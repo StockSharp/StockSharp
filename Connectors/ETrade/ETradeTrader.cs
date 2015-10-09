@@ -1,6 +1,7 @@
 namespace StockSharp.ETrade
 {
 	using System;
+	using System.Linq;
 	using System.Security;
 
 	using Ecng.Common;
@@ -21,8 +22,8 @@ namespace StockSharp.ETrade
 		/// </summary>
 		public string ConsumerKey
 		{
-			get { return _adapter.ConsumerKey; }
-			set { _adapter.ConsumerKey = value; }
+			get { return NativeAdapter.ConsumerKey; }
+			set { NativeAdapter.ConsumerKey = value; }
 		}
 
 		/// <summary>
@@ -30,8 +31,8 @@ namespace StockSharp.ETrade
 		/// </summary>
 		public string ConsumerSecret
 		{
-			get { return _adapter.ConsumerSecret.To<string>(); }
-			set { _adapter.ConsumerSecret = value.To<SecureString>(); }
+			get { return NativeAdapter.ConsumerSecret.To<string>(); }
+			set { NativeAdapter.ConsumerSecret = value.To<SecureString>(); }
 		}
 
 		/// <summary>
@@ -39,8 +40,8 @@ namespace StockSharp.ETrade
 		/// </summary>
 		public OAuthToken AccessToken
 		{
-			get { return _adapter.AccessToken; }
-			set { _adapter.AccessToken = value; }
+			get { return NativeAdapter.AccessToken; }
+			set { NativeAdapter.AccessToken = value; }
 		}
 
 		/// <summary>
@@ -48,8 +49,8 @@ namespace StockSharp.ETrade
 		/// </summary>
 		public string VerificationCode
 		{
-			get { return _adapter.VerificationCode; }
-			set { _adapter.VerificationCode = value; }
+			get { return NativeAdapter.VerificationCode; }
+			set { NativeAdapter.VerificationCode = value; }
 		}
 
 		/// <summary>
@@ -57,11 +58,9 @@ namespace StockSharp.ETrade
 		/// </summary>
 		public bool Sandbox
 		{
-			get { return _adapter.Sandbox; }
-			set { _adapter.Sandbox = value; }
+			get { return NativeAdapter.Sandbox; }
+			set { NativeAdapter.Sandbox = value; }
 		}
-
-		private readonly ETradeMessageAdapter _adapter;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="ETradeTrader"/>.
@@ -70,13 +69,16 @@ namespace StockSharp.ETrade
 		{
 			CreateAssociatedSecurity = true;
 
-			_adapter = new ETradeMessageAdapter(TransactionIdGenerator);
-
-			Adapter.InnerAdapters.Add(_adapter);
+			Adapter.InnerAdapters.Add(new ETradeMessageAdapter(TransactionIdGenerator));
 
 			ReConnectionSettings.TimeOutInterval = TimeSpan.FromMinutes(5);
 			ReConnectionSettings.Interval = TimeSpan.FromMinutes(1);
 			ReConnectionSettings.AttemptCount = 5;
+		}
+
+		private ETradeMessageAdapter NativeAdapter
+		{
+			get { return Adapter.InnerAdapters.OfType<ETradeMessageAdapter>().First(); }
 		}
 
 		/// <summary>
@@ -85,7 +87,7 @@ namespace StockSharp.ETrade
 		/// <param name="method">ETrade authorization method.</param>
 		public void SetCustomAuthorizationMethod(Action<string> method)
 		{
-			_adapter.SetCustomAuthorizationMethod(method);
+			NativeAdapter.SetCustomAuthorizationMethod(method);
 		}
 	}
 }

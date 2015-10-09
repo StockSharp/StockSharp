@@ -2,6 +2,7 @@ namespace StockSharp.InteractiveBrokers
 {
 	using System;
 	using System.Collections.Generic;
+	using System.Linq;
 	using System.Net;
 
 	using Ecng.Collections;
@@ -208,7 +209,6 @@ namespace StockSharp.InteractiveBrokers
 	{
 		private readonly SynchronizedDictionary<long, CandleSeries> _candleSeries = new SynchronizedDictionary<long, CandleSeries>();
 		private readonly SynchronizedDictionary<long, object> _states = new SynchronizedDictionary<long, object>();
-		private readonly InteractiveBrokersMessageAdapter _adapter;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="IBTrader"/>.
@@ -217,9 +217,12 @@ namespace StockSharp.InteractiveBrokers
 		{
 			CreateAssociatedSecurity = true;
 
-			_adapter = new InteractiveBrokersMessageAdapter(TransactionIdGenerator);
+			Adapter.InnerAdapters.Add(new InteractiveBrokersMessageAdapter(TransactionIdGenerator));
+		}
 
-			Adapter.InnerAdapters.Add(_adapter);
+		private InteractiveBrokersMessageAdapter NativeAdapter
+		{
+			get { return Adapter.InnerAdapters.OfType<InteractiveBrokersMessageAdapter>().First(); }
 		}
 
 		/// <summary>
@@ -227,34 +230,17 @@ namespace StockSharp.InteractiveBrokers
 		/// </summary>
 		public EndPoint Address
 		{
-			get { return _adapter.Address; }
-			set { _adapter.Address = value; }
+			get { return NativeAdapter.Address; }
+			set { NativeAdapter.Address = value; }
 		}
-
-		///// <summary>
-		///// Проверить, установлено ли еще соединение. Проверяется только в том случае, если был вызван метод <see cref="IConnector.Connect"/>.
-		///// </summary>
-		///// <returns><see langword="true"/>, если соединение еще установлено, false, если торговая система разорвала подключение.</returns>
-		//protected override bool IsConnectionAlive()
-		//{
-		//	return _socket.IsConnected;
-		//}
-
-		///// <summary>
-		///// Время подключения.
-		///// </summary>
-		//public DateTimeOffset ConnectedTime
-		//{
-		//	get { return _adapter.CurrentTime; }
-		//}
 
 		/// <summary>
 		/// Unique ID. Used when several clients are connected to one terminal or gateway.
 		/// </summary>
 		public int ClientId
 		{
-			get { return _adapter.ClientId; }
-			set { _adapter.ClientId = value; }
+			get { return NativeAdapter.ClientId; }
+			set { NativeAdapter.ClientId = value; }
 		}
 
 		/// <summary>
@@ -262,8 +248,8 @@ namespace StockSharp.InteractiveBrokers
 		/// </summary>
 		public ServerLogLevels ServerLogLevel
 		{
-			get { return _adapter.ServerLogLevel; }
-			set { _adapter.ServerLogLevel = value; }
+			get { return NativeAdapter.ServerLogLevel; }
+			set { NativeAdapter.ServerLogLevel = value; }
 		}
 
 		/// <summary>
@@ -271,19 +257,14 @@ namespace StockSharp.InteractiveBrokers
 		/// </summary>
 		public bool IsRealTimeMarketData
 		{
-			get { return _adapter.IsRealTimeMarketData; }
-			set { _adapter.IsRealTimeMarketData = value; }
+			get { return NativeAdapter.IsRealTimeMarketData; }
+			set { NativeAdapter.IsRealTimeMarketData = value; }
 		}
 
 		/// <summary>
 		/// The new results occurring event of the scanner started previously via <see cref="SubscribeScanner"/>.
 		/// </summary>
 		public event Action<ScannerFilter, IEnumerable<ScannerResult>> NewScannerResults;
-		
-		///// <summary>
-		///// Событие появления новой свечи реального времени, полученной по подписке через <see cref="SubscribeCandles"/>.
-		///// </summary>
-		//public event Action<TimeFrameCandle> NewRealTimeCandle;
 
 		/// <summary>
 		/// Event of new candles occurring, that are received after the subscription by <see cref="SubscribeCandles"/>.

@@ -1,5 +1,6 @@
 namespace StockSharp.Btce
 {
+	using System.Linq;
 	using System.Security;
 
 	using Ecng.Common;
@@ -14,16 +15,17 @@ namespace StockSharp.Btce
 	[Icon("Btce_logo.png")]
 	public class BtceTrader : Connector
 	{
-		private readonly BtceMessageAdapter _adapter;
-
 		/// <summary>
 		/// Initializes a new instance of the <see cref="BtceTrader"/>.
 		/// </summary>
 		public BtceTrader()
 		{
-			_adapter = new BtceMessageAdapter(TransactionIdGenerator);
+			Adapter.InnerAdapters.Add(new BtceMessageAdapter(TransactionIdGenerator));
+		}
 
-			Adapter.InnerAdapters.Add(_adapter);
+		private BtceMessageAdapter NativeAdapter
+		{
+			get { return Adapter.InnerAdapters.OfType<BtceMessageAdapter>().First(); }
 		}
 
 		/// <summary>
@@ -40,8 +42,8 @@ namespace StockSharp.Btce
 		/// </summary>
 		public string Key
 		{
-			get { return _adapter.Key.To<string>(); }
-			set { _adapter.Key = value.To<SecureString>(); }
+			get { return NativeAdapter.Key.To<string>(); }
+			set { NativeAdapter.Key = value.To<SecureString>(); }
 		}
 
 		/// <summary>
@@ -49,8 +51,8 @@ namespace StockSharp.Btce
 		/// </summary>
 		public string Secret
 		{
-			get { return _adapter.Secret.To<string>(); }
-			set { _adapter.Secret = value.To<SecureString>(); }
+			get { return NativeAdapter.Secret.To<string>(); }
+			set { NativeAdapter.Secret = value.To<SecureString>(); }
 		}
 	}
 }

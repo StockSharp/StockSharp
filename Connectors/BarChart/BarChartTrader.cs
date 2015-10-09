@@ -26,17 +26,20 @@ namespace StockSharp.BarChart
 		private readonly SynchronizedDictionary<long, RefFive<List<Trade>, SyncObject, bool, Security, bool>> _ticksInfo = new SynchronizedDictionary<long, RefFive<List<Trade>, SyncObject, bool, Security, bool>>();
 		private readonly SynchronizedDictionary<long, CandleSeries> _candleSeries = new SynchronizedDictionary<long, CandleSeries>();
 
-		private readonly BarChartMessageAdapter _adapter;
-
 		/// <summary>
 		/// Initializes a new instance of the <see cref="BarChartTrader"/>.
 		/// </summary>
 		public BarChartTrader()
 		{
-			_adapter = new BarChartMessageAdapter(TransactionIdGenerator);
-			_adapter.AddMarketDataSupport();
+			var adapter = new BarChartMessageAdapter(TransactionIdGenerator);
+			adapter.AddMarketDataSupport();
 
-			Adapter.InnerAdapters.Add(_adapter);
+			Adapter.InnerAdapters.Add(adapter);
+		}
+
+		private BarChartMessageAdapter NativeAdapter
+		{
+			get { return Adapter.InnerAdapters.OfType<BarChartMessageAdapter>().First(); }
 		}
 
 		/// <summary>
@@ -44,8 +47,8 @@ namespace StockSharp.BarChart
 		/// </summary>
 		public string Login
 		{
-			get { return _adapter.Login; }
-			set { _adapter.Login = value; }
+			get { return NativeAdapter.Login; }
+			set { NativeAdapter.Login = value; }
 		}
 
 		/// <summary>
@@ -53,8 +56,8 @@ namespace StockSharp.BarChart
 		/// </summary>
 		public string Password
 		{
-			get { return _adapter.Password.To<string>(); }
-			set { _adapter.Password = value.To<SecureString>(); }
+			get { return NativeAdapter.Password.To<string>(); }
+			set { NativeAdapter.Password = value.To<SecureString>(); }
 		}
 
 		/// <summary>

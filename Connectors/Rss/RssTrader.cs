@@ -1,6 +1,7 @@
 namespace StockSharp.Rss
 {
 	using System;
+	using System.Linq;
 
 	using Ecng.ComponentModel;
 
@@ -13,16 +14,17 @@ namespace StockSharp.Rss
 	[Icon("Rss_logo.png")]
 	public class RssTrader : Connector
     {
-		private readonly RssMarketDataMessageAdapter _adapter;
-
 		/// <summary>
 		/// Initializes a new instance of the <see cref="RssTrader"/>.
 		/// </summary>
 		public RssTrader()
 		{
-			_adapter = new RssMarketDataMessageAdapter(TransactionIdGenerator);
+			Adapter.InnerAdapters.Add(new RssMarketDataMessageAdapter(TransactionIdGenerator));
+		}
 
-			Adapter.InnerAdapters.Add(_adapter);
+		private RssMarketDataMessageAdapter NativeAdapter
+		{
+			get { return Adapter.InnerAdapters.OfType<RssMarketDataMessageAdapter>().First(); }
 		}
 
 		/// <summary>
@@ -30,8 +32,8 @@ namespace StockSharp.Rss
 		/// </summary>
 		public Uri Address
 		{
-			get { return _adapter.Address; }
-			set { _adapter.Address = value; }
+			get { return NativeAdapter.Address; }
+			set { NativeAdapter.Address = value; }
 		}
 
 		/// <summary>
@@ -39,8 +41,8 @@ namespace StockSharp.Rss
 		/// </summary>
 		public string CustomDateFormat
 		{
-			get { return _adapter.CustomDateFormat; }
-			set { _adapter.CustomDateFormat = value; }
+			get { return NativeAdapter.CustomDateFormat; }
+			set { NativeAdapter.CustomDateFormat = value; }
 		}
     }
 }

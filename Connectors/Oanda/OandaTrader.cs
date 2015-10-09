@@ -22,16 +22,18 @@ namespace StockSharp.Oanda
 	public class OandaTrader : Connector, IExternalCandleSource
     {
 		private readonly SynchronizedDictionary<long, CandleSeries> _series = new SynchronizedDictionary<long, CandleSeries>();
-		private readonly OandaMessageAdapter _adapter;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="OandaTrader"/>.
 		/// </summary>
 		public OandaTrader()
 		{
-			_adapter = new OandaMessageAdapter(TransactionIdGenerator);
+			Adapter.InnerAdapters.Add(new OandaMessageAdapter(TransactionIdGenerator));
+		}
 
-			Adapter.InnerAdapters.Add(_adapter);
+		private OandaMessageAdapter NativeAdapter
+		{
+			get { return Adapter.InnerAdapters.OfType<OandaMessageAdapter>().First(); }
 		}
 
 		/// <summary>
@@ -39,8 +41,8 @@ namespace StockSharp.Oanda
 		/// </summary>
 		public OandaServers Server
 		{
-			get { return _adapter.Server; }
-			set { _adapter.Server = value; }
+			get { return NativeAdapter.Server; }
+			set { NativeAdapter.Server = value; }
 		}
 
 		/// <summary>
@@ -48,8 +50,8 @@ namespace StockSharp.Oanda
 		/// </summary>
 		public SecureString Token
 		{
-			get { return _adapter.Token; }
-			set { _adapter.Token = value; }
+			get { return NativeAdapter.Token; }
+			set { NativeAdapter.Token = value; }
 		}
 
 		IEnumerable<Range<DateTimeOffset>> IExternalCandleSource.GetSupportedRanges(CandleSeries series)

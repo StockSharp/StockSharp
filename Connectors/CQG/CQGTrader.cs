@@ -17,10 +17,7 @@ namespace StockSharp.CQG
 		public CQGTrader()
 		{
 			CreateAssociatedSecurity = true;
-
-			var adapter = new CQGMessageAdapter(TransactionIdGenerator);
-
-			Adapter.InnerAdapters.Add(adapter);
+			Adapter.InnerAdapters.Add(new CQGMessageAdapter(TransactionIdGenerator));
 		}
     }
 }

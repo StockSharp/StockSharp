@@ -1,5 +1,6 @@
 namespace StockSharp.BitStamp
 {
+	using System.Linq;
 	using System.Security;
 
 	using Ecng.Common;
@@ -14,16 +15,17 @@ namespace StockSharp.BitStamp
 	[Icon("BitStamp_logo.png")]
 	public class BitStampTrader : Connector
     {
-		private readonly BitStampMessageAdapter _adapter;
-
 		/// <summary>
 		/// Initializes a new instance of the <see cref="BitStampTrader"/>.
 		/// </summary>
 		public BitStampTrader()
 		{
-			_adapter = new BitStampMessageAdapter(TransactionIdGenerator);
+			Adapter.InnerAdapters.Add(new BitStampMessageAdapter(TransactionIdGenerator));
+		}
 
-			Adapter.InnerAdapters.Add(_adapter);
+		private BitStampMessageAdapter NativeAdapter
+		{
+			get { return Adapter.InnerAdapters.OfType<BitStampMessageAdapter>().First(); }
 		}
 
 		/// <summary>
@@ -40,8 +42,8 @@ namespace StockSharp.BitStamp
 		/// </summary>
 		public string Key
 		{
-			get { return _adapter.Key.To<string>(); }
-			set { _adapter.Key = value.To<SecureString>(); }
+			get { return NativeAdapter.Key.To<string>(); }
+			set { NativeAdapter.Key = value.To<SecureString>(); }
 		}
 
 		/// <summary>
@@ -49,8 +51,8 @@ namespace StockSharp.BitStamp
 		/// </summary>
 		public string Secret
 		{
-			get { return _adapter.Secret.To<string>(); }
-			set { _adapter.Secret = value.To<SecureString>(); }
+			get { return NativeAdapter.Secret.To<string>(); }
+			set { NativeAdapter.Secret = value.To<SecureString>(); }
 		}
 
 		/// <summary>
@@ -58,8 +60,8 @@ namespace StockSharp.BitStamp
 		/// </summary>
 		public int ClientId
 		{
-			get { return _adapter.ClientId; }
-			set { _adapter.ClientId = value; }
+			get { return NativeAdapter.ClientId; }
+			set { NativeAdapter.ClientId = value; }
 		}
     }
 }

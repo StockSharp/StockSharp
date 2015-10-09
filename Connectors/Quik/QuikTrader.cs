@@ -2,6 +2,7 @@ namespace StockSharp.Quik
 {
 	using System;
 	using System.Collections.Generic;
+	using System.Linq;
 	using System.Net;
 	using System.Security;
 
@@ -12,7 +13,6 @@ namespace StockSharp.Quik
 
 	using StockSharp.BusinessEntities;
 	using StockSharp.Algo;
-	using StockSharp.Fix;
 	using StockSharp.Messages;
 	using StockSharp.Quik.Lua;
 	using StockSharp.Localization;
@@ -23,12 +23,6 @@ namespace StockSharp.Quik
 	[Icon("Quik_logo.png")]
 	public class QuikTrader : Connector
 	{
-		private readonly QuikTrans2QuikAdapter _trans2QuikAdapter;
-		private readonly QuikDdeAdapter _ddeAdapter;
-
-		private readonly FixMessageAdapter _luaTransactionAdapter;
-		private readonly FixMessageAdapter _luaMarketDataAdapter;
-
 		/// <summary>
 		/// Адрес по-умолчанию к LUA FIX серверу. Равен localhost:5001
 		/// </summary>
@@ -49,16 +43,27 @@ namespace StockSharp.Quik
 		public QuikTrader(string path)
 		{
 			Path = path;
-
-			_trans2QuikAdapter = new QuikTrans2QuikAdapter(TransactionIdGenerator);
-			_ddeAdapter = new QuikDdeAdapter(TransactionIdGenerator);
-
-			_trans2QuikAdapter.GetTerminal = _ddeAdapter.GetTerminal = () => Terminal;
-
-			_luaTransactionAdapter = new LuaFixTransactionMessageAdapter(TransactionIdGenerator);
-			_luaMarketDataAdapter = new LuaFixMarketDataMessageAdapter(TransactionIdGenerator);
-
 			IsDde = false;
+		}
+
+		private LuaFixTransactionMessageAdapter FixTransactionAdapter
+		{
+			get { return Adapter.InnerAdapters.OfType<LuaFixTransactionMessageAdapter>().First(); }
+		}
+
+		private LuaFixMarketDataMessageAdapter FixMarketDataAdapter
+		{
+			get { return Adapter.InnerAdapters.OfType<LuaFixMarketDataMessageAdapter>().First(); }
+		}
+
+		private QuikTrans2QuikAdapter Trans2QuikAdapter
+		{
+			get { return Adapter.InnerAdapters.OfType<QuikTrans2QuikAdapter>().First(); }
+		}
+
+		private QuikDdeAdapter DdeAdapter
+		{
+			get { return Adapter.InnerAdapters.OfType<QuikDdeAdapter>().First(); }
 		}
 
 		private bool _isDde;
@@ -77,13 +82,18 @@ namespace StockSharp.Quik
 
 				if (value)
 				{
-					Adapter.InnerAdapters.Add(_trans2QuikAdapter);
-					Adapter.InnerAdapters.Add(_ddeAdapter);
+					var trans2QuikAdapter = new QuikTrans2QuikAdapter(TransactionIdGenerator);
+					var ddeAdapter = new QuikDdeAdapter(TransactionIdGenerator);
+
+					trans2QuikAdapter.GetTerminal = ddeAdapter.GetTerminal = () => Terminal;
+
+					Adapter.InnerAdapters.Add(trans2QuikAdapter);
+					Adapter.InnerAdapters.Add(ddeAdapter);
 				}
 				else
 				{
-					Adapter.InnerAdapters.Add(_luaTransactionAdapter);
-					Adapter.InnerAdapters.Add(_luaMarketDataAdapter);
+					Adapter.InnerAdapters.Add(new LuaFixTransactionMessageAdapter(TransactionIdGenerator));
+					Adapter.InnerAdapters.Add(new LuaFixMarketDataMessageAdapter(TransactionIdGenerator));
 				}
 			}
 		}
@@ -93,8 +103,8 @@ namespace StockSharp.Quik
 		/// </summary>
 		public bool RequestAllSecurities
 		{
-			get { return _luaMarketDataAdapter.RequestAllSecurities; }
-			set { _luaMarketDataAdapter.RequestAllSecurities = value; }
+			get { return FixMarketDataAdapter.RequestAllSecurities; }
+			set { FixMarketDataAdapter.RequestAllSecurities = value; }
 		}
 
 		/// <summary>
@@ -110,8 +120,8 @@ namespace StockSharp.Quik
 		/// </summary>
 		public string DllName
 		{
-			get { return _trans2QuikAdapter.DllName; }
-			set { _trans2QuikAdapter.DllName = value; }
+			get { return Trans2QuikAdapter.DllName; }
+			set { Trans2QuikAdapter.DllName = value; }
 		}
 
 		/// <summary>
@@ -119,8 +129,8 @@ namespace StockSharp.Quik
 		/// </summary>
 		public string DdeServer
 		{
-			get { return _ddeAdapter.DdeServer; }
-			set { _ddeAdapter.DdeServer = value; }
+			get { return DdeAdapter.DdeServer; }
+			set { DdeAdapter.DdeServer = value; }
 		}
 
 		private string _path;
@@ -147,11 +157,11 @@ namespace StockSharp.Quik
 		/// </summary>
 		public EndPoint LuaFixServerAddress
 		{
-			get { return _luaTransactionAdapter.Address; }
+			get { return FixTransactionAdapter.Address; }
 			set
 			{
-				_luaTransactionAdapter.Address = value;
-				_luaMarketDataAdapter.Address = value;
+				FixTransactionAdapter.Address = value;
+				FixMarketDataAdapter.Address = value;
 			}
 		}
 
@@ -160,14 +170,14 @@ namespace StockSharp.Quik
 		/// </summary>
 		public string LuaLogin
 		{
-			get { return _luaTransactionAdapter.SenderCompId; }
+			get { return FixTransactionAdapter.SenderCompId; }
 			set
 			{
-				_luaTransactionAdapter.SenderCompId = value;
-				_luaTransactionAdapter.Login = value;
+				FixTransactionAdapter.SenderCompId = value;
+				FixTransactionAdapter.Login = value;
 
-				_luaMarketDataAdapter.SenderCompId = value;
-				_luaMarketDataAdapter.Login = value;
+				FixMarketDataAdapter.SenderCompId = value;
+				FixMarketDataAdapter.Login = value;
 			}
 		}
 
@@ -176,11 +186,11 @@ namespace StockSharp.Quik
 		/// </summary>
 		public SecureString LuaPassword
 		{
-			get { return _luaTransactionAdapter.Password; }
+			get { return FixTransactionAdapter.Password; }
 			set
 			{
-				_luaTransactionAdapter.Password = value;
-				_luaMarketDataAdapter.Password = value;
+				FixTransactionAdapter.Password = value;
+				FixMarketDataAdapter.Password = value;
 			}
 		}
 
@@ -201,7 +211,7 @@ namespace StockSharp.Quik
 				if (_terminal == null)
 				{
 					_terminal = QuikTerminal.Get(Path);
-					_terminal.Adapter = _ddeAdapter;
+					_terminal.Adapter = DdeAdapter;
 				}
 
 				return _terminal;
@@ -215,7 +225,7 @@ namespace StockSharp.Quik
 				{
 					_terminalPaths.Remove(_terminal.FileName);
 
-					_terminal.Adapter = _ddeAdapter;
+					_terminal.Adapter = DdeAdapter;
 					_terminal = null;
 				}
 
@@ -225,7 +235,7 @@ namespace StockSharp.Quik
 						throw new InvalidOperationException(LocalizedStrings.Str1807Params.Put(value.FileName));
 
 					_terminal = value;
-					_terminal.Adapter = _ddeAdapter;
+					_terminal.Adapter = DdeAdapter;
 				}
 
 				//TerminalChanged.SafeInvoke();
@@ -241,8 +251,8 @@ namespace StockSharp.Quik
 		/// </remarks>
 		public bool IsAsyncMode
 		{
-			get { return _trans2QuikAdapter.IsAsyncMode; }
-			set { _trans2QuikAdapter.IsAsyncMode = value; }
+			get { return Trans2QuikAdapter.IsAsyncMode; }
+			set { Trans2QuikAdapter.IsAsyncMode = value; }
 		}
 
 		/// <summary>
@@ -250,8 +260,8 @@ namespace StockSharp.Quik
 		/// </summary>
 		public event Action<string, IList<IList<object>>> PreProcessDdeData
 		{
-			add { _ddeAdapter.PreProcessDdeData += value; }
-			remove { _ddeAdapter.PreProcessDdeData -= value; }
+			add { DdeAdapter.PreProcessDdeData += value; }
+			remove { DdeAdapter.PreProcessDdeData -= value; }
 		}
 
 		/// <summary>
@@ -259,8 +269,8 @@ namespace StockSharp.Quik
 		/// </summary>
 		public event Action<string, IList<IList<object>>> ProcessUnknownDdeData
 		{
-			add { _ddeAdapter.ProcessUnknownDdeData += value; }
-			remove { _ddeAdapter.ProcessUnknownDdeData -= value; }
+			add { DdeAdapter.ProcessUnknownDdeData += value; }
+			remove { DdeAdapter.ProcessUnknownDdeData -= value; }
 		}
 
 		/// <summary>
@@ -268,8 +278,8 @@ namespace StockSharp.Quik
 		/// </summary>
 		public event Action<string, IDictionary<object, IList<object>>> ProcessWellKnownDdeData
 		{
-			add { _ddeAdapter.ProcessWellKnownDdeData += value; }
-			remove { _ddeAdapter.ProcessWellKnownDdeData -= value; }
+			add { DdeAdapter.ProcessWellKnownDdeData += value; }
+			remove { DdeAdapter.ProcessWellKnownDdeData -= value; }
 		}
 
 		/// <summary>
@@ -277,8 +287,8 @@ namespace StockSharp.Quik
 		/// </summary>
 		public event Action<Type, IEnumerable<object>> NewCustomTables
 		{
-			add { _ddeAdapter.NewCustomTables += value; }
-			remove { _ddeAdapter.NewCustomTables -= value; }
+			add { DdeAdapter.NewCustomTables += value; }
+			remove { DdeAdapter.NewCustomTables -= value; }
 		}
 
 		/// <summary>
@@ -286,8 +296,8 @@ namespace StockSharp.Quik
 		/// </summary>
 		public event Action<Type, IEnumerable<object>> CustomTablesChanged
 		{
-			add { _ddeAdapter.CustomTablesChanged += value; }
-			remove { _ddeAdapter.CustomTablesChanged -= value; }
+			add { DdeAdapter.CustomTablesChanged += value; }
+			remove { DdeAdapter.CustomTablesChanged -= value; }
 		}
 
 		/// <summary>
@@ -300,76 +310,76 @@ namespace StockSharp.Quik
 		/// </summary>
 		public event Action<Transaction> FormatTransaction
 		{
-			add { _trans2QuikAdapter.FormatTransaction += value; }
-			remove { _trans2QuikAdapter.FormatTransaction -= value; }
+			add { Trans2QuikAdapter.FormatTransaction += value; }
+			remove { Trans2QuikAdapter.FormatTransaction -= value; }
 		}
 
 		/// <summary>
 		/// Настройки DDE таблицы Инструменты.
 		/// </summary>
-		public DdeTable SecuritiesTable { get { return _ddeAdapter.SecuritiesTable; } }
+		public DdeTable SecuritiesTable { get { return DdeAdapter.SecuritiesTable; } }
 
 		/// <summary>
 		/// Настройки DDE таблицы Инструменты (изменения).
 		/// </summary>
-		public DdeTable SecuritiesChangeTable { get { return _ddeAdapter.SecuritiesChangeTable; } }
+		public DdeTable SecuritiesChangeTable { get { return DdeAdapter.SecuritiesChangeTable; } }
 
 		/// <summary>
 		/// Настройки DDE таблицы Сделки.
 		/// </summary>
-		public DdeTable TradesTable { get { return _ddeAdapter.TradesTable; } }
+		public DdeTable TradesTable { get { return DdeAdapter.TradesTable; } }
 
 		/// <summary>
 		/// Настройки DDE таблицы Мои Сделки.
 		/// </summary>
-		public DdeTable MyTradesTable { get { return _ddeAdapter.MyTradesTable; } }
+		public DdeTable MyTradesTable { get { return DdeAdapter.MyTradesTable; } }
 
 		/// <summary>
 		/// Настройки DDE таблицы Заявки.
 		/// </summary>
-		public DdeTable OrdersTable { get { return _ddeAdapter.OrdersTable; } }
+		public DdeTable OrdersTable { get { return DdeAdapter.OrdersTable; } }
 
 		/// <summary>
 		/// Настройки DDE таблицы Стоп-Заявки.
 		/// </summary>
-		public DdeTable StopOrdersTable { get { return _ddeAdapter.StopOrdersTable; } }
+		public DdeTable StopOrdersTable { get { return DdeAdapter.StopOrdersTable; } }
 
 		/// <summary>
 		/// Настройки DDE таблицы со стаканом.
 		/// </summary>
-		public DdeTable QuotesTable { get { return _ddeAdapter.QuotesTable; } }
+		public DdeTable QuotesTable { get { return DdeAdapter.QuotesTable; } }
 
 		/// <summary>
 		/// Настройки DDE таблицы Портфель по бумагам.
 		/// </summary>
-		public DdeTable EquityPortfoliosTable { get { return _ddeAdapter.EquityPortfoliosTable; } }
+		public DdeTable EquityPortfoliosTable { get { return DdeAdapter.EquityPortfoliosTable; } }
 
 		/// <summary>
 		/// Настройки DDE таблицы Портфель по деривативам.
 		/// </summary>
-		public DdeTable DerivativePortfoliosTable { get { return _ddeAdapter.DerivativePortfoliosTable; } }
+		public DdeTable DerivativePortfoliosTable { get { return DdeAdapter.DerivativePortfoliosTable; } }
 
 		/// <summary>
 		/// Настройки DDE таблицы Позиции по бумагам.
 		/// </summary>
-		public DdeTable EquityPositionsTable { get { return _ddeAdapter.EquityPositionsTable; } }
+		public DdeTable EquityPositionsTable { get { return DdeAdapter.EquityPositionsTable; } }
 
 		/// <summary>
 		/// Настройки DDE таблицы Позиции по деривативам.
 		/// </summary>
-		public DdeTable DerivativePositionsTable { get { return _ddeAdapter.DerivativePositionsTable; } }
+		public DdeTable DerivativePositionsTable { get { return DdeAdapter.DerivativePositionsTable; } }
 
 		/// <summary>
 		/// Настройки DDE таблицы Валюты портфелей.
 		/// </summary>
-		public DdeTable CurrencyPortfoliosTable { get { return _ddeAdapter.CurrencyPortfoliosTable; } }
+		public DdeTable CurrencyPortfoliosTable { get { return DdeAdapter.CurrencyPortfoliosTable; } }
 
 		/// <summary>
 		/// Список произвольных таблиц.
 		/// </summary>
 		public IList<DdeCustomTable> CustomTables
 		{
-			get { return _ddeAdapter.CustomTables; }
+			get { return DdeAdapter.CustomTables; }
 		}
 		
 		/// <summary>
@@ -380,8 +390,8 @@ namespace StockSharp.Quik
 		/// </remarks>
 		public bool SupportManualOrders
 		{
-			get { return _ddeAdapter.SupportManualOrders; }
-			set { _ddeAdapter.SupportManualOrders = value; }
+			get { return DdeAdapter.SupportManualOrders; }
+			set { DdeAdapter.SupportManualOrders = value; }
 		}
 
 		/// <summary>
@@ -389,8 +399,8 @@ namespace StockSharp.Quik
 		/// </summary>
 		public bool OverrideDll
 		{
-			get { return _trans2QuikAdapter.OverrideDll; }
-			set { _trans2QuikAdapter.OverrideDll = value; }
+			get { return Trans2QuikAdapter.OverrideDll; }
+			set { Trans2QuikAdapter.OverrideDll = value; }
 		}
 
 		/// <summary>
@@ -437,8 +447,8 @@ namespace StockSharp.Quik
 		/// </summary>
 		public IEnumerable<DdeTable> DdeTables
 		{
-			get { return _ddeAdapter.Tables; }
-			set { _ddeAdapter.Tables = value; }
+			get { return DdeAdapter.Tables; }
+			set { DdeAdapter.Tables = value; }
 		}
 
 		/// <summary>
@@ -536,7 +546,7 @@ namespace StockSharp.Quik
 		/// <returns>Транзакция.</returns>
 		public Transaction GetTransaction(long id)
 		{
-			return _trans2QuikAdapter.GetTransaction(id);
+			return Trans2QuikAdapter.GetTransaction(id);
 		}
 
 		/// <summary>

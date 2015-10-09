@@ -26,8 +26,6 @@ namespace StockSharp.IQFeed
 		private readonly SynchronizedDictionary<long, RefFive<List<Level1ChangeMessage>, SyncObject, bool, SecurityId, bool>> _level1Info = new SynchronizedDictionary<long, RefFive<List<Level1ChangeMessage>, SyncObject, bool, SecurityId, bool>>();
 		private readonly SynchronizedDictionary<long, CandleSeries> _candleSeries = new SynchronizedDictionary<long, CandleSeries>();
 
-		private readonly IQFeedMarketDataMessageAdapter _adapter;
-
 		/// <summary>
 		/// Initializes a new instance of the <see cref="IQFeedTrader"/>.
 		/// </summary>
@@ -35,9 +33,12 @@ namespace StockSharp.IQFeed
 		{
 			CreateAssociatedSecurity = true;
 
-			_adapter = new IQFeedMarketDataMessageAdapter(TransactionIdGenerator);
+			Adapter.InnerAdapters.Add(new IQFeedMarketDataMessageAdapter(TransactionIdGenerator));
+		}
 
-			Adapter.InnerAdapters.Add(_adapter);
+		private IQFeedMarketDataMessageAdapter NativeAdapter
+		{
+			get { return Adapter.InnerAdapters.OfType<IQFeedMarketDataMessageAdapter>().First(); }
 		}
 
 		/// <summary>
@@ -45,7 +46,7 @@ namespace StockSharp.IQFeed
 		/// </summary>
 		public IQFeedLevel1ColumnRegistry Level1ColumnRegistry
 		{
-			get { return _adapter.Level1ColumnRegistry; }
+			get { return NativeAdapter.Level1ColumnRegistry; }
 		}
 
 		/// <summary>
@@ -53,8 +54,8 @@ namespace StockSharp.IQFeed
 		/// </summary>
 		public EndPoint Level1Address
 		{
-			get { return _adapter.Level1Address; }
-			set { _adapter.Level1Address = value; }
+			get { return NativeAdapter.Level1Address; }
+			set { NativeAdapter.Level1Address = value; }
 		}
 
 		/// <summary>
@@ -62,8 +63,8 @@ namespace StockSharp.IQFeed
 		/// </summary>
 		public EndPoint Level2Address
 		{
-			get { return _adapter.Level2Address; }
-			set { _adapter.Level2Address = value; }
+			get { return NativeAdapter.Level2Address; }
+			set { NativeAdapter.Level2Address = value; }
 		}
 
 		/// <summary>
@@ -71,8 +72,8 @@ namespace StockSharp.IQFeed
 		/// </summary>
 		public EndPoint LookupAddress
 		{
-			get { return _adapter.LookupAddress; }
-			set { _adapter.LookupAddress = value; }
+			get { return NativeAdapter.LookupAddress; }
+			set { NativeAdapter.LookupAddress = value; }
 		}
 
 		/// <summary>
@@ -80,8 +81,8 @@ namespace StockSharp.IQFeed
 		/// </summary>
 		public EndPoint AdminAddress
 		{
-			get { return _adapter.AdminAddress; }
-			set { _adapter.AdminAddress = value; }
+			get { return NativeAdapter.AdminAddress; }
+			set { NativeAdapter.AdminAddress = value; }
 		}
 
 		/// <summary>
@@ -89,8 +90,8 @@ namespace StockSharp.IQFeed
 		/// </summary>
 		public bool IsDownloadSecurityFromSite
 		{
-			get { return _adapter.IsDownloadSecurityFromSite; }
-			set { _adapter.IsDownloadSecurityFromSite = value; }
+			get { return NativeAdapter.IsDownloadSecurityFromSite; }
+			set { NativeAdapter.IsDownloadSecurityFromSite = value; }
 		}
 
 		/// <summary>
@@ -98,8 +99,8 @@ namespace StockSharp.IQFeed
 		/// </summary>
 		public IEnumerable<SecurityTypes> SecurityTypesFilter
 		{
-			get { return _adapter.SecurityTypesFilter; }
-			set { _adapter.SecurityTypesFilter = value; }
+			get { return NativeAdapter.SecurityTypesFilter; }
+			set { NativeAdapter.SecurityTypesFilter = value; }
 		}
 
 		/// <summary>
@@ -107,8 +108,8 @@ namespace StockSharp.IQFeed
 		/// </summary>
 		public IEnumerable<IQFeedLevel1Column> Level1Columns
 		{
-			get { return _adapter.Level1Columns; }
-			set { _adapter.Level1Columns = value.ToArray(); }
+			get { return NativeAdapter.Level1Columns; }
+			set { NativeAdapter.Level1Columns = value.ToArray(); }
 		}
 
 		/// <summary>
@@ -546,7 +547,7 @@ namespace StockSharp.IQFeed
 				{
 					var msg = (IQFeedSystemMessage)message;
 
-					if (msg.Feed.Address == _adapter.LookupAddress)
+					if (msg.Feed.Address == NativeAdapter.LookupAddress)
 						PulseWaiting();
 
 					return;

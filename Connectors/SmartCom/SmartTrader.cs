@@ -2,6 +2,7 @@ namespace StockSharp.SmartCom
 {
 	using System;
 	using System.Collections.Generic;
+	using System.Linq;
 	using System.Net;
 	using System.Security;
 	using System.Threading;
@@ -29,16 +30,17 @@ namespace StockSharp.SmartCom
 
 		private Timer _realTimeCandlesTimer;
 
-		private readonly SmartComMessageAdapter _adapter;
-
 		/// <summary>
 		/// Создать <see cref="SmartTrader"/>.
 		/// </summary>
 		public SmartTrader()
 		{
-			_adapter = new SmartComMessageAdapter(TransactionIdGenerator);
+			Adapter.InnerAdapters.Add(new SmartComMessageAdapter(TransactionIdGenerator));
+		}
 
-			Adapter.InnerAdapters.Add(_adapter);
+		private SmartComMessageAdapter NativeAdapter
+		{
+			get { return Adapter.InnerAdapters.OfType<SmartComMessageAdapter>().First(); }
 		}
 
 		/// <summary>
@@ -67,8 +69,8 @@ namespace StockSharp.SmartCom
 		/// </summary>
 		public SmartComVersions Version
 		{
-			get { return _adapter.Version; }
-			set { _adapter.Version = value; }
+			get { return NativeAdapter.Version; }
+			set { NativeAdapter.Version = value; }
 		}
 
 		/// <summary>
@@ -76,8 +78,8 @@ namespace StockSharp.SmartCom
 		/// </summary>
 		public string Login
 		{
-			get { return _adapter.Login; }
-			set { _adapter.Login = value; }
+			get { return NativeAdapter.Login; }
+			set { NativeAdapter.Login = value; }
 		}
 
 		/// <summary>
@@ -85,8 +87,8 @@ namespace StockSharp.SmartCom
 		/// </summary>
 		public string Password
 		{
-			get { return _adapter.Password.To<string>(); }
-			set { _adapter.Password = value.To<SecureString>(); }
+			get { return NativeAdapter.Password.To<string>(); }
+			set { NativeAdapter.Password = value.To<SecureString>(); }
 		}
 
 		/// <summary>
@@ -94,8 +96,8 @@ namespace StockSharp.SmartCom
 		/// </summary>
 		public EndPoint Address
 		{
-			get { return _adapter.Address; }
-			set { _adapter.Address = value; }
+			get { return NativeAdapter.Address; }
+			set { NativeAdapter.Address = value; }
 		}
 
 		/// <summary>
@@ -103,8 +105,8 @@ namespace StockSharp.SmartCom
 		/// </summary>
 		public string ClientSettings
 		{
-			get { return _adapter.ClientSettings; }
-			set { _adapter.ClientSettings = value; }
+			get { return NativeAdapter.ClientSettings; }
+			set { NativeAdapter.ClientSettings = value; }
 		}
 
 		/// <summary>
@@ -112,8 +114,8 @@ namespace StockSharp.SmartCom
 		/// </summary>
 		public string ServerSettings
 		{
-			get { return _adapter.ServerSettings; }
-			set { _adapter.ServerSettings = value; }
+			get { return NativeAdapter.ServerSettings; }
+			set { NativeAdapter.ServerSettings = value; }
 		}
 
 		private TimeSpan _realTimeCandleOffset = TimeSpan.FromSeconds(5);

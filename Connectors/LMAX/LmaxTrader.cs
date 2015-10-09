@@ -22,16 +22,18 @@ namespace StockSharp.LMAX
 	public class LmaxTrader : Connector, IExternalCandleSource
 	{
 		private readonly SynchronizedDictionary<long, CandleSeries> _series = new SynchronizedDictionary<long, CandleSeries>();
-		private readonly LmaxMessageAdapter _adapter;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="LmaxTrader"/>.
 		/// </summary>
 		public LmaxTrader()
 		{
-			_adapter = new LmaxMessageAdapter(TransactionIdGenerator);
+			Adapter.InnerAdapters.Add(new LmaxMessageAdapter(TransactionIdGenerator));
+		}
 
-			Adapter.InnerAdapters.Add(_adapter);
+		private LmaxMessageAdapter NativeAdapter
+		{
+			get { return Adapter.InnerAdapters.OfType<LmaxMessageAdapter>().First(); }
 		}
 
 		/// <summary>
@@ -48,8 +50,8 @@ namespace StockSharp.LMAX
 		/// </summary>
 		public string Login
 		{
-			get { return _adapter.Login; }
-			set { _adapter.Login = value; }
+			get { return NativeAdapter.Login; }
+			set { NativeAdapter.Login = value; }
 		}
 
 		/// <summary>
@@ -57,8 +59,8 @@ namespace StockSharp.LMAX
 		/// </summary>
 		public string Password
 		{
-			get { return _adapter.Password.To<string>(); }
-			set { _adapter.Password = value.To<SecureString>(); }
+			get { return NativeAdapter.Password.To<string>(); }
+			set { NativeAdapter.Password = value.To<SecureString>(); }
 		}
 
 		/// <summary>
@@ -66,8 +68,8 @@ namespace StockSharp.LMAX
 		/// </summary>
 		public bool IsDemo
 		{
-			get { return _adapter.IsDemo; }
-			set { _adapter.IsDemo = value; }
+			get { return NativeAdapter.IsDemo; }
+			set { NativeAdapter.IsDemo = value; }
 		}
 
 		/// <summary>
@@ -75,8 +77,8 @@ namespace StockSharp.LMAX
 		/// </summary>
 		public bool IsDownloadSecurityFromSite
 		{
-			get { return _adapter.IsDownloadSecurityFromSite; }
-			set { _adapter.IsDownloadSecurityFromSite = value; }
+			get { return NativeAdapter.IsDownloadSecurityFromSite; }
+			set { NativeAdapter.IsDownloadSecurityFromSite = value; }
 		}
 
 		IEnumerable<Range<DateTimeOffset>> IExternalCandleSource.GetSupportedRanges(CandleSeries series)

@@ -23,16 +23,18 @@ namespace StockSharp.Transaq
 	public class TransaqTrader : Connector, IExternalCandleSource
 	{
 		private readonly SynchronizedDictionary<long, CandleSeries> _candleSeries = new SynchronizedDictionary<long, CandleSeries>();
-		private readonly TransaqMessageAdapter _adapter;
 
 		/// <summary>
 		/// Создать <see cref="TransaqTrader"/>.
 		/// </summary>
 		public TransaqTrader()
 		{
-			_adapter = new TransaqMessageAdapter(TransactionIdGenerator);
+			Adapter.InnerAdapters.Add(new TransaqMessageAdapter(TransactionIdGenerator));
+		}
 
-			Adapter.InnerAdapters.Add(_adapter);
+		private TransaqMessageAdapter NativeAdapter
+		{
+			get { return Adapter.InnerAdapters.OfType<TransaqMessageAdapter>().First(); }
 		}
 
 		/// <summary>
@@ -40,8 +42,8 @@ namespace StockSharp.Transaq
 		/// </summary>
 		public string Password
 		{
-			get { return _adapter.Password.To<string>(); }
-			set { _adapter.Password = value.To<SecureString>(); }
+			get { return NativeAdapter.Password.To<string>(); }
+			set { NativeAdapter.Password = value.To<SecureString>(); }
 		}
 
 		/// <summary>
@@ -49,8 +51,8 @@ namespace StockSharp.Transaq
 		/// </summary>
 		public string Login
 		{
-			get { return _adapter.Login; }
-			set { _adapter.Login = value; }
+			get { return NativeAdapter.Login; }
+			set { NativeAdapter.Login = value; }
 		}
 
 		/// <summary>
@@ -58,8 +60,8 @@ namespace StockSharp.Transaq
 		/// </summary>
 		public EndPoint Address
 		{
-			get { return _adapter.Address; }
-			set { _adapter.Address = value; }
+			get { return NativeAdapter.Address; }
+			set { NativeAdapter.Address = value; }
 		}
 
 		/// <summary>
@@ -67,8 +69,8 @@ namespace StockSharp.Transaq
 		/// </summary>
 		public Proxy Proxy
 		{
-			get { return _adapter.Proxy; }
-			set { _adapter.Proxy = value; }
+			get { return NativeAdapter.Proxy; }
+			set { NativeAdapter.Proxy = value; }
 		}
 
 		/// <summary>
@@ -76,8 +78,8 @@ namespace StockSharp.Transaq
 		/// </summary>
 		public ApiLogLevels ApiLogLevel
 		{
-			get { return _adapter.ApiLogLevel; }
-			set { _adapter.ApiLogLevel = value; }
+			get { return NativeAdapter.ApiLogLevel; }
+			set { NativeAdapter.ApiLogLevel = value; }
 		}
 
 		/// <summary>
@@ -85,8 +87,8 @@ namespace StockSharp.Transaq
 		/// </summary>
 		public string DllPath
 		{
-			get { return _adapter.DllPath; }
-			set { _adapter.DllPath = value; }
+			get { return NativeAdapter.DllPath; }
+			set { NativeAdapter.DllPath = value; }
 		}
 
 		/// <summary>
@@ -94,8 +96,8 @@ namespace StockSharp.Transaq
 		/// </summary>
 		public bool MicexRegisters
 		{
-			get { return _adapter.MicexRegisters; }
-			set { _adapter.MicexRegisters = value; }
+			get { return NativeAdapter.MicexRegisters; }
+			set { NativeAdapter.MicexRegisters = value; }
 		}
 
 		/// <summary>
@@ -103,8 +105,8 @@ namespace StockSharp.Transaq
 		/// </summary>
 		public bool IsHFT
 		{
-			get { return _adapter.IsHFT; }
-			set { _adapter.IsHFT = value; }
+			get { return NativeAdapter.IsHFT; }
+			set { NativeAdapter.IsHFT = value; }
 		}
 
 		/// <summary>
@@ -112,8 +114,8 @@ namespace StockSharp.Transaq
 		/// </summary>
 		public TimeSpan? MarketDataInterval
 		{
-			get { return _adapter.MarketDataInterval; }
-			set { _adapter.MarketDataInterval = value; }
+			get { return NativeAdapter.MarketDataInterval; }
+			set { NativeAdapter.MarketDataInterval = value; }
 		}
 
 		/// <summary>
@@ -121,8 +123,8 @@ namespace StockSharp.Transaq
 		/// </summary>
 		public bool OverrideDll
 		{
-			get { return _adapter.OverrideDll; }
-			set { _adapter.OverrideDll = value; }
+			get { return NativeAdapter.OverrideDll; }
+			set { NativeAdapter.OverrideDll = value; }
 		}
 
 		/// <summary>
@@ -130,7 +132,7 @@ namespace StockSharp.Transaq
 		/// </summary>
 		public string ConnectorVersion
 		{
-			get { return _adapter.ConnectorVersion; }
+			get { return NativeAdapter.ConnectorVersion; }
 		}
 
 		/// <summary>
@@ -138,7 +140,7 @@ namespace StockSharp.Transaq
 		/// </summary>
 		public int CurrentServer
 		{
-			get { return _adapter.CurrentServer; }
+			get { return NativeAdapter.CurrentServer; }
 		}
 
 		/// <summary>
@@ -146,7 +148,7 @@ namespace StockSharp.Transaq
 		/// </summary>
 		public TimeSpan? ServerTimeDiff
 		{
-			get { return _adapter.ServerTimeDiff; }
+			get { return NativeAdapter.ServerTimeDiff; }
 		}
 
 		/// <summary>
@@ -154,7 +156,7 @@ namespace StockSharp.Transaq
 		/// </summary>
 		public IEnumerable<TimeSpan> CandleTimeFrames
 		{
-			get { return _adapter.CandleTimeFrames; }
+			get { return NativeAdapter.CandleTimeFrames; }
 		}
 
 		/// <summary>
@@ -162,8 +164,8 @@ namespace StockSharp.Transaq
 		/// </summary>
 		public event Action CandleTimeFramesInitialized
 		{
-			add { _adapter.CandleTimeFramesInitialized += value; }
-			remove { _adapter.CandleTimeFramesInitialized -= value; }
+			add { NativeAdapter.CandleTimeFramesInitialized += value; }
+			remove { NativeAdapter.CandleTimeFramesInitialized -= value; }
 		}
 
 		/// <summary>
@@ -173,7 +175,7 @@ namespace StockSharp.Transaq
 		/// <returns>Временные диапазоны.</returns>
 		IEnumerable<Range<DateTimeOffset>> IExternalCandleSource.GetSupportedRanges(CandleSeries series)
 		{
-			if (series.CandleType == typeof(TimeFrameCandle) && series.Arg is TimeSpan && _adapter.CandleTimeFrames.Contains((TimeSpan)series.Arg))
+			if (series.CandleType == typeof(TimeFrameCandle) && series.Arg is TimeSpan && NativeAdapter.CandleTimeFrames.Contains((TimeSpan)series.Arg))
 			{
 				yield return new Range<DateTimeOffset>(DateTimeOffset.MinValue, CurrentTime);
 			}

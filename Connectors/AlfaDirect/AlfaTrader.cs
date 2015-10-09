@@ -2,6 +2,7 @@
 {
 	using System;
 	using System.Collections.Generic;
+	using System.Linq;
 	using System.Security;
 	using System.Threading;
 
@@ -26,16 +27,17 @@
 		private readonly SynchronizedPairSet<long, CandleSeries> _series = new SynchronizedPairSet<long, CandleSeries>();
 		private readonly CachedSynchronizedSet<CandleSeries> _realTimeSeries = new CachedSynchronizedSet<CandleSeries>();
 
-		private readonly AlfaDirectMessageAdapter _adapter;
-
 		/// <summary>
 		/// Создать <see cref="AlfaTrader"/>.
 		/// </summary>
 		public AlfaTrader()
 		{
-			_adapter = new AlfaDirectMessageAdapter(TransactionIdGenerator);
+			Adapter.InnerAdapters.Add(new AlfaDirectMessageAdapter(TransactionIdGenerator));
+		}
 
-			Adapter.InnerAdapters.Add(_adapter);
+		private AlfaDirectMessageAdapter NativeAdapter
+		{
+			get { return Adapter.InnerAdapters.OfType<AlfaDirectMessageAdapter>().First(); }
 		}
 
 		/// <summary>
@@ -52,8 +54,8 @@
 		/// </summary>
 		public string Login
 		{
-			get { return _adapter.Login; }
-			set { _adapter.Login = value; }
+			get { return NativeAdapter.Login; }
+			set { NativeAdapter.Login = value; }
 		}
 
 		/// <summary>
@@ -61,8 +63,8 @@
 		/// </summary>
 		public string Password
 		{
-			get { return _adapter.Password.To<string>(); }
-			set { _adapter.Password = value.To<SecureString>(); }
+			get { return NativeAdapter.Password.To<string>(); }
+			set { NativeAdapter.Password = value.To<SecureString>(); }
 		}
 
 		private TimeSpan _realTimeCandleOffset = TimeSpan.FromSeconds(5);

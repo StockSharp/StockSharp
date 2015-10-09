@@ -23,16 +23,18 @@ namespace StockSharp.OpenECry
 	public sealed class OECTrader : Connector, IExternalCandleSource
 	{
 		private readonly SynchronizedPairSet<long, CandleSeries> _series = new SynchronizedPairSet<long, CandleSeries>();
-		private readonly OpenECryMessageAdapter _adapter;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="OECTrader"/>.
 		/// </summary>
 		public OECTrader()
 		{
-			_adapter = new OpenECryMessageAdapter(TransactionIdGenerator);
+			Adapter.InnerAdapters.Add(new OpenECryMessageAdapter(TransactionIdGenerator));
+		}
 
-			Adapter.InnerAdapters.Add(_adapter);
+		private OpenECryMessageAdapter NativeAdapter
+		{
+			get { return Adapter.InnerAdapters.OfType<OpenECryMessageAdapter>().First(); }
 		}
 
 		/// <summary>
@@ -40,8 +42,8 @@ namespace StockSharp.OpenECry
 		/// </summary>
 		public string Uuid
 		{
-			get { return _adapter.Uuid; }
-			set { _adapter.Uuid = value; }
+			get { return NativeAdapter.Uuid; }
+			set { NativeAdapter.Uuid = value; }
 		}
 
 		/// <summary>
@@ -49,8 +51,8 @@ namespace StockSharp.OpenECry
 		/// </summary>
 		public string Login
 		{
-			get { return _adapter.Login; }
-			set { _adapter.Login = value; }
+			get { return NativeAdapter.Login; }
+			set { NativeAdapter.Login = value; }
 		}
 
 		/// <summary>
@@ -58,8 +60,8 @@ namespace StockSharp.OpenECry
 		/// </summary>
 		public string Password
 		{
-			get { return _adapter.Password.To<string>(); }
-			set { _adapter.Password = value.To<SecureString>(); }
+			get { return NativeAdapter.Password.To<string>(); }
+			set { NativeAdapter.Password = value.To<SecureString>(); }
 		}
 
 		/// <summary>
@@ -67,8 +69,8 @@ namespace StockSharp.OpenECry
 		/// </summary>
 		public OpenECryRemoting RemotingRequired
 		{
-			get { return _adapter.Remoting; }
-			set { _adapter.Remoting = value; }
+			get { return NativeAdapter.Remoting; }
+			set { NativeAdapter.Remoting = value; }
 		}
 
 		/// <summary>
@@ -76,8 +78,8 @@ namespace StockSharp.OpenECry
 		/// </summary>
 		public bool UseNativeReconnect
 		{
-			get { return _adapter.UseNativeReconnect; }
-			set { _adapter.UseNativeReconnect = value; }
+			get { return NativeAdapter.UseNativeReconnect; }
+			set { NativeAdapter.UseNativeReconnect = value; }
 		}
 
 		/// <summary>
@@ -85,8 +87,8 @@ namespace StockSharp.OpenECry
 		/// </summary>
 		public EndPoint Address
 		{
-			get { return _adapter.Address; }
-			set { _adapter.Address = value; }
+			get { return NativeAdapter.Address; }
+			set { NativeAdapter.Address = value; }
 		}
 
 		/// <summary>
@@ -94,8 +96,8 @@ namespace StockSharp.OpenECry
 		/// </summary>
 		public bool EnableOECLogging
 		{
-			get { return _adapter.EnableOECLogging; }
-			set { _adapter.EnableOECLogging = value; }
+			get { return NativeAdapter.EnableOECLogging; }
+			set { NativeAdapter.EnableOECLogging = value; }
 		}
 
 		///// <summary>
