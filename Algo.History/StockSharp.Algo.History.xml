@@ -898,6 +898,20 @@
             Number of decimal places.
             </summary>
     </member>
+    <member name="T:StockSharp.Algo.History.Russian.FortsDownloader">
+      <summary>
+            The helper class that filling fields in <see cref="P:StockSharp.BusinessEntities.Security.PriceStep" /> and <see cref="P:StockSharp.BusinessEntities.Security.VolumeStep" /> based on information from the site http://moex.com/ru/derivatives/contracts.aspx?p=act
+            </summary>
+    </member>
+    <member name="M:StockSharp.Algo.History.Russian.FortsDownloader.UpdateInfo(StockSharp.BusinessEntities.Security,System.Boolean)">
+      <summary>
+            To update information for the instrument.
+            </summary>
+      <param name="security">Security.</param>
+      <param name="isDownload">Whether to download information from the site, if it is not found locally.</param>
+      <returns>
+        <see langword="true" />, if the instrument has been updated successfully. Otherwise, <see langword="false" />.</returns>
+    </member>
     <member name="T:StockSharp.Algo.History.Russian.MfdHistorySource">
       <summary>
             The source for downloading historical data from Mdf.ru.
