@@ -1,6 +1,7 @@
 StockSharp API Change log
 ========================
 ###current:
+* (bug) Fix http://stocksharp.com/forum/yaf_postsm35888_LChI-Viewer.aspx#post35888
 * (bug) FilterableSecurityProvider. Moved to Algo.
 * (bug) ISecurityStorage.NewSecurity event.
 * (bug) BasketMessageAdapter. Save/Load fix.

@@ -258,7 +258,7 @@ namespace StockSharp.Algo.Storages
 			protected override IEnumerable<ExecutionMessage> FilterNewData(IEnumerable<ExecutionMessage> data, IMarketDataMetaInfo metaInfo)
 			{
 				var prevTransId = (long)metaInfo.LastId;
-				return data.Where(i => i.TransactionId > prevTransId);
+				return prevTransId == 0 ? data : data.Where(i => i.TransactionId > prevTransId);
 			}
 
 			public override DateTimeOffset GetTime(OrderLogItem data)
