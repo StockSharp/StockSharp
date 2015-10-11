@@ -1406,23 +1406,21 @@ namespace StockSharp.Studio
 			var wnd = new ConnectorWindow();
 
 			wnd.ConnectorsInfo.AddRange(AppConfig.Instance.Connections);
-			wnd.Adapter = _algoService.Connector.Adapter;
+			wnd.Adapter = (BasketMessageAdapter)_algoService.Connector.Adapter.Clone();
 			wnd.AutoConnect = _persistableService.GetAutoConnect();
 
-			var retVal = wnd.ShowModal(this);
+			if (!wnd.ShowModal(this))
+				return false;
 
-			if (retVal)
+			_algoService.Connector.Adapter.Load(wnd.Adapter.Save());
+
+			var settings = new SettingsStorage
 			{
-				var settings = new SettingsStorage
-				{
-					{ "TransactionAdapter", _algoService.Connector.TransactionAdapter.Save() },
-					{ "MarketDataAdapter", _algoService.Connector.MarketDataAdapter.Save() }
-				};
-				_persistableService.SetStudioSession(settings);
-				_persistableService.SetAutoConnect(wnd.AutoConnect);
-			}
-
-			return retVal;
+				{ "TransactionAdapter", _algoService.Connector.TransactionAdapter.Save() },
+				{ "MarketDataAdapter", _algoService.Connector.MarketDataAdapter.Save() }
+			};
+			_persistableService.SetStudioSession(settings);
+			_persistableService.SetAutoConnect(wnd.AutoConnect);
 		}
 
 		private void ExecutedStockSharpConnect(object sender, ExecutedRoutedEventArgs e)

@@ -217,10 +217,11 @@
 		{
 			var wnd = new ConnectorWindow();
 			wnd.ConnectorsInfo.AddRange(AppConfig.Instance.Connections);
-			wnd.Adapter = _connector.Adapter;
+			wnd.Adapter = (BasketMessageAdapter)_connector.Adapter.Clone();
 
 			if (wnd.ShowModal(this))
 			{
+				_connector.Adapter.Load(wnd.Adapter.Save());
 				SaveSettings();
 			}
 		}
