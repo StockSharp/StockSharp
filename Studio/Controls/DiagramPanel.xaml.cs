@@ -93,11 +93,7 @@ namespace StockSharp.Studio.Controls
 			if (!DiagramEditor.IndicatorTypes.IsEmpty())
 				return;
 
-			var indicatorTypes = ConfigManager
-				.GetService<IAlgoService>()
-				.IndicatorTypes;
-
-			DiagramEditor.IndicatorTypes.AddRange(indicatorTypes);
+			DiagramEditor.IndicatorTypes.AddRange(Configuration.Extensions.GetIndicatorTypes());
         }
 
 		private StrategyInfo _strategyInfo;

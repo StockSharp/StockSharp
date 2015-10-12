@@ -31,6 +31,7 @@
 	using StockSharp.Xaml;
 	using StockSharp.Xaml.Charting;
 	using StockSharp.Xaml.Diagram;
+	using StockSharp.Configuration;
 
 	public partial class MainWindow
 	{
@@ -108,7 +109,7 @@
 
 			ConfigManager.RegisterService(compositionSerializer);
 
-			compositionSerializer.DiagramElements.AddRange(AppConfig.Instance.DiagramElements.Select(t => t.CreateInstance<DiagramElement>()));
+			compositionSerializer.DiagramElements.AddRange(Configuration.Extensions.GetDiagramElements());
 			Directory.GetFiles("Compositions", "*.xml").Select(File.ReadAllText).ForEach(s => compositionSerializer.Load(s.LoadSettingsStorage(), true));
 		}
 
@@ -215,13 +216,8 @@
 
 		private void ExecutedConnectionSettings(object sender, ExecutedRoutedEventArgs e)
 		{
-			var wnd = new ConnectorWindow();
-			wnd.ConnectorsInfo.AddRange(AppConfig.Instance.Connections);
-			wnd.Adapter = (BasketMessageAdapter)_connector.Adapter.Clone();
-
-			if (wnd.ShowModal(this))
+			if (_connector.Configure(this))
 			{
-				_connector.Adapter.Load(wnd.Adapter.Save());
 				SaveSettings();
 			}
 		}

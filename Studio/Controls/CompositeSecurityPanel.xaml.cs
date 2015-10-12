@@ -25,6 +25,7 @@ namespace StockSharp.Studio.Controls
 	using StockSharp.Algo.Candles;
 	using StockSharp.Algo.Indicators;
 	using StockSharp.BusinessEntities;
+	using StockSharp.Configuration;
 	using StockSharp.Logging;
 	using StockSharp.Studio.Core;
 	using StockSharp.Studio.Core.Commands;
@@ -239,13 +240,9 @@ namespace StockSharp.Studio.Controls
 			ChartPanel.SubscribeIndicatorElement += OnChartPanelSubscribeIndicatorElement;
 			ChartPanel.UnSubscribeElement += OnChartPanelUnSubscribeElement;
 			
-			var indicatorTypes = ConfigManager
-				.GetService<IAlgoService>()
-				.IndicatorTypes;
-
 			ChartPanel.IsInteracted = true;
 			ChartPanel.MinimumRange = 200;
-			ChartPanel.IndicatorTypes.AddRange(indicatorTypes);
+			ChartPanel.FillIndicators();
 
 			SecurityPicker.SetColumnVisibility("Id", Visibility.Visible);
 			SecurityPicker.SetColumnVisibility("Code", Visibility.Collapsed);

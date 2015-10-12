@@ -1,11 +1,17 @@
-﻿namespace StockSharp.Studio.Configuration
+﻿namespace StockSharp.Configuration
 {
 	using System.Configuration;
 
-	class IndicatorElement : ConfigurationElement
+	/// <summary>
+	/// Represents the custom indicator.
+	/// </summary>
+	public class IndicatorElement : ConfigurationElement
 	{
 		private const string _typeKey = "type";
 
+		/// <summary>
+		/// Custom indicator.
+		/// </summary>
 		[ConfigurationProperty(_typeKey, IsRequired = true, IsKey = true)]
 		public string Type
 		{
@@ -15,6 +21,9 @@
 
 		private const string _painterKey = "painter";
 
+		/// <summary>
+		/// Custom indicator painter.
+		/// </summary>
 		[ConfigurationProperty(_painterKey, IsRequired = false)]
 		public string Painter
 		{

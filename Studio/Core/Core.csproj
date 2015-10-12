@@ -175,7 +175,6 @@
     <Compile Include="SessionStrategy.cs" />
     <Compile Include="SessionStrategyList.cs" />
     <Compile Include="Commands\IStudioCommand.cs" />
-    <Compile Include="IAlgoService.cs" />
     <Compile Include="IStrategyService.cs" />
     <Compile Include="IStudioEntityRegistry.cs" />
     <Compile Include="IStudioConnector.cs" />

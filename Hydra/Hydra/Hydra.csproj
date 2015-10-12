@@ -166,11 +166,6 @@
     <Compile Include="..\..\StockSharpAssemblyInfo.cs">
       <Link>Properties\StockSharpAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="AppConfig.cs" />
-    <Compile Include="Configuration\CandleElement.cs" />
-    <Compile Include="Configuration\CandleElementCollection.cs" />
-    <Compile Include="Configuration\IndicatorElement.cs" />
-    <Compile Include="Configuration\IndicatorElementCollection.cs" />
     <Compile Include="Configuration\HydraSection.cs" />
     <Compile Include="Controls\DrivePanel.xaml.cs">
       <DependentUpon>DrivePanel.xaml</DependentUpon>
@@ -471,6 +466,10 @@
     <ProjectReference Include="..\..\Community\Community.csproj">
       <Project>{e8e18f8f-97bd-41ae-8888-f54f2411d575}</Project>
       <Name>Community</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Configuration\Configuration.csproj">
+      <Project>{2CFF1903-4EF5-46F8-AB5D-BB623CA75CE6}</Project>
+      <Name>Configuration</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Localization\Localization.csproj">
       <Project>{A98A81CE-75A1-4FAB-9C02-E6EEF4B51F4F}</Project>

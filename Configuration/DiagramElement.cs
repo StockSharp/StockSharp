@@ -1,11 +1,17 @@
-﻿namespace StockSharp.Studio.Configuration
+﻿namespace StockSharp.Configuration
 {
 	using System.Configuration;
 
-	class CandleElement : ConfigurationElement
+	/// <summary>
+	/// Represents the custom diagram element.
+	/// </summary>
+	public class DiagramElement : ConfigurationElement
 	{
 		private const string _typeKey = "type";
 
+		/// <summary>
+		/// Custom diagram element.
+		/// </summary>
 		[ConfigurationProperty(_typeKey, IsRequired = true, IsKey = true)]
 		public string Type
 		{

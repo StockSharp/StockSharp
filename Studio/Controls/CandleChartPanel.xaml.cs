@@ -13,6 +13,7 @@ namespace StockSharp.Studio.Controls
 	using StockSharp.Algo.Candles;
 	using StockSharp.Algo.Indicators;
 	using StockSharp.BusinessEntities;
+	using StockSharp.Configuration;
 	using StockSharp.Localization;
 	using StockSharp.Studio.Core;
 	using StockSharp.Studio.Core.Commands;
@@ -72,12 +73,8 @@ namespace StockSharp.Studio.Controls
 			ChartPanel.SubscribeTradeElement += OnChartPanelSubscribeTradeElement;
 			ChartPanel.UnSubscribeElement += OnChartPanelUnSubscribeElement;
 
-			var indicatorTypes = ConfigManager
-				.GetService<IAlgoService>()
-				.IndicatorTypes;
-
 			ChartPanel.MinimumRange = 200;
-			ChartPanel.IndicatorTypes.AddRange(indicatorTypes);
+			ChartPanel.FillIndicators();
 
 			_bufferedChart = new BufferedChart(ChartPanel);
 

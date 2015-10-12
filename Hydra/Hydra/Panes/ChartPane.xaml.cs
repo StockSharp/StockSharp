@@ -13,6 +13,7 @@ namespace StockSharp.Hydra.Panes
 
 	using StockSharp.Algo.Candles;
 	using StockSharp.Algo.Indicators;
+	using StockSharp.Configuration;
 	using StockSharp.Logging;
 	using StockSharp.Xaml.Charting;
 	using StockSharp.Xaml.Charting.IndicatorPainters;
@@ -37,7 +38,7 @@ namespace StockSharp.Hydra.Panes
 
 			ChartPanel.MinimumRange = 200;
 			ChartPanel.IsInteracted = true;
-			ChartPanel.IndicatorTypes.AddRange(AppConfig.Instance.Indicators);
+			ChartPanel.FillIndicators();
 
 			ChartPanel.SubscribeCandleElement += OnChartPanelSubscribeCandleElement;
 			ChartPanel.SubscribeIndicatorElement += OnChartPanelSubscribeIndicatorElement;

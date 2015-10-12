@@ -11,7 +11,7 @@
     <RootNamespace>StockSharp.Studio</RootNamespace>
     <AssemblyName Condition="'$(Platform)'=='x64'">Studio_x64</AssemblyName>
     <AssemblyName Condition="'$(Platform)'=='x86'">Studio</AssemblyName>
-    <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <TargetFrameworkProfile>
     </TargetFrameworkProfile>
     <FileAlignment>512</FileAlignment>
@@ -167,6 +167,8 @@
     <Compile Include="..\..\StockSharpAssemblyInfo.cs">
       <Link>Properties\StockSharpAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="Configuration\ControlElement.cs" />
+    <Compile Include="Configuration\ControlElementCollection.cs" />
     <Compile Include="ContentDocumentWindow.xaml.cs">
       <DependentUpon>ContentDocumentWindow.xaml</DependentUpon>
     </Compile>
@@ -225,10 +227,7 @@
     <Compile Include="Ribbon\TerminalTab.xaml.cs">
       <DependentUpon>TerminalTab.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Services\AlgoService.cs" />
     <Compile Include="AppConfig.cs" />
-    <Compile Include="Configuration\DiagramElement.cs" />
-    <Compile Include="Configuration\DiagramElementCollection.cs" />
     <Compile Include="ContentToolWindow.xaml.cs">
       <DependentUpon>ContentToolWindow.xaml</DependentUpon>
     </Compile>
@@ -252,18 +251,10 @@
       <DependentUpon>StrategyInfoContent.xaml</DependentUpon>
     </Compile>
     <Compile Include="StudioConnector.cs" />
-    <Compile Include="Configuration\CandleElement.cs" />
-    <Compile Include="Configuration\CandleElementCollection.cs" />
-    <Compile Include="Configuration\ControlElement.cs" />
-    <Compile Include="Configuration\ControlElementCollection.cs" />
-    <Compile Include="Configuration\IndicatorElement.cs" />
-    <Compile Include="Configuration\IndicatorElementCollection.cs" />
     <Compile Include="Database\StudioEntityRegistry.cs" />
     <Compile Include="TerminalStrategy.cs" />
     <Compile Include="ToolWindowsManager.cs" />
     <Compile Include="UserConfig.cs" />
-    <Compile Include="Configuration\ConnectionElement.cs" />
-    <Compile Include="Configuration\ConnectionElementCollection.cs" />
     <Compile Include="Configuration\StudioSection.cs" />
     <Compile Include="NewStrategyWindow.xaml.cs">
       <DependentUpon>NewStrategyWindow.xaml</DependentUpon>
@@ -427,6 +418,10 @@
     <ProjectReference Include="..\..\Community\Community.csproj">
       <Project>{E8E18F8F-97BD-41AE-8888-F54F2411D575}</Project>
       <Name>Community</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Configuration\Configuration.csproj">
+      <Project>{2CFF1903-4EF5-46F8-AB5D-BB623CA75CE6}</Project>
+      <Name>Configuration</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Connectors\AlfaDirect\AlfaDirect.csproj">
       <Project>{aaa445e0-aa85-4b49-ad45-edd1b4839137}</Project>

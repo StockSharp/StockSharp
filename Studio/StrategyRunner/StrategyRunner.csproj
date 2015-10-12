@@ -9,10 +9,11 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>StockSharp.Studio.StrategyRunner</RootNamespace>
     <AssemblyName>StrategyRunner</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <WarningLevel>4</WarningLevel>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -123,20 +124,6 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="..\Studio\Configuration\ConnectionElement.cs">
-      <Link>Configuration\ConnectionElement.cs</Link>
-    </Compile>
-    <Compile Include="..\Studio\Configuration\ConnectionElementCollection.cs">
-      <Link>Configuration\ConnectionElementCollection.cs</Link>
-    </Compile>
-    <Compile Include="..\Studio\Configuration\DiagramElement.cs">
-      <Link>Configuration\DiagramElement.cs</Link>
-    </Compile>
-    <Compile Include="..\Studio\Configuration\DiagramElementCollection.cs">
-      <Link>Configuration\DiagramElementCollection.cs</Link>
-    </Compile>
-    <Compile Include="AppConfig.cs" />
-    <Compile Include="Configuration\StockSharpSection.cs" />
     <Compile Include="DiagramStrategyEx.cs" />
     <Compile Include="SecretWindow.xaml.cs">
       <DependentUpon>SecretWindow.xaml</DependentUpon>
@@ -195,7 +182,9 @@
     <AppDesigner Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\StockSharp %28GitLab%29\Algo.Strategies\Algo.Strategies.csproj">
@@ -213,6 +202,10 @@
     <ProjectReference Include="..\..\Community\Community.csproj">
       <Project>{e8e18f8f-97bd-41ae-8888-f54f2411d575}</Project>
       <Name>Community</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Configuration\Configuration.csproj">
+      <Project>{2cff1903-4ef5-46f8-ab5d-bb623ca75ce6}</Project>
+      <Name>Configuration</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Localization\Localization.csproj">
       <Project>{a98a81ce-75a1-4fab-9c02-e6eef4b51f4f}</Project>

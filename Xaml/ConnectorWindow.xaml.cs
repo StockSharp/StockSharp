@@ -14,7 +14,6 @@ namespace StockSharp.Xaml
 	using Ecng.Common;
 	using Ecng.ComponentModel;
 	using Ecng.Localization;
-	using Ecng.Serialization;
 	using Ecng.Xaml;
 
 	using MoreLinq;

@@ -1,25 +1,8 @@
 ﻿namespace StockSharp.Hydra.Configuration
 {
-	using System.Configuration;
+	using StockSharp.Configuration;
 
-	class HydraSection : ConfigurationSection
+	class HydraSection : StockSharpSection
 	{
-		private const string _candlesKey = "candles";
-
-		[ConfigurationProperty(_candlesKey, IsDefaultCollection = true)]
-		[ConfigurationCollection(typeof(CandleElementCollection), AddItemName = "candle", ClearItemsName = "clear", RemoveItemName = "remove")]
-		public CandleElementCollection Candles
-		{
-			get { return (CandleElementCollection)base[_candlesKey]; }
-		}
-
-		private const string _indicatorsKey = "indicators";
-
-		[ConfigurationProperty(_indicatorsKey, IsDefaultCollection = true)]
-		[ConfigurationCollection(typeof(IndicatorElementCollection), AddItemName = "indicator", ClearItemsName = "clear", RemoveItemName = "remove")]
-		public IndicatorElementCollection Indicators
-		{
-			get { return (IndicatorElementCollection)base[_indicatorsKey]; }
-		}
 	}
 }

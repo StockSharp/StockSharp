@@ -1,0 +1,212 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{2CFF1903-4EF5-46F8-AB5D-BB623CA75CE6}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>StockSharp.Configuration</RootNamespace>
+    <AssemblyName>StockSharp.Configuration</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\Debug\StockSharp.Configuration.xml</DocumentationFile>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>none</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\Release\StockSharp.Configuration.xml</DocumentationFile>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Ecng.Collections">
+      <HintPath>..\References\Ecng\Ecng.Collections.dll</HintPath>
+    </Reference>
+    <Reference Include="Ecng.Common">
+      <HintPath>..\References\Ecng\Ecng.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="Ecng.ComponentModel">
+      <HintPath>..\References\Ecng\Ecng.ComponentModel.dll</HintPath>
+    </Reference>
+    <Reference Include="Ecng.Configuration">
+      <HintPath>..\References\Ecng\Ecng.Configuration.dll</HintPath>
+    </Reference>
+    <Reference Include="Ecng.Serialization">
+      <HintPath>..\References\Ecng\Ecng.Serialization.dll</HintPath>
+    </Reference>
+    <Reference Include="Ecng.Xaml">
+      <HintPath>..\References\Ecng\Ecng.Xaml.dll</HintPath>
+    </Reference>
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+    <Reference Include="System" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xaml" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Xml" />
+    <Reference Include="WindowsBase" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\StockSharpAssemblyInfo.cs">
+      <Link>Properties\StockSharpAssemblyInfo.cs</Link>
+    </Compile>
+    <Compile Include="CandleElement.cs" />
+    <Compile Include="CandleElementCollection.cs" />
+    <Compile Include="ConnectionElement.cs" />
+    <Compile Include="ConnectionElementCollection.cs" />
+    <Compile Include="DiagramElement.cs" />
+    <Compile Include="DiagramElementCollection.cs" />
+    <Compile Include="Extensions.cs" />
+    <Compile Include="IndicatorElement.cs" />
+    <Compile Include="IndicatorElementCollection.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="StockSharpSection.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\Blackwood\Blackwood.csproj">
+      <Project>{C0D530DD-1E5A-4BE4-9AC6-FF11E5FC9B26}</Project>
+      <Name>Blackwood</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\Fix\Fix.csproj">
+      <Project>{DE2DC640-FA5B-46F2-92E7-E5A53232185F}</Project>
+      <Name>Fix</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\ITCH\ITCH.csproj">
+      <Project>{5E66A118-9D37-4F93-9598-A8B56A6BE1CA}</Project>
+      <Name>ITCH</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\Micex\Micex.csproj">
+      <Project>{E0C3BDD6-E75F-48C9-BF8C-05EFECE3E0B2}</Project>
+      <Name>Micex</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\Plaza\Plaza.csproj">
+      <Project>{7EABA894-FC98-4F5E-A212-C40550260886}</Project>
+      <Name>Plaza</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\Rithmic\Rithmic.csproj">
+      <Project>{FFBC7740-0D2B-49BA-8F95-59E4FC915D06}</Project>
+      <Name>Rithmic</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Xaml.Charting\Xaml.Charting.csproj">
+      <Project>{c449d618-dea4-41c3-ba86-9f827c7421dc}</Project>
+      <Name>Xaml.Charting</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Xaml.Diagram\Xaml.Diagram.csproj">
+      <Project>{e5d21a65-1b77-4b4b-87c7-8ac7eee4f085}</Project>
+      <Name>Xaml.Diagram</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Algo\Algo.csproj">
+      <Project>{2A5C6FAD-106C-4A4A-B602-77A6B1034CA2}</Project>
+      <Name>Algo</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\BusinessEntities\BusinessEntities.csproj">
+      <Project>{DCE69DB8-53CA-4B7F-9368-02F175A31074}</Project>
+      <Name>BusinessEntities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Connectors\AlfaDirect\AlfaDirect.csproj">
+      <Project>{AAA445E0-AA85-4B49-AD45-EDD1B4839137}</Project>
+      <Name>AlfaDirect</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Connectors\BarChart\BarChart.csproj">
+      <Project>{99B84E0C-D035-4BD9-8A42-8232ED6BA3F4}</Project>
+      <Name>BarChart</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Connectors\BitStamp\BitStamp.csproj">
+      <Project>{90b93af4-3168-4415-b916-9e078f192696}</Project>
+      <Name>BitStamp</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Connectors\Btce\Btce.csproj">
+      <Project>{AF225452-1CF1-48A2-B381-C02BEBE643D7}</Project>
+      <Name>Btce</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Connectors\CQG\CQG.csproj">
+      <Project>{34984B57-9200-47B9-AC78-0D93FDFA437A}</Project>
+      <Name>CQG</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Connectors\ETrade\ETrade.csproj">
+      <Project>{480539A8-CA30-4B87-B038-6AD854DA0C6A}</Project>
+      <Name>ETrade</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Connectors\InteractiveBrokers\InteractiveBrokers.csproj">
+      <Project>{F17D780E-6F82-40FD-84E1-C4EB09853BBD}</Project>
+      <Name>InteractiveBrokers</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Connectors\IQFeed\IQFeed.csproj">
+      <Project>{f3068408-9764-432e-8fb4-596b308edb4f}</Project>
+      <Name>IQFeed</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Connectors\LMAX\LMAX.csproj">
+      <Project>{4B37342E-9A01-499B-9E32-2E9948A6D0C4}</Project>
+      <Name>LMAX</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Connectors\Oanda\Oanda.csproj">
+      <Project>{9188D051-7FAA-4CF7-9D93-6D59E2FAEDD0}</Project>
+      <Name>Oanda</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Connectors\OpenECry\OpenECry.csproj">
+      <Project>{17EAE926-C9A9-40C7-8D54-3545077B4AB7}</Project>
+      <Name>OpenECry</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Connectors\Quik\Quik.csproj">
+      <Project>{1B798A4E-2271-46F9-9C2D-4E563114E268}</Project>
+      <Name>Quik</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Connectors\Rss\Rss.csproj">
+      <Project>{FBC5BE61-E6D9-47DF-9515-900184DDEBA0}</Project>
+      <Name>Rss</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Connectors\SmartCom\SmartCom.csproj">
+      <Project>{3EBEC334-3476-4F65-81C4-BC9D217550C1}</Project>
+      <Name>SmartCom</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Connectors\Sterling\Sterling.csproj">
+      <Project>{9ADD140B-1C43-4077-B32E-0EBA81648C4D}</Project>
+      <Name>Sterling</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Connectors\Transaq\Transaq.csproj">
+      <Project>{A00E5A4B-CB24-474A-8F2B-06A2E370C4F6}</Project>
+      <Name>Transaq</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Localization\Localization.csproj">
+      <Project>{a98a81ce-75a1-4fab-9c02-e6eef4b51f4f}</Project>
+      <Name>Localization</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Logging\Logging.csproj">
+      <Project>{c4476add-a3d5-41bb-9d43-55d865863b78}</Project>
+      <Name>Logging</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Messages\Messages.csproj">
+      <Project>{b47f9c23-a4bd-46a9-bf27-54cb3d653503}</Project>
+      <Name>Messages</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Xaml\Xaml.csproj">
+      <Project>{64E4D6F0-36B6-4904-9BA7-FFFBE5FF71D8}</Project>
+      <Name>Xaml</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

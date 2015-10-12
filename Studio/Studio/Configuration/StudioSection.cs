@@ -2,7 +2,9 @@
 {
 	using System.Configuration;
 
-	class StudioSection : ConfigurationSection
+	using StockSharp.Configuration;
+
+	class StudioSection : StockSharpSection
 	{
 		private const string _fixServerAddressKey = "fixServerAddress";
 
@@ -10,33 +12,6 @@
 		public string FixServerAddress
 		{
 			get { return (string)base[_fixServerAddressKey]; }
-		}
-
-		private const string _connectionsKey = "connections";
-
-		[ConfigurationProperty(_connectionsKey, IsDefaultCollection = true)]
-		[ConfigurationCollection(typeof(ConnectionElementCollection), AddItemName = "connection", ClearItemsName = "clear", RemoveItemName = "remove")]
-		public ConnectionElementCollection Connections
-		{
-			get { return (ConnectionElementCollection)base[_connectionsKey]; }
-		}
-
-		private const string _candlesKey = "candles";
-
-		[ConfigurationProperty(_candlesKey, IsDefaultCollection = true)]
-		[ConfigurationCollection(typeof(CandleElementCollection), AddItemName = "candle", ClearItemsName = "clear", RemoveItemName = "remove")]
-		public CandleElementCollection Candles
-		{
-			get { return (CandleElementCollection)base[_candlesKey]; }
-		}
-
-		private const string _indicatorsKey = "indicators";
-
-		[ConfigurationProperty(_indicatorsKey, IsDefaultCollection = true)]
-		[ConfigurationCollection(typeof(IndicatorElementCollection), AddItemName = "indicator", ClearItemsName = "clear", RemoveItemName = "remove")]
-		public IndicatorElementCollection Indicators
-		{
-			get { return (IndicatorElementCollection)base[_indicatorsKey]; }
 		}
 
 		private const string _toolControlsKey = "toolControls";
@@ -55,15 +30,6 @@
 		public ControlElementCollection StrategyControls
 		{
 			get { return (ControlElementCollection)base[_strategyControlsKey]; }
-		}
-
-		private const string _diagramElementsKey = "diagramElements";
-
-		[ConfigurationProperty(_diagramElementsKey, IsDefaultCollection = true)]
-		[ConfigurationCollection(typeof(DiagramElementCollection), AddItemName = "element", ClearItemsName = "clear", RemoveItemName = "remove")]
-		public DiagramElementCollection DiagramElements
-		{
-			get { return (DiagramElementCollection)base[_diagramElementsKey]; }
 		}
 	}
 }

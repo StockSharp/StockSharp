@@ -42,6 +42,8 @@ namespace StockSharp.Studio
 	using StockSharp.Xaml;
 	using StockSharp.Xaml.Code;
 	using StockSharp.Xaml.Diagram;
+	using StockSharp.Configuration;
+	using StockSharp.Localization;
 
 	using IStrategyService = StockSharp.Studio.Core.IStrategyService;
 	using RibbonButton = ActiproSoftware.Windows.Controls.Ribbon.Controls.Button;
@@ -49,7 +51,6 @@ namespace StockSharp.Studio
 	using RibbonMenuItem = ActiproSoftware.Windows.Controls.Ribbon.Controls.Primitives.MenuItem;
 	using RibbonPopupButton = ActiproSoftware.Windows.Controls.Ribbon.Controls.PopupButton;
 	using RibbonSeparator = ActiproSoftware.Windows.Controls.Ribbon.Controls.Separator;
-	using StockSharp.Localization;
 
 	public partial class MainWindow
 	{
@@ -110,7 +111,7 @@ namespace StockSharp.Studio
 
 		#endregion
 
-		private AlgoService _algoService;
+		private StudioConnector _connector;
 		private StudioEntityRegistry _entityRegistry;
 		private bool _showConnectionErrors;
 		private bool _isInitialized;
@@ -587,7 +588,7 @@ namespace StockSharp.Studio
 					((Portfolio)copy).CopyTo(pf);
 
 					_entityRegistry.Portfolios.Save(pf);
-					_algoService.Connector.SendToEmulator(new[] { pf.ToChangeMessage() });
+					_connector.SendToEmulator(new[] { pf.ToChangeMessage() });
 					new PortfolioCommand(pf, wnd.IsNew).Process(this);
 				}
 				else
@@ -597,7 +598,7 @@ namespace StockSharp.Studio
 					((Position)copy).CopyTo(pos);
 
 					_entityRegistry.Positions.Save(pos);
-					_algoService.Connector.SendToEmulator(new[] { pos.ToChangeMessage() });
+					_connector.SendToEmulator(new[] { pos.ToChangeMessage() });
 					new PositionCommand(DateTime.Now, pos, wnd.IsNew).Process(this);
 				}
 			});
@@ -618,7 +619,7 @@ namespace StockSharp.Studio
 
 			ConfigManager.RegisterService(compositionSerializer);
 
-			compositionSerializer.DiagramElements.AddRange(((IAlgoService)_algoService).DiagramElementTypes.Select(t => t.CreateInstance<DiagramElement>()));
+			compositionSerializer.DiagramElements.AddRange(StockSharp.Configuration.Extensions.GetDiagramElements());
 			
 			Properties
 				.Resources
@@ -957,17 +958,17 @@ namespace StockSharp.Studio
 			ConfigManager.RegisterService<IExchangeInfoProvider>(new ExchangeInfoProvider(_entityRegistry));
 			ConfigManager.RegisterService(CreateMarketDataSettingsCache());
 
-			_algoService = new AlgoService();
+			_connector = new StudioConnector();
+			ConfigManager.GetService<LogManager>().Sources.Add(_connector);
 			var strategyService = new StrategyService();
 
-			var connector = new StudioRegistryConnector(_algoService.Connector);
+			var connector = new StudioRegistryConnector(_connector);
 			ConfigManager.RegisterService<IConnector>(connector);
 			ConfigManager.RegisterService(new FilterableSecurityProvider(connector));
 			connector.Connect();
 
-			ConfigManager.RegisterService<IStudioConnector>(_algoService.Connector);
+			ConfigManager.RegisterService<IStudioConnector>(_connector);
 			ConfigManager.RegisterService<IStrategyService>(strategyService);
-			ConfigManager.RegisterService<IAlgoService>(_algoService);
 
 			InitializeAutomaticUpdater();
 			//InitializeChat();
@@ -1104,11 +1105,11 @@ namespace StockSharp.Studio
 
 				if (sessionSettings != null)
 				{
-					_algoService.Connector.TransactionAdapter.Load(sessionSettings.GetValue<SettingsStorage>("TransactionAdapter"));
-					_algoService.Connector.MarketDataAdapter.Load(sessionSettings.GetValue<SettingsStorage>("MarketDataAdapter"));
+					_connector.TransactionAdapter.Load(sessionSettings.GetValue<SettingsStorage>("TransactionAdapter"));
+					_connector.MarketDataAdapter.Load(sessionSettings.GetValue<SettingsStorage>("MarketDataAdapter"));
 				}
 				else
-					_algoService.Connector.AddStockSharpFixConnection(AppConfig.Instance.FixServerAddresss);
+					_connector.AddStockSharpFixConnection(AppConfig.Instance.FixServerAddresss);
 			}
 			catch (Exception ex)
 			{
@@ -1122,10 +1123,9 @@ namespace StockSharp.Studio
 					.Show();
 			}
 
-			var connector = _algoService.Connector;
-			connector.Connected += Trader_Connected;
-			connector.Disconnected += Trader_Disconnected;
-			connector.ConnectionError += Trader_ConnectionError;
+			_connector.Connected += Trader_Connected;
+			_connector.Disconnected += Trader_Disconnected;
+			_connector.ConnectionError += Trader_ConnectionError;
 		}
 
 		private MarketDataSettingsCache CreateMarketDataSettingsCache()
@@ -1146,11 +1146,9 @@ namespace StockSharp.Studio
 
 		private void Connect()
 		{
-			var connector = _algoService.Connector;
-
 			try
 			{
-				var innerAdapters = ((BasketMessageAdapter)connector.MarketDataAdapter).InnerAdapters;
+				var innerAdapters = ((BasketMessageAdapter)_connector.MarketDataAdapter).InnerAdapters;
 
 				if (innerAdapters.IsEmpty())
 				{
@@ -1196,37 +1194,35 @@ namespace StockSharp.Studio
 				ConnectBtn.IsEnabled = false;
 
 				_showConnectionErrors = true;
-				connector.Connect();
+				_connector.Connect();
 			}
 			catch (Exception ex)
 			{
-				connector.AddErrorLog(ex);
+				_connector.AddErrorLog(ex);
 
-				if (connector.ConnectionState != ConnectionStates.Disconnected)
-					connector.Disconnect();
+				if (_connector.ConnectionState != ConnectionStates.Disconnected)
+					_connector.Disconnect();
 			}
 		}
 
 		private void Disconnect()
 		{
-			var connector = _algoService.Connector;
-
 			try
 			{
 				ConnectBtn.IsEnabled = false;
 
-				connector.Disconnect();
+				_connector.Disconnect();
 			}
 			catch (Exception ex)
 			{
-				connector.AddErrorLog(ex);
+				_connector.AddErrorLog(ex);
 
-				if (connector.ConnectionState != ConnectionStates.Disconnected)
-					connector.Disconnect();
+				if (_connector.ConnectionState != ConnectionStates.Disconnected)
+					_connector.Disconnect();
 			}
 		}
 
-		private void SaveLayout()
+		private static void SaveLayout()
 		{
 			if (UserConfig.Instance.IsChangesSuspended)
 				return;
@@ -1260,11 +1256,9 @@ namespace StockSharp.Studio
 			//ConfigManager.GetService<ChatClient>().Dispose();
 			ConfigManager.GetService<AuthenticationClient>().Dispose();
 
-			var connector = _algoService.Connector;
-
-			connector.Connected -= Trader_Connected;
-			connector.Disconnected -= Trader_Disconnected;
-			connector.ConnectionError -= Trader_ConnectionError;
+			_connector.Connected -= Trader_Connected;
+			_connector.Disconnected -= Trader_Disconnected;
+			_connector.ConnectionError -= Trader_ConnectionError;
 
 			// временное решение для сохранения аннотаций на графике,
 			// т.к. нет способа определить изменение положения или параметров аннотаций.
@@ -1275,16 +1269,14 @@ namespace StockSharp.Studio
 			//а вызов Trader.Dispose сбрасывает приоритеты для трейдеров.
 
 			UserConfig.Instance.Dispose();
-			_algoService.Dispose();
+			_connector.Dispose();
 
 			base.OnClosing(e);
 		}
 
 		private void ExecutedConnect(object sender, ExecutedRoutedEventArgs e)
 		{
-			var connector = _algoService.Connector;
-
-			if (connector.ConnectionState == ConnectionStates.Disconnected || connector.ConnectionState == ConnectionStates.Failed)
+			if (_connector.ConnectionState == ConnectionStates.Disconnected || _connector.ConnectionState == ConnectionStates.Failed)
 			{
 				Connect();
 			}
@@ -1359,7 +1351,7 @@ namespace StockSharp.Studio
 		{
 			GuiDispatcher.GlobalDispatcher.AddAction(() =>
 			{
-				switch (_algoService.Connector.ConnectionState)
+				switch (_connector.ConnectionState)
 				{
 					case ConnectionStates.Connecting:
 					case ConnectionStates.Disconnecting:
@@ -1403,24 +1395,20 @@ namespace StockSharp.Studio
 
 		private bool ProcessConnectionSettings()
 		{
-			var wnd = new ConnectorWindow();
+			var autoConnect = _persistableService.GetAutoConnect();
 
-			wnd.ConnectorsInfo.AddRange(AppConfig.Instance.Connections);
-			wnd.Adapter = (BasketMessageAdapter)_algoService.Connector.Adapter.Clone();
-			wnd.AutoConnect = _persistableService.GetAutoConnect();
-
-			if (!wnd.ShowModal(this))
+			if (!_connector.Adapter.Configure(this, ref autoConnect))
 				return false;
-
-			_algoService.Connector.Adapter.Load(wnd.Adapter.Save());
 
 			var settings = new SettingsStorage
 			{
-				{ "TransactionAdapter", _algoService.Connector.TransactionAdapter.Save() },
-				{ "MarketDataAdapter", _algoService.Connector.MarketDataAdapter.Save() }
+				{ "TransactionAdapter", _connector.TransactionAdapter.Save() },
+				{ "MarketDataAdapter", _connector.MarketDataAdapter.Save() }
 			};
 			_persistableService.SetStudioSession(settings);
-			_persistableService.SetAutoConnect(wnd.AutoConnect);
+			_persistableService.SetAutoConnect(autoConnect);
+
+			return true;
 		}
 
 		private void ExecutedStockSharpConnect(object sender, ExecutedRoutedEventArgs e)
@@ -1468,7 +1456,7 @@ namespace StockSharp.Studio
 
 		private void ExecutedPortfolioSettings(object sender, ExecutedRoutedEventArgs e)
 		{
-			var adapter = _algoService.Connector.TransactionAdapter;
+			var adapter = _connector.TransactionAdapter;
 
 			new PortfolioMessageAdaptersWindow { Adapter = (BasketMessageAdapter)adapter }.ShowModal(this);
 
