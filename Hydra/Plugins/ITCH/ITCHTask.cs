@@ -94,7 +94,7 @@ namespace StockSharp.Hydra.ITCH
 
 			[CategoryLoc(_sourceName)]
 			[DisplayNameLoc(LocalizedStrings.XamlStr23Key)]
-			[DescriptionLoc(LocalizedStrings.XamlStr23Key, true)]
+			[DescriptionLoc(LocalizedStrings.OnlyActiveSecuritiesKey)]
 			[PropertyOrder(6)]
 			public bool OnlyActiveSecurities
 			{
