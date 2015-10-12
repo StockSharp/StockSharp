@@ -125,6 +125,11 @@
             To use automatic range for the X-axis. The default is off.
             </summary>
     </member>
+    <member name="P:StockSharp.Xaml.Charting.IChart.IndicatorTypes">
+      <summary>
+            The list of available indicators types.
+            </summary>
+    </member>
     <member name="M:StockSharp.Xaml.Charting.BufferedChart.#ctor(StockSharp.Xaml.Charting.IChart)">
       <summary>
             Initializes a new instance of the <see cref="T:StockSharp.Xaml.Charting.BufferedChart" />.
@@ -270,6 +275,11 @@
     <member name="P:StockSharp.Xaml.Charting.BufferedChart.IsAutoRange">
       <summary>
             To use automatic range for the X-axis. The default is off.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Charting.BufferedChart.IndicatorTypes">
+      <summary>
+            The list of available indicators types.
             </summary>
     </member>
     <member name="T:StockSharp.Xaml.Charting.Chart">
