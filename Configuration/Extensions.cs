@@ -48,22 +48,22 @@
 	/// </summary>
 	public static class Extensions
 	{
-		private static readonly ConnectorInfo[] _connections = ArrayHelper.Empty<ConnectorInfo>();
-		private static readonly IndicatorType[] _indicators = ArrayHelper.Empty<IndicatorType>();
-		private static readonly Type[] _candles = ArrayHelper.Empty<Type>();
-		private static readonly Type[] _diagramElements = ArrayHelper.Empty<Type>();
+		private static readonly ConnectorInfo[] _customConnections = ArrayHelper.Empty<ConnectorInfo>();
+		private static readonly IndicatorType[] _customIndicators = ArrayHelper.Empty<IndicatorType>();
+		private static readonly Type[] _customCandles = ArrayHelper.Empty<Type>();
+		private static readonly Type[] _customDiagramElements = ArrayHelper.Empty<Type>();
 
 		static Extensions()
 		{
-			var section = ConfigManager.GetSection<StockSharpSection>();
+			var section = ConfigManager.InnerConfig.Sections.OfType<StockSharpSection>().FirstOrDefault();
 
 			if (section == null)
 				return;
 
-			_connections = SafeAdd<ConnectionElement, ConnectorInfo>(section.CustomConnections, elem => new ConnectorInfo(elem.Type.To<Type>()));
-			_indicators = SafeAdd<IndicatorElement, IndicatorType>(section.CustomIndicators, elem => new IndicatorType(elem.Type.To<Type>(), elem.Painter.To<Type>()));
-			_candles = SafeAdd<CandleElement, Type>(section.CustomCandles, elem => elem.Type.To<Type>());
-			_diagramElements = SafeAdd<CandleElement, Type>(section.CustomDiagramElements, elem => elem.Type.To<Type>());
+			_customConnections = SafeAdd<ConnectionElement, ConnectorInfo>(section.CustomConnections, elem => new ConnectorInfo(elem.Type.To<Type>()));
+			_customIndicators = SafeAdd<IndicatorElement, IndicatorType>(section.CustomIndicators, elem => new IndicatorType(elem.Type.To<Type>(), elem.Painter.To<Type>()));
+			_customCandles = SafeAdd<CandleElement, Type>(section.CustomCandles, elem => elem.Type.To<Type>());
+			_customDiagramElements = SafeAdd<CandleElement, Type>(section.CustomDiagramElements, elem => elem.Type.To<Type>());
 		}
 
 		private static T2[] SafeAdd<T1, T2>(IEnumerable from, Func<T1, T2> func)
@@ -128,7 +128,7 @@
 
 			var wnd = new ConnectorWindow();
 
-			wnd.ConnectorsInfo.AddRange(_connections);
+			wnd.ConnectorsInfo.AddRange(_customConnections);
 
 			AddConnectorInfo(wnd, typeof(AlfaDirectMessageAdapter));
 			AddConnectorInfo(wnd, typeof(BarChartMessageAdapter));
@@ -176,25 +176,32 @@
 			wnd.ConnectorsInfo.Add(new ConnectorInfo(adapterType));
 		}
 
+		private static IndicatorType[] _indicatorTypes;
+
 		/// <summary>
 		/// Get all indicator types.
 		/// </summary>
 		/// <returns>All indicator types.</returns>
 		public static IEnumerable<IndicatorType> GetIndicatorTypes()
 		{
-			var ns = typeof(IIndicator).Namespace;
+			if (_indicatorTypes == null)
+			{
+				var ns = typeof(IIndicator).Namespace;
 
-			var rendererTypes = typeof(Chart).Assembly
-				.GetTypes()
-				.Where(t => !t.IsAbstract && typeof(BaseChartIndicatorPainter).IsAssignableFrom(t))
-				.ToDictionary(t => t.Name);
+				var rendererTypes = typeof(Chart).Assembly
+					.GetTypes()
+					.Where(t => !t.IsAbstract && typeof(BaseChartIndicatorPainter).IsAssignableFrom(t))
+					.ToDictionary(t => t.Name);
 
-			return typeof(IIndicator).Assembly
-				.GetTypes()
-				.Where(t => t.Namespace == ns && !t.IsAbstract && typeof(IIndicator).IsAssignableFrom(t))
-				.Select(t => new IndicatorType(t, rendererTypes.TryGetValue(t.Name + "Painter")))
-				.Concat(_indicators)
-				.ToArray();
+				_indicatorTypes = typeof(IIndicator).Assembly
+					.GetTypes()
+					.Where(t => t.Namespace == ns && !t.IsAbstract && typeof(IIndicator).IsAssignableFrom(t))
+					.Select(t => new IndicatorType(t, rendererTypes.TryGetValue(t.Name + "Painter")))
+					.Concat(_customIndicators)
+					.ToArray();
+			}
+
+			return _indicatorTypes;
 		}
 
 		/// <summary>
@@ -210,19 +217,29 @@
 			chart.IndicatorTypes.AddRange(GetIndicatorTypes());
 		}
 
+		private static Type[] _diagramElements;
+
 		/// <summary>
 		/// Get all diagram elements.
 		/// </summary>
 		/// <returns>All diagram elements.</returns>
 		public static IEnumerable<Xaml.Diagram.DiagramElement> GetDiagramElements()
 		{
-			return typeof(Xaml.Diagram.DiagramElement).Assembly
-				.GetTypes()
-				.Where(t => !t.IsAbstract && t.IsSubclassOf(typeof(Xaml.Diagram.DiagramElement)))
-				.Concat(_diagramElements)
+			if (_diagramElements == null)
+			{
+				_diagramElements = typeof(Xaml.Diagram.DiagramElement).Assembly
+					.GetTypes()
+					.Where(t => !t.IsAbstract && t.IsSubclassOf(typeof(Xaml.Diagram.DiagramElement)))
+					.Concat(_customDiagramElements)
+					.ToArray();
+			}
+
+			return _diagramElements
 				.Select(t => t.CreateInstance<Xaml.Diagram.DiagramElement>())
 				.ToArray();
 		}
+
+		private static Type[] _candles;
 
 		/// <summary>
 		/// Get all candles.
@@ -230,11 +247,11 @@
 		/// <returns>All candles.</returns>
 		public static IEnumerable<Type> GetCandles()
 		{
-			return typeof(Candle).Assembly
+			return _candles ?? (_candles = typeof(Candle).Assembly
 				.GetTypes()
 				.Where(t => !t.IsAbstract && t.IsSubclassOf(typeof(Candle)))
-				.Concat(_candles)
-				.ToArray();
+				.Concat(_customCandles)
+				.ToArray());
 		}
 	}
 }
