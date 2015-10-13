@@ -1,0 +1,950 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Disk.SDK</name>
+    </assembly>
+    <members>
+        <member name="T:Disk.SDK.CommonServices.CommonServiceManager">
+            <summary>
+            Represents entry point for common service.
+            </summary>
+        </member>
+        <member name="M:Disk.SDK.CommonServices.CommonServiceManager.CreateService">
+            <summary>
+            Creates the platform specific common service instance.
+            </summary>
+            <returns>The common service implementation.</returns>
+        </member>
+        <member name="P:Disk.SDK.CommonServices.CommonServiceManager.CommonService">
+            <summary>
+            Gets the platform specific common service instance.
+            </summary>
+            <value>
+            The common service instance.
+            </value>
+        </member>
+        <member name="T:Disk.SDK.IBrowser">
+            <summary>
+            Represents an abstraction for platform specific browser component.
+            </summary>
+        </member>
+        <member name="M:Disk.SDK.IBrowser.Navigate(System.String)">
+            <summary>
+            Navigates to the specified URL.
+            </summary>
+            <param name="url">The URL.</param>
+        </member>
+        <member name="E:Disk.SDK.IBrowser.Navigating">
+            <summary>
+            Occurs just before navigation to a document.
+            </summary>
+        </member>
+        <member name="T:Disk.SDK.Utils.HandlerExtensions">
+            <summary>
+            Represents static class with SDK handlers' extensions.
+            </summary>
+        </member>
+        <member name="M:Disk.SDK.Utils.HandlerExtensions.SafeInvoke``1(System.EventHandler{``0},System.Object,``0)">
+            <summary>
+            Invokes the delegate <see cref="T:System.EventHandler`1"/> with null checking.
+            </summary>
+            <typeparam name="TEventArgs">The type of the parameter.</typeparam>
+            <param name="handler">The typed event handler.</param>
+            <param name="sender">The event sender.</param>
+            <param name="args">The event argument.</param>
+        </member>
+        <member name="T:Disk.SDK.DiskItemInfo">
+            <summary>
+            Represents entity to store information about disk item.
+            </summary>
+        </member>
+        <member name="M:Disk.SDK.DiskItemInfo.Equals(System.Object)">
+            <summary>
+            Determines whether the specified <see cref="T:System.Object"/> is equal to this instance.
+            </summary>
+            <param name="obj">The object to compare with the current object.</param>
+            <returns><c>true</c> if the specified <see cref="T:System.Object"/> is equal to this instance; otherwise, <c>false</c>.</returns>
+        </member>
+        <member name="M:Disk.SDK.DiskItemInfo.Equals(Disk.SDK.DiskItemInfo)">
+            <summary>
+            Compares with the specified item.
+            </summary>
+            <param name="other">The other item.</param>
+            <returns><c>true</c> if paths of the items are equals, <c>false</c> otherwise.</returns>
+        </member>
+        <member name="M:Disk.SDK.DiskItemInfo.GetHashCode">
+            <summary>
+            Returns a hash code for this instance.
+            </summary>
+            <returns>A hash code for this instance, suitable for use in hashing algorithms and data structures like a hash table.</returns>
+        </member>
+        <member name="M:Disk.SDK.DiskItemInfo.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:Disk.SDK.DiskItemInfo"/> class.
+            </summary>
+        </member>
+        <member name="P:Disk.SDK.DiskItemInfo.OriginalDisplayName">
+            <summary>
+            Gets the original display name of the item.
+            </summary>
+            <value>The display name of the original.</value>
+        </member>
+        <member name="P:Disk.SDK.DiskItemInfo.OriginalFullPath">
+            <summary>
+            Gets the original full path.
+            </summary>
+            <value>The original full path.</value>
+        </member>
+        <member name="P:Disk.SDK.DiskItemInfo.ContentLength">
+            <summary>
+            Gets or sets the length of the content.
+            </summary>
+            <value>The length of the content.</value>
+        </member>
+        <member name="P:Disk.SDK.DiskItemInfo.ContentType">
+            <summary>
+            Gets or sets the type of the content (mime-type of the file).
+            </summary>
+            <value>The type of the content.</value>
+        </member>
+        <member name="P:Disk.SDK.DiskItemInfo.Etag">
+            <summary>
+            Gets or sets the entity tag (MD5) of the file.
+            </summary>
+            <value>The entity tag.</value>
+        </member>
+        <member name="P:Disk.SDK.DiskItemInfo.PublicUrl">
+            <summary>
+            Gets or sets the public URL (empty string if the item isn't published).
+            </summary>
+            <value>The public URL.</value>
+        </member>
+        <member name="P:Disk.SDK.DiskItemInfo.LastModified">
+            <summary>
+            Gets or sets the last modified date.
+            </summary>
+            <value>The last modified date.</value>
+        </member>
+        <member name="P:Disk.SDK.DiskItemInfo.CreationDate">
+            <summary>
+            Gets or sets the creation date.
+            </summary>
+            <value>The creation date.</value>
+        </member>
+        <member name="P:Disk.SDK.DiskItemInfo.IsDirectory">
+            <summary>
+            Gets a value indicating whether this instance is directory.
+            </summary>
+            <value><c>true</c> if this instance is directory; otherwise, <c>false</c>.</value>
+        </member>
+        <member name="P:Disk.SDK.DiskItemInfo.FullPath">
+            <summary>
+            Gets or sets the decoded full path of the item.
+            </summary>
+            <value>The full path of the item.</value>
+        </member>
+        <member name="P:Disk.SDK.DiskItemInfo.DisplayName">
+            <summary>
+            Gets or sets the decoded display name of the item.
+            </summary>
+            <value>The display name of the item.</value>
+        </member>
+        <member name="P:Disk.SDK.DiskItemInfo.IsPublished">
+            <summary>
+            Gets a value indicating whether this item is published.
+            </summary>
+            <value><c>true</c> if this item is published; otherwise, <c>false</c>.</value>
+        </member>
+        <member name="T:Disk.SDK.CommonServices.ICommonService">
+            <summary>
+            Represents interface for platform specific functionality.
+            </summary>
+        </member>
+        <member name="M:Disk.SDK.CommonServices.ICommonService.SetCustomHeader(System.Net.WebRequest)">
+            <summary>
+            Sets the custom header for web-request.
+            </summary>
+            <param name="request">The web-request.</param>
+        </member>
+        <member name="T:Disk.SDK.Utils.HttpUtilities">
+            <summary>
+            Represents static access to the HTTP utilities.
+            </summary>
+        </member>
+        <member name="M:Disk.SDK.Utils.HttpUtilities.CreateRequest(System.String,System.String)">
+            <summary>
+            Creates the common web request.
+            </summary>
+            <param name="token">The access token.</param>
+            <param name="path">The request path.</param>
+            <returns>The common HttpWebRequest object.</returns>
+        </member>
+        <member name="M:Disk.SDK.Utils.HttpUtilities.ProcessException(System.Exception)">
+            <summary>
+            Processes the exception.
+            </summary>
+            <param name="ex">The caught exception.</param>
+            <returns>The clear SDK exception object.</returns>
+        </member>
+        <member name="M:Disk.SDK.Utils.HttpUtilities.SendEmptyRequest(System.Net.WebRequest,System.Action{Disk.SDK.SdkException})">
+            <summary>
+            Sends the empty request.
+            </summary>
+            <param name="request">The http-request.</param>
+            <param name="completedAction">The completed action.</param>
+        </member>
+        <member name="M:Disk.SDK.Utils.HttpUtilities.SendFullRequest(Disk.SDK.Utils.RequestState,System.Action{System.IO.Stream,Disk.SDK.Utils.RequestState,Disk.SDK.SdkException})">
+            <summary>
+            Sends the full request.
+            </summary>
+            <param name="requestState">The request state.</param>
+            <param name="processResponseAction">The process response action.</param>
+        </member>
+        <member name="M:Disk.SDK.Utils.HttpUtilities.PrepareRequestContent(System.String)">
+            <summary>
+            Converts the content string into byte array.
+            </summary>
+            <param name="requestContent">Content of the request.</param>
+            <returns>The array of bytes.</returns>
+        </member>
+        <member name="T:Disk.SDK.Utils.RequestState">
+            <summary>
+            Represents entity to store request's state.
+            </summary>
+        </member>
+        <member name="P:Disk.SDK.Utils.RequestState.Request">
+            <summary>
+            Gets or sets the web-request.
+            </summary>
+            <value>The web-request.</value>
+        </member>
+        <member name="P:Disk.SDK.Utils.RequestState.RequestArgument">
+            <summary>
+            Gets or sets the web-request argument.
+            </summary>
+            <value>The web-request argument.</value>
+        </member>
+        <member name="P:Disk.SDK.Utils.RequestState.ResponseArgument">
+            <summary>
+            Gets or sets the web-response argument.
+            </summary>
+            <value>The web-response argument.</value>
+        </member>
+        <member name="T:Disk.SDK.IProgress">
+            <summary>
+            Represents interface to notify UI about async operation progress.
+            </summary>
+        </member>
+        <member name="M:Disk.SDK.IProgress.UpdateProgress(System.UInt64,System.UInt64)">
+            <summary>
+            Updates the progress value.
+            </summary>
+            <param name="current">The current value.</param>
+            <param name="total">The total value.</param>
+        </member>
+        <member name="T:Disk.SDK.AsyncProgress">
+            <summary>
+            Represents entity to notify UI about async operation progress.
+            </summary>
+        </member>
+        <member name="F:Disk.SDK.AsyncProgress.progressAction">
+            <summary>
+            The progress action.
+            </summary>
+        </member>
+        <member name="M:Disk.SDK.AsyncProgress.#ctor(System.Action{System.UInt64,System.UInt64})">
+            <summary>
+            Initializes a new instance of the <see cref="T:Disk.SDK.AsyncProgress"/> class.
+            </summary>
+            <param name="progressAction">The progress action.</param>
+        </member>
+        <member name="M:Disk.SDK.AsyncProgress.UpdateProgress(System.UInt64,System.UInt64)">
+            <summary>
+            Updates the progress value.
+            </summary>
+            <param name="current">The current value.</param>
+            <param name="total">The total value.</param>
+        </member>
+        <member name="T:Disk.SDK.IDiskSdkClient">
+            <summary>
+            Represents interface to access the Disk SDK.
+            </summary>
+        </member>
+        <member name="M:Disk.SDK.IDiskSdkClient.GetListAsync(System.String)">
+            <summary>
+            Gets a list of items from the specified directory asynchronously.
+            Use the <see cref="E:Disk.SDK.IDiskSdkClient.GetListCompleted"/> event to get a result and handle the completion of the operation.
+            </summary>
+            <param name="path">The folder path.</param>
+        </member>
+        <member name="M:Disk.SDK.IDiskSdkClient.GetListPageAsync(System.String,System.Int32,System.Int32)">
+            <summary>
+            Gets a paged list of items from the specified directory asynchronously.
+            Use the <see cref="E:Disk.SDK.IDiskSdkClient.GetListCompleted"/> event to get a result and handle the completion of the operation.
+            </summary>
+            <param name="path">The folder path.</param>
+            <param name="pageSize">The size of the page.</param>
+            <param name="pageIndex">The index of the page.</param>
+        </member>
+        <member name="M:Disk.SDK.IDiskSdkClient.GetItemInfoAsync(System.String)">
+            <summary>
+            Gets the disk item's information asynchronously.
+            Use the <see cref="E:Disk.SDK.IDiskSdkClient.GetItemInfoCompleted"/> event to get a result and handle the completion of the operation.
+            </summary>
+            <param name="path">The path to the specified item.</param>
+        </member>
+        <member name="M:Disk.SDK.IDiskSdkClient.MakeDirectoryAsync(System.String)">
+            <summary>
+            Makes a new directory by the specified path asynchronously.
+            Use the <see cref="E:Disk.SDK.IDiskSdkClient.MakeFolderCompleted"/> event to handle the completion of the operation.
+            </summary>
+            <param name="fullPath">The full path to a new folder.</param>
+        </member>
+        <member name="M:Disk.SDK.IDiskSdkClient.RemoveAsync(System.String)">
+            <summary>
+            Removes an item by the specified path asynchronously.
+            Use the <see cref="E:Disk.SDK.IDiskSdkClient.RemoveCompleted"/> event to handle the completion of the operation.
+            </summary>
+            <param name="path">The full path to the folder.</param>
+        </member>
+        <member name="M:Disk.SDK.IDiskSdkClient.TrashAsync(System.String)">
+            <summary>
+            Trash an item by the specified path asynchronously.
+            Use the <see cref="E:Disk.SDK.IDiskSdkClient.TrashCompleted"/> event to handle the completion of the operation.
+            </summary>
+            <param name="path">The full path to the folder.</param>
+        </member>
+        <member name="M:Disk.SDK.IDiskSdkClient.MoveAsync(System.String,System.String)">
+            <summary>
+            Moves the specified items to a new location asynchronously.
+            Use the <see cref="E:Disk.SDK.IDiskSdkClient.MoveCompleted"/> event to handle the completion of the operation.
+            </summary>
+            <param name="source">The path to source items.</param>
+            <param name="destination">The destination path.</param>
+        </member>
+        <member name="M:Disk.SDK.IDiskSdkClient.CopyAsync(System.String,System.String)">
+            <summary>
+            Copies the specified items to a new location asynchronously.
+            Use the <see cref="E:Disk.SDK.IDiskSdkClient.CopyCompleted"/> event to handle the completion of the operation.
+            </summary>
+            <param name="source">The path to source items.</param>
+            <param name="destination">The destination path.</param>
+        </member>
+        <member name="M:Disk.SDK.IDiskSdkClient.PublishAsync(System.String)">
+            <summary>
+            Publishes an item by the specified path asynchronously.
+            Use the <see cref="E:Disk.SDK.IDiskSdkClient.PublishCompleted"/> event to get a result and handle the completion of the operation.
+            </summary>
+            <param name="path">The path of the item.</param>
+        </member>
+        <member name="M:Disk.SDK.IDiskSdkClient.UnpublishAsync(System.String)">
+            <summary>
+            UnPublishes an item by the specified path asynchronously.
+            Use the <see cref="E:Disk.SDK.IDiskSdkClient.UnpublishCompleted"/> event to handle the completion of the operation.
+            </summary>
+            <param name="path">The path of the item.</param>
+        </member>
+        <member name="M:Disk.SDK.IDiskSdkClient.IsPublishedAsync(System.String)">
+            <summary>
+            Determines whether an item by the specified path is published asynchronously.
+            Use the <see cref="E:Disk.SDK.IDiskSdkClient.IsPublishedCompleted"/> event to get a result and handle the completion of the operation.
+            </summary>
+            <param name="path">The path of the item.</param>
+        </member>
+        <member name="E:Disk.SDK.IDiskSdkClient.GetListCompleted">
+            <summary>
+            Occurs when the getting list operation completes.
+            <param>The list of the folder's items.</param>
+            </summary>
+        </member>
+        <member name="E:Disk.SDK.IDiskSdkClient.GetItemInfoCompleted">
+            <summary>
+            Occurs when the getting item operation completes.
+            <param>The disk item's information.</param>
+            </summary>
+        </member>
+        <member name="E:Disk.SDK.IDiskSdkClient.MakeFolderCompleted">
+            <summary>
+            Occurs when the making folder operation completes.
+            </summary>
+        </member>
+        <member name="E:Disk.SDK.IDiskSdkClient.RemoveCompleted">
+            <summary>
+            Occurs when the removing item operation completes.
+            </summary>
+        </member>
+        <member name="E:Disk.SDK.IDiskSdkClient.TrashCompleted">
+            <summary>
+            Occurs when the trashing item operation completes.
+            </summary>
+        </member>
+        <member name="E:Disk.SDK.IDiskSdkClient.MoveCompleted">
+            <summary>
+            Occurs when the moving item operation completes.
+            </summary>
+        </member>
+        <member name="E:Disk.SDK.IDiskSdkClient.CopyCompleted">
+            <summary>
+            Occurs when the copying item operation completes.
+            </summary>
+        </member>
+        <member name="E:Disk.SDK.IDiskSdkClient.UnpublishCompleted">
+            <summary>
+            Occurs when the un-publishing item operation completes.
+            </summary>
+        </member>
+        <member name="E:Disk.SDK.IDiskSdkClient.PublishCompleted">
+            <summary>
+            Occurs when the publishing operation completes.
+            <param>The link to the published item.</param>
+            </summary>
+        </member>
+        <member name="E:Disk.SDK.IDiskSdkClient.IsPublishedCompleted">
+            <summary>
+            Occurs when the checking access operation completes.
+            <param>The link to the published item or empty string if item isn't published.</param>
+            </summary>
+        </member>
+        <member name="P:Disk.SDK.IDiskSdkClient.AccessToken">
+            <summary>
+            The user access token.
+            </summary>
+            <value>The access token.</value>
+        </member>
+        <member name="T:Disk.SDK.Utils.ResponseParser">
+            <summary>
+            Represents the parser for response's results.
+            </summary>
+        </member>
+        <member name="M:Disk.SDK.Utils.ResponseParser.ParseItem(System.String,System.String)">
+            <summary>
+            Parses the disk item.
+            </summary>
+            <param name="currentPath">The current path.</param>
+            <param name="responseText">The response text.</param>
+            <returns>The  parsed item.</returns>
+        </member>
+        <member name="M:Disk.SDK.Utils.ResponseParser.ParseItems(System.String,System.String)">
+            <summary>
+            Parses the disk items.
+            </summary>
+            <param name="currentPath">The current path.</param>
+            <param name="responseText">The response text.</param>
+            <returns>The list of parsed items.</returns>
+        </member>
+        <member name="M:Disk.SDK.Utils.ResponseParser.ParseLink(System.String)">
+            <summary>
+            Parses the link.
+            </summary>
+            <param name="responseText">The response text.</param>
+            <returns>The parsed link.</returns>
+        </member>
+        <member name="M:Disk.SDK.Utils.ResponseParser.ParseToken(System.IO.Stream)">
+            <summary>
+            Parses the token.
+            </summary>
+            <param name="responseStream">The response stream.</param>
+            <returns>The parsed access token.</returns>
+        </member>
+        <member name="M:Disk.SDK.Utils.ResponseParser.ParseToken(System.String)">
+            <summary>
+            Parses the token.
+            </summary>
+            <param name="resultString">The result string.</param>
+            <returns>The parsed access token.</returns>
+        </member>
+        <member name="T:Disk.SDK.DiskSdkClient">
+            <summary>
+            Represents entity to access the Disk SDK.
+            </summary>
+        </member>
+        <member name="F:Disk.SDK.DiskSdkClient.accessToken">
+            <summary>
+            The user access token.
+            </summary>
+        </member>
+        <member name="M:Disk.SDK.DiskSdkClient.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:Disk.SDK.DiskSdkClient"/> class.
+            </summary>
+        </member>
+        <member name="M:Disk.SDK.DiskSdkClient.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Disk.SDK.DiskSdkClient"/> class.
+            </summary>
+            <param name="accessToken">The access token.</param>
+        </member>
+        <member name="M:Disk.SDK.DiskSdkClient.GetListAsync(System.String)">
+            <summary>
+            Gets a list of items from the specified folder.
+            </summary>
+            <param name="path">The folder path.</param>
+        </member>
+        <member name="M:Disk.SDK.DiskSdkClient.GetListPageAsync(System.String,System.Int32,System.Int32)">
+            <summary>
+            Gets a paged list of items from the  specified folder.
+            </summary>
+            <param name="path">The folder path.</param>
+            <param name="pageSize">The size of the page.</param>
+            <param name="pageIndex">The index of the page.</param>
+        </member>
+        <member name="M:Disk.SDK.DiskSdkClient.GetItemInfoAsync(System.String)">
+            <summary>
+            Gets the disk item's information.
+            </summary>
+            <param name="path">The path to the specified item.</param>
+        </member>
+        <member name="M:Disk.SDK.DiskSdkClient.MakeDirectoryAsync(System.String)">
+            <summary>
+            Makes a new directory by the specified path.
+            </summary>
+            <param name="fullPath">The full path to a new folder.</param>
+        </member>
+        <member name="M:Disk.SDK.DiskSdkClient.RemoveAsync(System.String)">
+            <summary>
+            Removes an item by the specified path.
+            </summary>
+            <param name="path">The full path to the folder.</param>
+        </member>
+        <member name="M:Disk.SDK.DiskSdkClient.TrashAsync(System.String)">
+            <summary>
+            Trash an item by the specified path.
+            </summary>
+            <param name="path">The full path to the folder.</param>
+        </member>
+        <member name="M:Disk.SDK.DiskSdkClient.MoveAsync(System.String,System.String)">
+            <summary>
+            Moves the specified source.
+            </summary>
+            <param name="source">The path to source items.</param>
+            <param name="destination">The destination path.</param>
+        </member>
+        <member name="M:Disk.SDK.DiskSdkClient.CopyAsync(System.String,System.String)">
+            <summary>
+            Copies the specified items to a new location.
+            </summary>
+            <param name="source">The path to source items.</param>
+            <param name="destination">The destination path.</param>
+        </member>
+        <member name="M:Disk.SDK.DiskSdkClient.PublishAsync(System.String)">
+            <summary>
+            Publishes an item by the specified path.
+            </summary>
+            <param name="path">The path of the item.</param>
+        </member>
+        <member name="M:Disk.SDK.DiskSdkClient.UnpublishAsync(System.String)">
+            <summary>
+            UnPublishes an item by the specified path.
+            </summary>
+            <param name="path">The path of the item.</param>
+        </member>
+        <member name="M:Disk.SDK.DiskSdkClient.IsPublishedAsync(System.String)">
+            <summary>
+            Determines whether an item by the specified path is published.
+            </summary>
+            <param name="path">The path of the item.</param>
+        </member>
+        <member name="M:Disk.SDK.DiskSdkClient.ProcessGetListResponse(System.IO.Stream,Disk.SDK.Utils.RequestState,Disk.SDK.SdkException)">
+            <summary>
+            Processes the GetList response.
+            </summary>
+            <param name="responseStream">The response stream.</param>
+            <param name="requestState">The state of the request.</param>
+            <param name="sdkException">The SDK exception.</param>
+        </member>
+        <member name="M:Disk.SDK.DiskSdkClient.ProcessGetItemInfoResponse(System.IO.Stream,Disk.SDK.Utils.RequestState,Disk.SDK.SdkException)">
+            <summary>
+            Processes the GetListPage response.
+            </summary>
+            <param name="responseStream">The response stream.</param>
+            <param name="requestState">The state of the request.</param>
+            <param name="sdkException">The SDK exception.</param>
+        </member>
+        <member name="M:Disk.SDK.DiskSdkClient.ProcessPublishResponse(System.IO.Stream,Disk.SDK.Utils.RequestState,Disk.SDK.SdkException)">
+            <summary>
+            Processes the Publish response.
+            </summary>
+            <param name="responseStream">The response stream.</param>
+            <param name="requestState">The state of the request.</param>
+            <param name="sdkException">The SDK exception.</param>
+        </member>
+        <member name="M:Disk.SDK.DiskSdkClient.ProcessUnpublishResponse(System.IO.Stream,Disk.SDK.Utils.RequestState,Disk.SDK.SdkException)">
+            <summary>
+            Processes the Un-publish response.
+            </summary>
+            <param name="responseStream">The response stream.</param>
+            <param name="requestState">The state of the request.</param>
+            <param name="sdkException">The SDK exception.</param>
+        </member>
+        <member name="M:Disk.SDK.DiskSdkClient.ProcessIsPublishedResponse(System.IO.Stream,Disk.SDK.Utils.RequestState,Disk.SDK.SdkException)">
+            <summary>
+            Processes the IsPublished response.
+            </summary>
+            <param name="responseStream">The response stream.</param>
+            <param name="requestState">The state of the request.</param>
+            <param name="sdkException">The SDK exception.</param>
+        </member>
+        <member name="M:Disk.SDK.DiskSdkClient.ProcessMakeDirectoryResponse(Disk.SDK.SdkException)">
+            <summary>
+            Processes the MakeDirectory response.
+            </summary>
+            <param name="sdkException">The SDK exception.</param>
+        </member>
+        <member name="M:Disk.SDK.DiskSdkClient.ProcessRemoveResponse(Disk.SDK.SdkException)">
+            <summary>
+            Processes the Remove response.
+            </summary>
+            <param name="sdkException">The SDK exception.</param>
+        </member>
+        <member name="M:Disk.SDK.DiskSdkClient.ProcessTrashResponse(Disk.SDK.SdkException)">
+            <summary>
+            Processes the Trash response.
+            </summary>
+            <param name="sdkException">The SDK exception.</param>
+        </member>
+        <member name="M:Disk.SDK.DiskSdkClient.ProcessCopyResponse(Disk.SDK.SdkException)">
+            <summary>
+            Processes the Copy response.
+            </summary>
+            <param name="sdkException">The SDK exception.</param>
+        </member>
+        <member name="M:Disk.SDK.DiskSdkClient.ProcessMoveResponse(Disk.SDK.SdkException)">
+            <summary>
+            Processes the Move response.
+            </summary>
+            <param name="sdkException">The SDK exception.</param>
+        </member>
+        <member name="E:Disk.SDK.DiskSdkClient.GetListCompleted">
+            <summary>
+            Occurs when the getting list operation completes.
+            <param>The list of the folder's items.</param>
+            </summary>
+        </member>
+        <member name="E:Disk.SDK.DiskSdkClient.GetItemInfoCompleted">
+            <summary>
+            Occurs when the getting item operation completes.
+            <param>The disk item's information.</param>
+            </summary>
+        </member>
+        <member name="E:Disk.SDK.DiskSdkClient.MakeFolderCompleted">
+            <summary>
+            Occurs when the making folder operation completes.
+            </summary>
+        </member>
+        <member name="E:Disk.SDK.DiskSdkClient.RemoveCompleted">
+            <summary>
+            Occurs when the removing item operation completes.
+            </summary>
+        </member>
+        <member name="E:Disk.SDK.DiskSdkClient.TrashCompleted">
+            <summary>
+            Occurs when the trashing item operation completes.
+            </summary>
+        </member>
+        <member name="E:Disk.SDK.DiskSdkClient.MoveCompleted">
+            <summary>
+            Occurs when the moving item operation completes.
+            </summary>
+        </member>
+        <member name="E:Disk.SDK.DiskSdkClient.CopyCompleted">
+            <summary>
+            Occurs when the copying item operation completes.
+            </summary>
+        </member>
+        <member name="E:Disk.SDK.DiskSdkClient.UnpublishCompleted">
+            <summary>
+            Occurs when the un-publishing item operation completes.
+            </summary>
+        </member>
+        <member name="E:Disk.SDK.DiskSdkClient.PublishCompleted">
+            <summary>
+            Occurs when the publishing operation completes.
+            <param>The link to the published item.</param>
+            </summary>
+        </member>
+        <member name="E:Disk.SDK.DiskSdkClient.IsPublishedCompleted">
+            <summary>
+            Occurs when the checking access operation completes.
+            <param>The link to the published item or empty string if item isn't published.</param>
+            </summary>
+        </member>
+        <member name="P:Disk.SDK.DiskSdkClient.AccessToken">
+            <summary>
+            The user access token.
+            </summary>
+            <value>The access token.</value>
+        </member>
+        <member name="T:Disk.SDK.SdkEventArgs">
+            <summary>
+            Represents base entity to store SDK completed events' data.
+            </summary>
+        </member>
+        <member name="M:Disk.SDK.SdkEventArgs.#ctor(Disk.SDK.SdkException)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Disk.SDK.SdkEventArgs"/> class.
+            </summary>
+            <param name="exception">The exception object.</param>
+        </member>
+        <member name="P:Disk.SDK.SdkEventArgs.Error">
+            <summary>
+            Gets the SDK exception.
+            </summary>
+            <value>
+            The SDK exception.
+            </value>
+        </member>
+        <member name="T:Disk.SDK.GenericSdkEventArgs`1">
+            <summary>
+            Represents entity to store SDK completed events' data.
+            </summary>
+            <typeparam name="TData">The type of the data.</typeparam>
+        </member>
+        <member name="M:Disk.SDK.GenericSdkEventArgs`1.#ctor(`0)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Disk.SDK.GenericSdkEventArgs`1"/> class.
+            </summary>
+            <param name="content">The content of the event.</param>
+        </member>
+        <member name="M:Disk.SDK.GenericSdkEventArgs`1.#ctor(Disk.SDK.SdkException)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Disk.SDK.GenericSdkEventArgs`1"/> class.
+            </summary>
+            <param name="exception">The exception object.</param>
+        </member>
+        <member name="M:Disk.SDK.GenericSdkEventArgs`1.#ctor(`0,Disk.SDK.SdkException)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Disk.SDK.GenericSdkEventArgs`1"/> class.
+            </summary>
+            <param name="result">The result.</param>
+            <param name="exception">The exception.</param>
+        </member>
+        <member name="P:Disk.SDK.GenericSdkEventArgs`1.Result">
+            <summary>
+            Gets the result of the event.
+            </summary>
+            <value>
+            The result of the event.
+            </value>
+        </member>
+        <member name="T:Disk.SDK.SdkException">
+            <summary>
+            Represents base entity for all SDK exceptions.
+            </summary>
+        </member>
+        <member name="M:Disk.SDK.SdkException.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:System.Exception" /> class with a specified error message.
+            </summary>
+            <param name="message">The message that describes the error.</param>
+        </member>
+        <member name="T:Disk.SDK.SdkNotAuthorizedException">
+            <summary>
+            Represents entity for not authorized exceptions.
+            </summary>
+        </member>
+        <member name="M:Disk.SDK.SdkNotAuthorizedException.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:Disk.SDK.SdkNotAuthorizedException"/> class.
+            </summary>
+        </member>
+        <member name="T:Disk.SDK.SdkBadParameterException">
+            <summary>
+            Represents entity for bad parameters exception.
+            </summary>
+        </member>
+        <member name="M:Disk.SDK.SdkBadParameterException.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:Disk.SDK.SdkBadParameterException"/> class.
+            </summary>
+        </member>
+        <member name="T:Disk.SDK.SdkBadRequestException">
+            <summary>
+            Represents entity for bad request exception.
+            </summary>
+        </member>
+        <member name="M:Disk.SDK.SdkBadRequestException.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:Disk.SDK.SdkBadRequestException"/> class.
+            </summary>
+        </member>
+        <member name="T:Disk.SDK.SdkProviderException">
+            <summary>
+            Represents entity for provider exceptions.
+            </summary>
+        </member>
+        <member name="M:Disk.SDK.SdkProviderException.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:Disk.SDK.SdkProviderException"/> class.
+            </summary>
+        </member>
+        <member name="T:Disk.SDK.SdkOutOfMemoryException">
+            <summary>
+            Represents entity for OutOfMemory exception.
+            </summary>
+        </member>
+        <member name="M:Disk.SDK.SdkOutOfMemoryException.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:Disk.SDK.SdkOutOfMemoryException"/> class.
+            </summary>
+        </member>
+        <member name="T:Disk.SDK.Utils.WebdavResources">
+            <summary>
+              A strongly-typed resource class, for looking up localized strings, etc.
+            </summary>
+        </member>
+        <member name="P:Disk.SDK.Utils.WebdavResources.ResourceManager">
+            <summary>
+              Returns the cached ResourceManager instance used by this class.
+            </summary>
+        </member>
+        <member name="P:Disk.SDK.Utils.WebdavResources.Culture">
+            <summary>
+              Overrides the current thread's CurrentUICulture property for all
+              resource lookups using this strongly typed resource class.
+            </summary>
+        </member>
+        <member name="P:Disk.SDK.Utils.WebdavResources.ApiUrl">
+            <summary>
+              Looks up a localized string similar to https://webdav.yandex.ru/.
+            </summary>
+        </member>
+        <member name="P:Disk.SDK.Utils.WebdavResources.AuthBrowserUrlFormat">
+            <summary>
+              Looks up a localized string similar to https://oauth.yandex.ru/authorize?response_type=token&amp;client_id={0}&amp;display=popup.
+            </summary>
+        </member>
+        <member name="P:Disk.SDK.Utils.WebdavResources.AuthParamsFormat">
+            <summary>
+              Looks up a localized string similar to grant_type=password&amp;username={0}&amp;password={1}&amp;client_id={2}&amp;client_secret={3}.
+            </summary>
+        </member>
+        <member name="P:Disk.SDK.Utils.WebdavResources.AuthUrl">
+            <summary>
+              Looks up a localized string similar to https://oauth.yandex.ru/token.
+            </summary>
+        </member>
+        <member name="P:Disk.SDK.Utils.WebdavResources.BadParameterErrorMesage">
+            <summary>
+              Looks up a localized string similar to Incorrect parameters - provide correct data and try again.
+            </summary>
+        </member>
+        <member name="P:Disk.SDK.Utils.WebdavResources.BadRequestErrorMessage">
+            <summary>
+              Looks up a localized string similar to Incorrect request - provide correct data and try again.
+            </summary>
+        </member>
+        <member name="P:Disk.SDK.Utils.WebdavResources.CheckPublishingBody">
+             <summary>
+               Looks up a localized string similar to &lt;propfind xmlns=&quot;DAV:&quot;&gt;
+              &lt;prop&gt;
+                &lt;public_url xmlns=&quot;urn:yandex:disk:meta&quot;/&gt;
+              &lt;/prop&gt;
+            &lt;/propfind&gt;.
+             </summary>
+        </member>
+        <member name="P:Disk.SDK.Utils.WebdavResources.CopyMethod">
+            <summary>
+              Looks up a localized string similar to COPY.
+            </summary>
+        </member>
+        <member name="P:Disk.SDK.Utils.WebdavResources.DeleteMethod">
+            <summary>
+              Looks up a localized string similar to DELETE.
+            </summary>
+        </member>
+        <member name="P:Disk.SDK.Utils.WebdavResources.GetMethod">
+            <summary>
+              Looks up a localized string similar to GET.
+            </summary>
+        </member>
+        <member name="P:Disk.SDK.Utils.WebdavResources.ItemDetailsBody">
+             <summary>
+               Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot; ?&gt;
+            &lt;propfind xmlns=&quot;DAV:&quot;&gt;
+              &lt;prop&gt;
+                &lt;public_url xmlns=&quot;urn:yandex:disk:meta&quot; /&gt;
+                &lt;creationdate  /&gt;
+                &lt;getlastmodified/&gt;
+                &lt;displayname/&gt;
+                &lt;getcontentlength/&gt;
+                &lt;getcontenttype/&gt;
+                &lt;getetag/&gt;
+                &lt;resourcetype/&gt;
+              &lt;/prop&gt;
+            &lt;/propfind&gt;.
+             </summary>
+        </member>
+        <member name="P:Disk.SDK.Utils.WebdavResources.MakedirMethod">
+            <summary>
+              Looks up a localized string similar to MKCOL.
+            </summary>
+        </member>
+        <member name="P:Disk.SDK.Utils.WebdavResources.MoveMethod">
+            <summary>
+              Looks up a localized string similar to MOVE.
+            </summary>
+        </member>
+        <member name="P:Disk.SDK.Utils.WebdavResources.NotAuthorizedErrorMessage">
+            <summary>
+              Looks up a localized string similar to You must be logged in before starting to work with SDK, try to call AuthorizeAsync(...) at first.
+            </summary>
+        </member>
+        <member name="P:Disk.SDK.Utils.WebdavResources.OutOfMemoryErrorMessage">
+            <summary>
+              Looks up a localized string similar to The file is too large for uploading.
+            </summary>
+        </member>
+        <member name="P:Disk.SDK.Utils.WebdavResources.PostMethod">
+            <summary>
+              Looks up a localized string similar to POST.
+            </summary>
+        </member>
+        <member name="P:Disk.SDK.Utils.WebdavResources.PropfindMethod">
+            <summary>
+              Looks up a localized string similar to PROPFIND.
+            </summary>
+        </member>
+        <member name="P:Disk.SDK.Utils.WebdavResources.ProppatchMethod">
+            <summary>
+              Looks up a localized string similar to PROPPATCH.
+            </summary>
+        </member>
+        <member name="P:Disk.SDK.Utils.WebdavResources.ProviderErrorMessage">
+            <summary>
+              Looks up a localized string similar to Can&apos;t load SDK provider assembly. Add reference to the platform specific assembly &apos;Disk.SDK.Provider (platform)&apos; and try again..
+            </summary>
+        </member>
+        <member name="P:Disk.SDK.Utils.WebdavResources.PublishBody">
+             <summary>
+               Looks up a localized string similar to &lt;propertyupdate xmlns=&quot;DAV:&quot;&gt;
+              &lt;set&gt;
+                &lt;prop&gt;
+                  &lt;public_url xmlns=&quot;urn:yandex:disk:meta&quot;&gt;true&lt;/public_url&gt;
+                &lt;/prop&gt;
+              &lt;/set&gt;
+            &lt;/propertyupdate&gt;.
+             </summary>
+        </member>
+        <member name="P:Disk.SDK.Utils.WebdavResources.PutMethod">
+            <summary>
+              Looks up a localized string similar to PUT.
+            </summary>
+        </member>
+        <member name="P:Disk.SDK.Utils.WebdavResources.TokenRegexPattern">
+            <summary>
+              Looks up a localized string similar to ([a-zA-Z0-9]){32}.
+            </summary>
+        </member>
+        <member name="P:Disk.SDK.Utils.WebdavResources.UnpublishBody">
+             <summary>
+               Looks up a localized string similar to &lt;propertyupdate xmlns=&quot;DAV:&quot;&gt;
+              &lt;remove&gt;
+                &lt;prop&gt;
+                  &lt;public_url xmlns=&quot;urn:yandex:disk:meta&quot; /&gt;
+                &lt;/prop&gt;
+              &lt;/remove&gt;
+            &lt;/propertyupdate&gt;.
+             </summary>
+        </member>
+    </members>
+</doc>

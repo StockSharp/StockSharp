@@ -6,6 +6,7 @@ namespace StockSharp.Xaml
 	using System.Linq;
 	using System.Threading.Tasks;
 	using System.Windows;
+	using System.Windows.Navigation;
 
 	using Disk.SDK;
 	using Disk.SDK.Provider;
@@ -36,7 +37,7 @@ namespace StockSharp.Xaml
 			Browser.Navigated += BrowserNavigated;
 		}
 
-		private void BrowserNavigated(object sender, System.Windows.Navigation.NavigationEventArgs e)
+		private void BrowserNavigated(object sender, NavigationEventArgs e)
 		{
 			if (_authCompleted)
 				return;
@@ -93,14 +94,42 @@ namespace StockSharp.Xaml
 		/// <returns>The link to a file.</returns>
 		public static string Publish(string file, Window owner)
 		{
-			if (file == null)
+			return Do(file, owner, (client, remotePath) =>
+			{
+				TryCreateDirectory(client, RootPath);
+				UploadFile(client, remotePath, file);
+				return Publish(client, remotePath);
+			});
+		}
+
+		/// <summary>
+		/// To replace a file.
+		/// </summary>
+		/// <param name="file">File.</param>
+		/// <param name="owner">The login window owner.</param>
+		public static void Replace(string file, Window owner)
+		{
+			Do<object>(file, owner, (client, remotePath) =>
+			{
+				TryCreateDirectory(client, RootPath);
+				UploadFile(client, remotePath, file);
+				return null;
+			});
+		}
+
+		private static T Do<T>(string file, Window owner, Func<DiskSdkClient, string, T> action)
+		{
+			if (file.IsEmpty())
 				throw new ArgumentNullException("file");
+
+			if (action == null)
+				throw new ArgumentNullException("action");
 
 			if (!File.Exists(file))
 				throw new FileNotFoundException(LocalizedStrings.Str1575, file);
 
 			Exception error = null;
-			string result = null;
+			var result = default(T);
 
 			var loginWindow = new YandexLoginWindow();
 			loginWindow.AuthCompleted += (s, e) =>
@@ -109,14 +138,11 @@ namespace StockSharp.Xaml
 				{
 					var client = new DiskSdkClient(e.Result);
 
-					var remoteDir = RootPath;
-					var remotePath = remoteDir + "/" + Path.GetFileName(file);
+					var remotePath = RootPath + "/" + Path.GetFileName(file);
 
 					try
 					{
-						TryCreateDirectory(client, remoteDir);
-						UploadFile(client, remotePath, file);
-						result = Publish(client, remotePath);
+						result = action(client, remotePath);
 					}
 					catch (Exception excp)
 					{
@@ -134,56 +160,13 @@ namespace StockSharp.Xaml
 			return result;
 		}
 
-		/// <summary>
-		/// To replace a file.
-		/// </summary>
-		/// <param name="file">File.</param>
-		/// <param name="owner">The login window owner.</param>
-		public static void Replace(string file, Window owner)
-		{
-			if (file == null)
-				throw new ArgumentNullException("file");
-
-			if (!File.Exists(file))
-				throw new FileNotFoundException(LocalizedStrings.Str1575, file);
-
-			Exception error = null;
-
-			var loginWindow = new YandexLoginWindow();
-			loginWindow.AuthCompleted += (s, e) =>
-			{
-				if (e.Error == null)
-				{
-					var client = new DiskSdkClient(e.Result);
-
-					var remoteDir = RootPath;
-					var remotePath = remoteDir + "/" + Path.GetFileName(file);
-
-					try
-					{
-						TryCreateDirectory(client, remoteDir);
-						UploadFile(client, remotePath, file);
-					}
-					catch (Exception excp)
-					{
-						error = excp;
-					}
-				}
-				else
-					error = e.Error;
-			};
-			loginWindow.ShowModal(owner);
-
-			if (error != null)
-				error.Throw();
-		}
-
 		private static void TryCreateDirectory(DiskSdkClient client, string path)
 		{
 			var sync = new SyncObject();
 			var items = Enumerable.Empty<DiskItemInfo>();
 
 			Exception error = null;
+			var pulsed = false;
 
 			EventHandler<GenericSdkEventArgs<IEnumerable<DiskItemInfo>>> listHandler = (s, e) =>
 			{
@@ -192,13 +175,22 @@ namespace StockSharp.Xaml
 				else
 					items = e.Result;
 
-				sync.Pulse();
+				lock (sync)
+				{
+					pulsed = true;
+					sync.Pulse();
+				}
 			};
 
 			client.GetListCompleted += listHandler;
 			client.GetListAsync();
 
-			sync.Wait();
+			lock (sync)
+			{
+				if (!pulsed)
+					sync.Wait();	
+			}
+			
 			client.GetListCompleted -= listHandler;
 
 			if (error != null)

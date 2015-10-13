@@ -1,0 +1,90 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Disk.SDK.Provider</name>
+    </assembly>
+    <members>
+        <member name="T:Disk.SDK.Provider.WebBrowserWrapper">
+            <summary>
+            Represents wrapper for platform specific WebBrowser component.
+            </summary>
+        </member>
+        <member name="M:Disk.SDK.Provider.WebBrowserWrapper.#ctor(System.Windows.Controls.WebBrowser)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Disk.SDK.Provider.WebBrowserWrapper"/> class.
+            </summary>
+            <param name="browser">The browser.</param>
+        </member>
+        <member name="M:Disk.SDK.Provider.WebBrowserWrapper.Navigate(System.String)">
+            <summary>
+            Navigates to the specified URL.
+            </summary>
+            <param name="url">The URL.</param>
+        </member>
+        <member name="M:Disk.SDK.Provider.WebBrowserWrapper.BrowserOnNavigating(System.Object,System.Windows.Navigation.NavigatingCancelEventArgs)">
+            <summary>
+            Occurs when browser is navigating to the url.
+            </summary>
+            <param name="sender">The sender.</param>
+            <param name="e">The <see cref="T:System.Windows.Navigation.NavigatingCancelEventArgs"/> instance containing the event data.</param>
+        </member>
+        <member name="E:Disk.SDK.Provider.WebBrowserWrapper.Navigating">
+            <summary>
+            Occurs just before navigation to a document.
+            </summary>
+        </member>
+        <member name="T:Disk.SDK.Provider.CommonService">
+            <summary>
+            Represents implementation of the common services for .NET 4.0 platform.
+            </summary>
+        </member>
+        <member name="M:Disk.SDK.Provider.CommonService.SetCustomHeader(System.Net.WebRequest)">
+            <summary>
+            Sets the custom header for web-request.
+            </summary>
+            <param name="request">The web-request.</param>
+        </member>
+        <member name="T:Disk.SDK.Provider.DiskSdkClientExtensions">
+            <summary>
+            Disk SDK extension methods with upload\download operations for .NET 4+ platform.
+            </summary>
+        </member>
+        <member name="M:Disk.SDK.Provider.DiskSdkClientExtensions.AuthorizeAsync(Disk.SDK.IDiskSdkClient,Disk.SDK.IBrowser,System.String,System.String,System.EventHandler{Disk.SDK.GenericSdkEventArgs{System.String}})">
+            <summary>
+            Authorizes the asynchronous.
+            </summary>
+            <param name="sdkClient">The SDK client.</param>
+            <param name="browser">The browser.</param>
+            <param name="clientId">The client identifier.</param>
+            <param name="returnUrl">The return URL.</param>
+            <param name="completeCallback">The complete callback.</param>
+        </member>
+        <member name="M:Disk.SDK.Provider.DiskSdkClientExtensions.BrowserOnNavigating(System.Object,Disk.SDK.GenericSdkEventArgs{System.String})">
+            <summary>
+            Occurs when browser is navigating to the url.
+            </summary>
+            <param name="sender">The sender.</param>
+            <param name="e">The event argument.</param>
+        </member>
+        <member name="M:Disk.SDK.Provider.DiskSdkClientExtensions.DownloadFileAsync(Disk.SDK.IDiskSdkClient,System.String,System.IO.Stream,Disk.SDK.IProgress,System.EventHandler{Disk.SDK.SdkEventArgs})">
+            <summary>
+            Downloads the file as an asynchronous operation.
+            </summary>
+            <param name="sdkClient">The SDK client.</param>
+            <param name="path">The path to the file.</param>
+            <param name="fileStream">The file stream.</param>
+            <param name="progress">The progress.</param>
+            <param name="completeCallback">The complete callback.</param>
+        </member>
+        <member name="M:Disk.SDK.Provider.DiskSdkClientExtensions.UploadFileAsync(Disk.SDK.IDiskSdkClient,System.String,System.IO.Stream,Disk.SDK.IProgress,System.EventHandler{Disk.SDK.SdkEventArgs})">
+            <summary>
+            Uploads the file as an asynchronous operation.
+            </summary>
+            <param name="sdkClient">The SDK client.</param>
+            <param name="path">The path to the file.</param>
+            <param name="fileStream">The file stream.</param>
+            <param name="progress">The progress.</param>
+            <param name="completeCallback">The complete callback.</param>
+        </member>
+    </members>
+</doc>
