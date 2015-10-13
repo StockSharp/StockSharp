@@ -4,16 +4,32 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{1410FCB2-F096-4BD8-BE41-5E27FB99D85B}</ProjectGuid>
+    <ProjectGuid>{0B9F6527-5AA5-4ACC-8D31-2797351E7BED}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>StockSharp.Studio.StrategyRunner</RootNamespace>
-    <AssemblyName>StrategyRunner</AssemblyName>
+    <RootNamespace>StockSharp.Terminal</RootNamespace>
+    <AssemblyName>Terminal</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <WarningLevel>4</WarningLevel>
     <TargetFrameworkProfile />
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -28,7 +44,7 @@
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
-    <DebugType>none</DebugType>
+    <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
@@ -40,82 +56,72 @@
     <ApplicationIcon>..\..\References\stocksharp.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
-    <Resource Include="..\..\References\stocksharp.ico">
-      <Link>stocksharp.ico</Link>
-    </Resource>
-  </ItemGroup>
-  <ItemGroup>
     <Reference Include="ActiproSoftware.Docking.Wpf, Version=11.2.555.0, Culture=neutral, PublicKeyToken=36ff2196ab5654b9, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\References\Actipro\ActiproSoftware.Docking.Wpf.dll</HintPath>
-    </Reference>
-    <Reference Include="ActiproSoftware.Editors.Wpf, Version=11.2.555.0, Culture=neutral, PublicKeyToken=36ff2196ab5654b9, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\References\Actipro\ActiproSoftware.Editors.Wpf.dll</HintPath>
-    </Reference>
-    <Reference Include="ActiproSoftware.Navigation.Wpf, Version=11.2.555.0, Culture=neutral, PublicKeyToken=36ff2196ab5654b9, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\References\Actipro\ActiproSoftware.Navigation.Wpf.dll</HintPath>
-    </Reference>
-    <Reference Include="ActiproSoftware.Ribbon.Wpf, Version=11.2.555.0, Culture=neutral, PublicKeyToken=36ff2196ab5654b9, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\References\Actipro\ActiproSoftware.Ribbon.Wpf.dll</HintPath>
     </Reference>
     <Reference Include="ActiproSoftware.Shared.Wpf, Version=11.2.555.0, Culture=neutral, PublicKeyToken=36ff2196ab5654b9, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\References\Actipro\ActiproSoftware.Shared.Wpf.dll</HintPath>
     </Reference>
-    <Reference Include="ActiproSoftware.Views.Wpf, Version=11.2.555.0, Culture=neutral, PublicKeyToken=36ff2196ab5654b9, processorArchitecture=MSIL">
+    <Reference Include="ActiproSoftware.Text.Wpf, Version=11.2.555.0, Culture=neutral, PublicKeyToken=36ff2196ab5654b9, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\References\Actipro\ActiproSoftware.Views.Wpf.dll</HintPath>
+      <HintPath>..\..\References\Actipro\ActiproSoftware.Text.Wpf.dll</HintPath>
     </Reference>
-    <Reference Include="AutomaticUpdaterWPF, Version=2.6.18.4, Culture=neutral, PublicKeyToken=41f970429d9c8a0e, processorArchitecture=MSIL">
+    <Reference Include="Ecng.Collections, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\References\AutomaticUpdaterWPF.dll</HintPath>
-    </Reference>
-    <Reference Include="Ecng.Collections">
       <HintPath>..\..\References\Ecng\Ecng.Collections.dll</HintPath>
     </Reference>
-    <Reference Include="Ecng.Common">
+    <Reference Include="Ecng.Common, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\References\Ecng\Ecng.Common.dll</HintPath>
     </Reference>
-    <Reference Include="Ecng.ComponentModel">
+    <Reference Include="Ecng.ComponentModel, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\References\Ecng\Ecng.ComponentModel.dll</HintPath>
     </Reference>
-    <Reference Include="Ecng.Configuration">
+    <Reference Include="Ecng.Configuration, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\References\Ecng\Ecng.Configuration.dll</HintPath>
     </Reference>
-    <Reference Include="Ecng.Data">
-      <HintPath>..\..\References\Ecng\Ecng.Data.dll</HintPath>
-    </Reference>
-    <Reference Include="Ecng.Localization">
+    <Reference Include="Ecng.Localization, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\References\Ecng\Ecng.Localization.dll</HintPath>
     </Reference>
-    <Reference Include="Ecng.Serialization">
+    <Reference Include="Ecng.Reflection, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\References\Ecng\Ecng.Reflection.dll</HintPath>
+    </Reference>
+    <Reference Include="Ecng.Serialization, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\References\Ecng\Ecng.Serialization.dll</HintPath>
     </Reference>
-    <Reference Include="Ecng.Serialization.FieldFactories">
-      <HintPath>..\..\References\Ecng\Ecng.Serialization.FieldFactories.dll</HintPath>
-    </Reference>
-    <Reference Include="Ecng.Xaml">
+    <Reference Include="Ecng.Xaml, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\References\Ecng\Ecng.Xaml.dll</HintPath>
     </Reference>
-    <Reference Include="MoreLinq">
+    <Reference Include="MoreLinq, Version=1.0.16127.0, Culture=neutral, PublicKeyToken=384d532d7e88985d, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\References\Ecng\MoreLinq.dll</HintPath>
     </Reference>
+    <Reference Include="StockSharp.Xaml.Charting, Version=4.3.13.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Xaml.Charting\StockSharp.Xaml.Charting.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
-    <Reference Include="System.Configuration" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Xml" />
+    <Reference Include="System.configuration" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data" />
     <Reference Include="System.Xaml">
       <RequiredTargetFramework>4.0</RequiredTargetFramework>
     </Reference>
+    <Reference Include="System.XML" />
+    <Reference Include="System.Xml.Linq" />
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
-    <Reference Include="Xceed.Wpf.Toolkit">
+    <Reference Include="Xceed.Wpf.Toolkit, Version=2.5.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\References\Ecng\Xceed.Wpf.Toolkit.dll</HintPath>
     </Reference>
   </ItemGroup>
@@ -124,22 +130,16 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="DiagramStrategyEx.cs" />
-    <Compile Include="SecretWindow.xaml.cs">
-      <DependentUpon>SecretWindow.xaml</DependentUpon>
+    <Compile Include="..\..\StockSharpAssemblyInfo.cs">
+      <Link>Properties\StockSharpAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="StrategyConnector.cs" />
-    <Compile Include="StrategyContent.xaml.cs">
-      <DependentUpon>StrategyContent.xaml</DependentUpon>
+    <Compile Include="SecuritiesView.xaml.cs">
+      <DependentUpon>SecuritiesView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="StrategyEntityFactory.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Compile Include="..\..\StockSharpAssemblyInfo.cs">
-      <Link>Properties\StockSharpAssemblyInfo.cs</Link>
-    </Compile>
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -148,11 +148,7 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="SecretWindow.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="StrategyContent.xaml">
+    <Page Include="SecuritiesView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -182,74 +178,57 @@
     <AppDesigner Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="app.config">
-      <SubType>Designer</SubType>
-    </None>
+    <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\StockSharp %28GitLab%29\Algo.Strategies\Algo.Strategies.csproj">
-      <Project>{fcb47c52-e1ea-4020-b88c-e750924f5716}</Project>
-      <Name>Algo.Strategies</Name>
-    </ProjectReference>
+    <BootstrapperPackage Include=".NETFramework,Version=v4.5.1">
+      <Visible>False</Visible>
+      <ProductName>Microsoft .NET Framework 4.5.1 %28x86 и x64%29</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\..\Algo\Algo.csproj">
-      <Project>{2a5c6fad-106c-4a4a-b602-77a6b1034ca2}</Project>
+      <Project>{2A5C6FAD-106C-4A4A-B602-77A6B1034CA2}</Project>
       <Name>Algo</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\BusinessEntities\BusinessEntities.csproj">
-      <Project>{dce69db8-53ca-4b7f-9368-02f175a31074}</Project>
+      <Project>{DCE69DB8-53CA-4B7F-9368-02F175A31074}</Project>
       <Name>BusinessEntities</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Community\Community.csproj">
-      <Project>{e8e18f8f-97bd-41ae-8888-f54f2411d575}</Project>
-      <Name>Community</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Configuration\Configuration.csproj">
       <Project>{2cff1903-4ef5-46f8-ab5d-bb623ca75ce6}</Project>
       <Name>Configuration</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\Connectors\InteractiveBrokers\InteractiveBrokers.csproj">
+      <Project>{F17D780E-6F82-40FD-84E1-C4EB09853BBD}</Project>
+      <Name>InteractiveBrokers</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Localization\Localization.csproj">
-      <Project>{a98a81ce-75a1-4fab-9c02-e6eef4b51f4f}</Project>
+      <Project>{A98A81CE-75A1-4FAB-9C02-E6EEF4B51F4F}</Project>
       <Name>Localization</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Logging\Logging.csproj">
-      <Project>{c4476add-a3d5-41bb-9d43-55d865863b78}</Project>
+      <Project>{C4476ADD-A3D5-41BB-9D43-55D865863B78}</Project>
       <Name>Logging</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Messages\Messages.csproj">
-      <Project>{b47f9c23-a4bd-46a9-bf27-54cb3d653503}</Project>
+      <Project>{B47F9C23-A4BD-46A9-BF27-54CB3D653503}</Project>
       <Name>Messages</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\StockSharp %28GitLab%29\Xaml.Charting\Xaml.Charting.csproj">
-      <Project>{c449d618-dea4-41c3-ba86-9f827c7421dc}</Project>
-      <Name>Xaml.Charting</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\StockSharp %28GitLab%29\Xaml.Diagram\Xaml.Diagram.csproj">
-      <Project>{e5d21a65-1b77-4b4b-87c7-8ac7eee4f085}</Project>
-      <Name>Xaml.Diagram</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\Xaml\Xaml.csproj">
-      <Project>{64e4d6f0-36b6-4904-9ba7-fffbe5ff71d8}</Project>
+      <Project>{64E4D6F0-36B6-4904-9BA7-FFFBE5FF71D8}</Project>
       <Name>Xaml</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\Studio\Compositions\ПересечениеDiagramElement.xml">
-      <Link>Compositions\ПересечениеDiagramElement.xml</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\Studio\Compositions\СчетчикDiagramElement.xml">
-      <Link>Compositions\СчетчикDiagramElement.xml</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\Studio\Compositions\УсловныйОператорDiagramElement.xml">
-      <Link>Compositions\УсловныйОператорDiagramElement.xml</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="..\Studio\Compositions\MultiplicationDiagramElement.xml">
-      <Link>Compositions\MultiplicationDiagramElement.xml</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    <Resource Include="..\..\References\stocksharp.ico">
+      <Link>stocksharp.ico</Link>
     </Resource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

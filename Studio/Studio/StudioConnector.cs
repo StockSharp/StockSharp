@@ -663,6 +663,8 @@ namespace StockSharp.Studio
 			EntityFactory = new StudioConnectorEntityFactory();
 
 			_adapter = new PassThroughMessageAdapter(TransactionIdGenerator);
+			_adapter.AddMarketDataSupport();
+
 			Adapter.InnerAdapters.Add(_adapter);
 
 			_entityRegistry = ConfigManager.GetService<IStudioEntityRegistry>();

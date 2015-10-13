@@ -53772,5 +53772,44 @@ namespace StockSharp.Localization
 		{
 			get { return GetString(OrderLogBuilderKey); }
 		}
+
+		/// <summary>
+		/// Delay
+		/// </summary>
+		public const string DelayKey = "Delay";
+
+		/// <summary>
+		/// Delay
+		/// </summary>
+		public static string Delay
+		{
+			get { return GetString(DelayKey); }
+		}
+
+		/// <summary>
+		/// Delay load instruments.
+		/// </summary>
+		public const string SecurityDelayLoadKey = "SecurityDelayLoad";
+
+		/// <summary>
+		/// Delay load instruments.
+		/// </summary>
+		public static string SecurityDelayLoad
+		{
+			get { return GetString(SecurityDelayLoadKey); }
+		}
+
+		/// <summary>
+		/// Only active instruments.
+		/// </summary>
+		public const string OnlyActiveSecuritiesKey = "OnlyActiveSecurities";
+
+		/// <summary>
+		/// Only active instruments.
+		/// </summary>
+		public static string OnlyActiveSecurities
+		{
+			get { return GetString(OnlyActiveSecuritiesKey); }
+		}
     }
 }

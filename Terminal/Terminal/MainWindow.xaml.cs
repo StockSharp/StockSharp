@@ -19,33 +19,11 @@
 	using StockSharp.BusinessEntities;
 	using StockSharp.Localization;
 	using StockSharp.Messages;
-	using StockSharp.Quik;
 	using StockSharp.Xaml;
 	using StockSharp.Xaml.Charting;
-	using StockSharp.AlfaDirect;
 	using StockSharp.Algo;
 	using StockSharp.Algo.Storages;
-	using StockSharp.BarChart;
-	using StockSharp.BitStamp;
-	using StockSharp.Blackwood;
-	using StockSharp.Btce;
-	using StockSharp.CQG;
-	using StockSharp.ETrade;
-	using StockSharp.Fix;
-	using StockSharp.InteractiveBrokers;
-	using StockSharp.IQFeed;
-	using StockSharp.ITCH;
-	using StockSharp.LMAX;
-	using StockSharp.Micex;
-	using StockSharp.Oanda;
-	using StockSharp.OpenECry;
-	using StockSharp.Plaza;
-	using StockSharp.Quik.Lua;
-	using StockSharp.Rithmic;
-	using StockSharp.Rss;
-	using StockSharp.SmartCom;
-	using StockSharp.Sterling;
-	using StockSharp.Transaq;
+	using StockSharp.Configuration;
 
 	public partial class MainWindow
 	{
@@ -156,51 +134,15 @@
 
 		private void Settings(object obj)
 		{
-			var wnd = new ConnectorWindow();
-
-			AddConnectorInfo(wnd, typeof(AlfaDirectMessageAdapter));
-			AddConnectorInfo(wnd, typeof(BarChartMessageAdapter));
-			AddConnectorInfo(wnd, typeof(BitStampMessageAdapter));
-			AddConnectorInfo(wnd, typeof(BlackwoodMessageAdapter));
-			AddConnectorInfo(wnd, typeof(BtceMessageAdapter));
-			AddConnectorInfo(wnd, typeof(CQGMessageAdapter));
-			AddConnectorInfo(wnd, typeof(ETradeMessageAdapter));
-			AddConnectorInfo(wnd, typeof(FixMessageAdapter));
-			AddConnectorInfo(wnd, typeof(InteractiveBrokersMessageAdapter));
-			AddConnectorInfo(wnd, typeof(IQFeedMarketDataMessageAdapter));
-			AddConnectorInfo(wnd, typeof(ItchMessageAdapter));
-			AddConnectorInfo(wnd, typeof(LmaxMessageAdapter));
-			AddConnectorInfo(wnd, typeof(MicexMessageAdapter));
-			AddConnectorInfo(wnd, typeof(OandaMessageAdapter));
-			AddConnectorInfo(wnd, typeof(OpenECryMessageAdapter));
-			AddConnectorInfo(wnd, typeof(PlazaMessageAdapter));
-			AddConnectorInfo(wnd, typeof(LuaFixTransactionMessageAdapter));
-			AddConnectorInfo(wnd, typeof(LuaFixMarketDataMessageAdapter));
-			AddConnectorInfo(wnd, typeof(QuikTrans2QuikAdapter));
-			AddConnectorInfo(wnd, typeof(QuikDdeAdapter));
-			AddConnectorInfo(wnd, typeof(RithmicMessageAdapter));
-			AddConnectorInfo(wnd, typeof(RssMarketDataMessageAdapter));
-			AddConnectorInfo(wnd, typeof(SmartComMessageAdapter));
-			AddConnectorInfo(wnd, typeof(SterlingMessageAdapter));
-			AddConnectorInfo(wnd, typeof(TransaqMessageAdapter));
-
-			wnd.Adapter = Connector.Adapter;
-
-			if (!wnd.ShowModal(this))
+			if (!Connector.Configure(this))
 				return;
 
-			Connector.Adapter.Load(wnd.Adapter.Save());
 			new XmlSerializer<SettingsStorage>().Serialize(Connector.Adapter.Save(), _connectionFile);
 		}
 
 		private bool CanSettings(object obj)
 		{
 			return true;
-		}
-
-		private static void AddConnectorInfo(ConnectorWindow wnd, Type adapterType)
-		{
-			wnd.ConnectorsInfo.Add(new ConnectorInfo(adapterType));
 		}
 
 		private void Connect()
