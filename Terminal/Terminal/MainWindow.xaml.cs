@@ -1,35 +1,31 @@
-﻿using StockSharp.Terminal.Layout;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Windows;
+using System.Windows.Controls;
+using ActiproSoftware.Windows.Controls.Docking;
+using ActiproSoftware.Windows.Controls.Docking.Serialization;
+using Ecng.Collections;
+using Ecng.Configuration;
+using Ecng.Serialization;
+using Ecng.Xaml;
+using StockSharp.Algo;
+using StockSharp.Algo.Storages;
+using StockSharp.BusinessEntities;
+using StockSharp.Configuration;
+using StockSharp.Localization;
+using StockSharp.Messages;
+using StockSharp.Terminal.Layout;
+using StockSharp.Xaml;
+using StockSharp.Xaml.Charting;
+using EntityFactory = StockSharp.Algo.EntityFactory;
 
 namespace StockSharp.Terminal
 {
-	using System;
-	using System.Collections.Generic;
-	using System.Collections.ObjectModel;
-	using System.Linq;
-	using System.Windows;
-	using System.Windows.Controls;
-	using System.IO;
-
-	using ActiproSoftware.Windows.Controls.Docking;
-	using ActiproSoftware.Windows.Controls.Docking.Serialization;
-
-	using Ecng.Collections;
-	using Ecng.Configuration;
-	using Ecng.Xaml;
-	using Ecng.Serialization;
-
-	using StockSharp.BusinessEntities;
-	using StockSharp.Localization;
-	using StockSharp.Messages;
-	using StockSharp.Xaml;
-	using StockSharp.Xaml.Charting;
-	using StockSharp.Algo;
-	using StockSharp.Algo.Storages;
-	using StockSharp.Configuration;
-
 	public partial class MainWindow
 	{
-		private class StorageEntityFactory : Algo.EntityFactory
+		private class StorageEntityFactory : EntityFactory
 		{
 			private readonly ISecurityStorage _securityStorage;
 			private readonly Dictionary<string, Security> _securities;
@@ -40,7 +36,8 @@ namespace StockSharp.Terminal
 					throw new ArgumentNullException("securityStorage");
 
 				_securityStorage = securityStorage;
-				_securities = _securityStorage.LookupAll().ToDictionary(s => s.Id, s => s, StringComparer.InvariantCultureIgnoreCase);
+				_securities = _securityStorage.LookupAll()
+					.ToDictionary(s => s.Id, s => s, StringComparer.InvariantCultureIgnoreCase);
 			}
 
 			public override Security CreateSecurity(string id)
@@ -55,7 +52,10 @@ namespace StockSharp.Terminal
 		}
 
 		private readonly SecuritiesView _secView;
-		internal readonly SynchronizedDictionary<Security, MarketDepthControl> _depths = new SynchronizedDictionary<Security, MarketDepthControl>();
+
+		internal readonly SynchronizedDictionary<Security, MarketDepthControl> _depths =
+			new SynchronizedDictionary<Security, MarketDepthControl>();
+
 		private const string _settingsFolder = "Settings";
 		private readonly string _connectionFile;
 
@@ -71,10 +71,10 @@ namespace StockSharp.Terminal
 
 			Directory.CreateDirectory(_settingsFolder);
 
-			var storageRegistry = new StorageRegistry { DefaultDrive = new LocalMarketDataDrive(_settingsFolder) };
+			var storageRegistry = new StorageRegistry {DefaultDrive = new LocalMarketDataDrive(_settingsFolder)};
 			var securityStorage = storageRegistry.GetSecurityStorage();
-			
-			Connector = new Connector { EntityFactory = new StorageEntityFactory(securityStorage) };
+
+			Connector = new Connector {EntityFactory = new StorageEntityFactory(securityStorage)};
 			ConfigManager.RegisterService(new FilterableSecurityProvider(securityStorage));
 			ConfigManager.RegisterService<IConnector>(Connector);
 			ConfigManager.RegisterService<IMarketDataProvider>(Connector);
@@ -84,7 +84,7 @@ namespace StockSharp.Terminal
 			if (File.Exists(_connectionFile))
 				Connector.Adapter.Load(new XmlSerializer<SettingsStorage>().Deserialize(_connectionFile));
 
-			_secView = new SecuritiesView(this) { SecurityGrid = { MarketDataProvider = Connector } };
+			_secView = new SecuritiesView(this) {SecurityGrid = {MarketDataProvider = Connector}};
 
 			Connector.NewSecurities += _secView.SecurityGrid.Securities.AddRange;
 
@@ -178,24 +178,30 @@ namespace StockSharp.Terminal
 			LayoutManager.DockToolWindowToDockSite(dockSite, twNews, Dock.Right);
 
 			// Bottom left
-			var twSecurities = LayoutManager.CreateToolWindow(LayoutKey.Security, "Securities", LocalizedStrings.Securities, _secView, true);
+			var twSecurities = LayoutManager.CreateToolWindow(LayoutKey.Security, "Securities", LocalizedStrings.Securities,
+				_secView, true);
 			LayoutManager.DockToolWindowToDockSite(dockSite, twSecurities, Dock.Bottom);
 
-			var twMyTrades = LayoutManager.CreateToolWindow(LayoutKey.Trade, "MyTrades", LocalizedStrings.MyTrades, new MyTradeGrid(), true);
+			var twMyTrades = LayoutManager.CreateToolWindow(LayoutKey.Trade, "MyTrades", LocalizedStrings.MyTrades,
+				new MyTradeGrid(), true);
 			LayoutManager.DockToolWindowToToolWindow(twSecurities, twMyTrades, Direction.Content);
 
 			// Bottom right
-			var twOrders = LayoutManager.CreateToolWindow(LayoutKey.Order, "Orders", LocalizedStrings.Orders, new OrderGrid(), true);
+			var twOrders = LayoutManager.CreateToolWindow(LayoutKey.Order, "Orders", LocalizedStrings.Orders, new OrderGrid(),
+				true);
 			LayoutManager.DockToolWindowToToolWindow(twSecurities, twOrders, Direction.ContentRight);
 
-			var twOrderLog = LayoutManager.CreateToolWindow(LayoutKey.OrderLog, "OrderLog", LocalizedStrings.OrderLog, new OrderLogGrid(), true);
+			var twOrderLog = LayoutManager.CreateToolWindow(LayoutKey.OrderLog, "OrderLog", LocalizedStrings.OrderLog,
+				new OrderLogGrid(), true);
 			LayoutManager.DockToolWindowToToolWindow(twOrders, twOrderLog, Direction.Content);
 
 			// Right bottom
-			var twPositions = LayoutManager.CreateToolWindow(LayoutKey.Portfolio, "Positions", LocalizedStrings.Str972, new PortfolioGrid(), true);
+			var twPositions = LayoutManager.CreateToolWindow(LayoutKey.Portfolio, "Positions", LocalizedStrings.Str972,
+				new PortfolioGrid(), true);
 			LayoutManager.DockToolWindowToToolWindow(twNews, twPositions, Direction.ContentBottom);
 
-			var twTrades = LayoutManager.CreateToolWindow(LayoutKey.Trade, "Trades", LocalizedStrings.Ticks, new TradeGrid(), true);
+			var twTrades = LayoutManager.CreateToolWindow(LayoutKey.Trade, "Trades", LocalizedStrings.Ticks, new TradeGrid(),
+				true);
 			LayoutManager.DockToolWindowToToolWindow(twPositions, twTrades, Direction.Content);
 
 			LayoutManager._isLoaded = true;

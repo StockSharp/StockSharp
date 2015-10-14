@@ -1,11 +1,10 @@
-﻿namespace StockSharp.Terminal
+﻿using Ecng.Configuration;
+using Ecng.Xaml;
+using StockSharp.Algo;
+using StockSharp.BusinessEntities;
+
+namespace StockSharp.Terminal
 {
-	using Ecng.Configuration;
-	using Ecng.Xaml;
-
-	using StockSharp.Algo;
-	using StockSharp.BusinessEntities;
-
 	public partial class SecuritiesView
 	{
 		private readonly MainWindow _parent;
