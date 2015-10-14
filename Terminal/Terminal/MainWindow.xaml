@@ -17,8 +17,9 @@
 	
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="25" />
-            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+	        <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 		
         <ToolBar>
@@ -30,16 +31,24 @@
                 </Button>
         </ToolBar>
 
-        <docking:DockSite x:Name="DockSite" Grid.Row="1" 
+        <docking:DockSite x:Name="DockSite1" Grid.Row="1" 
 			ToolItemsSource="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.ToolItems}"
 			ToolItemContainerStyle="{StaticResource ToolItemStyle}" 
 			Loaded="DockSite_OnLoaded" 
 			WindowClosed="DockSite_OnWindowClosed">
             <docking:Workspace>
                 <docking:TabbedMdiHost>
-                    <docking:TabbedMdiContainer/>
+					<docking:TabbedMdiContainer>
+						<docking:ToolWindow x:Name="MasterToolWindow"/>
+					</docking:TabbedMdiContainer>
                 </docking:TabbedMdiHost>
             </docking:Workspace>
         </docking:DockSite>
+		
+		<docking:DockSite Grid.Row="2" x:Name="ProgrammaticDockSite"
+			ToolItemsSource="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.ToolItems}"
+			ToolItemContainerStyle="{StaticResource ToolItemStyle}" 
+			Loaded="ProgrammaticDockSite_OnLoaded"
+			WindowClosed="DockSite_OnWindowClosed"/>
     </Grid>
 </Window>
