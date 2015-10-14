@@ -28,7 +28,7 @@
 
 		private void CreateNewChart(object obj)
 		{
-			_parent.CreateNewChart(obj as Security);
+			_parent.LayoutManager.CreateNewChart(obj as Security);
 		}
 
 		private bool CanCreateNewChart(object obj)
@@ -38,7 +38,7 @@
 
 		private void CreateNewMarketDepth(object obj)
 		{
-			_parent.CreateNewMarketDepth(obj as Security);
+			_parent.LayoutManager.CreateNewMarketDepth(obj as Security);
 		}
 
 		private bool CanCreateNewMarketDepth(object obj)
