@@ -1,10 +1,12 @@
 namespace StockSharp.Hydra.ITCH
 {
+	using System.ComponentModel;
 	using System.Net;
 	using System.Security;
 
 	using Ecng.Common;
 	using Ecng.Net;
+	using Ecng.Xaml;
 
 	using StockSharp.Hydra.Core;
 	using StockSharp.ITCH;
@@ -36,6 +38,7 @@ namespace StockSharp.Hydra.ITCH
 			[DisplayNameLoc(LocalizedStrings.MainKey)]
 			[DescriptionLoc(LocalizedStrings.MainServerKey, true)]
 			[PropertyOrder(0)]
+			[ExpandableObject]
 			public MulticastSourceAddress PrimaryMulticast
 			{
 				get { return (MulticastSourceAddress)ExtensionInfo["PrimaryMulticast"]; }
@@ -86,6 +89,7 @@ namespace StockSharp.Hydra.ITCH
 			[DisplayNameLoc(LocalizedStrings.SecuritiesKey)]
 			[DescriptionLoc(LocalizedStrings.Str2137Key, true)]
 			[PropertyOrder(5)]
+			[Editor(typeof(FileBrowserEditor), typeof(FileBrowserEditor))]
 			public string SecurityCsvFile
 			{
 				get { return (string)ExtensionInfo["SecurityCsvFile"]; }
@@ -100,6 +104,16 @@ namespace StockSharp.Hydra.ITCH
 			{
 				get { return (bool)ExtensionInfo["OnlyActiveSecurities"]; }
 				set { ExtensionInfo["OnlyActiveSecurities"] = value; }
+			}
+
+			[CategoryLoc(_sourceName)]
+			[DisplayNameLoc(LocalizedStrings.GroupIdKey)]
+			[DescriptionLoc(LocalizedStrings.GroupIdKey, true)]
+			[PropertyOrder(7)]
+			public string SecurityGroupId
+			{
+				get { return (string)ExtensionInfo["SecurityGroupId"]; }
+				set { ExtensionInfo["SecurityGroupId"] = value; }
 			}
 		}
 
@@ -127,6 +141,7 @@ namespace StockSharp.Hydra.ITCH
 				_settings.ReplayAddress = _settings.RecoveryAddress = new IPEndPoint(IPAddress.Loopback, 3);
 				_settings.SecurityCsvFile = string.Empty;
 				_settings.OnlyActiveSecurities = true;
+				_settings.SecurityGroupId = string.Empty;
 			}
 
 			return new MarketDataConnector<ItchTrader>(EntityRegistry.Securities, this, () => new ItchTrader
@@ -137,7 +152,8 @@ namespace StockSharp.Hydra.ITCH
 				RecoveryAddress = _settings.RecoveryAddress,
 				ReplayAddress = _settings.ReplayAddress,
 				SecurityCsvFile = _settings.SecurityCsvFile,
-				OnlyActiveSecurities = _settings.OnlyActiveSecurities
+				OnlyActiveSecurities = _settings.OnlyActiveSecurities,
+				SecurityGroupId = _settings.SecurityGroupId
 			});
 		}
 	}

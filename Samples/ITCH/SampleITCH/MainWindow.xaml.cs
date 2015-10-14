@@ -1,16 +1,12 @@
 namespace SampleITCH
 {
 	using System;
-	using System.Collections.Generic;
 	using System.ComponentModel;
 	using System.Windows;
 
 	using Ecng.Common;
 	using Ecng.Configuration;
-	using Ecng.Net;
 	using Ecng.Xaml;
-
-	using Ookii.Dialogs.Wpf;
 
 	using StockSharp.Algo;
 	using StockSharp.BusinessEntities;
@@ -23,14 +19,13 @@ namespace SampleITCH
 	public partial class MainWindow
 	{
 		private bool _isConnected;
+		private bool _initialized;
 
 		public ItchTrader Trader;
 
 		private readonly SecuritiesWindow _securitiesWindow = new SecuritiesWindow();
 		private readonly TradesWindow _tradesWindow = new TradesWindow();
 		private readonly OrdersLogWindow _orderLogWindow = new OrdersLogWindow();
-
-		private readonly HashSet<string> _requestedBoards = new HashSet<string>(StringComparer.InvariantCultureIgnoreCase);
 
 		private readonly LogManager _logManager = new LogManager();
 
@@ -48,6 +43,17 @@ namespace SampleITCH
 
 			_logManager.Listeners.Add(new FileLogListener { LogDirectory = "StockSharp_ITCH" });
 			_logManager.Listeners.Add(new GuiLogListener(Monitor));
+
+			// create connector
+			Trader = new ItchTrader
+			{
+				LogLevel = LogLevels.Debug,
+				CreateDepthFromOrdersLog = true
+			};
+
+			_logManager.Sources.Add(Trader);
+
+			Settings.SelectedObject = Trader.MarketDataAdapter;
 		}
 
 		protected override void OnClosing(CancelEventArgs e)
@@ -68,44 +74,24 @@ namespace SampleITCH
 
 		public static MainWindow Instance { get; private set; }
 
-		private void FindPathClick(object sender, RoutedEventArgs e)
-		{
-			var dlg = new VistaFolderBrowserDialog();
-
-			if (!SecuritiesCsv.Text.IsEmpty())
-				dlg.SelectedPath = SecuritiesCsv.Text;
-
-			if (dlg.ShowDialog(this) == true)
-			{
-				SecuritiesCsv.Text = dlg.SelectedPath;
-			}
-		}
-
 		private void ConnectClick(object sender, RoutedEventArgs e)
 		{
 			if (!_isConnected)
 			{
-				if (Login.Text.IsEmpty())
+				if (Trader.Login.IsEmpty())
 				{
 					MessageBox.Show(this, LocalizedStrings.Str2974);
 					return;
 				}
-				else if (Password.Password.IsEmpty())
+				else if (Trader.Password.IsEmpty())
 				{
 					MessageBox.Show(this, LocalizedStrings.Str2975);
 					return;
 				}
 
-				if (Trader == null)
+				if (!_initialized)
 				{
-					// create connector
-					Trader = new ItchTrader
-					{
-						//LogLevel = LogLevels.Debug,
-						CreateDepthFromOrdersLog = true
-					};
-
-					_logManager.Sources.Add(Trader);
+					_initialized = true;
 
 					ConfigManager.RegisterService(new FilterableSecurityProvider(Trader));
 
@@ -113,7 +99,6 @@ namespace SampleITCH
 					Trader.ReConnectionSettings.WorkingTime = ExchangeBoard.Forts.WorkingTime;
 					Trader.Restored += () => this.GuiAsync(() =>
 					{
-						// разблокируем кнопку Экспорт (соединение было восстановлено)
 						ChangeConnectStatus(true);
 						MessageBox.Show(this, LocalizedStrings.Str2958);
 					});
@@ -146,52 +131,28 @@ namespace SampleITCH
 					Trader.MarketDataSubscriptionFailed += (security, type, error) =>
 						this.GuiAsync(() => MessageBox.Show(this, error.ToString(), LocalizedStrings.Str2956Params.Put(type, security)));
 
-					var isAllDepths = AllDepths.IsChecked == true;
-
-					Trader.NewSecurities += securities =>
-					{
-						foreach (var security in securities)
-						{
-							_securitiesWindow.SecurityPicker.Securities.Add(security);
-
-							if (isAllDepths && _requestedBoards.Add(security.Board.Code))
-							{
-								Trader.SendInMessage(new MarketDataMessage
-								{
-									SecurityId = new SecurityId
-									{
-										BoardCode = security.Board.Code,
-									},
-									IsSubscribe = true,
-									DataType = MarketDataTypes.OrderLog,
-									TransactionId = Trader.TransactionIdGenerator.GetNextId(),
-								});
-							}
-						}
-					};
+					Trader.NewSecurities += _securitiesWindow.SecurityPicker.Securities.AddRange;
 					Trader.NewTrades += _tradesWindow.TradeGrid.Trades.AddRange;
 					Trader.NewOrderLogItems += _orderLogWindow.OrderLogGrid.LogItems.AddRange;
 
+					//if (AllDepths.IsChecked == true)
+					{
+						Trader.LookupSecuritiesResult += securities =>
+						{
+							Trader.SendInMessage(new MarketDataMessage
+							{
+								IsSubscribe = true,
+								DataType = MarketDataTypes.OrderLog,
+								TransactionId = Trader.TransactionIdGenerator.GetNextId(),
+							});
+						};	
+					}
+					
 					// set market data provider
 					_securitiesWindow.SecurityPicker.MarketDataProvider = Trader;
 
 					ShowSecurities.IsEnabled = ShowTrades.IsEnabled = ShowOrdersLog.IsEnabled = true;
 				}
-
-				Trader.Login = Login.Text;
-				Trader.Password = Password.Password;
-				Trader.PrimaryMulticast = new MulticastSourceAddress
-				{
-					GroupAddress = GroupAddr.Address,
-					SourceAddress = SourceAddr.Address,
-					Port = Port.Value ?? 0
-				};
-				Trader.RecoveryAddress = Recovery.EndPoint;
-				Trader.ReplayAddress = Replay.EndPoint;
-				Trader.SecurityCsvFile = SecuritiesCsv.Text;
-
-				// clear password box for security reason
-				//Password.Clear();
 
 				Trader.Connect();
 			}
