@@ -6,35 +6,35 @@ namespace StockSharp.Algo.Commissions
 	using StockSharp.Messages;
 
 	/// <summary>
-	/// Интерфейс правила вычисления комиссии.
+	/// The commission calculating rule interface.
 	/// </summary>
 	public interface ICommissionRule : IPersistable
 	{
 		/// <summary>
-		/// Заголовок.
+		/// Header.
 		/// </summary>
 		string Title { get; }
 
 		/// <summary>
-		/// Суммарное значение комиссии.
+		/// Total commission.
 		/// </summary>
 		decimal Commission { get; }
 
 		/// <summary>
-		/// Значение комиссии.
+		/// Commission value.
 		/// </summary>
 		Unit Value { get; }
 
 		/// <summary>
-		/// Сбросить состояние.
+		/// To reset the state.
 		/// </summary>
 		void Reset();
 
 		/// <summary>
-		/// Рассчитать комиссию.
+		/// To calculate commission.
 		/// </summary>
-		/// <param name="message">Сообщение, содержащее информацию по заявке или собственной сделке.</param>
-		/// <returns>Комиссия. Если комиссию рассчитать невозможно, то будет возвращено <see langword="null"/>.</returns>
+		/// <param name="message">The message containing the information about the order or own trade.</param>
+		/// <returns>The commission. If the commission can not be calculated then <see langword="null" /> will be returned.</returns>
 		decimal? ProcessExecution(ExecutionMessage message);
 	}
 }

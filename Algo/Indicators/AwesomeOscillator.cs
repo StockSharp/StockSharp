@@ -10,17 +10,17 @@ namespace StockSharp.Algo.Indicators
 	using Xceed.Wpf.Toolkit.PropertyGrid.Attributes;
 
 	/// <summary>
-	/// Чудесный осцилятор.
+	/// Awesome Oscillator.
 	/// </summary>
-	///  <remarks>
-	/// http://ta.mql4.com/indicators/bills/awesome
+	/// <remarks>
+	/// http://ta.mql4.com/indicators/bills/awesome.
 	/// </remarks>
 	[DisplayName("AO")]
 	[DescriptionLoc(LocalizedStrings.Str836Key)]
 	public class AwesomeOscillator : BaseIndicator
 	{
 		/// <summary>
-		/// Создать <see cref="AwesomeOscillator"/>.
+		/// Initializes a new instance of the <see cref="AwesomeOscillator"/>.
 		/// </summary>
 		public AwesomeOscillator()
 			: this(new SimpleMovingAverage { Length = 34 }, new SimpleMovingAverage { Length = 5 })
@@ -28,10 +28,10 @@ namespace StockSharp.Algo.Indicators
 		}
 
 		/// <summary>
-		/// Создать <see cref="AwesomeOscillator"/>.
+		/// Initializes a new instance of the <see cref="AwesomeOscillator"/>.
 		/// </summary>
-		/// <param name="longSma">Длинная скользящая средняя.</param>
-		/// <param name="shortSma">Короткая скользящая средняя.</param>
+		/// <param name="longSma">Long moving average.</param>
+		/// <param name="shortSma">Short moving average.</param>
 		public AwesomeOscillator(SimpleMovingAverage longSma, SimpleMovingAverage shortSma)
 		{
 			if (longSma == null)
@@ -46,7 +46,7 @@ namespace StockSharp.Algo.Indicators
 		}
 
 		/// <summary>
-		/// Длинная скользящая средняя.
+		/// Long moving average.
 		/// </summary>
 		[ExpandableObject]
 		[DisplayNameLoc(LocalizedStrings.Str798Key)]
@@ -55,7 +55,7 @@ namespace StockSharp.Algo.Indicators
 		public SimpleMovingAverage LongMa { get; private set; }
 
 		/// <summary>
-		/// Короткая скользящая средняя.
+		/// Short moving average.
 		/// </summary>
 		[ExpandableObject]
 		[DisplayNameLoc(LocalizedStrings.Str800Key)]
@@ -64,7 +64,7 @@ namespace StockSharp.Algo.Indicators
 		public SimpleMovingAverage ShortMa { get; private set; }
 
 		/// <summary>
-		/// Медианная цена.
+		/// Median price.
 		/// </summary>
 		[ExpandableObject]
 		[DisplayNameLoc(LocalizedStrings.Str843Key)]
@@ -73,15 +73,15 @@ namespace StockSharp.Algo.Indicators
 		public MedianPrice MedianPrice { get; private set; }
 
 		/// <summary>
-		/// Сформирован ли индикатор.
+		/// Whether the indicator is set.
 		/// </summary>
 		public override bool IsFormed { get { return LongMa.IsFormed; } }
 
 		/// <summary>
-		/// Обработать входное значение.
+		/// To handle the input value.
 		/// </summary>
-		/// <param name="input">Входное значение.</param>
-		/// <returns>Результирующее значение.</returns>
+		/// <param name="input">The input value.</param>
+		/// <returns>The resulting value.</returns>
 		protected override IIndicatorValue OnProcess(IIndicatorValue input)
 		{
 			var mpValue = MedianPrice.Process(input);
@@ -93,9 +93,9 @@ namespace StockSharp.Algo.Indicators
 		}
 
 		/// <summary>
-		/// Загрузить настройки.
+		/// Load settings.
 		/// </summary>
-		/// <param name="settings">Хранилище настроек.</param>
+		/// <param name="settings">Settings storage.</param>
 		public override void Load(SettingsStorage settings)
 		{
 			base.Load(settings);
@@ -106,9 +106,9 @@ namespace StockSharp.Algo.Indicators
 		}
 
 		/// <summary>
-		/// Сохранить настройки.
+		/// Save settings.
 		/// </summary>
-		/// <param name="settings">Хранилище настроек.</param>
+		/// <param name="settings">Settings storage.</param>
 		public override void Save(SettingsStorage settings)
 		{
 			base.Save(settings);

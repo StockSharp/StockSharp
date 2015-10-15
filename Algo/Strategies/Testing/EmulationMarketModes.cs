@@ -3,24 +3,24 @@ namespace StockSharp.Algo.Strategies.Testing
 	using StockSharp.Localization;
 
 	/// <summary>
-	/// Тип данных для эмуляции.
+	/// The data type for paper trading.
 	/// </summary>
 	public enum EmulationMarketDataModes
 	{
 		/// <summary>
-		/// Хранилище.
+		/// Storage.
 		/// </summary>
 		[EnumDisplayNameLoc(LocalizedStrings.Str1405Key)]
 		Storage,
 
 		/// <summary>
-		/// Сгенерированные.
+		/// Generated.
 		/// </summary>
 		[EnumDisplayNameLoc(LocalizedStrings.Str1406Key)]
 		Generate,
 
 		/// <summary>
-		/// Никакие.
+		/// None.
 		/// </summary>
 		[EnumDisplayNameLoc(LocalizedStrings.Str1407Key)]
 		No

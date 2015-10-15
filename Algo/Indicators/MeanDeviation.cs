@@ -7,14 +7,14 @@ namespace StockSharp.Algo.Indicators
 	using StockSharp.Localization;
 
 	/// <summary>
-	/// Среднее отклонение.
+	/// Average deviation.
 	/// </summary>
 	[DisplayName("MeanDeviation")]
 	[DescriptionLoc(LocalizedStrings.Str744Key)]
 	public class MeanDeviation : LengthIndicator<decimal>
 	{
 		/// <summary>
-		/// Создать <see cref="MeanDeviation"/>.
+		/// Initializes a new instance of the <see cref="MeanDeviation"/>.
 		/// </summary>
 		public MeanDeviation()
 		{
@@ -23,13 +23,13 @@ namespace StockSharp.Algo.Indicators
 		}
 
 		/// <summary>
-		/// Скользящая средняя.
+		/// Moving Average.
 		/// </summary>
 		[Browsable(false)]
 		public SimpleMovingAverage Sma { get; private set; }
 
 		/// <summary>
-		/// Сформирован ли индикатор.
+		/// Whether the indicator is set.
 		/// </summary>
 		public override bool IsFormed
 		{
@@ -37,7 +37,7 @@ namespace StockSharp.Algo.Indicators
 		}
 
 		/// <summary>
-		/// Сбросить состояние индикатора на первоначальное. Метод вызывается каждый раз, когда меняются первоначальные настройки (например, длина периода).
+		/// To reset the indicator status to initial. The method is called each time when initial settings are changed (for example, the length of period).
 		/// </summary>
 		public override void Reset()
 		{
@@ -46,10 +46,10 @@ namespace StockSharp.Algo.Indicators
 		}
 
 		/// <summary>
-		/// Обработать входное значение.
+		/// To handle the input value.
 		/// </summary>
-		/// <param name="input">Входное значение.</param>
-		/// <returns>Результирующее значение.</returns>
+		/// <param name="input">The input value.</param>
+		/// <returns>The resulting value.</returns>
 		protected override IIndicatorValue OnProcess(IIndicatorValue input)
 		{
 			var val = input.GetValue<decimal>();

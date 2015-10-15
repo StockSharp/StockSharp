@@ -12526,3 +12526,6 @@ DocStr8469;The criterion;Критерий
 DocStr8470;To get the instruments storage;Получить хранилище инструментов
 DocStr8471;The instruments storage;Хранилище инструментов
 DocStr8472;To delete all instruments;Удалить все инструменты
+DocStr8473;Online doc url attribute;Online doc url attribute
+DocStr8474;Initializes a new instance of the {0};Initializes a new instance of the {0}
+DocStr8475;Online doc url;Online doc url

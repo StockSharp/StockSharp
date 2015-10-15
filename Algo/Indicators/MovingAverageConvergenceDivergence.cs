@@ -10,14 +10,14 @@ namespace StockSharp.Algo.Indicators
 	using Xceed.Wpf.Toolkit.PropertyGrid.Attributes;
 
 	/// <summary>
-	/// Схождение/расхождение скользящих средних.
+	/// Convergence/divergence of moving averages.
 	/// </summary>
 	[DisplayName("MACD")]
 	[DescriptionLoc(LocalizedStrings.Str797Key)]
 	public class MovingAverageConvergenceDivergence : BaseIndicator
 	{
 		/// <summary>
-		/// Создать <see cref="MovingAverageConvergenceDivergence"/>.
+		/// Initializes a new instance of the <see cref="MovingAverageConvergenceDivergence"/>.
 		/// </summary>
 		public MovingAverageConvergenceDivergence()
 			: this(new ExponentialMovingAverage { Length = 26 }, new ExponentialMovingAverage { Length = 12 })
@@ -25,10 +25,10 @@ namespace StockSharp.Algo.Indicators
 		}
 
 		/// <summary>
-		/// Создать <see cref="MovingAverageConvergenceDivergence"/>.
+		/// Initializes a new instance of the <see cref="MovingAverageConvergenceDivergence"/>.
 		/// </summary>
-		/// <param name="longMa">Длинная скользящая средняя.</param>
-		/// <param name="shortMa">Короткая скользящая средняя.</param>
+		/// <param name="longMa">Long moving average.</param>
+		/// <param name="shortMa">Short moving average.</param>
 		public MovingAverageConvergenceDivergence(ExponentialMovingAverage longMa, ExponentialMovingAverage shortMa)
 		{
 			if (longMa == null)
@@ -42,7 +42,7 @@ namespace StockSharp.Algo.Indicators
 		}
 
 		/// <summary>
-		/// Длинная скользящая средняя.
+		/// Long moving average.
 		/// </summary>
 		[ExpandableObject]
 		[DisplayNameLoc(LocalizedStrings.Str798Key)]
@@ -51,7 +51,7 @@ namespace StockSharp.Algo.Indicators
 		public ExponentialMovingAverage LongMa { get; private set; }
 
 		/// <summary>
-		/// Короткая скользящая средняя.
+		/// Short moving average.
 		/// </summary>
 		[ExpandableObject]
 		[DisplayNameLoc(LocalizedStrings.Str800Key)]
@@ -60,7 +60,7 @@ namespace StockSharp.Algo.Indicators
 		public ExponentialMovingAverage ShortMa { get; private set; }
 
 		/// <summary>
-		/// Сформирован ли индикатор.
+		/// Whether the indicator is set.
 		/// </summary>
 		public override bool IsFormed
 		{
@@ -68,10 +68,10 @@ namespace StockSharp.Algo.Indicators
 		}
 
 		/// <summary>
-		/// Обработать входное значение.
+		/// To handle the input value.
 		/// </summary>
-		/// <param name="input">Входное значение.</param>
-		/// <returns>Результирующее значение.</returns>
+		/// <param name="input">The input value.</param>
+		/// <returns>The resulting value.</returns>
 		protected override IIndicatorValue OnProcess(IIndicatorValue input)
 		{
 			var shortValue = ShortMa.Process(input);
@@ -80,9 +80,9 @@ namespace StockSharp.Algo.Indicators
 		}
 
 		/// <summary>
-		/// Загрузить настройки.
+		/// Load settings.
 		/// </summary>
-		/// <param name="settings">Хранилище настроек.</param>
+		/// <param name="settings">Settings storage.</param>
 		public override void Load(SettingsStorage settings)
 		{
 			base.Load(settings);
@@ -92,9 +92,9 @@ namespace StockSharp.Algo.Indicators
 		}
 
 		/// <summary>
-		/// Сохранить настройки.
+		/// Save settings.
 		/// </summary>
-		/// <param name="settings">Хранилище настроек.</param>
+		/// <param name="settings">Settings storage.</param>
 		public override void Save(SettingsStorage settings)
 		{
 			base.Save(settings);

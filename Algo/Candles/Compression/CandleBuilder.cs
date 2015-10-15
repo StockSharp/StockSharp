@@ -23,10 +23,9 @@ namespace StockSharp.Algo.Candles.Compression
 	}
 
 	/// <summary>
-	/// Построитель свечек. Через источник <see cref="ICandleBuilderSource"/> подключается к событию <see cref="ICandleSource{TValue}.Processing"/>,
-	/// и на основе полученных данных строит свечи по заданным критериям.
+	/// The candles builder. It connects to the <see cref="ICandleSource{T}.Processing"/> event through the <see cref="ICandleBuilderSource"/> source and creates candles on the basis of the data received by specified criteria.
 	/// </summary>
-	/// <typeparam name="TCandle">Тип свечи, которую будет формировать построитель.</typeparam>
+	/// <typeparam name="TCandle">The type of candle which the builder will create.</typeparam>
 	public abstract class CandleBuilder<TCandle> : BaseLogReceiver, ICandleBuilder, IStorageCandleSource
 		where TCandle : Candle
 	{
@@ -114,7 +113,7 @@ namespace StockSharp.Algo.Candles.Compression
 		private readonly SynchronizedDictionary<CandleSeries, CandleSeriesInfo> _info = new SynchronizedDictionary<CandleSeries, CandleSeriesInfo>();
 
 		/// <summary>
-		/// Инициализировать <see cref="CandleBuilder{TCandle}"/>.
+		/// Initialize <see cref="CandleBuilder{T}"/>.
 		/// </summary>
 		protected CandleBuilder()
 			: this(new CandleBuilderContainer())
@@ -122,9 +121,9 @@ namespace StockSharp.Algo.Candles.Compression
 		}
 
 		/// <summary>
-		/// Инициализировать <see cref="CandleBuilder{TCandle}"/>.
+		/// Initialize <see cref="CandleBuilder{T}"/>.
 		/// </summary>
-		/// <param name="container">Контейнер данных.</param>
+		/// <param name="container">The data container.</param>
 		protected CandleBuilder(ICandleBuilderContainer container)
 		{
 			if (container == null)
@@ -136,17 +135,17 @@ namespace StockSharp.Algo.Candles.Compression
 		}
 
 		/// <summary>
-		/// Источники данных.
+		/// Data sources.
 		/// </summary>
 		public ICandleBuilderSourceList Sources { get; private set; }
 
 		/// <summary>
-		/// Kонтейнер данных.
+		/// The data container.
 		/// </summary>
 		public ICandleBuilderContainer Container { get; private set; }
 
 		/// <summary>
-		/// Менеджер свечек. Заполняется, если построитель является источником внутри <see cref="ICandleManager.Sources"/>.
+		/// The candles manager. To be filled in if the builder is a source inside the <see cref="ICandleManager.Sources"/>.
 		/// </summary>
 		public ICandleManager CandleManager { get; set; }
 
@@ -158,7 +157,7 @@ namespace StockSharp.Algo.Candles.Compression
 		private IStorageRegistry _storageRegistry;
 
 		/// <summary>
-		/// Хранилище данных. Передается во все источники, реализующие интерфейс <see cref="IStorageCandleSource"/>.
+		/// The data storage. To be sent to all sources that implement the interface <see cref="IStorageCandleSource"/>.
 		/// </summary>
 		public IStorageRegistry StorageRegistry
 		{
@@ -171,7 +170,7 @@ namespace StockSharp.Algo.Candles.Compression
 		}
 
 		/// <summary>
-		/// Приоритет источника по скорости (0 - самый оптимальный).
+		/// The source priority by speed (0 - the best).
 		/// </summary>
 		public int SpeedPriority
 		{
@@ -179,27 +178,27 @@ namespace StockSharp.Algo.Candles.Compression
 		}
 
 		/// <summary>
-		/// Событие появления нового значения для обработки.
+		/// A new value for processing occurrence event.
 		/// </summary>
 		public event Action<CandleSeries, Candle> Processing;
 
 		/// <summary>
-		/// Событие окончания обработки серии.
+		/// The series processing end event.
 		/// </summary>
 		public event Action<CandleSeries> Stopped;
 
 		/// <summary>
-		/// Событие ошибки формирования свечек.
+		/// The candles creating error event.
 		/// </summary>
 		public event Action<Exception> Error;
 
 		#region ICandleSource members
 
 		/// <summary>
-		/// Получить временные диапазоны, для которых у данного источника для передаваемой серии свечек есть данные.
+		/// To get time ranges for which this source of passed candles series has data.
 		/// </summary>
-		/// <param name="series">Серия свечек.</param>
-		/// <returns>Временные диапазоны.</returns>
+		/// <param name="series">Candles series.</param>
+		/// <returns>Time ranges.</returns>
 		public virtual IEnumerable<Range<DateTimeOffset>> GetSupportedRanges(CandleSeries series)
 		{
 			if (series == null)
@@ -212,11 +211,11 @@ namespace StockSharp.Algo.Candles.Compression
 		}
 
 		/// <summary>
-		/// Запустить получение свечек для указанной серии.
+		/// To start getting of candles for the specified series.
 		/// </summary>
-		/// <param name="series">Серия свечек, для которой необходимо начать получать свечи.</param>
-		/// <param name="from">Начальная дата, с которой необходимо получать свечи.</param>
-		/// <param name="to">Конечная дата, до которой необходимо получать свечи.</param>
+		/// <param name="series">The series of candles for which candles getting should be started.</param>
+		/// <param name="from">The initial date from which candles getting should be started.</param>
+		/// <param name="to">The final date by which candles should be get.</param>
 		public virtual void Start(CandleSeries series, DateTimeOffset from, DateTimeOffset to)
 		{
 			if (series == null)
@@ -246,9 +245,9 @@ namespace StockSharp.Algo.Candles.Compression
 		}
 
 		/// <summary>
-		/// Остановить получение свечек, запущенное через <see cref="Start"/>.
+		/// To stop candles getting started via <see cref="Start"/>.
 		/// </summary>
-		/// <param name="series">Серия свечек.</param>
+		/// <param name="series">Candles series.</param>
 		public virtual void Stop(CandleSeries series)
 		{
 			if (series == null)
@@ -265,9 +264,9 @@ namespace StockSharp.Algo.Candles.Compression
 		#endregion
 
 		/// <summary>
-		/// Метод-обработчик события <see cref="CandleSeries.Stopped"/>.
+		/// The handler method of the <see cref="CandleSeries.Stopped"/> event.
 		/// </summary>
-		/// <param name="series">Серия свечек, для которой был было вызвано событие.</param>
+		/// <param name="series">The candles series for which the event was called.</param>
 		protected virtual void OnStopped(CandleSeries series)
 		{
 			_info.Remove(series);
@@ -275,11 +274,11 @@ namespace StockSharp.Algo.Candles.Compression
 		}
 
 		/// <summary>
-		/// Обработать новые данные.
+		/// To process the new data.
 		/// </summary>
-		/// <param name="series">Серия свечек.</param>
-		/// <param name="values">Новые данные.</param>
-		/// <returns>Время последнего элемента.</returns>
+		/// <param name="series">Candles series.</param>
+		/// <param name="values">New data.</param>
+		/// <returns>Time of the last item.</returns>
 		protected virtual DateTimeOffset OnNewValues(CandleSeries series, IEnumerable<ICandleBuilderSourceValue> values)
 		{
 			if (values == null)
@@ -346,35 +345,35 @@ namespace StockSharp.Algo.Candles.Compression
 		}
 
 		/// <summary>
-		/// Создать новую свечу.
+		/// To create a new candle.
 		/// </summary>
-		/// <param name="series">Серия свечек.</param>
-		/// <param name="value">Данные, с помощью которых необходимо создать новую свечу.</param>
-		/// <returns>Созданная свеча.</returns>
+		/// <param name="series">Candles series.</param>
+		/// <param name="value">Data with which a new candle should be created.</param>
+		/// <returns>Created candle.</returns>
 		protected virtual TCandle CreateCandle(CandleSeries series, ICandleBuilderSourceValue value)
 		{
 			throw new NotSupportedException(LocalizedStrings.Str637);
 		}
 
 		/// <summary>
-		/// Сформирована ли свеча до добавления данных.
+		/// Whether the candle is created before data adding.
 		/// </summary>
-		/// <param name="series">Серия свечек.</param>
-		/// <param name="candle">Свеча.</param>
-		/// <param name="value">Данные, с помощью которых принимается решение о необходимости окончания формирования текущей свечи.</param>
-		/// <returns><see langword="true"/>, если свечу необходимо закончить. Иначе, <see langword="false"/>.</returns>
+		/// <param name="series">Candles series.</param>
+		/// <param name="candle">Candle.</param>
+		/// <param name="value">Data by which it is decided to end the current candle creation.</param>
+		/// <returns><see langword="true" /> if the candle should be finished. Otherwise, <see langword="false" />.</returns>
 		protected virtual bool IsCandleFinishedBeforeChange(CandleSeries series, TCandle candle, ICandleBuilderSourceValue value)
 		{
 			return false;
 		}
 
 		/// <summary>
-		/// Заполнить первоначальные параметры свечи.
+		/// To fill in the initial candle settings.
 		/// </summary>
-		/// <param name="series">Серия свечек.</param>
-		/// <param name="candle">Свеча.</param>
-		/// <param name="value">Данные.</param>
-		/// <returns>Свеча.</returns>
+		/// <param name="series">Candles series.</param>
+		/// <param name="candle">Candle.</param>
+		/// <param name="value">Data.</param>
+		/// <returns>Candle.</returns>
 		protected virtual TCandle FirstInitCandle(CandleSeries series, TCandle candle, ICandleBuilderSourceValue value)
 		{
 			if (candle == null)
@@ -401,11 +400,11 @@ namespace StockSharp.Algo.Candles.Compression
 		}
 
 		/// <summary>
-		/// Обновить свечу данными.
+		/// To update the candle data.
 		/// </summary>
-		/// <param name="series">Серия свечек.</param>
-		/// <param name="candle">Свеча.</param>
-		/// <param name="value">Данные.</param>
+		/// <param name="series">Candles series.</param>
+		/// <param name="candle">Candle.</param>
+		/// <param name="value">Data.</param>
 		protected virtual void UpdateCandle(CandleSeries series, TCandle candle, ICandleBuilderSourceValue value)
 		{
 			if (candle == null)
@@ -446,26 +445,24 @@ namespace StockSharp.Algo.Candles.Compression
 		}
 
 		/// <summary>
-		/// Обработать новые данные.
+		/// To process the new data.
 		/// </summary>
-		/// <param name="series">Серия свечек.</param>
-		/// <param name="currentCandle">Текущая свеча.</param>
-		/// <param name="value">Новые данные, с помощью которых принимается решение о необходимости начала или окончания формирования текущей свечи.</param>
-		/// <returns>Новая свеча. Если новую свечу нет необходимости создавать, то возвращается <paramref name="currentCandle"/>.
-		/// Если новую свечу создать невозможно (<paramref name="value"/> не может быть применено к свечам), то возвращается <see langword="null"/>.</returns>
+		/// <param name="series">Candles series.</param>
+		/// <param name="currentCandle">The current candle.</param>
+		/// <param name="value">The new data by which it is decided to start or end the current candle creation.</param>
+		/// <returns>A new candle. If there is not necessary to create a new candle, then <paramref name="currentCandle" /> is returned. If it is impossible to create a new candle (<paramref name="value" /> can not be applied to candles), then <see langword="null" /> is returned.</returns>
 		Candle ICandleBuilder.ProcessValue(CandleSeries series, Candle currentCandle, ICandleBuilderSourceValue value)
 		{
 			return ProcessValue(series, (TCandle)currentCandle, value);
 		}
 
 		/// <summary>
-		/// Обработать новые данные.
+		/// To process the new data.
 		/// </summary>
-		/// <param name="series">Серия свечек.</param>
-		/// <param name="currentCandle">Текущая свеча.</param>
-		/// <param name="value">Новые данные, с помощью которых принимается решение о необходимости начала или окончания формирования текущей свечи.</param>
-		/// <returns>Новая свеча. Если новую свечу нет необходимости создавать, то возвращается <paramref name="currentCandle"/>.
-		/// Если новую свечу создать невозможно (<paramref name="value"/> не может быть применено к свечам), то возвращается <see langword="null"/>.</returns>
+		/// <param name="series">Candles series.</param>
+		/// <param name="currentCandle">The current candle.</param>
+		/// <param name="value">The new data by which it is decided to start or end the current candle creation.</param>
+		/// <returns>A new candle. If there is not necessary to create a new candle, then <paramref name="currentCandle" /> is returned. If it is impossible to create a new candle (<paramref name="value" /> can not be applied to candles), then <see langword="null" /> is returned.</returns>
 		public virtual TCandle ProcessValue(CandleSeries series, TCandle currentCandle, ICandleBuilderSourceValue value)
 		{
 			if (currentCandle == null || IsCandleFinishedBeforeChange(series, currentCandle, value))
@@ -482,10 +479,10 @@ namespace StockSharp.Algo.Candles.Compression
 		}
 
 		/// <summary>
-		/// Вызвать событие <see cref="Processing"/>.
+		/// To call the event <see cref="Processing"/>.
 		/// </summary>
-		/// <param name="series">Серия свечек.</param>
-		/// <param name="candle">Свеча.</param>
+		/// <param name="series">Candles series.</param>
+		/// <param name="candle">Candle.</param>
 		protected virtual void RaiseProcessing(CandleSeries series, Candle candle)
 		{
 			if (series == null)
@@ -508,9 +505,9 @@ namespace StockSharp.Algo.Candles.Compression
 		}
 
 		/// <summary>
-		/// Вызвать событие <see cref="Error"/>.
+		/// To call the event <see cref="Error"/>.
 		/// </summary>
-		/// <param name="error">Информация об ошибке.</param>
+		/// <param name="error">Error info.</param>
 		protected virtual void RaiseError(Exception error)
 		{
 			Error.SafeInvoke(error);
@@ -518,10 +515,10 @@ namespace StockSharp.Algo.Candles.Compression
 		}
 
 		/// <summary>
-		/// Принудительно завершить свечу.
+		/// To finish the candle forcibly.
 		/// </summary>
-		/// <param name="series">Серия свечек.</param>
-		/// <param name="candle">Свеча.</param>
+		/// <param name="series">Candles series.</param>
+		/// <param name="candle">Candle.</param>
 		protected void ForceFinishCandle(CandleSeries series, Candle candle)
 		{
 			var info = _info.TryGetValue(series);
@@ -547,7 +544,7 @@ namespace StockSharp.Algo.Candles.Compression
 		}
 
 		/// <summary>
-		/// Освободить занятые ресурсы.
+		/// Release resources.
 		/// </summary>
 		protected override void DisposeManaged()
 		{
@@ -558,7 +555,7 @@ namespace StockSharp.Algo.Candles.Compression
 	}
 
 	/// <summary>
-	/// Построитель свечек типа <see cref="TimeFrameCandle"/>.
+	/// The builder of candles of <see cref="TimeFrameCandle"/> type.
 	/// </summary>
 	public class TimeFrameCandleBuilder : CandleBuilder<TimeFrameCandle>
 	{
@@ -658,7 +655,7 @@ namespace StockSharp.Algo.Candles.Compression
 		//private readonly SynchronizedDictionary<CandleSeries, TimeoutInfo> _timeoutInfos = new SynchronizedDictionary<CandleSeries, TimeoutInfo>();
 
 		/// <summary>
-		/// Создать <see cref="TimeFrameCandleBuilder"/>.
+		/// Initializes a new instance of the <see cref="TimeFrameCandleBuilder"/>.
 		/// </summary>
 		public TimeFrameCandleBuilder()
 		{
@@ -666,9 +663,9 @@ namespace StockSharp.Algo.Candles.Compression
 		}
 
 		/// <summary>
-		/// Создать <see cref="TimeFrameCandleBuilder"/>.
+		/// Initializes a new instance of the <see cref="TimeFrameCandleBuilder"/>.
 		/// </summary>
-		/// <param name="container">Контейнер данных.</param>
+		/// <param name="container">The data container.</param>
 		public TimeFrameCandleBuilder(ICandleBuilderContainer container)
 			: base(container)
 		{
@@ -678,8 +675,7 @@ namespace StockSharp.Algo.Candles.Compression
 		private Unit _timeout = 10.Percents();
 
 		/// <summary>
-		/// Временной сдвиг от окончания тайм-фрейма, после которого для незакрытой свечи принудительно посылается сигнал на закрытие.
-		/// По-умолчанию равно 10% от тайм-фрейма.
+		/// The time shift from the time frame end after which a signal is sent to close the unclosed candle forcibly. The default is 10% of the time frame.
 		/// </summary>
 		public Unit Timeout
 		{
@@ -697,17 +693,16 @@ namespace StockSharp.Algo.Candles.Compression
 		}
 
 		/// <summary>
-		/// Генерировать ли пустые свечи (<see cref="CandleStates.None"/>) при отсутствии сделок.
-		/// По-умолчанию режим включен.
+		/// Whether to create empty candles (<see cref="CandleStates.None"/>) in the lack of trades. The default mode is enabled.
 		/// </summary>
 		public bool GenerateEmptyCandles { get; set; }
 
 		/// <summary>
-		/// Запустить получение свечек для указанной серии.
+		/// To start getting of candles for the specified series.
 		/// </summary>
-		/// <param name="series">Серия свечек, для которой необходимо начать получать свечи.</param>
-		/// <param name="from">Начальная дата, с которой необходимо получать свечи.</param>
-		/// <param name="to">Конечная дата, до которой необходимо получать свечи.</param>
+		/// <param name="series">The series of candles for which candles getting should be started.</param>
+		/// <param name="from">The initial date from which candles getting should be started.</param>
+		/// <param name="to">The final date by which candles should be get.</param>
 		public override void Start(CandleSeries series, DateTimeOffset from, DateTimeOffset to)
 		{
 			base.Start(series, from, to);
@@ -720,10 +715,10 @@ namespace StockSharp.Algo.Candles.Compression
 		}
 
 		/// <summary>
-		/// Получить временные диапазоны, для которых у данного источника для передаваемой серии свечек есть данные.
+		/// To get time ranges for which this source of passed candles series has data.
 		/// </summary>
-		/// <param name="series">Серия свечек.</param>
-		/// <returns>Временные диапазоны.</returns>
+		/// <param name="series">Candles series.</param>
+		/// <returns>Time ranges.</returns>
 		public override IEnumerable<Range<DateTimeOffset>> GetSupportedRanges(CandleSeries series)
 		{
 			var ranges = base.GetSupportedRanges(series);
@@ -741,11 +736,11 @@ namespace StockSharp.Algo.Candles.Compression
 		}
 
 		/// <summary>
-		/// Создать новую свечу.
+		/// To create a new candle.
 		/// </summary>
-		/// <param name="series">Серия свечек.</param>
-		/// <param name="value">Данные, с помощью которых необходимо создать новую свечу.</param>
-		/// <returns>Созданная свеча.</returns>
+		/// <param name="series">Candles series.</param>
+		/// <param name="value">Data with which a new candle should be created.</param>
+		/// <returns>Created candle.</returns>
 		protected override TimeFrameCandle CreateCandle(CandleSeries series, ICandleBuilderSourceValue value)
 		{
 			var timeFrame = (TimeSpan)series.Arg;
@@ -774,12 +769,12 @@ namespace StockSharp.Algo.Candles.Compression
 		}
 
 		/// <summary>
-		/// Сформирована ли свеча до добавления данных.
+		/// Whether the candle is created before data adding.
 		/// </summary>
-		/// <param name="series">Серия свечек.</param>
-		/// <param name="candle">Свеча.</param>
-		/// <param name="value">Данные, с помощью которых принимается решение о необходимости окончания формирования текущей свечи.</param>
-		/// <returns><see langword="true"/>, если свечу необходимо закончить. Иначе, <see langword="false"/>.</returns>
+		/// <param name="series">Candles series.</param>
+		/// <param name="candle">Candle.</param>
+		/// <param name="value">Data by which it is decided to end the current candle creation.</param>
+		/// <returns><see langword="true" /> if the candle should be finished. Otherwise, <see langword="false" />.</returns>
 		protected override bool IsCandleFinishedBeforeChange(CandleSeries series, TimeFrameCandle candle, ICandleBuilderSourceValue value)
 		{
 			return value.Time < candle.OpenTime || (candle.OpenTime + candle.TimeFrame) <= value.Time;
@@ -808,31 +803,31 @@ namespace StockSharp.Algo.Candles.Compression
 	}
 
 	/// <summary>
-	/// Построитель свечек типа <see cref="TickCandle"/>.
+	/// The builder of candles of <see cref="TickCandle"/> type.
 	/// </summary>
 	public class TickCandleBuilder : CandleBuilder<TickCandle>
 	{
 		/// <summary>
-		/// Создать <see cref="TickCandleBuilder"/>.
+		/// Initializes a new instance of the <see cref="TickCandleBuilder"/>.
 		/// </summary>
 		public TickCandleBuilder()
 		{
 		}
 
 		/// <summary>
-		/// Создать <see cref="TickCandleBuilder"/>.
+		/// Initializes a new instance of the <see cref="TickCandleBuilder"/>.
 		/// </summary>
-		/// <param name="container">Контейнер данных.</param>
+		/// <param name="container">The data container.</param>
 		public TickCandleBuilder(ICandleBuilderContainer container)
 			: base(container)
 		{
 		}
 
 		/// <summary>
-		/// Получить временные диапазоны, для которых у данного источника для передаваемой серии свечек есть данные.
+		/// To get time ranges for which this source of passed candles series has data.
 		/// </summary>
-		/// <param name="series">Серия свечек.</param>
-		/// <returns>Временные диапазоны.</returns>
+		/// <param name="series">Candles series.</param>
+		/// <returns>Time ranges.</returns>
 		public override IEnumerable<Range<DateTimeOffset>> GetSupportedRanges(CandleSeries series)
 		{
 			var ranges = base.GetSupportedRanges(series);
@@ -850,11 +845,11 @@ namespace StockSharp.Algo.Candles.Compression
 		}
 
 		/// <summary>
-		/// Создать новую свечу.
+		/// To create a new candle.
 		/// </summary>
-		/// <param name="series">Серия свечек.</param>
-		/// <param name="value">Данные, с помощью которых необходимо создать новую свечу.</param>
-		/// <returns>Созданная свеча.</returns>
+		/// <param name="series">Candles series.</param>
+		/// <param name="value">Data with which a new candle should be created.</param>
+		/// <returns>Created candle.</returns>
 		protected override TickCandle CreateCandle(CandleSeries series, ICandleBuilderSourceValue value)
 		{
 			return FirstInitCandle(series, new TickCandle
@@ -868,23 +863,23 @@ namespace StockSharp.Algo.Candles.Compression
 		}
 
 		/// <summary>
-		/// Сформирована ли свеча до добавления данных.
+		/// Whether the candle is created before data adding.
 		/// </summary>
-		/// <param name="series">Серия свечек.</param>
-		/// <param name="candle">Свеча.</param>
-		/// <param name="value">Данные, с помощью которых принимается решение о необходимости окончания формирования текущей свечи.</param>
-		/// <returns><see langword="true"/>, если свечу необходимо закончить. Иначе, <see langword="false"/>.</returns>
+		/// <param name="series">Candles series.</param>
+		/// <param name="candle">Candle.</param>
+		/// <param name="value">Data by which it is decided to end the current candle creation.</param>
+		/// <returns><see langword="true" /> if the candle should be finished. Otherwise, <see langword="false" />.</returns>
 		protected override bool IsCandleFinishedBeforeChange(CandleSeries series, TickCandle candle, ICandleBuilderSourceValue value)
 		{
 			return candle.CurrentTradeCount >= candle.MaxTradeCount;
 		}
 
 		/// <summary>
-		/// Обновить свечу данными.
+		/// To update the candle data.
 		/// </summary>
-		/// <param name="series">Серия свечек.</param>
-		/// <param name="candle">Свеча.</param>
-		/// <param name="value">Данные.</param>
+		/// <param name="series">Candles series.</param>
+		/// <param name="candle">Candle.</param>
+		/// <param name="value">Data.</param>
 		protected override void UpdateCandle(CandleSeries series, TickCandle candle, ICandleBuilderSourceValue value)
 		{
 			base.UpdateCandle(series, candle, value);
@@ -893,31 +888,31 @@ namespace StockSharp.Algo.Candles.Compression
 	}
 
 	/// <summary>
-	/// Построитель свечек типа <see cref="VolumeCandle"/>.
+	/// The builder of candles of <see cref="VolumeCandle"/> type.
 	/// </summary>
 	public class VolumeCandleBuilder : CandleBuilder<VolumeCandle>
 	{
 		/// <summary>
-		/// Создать <see cref="VolumeCandleBuilder"/>.
+		/// Initializes a new instance of the <see cref="VolumeCandleBuilder"/>.
 		/// </summary>
 		public VolumeCandleBuilder()
 		{
 		}
 
 		/// <summary>
-		/// Создать <see cref="VolumeCandleBuilder"/>.
+		/// Initializes a new instance of the <see cref="VolumeCandleBuilder"/>.
 		/// </summary>
-		/// <param name="container">Контейнер данных.</param>
+		/// <param name="container">The data container.</param>
 		public VolumeCandleBuilder(ICandleBuilderContainer container)
 			: base(container)
 		{
 		}
 
 		/// <summary>
-		/// Получить временные диапазоны, для которых у данного источника для передаваемой серии свечек есть данные.
+		/// To get time ranges for which this source of passed candles series has data.
 		/// </summary>
-		/// <param name="series">Серия свечек.</param>
-		/// <returns>Временные диапазоны.</returns>
+		/// <param name="series">Candles series.</param>
+		/// <returns>Time ranges.</returns>
 		public override IEnumerable<Range<DateTimeOffset>> GetSupportedRanges(CandleSeries series)
 		{
 			var ranges = base.GetSupportedRanges(series);
@@ -935,11 +930,11 @@ namespace StockSharp.Algo.Candles.Compression
 		}
 
 		/// <summary>
-		/// Создать новую свечу.
+		/// To create a new candle.
 		/// </summary>
-		/// <param name="series">Серия свечек.</param>
-		/// <param name="value">Данные, с помощью которых необходимо создать новую свечу.</param>
-		/// <returns>Созданная свеча.</returns>
+		/// <param name="series">Candles series.</param>
+		/// <param name="value">Data with which a new candle should be created.</param>
+		/// <returns>Created candle.</returns>
 		protected override VolumeCandle CreateCandle(CandleSeries series, ICandleBuilderSourceValue value)
 		{
 			return FirstInitCandle(series, new VolumeCandle
@@ -953,12 +948,12 @@ namespace StockSharp.Algo.Candles.Compression
 		}
 
 		/// <summary>
-		/// Сформирована ли свеча до добавления данных.
+		/// Whether the candle is created before data adding.
 		/// </summary>
-		/// <param name="series">Серия свечек.</param>
-		/// <param name="candle">Свеча.</param>
-		/// <param name="value">Данные, с помощью которых принимается решение о необходимости окончания формирования текущей свечи.</param>
-		/// <returns><see langword="true"/>, если свечу необходимо закончить. Иначе, <see langword="false"/>.</returns>
+		/// <param name="series">Candles series.</param>
+		/// <param name="candle">Candle.</param>
+		/// <param name="value">Data by which it is decided to end the current candle creation.</param>
+		/// <returns><see langword="true" /> if the candle should be finished. Otherwise, <see langword="false" />.</returns>
 		protected override bool IsCandleFinishedBeforeChange(CandleSeries series, VolumeCandle candle, ICandleBuilderSourceValue value)
 		{
 			return candle.TotalVolume >= candle.Volume;
@@ -966,31 +961,31 @@ namespace StockSharp.Algo.Candles.Compression
 	}
 
 	/// <summary>
-	/// Построитель свечек типа <see cref="RangeCandle"/>.
+	/// The builder of candles of <see cref="RangeCandle"/> type.
 	/// </summary>
 	public class RangeCandleBuilder : CandleBuilder<RangeCandle>
 	{
 		/// <summary>
-		/// Создать <see cref="RangeCandleBuilder"/>.
+		/// Initializes a new instance of the <see cref="RangeCandleBuilder"/>.
 		/// </summary>
 		public RangeCandleBuilder()
 		{
 		}
 
 		/// <summary>
-		/// Создать <see cref="RangeCandleBuilder"/>.
+		/// Initializes a new instance of the <see cref="RangeCandleBuilder"/>.
 		/// </summary>
-		/// <param name="container">Контейнер данных.</param>
+		/// <param name="container">The data container.</param>
 		public RangeCandleBuilder(ICandleBuilderContainer container)
 			: base(container)
 		{
 		}
 
 		/// <summary>
-		/// Получить временные диапазоны, для которых у данного источника для передаваемой серии свечек есть данные.
+		/// To get time ranges for which this source of passed candles series has data.
 		/// </summary>
-		/// <param name="series">Серия свечек.</param>
-		/// <returns>Временные диапазоны.</returns>
+		/// <param name="series">Candles series.</param>
+		/// <returns>Time ranges.</returns>
 		public override IEnumerable<Range<DateTimeOffset>> GetSupportedRanges(CandleSeries series)
 		{
 			var ranges = base.GetSupportedRanges(series);
@@ -1008,11 +1003,11 @@ namespace StockSharp.Algo.Candles.Compression
 		}
 
 		/// <summary>
-		/// Создать новую свечу.
+		/// To create a new candle.
 		/// </summary>
-		/// <param name="series">Серия свечек.</param>
-		/// <param name="value">Данные, с помощью которых необходимо создать новую свечу.</param>
-		/// <returns>Созданная свеча.</returns>
+		/// <param name="series">Candles series.</param>
+		/// <param name="value">Data with which a new candle should be created.</param>
+		/// <returns>Created candle.</returns>
 		protected override RangeCandle CreateCandle(CandleSeries series, ICandleBuilderSourceValue value)
 		{
 			return FirstInitCandle(series, new RangeCandle
@@ -1026,12 +1021,12 @@ namespace StockSharp.Algo.Candles.Compression
 		}
 
 		/// <summary>
-		/// Сформирована ли свеча до добавления данных.
+		/// Whether the candle is created before data adding.
 		/// </summary>
-		/// <param name="series">Серия свечек.</param>
-		/// <param name="candle">Свеча.</param>
-		/// <param name="value">Данные, с помощью которых принимается решение о необходимости окончания формирования текущей свечи.</param>
-		/// <returns><see langword="true"/>, если свечу необходимо закончить. Иначе, <see langword="false"/>.</returns>
+		/// <param name="series">Candles series.</param>
+		/// <param name="candle">Candle.</param>
+		/// <param name="value">Data by which it is decided to end the current candle creation.</param>
+		/// <returns><see langword="true" /> if the candle should be finished. Otherwise, <see langword="false" />.</returns>
 		protected override bool IsCandleFinishedBeforeChange(CandleSeries series, RangeCandle candle, ICandleBuilderSourceValue value)
 		{
 			return (decimal)(candle.LowPrice + candle.PriceRange) <= candle.HighPrice;
@@ -1039,31 +1034,31 @@ namespace StockSharp.Algo.Candles.Compression
 	}
 
 	/// <summary>
-	/// Построитель свечек типа <see cref="PnFCandle"/>.
+	/// The builder of candles of <see cref="PnFCandle"/> type.
 	/// </summary>
 	public class PnFCandleBuilder : CandleBuilder<PnFCandle>
 	{
 		/// <summary>
-		/// Создать <see cref="PnFCandleBuilder"/>.
+		/// Initializes a new instance of the <see cref="PnFCandleBuilder"/>.
 		/// </summary>
 		public PnFCandleBuilder()
 		{
 		}
 
 		/// <summary>
-		/// Создать <see cref="PnFCandleBuilder"/>.
+		/// Initializes a new instance of the <see cref="PnFCandleBuilder"/>.
 		/// </summary>
-		/// <param name="container">Контейнер данных.</param>
+		/// <param name="container">The data container.</param>
 		public PnFCandleBuilder(ICandleBuilderContainer container)
 			: base(container)
 		{
 		}
 
 		/// <summary>
-		/// Получить временные диапазоны, для которых у данного источника для передаваемой серии свечек есть данные.
+		/// To get time ranges for which this source of passed candles series has data.
 		/// </summary>
-		/// <param name="series">Серия свечек.</param>
-		/// <returns>Временные диапазоны.</returns>
+		/// <param name="series">Candles series.</param>
+		/// <returns>Time ranges.</returns>
 		public override IEnumerable<Range<DateTimeOffset>> GetSupportedRanges(CandleSeries series)
 		{
 			var ranges = base.GetSupportedRanges(series);
@@ -1078,11 +1073,11 @@ namespace StockSharp.Algo.Candles.Compression
 		}
 
 		/// <summary>
-		/// Создать новую свечу.
+		/// To create a new candle.
 		/// </summary>
-		/// <param name="series">Серия свечек.</param>
-		/// <param name="value">Данные, с помощью которых необходимо создать новую свечу.</param>
-		/// <returns>Созданная свеча.</returns>
+		/// <param name="series">Candles series.</param>
+		/// <param name="value">Data with which a new candle should be created.</param>
+		/// <returns>Created candle.</returns>
 		protected override PnFCandle CreateCandle(CandleSeries series, ICandleBuilderSourceValue value)
 		{
 			var arg = (PnFArg)series.Arg;
@@ -1152,12 +1147,12 @@ namespace StockSharp.Algo.Candles.Compression
 		}
 
 		/// <summary>
-		/// Сформирована ли свеча до добавления данных.
+		/// Whether the candle is created before data adding.
 		/// </summary>
-		/// <param name="series">Серия свечек.</param>
-		/// <param name="candle">Свеча.</param>
-		/// <param name="value">Данные, с помощью которых принимается решение о необходимости окончания формирования текущей свечи.</param>
-		/// <returns><see langword="true"/>, если свечу необходимо закончить. Иначе, <see langword="false"/>.</returns>
+		/// <param name="series">Candles series.</param>
+		/// <param name="candle">Candle.</param>
+		/// <param name="value">Data by which it is decided to end the current candle creation.</param>
+		/// <returns><see langword="true" /> if the candle should be finished. Otherwise, <see langword="false" />.</returns>
 		protected override bool IsCandleFinishedBeforeChange(CandleSeries series, PnFCandle candle, ICandleBuilderSourceValue value)
 		{
 			var argSize = candle.PnFArg.BoxSize * candle.PnFArg.ReversalAmount;
@@ -1169,11 +1164,11 @@ namespace StockSharp.Algo.Candles.Compression
 		}
 
 		/// <summary>
-		/// Обновить свечу данными.
+		/// To update the candle data.
 		/// </summary>
-		/// <param name="series">Серия свечек.</param>
-		/// <param name="candle">Свеча.</param>
-		/// <param name="value">Данные.</param>
+		/// <param name="series">Candles series.</param>
+		/// <param name="candle">Candle.</param>
+		/// <param name="value">Data.</param>
 		protected override void UpdateCandle(CandleSeries series, PnFCandle candle, ICandleBuilderSourceValue value)
 		{
 			candle.ClosePrice = candle.PnFArg.BoxSize.AlignPrice(candle.ClosePrice, value.Price);
@@ -1194,31 +1189,31 @@ namespace StockSharp.Algo.Candles.Compression
 	}
 
 	/// <summary>
-	/// Построитель свечек типа <see cref="RenkoCandle"/>.
+	/// The builder of candles of <see cref="RenkoCandle"/> type.
 	/// </summary>
 	public class RenkoCandleBuilder : CandleBuilder<RenkoCandle>
 	{
 		/// <summary>
-		/// Создать <see cref="RenkoCandleBuilder"/>.
+		/// Initializes a new instance of the <see cref="RenkoCandleBuilder"/>.
 		/// </summary>
 		public RenkoCandleBuilder()
 		{
 		}
 
 		/// <summary>
-		/// Создать <see cref="RenkoCandleBuilder"/>.
+		/// Initializes a new instance of the <see cref="RenkoCandleBuilder"/>.
 		/// </summary>
-		/// <param name="container">Контейнер данных.</param>
+		/// <param name="container">The data container.</param>
 		public RenkoCandleBuilder(ICandleBuilderContainer container)
 			: base(container)
 		{
 		}
 
 		/// <summary>
-		/// Получить временные диапазоны, для которых у данного источника для передаваемой серии свечек есть данные.
+		/// To get time ranges for which this source of passed candles series has data.
 		/// </summary>
-		/// <param name="series">Серия свечек.</param>
-		/// <returns>Временные диапазоны.</returns>
+		/// <param name="series">Candles series.</param>
+		/// <returns>Time ranges.</returns>
 		public override IEnumerable<Range<DateTimeOffset>> GetSupportedRanges(CandleSeries series)
 		{
 			var ranges = base.GetSupportedRanges(series);
@@ -1236,13 +1231,12 @@ namespace StockSharp.Algo.Candles.Compression
 		}
 
 		/// <summary>
-		/// Обработать новые данные.
+		/// To process the new data.
 		/// </summary>
-		/// <param name="series">Серия свечек.</param>
-		/// <param name="currentCandle">Текущая свеча.</param>
-		/// <param name="value">Новые данные, с помощью которых принимается решение о необходимости начала или окончания формирования текущей свечи.</param>
-		/// <returns>Новая свеча. Если новую свечу нет необходимости создавать, то возвращается <paramref name="currentCandle"/>.
-		/// Если новую свечу создать невозможно (<paramref name="value"/> не может быть применено к свечам), то возвращается <see langword="null"/>.</returns>
+		/// <param name="series">Candles series.</param>
+		/// <param name="currentCandle">The current candle.</param>
+		/// <param name="value">The new data by which it is decided to start or end the current candle creation.</param>
+		/// <returns>A new candle. If there is not necessary to create a new candle, then <paramref name="currentCandle" /> is returned. If it is impossible to create a new candle (<paramref name="value" /> can not be applied to candles), then <see langword="null" /> is returned.</returns>
 		public override RenkoCandle ProcessValue(CandleSeries series, RenkoCandle currentCandle, ICandleBuilderSourceValue value)
 		{
 			if (value == null)

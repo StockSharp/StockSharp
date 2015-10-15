@@ -10,18 +10,17 @@ namespace StockSharp.Algo.Indicators
 	using Xceed.Wpf.Toolkit.PropertyGrid.Attributes;
 
 	/// <summary>
-	/// Волатильность Чайкина.
+	/// Chaikin volatility.
 	/// </summary>
 	/// <remarks>
-	/// http://www2.wealth-lab.com/WL5Wiki/Volatility.ashx
-	/// http://www.incrediblecharts.com/indicators/chaikin_volatility.php
+	/// http://www2.wealth-lab.com/WL5Wiki/Volatility.ashx http://www.incrediblecharts.com/indicators/chaikin_volatility.php.
 	/// </remarks>
 	[DisplayName("Chaikin's Volatility")]
 	[DescriptionLoc(LocalizedStrings.Str730Key)]
 	public class ChaikinVolatility : BaseIndicator
 	{
 		/// <summary>
-		/// Создать <see cref="ChaikinVolatility"/>.
+		/// Initializes a new instance of the <see cref="ChaikinVolatility"/>.
 		/// </summary>
 		public ChaikinVolatility()
 		{
@@ -30,7 +29,7 @@ namespace StockSharp.Algo.Indicators
 		}
 
 		/// <summary>
-		/// Скользящая средняя.
+		/// Moving Average.
 		/// </summary>
 		[ExpandableObject]
 		[DisplayName("MA")]
@@ -39,7 +38,7 @@ namespace StockSharp.Algo.Indicators
 		public ExponentialMovingAverage Ema { get; private set; }
 
 		/// <summary>
-		/// Скорость изменения.
+		/// Rate of change.
 		/// </summary>
 		[ExpandableObject]
 		[DisplayName("ROC")]
@@ -48,7 +47,7 @@ namespace StockSharp.Algo.Indicators
 		public RateOfChange Roc { get; private set; }
 
 		/// <summary>
-		/// Сформирован ли индикатор.
+		/// Whether the indicator is set.
 		/// </summary>
 		public override bool IsFormed
 		{
@@ -56,10 +55,10 @@ namespace StockSharp.Algo.Indicators
 		}
 
 		/// <summary>
-		/// Обработать входное значение.
+		/// To handle the input value.
 		/// </summary>
-		/// <param name="input">Входное значение.</param>
-		/// <returns>Результирующее значение.</returns>
+		/// <param name="input">The input value.</param>
+		/// <returns>The resulting value.</returns>
 		protected override IIndicatorValue OnProcess(IIndicatorValue input)
 		{
 			var candle = input.GetValue<Candle>();
@@ -74,9 +73,9 @@ namespace StockSharp.Algo.Indicators
 		}
 
 		/// <summary>
-		/// Загрузить настройки.
+		/// Load settings.
 		/// </summary>
-		/// <param name="settings">Хранилище настроек.</param>
+		/// <param name="settings">Settings storage.</param>
 		public override void Load(SettingsStorage settings)
 		{
 			base.Load(settings);
@@ -86,9 +85,9 @@ namespace StockSharp.Algo.Indicators
 		}
 
 		/// <summary>
-		/// Сохранить настройки.
+		/// Save settings.
 		/// </summary>
-		/// <param name="settings">Хранилище настроек.</param>
+		/// <param name="settings">Settings storage.</param>
 		public override void Save(SettingsStorage settings)
 		{
 			base.Save(settings);

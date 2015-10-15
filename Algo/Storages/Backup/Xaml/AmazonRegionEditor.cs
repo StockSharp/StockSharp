@@ -8,7 +8,7 @@ namespace StockSharp.Algo.Storages.Backup.Xaml
 	using Xceed.Wpf.Toolkit.PropertyGrid.Editors;
 
 	/// <summary>
-	/// ¬ыпадающий список дл€ выбора региона AWS.
+	/// The drop-down list to select the AWS region.
 	/// </summary>
 	public class AmazonRegionEditor : ITypeEditor
 	{

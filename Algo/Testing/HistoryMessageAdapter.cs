@@ -17,7 +17,7 @@ namespace StockSharp.Algo.Testing
 	using StockSharp.Localization;
 
 	/// <summary>
-	/// Адаптер, получающий сообщения из хранилища <see cref="IStorageRegistry"/>.
+	/// The adapter, receiving messages form the storage <see cref="IStorageRegistry"/>.
 	/// </summary>
 	public class HistoryMessageAdapter : MessageAdapter
 	{
@@ -38,17 +38,17 @@ namespace StockSharp.Algo.Testing
 		}
 
 		/// <summary>
-		/// Число загруженных событий.
+		/// The number of loaded events.
 		/// </summary>
 		public int LoadedMessageCount { get; private set; }
 
 		private int _postTradeMarketTimeChangedCount = 2;
 
 		/// <summary>
-		/// Количество вызовов события <see cref="IConnector.MarketTimeChanged"/> после окончания торгов. По-умолчанию равно 2.
+		/// The number of the event <see cref="IConnector.MarketTimeChanged"/> calls after end of trading. By default it is equal to 2.
 		/// </summary>
 		/// <remarks>
-		/// Необходимо для активации пост-трейд правил (правила, которые опираются на события, происходящие после окончания торгов).
+		/// It is required for activation of post-trade rules (rules, basing on events, occurring after end of trading).
 		/// </remarks>
 		public int PostTradeMarketTimeChangedCount
 		{
@@ -65,7 +65,7 @@ namespace StockSharp.Algo.Testing
 		private IStorageRegistry _storageRegistry;
 
 		/// <summary>
-		/// Хранилище данных.
+		/// Market data storage.
 		/// </summary>
 		public IStorageRegistry StorageRegistry
 		{
@@ -82,7 +82,7 @@ namespace StockSharp.Algo.Testing
 		private IMarketDataDrive _drive;
 
 		/// <summary>
-		/// Хранилище, которое используется по-умолчанию. По умолчанию используется <see cref="IStorageRegistry.DefaultDrive"/>.
+		/// The storage which is used by default. By default, <see cref="IStorageRegistry.DefaultDrive"/> is used.
 		/// </summary>
 		public IMarketDataDrive Drive
 		{
@@ -97,24 +97,24 @@ namespace StockSharp.Algo.Testing
 		}
 
 		/// <summary>
-		/// Формат маркет-данных. По умолчанию используется <see cref="StorageFormats.Binary"/>.
+		/// The format of market data. <see cref="StorageFormats.Binary"/> is used by default.
 		/// </summary>
 		public StorageFormats StorageFormat { get; set; }
 
 		/// <summary>
-		/// Хранилище-агрегатор.
+		/// The aggregator-storage.
 		/// </summary>
 		public BasketMarketDataStorage<Message> BasketStorage { get; private set; }
 
 		/// <summary>
-		/// Поставщик информации об инструментах.
+		/// The provider of information about instruments.
 		/// </summary>
 		public ISecurityProvider SecurityProvider { get; private set; }
 
 		private TimeSpan _marketTimeChangedInterval = TimeSpan.FromSeconds(1);
 
 		/// <summary>
-		/// Интервал генерации сообщения <see cref="TimeMessage"/>. По-умолчанию равно 1 секунде.
+		/// The interval of message <see cref="TimeMessage"/> generation. By default, it is equal to 1 sec.
 		/// </summary>
 		[CategoryLoc(LocalizedStrings.Str186Key)]
 		[DisplayNameLoc(LocalizedStrings.TimeIntervalKey)]
@@ -132,9 +132,9 @@ namespace StockSharp.Algo.Testing
 		}
 
 		/// <summary>
-		/// Создать <see cref="HistoryMessageAdapter"/>.
+		/// Initializes a new instance of the <see cref="HistoryMessageAdapter"/>.
 		/// </summary>
-		/// <param name="transactionIdGenerator">Генератор идентификаторов транзакций.</param>
+		/// <param name="transactionIdGenerator">Transaction id generator.</param>
 		public HistoryMessageAdapter(IdGenerator transactionIdGenerator)
 			: base(transactionIdGenerator)
 		{
@@ -145,10 +145,10 @@ namespace StockSharp.Algo.Testing
 		}
 
 		/// <summary>
-		/// Создать <see cref="HistoryMessageAdapter"/>.
+		/// Initializes a new instance of the <see cref="HistoryMessageAdapter"/>.
 		/// </summary>
-		/// <param name="transactionIdGenerator">Генератор идентификаторов транзакций.</param>
-		/// <param name="securityProvider">Поставщик информации об инструментах.</param>
+		/// <param name="transactionIdGenerator">Transaction id generator.</param>
+		/// <param name="securityProvider">The provider of information about instruments.</param>
 		public HistoryMessageAdapter(IdGenerator transactionIdGenerator, ISecurityProvider securityProvider)
 			: this(transactionIdGenerator)
 		{
@@ -160,19 +160,19 @@ namespace StockSharp.Algo.Testing
 		}
 
 		/// <summary>
-		/// Дата в истории, с которой необходимо начать эмуляцию.
+		/// Date in history for starting the paper trading.
 		/// </summary>
 		public DateTimeOffset StartDate { get; set; }
 
 		/// <summary>
-		/// Дата в истории, на которой необходимо закончить эмуляцию (дата включается).
+		/// Date in history to stop the paper trading (date is included).
 		/// </summary>
 		public DateTimeOffset StopDate { get; set; }
 
 		private DateTimeOffset _currentTime;
 
 		/// <summary>
-		/// Текущее время.
+		/// The current time.
 		/// </summary>
 		public override DateTimeOffset CurrentTime
 		{
@@ -180,7 +180,7 @@ namespace StockSharp.Algo.Testing
 		}
 
 		/// <summary>
-		/// Освободить занятые ресурсы.
+		/// Release resources.
 		/// </summary>
 		protected override void DisposeManaged()
 		{
@@ -190,7 +190,7 @@ namespace StockSharp.Algo.Testing
 		}
 
 		/// <summary>
-		/// Требуется ли дополнительное сообщение <see cref="SecurityLookupMessage"/> для получения списка инструментов.
+		/// <see cref="SecurityLookupMessage"/> required to get securities.
 		/// </summary>
 		public override bool SecurityLookupRequired
 		{
@@ -210,9 +210,9 @@ namespace StockSharp.Algo.Testing
 		}
 
 		/// <summary>
-		/// Отправить сообщение.
+		/// Send message.
 		/// </summary>
-		/// <param name="message">Сообщение.</param>
+		/// <param name="message">Message.</param>
 		protected override void OnSendInMessage(Message message)
 		{
 			switch (message.Type)
@@ -541,9 +541,9 @@ namespace StockSharp.Algo.Testing
 		}
 
 		/// <summary>
-		/// Отправить исходящее сообщение, вызвав событие <see cref="MessageAdapter.NewOutMessage"/>.
+		/// Send outgoing message and raise <see cref="MessageAdapter.NewOutMessage"/> event.
 		/// </summary>
-		/// <param name="message">Сообщение.</param>
+		/// <param name="message">Message.</param>
 		public override void SendOutMessage(Message message)
 		{
 			LoadedMessageCount++;
@@ -735,9 +735,9 @@ namespace StockSharp.Algo.Testing
 		}
 
 		/// <summary>
-		/// Получить строковое представление.
+		/// Returns a string that represents the current object.
 		/// </summary>
-		/// <returns>Строковое представление.</returns>
+		/// <returns>A string that represents the current object.</returns>
 		public override string ToString()
 		{
 			return LocalizedStrings.Str1127Params.Put(StartDate, StopDate);

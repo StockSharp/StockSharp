@@ -6,27 +6,27 @@ namespace StockSharp.Algo.Indicators
 	using StockSharp.Localization;
 
 	/// <summary>
-	/// Индекс Облегчения Рынка.
+	/// Market Facilitation Index.
 	/// </summary>
 	/// <remarks>
-	/// http://ta.mql4.com/indicators/bills/market_facilitation_index
+	/// http://ta.mql4.com/indicators/bills/market_facilitation_index.
 	/// </remarks>
 	[DisplayName("MFI")]
 	[DescriptionLoc(LocalizedStrings.Str853Key)]
 	public class MarketFacilitationIndex : BaseIndicator
 	{
 		/// <summary>
-		/// Создать <see cref="MarketFacilitationIndex"/>.
+		/// Initializes a new instance of the <see cref="MarketFacilitationIndex"/>.
 		/// </summary>
 		public MarketFacilitationIndex()
 		{
 		}
 
 		/// <summary>
-		/// Обработать входное значение.
+		/// To handle the input value.
 		/// </summary>
-		/// <param name="input">Входное значение.</param>
-		/// <returns>Результирующее значение.</returns>
+		/// <param name="input">The input value.</param>
+		/// <returns>The resulting value.</returns>
 		protected override IIndicatorValue OnProcess(IIndicatorValue input)
 		{
 			var candle = input.GetValue<Candle>();

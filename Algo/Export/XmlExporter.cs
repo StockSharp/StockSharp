@@ -11,28 +11,28 @@ namespace StockSharp.Algo.Export
 	using StockSharp.Messages;
 
 	/// <summary>
-	/// Ёкспорт в xml.
+	/// The export into xml.
 	/// </summary>
 	public class XmlExporter : BaseExporter
 	{
 		private const string _timeFormat = "yyyy-MM-dd HH:mm:ss.fff zzz";
 
 		/// <summary>
-		/// —оздать <see cref="XmlExporter"/>.
+		/// Initializes a new instance of the <see cref="XmlExporter"/>.
 		/// </summary>
-		/// <param name="security">»нструмент.</param>
-		/// <param name="arg">ѕараметр данных.</param>
-		/// <param name="isCancelled">ќбработчик, возвращающий признак прерывани€ экспорта.</param>
-		/// <param name="fileName">ѕуть к файлу.</param>
+		/// <param name="security">Security.</param>
+		/// <param name="arg">The data parameter.</param>
+		/// <param name="isCancelled">The processor, returning export interruption sign.</param>
+		/// <param name="fileName">The path to file.</param>
 		public XmlExporter(Security security, object arg, Func<int, bool> isCancelled, string fileName)
 			: base(security, arg, isCancelled, fileName)
 		{
 		}
 
 		/// <summary>
-		/// Ёкспортировать <see cref="ExecutionMessage"/>.
+		/// To export <see cref="ExecutionMessage"/>.
 		/// </summary>
-		/// <param name="messages">—ообщени€.</param>
+		/// <param name="messages">Messages.</param>
 		protected override void Export(IEnumerable<ExecutionMessage> messages)
 		{
 			switch ((ExecutionTypes)Arg)
@@ -125,9 +125,9 @@ namespace StockSharp.Algo.Export
 		}
 
 		/// <summary>
-		/// Ёкспортировать <see cref="QuoteChangeMessage"/>.
+		/// To export <see cref="QuoteChangeMessage"/>.
 		/// </summary>
-		/// <param name="messages">—ообщени€.</param>
+		/// <param name="messages">Messages.</param>
 		protected override void Export(IEnumerable<QuoteChangeMessage> messages)
 		{
 			Do(messages, "depths", (writer, depth) =>
@@ -153,9 +153,9 @@ namespace StockSharp.Algo.Export
 		}
 
 		/// <summary>
-		/// Ёкспортировать <see cref="Level1ChangeMessage"/>.
+		/// To export <see cref="Level1ChangeMessage"/>.
 		/// </summary>
-		/// <param name="messages">—ообщени€.</param>
+		/// <param name="messages">Messages.</param>
 		protected override void Export(IEnumerable<Level1ChangeMessage> messages)
 		{
 			Do(messages, "messages", (writer, message) =>
@@ -173,9 +173,9 @@ namespace StockSharp.Algo.Export
 		}
 
 		/// <summary>
-		/// Ёкспортировать <see cref="CandleMessage"/>.
+		/// To export <see cref="CandleMessage"/>.
 		/// </summary>
-		/// <param name="messages">—ообщени€.</param>
+		/// <param name="messages">Messages.</param>
 		protected override void Export(IEnumerable<CandleMessage> messages)
 		{
 			Do(messages, "candles", (writer, candle) =>
@@ -199,9 +199,9 @@ namespace StockSharp.Algo.Export
 		}
 
 		/// <summary>
-		/// Ёкспортировать <see cref="NewsMessage"/>.
+		/// To export <see cref="NewsMessage"/>.
 		/// </summary>
-		/// <param name="messages">—ообщени€.</param>
+		/// <param name="messages">Messages.</param>
 		protected override void Export(IEnumerable<NewsMessage> messages)
 		{
 			Do(messages, "news", (writer, n) =>
@@ -236,9 +236,9 @@ namespace StockSharp.Algo.Export
 		}
 
 		/// <summary>
-		/// Ёкспортировать <see cref="SecurityMessage"/>.
+		/// To export <see cref="SecurityMessage"/>.
 		/// </summary>
-		/// <param name="messages">—ообщени€.</param>
+		/// <param name="messages">Messages.</param>
 		protected override void Export(IEnumerable<SecurityMessage> messages)
 		{
 			Do(messages, "securities", (writer, security) =>

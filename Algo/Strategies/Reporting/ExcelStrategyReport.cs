@@ -16,15 +16,15 @@ namespace StockSharp.Algo.Strategies.Reporting
 	using StockSharp.Localization;
 
 	/// <summary>
-	/// Генератор отчета для стратегии в формате Excel.
+	/// The report generator for the strategy in the Excel format.
 	/// </summary>
 	public class ExcelStrategyReport : StrategyReport
 	{
 		/// <summary>
-		/// Создать <see cref="ExcelStrategyReport"/>.
+		/// Initializes a new instance of the <see cref="ExcelStrategyReport"/>.
 		/// </summary>
-		/// <param name="strategy">Стратегия, для которой необходимо сгенерировать отчет.</param>
-		/// <param name="fileName">Название файла, в котором сгенерируется отчет в формате Excel.</param>
+		/// <param name="strategy">The strategy, requiring the report generation.</param>
+		/// <param name="fileName">The name of the file, in which report is generated in the Excel format.</param>
 		public ExcelStrategyReport(Strategy strategy, string fileName)
 			: this(new[] { strategy }, fileName)
 		{
@@ -33,10 +33,10 @@ namespace StockSharp.Algo.Strategies.Reporting
 		}
 
 		/// <summary>
-		/// Создать <see cref="ExcelStrategyReport"/>.
+		/// Initializes a new instance of the <see cref="ExcelStrategyReport"/>.
 		/// </summary>
-		/// <param name="strategies">Стратегии, для которых необходимо сгенерировать отчет.</param>
-		/// <param name="fileName">Название файла, в котором сгенерируется отчет в формате Excel.</param>
+		/// <param name="strategies">Strategies, requiring the report generation.</param>
+		/// <param name="fileName">The name of the file, in which report is generated in the Excel format.</param>
 		public ExcelStrategyReport(IEnumerable<Strategy> strategies, string fileName)
 			: base(strategies, fileName)
 		{
@@ -47,11 +47,11 @@ namespace StockSharp.Algo.Strategies.Reporting
 		}
 
 		/// <summary>
-		/// Создать <see cref="ExcelStrategyReport"/>.
+		/// Initializes a new instance of the <see cref="ExcelStrategyReport"/>.
 		/// </summary>
-		/// <param name="strategies">Стратегии, для которых необходимо сгенерировать отчет.</param>
-		/// <param name="fileName">Название файла, в котором сгенерируется отчет в формате Excel.</param>
-		/// <param name="template">Файл-шаблон, который будет скопирован в <see cref="StrategyReport.FileName"/>.</param>
+		/// <param name="strategies">Strategies, requiring the report generation.</param>
+		/// <param name="fileName">The name of the file, in which report is generated in the Excel format.</param>
+		/// <param name="template">The template file, to be copied into <see cref="StrategyReport.FileName"/>.</param>
 		public ExcelStrategyReport(IEnumerable<Strategy> strategies, string fileName, string template)
 			: this(strategies, fileName)
 		{
@@ -78,7 +78,7 @@ namespace StockSharp.Algo.Strategies.Reporting
 		//}
 
 		/// <summary>
-		/// Файл-шаблон, который будет скопирован в <see cref="StrategyReport.FileName"/> и дозаполнен листами Strategy, Orders и Trades.
+		/// The template file, to be copied into <see cref="StrategyReport.FileName"/> and filled up with Strategy, Orders and Trades sheets.
 		/// </summary>
 		public string Template { get; private set; }
 
@@ -88,22 +88,22 @@ namespace StockSharp.Algo.Strategies.Reporting
 		//public string SheetName { get; private set; }
 
 		/// <summary>
-		/// Версия Excel-я. Влияет на максимальное количество строчек. По-умолчанию установлено значение 2007.
+		/// The Excel version. It affects the maximal number of strings. The default value is 2007.
 		/// </summary>
 		public int ExcelVersion { get; set; }
 
 		/// <summary>
-		/// Добавлять в отчет заявки. По-умолчанию заявки добавляются.
+		/// To add orders to the report. Orders are added by default.
 		/// </summary>
 		public bool IncludeOrders { get; set; }
 
 		/// <summary>
-		/// Количество знаков после запятой. По-умолчанию равно 2.
+		/// The number of decimal places. By default, it equals to 2.
 		/// </summary>
 		public int Decimals { get; set; }
 
 		/// <summary>
-		/// Сгенерировать отчет.
+		/// To generate the report.
 		/// </summary>
 		public override void Generate()
 		{

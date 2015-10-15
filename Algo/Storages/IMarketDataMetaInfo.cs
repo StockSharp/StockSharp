@@ -6,55 +6,55 @@ namespace StockSharp.Algo.Storages
 	using StockSharp.BusinessEntities;
 
 	/// <summary>
-	/// Мета-информация о данных за один день.
+	/// Meta-information on data for one day.
 	/// </summary>
 	public interface IMarketDataMetaInfo
 	{
 		/// <summary>
-		/// Дата дня.
+		/// Date of day.
 		/// </summary>
 		DateTime Date { get; }
 
 		/// <summary>
-		/// Количество данных.
+		/// Number of data.
 		/// </summary>
 		int Count { get; set; }
 
 		/// <summary>
-		/// Значение <see cref="Security.PriceStep"/> в день <see cref="Date"/>.
+		/// Value <see cref="Security.PriceStep"/> at day <see cref="IMarketDataMetaInfo.Date"/>.
 		/// </summary>
 		decimal PriceStep { get; set; }
 
 		/// <summary>
-		/// Значение <see cref="Security.VolumeStep"/> в день <see cref="Date"/>.
+		/// Value <see cref="Security.VolumeStep"/> at day <see cref="IMarketDataMetaInfo.Date"/>.
 		/// </summary>
 		decimal VolumeStep { get; set; }
 
 		/// <summary>
-		/// Время первой записи.
+		/// First record time.
 		/// </summary>
 		DateTime FirstTime { get; set; }
 
 		/// <summary>
-		/// Время последней записи.
+		/// Last record time.
 		/// </summary>
 		DateTime LastTime { get; set; }
 
 		/// <summary>
-		/// Идентификатор последней записи.
+		/// Last record identifier.
 		/// </summary>
 		object LastId { get; }
 
 		/// <summary>
-		/// Сохранить параметры мета-информации в поток.
+		/// To save meta-information parameters to stream.
 		/// </summary>
-		/// <param name="stream">Поток данных.</param>
+		/// <param name="stream">Data stream.</param>
 		void Write(Stream stream);
 
 		/// <summary>
-		/// Загрузить параметры мета-информации из потока.
+		/// To load meta-information parameters from the stream.
 		/// </summary>
-		/// <param name="stream">Поток данных.</param>
+		/// <param name="stream">Data stream.</param>
 		void Read(Stream stream);
 	}
 
@@ -77,15 +77,15 @@ namespace StockSharp.Algo.Storages
 		public abstract object LastId { get; }
 
 		/// <summary>
-		/// Сохранить параметры мета-информации в поток.
+		/// To save meta-information parameters to stream.
 		/// </summary>
-		/// <param name="stream">Поток данных.</param>
+		/// <param name="stream">Data stream.</param>
 		public abstract void Write(Stream stream);
 
 		/// <summary>
-		/// Загрузить параметры мета-информации из потока.
+		/// To load meta-information parameters from the stream.
 		/// </summary>
-		/// <param name="stream">Поток данных.</param>
+		/// <param name="stream">Data stream.</param>
 		public abstract void Read(Stream stream);
 
 		//public static TMetaInfo CreateMetaInfo(DateTime date)

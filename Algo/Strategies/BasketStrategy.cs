@@ -8,35 +8,35 @@ namespace StockSharp.Algo.Strategies
 	using StockSharp.Localization;
 
 	/// <summary>
-	/// Условия окончания работы дочерних стратегий.
+	/// Conditions of subsidiary strategies operation end.
 	/// </summary>
 	public enum BasketStrategyFinishModes
 	{
 		/// <summary>
-		/// Если закончилась хотя бы одна стратегия.
+		/// If at least one strategy ended.
 		/// </summary>
 		First,
 
 		/// <summary>
-		/// Если закончились все стратегии.
+		/// If all strategies ended.
 		/// </summary>
 		All,
 
 		/// <summary>
-		/// Дочерние стратегии никак не зависят друг на друга.
+		/// Subsidiary strategies do not depend on each other.
 		/// </summary>
 		None,
 	}
 
 	/// <summary>
-	/// Пакетная стратегия, содержащая в себе дочерние стратегии, которые влияют друг на друга своим исполнением.
+	/// The batch strategy, containing subsidiary strategies, affecting each other by their execution.
 	/// </summary>
 	public class BasketStrategy : Strategy
 	{
 		/// <summary>
-		/// Создать стратегию.
+		/// Create strategy.
 		/// </summary>
-		/// <param name="finishMode">Условие окончания работы дочерних стратегий.</param>
+		/// <param name="finishMode">The condition of subsidiary strategies operation end.</param>
 		public BasketStrategy(BasketStrategyFinishModes finishMode)
 		{
 			FinishMode = finishMode;
@@ -46,17 +46,17 @@ namespace StockSharp.Algo.Strategies
 		}
 
 		/// <summary>
-		/// Условие окончания работы дочерних стратегий.
+		/// The condition of subsidiary strategies operation end.
 		/// </summary>
 		public BasketStrategyFinishModes FinishMode { get; private set; }
 
 		/// <summary>
-		/// Первая остановившаяся дочерняя стратегия. Свойство заполняется при <see cref="FinishMode"/> равным <see cref="BasketStrategyFinishModes.First"/>.
+		/// First stopped subsidiary strategy. The property is filled at <see cref="BasketStrategy.FinishMode"/> equals to <see cref="BasketStrategyFinishModes.First"/>.
 		/// </summary>
 		public Strategy FirstFinishStrategy { get; private set; }
 
 		/// <summary>
-		/// Метод вызывается тогда, когда вызвался метод <see cref="Strategy.Start"/>, и состояние <see cref="Strategy.ProcessState"/> перешло в значение <see cref="ProcessStates.Started"/>.
+		/// The method is called when the <see cref="Strategy.Start"/> method has been called and the <see cref="Strategy.ProcessState"/> state has been taken the <see cref="ProcessStates.Started"/> value.
 		/// </summary>
 		protected override void OnStarted()
 		{
@@ -93,7 +93,7 @@ namespace StockSharp.Algo.Strategies
 		}
 
 		/// <summary>
-		/// Освободить занятые ресурсы.
+		/// Release resources.
 		/// </summary>
 		protected override void DisposeManaged()
 		{

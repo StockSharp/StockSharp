@@ -1,4 +1,4 @@
-﻿namespace StockSharp.Algo.Indicators
+namespace StockSharp.Algo.Indicators
 {
 	using System.Collections.Generic;
 	using System.Linq;
@@ -8,21 +8,21 @@
 	using StockSharp.Algo.Candles;
 
 	/// <summary>
-	/// Реализация одной из линий индикатора Ишимоку Кинко Хайо (Tenkan, Kijun, Senkou Span B).
+	/// The implementation of the lines of Ishimoku KInko Khayo indicator (Tenkan, Kijun, Senkou Span B).
 	/// </summary>
 	public class IchimokuLine : LengthIndicator<decimal>
 	{
 		private readonly List<Candle> _buffer = new List<Candle>();
 
 		/// <summary>
-		/// Создать <see cref="IchimokuLine"/>.
+		/// Initializes a new instance of the <see cref="IchimokuLine"/>.
 		/// </summary>
 		public IchimokuLine()
 		{
 		}
 
 		/// <summary>
-		/// Сбросить состояние индикатора на первоначальное. Метод вызывается каждый раз, когда меняются первоначальные настройки (например, длина периода).
+		/// To reset the indicator status to initial. The method is called each time when initial settings are changed (for example, the length of period).
 		/// </summary>
 		public override void Reset()
 		{
@@ -31,7 +31,7 @@
 		}
 
 		/// <summary>
-		/// Сформирован ли индикатор.
+		/// Whether the indicator is set.
 		/// </summary>
 		public override bool IsFormed
 		{
@@ -39,10 +39,10 @@
 		}
 
 		/// <summary>
-		/// Обработать входное значение.
+		/// To handle the input value.
 		/// </summary>
-		/// <param name="input">Входное значение.</param>
-		/// <returns>Результирующее значение.</returns>
+		/// <param name="input">The input value.</param>
+		/// <returns>The resulting value.</returns>
 		protected override IIndicatorValue OnProcess(IIndicatorValue input)
 		{
 			var candle = input.GetValue<Candle>();

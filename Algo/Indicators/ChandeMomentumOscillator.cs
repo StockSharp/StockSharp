@@ -5,7 +5,7 @@ namespace StockSharp.Algo.Indicators
 	using StockSharp.Localization;
 
 	/// <summary>
-	/// Осциллятор ценовых моментов Чанде.
+	/// Chande Momentum Oscillator.
 	/// </summary>
 	[DisplayName("CMO")]
 	[DescriptionLoc(LocalizedStrings.Str759Key)]
@@ -17,7 +17,7 @@ namespace StockSharp.Algo.Indicators
 		private decimal _last;
 
 		/// <summary>
-		/// Создать <see cref="ChandeMomentumOscillator"/>.
+		/// Initializes a new instance of the <see cref="ChandeMomentumOscillator"/>.
 		/// </summary>
 		public ChandeMomentumOscillator()
 		{
@@ -25,7 +25,7 @@ namespace StockSharp.Algo.Indicators
 		}
 
 		/// <summary>
-		/// Сбросить состояние индикатора на первоначальное. Метод вызывается каждый раз, когда меняются первоначальные настройки (например, длина периода).
+		/// To reset the indicator status to initial. The method is called each time when initial settings are changed (for example, the length of period).
 		/// </summary>
 		public override void Reset()
 		{
@@ -37,15 +37,15 @@ namespace StockSharp.Algo.Indicators
 		}
 
 		/// <summary>
-		/// Сформирован ли индикатор.
+		/// Whether the indicator is set.
 		/// </summary>
 		public override bool IsFormed { get { return _cmoUp.IsFormed; } }
 
 		/// <summary>
-		/// Обработать входное значение.
+		/// To handle the input value.
 		/// </summary>
-		/// <param name="input">Входное значение.</param>
-		/// <returns>Результирующее значение.</returns>
+		/// <param name="input">The input value.</param>
+		/// <returns>The resulting value.</returns>
 		protected override IIndicatorValue OnProcess(IIndicatorValue input)
 		{
 			var newValue = input.GetValue<decimal>();

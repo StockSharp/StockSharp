@@ -1,4 +1,4 @@
-﻿namespace StockSharp.Algo
+namespace StockSharp.Algo
 {
 	using System;
 
@@ -7,12 +7,12 @@
 	using StockSharp.BusinessEntities;
 
 	/// <summary>
-	/// Генератор идентификаторов инструментов <see cref="Security.Id"/>.
+	/// The instrument identifiers generator <see cref="Security.Id"/>.
 	/// </summary>
 	public class SecurityIdGenerator
 	{
 		/// <summary>
-		/// Создать <see cref="SecurityIdGenerator"/>.
+		/// Initializes a new instance of the <see cref="SecurityIdGenerator"/>.
 		/// </summary>
 		public SecurityIdGenerator()
 		{
@@ -20,16 +20,16 @@
 		}
 
 		/// <summary>
-		/// Разделитель между кодом и классом инструмента.
+		/// The delimiter between the instrument code and the class.
 		/// </summary>
 		public string Delimiter { get; set; }
 
 		/// <summary>
-		/// Сгенерировать <see cref="Security.Id"/> инструмента.
+		/// Generate <see cref="Security.Id"/> security.
 		/// </summary>
-		/// <param name="secCode">Код инструмента.</param>
-		/// <param name="boardCode">Код площадки.</param>
-		/// <returns><see cref="Security.Id"/> инструмента.</returns>
+		/// <param name="secCode">Security code.</param>
+		/// <param name="boardCode">Board code.</param>
+		/// <returns><see cref="Security.Id"/> security.</returns>
 		public virtual string GenerateId(string secCode, string boardCode)
 		{
 			if (secCode.IsEmpty())
@@ -42,11 +42,11 @@
 		}
 
 		/// <summary>
-		/// Сгенерировать <see cref="Security.Id"/> инструмента.
+		/// Generate <see cref="Security.Id"/> security.
 		/// </summary>
-		/// <param name="secCode">Код инструмента.</param>
-		/// <param name="board">Площадка инструмента.</param>
-		/// <returns><see cref="Security.Id"/> инструмента.</returns>
+		/// <param name="secCode">Security code.</param>
+		/// <param name="board">Security boeard.</param>
+		/// <returns><see cref="Security.Id"/> security.</returns>
 		public virtual string GenerateId(string secCode/*, string secClass*/, ExchangeBoard board)
 		{
 			if (secCode.IsEmpty())
@@ -59,10 +59,10 @@
 		}
 
 		/// <summary>
-		/// Получить коды инструмента и площадки по идентификатору инструмента.
+		/// To get instrument codes and boards by the instrument identifier.
 		/// </summary>
-		/// <param name="securityId">Идентификатор инструмента <see cref="Security.Id"/>.</param>
-		/// <returns>Код инструмента <see cref="Security.Code"/> и код площадки <see cref="Security.Board"/>.</returns>
+		/// <param name="securityId">The instrument identifier <see cref="Security.Id"/>.</param>
+		/// <returns>The instrument code <see cref="Security.Code"/> and the board code <see cref="Security.Board"/>.</returns>
 		public virtual Tuple<string, string> Split(string securityId)
 		{
 			if (securityId.IsEmpty())

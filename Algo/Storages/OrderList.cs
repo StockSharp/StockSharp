@@ -5,14 +5,14 @@ namespace StockSharp.Algo.Storages
 	using StockSharp.BusinessEntities;
 
 	/// <summary>
-	/// Класс для представления в виде списка заявок, хранящихся во внешнем хранилище.
+	/// The class for representation in the form of list of orders, stored in external storage.
 	/// </summary>
 	public class OrderList : BaseStorageEntityList<Order>
 	{
 		/// <summary>
-		/// Создать <see cref="OrderList"/>.
+		/// Initializes a new instance of the <see cref="OrderList"/>.
 		/// </summary>
-		/// <param name="storage">Специальный интерфейс для прямого доступа к хранилищу.</param>
+		/// <param name="storage">The special interface for direct access to the storage.</param>
 		public OrderList(IStorage storage)
 			: base(storage)
 		{

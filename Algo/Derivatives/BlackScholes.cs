@@ -9,15 +9,15 @@ namespace StockSharp.Algo.Derivatives
 	using StockSharp.Localization;
 
 	/// <summary>
-	/// Модель расчета значений "греков" по формуле Блэка-Шоулза.
+	/// The model for calculating Greeks values by the Black-Scholes formula.
 	/// </summary>
 	public class BlackScholes : IBlackScholes
 	{
 		/// <summary>
-		/// Инициализировать <see cref="BlackScholes"/>.
+		/// Initialize <see cref="BlackScholes"/>.
 		/// </summary>
-		/// <param name="securityProvider">Поставщик информации об инструментах.</param>
-		/// <param name="dataProvider">Поставщик маркет-данных.</param>
+		/// <param name="securityProvider">The provider of information about instruments.</param>
+		/// <param name="dataProvider">The market data provider.</param>
 		protected BlackScholes(ISecurityProvider securityProvider, IMarketDataProvider dataProvider)
 		{
 			if (securityProvider == null)
@@ -31,11 +31,11 @@ namespace StockSharp.Algo.Derivatives
 		}
 
 		/// <summary>
-		/// Создать <see cref="BlackScholes"/>.
+		/// Initializes a new instance of the <see cref="BlackScholes"/>.
 		/// </summary>
-		/// <param name="option">Опцион.</param>
-		/// <param name="securityProvider">Поставщик информации об инструментах.</param>
-		/// <param name="dataProvider">Поставщик маркет-данных.</param>
+		/// <param name="option">Options contract.</param>
+		/// <param name="securityProvider">The provider of information about instruments.</param>
+		/// <param name="dataProvider">The market data provider.</param>
 		public BlackScholes(Security option, ISecurityProvider securityProvider, IMarketDataProvider dataProvider)
 			: this(securityProvider, dataProvider)
 		{
@@ -46,34 +46,34 @@ namespace StockSharp.Algo.Derivatives
 		}
 
 		/// <summary>
-		/// Поставщик информации об инструментах.
+		/// The provider of information about instruments.
 		/// </summary>
 		public ISecurityProvider SecurityProvider { get; private set; }
 
 		/// <summary>
-		/// Поставщик маркет-данных.
+		/// The market data provider.
 		/// </summary>
 		public virtual IMarketDataProvider DataProvider { get; private set; }
 
 		/// <summary>
-		/// Опцион.
+		/// Options contract.
 		/// </summary>
 		public virtual Security Option { get; private set; }
 
 		/// <summary>
-		/// Безрисковая процентная ставка.
+		/// The risk free interest rate.
 		/// </summary>
 		public decimal RiskFree { get; set; }
 
 		/// <summary>
-		/// Размер дивиденда по акциям.
+		/// The dividend amount on shares.
 		/// </summary>
 		public virtual decimal Dividend { get; set; }
 
 		private int _roundDecimals = -1;
 
 		/// <summary>
-		/// Количество знаков после запятой у вычисляемых значений. По-умолчанию равно -1, что означает не округлять значения.
+		/// The number of decimal places at calculated values. The default is -1, which means no values rounding.
 		/// </summary>
 		public virtual int RoundDecimals
 		{
@@ -90,7 +90,7 @@ namespace StockSharp.Algo.Derivatives
 		private Security _underlyingAsset;
 
 		/// <summary>
-		/// Базовый актив.
+		/// Underlying asset.
 		/// </summary>
 		public virtual Security UnderlyingAsset
 		{
@@ -98,7 +98,7 @@ namespace StockSharp.Algo.Derivatives
 		}
 
 		/// <summary>
-		/// Стандартное отклонение по-умолчанию.
+		/// The standard deviation by default.
 		/// </summary>
 		public decimal DefaultDeviation
 		{
@@ -106,20 +106,20 @@ namespace StockSharp.Algo.Derivatives
 		}
 
 		/// <summary>
-		/// Расчет времени до экспирации.
+		/// The time before expiration calculation.
 		/// </summary>
-		/// <param name="currentTime">Текущее время.</param>
-		/// <returns>Время, оставшееся до экспирации. Если значение равно <see langword="null"/>, то расчет значения в данный момент невозможен.</returns>
+		/// <param name="currentTime">The current time.</param>
+		/// <returns>The time remaining until expiration. If the value is equal to <see langword="null" />, then the value calculation currently is impossible.</returns>
 		public virtual double? GetExpirationTimeLine(DateTimeOffset currentTime)
 		{
 			return DerivativesHelper.GetExpirationTimeLine(Option.GetExpirationTime(), currentTime);
 		}
 
 		/// <summary>
-		/// Получить цену базового актива.
+		/// To get the price of the underlying asset.
 		/// </summary>
-		/// <param name="assetPrice">Цена базового актива, если она задана.</param>
-		/// <returns>Цена базового актива. Если значение равно <see langword="null"/>, то расчет значения в данный момент невозможен.</returns>
+		/// <param name="assetPrice">The price of the underlying asset if it is specified.</param>
+		/// <returns>The price of the underlying asset. If the value is equal to <see langword="null" />, then the value calculation currently is impossible.</returns>
 		public decimal? GetAssetPrice(decimal? assetPrice = null)
 		{
 			if (assetPrice != null)
@@ -129,7 +129,7 @@ namespace StockSharp.Algo.Derivatives
 		}
 
 		/// <summary>
-		/// Тип опциона.
+		/// Option type.
 		/// </summary>
 		protected OptionTypes OptionType
 		{
@@ -145,10 +145,10 @@ namespace StockSharp.Algo.Derivatives
 		}
 
 		/// <summary>
-		/// Округлить до <see cref="RoundDecimals"/>.
+		/// To round to <see cref="BlackScholes.RoundDecimals"/>.
 		/// </summary>
-		/// <param name="value">Исходное значение.</param>
-		/// <returns>Округленное значение.</returns>
+		/// <param name="value">The initial value.</param>
+		/// <returns>The rounded value.</returns>
 		protected decimal? TryRound(decimal? value)
 		{
 			if (value != null && RoundDecimals >= 0)
@@ -158,12 +158,12 @@ namespace StockSharp.Algo.Derivatives
 		}
 
 		/// <summary>
-		/// Рассчитать премию опциона.
+		/// To calculate the option premium.
 		/// </summary>
-		/// <param name="currentTime">Текущее время.</param>
-		/// <param name="deviation">Стандартное отклонение. Если оно не указано, то используется <see cref="DefaultDeviation"/>.</param>
-		/// <param name="assetPrice">Цена базового актива. Если цена не указана, то получается цена последней сделки из <see cref="UnderlyingAsset"/>.</param>
-		/// <returns>Премия опциона. Если значение равно <see langword="null"/>, то расчет значения в данный момент невозможен.</returns>
+		/// <param name="currentTime">The current time.</param>
+		/// <param name="deviation">The standard deviation. If it is not specified, then <see cref="BlackScholes.DefaultDeviation"/> is used.</param>
+		/// <param name="assetPrice">The price of the underlying asset. If the price is not specified, then the last trade price getting from <see cref="BlackScholes.UnderlyingAsset"/>.</param>
+		/// <returns>The option premium. If the value is equal to <see langword="null" />, then the value calculation currently is impossible.</returns>
 		public virtual decimal? Premium(DateTimeOffset currentTime, decimal? deviation = null, decimal? assetPrice = null)
 		{
 			deviation = deviation ?? DefaultDeviation;
@@ -181,12 +181,12 @@ namespace StockSharp.Algo.Derivatives
 		}
 
 		/// <summary>
-		/// Рассчитать дельту опциона.
+		/// To calculate the option delta.
 		/// </summary>
-		/// <param name="currentTime">Текущее время.</param>
-		/// <param name="deviation">Стандартное отклонение. Если оно не указано, то используется <see cref="DefaultDeviation"/>.</param>
-		/// <param name="assetPrice">Цена базового актива. Если цена не указана, то получается цена последней сделки из <see cref="UnderlyingAsset"/>.</param>
-		/// <returns>Дельта опциона. Если значение равно <see langword="null"/>, то расчет значения в данный момент невозможен.</returns>
+		/// <param name="currentTime">The current time.</param>
+		/// <param name="deviation">The standard deviation. If it is not specified, then <see cref="BlackScholes.DefaultDeviation"/> is used.</param>
+		/// <param name="assetPrice">The price of the underlying asset. If the price is not specified, then the last trade price getting from <see cref="BlackScholes.UnderlyingAsset"/>.</param>
+		/// <returns>The option delta. If the value is equal to <see langword="null" />, then the value calculation currently is impossible.</returns>
 		public virtual decimal? Delta(DateTimeOffset currentTime, decimal? deviation = null, decimal? assetPrice = null)
 		{
 			assetPrice = GetAssetPrice(assetPrice);
@@ -203,12 +203,12 @@ namespace StockSharp.Algo.Derivatives
 		}
 
 		/// <summary>
-		/// Рассчитать гамму опциона.
+		/// To calculate the option gamma.
 		/// </summary>
-		/// <param name="currentTime">Текущее время.</param>
-		/// <param name="deviation">Стандартное отклонение. Если оно не указано, то используется <see cref="DefaultDeviation"/>.</param>
-		/// <param name="assetPrice">Цена базового актива. Если цена не указана, то получается цена последней сделки из <see cref="UnderlyingAsset"/>.</param>
-		/// <returns>Гамма опциона. Если значение равно <see langword="null"/>, то расчет значения в данный момент невозможен.</returns>
+		/// <param name="currentTime">The current time.</param>
+		/// <param name="deviation">The standard deviation. If it is not specified, then <see cref="BlackScholes.DefaultDeviation"/> is used.</param>
+		/// <param name="assetPrice">The price of the underlying asset. If the price is not specified, then the last trade price getting from <see cref="BlackScholes.UnderlyingAsset"/>.</param>
+		/// <returns>The option gamma. If the value is equal to <see langword="null" />, then the value calculation currently is impossible.</returns>
 		public virtual decimal? Gamma(DateTimeOffset currentTime, decimal? deviation = null, decimal? assetPrice = null)
 		{
 			deviation = deviation ?? DefaultDeviation;
@@ -226,12 +226,12 @@ namespace StockSharp.Algo.Derivatives
 		}
 
 		/// <summary>
-		/// Рассчитать вегу опциона.
+		/// To calculate the option vega.
 		/// </summary>
-		/// <param name="currentTime">Текущее время.</param>
-		/// <param name="deviation">Стандартное отклонение. Если оно не указано, то используется <see cref="DefaultDeviation"/>.</param>
-		/// <param name="assetPrice">Цена базового актива. Если цена не указана, то получается цена последней сделки из <see cref="UnderlyingAsset"/>.</param>
-		/// <returns>Вега опциона. Если значение равно <see langword="null"/>, то расчет значения в данный момент невозможен.</returns>
+		/// <param name="currentTime">The current time.</param>
+		/// <param name="deviation">The standard deviation. If it is not specified, then <see cref="BlackScholes.DefaultDeviation"/> is used.</param>
+		/// <param name="assetPrice">The price of the underlying asset. If the price is not specified, then the last trade price getting from <see cref="BlackScholes.UnderlyingAsset"/>.</param>
+		/// <returns>The option vega. If the value is equal to <see langword="null" />, then the value calculation currently is impossible.</returns>
 		public virtual decimal? Vega(DateTimeOffset currentTime, decimal? deviation = null, decimal? assetPrice = null)
 		{
 			assetPrice = GetAssetPrice(assetPrice);
@@ -248,12 +248,12 @@ namespace StockSharp.Algo.Derivatives
 		}
 
 		/// <summary>
-		/// Рассчитать тету опциона.
+		/// To calculate the option theta.
 		/// </summary>
-		/// <param name="currentTime">Текущее время.</param>
-		/// <param name="deviation">Стандартное отклонение. Если оно не указано, то используется <see cref="DefaultDeviation"/>.</param>
-		/// <param name="assetPrice">Цена базового актива. Если цена не указана, то получается цена последней сделки из <see cref="UnderlyingAsset"/>.</param>
-		/// <returns>Тета опциона. Если значение равно <see langword="null"/>, то расчет значения в данный момент невозможен.</returns>
+		/// <param name="currentTime">The current time.</param>
+		/// <param name="deviation">The standard deviation. If it is not specified, then <see cref="BlackScholes.DefaultDeviation"/> is used.</param>
+		/// <param name="assetPrice">The price of the underlying asset. If the price is not specified, then the last trade price getting from <see cref="BlackScholes.UnderlyingAsset"/>.</param>
+		/// <returns>The option theta. If the value is equal to <see langword="null" />, then the value calculation currently is impossible.</returns>
 		public virtual decimal? Theta(DateTimeOffset currentTime, decimal? deviation = null, decimal? assetPrice = null)
 		{
 			deviation = deviation ?? DefaultDeviation;
@@ -271,12 +271,12 @@ namespace StockSharp.Algo.Derivatives
 		}
 
 		/// <summary>
-		/// Рассчитать ро опциона.
+		/// To calculate the option rho.
 		/// </summary>
-		/// <param name="currentTime">Текущее время.</param>
-		/// <param name="deviation">Стандартное отклонение. Если оно не указано, то используется <see cref="DefaultDeviation"/>.</param>
-		/// <param name="assetPrice">Цена базового актива. Если цена не указана, то получается цена последней сделки из <see cref="UnderlyingAsset"/>.</param>
-		/// <returns>Ро опциона. Если значение равно <see langword="null"/>, то расчет значения в данный момент невозможен.</returns>
+		/// <param name="currentTime">The current time.</param>
+		/// <param name="deviation">The standard deviation. If it is not specified, then <see cref="BlackScholes.DefaultDeviation"/> is used.</param>
+		/// <param name="assetPrice">The price of the underlying asset. If the price is not specified, then the last trade price getting from <see cref="BlackScholes.UnderlyingAsset"/>.</param>
+		/// <returns>The option rho. If the value is equal to <see langword="null" />, then the value calculation currently is impossible.</returns>
 		public virtual decimal? Rho(DateTimeOffset currentTime, decimal? deviation = null, decimal? assetPrice = null)
 		{
 			deviation = deviation ?? DefaultDeviation;
@@ -294,11 +294,11 @@ namespace StockSharp.Algo.Derivatives
 		}
 
 		/// <summary>
-		/// Рассчитать подразумеваемую волатильность.
+		/// To calculate the implied volatility.
 		/// </summary>
-		/// <param name="currentTime">Текущее время.</param>
-		/// <param name="premium">Премия по опциону.</param>
-		/// <returns>Подразумеваевая волатильность. Если значение равно <see langword="null"/>, то расчет значения в данный момент невозможен.</returns>
+		/// <param name="currentTime">The current time.</param>
+		/// <param name="premium">The option premium.</param>
+		/// <returns>The implied volatility. If the value is equal to <see langword="null" />, then the value calculation currently is impossible.</returns>
 		public virtual decimal? ImpliedVolatility(DateTimeOffset currentTime, decimal premium)
 		{
 			//var timeToExp = GetExpirationTimeLine();
@@ -306,22 +306,22 @@ namespace StockSharp.Algo.Derivatives
 		}
 
 		/// <summary>
-		/// Рассчитать параметр d1 определения вероятности исполнения опциона.
+		/// To calculate the d1 parameter of the option fulfilment probability estimating.
 		/// </summary>
-		/// <param name="deviation">Стандартное отклонение.</param>
-		/// <param name="assetPrice">Цена базового актива.</param>
-		/// <param name="timeToExp">Период опциона до экспирации.</param>
-		/// <returns>Параметр d1.</returns>
+		/// <param name="deviation">Standard deviation.</param>
+		/// <param name="assetPrice">Underlying asset price.</param>
+		/// <param name="timeToExp">The option period before the expiration.</param>
+		/// <returns>The d1 parameter.</returns>
 		protected virtual double D1(decimal deviation, decimal assetPrice, double timeToExp)
 		{
 			return DerivativesHelper.D1(assetPrice, GetStrike(), RiskFree, Dividend, deviation, timeToExp);
 		}
 		
 		/// <summary>
-		/// Создать стакан волатильности.
+		/// To create the order book of volatility.
 		/// </summary>
-		/// <param name="currentTime">Текущее время.</param>
-		/// <returns>Стакан волатильности.</returns>
+		/// <param name="currentTime">The current time.</param>
+		/// <returns>The order book volatility.</returns>
 		public virtual MarketDepth ImpliedVolatility(DateTimeOffset currentTime)
 		{
 			return DataProvider.GetMarketDepth(Option).ImpliedVolatility(this, currentTime);

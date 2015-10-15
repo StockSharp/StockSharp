@@ -3,12 +3,12 @@ namespace StockSharp.Algo.Candles
 	using StockSharp.Algo.Storages;
 
 	/// <summary>
-	/// Интерфейс источника свечек для <see cref="ICandleManager"/>, который загружает данные из внешнего хранилища.
+	/// The candles source interface for <see cref="ICandleManager"/> which loads data from external storage.
 	/// </summary>
 	public interface IStorageCandleSource
 	{
 		/// <summary>
-		/// Хранилище данных.
+		/// Market data storage.
 		/// </summary>
 		IStorageRegistry StorageRegistry { get; set; }
 	}

@@ -1,24 +1,24 @@
-﻿namespace StockSharp.Algo.Candles
+namespace StockSharp.Algo.Candles
 {
 	using System.Collections.Generic;
 
 	/// <summary>
-	/// Интерфейс менеджера свечек.
+	/// The candles manager interface.
 	/// </summary>
 	public interface ICandleManager : ICandleSource<Candle>
 	{
 		/// <summary>
-		/// Kонтейнер данных.
+		/// The data container.
 		/// </summary>
 		ICandleManagerContainer Container { get; }
 
 		/// <summary>
-		/// Все активные на текущий момент серии свечек, запущенные через <see cref="ICandleSource{T}.Start"/>.
+		/// All currently active candles series started via <see cref="ICandleSource{T}.Start"/>.
 		/// </summary>
 		IEnumerable<CandleSeries> Series { get; }
 
 		/// <summary>
-		/// Источники свечек.
+		/// Candles sources.
 		/// </summary>
 		ICandleManagerSourceList Sources { get; }
 	}

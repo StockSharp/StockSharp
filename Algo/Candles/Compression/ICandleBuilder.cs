@@ -3,33 +3,32 @@ namespace StockSharp.Algo.Candles.Compression
 	using System;
 
 	/// <summary>
-	/// Интерфейс построителя свечек.
+	/// The candles builder interface.
 	/// </summary>
 	public interface ICandleBuilder : ICandleManagerSource
 	{
 		/// <summary>
-		/// Тип свечи.
+		/// The candle type.
 		/// </summary>
 		Type CandleType { get; }
 
 		/// <summary>
-		/// Источники данных.
+		/// Data sources.
 		/// </summary>
 		ICandleBuilderSourceList Sources { get; }
 
 		/// <summary>
-		/// Kонтейнер данных.
+		/// The data container.
 		/// </summary>
 		ICandleBuilderContainer Container { get; }
 
 		/// <summary>
-		/// Обработать новые данные.
+		/// To process the new data.
 		/// </summary>
-		/// <param name="series">Серия свечек.</param>
-		/// <param name="currentCandle">Текущая свеча.</param>
-		/// <param name="value">Новые данные, с помощью которых принимается решение о необходимости начала или окончания формирования текущей свечи.</param>
-		/// <returns>Новая свеча. Если новую свечу нет необходимости создавать, то возвращается <paramref name="currentCandle"/>.
-		/// Если новую свечу создать невозможно (<paramref name="value"/> не может быть применено к свечам), то возвращается <see langword="null"/>.</returns>
+		/// <param name="series">Candles series.</param>
+		/// <param name="currentCandle">The current candle.</param>
+		/// <param name="value">The new data by which it is decided to start or end the current candle creation.</param>
+		/// <returns>A new candle. If there is not necessary to create a new candle, then <paramref name="currentCandle" /> is returned. If it is impossible to create a new candle (<paramref name="value" /> can not be applied to candles), then <see langword="null" /> is returned.</returns>
 		Candle ProcessValue(CandleSeries series, Candle currentCandle, ICandleBuilderSourceValue value);
 	}
 }

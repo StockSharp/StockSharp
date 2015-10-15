@@ -5,24 +5,24 @@ namespace StockSharp.Algo
 	using StockSharp.Localization;
 
 	/// <summary>
-	/// Виды авторизаций.
+	/// Types of authorization.
 	/// </summary>
 	public enum AuthorizationModes
 	{
 		/// <summary>
-		/// Анонимный.
+		/// Anonymous.
 		/// </summary>
 		[EnumDisplayNameLoc(LocalizedStrings.Str886Key)]
 		Anonymous,
 
 		/// <summary>
-		/// Windows авторизация.
+		/// Windows authorization.
 		/// </summary>
 		[EnumDisplayName("Windows")]
 		Windows,
 
 		/// <summary>
-		/// Пользовательский.
+		/// User.
 		/// </summary>
 		[EnumDisplayNameLoc(LocalizedStrings.Str887Key)]
 		Custom,

@@ -5,16 +5,16 @@ namespace StockSharp.Algo
 	using System.ServiceModel;
 
 	/// <summary>
-	/// Интерфейс для доступа к сервису валют.
+	/// The interface for access to currency service.
 	/// </summary>
 	[ServiceContract(Namespace = "http://web.cbr.ru/")]
 	public interface IDailyInfoSoap
 	{
 		/// <summary>
-		/// Получить курсы валют на определенную дату.
+		/// To get currency exchange rates for the specific date.
 		/// </summary>
-		/// <param name="date">Дата курсов.</param>
-		/// <returns>Курсы валют.</returns>
+		/// <param name="date">Date of rates.</param>
+		/// <returns>Currency exchange rates.</returns>
 		[OperationContract(Action = "http://web.cbr.ru/GetCursOnDate", ReplyAction = "*")]
 		[XmlSerializerFormat]
 		DataSet GetCursOnDate([MessageParameter(Name = "On_date")]DateTime date);

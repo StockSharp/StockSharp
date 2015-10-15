@@ -8,7 +8,7 @@ namespace StockSharp.Algo.Derivatives
 	using StockSharp.Localization;
 
 	/// <summary>
-	/// Построитель синтетических позиций.
+	/// The synthetic positions builder.
 	/// </summary>
 	public class Synthetic
 	{
@@ -16,10 +16,10 @@ namespace StockSharp.Algo.Derivatives
 		private readonly ISecurityProvider _provider;
 
 		/// <summary>
-		/// Создать <see cref="Synthetic"/>.
+		/// Initializes a new instance of the <see cref="Synthetic"/>.
 		/// </summary>
-		/// <param name="security">Инструмент (опцион или базовый актив).</param>
-		/// <param name="provider">Поставщик информации об инструментах.</param>
+		/// <param name="security">The instrument (the option or the underlying asset).</param>
+		/// <param name="provider">The provider of information about instruments.</param>
 		public Synthetic(Security security, ISecurityProvider provider)
 		{
 			if (security == null)
@@ -42,28 +42,28 @@ namespace StockSharp.Algo.Derivatives
 		}
 
 		/// <summary>
-		/// Получить синтетическую позицию для покупки опциона.
+		/// To get the synthetic position to buy the option.
 		/// </summary>
-		/// <returns>Синтетическая позиция.</returns>
+		/// <returns>The synthetic position.</returns>
 		public KeyValuePair<Security, Sides>[] Buy()
 		{
 			return Position(Sides.Buy);
 		}
 
 		/// <summary>
-		/// Получить синтетическую позицию для продажи опциона.
+		/// To get the synthetic position to sale the option.
 		/// </summary>
-		/// <returns>Синтетическая позиция.</returns>
+		/// <returns>The synthetic position.</returns>
 		public KeyValuePair<Security, Sides>[] Sell()
 		{
 			return Position(Sides.Sell);
 		}
 
 		/// <summary>
-		/// Получить синтетическую позицию для опциона.
+		/// To get the synthetic position for the option.
 		/// </summary>
-		/// <param name="side">Направление основной позиции.</param>
-		/// <returns>Синтетическая позиция.</returns>
+		/// <param name="side">The main position direction.</param>
+		/// <returns>The synthetic position.</returns>
 		public KeyValuePair<Security, Sides>[] Position(Sides side)
 		{
 			var asset = Option.GetUnderlyingAsset(_provider);
@@ -76,54 +76,54 @@ namespace StockSharp.Algo.Derivatives
 		}
 
 		/// <summary>
-		/// Получить опционную позицию для синтетической покупки базового актива.
+		/// To get the option position for the underlying asset synthetic buy.
 		/// </summary>
-		/// <param name="strike">Страйк.</param>
-		/// <returns>Опционная позиция.</returns>
+		/// <param name="strike">Strike.</param>
+		/// <returns>The option position.</returns>
 		public KeyValuePair<Security, Sides>[] Buy(decimal strike)
 		{
 			return Buy(strike, GetExpiryDate());
 		}
 
 		/// <summary>
-		/// Получить опционную позицию для синтетической покупки базового актива.
+		/// To get the option position for the underlying asset synthetic buy.
 		/// </summary>
-		/// <param name="strike">Страйк.</param>
-		/// <param name="expiryDate">Дата экспирации опциона.</param>
-		/// <returns>Опционная позиция.</returns>
+		/// <param name="strike">Strike.</param>
+		/// <param name="expiryDate">The date of the option expiration.</param>
+		/// <returns>The option position.</returns>
 		public KeyValuePair<Security, Sides>[] Buy(decimal strike, DateTimeOffset expiryDate)
 		{
 			return Position(strike, expiryDate, Sides.Buy);
 		}
 
 		/// <summary>
-		/// Получить опционную позицию для синтетической продажи базового актива.
+		/// To get the option position for synthetic sale of the base asset.
 		/// </summary>
-		/// <param name="strike">Страйк.</param>
-		/// <returns>Опционная позиция.</returns>
+		/// <param name="strike">Strike.</param>
+		/// <returns>The option position.</returns>
 		public KeyValuePair<Security, Sides>[] Sell(decimal strike)
 		{
 			return Sell(strike, GetExpiryDate());
 		}
 
 		/// <summary>
-		/// Получить опционную позицию для синтетической продажи базового актива.
+		/// To get the option position for synthetic sale of the base asset.
 		/// </summary>
-		/// <param name="strike">Страйк.</param>
-		/// <param name="expiryDate">Дата экспирации опциона.</param>
-		/// <returns>Опционная позиция.</returns>
+		/// <param name="strike">Strike.</param>
+		/// <param name="expiryDate">The date of the option expiration.</param>
+		/// <returns>The option position.</returns>
 		public KeyValuePair<Security, Sides>[] Sell(decimal strike, DateTimeOffset expiryDate)
 		{
 			return Position(strike, expiryDate, Sides.Sell);
 		}
 
 		/// <summary>
-		/// Получить опционную позицию для синтетического базового актива.
+		/// To get the option position for the synthetic base asset.
 		/// </summary>
-		/// <param name="strike">Страйк.</param>
-		/// <param name="expiryDate">Дата экспирации опциона.</param>
-		/// <param name="side">Направление основной позиции.</param>
-		/// <returns>Опционная позиция.</returns>
+		/// <param name="strike">Strike.</param>
+		/// <param name="expiryDate">The date of the option expiration.</param>
+		/// <param name="side">The main position direction.</param>
+		/// <returns>The option position.</returns>
 		public KeyValuePair<Security, Sides>[] Position(decimal strike, DateTimeOffset expiryDate, Sides side)
 		{
 			var call = _security.GetCall(_provider, strike, expiryDate);

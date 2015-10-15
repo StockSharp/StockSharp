@@ -5,7 +5,7 @@ namespace StockSharp.Algo.Indicators
 	using StockSharp.Localization;
 
 	/// <summary>
-	/// Реализация одной из линий индикатора Alligator (Jaw, Teeth, Lips).
+	/// The realization of one of indicator lines Alligator (Jaw, Teeth, and Lips).
 	/// </summary>
 	public class AlligatorLine : LengthIndicator<decimal>
 	{
@@ -15,7 +15,7 @@ namespace StockSharp.Algo.Indicators
 		//private readonly SimpleMovingAverage _sma;
 
 		/// <summary>
-		/// Создать <see cref="AlligatorLine"/>.
+		/// Initializes a new instance of the <see cref="AlligatorLine"/>.
 		/// </summary>
 		public AlligatorLine()
 		{
@@ -27,7 +27,7 @@ namespace StockSharp.Algo.Indicators
 		private int _shift;
 
 		/// <summary>
-		/// Сдвиг в будущее.
+		/// Shift to the future.
 		/// </summary>
 		[DisplayNameLoc(LocalizedStrings.Str841Key)]
 		[DescriptionLoc(LocalizedStrings.Str842Key)]
@@ -43,7 +43,7 @@ namespace StockSharp.Algo.Indicators
 		}
 
 		/// <summary>
-		/// Сбросить состояние индикатора на первоначальное. Метод вызывается каждый раз, когда меняются первоначальные настройки (например, длина периода).
+		/// To reset the indicator status to initial. The method is called each time when initial settings are changed (for example, the length of period).
 		/// </summary>
 		public override void Reset()
 		{
@@ -54,15 +54,15 @@ namespace StockSharp.Algo.Indicators
 		}
 
 		/// <summary>
-		/// Сформирован ли индикатор.
+		/// Whether the indicator is set.
 		/// </summary>
 		public override bool IsFormed { get { return Buffer.Count > Shift; } }
 
 		/// <summary>
-		/// Обработать входное значение.
+		/// To handle the input value.
 		/// </summary>
-		/// <param name="input">Входное значение.</param>
-		/// <returns>Результирующее значение.</returns>
+		/// <param name="input">The input value.</param>
+		/// <returns>The resulting value.</returns>
 		protected override IIndicatorValue OnProcess(IIndicatorValue input)
 		{
 			//если кол-во в буфере больше Shift, то первое значение отдали в прошлый раз, удалим его.
@@ -79,9 +79,9 @@ namespace StockSharp.Algo.Indicators
 		}
 
 		/// <summary>
-		/// Загрузить настройки.
+		/// Load settings.
 		/// </summary>
-		/// <param name="settings">Хранилище настроек.</param>
+		/// <param name="settings">Settings storage.</param>
 		public override void Load(SettingsStorage settings)
 		{
 			base.Load(settings);
@@ -89,9 +89,9 @@ namespace StockSharp.Algo.Indicators
 		}
 
 		/// <summary>
-		/// Сохранить настройки.
+		/// Save settings.
 		/// </summary>
-		/// <param name="settings">Хранилище настроек.</param>
+		/// <param name="settings">Settings storage.</param>
 		public override void Save(SettingsStorage settings)
 		{
 			base.Save(settings);

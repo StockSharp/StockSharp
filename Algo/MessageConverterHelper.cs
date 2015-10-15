@@ -14,12 +14,12 @@ namespace StockSharp.Algo
 	using StockSharp.Localization;
 
 	/// <summary>
-	/// Вспомогательный класс для конвертации бизнес-объектов (<see cref="StockSharp.BusinessEntities"/>) в сообщения (<see cref="StockSharp.Messages"/>) и обратно.
+	/// The auxiliary class for conversion of business-objects (<see cref="BusinessEntities"/>) into messages (<see cref="Messages"/>) and vice versa.
 	/// </summary>
 	public static class MessageConverterHelper
 	{
 		/// <summary>
-		/// Преобразовать <see cref="MarketDepth"/> в <see cref="QuoteChangeMessage"/>.
+		/// Cast <see cref="MarketDepth"/> to the <see cref="QuoteChangeMessage"/>.
 		/// </summary>
 		/// <param name="depth"><see cref="MarketDepth"/>.</param>
 		/// <returns><see cref="QuoteChangeMessage"/>.</returns>
@@ -88,9 +88,9 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Преобразовать тип сообщения <see cref="CandleMessage"/> в <see cref="MarketDataTypes"/>.
+		/// Cast message type <see cref="CandleMessage"/> to the <see cref="MarketDataTypes"/>.
 		/// </summary>
-		/// <param name="messageType">Тип сообщения <see cref="CandleMessage"/>.</param>
+		/// <param name="messageType">The type of the message <see cref="CandleMessage"/>.</param>
 		/// <returns><see cref="MarketDataTypes"/>.</returns>
 		public static MarketDataTypes ToCandleMarketDataType(this Type messageType)
 		{
@@ -106,10 +106,10 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Преобразовать тип свечи <see cref="Candle"/> в тип сообщения <see cref="CandleMessage"/>.
+		/// Cast candle type <see cref="Candle"/> to the message <see cref="CandleMessage"/>.
 		/// </summary>
-		/// <param name="candleType">Тип свечи <see cref="Candle"/>.</param>
-		/// <returns>Тип сообщения <see cref="CandleMessage"/>.</returns>
+		/// <param name="candleType">The type of the candle <see cref="Candle"/>.</param>
+		/// <returns>The type of the message <see cref="CandleMessage"/>.</returns>
 		public static Type ToCandleMessageType(this Type candleType)
 		{
 			if (candleType == null)
@@ -124,10 +124,10 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Преобразовать тип сообщения <see cref="CandleMessage"/> в тип свечи <see cref="Candle"/>.
+		/// Cast message type <see cref="CandleMessage"/> to the candle type <see cref="Candle"/>.
 		/// </summary>
-		/// <param name="messageType">Тип сообщения <see cref="CandleMessage"/>.</param>
-		/// <returns>Тип свечи <see cref="Candle"/>.</returns>
+		/// <param name="messageType">The type of the message <see cref="CandleMessage"/>.</param>
+		/// <returns>The type of the candle <see cref="Candle"/>.</returns>
 		public static Type ToCandleType(this Type messageType)
 		{
 			if (messageType == null)
@@ -142,30 +142,30 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Преобразовать тип свечек <see cref="MarketDataTypes"/> в тип сообщения <see cref="MessageTypes"/>.
+		/// To convert the type of candles <see cref="MarketDataTypes"/> into type of message <see cref="MessageTypes"/>.
 		/// </summary>
-		/// <param name="type">Тип свечек.</param>
-		/// <returns>Тип сообщения.</returns>
+		/// <param name="type">The candles type.</param>
+		/// <returns>Message type.</returns>
 		public static MessageTypes ToCandleMessageType(this MarketDataTypes type)
 		{
 			return _candleDataTypes[type];
 		}
 
 		/// <summary>
-		/// Преобразовать тип сообщения <see cref="MessageTypes"/> в тип свечек <see cref="MarketDataTypes"/>.
+		/// To convert the type of message <see cref="MessageTypes"/> into type of candles <see cref="MarketDataTypes"/>.
 		/// </summary>
-		/// <param name="type">Тип сообщения.</param>
-		/// <returns>Тип свечек.</returns>
+		/// <param name="type">Message type.</param>
+		/// <returns>The candles type.</returns>
 		public static MarketDataTypes ToCandleMarketDataType(this MessageTypes type)
 		{
 			return _candleDataTypes[type];
 		}
 
 		/// <summary>
-		/// Преобразовать свечу в сообщение.
+		/// To convert the candle into message.
 		/// </summary>
-		/// <param name="candle">Свеча.</param>
-		/// <returns>Сообщение.</returns>
+		/// <param name="candle">Candle.</param>
+		/// <returns>Message.</returns>
 		public static CandleMessage ToMessage(this Candle candle)
 		{
 			if (candle == null)
@@ -212,10 +212,10 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Преобразовать собственную сделку в сообщение.
+		/// To convert the own trade into message.
 		/// </summary>
-		/// <param name="trade">Собственная сделка.</param>
-		/// <returns>Сообщение.</returns>
+		/// <param name="trade">Own trade.</param>
+		/// <returns>Message.</returns>
 		public static ExecutionMessage ToMessage(this MyTrade trade)
 		{
 			if (trade == null)
@@ -243,10 +243,10 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Преобразовать заявку в сообщение.
+		/// To convert thee order into message.
 		/// </summary>
-		/// <param name="order">Заявка.</param>
-		/// <returns>Сообщение.</returns>
+		/// <param name="order">Order.</param>
+		/// <returns>Message.</returns>
 		public static ExecutionMessage ToMessage(this Order order)
 		{
 			if (order == null)
@@ -284,10 +284,10 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Преобразовать описание ошибки в сообщение.
+		/// To convert the error description into message.
 		/// </summary>
-		/// <param name="fail">Описание ошибки.</param>
-		/// <returns>Сообщение.</returns>
+		/// <param name="fail">Error detais.</param>
+		/// <returns>Message.</returns>
 		public static ExecutionMessage ToMessage(this OrderFail fail)
 		{
 			if (fail == null)
@@ -310,10 +310,10 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Преобразовать тиковую сделку в сообщение.
+		/// To convert the tick trade into message.
 		/// </summary>
-		/// <param name="trade">Тиковая сделка.</param>
-		/// <returns>Сообщение.</returns>
+		/// <param name="trade">Tick trade.</param>
+		/// <returns>Message.</returns>
 		public static ExecutionMessage ToMessage(this Trade trade)
 		{
 			if (trade == null)
@@ -337,10 +337,10 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Преобразовать строчку лога заявок в сообщение.
+		/// To convert the string of orders log onto message.
 		/// </summary>
-		/// <param name="item">Строчка лога заявок.</param>
-		/// <returns>Сообщение.</returns>
+		/// <param name="item">Order log item.</param>
+		/// <returns>Message.</returns>
 		public static ExecutionMessage ToMessage(this OrderLogItem item)
 		{
 			if (item == null)
@@ -377,11 +377,11 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Создать сообщение регистрации новой заявки.
+		/// To create the message of new order registration.
 		/// </summary>
-		/// <param name="order">Заявка.</param>
-		/// <param name="securityId">Идентификатор инструмента.</param>
-		/// <returns>Сообщение.</returns>
+		/// <param name="order">Order.</param>
+		/// <param name="securityId">Security ID.</param>
+		/// <returns>Message.</returns>
 		public static OrderRegisterMessage CreateRegisterMessage(this Order order, SecurityId securityId)
 		{
 			if (order == null)
@@ -415,13 +415,13 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Создать сообщение снятия старой заявки.
+		/// To create the message of cancelling old order.
 		/// </summary>
-		/// <param name="order">Заявка.</param>
-		/// <param name="securityId">Идентификатор инструмента.</param>
-		/// <param name="transactionId">Номер транзакции.</param>
-		/// <param name="volume">Отменяемый объем.</param>
-		/// <returns>Сообщение.</returns>
+		/// <param name="order">Order.</param>
+		/// <param name="securityId">Security ID.</param>
+		/// <param name="transactionId">The transaction number.</param>
+		/// <param name="volume">The volume been cancelled.</param>
+		/// <returns>Message.</returns>
 		public static OrderCancelMessage CreateCancelMessage(this Order order, SecurityId securityId, long transactionId, decimal? volume = null)
 		{
 			if (order == null)
@@ -448,12 +448,12 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Создать сообщение замены старой заявки на новую.
+		/// To create the message of replacing old order with new one.
 		/// </summary>
-		/// <param name="oldOrder">Старая заявка.</param>
-		/// <param name="newOrder">Новая заявка.</param>
-		/// <param name="securityId">Идентификатор инструмента.</param>
-		/// <returns>Сообщение.</returns>
+		/// <param name="oldOrder">Old order.</param>
+		/// <param name="newOrder">New order.</param>
+		/// <param name="securityId">Security ID.</param>
+		/// <returns>Message.</returns>
 		public static OrderReplaceMessage CreateReplaceMessage(this Order oldOrder, Order newOrder, SecurityId securityId)
 		{
 			if (oldOrder == null)
@@ -497,15 +497,15 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Создать сообщение замены пары старых заявок на новые.
+		/// To create the message of replacing pair of old orders to new ones.
 		/// </summary>
-		/// <param name="oldOrder1">Старая заявка.</param>
-		/// <param name="newOrder1">Новая заявка.</param>
-		/// <param name="security1">Идентификатор инструмента.</param>
-		/// <param name="oldOrder2">Старая заявка.</param>
-		/// <param name="newOrder2">Новая заявка.</param>
-		/// <param name="security2">Идентификатор инструмента.</param>
-		/// <returns>Сообщение.</returns>
+		/// <param name="oldOrder1">Old order.</param>
+		/// <param name="newOrder1">New order.</param>
+		/// <param name="security1">Security ID.</param>
+		/// <param name="oldOrder2">Old order.</param>
+		/// <param name="newOrder2">New order.</param>
+		/// <param name="security2">Security ID.</param>
+		/// <returns>Message.</returns>
 		public static OrderPairReplaceMessage CreateReplaceMessage(this Order oldOrder1, Order newOrder1, SecurityId security1,
 			Order oldOrder2, Order newOrder2, SecurityId security2)
 		{
@@ -521,16 +521,16 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Создать сообщение массового снятие заявок.
+		/// To create the message of orders mass cancelling.
 		/// </summary>
-		/// <param name="transactionId">Идентификатор транзакции.</param>
-		/// <param name="isStopOrder"><see langword="true"/>, если нужно отменить только стоп-заявки, <see langword="false"/> - если только обычный и <see langword="null"/> - если оба типа.</param>
-		/// <param name="portfolio">Портфель. Если значение равно <see langword="null"/>, то портфель не попадает в фильтр снятия заявок.</param>
-		/// <param name="direction">Направление заявки. Если значение равно <see langword="null"/>, то направление не попадает в фильтр снятия заявок.</param>
-		/// <param name="board">Торговая площадка. Если значение равно <see langword="null"/>, то площадка не попадает в фильтр снятия заявок.</param>
-		/// <param name="securityId">Идентификатор инструмента.</param>
-		/// <param name="security">Инструмент.</param>
-		/// <returns>Сообщение.</returns>
+		/// <param name="transactionId">Transaction ID.</param>
+		/// <param name="isStopOrder"><see langword="true" />, if cancel only a stop orders, <see langword="false" /> - if regular orders, <see langword="null" /> - both.</param>
+		/// <param name="portfolio">Portfolio. If the value is equal to <see langword="null" />, then the portfolio does not match the orders cancel filter.</param>
+		/// <param name="direction">Order side. If the value is <see langword="null" />, the direction does not use.</param>
+		/// <param name="board">Trading board. If the value is equal to <see langword="null" />, then the board does not match the orders cancel filter.</param>
+		/// <param name="securityId">Security ID.</param>
+		/// <param name="security">Security.</param>
+		/// <returns>Message.</returns>
 		public static OrderGroupCancelMessage CreateGroupCancelMessage(long transactionId, bool? isStopOrder, Portfolio portfolio, Sides? direction, ExchangeBoard board, SecurityId securityId, Security security)
 		{
 			var msg = new OrderGroupCancelMessage
@@ -561,11 +561,11 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Преобразовать инструмент в сообщение.
+		/// To convert the instrument into message.
 		/// </summary>
-		/// <param name="security">Инструмент.</param>
-		/// <param name="securityId">Идентификатор инструмента.</param>
-		/// <returns>Сообщение.</returns>
+		/// <param name="security">Security.</param>
+		/// <param name="securityId">Security ID.</param>
+		/// <returns>Message.</returns>
 		public static SecurityMessage ToMessage(this Security security, SecurityId? securityId = null)
 		{
 			if (security == null)
@@ -592,10 +592,10 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Преобразовать сообщение в инструмент.
+		/// To convert the message into instrument.
 		/// </summary>
-		/// <param name="message">Сообщение.</param>
-		/// <returns>Инструмент.</returns>
+		/// <param name="message">Message.</param>
+		/// <returns>Security.</returns>
 		public static Security ToSecurity(this SecurityMessage message)
 		{
 			if (message == null)
@@ -626,10 +626,10 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Преобразовать портфель в сообщение.
+		/// To convert the portfolio into message.
 		/// </summary>
-		/// <param name="portfolio">Портфель.</param>
-		/// <returns>Сообщение.</returns>
+		/// <param name="portfolio">Portfolio.</param>
+		/// <returns>Message.</returns>
 		public static PortfolioMessage ToMessage(this Portfolio portfolio)
 		{
 			if (portfolio == null)
@@ -644,10 +644,10 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Преобразовать портфель в сообщение.
+		/// To convert the portfolio into message.
 		/// </summary>
-		/// <param name="portfolio">Портфель.</param>
-		/// <returns>Сообщение.</returns>
+		/// <param name="portfolio">Portfolio.</param>
+		/// <returns>Message.</returns>
 		public static PortfolioChangeMessage ToChangeMessage(this Portfolio portfolio)
 		{
 			if (portfolio == null)
@@ -665,11 +665,11 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Преобразовать позицию в сообщение.
+		/// To convert the position into message.
 		/// </summary>
-		/// <param name="position">Позиция.</param>
-		/// <param name="localTime">Метка локального времени.</param>
-		/// <returns>Сообщение.</returns>
+		/// <param name="position">Position.</param>
+		/// <param name="localTime">The local time label.</param>
+		/// <returns>Message.</returns>
 		public static PositionMessage ToMessage(this Position position, DateTime localTime)
 		{
 			if (position == null)
@@ -686,10 +686,10 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Преобразовать позицию в сообщение.
+		/// To convert the position into message.
 		/// </summary>
-		/// <param name="position">Позиция.</param>
-		/// <returns>Сообщение.</returns>
+		/// <param name="position">Position.</param>
+		/// <returns>Message.</returns>
 		public static PositionChangeMessage ToChangeMessage(this Position position)
 		{
 			if (position == null)
@@ -708,10 +708,10 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Преобразовать площадку в сообщение.
+		/// To convert the board into message.
 		/// </summary>
-		/// <param name="board">Площадка.</param>
-		/// <returns>Сообщение.</returns>
+		/// <param name="board">Board.</param>
+		/// <returns>Message.</returns>
 		public static BoardMessage ToMessage(this ExchangeBoard board)
 		{
 			if (board == null)
@@ -772,12 +772,12 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Преобразовать торговые объекты в сообщения.
+		/// To convert trading objects into messages.
 		/// </summary>
-		/// <typeparam name="TEntity">Тип торгового объекта.</typeparam>
-		/// <typeparam name="TMessage">Тип сообщения.</typeparam>
-		/// <param name="entities">Торговые объекты.</param>
-		/// <returns>Сообщения.</returns>
+		/// <typeparam name="TEntity">The type of trading object.</typeparam>
+		/// <typeparam name="TMessage">Message type.</typeparam>
+		/// <param name="entities">Trading objects.</param>
+		/// <returns>Messages.</returns>
 		public static IEnumerableEx<TMessage> ToMessages<TEntity, TMessage>(this IEnumerableEx<TEntity> entities)
 		{
 			return new ToMessagesEnumerableEx<TEntity, TMessage>(entities);
@@ -869,13 +869,13 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Преобразовать сообщения в торговые объекты.
+		/// To convert messages into trading objects.
 		/// </summary>
-		/// <typeparam name="TMessage">Тип сообщения.</typeparam>
-		/// <typeparam name="TEntity">Тип торгового объекта.</typeparam>
-		/// <param name="messages">Сообщения.</param>
-		/// <param name="security">Инструмент.</param>
-		/// <returns>Торговые объекты.</returns>
+		/// <typeparam name="TMessage">Message type.</typeparam>
+		/// <typeparam name="TEntity">The type of trading object.</typeparam>
+		/// <param name="messages">Messages.</param>
+		/// <param name="security">Security.</param>
+		/// <returns>Trading objects.</returns>
 		public static IEnumerableEx<TEntity> ToEntities<TMessage, TEntity>(this IEnumerableEx<TMessage> messages, Security security)
 			where TMessage : Message
 		{
@@ -883,25 +883,25 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Преобразовать сообщения в торговые объекты.
+		/// To convert messages into trading objects.
 		/// </summary>
-		/// <typeparam name="TCandle">Тип свечи.</typeparam>
-		/// <param name="messages">Сообщения.</param>
-		/// <param name="security">Инструмент.</param>
-		/// <param name="candleType">Тип свечи. Еспользуется, если <typeparamref name="TCandle"/> равен <see cref="Candle"/>.</param>
-		/// <returns>Торговые объекты.</returns>
+		/// <typeparam name="TCandle">The candle type.</typeparam>
+		/// <param name="messages">Messages.</param>
+		/// <param name="security">Security.</param>
+		/// <param name="candleType">The type of the candle. It is used, if <typeparamref name="TCandle" /> equals to <see cref="Candle"/>.</param>
+		/// <returns>Trading objects.</returns>
 		public static IEnumerableEx<TCandle> ToCandles<TCandle>(this IEnumerableEx<CandleMessage> messages, Security security, Type candleType = null)
 		{
 			return new ToEntitiesEnumerableEx<CandleMessage, TCandle>(messages, security, candleType ?? typeof(TCandle));
 		}
 
 		/// <summary>
-		/// Преобразовать <see cref="CandleMessage"/> в свечу.
+		/// To convert <see cref="CandleMessage"/> into candle.
 		/// </summary>
-		/// <typeparam name="TCandle">Тип свечи.</typeparam>
-		/// <param name="message">Сообщение.</param>
-		/// <param name="series">Серия.</param>
-		/// <returns>Свеча.</returns>
+		/// <typeparam name="TCandle">The candle type.</typeparam>
+		/// <param name="message">Message.</param>
+		/// <param name="series">Series.</param>
+		/// <returns>Candle.</returns>
 		public static TCandle ToCandle<TCandle>(this CandleMessage message, CandleSeries series)
 			where TCandle : Candle, new()
 		{
@@ -909,11 +909,11 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Преобразовать <see cref="CandleMessage"/> в свечу.
+		/// To convert <see cref="CandleMessage"/> into candle.
 		/// </summary>
-		/// <param name="message">Сообщение.</param>
-		/// <param name="series">Серия.</param>
-		/// <returns>Свеча.</returns>
+		/// <param name="message">Message.</param>
+		/// <param name="series">Series.</param>
+		/// <returns>Candle.</returns>
 		public static Candle ToCandle(this CandleMessage message, CandleSeries series)
 		{
 			if (message == null)
@@ -932,12 +932,12 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Преобразовать <see cref="CandleMessage"/> в свечу.
+		/// To convert <see cref="CandleMessage"/> into candle.
 		/// </summary>
-		/// <param name="message">Сообщение.</param>
-		/// <param name="type">Тип свечи.</param>
-		/// <param name="security">Инструмент.</param>
-		/// <returns>Свеча.</returns>
+		/// <param name="message">Message.</param>
+		/// <param name="type">The candle type.</param>
+		/// <param name="security">Security.</param>
+		/// <returns>Candle.</returns>
 		public static Candle ToCandle(this CandleMessage message, Type type, Security security)
 		{
 			if (message == null)
@@ -988,11 +988,11 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Преобразовать сообщение в тиковую сделку.
+		/// To convert the message into tick trade.
 		/// </summary>
-		/// <param name="message">Сообщение.</param>
-		/// <param name="security">Инструмент.</param>
-		/// <returns>Тиковая сделка.</returns>
+		/// <param name="message">Message.</param>
+		/// <param name="security">Security.</param>
+		/// <returns>Tick trade.</returns>
 		public static Trade ToTrade(this ExecutionMessage message, Security security)
 		{
 			if (security == null)
@@ -1002,11 +1002,11 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Преобразовать сообщение в тиковую сделку.
+		/// To convert the message into tick trade.
 		/// </summary>
-		/// <param name="message">Сообщение.</param>
-		/// <param name="trade">Тиковая сделка.</param>
-		/// <returns>Тиковая сделка.</returns>
+		/// <param name="message">Message.</param>
+		/// <param name="trade">Tick trade.</param>
+		/// <returns>Tick trade.</returns>
 		public static Trade ToTrade(this ExecutionMessage message, Trade trade)
 		{
 			if (message == null)
@@ -1028,11 +1028,11 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Преобразовать сообщение в заявку.
+		/// To convert the message into order.
 		/// </summary>
-		/// <param name="message">Сообщение.</param>
-		/// <param name="security">Инструмент.</param>
-		/// <returns>Заявка.</returns>
+		/// <param name="message">Message.</param>
+		/// <param name="security">Security.</param>
+		/// <returns>Order.</returns>
 		public static Order ToOrder(this ExecutionMessage message, Security security)
 		{
 			if (security == null)
@@ -1042,11 +1042,11 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Преобразовать сообщение в заявку.
+		/// To convert the message into order.
 		/// </summary>
-		/// <param name="message">Сообщение.</param>
-		/// <param name="order">заявка.</param>
-		/// <returns>Заявка.</returns>
+		/// <param name="message">Message.</param>
+		/// <param name="order">The order.</param>
+		/// <returns>Order.</returns>
 		public static Order ToOrder(this ExecutionMessage message, Order order)
 		{
 			if (order == null)
@@ -1081,24 +1081,24 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Преобразовать сообщение в стакан.
+		/// To convert the message into order book.
 		/// </summary>
-		/// <param name="message">Сообщение.</param>
-		/// <param name="security">Инструмент.</param>
-		/// <param name="getSecurity">Функция для получения инструмента.</param>
-		/// <returns>Стакан.</returns>
+		/// <param name="message">Message.</param>
+		/// <param name="security">Security.</param>
+		/// <param name="getSecurity">The function for getting instrument.</param>
+		/// <returns>Market depth.</returns>
 		public static MarketDepth ToMarketDepth(this QuoteChangeMessage message, Security security, Func<SecurityId, Security> getSecurity = null)
 		{
 			return message.ToMarketDepth(new MarketDepth(security), getSecurity);
 		}
 
 		/// <summary>
-		/// Преобразовать сообщение в стакан.
+		/// To convert the message into order book.
 		/// </summary>
-		/// <param name="message">Сообщение.</param>
-		/// <param name="marketDepth">Стакан.</param>
-		/// <param name="getSecurity">Функция для получения инструмента.</param>
-		/// <returns>Стакан.</returns>
+		/// <param name="message">Message.</param>
+		/// <param name="marketDepth">Market depth.</param>
+		/// <param name="getSecurity">The function for getting instrument.</param>
+		/// <returns>Market depth.</returns>
 		public static MarketDepth ToMarketDepth(this QuoteChangeMessage message, MarketDepth marketDepth, Func<SecurityId, Security> getSecurity = null)
 		{
 			if (message == null)
@@ -1121,22 +1121,22 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Преобразовать котировку в сообщение.
+		/// To convert the quote into message.
 		/// </summary>
-		/// <param name="quote">Котировка.</param>
-		/// <returns>Сообщение.</returns>
+		/// <param name="quote">Quote.</param>
+		/// <returns>Message.</returns>
 		public static QuoteChange ToQuoteChange(this Quote quote)
 		{
 			return new QuoteChange(quote.OrderDirection, quote.Price, quote.Volume);
 		}
 
 		/// <summary>
-		/// Преобразовать сообщение в котировку.
+		/// To convert the message into quote.
 		/// </summary>
-		/// <param name="change">Сообщение.</param>
-		/// <param name="security">Инструмент.</param>
-		/// <param name="getSecurity">Функция для получения инструмента.</param>
-		/// <returns>Котировка.</returns>
+		/// <param name="change">Message.</param>
+		/// <param name="security">Security.</param>
+		/// <param name="getSecurity">The function for getting instrument.</param>
+		/// <returns>Quote.</returns>
 		public static Quote ToQuote(this QuoteChange change, Security security, Func<SecurityId, Security> getSecurity = null)
 		{
 			if (!change.BoardCode.IsEmpty() && getSecurity != null)
@@ -1148,11 +1148,11 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Преобразовать сообщение в строчку лога заявок.
+		/// To convert the message into orders log string.
 		/// </summary>
-		/// <param name="message">Сообщение.</param>
-		/// <param name="security">Инструмент.</param>
-		/// <returns>Строчка лога заявок.</returns>
+		/// <param name="message">Message.</param>
+		/// <param name="security">Security.</param>
+		/// <returns>Order log item.</returns>
 		public static OrderLogItem ToOrderLog(this ExecutionMessage message, Security security)
 		{
 			if (security == null)
@@ -1166,11 +1166,11 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Преобразовать сообщение в строчку лога заявок.
+		/// To convert the message into orders log string.
 		/// </summary>
-		/// <param name="message">Сообщение.</param>
-		/// <param name="item">Строчка лога заявок.</param>
-		/// <returns>Строчка лога заявок.</returns>
+		/// <param name="message">Message.</param>
+		/// <param name="item">Order log item.</param>
+		/// <returns>Order log item.</returns>
 		public static OrderLogItem ToOrderLog(this ExecutionMessage message, OrderLogItem item)
 		{
 			if (message == null)
@@ -1220,10 +1220,10 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Преобразовать новость в сообщение.
+		/// To convert news into message.
 		/// </summary>
-		/// <param name="news">Новость.</param>
-		/// <returns>Сообщение.</returns>
+		/// <param name="news">News.</param>
+		/// <returns>Message.</returns>
 		public static NewsMessage ToMessage(this News news)
 		{
 			if (news == null)
@@ -1244,11 +1244,11 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Преобразовать инструмент в <see cref="SecurityId"/>.
+		/// To convert the instrument into <see cref="SecurityId"/>.
 		/// </summary>
-		/// <param name="security">Инструмент.</param>
-		/// <param name="idGenerator">Генератор идентификаторов инструментов <see cref="Security.Id"/>.</param>
-		/// <returns>Идентификатор инструмента.</returns>
+		/// <param name="security">Security.</param>
+		/// <param name="idGenerator">The instrument identifiers generator <see cref="Security.Id"/>.</param>
+		/// <returns>Security ID.</returns>
 		public static SecurityId ToSecurityId(this Security security, SecurityIdGenerator idGenerator = null)
 		{
 			if (security == null)
@@ -1289,7 +1289,7 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Преобразовать <see cref="SecurityId"/> в <see cref="SecurityExternalId"/>.
+		/// Cast <see cref="SecurityId"/> to the <see cref="SecurityExternalId"/>.
 		/// </summary>
 		/// <param name="securityId"><see cref="SecurityId"/>.</param>
 		/// <returns><see cref="SecurityExternalId"/>.</returns>
@@ -1309,10 +1309,10 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Проверить содержит ли <see cref="SecurityId"/> идентификаторы внешних источников.
+		/// To check, if <see cref="SecurityId"/> contains identifiers of external sources.
 		/// </summary>
-		/// <param name="securityId">Идентификатор инструмента.</param>
-		/// <returns><see langword="true"/>, если есть идентификаторы внешних источников, иначе, <see langword="false"/>.</returns>
+		/// <param name="securityId">Security ID.</param>
+		/// <returns><see langword="true" />, if there are identifiers of external sources, otherwise, <see langword="false" />.</returns>
 		public static bool HasExternalId(this SecurityId securityId)
 		{
 			return !securityId.Bloomberg.IsEmpty() ||
@@ -1326,12 +1326,12 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Преобразовать <see cref="SecurityExternalId"/> в <see cref="SecurityId"/>.
+		/// Cast <see cref="SecurityExternalId"/> to the <see cref="SecurityId"/>.
 		/// </summary>
 		/// <param name="externalId"><see cref="SecurityExternalId"/>.</param>
-		/// <param name="securityCode">Код инструмента.</param>
-		/// <param name="boardCode">Код площадки.</param>
-		/// <param name="securityType">Тип инструмента.</param>
+		/// <param name="securityCode">Security code.</param>
+		/// <param name="boardCode">Board code.</param>
+		/// <param name="securityType">Security type.</param>
 		/// <returns><see cref="SecurityId"/>.</returns>
 		public static SecurityId ToSecurityId(this SecurityExternalId externalId, string securityCode, string boardCode, SecurityTypes? securityType)
 		{
@@ -1355,12 +1355,12 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Заполнить сообщение информацией об инструменте.
+		/// To fill the message with information about instrument.
 		/// </summary>
-		/// <param name="message">Сообщение на подписку маркет-данных.</param>
-		/// <param name="connector">Подключение к торговой системе.</param>
-		/// <param name="security">Инструмент.</param>
-		/// <returns>Сообщение на подписку маркет-данных.</returns>
+		/// <param name="message">The message for market data subscription.</param>
+		/// <param name="connector">Connection to the trading system.</param>
+		/// <param name="security">Security.</param>
+		/// <returns>The message for market data subscription.</returns>
 		public static MarketDataMessage FillSecurityInfo(this MarketDataMessage message, Connector connector, Security security)
 		{
 			if (message == null)
@@ -1377,11 +1377,11 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Преобразовать <see cref="Level1ChangeMessage"/> в <see cref="MarketDepth"/>.
+		/// Cast <see cref="Level1ChangeMessage"/> to the <see cref="MarketDepth"/>.
 		/// </summary>
-		/// <param name="message">Сообщение.</param>
-		/// <param name="security">Инструмент.</param>
-		/// <returns>Стакан.</returns>
+		/// <param name="message">Message.</param>
+		/// <param name="security">Security.</param>
+		/// <returns>Market depth.</returns>
 		public static MarketDepth ToMarketDepth(this Level1ChangeMessage message, Security security)
 		{
 			return new MarketDepth(security) { LocalTime = message.LocalTime }.Update(
@@ -1397,10 +1397,10 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Преобразовать <see cref="NewsMessage"/> в <see cref="News"/>.
+		/// Cast <see cref="NewsMessage"/> to the <see cref="News"/>.
 		/// </summary>
-		/// <param name="message">Сообщение.</param>
-		/// <returns>Новость.</returns>
+		/// <param name="message">Message.</param>
+		/// <returns>News.</returns>
 		public static News ToNews(this NewsMessage message)
 		{
 			return new News
@@ -1421,11 +1421,11 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Преобразовать тип бизнес-объекта в тип сообщения.
+		/// To convert the type of business object into type of message.
 		/// </summary>
-		/// <param name="dataType">Тип бизнес-объекта.</param>
-		/// <param name="arg">Параметр данных.</param>
-		/// <returns>Тип сообщения.</returns>
+		/// <param name="dataType">The type of business object.</param>
+		/// <param name="arg">The data parameter.</param>
+		/// <returns>Message type.</returns>
 		public static Type ToMessageType(this Type dataType, ref object arg)
 		{
 			if (dataType == typeof(Trade))

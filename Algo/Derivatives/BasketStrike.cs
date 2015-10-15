@@ -10,16 +10,16 @@ namespace StockSharp.Algo.Derivatives
 	using StockSharp.Messages;
 
 	/// <summary>
-	/// Виртуальный страйк, созданный из комбинации других страйков.
+	/// The virtual strike created from a combination of other strikes.
 	/// </summary>
 	public abstract class BasketStrike : BasketSecurity
 	{
 		/// <summary>
-		/// Инициализировать <see cref="BasketStrike"/>.
+		/// Initialize <see cref="BasketStrike"/>.
 		/// </summary>
-		/// <param name="underlyingAsset">Базовый актив.</param>
-		/// <param name="securityProvider">Поставщик информации об инструментах.</param>
-		/// <param name="dataProvider">Поставщик маркет-данных.</param>
+		/// <param name="underlyingAsset">Underlying asset.</param>
+		/// <param name="securityProvider">The provider of information about instruments.</param>
+		/// <param name="dataProvider">The market data provider.</param>
 		protected BasketStrike(Security underlyingAsset, ISecurityProvider securityProvider, IMarketDataProvider dataProvider)
 		{
 			if (underlyingAsset == null)
@@ -37,22 +37,22 @@ namespace StockSharp.Algo.Derivatives
 		}
 
 		/// <summary>
-		/// Поставщик информации об инструментах.
+		/// The provider of information about instruments.
 		/// </summary>
 		public ISecurityProvider SecurityProvider { get; private set; }
 
 		/// <summary>
-		/// Поставщик маркет-данных.
+		/// The market data provider.
 		/// </summary>
 		public virtual IMarketDataProvider DataProvider { get; private set; }
 
 		/// <summary>
-		/// Базовый актив.
+		/// Underlying asset.
 		/// </summary>
 		public Security UnderlyingAsset { get; private set; }
 
 		/// <summary>
-		/// Инструменты, из которых создана данная корзина.
+		/// Instruments, from which this basket is created.
 		/// </summary>
 		public override IEnumerable<Security> InnerSecurities
 		{
@@ -70,15 +70,15 @@ namespace StockSharp.Algo.Derivatives
 		}
 
 		/// <summary>
-		/// Получить отфильтрованные страйки.
+		/// To get filtered strikes.
 		/// </summary>
-		/// <param name="allStrikes">Все страйки.</param>
-		/// <returns>Отфильтрованные страйки.</returns>
+		/// <param name="allStrikes">All strikes.</param>
+		/// <returns>Filtered strikes.</returns>
 		protected abstract IEnumerable<Security> FilterStrikes(IEnumerable<Security> allStrikes);
 	}
 
 	/// <summary>
-	/// Виртуальный страйк, включающий в себя страйки заданной границы сдвига.
+	/// The virtual strike including strikes of the specified shift boundary.
 	/// </summary>
 	public class OffsetBasketStrike : BasketStrike
 	{
@@ -86,12 +86,12 @@ namespace StockSharp.Algo.Derivatives
 		private decimal _strikeStep;
 
 		/// <summary>
-		/// Создать <see cref="OffsetBasketStrike"/>.
+		/// Initializes a new instance of the <see cref="OffsetBasketStrike"/>.
 		/// </summary>
-		/// <param name="underlyingSecurity">Базовый актив.</param>
-		/// <param name="securityProvider">Поставщик информации об инструментах.</param>
-		/// <param name="dataProvider">Поставщик маркет-данных.</param>
-		/// <param name="strikeOffset">Границы сдвига от центрального страйка (отрицательное значение задает сдвиг в опционы в деньгах, положительное - вне денег).</param>
+		/// <param name="underlyingSecurity">Underlying asset.</param>
+		/// <param name="securityProvider">The provider of information about instruments.</param>
+		/// <param name="dataProvider">The market data provider.</param>
+		/// <param name="strikeOffset">Boundaries of shift from the main strike (a negative value specifies the shift to options in the money, a positive value - out of the money).</param>
 		public OffsetBasketStrike(Security underlyingSecurity, ISecurityProvider securityProvider, IMarketDataProvider dataProvider, Range<int> strikeOffset)
 			: base(underlyingSecurity, securityProvider, dataProvider)
 		{
@@ -102,10 +102,10 @@ namespace StockSharp.Algo.Derivatives
 		}
 
 		/// <summary>
-		/// Получить отфильтрованные страйки.
+		/// To get filtered strikes.
 		/// </summary>
-		/// <param name="allStrikes">Все страйки.</param>
-		/// <returns>Отфильтрованные страйки.</returns>
+		/// <param name="allStrikes">All strikes.</param>
+		/// <returns>Filtered strikes.</returns>
 		protected override IEnumerable<Security> FilterStrikes(IEnumerable<Security> allStrikes)
 		{
 			if (_strikeStep == 0)
@@ -129,19 +129,19 @@ namespace StockSharp.Algo.Derivatives
 	}
 
 	/// <summary>
-	/// Виртуальный страйк, включающий в себя страйки заданной границы волатильности.
+	/// The virtual strike including strikes of the specified volatility boundary.
 	/// </summary>
 	public class VolatilityBasketStrike : BasketStrike
 	{
 		private readonly Range<decimal> _volatilityRange;
 
 		/// <summary>
-		/// Создать <see cref="VolatilityBasketStrike"/>.
+		/// Initializes a new instance of the <see cref="VolatilityBasketStrike"/>.
 		/// </summary>
-		/// <param name="underlyingAsset">Базовый актив.</param>
-		/// <param name="securityProvider">Поставщик информации об инструментах.</param>
-		/// <param name="dataProvider">Поставщик маркет-данных.</param>
-		/// <param name="volatilityRange">Границы волатильности.</param>
+		/// <param name="underlyingAsset">Underlying asset.</param>
+		/// <param name="securityProvider">The provider of information about instruments.</param>
+		/// <param name="dataProvider">The market data provider.</param>
+		/// <param name="volatilityRange">Volatility range.</param>
 		public VolatilityBasketStrike(Security underlyingAsset, ISecurityProvider securityProvider, IMarketDataProvider dataProvider, Range<decimal> volatilityRange)
 			: base(underlyingAsset, securityProvider, dataProvider)
 		{
@@ -152,10 +152,10 @@ namespace StockSharp.Algo.Derivatives
 		}
 
 		/// <summary>
-		/// Получить отфильтрованные страйки.
+		/// To get filtered strikes.
 		/// </summary>
-		/// <param name="allStrikes">Все страйки.</param>
-		/// <returns>Отфильтрованные страйки.</returns>
+		/// <param name="allStrikes">All strikes.</param>
+		/// <returns>Filtered strikes.</returns>
 		protected override IEnumerable<Security> FilterStrikes(IEnumerable<Security> allStrikes)
 		{
 			return allStrikes.Where(s =>

@@ -1,4 +1,4 @@
-﻿namespace StockSharp.Algo.Storages
+namespace StockSharp.Algo.Storages
 {
 	using System.Collections.Generic;
 
@@ -8,34 +8,34 @@
 	using StockSharp.BusinessEntities;
 
 	/// <summary>
-	/// Интерфейс для представления в виде списка торговых объектов, полученных из внешнего хранилища.
+	/// The interface for presentation in the form of list of trade objects, received from the external storage.
 	/// </summary>
-	/// <typeparam name="T">Тип торгового объекта (например, <see cref="Security"/> или <see cref="MyTrade"/>).</typeparam>
+	/// <typeparam name="T">The type of the trading object (for example, <see cref="Security"/> or <see cref="MyTrade"/>).</typeparam>
 	public interface IStorageEntityList<T> : INotifyList<T>, ISynchronizedCollection<T>
 	{
 		/// <summary>
-		/// Загрузить торговый объект по идентификатору.
+		/// To load the trading object by identifier.
 		/// </summary>
-		/// <param name="id">Идентификатор.</param>
-		/// <returns>Торговый объект. Если по идентификатору объект не был найден, то будет возвращено <see langword="null"/>.</returns>
+		/// <param name="id">Identifier.</param>
+		/// <returns>The trading object. If the object was not found by identifier, <see langword="null" /> will be returned.</returns>
 		T ReadById(object id);
 
 		/// <summary>
-		/// Сохранить торговый объект.
+		/// To save the trading object.
 		/// </summary>
-		/// <param name="entity">Торговый объект.</param>
+		/// <param name="entity">The trading object.</param>
 		void Save(T entity);
 
 		/// <summary>
-		/// Отложенное действие.
+		/// The time delayed action.
 		/// </summary>
 		DelayAction DelayAction { get; set; }
 
 		/// <summary>
-		/// Загрузить последние созданные данные.
+		/// To load last created data.
 		/// </summary>
-		/// <param name="count">Количество запрашиваемых данных.</param>
-		/// <returns>Диапазон данных.</returns>
+		/// <param name="count">The amount of requested data.</param>
+		/// <returns>The data range.</returns>
 		IEnumerable<T> ReadLasts(int count);
 	}
 }

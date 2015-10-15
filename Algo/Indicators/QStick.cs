@@ -6,14 +6,14 @@ namespace StockSharp.Algo.Indicators
 	/// QStick.
 	/// </summary>
 	/// <remarks>
-	/// http://www2.wealth-lab.com/WL5Wiki/QStick.ashx
+	/// http://www2.wealth-lab.com/WL5Wiki/QStick.ashx.
 	/// </remarks>
 	public class QStick : LengthIndicator<IIndicatorValue>
 	{
 		private readonly SimpleMovingAverage _sma;
 
 		/// <summary>
-		/// —оздать <see cref="QStick"/>.
+		/// Initializes a new instance of the <see cref="QStick"/>.
 		/// </summary>
 		public QStick()
 		{
@@ -22,12 +22,12 @@ namespace StockSharp.Algo.Indicators
 		}
 
 		/// <summary>
-		/// —формирован ли индикатор.
+		/// Whether the indicator is set.
 		/// </summary>
 		public override bool IsFormed { get { return _sma.IsFormed; } }
 
 		/// <summary>
-		/// —бросить состо€ние индикатора на первоначальное. ћетод вызываетс€ каждый раз, когда мен€ютс€ первоначальные настройки (например, длина периода).
+		/// To reset the indicator status to initial. The method is called each time when initial settings are changed (for example, the length of period).
 		/// </summary>
 		public override void Reset()
 		{
@@ -36,10 +36,10 @@ namespace StockSharp.Algo.Indicators
 		}
 
 		/// <summary>
-		/// ќбработать входное значение.
+		/// To handle the input value.
 		/// </summary>
-		/// <param name="input">¬ходное значение.</param>
-		/// <returns>–езультирующее значение.</returns>
+		/// <param name="input">The input value.</param>
+		/// <returns>The resulting value.</returns>
 		protected override IIndicatorValue OnProcess(IIndicatorValue input)
 		{
 			var candle = input.GetValue<Candle>();

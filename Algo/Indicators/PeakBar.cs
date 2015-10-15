@@ -10,10 +10,10 @@ namespace StockSharp.Algo.Indicators
 	using StockSharp.Messages;
 
 	/// <summary>
-	/// ПикБар.
+	/// PeakBar.
 	/// </summary>
 	/// <remarks>
-	/// http://www2.wealth-lab.com/WL5Wiki/PeakBar.ashx
+	/// http://www2.wealth-lab.com/WL5Wiki/PeakBar.ashx.
 	/// </remarks>
 	[DisplayName("PeakBar")]
 	[DescriptionLoc(LocalizedStrings.Str817Key)]
@@ -26,7 +26,7 @@ namespace StockSharp.Algo.Indicators
 		private int _valueBarCount;
 
 		/// <summary>
-		/// Создать <see cref="PeakBar"/>.
+		/// Initializes a new instance of the <see cref="PeakBar"/>.
 		/// </summary>
 		public PeakBar()
 		{
@@ -35,7 +35,7 @@ namespace StockSharp.Algo.Indicators
 		private Unit _reversalAmount = new Unit();
 
 		/// <summary>
-		/// Порог изменения индикатора.
+		/// Indicator changes threshold.
 		/// </summary>
 		[DisplayNameLoc(LocalizedStrings.Str783Key)]
 		[DescriptionLoc(LocalizedStrings.Str784Key)]
@@ -55,10 +55,10 @@ namespace StockSharp.Algo.Indicators
 		}
 
 		/// <summary>
-		/// Обработать входное значение.
+		/// To handle the input value.
 		/// </summary>
-		/// <param name="input">Входное значение.</param>
-		/// <returns>Результирующее значение.</returns>
+		/// <param name="input">The input value.</param>
+		/// <returns>The resulting value.</returns>
 		protected override IIndicatorValue OnProcess(IIndicatorValue input)
 		{
 			var candle = input.GetValue<Candle>();
@@ -88,9 +88,9 @@ namespace StockSharp.Algo.Indicators
 		}
 
 		/// <summary>
-		/// Загрузить настройки.
+		/// Load settings.
 		/// </summary>
-		/// <param name="settings">Хранилище настроек.</param>
+		/// <param name="settings">Settings storage.</param>
 		public override void Load(SettingsStorage settings)
 		{
 			base.Load(settings);
@@ -100,9 +100,9 @@ namespace StockSharp.Algo.Indicators
 		}
 
 		/// <summary>
-		/// Сохранить настройки.
+		/// Save settings.
 		/// </summary>
-		/// <param name="settings">Хранилище настроек.</param>
+		/// <param name="settings">Settings storage.</param>
 		public override void Save(SettingsStorage settings)
 		{
 			base.Save(settings);

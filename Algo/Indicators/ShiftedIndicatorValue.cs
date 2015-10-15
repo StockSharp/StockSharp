@@ -1,27 +1,27 @@
-﻿namespace StockSharp.Algo.Indicators
+namespace StockSharp.Algo.Indicators
 {
 	using System;
 
 	/// <summary>
-	/// Смещенное значение индикатора.
+	/// The shifted value of the indicator.
 	/// </summary>
 	public class ShiftedIndicatorValue : SingleIndicatorValue<IIndicatorValue>
 	{
 		/// <summary>
-		/// Создать <see cref="ShiftedIndicatorValue"/>.
+		/// Initializes a new instance of the <see cref="ShiftedIndicatorValue"/>.
 		/// </summary>
-		/// <param name="indicator">Индикатор.</param>
+		/// <param name="indicator">Indicator.</param>
 		public ShiftedIndicatorValue(IIndicator indicator)
 			: base(indicator)
 		{
 		}
 
 		/// <summary>
-		/// Создать <see cref="ShiftedIndicatorValue"/>.
+		/// Initializes a new instance of the <see cref="ShiftedIndicatorValue"/>.
 		/// </summary>
-		/// <param name="shift">Смещение значения индикатора.</param>
-		/// <param name="value">Значение индикатора.</param>
-		/// <param name="indicator">Индикатор.</param>
+		/// <param name="shift">The shift of the indicator value.</param>
+		/// <param name="value">Indicator value.</param>
+		/// <param name="indicator">Indicator.</param>
 		public ShiftedIndicatorValue(IIndicator indicator, int shift, IIndicatorValue value)
 			: base(indicator, value)
 		{
@@ -29,37 +29,37 @@
 		}
 
 		/// <summary>
-		/// Смещение значения индикатора.
+		/// The shift of the indicator value.
 		/// </summary>
 		public int Shift { get; private set; }
 
 		/// <summary>
-		/// Поддерживает ли значение необходимый для индикатора тип данных.
+		/// Does value support data type, required for the indicator.
 		/// </summary>
-		/// <param name="valueType">Тип данных, которым оперирует индикатор.</param>
-		/// <returns><see langword="true"/>, если тип данных поддерживается, иначе, <see langword="false"/>.</returns>
+		/// <param name="valueType">The data type, operated by indicator.</param>
+		/// <returns><see langword="true" />, if data type is supported, otherwise, <see langword="false" />.</returns>
 		public override bool IsSupport(Type valueType)
 		{
 			return !IsEmpty && Value.IsSupport(valueType);
 		}
 
 		/// <summary>
-		/// Получить значение по типу данных.
+		/// To get the value by the data type.
 		/// </summary>
-		/// <typeparam name="T">Тип данных, которым оперирует индикатор.</typeparam>
-		/// <returns>Значение.</returns>
+		/// <typeparam name="T">The data type, operated by indicator.</typeparam>
+		/// <returns>Value.</returns>
 		public override T GetValue<T>()
 		{
 			return base.GetValue<IIndicatorValue>().GetValue<T>();
 		}
 
 		/// <summary>
-		/// Изменить входное значение индикатора новым значением (например, оно получено от другого индикатора).
+		/// To replace the indicator input value by new one (for example it is received from another indicator).
 		/// </summary>
-		/// <typeparam name="T">Тип данных, которым оперирует индикатор.</typeparam>
-		/// <param name="indicator">Индикатор.</param>
-		/// <param name="value">Значение.</param>
-		/// <returns>Измененная копия входного значения.</returns>
+		/// <typeparam name="T">The data type, operated by indicator.</typeparam>
+		/// <param name="indicator">Indicator.</param>
+		/// <param name="value">Value.</param>
+		/// <returns>Replaced copy of the input value.</returns>
 		public override IIndicatorValue SetValue<T>(IIndicator indicator, T value)
 		{
 			throw new NotSupportedException();

@@ -11,7 +11,7 @@ namespace StockSharp.Algo.Indicators
 	using Xceed.Wpf.Toolkit.PropertyGrid.Attributes;
 
 	/// <summary>
-	/// Индекса направленного движения Welles Wilder.
+	/// Welles Wilder Directional Movement Index.
 	/// </summary>
 	[DisplayName("DX")]
 	[DescriptionLoc(LocalizedStrings.Str762Key)]
@@ -40,7 +40,7 @@ namespace StockSharp.Algo.Indicators
 		}
 
 		/// <summary>
-		/// Создать <see cref="DirectionalIndex"/>.
+		/// Initializes a new instance of the <see cref="DirectionalIndex"/>.
 		/// </summary>
 		public DirectionalIndex()
 		{
@@ -49,7 +49,7 @@ namespace StockSharp.Algo.Indicators
 		}
 
 		/// <summary>
-		/// Длина периода.
+		/// Period length.
 		/// </summary>
 		[DisplayNameLoc(LocalizedStrings.Str736Key)]
 		[DescriptionLoc(LocalizedStrings.Str737Key)]
@@ -83,10 +83,10 @@ namespace StockSharp.Algo.Indicators
 		public DiMinus Minus { get; private set; }
 
 		/// <summary>
-		/// Обработать входное значение.
+		/// To handle the input value.
 		/// </summary>
-		/// <param name="input">Входное значение.</param>
-		/// <returns>Результирующее значение.</returns>
+		/// <param name="input">The input value.</param>
+		/// <returns>The resulting value.</returns>
 		protected override IIndicatorValue OnProcess(IIndicatorValue input)
 		{
 			var value = new DxValue(this) { IsFinal = input.IsFinal };
@@ -110,9 +110,9 @@ namespace StockSharp.Algo.Indicators
 		}
 
 		/// <summary>
-		/// Загрузить настройки.
+		/// Load settings.
 		/// </summary>
-		/// <param name="settings">Хранилище настроек.</param>
+		/// <param name="settings">Settings storage.</param>
 		public override void Load(SettingsStorage settings)
 		{
 			base.Load(settings);
@@ -120,9 +120,9 @@ namespace StockSharp.Algo.Indicators
 		}
 
 		/// <summary>
-		/// Сохранить настройки.
+		/// Save settings.
 		/// </summary>
-		/// <param name="settings">Хранилище настроек.</param>
+		/// <param name="settings">Settings storage.</param>
 		public override void Save(SettingsStorage settings)
 		{
 			base.Save(settings);

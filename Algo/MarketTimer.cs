@@ -9,7 +9,7 @@ namespace StockSharp.Algo
 	using StockSharp.Localization;
 
 	/// <summary>
-	/// Таймер, основанный на времени торговой системы.
+	/// The timer, based on trading system time.
 	/// </summary>
 	public class MarketTimer : Disposable
 	{
@@ -21,10 +21,10 @@ namespace StockSharp.Algo
 		private TimeSpan _elapsedTime;
 
 		/// <summary>
-		/// Создать <see cref="MarketTimer"/>.
+		/// Initializes a new instance of the <see cref="MarketTimer"/>.
 		/// </summary>
-		/// <param name="connector">Подключение к торговой системе, из которого будет использоваться событие <see cref="IConnector.MarketTimeChanged"/>.</param>
-		/// <param name="activated">Обработчик таймера.</param>
+		/// <param name="connector">The connection to trading system, from which event <see cref="IConnector.MarketTimeChanged"/> will be used.</param>
+		/// <param name="activated">The timer processor.</param>
 		public MarketTimer(IConnector connector, Action activated)
 		{
 			if (connector == null)
@@ -38,10 +38,10 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Установить интервал.
+		/// To set the interval.
 		/// </summary>
-		/// <param name="interval">Интервал таймера. Если устанавливается значение <see cref="TimeSpan.Zero"/>, то таймер перестает быть периодичным.</param>
-		/// <returns>Таймер.</returns>
+		/// <param name="interval">The timer interval. If <see cref="TimeSpan.Zero"/> value is set, timer stops to be periodical.</param>
+		/// <returns>The timer.</returns>
 		public MarketTimer Interval(TimeSpan interval)
 		{
 			if (interval <= TimeSpan.Zero)
@@ -57,9 +57,9 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Запустить таймер.
+		/// To start the timer.
 		/// </summary>
-		/// <returns>Таймер.</returns>
+		/// <returns>The timer.</returns>
 		public MarketTimer Start()
 		{
 			if (_interval == default(TimeSpan))
@@ -78,9 +78,9 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Остановить таймер.
+		/// To stop the timer.
 		/// </summary>
-		/// <returns>Таймер.</returns>
+		/// <returns>The timer.</returns>
 		public MarketTimer Stop()
 		{
 			lock (_syncLock)
@@ -113,7 +113,7 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Освободить занятые ресурсы.
+		/// Release resources.
 		/// </summary>
 		protected override void DisposeManaged()
 		{

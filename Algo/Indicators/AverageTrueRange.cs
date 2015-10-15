@@ -6,7 +6,7 @@ namespace StockSharp.Algo.Indicators
 	using StockSharp.Localization;
 
 	/// <summary>
-	/// Средний истинный диапазон <see cref="TrueRange"/>.
+	/// The average true range <see cref="AverageTrueRange.TrueRange"/>.
 	/// </summary>
 	[DisplayName("ATR")]
 	[DescriptionLoc(LocalizedStrings.Str758Key)]
@@ -15,7 +15,7 @@ namespace StockSharp.Algo.Indicators
 		private bool _isFormed;
 
 		/// <summary>
-		/// Создать <see cref="AverageTrueRange"/>.
+		/// Initializes a new instance of the <see cref="AverageTrueRange"/>.
 		/// </summary>
 		public AverageTrueRange()
 			: this(new WilderMovingAverage(), new TrueRange())
@@ -23,10 +23,10 @@ namespace StockSharp.Algo.Indicators
 		}
 
 		/// <summary>
-		/// Создать <see cref="AverageTrueRange"/>.
+		/// Initializes a new instance of the <see cref="AverageTrueRange"/>.
 		/// </summary>
-		/// <param name="movingAverage">Скользящая средняя.</param>
-		/// <param name="trueRange">Истинный диапазон.</param>
+		/// <param name="movingAverage">Moving Average.</param>
+		/// <param name="trueRange">True range.</param>
 		public AverageTrueRange(LengthIndicator<decimal> movingAverage, TrueRange trueRange)
 		{
 			if (movingAverage == null)
@@ -40,19 +40,19 @@ namespace StockSharp.Algo.Indicators
 		}
 
 		/// <summary>
-		/// Скользящая средняя.
+		/// Moving Average.
 		/// </summary>
 		[Browsable(false)]
 		public LengthIndicator<decimal> MovingAverage { get; private set; }
 
 		/// <summary>
-		/// Истинный диапазон.
+		/// True range.
 		/// </summary>
 		[Browsable(false)]
 		public TrueRange TrueRange { get; private set; }
 
 		/// <summary>
-		/// Сформирован ли индикатор.
+		/// Whether the indicator is set.
 		/// </summary>
 		public override bool IsFormed
 		{
@@ -60,7 +60,7 @@ namespace StockSharp.Algo.Indicators
 		}
 
 		/// <summary>
-		/// Сбросить состояние индикатора на первоначальное. Метод вызывается каждый раз, когда меняются первоначальные настройки (например, длина периода).
+		/// To reset the indicator status to initial. The method is called each time when initial settings are changed (for example, the length of period).
 		/// </summary>
 		public override void Reset()
 		{
@@ -73,10 +73,10 @@ namespace StockSharp.Algo.Indicators
 		}
 
 		/// <summary>
-		/// Обработать входное значение.
+		/// To handle the input value.
 		/// </summary>
-		/// <param name="input">Входное значение.</param>
-		/// <returns>Результирующее значение.</returns>
+		/// <param name="input">The input value.</param>
+		/// <returns>The resulting value.</returns>
 		protected override IIndicatorValue OnProcess(IIndicatorValue input)
 		{
 			// используем дополнительную переменную IsFormed, 

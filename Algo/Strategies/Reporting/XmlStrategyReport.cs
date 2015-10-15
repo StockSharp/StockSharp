@@ -1,4 +1,4 @@
-﻿namespace StockSharp.Algo.Strategies.Reporting
+namespace StockSharp.Algo.Strategies.Reporting
 {
 	using System;
 	using System.Collections.Generic;
@@ -10,15 +10,15 @@
 	using StockSharp.Algo.Strategies;
 
 	/// <summary>
-	/// Генератор отчета для стратегии в формате xml.
+	/// The report generator for the strategy in the xml format.
 	/// </summary>
 	public class XmlStrategyReport : StrategyReport
 	{
 		/// <summary>
-		/// Создать <see cref="XmlStrategyReport"/>.
+		/// Initializes a new instance of the <see cref="XmlStrategyReport"/>.
 		/// </summary>
-		/// <param name="strategy">Стратегия, для которой необходимо сгенерировать отчет.</param>
-		/// <param name="fileName">Название файла, в котором сгенерируется отчет в формате Xml.</param>
+		/// <param name="strategy">The strategy, requiring the report generation.</param>
+		/// <param name="fileName">The name of the file, in which report in the Xml format will be generated.</param>
 		public XmlStrategyReport(Strategy strategy, string fileName)
 			: this(new[] { strategy }, fileName)
 		{
@@ -27,17 +27,17 @@
 		}
 
 		/// <summary>
-		/// Создать <see cref="XmlStrategyReport"/>.
+		/// Initializes a new instance of the <see cref="XmlStrategyReport"/>.
 		/// </summary>
-		/// <param name="strategies">Стратегии, для которых необходимо сгенерировать отчет.</param>
-		/// <param name="fileName">Название файла, в котором сгенерируется отчет в формате xml.</param>
+		/// <param name="strategies">Strategies, requiring the report generation.</param>
+		/// <param name="fileName">The name of the file, in which report in the xml format will be generated.</param>
 		public XmlStrategyReport(IEnumerable<Strategy> strategies, string fileName)
 			: base(strategies, fileName)
 		{
 		}
 
 		/// <summary>
-		/// Сгенерировать отчет.
+		/// To generate the report.
 		/// </summary>
 		public override void Generate()
 		{

@@ -7,17 +7,17 @@ namespace StockSharp.Algo.Indicators
 	using Xceed.Wpf.Toolkit.PropertyGrid.Attributes;
 
 	/// <summary>
-	/// Аллигатор.
+	/// Alligator.
 	/// </summary>
 	/// <remarks>
-	/// http://ta.mql4.com/indicators/bills/alligator
+	/// http://ta.mql4.com/indicators/bills/alligator.
 	/// </remarks>
 	[DisplayName("Alligator")]
 	[DescriptionLoc(LocalizedStrings.Str837Key)]
 	public class Alligator : BaseComplexIndicator
 	{
 		/// <summary>
-		/// Создать <see cref="Alligator"/>.
+		/// Initializes a new instance of the <see cref="Alligator"/>.
 		/// </summary>
 		public Alligator()
 			: this(new AlligatorLine { Length = 13, Shift = 8 }, new AlligatorLine { Length = 8, Shift = 5 }, new AlligatorLine { Length = 5, Shift = 3 })
@@ -25,11 +25,11 @@ namespace StockSharp.Algo.Indicators
 		}
 
 		/// <summary>
-		/// Создать <see cref="Alligator"/>.
+		/// Initializes a new instance of the <see cref="Alligator"/>.
 		/// </summary>
-		/// <param name="jaw">Челюсть.</param>
-		/// <param name="teeth">Зубы.</param>
-		/// <param name="lips">Губы.</param>
+		/// <param name="jaw">Jaw.</param>
+		/// <param name="teeth">Teeth.</param>
+		/// <param name="lips">Lips.</param>
 		public Alligator(AlligatorLine jaw, AlligatorLine teeth, AlligatorLine lips)
 			: base(jaw, teeth, lips)
 		{
@@ -39,7 +39,7 @@ namespace StockSharp.Algo.Indicators
 		}
 
 		/// <summary>
-		/// Челюсть.
+		/// Jaw.
 		/// </summary>
 		[ExpandableObject]
 		[DisplayName("Jaw")]
@@ -48,7 +48,7 @@ namespace StockSharp.Algo.Indicators
 		public AlligatorLine Jaw { get; private set; }
 
 		/// <summary>
-		/// Зубы.
+		/// Teeth.
 		/// </summary>
 		[ExpandableObject]
 		[DisplayName("Teeth")]
@@ -57,7 +57,7 @@ namespace StockSharp.Algo.Indicators
 		public AlligatorLine Teeth { get; private set; }
 
 		/// <summary>
-		/// Губы.
+		/// Lips.
 		/// </summary>
 		[ExpandableObject]
 		[DisplayName("Lips")]
@@ -66,7 +66,7 @@ namespace StockSharp.Algo.Indicators
 		public AlligatorLine Lips { get; private set; }
 
 		/// <summary>
-		/// Сформирован ли индикатор.
+		/// Whether the indicator is set.
 		/// </summary>
 		public override bool IsFormed { get { return Jaw.IsFormed; } }
 	}

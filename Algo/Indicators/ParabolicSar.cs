@@ -11,10 +11,10 @@ namespace StockSharp.Algo.Indicators
 	using StockSharp.Localization;
 
 	/// <summary>
-	/// Реализация индикатора тренда - Parabolic SAR.
+	/// Trend indicator implementation - Parabolic SAR.
 	/// </summary>
 	/// <remarks>
-	/// http://ta.mql4.com/indicators/trends/parabolic_sar
+	/// http://ta.mql4.com/indicators/trends/parabolic_sar.
 	/// </remarks>
 	[DisplayName("Parabolic SAR")]
 	[DescriptionLoc(LocalizedStrings.Str809Key)]
@@ -33,7 +33,7 @@ namespace StockSharp.Algo.Indicators
 		private decimal _todaySar;
 
 		/// <summary>
-		/// Создать <see cref="ParabolicSar"/>.
+		/// Initializes a new instance of the <see cref="ParabolicSar"/>.
 		/// </summary>
 		public ParabolicSar()
 		{
@@ -43,7 +43,7 @@ namespace StockSharp.Algo.Indicators
 		}
 
 		/// <summary>
-		/// Фактор ускорения.
+		/// Acceleration factor.
 		/// </summary>
 		[DisplayNameLoc(LocalizedStrings.Str810Key)]
 		[DescriptionLoc(LocalizedStrings.Str811Key)]
@@ -51,7 +51,7 @@ namespace StockSharp.Algo.Indicators
 		public decimal Acceleration { get; set; }
 
 		/// <summary>
-		/// Шаг фактора ускорения.
+		/// Acceleration factor step.
 		/// </summary>
 		[DisplayNameLoc(LocalizedStrings.Str812Key)]
 		[DescriptionLoc(LocalizedStrings.Str813Key)]
@@ -59,7 +59,7 @@ namespace StockSharp.Algo.Indicators
 		public decimal AccelerationStep { get; set; }
 
 		/// <summary>
-		/// Максимальный фактор ускорения.
+		/// Maximum acceleration factor.
 		/// </summary>
 		[DisplayNameLoc(LocalizedStrings.MaxKey)]
 		[DescriptionLoc(LocalizedStrings.Str815Key)]
@@ -67,10 +67,10 @@ namespace StockSharp.Algo.Indicators
 		public decimal AccelerationMax { get; set; }
 
 		/// <summary>
-		/// Обработать входное значение.
+		/// To handle the input value.
 		/// </summary>
-		/// <param name="input">Входное значение.</param>
-		/// <returns>Результирующее значение.</returns>
+		/// <param name="input">The input value.</param>
+		/// <returns>The resulting value.</returns>
 		protected override IIndicatorValue OnProcess(IIndicatorValue input)
 		{
 			var candle = input.GetValue<Candle>();
@@ -231,9 +231,9 @@ namespace StockSharp.Algo.Indicators
 		}
 
 		/// <summary>
-		/// Загрузить настройки.
+		/// Load settings.
 		/// </summary>
-		/// <param name="settings">Хранилище настроек.</param>
+		/// <param name="settings">Settings storage.</param>
 		public override void Load(SettingsStorage settings)
 		{
 			base.Load(settings);
@@ -244,9 +244,9 @@ namespace StockSharp.Algo.Indicators
 		}
 
 		/// <summary>
-		/// Сохранить настройки.
+		/// Save settings.
 		/// </summary>
-		/// <param name="settings">Хранилище настроек.</param>
+		/// <param name="settings">Settings storage.</param>
 		public override void Save(SettingsStorage settings)
 		{
 			base.Save(settings);

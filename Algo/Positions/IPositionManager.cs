@@ -1,4 +1,4 @@
-﻿namespace StockSharp.Algo.Positions
+namespace StockSharp.Algo.Positions
 {
 	using System;
 	using System.Collections.Generic;
@@ -6,47 +6,47 @@
 	using StockSharp.BusinessEntities;
 
 	/// <summary>
-	/// Интерфейс для менеджера расчета позиции.
+	/// The interface for the position calculation manager.
 	/// </summary>
 	public interface IPositionManager
 	{
 		/// <summary>
-		/// Суммарное значение позиции.
+		/// The position aggregate value.
 		/// </summary>
 		decimal Position { get; set; }
 
 		/// <summary>
-		/// Позиции, сгруппированные по инструментам и портфелям.
+		/// Positions, grouped by instruments and portfolios.
 		/// </summary>
 		IEnumerable<Position> Positions { get; set; }
 
 		/// <summary>
-		/// Событие появления новой позиций в <see cref="Positions"/>.
+		/// The event of new position occurrence in <see cref="IPositionManager.Positions"/>.
 		/// </summary>
 		event Action<Position> NewPosition;
 
 		/// <summary>
-		/// Событие изменения позиции в <see cref="Positions"/>.
+		/// The event of position change in <see cref="IPositionManager.Positions"/>.
 		/// </summary>
 		event Action<Position> PositionChanged;
 
 		/// <summary>
-		/// Обнулить позицию.
+		/// To null position.
 		/// </summary>
 		void Reset();
 
 		/// <summary>
-		/// Рассчитать позицию по заявке.
+		/// To calculate position by the order.
 		/// </summary>
-		/// <param name="order">Заявка.</param>
-		/// <returns>Позиция по заявке.</returns>
+		/// <param name="order">Order.</param>
+		/// <returns>The position by the order.</returns>
 		decimal ProcessOrder(Order order);
 
 		/// <summary>
-		/// Рассчитать позицию по сделке.
+		/// To calculate the position by the trade.
 		/// </summary>
-		/// <param name="trade">Сделка.</param>
-		/// <returns>Позиция по сделке.</returns>
+		/// <param name="trade">Trade.</param>
+		/// <returns>The position by the trade.</returns>
 		decimal ProcessMyTrade(MyTrade trade);
 	}
 }

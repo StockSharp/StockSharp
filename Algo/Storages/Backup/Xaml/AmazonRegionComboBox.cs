@@ -3,12 +3,12 @@ namespace StockSharp.Algo.Storages.Backup.Xaml
 	using System.Windows.Controls;
 
 	/// <summary>
-	/// Выпадающий список для выбора региона AWS.
+	/// The drop-down list to select the AWS region.
 	/// </summary>
 	public class AmazonRegionComboBox : ComboBox
 	{
 		/// <summary>
-		/// Создать <see cref="AmazonRegionComboBox"/>.
+		/// Initializes a new instance of the <see cref="AmazonRegionComboBox"/>.
 		/// </summary>
 		public AmazonRegionComboBox()
 		{

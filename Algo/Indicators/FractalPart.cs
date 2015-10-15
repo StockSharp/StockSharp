@@ -1,24 +1,24 @@
-﻿namespace StockSharp.Algo.Indicators
+namespace StockSharp.Algo.Indicators
 {
 	using Ecng.Common;
 
 	/// <summary>
-	/// Часть <see cref="Fractals"/>.
+	/// Part <see cref="Fractals"/>.
 	/// </summary>
 	public class FractalPart : BaseIndicator
 	{
 		/// <summary>
-		/// Создать <see cref="FractalPart"/>.
+		/// Initializes a new instance of the <see cref="FractalPart"/>.
 		/// </summary>
 		public FractalPart()
 		{
 		}
 
 		/// <summary>
-		/// Обработать входное значение.
+		/// To handle the input value.
 		/// </summary>
-		/// <param name="input">Входное значение.</param>
-		/// <returns>Результирующее значение.</returns>
+		/// <param name="input">The input value.</param>
+		/// <returns>The resulting value.</returns>
 		protected override IIndicatorValue OnProcess(IIndicatorValue input)
 		{
 			if (input.IsFinal)

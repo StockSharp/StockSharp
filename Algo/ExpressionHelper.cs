@@ -13,7 +13,7 @@ namespace StockSharp.Algo
 	using StockSharp.BusinessEntities;
 
 	/// <summary>
-	/// Вспомогательный класс для работы с <see cref="ExpressionIndexSecurity"/>.
+	/// Extension class for <see cref="ExpressionIndexSecurity"/>.
 	/// </summary>
 	[CLSCompliant(false)]
 	public static class ExpressionHelper
@@ -29,10 +29,10 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Экранировать математическую формулу от идентификаторов инструментов <see cref="Security.Id"/>.
+		/// To screen off mathematic formula from instruments identifiers <see cref="Security.Id"/>.
 		/// </summary>
-		/// <param name="expression">Исходные текст.</param>
-		/// <returns>Экранированный текст.</returns>
+		/// <param name="expression">The source text.</param>
+		/// <returns>The screened text.</returns>
 		public static string Encode(string expression)
 		{
 			foreach (var secId in ExpressionHelper.GetSecurityIds(expression).Distinct(StringComparer.CurrentCultureIgnoreCase))
@@ -44,10 +44,10 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Получить все <see cref="Security.Id"/> из математической формулы.
+		/// To get all <see cref="Security.Id"/> from mathematic formula.
 		/// </summary>
-		/// <param name="expression">Математическая формула.</param>
-		/// <returns>Идентификаторы инструментов.</returns>
+		/// <param name="expression">Mathematical formula.</param>
+		/// <returns>IDs securities.</returns>
 		public static IEnumerable<string> GetSecurityIds(this Expression expression)
 		{
 			if (expression == null)

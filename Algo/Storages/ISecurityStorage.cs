@@ -1,4 +1,4 @@
-﻿namespace StockSharp.Algo.Storages
+namespace StockSharp.Algo.Storages
 {
 	using System;
 	using System.Collections.Generic;
@@ -6,7 +6,7 @@
 	using StockSharp.BusinessEntities;
 
 	/// <summary>
-	/// Интерфейс для доступа к хранилищу информации об инструментах.
+	/// The interface for access to the storage of information on instruments.
 	/// </summary>
 	public interface ISecurityStorage : ISecurityProvider
 	{
@@ -16,27 +16,27 @@
 		event Action<Security> NewSecurity; 
 
 		/// <summary>
-		/// Сохранить инструмент.
+		/// Save security.
 		/// </summary>
-		/// <param name="security">Инструмент.</param>
+		/// <param name="security">Security.</param>
 		void Save(Security security);
 
 		/// <summary>
-		/// Удалить инструмент.
+		/// Delete security.
 		/// </summary>
-		/// <param name="security">Инструмент.</param>
+		/// <param name="security">Security.</param>
 		void Delete(Security security);
 
 		/// <summary>
-		/// Удалить инструменты по критерию.
+		/// To delete instruments by the criterion.
 		/// </summary>
-		/// <param name="criteria">Критерий.</param>
+		/// <param name="criteria">The criterion.</param>
 		void DeleteBy(Security criteria);
 
 		/// <summary>
-		/// Получить идентификаторы сохраненных инструментов.
+		/// To get identifiers of saved instruments.
 		/// </summary>
-		/// <returns>Идентификаторы инструментов.</returns>
+		/// <returns>IDs securities.</returns>
 		IEnumerable<string> GetSecurityIds();
 	}
 }

@@ -14,7 +14,7 @@ namespace StockSharp.Algo.Candles
 	using StockSharp.Localization;
 
 	/// <summary>
-	/// Стандартный контейнер, хранящий данные свечек.
+	/// The standard container that stores candles data.
 	/// </summary>
 	public class CandleManagerContainer : Disposable, ICandleManagerContainer
 	{
@@ -129,7 +129,7 @@ namespace StockSharp.Algo.Candles
 		private long _maxCandlesKeepTime;
 		
 		/// <summary>
-		/// Создать <see cref="CandleManagerContainer"/>.
+		/// Initializes a new instance of the <see cref="CandleManagerContainer"/>.
 		/// </summary>
 		public CandleManagerContainer()
 		{
@@ -139,9 +139,11 @@ namespace StockSharp.Algo.Candles
 		private TimeSpan _candlesKeepTime;
 
 		/// <summary>
-		/// Время хранения свечек в памяти. По-умолчанию равно 2-ум дням.
+		/// Candles storage time in memory. The default is 2 days.
 		/// </summary>
-		/// <remarks>Если значение установлено в <see cref="TimeSpan.Zero"/>, то свечи не будут удаляться.</remarks>
+		/// <remarks>
+		/// If the value is set to <see cref="TimeSpan.Zero"/> then candles will not be deleted.
+		/// </remarks>
 		public TimeSpan CandlesKeepTime
 		{
 			get { return _candlesKeepTime; }
@@ -158,11 +160,11 @@ namespace StockSharp.Algo.Candles
 		}
 
 		/// <summary>
-		/// Добавить свечу для серии.
+		/// To add a candle for the series.
 		/// </summary>
-		/// <param name="series">Серия свечек.</param>
-		/// <param name="candle">Свеча.</param>
-		/// <returns><see langword="true"/>, если свеча не ранее добавлена, иначе, <see langword="false"/>.</returns>
+		/// <param name="series">Candles series.</param>
+		/// <param name="candle">Candle.</param>
+		/// <returns><see langword="true" /> if the candle is not added previously, otherwise, <see langword="false" />.</returns>
 		public bool AddCandle(CandleSeries series, Candle candle)
 		{
 			var info = GetInfo(series);
@@ -174,11 +176,11 @@ namespace StockSharp.Algo.Candles
 		}
 
 		/// <summary>
-		/// Получить для серии все ассоциированные с ней свечи на период <paramref name="time"/>.
+		/// To get all associated with the series candles for the <paramref name="time" /> period.
 		/// </summary>
-		/// <param name="series">Серия свечек.</param>
-		/// <param name="time">Период свечи.</param>
-		/// <returns>Свечи.</returns>
+		/// <param name="series">Candles series.</param>
+		/// <param name="time">The candle period.</param>
+		/// <returns>Candles.</returns>
 		public IEnumerable<Candle> GetCandles(CandleSeries series, DateTimeOffset time)
 		{
 			var info = GetInfo(series);
@@ -186,10 +188,10 @@ namespace StockSharp.Algo.Candles
 		}
 
 		/// <summary>
-		/// Получить для серии все ассоциированные с ней свечи.
+		/// To get all associated with the series candles.
 		/// </summary>
-		/// <param name="series">Серия свечек.</param>
-		/// <returns>Свечи.</returns>
+		/// <param name="series">Candles series.</param>
+		/// <returns>Candles.</returns>
 		public IEnumerable<Candle> GetCandles(CandleSeries series)
 		{
 			var info = GetInfo(series);
@@ -197,11 +199,11 @@ namespace StockSharp.Algo.Candles
 		}
 
 		/// <summary>
-		/// Получить свечу по индексу.
+		/// To get a candle by the index.
 		/// </summary>
-		/// <param name="series">Серия свечек.</param>
-		/// <param name="candleIndex">Порядковый номер свечи с конца.</param>
-		/// <returns>Найденная свеча. Если свечи не существует, то будет возвращено <see langword="null"/>.</returns>
+		/// <param name="series">Candles series.</param>
+		/// <param name="candleIndex">The candle's position number from the end.</param>
+		/// <returns>The found candle. If the candle does not exist, then <see langword="null" /> will be returned.</returns>
 		public Candle GetCandle(CandleSeries series, int candleIndex)
 		{
 			if (candleIndex < 0)
@@ -212,11 +214,11 @@ namespace StockSharp.Algo.Candles
 		}
 
 		/// <summary>
-		/// Получить свечи по серии и диапазону дат.
+		/// To get candles by the series and date range.
 		/// </summary>
-		/// <param name="series">Серия свечек.</param>
-		/// <param name="timeRange">Диапазон дат, в которые должны входить свечи. Учитывается значение <see cref="Candle.OpenTime"/>.</param>
-		/// <returns>Найденные свечи.</returns>
+		/// <param name="series">Candles series.</param>
+		/// <param name="timeRange">The date range which should include candles. The <see cref="Candle.OpenTime"/> value is taken into consideration.</param>
+		/// <returns>Found candles.</returns>
 		public IEnumerable<Candle> GetCandles(CandleSeries series, Range<DateTimeOffset> timeRange)
 		{
 			return GetCandles(series)
@@ -225,11 +227,11 @@ namespace StockSharp.Algo.Candles
 		}
 
 		/// <summary>
-		/// Получить свечи по серии и общему количеству.
+		/// To get candles by the series and the total number.
 		/// </summary>
-		/// <param name="series">Серия свечек.</param>
-		/// <param name="candleCount">Количество свечек, которое необходимо вернуть.</param>
-		/// <returns>Найденные свечи.</returns>
+		/// <param name="series">Candles series.</param>
+		/// <param name="candleCount">The number of candles that should be returned.</param>
+		/// <returns>Found candles.</returns>
 		public IEnumerable<Candle> GetCandles(CandleSeries series, int candleCount)
 		{
 			if (candleCount <= 0)
@@ -242,10 +244,10 @@ namespace StockSharp.Algo.Candles
 		}
 
 		/// <summary>
-		/// Получить количество свечек.
+		/// To get the number of candles.
 		/// </summary>
-		/// <param name="series">Серия свечек.</param>
-		/// <returns>Количество свечек.</returns>
+		/// <param name="series">Candles series.</param>
+		/// <returns>Number of candles.</returns>
 		public int GetCandleCount(CandleSeries series)
 		{
 			var info = GetInfo(series);
@@ -253,11 +255,11 @@ namespace StockSharp.Algo.Candles
 		}
 
 		/// <summary>
-		/// Известить контейнер для начале получения свечек для серии.
+		/// To notify the container about the start of the candles getting for the series.
 		/// </summary>
-		/// <param name="series">Серия свечек.</param>
-		/// <param name="from">Начальная дата, с которой будут получаться свечи.</param>
-		/// <param name="to">Конечная дата, до которой будут получаться свечи.</param>
+		/// <param name="series">Candles series.</param>
+		/// <param name="from">The initial date from which the candles will be get.</param>
+		/// <param name="to">The final date by which the candles will be get.</param>
 		public void Start(CandleSeries series, DateTimeOffset from, DateTimeOffset to)
 		{
 			if (series == null)
@@ -276,7 +278,7 @@ namespace StockSharp.Algo.Candles
 		}
 
 		/// <summary>
-		/// Освободить занятые ресурсы.
+		/// Release resources.
 		/// </summary>
 		protected override void DisposeManaged()
 		{

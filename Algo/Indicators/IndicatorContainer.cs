@@ -9,14 +9,14 @@ namespace StockSharp.Algo.Indicators
 	using StockSharp.Localization;
 
 	/// <summary>
-	/// Контейнер, хранящий данные индикаторов.
+	/// The container, storing indicators data.
 	/// </summary>
 	public class IndicatorContainer : IIndicatorContainer
 	{
 		private readonly FixedSynchronizedList<Tuple<IIndicatorValue, IIndicatorValue>> _values = new FixedSynchronizedList<Tuple<IIndicatorValue, IIndicatorValue>>();
 
 		/// <summary>
-		/// Максимальное количество значений индикаторов.
+		/// The maximal number of indicators values.
 		/// </summary>
 		public int MaxValueCount
 		{
@@ -25,7 +25,7 @@ namespace StockSharp.Algo.Indicators
 		}
 
 		/// <summary>
-		/// Текущее количество сохраненных значений.
+		/// The current number of saved values.
 		/// </summary>
 		public int Count
 		{
@@ -33,29 +33,29 @@ namespace StockSharp.Algo.Indicators
 		}
 
 		/// <summary>
-		/// Добавить новые значения.
+		/// Add new values.
 		/// </summary>
-		/// <param name="input">Входное значение индикатора.</param>
-		/// <param name="result">Результирующее значение индикатора.</param>
+		/// <param name="input">The input value of the indicator.</param>
+		/// <param name="result">The resulting value of the indicator.</param>
 		public virtual void AddValue(IIndicatorValue input, IIndicatorValue result)
 		{
 			_values.Add(Tuple.Create(input, result));
 		}
 
 		/// <summary>
-		/// Получить все значения индикатора.
+		/// To get all values of the identifier.
 		/// </summary>
-		/// <returns>Все значения индикатора. Пустое множество, если значений нет.</returns>
+		/// <returns>All values of the identifier. The empty set, if there are no values.</returns>
 		public virtual IEnumerable<Tuple<IIndicatorValue, IIndicatorValue>> GetValues()
 		{
 			return _values.SyncGet(c => c.Reverse().ToArray());
 		}
 
 		/// <summary>
-		/// Получить значения индикатора по индексу.
+		/// To get the indicator value by the index.
 		/// </summary>
-		/// <param name="index">Порядковый номер значения с конца.</param>
-		/// <returns>Входное и результирующие значения индикатора.</returns>
+		/// <param name="index">The sequential number of value from the end.</param>
+		/// <returns>Input and resulting values of the indicator.</returns>
 		public virtual Tuple<IIndicatorValue, IIndicatorValue> GetValue(int index)
 		{
 			if (index < 0)
@@ -71,7 +71,7 @@ namespace StockSharp.Algo.Indicators
 		}
 
 		/// <summary>
-		/// Удалить все значения индикатора.
+		/// To delete all values of the indicator.
 		/// </summary>
 		public virtual void ClearValues()
 		{

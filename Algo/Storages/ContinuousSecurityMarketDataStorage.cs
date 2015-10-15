@@ -15,15 +15,15 @@ namespace StockSharp.Algo.Storages
 	using StockSharp.Messages;
 
 	/// <summary>
-	/// Интерфейс, описывающий хранилище маркет-данных для непрерывного инструмента.
+	/// The interface, describing the storage of market-date of continuous instrument.
 	/// </summary>
 	public interface IContinuousSecurityMarketDataStorage
 	{
 		/// <summary>
-		/// Получить хранилище для составного инструмента.
+		/// To get storage for the composite instrument.
 		/// </summary>
-		/// <param name="date">Дата.</param>
-		/// <returns>Хранилище составного инструмента.</returns>
+		/// <param name="date">Date.</param>
+		/// <returns>The storage of the composite instrument.</returns>
 		IMarketDataStorage GetStorage(DateTime date);
 	}
 
@@ -114,9 +114,9 @@ namespace StockSharp.Algo.Storages
 		}
 
 		/// <summary>
-		/// Сохранить маркет-данные в хранилище.
+		/// To save market data in storage.
 		/// </summary>
-		/// <param name="data">Маркет-данные.</param>
+		/// <param name="data">Market data.</param>
 		public void Save(IEnumerable<T> data)
 		{
 			foreach (var group in data.GroupBy(_getSecurity))
@@ -126,9 +126,9 @@ namespace StockSharp.Algo.Storages
 		}
 
 		/// <summary>
-		/// Удалить маркет-данные из хранилища.
+		/// To delete market data from storage.
 		/// </summary>
-		/// <param name="data">Маркет-данные, которые необходимо удалить.</param>
+		/// <param name="data">Market data to be deleted.</param>
 		public void Delete(IEnumerable<T> data)
 		{
 			foreach (var group in data.GroupBy(d => _getTime(d).Date))
@@ -163,10 +163,10 @@ namespace StockSharp.Algo.Storages
 		}
 
 		/// <summary>
-		/// Загрузить данные.
+		/// To load data.
 		/// </summary>
-		/// <param name="date">Дата, для которой необходимо загрузить данные.</param>
-		/// <returns>Данные. Если данных не существует, то будет возвращено пустое множество.</returns>
+		/// <param name="date">Date, for which data shall be loaded.</param>
+		/// <returns>Data. If there is no data, the empty set will be returned.</returns>
 		public IEnumerableEx<T> Load(DateTime date)
 		{
 			return GetStorage(date).Load(date);

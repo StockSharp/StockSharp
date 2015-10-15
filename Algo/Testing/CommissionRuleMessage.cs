@@ -1,15 +1,15 @@
-﻿namespace StockSharp.Algo.Testing
+namespace StockSharp.Algo.Testing
 {
 	using StockSharp.Algo.Commissions;
 	using StockSharp.Messages;
 
 	/// <summary>
-	/// Сообщение, содержащее в себе информацию о правиле расчета комиссии.
+	/// The message, containing information on the commission calculation rule.
 	/// </summary>
 	public class CommissionRuleMessage : Message
 	{
 		/// <summary>
-		/// Создать <see cref="CommissionRuleMessage"/>.
+		/// Initializes a new instance of the <see cref="CommissionRuleMessage"/>.
 		/// </summary>
 		public CommissionRuleMessage()
 			: base(ExtendedMessageTypes.CommissionRule)
@@ -17,12 +17,12 @@
 		}
 
 		/// <summary>
-		/// Правило вычисления комиссии.
+		/// The commission calculating rule.
 		/// </summary>
 		public CommissionRule Rule { get; set; }
 
 		/// <summary>
-		/// Имя портфеля. Если оно задано, то <see cref="Rule"/> применяется к конктреному портфелю.
+		/// The portfolio name. If it is given, than <see cref="CommissionRuleMessage.Rule"/> is applied to specific portfolio.
 		/// </summary>
 		public string PortfolioName { get; set; }
 	}

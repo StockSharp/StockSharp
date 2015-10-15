@@ -1,4 +1,4 @@
-﻿namespace StockSharp.Algo.Export.Database.DbProviders
+namespace StockSharp.Algo.Export.Database.DbProviders
 {
 	using System;
 	using System.Collections.Generic;
@@ -36,7 +36,7 @@
 		}
 
 		/// <summary>
-		/// Проверять уникальность данных в базе данных. Влияет на производительность.
+		/// To check uniqueness of data in the database. It effects performance.
 		/// </summary>
 		public bool CheckUnique { get; set; }
 

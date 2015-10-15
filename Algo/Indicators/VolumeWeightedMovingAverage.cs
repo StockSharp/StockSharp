@@ -6,11 +6,10 @@ namespace StockSharp.Algo.Indicators
 	using StockSharp.Localization;
 
 	/// <summary>
-	/// Взвешенная по объему скользящая средняя.
+	/// Volume weighted moving average.
 	/// </summary>
 	/// <remarks>
-	/// http://www2.wealth-lab.com/WL5Wiki/VMA.ashx
-	/// http://stockcharts.com/school/doku.php?id=chart_school:technical_indicators:vwap_intraday      
+	/// http://www2.wealth-lab.com/WL5Wiki/VMA.ashx http://stockcharts.com/school/doku.php?id=chart_school:technical_indicators:vwap_intraday.
 	/// </remarks>
 	[DisplayName("VMA")]
 	[DescriptionLoc(LocalizedStrings.Str823Key)]
@@ -23,7 +22,7 @@ namespace StockSharp.Algo.Indicators
 		private readonly Sum _denominator = new Sum();
 
 		/// <summary>
-		/// Создать индикатор <see cref="VolumeWeightedMovingAverage"/>.
+		/// To create the indicator <see cref="VolumeWeightedMovingAverage"/>.
 		/// </summary>
 		public VolumeWeightedMovingAverage()
 		{
@@ -31,7 +30,7 @@ namespace StockSharp.Algo.Indicators
 		}
 
 		/// <summary>
-		/// Сбросить состояние индикатора на первоначальное. Метод вызывается каждый раз, когда меняются первоначальные настройки (например, длина периода).
+		/// To reset the indicator status to initial. The method is called each time when initial settings are changed (for example, the length of period).
 		/// </summary>
 		public override void Reset()
 		{
@@ -40,7 +39,7 @@ namespace StockSharp.Algo.Indicators
 		}
 
 		/// <summary>
-		/// Сформирован ли индикатор.
+		/// Whether the indicator is set.
 		/// </summary>
 		public override bool IsFormed
 		{
@@ -48,10 +47,10 @@ namespace StockSharp.Algo.Indicators
 		}
 
 		/// <summary>
-		/// Обработать входное значение.
+		/// To handle the input value.
 		/// </summary>
-		/// <param name="input">Входное значение.</param>
-		/// <returns>Результирующее значение.</returns>
+		/// <param name="input">The input value.</param>
+		/// <returns>The resulting value.</returns>
 		protected override IIndicatorValue OnProcess(IIndicatorValue input)
 		{
 			var candle = input.GetValue<Candle>();

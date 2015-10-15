@@ -8,54 +8,54 @@ namespace StockSharp.Algo.Storages
 	using Ecng.Collections;
 
 	/// <summary>
-	/// Сериализатор.
+	/// The serializer.
 	/// </summary>
 	public interface IMarketDataSerializer
 	{
 		/// <summary>
-		/// Создать пустую мета-информацию.
+		/// To create empty meta-information.
 		/// </summary>
-		/// <param name="date">Дата.</param>
-		/// <returns>Мета-информация о данных за один день.</returns>
+		/// <param name="date">Date.</param>
+		/// <returns>Meta-information on data for one day.</returns>
 		IMarketDataMetaInfo CreateMetaInfo(DateTime date);
 
 		/// <summary>
-		/// Преобразовать данные в поток байтов.
+		/// Cast data into stream.
 		/// </summary>
-		/// <param name="stream">Поток данных.</param>
-		/// <param name="data">Данные.</param>
-		/// <param name="metaInfo">Мета-информация о данных за один день.</param>
+		/// <param name="stream">Data stream.</param>
+		/// <param name="data">Data.</param>
+		/// <param name="metaInfo">Meta-information on data for one day.</param>
 		void Serialize(Stream stream, IEnumerable data, IMarketDataMetaInfo metaInfo);
 
 		/// <summary>
-		/// Загрузить данные из потока.
+		/// To load data from the stream.
 		/// </summary>
-		/// <param name="stream">Поток данных.</param>
-		/// <param name="metaInfo">Мета-информация о данных за один день.</param>
-		/// <returns>Данные.</returns>
+		/// <param name="stream">Data stream.</param>
+		/// <param name="metaInfo">Meta-information on data for one day.</param>
+		/// <returns>Data.</returns>
 		IEnumerableEx Deserialize(Stream stream, IMarketDataMetaInfo metaInfo);
 	}
 
 	/// <summary>
-	/// Сериализатор.
+	/// The serializer.
 	/// </summary>
-	/// <typeparam name="TData">Тип данных.</typeparam>
+	/// <typeparam name="TData">Data type.</typeparam>
 	public interface IMarketDataSerializer<TData> : IMarketDataSerializer
 	{
 		/// <summary>
-		/// Преобразовать данные в поток байтов.
+		/// Cast data into stream.
 		/// </summary>
-		/// <param name="stream">Поток данных.</param>
-		/// <param name="data">Данные.</param>
-		/// <param name="metaInfo">Мета-информация о данных за один день.</param>
+		/// <param name="stream">Data stream.</param>
+		/// <param name="data">Data.</param>
+		/// <param name="metaInfo">Meta-information on data for one day.</param>
 		void Serialize(Stream stream, IEnumerable<TData> data, IMarketDataMetaInfo metaInfo);
 
 		/// <summary>
-		/// Загрузить данные из потока.
+		/// To load data from the stream.
 		/// </summary>
-		/// <param name="stream">Поток.</param>
-		/// <param name="metaInfo">Мета-информация о данных за один день.</param>
-		/// <returns>Данные.</returns>
+		/// <param name="stream">The stream.</param>
+		/// <param name="metaInfo">Meta-information on data for one day.</param>
+		/// <returns>Data.</returns>
 		new IEnumerableEx<TData> Deserialize(Stream stream, IMarketDataMetaInfo metaInfo);
 	}
 }

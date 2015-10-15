@@ -1,9 +1,9 @@
-﻿namespace StockSharp.Algo.Indicators
+namespace StockSharp.Algo.Indicators
 {
 	using StockSharp.Algo.Candles;
 
 	/// <summary>
-	/// Часть индикатора <see cref="DirectionalIndex"/>.
+	/// The part of the indicator <see cref="DirectionalIndex"/>.
 	/// </summary>
 	public abstract class DiPart : LengthIndicator<decimal>
 	{
@@ -13,7 +13,7 @@
 		private bool _isFormed;
 
 		/// <summary>
-		/// Инициализировать <see cref="DiPart"/>.
+		/// Initialize <see cref="DiPart"/>.
 		/// </summary>
 		protected DiPart()
 		{
@@ -24,7 +24,7 @@
 		}
 
 		/// <summary>
-		/// Сбросить состояние индикатора на первоначальное. Метод вызывается каждый раз, когда меняются первоначальные настройки (например, длина периода).
+		/// To reset the indicator status to initial. The method is called each time when initial settings are changed (for example, the length of period).
 		/// </summary>
 		public override void Reset()
 		{
@@ -38,7 +38,7 @@
 		}
 
 		/// <summary>
-		/// Сформирован ли индикатор.
+		/// Whether the indicator is set.
 		/// </summary>
 		public override bool IsFormed
 		{
@@ -46,10 +46,10 @@
 		}
 
 		/// <summary>
-		/// Обработать входное значение.
+		/// To handle the input value.
 		/// </summary>
-		/// <param name="input">Входное значение.</param>
-		/// <returns>Результирующее значение.</returns>
+		/// <param name="input">The input value.</param>
+		/// <returns>The resulting value.</returns>
 		protected override IIndicatorValue OnProcess(IIndicatorValue input)
 		{
 			decimal? result = null;
@@ -79,11 +79,11 @@
 		}
 
 		/// <summary>
-		/// Получить значение части.
+		/// To get the part value.
 		/// </summary>
-		/// <param name="current">Текущая свеча.</param>
-		/// <param name="prev">Предыдущая свеча.</param>
-		/// <returns>Значение.</returns>
+		/// <param name="current">The current candle.</param>
+		/// <param name="prev">The previous candle.</param>
+		/// <returns>Value.</returns>
 		protected abstract decimal GetValue(Candle current, Candle prev);
 	}
 }

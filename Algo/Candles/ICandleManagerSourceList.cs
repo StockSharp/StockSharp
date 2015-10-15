@@ -1,11 +1,11 @@
-﻿namespace StockSharp.Algo.Candles
+namespace StockSharp.Algo.Candles
 {
 	using System.Collections.Generic;
 
 	using Ecng.Collections;
 
 	/// <summary>
-	/// Коллекция источников свечек.
+	/// The candles sources collection.
 	/// </summary>
 	public interface ICandleManagerSourceList : IList<ICandleManagerSource>, ISynchronizedCollection
 	{

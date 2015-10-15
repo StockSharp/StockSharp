@@ -13,13 +13,13 @@ namespace StockSharp.Algo.Commissions
 	using StockSharp.Localization;
 
 	/// <summary>
-	/// Правило вычисления комиссии.
+	/// The commission calculating rule.
 	/// </summary>
 	[DataContract]
 	public abstract class CommissionRule : NotifiableObject, ICommissionRule
 	{
 		/// <summary>
-		/// Инициализировать <see cref="CommissionRule"/>.
+		/// Initialize <see cref="CommissionRule"/>.
 		/// </summary>
 		protected CommissionRule()
 		{
@@ -28,7 +28,7 @@ namespace StockSharp.Algo.Commissions
 		private Unit _value = new Unit();
 
 		/// <summary>
-		/// Значение комиссии.
+		/// Commission value.
 		/// </summary>
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.Str159Key)]
@@ -48,7 +48,7 @@ namespace StockSharp.Algo.Commissions
 		}
 
 		/// <summary>
-		/// Суммарное значение комиссии.
+		/// Total commission.
 		/// </summary>
 		[Browsable(false)]
 		public decimal Commission { get; private set; }
@@ -56,7 +56,7 @@ namespace StockSharp.Algo.Commissions
 		private string _title;
 
 		/// <summary>
-		/// Заголовок.
+		/// Header.
 		/// </summary>
 		[Browsable(false)]
 		public string Title
@@ -70,7 +70,7 @@ namespace StockSharp.Algo.Commissions
 		}
 
 		/// <summary>
-		/// Сбросить состояние.
+		/// To reset the state.
 		/// </summary>
 		public virtual void Reset()
 		{
@@ -78,10 +78,10 @@ namespace StockSharp.Algo.Commissions
 		}
 
 		/// <summary>
-		/// Рассчитать комиссию.
+		/// To calculate commission.
 		/// </summary>
-		/// <param name="message">Сообщение, содержащее информацию по заявке или собственной сделке.</param>
-		/// <returns>Комиссия. Если комиссию рассчитать невозможно, то будет возвращено <see langword="null"/>.</returns>
+		/// <param name="message">The message containing the information about the order or own trade.</param>
+		/// <returns>The commission. If the commission can not be calculated then <see langword="null" /> will be returned.</returns>
 		public decimal? ProcessExecution(ExecutionMessage message)
 		{
 			var commission = OnProcessExecution(message);
@@ -93,25 +93,25 @@ namespace StockSharp.Algo.Commissions
 		}
 
 		/// <summary>
-		/// Рассчитать комиссию.
+		/// To calculate commission.
 		/// </summary>
-		/// <param name="message">Сообщение, содержащее информацию по заявке или собственной сделке.</param>
-		/// <returns>Комиссия. Если комиссию рассчитать невозможно, то будет возвращено <see langword="null"/>.</returns>
+		/// <param name="message">The message containing the information about the order or own trade.</param>
+		/// <returns>The commission. If the commission can not be calculated then <see langword="null" /> will be returned.</returns>
 		protected abstract decimal? OnProcessExecution(ExecutionMessage message);
 
 		/// <summary>
-		/// Загрузить настройки.
+		/// Load settings.
 		/// </summary>
-		/// <param name="storage">Хранилище.</param>
+		/// <param name="storage">Storage.</param>
 		public virtual void Load(SettingsStorage storage)
 		{
 			Value = storage.GetValue<Unit>("Value");
 		}
 
 		/// <summary>
-		/// Сохранить настройки.
+		/// Save settings.
 		/// </summary>
-		/// <param name="storage">Хранилище.</param>
+		/// <param name="storage">Storage.</param>
 		public virtual void Save(SettingsStorage storage)
 		{
 			storage.SetValue("Value", Value);
@@ -119,17 +119,17 @@ namespace StockSharp.Algo.Commissions
 	}
 
 	/// <summary>
-	/// Комиссия за заявку.
+	/// Order commission.
 	/// </summary>
 	[DisplayNameLoc(LocalizedStrings.Str504Key)]
 	[DescriptionLoc(LocalizedStrings.Str660Key)]
 	public class CommissionPerOrderRule : CommissionRule
 	{
 		/// <summary>
-		/// Рассчитать комиссию.
+		/// To calculate commission.
 		/// </summary>
-		/// <param name="message">Сообщение, содержащее информацию по заявке или собственной сделке.</param>
-		/// <returns>Комиссия. Если комиссию рассчитать невозможно, то будет возвращено <see langword="null"/>.</returns>
+		/// <param name="message">The message containing the information about the order or own trade.</param>
+		/// <returns>The commission. If the commission can not be calculated then <see langword="null" /> will be returned.</returns>
 		protected override decimal? OnProcessExecution(ExecutionMessage message)
 		{
 			if (message.ExecutionType == ExecutionTypes.Order)
@@ -140,17 +140,17 @@ namespace StockSharp.Algo.Commissions
 	}
 
 	/// <summary>
-	/// Комиссия за сделку.
+	/// Trade commission.
 	/// </summary>
 	[DisplayNameLoc(LocalizedStrings.Str506Key)]
 	[DescriptionLoc(LocalizedStrings.Str661Key)]
 	public class CommissionPerTradeRule : CommissionRule
 	{
 		/// <summary>
-		/// Рассчитать комиссию.
+		/// To calculate commission.
 		/// </summary>
-		/// <param name="message">Сообщение, содержащее информацию по заявке или собственной сделке.</param>
-		/// <returns>Комиссия. Если комиссию рассчитать невозможно, то будет возвращено <see langword="null"/>.</returns>
+		/// <param name="message">The message containing the information about the order or own trade.</param>
+		/// <returns>The commission. If the commission can not be calculated then <see langword="null" /> will be returned.</returns>
 		protected override decimal? OnProcessExecution(ExecutionMessage message)
 		{
 			if (message.ExecutionType == ExecutionTypes.Trade)
@@ -161,17 +161,17 @@ namespace StockSharp.Algo.Commissions
 	}
 
 	/// <summary>
-	/// Комиссия за объем в заявке.
+	/// Order volume commission.
 	/// </summary>
 	[DisplayNameLoc(LocalizedStrings.Str662Key)]
 	[DescriptionLoc(LocalizedStrings.Str663Key)]
 	public class CommissionPerOrderVolumeRule : CommissionRule
 	{
 		/// <summary>
-		/// Рассчитать комиссию.
+		/// To calculate commission.
 		/// </summary>
-		/// <param name="message">Сообщение, содержащее информацию по заявке или собственной сделке.</param>
-		/// <returns>Комиссия. Если комиссию рассчитать невозможно, то будет возвращено <see langword="null"/>.</returns>
+		/// <param name="message">The message containing the information about the order or own trade.</param>
+		/// <returns>The commission. If the commission can not be calculated then <see langword="null" /> will be returned.</returns>
 		protected override decimal? OnProcessExecution(ExecutionMessage message)
 		{
 			if (message.ExecutionType == ExecutionTypes.Order)
@@ -182,17 +182,17 @@ namespace StockSharp.Algo.Commissions
 	}
 
 	/// <summary>
-	/// Комиссия за объем в сделке.
+	/// Trade volume commission.
 	/// </summary>
 	[DisplayNameLoc(LocalizedStrings.Str664Key)]
 	[DescriptionLoc(LocalizedStrings.Str665Key)]
 	public class CommissionPerTradeVolumeRule : CommissionRule
 	{
 		/// <summary>
-		/// Рассчитать комиссию.
+		/// To calculate commission.
 		/// </summary>
-		/// <param name="message">Сообщение, содержащее информацию по заявке или собственной сделке.</param>
-		/// <returns>Комиссия. Если комиссию рассчитать невозможно, то будет возвращено <see langword="null"/>.</returns>
+		/// <param name="message">The message containing the information about the order or own trade.</param>
+		/// <returns>The commission. If the commission can not be calculated then <see langword="null" /> will be returned.</returns>
 		protected override decimal? OnProcessExecution(ExecutionMessage message)
 		{
 			if (message.ExecutionType == ExecutionTypes.Trade)
@@ -203,7 +203,7 @@ namespace StockSharp.Algo.Commissions
 	}
 
 	/// <summary>
-	/// Комиссия за количество заявок.
+	/// Number of orders commission.
 	/// </summary>
 	[DisplayNameLoc(LocalizedStrings.Str666Key)]
 	[DescriptionLoc(LocalizedStrings.Str667Key)]
@@ -213,7 +213,7 @@ namespace StockSharp.Algo.Commissions
 		private int _count;
 
 		/// <summary>
-		/// Количество заявок.
+		/// Order count.
 		/// </summary>
 		[DisplayNameLoc(LocalizedStrings.Str668Key)]
 		[DescriptionLoc(LocalizedStrings.Str669Key)]
@@ -229,7 +229,7 @@ namespace StockSharp.Algo.Commissions
 		}
 
 		/// <summary>
-		/// Сбросить состояние.
+		/// To reset the state.
 		/// </summary>
 		public override void Reset()
 		{
@@ -238,10 +238,10 @@ namespace StockSharp.Algo.Commissions
 		}
 
 		/// <summary>
-		/// Рассчитать комиссию.
+		/// To calculate commission.
 		/// </summary>
-		/// <param name="message">Сообщение, содержащее информацию по заявке или собственной сделке.</param>
-		/// <returns>Комиссия. Если комиссию рассчитать невозможно, то будет возвращено <see langword="null"/>.</returns>
+		/// <param name="message">The message containing the information about the order or own trade.</param>
+		/// <returns>The commission. If the commission can not be calculated then <see langword="null" /> will be returned.</returns>
 		protected override decimal? OnProcessExecution(ExecutionMessage message)
 		{
 			if (message.ExecutionType != ExecutionTypes.Order)
@@ -255,9 +255,9 @@ namespace StockSharp.Algo.Commissions
 		}
 
 		/// <summary>
-		/// Сохранить настройки.
+		/// Save settings.
 		/// </summary>
-		/// <param name="storage">Хранилище.</param>
+		/// <param name="storage">Storage.</param>
 		public override void Save(SettingsStorage storage)
 		{
 			base.Save(storage);
@@ -266,9 +266,9 @@ namespace StockSharp.Algo.Commissions
 		}
 
 		/// <summary>
-		/// Загрузить настройки.
+		/// Load settings.
 		/// </summary>
-		/// <param name="storage">Хранилище.</param>
+		/// <param name="storage">Storage.</param>
 		public override void Load(SettingsStorage storage)
 		{
 			base.Load(storage);
@@ -278,7 +278,7 @@ namespace StockSharp.Algo.Commissions
 	}
 
 	/// <summary>
-	/// Комиссия за количество сделок.
+	/// Number of trades commission.
 	/// </summary>
 	[DisplayNameLoc(LocalizedStrings.Str670Key)]
 	[DescriptionLoc(LocalizedStrings.Str671Key)]
@@ -288,7 +288,7 @@ namespace StockSharp.Algo.Commissions
 		private int _count;
 
 		/// <summary>
-		/// Количество сделок.
+		/// Number of trades.
 		/// </summary>
 		[DisplayNameLoc(LocalizedStrings.TradesOfKey)]
 		[DescriptionLoc(LocalizedStrings.Str232Key, true)]
@@ -304,7 +304,7 @@ namespace StockSharp.Algo.Commissions
 		}
 
 		/// <summary>
-		/// Сбросить состояние.
+		/// To reset the state.
 		/// </summary>
 		public override void Reset()
 		{
@@ -313,10 +313,10 @@ namespace StockSharp.Algo.Commissions
 		}
 
 		/// <summary>
-		/// Рассчитать комиссию.
+		/// To calculate commission.
 		/// </summary>
-		/// <param name="message">Сообщение, содержащее информацию по заявке или собственной сделке.</param>
-		/// <returns>Комиссия. Если комиссию рассчитать невозможно, то будет возвращено <see langword="null"/>.</returns>
+		/// <param name="message">The message containing the information about the order or own trade.</param>
+		/// <returns>The commission. If the commission can not be calculated then <see langword="null" /> will be returned.</returns>
 		protected override decimal? OnProcessExecution(ExecutionMessage message)
 		{
 			if (message.ExecutionType != ExecutionTypes.Trade)
@@ -330,9 +330,9 @@ namespace StockSharp.Algo.Commissions
 		}
 
 		/// <summary>
-		/// Сохранить настройки.
+		/// Save settings.
 		/// </summary>
-		/// <param name="storage">Хранилище.</param>
+		/// <param name="storage">Storage.</param>
 		public override void Save(SettingsStorage storage)
 		{
 			base.Save(storage);
@@ -341,9 +341,9 @@ namespace StockSharp.Algo.Commissions
 		}
 
 		/// <summary>
-		/// Загрузить настройки.
+		/// Load settings.
 		/// </summary>
-		/// <param name="storage">Хранилище.</param>
+		/// <param name="storage">Storage.</param>
 		public override void Load(SettingsStorage storage)
 		{
 			base.Load(storage);
@@ -353,17 +353,17 @@ namespace StockSharp.Algo.Commissions
 	}
 
 	/// <summary>
-	/// Комиссия за цену в сделке.
+	/// Trade price commission.
 	/// </summary>
 	[DisplayNameLoc(LocalizedStrings.Str672Key)]
 	[DescriptionLoc(LocalizedStrings.Str673Key)]
 	public class CommissionPerTradePriceRule : CommissionRule
 	{
 		/// <summary>
-		/// Рассчитать комиссию.
+		/// To calculate commission.
 		/// </summary>
-		/// <param name="message">Сообщение, содержащее информацию по заявке или собственной сделке.</param>
-		/// <returns>Комиссия. Если комиссию рассчитать невозможно, то будет возвращено <see langword="null"/>.</returns>
+		/// <param name="message">The message containing the information about the order or own trade.</param>
+		/// <returns>The commission. If the commission can not be calculated then <see langword="null" /> will be returned.</returns>
 		protected override decimal? OnProcessExecution(ExecutionMessage message)
 		{
 			if (message.ExecutionType == ExecutionTypes.Trade)
@@ -374,7 +374,7 @@ namespace StockSharp.Algo.Commissions
 	}
 
 	/// <summary>
-	/// Комиссия инструмента.
+	/// Security commission.
 	/// </summary>
 	[DisplayNameLoc(LocalizedStrings.SecurityKey)]
 	[DescriptionLoc(LocalizedStrings.Str674Key)]
@@ -383,7 +383,7 @@ namespace StockSharp.Algo.Commissions
 		private SecurityId _securityId;
 
 		/// <summary>
-		/// Идентификатор инструмента.
+		/// Security ID.
 		/// </summary>
 		[DisplayNameLoc(LocalizedStrings.SecurityIdKey)]
 		[DescriptionLoc(LocalizedStrings.SecurityIdKey, true)]
@@ -399,10 +399,10 @@ namespace StockSharp.Algo.Commissions
 		}
 
 		/// <summary>
-		/// Рассчитать комиссию.
+		/// To calculate commission.
 		/// </summary>
-		/// <param name="message">Сообщение, содержащее информацию по заявке или собственной сделке.</param>
-		/// <returns>Комиссия. Если комиссию рассчитать невозможно, то будет возвращено <see langword="null"/>.</returns>
+		/// <param name="message">The message containing the information about the order or own trade.</param>
+		/// <returns>The commission. If the commission can not be calculated then <see langword="null" /> will be returned.</returns>
 		protected override decimal? OnProcessExecution(ExecutionMessage message)
 		{
 			if (message.ExecutionType == ExecutionTypes.Trade && message.SecurityId == SecurityId)
@@ -412,9 +412,9 @@ namespace StockSharp.Algo.Commissions
 		}
 
 		/// <summary>
-		/// Сохранить настройки.
+		/// Save settings.
 		/// </summary>
-		/// <param name="storage">Хранилище.</param>
+		/// <param name="storage">Storage.</param>
 		public override void Save(SettingsStorage storage)
 		{
 			base.Save(storage);
@@ -423,9 +423,9 @@ namespace StockSharp.Algo.Commissions
 		}
 
 		/// <summary>
-		/// Загрузить настройки.
+		/// Load settings.
 		/// </summary>
-		/// <param name="storage">Хранилище.</param>
+		/// <param name="storage">Storage.</param>
 		public override void Load(SettingsStorage storage)
 		{
 			base.Load(storage);
@@ -435,14 +435,14 @@ namespace StockSharp.Algo.Commissions
 	}
 
 	/// <summary>
-	/// Комиссия типа инструмента.
+	/// Security type commission.
 	/// </summary>
 	[DisplayNameLoc(LocalizedStrings.Str675Key)]
 	[DescriptionLoc(LocalizedStrings.Str676Key)]
 	public class CommissionSecurityTypeRule : CommissionRule
 	{
 		/// <summary>
-		/// Создать <see cref="CommissionSecurityTypeRule"/>.
+		/// Initializes a new instance of the <see cref="CommissionSecurityTypeRule"/>.
 		/// </summary>
 		public CommissionSecurityTypeRule()
 		{
@@ -452,7 +452,7 @@ namespace StockSharp.Algo.Commissions
 		private SecurityTypes _securityType;
 
 		/// <summary>
-		/// Тип инструмента.
+		/// Security type.
 		/// </summary>
 		[DisplayNameLoc(LocalizedStrings.TypeKey)]
 		[DescriptionLoc(LocalizedStrings.Str360Key)]
@@ -468,10 +468,10 @@ namespace StockSharp.Algo.Commissions
 		}
 
 		/// <summary>
-		/// Рассчитать комиссию.
+		/// To calculate commission.
 		/// </summary>
-		/// <param name="message">Сообщение, содержащее информацию по заявке или собственной сделке.</param>
-		/// <returns>Комиссия. Если комиссию рассчитать невозможно, то будет возвращено <see langword="null"/>.</returns>
+		/// <param name="message">The message containing the information about the order or own trade.</param>
+		/// <returns>The commission. If the commission can not be calculated then <see langword="null" /> will be returned.</returns>
 		protected override decimal? OnProcessExecution(ExecutionMessage message)
 		{
 			if (message.ExecutionType == ExecutionTypes.Trade && message.SecurityId.SecurityType == SecurityType)
@@ -481,9 +481,9 @@ namespace StockSharp.Algo.Commissions
 		}
 
 		/// <summary>
-		/// Сохранить настройки.
+		/// Save settings.
 		/// </summary>
-		/// <param name="storage">Хранилище.</param>
+		/// <param name="storage">Storage.</param>
 		public override void Save(SettingsStorage storage)
 		{
 			base.Save(storage);
@@ -492,9 +492,9 @@ namespace StockSharp.Algo.Commissions
 		}
 
 		/// <summary>
-		/// Загрузить настройки.
+		/// Load settings.
 		/// </summary>
-		/// <param name="storage">Хранилище.</param>
+		/// <param name="storage">Storage.</param>
 		public override void Load(SettingsStorage storage)
 		{
 			base.Load(storage);
@@ -504,7 +504,7 @@ namespace StockSharp.Algo.Commissions
 	}
 
 	/// <summary>
-	/// Комиссия площадки.
+	/// Board commission.
 	/// </summary>
 	[DisplayNameLoc(LocalizedStrings.BoardKey)]
 	[DescriptionLoc(LocalizedStrings.BoardCommissionKey)]
@@ -513,7 +513,7 @@ namespace StockSharp.Algo.Commissions
 		private string _boardCode;
 
 		/// <summary>
-		/// Код площадки.
+		/// Board code.
 		/// </summary>
 		[DisplayNameLoc(LocalizedStrings.BoardKey)]
 		[DescriptionLoc(LocalizedStrings.BoardCodeKey)]
@@ -529,10 +529,10 @@ namespace StockSharp.Algo.Commissions
 		}
 
 		/// <summary>
-		/// Рассчитать комиссию.
+		/// To calculate commission.
 		/// </summary>
-		/// <param name="message">Сообщение, содержащее информацию по заявке или собственной сделке.</param>
-		/// <returns>Комиссия. Если комиссию рассчитать невозможно, то будет возвращено <see langword="null"/>.</returns>
+		/// <param name="message">The message containing the information about the order or own trade.</param>
+		/// <returns>The commission. If the commission can not be calculated then <see langword="null" /> will be returned.</returns>
 		protected override decimal? OnProcessExecution(ExecutionMessage message)
 		{
 			if (message.ExecutionType == ExecutionTypes.Trade && message.SecurityId.BoardCode.CompareIgnoreCase(BoardCode))
@@ -542,9 +542,9 @@ namespace StockSharp.Algo.Commissions
 		}
 
 		/// <summary>
-		/// Сохранить настройки.
+		/// Save settings.
 		/// </summary>
-		/// <param name="storage">Хранилище.</param>
+		/// <param name="storage">Storage.</param>
 		public override void Save(SettingsStorage storage)
 		{
 			base.Save(storage);
@@ -553,9 +553,9 @@ namespace StockSharp.Algo.Commissions
 		}
 
 		/// <summary>
-		/// Загрузить настройки.
+		/// Load settings.
 		/// </summary>
-		/// <param name="storage">Хранилище.</param>
+		/// <param name="storage">Storage.</param>
 		public override void Load(SettingsStorage storage)
 		{
 			base.Load(storage);
@@ -565,7 +565,7 @@ namespace StockSharp.Algo.Commissions
 	}
 
 	/// <summary>
-	/// Комиссия за оборот.
+	/// Turnover commission.
 	/// </summary>
 	[DisplayNameLoc(LocalizedStrings.TurnoverKey)]
 	[DescriptionLoc(LocalizedStrings.TurnoverCommissionKey)]
@@ -575,7 +575,7 @@ namespace StockSharp.Algo.Commissions
 		private decimal _turnOver;
 
 		/// <summary>
-		/// Оборот.
+		/// Turnover.
 		/// </summary>
 		[DisplayNameLoc(LocalizedStrings.TurnoverKey)]
 		[DescriptionLoc(LocalizedStrings.TurnoverKey, true)]
@@ -591,7 +591,7 @@ namespace StockSharp.Algo.Commissions
 		}
 
 		/// <summary>
-		/// Сбросить состояние.
+		/// To reset the state.
 		/// </summary>
 		public override void Reset()
 		{
@@ -600,10 +600,10 @@ namespace StockSharp.Algo.Commissions
 		}
 
 		/// <summary>
-		/// Рассчитать комиссию.
+		/// To calculate commission.
 		/// </summary>
-		/// <param name="message">Сообщение, содержащее информацию по заявке или собственной сделке.</param>
-		/// <returns>Комиссия. Если комиссию рассчитать невозможно, то будет возвращено <see langword="null"/>.</returns>
+		/// <param name="message">The message containing the information about the order or own trade.</param>
+		/// <returns>The commission. If the commission can not be calculated then <see langword="null" /> will be returned.</returns>
 		protected override decimal? OnProcessExecution(ExecutionMessage message)
 		{
 			if (message.ExecutionType != ExecutionTypes.Trade)
@@ -618,9 +618,9 @@ namespace StockSharp.Algo.Commissions
 		}
 
 		/// <summary>
-		/// Сохранить настройки.
+		/// Save settings.
 		/// </summary>
-		/// <param name="storage">Хранилище.</param>
+		/// <param name="storage">Storage.</param>
 		public override void Save(SettingsStorage storage)
 		{
 			base.Save(storage);
@@ -629,9 +629,9 @@ namespace StockSharp.Algo.Commissions
 		}
 
 		/// <summary>
-		/// Загрузить настройки.
+		/// Load settings.
 		/// </summary>
-		/// <param name="storage">Хранилище.</param>
+		/// <param name="storage">Storage.</param>
 		public override void Load(SettingsStorage storage)
 		{
 			base.Load(storage);

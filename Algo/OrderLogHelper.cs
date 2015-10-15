@@ -13,41 +13,41 @@ namespace StockSharp.Algo
 	using StockSharp.Localization;
 
 	/// <summary>
-	/// Причины отмены заявок в логе заявок.
+	/// Reasons for orders cancelling in the orders log.
 	/// </summary>
 	public enum OrderLogCancelReasons
 	{
 		/// <summary>
-		/// Перерегистрация заявки.
+		/// The order re-registration.
 		/// </summary>
 		ReRegistered,
 
 		/// <summary>
-		/// Отмена заявки.
+		/// Cancel order.
 		/// </summary>
 		Canceled,
 
 		/// <summary>
-		/// Групповая отмена заявок.
+		/// Group canceling of orders.
 		/// </summary>
 		GroupCanceled,
 
 		/// <summary>
-		/// Признак удаления остатка заявки по причине кросс-сделки.
+		/// The sign of deletion of order residual due to cross-trade.
 		/// </summary>
 		CrossTrade,
 	}
 
 	/// <summary>
-	/// Построение стакана по логу заявок.
+	/// Building order book by the orders log.
 	/// </summary>
 	public static class OrderLogHelper
 	{
 		/// <summary>
-		/// Проверить, содержит ли строчка регистрацию заявки.
+		/// To check, does the string contain the order registration.
 		/// </summary>
-		/// <param name="item">Строчка лога заявок.</param>
-		/// <returns><see langword="true"/>, если строчка содержит регистрацию заявки, иначе, <see langword="false"/>.</returns>
+		/// <param name="item">Order log item.</param>
+		/// <returns><see langword="true" />, if the string contains the order registration, otherwise, <see langword="false" />.</returns>
 		public static bool IsOrderLogRegistered(this ExecutionMessage item)
 		{
 			if (item == null)
@@ -57,20 +57,20 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Проверить, содержит ли строчка регистрацию заявки.
+		/// To check, does the string contain the order registration.
 		/// </summary>
-		/// <param name="item">Строчка лога заявок.</param>
-		/// <returns><see langword="true"/>, если строчка содержит регистрацию заявки, иначе, <see langword="false"/>.</returns>
+		/// <param name="item">Order log item.</param>
+		/// <returns><see langword="true" />, if the string contains the order registration, otherwise, <see langword="false" />.</returns>
 		public static bool IsRegistered(this OrderLogItem item)
 		{
 			return item.ToMessage().IsOrderLogRegistered();
 		}
 
 		/// <summary>
-		/// Проверить, содержит ли строчка отменену заявки.
+		/// To check, does the string contain the cancelled order.
 		/// </summary>
-		/// <param name="item">Строчка лога заявок.</param>
-		/// <returns><see langword="true"/>, если строчка содержит отменену заявки, иначе, <see langword="false"/>.</returns>
+		/// <param name="item">Order log item.</param>
+		/// <returns><see langword="true" />, if the string contain the cancelled order, otherwise, <see langword="false" />.</returns>
 		public static bool IsOrderLogCanceled(this ExecutionMessage item)
 		{
 			if (item == null)
@@ -80,20 +80,20 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Проверить, содержит ли строчка отменену заявки.
+		/// To check, does the string contain the cancelled order.
 		/// </summary>
-		/// <param name="item">Строчка лога заявок.</param>
-		/// <returns><see langword="true"/>, если строчка содержит отменену заявки, иначе, <see langword="false"/>.</returns>
+		/// <param name="item">Order log item.</param>
+		/// <returns><see langword="true" />, if the string contain the cancelled order, otherwise, <see langword="false" />.</returns>
 		public static bool IsCanceled(this OrderLogItem item)
 		{
 			return item.ToMessage().IsOrderLogCanceled();
 		}
 
 		/// <summary>
-		/// Проверить, содержит ли строчка исполнение заявки.
+		/// To check, does the string contain the order matching.
 		/// </summary>
-		/// <param name="item">Строчка лога заявок.</param>
-		/// <returns><see langword="true"/>, если строчка содержит исполнение заявки, иначе, <see langword="false"/>.</returns>
+		/// <param name="item">Order log item.</param>
+		/// <returns><see langword="true" />, if the string contains order matching, otherwise, <see langword="false" />.</returns>
 		public static bool IsOrderLogMatched(this ExecutionMessage item)
 		{
 			if (item == null)
@@ -103,20 +103,20 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Проверить, содержит ли строчка исполнение заявки.
+		/// To check, does the string contain the order matching.
 		/// </summary>
-		/// <param name="item">Строчка лога заявок.</param>
-		/// <returns><see langword="true"/>, если строчка содержит исполнение заявки, иначе, <see langword="false"/>.</returns>
+		/// <param name="item">Order log item.</param>
+		/// <returns><see langword="true" />, if the string contains order matching, otherwise, <see langword="false" />.</returns>
 		public static bool IsMatched(this OrderLogItem item)
 		{
 			return item.ToMessage().IsOrderLogMatched();
 		}
 
 		/// <summary>
-		/// Получить причину отмены заявки в логе заявок.
+		/// To get the reason for cancelling order in orders log.
 		/// </summary>
-		/// <param name="item">Строчка лога заявок.</param>
-		/// <returns>Причина отмены заявки в логе заявок.</returns>
+		/// <param name="item">Order log item.</param>
+		/// <returns>The reason for order cancelling in order log.</returns>
 		public static OrderLogCancelReasons GetOrderLogCancelReason(this ExecutionMessage item)
 		{
 			if (!item.IsOrderLogCanceled())
@@ -140,10 +140,10 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Получить причину отмены заявки в логе заявок.
+		/// To get the reason for cancelling order in orders log.
 		/// </summary>
-		/// <param name="item">Строчка лога заявок.</param>
-		/// <returns>Причина отмены заявки в логе заявок.</returns>
+		/// <param name="item">Order log item.</param>
+		/// <returns>The reason for order cancelling in order log.</returns>
 		public static OrderLogCancelReasons GetCancelReason(this OrderLogItem item)
 		{
 			return item.ToMessage().GetOrderLogCancelReason();
@@ -247,13 +247,13 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Построить стаканы из лога заявок.
+		/// Build market depths from order log.
 		/// </summary>
-		/// <param name="items">Строчки лога заявок.</param>
-		/// <param name="builder">Построитель стакана.</param>
-		/// <param name="interval">Интервал генерации стакана. По-умолчанаю равен <see cref="TimeSpan.Zero"/>, что означает генерацию стаканов при каждой новой строчке лога заявок.</param>
-		/// <param name="maxDepth">Максимальная глубина стакана. По-умолчанию равно <see cref="int.MaxValue"/>, что означает бесконечную глубину.</param>
-		/// <returns>Стаканы.</returns>
+		/// <param name="items">Orders log lines.</param>
+		/// <param name="builder">Order log to market depth builder.</param>
+		/// <param name="interval">The interval of the order book generation. The default is <see cref="TimeSpan.Zero"/>, which means order books generation at each new string of orders log.</param>
+		/// <param name="maxDepth">The maximal depth of order book. The default is <see cref="Int32.MaxValue"/>, which means endless depth.</param>
+		/// <returns>Market depths.</returns>
 		public static IEnumerableEx<MarketDepth> ToMarketDepths(this IEnumerableEx<OrderLogItem> items, IOrderLogMarketDepthBuilder builder, TimeSpan interval = default(TimeSpan), int maxDepth = int.MaxValue)
 		{
 			var first = items.FirstOrDefault();
@@ -267,13 +267,13 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Построить стаканы из лога заявок.
+		/// Build market depths from order log.
 		/// </summary>
-		/// <param name="items">Строчки лога заявок.</param>
-		/// <param name="builder">Построитель стакана.</param>
-		/// <param name="interval">Интервал генерации стакана. По-умолчанаю равен <see cref="TimeSpan.Zero"/>, что означает генерацию стаканов при каждой новой строчке лога заявок.</param>
-		/// <param name="maxDepth">Максимальная глубина стакана. По-умолчанию равно <see cref="int.MaxValue"/>, что означает бесконечную глубину.</param>
-		/// <returns>Стаканы.</returns>
+		/// <param name="items">Orders log lines.</param>
+		/// <param name="builder">Order log to market depth builder.</param>
+		/// <param name="interval">The interval of the order book generation. The default is <see cref="TimeSpan.Zero"/>, which means order books generation at each new string of orders log.</param>
+		/// <param name="maxDepth">The maximal depth of order book. The default is <see cref="Int32.MaxValue"/>, which means endless depth.</param>
+		/// <returns>Market depths.</returns>
 		public static IEnumerableEx<QuoteChangeMessage> ToMarketDepths(this IEnumerableEx<ExecutionMessage> items, IOrderLogMarketDepthBuilder builder, TimeSpan interval = default(TimeSpan), int maxDepth = int.MaxValue)
 		{
 			return new DepthEnumerable(items, builder, interval, maxDepth);
@@ -376,10 +376,10 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Построить тиковые сделки из лога заявок.
+		/// To build tick trades from the orders log.
 		/// </summary>
-		/// <param name="items">Строчки лога заявок.</param>
-		/// <returns>Тиковые сделки.</returns>
+		/// <param name="items">Orders log lines.</param>
+		/// <returns>Tick trades.</returns>
 		public static IEnumerableEx<Trade> ToTrades(this IEnumerableEx<OrderLogItem> items)
 		{
 			var first = items.FirstOrDefault();
@@ -396,10 +396,10 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Построить тиковые сделки из лога заявок.
+		/// To build tick trades from the orders log.
 		/// </summary>
-		/// <param name="items">Строчки лога заявок.</param>
-		/// <returns>Тиковые сделки.</returns>
+		/// <param name="items">Orders log lines.</param>
+		/// <returns>Tick trades.</returns>
 		public static IEnumerableEx<ExecutionMessage> ToTicks(this IEnumerableEx<ExecutionMessage> items)
 		{
 			return new OrderLogTickEnumerable(items);

@@ -1,18 +1,18 @@
-﻿namespace StockSharp.Algo.Indicators
+namespace StockSharp.Algo.Indicators
 {
 	using System.Collections.Generic;
 
 	using StockSharp.Algo.Candles;
 
 	/// <summary>
-	/// Средневзвешанная часть индикатора <see cref="RelativeVigorIndex"/>.
+	/// The weight-average part of indicator <see cref="RelativeVigorIndex"/>.
 	/// </summary>
 	public class RelativeVigorIndexAverage : LengthIndicator<decimal>
 	{
 		private readonly List<Candle> _buffer = new List<Candle>();
 
 		/// <summary>
-		/// Создать <see cref="RelativeVigorIndexAverage"/>.
+		/// Initializes a new instance of the <see cref="RelativeVigorIndexAverage"/>.
 		/// </summary>
 		public RelativeVigorIndexAverage()
 		{
@@ -20,7 +20,7 @@
 		}
 
 		/// <summary>
-		/// Сбросить состояние индикатора на первоначальное. Метод вызывается каждый раз, когда меняются первоначальные настройки (например, длина периода).
+		/// To reset the indicator status to initial. The method is called each time when initial settings are changed (for example, the length of period).
 		/// </summary>
 		public override void Reset()
 		{
@@ -31,10 +31,10 @@
 		}
 
 		/// <summary>
-		/// Обработать входное значение.
+		/// To handle the input value.
 		/// </summary>
-		/// <param name="input">Входное значение.</param>
-		/// <returns>Результирующее значение.</returns>
+		/// <param name="input">The input value.</param>
+		/// <returns>The resulting value.</returns>
 		protected override IIndicatorValue OnProcess(IIndicatorValue input)
 		{
 			var newValue = input.GetValue<Candle>();
@@ -85,7 +85,7 @@
 		}
 
 		/// <summary>
-		/// Сформирован ли индикатор.
+		/// Whether the indicator is set.
 		/// </summary>
 		public override bool IsFormed
 		{

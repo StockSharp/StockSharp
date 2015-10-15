@@ -1,4 +1,4 @@
-﻿namespace StockSharp.Algo.Indicators
+namespace StockSharp.Algo.Indicators
 {
 	using StockSharp.Algo.Candles;
 
@@ -8,18 +8,18 @@
 	public class DiMinus : DiPart
 	{
 		/// <summary>
-		/// Создать <see cref="DiMinus"/>.
+		/// Initializes a new instance of the <see cref="DiMinus"/>.
 		/// </summary>
 		public DiMinus()
 		{
 		}
 
 		/// <summary>
-		/// Получить значение части.
+		/// To get the part value.
 		/// </summary>
-		/// <param name="current">Текущая свеча.</param>
-		/// <param name="prev">Предыдущая свеча.</param>
-		/// <returns>Значение.</returns>
+		/// <param name="current">The current candle.</param>
+		/// <param name="prev">The previous candle.</param>
+		/// <returns>Value.</returns>
 		protected override decimal GetValue(Candle current, Candle prev)
 		{
 			if (current.LowPrice < prev.LowPrice && current.HighPrice - prev.HighPrice < prev.LowPrice - current.LowPrice)

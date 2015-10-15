@@ -8,7 +8,7 @@ namespace StockSharp.Algo.Storages
 	using Ecng.Collections;
 
 	/// <summary>
-	/// ’ранилище маркет-данных, сохран€ющее данных в кэш-хранилище.
+	/// The market data storage, saving data in the cache-storage.
 	/// </summary>
 	public class CacheableMarketDataDrive : IMarketDataStorageDrive
 	{
@@ -16,10 +16,10 @@ namespace StockSharp.Algo.Storages
 		private readonly IMarketDataStorageDrive _sourceDrive;
 
 		/// <summary>
-		/// —оздать <see cref="CacheableMarketDataDrive"/>.
+		/// Initializes a new instance of the <see cref="CacheableMarketDataDrive"/>.
 		/// </summary>
-		/// <param name="sourceDrive">»сходное хранилище маркет-данных.</param>
-		/// <param name="cacheDrive"> эш-хранилище маркет-данных.</param>
+		/// <param name="sourceDrive">The initial storage of market-data.</param>
+		/// <param name="cacheDrive">The cache-storage of market-data.</param>
 		public CacheableMarketDataDrive(IMarketDataStorageDrive sourceDrive, IMarketDataStorageDrive cacheDrive)
 		{
 			if (sourceDrive == null)

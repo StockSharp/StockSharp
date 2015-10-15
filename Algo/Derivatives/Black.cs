@@ -8,25 +8,25 @@ namespace StockSharp.Algo.Derivatives
 	using StockSharp.Localization;
 
 	/// <summary>
-	/// Модель расчета значений "греков" по формуле Блэка.
+	/// The Greeks values calculating model by the Black formula.
 	/// </summary>
 	public class Black : BlackScholes
 	{
 		// http://riskencyclopedia.com/articles/black_1976/
 
 		/// <summary>
-		/// Создать <see cref="Black"/>.
+		/// Initializes a new instance of the <see cref="Black"/>.
 		/// </summary>
-		/// <param name="option">Опцион.</param>
-		/// <param name="securityProvider">Поставщик информации об инструментах.</param>
-		/// <param name="dataProvider">Поставщик маркет-данных.</param>
+		/// <param name="option">Options contract.</param>
+		/// <param name="securityProvider">The provider of information about instruments.</param>
+		/// <param name="dataProvider">The market data provider.</param>
 		public Black(Security option, ISecurityProvider securityProvider, IMarketDataProvider dataProvider)
 			: base(option, securityProvider, dataProvider)
 		{
 		}
 
 		/// <summary>
-		/// Размер дивиденда по акциям.
+		/// The dividend amount on shares.
 		/// </summary>
 		public override decimal Dividend
 		{
@@ -50,84 +50,84 @@ namespace StockSharp.Algo.Derivatives
 		}
 
 		/// <summary>
-		/// Рассчитать премию опциона.
+		/// To calculate the option premium.
 		/// </summary>
-		/// <param name="currentTime">Текущее время.</param>
-		/// <param name="deviation">Стандартное отклонение. Если оно не указано, то используется <see cref="BlackScholes.DefaultDeviation"/>.</param>
-		/// <param name="assetPrice">Цена базового актива. Если цена не указана, то получается цена последней сделки из <see cref="BlackScholes.UnderlyingAsset"/>.</param>
-		/// <returns>Премия опциона. Если значение равно <see langword="null"/>, то расчет значения в данный момент невозможен.</returns>
+		/// <param name="currentTime">The current time.</param>
+		/// <param name="deviation">The standard deviation. If it is not specified, then <see cref="BlackScholes.DefaultDeviation"/> is used.</param>
+		/// <param name="assetPrice">The price of the underlying asset. If the price is not specified, then the last trade price getting from <see cref="BlackScholes.UnderlyingAsset"/>.</param>
+		/// <returns>The option premium. If the value is equal to <see langword="null" />, then the value calculation currently is impossible.</returns>
 		public override decimal? Premium(DateTimeOffset currentTime, decimal? deviation = null, decimal? assetPrice = null)
 		{
 			return GetExpRate(currentTime) * base.Premium(currentTime, deviation, assetPrice);
 		}
 
 		/// <summary>
-		/// Рассчитать дельту опциона.
+		/// To calculate the option delta.
 		/// </summary>
-		/// <param name="currentTime">Текущее время.</param>
-		/// <param name="deviation">Стандартное отклонение. Если оно не указано, то используется <see cref="BlackScholes.DefaultDeviation"/>.</param>
-		/// <param name="assetPrice">Цена базового актива. Если цена не указана, то получается цена последней сделки из <see cref="BlackScholes.UnderlyingAsset"/>.</param>
-		/// <returns>Дельта опциона. Если значение равно <see langword="null"/>, то расчет значения в данный момент невозможен.</returns>
+		/// <param name="currentTime">The current time.</param>
+		/// <param name="deviation">The standard deviation. If it is not specified, then <see cref="BlackScholes.DefaultDeviation"/> is used.</param>
+		/// <param name="assetPrice">The price of the underlying asset. If the price is not specified, then the last trade price getting from <see cref="BlackScholes.UnderlyingAsset"/>.</param>
+		/// <returns>The option delta. If the value is equal to <see langword="null" />, then the value calculation currently is impossible.</returns>
 		public override decimal? Delta(DateTimeOffset currentTime, decimal? deviation = null, decimal? assetPrice = null)
 		{
 			return GetExpRate(currentTime) * base.Delta(currentTime, deviation, assetPrice);
 		}
 
 		/// <summary>
-		/// Рассчитать гамму опциона.
+		/// To calculate the option gamma.
 		/// </summary>
-		/// <param name="currentTime">Текущее время.</param>
-		/// <param name="deviation">Стандартное отклонение. Если оно не указано, то используется <see cref="BlackScholes.DefaultDeviation"/>.</param>
-		/// <param name="assetPrice">Цена базового актива. Если цена не указана, то получается цена последней сделки из <see cref="BlackScholes.UnderlyingAsset"/>.</param>
-		/// <returns>Гамма опциона. Если значение равно <see langword="null"/>, то расчет значения в данный момент невозможен.</returns>
+		/// <param name="currentTime">The current time.</param>
+		/// <param name="deviation">The standard deviation. If it is not specified, then <see cref="BlackScholes.DefaultDeviation"/> is used.</param>
+		/// <param name="assetPrice">The price of the underlying asset. If the price is not specified, then the last trade price getting from <see cref="BlackScholes.UnderlyingAsset"/>.</param>
+		/// <returns>The option gamma. If the value is equal to <see langword="null" />, then the value calculation currently is impossible.</returns>
 		public override decimal? Gamma(DateTimeOffset currentTime, decimal? deviation = null, decimal? assetPrice = null)
 		{
 			return GetExpRate(currentTime) * base.Gamma(currentTime, deviation, assetPrice);
 		}
 
 		/// <summary>
-		/// Рассчитать вегу опциона.
+		/// To calculate the option vega.
 		/// </summary>
-		/// <param name="currentTime">Текущее время.</param>
-		/// <param name="deviation">Стандартное отклонение. Если оно не указано, то используется <see cref="BlackScholes.DefaultDeviation"/>.</param>
-		/// <param name="assetPrice">Цена базового актива. Если цена не указана, то получается цена последней сделки из <see cref="BlackScholes.UnderlyingAsset"/>.</param>
-		/// <returns>Вега опциона. Если значение равно <see langword="null"/>, то расчет значения в данный момент невозможен.</returns>
+		/// <param name="currentTime">The current time.</param>
+		/// <param name="deviation">The standard deviation. If it is not specified, then <see cref="BlackScholes.DefaultDeviation"/> is used.</param>
+		/// <param name="assetPrice">The price of the underlying asset. If the price is not specified, then the last trade price getting from <see cref="BlackScholes.UnderlyingAsset"/>.</param>
+		/// <returns>The option vega. If the value is equal to <see langword="null" />, then the value calculation currently is impossible.</returns>
 		public override decimal? Vega(DateTimeOffset currentTime, decimal? deviation = null, decimal? assetPrice = null)
 		{
 			return GetExpRate(currentTime) * base.Vega(currentTime, deviation, assetPrice);
 		}
 
 		/// <summary>
-		/// Рассчитать тету опциона.
+		/// To calculate the option theta.
 		/// </summary>
-		/// <param name="currentTime">Текущее время.</param>
-		/// <param name="deviation">Стандартное отклонение. Если оно не указано, то используется <see cref="BlackScholes.DefaultDeviation"/>.</param>
-		/// <param name="assetPrice">Цена базового актива. Если цена не указана, то получается цена последней сделки из <see cref="BlackScholes.UnderlyingAsset"/>.</param>
-		/// <returns>Тета опциона. Если значение равно <see langword="null"/>, то расчет значения в данный момент невозможен.</returns>
+		/// <param name="currentTime">The current time.</param>
+		/// <param name="deviation">The standard deviation. If it is not specified, then <see cref="BlackScholes.DefaultDeviation"/> is used.</param>
+		/// <param name="assetPrice">The price of the underlying asset. If the price is not specified, then the last trade price getting from <see cref="BlackScholes.UnderlyingAsset"/>.</param>
+		/// <returns>The option theta. If the value is equal to <see langword="null" />, then the value calculation currently is impossible.</returns>
 		public override decimal? Theta(DateTimeOffset currentTime, decimal? deviation = null, decimal? assetPrice = null)
 		{
 			return GetExpRate(currentTime) * base.Theta(currentTime, deviation, assetPrice);
 		}
 
 		/// <summary>
-		/// Рассчитать ро опциона.
+		/// To calculate the option rho.
 		/// </summary>
-		/// <param name="currentTime">Текущее время.</param>
-		/// <param name="deviation">Стандартное отклонение. Если оно не указано, то используется <see cref="BlackScholes.DefaultDeviation"/>.</param>
-		/// <param name="assetPrice">Цена базового актива. Если цена не указана, то получается цена последней сделки из <see cref="BlackScholes.UnderlyingAsset"/>.</param>
-		/// <returns>Ро опциона. Если значение равно <see langword="null"/>, то расчет значения в данный момент невозможен.</returns>
+		/// <param name="currentTime">The current time.</param>
+		/// <param name="deviation">The standard deviation. If it is not specified, then <see cref="BlackScholes.DefaultDeviation"/> is used.</param>
+		/// <param name="assetPrice">The price of the underlying asset. If the price is not specified, then the last trade price getting from <see cref="BlackScholes.UnderlyingAsset"/>.</param>
+		/// <returns>The option rho. If the value is equal to <see langword="null" />, then the value calculation currently is impossible.</returns>
 		public override decimal? Rho(DateTimeOffset currentTime, decimal? deviation = null, decimal? assetPrice = null)
 		{
 			return GetExpRate(currentTime) * base.Rho(currentTime, deviation, assetPrice);
 		}
 
 		/// <summary>
-		/// Рассчитать параметр d1 определения вероятности исполнения опциона.
+		/// To calculate the d1 parameter of the option fulfilment probability estimating.
 		/// </summary>
-		/// <param name="deviation">Стандартное отклонение.</param>
-		/// <param name="assetPrice">Цена базового актива.</param>
-		/// <param name="timeToExp">Период опциона до экспирации.</param>
-		/// <returns>Параметр d1.</returns>
+		/// <param name="deviation">Standard deviation.</param>
+		/// <param name="assetPrice">Underlying asset price.</param>
+		/// <param name="timeToExp">The option period before the expiration.</param>
+		/// <returns>The d1 parameter.</returns>
 		protected override double D1(decimal deviation, decimal assetPrice, double timeToExp)
 		{
 			return DerivativesHelper.D1(assetPrice, GetStrike(), 0, 0, deviation, timeToExp);

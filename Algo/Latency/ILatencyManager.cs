@@ -1,36 +1,34 @@
-﻿namespace StockSharp.Algo.Latency
+namespace StockSharp.Algo.Latency
 {
 	using System;
 
 	using StockSharp.Messages;
 
 	/// <summary>
-	/// Интерфейс менеджера расчета задержки регистрации заявок.
+	/// The interface of the order registration delay calculation manager.
 	/// </summary>
 	public interface ILatencyManager
 	{
 		/// <summary>
-		/// Обнулить расчеты.
+		/// To zero calculations.
 		/// </summary>
 		void Reset();
 
 		/// <summary>
-		/// Суммарное значение задержки регистрации по всем заявкам.
+		/// The aggregate value of registration delay by all orders.
 		/// </summary>
 		TimeSpan LatencyRegistration { get; }
 
 		/// <summary>
-		/// Суммарное значение задержки отмены по всем заявкам.
+		/// The aggregate value of cancelling delay by all orders.
 		/// </summary>
 		TimeSpan LatencyCancellation { get; }
 
 		/// <summary>
-		/// Обработать сообщение для вычисления задержки транзакции. Принимаются сообщения типа
-		/// <see cref="OrderRegisterMessage"/>, <see cref="OrderReplaceMessage"/>,
-		/// <see cref="OrderCancelMessage"/> и <see cref="ExecutionMessage"/>.
+		/// To process the message for transaction delay calculation. Messages of <see cref="OrderRegisterMessage"/>, <see cref="OrderReplaceMessage"/>, <see cref="OrderCancelMessage"/> and <see cref="ExecutionMessage"/> types are accepted.
 		/// </summary>
-		/// <param name="message">Сообщение.</param>
-		/// <returns>Задержка транзакции. В случае невозможности вычислить задержку будет возвращено <see langword="null"/>.</returns>
+		/// <param name="message">Message.</param>
+		/// <returns>The transaction delay. If it is impossible to calculate delay, <see langword="null" /> will be returned.</returns>
 		TimeSpan? ProcessMessage(Message message);
 	}
 }

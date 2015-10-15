@@ -25,7 +25,7 @@ namespace StockSharp.Algo.Strategies.Analytics
 	using Xceed.Wpf.Toolkit.PropertyGrid.Attributes;
 
 	/// <summary>
-	/// Аналитическая стратегия, расчитывающая распределение наибольшего объема по часам.
+	/// The analytic strategy, calculating distribution of the biggest volume by hours.
 	/// </summary>
 	public class DailyHighestVolumeStrategy : BaseAnalyticsStrategy
 	{
@@ -49,7 +49,7 @@ namespace StockSharp.Algo.Strategies.Analytics
 		private readonly StrategyParam<TimeSpan> _timeFrame;
 
 		/// <summary>
-		/// Тайм-фрейм.
+		/// Time-frame.
 		/// </summary>
 		[DisplayNameLoc(LocalizedStrings.Str1242Key)]
 		[DescriptionLoc(LocalizedStrings.Str1243Key)]
@@ -62,7 +62,7 @@ namespace StockSharp.Algo.Strategies.Analytics
 		}
 
 		/// <summary>
-		/// Создать <see cref="DailyHighestVolumeStrategy"/>.
+		/// Initializes a new instance of the <see cref="DailyHighestVolumeStrategy"/>.
 		/// </summary>
 		public DailyHighestVolumeStrategy()
 		{
@@ -70,7 +70,7 @@ namespace StockSharp.Algo.Strategies.Analytics
 		}
 
 		/// <summary>
-		/// Анализировать.
+		/// To analyze.
 		/// </summary>
 		protected override void OnAnalyze()
 		{

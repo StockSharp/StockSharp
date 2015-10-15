@@ -11,8 +11,7 @@ namespace StockSharp.Algo.Testing
 	using StockSharp.Localization;
 
 	/// <summary>
-	/// Преобразователь сообщений вида <see cref="QuoteChangeMessage"/> и <see cref="ExecutionMessage"/> (ассоциированный с тиковой сделкой)
-	/// в единый поток <see cref="ExecutionMessage"/> (ассоциированный с логом заявок).
+	/// The converter of <see cref="QuoteChangeMessage"/> and <see cref="ExecutionMessage"/> type messages (associated with tick trade) into single stream <see cref="ExecutionMessage"/> (associated with orders log).
 	/// </summary>
 	class ExecutionLogConverter
 	{
@@ -65,15 +64,15 @@ namespace StockSharp.Algo.Testing
 		}
 
 		/// <summary>
-		/// Идентификатор инструмента.
+		/// Security ID.
 		/// </summary>
 		public SecurityId SecurityId { get; private set; }
 
 		/// <summary>
-		/// Преобразовать котировки.
+		/// To convert quotes.
 		/// </summary>
-		/// <param name="message">Котировки.</param>
-		/// <returns>Поток <see cref="ExecutionMessage"/>.</returns>
+		/// <param name="message">Quotes.</param>
+		/// <returns>Stream <see cref="ExecutionMessage"/>.</returns>
 		public IEnumerable<ExecutionMessage> ToExecutionLog(QuoteChangeMessage message)
 		{
 			if (message == null)
@@ -258,10 +257,10 @@ namespace StockSharp.Algo.Testing
 		}
 
 		/// <summary>
-		/// Преобразовать тиковую сделку.
+		/// To convert the tick trade.
 		/// </summary>
-		/// <param name="message">Тиковая сделка.</param>
-		/// <returns>Поток <see cref="ExecutionMessage"/>.</returns>
+		/// <param name="message">Tick trade.</param>
+		/// <returns>Stream <see cref="ExecutionMessage"/>.</returns>
 		public IEnumerable<ExecutionMessage> ToExecutionLog(ExecutionMessage message)
 		{
 			if (message == null)
@@ -420,10 +419,10 @@ namespace StockSharp.Algo.Testing
 		}
 
 		/// <summary>
-		/// Преобразовать первый уровень маркет-данных.
+		/// To convert first level of market data.
 		/// </summary>
-		/// <param name="message">Первый уровень маркет-данных.</param>
-		/// <returns>Поток <see cref="Message"/>.</returns>
+		/// <param name="message">Level 1.</param>
+		/// <returns>Stream <see cref="Message"/>.</returns>
 		public IEnumerable<Message> ToExecutionLog(Level1ChangeMessage message)
 		{
 			if (message == null)
@@ -578,11 +577,11 @@ namespace StockSharp.Algo.Testing
 		}
 
 		/// <summary>
-		/// Преобразовать транзакцию.
+		/// Convert transaction.
 		/// </summary>
-		/// <param name="message">Транзакция.</param>
-		/// <param name="quotesVolume">Объем в стакане.</param>
-		/// <returns>Поток <see cref="ExecutionMessage"/>.</returns>
+		/// <param name="message">Transaction.</param>
+		/// <param name="quotesVolume">Order book volume.</param>
+		/// <returns>Stream <see cref="ExecutionMessage"/>.</returns>
 		public IEnumerable<ExecutionMessage> ToExecutionLog(OrderMessage message, decimal quotesVolume)
 		{
 			if (message == null)

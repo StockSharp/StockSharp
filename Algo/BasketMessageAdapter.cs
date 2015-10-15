@@ -16,25 +16,25 @@ namespace StockSharp.Algo
 	using SubscriptionInfo = System.Tuple<Messages.SecurityId, Messages.MarketDataTypes, System.DateTimeOffset?, System.DateTimeOffset?, long?, int?>;
 
 	/// <summary>
-	/// Интерфейс, описывающий список адаптеров к торговым системам, с которыми оперирует агрегатор.
+	/// The interface describing the list of adapters to trading systems with which the aggregator operates.
 	/// </summary>
 	public interface IInnerAdapterList : ISynchronizedCollection<IMessageAdapter>, INotifyList<IMessageAdapter>
 	{
 		/// <summary>
-		/// Внутренние адаптеры, отсортированные по скорости работы.
+		/// Internal adapters sorted by operation speed.
 		/// </summary>
 		IEnumerable<IMessageAdapter> SortedAdapters { get; }
 
 		/// <summary>
-		/// Индексатор, через который задаются приоритеты скорости (чем меньше значение, те быстрее адаптер) на внутренние адаптеры.
+		/// The indexer through which speed priorities (the smaller the value, then adapter is faster) for internal adapters are set.
 		/// </summary>
-		/// <param name="adapter">Внутренний адаптер.</param>
-		/// <returns>Приоритет адаптера. Если задается значение -1, то адаптер считается выключенным.</returns>
+		/// <param name="adapter">The internal adapter.</param>
+		/// <returns>The adapter priority. If the -1 value is set the adapter is considered to be off.</returns>
 		int this[IMessageAdapter adapter] { get; set; }
 	}
 
 	/// <summary>
-	/// Адаптер-агрегатор, позволяющий оперировать одновременно несколькими адаптерами, подключенных к разным торговым системам.
+	/// Adapter-aggregator that allows simultaneously to operate multiple adapters connected to different trading systems.
 	/// </summary>
 	public class BasketMessageAdapter : MessageAdapter
 	{
@@ -113,7 +113,7 @@ namespace StockSharp.Algo
 		private readonly InnerAdapterList _innerAdapters;
 
 		/// <summary>
-		/// Адаптеры, с которыми оперирует агрегатор.
+		/// Adapters with which the aggregator operates.
 		/// </summary>
 		public IInnerAdapterList InnerAdapters
 		{
@@ -121,14 +121,14 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Портфели, которые используются для отправки транзакций.
+		/// Portfolios which are used to send transactions.
 		/// </summary>
 		public IDictionary<string, IMessageAdapter> Portfolios { get; private set; }
 
 		/// <summary>
-		/// Создать <see cref="BasketMessageAdapter"/>.
+		/// Initializes a new instance of the <see cref="BasketMessageAdapter"/>.
 		/// </summary>
-		/// <param name="transactionIdGenerator">Генератор идентификаторов транзакций.</param>
+		/// <param name="transactionIdGenerator">Transaction id generator.</param>
 		public BasketMessageAdapter(IdGenerator transactionIdGenerator)
 			: base(transactionIdGenerator)
 		{
@@ -137,7 +137,7 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Поддерживаемые типы сообщений, который может обработать адаптер.
+		/// Supported by adapter message types.
 		/// </summary>
 		public override MessageTypes[] SupportedMessages
 		{
@@ -145,7 +145,7 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Требуется ли дополнительное сообщение <see cref="PortfolioLookupMessage"/> для получения списка портфелей и позиций.
+		/// <see cref="PortfolioLookupMessage"/> required to get portfolios and positions.
 		/// </summary>
 		public override bool PortfolioLookupRequired
 		{
@@ -153,7 +153,7 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Требуется ли дополнительное сообщение <see cref="OrderStatusMessage"/> для получения списка заявок и собственных сделок.
+		/// <see cref="OrderStatusMessage"/> required to get orders and ow trades.
 		/// </summary>
 		public override bool OrderStatusRequired
 		{
@@ -161,7 +161,7 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Требуется ли дополнительное сообщение <see cref="SecurityLookupMessage"/> для получения списка инструментов.
+		/// <see cref="SecurityLookupMessage"/> required to get securities.
 		/// </summary>
 		public override bool SecurityLookupRequired
 		{
@@ -169,7 +169,7 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Поддерживается ли торговой системой поиск портфелей.
+		/// Gets a value indicating whether the connector supports position lookup.
 		/// </summary>
 		protected override bool IsSupportNativePortfolioLookup
 		{
@@ -177,7 +177,7 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Поддерживается ли торговой системой поиск инструментов.
+		/// Gets a value indicating whether the connector supports security lookup.
 		/// </summary>
 		protected override bool IsSupportNativeSecurityLookup
 		{
@@ -185,18 +185,18 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Создать для заявки типа <see cref="OrderTypes.Conditional"/> условие, которое поддерживается подключением.
+		/// Create condition for order type <see cref="OrderTypes.Conditional"/>, that supports the adapter.
 		/// </summary>
-		/// <returns>Условие для заявки. Если подключение не поддерживает заявки типа <see cref="OrderTypes.Conditional"/>, то будет возвращено <see langword="null"/>.</returns>
+		/// <returns>Order condition. If the connection does not support the order type <see cref="OrderTypes.Conditional"/>, it will be returned <see langword="null" />.</returns>
 		public override OrderCondition CreateOrderCondition()
 		{
 			throw new NotSupportedException();
 		}
 
 		/// <summary>
-		/// Проверить, установлено ли еще соединение. Проверяется только в том случае, если было успешно установлено подключение.
+		/// Check the connection is alive. Uses only for connected states.
 		/// </summary>
-		/// <returns><see langword="true"/>, если соединение еще установлено, <see langword="false"/>, если торговая система разорвала подключение.</returns>
+		/// <returns><see langword="true" />, is the connection still alive, <see langword="false" />, if the connection was rejected.</returns>
 		public override bool IsConnectionAlive()
 		{
 			throw new NotSupportedException();
@@ -219,9 +219,9 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Отправить сообщение.
+		/// Send message.
 		/// </summary>
-		/// <param name="message">Сообщение.</param>
+		/// <param name="message">Message.</param>
 		protected override void OnSendInMessage(Message message)
 		{
 			switch (message.Type)
@@ -402,10 +402,10 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Обработчик события <see cref="IMessageChannel.NewOutMessage"/> вложенного адаптера.
+		/// The embedded adapter event <see cref="IMessageChannel.NewOutMessage"/> handler.
 		/// </summary>
-		/// <param name="innerAdapter">Вложенный адаптер.</param>
-		/// <param name="message">Сообщение.</param>
+		/// <param name="innerAdapter">The embedded adapter.</param>
+		/// <param name="message">Message.</param>
 		protected virtual void OnInnerAdapterNewMessage(IMessageAdapter innerAdapter, Message message)
 		{
 			if (message.IsBack)
@@ -565,18 +565,18 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Получить адаптеры <see cref="IInnerAdapterList.SortedAdapters"/>, отсортированные в зависимости от заданного приоритета. По-умолчанию сортировка отсутствует.
+		/// To get adapters <see cref="IInnerAdapterList.SortedAdapters"/> sorted by the specified priority. By default, there is no sorting.
 		/// </summary>
-		/// <returns>Отсортированные адаптеры.</returns>
+		/// <returns>Sorted adapters.</returns>
 		protected IEnumerable<IMessageAdapter> GetSortedAdapters()
 		{
 			return _innerAdapters.SortedAdapters;
 		}
 
 		/// <summary>
-		/// Сохранить настройки.
+		/// Save settings.
 		/// </summary>
-		/// <param name="storage">Хранилище настроек.</param>
+		/// <param name="storage">Settings storage.</param>
 		public override void Save(SettingsStorage storage)
 		{
 			lock (InnerAdapters.SyncRoot)
@@ -597,9 +597,9 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Загрузить настройки.
+		/// Load settings.
 		/// </summary>
-		/// <param name="storage">Хранилище настроек.</param>
+		/// <param name="storage">Settings storage.</param>
 		public override void Load(SettingsStorage storage)
 		{
 			lock (InnerAdapters.SyncRoot)

@@ -1,14 +1,14 @@
-﻿namespace StockSharp.Algo.Indicators
+namespace StockSharp.Algo.Indicators
 {
 	using System.Collections.Generic;
 
 	/// <summary>
-	/// Интерфейс индикатора, который строится в виде комбинации нескольких индикаторов.
+	/// The interface of indicator, built as combination of several indicators.
 	/// </summary>
 	public interface IComplexIndicator : IIndicator
 	{
 		/// <summary>
-		/// Вложенные индикаторы.
+		/// Embedded indicators.
 		/// </summary>
 		IEnumerable<IIndicator> InnerIndicators { get; }
 	}

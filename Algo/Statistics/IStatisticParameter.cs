@@ -1,4 +1,4 @@
-﻿namespace StockSharp.Algo.Statistics
+namespace StockSharp.Algo.Statistics
 {
 	using System;
 
@@ -7,67 +7,67 @@
 	using Ecng.Serialization;
 
 	/// <summary>
-	/// Интерфейс, описывающий параметр статистики.
+	/// The interface, describing statistic parameter.
 	/// </summary>
 	public interface IStatisticParameter : IPersistable
 	{
 		/// <summary>
-		/// Название параметра.
+		/// Parameter name.
 		/// </summary>
 		string Name { get; set; }
 
 		/// <summary>
-		/// Текущее значение параметра.
+		/// The current value of the parameter.
 		/// </summary>
 		object Value { get; }
 
 		/// <summary>
-		/// Отображаемое название параметра.
+		/// The displayed parameter name.
 		/// </summary>
 		string DisplayName { get; }
 
 		/// <summary>
-		/// Описание параметра.
+		/// The parameter description.
 		/// </summary>
 		string Description { get; }
 
 		/// <summary>
-		/// Категория.
+		/// Category.
 		/// </summary>
 		string Category { get; }
 
 		/// <summary>
-		/// Событие изменения <see cref="Value"/>.
+		/// <see cref="IStatisticParameter.Value"/> change event.
 		/// </summary>
 		event Action ValueChanged;
 
 		/// <summary>
-		/// Сбросить значение параметра.
+		/// To reset the parameter value.
 		/// </summary>
 		void Reset();
 	}
 
 	/// <summary>
-	/// Интерфейс, описывающий параметр статистики.
+	/// The interface, describing statistic parameter.
 	/// </summary>
-	/// <typeparam name="TValue">Тип значения параметра.</typeparam>
+	/// <typeparam name="TValue">The type of the parameter value.</typeparam>
 	public interface IStatisticParameter<TValue> : IStatisticParameter
 	{
 		/// <summary>
-		/// Текущее значение параметра.
+		/// The current value of the parameter.
 		/// </summary>
 		new TValue Value { get; }
 	}
 
 	/// <summary>
-	/// Базовый параметр статистики.
+	/// The base statistics parameter.
 	/// </summary>
-	/// <typeparam name="TValue">Тип значения параметра.</typeparam>
+	/// <typeparam name="TValue">The type of the parameter value.</typeparam>
 	public abstract class BaseStatisticParameter<TValue> : NotifiableObject, IStatisticParameter<TValue>
 		where TValue : IComparable<TValue>
 	{
 		/// <summary>
-		/// Инициализировать <see cref="BaseStatisticParameter{TValue}"/>.
+		/// Initialize <see cref="BaseStatisticParameter{T}"/>.
 		/// </summary>
 		protected BaseStatisticParameter()
 		{
@@ -82,7 +82,7 @@
 		private string _name;
 
 		/// <summary>
-		/// Название параметра.
+		/// Parameter name.
 		/// </summary>
 		public string Name
 		{
@@ -98,24 +98,24 @@
 		}
 
 		/// <summary>
-		/// Отображаемое название параметра.
+		/// The displayed parameter name.
 		/// </summary>
 		public string DisplayName { get; private set; }
 
 		/// <summary>
-		/// Описание параметра.
+		/// The parameter description.
 		/// </summary>
 		public string Description { get; private set; }
 
 		/// <summary>
-		/// Категория.
+		/// Category.
 		/// </summary>
 		public string Category { get; private set; }
 
 		private TValue _value;
 
 		/// <summary>
-		/// Текущее значение параметра.
+		/// The current value of the parameter.
 		/// </summary>
 		public virtual TValue Value
 		{
@@ -149,7 +149,7 @@
 		}
 
 		/// <summary>
-		/// Текущее значение параметра.
+		/// The current value of the parameter.
 		/// </summary>
 		object IStatisticParameter.Value
 		{
@@ -157,12 +157,12 @@
 		}
 
 		/// <summary>
-		/// Событие изменения <see cref="Value"/>.
+		/// <see cref="Value"/> change event.
 		/// </summary>
 		public virtual event Action ValueChanged;
 
 		/// <summary>
-		/// Сбросить значение параметра.
+		/// To reset the parameter value.
 		/// </summary>
 		public virtual void Reset()
 		{
@@ -170,7 +170,7 @@
 		}
 
 		/// <summary>
-		/// Вызвать событие <see cref="ValueChanged"/>.
+		/// To call the event <see cref="ValueChanged"/>.
 		/// </summary>
 		private void RaiseValueChanged()
 		{
@@ -179,18 +179,18 @@
 		}
 
 		/// <summary>
-		/// Загрузить состояние параметра статистики.
+		/// To load the state of statistic parameter.
 		/// </summary>
-		/// <param name="storage">Хранилище.</param>
+		/// <param name="storage">Storage.</param>
 		public virtual void Load(SettingsStorage storage)
 		{
 			Value = storage.GetValue("Value", default(TValue));
 		}
 	
 		/// <summary>
-		/// Сохранить состояние параметра статистики.
+		/// To save the state of statistic parameter.
 		/// </summary>
-		/// <param name="storage">Хранилище.</param>
+		/// <param name="storage">Storage.</param>
 		public virtual void Save(SettingsStorage storage)
 		{
 			storage.SetValue("Value", Value);

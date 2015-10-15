@@ -1,4 +1,4 @@
-﻿namespace StockSharp.Algo.Storages
+namespace StockSharp.Algo.Storages
 {
 	using System;
 	using System.Collections.Generic;
@@ -15,73 +15,73 @@
 	using StockSharp.Messages;
 
 	/// <summary>
-	/// Интерфейс, описывающий хранилище для инструмента.
+	/// The interface, describing the storage for instrument.
 	/// </summary>
 	public interface ISecurityMarketDataDrive
 	{
 		/// <summary>
-		/// Получить хранилище тиковых сделок для заданного инструмента.
+		/// To get the storage of tick trades for the specified instrument.
 		/// </summary>
-		/// <param name="serializer">Сериализатор.</param>
-		/// <returns>Хранилище тиковых сделок.</returns>
+		/// <param name="serializer">The serializer.</param>
+		/// <returns>The storage of tick trades.</returns>
 		IMarketDataStorage<ExecutionMessage> GetTickStorage(IMarketDataSerializer<ExecutionMessage> serializer);
 
 		/// <summary>
-		/// Получить хранилище стаканов для заданного инструмента.
+		/// To get the storage of order books for the specified instrument.
 		/// </summary>
-		/// <param name="serializer">Сериализатор.</param>
-		/// <returns>Хранилище стаканов.</returns>
+		/// <param name="serializer">The serializer.</param>
+		/// <returns>The order books storage.</returns>
 		IMarketDataStorage<QuoteChangeMessage> GetQuoteStorage(IMarketDataSerializer<QuoteChangeMessage> serializer);
 
 		/// <summary>
-		/// Получить хранилище лога заявок для заданного инструмента.
+		/// To get the storage of orders log for the specified instrument.
 		/// </summary>
-		/// <param name="serializer">Сериализатор.</param>
-		/// <returns>Хранилище лога заявок.</returns>
+		/// <param name="serializer">The serializer.</param>
+		/// <returns>The storage of orders log.</returns>
 		IMarketDataStorage<ExecutionMessage> GetOrderLogStorage(IMarketDataSerializer<ExecutionMessage> serializer);
 
 		/// <summary>
-		/// Получить хранилище level1 данных.
+		/// To get the storage of level1 data.
 		/// </summary>
-		/// <param name="serializer">Сериализатор.</param>
-		/// <returns>Хранилище level1 данных.</returns>
+		/// <param name="serializer">The serializer.</param>
+		/// <returns>The storage of level1 data.</returns>
 		IMarketDataStorage<Level1ChangeMessage> GetLevel1Storage(IMarketDataSerializer<Level1ChangeMessage> serializer);
 
 		/// <summary>
-		/// Получить хранилище свечек для заданного инструмента.
+		/// To get the candles storage the specified instrument.
 		/// </summary>
-		/// <param name="candleType">Тип свечи.</param>
-		/// <param name="arg">Параметр свечи.</param>
-		/// <param name="serializer">Сериализатор.</param>
-		/// <returns>Хранилище свечек.</returns>
+		/// <param name="candleType">The candle type.</param>
+		/// <param name="arg">Candle arg.</param>
+		/// <param name="serializer">The serializer.</param>
+		/// <returns>The candles storage.</returns>
 		IMarketDataStorage<CandleMessage> GetCandleStorage(Type candleType, object arg, IMarketDataSerializer<CandleMessage> serializer);
 
 		/// <summary>
-		/// Получить хранилище транзакций для заданного инструмента.
+		/// To get the transactions storage the specified instrument.
 		/// </summary>
-		/// <param name="serializer">Сериализатор.</param>
-		/// <returns>Хранилище транзакций.</returns>
+		/// <param name="serializer">The serializer.</param>
+		/// <returns>The transactions storage.</returns>
 		IMarketDataStorage<ExecutionMessage> GetTransactionStorage(IMarketDataSerializer<ExecutionMessage> serializer);
 
 		/// <summary>
-		/// Получить хранилище маркет-данных.
+		/// To get the market-data storage.
 		/// </summary>
-		/// <param name="dataType">Тип маркет-данных.</param>
-		/// <param name="arg">Параметр, ассоциированный с типом <paramref name="dataType"/>. Например, <see cref="Candle.Arg"/>.</param>
-		/// <param name="serializer">Сериализатор.</param>
-		/// <returns>Хранилище маркет-данных.</returns>
+		/// <param name="dataType">Market data type.</param>
+		/// <param name="arg">The parameter associated with the <paramref name="dataType" /> type. For example, <see cref="Candle.Arg"/>.</param>
+		/// <param name="serializer">The serializer.</param>
+		/// <returns>Market-data storage.</returns>
 		IMarketDataStorage GetStorage(Type dataType, object arg, IMarketDataSerializer serializer);
 
 		/// <summary>
-		/// Получить для инструмента доступные типы свечек с параметрами.
+		/// To get available candles types with parameters for the instrument.
 		/// </summary>
-		/// <param name="serializer">Сериализатор.</param>
-		/// <returns>Доступные типы свечек с параметрами.</returns>
+		/// <param name="serializer">The serializer.</param>
+		/// <returns>Available candles types with parameters.</returns>
 		IEnumerable<Tuple<Type, object[]>> GetCandleTypes(IMarketDataSerializer<CandleMessage> serializer);
 	}
 
 	/// <summary>
-	/// Хранилище для инструмента.
+	/// The storage for the instrument.
 	/// </summary>
 	public class SecurityMarketDataDrive : ISecurityMarketDataDrive
 	{
@@ -541,10 +541,10 @@
 		}
 
 		/// <summary>
-		/// Создать <see cref="SecurityMarketDataDrive"/>.
+		/// Initializes a new instance of the <see cref="SecurityMarketDataDrive"/>.
 		/// </summary>
-		/// <param name="drive">Хранилище (база данных, файл и т.д.).</param>
-		/// <param name="security">Инструмент.</param>
+		/// <param name="drive">The storage (database, file etc.).</param>
+		/// <param name="security">Security.</param>
 		public SecurityMarketDataDrive(IMarketDataDrive drive, Security security)
 		{
 			if (drive == null)
@@ -558,12 +558,12 @@
 		}
 
 		/// <summary>
-		/// Хранилище (база данных, файл и т.д.).
+		/// The storage (database, file etc.).
 		/// </summary>
 		public IMarketDataDrive Drive { get; private set; }
 
 		/// <summary>
-		/// Инструмент.
+		/// Security.
 		/// </summary>
 		public Security Security { get; private set; }
 
@@ -589,52 +589,52 @@
 		}
 
 		/// <summary>
-		/// Получить хранилище тиковых сделок для заданного инструмента.
+		/// To get the storage of tick trades for the specified instrument.
 		/// </summary>
-		/// <param name="serializer">Сериализатор.</param>
-		/// <returns>Хранилище тиковых сделок.</returns>
+		/// <param name="serializer">The serializer.</param>
+		/// <returns>The storage of tick trades.</returns>
 		public IMarketDataStorage<ExecutionMessage> GetTickStorage(IMarketDataSerializer<ExecutionMessage> serializer)
 		{
 			return new TradeStorage(Security, GetStorageDrive(serializer, ExecutionTypes.Tick), serializer);
 		}
 
 		/// <summary>
-		/// Получить хранилище стаканов для заданного инструмента.
+		/// To get the storage of order books for the specified instrument.
 		/// </summary>
-		/// <param name="serializer">Сериализатор.</param>
-		/// <returns>Хранилище стаканов.</returns>
+		/// <param name="serializer">The serializer.</param>
+		/// <returns>The order books storage.</returns>
 		public IMarketDataStorage<QuoteChangeMessage> GetQuoteStorage(IMarketDataSerializer<QuoteChangeMessage> serializer)
 		{
 			return new MarketDepthStorage(Security, GetStorageDrive(serializer), serializer);
 		}
 
 		/// <summary>
-		/// Получить хранилище лога заявок для заданного инструмента.
+		/// To get the storage of orders log for the specified instrument.
 		/// </summary>
-		/// <param name="serializer">Сериализатор.</param>
-		/// <returns>Хранилище лога заявок.</returns>
+		/// <param name="serializer">The serializer.</param>
+		/// <returns>The storage of orders log.</returns>
 		public IMarketDataStorage<ExecutionMessage> GetOrderLogStorage(IMarketDataSerializer<ExecutionMessage> serializer)
 		{
 			return new OrderLogStorage(Security, GetStorageDrive(serializer, ExecutionTypes.OrderLog), serializer);
 		}
 
 		/// <summary>
-		/// Получить хранилище level1 данных.
+		/// To get the storage of level1 data.
 		/// </summary>
-		/// <param name="serializer">Сериализатор.</param>
-		/// <returns>Хранилище level1 данных.</returns>
+		/// <param name="serializer">The serializer.</param>
+		/// <returns>The storage of level1 data.</returns>
 		public IMarketDataStorage<Level1ChangeMessage> GetLevel1Storage(IMarketDataSerializer<Level1ChangeMessage> serializer)
 		{
 			return new Level1Storage(Security, GetStorageDrive(serializer), serializer);
 		}
 
 		/// <summary>
-		/// Получить хранилище свечек для заданного инструмента.
+		/// To get the candles storage the specified instrument.
 		/// </summary>
-		/// <param name="candleType">Тип свечи.</param>
-		/// <param name="arg">Параметр свечи.</param>
-		/// <param name="serializer">Сериализатор.</param>
-		/// <returns>Хранилище свечек.</returns>
+		/// <param name="candleType">The candle type.</param>
+		/// <param name="arg">Candle arg.</param>
+		/// <param name="serializer">The serializer.</param>
+		/// <returns>The candles storage.</returns>
 		public IMarketDataStorage<CandleMessage> GetCandleStorage(Type candleType, object arg, IMarketDataSerializer<CandleMessage> serializer)
 		{
 			if (candleType == null)
@@ -647,22 +647,22 @@
 		}
 
 		/// <summary>
-		/// Получить хранилище транзакций для заданного инструмента.
+		/// To get the transactions storage the specified instrument.
 		/// </summary>
-		/// <param name="serializer">Сериализатор.</param>
-		/// <returns>Хранилище транзакций.</returns>
+		/// <param name="serializer">The serializer.</param>
+		/// <returns>The transactions storage.</returns>
 		public IMarketDataStorage<ExecutionMessage> GetTransactionStorage(IMarketDataSerializer<ExecutionMessage> serializer)
 		{
 			return new TransactionStorage(Security, GetStorageDrive(serializer, ExecutionTypes.Order), serializer);
 		}
 
 		/// <summary>
-		/// Получить хранилище маркет-данных.
+		/// To get the market-data storage.
 		/// </summary>
-		/// <param name="dataType">Тип маркет-данных.</param>
-		/// <param name="arg">Параметр, ассоциированный с типом <paramref name="dataType"/>. Например, <see cref="Candle.Arg"/>.</param>
-		/// <param name="serializer">Сериализатор.</param>
-		/// <returns>Хранилище маркет-данных.</returns>
+		/// <param name="dataType">Market data type.</param>
+		/// <param name="arg">The parameter associated with the <paramref name="dataType" /> type. For example, <see cref="Candle.Arg"/>.</param>
+		/// <param name="serializer">The serializer.</param>
+		/// <returns>Market-data storage.</returns>
 		public IMarketDataStorage GetStorage(Type dataType, object arg, IMarketDataSerializer serializer)
 		{
 			if (dataType == null)
@@ -697,10 +697,10 @@
 		}
 
 		/// <summary>
-		/// Получить для инструмента доступные типы свечек с параметрами.
+		/// To get available candles types with parameters for the instrument.
 		/// </summary>
-		/// <param name="serializer">Сериализатор.</param>
-		/// <returns>Доступные типы свечек с параметрами.</returns>
+		/// <param name="serializer">The serializer.</param>
+		/// <returns>Available candles types with parameters.</returns>
 		public IEnumerable<Tuple<Type, object[]>> GetCandleTypes(IMarketDataSerializer<CandleMessage> serializer)
 		{
 			return Drive.GetCandleTypes(Security.ToSecurityId(), ToFormat(serializer));

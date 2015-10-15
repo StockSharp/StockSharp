@@ -1,4 +1,4 @@
-﻿namespace StockSharp.Algo.PnL
+namespace StockSharp.Algo.PnL
 {
 	using System;
 	using System.Linq;
@@ -9,7 +9,7 @@
 	using StockSharp.Messages;
 
 	/// <summary>
-	/// Очередь расчета прибыли по потому сообщений.
+	/// The queue of profit calculation by messages stream.
 	/// </summary>
 	public class PnLQueue
 	{
@@ -18,9 +18,9 @@
 		private decimal _multiplier;
 
 		/// <summary>
-		/// Создать <see cref="PnLQueue"/>.
+		/// Initializes a new instance of the <see cref="PnLQueue"/>.
 		/// </summary>
-		/// <param name="securityId">Идентификатор инструмента.</param>
+		/// <param name="securityId">Security ID.</param>
 		public PnLQueue(SecurityId securityId)
 		{
 			SecurityId = securityId;
@@ -29,14 +29,14 @@
 		}
 
 		/// <summary>
-		/// Идентификатор инструмента.
+		/// Security ID.
 		/// </summary>
 		public SecurityId SecurityId { get; private set; }
 
 		private decimal _priceStep;
 
 		/// <summary>
-		/// Шаг цены.
+		/// Price step.
 		/// </summary>
 		public decimal PriceStep
 		{
@@ -51,7 +51,7 @@
 		private decimal _stepPrice;
 
 		/// <summary>
-		/// Стоимость шага цены.
+		/// Step price.
 		/// </summary>
 		public decimal StepPrice
 		{
@@ -64,24 +64,24 @@
 		}
 
 		/// <summary>
-		/// Последняя цена тиковой сделки.
+		/// Last price of tick trade.
 		/// </summary>
 		public decimal TradePrice { get; private set; }
 
 		/// <summary>
-		/// Последняя цена спроса.
+		/// Last price of demand.
 		/// </summary>
 		public decimal BidPrice { get; private set; }
 
 		/// <summary>
-		/// Последняя цена предложения.
+		/// Last price of offer.
 		/// </summary>
 		public decimal AskPrice { get; private set; }
 
 		private decimal? _unrealizedPnL;
 
 		/// <summary>
-		/// Нереализованная прибыль.
+		/// Unrealized profit.
 		/// </summary>
 		public decimal UnrealizedPnL
 		{
@@ -109,15 +109,15 @@
 		}
 
 		/// <summary>
-		/// Реализованная прибыль.
+		/// Realized profit.
 		/// </summary>
 		public decimal RealizedPnL { get; private set; }
 
 		/// <summary>
-		/// Рассчитать прибыльность сделки. Если сделка уже ранее была обработана, то возвращается предыдущая информация.
+		/// To calculate trade profitability. If the trade was already processed earlier, previous information returns.
 		/// </summary>
-		/// <param name="trade">Сделка.</param>
-		/// <returns>Информация о новой сделке.</returns>
+		/// <param name="trade">Trade.</param>
+		/// <returns>Information on new trade.</returns>
 		public PnLInfo Process(ExecutionMessage trade)
 		{
 			if (trade == null)
@@ -176,9 +176,9 @@
 		}
 
 		/// <summary>
-		/// Обработать сообщение, содержащее рыночные данные.
+		/// To process the message, containing market data.
 		/// </summary>
-		/// <param name="levelMsg">Сообщение, содержащее рыночные данные.</param>
+		/// <param name="levelMsg">The message, containing market data.</param>
 		public void ProcessLevel1(Level1ChangeMessage levelMsg)
 		{
 			var priceStep = levelMsg.Changes.TryGetValue(Level1Fields.PriceStep);
@@ -218,9 +218,9 @@
 		}
 
 		/// <summary>
-		/// Обработать сообщение, содержащее информацию о тиковой сделке.
+		/// To process the message, containing information on tick trade.
 		/// </summary>
-		/// <param name="execMsg">Сообщение, содержащее информацию о тиковой сделке.</param>
+		/// <param name="execMsg">The message, containing information on tick trade.</param>
 		public void ProcessExecution(ExecutionMessage execMsg)
 		{
 			if (execMsg.TradePrice != null)
@@ -231,9 +231,9 @@
 		}
 
 		/// <summary>
-		/// Обработать сообщение, содержащее данные о стакане.
+		/// To process the message, containing data on order book.
 		/// </summary>
-		/// <param name="quoteMsg">Сообщение, содержащее данные о стакане.</param>
+		/// <param name="quoteMsg">The message, containing data on order book.</param>
 		public void ProcessQuotes(QuoteChangeMessage quoteMsg)
 		{
 			var ask = quoteMsg.GetBestAsk();

@@ -15,11 +15,11 @@ namespace StockSharp.Algo
 	using StockSharp.BusinessEntities;
 	using StockSharp.Localization;
 
-	/// <summary>
-	/// Индекс, построенный из комбинации нескольких инструментов через математическую формулу <see cref="Expression"/>.
-	/// </summary>
 	#region Ignore
 	//[Ignore(FieldName = "Code")]
+	/// <summary>
+	/// The index, built of combination of several instruments through mathematic formula <see cref="ExpressionIndexSecurity.Expression"/>.
+	/// </summary>
 	[Ignore(FieldName = "Class")]
 	[Ignore(FieldName = "Name")]
 	[Ignore(FieldName = "ShortName")]
@@ -68,7 +68,7 @@ namespace StockSharp.Algo
 		private readonly SynchronizedList<Security> _innerSecurities = new SynchronizedList<Security>(); 
 
 		/// <summary>
-		/// Создать <see cref="ExpressionIndexSecurity"/>.
+		/// Initializes a new instance of the <see cref="ExpressionIndexSecurity"/>.
 		/// </summary>
 		public ExpressionIndexSecurity()
 		{
@@ -79,7 +79,7 @@ namespace StockSharp.Algo
 		private Expression _expression;
 
 		/// <summary>
-		/// Математическая формула индекса.
+		/// The mathematic formula of index.
 		/// </summary>
 		[Browsable(false)]
 		public string Expression
@@ -111,7 +111,7 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Инструменты, из которых создана данная корзина.
+		/// Instruments, from which this basket is created.
 		/// </summary>
 		public override IEnumerable<Security> InnerSecurities
 		{
@@ -119,10 +119,10 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Вычислить значение корзины.
+		/// To calculate the basket value.
 		/// </summary>
-		/// <param name="prices">Цены составных инструментов корзины <see cref="BasketSecurity.InnerSecurities"/>.</param>
-		/// <returns>Значение корзины.</returns>
+		/// <param name="prices">Prices of basket composite instruments <see cref="BasketSecurity.InnerSecurities"/>.</param>
+		/// <returns>The basket value.</returns>
 		public override decimal? Calculate(IDictionary<Security, decimal> prices)
 		{
 			if (prices == null)
@@ -141,9 +141,9 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Создать копию <see cref="Security"/>.
+		/// Create a copy of <see cref="Security"/>.
 		/// </summary>
-		/// <returns>Копия объекта.</returns>
+		/// <returns>Copy.</returns>
 		public override Security Clone()
 		{
 			var clone = new ExpressionIndexSecurity { Expression = Expression };

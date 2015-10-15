@@ -1,4 +1,4 @@
-﻿namespace StockSharp.Algo.Storages
+namespace StockSharp.Algo.Storages
 {
 	using System;
 
@@ -7,197 +7,197 @@
 	using StockSharp.Messages;
 
 	/// <summary>
-	/// Интерфейс, описывающий хранилище маркет-данных.
+	/// The interface describing the storage of market data.
 	/// </summary>
 	public interface IStorageRegistry
 	{
 		/// <summary>
-		/// Хранилище, которое используется по-умолчанию.
+		/// The storage used by default.
 		/// </summary>
 		IMarketDataDrive DefaultDrive { get; }
 
 		/// <summary>
-		/// Получить хранилище новостей.
+		/// To get news storage.
 		/// </summary>
-		/// <param name="drive">Хранилище. Если значение равно <see langword="null"/>, то будет использоваться <see cref="DefaultDrive"/>.</param>
-		/// <param name="format">Тип формата. По-умолчанию передается <see cref="StorageFormats.Binary"/>.</param>
-		/// <returns>Хранилище новостей.</returns>
+		/// <param name="drive">The storage. If a value is <see langword="null" />, <see cref="IStorageRegistry.DefaultDrive"/> will be used.</param>
+		/// <param name="format">The format type. By default <see cref="StorageFormats.Binary"/> is passed.</param>
+		/// <returns>The news storage.</returns>
 		IMarketDataStorage<News> GetNewsStorage(IMarketDataDrive drive = null, StorageFormats format = StorageFormats.Binary);
 
 		/// <summary>
-		/// Получить хранилище новостей.
+		/// To get news storage.
 		/// </summary>
-		/// <param name="drive">Хранилище. Если значение равно <see langword="null"/>, то будет использоваться <see cref="DefaultDrive"/>.</param>
-		/// <param name="format">Тип формата. По-умолчанию передается <see cref="StorageFormats.Binary"/>.</param>
-		/// <returns>Хранилище новостей.</returns>
+		/// <param name="drive">The storage. If a value is <see langword="null" />, <see cref="IStorageRegistry.DefaultDrive"/> will be used.</param>
+		/// <param name="format">The format type. By default <see cref="StorageFormats.Binary"/> is passed.</param>
+		/// <returns>The news storage.</returns>
 		IMarketDataStorage<NewsMessage> GetNewsMessageStorage(IMarketDataDrive drive = null, StorageFormats format = StorageFormats.Binary);
 
 		/// <summary>
-		/// Получить хранилище тиковых сделок для заданного инструмента.
+		/// To get the storage of tick trades for the specified instrument.
 		/// </summary>
-		/// <param name="security">Инструмент.</param>
-		/// <param name="drive">Хранилище. Если значение равно <see langword="null"/>, то будет использоваться <see cref="DefaultDrive"/>.</param>
-		/// <param name="format">Тип формата. По-умолчанию передается <see cref="StorageFormats.Binary"/>.</param>
-		/// <returns>Хранилище тиковых сделок.</returns>
+		/// <param name="security">Security.</param>
+		/// <param name="drive">The storage. If a value is <see langword="null" />, <see cref="IStorageRegistry.DefaultDrive"/> will be used.</param>
+		/// <param name="format">The format type. By default <see cref="StorageFormats.Binary"/> is passed.</param>
+		/// <returns>The storage of tick trades.</returns>
 		IMarketDataStorage<Trade> GetTradeStorage(Security security, IMarketDataDrive drive = null, StorageFormats format = StorageFormats.Binary);
 
 		/// <summary>
-		/// Получить хранилище стаканов для заданного инструмента.
+		/// To get the storage of order books for the specified instrument.
 		/// </summary>
-		/// <param name="security">Инструмент.</param>
-		/// <param name="drive">Хранилище. Если значение равно <see langword="null"/>, то будет использоваться <see cref="DefaultDrive"/>.</param>
-		/// <param name="format">Тип формата. По-умолчанию передается <see cref="StorageFormats.Binary"/>.</param>
-		/// <returns>Хранилище стаканов.</returns>
+		/// <param name="security">Security.</param>
+		/// <param name="drive">The storage. If a value is <see langword="null" />, <see cref="IStorageRegistry.DefaultDrive"/> will be used.</param>
+		/// <param name="format">The format type. By default <see cref="StorageFormats.Binary"/> is passed.</param>
+		/// <returns>The order books storage.</returns>
 		IMarketDataStorage<MarketDepth> GetMarketDepthStorage(Security security, IMarketDataDrive drive = null, StorageFormats format = StorageFormats.Binary);
 
 		/// <summary>
-		/// Получить хранилище лога заявок для заданного инструмента.
+		/// To get the storage of orders log for the specified instrument.
 		/// </summary>
-		/// <param name="security">Инструмент.</param>
-		/// <param name="drive">Хранилище. Если значение равно <see langword="null"/>, то будет использоваться <see cref="DefaultDrive"/>.</param>
-		/// <param name="format">Тип формата. По-умолчанию передается <see cref="StorageFormats.Binary"/>.</param>
-		/// <returns>Хранилище лога заявок.</returns>
+		/// <param name="security">Security.</param>
+		/// <param name="drive">The storage. If a value is <see langword="null" />, <see cref="IStorageRegistry.DefaultDrive"/> will be used.</param>
+		/// <param name="format">The format type. By default <see cref="StorageFormats.Binary"/> is passed.</param>
+		/// <returns>The storage of orders log.</returns>
 		IMarketDataStorage<OrderLogItem> GetOrderLogStorage(Security security, IMarketDataDrive drive = null, StorageFormats format = StorageFormats.Binary);
 
 		/// <summary>
-		/// Получить хранилище свечек для заданного инструмента.
+		/// To get the candles storage the specified instrument.
 		/// </summary>
-		/// <param name="candleType">Тип свечи.</param>
-		/// <param name="security">Инструмент.</param>
-		/// <param name="arg">Параметр свечи.</param>
-		/// <param name="drive">Хранилище. Если значение равно <see langword="null"/>, то будет использоваться <see cref="DefaultDrive"/>.</param>
-		/// <param name="format">Тип формата. По-умолчанию передается <see cref="StorageFormats.Binary"/>.</param>
-		/// <returns>Хранилище свечек.</returns>
+		/// <param name="candleType">The candle type.</param>
+		/// <param name="security">Security.</param>
+		/// <param name="arg">Candle arg.</param>
+		/// <param name="drive">The storage. If a value is <see langword="null" />, <see cref="IStorageRegistry.DefaultDrive"/> will be used.</param>
+		/// <param name="format">The format type. By default <see cref="StorageFormats.Binary"/> is passed.</param>
+		/// <returns>The candles storage.</returns>
 		IMarketDataStorage<Candle> GetCandleStorage(Type candleType, Security security, object arg, IMarketDataDrive drive = null, StorageFormats format = StorageFormats.Binary);
 
 		/// <summary>
-		/// Получить хранилище тиковых сделок для заданного инструмента.
+		/// To get the storage of tick trades for the specified instrument.
 		/// </summary>
-		/// <param name="security">Инструмент.</param>
-		/// <param name="drive">Хранилище. Если значение равно <see langword="null"/>, то будет использоваться <see cref="DefaultDrive"/>.</param>
-		/// <param name="format">Тип формата. По-умолчанию передается <see cref="StorageFormats.Binary"/>.</param>
-		/// <returns>Хранилище тиковых сделок.</returns>
+		/// <param name="security">Security.</param>
+		/// <param name="drive">The storage. If a value is <see langword="null" />, <see cref="IStorageRegistry.DefaultDrive"/> will be used.</param>
+		/// <param name="format">The format type. By default <see cref="StorageFormats.Binary"/> is passed.</param>
+		/// <returns>The storage of tick trades.</returns>
 		IMarketDataStorage<ExecutionMessage> GetTickMessageStorage(Security security, IMarketDataDrive drive = null, StorageFormats format = StorageFormats.Binary);
 
 		/// <summary>
-		/// Получить хранилище стаканов для заданного инструмента.
+		/// To get the storage of order books for the specified instrument.
 		/// </summary>
-		/// <param name="security">Инструмент.</param>
-		/// <param name="drive">Хранилище. Если значение равно <see langword="null"/>, то будет использоваться <see cref="DefaultDrive"/>.</param>
-		/// <param name="format">Тип формата. По-умолчанию передается <see cref="StorageFormats.Binary"/>.</param>
-		/// <returns>Хранилище стаканов.</returns>
+		/// <param name="security">Security.</param>
+		/// <param name="drive">The storage. If a value is <see langword="null" />, <see cref="IStorageRegistry.DefaultDrive"/> will be used.</param>
+		/// <param name="format">The format type. By default <see cref="StorageFormats.Binary"/> is passed.</param>
+		/// <returns>The order books storage.</returns>
 		IMarketDataStorage<QuoteChangeMessage> GetQuoteMessageStorage(Security security, IMarketDataDrive drive = null, StorageFormats format = StorageFormats.Binary);
 
 		/// <summary>
-		/// Получить хранилище лога заявок для заданного инструмента.
+		/// To get the storage of orders log for the specified instrument.
 		/// </summary>
-		/// <param name="security">Инструмент.</param>
-		/// <param name="drive">Хранилище. Если значение равно <see langword="null"/>, то будет использоваться <see cref="DefaultDrive"/>.</param>
-		/// <param name="format">Тип формата. По-умолчанию передается <see cref="StorageFormats.Binary"/>.</param>
-		/// <returns>Хранилище лога заявок.</returns>
+		/// <param name="security">Security.</param>
+		/// <param name="drive">The storage. If a value is <see langword="null" />, <see cref="IStorageRegistry.DefaultDrive"/> will be used.</param>
+		/// <param name="format">The format type. By default <see cref="StorageFormats.Binary"/> is passed.</param>
+		/// <returns>The storage of orders log.</returns>
 		IMarketDataStorage<ExecutionMessage> GetOrderLogMessageStorage(Security security, IMarketDataDrive drive = null, StorageFormats format = StorageFormats.Binary);
 
 		/// <summary>
-		/// Получить хранилище level1 данных.
+		/// To get the storage of level1 data.
 		/// </summary>
-		/// <param name="security">Инструмент.</param>
-		/// <param name="drive">Хранилище. Если значение равно <see langword="null"/>, то будет использоваться <see cref="DefaultDrive"/>.</param>
-		/// <param name="format">Тип формата. По-умолчанию передается <see cref="StorageFormats.Binary"/>.</param>
-		/// <returns>Хранилище level1 данных.</returns>
+		/// <param name="security">Security.</param>
+		/// <param name="drive">The storage. If a value is <see langword="null" />, <see cref="IStorageRegistry.DefaultDrive"/> will be used.</param>
+		/// <param name="format">The format type. By default <see cref="StorageFormats.Binary"/> is passed.</param>
+		/// <returns>The storage of level1 data.</returns>
 		IMarketDataStorage<Level1ChangeMessage> GetLevel1MessageStorage(Security security, IMarketDataDrive drive = null, StorageFormats format = StorageFormats.Binary);
 
 		/// <summary>
-		/// Получить хранилище свечек для заданного инструмента.
+		/// To get the candles storage the specified instrument.
 		/// </summary>
-		/// <param name="candleType">Тип свечи.</param>
-		/// <param name="security">Инструмент.</param>
-		/// <param name="arg">Параметр свечи.</param>
-		/// <param name="drive">Хранилище. Если значение равно <see langword="null"/>, то будет использоваться <see cref="DefaultDrive"/>.</param>
-		/// <param name="format">Тип формата. По-умолчанию передается <see cref="StorageFormats.Binary"/>.</param>
-		/// <returns>Хранилище свечек.</returns>
+		/// <param name="candleType">The candle type.</param>
+		/// <param name="security">Security.</param>
+		/// <param name="arg">Candle arg.</param>
+		/// <param name="drive">The storage. If a value is <see langword="null" />, <see cref="IStorageRegistry.DefaultDrive"/> will be used.</param>
+		/// <param name="format">The format type. By default <see cref="StorageFormats.Binary"/> is passed.</param>
+		/// <returns>The candles storage.</returns>
 		IMarketDataStorage<CandleMessage> GetCandleMessageStorage(Type candleType, Security security, object arg, IMarketDataDrive drive = null, StorageFormats format = StorageFormats.Binary);
 
 		/// <summary>
-		/// Получить хранилище транзакций для заданного инструмента.
+		/// To get the transactions storage the specified instrument.
 		/// </summary>
-		/// <param name="security">Инструмент.</param>
-		/// <param name="type">Тип данных, информация о которых содержится <see cref="ExecutionMessage"/>.</param>
-		/// <param name="drive">Хранилище. Если значение равно <see langword="null"/>, то будет использоваться <see cref="IStorageRegistry.DefaultDrive"/>.</param>
-		/// <param name="format">Тип формата. По-умолчанию передается <see cref="StorageFormats.Binary"/>.</param>
-		/// <returns>Хранилище транзакций.</returns>
+		/// <param name="security">Security.</param>
+		/// <param name="type">Data type, information about which is contained in the <see cref="ExecutionMessage"/>.</param>
+		/// <param name="drive">The storage. If a value is <see langword="null" />, <see cref="IStorageRegistry.DefaultDrive"/> will be used.</param>
+		/// <param name="format">The format type. By default <see cref="StorageFormats.Binary"/> is passed.</param>
+		/// <returns>The transactions storage.</returns>
 		IMarketDataStorage<ExecutionMessage> GetExecutionStorage(Security security, ExecutionTypes type, IMarketDataDrive drive = null, StorageFormats format = StorageFormats.Binary);
 
 		/// <summary>
-		/// Получить хранилище маркет-данных.
+		/// To get the market-data storage.
 		/// </summary>
-		/// <param name="security">Инструмент.</param>
-		/// <param name="dataType">Тип маркет-данных.</param>
-		/// <param name="arg">Параметр, ассоциированный с типом <paramref name="dataType"/>. Например, <see cref="Candle.Arg"/>.</param>
-		/// <param name="drive">Хранилище. Если значение равно <see langword="null"/>, то будет использоваться <see cref="DefaultDrive"/>.</param>
-		/// <param name="format">Тип формата. По-умолчанию передается <see cref="StorageFormats.Binary"/>.</param>
-		/// <returns>Хранилище маркет-данных.</returns>
+		/// <param name="security">Security.</param>
+		/// <param name="dataType">Market data type.</param>
+		/// <param name="arg">The parameter associated with the <paramref name="dataType" /> type. For example, <see cref="Candle.Arg"/>.</param>
+		/// <param name="drive">The storage. If a value is <see langword="null" />, <see cref="IStorageRegistry.DefaultDrive"/> will be used.</param>
+		/// <param name="format">The format type. By default <see cref="StorageFormats.Binary"/> is passed.</param>
+		/// <returns>Market-data storage.</returns>
 		IMarketDataStorage GetStorage(Security security, Type dataType, object arg, IMarketDataDrive drive = null, StorageFormats format = StorageFormats.Binary);
 
 		/// <summary>
-		/// Получить хранилище инструментов.
+		/// To get the instruments storage.
 		/// </summary>
-		/// <param name="drive">Хранилище. Если значение равно <see langword="null"/>, то будет использоваться <see cref="DefaultDrive"/>.</param>
-		/// <param name="format">Тип формата. По-умолчанию передается <see cref="StorageFormats.Binary"/>.</param>
-		/// <returns>Хранилище инструментов.</returns>
+		/// <param name="drive">The storage. If a value is <see langword="null" />, <see cref="IStorageRegistry.DefaultDrive"/> will be used.</param>
+		/// <param name="format">The format type. By default <see cref="StorageFormats.Binary"/> is passed.</param>
+		/// <returns>The instruments storage.</returns>
 		ISecurityStorage GetSecurityStorage(IMarketDataDrive drive = null, StorageFormats format = StorageFormats.Binary);
 
 		/// <summary>
-		/// Зарегистрировать хранилище тиковых сделок.
+		/// To register tick trades storage.
 		/// </summary>
-		/// <param name="storage">Хранилище тиковых сделок</param>
+		/// <param name="storage">The storage of tick trades.</param>
 		void RegisterTradeStorage(IMarketDataStorage<Trade> storage);
 
 		/// <summary>
-		/// Зарегистрировать хранилище стаканов.
+		/// To register the order books storage.
 		/// </summary>
-		/// <param name="storage">Хранилище стаканов.</param>
+		/// <param name="storage">The order books storage.</param>
 		void RegisterMarketDepthStorage(IMarketDataStorage<MarketDepth> storage);
 
 		/// <summary>
-		/// Зарегистрировать хранилище лога заявок.
+		/// To register the order log storage.
 		/// </summary>
-		/// <param name="storage">Хранилище лога заявок.</param>
+		/// <param name="storage">The storage of orders log.</param>
 		void RegisterOrderLogStorage(IMarketDataStorage<OrderLogItem> storage);
 
 		/// <summary>
-		/// Зарегистрировать хранилище свечек.
+		/// To register the candles storage.
 		/// </summary>
-		/// <param name="storage">Хранилище свечек.</param>
+		/// <param name="storage">The candles storage.</param>
 		void RegisterCandleStorage(IMarketDataStorage<Candle> storage);
 
 		/// <summary>
-		/// Зарегистрировать хранилище тиковых сделок.
+		/// To register tick trades storage.
 		/// </summary>
-		/// <param name="storage">Хранилище тиковых сделок</param>
+		/// <param name="storage">The storage of tick trades.</param>
 		void RegisterTradeStorage(IMarketDataStorage<ExecutionMessage> storage);
 
 		/// <summary>
-		/// Зарегистрировать хранилище стаканов.
+		/// To register the order books storage.
 		/// </summary>
-		/// <param name="storage">Хранилище стаканов.</param>
+		/// <param name="storage">The order books storage.</param>
 		void RegisterMarketDepthStorage(IMarketDataStorage<QuoteChangeMessage> storage);
 
 		/// <summary>
-		/// Зарегистрировать хранилище лога заявок.
+		/// To register the order log storage.
 		/// </summary>
-		/// <param name="storage">Хранилище лога заявок.</param>
+		/// <param name="storage">The storage of orders log.</param>
 		void RegisterOrderLogStorage(IMarketDataStorage<ExecutionMessage> storage);
 
 		/// <summary>
-		/// Зарегистрировать хранилище level1 данных.
+		/// To register the storage of level1 data.
 		/// </summary>
-		/// <param name="storage">Хранилище level1 данных.</param>
+		/// <param name="storage">The storage of level1 data.</param>
 		void RegisterLevel1Storage(IMarketDataStorage<Level1ChangeMessage> storage);
 
 		/// <summary>
-		/// Зарегистрировать хранилище свечек.
+		/// To register the candles storage.
 		/// </summary>
-		/// <param name="storage">Хранилище свечек.</param>
+		/// <param name="storage">The candles storage.</param>
 		void RegisterCandleStorage(IMarketDataStorage<CandleMessage> storage);
 	}
 }

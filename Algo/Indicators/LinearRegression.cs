@@ -9,14 +9,14 @@ namespace StockSharp.Algo.Indicators
 	using Xceed.Wpf.Toolkit.PropertyGrid.Attributes;
 
 	/// <summary>
-	/// Полный класс линейной регрессии, считает одновременно LinearReg, LinearRegSlope, RSquared и StandardError.
+	/// The full class of linear regression, calculates LinearReg, LinearRegSlope, RSquared and StandardError at the same time.
 	/// </summary>
 	[DisplayName("LinearRegression")]
 	[DescriptionLoc(LocalizedStrings.Str735Key)]
 	public class LinearRegression : BaseComplexIndicator
 	{
 		/// <summary>
-		/// Создать <see cref="LinearRegression"/>.
+		/// Initializes a new instance of the <see cref="LinearRegression"/>.
 		/// </summary>
 		public LinearRegression()
 			: this(new LinearReg(), new RSquared(), new LinearRegSlope(), new StandardError())
@@ -24,13 +24,13 @@ namespace StockSharp.Algo.Indicators
 			Length = 11;
 		}
 
-		///<summary>
-		/// Создать <see cref="LinearRegression"/>.
-		///</summary>
-		///<param name="linearReg">Линейная регрессия.</param>
-		///<param name="rSquared">R-квадрат регрессии.</param>
-		///<param name="regSlope">Коэффициент при независимой переменной, угол наклона прямой.</param>
-		///<param name="standardError">Стандартная ошибка.</param>
+		/// <summary>
+		/// Initializes a new instance of the <see cref="LinearRegression"/>.
+		/// </summary>
+		/// <param name="linearReg">Linear regression.</param>
+		/// <param name="rSquared">Regression R-squared.</param>
+		/// <param name="regSlope">Coefficient with independent variable, slope of a straight line.</param>
+		/// <param name="standardError">Standard error.</param>
 		public LinearRegression(LinearReg linearReg, RSquared rSquared, LinearRegSlope regSlope, StandardError standardError)
 			: base(linearReg, rSquared, regSlope, standardError)
 		{
@@ -42,9 +42,9 @@ namespace StockSharp.Algo.Indicators
 			Mode = ComplexIndicatorModes.Parallel;
 		}
 
-		///<summary>
-		/// Длина периода.
-		///</summary>
+		/// <summary>
+		/// Period length.
+		/// </summary>
 		[DisplayNameLoc(LocalizedStrings.Str736Key)]
 		[DescriptionLoc(LocalizedStrings.Str737Key)]
 		[CategoryLoc(LocalizedStrings.GeneralKey)]
@@ -59,7 +59,7 @@ namespace StockSharp.Algo.Indicators
 		}
 
 		/// <summary>
-		/// Линейная регрессия.
+		/// Linear regression.
 		/// </summary>
 		[ExpandableObject]
 		[DisplayName("LinearReg")]
@@ -68,7 +68,7 @@ namespace StockSharp.Algo.Indicators
 		public LinearReg LinearReg { get; private set; }
 
 		/// <summary>
-		/// R-квадрат регрессии.
+		/// Regression R-squared.
 		/// </summary>
 		[ExpandableObject]
 		[DisplayName("RSquared")]
@@ -77,7 +77,7 @@ namespace StockSharp.Algo.Indicators
 		public RSquared RSquared { get; private set; }
 
 		/// <summary>
-		/// Стандартная ошибка.
+		/// Standard error.
 		/// </summary>
 		[ExpandableObject]
 		[DisplayName("StdErr")]
@@ -86,7 +86,7 @@ namespace StockSharp.Algo.Indicators
 		public StandardError StandardError { get; private set; }
 
 		/// <summary>
-		/// Коэффициент при независимой переменной, угол наклона прямой.
+		/// Coefficient with independent variable, slope of a straight line.
 		/// </summary>
 		[ExpandableObject]
 		[DisplayName("LinearRegSlope")]
@@ -95,9 +95,9 @@ namespace StockSharp.Algo.Indicators
 		public LinearRegSlope LinearRegSlope { get; private set; }
 
 		/// <summary>
-		/// Загрузить настройки.
+		/// Load settings.
 		/// </summary>
-		/// <param name="settings">Хранилище настроек.</param>
+		/// <param name="settings">Settings storage.</param>
 		public override void Load(SettingsStorage settings)
 		{
 			base.Load(settings);
@@ -105,9 +105,9 @@ namespace StockSharp.Algo.Indicators
 		}
 
 		/// <summary>
-		/// Сохранить настройки.
+		/// Save settings.
 		/// </summary>
-		/// <param name="settings">Хранилище настроек.</param>
+		/// <param name="settings">Settings storage.</param>
 		public override void Save(SettingsStorage settings)
 		{
 			base.Save(settings);

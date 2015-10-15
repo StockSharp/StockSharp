@@ -6,14 +6,14 @@ namespace StockSharp.Algo.Indicators
 	using StockSharp.Localization;
 
 	/// <summary>
-	/// Сумма N последних значений.
+	/// Sum of N last values.
 	/// </summary>
 	[DisplayName("Sum")]
 	[DescriptionLoc(LocalizedStrings.Str751Key)]
 	public class Sum : LengthIndicator<decimal>
 	{
 		/// <summary>
-		/// Создать <see cref="Sum"/>.
+		/// Initializes a new instance of the <see cref="Sum"/>.
 		/// </summary>
 		public Sum()
 		{
@@ -21,10 +21,10 @@ namespace StockSharp.Algo.Indicators
 		}
 
 		/// <summary>
-		/// Обработать входное значение.
+		/// To handle the input value.
 		/// </summary>
-		/// <param name="input">Входное значение.</param>
-		/// <returns>Результирующее значение.</returns>
+		/// <param name="input">The input value.</param>
+		/// <returns>The resulting value.</returns>
 		protected override IIndicatorValue OnProcess(IIndicatorValue input)
 		{
 			var newValue = input.GetValue<decimal>();

@@ -1,4 +1,4 @@
-﻿namespace StockSharp.Algo.Storages.Backup
+namespace StockSharp.Algo.Storages.Backup
 {
 	using System;
 	using System.Collections.Generic;
@@ -16,7 +16,7 @@
 	using StockSharp.Localization;
 
 	/// <summary>
-	/// Сервис хранения данных, основанный на Amazon S3 http://aws.amazon.com/s3/
+	/// The data storage service based on Amazon S3 http://aws.amazon.com/s3/.
 	/// </summary>
 	public class AmazonS3Service : IBackupService
 	{
@@ -25,12 +25,12 @@
 		private const int _bufferSize = 1024 * 1024 * 10; // 10mb
 
 		/// <summary>
-		/// Создать <see cref="AmazonS3Service"/>.
+		/// Initializes a new instance of the <see cref="AmazonS3Service"/>.
 		/// </summary>
-		/// <param name="endpoint">Адрес региона.</param>
-		/// <param name="bucket">Имя хранилища.</param>
-		/// <param name="accessKey">Ключ.</param>
-		/// <param name="secretKey">Секрет.</param>
+		/// <param name="endpoint">Region address.</param>
+		/// <param name="bucket">Storage name.</param>
+		/// <param name="accessKey">Key.</param>
+		/// <param name="secretKey">Secret.</param>
 		public AmazonS3Service(RegionEndpoint endpoint, string bucket, string accessKey, string secretKey)
 		{
 			if (bucket.IsEmpty())

@@ -8,14 +8,14 @@ namespace StockSharp.Algo.Storages
 	using StockSharp.BusinessEntities;
 
 	/// <summary>
-	/// Хранилище торговых объектов.
+	/// The storage of trade objects.
 	/// </summary>
 	public class EntityRegistry : IEntityRegistry
 	{
 		private DelayAction _delayAction;
 
 		/// <summary>
-		/// Создать <see cref="EntityRegistry"/>.
+		/// Initializes a new instance of the <see cref="EntityRegistry"/>.
 		/// </summary>
 		public EntityRegistry()
 			: this(new InMemoryStorage())
@@ -23,9 +23,9 @@ namespace StockSharp.Algo.Storages
 		}
 
 		/// <summary>
-		/// Создать <see cref="EntityRegistry"/>.
+		/// Initializes a new instance of the <see cref="EntityRegistry"/>.
 		/// </summary>
-		/// <param name="storage">Специальный интерфейс для прямого доступа к хранилищу.</param>
+		/// <param name="storage">The special interface for direct access to the storage.</param>
 		public EntityRegistry(IStorage storage)
 		{
 			if (storage == null)
@@ -48,62 +48,62 @@ namespace StockSharp.Algo.Storages
 		}
 
 		/// <summary>
-		/// Специальный интерфейс для прямого доступа к хранилищу.
+		/// The special interface for direct access to the storage.
 		/// </summary>
 		public IStorage Storage { get; private set; }
 
 		/// <summary>
-		/// Список бирж.
+		/// List of exchanges.
 		/// </summary>
 		public virtual IStorageEntityList<Exchange> Exchanges { get; private set; }
 
 		/// <summary>
-		/// Список биржевых площадок.
+		/// The list of stock boards.
 		/// </summary>
 		public virtual IStorageEntityList<ExchangeBoard> ExchangeBoards { get; private set; }
 
 		/// <summary>
-		/// Список инструментов.
+		/// The list of instruments.
 		/// </summary>
 		public virtual IStorageSecurityList Securities { get; private set; }
 
 		/// <summary>
-		/// Список портфелей.
+		/// The list of portfolios.
 		/// </summary>
 		public virtual IStorageEntityList<Portfolio> Portfolios { get; private set; }
 
 		/// <summary>
-		/// Список позиций.
+		/// The list of positions.
 		/// </summary>
 		public virtual IStorageEntityList<Position> Positions { get; private set; }
 
 		/// <summary>
-		/// Список собственных сделок.
+		/// The list of own trades.
 		/// </summary>
 		public virtual IStorageEntityList<MyTrade> MyTrades { get; private set; }
 
 		/// <summary>
-		/// Список тиковых сделок.
+		/// The list of tick trades.
 		/// </summary>
 		public virtual IStorageEntityList<Trade> Trades { get; private set; }
 
 		/// <summary>
-		/// Список заявок.
+		/// The list of orders.
 		/// </summary>
 		public virtual IStorageEntityList<Order> Orders { get; private set; }
 
 		/// <summary>
-		/// Список ошибок регистрации и снятия заявок.
+		/// The list of orders registration and cancelling errors.
 		/// </summary>
 		public virtual IStorageEntityList<OrderFail> OrderFails { get; private set; }
 
 		/// <summary>
-		/// Список новостей.
+		/// The list of news.
 		/// </summary>
 		public virtual IStorageEntityList<News> News { get; private set; }
 
 		/// <summary>
-		/// Отложенное действие.
+		/// The time delayed action.
 		/// </summary>
 		public DelayAction DelayAction
 		{
@@ -126,9 +126,9 @@ namespace StockSharp.Algo.Storages
 		}
 
 		///// <summary>
-		///// Добавить инструмент в очередь сохранения.
+		///// Г„Г®ГЎГ ГўГЁГІГј ГЁГ­Г±ГІГ°ГіГ¬ГҐГ­ГІ Гў Г®Г·ГҐГ°ГҐГ¤Гј Г±Г®ГµГ°Г Г­ГҐГ­ГЁГї.
 		///// </summary>
-		///// <param name="security">Инструмент.</param>
+		///// <param name="security">Г€Г­Г±ГІГ°ГіГ¬ГҐГ­ГІ.</param>
 		//public void EnqueueSecurity(Security security)
 		//{
 		//	if (security == null)
@@ -140,9 +140,9 @@ namespace StockSharp.Algo.Storages
 		//}
 
 		///// <summary>
-		///// Сохранить биржевую площадку. Учитывается сохранение как самой площадки, так и биржу <see cref="ExchangeBoard.Exchange"/>.
+		///// Г‘Г®ГµГ°Г Г­ГЁГІГј ГЎГЁГ°Г¦ГҐГўГіГѕ ГЇГ«Г®Г№Г Г¤ГЄГі. Г“Г·ГЁГІГ»ГўГ ГҐГІГ±Гї Г±Г®ГµГ°Г Г­ГҐГ­ГЁГҐ ГЄГ ГЄ Г±Г Г¬Г®Г© ГЇГ«Г®Г№Г Г¤ГЄГЁ, ГІГ ГЄ ГЁ ГЎГЁГ°Г¦Гі <see cref="ExchangeBoard.Exchange"/>.
 		///// </summary>
-		///// <param name="board">Биржевая площадка.</param>
+		///// <param name="board">ГЃГЁГ°Г¦ГҐГўГ Гї ГЇГ«Г®Г№Г Г¤ГЄГ .</param>
 		//public void SaveExchangeBoard(ExchangeBoard board)
 		//{
 		//	if (board == null)

@@ -1,4 +1,4 @@
-﻿namespace StockSharp.Algo.Positions
+namespace StockSharp.Algo.Positions
 {
 	using System;
 	using System.Collections.Generic;
@@ -11,7 +11,7 @@
 	using StockSharp.BusinessEntities;
 
 	/// <summary>
-	/// Менеджер расчета позиции.
+	/// The position calculation manager.
 	/// </summary>
 	public class PositionManager : IPositionManager
 	{
@@ -19,28 +19,28 @@
 		private readonly Dictionary<Order, decimal> _byOrderPositions = new Dictionary<Order, decimal>();
 
 		/// <summary>
-		/// Создать <see cref="PositionManager"/>.
+		/// Initializes a new instance of the <see cref="PositionManager"/>.
 		/// </summary>
-		/// <param name="byOrders">Расчитывать позицию по реализованному объему у заявок (<see langword="true"/>) или по сделкам (<see langword="false"/>).</param>
+		/// <param name="byOrders">To calculate the position on realized volume for orders (<see langword="true" />) or by trades (<see langword="false" />).</param>
 		public PositionManager(bool byOrders)
 		{
 			ByOrders = byOrders;
 		}
 
 		/// <summary>
-		/// Расчитывать позицию по реализованному объему у заявок (<see langword="true"/>) или по сделкам (<see langword="false"/>).
+		/// To calculate the position on realized volume for orders (<see langword="true" />) or by trades (<see langword="false" />).
 		/// </summary>
 		public bool ByOrders { get; private set; }
 
 		/// <summary>
-		/// Суммарное значение позиции.
+		/// The position aggregate value.
 		/// </summary>
 		public virtual decimal Position { get; set; }
 
 		private readonly CachedSynchronizedDictionary<Tuple<Security, Portfolio>, Position> _positions = new CachedSynchronizedDictionary<Tuple<Security, Portfolio>, Position>();
 
 		/// <summary>
-		/// Позиции, сгруппированные по инструментам и портфелям.
+		/// Positions, grouped by instruments and portfolios.
 		/// </summary>
 		public IEnumerable<Position> Positions
 		{
@@ -77,20 +77,20 @@
 		}
 
 		/// <summary>
-		/// Событие появления новой позиций в <see cref="IPositionManager.Positions"/>.
+		/// The event of new position occurrence in <see cref="IPositionManager.Positions"/>.
 		/// </summary>
 		public event Action<Position> NewPosition;
 
 		/// <summary>
-		/// Событие изменения позиции в <see cref="IPositionManager.Positions"/>.
+		/// The event of position change in <see cref="IPositionManager.Positions"/>.
 		/// </summary>
 		public event Action<Position> PositionChanged;
 
 		/// <summary>
-		/// Рассчитать позицию по заявке.
+		/// To calculate position by the order.
 		/// </summary>
-		/// <param name="order">Заявка.</param>
-		/// <returns>Позиция по заявке.</returns>
+		/// <param name="order">Order.</param>
+		/// <returns>The position by the order.</returns>
 		public decimal ProcessOrder(Order order)
 		{
 			if (!ByOrders)
@@ -133,7 +133,7 @@
 		}
 
 		/// <summary>
-		/// Обнулить позицию.
+		/// To null position.
 		/// </summary>
 		public virtual void Reset()
 		{
@@ -147,10 +147,10 @@
 		}
 
 		/// <summary>
-		/// Рассчитать позицию по сделке.
+		/// To calculate the position by the trade.
 		/// </summary>
-		/// <param name="trade">Сделка.</param>
-		/// <returns>Позиция по сделке.</returns>
+		/// <param name="trade">Trade.</param>
+		/// <returns>The position by the trade.</returns>
 		public virtual decimal ProcessMyTrade(MyTrade trade)
 		{
 			if (ByOrders)

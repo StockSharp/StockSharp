@@ -1,43 +1,43 @@
-﻿namespace StockSharp.Algo.PnL
+namespace StockSharp.Algo.PnL
 {
 	using StockSharp.Messages;
 
 	/// <summary>
-	/// Интерфейс менеджера расчета прибыли-убытка.
+	/// The interface of the gain-loss calculation manager.
 	/// </summary>
 	public interface IPnLManager
 	{
 		/// <summary>
-		/// Суммарное значение прибыли-убытка.
+		/// Total profit-loss.
 		/// </summary>
 		decimal PnL { get; }
 
 		/// <summary>
-		/// Значение реализованной прибыли-убытка.
+		/// The value of realized gain-loss.
 		/// </summary>
 		decimal RealizedPnL { get; }
 
 		/// <summary>
-		/// Значение нереализованной прибыли-убытка.
+		/// The value of unrealized gain-loss.
 		/// </summary>
 		decimal UnrealizedPnL { get; }
 
 		/// <summary>
-		/// Обнулить <see cref="PnL"/>.
+		/// To zero <see cref="IPnLManager.PnL"/>.
 		/// </summary>
 		void Reset();
 
 		/// <summary>
-		/// Рассчитать прибыльность сделки. Если сделка уже ранее была обработана, то возвращается предыдущая информация.
+		/// To calculate trade profitability. If the trade was already processed earlier, previous information returns.
 		/// </summary>
-		/// <param name="trade">Сделка.</param>
-		/// <returns>Информация о новой сделке.</returns>
+		/// <param name="trade">Trade.</param>
+		/// <returns>Information on new trade.</returns>
 		PnLInfo ProcessMyTrade(ExecutionMessage trade);
 
 		/// <summary>
-		/// Обработать сообщение, содержащее рыночные данные.
+		/// To process the message, containing market data.
 		/// </summary>
-		/// <param name="message">Сообщение, содержащее рыночные данные.</param>
+		/// <param name="message">The message, containing market data.</param>
 		void ProcessMessage(Message message);
 	}
 }

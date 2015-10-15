@@ -1,4 +1,4 @@
-﻿namespace StockSharp.Algo.Testing
+namespace StockSharp.Algo.Testing
 {
 	using System;
 
@@ -9,14 +9,14 @@
 	using StockSharp.Messages;
 
 	/// <summary>
-	/// Генератор тиковых сделок случайным методом.
+	/// Tick trades generator using random method.
 	/// </summary>
 	public abstract class TradeGenerator : MarketDataGenerator
 	{
 		/// <summary>
-		/// Инициализировать <see cref="TradeGenerator"/>.
+		/// Initialize <see cref="TradeGenerator"/>.
 		/// </summary>
-		/// <param name="securityId">Идентификатор инструмента, для которого необходимо генерировать данные.</param>
+		/// <param name="securityId">The identifier of the instrument, for which data shall be generated.</param>
 		protected TradeGenerator(SecurityId securityId)
 			: base(securityId)
 		{
@@ -24,7 +24,7 @@
 		}
 
 		/// <summary>
-		/// Тип маркет-данных.
+		/// Market data type.
 		/// </summary>
 		public override MarketDataTypes DataType
 		{
@@ -32,14 +32,14 @@
 		}
 
 		/// <summary>
-		/// Генерировать значение для <see cref="Trade.OrderDirection"/>. По-умолчанию отключено.
+		/// To generate the value for <see cref="Trade.OrderDirection"/>. By default is disabled.
 		/// </summary>
 		public bool GenerateDirection { get; set; }
 
 		private IdGenerator _idGenerator;
 
 		/// <summary>
-		/// Генератор идентификатора сделки <see cref="Trade.Id"/>.
+		/// The trade identifier generator <see cref="Trade.Id"/>.
 		/// </summary>
 		public IdGenerator IdGenerator
 		{
@@ -55,16 +55,16 @@
 	}
 
 	/// <summary>
-	/// Генератор сделок на основе нормального распределения.
+	/// The trade generator based on normal distribution.
 	/// </summary>
 	public class RandomWalkTradeGenerator : TradeGenerator
 	{
 		private decimal _lastTradePrice;
 
 		/// <summary>
-		/// Создать <see cref="RandomWalkTradeGenerator"/>.
+		/// Initializes a new instance of the <see cref="RandomWalkTradeGenerator"/>.
 		/// </summary>
-		/// <param name="securityId">Идентификатор инструмента, для которого необходимо генерировать данные.</param>
+		/// <param name="securityId">The identifier of the instrument, for which data shall be generated.</param>
 		public RandomWalkTradeGenerator(SecurityId securityId)
 			: base(securityId)
 		{
@@ -72,11 +72,10 @@
 		}
 
 		/// <summary>
-		/// Обработать сообщение.
+		/// Process message.
 		/// </summary>
-		/// <param name="message">Сообщение.</param>
-		/// <returns>Результат обработки. Если будет возрвщено <see langword="null"/>,
-		/// то генератору пока недостаточно данных для генерации нового сообщения.</returns>
+		/// <param name="message">Message.</param>
+		/// <returns>The result of processing. If <see langword="null" /> is returned, then generator has no sufficient data to generate new message.</returns>
 		protected override Message OnProcess(Message message)
 		{
 			DateTimeOffset time;
@@ -161,9 +160,9 @@
 		}
 
 		/// <summary>
-		/// Создать копию <see cref="RandomWalkTradeGenerator"/>.
+		/// Create a copy of <see cref="RandomWalkTradeGenerator"/>.
 		/// </summary>
-		/// <returns>Копия.</returns>
+		/// <returns>Copy.</returns>
 		public override MarketDataGenerator Clone()
 		{
 			return new RandomWalkTradeGenerator(SecurityId)

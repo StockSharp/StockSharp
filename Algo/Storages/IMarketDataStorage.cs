@@ -1,4 +1,4 @@
-﻿namespace StockSharp.Algo.Storages
+namespace StockSharp.Algo.Storages
 {
 	using System;
 	using System.Collections;
@@ -10,105 +10,105 @@
 	using StockSharp.BusinessEntities;
 
 	/// <summary>
-	/// Интерфейс, описывающий хранилище маркет-данных (тики, стаканы и т.д.).
+	/// The interface, describing the storage of market data (ticks, order books etc.).
 	/// </summary>
 	public interface IMarketDataStorage
 	{
 		/// <summary>
-		/// Все даты, для которых записаны маркет-данные.
+		/// All data, for which market data are recorded.
 		/// </summary>
 		IEnumerable<DateTime> Dates { get; }
 
 		/// <summary>
-		/// Тип маркет-данных, с которыми работает данное хранилище.
+		/// The type of market-data, operated by given storage.
 		/// </summary>
 		Type DataType { get; }
 
 		/// <summary>
-		/// Инструмент, с которым работает внешнее хранилище.
+		/// The instrument, operated by the external storage.
 		/// </summary>
 		Security Security { get; }
 
 		/// <summary>
-		/// Дополнительный аргумент, ассоциированный с данными. Например, <see cref="Candle.Arg"/>.
+		/// The additional argument, associated with data. For example, <see cref="Candle.Arg"/>.
 		/// </summary>
 		object Arg { get; }
 
 		/// <summary>
-		/// Хранилище (база данных, файл и т.д.).
+		/// The storage (database, file etc.).
 		/// </summary>
 		IMarketDataStorageDrive Drive { get; }
 
 		/// <summary>
-		/// Добавлять ли только новые данные или пытаться записать все данные без фильтра.
+		/// Whether to add new data or attempt to record all data without filter.
 		/// </summary>
 		bool AppendOnlyNew { get; set; }
 
 		/// <summary>
-		/// Сохранить маркет-данные в хранилище.
+		/// To save market data in storage.
 		/// </summary>
-		/// <param name="data">Маркет-данные.</param>
+		/// <param name="data">Market data.</param>
 		void Save(IEnumerable data);
 
 		/// <summary>
-		/// Удалить маркет-данные из хранилища.
+		/// To delete market data from storage.
 		/// </summary>
-		/// <param name="data">Маркет-данные, которые необходимо удалить.</param>
+		/// <param name="data">Market data to be deleted.</param>
 		void Delete(IEnumerable data);
 
 		/// <summary>
-		/// Удалить маркет-данные из хранилища за указанную дату.
+		/// To remove market data on specified date from the storage.
 		/// </summary>
-		/// <param name="date">Дата, для которой необходимо удалить все данные.</param>
+		/// <param name="date">Date, for which all data shall be deleted.</param>
 		void Delete(DateTime date);
 
 		/// <summary>
-		/// Загрузить данные.
+		/// To load data.
 		/// </summary>
-		/// <param name="date">Дата, для которой необходимо загрузить данные.</param>
-		/// <returns>Данные. Если данных не существует, то будет возвращено пустое множество.</returns>
+		/// <param name="date">Date, for which data shall be loaded.</param>
+		/// <returns>Data. If there is no data, the empty set will be returned.</returns>
 		IEnumerable Load(DateTime date);
 
 		/// <summary>
-		/// Получить мета-информация о данных.
+		/// To ger meta-information on data.
 		/// </summary>
-		/// <param name="date">Дата, для которой необходимо получить мета-информация о данных.</param>
-		/// <returns>Мета-информация о данных. Если дня в истории не существует, то будет возвращено <see langword="null"/>.</returns>
+		/// <param name="date">Date, for which meta-information on data shall be received.</param>
+		/// <returns>Meta-information on data. If there is no such date in history, <see langword="null" /> will be returned.</returns>
 		IMarketDataMetaInfo GetMetaInfo(DateTime date);
 
 		/// <summary>
-		/// Сериализатор.
+		/// The serializer.
 		/// </summary>
 		IMarketDataSerializer Serializer { get; }
 	}
 
 	/// <summary>
-	/// Интерфейс, описывающий хранилище маркет-данных (тики, стаканы и т.д.).
+	/// The interface, describing the storage of market data (ticks, order books etc.).
 	/// </summary>
-	/// <typeparam name="TData">Тип маркет-данных.</typeparam>
+	/// <typeparam name="TData">Market data type.</typeparam>
 	public interface IMarketDataStorage<TData> : IMarketDataStorage
 	{
 		/// <summary>
-		/// Сохранить маркет-данные в хранилище.
+		/// To save market data in storage.
 		/// </summary>
-		/// <param name="data">Маркет-данные.</param>
+		/// <param name="data">Market data.</param>
 		void Save(IEnumerable<TData> data);
 
 		/// <summary>
-		/// Удалить маркет-данные из хранилища.
+		/// To delete market data from storage.
 		/// </summary>
-		/// <param name="data">Маркет-данные, которые необходимо удалить.</param>
+		/// <param name="data">Market data to be deleted.</param>
 		void Delete(IEnumerable<TData> data);
 
 		/// <summary>
-		/// Загрузить данные.
+		/// To load data.
 		/// </summary>
-		/// <param name="date">Дата, для которой необходимо загрузить данные.</param>
-		/// <returns>Данные. Если данных не существует, то будет возвращено пустое множество.</returns>
+		/// <param name="date">Date, for which data shall be loaded.</param>
+		/// <returns>Data. If there is no data, the empty set will be returned.</returns>
 		new IEnumerableEx<TData> Load(DateTime date);
 
 		/// <summary>
-		/// Сериализатор.
+		/// The serializer.
 		/// </summary>
 		new IMarketDataSerializer<TData> Serializer { get; }
 	}

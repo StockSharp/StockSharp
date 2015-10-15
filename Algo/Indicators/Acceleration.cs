@@ -10,17 +10,17 @@ namespace StockSharp.Algo.Indicators
 	using Xceed.Wpf.Toolkit.PropertyGrid.Attributes;
 
 	/// <summary>
-	/// Индикатор Замедления / Ускорения.
+	/// Acceleration / Decelration Indicator.
 	/// </summary>
 	/// <remarks>
-	/// http://ta.mql4.com/indicators/bills/acceleration_deceleration
+	/// http://ta.mql4.com/indicators/bills/acceleration_deceleration.
 	/// </remarks>
 	[DisplayName("A/D")]
 	[DescriptionLoc(LocalizedStrings.Str835Key)]
 	public class Acceleration : BaseIndicator
 	{
 		/// <summary>
-		/// Создать <see cref="Acceleration"/>.
+		/// Initializes a new instance of the <see cref="Acceleration"/>.
 		/// </summary>
 		public Acceleration()
 			: this(new AwesomeOscillator(), new SimpleMovingAverage { Length = 5 })
@@ -28,10 +28,10 @@ namespace StockSharp.Algo.Indicators
 		}
 
 		/// <summary>
-		/// Создать <see cref="Acceleration"/>.
+		/// Initializes a new instance of the <see cref="Acceleration"/>.
 		/// </summary>
-		/// <param name="ao">Чудесный осцилятор.</param>
-		/// <param name="sma">Cкользящая средняя.</param>
+		/// <param name="ao">Awesome Oscillator.</param>
+		/// <param name="sma">The moving average.</param>
 		public Acceleration(AwesomeOscillator ao, SimpleMovingAverage sma)
 		{
 			if (ao == null)
@@ -45,7 +45,7 @@ namespace StockSharp.Algo.Indicators
 		}
 
 		/// <summary>
-		/// Cкользящая средняя.
+		/// The moving average.
 		/// </summary>
 		[ExpandableObject]
 		[DisplayName("MA")]
@@ -54,7 +54,7 @@ namespace StockSharp.Algo.Indicators
 		public SimpleMovingAverage Sma { get; private set; }
 
 		/// <summary>
-		/// Чудесный осцилятор.
+		/// Awesome Oscillator.
 		/// </summary>
 		[ExpandableObject]
 		[DisplayName("AO")]
@@ -63,15 +63,15 @@ namespace StockSharp.Algo.Indicators
 		public AwesomeOscillator Ao { get; private set; }
 
 		/// <summary>
-		/// Сформирован ли индикатор.
+		/// Whether the indicator is set.
 		/// </summary>
 		public override bool IsFormed { get { return Sma.IsFormed; } }
 
 		/// <summary>
-		/// Обработать входное значение.
+		/// To handle the input value.
 		/// </summary>
-		/// <param name="input">Входное значение.</param>
-		/// <returns>Результирующее значение.</returns>
+		/// <param name="input">The input value.</param>
+		/// <returns>The resulting value.</returns>
 		protected override IIndicatorValue OnProcess(IIndicatorValue input)
 		{
 			var aoValue = Ao.Process(input);
@@ -83,9 +83,9 @@ namespace StockSharp.Algo.Indicators
 		}
 
 		/// <summary>
-		/// Загрузить настройки.
+		/// Load settings.
 		/// </summary>
-		/// <param name="settings">Хранилище настроек.</param>
+		/// <param name="settings">Settings storage.</param>
 		public override void Load(SettingsStorage settings)
 		{
 			base.Load(settings);
@@ -95,9 +95,9 @@ namespace StockSharp.Algo.Indicators
 		}
 
 		/// <summary>
-		/// Сохранить настройки.
+		/// Save settings.
 		/// </summary>
-		/// <param name="settings">Хранилище настроек.</param>
+		/// <param name="settings">Settings storage.</param>
 		public override void Save(SettingsStorage settings)
 		{
 			base.Save(settings);

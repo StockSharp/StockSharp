@@ -16,7 +16,7 @@ namespace StockSharp.Algo.Candles
 	using StockSharp.Localization;
 
 	/// <summary>
-	/// Источник свечек для <see cref="ICandleManager"/>, который загружает свечи из внешнего хранилища.
+	/// The candles source for <see cref="ICandleManager"/> that downloads candles from an external storage.
 	/// </summary>
 	public class StorageCandleSource : BaseCandleSource<Candle>, ICandleManagerSource, IStorageCandleSource
 	{
@@ -43,7 +43,7 @@ namespace StockSharp.Algo.Candles
 		private readonly CachedSynchronizedDictionary<CandleSeries, SeriesInfo> _series = new CachedSynchronizedDictionary<CandleSeries, SeriesInfo>();
 
 		/// <summary>
-		/// Создать <see cref="StorageCandleSource"/>.
+		/// Initializes a new instance of the <see cref="StorageCandleSource"/>.
 		/// </summary>
 		public StorageCandleSource()
 		{
@@ -55,7 +55,7 @@ namespace StockSharp.Algo.Candles
 		}
 
 		/// <summary>
-		/// Приоритет источника по скорости (0 - самый оптимальный).
+		/// The source priority by speed (0 - the best).
 		/// </summary>
 		public override int SpeedPriority
 		{
@@ -63,25 +63,25 @@ namespace StockSharp.Algo.Candles
 		}
 
 		/// <summary>
-		/// Хранилище данных.
+		/// Market data storage.
 		/// </summary>
 		public IStorageRegistry StorageRegistry { get; set; }
 
 		/// <summary>
-		/// Хранилище, которое используется по-умолчанию. По умолчанию используется <see cref="IStorageRegistry.DefaultDrive"/>.
+		/// The storage which is used by default. By default, <see cref="IStorageRegistry.DefaultDrive"/> is used.
 		/// </summary>
 		public IMarketDataDrive Drive { get; set; }
 
 		/// <summary>
-		/// Менеджер свечек, которому принадлежит данный источник.
+		/// The candles manager which owns this source.
 		/// </summary>
 		ICandleManager ICandleManagerSource.CandleManager { get; set; }
 
 		/// <summary>
-		/// Получить временные диапазоны, для которых у данного источника для передаваемой серии свечек есть данные.
+		/// To get time ranges for which this source of passed candles series has data.
 		/// </summary>
-		/// <param name="series">Серия свечек.</param>
-		/// <returns>Временные диапазоны.</returns>
+		/// <param name="series">Candles series.</param>
+		/// <returns>Time ranges.</returns>
 		public override IEnumerable<Range<DateTimeOffset>> GetSupportedRanges(CandleSeries series)
 		{
 			if (StorageRegistry == null)
@@ -91,11 +91,11 @@ namespace StockSharp.Algo.Candles
 		}
 
 		/// <summary>
-		/// Запросить получение данных.
+		/// To send data request.
 		/// </summary>
-		/// <param name="series">Серия свечек, для которой необходимо начать получать данные.</param>
-		/// <param name="from">Начальная дата, с которой необходимо получать данные.</param>
-		/// <param name="to">Конечная дата, до которой необходимо получать данные.</param>
+		/// <param name="series">The candles series for which data receiving should be started.</param>
+		/// <param name="from">The initial date from which you need to get data.</param>
+		/// <param name="to">The final date by which you need to get data.</param>
 		public override void Start(CandleSeries series, DateTimeOffset from, DateTimeOffset to)
 		{
 			if (series == null)
@@ -121,9 +121,9 @@ namespace StockSharp.Algo.Candles
 		}
 
 		/// <summary>
-		/// Прекратить получение данных, запущенное через <see cref="Start"/>.
+		/// To stop data receiving starting through <see cref="Start"/>.
 		/// </summary>
-		/// <param name="series">Серия свечек.</param>
+		/// <param name="series">Candles series.</param>
 		public override void Stop(CandleSeries series)
 		{
 			lock (_series.SyncRoot)
@@ -189,7 +189,7 @@ namespace StockSharp.Algo.Candles
 		}
 
 		/// <summary>
-		/// Освободить занятые ресурсы.
+		/// Release resources.
 		/// </summary>
 		public override void Dispose()
 		{

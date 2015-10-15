@@ -5,14 +5,14 @@ namespace StockSharp.Algo.Indicators
 	using StockSharp.Localization;
 
 	/// <summary>
-	/// Впадина.
+	/// Trough.
 	/// </summary>
 	[DisplayName("Trough")]
 	[DescriptionLoc(LocalizedStrings.Str821Key)]
 	public sealed class Trough : ZigZagEquis
 	{
 		/// <summary>
-		/// Создать индикатор <see cref="Trough"/>.
+		/// To create the indicator <see cref="Trough"/>.
 		/// </summary>
 		public Trough()
 		{
@@ -20,10 +20,10 @@ namespace StockSharp.Algo.Indicators
 		}
 
 		/// <summary>
-		/// Обработать входное значение.
+		/// To handle the input value.
 		/// </summary>
-		/// <param name="input">Входное значение.</param>
-		/// <returns>Результирующее значение.</returns>
+		/// <param name="input">The input value.</param>
+		/// <returns>The resulting value.</returns>
 		protected override IIndicatorValue OnProcess(IIndicatorValue input)
 		{
 			var value = base.OnProcess(input);

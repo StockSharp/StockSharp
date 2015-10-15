@@ -12,21 +12,21 @@ namespace StockSharp.Algo.Storages
 	using StockSharp.Messages;
 
 	/// <summary>
-	/// Хранилище, генерирующее данные в процессе работы.
+	/// The storage, generating data in the process of operation.
 	/// </summary>
-	/// <typeparam name="T">Тип данных.</typeparam>
+	/// <typeparam name="T">Data type.</typeparam>
 	public sealed class InMemoryMarketDataStorage<T> : IMarketDataStorage<T>
 		where T : Message
 	{
 		private readonly Func<DateTimeOffset, IEnumerable<T>> _getData;
 
 		/// <summary>
-		/// Создать <see cref="InMemoryMarketDataStorage{T}"/>.
+		/// Г‘Г®Г§Г¤Г ГІГј <see cref="InMemoryMarketDataStorage{T}"/>.
 		/// </summary>
-		/// <param name="security">Инструмент, с которым работает внешнее хранилище.</param>
-		/// <param name="arg">Дополнительный аргумент, ассоциированный с данными. Например, <see cref="Candle.Arg"/>.</param>
-		/// <param name="getData">Метод генерации данных для указанной даты.</param>
-		/// <param name="dataType">Тип данных.</param>
+		/// <param name="security">Г€Г­Г±ГІГ°ГіГ¬ГҐГ­ГІ, Г± ГЄГ®ГІГ®Г°Г»Г¬ Г°Г ГЎГ®ГІГ ГҐГІ ГўГ­ГҐГёГ­ГҐГҐ ГµГ°Г Г­ГЁГ«ГЁГ№ГҐ.</param>
+		/// <param name="arg">Г„Г®ГЇГ®Г«Г­ГЁГІГҐГ«ГјГ­Г»Г© Г Г°ГЈГіГ¬ГҐГ­ГІ, Г Г±Г±Г®Г¶ГЁГЁГ°Г®ГўГ Г­Г­Г»Г© Г± Г¤Г Г­Г­Г»Г¬ГЁ. ГЌГ ГЇГ°ГЁГ¬ГҐГ°, <see cref="Candle.Arg"/>.</param>
+		/// <param name="getData">ГЊГҐГІГ®Г¤ ГЈГҐГ­ГҐГ°Г Г¶ГЁГЁ Г¤Г Г­Г­Г»Гµ Г¤Г«Гї ГіГЄГ Г§Г Г­Г­Г®Г© Г¤Г ГІГ».</param>
+		/// <param name="dataType">Г’ГЁГЇ Г¤Г Г­Г­Г»Гµ.</param>
 		public InMemoryMarketDataStorage(Security security, object arg, Func<DateTimeOffset, IEnumerable<Message>> getData, Type dataType = null)
 		{
 			if (getData == null)
@@ -39,11 +39,11 @@ namespace StockSharp.Algo.Storages
 		}
 
 		/// <summary>
-		/// Создать <see cref="InMemoryMarketDataStorage{T}"/>.
+		/// Г‘Г®Г§Г¤Г ГІГј <see cref="InMemoryMarketDataStorage{T}"/>.
 		/// </summary>
-		/// <param name="security">Инструмент, с которым работает внешнее хранилище.</param>
-		/// <param name="arg">Дополнительный аргумент, ассоциированный с данными. Например, <see cref="Candle.Arg"/>.</param>
-		/// <param name="getData">Метод генерации данных для указанной даты.</param>
+		/// <param name="security">Г€Г­Г±ГІГ°ГіГ¬ГҐГ­ГІ, Г± ГЄГ®ГІГ®Г°Г»Г¬ Г°Г ГЎГ®ГІГ ГҐГІ ГўГ­ГҐГёГ­ГҐГҐ ГµГ°Г Г­ГЁГ«ГЁГ№ГҐ.</param>
+		/// <param name="arg">Г„Г®ГЇГ®Г«Г­ГЁГІГҐГ«ГјГ­Г»Г© Г Г°ГЈГіГ¬ГҐГ­ГІ, Г Г±Г±Г®Г¶ГЁГЁГ°Г®ГўГ Г­Г­Г»Г© Г± Г¤Г Г­Г­Г»Г¬ГЁ. ГЌГ ГЇГ°ГЁГ¬ГҐГ°, <see cref="Candle.Arg"/>.</param>
+		/// <param name="getData">ГЊГҐГІГ®Г¤ ГЈГҐГ­ГҐГ°Г Г¶ГЁГЁ Г¤Г Г­Г­Г»Гµ Г¤Г«Гї ГіГЄГ Г§Г Г­Г­Г®Г© Г¤Г ГІГ».</param>
 		public InMemoryMarketDataStorage(Security security, object arg, Func<DateTimeOffset, IEnumerable<T>> getData)
 		{
 			if (getData == null)
@@ -98,10 +98,10 @@ namespace StockSharp.Algo.Storages
 		}
 
 		/// <summary>
-		/// Загрузить данные.
+		/// To load data.
 		/// </summary>
-		/// <param name="date">Дата, для которой необходимо загрузить данные.</param>
-		/// <returns>Данные. Если данных не существует, то будет возвращено пустое множество.</returns>
+		/// <param name="date">Date, for which data shall be loaded.</param>
+		/// <returns>Data. If there is no data, the empty set will be returned.</returns>
 		public IEnumerableEx<T> Load(DateTime date)
 		{
 			return _getData(date).ToEx();

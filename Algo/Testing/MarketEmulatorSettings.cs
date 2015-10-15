@@ -13,12 +13,12 @@ namespace StockSharp.Algo.Testing
 	using Xceed.Wpf.Toolkit.PropertyGrid.Attributes;
 
 	/// <summary>
-	/// Настройки эмулятора биржи.
+	/// Settings of exchange emulator.
 	/// </summary>
 	public class MarketEmulatorSettings : NotifiableObject, IPersistable
 	{
 		/// <summary>
-		/// Создать <see cref="MarketEmulatorSettings"/>.
+		/// Initializes a new instance of the <see cref="MarketEmulatorSettings"/>.
 		/// </summary>
 		public MarketEmulatorSettings()
 		{
@@ -30,8 +30,7 @@ namespace StockSharp.Algo.Testing
 		private bool _matchOnTouch;
 
 		/// <summary>
-		/// При эмулировании сведения по сделкам, производить сведение заявок, когда цена сделки коснулась цены заявки (равна цене заявки),
-		/// а не только, когда цена сделки лучше цены заявки. По-умолчанию включено (оптимистический сценарий).
+		/// At emulation of clearing by trades, to perform clearing of orders, when trade price touches the order price (is equal to order price), rather than only when the trade price is better than order price. Is On by default (optimistic scenario).
 		/// </summary>
 		[CategoryLoc(LocalizedStrings.Str1175Key)]
 		[PropertyOrder(50)]
@@ -53,8 +52,7 @@ namespace StockSharp.Algo.Testing
 		private TimeSpan _depthExpirationTime;
 
 		/// <summary>
-		/// Максимальное время, которое стакан находится в эмуляторе. Если за это время не произошло обновление, стакан стирается.
-		/// Это свойство можно использовать, чтобы убирать старые стаканы при наличии дыр в данных. По-умолчанию равно 1 дню.
+		/// The maximal time, during which the order book is in the emulator, If no renewal during this time, the order book is deleted, This feature may be used to remove old order books if the are holes in data. By default is equal to 1 day.
 		/// </summary>
 		[CategoryLoc(LocalizedStrings.Str1175Key)]
 		[PropertyOrder(200)]
@@ -76,8 +74,7 @@ namespace StockSharp.Algo.Testing
 		private double _failing;
 
 		/// <summary>
-		/// Процентное значение ошибки регистрации новых заявок. Значение может быть от 0 (не будет ни одной ошибки) до 100.
-		/// По-умолчанию выключено.
+		/// The percentage value of new orders registration error. The value may be from 0 (not a single error) to 100. By default is Off.
 		/// </summary>
 		[CategoryLoc(LocalizedStrings.Str1175Key)]
 		[PropertyOrder(60)]
@@ -102,8 +99,7 @@ namespace StockSharp.Algo.Testing
 		private TimeSpan _latency;
 
 		/// <summary>
-		/// Минимальное значение задержки выставляемых заявок.
-		/// По-умолчанию равно <see cref="TimeSpan.Zero"/>, что означает мгновенное принятие биржей выставляемых заявок.
+		/// The minimal value of the registered orders delay. By default, it is <see cref="TimeSpan.Zero"/>, which means instant adoption of registered orders by  exchange.
 		/// </summary>
 		[CategoryLoc(LocalizedStrings.Str1175Key)]
 		[PropertyOrder(20)]
@@ -125,7 +121,7 @@ namespace StockSharp.Algo.Testing
 		private bool _isSupportAtomicReRegister;
 
 		/// <summary>
-		/// Поддерживается ли перерегистрация заявок в виде одной транзакции. По-умолчанию включено.
+		/// Gets a value indicating whether the re-registration orders as a single transaction. By default is enabled.
 		/// </summary>
 		[CategoryLoc(LocalizedStrings.Str1175Key)]
 		[PropertyOrder(30)]
@@ -144,8 +140,7 @@ namespace StockSharp.Algo.Testing
 		private TimeSpan _bufferTime;
 
 		/// <summary>
-		/// Отправлять ответы интервально целым пакетом. Эмулируется сетевая задержка и буферизированная работа биржевого ядра.
-		/// По умолчанию 0 мс.
+		/// Responses shall be sent in intervals by whole package. The network delay and bufferized operation of exchange are emulated. The default is 0 ms.
 		/// </summary>
 		[CategoryLoc(LocalizedStrings.Str1175Key)]
 		[PropertyOrder(80)]
@@ -191,7 +186,7 @@ namespace StockSharp.Algo.Testing
 		private long _initialOrderId;
 
 		/// <summary>
-		/// Число, начиная с которого эмулятор будет генерировать идентификаторы для заявок <see cref="Order.Id"/>.
+		/// The number, starting at which the emulator will generate identifiers for orders <see cref="Order.Id"/>.
 		/// </summary>
 		[CategoryLoc(LocalizedStrings.Str1175Key)]
 		[PropertyOrder(70)]
@@ -210,7 +205,7 @@ namespace StockSharp.Algo.Testing
 		private long _initialTradeId;
 
 		/// <summary>
-		/// Число, начиная с которого эмулятор будет генерировать идентификаторы для сделок <see cref="Trade.Id"/>.
+		/// The number, starting at which the emulator will generate identifiers fir trades <see cref="Trade.Id"/>.
 		/// </summary>
 		[CategoryLoc(LocalizedStrings.Str1175Key)]
 		[PropertyOrder(80)]
@@ -229,7 +224,7 @@ namespace StockSharp.Algo.Testing
 		private long _initialTransactionId;
 
 		/// <summary>
-		/// Номер, начиная с которого эмулятор будет генерировать номера для транзакций заявок <see cref="Order.TransactionId"/>.
+		/// The number, starting at which the emulator will generate numbers for order trades <see cref="Order.TransactionId"/>.
 		/// </summary>
 		[CategoryLoc(LocalizedStrings.Str1175Key)]
 		[PropertyOrder(80)]
@@ -248,8 +243,7 @@ namespace StockSharp.Algo.Testing
 		private int _spreadSize = 2;
 
 		/// <summary>
-		/// Размер спреда в шагах цены. Используется при определение спреда для генерации стакана из тиковых сделок.
-		/// По-умолчанию равен 2.
+		/// The size of spread in price increments. It used at determination of spread for generation of order book from tick trades. By default equals to 2.
 		/// </summary>
 		[CategoryLoc(LocalizedStrings.Str1175Key)]
 		[PropertyOrder(90)]
@@ -271,8 +265,7 @@ namespace StockSharp.Algo.Testing
 		private int _maxDepth = 5;
 
 		/// <summary>
-		/// Максимальная глубина стакана, который будет генерироваться из тиков.
-		/// Используется, если нет истории стаканов. По-умолчанию равно 5.
+		/// The maximal depth of order book, which will be generated from ticks. It used, if there is no order book history. By default equals to 5.
 		/// </summary>
 		[CategoryLoc(LocalizedStrings.Str1175Key)]
 		[PropertyOrder(100)]
@@ -294,8 +287,7 @@ namespace StockSharp.Algo.Testing
 		private int _volumeMultiplier = 2;
 
 		/// <summary>
-		/// Количество шагов объема, на которое заявка больше тиковой сделки. Используется при тестировании на тиковых сделках.
-		/// По-умолчанию равен 2.
+		/// The number of volume increments, at which the order exceeds the tick trade. It used at testing on tick trades. By default equals to 2.
 		/// </summary>
 		[CategoryLoc(LocalizedStrings.Str1175Key)]
 		[PropertyOrder(110)]
@@ -317,7 +309,7 @@ namespace StockSharp.Algo.Testing
 		private TimeSpan _portfolioRecalcInterval = TimeSpan.Zero;
 
 		/// <summary>
-		/// Интервал перерасчета данных по портфелям. Если интервал равен <see cref="TimeSpan.Zero"/>, то перерасчет не выполняется.
+		/// The interval for recalculation of data on portfolios. If interval equals <see cref="TimeSpan.Zero"/>, recalculation is not performed.
 		/// </summary>
 		[CategoryLoc(LocalizedStrings.Str1175Key)]
 		[PropertyOrder(120)]
@@ -339,7 +331,7 @@ namespace StockSharp.Algo.Testing
 		private bool _convertTime;
 
 		/// <summary>
-		/// Переводить время для заявок и сделок в биржевое. По-умолчанию выключено.
+		/// To convert time for orders and trades into exchange time. By default, it is disabled.
 		/// </summary>
 		[CategoryLoc(LocalizedStrings.Str1175Key)]
 		[PropertyOrder(130)]
@@ -358,7 +350,7 @@ namespace StockSharp.Algo.Testing
 		private TimeZoneInfo _timeZone;
 
 		/// <summary>
-		/// Информация о временной зоне, где находится биржа.
+		/// Information about the time zone where the exchange is located.
 		/// </summary>
 		[CategoryLoc(LocalizedStrings.Str1175Key)]
 		[PropertyOrder(140)]
@@ -377,8 +369,7 @@ namespace StockSharp.Algo.Testing
 		private Unit _priceLimitOffset = new Unit(40, UnitTypes.Percent);
 
 		/// <summary>
-		/// Сдвиг цены от последней сделки, определяющие границы максимальной и минимальной цен на следующую сессию.
-		/// Используется только, если нет сохраненной информации <see cref="Level1ChangeMessage"/>. По-умолчанию равен 40%.
+		/// The price shift from the previous trade, determining boundaries of maximal and minimal prices for the next session. Used only if there is no saved information <see cref="Level1ChangeMessage"/>. By default, it equals to 40%.
 		/// </summary>
 		[CategoryLoc(LocalizedStrings.Str1175Key)]
 		[PropertyOrder(150)]
@@ -399,7 +390,7 @@ namespace StockSharp.Algo.Testing
 		private bool _increaseDepthVolume = true;
 
 		/// <summary>
-		/// Добавлять дополнительный объем в стакан при выставлении заявок с большим объемом. По-умолчанию включено.
+		/// To add the additional volume into order book at registering orders with greater volume. By default, it is enabled.
 		/// </summary>
 		[CategoryLoc(LocalizedStrings.Str1175Key)]
 		[PropertyOrder(150)]
@@ -416,9 +407,9 @@ namespace StockSharp.Algo.Testing
 		}
 
 		/// <summary>
-		/// Сохранить состояние параметров эмуляции.
+		/// To save the state of paper trading parameters.
 		/// </summary>
-		/// <param name="storage">Хранилище.</param>
+		/// <param name="storage">Storage.</param>
 		public virtual void Save(SettingsStorage storage)
 		{
 			storage.SetValue("DepthExpirationTime", DepthExpirationTime);
@@ -444,9 +435,9 @@ namespace StockSharp.Algo.Testing
 		}
 
 		/// <summary>
-		/// Загрузить состояние параметров эмуляции.
+		/// To load the state of paper trading parameters.
 		/// </summary>
-		/// <param name="storage">Хранилище.</param>
+		/// <param name="storage">Storage.</param>
 		public virtual void Load(SettingsStorage storage)
 		{
 			DepthExpirationTime = storage.GetValue("DepthExpirationTime", DepthExpirationTime);

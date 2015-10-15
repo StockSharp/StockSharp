@@ -11,7 +11,7 @@ namespace StockSharp.Algo.Indicators
 	using StockSharp.Localization;
 
 	/// <summary>
-	/// Адаптивная скользящая средняя Кауфманна.
+	/// Kaufman adaptive moving average.
 	/// </summary>
 	[DisplayName("KAMA")]
 	[DescriptionLoc(LocalizedStrings.Str792Key)]
@@ -21,7 +21,7 @@ namespace StockSharp.Algo.Indicators
 		private bool _isInitialized;
 
 		/// <summary>
-		/// Создать <see cref="KaufmannAdaptiveMovingAverage"/>.
+		/// Initializes a new instance of the <see cref="KaufmannAdaptiveMovingAverage"/>.
 		/// </summary>
 		public KaufmannAdaptiveMovingAverage()
 		{
@@ -30,7 +30,7 @@ namespace StockSharp.Algo.Indicators
 		}
 
 		/// <summary>
-		/// Период "быстрой" EMA. Значение по умолчанию 2.
+		/// �Rapid� EMA period. The default value is 2.
 		/// </summary>
 		[DisplayNameLoc(LocalizedStrings.Str793Key)]
 		[DescriptionLoc(LocalizedStrings.Str794Key)]
@@ -38,7 +38,7 @@ namespace StockSharp.Algo.Indicators
 		public int FastSCPeriod { get; set; }
 
 		/// <summary>
-		/// Период "медленной" EMA. Значение по умолчанию 30.
+		/// �Slow� EMA period. The default value is 30.
 		/// </summary>
 		[DisplayNameLoc(LocalizedStrings.Str795Key)]
 		[DescriptionLoc(LocalizedStrings.Str796Key)]
@@ -46,7 +46,7 @@ namespace StockSharp.Algo.Indicators
 		public int SlowSCPeriod { get; set; }
 
 		/// <summary>
-		/// Сформирован ли индикатор.
+		/// Whether the indicator is set.
 		/// </summary>
 		public override bool IsFormed
 		{
@@ -54,7 +54,7 @@ namespace StockSharp.Algo.Indicators
 		}
 
 		/// <summary>
-		/// Сбросить состояние индикатора на первоначальное. Метод вызывается каждый раз, когда меняются первоначальные настройки (например, длина периода).
+		/// To reset the indicator status to initial. The method is called each time when initial settings are changed (for example, the length of period).
 		/// </summary>
 		public override void Reset()
 		{
@@ -65,10 +65,10 @@ namespace StockSharp.Algo.Indicators
 		}
 
 		/// <summary>
-		/// Обработать входное значение.
+		/// To handle the input value.
 		/// </summary>
-		/// <param name="input">Входное значение.</param>
-		/// <returns>Результирующее значение.</returns>
+		/// <param name="input">The input value.</param>
+		/// <returns>The resulting value.</returns>
 		protected override IIndicatorValue OnProcess(IIndicatorValue input)
 		{
 			var newValue = input.GetValue<decimal>();
@@ -127,9 +127,9 @@ namespace StockSharp.Algo.Indicators
 		}
 
 		/// <summary>
-		/// Загрузить настройки.
+		/// Load settings.
 		/// </summary>
-		/// <param name="settings">Хранилище настроек.</param>
+		/// <param name="settings">Settings storage.</param>
 		public override void Load(SettingsStorage settings)
 		{
 			base.Load(settings);
@@ -138,9 +138,9 @@ namespace StockSharp.Algo.Indicators
 		}
 
 		/// <summary>
-		/// Сохранить настройки.
+		/// Save settings.
 		/// </summary>
-		/// <param name="settings">Хранилище настроек.</param>
+		/// <param name="settings">Settings storage.</param>
 		public override void Save(SettingsStorage settings)
 		{
 			base.Save(settings);

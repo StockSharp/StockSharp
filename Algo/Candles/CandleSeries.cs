@@ -11,30 +11,30 @@ namespace StockSharp.Algo.Candles
 	using StockSharp.Messages;
 
 	/// <summary>
-	/// Серия свечек.
+	/// Candles series.
 	/// </summary>
 	public class CandleSeries : Disposable, IPersistable, INotifyPropertyChanged
 	{
 		/// <summary>
-		/// Создать <see cref="CandleSeries"/>.
+		/// Initializes a new instance of the <see cref="CandleSeries"/>.
 		/// </summary>
 		public CandleSeries()
 		{
 		}
 
 		/// <summary>
-		/// Создать <see cref="CandleSeries"/>.
+		/// Initializes a new instance of the <see cref="CandleSeries"/>.
 		/// </summary>
-		/// <param name="candleType">Тип свечи.</param>
-		/// <param name="security">Инструмент, по которому необходимо формировать свечи.</param>
-		/// <param name="arg">Параметр формирования свечи. Например, для <see cref="TimeFrameCandle"/> это значение <see cref="TimeFrameCandle.TimeFrame"/>.</param>
+		/// <param name="candleType">The candle type.</param>
+		/// <param name="security">The instrument to be used for candles formation.</param>
+		/// <param name="arg">The candle formation parameter. For example, for <see cref="TimeFrameCandle"/> this value is <see cref="TimeFrameCandle.TimeFrame"/>.</param>
 		public CandleSeries(Type candleType, Security security, object arg)
 		{
 			if (candleType == null)
 				throw new ArgumentNullException("candleType");
 
 			if (!candleType.IsSubclassOf(typeof(Candle)))
-				throw new ArgumentOutOfRangeException("candleType", candleType, "Неправильный тип свечки.");
+				throw new ArgumentOutOfRangeException("candleType", candleType, "ГЌГҐГЇГ°Г ГўГЁГ«ГјГ­Г»Г© ГІГЁГЇ Г±ГўГҐГ·ГЄГЁ.");
 
 			if (security == null)
 				throw new ArgumentNullException("security");
@@ -51,7 +51,7 @@ namespace StockSharp.Algo.Candles
 		private Security _security;
 
 		/// <summary>
-		/// Инструмент, по которому необходимо формировать свечи.
+		/// The instrument to be used for candles formation.
 		/// </summary>
 		public virtual Security Security
 		{
@@ -66,7 +66,7 @@ namespace StockSharp.Algo.Candles
 		private Type _candleType;
 
 		/// <summary>
-		/// Тип свечи.
+		/// The candle type.
 		/// </summary>
 		public virtual Type CandleType
 		{
@@ -81,7 +81,7 @@ namespace StockSharp.Algo.Candles
 		private object _arg;
 
 		/// <summary>
-		/// Параметр формирования свечи. Например, для <see cref="TimeFrameCandle"/> это значение <see cref="TimeFrameCandle.TimeFrame"/>.
+		/// The candle formation parameter. For example, for <see cref="TimeFrameCandle"/> this value is <see cref="TimeFrameCandle.TimeFrame"/>.
 		/// </summary>
 		public virtual object Arg
 		{
@@ -94,14 +94,14 @@ namespace StockSharp.Algo.Candles
 		}
 
 		/// <summary>
-		/// Граница времени, в пределах которой должны транслироваться свечи для данной серии.
+		/// The time boundary, within which candles for give series shall be translated.
 		/// </summary>
 		public WorkingTime WorkingTime { get; set; }
 
 		private ICandleManager _candleManager;
 
 		/// <summary>
-		/// Менеджер свечек, который зарегистрировал данную серию.
+		/// The candle manager, which has registered given series.
 		/// </summary>
 		public ICandleManager CandleManager
 		{
@@ -128,28 +128,27 @@ namespace StockSharp.Algo.Candles
 		}
 
 		/// <summary>
-		/// Производить расчет <see cref="Candle.VolumeProfileInfo"/>.
-		/// По-умолчанию, выключено.
+		/// To perform the calculation <see cref="Candle.VolumeProfileInfo"/>. By default, it is disabled.
 		/// </summary>
 		public bool IsCalcVolumeProfile { get; set; }
 
-		// используется RealTimeCandleBuilderSource
+		// ГЁГ±ГЇГ®Г«ГјГ§ГіГҐГІГ±Гї RealTimeCandleBuilderSource
 		internal bool IsNew { get; set; }
 
 		/// <summary>
-		/// Событие обработки свечи.
+		/// The candle processing event.
 		/// </summary>
 		public event Action<Candle> ProcessCandle;
 
 		/// <summary>
-		/// Событие окончания обработки серии.
+		/// The series processing end event.
 		/// </summary>
 		public event Action Stopped;
 
 		private DateTimeOffset _from = DateTimeOffset.MinValue;
 
 		/// <summary>
-		/// Начальная дата, с которой необходимо получать данные.
+		/// The initial date from which you need to get data.
 		/// </summary>
 		public DateTimeOffset From
 		{
@@ -160,7 +159,7 @@ namespace StockSharp.Algo.Candles
 		private DateTimeOffset _to = DateTimeOffset.MaxValue;
 		
 		/// <summary>
-		/// Конечная дата, до которой необходимо получать данные.
+		/// The final date by which you need to get data.
 		/// </summary>
 		public DateTimeOffset To
 		{
@@ -181,7 +180,7 @@ namespace StockSharp.Algo.Candles
 		}
 
 		/// <summary>
-		/// Освободить занятые ресурсы.
+		/// Release resources.
 		/// </summary>
 		protected override void DisposeManaged()
 		{
@@ -192,9 +191,9 @@ namespace StockSharp.Algo.Candles
 		}
 
 		/// <summary>
-		/// Получить строковое представление.
+		/// Returns a string that represents the current object.
 		/// </summary>
-		/// <returns>Строковое представление.</returns>
+		/// <returns>A string that represents the current object.</returns>
 		public override string ToString()
 		{
 			return CandleType.Name + "_" + Security + "_" + TraderHelper.CandleArgToFolderName(Arg);
@@ -203,9 +202,9 @@ namespace StockSharp.Algo.Candles
 		#region IPersistable
 
 		/// <summary>
-		/// Загрузить настройки.
+		/// Load settings.
 		/// </summary>
-		/// <param name="storage">Хранилище настроек.</param>
+		/// <param name="storage">Settings storage.</param>
 		public void Load(SettingsStorage storage)
 		{
 			var connector = ConfigManager.TryGetService<IConnector>();
@@ -228,9 +227,9 @@ namespace StockSharp.Algo.Candles
 		}
 
 		/// <summary>
-		/// Сохранить настройки.
+		/// Save settings.
 		/// </summary>
-		/// <param name="storage">Хранилище настроек.</param>
+		/// <param name="storage">Settings storage.</param>
 		public void Save(SettingsStorage storage)
 		{
 			if (Security != null)
@@ -251,12 +250,12 @@ namespace StockSharp.Algo.Candles
 		#region INotifyPropertyChanged
 
 		/// <summary>
-		/// Событие изменения параметров серии.
+		/// The series parameters change event.
 		/// </summary>
 		public event PropertyChangedEventHandler PropertyChanged;
 
 		/// <summary>
-		/// Вызвать событие изменения параметров серии.
+		/// To call series parameters change event.
 		/// </summary>
 		protected void RaisePropertyChanged(string propertyName)
 		{

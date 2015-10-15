@@ -6,14 +6,14 @@ namespace StockSharp.Algo.Indicators
 	using StockSharp.Localization;
 
 	/// <summary>
-	/// Простая скользящая средняя.
+	/// Simple moving average.
 	/// </summary>
 	[DisplayName("SMA")]
 	[DescriptionLoc(LocalizedStrings.Str818Key)]
 	public class SimpleMovingAverage : LengthIndicator<decimal>
 	{
 		/// <summary>
-		/// Создать <see cref="SimpleMovingAverage"/>.
+		/// Initializes a new instance of the <see cref="SimpleMovingAverage"/>.
 		/// </summary>
 		public SimpleMovingAverage()
 		{
@@ -21,10 +21,10 @@ namespace StockSharp.Algo.Indicators
 		}
 
 		/// <summary>
-		/// Обработать входное значение.
+		/// To handle the input value.
 		/// </summary>
-		/// <param name="input">Входное значение.</param>
-		/// <returns>Результирующее значение.</returns>
+		/// <param name="input">The input value.</param>
+		/// <returns>The resulting value.</returns>
 		protected override IIndicatorValue OnProcess(IIndicatorValue input)
 		{
 			var newValue = input.GetValue<decimal>();

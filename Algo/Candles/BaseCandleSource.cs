@@ -7,82 +7,82 @@ namespace StockSharp.Algo.Candles
 	using Ecng.ComponentModel;
 
 	/// <summary>
-	/// Базовый реализация интерфейса <see cref="ICandleSource{TValue}"/>.
+	/// The base interface <see cref="ICandleSource{T}"/> implementation.
 	/// </summary>
-	/// <typeparam name="TValue">Тип данных.</typeparam>
+	/// <typeparam name="TValue">Data type.</typeparam>
 	public abstract class BaseCandleSource<TValue> : Disposable, ICandleSource<TValue>
 	{
 		/// <summary>
-		/// Инициализировать <see cref="BaseCandleSource{TValue}"/>.
+		/// Initialize <see cref="BaseCandleSource{T}"/>.
 		/// </summary>
 		protected BaseCandleSource()
 		{
 		}
 
 		/// <summary>
-		/// Приоритет источника по скорости (0 - самый оптимальный).
+		/// The source priority by speed (0 - the best).
 		/// </summary>
 		public abstract int SpeedPriority { get; }
 
 		/// <summary>
-		/// Событие появления нового значения для обработки.
+		/// A new value for processing occurrence event.
 		/// </summary>
 		public event Action<CandleSeries, TValue> Processing;
 
 		/// <summary>
-		/// Событие окончания обработки серии.
+		/// The series processing end event.
 		/// </summary>
 		public event Action<CandleSeries> Stopped;
 
 		/// <summary>
-		/// Событие ошибки транслирования данных.
+		/// The data transfer error event.
 		/// </summary>
 		public event Action<Exception> Error;
 
 		/// <summary>
-		/// Получить временные диапазоны, для которых у данного источника для передаваемой серии свечек есть данные.
+		/// To get time ranges for which this source of passed candles series has data.
 		/// </summary>
-		/// <param name="series">Серия свечек.</param>
-		/// <returns>Временные диапазоны.</returns>
+		/// <param name="series">Candles series.</param>
+		/// <returns>Time ranges.</returns>
 		public abstract IEnumerable<Range<DateTimeOffset>> GetSupportedRanges(CandleSeries series);
 
 		/// <summary>
-		/// Запросить получение данных.
+		/// To send data request.
 		/// </summary>
-		/// <param name="series">Серия свечек, для которой необходимо начать получать данные.</param>
-		/// <param name="from">Начальная дата, с которой необходимо получать данные.</param>
-		/// <param name="to">Конечная дата, до которой необходимо получать данные.</param>
+		/// <param name="series">The candles series for which data receiving should be started.</param>
+		/// <param name="from">The initial date from which you need to get data.</param>
+		/// <param name="to">The final date by which you need to get data.</param>
 		public abstract void Start(CandleSeries series, DateTimeOffset from, DateTimeOffset to);
 
 		/// <summary>
-		/// Прекратить получение данных, запущенное через <see cref="Start"/>.
+		/// To stop data receiving starting through <see cref="Start"/>.
 		/// </summary>
-		/// <param name="series">Серия свечек.</param>
+		/// <param name="series">Candles series.</param>
 		public abstract void Stop(CandleSeries series);
 
 		/// <summary>
-		/// Вызвать событие <see cref="Processing"/>.
+		/// To call the event <see cref="Processing"/>.
 		/// </summary>
-		/// <param name="series">Серия свечек.</param>
-		/// <param name="values">Новые данные.</param>
+		/// <param name="series">Candles series.</param>
+		/// <param name="values">New data.</param>
 		protected virtual void RaiseProcessing(CandleSeries series, TValue values)
 		{
 			Processing.SafeInvoke(series, values);
 		}
 
 		/// <summary>
-		/// Вызвать событие <see cref="Error"/>.
+		/// To call the event <see cref="Error"/>.
 		/// </summary>
-		/// <param name="error">Описание ошибки.</param>
+		/// <param name="error">Error detais.</param>
 		protected void RaiseError(Exception error)
 		{
 			Error.SafeInvoke(error);
 		}
 
 		/// <summary>
-		/// Вызвать событие <see cref="Stopped"/>.
+		/// To call the event <see cref="Stopped"/>.
 		/// </summary>
-		/// <param name="series">Серия свечек.</param>
+		/// <param name="series">Candles series.</param>
 		protected void RaiseStopped(CandleSeries series)
 		{
 			Stopped.SafeInvoke(series);

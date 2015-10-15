@@ -11,15 +11,15 @@ namespace StockSharp.Algo.Strategies.Reporting
 	using StockSharp.Localization;
 
 	/// <summary>
-	/// Базовый генератор отчета для стратегии.
+	/// The base report generator for strategies.
 	/// </summary>
 	public abstract class StrategyReport
 	{
 		/// <summary>
-		/// Инициализировать <see cref="StrategyReport"/>.
+		/// Initialize <see cref="StrategyReport"/>.
 		/// </summary>
-		/// <param name="strategies">Стратегии, для которых необходимо сгенерировать отчет.</param>
-		/// <param name="fileName">Название файла, в котором сгенерируется отчет.</param>
+		/// <param name="strategies">Strategies, requiring the report generation.</param>
+		/// <param name="fileName">The name of the file, in which the report is generated.</param>
 		protected StrategyReport(IEnumerable<Strategy> strategies, string fileName)
 		{
 			if (strategies == null)
@@ -36,25 +36,25 @@ namespace StockSharp.Algo.Strategies.Reporting
 		}
 
 		/// <summary>
-		/// Название файла, в котором сгенерируется отчет.
+		/// The name of the file, in which the report is generated.
 		/// </summary>
 		public string FileName { get; private set; }
 
 		/// <summary>
-		/// Стратегии, для которых необходимо сгенерировать отчет.
+		/// Strategies, requiring the report generation.
 		/// </summary>
 		public IEnumerable<Strategy> Strategies { get; private set; }
 
 		/// <summary>
-		/// Сгенерировать отчет.
+		/// To generate the report.
 		/// </summary>
 		public abstract void Generate();
 
 		/// <summary>
-		/// Отформатировать время в строку.
+		/// To format the date in string.
 		/// </summary>
-		/// <param name="time">Время.</param>
-		/// <returns>Отформатированная строка.</returns>
+		/// <param name="time">Time.</param>
+		/// <returns>The formatted string.</returns>
 		protected virtual string Format(TimeSpan? time)
 		{
 			return time == null
@@ -63,30 +63,30 @@ namespace StockSharp.Algo.Strategies.Reporting
 		}
 
 		/// <summary>
-		/// Отформатировать время в строку.
+		/// To format the date in string.
 		/// </summary>
-		/// <param name="time">Время.</param>
-		/// <returns>Отформатированная строка.</returns>
+		/// <param name="time">Time.</param>
+		/// <returns>The formatted string.</returns>
 		protected virtual string Format(DateTimeOffset time)
 		{
 			return time.To<string>();
 		}
 
 		/// <summary>
-		/// Отформатировать направление заявки в строку.
+		/// Convert order side into string.
 		/// </summary>
-		/// <param name="direction">Направление заявки.</param>
-		/// <returns>Отформатированная строка.</returns>
+		/// <param name="direction">Order side.</param>
+		/// <returns>The formatted string.</returns>
 		protected virtual string Format(Sides direction)
 		{
 			return direction == Sides.Buy ? LocalizedStrings.Str403 : LocalizedStrings.Str404;
 		}
 
 		/// <summary>
-		/// Отформатировать состояние заявки в строку.
+		/// Convert order state into string.
 		/// </summary>
-		/// <param name="state">Состояние заявки.</param>
-		/// <returns>Отформатированная строка.</returns>
+		/// <param name="state">Order state.</param>
+		/// <returns>The formatted string.</returns>
 		protected virtual string Format(OrderStates state)
 		{
 			switch (state)
@@ -105,10 +105,10 @@ namespace StockSharp.Algo.Strategies.Reporting
 		}
 
 		/// <summary>
-		/// Отформатировать тип заявки в строку.
+		/// To format the order type in string.
 		/// </summary>
-		/// <param name="type">Тип заявки.</param>
-		/// <returns>Отформатированная строка.</returns>
+		/// <param name="type">Order type.</param>
+		/// <returns>The formatted string.</returns>
 		protected virtual string Format(OrderTypes type)
 		{
 			switch (type)

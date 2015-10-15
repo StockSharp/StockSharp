@@ -6,12 +6,12 @@ namespace StockSharp.Algo.Testing
 	using StockSharp.Messages;
 
 	/// <summary>
-	/// Базовое подключение эмуляции.
+	/// The base connection of emulation.
 	/// </summary>
 	public abstract class BaseEmulationConnector : Connector
 	{
 		/// <summary>
-		/// Инициализировать <see cref="BaseEmulationConnector"/>.
+		/// Initialize <see cref="BaseEmulationConnector"/>.
 		/// </summary>
 		protected BaseEmulationConnector()
 		{
@@ -19,7 +19,7 @@ namespace StockSharp.Algo.Testing
 		}
 
 		/// <summary>
-		/// Адаптер, исполняющий сообщения в <see cref="IMarketEmulator"/>.
+		/// The adapter, executing messages in <see cref="IMarketEmulator"/>.
 		/// </summary>
 		public EmulationMessageAdapter EmulationAdapter
 		{
@@ -27,8 +27,7 @@ namespace StockSharp.Algo.Testing
 		}
 
 		/// <summary>
-		/// Поддерживается ли перерегистрация заявок через метод <see cref="IConnector.ReRegisterOrder(StockSharp.BusinessEntities.Order,StockSharp.BusinessEntities.Order)"/>
-		/// в виде одной транзакции.
+		/// Gets a value indicating whether the re-registration orders via the method <see cref="IConnector.ReRegisterOrder(StockSharp.BusinessEntities.Order,StockSharp.BusinessEntities.Order)"/> as a single transaction.
 		/// </summary>
 		public override bool IsSupportAtomicReRegister
 		{
@@ -36,7 +35,7 @@ namespace StockSharp.Algo.Testing
 		}
 
 		///// <summary>
-		///// Эмулятор торгов.
+		///// ГќГ¬ГіГ«ГїГІГ®Г° ГІГ®Г°ГЈГ®Гў.
 		///// </summary>
 		//public IMarketEmulator MarketEmulator
 		//{
@@ -45,17 +44,17 @@ namespace StockSharp.Algo.Testing
 		//}
 
 		/// <summary>
-		/// Запустить таймер генерации сообщений <see cref="TimeMessage"/> с интервалом <see cref="Connector.MarketTimeChangedInterval"/>.
+		/// To start the messages generating timer <see cref="TimeMessage"/> with the <see cref="Connector.MarketTimeChangedInterval"/> interval.
 		/// </summary>
 		protected override void StartMarketTimer()
 		{
 		}
 
 		///// <summary>
-		///// Обработать сообщение, содержащее рыночные данные.
+		///// ГЋГЎГ°Г ГЎГ®ГІГ ГІГј Г±Г®Г®ГЎГ№ГҐГ­ГЁГҐ, Г±Г®Г¤ГҐГ°Г¦Г Г№ГҐГҐ Г°Г»Г­Г®Г·Г­Г»ГҐ Г¤Г Г­Г­Г»ГҐ.
 		///// </summary>
-		///// <param name="message">Сообщение, содержащее рыночные данные.</param>
-		///// <param name="direction">Направление сообщения.</param>
+		///// <param name="message">Г‘Г®Г®ГЎГ№ГҐГ­ГЁГҐ, Г±Г®Г¤ГҐГ°Г¦Г Г№ГҐГҐ Г°Г»Г­Г®Г·Г­Г»ГҐ Г¤Г Г­Г­Г»ГҐ.</param>
+		///// <param name="direction">ГЌГ ГЇГ°Г ГўГ«ГҐГ­ГЁГҐ Г±Г®Г®ГЎГ№ГҐГ­ГЁГї.</param>
 		//protected override void OnProcessMessage(Message message, MessageDirections direction)
 		//{
 		//	if (adapter == MarketDataAdapter && direction == MessageDirections.Out)
@@ -107,54 +106,54 @@ namespace StockSharp.Algo.Testing
 		}
 
 		/// <summary>
-		/// Зарегистрировать генератор сделок.
+		/// To register the trades generator.
 		/// </summary>
-		/// <param name="generator">Генератор сделок.</param>
+		/// <param name="generator">The trades generator.</param>
 		public void RegisterTrades(TradeGenerator generator)
 		{
 			SendInGeneratorMessage(generator, true);
 		}
 
 		/// <summary>
-		/// Удалить генератор сделок, ранее зарегистрированный через <see cref="RegisterTrades"/>.
+		/// To delete the trades generator, registered earlier through <see cref="RegisterTrades"/>.
 		/// </summary>
-		/// <param name="generator">Генератор сделок.</param>
+		/// <param name="generator">The trades generator.</param>
 		public void UnRegisterTrades(TradeGenerator generator)
 		{
 			SendInGeneratorMessage(generator, false);
 		}
 
 		/// <summary>
-		/// Зарегистрировать генератор стаканов.
+		/// To register the order books generator.
 		/// </summary>
-		/// <param name="generator">Генератор стаканов.</param>
+		/// <param name="generator">The order books generator.</param>
 		public void RegisterMarketDepth(MarketDepthGenerator generator)
 		{
 			SendInGeneratorMessage(generator, true);
 		}
 
 		/// <summary>
-		/// Удалить генератор стаканов, ранее зарегистрированный через <see cref="RegisterMarketDepth"/>.
+		/// To delete the order books generator, earlier registered through <see cref="RegisterMarketDepth"/>.
 		/// </summary>
-		/// <param name="generator">Генератор стаканов.</param>
+		/// <param name="generator">The order books generator.</param>
 		public void UnRegisterMarketDepth(MarketDepthGenerator generator)
 		{
 			SendInGeneratorMessage(generator, false);
 		}
 
 		/// <summary>
-		/// Зарегистрировать генератор лога заявок.
+		/// To register the orders log generator.
 		/// </summary>
-		/// <param name="generator">Генератор лога заявок.</param>
+		/// <param name="generator">The orders log generator.</param>
 		public void RegisterOrderLog(OrderLogGenerator generator)
 		{
 			SendInGeneratorMessage(generator, true);
 		}
 
 		/// <summary>
-		/// Удалить генератор лога заявок, ранее зарегистрированный через <see cref="RegisterOrderLog"/>.
+		/// To delete the orders log generator, earlier registered through <see cref="RegisterOrderLog"/>.
 		/// </summary>
-		/// <param name="generator">Генератор лога заявок.</param>
+		/// <param name="generator">The orders log generator.</param>
 		public void UnRegisterOrderLog(OrderLogGenerator generator)
 		{
 			SendInGeneratorMessage(generator, false);

@@ -13,15 +13,15 @@ namespace StockSharp.Algo
 	using StockSharp.Localization;
 
 	/// <summary>
-	/// Адаптер сообщения, вычисляющий автоматически проскальзывание, сетевые задержки и т.д.
+	/// The message adapter, automatically calculating slippage, network delays etc.
 	/// </summary>
 	public class ManagedMessageAdapter : MessageAdapterWrapper
 	{
 		
 		/// <summary>
-		/// Создать <see cref="ManagedMessageAdapter"/>.
+		/// Initializes a new instance of the <see cref="ManagedMessageAdapter"/>.
 		/// </summary>
-		/// <param name="innerAdapter">Адаптер, в который будут перенаправляться сообщения.</param>
+		/// <param name="innerAdapter">The adapter, to which messages will be directed.</param>
 		public ManagedMessageAdapter(IMessageAdapter innerAdapter)
 			: base(innerAdapter)
 		{
@@ -36,17 +36,17 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Менеджер расчета комиссии.
+		/// The commission calculating manager.
 		/// </summary>
 		public ICommissionManager CommissionManager { get; private set; }
 
 		/// <summary>
-		/// Менеджер расчета задержки регистрации заявок.
+		/// Orders registration delay calculation manager.
 		/// </summary>
 		public ILatencyManager LatencyManager { get; private set; }
 
 		/// <summary>
-		/// Менеджер расчета задержки регистрации заявок.
+		/// Orders registration delay calculation manager.
 		/// </summary>
 		public IRiskManager RiskManager { get; private set; }
 
@@ -152,9 +152,9 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Обработать сообщение, содержащее рыночные данные.
+		/// To process the message, containing market data.
 		/// </summary>
-		/// <param name="message">Сообщение, содержащее рыночные данные.</param>
+		/// <param name="message">The message, containing market data.</param>
 		public void ProcessMessage(Message message)
 		{
 			if (message == null)

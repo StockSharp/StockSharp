@@ -7,14 +7,14 @@ namespace StockSharp.Algo.Indicators
 	using StockSharp.Localization;
 
 	/// <summary>
-	/// Индикатор, строящийся на основе маркет-данных.
+	/// The indicator, built on the market data basis.
 	/// </summary>
 	[DisplayNameLoc(LocalizedStrings.SecurityKey)]
 	[DescriptionLoc(LocalizedStrings.Str747Key)]
 	public class Level1Indicator : BaseIndicator
 	{
 		/// <summary>
-		/// Поле маркет-данных первого уровня, которое используется как значение индикатора.
+		/// Level one market-data field, which is used as an indicator value.
 		/// </summary>
 		[DisplayNameLoc(LocalizedStrings.Str748Key)]
 		[DescriptionLoc(LocalizedStrings.Str749Key)]
@@ -22,10 +22,10 @@ namespace StockSharp.Algo.Indicators
 		public Level1Fields Field { get; set; }
 
 		/// <summary>
-		/// Обработать входное значение.
+		/// To handle the input value.
 		/// </summary>
-		/// <param name="input">Входное значение.</param>
-		/// <returns>Результирующее значение.</returns>
+		/// <param name="input">The input value.</param>
+		/// <returns>The resulting value.</returns>
 		protected override IIndicatorValue OnProcess(IIndicatorValue input)
 		{
 			var message = input.GetValue<Level1ChangeMessage>();
@@ -39,9 +39,9 @@ namespace StockSharp.Algo.Indicators
 		}
 
 		/// <summary>
-		/// Загрузить настройки.
+		/// Load settings.
 		/// </summary>
-		/// <param name="settings">Хранилище настроек.</param>
+		/// <param name="settings">Settings storage.</param>
 		public override void Load(SettingsStorage settings)
 		{
 			base.Load(settings);
@@ -49,9 +49,9 @@ namespace StockSharp.Algo.Indicators
 		}
 
 		/// <summary>
-		/// Сохранить настройки.
+		/// Save settings.
 		/// </summary>
-		/// <param name="settings">Хранилище настроек.</param>
+		/// <param name="settings">Settings storage.</param>
 		public override void Save(SettingsStorage settings)
 		{
 			base.Save(settings);

@@ -1,4 +1,4 @@
-﻿namespace StockSharp.Algo.Storages
+namespace StockSharp.Algo.Storages
 {
 	using System;
 	using System.Collections.Generic;
@@ -10,43 +10,43 @@
 	using StockSharp.BusinessEntities;
 
 	/// <summary>
-	/// Буфер маркет-данных.
+	/// The market data buffer.
 	/// </summary>
-	/// <typeparam name="TKey">Тип ключа.</typeparam>
-	/// <typeparam name="TMarketData">Тип маркет-данных.</typeparam>
+	/// <typeparam name="TKey">The key type.</typeparam>
+	/// <typeparam name="TMarketData">Market data type.</typeparam>
 	public class MarketDataBuffer<TKey, TMarketData>
 	{
 		private readonly SynchronizedDictionary<TKey, List<TMarketData>> _data = new SynchronizedDictionary<TKey, List<TMarketData>>();
 
 		/// <summary>
-		/// Размер буфера.
+		/// The buffer size.
 		/// </summary>
 		public int Size { get; set; }
 
 		/// <summary>
-		/// Добавить новую информацию в буфер.
+		/// To add new information to the buffer.
 		/// </summary>
-		/// <param name="key">Ключ, которому принадлежит новая информация.</param>
-		/// <param name="data">Новая информация.</param>
+		/// <param name="key">The key possessing new information.</param>
+		/// <param name="data">New information.</param>
 		public void Add(TKey key, TMarketData data)
 		{
 			Add(key, new[] { data });
 		}
 
 		/// <summary>
-		/// Добавить новую информацию в буфер.
+		/// To add new information to the buffer.
 		/// </summary>
-		/// <param name="key">Ключ, которому принадлежит новая информация.</param>
-		/// <param name="data">Новая информация.</param>
+		/// <param name="key">The key possessing new information.</param>
+		/// <param name="data">New information.</param>
 		public void Add(TKey key, IEnumerable<TMarketData> data)
 		{
 			_data.SyncDo(d => d.SafeAdd(key).AddRange(data));
 		}
 
 		/// <summary>
-		/// Получить накопленные данные из буфера и удалить их.
+		/// To get accumulated data from the buffer and delete them.
 		/// </summary>
-		/// <returns>Полученные данные.</returns>
+		/// <returns>Gotten data.</returns>
 		public IDictionary<TKey, IEnumerable<TMarketData>> Get()
 		{
 			return _data.SyncGet(d =>
@@ -58,10 +58,10 @@
 		}
 
 		/// <summary>
-		/// Получить накопленные данные из буфера и удалить их.
+		/// To get accumulated data from the buffer and delete them.
 		/// </summary>
-		/// <param name="key">Ключ, которому принадлежат маркет-данных.</param>
-		/// <returns>Полученные данные.</returns>
+		/// <param name="key">The key possessing market data.</param>
+		/// <returns>Gotten data.</returns>
 		public IEnumerable<TMarketData> Get(TKey key)
 		{
 			if (key.IsDefault())
@@ -84,9 +84,9 @@
 	}
 
 	/// <summary>
-	/// Буфер маркет-данных.
+	/// The market data buffer.
 	/// </summary>
-	/// <typeparam name="TMarketData">Тип маркет-данных.</typeparam>
+	/// <typeparam name="TMarketData">Market data type.</typeparam>
 	public class MarketDataBuffer<TMarketData> : MarketDataBuffer<Security, TMarketData>
 	{
 	}

@@ -1,4 +1,4 @@
-﻿namespace StockSharp.Algo.Indicators
+namespace StockSharp.Algo.Indicators
 {
 	using System;
 	using System.Collections.Generic;
@@ -10,16 +10,16 @@
 	using StockSharp.Algo.Candles;
 
 	/// <summary>
-	/// Линия Senkou Span B.
+	/// Senkou Span B line.
 	/// </summary>
 	public class IchimokuSenkouBLine : LengthIndicator<decimal>
 	{
 		private readonly List<Candle> _buffer = new List<Candle>();
 
 		/// <summary>
-		/// Создать <see cref="IchimokuLine"/>.
+		/// Initializes a new instance of the <see cref="IchimokuLine"/>.
 		/// </summary>
-		/// <param name="kijun">Линия Kijun.</param>
+		/// <param name="kijun">Kijun line.</param>
 		public IchimokuSenkouBLine(IchimokuLine kijun)
 		{
 			if (kijun == null)
@@ -29,7 +29,7 @@
 		}
 
 		/// <summary>
-		/// Сбросить состояние индикатора на первоначальное. Метод вызывается каждый раз, когда меняются первоначальные настройки (например, длина периода).
+		/// To reset the indicator status to initial. The method is called each time when initial settings are changed (for example, the length of period).
 		/// </summary>
 		public override void Reset()
 		{
@@ -38,7 +38,7 @@
 		}
 
 		/// <summary>
-		/// Сформирован ли индикатор.
+		/// Whether the indicator is set.
 		/// </summary>
 		public override bool IsFormed
 		{
@@ -47,16 +47,16 @@
 		//_buffer.Count >= Length &&
 		
 		/// <summary>
-		/// Линия Kijun.
+		/// Kijun line.
 		/// </summary>
 		[Browsable(false)]
 		public IchimokuLine Kijun { get; private set; }
 
 		/// <summary>
-		/// Обработать входное значение.
+		/// To handle the input value.
 		/// </summary>
-		/// <param name="input">Входное значение.</param>
-		/// <returns>Результирующее значение.</returns>
+		/// <param name="input">The input value.</param>
+		/// <returns>The resulting value.</returns>
 		protected override IIndicatorValue OnProcess(IIndicatorValue input)
 		{
 			var candle = input.GetValue<Candle>();

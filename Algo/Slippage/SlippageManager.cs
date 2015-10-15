@@ -8,7 +8,7 @@ namespace StockSharp.Algo.Slippage
 	using StockSharp.Messages;
 
 	/// <summary>
-	/// Менеджер проскальзывания.
+	/// The slippage manager.
 	/// </summary>
 	public class SlippageManager : ISlippageManager
 	{
@@ -16,7 +16,7 @@ namespace StockSharp.Algo.Slippage
 		private readonly SynchronizedDictionary<long, Tuple<Sides, decimal>> _plannedPrices = new SynchronizedDictionary<long, Tuple<Sides, decimal>>();
 
 		/// <summary>
-		/// Создать <see cref="SlippageManager"/>.
+		/// Initializes a new instance of the <see cref="SlippageManager"/>.
 		/// </summary>
 		public SlippageManager()
 		{
@@ -24,17 +24,17 @@ namespace StockSharp.Algo.Slippage
 		}
 
 		/// <summary>
-		/// Суммарное значение проскальзывания.
+		/// Total slippage.
 		/// </summary>
 		public virtual decimal Slippage { get; private set; }
 
 		/// <summary>
-		/// Считать отрицательное проскальзывание. По-умолчанию расчет выключен.
+		/// To calculate negative slippage. By default, the calculation is enabled.
 		/// </summary>
 		public bool CalculateNegative { get; set; }
 
 		/// <summary>
-		/// Обнулить <see cref="ISlippageManager.Slippage"/>.
+		/// To zero <see cref="ISlippageManager.Slippage"/>.
 		/// </summary>
 		public virtual void Reset()
 		{
@@ -44,10 +44,10 @@ namespace StockSharp.Algo.Slippage
 		}
 
 		/// <summary>
-		/// Рассчитать проскальзывание.
+		/// To calculate slippage.
 		/// </summary>
-		/// <param name="message">Сообщение.</param>
-		/// <returns>Проскальзывание. Если проскальзывание рассчитать невозможно, то будет возвращено <see langword="null"/>.</returns>
+		/// <param name="message">Message.</param>
+		/// <returns>The slippage. If it is impossible to calculate slippage, <see langword="null" /> will be returned.</returns>
 		public decimal? ProcessMessage(Message message)
 		{
 			switch (message.Type)

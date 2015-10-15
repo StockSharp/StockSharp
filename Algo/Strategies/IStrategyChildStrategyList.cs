@@ -1,9 +1,9 @@
-﻿namespace StockSharp.Algo.Strategies
+namespace StockSharp.Algo.Strategies
 {
 	using Ecng.Collections;
 
 	/// <summary>
-	/// Коллекция дочерних стратегий.
+	/// The collection of subsidiary strategies.
 	/// </summary>
 	public interface IStrategyChildStrategyList : INotifyList<Strategy>, ISynchronizedCollection
 	{

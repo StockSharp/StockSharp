@@ -6,11 +6,10 @@ namespace StockSharp.Algo.Indicators
 	using StockSharp.Localization;
 
 	/// <summary>
-	/// Последний осцилятор.
+	/// Last oscillator.
 	/// </summary>
 	/// <remarks>
-	/// http://www2.wealth-lab.com/WL5Wiki/UltimateOsc.ashx
-	/// http://stockcharts.com/school/doku.php?id=chart_school:technical_indicators:ultimate_oscillator
+	/// http://www2.wealth-lab.com/WL5Wiki/UltimateOsc.ashx http://stockcharts.com/school/doku.php?id=chart_school:technical_indicators:ultimate_oscillator.
 	/// </remarks>
 	[DisplayName("UltimateOsc")]
 	[DescriptionLoc(LocalizedStrings.Str776Key)]
@@ -37,8 +36,8 @@ namespace StockSharp.Algo.Indicators
 		private decimal? _previouseClosePrice;
 
 		/// <summary>
-		/// Создать индикатор<see cref="UltimateOscillator"/>.
-		/// </summary>		
+		/// To create the indicator <see cref="UltimateOscillator"/>.
+		/// </summary>
 		public UltimateOscillator()
 		{
 			_period7BpSum = new Sum { Length = _period7 };
@@ -51,7 +50,7 @@ namespace StockSharp.Algo.Indicators
 		}
 
 		/// <summary>
-		/// Сформирован ли индикатор.
+		/// Whether the indicator is set.
 		/// </summary>
 		public override bool IsFormed
 		{
@@ -64,10 +63,10 @@ namespace StockSharp.Algo.Indicators
 		}
 
 		/// <summary>
-		/// Обработать входное значение.
+		/// To handle the input value.
 		/// </summary>
-		/// <param name="input">Входное значение.</param>
-		/// <returns>Результирующее значение.</returns>
+		/// <param name="input">The input value.</param>
+		/// <returns>The resulting value.</returns>
 		protected override IIndicatorValue OnProcess(IIndicatorValue input)
 		{
 			var candle = input.GetValue<Candle>();

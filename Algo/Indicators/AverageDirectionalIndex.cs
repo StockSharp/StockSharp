@@ -8,14 +8,14 @@ namespace StockSharp.Algo.Indicators
 	using StockSharp.Localization;
 
 	/// <summary>
-	/// Индекс среднего направления движения Welles Wilder.
+	/// Welles Wilder Average Directional Index.
 	/// </summary>
 	[DisplayName("ADX")]
 	[DescriptionLoc(LocalizedStrings.Str757Key)]
 	public class AverageDirectionalIndex : BaseComplexIndicator
 	{
 		/// <summary>
-		/// Создать <see cref="AverageDirectionalIndex"/>.
+		/// Initializes a new instance of the <see cref="AverageDirectionalIndex"/>.
 		/// </summary>
 		public AverageDirectionalIndex()
 			: this(new DirectionalIndex { Length = 14 }, new WilderMovingAverage { Length = 14 })
@@ -23,10 +23,10 @@ namespace StockSharp.Algo.Indicators
 		}
 
 		/// <summary>
-		/// Создать <see cref="AverageDirectionalIndex"/>.
+		/// Initializes a new instance of the <see cref="AverageDirectionalIndex"/>.
 		/// </summary>
-		/// <param name="dx">Индекса направленного движения Welles Wilder.</param>
-		/// <param name="movingAverage">Скользящая средняя.</param>
+		/// <param name="dx">Welles Wilder Directional Movement Index.</param>
+		/// <param name="movingAverage">Moving Average.</param>
 		public AverageDirectionalIndex(DirectionalIndex dx, LengthIndicator<decimal> movingAverage)
 		{
 			if (dx == null)
@@ -41,19 +41,19 @@ namespace StockSharp.Algo.Indicators
 		}
 
 		/// <summary>
-		/// Индекса направленного движения Welles Wilder.
+		/// Welles Wilder Directional Movement Index.
 		/// </summary>
 		[Browsable(false)]
 		public DirectionalIndex Dx { get; private set; }
 
 		/// <summary>
-		/// Скользящая средняя.
+		/// Moving Average.
 		/// </summary>
 		[Browsable(false)]
 		public LengthIndicator<decimal> MovingAverage { get; private set; }
 
 		/// <summary>
-		/// Длина периода.
+		/// Period length.
 		/// </summary>
 		[DisplayNameLoc(LocalizedStrings.Str736Key)]
 		[DescriptionLoc(LocalizedStrings.Str737Key)]
@@ -69,9 +69,9 @@ namespace StockSharp.Algo.Indicators
 		}
 
 		/// <summary>
-		/// Загрузить настройки.
+		/// Load settings.
 		/// </summary>
-		/// <param name="settings">Хранилище настроек.</param>
+		/// <param name="settings">Settings storage.</param>
 		public override void Load(SettingsStorage settings)
 		{
 			base.Load(settings);
@@ -79,9 +79,9 @@ namespace StockSharp.Algo.Indicators
 		}
 
 		/// <summary>
-		/// Сохранить настройки.
+		/// Save settings.
 		/// </summary>
-		/// <param name="settings">Хранилище настроек.</param>
+		/// <param name="settings">Settings storage.</param>
 		public override void Save(SettingsStorage settings)
 		{
 			base.Save(settings);

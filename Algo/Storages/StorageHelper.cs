@@ -16,7 +16,7 @@ namespace StockSharp.Algo.Storages
 	using StockSharp.Messages;
 
 	/// <summary>
-	/// Вспомогательный класс для работы с внешнем хранилищем.
+	/// Extension class for storage.
 	/// </summary>
 	public static class StorageHelper
 	{
@@ -174,16 +174,16 @@ namespace StockSharp.Algo.Storages
 		}
 
 		/// <summary>
-		/// Получить хранилище свечек.
+		/// To get the storage of candles.
 		/// </summary>
-		/// <typeparam name="TCandle">Тип свечи.</typeparam>
-		/// <typeparam name="TArg">Тип параметра свечи.</typeparam>
-		/// <param name="storageRegistry">Внешнее хранилище.</param>
-		/// <param name="security">Инструмент.</param>
-		/// <param name="arg">Параметр свечи.</param>
-		/// <param name="drive">Хранилище. Если значение равно <see langword="null"/>, то будет использоваться <see cref="IStorageRegistry.DefaultDrive"/>.</param>
-		/// <param name="format">Тип формата. По-умолчанию передается <see cref="StorageFormats.Binary"/>.</param>
-		/// <returns>Хранилище свечек.</returns>
+		/// <typeparam name="TCandle">The candle type.</typeparam>
+		/// <typeparam name="TArg">The type of candle parameter.</typeparam>
+		/// <param name="storageRegistry">The external storage.</param>
+		/// <param name="security">Security.</param>
+		/// <param name="arg">Candle arg.</param>
+		/// <param name="drive">The storage. If a value is <see langword="null" />, <see cref="IStorageRegistry.DefaultDrive"/> will be used.</param>
+		/// <param name="format">The format type. By default <see cref="StorageFormats.Binary"/> is passed.</param>
+		/// <returns>The candles storage.</returns>
 		public static IMarketDataStorage<Candle> GetCandleStorage<TCandle, TArg>(this IStorageRegistry storageRegistry, Security security, TArg arg, IMarketDataDrive drive = null, StorageFormats format = StorageFormats.Binary)
 			where TCandle : Candle
 		{
@@ -191,13 +191,13 @@ namespace StockSharp.Algo.Storages
 		}
 
 		/// <summary>
-		/// Получить хранилище свечек.
+		/// To get the storage of candles.
 		/// </summary>
-		/// <param name="storageRegistry">Внешнее хранилище.</param>
-		/// <param name="series">Серия свечек.</param>
-		/// <param name="drive">Хранилище. Если значение равно <see langword="null"/>, то будет использоваться <see cref="IStorageRegistry.DefaultDrive"/>.</param>
-		/// <param name="format">Тип формата. По-умолчанию передается <see cref="StorageFormats.Binary"/>.</param>
-		/// <returns>Хранилище свечек.</returns>
+		/// <param name="storageRegistry">The external storage.</param>
+		/// <param name="series">Candles series.</param>
+		/// <param name="drive">The storage. If a value is <see langword="null" />, <see cref="IStorageRegistry.DefaultDrive"/> will be used.</param>
+		/// <param name="format">The format type. By default <see cref="StorageFormats.Binary"/> is passed.</param>
+		/// <returns>The candles storage.</returns>
 		public static IMarketDataStorage<Candle> GetCandleStorage(this IStorageRegistry storageRegistry, CandleSeries series, IMarketDataDrive drive = null, StorageFormats format = StorageFormats.Binary)
 		{
 			if (series == null)
@@ -228,13 +228,13 @@ namespace StockSharp.Algo.Storages
 		}
 
 		/// <summary>
-		/// Создать итерационный загрузчик маркет-данных для диапазона времени.
+		/// To create an iterative loader of market data for the time range.
 		/// </summary>
-		/// <typeparam name="TData">Тип данных.</typeparam>
-		/// <param name="storage">Хранилище маркет-данных.</param>
-		/// <param name="from">Время начала, с которого необходимо загружать данные. Если значение не указано, то будут загружены данные с начальной даты <see cref="GetFromDate"/>.</param>
-		/// <param name="to">Время окончания, до которого включительно необходимо загружать данные. Если значение не указано, то будут загружены данные до конечной даты <see cref="GetToDate"/> включительно.</param>
-		/// <returns>Итерационный загрузчик маркет-данных.</returns>
+		/// <typeparam name="TData">Data type.</typeparam>
+		/// <param name="storage">Market-data storage.</param>
+		/// <param name="from">The start time for data loading. If the value is not specified, data will be loaded from the starting time <see cref="GetFromDate"/>.</param>
+		/// <param name="to">The end time for data loading. If the value is not specified, data will be loaded up to the <see cref="GetToDate"/> date, inclusive.</param>
+		/// <returns>The iterative loader of market data.</returns>
 		public static IEnumerableEx<TData> Load<TData>(this IMarketDataStorage<TData> storage, DateTimeOffset? from = null, DateTimeOffset? to = null)
 		{
 			var range = GetRange(storage, from, to);
@@ -245,11 +245,11 @@ namespace StockSharp.Algo.Storages
 		}
 
 		/// <summary>
-		/// Удалить маркет-данные из хранилища для заданного периода.
+		/// To delete market data from the storage for the specified time period.
 		/// </summary>
-		/// <param name="storage">Хранилище маркет-данных.</param>
-		/// <param name="from">Время начала, с которого необходимо удалять данные. Если значение не указано, то будут удалены данные с начальной даты <see cref="GetFromDate"/>.</param>
-		/// <param name="to">Время окончания, до которого включительно необходимо удалять данные. Если значение не указано, то будут удалены данные до конечной даты <see cref="GetToDate"/> включительно.</param>
+		/// <param name="storage">Market-data storage.</param>
+		/// <param name="from">The start time for data deleting. If the value is not specified, the data will be deleted starting from the date <see cref="GetFromDate"/>.</param>
+		/// <param name="to">The end time, up to which the data shall be deleted. If the value is not specified, data will be deleted up to the end date <see cref="GetToDate"/>, inclusive.</param>
 		public static void Delete(this IMarketDataStorage storage, DateTimeOffset? from = null, DateTimeOffset? to = null)
 		{
 			if (storage == null)
@@ -320,32 +320,32 @@ namespace StockSharp.Algo.Storages
 		}
 
 		/// <summary>
-		/// Получить начальную дату, с которой храняться маркет-данные в хранилище.
+		/// To get the start date for market data, stored in the storage.
 		/// </summary>
-		/// <param name="storage">Хранилище маркет-данных.</param>
-		/// <returns>Начальная дата. Если значение не инициализировано, значит хранилище пустое.</returns>
+		/// <param name="storage">Market-data storage.</param>
+		/// <returns>The start date. If the value is not initialized, the storage is empty.</returns>
 		public static DateTime? GetFromDate(this IMarketDataStorage storage)
 		{
 			return storage.Dates.FirstOr();
 		}
 
 		/// <summary>
-		/// Получить конечную дату, по которую храняться маркет-данные в хранилище.
+		/// To get the end date for market data, stored in the storage.
 		/// </summary>
-		/// <param name="storage">Хранилище маркет-данных.</param>
-		/// <returns>Конечная дата. Если значение не инициализировано, значит хранилище пустое.</returns>
+		/// <param name="storage">Market-data storage.</param>
+		/// <returns>The end date. If the value is not initialized, the storage is empty.</returns>
 		public static DateTime? GetToDate(this IMarketDataStorage storage)
 		{
 			return storage.Dates.LastOr();
 		}
 
 		/// <summary>
-		/// Получить все даты, для которых записаны маркет-данные за указанный диапазон.
+		/// To get all dates for stored market data for the specified range.
 		/// </summary>
-		/// <param name="storage">Хранилище маркет-данных.</param>
-		/// <param name="from">Время начала диапазона. Если значение не указано, то будут загружены данные с начальной даты <see cref="GetFromDate"/>.</param>
-		/// <param name="to">Время окончания диапазона. Если значение не указано, то будут загружены данные до конечной даты <see cref="GetToDate"/> включительно.</param>
-		/// <returns>Все доступные даты внутри диапазона.</returns>
+		/// <param name="storage">Market-data storage.</param>
+		/// <param name="from">The range start time. If the value is not specified, data will be loaded from the start date <see cref="GetFromDate"/>.</param>
+		/// <param name="to">The range end time. If the value is not specified, data will be loaded up to the end date <see cref="GetToDate"/>, inclusive.</param>
+		/// <returns>All available data within the range.</returns>
 		public static IEnumerable<DateTime> GetDates(this IMarketDataStorage storage, DateTime? from, DateTime? to)
 		{
 			var dates = storage.Dates;
@@ -360,11 +360,11 @@ namespace StockSharp.Algo.Storages
 		}
 
 		/// <summary>
-		/// Сконвертировать строковое представление аргумента свечи в типизированное.
+		/// To convert string representation of the candle argument into typified.
 		/// </summary>
-		/// <param name="type">Тип сообщения свечи.</param>
-		/// <param name="str">Строковое представление аргумента.</param>
-		/// <returns>Аргумент.</returns>
+		/// <param name="type">The type of candle message.</param>
+		/// <param name="str">The string representation of the argument.</param>
+		/// <returns>Argument.</returns>
 		public static object ToCandleArg(this Type type, string str)
 		{
 			if (type == null)

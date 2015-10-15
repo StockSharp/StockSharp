@@ -24,7 +24,7 @@ namespace StockSharp.Algo.Strategies.Analytics
 	using Xceed.Wpf.Toolkit.PropertyGrid.Attributes;
 
 	/// <summary>
-	/// Аналитическая стратегия, расчитывающая распределение объема по ценовым уровням.
+	/// The analytic strategy, calculating distribution of the volume by price levels.
 	/// </summary>
 	public class PriceVolumeDistributionStrategy : BaseAnalyticsStrategy
 	{
@@ -48,7 +48,7 @@ namespace StockSharp.Algo.Strategies.Analytics
 		private readonly StrategyParam<TimeSpan> _timeFrame;
 
 		/// <summary>
-		/// Тайм-фрейм.
+		/// Time-frame.
 		/// </summary>
 		[DisplayNameLoc(LocalizedStrings.Str1242Key)]
 		[DescriptionLoc(LocalizedStrings.Str1243Key)]
@@ -61,7 +61,7 @@ namespace StockSharp.Algo.Strategies.Analytics
 		}
 		
 		/// <summary>
-		/// Создать <see cref="PriceVolumeDistributionStrategy"/>.
+		/// Initializes a new instance of the <see cref="PriceVolumeDistributionStrategy"/>.
 		/// </summary>
 		public PriceVolumeDistributionStrategy()
 		{
@@ -69,7 +69,7 @@ namespace StockSharp.Algo.Strategies.Analytics
 		}
 
 		/// <summary>
-		/// Анализировать.
+		/// To analyze.
 		/// </summary>
 		protected override void OnAnalyze()
 		{

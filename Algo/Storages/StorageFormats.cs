@@ -1,4 +1,4 @@
-﻿namespace StockSharp.Algo.Storages
+namespace StockSharp.Algo.Storages
 {
 	using System;
 	using System.Runtime.Serialization;
@@ -6,21 +6,21 @@
 	using Ecng.ComponentModel;
 
 	/// <summary>
-	/// Типы форматов.
+	/// Format types.
 	/// </summary>
 	[Serializable]
 	[DataContract]
 	public enum StorageFormats
 	{
 		/// <summary>
-		/// Бинарный формат StockSharp.
+		/// The binary format StockSharp.
 		/// </summary>
 		[EnumDisplayName("BIN")]
 		[EnumMember]
 		Binary,
 		
 		/// <summary>
-		/// Текстовый формат CSV.
+		/// The text format CSV.
 		/// </summary>
 		[EnumDisplayName("CSV")]
 		[EnumMember]

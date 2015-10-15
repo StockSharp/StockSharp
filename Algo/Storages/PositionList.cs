@@ -1,58 +1,58 @@
-﻿namespace StockSharp.Algo.Storages
+namespace StockSharp.Algo.Storages
 {
 	using Ecng.Serialization;
 
 	using StockSharp.BusinessEntities;
 
 	/// <summary>
-	/// Класс для представления в виде списка позиций, хранящихся во внешнем хранилище.
+	/// The class for representation in the form of list of positions, stored in external storage.
 	/// </summary>
 	public class PositionList : BaseStorageEntityList<Position>
 	{
 		/// <summary>
-		/// Создать <see cref="PositionList"/>.
+		/// Initializes a new instance of the <see cref="PositionList"/>.
 		/// </summary>
-		/// <param name="storage">Специальный интерфейс для прямого доступа к хранилищу.</param>
+		/// <param name="storage">The special interface for direct access to the storage.</param>
 		public PositionList(IStorage storage)
 			: base(storage)
 		{
 		}
 
 		/// <summary>
-		/// Получить данных из сущности для создания.
+		/// To get data from essence for creation.
 		/// </summary>
-		/// <param name="entity">Сущность.</param>
-		/// <returns>Данные для создания.</returns>
+		/// <param name="entity">Entity.</param>
+		/// <returns>Data for creation.</returns>
 		protected override SerializationItemCollection GetOverridedAddSource(Position entity)
 		{
 			return CreateSource(entity);
 		}
 
 		/// <summary>
-		/// Получить данных из сущности для удаления.
+		/// To get data from essence for deletion.
 		/// </summary>
-		/// <param name="entity">Сущность.</param>
-		/// <returns>Данные для удаления.</returns>
+		/// <param name="entity">Entity.</param>
+		/// <returns>Data for deletion.</returns>
 		protected override SerializationItemCollection GetOverridedRemoveSource(Position entity)
 		{
 			return CreateSource(entity);
 		}
 
 		/// <summary>
-		/// Загрузить позицию.
+		/// To load the position.
 		/// </summary>
-		/// <param name="security">Инструмент.</param>
-		/// <param name="portfolio">Портфель.</param>
-		/// <returns>Позиция.</returns>
+		/// <param name="security">Security.</param>
+		/// <param name="portfolio">Portfolio.</param>
+		/// <returns>Position.</returns>
 		public Position ReadBySecurityAndPortfolio(Security security, Portfolio portfolio)
 		{
 			return Read(CreateSource(security, portfolio));
 		}
 
 		/// <summary>
-		/// Сохранить торговый объект.
+		/// To save the trading object.
 		/// </summary>
-		/// <param name="entity">Торговый объект.</param>
+		/// <param name="entity">The trading object.</param>
 		public override void Save(Position entity)
 		{
 			if (ReadBySecurityAndPortfolio(entity.Security, entity.Portfolio) == null)

@@ -6,14 +6,14 @@ namespace StockSharp.Algo.Storages
 	using StockSharp.BusinessEntities;
 
 	/// <summary>
-	/// Класс для представления в виде списка собственных сделок, хранящихся во внешнем хранилище.
+	/// The class for representation in the form of list of own trades, stored in external storage.
 	/// </summary>
 	public class MyTradeList : BaseStorageEntityList<MyTrade>
 	{
 		/// <summary>
-		/// Создать <see cref="MyTradeList"/>.
+		/// Initializes a new instance of the <see cref="MyTradeList"/>.
 		/// </summary>
-		/// <param name="storage">Специальный интерфейс для прямого доступа к хранилищу.</param>
+		/// <param name="storage">The special interface for direct access to the storage.</param>
 		public MyTradeList(IStorage storage)
 			: base(storage)
 		{
@@ -21,10 +21,10 @@ namespace StockSharp.Algo.Storages
 		}
 
 		/// <summary>
-		/// Получить данных из сущности для создания.
+		/// To get data from essence for creation.
 		/// </summary>
-		/// <param name="entity">Сущность.</param>
-		/// <returns>Данные для создания.</returns>
+		/// <param name="entity">Entity.</param>
+		/// <returns>Data for creation.</returns>
 		protected override SerializationItemCollection GetOverridedAddSource(MyTrade entity)
 		{
 			var source = CreateSource(entity);
@@ -36,30 +36,30 @@ namespace StockSharp.Algo.Storages
 		}
 
 		/// <summary>
-		/// Получить данных из сущности для удаления.
+		/// To get data from essence for deletion.
 		/// </summary>
-		/// <param name="entity">Сущность.</param>
-		/// <returns>Данные для удаления.</returns>
+		/// <param name="entity">Entity.</param>
+		/// <returns>Data for deletion.</returns>
 		protected override SerializationItemCollection GetOverridedRemoveSource(MyTrade entity)
 		{
 			return CreateSource(entity);
 		}
 
 		/// <summary>
-		/// Загрузить собственную сделку.
+		/// To load own trade.
 		/// </summary>
-		/// <param name="order">Заявка.</param>
-		/// <param name="trade">Тиковая сделка.</param>
-		/// <returns>Собственная сделка.</returns>
+		/// <param name="order">Order.</param>
+		/// <param name="trade">Tick trade.</param>
+		/// <returns>Own trade.</returns>
 		public MyTrade ReadByOrderAndTrade(Order order, Trade trade)
 		{
 			return Read(CreateSource(order, trade));
 		}
 
 		/// <summary>
-		/// Сохранить торговый объект.
+		/// To save the trading object.
 		/// </summary>
-		/// <param name="entity">Торговый объект.</param>
+		/// <param name="entity">The trading object.</param>
 		public override void Save(MyTrade entity)
 		{
 			if (ReadByOrderAndTrade(entity.Order, entity.Trade) == null)

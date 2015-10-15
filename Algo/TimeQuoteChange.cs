@@ -5,22 +5,22 @@ namespace StockSharp.Algo
 	using StockSharp.Messages;
 
 	/// <summary>
-	/// Котировка с меткой времени. Используется для CSV файлов.
+	/// The quote with the time mark. It used for CSV files.
 	/// </summary>
 	public class TimeQuoteChange : QuoteChange
 	{
 		/// <summary>
-		/// Создать <see cref="TimeQuoteChange"/>.
+		/// Initializes a new instance of the <see cref="TimeQuoteChange"/>.
 		/// </summary>
 		public TimeQuoteChange()
 		{
 		}
 
 		/// <summary>
-		/// Создать <see cref="TimeQuoteChange"/>.
+		/// Initializes a new instance of the <see cref="TimeQuoteChange"/>.
 		/// </summary>
-		/// <param name="quote">Котировка, из которой будут скопированы изменения.</param>
-		/// <param name="message">Сообщение с котировками.</param>
+		/// <param name="quote">The quote, from which changes will be copied.</param>
+		/// <param name="message">The message with quotes.</param>
 		public TimeQuoteChange(QuoteChange quote, QuoteChangeMessage message)
 		{
 			if (quote == null)
@@ -35,17 +35,17 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Идентификатор инструмента.
+		/// Security ID.
 		/// </summary>
 		public SecurityId SecurityId { get; set; }
 
 		/// <summary>
-		/// Серверная метка времени.
+		/// The server time mark.
 		/// </summary>
 		public DateTimeOffset ServerTime { get; set; }
 
 		/// <summary>
-		/// Локальная метка времени.
+		/// The local time mark.
 		/// </summary>
 		public DateTime LocalTime { get; set; }
 	}

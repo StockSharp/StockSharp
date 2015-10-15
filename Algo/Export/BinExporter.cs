@@ -13,19 +13,19 @@ namespace StockSharp.Algo.Export
 	using StockSharp.Messages;
 
 	/// <summary>
-	/// Ёкспорт в бинарный формат StockSharp.
+	/// The export into the StockSharp binary format.
 	/// </summary>
 	public class BinExporter : BaseExporter
 	{
 		private readonly IMarketDataDrive _drive;
 
 		/// <summary>
-		/// —оздать <see cref="BinExporter"/>.
+		/// Initializes a new instance of the <see cref="BinExporter"/>.
 		/// </summary>
-		/// <param name="security">»нструмент.</param>
-		/// <param name="arg">ѕараметр данных.</param>
-		/// <param name="isCancelled">ќбработчик, возвращающий признак прерывани€ экспорта.</param>
-		/// <param name="drive">’ранилище.</param>
+		/// <param name="security">Security.</param>
+		/// <param name="arg">The data parameter.</param>
+		/// <param name="isCancelled">The processor, returning export interruption sign.</param>
+		/// <param name="drive">Storage.</param>
 		public BinExporter(Security security, object arg, Func<int, bool> isCancelled, IMarketDataDrive drive)
 			: base(security, arg, isCancelled, drive.Path)
 		{
@@ -38,7 +38,7 @@ namespace StockSharp.Algo.Export
 		private int _batchSize = 50;
 
 		/// <summary>
-		/// –азмер пакета передаваемых данных. ѕо-умолчанию равен 50 элементам.
+		/// The size of transmitted data package. The default is 50 elements.
 		/// </summary>
 		public int BatchSize
 		{
@@ -72,36 +72,36 @@ namespace StockSharp.Algo.Export
 		}
 
 		/// <summary>
-		/// Ёкспортировать <see cref="ExecutionMessage"/>.
+		/// To export <see cref="ExecutionMessage"/>.
 		/// </summary>
-		/// <param name="messages">—ообщени€.</param>
+		/// <param name="messages">Messages.</param>
 		protected override void Export(IEnumerable<ExecutionMessage> messages)
 		{
 			Export(messages);
 		}
 
 		/// <summary>
-		/// Ёкспортировать <see cref="QuoteChangeMessage"/>.
+		/// To export <see cref="QuoteChangeMessage"/>.
 		/// </summary>
-		/// <param name="messages">—ообщени€.</param>
+		/// <param name="messages">Messages.</param>
 		protected override void Export(IEnumerable<QuoteChangeMessage> messages)
 		{
 			Export(messages);
 		}
 
 		/// <summary>
-		/// Ёкспортировать <see cref="Level1ChangeMessage"/>.
+		/// To export <see cref="Level1ChangeMessage"/>.
 		/// </summary>
-		/// <param name="messages">—ообщени€.</param>
+		/// <param name="messages">Messages.</param>
 		protected override void Export(IEnumerable<Level1ChangeMessage> messages)
 		{
 			Export(messages);
 		}
 
 		/// <summary>
-		/// Ёкспортировать <see cref="CandleMessage"/>.
+		/// To export <see cref="CandleMessage"/>.
 		/// </summary>
-		/// <param name="messages">—ообщени€.</param>
+		/// <param name="messages">Messages.</param>
 		protected override void Export(IEnumerable<CandleMessage> messages)
 		{
 			foreach (var group in messages.GroupBy(m => m.GetType()))
@@ -122,18 +122,18 @@ namespace StockSharp.Algo.Export
 		}
 
 		/// <summary>
-		/// Ёкспортировать <see cref="NewsMessage"/>.
+		/// To export <see cref="NewsMessage"/>.
 		/// </summary>
-		/// <param name="messages">—ообщени€.</param>
+		/// <param name="messages">Messages.</param>
 		protected override void Export(IEnumerable<NewsMessage> messages)
 		{
 			throw new NotSupportedException();
 		}
 
 		/// <summary>
-		/// Ёкспортировать <see cref="SecurityMessage"/>.
+		/// To export <see cref="SecurityMessage"/>.
 		/// </summary>
-		/// <param name="messages">—ообщени€.</param>
+		/// <param name="messages">Messages.</param>
 		protected override void Export(IEnumerable<SecurityMessage> messages)
 		{
 			throw new NotSupportedException();

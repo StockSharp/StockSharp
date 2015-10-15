@@ -16,7 +16,7 @@ namespace StockSharp.Algo.Derivatives
 	using StockSharp.Localization;
 
 	/// <summary>
-	/// Вспомогательный класс для работы с производными финансовыми инструментами (деривативами).
+	/// Extension class for derivatives.
 	/// </summary>
 	public static class DerivativesHelper
 	{
@@ -75,11 +75,11 @@ namespace StockSharp.Algo.Derivatives
 		private static readonly SynchronizedDictionary<Security, Security> _underlyingSecurities = new SynchronizedDictionary<Security, Security>();
 
 		/// <summary>
-		/// Получить базовый актив по деривативу.
+		/// To get the underlying asset by the derivative.
 		/// </summary>
-		/// <param name="derivative">Дериватив.</param>
-		/// <param name="provider">Поставщик информации об инструментах.</param>
-		/// <returns>Базовый актив.</returns>
+		/// <param name="derivative">The derivative.</param>
+		/// <param name="provider">The provider of information about instruments.</param>
+		/// <returns>Underlying asset.</returns>
 		public static Security GetUnderlyingAsset(this Security derivative, ISecurityProvider provider)
 		{
 			if (derivative == null)
@@ -109,33 +109,33 @@ namespace StockSharp.Algo.Derivatives
 		}
 
 		/// <summary>
-		/// Отфильтровать опционы по страйку <see cref="Security.Strike"/>.
+		/// To filter options by the strike <see cref="Security.Strike"/>.
 		/// </summary>
-		/// <param name="options">Опционы, которые необходимо отфильтровать.</param>
-		/// <param name="strike">Цена страйка.</param>
-		/// <returns>Отфильтрованные опционы.</returns>
+		/// <param name="options">Options to be filtered.</param>
+		/// <param name="strike">The strike price.</param>
+		/// <returns>Filtered options.</returns>
 		public static IEnumerable<Security> Filter(this IEnumerable<Security> options, decimal strike)
 		{
 			return options.Where(o => o.Strike == strike);
 		}
 
 		/// <summary>
-		/// Отфильтровать опционы по типу <see cref="Security.OptionType"/>.
+		/// To filter options by type <see cref="Security.OptionType"/>.
 		/// </summary>
-		/// <param name="options">Опционы, которые необходимо отфильтровать.</param>
-		/// <param name="type">Тип опциона.</param>
-		/// <returns>Отфильтрованные опционы.</returns>
+		/// <param name="options">Options to be filtered.</param>
+		/// <param name="type">Option type.</param>
+		/// <returns>Filtered options.</returns>
 		public static IEnumerable<Security> Filter(this IEnumerable<Security> options, OptionTypes type)
 		{
 			return options.Where(o => o.OptionType == type);
 		}
 
 		/// <summary>
-		/// Отфильтровать инструменты по базовому активу.
+		/// To filter instruments by the underlying asset.
 		/// </summary>
-		/// <param name="securities">Инструменты, которые необходимо отфильтровать.</param>
-		/// <param name="asset">Базовый актив.</param>
-		/// <returns>Отфильтрованные инструменты.</returns>
+		/// <param name="securities">Instruments to be filtered.</param>
+		/// <param name="asset">Underlying asset.</param>
+		/// <returns>Instruments filtered.</returns>
 		public static IEnumerable<Security> FilterByUnderlying(this IEnumerable<Security> securities, Security asset)
 		{
 			if (asset == null)
@@ -145,11 +145,11 @@ namespace StockSharp.Algo.Derivatives
 		}
 
 		/// <summary>
-		/// Отфильтровать инструменты по дате экспирации <see cref="Security.ExpiryDate"/>.
+		/// To filter instruments by the expiration date <see cref="Security.ExpiryDate"/>.
 		/// </summary>
-		/// <param name="securities">Инструменты, которые необходимо отфильтровать.</param>
-		/// <param name="expirationDate">Дата экспирации.</param>
-		/// <returns>Отфильтрованные инструменты.</returns>
+		/// <param name="securities">Instruments to be filtered.</param>
+		/// <param name="expirationDate">The expiration date.</param>
+		/// <returns>Instruments filtered.</returns>
 		public static IEnumerable<Security> Filter(this IEnumerable<Security> securities, DateTimeOffset? expirationDate)
 		{
 			if (expirationDate == null)
@@ -159,13 +159,15 @@ namespace StockSharp.Algo.Derivatives
 		}
 
 		/// <summary>
-		/// Получить деривативы по базовому активу.
+		/// To get derivatives by the underlying asset.
 		/// </summary>
-		/// <param name="asset">Базовый актив.</param>
-		/// <param name="provider">Поставщик информации об инструментах.</param>
-		/// <param name="expirationDate">Дата экспирации.</param>
-		/// <returns>Список из деривативов.</returns>
-		/// <remarks>Возвращает пустой список, если деривативов не найдено.</remarks>
+		/// <param name="asset">Underlying asset.</param>
+		/// <param name="provider">The provider of information about instruments.</param>
+		/// <param name="expirationDate">The expiration date.</param>
+		/// <returns>The list of derivatives.</returns>
+		/// <remarks>
+		/// It returns an empty list if derivatives are not found.
+		/// </remarks>
 		public static IEnumerable<Security> GetDerivatives(this Security asset, ISecurityProvider provider, DateTimeOffset? expirationDate = null)
 		{
 			return provider.Lookup(new Security
@@ -176,11 +178,11 @@ namespace StockSharp.Algo.Derivatives
 		}
 
 		/// <summary>
-		/// Получить базовый актив.
+		/// To get the underlying asset.
 		/// </summary>
-		/// <param name="derivative">Дериватив.</param>
-		/// <param name="provider">Поставщик информации об инструментах.</param>
-		/// <returns>Базовый актив.</returns>
+		/// <param name="derivative">The derivative.</param>
+		/// <param name="provider">The provider of information about instruments.</param>
+		/// <returns>Underlying asset.</returns>
 		public static Security GetAsset(this Security derivative, ISecurityProvider provider)
 		{
 			var asset = provider.LookupById(derivative.UnderlyingSecurityId);
@@ -192,21 +194,21 @@ namespace StockSharp.Algo.Derivatives
 		}
 
 		/// <summary>
-		/// Поменять тип опциона на противоположное.
+		/// To change the option type for opposite.
 		/// </summary>
-		/// <param name="type">Первоначальное значение.</param>
-		/// <returns>Противоположное значение.</returns>
+		/// <param name="type">The initial value.</param>
+		/// <returns>The opposite value.</returns>
 		public static OptionTypes Invert(this OptionTypes type)
 		{
 			return type == OptionTypes.Call ? OptionTypes.Put : OptionTypes.Call;
 		}
 
 		/// <summary>
-		/// Получить противоположный опцион (для Call получить Put, для Put получить Call).
+		/// To get opposite option (for Call to get Put, for Put to get Call).
 		/// </summary>
-		/// <param name="option">Опцион.</param>
-		/// <param name="provider">Поставщик информации об инструментах.</param>
-		/// <returns>Противоположный опцион.</returns>
+		/// <param name="option">Options contract.</param>
+		/// <param name="provider">The provider of information about instruments.</param>
+		/// <returns>The opposite option.</returns>
 		public static Security GetOppositeOption(this Security option, ISecurityProvider provider)
 		{
 			if (provider == null)
@@ -231,40 +233,40 @@ namespace StockSharp.Algo.Derivatives
 		}
 
 		/// <summary>
-		/// Получить Call для базового фьючерса.
+		/// To get Call for the underlying futures.
 		/// </summary>
-		/// <param name="future">Базовый фьючерс.</param>
-		/// <param name="provider">Поставщик информации об инструментах.</param>
-		/// <param name="strike">Страйк.</param>
-		/// <param name="expirationDate">Дата экспирации опциона.</param>
-		/// <returns>Опцион Call.</returns>
+		/// <param name="future">Underlying futures.</param>
+		/// <param name="provider">The provider of information about instruments.</param>
+		/// <param name="strike">Strike.</param>
+		/// <param name="expirationDate">The date of the option expiration.</param>
+		/// <returns>The Call option.</returns>
 		public static Security GetCall(this Security future, ISecurityProvider provider, decimal strike, DateTimeOffset expirationDate)
 		{
 			return future.GetOption(provider, strike, expirationDate, OptionTypes.Call);
 		}
 
 		/// <summary>
-		/// Получить Put для базового фьючерса.
+		/// To get Put for the underlying futures.
 		/// </summary>
-		/// <param name="future">Базовый фьючерс.</param>
-		/// <param name="provider">Поставщик информации об инструментах.</param>
-		/// <param name="strike">Страйк.</param>
-		/// <param name="expirationDate">Дата экспирации опциона.</param>
-		/// <returns>Опцион Put.</returns>
+		/// <param name="future">Underlying futures.</param>
+		/// <param name="provider">The provider of information about instruments.</param>
+		/// <param name="strike">Strike.</param>
+		/// <param name="expirationDate">The date of the option expiration.</param>
+		/// <returns>The Put option.</returns>
 		public static Security GetPut(this Security future, ISecurityProvider provider, decimal strike, DateTimeOffset expirationDate)
 		{
 			return future.GetOption(provider, strike, expirationDate, OptionTypes.Put);
 		}
 
 		/// <summary>
-		/// Получить опцион для базового фьючерса.
+		/// To get an option for the underlying futures.
 		/// </summary>
-		/// <param name="future">Базовый фьючерс.</param>
-		/// <param name="provider">Поставщик информации об инструментах.</param>
-		/// <param name="strike">Страйк.</param>
-		/// <param name="expirationDate">Дата экспирации опционов.</param>
-		/// <param name="optionType">Тип опциона.</param>
-		/// <returns>Опцион.</returns>
+		/// <param name="future">Underlying futures.</param>
+		/// <param name="provider">The provider of information about instruments.</param>
+		/// <param name="strike">Strike.</param>
+		/// <param name="expirationDate">The options expiration date.</param>
+		/// <param name="optionType">Option type.</param>
+		/// <returns>Options contract.</returns>
 		public static Security GetOption(this Security future, ISecurityProvider provider, decimal strike, DateTimeOffset expirationDate, OptionTypes optionType)
 		{
 			if (future == null)
@@ -290,26 +292,26 @@ namespace StockSharp.Algo.Derivatives
 		}
 
 		/// <summary>
-		/// Получить центральный страйк.
+		/// To get the main strike.
 		/// </summary>
-		/// <param name="underlyingAsset">Базовый актив.</param>
-		/// <param name="securityProvider">Поставщик информации об инструментах.</param>
-		/// <param name="dataProvider">Поставщик маркет-данных.</param>
-		/// <param name="expirationDate">Дата экспирации опционов.</param>
-		/// <param name="optionType">Тип опциона.</param>
-		/// <returns>Центральный страйк.</returns>
+		/// <param name="underlyingAsset">Underlying asset.</param>
+		/// <param name="securityProvider">The provider of information about instruments.</param>
+		/// <param name="dataProvider">The market data provider.</param>
+		/// <param name="expirationDate">The options expiration date.</param>
+		/// <param name="optionType">Option type.</param>
+		/// <returns>The main strike.</returns>
 		public static Security GetCentralStrike(this Security underlyingAsset, ISecurityProvider securityProvider, IMarketDataProvider dataProvider, DateTimeOffset expirationDate, OptionTypes optionType)
 		{
 			return underlyingAsset.GetCentralStrike(dataProvider, underlyingAsset.GetDerivatives(securityProvider, expirationDate).Filter(optionType));
 		}
 
 		/// <summary>
-		/// Получить центральный страйк.
+		/// To get the main strike.
 		/// </summary>
-		/// <param name="underlyingAsset">Базовый актив.</param>
-		/// <param name="provider">Поставщик маркет-данных.</param>
-		/// <param name="allStrikes">Все страйки.</param>
-		/// <returns>Центральный страйк. Если невозможно получить текущую рыночную цену актива, то будет возвращено <see langword="null"/>.</returns>
+		/// <param name="underlyingAsset">Underlying asset.</param>
+		/// <param name="provider">The market data provider.</param>
+		/// <param name="allStrikes">All strikes.</param>
+		/// <returns>The main strike. If it is impossible to get the current market price of the asset then the <see langword="null" /> will be returned.</returns>
 		public static Security GetCentralStrike(this Security underlyingAsset, IMarketDataProvider provider, IEnumerable<Security> allStrikes)
 		{
 			var assetPrice = underlyingAsset.GetCurrentPrice(provider);
@@ -320,12 +322,12 @@ namespace StockSharp.Algo.Derivatives
 		}
 
 		/// <summary>
-		/// Получить размер шага страйка.
+		/// To get the strike step size.
 		/// </summary>
-		/// <param name="provider">Поставщик информации об инструментах.</param>
-		/// <param name="underlyingAsset">Базовый актив.</param>
-		/// <param name="expirationDate">Дата экспирации опционов (для указания конкретной серии).</param>
-		/// <returns>Размер шага страйка.</returns>
+		/// <param name="provider">The provider of information about instruments.</param>
+		/// <param name="underlyingAsset">Underlying asset.</param>
+		/// <param name="expirationDate">The options expiration date (to specify a particular series).</param>
+		/// <returns>The strike step size.</returns>
 		public static decimal GetStrikeStep(this Security underlyingAsset, ISecurityProvider provider, DateTimeOffset? expirationDate = null)
 		{
 			var group = underlyingAsset
@@ -342,24 +344,24 @@ namespace StockSharp.Algo.Derivatives
 		}
 
 		/// <summary>
-		/// Получить опционы вне денег (OTM).
+		/// To get out of the money options (OTM).
 		/// </summary>
-		/// <param name="underlyingAsset">Базовый актив.</param>
-		/// <param name="securityProvider">Поставщик информации об инструментах.</param>
-		/// <param name="dataProvider">Поставщик маркет-данных.</param>
-		/// <returns>Опционы вне денег.</returns>
+		/// <param name="underlyingAsset">Underlying asset.</param>
+		/// <param name="securityProvider">The provider of information about instruments.</param>
+		/// <param name="dataProvider">The market data provider.</param>
+		/// <returns>Out of the money options.</returns>
 		public static IEnumerable<Security> GetOutOfTheMoney(this Security underlyingAsset, ISecurityProvider securityProvider, IMarketDataProvider dataProvider)
 		{
 			return underlyingAsset.GetOutOfTheMoney(dataProvider, underlyingAsset.GetDerivatives(securityProvider));
 		}
 
 		/// <summary>
-		/// Получить опционы вне денег (OTM).
+		/// To get out of the money options (OTM).
 		/// </summary>
-		/// <param name="underlyingAsset">Базовый актив.</param>
-		/// <param name="provider">Поставщик маркет-данных.</param>
-		/// <param name="allStrikes">Все страйки.</param>
-		/// <returns>Опционы вне денег.</returns>
+		/// <param name="underlyingAsset">Underlying asset.</param>
+		/// <param name="provider">The market data provider.</param>
+		/// <param name="allStrikes">All strikes.</param>
+		/// <returns>Out of the money options.</returns>
 		public static IEnumerable<Security> GetOutOfTheMoney(this Security underlyingAsset, IMarketDataProvider provider, IEnumerable<Security> allStrikes)
 		{
 			if (underlyingAsset == null)
@@ -371,24 +373,24 @@ namespace StockSharp.Algo.Derivatives
 		}
 
 		/// <summary>
-		/// Получить опционы в деньгах (ITM).
+		/// To get in the money options (ITM).
 		/// </summary>
-		/// <param name="underlyingAsset">Базовый актив.</param>
-		/// <param name="securityProvider">Поставщик информации об инструментах.</param>
-		/// <param name="dataProvider">Поставщик маркет-данных.</param>
-		/// <returns>Опционы в деньгах.</returns>
+		/// <param name="underlyingAsset">Underlying asset.</param>
+		/// <param name="securityProvider">The provider of information about instruments.</param>
+		/// <param name="dataProvider">The market data provider.</param>
+		/// <returns>In the money options.</returns>
 		public static IEnumerable<Security> GetInTheMoney(this Security underlyingAsset, ISecurityProvider securityProvider, IMarketDataProvider dataProvider)
 		{
 			return underlyingAsset.GetInTheMoney(dataProvider, underlyingAsset.GetDerivatives(securityProvider));
 		}
 
 		/// <summary>
-		/// Получить опционы в деньгах (ITM).
+		/// To get in the money options (ITM).
 		/// </summary>
-		/// <param name="underlyingAsset">Базовый актив.</param>
-		/// <param name="provider">Поставщик маркет-данных.</param>
-		/// <param name="allStrikes">Все страйки.</param>
-		/// <returns>Опционы в деньгах.</returns>
+		/// <param name="underlyingAsset">Underlying asset.</param>
+		/// <param name="provider">The market data provider.</param>
+		/// <param name="allStrikes">All strikes.</param>
+		/// <returns>In the money options.</returns>
 		public static IEnumerable<Security> GetInTheMoney(this Security underlyingAsset, IMarketDataProvider provider, IEnumerable<Security> allStrikes)
 		{
 			if (underlyingAsset == null)
@@ -400,24 +402,24 @@ namespace StockSharp.Algo.Derivatives
 		}
 
 		/// <summary>
-		/// Получить опционы на деньгах (ATM).
+		/// To get at the money options (ATM).
 		/// </summary>
-		/// <param name="underlyingAsset">Базовый актив.</param>
-		/// <param name="securityProvider">Поставщик информации об инструментах.</param>
-		/// <param name="dataProvider">Поставщик маркет-данных.</param>
-		/// <returns>Опционы на деньгах.</returns>
+		/// <param name="underlyingAsset">Underlying asset.</param>
+		/// <param name="securityProvider">The provider of information about instruments.</param>
+		/// <param name="dataProvider">The market data provider.</param>
+		/// <returns>At the money options.</returns>
 		public static IEnumerable<Security> GetAtTheMoney(this Security underlyingAsset, ISecurityProvider securityProvider, IMarketDataProvider dataProvider)
 		{
 			return underlyingAsset.GetAtTheMoney(dataProvider, underlyingAsset.GetDerivatives(securityProvider));
 		}
 
 		/// <summary>
-		/// Получить опционы на деньгах (ATM).
+		/// To get at the money options (ATM).
 		/// </summary>
-		/// <param name="underlyingAsset">Базовый актив.</param>
-		/// <param name="provider">Поставщик маркет-данных.</param>
-		/// <param name="allStrikes">Все страйки.</param>
-		/// <returns>Опционы на деньгах.</returns>
+		/// <param name="underlyingAsset">Underlying asset.</param>
+		/// <param name="provider">The market data provider.</param>
+		/// <param name="allStrikes">All strikes.</param>
+		/// <returns>At the money options.</returns>
 		public static IEnumerable<Security> GetAtTheMoney(this Security underlyingAsset, IMarketDataProvider provider, IEnumerable<Security> allStrikes)
 		{
 			if (underlyingAsset == null)
@@ -439,12 +441,12 @@ namespace StockSharp.Algo.Derivatives
 		}
 
 		/// <summary>
-		/// Получить внутреннюю стоимость опциона.
+		/// To get the internal option value.
 		/// </summary>
-		/// <param name="option">Опцион.</param>
-		/// <param name="securityProvider">Поставщик информации об инструментах.</param>
-		/// <param name="dataProvider">Поставщик маркет-данных.</param>
-		/// <returns>Внутренняя стоимость. Если невозможно получить текущую рыночную цену актива, то будет возвращено <see langword="null"/>.</returns>
+		/// <param name="option">Options contract.</param>
+		/// <param name="securityProvider">The provider of information about instruments.</param>
+		/// <param name="dataProvider">The market data provider.</param>
+		/// <returns>The internal value. If it is impossible to get the current market price of the asset then the <see langword="null" /> will be returned.</returns>
 		public static decimal? GetIntrinsicValue(this Security option, ISecurityProvider securityProvider, IMarketDataProvider dataProvider)
 		{
 			if (securityProvider == null)
@@ -461,12 +463,12 @@ namespace StockSharp.Algo.Derivatives
 		}
 
 		/// <summary>
-		/// Получить временную стоимость опциона.
+		/// To get the timed option value.
 		/// </summary>
-		/// <param name="option">Опцион.</param>
-		/// <param name="securityProvider">Поставщик информации об инструментах.</param>
-		/// <param name="dataProvider">Поставщик маркет-данных.</param>
-		/// <returns>Временная стоимость. Если невозможно получить текущую рыночную цену актива, то будет возвращено <see langword="null"/>.</returns>
+		/// <param name="option">Options contract.</param>
+		/// <param name="securityProvider">The provider of information about instruments.</param>
+		/// <param name="dataProvider">The market data provider.</param>
+		/// <returns>The timed value. If it is impossible to get the current market price of the asset then the <see langword="null" /> will be returned.</returns>
 		public static decimal? GetTimeValue(this Security option, ISecurityProvider securityProvider, IMarketDataProvider dataProvider)
 		{
 			if (securityProvider == null)
@@ -497,22 +499,22 @@ namespace StockSharp.Algo.Derivatives
 		}
 
 		/// <summary>
-		/// Проверить, закончил ли действие инструмент.
+		/// To check whether the instrument has finished the action.
 		/// </summary>
-		/// <param name="security">Инструмент.</param>
-		/// <param name="currentTime">Текущее время.</param>
-		/// <returns><see langword="true"/>, если инструмент закончил свое действие.</returns>
+		/// <param name="security">Security.</param>
+		/// <param name="currentTime">The current time.</param>
+		/// <returns><see langword="true" /> if the instrument has finished its action.</returns>
 		public static bool IsExpired(this Security security, DateTimeOffset currentTime)
 		{
 			return security.GetExpirationTime() <= currentTime;
 		}
 
 		/// <summary>
-		/// Получить из названия опциона его информацию (базовый актив, страйк, дата экспирации и т.д.).
+		/// To get the information about the option from its name (underlying asset, strike, expiration date, etc.).
 		/// </summary>
-		/// <param name="optionName">Название опциона.</param>
-		/// <param name="board">Информация о площадке.</param>
-		/// <returns>Информация об опционе.</returns>
+		/// <param name="optionName">The option name.</param>
+		/// <param name="board">Board info.</param>
+		/// <returns>Information about the option.</returns>
 		public static Security GetOptionInfo(this string optionName, ExchangeBoard board)
 		{
 			if (board == null)
@@ -543,12 +545,12 @@ namespace StockSharp.Algo.Derivatives
 		}
 
 		/// <summary>
-		/// Получить из названия фьючерса его информацию (базовый актив, дата экспирации и т.д.).
+		/// To get the information about the futures from its name (underlying asset, expiration date, etc.).
 		/// </summary>
-		/// <param name="futureName">Название фьючерса.</param>
-		/// <param name="optionCode">Код опциона.</param>
-		/// <param name="board">Информация о площадке.</param>
-		/// <returns>Информация о фьючерсе.</returns>
+		/// <param name="futureName">The futures name.</param>
+		/// <param name="optionCode">The option code.</param>
+		/// <param name="board">Board info.</param>
+		/// <returns>Information about futures.</returns>
 		public static SecurityMessage GetFutureInfo(this string futureName, string optionCode, ExchangeBoard board)
 		{
 			if (board == null)
@@ -588,15 +590,15 @@ namespace StockSharp.Algo.Derivatives
 		}
 
 		/// <summary>
-		/// Создать стакан волатильности из обычного стакана.
+		/// To create the volatility order book from usual order book.
 		/// </summary>
-		/// <param name="depth">Стакан, котировки которого будут переведены в котировки с волатильностью.</param>
-		/// <param name="securityProvider">Поставщик информации об инструментах.</param>
-		/// <param name="dataProvider">Поставщик маркет-данных.</param>
-		/// <param name="currentTime">Текущее время.</param>
-		/// <param name="riskFree">Безрисковая процентная ставка.</param>
-		/// <param name="dividend">Размер дивиденда по акциям.</param>
-		/// <returns>Стакан волатильности.</returns>
+		/// <param name="depth">The order book quotes of which will be changed to volatility quotes.</param>
+		/// <param name="securityProvider">The provider of information about instruments.</param>
+		/// <param name="dataProvider">The market data provider.</param>
+		/// <param name="currentTime">The current time.</param>
+		/// <param name="riskFree">The risk free interest rate.</param>
+		/// <param name="dividend">The dividend amount on shares.</param>
+		/// <returns>The order book volatility.</returns>
 		public static MarketDepth ImpliedVolatility(this MarketDepth depth, ISecurityProvider securityProvider, IMarketDataProvider dataProvider, DateTimeOffset currentTime, decimal riskFree = 0, decimal dividend = 0)
 		{
 			if (depth == null)
@@ -606,12 +608,12 @@ namespace StockSharp.Algo.Derivatives
 		}
 
 		/// <summary>
-		/// Создать стакан волатильности из обычного стакана.
+		/// To create the volatility order book from usual order book.
 		/// </summary>
-		/// <param name="depth">Стакан, котировки которого будут переведены в котировки с волатильностью.</param>
-		/// <param name="model">Модель расчета значений "греков" по формуле Блэка-Шоулза.</param>
-		/// <param name="currentTime">Текущее время.</param>
-		/// <returns>Стакан волатильности.</returns>
+		/// <param name="depth">The order book quotes of which will be changed to volatility quotes.</param>
+		/// <param name="model">The model for calculating Greeks values by the Black-Scholes formula.</param>
+		/// <param name="currentTime">The current time.</param>
+		/// <returns>The order book volatility.</returns>
 		public static MarketDepth ImpliedVolatility(this MarketDepth depth, BlackScholes model, DateTimeOffset currentTime)
 		{
 			if (depth == null)
@@ -631,23 +633,23 @@ namespace StockSharp.Algo.Derivatives
 		}
 
 		/// <summary>
-		/// Получить период опциона до экспирации.
+		/// To get the option period before expiration.
 		/// </summary>
-		/// <param name="expirationTime">Время экспирации опциона.</param>
-		/// <param name="currentTime">Текущее время.</param>
-		/// <returns>Период опциона до экспирации. Если значение равно <see langword="null"/>, то расчет значения в данный момент невозможен.</returns>
+		/// <param name="expirationTime">The option expiration time.</param>
+		/// <param name="currentTime">The current time.</param>
+		/// <returns>The option period before expiration. If the value is equal to <see langword="null" />, then the value calculation currently is impossible.</returns>
 		public static double? GetExpirationTimeLine(DateTimeOffset expirationTime, DateTimeOffset currentTime)
 		{
 			return GetExpirationTimeLine(expirationTime, currentTime, TimeSpan.FromDays(365));
 		}
 
 		/// <summary>
-		/// Получить период опциона до экспирации.
+		/// To get the option period before expiration.
 		/// </summary>
-		/// <param name="expirationTime">Время экспирации опциона.</param>
-		/// <param name="currentTime">Текущее время.</param>
-		/// <param name="timeLine">Длина общего периода.</param>
-		/// <returns>Период опциона до экспирации. Если значение равно <see langword="null"/>, то расчет значения в данный момент невозможен.</returns>
+		/// <param name="expirationTime">The option expiration time.</param>
+		/// <param name="currentTime">The current time.</param>
+		/// <param name="timeLine">The length of the total period.</param>
+		/// <returns>The option period before expiration. If the value is equal to <see langword="null" />, then the value calculation currently is impossible.</returns>
 		public static double? GetExpirationTimeLine(DateTimeOffset expirationTime, DateTimeOffset currentTime, TimeSpan timeLine)
 		{
 			var retVal = expirationTime - currentTime;
@@ -668,26 +670,26 @@ namespace StockSharp.Algo.Derivatives
 		}
 
 		/// <summary>
-		/// Рассчитать временную экспоненту.
+		/// To calculate the time exhibitor.
 		/// </summary>
-		/// <param name="riskFree">Безрисковая процентная ставка.</param>
-		/// <param name="timeToExp">Период опциона до экспирации.</param>
-		/// <returns>Временная экспонента.</returns>
+		/// <param name="riskFree">The risk free interest rate.</param>
+		/// <param name="timeToExp">The option period before the expiration.</param>
+		/// <returns>The time exhibitor.</returns>
 		public static double ExpRate(decimal riskFree, double timeToExp)
 		{
 			return riskFree == 0 ? 1 : Math.Exp(-(double)riskFree * timeToExp);
 		}
 
 		/// <summary>
-		/// Рассчитать параметр d1 определения вероятности исполнения опциона.
+		/// To calculate the d1 parameter of the option fulfilment probability estimating.
 		/// </summary>
-		/// <param name="assetPrice">Цена базового актива.</param>
-		/// <param name="strike">Цена страйка.</param>
-		/// <param name="riskFree">Безрисковая процентная ставка.</param>
-		/// <param name="dividend">Размер дивиденда по акциям.</param>
-		/// <param name="deviation">Стандартное отклонение.</param>
-		/// <param name="timeToExp">Период опциона до экспирации.</param>
-		/// <returns>Параметр d1 определения вероятности исполнения опциона.</returns>
+		/// <param name="assetPrice">Underlying asset price.</param>
+		/// <param name="strike">The strike price.</param>
+		/// <param name="riskFree">The risk free interest rate.</param>
+		/// <param name="dividend">The dividend amount on shares.</param>
+		/// <param name="deviation">Standard deviation.</param>
+		/// <param name="timeToExp">The option period before the expiration.</param>
+		/// <returns>The d1 parameter of the option fulfilment probability estimating.</returns>
 		public static double D1(decimal assetPrice, decimal strike, decimal riskFree, decimal dividend, decimal deviation, double timeToExp)
 		{
 			if (deviation < 0)
@@ -698,29 +700,29 @@ namespace StockSharp.Algo.Derivatives
 		}
 
 		/// <summary>
-		/// Рассчитать параметр d2 определения вероятности исполнения опциона.
+		/// To calculate the d2 parameter of the option fulfilment probability estimating.
 		/// </summary>
-		/// <param name="d1">Параметр d1 определения вероятности исполнения опциона.</param>
-		/// <param name="deviation">Стандартное отклонение.</param>
-		/// <param name="timeToExp">Период опциона до экспирации.</param>
-		/// <returns>Параметр d2 определения вероятности исполнения опциона.</returns>
+		/// <param name="d1">The d1 parameter of the option fulfilment probability estimating.</param>
+		/// <param name="deviation">Standard deviation.</param>
+		/// <param name="timeToExp">The option period before the expiration.</param>
+		/// <returns>The d2 parameter of the option fulfilment probability estimating.</returns>
 		public static double D2(double d1, decimal deviation, double timeToExp)
 		{
 			return d1 - (double)deviation * timeToExp.Sqrt();
 		}
 
 		/// <summary>
-		/// Рассчитать премию опциона.
+		/// To calculate the option premium.
 		/// </summary>
-		/// <param name="optionType">Тип опциона.</param>
-		/// <param name="strike">Цена страйка.</param>
-		/// <param name="assetPrice">Цена базового актива.</param>
-		/// <param name="riskFree">Безрисковая процентная ставка.</param>
-		/// <param name="dividend">Размер дивиденда по акциям.</param>
-		/// <param name="deviation">Стандартное отклонение.</param>
-		/// <param name="timeToExp">Период опциона до экспирации.</param>
-		/// <param name="d1">Параметр d1 определения вероятности исполнения опциона.</param>
-		/// <returns>Премия опциона.</returns>
+		/// <param name="optionType">Option type.</param>
+		/// <param name="strike">The strike price.</param>
+		/// <param name="assetPrice">Underlying asset price.</param>
+		/// <param name="riskFree">The risk free interest rate.</param>
+		/// <param name="dividend">The dividend amount on shares.</param>
+		/// <param name="deviation">Standard deviation.</param>
+		/// <param name="timeToExp">The option period before the expiration.</param>
+		/// <param name="d1">The d1 parameter of the option fulfilment probability estimating.</param>
+		/// <returns>The option premium.</returns>
 		public static decimal Premium(OptionTypes optionType, decimal strike, decimal assetPrice, decimal riskFree, decimal dividend, decimal deviation, double timeToExp, double d1)
 		{
 			var sign = (optionType == OptionTypes.Call) ? 1 : -1;
@@ -733,12 +735,12 @@ namespace StockSharp.Algo.Derivatives
 		}
 
 		/// <summary>
-		/// Рассчитать дельту опциона.
+		/// To calculate the option delta.
 		/// </summary>
-		/// <param name="optionType">Тип опциона.</param>
-		/// <param name="assetPrice">Цена базового актива.</param>
-		/// <param name="d1">Параметр d1 определения вероятности исполнения опциона.</param>
-		/// <returns>Дельта опциона.</returns>
+		/// <param name="optionType">Option type.</param>
+		/// <param name="assetPrice">Underlying asset price.</param>
+		/// <param name="d1">The d1 parameter of the option fulfilment probability estimating.</param>
+		/// <returns>Option delta.</returns>
 		public static decimal Delta(OptionTypes optionType, decimal assetPrice, double d1)
 		{
 			var delta = (decimal)NormalDistr(d1);
@@ -750,13 +752,13 @@ namespace StockSharp.Algo.Derivatives
 		}
 
 		/// <summary>
-		/// Рассчитать гамму опциона.
+		/// To calculate the option gamma.
 		/// </summary>
-		/// <param name="assetPrice">Цена базового актива.</param>
-		/// <param name="deviation">Стандартное отклонение.</param>
-		/// <param name="timeToExp">Период опциона до экспирации.</param>
-		/// <param name="d1">Параметр d1 определения вероятности исполнения опциона.</param>
-		/// <returns>Гамма опциона.</returns>
+		/// <param name="assetPrice">Underlying asset price.</param>
+		/// <param name="deviation">Standard deviation.</param>
+		/// <param name="timeToExp">The option period before the expiration.</param>
+		/// <param name="d1">The d1 parameter of the option fulfilment probability estimating.</param>
+		/// <returns>Option gamma.</returns>
 		public static decimal Gamma(decimal assetPrice, decimal deviation, double timeToExp, double d1)
 		{
 			if (deviation == 0)
@@ -770,29 +772,29 @@ namespace StockSharp.Algo.Derivatives
 		}
 
 		/// <summary>
-		/// Рассчитать вегу опциона.
+		/// To calculate the option vega.
 		/// </summary>
-		/// <param name="assetPrice">Цена базового актива.</param>
-		/// <param name="timeToExp">Период опциона до экспирации.</param>
-		/// <param name="d1">Параметр d1 определения вероятности исполнения опциона.</param>
-		/// <returns>Вега опциона.</returns>
+		/// <param name="assetPrice">Underlying asset price.</param>
+		/// <param name="timeToExp">The option period before the expiration.</param>
+		/// <param name="d1">The d1 parameter of the option fulfilment probability estimating.</param>
+		/// <returns>Option vega.</returns>
 		public static decimal Vega(decimal assetPrice, double timeToExp, double d1)
 		{
 			return assetPrice * (decimal)(0.01 * InvertD1(d1) * timeToExp.Sqrt());
 		}
 
 		/// <summary>
-		/// Рассчитать тету опциона.
+		/// To calculate the option theta.
 		/// </summary>
-		/// <param name="optionType">Тип опциона.</param>
-		/// <param name="strike">Цена страйка.</param>
-		/// <param name="assetPrice">Цена базового актива.</param>
-		/// <param name="riskFree">Безрисковая процентная ставка.</param>
-		/// <param name="deviation">Стандартное отклонение.</param>
-		/// <param name="timeToExp">Период опциона до экспирации.</param>
-		/// <param name="d1">Параметр d1 определения вероятности исполнения опциона.</param>
-		/// <param name="daysInYear">Дней в году.</param>
-		/// <returns>Тета опциона.</returns>
+		/// <param name="optionType">Option type.</param>
+		/// <param name="strike">The strike price.</param>
+		/// <param name="assetPrice">Underlying asset price.</param>
+		/// <param name="riskFree">The risk free interest rate.</param>
+		/// <param name="deviation">Standard deviation.</param>
+		/// <param name="timeToExp">The option period before the expiration.</param>
+		/// <param name="d1">The d1 parameter of the option fulfilment probability estimating.</param>
+		/// <param name="daysInYear">Days per year.</param>
+		/// <returns>Option theta.</returns>
 		public static decimal Theta(OptionTypes optionType, decimal strike, decimal assetPrice, decimal riskFree, decimal deviation, double timeToExp, double d1, decimal daysInYear = 365)
 		{
 			var nd1 = InvertD1(d1);
@@ -807,16 +809,16 @@ namespace StockSharp.Algo.Derivatives
 		}
 
 		/// <summary>
-		/// Рассчитать ро опциона.
+		/// To calculate the option rho.
 		/// </summary>
-		/// <param name="optionType">Тип опциона.</param>
-		/// <param name="strike">Цена страйка.</param>
-		/// <param name="assetPrice">Цена базового актива.</param>
-		/// <param name="riskFree">Безрисковая процентная ставка.</param>
-		/// <param name="deviation">Стандартное отклонение.</param>
-		/// <param name="timeToExp">Период опциона до экспирации.</param>
-		/// <param name="d1">Параметр d1 определения вероятности исполнения опциона.</param>
-		/// <returns>Ро опциона.</returns>
+		/// <param name="optionType">Option type.</param>
+		/// <param name="strike">The strike price.</param>
+		/// <param name="assetPrice">Underlying asset price.</param>
+		/// <param name="riskFree">The risk free interest rate.</param>
+		/// <param name="deviation">Standard deviation.</param>
+		/// <param name="timeToExp">The option period before the expiration.</param>
+		/// <param name="d1">The d1 parameter of the option fulfilment probability estimating.</param>
+		/// <returns>Option rho.</returns>
 		public static decimal Rho(OptionTypes optionType, decimal strike, decimal assetPrice, decimal riskFree, decimal deviation, double timeToExp, double d1)
 		{
 			var expRate = ExpRate(riskFree, timeToExp);
@@ -827,11 +829,11 @@ namespace StockSharp.Algo.Derivatives
 		}
 
 		/// <summary>
-		/// Рассчитать подразумеваемую волатильность (Implied  Volatility).
+		/// To calculate the implied volatility.
 		/// </summary>
-		/// <param name="premium">Премия по опциону.</param>
-		/// <param name="getPremium">Рассчитать премию по волатильности.</param>
-		/// <returns>Подразумеваевая волатильность. Если значение равно <see langword="null"/>, то расчет значения в данный момент невозможен.</returns>
+		/// <param name="premium">The option premium.</param>
+		/// <param name="getPremium">To calculate the premium by volatility.</param>
+		/// <returns>The implied volatility. If the value is equal to <see langword="null" />, then the value calculation currently is impossible.</returns>
 		public static decimal? ImpliedVolatility(decimal premium, Func<decimal, decimal?> getPremium)
 		{
 			if (getPremium == null)

@@ -1,4 +1,4 @@
-﻿namespace StockSharp.Algo.Storages
+namespace StockSharp.Algo.Storages
 {
 	using System;
 	using System.Collections;
@@ -26,9 +26,9 @@
 	}
 
 	/// <summary>
-	/// Хранилище-агрегатор, позволяющее загружать данные одновременно из нескольких хранилищ маркет-данных.
+	/// The aggregator-storage, allowing to load data simultaneously from several market data storages.
 	/// </summary>
-	/// <typeparam name="T">Тип сообщения.</typeparam>
+	/// <typeparam name="T">Message type.</typeparam>
 	public class BasketMarketDataStorage<T> : Disposable
 		where T : Message
 	{
@@ -93,12 +93,12 @@
 			}
 
 			/// <summary>
-			/// Текущее сообщение.
+			/// The current message.
 			/// </summary>
 			public T Current { get; private set; }
 
 			/// <summary>
-			/// Доступные типы данных.
+			/// Available data types.
 			/// </summary>
 			public IEnumerable<MessageTypes> DataTypes { get; private set; }
 
@@ -228,7 +228,7 @@
 		private readonly CachedSynchronizedList<BasketMarketDataStorageEnumerator> _enumerators = new CachedSynchronizedList<BasketMarketDataStorageEnumerator>();
 
 		/// <summary>
-		/// Вложенные хранилища маркет-данных.
+		/// Embedded storages of market data.
 		/// </summary>
 		public ISynchronizedCollection<IMarketDataStorage> InnerStorages
 		{
@@ -236,7 +236,7 @@
 		}
 
 		/// <summary>
-		/// Создать <see cref="BasketMarketDataStorage{T}"/>.
+		/// Initializes a new instance of the <see cref="BasketMarketDataStorage{T}"/>.
 		/// </summary>
 		public BasketMarketDataStorage()
 		{
@@ -246,7 +246,7 @@
 		}
 
 		/// <summary>
-		/// Освободить занятые ресурсы.
+		/// Release resources.
 		/// </summary>
 		protected override void DisposeManaged()
 		{
@@ -280,10 +280,10 @@
 		}
 
 		/// <summary>
-		/// Загрузить сообщения из вложенных хранилищ за указанную дату.
+		/// To load messages from embedded storages for specified date.
 		/// </summary>
-		/// <param name="date">Дата.</param>
-		/// <returns>Загрузчик сообщений.</returns>
+		/// <param name="date">Date.</param>
+		/// <returns>The messages loader.</returns>
 		public IBasketMarketDataStorageEnumerator<T> Load(DateTime date)
 		{
 			return new BasketMarketDataStorageEnumerator(this, date);

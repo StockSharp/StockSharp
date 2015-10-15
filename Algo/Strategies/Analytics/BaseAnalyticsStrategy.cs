@@ -16,7 +16,7 @@ namespace StockSharp.Algo.Strategies.Analytics
 	using Xceed.Wpf.Toolkit.PropertyGrid.Attributes;
 
 	/// <summary>
-	/// Базовая аналитическая стратегия.
+	/// The base analytic strategy.
 	/// </summary>
 	[CategoryOrderLoc(LocalizedStrings.Str1221Key, 0)]
 	public abstract class BaseAnalyticsStrategy : Strategy
@@ -24,7 +24,7 @@ namespace StockSharp.Algo.Strategies.Analytics
 		private readonly StrategyParam<DateTime> _from;
 
 		/// <summary>
-		/// Дата начала.
+		/// Start date.
 		/// </summary>
 		[DisplayNameLoc(LocalizedStrings.Str343Key)]
 		[DescriptionLoc(LocalizedStrings.Str1222Key)]
@@ -39,7 +39,7 @@ namespace StockSharp.Algo.Strategies.Analytics
 		private readonly StrategyParam<DateTime> _to;
 
 		/// <summary>
-		/// Дата окончания.
+		/// End date.
 		/// </summary>
 		[DisplayNameLoc(LocalizedStrings.Str345Key)]
 		[DescriptionLoc(LocalizedStrings.Str418Key, true)]
@@ -52,13 +52,13 @@ namespace StockSharp.Algo.Strategies.Analytics
 		}
 
 		/// <summary>
-		/// Хранилище маркет-данных.
+		/// Market-data storage.
 		/// </summary>
 		[Browsable(false)]
 		public IStorageRegistry StorateRegistry { get; private set; }
 
 		/// <summary>
-		/// Инициализировать <see cref="BaseAnalyticsStrategy"/>.
+		/// Initialize <see cref="BaseAnalyticsStrategy"/>.
 		/// </summary>
 		protected BaseAnalyticsStrategy()
 		{
@@ -67,14 +67,14 @@ namespace StockSharp.Algo.Strategies.Analytics
 		}
 
 		/// <summary>
-		/// Отменить все активные заявки (стоп и обычные).
+		/// To cancel all active orders (to stop and regular).
 		/// </summary>
 		protected override void ProcessCancelActiveOrders()
 		{
 		}
 
 		/// <summary>
-		/// Текущее время, которое будет передано в <see cref="LogMessage.Time"/>.
+		/// Current time, which will be passed to the <see cref="LogMessage.Time"/>.
 		/// </summary>
 		public override DateTimeOffset CurrentTime
 		{
@@ -82,7 +82,7 @@ namespace StockSharp.Algo.Strategies.Analytics
 		}
 
 		/// <summary>
-		/// График.
+		/// Chart.
 		/// </summary>
 		[CLSCompliant(false)]
 		protected SciChartSurface Chart
@@ -91,7 +91,7 @@ namespace StockSharp.Algo.Strategies.Analytics
 		}
 
 		/// <summary>
-		/// Таблица.
+		/// Table.
 		/// </summary>
 		protected UniversalGrid Grid
 		{
@@ -99,7 +99,7 @@ namespace StockSharp.Algo.Strategies.Analytics
 		}
 
 		/// <summary>
-		/// Формат данных.
+		/// Data format.
 		/// </summary>
 		protected StorageFormats StorageFormat
 		{
@@ -107,7 +107,7 @@ namespace StockSharp.Algo.Strategies.Analytics
 		}
 
 		/// <summary>
-		/// Метод вызывается тогда, когда вызвался метод <see cref="Strategy.Start"/>, и состояние <see cref="Strategy.ProcessState"/> перешло в значение <see cref="ProcessStates.Started"/>.
+		/// The method is called when the <see cref="Strategy.Start"/> method has been called and the <see cref="Strategy.ProcessState"/> state has been taken the <see cref="ProcessStates.Started"/> value.
 		/// </summary>
 		protected override void OnStarted()
 		{
@@ -138,7 +138,7 @@ namespace StockSharp.Algo.Strategies.Analytics
 		}
 
 		/// <summary>
-		/// Анализировать.
+		/// To analyze.
 		/// </summary>
 		protected abstract void OnAnalyze();
 	}

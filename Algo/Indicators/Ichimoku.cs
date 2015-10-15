@@ -8,17 +8,17 @@ namespace StockSharp.Algo.Indicators
 	using StockSharp.Localization;
 
 	/// <summary>
-	/// Ишимоку.
+	/// Ichimoku.
 	/// </summary>
 	/// <remarks>
-	/// http://ta.mql4.com/indicators/oscillators/ichimoku
+	/// http://ta.mql4.com/indicators/oscillators/ichimoku.
 	/// </remarks>
 	[DisplayName("Ichimoku")]
 	[DescriptionLoc(LocalizedStrings.Str763Key)]
 	public class Ichimoku : BaseComplexIndicator
 	{
 		/// <summary>
-		/// Создать <see cref="Ichimoku"/>.
+		/// Initializes a new instance of the <see cref="Ichimoku"/>.
 		/// </summary>
 		public Ichimoku()
 			: this(new IchimokuLine { Length = 9 }, new IchimokuLine { Length = 26 })
@@ -26,10 +26,10 @@ namespace StockSharp.Algo.Indicators
 		}
 
 		/// <summary>
-		/// Создать <see cref="Ichimoku"/>.
+		/// Initializes a new instance of the <see cref="Ichimoku"/>.
 		/// </summary>
-		/// <param name="tenkan">Линия Tenkan.</param>
-		/// <param name="kijun">Линия Kijun.</param>
+		/// <param name="tenkan">Tenkan line.</param>
+		/// <param name="kijun">Kijun line.</param>
 		public Ichimoku(IchimokuLine tenkan, IchimokuLine kijun)
 		{
 			if (tenkan == null)
@@ -46,7 +46,7 @@ namespace StockSharp.Algo.Indicators
 		}
 
 		/// <summary>
-		/// Линия Tenkan.
+		/// Tenkan line.
 		/// </summary>
 		[ExpandableObject]
 		[DisplayName("Tenkan")]
@@ -55,7 +55,7 @@ namespace StockSharp.Algo.Indicators
 		public IchimokuLine Tenkan { get; private set; }
 
 		/// <summary>
-		/// Линия Kijun.
+		/// Kijun line.
 		/// </summary>
 		[ExpandableObject]
 		[DisplayName("Kijun")]
@@ -64,7 +64,7 @@ namespace StockSharp.Algo.Indicators
 		public IchimokuLine Kijun { get; private set; }
 
 		/// <summary>
-		/// Линия Senkou Span A.
+		/// Senkou Span A line.
 		/// </summary>
 		[ExpandableObject]
 		[DisplayName("SenkouA")]
@@ -73,7 +73,7 @@ namespace StockSharp.Algo.Indicators
 		public IchimokuSenkouALine SenkouA { get; private set; }
 
 		/// <summary>
-		/// Линия Senkou Span B.
+		/// Senkou Span B line.
 		/// </summary>
 		[ExpandableObject]
 		[DisplayName("SenkouB")]
@@ -82,7 +82,7 @@ namespace StockSharp.Algo.Indicators
 		public IchimokuSenkouBLine SenkouB { get; private set; }
 
 		/// <summary>
-		/// Линия Chinkou.
+		/// Chinkou line.
 		/// </summary>
 		[ExpandableObject]
 		[DisplayName("Chinkou")]

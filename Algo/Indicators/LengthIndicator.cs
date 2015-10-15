@@ -9,12 +9,12 @@ namespace StockSharp.Algo.Indicators
 	using StockSharp.Localization;
 
 	/// <summary>
-	/// Базовый класс для индикаторов с одним результирующим значением и основанных на периоде.
+	/// The base class for indicators with one resulting value and based on the period.
 	/// </summary>
 	public abstract class LengthIndicator<TResult> : BaseIndicator
 	{
 		/// <summary>
-		/// Инициализировать <see cref="LengthIndicator{TResult}"/>.
+		/// Initialize <see cref="LengthIndicator{T}"/>.
 		/// </summary>
 		protected LengthIndicator()
 		{
@@ -22,7 +22,7 @@ namespace StockSharp.Algo.Indicators
 		}
 
 		/// <summary>
-		/// Сбросить состояние индикатора на первоначальное. Метод вызывается каждый раз, когда меняются первоначальные настройки (например, длина периода).
+		/// To reset the indicator status to initial. The method is called each time when initial settings are changed (for example, the length of period).
 		/// </summary>
 		public override void Reset()
 		{
@@ -33,7 +33,7 @@ namespace StockSharp.Algo.Indicators
 		private int _length = 1;
 
 		/// <summary>
-		/// Длина периода. По-умолчанию длина равна 1.
+		/// Period length. By default equal to 1.
 		/// </summary>
 		[DisplayNameLoc(LocalizedStrings.Str736Key)]
 		[DescriptionLoc(LocalizedStrings.Str778Key, true)]
@@ -53,7 +53,7 @@ namespace StockSharp.Algo.Indicators
 		}
 
 		/// <summary>
-		/// Сформирован ли индикатор.
+		/// Whether the indicator is set.
 		/// </summary>
 		public override bool IsFormed
 		{
@@ -61,15 +61,15 @@ namespace StockSharp.Algo.Indicators
 		}
 
 		/// <summary>
-		/// Буфер для хранения данных.
+		/// The buffer for data storage.
 		/// </summary>
 		[Browsable(false)]
 		protected IList<TResult> Buffer { get; private set; }
 
 		/// <summary>
-		/// Загрузить настройки.
+		/// Load settings.
 		/// </summary>
-		/// <param name="settings">Хранилище настроек.</param>
+		/// <param name="settings">Settings storage.</param>
 		public override void Load(SettingsStorage settings)
 		{
 			base.Load(settings);
@@ -77,9 +77,9 @@ namespace StockSharp.Algo.Indicators
 		}
 
 		/// <summary>
-		/// Сохранить настройки.
+		/// Save settings.
 		/// </summary>
-		/// <param name="settings">Хранилище настроек.</param>
+		/// <param name="settings">Settings storage.</param>
 		public override void Save(SettingsStorage settings)
 		{
 			base.Save(settings);
@@ -87,9 +87,9 @@ namespace StockSharp.Algo.Indicators
 		}
 
 		/// <summary>
-		/// Получить строковое представление.
+		/// Returns a string that represents the current object.
 		/// </summary>
-		/// <returns>Строковое представление.</returns>
+		/// <returns>A string that represents the current object.</returns>
 		public override string ToString()
 		{
 			return base.ToString() + " " + Length;

@@ -14,55 +14,55 @@ namespace StockSharp.Algo
 	using StockSharp.Localization;
 
 	/// <summary>
-	/// Непрерывный инструмент (как правило, фьючерс), содержащий в себе инструменты, подверженные экспирации.
+	/// Continuous security (generally, a futures contract), containing expirable securities.
 	/// </summary>
 	[DisplayNameLoc(LocalizedStrings.ContinuousSecurityKey)]
 	[DescriptionLoc(LocalizedStrings.Str696Key)]
 	public class ContinuousSecurity : BasketSecurity
 	{
 		/// <summary>
-		/// Интерфейс, описывающий коллекцию внутренних инструментов <see cref="ContinuousSecurity.ExpirationJumps"/>.
+		/// The interface describing the internal instruments collection <see cref="ContinuousSecurity.ExpirationJumps"/>.
 		/// </summary>
 		public interface IExpirationJumpList : ISynchronizedCollection<KeyValuePair<Security, DateTimeOffset>>, IDictionary<Security, DateTimeOffset>
 		{
 			/// <summary>
-			/// Получить инструмент для заданного времени экспирации.
+			/// To get the instrument for the specified expiration time.
 			/// </summary>
-			/// <param name="time">Время экспирации.</param>
-			/// <returns>Инструмент.</returns>
+			/// <param name="time">The expiration time.</param>
+			/// <returns>Security.</returns>
 			Security this[DateTimeOffset time] { get; }
 
 			/// <summary>
-			/// Получить первый по экспирации инструмент.
+			/// To get the first instrument by expiration.
 			/// </summary>
-			/// <returns>Первый инструмент. Если <see cref="ExpirationJumps"/> пустой, то будет возвращено <see langword="null"/>.</returns>
+			/// <returns>The first instrument. If the <see cref="ContinuousSecurity.ExpirationJumps"/> is empty, the <see langword="null" /> will be returned.</returns>
 			Security FirstSecurity { get; }
 
 			/// <summary>
-			/// Получить последний по экспирации инструмент.
+			/// To get the last instrument by expiration.
 			/// </summary>
-			/// <returns>Последний инструмент. Если <see cref="ExpirationJumps"/> пустой, то будет возвращено <see langword="null"/>.</returns>
+			/// <returns>The last instrument. If the <see cref="ContinuousSecurity.ExpirationJumps"/> is empty, the <see langword="null" /> will be returned.</returns>
 			Security LastSecurity { get; }
 
 			/// <summary>
-			/// Получить следующий инструмент.
+			/// To get the next instrument.
 			/// </summary>
-			/// <param name="security">Инструмент.</param>
-			/// <returns>Следующий инструмент. Если <paramref name="security"/> является последним инструментом, то будет возвращено <see langword="null"/>.</returns>
+			/// <param name="security">Security.</param>
+			/// <returns>The next instrument. If the <paramref name="security" /> is the last instrument then <see langword="null" /> will be returned.</returns>
 			Security GetNextSecurity(Security security);
 
 			/// <summary>
-			/// Получить предыдущий инструмент.
+			/// To get the previous instrument.
 			/// </summary>
-			/// <param name="security">Инструмент.</param>
-			/// <returns>Предыдущий инструмент. Если <paramref name="security"/> является первым инструментом, то будет возвращено <see langword="null"/>.</returns>
+			/// <param name="security">Security.</param>
+			/// <returns>The previous instrument. If the <paramref name="security" /> is the first instrument then <see langword="null" /> will be returned.</returns>
 			Security GetPrevSecurity(Security security);
 			
 			/// <summary>
-			/// Получить диапазон действия внутреннего инструмента.
+			/// To get the range of operation of the internal instrument.
 			/// </summary>
-			/// <param name="security">Внутренний инструмент.</param>
-			/// <returns>Диапазон действия.</returns>
+			/// <param name="security">The internal instrument.</param>
+			/// <returns>The range of operation.</returns>
 			Range<DateTimeOffset> GetActivityRange(Security security);
 		}
 
@@ -230,7 +230,7 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Создать <see cref="ContinuousSecurity"/>.
+		/// Initializes a new instance of the <see cref="ContinuousSecurity"/>.
 		/// </summary>
 		public ContinuousSecurity()
 		{
@@ -241,7 +241,7 @@ namespace StockSharp.Algo
 		private readonly ExpirationJumpsDictionary _expirationJumps;
 
 		/// <summary>
-		/// Инструменты и даты перехода, при наступлении которых происходит переход на следующий инструмент.
+		/// Instruments and dates of transition at which the transition to the next instrument takes place.
 		/// </summary>
 		[Browsable(false)]
 		public IExpirationJumpList ExpirationJumps
@@ -250,7 +250,7 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Инструменты, из которых создана данная корзина.
+		/// Instruments, from which this basket is created.
 		/// </summary>
 		[Browsable(false)]
 		public override IEnumerable<Security> InnerSecurities
@@ -284,19 +284,19 @@ namespace StockSharp.Algo
 		//}
 
 		/// <summary>
-		/// Получить инструмент, который торгуется для указанного биржевого времени.
+		/// To get the instrument that trades for the specified exchange time.
 		/// </summary>
-		/// <param name="marketTime">Биржевое время.</param>
-		/// <returns>Инструмент. Если не существует инструмента для указанного времени, то будет возвращено <see langword="null"/>.</returns>
+		/// <param name="marketTime">The exchange time.</param>
+		/// <returns>The instrument. If there is no instrument for the specified time then the <see langword="null" /> will be returned.</returns>
 		public Security GetSecurity(DateTimeOffset marketTime)
 		{
 			return _expirationJumps.GetSecurity(marketTime);
 		}
 
 		/// <summary>
-		/// Сдвинуть экпирацию у внутренних инструментов <see cref="ExpirationJumps"/> на размер, равный <paramref name="offset"/>.
+		/// To shift the expiration of internal instruments <see cref="ContinuousSecurity.ExpirationJumps"/> to a size equas to <paramref name="offset" />.
 		/// </summary>
-		/// <param name="offset">Размер сдвига экспирации.</param>
+		/// <param name="offset">The size of the expiration shift.</param>
 		public void Offset(TimeSpan offset)
 		{
 			lock (_expirationJumps.SyncRoot)

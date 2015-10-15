@@ -15,7 +15,7 @@ namespace StockSharp.Algo.Indicators
 	public class Envelope : BaseComplexIndicator
 	{
 		/// <summary>
-		/// Создать <see cref="Envelope"/>.
+		/// Initializes a new instance of the <see cref="Envelope"/>.
 		/// </summary>
 		public Envelope()
 			: this(new SimpleMovingAverage())
@@ -23,7 +23,7 @@ namespace StockSharp.Algo.Indicators
 		}
 
 		/// <summary>
-		/// Создать <see cref="Envelope"/>.
+		/// Initializes a new instance of the <see cref="Envelope"/>.
 		/// </summary>
 		public Envelope(LengthIndicator<decimal> ma)
 		{
@@ -36,25 +36,25 @@ namespace StockSharp.Algo.Indicators
 		}
 
 		/// <summary>
-		/// Средняя линия.
+		/// Middle line.
 		/// </summary>
 		[Browsable(false)]
 		public LengthIndicator<decimal> Middle { get; private set; }
 
 		/// <summary>
-		/// Верхняя линия.
+		/// Upper line.
 		/// </summary>
 		[Browsable(false)]
 		public LengthIndicator<decimal> Upper { get; private set; }
 
 		/// <summary>
-		/// Нижняя линия.
+		/// Lower line.
 		/// </summary>
 		[Browsable(false)]
 		public LengthIndicator<decimal> Lower { get; private set; }
 
 		/// <summary>
-		/// Длина периода. По-умолчанию длина равна 1.
+		/// Period length. By default equal to 1.
 		/// </summary>
 		[DisplayNameLoc(LocalizedStrings.Str778Key)]
 		[DescriptionLoc(LocalizedStrings.Str779Key)]
@@ -72,7 +72,7 @@ namespace StockSharp.Algo.Indicators
 		private decimal _shift = 0.25m;
 
 		/// <summary>
-		/// Ширина сдвига. Задается в процентах от 0 до 1. По-умолчанию равно 0.25.
+		/// The shift width. Specified as percentage from 0 to 1. The default equals to 0.25.
 		/// </summary>
 		[DisplayNameLoc(LocalizedStrings.Str783Key)]
 		[DescriptionLoc(LocalizedStrings.Str784Key)]
@@ -91,7 +91,7 @@ namespace StockSharp.Algo.Indicators
 		}
 
 		/// <summary>
-		/// Сформирован ли индикатор.
+		/// Whether the indicator is set.
 		/// </summary>
 		public override bool IsFormed
 		{
@@ -99,10 +99,10 @@ namespace StockSharp.Algo.Indicators
 		}
 
 		/// <summary>
-		/// Обработать входное значение.
+		/// To handle the input value.
 		/// </summary>
-		/// <param name="input">Входное значение.</param>
-		/// <returns>Результирующее значение.</returns>
+		/// <param name="input">The input value.</param>
+		/// <returns>The resulting value.</returns>
 		protected override IIndicatorValue OnProcess(IIndicatorValue input)
 		{
 			var value = (ComplexIndicatorValue)base.OnProcess(input);
@@ -117,9 +117,9 @@ namespace StockSharp.Algo.Indicators
 		}
 
 		/// <summary>
-		/// Загрузить настройки.
+		/// Load settings.
 		/// </summary>
-		/// <param name="settings">Хранилище настроек.</param>
+		/// <param name="settings">Settings storage.</param>
 		public override void Load(SettingsStorage settings)
 		{
 			base.Load(settings);
@@ -127,9 +127,9 @@ namespace StockSharp.Algo.Indicators
 		}
 
 		/// <summary>
-		/// Сохранить настройки.
+		/// Save settings.
 		/// </summary>
-		/// <param name="settings">Хранилище настроек.</param>
+		/// <param name="settings">Settings storage.</param>
 		public override void Save(SettingsStorage settings)
 		{
 			base.Save(settings);

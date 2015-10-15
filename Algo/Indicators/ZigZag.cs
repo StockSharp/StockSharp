@@ -12,11 +12,10 @@ namespace StockSharp.Algo.Indicators
 	using StockSharp.Messages;
 
 	/// <summary>
-	/// ЗигЗаг.
+	/// ZigZag.
 	/// </summary>
 	/// <remarks>
-	/// ZigZag отслеживает и соединяет между собой крайние точки графика отстоящие
-	/// друг от друга не менее чем на заданный процент по шкале цены.
+	/// ZigZag traces and combines extreme points of the chart, distanced for not less than specified percentage by the price scale.
 	/// </remarks>
 	[DisplayName("ZigZag")]
 	[DescriptionLoc(LocalizedStrings.Str826Key)]
@@ -32,18 +31,18 @@ namespace StockSharp.Algo.Indicators
 		private int _backStep;
 		private bool _needAdd = true;
 
-		///<summary>
-		/// Создать <see cref="ZigZag"/>
-		///</summary>
+		/// <summary>
+		/// Initializes a new instance of the <see cref="ZigZag"/>.
+		/// </summary>
 		public ZigZag()
 		{
 			BackStep = 3;
 			Depth = 12;
 		}
 
-		///<summary>
-		/// Минимальное число баров между локальными максимумами, минимумами.
-		///</summary>
+		/// <summary>
+		/// Minimum number of bars between local maximums, minimums.
+		/// </summary>
 		[DisplayNameLoc(LocalizedStrings.Str827Key)]
 		[DescriptionLoc(LocalizedStrings.Str828Key)]
 		[CategoryLoc(LocalizedStrings.GeneralKey)]
@@ -60,10 +59,9 @@ namespace StockSharp.Algo.Indicators
 			}
 		}
 
-		///<summary>
-		/// Минимум баров, на котором Zigzag не будет строить второй максимум (или минимум),
-		/// если тот меньше (или больше) на deviation предыдущего соответственно.
-		///</summary>
+		/// <summary>
+		/// Bars minimum, on which Zigzag will not build a second maximum (or minimum), if it is smaller (or larger) by a deviation of the previous respectively.
+		/// </summary>
 		[DisplayNameLoc(LocalizedStrings.Str829Key)]
 		[DescriptionLoc(LocalizedStrings.Str830Key)]
 		[CategoryLoc(LocalizedStrings.GeneralKey)]
@@ -81,10 +79,9 @@ namespace StockSharp.Algo.Indicators
 		}
 
 		private Unit _deviation = new Unit(0.45m, UnitTypes.Percent);
-		///<summary>
-		/// Минимальное количество пунктов между максимумами (минимумами) двух соседних баров для того
-		/// чтобы индикатор Zigzag сформировал локальную вершину (локальный минимум).
-		///</summary>
+		/// <summary>
+		/// Minimum number of points between maximums (minimums) of two adjacent bars used by Zigzag indicator to form a local peak (local trough).
+		/// </summary>
 		[DisplayNameLoc(LocalizedStrings.Str831Key)]
 		[DescriptionLoc(LocalizedStrings.Str832Key)]
 		[CategoryLoc(LocalizedStrings.GeneralKey)]
@@ -105,9 +102,9 @@ namespace StockSharp.Algo.Indicators
 		}
 
 		private Func<Candle, decimal> _highValue = candle => candle.HighPrice;
-		///<summary>
-		/// Конвертер, который возвращает из свечи цену для поиска максимума.
-		///</summary>
+		/// <summary>
+		/// The converter, returning from the candle a price for search of maximum.
+		/// </summary>
 		[Browsable(false)]
 		public Func<Candle, decimal> HighValueFunc
 		{
@@ -120,9 +117,9 @@ namespace StockSharp.Algo.Indicators
 		}
 
 		private Func<Candle, decimal> _lowValue = candle => candle.LowPrice;
-		///<summary>
-		/// Конвертер, который возвращает из свечи цену для поиска минимумв.
-		///</summary>
+		/// <summary>
+		/// The converter, returning from the candle a price for search of minimum.
+		/// </summary>
 		[Browsable(false)]
 		public Func<Candle, decimal> LowValueFunc
 		{
@@ -134,9 +131,9 @@ namespace StockSharp.Algo.Indicators
 			}
 		}
 
-		///<summary>
-		/// Конвертер, который возвращает из свечи цену для текущего значения.
-		///</summary>
+		/// <summary>
+		/// The converter, returning from the candle a price for the current value.
+		/// </summary>
 		[Browsable(false)]
 		public Func<Candle, decimal> CurrentValueFunc
 		{
@@ -148,20 +145,20 @@ namespace StockSharp.Algo.Indicators
 			}
 		}
 
-		///<summary>
-		/// Текущее значение индикатора
-		///</summary>
+		/// <summary>
+		/// The indicator current value.
+		/// </summary>
 		[Browsable(false)]
 		public decimal CurrentValue { get; private set; }
 
-		///<summary>
-		/// Смещение для последнего значения индикатора
-		///</summary>
+		/// <summary>
+		/// Shift for the last indicator value.
+		/// </summary>
 		[Browsable(false)]
 		public int LastValueShift { get; private set; }
 
 		/// <summary>
-		/// Сбросить состояние индикатора на первоначальное. Метод вызывается каждый раз, когда меняются первоначальные настройки (например, длина периода).
+		/// To reset the indicator status to initial. The method is called each time when initial settings are changed (for example, the length of period).
 		/// </summary>
 		public override void Reset()
 		{
@@ -176,10 +173,10 @@ namespace StockSharp.Algo.Indicators
 		}
 
 		/// <summary>
-		/// Обработать входное значение.
+		/// To handle the input value.
 		/// </summary>
-		/// <param name="input">Входное значение.</param>
-		/// <returns>Результирующее значение.</returns>
+		/// <param name="input">The input value.</param>
+		/// <returns>The resulting value.</returns>
 		protected override IIndicatorValue OnProcess(IIndicatorValue input)
 		{
 			var candle = input.GetValue<Candle>();
@@ -391,9 +388,9 @@ namespace StockSharp.Algo.Indicators
 		}
 
 		/// <summary>
-		/// Загрузить настройки.
+		/// Load settings.
 		/// </summary>
-		/// <param name="settings">Хранилище настроек.</param>
+		/// <param name="settings">Settings storage.</param>
 		public override void Load(SettingsStorage settings)
 		{
 			base.Load(settings);
@@ -404,9 +401,9 @@ namespace StockSharp.Algo.Indicators
 		}
 
 		/// <summary>
-		/// Сохранить настройки.
+		/// Save settings.
 		/// </summary>
-		/// <param name="settings">Хранилище настроек.</param>
+		/// <param name="settings">Settings storage.</param>
 		public override void Save(SettingsStorage settings)
 		{
 			base.Save(settings);

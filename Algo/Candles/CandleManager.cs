@@ -18,7 +18,7 @@ namespace StockSharp.Algo.Candles
 	using StockSharp.Localization;
 
 	/// <summary>
-	/// Менеджер свечек.
+	/// The candles manager.
 	/// </summary>
 	public class CandleManager : BaseLogReceiver, ICandleManager
 	{
@@ -179,7 +179,7 @@ namespace StockSharp.Algo.Candles
 			}
 
 			/// <summary>
-			/// Освободить занятые ресурсы.
+			/// Release resources.
 			/// </summary>
 			protected override void DisposeManaged()
 			{
@@ -195,7 +195,7 @@ namespace StockSharp.Algo.Candles
 		private readonly SynchronizedDictionary<CandleSeries, CandleSourceEnumerator<ICandleManagerSource, Candle>> _series = new SynchronizedDictionary<CandleSeries, CandleSourceEnumerator<ICandleManagerSource, Candle>>();
 
 		/// <summary>
-		/// Создать <see cref="CandleManager"/>.
+		/// Initializes a new instance of the <see cref="CandleManager"/>.
 		/// </summary>
 		public CandleManager()
 		{
@@ -215,9 +215,9 @@ namespace StockSharp.Algo.Candles
 		}
 
 		/// <summary>
-		/// Создать <see cref="CandleManager"/>.
+		/// Initializes a new instance of the <see cref="CandleManager"/>.
 		/// </summary>
-		/// <param name="builderSource">Источник данных для <see cref="ICandleBuilder"/>.</param>
+		/// <param name="builderSource">The data source for <see cref="ICandleBuilder"/>.</param>
 		public CandleManager(ICandleBuilderSource builderSource)
 			: this()
 		{
@@ -228,9 +228,9 @@ namespace StockSharp.Algo.Candles
 		}
 
 		/// <summary>
-		/// Создать <see cref="CandleManager"/>.
+		/// Initializes a new instance of the <see cref="CandleManager"/>.
 		/// </summary>
-		/// <param name="connector">Подключение к торговой системе для создания источника тиковых сделок по-умолчанию.</param>
+		/// <param name="connector">The connection to trading system to create the source for tick trades by default.</param>
 		public CandleManager(IConnector connector)
 			: this(new TradeCandleBuilderSource(connector))
 		{
@@ -243,7 +243,7 @@ namespace StockSharp.Algo.Candles
 		private ICandleManagerContainer _container = new CandleManagerContainer();
 
 		/// <summary>
-		/// Kонтейнер данных.
+		/// The data container.
 		/// </summary>
 		public ICandleManagerContainer Container
 		{
@@ -264,7 +264,7 @@ namespace StockSharp.Algo.Candles
 		private IStorageRegistry _storageRegistry;
 
 		/// <summary>
-		/// Хранилище данных. Передается во все источники, реализующие интерфейс <see cref="IStorageCandleSource"/>.
+		/// The data storage. To be sent to all sources that implement the interface <see cref="IStorageCandleSource"/>.
 		/// </summary>
 		public IStorageRegistry StorageRegistry
 		{
@@ -277,7 +277,7 @@ namespace StockSharp.Algo.Candles
 		}
 
 		/// <summary>
-		/// Все активные на текущий момент серии свечек, запущенные через <see cref="Start"/>.
+		/// All currently active candles series started via <see cref="Start"/>.
 		/// </summary>
 		public IEnumerable<CandleSeries> Series
 		{
@@ -285,12 +285,12 @@ namespace StockSharp.Algo.Candles
 		}
 
 		/// <summary>
-		/// Источники свечек.
+		/// Candles sources.
 		/// </summary>
 		public ICandleManagerSourceList Sources { get; private set; }
 
 		/// <summary>
-		/// Приоритет источника по скорости (0 - самый оптимальный).
+		/// The source priority by speed (0 - the best).
 		/// </summary>
 		public int SpeedPriority
 		{
@@ -298,25 +298,25 @@ namespace StockSharp.Algo.Candles
 		}
 
 		/// <summary>
-		/// Событие появления нового значения для обработки.
+		/// A new value for processing occurrence event.
 		/// </summary>
 		public event Action<CandleSeries, Candle> Processing;
 
 		/// <summary>
-		/// Событие окончания обработки серии.
+		/// The series processing end event.
 		/// </summary>
 		public event Action<CandleSeries> Stopped;
 
 		/// <summary>
-		/// Событие ошибки формирования свечек.
+		/// The candles creating error event.
 		/// </summary>
 		public event Action<Exception> Error;
 
 		/// <summary>
-		/// Получить временные диапазоны, для которых у данного источника для передаваемой серии свечек есть данные.
+		/// To get time ranges for which this source of passed candles series has data.
 		/// </summary>
-		/// <param name="series">Серия свечек.</param>
-		/// <returns>Временные диапазоны.</returns>
+		/// <param name="series">Candles series.</param>
+		/// <returns>Time ranges.</returns>
 		public virtual IEnumerable<Range<DateTimeOffset>> GetSupportedRanges(CandleSeries series)
 		{
 			if (series == null)
@@ -326,11 +326,11 @@ namespace StockSharp.Algo.Candles
 		}
 
 		/// <summary>
-		/// Запросить получение данных.
+		/// To send data request.
 		/// </summary>
-		/// <param name="series">Серия свечек, для которой необходимо начать получать данные.</param>
-		/// <param name="from">Начальная дата, с которой необходимо получать данные.</param>
-		/// <param name="to">Конечная дата, до которой необходимо получать данные.</param>
+		/// <param name="series">The candles series for which data receiving should be started.</param>
+		/// <param name="from">The initial date from which you need to get data.</param>
+		/// <param name="to">The final date by which you need to get data.</param>
 		public virtual void Start(CandleSeries series, DateTimeOffset from, DateTimeOffset to)
 		{
 			if (series == null)
@@ -370,9 +370,9 @@ namespace StockSharp.Algo.Candles
 		}
 
 		/// <summary>
-		/// Прекратить получение данных, запущенное через <see cref="Start"/>.
+		/// To stop data receiving starting through <see cref="Start"/>.
 		/// </summary>
-		/// <param name="series">Серия свечек.</param>
+		/// <param name="series">Candles series.</param>
 		public virtual void Stop(CandleSeries series)
 		{
 			if (series == null)
@@ -387,9 +387,9 @@ namespace StockSharp.Algo.Candles
 		}
 
 		/// <summary>
-		/// Вызвать событие <see cref="Error"/>.
+		/// To call the event <see cref="CandleManager.Error"/>.
 		/// </summary>
-		/// <param name="error">Информация об ошибке.</param>
+		/// <param name="error">Error info.</param>
 		protected virtual void RaiseError(Exception error)
 		{
 			Error.SafeInvoke(error);
@@ -397,7 +397,7 @@ namespace StockSharp.Algo.Candles
 		}
 
 		/// <summary>
-		/// Освободить занятые ресурсы.
+		/// Release resources.
 		/// </summary>
 		protected override void DisposeManaged()
 		{

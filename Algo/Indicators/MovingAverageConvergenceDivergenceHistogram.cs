@@ -5,34 +5,34 @@ namespace StockSharp.Algo.Indicators
 	using StockSharp.Localization;
 
 	/// <summary>
-	/// Схождение/расхождение скользящих средних. Гистограмма.
+	/// Convergence/divergence of moving averages. Histogram.
 	/// </summary>
 	[DisplayName("MACD Histogram")]
 	[DescriptionLoc(LocalizedStrings.Str802Key)]
 	public class MovingAverageConvergenceDivergenceHistogram : MovingAverageConvergenceDivergenceSignal
 	{
 		/// <summary>
-		/// Создать <see cref="MovingAverageConvergenceDivergenceHistogram"/>.
+		/// Initializes a new instance of the <see cref="MovingAverageConvergenceDivergenceHistogram"/>.
 		/// </summary>
 		public MovingAverageConvergenceDivergenceHistogram()
 		{
 		}
 
 		/// <summary>
-		/// Создать <see cref="MovingAverageConvergenceDivergenceHistogram"/>.
+		/// Initializes a new instance of the <see cref="MovingAverageConvergenceDivergenceHistogram"/>.
 		/// </summary>
-		/// <param name="macd">Схождение/расхождение скользящих средних.</param>
-		/// <param name="signalMa">Сигнальная скользящая средняя.</param>
+		/// <param name="macd">Convergence/divergence of moving averages.</param>
+		/// <param name="signalMa">Signalling Voving Average.</param>
 		public MovingAverageConvergenceDivergenceHistogram(MovingAverageConvergenceDivergence macd, ExponentialMovingAverage signalMa)
 			: base(macd, signalMa)
 		{
 		}
 
 		/// <summary>
-		/// Обработать входное значение.
+		/// To handle the input value.
 		/// </summary>
-		/// <param name="input">Входное значение.</param>
-		/// <returns>Результирующее значение.</returns>
+		/// <param name="input">The input value.</param>
+		/// <returns>The resulting value.</returns>
 		protected override IIndicatorValue OnProcess(IIndicatorValue input)
 		{
 			var macdValue = Macd.Process(input);

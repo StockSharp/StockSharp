@@ -1,4 +1,4 @@
-﻿namespace StockSharp.Algo.Strategies.Testing
+namespace StockSharp.Algo.Strategies.Testing
 {
 	using System;
 	using System.Collections.Generic;
@@ -17,7 +17,7 @@
 	using StockSharp.Messages;
 
 	/// <summary>
-	/// Пакетный эмулятор стратегий.
+	/// The batch emulator of strategies.
 	/// </summary>
 	public class BatchEmulation
 	{
@@ -171,29 +171,29 @@
 		}
 
 		/// <summary>
-		/// Настройки эмуляции.
+		/// Emulation settings.
 		/// </summary>
 		public EmulationSettings EmulationSettings { get; private set; }
 
 		/// <summary>
-		/// Эмуляционное подключение.
+		/// The emulational connection.
 		/// </summary>
 		public HistoryEmulationConnector EmulationConnector { get; private set; }
 
 		/// <summary>
-		/// Стратегии для тестирования.
+		/// The startegy for testing.
 		/// </summary>
 		public IEnumerableEx<Strategy> Strategies { get; set; }
 
 		/// <summary>
-		/// Закончил ли эмулятор свою работу по причине окончания данных или он был прерван через метод <see cref="Stop"/>.
+		/// Has the emulator ended its operation due to end of data, or it was interrupted through the <see cref="BatchEmulation.Stop"/>method.
 		/// </summary>
 		public bool IsFinished { get { return EmulationConnector.IsFinished; } }
 
 		private int _progress;
 
 		/// <summary>
-		/// Текущий прогресс процесса эмуляции.
+		/// The current progress of paper trade process.
 		/// </summary>
 		public int CurrentProgress
 		{
@@ -214,7 +214,7 @@
 		private int _totalProgress;
 
 		/// <summary>
-		/// Общий прогресс эмуляции.
+		/// The general progress of paper trade.
 		/// </summary>
 		public int TotalProgress
 		{
@@ -225,7 +225,7 @@
 		private EmulationStates _state = EmulationStates.Stopped;
 		
 		/// <summary>
-		/// Состояние эмулятора.
+		/// The emulator state.
 		/// </summary>
 		public EmulationStates State
 		{
@@ -242,37 +242,37 @@
 		}
 
 		/// <summary>
-		/// Текущие тестируемые стратегии.
+		/// Current tested strategies.
 		/// </summary>
 		public IEnumerable<Strategy> BatchStrategies { get { return _batch; } }
 
 		/// <summary>
-		/// Событие об изменении состояния эмуляции.
+		/// The event on change of paper trade state.
 		/// </summary>
 		public event Action<EmulationStates, EmulationStates> StateChanged;
 
 		/// <summary>
-		/// Событие изменения прогресса эмуляции.
+		/// The event of paper trade progress change.
 		/// </summary>
 		public event Action<int, int> ProgressChanged;
 
 		/// <summary>
-		/// Создать <see cref="BatchEmulation"/>.
+		/// Initializes a new instance of the <see cref="BatchEmulation"/>.
 		/// </summary>
-		/// <param name="securities">Инструменты, с которыми будет вестись работа.</param>
-		/// <param name="portfolios">Портфели, с которыми будет вестись работа.</param>
-		/// <param name="storageRegistry">Хранилище данных.</param>
+		/// <param name="securities">Instruments, the operation will be performed with.</param>
+		/// <param name="portfolios">Portfolios, the operation will be performed with.</param>
+		/// <param name="storageRegistry">Market data storage.</param>
 		public BatchEmulation(IEnumerable<Security> securities, IEnumerable<Portfolio> portfolios, IStorageRegistry storageRegistry)
 			: this(new CollectionSecurityProvider(securities), portfolios, storageRegistry)
 		{
 		}
 
 		/// <summary>
-		/// Создать <see cref="BatchEmulation"/>.
+		/// Initializes a new instance of the <see cref="BatchEmulation"/>.
 		/// </summary>
-		/// <param name="securityProvider">Поставщик информации об инструментах.</param>
-		/// <param name="portfolios">Портфели, с которыми будет вестись работа.</param>
-		/// <param name="storageRegistry">Хранилище данных.</param>
+		/// <param name="securityProvider">The provider of information about instruments.</param>
+		/// <param name="portfolios">Portfolios, the operation will be performed with.</param>
+		/// <param name="storageRegistry">Market data storage.</param>
 		public BatchEmulation(ISecurityProvider securityProvider, IEnumerable<Portfolio> portfolios, IStorageRegistry storageRegistry)
 		{
 			if (securityProvider == null)
@@ -347,7 +347,7 @@
 		}
 
 		/// <summary>
-		/// Начать эмуляцию.
+		/// To start paper trading.
 		/// </summary>
 		public void Start(IEnumerableEx<Strategy> strategies)
 		{
@@ -513,7 +513,7 @@
 		}
 
 		/// <summary>
-		/// Остановить эмуляцию.
+		/// To stop paper trading.
 		/// </summary>
 		public void Stop()
 		{

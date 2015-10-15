@@ -1,4 +1,4 @@
-﻿namespace StockSharp.Algo.Candles.Compression
+namespace StockSharp.Algo.Candles.Compression
 {
 	using System;
 	using System.Diagnostics;
@@ -7,53 +7,53 @@
 	using StockSharp.Messages;
 
 	/// <summary>
-	/// Интерфейс, описывающий данные источника <see cref="ICandleBuilderSource"/>.
+	/// The interface that describes data of the <see cref="ICandleBuilderSource"/> source.
 	/// </summary>
 	public interface ICandleBuilderSourceValue
 	{
 		/// <summary>
-		/// Инструмент, по которому были сформированы данные.
+		/// The instrument by which data has been created.
 		/// </summary>
 		Security Security { get; }
 
 		/// <summary>
-		/// Время появления новых данных.
+		/// The time of new data occurrence.
 		/// </summary>
 		DateTimeOffset Time { get; }
 
 		/// <summary>
-		/// Цена.
+		/// Price.
 		/// </summary>
 		decimal Price { get; }
 
 		/// <summary>
-		/// Объем.
+		/// Volume.
 		/// </summary>
 		decimal Volume { get; }
 
 		/// <summary>
-		/// Направление заявки.
+		/// Order side.
 		/// </summary>
 		Sides? OrderDirection { get; }
 	}
 
 	/// <summary>
-	/// Данные источника <see cref="ICandleBuilderSource"/>, созданные на основе <see cref="Trade"/>.
+	/// The <see cref="ICandleBuilderSource"/> source data is created on basis of <see cref="TradeCandleBuilderSourceValue.Trade"/>.
 	/// </summary>
 	[DebuggerDisplay("{Trade}")]
 	public class TradeCandleBuilderSourceValue : ICandleBuilderSourceValue
 	{
 		/// <summary>
-		/// Создать <see cref="TradeCandleBuilderSourceValue"/>.
+		/// Initializes a new instance of the <see cref="TradeCandleBuilderSourceValue"/>.
 		/// </summary>
-		/// <param name="trade">Тиковая сделка.</param>
+		/// <param name="trade">Tick trade.</param>
 		public TradeCandleBuilderSourceValue(Trade trade)
 		{
 			Trade = trade;
 		}
 
 		/// <summary>
-		/// Тиковая сделка.
+		/// Tick trade.
 		/// </summary>
 		public Trade Trade { get; private set; }
 
@@ -84,16 +84,16 @@
 	}
 
 	/// <summary>
-	/// Данные источника <see cref="ICandleBuilderSource"/>, созданные на основе <see cref="Trade"/>.
+	/// The <see cref="ICandleBuilderSource"/> source data is created on basis of <see cref="Trade"/>.
 	/// </summary>
 	[DebuggerDisplay("{Tick}")]
 	public class TickCandleBuilderSourceValue : ICandleBuilderSourceValue
 	{
 		/// <summary>
-		/// Создать <see cref="TickCandleBuilderSourceValue"/>.
+		/// Initializes a new instance of the <see cref="TickCandleBuilderSourceValue"/>.
 		/// </summary>
-		/// <param name="security">Инструмент, по которому были сформированы данные.</param>
-		/// <param name="tick">Тиковая сделка.</param>
+		/// <param name="security">The instrument by which data has been created.</param>
+		/// <param name="tick">Tick trade.</param>
 		public TickCandleBuilderSourceValue(Security security, ExecutionMessage tick)
 		{
 			_security = security;
@@ -101,7 +101,7 @@
 		}
 
 		/// <summary>
-		/// Тиковая сделка.
+		/// Tick trade.
 		/// </summary>
 		public ExecutionMessage Tick { get; private set; }
 
@@ -134,22 +134,22 @@
 	}
 
 	/// <summary>
-	/// Данные источника <see cref="ICandleBuilderSource"/>, созданные на основе <see cref="MarketDepth"/>.
+	/// The <see cref="ICandleBuilderSource"/> source data is created on basis of <see cref="MarketDepth"/>.
 	/// </summary>
 	[DebuggerDisplay("{Depth}")]
 	public class DepthCandleBuilderSourceValue : ICandleBuilderSourceValue
 	{
 		/// <summary>
-		/// Создать <see cref="DepthCandleBuilderSourceValue"/>.
+		/// Initializes a new instance of the <see cref="DepthCandleBuilderSourceValue"/>.
 		/// </summary>
-		/// <param name="depth">Стакан.</param>
+		/// <param name="depth">Market depth.</param>
 		public DepthCandleBuilderSourceValue(MarketDepth depth)
 		{
 			Depth = depth;
 		}
 
 		/// <summary>
-		/// Стакан.
+		/// Market depth.
 		/// </summary>
 		public MarketDepth Depth { get; private set; }
 

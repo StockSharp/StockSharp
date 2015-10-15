@@ -1,27 +1,27 @@
-﻿namespace StockSharp.Algo.Slippage
+namespace StockSharp.Algo.Slippage
 {
 	using StockSharp.Messages;
 
 	/// <summary>
-	/// Интерфейс для менеджера расчета проскальзывания.
+	/// The interface for the slippage calculation manager.
 	/// </summary>
 	public interface ISlippageManager
 	{
 		/// <summary>
-		/// Суммарное значение проскальзывания.
+		/// Total slippage.
 		/// </summary>
 		decimal Slippage { get; }
 
 		/// <summary>
-		/// Сбросить состояние.
+		/// To reset the state.
 		/// </summary>
 		void Reset();
 
 		/// <summary>
-		/// Рассчитать проскальзывание.
+		/// To calculate slippage.
 		/// </summary>
-		/// <param name="message">Сообщение.</param>
-		/// <returns>Проскальзывание. Если проскальзывание рассчитать невозможно, то будет возвращено <see langword="null"/>.</returns>
+		/// <param name="message">Message.</param>
+		/// <returns>The slippage. If it is impossible to calculate slippage, <see langword="null" /> will be returned.</returns>
 		decimal? ProcessMessage(Message message);
 	}
 }

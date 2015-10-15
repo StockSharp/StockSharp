@@ -5,14 +5,14 @@ namespace StockSharp.Algo.Storages
 	using StockSharp.BusinessEntities;
 
 	/// <summary>
-	/// Класс для представления в виде списка новостей, хранящихся во внешнем хранилище.
+	/// The class for representation in the form of list of news, stored in the external storage.
 	/// </summary>
 	public class NewsList : BaseStorageEntityList<News>
 	{
 		/// <summary>
-		/// Создать <see cref="NewsList"/>.
+		/// Initializes a new instance of the <see cref="NewsList"/>.
 		/// </summary>
-		/// <param name="storage">Специальный интерфейс для прямого доступа к хранилищу.</param>
+		/// <param name="storage">The special interface for direct access to the storage.</param>
 		public NewsList(IStorage storage)
 			: base(storage)
 		{

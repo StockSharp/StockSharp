@@ -5,14 +5,14 @@ namespace StockSharp.Algo.Storages
 	using StockSharp.BusinessEntities;
 
 	/// <summary>
-	/// Класс для представления в виде списка тиковых сделок, хранящихся во внешнем хранилище.
+	/// The class for representation of tick trades, stored in external storage, in the form of list.
 	/// </summary>
 	public class TradeList : BaseStorageEntityList<Trade>
 	{
 		/// <summary>
-		/// Создать <see cref="TradeList"/>.
+		/// Initializes a new instance of the <see cref="TradeList"/>.
 		/// </summary>
-		/// <param name="storage">Специальный интерфейс для прямого доступа к хранилищу.</param>
+		/// <param name="storage">The special interface for direct access to the storage.</param>
 		public TradeList(IStorage storage)
 			: base(storage)
 		{

@@ -7,14 +7,14 @@ namespace StockSharp.Algo.Indicators
 	using StockSharp.Localization;
 
 	/// <summary>
-	/// Скользящая средняя Welles Wilder.
+	/// Welles Wilder Moving Average.
 	/// </summary>
 	[DisplayName("WilderMA")]
 	[DescriptionLoc(LocalizedStrings.Str825Key)]
 	public class WilderMovingAverage : LengthIndicator<decimal>
 	{
 		/// <summary>
-		/// Создать <see cref="WilderMovingAverage"/>.
+		/// Initializes a new instance of the <see cref="WilderMovingAverage"/>.
 		/// </summary>
 		public WilderMovingAverage()
 		{
@@ -22,10 +22,10 @@ namespace StockSharp.Algo.Indicators
 		}
 
 		/// <summary>
-		/// Обработать входное значение.
+		/// To handle the input value.
 		/// </summary>
-		/// <param name="input">Входное значение.</param>
-		/// <returns>Результирующее значение.</returns>
+		/// <param name="input">The input value.</param>
+		/// <returns>The resulting value.</returns>
 		protected override IIndicatorValue OnProcess(IIndicatorValue input)
 		{
 			var newValue = input.GetValue<decimal>();

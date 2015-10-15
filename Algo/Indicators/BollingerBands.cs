@@ -6,7 +6,7 @@ namespace StockSharp.Algo.Indicators
 	using StockSharp.Localization;
 
 	/// <summary>
-	/// Полосы Боллинджера.
+	/// Bollinger Bands.
 	/// </summary>
 	[DisplayName("Bollinger")]
 	[DescriptionLoc(LocalizedStrings.Str777Key)]
@@ -15,7 +15,7 @@ namespace StockSharp.Algo.Indicators
 		private readonly StandardDeviation _dev = new StandardDeviation();
 
 		/// <summary>
-		/// Создать <see cref="BollingerBands"/>.
+		/// Initializes a new instance of the <see cref="BollingerBands"/>.
 		/// </summary>
 		public BollingerBands()
 			: this(new SimpleMovingAverage())
@@ -23,9 +23,9 @@ namespace StockSharp.Algo.Indicators
 		}
 
 		/// <summary>
-		/// Создать <see cref="BollingerBands"/>.
+		/// Initializes a new instance of the <see cref="BollingerBands"/>.
 		/// </summary>
-		/// <param name="ma">Скользящая средняя.</param>
+		/// <param name="ma">Moving Average.</param>
 		public BollingerBands(LengthIndicator<decimal> ma)
 		{
 			InnerIndicators.Add(MovingAverage = ma);
@@ -35,25 +35,25 @@ namespace StockSharp.Algo.Indicators
 		}
 
 		/// <summary>
-		/// Средняя линия.
+		/// Middle line.
 		/// </summary>
 		[Browsable(false)]
 		public LengthIndicator<decimal> MovingAverage { get; private set; }
 
 		/// <summary>
-		/// Верхняя полоса+.
+		/// Upper band +.
 		/// </summary>
 		[Browsable(false)]
 		public BollingerBand UpBand { get; private set; }
 
 		/// <summary>
-		/// Нижняя полоса-.
+		/// Lower band -.
 		/// </summary>
 		[Browsable(false)]
 		public BollingerBand LowBand { get; private set; }
 
 		/// <summary>
-		/// Длина периода. По-умолчанию длина равна 1.
+		/// Period length. By default equal to 1.
 		/// </summary>
 		[DisplayNameLoc(LocalizedStrings.Str778Key)]
 		[DescriptionLoc(LocalizedStrings.Str779Key)]
@@ -69,7 +69,7 @@ namespace StockSharp.Algo.Indicators
 		}
 
 		/// <summary>
-		/// Ширина канала Полос Боллинджера. Значение по умолчанию равно 2.
+		/// Bollinger Bands channel width. Default value equal to 2.
 		/// </summary>
 		[DisplayNameLoc(LocalizedStrings.Str780Key)]
 		[DescriptionLoc(LocalizedStrings.Str781Key)]
@@ -90,7 +90,7 @@ namespace StockSharp.Algo.Indicators
 		}
 		
 		/// <summary>
-		/// Сбросить состояние индикатора на первоначальное. Метод вызывается каждый раз, когда меняются первоначальные настройки (например, длина периода).
+		/// To reset the indicator status to initial. The method is called each time when initial settings are changed (for example, the length of period).
 		/// </summary>
 		public override void Reset()
 		{
@@ -102,7 +102,7 @@ namespace StockSharp.Algo.Indicators
 		}
 
 		/// <summary>
-		/// Сформирован ли индикатор.
+		/// Whether the indicator is set.
 		/// </summary>
 		public override bool IsFormed
 		{
@@ -110,10 +110,10 @@ namespace StockSharp.Algo.Indicators
 		}
 
 		/// <summary>
-		/// Обработать входное значение.
+		/// To handle the input value.
 		/// </summary>
-		/// <param name="input">Входное значение.</param>
-		/// <returns>Результирующее значение.</returns>
+		/// <param name="input">The input value.</param>
+		/// <returns>The resulting value.</returns>
 		protected override IIndicatorValue OnProcess(IIndicatorValue input)
 		{
 			_dev.Process(input);

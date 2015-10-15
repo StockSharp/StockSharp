@@ -5,27 +5,27 @@ namespace StockSharp.Algo
 	using StockSharp.Localization;
 
 	/// <summary>
-	/// Состояния процесса.
+	/// States of the process.
 	/// </summary>
 	[DataContract]
 	public enum ProcessStates
 	{
 		/// <summary>
-		/// Остановлено.
+		/// Stopped.
 		/// </summary>
 		[EnumMember]
 		[EnumDisplayNameLoc(LocalizedStrings.Str1113Key)]
 		Stopped,
 
 		/// <summary>
-		/// Останавливается.
+		/// Stopping.
 		/// </summary>
 		[EnumMember]
 		[EnumDisplayNameLoc(LocalizedStrings.Str1114Key)]
 		Stopping,
 
 		/// <summary>
-		/// Запущено.
+		/// Started.
 		/// </summary>
 		[EnumMember]
 		[EnumDisplayNameLoc(LocalizedStrings.Str1115Key)]

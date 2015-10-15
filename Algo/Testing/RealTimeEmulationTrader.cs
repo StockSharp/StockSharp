@@ -11,10 +11,9 @@ namespace StockSharp.Algo.Testing
 	using EntityFactory = StockSharp.Algo.EntityFactory;
 
 	/// <summary>
-	/// Симуляционное подключение, предназначенный для тестирования стратегии c реальном подключения к торговой системе через <see cref="UnderlyngMarketDataAdapter"/>,
-	/// но без реального выставления заявок на бирже. Исполнение заявок и их сделки эмулируются подключением, используя информацию по стаканам, приходящих от реального подключения.
+	/// The simulational connection, intended for strategy testing with real connection to trading system through <see cref="RealTimeEmulationTrader{T}.UnderlyngMarketDataAdapter"/>, but without real resitering orders on stock. Execution of orders and their trades are emulated by connection, using information by order books, coming from real connection.
 	/// </summary>
-	/// <typeparam name="TUnderlyingMarketDataAdapter">Тип <see cref="IMessageAdapter"/>, через который будут получаться маркет-данные.</typeparam>
+	/// <typeparam name="TUnderlyingMarketDataAdapter">The type <see cref="IMessageAdapter"/>, through which market data will be received.</typeparam>
 	public class RealTimeEmulationTrader<TUnderlyingMarketDataAdapter> : BaseEmulationConnector
 		where TUnderlyingMarketDataAdapter : IMessageAdapter
 	{
@@ -52,9 +51,9 @@ namespace StockSharp.Algo.Testing
 		//}
 
 		/// <summary>
-		/// Создать <see cref="RealTimeEmulationTrader{TUnderlyingMarketDataAdapter}"/>.
+		/// Initializes a new instance of the <see cref="RealTimeEmulationTrader{T}"/>.
 		/// </summary>
-		/// <param name="underlyngMarketDataAdapter"><see cref="IMessageAdapter"/>, через который будут получаться маркет-данные.</param>
+		/// <param name="underlyngMarketDataAdapter"><see cref="IMessageAdapter"/>, through which market data will be got.</param>
 		public RealTimeEmulationTrader(TUnderlyingMarketDataAdapter underlyngMarketDataAdapter)
 			: this(underlyngMarketDataAdapter, new Portfolio
 			{
@@ -65,11 +64,11 @@ namespace StockSharp.Algo.Testing
 		}
 
 		/// <summary>
-		/// Создать <see cref="RealTimeEmulationTrader{TUnderlyingMarketDataAdapter}"/>.
+		/// Initializes a new instance of the <see cref="RealTimeEmulationTrader{T}"/>.
 		/// </summary>
-		/// <param name="underlyngMarketDataAdapter"><see cref="IMessageAdapter"/>, через который будут получаться маркет-данные.</param>
-		/// <param name="portfolio">Портфель, который будет использоваться для выставления заявок. Если значение не задано, то будет создан портфель по умолчанию с названием Симулятор.</param>
-		/// <param name="ownAdapter">Контролировать время жизни подключения <paramref name="underlyngMarketDataAdapter"/>.</param>
+		/// <param name="underlyngMarketDataAdapter"><see cref="IMessageAdapter"/>, through which market data will be got.</param>
+		/// <param name="portfolio">The portfolio to be used to register orders. If value is not given, the portfolio with default name Simulator will be created.</param>
+		/// <param name="ownAdapter">Track the connection <paramref name="underlyngMarketDataAdapter" /> lifetime.</param>
 		public RealTimeEmulationTrader(TUnderlyingMarketDataAdapter underlyngMarketDataAdapter, Portfolio portfolio, bool ownAdapter = true)
 		{
 			if (underlyngMarketDataAdapter == null)
@@ -100,7 +99,7 @@ namespace StockSharp.Algo.Testing
 		}
 
 		/// <summary>
-		/// <see cref="IMessageAdapter"/>, через который будут получаться маркет-данные.
+		/// <see cref="IMessageAdapter"/>, through which market data will be got.
 		/// </summary>
 		public TUnderlyingMarketDataAdapter UnderlyngMarketDataAdapter { get; private set; }
 
@@ -127,9 +126,9 @@ namespace StockSharp.Algo.Testing
 		//}
 
 		/// <summary>
-		/// Обработать сообщение, содержащее рыночные данные.
+		/// To process the message, containing market data.
 		/// </summary>
-		/// <param name="message">Сообщение, содержащее рыночные данные.</param>
+		/// <param name="message">The message, containing market data.</param>
 		protected override void OnProcessMessage(Message message)
 		{
 			if (message.Type == MessageTypes.Connect && message.Adapter == TransactionAdapter)
@@ -203,9 +202,9 @@ namespace StockSharp.Algo.Testing
 		//}
 
 		/// <summary>
-		/// Загрузить настройки.
+		/// Load settings.
 		/// </summary>
-		/// <param name="storage">Хранилище настроек.</param>
+		/// <param name="storage">Settings storage.</param>
 		public override void Load(SettingsStorage storage)
 		{
 			if (_ownAdapter)
@@ -217,9 +216,9 @@ namespace StockSharp.Algo.Testing
 		}
 
 		/// <summary>
-		/// Сохранить настройки.
+		/// Save settings.
 		/// </summary>
-		/// <param name="storage">Хранилище настроек.</param>
+		/// <param name="storage">Settings storage.</param>
 		public override void Save(SettingsStorage storage)
 		{
 			if (_ownAdapter)
@@ -231,7 +230,7 @@ namespace StockSharp.Algo.Testing
 		}
 
 		/// <summary>
-		/// Освободить занятые ресурсы.
+		/// Release resources.
 		/// </summary>
 		protected override void DisposeManaged()
 		{

@@ -10,17 +10,17 @@ namespace StockSharp.Algo.Candles.Compression
 	using StockSharp.BusinessEntities;
 
 	/// <summary>
-	/// Базовый источник данных для <see cref="ICandleBuilder"/>, который получает данные из <see cref="IConnector"/>.
+	/// The base data source for <see cref="ICandleBuilder"/> which receives data from <see cref="IConnector"/>.
 	/// </summary>
-	/// <typeparam name="T">Тип исходных данных (например, <see cref="Trade"/>).</typeparam>
+	/// <typeparam name="T">The source data type (for example, <see cref="Trade"/>).</typeparam>
 	public abstract class RealTimeCandleBuilderSource<T> : ConvertableCandleBuilderSource<T>
 	{
 		private readonly SynchronizedDictionary<Security, CachedSynchronizedList<CandleSeries>> _registeredSeries = new SynchronizedDictionary<Security, CachedSynchronizedList<CandleSeries>>();
 
 		/// <summary>
-		/// Создать <see cref="RealTimeCandleBuilderSource{T}"/>.
+		/// Initializes a new instance of the <see cref="RealTimeCandleBuilderSource{T}"/>.
 		/// </summary>
-		/// <param name="connector">Подключение, через которое будут получаться новые данные.</param>
+		/// <param name="connector">The connection through which new data will be received.</param>
 		protected RealTimeCandleBuilderSource(IConnector connector)
 		{
 			if (connector == null)
@@ -30,7 +30,7 @@ namespace StockSharp.Algo.Candles.Compression
 		}
 
 		/// <summary>
-		/// Приоритет источника по скорости (0 - самый оптимальный).
+		/// The source priority by speed (0 - the best).
 		/// </summary>
 		public override int SpeedPriority
 		{
@@ -38,16 +38,16 @@ namespace StockSharp.Algo.Candles.Compression
 		}
 
 		/// <summary>
-		/// Подключение, через которое будут получаться новые данные.
+		/// The connection through which new data will be received.
 		/// </summary>
 		public IConnector Connector { get; private set; }
 
 		/// <summary>
-		/// Запросить получение данных.
+		/// To send data request.
 		/// </summary>
-		/// <param name="series">Серия свечек, для которой необходимо начать получать данные.</param>
-		/// <param name="from">Начальная дата, с которой необходимо получать данные.</param>
-		/// <param name="to">Конечная дата, до которой необходимо получать данные.</param>
+		/// <param name="series">The candles series for which data receiving should be started.</param>
+		/// <param name="from">The initial date from which you need to get data.</param>
+		/// <param name="to">The final date by which you need to get data.</param>
 		public override void Start(CandleSeries series, DateTimeOffset from, DateTimeOffset to)
 		{
 			if (series == null)
@@ -63,9 +63,9 @@ namespace StockSharp.Algo.Candles.Compression
 		}
 
 		/// <summary>
-		/// Прекратить получение данных, запущенное через <see cref="Start"/>.
+		/// To stop data receiving starting through <see cref="Start"/>.
 		/// </summary>
-		/// <param name="series">Серия свечек.</param>
+		/// <param name="series">Candles series.</param>
 		public override void Stop(CandleSeries series)
 		{
 			if (series == null)
@@ -88,28 +88,28 @@ namespace StockSharp.Algo.Candles.Compression
 		}
 
 		/// <summary>
-		/// Зарегистрировать получение данных для инструмента.
+		/// To register the getting data for the instrument.
 		/// </summary>
-		/// <param name="security">Инструмент.</param>
+		/// <param name="security">Security.</param>
 		protected abstract void RegisterSecurity(Security security);
 
 		/// <summary>
-		/// Остановить получение данных для инструмента.
+		/// To stop the getting data for the instrument.
 		/// </summary>
-		/// <param name="security">Инструмент.</param>
+		/// <param name="security">Security.</param>
 		protected abstract void UnRegisterSecurity(Security security);
 
 		/// <summary>
-		/// Получить ранее накопленные значения.
+		/// To get previously accumulated values.
 		/// </summary>
-		/// <param name="security">Инструмент.</param>
-		/// <returns>Накопленные значения.</returns>
+		/// <param name="security">Security.</param>
+		/// <returns>Accumulated values.</returns>
 		protected abstract IEnumerable<T> GetSecurityValues(Security security);
 
 		/// <summary>
-		/// Добавить синхронно новые данные, полученные от <see cref="Connector"/>.
+		/// Synchronously to add new data received from <see cref="Connector"/>.
 		/// </summary>
-		/// <param name="values">Новые данные.</param>
+		/// <param name="values">New data.</param>
 		protected void AddNewValues(IEnumerable<T> values)
 		{
 			if (_registeredSeries.Count == 0)
@@ -145,14 +145,14 @@ namespace StockSharp.Algo.Candles.Compression
 	}
 
 	/// <summary>
-	/// Источник данных для <see cref="CandleBuilder{TCandle}"/>, который создает <see cref="ICandleBuilderSourceValue"/> из тиковых сделок <see cref="Trade"/>.
+	/// The data source for <see cref="CandleBuilder{T}"/> which creates <see cref="ICandleBuilderSourceValue"/> from tick trades <see cref="Trade"/>.
 	/// </summary>
 	public class TradeCandleBuilderSource : RealTimeCandleBuilderSource<Trade>
 	{
 		/// <summary>
-		/// Создать <see cref="TradeCandleBuilderSource"/>.
+		/// Initializes a new instance of the <see cref="TradeCandleBuilderSource"/>.
 		/// </summary>
-		/// <param name="connector">Подключение, через которое будут получаться новые сделки, используя событие <see cref="IConnector.NewTrades"/>.</param>
+		/// <param name="connector">The connection through which new trades will be received using the event <see cref="IConnector.NewTrades"/>.</param>
 		public TradeCandleBuilderSource(IConnector connector)
 			: base(connector)
 		{
@@ -160,10 +160,10 @@ namespace StockSharp.Algo.Candles.Compression
 		}
 
 		/// <summary>
-		/// Получить временные диапазоны, для которых у данного источника для передаваемой серии свечек есть данные.
+		/// To get time ranges for which this source of passed candles series has data.
 		/// </summary>
-		/// <param name="series">Серия свечек.</param>
-		/// <returns>Временные диапазоны.</returns>
+		/// <param name="series">Candles series.</param>
+		/// <returns>Time ranges.</returns>
 		public override IEnumerable<Range<DateTimeOffset>> GetSupportedRanges(CandleSeries series)
 		{
 			if (series == null)
@@ -175,35 +175,35 @@ namespace StockSharp.Algo.Candles.Compression
 		}
 
 		/// <summary>
-		/// Зарегистрировать получение данных для инструмента.
+		/// To register the getting data for the instrument.
 		/// </summary>
-		/// <param name="security">Инструмент.</param>
+		/// <param name="security">Security.</param>
 		protected override void RegisterSecurity(Security security)
 		{
 			Connector.RegisterTrades(security);
 		}
 
 		/// <summary>
-		/// Остановить получение данных для инструмента.
+		/// To stop the getting data for the instrument.
 		/// </summary>
-		/// <param name="security">Инструмент.</param>
+		/// <param name="security">Security.</param>
 		protected override void UnRegisterSecurity(Security security)
 		{
 			Connector.UnRegisterTrades(security);
 		}
 
 		/// <summary>
-		/// Получить ранее накопленные значения.
+		/// To get previously accumulated values.
 		/// </summary>
-		/// <param name="security">Инструмент.</param>
-		/// <returns>Накопленные значения.</returns>
+		/// <param name="security">Security.</param>
+		/// <returns>Accumulated values.</returns>
 		protected override IEnumerable<Trade> GetSecurityValues(Security security)
 		{
 			return Connector.Trades.Filter(security);
 		}
 
 		/// <summary>
-		/// Освободить занятые ресурсы.
+		/// Release resources.
 		/// </summary>
 		protected override void DisposeManaged()
 		{
@@ -213,14 +213,14 @@ namespace StockSharp.Algo.Candles.Compression
 	}
 
 	/// <summary>
-	/// Источник данных для <see cref="CandleBuilder{TCandle}"/>, который создает <see cref="ICandleBuilderSourceValue"/> из стакана <see cref="MarketDepth"/>.
+	/// The data source for <see cref="CandleBuilder{T}"/> which creates <see cref="ICandleBuilderSourceValue"/> from the order book <see cref="MarketDepth"/>.
 	/// </summary>
 	public class MarketDepthCandleBuilderSource : RealTimeCandleBuilderSource<MarketDepth>
 	{
 		/// <summary>
-		/// Создать <see cref="MarketDepthCandleBuilderSource"/>.
+		/// Initializes a new instance of the <see cref="MarketDepthCandleBuilderSource"/>.
 		/// </summary>
-		/// <param name="connector">Подключение, через которое будут получаться измененные стаканы, используя событие <see cref="IConnector.MarketDepthsChanged"/>.</param>
+		/// <param name="connector">The connection through which changed order books will be received using the event <see cref="IConnector.MarketDepthsChanged"/>.</param>
 		public MarketDepthCandleBuilderSource(IConnector connector)
 			: base(connector)
 		{
@@ -228,10 +228,10 @@ namespace StockSharp.Algo.Candles.Compression
 		}
 
 		/// <summary>
-		/// Получить временные диапазоны, для которых у данного источника для передаваемой серии свечек есть данные.
+		/// To get time ranges for which this source of passed candles series has data.
 		/// </summary>
-		/// <param name="series">Серия свечек.</param>
-		/// <returns>Временные диапазоны.</returns>
+		/// <param name="series">Candles series.</param>
+		/// <returns>Time ranges.</returns>
 		public override IEnumerable<Range<DateTimeOffset>> GetSupportedRanges(CandleSeries series)
 		{
 			if (series == null)
@@ -241,28 +241,28 @@ namespace StockSharp.Algo.Candles.Compression
 		}
 
 		/// <summary>
-		/// Зарегистрировать получение данных для инструмента.
+		/// To register the getting data for the instrument.
 		/// </summary>
-		/// <param name="security">Инструмент.</param>
+		/// <param name="security">Security.</param>
 		protected override void RegisterSecurity(Security security)
 		{
 			Connector.RegisterMarketDepth(security);
 		}
 
 		/// <summary>
-		/// Остановить получение данных для инструмента.
+		/// To stop the getting data for the instrument.
 		/// </summary>
-		/// <param name="security">Инструмент.</param>
+		/// <param name="security">Security.</param>
 		protected override void UnRegisterSecurity(Security security)
 		{
 			Connector.UnRegisterMarketDepth(security);
 		}
 
 		/// <summary>
-		/// Получить ранее накопленные значения.
+		/// To get previously accumulated values.
 		/// </summary>
-		/// <param name="security">Инструмент.</param>
-		/// <returns>Накопленные значения.</returns>
+		/// <param name="security">Security.</param>
+		/// <returns>Accumulated values.</returns>
 		protected override IEnumerable<MarketDepth> GetSecurityValues(Security security)
 		{
 			return Enumerable.Empty<MarketDepth>();
@@ -274,7 +274,7 @@ namespace StockSharp.Algo.Candles.Compression
 		}
 
 		/// <summary>
-		/// Освободить занятые ресурсы.
+		/// Release resources.
 		/// </summary>
 		protected override void DisposeManaged()
 		{

@@ -11,20 +11,20 @@ namespace StockSharp.Algo.Derivatives
 	using StockSharp.Localization;
 
 	/// <summary>
-	/// Портфельная модель расчета значений "греков" по формуле Блэка-Шоулза.
+	/// Portfolio model for calculating the values of Greeks by the Black-Scholes formula.
 	/// </summary>
 	public class BasketBlackScholes : BlackScholes
 	{
 		/// <summary>
-		/// Модель расчета значений "греков" по формуле Блэка-Шоулза с учетом позиции.
+		/// The model for calculating Greeks values by the Black-Scholes formula based on the position.
 		/// </summary>
 		public class InnerModel
 		{
 			/// <summary>
-			/// Создать <see cref="InnerModel"/>.
+			/// Initializes a new instance of the <see cref="InnerModel"/>.
 			/// </summary>
-			/// <param name="model">Модель расчета значений "греков" по формуле Блэка-Шоулза.</param>
-			/// <param name="positionManager">Менеджер позиции.</param>
+			/// <param name="model">The model for calculating Greeks values by the Black-Scholes formula.</param>
+			/// <param name="positionManager">The position manager.</param>
 			public InnerModel(BlackScholes model, IPositionManager positionManager)
 			{
 				if (model == null)
@@ -38,26 +38,26 @@ namespace StockSharp.Algo.Derivatives
 			}
 
 			/// <summary>
-			/// Модель расчета значений "греков" по формуле Блэка-Шоулза.
+			/// The model for calculating Greeks values by the Black-Scholes formula.
 			/// </summary>
 			public BlackScholes Model { get; private set; }
 
 			/// <summary>
-			/// Менеджер позиции.
+			/// The position manager.
 			/// </summary>
 			public IPositionManager PositionManager { get; private set; }
 		}
 
 		/// <summary>
-		/// Интерфейс, описывающий коллекцию внутренних моделей <see cref="BasketBlackScholes.InnerModels"/>.
+		/// The interface describing the internal models collection <see cref="BasketBlackScholes.InnerModels"/>.
 		/// </summary>
 		public interface IInnerModelList : ISynchronizedCollection<InnerModel>
 		{
 			/// <summary>
-			/// Получить модель расчета значений "греков" по формуле Блэка-Шоулза для конкретного опциона.
+			/// To get the model for calculating Greeks values by the Black-Scholes formula for a particular option.
 			/// </summary>
-			/// <param name="option">Опцион.</param>
-			/// <returns>Модель. Если опцион не зарегистрирован, то будет возвращено <see langword="null"/>.</returns>
+			/// <param name="option">Options contract.</param>
+			/// <returns>The model. If the option is not registered, then <see langword="null" /> will be returned.</returns>
 			InnerModel this[Security option] { get; }
 		}
 
@@ -98,10 +98,10 @@ namespace StockSharp.Algo.Derivatives
 		}
 
 		/// <summary>
-		/// Создать <see cref="BasketBlackScholes"/>.
+		/// Initializes a new instance of the <see cref="BasketBlackScholes"/>.
 		/// </summary>
-		/// <param name="securityProvider">Поставщик информации об инструментах.</param>
-		/// <param name="dataProvider">Поставщик маркет-данных.</param>
+		/// <param name="securityProvider">The provider of information about instruments.</param>
+		/// <param name="dataProvider">The market data provider.</param>
 		public BasketBlackScholes(ISecurityProvider securityProvider, IMarketDataProvider dataProvider)
 			: base(securityProvider, dataProvider)
 		{
@@ -111,7 +111,7 @@ namespace StockSharp.Algo.Derivatives
 		private readonly InnerModelList _innerModels;
 
 		/// <summary>
-		/// Информация по опционам.
+		/// Information about options.
 		/// </summary>
 		public IInnerModelList InnerModels
 		{
@@ -119,12 +119,12 @@ namespace StockSharp.Algo.Derivatives
 		}
 
 		/// <summary>
-		/// Позиция по базовому активу.
+		/// The position by the underlying asset.
 		/// </summary>
 		public IPositionManager UnderlyingAssetPosition { get; set; }
 
 		/// <summary>
-		/// Опцион.
+		/// Options contract.
 		/// </summary>
 		public override Security Option
 		{
@@ -134,7 +134,7 @@ namespace StockSharp.Algo.Derivatives
 		private Security _underlyingAsset;
 
 		/// <summary>
-		/// Базовый актив.
+		/// Underlying asset.
 		/// </summary>
 		public override Security UnderlyingAsset
 		{
@@ -155,7 +155,7 @@ namespace StockSharp.Algo.Derivatives
 		}
 
 		/// <summary>
-		/// Количество знаков после запятой у вычисляемых значений. По-умолчанию равно -1, что означает не округлять значения.
+		/// The number of decimal places at calculated values. The default is -1, which means no values rounding.
 		/// </summary>
 		public override int RoundDecimals
 		{
@@ -176,12 +176,12 @@ namespace StockSharp.Algo.Derivatives
 		}
 
 		/// <summary>
-		/// Рассчитать дельту опциона.
+		/// To calculate the option delta.
 		/// </summary>
-		/// <param name="currentTime">Текущее время.</param>
-		/// <param name="deviation">Стандартное отклонение. Если оно не указано, то используется <see cref="BlackScholes.DefaultDeviation"/>.</param>
-		/// <param name="assetPrice">Цена базового актива. Если цена не указана, то получается цена последней сделки из <see cref="BlackScholes.UnderlyingAsset"/>.</param>
-		/// <returns>Дельта опциона. Если значение равно <see langword="null"/>, то расчет значения в данный момент невозможен.</returns>
+		/// <param name="currentTime">The current time.</param>
+		/// <param name="deviation">The standard deviation. If it is not specified, then <see cref="BlackScholes.DefaultDeviation"/> is used.</param>
+		/// <param name="assetPrice">The price of the underlying asset. If the price is not specified, then the last trade price getting from <see cref="BlackScholes.UnderlyingAsset"/>.</param>
+		/// <returns>The option delta. If the value is equal to <see langword="null" />, then the value calculation currently is impossible.</returns>
 		public override decimal? Delta(DateTimeOffset currentTime, decimal? deviation = null, decimal? assetPrice = null)
 		{
 			return ProcessOptions(bs => bs.Delta(currentTime, deviation, assetPrice)) + GetAssetPosition();
@@ -189,12 +189,12 @@ namespace StockSharp.Algo.Derivatives
 
 
 		/// <summary>
-		/// Рассчитать гамму опциона.
+		/// To calculate the option gamma.
 		/// </summary>
-		/// <param name="currentTime">Текущее время.</param>
-		/// <param name="deviation">Стандартное отклонение. Если оно не указано, то используется <see cref="BlackScholes.DefaultDeviation"/>.</param>
-		/// <param name="assetPrice">Цена базового актива. Если цена не указана, то получается цена последней сделки из <see cref="BlackScholes.UnderlyingAsset"/>.</param>
-		/// <returns>Гамма опциона. Если значение равно <see langword="null"/>, то расчет значения в данный момент невозможен.</returns>
+		/// <param name="currentTime">The current time.</param>
+		/// <param name="deviation">The standard deviation. If it is not specified, then <see cref="BlackScholes.DefaultDeviation"/> is used.</param>
+		/// <param name="assetPrice">The price of the underlying asset. If the price is not specified, then the last trade price getting from <see cref="BlackScholes.UnderlyingAsset"/>.</param>
+		/// <returns>The option gamma. If the value is equal to <see langword="null" />, then the value calculation currently is impossible.</returns>
 		public override decimal? Gamma(DateTimeOffset currentTime, decimal? deviation = null, decimal? assetPrice = null)
 		{
 			return ProcessOptions(bs => bs.Gamma(currentTime, deviation, assetPrice));
@@ -202,69 +202,69 @@ namespace StockSharp.Algo.Derivatives
 
 
 		/// <summary>
-		/// Рассчитать вегу опциона.
+		/// To calculate the option vega.
 		/// </summary>
-		/// <param name="currentTime">Текущее время.</param>
-		/// <param name="deviation">Стандартное отклонение. Если оно не указано, то используется <see cref="BlackScholes.DefaultDeviation"/>.</param>
-		/// <param name="assetPrice">Цена базового актива. Если цена не указана, то получается цена последней сделки из <see cref="BlackScholes.UnderlyingAsset"/>.</param>
-		/// <returns>Вега опциона. Если значение равно <see langword="null"/>, то расчет значения в данный момент невозможен.</returns>
+		/// <param name="currentTime">The current time.</param>
+		/// <param name="deviation">The standard deviation. If it is not specified, then <see cref="BlackScholes.DefaultDeviation"/> is used.</param>
+		/// <param name="assetPrice">The price of the underlying asset. If the price is not specified, then the last trade price getting from <see cref="BlackScholes.UnderlyingAsset"/>.</param>
+		/// <returns>The option vega. If the value is equal to <see langword="null" />, then the value calculation currently is impossible.</returns>
 		public override decimal? Vega(DateTimeOffset currentTime, decimal? deviation = null, decimal? assetPrice = null)
 		{
 			return ProcessOptions(bs => bs.Vega(currentTime, deviation, assetPrice));
 		}
 
 		/// <summary>
-		/// Рассчитать тету опциона.
+		/// To calculate the option theta.
 		/// </summary>
-		/// <param name="currentTime">Текущее время.</param>
-		/// <param name="deviation">Стандартное отклонение. Если оно не указано, то используется <see cref="BlackScholes.DefaultDeviation"/>.</param>
-		/// <param name="assetPrice">Цена базового актива. Если цена не указана, то получается цена последней сделки из <see cref="BlackScholes.UnderlyingAsset"/>.</param>
-		/// <returns>Тета опциона. Если значение равно <see langword="null"/>, то расчет значения в данный момент невозможен.</returns>
+		/// <param name="currentTime">The current time.</param>
+		/// <param name="deviation">The standard deviation. If it is not specified, then <see cref="BlackScholes.DefaultDeviation"/> is used.</param>
+		/// <param name="assetPrice">The price of the underlying asset. If the price is not specified, then the last trade price getting from <see cref="BlackScholes.UnderlyingAsset"/>.</param>
+		/// <returns>The option theta. If the value is equal to <see langword="null" />, then the value calculation currently is impossible.</returns>
 		public override decimal? Theta(DateTimeOffset currentTime, decimal? deviation = null, decimal? assetPrice = null)
 		{
 			return ProcessOptions(bs => bs.Theta(currentTime, deviation, assetPrice));
 		}
 
 		/// <summary>
-		/// Рассчитать ро опциона.
+		/// To calculate the option rho.
 		/// </summary>
-		/// <param name="currentTime">Текущее время.</param>
-		/// <param name="deviation">Стандартное отклонение. Если оно не указано, то используется <see cref="BlackScholes.DefaultDeviation"/>.</param>
-		/// <param name="assetPrice">Цена базового актива. Если цена не указана, то получается цена последней сделки из <see cref="BlackScholes.UnderlyingAsset"/>.</param>
-		/// <returns>Ро опциона. Если значение равно <see langword="null"/>, то расчет значения в данный момент невозможен.</returns>
+		/// <param name="currentTime">The current time.</param>
+		/// <param name="deviation">The standard deviation. If it is not specified, then <see cref="BlackScholes.DefaultDeviation"/> is used.</param>
+		/// <param name="assetPrice">The price of the underlying asset. If the price is not specified, then the last trade price getting from <see cref="BlackScholes.UnderlyingAsset"/>.</param>
+		/// <returns>The option rho. If the value is equal to <see langword="null" />, then the value calculation currently is impossible.</returns>
 		public override decimal? Rho(DateTimeOffset currentTime, decimal? deviation = null, decimal? assetPrice = null)
 		{
 			return ProcessOptions(bs => bs.Rho(currentTime, deviation, assetPrice));
 		}
 
 		/// <summary>
-		/// Рассчитать премию опциона.
+		/// To calculate the option premium.
 		/// </summary>
-		/// <param name="currentTime">Текущее время.</param>
-		/// <param name="deviation">Стандартное отклонение. Если оно не указано, то используется <see cref="BlackScholes.DefaultDeviation"/>.</param>
-		/// <param name="assetPrice">Цена базового актива. Если цена не указана, то получается цена последней сделки из <see cref="BlackScholes.UnderlyingAsset"/>.</param>
-		/// <returns>Премия опциона. Если значение равно <see langword="null"/>, то расчет значения в данный момент невозможен.</returns>
+		/// <param name="currentTime">The current time.</param>
+		/// <param name="deviation">The standard deviation. If it is not specified, then <see cref="BlackScholes.DefaultDeviation"/> is used.</param>
+		/// <param name="assetPrice">The price of the underlying asset. If the price is not specified, then the last trade price getting from <see cref="BlackScholes.UnderlyingAsset"/>.</param>
+		/// <returns>The option premium. If the value is equal to <see langword="null" />, then the value calculation currently is impossible.</returns>
 		public override decimal? Premium(DateTimeOffset currentTime, decimal? deviation = null, decimal? assetPrice = null)
 		{
 			return ProcessOptions(bs => bs.Premium(currentTime, deviation, assetPrice));
 		}
 
 		/// <summary>
-		/// Рассчитать подразумеваемую волатильность.
+		/// To calculate the implied volatility.
 		/// </summary>
-		/// <param name="currentTime">Текущее время.</param>
-		/// <param name="premium">Премия по опциону.</param>
-		/// <returns>Подразумеваевая волатильность. Если значение равно <see langword="null"/>, то расчет значения в данный момент невозможен.</returns>
+		/// <param name="currentTime">The current time.</param>
+		/// <param name="premium">The option premium.</param>
+		/// <returns>The implied volatility. If the value is equal to <see langword="null" />, then the value calculation currently is impossible.</returns>
 		public override decimal? ImpliedVolatility(DateTimeOffset currentTime, decimal premium)
 		{
 			return ProcessOptions(bs => bs.ImpliedVolatility(currentTime, premium), false);
 		}
 
 		/// <summary>
-		/// Создать стакан волатильности.
+		/// To create the order book of volatility.
 		/// </summary>
-		/// <param name="currentTime">Текущее время.</param>
-		/// <returns>Стакан волатильности.</returns>
+		/// <param name="currentTime">The current time.</param>
+		/// <returns>The order book volatility.</returns>
 		public override MarketDepth ImpliedVolatility(DateTimeOffset currentTime)
 		{
 			throw new NotSupportedException();

@@ -1,4 +1,4 @@
-﻿namespace StockSharp.Algo.Risk
+namespace StockSharp.Algo.Risk
 {
 	using System;
 	using System.Collections.Generic;
@@ -12,12 +12,12 @@
 	using StockSharp.Messages;
 
 	/// <summary>
-	/// Менеджер контроля рисков.
+	/// The risks control manager.
 	/// </summary>
 	public class RiskManager : IRiskManager
 	{
 		/// <summary>
-		/// Создать <see cref="RiskManager"/>.
+		/// Initializes a new instance of the <see cref="RiskManager"/>.
 		/// </summary>
 		public RiskManager()
 		{
@@ -26,7 +26,7 @@
 		private readonly CachedSynchronizedSet<IRiskRule> _rules = new CachedSynchronizedSet<IRiskRule>();
 
 		/// <summary>
-		/// Список правил.
+		/// Rule list.
 		/// </summary>
 		public SynchronizedSet<IRiskRule> Rules
 		{
@@ -34,7 +34,7 @@
 		}
 
 		/// <summary>
-		/// Сбросить состояние.
+		/// To reset the state.
 		/// </summary>
 		public virtual void Reset()
 		{
@@ -42,28 +42,28 @@
 		}
 
 		/// <summary>
-		/// Обработать торговое сообщение.
+		/// To process the trade message.
 		/// </summary>
-		/// <param name="message">Торговое сообщение.</param>
-		/// <returns>Список правил, которые были активированы сообщением</returns>
+		/// <param name="message">The trade message.</param>
+		/// <returns>List of rules, activated by the message.</returns>
 		public IEnumerable<IRiskRule> ProcessRules(Message message)
 		{
 			return _rules.Cache.Where(r => r.ProcessMessage(message)).ToArray();
 		}
 
 		/// <summary>
-		/// Загрузить настройки.
+		/// Load settings.
 		/// </summary>
-		/// <param name="storage">Хранилище.</param>
+		/// <param name="storage">Storage.</param>
 		public void Load(SettingsStorage storage)
 		{
 			Rules.AddRange(storage.GetValue<SettingsStorage[]>("Rules").Select(s => s.LoadEntire<IRiskRule>()));
 		}
 
 		/// <summary>
-		/// Сохранить настройки.
+		/// Save settings.
 		/// </summary>
-		/// <param name="storage">Хранилище.</param>
+		/// <param name="storage">Storage.</param>
 		public void Save(SettingsStorage storage)
 		{
 			storage.SetValue("Rules", Rules.Select(r => r.SaveEntire(false)).ToArray());

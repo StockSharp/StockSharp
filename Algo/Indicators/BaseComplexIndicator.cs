@@ -1,4 +1,4 @@
-﻿namespace StockSharp.Algo.Indicators
+namespace StockSharp.Algo.Indicators
 {
 	using System;
 	using System.Collections.Generic;
@@ -10,30 +10,30 @@
 	using MoreLinq;
 
 	/// <summary>
-	/// Режимы обработки вложенных индикаторов.
+	/// Embedded indicators processing modes.
 	/// </summary>
 	public enum ComplexIndicatorModes
 	{
 		/// <summary>
-		/// Последовательно. Результат выполнения предыдущего индикатора передается в следующий.
+		/// In-series. The result of the previous indicator execution is passed to the next one,.
 		/// </summary>
 		Sequence,
 
 		/// <summary>
-		/// Параллельно. Результаты выполнения индикаторов не зависят друг от друга.
+		/// In parallel. Results of indicators execution for not depend on each other.
 		/// </summary>
 		Parallel,
 	}
 
 	/// <summary>
-	/// Базовый индикатор, который строится в виде комбинации нескольких индикаторов.
+	/// The base indicator, built in form of several indicators combination.
 	/// </summary>
 	public abstract class BaseComplexIndicator : BaseIndicator, IComplexIndicator
 	{
 		/// <summary>
-		/// Создать <see cref="BaseComplexIndicator"/>.
+		/// Initializes a new instance of the <see cref="BaseComplexIndicator"/>.
 		/// </summary>
-		/// <param name="innerIndicators">Вложенные индикаторы.</param>
+		/// <param name="innerIndicators">Embedded indicators.</param>
 		protected BaseComplexIndicator(params IIndicator[] innerIndicators)
 		{
 			if (innerIndicators == null)
@@ -48,13 +48,13 @@
 		}
 
 		/// <summary>
-		/// Режим обработки вложенных индикаторов. По умолчаннию равно <see cref="ComplexIndicatorModes.Parallel"/>.
+		/// Embedded indicators processing mode. The default equals to <see cref="ComplexIndicatorModes.Parallel"/>.
 		/// </summary>
 		[Browsable(false)]
 		public ComplexIndicatorModes Mode { get; protected set; }
 
 		/// <summary>
-		/// Вложенные индикаторы.
+		/// Embedded indicators.
 		/// </summary>
 		[Browsable(false)]
 		protected IList<IIndicator> InnerIndicators { get; private set; }
@@ -65,7 +65,7 @@
 		}
 
 		/// <summary>
-		/// Сформирован ли индикатор.
+		/// Whether the indicator is set.
 		/// </summary>
 		public override bool IsFormed
 		{
@@ -73,10 +73,10 @@
 		}
 
 		/// <summary>
-		/// Обработать входное значение.
+		/// To handle the input value.
 		/// </summary>
-		/// <param name="input">Входное значение.</param>
-		/// <returns>Результирующее значение.</returns>
+		/// <param name="input">The input value.</param>
+		/// <returns>The resulting value.</returns>
 		protected override IIndicatorValue OnProcess(IIndicatorValue input)
 		{
 			var value = new ComplexIndicatorValue(this);
@@ -102,7 +102,7 @@
 		}
 
 		/// <summary>
-		/// Сбросить состояние индикатора на первоначальное. Метод вызывается каждый раз, когда меняются первоначальные настройки (например, длина периода).
+		/// To reset the indicator status to initial. The method is called each time when initial settings are changed (for example, the length of period).
 		/// </summary>
 		public override void Reset()
 		{
@@ -110,9 +110,9 @@
 		}
 
 		/// <summary>
-		/// Сохранить настройки.
+		/// Save settings.
 		/// </summary>
-		/// <param name="settings">Хранилище настроек.</param>
+		/// <param name="settings">Settings storage.</param>
 		public override void Save(SettingsStorage settings)
 		{
 			base.Save(settings);
@@ -129,9 +129,9 @@
 		}
 
 		/// <summary>
-		/// Загрузить настройки.
+		/// Load settings.
 		/// </summary>
-		/// <param name="settings">Хранилище настроек.</param>
+		/// <param name="settings">Settings storage.</param>
 		public override void Load(SettingsStorage settings)
 		{
 			base.Load(settings);

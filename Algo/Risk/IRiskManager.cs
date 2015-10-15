@@ -1,4 +1,4 @@
-﻿namespace StockSharp.Algo.Risk
+namespace StockSharp.Algo.Risk
 {
 	using System.Collections.Generic;
 
@@ -7,20 +7,20 @@
 	using StockSharp.Messages;
 
 	/// <summary>
-	/// Интерфейс, описывающий менеджера контроля рисков.
+	/// The interface, describing risks control manager.
 	/// </summary>
 	public interface IRiskManager : IRiskRule
 	{
 		/// <summary>
-		/// Список правил.
+		/// Rule list.
 		/// </summary>
 		SynchronizedSet<IRiskRule> Rules { get; }
 
 		/// <summary>
-		/// Обработать торговое сообщение.
+		/// To process the trade message.
 		/// </summary>
-		/// <param name="message">Торговое сообщение.</param>
-		/// <returns>Список правил, которые были активированы сообщением.</returns>
+		/// <param name="message">The trade message.</param>
+		/// <returns>List of rules, activated by the message.</returns>
 		IEnumerable<IRiskRule> ProcessRules(Message message);
 	}
 }

@@ -1,12 +1,12 @@
-﻿namespace StockSharp.Algo.Indicators
+namespace StockSharp.Algo.Indicators
 {
 	/// <summary>
-	/// Сигнальная часть индикатора <see cref="RelativeVigorIndex"/>.
+	/// The signaling part of indicator <see cref="RelativeVigorIndex"/>.
 	/// </summary>
 	public class RelativeVigorIndexSignal : LengthIndicator<decimal>
 	{
 		/// <summary>
-		/// Создать <see cref="RelativeVigorIndexSignal"/>.
+		/// Initializes a new instance of the <see cref="RelativeVigorIndexSignal"/>.
 		/// </summary>
 		public RelativeVigorIndexSignal()
 		{
@@ -14,10 +14,10 @@
 		}
 
 		/// <summary>
-		/// Обработать входное значение.
+		/// To handle the input value.
 		/// </summary>
-		/// <param name="input">Входное значение.</param>
-		/// <returns>Результирующее значение.</returns>
+		/// <param name="input">The input value.</param>
+		/// <returns>The resulting value.</returns>
 		protected override IIndicatorValue OnProcess(IIndicatorValue input)
 		{
 			var newValue = input.GetValue<decimal>();

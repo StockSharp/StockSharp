@@ -17,9 +17,9 @@ namespace StockSharp.Algo.Candles.Compression
 	using StockSharp.Localization;
 
 	/// <summary>
-	/// Базовый источник данных для <see cref="ICandleBuilder"/>, который получает данные из внешнего хранилища.
+	/// The base data source for <see cref="ICandleBuilder"/>, which receives data from the external storage.
 	/// </summary>
-	/// <typeparam name="TSourceValue">Тип исходных данных (например, <see cref="Trade"/>).</typeparam>
+	/// <typeparam name="TSourceValue">The source data type (for example, <see cref="Trade"/>).</typeparam>
 	public abstract class StorageCandleBuilderSource<TSourceValue> : ConvertableCandleBuilderSource<TSourceValue>, IStorageCandleSource
 	{
 		[DebuggerDisplay("{Series} {Reader}")]
@@ -45,7 +45,7 @@ namespace StockSharp.Algo.Candles.Compression
 		private readonly CachedSynchronizedDictionary<CandleSeries, SeriesInfo> _series = new CachedSynchronizedDictionary<CandleSeries, SeriesInfo>();
 
 		/// <summary>
-		/// Инициализировать <see cref="StorageCandleBuilderSource{TSourceValue}"/>.
+		/// Initialize <see cref="StorageCandleBuilderSource{T}"/>.
 		/// </summary>
 		protected StorageCandleBuilderSource()
 		{
@@ -57,7 +57,7 @@ namespace StockSharp.Algo.Candles.Compression
 		}
 
 		/// <summary>
-		/// Приоритет источника по скорости (0 - самый оптимальный).
+		/// The source priority by speed (0 - the best).
 		/// </summary>
 		public override int SpeedPriority
 		{
@@ -65,14 +65,14 @@ namespace StockSharp.Algo.Candles.Compression
 		}
 
 		/// <summary>
-		/// Хранилище данных.
+		/// Market data storage.
 		/// </summary>
 		public IStorageRegistry StorageRegistry { get; set; }
 
 		private IMarketDataDrive _drive;
 
 		/// <summary>
-		/// Хранилище, которое используется по-умолчанию. По умолчанию используется <see cref="IStorageRegistry.DefaultDrive"/>.
+		/// The storage which is used by default. By default, <see cref="IStorageRegistry.DefaultDrive"/> is used.
 		/// </summary>
 		public IMarketDataDrive Drive
 		{
@@ -93,17 +93,17 @@ namespace StockSharp.Algo.Candles.Compression
 		}
 
 		/// <summary>
-		/// Получить хранилище данных <typeparamref name="TSourceValue"/>.
+		/// To get the data storage <typeparamref name="TSourceValue" />.
 		/// </summary>
-		/// <param name="security">Инструмент.</param>
-		/// <returns>Хранилище данных.</returns>
+		/// <param name="security">Security.</param>
+		/// <returns>Market data storage.</returns>
 		protected abstract IMarketDataStorage<TSourceValue> GetStorage(Security security);
 
 		/// <summary>
-		/// Получить временные диапазоны, для которых у данного источника для передаваемой серии свечек есть данные.
+		/// To get time ranges for which this source of passed candles series has data.
 		/// </summary>
-		/// <param name="series">Серия свечек.</param>
-		/// <returns>Временные диапазоны.</returns>
+		/// <param name="series">Candles series.</param>
+		/// <returns>Time ranges.</returns>
 		public override IEnumerable<Range<DateTimeOffset>> GetSupportedRanges(CandleSeries series)
 		{
 			if (series == null)
@@ -116,12 +116,12 @@ namespace StockSharp.Algo.Candles.Compression
 		}
 
 		/// <summary>
-		/// Получить данные.
+		/// To get data.
 		/// </summary>
-		/// <param name="series">Серия свечек.</param>
-		/// <param name="from">Начальная дата, с которой необходимо получать данные.</param>
-		/// <param name="to">Конечная дата, до которой необходимо получать данные.</param>
-		/// <returns>Данные. Если данных не существует для заданного диапазона, то будет возвращено <see langword="null"/>.</returns>
+		/// <param name="series">Candles series.</param>
+		/// <param name="from">The initial date from which you need to get data.</param>
+		/// <param name="to">The final date by which you need to get data.</param>
+		/// <returns>Data. If data does not exist for the specified range then <see langword="null" /> will be returned.</returns>
 		protected virtual IEnumerable<TSourceValue> GetValues(CandleSeries series, DateTimeOffset from, DateTimeOffset to)
 		{
 			var storage = GetStorage(series.Security);
@@ -135,11 +135,11 @@ namespace StockSharp.Algo.Candles.Compression
 		}
 
 		/// <summary>
-		/// Запросить получение данных.
+		/// To send data request.
 		/// </summary>
-		/// <param name="series">Серия свечек, для которой необходимо начать получать данные.</param>
-		/// <param name="from">Начальная дата, с которой необходимо получать данные.</param>
-		/// <param name="to">Конечная дата, до которой необходимо получать данные.</param>
+		/// <param name="series">The candles series for which data receiving should be started.</param>
+		/// <param name="from">The initial date from which you need to get data.</param>
+		/// <param name="to">The final date by which you need to get data.</param>
 		public override void Start(CandleSeries series, DateTimeOffset from, DateTimeOffset to)
 		{
 			if (series == null)
@@ -163,9 +163,9 @@ namespace StockSharp.Algo.Candles.Compression
 		}
 
 		/// <summary>
-		/// Прекратить получение данных, запущенное через <see cref="Start"/>.
+		/// To stop data receiving starting through <see cref="Start"/>.
 		/// </summary>
-		/// <param name="series">Серия свечек.</param>
+		/// <param name="series">Candles series.</param>
 		public override void Stop(CandleSeries series)
 		{
 			lock (_series.SyncRoot)
@@ -232,7 +232,7 @@ namespace StockSharp.Algo.Candles.Compression
 		}
 
 		/// <summary>
-		/// Освободить занятые ресурсы.
+		/// Release resources.
 		/// </summary>
 		public override void Dispose()
 		{
@@ -247,22 +247,22 @@ namespace StockSharp.Algo.Candles.Compression
 	}
 
 	/// <summary>
-	/// Источник данных для <see cref="CandleBuilder{TCandle}"/>, получающий тиковые сделки из внешнего хранилища <see cref="IStorageRegistry"/>.
+	/// The data source for <see cref="CandleBuilder{T}"/> getting tick trades from the external storage <see cref="IStorageRegistry"/>.
 	/// </summary>
 	public class TradeStorageCandleBuilderSource : StorageCandleBuilderSource<Trade>
 	{
 		/// <summary>
-		/// Создать <see cref="TradeStorageCandleBuilderSource"/>.
+		/// Initializes a new instance of the <see cref="TradeStorageCandleBuilderSource"/>.
 		/// </summary>
 		public TradeStorageCandleBuilderSource()
 		{
 		}
 
 		/// <summary>
-		/// Получить хранилище тиковых сделок.
+		/// To get the storage of tick trades.
 		/// </summary>
-		/// <param name="security">Инструмент.</param>
-		/// <returns>Хранилище тиковых сделок.</returns>
+		/// <param name="security">Security.</param>
+		/// <returns>The storage of tick trades.</returns>
 		protected override IMarketDataStorage<Trade> GetStorage(Security security)
 		{
 			return StorageRegistry.GetTradeStorage(security, Drive);
@@ -270,22 +270,22 @@ namespace StockSharp.Algo.Candles.Compression
 	}
 
 	/// <summary>
-	/// Источник данных для <see cref="CandleBuilder{TCandle}"/>, получающий тиковые сделки из внешнего хранилища <see cref="IStorageRegistry"/>.
+	/// The data source for <see cref="CandleBuilder{T}"/> getting tick trades from the external storage <see cref="IStorageRegistry"/>.
 	/// </summary>
 	public class MarketDepthStorageCandleBuilderSource : StorageCandleBuilderSource<MarketDepth>
 	{
 		/// <summary>
-		/// Создать <see cref="MarketDepthStorageCandleBuilderSource"/>.
+		/// Initializes a new instance of the <see cref="MarketDepthStorageCandleBuilderSource"/>.
 		/// </summary>
 		public MarketDepthStorageCandleBuilderSource()
 		{
 		}
 
 		/// <summary>
-		/// Получить хранилище стаканов.
+		/// To get the order books storage.
 		/// </summary>
-		/// <param name="security">Инструмент.</param>
-		/// <returns>Хранилище стаканов.</returns>
+		/// <param name="security">Security.</param>
+		/// <returns>The order books storage.</returns>
 		protected override IMarketDataStorage<MarketDepth> GetStorage(Security security)
 		{
 			return StorageRegistry.GetMarketDepthStorage(security, Drive);
@@ -293,19 +293,19 @@ namespace StockSharp.Algo.Candles.Compression
 	}
 
 	/// <summary>
-	/// Источник данных для <see cref="CandleBuilder{TCandle}"/>, получающий тиковые сделки из внешнего хранилища <see cref="IStorageRegistry"/>.
+	/// The data source for <see cref="CandleBuilder{T}"/> getting tick trades from the external storage <see cref="IStorageRegistry"/>.
 	/// </summary>
 	public class OrderLogStorageCandleBuilderSource : StorageCandleBuilderSource<Trade>
 	{
 		/// <summary>
-		/// Создать <see cref="OrderLogStorageCandleBuilderSource"/>.
+		/// Initializes a new instance of the <see cref="OrderLogStorageCandleBuilderSource"/>.
 		/// </summary>
 		public OrderLogStorageCandleBuilderSource()
 		{
 		}
 
 		/// <summary>
-		/// Приоритет источника по скорости (0 - самый оптимальный).
+		/// The source priority by speed (0 - the best).
 		/// </summary>
 		public override int SpeedPriority
 		{
@@ -313,20 +313,20 @@ namespace StockSharp.Algo.Candles.Compression
 		}
 
 		/// <summary>
-		/// Получить хранилище данных.
+		/// To get the data storage.
 		/// </summary>
-		/// <param name="security">Инструмент.</param>
-		/// <returns>Хранилище данных.</returns>
+		/// <param name="security">Security.</param>
+		/// <returns>Market data storage.</returns>
 		protected override IMarketDataStorage<Trade> GetStorage(Security security)
 		{
 			throw new NotSupportedException();
 		}
 
 		/// <summary>
-		/// Получить временные диапазоны, для которых у данного источника для передаваемой серии свечек есть данные.
+		/// To get time ranges for which this source of passed candles series has data.
 		/// </summary>
-		/// <param name="series">Серия свечек.</param>
-		/// <returns>Временные диапазоны.</returns>
+		/// <param name="series">Candles series.</param>
+		/// <returns>Time ranges.</returns>
 		public override IEnumerable<Range<DateTimeOffset>> GetSupportedRanges(CandleSeries series)
 		{
 			if (series == null)
@@ -339,12 +339,12 @@ namespace StockSharp.Algo.Candles.Compression
 		}
 
 		/// <summary>
-		/// Получить данные.
+		/// To get data.
 		/// </summary>
-		/// <param name="series">Серия свечек.</param>
-		/// <param name="from">Начальная дата, с которой необходимо получать данные.</param>
-		/// <param name="to">Конечная дата, до которой необходимо получать данные.</param>
-		/// <returns>Данные. Если данных не существует для заданного диапазона, то будет возвращено <see langword="null"/>.</returns>
+		/// <param name="series">Candles series.</param>
+		/// <param name="from">The initial date from which you need to get data.</param>
+		/// <param name="to">The final date by which you need to get data.</param>
+		/// <returns>Data. If data does not exist for the specified range then <see langword="null" /> will be returned.</returns>
 		protected override IEnumerable<Trade> GetValues(CandleSeries series, DateTimeOffset from, DateTimeOffset to)
 		{
 			var storage = StorageRegistry.GetOrderLogStorage(series.Security, Drive);

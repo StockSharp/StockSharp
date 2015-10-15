@@ -6,7 +6,7 @@ namespace StockSharp.Algo.Indicators
 	using StockSharp.Localization;
 
 	/// <summary>
-	/// Стохастик %K.
+	/// Stochastic %K.
 	/// </summary>
 	[DisplayName("Stochastic %K")]
 	[DescriptionLoc(LocalizedStrings.Str774Key)]
@@ -19,7 +19,7 @@ namespace StockSharp.Algo.Indicators
 		private readonly Highest _high = new Highest();
 
 		/// <summary>
-		/// Создать <see cref="StochasticK"/>.
+		/// Initializes a new instance of the <see cref="StochasticK"/>.
 		/// </summary>
 		public StochasticK()
 		{
@@ -27,12 +27,12 @@ namespace StockSharp.Algo.Indicators
 		}
 
 		/// <summary>
-		/// Индикатор сформирован.
+		/// The indicator is formed.
 		/// </summary>
 		public override bool IsFormed { get { return _high.IsFormed; } }
 
 		/// <summary>
-		/// Сбросить состояние индикатора на первоначальное. Метод вызывается каждый раз, когда меняются первоначальные настройки (например, длина периода).
+		/// To reset the indicator status to initial. The method is called each time when initial settings are changed (for example, the length of period).
 		/// </summary>
 		public override void Reset()
 		{
@@ -41,10 +41,10 @@ namespace StockSharp.Algo.Indicators
 		}
 
 		/// <summary>
-		/// Обработать входное значение.
+		/// To handle the input value.
 		/// </summary>
-		/// <param name="input">Входное значение.</param>
-		/// <returns>Результирующее значение.</returns>
+		/// <param name="input">The input value.</param>
+		/// <returns>The resulting value.</returns>
 		protected override IIndicatorValue OnProcess(IIndicatorValue input)
 		{
 			var candle = input.GetValue<Candle>();

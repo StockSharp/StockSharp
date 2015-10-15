@@ -8,60 +8,60 @@ namespace StockSharp.Algo.Strategies
 	using Ecng.Serialization;
 
 	/// <summary>
-	/// Параметр стратегии.
+	/// The startegy parameter.
 	/// </summary>
 	public interface IStrategyParam : IPersistable
 	{
 		/// <summary>
-		/// Название параметра.
+		/// Parameter name.
 		/// </summary>
 		string Name { get; }
 
 		/// <summary>
-		/// Значение параметра.
+		/// The parameter value.
 		/// </summary>
 		object Value { get; set; }
 
 		/// <summary>
-		/// Значение От при оптимизации.
+		/// The From value at optimization.
 		/// </summary>
 		object OptimizeFrom { get; set; }
 
 		/// <summary>
-		/// Значение До при оптимизации.
+		/// The To value at optimization.
 		/// </summary>
 		object OptimizeTo { get; set; }
 
 		/// <summary>
-		/// Значение Шаг при оптимизации.
+		/// The Increment value at optimization.
 		/// </summary>
 		object OptimizeStep { get; set; }
 	}
 
 	/// <summary>
-	/// Обертка для типизированного доступа к параметру стратегии.
+	/// Wrapper for typified access to the strategy parameter.
 	/// </summary>
-	/// <typeparam name="T">Тип значения параметра.</typeparam>
+	/// <typeparam name="T">The type of the parameter value.</typeparam>
 	public class StrategyParam<T> : IStrategyParam
 	{
 		private readonly Strategy _strategy;
 
 		/// <summary>
-		/// Создать <see cref="StrategyParam{T}"/>.
+		/// Initializes a new instance of the <see cref="StrategyParam{T}"/>.
 		/// </summary>
-		/// <param name="strategy">Стратегия.</param>
-		/// <param name="name">Название параметра.</param>
+		/// <param name="strategy">Strategy.</param>
+		/// <param name="name">Parameter name.</param>
 		public StrategyParam(Strategy strategy, string name)
 			: this(strategy, name, default(T))
 		{
 		}
 
 		/// <summary>
-		/// Создать <see cref="StrategyParam{T}"/>.
+		/// Initializes a new instance of the <see cref="StrategyParam{T}"/>.
 		/// </summary>
-		/// <param name="strategy">Стратегия.</param>
-		/// <param name="name">Название параметра.</param>
-		/// <param name="initialValue">Первоначальное значение.</param>
+		/// <param name="strategy">Strategy.</param>
+		/// <param name="name">Parameter name.</param>
+		/// <param name="initialValue">The initial value.</param>
 		public StrategyParam(Strategy strategy, string name, T initialValue)
 		{
 			if (strategy == null)
@@ -78,14 +78,14 @@ namespace StockSharp.Algo.Strategies
 		}
 
 		/// <summary>
-		/// Название параметра.
+		/// Parameter name.
 		/// </summary>
 		public string Name { get; private set; }
 
 		private bool _allowNull = typeof(T).IsNullable();
 
 		/// <summary>
-		/// Возможно ли в <see cref="Value"/> хранить значение, равное <see langword="null"/>.
+		/// Is it possible to store in <see cref="Value"/> a value, equal to <see langword="null" />.
 		/// </summary>
 		public bool AllowNull
 		{
@@ -96,7 +96,7 @@ namespace StockSharp.Algo.Strategies
 		private T _value;
 
 		/// <summary>
-		/// Значение параметра.
+		/// The parameter value.
 		/// </summary>
 		public T Value
 		{
@@ -126,17 +126,17 @@ namespace StockSharp.Algo.Strategies
 		}
 
 		/// <summary>
-		/// Значение От при оптимизации.
+		/// The From value at optimization.
 		/// </summary>
 		public object OptimizeFrom { get; set; }
 
 		/// <summary>
-		/// Значение До при оптимизации.
+		/// The To value at optimization.
 		/// </summary>
 		public object OptimizeTo { get; set; }
 
 		/// <summary>
-		/// Значение Шаг при оптимизации.
+		/// The Increment value at optimization.
 		/// </summary>
 		public object OptimizeStep { get; set; }
 
@@ -152,9 +152,9 @@ namespace StockSharp.Algo.Strategies
 		}
 
 		/// <summary>
-		/// Загрузить настройки.
+		/// Load settings.
 		/// </summary>
-		/// <param name="storage">Хранилище настроек.</param>
+		/// <param name="storage">Settings storage.</param>
 		public void Load(SettingsStorage storage)
 		{
 			Name = storage.GetValue<string>("Name");
@@ -165,9 +165,9 @@ namespace StockSharp.Algo.Strategies
 		}
 
 		/// <summary>
-		/// Сохранить настройки.
+		/// Save settings.
 		/// </summary>
-		/// <param name="storage">Хранилище настроек.</param>
+		/// <param name="storage">Settings storage.</param>
 		public void Save(SettingsStorage storage)
 		{
 			storage.SetValue("Name", Name);
@@ -179,32 +179,32 @@ namespace StockSharp.Algo.Strategies
 	}
 
 	/// <summary>
-	/// Вспомогательный класс для с <see cref="StrategyParam{T}"/>.
+	/// The auxiliary class for <see cref="StrategyParam{T}"/>.
 	/// </summary>
 	public static class StrategyParamHelper
 	{
 		/// <summary>
-		/// Создать <see cref="StrategyParam{T}"/>.
+		/// Initializes a new instance of the <see cref="StrategyParam{T}"/>.
 		/// </summary>
-		/// <typeparam name="T">Тип значения параметра.</typeparam>
-		/// <param name="strategy">Стратегия.</param>
-		/// <param name="name">Название параметра.</param>
-		/// <param name="initialValue">Первоначальное значение.</param>
-		/// <returns>Параметр стратегии.</returns>
+		/// <typeparam name="T">The type of the parameter value.</typeparam>
+		/// <param name="strategy">Strategy.</param>
+		/// <param name="name">Parameter name.</param>
+		/// <param name="initialValue">The initial value.</param>
+		/// <returns>The startegy parameter.</returns>
 		public static StrategyParam<T> Param<T>(this Strategy strategy, string name, T initialValue = default(T))
 		{
 			return new StrategyParam<T>(strategy, name, initialValue);
 		}
 
 		/// <summary>
-		/// Создать <see cref="StrategyParam{T}"/>.
+		/// Initializes a new instance of the <see cref="StrategyParam{T}"/>.
 		/// </summary>
-		/// <typeparam name="T">Тип значения параметра.</typeparam>
-		/// <param name="param">Параметр стратегии.</param>
-		/// <param name="optimizeFrom">Значение От при оптимизации.</param>
-		/// <param name="optimizeTo">Значение До при оптимизации.</param>
-		/// <param name="optimizeStep">Значение Шаг при оптимизации.</param>
-		/// <returns>Параметр стратегии.</returns>
+		/// <typeparam name="T">The type of the parameter value.</typeparam>
+		/// <param name="param">The startegy parameter.</param>
+		/// <param name="optimizeFrom">The From value at optimization.</param>
+		/// <param name="optimizeTo">The To value at optimization.</param>
+		/// <param name="optimizeStep">The Increment value at optimization.</param>
+		/// <returns>The startegy parameter.</returns>
 		public static StrategyParam<T> Optimize<T>(this StrategyParam<T> param, T optimizeFrom = default(T), T optimizeTo = default(T), T optimizeStep = default(T))
 		{
 			if (param == null)

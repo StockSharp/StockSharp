@@ -3,42 +3,42 @@ namespace StockSharp.Algo.Testing
 	using StockSharp.Localization;
 
 	/// <summary>
-	/// Состояния <see cref="HistoryEmulationConnector"/>.
+	/// States <see cref="HistoryEmulationConnector"/>.
 	/// </summary>
 	public enum EmulationStates
 	{
 		/// <summary>
-		/// Остановлен.
+		/// Stopped.
 		/// </summary>
 		[EnumDisplayNameLoc(LocalizedStrings.Str1128Key)]
 		Stopped,
 
 		/// <summary>
-		/// Останавливается.
+		/// Stopping.
 		/// </summary>
 		[EnumDisplayNameLoc(LocalizedStrings.Str1114Key)]
 		Stopping,
 
 		/// <summary>
-		/// Запускается.
+		/// Starting.
 		/// </summary>
 		[EnumDisplayNameLoc(LocalizedStrings.Str1129Key)]
 		Starting,
 
 		/// <summary>
-		/// Работает.
+		/// Working.
 		/// </summary>
 		[EnumDisplayNameLoc(LocalizedStrings.Str1130Key)]
 		Started,
 
 		/// <summary>
-		/// В процессе приостановки.
+		/// In the process of suspension.
 		/// </summary>
 		[EnumDisplayNameLoc(LocalizedStrings.Str1131Key)]
 		Suspending, 
 
 		/// <summary>
-		/// Приостановлен.
+		/// Suspended.
 		/// </summary>
 		[EnumDisplayNameLoc(LocalizedStrings.Str1132Key)]
 		Suspended,

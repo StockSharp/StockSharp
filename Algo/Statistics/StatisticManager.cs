@@ -1,4 +1,4 @@
-﻿namespace StockSharp.Algo.Statistics
+namespace StockSharp.Algo.Statistics
 {
 	using System;
 	using System.Collections.Generic;
@@ -13,7 +13,7 @@
 	using StockSharp.BusinessEntities;
 
 	/// <summary>
-	/// Менеджер статистики.
+	/// The statistics manager.
 	/// </summary>
 	public class StatisticManager
 	{
@@ -89,7 +89,7 @@
 		}
 
 		/// <summary>
-		/// Создать <see cref="StatisticManager"/>.
+		/// Initializes a new instance of the <see cref="StatisticManager"/>.
 		/// </summary>
 		public StatisticManager()
 		{
@@ -120,7 +120,7 @@
 		private readonly EquityParameterList _parameters = new EquityParameterList();
 
 		/// <summary>
-		/// Вычисляемые параметры.
+		/// Calculated parameters.
 		/// </summary>
 		public ISynchronizedCollection<IStatisticParameter> Parameters
 		{
@@ -128,72 +128,72 @@
 		}
 
 		/// <summary>
-		/// Добавить новое значение прибыли-убытка.
+		/// To add the new profit-loss value.
 		/// </summary>
-		/// <param name="time">Время изменения <paramref name="pnl"/>.</param>
-		/// <param name="pnl">Новое значение прибыли-убытка.</param>
+		/// <param name="time">The change time <paramref name="pnl" />.</param>
+		/// <param name="pnl">New profit-loss value.</param>
 		public virtual void AddPnL(DateTimeOffset time, decimal pnl)
 		{
 			_parameters.PnLParams.ForEach(p => p.Add(time, pnl));
 		}
 
 		/// <summary>
-		/// Добавить новое значение позиции.
+		/// To add the new position value.
 		/// </summary>
-		/// <param name="time">Время изменения <paramref name="position"/>.</param>
-		/// <param name="position">Новое значение позиции.</param>
+		/// <param name="time">The change time <paramref name="position" />.</param>
+		/// <param name="position">The new position value.</param>
 		public virtual void AddPosition(DateTimeOffset time, decimal position)
 		{
 			_parameters.PositionParams.ForEach(p => p.Add(time, position));
 		}
 
 		/// <summary>
-		/// Добавить информацию о новой сделке.
+		/// To add information about new trade.
 		/// </summary>
-		/// <param name="info">Информация о новой сделке.</param>
+		/// <param name="info">Information on new trade.</param>
 		public virtual void AddMyTrade(PnLInfo info)
 		{
 			_parameters.TradeParams.ForEach(p => p.Add(info));
 		}
 
 		/// <summary>
-		/// Добавить новую заявку.
+		/// To add new order.
 		/// </summary>
-		/// <param name="order">Новая заявка.</param>
+		/// <param name="order">New order.</param>
 		public virtual void AddNewOrder(Order order)
 		{
 			_parameters.OrderParams.ForEach(p => p.New(order));
 		}
 
 		/// <summary>
-		/// Добавить измененную заявку.
+		/// To add the changed order.
 		/// </summary>
-		/// <param name="order">Измененная заявка.</param>
+		/// <param name="order">The changed order.</param>
 		public virtual void AddChangedOrder(Order order)
 		{
 			_parameters.OrderParams.ForEach(p => p.Changed(order));
 		}
 
 		/// <summary>
-		/// Добавить ошибку регистрации заявки.
+		/// To add the order registration error.
 		/// </summary>
-		/// <param name="fail">Ошибка регистрации заявки.</param>
+		/// <param name="fail">Error registering order.</param>
 		public virtual void AddRegisterFailedOrder(OrderFail fail)
 		{
 			_parameters.OrderParams.ForEach(p => p.RegisterFailed(fail));
 		}
 
 		/// <summary>
-		/// Добавить ошибку отмены заявки.
+		/// To add the order cancelling error.
 		/// </summary>
-		/// <param name="fail">Ошибка заявки.</param>
+		/// <param name="fail">The order error.</param>
 		public virtual void AddFailedOrderCancel(OrderFail fail)
 		{
 			_parameters.OrderParams.ForEach(p => p.CancelFailed(fail));
 		}
 
 		/// <summary>
-		/// Очистить данные по эквити.
+		/// To clear data on equity.
 		/// </summary>
 		public virtual void Reset()
 		{

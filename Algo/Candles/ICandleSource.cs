@@ -6,50 +6,50 @@ namespace StockSharp.Algo.Candles
 	using Ecng.ComponentModel;
 
 	/// <summary>
-	/// Источник данных.
+	/// Market-data source.
 	/// </summary>
-	/// <typeparam name="TValue">Тип данных.</typeparam>
+	/// <typeparam name="TValue">Data type.</typeparam>
 	public interface ICandleSource<TValue> : IDisposable
 	{
 		/// <summary>
-		/// Приоритет источника по скорости (0 - самый оптимальный).
+		/// The source priority by speed (0 - the best).
 		/// </summary>
 		int SpeedPriority { get; }
 
 		/// <summary>
-		/// Событие появления нового значения для обработки.
+		/// A new value for processing occurrence event.
 		/// </summary>
 		event Action<CandleSeries, TValue> Processing;
 
 		/// <summary>
-		/// Событие окончания обработки серии.
+		/// The series processing end event.
 		/// </summary>
 		event Action<CandleSeries> Stopped;
 
 		/// <summary>
-		/// Событие ошибки транслирования данных.
+		/// The data transfer error event.
 		/// </summary>
 		event Action<Exception> Error;
 
 		/// <summary>
-		/// Получить временные диапазоны, для которых у данного источника для передаваемой серии свечек есть данные.
+		/// To get time ranges for which this source of passed candles series has data.
 		/// </summary>
-		/// <param name="series">Серия свечек.</param>
-		/// <returns>Временные диапазоны.</returns>
+		/// <param name="series">Candles series.</param>
+		/// <returns>Time ranges.</returns>
 		IEnumerable<Range<DateTimeOffset>> GetSupportedRanges(CandleSeries series);
 
 		/// <summary>
-		/// Запросить получение данных.
+		/// To send data request.
 		/// </summary>
-		/// <param name="series">Серия свечек, для которой необходимо начать получать данные.</param>
-		/// <param name="from">Начальная дата, с которой необходимо получать данные.</param>
-		/// <param name="to">Конечная дата, до которой необходимо получать данные.</param>
+		/// <param name="series">The candles series for which data receiving should be started.</param>
+		/// <param name="from">The initial date from which you need to get data.</param>
+		/// <param name="to">The final date by which you need to get data.</param>
 		void Start(CandleSeries series, DateTimeOffset from, DateTimeOffset to);
 
 		/// <summary>
-		/// Прекратить получение данных, запущенное через <see cref="Start"/>.
+		/// To stop data receiving starting through <see cref="Start"/>.
 		/// </summary>
-		/// <param name="series">Серия свечек.</param>
+		/// <param name="series">Candles series.</param>
 		void Stop(CandleSeries series);
 	}
 }

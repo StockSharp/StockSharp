@@ -1,3 +1,7 @@
+T:StockSharp.Algo.DocAttribute/summary;DocStr8473
+M:StockSharp.Algo.DocAttribute.#ctor(System.String)/summary;DocStr8474
+M:StockSharp.Algo.DocAttribute.#ctor(System.String)/param/docUrl;DocStr8475
+P:StockSharp.Algo.DocAttribute.DocUrl/summary;DocStr8475
 T:StockSharp.Algo.Indicators.Correlation/summary;Correlation
 T:StockSharp.Algo.Indicators.Correlation/remarks;DocStr8462
 T:StockSharp.Algo.Indicators.Covariance/summary;Covariance

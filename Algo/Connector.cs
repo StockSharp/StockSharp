@@ -20,7 +20,7 @@ namespace StockSharp.Algo
 	using Wintellect.PowerCollections;
 
 	/// <summary>
-	/// Класс для создания подключений к торговым системам.
+	/// The class to create connections to trading systems.
 	/// </summary>
 	public partial class Connector : BaseLogReceiver, IConnector
 	{
@@ -198,7 +198,7 @@ namespace StockSharp.Algo
 		private bool _isDisposing;
 
 		/// <summary>
-		/// Создать <see cref="Connector"/>.
+		/// Initializes a new instance of the <see cref="Connector"/>.
 		/// </summary>
 		public Connector()
 		{
@@ -221,14 +221,14 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Настройки контроля подключения <see cref="IConnector"/> к торговой системе.
+		/// Settings of the connection control <see cref="IConnector"/> to the trading system.
 		/// </summary>
 		public ReConnectionSettings ReConnectionSettings { get; private set; }
 
 		private IEntityFactory _entityFactory = Algo.EntityFactory.Instance;
 
 		/// <summary>
-		/// Фабрика бизнес-сущностей (<see cref="Security"/>, <see cref="Order"/> и т.д.).
+		/// Entity factory (<see cref="Security"/>, <see cref="Order"/> etc.).
 		/// </summary>
 		public IEntityFactory EntityFactory
 		{
@@ -243,9 +243,7 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Количество тиковых сделок для хранения. 
-		/// По умолчанию равно 100000. Если значение установлено в -1, то сделки не будут удаляться.
-		/// Если значение установлено в 0, то сделки не будут сохраняться.
+		/// Number of tick trades for storage. The default is 100000. If the value is set to -1, the trades will not be deleted. If the value is set to 0, then the trades will not be stored.
 		/// </summary>
 		public int TradesKeepCount
 		{
@@ -254,9 +252,7 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Количество заявок для хранения. 
-		/// По умолчанию равно 1000. Если значение установлено в -1, то заявки не будут удаляться.
-		/// Если значение установлено в 0, то заявки не будут сохраняться.
+		/// The number of orders for storage. The default is 1000. If the value is set to -1, then the orders will not be deleted. If the value is set to 0, then the orders will not be stored.
 		/// </summary>
 		public int OrdersKeepCount
 		{
@@ -265,7 +261,7 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Генератор идентификаторов транзакций.
+		/// Transaction id generator.
 		/// </summary>
 		public IdGenerator TransactionIdGenerator
 		{
@@ -276,7 +272,7 @@ namespace StockSharp.Algo
 		private SecurityIdGenerator _securityIdGenerator = new SecurityIdGenerator();
 
 		/// <summary>
-		/// Генератор идентификаторов инструментов <see cref="Security.Id"/>.
+		/// The instrument identifiers generator <see cref="Security.Id"/>.
 		/// </summary>
 		public SecurityIdGenerator SecurityIdGenerator
 		{
@@ -293,7 +289,7 @@ namespace StockSharp.Algo
 		private readonly CachedSynchronizedSet<ExchangeBoard> _exchangeBoards = new CachedSynchronizedSet<ExchangeBoard>();
 
 		/// <summary>
-		/// Список всех биржевых площадок, для которых загружены инструменты <see cref="IConnector.Securities"/>.
+		/// List of all exchange boards, for which instruments are loaded <see cref="IConnector.Securities"/>.
 		/// </summary>
 		public IEnumerable<ExchangeBoard> ExchangeBoards
 		{
@@ -303,8 +299,7 @@ namespace StockSharp.Algo
 		private readonly CachedSynchronizedDictionary<string, Security> _securities = new CachedSynchronizedDictionary<string, Security>(StringComparer.InvariantCultureIgnoreCase);
 
 		/// <summary>
-		/// Список всех загруженных инструментов.
-		/// Вызывать необходимо после того, как пришло событие <see cref="IConnector.NewSecurities" />. Иначе будет возвращено пустое множество.
+		/// List of all loaded instruments. It should be called after event <see cref="IConnector.NewSecurities"/> arisen. Otherwise the empty set will be returned.
 		/// </summary>
 		public virtual IEnumerable<Security> Securities
 		{
@@ -312,20 +307,20 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Найти инструменты, соответствующие фильтру <paramref name="criteria"/>.
+		/// Lookup securities by criteria <paramref name="criteria" />.
 		/// </summary>
-		/// <param name="criteria">Инструмент, поля которого будут использоваться в качестве фильтра.</param>
-		/// <returns>Найденные инструменты.</returns>
+		/// <param name="criteria">The instrument whose fields will be used as a filter.</param>
+		/// <returns>Found instruments.</returns>
 		public virtual IEnumerable<Security> Lookup(Security criteria)
 		{
 			return _securityProvider.Lookup(criteria);
 		}
 
 		/// <summary>
-		/// Получить внутренний идентификатор торговой системы.
+		/// Get native id.
 		/// </summary>
-		/// <param name="security">Инструмент.</param>
-		/// <returns>Внутренний идентификатор торговой системы.</returns>
+		/// <param name="security">Security.</param>
+		/// <returns>Native (internal) trading system security id.</returns>
 		public object GetNativeId(Security security)
 		{
 			if (security == null)
@@ -337,7 +332,7 @@ namespace StockSharp.Algo
 		private DateTimeOffset _currentTime;
 
 		/// <summary>
-		/// Текущее время, которое будет передано в <see cref="LogMessage.Time"/>.
+		/// Current time, which will be passed to the <see cref="LogMessage.Time"/>.
 		/// </summary>
 		public override DateTimeOffset CurrentTime
 		{
@@ -345,17 +340,17 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Получить состояние сессии для заданной площадки.
+		/// Get session state for required board.
 		/// </summary>
-		/// <param name="board">Биржевая площадка электронных торгов.</param>
-		/// <returns>Состояние сессии. Если информация о состоянии сессии отсутствует, то будет возвращено <see langword="null"/>.</returns>
+		/// <param name="board">Electronic board.</param>
+		/// <returns>Session state. If the information about session state does not exist, then <see langword="null" /> will be returned.</returns>
 		public SessionStates? GetSessionState(ExchangeBoard board)
 		{
 			return _sessionStates.TryGetValue2(board);
 		}
 
 		/// <summary>
-		/// Получить все заявки.
+		/// Get all orders.
 		/// </summary>
 		public IEnumerable<Order> Orders
 		{
@@ -363,7 +358,7 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Получить все стоп-заявки.
+		/// Get all stop-orders.
 		/// </summary>
 		public IEnumerable<Order> StopOrders
 		{
@@ -373,7 +368,7 @@ namespace StockSharp.Algo
 		private readonly SynchronizedList<OrderFail> _orderRegisterFails = new SynchronizedList<OrderFail>();
 
 		/// <summary>
-		/// Получить все ошибки при регистрации заявок.
+		/// Get all registration errors.
 		/// </summary>
 		public IEnumerable<OrderFail> OrderRegisterFails
 		{
@@ -383,7 +378,7 @@ namespace StockSharp.Algo
 		private readonly SynchronizedList<OrderFail> _orderCancelFails = new SynchronizedList<OrderFail>();
 
 		/// <summary>
-		/// Получить все ошибки при снятии заявок.
+		/// Get all cancellation errors.
 		/// </summary>
 		public IEnumerable<OrderFail> OrderCancelFails
 		{
@@ -391,7 +386,7 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Получить все сделки.
+		/// Get all tick trades.
 		/// </summary>
 		public IEnumerable<Trade> Trades
 		{
@@ -399,7 +394,7 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Получить все собственные сделки.
+		/// Get all own trades.
 		/// </summary>
 		public IEnumerable<MyTrade> MyTrades
 		{
@@ -407,7 +402,7 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Получить все портфели.
+		/// Get all portfolios.
 		/// </summary>
 		public virtual IEnumerable<Portfolio> Portfolios
 		{
@@ -417,7 +412,7 @@ namespace StockSharp.Algo
 		private readonly CachedSynchronizedDictionary<Tuple<Portfolio, Security, string, TPlusLimits?>, Position> _positions = new CachedSynchronizedDictionary<Tuple<Portfolio, Security, string, TPlusLimits?>, Position>();
 
 		/// <summary>
-		/// Получить все позиции.
+		/// Get all positions.
 		/// </summary>
 		public IEnumerable<Position> Positions
 		{
@@ -425,7 +420,7 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Все новости.
+		/// All news.
 		/// </summary>
 		public IEnumerable<News> News
 		{
@@ -433,7 +428,7 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Производить расчет данных на основе <see cref="ManagedMessageAdapter"/>. По-умолчанию включено.
+		/// To calculate data on basis of <see cref="ManagedMessageAdapter"/>. The default is enabled.
 		/// </summary>
 		public virtual bool CalculateMessages
 		{
@@ -441,20 +436,19 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Менеджер расчета проскальзывания.
+		/// The slippage calculation manager.
 		/// </summary>
 		public ISlippageManager SlippageManager { get; private set; }
 
 		/// <summary>
-		/// Состояние соединения.
+		/// Connection state.
 		/// </summary>
 		public ConnectionStates ConnectionState { get; private set; }
 
 		private bool _isSupportAtomicReRegister = true;
 
 		/// <summary>
-		/// Поддерживается ли перерегистрация заявок через метод <see cref="IConnector.ReRegisterOrder(StockSharp.BusinessEntities.Order,StockSharp.BusinessEntities.Order)"/>
-		/// в виде одной транзакции. По-умолчанию включено.
+		/// Gets a value indicating whether the re-registration orders via the method <see cref="ReRegisterOrder(StockSharp.BusinessEntities.Order,StockSharp.BusinessEntities.Order)"/> as a single transaction. The default is enabled.
 		/// </summary>
 		public virtual bool IsSupportAtomicReRegister
 		{
@@ -463,44 +457,41 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Использовать лог заявок (orders log) для создания стаканов. По-умолчанию выключено.
+		/// Use orders log to create market depths. Disabled by default.
 		/// </summary>
 		public virtual bool CreateDepthFromOrdersLog { get; set; }
 
 		/// <summary>
-		/// Использовать лог заявок (orders log) для создания тиковых сделок. По-умолчанию выключено.
+		/// Use orders log to create ticks7. Disabled by default.
 		/// </summary>
 		public virtual bool CreateTradesFromOrdersLog { get; set; }
 
 		/// <summary>
-		/// Обновлять <see cref="Security.LastTrade"/>, <see cref="Security.BestBid"/>, <see cref="Security.BestAsk"/> на каждом обновлении стакана и/или сделок.
-		/// По умолчанию включено.
+		/// To update <see cref="Security.LastTrade"/>, <see cref="Security.BestBid"/>, <see cref="Security.BestAsk"/> at each update of order book and/or trades. By default is enabled.
 		/// </summary>
 		public bool UpdateSecurityLastQuotes { get; set; }
 
 		/// <summary>
-		/// Обновлять поля <see cref="Security"/> при появлении сообщения <see cref="Level1ChangeMessage"/>.
-		/// По умолчанию включено.
+		/// To update <see cref="Security"/> fields when the <see cref="Level1ChangeMessage"/> message appears. By default is enabled.
 		/// </summary>
 		public bool UpdateSecurityByLevel1 { get; set; }
 
 		/// <summary>
-		/// Обновлять стакан для инструмента при появлении сообщения <see cref="Level1ChangeMessage"/>.
-		/// По умолчанию включено.
+		/// To update the order book for the instrument when the <see cref="Level1ChangeMessage"/> message appears. By default is enabled.
 		/// </summary>
 		[DisplayNameLoc(LocalizedStrings.Str200Key)]
 		[DescriptionLoc(LocalizedStrings.Str201Key)]
 		public bool CreateDepthFromLevel1 { get; set; }
 
 		/// <summary>
-		/// Создавать объединенный инструмент для инструментов с разных торговых площадок.
+		/// Create a combined security for securities from different boards.
 		/// </summary>
 		[DisplayNameLoc(LocalizedStrings.Str197Key)]
 		[DescriptionLoc(LocalizedStrings.Str198Key)]
 		public bool CreateAssociatedSecurity { get; set; }
 
 		/// <summary>
-		/// Число ошибок, переданное через событие <see cref="Error"/>.
+		/// The number of errors passed through the <see cref="Connector.Error"/> event.
 		/// </summary>
 		public int ErrorCount { get; private set; }
 
@@ -513,7 +504,7 @@ namespace StockSharp.Algo
 		private TimeSpan _marketTimeChangedInterval = TimeSpan.FromMilliseconds(10);
 
 		/// <summary>
-		/// Интервал генерации сообщения <see cref="TimeMessage"/>. По-умолчанию равно 10 миллисекундам.
+		/// The <see cref="TimeMessage"/> message generating Interval. The default is 10 milliseconds.
 		/// </summary>
 		[CategoryLoc(LocalizedStrings.Str186Key)]
 		[DisplayNameLoc(LocalizedStrings.TimeIntervalKey)]
@@ -539,7 +530,7 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Подключиться к торговой системе.
+		/// Connect to trading system.
 		/// </summary>
 		public void Connect()
 		{
@@ -572,7 +563,7 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Подключиться к торговой системе.
+		/// Connect to trading system.
 		/// </summary>
 		protected virtual void OnConnect()
 		{
@@ -580,7 +571,7 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Отключиться от торговой системы.
+		/// Disconnect from trading system.
 		/// </summary>
 		public void Disconnect()
 		{
@@ -615,7 +606,7 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Отключиться от торговой системы.
+		/// Disconnect from trading system.
 		/// </summary>
 		protected virtual void OnDisconnect()
 		{
@@ -623,10 +614,9 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Найти инструменты, соответствующие фильтру <paramref name="criteria"/>.
-		/// Найденные инструменты будут переданы через событие <see cref="IConnector.LookupSecuritiesResult"/>.
+		/// To find instruments that match the filter <paramref name="criteria" />. Found instruments will be passed through the event <see cref="IConnector.LookupSecuritiesResult"/>.
 		/// </summary>
-		/// <param name="criteria">Инструмент, поля которого будут использоваться в качестве фильтра.</param>
+		/// <param name="criteria">The instrument whose fields will be used as a filter.</param>
 		public void LookupSecurities(Security criteria)
 		{
 			if (criteria == null)
@@ -672,10 +662,9 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Найти инструменты, соответствующие фильтру <paramref name="criteria"/>.
-		/// Найденные инструменты будут переданы через событие <see cref="IConnector.LookupSecuritiesResult"/>.
+		/// To find instruments that match the filter <paramref name="criteria" />. Found instruments will be passed through the event <see cref="IConnector.LookupSecuritiesResult"/>.
 		/// </summary>
-		/// <param name="criteria">Критерий, поля которого будут использоваться в качестве фильтра.</param>
+		/// <param name="criteria">The criterion which fields will be used as a filter.</param>
 		public virtual void LookupSecurities(SecurityLookupMessage criteria)
 		{
 			if (criteria == null)
@@ -711,10 +700,9 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Найти портфели, соответствующие фильтру <paramref name="criteria"/>.
-		/// Найденные портфели будут переданы через событие <see cref="IConnector.LookupPortfoliosResult"/>.
+		/// To find portfolios that match the filter <paramref name="criteria" />. Found portfolios will be passed through the event <see cref="IConnector.LookupPortfoliosResult"/>.
 		/// </summary>
-		/// <param name="criteria">Портфель, поля которого будут использоваться в качестве фильтра.</param>
+		/// <param name="criteria">The portfolio which fields will be used as a filter.</param>
 		public virtual void LookupPortfolios(Portfolio criteria)
 		{
 			if (criteria == null)
@@ -734,13 +722,12 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Получить позицию по портфелю и инструменту.
+		/// To get the position by portfolio and instrument.
 		/// </summary>
-		/// <param name="portfolio">Портфель, по которому нужно найти позицию.</param>
-		/// <param name="security">Инструмент, по которому нужно найти позицию.</param>
-		/// <param name="depoName">Название депозитария, где находится физически ценная бумага.
-		/// По-умолчанию передается пустая строка, что означает суммарную позицию по всем депозитариям.</param>
-		/// <returns>Позиция.</returns>
+		/// <param name="portfolio">The portfolio on which the position should be found.</param>
+		/// <param name="security">The instrument on which the position should be found.</param>
+		/// <param name="depoName">The depository name where the stock is located physically. By default, an empty string is passed, which means the total position by all depositories.</param>
+		/// <returns>Position.</returns>
 		public Position GetPosition(Portfolio portfolio, Security security, string depoName = "")
 		{
 			return GetPosition(portfolio, security, depoName, TPlusLimits.T0, string.Empty);
@@ -784,10 +771,10 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Получить стакан котировок.
+		/// To get the quotes order book.
 		/// </summary>
-		/// <param name="security">Инструмент, по которому нужно получить стакан.</param>
-		/// <returns>Стакан котировок.</returns>
+		/// <param name="security">The instrument by which an order book should be got.</param>
+		/// <returns>Order book.</returns>
 		public MarketDepth GetMarketDepth(Security security)
 		{
 			if (security == null)
@@ -836,10 +823,10 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Получить отфильтрованный стакан котировок.
+		/// Get filtered order book.
 		/// </summary>
-		/// <param name="security">Инструмент, по которому нужно получить стакан.</param>
-		/// <returns>Отфильтрованный стакан котировок.</returns>
+		/// <param name="security">The instrument by which an order book should be got.</param>
+		/// <returns>Filtered order book.</returns>
 		public MarketDepth GetFilteredMarketDepth(Security security)
 		{
 			if (security == null)
@@ -857,9 +844,9 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Зарегистрировать заявку на бирже.
+		/// Register new order.
 		/// </summary>
-		/// <param name="order">Заявка, содержащая информацию для регистрации.</param>
+		/// <param name="order">Registration details.</param>
 		public void RegisterOrder(Order order)
 		{
 			RegisterOrder(order, true);
@@ -893,14 +880,14 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Перерегистрировать заявку на бирже.
+		/// Reregister the order.
 		/// </summary>
-		/// <param name="oldOrder">Заявка, которую нужно снять и на основе нее зарегистрировать новую.</param>
-		/// <param name="price">Цена новой заявки.</param>
-		/// <param name="volume">Объем новой заявки.</param>
-		/// <returns>Новая заявка.</returns>
+		/// <param name="oldOrder">Changing order.</param>
+		/// <param name="price">Price of the new order.</param>
+		/// <param name="volume">Volume of the new order.</param>
+		/// <returns>New order.</returns>
 		/// <remarks>
-		/// Если объём не задан, меняется только цена.
+		/// If the volume is not set, only the price changes.
 		/// </remarks>
 		public Order ReRegisterOrder(Order oldOrder, decimal price, decimal volume = 0)
 		{
@@ -913,10 +900,10 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Перерегистрировать заявку на бирже.
+		/// Reregister the order.
 		/// </summary>
-		/// <param name="oldOrder">Заявка, которую нужно снять.</param>
-		/// <param name="newOrder">Новая заявка, которую нужно зарегистрировать.</param>
+		/// <param name="oldOrder">Cancelling order.</param>
+		/// <param name="newOrder">New order to register.</param>
 		public virtual void ReRegisterOrder(Order oldOrder, Order newOrder)
 		{
 			if (oldOrder == null)
@@ -957,12 +944,12 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Перерегистрировать пару заявок на бирже.
+		/// Reregister of pair orders.
 		/// </summary>
-		/// <param name="oldOrder1">Первая заявка, которую нужно снять.</param>
-		/// <param name="newOrder1">Первая новая заявка, которую нужно зарегистрировать.</param>
-		/// <param name="oldOrder2">Вторая заявка, которую нужно снять.</param>
-		/// <param name="newOrder2">Вторая новая заявка, которую нужно зарегистрировать.</param>
+		/// <param name="oldOrder1">First order to cancel.</param>
+		/// <param name="newOrder1">First new order to register.</param>
+		/// <param name="oldOrder2">Second order to cancel.</param>
+		/// <param name="newOrder2">Second new order to register.</param>
 		public void ReRegisterOrderPair(Order oldOrder1, Order newOrder1, Order oldOrder2, Order newOrder2)
 		{
 			if (oldOrder1 == null)
@@ -1027,9 +1014,9 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Отменить заявку на бирже.
+		/// Cancel the order.
 		/// </summary>
-		/// <param name="order">Заявка, которую нужно отменять.</param>
+		/// <param name="order">Order to cancel.</param>
 		public void CancelOrder(Order order)
 		{
 			try
@@ -1116,9 +1103,9 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Инициализировать новую заявку идентификатором транзакции, информацией о подключении и т.д.
+		/// Initialize registering order (transaction id etc.).
 		/// </summary>
-		/// <param name="order">Новая заявка.</param>
+		/// <param name="order">New order.</param>
 		private void InitNewOrder(Order order)
 		{
 			order.Balance = order.Volume;
@@ -1146,9 +1133,9 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Зарегистрировать заявку на бирже.
+		/// Register new order.
 		/// </summary>
-		/// <param name="order">Заявка, содержащая информацию для регистрации.</param>
+		/// <param name="order">Registration details.</param>
 		protected virtual void OnRegisterOrder(Order order)
 		{
 			var regMsg = order.CreateRegisterMessage(GetSecurityId(order.Security));
@@ -1164,10 +1151,10 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Перерегистрировать заявку на бирже.
+		/// Reregister the order.
 		/// </summary>
-		/// <param name="oldOrder">Заявка, которую нужно снять.</param>
-		/// <param name="newOrder">Новая заявка, которую нужно зарегистрировать.</param>
+		/// <param name="oldOrder">Cancelling order.</param>
+		/// <param name="newOrder">New order to register.</param>
 		protected virtual void OnReRegisterOrder(Order oldOrder, Order newOrder)
 		{
 			if (IsSupportAtomicReRegister && oldOrder.Security.Board.IsSupportAtomicReRegister)
@@ -1183,12 +1170,12 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Перерегистрировать пару заявок на бирже.
+		/// Reregister of pair orders.
 		/// </summary>
-		/// <param name="oldOrder1">Первая заявка, которую нужно снять.</param>
-		/// <param name="newOrder1">Первая новая заявка, которую нужно зарегистрировать.</param>
-		/// <param name="oldOrder2">Вторая заявка, которую нужно снять.</param>
-		/// <param name="newOrder2">Вторая новая заявка, которую нужно зарегистрировать.</param>
+		/// <param name="oldOrder1">First order to cancel.</param>
+		/// <param name="newOrder1">First new order to register.</param>
+		/// <param name="oldOrder2">Second order to cancel.</param>
+		/// <param name="newOrder2">Second new order to register.</param>
 		protected virtual void OnReRegisterOrderPair(Order oldOrder1, Order newOrder1, Order oldOrder2, Order newOrder2)
 		{
 			CancelOrder(oldOrder1);
@@ -1199,10 +1186,10 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Отменить заявку на бирже.
+		/// Cancel the order.
 		/// </summary>
-		/// <param name="order">Заявка, которую нужно отменять.</param>
-		/// <param name="transactionId">Идентификатор транзакции отмены.</param>
+		/// <param name="order">Order to cancel.</param>
+		/// <param name="transactionId">Order cancellation transaction id.</param>
 		protected virtual void OnCancelOrder(Order order, long transactionId)
 		{
 			var cancelMsg = order.CreateCancelMessage(GetSecurityId(order.Security), transactionId);
@@ -1210,13 +1197,13 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Отменить группу заявок на бирже по фильтру.
+		/// Cancel orders by filter.
 		/// </summary>
-		/// <param name="isStopOrder"><see langword="true"/>, если нужно отменить только стоп-заявки, <see langword="false"/> - если только обычный и <see langword="null"/> - если оба типа.</param>
-		/// <param name="portfolio">Портфель. Если значение равно <see langword="null"/>, то портфель не попадает в фильтр снятия заявок.</param>
-		/// <param name="direction">Направление заявки. Если значение равно <see langword="null"/>, то направление не попадает в фильтр снятия заявок.</param>
-		/// <param name="board">Торговая площадка. Если значение равно <see langword="null"/>, то площадка не попадает в фильтр снятия заявок.</param>
-		/// <param name="security">Инструмент. Если значение равно <see langword="null"/>, то инструмент не попадает в фильтр снятия заявок.</param>
+		/// <param name="isStopOrder"><see langword="true" />, if cancel only a stop orders, <see langword="false" /> - if regular orders, <see langword="null" /> - both.</param>
+		/// <param name="portfolio">Portfolio. If the value is equal to <see langword="null" />, then the portfolio does not match the orders cancel filter.</param>
+		/// <param name="direction">Order side. If the value is <see langword="null" />, the direction does not use.</param>
+		/// <param name="board">Trading board. If the value is equal to <see langword="null" />, then the board does not match the orders cancel filter.</param>
+		/// <param name="security">Instrument. If the value is equal to <see langword="null" />, then the instrument does not match the orders cancel filter.</param>
 		public void CancelOrders(bool? isStopOrder = null, Portfolio portfolio = null, Sides? direction = null, ExchangeBoard board = null, Security security = null)
 		{
 			var transactionId = TransactionIdGenerator.GetNextId();
@@ -1225,14 +1212,14 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Отменить группу заявок на бирже по фильтру.
+		/// Cancel orders by filter.
 		/// </summary>
-		/// <param name="transactionId">Идентификатор транзакции отмены.</param>
-		/// <param name="isStopOrder"><see langword="true"/>, если нужно отменить только стоп-заявки, <see langword="false"/> - если только обычный и <see langword="null"/> - если оба типа.</param>
-		/// <param name="portfolio">Портфель. Если значение равно <see langword="null"/>, то портфель не попадает в фильтр снятия заявок.</param>
-		/// <param name="direction">Направление заявки. Если значение равно <see langword="null"/>, то направление не попадает в фильтр снятия заявок.</param>
-		/// <param name="board">Торговая площадка. Если значение равно <see langword="null"/>, то площадка не попадает в фильтр снятия заявок.</param>
-		/// <param name="security">Инструмент. Если значение равно <see langword="null"/>, то инструмент не попадает в фильтр снятия заявок.</param>
+		/// <param name="transactionId">Order cancellation transaction id.</param>
+		/// <param name="isStopOrder"><see langword="true" />, if cancel only a stop orders, <see langword="false" /> - if regular orders, <see langword="null" /> - both.</param>
+		/// <param name="portfolio">Portfolio. If the value is equal to <see langword="null" />, then the portfolio does not match the orders cancel filter.</param>
+		/// <param name="direction">Order side. If the value is <see langword="null" />, the direction does not use.</param>
+		/// <param name="board">Trading board. If the value is equal to <see langword="null" />, then the board does not match the orders cancel filter.</param>
+		/// <param name="security">Instrument. If the value is equal to <see langword="null" />, then the instrument does not match the orders cancel filter.</param>
 		protected virtual void OnCancelOrders(long transactionId, bool? isStopOrder = null, Portfolio portfolio = null, Sides? direction = null, ExchangeBoard board = null, Security security = null)
 		{
 			var cancelMsg = MessageConverterHelper.CreateGroupCancelMessage(transactionId, isStopOrder, portfolio, direction, board, security == null ? default(SecurityId) : GetSecurityId(security), security);
@@ -1271,21 +1258,21 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Получить инструмент по коду.
+		/// Get security by code.
 		/// </summary>
-		/// <param name="securityId">Идентификатор инструмента.</param>
-		/// <returns>Инструмент.</returns>
+		/// <param name="securityId">Security ID.</param>
+		/// <returns>Security.</returns>
 		protected Security GetSecurity(SecurityId securityId)
 		{
 			return GetSecurity(CreateSecurityId(securityId.SecurityCode, securityId.BoardCode), s => false);
 		}
 
 		/// <summary>
-		/// Получить инструмент по коду. Если инструмент не найден, то для создания инструмента вызывается <see cref="IEntityFactory.CreateSecurity"/>.
+		/// To get the instrument by the code. If the instrument is not found, then the <see cref="IEntityFactory.CreateSecurity"/> is called to create an instrument.
 		/// </summary>
-		/// <param name="id">Идентификатор инструмента.</param>
-		/// <param name="changeSecurity">Обработчик, изменяющий инструмент. Возвращает <see langword="true"/>, если инструмент был изменен, и необходимо вызвать <see cref="IConnector.SecuritiesChanged"/>.</param>
-		/// <returns>Инструмент.</returns>
+		/// <param name="id">Security ID.</param>
+		/// <param name="changeSecurity">The handler changing the instrument. It returns <see langword="true" /> if the instrument has been changed and the <see cref="IConnector.SecuritiesChanged"/> should be called.</param>
+		/// <returns>Security.</returns>
 		private Security GetSecurity(string id, Func<Security, bool> changeSecurity)
 		{
 			if (id.IsEmpty())
@@ -1340,10 +1327,10 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Получить <see cref="SecurityId"/>.
+		/// Get <see cref="SecurityId"/>.
 		/// </summary>
-		/// <param name="security">Инструмент.</param>
-		/// <returns>Идентификатор инструмента.</returns>
+		/// <param name="security">Security.</param>
+		/// <returns>Security ID.</returns>
 		public SecurityId GetSecurityId(Security security)
 		{
 			if (security == null)
@@ -1390,11 +1377,11 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Получить портфель по названию. Если портфель не зарегистрирован, то он создается через <see cref="IEntityFactory.CreatePortfolio"/>.
+		/// To get the portfolio by the name. If the portfolio is not registered, it is created via <see cref="IEntityFactory.CreatePortfolio"/>.
 		/// </summary>
-		/// <param name="name">Название портфеля.</param>
-		/// <param name="changePortfolio">Обработчик, изменяющий портфель.</param>
-		/// <returns>Портфель.</returns>
+		/// <param name="name">Portfolio name.</param>
+		/// <param name="changePortfolio">Portfolio handler.</param>
+		/// <returns>Portfolio.</returns>
 		private Portfolio GetPortfolio(string name, Func<Portfolio, bool> changePortfolio = null)
 		{
 			if (name.IsEmpty())
@@ -1423,22 +1410,22 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Сгенерировать <see cref="Security.Id"/> инструмента.
+		/// Generate <see cref="Security.Id"/> security.
 		/// </summary>
-		/// <param name="secCode">Код инструмента.</param>
-		/// <param name="secClass">Класс инструмента.</param>
-		/// <returns><see cref="Security.Id"/> инструмента.</returns>
+		/// <param name="secCode">Security code.</param>
+		/// <param name="secClass">Security class.</param>
+		/// <returns><see cref="Security.Id"/> security.</returns>
 		protected string CreateSecurityId(string secCode, string secClass)
 		{
 			return SecurityIdGenerator.GenerateId(secCode, GetBoardCode(secClass));
 		}
 
 		/// <summary>
-		/// Получить значение маркет-данных для инструмента.
+		/// To get the value of market data for the instrument.
 		/// </summary>
-		/// <param name="security">Инструмент.</param>
-		/// <param name="field">Поле маркет-данных.</param>
-		/// <returns>Значение поля. Если данных нет, то будет возвращено <see langword="null"/>.</returns>
+		/// <param name="security">Security.</param>
+		/// <param name="field">Market-data field.</param>
+		/// <returns>The field value. If no data, the <see langword="null" /> will be returned.</returns>
 		public object GetSecurityValue(Security security, Level1Fields field)
 		{
 			if (security == null)
@@ -1449,10 +1436,10 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Получить набор доступных полей <see cref="Level1Fields"/>, для которых есть маркет-данные для инструмента.
+		/// To get a set of available fields <see cref="Level1Fields"/>, for which there is a market data for the instrument.
 		/// </summary>
-		/// <param name="security">Инструмент.</param>
-		/// <returns>Набор доступных полей.</returns>
+		/// <param name="security">Security.</param>
+		/// <returns>Possible fields.</returns>
 		public IEnumerable<Level1Fields> GetLevel1Fields(Security security)
 		{
 			if (security == null)
@@ -1480,7 +1467,7 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Очистить кэш данных.
+		/// Clear cache.
 		/// </summary>
 		public virtual void ClearCache()
 		{
@@ -1527,7 +1514,7 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Запустить таймер генерации сообщений <see cref="TimeMessage"/> с интервалом <see cref="MarketTimeChangedInterval"/>.
+		/// To start the messages generating timer <see cref="TimeMessage"/> with the <see cref="Connector.MarketTimeChangedInterval"/> interval.
 		/// </summary>
 		protected virtual void StartMarketTimer()
 		{
@@ -1557,7 +1544,7 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Остановить таймер, запущенный ранее через <see cref="StartMarketTimer"/>.
+		/// To stop the timer started earlier via <see cref="Connector.StartMarketTimer"/>.
 		/// </summary>
 		protected void StopMarketTimer()
 		{
@@ -1569,7 +1556,7 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Освободить занятые ресурсы. В частности, отключиться от торговой системы через <see cref="Disconnect"/>.
+		/// To release allocated resources. In particular, to disconnect from the trading system via <see cref="Connector.Disconnect"/>.
 		/// </summary>
 		protected override void DisposeManaged()
 		{
@@ -1601,9 +1588,9 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Загрузить настройки.
+		/// Load settings.
 		/// </summary>
-		/// <param name="storage">Хранилище настроек.</param>
+		/// <param name="storage">Settings storage.</param>
 		public override void Load(SettingsStorage storage)
 		{
 			if (storage == null)
@@ -1629,9 +1616,9 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Сохранить настройки.
+		/// Save settings.
 		/// </summary>
-		/// <param name="storage">Хранилище настроек.</param>
+		/// <param name="storage">Settings storage.</param>
 		public override void Save(SettingsStorage storage)
 		{
 			if (storage == null)

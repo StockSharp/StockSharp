@@ -9,14 +9,14 @@ namespace StockSharp.Algo.Indicators
 	using StockSharp.Localization;
 
 	/// <summary>
-	/// Наклон линейной регрессии.
+	/// Linear regression gradient.
 	/// </summary>
 	[DisplayName("LinearRegSlope")]
 	[DescriptionLoc(LocalizedStrings.Str742Key)]
 	public class LinearRegSlope : LengthIndicator<decimal>
 	{
 		/// <summary>
-		/// Создать <see cref="LinearRegSlope"/>.
+		/// Initializes a new instance of the <see cref="LinearRegSlope"/>.
 		/// </summary>
 		public LinearRegSlope()
 		{
@@ -24,10 +24,10 @@ namespace StockSharp.Algo.Indicators
 		}
 
 		/// <summary>
-		/// Обработать входное значение.
+		/// To handle the input value.
 		/// </summary>
-		/// <param name="input">Входное значение.</param>
-		/// <returns>Результирующее значение.</returns>
+		/// <param name="input">The input value.</param>
+		/// <returns>The resulting value.</returns>
 		protected override IIndicatorValue OnProcess(IIndicatorValue input)
 		{
 			var newValue = input.GetValue<decimal>();

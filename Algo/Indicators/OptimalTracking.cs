@@ -1,4 +1,4 @@
-﻿namespace StockSharp.Algo.Indicators
+namespace StockSharp.Algo.Indicators
 {
 	using System.ComponentModel;
 
@@ -8,8 +8,7 @@
 	/// Optimal Tracking.
 	/// </summary>
 	/// <remarks>
-	/// Based on a Kalman Filter (Dr. R. E. Kalman, 1960)
-	/// and Kalatas Tracking Index (Paul. R. Kalata, 1984)
+	/// Based on a Kalman Filter (Dr. R. E. Kalman, 1960) and Kalatas Tracking Index (Paul. R. Kalata, 1984).
 	/// </remarks>
 	[DisplayName("OptimalTracking")]
 	[Description("Optimal Tracking Filter published by John Ehlers")]
@@ -32,7 +31,7 @@
 		//methods
 
 		/// <summary>
-		/// Создать <see cref="OptimalTracking"/>.
+		/// Initializes a new instance of the <see cref="OptimalTracking"/>.
 		/// </summary>
 		public OptimalTracking()
 		{
@@ -43,7 +42,7 @@
 		}
 
 		/// <summary>
-		/// Сбросить состояние индикатора на первоначальное. Метод вызывается каждый раз, когда меняются первоначальные настройки (например, длина периода).
+		/// To reset the indicator status to initial. The method is called each time when initial settings are changed (for example, the length of period).
 		/// </summary>
 		public override void Reset()
 		{
@@ -58,10 +57,10 @@
 		}
 
 		/// <summary>
-		/// Обработать входное значение.
+		/// To handle the input value.
 		/// </summary>
-		/// <param name="input">Входное значение.</param>
-		/// <returns>Результирующее значение.</returns>
+		/// <param name="input">The input value.</param>
+		/// <returns>The resulting value.</returns>
 		protected override IIndicatorValue OnProcess(IIndicatorValue input)
 		{
 			var candle = input.GetValue<Candle>();

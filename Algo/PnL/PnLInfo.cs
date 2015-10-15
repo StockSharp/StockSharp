@@ -7,16 +7,16 @@ namespace StockSharp.Algo.PnL
 	using StockSharp.Localization;
 
 	/// <summary>
-	/// Информация о сделке, закрытый ее объем и ее прибыльность.
+	/// Information on trade, its closed volume and its profitability.
 	/// </summary>
 	public class PnLInfo
 	{
 		/// <summary>
-		/// Создать <see cref="PnLInfo"/>.
+		/// Initializes a new instance of the <see cref="PnLInfo"/>.
 		/// </summary>
-		/// <param name="trade">Собственная сделка.</param>
-		/// <param name="closedVolume">Объем позиции, который был закрыт собственной сделкой.</param>
-		/// <param name="pnL">Реализованная данной сделкой прибыль.</param>
+		/// <param name="trade">Own trade.</param>
+		/// <param name="closedVolume">The volume of position, which was closed by own trade.</param>
+		/// <param name="pnL">The profit, realized by this trade.</param>
 		public PnLInfo(ExecutionMessage trade, decimal closedVolume, decimal pnL)
 		{
 			if (trade == null)
@@ -31,18 +31,20 @@ namespace StockSharp.Algo.PnL
 		}
 
 		/// <summary>
-		/// Собственная сделка.
+		/// Own trade.
 		/// </summary>
 		public ExecutionMessage Trade { get; private set; }
 
 		/// <summary>
-		/// Объем позиции, который был закрыт собственной сделкой.
+		/// The volume of position, which was closed by own trade.
 		/// </summary>
-		/// <remarks>Например, в стратегии позиция была 2, Сделка на -5 контрактов. Закрытая позиция 2.</remarks>
+		/// <remarks>
+		/// For example, in strategy position was 2. The trade for -5 contracts. Closed position 2.
+		/// </remarks>
 		public decimal ClosedVolume { get; private set; }
 
 		/// <summary>
-		/// Реализованная данной сделкой прибыль.
+		/// The profit, realized by this trade.
 		/// </summary>
 		public decimal PnL { get; private set; }
 	}

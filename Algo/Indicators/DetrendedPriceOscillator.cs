@@ -5,7 +5,7 @@ namespace StockSharp.Algo.Indicators
 	using StockSharp.Localization;
 
 	/// <summary>
-	/// Бестрендовый ценовой осциллятор.
+	/// Price oscillator without trend.
 	/// </summary>
 	[DisplayName("DPO")]
 	[DescriptionLoc(LocalizedStrings.Str761Key)]
@@ -14,7 +14,7 @@ namespace StockSharp.Algo.Indicators
 		private readonly SimpleMovingAverage _sma;
 
 		/// <summary>
-		/// Создать <see cref="DetrendedPriceOscillator"/>.
+		/// Initializes a new instance of the <see cref="DetrendedPriceOscillator"/>.
 		/// </summary>
 		public DetrendedPriceOscillator()
 		{
@@ -23,7 +23,7 @@ namespace StockSharp.Algo.Indicators
 		}
 
 		/// <summary>
-		/// Сбросить состояние индикатора на первоначальное. Метод вызывается каждый раз, когда меняются первоначальные настройки (например, длина периода).
+		/// To reset the indicator status to initial. The method is called each time when initial settings are changed (for example, the length of period).
 		/// </summary>
 		public override void Reset()
 		{
@@ -32,15 +32,15 @@ namespace StockSharp.Algo.Indicators
 		}
 
 		/// <summary>
-		/// Индикатор сформирован.
+		/// The indicator is formed.
 		/// </summary>
 		public override bool IsFormed { get { return Buffer.Count >= Length; } }
 
 		/// <summary>
-		/// Обработать входное значение.
+		/// To handle the input value.
 		/// </summary>
-		/// <param name="input">Входное значение.</param>
-		/// <returns>Результирующее значение.</returns>
+		/// <param name="input">The input value.</param>
+		/// <returns>The resulting value.</returns>
 		protected override IIndicatorValue OnProcess(IIndicatorValue input)
 		{
 			var smaValue = _sma.Process(input);

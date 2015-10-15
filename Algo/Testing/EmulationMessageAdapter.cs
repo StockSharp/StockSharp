@@ -1,4 +1,4 @@
-﻿namespace StockSharp.Algo.Testing
+namespace StockSharp.Algo.Testing
 {
 	using System;
 
@@ -7,24 +7,24 @@
 	using StockSharp.Messages;
 
 	/// <summary>
-	/// Адаптер, исполняющий сообщения в <see cref="IMarketEmulator"/>.
+	/// The adapter, executing messages in <see cref="IMarketEmulator"/>.
 	/// </summary>
 	public class EmulationMessageAdapter : MessageAdapter
 	{
 		/// <summary>
-		/// Создать <see cref="EmulationMessageAdapter"/>.
+		/// Initializes a new instance of the <see cref="EmulationMessageAdapter"/>.
 		/// </summary>
-		/// <param name="transactionIdGenerator">Генератор идентификаторов транзакций.</param>
+		/// <param name="transactionIdGenerator">Transaction id generator.</param>
 		public EmulationMessageAdapter(IdGenerator transactionIdGenerator)
 			: this(new MarketEmulator(), transactionIdGenerator)
 		{
 		}
 
 		/// <summary>
-		/// Создать <see cref="EmulationMessageAdapter"/>.
+		/// Initializes a new instance of the <see cref="EmulationMessageAdapter"/>.
 		/// </summary>
-		/// <param name="emulator">Эмулятор торгов.</param>
-		/// <param name="transactionIdGenerator">Генератор идентификаторов транзакций.</param>
+		/// <param name="emulator">Paper trading.</param>
+		/// <param name="transactionIdGenerator">Transaction id generator.</param>
 		public EmulationMessageAdapter(IMarketEmulator emulator, IdGenerator transactionIdGenerator)
 			: base(transactionIdGenerator)
 		{
@@ -44,7 +44,7 @@
 		private IMarketEmulator _emulator;
 
 		/// <summary>
-		/// Эмулятор торгов.
+		/// Paper trading.
 		/// </summary>
 		public IMarketEmulator Emulator
 		{
@@ -72,7 +72,7 @@
 		private DateTimeOffset _currentTime;
 
 		/// <summary>
-		/// Текущее время.
+		/// The current time.
 		/// </summary>
 		public override DateTimeOffset CurrentTime
 		{
@@ -80,14 +80,14 @@
 		}
 
 		/// <summary>
-		/// Число обработанных сообщений.
+		/// The number of processed messages.
 		/// </summary>
 		public int ProcessedMessageCount { get; private set; }
 
 		/// <summary>
-		/// Отправить сообщение.
+		/// Send message.
 		/// </summary>
-		/// <param name="message">Сообщение.</param>
+		/// <param name="message">Message.</param>
 		protected override void OnSendInMessage(Message message)
 		{
 			var localTime = message.LocalTime;

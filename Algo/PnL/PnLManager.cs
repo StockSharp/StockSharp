@@ -1,4 +1,4 @@
-﻿namespace StockSharp.Algo.PnL
+namespace StockSharp.Algo.PnL
 {
 	using System;
 	using System.Linq;
@@ -8,21 +8,21 @@
 	using StockSharp.Messages;
 
 	/// <summary>
-	/// Менеджер прибыли-убытка.
+	/// The gain-loss manager.
 	/// </summary>
 	public class PnLManager : IPnLManager
 	{
 		private readonly CachedSynchronizedDictionary<string, PortfolioPnLManager> _portfolioManagers = new CachedSynchronizedDictionary<string, PortfolioPnLManager>(StringComparer.InvariantCultureIgnoreCase);
 
 		/// <summary>
-		/// Создать <see cref="PnLManager"/>.
+		/// Initializes a new instance of the <see cref="PnLManager"/>.
 		/// </summary>
 		public PnLManager()
 		{
 		}
 
 		/// <summary>
-		/// Суммарное значение прибыли-убытка.
+		/// Total profit-loss.
 		/// </summary>
 		public virtual decimal PnL
 		{
@@ -32,7 +32,7 @@
 		private decimal _realizedPnL;
 
 		/// <summary>
-		/// Относительное значение прибыли-убытка без учета открытой позиции.
+		/// The relative value of profit-loss without open position accounting.
 		/// </summary>
 		public virtual decimal RealizedPnL
 		{
@@ -40,7 +40,7 @@
 		}
 
 		/// <summary>
-		/// Значение нереализованной прибыли-убытка.
+		/// The value of unrealized gain-loss.
 		/// </summary>
 		public virtual decimal UnrealizedPnL
 		{
@@ -48,7 +48,7 @@
 		}
 
 		/// <summary>
-		/// Обнулить <see cref="PnL"/>.
+		/// To zero <see cref="PnLManager.PnL"/>.
 		/// </summary>
 		public void Reset()
 		{
@@ -60,10 +60,10 @@
 		}
 
 		/// <summary>
-		/// Рассчитать прибыльность сделки. Если сделка уже ранее была обработана, то возвращается предыдущая информация.
+		/// To calculate trade profitability. If the trade was already processed earlier, previous information returns.
 		/// </summary>
-		/// <param name="trade">Сделка.</param>
-		/// <returns>Информация о новой сделке.</returns>
+		/// <param name="trade">Trade.</param>
+		/// <returns>Information on new trade.</returns>
 		public virtual PnLInfo ProcessMyTrade(ExecutionMessage trade)
 		{
 			if (trade == null)
@@ -83,9 +83,9 @@
 		}
 
 		/// <summary>
-		/// Обработать сообщение, содержащее рыночные данные.
+		/// To process the message, containing market data.
 		/// </summary>
-		/// <param name="message">Сообщение, содержащее рыночные данные.</param>
+		/// <param name="message">The message, containing market data.</param>
 		public void ProcessMessage(Message message)
 		{
 			if (message == null)

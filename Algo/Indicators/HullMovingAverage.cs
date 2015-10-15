@@ -8,7 +8,7 @@ namespace StockSharp.Algo.Indicators
 	using StockSharp.Localization;
 
 	/// <summary>
-	/// Скользящая средняя Халла (Hull Moving Average).
+	/// Hull Moving Average.
 	/// </summary>
 	[DisplayName("HMA")]
 	[DescriptionLoc(LocalizedStrings.Str786Key)]
@@ -19,7 +19,7 @@ namespace StockSharp.Algo.Indicators
 		private readonly WeightedMovingAverage _wmaResult = new WeightedMovingAverage();
 
 		/// <summary>
-		/// Создать <see cref="HullMovingAverage"/>.
+		/// Initializes a new instance of the <see cref="HullMovingAverage"/>.
 		/// </summary>
 		public HullMovingAverage()
 		{
@@ -30,8 +30,7 @@ namespace StockSharp.Algo.Indicators
 		private int _sqrtPeriod;
 
 		/// <summary>
-		/// Период результирующей средней. Если равно 0, период результирующей средней равен квадратному корню периода HMA.
-		/// По умолчанию равно 0. 
+		/// Peiod of resulting average. If equal to 0, period of resulting average is equal to the square root of HMA period. By default equal to 0.
 		/// </summary>
 		[DisplayNameLoc(LocalizedStrings.Str787Key)]
 		[DescriptionLoc(LocalizedStrings.Str788Key)]
@@ -47,7 +46,7 @@ namespace StockSharp.Algo.Indicators
 		}
 
 		/// <summary>
-		/// Сформирован ли индикатор.
+		/// Whether the indicator is set.
 		/// </summary>
 		public override bool IsFormed
 		{
@@ -55,7 +54,7 @@ namespace StockSharp.Algo.Indicators
 		}
 
 		/// <summary>
-		/// Сбросить состояние индикатора на первоначальное. Метод вызывается каждый раз, когда меняются первоначальные настройки (например, длина периода).
+		/// To reset the indicator status to initial. The method is called each time when initial settings are changed (for example, the length of period).
 		/// </summary>
 		public override void Reset()
 		{
@@ -67,10 +66,10 @@ namespace StockSharp.Algo.Indicators
 		}
 
 		/// <summary>
-		/// Обработать входное значение.
+		/// To handle the input value.
 		/// </summary>
-		/// <param name="input">Входное значение.</param>
-		/// <returns>Результирующее значение.</returns>
+		/// <param name="input">The input value.</param>
+		/// <returns>The resulting value.</returns>
 		protected override IIndicatorValue OnProcess(IIndicatorValue input)
 		{
 			_wmaSlow.Process(input);
@@ -86,9 +85,9 @@ namespace StockSharp.Algo.Indicators
 		}
 
 		/// <summary>
-		/// Загрузить настройки.
+		/// Load settings.
 		/// </summary>
-		/// <param name="settings">Хранилище настроек.</param>
+		/// <param name="settings">Settings storage.</param>
 		public override void Load(SettingsStorage settings)
 		{
 			base.Load(settings);
@@ -96,9 +95,9 @@ namespace StockSharp.Algo.Indicators
 		}
 
 		/// <summary>
-		/// Сохранить настройки.
+		/// Save settings.
 		/// </summary>
-		/// <param name="settings">Хранилище настроек.</param>
+		/// <param name="settings">Settings storage.</param>
 		public override void Save(SettingsStorage settings)
 		{
 			base.Save(settings);

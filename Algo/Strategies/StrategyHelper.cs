@@ -21,79 +21,79 @@ namespace StockSharp.Algo.Strategies
 	using StockSharp.Logging;
 
 	/// <summary>
-	/// Вспомогательный класс для работы с <see cref="Strategy"/>.
+	/// Extension class for <see cref="Strategy"/>.
 	/// </summary>
 	public static class StrategyHelper
 	{
 		/// <summary>
-		/// Создать инициализированный объект заявки на покупку по рыночной цене.
+		/// To create initialized object of purchase order at market price.
 		/// </summary>
+		/// <param name="strategy">Strategy.</param>
+		/// <param name="volume">The volume. If <see langword="null" /> value is passed, then <see cref="Strategy.Volume"/> value is used.</param>
+		/// <returns>The initialized order object.</returns>
 		/// <remarks>
-		/// Заявка не регистрируется, а только создается объект.
+		/// The order is not registered, only the object is created.
 		/// </remarks>
-		/// <param name="strategy">Стратегия.</param>
-		/// <param name="volume">Объем. Если передается значение <see langword="null"/>, то используется значение <see cref="Strategy.Volume"/>.</param>
-		/// <returns>Инициализированный объект заявки.</returns>
 		public static Order BuyAtMarket(this Strategy strategy, decimal? volume = null)
 		{
 			return strategy.CreateOrder(Sides.Buy, null, volume);
 		}
 
 		/// <summary>
-		/// Создать инициализированный объект заявки на продажу по рыночной цене.
+		/// To create the initialized order object for sale at market price.
 		/// </summary>
+		/// <param name="strategy">Strategy.</param>
+		/// <param name="volume">The volume. If <see langword="null" /> value is passed, then <see cref="Strategy.Volume"/> value is used.</param>
+		/// <returns>The initialized order object.</returns>
 		/// <remarks>
-		/// Заявка не регистрируется, а только создается объект.
+		/// The order is not registered, only the object is created.
 		/// </remarks>
-		/// <param name="strategy">Стратегия.</param>
-		/// <param name="volume">Объем. Если передается значение <see langword="null"/>, то используется значение <see cref="Strategy.Volume"/>.</param>
-		/// <returns>Инициализированный объект заявки.</returns>
 		public static Order SellAtMarket(this Strategy strategy, decimal? volume = null)
 		{
 			return strategy.CreateOrder(Sides.Sell, null, volume);
 		}
 
 		/// <summary>
-		/// Создать инициализированный объект заявки на покупку.
+		/// To create the initialized order object for purchase.
 		/// </summary>
+		/// <param name="strategy">Strategy.</param>
+		/// <param name="price">Price.</param>
+		/// <param name="volume">The volume. If <see langword="null" /> value is passed, then <see cref="Strategy.Volume"/> value is used.</param>
+		/// <returns>The initialized order object.</returns>
 		/// <remarks>
-		/// Заявка не регистрируется, а только создается объект.
+		/// The order is not registered, only the object is created.
 		/// </remarks>
-		/// <param name="strategy">Стратегия.</param>
-		/// <param name="price">Цена.</param>
-		/// <param name="volume">Объем. Если передается значение <see langword="null"/>, то используется значение <see cref="Strategy.Volume"/>.</param>
-		/// <returns>Инициализированный объект заявки.</returns>
 		public static Order BuyAtLimit(this Strategy strategy, decimal price, decimal? volume = null)
 		{
 			return strategy.CreateOrder(Sides.Buy, price, volume);
 		}
 
 		/// <summary>
-		/// Создать инициализированный объект заявки на продажу.
+		/// To create the initialized order object for sale.
 		/// </summary>
+		/// <param name="strategy">Strategy.</param>
+		/// <param name="price">Price.</param>
+		/// <param name="volume">The volume. If <see langword="null" /> value is passed, then <see cref="Strategy.Volume"/> value is used.</param>
+		/// <returns>The initialized order object.</returns>
 		/// <remarks>
-		/// Заявка не регистрируется, а только создается объект.
+		/// The order is not registered, only the object is created.
 		/// </remarks>
-		/// <param name="strategy">Стратегия.</param>
-		/// <param name="price">Цена.</param>
-		/// <param name="volume">Объем. Если передается значение <see langword="null"/>, то используется значение <see cref="Strategy.Volume"/>.</param>
-		/// <returns>Инициализированный объект заявки.</returns>
 		public static Order SellAtLimit(this Strategy strategy, decimal price, decimal? volume = null)
 		{
 			return strategy.CreateOrder(Sides.Sell, price, volume);
 		}
 
 		/// <summary>
-		/// Создать инициализированный объект заявки.
+		/// To create the initialized order object.
 		/// </summary>
+		/// <param name="strategy">Strategy.</param>
+		/// <param name="direction">Order side.</param>
+		/// <param name="price">The price. If <see langword="null" /> value is passed, the order is registered at market price.</param>
+		/// <param name="volume">The volume. If <see langword="null" /> value is passed, then <see cref="Strategy.Volume"/> value is used.</param>
+		/// <returns>The initialized order object.</returns>
 		/// <remarks>
-		/// Заявка не регистрируется, а только создается объект.
+		/// The order is not registered, only the object is created.
 		/// </remarks>
-		/// <param name="strategy">Стратегия.</param>
-		/// <param name="direction">Направление заявки.</param>
-		/// <param name="price">Цена. Если передается значение <see langword="null"/>, то выставляется заявка по рыночной цене.</param>
-		/// <param name="volume">Объем. Если передается значение <see langword="null"/>, то используется значение <see cref="Strategy.Volume"/>.</param>
-		/// <returns>Инициализированный объект заявки.</returns>
 		public static Order CreateOrder(this Strategy strategy, Sides direction, decimal? price, decimal? volume = null)
 		{
 			if (strategy == null)
@@ -126,13 +126,13 @@ namespace StockSharp.Algo.Strategies
 		}
 
 		/// <summary>
-		/// Закрыть открытую позицию по рынку (выставить заявку типа <see cref="OrderTypes.Market"/>).
+		/// To close open position by market (to register the order of the type <see cref="OrderTypes.Market"/>).
 		/// </summary>
+		/// <param name="strategy">Strategy.</param>
+		/// <param name="slippage">The slippage level, admissible at the order registration. It is used, if the order is registered using the limit order.</param>
 		/// <remarks>
-		/// Рыночная заявка не работает на всех биржах.
+		/// The market order is not operable on all exchanges.
 		/// </remarks>
-		/// <param name="strategy">Стратегия.</param>
-		/// <param name="slippage">Уровень проскальзывания, допустимый при регистрации заявки. Используется, если заявка регистрируется лимиткой.</param>
 		public static void ClosePosition(this Strategy strategy, decimal slippage = 0)
 		{
 			if (strategy == null)
@@ -156,10 +156,10 @@ namespace StockSharp.Algo.Strategies
 		}
 
 		/// <summary>
-		/// Получить менеджер свечек, ассоциированный с переданной стратегией.
+		/// To get the candle manager, associated with the passed strategy.
 		/// </summary>
-		/// <param name="strategy">Стратегия.</param>
-		/// <returns>Менеджер свечек.</returns>
+		/// <param name="strategy">Strategy.</param>
+		/// <returns>The candles manager.</returns>
 		public static ICandleManager GetCandleManager(this Strategy strategy)
 		{
 			if (strategy == null)
@@ -169,10 +169,10 @@ namespace StockSharp.Algo.Strategies
 		}
 
 		/// <summary>
-		/// Установить менеджер свечек для стратегии.
+		/// To set the candle manager for the strategy.
 		/// </summary>
-		/// <param name="strategy">Стратегия.</param>
-		/// <param name="candleManager">Менеджер свечек.</param>
+		/// <param name="strategy">Strategy.</param>
+		/// <param name="candleManager">The candles manager.</param>
 		public static void SetCandleManager(this Strategy strategy, ICandleManager candleManager)
 		{
 			if (strategy == null)
@@ -185,61 +185,53 @@ namespace StockSharp.Algo.Strategies
 		}
 
 		/// <summary>
-		/// Получить режим запуска стратегии (эмуляция или реал).
+		/// To get the strategy start-up mode (paper trading or real).
 		/// </summary>
-		/// <param name="strategy">Стратегия.</param>
-		/// <returns>Если используется режим эмуляции - <see langword="true"/>, иначе - <see langword="false"/>.</returns>
+		/// <param name="strategy">Strategy.</param>
+		/// <returns>If the paper trading mode is used - <see langword="true" />, otherwise - <see langword="false" />.</returns>
 		public static bool GetIsEmulation(this Strategy strategy)
 		{
 			return strategy.Environment.GetValue("IsEmulationMode", false);
 		}
 
 		/// <summary>
-		/// Установить режим запуска стратегии (эмуляция или реал).
+		/// To get the strategy start-up mode (paper trading or real).
 		/// </summary>
-		/// <param name="strategy">Стратегия.</param>
-		/// <param name="isEmulation">Если используется режим эмуляции - <see langword="true"/>, иначе - <see langword="false"/>.</param>
+		/// <param name="strategy">Strategy.</param>
+		/// <param name="isEmulation">If the paper trading mode is used - <see langword="true" />, otherwise - <see langword="false" />.</param>
 		public static void SetIsEmulation(this Strategy strategy, bool isEmulation)
 		{
 			strategy.Environment.SetValue("IsEmulationMode", isEmulation);
 		}
 
 		/// <summary>
-		/// Получить режим работы стратегии (инициализация или торговля).
+		/// To get the strategy operation mode (initialization or trade).
 		/// </summary>
-		/// <param name="strategy">Стратегия.</param>
-		/// <returns>Если выполняется инициализация - <see langword="true"/>, иначе - <see langword="false"/>.</returns>
+		/// <param name="strategy">Strategy.</param>
+		/// <returns>If initialization is performed - <see langword="true" />, otherwise - <see langword="false" />.</returns>
 		public static bool GetIsInitialization(this Strategy strategy)
 		{
 			return strategy.Environment.GetValue("IsInitializationMode", false);
 		}
 
 		/// <summary>
-		/// Установить режим работы стратегии (инициализация или торговля).
+		/// To set the strategy operation mode (initialization or trade).
 		/// </summary>
-		/// <param name="strategy">Стратегия.</param>
-		/// <param name="isInitialization">Если выполняется инициализация - <see langword="true"/>, иначе - <see langword="false"/>.</param>
+		/// <param name="strategy">Strategy.</param>
+		/// <param name="isInitialization">If initialization is performed - <see langword="true" />, otherwise - <see langword="false" />.</param>
 		public static void SetIsInitialization(this Strategy strategy, bool isInitialization)
 		{
 			strategy.Environment.SetValue("IsInitializationMode", isInitialization);
 		}
 
 		/// <summary>
-		/// Восстановить состояние стратегии.
+		/// To restore the strategy state.
 		/// </summary>
+		/// <param name="strategy">Strategy.</param>
+		/// <param name="storage">Market data storage.</param>
 		/// <remarks>
-		/// Данный метод используется для загрузки статистики, заявок и сделок.
-		/// 
-		/// Хранилище данных должно содержать следующие параметры:
-		/// 1. Settings (SettingsStorage) - настройки стратегии.
-		/// 2. Statistics(SettingsStorage) - сохраненное состояние статистики.
-		/// 3. Orders (IDictionary[Order, IEnumerable[MyTrade]]) - заявки и сделки по ним.
-		/// 4. Positions (IEnumerable[Position]) - позиции стратегии.
-		/// 
-		/// При отсутствии одного из параметров соответствующие данные восстанавливаться не будут.
+		/// This method is used to load statistics, orders and trades. The data storage shall include the following parameters: 1. Settings (SettingsStorage) � statistics settings. 2. Statistics(SettingsStorage) � saved state of statistics. 3. Orders (IDictionary[Order, IEnumerable[MyTrade]]) � orders and corresponding trades. 4. Positions (IEnumerable[Position]) � strategy positions. If any of the parameters is missing, data will not be restored.
 		/// </remarks>
-		/// <param name="strategy">Стратегия.</param>
-		/// <param name="storage">Хранилище данных.</param>
 		public static void LoadState(this Strategy strategy, SettingsStorage storage)
 		{
 			if (strategy == null)
@@ -293,12 +285,12 @@ namespace StockSharp.Algo.Strategies
 		}
 
 		/// <summary>
-		/// Получить значение маркет-данных для инструмента стратегии.
+		/// To get market data value for the strategy instrument.
 		/// </summary>
-		/// <typeparam name="T">Тип значения поля маркет-данных.</typeparam>
-		/// <param name="strategy">Стратегия.</param>
-		/// <param name="field">Поле маркет-данных.</param>
-		/// <returns>Значение поля. Если данных нет, то будет возвращено <see langword="null"/>.</returns>
+		/// <typeparam name="T">The type of the market data field value.</typeparam>
+		/// <param name="strategy">Strategy.</param>
+		/// <param name="field">Market-data field.</param>
+		/// <returns>The field value. If no data, the <see langword="null" /> will be returned.</returns>
 		public static T GetSecurityValue<T>(this Strategy strategy, Level1Fields field)
 		{
 			if (strategy == null)
@@ -308,11 +300,11 @@ namespace StockSharp.Algo.Strategies
 		}
 
 		/// <summary>
-		/// Получить рыночную цену для инструмента по максимально и минимально возможным ценам.
+		/// To get market price for the instrument by maximal and minimal possible prices.
 		/// </summary>
-		/// <param name="strategy">Стратегия.</param>
-		/// <param name="side">Направление заявки.</param>
-		/// <returns>Рыночная цена. Если нет информации о максимально и минимально возможных ценах, то будет возвращено <see langword="null"/>.</returns>
+		/// <param name="strategy">Strategy.</param>
+		/// <param name="side">Order side.</param>
+		/// <returns>The market price. If there is no information on maximal and minimal possible prices, then <see langword="null" /> will be returned.</returns>
 		public static decimal? GetMarketPrice(this Strategy strategy, Sides side)
 		{
 			if (strategy == null)
@@ -322,10 +314,10 @@ namespace StockSharp.Algo.Strategies
 		}
 
 		/// <summary>
-		/// Получить трассировочный идентификатор заявки.
+		/// To get the tracing-based order identifier.
 		/// </summary>
-		/// <param name="order">Заявка.</param>
-		/// <returns>Трассировочный идентификатор заявки.</returns>
+		/// <param name="order">Order.</param>
+		/// <returns>The tracing-based order identifier.</returns>
 		public static string GetTraceId(this Order order)
 		{
 			return "{0} (0x{1:X})".Put(order.TransactionId, order.GetHashCode());
@@ -367,12 +359,12 @@ namespace StockSharp.Algo.Strategies
 		}
 
 		/// <summary>
-		/// Сэмулировать заявки на истории.
+		/// To emulate orders on history.
 		/// </summary>
-		/// <param name="orders">Заявки, которые необходимо сэмулировать на истории.</param>
-		/// <param name="storageRegistry">Внешнеее хранилище для доступа к исторических данным.</param>
-		/// <param name="openedPositions">Сделки, описывающие начальные открытые позиции.</param>
-		/// <returns>Виртуальная стратегии, содержащая в себе ход эмуляционных торгов.</returns>
+		/// <param name="orders">Orders to be emulated on history.</param>
+		/// <param name="storageRegistry">The external storage for access to history data.</param>
+		/// <param name="openedPositions">Trades, describing initial open positions.</param>
+		/// <returns>The virtual strategy, containing progress of paper trades.</returns>
 		public static Strategy EmulateOrders(this IEnumerable<Order> orders, IStorageRegistry storageRegistry, IDictionary<Security, decimal> openedPositions)
 		{
 			if (openedPositions == null)
@@ -648,51 +640,51 @@ namespace StockSharp.Algo.Strategies
 		}
 
 		/// <summary>
-		/// Создать правило на событие появление новых сделок стратегии.
+		/// To create a rule for the event of occurrence new strategy trades.
 		/// </summary>
-		/// <param name="strategy">Стратегия, по которой будет отслеживаться появление сделок.</param>
-		/// <returns>Правило.</returns>
+		/// <param name="strategy">The startegy, based on which trades occurrence will be traced.</param>
+		/// <returns>Rule.</returns>
 		public static MarketRule<Strategy, IEnumerable<MyTrade>> WhenNewMyTrades(this Strategy strategy)
 		{
 			return new NewMyTradesStrategyRule(strategy);
 		}
 
 		/// <summary>
-		/// Создать правило на событие появление новой заявки стратегии.
+		/// To create a rule for event of occurrence of new strategy order.
 		/// </summary>
-		/// <param name="strategy">Стратегия, по которой будет отслеживаться появление заявки.</param>
-		/// <returns>Правило.</returns>
+		/// <param name="strategy">The startegy, based on which order occurrence will be traced.</param>
+		/// <returns>Rule.</returns>
 		public static MarketRule<Strategy, Order> WhenOrderRegistered(this Strategy strategy)
 		{
 			return new OrderRegisteredStrategyRule(strategy);
 		}
 
 		/// <summary>
-		/// Создать правило на событие изменения любой заявки стратегии.
+		/// To create a rule for event of change of any strategy order.
 		/// </summary>
-		/// <param name="strategy">Стратегия, по которой будет отслеживаться изменение заявок.</param>
-		/// <returns>Правило.</returns>
+		/// <param name="strategy">The startegy, based on which orders change will be traced.</param>
+		/// <returns>Rule.</returns>
 		public static MarketRule<Strategy, Order> WhenOrderChanged(this Strategy strategy)
 		{
 			return new OrderChangedStrategyRule(strategy);
 		}
 
 		/// <summary>
-		/// Создать правило на событие изменения позиции у стратегии.
+		/// To create a rule for the event of strategy position change.
 		/// </summary>
-		/// <param name="strategy">Стратегия, по которой будет отслеживаться изменение позиции.</param>
-		/// <returns>Правило.</returns>
+		/// <param name="strategy">The startegy, based on which position change will be traced.</param>
+		/// <returns>Rule.</returns>
 		public static MarketRule<Strategy, decimal> WhenPositionChanged(this Strategy strategy)
 		{
 			return new PositionManagerStrategyRule(strategy);
 		}
 
 		/// <summary>
-		/// Создать правило на событие уменьшения позиции у стратегии ниже определённого уровня.
+		/// To create a rule for event of position event reduction below the specified level.
 		/// </summary>
-		/// <param name="strategy">Стратегия, по которой будет отслеживаться изменение позиции.</param>
-		/// <param name="value">Уровень. Если тип <see cref="Unit.Type"/> равен <see cref="UnitTypes.Limit"/>, то задается конкретная цена. Иначе, указывается величина сдвига.</param>
-		/// <returns>Правило.</returns>
+		/// <param name="strategy">The startegy, based on which position change will be traced.</param>
+		/// <param name="value">The level. If the <see cref="Unit.Type"/> type equals to <see cref="UnitTypes.Limit"/>, specified price is set. Otherwise, shift value is specified.</param>
+		/// <returns>Rule.</returns>
 		public static MarketRule<Strategy, decimal> WhenPositionLess(this Strategy strategy, Unit value)
 		{
 			if (strategy == null)
@@ -710,11 +702,11 @@ namespace StockSharp.Algo.Strategies
 		}
 
 		/// <summary>
-		/// Создать правило на событие увеличения позиции у стратегии выше определенного уровня.
+		/// To create a rule for event of position event increase above the specified level.
 		/// </summary>
-		/// <param name="strategy">Стратегия, по которой будет отслеживаться изменение позиции.</param>
-		/// <param name="value">Уровень. Если тип <see cref="Unit.Type"/> равен <see cref="UnitTypes.Limit"/>, то задается конкретная цена. Иначе, указывается величина сдвига.</param>
-		/// <returns>Правило.</returns>
+		/// <param name="strategy">The startegy, based on which position change will be traced.</param>
+		/// <param name="value">The level. If the <see cref="Unit.Type"/> type equals to <see cref="UnitTypes.Limit"/>, specified price is set. Otherwise, shift value is specified.</param>
+		/// <returns>Rule.</returns>
 		public static MarketRule<Strategy, decimal> WhenPositionMore(this Strategy strategy, Unit value)
 		{
 			if (strategy == null)
@@ -732,11 +724,11 @@ namespace StockSharp.Algo.Strategies
 		}
 
 		/// <summary>
-		/// Создать правило на событие уменьшения прибыли ниже определённого уровня.
+		/// To create a rule for event of profit reduction below the specified level.
 		/// </summary>
-		/// <param name="strategy">Стратегия, по которой будет отслеживаться изменение прибыли.</param>
-		/// <param name="value">Уровень. Если тип <see cref="Unit.Type"/> равен <see cref="UnitTypes.Limit"/>, то задается конкретная цена. Иначе, указывается величина сдвига.</param>
-		/// <returns>Правило.</returns>
+		/// <param name="strategy">The startegy, based on which the profit change will be traced.</param>
+		/// <param name="value">The level. If the <see cref="Unit.Type"/> type equals to <see cref="UnitTypes.Limit"/>, specified price is set. Otherwise, shift value is specified.</param>
+		/// <returns>Rule.</returns>
 		public static MarketRule<Strategy, decimal> WhenPnLLess(this Strategy strategy, Unit value)
 		{
 			if (strategy == null)
@@ -754,11 +746,11 @@ namespace StockSharp.Algo.Strategies
 		}
 
 		/// <summary>
-		/// Создать правило на событие увеличения прибыли выше определенного уровня.
+		/// To create a rule for event of profit increase above the specified level.
 		/// </summary>
-		/// <param name="strategy">Стратегия, по которой будет отслеживаться изменение прибыли.</param>
-		/// <param name="value">Уровень. Если тип <see cref="Unit.Type"/> равен <see cref="UnitTypes.Limit"/>, то задается конкретная цена. Иначе, указывается величина сдвига.</param>
-		/// <returns>Правило.</returns>
+		/// <param name="strategy">The startegy, based on which the profit change will be traced.</param>
+		/// <param name="value">The level. If the <see cref="Unit.Type"/> type equals to <see cref="UnitTypes.Limit"/>, specified price is set. Otherwise, shift value is specified.</param>
+		/// <returns>Rule.</returns>
 		public static MarketRule<Strategy, decimal> WhenPnLMore(this Strategy strategy, Unit value)
 		{
 			if (strategy == null)
@@ -776,20 +768,20 @@ namespace StockSharp.Algo.Strategies
 		}
 
 		/// <summary>
-		/// Создать правило на событие изменения прибыли.
+		/// To create a rule for event of profit change.
 		/// </summary>
-		/// <param name="strategy">Стратегия, по которой будет отслеживаться изменение прибыли.</param>
-		/// <returns>Правило.</returns>
+		/// <param name="strategy">The startegy, based on which the profit change will be traced.</param>
+		/// <returns>Rule.</returns>
 		public static MarketRule<Strategy, decimal> WhenPnLChanged(this Strategy strategy)
 		{
 			return new PnLManagerStrategyRule(strategy);
 		}
 
 		/// <summary>
-		/// Создать правило на событие начала работы стратегии.
+		/// To create a rule for event of start of strategy operation.
 		/// </summary>
-		/// <param name="strategy">Стратегия, по которой будет ожидаться начало работы стратегии.</param>
-		/// <returns>Правило.</returns>
+		/// <param name="strategy">The startegy, based on which the start of strategy operation will be expected.</param>
+		/// <returns>Rule.</returns>
 		public static MarketRule<Strategy, Strategy> WhenStarted(this Strategy strategy)
 		{
 			return new ProcessStateChangedStrategyRule(strategy, s => s == ProcessStates.Started)
@@ -799,10 +791,10 @@ namespace StockSharp.Algo.Strategies
 		}
 
 		/// <summary>
-		/// Создать правило на событие начала остановки работы стратегии.
+		/// To create a rule for event of beginning of the strategy operation stop.
 		/// </summary>
-		/// <param name="strategy">Стратегия, по которой будет ожидаться начало остановки.</param>
-		/// <returns>Правило.</returns>
+		/// <param name="strategy">The startegy, based on which the beginning of stop will be determined.</param>
+		/// <returns>Rule.</returns>
 		public static MarketRule<Strategy, Strategy> WhenStopping(this Strategy strategy)
 		{
 			return new ProcessStateChangedStrategyRule(strategy, s => s == ProcessStates.Stopping)
@@ -812,10 +804,10 @@ namespace StockSharp.Algo.Strategies
 		}
 
 		/// <summary>
-		/// Создать правило на событие полной остановки работы стратегии.
+		/// To create a rule for event full stop of strategy operation.
 		/// </summary>
-		/// <param name="strategy">Стратегия, по которой будет ожидаться полная остановка.</param>
-		/// <returns>Правило.</returns>
+		/// <param name="strategy">The startegy, based on which the full stop will be expected.</param>
+		/// <returns>Rule.</returns>
 		public static MarketRule<Strategy, Strategy> WhenStopped(this Strategy strategy)
 		{
 			return new ProcessStateChangedStrategyRule(strategy, s => s == ProcessStates.Stopped)
@@ -825,20 +817,20 @@ namespace StockSharp.Algo.Strategies
 		}
 
 		/// <summary>
-		/// Создать правило на событие ошибки стратегии (переход состояния <see cref="Strategy.ErrorState"/> в <see cref="LogLevels.Error"/>).
+		/// To create a rule for event of strategy error (transition of state <see cref="Strategy.ErrorState"/> into <see cref="LogLevels.Error"/>).
 		/// </summary>
-		/// <param name="strategy">Стратегия, по которой будет ожидаться ошибка.</param>
-		/// <returns>Правило.</returns>
+		/// <param name="strategy">The startegy, based on which error will be expected.</param>
+		/// <returns>Rule.</returns>
 		public static MarketRule<Strategy, Exception> WhenError(this Strategy strategy)
 		{
 			return new ErrorStrategyRule(strategy);
 		}
 
 		/// <summary>
-		/// Создать правило на событие предупреждения стратегии (переход состояния <see cref="Strategy.ErrorState"/> в <see cref="LogLevels.Warning"/>).
+		/// To create a rule for event of strategy warning (transition of state <see cref="Strategy.ErrorState"/> into <see cref="LogLevels.Warning"/>).
 		/// </summary>
-		/// <param name="strategy">Стратегия, по которой будет ожидаться предупреждение.</param>
-		/// <returns>Правило.</returns>
+		/// <param name="strategy">The startegy, based on which the warning will be expected.</param>
+		/// <returns>Rule.</returns>
 		public static MarketRule<Strategy, Strategy> WhenWarning(this Strategy strategy)
 		{
 			return new PropertyChangedStrategyRule(strategy, s => s.ErrorState == LogLevels.Warning)
@@ -852,11 +844,11 @@ namespace StockSharp.Algo.Strategies
 		#region Order actions
 
 		/// <summary>
-		/// Создать действие, регистрирующее заявку.
+		/// To create an action, registering the order.
 		/// </summary>
-		/// <param name="rule">Правило.</param>
-		/// <param name="order">Заявка, которую необходимо зарегистрировать.</param>
-		/// <returns>Правило.</returns>
+		/// <param name="rule">Rule.</param>
+		/// <param name="order">The order to be registered.</param>
+		/// <returns>Rule.</returns>
 		public static IMarketRule Register(this IMarketRule rule, Order order)
 		{
 			if (rule == null)
@@ -869,12 +861,12 @@ namespace StockSharp.Algo.Strategies
 		}
 
 		/// <summary>
-		/// Создать действие, перерегистрирующее заявку.
+		/// To create an action, re-registering the order.
 		/// </summary>
-		/// <param name="rule">Правило.</param>
-		/// <param name="oldOrder">Заявка, которую необходимо перезарегистрировать.</param>
-		/// <param name="newOrder">Информация о новой заявке.</param>
-		/// <returns>Правило.</returns>
+		/// <param name="rule">Rule.</param>
+		/// <param name="oldOrder">The order to be re-registered.</param>
+		/// <param name="newOrder">Information about new order.</param>
+		/// <returns>Rule.</returns>
 		public static IMarketRule ReRegister(this IMarketRule rule, Order oldOrder, Order newOrder)
 		{
 			if (rule == null)
@@ -890,11 +882,11 @@ namespace StockSharp.Algo.Strategies
 		}
 
 		/// <summary>
-		/// Создать действие, отменяющее заявку.
+		/// To create an action, cancelling the order.
 		/// </summary>
-		/// <param name="rule">Правило.</param>
-		/// <param name="order">Заявка, которую необходимо отменить.</param>
-		/// <returns>Правило.</returns>
+		/// <param name="rule">Rule.</param>
+		/// <param name="order">The order to be cancelled.</param>
+		/// <returns>Rule.</returns>
 		public static IMarketRule Cancel(this IMarketRule rule, Order order)
 		{
 			if (rule == null)

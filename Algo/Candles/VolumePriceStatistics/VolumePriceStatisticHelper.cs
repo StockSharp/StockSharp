@@ -1,57 +1,57 @@
-﻿namespace StockSharp.Algo.Candles.VolumePriceStatistics
+namespace StockSharp.Algo.Candles.VolumePriceStatistics
 {
 	using System.Linq;
 
 	/// <summary>
-	/// Вспомогательный класс для работы с <see cref="VolumeProfile"/>.
+	/// Extension class for <see cref="VolumeProfile"/>.
 	/// </summary>
 	public static class VolumePriceStatisticHelper
 	{
 		/// <summary>
-		/// Суммарный объем покупок в <see cref="VolumeProfile"/>.
+		/// The total volume of purchases in the <see cref="VolumeProfile"/>.
 		/// </summary>
-		/// <param name="volumeProfile">Профиль объема.</param>
-		/// <returns>Суммарный объем покупок.</returns>
+		/// <param name="volumeProfile">Volume profile.</param>
+		/// <returns>The total volume of purchases.</returns>
 		public static decimal TotalBuyVolume(this VolumeProfile volumeProfile)
 		{
 			return volumeProfile.PriceLevels.Select(p => p.BuyVolume).Sum();
 		}
 
 		/// <summary>
-		/// Суммарный объем продаж в <see cref="VolumeProfile"/>.
+		/// The total volume of sales in the <see cref="VolumeProfile"/>.
 		/// </summary>
-		/// <param name="volumeProfile">Профиль объема.</param>
-		/// <returns>Суммарный объем продаж.</returns>
+		/// <param name="volumeProfile">Volume profile.</param>
+		/// <returns>The total volume of sales.</returns>
 		public static decimal TotalSellVolume(this VolumeProfile volumeProfile)
 		{
 			return volumeProfile.PriceLevels.Select(p => p.SellVolume).Sum();
 		}
 
 		/// <summary>
-		/// Суммарное количество покупок в <see cref="VolumeProfile"/>.
+		/// The total number of purchases in the <see cref="VolumeProfile"/>.
 		/// </summary>
-		/// <param name="volumeProfile">Профиль объема.</param>
-		/// <returns>Суммарное количество покупок.</returns>
+		/// <param name="volumeProfile">Volume profile.</param>
+		/// <returns>The total number of purchases.</returns>
 		public static decimal TotalBuyCount(this VolumeProfile volumeProfile)
 		{
 			return volumeProfile.PriceLevels.Select(p => p.BuyCount).Sum();
 		}
 
 		/// <summary>
-		/// Суммарное количество продаж в <see cref="VolumeProfile"/>.
+		/// The total number of sales in the <see cref="VolumeProfile"/>.
 		/// </summary>
-		/// <param name="volumeProfile">Профиль объема.</param>
-		/// <returns>Суммарное количество продаж.</returns>
+		/// <param name="volumeProfile">Volume profile.</param>
+		/// <returns>The total number of sales.</returns>
 		public static decimal TotalSellCount(this VolumeProfile volumeProfile)
 		{
 			return volumeProfile.PriceLevels.Select(p => p.SellCount).Sum();
 		}
 
 		/// <summary>
-		/// POC (Point Of Control) возвращает <see cref="PriceLevel"/>, по которому прошел максимальный объем.
+		/// POC (Point Of Control) returns <see cref="PriceLevel"/> which had the maximum volume.
 		/// </summary>
-		/// <param name="volumeProfile">Профиль объема.</param>
-		/// <returns><see cref="PriceLevel"/>, по которому прошел максимальный объем.</returns>
+		/// <param name="volumeProfile">Volume profile.</param>
+		/// <returns>The <see cref="PriceLevel"/> which had the maximum volume.</returns>
 		public static PriceLevel POC(this VolumeProfile volumeProfile)
 		{
 			var max = volumeProfile.PriceLevels.Select(p => (p.BuyVolume + p.SellVolume)).Max();
@@ -59,10 +59,10 @@
 		}
 
 		/// <summary>
-		/// Суммарный объем покупок, который прошел выше <see cref="POC"/>.
+		/// The total volume of purchases which was above <see cref="POC"/>.
 		/// </summary>
-		/// <param name="volumeProfile">Профиль объема.</param>
-		/// <returns>Суммарный объем покупок.</returns>
+		/// <param name="volumeProfile">Volume profile.</param>
+		/// <returns>The total volume of purchases.</returns>
 		public static decimal BuyVolAbovePOC(this VolumeProfile volumeProfile)
 		{
 			var poc = volumeProfile.POC();
@@ -70,10 +70,10 @@
 		}
 
 		/// <summary>
-		/// Суммарный объем покупок, который прошел ниже <see cref="POC"/>.
+		/// The total volume of purchases which was below <see cref="POC"/>.
 		/// </summary>
-		/// <param name="volumeProfile">Профиль объема.</param>
-		/// <returns>Суммарный объем покупок.</returns>
+		/// <param name="volumeProfile">Volume profile.</param>
+		/// <returns>The total volume of purchases.</returns>
 		public static decimal BuyVolBelowPOC(this VolumeProfile volumeProfile)
 		{
 			var poc = volumeProfile.POC();
@@ -81,10 +81,10 @@
 		}
 
 		/// <summary>
-		/// Суммарный объем продаж, который прошел выше <see cref="POC"/>.
+		/// The total volume of sales which was above <see cref="POC"/>.
 		/// </summary>
-		/// <param name="volumeProfile">Профиль объема.</param>
-		/// <returns>Суммарный объем продаж.</returns>
+		/// <param name="volumeProfile">Volume profile.</param>
+		/// <returns>The total volume of sales.</returns>
 		public static decimal SellVolAbovePOC(this VolumeProfile volumeProfile)
 		{
 			var poc = volumeProfile.POC();
@@ -92,10 +92,10 @@
 		}
 
 		/// <summary>
-		/// Суммарный объем продаж, который прошел ниже <see cref="POC"/>.
+		/// The total volume of sales which was below <see cref="POC"/>.
 		/// </summary>
-		/// <param name="volumeProfile">Профиль объема.</param>
-		/// <returns>Суммарный объем продаж.</returns>
+		/// <param name="volumeProfile">Volume profile.</param>
+		/// <returns>The total volume of sales.</returns>
 		public static decimal SellVolBelowPOC(this VolumeProfile volumeProfile)
 		{
 			var poc = volumeProfile.POC();
@@ -103,39 +103,39 @@
 		}
 
 		/// <summary>
-		/// Суммарный объем, который прошел выше <see cref="POC"/>.
+		/// The total volume which was above <see cref="POC"/>.
 		/// </summary>
-		/// <param name="volumeProfile">Профиль объема.</param>
-		/// <returns>Суммарный объем.</returns>
+		/// <param name="volumeProfile">Volume profile.</param>
+		/// <returns>Total volume.</returns>
 		public static decimal VolumeAbovePOC(this VolumeProfile volumeProfile)
 		{
 			return volumeProfile.BuyVolAbovePOC() + volumeProfile.SellVolAbovePOC();
 		}
 
 		/// <summary>
-		/// Суммарный объем, который прошел ниже <see cref="POC"/>.
+		/// The total volume which was below <see cref="POC"/>.
 		/// </summary>
-		/// <param name="volumeProfile">Профиль объема.</param>
-		/// <returns>Суммарный объем.</returns>
+		/// <param name="volumeProfile">Volume profile.</param>
+		/// <returns>Total volume.</returns>
 		public static decimal VolumeBelowPOC(this VolumeProfile volumeProfile)
 		{
 			return volumeProfile.BuyVolBelowPOC() + volumeProfile.SellVolBelowPOC();
 		}
 
 		/// <summary>
-		/// Разница между <see cref="TotalBuyVolume"/> и <see cref="TotalSellVolume"/>.
+		/// The difference between <see cref="TotalBuyVolume"/> and <see cref="TotalSellVolume"/>.
 		/// </summary>
-		/// <param name="volumeProfile">Профиль объема.</param>
-		/// <returns>Дельта.</returns>
+		/// <param name="volumeProfile">Volume profile.</param>
+		/// <returns>Delta.</returns>
 		public static decimal Delta(this VolumeProfile volumeProfile)
 		{
 			return volumeProfile.TotalBuyVolume() - volumeProfile.TotalSellVolume();
 		}
 
 		/// <summary>
-		/// Возвращает ценовой уровень, по которому прошла максимальная <see cref="Delta"/>.
+		/// It returns the price level at which the maximum <see cref="Delta"/> is passed.
 		/// </summary>
-		/// <param name="volumeProfile">Профиль объема.</param>
+		/// <param name="volumeProfile">Volume profile.</param>
 		/// <returns><see cref="PriceLevel"/>.</returns>
 		public static PriceLevel PriceLevelOfMaxDelta(this VolumeProfile volumeProfile)
 		{
@@ -144,10 +144,10 @@
 		}
 
 		/// <summary>
-		/// Возвращает ценовой уровень, по которому прошла минимальная <see cref="Delta"/>.
+		/// It returns the price level at which the minimum <see cref="Delta"/> is passed.
 		/// </summary>
-		/// <param name="volumeProfile">Профиль объема</param>
-		/// <returns>Ценовой уровень.</returns>
+		/// <param name="volumeProfile">Volume profile.</param>
+		/// <returns>The price level.</returns>
 		public static PriceLevel PriceLevelOfMinDelta(this VolumeProfile volumeProfile)
 		{
 			var delta = volumeProfile.PriceLevels.Select(p => p.BuyVolume - p.SellVolume).Min();
@@ -155,20 +155,20 @@
 		}
 
 		/// <summary>
-		/// Суммарная Дельта, которая прошла выше <see cref="POC"/>.
+		/// The total Delta which was above <see cref="POC"/>.
 		/// </summary>
-		/// <param name="volumeProfile">Профиль объема.</param>
-		/// <returns>Дельта.</returns>
+		/// <param name="volumeProfile">Volume profile.</param>
+		/// <returns>Delta.</returns>
 		public static decimal DeltaAbovePOC(this VolumeProfile volumeProfile)
 		{
 			return volumeProfile.BuyVolAbovePOC() - volumeProfile.SellVolAbovePOC();
 		}
 
 		/// <summary>
-		/// Суммарная Дельта, которая прошла ниже <see cref="POC"/>.
+		/// The total Delta which was below <see cref="POC"/>.
 		/// </summary>
-		/// <param name="volumeProfile">Профиль объема.</param>
-		/// <returns>Дельта.</returns>
+		/// <param name="volumeProfile">Volume profile.</param>
+		/// <returns>Delta.</returns>
 		public static decimal DeltaBelowPOC(this VolumeProfile volumeProfile)
 		{
 			return volumeProfile.BuyVolBelowPOC() - volumeProfile.SellVolBelowPOC();

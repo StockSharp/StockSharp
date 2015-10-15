@@ -12,7 +12,7 @@ namespace StockSharp.Algo.Candles
 	using StockSharp.Localization;
 
 	/// <summary>
-	/// Базовый класс для свечи (содержит основные параметры).
+	/// Base candle class (contains main parameters).
 	/// </summary>
 	[DataContract]
 	[Serializable]
@@ -25,7 +25,7 @@ namespace StockSharp.Algo.Candles
 	public abstract class Candle : Cloneable<Candle>
 	{
 		/// <summary>
-		/// Инструмент.
+		/// Security.
 		/// </summary>
 		[DataMember]
 		public Security Security { get; set; }
@@ -33,7 +33,7 @@ namespace StockSharp.Algo.Candles
 		private DateTimeOffset _openTime;
 
 		/// <summary>
-		/// Время начала свечи.
+		/// Open time.
 		/// </summary>
 		[DataMember]
 		public DateTimeOffset OpenTime
@@ -49,7 +49,7 @@ namespace StockSharp.Algo.Candles
 		private DateTimeOffset _closeTime;
 
 		/// <summary>
-		/// Время окончания свечи.
+		/// Close time.
 		/// </summary>
 		[DataMember]
 		public DateTimeOffset CloseTime
@@ -65,7 +65,7 @@ namespace StockSharp.Algo.Candles
 		private DateTimeOffset _highTime;
 
 		/// <summary>
-		/// Время с максимальной ценой в свече.
+		/// High time.
 		/// </summary>
 		[DataMember]
 		public DateTimeOffset HighTime
@@ -81,7 +81,7 @@ namespace StockSharp.Algo.Candles
 		private DateTimeOffset _lowTime;
 
 		/// <summary>
-		/// Время с минимальной ценой в свече.
+		/// Low time.
 		/// </summary>
 		[DataMember]
 		public DateTimeOffset LowTime
@@ -97,7 +97,7 @@ namespace StockSharp.Algo.Candles
 		private decimal _openPrice;
 
 		/// <summary>
-		/// Цена открытия.
+		/// Opening price.
 		/// </summary>
 		[DataMember]
 		public decimal OpenPrice
@@ -113,7 +113,7 @@ namespace StockSharp.Algo.Candles
 		private decimal _closePrice;
 
 		/// <summary>
-		/// Цена закрытия.
+		/// Closing price.
 		/// </summary>
 		[DataMember]
 		public decimal ClosePrice
@@ -129,7 +129,7 @@ namespace StockSharp.Algo.Candles
 		private decimal _highPrice;
 
 		/// <summary>
-		/// Максимальная цена.
+		/// Maximum price.
 		/// </summary>
 		[DataMember]
 		public decimal HighPrice
@@ -145,7 +145,7 @@ namespace StockSharp.Algo.Candles
 		private decimal _lowPrice;
 
 		/// <summary>
-		/// Минимальная цена.
+		/// Minimum price.
 		/// </summary>
 		[DataMember]
 		public decimal LowPrice
@@ -161,7 +161,7 @@ namespace StockSharp.Algo.Candles
 		private decimal _totalPrice;
 
 		/// <summary>
-		/// Суммарный оборот по сделкам.
+		/// Total trades volume.
 		/// </summary>
 		[DataMember]
 		public decimal TotalPrice
@@ -177,7 +177,7 @@ namespace StockSharp.Algo.Candles
 		private decimal? _openVolume;
 
 		/// <summary>
-		/// Объем открытия.
+		/// Volume at open.
 		/// </summary>
 		[DataMember]
 		public decimal? OpenVolume
@@ -193,7 +193,7 @@ namespace StockSharp.Algo.Candles
 		private decimal? _closeVolume;
 
 		/// <summary>
-		/// Объем закрытия.
+		/// Volume at close.
 		/// </summary>
 		[DataMember]
 		public decimal? CloseVolume
@@ -209,7 +209,7 @@ namespace StockSharp.Algo.Candles
 		private decimal? _highVolume;
 
 		/// <summary>
-		/// Максимальный объем.
+		/// Volume at high.
 		/// </summary>
 		[DataMember]
 		public decimal? HighVolume
@@ -225,7 +225,7 @@ namespace StockSharp.Algo.Candles
 		private decimal? _lowVolume;
 
 		/// <summary>
-		/// Минимальный объем.
+		/// Minimum volume.
 		/// </summary>
 		[DataMember]
 		public decimal? LowVolume
@@ -241,7 +241,7 @@ namespace StockSharp.Algo.Candles
 		private decimal _totalVolume;
 
 		/// <summary>
-		/// Суммарный объем.
+		/// Total volume.
 		/// </summary>
 		[DataMember]
 		public decimal TotalVolume
@@ -257,7 +257,7 @@ namespace StockSharp.Algo.Candles
 		private decimal? _relativeVolume;
 
 		/// <summary>
-		/// Относительный объем.
+		/// Relative colume.
 		/// </summary>
 		[DataMember]
 		public decimal? RelativeVolume
@@ -274,7 +274,7 @@ namespace StockSharp.Algo.Candles
 		private CandleSeries _series;
 
 		/// <summary>
-		/// Серия свечек.
+		/// Candles series.
 		/// </summary>
 		public CandleSeries Series
 		{
@@ -286,7 +286,7 @@ namespace StockSharp.Algo.Candles
 		private ICandleManagerSource _source;
 
 		/// <summary>
-		/// Источник, из которого была получена свеча.
+		/// Candle's source.
 		/// </summary>
 		public ICandleManagerSource Source
 		{
@@ -295,14 +295,14 @@ namespace StockSharp.Algo.Candles
 		}
 
 		/// <summary>
-		/// Параметр свечи.
+		/// Candle arg.
 		/// </summary>
 		public abstract object Arg { get; set; }
 
 		private int? _totalTicks;
 
 		/// <summary>
-		/// Количество тиковых сделок.
+		/// Number of ticks.
 		/// </summary>
 		[DataMember]
 		public int? TotalTicks
@@ -318,7 +318,7 @@ namespace StockSharp.Algo.Candles
 		private int? _upTicks;
 
 		/// <summary>
-		/// Количество восходящих тиковых сделок.
+		/// Number of uptrending ticks.
 		/// </summary>
 		[DataMember]
 		public int? UpTicks
@@ -334,7 +334,7 @@ namespace StockSharp.Algo.Candles
 		private int? _downTicks;
 
 		/// <summary>
-		/// Количество нисходящих тиковых сделок.
+		/// Number of downtrending ticks.
 		/// </summary>
 		[DataMember]
 		public int? DownTicks
@@ -350,7 +350,7 @@ namespace StockSharp.Algo.Candles
 		private CandleStates _state;
 
 		/// <summary>
-		/// Состояние.
+		/// State.
 		/// </summary>
 		[DataMember]
 		public CandleStates State
@@ -367,7 +367,7 @@ namespace StockSharp.Algo.Candles
 		private readonly VolumeProfile _volumeProfileInfo = new VolumeProfile();
 
 		/// <summary>
-		/// Профиль объема.
+		/// Volume profile.
 		/// </summary>
 		public VolumeProfile VolumeProfileInfo
 		{
@@ -375,15 +375,15 @@ namespace StockSharp.Algo.Candles
 		}
 
 		/// <summary>
-		/// Открытый интерес.
+		/// Open interest.
 		/// </summary>
 		[DataMember]
 		public decimal? OpenInterest { get; set; }
 
 		/// <summary>
-		/// Получить строковое представление.
+		/// Returns a string that represents the current object.
 		/// </summary>
-		/// <returns>Строковое представление.</returns>
+		/// <returns>A string that represents the current object.</returns>
 		public override string ToString()
 		{
 			return "{0:HH:mm:ss} {1} (O:{2}, H:{3}, L:{4}, C:{5}, V:{6})"
@@ -398,11 +398,11 @@ namespace StockSharp.Algo.Candles
 		}
 
 		/// <summary>
-		/// Скопировать данные сообщения в <paramref name="destination"/>.
+		/// Copy the message into the <paramref name="destination" />.
 		/// </summary>
-		/// <typeparam name="TCandle">Тип свечи.</typeparam>
-		/// <param name="destination">Объект, в который копируется информация.</param>
-		/// <returns>Объект, в который копируется информация.</returns>
+		/// <typeparam name="TCandle">The candle type.</typeparam>
+		/// <param name="destination">The object, which copied information.</param>
+		/// <returns>The object, which copied information.</returns>
 		protected TCandle CopyTo<TCandle>(TCandle destination)
 			where TCandle : Candle
 		{
@@ -436,7 +436,7 @@ namespace StockSharp.Algo.Candles
 	}
 
 	/// <summary>
-	/// Свеча, группируемая по тайм-фрейму.
+	/// Time-frame candle.
 	/// </summary>
 	[DataContract]
 	[Serializable]
@@ -444,13 +444,13 @@ namespace StockSharp.Algo.Candles
 	public class TimeFrameCandle : Candle
 	{
 		/// <summary>
-		/// Тайм-фрейм.
+		/// Time-frame.
 		/// </summary>
 		[DataMember]
 		public TimeSpan TimeFrame { get; set; }
 
 		/// <summary>
-		/// Параметр свечи.
+		/// Candle arg.
 		/// </summary>
 		public override object Arg
 		{
@@ -459,9 +459,9 @@ namespace StockSharp.Algo.Candles
 		}
 
 		/// <summary>
-		/// Создать копию <see cref="TimeFrameCandle"/>.
+		/// Create a copy of <see cref="TimeFrameCandle"/>.
 		/// </summary>
-		/// <returns>Копия.</returns>
+		/// <returns>Copy.</returns>
 		public override Candle Clone()
 		{
 			return CopyTo(new TimeFrameCandle());
@@ -469,7 +469,7 @@ namespace StockSharp.Algo.Candles
 	}
 
 	/// <summary>
-	/// Свеча, группируемая по количеству сделок.
+	/// Tick candle.
 	/// </summary>
 	[DataContract]
 	[Serializable]
@@ -477,19 +477,19 @@ namespace StockSharp.Algo.Candles
 	public class TickCandle : Candle
 	{
 		/// <summary>
-		/// Максимальное количество сделок, которое может содержать свеча.
+		/// Maximum tick count.
 		/// </summary>
 		[DataMember]
 		public int MaxTradeCount { get; set; }
 
 		/// <summary>
-		/// Текущее количество сделок, которое содержит свеча.
+		/// Current tick count.
 		/// </summary>
 		[DataMember]
 		public int CurrentTradeCount { get; set; }
 
 		/// <summary>
-		/// Параметр свечи.
+		/// Candle arg.
 		/// </summary>
 		public override object Arg
 		{
@@ -498,9 +498,9 @@ namespace StockSharp.Algo.Candles
 		}
 
 		/// <summary>
-		/// Создать копию <see cref="TickCandle"/>.
+		/// Create a copy of <see cref="TickCandle"/>.
 		/// </summary>
-		/// <returns>Копия.</returns>
+		/// <returns>Copy.</returns>
 		public override Candle Clone()
 		{
 			return CopyTo(new TickCandle());
@@ -508,7 +508,7 @@ namespace StockSharp.Algo.Candles
 	}
 
 	/// <summary>
-	/// Свеча, группируемая по количеству контрактов.
+	/// Volume candle.
 	/// </summary>
 	[DataContract]
 	[Serializable]
@@ -516,13 +516,13 @@ namespace StockSharp.Algo.Candles
 	public class VolumeCandle : Candle
 	{
 		/// <summary>
-		/// Максимальное количество контрактов, которое может содержать свеча.
+		/// Maximum volume.
 		/// </summary>
 		[DataMember]
 		public decimal Volume { get; set; }
 
 		/// <summary>
-		/// Параметр свечи.
+		/// Candle arg.
 		/// </summary>
 		public override object Arg
 		{
@@ -531,9 +531,9 @@ namespace StockSharp.Algo.Candles
 		}
 
 		/// <summary>
-		/// Создать копию <see cref="VolumeCandle"/>.
+		/// Create a copy of <see cref="VolumeCandle"/>.
 		/// </summary>
-		/// <returns>Копия.</returns>
+		/// <returns>Copy.</returns>
 		public override Candle Clone()
 		{
 			return CopyTo(new VolumeCandle());
@@ -541,7 +541,7 @@ namespace StockSharp.Algo.Candles
 	}
 
 	/// <summary>
-	/// Свеча, группируемая по ценовому диапазону.
+	/// Range candle.
 	/// </summary>
 	[DataContract]
 	[Serializable]
@@ -549,13 +549,13 @@ namespace StockSharp.Algo.Candles
 	public class RangeCandle : Candle
 	{
 		/// <summary>
-		/// Дельта цены, в рамках которой свеча может содержать сделки.
+		/// Range of price.
 		/// </summary>
 		[DataMember]
 		public Unit PriceRange { get; set; }
 
 		/// <summary>
-		/// Параметр свечи.
+		/// Candle arg.
 		/// </summary>
 		public override object Arg
 		{
@@ -564,9 +564,9 @@ namespace StockSharp.Algo.Candles
 		}
 
 		/// <summary>
-		/// Создать копию <see cref="RangeCandle"/>.
+		/// Create a copy of <see cref="RangeCandle"/>.
 		/// </summary>
-		/// <returns>Копия.</returns>
+		/// <returns>Copy.</returns>
 		public override Candle Clone()
 		{
 			return CopyTo(new RangeCandle());
@@ -574,7 +574,7 @@ namespace StockSharp.Algo.Candles
 	}
 
 	/// <summary>
-	/// Свеча пункто-цифрового графика (график крестики-нолики).
+	/// The candle of point-and-figure chart (tac-toe chart).
 	/// </summary>
 	[DataContract]
 	[Serializable]
@@ -582,19 +582,19 @@ namespace StockSharp.Algo.Candles
 	public class PnFCandle : Candle
 	{
 		/// <summary>
-		/// Значение параметров.
+		/// Value of arguments.
 		/// </summary>
 		[DataMember]
 		public PnFArg PnFArg { get; set; }
 
 		/// <summary>
-		/// Тип символов.
+		/// Type of symbols.
 		/// </summary>
 		[DataMember]
 		public PnFTypes Type { get; set; }
 
 		/// <summary>
-		/// Параметр свечи.
+		/// Candle arg.
 		/// </summary>
 		public override object Arg
 		{
@@ -603,9 +603,9 @@ namespace StockSharp.Algo.Candles
 		}
 
 		/// <summary>
-		/// Создать копию <see cref="PnFCandle"/>.
+		/// Create a copy of <see cref="PnFCandle"/>.
 		/// </summary>
-		/// <returns>Копия.</returns>
+		/// <returns>Copy.</returns>
 		public override Candle Clone()
 		{
 			return CopyTo(new PnFCandle { Type = Type });
@@ -613,7 +613,7 @@ namespace StockSharp.Algo.Candles
 	}
 
 	/// <summary>
-	/// Свеча Рэнко графика.
+	/// Renko candle.
 	/// </summary>
 	[DataContract]
 	[Serializable]
@@ -621,13 +621,13 @@ namespace StockSharp.Algo.Candles
 	public class RenkoCandle : Candle
 	{
 		/// <summary>
-		/// Изменение цены, при превышении которого регистрируется новая свеча.
+		/// Possible price change range.
 		/// </summary>
 		[DataMember]
 		public Unit BoxSize { get; set; }
 
 		/// <summary>
-		/// Параметр свечи.
+		/// Candle arg.
 		/// </summary>
 		public override object Arg
 		{
@@ -636,9 +636,9 @@ namespace StockSharp.Algo.Candles
 		}
 
 		/// <summary>
-		/// Создать копию <see cref="RenkoCandle"/>.
+		/// Create a copy of <see cref="RenkoCandle"/>.
 		/// </summary>
-		/// <returns>Копия.</returns>
+		/// <returns>Copy.</returns>
 		public override Candle Clone()
 		{
 			return CopyTo(new RenkoCandle());

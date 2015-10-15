@@ -1,15 +1,15 @@
-﻿namespace StockSharp.Algo.Testing
+namespace StockSharp.Algo.Testing
 {
 	using StockSharp.Logging;
 	using StockSharp.Messages;
 
 	/// <summary>
-	/// Интерфейс, описывающий эмулятор торгов.
+	/// The interface, describing paper trading.
 	/// </summary>
 	public interface IMarketEmulator : IMessageChannel, ILogSource
 	{
 		/// <summary>
-		/// Настройки эмулятора.
+		/// Emulator settings.
 		/// </summary>
 		MarketEmulatorSettings Settings { get; }
 	}

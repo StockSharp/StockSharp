@@ -8,19 +8,19 @@ namespace StockSharp.Algo.Statistics
 	using StockSharp.Localization;
 
 	/// <summary>
-	/// Интерфейс, описывающий параметр статистики, рассчитывающийся на основе сделки.
+	/// The interface, describing statistic parameter, calculated based on trade.
 	/// </summary>
 	public interface ITradeStatisticParameter
 	{
 		/// <summary>
-		/// Добавить в параметр информацию о новой сделке.
+		/// To add information about new trade to the parameter.
 		/// </summary>
-		/// <param name="info">Информация о новой сделке.</param>
+		/// <param name="info">Information on new trade.</param>
 		void Add(PnLInfo info);
 	}
 
 	/// <summary>
-	/// Количество выигранных сделок (прибыль которых больше 0).
+	/// Number of trades won (whose profit is greater than 0).
 	/// </summary>
 	[DisplayNameLoc(LocalizedStrings.Str983Key)]
 	[DescriptionLoc(LocalizedStrings.Str984Key)]
@@ -28,9 +28,9 @@ namespace StockSharp.Algo.Statistics
 	public class WinningTradesParameter : BaseStatisticParameter<int>, ITradeStatisticParameter
 	{
 		/// <summary>
-		/// Добавить в параметр информацию о новой сделке.
+		/// To add information about new trade to the parameter.
 		/// </summary>
-		/// <param name="info">Информация о новой сделке.</param>
+		/// <param name="info">Information on new trade.</param>
 		public void Add(PnLInfo info)
 		{
 			if (info == null)
@@ -44,7 +44,7 @@ namespace StockSharp.Algo.Statistics
 	}
 
 	/// <summary>
-	/// Количество проигранных сделок и с нулевой прибылью (прибыль которых меньше равна 0).
+	/// Number of trades lost with zero profit (whose profit is less than or equal to 0).
 	/// </summary>
 	[DisplayNameLoc(LocalizedStrings.Str986Key)]
 	[DescriptionLoc(LocalizedStrings.Str987Key)]
@@ -52,9 +52,9 @@ namespace StockSharp.Algo.Statistics
 	public class LossingTradesParameter : BaseStatisticParameter<int>, ITradeStatisticParameter
 	{
 		/// <summary>
-		/// Добавить в параметр информацию о новой сделке.
+		/// To add information about new trade to the parameter.
 		/// </summary>
-		/// <param name="info">Информация о новой сделке.</param>
+		/// <param name="info">Information on new trade.</param>
 		public void Add(PnLInfo info)
 		{
 			if (info == null)
@@ -66,7 +66,7 @@ namespace StockSharp.Algo.Statistics
 	}
 
 	/// <summary>
-	/// Общее количество сделок.
+	/// Total number of trades .
 	/// </summary>
 	[DisplayNameLoc(LocalizedStrings.Str988Key)]
 	[DescriptionLoc(LocalizedStrings.Str989Key)]
@@ -74,9 +74,9 @@ namespace StockSharp.Algo.Statistics
 	public class TradeCountParameter : BaseStatisticParameter<int>, ITradeStatisticParameter
 	{
 		/// <summary>
-		/// Добавить в параметр информацию о новой сделке.
+		/// To add information about new trade to the parameter.
 		/// </summary>
-		/// <param name="info">Информация о новой сделке.</param>
+		/// <param name="info">Information on new trade.</param>
 		public void Add(PnLInfo info)
 		{
 			Value++;
@@ -84,7 +84,7 @@ namespace StockSharp.Algo.Statistics
 	}
 
 	/// <summary>
-	/// Общее количество закрывающих сделок.
+	/// Total number of closing trades.
 	/// </summary>
 	[DisplayNameLoc(LocalizedStrings.Str990Key)]
 	[DescriptionLoc(LocalizedStrings.Str991Key)]
@@ -92,9 +92,9 @@ namespace StockSharp.Algo.Statistics
 	public class RoundtripCountParameter : BaseStatisticParameter<int>, ITradeStatisticParameter
 	{
 		/// <summary>
-		/// Добавить в параметр информацию о новой сделке.
+		/// To add information about new trade to the parameter.
 		/// </summary>
-		/// <param name="info">Информация о новой сделке.</param>
+		/// <param name="info">Information on new trade.</param>
 		public void Add(PnLInfo info)
 		{
 			if (info.ClosedVolume > 0)
@@ -103,7 +103,7 @@ namespace StockSharp.Algo.Statistics
 	}
 
 	/// <summary>
-	/// Средняя величина прибыли сделки.
+	/// Average trade profit.
 	/// </summary>
 	[DisplayNameLoc(LocalizedStrings.Str992Key)]
 	[DescriptionLoc(LocalizedStrings.Str993Key)]
@@ -114,9 +114,9 @@ namespace StockSharp.Algo.Statistics
 		private int _count;
 
 		/// <summary>
-		/// Добавить в параметр информацию о новой сделке.
+		/// To add information about new trade to the parameter.
 		/// </summary>
-		/// <param name="info">Информация о новой сделке.</param>
+		/// <param name="info">Information on new trade.</param>
 		public void Add(PnLInfo info)
 		{
 			if (info == null)
@@ -132,9 +132,9 @@ namespace StockSharp.Algo.Statistics
 		}
 
 		/// <summary>
-		/// Сохранить состояние параметра статистики.
+		/// To save the state of statistic parameter.
 		/// </summary>
-		/// <param name="storage">Хранилище.</param>
+		/// <param name="storage">Storage.</param>
 		public override void Save(SettingsStorage storage)
 		{
 			storage.SetValue("Sum", _sum);
@@ -144,9 +144,9 @@ namespace StockSharp.Algo.Statistics
 		}
 
 		/// <summary>
-		/// Загрузить состояние параметра статистики.
+		/// To load the state of statistic parameter.
 		/// </summary>
-		/// <param name="storage">Хранилище.</param>
+		/// <param name="storage">Storage.</param>
 		public override void Load(SettingsStorage storage)
 		{
 			_sum = storage.GetValue<decimal>("Sum");
@@ -157,7 +157,7 @@ namespace StockSharp.Algo.Statistics
 	}
 
 	/// <summary>
-	/// Средняя выигрышная сделка.
+	/// Average winning trade.
 	/// </summary>
 	[DisplayNameLoc(LocalizedStrings.Str994Key)]
 	[DescriptionLoc(LocalizedStrings.Str995Key)]
@@ -168,9 +168,9 @@ namespace StockSharp.Algo.Statistics
 		private int _count;
 
 		/// <summary>
-		/// Добавить в параметр информацию о новой сделке.
+		/// To add information about new trade to the parameter.
 		/// </summary>
-		/// <param name="info">Информация о новой сделке.</param>
+		/// <param name="info">Information on new trade.</param>
 		public void Add(PnLInfo info)
 		{
 			if (info == null)
@@ -189,9 +189,9 @@ namespace StockSharp.Algo.Statistics
 		}
 
 		/// <summary>
-		/// Сохранить состояние параметра статистики.
+		/// To save the state of statistic parameter.
 		/// </summary>
-		/// <param name="storage">Хранилище.</param>
+		/// <param name="storage">Storage.</param>
 		public override void Save(SettingsStorage storage)
 		{
 			storage.SetValue("Sum", _sum);
@@ -201,9 +201,9 @@ namespace StockSharp.Algo.Statistics
 		}
 
 		/// <summary>
-		/// Загрузить состояние параметра статистики.
+		/// To load the state of statistic parameter.
 		/// </summary>
-		/// <param name="storage">Хранилище.</param>
+		/// <param name="storage">Storage.</param>
 		public override void Load(SettingsStorage storage)
 		{
 			_sum = storage.GetValue<decimal>("Sum");
@@ -214,7 +214,7 @@ namespace StockSharp.Algo.Statistics
 	}
 
 	/// <summary>
-	/// Средняя проигрышная сделка.
+	/// Average losing trade.
 	/// </summary>
 	[DisplayNameLoc(LocalizedStrings.Str996Key)]
 	[DescriptionLoc(LocalizedStrings.Str997Key)]
@@ -225,9 +225,9 @@ namespace StockSharp.Algo.Statistics
 		private int _count;
 
 		/// <summary>
-		/// Добавить в параметр информацию о новой сделке.
+		/// To add information about new trade to the parameter.
 		/// </summary>
-		/// <param name="info">Информация о новой сделке.</param>
+		/// <param name="info">Information on new trade.</param>
 		public void Add(PnLInfo info)
 		{
 			if (info == null)
@@ -246,9 +246,9 @@ namespace StockSharp.Algo.Statistics
 		}
 
 		/// <summary>
-		/// Сохранить состояние параметра статистики.
+		/// To save the state of statistic parameter.
 		/// </summary>
-		/// <param name="storage">Хранилище.</param>
+		/// <param name="storage">Storage.</param>
 		public override void Save(SettingsStorage storage)
 		{
 			storage.SetValue("Sum", _sum);
@@ -258,9 +258,9 @@ namespace StockSharp.Algo.Statistics
 		}
 
 		/// <summary>
-		/// Загрузить состояние параметра статистики.
+		/// To load the state of statistic parameter.
 		/// </summary>
-		/// <param name="storage">Хранилище.</param>
+		/// <param name="storage">Storage.</param>
 		public override void Load(SettingsStorage storage)
 		{
 			_sum = storage.GetValue<decimal>("Sum");

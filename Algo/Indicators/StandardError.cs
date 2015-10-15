@@ -10,7 +10,7 @@ namespace StockSharp.Algo.Indicators
 	using StockSharp.Localization;
 
 	/// <summary>
-	/// Стандартная ошибка в линейной регрессии.
+	/// Standard error in linear regression.
 	/// </summary>
 	[DisplayName("StdErr")]
 	[DescriptionLoc(LocalizedStrings.Str750Key)]
@@ -20,7 +20,7 @@ namespace StockSharp.Algo.Indicators
 		private decimal _slope;
 
 		/// <summary>
-		/// Создать <see cref="StandardError"/>.
+		/// Initializes a new instance of the <see cref="StandardError"/>.
 		/// </summary>
 		public StandardError()
 		{
@@ -28,7 +28,7 @@ namespace StockSharp.Algo.Indicators
 		}
 
 		/// <summary>
-		/// Сбросить состояние индикатора на первоначальное. Метод вызывается каждый раз, когда меняются первоначальные настройки (например, длина периода).
+		/// To reset the indicator status to initial. The method is called each time when initial settings are changed (for example, the length of period).
 		/// </summary>
 		public override void Reset()
 		{
@@ -37,10 +37,10 @@ namespace StockSharp.Algo.Indicators
 		}
 
 		/// <summary>
-		/// Обработать входное значение.
+		/// To handle the input value.
 		/// </summary>
-		/// <param name="input">Входное значение.</param>
-		/// <returns>Результирующее значение.</returns>
+		/// <param name="input">The input value.</param>
+		/// <returns>The resulting value.</returns>
 		protected override IIndicatorValue OnProcess(IIndicatorValue input)
 		{
 			var newValue = input.GetValue<decimal>();

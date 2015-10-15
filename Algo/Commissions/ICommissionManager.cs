@@ -3,17 +3,17 @@ namespace StockSharp.Algo.Commissions
 	using Ecng.Collections;
 
 	/// <summary>
-	/// Интерфейс менеджера расчета комиссии.
+	/// The commission calculating manager interface.
 	/// </summary>
 	public interface ICommissionManager : ICommissionRule
 	{
 		/// <summary>
-		/// Список правил вычисления комиссии.
+		/// The list of commission calculating rules.
 		/// </summary>
 		ISynchronizedCollection<ICommissionRule> Rules { get; }
 
 		///// <summary>
-		///// Суммарное значение комиссии, сгруппированное по типам.
+		///// Г‘ГіГ¬Г¬Г Г°Г­Г®ГҐ Г§Г­Г Г·ГҐГ­ГЁГҐ ГЄГ®Г¬ГЁГ±Г±ГЁГЁ, Г±ГЈГ°ГіГЇГЇГЁГ°Г®ГўГ Г­Г­Г®ГҐ ГЇГ® ГІГЁГЇГ Г¬.
 		///// </summary>
 		//IDictionary<CommissionTypes, decimal> CommissionPerTypes { get; }
 	}

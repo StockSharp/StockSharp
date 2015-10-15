@@ -11,12 +11,12 @@ namespace StockSharp.Algo.Commissions
 	using StockSharp.Messages;
 
 	/// <summary>
-	/// Менеджер расчета комиссии.
+	/// The commission calculating manager.
 	/// </summary>
 	public class CommissionManager : ICommissionManager
 	{
 		/// <summary>
-		/// Создать <see cref="CommissionManager"/>.
+		/// Initializes a new instance of the <see cref="CommissionManager"/>.
 		/// </summary>
 		public CommissionManager()
 		{
@@ -25,7 +25,7 @@ namespace StockSharp.Algo.Commissions
 		private readonly CachedSynchronizedSet<ICommissionRule> _rules = new CachedSynchronizedSet<ICommissionRule>();
 
 		/// <summary>
-		/// Список правил вычисления комиссии.
+		/// The list of commission calculating rules.
 		/// </summary>
 		public ISynchronizedCollection<ICommissionRule> Rules
 		{
@@ -33,12 +33,12 @@ namespace StockSharp.Algo.Commissions
 		}
 
 		/// <summary>
-		/// Суммарное значение комиссии.
+		/// Total commission.
 		/// </summary>
 		public virtual decimal Commission { get; private set; }
 
 		/// <summary>
-		/// Сбросить состояние.
+		/// To reset the state.
 		/// </summary>
 		public virtual void Reset()
 		{
@@ -47,10 +47,10 @@ namespace StockSharp.Algo.Commissions
 		}
 
 		/// <summary>
-		/// Рассчитать комиссию.
+		/// To calculate commission.
 		/// </summary>
-		/// <param name="message">Сообщение, содержащее информацию по заявке или собственной сделке.</param>
-		/// <returns>Комиссия. Если комиссию рассчитать невозможно, то будет возвращено <see langword="null"/>.</returns>
+		/// <param name="message">The message containing the information about the order or own trade.</param>
+		/// <returns>The commission. If the commission can not be calculated then <see langword="null" /> will be returned.</returns>
 		public virtual decimal? ProcessExecution(ExecutionMessage message)
 		{
 			if (_rules.Count == 0)
@@ -65,18 +65,18 @@ namespace StockSharp.Algo.Commissions
 		}
 
 		/// <summary>
-		/// Загрузить настройки.
+		/// Load settings.
 		/// </summary>
-		/// <param name="storage">Хранилище.</param>
+		/// <param name="storage">Storage.</param>
 		public void Load(SettingsStorage storage)
 		{
 			Rules.AddRange(storage.GetValue<SettingsStorage[]>("Rules").Select(s => s.LoadEntire<ICommissionRule>()));
 		}
 
 		/// <summary>
-		/// Сохранить настройки.
+		/// Save settings.
 		/// </summary>
-		/// <param name="storage">Хранилище.</param>
+		/// <param name="storage">Storage.</param>
 		public void Save(SettingsStorage storage)
 		{
 			storage.SetValue("Rules", Rules.Select(r => r.SaveEntire(false)).ToArray());

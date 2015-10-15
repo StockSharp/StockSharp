@@ -19,7 +19,7 @@ namespace StockSharp.Algo.Storages
 	using StockSharp.Localization;
 
 	/// <summary>
-	/// Файловое хранилище маркет-данных.
+	/// The file storage for market data.
 	/// </summary>
 	public class LocalMarketDataDrive : BaseMarketDataDrive
 	{
@@ -272,7 +272,7 @@ namespace StockSharp.Algo.Storages
 		private readonly SynchronizedDictionary<Tuple<SecurityId, Type, object, StorageFormats>, LocalMarketDataStorageDrive> _drives = new SynchronizedDictionary<Tuple<SecurityId, Type, object, StorageFormats>, LocalMarketDataStorageDrive>();
 
 		/// <summary>
-		/// Создать <see cref="LocalMarketDataDrive"/>.
+		/// Initializes a new instance of the <see cref="LocalMarketDataDrive"/>.
 		/// </summary>
 		public LocalMarketDataDrive()
 			: this(Directory.GetCurrentDirectory())
@@ -280,9 +280,9 @@ namespace StockSharp.Algo.Storages
 		}
 
 		/// <summary>
-		/// Создать <see cref="LocalMarketDataDrive"/>.
+		/// Initializes a new instance of the <see cref="LocalMarketDataDrive"/>.
 		/// </summary>
-		/// <param name="path">Путь к директории с данными.</param>
+		/// <param name="path">The path to the directory with data.</param>
 		public LocalMarketDataDrive(string path)
 		{
 			_path = path;
@@ -291,7 +291,7 @@ namespace StockSharp.Algo.Storages
 		private string _path;
 
 		/// <summary>
-		/// Путь к директории с данными.
+		/// The path to the directory with data.
 		/// </summary>
 		public override string Path
 		{
@@ -312,7 +312,7 @@ namespace StockSharp.Algo.Storages
 		private bool _useAlphabeticPath = true;
 
 		/// <summary>
-		/// Использовать ли алфавитный путь к данным. По-умолчанию включено.
+		/// Whether to use the alphabetical path to data. The default is enabled.
 		/// </summary>
 		[Obsolete]
 		public bool UseAlphabeticPath
@@ -335,11 +335,11 @@ namespace StockSharp.Algo.Storages
 		}
 
 		/// <summary>
-		/// Получить для инструмента доступные типы свечек с параметрами.
+		/// To get available candles types with parameters for the instrument.
 		/// </summary>
-		/// <param name="securityId">Идентификатор инструмента.</param>
-		/// <param name="format">Тип формата.</param>
-		/// <returns>Доступные типы свечек с параметрами.</returns>
+		/// <param name="securityId">Security ID.</param>
+		/// <param name="format">Format type.</param>
+		/// <returns>Available candles types with parameters.</returns>
 		public override IEnumerable<Tuple<Type, object[]>> GetCandleTypes(SecurityId securityId, StorageFormats format)
 		{
 			var secPath = GetSecurityPath(securityId);
@@ -364,13 +364,13 @@ namespace StockSharp.Algo.Storages
 		}
 
 		/// <summary>
-		/// Создать хранилище для <see cref="IMarketDataStorage"/>.
+		/// Create storage for <see cref="IMarketDataStorage"/>.
 		/// </summary>
-		/// <param name="securityId">Идентификатор инструмента.</param>
-		/// <param name="dataType">Тип маркет-данных.</param>
-		/// <param name="arg">Параметр, ассоциированный с типом <paramref name="dataType"/>. Например, <see cref="CandleMessage.Arg"/>.</param>
-		/// <param name="format">Тип формата.</param>
-		/// <returns>Хранилище для <see cref="IMarketDataStorage"/>.</returns>
+		/// <param name="securityId">Security ID.</param>
+		/// <param name="dataType">Market data type.</param>
+		/// <param name="arg">The parameter associated with the <paramref name="dataType" /> type. For example, <see cref="CandleMessage.Arg"/>.</param>
+		/// <param name="format">Format type.</param>
+		/// <returns>Storage for <see cref="IMarketDataStorage"/>.</returns>
 		public override IMarketDataStorageDrive GetStorageDrive(SecurityId securityId, Type dataType, object arg, StorageFormats format)
 		{
 			if (securityId.IsDefault())
@@ -381,10 +381,10 @@ namespace StockSharp.Algo.Storages
 		}
 
 		/// <summary>
-		/// Получить расширение файла для формата.
+		/// To get the file extension for the format.
 		/// </summary>
-		/// <param name="format">Формат.</param>
-		/// <returns>Расширение.</returns>
+		/// <param name="format">Format.</param>
+		/// <returns>The extension.</returns>
 		public static string GetExtension(StorageFormats format)
 		{
 			switch (format)
@@ -399,11 +399,11 @@ namespace StockSharp.Algo.Storages
 		}
 
 		/// <summary>
-		/// Получить название файла по типу данных.
+		/// To get the file name by the type of data.
 		/// </summary>
-		/// <param name="dataType">Тип маркет-данных.</param>
-		/// <param name="arg">Параметр, ассоциированный с типом <paramref name="dataType"/>. Например, <see cref="CandleMessage.Arg"/>.</param>
-		/// <returns>Название файла.</returns>
+		/// <param name="dataType">Market data type.</param>
+		/// <param name="arg">The parameter associated with the <paramref name="dataType" /> type. For example, <see cref="CandleMessage.Arg"/>.</param>
+		/// <returns>The file name.</returns>
 		public static string CreateFileName(Type dataType, object arg)
 		{
 			if (dataType == null)
@@ -437,10 +437,11 @@ namespace StockSharp.Algo.Storages
 		}
 
 #pragma warning disable 612
+
 		/// <summary>
-		/// Загрузить настройки.
+		/// Load settings.
 		/// </summary>
-		/// <param name="storage">Хранилище настроек.</param>
+		/// <param name="storage">Settings storage.</param>
 		public override void Load(SettingsStorage storage)
 		{
 			base.Load(storage);
@@ -449,9 +450,9 @@ namespace StockSharp.Algo.Storages
 		}
 
 		/// <summary>
-		/// Сохранить настройки.
+		/// Save settings.
 		/// </summary>
-		/// <param name="storage">Хранилище настроек.</param>
+		/// <param name="storage">Settings storage.</param>
 		public override void Save(SettingsStorage storage)
 		{
 			base.Save(storage);
@@ -460,10 +461,10 @@ namespace StockSharp.Algo.Storages
 		}
 
 		/// <summary>
-		/// Получить путь к папке с маркет-данными для инструмента.
+		/// To get the path to the folder with market data for the instrument.
 		/// </summary>
-		/// <param name="securityId">Идентификатор инструмента.</param>
-		/// <returns>Путь к папке с маркет-данными.</returns>
+		/// <param name="securityId">Security ID.</param>
+		/// <returns>The path to the folder with market data.</returns>
 		public string GetSecurityPath(SecurityId securityId)
 		{
 			if (securityId.IsDefault())

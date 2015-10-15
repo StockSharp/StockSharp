@@ -5,27 +5,27 @@ namespace StockSharp.Algo
 	using StockSharp.Localization;
 
 	/// <summary>
-	/// Типы рыночных цен.
+	/// The type of market prices.
 	/// </summary>
 	[DataContract]
 	public enum MarketPriceTypes
 	{
 		/// <summary>
-		/// Встречная цена (для быстрого закрытия позы).
+		/// The counter-price (for quick closure of position).
 		/// </summary>
 		[EnumDisplayNameLoc(LocalizedStrings.Str975Key)]
 		[EnumMember]
 		Opposite,
 
 		/// <summary>
-		/// Попутная цена (для котирования на краю спреда).
+		/// The concurrent price (for quoting at the edge of spread).
 		/// </summary>
 		[EnumDisplayNameLoc(LocalizedStrings.Str976Key)]
 		[EnumMember]
 		Following,
 
 		/// <summary>
-		/// Середина спреда.
+		/// Spread middle.
 		/// </summary>
 		[EnumDisplayNameLoc(LocalizedStrings.Str500Key)]
 		[EnumMember]

@@ -10,7 +10,7 @@ namespace StockSharp.Algo.Indicators
 	using StockSharp.Localization;
 
 	/// <summary>
-	/// Профайл объема.
+	/// Volume profile.
 	/// </summary>
 	[DisplayName("VolumeProfile")]
 	[DescriptionLoc(LocalizedStrings.Str729Key)]
@@ -19,7 +19,7 @@ namespace StockSharp.Algo.Indicators
 		private readonly Dictionary<decimal, decimal> _levels = new Dictionary<decimal, decimal>();
 
 		/// <summary>
-		/// Создать <see cref="StockSharp.Algo.Indicators.VolumeProfileIndicator"/>.
+		/// Initializes a new instance of the <see cref="VolumeProfileIndicator"/>.
 		/// </summary>
 		public VolumeProfileIndicator()
 		{
@@ -27,20 +27,20 @@ namespace StockSharp.Algo.Indicators
 		}
 
 		/// <summary>
-		/// Шаг группировки.
+		/// The grouping increment.
 		/// </summary>
 		public decimal Step { get; set; }
 
 		/// <summary>
-		/// Использовать в расчетах суммарный объем (когда свечи не содержат VolumeProfile).
+		/// To use aggregate volume in calculations (when candles do not contain VolumeProfile).
 		/// </summary>
 		public bool UseTotalVolume { get; set; }
 
 		/// <summary>
-		/// Обработать входное значение.
+		/// To handle the input value.
 		/// </summary>
-		/// <param name="input">Входное значение.</param>
-		/// <returns>Результирующее значение.</returns>
+		/// <param name="input">The input value.</param>
+		/// <returns>The resulting value.</returns>
 		protected override IIndicatorValue OnProcess(IIndicatorValue input)
 		{
 			var result = new VolumeProfileIndicatorValue(this);
@@ -78,14 +78,14 @@ namespace StockSharp.Algo.Indicators
 	}
 
 	/// <summary>
-	/// Значение индикатора <see cref="VolumeProfileIndicator"/>, которое получается в результате вычисления.
+	/// The indicator value <see cref="VolumeProfileIndicator"/>, derived in result of calculation.
 	/// </summary>
 	public class VolumeProfileIndicatorValue : SingleIndicatorValue<IDictionary<decimal, decimal>>
 	{
 		/// <summary>
-		/// Создать <see cref="VolumeProfileIndicatorValue"/>.
+		/// Initializes a new instance of the <see cref="VolumeProfileIndicatorValue"/>.
 		/// </summary>
-		/// <param name="indicator">Индикатор.</param>
+		/// <param name="indicator">Indicator.</param>
 		public VolumeProfileIndicatorValue(IIndicator indicator)
 			: base(indicator)
 		{
@@ -93,47 +93,47 @@ namespace StockSharp.Algo.Indicators
 		}
 
 		/// <summary>
-		/// Вложенные значения.
+		/// Embedded values.
 		/// </summary>
 		public IDictionary<decimal, decimal> Levels { get; private set; }
 
 		/// <summary>
-		/// Поддерживает ли значение необходимый для индикатора тип данных.
+		/// Does value support data type, required for the indicator.
 		/// </summary>
-		/// <param name="valueType">Тип данных, которым оперирует индикатор.</param>
-		/// <returns><see langword="true"/>, если тип данных поддерживается, иначе, <see langword="false"/>.</returns>
+		/// <param name="valueType">The data type, operated by indicator.</param>
+		/// <returns><see langword="true" />, if data type is supported, otherwise, <see langword="false" />.</returns>
 		public override bool IsSupport(Type valueType)
 		{
 			return valueType == typeof(decimal);
 		}
 
 		/// <summary>
-		/// Получить значение по типу данных.
+		/// To get the value by the data type.
 		/// </summary>
-		/// <typeparam name="T">Тип данных, которым оперирует индикатор.</typeparam>
-		/// <returns>Значение.</returns>
+		/// <typeparam name="T">The data type, operated by indicator.</typeparam>
+		/// <returns>Value.</returns>
 		public override T GetValue<T>()
 		{
 			throw new NotSupportedException();
 		}
 
 		/// <summary>
-		/// Изменить входное значение индикатора новым значением (например, оно получено от другого индикатора).
+		/// To replace the indicator input value by new one (for example it is received from another indicator).
 		/// </summary>
-		/// <typeparam name="T">Тип данных, которым оперирует индикатор.</typeparam>
-		/// <param name="indicator">Индикатор.</param>
-		/// <param name="value">Значение.</param>
-		/// <returns>Измененная копия входного значения.</returns>
+		/// <typeparam name="T">The data type, operated by indicator.</typeparam>
+		/// <param name="indicator">Indicator.</param>
+		/// <param name="value">Value.</param>
+		/// <returns>Replaced copy of the input value.</returns>
 		public override IIndicatorValue SetValue<T>(IIndicator indicator, T value)
 		{
 			throw new NotSupportedException();
 		}
 
 		/// <summary>
-		/// Сравнить <see cref="VolumeProfileIndicatorValue" /> на эквивалентность.
+		/// Compare <see cref="VolumeProfileIndicatorValue"/> on the equivalence.
 		/// </summary>
-		/// <param name="other">Другое значение, с которым необходимо сравнивать.</param>
-		/// <returns>Результат сравнения.</returns>
+		/// <param name="other">Another value with which to compare.</param>
+		/// <returns>The result of the comparison.</returns>
 		public override int CompareTo(IIndicatorValue other)
 		{
 			throw new NotSupportedException();

@@ -5,19 +5,17 @@ namespace StockSharp.Algo.Indicators
 	using StockSharp.Localization;
 
 	/// <summary>
-	/// Моментум.
+	/// Momentum.
 	/// </summary>
 	/// <remarks>
-	/// Momentum Simple = C - C-n
-	/// Где C- цена закрытия текущего периода.
-	/// Где С-n - цена закрытия N периодов назад.
+	/// Momentum Simple = C - C-n Where C- closing price of previous period. Where �-n � closing price N periods ago.
 	/// </remarks>
 	[DisplayName("Momentum")]
 	[DescriptionLoc(LocalizedStrings.Str769Key)]
 	public class Momentum : LengthIndicator<decimal>
 	{
 		/// <summary>
-		/// Создать <see cref="Momentum"/>.
+		/// Initializes a new instance of the <see cref="Momentum"/>.
 		/// </summary>
 		public Momentum()
 		{
@@ -25,7 +23,7 @@ namespace StockSharp.Algo.Indicators
 		}
 
 		/// <summary>
-		/// Сформирован ли индикатор.
+		/// Whether the indicator is set.
 		/// </summary>
 		public override bool IsFormed
 		{
@@ -33,10 +31,10 @@ namespace StockSharp.Algo.Indicators
 		}
 
 		/// <summary>
-		/// Обработать входное значение.
+		/// To handle the input value.
 		/// </summary>
-		/// <param name="input">Входное значение.</param>
-		/// <returns>Результирующее значение.</returns>
+		/// <param name="input">The input value.</param>
+		/// <returns>The resulting value.</returns>
 		protected override IIndicatorValue OnProcess(IIndicatorValue input)
 		{
 			var newValue = input.GetValue<decimal>();

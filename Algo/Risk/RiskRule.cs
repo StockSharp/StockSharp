@@ -14,12 +14,12 @@ namespace StockSharp.Algo.Risk
 	using StockSharp.Localization;
 
 	/// <summary>
-	/// Базовое риск-правило.
+	/// Base risk-rule.
 	/// </summary>
 	public abstract class RiskRule : NotifiableObject, IRiskRule
 	{
 		/// <summary>
-		/// Инициализировать <see cref="RiskRule"/>.
+		/// Initialize <see cref="RiskRule"/>.
 		/// </summary>
 		protected RiskRule()
 		{
@@ -28,7 +28,7 @@ namespace StockSharp.Algo.Risk
 		private string _title;
 
 		/// <summary>
-		/// Заголовок.
+		/// Header.
 		/// </summary>
 		[Browsable(false)]
 		public string Title
@@ -42,7 +42,7 @@ namespace StockSharp.Algo.Risk
 		}
 
 		/// <summary>
-		/// Действие, которое необходимо совершить в случае активации правило.
+		/// Action that needs to be taken in case of rule activation.
 		/// </summary>
 		[DisplayNameLoc(LocalizedStrings.Str722Key)]
 		[DescriptionLoc(LocalizedStrings.Str859Key)]
@@ -50,32 +50,32 @@ namespace StockSharp.Algo.Risk
 		public RiskActions Action { get; set; }
 
 		/// <summary>
-		/// Сбросить состояние.
+		/// To reset the state.
 		/// </summary>
 		public virtual void Reset()
 		{
 		}
 
 		/// <summary>
-		/// Обработать торговое сообщение.
+		/// To process the trade message.
 		/// </summary>
-		/// <param name="message">Торговое сообщение.</param>
-		/// <returns><see langword="true"/>, если правило активировалось, иначе, <see langword="false"/>.</returns>
+		/// <param name="message">The trade message.</param>
+		/// <returns><see langword="true" />, if the rule is activated, otherwise, <see langword="false" />.</returns>
 		public abstract bool ProcessMessage(Message message);
 
 		/// <summary>
-		/// Загрузить настройки.
+		/// Load settings.
 		/// </summary>
-		/// <param name="storage">Хранилище.</param>
+		/// <param name="storage">Storage.</param>
 		public virtual void Load(SettingsStorage storage)
 		{
 			Action = storage.GetValue<RiskActions>("Action");
 		}
 
 		/// <summary>
-		/// Сохранить настройки.
+		/// Save settings.
 		/// </summary>
-		/// <param name="storage">Хранилище.</param>
+		/// <param name="storage">Storage.</param>
 		public virtual void Save(SettingsStorage storage)
 		{
 			storage.SetValue("Action", Action.To<string>());
@@ -83,7 +83,7 @@ namespace StockSharp.Algo.Risk
 	}
 
 	/// <summary>
-	/// Риск-правило, отслеживающее прибыль-убыток.
+	/// Risk-rule, tracking profit-loss.
 	/// </summary>
 	[DisplayNameLoc(LocalizedStrings.PnLKey)]
 	[DescriptionLoc(LocalizedStrings.Str860Key)]
@@ -92,7 +92,7 @@ namespace StockSharp.Algo.Risk
 		private decimal _pnL;
 
 		/// <summary>
-		/// Прибыль-убыток.
+		/// Profit-loss.
 		/// </summary>
 		[DisplayNameLoc(LocalizedStrings.PnLKey)]
 		[DescriptionLoc(LocalizedStrings.Str861Key)]
@@ -108,10 +108,10 @@ namespace StockSharp.Algo.Risk
 		}
 
 		/// <summary>
-		/// Обработать торговое сообщение.
+		/// To process the trade message.
 		/// </summary>
-		/// <param name="message">Торговое сообщение.</param>
-		/// <returns><see langword="true"/>, если правило активировалось, иначе, <see langword="false"/>.</returns>
+		/// <param name="message">The trade message.</param>
+		/// <returns><see langword="true" />, if the rule is activated, otherwise, <see langword="false" />.</returns>
 		public override bool ProcessMessage(Message message)
 		{
 			if (message.Type != MessageTypes.PortfolioChange)
@@ -130,9 +130,9 @@ namespace StockSharp.Algo.Risk
 		}
 
 		/// <summary>
-		/// Сохранить настройки.
+		/// Save settings.
 		/// </summary>
-		/// <param name="storage">Хранилище.</param>
+		/// <param name="storage">Storage.</param>
 		public override void Save(SettingsStorage storage)
 		{
 			base.Save(storage);
@@ -141,9 +141,9 @@ namespace StockSharp.Algo.Risk
 		}
 
 		/// <summary>
-		/// Загрузить настройки.
+		/// Load settings.
 		/// </summary>
-		/// <param name="storage">Хранилище.</param>
+		/// <param name="storage">Storage.</param>
 		public override void Load(SettingsStorage storage)
 		{
 			base.Load(storage);
@@ -153,7 +153,7 @@ namespace StockSharp.Algo.Risk
 	}
 
 	/// <summary>
-	/// Риск-правило, отслеживающее размер позиции.
+	/// Risk-rule, tracking position size.
 	/// </summary>
 	[DisplayNameLoc(LocalizedStrings.Str862Key)]
 	[DescriptionLoc(LocalizedStrings.Str863Key)]
@@ -162,7 +162,7 @@ namespace StockSharp.Algo.Risk
 		private decimal _position;
 
 		/// <summary>
-		/// Размер позиции.
+		/// Position size.
 		/// </summary>
 		[DisplayNameLoc(LocalizedStrings.Str862Key)]
 		[DescriptionLoc(LocalizedStrings.Str864Key)]
@@ -178,10 +178,10 @@ namespace StockSharp.Algo.Risk
 		}
 
 		/// <summary>
-		/// Обработать торговое сообщение.
+		/// To process the trade message.
 		/// </summary>
-		/// <param name="message">Торговое сообщение.</param>
-		/// <returns><see langword="true"/>, если правило активировалось, иначе, <see langword="false"/>.</returns>
+		/// <param name="message">The trade message.</param>
+		/// <returns><see langword="true" />, if the rule is activated, otherwise, <see langword="false" />.</returns>
 		public override bool ProcessMessage(Message message)
 		{
 			if (message.Type != MessageTypes.PositionChange)
@@ -200,9 +200,9 @@ namespace StockSharp.Algo.Risk
 		}
 
 		/// <summary>
-		/// Сохранить настройки.
+		/// Save settings.
 		/// </summary>
-		/// <param name="storage">Хранилище.</param>
+		/// <param name="storage">Storage.</param>
 		public override void Save(SettingsStorage storage)
 		{
 			base.Save(storage);
@@ -211,9 +211,9 @@ namespace StockSharp.Algo.Risk
 		}
 
 		/// <summary>
-		/// Загрузить настройки.
+		/// Load settings.
 		/// </summary>
-		/// <param name="storage">Хранилище.</param>
+		/// <param name="storage">Storage.</param>
 		public override void Load(SettingsStorage storage)
 		{
 			base.Load(storage);
@@ -223,7 +223,7 @@ namespace StockSharp.Algo.Risk
 	}
 
 	/// <summary>
-	/// Риск-правило, отслеживающее время жизни позиции.
+	/// Risk-rule, tracking position lifetime.
 	/// </summary>
 	[DisplayNameLoc(LocalizedStrings.Str865Key)]
 	[DescriptionLoc(LocalizedStrings.Str866Key)]
@@ -233,7 +233,7 @@ namespace StockSharp.Algo.Risk
 		private TimeSpan _time;
 
 		/// <summary>
-		/// Время жизни позиции.
+		/// Position lifetime.
 		/// </summary>
 		[DisplayNameLoc(LocalizedStrings.TimeKey)]
 		[DescriptionLoc(LocalizedStrings.Str867Key)]
@@ -249,7 +249,7 @@ namespace StockSharp.Algo.Risk
 		}
 
 		/// <summary>
-		/// Сбросить состояние.
+		/// To reset the state.
 		/// </summary>
 		public override void Reset()
 		{
@@ -258,10 +258,10 @@ namespace StockSharp.Algo.Risk
 		}
 
 		/// <summary>
-		/// Обработать торговое сообщение.
+		/// To process the trade message.
 		/// </summary>
-		/// <param name="message">Торговое сообщение.</param>
-		/// <returns><see langword="true"/>, если правило активировалось, иначе, <see langword="false"/>.</returns>
+		/// <param name="message">The trade message.</param>
+		/// <returns><see langword="true" />, if the rule is activated, otherwise, <see langword="false" />.</returns>
 		public override bool ProcessMessage(Message message)
 		{
 			switch (message.Type)
@@ -327,9 +327,9 @@ namespace StockSharp.Algo.Risk
 		}
 
 		/// <summary>
-		/// Сохранить настройки.
+		/// Save settings.
 		/// </summary>
-		/// <param name="storage">Хранилище.</param>
+		/// <param name="storage">Storage.</param>
 		public override void Save(SettingsStorage storage)
 		{
 			base.Save(storage);
@@ -338,9 +338,9 @@ namespace StockSharp.Algo.Risk
 		}
 
 		/// <summary>
-		/// Загрузить настройки.
+		/// Load settings.
 		/// </summary>
-		/// <param name="storage">Хранилище.</param>
+		/// <param name="storage">Storage.</param>
 		public override void Load(SettingsStorage storage)
 		{
 			base.Load(storage);
@@ -350,7 +350,7 @@ namespace StockSharp.Algo.Risk
 	}
 
 	/// <summary>
-	/// Риск-правило, отслеживающее размер комиссии.
+	/// Risk-rule, tracking commission size.
 	/// </summary>
 	[DisplayNameLoc(LocalizedStrings.Str159Key)]
 	[DescriptionLoc(LocalizedStrings.Str868Key)]
@@ -359,7 +359,7 @@ namespace StockSharp.Algo.Risk
 		private decimal _commission;
 
 		/// <summary>
-		/// Размер комиссии.
+		/// Commission size.
 		/// </summary>
 		[DisplayNameLoc(LocalizedStrings.Str159Key)]
 		[DescriptionLoc(LocalizedStrings.Str869Key)]
@@ -375,10 +375,10 @@ namespace StockSharp.Algo.Risk
 		}
 
 		/// <summary>
-		/// Обработать торговое сообщение.
+		/// To process the trade message.
 		/// </summary>
-		/// <param name="message">Торговое сообщение.</param>
-		/// <returns><see langword="true"/>, если правило активировалось, иначе, <see langword="false"/>.</returns>
+		/// <param name="message">The trade message.</param>
+		/// <returns><see langword="true" />, if the rule is activated, otherwise, <see langword="false" />.</returns>
 		public override bool ProcessMessage(Message message)
 		{
 			if (message.Type != MessageTypes.PortfolioChange)
@@ -394,9 +394,9 @@ namespace StockSharp.Algo.Risk
 		}
 
 		/// <summary>
-		/// Сохранить настройки.
+		/// Save settings.
 		/// </summary>
-		/// <param name="storage">Хранилище.</param>
+		/// <param name="storage">Storage.</param>
 		public override void Save(SettingsStorage storage)
 		{
 			base.Save(storage);
@@ -405,9 +405,9 @@ namespace StockSharp.Algo.Risk
 		}
 
 		/// <summary>
-		/// Загрузить настройки.
+		/// Load settings.
 		/// </summary>
-		/// <param name="storage">Хранилище.</param>
+		/// <param name="storage">Storage.</param>
 		public override void Load(SettingsStorage storage)
 		{
 			base.Load(storage);
@@ -417,7 +417,7 @@ namespace StockSharp.Algo.Risk
 	}
 
 	/// <summary>
-	/// Риск-правило, отслеживающее размер проскальзывания.
+	/// Risk-rule, tracking slippage size.
 	/// </summary>
 	[DisplayNameLoc(LocalizedStrings.Str163Key)]
 	[DescriptionLoc(LocalizedStrings.Str870Key)]
@@ -426,7 +426,7 @@ namespace StockSharp.Algo.Risk
 		private decimal _slippage;
 
 		/// <summary>
-		/// Размер проскальзывания.
+		/// Sllippage size.
 		/// </summary>
 		[DisplayNameLoc(LocalizedStrings.Str163Key)]
 		[DescriptionLoc(LocalizedStrings.Str871Key)]
@@ -442,10 +442,10 @@ namespace StockSharp.Algo.Risk
 		}
 
 		/// <summary>
-		/// Обработать торговое сообщение.
+		/// To process the trade message.
 		/// </summary>
-		/// <param name="message">Торговое сообщение.</param>
-		/// <returns><see langword="true"/>, если правило активировалось, иначе, <see langword="false"/>.</returns>
+		/// <param name="message">The trade message.</param>
+		/// <returns><see langword="true" />, if the rule is activated, otherwise, <see langword="false" />.</returns>
 		public override bool ProcessMessage(Message message)
 		{
 			if (message.Type != MessageTypes.Execution)
@@ -464,9 +464,9 @@ namespace StockSharp.Algo.Risk
 		}
 
 		/// <summary>
-		/// Сохранить настройки.
+		/// Save settings.
 		/// </summary>
-		/// <param name="storage">Хранилище.</param>
+		/// <param name="storage">Storage.</param>
 		public override void Save(SettingsStorage storage)
 		{
 			base.Save(storage);
@@ -475,9 +475,9 @@ namespace StockSharp.Algo.Risk
 		}
 
 		/// <summary>
-		/// Загрузить настройки.
+		/// Load settings.
 		/// </summary>
-		/// <param name="storage">Хранилище.</param>
+		/// <param name="storage">Storage.</param>
 		public override void Load(SettingsStorage storage)
 		{
 			base.Load(storage);
@@ -487,7 +487,7 @@ namespace StockSharp.Algo.Risk
 	}
 
 	/// <summary>
-	/// Риск-правило, отслеживающее цену заявки.
+	/// Risk-rule, tracking order price.
 	/// </summary>
 	[DisplayNameLoc(LocalizedStrings.Str872Key)]
 	[DescriptionLoc(LocalizedStrings.Str873Key)]
@@ -496,7 +496,7 @@ namespace StockSharp.Algo.Risk
 		private decimal _price;
 
 		/// <summary>
-		/// Цена заявки.
+		/// Order price.
 		/// </summary>
 		[DisplayNameLoc(LocalizedStrings.PriceKey)]
 		[DescriptionLoc(LocalizedStrings.OrderPriceKey)]
@@ -512,10 +512,10 @@ namespace StockSharp.Algo.Risk
 		}
 
 		/// <summary>
-		/// Обработать торговое сообщение.
+		/// To process the trade message.
 		/// </summary>
-		/// <param name="message">Торговое сообщение.</param>
-		/// <returns><see langword="true"/>, если правило активировалось, иначе, <see langword="false"/>.</returns>
+		/// <param name="message">The trade message.</param>
+		/// <returns><see langword="true" />, if the rule is activated, otherwise, <see langword="false" />.</returns>
 		public override bool ProcessMessage(Message message)
 		{
 			switch (message.Type)
@@ -538,9 +538,9 @@ namespace StockSharp.Algo.Risk
 		}
 
 		/// <summary>
-		/// Сохранить настройки.
+		/// Save settings.
 		/// </summary>
-		/// <param name="storage">Хранилище.</param>
+		/// <param name="storage">Storage.</param>
 		public override void Save(SettingsStorage storage)
 		{
 			base.Save(storage);
@@ -549,9 +549,9 @@ namespace StockSharp.Algo.Risk
 		}
 
 		/// <summary>
-		/// Загрузить настройки.
+		/// Load settings.
 		/// </summary>
-		/// <param name="storage">Хранилище.</param>
+		/// <param name="storage">Storage.</param>
 		public override void Load(SettingsStorage storage)
 		{
 			base.Load(storage);
@@ -561,7 +561,7 @@ namespace StockSharp.Algo.Risk
 	}
 
 	/// <summary>
-	/// Риск-правило, отслеживающее объем заявки.
+	/// Risk-rule, tracking order volume.
 	/// </summary>
 	[DisplayNameLoc(LocalizedStrings.Str662Key)]
 	[DescriptionLoc(LocalizedStrings.Str874Key)]
@@ -570,7 +570,7 @@ namespace StockSharp.Algo.Risk
 		private decimal _volume;
 
 		/// <summary>
-		/// Объем заявки.
+		/// Order volume.
 		/// </summary>
 		[DisplayNameLoc(LocalizedStrings.VolumeKey)]
 		[DescriptionLoc(LocalizedStrings.Str875Key)]
@@ -586,10 +586,10 @@ namespace StockSharp.Algo.Risk
 		}
 
 		/// <summary>
-		/// Обработать торговое сообщение.
+		/// To process the trade message.
 		/// </summary>
-		/// <param name="message">Торговое сообщение.</param>
-		/// <returns><see langword="true"/>, если правило активировалось, иначе, <see langword="false"/>.</returns>
+		/// <param name="message">The trade message.</param>
+		/// <returns><see langword="true" />, if the rule is activated, otherwise, <see langword="false" />.</returns>
 		public override bool ProcessMessage(Message message)
 		{
 			switch (message.Type)
@@ -612,9 +612,9 @@ namespace StockSharp.Algo.Risk
 		}
 
 		/// <summary>
-		/// Сохранить настройки.
+		/// Save settings.
 		/// </summary>
-		/// <param name="storage">Хранилище.</param>
+		/// <param name="storage">Storage.</param>
 		public override void Save(SettingsStorage storage)
 		{
 			base.Save(storage);
@@ -623,9 +623,9 @@ namespace StockSharp.Algo.Risk
 		}
 
 		/// <summary>
-		/// Загрузить настройки.
+		/// Load settings.
 		/// </summary>
-		/// <param name="storage">Хранилище.</param>
+		/// <param name="storage">Storage.</param>
 		public override void Load(SettingsStorage storage)
 		{
 			base.Load(storage);
@@ -635,7 +635,7 @@ namespace StockSharp.Algo.Risk
 	}
 
 	/// <summary>
-	/// Риск-правило, отслеживающее частоту выставления заявок.
+	/// Risk-rule, tracking orders placing frequency.
 	/// </summary>
 	[DisplayNameLoc(LocalizedStrings.Str876Key)]
 	[DescriptionLoc(LocalizedStrings.Str877Key)]
@@ -647,7 +647,7 @@ namespace StockSharp.Algo.Risk
 		private int _count;
 
 		/// <summary>
-		/// Количество заявок.
+		/// Order count.
 		/// </summary>
 		[DisplayNameLoc(LocalizedStrings.Str878Key)]
 		[DescriptionLoc(LocalizedStrings.Str669Key)]
@@ -666,7 +666,7 @@ namespace StockSharp.Algo.Risk
 
 
 		/// <summary>
-		/// Интервал, в пределах которого будет отслеживать количество заявок.
+		/// Interval, during which orders quantity will be monitored.
 		/// </summary>
 		[DisplayNameLoc(LocalizedStrings.Str175Key)]
 		[DescriptionLoc(LocalizedStrings.Str879Key)]
@@ -682,7 +682,7 @@ namespace StockSharp.Algo.Risk
 		}
 
 		/// <summary>
-		/// Сбросить состояние.
+		/// To reset the state.
 		/// </summary>
 		public override void Reset()
 		{
@@ -693,10 +693,10 @@ namespace StockSharp.Algo.Risk
 		}
 
 		/// <summary>
-		/// Обработать торговое сообщение.
+		/// To process the trade message.
 		/// </summary>
-		/// <param name="message">Торговое сообщение.</param>
-		/// <returns><see langword="true"/>, если правило активировалось, иначе, <see langword="false"/>.</returns>
+		/// <param name="message">The trade message.</param>
+		/// <returns><see langword="true" />, if the rule is activated, otherwise, <see langword="false" />.</returns>
 		public override bool ProcessMessage(Message message)
 		{
 			switch (message.Type)
@@ -736,9 +736,9 @@ namespace StockSharp.Algo.Risk
 		}
 
 		/// <summary>
-		/// Сохранить настройки.
+		/// Save settings.
 		/// </summary>
-		/// <param name="storage">Хранилище.</param>
+		/// <param name="storage">Storage.</param>
 		public override void Save(SettingsStorage storage)
 		{
 			base.Save(storage);
@@ -748,9 +748,9 @@ namespace StockSharp.Algo.Risk
 		}
 
 		/// <summary>
-		/// Загрузить настройки.
+		/// Load settings.
 		/// </summary>
-		/// <param name="storage">Хранилище.</param>
+		/// <param name="storage">Storage.</param>
 		public override void Load(SettingsStorage storage)
 		{
 			base.Load(storage);
@@ -761,7 +761,7 @@ namespace StockSharp.Algo.Risk
 	}
 
 	/// <summary>
-	/// Риск-правило, отслеживающее цену сделки.
+	/// Risk-rule, tracking trade price.
 	/// </summary>
 	[DisplayNameLoc(LocalizedStrings.Str672Key)]
 	[DescriptionLoc(LocalizedStrings.Str880Key)]
@@ -770,7 +770,7 @@ namespace StockSharp.Algo.Risk
 		private decimal _price;
 
 		/// <summary>
-		/// Цена сделки.
+		/// Trade price.
 		/// </summary>
 		[DisplayNameLoc(LocalizedStrings.PriceKey)]
 		[DescriptionLoc(LocalizedStrings.Str147Key)]
@@ -786,10 +786,10 @@ namespace StockSharp.Algo.Risk
 		}
 
 		/// <summary>
-		/// Обработать торговое сообщение.
+		/// To process the trade message.
 		/// </summary>
-		/// <param name="message">Торговое сообщение.</param>
-		/// <returns><see langword="true"/>, если правило активировалось, иначе, <see langword="false"/>.</returns>
+		/// <param name="message">The trade message.</param>
+		/// <returns><see langword="true" />, if the rule is activated, otherwise, <see langword="false" />.</returns>
 		public override bool ProcessMessage(Message message)
 		{
 			if (message.Type != MessageTypes.Execution)
@@ -804,9 +804,9 @@ namespace StockSharp.Algo.Risk
 		}
 
 		/// <summary>
-		/// Сохранить настройки.
+		/// Save settings.
 		/// </summary>
-		/// <param name="storage">Хранилище.</param>
+		/// <param name="storage">Storage.</param>
 		public override void Save(SettingsStorage storage)
 		{
 			base.Save(storage);
@@ -815,9 +815,9 @@ namespace StockSharp.Algo.Risk
 		}
 
 		/// <summary>
-		/// Загрузить настройки.
+		/// Load settings.
 		/// </summary>
-		/// <param name="storage">Хранилище.</param>
+		/// <param name="storage">Storage.</param>
 		public override void Load(SettingsStorage storage)
 		{
 			base.Load(storage);
@@ -827,7 +827,7 @@ namespace StockSharp.Algo.Risk
 	}
 
 	/// <summary>
-	/// Риск-правило, отслеживающее объем сделки.
+	/// Risk-rule, tracking trade volume.
 	/// </summary>
 	[DisplayNameLoc(LocalizedStrings.Str664Key)]
 	[DescriptionLoc(LocalizedStrings.Str881Key)]
@@ -836,7 +836,7 @@ namespace StockSharp.Algo.Risk
 		private decimal _volume;
 
 		/// <summary>
-		/// Объем сделки.
+		/// Trade volume.
 		/// </summary>
 		[DisplayNameLoc(LocalizedStrings.VolumeKey)]
 		[DescriptionLoc(LocalizedStrings.Str882Key)]
@@ -852,10 +852,10 @@ namespace StockSharp.Algo.Risk
 		}
 
 		/// <summary>
-		/// Обработать торговое сообщение.
+		/// To process the trade message.
 		/// </summary>
-		/// <param name="message">Торговое сообщение.</param>
-		/// <returns><see langword="true"/>, если правило активировалось, иначе, <see langword="false"/>.</returns>
+		/// <param name="message">The trade message.</param>
+		/// <returns><see langword="true" />, if the rule is activated, otherwise, <see langword="false" />.</returns>
 		public override bool ProcessMessage(Message message)
 		{
 			if (message.Type != MessageTypes.Execution)
@@ -870,9 +870,9 @@ namespace StockSharp.Algo.Risk
 		}
 
 		/// <summary>
-		/// Сохранить настройки.
+		/// Save settings.
 		/// </summary>
-		/// <param name="storage">Хранилище.</param>
+		/// <param name="storage">Storage.</param>
 		public override void Save(SettingsStorage storage)
 		{
 			base.Save(storage);
@@ -881,9 +881,9 @@ namespace StockSharp.Algo.Risk
 		}
 
 		/// <summary>
-		/// Загрузить настройки.
+		/// Load settings.
 		/// </summary>
-		/// <param name="storage">Хранилище.</param>
+		/// <param name="storage">Storage.</param>
 		public override void Load(SettingsStorage storage)
 		{
 			base.Load(storage);
@@ -893,7 +893,7 @@ namespace StockSharp.Algo.Risk
 	}
 
 	/// <summary>
-	/// Риск-правило, отслеживающее частоту совершения сделок.
+	/// Risk-rule, tracking orders execution frequency.
 	/// </summary>
 	[DisplayNameLoc(LocalizedStrings.Str883Key)]
 	[DescriptionLoc(LocalizedStrings.Str884Key)]
@@ -905,7 +905,7 @@ namespace StockSharp.Algo.Risk
 		private int _count;
 
 		/// <summary>
-		/// Количество сделок.
+		/// Number of trades.
 		/// </summary>
 		[DisplayNameLoc(LocalizedStrings.Str878Key)]
 		[DescriptionLoc(LocalizedStrings.Str232Key, true)]
@@ -923,7 +923,7 @@ namespace StockSharp.Algo.Risk
 		private TimeSpan _interval;
 
 		/// <summary>
-		/// Интервал, в пределах которого будет отслеживать количество сделок.
+		/// Interval, during which trades quantity will be monitored.
 		/// </summary>
 		[DisplayNameLoc(LocalizedStrings.Str175Key)]
 		[DescriptionLoc(LocalizedStrings.Str885Key)]
@@ -939,7 +939,7 @@ namespace StockSharp.Algo.Risk
 		}
 
 		/// <summary>
-		/// Сбросить состояние.
+		/// To reset the state.
 		/// </summary>
 		public override void Reset()
 		{
@@ -950,10 +950,10 @@ namespace StockSharp.Algo.Risk
 		}
 
 		/// <summary>
-		/// Обработать торговое сообщение.
+		/// To process the trade message.
 		/// </summary>
-		/// <param name="message">Торговое сообщение.</param>
-		/// <returns><see langword="true"/>, если правило активировалось, иначе, <see langword="false"/>.</returns>
+		/// <param name="message">The trade message.</param>
+		/// <returns><see langword="true" />, if the rule is activated, otherwise, <see langword="false" />.</returns>
 		public override bool ProcessMessage(Message message)
 		{
 			if (message.Type != MessageTypes.Execution)
@@ -991,9 +991,9 @@ namespace StockSharp.Algo.Risk
 		}
 
 		/// <summary>
-		/// Сохранить настройки.
+		/// Save settings.
 		/// </summary>
-		/// <param name="storage">Хранилище.</param>
+		/// <param name="storage">Storage.</param>
 		public override void Save(SettingsStorage storage)
 		{
 			base.Save(storage);
@@ -1003,9 +1003,9 @@ namespace StockSharp.Algo.Risk
 		}
 
 		/// <summary>
-		/// Загрузить настройки.
+		/// Load settings.
 		/// </summary>
-		/// <param name="storage">Хранилище.</param>
+		/// <param name="storage">Storage.</param>
 		public override void Load(SettingsStorage storage)
 		{
 			base.Load(storage);

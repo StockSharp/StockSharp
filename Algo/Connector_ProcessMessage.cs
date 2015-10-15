@@ -12,6 +12,9 @@ namespace StockSharp.Algo
 	using StockSharp.Messages;
 	using StockSharp.Localization;
 
+	/// <summary>
+	/// The class to create connections to trading systems.
+	/// </summary>
 	partial class Connector
 	{
 		private sealed class QuoteChangeDepthBuilder
@@ -142,7 +145,7 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Вызывать событие <see cref="Connected"/> при установке подключения первого адаптера в <see cref="Adapter"/>.
+		/// To call the <see cref="Connector.Connected"/> event when the first adapter connects to <see cref="Connector.Adapter"/>.
 		/// </summary>
 		protected virtual bool RaiseConnectedOnFirstAdapter
 		{
@@ -152,7 +155,7 @@ namespace StockSharp.Algo
 		private IMessageChannel _outMessageChannel;
 
 		/// <summary>
-		/// Транспортный канал исходящих сообщений.
+		/// Outgoing message channel.
 		/// </summary>
 		public IMessageChannel OutMessageChannel
 		{
@@ -183,7 +186,7 @@ namespace StockSharp.Algo
 		private BasketMessageAdapter _adapter;
 
 		/// <summary>
-		/// Адаптер сообщений.
+		/// Message adapter.
 		/// </summary>
 		public BasketMessageAdapter Adapter
 		{
@@ -230,9 +233,9 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Отправить исходящее сообщение.
+		/// Send outgoing message.
 		/// </summary>
-		/// <param name="message">Сообщение.</param>
+		/// <param name="message">Message.</param>
 		public void SendOutMessage(Message message)
 		{
 			if (message.LocalTime.IsDefault())
@@ -242,18 +245,18 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Отправить ошибку.
+		/// Send error message.
 		/// </summary>
-		/// <param name="error">Описание ошибки.</param>
+		/// <param name="error">Error detais.</param>
 		public void SendOutError(Exception error)
 		{
 			SendOutMessage(new ErrorMessage { Error = error });
 		}
 
 		/// <summary>
-		/// Отправить сообщение.
+		/// Send message.
 		/// </summary>
-		/// <param name="message">Сообщение.</param>
+		/// <param name="message">Message.</param>
 		public void SendInMessage(Message message)
 		{
 			_inAdapter.SendInMessage(message);
@@ -286,19 +289,19 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Адаптер для транзакций.
+		/// Transactional adapter.
 		/// </summary>
 		public IMessageAdapter TransactionAdapter { get; private set; }
 
 		/// <summary>
-		/// Адаптер для маркет-данных.
+		/// Market-data adapter.
 		/// </summary>
 		public IMessageAdapter MarketDataAdapter { get; private set; }
 
 		/// <summary>
-		/// Обработать сообщение.
+		/// Process message.
 		/// </summary>
-		/// <param name="message">Сообщение.</param>
+		/// <param name="message">Message.</param>
 		protected virtual void OnProcessMessage(Message message)
 		{
 			if (message.Type != MessageTypes.Time)

@@ -1,4 +1,4 @@
-﻿namespace StockSharp.Algo.PnL
+namespace StockSharp.Algo.PnL
 {
 	using System;
 	using System.Collections.Generic;
@@ -24,7 +24,7 @@
 		public string PortfolioName { get; private set; }
 
 		/// <summary>
-		/// Суммарное значение прибыли-убытка.
+		/// Total profit-loss.
 		/// </summary>
 		public decimal PnL
 		{
@@ -34,7 +34,7 @@
 		private decimal _realizedPnL;
 
 		/// <summary>
-		/// Относительное значение прибыли-убытка без учета открытой позиции.
+		/// The relative value of profit-loss without open position accounting.
 		/// </summary>
 		public virtual decimal RealizedPnL
 		{
@@ -42,7 +42,7 @@
 		}
 
 		/// <summary>
-		/// Обнулить <see cref="PnL"/>.
+		/// To zero <see cref="PortfolioPnLManager.PnL"/>.
 		/// </summary>
 		public void Reset()
 		{
@@ -56,11 +56,11 @@
 		}
 
 		/// <summary>
-		/// Рассчитать прибыльность сделки. Если сделка уже ранее была обработана, то возвращается предыдущая информация.
+		/// To calculate trade profitability. If the trade was already processed earlier, previous information returns.
 		/// </summary>
-		/// <param name="trade">Сделка.</param>
-		/// <param name="info">Информация о новой сделке.</param>
-		/// <returns><see langword="true"/>, если получена новая сделка, иначе, <see langword="false"/>.</returns>
+		/// <param name="trade">Trade.</param>
+		/// <param name="info">Information on new trade.</param>
+		/// <returns><see langword="true" />, if new trade received, otherwise, <see langword="false" />.</returns>
 		public bool ProcessMyTrade(ExecutionMessage trade, out PnLInfo info)
 		{
 			if (trade == null)
@@ -82,9 +82,9 @@
 		}
 
 		/// <summary>
-		/// Обработать сообщение, содержащее рыночные данные.
+		/// To process the message, containing market data.
 		/// </summary>
-		/// <param name="message">Сообщение, содержащее рыночные данные.</param>
+		/// <param name="message">The message, containing market data.</param>
 		public void ProcessMessage(Message message)
 		{
 			switch (message.Type)

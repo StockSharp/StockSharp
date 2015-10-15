@@ -7,14 +7,14 @@ namespace StockSharp.Algo.Indicators
 	using StockSharp.Localization;
 
 	/// <summary>
-	/// Максимальное значение за период.
+	/// Maximum value for a period.
 	/// </summary>
 	[DisplayName("Highest")]
 	[DescriptionLoc(LocalizedStrings.Str733Key)]
 	public class Highest : LengthIndicator<decimal>
 	{
 		/// <summary>
-		/// Создать <see cref="Highest"/>.
+		/// Initializes a new instance of the <see cref="Highest"/>.
 		/// </summary>
 		public Highest()
 		{
@@ -22,10 +22,10 @@ namespace StockSharp.Algo.Indicators
 		}
 
 		/// <summary>
-		/// Обработать входное значение.
+		/// To handle the input value.
 		/// </summary>
-		/// <param name="input">Входное значение.</param>
-		/// <returns>Результирующее значение.</returns>
+		/// <param name="input">The input value.</param>
+		/// <returns>The resulting value.</returns>
 		protected override IIndicatorValue OnProcess(IIndicatorValue input)
 		{
 			var newValue = input.GetValue<decimal>();

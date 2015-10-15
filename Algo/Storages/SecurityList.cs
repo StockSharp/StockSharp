@@ -15,7 +15,7 @@ namespace StockSharp.Algo.Storages
 	using StockSharp.BusinessEntities;
 
 	/// <summary>
-	/// Класс для представления в виде списка инструментов, хранящихся во внешнем хранилище.
+	/// The class for representation in the form of list of instruments, stored in external storage.
 	/// </summary>
 	public class SecurityList : BaseStorageEntityList<Security>, IStorageSecurityList
 	{
@@ -28,9 +28,9 @@ namespace StockSharp.Algo.Storages
 		private readonly DatabaseCommand _readSecurityIds;
 
 		/// <summary>
-		/// Создать <see cref="SecurityList"/>.
+		/// Initializes a new instance of the <see cref="SecurityList"/>.
 		/// </summary>
-		/// <param name="registry">Хранилище торговых объектов.</param>
+		/// <param name="registry">The storage of trade objects.</param>
 		public SecurityList(EntityRegistry registry)
 			: base(registry.Storage)
 		{
@@ -125,10 +125,10 @@ namespace StockSharp.Algo.Storages
 		}
 
 		/// <summary>
-		/// Найти инструменты, соответствующие фильтру <paramref name="criteria"/>.
+		/// Lookup securities by criteria <paramref name="criteria" />.
 		/// </summary>
-		/// <param name="criteria">Инструмент, поля которого будут использоваться в качестве фильтра.</param>
-		/// <returns>Найденные инструменты.</returns>
+		/// <param name="criteria">The instrument whose fields will be used as a filter.</param>
+		/// <returns>Found instruments.</returns>
 		public IEnumerable<Security> Lookup(Security criteria)
 		{
 			if (!criteria.Id.IsEmpty())
@@ -226,14 +226,14 @@ namespace StockSharp.Algo.Storages
 		}
 
 		/// <summary>
-		/// Событие добавление нового инструмента.
+		/// Г‘Г®ГЎГ»ГІГЁГҐ Г¤Г®ГЎГ ГўГ«ГҐГ­ГЁГҐ Г­Г®ГўГ®ГЈГ® ГЁГ­Г±ГІГ°ГіГ¬ГҐГ­ГІГ .
 		/// </summary>
 		public event Action<Security> NewSecurity;
 
 		/// <summary>
-		/// Сохранить торговый объект.
+		/// To save the trading object.
 		/// </summary>
-		/// <param name="entity">Торговый объект.</param>
+		/// <param name="entity">The trading object.</param>
 		public override void Save(Security entity)
 		{
 			_registry.ExchangeBoards.Save(entity.Board);
@@ -242,9 +242,9 @@ namespace StockSharp.Algo.Storages
 		}
 
 		/// <summary>
-		/// Получить идентификаторы сохраненных инструментов.
+		/// To get identifiers of saved instruments.
 		/// </summary>
-		/// <returns>Идентификаторы инструментов.</returns>
+		/// <returns>IDs securities.</returns>
 		public IEnumerable<string> GetSecurityIds()
 		{
 			if (_readSecurityIds == null)
@@ -255,9 +255,9 @@ namespace StockSharp.Algo.Storages
 		}
 
 		/// <summary>
-		/// Вызывается при добавлении элемента в хранилище.
+		/// It is called when adding element to the storage.
 		/// </summary>
-		/// <param name="entity">Торговый объект.</param>
+		/// <param name="entity">The trading object.</param>
 		protected override void OnAdd(Security entity)
 		{
 			_registry.ExchangeBoards.Save(entity.Board);
@@ -266,18 +266,18 @@ namespace StockSharp.Algo.Storages
 		}
 
 		/// <summary>
-		/// Удалить инструмент.
+		/// Delete security.
 		/// </summary>
-		/// <param name="security">Инструмент.</param>
+		/// <param name="security">Security.</param>
 		public void Delete(Security security)
 		{
 			Remove(security);
 		}
 
 		/// <summary>
-		/// Удалить инструменты по критерию.
+		/// To delete instruments by the criterion.
 		/// </summary>
-		/// <param name="criteria">Критерий.</param>
+		/// <param name="criteria">The criterion.</param>
 		public void DeleteBy(Security criteria)
 		{
 			this.Filter(criteria).ForEach(s => Remove(s));

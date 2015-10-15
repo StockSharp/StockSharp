@@ -3,57 +3,57 @@ namespace StockSharp.Algo.Storages
 	using StockSharp.BusinessEntities;
 
 	/// <summary>
-	/// Интерфейс, описывающий хранилище торговых объектов.
+	/// The interface describing the trade objects storage.
 	/// </summary>
 	public interface IEntityRegistry
 	{
 		/// <summary>
-		/// Список бирж.
+		/// List of exchanges.
 		/// </summary>
 		IStorageEntityList<Exchange> Exchanges { get; }
 
 		/// <summary>
-		/// Список биржевых площадок.
+		/// The list of stock boards.
 		/// </summary>
 		IStorageEntityList<ExchangeBoard> ExchangeBoards { get; }
 
 		/// <summary>
-		/// Список инструментов.
+		/// The list of instruments.
 		/// </summary>
 		IStorageSecurityList Securities { get; }
 
 		/// <summary>
-		/// Список портфелей.
+		/// The list of portfolios.
 		/// </summary>
 		IStorageEntityList<Portfolio> Portfolios { get; }
 
 		/// <summary>
-		/// Список позиций.
+		/// The list of positions.
 		/// </summary>
 		IStorageEntityList<Position> Positions { get; }
 
 		/// <summary>
-		/// Список собственных сделок.
+		/// The list of own trades.
 		/// </summary>
 		IStorageEntityList<MyTrade> MyTrades { get; }
 
 		/// <summary>
-		/// Список тиковых сделок.
+		/// The list of tick trades.
 		/// </summary>
 		IStorageEntityList<Trade> Trades { get; }
 
 		/// <summary>
-		/// Список заявок.
+		/// The list of orders.
 		/// </summary>
 		IStorageEntityList<Order> Orders { get; }
 
 		/// <summary>
-		/// Список ошибок регистрации и снятия заявок.
+		/// The list of orders registration and cancelling errors.
 		/// </summary>
 		IStorageEntityList<OrderFail> OrderFails { get; }
 
 		/// <summary>
-		/// Список новостей.
+		/// The list of news.
 		/// </summary>
 		IStorageEntityList<News> News { get; }
 	}

@@ -1,4 +1,4 @@
-﻿namespace StockSharp.Algo.Candles
+namespace StockSharp.Algo.Candles
 {
 	using System;
 	using System.Collections;
@@ -18,90 +18,90 @@
 	using StockSharp.Messages;
 
 	/// <summary>
-	/// Вспомогательный класс для работы со свечами.
+	/// Extension class for candles.
 	/// </summary>
 	public static class CandleHelper
 	{
 		/// <summary>
-		/// Создать <see cref="CandleSeries"/> для свечек <see cref="TimeFrameCandle"/>.
+		/// To create <see cref="CandleSeries"/> for <see cref="TimeFrameCandle"/> candles.
 		/// </summary>
-		/// <param name="security">Инструмент.</param>
-		/// <param name="arg">Значение <see cref="TimeFrameCandle.TimeFrame"/>.</param>
-		/// <returns>Серия свечек.</returns>
+		/// <param name="security">Security.</param>
+		/// <param name="arg">The value of <see cref="TimeFrameCandle.TimeFrame"/>.</param>
+		/// <returns>Candles series.</returns>
 		public static CandleSeries TimeFrame(this Security security, TimeSpan arg)
 		{
 			return new CandleSeries(typeof(TimeFrameCandle), security, arg);
 		}
 
 		/// <summary>
-		/// Создать <see cref="CandleSeries"/> для свечек <see cref="RangeCandle"/>.
+		/// To create <see cref="CandleSeries"/> for <see cref="RangeCandle"/> candles.
 		/// </summary>
-		/// <param name="security">Инструмент.</param>
-		/// <param name="arg">Значение <see cref="RangeCandle.PriceRange"/>.</param>
-		/// <returns>Серия свечек.</returns>
+		/// <param name="security">Security.</param>
+		/// <param name="arg">The value of <see cref="RangeCandle.PriceRange"/>.</param>
+		/// <returns>Candles series.</returns>
 		public static CandleSeries Range(this Security security, Unit arg)
 		{
 			return new CandleSeries(typeof(RangeCandle), security, arg);
 		}
 
 		/// <summary>
-		/// Создать <see cref="CandleSeries"/> для свечек <see cref="VolumeCandle"/>.
+		/// To create <see cref="CandleSeries"/> for <see cref="VolumeCandle"/> candles.
 		/// </summary>
-		/// <param name="security">Инструмент.</param>
-		/// <param name="arg">Значение <see cref="VolumeCandle.Volume"/>.</param>
-		/// <returns>Серия свечек.</returns>
+		/// <param name="security">Security.</param>
+		/// <param name="arg">The value of <see cref="VolumeCandle.Volume"/>.</param>
+		/// <returns>Candles series.</returns>
 		public static CandleSeries Volume(this Security security, decimal arg)
 		{
 			return new CandleSeries(typeof(VolumeCandle), security, arg);
 		}
 
 		/// <summary>
-		/// Создать <see cref="CandleSeries"/> для свечек <see cref="TickCandle"/>.
+		/// To create <see cref="CandleSeries"/> for <see cref="TickCandle"/> candles.
 		/// </summary>
-		/// <param name="security">Инструмент.</param>
-		/// <param name="arg">Значение <see cref="TickCandle.MaxTradeCount"/>.</param>
-		/// <returns>Серия свечек.</returns>
+		/// <param name="security">Security.</param>
+		/// <param name="arg">The value of <see cref="TickCandle.MaxTradeCount"/>.</param>
+		/// <returns>Candles series.</returns>
 		public static CandleSeries Tick(this Security security, decimal arg)
 		{
 			return new CandleSeries(typeof(TickCandle), security, arg);
 		}
 
 		/// <summary>
-		/// Создать <see cref="CandleSeries"/> для свечек <see cref="PnFCandle"/>.
+		/// To create <see cref="CandleSeries"/> for <see cref="PnFCandle"/> candles.
 		/// </summary>
-		/// <param name="security">Инструмент.</param>
-		/// <param name="arg">Значение <see cref="PnFCandle.PnFArg"/>.</param>
-		/// <returns>Серия свечек.</returns>
+		/// <param name="security">Security.</param>
+		/// <param name="arg">The value of <see cref="PnFCandle.PnFArg"/>.</param>
+		/// <returns>Candles series.</returns>
 		public static CandleSeries PnF(this Security security, PnFArg arg)
 		{
 			return new CandleSeries(typeof(PnFCandle), security, arg);
 		}
 
 		/// <summary>
-		/// Создать <see cref="CandleSeries"/> для свечек <see cref="RenkoCandle"/>.
+		/// To create <see cref="CandleSeries"/> for <see cref="RenkoCandle"/> candles.
 		/// </summary>
-		/// <param name="security">Инструмент.</param>
-		/// <param name="arg">Значение <see cref="RenkoCandle.BoxSize"/>.</param>
-		/// <returns>Серия свечек.</returns>
+		/// <param name="security">Security.</param>
+		/// <param name="arg">The value of <see cref="RenkoCandle.BoxSize"/>.</param>
+		/// <returns>Candles series.</returns>
 		public static CandleSeries Renko(this Security security, Unit arg)
 		{
 			return new CandleSeries(typeof(RenkoCandle), security, arg);
 		}
 
 		/// <summary>
-		/// Запустить получение свечек.
+		/// To start candles getting.
 		/// </summary>
-		/// <param name="manager">Менеджер свечек.</param>
-		/// <param name="series">Серия свечек.</param>
+		/// <param name="manager">The candles manager.</param>
+		/// <param name="series">Candles series.</param>
 		public static void Start(this ICandleManager manager, CandleSeries series)
 		{
 			manager.ThrowIfNull().Start(series, series.From, series.To);
 		}
 
 		/// <summary>
-		/// Прекратить получение свечек.
+		/// To stop candles getting.
 		/// </summary>
-		/// <param name="series">Серия свечек.</param>
+		/// <param name="series">Candles series.</param>
 		public static void Stop(this CandleSeries series)
 		{
 			var manager = series.ThrowIfNull().CandleManager;
@@ -119,22 +119,22 @@
 		}
 
 		/// <summary>
-		/// Получить количество свечек.
+		/// To get the number of candles.
 		/// </summary>
-		/// <param name="series">Серия свечек.</param>
-		/// <returns>Количество свечек.</returns>
+		/// <param name="series">Candles series.</param>
+		/// <returns>Number of candles.</returns>
 		public static int GetCandleCount(this CandleSeries series)
 		{
 			return series.GetContainer().GetCandleCount(series);
 		}
 
 		/// <summary>
-		/// Получить все свечи на период <paramref name="time"/>.
+		/// To get all candles for the <paramref name="time" /> period.
 		/// </summary>
-		/// <typeparam name="TCandle">Тип свечек.</typeparam>
-		/// <param name="series">Серия свечек.</param>
-		/// <param name="time">Период свечи.</param>
-		/// <returns>Свечи.</returns>
+		/// <typeparam name="TCandle">The candles type.</typeparam>
+		/// <param name="series">Candles series.</param>
+		/// <param name="time">The candle period.</param>
+		/// <returns>Candles.</returns>
 		public static IEnumerable<TCandle> GetCandles<TCandle>(this CandleSeries series, DateTimeOffset time) 
 			where TCandle : Candle
 		{
@@ -142,11 +142,11 @@
 		}
 
 		/// <summary>
-		/// Получить все свечи.
+		/// To get all candles.
 		/// </summary>
-		/// <typeparam name="TCandle">Тип свечек.</typeparam>
-		/// <param name="series">Серия свечек.</param>
-		/// <returns>Свечи.</returns>
+		/// <typeparam name="TCandle">The candles type.</typeparam>
+		/// <param name="series">Candles series.</param>
+		/// <returns>Candles.</returns>
 		public static IEnumerable<TCandle> GetCandles<TCandle>(this CandleSeries series)
 			where TCandle : Candle
 		{
@@ -154,12 +154,12 @@
 		}
 
 		/// <summary>
-		/// Получить свечи по диапазону дат.
+		/// To get candles by date range.
 		/// </summary>
-		/// <typeparam name="TCandle">Тип свечек.</typeparam>
-		/// <param name="series">Серия свечек.</param>
-		/// <param name="timeRange">Диапазон дат, в которые должны входить свечи. Учитывается значение <see cref="Candle.OpenTime"/>.</param>
-		/// <returns>Найденные свечи.</returns>
+		/// <typeparam name="TCandle">The candles type.</typeparam>
+		/// <param name="series">Candles series.</param>
+		/// <param name="timeRange">The date range which should include candles. The <see cref="Candle.OpenTime"/> value is taken into consideration.</param>
+		/// <returns>Found candles.</returns>
 		public static IEnumerable<TCandle> GetCandles<TCandle>(this CandleSeries series, Range<DateTimeOffset> timeRange)
 			where TCandle : Candle
 		{
@@ -167,24 +167,24 @@
 		}
 
 		/// <summary>
-		/// Получить свечи по общему количеству.
+		/// To get candles by the total number.
 		/// </summary>
-		/// <typeparam name="TCandle">Тип свечек.</typeparam>
-		/// <param name="series">Серия свечек.</param>
-		/// <param name="candleCount">Количество свечек, которое необходимо вернуть.</param>
-		/// <returns>Найденные свечи.</returns>
+		/// <typeparam name="TCandle">The candles type.</typeparam>
+		/// <param name="series">Candles series.</param>
+		/// <param name="candleCount">The number of candles that should be returned.</param>
+		/// <returns>Found candles.</returns>
 		public static IEnumerable<TCandle> GetCandles<TCandle>(this CandleSeries series, int candleCount)
 		{
 			return series.GetContainer().GetCandles(series, candleCount).OfType<TCandle>();
 		}
 
 		/// <summary>
-		/// Получить свечу по индексу.
+		/// To get a candle by the index.
 		/// </summary>
-		/// <typeparam name="TCandle">Тип свечек.</typeparam>
-		/// <param name="series">Серия свечек.</param>
-		/// <param name="candleIndex">Порядковый номер свечи с конца.</param>
-		/// <returns>Найденная свеча. Если свечи не существует, то будет возвращено <see langword="null"/>.</returns>
+		/// <typeparam name="TCandle">The candles type.</typeparam>
+		/// <param name="series">Candles series.</param>
+		/// <param name="candleIndex">The candle's position number from the end.</param>
+		/// <returns>The found candle. If the candle does not exist, then <see langword="null" /> will be returned.</returns>
 		public static TCandle GetCandle<TCandle>(this CandleSeries series, int candleIndex)
 			where TCandle : Candle
 		{
@@ -192,22 +192,22 @@
 		}
 
 		/// <summary>
-		/// Получить временную свечу за определенную дату.
+		/// To get a temporary candle on the specific date.
 		/// </summary>
-		/// <param name="series">Серия свечек.</param>
-		/// <param name="time">Дата свечи.</param>
-		/// <returns>Найденная свеча (<see langword="null"/>, если свеча по заданным критериям не существует).</returns>
+		/// <param name="series">Candles series.</param>
+		/// <param name="time">The candle date.</param>
+		/// <returns>The found candle (<see langword="null" />, if the candle by the specified criteria does not exist).</returns>
 		public static TimeFrameCandle GetTimeFrameCandle(this CandleSeries series, DateTimeOffset time)
 		{
 			return series.GetCandles<TimeFrameCandle>().FirstOrDefault(c => c.OpenTime == time);
 		}
 
 		/// <summary>
-		/// Получить текущую свечу.
+		/// To get the current candle.
 		/// </summary>
-		/// <typeparam name="TCandle">Тип свечек.</typeparam>
-		/// <param name="series">Серия свечек.</param>
-		/// <returns>Найденная свеча. Если свеча не существует, то будет возвращено <see langword="null"/>.</returns>
+		/// <typeparam name="TCandle">The candles type.</typeparam>
+		/// <param name="series">Candles series.</param>
+		/// <returns>The found candle. If the candle does not exist, the <see langword="null" /> will be returned.</returns>
 		public static TCandle GetCurrentCandle<TCandle>(this CandleSeries series)
 			where TCandle : Candle
 		{
@@ -215,13 +215,13 @@
 		}
 
 		/// <summary>
-		/// Получить серию свечек по заданным параметрам.
+		/// To get a candles series by the specified parameters.
 		/// </summary>
-		/// <typeparam name="TCandle">Тип свечек.</typeparam>
-		/// <param name="manager">Менеджер свечек.</param>
-		/// <param name="security">Инструмент, по которому нужно фильтровать сделки для формирования свечек.</param>
-		/// <param name="arg">Параметр свечи.</param>
-		/// <returns>Серия свечек. <see langword="null"/>, если такая серия не зарегистрирована.</returns>
+		/// <typeparam name="TCandle">The candles type.</typeparam>
+		/// <param name="manager">The candles manager.</param>
+		/// <param name="security">The instrument by which trades should be filtered for the candles creation.</param>
+		/// <param name="arg">Candle arg.</param>
+		/// <returns>The candles series. <see langword="null" /> if this series is not registered.</returns>
 		public static CandleSeries GetSeries<TCandle>(this ICandleManager manager, Security security, object arg)
 			where TCandle : Candle
 		{
@@ -385,12 +385,12 @@
 		}
 
 		/// <summary>
-		/// Построить свечи из коллекции тиковых сделок.
+		/// To create candles from the tick trades collection.
 		/// </summary>
-		/// <typeparam name="TCandle">Тип свечек.</typeparam>
-		/// <param name="trades">Тиковые сделки.</param>
-		/// <param name="arg">Параметр свечи.</param>
-		/// <returns>Свечи.</returns>
+		/// <typeparam name="TCandle">The candles type.</typeparam>
+		/// <param name="trades">Tick trades.</param>
+		/// <param name="arg">Candle arg.</param>
+		/// <returns>Candles.</returns>
 		public static IEnumerable<TCandle> ToCandles<TCandle>(this IEnumerableEx<Trade> trades, object arg)
 			where TCandle : Candle
 		{
@@ -403,22 +403,22 @@
 		}
 
 		/// <summary>
-		/// Построить свечи из коллекции тиковых сделок.
+		/// To create candles from the tick trades collection.
 		/// </summary>
-		/// <param name="trades">Тиковые сделки.</param>
-		/// <param name="series">Серия свечек.</param>
-		/// <returns>Свечи.</returns>
+		/// <param name="trades">Tick trades.</param>
+		/// <param name="series">Candles series.</param>
+		/// <returns>Candles.</returns>
 		public static IEnumerableEx<Candle> ToCandles(this IEnumerableEx<Trade> trades, CandleSeries series)
 		{
 			return new CandleEnumerable<Trade>(series, trades);
 		}
 
 		/// <summary>
-		/// Построить свечи из коллекции тиковых сделок.
+		/// To create candles from the tick trades collection.
 		/// </summary>
-		/// <param name="trades">Тиковые сделки.</param>
-		/// <param name="series">Серия свечек.</param>
-		/// <returns>Свечи.</returns>
+		/// <param name="trades">Tick trades.</param>
+		/// <param name="series">Candles series.</param>
+		/// <returns>Candles.</returns>
 		public static IEnumerableEx<CandleMessage> ToCandles(this IEnumerableEx<ExecutionMessage> trades, CandleSeries series)
 		{
 			return trades
@@ -428,22 +428,22 @@
 		}
 
 		/// <summary>
-		/// Построить свечи из коллекции стаканов.
+		/// To create candles from the order books collection.
 		/// </summary>
-		/// <param name="depths">Стаканы.</param>
-		/// <param name="series">Серия свечек.</param>
-		/// <returns>Свечи.</returns>
+		/// <param name="depths">Market depths.</param>
+		/// <param name="series">Candles series.</param>
+		/// <returns>Candles.</returns>
 		public static IEnumerableEx<Candle> ToCandles(this IEnumerableEx<MarketDepth> depths, CandleSeries series)
 		{
 			return new CandleEnumerable<MarketDepth>(series, depths);
 		}
 
 		/// <summary>
-		/// Построить свечи из коллекции стаканов.
+		/// To create candles from the order books collection.
 		/// </summary>
-		/// <param name="depths">Стаканы.</param>
-		/// <param name="series">Серия свечек.</param>
-		/// <returns>Свечи.</returns>
+		/// <param name="depths">Market depths.</param>
+		/// <param name="series">Candles series.</param>
+		/// <returns>Candles.</returns>
 		public static IEnumerableEx<CandleMessage> ToCandles(this IEnumerableEx<QuoteChangeMessage> depths, CandleSeries series)
 		{
 			return depths
@@ -453,10 +453,10 @@
 		}
 
 		/// <summary>
-		/// Построить тики из свечек.
+		/// To create ticks from candles.
 		/// </summary>
-		/// <param name="candles">Свечи.</param>
-		/// <returns>Сделки.</returns>
+		/// <param name="candles">Candles.</param>
+		/// <returns>Trades.</returns>
 		public static IEnumerableEx<Trade> ToTrades(this IEnumerableEx<Candle> candles)
 		{
 			var candle = candles.FirstOrDefault();
@@ -471,23 +471,23 @@
 		}
 
 		/// <summary>
-		/// Построить тиковые сделки из свечек.
+		/// To create tick trades from candles.
 		/// </summary>
-		/// <param name="candles">Свечи.</param>
-		/// <param name="volumeStep">Шаг объема.</param>
-		/// <returns>Тиковые сделки.</returns>
+		/// <param name="candles">Candles.</param>
+		/// <param name="volumeStep">Volume step.</param>
+		/// <returns>Tick trades.</returns>
 		public static IEnumerableEx<ExecutionMessage> ToTrades(this IEnumerableEx<CandleMessage> candles, decimal volumeStep)
 		{
 			return new TradeEnumerable(candles, volumeStep);
 		}
 
 		/// <summary>
-		/// Построить тиковые сделки из свечи.
+		/// To create tick trades from candle.
 		/// </summary>
-		/// <param name="candleMsg">Свеча.</param>
-		/// <param name="volumeStep">Шаг объема.</param>
-		/// <param name="decimals">Количество знаком после запятой у объема.</param>
-		/// <returns>Тиковые сделки.</returns>
+		/// <param name="candleMsg">Candle.</param>
+		/// <param name="volumeStep">Volume step.</param>
+		/// <param name="decimals">The number of decimal places for the volume.</param>
+		/// <returns>Tick trades.</returns>
 		public static IEnumerable<ExecutionMessage> ToTrades(this CandleMessage candleMsg, decimal volumeStep, int decimals)
 		{
 			if (candleMsg == null)
@@ -646,13 +646,13 @@
 		}
 
 		/// <summary>
-		/// Зарегистрирована ли группировка свечек по определённому признаку.
+		/// Whether the grouping of candles by the specified attribute is registered.
 		/// </summary>
-		/// <typeparam name="TCandle">Тип свечек.</typeparam>
-		/// <param name="manager">Менеджер свечек.</param>
-		/// <param name="security">Инструмент, для которого зарегистрирована группировка.</param>
-		/// <param name="arg">Параметр свечи.</param>
-		/// <returns><see langword="true"/>, если зарегистрирована. Иначе, <see langword="false"/>.</returns>
+		/// <typeparam name="TCandle">The candles type.</typeparam>
+		/// <param name="manager">The candles manager.</param>
+		/// <param name="security">The instrument for which the grouping is registered.</param>
+		/// <param name="arg">Candle arg.</param>
+		/// <returns><see langword="true" /> if registered. Otherwise, <see langword="false" />.</returns>
 		public static bool IsCandlesRegistered<TCandle>(this ICandleManager manager, Security security, object arg)
 			where TCandle : Candle
 		{
@@ -671,23 +671,23 @@
 		//}
 
 		/// <summary>
-		/// Получить временные рамки свечи.
+		/// To get the candle time range.
 		/// </summary>
-		/// <param name="timeFrame">Тайм-фрейм, по которому необходимо получить временные рамки.</param>
-		/// <param name="currentTime">Текущее время, входящее в диапазон временных рамок.</param>
-		/// <returns>Временные рамки свечи.</returns>
+		/// <param name="timeFrame">The time frame for which you need to get time range.</param>
+		/// <param name="currentTime">The current time within the range of time frames.</param>
+		/// <returns>The candle time frames.</returns>
 		public static Range<DateTimeOffset> GetCandleBounds(this TimeSpan timeFrame, DateTimeOffset currentTime)
 		{
 			return timeFrame.GetCandleBounds(currentTime, ExchangeBoard.Associated);
 		}
 
 		/// <summary>
-		/// Получить временные рамки свечи относительно времени работы биржи.
+		/// To get candle time frames relatively to the exchange working hours.
 		/// </summary>
-		/// <param name="timeFrame">Тайм-фрейм, по которому необходимо получить временные рамки.</param>
-		/// <param name="currentTime">Текущее время, входящее в диапазон временных рамок.</param>
-		/// <param name="board">Информация о площадке, из которой будет взято время работы <see cref="ExchangeBoard.WorkingTime"/>.</param>
-		/// <returns>Временные рамки свечи.</returns>
+		/// <param name="timeFrame">The time frame for which you need to get time range.</param>
+		/// <param name="currentTime">The current time within the range of time frames.</param>
+		/// <param name="board">The information about the board from which <see cref="ExchangeBoard.WorkingTime"/> working hours will be taken.</param>
+		/// <returns>The candle time frames.</returns>
 		public static Range<DateTimeOffset> GetCandleBounds(this TimeSpan timeFrame, DateTimeOffset currentTime, ExchangeBoard board)
 		{
 			if (board == null)
@@ -699,13 +699,13 @@
 		private static readonly long _weekTf = TimeSpan.FromDays(7).Ticks;
 
 		/// <summary>
-		/// Получить временные рамки свечи относительно режиме работы биржи.
+		/// To get candle time frames relatively to the exchange working pattern.
 		/// </summary>
-		/// <param name="timeFrame">Тайм-фрейм, по которому необходимо получить временные рамки.</param>
-		/// <param name="currentTime">Текущее время, входящее в диапазон временных рамок.</param>
-		/// <param name="board">Информация о площадке.</param>
-		/// <param name="time">Информация о режиме работы биржи.</param>
-		/// <returns>Временные рамки свечи.</returns>
+		/// <param name="timeFrame">The time frame for which you need to get time range.</param>
+		/// <param name="currentTime">The current time within the range of time frames.</param>
+		/// <param name="board">Board info.</param>
+		/// <param name="time">The information about the exchange working pattern.</param>
+		/// <returns>The candle time frames.</returns>
 		public static Range<DateTimeOffset> GetCandleBounds(this TimeSpan timeFrame, DateTimeOffset currentTime, ExchangeBoard board, WorkingTime time)
 		{
 			if (board == null)
@@ -783,10 +783,10 @@
 		}
 
 		/// <summary>
-		/// Получить длину свечи.
+		/// To get the candle length.
 		/// </summary>
-		/// <param name="candle">Свеча, для которой необходимо получить длины.</param>
-		/// <returns>Длина свечи.</returns>
+		/// <param name="candle">The candle for which you need to get a length.</param>
+		/// <returns>The candle length.</returns>
 		public static decimal GetLength(this Candle candle)
 		{
 			if (candle == null)
@@ -796,10 +796,10 @@
 		}
 
 		/// <summary>
-		/// Получить тело свечи.
+		/// To get the candle body.
 		/// </summary>
-		/// <param name="candle">Свеча, для которой необходимо получить тело.</param>
-		/// <returns>Тело свечи.</returns>
+		/// <param name="candle">The candle for which you need to get the body.</param>
+		/// <returns>The candle body.</returns>
 		public static decimal GetBody(this Candle candle)
 		{
 			if (candle == null)
@@ -809,10 +809,10 @@
 		}
 
 		/// <summary>
-		/// Получить длину верхней тени свечи.
+		/// To get the candle upper shadow length.
 		/// </summary>
-		/// <param name="candle">Свеча, для которой необходимо получить длины верхней тени.</param>
-		/// <returns>Длина верхней тени свечи. Если 0, то тень отсутствует.</returns>
+		/// <param name="candle">The candle for which you need to get the upper shadow length.</param>
+		/// <returns>The candle upper shadow length. If 0, there is no shadow.</returns>
 		public static decimal GetTopShadow(this Candle candle)
 		{
 			if (candle == null)
@@ -822,10 +822,10 @@
 		}
 
 		/// <summary>
-		/// Получить длину нижней тени свечи.
+		/// To get the candle lower shadow length.
 		/// </summary>
-		/// <param name="candle">Свеча, для которой необходимо получить длины нижней тени.</param>
-		/// <returns>Длина нижней тени свечи. Если 0, то тень отсутствует.</returns>
+		/// <param name="candle">The candle for which you need to get the lower shadow length.</param>
+		/// <returns>The candle lower shadow length. If 0, there is no shadow.</returns>
 		public static decimal GetBottomShadow(this Candle candle)
 		{
 			if (candle == null)
@@ -839,10 +839,10 @@
 		//
 
 		/// <summary>
-		/// Белая ли или черная свеча.
+		/// Whether the candle is white or black.
 		/// </summary>
-		/// <param name="candle">Свеча, для которой необходимо определить цвет.</param>
-		/// <returns><see langword="true"/>, если свеча белая, <see langword="false"/>, если черная, и <see langword="null"/>, если свеча плоская.</returns>
+		/// <param name="candle">The candle for which you need to get a color.</param>
+		/// <returns><see langword="true" /> if the candle is white, <see langword="false" /> if the candle is black and <see langword="null" /> if the candle is plane.</returns>
 		public static bool? IsWhiteOrBlack(this Candle candle)
 		{
 			if (candle == null)
@@ -855,10 +855,10 @@
 		}
 
 		/// <summary>
-		/// Бестеневая ли свеча тени.
+		/// Whether the candle is shadowless.
 		/// </summary>
-		/// <param name="candle">Свеча, для которой необходимо определить наличие теней.</param>
-		/// <returns><see langword="true"/>, если свеча не имеет теней, <see langword="false"/>, если имеет.</returns>
+		/// <param name="candle">The candle for which you need to identify the shadows presence.</param>
+		/// <returns><see langword="true" /> if the candle has no shadows, <see langword="false" /> if it has shadows.</returns>
 		public static bool IsMarubozu(this Candle candle)
 		{
 			if (candle == null)
@@ -868,33 +868,33 @@
 		}
 
 		/// <summary>
-		/// Нейтральная ли свеча сделкам.
+		/// Whether the candle is neutral to trades.
 		/// </summary>
+		/// <param name="candle">The candle for which you need to calculate whether it is neutral.</param>
+		/// <returns><see langword="true" /> if the candle is neutral, <see langword="false" /> if it is not neutral.</returns>
 		/// <remarks>
-		/// Нейтральность определяется как ситуация, когда в период свечи ни покупатели ни продавцы не создали тренд.
+		/// The neutrality is defined as a situation when during the candle neither buyers nor sellers have not created a trend.
 		/// </remarks>
-		/// <param name="candle">Свеча, для которой необходимо рассчитать, нейтральна ли она.</param>
-		/// <returns><see langword="true"/>, если свеча нейтральна, <see langword="false"/>, если не нейтральная.</returns>
 		public static bool IsSpinningTop(this Candle candle)
 		{
 			return !candle.IsMarubozu() && (candle.GetBottomShadow() == candle.GetTopShadow());
 		}
 
 		/// <summary>
-		/// Является ли свеча молотом.
+		/// Whether the candle is hammer.
 		/// </summary>
-		/// <param name="candle">Свеча, которую необходимо проверить на паттерн.</param>
-		/// <returns><see langword="true"/>, если является, <see langword="false"/>, если нет.</returns>
+		/// <param name="candle">The candle which should match the pattern.</param>
+		/// <returns><see langword="true" /> if it is matched, <see langword="false" /> if not.</returns>
 		public static bool IsHammer(this Candle candle)
 		{
 			return !candle.IsMarubozu() && (candle.GetBottomShadow() == 0 || candle.GetTopShadow() == 0);
 		}
 
 		/// <summary>
-		/// Является ли свеча стрекозой или надгробьем.
+		/// Whether the candle is dragonfly or tombstone.
 		/// </summary>
-		/// <param name="candle">Свеча, которую необходимо проверить на паттерн.</param>
-		/// <returns><see langword="true"/>, если стрекоза, <see langword="false"/>, если надгробье, <see langword="null"/> - ни то, ни другое.</returns>
+		/// <param name="candle">The candle which should match the pattern.</param>
+		/// <returns><see langword="true" /> if the dragonfly, <see langword="false" /> if the tombstone, <see langword="null" /> - neither one nor the other.</returns>
 		public static bool? IsDragonflyOrGravestone(this Candle candle)
 		{
 			if (candle.IsWhiteOrBlack() == null)
@@ -909,10 +909,10 @@
 		}
 
 		/// <summary>
-		/// Бычья ли или медвежья свеча.
+		/// Whether the candle is bullish or bearish.
 		/// </summary>
-		/// <param name="candle">Свеча, которую необходимо проверить на тренд.</param>
-		/// <returns><see langword="true"/>, если бычья, <see langword="false"/>, если медвежья, <see langword="null"/> - ни то, ни другое.</returns>
+		/// <param name="candle">The candle which should be checked for the trend.</param>
+		/// <returns><see langword="true" /> if bullish, <see langword="false" />, if bearish, <see langword="null" /> - neither one nor the other.</returns>
 		public static bool? IsBullishOrBearish(this Candle candle)
 		{
 			if (candle == null)
@@ -936,12 +936,12 @@
 		}
 
 		/// <summary>
-		/// Получить количество временных интервалов в пределах заданного отрезка времени.
+		/// To get the number of time frames within the specified time range.
 		/// </summary>
-		/// <param name="security">Инструмент, по которому вычисляется время работы биржи через свойство <see cref="Security.Board"/>.</param>
-		/// <param name="range">Заданный отрезок времени, для которого нужно получить количество временных интервалов.</param>
-		/// <param name="timeFrame">Размер временного интервала.</param>
-		/// <returns>Полученное количество временных интервалов.</returns>
+		/// <param name="security">The instrument by which exchange working hours are calculated through the <see cref="Security.Board"/> property.</param>
+		/// <param name="range">The specified time range for which you need to get the number of time frames.</param>
+		/// <param name="timeFrame">The time frame size.</param>
+		/// <returns>The received number of time frames.</returns>
 		public static long GetTimeFrameCount(this Security security, Range<DateTimeOffset> range, TimeSpan timeFrame)
 		{
 			if (security == null)
@@ -951,12 +951,12 @@
 		}
 
 		/// <summary>
-		/// Получить количество временных интервалов в пределах заданного отрезка времени.
+		/// To get the number of time frames within the specified time range.
 		/// </summary>
-		/// <param name="board">Информация о площадке, по которому вычисляется время работы через свойство <see cref="ExchangeBoard.WorkingTime"/>.</param>
-		/// <param name="range">Заданный отрезок времени, для которого нужно получить количество временных интервалов.</param>
-		/// <param name="timeFrame">Размер временного интервала.</param>
-		/// <returns>Полученное количество временных интервалов.</returns>
+		/// <param name="board">The information about the board by which working hours are calculated through the <see cref="ExchangeBoard.WorkingTime"/> property.</param>
+		/// <param name="range">The specified time range for which you need to get the number of time frames.</param>
+		/// <param name="timeFrame">The time frame size.</param>
+		/// <returns>The received number of time frames.</returns>
 		public static long GetTimeFrameCount(this ExchangeBoard board, Range<DateTimeOffset> range, TimeSpan timeFrame)
 		{
 			if (board == null)
@@ -1037,9 +1037,9 @@
 		}
 
 		/// <summary>
-		/// Рассчитать <see cref="ValueArea"/> для группы свечек.
+		/// To calculate the <see cref="ValueArea"/> for the candles group.
 		/// </summary>
-		/// <param name="candles">Свечи.</param>
+		/// <param name="candles">Candles.</param>
 		/// <returns><see cref="ValueArea"/>.</returns>
 		public static ValueArea GetValueArea(this IEnumerable<Candle> candles)
 		{
@@ -1049,15 +1049,15 @@
 		}
 
 		/// <summary>
-		/// Запустить таймер получения из переданного <paramref name="connector"/> свечек реального времени.
+		/// To start timer of getting from sent <paramref name="connector" /> of real time candles.
 		/// </summary>
-		/// <typeparam name="TConnector">Тип подключения, реализующего <see cref="IExternalCandleSource"/>.</typeparam>
-		/// <param name="connector">Подключение, реализующее <see cref="IExternalCandleSource"/>.</param>
-		/// <param name="registeredSeries">Все зарегистрированные серии свечек.</param>
-		/// <param name="offset">Временной отступ для нового запроса получение новой свечи. Необходим для того, чтобы сервер успел сформировать данные в своем хранилище свечек.</param>
-		/// <param name="requestNewCandles">Обработчик, получающий новые свечи.</param>
-		/// <param name="interval">Периодичность обновления данных.</param>
-		/// <returns>Созданный таймер.</returns>
+		/// <typeparam name="TConnector">The type of the connection implementing <see cref="IExternalCandleSource"/>.</typeparam>
+		/// <param name="connector">The connection implementing <see cref="IExternalCandleSource"/>.</param>
+		/// <param name="registeredSeries">All registered candles series.</param>
+		/// <param name="offset">The time shift for the new request to obtain a new candle. It is needed for the server will have time to create data in its candles storage.</param>
+		/// <param name="requestNewCandles">The handler getting new candles.</param>
+		/// <param name="interval">The interval between data updates.</param>
+		/// <returns>Created timer.</returns>
 		public static Timer StartRealTime<TConnector>(this TConnector connector, CachedSynchronizedSet<CandleSeries> registeredSeries, TimeSpan offset, Action<CandleSeries, Range<DateTimeOffset>> requestNewCandles, TimeSpan interval)
 			where TConnector : class, IConnector, IExternalCandleSource
 		{

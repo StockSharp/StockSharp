@@ -1,4 +1,4 @@
-﻿namespace StockSharp.Algo
+namespace StockSharp.Algo
 {
 	using System;
 	using System.Threading;
@@ -12,7 +12,7 @@
 	}
 
 	/// <summary>
-	/// Адаптер сообщений, контролирующий соединение.
+	/// The messages adapter controlling the connection.
 	/// </summary>
 	public class HeartbeatAdapter : MessageAdapterWrapper
 	{

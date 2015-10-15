@@ -24,7 +24,7 @@ namespace StockSharp.Algo.Strategies
 	using Xceed.Wpf.Toolkit.PropertyGrid.Attributes;
 
 	/// <summary>
-	/// Базовый класс для всех торговых стратегий.
+	/// The base class for all trade strategies.
 	/// </summary>
 	[CategoryOrderLoc(LocalizedStrings.GeneralKey, 10)]
 	[CategoryOrderLoc(LocalizedStrings.Str436Key, 11)]
@@ -222,7 +222,7 @@ namespace StockSharp.Algo.Strategies
 		private string _idStr;
 
 		/// <summary>
-		/// Создать <see cref="Strategy"/>.
+		/// Initializes a new instance of the <see cref="Strategy"/>.
 		/// </summary>
 		public Strategy()
 		{
@@ -252,7 +252,7 @@ namespace StockSharp.Algo.Strategies
 		private readonly StrategyParam<Guid> _id;
 
 		/// <summary>
-		/// Уникальный идентификатор источника.
+		/// The unique identifier of the source.
 		/// </summary>
 		public override Guid Id
 		{
@@ -263,7 +263,7 @@ namespace StockSharp.Algo.Strategies
 		private readonly StrategyParam<LogLevels> _logLevel;
 
 		/// <summary>
-		/// Уровень логирования. По-умолчанию установлено в <see cref="LogLevels.Inherit"/>.
+		/// The logging level. The default is set to <see cref="LogLevels.Inherit"/>.
 		/// </summary>
 		[CategoryLoc(LocalizedStrings.LoggingKey)]
 		//[PropertyOrder(8)]
@@ -278,7 +278,7 @@ namespace StockSharp.Algo.Strategies
 		private readonly StrategyParam<string> _name;
 
 		/// <summary>
-		/// Название стратегии.
+		/// Strategy name.
 		/// </summary>
 		[CategoryLoc(LocalizedStrings.GeneralKey)]
 		[PropertyOrder(0)]
@@ -298,7 +298,7 @@ namespace StockSharp.Algo.Strategies
 		}
 
 		/// <summary>
-		/// Генератор имени стратегии.
+		/// The generator of strategy name.
 		/// </summary>
 		[Browsable(false)]
 		public StrategyNameGenerator NameGenerator { get { return _nameGenerator; } }
@@ -306,7 +306,7 @@ namespace StockSharp.Algo.Strategies
 		private IConnector _connector;
 
 		/// <summary>
-		/// Подключение к торговой системе.
+		/// Connection to the trading system.
 		/// </summary>
 		[Browsable(false)]
 		public virtual IConnector Connector
@@ -369,9 +369,9 @@ namespace StockSharp.Algo.Strategies
 		}
 
 		/// <summary>
-		/// Получить получение стратегии <see cref="Connector"/>. Если оно не инициализивано, то будет выбрашено исключение.
+		/// To get the strategy getting <see cref="Strategy.Connector"/>. If it is not initialized, the exception will be discarded.
 		/// </summary>
-		/// <returns>Подключение.</returns>
+		/// <returns>Connection string.</returns>
 		public IConnector SafeGetConnector()
 		{
 			var connector = Connector;
@@ -385,7 +385,7 @@ namespace StockSharp.Algo.Strategies
 		private Portfolio _portfolio;
 
 		/// <summary>
-		/// Портфель.
+		/// Portfolio.
 		/// </summary>
 		[CategoryLoc(LocalizedStrings.GeneralKey)]
 		[PropertyOrder(1)]
@@ -418,7 +418,7 @@ namespace StockSharp.Algo.Strategies
 		private Security _security;
 
 		/// <summary>
-		/// Инструмент.
+		/// Security.
 		/// </summary>
 		[CategoryLoc(LocalizedStrings.GeneralKey)]
 		[PropertyOrder(2)]
@@ -449,7 +449,7 @@ namespace StockSharp.Algo.Strategies
 		}
 
 		/// <summary>
-		/// Суммарное значение проскальзывания.
+		/// Total slippage.
 		/// </summary>
 		[CategoryLoc(LocalizedStrings.Str436Key)]
 		[PropertyOrder(4)]
@@ -459,14 +459,14 @@ namespace StockSharp.Algo.Strategies
 		public decimal? Slippage { get; private set; }
 
 		/// <summary>
-		/// Событие изменения <see cref="Slippage"/>.
+		/// <see cref="Strategy.Slippage"/> change event.
 		/// </summary>
 		public event Action SlippageChanged;
 
 		private IPnLManager _pnLManager = new PnLManager();
 
 		/// <summary>
-		/// Менеджер прибыли-убытка. Учитывает сделки данной стратегии, а так же ее дочерних стратегий <see cref="ChildStrategies"/>.
+		/// The profit-loss manager. It accounts trades of this strategy, as well as of its subsidiary strategies <see cref="Strategy.ChildStrategies"/>.
 		/// </summary>
 		[Browsable(false)]
 		public IPnLManager PnLManager
@@ -482,7 +482,7 @@ namespace StockSharp.Algo.Strategies
 		}
 
 		/// <summary>
-		/// Суммарное значение прибыли-убытка без учета комиссии <see cref="Commission"/>.
+		/// The aggregate value of profit-loss without accounting commission <see cref="Strategy.Commission"/>.
 		/// </summary>
 		[CategoryLoc(LocalizedStrings.Str436Key)]
 		[PropertyOrder(5)]
@@ -495,12 +495,12 @@ namespace StockSharp.Algo.Strategies
 		}
 
 		/// <summary>
-		/// Событие изменения <see cref="PnL"/>.
+		/// <see cref="Strategy.PnL"/> change event.
 		/// </summary>
 		public event Action PnLChanged;
 
 		/// <summary>
-		/// Суммарное значение комиссии.
+		/// Total commission.
 		/// </summary>
 		[CategoryLoc(LocalizedStrings.Str436Key)]
 		[PropertyOrder(6)]
@@ -510,14 +510,14 @@ namespace StockSharp.Algo.Strategies
 		public decimal? Commission { get; private set; }
 
 		/// <summary>
-		/// Событие изменения <see cref="Commission"/>.
+		/// <see cref="Strategy.Commission"/> change event.
 		/// </summary>
 		public event Action CommissionChanged;
 
 		private IPositionManager _positionManager = new PositionManager(true);
 
 		/// <summary>
-		/// Менеджер позиции. Учитывает сделки данной стратегии, а так же ее дочерних стратегий <see cref="ChildStrategies"/>.
+		/// The position manager. It accounts trades of this strategy, as well as of its subsidiary strategies <see cref="Strategy.ChildStrategies"/>.
 		/// </summary>
 		[Browsable(false)]
 		public IPositionManager PositionManager
@@ -533,7 +533,7 @@ namespace StockSharp.Algo.Strategies
 		}
 
 		/// <summary>
-		/// Суммарное значение позиции.
+		/// The position aggregate value.
 		/// </summary>
 		[Browsable(false)]
 		public decimal Position
@@ -550,12 +550,12 @@ namespace StockSharp.Algo.Strategies
 		}
 
 		/// <summary>
-		/// Событие изменения <see cref="Position"/>.
+		/// <see cref="Strategy.Position"/> change event.
 		/// </summary>
 		public event Action PositionChanged;
 
 		/// <summary>
-		/// Суммарное значение задержки.
+		/// Total latency.
 		/// </summary>
 		[CategoryLoc(LocalizedStrings.Str436Key)]
 		[PropertyOrder(8)]
@@ -565,14 +565,14 @@ namespace StockSharp.Algo.Strategies
 		public TimeSpan? Latency { get; private set; }
 
 		/// <summary>
-		/// Событие изменения <see cref="Latency"/>.
+		/// <see cref="Strategy.Latency"/> change event.
 		/// </summary>
 		public event Action LatencyChanged;
 
 		private StatisticManager _statisticManager = new StatisticManager();
 
 		/// <summary>
-		/// Менеджер статистики.
+		/// The statistics manager.
 		/// </summary>
 		[Browsable(false)]
 		public StatisticManager StatisticManager
@@ -590,7 +590,7 @@ namespace StockSharp.Algo.Strategies
 		private IRiskManager _riskManager = new RiskManager();
 
 		/// <summary>
-		/// Менеджер контроля рисков.
+		/// The risks control manager.
 		/// </summary>
 		[Browsable(false)]
 		public IRiskManager RiskManager
@@ -608,7 +608,7 @@ namespace StockSharp.Algo.Strategies
 		private readonly SynchronizedSet<IStrategyParam> _parameters = new SynchronizedSet<IStrategyParam>();
 
 		/// <summary>
-		/// Параметры стратегии.
+		/// Strategy parameters.
 		/// </summary>
 		[Browsable(false)]
 		public ISynchronizedCollection<IStrategyParam> Parameters
@@ -617,14 +617,14 @@ namespace StockSharp.Algo.Strategies
 		}
 
 		/// <summary>
-		/// Событие изменения <see cref="Parameters"/>.
+		/// <see cref="Strategy.Parameters"/> change event.
 		/// </summary>
 		public event Action ParametersChanged;
 
 		/// <summary>
-		/// Вызвать события <see cref="ParametersChanged"/> и <see cref="PropertyChanged"/>.
+		/// To call events <see cref="Strategy.ParametersChanged"/> and <see cref="Strategy.PropertyChanged"/>.
 		/// </summary>
-		/// <param name="name">Название параметра.</param>
+		/// <param name="name">Parameter name.</param>
 		protected internal void RaiseParametersChanged(string name)
 		{
 			ParametersChanged.SafeInvoke();
@@ -634,7 +634,7 @@ namespace StockSharp.Algo.Strategies
 		private readonly SettingsStorage _environment = new SettingsStorage();
 
 		/// <summary>
-		/// Параметры окружения стратегии. 
+		/// Strategy environment parameters.
 		/// </summary>
 		[Browsable(false)]
 		public SettingsStorage Environment
@@ -645,9 +645,11 @@ namespace StockSharp.Algo.Strategies
 		private readonly StrategyParam<int> _maxErrorCount;
 
 		/// <summary>
-		/// Максимальное количество ошибок, которое должна получить стратегия прежде, чем она остановил работу.
+		/// The maximal number of errors, which strategy shall receive prior to stop operation.
 		/// </summary>
-		/// <remarks>Значение по умолчанию равно 1.</remarks>
+		/// <remarks>
+		/// The default value is 1.
+		/// </remarks>
 		[Browsable(false)]
 		public int MaxErrorCount
 		{
@@ -664,7 +666,7 @@ namespace StockSharp.Algo.Strategies
 		private int _errorCount;
 
 		/// <summary>
-		/// Текущее количество ошибок.
+		/// The current number of errors.
 		/// </summary>
 		[Browsable(false)]
 		public int ErrorCount
@@ -683,7 +685,7 @@ namespace StockSharp.Algo.Strategies
 		private ProcessStates _processState;
 
 		/// <summary>
-		/// Состояние работы.
+		/// The operation state.
 		/// </summary>
 		[Browsable(false)]
 		public virtual ProcessStates ProcessState
@@ -800,14 +802,14 @@ namespace StockSharp.Algo.Strategies
 		}
 
 		/// <summary>
-		/// Событие изменения <see cref="ProcessState"/>.
+		/// <see cref="Strategy.ProcessState"/> change event.
 		/// </summary>
 		public event Action<Strategy> ProcessStateChanged;
 
 		/// <summary>
-		/// Вызвать событие <see cref="ProcessStateChanged"/>.
+		/// To call the event <see cref="Strategy.ProcessStateChanged"/>.
 		/// </summary>
-		/// <param name="strategy">Стратегия.</param>
+		/// <param name="strategy">Strategy.</param>
 		protected void RaiseProcessStateChanged(Strategy strategy)
 		{
 			if (strategy == null)
@@ -819,7 +821,7 @@ namespace StockSharp.Algo.Strategies
 		private readonly StrategyParam<bool> _cancelOrdersWhenStopping;
 
 		/// <summary>
-		/// Снимать активные заявки при остановке. По-умолчанию включено.
+		/// To cancel active orders at stop. Is On by default.
 		/// </summary>
 		[Browsable(false)]
 		public virtual bool CancelOrdersWhenStopping
@@ -829,7 +831,7 @@ namespace StockSharp.Algo.Strategies
 		}
 
 		/// <summary>
-		/// Заявки, зарегистрированные в рамках стратегии.
+		/// Orders, registered within the strategy framework.
 		/// </summary>
 		[Browsable(false)]
 		public IEnumerable<Order> Orders
@@ -838,7 +840,7 @@ namespace StockSharp.Algo.Strategies
 		}
 
 		/// <summary>
-		/// Стоп-заявки, зарегистрированные в рамках стратегии.
+		/// Stop-orders, registered within the strategy framework.
 		/// </summary>
 		[Browsable(false)]
 		public IEnumerable<Order> StopOrders
@@ -849,8 +851,7 @@ namespace StockSharp.Algo.Strategies
 		private readonly StrategyParam<TimeSpan> _ordersKeepTime;
 
 		/// <summary>
-		/// Время хранения заявок <see cref="Orders"/> и <see cref="StopOrders"/> в памяти.
-		/// По-умолчанию равно 2-ум дням. Если значение установлено в <see cref="TimeSpan.Zero"/>, то заявки не будут удаляться.
+		/// The time for storing <see cref="Strategy.Orders"/> � <see cref="Strategy.StopOrders"/> orders in memory. By default it equals to 2 days. If value is set in <see cref="TimeSpan.Zero"/>, orders will not be deleted.
 		/// </summary>
 		[Browsable(false)]
 		public TimeSpan OrdersKeepTime
@@ -875,7 +876,7 @@ namespace StockSharp.Algo.Strategies
 		private readonly CachedSynchronizedSet<MyTrade> _myTrades = new CachedSynchronizedSet<MyTrade> { ThrowIfDuplicate = true };
 
 		/// <summary>
-		/// Сделки, прошедшие в течении работы стратегии.
+		/// Trades, matched during the strategy operation.
 		/// </summary>
 		[Browsable(false)]
 		public IEnumerable<MyTrade> MyTrades
@@ -886,7 +887,7 @@ namespace StockSharp.Algo.Strategies
 		//private readonly CachedSynchronizedSet<OrderFail> _orderFails = new CachedSynchronizedSet<OrderFail> { ThrowIfDuplicate = true };
 
 		/// <summary>
-		/// Заявки с ошибками, зарегистрированные в рамках стратегии.
+		/// Orders with errors, registered within the strategy.
 		/// </summary>
 		[Browsable(false)]
 		public IEnumerable<OrderFail> OrderFails
@@ -897,10 +898,10 @@ namespace StockSharp.Algo.Strategies
 		private readonly StrategyParam<decimal> _volume;
 
 		/// <summary>
-		/// Объем, которым необходимо оперировать.
+		/// Operational volume.
 		/// </summary>
 		/// <remarks>
-		/// Если значение установлено в 0, то параметр игнорируется.
+		/// If the value is set 0, the parameter is ignored.
 		/// </remarks>
 		[CategoryLoc(LocalizedStrings.GeneralKey)]
 		[PropertyOrder(3)]
@@ -921,7 +922,7 @@ namespace StockSharp.Algo.Strategies
 		private LogLevels _errorState;
 
 		/// <summary>
-		/// Состояние ошибки.
+		/// The state of an error.
 		/// </summary>
 		[Browsable(false)]
 		public LogLevels ErrorState
@@ -940,7 +941,7 @@ namespace StockSharp.Algo.Strategies
 		private readonly ChildStrategyList _childStrategies;
 
 		/// <summary>
-		/// Дочерние торговые стратегии.
+		/// Subsidiary trade strategies.
 		/// </summary>
 		[Browsable(false)]
 		public IStrategyChildStrategyList ChildStrategies
@@ -951,7 +952,7 @@ namespace StockSharp.Algo.Strategies
 		private DateTimeOffset _startedTime;
 
 		/// <summary>
-		/// Время запуска стратегии.
+		/// Strategy start time.
 		/// </summary>
 		[CategoryLoc(LocalizedStrings.Str436Key)]
 		[PropertyOrder(3)]
@@ -971,7 +972,7 @@ namespace StockSharp.Algo.Strategies
 		private TimeSpan _totalWorkingTime;
 
 		/// <summary>
-		/// Общее время работы стратегии с вычетом временных отрезков, когда стратегия останавливалась.
+		/// The total time of strategy operation less time periods, when strategy was stopped.
 		/// </summary>
 		[Browsable(false)]
 		public TimeSpan TotalWorkingTime
@@ -998,12 +999,11 @@ namespace StockSharp.Algo.Strategies
 		private readonly StrategyParam<bool> _disposeOnStop;
 
 		/// <summary>
-		/// Автоматически освобождать занятые ресурсы стратерии при ее остановке
-		/// (состояние <see cref="ProcessState"/> стало равным <see cref="ProcessStates.Stopped"/>)
-		/// и удалять ее из родительской через <see cref="ChildStrategies"/>.
+		/// Automatically to clear resources, used by the strategy, when it stops (state <see cref="Strategy.ProcessState"/> becomes equal to <see cref="ProcessStates.Stopped"/>) and delete it from the parent strategy through <see cref="Strategy.ChildStrategies"/>.
 		/// </summary>
-		/// <remarks>Режим используется только для одноразовых стратегий, тоесть для тех, что не будут запущены повторно (например, котирование).
-		/// По умолчанию выключено.</remarks>
+		/// <remarks>
+		/// The mode is used only for one-time strategies, i.e. for those strategies, which will not be started again (for example, quoting). It is disabled by default.
+		/// </remarks>
 		[Browsable(false)]
 		public bool DisposeOnStop
 		{
@@ -1014,9 +1014,11 @@ namespace StockSharp.Algo.Strategies
 		private readonly StrategyParam<bool> _waitAllTrades;
 
 		/// <summary>
-		/// Останавливать стратегию только после получения всех сделок по зарегистрированным заявкам.
+		/// Stop strategy only after getting all trades by registered trades.
 		/// </summary>
-		/// <remarks>По умолчанию выключено.</remarks>
+		/// <remarks>
+		/// It is disabled by default.
+		/// </remarks>
 		[Browsable(false)]
 		public bool WaitAllTrades
 		{
@@ -1027,9 +1029,11 @@ namespace StockSharp.Algo.Strategies
 		private readonly StrategyParam<bool> _commentOrders;
 
 		/// <summary>
-		/// Добавлять в <see cref="Order.Comment"/> название стратегии <see cref="Name"/>, выставившая заявку.
+		/// To add to <see cref="Order.Comment"/> the name of the strategy <see cref="Strategy.Name"/>, registering the order.
 		/// </summary>
-		/// <remarks>По умолчанию выключено.</remarks>
+		/// <remarks>
+		/// It is disabled by default.
+		/// </remarks>
 		[Browsable(false)]
 		public bool CommentOrders
 		{
@@ -1038,7 +1042,7 @@ namespace StockSharp.Algo.Strategies
 		}
 
 		/// <summary>
-		/// Зарегистрированные правила.
+		/// Registered rules.
 		/// </summary>
 		[Browsable(false)]
 		public IMarketRuleList Rules { get; private set; }
@@ -1047,10 +1051,10 @@ namespace StockSharp.Algo.Strategies
 		private int _rulesSuspendCount;
 
 		/// <summary>
-		/// Приостановлено ли исполнение правил.
+		/// Is rules execution suspended.
 		/// </summary>
 		/// <remarks>
-		/// Приостановка правил происходит через метод <see cref="SuspendRules()"/>.
+		/// Rules suspension is performed through the method <see cref="Strategy.SuspendRules"/>.
 		/// </remarks>
 		[Browsable(false)]
 		public bool IsRulesSuspended
@@ -1059,107 +1063,107 @@ namespace StockSharp.Algo.Strategies
 		}
 
 		/// <summary>
-		/// Событие отправки заявки на регистрацию.
+		/// The event of sending order for registration.
 		/// </summary>
 		public event Action<Order> OrderRegistering;
 
 		/// <summary>
-		/// Событие об успешной регистрации заявки.
+		/// The event of order successful registration.
 		/// </summary>
 		public event Action<Order> OrderRegistered;
 
 		/// <summary>
-		/// Событие об ошибке регистрации заявки.
+		/// The event of order registration error.
 		/// </summary>
 		public event Action<OrderFail> OrderRegisterFailed;
 
 		/// <summary>
-		/// Событие отправки стоп-заявки на регистрацию.
+		/// The event of sending stop-order for registration.
 		/// </summary>
 		public event Action<Order> StopOrderRegistering;
 
 		/// <summary>
-		/// Событие об успешной регистрации стоп-заявки.
+		/// The event of stop-order successful registration.
 		/// </summary>
 		public event Action<Order> StopOrderRegistered;
 
 		/// <summary>
-		/// Событие об ошибке регистрации стоп-заявки.
+		/// The event of stop-order successful registration.
 		/// </summary>
 		public event Action<OrderFail> StopOrderRegisterFailed;
 
 		/// <summary>
-		/// Событие об изменении заявки.
+		/// The event of order change.
 		/// </summary>
 		public event Action<Order> OrderChanged;
 
 		/// <summary>
-		/// Событие об изменении стоп-заявки.
+		/// The event of stop-order change.
 		/// </summary>
 		public event Action<Order> StopOrderChanged;
 
 		/// <summary>
-		/// Событие отправки заявки на отмену.
+		/// The event of sending order for cancelling.
 		/// </summary>
 		public event Action<Order> OrderCanceling;
 
 		/// <summary>
-		/// Событие отправки стоп-заявки на отмену.
+		/// The event of sending stop-order for cancelling.
 		/// </summary>
 		public event Action<Order> StopOrderCanceling;
 
 		/// <summary>
-		/// Событие отправки заявки на перерегистрацию.
+		/// The event of sending order for re-registration.
 		/// </summary>
 		public event Action<Order, Order> OrderReRegistering;
 
 		/// <summary>
-		/// Событие отправки стоп-заявки на перерегистрацию.
+		/// The event of sending stop-order for re-registration.
 		/// </summary>
 		public event Action<Order, Order> StopOrderReRegistering;
 
 		/// <summary>
-		/// Событие об ошибке отмены заявки.
+		/// The event of order cancelling order.
 		/// </summary>
 		public event Action<OrderFail> OrderCancelFailed;
 
 		/// <summary>
-		/// Событие об ошибке отмены стоп-заявки.
+		/// The event of stop-order cancelling order.
 		/// </summary>
 		public event Action<OrderFail> StopOrderCancelFailed;
 
 		/// <summary>
-		/// Событие о появлении новых сделок.
+		/// The event of new trades occurrence.
 		/// </summary>
 		public event Action<IEnumerable<MyTrade>> NewMyTrades;
 
 		/// <summary>
-		/// Событие изменения подключения стратегии.
+		/// The event of strategy connection change.
 		/// </summary>
 		public event Action ConnectorChanged;
 
 		/// <summary>
-		/// Событие изменения инструмента стратегии.
+		/// The event of strategy instrument change.
 		/// </summary>
 		public event Action SecurityChanged;
 
 		/// <summary>
-		/// Событие изменения портфеля стратегии.
+		/// The event of strategy portfolio change.
 		/// </summary>
 		public event Action PortfolioChanged;
 
 		/// <summary>
-		/// Событие изменения позиций стратегии.
+		/// The event of strategy position change.
 		/// </summary>
 		public event Action<IEnumerable<Position>> PositionsChanged;
 
 		/// <summary>
-		/// Событие возникновения ошибки в стратегии.
+		/// The event of error occurrence in the strategy.
 		/// </summary>
 		public event Action<Exception> Error;
 
 		/// <summary>
-		/// Метод вызывается тогда, когда вызвался метод <see cref="Start"/>, и состояние <see cref="ProcessState"/> перешло в значение <see cref="ProcessStates.Started"/>.
+		/// The method is called when the <see cref="Strategy.Start"/> method has been called and the <see cref="Strategy.ProcessState"/> state has been taken the <see cref="ProcessStates.Started"/> value.
 		/// </summary>
 		protected virtual void OnStarted()
 		{
@@ -1190,23 +1194,23 @@ namespace StockSharp.Algo.Strategies
 		}
 
 		/// <summary>
-		/// Метод вызывается тогда, когда состояние процесса <see cref="ProcessState"/> перешло в значение <see cref="ProcessStates.Stopping"/>.
+		/// The method is called when the <see cref="Strategy.ProcessState"/> process state has been taken the <see cref="ProcessStates.Stopping"/> value.
 		/// </summary>
 		protected virtual void OnStopping()
 		{
 		}
 
 		/// <summary>
-		/// Метод вызывается тогда, когда состояние процесса <see cref="ProcessState"/> перешло в значение <see cref="ProcessStates.Stopped"/>.
+		/// The method is called when the <see cref="Strategy.ProcessState"/> process state has been taken the <see cref="ProcessStates.Stopped"/> value.
 		/// </summary>
 		protected virtual void OnStopped()
 		{
 		}
 
 		/// <summary>
-		/// Зарегистрировать заявку и автоматически добавить для запуска механизмов расчета прибыли-убытка и проскальзывания.
+		/// To register the order and automatically add to start mechanism of profit-loss and slippage.
 		/// </summary>
-		/// <param name="order">Заявка.</param>
+		/// <param name="order">Order.</param>
 		public virtual void RegisterOrder(Order order)
 		{
 			if (order == null)
@@ -1247,10 +1251,10 @@ namespace StockSharp.Algo.Strategies
 		}
 
 		/// <summary>
-		/// Перерегистрировать заявку и автоматически добавить для запуска механизмов расчета прибыли-убытка и проскальзывания.
+		/// To re-register the order and automatically add to start mechanism of profit-loss and slippage.
 		/// </summary>
-		/// <param name="oldOrder">Заявка, которую нужно снять и на основе нее зарегистрировать новую.</param>
-		/// <param name="newOrder">Новая заявка.</param>
+		/// <param name="oldOrder">Changing order.</param>
+		/// <param name="newOrder">New order.</param>
 		public virtual void ReRegisterOrder(Order oldOrder, Order newOrder)
 		{
 			if (oldOrder == null)
@@ -1370,9 +1374,9 @@ namespace StockSharp.Algo.Strategies
 		}
 
 		/// <summary>
-		/// Отменить заявку.
+		/// Cancel order.
 		/// </summary>
-		/// <param name="order">Заявка для отмены.</param>
+		/// <param name="order">The order for cancelling.</param>
 		public virtual void CancelOrder(Order order)
 		{
 			if (ProcessState != ProcessStates.Started)
@@ -1419,19 +1423,19 @@ namespace StockSharp.Algo.Strategies
 		}
 
 		/// <summary>
-		/// Добавить заявку в стратегию.
+		/// To add the order to the strategy.
 		/// </summary>
-		/// <param name="order">Заявка.</param>
+		/// <param name="order">Order.</param>
 		private void ProcessOrder(Order order)
 		{
 			ProcessOrder(order, false);
 		}
 
 		/// <summary>
-		/// Добавить заявку в стратегию.
+		/// To add the order to the strategy.
 		/// </summary>
-		/// <param name="order">Заявка.</param>
-		/// <param name="isChanging">Заявка пришла из события изменения.</param>
+		/// <param name="order">Order.</param>
+		/// <param name="isChanging">The order came from the change event.</param>
 		private void ProcessOrder(Order order, bool isChanging)
 		{
 			if (order == null)
@@ -1525,14 +1529,13 @@ namespace StockSharp.Algo.Strategies
 		}
 
 		/// <summary>
-		/// Добавить активную заявку в стратегию и обработать сделки по заявке.
+		/// To add the active order to the strategy and process trades by the order.
 		/// </summary>
+		/// <param name="order">Order.</param>
+		/// <param name="myTrades">Trades for order.</param>
 		/// <remarks>
-		/// Используется для восстановления состояния стратегии, когда необходимо
-		/// подписаться на получение данных по заявкам, зарегистрированным ранее.
+		/// It is used to restore a state of the strategy, when it is necessary to subscribe for getting data on orders, registered earlier.
 		/// </remarks>
-		/// <param name="order">Заявка.</param>
-		/// <param name="myTrades">Сделки по заявке.</param>
 		public virtual void AttachOrder(Order order, IEnumerable<MyTrade> myTrades)
 		{
 			if (order == null)
@@ -1566,9 +1569,9 @@ namespace StockSharp.Algo.Strategies
 		}
 
 		/// <summary>
-		/// Установить идентификатор стратегии для заявки.
+		/// To set the strategy identifier for the order.
 		/// </summary>
-		/// <param name="order">Заявка, для которой необходимо установить идентификатор стратегии.</param>
+		/// <param name="order">The order, for which the strategy identifier shall be set.</param>
 		protected virtual void AssignOrderStrategyId(Order order)
 		{
 			order.UserOrderId = Id.To<string>();
@@ -1590,7 +1593,7 @@ namespace StockSharp.Algo.Strategies
 		}
 
 		/// <summary>
-		/// Текущее время, которое будет передано в <see cref="LogMessage.Time"/>.
+		/// Current time, which will be passed to the <see cref="LogMessage.Time"/>.
 		/// </summary>
 		public override DateTimeOffset CurrentTime
 		{
@@ -1601,9 +1604,9 @@ namespace StockSharp.Algo.Strategies
 		}
 
 		/// <summary>
-		/// Вызвать событие <see cref="ILogSource.Log"/>.
+		/// To call the event <see cref="ILogSource.Log"/>.
 		/// </summary>
-		/// <param name="message">Отладочное сообщение.</param>
+		/// <param name="message">A debug message.</param>
 		protected override void RaiseLog(LogMessage message)
 		{
 			if (message == null)
@@ -1628,7 +1631,7 @@ namespace StockSharp.Algo.Strategies
 		}
 
 		/// <summary>
-		/// Запустить торговый алгоритм.
+		/// To start the trade algorithm.
 		/// </summary>
 		public virtual void Start()
 		{
@@ -1639,7 +1642,7 @@ namespace StockSharp.Algo.Strategies
 		}
 
 		/// <summary>
-		/// Остановить торговый алгоритм.
+		/// To stop the trade algorithm.
 		/// </summary>
 		public virtual void Stop()
 		{
@@ -1650,12 +1653,12 @@ namespace StockSharp.Algo.Strategies
 		}
 
 		/// <summary>
-		/// Событие переинициализации стратегии.
+		/// The event of the strategy re-initialization.
 		/// </summary>
 		public event Action Reseted;
 
 		/// <summary>
-		/// Вызвать событие <see cref="Reseted"/>.
+		/// To call the event <see cref="Strategy.Reseted"/>.
 		/// </summary>
 		private void RaiseReseted()
 		{
@@ -1663,8 +1666,7 @@ namespace StockSharp.Algo.Strategies
 		}
 
 		/// <summary>
-		/// Переинициализировать торговый алгоритм.
-		/// Вызывается после инициализации объекта стратегии и загрузки сохраненных параметров.
+		/// To re-initialize the trade algorithm. It is called after initialization of the strategy object and loading stored parameters.
 		/// </summary>
 		public virtual void Reset()
 		{
@@ -1719,7 +1721,7 @@ namespace StockSharp.Algo.Strategies
 		}
 
 		/// <summary>
-		/// Вызывается из метода <see cref="Reset"/>. 
+		/// It is called from the <see cref="Strategy.Reset"/> method.
 		/// </summary>
 		protected virtual void OnReseted()
 		{
@@ -1727,7 +1729,7 @@ namespace StockSharp.Algo.Strategies
 		}
 
 		/// <summary>
-		/// Приостановить исполнение правил до следующего восстановления через метод <see cref="ResumeRules"/>.
+		/// To suspend rules execution until next restoration through the method <see cref="Strategy.ResumeRules"/>.
 		/// </summary>
 		public virtual void SuspendRules()
 		{
@@ -1738,7 +1740,7 @@ namespace StockSharp.Algo.Strategies
 		}
 
 		/// <summary>
-		/// Восстановить исполнение правил, остановленное через метод <see cref="SuspendRules()"/>.
+		/// To restore rules execution, suspended through the method <see cref="Strategy.SuspendRules"/>.
 		/// </summary>
 		public virtual void ResumeRules()
 		{
@@ -1801,7 +1803,7 @@ namespace StockSharp.Algo.Strategies
 		private TimeSpan _unrealizedPnLInterval = TimeSpan.FromMinutes(1);
 
 		/// <summary>
-		/// Интервал пересчета нереализованной прибыли. Значение по-умолчанию равно 1 минуте.
+		/// The interval for unrealized gain recalculation. The default value is 1 minute.
 		/// </summary>
 		[Browsable(false)]
 		public virtual TimeSpan UnrealizedPnLInterval
@@ -1817,27 +1819,27 @@ namespace StockSharp.Algo.Strategies
 		}
 
 		/// <summary>
-		/// Метод, который вызывается при изменении позиций стратегии.
+		/// The method, called at strategy positions change.
 		/// </summary>
-		/// <param name="positions">Измененные позиции стратегии.</param>
+		/// <param name="positions">The strategy positions change.</param>
 		protected virtual void OnPositionsChanged(IEnumerable<Position> positions)
 		{
 			PositionsChanged.SafeInvoke(positions);
 		}
 
 		/// <summary>
-		/// Метод, который вызывается при появлении новых сделок стратегии.
+		/// The method, called at occurrence of new strategy trades.
 		/// </summary>
-		/// <param name="trades">Новые сделки стратегии.</param>
+		/// <param name="trades">New trades of a strategy.</param>
 		protected virtual void OnNewMyTrades(IEnumerable<MyTrade> trades)
 		{
 			NewMyTrades.SafeInvoke(trades);
 		}
 
 		/// <summary>
-		/// Вызвать событие <see cref="OrderRegistering"/>.
+		/// To call the event <see cref="Strategy.OrderRegistering"/>.
 		/// </summary>
-		/// <param name="order">Заявка.</param>
+		/// <param name="order">Order.</param>
 		protected virtual void OnOrderRegistering(Order order)
 		{
 			TryAddChildOrder(order);
@@ -1847,18 +1849,18 @@ namespace StockSharp.Algo.Strategies
 		}
 
 		/// <summary>
-		/// Вызвать событие <see cref="OrderRegistered"/>.
+		/// To call the event <see cref="Strategy.OrderRegistered"/>.
 		/// </summary>
-		/// <param name="order">Заявка.</param>
+		/// <param name="order">Order.</param>
 		protected virtual void OnOrderRegistered(Order order)
 		{
 			OrderRegistered.SafeInvoke(order);
 		}
 
 		/// <summary>
-		/// Вызвать событие <see cref="StopOrderRegistering"/>.
+		/// To call the event <see cref="Strategy.StopOrderRegistering"/>.
 		/// </summary>
-		/// <param name="order">Стоп-заявка.</param>
+		/// <param name="order">The stop order.</param>
 		protected virtual void OnStopOrderRegistering(Order order)
 		{
 			StopOrderRegistering.SafeInvoke(order);
@@ -1866,47 +1868,47 @@ namespace StockSharp.Algo.Strategies
 		}
 
 		/// <summary>
-		/// Вызвать событие <see cref="StopOrderRegistered"/>.
+		/// To call the event <see cref="Strategy.StopOrderRegistered"/>.
 		/// </summary>
-		/// <param name="order">Стоп-заявка.</param>
+		/// <param name="order">The stop order.</param>
 		protected virtual void OnStopOrderRegistered(Order order)
 		{
 			StopOrderRegistered.SafeInvoke(order);
 		}
 
 		/// <summary>
-		/// Вызвать событие <see cref="StopOrderRegistered"/>.
+		/// To call the event <see cref="Strategy.StopOrderRegistered"/>.
 		/// </summary>
-		/// <param name="order">Стоп-заявка.</param>
+		/// <param name="order">The stop order.</param>
 		protected virtual void OnStopOrderCanceling(Order order)
 		{
 			StopOrderCanceling.SafeInvoke(order);
 		}
 
 		/// <summary>
-		/// Вызвать событие <see cref="OrderRegistered"/>.
+		/// To call the event <see cref="Strategy.OrderRegistered"/>.
 		/// </summary>
-		/// <param name="order">Заявка.</param>
+		/// <param name="order">Order.</param>
 		protected virtual void OnOrderCanceling(Order order)
 		{
 			OrderCanceling.SafeInvoke(order);
 		}
 
 		/// <summary>
-		/// Вызвать событие <see cref="StopOrderReRegistering"/>.
+		/// To call the event <see cref="Strategy.StopOrderReRegistering"/>.
 		/// </summary>
-		/// <param name="oldOrder">Стоп-заявка, которую нужно снять.</param>
-		/// <param name="newOrder">Новая стоп-заявка, которую нужно зарегистрировать.</param>
+		/// <param name="oldOrder">The stop order to be cancelled.</param>
+		/// <param name="newOrder">New stop order to be registered.</param>
 		protected virtual void OnStopOrderReRegistering(Order oldOrder, Order newOrder)
 		{
 			StopOrderReRegistering.SafeInvoke(oldOrder, newOrder);
 		}
 
 		/// <summary>
-		/// Вызвать событие <see cref="OrderReRegistering"/>.
+		/// To call the event <see cref="Strategy.OrderReRegistering"/>.
 		/// </summary>
-		/// <param name="oldOrder">Заявка, которую нужно снять.</param>
-		/// <param name="newOrder">Новая заявка, которую нужно зарегистрировать.</param>
+		/// <param name="oldOrder">Cancelling order.</param>
+		/// <param name="newOrder">New order to register.</param>
 		protected virtual void OnOrderReRegistering(Order oldOrder, Order newOrder)
 		{
 			TryAddChildOrder(newOrder);
@@ -1915,9 +1917,9 @@ namespace StockSharp.Algo.Strategies
 		}
 
 		/// <summary>
-		/// Метод, который вызывается при изменении заявки стратегии.
+		/// The method, called at strategy order change.
 		/// </summary>
-		/// <param name="order">Измененная заявка.</param>
+		/// <param name="order">The changed order.</param>
 		protected virtual void OnOrderChanged(Order order)
 		{
 			OrderChanged.SafeInvoke(order);
@@ -1930,9 +1932,9 @@ namespace StockSharp.Algo.Strategies
 		}
 	
 		/// <summary>
-		/// Метод, который вызывается при изменении стоп-заявки стратегии.
+		/// The method, called at strategy stop order change.
 		/// </summary>
-		/// <param name="order">Измененная стоп-заявка.</param>
+		/// <param name="order">The changed stop order.</param>
 		protected virtual void OnStopOrderChanged(Order order)
 		{
 			StopOrderChanged.SafeInvoke(order);
@@ -1940,9 +1942,9 @@ namespace StockSharp.Algo.Strategies
 		}
 
 		/// <summary>
-		/// Метод, который вызывается при изменении стоп-заявок стратегии.
+		/// The method, called at strategy stop orders change.
 		/// </summary>
-		/// <param name="orders">Измененные стоп-заявки.</param>
+		/// <param name="orders">Changed stop orders.</param>
 		protected virtual void OnStopOrdersChanged(IEnumerable<Order> orders)
 		{
 			foreach (var order in orders)
@@ -1970,9 +1972,9 @@ namespace StockSharp.Algo.Strategies
 		}
 
 		/// <summary>
-		/// Метод, который вызывается при ошибке регистрации заявки стратегии.
+		/// The method, called at strategy order registration error.
 		/// </summary>
-		/// <param name="fail">Ошибка регистрации заявки.</param>
+		/// <param name="fail">Error registering order.</param>
 		protected virtual void OnOrderRegisterFailed(OrderFail fail)
 		{
 			OrderRegisterFailed.SafeInvoke(fail);
@@ -1980,9 +1982,9 @@ namespace StockSharp.Algo.Strategies
 		}
 
 		/// <summary>
-		/// Метод, который вызывается при ошибке регистрации стоп-заявки стратегии.
+		/// The method, called at strategy stop order registration error.
 		/// </summary>
-		/// <param name="fail">Ошибка регистрации стоп-заявки.</param>
+		/// <param name="fail">The stop order registration error.</param>
 		protected virtual void OnStopOrderRegisterFailed(OrderFail fail)
 		{
 			StopOrderRegisterFailed.SafeInvoke(fail);
@@ -2307,19 +2309,19 @@ namespace StockSharp.Algo.Strategies
 		}
 
 		/// <summary>
-		/// Обработать поступившие от подключения <see cref="Connector"/> заявки, и найти из них те, что принадлежат стратегии.
+		/// To process orders, received for the connection <see cref="Strategy.Connector"/>, and find among them those, belonging to the strategy.
 		/// </summary>
-		/// <param name="newOrders">Новые заявки.</param>
-		/// <returns>Заявки, принадлежащие стратегии.</returns>
+		/// <param name="newOrders">New orders.</param>
+		/// <returns>Orders, belonging to the strategy.</returns>
 		protected virtual IEnumerable<Order> ProcessNewOrders(IEnumerable<Order> newOrders)
 		{
 			return _ordersInfo.SyncGet(d => newOrders.Where(IsOwnOrder).ToArray());
 		}
 
 		/// <summary>
-		/// Загрузить настройки.
+		/// Load settings.
 		/// </summary>
-		/// <param name="storage">Хранилище настроек.</param>
+		/// <param name="storage">Settings storage.</param>
 		public override void Load(SettingsStorage storage)
 		{
 			var parameters = storage.GetValue<SettingsStorage[]>("Parameters");
@@ -2342,16 +2344,16 @@ namespace StockSharp.Algo.Strategies
 		}
 
 		/// <summary>
-		/// Сохранить настройки.
+		/// Save settings.
 		/// </summary>
-		/// <param name="storage">Хранилище настроек.</param>
+		/// <param name="storage">Settings storage.</param>
 		public override void Save(SettingsStorage storage)
 		{
 			storage.SetValue("Parameters", Parameters.SyncGet(c => c.Select(p => p.Save()).ToArray()));
 		}
 
 		/// <summary>
-		/// Событие изменения параметров стратегии.
+		/// The event of strategy parameters change.
 		/// </summary>
 		public event PropertyChangedEventHandler PropertyChanged;
 
@@ -2361,7 +2363,7 @@ namespace StockSharp.Algo.Strategies
 		}
 
 		/// <summary>
-		/// Отменить все активные заявки (стоп и обычные).
+		/// To cancel all active orders (to stop and regular).
 		/// </summary>
 		public void CancelActiveOrders()
 		{
@@ -2377,7 +2379,7 @@ namespace StockSharp.Algo.Strategies
 		}
 
 		/// <summary>
-		/// Отменить все активные заявки (стоп и обычные).
+		/// To cancel all active orders (to stop and regular).
 		/// </summary>
 		protected virtual void ProcessCancelActiveOrders()
 		{
@@ -2488,9 +2490,9 @@ namespace StockSharp.Algo.Strategies
 		}
 
 		/// <summary>
-		/// Обработка ошибки, полученной в результате работы стратегии.
+		/// Processing of error, occurred as result of strategy operation.
 		/// </summary>
-		/// <param name="error">Ошибка.</param>
+		/// <param name="error">Error.</param>
 		protected virtual void OnError(Exception error)
 		{
 			ErrorCount++;
@@ -2508,9 +2510,9 @@ namespace StockSharp.Algo.Strategies
 		}
 
 		/// <summary>
-		/// Создать копию <see cref="Strategy"/>.
+		/// Create a copy of <see cref="Strategy"/>.
 		/// </summary>
-		/// <returns>Копия.</returns>
+		/// <returns>Copy.</returns>
 		public virtual Strategy Clone()
 		{
 			var clone = GetType().CreateInstance<Strategy>();
@@ -2564,26 +2566,26 @@ namespace StockSharp.Algo.Strategies
 		}
 
 		/// <summary>
-		/// Событие изменения инструмента.
+		/// Security changed.
 		/// </summary>
 		public event Action<Security, IEnumerable<KeyValuePair<Level1Fields, object>>, DateTimeOffset, DateTime> ValuesChanged;
 
 		/// <summary>
-		/// Получить стакан котировок.
+		/// To get the quotes order book.
 		/// </summary>
-		/// <param name="security">Инструмент, по которому нужно получить стакан.</param>
-		/// <returns>Стакан котировок.</returns>
+		/// <param name="security">The instrument by which an order book should be got.</param>
+		/// <returns>Order book.</returns>
 		public MarketDepth GetMarketDepth(Security security)
 		{
 			return SafeGetConnector().GetMarketDepth(security);
 		}
 
 		/// <summary>
-		/// Получить значение маркет-данных для инструмента.
+		/// To get the value of market data for the instrument.
 		/// </summary>
-		/// <param name="security">Инструмент.</param>
-		/// <param name="field">Поле маркет-данных.</param>
-		/// <returns>Значение поля. Если данных нет, то будет возвращено <see langword="null"/>.</returns>
+		/// <param name="security">Security.</param>
+		/// <param name="field">Market-data field.</param>
+		/// <returns>The field value. If no data, the <see langword="null" /> will be returned.</returns>
 		public object GetSecurityValue(Security security, Level1Fields field)
 		{
 			if (security == null)
@@ -2593,10 +2595,10 @@ namespace StockSharp.Algo.Strategies
 		}
 
 		/// <summary>
-		/// Получить набор доступных полей <see cref="Level1Fields"/>, для которых есть маркет-данные для инструмента.
+		/// To get a set of available fields <see cref="Level1Fields"/>, for which there is a market data for the instrument.
 		/// </summary>
-		/// <param name="security">Инструмент.</param>
-		/// <returns>Набор доступных полей.</returns>
+		/// <param name="security">Security.</param>
+		/// <returns>Possible fields.</returns>
 		public IEnumerable<Level1Fields> GetLevel1Fields(Security security)
 		{
 			if (security == null)
@@ -2606,10 +2608,10 @@ namespace StockSharp.Algo.Strategies
 		}
 
 		/// <summary>
-		/// Найти инструменты, соответствующие фильтру <paramref name="criteria"/>.
+		/// Lookup securities by criteria <paramref name="criteria" />.
 		/// </summary>
-		/// <param name="criteria">Инструмент, поля которого будут использоваться в качестве фильтра.</param>
-		/// <returns>Найденные инструменты.</returns>
+		/// <param name="criteria">The instrument whose fields will be used as a filter.</param>
+		/// <returns>Found instruments.</returns>
 		public IEnumerable<Security> Lookup(Security criteria)
 		{
 			return SafeGetConnector().Lookup(criteria);
@@ -2627,7 +2629,7 @@ namespace StockSharp.Algo.Strategies
 		//}
 
 		/// <summary>
-		/// Освободить занятые ресурсы.
+		/// Release resources.
 		/// </summary>
 		protected override void DisposeManaged()
 		{

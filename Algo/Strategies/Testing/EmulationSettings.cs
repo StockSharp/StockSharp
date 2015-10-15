@@ -14,7 +14,7 @@ namespace StockSharp.Algo.Strategies.Testing
 	using StockSharp.Localization;
 
 	/// <summary>
-	/// Настройки эмуляции.
+	/// Emulation settings.
 	/// </summary>
 	[DisplayNameLoc(LocalizedStrings.SettingsKey)]
 	[DescriptionLoc(LocalizedStrings.Str1408Key)]
@@ -23,7 +23,7 @@ namespace StockSharp.Algo.Strategies.Testing
 		private DateTime _startTime = DateTime.Today.AddYears(-1);
 
 		/// <summary>
-		/// Дата в истории, с которой необходимо начать эмуляцию.
+		/// Date in history for starting the paper trading.
 		/// </summary>
 		[Browsable(false)]
 		public DateTime StartTime
@@ -39,7 +39,7 @@ namespace StockSharp.Algo.Strategies.Testing
 		private DateTime _stopTime = DateTime.Today;
 
 		/// <summary>
-		/// Дата в истории, на которой необходимо закончить эмуляцию (дата включается).
+		/// Date in history to stop the paper trading (date is included).
 		/// </summary>
 		[Browsable(false)]
 		public DateTime StopTime
@@ -57,7 +57,7 @@ namespace StockSharp.Algo.Strategies.Testing
 		private TimeSpan _marketTimeChangedInterval;
 
 		/// <summary>
-		/// Интервал изменения времени.
+		/// Time change interval.
 		/// </summary>
 		[CategoryLoc(LocalizedStrings.Str1174Key)]
 		[PropertyOrder(1)]
@@ -79,7 +79,7 @@ namespace StockSharp.Algo.Strategies.Testing
 		private TimeSpan? _unrealizedPnLInterval;
 
 		/// <summary>
-		/// Интервал пересчета нереализованной прибыли.
+		/// Unrealized profit recalculation interval.
 		/// </summary>
 		[CategoryLoc(LocalizedStrings.Str1174Key)]
 		[PropertyOrder(1)]
@@ -102,7 +102,7 @@ namespace StockSharp.Algo.Strategies.Testing
 		private EmulationMarketDataModes _tradeDataMode;
 
 		/// <summary>
-		/// Какие использовать сделки.
+		/// What trades to use.
 		/// </summary>
 		[CategoryLoc(LocalizedStrings.Str1174Key)]
 		[PropertyOrder(25)]
@@ -121,7 +121,7 @@ namespace StockSharp.Algo.Strategies.Testing
 		private EmulationMarketDataModes _depthDataMode;
 
 		/// <summary>
-		/// Какие использовать стаканы.
+		/// What market depths to use.
 		/// </summary>
 		[CategoryLoc(LocalizedStrings.Str1174Key)]
 		[PropertyOrder(30)]
@@ -140,7 +140,7 @@ namespace StockSharp.Algo.Strategies.Testing
 		private EmulationMarketDataModes _orderLogDataMode;
 
 		/// <summary>
-		/// Использовать лог заявок.
+		/// Use orders log.
 		/// </summary>
 		[CategoryLoc(LocalizedStrings.Str1174Key)]
 		[PropertyOrder(40)]
@@ -159,7 +159,7 @@ namespace StockSharp.Algo.Strategies.Testing
 		private int _batchSize = 10;
 
 		/// <summary>
-		/// Количество одновременно тестируемых стратегий.
+		/// Number of simultaneously tested strategies.
 		/// </summary>
 		[CategoryLoc(LocalizedStrings.Str1174Key)]
 		[PropertyOrder(50)]
@@ -182,7 +182,7 @@ namespace StockSharp.Algo.Strategies.Testing
 		private LogLevels _logLevel;
 
 		/// <summary>
-		/// Уровень логирования.
+		/// Logging level.
 		/// </summary>
 		[CategoryLoc(LocalizedStrings.Str12Key)]
 		[PropertyOrder(1)]
@@ -201,7 +201,7 @@ namespace StockSharp.Algo.Strategies.Testing
 		#endregion
 
 		/// <summary>
-		/// Создать <see cref="EmulationSettings"/>.
+		/// Initializes a new instance of the <see cref="EmulationSettings"/>.
 		/// </summary>
 		public EmulationSettings()
 		{
@@ -210,9 +210,9 @@ namespace StockSharp.Algo.Strategies.Testing
 		}
 
 		/// <summary>
-		/// Сохранить состояние параметров эмуляции.
+		/// To save the state of paper trading parameters.
 		/// </summary>
-		/// <param name="storage">Хранилище.</param>
+		/// <param name="storage">Storage.</param>
 		public override void Save(SettingsStorage storage)
 		{
 			base.Save(storage);
@@ -229,9 +229,9 @@ namespace StockSharp.Algo.Strategies.Testing
 		}
 
 		/// <summary>
-		/// Загрузить состояние параметров эмуляции.
+		/// To load the state of paper trading parameters.
 		/// </summary>
-		/// <param name="storage">Хранилище.</param>
+		/// <param name="storage">Storage.</param>
 		public override void Load(SettingsStorage storage)
 		{
 			base.Load(storage);

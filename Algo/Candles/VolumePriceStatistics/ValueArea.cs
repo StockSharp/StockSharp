@@ -1,18 +1,18 @@
-﻿namespace StockSharp.Algo.Candles.VolumePriceStatistics
+namespace StockSharp.Algo.Candles.VolumePriceStatistics
 {
 	using System;
 	using System.Collections.Generic;
 	using System.Linq;
 
 	/// <summary>
-	/// Область стоимости.
+	/// The value area.
 	/// </summary>
 	public class ValueArea
 	{
 		private decimal _volumePercent = 70;
 
 		/// <summary>
-		/// Процент от общего объема (по умолчанию 70%).
+		/// The percentage of total volume (the default is 70%).
 		/// </summary>
 		public decimal VolumePercent
 		{
@@ -27,17 +27,17 @@
 		}
 
 		/// <summary>
-		/// Ценовые уровни.
+		/// Price levels.
 		/// </summary>
 		public List<PriceLevel> PriceLevels { get; private set; }
 
 		/// <summary>
-		/// Верхний ценовой уровень.
+		/// The upper price level.
 		/// </summary>
 		public PriceLevel VAH { get; private set; }
 
 		/// <summary>
-		/// Нижний ценовой уровень.
+		/// The lower price level.
 		/// </summary>
 		public PriceLevel VAL { get; private set; }
 
@@ -47,9 +47,9 @@
 		public PriceLevel POC { get; private set; }
 
 		/// <summary>
-		/// Создать <see cref="ValueArea"/>
+		/// Initializes a new instance of the <see cref="ValueArea"/>.
 		/// </summary>
-		/// <param name="priceLevels">Коллекция <see cref="PriceLevel"/>, для которых необходимо рассчитать область стоимости.</param>
+		/// <param name="priceLevels">The collection of <see cref="PriceLevel"/> for which you need to calculate the value area.</param>
 		public ValueArea(IEnumerable<PriceLevel> priceLevels)
 		{
 			if (priceLevels == null)
@@ -62,7 +62,7 @@
 		}
 
 		/// <summary>
-		/// Рассчитать область стоимости.
+		/// To calculate the value area.
 		/// </summary>
 		public void Calculate()
 		{

@@ -17,7 +17,7 @@ namespace StockSharp.Algo.Testing
 	using StockSharp.Localization;
 
 	/// <summary>
-	/// Эмулятор торгов.
+	/// Paper trading.
 	/// </summary>
 	public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 	{
@@ -1412,7 +1412,7 @@ namespace StockSharp.Algo.Testing
 		private readonly ICommissionManager _commissionManager = new CommissionManager();
 
 		/// <summary>
-		/// Создать <see cref="MarketEmulator"/>.
+		/// Initializes a new instance of the <see cref="MarketEmulator"/>.
 		/// </summary>
 		public MarketEmulator()
 		{
@@ -1421,7 +1421,7 @@ namespace StockSharp.Algo.Testing
 		private readonly MarketEmulatorSettings _settings = new MarketEmulatorSettings();
 
 		/// <summary>
-		/// Настройки эмулятора.
+		/// Emulator settings.
 		/// </summary>
 		public MarketEmulatorSettings Settings
 		{
@@ -1429,7 +1429,7 @@ namespace StockSharp.Algo.Testing
 		}
 
 		/// <summary>
-		/// Генератор идентификаторов для заявок.
+		/// The generator of identifiers for orders.
 		/// </summary>
 		public IncrementalIdGenerator OrderIdGenerator
 		{
@@ -1438,7 +1438,7 @@ namespace StockSharp.Algo.Testing
 		}
 
 		/// <summary>
-		/// Генератор идентификаторов для сделок.
+		/// The generator of identifiers for trades.
 		/// </summary>
 		public IncrementalIdGenerator TradeIdGenerator
 		{
@@ -1447,9 +1447,9 @@ namespace StockSharp.Algo.Testing
 		}
 
 		/// <summary>
-		/// Отправить сообщение.
+		/// Send message.
 		/// </summary>
-		/// <param name="message">Сообщение.</param>
+		/// <param name="message">Message.</param>
 		public void SendInMessage(Message message)
 		{
 			if (message == null) 
@@ -1641,7 +1641,7 @@ namespace StockSharp.Algo.Testing
 		}
 
 		/// <summary>
-		/// Событие появления нового сообщения.
+		/// New message event.
 		/// </summary>
 		public event Action<Message> NewOutMessage;
 

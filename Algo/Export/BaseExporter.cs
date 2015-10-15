@@ -14,19 +14,19 @@ namespace StockSharp.Algo.Export
 	using StockSharp.Localization;
 
 	/// <summary>
-	/// Базовый класс экспорта.
+	/// The base class of export.
 	/// </summary>
 	public abstract class BaseExporter
 	{
 		private readonly Func<int, bool> _isCancelled;
 
 		/// <summary>
-		/// Инициализировать <see cref="BaseExporter"/>.
+		/// Initialize <see cref="BaseExporter"/>.
 		/// </summary>
-		/// <param name="security">Инструмент.</param>
-		/// <param name="arg">Параметр данных.</param>
-		/// <param name="isCancelled">Обработчик, возвращающий признак прерывания экспорта.</param>
-		/// <param name="path">Путь к файлу.</param>
+		/// <param name="security">Security.</param>
+		/// <param name="arg">The data parameter.</param>
+		/// <param name="isCancelled">The processor, returning export interruption sign.</param>
+		/// <param name="path">The path to file.</param>
 		protected BaseExporter(Security security, object arg, Func<int, bool> isCancelled, string path)
 		{
 			//if (security == null)
@@ -45,25 +45,25 @@ namespace StockSharp.Algo.Export
 		}
 
 		/// <summary>
-		/// Инструмент.
+		/// Security.
 		/// </summary>
 		protected Security Security { get; private set; }
 
 		/// <summary>
-		/// Параметр данных.
+		/// The data parameter.
 		/// </summary>
 		public object Arg { get; private set; }
 
 		/// <summary>
-		/// Путь к файлу.
+		/// The path to file.
 		/// </summary>
 		protected string Path { get; private set; }
 
 		/// <summary>
-		/// Экспортировать значения.
+		/// To export values.
 		/// </summary>
-		/// <param name="dataType">Тип маркет-данных.</param>
-		/// <param name="values">Значение.</param>
+		/// <param name="dataType">Market data type.</param>
+		/// <param name="values">Value.</param>
 		public void Export(Type dataType, IEnumerable values)
 		{
 			if (values == null)
@@ -101,49 +101,49 @@ namespace StockSharp.Algo.Export
 		}
 
 		/// <summary>
-		/// Можно ли продолжать экспорт.
+		/// Is it possible to continue export.
 		/// </summary>
-		/// <param name="exported">Количество экспотированных элементов с предыдущего вызова метода.</param>
-		/// <returns><see langword="true"/>, если экспорт можно продолжить, иначе, <see langword="false"/>.</returns>
+		/// <param name="exported">The number of exported elements from previous call of the method.</param>
+		/// <returns><see langword="true" />, if export can be continued, otherwise, <see langword="false" />.</returns>
 		protected bool CanProcess(int exported = 1)
 		{
 			return !_isCancelled(exported);
 		}
 
 		/// <summary>
-		/// Экспортировать <see cref="QuoteChangeMessage"/>.
+		/// To export <see cref="QuoteChangeMessage"/>.
 		/// </summary>
-		/// <param name="messages">Сообщения.</param>
+		/// <param name="messages">Messages.</param>
 		protected abstract void Export(IEnumerable<QuoteChangeMessage> messages);
 
 		/// <summary>
-		/// Экспортировать <see cref="Level1ChangeMessage"/>.
+		/// To export <see cref="Level1ChangeMessage"/>.
 		/// </summary>
-		/// <param name="messages">Сообщения.</param>
+		/// <param name="messages">Messages.</param>
 		protected abstract void Export(IEnumerable<Level1ChangeMessage> messages);
 
 		/// <summary>
-		/// Экспортировать <see cref="ExecutionMessage"/>.
+		/// To export <see cref="ExecutionMessage"/>.
 		/// </summary>
-		/// <param name="messages">Сообщения.</param>
+		/// <param name="messages">Messages.</param>
 		protected abstract void Export(IEnumerable<ExecutionMessage> messages);
 
 		/// <summary>
-		/// Экспортировать <see cref="CandleMessage"/>.
+		/// To export <see cref="CandleMessage"/>.
 		/// </summary>
-		/// <param name="messages">Сообщения.</param>
+		/// <param name="messages">Messages.</param>
 		protected abstract void Export(IEnumerable<CandleMessage> messages);
 
 		/// <summary>
-		/// Экспортировать <see cref="NewsMessage"/>.
+		/// To export <see cref="NewsMessage"/>.
 		/// </summary>
-		/// <param name="messages">Сообщения.</param>
+		/// <param name="messages">Messages.</param>
 		protected abstract void Export(IEnumerable<NewsMessage> messages);
 
 		/// <summary>
-		/// Экспортировать <see cref="SecurityMessage"/>.
+		/// To export <see cref="SecurityMessage"/>.
 		/// </summary>
-		/// <param name="messages">Сообщения.</param>
+		/// <param name="messages">Messages.</param>
 		protected abstract void Export(IEnumerable<SecurityMessage> messages);
 	}
 }

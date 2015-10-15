@@ -1,4 +1,4 @@
-﻿namespace StockSharp.Algo.Indicators
+namespace StockSharp.Algo.Indicators
 {
 	using System;
 	using System.ComponentModel;
@@ -6,17 +6,17 @@
 	using StockSharp.Localization;
 
 	/// <summary>
-	/// Ковариация.
+	/// Covariance.
 	/// </summary>
 	/// <remarks>
-	/// https://en.wikipedia.org/wiki/Covariance
+	/// https://en.wikipedia.org/wiki/Covariance.
 	/// </remarks>
 	[DisplayName("COV")]
 	[DescriptionLoc(LocalizedStrings.CovarianceKey, true)]
 	public class Covariance : LengthIndicator<Tuple<decimal, decimal>>
 	{
 		/// <summary>
-		/// Создать <see cref="Covariance"/>.
+		/// Initializes a new instance of the <see cref="Covariance"/>.
 		/// </summary>
 		public Covariance()
 		{
@@ -24,10 +24,10 @@
 		}
 
 		/// <summary>
-		/// Обработать входное значение.
+		/// To handle the input value.
 		/// </summary>
-		/// <param name="input">Входное значение.</param>
-		/// <returns>Результирующее значение.</returns>
+		/// <param name="input">The input value.</param>
+		/// <returns>The resulting value.</returns>
 		protected override IIndicatorValue OnProcess(IIndicatorValue input)
 		{
 			var value = input.GetValue<Tuple<decimal, decimal>>();

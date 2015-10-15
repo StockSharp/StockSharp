@@ -1,11 +1,11 @@
-﻿namespace StockSharp.Algo.Indicators
+namespace StockSharp.Algo.Indicators
 {
 	using System;
 
 	using Ecng.Serialization;
 
 	/// <summary>
-	/// Гистограмма осцилятора <see cref="GatorOscillator"/>.
+	/// The oscillator histogram <see cref="GatorOscillator"/>.
 	/// </summary>
 	public class GatorHistogram : BaseIndicator
 	{
@@ -27,10 +27,10 @@
 		}
 
 		/// <summary>
-		/// Обработать входное значение.
+		/// To handle the input value.
 		/// </summary>
-		/// <param name="input">Входное значение.</param>
-		/// <returns>Результирующее значение.</returns>
+		/// <param name="input">The input value.</param>
+		/// <returns>The resulting value.</returns>
 		protected override IIndicatorValue OnProcess(IIndicatorValue input)
 		{
 			if (input.IsFinal)
@@ -40,18 +40,18 @@
 		}
 
 		/// <summary>
-		/// Создать копию <see cref="GatorHistogram"/>.
+		/// Create a copy of <see cref="GatorHistogram"/>.
 		/// </summary>
-		/// <returns>Копия.</returns>
+		/// <returns>Copy.</returns>
 		public override IIndicator Clone()
 		{
 			return new GatorHistogram((AlligatorLine)_line1.Clone(), (AlligatorLine)_line2.Clone(), _isNegative) { Name = Name };
 		}
 
 		/// <summary>
-		/// Загрузить настройки.
+		/// Load settings.
 		/// </summary>
-		/// <param name="settings">Хранилище настроек.</param>
+		/// <param name="settings">Settings storage.</param>
 		public override void Load(SettingsStorage settings)
 		{
 			base.Load(settings);
@@ -61,9 +61,9 @@
 		}
 
 		/// <summary>
-		/// Сохранить настройки.
+		/// Save settings.
 		/// </summary>
-		/// <param name="settings">Хранилище настроек.</param>
+		/// <param name="settings">Settings storage.</param>
 		public override void Save(SettingsStorage settings)
 		{
 			base.Save(settings);

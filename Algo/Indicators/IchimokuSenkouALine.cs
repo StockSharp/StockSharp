@@ -1,18 +1,18 @@
-﻿namespace StockSharp.Algo.Indicators
+namespace StockSharp.Algo.Indicators
 {
 	using System;
 	using System.ComponentModel;
 
 	/// <summary>
-	/// Линия Senkou Span A.
+	/// Senkou Span A line.
 	/// </summary>
 	public class IchimokuSenkouALine : LengthIndicator<decimal>
 	{
 		/// <summary>
-		/// Создать <see cref="IchimokuSenkouALine"/>.
+		/// Initializes a new instance of the <see cref="IchimokuSenkouALine"/>.
 		/// </summary>
-		/// <param name="tenkan">Линия Tenkan.</param>
-		/// <param name="kijun">Линия Kijun.</param>
+		/// <param name="tenkan">Tenkan line.</param>
+		/// <param name="kijun">Kijun line.</param>
 		public IchimokuSenkouALine(IchimokuLine tenkan, IchimokuLine kijun)
 		{
 			if (tenkan == null)
@@ -26,31 +26,30 @@
 		}
 
 		/// <summary>
-		/// Сформирован ли индикатор.
+		/// Whether the indicator is set.
 		/// </summary>
-		/// 
 		public override bool IsFormed
 		{
 			get { return Buffer.Count >= Kijun.Length; }
 		}
 
 		/// <summary>
-		/// Линия Tenkan.
+		/// Tenkan line.
 		/// </summary>
 		[Browsable(false)]
 		public IchimokuLine Tenkan { get; private set; }
 
 		/// <summary>
-		/// Линия Kijun.
+		/// Kijun line.
 		/// </summary>
 		[Browsable(false)]
 		public IchimokuLine Kijun { get; private set; }
 
 		/// <summary>
-		/// Обработать входное значение.
+		/// To handle the input value.
 		/// </summary>
-		/// <param name="input">Входное значение.</param>
-		/// <returns>Результирующее значение.</returns>
+		/// <param name="input">The input value.</param>
+		/// <returns>The resulting value.</returns>
 		protected override IIndicatorValue OnProcess(IIndicatorValue input)
 		{
 			decimal? result = null;

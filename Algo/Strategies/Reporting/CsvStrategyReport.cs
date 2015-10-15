@@ -12,18 +12,18 @@ namespace StockSharp.Algo.Strategies.Reporting
 
 	using StockSharp.Localization;
 
-	///<summary>
-	/// Генератор отчета по эквити стратегии в формате csv.
-	///</summary>
+	/// <summary>
+	/// The generator of report on equity in the csv format.
+	/// </summary>
 	public class CsvStrategyReport : StrategyReport
 	{
 		private readonly string _separator = CultureInfo.CurrentCulture.TextInfo.ListSeparator;
 
 		/// <summary>
-		/// Создать <see cref="CsvStrategyReport"/>.
+		/// Initializes a new instance of the <see cref="CsvStrategyReport"/>.
 		/// </summary>
-		/// <param name="strategy">Стратегия, для которой необходимо сгенерировать отчет.</param>
-		/// <param name="fileName">Название файла, в котором сгенерируется отчет в формате csv.</param>
+		/// <param name="strategy">The strategy, requiring the report generation.</param>
+		/// <param name="fileName">The name of the file for the report generation in the csv format.</param>
 		public CsvStrategyReport(Strategy strategy, string fileName)
 			: this(new[] { strategy }, fileName)
 		{
@@ -32,17 +32,17 @@ namespace StockSharp.Algo.Strategies.Reporting
 		}
 
 		/// <summary>
-		/// Создать <see cref="CsvStrategyReport"/>.
+		/// Initializes a new instance of the <see cref="CsvStrategyReport"/>.
 		/// </summary>
-		/// <param name="strategies">Стратегии, для которых необходимо сгенерировать отчет.</param>
-		/// <param name="fileName">Название файла, в котором сгенерируется отчет в формате csv.</param>
+		/// <param name="strategies">Strategies, requiring the report generation.</param>
+		/// <param name="fileName">The name of the file for the report generation in the csv format.</param>
 		public CsvStrategyReport(IEnumerable<Strategy> strategies, string fileName)
 			: base(strategies, fileName)
 		{
 		}
 
 		/// <summary>
-		/// Сгенерировать отчет.
+		/// To generate the report.
 		/// </summary>
 		public override void Generate()
 		{

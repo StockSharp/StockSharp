@@ -16,7 +16,7 @@ namespace StockSharp.Algo
 	using StockSharp.Localization;
 
 	/// <summary>
-	/// Вспомогательный класс для работы с <see cref="IMarketRule"/>.
+	/// Extension class for <see cref="IMarketRule"/>.
 	/// </summary>
 	public static class MarketRuleHelper
 	{
@@ -83,9 +83,9 @@ namespace StockSharp.Algo
 			}
 
 			/// <summary>
-			/// Получить строковое представление.
+			/// Returns a string that represents the current object.
 			/// </summary>
-			/// <returns>Строковое представление.</returns>
+			/// <returns>A string that represents the current object.</returns>
 			public override string ToString()
 			{
 				return "{0} {2}/{3} (0x{1:X})".Put(Name, GetHashCode(), Order.TransactionId, (Order.Id == null ? Order.StringId : Order.Id.To<string>()));
@@ -374,10 +374,10 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Создать правило на событие успешной регистрации заявки на бирже.
+		/// To create a rule for the event of successful order registration on exchange.
 		/// </summary>
-		/// <param name="order">Заявка, которую необходимо отслеживать на событие успешной регистрации.</param>
-		/// <returns>Правило.</returns>
+		/// <param name="order">The order to be traced for the event of successful registration.</param>
+		/// <returns>Rule.</returns>
 		public static MarketRule<Order, Order> WhenRegistered(this Order order)
 		{
 			if (order == null)
@@ -387,10 +387,10 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Создать правило на событие активации стоп-заявки.
+		/// To create a rule for the stop order activation.
 		/// </summary>
-		/// <param name="stopOrder">Стоп-заявка, которую необходимо отслеживать на событие активации.</param>
-		/// <returns>Правило.</returns>
+		/// <param name="stopOrder">The stop order to be traced for the activation event.</param>
+		/// <returns>Rule.</returns>
 		public static MarketRule<Order, Order> WhenActivated(this Order stopOrder)
 		{
 			if (stopOrder == null)
@@ -400,10 +400,10 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Создать правило на событие частичного исполнения заявки.
+		/// To create a rule for the event of order partial matching.
 		/// </summary>
-		/// <param name="order">Заявка, которую необходимо отслеживать на событие частичного исполнения.</param>
-		/// <returns>Правило.</returns>
+		/// <param name="order">The order to be traced for partial matching event.</param>
+		/// <returns>Rule.</returns>
 		public static MarketRule<Order, Order> WhenPartiallyMatched(this Order order)
 		{
 			if (order == null)
@@ -431,10 +431,10 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Создать правило на событие неудачной регистрации заявки на бирже.
+		/// To create a for the event of order unsuccessful registration on exchange.
 		/// </summary>
-		/// <param name="order">Заявка, которую необходимо отслеживать на событие неудачной регистрации.</param>
-		/// <returns>Правило.</returns>
+		/// <param name="order">The order to be traced for unsuccessful registration event.</param>
+		/// <returns>Rule.</returns>
 		public static MarketRule<Order, OrderFail> WhenRegisterFailed(this Order order)
 		{
 			if (order == null)
@@ -444,10 +444,10 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Создать правило на событие неудачного снятия заявки на бирже.
+		/// To create a rule for the event of unsuccessful order cancelling on exchange.
 		/// </summary>
-		/// <param name="order">Заявка, которую необходимо отслеживать на событие неудачного снятия.</param>
-		/// <returns>Правило.</returns>
+		/// <param name="order">The order to be traced for unsuccessful cancelling event.</param>
+		/// <returns>Rule.</returns>
 		public static MarketRule<Order, OrderFail> WhenCancelFailed(this Order order)
 		{
 			if (order == null)
@@ -457,10 +457,10 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Создать правило на событие отмены заявки.
+		/// To create a rule for the order cancelling event.
 		/// </summary>
-		/// <param name="order">Заявка, которую необходимо отслеживать на событие отмены.</param>
-		/// <returns>Правило.</returns>
+		/// <param name="order">The order to be traced for cancelling event.</param>
+		/// <returns>Rule.</returns>
 		public static MarketRule<Order, Order> WhenCanceled(this Order order)
 		{
 			if (order == null)
@@ -470,10 +470,10 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Создать правило на событие полного исполнения заявки.
+		/// To create a rule for the event of order fully matching.
 		/// </summary>
-		/// <param name="order">Заявка, которую необходимо отслеживать на событие полного исполнения.</param>
-		/// <returns>Правило.</returns>
+		/// <param name="order">The order to be traced for the fully matching event.</param>
+		/// <returns>Rule.</returns>
 		public static MarketRule<Order, Order> WhenMatched(this Order order)
 		{
 			if (order == null)
@@ -483,20 +483,20 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Создать правило на событие изменения заявки.
+		/// To create a rule for the order change event.
 		/// </summary>
-		/// <param name="order">Заявка, которую необходимо отслеживать на событие изменения.</param>
-		/// <returns>Правило.</returns>
+		/// <param name="order">The order to be traced for the change event.</param>
+		/// <returns>Rule.</returns>
 		public static MarketRule<Order, Order> WhenChanged(this Order order)
 		{
 			return new ChangedOrNewOrderRule(order);
 		}
 
 		/// <summary>
-		/// Создать правило на событие появления сделок по заявке.
+		/// To create a rule for the event of trade occurrence for the order.
 		/// </summary>
-		/// <param name="order">Заявка, которую необходимо отслеживать на событие появления сделок.</param>
-		/// <returns>Правило.</returns>
+		/// <param name="order">The order to be traced for trades occurrence events.</param>
+		/// <returns>Rule.</returns>
 		public static MarketRule<Order, IEnumerable<MyTrade>> WhenNewTrades(this Order order)
 		{
 			if (order == null)
@@ -506,10 +506,10 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Создать правило на событие появления всех сделок по заявке.
+		/// To create a rule for the event of all trades occurrence for the order.
 		/// </summary>
-		/// <param name="order">Заявка, которую необходимо отслеживать на событие появления всех сделок.</param>
-		/// <returns>Правило.</returns>
+		/// <param name="order">The order to be traced for all trades occurrence event.</param>
+		/// <returns>Rule.</returns>
 		public static MarketRule<Order, IEnumerable<MyTrade>> WhenAllTrades(this Order order)
 		{
 			if (order == null)
@@ -559,11 +559,11 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Создать правило на событие уменьшения денег в портфеле ниже определённого уровня.
+		/// To create a rule for the event of money decrease in portfolio below the specific level.
 		/// </summary>
-		/// <param name="portfolio">Портфель, который необходимо отслеживать на событие уменьшении денег ниже определённого уровня.</param>
-		/// <param name="money">Уровень. Если тип <see cref="Unit.Type"/> равен <see cref="UnitTypes.Limit"/>, то задается конкретная цена. Иначе, указывается величина сдвига.</param>
-		/// <returns>Правило.</returns>
+		/// <param name="portfolio">The portfolio to be traced for the event of money decrease below the specific level.</param>
+		/// <param name="money">The level. If the <see cref="Unit.Type"/> type equals to <see cref="UnitTypes.Limit"/>, specified price is set. Otherwise, shift value is specified.</param>
+		/// <returns>Rule.</returns>
 		public static MarketRule<Portfolio, Portfolio> WhenMoneyLess(this Portfolio portfolio, Unit money)
 		{
 			if (portfolio == null)
@@ -581,11 +581,11 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Создать правило на событие увеличения денег в портфеле выше определённого уровня.
+		/// To create a rule for the event of money increase in portfolio above the specific level.
 		/// </summary>
-		/// <param name="portfolio">Портфель, который необходимо отслеживать на событие увеличения денег выше определённого уровня.</param>
-		/// <param name="money">Уровень. Если тип <see cref="Unit.Type"/> равен <see cref="UnitTypes.Limit"/>, то задается конкретная цена. Иначе, указывается величина сдвига.</param>
-		/// <returns>Правило.</returns>
+		/// <param name="portfolio">The portfolio to be traced for the event of money increase above the specific level.</param>
+		/// <param name="money">The level. If the <see cref="Unit.Type"/> type equals to <see cref="UnitTypes.Limit"/>, specified price is set. Otherwise, shift value is specified.</param>
+		/// <returns>Rule.</returns>
 		public static MarketRule<Portfolio, Portfolio> WhenMoneyMore(this Portfolio portfolio, Unit money)
 		{
 			if (portfolio == null)
@@ -649,11 +649,11 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Создать правило на событие уменьшения позиции ниже определённого уровня.
+		/// To create a rule for the event of position decrease below the specific level.
 		/// </summary>
-		/// <param name="position">Позиция, которую необходимо отслеживать на событие уменьшения ниже определенного уровня.</param>
-		/// <param name="value">Уровень. Если тип <see cref="Unit.Type"/> равен <see cref="UnitTypes.Limit"/>, то задается конкретная цена. Иначе, указывается величина сдвига.</param>
-		/// <returns>Правило.</returns>
+		/// <param name="position">The position to be traced for the event of decrease below the specific level.</param>
+		/// <param name="value">The level. If the <see cref="Unit.Type"/> type equals to <see cref="UnitTypes.Limit"/>, specified price is set. Otherwise, shift value is specified.</param>
+		/// <returns>Rule.</returns>
 		public static MarketRule<Position, Position> WhenLess(this Position position, Unit value)
 		{
 			if (position == null)
@@ -671,11 +671,11 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Создать правило на событие увеличения позиции выше определенного уровня.
+		/// To create a rule for the event of position increase above the specific level.
 		/// </summary>
-		/// <param name="position">Позиция, которую необходимо отслеживать на событие увеличения выше определенного уровня.</param>
-		/// <param name="value">Уровень. Если тип <see cref="Unit.Type"/> равен <see cref="UnitTypes.Limit"/>, то задается конкретная цена. Иначе, указывается величина сдвига.</param>
-		/// <returns>Правило.</returns>
+		/// <param name="position">The position to be traced of the event of increase above the specific level.</param>
+		/// <param name="value">The level. If the <see cref="Unit.Type"/> type equals to <see cref="UnitTypes.Limit"/>, specified price is set. Otherwise, shift value is specified.</param>
+		/// <returns>Rule.</returns>
 		public static MarketRule<Position, Position> WhenMore(this Position position, Unit value)
 		{
 			if (position == null)
@@ -693,10 +693,10 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Создать правило на событие изменения позиции.
+		/// To create a rule for the position change event.
 		/// </summary>
-		/// <param name="position">Позиция, которую необходимо отслеживать на событие изменения.</param>
-		/// <returns>Правило.</returns>
+		/// <param name="position">The position to be traced for the change event.</param>
+		/// <returns>Rule.</returns>
 		public static MarketRule<Position, Position> Changed(this Position position)
 		{
 			return new PositionRule(position);
@@ -977,129 +977,129 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Создать правило на событие изменения инструмента.
+		/// To create a rule for the instrument change event.
 		/// </summary>
-		/// <param name="security">Инструмент, изменения которого будут отслеживаться.</param>
-		/// <param name="connector">Подключение к торговой системе.</param>
-		/// <returns>Правило.</returns>
+		/// <param name="security">The instrument to be traced for changes.</param>
+		/// <param name="connector">Connection to the trading system.</param>
+		/// <returns>Rule.</returns>
 		public static MarketRule<Security, Security> WhenChanged(this Security security, IConnector connector)
 		{
 			return new SecurityChangedRule(security, connector);
 		}
 
 		/// <summary>
-		/// Создать правило на событие появления у инструмента новой сделки.
+		/// To create a rule for the event of new trade occurrence for the instrument.
 		/// </summary>
-		/// <param name="security">Инструмент, который необходимо отслеживать на событие появления новой сделки.</param>
-		/// <param name="connector">Подключение к торговой системе.</param>
-		/// <returns>Правило.</returns>
+		/// <param name="security">The instrument to be traced for new trade occurrence event.</param>
+		/// <param name="connector">Connection to the trading system.</param>
+		/// <returns>Rule.</returns>
 		public static MarketRule<Security, IEnumerable<Trade>> WhenNewTrades(this Security security, IConnector connector)
 		{
 			return new SecurityNewTradesRule(security, connector);
 		}
 
 		/// <summary>
-		/// Создать правило на событие появления у инструмента новых записей в логе заявок.
+		/// To create a rule for the event of new notes occurrence in the orders log for instrument.
 		/// </summary>
-		/// <param name="security">Инструмент, который необходимо отслеживать на событие появления новых записей в логе заявок.</param>		
-		/// <param name="connector">Подключение к торговой системе.</param>
-		/// <returns>Правило.</returns>
+		/// <param name="security">The instrument to be traced for the event of new notes occurrence in the orders log.</param>
+		/// <param name="connector">Connection to the trading system.</param>
+		/// <returns>Rule.</returns>
 		public static MarketRule<Security, IEnumerable<OrderLogItem>> WhenNewOrderLogItems(this Security security, IConnector connector)
 		{
 			return new SecurityNewOrderLogItems(security, connector);
 		}
 
 		/// <summary>
-		/// Создать правило на событие изменения стакана по инструменту.
+		/// To create a rule for the event of order book change by instrument.
 		/// </summary>
-		/// <param name="security">Инструмент, который необходимо отслеживать на событие изменения стакана по инструменту.</param>
-		/// <param name="connector">Подключение к торговой системе.</param>
-		/// <returns>Правило.</returns>
+		/// <param name="security">The instrument to be traced for the event of order book change by instrument.</param>
+		/// <param name="connector">Connection to the trading system.</param>
+		/// <returns>Rule.</returns>
 		public static MarketRule<Security, MarketDepth> WhenMarketDepthChanged(this Security security, IConnector connector)
 		{
 			return new SecurityMarketDepthChangedRule(security, connector);
 		}
 
 		/// <summary>
-		/// Создать правило на событие изменения стаканов по корзине инструментов.
+		/// To create a rule for the event of order book change by instruments basket.
 		/// </summary>
-		/// <param name="security">Корзина инструментов, которую необходимо отслеживать на событие изменения стаканов по внутренним инструментам.</param>
-		/// <param name="connector">Подключение к торговой системе.</param>
-		/// <returns>Правило.</returns>
+		/// <param name="security">Instruments basket to be traced for the event of order books change by internal instruments.</param>
+		/// <param name="connector">Connection to the trading system.</param>
+		/// <returns>Rule.</returns>
 		public static MarketRule<Security, IEnumerable<MarketDepth>> WhenMarketDepthChanged(this BasketSecurity security, IConnector connector)
 		{
 			return new BasketSecurityMarketDepthChangedRule(security, connector);
 		}
 
 		/// <summary>
-		/// Создать правило на событие превышения лучшего бида определенного уровня.
+		/// To create a rule for the event of excess of the best bid of specific level.
 		/// </summary>
-		/// <param name="security">Инструмент, который необходимо отслеживать на событие превышения лучшего бида определенного уровня.</param>
-		/// <param name="connector">Подключение к торговой системе.</param>
-		/// <param name="price">Уровень. Если тип <see cref="Unit.Type"/> равен <see cref="UnitTypes.Limit"/>, то задается конкретная цена. Иначе, указывается величина сдвига.</param>
-		/// <returns>Правило.</returns>
+		/// <param name="security">The instrument to be traced for the event of excess of the best bid of specific level.</param>
+		/// <param name="connector">Connection to the trading system.</param>
+		/// <param name="price">The level. If the <see cref="Unit.Type"/> type equals to <see cref="UnitTypes.Limit"/>, specified price is set. Otherwise, shift value is specified.</param>
+		/// <returns>Rule.</returns>
 		public static MarketRule<Security, Security> WhenBestBidPriceMore(this Security security, IConnector connector, Unit price)
 		{
 			return CreateSecurityCondition(security, connector, Level1Fields.BestBidPrice, price, false);
 		}
 
 		/// <summary>
-		/// Создать правило на событие понижения лучшего бида ниже определенного уровня.
+		/// To create a rule for the event of dropping the best bid below the specific level.
 		/// </summary>
-		/// <param name="security">Инструмент, который необходимо отслеживать на событие понижения лучшего бида ниже определенного уровня.</param>
-		/// <param name="connector">Подключение к торговой системе.</param>
-		/// <param name="price">Уровень. Если тип <see cref="Unit.Type"/> равен <see cref="UnitTypes.Limit"/>, то задается конкретная цена. Иначе, указывается величина сдвига.</param>
-		/// <returns>Правило.</returns>
+		/// <param name="security">The instrument to be traced for the event of dropping the best bid below the specific level.</param>
+		/// <param name="connector">Connection to the trading system.</param>
+		/// <param name="price">The level. If the <see cref="Unit.Type"/> type equals to <see cref="UnitTypes.Limit"/>, specified price is set. Otherwise, shift value is specified.</param>
+		/// <returns>Rule.</returns>
 		public static MarketRule<Security, Security> WhenBestBidPriceLess(this Security security, IConnector connector, Unit price)
 		{
 			return CreateSecurityCondition(security, connector, Level1Fields.BestBidPrice, price, true);
 		}
 
 		/// <summary>
-		/// Создать правило на событие превышения лучшего оффера определенного уровня.
+		/// To create a rule for the event of excess of the best offer of the specific level.
 		/// </summary>
-		/// <param name="security">Инструмент, который необходимо отслеживать на событие превышения лучшего оффера определенного уровня.</param>
-		/// <param name="connector">Подключение к торговой системе.</param>
-		/// <param name="price">Уровень. Если тип <see cref="Unit.Type"/> равен <see cref="UnitTypes.Limit"/>, то задается конкретная цена. Иначе, указывается величина сдвига.</param>
-		/// <returns>Правило.</returns>
+		/// <param name="security">The instrument to be traced for the event of excess of the best offer of the specific level.</param>
+		/// <param name="connector">Connection to the trading system.</param>
+		/// <param name="price">The level. If the <see cref="Unit.Type"/> type equals to <see cref="UnitTypes.Limit"/>, specified price is set. Otherwise, shift value is specified.</param>
+		/// <returns>Rule.</returns>
 		public static MarketRule<Security, Security> WhenBestAskPriceMore(this Security security, IConnector connector, Unit price)
 		{
 			return CreateSecurityCondition(security, connector, Level1Fields.BestAskPrice, price, false);
 		}
 
 		/// <summary>
-		/// Создать правило на событие понижения лучшего оффера ниже определенного уровня.
+		/// To create a rule for the event of dropping the best offer below the specific level.
 		/// </summary>
-		/// <param name="security">Инструмент, который необходимо отслеживать на событие понижения лучшего оффера ниже определенного уровня.</param>
-		/// <param name="connector">Подключение к торговой системе.</param>
-		/// <param name="price">Уровень. Если тип <see cref="Unit.Type"/> равен <see cref="UnitTypes.Limit"/>, то задается конкретная цена. Иначе, указывается величина сдвига.</param>
-		/// <returns>Правило.</returns>
+		/// <param name="security">The instrument to be traced for the event of dropping the best offer below the specific level.</param>
+		/// <param name="connector">Connection to the trading system.</param>
+		/// <param name="price">The level. If the <see cref="Unit.Type"/> type equals to <see cref="UnitTypes.Limit"/>, specified price is set. Otherwise, shift value is specified.</param>
+		/// <returns>Rule.</returns>
 		public static MarketRule<Security, Security> WhenBestAskPriceLess(this Security security, IConnector connector, Unit price)
 		{
 			return CreateSecurityCondition(security, connector, Level1Fields.BestAskPrice, price, true);
 		}
 
 		/// <summary>
-		/// Создать правило на событие повышения цены последней сделки выше определённого уровня.
+		/// To create a rule for the event of increase of the last trade price above the specific level.
 		/// </summary>
-		/// <param name="security">Инструмент, который необходимо отслеживать на событие повышения цены последней сделки выше определённого уровня.</param>
-		/// <param name="connector">Подключение к торговой системе.</param>
-		/// <param name="provider">Поставщик маркет-данных.</param>
-		/// <param name="price">Уровень. Если тип <see cref="Unit.Type"/> равен <see cref="UnitTypes.Limit"/>, то задается конкретная цена. Иначе, указывается величина сдвига.</param>
-		/// <returns>Правило.</returns>
+		/// <param name="security">The instrument to be traced for the event of increase of the last trade price above the specific level.</param>
+		/// <param name="connector">Connection to the trading system.</param>
+		/// <param name="provider">The market data provider.</param>
+		/// <param name="price">The level. If the <see cref="Unit.Type"/> type equals to <see cref="UnitTypes.Limit"/>, specified price is set. Otherwise, shift value is specified.</param>
+		/// <returns>Rule.</returns>
 		public static MarketRule<Security, Security> WhenLastTradePriceMore(this Security security, IConnector connector, IMarketDataProvider provider, Unit price)
 		{
 			return CreateLastTradeCondition(security, connector, provider, price, false);
 		}
 
 		/// <summary>
-		/// Создать правило на событие понижения цены последней сделки ниже определённого уровня.
+		/// To create a rule for the event of reduction of the last trade price below the specific level.
 		/// </summary>
-		/// <param name="security">Инструмент, который необходимо отслеживать на событие понижения цены последней сделки ниже определённого уровня.</param>
-		/// <param name="connector">Подключение к торговой системе.</param>
-		/// <param name="provider">Поставщик маркет-данных.</param>
-		/// <param name="price">Уровень. Если тип <see cref="Unit.Type"/> равен <see cref="UnitTypes.Limit"/>, то задается конкретная цена. Иначе, указывается величина сдвига.</param>
-		/// <returns>Правило.</returns>
+		/// <param name="security">The instrument to be traced for the event of reduction of the last trade price below the specific level.</param>
+		/// <param name="connector">Connection to the trading system.</param>
+		/// <param name="provider">The market data provider.</param>
+		/// <param name="price">The level. If the <see cref="Unit.Type"/> type equals to <see cref="UnitTypes.Limit"/>, specified price is set. Otherwise, shift value is specified.</param>
+		/// <returns>Rule.</returns>
 		public static MarketRule<Security, Security> WhenLastTradePriceLess(this Security security, IConnector connector, IMarketDataProvider provider, Unit price)
 		{
 			return CreateLastTradeCondition(security, connector, provider, price, true);
@@ -1247,24 +1247,24 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Создать правило, которое активизируется при наступлении точного времени, указанного через <paramref name="times"/>.
+		/// To create a rule, activated at the exact time, specified through <paramref name="times" />.
 		/// </summary>
-		/// <param name="security">Инструмент.</param>
-		/// <param name="connector">Подключение к торговой системе.</param>
-		/// <param name="times">Точное время. Может быть передано несколько значений.</param>
-		/// <returns>Правило.</returns>
+		/// <param name="security">Security.</param>
+		/// <param name="connector">Connection to the trading system.</param>
+		/// <param name="times">The exact time. Several values may be sent.</param>
+		/// <returns>Rule.</returns>
 		public static MarketRule<Security, DateTimeOffset> WhenTimeCome(this Security security, IConnector connector, params DateTimeOffset[] times)
 		{
 			return security.WhenTimeCome(connector, (IEnumerable<DateTimeOffset>)times);
 		}
 
 		/// <summary>
-		/// Создать правило, которое активизируется при наступлении точного времени, указанного через <paramref name="times"/>.
+		/// To create a rule, activated at the exact time, specified through <paramref name="times" />.
 		/// </summary>
-		/// <param name="security">Инструмент.</param>
-		/// <param name="connector">Подключение к торговой системе.</param>
-		/// <param name="times">Точное время. Может быть передано несколько значений.</param>
-		/// <returns>Правило.</returns>
+		/// <param name="security">Security.</param>
+		/// <param name="connector">Connection to the trading system.</param>
+		/// <param name="times">The exact time. Several values may be sent.</param>
+		/// <returns>Rule.</returns>
 		public static MarketRule<Security, DateTimeOffset> WhenTimeCome(this Security security, IConnector connector, IEnumerable<DateTimeOffset> times)
 		{
 			return new SecurityMarketTimeRule(security, connector, times);
@@ -1323,21 +1323,21 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Создать правило на событие изменения стакана.
+		/// To create a rule for the order book change event.
 		/// </summary>
-		/// <param name="depth">Стакан, который необходимо отслеживать на событие изменения.</param>
-		/// <returns>Правило.</returns>
+		/// <param name="depth">The order book to be traced for change event.</param>
+		/// <returns>Rule.</returns>
 		public static MarketRule<MarketDepth, MarketDepth> WhenChanged(this MarketDepth depth)
 		{
 			return new MarketDepthChangedRule(depth);
 		}
 
 		/// <summary>
-		/// Создать правило на событие повышения размера спреда стакана на определенную величину.
+		/// To create a rule for the event of order book spread size increase on a specific value.
 		/// </summary>
-		/// <param name="depth">Стакан, который необходимо отслеживать на событие изменения спреда.</param>
-		/// <param name="price">Величина сдвига.</param>
-		/// <returns>Правило.</returns>
+		/// <param name="depth">The order book to be traced for the spread change event.</param>
+		/// <param name="price">The shift value.</param>
+		/// <returns>Rule.</returns>
 		public static MarketRule<MarketDepth, MarketDepth> WhenSpreadMore(this MarketDepth depth, Unit price)
 		{
 			var pair = depth.BestPair;
@@ -1349,11 +1349,11 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Создать правило на событие понижения размера спреда стакана на определенную величину.
+		/// To create a rule for the event of order book spread size decrease on a specific value.
 		/// </summary>
-		/// <param name="depth">Стакан, который необходимо отслеживать на событие изменения спреда.</param>
-		/// <param name="price">Величина сдвига.</param>
-		/// <returns>Правило.</returns>
+		/// <param name="depth">The order book to be traced for the spread change event.</param>
+		/// <param name="price">The shift value.</param>
+		/// <returns>Rule.</returns>
 		public static MarketRule<MarketDepth, MarketDepth> WhenSpreadLess(this MarketDepth depth, Unit price)
 		{
 			var pair = depth.BestPair;
@@ -1365,11 +1365,11 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Создать правило на событие повышения лучшего бида на определенную величину.
+		/// To create a rule for the event of the best bid increase on a specific value.
 		/// </summary>
-		/// <param name="depth">Стакан, который необходимо отслеживать на событие повышения лучшего бида на определенную величину.</param>
-		/// <param name="price">Величина сдвига.</param>
-		/// <returns>Правило.</returns>
+		/// <param name="depth">The order book to be traced for the event of the best bid increase on a specific value.</param>
+		/// <param name="price">The shift value.</param>
+		/// <returns>Rule.</returns>
 		public static MarketRule<MarketDepth, MarketDepth> WhenBestBidPriceMore(this MarketDepth depth, Unit price)
 		{
 			return new MarketDepthChangedRule(depth, CreateDepthCondition(price, () => depth.BestBid, false))
@@ -1379,11 +1379,11 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Создать правило на событие понижения лучшего бида на определенную величину.
+		/// To create a rule for the event of the best bid decrease on a specific value.
 		/// </summary>
-		/// <param name="depth">Стакан, который необходимо отслеживать на событие понижения лучшего бида на определенную величину.</param>
-		/// <param name="price">Величина сдвига.</param>
-		/// <returns>Правило.</returns>
+		/// <param name="depth">The order book to be traced for the event of the best bid decrease on a specific value.</param>
+		/// <param name="price">The shift value.</param>
+		/// <returns>Rule.</returns>
 		public static MarketRule<MarketDepth, MarketDepth> WhenBestBidPriceLess(this MarketDepth depth, Unit price)
 		{
 			return new MarketDepthChangedRule(depth, CreateDepthCondition(price, () => depth.BestBid, true))
@@ -1393,11 +1393,11 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Создать правило на событие повышения лучшего оффера на определенную величину.
+		/// To create a rule for the event of the best offer increase on a specific value.
 		/// </summary>
-		/// <param name="depth">Стакан, который необходимо отслеживать на событие повышения лучшего оффера на определенную величину.</param>
-		/// <param name="price">Величина сдвига.</param>
-		/// <returns>Правило.</returns>
+		/// <param name="depth">The order book to be traced for the event of the best offer increase on a specific value.</param>
+		/// <param name="price">The shift value.</param>
+		/// <returns>Rule.</returns>
 		public static MarketRule<MarketDepth, MarketDepth> WhenBestAskPriceMore(this MarketDepth depth, Unit price)
 		{
 			return new MarketDepthChangedRule(depth, CreateDepthCondition(price, () => depth.BestAsk, false))
@@ -1407,11 +1407,11 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Создать правило на событие понижения лучшего оффера на определенную величину.
+		/// To create a rule for the event of the best offer decrease on a specific value.
 		/// </summary>
-		/// <param name="depth">Стакан, который необходимо отслеживать на событие понижения лучшего оффера на определенную величину.</param>
-		/// <param name="price">Величина сдвига.</param>
-		/// <returns>Правило.</returns>
+		/// <param name="depth">The order book to be traced for the event of the best offer decrease on a specific value.</param>
+		/// <param name="price">The shift value.</param>
+		/// <returns>Rule.</returns>
 		public static MarketRule<MarketDepth, MarketDepth> WhenBestAskPriceLess(this MarketDepth depth, Unit price)
 		{
 			return new MarketDepthChangedRule(depth, CreateDepthCondition(price, () => depth.BestAsk, true))
@@ -1619,11 +1619,11 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Создать правило на событие превышения цены закрытия свечи выше определенного уровня.
+		/// To create a rule for the event of candle closing price excess above a specific level.
 		/// </summary>
-		/// <param name="candle">Свеча, которую необходимо отслеживать на событие превышения цены закрытия свечи выше определенного уровня.</param>
-		/// <param name="price">Уровень. Если тип <see cref="Unit.Type"/> равен <see cref="UnitTypes.Limit"/>, то задается конкретная цена. Иначе, указывается величина сдвига.</param>
-		/// <returns>Правило.</returns>
+		/// <param name="candle">The candle to be traced for the event of candle closing price excess above a specific level.</param>
+		/// <param name="price">The level. If the <see cref="Unit.Type"/> type equals to <see cref="UnitTypes.Limit"/>, specified price is set. Otherwise, shift value is specified.</param>
+		/// <returns>Rule.</returns>
 		public static MarketRule<CandleSeries, Candle> WhenClosePriceMore(this Candle candle, Unit price)
 		{
 			return new ChangedCandleRule(candle, candle.CreateCandleCondition(price, c => c.ClosePrice, false))
@@ -1633,11 +1633,11 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Создать правило на событие понижения цены закрытия свечи ниже определенного уровня.
+		/// To create a rule for the event of candle closing price reduction below a specific level.
 		/// </summary>
-		/// <param name="candle">Свеча, которую необходимо отслеживать на событие понижения цены закрытия свечи ниже определенного уровня.</param>
-		/// <param name="price">Уровень. Если тип <see cref="Unit.Type"/> равен <see cref="UnitTypes.Limit"/>, то задается конкретная цена. Иначе, указывается величина сдвига.</param>
-		/// <returns>Правило.</returns>
+		/// <param name="candle">The candle to be traced for the event of candle closing price reduction below a specific level.</param>
+		/// <param name="price">The level. If the <see cref="Unit.Type"/> type equals to <see cref="UnitTypes.Limit"/>, specified price is set. Otherwise, shift value is specified.</param>
+		/// <returns>Rule.</returns>
 		public static MarketRule<CandleSeries, Candle> WhenClosePriceLess(this Candle candle, Unit price)
 		{
 			return new ChangedCandleRule(candle, candle.CreateCandleCondition(price, c => c.ClosePrice, true))
@@ -1676,11 +1676,11 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Создать правило на событие превышения общего объема свечи выше определённого уровня.
+		/// To create a rule for the event of candle total volume excess above a specific level.
 		/// </summary>
-		/// <param name="candle">Свеча, которую необходимо отслеживать на событие превышения общего объема выше определённого уровня.</param>
-		/// <param name="volume">Уровень. Если тип <see cref="Unit.Type"/> равен <see cref="UnitTypes.Limit"/>, то задается конкретная цена. Иначе, указывается величина сдвига.</param>
-		/// <returns>Правило.</returns>
+		/// <param name="candle">The candle to be traced for the event of candle total volume excess above a specific level.</param>
+		/// <param name="volume">The level. If the <see cref="Unit.Type"/> type equals to <see cref="UnitTypes.Limit"/>, specified price is set. Otherwise, shift value is specified.</param>
+		/// <returns>Rule.</returns>
 		public static MarketRule<CandleSeries, Candle> WhenTotalVolumeMore(this Candle candle, Unit volume)
 		{
 			if (candle == null)
@@ -1695,11 +1695,11 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Создать правило на событие превышения общего объема свечи выше определенного уровня.
+		/// To create a rule for the event of candle total volume excess above a specific level.
 		/// </summary>
-		/// <param name="series">Серия свечек, из которой будет браться свеча.</param>
-		/// <param name="volume">Уровень. Если тип <see cref="Unit.Type"/> равен <see cref="UnitTypes.Limit"/>, то задается конкретная цена. Иначе, указывается величина сдвига.</param>
-		/// <returns>Правило.</returns>
+		/// <param name="series">Candles series, from which a candle will be taken.</param>
+		/// <param name="volume">The level. If the <see cref="Unit.Type"/> type equals to <see cref="UnitTypes.Limit"/>, specified price is set. Otherwise, shift value is specified.</param>
+		/// <returns>Rule.</returns>
 		public static MarketRule<CandleSeries, Candle> WhenCurrentCandleTotalVolumeMore(this CandleSeries series, Unit volume)
 		{
 			if (series == null)
@@ -1724,40 +1724,40 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Создать правило на событие появления новых свечек.
+		/// To create a rule for the event of new candles occurrence.
 		/// </summary>
-		/// <param name="series">Серия свечек, для которой будут отслеживаться новые свечи.</param>
-		/// <returns>Правило.</returns>
+		/// <param name="series">Candles series to be traced for new candles.</param>
+		/// <returns>Rule.</returns>
 		public static MarketRule<CandleSeries, Candle> WhenCandlesStarted(this CandleSeries series)
 		{
 			return new CandleStateSeriesRule(series, CandleStates.Active) { Name = LocalizedStrings.Str1072 + " " + series };
 		}
 
 		/// <summary>
-		/// Создать правило на событие изменения свечек.
+		/// To create a rule for candle change event.
 		/// </summary>
-		/// <param name="series">Серия свечек, для которой будут отслеживаться измененные свечи.</param>
-		/// <returns>Правило.</returns>
+		/// <param name="series">Candles series to be traced for changed candles.</param>
+		/// <returns>Rule.</returns>
 		public static MarketRule<CandleSeries, Candle> WhenCandlesChanged(this CandleSeries series)
 		{
 			return new CandleChangedSeriesRule(series);
 		}
 
 		/// <summary>
-		/// Создать правило на событие окончания свечек.
+		/// To create a rule for candles end event.
 		/// </summary>
-		/// <param name="series">Серия свечек, для которой будут отслеживаться законченные свечи.</param>
-		/// <returns>Правило.</returns>
+		/// <param name="series">Candles series to be traced for end of candle.</param>
+		/// <returns>Rule.</returns>
 		public static MarketRule<CandleSeries, Candle> WhenCandlesFinished(this CandleSeries series)
 		{
 			return new CandleStateSeriesRule(series, CandleStates.Finished) { Name = LocalizedStrings.Str1073 + " " + series };
 		}
 
 		/// <summary>
-		/// Создать правило на событие появления, изменения и икончания свечек.
+		/// To create a rule for the event of candles occurrence, change and end.
 		/// </summary>
-		/// <param name="series">Серия свечек, для которой будут отслеживаться свечи.</param>
-		/// <returns>Правило.</returns>
+		/// <param name="series">Candles series to be traced for candles.</param>
+		/// <returns>Rule.</returns>
 		public static MarketRule<CandleSeries, Candle> WhenCandles(this CandleSeries series)
 		{
 			return new CandleStateSeriesRule(series, CandleStates.Active, CandleStates.Finished)
@@ -1767,32 +1767,32 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Создать правило на событие изменения свечи.
+		/// To create a rule for candle change event.
 		/// </summary>
-		/// <param name="candle">Свеча, для которой будет отслеживаться изменение.</param>
-		/// <returns>Правило.</returns>
+		/// <param name="candle">The candle to be traced for change.</param>
+		/// <returns>Rule.</returns>
 		public static MarketRule<CandleSeries, Candle> WhenChanged(this Candle candle)
 		{
 			return new ChangedCandleRule(candle);
 		}
 
 		/// <summary>
-		/// Создать правило на событие окончания свечи.
+		/// To create a rule for candle end event.
 		/// </summary>
-		/// <param name="candle">Свеча, для которой будет отслеживаться окончание.</param>
-		/// <returns>Правило.</returns>
+		/// <param name="candle">The candle to be traced for end.</param>
+		/// <returns>Rule.</returns>
 		public static MarketRule<CandleSeries, Candle> WhenFinished(this Candle candle)
 		{
 			return new FinishedCandleRule(candle).Once();
 		}
 
 		/// <summary>
-		/// Создать правило на событие частичного окончания свечи.
+		/// To create a rule for the event of candle partial end.
 		/// </summary>
-		/// <param name="candle">Свеча, для которой будет отслеживаться частичное окончание.</param>
-		/// <param name="connector">Подключение к торговой системе.</param>
-		/// <param name="percent">Процент завершения свечи.</param>
-		/// <returns>Правило.</returns>
+		/// <param name="candle">The candle to be traced for partial end.</param>
+		/// <param name="connector">Connection to the trading system.</param>
+		/// <param name="percent">The percentage of candle completion.</param>
+		/// <returns>Rule.</returns>
 		public static MarketRule<CandleSeries, Candle> WhenPartiallyFinished(this Candle candle, IConnector connector, decimal percent)
 		{
 			var rule = (candle is TimeFrameCandle)
@@ -1804,12 +1804,12 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Создать правило на событие частичного окончания свечек.
+		/// To create a rule for the event of candle partial end.
 		/// </summary>
-		/// <param name="series">Серия свечек, для которой будут отслеживаться частичное окончание свечи.</param>
-		/// <param name="connector">Подключение к торговой системе.</param>
-		/// <param name="percent">Процент завершения свечи.</param>
-		/// <returns>Правило.</returns>
+		/// <param name="series">The candle series to be traced for candle partial end.</param>
+		/// <param name="connector">Connection to the trading system.</param>
+		/// <param name="percent">The percentage of candle completion.</param>
+		/// <returns>Rule.</returns>
 		public static MarketRule<CandleSeries, Candle> WhenPartiallyFinishedCandles(this CandleSeries series, IConnector connector, decimal percent)
 		{
 			var rule = (series.CandleType == typeof(TimeFrameCandle))
@@ -2019,11 +2019,11 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Создать правило на событие <see cref="IConnector.MarketTimeChanged"/>, активизирующееся по истечению <paramref name="interval"/>.
+		/// To create a rule for the event <see cref="IConnector.MarketTimeChanged"/>, activated after expiration of <paramref name="interval" />.
 		/// </summary>
-		/// <param name="connector">Подключение к торговой системе.</param>
-		/// <param name="interval">Интервал.</param>
-		/// <returns>Правило.</returns>
+		/// <param name="connector">Connection to the trading system.</param>
+		/// <param name="interval">Interval.</param>
+		/// <returns>Rule.</returns>
 		public static MarketRule<IConnector, IConnector> WhenIntervalElapsed(this IConnector connector, TimeSpan interval/*, bool firstTimeRun = false*/)
 		{
 			/*/// <param name="firstTimeRun">Сработает ли правило в момент создания (нулевое время). False по умолчанию.</param>*/
@@ -2035,20 +2035,20 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Создать правило на событие появление новых сделок.
+		/// To create a rule for the event of new trades occurrences.
 		/// </summary>
-		/// <param name="connector">Подключение, по которому будет отслеживаться появление сделок.</param>
-		/// <returns>Правило.</returns>
+		/// <param name="connector">The connection to be traced for trades occurrences.</param>
+		/// <returns>Rule.</returns>
 		public static MarketRule<IConnector, IEnumerable<MyTrade>> WhenNewMyTrades(this IConnector connector)
 		{
 			return new NewMyTradesTraderRule(connector);
 		}
 
 		/// <summary>
-		/// Создать правило на событие появление новых заявок.
+		/// To create a rule for the event of new orders occurrences.
 		/// </summary>
-		/// <param name="connector">Подключение, по которому будет отслеживаться появление заявок.</param>
-		/// <returns>Правило.</returns>
+		/// <param name="connector">The connection to be traced for orders occurrences.</param>
+		/// <returns>Rule.</returns>
 		public static MarketRule<IConnector, IEnumerable<Order>> WhenNewOrder(this IConnector connector)
 		{
 			return new NewOrdersTraderRule(connector);
@@ -2059,10 +2059,10 @@ namespace StockSharp.Algo
 		#region Apply
 
 		/// <summary>
-		/// Сформировать правило (включить <see cref="IMarketRule.IsReady"/>).
+		/// To form a rule (include <see cref="IMarketRule.IsReady"/>).
 		/// </summary>
-		/// <param name="rule">Правило.</param>
-		/// <returns>Правило.</returns>
+		/// <param name="rule">Rule.</param>
+		/// <returns>Rule.</returns>
 		public static IMarketRule Apply(this IMarketRule rule)
 		{
 			if (rule == null)
@@ -2072,11 +2072,11 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Сформировать правило (включить <see cref="IMarketRule.IsReady"/>).
+		/// To form a rule (include <see cref="IMarketRule.IsReady"/>).
 		/// </summary>
-		/// <param name="rule">Правило.</param>
-		/// <param name="container">Контейнер правил.</param>
-		/// <returns>Правило.</returns>
+		/// <param name="rule">Rule.</param>
+		/// <param name="container">The rules container.</param>
+		/// <returns>Rule.</returns>
 		public static IMarketRule Apply(this IMarketRule rule, IMarketRuleContainer container)
 		{
 			if (rule == null)
@@ -2090,36 +2090,36 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Сформировать правило (включить <see cref="IMarketRule.IsReady"/>).
+		/// To form a rule (include <see cref="IMarketRule.IsReady"/>).
 		/// </summary>
-		/// <typeparam name="TToken">Тип токена.</typeparam>
-		/// <typeparam name="TArg">Тип принимаемого правилом аргумента.</typeparam>
-		/// <param name="rule">Правило.</param>
-		/// <returns>Правило.</returns>
+		/// <typeparam name="TToken">The type of token.</typeparam>
+		/// <typeparam name="TArg">The type of argument, accepted by the rule.</typeparam>
+		/// <param name="rule">Rule.</param>
+		/// <returns>Rule.</returns>
 		public static MarketRule<TToken, TArg> Apply<TToken, TArg>(this MarketRule<TToken, TArg> rule)
 		{
 			return rule.Apply(DefaultRuleContainer);
 		}
 
 		/// <summary>
-		/// Сформировать правило (включить <see cref="IMarketRule.IsReady"/>).
+		/// To form a rule (include <see cref="IMarketRule.IsReady"/>).
 		/// </summary>
-		/// <typeparam name="TToken">Тип токена.</typeparam>
-		/// <typeparam name="TArg">Тип принимаемого правилом аргумента.</typeparam>
-		/// <param name="rule">Правило.</param>
-		/// <param name="container">Контейнер правил.</param>
-		/// <returns>Правило.</returns>
+		/// <typeparam name="TToken">The type of token.</typeparam>
+		/// <typeparam name="TArg">The type of argument, accepted by the rule.</typeparam>
+		/// <param name="rule">Rule.</param>
+		/// <param name="container">The rules container.</param>
+		/// <returns>Rule.</returns>
 		public static MarketRule<TToken, TArg> Apply<TToken, TArg>(this MarketRule<TToken, TArg> rule, IMarketRuleContainer container)
 		{
 			return (MarketRule<TToken, TArg>)((IMarketRule)rule).Apply(container);
 		}
 
 		/// <summary>
-		/// Активировать правило.
+		/// To activate the rule.
 		/// </summary>
-		/// <param name="container">Контейнер правил.</param>
-		/// <param name="rule">Правило.</param>
-		/// <param name="process">Обработчик.</param>
+		/// <param name="container">The rules container.</param>
+		/// <param name="rule">Rule.</param>
+		/// <param name="process">The handler.</param>
 		public static void ActiveRule(this IMarketRuleContainer container, IMarketRule rule, Func<bool> process)
 		{
 			container.AddRuleLog(LogLevels.Debug, rule, LocalizedStrings.Str1082);
@@ -2213,26 +2213,24 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Контейнер правил, который будет применяться по умолчанию ко всем правилам, не входящим в стратегию.
+		/// The container of rules, which will be applied by default to all rules, not included into strategy.
 		/// </summary>
 		public static readonly IMarketRuleContainer DefaultRuleContainer = new MarketRuleContainer();
 
 		/// <summary>
-		/// Обработать правила в приостановленном режиме (например, создать несколько правил и запустить их одновременно).
-		/// После окончания работы метода все правила, присоединенные к контейнеру, возобновляют свою активность.
+		/// To process rules in suspended mode (for example, create several rules and start them up simultaneously). After completion of method operation all rules, attached to the container resume their activity.
 		/// </summary>
-		/// <param name="action">Действие, которое необходимо обработать при остановленных правилах. Например, добавить одновременно несколько правил.</param>
+		/// <param name="action">The action to be processed at suspended rules. For example, to add several rules simultaneously.</param>
 		public static void SuspendRules(Action action)
 		{
 			DefaultRuleContainer.SuspendRules(action);
 		}
 
 		/// <summary>
-		/// Обработать правила в приостановленном режиме (например, создать несколько правил и запустить их одновременно).
-		/// После окончания работы метода все правила, присоединенные к контейнеру, возобновляют свою активность.
+		/// To process rules in suspended mode (for example, create several rules and start them up simultaneously). After completion of method operation all rules, attached to the container resume their activity.
 		/// </summary>
-		/// <param name="container">Контейнер правил.</param>
-		/// <param name="action">Действие, которое необходимо обработать при остановленных правилах. Например, добавить одновременно несколько правил.</param>
+		/// <param name="container">The rules container.</param>
+		/// <param name="action">The action to be processed at suspended rules. For example, to add several rules simultaneously.</param>
 		public static void SuspendRules(this IMarketRuleContainer container, Action action)
 		{
 			if (container == null)
@@ -2256,12 +2254,12 @@ namespace StockSharp.Algo
 		#endregion
 
 		/// <summary>
-		/// Удалить правило. Если правило выполняется в момент вызова данного метода, то оно не будет удалено.
+		/// To delete a rule. If a rule is executed at the time when this method is called, it will not be deleted.
 		/// </summary>
-		/// <param name="container">Контейнер правил.</param>
-		/// <param name="rule">Правило.</param>
-		/// <param name="checkCanFinish">Проверять возможность остановки правила.</param>
-		/// <returns><see langword="true"/>, если правило было успешно удалено, <see langword="false"/> - если правило нельзя удалить в текущий момент.</returns>
+		/// <param name="container">The rules container.</param>
+		/// <param name="rule">Rule.</param>
+		/// <param name="checkCanFinish">To check the possibility of rule suspension.</param>
+		/// <returns><see langword="true" />, if a rule was successfully deleted, <see langword="false" /> � if a rule can not be currently deleted.</returns>
 		public static bool TryRemoveRule(this IMarketRuleContainer container, IMarketRule rule, bool checkCanFinish = true)
 		{
 			if (container == null)
@@ -2299,10 +2297,10 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Удалить правило и все противоположные правила. Если правило выполняется в момент вызова данного метода, то оно не будет удалено.
+		/// To delete the rule and all opposite rules. If the rule is executed at the time when this method is called, it will not be deleted.
 		/// </summary>
-		/// <param name="container">Контейнер правил.</param>
-		/// <param name="rule">Правило.</param>
+		/// <param name="container">The rules container.</param>
+		/// <param name="rule">Rule.</param>
 		public static bool TryRemoveWithExclusive(this IMarketRuleContainer container, IMarketRule rule)
 		{
 			if (container == null)
@@ -2328,10 +2326,10 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Сделать правила взаимо исключающими.
+		/// To make rules mutually exclusive.
 		/// </summary>
-		/// <param name="rule1">Первое правило.</param>
-		/// <param name="rule2">Второе правило.</param>
+		/// <param name="rule1">First rule.</param>
+		/// <param name="rule2">Second rule.</param>
 		public static void Exclusive(this IMarketRule rule1, IMarketRule rule2)
 		{
 			if (rule1 == null)
@@ -2579,68 +2577,68 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Объединить правила по условию ИЛИ.
+		/// To combine rules by OR condition.
 		/// </summary>
-		/// <param name="rule">Первое правило.</param>
-		/// <param name="rules">Дополнительные правила.</param>
-		/// <returns>Объединенное правило.</returns>
+		/// <param name="rule">First rule.</param>
+		/// <param name="rules">Additional rules.</param>
+		/// <returns>Combined rule.</returns>
 		public static IMarketRule Or(this IMarketRule rule, params IMarketRule[] rules)
 		{
 			return new OrRule(new[] { rule }.Concat(rules));
 		}
 
 		/// <summary>
-		/// Объединить правила по условию ИЛИ.
+		/// To combine rules by OR condition.
 		/// </summary>
-		/// <param name="rules">Правила.</param>
-		/// <returns>Объединенное правило.</returns>
+		/// <param name="rules">Rules.</param>
+		/// <returns>Combined rule.</returns>
 		public static IMarketRule Or(this IEnumerable<IMarketRule> rules)
 		{
 			return new OrRule(rules);
 		}
 
 		/// <summary>
-		/// Объединить правила по условию ИЛИ.
+		/// To combine rules by OR condition.
 		/// </summary>
-		/// <typeparam name="TToken">Тип токена.</typeparam>
-		/// <typeparam name="TArg">Тип принимаемого правилом аргумента.</typeparam>
-		/// <param name="rule">Первое правило.</param>
-		/// <param name="rules">Дополнительные правила.</param>
-		/// <returns>Объединенное правило.</returns>
+		/// <typeparam name="TToken">The type of token.</typeparam>
+		/// <typeparam name="TArg">The type of argument, accepted by the rule.</typeparam>
+		/// <param name="rule">First rule.</param>
+		/// <param name="rules">Additional rules.</param>
+		/// <returns>Combined rule.</returns>
 		public static MarketRule<TToken, TArg> Or<TToken, TArg>(this MarketRule<TToken, TArg> rule, params MarketRule<TToken, TArg>[] rules)
 		{
 			return new OrRule<TToken, TArg>(new[] { rule }.Concat(rules));
 		}
 
 		/// <summary>
-		/// Объединить правила по условию И.
+		/// To combine rules by AND condition.
 		/// </summary>
-		/// <param name="rule">Первое правило.</param>
-		/// <param name="rules">Дополнительные правила.</param>
-		/// <returns>Объединенное правило.</returns>
+		/// <param name="rule">First rule.</param>
+		/// <param name="rules">Additional rules.</param>
+		/// <returns>Combined rule.</returns>
 		public static IMarketRule And(this IMarketRule rule, params IMarketRule[] rules)
 		{
 			return new AndRule(new[] { rule }.Concat(rules));
 		}
 
 		/// <summary>
-		/// Объединить правила по условию И.
+		/// To combine rules by AND condition.
 		/// </summary>
-		/// <param name="rules">Правила.</param>
-		/// <returns>Объединенное правило.</returns>
+		/// <param name="rules">Rules.</param>
+		/// <returns>Combined rule.</returns>
 		public static IMarketRule And(this IEnumerable<IMarketRule> rules)
 		{
 			return new AndRule(rules);
 		}
 
 		/// <summary>
-		/// Объединить правила по условию И.
+		/// To combine rules by AND condition.
 		/// </summary>
-		/// <typeparam name="TToken">Тип токена.</typeparam>
-		/// <typeparam name="TArg">Тип принимаемого правилом аргумента.</typeparam>
-		/// <param name="rule">Первое правило.</param>
-		/// <param name="rules">Дополнительные правила.</param>
-		/// <returns>Объединенное правило.</returns>
+		/// <typeparam name="TToken">The type of token.</typeparam>
+		/// <typeparam name="TArg">The type of argument, accepted by the rule.</typeparam>
+		/// <param name="rule">First rule.</param>
+		/// <param name="rules">Additional rules.</param>
+		/// <returns>Combined rule.</returns>
 		public static MarketRule<TToken, TArg> And<TToken, TArg>(this MarketRule<TToken, TArg> rule, params MarketRule<TToken, TArg>[] rules)
 		{
 			return new AndRule<TToken, TArg>(new[] { rule }.Concat(rules));
@@ -2649,12 +2647,12 @@ namespace StockSharp.Algo
 		#endregion
 
 		/// <summary>
-		/// Задать новое имя правила <see cref="IMarketRule.Name"/>.
+		/// To assign the rule a new name <see cref="IMarketRule.Name"/>.
 		/// </summary>
-		/// <typeparam name="TRule">Тип правила.</typeparam>
-		/// <param name="rule">Правило.</param>
-		/// <param name="name">Новое имя правила.</param>
-		/// <returns>Правило.</returns>
+		/// <typeparam name="TRule">The type of the rule.</typeparam>
+		/// <param name="rule">Rule.</param>
+		/// <param name="name">The rule new name.</param>
+		/// <returns>Rule.</returns>
 		public static TRule UpdateName<TRule>(this TRule rule, string name)
 			where TRule : IMarketRule
 		{
@@ -2662,12 +2660,12 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Установить уровень логирования.
+		/// To set the logging level.
 		/// </summary>
-		/// <typeparam name="TRule">Тип правила.</typeparam>
-		/// <param name="rule">Правило.</param>
-		/// <param name="level">Уровень, на котором осуществлять логирование.</param>
-		/// <returns>Правило.</returns>
+		/// <typeparam name="TRule">The type of the rule.</typeparam>
+		/// <param name="rule">Rule.</param>
+		/// <param name="level">The level, on which logging is performed.</param>
+		/// <returns>Rule.</returns>
 		public static TRule UpdateLogLevel<TRule>(this TRule rule, LogLevels level)
 			where TRule : IMarketRule
 		{
@@ -2675,12 +2673,12 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Приостановить или возобновить правило.
+		/// To suspend or resume the rule.
 		/// </summary>
-		/// <typeparam name="TRule">Тип правила.</typeparam>
-		/// <param name="rule">Правило.</param>
-		/// <param name="suspend"><see langword="true"/> - приостановить, <see langword="false"/> - возобновить.</param>
-		/// <returns>Правило.</returns>
+		/// <typeparam name="TRule">The type of the rule.</typeparam>
+		/// <param name="rule">Rule.</param>
+		/// <param name="suspend"><see langword="true" /> - suspend, <see langword="false" /> - resume.</param>
+		/// <returns>Rule.</returns>
 		public static TRule Suspend<TRule>(this TRule rule, bool suspend)
 			where TRule : IMarketRule
 		{
@@ -2701,11 +2699,11 @@ namespace StockSharp.Algo
 		//}
 
 		/// <summary>
-		/// Сделать правило одноразовым (будет вызвано только один раз).
+		/// To make the rule one-time rule (will be called only once).
 		/// </summary>
-		/// <typeparam name="TRule">Тип правила.</typeparam>
-		/// <param name="rule">Правило.</param>
-		/// <returns>Правило.</returns>
+		/// <typeparam name="TRule">The type of the rule.</typeparam>
+		/// <param name="rule">Rule.</param>
+		/// <returns>Rule.</returns>
 		public static TRule Once<TRule>(this TRule rule)
 			where TRule : IMarketRule
 		{
@@ -2724,15 +2722,13 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Записать сообщение от правила.
+		/// To write the message from the rule.
 		/// </summary>
-		/// <param name="container">Контейнер правил.</param>
-		/// <param name="level">Уровень лог-сообщения.</param>
-		/// <param name="rule">Правило.</param>
-		/// <param name="message">Текстовое сообщение.</param>
-		/// <param name="args">Параметры текстового сообщения.
-		/// Используются в случае, если message является форматирующей строкой.
-		/// Подробнее, <see cref="string.Format(string,object[])"/>.</param>
+		/// <param name="container">The rules container.</param>
+		/// <param name="level">The level of the log message.</param>
+		/// <param name="rule">Rule.</param>
+		/// <param name="message">Text message.</param>
+		/// <param name="args">Text message settings. Used if a message is the format string. For details, see <see cref="string.Format(string,object[])"/>.</param>
 		public static void AddRuleLog(this IMarketRuleContainer container, LogLevels level, IMarketRule rule, string message, params object[] args)
 		{
 			if (container == null)

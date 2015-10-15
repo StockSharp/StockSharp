@@ -7,20 +7,20 @@ namespace StockSharp.Algo.Statistics
 	using StockSharp.Localization;
 
 	/// <summary>
-	/// Интерфейс, описывающий параметр статистики, рассчитывающийся на основе значение прибыли-убытка (максимальная просадка, коэффициент Шарпа и т.д.).
+	/// The interface, describing statistic parameter, calculated based on the profit-loss value (maximal contraction, Sharp coefficient etc.).
 	/// </summary>
 	public interface IPnLStatisticParameter
 	{
 		/// <summary>
-		/// Добавить в параметр новые данные.
+		/// To add new data to the parameter.
 		/// </summary>
-		/// <param name="marketTime">Биржевое время.</param>
-		/// <param name="pnl">Значение прибыли убытка.</param>
+		/// <param name="marketTime">The exchange time.</param>
+		/// <param name="pnl">The profit-loss value.</param>
 		void Add(DateTimeOffset marketTime, decimal pnl);
 	}
 
 	/// <summary>
-	/// Максимальная значение прибыли за весь период.
+	/// The maximal profit value for the entire period.
 	/// </summary>
 	[DisplayNameLoc(LocalizedStrings.Str958Key)]
 	[DescriptionLoc(LocalizedStrings.Str959Key)]
@@ -28,10 +28,10 @@ namespace StockSharp.Algo.Statistics
 	public class MaxProfitParameter : BaseStatisticParameter<decimal>, IPnLStatisticParameter
 	{
 		/// <summary>
-		/// Добавить в параметр новые данные.
+		/// To add new data to the parameter.
 		/// </summary>
-		/// <param name="marketTime">Биржевое время.</param>
-		/// <param name="pnl">Значение прибыли убытка.</param>
+		/// <param name="marketTime">The exchange time.</param>
+		/// <param name="pnl">The profit-loss value.</param>
 		public void Add(DateTimeOffset marketTime, decimal pnl)
 		{
 			Value = Math.Max(Value, pnl);
@@ -39,7 +39,7 @@ namespace StockSharp.Algo.Statistics
 	}
 
 	/// <summary>
-	/// Максимальная абсолютная просадка за весь период.
+	/// Maximum absolute drawdown during the whole period.
 	/// </summary>
 	[DisplayNameLoc(LocalizedStrings.Str960Key)]
 	[DescriptionLoc(LocalizedStrings.Str961Key)]
@@ -49,10 +49,10 @@ namespace StockSharp.Algo.Statistics
 		private decimal _maxEquity = decimal.MinValue;
 
 		/// <summary>
-		/// Добавить в параметр новые данные.
+		/// To add new data to the parameter.
 		/// </summary>
-		/// <param name="marketTime">Биржевое время.</param>
-		/// <param name="pnl">Значение прибыли убытка.</param>
+		/// <param name="marketTime">The exchange time.</param>
+		/// <param name="pnl">The profit-loss value.</param>
 		public void Add(DateTimeOffset marketTime, decimal pnl)
 		{
 			_maxEquity = Math.Max(_maxEquity, pnl);
@@ -60,9 +60,9 @@ namespace StockSharp.Algo.Statistics
 		}
 
 		/// <summary>
-		/// Сохранить состояние параметра статистики.
+		/// To save the state of statistic parameter.
 		/// </summary>
-		/// <param name="storage">Хранилище.</param>
+		/// <param name="storage">Storage.</param>
 		public override void Save(SettingsStorage storage)
 		{
 			storage.SetValue("MaxEquity", _maxEquity);
@@ -70,9 +70,9 @@ namespace StockSharp.Algo.Statistics
 		}
 
 		/// <summary>
-		/// Загрузить состояние параметра статистики.
+		/// To load the state of statistic parameter.
 		/// </summary>
-		/// <param name="storage">Хранилище.</param>
+		/// <param name="storage">Storage.</param>
 		public override void Load(SettingsStorage storage)
 		{
 			_maxEquity = storage.GetValue<decimal>("MaxEquity");
@@ -81,7 +81,7 @@ namespace StockSharp.Algo.Statistics
 	}
 
 	/// <summary>
-	/// Максимальная относительная просадка эквити за весь период.
+	/// Maximum relative equity drawdown during the whole period.
 	/// </summary>
 	[DisplayNameLoc(LocalizedStrings.Str962Key)]
 	[DescriptionLoc(LocalizedStrings.Str963Key)]
@@ -91,10 +91,10 @@ namespace StockSharp.Algo.Statistics
 		private decimal _maxEquity = decimal.MinValue;
 
 		/// <summary>
-		/// Добавить в параметр новые данные.
+		/// To add new data to the parameter.
 		/// </summary>
-		/// <param name="marketTime">Биржевое время.</param>
-		/// <param name="pnl">Значение прибыли убытка.</param>
+		/// <param name="marketTime">The exchange time.</param>
+		/// <param name="pnl">The profit-loss value.</param>
 		public void Add(DateTimeOffset marketTime, decimal pnl)
 		{
 			_maxEquity = Math.Max(_maxEquity, pnl);
@@ -104,9 +104,9 @@ namespace StockSharp.Algo.Statistics
 		}
 
 		/// <summary>
-		/// Сохранить состояние параметра статистики.
+		/// To save the state of statistic parameter.
 		/// </summary>
-		/// <param name="storage">Хранилище.</param>
+		/// <param name="storage">Storage.</param>
 		public override void Save(SettingsStorage storage)
 		{
 			storage.SetValue("MaxEquity", _maxEquity);
@@ -114,9 +114,9 @@ namespace StockSharp.Algo.Statistics
 		}
 
 		/// <summary>
-		/// Загрузить состояние параметра статистики.
+		/// To load the state of statistic parameter.
 		/// </summary>
-		/// <param name="storage">Хранилище.</param>
+		/// <param name="storage">Storage.</param>
 		public override void Load(SettingsStorage storage)
 		{
 			_maxEquity = storage.GetValue<decimal>("MaxEquity");
@@ -125,7 +125,7 @@ namespace StockSharp.Algo.Statistics
 	}
 
 	/// <summary>
-	/// Относительная прибыль за весь отрезок времени.
+	/// Relative income for the whole time period.
 	/// </summary>
 	[DisplayNameLoc(LocalizedStrings.Str964Key)]
 	[DescriptionLoc(LocalizedStrings.Str965Key)]
@@ -135,10 +135,10 @@ namespace StockSharp.Algo.Statistics
 		private decimal _minEquity = decimal.MaxValue;
 
 		/// <summary>
-		/// Добавить в параметр новые данные.
+		/// To add new data to the parameter.
 		/// </summary>
-		/// <param name="marketTime">Биржевое время.</param>
-		/// <param name="pnl">Значение прибыли убытка.</param>
+		/// <param name="marketTime">The exchange time.</param>
+		/// <param name="pnl">The profit-loss value.</param>
 		public void Add(DateTimeOffset marketTime, decimal pnl)
 		{
 			_minEquity = Math.Min(_minEquity, pnl);
@@ -148,9 +148,9 @@ namespace StockSharp.Algo.Statistics
 		}
 
 		/// <summary>
-		/// Сохранить состояние параметра статистики.
+		/// To save the state of statistic parameter.
 		/// </summary>
-		/// <param name="storage">Хранилище.</param>
+		/// <param name="storage">Storage.</param>
 		public override void Save(SettingsStorage storage)
 		{
 			storage.SetValue("MinEquity", _minEquity);
@@ -158,9 +158,9 @@ namespace StockSharp.Algo.Statistics
 		}
 
 		/// <summary>
-		/// Загрузить состояние параметра статистики.
+		/// To load the state of statistic parameter.
 		/// </summary>
-		/// <param name="storage">Хранилище.</param>
+		/// <param name="storage">Storage.</param>
 		public override void Load(SettingsStorage storage)
 		{
 			_minEquity = storage.GetValue<decimal>("MinEquity");
@@ -169,7 +169,7 @@ namespace StockSharp.Algo.Statistics
 	}
 
 	/// <summary>
-	/// Коэффициент восстановления (чистая прибыль / максимальная просадка).
+	/// Recovery factor (net profit / maximum drawdown).
 	/// </summary>
 	[DisplayNameLoc(LocalizedStrings.Str966Key)]
 	[DescriptionLoc(LocalizedStrings.Str967Key)]
@@ -180,10 +180,10 @@ namespace StockSharp.Algo.Statistics
 		private readonly NetProfitParameter _netProfit = new NetProfitParameter();
 
 		/// <summary>
-		/// Добавить в параметр новые данные.
+		/// To add new data to the parameter.
 		/// </summary>
-		/// <param name="marketTime">Биржевое время.</param>
-		/// <param name="pnl">Значение прибыли убытка.</param>
+		/// <param name="marketTime">The exchange time.</param>
+		/// <param name="pnl">The profit-loss value.</param>
 		public void Add(DateTimeOffset marketTime, decimal pnl)
 		{
 			_maxDrawdown.Add(marketTime, pnl);
@@ -193,9 +193,9 @@ namespace StockSharp.Algo.Statistics
 		}
 
 		/// <summary>
-		/// Сохранить состояние параметра статистики.
+		/// To save the state of statistic parameter.
 		/// </summary>
-		/// <param name="storage">Хранилище.</param>
+		/// <param name="storage">Storage.</param>
 		public override void Save(SettingsStorage storage)
 		{
 			storage.SetValue("MaxDrawdown", _maxDrawdown.Save());
@@ -205,9 +205,9 @@ namespace StockSharp.Algo.Statistics
 		}
 
 		/// <summary>
-		/// Загрузить состояние параметра статистики.
+		/// To load the state of statistic parameter.
 		/// </summary>
-		/// <param name="storage">Хранилище.</param>
+		/// <param name="storage">Storage.</param>
 		public override void Load(SettingsStorage storage)
 		{
 			_maxDrawdown.Load(storage.GetValue<SettingsStorage>("MaxDrawdown"));
@@ -218,7 +218,7 @@ namespace StockSharp.Algo.Statistics
 	}
 
 	/// <summary>
-	/// Чистая прибыль за весь отрезок времени.
+	/// Net profit for whole time period.
 	/// </summary>
 	[DisplayNameLoc(LocalizedStrings.Str968Key)]
 	[DescriptionLoc(LocalizedStrings.Str969Key)]
@@ -228,10 +228,10 @@ namespace StockSharp.Algo.Statistics
 		private decimal? _firstPnL;
 
 		/// <summary>
-		/// Добавить в параметр новые данные.
+		/// To add new data to the parameter.
 		/// </summary>
-		/// <param name="marketTime">Биржевое время.</param>
-		/// <param name="pnl">Значение прибыли убытка.</param>
+		/// <param name="marketTime">The exchange time.</param>
+		/// <param name="pnl">The profit-loss value.</param>
 		public void Add(DateTimeOffset marketTime, decimal pnl)
 		{
 			if (_firstPnL == null)
@@ -241,9 +241,9 @@ namespace StockSharp.Algo.Statistics
 		}
 
 		/// <summary>
-		/// Сохранить состояние параметра статистики.
+		/// To save the state of statistic parameter.
 		/// </summary>
-		/// <param name="storage">Хранилище.</param>
+		/// <param name="storage">Storage.</param>
 		public override void Save(SettingsStorage storage)
 		{
 			storage.SetValue("FirstPnL", _firstPnL);
@@ -251,9 +251,9 @@ namespace StockSharp.Algo.Statistics
 		}
 
 		/// <summary>
-		/// Загрузить состояние параметра статистики.
+		/// To load the state of statistic parameter.
 		/// </summary>
-		/// <param name="storage">Хранилище.</param>
+		/// <param name="storage">Storage.</param>
 		public override void Load(SettingsStorage storage)
 		{
 			_firstPnL = storage.GetValue<decimal?>("FirstPnL");

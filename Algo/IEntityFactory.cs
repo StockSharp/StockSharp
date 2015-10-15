@@ -1,4 +1,4 @@
-﻿namespace StockSharp.Algo
+namespace StockSharp.Algo
 {
 	using System;
 	using System.Collections.Generic;
@@ -11,90 +11,90 @@
 	using StockSharp.Messages;
 
 	/// <summary>
-	/// Интерфейс фабрики бизнес-сущностей (<see cref="Security"/>, <see cref="Order"/> и т.д.).
+	/// The interface of the business-essences factory (<see cref="Security"/>, <see cref="Order"/> etc.).
 	/// </summary>
 	public interface IEntityFactory
 	{
 		/// <summary>
-		/// Создать инструмент по идентификатору.
+		/// To create the instrument by the identifier.
 		/// </summary>
-		/// <param name="id">Идентификатор инструмента.</param>
-		/// <returns>Созданный инструмент.</returns>
+		/// <param name="id">Security ID.</param>
+		/// <returns>Created instrument.</returns>
 		Security CreateSecurity(string id);
 
 		/// <summary>
-		/// Создать портфель по номеру счета.
+		/// To create the portfolio by the account number.
 		/// </summary>
-		/// <param name="name">Номер счета.</param>
-		/// <returns>Созданный портфель.</returns>
+		/// <param name="name">Account number.</param>
+		/// <returns>Created portfolio.</returns>
 		Portfolio CreatePortfolio(string name);
 
 		/// <summary>
-		/// Создать позицию.
+		/// Create position.
 		/// </summary>
-		/// <param name="portfolio">Портфель.</param>
-		/// <param name="security">Инструмент.</param>
-		/// <returns>Созданная позиция.</returns>
+		/// <param name="portfolio">Portfolio.</param>
+		/// <param name="security">Security.</param>
+		/// <returns>Created position.</returns>
 		Position CreatePosition(Portfolio portfolio, Security security);
 
 		/// <summary>
-		/// Создать тиковую сделку по ее идентификатору.
+		/// To create the tick trade by its identifier.
 		/// </summary>
-		/// <param name="security">Инструмент.</param>
-		/// <param name="id">Идентификатор сделки (равно <see langword="null"/>, если используется строковый идентификатор).</param>
-		/// <param name="stringId">Идентификатор сделки (в виде строки, если электронная площадка не использует числовое представление идентификатора сделки).</param>
-		/// <returns>Созданная сделка.</returns>
+		/// <param name="security">Security.</param>
+		/// <param name="id">The trade identifier (equals <see langword="null" />, if string identifier is used).</param>
+		/// <param name="stringId">Trade ID (as string, if electronic board does not use numeric order ID representation).</param>
+		/// <returns>Created trade.</returns>
 		Trade CreateTrade(Security security, long? id, string stringId);
 
 		/// <summary>
-		/// Создать заявку по идентификатору транзакции.
+		/// To create the order by the transaction identifier.
 		/// </summary>
-		/// <param name="security">Инструмент.</param>
-		/// <param name="type">Тип заявки.</param>
-		/// <param name="transactionId">Идентификатор транзакции регистрации заявки.</param>
-		/// <returns>Созданная заявка.</returns>
+		/// <param name="security">Security.</param>
+		/// <param name="type">Order type.</param>
+		/// <param name="transactionId">The identifier of the order registration transaction.</param>
+		/// <returns>Created order.</returns>
 		Order CreateOrder(Security security, OrderTypes type, long transactionId);
 
 		/// <summary>
-		/// Создать описание ошибки для заявки.
+		/// To create the error description for the order.
 		/// </summary>
-		/// <param name="order">Заявка.</param>
-		/// <param name="error">Системное описание ошибки.</param>
-		/// <returns>Созданное описание ошибки.</returns>
+		/// <param name="order">Order.</param>
+		/// <param name="error">The system description of error.</param>
+		/// <returns>Created error description.</returns>
 		OrderFail CreateOrderFail(Order order, Exception error);
 
 		/// <summary>
-		/// Создать собственную сделку.
+		/// To create own trade.
 		/// </summary>
-		/// <param name="order">Заявка.</param>
-		/// <param name="trade">Тиковая сделка.</param>
-		/// <returns>Созданная собственная сделка.</returns>
+		/// <param name="order">Order.</param>
+		/// <param name="trade">Tick trade.</param>
+		/// <returns>Created own trade.</returns>
 		MyTrade CreateMyTrade(Order order, Trade trade);
 
 		/// <summary>
-		/// Создать стакан для инструмента.
+		/// To create the order book for the instrument.
 		/// </summary>
-		/// <param name="security">Инструмент.</param>
-		/// <returns>Созданный стакан.</returns>
+		/// <param name="security">Security.</param>
+		/// <returns>Created order book.</returns>
 		MarketDepth CreateMarketDepth(Security security);
 
 		/// <summary>
-		/// Создать строчку лога заявок.
+		/// To create the string of orders log.
 		/// </summary>
-		/// <param name="order">Заявка.</param>
-		/// <param name="trade">Тиковая сделка.</param>
-		/// <returns>Строчка лога заявок.</returns>
+		/// <param name="order">Order.</param>
+		/// <param name="trade">Tick trade.</param>
+		/// <returns>Order log item.</returns>
 		OrderLogItem CreateOrderLogItem(Order order, Trade trade);
 
 		/// <summary>
-		/// Создать новость.
+		/// To create news.
 		/// </summary>
-		/// <returns>Новость.</returns>
+		/// <returns>News.</returns>
 		News CreateNews();
 	}
 
 	/// <summary>
-	/// Фабрика бизнес-сущностей (<see cref="Security"/>, <see cref="Order"/> и т.д.).
+	/// Entity factory (<see cref="Security"/>, <see cref="Order"/> etc.).
 	/// </summary>
 	public class EntityFactory : IEntityFactory, IStorage
 	{
@@ -104,43 +104,43 @@
 		}
 
 		/// <summary>
-		/// Создать <see cref="EntityFactory"/>.
+		/// Initializes a new instance of the <see cref="EntityFactory"/>.
 		/// </summary>
 		public EntityFactory()
 		{
 		}
 
 		/// <summary>
-		/// Статический объект <see cref="EntityFactory"/>, который необходимо использовать, если требуется поддержать ссылочную целостность между разными подключениями.
+		/// The statistical object <see cref="EntityFactory"/> to be used, if it is required to maintain referential integrity between different connections.
 		/// </summary>
 		public static EntityFactory Instance { get; private set; }
 
 		/// <summary>
-		/// Создать инструмент по идентификатору.
+		/// To create the instrument by the identifier.
 		/// </summary>
-		/// <param name="id">Идентификатор инструмента.</param>
-		/// <returns>Созданный инструмент.</returns>
+		/// <param name="id">Security ID.</param>
+		/// <returns>Created instrument.</returns>
 		public virtual Security CreateSecurity(string id)
 		{
 			return new Security { Id = id };
 		}
 
 		/// <summary>
-		/// Создать портфель по номеру счета.
+		/// To create the portfolio by the account number.
 		/// </summary>
-		/// <param name="name">Номер счета.</param>
-		/// <returns>Созданный портфель.</returns>
+		/// <param name="name">Account number.</param>
+		/// <returns>Created portfolio.</returns>
 		public virtual Portfolio CreatePortfolio(string name)
 		{
 			return new Portfolio { Name = name };
 		}
 
 		/// <summary>
-		/// Создать позицию.
+		/// Create position.
 		/// </summary>
-		/// <param name="portfolio">Портфель.</param>
-		/// <param name="security">Инструмент.</param>
-		/// <returns>Созданная позиция.</returns>
+		/// <param name="portfolio">Portfolio.</param>
+		/// <param name="security">Security.</param>
+		/// <returns>Created position.</returns>
 		public virtual Position CreatePosition(Portfolio portfolio, Security security)
 		{
 			if (portfolio == null)
@@ -157,24 +157,24 @@
 		}
 
 		/// <summary>
-		/// Создать тиковую сделку по ее идентификатору.
+		/// To create the tick trade by its identifier.
 		/// </summary>
-		/// <param name="security">Инструмент.</param>
-		/// <param name="id">Идентификатор сделки (равно <see langword="null"/>, если используется строковый идентификатор).</param>
-		/// <param name="stringId">Идентификатор сделки (в виде строки, если электронная площадка не использует числовое представление идентификатора сделки).</param>
-		/// <returns>Созданная сделка.</returns>
+		/// <param name="security">Security.</param>
+		/// <param name="id">The trade identifier (equals <see langword="null" />, if string identifier is used).</param>
+		/// <param name="stringId">Trade ID (as string, if electronic board does not use numeric order ID representation).</param>
+		/// <returns>Created trade.</returns>
 		public virtual Trade CreateTrade(Security security, long? id, string stringId)
 		{
 			return new Trade { Security = security, Id = id ?? 0, StringId = stringId };
 		}
 
 		/// <summary>
-		/// Создать заявку по идентификатору транзакции.
+		/// To create the order by the transaction identifier.
 		/// </summary>
-		/// <param name="security">Инструмент.</param>
-		/// <param name="type">Тип заявки.</param>
-		/// <param name="transactionId">Идентификатор транзакции регистрации заявки.</param>
-		/// <returns>Созданная заявка.</returns>
+		/// <param name="security">Security.</param>
+		/// <param name="type">Order type.</param>
+		/// <param name="transactionId">The identifier of the order registration transaction.</param>
+		/// <returns>Created order.</returns>
 		public virtual Order CreateOrder(Security security, OrderTypes type, long transactionId)
 		{
 			return new Order
@@ -186,22 +186,22 @@
 		}
 
 		/// <summary>
-		/// Создать описание ошибки для заявки.
+		/// To create the error description for the order.
 		/// </summary>
-		/// <param name="order">Заявка.</param>
-		/// <param name="error">Системное описание ошибки.</param>
-		/// <returns>Созданное описание ошибки.</returns>
+		/// <param name="order">Order.</param>
+		/// <param name="error">The system description of error.</param>
+		/// <returns>Created error description.</returns>
 		public virtual OrderFail CreateOrderFail(Order order, Exception error)
 		{
 			return new OrderFail { Order = order, Error = error };
 		}
 
 		/// <summary>
-		/// Создать собственную сделку.
+		/// To create own trade.
 		/// </summary>
-		/// <param name="order">Заявка.</param>
-		/// <param name="trade">Тиковая сделка.</param>
-		/// <returns>Созданная собственная сделка.</returns>
+		/// <param name="order">Order.</param>
+		/// <param name="trade">Tick trade.</param>
+		/// <returns>Created own trade.</returns>
 		public virtual MyTrade CreateMyTrade(Order order, Trade trade)
 		{
 			return new MyTrade
@@ -212,21 +212,21 @@
 		}
 
 		/// <summary>
-		/// Создать стакан для инструмента.
+		/// To create the order book for the instrument.
 		/// </summary>
-		/// <param name="security">Инструмент.</param>
-		/// <returns>Созданный стакан.</returns>
+		/// <param name="security">Security.</param>
+		/// <returns>Created order book.</returns>
 		public virtual MarketDepth CreateMarketDepth(Security security)
 		{
 			return new MarketDepth(security);
 		}
 
 		/// <summary>
-		/// Создать строчку лога заявок.
+		/// To create the string of orders log.
 		/// </summary>
-		/// <param name="order">Заявка.</param>
-		/// <param name="trade">Тиковая сделка.</param>
-		/// <returns>Строчка лога заявок.</returns>
+		/// <param name="order">Order.</param>
+		/// <param name="trade">Tick trade.</param>
+		/// <returns>Order log item.</returns>
 		public virtual OrderLogItem CreateOrderLogItem(Order order, Trade trade)
 		{
 			return new OrderLogItem
@@ -237,9 +237,9 @@
 		}
 
 		/// <summary>
-		/// Создать новость.
+		/// To create news.
 		/// </summary>
-		/// <returns>Новость.</returns>
+		/// <returns>News.</returns>
 		public virtual News CreateNews()
 		{
 			return new News();

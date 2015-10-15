@@ -12,68 +12,68 @@ namespace StockSharp.Algo.Indicators
 	using StockSharp.Localization;
 
 	/// <summary>
-	/// Входное значение индикатора, на основе которого он обновит свое значение, а так значение, хранящее результат вычисления индикатора.
+	/// The indicator input value, based on which it will renew its value, as well as value, containing result of indicator calculation.
 	/// </summary>
 	public interface IIndicatorValue : IComparable<IIndicatorValue>, IComparable
 	{
 		/// <summary>
-		/// Индикатор.
+		/// Indicator.
 		/// </summary>
 		IIndicator Indicator { get; }
 
 		/// <summary>
-		/// Значение индикатора отсутствует.
+		/// No indicator value.
 		/// </summary>
 		bool IsEmpty { get; }
 
 		/// <summary>
-		/// Является ли значение окончательным (индикатор окончательно формирует свое значение и более не будет изменяться в данной точке времени).
+		/// Is the value final (indicator finalizes its value and will not be changed anymore in the given point of time).
 		/// </summary>
 		bool IsFinal { get; set; }
 
 		/// <summary>
-		/// Сформирован ли индикатор.
+		/// Whether the indicator is set.
 		/// </summary>
 		bool IsFormed { get; }
 
 		/// <summary>
-		/// Входное значение.
+		/// The input value.
 		/// </summary>
 		IIndicatorValue InputValue { get; set; }
 
 		/// <summary>
-		/// Поддерживает ли значение необходимый для индикатора тип данных.
+		/// Does value support data type, required for the indicator.
 		/// </summary>
-		/// <param name="valueType">Тип данных, которым оперирует индикатор.</param>
-		/// <returns><see langword="true"/>, если тип данных поддерживается, иначе, <see langword="false"/>.</returns>
+		/// <param name="valueType">The data type, operated by indicator.</param>
+		/// <returns><see langword="true" />, if data type is supported, otherwise, <see langword="false" />.</returns>
 		bool IsSupport(Type valueType);
 
 		/// <summary>
-		/// Получить значение по типу данных.
+		/// To get the value by the data type.
 		/// </summary>
-		/// <typeparam name="T">Тип данных, которым оперирует индикатор.</typeparam>
-		/// <returns>Значение.</returns>
+		/// <typeparam name="T">The data type, operated by indicator.</typeparam>
+		/// <returns>Value.</returns>
 		T GetValue<T>();
 
 		/// <summary>
-		/// Изменить входное значение индикатора новым значением (например, оно получено от другого индикатора).
+		/// To replace the indicator input value by new one (for example it is received from another indicator).
 		/// </summary>
-		/// <typeparam name="T">Тип данных, которым оперирует индикатор.</typeparam>
-		/// <param name="indicator">Индикатор.</param>
-		/// <param name="value">Значение.</param>
-		/// <returns>Новый объект, содержащий входное значение.</returns>
+		/// <typeparam name="T">The data type, operated by indicator.</typeparam>
+		/// <param name="indicator">Indicator.</param>
+		/// <param name="value">Value.</param>
+		/// <returns>New object, containing input value.</returns>
 		IIndicatorValue SetValue<T>(IIndicator indicator, T value);
 	}
 
 	/// <summary>
-	/// Базовый класс для значения индикатора.
+	/// The base class for the indicator value.
 	/// </summary>
 	public abstract class BaseIndicatorValue : IIndicatorValue
 	{
 		/// <summary>
-		/// Инициализировать <see cref="BaseIndicatorValue"/>.
+		/// Initialize <see cref="BaseIndicatorValue"/>.
 		/// </summary>
-		/// <param name="indicator">Индикатор.</param>
+		/// <param name="indicator">Indicator.</param>
 		protected BaseIndicatorValue(IIndicator indicator)
 		{
 			if (indicator == null)
@@ -84,65 +84,65 @@ namespace StockSharp.Algo.Indicators
 		}
 
 		/// <summary>
-		/// Индикатор.
+		/// Indicator.
 		/// </summary>
 		public IIndicator Indicator { get; private set; }
 
 		/// <summary>
-		/// Значение индикатора отсутствует.
+		/// No indicator value.
 		/// </summary>
 		public abstract bool IsEmpty { get; set; }
 
 		/// <summary>
-		/// Является ли значение окончательным (индикатор окончательно формирует свое значение и более не будет изменяться в данной точке времени).
+		/// Is the value final (indicator finalizes its value and will not be changed anymore in the given point of time).
 		/// </summary>
 		public abstract bool IsFinal { get; set; }
 
 		/// <summary>
-		/// Сформирован ли индикатор.
+		/// Whether the indicator is set.
 		/// </summary>
 		public bool IsFormed { get; private set; }
 
 		/// <summary>
-		/// Входное значение.
+		/// The input value.
 		/// </summary>
 		public abstract IIndicatorValue InputValue { get; set; }
 
 		/// <summary>
-		/// Поддерживает ли значение необходимый для индикатора тип данных.
+		/// Does value support data type, required for the indicator.
 		/// </summary>
-		/// <param name="valueType">Тип данных, которым оперирует индикатор.</param>
-		/// <returns><see langword="true"/>, если тип данных поддерживается, иначе, <see langword="false"/>.</returns>
+		/// <param name="valueType">The data type, operated by indicator.</param>
+		/// <returns><see langword="true" />, if data type is supported, otherwise, <see langword="false" />.</returns>
 		public abstract bool IsSupport(Type valueType);
 
 		/// <summary>
-		/// Получить значение по типу данных.
+		/// To get the value by the data type.
 		/// </summary>
-		/// <typeparam name="T">Тип данных, которым оперирует индикатор.</typeparam>
-		/// <returns>Значение.</returns>
+		/// <typeparam name="T">The data type, operated by indicator.</typeparam>
+		/// <returns>Value.</returns>
 		public abstract T GetValue<T>();
 
 		/// <summary>
-		/// Изменить входное значение индикатора новым значением (например, оно получено от другого индикатора).
+		/// To replace the indicator input value by new one (for example it is received from another indicator).
 		/// </summary>
-		/// <typeparam name="T">Тип данных, которым оперирует индикатор.</typeparam>
-		/// <param name="indicator">Индикатор.</param>
-		/// <param name="value">Значение.</param>
-		/// <returns>Новый объект, содержащий входное значение.</returns>
+		/// <typeparam name="T">The data type, operated by indicator.</typeparam>
+		/// <param name="indicator">Indicator.</param>
+		/// <param name="value">Value.</param>
+		/// <returns>New object, containing input value.</returns>
 		public abstract IIndicatorValue SetValue<T>(IIndicator indicator, T value);
 
 		/// <summary>
-		/// Сравнить <see cref="IIndicatorValue" /> на эквивалентность.
+		/// Compare <see cref="IIndicatorValue"/> on the equivalence.
 		/// </summary>
-		/// <param name="other">Другое значение, с которым необходимо сравнивать.</param>
-		/// <returns>Результат сравнения.</returns>
+		/// <param name="other">Another value with which to compare.</param>
+		/// <returns>The result of the comparison.</returns>
 		public abstract int CompareTo(IIndicatorValue other);
 
 		/// <summary>
-		/// Сравнить <see cref="IIndicatorValue" /> на эквивалентность.
+		/// Compare <see cref="IIndicatorValue"/> on the equivalence.
 		/// </summary>
-		/// <param name="other">Другое значение, с которым необходимо сравнивать.</param>
-		/// <returns>Результат сравнения.</returns>
+		/// <param name="other">Another value with which to compare.</param>
+		/// <returns>The result of the comparison.</returns>
 		int IComparable.CompareTo(object other)
 		{
 			var value = other as IIndicatorValue;
@@ -155,16 +155,16 @@ namespace StockSharp.Algo.Indicators
 	}
 
 	/// <summary>
-	/// Базовое значение индикатора, работающее с один типом данных.
+	/// The base value of the indicator, operating with one data type.
 	/// </summary>
-	/// <typeparam name="TValue">Тип значения.</typeparam>
+	/// <typeparam name="TValue">Value type.</typeparam>
 	public class SingleIndicatorValue<TValue> : BaseIndicatorValue
 	{
 		/// <summary>
-		/// Создать <see cref="SingleIndicatorValue{TValue}"/>.
+		/// Initializes a new instance of the <see cref="SingleIndicatorValue{T}"/>.
 		/// </summary>
-		/// <param name="indicator">Индикатор.</param>
-		/// <param name="value">Значение.</param>
+		/// <param name="indicator">Indicator.</param>
+		/// <param name="value">Value.</param>
 		public SingleIndicatorValue(IIndicator indicator, TValue value)
 			: base(indicator)
 		{
@@ -173,9 +173,9 @@ namespace StockSharp.Algo.Indicators
 		}
 
 		/// <summary>
-		/// Создать <see cref="SingleIndicatorValue{TValue}"/>.
+		/// Initializes a new instance of the <see cref="SingleIndicatorValue{T}"/>.
 		/// </summary>
-		/// <param name="indicator">Индикатор.</param>
+		/// <param name="indicator">Indicator.</param>
 		public SingleIndicatorValue(IIndicator indicator)
 			: base(indicator)
 		{
@@ -183,40 +183,40 @@ namespace StockSharp.Algo.Indicators
 		}
 
 		/// <summary>
-		/// Значение.
+		/// Value.
 		/// </summary>
 		public TValue Value { get; private set; }
 
 		/// <summary>
-		/// Значение индикатора отсутствует.
+		/// No indicator value.
 		/// </summary>
 		public override bool IsEmpty { get; set; }
 
 		/// <summary>
-		/// Является ли значение окончательным (индикатор окончательно формирует свое значение и более не будет изменяться в данной точке времени).
+		/// Is the value final (indicator finalizes its value and will not be changed anymore in the given point of time).
 		/// </summary>
 		public override bool IsFinal { get; set; }
 
 		/// <summary>
-		/// Входное значение.
+		/// The input value.
 		/// </summary>
 		public override IIndicatorValue InputValue { get; set; }
 
 		/// <summary>
-		/// Поддерживает ли значение необходимый для индикатора тип данных.
+		/// Does value support data type, required for the indicator.
 		/// </summary>
-		/// <param name="valueType">Тип данных, которым оперирует индикатор.</param>
-		/// <returns><see langword="true"/>, если тип данных поддерживается, иначе, <see langword="false"/>.</returns>
+		/// <param name="valueType">The data type, operated by indicator.</param>
+		/// <returns><see langword="true" />, if data type is supported, otherwise, <see langword="false" />.</returns>
 		public override bool IsSupport(Type valueType)
 		{
 			return valueType == typeof(TValue);
 		}
 
 		/// <summary>
-		/// Получить значение по типу данных.
+		/// To get the value by the data type.
 		/// </summary>
-		/// <typeparam name="T">Тип данных, которым оперирует индикатор.</typeparam>
-		/// <returns>Значение.</returns>
+		/// <typeparam name="T">The data type, operated by indicator.</typeparam>
+		/// <returns>Value.</returns>
 		public override T GetValue<T>()
 		{
 			ThrowIfEmpty();
@@ -224,12 +224,12 @@ namespace StockSharp.Algo.Indicators
 		}
 
 		/// <summary>
-		/// Изменить входное значение индикатора новым значением (например, оно получено от другого индикатора).
+		/// To replace the indicator input value by new one (for example it is received from another indicator).
 		/// </summary>
-		/// <typeparam name="T">Тип данных, которым оперирует индикатор.</typeparam>
-		/// <param name="indicator">Индикатор.</param>
-		/// <param name="value">Значение.</param>
-		/// <returns>Новый объект, содержащий входное значение.</returns>
+		/// <typeparam name="T">The data type, operated by indicator.</typeparam>
+		/// <param name="indicator">Indicator.</param>
+		/// <param name="value">Value.</param>
+		/// <returns>New object, containing input value.</returns>
 		public override IIndicatorValue SetValue<T>(IIndicator indicator, T value)
 		{
 			return new SingleIndicatorValue<T>(indicator, value) { IsFinal = IsFinal, InputValue = this };
@@ -242,19 +242,19 @@ namespace StockSharp.Algo.Indicators
 		}
 
 		/// <summary>
-		/// Сравнить <see cref="SingleIndicatorValue{T}" /> на эквивалентность.
+		/// Compare <see cref="SingleIndicatorValue{T}"/> on the equivalence.
 		/// </summary>
-		/// <param name="other">Другое значение, с которым необходимо сравнивать.</param>
-		/// <returns>Результат сравнения.</returns>
+		/// <param name="other">Another value with which to compare.</param>
+		/// <returns>The result of the comparison.</returns>
 		public override int CompareTo(IIndicatorValue other)
 		{
 			return Value.Compare(other.GetValue<TValue>());
 		}
 
 		/// <summary>
-		/// Получить строковое представление.
+		/// Returns a string that represents the current object.
 		/// </summary>
-		/// <returns>Строковое представление.</returns>
+		/// <returns>A string that represents the current object.</returns>
 		public override string ToString()
 		{
 			return IsEmpty ? "Empty" : Value.ToString();
@@ -262,36 +262,36 @@ namespace StockSharp.Algo.Indicators
 	}
 
 	/// <summary>
-	/// Значение индикатора, работающее с типом данных <see cref="decimal"/>.
+	/// The indicator value, operating with data type <see cref="Decimal"/>.
 	/// </summary>
 	public class DecimalIndicatorValue : SingleIndicatorValue<decimal>
 	{
 		/// <summary>
-		/// Создать <see cref="DecimalIndicatorValue"/>.
+		/// Initializes a new instance of the <see cref="DecimalIndicatorValue"/>.
 		/// </summary>
-		/// <param name="indicator">Индикатор.</param>
-		/// <param name="value">Значение.</param>
+		/// <param name="indicator">Indicator.</param>
+		/// <param name="value">Value.</param>
 		public DecimalIndicatorValue(IIndicator indicator, decimal value)
 			: base(indicator, value)
 		{
 		}
 
 		/// <summary>
-		/// Создать <see cref="DecimalIndicatorValue"/>. 
+		/// Initializes a new instance of the <see cref="DecimalIndicatorValue"/>.
 		/// </summary>
-		/// <param name="indicator">Индикатор.</param>
+		/// <param name="indicator">Indicator.</param>
 		public DecimalIndicatorValue(IIndicator indicator)
 			: base(indicator)
 		{
 		}
 
 		/// <summary>
-		/// Изменить входное значение индикатора новым значением (например, оно получено от другого индикатора).
+		/// To replace the indicator input value by new one (for example it is received from another indicator).
 		/// </summary>
-		/// <typeparam name="T">Тип данных, которым оперирует индикатор.</typeparam>
-		/// <param name="indicator">Индикатор.</param>
-		/// <param name="value">Значение.</param>
-		/// <returns>Новый объект, содержащий входное значение.</returns>
+		/// <typeparam name="T">The data type, operated by indicator.</typeparam>
+		/// <param name="indicator">Indicator.</param>
+		/// <param name="value">Value.</param>
+		/// <returns>New object, containing input value.</returns>
 		public override IIndicatorValue SetValue<T>(IIndicator indicator, T value)
 		{
 			return typeof(T) == typeof(decimal)
@@ -301,28 +301,28 @@ namespace StockSharp.Algo.Indicators
 	}
 
 	/// <summary>
-	/// Значение индикатора, работающее с типом данных <see cref="Candle"/>.
+	/// The indicator value, operating with data type <see cref="Candle"/>.
 	/// </summary>
 	public class CandleIndicatorValue : SingleIndicatorValue<Candle>
 	{
 		private readonly Func<Candle, decimal> _getPart;
 
 		/// <summary>
-		/// Создать <see cref="CandleIndicatorValue"/>.
+		/// Initializes a new instance of the <see cref="CandleIndicatorValue"/>.
 		/// </summary>
-		/// <param name="indicator">Индикатор.</param>
-		/// <param name="value">Значение.</param>
+		/// <param name="indicator">Indicator.</param>
+		/// <param name="value">Value.</param>
 		public CandleIndicatorValue(IIndicator indicator, Candle value)
 			: this(indicator, value, ByClose)
 		{
 		}
 
 		/// <summary>
-		/// Создать <see cref="CandleIndicatorValue"/>.
+		/// Initializes a new instance of the <see cref="CandleIndicatorValue"/>.
 		/// </summary>
-		/// <param name="indicator">Индикатор.</param>
-		/// <param name="value">Значение.</param>
-		/// <param name="getPart">Конвертер свечи, через который можно получить ее параметр. По-умолчанию используется <see cref="ByClose"/>.</param>
+		/// <param name="indicator">Indicator.</param>
+		/// <param name="value">Value.</param>
+		/// <param name="getPart">The candle converter, through which its parameter can be got. By default, the <see cref="CandleIndicatorValue.ByClose"/> is used.</param>
 		public CandleIndicatorValue(IIndicator indicator, Candle value, Func<Candle, decimal> getPart)
 			: base(indicator, value)
 		{
@@ -338,44 +338,44 @@ namespace StockSharp.Algo.Indicators
 		}
 
 		/// <summary>
-		/// Создать <see cref="CandleIndicatorValue"/>.
+		/// Initializes a new instance of the <see cref="CandleIndicatorValue"/>.
 		/// </summary>
-		/// <param name="indicator">Индикатор.</param>
+		/// <param name="indicator">Indicator.</param>
 		private CandleIndicatorValue(IIndicator indicator)
 			: base(indicator)
 		{
 		}
 
 		/// <summary>
-		/// Конвертер, который берет из свечи цену закрытия <see cref="Candle.ClosePrice"/>.
+		/// The converter, taking from candle closing price <see cref="Candle.ClosePrice"/>.
 		/// </summary>
 		public static readonly Func<Candle, decimal> ByClose = c => c.ClosePrice;
 
 		/// <summary>
-		/// Конвертер, который берет из свечи цену открытия <see cref="Candle.OpenPrice"/>.
+		/// The converter, taking from candle opening price <see cref="Candle.OpenPrice"/>.
 		/// </summary>
 		public static readonly Func<Candle, decimal> ByOpen = c => c.OpenPrice;
 
 		/// <summary>
-		/// Конвертер, который берет из свечи середину тела (<see cref="Candle.OpenPrice"/> + <see cref="Candle.ClosePrice"/>) / 2.
+		/// The converter, taking from candle middle of the body (<see cref="Candle.OpenPrice"/> + <see cref="Candle.ClosePrice"/>) / 2.
 		/// </summary>
 		public static readonly Func<Candle, decimal> ByMiddle = c => (c.ClosePrice + c.OpenPrice) / 2;
 
 		/// <summary>
-		/// Поддерживает ли значение необходимый для индикатора тип данных.
+		/// Does value support data type, required for the indicator.
 		/// </summary>
-		/// <param name="valueType">Тип данных, которым оперирует индикатор.</param>
-		/// <returns><see langword="true"/>, если тип данных поддерживается, иначе, <see langword="false"/>.</returns>
+		/// <param name="valueType">The data type, operated by indicator.</param>
+		/// <returns><see langword="true" />, if data type is supported, otherwise, <see langword="false" />.</returns>
 		public override bool IsSupport(Type valueType)
 		{
 			return valueType == typeof(decimal) || base.IsSupport(valueType);
 		}
 
 		/// <summary>
-		/// Получить значение по типу данных.
+		/// To get the value by the data type.
 		/// </summary>
-		/// <typeparam name="T">Тип данных, которым оперирует индикатор.</typeparam>
-		/// <returns>Значение.</returns>
+		/// <typeparam name="T">The data type, operated by indicator.</typeparam>
+		/// <returns>Value.</returns>
 		public override T GetValue<T>()
 		{
 			var candle = base.GetValue<Candle>();
@@ -383,12 +383,12 @@ namespace StockSharp.Algo.Indicators
 		}
 
 		/// <summary>
-		/// Изменить входное значение индикатора новым значением (например, оно получено от другого индикатора).
+		/// To replace the indicator input value by new one (for example it is received from another indicator).
 		/// </summary>
-		/// <typeparam name="T">Тип данных, которым оперирует индикатор.</typeparam>
-		/// <param name="indicator">Индикатор.</param>
-		/// <param name="value">Значение.</param>
-		/// <returns>Новый объект, содержащий входное значение.</returns>
+		/// <typeparam name="T">The data type, operated by indicator.</typeparam>
+		/// <param name="indicator">Indicator.</param>
+		/// <param name="value">Value.</param>
+		/// <returns>New object, containing input value.</returns>
 		public override IIndicatorValue SetValue<T>(IIndicator indicator, T value)
 		{
 			var candle = value as Candle;
@@ -400,28 +400,28 @@ namespace StockSharp.Algo.Indicators
 	}
 
 	/// <summary>
-	/// Значение индикатора, работающее с типом данных <see cref="MarketDepth"/>.
+	/// The indicator value, operating with data type <see cref="MarketDepth"/>.
 	/// </summary>
 	public class MarketDepthIndicatorValue : SingleIndicatorValue<MarketDepth>
 	{
 		private readonly Func<MarketDepth, decimal?> _getPart;
 
 		/// <summary>
-		/// Создать <see cref="MarketDepthIndicatorValue"/>.
+		/// Initializes a new instance of the <see cref="MarketDepthIndicatorValue"/>.
 		/// </summary>
-		/// <param name="indicator">Индикатор.</param>
-		/// <param name="depth">Стакан.</param>
+		/// <param name="indicator">Indicator.</param>
+		/// <param name="depth">Market depth.</param>
 		public MarketDepthIndicatorValue(IIndicator indicator, MarketDepth depth)
 			: this(indicator, depth, ByMiddle)
 		{
 		}
 
 		/// <summary>
-		/// Создать <see cref="MarketDepthIndicatorValue"/>.
+		/// Initializes a new instance of the <see cref="MarketDepthIndicatorValue"/>.
 		/// </summary>
-		/// <param name="indicator">Индикатор.</param>
-		/// <param name="depth">Стакан.</param>
-		/// <param name="getPart">Конвертер стакана, через который можно получить его параметр. По-умолчанию используется <see cref="ByMiddle"/>.</param>
+		/// <param name="indicator">Indicator.</param>
+		/// <param name="depth">Market depth.</param>
+		/// <param name="getPart">The order book converter, through which its parameter can be got. By default, the <see cref="MarketDepthIndicatorValue.ByMiddle"/> is used.</param>
 		public MarketDepthIndicatorValue(IIndicator indicator, MarketDepth depth, Func<MarketDepth, decimal?> getPart)
 			: base(indicator, depth)
 		{
@@ -435,35 +435,35 @@ namespace StockSharp.Algo.Indicators
 		}
 
 		/// <summary>
-		/// Конвертер, который берет из стакана цену лучшего бида <see cref="MarketDepth.BestBid"/>.
+		/// The converter, taking from the order book the best bid price <see cref="MarketDepth.BestBid"/>.
 		/// </summary>
 		public static readonly Func<MarketDepth, decimal?> ByBestBid = d => d.BestBid != null ? d.BestBid.Price : (decimal?)null;
 
 		/// <summary>
-		/// Конвертер, который берет из стакана цену лучшего оффера <see cref="MarketDepth.BestAsk"/>.
+		/// The converter, taking from the order book the best offer price <see cref="MarketDepth.BestAsk"/>.
 		/// </summary>
 		public static readonly Func<MarketDepth, decimal?> ByBestAsk = d => d.BestAsk != null ? d.BestAsk.Price : (decimal?)null;
 
 		/// <summary>
-		/// Конвертер, который берет из стакана середину спреда <see cref="MarketDepthPair.MiddlePrice"/>.
+		/// The converter, taking from the order book the middle of the spread <see cref="MarketDepthPair.MiddlePrice"/>.
 		/// </summary>
 		public static readonly Func<MarketDepth, decimal?> ByMiddle = d => d.BestPair == null ? (decimal?)null : d.BestPair.MiddlePrice;
 
 		/// <summary>
-		/// Поддерживает ли значение необходимый для индикатора тип данных.
+		/// Does value support data type, required for the indicator.
 		/// </summary>
-		/// <param name="valueType">Тип данных, которым оперирует индикатор.</param>
-		/// <returns><see langword="true"/>, если тип данных поддерживается, иначе, <see langword="false"/>.</returns>
+		/// <param name="valueType">The data type, operated by indicator.</param>
+		/// <returns><see langword="true" />, if data type is supported, otherwise, <see langword="false" />.</returns>
 		public override bool IsSupport(Type valueType)
 		{
 			return valueType == typeof(decimal) || base.IsSupport(valueType);
 		}
 
 		/// <summary>
-		/// Получить значение по типу данных.
+		/// To get the value by the data type.
 		/// </summary>
-		/// <typeparam name="T">Тип данных, которым оперирует индикатор.</typeparam>
-		/// <returns>Значение.</returns>
+		/// <typeparam name="T">The data type, operated by indicator.</typeparam>
+		/// <returns>Value.</returns>
 		public override T GetValue<T>()
 		{
 			var depth = base.GetValue<MarketDepth>();
@@ -471,12 +471,12 @@ namespace StockSharp.Algo.Indicators
 		}
 
 		/// <summary>
-		/// Изменить входное значение индикатора новым значением (например, оно получено от другого индикатора).
+		/// To replace the indicator input value by new one (for example it is received from another indicator).
 		/// </summary>
-		/// <typeparam name="T">Тип данных, которым оперирует индикатор.</typeparam>
-		/// <param name="indicator">Индикатор.</param>
-		/// <param name="value">Значение.</param>
-		/// <returns>Новый объект, содержащий входное значение.</returns>
+		/// <typeparam name="T">The data type, operated by indicator.</typeparam>
+		/// <param name="indicator">Indicator.</param>
+		/// <param name="value">Value.</param>
+		/// <returns>New object, containing input value.</returns>
 		public override IIndicatorValue SetValue<T>(IIndicator indicator, T value)
 		{
 			return new MarketDepthIndicatorValue(indicator, base.GetValue<MarketDepth>(), _getPart)
@@ -488,36 +488,36 @@ namespace StockSharp.Algo.Indicators
 	}
 
 	/// <summary>
-	/// Значение индикатора, работающее с парой <see ref="Tuple{TValue, TValue}"/>.
+	/// The value of the indicator, operating with pair <see ref="Tuple{TValue, TValue}" />.
 	/// </summary>
 	public class PairIndicatorValue<TValue> : SingleIndicatorValue<Tuple<TValue, TValue>>
 	{
 		/// <summary>
-		/// Создать <see cref="PairIndicatorValue{TValue}"/>.
+		/// Initializes a new instance of the <see cref="PairIndicatorValue{T}"/>.
 		/// </summary>
-		/// <param name="indicator">Индикатор.</param>
-		/// <param name="value">Значение.</param>
+		/// <param name="indicator">Indicator.</param>
+		/// <param name="value">Value.</param>
 		public PairIndicatorValue(IIndicator indicator, Tuple<TValue, TValue> value)
 			: base(indicator, value)
 		{
 		}
 
 		/// <summary>
-		/// Создать <see cref="PairIndicatorValue{TValue}"/>.
+		/// Initializes a new instance of the <see cref="PairIndicatorValue{T}"/>.
 		/// </summary>
-		/// <param name="indicator">Индикатор.</param>
+		/// <param name="indicator">Indicator.</param>
 		public PairIndicatorValue(IIndicator indicator)
 			: base(indicator)
 		{
 		}
 
 		/// <summary>
-		/// Изменить входное значение индикатора новым значением (например, оно получено от другого индикатора).
+		/// To replace the indicator input value by new one (for example it is received from another indicator).
 		/// </summary>
-		/// <typeparam name="T">Тип данных, которым оперирует индикатор.</typeparam>
-		/// <param name="indicator">Индикатор.</param>
-		/// <param name="value">Значение.</param>
-		/// <returns>Новый объект, содержащий входное значение.</returns>
+		/// <typeparam name="T">The data type, operated by indicator.</typeparam>
+		/// <param name="indicator">Indicator.</param>
+		/// <param name="value">Value.</param>
+		/// <returns>New object, containing input value.</returns>
 		public override IIndicatorValue SetValue<T>(IIndicator indicator, T value)
 		{
 			return new PairIndicatorValue<TValue>(indicator, GetValue<Tuple<TValue, TValue>>())
@@ -529,14 +529,14 @@ namespace StockSharp.Algo.Indicators
 	}
 
 	/// <summary>
-	/// Комплексное значение индикатора <see cref="IComplexIndicator"/>, которое получается в результате вычисления.
+	/// The complex value of the indicator <see cref="IComplexIndicator"/>, derived as result of calculation.
 	/// </summary>
 	public class ComplexIndicatorValue : BaseIndicatorValue
 	{
 		/// <summary>
-		/// Создать <see cref="ComplexIndicatorValue"/>.
+		/// Initializes a new instance of the <see cref="ComplexIndicatorValue"/>.
 		/// </summary>
-		/// <param name="indicator">Индикатор.</param>
+		/// <param name="indicator">Indicator.</param>
 		public ComplexIndicatorValue(IIndicator indicator)
 			: base(indicator)
 		{
@@ -544,62 +544,62 @@ namespace StockSharp.Algo.Indicators
 		}
 
 		/// <summary>
-		/// Значение индикатора отсутствует.
+		/// No indicator value.
 		/// </summary>
 		public override bool IsEmpty { get; set; }
 
 		/// <summary>
-		/// Является ли значение окончательным (индикатор окончательно формирует свое значение и более не будет изменяться в данной точке времени).
+		/// Is the value final (indicator finalizes its value and will not be changed anymore in the given point of time).
 		/// </summary>
 		public override bool IsFinal { get; set; }
 
 		/// <summary>
-		/// Входное значение.
+		/// The input value.
 		/// </summary>
 		public override IIndicatorValue InputValue { get; set; }
 
 		/// <summary>
-		/// Вложенные значения.
+		/// Embedded values.
 		/// </summary>
 		public IDictionary<IIndicator, IIndicatorValue> InnerValues { get; private set; }
 
 		/// <summary>
-		/// Поддерживает ли значение необходимый для индикатора тип данных.
+		/// Does value support data type, required for the indicator.
 		/// </summary>
-		/// <param name="valueType">Тип данных, которым оперирует индикатор.</param>
-		/// <returns><see langword="true"/>, если тип данных поддерживается, иначе, <see langword="false"/>.</returns>
+		/// <param name="valueType">The data type, operated by indicator.</param>
+		/// <returns><see langword="true" />, if data type is supported, otherwise, <see langword="false" />.</returns>
 		public override bool IsSupport(Type valueType)
 		{
 			return InnerValues.Any(v => v.Value.IsSupport(valueType));
 		}
 
 		/// <summary>
-		/// Получить значение по типу данных.
+		/// To get the value by the data type.
 		/// </summary>
-		/// <typeparam name="T">Тип данных, которым оперирует индикатор.</typeparam>
-		/// <returns>Значение.</returns>
+		/// <typeparam name="T">The data type, operated by indicator.</typeparam>
+		/// <returns>Value.</returns>
 		public override T GetValue<T>()
 		{
 			throw new NotSupportedException();
 		}
 
 		/// <summary>
-		/// Изменить входное значение индикатора новым значением (например, оно получено от другого индикатора).
+		/// To replace the indicator input value by new one (for example it is received from another indicator).
 		/// </summary>
-		/// <typeparam name="T">Тип данных, которым оперирует индикатор.</typeparam>
-		/// <param name="indicator">Индикатор.</param>
-		/// <param name="value">Значение.</param>
-		/// <returns>Измененная копия входного значения.</returns>
+		/// <typeparam name="T">The data type, operated by indicator.</typeparam>
+		/// <param name="indicator">Indicator.</param>
+		/// <param name="value">Value.</param>
+		/// <returns>Replaced copy of the input value.</returns>
 		public override IIndicatorValue SetValue<T>(IIndicator indicator, T value)
 		{
 			throw new NotSupportedException();
 		}
 
 		/// <summary>
-		/// Сравнить <see cref="ComplexIndicatorValue" /> на эквивалентность.
+		/// Compare <see cref="ComplexIndicatorValue"/> on the equivalence.
 		/// </summary>
-		/// <param name="other">Другое значение, с которым необходимо сравнивать.</param>
-		/// <returns>Результат сравнения.</returns>
+		/// <param name="other">Another value with which to compare.</param>
+		/// <returns>The result of the comparison.</returns>
 		public override int CompareTo(IIndicatorValue other)
 		{
 			throw new NotSupportedException();

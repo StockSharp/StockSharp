@@ -1,24 +1,24 @@
-﻿namespace StockSharp.Algo.Storages.Backup
+namespace StockSharp.Algo.Storages.Backup
 {
 	/// <summary>
-	/// Элемент хранилища.
+	/// Storage element.
 	/// </summary>
 	public class BackupEntry
 	{
 		/// <summary>
-		/// Создать <see cref="BackupEntry"/>.
+		/// Initializes a new instance of the <see cref="BackupEntry"/>.
 		/// </summary>
 		public BackupEntry()
 		{
 		}
 
 		/// <summary>
-		/// Название элемента.
+		/// Element name.
 		/// </summary>
 		public string Name { get; set; }
 
 		/// <summary>
-		/// Родительский элемент.
+		/// Parent element.
 		/// </summary>
 		public BackupEntry Parent { get; set; }
 
@@ -28,7 +28,7 @@
 		//public bool IsDirectory { get; set; }
 
 		/// <summary>
-		/// Размер в байтах.
+		/// Size in bytes.
 		/// </summary>
 		public long Size { get; set; }
 	}

@@ -1,19 +1,19 @@
-﻿namespace StockSharp.Algo.Testing
+namespace StockSharp.Algo.Testing
 {
 	using StockSharp.Messages;
 
 	/// <summary>
-	/// Сообщение о создании или удалении генератора маркет-данных.
+	/// The message about creation or deletion of the market data generator.
 	/// </summary>
 	public class GeneratorMessage : MarketDataMessage
 	{
 		/// <summary>
-		/// Генератор маркет-данных.
+		/// The market data generator.
 		/// </summary>
 		public MarketDataGenerator Generator { get; set; }
 
 		/// <summary>
-		/// Создать <see cref="GeneratorMessage"/>.
+		/// Initializes a new instance of the <see cref="GeneratorMessage"/>.
 		/// </summary>
 		public GeneratorMessage()
 			: base(ExtendedMessageTypes.Generator)

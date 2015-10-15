@@ -8,14 +8,14 @@ namespace StockSharp.Algo.Testing
 	using StockSharp.Localization;
 
 	/// <summary>
-	/// Генератор маркет-данных.
+	/// The market data generator.
 	/// </summary>
 	public abstract class MarketDataGenerator : Cloneable<MarketDataGenerator>
 	{
 		/// <summary>
-		/// Инициализировать <see cref="MarketDataGenerator"/>.
+		/// Initialize <see cref="MarketDataGenerator"/>.
 		/// </summary>
-		/// <param name="securityId">Идентификатор инструмента, для которого необходимо генерировать данные.</param>
+		/// <param name="securityId">The identifier of the instrument, for which data shall be generated.</param>
 		protected MarketDataGenerator(SecurityId securityId)
 		{
 			SecurityId = securityId;
@@ -27,17 +27,17 @@ namespace StockSharp.Algo.Testing
 		}
 
 		/// <summary>
-		/// Тип маркет-данных.
+		/// Market data type.
 		/// </summary>
 		public abstract MarketDataTypes DataType { get; }
 
 		/// <summary>
-		/// Длина массива предварительно сгенерированных случайных чисел. По умолчанию 100.
+		/// The length of massive of preliminarily generated random numbers. The default is 100.
 		/// </summary>
 		public int RandomArrayLength { get; set; }
 
 		/// <summary>
-		/// Инициализировать состояние генератора.
+		/// To initialize the generator state.
 		/// </summary>
 		public virtual void Init()
 		{
@@ -50,32 +50,32 @@ namespace StockSharp.Algo.Testing
 		}
 
 		/// <summary>
-		/// Идентификатор инструмента, для которого необходимо генерировать данные.
+		/// The identifier of the instrument, for which data shall be generated.
 		/// </summary>
 		public SecurityId SecurityId { get; private set; }
 
 		/// <summary>
-		/// Информация о торговом инструменте.
+		/// Information about the trading instrument.
 		/// </summary>
 		protected SecurityMessage SecurityDefinition { get; private set; }
 
 		/// <summary>
-		/// Время последней генерации данных.
+		/// The time of last data generation.
 		/// </summary>
 		protected DateTimeOffset LastGenerationTime { get; set; }
 
 		/// <summary>
-		/// Интервал генерации данных.
+		/// The data generation interval.
 		/// </summary>
 		public TimeSpan Interval { get; set; }
 
 		private int _maxVolume;
 
 		/// <summary>
-		/// Максимальный объем. Объем будет выбран случайно от <see cref="MinVolume"/> до <see cref="MaxVolume"/>.
+		/// The maximal volume. The volume will be selected randomly from <see cref="MinVolume"/> to <see cref="MaxVolume"/>.
 		/// </summary>
 		/// <remarks>
-		/// Значение по умолчанию равно 20.
+		/// The default value equals 20.
 		/// </remarks>
 		public int MaxVolume
 		{
@@ -92,10 +92,10 @@ namespace StockSharp.Algo.Testing
 		private int _minVolume;
 
 		/// <summary>
-		/// Максимальный объем. Объем будет выбран случайно от <see cref="MinVolume"/> до <see cref="MaxVolume"/>.
+		/// The maximal volume. The volume will be selected randomly from <see cref="MinVolume"/> to <see cref="MaxVolume"/>.
 		/// </summary>
 		/// <remarks>
-		/// Значение по умолчанию равно 1.
+		/// The default value is 1.
 		/// </remarks>
 		public int MinVolume
 		{
@@ -112,10 +112,10 @@ namespace StockSharp.Algo.Testing
 		private int _maxPriceStepCount;
 
 		/// <summary>
-		/// Максимальное количество шагов цены <see cref="BusinessEntities.Security.PriceStep"/>, которое будет возвращатся через массив <see cref="Steps"/>.
+		/// The maximal number of price increments <see cref="BusinessEntities.Security.PriceStep"/> to be returned through massive <see cref="Steps"/>.
 		/// </summary>
 		/// <remarks>
-		/// Значение по умолчанию равно 10.
+		/// The default value is 10.
 		/// </remarks>
 		public int MaxPriceStepCount
 		{
@@ -130,11 +130,10 @@ namespace StockSharp.Algo.Testing
 		}
 
 		/// <summary>
-		/// Обработать сообщение.
+		/// Process message.
 		/// </summary>
-		/// <param name="message">Сообщение.</param>
-		/// <returns>Результат обработки. Если будет возрвщено <see langword="null"/>,
-		/// то генератору пока недостаточно данных для генерации нового сообщения.</returns>
+		/// <param name="message">Message.</param>
+		/// <returns>The result of processing. If <see langword="null" /> is returned, then generator has no sufficient data to generate new message.</returns>
 		public virtual Message Process(Message message)
 		{
 			if (message == null)
@@ -149,18 +148,17 @@ namespace StockSharp.Algo.Testing
 		}
 
 		/// <summary>
-		/// Обработать сообщение.
+		/// Process message.
 		/// </summary>
-		/// <param name="message">Сообщение.</param>
-		/// <returns>Результат обработки. Если будет возрвщено <see langword="null"/>,
-		/// то генератору пока недостаточно данных для генерации нового сообщения.</returns>
+		/// <param name="message">Message.</param>
+		/// <returns>The result of processing. If <see langword="null" /> is returned, then generator has no sufficient data to generate new message.</returns>
 		protected abstract Message OnProcess(Message message);
 
 		/// <summary>
-		/// Требуется ли генерация новых данных.
+		/// Is new data generation required.
 		/// </summary>
-		/// <param name="time">Текущее время.</param>
-		/// <returns><see langword="true"/>, если надо сгенерировать данные. Иначе, <see langword="false"/>.</returns>
+		/// <param name="time">The current time.</param>
+		/// <returns><see langword="true" />, if data shall be generated, Otherwise, <see langword="false" />.</returns>
 		protected bool IsTimeToGenerate(DateTimeOffset time)
 		{
 			return time >= LastGenerationTime + Interval;
@@ -169,7 +167,7 @@ namespace StockSharp.Algo.Testing
 		private RandomArray<int> _volumes;
 
 		/// <summary>
-		/// Массив случайных объемов в диапазоне от <see cref="MinVolume"/> до <see cref="MaxVolume"/>.
+		/// The massive of random volumes in the range from <see cref="MarketDataGenerator.MinVolume"/> to <see cref="MarketDataGenerator.MaxVolume"/>.
 		/// </summary>
 		public RandomArray<int> Volumes
 		{
@@ -192,7 +190,7 @@ namespace StockSharp.Algo.Testing
 		private RandomArray<int> _steps;
 
 		/// <summary>
-		/// Массив случайных количеств шагов цены в диапазоне от 1 до <see cref="MaxPriceStepCount"/>.
+		/// The massive of random price increments in the range from 1 to <see cref="MarketDataGenerator.MaxPriceStepCount"/>.
 		/// </summary>
 		public RandomArray<int> Steps
 		{

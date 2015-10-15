@@ -16,19 +16,19 @@ namespace StockSharp.Algo.Export
 	using StockSharp.Messages;
 
 	/// <summary>
-	/// Экспорт в базу данных.
+	/// The export into database.
 	/// </summary>
 	public class DatabaseExporter : BaseExporter
 	{
 		private readonly DatabaseConnectionPair _connection;
 
 		/// <summary>
-		/// Создать <see cref="DatabaseExporter"/>.
+		/// Initializes a new instance of the <see cref="DatabaseExporter"/>.
 		/// </summary>
-		/// <param name="security">Инструмент.</param>
-		/// <param name="arg">Параметр данных.</param>
-		/// <param name="isCancelled">Обработчик, возвращающий признак прерывания экспорта.</param>
-		/// <param name="connection">Подключение к БД.</param>
+		/// <param name="security">Security.</param>
+		/// <param name="arg">The data parameter.</param>
+		/// <param name="isCancelled">The processor, returning export interruption sign.</param>
+		/// <param name="connection">The connection to DB.</param>
 		public DatabaseExporter(Security security, object arg, Func<int, bool> isCancelled, DatabaseConnectionPair connection)
 			: base(security, arg, isCancelled, connection.ToString())
 		{
@@ -39,7 +39,7 @@ namespace StockSharp.Algo.Export
 		private int _batchSize = 50;
 
 		/// <summary>
-		/// Размер пакета передаваемых данных. По-умолчанию равен 50 элементам.
+		/// The size of transmitted data package. The default is 50 elements.
 		/// </summary>
 		public int BatchSize
 		{
@@ -54,14 +54,14 @@ namespace StockSharp.Algo.Export
 		}
 
 		/// <summary>
-		/// Проверять уникальность данных в базе данных. Влияет на производительность. По-умолчанию включено.
+		/// To check uniqueness of data in the database. It effects performance. The default is enabled.
 		/// </summary>
 		public bool CheckUnique { get; set; }
 
 		/// <summary>
-		/// Экспортировать <see cref="ExecutionMessage"/>.
+		/// To export <see cref="ExecutionMessage"/>.
 		/// </summary>
-		/// <param name="messages">Сообщения.</param>
+		/// <param name="messages">Messages.</param>
 		protected override void Export(IEnumerable<ExecutionMessage> messages)
 		{
 			switch ((ExecutionTypes)Arg)
@@ -81,27 +81,27 @@ namespace StockSharp.Algo.Export
 		}
 
 		/// <summary>
-		/// Экспортировать <see cref="QuoteChangeMessage"/>.
+		/// To export <see cref="QuoteChangeMessage"/>.
 		/// </summary>
-		/// <param name="messages">Сообщения.</param>
+		/// <param name="messages">Messages.</param>
 		protected override void Export(IEnumerable<QuoteChangeMessage> messages)
 		{
 			Do(messages.SelectMany(d => d.Asks.Concat(d.Bids).OrderByDescending(q => q.Price).Select(q => new TimeQuoteChange(q, d))), () => new MarketDepthQuoteTable(Security));
 		}
 
 		/// <summary>
-		/// Экспортировать <see cref="Level1ChangeMessage"/>.
+		/// To export <see cref="Level1ChangeMessage"/>.
 		/// </summary>
-		/// <param name="messages">Сообщения.</param>
+		/// <param name="messages">Messages.</param>
 		protected override void Export(IEnumerable<Level1ChangeMessage> messages)
 		{
 			Do(messages, () => new Level1Table(Security));
 		}
 
 		/// <summary>
-		/// Экспортировать <see cref="CandleMessage"/>.
+		/// To export <see cref="CandleMessage"/>.
 		/// </summary>
-		/// <param name="messages">Сообщения.</param>
+		/// <param name="messages">Messages.</param>
 		protected override void Export(IEnumerable<CandleMessage> messages)
 		{
 			// TODO
@@ -109,18 +109,18 @@ namespace StockSharp.Algo.Export
 		}
 
 		/// <summary>
-		/// Экспортировать <see cref="NewsMessage"/>.
+		/// To export <see cref="NewsMessage"/>.
 		/// </summary>
-		/// <param name="messages">Сообщения.</param>
+		/// <param name="messages">Messages.</param>
 		protected override void Export(IEnumerable<NewsMessage> messages)
 		{
 			Do(messages, () => new NewsTable());
 		}
 
 		/// <summary>
-		/// Экспортировать <see cref="SecurityMessage"/>.
+		/// To export <see cref="SecurityMessage"/>.
 		/// </summary>
-		/// <param name="messages">Сообщения.</param>
+		/// <param name="messages">Messages.</param>
 		protected override void Export(IEnumerable<SecurityMessage> messages)
 		{
 			Do(messages, () => new SecuritiesTable(Security));

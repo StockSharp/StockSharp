@@ -5,11 +5,10 @@ namespace StockSharp.Algo.Indicators
 	using StockSharp.Localization;
 
 	/// <summary>
-	/// Тройная экспоненциальная скользящая средняя.
+	/// Triple Exponential Moving Average.
 	/// </summary>
 	/// <remarks>
-	/// http://www2.wealth-lab.com/WL5Wiki/TRIX.ashx
-	/// http://www.incrediblecharts.com/indicators/trix_indicator.php
+	/// http://www2.wealth-lab.com/WL5Wiki/TRIX.ashx http://www.incrediblecharts.com/indicators/trix_indicator.php.
 	/// </remarks>
 	[DisplayName("Trix")]
 	[DescriptionLoc(LocalizedStrings.Str752Key)]
@@ -21,7 +20,7 @@ namespace StockSharp.Algo.Indicators
 		private readonly RateOfChange _roc;
 
 		/// <summary>
-		/// Создать <see cref="VolumeWeightedMovingAverage"/>.
+		/// Initializes a new instance of the <see cref="VolumeWeightedMovingAverage"/>.
 		/// </summary>
 		public Trix()
 		{
@@ -32,7 +31,7 @@ namespace StockSharp.Algo.Indicators
 		}
 
 		/// <summary>
-		/// Длина периода <see cref="RateOfChange"/>.
+		/// The length of period <see cref="RateOfChange"/>.
 		/// </summary>
 		[DisplayName("ROC")]
 		[DescriptionLoc(LocalizedStrings.Str753Key)]
@@ -44,7 +43,7 @@ namespace StockSharp.Algo.Indicators
 		}
 
 		/// <summary>
-		/// Сбросить состояние индикатора на первоначальное. Метод вызывается каждый раз, когда меняются первоначальные настройки (например, длина периода).
+		/// To reset the indicator status to initial. The method is called each time when initial settings are changed (for example, the length of period).
 		/// </summary>
 		public override void Reset()
 		{
@@ -54,7 +53,7 @@ namespace StockSharp.Algo.Indicators
 		}
 
 		/// <summary>
-		/// Сформирован ли индикатор.
+		/// Whether the indicator is set.
 		/// </summary>
 		public override bool IsFormed
 		{
@@ -62,10 +61,10 @@ namespace StockSharp.Algo.Indicators
 		}
 
 		/// <summary>
-		/// Обработать входное значение.
+		/// To handle the input value.
 		/// </summary>
-		/// <param name="input">Входное значение.</param>
-		/// <returns>Результирующее значение.</returns>
+		/// <param name="input">The input value.</param>
+		/// <returns>The resulting value.</returns>
 		protected override IIndicatorValue OnProcess(IIndicatorValue input)
 		{
 			var ema1Value = _ema1.Process(input);

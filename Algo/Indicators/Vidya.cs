@@ -7,11 +7,10 @@ namespace StockSharp.Algo.Indicators
 	using StockSharp.Localization;
 
 	/// <summary>
-	/// Динамическая средняя переменного индекса (Variable Index Dynamic Average).
+	/// The dynamic average of variable index  (Variable Index Dynamic Average).
 	/// </summary>
 	/// <remarks>
-	/// http://www2.wealth-lab.com/WL5Wiki/Vidya.ashx
-	/// http://www.mql5.com/en/code/75 
+	/// http://www2.wealth-lab.com/WL5Wiki/Vidya.ashx http://www.mql5.com/en/code/75.
 	/// </remarks>
 	[DisplayName("Vidya")]
 	[DescriptionLoc(LocalizedStrings.Str755Key)]
@@ -23,7 +22,7 @@ namespace StockSharp.Algo.Indicators
 		private readonly ChandeMomentumOscillator _cmo;
 
 		/// <summary>
-		/// Создать индикатор<see cref="Vidya"/>.
+		/// To create the indicator <see cref="Vidya"/>.
 		/// </summary>
 		public Vidya()
 		{
@@ -32,7 +31,7 @@ namespace StockSharp.Algo.Indicators
 		}
 
 		/// <summary>
-		/// Сбросить состояние индикатора на первоначальное. Метод вызывается каждый раз, когда меняются первоначальные настройки (например, длина периода).
+		/// To reset the indicator status to initial. The method is called each time when initial settings are changed (for example, the length of period).
 		/// </summary>
 		public override void Reset()
 		{
@@ -44,10 +43,10 @@ namespace StockSharp.Algo.Indicators
 		}
 
 		/// <summary>
-		/// Обработать входное значение.
+		/// To handle the input value.
 		/// </summary>
-		/// <param name="input">Входное значение.</param>
-		/// <returns>Результирующее значение.</returns>
+		/// <param name="input">The input value.</param>
+		/// <returns>The resulting value.</returns>
 		protected override IIndicatorValue OnProcess(IIndicatorValue input)
 		{
 			var newValue = input.GetValue<decimal>();

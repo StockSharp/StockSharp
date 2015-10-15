@@ -18,7 +18,7 @@ namespace StockSharp.Algo.Testing
 	using StockSharp.Localization;
 
 	/// <summary>
-	/// Эмуляционное подключение. Использует исторические данные и/или случайно сгенерированные.
+	/// The emulational connection. It uses historic data and/or occasionally generated.
 	/// </summary>
 	public class HistoryEmulationConnector : BaseEmulationConnector, IExternalCandleSource
 	{
@@ -67,32 +67,32 @@ namespace StockSharp.Algo.Testing
 		private readonly InMemoryMessageChannel _historyChannel;
 
 		/// <summary>
-		/// Создать <see cref="HistoryEmulationConnector"/>.
+		/// Initializes a new instance of the <see cref="HistoryEmulationConnector"/>.
 		/// </summary>
-		/// <param name="securities">Инструменты, которые будут переданы через событие <see cref="IConnector.NewSecurities"/>.</param>
-		/// <param name="portfolios">Портфели, которые будут переданы через событие <see cref="IConnector.NewPortfolios"/>.</param>
+		/// <param name="securities">Instruments, which will be sent through the <see cref="IConnector.NewSecurities"/> event.</param>
+		/// <param name="portfolios">Portfolios, which will be sent through the <see cref="IConnector.NewPortfolios"/> event.</param>
 		public HistoryEmulationConnector(IEnumerable<Security> securities, IEnumerable<Portfolio> portfolios)
 			: this(securities, portfolios, new StorageRegistry())
 		{
 		}
 
 		/// <summary>
-		/// Создать <see cref="HistoryEmulationConnector"/>.
+		/// Initializes a new instance of the <see cref="HistoryEmulationConnector"/>.
 		/// </summary>
-		/// <param name="securities">Инструменты, с которыми будет вестись работа.</param>
-		/// <param name="portfolios">Портфели, с которыми будет вестись работа.</param>
-		/// <param name="storageRegistry">Хранилище данных.</param>
+		/// <param name="securities">Instruments, the operation will be performed with.</param>
+		/// <param name="portfolios">Portfolios, the operation will be performed with.</param>
+		/// <param name="storageRegistry">Market data storage.</param>
 		public HistoryEmulationConnector(IEnumerable<Security> securities, IEnumerable<Portfolio> portfolios, IStorageRegistry storageRegistry)
 			: this(new CollectionSecurityProvider(securities), portfolios, storageRegistry)
 		{
 		}
 
 		/// <summary>
-		/// Создать <see cref="HistoryEmulationConnector"/>.
+		/// Initializes a new instance of the <see cref="HistoryEmulationConnector"/>.
 		/// </summary>
-		/// <param name="securityProvider">Поставщик информации об инструментах.</param>
-		/// <param name="portfolios">Портфели, с которыми будет вестись работа.</param>
-		/// <param name="storageRegistry">Хранилище данных.</param>
+		/// <param name="securityProvider">The provider of information about instruments.</param>
+		/// <param name="portfolios">Portfolios, the operation will be performed with.</param>
+		/// <param name="storageRegistry">Market data storage.</param>
 		public HistoryEmulationConnector(ISecurityProvider securityProvider, IEnumerable<Portfolio> portfolios, IStorageRegistry storageRegistry)
 		{
 			if (securityProvider == null)
@@ -130,7 +130,7 @@ namespace StockSharp.Algo.Testing
 		private readonly HistoryMessageAdapter _historyAdapter;
 
 		/// <summary>
-		/// Адаптер, получающий сообщения из хранилища <see cref="IStorageRegistry"/>.
+		/// The adapter, receiving messages form the storage <see cref="IStorageRegistry"/>.
 		/// </summary>
 		public HistoryMessageAdapter HistoryMessageAdapter
 		{
@@ -165,7 +165,7 @@ namespace StockSharp.Algo.Testing
 		//}
 
 		/// <summary>
-		/// Максимальный размер очереди сообщений, до которого читаются исторические данные. По-умолчанию равно 1000.
+		/// The maximal size of the message queue, up to which history data are red. By default, it is equal to 1000.
 		/// </summary>
 		public int MaxMessageCount
 		{
@@ -176,7 +176,7 @@ namespace StockSharp.Algo.Testing
 		private readonly Dictionary<Portfolio, decimal> _initialMoney;
 
 		/// <summary>
-		/// Первоначальный размер денежных средств на счетах.
+		/// The initial size of monetary funds on accounts.
 		/// </summary>
 		public IDictionary<Portfolio, decimal> InitialMoney
 		{
@@ -184,7 +184,7 @@ namespace StockSharp.Algo.Testing
 		}
 
 		/// <summary>
-		/// Производить расчет данных на основе <see cref="ManagedMessageAdapter"/>. По-умолчанию включено.
+		/// To calculate data on basis of <see cref="ManagedMessageAdapter"/>. The default is enabled.
 		/// </summary>
 		public override bool CalculateMessages
 		{
@@ -192,19 +192,19 @@ namespace StockSharp.Algo.Testing
 		}
 
 		/// <summary>
-		/// Число загруженных сообщений.
+		/// The number of loaded messages.
 		/// </summary>
 		public int LoadedMessageCount { get { return _historyAdapter.LoadedMessageCount; } }
 
 		/// <summary>
-		/// Число обработанных сообщений.
+		/// The number of processed messages.
 		/// </summary>
 		public int ProcessedMessageCount { get { return EmulationAdapter.ProcessedMessageCount; } }
 
 		private EmulationStates _state = EmulationStates.Stopped;
 
 		/// <summary>
-		/// Состояние эмулятора.
+		/// The emulator state.
 		/// </summary>
 		public EmulationStates State
 		{
@@ -258,7 +258,7 @@ namespace StockSharp.Algo.Testing
 		}
 
 		/// <summary>
-		/// Событие о изменении состояния эмулятора <see cref="State"/>.
+		/// The event on the emulator state change <see cref="HistoryEmulationConnector.State"/>.
 		/// </summary>
 		public event Action StateChanged;
 
@@ -290,19 +290,17 @@ namespace StockSharp.Algo.Testing
 		//}
 
 		/// <summary>
-		/// Закончил ли эмулятор свою работу по причине окончания данных или он был прерван через метод <see cref="IConnector.Disconnect"/>.
+		/// Has the emulator ended its operation due to end of data, or it was interrupted through the <see cref="IConnector.Disconnect"/>method.
 		/// </summary>
 		public bool IsFinished { get; private set; }
 
 		/// <summary>
-		/// Включить возможность выдавать свечи напрямую в <see cref="ICandleManager"/>.
-		/// Ускоряет работу, но будут отсутствовать события изменения свечек.
-		/// По умолчанию выключено.
+		/// To enable the possibility to give out candles directly into <see cref="ICandleManager"/>. It accelerates operation, but candle change events will not be available. By default it is disabled.
 		/// </summary>
 		public bool UseExternalCandleSource { get; set; }
 
 		/// <summary>
-		/// Очистить кэш данных.
+		/// Clear cache.
 		/// </summary>
 		public override void ClearCache()
 		{
@@ -311,7 +309,7 @@ namespace StockSharp.Algo.Testing
 		}
 
 		/// <summary>
-		/// Вызывать событие <see cref="Connector.Connected"/> при установке подключения первого адаптера в <see cref="Connector.Adapter"/>.
+		/// To call the <see cref="Connector.Connected"/> event when the first adapter connects to <see cref="Connector.Adapter"/>.
 		/// </summary>
 		protected override bool RaiseConnectedOnFirstAdapter
 		{
@@ -328,7 +326,7 @@ namespace StockSharp.Algo.Testing
 		//}
 
 		/// <summary>
-		/// Отключиться от торговой системы.
+		/// Disconnect from trading system.
 		/// </summary>
 		protected override void OnDisconnect()
 		{
@@ -336,7 +334,7 @@ namespace StockSharp.Algo.Testing
 		}
 
 		/// <summary>
-		/// Запустить эмуляцию.
+		/// To start the emulation.
 		/// </summary>
 		public void Start()
 		{
@@ -344,7 +342,7 @@ namespace StockSharp.Algo.Testing
 		}
 
 		/// <summary>
-		/// Приостановить эмуляцию.
+		/// To suspend the emulation.
 		/// </summary>
 		public void Suspend()
 		{
@@ -357,9 +355,9 @@ namespace StockSharp.Algo.Testing
 		}
 
 		/// <summary>
-		/// Обработать сообщение, содержащее рыночные данные.
+		/// To process the message, containing market data.
 		/// </summary>
-		/// <param name="message">Сообщение, содержащее рыночные данные.</param>
+		/// <param name="message">The message, containing market data.</param>
 		protected override void OnProcessMessage(Message message)
 		{
 			try
@@ -549,9 +547,9 @@ namespace StockSharp.Algo.Testing
 		//}
 
 		/// <summary>
-		/// Начать получать новую информацию по портфелю.
+		/// Subscribe on the portfolio changes.
 		/// </summary>
-		/// <param name="portfolio">Портфель, по которому необходимо начать получать новую информацию.</param>
+		/// <param name="portfolio">Portfolio for subscription.</param>
 		protected override void OnRegisterPortfolio(Portfolio portfolio)
 		{
 			_initialMoney.TryAdd(portfolio, portfolio.BeginValue);

@@ -9,14 +9,14 @@ namespace StockSharp.Algo.Testing
 	using StockSharp.Localization;
 
 	/// <summary>
-	/// Генератор стакана случайным методом.
+	/// The order book generator using random method.
 	/// </summary>
 	public abstract class MarketDepthGenerator : MarketDataGenerator
 	{
 		/// <summary>
-		/// Инициализировать <see cref="MarketDepthGenerator"/>.
+		/// Initialize <see cref="MarketDepthGenerator"/>.
 		/// </summary>
-		/// <param name="securityId">Идентификатор инструмента, для которого необходимо генерировать данные.</param>
+		/// <param name="securityId">The identifier of the instrument, for which data shall be generated.</param>
 		protected MarketDepthGenerator(SecurityId securityId)
 			: base(securityId)
 		{
@@ -29,7 +29,7 @@ namespace StockSharp.Algo.Testing
 		}
 
 		/// <summary>
-		/// Тип маркет-данных.
+		/// Market data type.
 		/// </summary>
 		public override MarketDataTypes DataType
 		{
@@ -37,21 +37,20 @@ namespace StockSharp.Algo.Testing
 		}
 
 		/// <summary>
-		/// Использовать для генерации лучших котировок в стакане объем исторических сделок.
+		/// To use to generate best quotes in the order book volume of history trades.
 		/// </summary>
 		/// <remarks>
-		/// Значение по умолчанию <see langword="true"/>.
+		/// The default value is <see langword="true" />.
 		/// </remarks>
 		public bool UseTradeVolume { get; set; } // TODO
 
 		private int _minSpreadStepCount;
 
 		/// <summary>
-		/// Минимальная величина спреда между лучшими котировками в единицах числа шагов цены.
-		/// Величина спреда будет выбрана случайно между <see cref="MinSpreadStepCount"/> и <see cref="MaxSpreadStepCount"/>.
+		/// The minimal value of spread between the best quotes in units of price increments number. The spread value will be selected randomly between <see cref="MarketDepthGenerator.MinSpreadStepCount"/> and <see cref="MarketDepthGenerator.MaxSpreadStepCount"/>.
 		/// </summary>
 		/// <remarks>
-		/// Значение по умолчанию 1.
+		/// The default value is 1.
 		/// </remarks>
 		public int MinSpreadStepCount
 		{
@@ -68,11 +67,10 @@ namespace StockSharp.Algo.Testing
 		private int _maxSpreadStepCount;
 
 		/// <summary>
-		/// Максимальная величина спреда между лучшими котировками в единицах числа шагов цены.
-		/// Величина спреда будет выбрана случайно между <see cref="MinSpreadStepCount"/> и <see cref="MaxSpreadStepCount"/>.
+		/// The maximal value of spread between the best quotes in units of price increments number. The spread value will be selected randomly between <see cref="MarketDepthGenerator.MinSpreadStepCount"/> and <see cref="MarketDepthGenerator.MaxSpreadStepCount"/>.
 		/// </summary>
 		/// <remarks>
-		/// Значение по умолчанию <see cref="int.MaxValue"/>.
+		/// The default value is <see cref="Int32.MaxValue"/>.
 		/// </remarks>
 		public int MaxSpreadStepCount
 		{
@@ -89,10 +87,10 @@ namespace StockSharp.Algo.Testing
 		private int _maxBidsDepth;
 
 		/// <summary>
-		/// Максимальная глубина бидов.
+		/// The maximal depth of bids.
 		/// </summary>
 		/// <remarks>
-		/// Значение по умолчанию равно 1.
+		/// The default value is 1.
 		/// </remarks>
 		public int MaxBidsDepth
 		{
@@ -109,10 +107,10 @@ namespace StockSharp.Algo.Testing
 		private int _maxAsksDepth;
 
 		/// <summary>
-		/// Максимальная глубина офферов.
+		/// The maximal depth of offers.
 		/// </summary>
 		/// <remarks>
-		/// Значение по умолчанию равно 1.
+		/// The default value is 1.
 		/// </remarks>
 		public int MaxAsksDepth
 		{
@@ -127,17 +125,17 @@ namespace StockSharp.Algo.Testing
 		}
 
 		/// <summary>
-		/// Генерировать ли стаканы после каждой сделки. По умолчанию <see langword="false"/>.
+		/// Shall order books be generated after each trade. The default is <see langword="false" />.
 		/// </summary>
 		public bool GenerateDepthOnEachTrade { get; set; }
 
 		private int _maxGenerations;
 
 		/// <summary>
-		/// Максимальное количество генераций после последнего поступления исходных данных для стакана.
+		/// The maximal number of generations after last occurrence of source data for the order book.
 		/// </summary>
 		/// <remarks>
-		/// Значение по умолчанию равно 20.
+		/// The default value equals 20.
 		/// </remarks>
 		public int MaxGenerations
 		{
@@ -152,11 +150,11 @@ namespace StockSharp.Algo.Testing
 		}
 
 		/// <summary>
-		/// Создать случайным методом котировку.
+		/// To create the quote using random method.
 		/// </summary>
-		/// <param name="startPrice">Начальная цена, от которой случайным методом необходимо получить цену котировки.</param>
-		/// <param name="side">Направление котировки.</param>
-		/// <returns>Случайная котировка.</returns>
+		/// <param name="startPrice">The initial price, based on which a quote price shall be got using random method.</param>
+		/// <param name="side">The quote direction.</param>
+		/// <returns>The random quote.</returns>
 		protected QuoteChange CreateQuote(decimal startPrice, Sides side)
 		{
 			var priceStep = SecurityDefinition.PriceStep ?? 0.01m;
@@ -171,7 +169,7 @@ namespace StockSharp.Algo.Testing
 	}
 
 	/// <summary>
-	/// Генератор стаканов, учитывающий последовательность сделок.
+	/// The order book generator, accounting for trades sequence.
 	/// </summary>
 	public class TrendMarketDepthGenerator : MarketDepthGenerator
 	{
@@ -188,9 +186,9 @@ namespace StockSharp.Algo.Testing
 		private BoardMessage _boardDefinition;
 
 		/// <summary>
-		/// Создать <see cref="TrendMarketDepthGenerator"/>.
+		/// Initializes a new instance of the <see cref="TrendMarketDepthGenerator"/>.
 		/// </summary>
-		/// <param name="securityId">Идентификатор инструмента, для которого необходимо генерировать данные.</param>
+		/// <param name="securityId">The identifier of the instrument, for which data shall be generated.</param>
 		public TrendMarketDepthGenerator(SecurityId securityId)
 			: base(securityId)
 		{
@@ -198,7 +196,7 @@ namespace StockSharp.Algo.Testing
 		}
 
 		/// <summary>
-		/// Инициализировать состояние генератора.
+		/// To initialize the generator state.
 		/// </summary>
 		public override void Init()
 		{
@@ -216,11 +214,10 @@ namespace StockSharp.Algo.Testing
 		}
 
 		/// <summary>
-		/// Обработать сообщение.
+		/// Process message.
 		/// </summary>
-		/// <param name="message">Сообщение.</param>
-		/// <returns>Результат обработки. Если будет возрвщено <see langword="null"/>,
-		/// то генератору пока недостаточно данных для генерации нового сообщения.</returns>
+		/// <param name="message">Message.</param>
+		/// <returns>The result of processing. If <see langword="null" /> is returned, then generator has no sufficient data to generate new message.</returns>
 		protected override Message OnProcess(Message message)
 		{
 			if (_boardDefinition == null)
@@ -437,9 +434,9 @@ namespace StockSharp.Algo.Testing
 		//}
 		
 		/// <summary>
-		/// Создать копию <see cref="TrendMarketDepthGenerator"/>.
+		/// Create a copy of <see cref="TrendMarketDepthGenerator"/>.
 		/// </summary>
-		/// <returns>Копия.</returns>
+		/// <returns>Copy.</returns>
 		public override MarketDataGenerator Clone()
 		{
 			return new TrendMarketDepthGenerator(SecurityId)

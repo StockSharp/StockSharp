@@ -9,15 +9,15 @@ namespace StockSharp.Algo.Indicators
 	using StockSharp.Localization;
 
 	/// <summary>
-	/// Вспомогательный класс для работы с индикаторами.
+	/// Extension class for indicators.
 	/// </summary>
 	public static class IndicatorHelper
 	{
 		/// <summary>
-		/// Получить текущее значение индикатора.
+		/// To get the current value of the indicator.
 		/// </summary>
-		/// <param name="indicator">Индикатор.</param>
-		/// <returns>Текущее значение.</returns>
+		/// <param name="indicator">Indicator.</param>
+		/// <returns>The current value.</returns>
 		public static decimal GetCurrentValue(this IIndicator indicator)
 		{
 			if (indicator == null)
@@ -27,11 +27,11 @@ namespace StockSharp.Algo.Indicators
 		}
 
 		/// <summary>
-		/// Получить текущее значение индикатора.
+		/// To get the current value of the indicator.
 		/// </summary>
-		/// <typeparam name="T">Тип значения.</typeparam>
-		/// <param name="indicator">Индикатор.</param>
-		/// <returns>Текущее значение.</returns>
+		/// <typeparam name="T">Value type.</typeparam>
+		/// <param name="indicator">Indicator.</param>
+		/// <returns>The current value.</returns>
 		public static T GetCurrentValue<T>(this IIndicator indicator)
 		{
 			if (indicator == null)
@@ -41,11 +41,11 @@ namespace StockSharp.Algo.Indicators
 		}
 
 		/// <summary>
-		/// Получить значение индикатора по индексу (0 - последнее значение).
+		/// To get the indicator value by the index (0 � last value).
 		/// </summary>
-		/// <param name="indicator">Индикатор.</param>
-		/// <param name="index">Индекс значения.</param>
-		/// <returns>Значение индикатора.</returns>
+		/// <param name="indicator">Indicator.</param>
+		/// <param name="index">The value index.</param>
+		/// <returns>Indicator value.</returns>
 		public static decimal GetValue(this IIndicator indicator, int index)
 		{
 			if (indicator == null)
@@ -55,12 +55,12 @@ namespace StockSharp.Algo.Indicators
 		}
 
 		/// <summary>
-		/// Получить значение индикатора по индексу (0 - последнее значение).
+		/// To get the indicator value by the index (0 � last value).
 		/// </summary>
-		/// <typeparam name="T">Тип значения.</typeparam>
-		/// <param name="indicator">Индикатор.</param>
-		/// <param name="index">Индекс значения.</param>
-		/// <returns>Значение индикатора.</returns>
+		/// <typeparam name="T">Value type.</typeparam>
+		/// <param name="indicator">Indicator.</param>
+		/// <param name="index">The value index.</param>
+		/// <returns>Indicator value.</returns>
 		public static T GetValue<T>(this IIndicator indicator, int index)
 		{
 			if (indicator == null)
@@ -79,35 +79,35 @@ namespace StockSharp.Algo.Indicators
 		}
 
 		/// <summary>
-		/// Обновить индикатор ценой закрытия свечи <see cref="Candle.ClosePrice"/>.
+		/// To renew the indicator with candle closing price <see cref="Candle.ClosePrice"/>.
 		/// </summary>
-		/// <param name="indicator">Индикатор.</param>
-		/// <param name="candle">Свеча.</param>
-		/// <returns>Новое значение индикатора.</returns>
+		/// <param name="indicator">Indicator.</param>
+		/// <param name="candle">Candle.</param>
+		/// <returns>The new value of the indicator.</returns>
 		public static IIndicatorValue Process(this IIndicator indicator, Candle candle)
 		{
 			return indicator.Process(new CandleIndicatorValue(indicator, candle));
 		}
 
 		/// <summary>
-		/// Обновить индикатор числовым значением.
+		/// To renew the indicator with numeric value.
 		/// </summary>
-		/// <param name="indicator">Индикатор.</param>
-		/// <param name="value">Числовое значение.</param>
-		/// <param name="isFinal">Является ли значение окончательным (индикатор окончательно формирует свое значение и более не будет изменяться в данной точке времени). По-умолчанию <see langword="true"/>.</param>
-		/// <returns>Новое значение индикатора.</returns>
+		/// <param name="indicator">Indicator.</param>
+		/// <param name="value">Numeric value.</param>
+		/// <param name="isFinal">Is the value final (the indicator finally forms its value and will not be changed in this point of time anymore). Default is <see langword="true" />.</param>
+		/// <returns>The new value of the indicator.</returns>
 		public static IIndicatorValue Process(this IIndicator indicator, decimal value, bool isFinal = true)
 		{
 			return indicator.Process(new DecimalIndicatorValue(indicator, value) { IsFinal = isFinal });
 		}
 
 		/// <summary>
-		/// Обновить индикатор числовой парой.
+		/// To renew the indicator with numeric pair.
 		/// </summary>
-		/// <param name="indicator">Индикатор.</param>
-		/// <param name="value">Пара значений.</param>
-		/// <param name="isFinal">Является ли пара окончательной (индикатор окончательно формирует свое значение и более не будет изменяться в данной точке времени). По-умолчанию <see langword="true"/>.</param>
-		/// <returns>Новое значение индикатора.</returns>
+		/// <param name="indicator">Indicator.</param>
+		/// <param name="value">The pair of values.</param>
+		/// <param name="isFinal">If the pair final (the indicator finally forms its value and will not be changed in this point of time anymore). Default is <see langword="true" />.</param>
+		/// <returns>The new value of the indicator.</returns>
 		public static IIndicatorValue Process<TValue>(this IIndicator indicator, Tuple<TValue, TValue> value, bool isFinal = true)
 		{
 			return indicator.Process(new PairIndicatorValue<TValue>(indicator, value) { IsFinal = isFinal });
@@ -121,11 +121,11 @@ namespace StockSharp.Algo.Indicators
 		}
 
 		/// <summary>
-		/// Получить входное значение для <see cref="IIndicatorValue"/>.
+		/// To get the input value for <see cref="IIndicatorValue"/>.
 		/// </summary>
-		/// <typeparam name="T">Тип значения.</typeparam>
-		/// <param name="indicatorValue">Значение индикатора.</param>
-		/// <returns>Входное значение указанного типа.</returns>
+		/// <typeparam name="T">Value type.</typeparam>
+		/// <param name="indicatorValue">Indicator value.</param>
+		/// <returns>The input value of the specified type.</returns>
 		public static T GetInputValue<T>(this IIndicatorValue indicatorValue)
 		{
 			var input = indicatorValue.InputValue;

@@ -1,4 +1,4 @@
-﻿namespace StockSharp.Algo.Indicators
+namespace StockSharp.Algo.Indicators
 {
 	using System;
 
@@ -6,49 +6,49 @@
 	using Ecng.Serialization;
 
 	/// <summary>
-	/// Интерфейс, описывающий индикатор.
+	/// The interface describing indicator.
 	/// </summary>
 	public interface IIndicator : IPersistable, ICloneable<IIndicator>
 	{
 		/// <summary>
-		/// Уникальный идентификатор.
+		/// Unique ID.
 		/// </summary>
 		Guid Id { get; }
 
 		/// <summary>
-		/// Название индикатора.
+		/// Indicator name.
 		/// </summary>
 		string Name { get; set; }
 
 		/// <summary>
-		/// Сформирован ли индикатор.
+		/// Whether the indicator is set.
 		/// </summary>
 		bool IsFormed { get; }
 
 		/// <summary>
-		/// Контейнер, хранящий данные индикатора.
+		/// The container storing indicator data.
 		/// </summary>
 		IIndicatorContainer Container { get; }
 
 		/// <summary>
-		/// Событие об изменении индикатора (например, добавлено новое значение).
+		/// The indicator change event (for example, a new value is added).
 		/// </summary>
 		event Action<IIndicatorValue, IIndicatorValue> Changed;
 
 		/// <summary>
-		/// Событие о сбросе состояния индикатора на первоначальное. Событие вызывается каждый раз, когда меняются первоначальные настройки (например, длина периода).
+		/// The event of resetting the indicator status to initial. The event is called each time when initial settings are changed (for example, the length of period).
 		/// </summary>
 		event Action Reseted;
 
 		/// <summary>
-		/// Обработать входное значение.
+		/// To handle the input value.
 		/// </summary>
-		/// <param name="input">Входное значение.</param>
-		/// <returns>Новое значение индикатора.</returns>
+		/// <param name="input">The input value.</param>
+		/// <returns>The new value of the indicator.</returns>
 		IIndicatorValue Process(IIndicatorValue input);
 
 		/// <summary>
-		/// Сбросить состояние индикатора на первоначальное. Метод вызывается каждый раз, когда меняются первоначальные настройки (например, длина периода).
+		/// To reset the indicator status to initial. The method is called each time when initial settings are changed (for example, the length of period).
 		/// </summary>
 		void Reset();
 	}

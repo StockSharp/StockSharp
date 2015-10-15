@@ -7,14 +7,14 @@ namespace StockSharp.Algo.Indicators
 	using Xceed.Wpf.Toolkit.PropertyGrid.Attributes;
 
 	/// <summary>
-	/// Индекс Относительной Энергии.
+	/// Relative Vigor Index.
 	/// </summary>
 	[DisplayName("RVI")]
 	[DescriptionLoc(LocalizedStrings.Str771Key)]
 	public class RelativeVigorIndex : BaseComplexIndicator
 	{
 		/// <summary>
-		/// Создать <see cref="RelativeVigorIndex"/>.
+		/// Initializes a new instance of the <see cref="RelativeVigorIndex"/>.
 		/// </summary>
 		public RelativeVigorIndex()
 			: this(new RelativeVigorIndexAverage(), new RelativeVigorIndexSignal())
@@ -22,10 +22,10 @@ namespace StockSharp.Algo.Indicators
 		}
 
 		/// <summary>
-		/// Создать <see cref="RelativeVigorIndex"/>.
+		/// Initializes a new instance of the <see cref="RelativeVigorIndex"/>.
 		/// </summary>
-		/// <param name="average">Средневзвешанная часть индикатора.</param>
-		/// <param name="signal">Сигнальная часть индикатора.</param>
+		/// <param name="average">Average indicator part.</param>
+		/// <param name="signal">Signalling part of indicator.</param>
 		public RelativeVigorIndex(RelativeVigorIndexAverage average, RelativeVigorIndexSignal signal)
 			: base(average, signal)
 		{
@@ -36,7 +36,7 @@ namespace StockSharp.Algo.Indicators
 		}
 
 		/// <summary>
-		/// Средневзвешанная часть индикатора.
+		/// Average indicator part.
 		/// </summary>
 		[ExpandableObject]
 		[DisplayName("Average")]
@@ -45,7 +45,7 @@ namespace StockSharp.Algo.Indicators
 		public RelativeVigorIndexAverage Average { get; private set; }
 
 		/// <summary>
-		/// Сигнальная часть индикатора.
+		/// Signalling part of indicator.
 		/// </summary>
 		[ExpandableObject]
 		[DisplayName("Signal")]

@@ -9,84 +9,84 @@ namespace StockSharp.Algo.Statistics
 	using StockSharp.Localization;
 
 	/// <summary>
-	/// Интерфейс, описывающий параметр статистики, рассчитывающийся на основе заявков.
+	/// The interface, describing statistic parameter, calculated based on orders.
 	/// </summary>
 	public interface IOrderStatisticParameter
 	{
 		/// <summary>
-		/// Добавить в параметр информацию о новой заявке.
+		/// To add to the parameter an information on new order.
 		/// </summary>
-		/// <param name="order">Новая заявка.</param>
+		/// <param name="order">New order.</param>
 		void New(Order order);
 
 		/// <summary>
-		/// Добавить в параметр информацию об изменившейся заявке.
+		/// To add to the parameter an information on changed order.
 		/// </summary>
-		/// <param name="order">Изменившаяся заявка.</param>
+		/// <param name="order">The changed order.</param>
 		void Changed(Order order);
 
 		/// <summary>
-		/// Добавить в параметр информацию об ошибке регистрации заявки.
+		/// To add to the parameter an information on error of order registration.
 		/// </summary>
-		/// <param name="fail">Ошибка регистрации заявки.</param>
+		/// <param name="fail">Error registering order.</param>
 		void RegisterFailed(OrderFail fail);
 	
 		/// <summary>
-		/// Добавить в параметр информацию об ошибке отмены заявки.
+		/// To add to the parameter an information on error of order cancelling.
 		/// </summary>
-		/// <param name="fail">Ошибка отмены заявки.</param>
+		/// <param name="fail">Error cancelling order.</param>
 		void CancelFailed(OrderFail fail);
 	}
 
 	/// <summary>
-	/// Базовый параметр статистики, рассчитывающийся на основе заявков.
+	/// The base statistic parameter, calculated based on orders.
 	/// </summary>
-	/// <typeparam name="TValue">Тип значения параметра.</typeparam>
+	/// <typeparam name="TValue">The type of the parameter value.</typeparam>
 	public abstract class BaseOrderStatisticParameter<TValue> : BaseStatisticParameter<TValue>, IOrderStatisticParameter
 		where TValue : IComparable<TValue>
 	{
 		/// <summary>
-		/// Инициализировать <see cref="BaseOrderStatisticParameter{TValue}"/>.
+		/// Initialize <see cref="BaseOrderStatisticParameter{T}"/>.
 		/// </summary>
 		protected BaseOrderStatisticParameter()
 		{
 		}
 
 		/// <summary>
-		/// Добавить в параметр информацию о новой заявке.
+		/// To add to the parameter an information on new order.
 		/// </summary>
-		/// <param name="order">Новая заявка.</param>
+		/// <param name="order">New order.</param>
 		public virtual void New(Order order)
 		{
 		}
 
 		/// <summary>
-		/// Добавить в параметр информацию об изменившейся заявке.
+		/// To add to the parameter an information on changed order.
 		/// </summary>
-		/// <param name="order">Изменившаяся заявка.</param>
+		/// <param name="order">The changed order.</param>
 		public virtual void Changed(Order order)
 		{
 		}
 
 		/// <summary>
-		/// Добавить в параметр информацию об ошибке регистрации заявки.
+		/// To add to the parameter an information on error of order registration.
 		/// </summary>
-		/// <param name="fail">Ошибка регистрации заявки.</param>
+		/// <param name="fail">Error registering order.</param>
 		public virtual void RegisterFailed(OrderFail fail)
 		{
 		}
 
 		/// <summary>
-		/// Добавить в параметр информацию об ошибке отмены заявки.
+		/// To add to the parameter an information on error of order cancelling.
 		/// </summary>
-		/// <param name="fail">Ошибка отмены заявки.</param>
+		/// <param name="fail">Error cancelling order.</param>
 		public virtual void CancelFailed(OrderFail fail)
 		{
 		}
 	}
 
 	/// <summary>
-	/// Максимальное значение задержки регистрации заявки.
+	/// The maximal value of the order registration delay.
 	/// </summary>
 	[DisplayNameLoc(LocalizedStrings.Str947Key)]
 	[DescriptionLoc(LocalizedStrings.Str948Key)]
@@ -94,9 +94,9 @@ namespace StockSharp.Algo.Statistics
 	public class MaxLatencyRegistrationParameter : BaseOrderStatisticParameter<TimeSpan>
 	{
 		/// <summary>
-		/// Добавить в параметр информацию о новой заявке.
+		/// To add to the parameter an information on new order.
 		/// </summary>
-		/// <param name="order">Новая заявка.</param>
+		/// <param name="order">New order.</param>
 		public override void New(Order order)
 		{
 			if (order.LatencyRegistration != null)
@@ -105,7 +105,7 @@ namespace StockSharp.Algo.Statistics
 	}
 
 	/// <summary>
-	/// Максимальное значение задержки отмены заявки.
+	/// The maximal value of the order cancelling delay.
 	/// </summary>
 	[DisplayNameLoc(LocalizedStrings.Str950Key)]
 	[DescriptionLoc(LocalizedStrings.Str951Key)]
@@ -113,9 +113,9 @@ namespace StockSharp.Algo.Statistics
 	public class MaxLatencyCancellationParameter : BaseOrderStatisticParameter<TimeSpan>
 	{
 		/// <summary>
-		/// Добавить в параметр информацию об изменившейся заявке.
+		/// To add to the parameter an information on changed order.
 		/// </summary>
-		/// <param name="order">Изменившаяся заявка.</param>
+		/// <param name="order">The changed order.</param>
 		public override void Changed(Order order)
 		{
 			if (order.LatencyCancellation != null)
@@ -124,7 +124,7 @@ namespace StockSharp.Algo.Statistics
 	}
 
 	/// <summary>
-	/// Минимальное значение задержки регистрации заявки.
+	/// The minimal value of order registration delay.
 	/// </summary>
 	[DisplayNameLoc(LocalizedStrings.Str952Key)]
 	[DescriptionLoc(LocalizedStrings.Str953Key)]
@@ -134,9 +134,9 @@ namespace StockSharp.Algo.Statistics
 		private bool _initialized;
 
 		/// <summary>
-		/// Добавить в параметр информацию о новой заявке.
+		/// To add to the parameter an information on new order.
 		/// </summary>
-		/// <param name="order">Новая заявка.</param>
+		/// <param name="order">New order.</param>
 		public override void New(Order order)
 		{
 			if (order.LatencyRegistration == null)
@@ -152,9 +152,9 @@ namespace StockSharp.Algo.Statistics
 		}
 
 		/// <summary>
-		/// Загрузить состояние параметра статистики.
+		/// To load the state of statistic parameter.
 		/// </summary>
-		/// <param name="storage">Хранилище.</param>
+		/// <param name="storage">Storage.</param>
 		public override void Load(SettingsStorage storage)
 		{
 			_initialized = storage.GetValue<bool>("Initialized");
@@ -162,9 +162,9 @@ namespace StockSharp.Algo.Statistics
 		}
 
 		/// <summary>
-		/// Сохранить состояние параметра статистики.
+		/// To save the state of statistic parameter.
 		/// </summary>
-		/// <param name="storage">Хранилище.</param>
+		/// <param name="storage">Storage.</param>
 		public override void Save(SettingsStorage storage)
 		{
 			storage.SetValue("Initialized", _initialized);
@@ -173,7 +173,7 @@ namespace StockSharp.Algo.Statistics
 	}
 
 	/// <summary>
-	/// Минимальное значение задержки отмены заявки.
+	/// The minimal value of order cancelling delay.
 	/// </summary>
 	[DisplayNameLoc(LocalizedStrings.Str954Key)]
 	[DescriptionLoc(LocalizedStrings.Str955Key)]
@@ -183,9 +183,9 @@ namespace StockSharp.Algo.Statistics
 		private bool _initialized;
 
 		/// <summary>
-		/// Добавить в параметр информацию об изменившейся заявке.
+		/// To add to the parameter an information on changed order.
 		/// </summary>
-		/// <param name="order">Изменившаяся заявка.</param>
+		/// <param name="order">The changed order.</param>
 		public override void Changed(Order order)
 		{
 			if (order.LatencyCancellation == null)
@@ -201,9 +201,9 @@ namespace StockSharp.Algo.Statistics
 		}
 
 		/// <summary>
-		/// Загрузить состояние параметра статистики.
+		/// To load the state of statistic parameter.
 		/// </summary>
-		/// <param name="storage">Хранилище.</param>
+		/// <param name="storage">Storage.</param>
 		public override void Load(SettingsStorage storage)
 		{
 			_initialized = storage.GetValue<bool>("Initialized");
@@ -211,9 +211,9 @@ namespace StockSharp.Algo.Statistics
 		}
 
 		/// <summary>
-		/// Сохранить состояние параметра статистики.
+		/// To save the state of statistic parameter.
 		/// </summary>
-		/// <param name="storage">Хранилище.</param>
+		/// <param name="storage">Storage.</param>
 		public override void Save(SettingsStorage storage)
 		{
 			storage.SetValue("Initialized", _initialized);
@@ -222,7 +222,7 @@ namespace StockSharp.Algo.Statistics
 	}
 
 	/// <summary>
-	/// Общее количество заявок.
+	/// Total number of orders.
 	/// </summary>
 	[DisplayNameLoc(LocalizedStrings.Str956Key)]
 	[DescriptionLoc(LocalizedStrings.Str957Key)]
@@ -230,9 +230,9 @@ namespace StockSharp.Algo.Statistics
 	public class OrderCountParameter : BaseOrderStatisticParameter<int>
 	{
 		/// <summary>
-		/// Добавить в параметр информацию о новой заявке.
+		/// To add to the parameter an information on new order.
 		/// </summary>
-		/// <param name="order">Новая заявка.</param>
+		/// <param name="order">New order.</param>
 		public override void New(Order order)
 		{
 			Value++;

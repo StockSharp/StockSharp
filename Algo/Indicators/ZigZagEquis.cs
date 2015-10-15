@@ -9,13 +9,11 @@ namespace StockSharp.Algo.Indicators
 	using StockSharp.Algo.Candles;
 	using StockSharp.Localization;
 
-	///<summary>
-	/// ЗигЗаг (Metastock).
-	///</summary>
+	/// <summary>
+	/// Zig Zag (Metastock).
+	/// </summary>
 	/// <remarks>
-	/// Индикатор Зиг-Заг (Zig Zag) фильтрует колебания цен или значений индикаторов, которые не выходят за определенную величину
-	/// выраженную в % или абсолютных числах. Это делается для предварительного анализа графика на котором акцентированы только 
-	/// достаточно большие изменения цен (значений индикатора).
+	/// Zig Zag indicator filters fluctuations of prices or indicator values, which are not beyond specific value, presented in % or in absolute numbers. It is done for preliminary analysis of chart, emphasizing only sufficiently big price changes (indicator values).
 	/// </remarks>
 	[DisplayName("ZigZag Metastock")]
 	[DescriptionLoc(LocalizedStrings.Str826Key)]
@@ -27,7 +25,7 @@ namespace StockSharp.Algo.Indicators
 		private bool _needAdd = true;
 
 		/// <summary>
-		/// Создать <see cref="ZigZagEquis"/>.
+		/// Initializes a new instance of the <see cref="ZigZagEquis"/>.
 		/// </summary>
 		public ZigZagEquis()
 		{
@@ -35,10 +33,12 @@ namespace StockSharp.Algo.Indicators
 
 		private decimal _deviation = 0.45m * 0.01m;
 
-		///<summary>
-		/// Процент изменения.
-		///</summary>
-		/// <remarks>Указывается в диапазоне от 0 до 1</remarks>
+		/// <summary>
+		/// Percentage change.
+		/// </summary>
+		/// <remarks>
+		/// It is specified in the range from 0 to 1.
+		/// </remarks>
 		[DisplayNameLoc(LocalizedStrings.Str833Key)]
 		[DescriptionLoc(LocalizedStrings.Str834Key)]
 		[CategoryLoc(LocalizedStrings.GeneralKey)]
@@ -60,9 +60,9 @@ namespace StockSharp.Algo.Indicators
 
 		private Func<Candle, decimal> _byPrice = candle => candle.ClosePrice;
 
-		///<summary>
-		/// Конвертер, который возвращает из свечи цену для расчетов.
-		///</summary>
+		/// <summary>
+		/// The converter, returning from the candle a price for calculations.
+		/// </summary>
 		[Browsable(false)]
 		public Func<Candle, decimal> ByPrice
 		{
@@ -74,14 +74,14 @@ namespace StockSharp.Algo.Indicators
 			}
 		}
 
-		///<summary>
-		/// Текущее значение индикатора.
-		///</summary>
+		/// <summary>
+		/// The indicator current value.
+		/// </summary>
 		[Browsable(false)]
 		public decimal CurrentValue { get; private set; }
 
 		/// <summary>
-		/// Сбросить состояние индикатора на первоначальное. Метод вызывается каждый раз, когда меняются первоначальные настройки (например, длина периода).
+		/// To reset the indicator status to initial. The method is called each time when initial settings are changed (for example, the length of period).
 		/// </summary>
 		public override void Reset()
 		{
@@ -93,10 +93,10 @@ namespace StockSharp.Algo.Indicators
 		}
 
 		/// <summary>
-		/// Обработать входное значение.
+		/// To handle the input value.
 		/// </summary>
-		/// <param name="input">Входное значение.</param>
-		/// <returns>Результирующее значение.</returns>
+		/// <param name="input">The input value.</param>
+		/// <returns>The resulting value.</returns>
 		protected override IIndicatorValue OnProcess(IIndicatorValue input)
 		{
 			var value = _byPrice(input.GetValue<Candle>());
@@ -208,9 +208,9 @@ namespace StockSharp.Algo.Indicators
 		}
 
 		/// <summary>
-		/// Загрузить настройки.
+		/// Load settings.
 		/// </summary>
-		/// <param name="settings">Хранилище настроек.</param>
+		/// <param name="settings">Settings storage.</param>
 		public override void Load(SettingsStorage settings)
 		{
 			base.Load(settings);
@@ -218,9 +218,9 @@ namespace StockSharp.Algo.Indicators
 		}
 
 		/// <summary>
-		/// Сохранить настройки.
+		/// Save settings.
 		/// </summary>
-		/// <param name="settings">Хранилище настроек.</param>
+		/// <param name="settings">Settings storage.</param>
 		public override void Save(SettingsStorage settings)
 		{
 			base.Save(settings);

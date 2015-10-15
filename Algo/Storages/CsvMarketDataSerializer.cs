@@ -22,9 +22,9 @@ namespace StockSharp.Algo.Storages
 	using StockSharp.Localization;
 
 	/// <summary>
-	/// Сериализатор в формате CSV.
+	/// The serializer in the CSV format.
 	/// </summary>
-	/// <typeparam name="TData">Тип данных.</typeparam>
+	/// <typeparam name="TData">Data type.</typeparam>
 	public class CsvMarketDataSerializer<TData> : IMarketDataSerializer<TData>
 	{
 		class CsvMetaInfo : MetaInfo
@@ -277,21 +277,21 @@ namespace StockSharp.Algo.Storages
 		private FormatCache _templateCache;
 
 		/// <summary>
-		/// Создать <see cref="CsvMarketDataSerializer{TData}"/>.
+		/// Initializes a new instance of the <see cref="CsvMarketDataSerializer{T}"/>.
 		/// </summary>
-		/// <param name="encoding">Кодировка.</param>
+		/// <param name="encoding">Encoding.</param>
 		public CsvMarketDataSerializer(Encoding encoding = null)
 			: this(default(SecurityId), null, encoding)
 		{
 		}
 
 		/// <summary>
-		/// Создать <see cref="CsvMarketDataSerializer{TData}"/>.
+		/// Initializes a new instance of the <see cref="CsvMarketDataSerializer{T}"/>.
 		/// </summary>
-		/// <param name="securityId">Идентификатор инструмента.</param>
-		/// <param name="executionType">Тип исполнения.</param>
-		/// <param name="candleArg">Параметр свечи.</param>
-		/// <param name="encoding">Кодировка.</param>
+		/// <param name="securityId">Security ID.</param>
+		/// <param name="executionType">The type of execution.</param>
+		/// <param name="candleArg">Candle arg.</param>
+		/// <param name="encoding">Encoding.</param>
 		public CsvMarketDataSerializer(SecurityId securityId, ExecutionTypes? executionType = null, object candleArg = null, Encoding encoding = null)
 		{
 			if (securityId.IsDefault() && !_isNews)
@@ -335,7 +335,7 @@ namespace StockSharp.Algo.Storages
 		}
 
 		/// <summary>
-		/// Идентификатор инструмента.
+		/// Security ID.
 		/// </summary>
 		public SecurityId SecurityId { get; private set; }
 
@@ -393,10 +393,10 @@ namespace StockSharp.Algo.Storages
 		}
 
 		/// <summary>
-		/// Создать пустую мета-информацию.
+		/// To create empty meta-information.
 		/// </summary>
-		/// <param name="date">Дата.</param>
-		/// <returns>Мета-информация о данных за один день.</returns>
+		/// <param name="date">Date.</param>
+		/// <returns>Meta-information on data for one day.</returns>
 		public virtual IMarketDataMetaInfo CreateMetaInfo(DateTime date)
 		{
 			return new CsvMetaInfo(date, _toId);
@@ -413,11 +413,11 @@ namespace StockSharp.Algo.Storages
 		}
 
 		/// <summary>
-		/// Преобразовать данные в поток байтов.
+		/// Cast data into stream.
 		/// </summary>
-		/// <param name="stream">Поток данных.</param>
-		/// <param name="data">Данные.</param>
-		/// <param name="metaInfo">Мета-информация о данных за один день.</param>
+		/// <param name="stream">Data stream.</param>
+		/// <param name="data">Data.</param>
+		/// <param name="metaInfo">Meta-information on data for one day.</param>
 		public virtual void Serialize(Stream stream, IEnumerable<TData> data, IMarketDataMetaInfo metaInfo)
 		{
 			CultureInfo.InvariantCulture.DoInCulture(() =>
@@ -453,11 +453,11 @@ namespace StockSharp.Algo.Storages
 		}
 
 		/// <summary>
-		/// Загрузить данные из потока.
+		/// To load data from the stream.
 		/// </summary>
-		/// <param name="stream">Поток.</param>
-		/// <param name="metaInfo">Мета-информация о данных за один день.</param>
-		/// <returns>Данные.</returns>
+		/// <param name="stream">The stream.</param>
+		/// <param name="metaInfo">Meta-information on data for one day.</param>
+		/// <returns>Data.</returns>
 		public virtual IEnumerableEx<TData> Deserialize(Stream stream, IMarketDataMetaInfo metaInfo)
 		{
 			// TODO (переделать в будущем)

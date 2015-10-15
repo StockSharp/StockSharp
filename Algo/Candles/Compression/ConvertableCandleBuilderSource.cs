@@ -11,9 +11,9 @@ namespace StockSharp.Algo.Candles.Compression
 	using StockSharp.Localization;
 
 	/// <summary>
-	/// Базовый источник данных для <see cref="ICandleBuilder"/>, который переводит данные из типа <typeparamref name="TSourceValue"/> в <see cref="ICandleBuilderSourceValue"/>.
+	/// The base data source for <see cref="ICandleBuilder"/> which convert data from the <typeparamref name="TSourceValue" /> type to the <see cref="ICandleBuilderSourceValue"/>.
 	/// </summary>
-	/// <typeparam name="TSourceValue">Тип исходных данных (например, <see cref="Trade"/>).</typeparam>
+	/// <typeparam name="TSourceValue">The source data type (for example, <see cref="Trade"/>).</typeparam>
 	public abstract class ConvertableCandleBuilderSource<TSourceValue> : BaseCandleBuilderSource
 	{
 		static ConvertableCandleBuilderSource()
@@ -33,21 +33,21 @@ namespace StockSharp.Algo.Candles.Compression
 		}
 
 		/// <summary>
-		/// Инициализировать <see cref="ConvertableCandleBuilderSource{TSourceValue}"/>.
+		/// Initialize <see cref="ConvertableCandleBuilderSource{T}"/>.
 		/// </summary>
 		protected ConvertableCandleBuilderSource()
 		{
 		}
 
 		/// <summary>
-		/// Функция по-умолчанию для перевода данных из типа <typeparamref name="TSourceValue"/> в <see cref="ICandleBuilderSourceValue"/>.
+		/// The default function to convert data from the <typeparamref name="TSourceValue" /> type to the <see cref="ICandleBuilderSourceValue"/>.
 		/// </summary>
 		public static Func<TSourceValue, ICandleBuilderSourceValue> DefaultConverter { get; private set; }
 
 		private Func<TSourceValue, ICandleBuilderSourceValue> _converter = DefaultConverter;
 
 		/// <summary>
-		/// Функция для перевода данных из типа <typeparamref name="TSourceValue"/> в <see cref="ICandleBuilderSourceValue"/>.
+		/// The function to convert data from the <typeparamref name="TSourceValue" /> type to the <see cref="ICandleBuilderSourceValue"/>.
 		/// </summary>
 		public Func<TSourceValue, ICandleBuilderSourceValue> Converter
 		{
@@ -62,14 +62,14 @@ namespace StockSharp.Algo.Candles.Compression
 		}
 
 		/// <summary>
-		/// Функция по-умолчанию для фильтрации данных <typeparamref name="TSourceValue"/>.
+		/// The default function to filter data <typeparamref name="TSourceValue" />.
 		/// </summary>
 		public static Func<TSourceValue, bool> DefaultFilter { get; private set; }
 
 		private Func<TSourceValue, bool> _filter = DefaultFilter;
 
 		/// <summary>
-		/// Функция для фильтрации данных <typeparamref name="TSourceValue"/>.
+		/// The function to filter data <typeparamref name="TSourceValue" />.
 		/// </summary>
 		public Func<TSourceValue, bool> Filter
 		{
@@ -84,20 +84,20 @@ namespace StockSharp.Algo.Candles.Compression
 		}
 
 		/// <summary>
-		/// Сконвертировать новые данные с помощью <see cref="Converter"/>.
+		/// To convert new data using the <see cref="Converter"/>.
 		/// </summary>
-		/// <param name="values">Новые исходные данные.</param>
-		/// <returns>Данные, в формате <see cref="ICandleBuilder"/>.</returns>
+		/// <param name="values">New source data.</param>
+		/// <returns>Data in format <see cref="ICandleBuilder"/>.</returns>
 		protected IEnumerable<ICandleBuilderSourceValue> Convert(IEnumerable<TSourceValue> values)
 		{
 			return values.Where(Filter).Select(Converter);
 		}
 
 		/// <summary>
-		/// Сконвертировать и передать новые данные в метод <see cref="BaseCandleBuilderSource.RaiseProcessing"/>.
+		/// To convert and pass new data to the method <see cref="BaseCandleBuilderSource.RaiseProcessing"/>.
 		/// </summary>
-		/// <param name="series">Серия свечек.</param>
-		/// <param name="values">Новые исходные данные.</param>
+		/// <param name="series">Candles series.</param>
+		/// <param name="values">New source data.</param>
 		protected virtual void NewSourceValues(CandleSeries series, IEnumerable<TSourceValue> values)
 		{
 			RaiseProcessing(series, Convert(values));
@@ -105,9 +105,9 @@ namespace StockSharp.Algo.Candles.Compression
 	}
 
 	/// <summary>
-	/// Источник данных, работающий непосредственно с готовой коллекцией данных.
+	/// The data source working directly with ready data collection.
 	/// </summary>
-	/// <typeparam name="TSourceValue">Тип исходных данных (например, <see cref="Trade"/>).</typeparam>
+	/// <typeparam name="TSourceValue">The source data type (for example, <see cref="Trade"/>).</typeparam>
 	public class RawConvertableCandleBuilderSource<TSourceValue> : ConvertableCandleBuilderSource<TSourceValue>
 	{
 		private readonly Security _security;
@@ -115,12 +115,12 @@ namespace StockSharp.Algo.Candles.Compression
 		private readonly DateTimeOffset _to;
 
 		/// <summary>
-		/// Создать <see cref="RawConvertableCandleBuilderSource{TSourceValue}"/>.
+		/// Initializes a new instance of the <see cref="RawConvertableCandleBuilderSource{T}"/>.
 		/// </summary>
-		/// <param name="security">Инструмент, данные которого передаются в источник.</param>
-		/// <param name="from">Время первого значения.</param>
-		/// <param name="to">Время последнего значения.</param>
-		/// <param name="values">Готовая коллеция данные.</param>
+		/// <param name="security">The instrument whose data is passed to the source.</param>
+		/// <param name="from">The first time value.</param>
+		/// <param name="to">The last time value.</param>
+		/// <param name="values">Ready data collection.</param>
 		public RawConvertableCandleBuilderSource(Security security, DateTimeOffset from, DateTimeOffset to, IEnumerable<TSourceValue> values)
 		{
 			if (security == null)
@@ -137,7 +137,7 @@ namespace StockSharp.Algo.Candles.Compression
 		}
 
 		/// <summary>
-		/// Приоритет источника по скорости (0 - самый оптимальный).
+		/// The source priority by speed (0 - the best).
 		/// </summary>
 		public override int SpeedPriority
 		{
@@ -145,15 +145,15 @@ namespace StockSharp.Algo.Candles.Compression
 		}
 
 		/// <summary>
-		/// Готовая коллеция данные.
+		/// Ready data collection.
 		/// </summary>
 		public IEnumerable<TSourceValue> Values { get; private set; }
 
 		/// <summary>
-		/// Получить временные диапазоны, для которых у данного источника для передаваемой серии свечек есть данные.
+		/// To get time ranges for which this source of passed candles series has data.
 		/// </summary>
-		/// <param name="series">Серия свечек.</param>
-		/// <returns>Временные диапазоны.</returns>
+		/// <param name="series">Candles series.</param>
+		/// <returns>Time ranges.</returns>
 		public override IEnumerable<Range<DateTimeOffset>> GetSupportedRanges(CandleSeries series)
 		{
 			if (series == null)
@@ -166,11 +166,11 @@ namespace StockSharp.Algo.Candles.Compression
 		}
 
 		/// <summary>
-		/// Запросить получение данных.
+		/// To send data request.
 		/// </summary>
-		/// <param name="series">Серия свечек, для которой необходимо начать получать данные.</param>
-		/// <param name="from">Начальная дата, с которой необходимо получать данные.</param>
-		/// <param name="to">Конечная дата, до которой необходимо получать данные.</param>
+		/// <param name="series">The candles series for which data receiving should be started.</param>
+		/// <param name="from">The initial date from which you need to get data.</param>
+		/// <param name="to">The final date by which you need to get data.</param>
 		public override void Start(CandleSeries series, DateTimeOffset from, DateTimeOffset to)
 		{
 			if (series == null)
@@ -185,9 +185,9 @@ namespace StockSharp.Algo.Candles.Compression
 		}
 
 		/// <summary>
-		/// Прекратить получение данных, запущенное через <see cref="Start"/>.
+		/// To stop data receiving starting through <see cref="Start"/>.
 		/// </summary>
-		/// <param name="series">Серия свечек.</param>
+		/// <param name="series">Candles series.</param>
 		public override void Stop(CandleSeries series)
 		{
 			RaiseStopped(series);

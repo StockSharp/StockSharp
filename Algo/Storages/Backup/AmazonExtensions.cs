@@ -1,4 +1,4 @@
-﻿namespace StockSharp.Algo.Storages.Backup
+namespace StockSharp.Algo.Storages.Backup
 {
 	using System.Collections.Generic;
 	using System.Linq;
@@ -9,14 +9,14 @@
 	using Ecng.Common;
 
 	/// <summary>
-	/// Вспомогательный класс для AWS.
+	/// Extension class for AWS.
 	/// </summary>
 	public static class AmazonExtensions
 	{
 		private static RegionEndpoint[] _endpoints;
 
 		/// <summary>
-		/// Все регионы.
+		/// All regions.
 		/// </summary>
 		public static IEnumerable<RegionEndpoint> Endpoints
 		{
@@ -39,10 +39,10 @@
 		}
 
 		/// <summary>
-		/// Получить регион по имени.
+		/// Get region by name.
 		/// </summary>
-		/// <param name="name">Имя региона.</param>
-		/// <returns>Регион.</returns>
+		/// <param name="name">Region name.</param>
+		/// <returns>Region.</returns>
 		public static RegionEndpoint GetEndpoint(string name)
 		{
 			return Endpoints.First(e =>

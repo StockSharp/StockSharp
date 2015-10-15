@@ -6,24 +6,24 @@ namespace StockSharp.Algo.Indicators
 	using StockSharp.Localization;
 
 	/// <summary>
-	/// Объем свечи.
+	/// Cadle volume.
 	/// </summary>
 	[DisplayName("Volume")]
 	[DescriptionLoc(LocalizedStrings.Str756Key)]
 	public class VolumeIndicator : BaseIndicator
 	{
 		/// <summary>
-		/// Создать <see cref="VolumeIndicator"/>.
+		/// Initializes a new instance of the <see cref="VolumeIndicator"/>.
 		/// </summary>
 		public VolumeIndicator()
 		{
 		}
 
 		/// <summary>
-		/// Обработать входное значение.
+		/// To handle the input value.
 		/// </summary>
-		/// <param name="input">Входное значение.</param>
-		/// <returns>Результирующее значение.</returns>
+		/// <param name="input">The input value.</param>
+		/// <returns>The resulting value.</returns>
 		protected override IIndicatorValue OnProcess(IIndicatorValue input)
 		{
 			if (input.IsFinal)

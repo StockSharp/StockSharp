@@ -1,4 +1,4 @@
-﻿namespace StockSharp.Algo.Storages
+namespace StockSharp.Algo.Storages
 {
 	using System;
 	using System.Collections.Generic;
@@ -12,7 +12,7 @@
 	using StockSharp.BusinessEntities;
 
 	/// <summary>
-	/// Провайдер бирж и торговых площадок.
+	/// The provider of stocks and trade boards.
 	/// </summary>
 	public class ExchangeInfoProvider : IExchangeInfoProvider
 	{
@@ -22,9 +22,9 @@
 		private readonly CachedSynchronizedDictionary<string, Exchange> _exchanges = new CachedSynchronizedDictionary<string, Exchange>(StringComparer.InvariantCultureIgnoreCase);
 
 		/// <summary>
-		/// Создать <see cref="ExchangeInfoProvider"/>.
+		/// Initializes a new instance of the <see cref="ExchangeInfoProvider"/>.
 		/// </summary>
-		/// <param name="entityRegistry">Хранилище торговых объектов.</param>
+		/// <param name="entityRegistry">The storage of trade objects.</param>
 		public ExchangeInfoProvider(IEntityRegistry entityRegistry)
 		{
 			if (entityRegistry == null)
@@ -58,7 +58,7 @@
 		}
 
 		/// <summary>
-		/// Все биржи.
+		/// All exchanges.
 		/// </summary>
 		public IEnumerable<ExchangeBoard> Boards
 		{
@@ -66,7 +66,7 @@
 		}
 
 		/// <summary>
-		/// Все площадки.
+		/// All boards.
 		/// </summary>
 		public IEnumerable<Exchange> Exchanges
 		{
@@ -74,19 +74,19 @@
 		}
 
 		/// <summary>
-		/// Оповещение о добавлении новой площадки.
+		/// Notification about adding a new board.
 		/// </summary>
 		public event Action<ExchangeBoard> BoardAdded;
 
 		/// <summary>
-		/// Оповещение о добавлении новой биржи.
+		/// Notification about adding a new exchange.
 		/// </summary>
 		public event Action<Exchange> ExchangeAdded;
 
 		/// <summary>
-		/// Сохранить площадку.
+		/// To save the board.
 		/// </summary>
-		/// <param name="board">Торговая площадка.</param>
+		/// <param name="board">Trading board.</param>
 		public void Save(ExchangeBoard board)
 		{
 			if (board == null)
@@ -104,9 +104,9 @@
 		}
 
 		/// <summary>
-		/// Сохранить биржу.
+		/// To save the exchange.
 		/// </summary>
-		/// <param name="exchange">Биржа.</param>
+		/// <param name="exchange">Exchange.</param>
 		public void Save(Exchange exchange)
 		{
 			if (exchange == null)
@@ -124,10 +124,10 @@
 		}
 
 		/// <summary>
-		/// Получить площадку по коду.
+		/// To get a board by the code.
 		/// </summary>
-		/// <param name="code">Код площадки <see cref="ExchangeBoard.Code"/>.</param>
-		/// <returns>Торговая площадка. Если площадка с заданным кодом не существует, то будет возвращено <see langword="null"/>.</returns>
+		/// <param name="code">The board code <see cref="ExchangeBoard.Code"/>.</param>
+		/// <returns>Trading board. If the board with the specified code does not exist, then <see langword="null" /> will be returned.</returns>
 		public ExchangeBoard GetExchangeBoard(string code)
 		{
 			if (code.IsEmpty())
@@ -137,10 +137,10 @@
 		}
 
 		/// <summary>
-		/// Получить биржу по коду.
+		/// To get an exchange by the code.
 		/// </summary>
-		/// <param name="code">Код биржи <see cref="Exchange.Name"/>.</param>
-		/// <returns>Биржа. Если биржа с заданным кодом не существует, то будет возвращено <see langword="null"/>.</returns>
+		/// <param name="code">The exchange code <see cref="Exchange.Name"/>.</param>
+		/// <returns>Exchange. If the exchange with the specified code does not exist, then <see langword="null" /> will be returned.</returns>
 		public Exchange GetExchange(string code)
 		{
 			if (code.IsEmpty())

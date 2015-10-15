@@ -11,12 +11,12 @@ namespace StockSharp.Algo
 	using StockSharp.Messages;
 
 	/// <summary>
-	/// Индекс, построенный из инструментов. Например, для задание спреда при арбитраже или парном трейдинге.
+	/// The index, built of instruments. For example, to specify spread at arbitrage or pair trading.
 	/// </summary>
 	public abstract class IndexSecurity : BasketSecurity
 	{
 		/// <summary>
-		/// Инициализировать <see cref="IndexSecurity"/>.
+		/// Initialize <see cref="IndexSecurity"/>.
 		/// </summary>
 		protected IndexSecurity()
 		{
@@ -24,15 +24,15 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Вычислить значение корзины.
+		/// To calculate the basket value.
 		/// </summary>
-		/// <param name="prices">Цены составных инструментов корзины <see cref="BasketSecurity.InnerSecurities"/>.</param>
-		/// <returns>Значение корзины.</returns>
+		/// <param name="prices">Prices of basket composite instruments <see cref="BasketSecurity.InnerSecurities"/>.</param>
+		/// <returns>The basket value.</returns>
 		public abstract decimal? Calculate(IDictionary<Security, decimal> prices);
 	}
 
 	/// <summary>
-	/// Корзина инструментов, основанная на весах <see cref="Weights"/>.
+	/// The instruments basket, based on weigh-scales <see cref="WeightedIndexSecurity.Weights"/>.
 	/// </summary>
 	public class WeightedIndexSecurity : IndexSecurity
 	{
@@ -85,7 +85,7 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Создать <see cref="WeightedIndexSecurity"/>.
+		/// Initializes a new instance of the <see cref="WeightedIndexSecurity"/>.
 		/// </summary>
 		public WeightedIndexSecurity()
 		{
@@ -95,7 +95,7 @@ namespace StockSharp.Algo
 		private readonly WeightsDictionary _weights;
 
 		/// <summary>
-		/// Инструменты и их весовые коэффициенты в корзине.
+		/// Instruments and their weighting coefficients in the basket.
 		/// </summary>
 		public SynchronizedDictionary<Security, decimal> Weights
 		{
@@ -103,7 +103,7 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Инструменты, из которых создана данная корзина.
+		/// Instruments, from which this basket is created.
 		/// </summary>
 		public override IEnumerable<Security> InnerSecurities
 		{
@@ -111,10 +111,10 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Вычислить значение корзины.
+		/// To calculate the basket value.
 		/// </summary>
-		/// <param name="prices">Цены составных инструментов корзины <see cref="BasketSecurity.InnerSecurities"/>.</param>
-		/// <returns>Значение корзины.</returns>
+		/// <param name="prices">Prices of basket composite instruments <see cref="BasketSecurity.InnerSecurities"/>.</param>
+		/// <returns>The basket value.</returns>
 		public override decimal? Calculate(IDictionary<Security, decimal> prices)
 		{
 			if (prices == null)
@@ -127,9 +127,9 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Создать копию <see cref="Security"/>.
+		/// Create a copy of <see cref="Security"/>.
 		/// </summary>
-		/// <returns>Копия объекта.</returns>
+		/// <returns>Copy.</returns>
 		public override Security Clone()
 		{
 			var clone = new WeightedIndexSecurity();

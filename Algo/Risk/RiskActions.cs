@@ -3,24 +3,24 @@ namespace StockSharp.Algo.Risk
 	using StockSharp.Localization;
 
 	/// <summary>
-	/// Типы действий.
+	/// Types of actions.
 	/// </summary>
 	public enum RiskActions
 	{
 		/// <summary>
-		/// Закрыть позиции.
+		/// Close positions.
 		/// </summary>
 		[EnumDisplayNameLoc(LocalizedStrings.Str856Key)]
 		ClosePositions,
 
 		/// <summary>
-		/// Остановить торговлю.
+		/// Stop trading.
 		/// </summary>
 		[EnumDisplayNameLoc(LocalizedStrings.Str857Key)]
 		StopTrading,
 
 		/// <summary>
-		/// Отменить заявки.
+		/// Cancel orders.
 		/// </summary>
 		[EnumDisplayNameLoc(LocalizedStrings.Str858Key)]
 		CancelOrders,

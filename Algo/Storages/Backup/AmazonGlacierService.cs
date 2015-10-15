@@ -1,4 +1,4 @@
-﻿namespace StockSharp.Algo.Storages.Backup
+namespace StockSharp.Algo.Storages.Backup
 {
 	using System;
 	using System.Collections.Generic;
@@ -12,7 +12,7 @@
 	using Ecng.Common;
 
 	/// <summary>
-	/// Сервис хранения данных, основанный на Amazon Glacier http://aws.amazon.com/glacier/
+	/// The data storage service based on Amazon Glacier http://aws.amazon.com/glacier/.
 	/// </summary>
 	public class AmazonGlacierService : IBackupService
 	{
@@ -20,12 +20,12 @@
 		private readonly string _vaultName;
 
 		/// <summary>
-		/// Создать <see cref="AmazonGlacierService"/>.
+		/// Initializes a new instance of the <see cref="AmazonGlacierService"/>.
 		/// </summary>
-		/// <param name="endpoint">Адрес региона.</param>
-		/// <param name="vaultName">Имя хранилища.</param>
-		/// <param name="accessKey">Ключ.</param>
-		/// <param name="secretKey">Секрет.</param>
+		/// <param name="endpoint">Region address.</param>
+		/// <param name="vaultName">Storage name.</param>
+		/// <param name="accessKey">Key.</param>
+		/// <param name="secretKey">Secret.</param>
 		public AmazonGlacierService(RegionEndpoint endpoint, string vaultName, string accessKey, string secretKey)
 		{
 			if (vaultName.IsEmpty())

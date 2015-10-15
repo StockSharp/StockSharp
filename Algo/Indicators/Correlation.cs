@@ -1,4 +1,4 @@
-﻿namespace StockSharp.Algo.Indicators
+namespace StockSharp.Algo.Indicators
 {
 	using System;
 	using System.ComponentModel;
@@ -6,10 +6,10 @@
 	using StockSharp.Localization;
 
 	/// <summary>
-	/// Корреляция.
+	/// Correlation.
 	/// </summary>
 	/// <remarks>
-	/// https://en.wikipedia.org/wiki/Correlation_and_dependence
+	/// https://en.wikipedia.org/wiki/Correlation_and_dependence.
 	/// </remarks>
 	[DisplayName("COR")]
 	[DescriptionLoc(LocalizedStrings.CorrelationKey, true)]
@@ -19,7 +19,7 @@
 		private readonly StandardDeviation _other;
 
 		/// <summary>
-		/// Создать <see cref="Correlation"/>.
+		/// Initializes a new instance of the <see cref="Correlation"/>.
 		/// </summary>
 		public Correlation()
 		{
@@ -30,7 +30,7 @@
 		}
 
 		/// <summary>
-		/// Сбросить состояние индикатора на первоначальное. Метод вызывается каждый раз, когда меняются первоначальные настройки (например, длина периода).
+		/// To reset the indicator status to initial. The method is called each time when initial settings are changed (for example, the length of period).
 		/// </summary>
 		public override void Reset()
 		{
@@ -40,10 +40,10 @@
 		}
 
 		/// <summary>
-		/// Обработать входное значение.
+		/// To handle the input value.
 		/// </summary>
-		/// <param name="input">Входное значение.</param>
-		/// <returns>Результирующее значение.</returns>
+		/// <param name="input">The input value.</param>
+		/// <returns>The resulting value.</returns>
 		protected override IIndicatorValue OnProcess(IIndicatorValue input)
 		{
 			var cov = base.OnProcess(input);

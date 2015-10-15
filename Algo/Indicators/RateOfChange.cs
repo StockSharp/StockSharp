@@ -5,24 +5,24 @@ namespace StockSharp.Algo.Indicators
 	using StockSharp.Localization;
 
 	/// <summary>
-	/// Скорость изменения.
+	/// Rate of change.
 	/// </summary>
 	[DisplayName("ROC")]
 	[DescriptionLoc(LocalizedStrings.Str732Key)]
 	public class RateOfChange : Momentum
 	{
 		/// <summary>
-		/// Создать <see cref="RateOfChange"/>.
+		/// Initializes a new instance of the <see cref="RateOfChange"/>.
 		/// </summary>
 		public RateOfChange()
 		{
 		}
 
 		/// <summary>
-		/// Обработать входное значение.
+		/// To handle the input value.
 		/// </summary>
-		/// <param name="input">Входное значение.</param>
-		/// <returns>Результирующее значение.</returns>
+		/// <param name="input">The input value.</param>
+		/// <returns>The resulting value.</returns>
 		protected override IIndicatorValue OnProcess(IIndicatorValue input)
 		{
 			var result = base.OnProcess(input);

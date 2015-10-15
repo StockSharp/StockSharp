@@ -1,4 +1,4 @@
-﻿namespace StockSharp.Algo.Storages.Backup
+namespace StockSharp.Algo.Storages.Backup
 {
 	using System;
 	using System.Collections.Generic;
@@ -6,39 +6,39 @@
 	using System.Threading;
 
 	/// <summary>
-	/// Интерфейс, описывающий интернет-сервис хранения данных.
+	/// The interface describing online data storage service.
 	/// </summary>
 	public interface IBackupService
 	{
 		/// <summary>
-		/// Получить список файлов в сервисе.
+		/// List of files.
 		/// </summary>
-		/// <param name="parent">Элемент.</param>
-		/// <returns>Список файлов.</returns>
+		/// <param name="parent">Element.</param>
+		/// <returns>File list.</returns>
 		IEnumerable<BackupEntry> Get(BackupEntry parent);
 
 		/// <summary>
-		/// Удалить файл из сервиса.
+		/// Delete file from the service.
 		/// </summary>
-		/// <param name="entry">Элемент.</param>
+		/// <param name="entry">Element.</param>
 		void Delete(BackupEntry entry);
 
 		/// <summary>
-		/// Сохранить файл.
+		/// Save file.
 		/// </summary>
-		/// <param name="entry">Элемент.</param>
-		/// <param name="stream">Поток открытого файла, который будет сохранен в сервисе.</param>
-		/// <param name="progress">Оповещение о прогрессе.</param>
-		/// <returns>Токен отмены.</returns>
+		/// <param name="entry">Element.</param>
+		/// <param name="stream">The thread of the open file that will be saved to the service.</param>
+		/// <param name="progress">Progress notification.</param>
+		/// <returns>Cancellation token.</returns>
 		CancellationTokenSource Download(BackupEntry entry, Stream stream, Action<int> progress);
 
 		/// <summary>
-		/// Загрузить файл.
+		/// Upload file.
 		/// </summary>
-		/// <param name="entry">Элемент.</param>
-		/// <param name="stream">Поток открытого файла, в который будет скачены данные из сервиса.</param>
-		/// <param name="progress">Оповещение о прогрессе.</param>
-		/// <returns>Токен отмены.</returns>
+		/// <param name="entry">Element.</param>
+		/// <param name="stream">The thread of the open file into which data from the service will be downloaded.</param>
+		/// <param name="progress">Progress notification.</param>
+		/// <returns>Cancellation token.</returns>
 		CancellationTokenSource Upload(BackupEntry entry, Stream stream, Action<int> progress);
 	}
 }

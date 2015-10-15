@@ -13,7 +13,7 @@ namespace StockSharp.Algo.Candles.Compression
 	using StockSharp.Localization;
 
 	/// <summary>
-	/// Стандартный контейнер данных.
+	/// The standard data container.
 	/// </summary>
 	public class CandleBuilderContainer : Disposable, ICandleBuilderContainer
 	{
@@ -122,7 +122,7 @@ namespace StockSharp.Algo.Candles.Compression
 		private long _maxValuesKeepTime;
 		
 		/// <summary>
-		/// Создать <see cref="CandleBuilderContainer"/>.
+		/// Initializes a new instance of the <see cref="CandleBuilderContainer"/>.
 		/// </summary>
 		public CandleBuilderContainer()
 		{
@@ -132,7 +132,7 @@ namespace StockSharp.Algo.Candles.Compression
 		private TimeSpan _valuesKeepTime;
 
 		/// <summary>
-		/// Время хранения <see cref="ICandleBuilderSourceValue"/> в памяти. По-умолчанию равно нулю (хранение отсутствует).
+		/// The time of <see cref="ICandleBuilderSourceValue"/> storage in memory. The default is zero (no storage).
 		/// </summary>
 		public TimeSpan ValuesKeepTime
 		{
@@ -150,11 +150,11 @@ namespace StockSharp.Algo.Candles.Compression
 		}
 
 		/// <summary>
-		/// Известить контейнер для начале получения данных для серии.
+		/// To notify the container about the start of the data getting for the series.
 		/// </summary>
-		/// <param name="series">Серия свечек.</param>
-		/// <param name="from">Начальная дата, с которой будут получаться данные.</param>
-		/// <param name="to">Конечная дата, до которой будут получаться данные.</param>
+		/// <param name="series">Candles series.</param>
+		/// <param name="from">The initial date from which data will be get.</param>
+		/// <param name="to">The final date by which data will be get.</param>
 		public void Start(CandleSeries series, DateTimeOffset from, DateTimeOffset to)
 		{
 			if (series == null)
@@ -165,11 +165,11 @@ namespace StockSharp.Algo.Candles.Compression
 		}
 
 		/// <summary>
-		/// Добавить данные для свечи.
+		/// To add data for the candle.
 		/// </summary>
-		/// <param name="series">Серия свечек.</param>
-		/// <param name="candle">Свеча, для которой нужно добавить данные.</param>
-		/// <param name="value">Новые данные.</param>
+		/// <param name="series">Candles series.</param>
+		/// <param name="candle">The candle for which you need to add data.</param>
+		/// <param name="value">New data.</param>
 		public void AddValue(CandleSeries series, Candle candle, ICandleBuilderSourceValue value)
 		{
 			if (_valuesKeepTime == TimeSpan.Zero)
@@ -179,11 +179,11 @@ namespace StockSharp.Algo.Candles.Compression
 		}
 
 		/// <summary>
-		/// Получить все данные по свече.
+		/// To get all data by the candle.
 		/// </summary>
-		/// <param name="series">Серия свечек.</param>
-		/// <param name="candle">Свеча, по которой нужно найти данные.</param>
-		/// <returns>Найденные данные.</returns>
+		/// <param name="series">Candles series.</param>
+		/// <param name="candle">The candle for which you need to find data.</param>
+		/// <returns>Found data.</returns>
 		public IEnumerable<ICandleBuilderSourceValue> GetValues(CandleSeries series, Candle candle)
 		{
 			return GetInfo(series).GetValues(candle);
@@ -203,7 +203,7 @@ namespace StockSharp.Algo.Candles.Compression
 		}
 
 		/// <summary>
-		/// Освободить занятые ресурсы.
+		/// Release resources.
 		/// </summary>
 		protected override void DisposeManaged()
 		{

@@ -1,4 +1,4 @@
-﻿namespace StockSharp.Algo.Candles.VolumePriceStatistics
+namespace StockSharp.Algo.Candles.VolumePriceStatistics
 {
 	using System.Collections.Generic;
 	
@@ -7,21 +7,21 @@
 	using StockSharp.Algo.Candles.Compression;
 
 	/// <summary>
-	/// Профиль объема.
+	/// Volume profile.
 	/// </summary>
 	public class VolumeProfile
 	{
 		private readonly CachedSynchronizedDictionary<decimal, PriceLevel> _volumeProfileInfo = new CachedSynchronizedDictionary<decimal, PriceLevel>();
 
 		/// <summary>
-		/// Создать <see cref="VolumeProfile"/>.
+		/// Initializes a new instance of the <see cref="VolumeProfile"/>.
 		/// </summary>
 		public VolumeProfile()
 		{
 		}
 
 		/// <summary>
-		/// Ценовые уровни.
+		/// Price levels.
 		/// </summary>
 		public IEnumerable<PriceLevel> PriceLevels 
 		{
@@ -29,9 +29,9 @@
 		}
 
 		/// <summary>
-		/// Обновить профиль новым значением.
+		/// To update the profile with new value.
 		/// </summary>
-		/// <param name="value">Значение.</param>
+		/// <param name="value">Value.</param>
 		public void Update(ICandleBuilderSourceValue value)
 		{
 			if (value.OrderDirection == null)

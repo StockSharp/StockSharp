@@ -1,9 +1,9 @@
-﻿namespace StockSharp.Algo.Testing
+namespace StockSharp.Algo.Testing
 {
 	using StockSharp.Messages;
 
 	/// <summary>
-	/// Сообщение, информирующее об изменении состояния эмулятора.
+	/// The message, informing about the emulator state change.
 	/// </summary>
 	class EmulationStateMessage : Message
 	{
@@ -23,12 +23,12 @@
 		//public EmulationStates OldState { get; set; }
 
 		/// <summary>
-		/// Передаваемое состояние.
+		/// The state been transferred.
 		/// </summary>
 		public EmulationStates State { get; set; }
 
 		/// <summary>
-		/// Создать <see cref="EmulationStateMessage"/>.
+		/// Initializes a new instance of the <see cref="EmulationStateMessage"/>.
 		/// </summary>
 		public EmulationStateMessage()
 			: base(ExtendedMessageTypes.EmulationState)
@@ -36,9 +36,9 @@
 		}
 
 		/// <summary>
-		/// Создать копию <see cref="Message"/>.
+		/// Create a copy of <see cref="Message"/>.
 		/// </summary>
-		/// <returns>Копия.</returns>
+		/// <returns>Copy.</returns>
 		public override Message Clone()
 		{
 			return new EmulationStateMessage

@@ -1,9 +1,9 @@
-﻿namespace StockSharp.Algo.Candles.Compression
+namespace StockSharp.Algo.Candles.Compression
 {
 	using Ecng.Collections;
 
 	/// <summary>
-	/// Коллекция источников данных.
+	/// The data sources collection.
 	/// </summary>
 	public interface ICandleBuilderSourceList : INotifyList<ICandleBuilderSource>, ISynchronizedCollection
 	{

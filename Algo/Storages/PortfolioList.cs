@@ -1,18 +1,18 @@
-﻿namespace StockSharp.Algo.Storages
+namespace StockSharp.Algo.Storages
 {
 	using Ecng.Serialization;
 
 	using StockSharp.BusinessEntities;
 
 	/// <summary>
-	/// Класс для представления в виде списка портфелей, хранящихся во внешнем хранилище.
+	/// The class for representation in the form of list of portfolios, stored in external storage.
 	/// </summary>
 	public class PortfolioList : BaseStorageEntityList<Portfolio>
 	{
 		/// <summary>
-		/// Создать <see cref="PortfolioList"/>.
+		/// Initializes a new instance of the <see cref="PortfolioList"/>.
 		/// </summary>
-		/// <param name="storage">Специальный интерфейс для прямого доступа к хранилищу.</param>
+		/// <param name="storage">The special interface for direct access to the storage.</param>
 		public PortfolioList(IStorage storage)
 			: base(storage)
 		{

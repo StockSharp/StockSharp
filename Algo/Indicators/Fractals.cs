@@ -13,10 +13,10 @@ namespace StockSharp.Algo.Indicators
 	using Xceed.Wpf.Toolkit.PropertyGrid.Attributes;
 
 	/// <summary>
-	/// Фракталы.
+	/// Fractals.
 	/// </summary>
 	/// <remarks>
-	/// http://ta.mql4.com/indicators/bills/fractal
+	/// http://ta.mql4.com/indicators/bills/fractal.
 	/// </remarks>
 	[DisplayName("Fractals")]
 	[DescriptionLoc(LocalizedStrings.Str844Key)]
@@ -34,7 +34,7 @@ namespace StockSharp.Algo.Indicators
 		private bool _wasHighDown;
 
 		/// <summary>
-		/// Создать <see cref="Fractals"/>.
+		/// Initializes a new instance of the <see cref="Fractals"/>.
 		/// </summary>
 		public Fractals()
 			: this(5, new FractalPart { Name = "Up" }, new FractalPart { Name = "Down" })
@@ -42,11 +42,11 @@ namespace StockSharp.Algo.Indicators
 		}
 
 		/// <summary>
-		/// Создать <see cref="Fractals"/>.
+		/// Initializes a new instance of the <see cref="Fractals"/>.
 		/// </summary>
-		/// <param name="length">Длина периода.</param>
-		/// <param name="up">Фрактал вверх.</param>
-		/// <param name="down">Фрактал вниз.</param>
+		/// <param name="length">Period length.</param>
+		/// <param name="up">Up fractal.</param>
+		/// <param name="down">Down fractal.</param>
 		public Fractals(int length, FractalPart up, FractalPart down)
 			: base(up, down)
 		{
@@ -64,7 +64,7 @@ namespace StockSharp.Algo.Indicators
 		private int _length;
 
 		/// <summary>
-		/// Длина периода.
+		/// Period length.
 		/// </summary>
 		public int Length
 		{
@@ -78,7 +78,7 @@ namespace StockSharp.Algo.Indicators
 		}
 
 		/// <summary>
-		/// Сформирован ли индикатор.
+		/// Whether the indicator is set.
 		/// </summary>
 		public override bool IsFormed
 		{
@@ -86,7 +86,7 @@ namespace StockSharp.Algo.Indicators
 		}
 
 		/// <summary>
-		/// Фрактал вверх.
+		/// Up fractal.
 		/// </summary>
 		[ExpandableObject]
 		[DisplayNameLoc(LocalizedStrings.Str846Key)]
@@ -95,7 +95,7 @@ namespace StockSharp.Algo.Indicators
 		public FractalPart Up { get; private set; }
 
 		/// <summary>
-		/// Фрактал вниз.
+		/// Down fractal.
 		/// </summary>
 		[ExpandableObject]
 		[DisplayNameLoc(LocalizedStrings.Str848Key)]
@@ -104,7 +104,7 @@ namespace StockSharp.Algo.Indicators
 		public FractalPart Down { get; private set; }
 
 		/// <summary>
-		/// Сбросить состояние индикатора на первоначальное. Метод вызывается каждый раз, когда меняются первоначальные настройки (например, длина периода).
+		/// To reset the indicator status to initial. The method is called each time when initial settings are changed (for example, the length of period).
 		/// </summary>
 		public override void Reset()
 		{
@@ -113,10 +113,10 @@ namespace StockSharp.Algo.Indicators
 		}
 
 		/// <summary>
-		/// Обработать входное значение.
+		/// To handle the input value.
 		/// </summary>
-		/// <param name="input">Входное значение.</param>
-		/// <returns>Результирующее значение.</returns>
+		/// <param name="input">The input value.</param>
+		/// <returns>The resulting value.</returns>
 		protected override IIndicatorValue OnProcess(IIndicatorValue input)
 		{
 			var candle = input.GetValue<Candle>();
@@ -199,9 +199,9 @@ namespace StockSharp.Algo.Indicators
 		}
 
 		/// <summary>
-		/// Загрузить настройки.
+		/// Load settings.
 		/// </summary>
-		/// <param name="settings">Хранилище настроек.</param>
+		/// <param name="settings">Settings storage.</param>
 		public override void Load(SettingsStorage settings)
 		{
 			base.Load(settings);
@@ -209,9 +209,9 @@ namespace StockSharp.Algo.Indicators
 		}
 
 		/// <summary>
-		/// Сохранить настройки.
+		/// Save settings.
 		/// </summary>
-		/// <param name="settings">Хранилище настроек.</param>
+		/// <param name="settings">Settings storage.</param>
 		public override void Save(SettingsStorage settings)
 		{
 			base.Save(settings);

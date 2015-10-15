@@ -1,4 +1,4 @@
-﻿namespace StockSharp.Algo.Strategies
+namespace StockSharp.Algo.Strategies
 {
 	using System;
 	using System.Collections.Generic;
@@ -12,7 +12,7 @@
 	using SmartFormat.Core.Parsing;
 
 	/// <summary>
-	/// Класс для формирования имени стратегии.
+	/// The class for the strategy name formation.
 	/// </summary>
 	public sealed class StrategyNameGenerator
 	{
@@ -57,9 +57,9 @@
 		private string _pattern;
 
 		/// <summary>
-		/// Создать <see cref="StrategyNameGenerator"/>.
+		/// Initializes a new instance of the <see cref="StrategyNameGenerator"/>.
 		/// </summary>
-		/// <param name="strategy">Стратегия.</param>
+		/// <param name="strategy">Strategy.</param>
 		public StrategyNameGenerator(Strategy strategy)
 		{
 			if (strategy == null)
@@ -93,22 +93,22 @@
 		}
 
 		/// <summary>
-		/// Событие изменения имени.
+		/// The name change event.
 		/// </summary>
 		public event Action<string> Changed;
 
 		/// <summary>
-		/// Использовать ли автоматическую генерацию имени стратегии. По-умолчанию включено.
+		/// Whether to use the automatic generation of the strategy name. It is enabled by default.
 		/// </summary>
 		public bool AutoGenerateStrategyName { get; set; }
 
 		/// <summary>
-		/// Короткое название стратегии.
+		/// The startegy brief name.
 		/// </summary>
 		public string ShortName { get; private set; }
 
 		/// <summary>
-		/// Паттерн для формирования имени стратегии.
+		/// The pattern for strategy name formation.
 		/// </summary>
 		public string Pattern
 		{
@@ -136,7 +136,7 @@
 		}
 
 		/// <summary>
-		/// Сгенерированное или установленное имя стратегии.
+		/// Generated or set strategy name.
 		/// </summary>
 		public string Value
 		{

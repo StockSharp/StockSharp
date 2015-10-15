@@ -8,39 +8,39 @@ namespace StockSharp.Algo.Candles
 	using StockSharp.BusinessEntities;
 
 	/// <summary>
-	/// Внешний источник свечек (например, подключение <see cref="IConnector"/>, предоставляющее возможность получения готовых свечек).
+	/// The external candles source (for example, connection <see cref="IConnector"/> which provides the possibility of ready candles getting).
 	/// </summary>
 	public interface IExternalCandleSource
 	{
 		/// <summary>
-		/// Получить временные диапазоны, для которых у данного источника для передаваемой серии свечек есть данные.
+		/// To get time ranges for which this source of passed candles series has data.
 		/// </summary>
-		/// <param name="series">Серия свечек.</param>
-		/// <returns>Временные диапазоны.</returns>
+		/// <param name="series">Candles series.</param>
+		/// <returns>Time ranges.</returns>
 		IEnumerable<Range<DateTimeOffset>> GetSupportedRanges(CandleSeries series);
 
 		/// <summary>
-		/// Событие появления новых свечек, полученных после подписки через <see cref="SubscribeCandles"/>.
+		/// Event of new candles occurring, that are received after the subscription by <see cref="SubscribeCandles"/>.
 		/// </summary>
 		event Action<CandleSeries, IEnumerable<Candle>> NewCandles;
 
 		/// <summary>
-		/// Событие окончания обработки серии.
+		/// The series processing end event.
 		/// </summary>
 		event Action<CandleSeries> Stopped;
 
 		/// <summary>
-		/// Подписаться на получение свечек.
+		/// Subscribe to receive new candles.
 		/// </summary>
-		/// <param name="series">Серия свечек.</param>
-		/// <param name="from">Начальная дата, с которой необходимо получать данные.</param>
-		/// <param name="to">Конечная дата, до которой необходимо получать данные.</param>
+		/// <param name="series">Candles series.</param>
+		/// <param name="from">The initial date from which you need to get data.</param>
+		/// <param name="to">The final date by which you need to get data.</param>
 		void SubscribeCandles(CandleSeries series, DateTimeOffset from, DateTimeOffset to);
 
 		/// <summary>
-		/// Остановить подписку получения свечек, ранее созданную через <see cref="SubscribeCandles"/>.
+		/// To stop the candles receiving subscription, previously created by <see cref="SubscribeCandles"/>.
 		/// </summary>
-		/// <param name="series">Серия свечек.</param>
+		/// <param name="series">Candles series.</param>
 		void UnSubscribeCandles(CandleSeries series);
 	}
 }

@@ -8,25 +8,25 @@ namespace StockSharp.Algo.Candles.VolumePriceStatistics
 	using StockSharp.Messages;
 
 	/// <summary>
-	/// Ценовой уровень.
+	/// The price level.
 	/// </summary>
 	public class PriceLevel
 	{
 		/// <summary>
-		/// Создать <see cref="PriceLevel"/>.
+		/// Initializes a new instance of the <see cref="PriceLevel"/>.
 		/// </summary>
-		/// <param name="price">Цена.</param>
+		/// <param name="price">Price.</param>
 		public PriceLevel(decimal price)
 			: this(price, new List<decimal>(), new List<decimal>())
 		{
 		}
 
 		/// <summary>
-		/// Создать <see cref="PriceLevel"/>.
+		/// Initializes a new instance of the <see cref="PriceLevel"/>.
 		/// </summary>
-		/// <param name="price">Цена.</param>
-		/// <param name="buyVolumes">Коллекция объемов на покупку.</param>
-		/// <param name="sellVolumes">Коллекция объемов на продажу.</param>
+		/// <param name="price">Price.</param>
+		/// <param name="buyVolumes">The volumes collection to buy.</param>
+		/// <param name="sellVolumes">The volumes collection for sale.</param>
 		public PriceLevel(decimal price, List<decimal> buyVolumes, List<decimal> sellVolumes)
 		{
 			Price = price;
@@ -42,44 +42,44 @@ namespace StockSharp.Algo.Candles.VolumePriceStatistics
 		}
 
 		/// <summary>
-		/// Цена.
+		/// Price.
 		/// </summary>
 		public decimal Price { get; private set; }
 
 		/// <summary>
-		/// Объем покупок.
+		/// The volume of purchases.
 		/// </summary>
 		public decimal BuyVolume { get; private set; }
 
 		/// <summary>
-		/// Объем продаж.
+		/// The volume of sales.
 		/// </summary>
 		public decimal SellVolume { get; private set; }
 
 		/// <summary>
-		/// Количество покупок.
+		/// The number of purchases.
 		/// </summary>
 		public decimal BuyCount { get; private set; }
 
 		/// <summary>
-		/// Количество продаж.
+		/// The number of sales.
 		/// </summary>
 		public decimal SellCount { get; private set; }
 
 		/// <summary>
-		/// Коллекция объемов на покупку.
+		/// The volumes collection to buy.
 		/// </summary>
 		public List<decimal> BuyVolumes { get; set; }
 
 		/// <summary>
-		/// Коллекция объемов на продажу.
+		/// The volumes collection for sale.
 		/// </summary>
 		public List<decimal> SellVolumes { get; set; }
 
 		/// <summary>
-		/// Обновить ценовой уровень новым значением.
+		/// To update the price level with the new value.
 		/// </summary>
-		/// <param name="value">Значение.</param>
+		/// <param name="value">Value.</param>
 		public void Update(ICandleBuilderSourceValue value)
 		{
 			var side = value.OrderDirection;

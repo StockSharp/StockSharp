@@ -1,11 +1,11 @@
-﻿namespace StockSharp.Algo.Indicators
+namespace StockSharp.Algo.Indicators
 {
 	using System;
 
 	using Ecng.Serialization;
 
 	/// <summary>
-	/// Полоса Боллинджера.
+	/// Bollinger band.
 	/// </summary>
 	public class BollingerBand : BaseIndicator
 	{
@@ -13,10 +13,10 @@
 		private readonly StandardDeviation _dev;
 
 		/// <summary>
-		/// Создать <see cref="BollingerBand"/>.
+		/// Initializes a new instance of the <see cref="BollingerBand"/>.
 		/// </summary>
-		/// <param name="ma">Скользящая средняя.</param>
-		/// <param name="dev">Стандартное отклонение.</param>
+		/// <param name="ma">Moving Average.</param>
+		/// <param name="dev">Standard deviation.</param>
 		public BollingerBand(LengthIndicator<decimal> ma, StandardDeviation dev)
 		{
 			if (ma == null)
@@ -30,24 +30,24 @@
 		}
 
 		/// <summary>
-		/// Ширина канала.
+		/// Channel width.
 		/// </summary>
 		public decimal Width { get; set; }
 
 		/// <summary>
-		/// Обработать входное значение.
+		/// To handle the input value.
 		/// </summary>
-		/// <param name="input">Входное значение.</param>
-		/// <returns>Результирующее значение.</returns>
+		/// <param name="input">The input value.</param>
+		/// <returns>The resulting value.</returns>
 		protected override IIndicatorValue OnProcess(IIndicatorValue input)
 		{
 			return new DecimalIndicatorValue(this, _ma.GetCurrentValue() + (Width * _dev.GetCurrentValue()));
 		}
 
 		/// <summary>
-		/// Загрузить настройки.
+		/// Load settings.
 		/// </summary>
-		/// <param name="settings">Хранилище настроек.</param>
+		/// <param name="settings">Settings storage.</param>
 		public override void Load(SettingsStorage settings)
 		{
 			base.Load(settings);
@@ -55,9 +55,9 @@
 		}
 
 		/// <summary>
-		/// Сохранить настройки.
+		/// Save settings.
 		/// </summary>
-		/// <param name="settings">Хранилище настроек.</param>
+		/// <param name="settings">Settings storage.</param>
 		public override void Save(SettingsStorage settings)
 		{
 			base.Save(settings);

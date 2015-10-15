@@ -13,6 +13,9 @@ namespace StockSharp.Algo
 	using StockSharp.Messages;
 	using StockSharp.Localization;
 
+	/// <summary>
+	/// The class to create connections to trading systems.
+	/// </summary>
 	partial class Connector
 	{
 		private const MarketDataTypes _filteredMarketDepth = (MarketDataTypes)(-1);
@@ -523,7 +526,7 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Список всех инструментов, зарегистрированных через <see cref="IConnector.RegisterSecurity"/>.
+		/// List of all securities, subscribed via <see cref="RegisterSecurity"/>.
 		/// </summary>
 		public IEnumerable<Security> RegisteredSecurities
 		{
@@ -531,7 +534,7 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Список всех инструментов, зарегистрированных через <see cref="IConnector.RegisterMarketDepth"/>.
+		/// List of all securities, subscribed via <see cref="RegisterMarketDepth"/>.
 		/// </summary>
 		public IEnumerable<Security> RegisteredMarketDepths
 		{
@@ -539,7 +542,7 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Список всех инструментов, зарегистрированных через <see cref="IConnector.RegisterTrades"/>.
+		/// List of all securities, subscribed via <see cref="RegisterTrades"/>.
 		/// </summary>
 		public IEnumerable<Security> RegisteredTrades
 		{
@@ -547,7 +550,7 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Список всех инструментов, зарегистрированных через <see cref="IConnector.RegisterOrderLog"/>.
+		/// List of all securities, subscribed via <see cref="RegisterOrderLog"/>.
 		/// </summary>
 		public IEnumerable<Security> RegisteredOrderLogs
 		{
@@ -555,7 +558,7 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Список всех портфелей, зарегистрированных через <see cref="IConnector.RegisterPortfolio"/>.
+		/// List of all portfolios, subscribed via <see cref="RegisterPortfolio"/>.
 		/// </summary>
 		public IEnumerable<Portfolio> RegisteredPortfolios
 		{
@@ -563,67 +566,65 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Подписаться на получение рыночных данных по инструменту.
+		/// To sign up to get market data by the instrument.
 		/// </summary>
-		/// <param name="security">Инструмент, по которому необходимо начать получать новую информацию.</param>
-		/// <param name="type">Тип рыночных данных.</param>
+		/// <param name="security">The instrument by which new information getting should be started .</param>
+		/// <param name="type">Market data type.</param>
 		public virtual void SubscribeMarketData(Security security, MarketDataTypes type)
 		{
 			_subscriptionManager.Subscribe(security, type);
 		}
 
 		/// <summary>
-		/// Отписаться от получения рыночных данных по инструменту.
+		/// To unsubscribe from getting market data by the instrument.
 		/// </summary>
-		/// <param name="security">Инструмент, по которому необходимо начать получать новую информацию.</param>
-		/// <param name="type">Тип рыночных данных.</param>
+		/// <param name="security">The instrument by which new information getting should be started .</param>
+		/// <param name="type">Market data type.</param>
 		public virtual void UnSubscribeMarketData(Security security, MarketDataTypes type)
 		{
 			_subscriptionManager.UnSubscribe(security, type);
 		}
 
 		/// <summary>
-		/// Начать получать новую информацию (например, <see cref="Security.LastTrade"/> или <see cref="Security.BestBid"/>) по инструменту.
+		/// To start getting new information (for example, <see cref="Security.LastTrade"/> or <see cref="Security.BestBid"/>) by the instrument.
 		/// </summary>
-		/// <param name="security">Инструмент, по которому необходимо начать получать новую информацию.</param>
+		/// <param name="security">The instrument by which new information getting should be started .</param>
 		public void RegisterSecurity(Security security)
 		{
 			SubscribeMarketData(security, MarketDataTypes.Level1);
 		}
 
 		/// <summary>
-		/// Остановить получение новой информации.
+		/// To stop getting new information.
 		/// </summary>
-		/// <param name="security">Инструмент, по которому необходимо остановить получение новой информации.</param>
+		/// <param name="security">The instrument by which new information getting should be stopped.</param>
 		public void UnRegisterSecurity(Security security)
 		{
 			UnSubscribeMarketData(security, MarketDataTypes.Level1);
 		}
 
 		/// <summary>
-		/// Начать получать котировки (стакан) по инструменту.
-		/// Значение котировок можно получить через событие <see cref="MarketDepthsChanged"/>.
+		/// To start getting quotes (order book) by the instrument. Quotes values are available through the event <see cref="Connector.MarketDepthsChanged"/>.
 		/// </summary>
-		/// <param name="security">Инструмент, по которому необходимо начать получать котировки.</param>
+		/// <param name="security">The instrument by which quotes getting should be started.</param>
 		public void RegisterMarketDepth(Security security)
 		{
 			SubscribeMarketData(security, MarketDataTypes.MarketDepth);
 		}
 
 		/// <summary>
-		/// Остановить получение котировок по инструменту.
+		/// To stop getting quotes by the instrument.
 		/// </summary>
-		/// <param name="security">Инструмент, по которому необходимо остановить получение котировок.</param>
+		/// <param name="security">The instrument by which quotes getting should be stopped.</param>
 		public void UnRegisterMarketDepth(Security security)
 		{
 			UnSubscribeMarketData(security, MarketDataTypes.MarketDepth);
 		}
 
 		/// <summary>
-		/// Начать получать отфильтрованные котировки (стакан) по инструменту.
-		/// Значение котировок можно получить через метод <see cref="IConnector.GetFilteredMarketDepth"/>.
+		/// To start getting filtered quotes (order book) by the instrument. Quotes values are available through the event <see cref="IConnector.GetFilteredMarketDepth"/>.
 		/// </summary>
-		/// <param name="security">Инструмент, по которому необходимо начать получать котировки.</param>
+		/// <param name="security">The instrument by which quotes getting should be started.</param>
 		public void RegisterFilteredMarketDepth(Security security)
 		{
 			_subscriptionManager.RegisterFilteredMarketDepth(security);
@@ -641,9 +642,9 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Остановить получение отфильтрованных котировок по инструменту.
+		/// To stop getting filtered quotes by the instrument.
 		/// </summary>
-		/// <param name="security">Инструмент, по которому необходимо остановить получение котировок.</param>
+		/// <param name="security">The instrument by which quotes getting should be stopped.</param>
 		public void UnRegisterFilteredMarketDepth(Security security)
 		{
 			_subscriptionManager.UnRegisterFilteredMarketDepth(security);
@@ -659,37 +660,36 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Начать получать сделки (тиковые данные) по инструменту. Новые сделки будут приходить через
-		/// событие <see cref="IConnector.NewTrades"/>.
+		/// To start getting trades (tick data) by the instrument. New trades will come through the event <see cref="IConnector.NewTrades"/>.
 		/// </summary>
-		/// <param name="security">Инструмент, по которому необходимо начать получать сделки.</param>
+		/// <param name="security">The instrument by which trades getting should be started.</param>
 		public void RegisterTrades(Security security)
 		{
 			SubscribeMarketData(security, MarketDataTypes.Trades);
 		}
 
 		/// <summary>
-		/// Остановить получение сделок (тиковые данные) по инструменту.
+		/// To stop getting trades (tick data) by the instrument.
 		/// </summary>
-		/// <param name="security">Инструмент, по которому необходимо остановить получение сделок.</param>
+		/// <param name="security">The instrument by which trades getting should be stopped.</param>
 		public void UnRegisterTrades(Security security)
 		{
 			UnSubscribeMarketData(security, MarketDataTypes.Trades);
 		}
 
 		/// <summary>
-		/// Начать получать новую информацию по портфелю.
+		/// Subscribe on the portfolio changes.
 		/// </summary>
-		/// <param name="portfolio">Портфель, по которому необходимо начать получать новую информацию.</param>
+		/// <param name="portfolio">Portfolio for subscription.</param>
 		public void RegisterPortfolio(Portfolio portfolio)
 		{
 			_subscriptionManager.RegisterPortfolio(portfolio);
 		}
 
 		/// <summary>
-		/// Начать получать новую информацию по портфелю.
+		/// Subscribe on the portfolio changes.
 		/// </summary>
-		/// <param name="portfolio">Портфель, по которому необходимо начать получать новую информацию.</param>
+		/// <param name="portfolio">Portfolio for subscription.</param>
 		protected virtual void OnRegisterPortfolio(Portfolio portfolio)
 		{
 			SendInMessage(new PortfolioMessage
@@ -701,18 +701,18 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Остановить получение новой информации по портфелю.
+		/// Unsubscribe from the portfolio changes.
 		/// </summary>
-		/// <param name="portfolio">Портфель, по которому необходимо остановить получение новой информации.</param>
+		/// <param name="portfolio">Portfolio for unsubscription.</param>
 		public void UnRegisterPortfolio(Portfolio portfolio)
 		{
 			_subscriptionManager.UnRegisterPortfolio(portfolio);
 		}
 
 		/// <summary>
-		/// Остановить получение новой информации по портфелю.
+		/// Unsubscribe from the portfolio changes.
 		/// </summary>
-		/// <param name="portfolio">Портфель, по которому необходимо остановить получение новой информации.</param>
+		/// <param name="portfolio">Portfolio for unsubscription.</param>
 		protected virtual void OnUnRegisterPortfolio(Portfolio portfolio)
 		{
 			SendInMessage(new PortfolioMessage
@@ -724,25 +724,25 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Начать получать лог заявок для инструмента.
+		/// Subscribe on order log for the security.
 		/// </summary>
-		/// <param name="security">Инструмент, по которому необходимо начать получать лог заявок.</param>
+		/// <param name="security">Security for subscription.</param>
 		public void RegisterOrderLog(Security security)
 		{
 			SubscribeMarketData(security, MarketDataTypes.OrderLog);
 		}
 
 		/// <summary>
-		/// Остановить получение лога заявок для инструмента.
+		/// Unsubscribe from order log for the security.
 		/// </summary>
-		/// <param name="security">Инструмент, по которому необходимо остановить получение лога заявок.</param>
+		/// <param name="security">Security for unsubscription.</param>
 		public void UnRegisterOrderLog(Security security)
 		{
 			UnSubscribeMarketData(security, MarketDataTypes.OrderLog);
 		}
 
 		/// <summary>
-		/// Начать получать новости.
+		/// Subscribe on news.
 		/// </summary>
 		public void RegisterNews()
 		{
@@ -750,7 +750,7 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Начать получать новости.
+		/// Subscribe on news.
 		/// </summary>
 		protected virtual void OnRegisterNews()
 		{
@@ -763,7 +763,7 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Остановить получение новостей.
+		/// Unsubscribe from news.
 		/// </summary>
 		public void UnRegisterNews()
 		{
@@ -771,9 +771,9 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Запросить текст новости <see cref="BusinessEntities.News.Story"/>. После получения текста будет вызвано событие <see cref="NewsChanged"/>.
+		/// Request news <see cref="BusinessEntities.News.Story"/> body. After receiving the event <see cref="Connector.NewsChanged"/> will be triggered.
 		/// </summary>
-		/// <param name="news">Новость.</param>
+		/// <param name="news">News.</param>
 		public virtual void RequestNewsStory(News news)
 		{
 			if (news == null)
@@ -789,7 +789,7 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Остановить получение новостей.
+		/// Unsubscribe from news.
 		/// </summary>
 		protected virtual void OnUnRegisterNews()
 		{

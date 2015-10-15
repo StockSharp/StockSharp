@@ -1,4 +1,4 @@
-﻿namespace StockSharp.Algo.Storages
+namespace StockSharp.Algo.Storages
 {
 	using System.Collections.Generic;
 	using System.Linq;
@@ -8,23 +8,23 @@
 	using StockSharp.BusinessEntities;
 
 	/// <summary>
-	/// Класс для представления в виде списка биржевых площадок, хранящихся во внешнем хранилище.
+	/// The class for representation in the form of list of exchange sites, stored in the external storage.
 	/// </summary>
 	public class ExchangeBoardList : BaseStorageEntityList<ExchangeBoard>
 	{
 		/// <summary>
-		/// Создать <see cref="ExchangeBoardList"/>.
+		/// Initializes a new instance of the <see cref="ExchangeBoardList"/>.
 		/// </summary>
-		/// <param name="storage">Специальный интерфейс для прямого доступа к хранилищу.</param>
+		/// <param name="storage">The special interface for direct access to the storage.</param>
 		public ExchangeBoardList(IStorage storage)
 			: base(storage)
 		{
 		}
 
 		/// <summary>
-		/// Получить идентификаторы.
+		/// To get identifiers.
 		/// </summary>
-		/// <returns>Идентификаторы.</returns>
+		/// <returns>Identifiers.</returns>
 		public virtual IEnumerable<string> GetIds()
 		{
 			return this.Select(b => b.Code);

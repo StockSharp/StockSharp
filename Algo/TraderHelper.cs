@@ -26,35 +26,35 @@ namespace StockSharp.Algo
 	using Wintellect.PowerCollections;
 
 	/// <summary>
-	/// Правила округления цены.
+	/// Price rounding rules.
 	/// </summary>
 	public enum ShrinkRules
 	{
 		/// <summary>
-		/// Автоматически определять, к меньшему или большему значению округлять.
+		/// Automatically to determine rounding to lesser or to bigger value.
 		/// </summary>
 		Auto,
 
 		/// <summary>
-		/// Округлять к меньшему значению.
+		/// To round to lesser value.
 		/// </summary>
 		Less,
 
 		/// <summary>
-		/// Округлять к большему значению.
+		/// To round to bigger value.
 		/// </summary>
 		More,
 	}
 
 	/// <summary>
-	/// Поставщик информации об инструментах, получающий данные из коллекции.
+	/// The supplier of information on instruments, getting data from the collection.
 	/// </summary>
 	public class CollectionSecurityProvider : ISecurityProvider
 	{
 		/// <summary>
-		/// Создать <see cref="CollectionSecurityProvider"/>.
+		/// Initializes a new instance of the <see cref="CollectionSecurityProvider"/>.
 		/// </summary>
-		/// <param name="securities">Коллекция инструментов.</param>
+		/// <param name="securities">The instruments collection.</param>
 		public CollectionSecurityProvider(IEnumerable<Security> securities)
 		{
 			if (securities == null)
@@ -66,7 +66,7 @@ namespace StockSharp.Algo
 		private readonly IEnumerable<Security> _securities;
 
 		/// <summary>
-		/// Коллекция инструментов.
+		/// The instruments collection.
 		/// </summary>
 		protected virtual IEnumerable<Security> Securities
 		{
@@ -74,10 +74,10 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Найти инструменты, соответствующие фильтру <paramref name="criteria"/>.
+		/// Lookup securities by criteria <paramref name="criteria" />.
 		/// </summary>
-		/// <param name="criteria">Инструмент, поля которого будут использоваться в качестве фильтра.</param>
-		/// <returns>Найденные инструменты.</returns>
+		/// <param name="criteria">The instrument whose fields will be used as a filter.</param>
+		/// <returns>Found instruments.</returns>
 		public IEnumerable<Security> Lookup(Security criteria)
 		{
 			var provider = Securities as ISecurityProvider;
@@ -91,16 +91,16 @@ namespace StockSharp.Algo
 	}
 
 	/// <summary>
-	/// Поставщик информации об инструментах, получающий данные из <see cref="IConnector"/>.
+	/// The supplier of information on instruments, getting data from <see cref="IConnector"/>.
 	/// </summary>
 	public class ConnectorSecurityProvider : CollectionSecurityProvider
 	{
 		private readonly IConnector _connector;
 
 		/// <summary>
-		/// Создать <see cref="ConnectorSecurityProvider"/>.
+		/// Initializes a new instance of the <see cref="ConnectorSecurityProvider"/>.
 		/// </summary>
-		/// <param name="connector">Подключение к торговой системе.</param>
+		/// <param name="connector">Connection to the trading system.</param>
 		public ConnectorSecurityProvider(IConnector connector)
 			: base(Enumerable.Empty<Security>())
 		{
@@ -111,7 +111,7 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Коллекция инструментов.
+		/// The instruments collection.
 		/// </summary>
 		protected override IEnumerable<Security> Securities
 		{
@@ -120,17 +120,17 @@ namespace StockSharp.Algo
 	}
 
 	/// <summary>
-	/// Вспомогательный класс для предоставления различной алгоритмической функциональности.
+	/// The auxiliary class for provision of various algorithmic functionalities.
 	/// </summary>
 	public static class TraderHelper
 	{
 		/// <summary>
-		/// Отфильтровать стакан от собственных заявок.
+		/// To filter the order book from own orders.
 		/// </summary>
-		/// <param name="quotes">Исходный стакан, который необходимо отфильтровать.</param>
-		/// <param name="ownOrders">Активные заявки по данному инструменту.</param>
-		/// <param name="orders">Заявки, которые необходимо игнорировать.</param>
-		/// <returns>Отфильтрованный стакан.</returns>
+		/// <param name="quotes">The initial order book to be filtered.</param>
+		/// <param name="ownOrders">Active orders for this instrument.</param>
+		/// <param name="orders">Orders to be ignored.</param>
+		/// <returns>The filtered order book.</returns>
 		public static IEnumerable<Quote> GetFilteredQuotes(this IEnumerable<Quote> quotes, IEnumerable<Order> ownOrders, IEnumerable<Order> orders)
 		{
 			if (quotes == null)
@@ -172,12 +172,12 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Получить рыночную цену для инструмента по максимально и минимально возможным ценам.
+		/// To get market price for the instrument by maximal and minimal possible prices.
 		/// </summary>
-		/// <param name="security">Инструмент, по которому вычисляется рыночная цена.</param>
-		/// <param name="provider">Поставщик маркет-данных.</param>
-		/// <param name="side">Направление заявки.</param>
-		/// <returns>Рыночная цена. Если нет информации о максимально и минимально возможных ценах, то будет возвращено <see langword="null"/>.</returns>
+		/// <param name="security">The instrument used for the market price calculation.</param>
+		/// <param name="provider">The market data provider.</param>
+		/// <param name="side">Order side.</param>
+		/// <returns>The market price. If there is no information on maximal and minimal possible prices, then <see langword="null" /> will be returned.</returns>
 		public static decimal? GetMarketPrice(this Security security, IMarketDataProvider provider, Sides side)
 		{
 			var board = security.CheckExchangeBoard();
@@ -198,14 +198,14 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Высчитать текущую цену по инструменту в зависимости от направления заявки.
+		/// To calculate the current price by the instrument depending on the order direction.
 		/// </summary>
-		/// <param name="security">Инструмент, по которому вычисляется текущая цена.</param>
-		/// <param name="provider">Поставщик маркет-данных.</param>
-		/// <param name="direction">Направление заявки.</param>
-		/// <param name="priceType">Тип рыночной цены.</param>
-		/// <param name="orders">Заявки, которые необходимо игнорировать.</param>
-		/// <returns>Текущая цена. Если информации в стакане недостаточно, будет возвращено <see langword="null"/>.</returns>
+		/// <param name="security">The instrument used for the current price calculation.</param>
+		/// <param name="provider">The market data provider.</param>
+		/// <param name="direction">Order side.</param>
+		/// <param name="priceType">The type of market price.</param>
+		/// <param name="orders">Orders to be ignored.</param>
+		/// <returns>The current price. If information in order book is insufficient, then <see langword="null" /> will be returned.</returns>
 		public static Unit GetCurrentPrice(this Security security, IMarketDataProvider provider, Sides? direction = null, MarketPriceTypes priceType = MarketPriceTypes.Following, IEnumerable<Order> orders = null)
 		{
 			if (provider == null)
@@ -236,15 +236,16 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Высчитать текущую цену по стакану в зависимости от направления заявки.
+		/// To calculate the current price by the order book depending on the order direction.
 		/// </summary>
-		/// <remarks>Для корректной работы метода необходимо запустить экспорт стакана.</remarks>
-		/// <param name="depth">Стакан, по которому нужно высчитать текущую цену.</param>
-		/// <param name="side">Направление заявки. Если это покупка, то будет использоваться
-		/// значение <see cref="MarketDepth.BestAsk"/>, иначе <see cref="MarketDepth.BestBid"/>.</param>
-		/// <param name="priceType">Тип текущей цены.</param>
-		/// <param name="orders">Заявки, которые необходимо игнорировать.</param>
-		/// <returns>Текущая цена. Если информации в стакане недостаточно, будет возвращено <see langword="null"/>.</returns>
+		/// <param name="depth">The order book for the current price calculation.</param>
+		/// <param name="side">The order direction. If it is a purchase, <see cref="MarketDepth.BestAsk"/> value is used, otherwise <see cref="MarketDepth.BestBid"/>.</param>
+		/// <param name="priceType">The type of current price.</param>
+		/// <param name="orders">Orders to be ignored.</param>
+		/// <returns>The current price. If information in order book is insufficient, then <see langword="null" /> will be returned.</returns>
+		/// <remarks>
+		/// For correct operation of the method the order book export shall be launched.
+		/// </remarks>
 		public static Unit GetCurrentPrice(this MarketDepth depth, Sides side, MarketPriceTypes priceType = MarketPriceTypes.Following, IEnumerable<Order> orders = null)
 		{
 			if (depth == null)
@@ -261,14 +262,15 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Высчитать текущую цену по лучшей паре котировок в зависимости от направления заявки.
+		/// To calculate the current price based on the best pair of quotes, depending on the order direction.
 		/// </summary>
-		/// <remarks>Для корректной работы метода необходимо запустить экспорт стакана.</remarks>
-		/// <param name="bestPair">Лучшая пара котировок, по которой вычисляется текущая цена.</param>
-		/// <param name="side">Направление заявки. Если это покупка, то будет использоваться
-		/// значение <see cref="MarketDepthPair.Ask"/>, иначе <see cref="MarketDepthPair.Bid"/>.</param>
-		/// <param name="priceType">Тип текущей цены.</param>
-		/// <returns>Текущая цена. Если информации в стакане недостаточно, будет возвращено <see langword="null"/>.</returns>
+		/// <param name="bestPair">The best pair of quotes, used for the current price calculation.</param>
+		/// <param name="side">The order direction. If it is a purchase, <see cref="MarketDepthPair.Ask"/> value is used, otherwise <see cref="MarketDepthPair.Bid"/>.</param>
+		/// <param name="priceType">The type of current price.</param>
+		/// <returns>The current price. If information in order book is insufficient, then <see langword="null" /> will be returned.</returns>
+		/// <remarks>
+		/// For correct operation of the method the order book export shall be launched.
+		/// </remarks>
 		public static Unit GetCurrentPrice(this MarketDepthPair bestPair, Sides side, MarketPriceTypes priceType = MarketPriceTypes.Following)
 		{
 			if (bestPair == null)
@@ -308,13 +310,13 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Применить для цены сдвиг в зависимости от направления <paramref name="side"/>.
+		/// To use shifting for price, depending on direction <paramref name="side" />.
 		/// </summary>
-		/// <param name="price">Цена.</param>
-		/// <param name="side">Направление заявки, которое используется в качестве направления для сдвига (для покупки сдвиг прибавляется, для продажи - вычитается).</param>
-		/// <param name="offset">Сдвиг цены.</param>
-		/// <param name="security">Инструмент.</param>
-		/// <returns>Новая цена.</returns>
+		/// <param name="price">Price.</param>
+		/// <param name="side">The order direction, used as shift direction (for purchase the shift is added, for sale - subtracted).</param>
+		/// <param name="offset">Price shift.</param>
+		/// <param name="security">Security.</param>
+		/// <returns>New price.</returns>
 		public static decimal ApplyOffset(this Unit price, Sides side, Unit offset, Security security)
 		{
 			if (price == null)
@@ -333,10 +335,10 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Обрезать цену для заявки, чтобы она стала кратной минимальному шагу, а так же ограничить количество знаков после запятой.
+		/// To cut the price for the order, to make it multiple of the minimal step, also to limit number of decimal places.
 		/// </summary>
-		/// <param name="order">Заявка, для которой будет обрезана цена <see cref="Order.Price"/>.</param>
-		/// <param name="rule">Правило округления цены.</param>
+		/// <param name="order">The order for which the price will be cut <see cref="Order.Price"/>.</param>
+		/// <param name="rule">The price rounding rule.</param>
 		public static void ShrinkPrice(this Order order, ShrinkRules rule = ShrinkRules.Auto)
 		{
 			if (order == null)
@@ -346,12 +348,12 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Обрезать цену, чтобы она стала кратной минимальному шагу, а так же ограничить количество знаков после запятой.
+		/// To cut the price, to make it multiple of minimal step, also to limit number of signs after the comma.
 		/// </summary>
-		/// <param name="security">Инструмент, из которого берется значения <see cref="Security.PriceStep"/> и <see cref="Security.Decimals"/>.</param>
-		/// <param name="price">Цена, которую нужно сделать кратной.</param>
-		/// <param name="rule">Правило округления цены.</param>
-		/// <returns>Кратная цена.</returns>
+		/// <param name="security">The instrument from which the <see cref="Security.PriceStep"/> and <see cref="Security.Decimals"/> values are taken.</param>
+		/// <param name="price">The price to be made multiple.</param>
+		/// <param name="rule">The price rounding rule.</param>
+		/// <returns>The multiple price.</returns>
 		public static decimal ShrinkPrice(this Security security, decimal price, ShrinkRules rule = ShrinkRules.Auto)
 		{
 			security.CheckPriceStep();
@@ -363,11 +365,10 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Получить позицию по Моей сделке.
+		/// To get the position on My trade.
 		/// </summary>
-		/// <param name="trade">Моя сделка, по которой рассчитывается позиция. При покупке объем сделки <see cref="Trade.Volume"/>
-		/// берется с положительным знаком, при продаже - с отрицательным.</param>
-		/// <returns>Позиция.</returns>
+		/// <param name="trade">My trade, used for position calculation. At purchase the trade volume <see cref="Trade.Volume"/> is taken with positive sign, at sale � with negative.</param>
+		/// <returns>Position.</returns>
 		public static decimal GetPosition(this MyTrade trade)
 		{
 			if (trade == null)
@@ -377,11 +378,10 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Получить позицию по Моей сделке.
+		/// To get the position on My trade.
 		/// </summary>
-		/// <param name="message">Моя сделка, по которой рассчитывается позиция. При покупке объем сделки <see cref="ExecutionMessage.Volume"/>
-		/// берется с положительным знаком, при продаже - с отрицательным.</param>
-		/// <returns>Позиция.</returns>
+		/// <param name="message">My trade, used for position calculation. At purchase the trade volume <see cref="ExecutionMessage.Volume"/> is taken with positive sign, at sale � with negative.</param>
+		/// <returns>Position.</returns>
 		public static decimal GetPosition(this ExecutionMessage message)
 		{
 			if (message == null)
@@ -391,10 +391,10 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Получить позицию по заявке.
+		/// To get the position by the order.
 		/// </summary>
-		/// <param name="order">Заявка, по которой рассчитывается позиция. При покупке позиция берется с положительным знаком, при продаже - с отрицательным.</param>
-		/// <returns>Позиция.</returns>
+		/// <param name="order">The order, used for the position calculation. At purchase the position is taken with positive sign, at sale � with negative.</param>
+		/// <returns>Position.</returns>
 		public static decimal GetPosition(this Order order)
 		{
 			if (order == null)
@@ -406,10 +406,10 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Получить позицию по портфелю.
+		/// To get the position by the portfolio.
 		/// </summary>
-		/// <param name="portfolio">Портфель, для которого необходимо получить позицию.</param>
-		/// <returns>Позиция по портфелю.</returns>
+		/// <param name="portfolio">The portfolio, for which the position needs to be got.</param>
+		/// <returns>The position by the portfolio.</returns>
 		public static decimal GetPosition(this Portfolio portfolio)
 		{
 			if (portfolio == null)
@@ -422,20 +422,20 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Получить позицию по Моим сделкам.
+		/// To get the position by My trades.
 		/// </summary>
-		/// <param name="trades">Мои сделки, по которым рассчитывается позиция через метод <see cref="GetPosition(StockSharp.BusinessEntities.MyTrade)"/>.</param>
-		/// <returns>Позиция.</returns>
+		/// <param name="trades">My trades, used for the position calculation using the <see cref="GetPosition(StockSharp.BusinessEntities.MyTrade)"/> method.</param>
+		/// <returns>Position.</returns>
 		public static decimal GetPosition(this IEnumerable<MyTrade> trades)
 		{
 			return trades.Sum(t => t.GetPosition());
 		}
 
 		/// <summary>
-		/// Получить объем заявки, сопоставимый с размером позиции.
+		/// To get the trade volume, collatable with the position size.
 		/// </summary>
-		/// <param name="position">Позиция по инструменту.</param>
-		/// <returns>Объем заявки.</returns>
+		/// <param name="position">The position by the instrument.</param>
+		/// <returns>Order volume.</returns>
 		public static decimal GetOrderVolume(this Position position)
 		{
 			if (position == null)
@@ -445,11 +445,13 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Сгруппировать заявки по инструменту и портфелю.
+		/// To group orders by instrument and portfolio.
 		/// </summary>
-		/// <remarks>Рекомендуется использовать для уменьшения транзакционных издержек.</remarks>
-		/// <param name="orders">Исходные заявки.</param>
-		/// <returns>Сгруппированные заявки.</returns>
+		/// <param name="orders">Initial orders.</param>
+		/// <returns>Grouped orders.</returns>
+		/// <remarks>
+		/// Recommended to use to reduce trade costs.
+		/// </remarks>
 		public static IEnumerable<Order> Join(this IEnumerable<Order> orders)
 		{
 			if (orders == null)
@@ -494,20 +496,20 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Рассчитать прибыль-убыток на основе сделок.
+		/// To calculate profit-loss based on trades.
 		/// </summary>
-		/// <param name="trades">Сделки, по которым необходимо рассчитывать прибыль-убыток.</param>
-		/// <returns>Прибыль-убыток.</returns>
+		/// <param name="trades">Trades, for which the profit-loss shall be calculated.</param>
+		/// <returns>Profit-loss.</returns>
 		public static decimal GetPnL(this IEnumerable<MyTrade> trades)
 		{
 			return trades.Select(t => t.ToMessage()).GetPnL();
 		}
 
 		/// <summary>
-		/// Рассчитать прибыль-убыток на основе сделок.
+		/// To calculate profit-loss based on trades.
 		/// </summary>
-		/// <param name="trades">Сделки, по которым необходимо рассчитывать прибыль-убыток.</param>
-		/// <returns>Прибыль-убыток.</returns>
+		/// <param name="trades">Trades, for which the profit-loss shall be calculated.</param>
+		/// <returns>Profit-loss.</returns>
 		public static decimal GetPnL(this IEnumerable<ExecutionMessage> trades)
 		{
 			return trades.GroupBy(t => t.SecurityId).Sum(g =>
@@ -521,11 +523,11 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Рассчитать прибыль-убыток для сделки.
+		/// To calculate profit-loss for trade.
 		/// </summary>
-		/// <param name="trade">Сделка, для которой необходимо рассчитывать прибыль-убыток.</param>
-		/// <param name="currentPrice">Текущая цена инструмента.</param>
-		/// <returns>Прибыль-убыток.</returns>
+		/// <param name="trade">The trade for which the profit-loss shall be calculated.</param>
+		/// <param name="currentPrice">The current price of the instrument.</param>
+		/// <returns>Profit-loss.</returns>
 		public static decimal GetPnL(this MyTrade trade, decimal currentPrice)
 		{
 			if (trade == null)
@@ -535,11 +537,11 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Рассчитать прибыль-убыток для сделки.
+		/// To calculate profit-loss for trade.
 		/// </summary>
-		/// <param name="trade">Сделка, для которой необходимо рассчитывать прибыль-убыток.</param>
-		/// <param name="currentPrice">Текущая цена инструмента.</param>
-		/// <returns>Прибыль-убыток.</returns>
+		/// <param name="trade">The trade for which the profit-loss shall be calculated.</param>
+		/// <param name="currentPrice">The current price of the instrument.</param>
+		/// <returns>Profit-loss.</returns>
 		public static decimal GetPnL(this ExecutionMessage trade, decimal currentPrice)
 		{
 			return GetPnL(trade.GetTradePrice(), trade.SafeGetVolume(), trade.Side, currentPrice);
@@ -551,10 +553,10 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Рассчитать прибыль-убыток на основе портфеля.
+		/// To calculate profit-loss based on the portfolio.
 		/// </summary>
-		/// <param name="portfolio">Портфель, для которого необходимо рассчитать прибыль-убыток.</param>
-		/// <returns>Прибыль-убыток.</returns>
+		/// <param name="portfolio">The portfolio, for which the profit-loss shall be calculated.</param>
+		/// <returns>Profit-loss.</returns>
 		public static decimal GetPnL(this Portfolio portfolio)
 		{
 			if (portfolio == null)
@@ -564,11 +566,11 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Рассчитать стоимость позиции.
+		/// To calculate the position cost.
 		/// </summary>
-		/// <param name="position">Позиция.</param>
-		/// <param name="currentPrice">Текущая цена инструмента.</param>
-		/// <returns>Стоимость позиции.</returns>
+		/// <param name="position">Position.</param>
+		/// <param name="currentPrice">The current price of the instrument.</param>
+		/// <returns>Position price.</returns>
 		public static decimal GetPrice(this Position position, decimal currentPrice)
 		{
 			if (position == null)
@@ -599,22 +601,22 @@ namespace StockSharp.Algo
 		//}
 
 		/// <summary>
-		/// Проверить, является ли время торгуемым (началась ли сессия, не закончилась ли, нет ли клиринга).
+		/// To check, whether the time is traded (has the session started, ended, is there a clearing).
 		/// </summary>
-		/// <param name="board">Информация о площадке.</param>
-		/// <param name="time">Передаваемое время, которое нужно проверить.</param>
-		/// <returns><see langword="true"/>, если торгуемое время, иначе, неторгуемое.</returns>
+		/// <param name="board">Board info.</param>
+		/// <param name="time">The passed time to be checked.</param>
+		/// <returns><see langword="true" />, if time is traded, otherwise, not traded.</returns>
 		public static bool IsTradeTime(this ExchangeBoard board, DateTimeOffset time)
 		{
 			return board.ToMessage().IsTradeTime(time);
 		}
 
 		/// <summary>
-		/// Проверить, является ли время торгуемым (началась ли сессия, не закончилась ли, нет ли клиринга).
+		/// To check, whether the time is traded (has the session started, ended, is there a clearing).
 		/// </summary>
-		/// <param name="board">Информация о площадке.</param>
-		/// <param name="time">Передаваемое время, которое нужно проверить.</param>
-		/// <returns><see langword="true"/>, если торгуемое время, иначе, неторгуемое.</returns>
+		/// <param name="board">Board info.</param>
+		/// <param name="time">The passed time to be checked.</param>
+		/// <returns><see langword="true" />, if time is traded, otherwise, not traded.</returns>
 		public static bool IsTradeTime(this BoardMessage board, DateTimeOffset time)
 		{
 			if (board == null)
@@ -635,24 +637,24 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Проверить, является ли дата торгуемой.
+		/// To check, whether date is traded.
 		/// </summary>
-		/// <param name="board">Информация о площадке.</param>
-		/// <param name="date">Передаваемая дата, которую необходимо проверить.</param>
-		/// <param name="checkHolidays">Проверять ли переданную дату на день недели (суббота и воскресенье являются выходными и для них будет возвращено <see langword="false"/>).</param>
-		/// <returns><see langword="true"/>, если торгуемая дата, иначе, неторгуемая.</returns>
+		/// <param name="board">Board info.</param>
+		/// <param name="date">The passed date to be checked.</param>
+		/// <param name="checkHolidays">Whether to check the passed date for a weekday (Saturday and Sunday are days off, returned value for them is <see langword="false" />).</param>
+		/// <returns><see langword="true" />, if the date is traded, otherwise, is not traded.</returns>
 		public static bool IsTradeDate(this ExchangeBoard board, DateTimeOffset date, bool checkHolidays = false)
 		{
 			return board.ToMessage().IsTradeDate(date, checkHolidays);
 		}
 
 		/// <summary>
-		/// Проверить, является ли дата торгуемой.
+		/// To check, whether date is traded.
 		/// </summary>
-		/// <param name="board">Информация о площадке.</param>
-		/// <param name="date">Передаваемая дата, которую необходимо проверить.</param>
-		/// <param name="checkHolidays">Проверять ли переданную дату на день недели (суббота и воскресенье являются выходными и для них будет возвращено <see langword="false"/>).</param>
-		/// <returns><see langword="true"/>, если торгуемая дата, иначе, неторгуемая.</returns>
+		/// <param name="board">Board info.</param>
+		/// <param name="date">The passed date to be checked.</param>
+		/// <param name="checkHolidays">Whether to check the passed date for a weekday (Saturday and Sunday are days off, returned value for them is <see langword="false" />).</param>
+		/// <returns><see langword="true" />, if the date is traded, otherwise, is not traded.</returns>
 		public static bool IsTradeDate(this BoardMessage board, DateTimeOffset date, bool checkHolidays = false)
 		{
 			if (board == null)
@@ -677,12 +679,12 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Создать копию заявки для перерегистрации.
+		/// To create copy of the order for re-registration.
 		/// </summary>
-		/// <param name="oldOrder">Оригинальная заявка.</param>
-		/// <param name="newPrice">Цена новой заявки.</param>
-		/// <param name="newVolume">Объем новой заявки.</param>
-		/// <returns>Новая заявка.</returns>
+		/// <param name="oldOrder">The original order.</param>
+		/// <param name="newPrice">Price of the new order.</param>
+		/// <param name="newVolume">Volume of the new order.</param>
+		/// <returns>New order.</returns>
 		public static Order ReRegisterClone(this Order oldOrder, decimal? newPrice = null, decimal? newVolume = null)
 		{
 			if (oldOrder == null)
@@ -704,11 +706,11 @@ namespace StockSharp.Algo
 		private static readonly Dictionary<DateTime, Dictionary<CurrencyTypes, decimal>> _rateInfo = new Dictionary<DateTime, Dictionary<CurrencyTypes, decimal>>();
 
 		/// <summary>
-		/// Сконвертировать одну валюту в другую.
+		/// To convert one currency to another.
 		/// </summary>
-		/// <param name="currencyFrom">Валюта, из которой нужно произвести конвертацию.</param>
-		/// <param name="currencyTypeTo">Код валюты, в которую нужно произвести конвертацию.</param>
-		/// <returns>Сконвертированная валюта.</returns>
+		/// <param name="currencyFrom">The currency to be converted.</param>
+		/// <param name="currencyTypeTo">The code of the target currency.</param>
+		/// <returns>Converted currency.</returns>
 		public static Currency Convert(this Currency currencyFrom, CurrencyTypes currencyTypeTo)
 		{
 			if (currencyFrom == null)
@@ -718,23 +720,23 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Получить курс конвертации одной валюту в другую.
+		/// To get the conversion rate for converting one currency to another.
 		/// </summary>
-		/// <param name="from">Код валюты, из которой нужно произвести конвертацию.</param>
-		/// <param name="to">Код валюты, в которую нужно произвести конвертацию.</param>
-		/// <returns>Курс.</returns>
+		/// <param name="from">The code of currency to be converted.</param>
+		/// <param name="to">The code of the target currency.</param>
+		/// <returns>The rate.</returns>
 		public static decimal Convert(this CurrencyTypes from, CurrencyTypes to)
 		{
 			return from.Convert(to, DateTime.Today);
 		}
 
 		/// <summary>
-		/// Получить курс конвертации одной валюту в другую на определенную дату.
+		/// To get the conversion rate for the specified date.
 		/// </summary>
-		/// <param name="from">Код валюты, из которой нужно произвести конвертацию.</param>
-		/// <param name="to">Код валюты, в которую нужно произвести конвертацию.</param>
-		/// <param name="date">Дата курса.</param>
-		/// <returns>Курс.</returns>
+		/// <param name="from">The code of currency to be converted.</param>
+		/// <param name="to">The code of the target currency.</param>
+		/// <param name="date">The rate date.</param>
+		/// <returns>The rate.</returns>
 		public static decimal Convert(this CurrencyTypes from, CurrencyTypes to, DateTime date)
 		{
 			if (from == to)
@@ -761,13 +763,12 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Создать из обычного стакана разреженный с минимальным шагом цены равный <see cref="Security.PriceStep"/>.
-		/// <remarks>
-		/// В разреженном стакане показаны котировки на те цены, по которым не выставлены заявки. Объем таких котировок равен 0.
-		/// </remarks>
+		/// To create from regular order book a sparse on, with minimal price step of <see cref="Security.PriceStep"/>. <remarks>
+		///             В разреженном стакане показаны котировки на те цены, по которым не выставлены заявки. Объем таких котировок равен 0.
+		///             </remarks>.
 		/// </summary>
-		/// <param name="depth">Обычный стакан.</param>
-		/// <returns>Разреженный стакан.</returns>
+		/// <param name="depth">The regular order book.</param>
+		/// <returns>The sparse order book.</returns>
 		public static MarketDepth Sparse(this MarketDepth depth)
 		{
 			if (depth == null)
@@ -777,14 +778,13 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Создать из обычного стакана разреженный.
-		/// <remarks>
-		/// В разреженном стакане показаны котировки на те цены, по которым не выставлены заявки. Объем таких котировок равен 0.
-		/// </remarks>
+		/// To create from regular order book a sparse one. <remarks>
+		///             В разреженном стакане показаны котировки на те цены, по которым не выставлены заявки. Объем таких котировок равен 0.
+		///             </remarks>.
 		/// </summary>
-		/// <param name="depth">Обычный стакан.</param>
-		/// <param name="priceStep">Минимальный шаг цены.</param>
-		/// <returns>Разреженный стакан.</returns>
+		/// <param name="depth">The regular order book.</param>
+		/// <param name="priceStep">Minimum price step.</param>
+		/// <returns>The sparse order book.</returns>
 		public static MarketDepth Sparse(this MarketDepth depth, decimal priceStep)
 		{
 			if (depth == null)
@@ -803,14 +803,13 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Создать из пары котировок разреженную коллекцию котировок, которая будет входить в диапазон между парой.
-		/// <remarks>
-		/// В разреженной коллекции показаны котировки на те цены, по которым не выставлены заявки. Объем таких котировок равен 0.
-		/// </remarks>
+		/// To create form pair of quotes a sparse collection of quotes, which will be included into the range between the pair. <remarks>
+		///             В разреженной коллекции показаны котировки на те цены, по которым не выставлены заявки. Объем таких котировок равен 0.
+		///             </remarks>.
 		/// </summary>
-		/// <param name="pair">Пара обычных котировок.</param>
-		/// <param name="priceStep">Минимальный шаг цены.</param>
-		/// <returns>Разреженная коллекция котировок.</returns>
+		/// <param name="pair">The pair of regular quotes.</param>
+		/// <param name="priceStep">Minimum price step.</param>
+		/// <returns>The sparse collection of quotes.</returns>
 		public static IEnumerable<Quote> Sparse(this MarketDepthPair pair, decimal priceStep)
 		{
 			if (pair == null)
@@ -859,14 +858,13 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Создать из обычных котировок разреженную коллекцию котировок.
-		/// <remarks>
-		/// В разреженной коллекции показаны котировки на те цены, по которым не выставлены заявки. Объем таких котировок равен 0.
-		/// </remarks>
+		/// To create the sparse collection of quotes from regular quotes. <remarks>
+		///             В разреженной коллекции показаны котировки на те цены, по которым не выставлены заявки. Объем таких котировок равен 0.
+		///             </remarks>.
 		/// </summary>
-		/// <param name="quotes">Обычные котировки. Коллекция должна содержать одинаково направленные котировки (только биды или только оффера).</param>
-		/// <param name="priceStep">Минимальный шаг цены.</param>
-		/// <returns>Разреженная коллекция котировок.</returns>
+		/// <param name="quotes">Regular quotes. The collection shall contain quotes of the same direction (only bids or only offers).</param>
+		/// <param name="priceStep">Minimum price step.</param>
+		/// <returns>The sparse collection of quotes.</returns>
 		public static IEnumerable<Quote> Sparse(this IEnumerable<Quote> quotes, decimal priceStep)
 		{
 			if (quotes == null)
@@ -911,11 +909,11 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Объединить первоначальный стакан, и его разреженное представление.
+		/// To merge the initial order book and its sparse representation.
 		/// </summary>
-		/// <param name="original">Первоначальный стакан.</param>
-		/// <param name="rare">Разреженный стакан.</param>
-		/// <returns>Объединенный стакан.</returns>
+		/// <param name="original">The initial order book.</param>
+		/// <param name="rare">The sparse order book.</param>
+		/// <returns>The merged order book.</returns>
 		public static MarketDepth Join(this MarketDepth original, MarketDepth rare)
 		{
 			if (original == null)
@@ -928,21 +926,21 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Сгруппировать стакан по ценовому диапазону.
+		/// To group the order book by the price range.
 		/// </summary>
-		/// <param name="depth">Стакан, который необходимо сгруппировать.</param>
-		/// <param name="priceRange">Ценовой диапазон, по которому необходимо произвести группировку.</param>
-		/// <returns>Сгруппированный стакан.</returns>
+		/// <param name="depth">The order book to be grouped.</param>
+		/// <param name="priceRange">The price range, for which grouping shall be performed.</param>
+		/// <returns>The grouped order book.</returns>
 		public static MarketDepth Group(this MarketDepth depth, Unit priceRange)
 		{
 			return new MarketDepth(depth.Security).Update(depth.Bids.Group(priceRange), depth.Asks.Group(priceRange), true, depth.LastChangeTime);
 		}
 
 		/// <summary>
-		/// Разгруппировать стакан, сгруппированный через метод <see cref="Group(StockSharp.BusinessEntities.MarketDepth,Unit)"/>.
+		/// To de-group the order book, grouped using the method <see cref="Group(StockSharp.BusinessEntities.MarketDepth,StockSharp.Messages.Unit)"/>.
 		/// </summary>
-		/// <param name="depth">Сгруппированный стакан.</param>
-		/// <returns>Разгруппированный стакан.</returns>
+		/// <param name="depth">The grouped order book.</param>
+		/// <returns>The de-grouped order book.</returns>
 		public static MarketDepth UnGroup(this MarketDepth depth)
 		{
 			return new MarketDepth(depth.Security).Update(
@@ -952,10 +950,10 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Удалить в стакане те уровни, которые должны исчезнуть в случае появления сделок <paramref name="trades"/>.
+		/// To delete in order book levels, which shall disappear in case of trades occurrence <paramref name="trades" />.
 		/// </summary>
-		/// <param name="depth">Стакан, который необходимо очистить.</param>
-		/// <param name="trades">Сделки.</param>
+		/// <param name="depth">The order book to be cleared.</param>
+		/// <param name="trades">Trades.</param>
 		public static void EmulateTrades(this MarketDepth depth, IEnumerable<ExecutionMessage> trades)
 		{
 			if (depth == null)
@@ -1071,11 +1069,11 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Сгруппировать котировки по ценовому диапазону.
+		/// To group quotes by the price range.
 		/// </summary>
-		/// <param name="quotes">Котировки, которые необходимо сгруппировать.</param>
-		/// <param name="priceRange">Ценовой диапазон, по которому необходимо произвести группировку.</param>
-		/// <returns>Сгруппированные котировки.</returns>
+		/// <param name="quotes">Quotes to be grouped.</param>
+		/// <param name="priceRange">The price range, for which grouping shall be performed.</param>
+		/// <returns>Grouped quotes.</returns>
 		public static IEnumerable<AggregatedQuote> Group(this IEnumerable<Quote> quotes, Unit priceRange)
 		{
 			if (quotes == null)
@@ -1123,11 +1121,11 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Вычислить изменение между стаканами.
+		/// To calculate the change between order books.
 		/// </summary>
-		/// <param name="from">Первый стакан.</param>
-		/// <param name="to">Второй стакан.</param>
-		/// <returns>Стакан, хранящий только приращения.</returns>
+		/// <param name="from">First order book.</param>
+		/// <param name="to">Second order book.</param>
+		/// <returns>The order book, storing only increments.</returns>
 		public static QuoteChangeMessage GetDelta(this QuoteChangeMessage from, QuoteChangeMessage to)
 		{
 			if (from == null)
@@ -1148,12 +1146,12 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Вычислить изменение между котировками.
+		/// To calculate the change between quotes.
 		/// </summary>
-		/// <param name="from">Первые котировки.</param>
-		/// <param name="to">Вторые котировки.</param>
-		/// <param name="side">Направление, показывающее тип котировок.</param>
-		/// <returns>Изменения.</returns>
+		/// <param name="from">First quotes.</param>
+		/// <param name="to">Second quotes.</param>
+		/// <param name="side">The direction, showing the type of quotes.</param>
+		/// <returns>Changes.</returns>
 		public static IEnumerable<QuoteChange> GetDelta(this IEnumerable<QuoteChange> from, IEnumerable<QuoteChange> to, Sides side)
 		{
 			var mapTo = to.ToDictionary(q => q.Price);
@@ -1186,11 +1184,11 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Прибавить изменение к первому стакану.
+		/// To add change to the first order book.
 		/// </summary>
-		/// <param name="from">Первый стакан.</param>
-		/// <param name="delta">Изменение.</param>
-		/// <returns>Измененный стакан.</returns>
+		/// <param name="from">First order book.</param>
+		/// <param name="delta">Change.</param>
+		/// <returns>The changed order book.</returns>
 		public static QuoteChangeMessage AddDelta(this QuoteChangeMessage from, QuoteChangeMessage delta)
 		{
 			if (from == null)
@@ -1217,12 +1215,12 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Прибавить изменение к котировки.
+		/// To add change to quote.
 		/// </summary>
-		/// <param name="fromQuotes">Котировки.</param>
-		/// <param name="deltaQuotes">Изменения.</param>
-		/// <param name="isBids">Признак направления котировок.</param>
-		/// <returns>Измененные котировки.</returns>
+		/// <param name="fromQuotes">Quotes.</param>
+		/// <param name="deltaQuotes">Changes.</param>
+		/// <param name="isBids">The indication of quotes direction.</param>
+		/// <returns>Changed quotes.</returns>
 		public static IEnumerable<QuoteChange> AddDelta(this IEnumerable<QuoteChange> fromQuotes, IEnumerable<QuoteChange> deltaQuotes, bool isBids)
 		{
 			var result = new List<QuoteChange>();
@@ -1292,50 +1290,50 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Проверить, отменена ли заявка.
+		/// To check, whether the order was cancelled.
 		/// </summary>
-		/// <param name="order">Заявка, которую необходимо проверить.</param>
-		/// <returns><see langword="true"/>, если заявка отменена, иначе, <see langword="false"/>.</returns>
+		/// <param name="order">The order to be checked.</param>
+		/// <returns><see langword="true" />, if the order is cancelled, otherwise, <see langword="false" />.</returns>
 		public static bool IsCanceled(this Order order)
 		{
 			return order.ToMessage().IsCanceled();
 		}
 
 		/// <summary>
-		/// Проверить, исполнена ли полностью заявка.
+		/// To check, is the order matched completely.
 		/// </summary>
-		/// <param name="order">Заявка, которую необходимо проверить.</param>
-		/// <returns><see langword="true"/>, если заявка полностью исполнена, иначе, <see langword="false"/>.</returns>
+		/// <param name="order">The order to be checked.</param>
+		/// <returns><see langword="true" />, if the order is matched completely, otherwise, <see langword="false" />.</returns>
 		public static bool IsMatched(this Order order)
 		{
 			return order.ToMessage().IsMatched();
 		}
 
 		/// <summary>
-		/// Проверить, реализована ли часть объема в заявке.
+		/// To check, is a part of volume is implemented in the order.
 		/// </summary>
-		/// <param name="order">Заявка, которую необходимо проверить.</param>
-		/// <returns><see langword="true"/>, если часть объема реализована, иначе, <see langword="false"/>.</returns>
+		/// <param name="order">The order to be checked.</param>
+		/// <returns><see langword="true" />, if part of volume is implemented, otherwise, <see langword="false" />.</returns>
 		public static bool IsMatchedPartially(this Order order)
 		{
 			return order.ToMessage().IsMatchedPartially();
 		}
 
 		/// <summary>
-		/// Проверить, что не реализован ни один контракт в заявке.
+		/// To check, if no contract in order is implemented.
 		/// </summary>
-		/// <param name="order">Заявка, которую необходимо проверить.</param>
-		/// <returns><see langword="true"/>, если ни один контракт не реализована, иначе, <see langword="false"/>.</returns>
+		/// <param name="order">The order to be checked.</param>
+		/// <returns><see langword="true" />, if no contract is implemented, otherwise, <see langword="false" />.</returns>
 		public static bool IsMatchedEmpty(this Order order)
 		{
 			return order.ToMessage().IsMatchedEmpty();
 		}
 
 		/// <summary>
-		/// Проверить, отменена ли заявка.
+		/// To check, whether the order was cancelled.
 		/// </summary>
-		/// <param name="order">Заявка, которую необходимо проверить.</param>
-		/// <returns><see langword="true"/>, если заявка отменена, иначе, <see langword="false"/>.</returns>
+		/// <param name="order">The order to be checked.</param>
+		/// <returns><see langword="true" />, if the order is cancelled, otherwise, <see langword="false" />.</returns>
 		public static bool IsCanceled(this ExecutionMessage order)
 		{
 			if (order == null)
@@ -1348,10 +1346,10 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Проверить, исполнена ли полностью заявка.
+		/// To check, is the order matched completely.
 		/// </summary>
-		/// <param name="order">Заявка, которую необходимо проверить.</param>
-		/// <returns><see langword="true"/>, если заявка полностью исполнена, иначе, <see langword="false"/>.</returns>
+		/// <param name="order">The order to be checked.</param>
+		/// <returns><see langword="true" />, if the order is matched completely, otherwise, <see langword="false" />.</returns>
 		public static bool IsMatched(this ExecutionMessage order)
 		{
 			if (order == null)
@@ -1361,10 +1359,10 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Проверить, реализована ли часть объема в заявке.
+		/// To check, is a part of volume is implemented in the order.
 		/// </summary>
-		/// <param name="order">Заявка, которую необходимо проверить.</param>
-		/// <returns><see langword="true"/>, если часть объема реализована, иначе, <see langword="false"/>.</returns>
+		/// <param name="order">The order to be checked.</param>
+		/// <returns><see langword="true" />, if part of volume is implemented, otherwise, <see langword="false" />.</returns>
 		public static bool IsMatchedPartially(this ExecutionMessage order)
 		{
 			if (order == null)
@@ -1374,10 +1372,10 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Проверить, что не реализован ни один контракт в заявке.
+		/// To check, if no contract in order is implemented.
 		/// </summary>
-		/// <param name="order">Заявка, которую необходимо проверить.</param>
-		/// <returns><see langword="true"/>, если ни один контракт не реализована, иначе, <see langword="false"/>.</returns>
+		/// <param name="order">The order to be checked.</param>
+		/// <returns><see langword="true" />, if no contract is implemented, otherwise, <see langword="false" />.</returns>
 		public static bool IsMatchedEmpty(this ExecutionMessage order)
 		{
 			if (order == null)
@@ -1387,10 +1385,10 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Получить сделки заявки.
+		/// To get order trades.
 		/// </summary>
-		/// <param name="order">Заявки.</param>
-		/// <returns>Сделки.</returns>
+		/// <param name="order">Orders.</param>
+		/// <returns>Trades.</returns>
 		public static IEnumerable<MyTrade> GetTrades(this Order order)
 		{
 			if (order == null)
@@ -1405,12 +1403,11 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Рассчитать реализованную часть объема для заявки.
+		/// To calculate the implemented part of volume for order.
 		/// </summary>
-		/// <param name="order">Заявка, для которой необходимо рассчитать реализованную часть объема.</param>
-		/// <param name="byOrder">Проверять реализованный объем по балансу заявке (<see cref="Order.Balance"/>) или по полученным сделкам.
-		/// По-умолчанию проверяется по заявке.</param>
-		/// <returns>Реализованная часть объема.</returns>
+		/// <param name="order">The order, for which the implemented part of volume shall be calculated.</param>
+		/// <param name="byOrder">To check implemented volume by order balance (<see cref="Order.Balance"/>) or by received trades. The default is checked by the order.</param>
+		/// <returns>The implemented part of volume.</returns>
 		public static decimal GetMatchedVolume(this Order order, bool byOrder = true)
 		{
 			if (order == null)
@@ -1430,20 +1427,20 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Получить средневзрешанную цену исполнения заявки.
+		/// To get weighted mean price of order matching.
 		/// </summary>
-		/// <param name="order">Заявка, для которой необходимо получить средневзрешанную цену исполнения.</param>
-		/// <returns>Средневзвешанная цена. Если заявка не существует ни одной сделки, то возвращается 0.</returns>
+		/// <param name="order">The order, for which the weighted mean matching price shall be got.</param>
+		/// <returns>The weighted mean price. If no order exists no trades, 0 is returned.</returns>
 		public static decimal GetAveragePrice(this Order order)
 		{
 			return order.GetTrades().GetAveragePrice();
 		}
 
 		/// <summary>
-		/// Получить средневзрешанную цену исполнения по собственным сделкам.
+		/// To get the weighted mean price of matching by own trades.
 		/// </summary>
-		/// <param name="trades">Сделки, для которых необходимо получить средневзрешанную цену исполнения.</param>
-		/// <returns>Средневзвешанная цена. Если сделки отсутствуют, то возвращается 0.</returns>
+		/// <param name="trades">Trades, for which the weighted mean price of matching shall be got.</param>
+		/// <returns>The weighted mean price. If no trades, 0 is returned.</returns>
 		public static decimal GetAveragePrice(this IEnumerable<MyTrade> trades)
 		{
 			if (trades == null)
@@ -1485,11 +1482,11 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Получить вероятные сделки по стакану для заданной заявки.
+		/// To get probable trades for order book for the given order.
 		/// </summary>
-		/// <param name="depth">Стакан, который в момент вызова функции отражает ситуацию на рынке.</param>
-		/// <param name="order">Заявку, для которой необходимо рассчитать вероятные сделки.</param>
-		/// <returns>Вероятные сделки.</returns>
+		/// <param name="depth">The order book, reflecting situation on market at the moment of function call.</param>
+		/// <param name="order">The order, for which probable trades shall be calculated.</param>
+		/// <returns>Probable trades.</returns>
 		public static IEnumerable<MyTrade> GetTheoreticalTrades(this MarketDepth depth, Order order)
 		{
 			if (depth == null)
@@ -1559,25 +1556,25 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Получить вероятные сделки по стакану для рыночной цены и заданного объема.
+		/// To get probable trades by the order book for the market price and given volume.
 		/// </summary>
-		/// <param name="depth">Стакан, который в момент вызова функции отражает ситуацию на рынке.</param>
-		/// <param name="orderDirection">Направление заявки.</param>
-		/// <param name="volume">Объем, который предполагается реализовать.</param>
-		/// <returns>Вероятные сделки.</returns>
+		/// <param name="depth">The order book, reflecting situation on market at the moment of function call.</param>
+		/// <param name="orderDirection">Order side.</param>
+		/// <param name="volume">The volume, supposed to be implemented.</param>
+		/// <returns>Probable trades.</returns>
 		public static IEnumerable<MyTrade> GetTheoreticalTrades(this MarketDepth depth, Sides orderDirection, decimal volume)
 		{
 			return depth.GetTheoreticalTrades(orderDirection, volume, 0);
 		}
 
 		/// <summary>
-		/// Получить вероятные сделки по стакану для заданных цены и объема.
+		/// To get probable trades by order book for given price and volume.
 		/// </summary>
-		/// <param name="depth">Стакан, который в момент вызова функции отражает ситуацию на рынке.</param>
-		/// <param name="orderDirection">Направление заявки.</param>
-		/// <param name="volume">Объем, который предполагается реализовать.</param>
-		/// <param name="price">Цена, по которой предполагает выставить заявку. Если она равна 0, то будет рассматриваться вариант рыночной заявки.</param>
-		/// <returns>Вероятные сделки.</returns>
+		/// <param name="depth">The order book, reflecting situation on market at the moment of function call.</param>
+		/// <param name="orderDirection">Order side.</param>
+		/// <param name="volume">The volume, supposed to be implemented.</param>
+		/// <param name="price">The price, based on which the order is supposed to be forwarded. If it equals 0, option of market order will be considered.</param>
+		/// <returns>Probable trades.</returns>
 		public static IEnumerable<MyTrade> GetTheoreticalTrades(this MarketDepth depth, Sides orderDirection, decimal volume, decimal price)
 		{
 			if (depth == null)
@@ -1594,23 +1591,23 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Поменять направление на противоположное.
+		/// To change the direction to opposite.
 		/// </summary>
-		/// <param name="side">Первоначальное направление.</param>
-		/// <returns>Противоположное направление.</returns>
+		/// <param name="side">The initial direction.</param>
+		/// <returns>The opposite direction.</returns>
 		public static Sides Invert(this Sides side)
 		{
 			return side == Sides.Buy ? Sides.Sell : Sides.Buy;
 		}
 
 		/// <summary>
-		/// Получить направление заявки для позиции.
+		/// To get the order direction for the position.
 		/// </summary>
+		/// <param name="position">The position value.</param>
+		/// <returns>Order side.</returns>
 		/// <remarks>
-		/// Положительное значение равно <see cref="Sides.Buy"/>, отрицательное - <see cref="Sides.Sell"/>, нулевое - <see langword="null"/>.
+		/// A positive value equals <see cref="Sides.Buy"/>, a negative - <see cref="Sides.Sell"/>, zero - <see langword="null" />.
 		/// </remarks>
-		/// <param name="position">Значение позиции.</param>
-		/// <returns>Направление заявки.</returns>
 		public static Sides? GetDirection(this Position position)
 		{
 			if (position == null)
@@ -1620,13 +1617,13 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Получить направление заявки для позиции.
+		/// To get the order direction for the position.
 		/// </summary>
+		/// <param name="position">The position value.</param>
+		/// <returns>Order side.</returns>
 		/// <remarks>
-		/// Положительное значение равно <see cref="Sides.Buy"/>, отрицательное - <see cref="Sides.Sell"/>, нулевое - <see langword="null"/>.
+		/// A positive value equals <see cref="Sides.Buy"/>, a negative - <see cref="Sides.Sell"/>, zero - <see langword="null" />.
 		/// </remarks>
-		/// <param name="position">Значение позиции.</param>
-		/// <returns>Направление заявки.</returns>
 		public static Sides? GetDirection(this decimal position)
 		{
 			if (position == 0)
@@ -1636,15 +1633,15 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Отменить группу заявок на бирже по фильтру.
+		/// Cancel orders by filter.
 		/// </summary>
-		/// <param name="connector">Подключение взаимодействия с торговыми системами.</param>
-		/// <param name="orders">Группа заявок, из которой необходимо найти требуемые заявки и отменить их.</param>
-		/// <param name="isStopOrder"><see langword="true"/>, если нужно отменить только стоп-заявки, <see langword="false"/> - если только обычный и <see langword="null"/> - если оба типа.</param>
-		/// <param name="portfolio">Портфель. Если значение равно <see langword="null"/>, то портфель не попадает в фильтр снятия заявок.</param>
-		/// <param name="direction">Направление заявки. Если значение равно <see langword="null"/>, то направление не попадает в фильтр снятия заявок.</param>
-		/// <param name="board">Торговая площадка. Если значение равно <see langword="null"/>, то площадка не попадает в фильтр снятия заявок.</param>
-		/// <param name="security">Инструмент. Если значение равно <see langword="null"/>, то инструмент не попадает в фильтр снятия заявок.</param>
+		/// <param name="connector">The connection of interaction with trade systems.</param>
+		/// <param name="orders">The group of orders, from which the required orders shall be found and cancelled.</param>
+		/// <param name="isStopOrder"><see langword="true" />, if cancel only a stop orders, <see langword="false" /> - if regular orders, <see langword="null" /> - both.</param>
+		/// <param name="portfolio">Portfolio. If the value is equal to <see langword="null" />, then the portfolio does not match the orders cancel filter.</param>
+		/// <param name="direction">Order side. If the value is <see langword="null" />, the direction does not use.</param>
+		/// <param name="board">Trading board. If the value is equal to <see langword="null" />, then the board does not match the orders cancel filter.</param>
+		/// <param name="security">Instrument. If the value is equal to <see langword="null" />, then the instrument does not match the orders cancel filter.</param>
 		public static void CancelOrders(this IConnector connector, IEnumerable<Order> orders, bool? isStopOrder = null, Portfolio portfolio = null, Sides? direction = null, ExchangeBoard board = null, Security security = null)
 		{
 			if (connector == null)
@@ -1675,11 +1672,11 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Отфильтровать заявки для заданного инструмента.
+		/// To filter orders for the given instrument.
 		/// </summary>
-		/// <param name="orders">Все заявки, в которых необходимо искать требуемые.</param>
-		/// <param name="security">Инструмент, для которого нужно отфильтровать заявки.</param>
-		/// <returns>Отфильтрованные заявки.</returns>
+		/// <param name="orders">All orders, in which the required shall be searched for.</param>
+		/// <param name="security">The instrument, for which the orders shall be filtered.</param>
+		/// <returns>Filtered orders.</returns>
 		public static IEnumerable<Order> Filter(this IEnumerable<Order> orders, Security security)
 		{
 			if (orders == null)
@@ -1693,11 +1690,11 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Отфильтровать заявки для заданного портфеля.
+		/// To filter orders for the given portfolio.
 		/// </summary>
-		/// <param name="orders">Все заявки, в которых необходимо искать требуемые.</param>
-		/// <param name="portfolio">Портфель, для которого нужно отфильтровать заявки.</param>
-		/// <returns>Отфильтрованные заявки.</returns>
+		/// <param name="orders">All orders, in which the required shall be searched for.</param>
+		/// <param name="portfolio">The portfolio, for which the orders shall be filtered.</param>
+		/// <returns>Filtered orders.</returns>
 		public static IEnumerable<Order> Filter(this IEnumerable<Order> orders, Portfolio portfolio)
 		{
 			if (orders == null)
@@ -1710,11 +1707,11 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Отфильтровать заявки для заданного состояния.
+		/// To ilter orders for the given condition.
 		/// </summary>
-		/// <param name="orders">Все заявки, в которых необходимо искать требуемые.</param>
-		/// <param name="state">Состояние заявки.</param>
-		/// <returns>Отфильтрованные заявки.</returns>
+		/// <param name="orders">All orders, in which the required shall be searched for.</param>
+		/// <param name="state">Order state.</param>
+		/// <returns>Filtered orders.</returns>
 		public static IEnumerable<Order> Filter(this IEnumerable<Order> orders, OrderStates state)
 		{
 			if (orders == null)
@@ -1724,11 +1721,11 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Отфильтровать заявки для заданного направления.
+		/// To filter orders for the given direction.
 		/// </summary>
-		/// <param name="orders">Все заявки, в которых необходимо искать требуемые.</param>
-		/// <param name="direction">Направление заявки.</param>
-		/// <returns>Отфильтрованные заявки.</returns>
+		/// <param name="orders">All orders, in which the required shall be searched for.</param>
+		/// <param name="direction">Order side.</param>
+		/// <returns>Filtered orders.</returns>
 		public static IEnumerable<Order> Filter(this IEnumerable<Order> orders, Sides direction)
 		{
 			if (orders == null)
@@ -1738,11 +1735,11 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Отфильтровать сделки для заданного инструмента.
+		/// To filter orders for the given instrument.
 		/// </summary>
-		/// <param name="trades">Все сделки, в которых необходимо искать требуемые.</param>
-		/// <param name="security">Инструмент, для которого нужно отфильтровать сделки.</param>
-		/// <returns>Отфильтрованные сделки.</returns>
+		/// <param name="trades">All trades, in which the required shall be searched for.</param>
+		/// <param name="security">The instrument, for which the trades shall be filtered.</param>
+		/// <returns>Filtered trades.</returns>
 		public static IEnumerable<Trade> Filter(this IEnumerable<Trade> trades, Security security)
 		{
 			if (trades == null)
@@ -1756,12 +1753,12 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Отфильтровать сделки для заданного временного периода.
+		/// To filter trades for the given time period.
 		/// </summary>
-		/// <param name="trades">Все сделки, в которых необходимо искать требуемые.</param>
-		/// <param name="from">Дата, с которой нужно искать сделки.</param>
-		/// <param name="to">Дата, до которой нужно искать сделки.</param>
-		/// <returns>Отфильтрованные сделки.</returns>
+		/// <param name="trades">All trades, in which the required shall be searched for.</param>
+		/// <param name="from">The start date for trades searching.</param>
+		/// <param name="to">The end date for trades searching.</param>
+		/// <returns>Filtered trades.</returns>
 		public static IEnumerable<Trade> Filter(this IEnumerable<Trade> trades, DateTimeOffset from, DateTimeOffset to)
 		{
 			if (trades == null)
@@ -1771,11 +1768,11 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Отфильтровать позиции для заданного инструмента.
+		/// To filter positions for the given instrument.
 		/// </summary>
-		/// <param name="positions">Все позиции, в которых необходимо искать требуемые.</param>
-		/// <param name="security">Инструмент, для которого нужно отфильтровать позиции.</param>
-		/// <returns>Отфильтрованные позиции.</returns>
+		/// <param name="positions">All positions, in which the required shall be searched for.</param>
+		/// <param name="security">The instrument, for which positions shall be filtered.</param>
+		/// <returns>Filtered positions.</returns>
 		public static IEnumerable<Position> Filter(this IEnumerable<Position> positions, Security security)
 		{
 			if (positions == null)
@@ -1789,11 +1786,11 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Отфильтровать позиции для заданного портфеля.
+		/// To filter positions for the given portfolio.
 		/// </summary>
-		/// <param name="positions">Все позиции, в которых необходимо искать требуемые.</param>
-		/// <param name="portfolio">Портфель, для которого нужно отфильтровать позиции.</param>
-		/// <returns>Отфильтрованные позиции.</returns>
+		/// <param name="positions">All positions, in which the required shall be searched for.</param>
+		/// <param name="portfolio">The portfolio, for which positions shall be filtered.</param>
+		/// <returns>Filtered positions.</returns>
 		public static IEnumerable<Position> Filter(this IEnumerable<Position> positions, Portfolio portfolio)
 		{
 			if (positions == null)
@@ -1806,11 +1803,11 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Отфильтровать собственные сделки для заданного инструмента.
+		/// To filter own trades for the given instrument.
 		/// </summary>
-		/// <param name="myTrades">Все собственные сделки, в которых необходимо искать требуемые.</param>
-		/// <param name="security">Инструмент, по которому нужно найти сделки.</param>
-		/// <returns>Отфильтрованные сделки.</returns>
+		/// <param name="myTrades">All own trades, in which the required shall be looked for.</param>
+		/// <param name="security">The instrument, on which the trades shall be found.</param>
+		/// <returns>Filtered trades.</returns>
 		public static IEnumerable<MyTrade> Filter(this IEnumerable<MyTrade> myTrades, Security security)
 		{
 			if (myTrades == null)
@@ -1824,11 +1821,11 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Отфильтровать собственные сделки для заданного портфеля.
+		/// To filter own trades for the given portfolio.
 		/// </summary>
-		/// <param name="myTrades">Все собственные сделки, в которых необходимо искать требуемые.</param>
-		/// <param name="portfolio">Портфель, для которого нужно отфильтровать сделки.</param>
-		/// <returns>Отфильтрованные сделки.</returns>
+		/// <param name="myTrades">All own trades, in which the required shall be looked for.</param>
+		/// <param name="portfolio">The portfolio, for which the trades shall be filtered.</param>
+		/// <returns>Filtered trades.</returns>
 		public static IEnumerable<MyTrade> Filter(this IEnumerable<MyTrade> myTrades, Portfolio portfolio)
 		{
 			if (myTrades == null)
@@ -1841,11 +1838,11 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Отфильтровать собственные сделки для заданной заявки.
+		/// To filter own trades for the given order.
 		/// </summary>
-		/// <param name="myTrades">Все собственные сделки, в которых необходимо искать требуемые.</param>
-		/// <param name="order">Заявка, для которой нужно отфильтровать сделки.</param>
-		/// <returns>Отфильтрованные заявки.</returns>
+		/// <param name="myTrades">All own trades, in which the required shall be looked for.</param>
+		/// <param name="order">The order, for which trades shall be filtered.</param>
+		/// <returns>Filtered orders.</returns>
 		public static IEnumerable<MyTrade> Filter(this IEnumerable<MyTrade> myTrades, Order order)
 		{
 			if (myTrades == null)
@@ -1858,11 +1855,11 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Отфильтровать <see cref="Connector.Securities"/> по заданному критерию.
+		/// To filter <see cref="Connector.Securities"/> by given criteria.
 		/// </summary>
-		/// <param name="connector">Инструменты.</param>
-		/// <param name="criteria">Критерий, поля которого будут использоваться в качестве фильтра.</param>
-		/// <returns>Отфильтрованные инструменты.</returns>
+		/// <param name="connector">Securities.</param>
+		/// <param name="criteria">The criterion which fields will be used as a filter.</param>
+		/// <returns>Instruments filtered.</returns>
 		public static IEnumerable<Security> FilterSecurities(this Connector connector, SecurityLookupMessage criteria)
 		{
 			if (connector == null)
@@ -1877,11 +1874,11 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Создать критерий поиска <see cref="Security"/> из <see cref="SecurityLookupMessage"/>.
+		/// To create the search criteria <see cref="Security"/> from <see cref="SecurityLookupMessage"/>.
 		/// </summary>
-		/// <param name="connector">Подключение к торговой системе.</param>
-		/// <param name="criteria">Критерий, поля которого будут использоваться в качестве фильтра.</param>
-		/// <returns>Критерий поиска.</returns>
+		/// <param name="connector">Connection to the trading system.</param>
+		/// <param name="criteria">The criterion which fields will be used as a filter.</param>
+		/// <returns>Search criterion.</returns>
 		public static Security GetSecurityCriteria(this Connector connector, SecurityLookupMessage criteria)
 		{
 			if (connector == null)
@@ -1922,11 +1919,11 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Отфильтровать инструменты по торговой площадке.
+		/// To filter instruments by the trading board.
 		/// </summary>
-		/// <param name="securities">Инструменты.</param>
-		/// <param name="board">Торговая площадка.</param>
-		/// <returns>Отфильтрованные инструменты.</returns>
+		/// <param name="securities">Securities.</param>
+		/// <param name="board">Trading board.</param>
+		/// <returns>Instruments filtered.</returns>
 		public static IEnumerable<Security> Filter(this IEnumerable<Security> securities, ExchangeBoard board)
 		{
 			if (securities == null)
@@ -1939,11 +1936,11 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Отфильтровать инструменты по заданному критерию.
+		/// To filter instruments by the given criteria.
 		/// </summary>
-		/// <param name="securities">Инструменты.</param>
-		/// <param name="criteria">Инструмент, поля которого будут использоваться в качестве фильтра.</param>
-		/// <returns>Отфильтрованные инструменты.</returns>
+		/// <param name="securities">Securities.</param>
+		/// <param name="criteria">The instrument whose fields will be used as a filter.</param>
+		/// <returns>Instruments filtered.</returns>
 		public static IEnumerable<Security> Filter(this IEnumerable<Security> securities, Security criteria)
 		{
 			if (securities == null)
@@ -2040,10 +2037,10 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Определить, является ли стакан пустым.
+		/// To determine, is the order book empty.
 		/// </summary>
-		/// <param name="depth">Стакан.</param>
-		/// <returns><see langword="true"/>, если стакан пустой, иначе, <see langword="false"/>.</returns>
+		/// <param name="depth">Market depth.</param>
+		/// <returns><see langword="true" />, if order book is empty, otherwise, <see langword="false" />.</returns>
 		public static bool IsFullEmpty(this MarketDepth depth)
 		{
 			if (depth == null)
@@ -2053,10 +2050,10 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Определить, является ли стакан пустым на половину.
+		/// To determine, is the order book half-empty.
 		/// </summary>
-		/// <param name="depth">Стакан.</param>
-		/// <returns><see langword="true"/>, если стакан пустой на половину, иначе, <see langword="false"/>.</returns>
+		/// <param name="depth">Market depth.</param>
+		/// <returns><see langword="true" />, if the order book is half-empty, otherwise, <see langword="false" />.</returns>
 		public static bool IsHalfEmpty(this MarketDepth depth)
 		{
 			if (depth == null)
@@ -2066,12 +2063,12 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Получить T+N дату.
+		/// To get the T+N date.
 		/// </summary>
-		/// <param name="board">Информация о площадке.</param>
-		/// <param name="date">Начальная дата T.</param>
-		/// <param name="n">Размер N.</param>
-		/// <returns>Конечная дата T+N.</returns>
+		/// <param name="board">Board info.</param>
+		/// <param name="date">The start T date.</param>
+		/// <param name="n">The N size.</param>
+		/// <returns>The end T+N date.</returns>
 		public static DateTimeOffset GetTPlusNDate(this ExchangeBoard board, DateTimeOffset date, int n)
 		{
 			if (board == null)
@@ -2179,24 +2176,24 @@ namespace StockSharp.Algo
 		//}
 
 		/// <summary>
-		/// Вычислить задержку на основе разницы между серверным времени и локальным.
+		/// To calculate delay based on difference between the server and local time.
 		/// </summary>
-		/// <param name="security">Инструмент.</param>
-		/// <param name="serverTime">Серверное время.</param>
-		/// <param name="localTime">Локальное время.</param>
-		/// <returns>Задержка.</returns>
+		/// <param name="security">Security.</param>
+		/// <param name="serverTime">Server time.</param>
+		/// <param name="localTime">Local time.</param>
+		/// <returns>Latency.</returns>
 		public static TimeSpan GetLatency(this Security security, DateTimeOffset serverTime, DateTime localTime)
 		{
 			return localTime - serverTime.LocalDateTime;
 		}
 
 		/// <summary>
-		/// Вычислить задержку на основе разницы между серверным времени и локальным.
+		/// To calculate delay based on difference between the server and local time.
 		/// </summary>
-		/// <param name="securityId">Идентификатор инструмента.</param>
-		/// <param name="serverTime">Серверное время.</param>
-		/// <param name="localTime">Локальное время.</param>
-		/// <returns>Задержка.</returns>
+		/// <param name="securityId">Security ID.</param>
+		/// <param name="serverTime">Server time.</param>
+		/// <param name="localTime">Local time.</param>
+		/// <returns>Latency.</returns>
 		public static TimeSpan GetLatency(this SecurityId securityId, DateTimeOffset serverTime, DateTime localTime)
 		{
 			var board = ExchangeBoard.GetBoard(securityId.BoardCode);
@@ -2208,11 +2205,11 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Получить размер свободных денежных средств в портфеле.
+		/// To get the size of clear funds in the portfolio.
 		/// </summary>
-		/// <param name="portfolio">Портфель</param>
-		/// <param name="useLeverage">Использовать ли для расчета размер плеча.</param>
-		/// <returns>Размер свободных денежных средств.</returns>
+		/// <param name="portfolio">Portfolio.</param>
+		/// <param name="useLeverage">Whether to use shoulder size for calculation.</param>
+		/// <returns>The size of clear funds.</returns>
 		public static decimal GetFreeMoney(this Portfolio portfolio, bool useLeverage = false)
 		{
 			if (portfolio == null)
@@ -2226,11 +2223,11 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Получить даты экспирации для <see cref="ExchangeBoard.Forts"/>.
+		/// To get the expiration date for <see cref="ExchangeBoard.Forts"/>.
 		/// </summary>
-		/// <param name="from">Начало диапазона экспираций.</param>
-		/// <param name="to">Окончание диапазона экспираций.</param>
-		/// <returns>Даты экспирации.</returns>
+		/// <param name="from">The start of the expiration range.</param>
+		/// <param name="to">The end of the expiration range.</param>
+		/// <returns>Expiration dates.</returns>
 		public static IEnumerable<DateTimeOffset> GetExpiryDates(this DateTime from, DateTime to)
 		{
 			if (from > to)
@@ -2268,14 +2265,14 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Получить для базовой части кода инструмента реальные экспирирующиеся инструменты.
+		/// To get real expirating instruments for base part of the code.
 		/// </summary>
-		/// <param name="baseCode">Базовая часть кода инструмента.</param>
-		/// <param name="from">Начало диапазона экспираций.</param>
-		/// <param name="to">Окончание диапазона экспираций.</param>
-		/// <param name="getSecurity">Функция для получения инструмента по коду.</param>
-		/// <param name="throwIfNotExists">Сгенерировать исключение, если какой-либо из инструментов отсутствует.</param>
-		/// <returns>Экспирирующиеся инструменты.</returns>
+		/// <param name="baseCode">The base part of the instrument code.</param>
+		/// <param name="from">The start of the expiration range.</param>
+		/// <param name="to">The end of the expiration range.</param>
+		/// <param name="getSecurity">The function to get instrument by the code.</param>
+		/// <param name="throwIfNotExists">To generate exception, if some of instruments are not available.</param>
+		/// <returns>Expirating instruments.</returns>
 		public static IEnumerable<Security> GetFortsJumps(this string baseCode, DateTime from, DateTime to, Func<string, Security> getSecurity, bool throwIfNotExists = true)
 		{
 			if (baseCode.IsEmpty())
@@ -2333,15 +2330,15 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Получить для непрерывного инструмента реальные экспирирующиеся инструменты.
+		/// To get real expirating instruments for the continuous instrument.
 		/// </summary>
-		/// <param name="continuousSecurity">Непрерывный инструмент.</param>
-		/// <param name="provider">Поставщик информации об инструментах.</param>
-		/// <param name="baseCode">Базовая часть кода инструмента.</param>
-		/// <param name="from">Начало диапазона экспираций.</param>
-		/// <param name="to">Окончание диапазона экспираций.</param>
-		/// <param name="throwIfNotExists">Сгенерировать исключение, если какой-либо из инструментов для переданного <paramref name="continuousSecurity"/> отсутствует.</param>
-		/// <returns>Экспирирующиеся инструменты.</returns>
+		/// <param name="continuousSecurity">Continuous security.</param>
+		/// <param name="provider">The provider of information about instruments.</param>
+		/// <param name="baseCode">The base part of the instrument code.</param>
+		/// <param name="from">The start of the expiration range.</param>
+		/// <param name="to">The end of the expiration range.</param>
+		/// <param name="throwIfNotExists">To generate exception, if some of instruments for passed <paramref name="continuousSecurity" /> are not available.</param>
+		/// <returns>Expirating instruments.</returns>
 		public static IEnumerable<Security> GetFortsJumps(this ContinuousSecurity continuousSecurity, ISecurityProvider provider, string baseCode, DateTime from, DateTime to, bool throwIfNotExists = true)
 		{
 			if (continuousSecurity == null)
@@ -2354,13 +2351,13 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Заполнить переходы <see cref="ContinuousSecurity.ExpirationJumps"/>.
+		/// To fill transitions <see cref="ContinuousSecurity.ExpirationJumps"/>.
 		/// </summary>
-		/// <param name="continuousSecurity">Непрерывный инструмент.</param>
-		/// <param name="provider">Поставщик информации об инструментах.</param>
-		/// <param name="baseCode">Базовая часть кода инструмента.</param>
-		/// <param name="from">Начало диапазона экспираций.</param>
-		/// <param name="to">Окончание диапазона экспираций.</param>
+		/// <param name="continuousSecurity">Continuous security.</param>
+		/// <param name="provider">The provider of information about instruments.</param>
+		/// <param name="baseCode">The base part of the instrument code.</param>
+		/// <param name="from">The start of the expiration range.</param>
+		/// <param name="to">The end of the expiration range.</param>
 		public static void FillFortsJumps(this ContinuousSecurity continuousSecurity, ISecurityProvider provider, string baseCode, DateTime from, DateTime to)
 		{
 			var securities = continuousSecurity.GetFortsJumps(provider, baseCode, from, to);
@@ -2417,10 +2414,10 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Сконвертировать портфель в денежную позицию.
+		/// To convert portfolio into the monetary position.
 		/// </summary>
-		/// <param name="portfolio">Портфель с торговым счетом.</param>
-		/// <returns>Денежная позиция.</returns>
+		/// <param name="portfolio">Portfolio with trading account.</param>
+		/// <returns>Money position.</returns>
 		public static Position ToCashPosition(this Portfolio portfolio)
 		{
 			return new CashPosition(portfolio);
@@ -2439,7 +2436,7 @@ namespace StockSharp.Algo
 			}
 
 			/// <summary>
-			/// Суммарное значение позиции.
+			/// The position aggregate value.
 			/// </summary>
 			decimal IPositionManager.Position
 			{
@@ -2460,20 +2457,20 @@ namespace StockSharp.Algo
 			}
 
 			/// <summary>
-			/// Рассчитать позицию по заявке.
+			/// To calculate position by the order.
 			/// </summary>
-			/// <param name="order">Заявка.</param>
-			/// <returns>Позиция по заявке.</returns>
+			/// <param name="order">Order.</param>
+			/// <returns>The position by the order.</returns>
 			decimal IPositionManager.ProcessOrder(Order order)
 			{
 				throw new NotSupportedException();
 			}
 
 			/// <summary>
-			/// Рассчитать позицию по сделке.
+			/// To calculate the position by the trade.
 			/// </summary>
-			/// <param name="trade">Сделка.</param>
-			/// <returns>Позиция по сделке.</returns>
+			/// <param name="trade">Trade.</param>
+			/// <returns>The position by the trade.</returns>
 			decimal IPositionManager.ProcessMyTrade(MyTrade trade)
 			{
 				throw new NotSupportedException();
@@ -2499,10 +2496,10 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Сконвертировать позицию в объект типа <see cref="IPositionManager"/>.
+		/// Convert the position object to the type <see cref="IPositionManager"/>.
 		/// </summary>
-		/// <param name="position">Позиция.</param>
-		/// <returns>Менеджера расчета позиции.</returns>
+		/// <param name="position">Position.</param>
+		/// <returns>Position calc manager.</returns>
 		public static IPositionManager ToPositionManager(this Position position)
 		{
 			if (position == null)
@@ -2512,24 +2509,24 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Записать сообщение о заявке в лог.
+		/// Write order info to the log.
 		/// </summary>
-		/// <param name="receiver">Получатель логов.</param>
-		/// <param name="order">Заявка.</param>
-		/// <param name="operation">Операция, которая проводится с заявкой.</param>
-		/// <param name="getAdditionalInfo">Дополнительная информация о заявке.</param>
+		/// <param name="receiver">Logs receiver.</param>
+		/// <param name="order">Order.</param>
+		/// <param name="operation">Order action name.</param>
+		/// <param name="getAdditionalInfo">Extended order info.</param>
 		public static void AddOrderInfoLog(this ILogReceiver receiver, Order order, string operation, Func<string> getAdditionalInfo = null)
 		{
 			receiver.AddOrderLog(LogLevels.Info, order, operation, getAdditionalInfo);
 		}
 
 		/// <summary>
-		/// Записать ошибку о заявке в лог.
+		/// Write order error to the log.
 		/// </summary>
-		/// <param name="receiver">Получатель логов.</param>
-		/// <param name="order">Заявка.</param>
-		/// <param name="operation">Операция, которая проводится с заявкой.</param>
-		/// <param name="getAdditionalInfo">Дополнительная информация о заявке.</param>
+		/// <param name="receiver">Logs receiver.</param>
+		/// <param name="order">Order.</param>
+		/// <param name="operation">Order action name.</param>
+		/// <param name="getAdditionalInfo">Extended order info.</param>
 		public static void AddOrderErrorLog(this ILogReceiver receiver, Order order, string operation, Func<string> getAdditionalInfo = null)
 		{
 			receiver.AddOrderLog(LogLevels.Error, order, operation, getAdditionalInfo);
@@ -2603,11 +2600,11 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Выполнить блокирующий поиск инструментов, соответствующих фильтру criteria.
+		/// To perform blocking search of instruments, corresponding to the criteria filter.
 		/// </summary>
-		/// <param name="connector">Подключение взаимодействия с торговой системой.</param>
-		/// <param name="criteria">Критерий поиска инструментов.</param>
-		/// <returns>Найденные инструменты.</returns>
+		/// <param name="connector">The connection of interaction with trading system.</param>
+		/// <param name="criteria">Instruments search criteria.</param>
+		/// <returns>Found instruments.</returns>
 		public static IEnumerable<Security> SyncLookupSecurities(this IConnector connector, Security criteria)
 		{
 			if (connector == null)
@@ -2623,10 +2620,10 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Применить изменения к портфелю.
+		/// Apply changes to the portfolio object.
 		/// </summary>
-		/// <param name="portfolio">Портфель.</param>
-		/// <param name="message">Сообщение об изменении портфеля.</param>
+		/// <param name="portfolio">Portfolio.</param>
+		/// <param name="message">Portfolio change message.</param>
 		public static void ApplyChanges(this Portfolio portfolio, PortfolioChangeMessage message)
 		{
 			if (portfolio == null)
@@ -2660,10 +2657,10 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Применить изменения к позиции.
+		/// Apply changes to the position object.
 		/// </summary>
-		/// <param name="position">Позиция.</param>
-		/// <param name="message">Сообщение об изменении позиции.</param>
+		/// <param name="position">Position.</param>
+		/// <param name="message">Position change message.</param>
 		public static void ApplyChanges(this Position position, PositionChangeMessage message)
 		{
 			if (position == null)
@@ -2731,12 +2728,12 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Применить изменения к инструменту.
+		/// Apply change to the security object.
 		/// </summary>
-		/// <param name="security">Инструмент.</param>
-		/// <param name="changes">Изменения.</param>
-		/// <param name="serverTime">Серверное время изменения.</param>
-		/// <param name="localTime">Метка локального времени, когда сообщение было получено/создано.</param>
+		/// <param name="security">Security.</param>
+		/// <param name="changes">Changes.</param>
+		/// <param name="serverTime">Change server time.</param>
+		/// <param name="localTime">Local time label when a message was received/created.</param>
 		public static void ApplyChanges(this Security security, IEnumerable<KeyValuePair<Level1Fields, object>> changes, DateTimeOffset serverTime, DateTime localTime)
 		{
 			if (security == null)
@@ -2965,10 +2962,10 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Применить изменения к инструменту.
+		/// Apply change to the security object.
 		/// </summary>
-		/// <param name="security">Инструмент.</param>
-		/// <param name="message">Изменения.</param>
+		/// <param name="security">Security.</param>
+		/// <param name="message">Changes.</param>
 		public static void ApplyChanges(this Security security, Level1ChangeMessage message)
 		{
 			if (security == null)
@@ -2981,14 +2978,14 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Добавить изменение в коллекцию.
+		/// Add change into collection.
 		/// </summary>
-		/// <typeparam name="TMessage">Тип сообщения с изменениями.</typeparam>
-		/// <typeparam name="TChange">Тип изменения.</typeparam>
-		/// <param name="message">Сообщение с изменениями.</param>
-		/// <param name="type">Вид изменения.</param>
-		/// <param name="value">Значение изменения.</param>
-		/// <returns>Сообщение с изменениями.</returns>
+		/// <typeparam name="TMessage">Change message type.</typeparam>
+		/// <typeparam name="TChange">Change type.</typeparam>
+		/// <param name="message">Change message.</param>
+		/// <param name="type">Change type.</param>
+		/// <param name="value">Change value.</param>
+		/// <returns>Change message.</returns>
 		public static TMessage Add<TMessage, TChange>(this TMessage message, TChange type, object value)
 			where TMessage : BaseChangeMessage<TChange>
 		{
@@ -2997,14 +2994,14 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Добавить изменение в коллекцию.
+		/// Add change into collection.
 		/// </summary>
-		/// <typeparam name="TMessage">Тип сообщения с изменениями.</typeparam>
-		/// <typeparam name="TChange">Тип изменения.</typeparam>
-		/// <param name="message">Сообщение с изменениями.</param>
-		/// <param name="type">Вид изменения.</param>
-		/// <param name="value">Значение изменения.</param>
-		/// <returns>Сообщение с изменениями.</returns>
+		/// <typeparam name="TMessage">Change message type.</typeparam>
+		/// <typeparam name="TChange">Change type.</typeparam>
+		/// <param name="message">Change message.</param>
+		/// <param name="type">Change type.</param>
+		/// <param name="value">Change value.</param>
+		/// <returns>Change message.</returns>
 		public static TMessage Add<TMessage, TChange>(this TMessage message, TChange type, decimal value)
 			where TMessage : BaseChangeMessage<TChange>
 		{
@@ -3012,14 +3009,14 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Добавить изменение в коллекцию.
+		/// Add change into collection.
 		/// </summary>
-		/// <typeparam name="TMessage">Тип сообщения с изменениями.</typeparam>
-		/// <typeparam name="TChange">Тип изменения.</typeparam>
-		/// <param name="message">Сообщение с изменениями.</param>
-		/// <param name="type">Вид изменения.</param>
-		/// <param name="value">Значение изменения.</param>
-		/// <returns>Сообщение с изменениями.</returns>
+		/// <typeparam name="TMessage">Change message type.</typeparam>
+		/// <typeparam name="TChange">Change type.</typeparam>
+		/// <param name="message">Change message.</param>
+		/// <param name="type">Change type.</param>
+		/// <param name="value">Change value.</param>
+		/// <returns>Change message.</returns>
 		public static TMessage Add<TMessage, TChange>(this TMessage message, TChange type, int value)
 			where TMessage : BaseChangeMessage<TChange>
 		{
@@ -3027,14 +3024,14 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Добавить изменение в коллекцию.
+		/// Add change into collection.
 		/// </summary>
-		/// <typeparam name="TMessage">Тип сообщения с изменениями.</typeparam>
-		/// <typeparam name="TChange">Тип изменения.</typeparam>
-		/// <param name="message">Сообщение с изменениями.</param>
-		/// <param name="type">Вид изменения.</param>
-		/// <param name="value">Значение изменения.</param>
-		/// <returns>Сообщение с изменениями.</returns>
+		/// <typeparam name="TMessage">Change message type.</typeparam>
+		/// <typeparam name="TChange">Change type.</typeparam>
+		/// <param name="message">Change message.</param>
+		/// <param name="type">Change type.</param>
+		/// <param name="value">Change value.</param>
+		/// <returns>Change message.</returns>
 		public static TMessage Add<TMessage, TChange>(this TMessage message, TChange type, long value)
 			where TMessage : BaseChangeMessage<TChange>
 		{
@@ -3042,14 +3039,14 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Добавить изменение в коллекцию, если значение отлично от 0.
+		/// To add a change to the collection, if value is other than 0.
 		/// </summary>
-		/// <typeparam name="TMessage">Тип сообщения с изменениями.</typeparam>
-		/// <typeparam name="TChange">Тип изменения.</typeparam>
-		/// <param name="message">Сообщение с изменениями.</param>
-		/// <param name="type">Вид изменения.</param>
-		/// <param name="value">Значение изменения.</param>
-		/// <returns>Сообщение с изменениями.</returns>
+		/// <typeparam name="TMessage">Change message type.</typeparam>
+		/// <typeparam name="TChange">Change type.</typeparam>
+		/// <param name="message">Change message.</param>
+		/// <param name="type">Change type.</param>
+		/// <param name="value">Change value.</param>
+		/// <returns>Change message.</returns>
 		public static TMessage TryAdd<TMessage, TChange>(this TMessage message, TChange type, decimal value)
 			where TMessage : BaseChangeMessage<TChange>
 		{
@@ -3060,14 +3057,14 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Добавить изменение в коллекцию, если значение отлично от 0 и <see langword="null"/>.
+		/// To add a change to the collection, if value is other than 0 and <see langword="null" />.
 		/// </summary>
-		/// <typeparam name="TMessage">Тип сообщения с изменениями.</typeparam>
-		/// <typeparam name="TChange">Тип изменения.</typeparam>
-		/// <param name="message">Сообщение с изменениями.</param>
-		/// <param name="type">Вид изменения.</param>
-		/// <param name="value">Значение изменения.</param>
-		/// <returns>Сообщение с изменениями.</returns>
+		/// <typeparam name="TMessage">Change message type.</typeparam>
+		/// <typeparam name="TChange">Change type.</typeparam>
+		/// <param name="message">Change message.</param>
+		/// <param name="type">Change type.</param>
+		/// <param name="value">Change value.</param>
+		/// <returns>Change message.</returns>
 		public static TMessage TryAdd<TMessage, TChange>(this TMessage message, TChange type, decimal? value)
 			where TMessage : BaseChangeMessage<TChange>
 		{
@@ -3078,14 +3075,14 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Добавить изменение в коллекцию, если значение отлично от 0.
+		/// To add a change to the collection, if value is other than 0.
 		/// </summary>
-		/// <typeparam name="TMessage">Тип сообщения с изменениями.</typeparam>
-		/// <typeparam name="TChange">Тип изменения.</typeparam>
-		/// <param name="message">Сообщение с изменениями.</param>
-		/// <param name="type">Вид изменения.</param>
-		/// <param name="value">Значение изменения.</param>
-		/// <returns>Сообщение с изменениями.</returns>
+		/// <typeparam name="TMessage">Change message type.</typeparam>
+		/// <typeparam name="TChange">Change type.</typeparam>
+		/// <param name="message">Change message.</param>
+		/// <param name="type">Change type.</param>
+		/// <param name="value">Change value.</param>
+		/// <returns>Change message.</returns>
 		public static TMessage TryAdd<TMessage, TChange>(this TMessage message, TChange type, int value)
 			where TMessage : BaseChangeMessage<TChange>
 		{
@@ -3096,14 +3093,14 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Добавить изменение в коллекцию, если значение отлично от 0 и <see langword="null"/>.
+		/// To add a change to the collection, if value is other than 0 and <see langword="null" />.
 		/// </summary>
-		/// <typeparam name="TMessage">Тип сообщения с изменениями.</typeparam>
-		/// <typeparam name="TChange">Тип изменения.</typeparam>
-		/// <param name="message">Сообщение с изменениями.</param>
-		/// <param name="type">Вид изменения.</param>
-		/// <param name="value">Значение изменения.</param>
-		/// <returns>Сообщение с изменениями.</returns>
+		/// <typeparam name="TMessage">Change message type.</typeparam>
+		/// <typeparam name="TChange">Change type.</typeparam>
+		/// <param name="message">Change message.</param>
+		/// <param name="type">Change type.</param>
+		/// <param name="value">Change value.</param>
+		/// <returns>Change message.</returns>
 		public static TMessage TryAdd<TMessage, TChange>(this TMessage message, TChange type, int? value)
 			where TMessage : BaseChangeMessage<TChange>
 		{
@@ -3114,14 +3111,14 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Добавить изменение в коллекцию, если значение отлично от 0.
+		/// To add a change to the collection, if value is other than 0.
 		/// </summary>
-		/// <typeparam name="TMessage">Тип сообщения с изменениями.</typeparam>
-		/// <typeparam name="TChange">Тип изменения.</typeparam>
-		/// <param name="message">Сообщение с изменениями.</param>
-		/// <param name="type">Вид изменения.</param>
-		/// <param name="value">Значение изменения.</param>
-		/// <returns>Сообщение с изменениями.</returns>
+		/// <typeparam name="TMessage">Change message type.</typeparam>
+		/// <typeparam name="TChange">Change type.</typeparam>
+		/// <param name="message">Change message.</param>
+		/// <param name="type">Change type.</param>
+		/// <param name="value">Change value.</param>
+		/// <returns>Change message.</returns>
 		public static TMessage TryAdd<TMessage, TChange>(this TMessage message, TChange type, long value)
 			where TMessage : BaseChangeMessage<TChange>
 		{
@@ -3132,10 +3129,10 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Преобразовать тип валюты в название в формате ММВБ.
+		/// To convert the currency type into the name in the MICEX format.
 		/// </summary>
-		/// <param name="type">Тип валюты.</param>
-		/// <returns>Название валюты в формате ММВБ.</returns>
+		/// <param name="type">Currency type.</param>
+		/// <returns>The currency name in the MICEX format.</returns>
 		public static string ToMicexCurrencyName(this CurrencyTypes type)
 		{
 			switch (type)
@@ -3148,10 +3145,10 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Преобразовать название валюты в формате ММВБ в <see cref="CurrencyTypes"/>.
+		/// To �onvert the currency name in the MICEX format into <see cref="CurrencyTypes"/>.
 		/// </summary>
-		/// <param name="name">Название валюты в формате ММВБ.</param>
-		/// <returns>Тип валюты. Если название валюты пустое, то будет возвращено <see langword="null"/>.</returns>
+		/// <param name="name">The currency name in the MICEX format.</param>
+		/// <returns>Currency type. If the value is empty, <see langword="null" /> will be returned.</returns>
 		public static CurrencyTypes? FromMicexCurrencyName(this string name)
 		{
 			if (name.IsEmpty())
@@ -3168,11 +3165,11 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Получить период для режима.
+		/// Get period for schedule.
 		/// </summary>
-		/// <param name="time">Режим торгов.</param>
-		/// <param name="date">Дата во времени, для которой будет искать подходящий период.</param>
-		/// <returns>Период расписания. Если ни один период не подходит, то будет возвращено <see langword="null"/>.</returns>
+		/// <param name="time">Trading schedule.</param>
+		/// <param name="date">The date in time for search of appropriate period.</param>
+		/// <returns>The schedule period. If no period is appropriate, <see langword="null" /> is returned.</returns>
 		public static WorkingTimePeriod GetPeriod(this WorkingTime time, DateTime date)
 		{
 			if (time == null)
@@ -3182,12 +3179,11 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Получить описание инструмента по классу.
+		/// To get the instrument description by the class.
 		/// </summary>
-		/// <param name="securityClassInfo">Описание классов инструментов, в зависимости от которых будут проставляться параметры в <see cref="SecurityMessage.SecurityType"/> и <see cref="SecurityId.BoardCode"/>.</param>
-		/// <param name="secClass">Класс инструмента.</param>
-		/// <returns>Описание инструмента. Если класс не найден,
-		/// то будет возвращено значение <see langword="null"/> в качестве типа инструмента.</returns>
+		/// <param name="securityClassInfo">Description of the class of securities, depending on which will be marked in the <see cref="SecurityMessage.SecurityType"/> and <see cref="SecurityId.BoardCode"/>.</param>
+		/// <param name="secClass">Security class.</param>
+		/// <returns>The instrument description. If the class is not found, than <see langword="null" /> value is returned as instrument type.</returns>
 		public static Tuple<SecurityTypes?, string> GetSecurityClassInfo(this IDictionary<string, RefPair<SecurityTypes, string>> securityClassInfo, string secClass)
 		{
 			var pair = securityClassInfo.TryGetValue(secClass);
@@ -3195,11 +3191,11 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Получить код площадки для класса инструмента.
+		/// To get the board code for the instrument class.
 		/// </summary>
-		/// <param name="adapter">Адаптер к торговой системе.</param>
-		/// <param name="secClass">Класс инструмента.</param>
-		/// <returns>Код площадки.</returns>
+		/// <param name="adapter">Adapter to the trading system.</param>
+		/// <param name="secClass">Security class.</param>
+		/// <returns>Board code.</returns>
 		public static string GetBoardCode(this IMessageAdapter adapter, string secClass)
 		{
 			if (adapter == null)
@@ -3209,22 +3205,22 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Получить шаг цены на основе точности.
+		/// To get the price increment on the basis of accuracy.
 		/// </summary>
-		/// <param name="decimals">Точность.</param>
-		/// <returns>Шаг цены.</returns>
+		/// <param name="decimals">Decimals.</param>
+		/// <returns>Price step.</returns>
 		public static decimal GetPriceStep(this int decimals)
 		{
 			return 1m / 10.Pow(decimals);
 		}
 
 		/// <summary>
-		/// Разделитель, заменяющий '/' в пути для инструментов вида USD/EUR. Равен '__'.
+		/// The delimiter, replacing '/' in path for instruments of USD/EUR type. Is equal to '__'.
 		/// </summary>
 		public const string SecurityPairSeparator = "__";
 
 		/// <summary>
-		/// Разделитель, заменяющий '*' в пути для инструментов вида C.BPO-*@CANADIAN. Равен '##STAR##'.
+		/// The delimiter, replacing '*' in the path for instruments of the C.BPO-*@CANADIAN type. Is equal to '##STAR##'.
 		/// </summary>
 		public const string SecurityStarSeparator = "##STAR##";
 
@@ -3237,10 +3233,10 @@ namespace StockSharp.Algo
 		};
 
 		/// <summary>
-		/// Преобразовать идентификатор инструмента в название директории с заменой зарезервированных символов.
+		/// To convert the instrument identifier into the folder name, replacing reserved symbols.
 		/// </summary>
-		/// <param name="id">Идентификатор инструмента.</param>
-		/// <returns>Название директории.</returns>
+		/// <param name="id">Security ID.</param>
+		/// <returns>Directory name.</returns>
 		public static string SecurityIdToFolderName(this string id)
 		{
 			if (id.IsEmpty())
@@ -3258,10 +3254,10 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Обратное преобразование от метода <see cref="SecurityIdToFolderName"/>.
+		/// The inverse conversion from the <see cref="SecurityIdToFolderName(System.String)"/> method.
 		/// </summary>
-		/// <param name="folderName">Название директории.</param>
-		/// <returns>Идентификатор инструмента.</returns>
+		/// <param name="folderName">Directory name.</param>
+		/// <returns>Security ID.</returns>
 		public static string FolderNameToSecurityId(this string folderName)
 		{
 			if (folderName.IsEmpty())
@@ -3278,21 +3274,21 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Преобразовать параметр свечи в название директории с заменой зарезервированных символов.
+		/// Convert candle parameter into folder name replacing the reserved symbols.
 		/// </summary>
-		/// <param name="arg">Параметр свечи.</param>
-		/// <returns>Название директории.</returns>
+		/// <param name="arg">Candle arg.</param>
+		/// <returns>Directory name.</returns>
 		public static string CandleArgToFolderName(object arg)
 		{
 			return arg == null ? string.Empty : arg.ToString().Replace(":", "-");
 		}
 
 		/// <summary>
-		/// Получить инструмент по идентификатору.
+		/// To get the instrument by the identifier.
 		/// </summary>
-		/// <param name="provider">Поставщик информации об инструментах.</param>
-		/// <param name="id">Идентификатор инструмента.</param>
-		/// <returns>Полученный инструмент. Если инструмент по данным критериям отсутствует, то будет возвращено <see langword="null"/>.</returns>
+		/// <param name="provider">The provider of information about instruments.</param>
+		/// <param name="id">Security ID.</param>
+		/// <returns>The got instrument. If there is no instrument by given criteria, <see langword="null" /> is returned.</returns>
 		public static Security LookupById(this ISecurityProvider provider, string id)
 		{
 			if (provider == null)
@@ -3305,11 +3301,11 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Получить инструмент по коду инструмента.
+		/// To get the instrument by the instrument code.
 		/// </summary>
-		/// <param name="provider">Поставщик информации об инструментах.</param>
-		/// <param name="code">Код инструмента.</param>
-		/// <returns>Полученный инструмент. Если инструмент по данным критериям отсутствует, то будет возвращено <see langword="null"/>.</returns>
+		/// <param name="provider">The provider of information about instruments.</param>
+		/// <param name="code">Security code.</param>
+		/// <returns>The got instrument. If there is no instrument by given criteria, <see langword="null" /> is returned.</returns>
 		public static IEnumerable<Security> LookupByCode(this ISecurityProvider provider, string code)
 		{
 			if (provider == null)
@@ -3322,10 +3318,10 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Получить все доступные инструменты.
+		/// Get all available instruments.
 		/// </summary>
-		/// <param name="provider">Поставщик информации об инструментах.</param>
-		/// <returns>Все доступные инструменты.</returns>
+		/// <param name="provider">The provider of information about instruments.</param>
+		/// <returns>All available instruments.</returns>
 		public static IEnumerable<Security> LookupAll(this ISecurityProvider provider)
 		{
 			if (provider == null)
@@ -3335,9 +3331,9 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Удалить все инструменты.
+		/// To delete all instruments.
 		/// </summary>
-		/// <param name="storage">Хранилище информации об инструментах.</param>
+		/// <param name="storage">Securities meta info storage.</param>
 		public static void DeleteAll(this ISecurityStorage storage)
 		{
 			if (storage == null)
@@ -3347,13 +3343,13 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Получить значение маркет-данных для инструмента.
+		/// To get the value of market data for the instrument.
 		/// </summary>
-		/// <typeparam name="T">Тип значения поля маркет-данных.</typeparam>
-		/// <param name="provider">Поставщик маркет-данных.</param>
-		/// <param name="security">Инструмент.</param>
-		/// <param name="field">Поле маркет-данных.</param>
-		/// <returns>Значение поля. Если данных нет, то будет возвращено <see langword="null"/>.</returns>
+		/// <typeparam name="T">The type of the market data field value.</typeparam>
+		/// <param name="provider">The market data provider.</param>
+		/// <param name="security">Security.</param>
+		/// <param name="field">Market-data field.</param>
+		/// <returns>The field value. If no data, the <see langword="null" /> will be returned.</returns>
 		public static T GetSecurityValue<T>(this IMarketDataProvider provider, Security security, Level1Fields field)
 		{
 			if (provider == null)
@@ -3366,11 +3362,11 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Получить все значения маркет-данных для инструмента.
+		/// To get all market data values for the instrument.
 		/// </summary>
-		/// <param name="provider">Поставщик маркет-данных.</param>
-		/// <param name="security">Инструмент.</param>
-		/// <returns>Значения полей. Если данных нет, то будет возвращено <see langword="null"/>.</returns>
+		/// <param name="provider">The market data provider.</param>
+		/// <param name="security">Security.</param>
+		/// <returns>Filed values. If there is no data, <see langword="null" /> is returned.</returns>
 		public static IDictionary<Level1Fields, object> GetSecurityValues(this IMarketDataProvider provider, Security security)
 		{
 			if (provider == null)
@@ -3388,11 +3384,11 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Привести адаптер к типу <typeparamref name="T"/>.
+		/// To deduce the adapter to the <typeparamref name="T" /> type.
 		/// </summary>
-		/// <typeparam name="T">Тип адаптера.</typeparam>
-		/// <param name="adapter">Исходный адаптер.</param>
-		/// <returns>Адаптер.</returns>
+		/// <typeparam name="T">The adapter type.</typeparam>
+		/// <param name="adapter">The initial adapter.</param>
+		/// <returns>Adapter.</returns>
 		public static T To<T>(this IMessageAdapter adapter)
 			where T : class, IMessageAdapter
 		{
@@ -3413,12 +3409,12 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Преобразовать адаптер в <see cref="ChannelMessageAdapter"/>.
+		/// To convert the adapter into <see cref="ChannelMessageAdapter"/>.
 		/// </summary>
-		/// <param name="adapter">Адаптер.</param>
-		/// <param name="connector">Подключение. Используется для определения имени канала.</param>
-		/// <param name="name">Имя канала.</param>
-		/// <returns>Адаптер сообщений, пересылающий сообщения через транспортный канал <see cref="IMessageChannel"/>.</returns>
+		/// <param name="adapter">Adapter.</param>
+		/// <param name="connector">The connection. It is used to determine the channel name.</param>
+		/// <param name="name">The channel name.</param>
+		/// <returns>Message adapter, forward messages through a transport channel <see cref="IMessageChannel"/>.</returns>
 		public static ChannelMessageAdapter ToChannel(this IMessageAdapter adapter, Connector connector, string name = null)
 		{
 			name = name ?? connector.GetType().GetDisplayName();
@@ -3432,30 +3428,30 @@ namespace StockSharp.Algo
 		private const double _maxValue = (double)decimal.MaxValue;
 
 		/// <summary>
-		/// Перевести <see cref="double"/> в <see cref="decimal"/>. Если исходное значение <see cref="double.IsNaN"/> или <see cref="double.IsInfinity"/>, то будет возвращено <see langword="null"/>.
+		/// To convert <see cref="Double"/> into <see cref="Decimal"/>. If the initial value is <see cref="double.NaN"/> or <see cref="double.IsInfinity"/>, <see langword="null" /> is returned.
 		/// </summary>
-		/// <param name="value"><see cref="double"/> значение.</param>
-		/// <returns><see cref="decimal"/> значение.</returns>
+		/// <param name="value"><see cref="Double"/> value.</param>
+		/// <returns><see cref="Decimal"/> value.</returns>
 		public static decimal? ToDecimal(this double value)
 		{
 			return value.IsInfinity() || value.IsNaN() || value < _minValue || value > _maxValue ? (decimal?)null : (decimal)value;
 		}
 
 		/// <summary>
-		/// Перевести <see cref="float"/> в <see cref="decimal"/>. Если исходное значение <see cref="float.IsNaN"/> или <see cref="float.IsInfinity"/>, то будет возвращено <see langword="null"/>.
+		/// To convert <see cref="Single"/> into <see cref="Decimal"/>. If the initial value is <see cref="float.NaN"/> or <see cref="float.IsInfinity"/>, <see langword="null" /> is returned.
 		/// </summary>
-		/// <param name="value"><see cref="float"/> значение.</param>
-		/// <returns><see cref="decimal"/> значение.</returns>
+		/// <param name="value"><see cref="Single"/> value.</param>
+		/// <returns><see cref="Decimal"/> value.</returns>
 		public static decimal? ToDecimal(this float value)
 		{
 			return value.IsInfinity() || value.IsNaN() || value < _minValue || value > _maxValue ? (decimal?)null : (decimal)value;
 		}
 
 		/// <summary>
-		/// Получить для инструмента тип в стандарте ISO 10962.
+		/// To get the type for the instrument in the ISO 10962 standard.
 		/// </summary>
-		/// <param name="security">Инструмент.</param>
-		/// <returns>Тип в стандарте ISO 10962.</returns>
+		/// <param name="security">Security.</param>
+		/// <returns>Type in ISO 10962 standard.</returns>
 		public static string GetIso10962(this Security security)
 		{
 			if (security == null)
@@ -3517,10 +3513,10 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Преобразовать тип в стандарте ISO 10962 в <see cref="SecurityTypes"/>.
+		/// To convert the type in the ISO 10962 standard into <see cref="SecurityTypes"/>.
 		/// </summary>
-		/// <param name="type">Тип в стандарте ISO 10962.</param>
-		/// <returns>Тип инструмента.</returns>
+		/// <param name="type">Type in ISO 10962 standard.</param>
+		/// <returns>Security type.</returns>
 		public static SecurityTypes? FromIso10962(string type)
 		{
 			if (type.IsEmpty())
@@ -3611,10 +3607,10 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Получить количество операции, или выбросить исключение, если информация отсутствует.
+		/// To get the number of operations, or discard the exception, if no information available.
 		/// </summary>
-		/// <param name="message">Операции.</param>
-		/// <returns>Количество.</returns>
+		/// <param name="message">Operations.</param>
+		/// <returns>Quantity.</returns>
 		public static decimal SafeGetVolume(this ExecutionMessage message)
 		{
 			if (message == null)
@@ -3633,10 +3629,10 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Получить идентификатор заявки, или выбросить исключение, если информация отсутствует.
+		/// To get order identifier, or discard exception, if no information available.
 		/// </summary>
-		/// <param name="message">Операции.</param>
-		/// <returns>Идентификатор заявки.</returns>
+		/// <param name="message">Operations.</param>
+		/// <returns>Order ID.</returns>
 		public static long SafeGetOrderId(this ExecutionMessage message)
 		{
 			if (message == null)
@@ -3719,20 +3715,20 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Преобразовать level1 данные в тиковые.
+		/// To convert level1 data into tick data.
 		/// </summary>
-		/// <param name="level1">Level1 данные.</param>
-		/// <returns>Тиковые данные.</returns>
+		/// <param name="level1">Level1 data.</param>
+		/// <returns>Tick data.</returns>
 		public static IEnumerableEx<ExecutionMessage> ToTicks(this IEnumerableEx<Level1ChangeMessage> level1)
 		{
 			return new TickEnumerable(level1);
 		}
 
 		/// <summary>
-		/// Проверить, если ли в level1 данных тиковые.
+		/// To check, are there tick data in the level1 data.
 		/// </summary>
-		/// <param name="level1">Level1 данные.</param>
-		/// <returns>Результат проверки.</returns>
+		/// <param name="level1">Level1 data.</param>
+		/// <returns>The test result.</returns>
 		public static bool IsContainsTick(this Level1ChangeMessage level1)
 		{
 			if (level1 == null)
@@ -3742,10 +3738,10 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Преобразовать level1 данные в тиковые.
+		/// To convert level1 data into tick data.
 		/// </summary>
-		/// <param name="level1">Level1 данные.</param>
-		/// <returns>Тиковые данные.</returns>
+		/// <param name="level1">Level1 data.</param>
+		/// <returns>Tick data.</returns>
 		public static ExecutionMessage ToTick(this Level1ChangeMessage level1)
 		{
 			if (level1 == null)
@@ -3866,20 +3862,20 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Преобразовать level1 данные в стаканы.
+		/// To convert level1 data into order books.
 		/// </summary>
-		/// <param name="level1">Level1 данные.</param>
-		/// <returns>Стаканы.</returns>
+		/// <param name="level1">Level1 data.</param>
+		/// <returns>Market depths.</returns>
 		public static IEnumerableEx<QuoteChangeMessage> ToOrderBooks(this IEnumerableEx<Level1ChangeMessage> level1)
 		{
 			return new OrderBookEnumerable(level1);
 		}
 
 		/// <summary>
-		/// Проверить, если ли в level1 котировки.
+		/// To check, are there quotes in the level1.
 		/// </summary>
-		/// <param name="level1">Level1 данные.</param>
-		/// <returns>Котировки.</returns>
+		/// <param name="level1">Level1 data.</param>
+		/// <returns>Quotes.</returns>
 		public static bool IsContainsQuotes(this Level1ChangeMessage level1)
 		{
 			if (level1 == null)

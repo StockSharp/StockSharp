@@ -1,4 +1,4 @@
-﻿namespace StockSharp.Algo.Storages
+namespace StockSharp.Algo.Storages
 {
 	using System;
 	using System.Collections.Generic;
@@ -14,21 +14,21 @@
 	using StockSharp.BusinessEntities;
 
 	/// <summary>
-	/// Базовый класс для представления в виде списка торговых объектов, хранящихся в базе данных.
+	/// The base class for representation in the form of list of trade objects, stored in database.
 	/// </summary>
-	/// <typeparam name="T">Тип торгового объекта (например, <see cref="Security"/> или <see cref="MyTrade"/>).</typeparam>
+	/// <typeparam name="T">The type of the trading object (for example, <see cref="Security"/> or <see cref="MyTrade"/>).</typeparam>
 	public abstract class BaseStorageEntityList<T> : HierarchicalPageLoadList<T>, IStorageEntityList<T>, ICollectionEx<T>
 		where T : class
 	{
 		private readonly SyncObject _syncRoot = new SyncObject();
 
 		/// <summary>
-		/// Объект синхронизации.
+		/// The object of synchronization.
 		/// </summary>
 		public SyncObject SyncRoot { get { return _syncRoot; } }
 
 		/// <summary>
-		/// Поле, обозначающее время.
+		/// The time designating field.
 		/// </summary>
 		protected virtual Field TimeField
 		{
@@ -36,18 +36,18 @@
 		}
 
 		/// <summary>
-		/// Инициализировать <see cref="BaseStorageEntityList{T}"/>.
+		/// Initialize <see cref="BaseStorageEntityList{T}"/>.
 		/// </summary>
-		/// <param name="storage">Специальный интерфейс для прямого доступа к хранилищу.</param>
+		/// <param name="storage">The special interface for direct access to the storage.</param>
 		protected BaseStorageEntityList(IStorage storage)
 			: base(storage)
 		{
 		}
 
 		/// <summary>
-		/// Добавить торговый объект в коллекцию.
+		/// To add the trading object to the collection.
 		/// </summary>
-		/// <param name="entity">Торговый объект.</param>
+		/// <param name="entity">The trading object.</param>
 		public override void Add(T entity)
 		{
 			if (entity == null)
@@ -57,12 +57,10 @@
 		}
 
 		/// <summary>
-		/// Удалить торговый объект из коллекции.
+		/// To delete the trading object from the collection.
 		/// </summary>
-		/// <returns>
-		/// <see langword="true"/>, если элемент был удален. Иначе, <see langword="false"/>.
-		/// </returns>
-		/// <param name="entity">Торговый объект.</param>
+		/// <param name="entity">The trading object.</param>
+		/// <returns><see langword="true" />, if the element was deleted. Otherwise, <see langword="false" />.</returns>
 		public override bool Remove(T entity)
 		{
 			if (entity == null)
@@ -72,9 +70,9 @@
 		}
 
 		/// <summary>
-		/// Сохранить торговый объект.
+		/// To save the trading object.
 		/// </summary>
-		/// <param name="entity">Торговый объект.</param>
+		/// <param name="entity">The trading object.</param>
 		public override void Save(T entity)
 		{
 			if (entity == null)
@@ -85,19 +83,19 @@
 		}
 
 		/// <summary>
-		/// Загрузить последние созданные данные.
+		/// To load last created data.
 		/// </summary>
-		/// <param name="count">Количество запрашиваемых данных.</param>
-		/// <returns>Диапазон данных.</returns>
+		/// <param name="count">The amount of requested data.</param>
+		/// <returns>The data range.</returns>
 		public virtual IEnumerable<T> ReadLasts(int count)
 		{
 			return ReadLasts(count, TimeField);
 		}
 
 		/// <summary>
-		/// Вызывается при добавлении элемента в хранилище.
+		/// It is called when adding element to the storage.
 		/// </summary>
-		/// <param name="entity">Торговый объект.</param>
+		/// <param name="entity">The trading object.</param>
 		protected override void OnAdd(T entity)
 		{
 			lock (SyncRoot)
@@ -105,7 +103,7 @@
 		}
 
 		/// <summary>
-		/// Вызывается при удалении всех элементов в хранилище.
+		/// It is called at deleting all elements in the storage.
 		/// </summary>
 		protected override void OnClear()
 		{
@@ -114,9 +112,9 @@
 		}
 
 		/// <summary>
-		/// Вызывается при получении количества элементов в хранилище.
+		/// It is called at getting number of elements in the storage.
 		/// </summary>
-		/// <returns>Количество элементов в хранилище.</returns>
+		/// <returns>The number of elements in the storage.</returns>
 		protected override long OnGetCount()
 		{
 			lock (SyncRoot)
@@ -124,13 +122,13 @@
 		}
 
 		/// <summary>
-		/// Вызывается при выборке элементов из хранилища.
+		/// It is called at selection elements from the storage.
 		/// </summary>
-		/// <param name="startIndex">Индекс первого элемента.</param>
-		/// <param name="count">Число элементов.</param>
-		/// <param name="orderBy">Условие сортировки.</param>
-		/// <param name="direction">Направление сортировки.</param>
-		/// <returns>Набор элементов.</returns>
+		/// <param name="startIndex">First element index.</param>
+		/// <param name="count">The number of elements.</param>
+		/// <param name="orderBy">The sorting condition.</param>
+		/// <param name="direction">The sorting direction.</param>
+		/// <returns>The set of elements.</returns>
 		protected override IEnumerable<T> OnGetGroup(long startIndex, long count, Field orderBy, ListSortDirection direction)
 		{
 			lock (SyncRoot)
@@ -138,9 +136,9 @@
 		}
 
 		/// <summary>
-		/// Вызывается при удалении элемента из хранилища.
+		/// It is called when deleting element from the storage.
 		/// </summary>
-		/// <param name="entity">Элемент.</param>
+		/// <param name="entity">Element.</param>
 		protected override void OnRemove(T entity)
 		{
 			lock (SyncRoot)
@@ -148,9 +146,9 @@
 		}
 
 		/// <summary>
-		/// Вызывается при обновлении элемента в хранилище.
+		/// It is called at renewal element in the storage.
 		/// </summary>
-		/// <param name="entity">Элемент.</param>
+		/// <param name="entity">Element.</param>
 		protected override void OnUpdate(T entity)
 		{
 			lock (SyncRoot)
@@ -158,30 +156,30 @@
 		}
 
 		/// <summary>
-		/// Добавить элементы.
+		/// To add items.
 		/// </summary>
-		/// <param name="items">Новые элементы.</param>
+		/// <param name="items">New items.</param>
 		public void AddRange(IEnumerable<T> items)
 		{
 			items.ForEach(Add);
 		}
 
 		/// <summary>
-		/// Удалить элементы.
+		/// To delete elements.
 		/// </summary>
-		/// <param name="items">Элементы, которые необходимо удалить.</param>
-		/// <returns>Удаленные элементы.</returns>
+		/// <param name="items">Elements to be deleted.</param>
+		/// <returns>Deleted elements.</returns>
 		public IEnumerable<T> RemoveRange(IEnumerable<T> items)
 		{
 			return CollectionHelper.RemoveRange(this, items);
 		}
 
 		/// <summary>
-		/// Удалить элементы.
+		/// To delete elements.
 		/// </summary>
-		/// <param name="index">Индекс, начиная с которого необходимо удалить элементы.</param>
-		/// <param name="count">Количество удаляемых элементов.</param>
-		/// <returns>Количество удаленных элементов.</returns>
+		/// <param name="index">The index, starting with which the elements have to be deleted.</param>
+		/// <param name="count">The number of elements to be deleted.</param>
+		/// <returns>The number of deleted elements.</returns>
 		public int RemoveRange(int index, int count)
 		{
 			throw new NotSupportedException();

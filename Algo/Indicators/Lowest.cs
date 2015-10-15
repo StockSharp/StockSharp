@@ -7,14 +7,14 @@ namespace StockSharp.Algo.Indicators
 	using StockSharp.Localization;
 
 	/// <summary>
-	/// Минимальное значение за период.
+	/// Minimum value for a period.
 	/// </summary>
 	[DisplayName("Lowest")]
 	[DescriptionLoc(LocalizedStrings.Str743Key)]
 	public class Lowest : LengthIndicator<decimal>
 	{
 		/// <summary>
-		/// Создать <see cref="Lowest"/>.
+		/// Initializes a new instance of the <see cref="Lowest"/>.
 		/// </summary>
 		public Lowest()
 		{
@@ -22,10 +22,10 @@ namespace StockSharp.Algo.Indicators
 		}
 
 		/// <summary>
-		/// Обработать входное значение.
+		/// To handle the input value.
 		/// </summary>
-		/// <param name="input">Входное значение.</param>
-		/// <returns>Результирующее значение.</returns>
+		/// <param name="input">The input value.</param>
+		/// <returns>The resulting value.</returns>
 		protected override IIndicatorValue OnProcess(IIndicatorValue input)
 		{
 			var newValue = input.GetValue<decimal>();

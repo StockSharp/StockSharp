@@ -1,40 +1,40 @@
-﻿namespace StockSharp.Algo.Candles.Compression
+namespace StockSharp.Algo.Candles.Compression
 {
 	using System;
 	using System.Collections.Generic;
 
 	/// <summary>
-	/// Интерфейс контейнера, хранящего данные.
+	/// The interface of the container storing data.
 	/// </summary>
 	public interface ICandleBuilderContainer : IDisposable
 	{
 		/// <summary>
-		/// Время хранения <see cref="ICandleBuilderSourceValue"/> в памяти. По-умолчанию равно нулю (хранение отсутствует).
+		/// The time of <see cref="ICandleBuilderSourceValue"/> storage in memory. The default is zero (no storage).
 		/// </summary>
 		TimeSpan ValuesKeepTime { get; set; }
 
 		/// <summary>
-		/// Известить контейнер для начале получения данных для серии.
+		/// To notify the container about the start of the data getting for the series.
 		/// </summary>
-		/// <param name="series">Серия свечек.</param>
-		/// <param name="from">Начальная дата, с которой будут получаться данные.</param>
-		/// <param name="to">Конечная дата, до которой будут получаться данные.</param>
+		/// <param name="series">Candles series.</param>
+		/// <param name="from">The initial date from which data will be get.</param>
+		/// <param name="to">The final date by which data will be get.</param>
 		void Start(CandleSeries series, DateTimeOffset from, DateTimeOffset to);
 
 		/// <summary>
-		/// Добавить данные для свечи.
+		/// To add data for the candle.
 		/// </summary>
-		/// <param name="series">Серия свечек.</param>
-		/// <param name="candle">Свеча, для которой нужно добавить данные.</param>
-		/// <param name="value">Новые данные.</param>
+		/// <param name="series">Candles series.</param>
+		/// <param name="candle">The candle for which you need to add data.</param>
+		/// <param name="value">New data.</param>
 		void AddValue(CandleSeries series, Candle candle, ICandleBuilderSourceValue value);
 
 		/// <summary>
-		/// Получить все данные по свече.
+		/// To get all data by the candle.
 		/// </summary>
-		/// <param name="series">Серия свечек.</param>
-		/// <param name="candle">Свеча, по которой нужно найти данные.</param>
-		/// <returns>Найденные данные.</returns>
+		/// <param name="series">Candles series.</param>
+		/// <param name="candle">The candle for which you need to find data.</param>
+		/// <returns>Found data.</returns>
 		IEnumerable<ICandleBuilderSourceValue> GetValues(CandleSeries series, Candle candle);
 	}
 }

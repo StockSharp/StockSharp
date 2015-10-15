@@ -3,30 +3,30 @@ namespace StockSharp.Algo.Strategies
 	using System;
 
 	/// <summary>
-	/// Результаты работы одной итерации торговой стратегии.
+	/// Results of the trading strategy one iteration operation.
 	/// </summary>
 	public enum ProcessResults
 	{
 		/// <summary>
-		/// Продолжить работу дальше.
+		/// To continue the operation.
 		/// </summary>
 		Continue,
 
 		/// <summary>
-		/// Прекратить работу стратегии.
+		/// To stop the strategy operation.
 		/// </summary>
 		Stop,
 	}
 
 	/// <summary>
-	/// Торговая стратегия, основанное на тайм-фрейме.
+	/// The timeframe based trade strategy.
 	/// </summary>
 	public abstract class TimeFrameStrategy : Strategy
 	{
 	    /// <summary>
-	    /// Инициализировать <see cref="TimeFrameStrategy"/>.
+	    /// Initialize <see cref="TimeFrameStrategy"/>.
 	    /// </summary>
-	    /// <param name="timeFrame">Таймфрейм стратегии.</param>
+	    /// <param name="timeFrame">The startegy timeframe.</param>
 	    protected TimeFrameStrategy(TimeSpan timeFrame)
 		{
 			_interval = this.Param("Interval", timeFrame);
@@ -36,7 +36,7 @@ namespace StockSharp.Algo.Strategies
 		private readonly StrategyParam<TimeSpan> _timeFrame;
 
         /// <summary>
-        /// Таймфрейм стратегии.
+        /// The startegy timeframe.
         /// </summary>
         public TimeSpan TimeFrame
         {
@@ -47,7 +47,7 @@ namespace StockSharp.Algo.Strategies
 		private readonly StrategyParam<TimeSpan> _interval;
 
 		/// <summary>
-		/// Интервал запуска стратегии. По умолчанию равен <see cref="TimeFrame"/>.
+		/// The startegy start-up interval. By default, it equals to <see cref="TimeFrameStrategy.TimeFrame"/>.
 		/// </summary>
 		public TimeSpan Interval
 		{
@@ -56,7 +56,7 @@ namespace StockSharp.Algo.Strategies
 		}
 
 		/// <summary>
-		/// Метод вызывается тогда, когда вызвался метод <see cref="Strategy.Start"/>, и состояние <see cref="Strategy.ProcessState"/> перешло в значение <see cref="ProcessStates.Started"/>.
+		/// The method is called when the <see cref="Strategy.Start"/> method has been called and the <see cref="Strategy.ProcessState"/> state has been taken the <see cref="ProcessStates.Started"/> value.
 		/// </summary>
 		protected override void OnStarted()
 		{
@@ -82,11 +82,9 @@ namespace StockSharp.Algo.Strategies
 		}
 
 		/// <summary>
-		/// Реализация торгового алгоритма.
+		/// The implementation of the trade algorithm.
 		/// </summary>
-		/// <returns>
-		/// Результат работы одной итерации торгового алгоритма.
-		/// </returns>
+		/// <returns>The result of trade algorithm one iteration operation.</returns>
 		protected abstract ProcessResults OnProcess();
 	}
 }

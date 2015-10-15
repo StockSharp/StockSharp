@@ -9,7 +9,7 @@ namespace StockSharp.Algo.Indicators
 	using StockSharp.Localization;
 
 	/// <summary>
-	/// Линейная регрессия - Value возвращает прогноз последней точки.
+	/// Linear regression - Value returns the last point prediction.
 	/// </summary>
 	[DisplayName("LinearReg")]
 	[DescriptionLoc(LocalizedStrings.Str734Key)]
@@ -19,7 +19,7 @@ namespace StockSharp.Algo.Indicators
 		private decimal _slope;
 
 		/// <summary>
-		/// Создать <see cref="LinearReg"/>.
+		/// Initializes a new instance of the <see cref="LinearReg"/>.
 		/// </summary>
 		public LinearReg()
 		{
@@ -27,7 +27,7 @@ namespace StockSharp.Algo.Indicators
 		}
 
 		/// <summary>
-		/// Сбросить состояние индикатора на первоначальное. Метод вызывается каждый раз, когда меняются первоначальные настройки (например, длина периода).
+		/// To reset the indicator status to initial. The method is called each time when initial settings are changed (for example, the length of period).
 		/// </summary>
 		public override void Reset()
 		{
@@ -36,10 +36,10 @@ namespace StockSharp.Algo.Indicators
 		}
 
 		/// <summary>
-		/// Обработать входное значение.
+		/// To handle the input value.
 		/// </summary>
-		/// <param name="input">Входное значение.</param>
-		/// <returns>Результирующее значение.</returns>
+		/// <param name="input">The input value.</param>
+		/// <returns>The resulting value.</returns>
 		protected override IIndicatorValue OnProcess(IIndicatorValue input)
 		{
 			var newValue = input.GetValue<decimal>();

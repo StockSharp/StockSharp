@@ -8,10 +8,10 @@ namespace StockSharp.Algo.Indicators
 	using StockSharp.Localization;
 
 	/// <summary>
-	/// Gator осцилятор.
+	/// Gator oscillator.
 	/// </summary>
 	/// <remarks>
-	/// http://ta.mql4.com/indicators/bills/gator
+	/// http://ta.mql4.com/indicators/bills/gator.
 	/// </remarks>
 	[DisplayName("Gator")]
 	[DescriptionLoc(LocalizedStrings.Str850Key)]
@@ -20,7 +20,7 @@ namespace StockSharp.Algo.Indicators
 		private readonly Alligator _alligator;
 
 		/// <summary>
-		/// Создать <see cref="GatorOscillator"/>.
+		/// Initializes a new instance of the <see cref="GatorOscillator"/>.
 		/// </summary>
 		public GatorOscillator()
 		{
@@ -32,11 +32,11 @@ namespace StockSharp.Algo.Indicators
 		}
 
 		/// <summary>
-		/// Создать <see cref="GatorOscillator"/>.
+		/// Initializes a new instance of the <see cref="GatorOscillator"/>.
 		/// </summary>
-		/// <param name="alligator">Аллигатор.</param>
-		/// <param name="histogram1">Верхняя гистограмма.</param>
-		/// <param name="histogram2">Нижняя гистограмма.</param>
+		/// <param name="alligator">Alligator.</param>
+		/// <param name="histogram1">Top histogram.</param>
+		/// <param name="histogram2">Lower histogram.</param>
 		public GatorOscillator(Alligator alligator, GatorHistogram histogram1, GatorHistogram histogram2)
 			: base(histogram1, histogram2)
 		{
@@ -49,7 +49,7 @@ namespace StockSharp.Algo.Indicators
 		}
 
 		/// <summary>
-		/// Верхняя гистограмма.
+		/// Top histogram.
 		/// </summary>
 		[ExpandableObject]
 		[DisplayName("Histogram1")]
@@ -58,7 +58,7 @@ namespace StockSharp.Algo.Indicators
 		public GatorHistogram Histogram1 { get; private set; }
 
 		/// <summary>
-		/// Нижняя гистограмма.
+		/// Lower histogram.
 		/// </summary>
 		[ExpandableObject]
 		[DisplayName("Histogram2")]
@@ -67,7 +67,7 @@ namespace StockSharp.Algo.Indicators
 		public GatorHistogram Histogram2 { get; private set; }
 
 		/// <summary>
-		/// Сформирован ли индикатор.
+		/// Whether the indicator is set.
 		/// </summary>
 		public override bool IsFormed
 		{
@@ -78,10 +78,10 @@ namespace StockSharp.Algo.Indicators
 		}
 
 		/// <summary>
-		/// Обработать входное значение.
+		/// To handle the input value.
 		/// </summary>
-		/// <param name="input">Входное значение.</param>
-		/// <returns>Результирующее значение.</returns>
+		/// <param name="input">The input value.</param>
+		/// <returns>The resulting value.</returns>
 		protected override IIndicatorValue OnProcess(IIndicatorValue input)
 		{
 			_alligator.Process(input);

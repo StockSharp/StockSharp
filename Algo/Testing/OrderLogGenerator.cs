@@ -1,4 +1,4 @@
-﻿namespace StockSharp.Algo.Testing
+namespace StockSharp.Algo.Testing
 {
 	using System;
 
@@ -9,7 +9,7 @@
 	using StockSharp.Messages;
 
 	/// <summary>
-	/// Генератор лога заявок случайным методом.
+	/// The orders log generator using random method.
 	/// </summary>
 	public class OrderLogGenerator : MarketDataGenerator
 	{
@@ -17,19 +17,19 @@
 		private readonly SynchronizedQueue<ExecutionMessage> _activeOrders = new SynchronizedQueue<ExecutionMessage>(); 
 
 		/// <summary>
-		/// Создать <see cref="OrderLogGenerator"/>.
+		/// Initializes a new instance of the <see cref="OrderLogGenerator"/>.
 		/// </summary>
-		/// <param name="securityId">Идентификатор инструмента, для которого необходимо генерировать данные.</param>
+		/// <param name="securityId">The identifier of the instrument, for which data shall be generated.</param>
 		public OrderLogGenerator(SecurityId securityId)
 			: this(securityId, new RandomWalkTradeGenerator(securityId))
 		{
 		}
 
 		/// <summary>
-		/// Создать <see cref="OrderLogGenerator"/>.
+		/// Initializes a new instance of the <see cref="OrderLogGenerator"/>.
 		/// </summary>
-		/// <param name="securityId">Идентификатор инструмента, для которого необходимо генерировать данные.</param>
-		/// <param name="tradeGenerator">Генератор тиковых сделок случайным методом.</param>
+		/// <param name="securityId">The identifier of the instrument, for which data shall be generated.</param>
+		/// <param name="tradeGenerator">Tick trades generator using random method.</param>
 		public OrderLogGenerator(SecurityId securityId, TradeGenerator tradeGenerator)
 			: base(securityId)
 		{
@@ -43,7 +43,7 @@
 		}
 
 		/// <summary>
-		/// Тип маркет-данных.
+		/// Market data type.
 		/// </summary>
 		public override MarketDataTypes DataType
 		{
@@ -51,14 +51,14 @@
 		}
 
 		/// <summary>
-		/// Генератор тиковых сделок случайным методом.
+		/// Tick trades generator using random method.
 		/// </summary>
 		public TradeGenerator TradeGenerator { get; private set; }
 
 		private IdGenerator _idGenerator;
 
 		/// <summary>
-		/// Генератор идентификатора заявки <see cref="Order.Id"/>.
+		/// The order identifier generator <see cref="Order.Id"/>.
 		/// </summary>
 		public IdGenerator IdGenerator
 		{
@@ -73,7 +73,7 @@
 		}
 
 		/// <summary>
-		/// Инициализировать состояние генератора.
+		/// To initialize the generator state.
 		/// </summary>
 		public override void Init()
 		{
@@ -82,11 +82,10 @@
 		}
 
 		/// <summary>
-		/// Обработать сообщение.
+		/// Process message.
 		/// </summary>
-		/// <param name="message">Сообщение.</param>
-		/// <returns>Результат обработки. Если будет возрвщено <see langword="null"/>,
-		/// то генератору пока недостаточно данных для генерации нового сообщения.</returns>
+		/// <param name="message">Message.</param>
+		/// <returns>The result of processing. If <see langword="null" /> is returned, then generator has no sufficient data to generate new message.</returns>
 		public override Message Process(Message message)
 		{
 			if (message.Type == MessageTypes.Security)
@@ -96,11 +95,10 @@
 		}
 
 		/// <summary>
-		/// Обработать сообщение.
+		/// Process message.
 		/// </summary>
-		/// <param name="message">Сообщение.</param>
-		/// <returns>Результат обработки. Если будет возрвщено <see langword="null"/>,
-		/// то генератору пока недостаточно данных для генерации нового сообщения.</returns>
+		/// <param name="message">Message.</param>
+		/// <returns>The result of processing. If <see langword="null" /> is returned, then generator has no sufficient data to generate new message.</returns>
 		protected override Message OnProcess(Message message)
 		{
 			DateTimeOffset time;
@@ -241,9 +239,9 @@
 		}
 
 		/// <summary>
-		/// Создать копию <see cref="MarketDataGenerator"/>.
+		/// Create a copy of <see cref="MarketDataGenerator"/>.
 		/// </summary>
-		/// <returns>Копия.</returns>
+		/// <returns>Copy.</returns>
 		public override MarketDataGenerator Clone()
 		{
 			return new OrderLogGenerator(SecurityId, (TradeGenerator)TradeGenerator.Clone())

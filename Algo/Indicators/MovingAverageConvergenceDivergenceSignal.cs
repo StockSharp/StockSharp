@@ -7,14 +7,14 @@ namespace StockSharp.Algo.Indicators
 	using Xceed.Wpf.Toolkit.PropertyGrid.Attributes;
 
 	/// <summary>
-	/// Схождение/расхождение скользящих средних с сигнальной линией.
+	/// Convergence/divergence of moving averages with signal line.
 	/// </summary>
 	[DisplayName("MACD Signal")]
 	[DescriptionLoc(LocalizedStrings.Str803Key)]
 	public class MovingAverageConvergenceDivergenceSignal : BaseComplexIndicator
 	{
 		/// <summary>
-		/// Создать <see cref="MovingAverageConvergenceDivergenceSignal"/>.
+		/// Initializes a new instance of the <see cref="MovingAverageConvergenceDivergenceSignal"/>.
 		/// </summary>
 		public MovingAverageConvergenceDivergenceSignal()
 			: this(new MovingAverageConvergenceDivergence(), new ExponentialMovingAverage { Length = 9 })
@@ -22,10 +22,10 @@ namespace StockSharp.Algo.Indicators
 		}
 
 		/// <summary>
-		/// Создать <see cref="MovingAverageConvergenceDivergenceSignal"/>.
+		/// Initializes a new instance of the <see cref="MovingAverageConvergenceDivergenceSignal"/>.
 		/// </summary>
-		/// <param name="macd">Схождение/расхождение скользящих средних.</param>
-		/// <param name="signalMa">Сигнальная скользящая средняя.</param>
+		/// <param name="macd">Convergence/divergence of moving averages.</param>
+		/// <param name="signalMa">Signalling Voving Average.</param>
 		public MovingAverageConvergenceDivergenceSignal(MovingAverageConvergenceDivergence macd, ExponentialMovingAverage signalMa)
 			: base(macd, signalMa)
 		{
@@ -35,7 +35,7 @@ namespace StockSharp.Algo.Indicators
 		}
 
 		/// <summary>
-		/// Схождение/расхождение скользящих средних.
+		/// Convergence/divergence of moving averages.
 		/// </summary>
 		[ExpandableObject]
 		[DisplayName("MACD")]
@@ -44,7 +44,7 @@ namespace StockSharp.Algo.Indicators
 		public MovingAverageConvergenceDivergence Macd { get; private set; }
 
 		/// <summary>
-		/// Сигнальная скользящая средняя.
+		/// Signalling Voving Average.
 		/// </summary>
 		[ExpandableObject]
 		[DisplayNameLoc(LocalizedStrings.Str804Key)]

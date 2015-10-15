@@ -1,4 +1,4 @@
-﻿namespace StockSharp.Algo.Indicators
+namespace StockSharp.Algo.Indicators
 {
 	using System.ComponentModel;
 
@@ -6,7 +6,7 @@
 	/// Double Exponential Moving Average.
 	/// </summary>
 	/// <remarks>
-	/// ((2 * EMA) – EMA of EMA)
+	/// ((2 * EMA) – EMA of EMA).
 	/// </remarks>
 	[DisplayName("DEMA")]
 	[Description("Double Exponential Moving Average")]
@@ -16,7 +16,7 @@
 		private readonly ExponentialMovingAverage _ema2;
 
 		/// <summary>
-		/// Создать <see cref="DoubleExponentialMovingAverage"/>.
+		/// Initializes a new instance of the <see cref="DoubleExponentialMovingAverage"/>.
 		/// </summary>
 		public DoubleExponentialMovingAverage()
 		{
@@ -27,7 +27,7 @@
 		}
 
 		/// <summary>
-		/// Сбросить состояние индикатора на первоначальное. Метод вызывается каждый раз, когда меняются первоначальные настройки (например, длина периода).
+		/// To reset the indicator status to initial. The method is called each time when initial settings are changed (for example, the length of period).
 		/// </summary>
 		public override void Reset()
 		{
@@ -36,7 +36,7 @@
 		}
 
 		/// <summary>
-		/// Сформирован ли индикатор.
+		/// Whether the indicator is set.
 		/// </summary>
 		public override bool IsFormed
 		{
@@ -44,10 +44,10 @@
 		}
 
 		/// <summary>
-		/// Обработать входное значение.
+		/// To handle the input value.
 		/// </summary>
-		/// <param name="input">Входное значение.</param>
-		/// <returns>Результирующее значение.</returns>
+		/// <param name="input">The input value.</param>
+		/// <returns>The resulting value.</returns>
 		protected override IIndicatorValue OnProcess(IIndicatorValue input)
 		{
 			var ema1Value = _ema1.Process(input);

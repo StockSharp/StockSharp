@@ -10,12 +10,12 @@ namespace StockSharp.Algo.Indicators
 	using StockSharp.Localization;
 
 	/// <summary>
-	/// Базовый индикатор.
+	/// The base Indicator.
 	/// </summary>
 	public abstract class BaseIndicator : Cloneable<IIndicator>, IIndicator
 	{
 		/// <summary>
-		/// Инициализировать <see cref="BaseIndicator"/>, который работает с данными типа <see cref="decimal"/>.
+		/// To initialize <see cref="BaseIndicator"/> which works with the <see cref="Decimal"/> data type.
 		/// </summary>
 		protected BaseIndicator()
 		{
@@ -25,7 +25,7 @@ namespace StockSharp.Algo.Indicators
 		private Guid _id = Guid.NewGuid();
 
 		/// <summary>
-		/// Уникальный идентификатор.
+		/// Unique ID.
 		/// </summary>
 		[Browsable(false)]
 		public Guid Id
@@ -36,7 +36,7 @@ namespace StockSharp.Algo.Indicators
 		private string _name;
 
 		/// <summary>
-		/// Название индикатора.
+		/// Indicator name.
 		/// </summary>
 		[DisplayNameLoc(LocalizedStrings.NameKey)]
 		[DescriptionLoc(LocalizedStrings.Str908Key)]
@@ -54,7 +54,7 @@ namespace StockSharp.Algo.Indicators
 		}
 
 		/// <summary>
-		/// Сбросить состояние индикатора на первоначальное. Метод вызывается каждый раз, когда меняются первоначальные настройки (например, длина периода).
+		/// To reset the indicator status to initial. The method is called each time when initial settings are changed (for example, the length of period).
 		/// </summary>
 		public virtual void Reset()
 		{
@@ -64,9 +64,9 @@ namespace StockSharp.Algo.Indicators
 		}
 
 		/// <summary>
-		/// Сохранить настройки.
+		/// Save settings.
 		/// </summary>
-		/// <param name="storage">Хранилище настроек.</param>
+		/// <param name="storage">Settings storage.</param>
 		public virtual void Save(SettingsStorage storage)
 		{
 			storage.SetValue("Id", _id);
@@ -74,9 +74,9 @@ namespace StockSharp.Algo.Indicators
 		}
 
 		/// <summary>
-		/// Загрузить настройки.
+		/// Load settings.
 		/// </summary>
-		/// <param name="storage">Хранилище настроек.</param>
+		/// <param name="storage">Settings storage.</param>
 		public virtual void Load(SettingsStorage storage)
 		{
 			_id = storage.GetValue<Guid>("Id");
@@ -84,7 +84,7 @@ namespace StockSharp.Algo.Indicators
 		}
 
 		/// <summary>
-		/// Сформирован ли индикатор.
+		/// Whether the indicator is set.
 		/// </summary>
 		[Browsable(false)]
 		public virtual bool IsFormed { get; protected set; }
@@ -92,7 +92,7 @@ namespace StockSharp.Algo.Indicators
 		private readonly IIndicatorContainer _container = new IndicatorContainer();
 
 		/// <summary>
-		/// Контейнер, хранящий данные индикатора.
+		/// The container storing indicator data.
 		/// </summary>
 		[Browsable(false)]
 		public IIndicatorContainer Container
@@ -101,20 +101,20 @@ namespace StockSharp.Algo.Indicators
 		}
 
 		/// <summary>
-		/// Событие об изменении индикатора (например, добавлено новое значение).
+		/// The indicator change event (for example, a new value is added).
 		/// </summary>
 		public event Action<IIndicatorValue, IIndicatorValue> Changed;
 
 		/// <summary>
-		/// Событие о сбросе состояния индикатора на первоначальное. Событие вызывается каждый раз, когда меняются первоначальные настройки (например, длина периода).
+		/// The event of resetting the indicator status to initial. The event is called each time when initial settings are changed (for example, the length of period).
 		/// </summary>
 		public event Action Reseted;
 
 		/// <summary>
-		/// Обработать входное значение.
+		/// To handle the input value.
 		/// </summary>
-		/// <param name="input">Входное значение.</param>
-		/// <returns>Результирующее значение.</returns>
+		/// <param name="input">The input value.</param>
+		/// <returns>The resulting value.</returns>
 		public virtual IIndicatorValue Process(IIndicatorValue input)
 		{
 			var result = OnProcess(input);
@@ -135,17 +135,17 @@ namespace StockSharp.Algo.Indicators
 		}
 
 		/// <summary>
-		/// Обработать входное значение.
+		/// To handle the input value.
 		/// </summary>
-		/// <param name="input">Входное значение.</param>
-		/// <returns>Результирующее значение.</returns>
+		/// <param name="input">The input value.</param>
+		/// <returns>The resulting value.</returns>
 		protected abstract IIndicatorValue OnProcess(IIndicatorValue input);
 
 		/// <summary>
-		/// Вызвать событие <see cref="Changed"/>.
+		/// To call the event <see cref="BaseIndicator.Changed"/>.
 		/// </summary>
-		/// <param name="input">Входное значение индикатора.</param>
-		/// <param name="result">Результирующее значение индикатора.</param>
+		/// <param name="input">The input value of the indicator.</param>
+		/// <param name="result">The resulting value of the indicator.</param>
 		protected void RaiseChangedEvent(IIndicatorValue input, IIndicatorValue result)
 		{
 			if (input == null)
@@ -158,18 +158,18 @@ namespace StockSharp.Algo.Indicators
 		}
 
 		/// <summary>
-		/// Создать копию <see cref="IIndicator"/>.
+		/// Create a copy of <see cref="IIndicator"/>.
 		/// </summary>
-		/// <returns>Копия.</returns>
+		/// <returns>Copy.</returns>
 		public override IIndicator Clone()
 		{
 			return PersistableHelper.Clone(this);
 		}
 
 		/// <summary>
-		/// Получить строковое представление.
+		/// Returns a string that represents the current object.
 		/// </summary>
-		/// <returns>Строковое представление.</returns>
+		/// <returns>A string that represents the current object.</returns>
 		public override string ToString()
 		{
 			return Name;

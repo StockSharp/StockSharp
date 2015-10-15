@@ -23,14 +23,14 @@ namespace StockSharp.Algo.Indicators
 		private int _newTrend;
 
 		/// <summary>
-		/// Направление тренда.
+		/// The trend direction.
 		/// </summary>
 		private int _trend;
 
 		private decimal _multiple;
 
 		/// <summary>
-		/// Множитель.
+		/// Multiplication factor.
 		/// </summary>
 		[DisplayNameLoc(LocalizedStrings.Str806Key)]
 		[DescriptionLoc(LocalizedStrings.Str807Key)]
@@ -74,7 +74,7 @@ namespace StockSharp.Algo.Indicators
 		//}
 
 		/// <summary>
-		/// Создать <see cref="NickRypockTrailingReverse"/>.
+		/// Initializes a new instance of the <see cref="NickRypockTrailingReverse"/>.
 		/// </summary>
 		public NickRypockTrailingReverse()
 		{
@@ -83,10 +83,10 @@ namespace StockSharp.Algo.Indicators
 		}
 
 		/// <summary>
-		/// Обработать входное значение.
+		/// To handle the input value.
 		/// </summary>
-		/// <param name="input">Входное значение.</param>
-		/// <returns>Результирующее значение.</returns>
+		/// <param name="input">The input value.</param>
+		/// <returns>The resulting value.</returns>
 		protected override IIndicatorValue OnProcess(IIndicatorValue input)
 		{
 			if (_isInitialized == false)
@@ -161,7 +161,7 @@ namespace StockSharp.Algo.Indicators
 		}
 
 		/// <summary>
-		/// Сбросить состояние индикатора на первоначальное. Метод вызывается каждый раз, когда меняются первоначальные настройки (например, длина периода).
+		/// To reset the indicator status to initial. The method is called each time when initial settings are changed (for example, the length of period).
 		/// </summary>
 		public override void Reset()
 		{
@@ -177,9 +177,9 @@ namespace StockSharp.Algo.Indicators
 		}
 
 		/// <summary>
-		/// Загрузить настройки.
+		/// Load settings.
 		/// </summary>
-		/// <param name="settings">Хранилище настроек.</param>
+		/// <param name="settings">Settings storage.</param>
 		public override void Load(SettingsStorage settings)
 		{
 			base.Load(settings);
@@ -188,9 +188,9 @@ namespace StockSharp.Algo.Indicators
 		}
 
 		/// <summary>
-		/// Сохранить настройки.
+		/// Save settings.
 		/// </summary>
-		/// <param name="settings">Хранилище настроек.</param>
+		/// <param name="settings">Settings storage.</param>
 		public override void Save(SettingsStorage settings)
 		{
 			base.Save(settings);

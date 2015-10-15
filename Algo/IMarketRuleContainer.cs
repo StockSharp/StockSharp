@@ -5,42 +5,42 @@ namespace StockSharp.Algo
 	using StockSharp.Logging;
 
 	/// <summary>
-	/// Интерфейс, описывающий контейнер правил.
+	/// The interface, describing the rules container.
 	/// </summary>
 	public interface IMarketRuleContainer : ILogReceiver
 	{
 		/// <summary>
-		/// Состояние работы.
+		/// The operation state.
 		/// </summary>
 		ProcessStates ProcessState { get; }
 
 		/// <summary>
-		/// Активировать правило.
+		/// To activate the rule.
 		/// </summary>
-		/// <param name="rule">Правило.</param>
-		/// <param name="process">Обработчик, возвращающий <see langword="true"/>, если правило закончило свою работу, иначе - <see langword="false"/>.</param>
+		/// <param name="rule">Rule.</param>
+		/// <param name="process">The processor returning <see langword="true" /> if the rule has ended its operation, otherwise - <see langword="false" />.</param>
 		void ActivateRule(IMarketRule rule, Func<bool> process);
 
 		/// <summary>
-		/// Приостановлено ли исполнение правил.
+		/// Is rules execution suspended.
 		/// </summary>
 		/// <remarks>
-		/// Приостановка правил происходит через метод <see cref="SuspendRules()"/>.
+		/// Rules suspension is performed through the method <see cref="IMarketRuleContainer.SuspendRules"/>.
 		/// </remarks>
 		bool IsRulesSuspended { get; }
 
 		/// <summary>
-		/// Приостановить исполнение правил до следующего восстановления через метод <see cref="ResumeRules"/>.
+		/// To suspend rules execution until next restoration through the method <see cref="IMarketRuleContainer.ResumeRules"/>.
 		/// </summary>
 		void SuspendRules();
 
 		/// <summary>
-		/// Восстановить исполнение правил, остановленное через метод <see cref="SuspendRules()"/>.
+		/// To restore rules execution, suspended through the method <see cref="IMarketRuleContainer.SuspendRules"/>.
 		/// </summary>
 		void ResumeRules();
 
 		/// <summary>
-		/// Зарегистрированные правила.
+		/// Registered rules.
 		/// </summary>
 		IMarketRuleList Rules { get; }
 	}

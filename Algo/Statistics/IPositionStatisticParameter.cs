@@ -7,20 +7,20 @@ namespace StockSharp.Algo.Statistics
 	using StockSharp.Localization;
 
 	/// <summary>
-	/// Интерфейс, описывающий параметр статистики, рассчитывающийся на основе позиции.
+	/// The interface, describing statistic parameter, calculated based on position.
 	/// </summary>
 	public interface IPositionStatisticParameter
 	{
 		/// <summary>
-		/// Добавить в параметр новое значение позиции.
+		/// To add the new position value to the parameter.
 		/// </summary>
-		/// <param name="marketTime">Биржевое время.</param>
-		/// <param name="position">Новое значение позиции.</param>
+		/// <param name="marketTime">The exchange time.</param>
+		/// <param name="position">The new position value.</param>
 		void Add(DateTimeOffset marketTime, decimal position);
 	}
 
 	/// <summary>
-	/// Максимальный размер длинной позиции.
+	/// Maximum long position size.
 	/// </summary>
 	[DisplayNameLoc(LocalizedStrings.Str970Key)]
 	[DescriptionLoc(LocalizedStrings.Str971Key)]
@@ -28,10 +28,10 @@ namespace StockSharp.Algo.Statistics
 	public class MaxLongPositionParameter : BaseStatisticParameter<decimal>, IPositionStatisticParameter
 	{
 		/// <summary>
-		/// Добавить в параметр новое значение позиции.
+		/// To add the new position value to the parameter.
 		/// </summary>
-		/// <param name="marketTime">Биржевое время.</param>
-		/// <param name="position">Новое значение позиции.</param>
+		/// <param name="marketTime">The exchange time.</param>
+		/// <param name="position">The new position value.</param>
 		public void Add(DateTimeOffset marketTime, decimal position)
 		{
 			if (position > 0)
@@ -40,7 +40,7 @@ namespace StockSharp.Algo.Statistics
 	}
 
 	/// <summary>
-	/// Максимальный размер короткой позиции.
+	/// Maximum short position size.
 	/// </summary>
 	[DisplayNameLoc(LocalizedStrings.Str973Key)]
 	[DescriptionLoc(LocalizedStrings.Str974Key)]
@@ -48,10 +48,10 @@ namespace StockSharp.Algo.Statistics
 	public class MaxShortPositionParameter : BaseStatisticParameter<decimal>, IPositionStatisticParameter
 	{
 		/// <summary>
-		/// Добавить в параметр новое значение позиции.
+		/// To add the new position value to the parameter.
 		/// </summary>
-		/// <param name="marketTime">Биржевое время.</param>
-		/// <param name="position">Новое значение позиции.</param>
+		/// <param name="marketTime">The exchange time.</param>
+		/// <param name="position">The new position value.</param>
 		public void Add(DateTimeOffset marketTime, decimal position)
 		{
 			if (position < 0)

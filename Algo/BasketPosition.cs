@@ -1,16 +1,16 @@
-﻿namespace StockSharp.Algo
+namespace StockSharp.Algo
 {
 	using System.Collections.Generic;
 
 	using StockSharp.BusinessEntities;
 
 	/// <summary>
-	/// Корзина позиций, которые принадлежат <see cref="BasketPortfolio"/>.
+	/// The basket with positions which belong to <see cref="BasketPortfolio"/>.
 	/// </summary>
 	public abstract class BasketPosition : Position
 	{
 		/// <summary>
-		/// Позиции, из которых создана данная корзина.
+		/// Positions from which this basket is created.
 		/// </summary>
 		public abstract IEnumerable<Position> InnerPositions { get; }
 	}

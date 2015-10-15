@@ -1,4 +1,4 @@
-﻿namespace StockSharp.Algo.Indicators
+namespace StockSharp.Algo.Indicators
 {
 	using System.ComponentModel;
 
@@ -7,14 +7,14 @@
 	using Xceed.Wpf.Toolkit.PropertyGrid.Attributes;
 
 	/// <summary>
-	/// Стохастический Осциллятор.
+	/// The stochastic oscillator.
 	/// </summary>
 	[DisplayName("Stochastic Oscillator")]
 	[Description("Stochastic Oscillator")]
 	public class StochasticOscillator : BaseComplexIndicator
 	{
 		/// <summary>
-		/// Создать <see cref="StochasticOscillator"/>.
+		/// Initializes a new instance of the <see cref="StochasticOscillator"/>.
 		/// </summary>
 		public StochasticOscillator()
 		{

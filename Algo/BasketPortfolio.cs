@@ -1,4 +1,4 @@
-﻿namespace StockSharp.Algo
+namespace StockSharp.Algo
 {
 	using System;
 	using System.Collections.Generic;
@@ -12,25 +12,25 @@
 	using StockSharp.Messages;
 
 	/// <summary>
-	/// Корзина портфелей.
+	/// Basket portfolio.
 	/// </summary>
 	public abstract class BasketPortfolio : Portfolio
 	{
 		/// <summary>
-		/// Портфели, из которых создана данная корзина.
+		/// Portfolios from which this basket is created.
 		/// </summary>
 		[Browsable(false)]
 		public abstract IEnumerable<Portfolio> InnerPortfolios { get; }
 
 		/// <summary>
-		/// Позиции, из которых создана данная корзина.
+		/// Positions from which this basket is created.
 		/// </summary>
 		[Browsable(false)]
 		public abstract IEnumerable<BasketPosition> InnerPositions { get; }
 	}
 
 	/// <summary>
-	/// Корзина портфелей, основанная на весах <see cref="Weights"/>.
+	/// Portfolios basket based on the weights <see cref="WeightedPortfolio.Weights"/>.
 	/// </summary>
 	public class WeightedPortfolio : BasketPortfolio
 	{
@@ -170,7 +170,7 @@
 		}
 
 		/// <summary>
-		/// Создать <see cref="WeightedPortfolio"/>.
+		/// Initializes a new instance of the <see cref="WeightedPortfolio"/>.
 		/// </summary>
 		public WeightedPortfolio()
 		{
@@ -180,7 +180,7 @@
 		private readonly WeightsDictionary _weights;
 
 		/// <summary>
-		/// Инструменты и их весовые коэффициенты в корзине.
+		/// Instruments and their weighting coefficients in the basket.
 		/// </summary>
 		public SynchronizedDictionary<Portfolio, decimal> Weights
 		{
@@ -188,7 +188,7 @@
 		}
 
 		/// <summary>
-		/// Портфели, из которых создана данная корзина.
+		/// Portfolios from which this basket is created.
 		/// </summary>
 		public override IEnumerable<Portfolio> InnerPortfolios
 		{
@@ -196,7 +196,7 @@
 		}
 
 		/// <summary>
-		/// Позиции, из которых создана данная корзина.
+		/// Positions from which this basket is created.
 		/// </summary>
 		public override IEnumerable<BasketPosition> InnerPositions
 		{

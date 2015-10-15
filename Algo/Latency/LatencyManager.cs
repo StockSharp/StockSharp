@@ -11,7 +11,7 @@ namespace StockSharp.Algo.Latency
 	using StockSharp.Localization;
 
 	/// <summary>
-	/// Менеджер расчета задержки регистрации заявок.
+	/// Orders registration delay calculation manager.
 	/// </summary>
 	public class LatencyManager : ILatencyManager
 	{
@@ -20,29 +20,27 @@ namespace StockSharp.Algo.Latency
 		private readonly Dictionary<long, DateTime> _cancel = new Dictionary<long, DateTime>();
 
 		/// <summary>
-		/// Создать <see cref="LatencyManager"/>
+		/// Initializes a new instance of the <see cref="LatencyManager"/>.
 		/// </summary>
 		public LatencyManager()
 		{
 		}
 
 		/// <summary>
-		/// Суммарное значение задержки регистрации по всем заявкам.
+		/// The aggregate value of registration delay by all orders.
 		/// </summary>
 		public virtual TimeSpan LatencyRegistration { get; private set; }
 
 		/// <summary>
-		/// Суммарное значение задержки отмены по всем заявкам.
+		/// The aggregate value of cancelling delay by all orders.
 		/// </summary>
 		public virtual TimeSpan LatencyCancellation { get; private set; }
 
 		/// <summary>
-		/// Обработать сообщение для вычисления задержки транзакции. Принимаются сообщения типа
-		/// <see cref="OrderRegisterMessage"/>, <see cref="OrderReplaceMessage"/>, <see cref="OrderPairReplaceMessage"/>,
-		/// <see cref="OrderCancelMessage"/> и <see cref="ExecutionMessage"/>.
+		/// To process the message for transaction delay calculation. Messages of types <see cref="OrderRegisterMessage"/>, <see cref="OrderReplaceMessage"/>, <see cref="OrderPairReplaceMessage"/>, <see cref="OrderCancelMessage"/> and <see cref="ExecutionMessage"/> are accepted.
 		/// </summary>
-		/// <param name="message">Сообщение.</param>
-		/// <returns>Задержка транзакции.</returns>
+		/// <param name="message">Message.</param>
+		/// <returns>Transaction delay.</returns>
 		public TimeSpan? ProcessMessage(Message message)
 		{
 			switch (message.Type)
@@ -169,7 +167,7 @@ namespace StockSharp.Algo.Latency
 		}
 
 		/// <summary>
-		/// Обнулить расчеты.
+		/// To zero calculations.
 		/// </summary>
 		public virtual void Reset()
 		{

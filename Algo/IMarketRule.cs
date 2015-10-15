@@ -9,84 +9,83 @@ namespace StockSharp.Algo
 	using StockSharp.Localization;
 
 	/// <summary>
-	/// Интерфейс правила, активизирующее действие при наступлении рыночного условия.
+	/// The interface of the rule, activating action at occurrence of market condition.
 	/// </summary>
 	public interface IMarketRule : IDisposable
 	{
 		/// <summary>
-		/// Имя правила.
+		/// The name of the rule.
 		/// </summary>
 		string Name { get; set; }
 
 		/// <summary>
-		/// Контейнер правил.
+		/// The rules container.
 		/// </summary>
 		IMarketRuleContainer Container { get; set; }
 
 		/// <summary>
-		/// Уровень, на котором осуществлять логирование данного правила.
+		/// The level to perform this rule logging.
 		/// </summary>
 		LogLevels LogLevel { get; set; }
 
 		/// <summary>
-		/// Приостановлено ли правило.
+		/// Is the rule suspended.
 		/// </summary>
 		bool IsSuspended { get; set; }
 
 		/// <summary>
-		/// Сформировано ли правило.
+		/// Is the rule formed.
 		/// </summary>
 		bool IsReady { get; }
 
 		/// <summary>
-		/// Активировано ли правило в данный момент.
+		/// Is the rule currently activated.
 		/// </summary>
 		bool IsActive { get; set; }
 
 		/// <summary>
-		/// Токен правила, с которым он ассоциирован (например, для правила <see cref="MarketRuleHelper.WhenRegistered"/> токеном будет являтся заявка).
-		/// Если правильно ни с чем не ассоциировано, то будет возвращено <see langword="null"/>.
+		/// Token-rules, it is associated with (for example, for rule <see cref="MarketRuleHelper.WhenRegistered"/> the order will be a token). If rule is not associated with anything, <see langword="null" /> will be returned.
 		/// </summary>
 		object Token { get; }
 
 		/// <summary>
-		/// Правила, которые противоположны данному. Удалаются автоматически при активации данного правила.
+		/// Rules, opposite to given rule. They are deleted automatically at activation of this rule.
 		/// </summary>
 		ISynchronizedCollection<IMarketRule> ExclusiveRules { get; }
 
 		/// <summary>
-		/// Сделать правило периодичным (будет вызываться до тех пор, пока <paramref name="canFinish"/> не вернет <see langword="true"/>).
+		/// To make the rule periodical (will be called until <paramref name="canFinish" /> returns <see langword="true" />).
 		/// </summary>
-		/// <param name="canFinish">Критерий окончания периодичности.</param>
-		/// <returns>Правило.</returns>
+		/// <param name="canFinish">The criteria for end of periodicity.</param>
+		/// <returns>Rule.</returns>
 		IMarketRule Until(Func<bool> canFinish);
 
 		/// <summary>
-		/// Добавить действие, активизирующееся при наступлении условия.
+		/// To add the action, activated at occurrence of condition.
 		/// </summary>
-		/// <param name="action">Действие.</param>
-		/// <returns>Правило.</returns>
+		/// <param name="action">Action.</param>
+		/// <returns>Rule.</returns>
 		IMarketRule Do(Action action);
 
 		/// <summary>
-		/// Добавить действие, активизирующееся при наступлении условия.
+		/// To add the action, activated at occurrence of condition.
 		/// </summary>
-		/// <param name="action">Действие, принимающее значение.</param>
-		/// <returns>Правило.</returns>
+		/// <param name="action">The action, taking a value.</param>
+		/// <returns>Rule.</returns>
 		IMarketRule Do(Action<object> action);
 
 		/// <summary>
-		/// Добавить действие, возвращающее результат, активизирующееся при наступлении условия.
+		/// To add the action, returning result, activated at occurrence of condition.
 		/// </summary>
-		/// <typeparam name="TResult">Тип возвращаемого результата.</typeparam>
-		/// <param name="action">Действие, возвращающее результат.</param>
-		/// <returns>Правило.</returns>
+		/// <typeparam name="TResult">The type of returned result.</typeparam>
+		/// <param name="action">The action, returning a result.</param>
+		/// <returns>Rule.</returns>
 		IMarketRule Do<TResult>(Func<TResult> action);
 
 		/// <summary>
-		/// Можно ли закончить правило.
+		/// Can the rule be ended.
 		/// </summary>
-		/// <returns><see langword="true"/>, если правило больше не нужно. Иначе, <see langword="false"/>.</returns>
+		/// <returns><see langword="true" />, if rule is not required any more. Otherwise, <see langword="false" />.</returns>
 		bool CanFinish();
 	}
 
@@ -101,10 +100,10 @@ namespace StockSharp.Algo
 	}
 
 	/// <summary>
-	/// Правило, активизирующее действие при наступлении рыночного условия.
+	/// The rule, activating action at market condition occurrence.
 	/// </summary>
-	/// <typeparam name="TToken">Тип токена.</typeparam>
-	/// <typeparam name="TArg">Тип принимаемого аргумента.</typeparam>
+	/// <typeparam name="TToken">The type of token.</typeparam>
+	/// <typeparam name="TArg">The type of accepted argument.</typeparam>
 	public abstract class MarketRule<TToken, TArg> : Disposable, IMarketRule
 	{
 		private Func<TArg, object> _action = a => a;
@@ -117,9 +116,9 @@ namespace StockSharp.Algo
 		private Func<bool> _canFinish;
 
 		/// <summary>
-		/// Инициализировать <see cref="MarketRule{TToken, TArg}"/>.
+		/// Initialize <see cref="MarketRule{T1,T2}"/>.
 		/// </summary>
-		/// <param name="token">Токен правила.</param>
+		/// <param name="token">Token rules.</param>
 		protected MarketRule(TToken token)
 		{
 			_token = token;
@@ -131,9 +130,9 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Можно ли закончить правило.
+		/// Can the rule be ended.
 		/// </summary>
-		/// <returns><see langword="true"/>, если правило больше не нужно. Иначе, <see langword="false"/>.</returns>
+		/// <returns><see langword="true" />, if rule is not required any more. Otherwise, <see langword="false" />.</returns>
 		protected virtual bool CanFinish()
 		{
 			return ReferenceEquals(_container, null) || _container.ProcessState != ProcessStates.Started;
@@ -142,7 +141,7 @@ namespace StockSharp.Algo
 		private string _name;
 
 		/// <summary>
-		/// Имя правила.
+		/// The name of the rule.
 		/// </summary>
 		public string Name
 		{
@@ -159,7 +158,7 @@ namespace StockSharp.Algo
 		private LogLevels _logLevel = LogLevels.Inherit;
 
 		/// <summary>
-		/// Уровень, на котором осуществлять логирование данного правила. По-умолчанию, <see cref="LogLevels.Inherit"/>.
+		/// The level, at which logging of this rule is performed. The default is <see cref="LogLevels.Inherit"/>.
 		/// </summary>
 		public virtual LogLevels LogLevel
 		{
@@ -170,7 +169,7 @@ namespace StockSharp.Algo
 		private bool _isSuspended;
 
 		/// <summary>
-		/// Приостановлено ли правило.
+		/// Is the rule suspended.
 		/// </summary>
 		public virtual bool IsSuspended
 		{
@@ -187,8 +186,7 @@ namespace StockSharp.Algo
 		private readonly TToken _token;
 
 		/// <summary>
-		/// Токен правила, с которым он ассоциирован (например, для правила <see cref="MarketRuleHelper.WhenRegistered"/> токеном будет являтся заявка).
-		/// Если правильно ни с чем не ассоциировано, то будет возвращено <see langword="null"/>.
+		/// Token-rules, it is associated with (for example, for rule <see cref="MarketRuleHelper.WhenRegistered"/> the order will be a token). If rule is not associated with anything, <see langword="null" /> will be returned.
 		/// </summary>
 		public virtual object Token
 		{
@@ -198,7 +196,7 @@ namespace StockSharp.Algo
 		private readonly SynchronizedSet<IMarketRule> _exclusiveRules = new SynchronizedSet<IMarketRule>();
 
 		/// <summary>
-		/// Правила, которые противоположны данному. Удалаются автоматически при активации данного правила.
+		/// Rules, opposite to given rule. They are deleted automatically at activation of this rule.
 		/// </summary>
 		public virtual ISynchronizedCollection<IMarketRule> ExclusiveRules
 		{
@@ -208,7 +206,7 @@ namespace StockSharp.Algo
 		private IMarketRuleContainer _container;
 
 		/// <summary>
-		/// Контейнер правил.
+		/// The rules container.
 		/// </summary>
 		public virtual IMarketRuleContainer Container
 		{
@@ -228,10 +226,10 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Сделать правило периодичным (будет вызываться до тех пор, пока <paramref name="canFinish"/> не вернет <see langword="true"/>).
+		/// To make the rule periodical (will be called until <paramref name="canFinish" /> returns <see langword="true" />).
 		/// </summary>
-		/// <param name="canFinish">Критерий окончания периодичности.</param>
-		/// <returns>Правило.</returns>
+		/// <param name="canFinish">The criteria for end of periodicity.</param>
+		/// <returns>Rule.</returns>
 		public MarketRule<TToken, TArg> Until(Func<bool> canFinish)
 		{
 			if (canFinish == null)
@@ -242,10 +240,10 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Добавить действие, активизирующееся при наступлении условия.
+		/// To add the action, activated at occurrence of condition.
 		/// </summary>
-		/// <param name="action">Действие.</param>
-		/// <returns>Правило.</returns>
+		/// <param name="action">Action.</param>
+		/// <returns>Rule.</returns>
 		public MarketRule<TToken, TArg> Do(Action<TArg> action)
 		{
 			if (action == null)
@@ -260,10 +258,10 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Добавить действие, активизирующееся при наступлении условия.
+		/// To add the action, activated at occurrence of condition.
 		/// </summary>
-		/// <param name="action">Действие.</param>
-		/// <returns>Правило.</returns>
+		/// <param name="action">Action.</param>
+		/// <returns>Rule.</returns>
 		public MarketRule<TToken, TArg> Do(Action<MarketRule<TToken, TArg>, TArg> action)
 		{
 			if (action == null)
@@ -277,11 +275,11 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Добавить действие, возвращающее результат, активизирующееся при наступлении условия.
+		/// To add the action, returning result, activated at occurrence of condition.
 		/// </summary>
-		/// <typeparam name="TResult">Тип возвращаемого результата.</typeparam>
-		/// <param name="action">Действие, возвращающее результат.</param>
-		/// <returns>Правило.</returns>
+		/// <typeparam name="TResult">The type of returned result.</typeparam>
+		/// <param name="action">The action, returning a result.</param>
+		/// <returns>Rule.</returns>
 		public MarketRule<TToken, TArg> Do<TResult>(Func<TArg, TResult> action)
 		{
 			if (action == null)
@@ -291,11 +289,11 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Добавить действие, возвращающее результат, активизирующееся при наступлении условия.
+		/// To add the action, returning result, activated at occurrence of condition.
 		/// </summary>
-		/// <typeparam name="TResult">Тип возвращаемого результата.</typeparam>
-		/// <param name="action">Действие, возвращающее результат.</param>
-		/// <returns>Правило.</returns>
+		/// <typeparam name="TResult">The type of returned result.</typeparam>
+		/// <param name="action">The action, returning a result.</param>
+		/// <returns>Rule.</returns>
 		public MarketRule<TToken, TArg> Do<TResult>(Func<MarketRule<TToken, TArg>, TArg, TResult> action)
 		{
 			if (action == null)
@@ -308,10 +306,10 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Добавить действие, активизирующееся при наступлении условия.
+		/// To add the action, activated at occurrence of condition.
 		/// </summary>
-		/// <param name="action">Действие.</param>
-		/// <returns>Правило.</returns>
+		/// <param name="action">Action.</param>
+		/// <returns>Rule.</returns>
 		public MarketRule<TToken, TArg> Do(Action action)
 		{
 			if (action == null)
@@ -321,11 +319,11 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Добавить действие, возвращающее результат, активизирующееся при наступлении условия.
+		/// To add the action, returning result, activated at occurrence of condition.
 		/// </summary>
-		/// <typeparam name="TResult">Тип возвращаемого результата.</typeparam>
-		/// <param name="action">Действие, возвращающее результат.</param>
-		/// <returns>Правило.</returns>
+		/// <typeparam name="TResult">The type of returned result.</typeparam>
+		/// <param name="action">The action, returning a result.</param>
+		/// <returns>Rule.</returns>
 		public MarketRule<TToken, TArg> Do<TResult>(Func<TResult> action)
 		{
 			if (action == null)
@@ -335,10 +333,10 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Добавить обработчик, который будет вызван при активации действия.
+		/// To add the processor, which will be called at action activation.
 		/// </summary>
-		/// <param name="handler">Обработчик.</param>
-		/// <returns>Правило.</returns>
+		/// <param name="handler">The handler.</param>
+		/// <returns>Rule.</returns>
 		public MarketRule<TToken, TArg> Activated(Action handler)
 		{
 			if (handler == null)
@@ -348,11 +346,11 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Добавить обработчик, принимающий аргумент из <see cref="Do{TResult}(System.Func{TResult})"/>, который будет вызван при активации действия.
+		/// To add the processor, accepting argument from <see cref="Do{TResult}(System.Func{TResult})"/>, which will be called at action activation.
 		/// </summary>
-		/// <typeparam name="TResult">Тип возвращаемого результата из обработчика правила.</typeparam>
-		/// <param name="handler">Обработчик.</param>
-		/// <returns>Правило.</returns>
+		/// <typeparam name="TResult">The type of result, returned from the processor.</typeparam>
+		/// <param name="handler">The handler.</param>
+		/// <returns>Rule.</returns>
 		public MarketRule<TToken, TArg> Activated<TResult>(Action<TResult> handler)
 		{
 			if (handler == null)
@@ -363,7 +361,7 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Активировать правило.
+		/// To activate the rule.
 		/// </summary>
 		protected void Activate()
 		{
@@ -371,9 +369,9 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Активировать правило.
+		/// To activate the rule.
 		/// </summary>
-		/// <param name="arg">Значение, которое будет передано в обработчик, зарегистрированный через <see cref="Do(System.Action{TArg})"/>.</param>
+		/// <param name="arg">The value, which will be sent to processor, registered through <see cref="Do(System.Action{TArg})"/>.</param>
 		protected virtual void Activate(TArg arg)
 		{
 			if (!IsReady || IsSuspended)
@@ -401,16 +399,16 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Получить строковое представление.
+		/// Returns a string that represents the current object.
 		/// </summary>
-		/// <returns>Строковое представление.</returns>
+		/// <returns>A string that represents the current object.</returns>
 		public override string ToString()
 		{
 			return "{0} (0x{1:X})".Put(Name, GetHashCode());
 		}
 
 		/// <summary>
-		/// Освободить занятые ресурсы.
+		/// Release resources.
 		/// </summary>
 		protected override void DisposeManaged()
 		{
@@ -428,7 +426,7 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Сформировано ли правило.
+		/// Is the rule formed.
 		/// </summary>
 		public bool IsReady
 		{
@@ -436,7 +434,7 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Активировано ли правило в данный момент.
+		/// Is the rule currently activated.
 		/// </summary>
 		public bool IsActive { get; set; }
 

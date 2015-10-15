@@ -17,7 +17,7 @@ namespace StockSharp.Algo.Indicators
 	public class RangeActionVerificationIndex : BaseIndicator
 	{
 		/// <summary>
-		/// Создать <see cref="RangeActionVerificationIndex"/>.
+		/// Initializes a new instance of the <see cref="RangeActionVerificationIndex"/>.
 		/// </summary>
 		public RangeActionVerificationIndex()
 		{
@@ -26,7 +26,7 @@ namespace StockSharp.Algo.Indicators
 		}
 
 		/// <summary>
-		/// Короткая скользящая средняя.
+		/// Short moving average.
 		/// </summary>
 		[ExpandableObject]
 		[DisplayNameLoc(LocalizedStrings.Str800Key)]
@@ -35,7 +35,7 @@ namespace StockSharp.Algo.Indicators
 		public SimpleMovingAverage ShortSma { get; private set; }
 
 		/// <summary>
-		/// Длинная скользящая средняя.
+		/// Long moving average.
 		/// </summary>
 		[ExpandableObject]
 		[DisplayNameLoc(LocalizedStrings.Str798Key)]
@@ -44,15 +44,15 @@ namespace StockSharp.Algo.Indicators
 		public SimpleMovingAverage LongSma { get; private set; }
 
 		/// <summary>
-		/// Сформирован ли индикатор.
+		/// Whether the indicator is set.
 		/// </summary>
 		public override bool IsFormed { get { return LongSma.IsFormed; } }
 
 		/// <summary>
-		/// Обработать входное значение.
+		/// To handle the input value.
 		/// </summary>
-		/// <param name="input">Входное значение.</param>
-		/// <returns>Результирующее значение.</returns>
+		/// <param name="input">The input value.</param>
+		/// <returns>The resulting value.</returns>
 		protected override IIndicatorValue OnProcess(IIndicatorValue input)
 		{
 			var shortValue = ShortSma.Process(input).GetValue<decimal>();
@@ -62,9 +62,9 @@ namespace StockSharp.Algo.Indicators
 		}
 
 		/// <summary>
-		/// Загрузить настройки.
+		/// Load settings.
 		/// </summary>
-		/// <param name="settings">Хранилище настроек.</param>
+		/// <param name="settings">Settings storage.</param>
 		public override void Load(SettingsStorage settings)
 		{
 			base.Load(settings);
@@ -74,9 +74,9 @@ namespace StockSharp.Algo.Indicators
 		}
 
 		/// <summary>
-		/// Сохранить настройки.
+		/// Save settings.
 		/// </summary>
-		/// <param name="settings">Хранилище настроек.</param>
+		/// <param name="settings">Settings storage.</param>
 		public override void Save(SettingsStorage settings)
 		{
 			base.Save(settings);
