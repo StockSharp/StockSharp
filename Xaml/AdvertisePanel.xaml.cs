@@ -1,7 +1,6 @@
 namespace StockSharp.Xaml
 {
 	using System;
-	using System.Collections.Generic;
 	using System.ComponentModel;
 	using System.Windows;
 	using System.Windows.Threading;
@@ -11,6 +10,7 @@ namespace StockSharp.Xaml
 	using Ecng.Configuration;
 	using Ecng.Localization;
 	using Ecng.Web.BBCodes;
+	using Ecng.Xaml;
 
 	using StockSharp.Community;
 	using StockSharp.Localization;
@@ -22,7 +22,7 @@ namespace StockSharp.Xaml
 	public partial class AdvertisePanel
 	{
 		private readonly NotificationClient _client;
-		private readonly List<CommunityNews> _news = new List<CommunityNews>();
+		private readonly SynchronizedList<CommunityNews> _news = new SynchronizedList<CommunityNews>();
 		private int _index = -1;
 		private readonly BBCodeParser _parser;
 		private DispatcherTimer _timer;
@@ -78,27 +78,23 @@ namespace StockSharp.Xaml
 		{
 			var now = DateTime.UtcNow;
 
-			_news.RemoveWhere(n => n.EndDate <= now);
+			lock (_news.SyncRoot)
+			{
+				_news.RemoveWhere(n => n.EndDate <= now);
 
-			if (GetContent(news).IsEmpty())
-				return;
+				if (GetContent(news).IsEmpty())
+					return;
 
-			_news.Add(news);
+				_news.Add(news);
+				_index = 0;
+			}
 
-			_index = 0;
-			ShowNews();
+			this.GuiAsync(() => ShowNews(news));
 		}
 
-		private void ShowNews()
+		private void ShowNews(CommunityNews news)
 		{
-			var news = _news[_index];
-
-			var content = GetContent(news);
-
-			if (content.IsEmpty())
-				return;
-
-			HtmlPanel.Text = _parser.ToHtml(content);
+			HtmlPanel.Text = _parser.ToHtml(GetContent(news));
 		}
 
 		private void AdvertisePanel_OnLoaded(object sender, RoutedEventArgs e)
@@ -118,28 +114,42 @@ namespace StockSharp.Xaml
 
 		private void OnNextClick(object sender, RoutedEventArgs e)
 		{
-			if (_news.Count <= 0)
-				return;
+			CommunityNews news;
 
-			if (_index >= (_news.Count - 1))
-				_index = 0;
-			else
-				_index++;
+			lock (_news.SyncRoot)
+			{
+				if (_news.Count == 0)
+					return;
 
-			ShowNews();
+				if (_index >= (_news.Count - 1))
+					_index = 0;
+				else
+					_index++;
+
+				news = _news[_index];
+			}
+
+			ShowNews(news);
 		}
 
 		private void OnPrevClick(object sender, RoutedEventArgs e)
 		{
-			if (_news.Count <= 0)
-				return;
+			CommunityNews news;
 
-			if (_index < 1)
-				_index = _news.Count - 1;
-			else
-				_index--;
+			lock (_news.SyncRoot)
+			{
+				if (_news.Count == 0)
+					return;
 
-			ShowNews();
+				if (_index < 1)
+					_index = _news.Count - 1;
+				else
+					_index--;
+
+				news = _news[_index];
+			}
+
+			ShowNews(news);
 		}
 	}
 }
