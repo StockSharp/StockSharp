@@ -39,7 +39,7 @@ namespace StockSharp.Algo
 		private bool _isFirstTimeConnect = true;
 
 		/// <summary>
-		/// Создать <see cref="HeartbeatAdapter"/>.
+		/// Initializes a new instance of the <see cref="HeartbeatAdapter"/>.
 		/// </summary>
 		/// <param name="innerAdapter">Underlying adapter.</param>
 		public HeartbeatAdapter(IMessageAdapter innerAdapter)

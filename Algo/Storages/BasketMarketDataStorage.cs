@@ -14,13 +14,13 @@ namespace StockSharp.Algo.Storages
 	using StockSharp.Messages;
 
 	/// <summary>
-	/// Загрузчик сообщений хранилища-агрегатора.
+	/// The aggregator-storage enumerator.
 	/// </summary>
-	/// <typeparam name="T">Тип сообщения.</typeparam>
+	/// <typeparam name="T">Message type.</typeparam>
 	public interface IBasketMarketDataStorageEnumerator<T> : IEnumerator<T>
 	{
 		/// <summary>
-		/// Доступные типы данных.
+		/// Available message types.
 		/// </summary>
 		IEnumerable<MessageTypes> DataTypes { get; }
 	}

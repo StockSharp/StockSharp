@@ -21,12 +21,12 @@ namespace StockSharp.Algo.Storages
 		private readonly Func<DateTimeOffset, IEnumerable<T>> _getData;
 
 		/// <summary>
-		/// Ñîçäàòü <see cref="InMemoryMarketDataStorage{T}"/>.
+		/// Initializes a new instance of the <see cref="InMemoryMarketDataStorage{T}"/>.
 		/// </summary>
-		/// <param name="security">Èíñòðóìåíò, ñ êîòîðûì ðàáîòàåò âíåøíåå õðàíèëèùå.</param>
-		/// <param name="arg">Äîïîëíèòåëüíûé àðãóìåíò, àññîöèèðîâàííûé ñ äàííûìè. Íàïðèìåð, <see cref="Candle.Arg"/>.</param>
-		/// <param name="getData">Ìåòîä ãåíåðàöèè äàííûõ äëÿ óêàçàííîé äàòû.</param>
-		/// <param name="dataType">Òèï äàííûõ.</param>
+		/// <param name="security">The instrument.</param>
+		/// <param name="arg">The additional argument, associated with data. For example, <see cref="Candle.Arg"/>.</param>
+		/// <param name="getData">Handler for retrieving in-memory data.</param>
+		/// <param name="dataType">Data type.</param>
 		public InMemoryMarketDataStorage(Security security, object arg, Func<DateTimeOffset, IEnumerable<Message>> getData, Type dataType = null)
 		{
 			if (getData == null)
@@ -39,11 +39,11 @@ namespace StockSharp.Algo.Storages
 		}
 
 		/// <summary>
-		/// Ñîçäàòü <see cref="InMemoryMarketDataStorage{T}"/>.
+		/// Initializes a new instance of the <see cref="InMemoryMarketDataStorage{T}"/>.
 		/// </summary>
-		/// <param name="security">Èíñòðóìåíò, ñ êîòîðûì ðàáîòàåò âíåøíåå õðàíèëèùå.</param>
-		/// <param name="arg">Äîïîëíèòåëüíûé àðãóìåíò, àññîöèèðîâàííûé ñ äàííûìè. Íàïðèìåð, <see cref="Candle.Arg"/>.</param>
-		/// <param name="getData">Ìåòîä ãåíåðàöèè äàííûõ äëÿ óêàçàííîé äàòû.</param>
+		/// <param name="security">The instrument.</param>
+		/// <param name="arg">The additional argument, associated with data. For example, <see cref="Candle.Arg"/>.</param>
+		/// <param name="getData">Handler for retrieving in-memory data.</param>
 		public InMemoryMarketDataStorage(Security security, object arg, Func<DateTimeOffset, IEnumerable<T>> getData)
 		{
 			if (getData == null)

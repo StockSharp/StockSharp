@@ -17,7 +17,6 @@ namespace StockSharp.Algo
 	/// </summary>
 	public class ManagedMessageAdapter : MessageAdapterWrapper
 	{
-		
 		/// <summary>
 		/// Initializes a new instance of the <see cref="ManagedMessageAdapter"/>.
 		/// </summary>
