@@ -262,7 +262,7 @@ namespace StockSharp.Algo
 		private readonly Cache _cache = new Cache();
 		private readonly HashSet<long> _orderStatusTransactions = new HashSet<long>();
 
-		private IEntityFactory _entityFactory = Algo.EntityFactory.Instance;
+		private IEntityFactory _entityFactory = new EntityFactory();
 
 		public IEntityFactory EntityFactory
 		{

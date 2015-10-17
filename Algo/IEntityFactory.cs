@@ -98,22 +98,12 @@ namespace StockSharp.Algo
 	/// </summary>
 	public class EntityFactory : IEntityFactory, IStorage
 	{
-		static EntityFactory()
-		{
-			Instance = new EntityFactory();
-		}
-
 		/// <summary>
 		/// Initializes a new instance of the <see cref="EntityFactory"/>.
 		/// </summary>
 		public EntityFactory()
 		{
 		}
-
-		/// <summary>
-		/// The statistical object <see cref="EntityFactory"/> to be used, if it is required to maintain referential integrity between different connections.
-		/// </summary>
-		public static EntityFactory Instance { get; private set; }
 
 		/// <summary>
 		/// To create the instrument by the identifier.

@@ -1,15 +1,17 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+
 using ActiproSoftware.Windows.Controls.Docking;
 using ActiproSoftware.Windows.Controls.Docking.Serialization;
+
 using Ecng.Collections;
 using Ecng.Configuration;
 using Ecng.Serialization;
 using Ecng.Xaml;
+
 using StockSharp.Algo;
 using StockSharp.Algo.Storages;
 using StockSharp.BusinessEntities;
@@ -19,38 +21,11 @@ using StockSharp.Messages;
 using StockSharp.Terminal.Layout;
 using StockSharp.Xaml;
 using StockSharp.Xaml.Charting;
-using EntityFactory = StockSharp.Algo.EntityFactory;
 
 namespace StockSharp.Terminal
 {
 	public partial class MainWindow
 	{
-		private class StorageEntityFactory : EntityFactory
-		{
-			private readonly ISecurityStorage _securityStorage;
-			private readonly Dictionary<string, Security> _securities;
-
-			public StorageEntityFactory(ISecurityStorage securityStorage)
-			{
-				if (securityStorage == null)
-					throw new ArgumentNullException("securityStorage");
-
-				_securityStorage = securityStorage;
-				_securities = _securityStorage.LookupAll()
-					.ToDictionary(s => s.Id, s => s, StringComparer.InvariantCultureIgnoreCase);
-			}
-
-			public override Security CreateSecurity(string id)
-			{
-				return _securities.SafeAdd(id, key =>
-				{
-					var s = base.CreateSecurity(id);
-					_securityStorage.Save(s);
-					return s;
-				});
-			}
-		}
-
 		private readonly SecuritiesView _secView;
 
 		public readonly SynchronizedDictionary<Security, MarketDepthControl> Depths =
@@ -71,10 +46,9 @@ namespace StockSharp.Terminal
 			Directory.CreateDirectory(_settingsFolder);
 
 			var storageRegistry = new StorageRegistry {DefaultDrive = new LocalMarketDataDrive(_settingsFolder)};
-			var securityStorage = storageRegistry.GetSecurityStorage();
 
-			Connector = new Connector {EntityFactory = new StorageEntityFactory(securityStorage)};
-			ConfigManager.RegisterService<ISecurityProvider>(new FilterableSecurityProvider(securityStorage));
+			Connector = new Connector { EntityFactory = new StorageEntityFactory(new EntityRegistry(), storageRegistry) };
+			ConfigManager.RegisterService<ISecurityProvider>(new FilterableSecurityProvider(storageRegistry.GetSecurityStorage()));
 			ConfigManager.RegisterService<IConnector>(Connector);
 			ConfigManager.RegisterService<IMarketDataProvider>(Connector);
 

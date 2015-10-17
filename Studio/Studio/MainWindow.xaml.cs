@@ -962,10 +962,9 @@ namespace StockSharp.Studio
 			ConfigManager.GetService<LogManager>().Sources.Add(_connector);
 			var strategyService = new StrategyService();
 
-			var connector = new StudioRegistryConnector(_connector);
-			ConfigManager.RegisterService<IConnector>(connector);
-			ConfigManager.RegisterService<ISecurityProvider>(new FilterableSecurityProvider(connector));
-			connector.Connect();
+			ConfigManager.RegisterService<IConnector>(_connector);
+			ConfigManager.RegisterService<ISecurityProvider>(new FilterableSecurityProvider(_connector));
+			_connector.Connect();
 
 			ConfigManager.RegisterService<IStudioConnector>(_connector);
 			ConfigManager.RegisterService<IStrategyService>(strategyService);

@@ -396,6 +396,7 @@
     <Compile Include="Storages\MarketDataBuffer.cs" />
     <Compile Include="Storages\BinaryHelper.cs" />
     <Compile Include="Storages\OrderLogSerializer.cs" />
+    <Compile Include="Storages\StorageEntityFactory.cs" />
     <Compile Include="Storages\StorageFormats.cs" />
     <Compile Include="Storages\StorageHelper.cs" />
     <Compile Include="Storages\StorageRegistry.cs" />

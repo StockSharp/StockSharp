@@ -66,11 +66,11 @@ namespace StockSharp.Studio.Services
 				_realConnector = (StudioConnector)ConfigManager.GetService<IStudioConnector>();
 				_realConnector.NewMessage += RealConnectorNewMessage;
 
-				EntityFactory = new StudioConnectorEntityFactory();
-
 				_securityProvider = new StudioSecurityProvider();
 
 				var storageRegistry = new StudioStorageRegistry { MarketDataSettings = strategy.MarketDataSettings };
+
+				EntityFactory = new StorageEntityFactory(entityRegistry, storageRegistry);
 
 				Adapter.InnerAdapters.Add(_historyMessageAdapter = new HistoryMessageAdapter(TransactionIdGenerator, _securityProvider)
 				{

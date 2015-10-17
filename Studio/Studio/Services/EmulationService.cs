@@ -149,6 +149,8 @@ namespace StockSharp.Studio.Services
 
 			ConfigManager.GetService<LogManager>().Sources.Add(EmulationConnector);
 
+			EmulationConnector.HistoryMessageAdapter.StorageRegistry = storageRegistry;
+
 			CanStart = true;
 		}
 
@@ -338,8 +340,6 @@ namespace StockSharp.Studio.Services
 			_infoClone.Id = 0;
 
 			strategyInfoList.Add(_infoClone);
-			
-			EmulationConnector.HistoryMessageAdapter.StorageRegistry = new StudioStorageRegistry { MarketDataSettings = Strategy.MarketDataSettings };
 		}
 
 		private CandleManager CreateCandleManager()

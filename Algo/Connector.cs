@@ -225,21 +225,13 @@ namespace StockSharp.Algo
 		/// </summary>
 		public ReConnectionSettings ReConnectionSettings { get; private set; }
 
-		private IEntityFactory _entityFactory = Algo.EntityFactory.Instance;
-
 		/// <summary>
 		/// Entity factory (<see cref="Security"/>, <see cref="Order"/> etc.).
 		/// </summary>
 		public IEntityFactory EntityFactory
 		{
-			get { return _entityFactory; }
-			set
-			{
-				if (value == null)
-					throw new ArgumentNullException("value");
-
-				_entityFactory = value;
-			}
+			get { return _entityCache.EntityFactory; }
+			set { _entityCache.EntityFactory = value; }
 		}
 
 		/// <summary>

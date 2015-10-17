@@ -3,7 +3,6 @@ namespace StockSharp.Studio
 	using System;
 	using System.Collections.Generic;
 	using System.Linq;
-	using System.Threading.Tasks;
 
 	using Ecng.Collections;
 	using Ecng.Common;
@@ -12,16 +11,14 @@ namespace StockSharp.Studio
 	using MoreLinq;
 
 	using StockSharp.Algo;
+	using StockSharp.Algo.Storages;
 	using StockSharp.Algo.Testing;
 	using StockSharp.BusinessEntities;
 	using StockSharp.Logging;
 	using StockSharp.Messages;
 	using StockSharp.Studio.Core;
 	using StockSharp.Studio.Core.Commands;
-	using StockSharp.Studio.Database;
 	using StockSharp.Localization;
-
-	using EntityFactory = StockSharp.Algo.EntityFactory;
 
 	internal class StudioConnector : Connector, IStudioConnector
 	{
@@ -164,231 +161,6 @@ namespace StockSharp.Studio
 			}
 		}
 
-		private sealed class StudioEntityFactory : EntityFactory, ISecurityProvider
-		{
-			private readonly StudioConnector _parent;
-			private readonly StudioEntityRegistry _entityRegistry = (StudioEntityRegistry)ConfigManager.GetService<IStudioEntityRegistry>();
-
-			private static readonly SynchronizedSet<Security> _notSavedSecurities = new SynchronizedSet<Security>();
-			private static readonly SynchronizedSet<Portfolio> _notSavedPortfolios = new SynchronizedSet<Portfolio>();
-			private static readonly SynchronizedSet<News> _notSavedNews = new SynchronizedSet<News>();
-
-			public StudioEntityFactory(StudioConnector parent)
-			{
-				if (parent == null)
-					throw new ArgumentNullException("parent");
-
-				_parent = parent;
-
-				_parent.NewSecurities += OnSecurities;
-				_parent.SecuritiesChanged += OnSecurities;
-
-				_parent.NewPortfolios += OnPortfolios;
-				_parent.PortfoliosChanged += OnPortfolios;
-
-				_parent.NewNews += OnNews;
-				_parent.NewsChanged += OnNews;
-			}
-
-			private void OnSecurities(IEnumerable<Security> securities)
-			{
-				lock (_notSavedSecurities.SyncRoot)
-				{
-					if (_notSavedSecurities.Count == 0)
-						return;
-
-					foreach (var s in securities)
-					{
-						var security = s;
-
-						if (!_notSavedSecurities.Contains(security))
-							continue;
-
-						// NOTE Когда из Квика пришел инструмент, созданный по сделке
-						if (security.Code.IsEmpty())
-							continue;
-
-						_parent.AddInfoLog(LocalizedStrings.Str3618Params, security.Id);
-
-						var securityToSave = security.Clone();
-						securityToSave.ExtensionInfo = new Dictionary<object, object>();
-						_entityRegistry.Securities.Save(securityToSave);
-
-						_notSavedSecurities.Remove(security);
-					}
-				}
-
-				new NewSecuritiesCommand().Process(this);
-			}
-
-			private void OnPortfolios(IEnumerable<Portfolio> portfolios)
-			{
-				//foreach (var portfolio in portfolios)
-				//{
-				//	_parent.AddInfoLog("Изменение портфеля {0}.", portfolio.Name);
-				//}
-
-				lock (_notSavedPortfolios.SyncRoot)
-				{
-					if (_notSavedPortfolios.Count == 0)
-						return;
-
-					foreach (var p in portfolios)
-					{
-						var portfolio = p;
-
-						if (!_notSavedPortfolios.Contains(portfolio))
-							continue;
-
-						//если площадка у портфеля пустая, то необходимо дождаться ее заполнения
-						//пустой площадка может быть когда в начале придет информация о заявке 
-						//с портфелем или о позиции, и только потом придет сам портфель
-
-						// mika: портфели могут быть универсальными и не принадлежать площадке
-
-						//var board = portfolio.Board;
-						//if (board == null)
-						//	continue;
-
-						_parent.AddInfoLog(LocalizedStrings.Str3619Params, portfolio.Name);
-
-						//if (board != null)
-						//	_entityRegistry.SaveExchangeBoard(board);
-
-						_entityRegistry.Portfolios.Save(portfolio);
-
-						_notSavedPortfolios.Remove(portfolio);
-					}
-				}
-			}
-
-			private void OnNews(News news)
-			{
-				lock (_notSavedNews.SyncRoot)
-				{
-					if (_notSavedNews.Count == 0)
-						return;
-
-					if (!_notSavedNews.Contains(news))
-						return;
-
-					_parent.AddInfoLog(LocalizedStrings.Str3620Params, news.Headline);
-
-					_entityRegistry.News.Add(news);
-					_notSavedNews.Remove(news);
-				}
-			}
-
-			public override Portfolio CreatePortfolio(string name)
-			{
-				_parent.AddInfoLog(LocalizedStrings.Str3621Params, name);
-
-				lock (_notSavedPortfolios.SyncRoot)
-				{
-					var portfolio = _entityRegistry.Portfolios.ReadById(name);
-
-					if (portfolio == null)
-					{
-						_parent.AddInfoLog(LocalizedStrings.Str3622Params, name);
-
-						portfolio = base.CreatePortfolio(name);
-						_notSavedPortfolios.Add(portfolio);
-					}
-
-					return portfolio;
-				}
-			}
-
-			public override Security CreateSecurity(string id)
-			{
-				_parent.AddInfoLog(LocalizedStrings.Str3623Params, id);
-
-				lock (_notSavedSecurities.SyncRoot)
-				{
-					var security = _entityRegistry.Securities.ReadById(id);
-
-					if (security == null)
-					{
-						_parent.AddInfoLog(LocalizedStrings.Str3624Params, id);
-
-						security = base.CreateSecurity(id);
-						_notSavedSecurities.Add(security);
-					}
-
-					return security;
-				}
-			}
-
-			//public override Order CreateOrder(Security security, OrderTypes type, long transactionId)
-			//{
-			//	if(_innerTrader != null)
-			//		return base.CreateOrder(security, type, transactionId);
-
-			//	return ((SessionOrderList)_entityRegistry.Orders).ReadByTransactionId(security, type, transactionId) ?? base.CreateOrder(security, type, transactionId);
-			//}
-
-			//public override MyTrade CreateMyTrade(Order order, Trade trade)
-			//{
-			//	if (_innerTrader != null)
-			//		return base.CreateMyTrade(order, trade);
-
-			//	return ((SessionMyTradeList)_entityRegistry.MyTrades).ReadByTradeId(order.Security, order.TransactionId, trade.Id) ?? base.CreateMyTrade(order, trade);
-			//}
-
-			public override News CreateNews()
-			{
-				lock (_notSavedSecurities.SyncRoot)
-				{
-					//var news = _entityRegistry.News.ReadById(id);
-
-					//if (news == null)
-					//{
-						var news = base.CreateNews();
-						_notSavedNews.Add(news);
-					//}
-
-					return news;
-				}
-			}
-
-			IEnumerable<Security> ISecurityProvider.Lookup(Security criteria)
-			{
-				return _entityRegistry.Securities.Lookup(criteria);
-			}
-
-			object ISecurityProvider.GetNativeId(Security security)
-			{
-				return null;
-			}
-
-			int ISecurityProvider.Count
-			{
-				get { return ((IList<Security>)_entityRegistry.Securities).Count; }
-			}
-
-			event Action<Security> ISecurityProvider.Added
-			{
-				add { }
-				remove { }
-			}
-
-			event Action<Security> ISecurityProvider.Removed
-			{
-				add { }
-				remove { }
-			}
-
-			event Action ISecurityProvider.Cleared
-			{
-				add { }
-				remove { }
-			}
-
-			void IDisposable.Dispose()
-			{
-			}
-		}
-
 		private readonly CachedSynchronizedDictionary<Security, SynchronizedDictionary<MarketDataTypes, bool>> _exports = new CachedSynchronizedDictionary<Security, SynchronizedDictionary<MarketDataTypes, bool>>();
 
 		private readonly StudioMarketDataAdapter _marketDataAdapter;
@@ -397,7 +169,7 @@ namespace StockSharp.Studio
 
 		public StudioConnector()
 		{
-			EntityFactory = new StudioEntityFactory(this);
+			EntityFactory = new StorageEntityFactory(ConfigManager.GetService<IEntityRegistry>(), ConfigManager.GetService<IStorageRegistry>());
 
 			_marketDataAdapter = new StudioMarketDataAdapter(TransactionIdGenerator);
 
@@ -667,118 +439,6 @@ namespace StockSharp.Studio
 			}
 
 			base.OnProcessMessage(message);
-		}
-	}
-
-	internal sealed class StudioRegistryConnector : Connector
-	{
-		private readonly IStudioEntityRegistry _entityRegistry;
-		private readonly PassThroughMessageAdapter _adapter;
-
-		public override IEnumerable<Security> Securities
-		{
-			get { return _entityRegistry.Securities; }
-		}
-
-		public override IEnumerable<Portfolio> Portfolios
-		{
-			get { return _entityRegistry.Portfolios; }
-		}
-
-		public StudioRegistryConnector(IConnector studioConnector)
-		{
-			EntityFactory = new StudioConnectorEntityFactory();
-
-			_adapter = new PassThroughMessageAdapter(TransactionIdGenerator);
-			_adapter.AddMarketDataSupport();
-
-			Adapter.InnerAdapters.Add(_adapter);
-
-			_entityRegistry = ConfigManager.GetService<IStudioEntityRegistry>();
-			((INotifyList<Security>)_entityRegistry.Securities).Added += s => _adapter.SendOutMessage(s.ToMessage(GetSecurityId(s)));
-			_entityRegistry.Portfolios.Added += p => _adapter.SendOutMessage(p.ToMessage());
-
-			var cmdSvc = ConfigManager.GetService<IStudioCommandService>();
-
-			//cmdSvc.Register<LookupSecuritiesCommand>(this, cmd => LookupSecurities(cmd.Criteria));
-			cmdSvc.Register<RequestPortfoliosCommand>(this, false, cmd => Portfolios.ForEach(pf => new PortfolioCommand(pf, true).Process(this)));
-
-			NewPortfolios += portfolios => portfolios.ForEach(pf => new PortfolioCommand(pf, true).Process(this));
-			//NewPositions += positions => positions.ForEach(pos => new PositionCommand(pos, true).Process(this));
-
-			// для корректной работы правил коннектор всегда должен быть реальным
-			//NewSecurities += securities => securities.ForEach(s => s.Connector = studioConnector);
-			NewPortfolios += portfolios => portfolios.ForEach(p => p.Connector = studioConnector);
-		}
-
-		protected override void OnConnect()
-		{
-			Task.Factory.StartNew(() =>
-			{
-				base.OnConnect();
-
-				Securities.ForEach(s => _adapter.SendOutMessage(s.ToMessage(GetSecurityId(s))));
-				Portfolios.ForEach(p => _adapter.SendOutMessage(p.ToMessage()));
-			});
-		}
-	}
-
-	sealed class StudioConnectorEntityFactory : EntityFactory, ISecurityProvider
-	{
-		private readonly StudioEntityRegistry _entityRegistry;
-
-		public StudioConnectorEntityFactory()
-		{
-			_entityRegistry = (StudioEntityRegistry)ConfigManager.GetService<IStudioEntityRegistry>();
-		}
-
-		public override Portfolio CreatePortfolio(string name)
-		{
-			return _entityRegistry.Portfolios.ReadById(name) ?? base.CreatePortfolio(name);
-		}
-
-		public override Security CreateSecurity(string id)
-		{
-			return _entityRegistry.Securities.ReadById(id) ?? base.CreateSecurity(id);
-		}
-
-		IEnumerable<Security> ISecurityProvider.Lookup(Security criteria)
-		{
-			return criteria.Id.IsEmpty()
-				? Enumerable.Empty<Security>()
-				: new[] { _entityRegistry.Securities.ReadById(criteria.Id) };
-		}
-
-		object ISecurityProvider.GetNativeId(Security security)
-		{
-			return null;
-		}
-
-		int ISecurityProvider.Count
-		{
-			get { return ((ISecurityProvider)_entityRegistry.Securities).Count; }
-		}
-
-		event Action<Security> ISecurityProvider.Added
-		{
-			add { }
-			remove { }
-		}
-
-		event Action<Security> ISecurityProvider.Removed
-		{
-			add { }
-			remove { }
-		}
-
-		event Action ISecurityProvider.Cleared
-		{
-			add { }
-			remove { }
-		}
-
-		void IDisposable.Dispose()
-		{
 		}
 	}
 }

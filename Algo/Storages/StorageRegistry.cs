@@ -17,7 +17,7 @@ namespace StockSharp.Algo.Storages
 	using StockSharp.Localization;
 
 	/// <summary>
-	/// The base class describing the storage of market data.
+	/// The storage of market data.
 	/// </summary>
 	public class StorageRegistry : Disposable, IStorageRegistry
 	{
