@@ -1,6 +1,6 @@
 ﻿using Ecng.Configuration;
 using Ecng.Xaml;
-using StockSharp.Algo;
+
 using StockSharp.BusinessEntities;
 
 namespace StockSharp.Terminal
@@ -18,7 +18,7 @@ namespace StockSharp.Terminal
 			NewChartCommand = new DelegateCommand(CreateNewChart, CanCreateNewChart);
 			NewMarketDepthCommand = new DelegateCommand(CreateNewMarketDepth, CanCreateNewMarketDepth);
 
-			SecurityGrid.SecurityProvider = ConfigManager.GetService<FilterableSecurityProvider>();
+			SecurityGrid.SecurityProvider = ConfigManager.GetService<ISecurityProvider>();
 		}
 
 		public DelegateCommand NewChartCommand { private set; get; }

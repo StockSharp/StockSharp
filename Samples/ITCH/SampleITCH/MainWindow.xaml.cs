@@ -5,10 +5,8 @@ namespace SampleITCH
 	using System.Windows;
 
 	using Ecng.Common;
-	using Ecng.Configuration;
 	using Ecng.Xaml;
 
-	using StockSharp.Algo;
 	using StockSharp.BusinessEntities;
 	using StockSharp.ITCH;
 	using StockSharp.Localization;
@@ -92,8 +90,6 @@ namespace SampleITCH
 				if (!_initialized)
 				{
 					_initialized = true;
-
-					ConfigManager.RegisterService(new FilterableSecurityProvider(Trader));
 
 					// update gui labes
 					Trader.ReConnectionSettings.WorkingTime = ExchangeBoard.Forts.WorkingTime;

@@ -964,7 +964,7 @@ namespace StockSharp.Studio
 
 			var connector = new StudioRegistryConnector(_connector);
 			ConfigManager.RegisterService<IConnector>(connector);
-			ConfigManager.RegisterService(new FilterableSecurityProvider(connector));
+			ConfigManager.RegisterService<ISecurityProvider>(new FilterableSecurityProvider(connector));
 			connector.Connect();
 
 			ConfigManager.RegisterService<IStudioConnector>(_connector);

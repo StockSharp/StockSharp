@@ -10,8 +10,21 @@
 
 	class StrategyEntityFactory : EntityFactory, ISecurityProvider
 	{
-		private class SecurityList : SynchronizedList<Security>, ISecurityList
+		private class SecurityList : SynchronizedList<Security>, ISecurityProvider
 		{
+			IEnumerable<Security> ISecurityProvider.Lookup(Security criteria)
+			{
+				return this.Filter(criteria);
+			}
+
+			object ISecurityProvider.GetNativeId(Security security)
+			{
+				return null;
+			}
+
+			void IDisposable.Dispose()
+			{
+			}
 		}
 
 		private readonly CachedSynchronizedDictionary<string, Security> _securities = new CachedSynchronizedDictionary<string, Security>();
@@ -19,7 +32,10 @@
 
 		private readonly SecurityList _securityList = new SecurityList();
 
-		public ISecurityList Securities { get { return _securityList; } }
+		public ISecurityProvider SecurityProvider
+		{
+			get { return _securityList; }
+		}
 
 		/// <summary>
 		/// Создать инструмент по идентификатору.
@@ -53,10 +69,7 @@
 		/// <returns>Найденные инструменты.</returns>
 		public IEnumerable<Security> Lookup(Security criteria)
 		{
-			if (criteria == null)
-				throw new ArgumentNullException("criteria");
-
-			if (criteria.Code == "*")
+			if (criteria.IsLookupAll())
 				return _securities.CachedValues;
 
 			//TODO criteria.Id = null
@@ -75,6 +88,33 @@
 				throw new ArgumentNullException("name");
 
 			return CreatePortfolio(name);
+		}
+
+		int ISecurityProvider.Count
+		{
+			get { return _securityList.Count; }
+		}
+
+		event Action<Security> ISecurityProvider.Added
+		{
+			add { }
+			remove { }
+		}
+
+		event Action<Security> ISecurityProvider.Removed
+		{
+			add { }
+			remove { }
+		}
+
+		event Action ISecurityProvider.Cleared
+		{
+			add { }
+			remove { }
+		}
+
+		void IDisposable.Dispose()
+		{
 		}
 	}
 }

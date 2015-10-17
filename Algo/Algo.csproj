@@ -359,8 +359,10 @@
     <Compile Include="Storages\IMarketDataMetaInfo.cs" />
     <Compile Include="Storages\InMemoryMarketDataStorage.cs" />
     <Compile Include="Storages\ISecurityMarketDataDrive.cs" />
-    <Compile Include="Storages\IStorageSecurityList.cs" />
     <Compile Include="Storages\ISecurityStorage.cs" />
+    <Compile Include="Storages\IStorageSecurityList.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Storages\Level1Serializer.cs" />
     <Compile Include="Storages\NewsList.cs" />
     <Compile Include="Storages\ExecutionSerializer.cs" />

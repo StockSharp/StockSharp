@@ -166,7 +166,7 @@ namespace StockSharp.Xaml
 		/// <summary>
 		/// The provider of information about instruments.
 		/// </summary>
-		public FilterableSecurityProvider SecurityProvider
+		public ISecurityProvider SecurityProvider
 		{
 			get { return SecurityCtrl.SecurityProvider; }
 			set { SecurityCtrl.SecurityProvider = value; }

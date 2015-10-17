@@ -10,7 +10,6 @@ namespace StockSharp.Studio.Controls
 	using Ecng.Configuration;
 	using Ecng.Xaml;
 
-	using StockSharp.Algo;
 	using StockSharp.BusinessEntities;
 	using StockSharp.Studio.Core.Commands;
 	using StockSharp.Localization;
@@ -36,7 +35,7 @@ namespace StockSharp.Studio.Controls
 		/// <summary>
 		/// Поставщик информации об инструментах.
 		/// </summary>
-		public FilterableSecurityProvider SecurityProvider
+		public ISecurityProvider SecurityProvider
 		{
 			get { return SecuritiesAll.SecurityProvider; }
 			set { SecuritiesAll.SecurityProvider = value; }
@@ -87,7 +86,7 @@ namespace StockSharp.Studio.Controls
 			base.OnClosed(e);
 		}
 
-		public void SelectSecurities(IEnumerable<Security> securities)
+		public void SelectSecurities(Security[] securities)
 		{
 			SecuritiesSelected.Securities.AddRange(securities);
 			SecuritiesAll.ExcludeSecurities.AddRange(securities);
@@ -95,7 +94,7 @@ namespace StockSharp.Studio.Controls
 			EnableOk();
 		}
 
-		private void UnselectSecurities(IEnumerable<Security> securities)
+		private void UnselectSecurities(Security[] securities)
 		{
 			SecuritiesSelected.Securities.RemoveRange(securities);
 			SecuritiesAll.ExcludeSecurities.RemoveRange(securities);

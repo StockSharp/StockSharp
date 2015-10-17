@@ -7,6 +7,7 @@ namespace StockSharp.Xaml
 	using Ecng.Common;
 	using Ecng.Serialization;
 
+	using StockSharp.Algo;
 	using StockSharp.BusinessEntities;
 
 	/// <summary>
@@ -66,7 +67,7 @@ namespace StockSharp.Xaml
 
 			Filter.Code = SecurityCodeLike.Text.Trim();
 
-			if (Filter.Code == "*")
+			if (Filter.IsLookupAll())
 				Filter.Code = string.Empty;
 			//else if (Filter.Code.IsEmpty())
 			//	return;

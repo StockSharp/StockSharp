@@ -2,173 +2,87 @@ namespace StockSharp.Algo
 {
 	using System;
 	using System.Collections.Generic;
-	using System.Collections.Specialized;
 	using System.Linq;
 
-	using Ecng.Collections;
 	using Ecng.Common;
 
 	using Gma.DataStructures.StringSearch;
 
 	using MoreLinq;
 
-	using StockSharp.Algo.Storages;
 	using StockSharp.BusinessEntities;
-
-	/// <summary>
-	/// Interface describing a list of items.
-	/// </summary>
-	public interface ISecurityList : INotifyList<Security>, ICollectionEx<Security>, ISynchronizedCollection<Security>
-	{
-	}
 
 	/// <summary>
 	/// Provider of information about instruments supporting search using <see cref="SuffixTrie{T}"/>.
 	/// </summary>
 	public class FilterableSecurityProvider : Disposable, ISecurityProvider
 	{
-		private class SecurityList : SynchronizedList<Security>, ISecurityList
-		{
-		}
-
-		private ISecurityStorage _storage;
+		private readonly SyncObject _sync = new SyncObject();
+		private readonly List<Security> _allSecurities = new List<Security>();
 		private readonly ITrie<Security> _trie = new SuffixTrie<Security>(1);
 
-		/// <summary>
-		/// Available instruments.
-		/// </summary>
-		public ISecurityList Securities { get; private set; }
+		///// <summary>
+		///// Filter for instruments exclusion.
+		///// </summary>
+		//public Func<Security, bool> ExcludeFilter { get; private set; }
 
-		private IConnector _connector;
+		///// <summary>
+		///// The number of excluded instruments by filter <see cref="ExcludeFilter"/>.
+		///// </summary>
+		//public int ExcludedCount { get; private set; }
+
+		private readonly ISecurityProvider _provider;
+		private readonly bool _ownProvider;
 
 		/// <summary>
-		/// Connection to the trading system.
+		/// Initializes a new instance of the <see cref="FilterableSecurityProvider"/>.
 		/// </summary>
-		public IConnector Connector
+		/// <param name="provider">Security meta info provider.</param>
+		/// <param name="ownProvider"><see langword="true"/> to leave the <paramref name="provider"/> open after the <see cref="FilterableSecurityProvider"/> object is disposed; otherwise, <see langword="false"/>.</param>
+		///// <param name="excludeFilter">Filter for instruments exclusion.</param>
+		public FilterableSecurityProvider(ISecurityProvider provider, bool ownProvider = false/*, Func<Security, bool> excludeFilter = null*/)
 		{
-			get { return _connector; }
-			private set
+			if (provider == null)
+				throw new ArgumentNullException("provider");
+
+			_provider = provider;
+			_ownProvider = ownProvider;
+
+			//ExcludeFilter = excludeFilter;
+
+			_provider.Added += AddSecurity;
+			_provider.Removed += RemoveSecurity;
+			_provider.Cleared += ClearSecurities;
+
+			_provider.LookupAll().ForEach(AddSecurity);
+		}
+
+		/// <summary>
+		/// Gets the number of instruments contained in the <see cref="ISecurityProvider"/>.
+		/// </summary>
+		public int Count
+		{
+			get
 			{
-				if (_connector == value)
-					return;
-
-				if (_connector != null)
-				{
-					_connector.NewSecurities -= OnNewSecurities;
-					Securities.Clear();
-				}
-
-				_connector = value;
-
-				if (_connector == null)
-					return;
-
-				//if (!OnlyNewSecurities)
-				OnNewSecurities(_connector.Securities);
-
-				_connector.NewSecurities += OnNewSecurities;
+				lock (_sync)
+					return _allSecurities.Count;
 			}
 		}
 
-		///// <summary>
-		///// To get only new instruments from the trading system.
-		///// </summary>
-		//public bool OnlyNewSecurities { get; set; }
+		/// <summary>
+		/// New instrument created.
+		/// </summary>
+		public event Action<Security> Added;
 
 		/// <summary>
-		/// Filter for instruments exclusion.
+		/// Instrument deleted.
 		/// </summary>
-		public Func<Security, bool> ExcludeFilter { get; private set; }
+		public event Action<Security> Removed;
 
 		/// <summary>
-		/// The number of excluded instruments by filter <see cref="FilterableSecurityProvider.ExcludeFilter"/>.
+		/// The storage was cleared.
 		/// </summary>
-		public int ExcludedCount { get; private set; }
-
-		/// <summary>
-		/// Available instruments set change event.
-		/// </summary>
-		public event Action<NotifyCollectionChangedAction, Security> SecuritiesChanged;
-
-		/// <summary>
-		/// Initializes a new instance of the <see cref="FilterableSecurityProvider"/>.
-		/// </summary>
-		/// <param name="securities">Securities.</param>
-		/// <param name="excludeFilter">Filter for instruments exclusion.</param>
-		public FilterableSecurityProvider(ISecurityList securities, Func<Security, bool> excludeFilter = null)
-		{
-			if (securities == null)
-				throw new ArgumentNullException("securities");
-
-			Securities = securities;
-			ExcludeFilter = excludeFilter;
-
-			Securities.Added += AddSuffix;
-			Securities.Inserted += (i, s) => AddSuffix(s);
-
-			Securities.Removed += s =>
-			{
-				lock (_trie)
-					_trie.Remove(s);
-
-				if (ExcludeFilter != null && ExcludeFilter(s))
-					ExcludedCount--;
-
-				SecuritiesChanged.SafeInvoke(NotifyCollectionChangedAction.Remove, s);
-			};
-
-			Securities.Cleared += () =>
-			{
-				lock (_trie)
-					_trie.Clear();
-
-				ExcludedCount = 0;
-				SecuritiesChanged.SafeInvoke(NotifyCollectionChangedAction.Reset, null);
-			};
-
-			Securities.ForEach(AddSuffix);
-		}
-
-		/// <summary>
-		/// Initializes a new instance of the <see cref="FilterableSecurityProvider"/>.
-		/// </summary>
-		/// <param name="excludeFilter">Filter for instruments exclusion.</param>
-		public FilterableSecurityProvider(Func<Security, bool> excludeFilter = null)
-			: this(new SecurityList(), excludeFilter)
-		{
-		}
-
-		/// <summary>
-		/// Initializes a new instance of the <see cref="FilterableSecurityProvider"/>.
-		/// </summary>
-		/// <param name="connector">Connection to the trading system.</param>
-		/// <param name="excludeFilter">Filter for instruments exclusion.</param>
-		public FilterableSecurityProvider(IConnector connector, Func<Security, bool> excludeFilter = null)
-			: this(excludeFilter)
-		{
-			if (connector == null)
-				throw new ArgumentNullException("connector");
-
-			//OnlyNewSecurities = onlyNewSecurities;
-			Connector = connector;
-		}
-
-		/// <summary>
-		/// Initializes a new instance of the <see cref="FilterableSecurityProvider"/>.
-		/// </summary>
-		/// <param name="storage">Security meta info storage.</param>
-		/// <param name="excludeFilter">Filter for instruments exclusion.</param>
-		public FilterableSecurityProvider(ISecurityStorage storage, Func<Security, bool> excludeFilter = null)
-			: this(excludeFilter)
-		{
-			if (storage == null)
-				throw new ArgumentNullException("storage");
-
-			OnNewSecurities(storage.LookupAll());
-
-			_storage = storage;
-			_storage.NewSecurity += OnNewSecurity;
-		}
+		public event Action Cleared;
 
 		/// <summary>
 		/// Lookup securities by criteria <paramref name="criteria" />.
@@ -181,31 +95,31 @@ namespace StockSharp.Algo
 				throw new ArgumentNullException("criteria");
 
 			var filter = criteria.Id.IsEmpty()
-				? (criteria.Code == "*" ? string.Empty : criteria.Code.ToLowerInvariant())
+				? (criteria.IsLookupAll() ? string.Empty : criteria.Code.ToLowerInvariant())
 				: criteria.Id.ToLowerInvariant();
 
 			IEnumerable<Security> securities;
 
-			if (filter.IsEmpty())
+			lock (_sync)
 			{
-				var syncCollection = Securities as ISynchronizedCollection<Security>;
-
-				securities = syncCollection != null
-					? syncCollection.SyncGet(c => c.ToArray())
-					: Securities.ToArray();
-			}
-			else
-			{
-				lock (_trie)
+				if (filter.IsEmpty())
 				{
-					securities = _trie.Retrieve(filter).ToArray();
+					securities = _allSecurities;
+				}
+				else
+				{
+					securities = _trie.Retrieve(filter);
 
 					if (!criteria.Id.IsEmpty())
 						securities = securities.Where(s => s.Id.CompareIgnoreCase(criteria.Id));
+					
 				}
+
+				securities = securities.ToArray();
 			}
 
-			return ExcludeFilter == null ? securities : securities.Where(s => !ExcludeFilter(s));
+			return securities;
+			//return ExcludeFilter == null ? securities : securities.Where(s => !ExcludeFilter(s));
 		}
 
 		object ISecurityProvider.GetNativeId(Security security)
@@ -213,19 +127,9 @@ namespace StockSharp.Algo
 			return null;
 		}
 
-		private void OnNewSecurities(IEnumerable<Security> securities)
+		private void AddSecurity(Security security)
 		{
-			Securities.AddRange(securities);
-		}
-
-		private void OnNewSecurity(Security security)
-		{
-			Securities.Add(security);
-		}
-
-		private void AddSuffix(Security security)
-		{
-			lock (_trie)
+			lock (_sync)
 			{
 				AddSuffix(security.Id, security);
 				AddSuffix(security.Code, security);
@@ -236,12 +140,14 @@ namespace StockSharp.Algo
 				AddSuffix(security.ExternalId.Isin, security);
 				AddSuffix(security.ExternalId.Ric, security);
 				AddSuffix(security.ExternalId.Sedol, security);
+
+				_allSecurities.Add(security);
 			}
 
-			if (ExcludeFilter != null && ExcludeFilter(security))
-				ExcludedCount++;
+			//if (ExcludeFilter != null && ExcludeFilter(security))
+			//	ExcludedCount++;
 
-			SecuritiesChanged.SafeInvoke(NotifyCollectionChangedAction.Add, security);
+			Added.SafeInvoke(security);
 		}
 
 		private void AddSuffix(string text, Security security)
@@ -252,18 +158,44 @@ namespace StockSharp.Algo
 			_trie.Add(text.ToLowerInvariant(), security);
 		}
 
+		private void RemoveSecurity(Security security)
+		{
+			lock (_sync)
+			{
+				_trie.Remove(security);
+				_allSecurities.Remove(security);
+			}
+
+			//if (ExcludeFilter != null && ExcludeFilter(security))
+			//	ExcludedCount--;
+
+			Removed.SafeInvoke(security);
+		}
+
+		private void ClearSecurities()
+		{
+			lock (_sync)
+			{
+				_trie.Clear();
+				_allSecurities.Clear();
+			}
+
+			//ExcludedCount = 0;
+
+			Cleared.SafeInvoke();
+		}
+
 		/// <summary>
 		/// Release resources.
 		/// </summary>
 		protected override void DisposeManaged()
 		{
-			Connector = null;
+			_provider.Added -= AddSecurity;
+			_provider.Removed -= RemoveSecurity;
+			_provider.Cleared -= ClearSecurities;
 
-			if (_storage != null)
-			{
-				_storage.NewSecurity -= OnNewSecurity;
-				_storage = null;
-			}
+			if (_ownProvider)
+				_provider.Dispose();
 
 			base.DisposeManaged();
 		}

@@ -49,7 +49,7 @@ namespace StockSharp.Algo
 	/// <summary>
 	/// The supplier of information on instruments, getting data from the collection.
 	/// </summary>
-	public class CollectionSecurityProvider : ISecurityProvider
+	public class CollectionSecurityProvider : Disposable, ISecurityProvider
 	{
 		/// <summary>
 		/// Initializes a new instance of the <see cref="CollectionSecurityProvider"/>.
@@ -60,10 +60,10 @@ namespace StockSharp.Algo
 			if (securities == null)
 				throw new ArgumentNullException("securities");
 
-			_securities = securities;
+			_securities = securities.ToArray();
 		}
 
-		private readonly IEnumerable<Security> _securities;
+		private readonly Security[] _securities;
 
 		/// <summary>
 		/// The instruments collection.
@@ -71,6 +71,32 @@ namespace StockSharp.Algo
 		protected virtual IEnumerable<Security> Securities
 		{
 			get { return _securities; }
+		}
+
+		/// <summary>
+		/// Gets the number of instruments contained in the <see cref="ISecurityProvider"/>.
+		/// </summary>
+		public int Count
+		{
+			get { return _securities.Length; }
+		}
+
+		event Action<Security> ISecurityProvider.Added
+		{
+			add { }
+			remove { }
+		}
+
+		event Action<Security> ISecurityProvider.Removed
+		{
+			add { }
+			remove { }
+		}
+
+		event Action ISecurityProvider.Cleared
+		{
+			add { }
+			remove { }
 		}
 
 		/// <summary>
@@ -1949,19 +1975,15 @@ namespace StockSharp.Algo
 			if (criteria == null)
 				throw new ArgumentNullException("criteria");
 
-			var id = criteria.Id;
-
-			if (!id.IsEmpty())
-				return securities.Where(s => s.Id == criteria.Id).ToArray();
-
-			var code = criteria.Code;
-
-			if (code == "*")
+			if (criteria.IsLookupAll())
 				return securities.ToArray();
+
+			if (!criteria.Id.IsEmpty())
+				return securities.Where(s => s.Id == criteria.Id).ToArray();
 
 			return securities.Where(s =>
 			{
-				if (!code.IsEmpty() && !s.Code.ContainsIgnoreCase(code))
+				if (!criteria.Code.IsEmpty() && !s.Code.ContainsIgnoreCase(criteria.Code))
 					return false;
 
 				var board = criteria.Board;
@@ -3318,6 +3340,30 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
+		/// Lookup all securities predefined criteria.
+		/// </summary>
+		public static readonly Security LookupAllCriteria = new Security { Code = "*" };
+
+		/// <summary>
+		/// Determine the <paramref name="criteria"/> contains lookup all filter.
+		/// </summary>
+		/// <param name="criteria">The instrument whose fields will be used as a filter.</param>
+		/// <returns>Check result.</returns>
+		public static bool IsLookupAll(this Security criteria)
+		{
+			if (criteria == null)
+				throw new ArgumentNullException("criteria");
+
+			if (criteria == LookupAllCriteria)
+				return true;
+
+			return
+				criteria.Id.IsEmpty() &&
+				criteria.Code == "*" &&
+				criteria.Type == null;
+		}
+
+		/// <summary>
 		/// Get all available instruments.
 		/// </summary>
 		/// <param name="provider">The provider of information about instruments.</param>
@@ -3327,7 +3373,7 @@ namespace StockSharp.Algo
 			if (provider == null)
 				throw new ArgumentNullException("provider");
 
-			return provider.Lookup(new Security { Code = "*" });
+			return provider.Lookup(LookupAllCriteria);
 		}
 
 		/// <summary>
@@ -3339,7 +3385,7 @@ namespace StockSharp.Algo
 			if (storage == null)
 				throw new ArgumentNullException("storage");
 
-			storage.DeleteBy(new Security { Code = "*" });
+			storage.DeleteBy(LookupAllCriteria);
 		}
 
 		/// <summary>

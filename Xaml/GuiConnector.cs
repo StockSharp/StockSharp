@@ -1012,6 +1012,29 @@ namespace StockSharp.Xaml
 			return Connector.GetLevel1Fields(security);
 		}
 
+		int ISecurityProvider.Count
+		{
+			get { return Connector.Count; }
+		}
+
+		event Action<Security> ISecurityProvider.Added
+		{
+			add { Connector.Added += value; }
+			remove { Connector.Added -= value; }
+		}
+
+		event Action<Security> ISecurityProvider.Removed
+		{
+			add { Connector.Removed += value; }
+			remove { Connector.Removed -= value; }
+		}
+
+		event Action ISecurityProvider.Cleared
+		{
+			add { Connector.Cleared += value; }
+			remove { Connector.Cleared -= value; }
+		}
+
 		/// <summary>
 		/// Lookup securities by criteria <paramref name="criteria" />.
 		/// </summary>

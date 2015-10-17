@@ -55,7 +55,7 @@ namespace StockSharp.Algo.Storages
 							.Equals(Schema.Fields["Type"])
 						.CloseBracket();
 
-			_readAllByCodeAndType = database.GetCommand(readAllByCodeAndType, Schema, new FieldList(new[] { Schema.Fields["Code"], Schema.Fields["Type"] }), new FieldList());
+			_readAllByCodeAndType = database.GetCommand(readAllByCodeAndType, Schema, new FieldList(Schema.Fields["Code"], Schema.Fields["Type"]), new FieldList());
 
 			var readAllByCodeAndTypeAndExpiryDate = database.CommandType == CommandType.StoredProcedure
 				? Query.Execute(Schema, SqlCommandTypes.ReadAll, string.Empty, "CodeAndTypeAndExpiryDate")
@@ -77,7 +77,7 @@ namespace StockSharp.Algo.Storages
 							.Equals(Schema.Fields["ExpiryDate"])
 						.CloseBracket();
 
-			_readAllByCodeAndTypeAndExpiryDate = database.GetCommand(readAllByCodeAndTypeAndExpiryDate, Schema, new FieldList(new[] { Schema.Fields["Code"], Schema.Fields["Type"], Schema.Fields["ExpiryDate"] }), new FieldList());
+			_readAllByCodeAndTypeAndExpiryDate = database.GetCommand(readAllByCodeAndTypeAndExpiryDate, Schema, new FieldList(Schema.Fields["Code"], Schema.Fields["Type"], Schema.Fields["ExpiryDate"]), new FieldList());
 
 			if (database.CommandType == CommandType.Text)
 			{
@@ -98,7 +98,7 @@ namespace StockSharp.Algo.Storages
 							.Equals(Schema.Fields["Type"])
 						.CloseBracket();
 
-				_readAllByBoardAndType = database.GetCommand(readAllByBoardAndType, Schema, new FieldList(new[] { Schema.Fields["Board"], Schema.Fields["Type"] }), new FieldList());
+				_readAllByBoardAndType = database.GetCommand(readAllByBoardAndType, Schema, new FieldList(Schema.Fields["Board"], Schema.Fields["Type"]), new FieldList());
 
 				var readAllByTypeAndExpiryDate = Query
 					.Select(Schema)
@@ -112,7 +112,7 @@ namespace StockSharp.Algo.Storages
 							.Equals(Schema.Fields["ExpiryDate"])
 						.CloseBracket();
 
-				_readAllByTypeAndExpiryDate = database.GetCommand(readAllByTypeAndExpiryDate, Schema, new FieldList(new[] { Schema.Fields["Type"], Schema.Fields["ExpiryDate"] }), new FieldList());
+				_readAllByTypeAndExpiryDate = database.GetCommand(readAllByTypeAndExpiryDate, Schema, new FieldList(Schema.Fields["Type"], Schema.Fields["ExpiryDate"]), new FieldList());
 
 				var readAllByType = Query
 					.Select(Schema)
@@ -120,7 +120,7 @@ namespace StockSharp.Algo.Storages
 					.Where()
 					.Equals(Schema.Fields["Type"]);
 
-				_readAllByType = database.GetCommand(readAllByType, Schema, new FieldList(new[] { Schema.Fields["Type"] }), new FieldList());
+				_readAllByType = database.GetCommand(readAllByType, Schema, new FieldList(Schema.Fields["Type"]), new FieldList());
 			}
 		}
 
@@ -131,6 +131,9 @@ namespace StockSharp.Algo.Storages
 		/// <returns>Found instruments.</returns>
 		public IEnumerable<Security> Lookup(Security criteria)
 		{
+			if (criteria.IsLookupAll())
+				return this.ToArray();
+
 			if (!criteria.Id.IsEmpty())
 			{
 				var security = ReadById(criteria.Id);
@@ -226,11 +229,6 @@ namespace StockSharp.Algo.Storages
 		}
 
 		/// <summary>
-		/// Ñîáûòèå äîáàâëåíèå íîâîãî èíñòðóìåíòà.
-		/// </summary>
-		public event Action<Security> NewSecurity;
-
-		/// <summary>
 		/// To save the trading object.
 		/// </summary>
 		/// <param name="entity">The trading object.</param>
@@ -261,7 +259,6 @@ namespace StockSharp.Algo.Storages
 		protected override void OnAdd(Security entity)
 		{
 			_registry.ExchangeBoards.Save(entity.Board);
-			NewSecurity.SafeInvoke(entity);
 			base.OnAdd(entity);
 		}
 
@@ -281,6 +278,10 @@ namespace StockSharp.Algo.Storages
 		public void DeleteBy(Security criteria)
 		{
 			this.Filter(criteria).ForEach(s => Remove(s));
+		}
+
+		void IDisposable.Dispose()
+		{
 		}
 	}
 }

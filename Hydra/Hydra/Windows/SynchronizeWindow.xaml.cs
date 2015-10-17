@@ -110,7 +110,7 @@ namespace StockSharp.Hydra.Windows
 
 				var iterCount = 
 					securityPaths.Count + // кол-во проходов по директории для создания инструмента
-					DriveCache.Instance.AllDrives.Count() * (EntityRegistry.Securities.Count + securityPaths.Count); // кол-во сбросов кэша дат
+					DriveCache.Instance.AllDrives.Count() * (((IList<Security>)EntityRegistry.Securities).Count + securityPaths.Count); // кол-во сбросов кэша дат
 
 				this.GuiSync(() => Progress.Maximum = iterCount);
 

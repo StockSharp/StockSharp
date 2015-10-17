@@ -1018,13 +1018,13 @@ namespace StockSharp.Algo.Storages
 			});
 		}
 
-		private class SecurityStorage : CollectionSecurityProvider, ISecurityStorage
+		private class SecurityStorage : Disposable, ISecurityStorage
 		{
 			private const string _format = "{Id};{Type};{Decimals};{PriceStep};{VolumeStep};{Multiplier};{Name};{ShortName};{UnderlyingSecurityId};{Class};{Currency};{OptionType};{Strike};{BinaryOptionType}";
 			private readonly string _file;
+			private readonly CachedSynchronizedSet<Security> _securities = new CachedSynchronizedSet<Security>();
 
 			public SecurityStorage(IMarketDataDrive drive)
-				: base(Enumerable.Empty<Security>())
 			{
 				if (drive == null)
 					throw new ArgumentNullException("drive");
@@ -1067,16 +1067,31 @@ namespace StockSharp.Algo.Storages
 				});
 			}
 
-			private readonly CachedSynchronizedSet<Security> _securities = new CachedSynchronizedSet<Security>();
-
-			protected override IEnumerable<Security> Securities
+			int ISecurityProvider.Count
 			{
-				get { return _securities.Cache; }
+				get { return _securities.Count; }
 			}
 
-			public event Action<Security> NewSecurity;
+			public event Action<Security> Added;
+			public event Action<Security> Removed;
 
-			public void Save(Security security)
+			public event Action Cleared
+			{
+				add { }
+				remove { }
+			}
+
+			IEnumerable<Security> ISecurityProvider.Lookup(Security criteria)
+			{
+				return _securities.Cache.Filter(criteria);
+			}
+
+			object ISecurityProvider.GetNativeId(Security security)
+			{
+				return null;
+			}
+
+			void ISecurityStorage.Save(Security security)
 			{
 				if (!_securities.TryAdd(security))
 					return;
@@ -1087,18 +1102,26 @@ namespace StockSharp.Algo.Storages
 						file.WriteLine(_format.PutEx(security));
 				});
 
-				NewSecurity.SafeInvoke(security);
+				Added.SafeInvoke(security);
 			}
 
-			public void Delete(Security security)
+			void ISecurityStorage.Delete(Security security)
 			{
-				_securities.Remove(security);
+				if (!_securities.Remove(security))
+					return;
+
 				Save();
+				Removed.SafeInvoke(security);
 			}
 
-			public void DeleteBy(Security criteria)
+			void ISecurityStorage.DeleteBy(Security criteria)
 			{
-				_securities.RemoveRange(_securities.Cache.Filter(criteria));
+				foreach (var security in _securities.Cache.Filter(criteria))
+				{
+					if (_securities.Remove(security))
+						Removed.SafeInvoke(security);
+				}
+				
 				Save();
 			}
 
@@ -1115,9 +1138,9 @@ namespace StockSharp.Algo.Storages
 				});
 			}
 
-			public IEnumerable<string> GetSecurityIds()
+			IEnumerable<string> ISecurityStorage.GetSecurityIds()
 			{
-				return Securities.Select(s => s.Id);
+				return _securities.Cache.Select(s => s.Id);
 			}
 		}
 

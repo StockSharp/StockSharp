@@ -47,7 +47,7 @@ namespace SampleRealTimeEmulation
 			_logManager = new LogManager();
 			_logManager.Listeners.Add(new GuiLogListener(Log));
 
-			ChartArea area = new ChartArea();
+			var area = new ChartArea();
 			Chart.Areas.Add(area);
 
 			_candlesElem = new ChartCandleElement();
@@ -105,13 +105,12 @@ namespace SampleRealTimeEmulation
 					else
 					{
 						// create real-time emu connector
-						_connector =
-						new RealTimeEmulationTrader<IMessageAdapter>(new IQFeedMarketDataMessageAdapter(new MillisecondIncrementalIdGenerator())
-							{
-								Level1Address = Level1AddressCtrl.Text.To<EndPoint>(),
-								Level2Address = Level2AddressCtrl.Text.To<EndPoint>(),
-								LookupAddress = LookupAddressCtrl.Text.To<EndPoint>()
-							});
+						_connector = new RealTimeEmulationTrader<IMessageAdapter>(new IQFeedMarketDataMessageAdapter(new MillisecondIncrementalIdGenerator())
+						{
+							Level1Address = Level1AddressCtrl.Text.To<EndPoint>(),
+							Level2Address = Level2AddressCtrl.Text.To<EndPoint>(),
+							LookupAddress = LookupAddressCtrl.Text.To<EndPoint>()
+						});
 
 						_connector.EmulationAdapter.Emulator.Settings.TimeZone = TimeHelper.Est;
 					}
@@ -129,26 +128,26 @@ namespace SampleRealTimeEmulation
 
 					// subscribe on connection successfully event
 					_connector.Connected += () =>
-						{
-							// update gui labels
-							this.GuiAsync(() => { ChangeConnectStatus(true); });
-						};
+					{
+						// update gui labels
+						this.GuiAsync(() => { ChangeConnectStatus(true); });
+					};
 
 					// subscribe on disconnection event
 					_connector.Disconnected += () =>
-						{
-							// update gui labels
-							this.GuiAsync(() => { ChangeConnectStatus(false); });
-						};
+					{
+						// update gui labels
+						this.GuiAsync(() => { ChangeConnectStatus(false); });
+					};
 
 					// subscribe on connection error event
 					_connector.ConnectionError += error => this.GuiAsync(() =>
-						{
-							// update gui labels
-							ChangeConnectStatus(false);
+					{
+						// update gui labels
+						ChangeConnectStatus(false);
 
-							MessageBox.Show(this, error.ToString(), LocalizedStrings.Str2959);
-						});
+						MessageBox.Show(this, error.ToString(), LocalizedStrings.Str2959);
+					});
 
 					_connector.NewMarketDepths += OnDepths;
 					_connector.MarketDepthsChanged += OnDepths;
@@ -187,7 +186,7 @@ namespace SampleRealTimeEmulation
 			if (_security == null)
 				return;
 
-			MarketDepth depth = depths.FirstOrDefault(d => d.Security == _security);
+			var depth = depths.FirstOrDefault(d => d.Security == _security);
 
 			if (depth == null)
 				return;
@@ -198,10 +197,10 @@ namespace SampleRealTimeEmulation
 		private void OrdersFailed(IEnumerable<OrderFail> fails)
 		{
 			this.GuiAsync(() =>
-				{
-					foreach (OrderFail fail in fails)
-						MessageBox.Show(this, fail.Error.ToString(), LocalizedStrings.Str2960);
-				});
+			{
+				foreach (var fail in fails)
+					MessageBox.Show(this, fail.Error.ToString(), LocalizedStrings.Str2960);
+			});
 		}
 
 		private void ChangeConnectStatus(bool isConnected)
@@ -217,7 +216,7 @@ namespace SampleRealTimeEmulation
 
 		private void ProcessCandles()
 		{
-			foreach (Candle candle in _buffer.SyncGet(c => c.CopyAndClear()))
+			foreach (var candle in _buffer.SyncGet(c => c.CopyAndClear()))
 				Chart.Draw(_candlesElem, candle);
 		}
 

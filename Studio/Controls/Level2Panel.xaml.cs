@@ -31,7 +31,7 @@ namespace StockSharp.Studio.Controls
 
 		private Security[] _securities;
 
-		private static FilterableSecurityProvider SecurityProvider { get { return ConfigManager.GetService<FilterableSecurityProvider>(); } }
+		private static ISecurityProvider SecurityProvider { get { return ConfigManager.GetService<ISecurityProvider>(); } }
 
 		private BuySellSettings Settings
 		{

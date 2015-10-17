@@ -37,7 +37,8 @@ namespace StockSharp.Hydra.Panes
 
 			_entityRegistry = ConfigManager.GetService<IEntityRegistry>();
 
-			SecurityPicker.SecurityProvider = ConfigManager.TryGetService<FilterableSecurityProvider>();
+			SecurityPicker.SecurityProvider = ConfigManager.GetService<ISecurityProvider>();
+			SecurityPicker.ExcludeAllSecurity();
 
 			MarketData.DataLoading += () => MarketDataBusyIndicator.IsBusy = true;
 			MarketData.DataLoaded += () => MarketDataBusyIndicator.IsBusy = false;

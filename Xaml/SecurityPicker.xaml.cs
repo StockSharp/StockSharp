@@ -26,6 +26,23 @@ namespace StockSharp.Xaml
 	/// </summary>
 	public partial class SecurityPicker : IPersistable
 	{
+		private class SecurityList : SynchronizedList<Security>, ISecurityProvider
+		{
+			IEnumerable<Security> ISecurityProvider.Lookup(Security criteria)
+			{
+				return this.Filter(criteria);
+			}
+
+			object ISecurityProvider.GetNativeId(Security security)
+			{
+				return null;
+			}
+
+			void IDisposable.Dispose()
+			{
+			}
+		}
+
 		private const DataGridSelectionMode _defaultSelectionMode = DataGridSelectionMode.Extended;
 
 		/// <summary>
@@ -119,6 +136,7 @@ namespace StockSharp.Xaml
 		private bool _isCounterDirty;
 		private string _prevFilter;
 		private SecurityTypes? _prevType;
+		private bool _ownProvider;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="SecurityPicker"/>.
@@ -152,7 +170,7 @@ namespace StockSharp.Xaml
 			_excludeSecurities.Removed += s => SecurityProviderOnSecuritiesChanged(true, NotifyCollectionChangedAction.Remove, s);
 			_excludeSecurities.Cleared += () => SecurityProviderOnSecuritiesChanged(true, NotifyCollectionChangedAction.Reset, null);
 
-			SecurityProvider = new FilterableSecurityProvider();
+			SecurityProvider = null;
 
 			SecuritiesCtrl.SelectionMode = _defaultSelectionMode;
 
@@ -247,12 +265,20 @@ namespace StockSharp.Xaml
 			set { SetValue(TitleProperty, value); }
 		}
 
+		private readonly SecurityList _securities = new SecurityList();
+
 		/// <summary>
 		/// Available instruments.
 		/// </summary>
-		public ISecurityList Securities
+		public SynchronizedList<Security> Securities
 		{
-			get { return SecurityProvider.Securities; }
+			get
+			{
+				if (!_ownProvider)
+					throw new InvalidOperationException();
+
+				return _securities;
+			}
 		}
 
 		/// <summary>
@@ -263,34 +289,60 @@ namespace StockSharp.Xaml
 			get { return _excludeSecurities; }
 		}
 
-		private FilterableSecurityProvider _securityProvider;
+		private ISecurityProvider _securityProvider;
 
 		/// <summary>
 		/// The provider of information about instruments.
 		/// </summary>
-		public FilterableSecurityProvider SecurityProvider
+		public ISecurityProvider SecurityProvider
 		{
 			get { return _securityProvider; }
 			set
 			{
-				if (_securityProvider == value)
+				if (_securityProvider != null && _securityProvider == value)
 					return;
 
 				if (_securityProvider != null)
 				{
-					_securityProvider.SecuritiesChanged -= SecurityProviderOnSecuritiesChanged;
-					_securityProvider.Dispose();
+					_securityProvider.Added -= AddSecurity;
+					_securityProvider.Removed -= RemoveSecurity;
+					_securityProvider.Cleared -= ClearSecurities;
+
+					if (_ownProvider)
+						_securityProvider.Dispose();
 				}
+
+				if (value == null)
+				{
+					value = new FilterableSecurityProvider(_securities);
+					_ownProvider = true;
+				}
+				else
+					_ownProvider = false;
 
 				_securityProvider = value;
 
-				if (_securityProvider != null)
-					_securityProvider.SecuritiesChanged += SecurityProviderOnSecuritiesChanged;
-				else
-					_securityProvider = new FilterableSecurityProvider();
+				_securityProvider.Added += AddSecurity;
+				_securityProvider.Removed += RemoveSecurity;
+				_securityProvider.Cleared += ClearSecurities;
 
 				FilterSecurities();
 			}
+		}
+
+		private void AddSecurity(Security security)
+		{
+			SecurityProviderOnSecuritiesChanged(false, NotifyCollectionChangedAction.Add, security);
+		}
+
+		private void RemoveSecurity(Security security)
+		{
+			SecurityProviderOnSecuritiesChanged(false, NotifyCollectionChangedAction.Remove, security);
+		}
+
+		private void ClearSecurities()
+		{
+			SecurityProviderOnSecuritiesChanged(false, NotifyCollectionChangedAction.Reset, null);
 		}
 
 		/// <summary>
@@ -325,11 +377,6 @@ namespace StockSharp.Xaml
 				throw new ArgumentNullException("menuItem");
 
 			SecuritiesCtrl.ContextMenu.Items.Add(menuItem);
-		}
-
-		private void SecurityProviderOnSecuritiesChanged(NotifyCollectionChangedAction action, Security security)
-		{
-			SecurityProviderOnSecuritiesChanged(false, action, security);
 		}
 
 		private void SecurityProviderOnSecuritiesChanged(bool exclude, NotifyCollectionChangedAction action, Security security)
@@ -409,7 +456,7 @@ namespace StockSharp.Xaml
 
 			// при уточняющем фильтре выполняем поиск в найденных инструментах
 			if (!fullRefresh
-				&& !_prevFilter.IsEmpty() && filter.StartsWith(_prevFilter, StringComparison.InvariantCultureIgnoreCase)
+				&& !_prevFilter.IsEmpty() && (filter != null && filter.StartsWith(_prevFilter, StringComparison.InvariantCultureIgnoreCase))
 				&& (_prevType == secType || _prevType == null && secType != null)
 				&& FilteredSecurities.Count < 500)
 			{
@@ -418,11 +465,9 @@ namespace StockSharp.Xaml
 				return;
 			}
 
-			// LookupByCode не принимает пустой фильтр
-			if (filter.IsEmpty())
-				filter = "*";
-
-			var securities = SecurityProvider.LookupByCode(filter);
+			var securities = filter.IsEmpty()
+				? SecurityProvider.LookupAll()
+				: SecurityProvider.LookupByCode(filter);
 
 			var toAdd = securities
 				.Where(s => !_excludeSecurities.Contains(s) && (secType == null || s.Type == secType))
@@ -440,7 +485,7 @@ namespace StockSharp.Xaml
 		private void UpdateCounter()
 		{
 			Counter.Text = _counterMask.Put(FilteredSecurities.Count,
-				Securities.Count - SecurityProvider.ExcludedCount - _excludeSecurities.Count);
+				SecurityProvider.Count/* - SecurityProvider.ExcludedCount*/ - _excludeSecurities.Count);
 		}
 
 		private void HandleDoubleClick(object sender, MouseButtonEventArgs e)

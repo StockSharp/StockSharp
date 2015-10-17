@@ -308,7 +308,7 @@ namespace StockSharp.Studio.Controls
 
 		private void OnLoaded()
 		{
-			SecurityPicker.SecurityProvider = ConfigManager.GetService<FilterableSecurityProvider>();
+			SecurityPicker.SecurityProvider = ConfigManager.GetService<ISecurityProvider>();
 
 			_mainArea = ChartPanel.Areas.FirstOrDefault();
 

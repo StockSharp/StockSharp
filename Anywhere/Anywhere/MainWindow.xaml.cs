@@ -151,10 +151,6 @@ namespace StockSharp.Anywhere
                     case MessageTypes.SecurityLookupResult:
                         //Debug.WriteLine("SecurityLookupResult");
 
-                        var lst = new SecurityList();
-                        lst.AddRange(_securities);
-                        this.GuiSync(() => SecurityEditor.SecurityProvider = new FilterableSecurityProvider(lst));
-
                         break;
                     case MessageTypes.PortfolioLookupResult:
                         //Debug.WriteLine("PortfolioLookupResult");
@@ -348,8 +344,21 @@ namespace StockSharp.Anywhere
                 _messAdapter.SendInMessage(new DisconnectMessage());
         }
 
-        private class SecurityList : SynchronizedList<Security>, ISecurityList
+        private class SecurityList : SynchronizedList<Security>, ISecurityProvider
         {
+			IEnumerable<Security> ISecurityProvider.Lookup(Security criteria)
+			{
+				return this.Filter(criteria);
+			}
+
+			object ISecurityProvider.GetNativeId(Security security)
+			{
+				return null;
+			}
+
+			void IDisposable.Dispose()
+			{
+			}
         }
 
         #region Commands

@@ -2607,6 +2607,29 @@ namespace StockSharp.Algo.Strategies
 			return SafeGetConnector().GetLevel1Fields(security);
 		}
 
+		int ISecurityProvider.Count
+		{
+			get { return SafeGetConnector().Count; }
+		}
+
+		event Action<Security> ISecurityProvider.Added
+		{
+			add { SafeGetConnector().Added += value; }
+			remove { SafeGetConnector().Added -= value; }
+		}
+
+		event Action<Security> ISecurityProvider.Removed
+		{
+			add { SafeGetConnector().Removed += value; }
+			remove { SafeGetConnector().Removed -= value; }
+		}
+
+		event Action ISecurityProvider.Cleared
+		{
+			add { SafeGetConnector().Cleared += value; }
+			remove { SafeGetConnector().Cleared -= value; }
+		}
+
 		/// <summary>
 		/// Lookup securities by criteria <paramref name="criteria" />.
 		/// </summary>

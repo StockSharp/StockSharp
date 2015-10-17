@@ -2,16 +2,15 @@
 {
 	using System;
 	using System.Collections.Generic;
-	using System.Linq;
 
 	using Ecng.Collections;
-	using Ecng.Common;
 
 	using StockSharp.Algo.History;
 	using StockSharp.Algo.Storages;
 	using StockSharp.BusinessEntities;
+	using StockSharp.Hydra.Core;
 
-	class QuandlSecurityStorage : ISecurityStorage
+	class QuandlSecurityStorage : NativeIdSecurityStorage<Tuple<string, string>>
 	{
 		private class KeyComparer : IEqualityComparer<Tuple<string, string>>
 		{
@@ -27,83 +26,17 @@
 			}
 		}
 
-		private readonly IEntityRegistry _entityRegistry;
-
 		public QuandlSecurityStorage(IEntityRegistry entityRegistry)
+			: base(entityRegistry, new KeyComparer())
 		{
-			if (entityRegistry == null)
-				throw new ArgumentNullException("entityRegistry");
-
-			_entityRegistry = entityRegistry;
-
-			foreach (var security in entityRegistry.Securities)
-				TryAddToCache(security);
 		}
 
-		private readonly SynchronizedDictionary<Tuple<string, string>, Security> _cacheByQuandlId = new SynchronizedDictionary<Tuple<string, string>, Security>(new KeyComparer());
-
-		public IEnumerable<Security> Securities
+		protected override Tuple<string, string> CreateNativeId(Security security)
 		{
-			get { return _cacheByQuandlId.Values; }
-		}
-
-		IEnumerable<Security> ISecurityProvider.Lookup(Security criteria)
-		{
-			var quandlId = criteria.ExtensionInfo == null
-				? null
-				: Tuple.Create((string)criteria.ExtensionInfo.TryGetValue(QuandlHistorySource.SourceCodeField), (string)criteria.ExtensionInfo.TryGetValue(QuandlHistorySource.SecurityCodeField));
-
-			if (quandlId == null || quandlId.Item1 == null)
-				return _entityRegistry.Securities.Lookup(criteria);
-
-			var security = _cacheByQuandlId.TryGetValue(quandlId);
-			return security == null ? Enumerable.Empty<Security>() : new[] { security };
-		}
-
-		object ISecurityProvider.GetNativeId(Security security)
-		{
-			return _cacheByQuandlId.SyncGet(d => d.FirstOrDefault(p => p.Value == security).Key);
-		}
-
-		public event Action<Security> NewSecurity;
-
-		void ISecurityStorage.Save(Security security)
-		{
-			_entityRegistry.Securities.Save(security);
-			TryAddToCache(security);
-		}
-
-		IEnumerable<string> ISecurityStorage.GetSecurityIds()
-		{
-			return _entityRegistry.Securities.GetSecurityIds();
-		}
-
-		private void TryAddToCache(Security security)
-		{
-			if (security == null)
-				throw new ArgumentNullException("security");
-
 			var sourceCode = (string)security.ExtensionInfo.TryGetValue(QuandlHistorySource.SourceCodeField);
 			var secCode = (string)security.ExtensionInfo.TryGetValue(QuandlHistorySource.SecurityCodeField);
 
-			if (sourceCode != null && secCode != null)
-			{
-				bool isNew;
-				_cacheByQuandlId.SafeAdd(Tuple.Create(sourceCode, secCode), key => security, out isNew);
-
-				if (isNew)
-					NewSecurity.SafeInvoke(security);
-			}
-		}
-
-		void ISecurityStorage.Delete(Security security)
-		{
-			throw new NotSupportedException();
-		}
-
-		void ISecurityStorage.DeleteBy(Security criteria)
-		{
-			throw new NotSupportedException();
+			return Tuple.Create(sourceCode, secCode);
 		}
 	}
 }

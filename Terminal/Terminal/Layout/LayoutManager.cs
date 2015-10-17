@@ -23,8 +23,6 @@ namespace StockSharp.Terminal.Layout
 	{
 		private int _lastChartWindowId;
 		private int _lastDepthWindowId;
-		internal string _layoutFile;
-		internal bool _isLoaded;
 		private readonly DockSite _dockSite;
 
 		private readonly ObservableCollection<DockingWindow> _toolItems = new ObservableCollection<DockingWindow>();
@@ -48,6 +46,8 @@ namespace StockSharp.Terminal.Layout
 			}
 		}
 
+		public string LayoutFile;
+		public bool IsLoaded;
 
 		public LayoutManager(MainWindow parent, DockSite dockSite)
 		{
@@ -101,7 +101,7 @@ namespace StockSharp.Terminal.Layout
 			var depthControl = new MarketDepthControl();
 			depthControl.UpdateFormat(security);
 
-			_parent._depths.Add(security, depthControl);
+			_parent.Depths.Add(security, depthControl);
 
 			CreateToolWindow(_dockSite, security.Id, "Depth" + _lastDepthWindowId, depthControl, true);
 		}
@@ -186,10 +186,10 @@ namespace StockSharp.Terminal.Layout
 			if (toolWindow != null)
 				toolWindow.Dock(_dockSite, Dock.Top);
 
-			if (!_isLoaded)
+			if (!IsLoaded)
 				return;
 
-			LayoutSerializer.SaveToFile(_layoutFile, _parent.DockSite1);
+			LayoutSerializer.SaveToFile(LayoutFile, _parent.DockSite1);
 		}
 
 		private static void ParameterNullCheck(object parameter)

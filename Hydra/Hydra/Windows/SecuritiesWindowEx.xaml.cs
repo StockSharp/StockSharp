@@ -11,7 +11,6 @@ namespace StockSharp.Hydra.Windows
 	using Ecng.Configuration;
 	using Ecng.Xaml;
 
-	using StockSharp.Algo;
 	using StockSharp.Algo.History;
 	using StockSharp.Algo.Storages;
 	using StockSharp.BusinessEntities;
@@ -25,18 +24,12 @@ namespace StockSharp.Hydra.Windows
 		public static RoutedCommand UnselectSecurityCommand = new RoutedCommand();
 		private bool _isClosed;
 
-		/// <summary>
-		/// Список выбранных инструментов.
-		/// </summary>
 		public IEnumerable<Security> SelectedSecurities
 		{
 			get { return SecuritiesSelected.Securities.SyncGet(c => c.ToArray()); }
 		}
 
-		/// <summary>
-		/// Поставщик информации об инструментах.
-		/// </summary>
-		public FilterableSecurityProvider SecurityProvider
+		public ISecurityProvider SecurityProvider
 		{
 			get { return SecuritiesAll.SecurityProvider; }
 			set { SecuritiesAll.SecurityProvider = value; }
@@ -71,13 +64,13 @@ namespace StockSharp.Hydra.Windows
 			};
 		}
 
-		public void SelectSecurities(IEnumerable<Security> securities)
+		public void SelectSecurities(Security[] securities)
 		{
 			SecuritiesSelected.Securities.AddRange(securities);
 			SecuritiesAll.ExcludeSecurities.AddRange(securities);
 		}
 
-		private void UnselectSecurities(IEnumerable<Security> securities)
+		private void UnselectSecurities(Security[] securities)
 		{
 			SecuritiesSelected.Securities.RemoveRange(securities);
 			SecuritiesAll.ExcludeSecurities.RemoveRange(securities);

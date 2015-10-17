@@ -284,9 +284,14 @@ namespace StockSharp.Algo
 		/// To call the event <see cref="Connector.NewSecurities"/>.
 		/// </summary>
 		/// <param name="securities">Instruments that should be passed to the event.</param>
-		private void RaiseNewSecurities(IEnumerable<Security> securities)
+		private void RaiseNewSecurities(Security[] securities)
 		{
 			NewSecurities.SafeInvoke(securities);
+
+			foreach (var security in securities)
+			{
+				_added.SafeInvoke(security);
+			}
 		}
 
 		/// <summary>

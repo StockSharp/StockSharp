@@ -360,6 +360,33 @@ namespace StockSharp.Studio
 			{
 				return null;
 			}
+
+			int ISecurityProvider.Count
+			{
+				get { return ((IList<Security>)_entityRegistry.Securities).Count; }
+			}
+
+			event Action<Security> ISecurityProvider.Added
+			{
+				add { }
+				remove { }
+			}
+
+			event Action<Security> ISecurityProvider.Removed
+			{
+				add { }
+				remove { }
+			}
+
+			event Action ISecurityProvider.Cleared
+			{
+				add { }
+				remove { }
+			}
+
+			void IDisposable.Dispose()
+			{
+			}
 		}
 
 		private readonly CachedSynchronizedDictionary<Security, SynchronizedDictionary<MarketDataTypes, bool>> _exports = new CachedSynchronizedDictionary<Security, SynchronizedDictionary<MarketDataTypes, bool>>();
@@ -668,7 +695,7 @@ namespace StockSharp.Studio
 			Adapter.InnerAdapters.Add(_adapter);
 
 			_entityRegistry = ConfigManager.GetService<IStudioEntityRegistry>();
-			_entityRegistry.Securities.Added += s => _adapter.SendOutMessage(s.ToMessage(GetSecurityId(s)));
+			((INotifyList<Security>)_entityRegistry.Securities).Added += s => _adapter.SendOutMessage(s.ToMessage(GetSecurityId(s)));
 			_entityRegistry.Portfolios.Added += p => _adapter.SendOutMessage(p.ToMessage());
 
 			var cmdSvc = ConfigManager.GetService<IStudioCommandService>();
@@ -696,7 +723,7 @@ namespace StockSharp.Studio
 		}
 	}
 
-	internal sealed class StudioConnectorEntityFactory : EntityFactory, ISecurityProvider
+	sealed class StudioConnectorEntityFactory : EntityFactory, ISecurityProvider
 	{
 		private readonly StudioEntityRegistry _entityRegistry;
 
@@ -725,6 +752,33 @@ namespace StockSharp.Studio
 		object ISecurityProvider.GetNativeId(Security security)
 		{
 			return null;
+		}
+
+		int ISecurityProvider.Count
+		{
+			get { return ((ISecurityProvider)_entityRegistry.Securities).Count; }
+		}
+
+		event Action<Security> ISecurityProvider.Added
+		{
+			add { }
+			remove { }
+		}
+
+		event Action<Security> ISecurityProvider.Removed
+		{
+			add { }
+			remove { }
+		}
+
+		event Action ISecurityProvider.Cleared
+		{
+			add { }
+			remove { }
+		}
+
+		void IDisposable.Dispose()
+		{
 		}
 	}
 }

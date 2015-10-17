@@ -98,7 +98,7 @@
 
 			ConfigManager.RegisterService(_connector);
 			ConfigManager.RegisterService<IConnector>(_connector);
-			ConfigManager.RegisterService(new FilterableSecurityProvider(_connector.SecurityList));
+			ConfigManager.RegisterService<ISecurityProvider>(new FilterableSecurityProvider(_connector.SecurityProvider));
 
 			InitializeCompositions();
 		}

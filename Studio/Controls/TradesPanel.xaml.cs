@@ -137,7 +137,7 @@ namespace StockSharp.Studio.Controls
 		{
 			var window = new SecuritiesWindowEx
 			{
-				SecurityProvider = ConfigManager.GetService<FilterableSecurityProvider>()
+				SecurityProvider = ConfigManager.GetService<ISecurityProvider>()
 			};
 
 			var selectedSecurities = Securities;

@@ -53,7 +53,7 @@ namespace StockSharp.Terminal
 
 		private readonly SecuritiesView _secView;
 
-		internal readonly SynchronizedDictionary<Security, MarketDepthControl> _depths =
+		public readonly SynchronizedDictionary<Security, MarketDepthControl> Depths =
 			new SynchronizedDictionary<Security, MarketDepthControl>();
 
 		private const string _settingsFolder = "Settings";
@@ -63,8 +63,7 @@ namespace StockSharp.Terminal
 		{
 			InitializeComponent();
 
-			this.LayoutManager = new LayoutManager(this, ProgrammaticDockSite);
-			LayoutManager._layoutFile = Path.Combine(_settingsFolder, "layout.xml");
+			LayoutManager = new LayoutManager(this, ProgrammaticDockSite) { LayoutFile = Path.Combine(_settingsFolder, "layout.xml") };
 
 			ConnectCommand = new DelegateCommand(Connect, CanConnect);
 			SettingsCommand = new DelegateCommand(Settings, CanSettings);
@@ -75,7 +74,7 @@ namespace StockSharp.Terminal
 			var securityStorage = storageRegistry.GetSecurityStorage();
 
 			Connector = new Connector {EntityFactory = new StorageEntityFactory(securityStorage)};
-			ConfigManager.RegisterService(new FilterableSecurityProvider(securityStorage));
+			ConfigManager.RegisterService<ISecurityProvider>(new FilterableSecurityProvider(securityStorage));
 			ConfigManager.RegisterService<IConnector>(Connector);
 			ConfigManager.RegisterService<IMarketDataProvider>(Connector);
 
@@ -86,13 +85,11 @@ namespace StockSharp.Terminal
 
 			_secView = new SecuritiesView(this) {SecurityGrid = {MarketDataProvider = Connector}};
 
-			Connector.NewSecurities += _secView.SecurityGrid.Securities.AddRange;
-
 			Connector.MarketDepthsChanged += depths =>
 			{
 				foreach (var depth in depths)
 				{
-					var ctrl = _depths.TryGetValue(depth.Security);
+					var ctrl = Depths.TryGetValue(depth.Security);
 
 					if (ctrl != null)
 						ctrl.UpdateDepth(depth);
@@ -204,7 +201,7 @@ namespace StockSharp.Terminal
 				true);
 			LayoutManager.DockToolWindowToToolWindow(twPositions, twTrades, Direction.Content);
 
-			LayoutManager._isLoaded = true;
+			LayoutManager.IsLoaded = true;
 		}
 
 		private void DockSite_OnWindowClosed(object sender, DockingWindowEventArgs e)
@@ -214,7 +211,7 @@ namespace StockSharp.Terminal
 
 		protected override void OnClosed(EventArgs e)
 		{
-			LayoutSerializer.SaveToFile(LayoutManager._layoutFile, DockSite1);
+			LayoutSerializer.SaveToFile(LayoutManager.LayoutFile, DockSite1);
 			base.OnClosed(e);
 		}
 
@@ -233,8 +230,8 @@ namespace StockSharp.Terminal
 
 		private void MainWindow_OnLoaded(object sender, RoutedEventArgs e)
 		{
-			if (File.Exists(LayoutManager._layoutFile))
-				LayoutSerializer.LoadFromFile(LayoutManager._layoutFile, DockSite1);
+			if (File.Exists(LayoutManager.LayoutFile))
+				LayoutSerializer.LoadFromFile(LayoutManager.LayoutFile, DockSite1);
 		}
 	}
 }

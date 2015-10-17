@@ -123,6 +123,7 @@
     <Compile Include="IHydraTask.cs" />
     <Compile Include="HydraTaskSettings.cs" />
     <Compile Include="HydraTaskSettingsList.cs" />
+    <Compile Include="NativeIdSecurityStorage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="MarketDataConnector.cs" />
     <Compile Include="ConnectorHydraTask.cs" />

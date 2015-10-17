@@ -8,16 +8,19 @@
 	using Ecng.Common;
 	using Ecng.ComponentModel;
 	using Ecng.Collections;
+	using Ecng.Configuration;
 	using Ecng.Reflection;
 	using Ecng.Xaml;
 
 	using StockSharp.Algo;
 	using StockSharp.Algo.Candles;
+	using StockSharp.Algo.Storages;
 	using StockSharp.BusinessEntities;
 	using StockSharp.ITCH;
 	using StockSharp.Localization;
 	using StockSharp.Messages;
 	using StockSharp.Plaza;
+	using StockSharp.Xaml;
 
 	/// <summary>
 	/// Построители стаканов из лога заявок.
@@ -66,6 +69,27 @@
 				throw new ArgumentNullException("task");
 			
 			return task.Settings.Securities.FirstOrDefault(s => s.Security.IsAllSecurity());
+		}
+
+		/// <summary>
+		/// Получить инструмент "Все инструменты".
+		/// </summary>
+		/// <returns>Инструмент "Все инструменты".</returns>
+		public static Security GetAllSecurity()
+		{
+			return ConfigManager.GetService<IEntityRegistry>().Securities.ReadById(AllSecurityId);
+		}
+
+		/// <summary>
+		/// Получить инструмент "Все инструменты".
+		/// </summary>
+		/// <param name="picker">Визуальный компонент для поиска и выбора инструмента.</param>
+		public static void ExcludeAllSecurity(this SecurityPicker picker)
+		{
+			if (picker == null)
+				throw new ArgumentNullException("picker");
+
+			picker.ExcludeSecurities.Add(GetAllSecurity());
 		}
 
 		/// <summary>

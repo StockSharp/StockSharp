@@ -9,7 +9,6 @@
 	using Ecng.Xaml;
 	using Ecng.Common;
 
-	using StockSharp.Algo;
 	using StockSharp.BusinessEntities;
 	using StockSharp.Xaml;
 
@@ -56,10 +55,10 @@
 
 			var wnd = new SecurityPickerWindow
 			{
-				SecurityProvider = ConfigManager.GetService<FilterableSecurityProvider>(),
+				SecurityProvider = ConfigManager.GetService<ISecurityProvider>(),
 				//SelectionMode = DataGridSelectionMode.Single
 			};
-			
+			wnd.ExcludeSecurities.Add(Core.Extensions.GetAllSecurity());
 			wnd.SelectedSecurities.AddRange(SelectedSecurities);
 
 			if (!wnd.ShowModal(this))

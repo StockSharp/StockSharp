@@ -306,6 +306,33 @@ namespace StockSharp.Algo
 			get { return _securities.CachedValues; }
 		}
 
+		int ISecurityProvider.Count
+		{
+			get { return _securities.Count; }
+		}
+
+		private Action<Security> _added;
+
+		event Action<Security> ISecurityProvider.Added
+		{
+			add { _added += value; }
+			remove { _added -= value; }
+		}
+
+		event Action<Security> ISecurityProvider.Removed
+		{
+			add { }
+			remove { }
+		}
+
+		private Action _cleared;
+
+		event Action ISecurityProvider.Cleared
+		{
+			add { _cleared += value; }
+			remove { _cleared -= value; }
+		}
+
 		/// <summary>
 		/// Lookup securities by criteria <paramref name="criteria" />.
 		/// </summary>
@@ -1511,6 +1538,8 @@ namespace StockSharp.Algo
 			_olBuilders.Clear();
 
 			SendInMessage(new ResetMessage());
+
+			_cleared.SafeInvoke();
 		}
 
 		/// <summary>

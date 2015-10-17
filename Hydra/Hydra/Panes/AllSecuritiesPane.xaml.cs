@@ -33,7 +33,8 @@ namespace StockSharp.Hydra.Panes
 
 			Progress.Init(ExportBtn, MainGrid);
 
-			SecurityPicker.SecurityProvider = ConfigManager.TryGetService<FilterableSecurityProvider>();
+			SecurityPicker.SecurityProvider = ConfigManager.GetService<ISecurityProvider>();
+			SecurityPicker.ExcludeAllSecurity();
 
 			ExportBtn.EnableType(ExportTypes.Bin, false);
 

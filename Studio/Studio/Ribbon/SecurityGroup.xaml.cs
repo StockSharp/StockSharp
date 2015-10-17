@@ -3,6 +3,7 @@
 	using System;
 	using System.Windows.Input;
 
+	using StockSharp.Algo;
 	using StockSharp.BusinessEntities;
 	using StockSharp.Studio.Core.Commands;
 
@@ -37,7 +38,7 @@
 
 			Filter.Code = SecurityCodeLike.Text.Trim();
 
-			if (Filter.Code == "*")
+			if (Filter.IsLookupAll())
 				Filter.Code = string.Empty;
 
 			Lookup();

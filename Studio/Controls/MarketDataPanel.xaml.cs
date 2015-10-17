@@ -14,7 +14,6 @@ namespace StockSharp.Studio.Controls
 	using Ecng.Xaml;
 	using Ecng.ComponentModel;
 
-	using StockSharp.Algo;
 	using StockSharp.Algo.Storages;
 	using StockSharp.BusinessEntities;
 	using StockSharp.Community;
@@ -58,7 +57,7 @@ namespace StockSharp.Studio.Controls
 			InitializeComponent();
 
 			SelectedSettings = ConfigManager.GetService<MarketDataSettingsCache>().Settings.FirstOrDefault(s => s.Id != Guid.Empty);
-			SecurityPicker.SecurityProvider = ConfigManager.GetService<FilterableSecurityProvider>();
+			SecurityPicker.SecurityProvider = ConfigManager.GetService<ISecurityProvider>();
 			
 			Grid.PropertyChanged += (s, e) => RaiseChangedCommand();
 			Grid.DataLoading += () => BusyIndicator1.IsBusy = true;

@@ -59,7 +59,7 @@ namespace StockSharp.BusinessEntities
 		event Action<IEnumerable<Order>> NewStopOrders;
 
 		/// <summary>
-		/// Stop orders state change event .
+		/// Stop orders state change event.
 		/// </summary>
 		event Action<IEnumerable<Order>> StopOrdersChanged;
 

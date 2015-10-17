@@ -489,6 +489,10 @@ namespace StockSharp.Studio.Database
 			{
 				this.Filter(criteria).ForEach(s => Remove(s));
 			}
+
+			void IDisposable.Dispose()
+			{
+			}
 		}
 
 		#endregion

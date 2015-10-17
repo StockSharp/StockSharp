@@ -7,6 +7,7 @@ namespace StockSharp.Studio.Services
 	using Ecng.Collections;
 	using Ecng.Configuration;
 
+	using StockSharp.Algo;
 	using StockSharp.BusinessEntities;
 	using StockSharp.Studio.Core;
 
@@ -23,10 +24,7 @@ namespace StockSharp.Studio.Services
 
 		IEnumerable<Security> ISecurityProvider.Lookup(Security criteria)
 		{
-			if (criteria == null)
-				throw new ArgumentNullException("criteria");
-
-			if (criteria.Code == "*")
+			if (criteria.IsLookupAll())
 				return _securities.CachedValues;
 
 			return _registry
@@ -39,6 +37,33 @@ namespace StockSharp.Studio.Services
 		object ISecurityProvider.GetNativeId(Security security)
 		{
 			return null;
+		}
+
+		int ISecurityProvider.Count
+		{
+			get { return _securities.Count; }
+		}
+
+		event Action<Security> ISecurityProvider.Added
+		{
+			add { }
+			remove { }
+		}
+
+		event Action<Security> ISecurityProvider.Removed
+		{
+			add { }
+			remove { }
+		}
+
+		event Action ISecurityProvider.Cleared
+		{
+			add { }
+			remove { }
+		}
+
+		void IDisposable.Dispose()
+		{
 		}
 	}
 }

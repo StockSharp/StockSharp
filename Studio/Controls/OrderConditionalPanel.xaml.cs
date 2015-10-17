@@ -41,7 +41,7 @@ namespace StockSharp.Studio.Controls
 			{
 				var wnd = new OrderConditionalWindow
 				{
-					SecurityProvider = ConfigManager.TryGetService<FilterableSecurityProvider>(),
+					SecurityProvider = ConfigManager.TryGetService<ISecurityProvider>(),
 					Order = createOrder()
 				};
 

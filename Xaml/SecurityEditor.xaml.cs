@@ -6,12 +6,10 @@ namespace StockSharp.Xaml
 	using System.Windows.Controls;
 	using System.Windows.Input;
 
-	using Ecng.Collections;
 	using Ecng.Common;
 	using Ecng.Configuration;
 	using Ecng.Xaml;
 
-	using StockSharp.Algo;
 	using StockSharp.BusinessEntities;
 
 	/// <summary>
@@ -37,20 +35,21 @@ namespace StockSharp.Xaml
 			{
 				ConfigManager.ServiceRegistered += (t, s) =>
 				{
-					if (typeof(FilterableSecurityProvider) != t)
+					if (typeof(ISecurityProvider) != t)
 						return;
 
-					GuiDispatcher.GlobalDispatcher.AddAction(() => SecurityProvider = (FilterableSecurityProvider)s);
+					GuiDispatcher.GlobalDispatcher.AddAction(() => SecurityProvider = (ISecurityProvider)s);
 				};
 			}
 		}
 
-		private FilterableSecurityProvider _securityProvider;
+		private ThreadSafeObservableCollection<Security> _itemsSource;
+		private ISecurityProvider _securityProvider;
 
 		/// <summary>
 		/// The provider of information about instruments.
 		/// </summary>
-		public FilterableSecurityProvider SecurityProvider
+		public ISecurityProvider SecurityProvider
 		{
 			get { return _securityProvider; }
 			set
@@ -59,7 +58,14 @@ namespace StockSharp.Xaml
 					return;
 
 				if (_securityProvider != null)
+				{
+					_securityProvider.Added -= AddSecurity;
+					_securityProvider.Removed -= RemoveSecurity;
+					_securityProvider.Cleared -= ClearSecurities;
+
 					SecurityTextBox.ItemsSource = Enumerable.Empty<Security>();
+					_itemsSource = null;
+				}
 
 				_securityProvider = value;
 
@@ -67,12 +73,30 @@ namespace StockSharp.Xaml
 					return;
 
 				var itemsSource = new ObservableCollectionEx<Security>();
-				
-				lock (_securityProvider.Securities.SyncRoot)
-					_securityProvider.Securities.Bind(new ThreadSafeObservableCollection<Security>(itemsSource));
-				
+
+				_itemsSource = new ThreadSafeObservableCollection<Security>(itemsSource);
+
+				_securityProvider.Added += AddSecurity;
+				_securityProvider.Removed += RemoveSecurity;
+				_securityProvider.Cleared += ClearSecurities;
+
 				SecurityTextBox.ItemsSource = itemsSource;
 			}
+		}
+
+		private void AddSecurity(Security security)
+		{
+			_itemsSource.Add(security);
+		}
+
+		private void RemoveSecurity(Security security)
+		{
+			_itemsSource.Remove(security);
+		}
+
+		private void ClearSecurities()
+		{
+			_itemsSource.Clear();
 		}
 
 		/// <summary>
@@ -139,14 +163,9 @@ namespace StockSharp.Xaml
 			SelectedSecurity = null;
 		}
 
-		private FilterableSecurityProvider GetSecurityProvider()
+		private ISecurityProvider GetSecurityProvider()
 		{
-			return SecurityProvider
-					?? ConfigManager.TryGetService<ISecurityProvider>() as FilterableSecurityProvider
-					?? ConfigManager.TryGetService<FilterableSecurityProvider>()
-					?? (ConfigManager.IsServiceRegistered<IConnector>()
-						? new FilterableSecurityProvider(ConfigManager.TryGetService<IConnector>())
-						: null);
+			return SecurityProvider ?? ConfigManager.TryGetService<ISecurityProvider>();
 		}
 	}
 }

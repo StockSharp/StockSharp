@@ -1,12 +1,33 @@
 namespace StockSharp.BusinessEntities
 {
+	using System;
 	using System.Collections.Generic;
 
 	/// <summary>
 	/// The interface for access to provider of information about instruments.
 	/// </summary>
-	public interface ISecurityProvider
+	public interface ISecurityProvider : IDisposable
 	{
+		/// <summary>
+		/// Gets the number of instruments contained in the <see cref="ISecurityProvider"/>.
+		/// </summary>
+		int Count { get; }
+
+		/// <summary>
+		/// New instrument created.
+		/// </summary>
+		event Action<Security> Added;
+
+		/// <summary>
+		/// Instrument deleted.
+		/// </summary>
+		event Action<Security> Removed;
+
+		/// <summary>
+		/// The storage was cleared.
+		/// </summary>
+		event Action Cleared;
+
 		/// <summary>
 		/// Lookup securities by criteria <paramref name="criteria" />.
 		/// </summary>

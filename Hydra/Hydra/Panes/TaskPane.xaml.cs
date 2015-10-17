@@ -392,9 +392,10 @@ namespace StockSharp.Hydra.Panes
 			var secWnd = new SecuritiesWindowEx
 			{
 				Task = Task, 
-				SecurityProvider = ConfigManager.GetService<FilterableSecurityProvider>()
+				SecurityProvider = ConfigManager.GetService<ISecurityProvider>()
 			};
-			secWnd.SelectSecurities(_allSecurities.Select(s => s.Security).Where(s => !s.IsAllSecurity()));
+			secWnd.SecuritiesAll.ExcludeAllSecurity();
+			secWnd.SelectSecurities(_allSecurities.Select(s => s.Security).Where(s => !s.IsAllSecurity()).ToArray());
 
 			if (!secWnd.ShowModal(this))
 				return;

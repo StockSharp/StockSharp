@@ -78,7 +78,7 @@ namespace StockSharp.Studio.Controls
 				if (!cmd.CheckControl(this))
 					return;
 
-				SecurityPicker.SecurityProvider = ConfigManager.GetService<FilterableSecurityProvider>();
+				SecurityPicker.SecurityProvider = ConfigManager.GetService<ISecurityProvider>();
 			});
 
 			WhenLoaded(() => new RequestBindSource(this).SyncProcess(this));

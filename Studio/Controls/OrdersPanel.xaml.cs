@@ -45,7 +45,7 @@ namespace StockSharp.Studio.Controls
 			{
 				var wnd = new OrderWindow
 				{
-					SecurityProvider = ConfigManager.TryGetService<FilterableSecurityProvider>(),
+					SecurityProvider = ConfigManager.TryGetService<ISecurityProvider>(),
 					Order = createOrder(prevType)
 				};
 

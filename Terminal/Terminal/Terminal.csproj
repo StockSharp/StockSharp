@@ -129,6 +129,9 @@
     <Compile Include="..\..\StockSharpAssemblyInfo.cs">
       <Link>Properties\StockSharpAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="Layout\ILayoutManager.cs" />
+    <Compile Include="Layout\LayoutKeys.cs" />
+    <Compile Include="Layout\LayoutManager.cs" />
     <Compile Include="SecuritiesView.xaml.cs">
       <DependentUpon>SecuritiesView.xaml</DependentUpon>
     </Compile>

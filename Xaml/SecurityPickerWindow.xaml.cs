@@ -5,7 +5,6 @@ namespace StockSharp.Xaml
 
 	using Ecng.Xaml;
 
-	using StockSharp.Algo;
 	using StockSharp.BusinessEntities;
 
 	/// <summary>
@@ -48,18 +47,26 @@ namespace StockSharp.Xaml
 			get { return Picker.SelectedSecurities; }
 		}
 
+		///// <summary>
+		///// Available instruments.
+		///// </summary>
+		//public ISecurityList Securities
+		//{
+		//	get { return Picker.Securities; }
+		//}
+
 		/// <summary>
-		/// Available instruments.
+		/// Instruments that should be hidden.
 		/// </summary>
-		public ISecurityList Securities
+		public ISet<Security> ExcludeSecurities
 		{
-			get { return Picker.Securities; }
+			get { return Picker.ExcludeSecurities; }
 		}
 
 		/// <summary>
 		/// The provider of information about instruments.
 		/// </summary>
-		public FilterableSecurityProvider SecurityProvider
+		public ISecurityProvider SecurityProvider
 		{
 			get { return Picker.SecurityProvider; }
 			set { Picker.SecurityProvider = value; }

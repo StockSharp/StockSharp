@@ -6,12 +6,10 @@ namespace SampleSmart
 	using System.Windows;
 
 	using Ecng.Common;
-	using Ecng.Configuration;
 	using Ecng.Xaml;
 
 	using MoreLinq;
 
-	using StockSharp.Algo;
 	using StockSharp.BusinessEntities;
 	using StockSharp.SmartCom;
 	using StockSharp.SmartCom.Native;
@@ -89,8 +87,6 @@ namespace SampleSmart
 				{
 					// создаем подключение
 					Trader = new SmartTrader();
-
-					ConfigManager.RegisterService(new FilterableSecurityProvider(Trader));
 
 					// инициализируем механизм переподключения
 					Trader.ReConnectionSettings.WorkingTime = ExchangeBoard.Forts.WorkingTime;

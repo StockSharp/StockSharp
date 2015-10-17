@@ -9,7 +9,10 @@
 	{
 		private readonly StrategyEntityFactory _entityFactory;
 
-		public ISecurityList SecurityList { get { return _entityFactory.Securities; } }
+		public ISecurityProvider SecurityProvider
+		{
+			get { return _entityFactory.SecurityProvider; }
+		}
 
 		public StrategyConnector()
 		{
