@@ -32,6 +32,7 @@ namespace StockSharp.Studio.Controls
 	using StockSharp.Xaml;
 	using StockSharp.Xaml.Charting;
 	using StockSharp.Localization;
+	using StockSharp.Xaml.Actipro;
 
 	public partial class CompositeSecurityPanel
 	{

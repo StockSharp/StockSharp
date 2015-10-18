@@ -40,7 +40,7 @@ namespace StockSharp.Studio
 	using StockSharp.Studio.Services;
 	using StockSharp.Alerts;
 	using StockSharp.Xaml;
-	using StockSharp.Xaml.Code;
+	using StockSharp.Xaml.Actipro.Code;
 	using StockSharp.Xaml.Diagram;
 	using StockSharp.Configuration;
 	using StockSharp.Localization;

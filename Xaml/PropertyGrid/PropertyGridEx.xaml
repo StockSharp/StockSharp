@@ -9,7 +9,6 @@
 		xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
 		xmlns:security="clr-namespace:System.Security;assembly=mscorlib"
 		xmlns:net="clr-namespace:System.Net;assembly=System"
-		xmlns:editors="http://schemas.actiprosoftware.com/winfx/xaml/editors"
 		xmlns:text="clr-namespace:System.Text;assembly=mscorlib"
 		xmlns:ex="clr-namespace:Ecng.Xaml;assembly=Ecng.Xaml" 
 		xmlns:local="clr-namespace:StockSharp.Xaml"
@@ -55,7 +54,7 @@
 		<xctk:EditorTemplateDefinition TargetProperties="{x:Type sys:TimeSpan}">
 			<xctk:EditorTemplateDefinition.EditingTemplate>
 				<DataTemplate>
-					<editors:TimeSpanEditBox x:Name="TimeSpanBox" Format="d hh:mm:ss" CenterSlotHorizontalAlignment="Right" Value="{Binding Value, Mode=TwoWay}" />
+					<xctk:TimeSpanUpDown x:Name="TimeSpanBox" TextAlignment="Right" Value="{Binding Value, Mode=TwoWay}" />
 				</DataTemplate>
 			</xctk:EditorTemplateDefinition.EditingTemplate>
 		</xctk:EditorTemplateDefinition>
@@ -63,7 +62,7 @@
 		<xctk:EditorTemplateDefinition TargetProperties="{x:Type sys:DateTime}">
 			<xctk:EditorTemplateDefinition.EditingTemplate>
 				<DataTemplate>
-					<editors:DateTimeEditBox x:Name="DateTimeBox" CenterSlotHorizontalAlignment="Right" Value="{Binding Value, Mode=TwoWay}" />
+					<xctk:DateTimePicker x:Name="DateTimeBox" TextAlignment="Right" Value="{Binding Value, Mode=TwoWay}" />
 				</DataTemplate>
 			</xctk:EditorTemplateDefinition.EditingTemplate>
 		</xctk:EditorTemplateDefinition>
@@ -71,7 +70,7 @@
 		<xctk:EditorTemplateDefinition TargetProperties="{x:Type sys:DateTimeOffset}">
 			<xctk:EditorTemplateDefinition.EditingTemplate>
 				<DataTemplate>
-                    <propertyGrid:DateTimeOffsetEditor x:Name="DateTimeOffsetBox" CenterSlotHorizontalAlignment="Right" Offset="{Binding Value, Mode=TwoWay}" />
+					<ex:DateTimeOffsetEditor x:Name="DateTimeOffsetBox" TextAlignment="Right" Offset="{Binding Value, Mode=TwoWay}" />
 				</DataTemplate>
 			</xctk:EditorTemplateDefinition.EditingTemplate>
 		</xctk:EditorTemplateDefinition>
@@ -79,7 +78,7 @@
 		<xctk:EditorTemplateDefinition TargetProperties="{x:Type net:EndPoint}">
 			<xctk:EditorTemplateDefinition.EditingTemplate>
 				<DataTemplate>
-					<local:EndPointEditor EndPoint="{Binding Value, Mode=TwoWay}" />
+					<ex:EndPointEditor EndPoint="{Binding Value, Mode=TwoWay}" />
 				</DataTemplate>
 			</xctk:EditorTemplateDefinition.EditingTemplate>
 		</xctk:EditorTemplateDefinition>
@@ -87,7 +86,7 @@
 		<xctk:EditorTemplateDefinition TargetProperties="{x:Type net:IPAddress}">
 			<xctk:EditorTemplateDefinition.EditingTemplate>
 				<DataTemplate>
-					<local:IpAddressEditor Address="{Binding Value, Mode=TwoWay}" />
+					<ex:IpAddressEditor Address="{Binding Value, Mode=TwoWay}" />
 				</DataTemplate>
 			</xctk:EditorTemplateDefinition.EditingTemplate>
 		</xctk:EditorTemplateDefinition>

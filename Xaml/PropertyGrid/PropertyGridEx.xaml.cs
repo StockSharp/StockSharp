@@ -2,15 +2,10 @@ namespace StockSharp.Xaml.PropertyGrid
 {
 	using System;
 	using System.ComponentModel;
-	using System.Globalization;
 	using System.Linq;
 	using System.Windows;
 	using System.Windows.Controls;
-	using System.Windows.Controls.Primitives;
 	using System.Windows.Data;
-
-	using ActiproSoftware.Windows.Controls.Editors;
-	using ActiproSoftware.Windows.Controls.Editors.Primitives;
 
 	using Ecng.Common;
 	using Ecng.Xaml;
@@ -20,7 +15,11 @@ namespace StockSharp.Xaml.PropertyGrid
 	using StockSharp.Messages;
 	using StockSharp.Xaml;
 
+	using Xceed.Wpf.Toolkit;
+	using Xceed.Wpf.Toolkit.Primitives;
 	using Xceed.Wpf.Toolkit.PropertyGrid;
+
+	using Selector = System.Windows.Controls.Primitives.Selector;
 
 	class EnumComboBoxEx : ComboBox
 	{
@@ -56,25 +55,25 @@ namespace StockSharp.Xaml.PropertyGrid
 	/// </summary>
 	public partial class PropertyGridEx
 	{
-		private sealed class DefaultValueConverter : IValueConverter
-		{
-			public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
-			{
-				var item = value as PropertyItem;
+		//private sealed class DefaultValueConverter : IValueConverter
+		//{
+		//	public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+		//	{
+		//		var item = value as PropertyItem;
 
-				if (item == null)
-					return null;
+		//		if (item == null)
+		//			return null;
 
-				var attr = item.PropertyDescriptor.Attributes.OfType<DefaultValueAttribute>().FirstOrDefault();
+		//		var attr = item.PropertyDescriptor.Attributes.OfType<DefaultValueAttribute>().FirstOrDefault();
 
-				return attr != null ? attr.Value : null;
-			}
+		//		return attr != null ? attr.Value : null;
+		//	}
 
-			public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
-			{
-				throw new NotSupportedException();
-			}
-		}
+		//	public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+		//	{
+		//		throw new NotSupportedException();
+		//	}
+		//}
 
 		private static readonly ReadOnlyTypeDescriptionProvider _provider = new ReadOnlyTypeDescriptionProvider();
 
@@ -131,11 +130,11 @@ namespace StockSharp.Xaml.PropertyGrid
 				Mode = BindingMode.TwoWay
 			};
 
-			var element = new FrameworkElementFactory(typeof(DateTimeEditBox));
-			element.SetBinding(DateTimeEditBox.ValueProperty, binding);
+			var element = new FrameworkElementFactory(typeof(DateTimePicker));
+			element.SetBinding(DateTimePicker.ValueProperty, binding);
 			element.SetValue(BorderThicknessProperty, new Thickness(0));
-			element.SetValue(SlottedItemsControl.CenterSlotHorizontalAlignmentProperty, HorizontalAlignment.Right);
-			element.SetValue(PartEditBox.CheckBoxVisibilityProperty, Visibility.Visible);
+			element.SetValue(InputBase.TextAlignmentProperty, TextAlignment.Right);
+			//element.SetValue(PartEditBox.CheckBoxVisibilityProperty, Visibility.Visible);
 			element.SetValue(MarginProperty, new Thickness(5, 0, 0, 0));
 
 			var dataTemplate = new DataTemplate { VisualTree = element };
@@ -156,13 +155,13 @@ namespace StockSharp.Xaml.PropertyGrid
 				Mode = BindingMode.TwoWay
 			};
 
-			var element = new FrameworkElementFactory(typeof(TimeSpanEditBox));
-			element.SetBinding(TimeSpanEditBox.ValueProperty, binding);
-			element.SetBinding(TimeSpanEditBox.InitialValueProperty, new Binding(".") { Converter = new DefaultValueConverter() });
+			var element = new FrameworkElementFactory(typeof(TimeSpanUpDown));
+			element.SetBinding(TimeSpanUpDown.ValueProperty, binding);
+			//element.SetBinding(TimeSpanEditBox.InitialValueProperty, new Binding(".") { Converter = new DefaultValueConverter() });
 			element.SetValue(BorderThicknessProperty, new Thickness(0));
-			element.SetValue(TimeSpanEditBox.FormatProperty, "d hh:mm:ss");
-			element.SetValue(SlottedItemsControl.CenterSlotHorizontalAlignmentProperty, HorizontalAlignment.Right);
-			element.SetValue(PartEditBox.CheckBoxVisibilityProperty, Visibility.Visible);
+			//element.SetValue(TimeSpanUpDown.FormatProperty, "d hh:mm:ss");
+			element.SetValue(InputBase.TextAlignmentProperty, TextAlignment.Right);
+			//element.SetValue(PartEditBox.CheckBoxVisibilityProperty, Visibility.Visible);
 			element.SetValue(MarginProperty, new Thickness(5, 0, 0, 0));
 
 			var dataTemplate = new DataTemplate { VisualTree = element };
@@ -186,8 +185,8 @@ namespace StockSharp.Xaml.PropertyGrid
 			var element = new FrameworkElementFactory(typeof(DateTimeOffsetEditor));
 			element.SetBinding(DateTimeOffsetEditor.OffsetProperty, binding);
 			element.SetValue(BorderThicknessProperty, new Thickness(0));
-			element.SetValue(SlottedItemsControl.CenterSlotHorizontalAlignmentProperty, HorizontalAlignment.Right);
-			element.SetValue(PartEditBox.CheckBoxVisibilityProperty, Visibility.Visible);
+			element.SetValue(InputBase.TextAlignmentProperty, TextAlignment.Right);
+			//element.SetValue(PartEditBox.CheckBoxVisibilityProperty, Visibility.Visible);
 			element.SetValue(MarginProperty, new Thickness(5, 0, 0, 0));
 
 			var dataTemplate = new DataTemplate { VisualTree = element };

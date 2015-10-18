@@ -16,7 +16,7 @@ namespace StockSharp.Studio
 	using StockSharp.Logging;
 	using StockSharp.Studio.Core;
 	using StockSharp.Xaml;
-	using StockSharp.Xaml.Code;
+	using StockSharp.Xaml.Actipro.Code;
 	using StockSharp.Xaml.Diagram;
 	using StockSharp.Localization;
 

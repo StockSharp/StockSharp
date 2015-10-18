@@ -7,6 +7,7 @@ namespace StockSharp.Xaml
 
 	using Ecng.Common;
 	using Ecng.Serialization;
+	using Ecng.Xaml;
 
 	using Xceed.Wpf.Toolkit.PropertyGrid.Attributes;
 

@@ -212,7 +212,7 @@
 		<TextBlock Grid.Column="0" Grid.Row="17" HorizontalAlignment="Right" VerticalAlignment="Center">
 			<Run Text="{x:Static loc:LocalizedStrings.ExpiryDate}" /><Run Text=":"/>
 		</TextBlock>
-		<editors:DateTimeEditBox Grid.Column="1" Grid.Row="17" x:Name="ExpiryDate" CenterSlotHorizontalAlignment="Right" IsEnabled="False" ValueChanged="ExpiryDate_OnValueChanged" />
+		<xctk:DateTimePicker Grid.Column="1" Grid.Row="17" x:Name="ExpiryDate" TextAlignment="Right" IsEnabled="False" ValueChanged="ExpiryDate_OnValueChanged" />
 
 		<TextBlock Grid.Column="0" Grid.Row="19" HorizontalAlignment="Right" VerticalAlignment="Center">
 			<Run Text="{x:Static loc:LocalizedStrings.Str135}" /><Run Text=":"/>

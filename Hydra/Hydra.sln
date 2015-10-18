@@ -129,6 +129,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ITCHPublic", "Plugins\ITCH\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BitStamp", "..\Connectors\BitStamp\BitStamp.csproj", "{90B93AF4-3168-4415-B916-9E078F192696}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xaml.ActiproPublic", "..\Xaml.Actipro\Xaml.ActiproPublic.csproj", "{D556FA3F-E40E-4F76-B3CA-B18134247FD1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConfigurationPublic", "..\Configuration\ConfigurationPublic.csproj", "{2CFF1903-4EF5-46F8-AB5D-BB623CA75CE6}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -375,6 +379,14 @@ Global
 		{90B93AF4-3168-4415-B916-9E078F192696}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{90B93AF4-3168-4415-B916-9E078F192696}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{90B93AF4-3168-4415-B916-9E078F192696}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D556FA3F-E40E-4F76-B3CA-B18134247FD1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D556FA3F-E40E-4F76-B3CA-B18134247FD1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D556FA3F-E40E-4F76-B3CA-B18134247FD1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D556FA3F-E40E-4F76-B3CA-B18134247FD1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2CFF1903-4EF5-46F8-AB5D-BB623CA75CE6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2CFF1903-4EF5-46F8-AB5D-BB623CA75CE6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2CFF1903-4EF5-46F8-AB5D-BB623CA75CE6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2CFF1903-4EF5-46F8-AB5D-BB623CA75CE6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

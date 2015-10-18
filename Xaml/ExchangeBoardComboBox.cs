@@ -11,7 +11,6 @@ namespace StockSharp.Xaml
 	using Ecng.Xaml;
 
 	using StockSharp.BusinessEntities;
-
 	using StockSharp.Localization;
 
 	/// <summary>

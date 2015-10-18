@@ -1,4 +1,4 @@
-<Window x:Class="StockSharp.Xaml.Code.CodeReferencesWindow"
+<Window x:Class="StockSharp.Xaml.Actipro.Code.CodeReferencesWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:loc="clr-namespace:StockSharp.Localization;assembly=StockSharp.Localization"

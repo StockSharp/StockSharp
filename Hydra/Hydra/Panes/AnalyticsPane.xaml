@@ -6,8 +6,7 @@
              xmlns:shared="http://schemas.actiprosoftware.com/winfx/xaml/shared"
              xmlns:ex="clr-namespace:Ecng.Xaml;assembly=Ecng.Xaml"
              xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
-			 xmlns:local="clr-namespace:StockSharp.Hydra.Panes"
-			 xmlns:code="clr-namespace:StockSharp.Xaml.Code;assembly=StockSharp.Xaml">
+			 xmlns:local="clr-namespace:StockSharp.Hydra.Panes">
 	<UserControl.CommandBindings>
 		<CommandBinding Command="{x:Static local:AnalyticsPane.SaveCommand}" 
                         Executed="ExecutedSaveCommand" 
@@ -62,7 +61,7 @@
 					<docking:TabbedMdiHost>
 						<docking:TabbedMdiContainer>
 							<docking:DocumentWindow Title="{x:Static loc:LocalizedStrings.XamlStr661}" CanClose="False">
-								<code:CodePanel x:Name="CodePanel" CompilingCode="CodePanel_OnCompilingCode" />
+								<sx:CodePanel x:Name="CodePanel" CompilingCode="CodePanel_OnCompilingCode" />
 							</docking:DocumentWindow>
 							<docking:DocumentWindow x:Name="ChartPanel" Title="{x:Static loc:LocalizedStrings.Str3200}" CanClose="False">
 							</docking:DocumentWindow>

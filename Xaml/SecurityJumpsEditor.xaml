@@ -5,7 +5,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:xaml="clr-namespace:StockSharp.Xaml"
-             xmlns:editors="http://schemas.actiprosoftware.com/winfx/xaml/editors"
+             xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
 
@@ -24,7 +24,7 @@
             <DataGridTemplateColumn Header="{x:Static loc:LocalizedStrings.ExpiryDate}" Width="150">
                 <DataGridTemplateColumn.CellTemplate>
                     <DataTemplate>
-                        <editors:DateTimeEditBox BorderThickness="0" BorderBrush="{x:Null}" Value="{Binding Date, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                        <xctk:DateTimePicker BorderThickness="0" BorderBrush="{x:Null}" Value="{Binding Date, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                     </DataTemplate>
                 </DataGridTemplateColumn.CellTemplate>
             </DataGridTemplateColumn>

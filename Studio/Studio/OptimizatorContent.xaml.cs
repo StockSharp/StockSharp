@@ -24,8 +24,8 @@ namespace StockSharp.Studio
 	using StockSharp.Studio.Core;
 	using StockSharp.Studio.Core.Commands;
 	using StockSharp.Studio.Services;
-	using StockSharp.Xaml;
 	using StockSharp.Localization;
+	using StockSharp.Xaml.Actipro;
 
 	using Xceed.Wpf.Toolkit.PropertyGrid.Attributes;
 

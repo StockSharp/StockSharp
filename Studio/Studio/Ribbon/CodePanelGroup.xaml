@@ -4,7 +4,7 @@
               xmlns:loc="clr-namespace:StockSharp.Localization;assembly=StockSharp.Localization"
               xmlns:ribbon="http://schemas.actiprosoftware.com/winfx/xaml/ribbon"
               xmlns:local="clr-namespace:StockSharp.Studio.Ribbon"
-              xmlns:code="clr-namespace:StockSharp.Xaml.Code;assembly=StockSharp.Xaml"
+              xmlns:sx="http://schemas.stocksharp.com/xaml"
               Label="{x:Static loc:LocalizedStrings.Code}">
     
     <ribbon:Group.CommandBindings>
@@ -15,11 +15,11 @@
 
     <ribbon:StackPanel ItemVariantBehavior="AlwaysMedium">
         <ribbon:Button Label="{x:Static loc:LocalizedStrings.XamlStr419}" ToolTip="{x:Static loc:LocalizedStrings.XamlStr424}" ToolTipService.ShowOnDisabled="True"
-                       Command="{x:Static code:CodePanel.UndoCommand}"
+                       Command="{x:Static sx:CodePanel.UndoCommand}"
                        ImageSourceLarge="pack://application:,,,/StockSharp.Xaml;component/Images/undo_16x16.png" />
 
         <ribbon:Button Label="{x:Static loc:LocalizedStrings.Undo}" ToolTip="{x:Static loc:LocalizedStrings.UndoChanges}" ToolTipService.ShowOnDisabled="True"
-                       Command="{x:Static code:CodePanel.RedoCommand}"
+                       Command="{x:Static sx:CodePanel.RedoCommand}"
                        ImageSourceLarge="pack://application:,,,/StockSharp.Xaml;component/Images/redo_16x16.png" />
     </ribbon:StackPanel>
     

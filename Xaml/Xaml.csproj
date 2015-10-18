@@ -65,38 +65,6 @@
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="ActiproSoftware.Docking.Wpf, Version=11.2.555.0, Culture=neutral, PublicKeyToken=36ff2196ab5654b9, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\References\Actipro\ActiproSoftware.Docking.Wpf.dll</HintPath>
-    </Reference>
-    <Reference Include="ActiproSoftware.Editors.Wpf, Version=11.2.555.0, Culture=neutral, PublicKeyToken=36ff2196ab5654b9, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\References\Actipro\ActiproSoftware.Editors.Wpf.dll</HintPath>
-    </Reference>
-    <Reference Include="ActiproSoftware.Navigation.Wpf, Version=11.2.555.0, Culture=neutral, PublicKeyToken=36ff2196ab5654b9, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\References\Actipro\ActiproSoftware.Navigation.Wpf.dll</HintPath>
-    </Reference>
-    <Reference Include="ActiproSoftware.Shared.Wpf, Version=11.2.555.0, Culture=neutral, PublicKeyToken=36ff2196ab5654b9, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\References\Actipro\ActiproSoftware.Shared.Wpf.dll</HintPath>
-    </Reference>
-    <Reference Include="ActiproSoftware.SyntaxEditor.Addons.DotNet.Wpf, Version=11.2.555.0, Culture=neutral, PublicKeyToken=36ff2196ab5654b9, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\References\Actipro\ActiproSoftware.SyntaxEditor.Addons.DotNet.Wpf.dll</HintPath>
-    </Reference>
-    <Reference Include="ActiproSoftware.SyntaxEditor.Wpf, Version=11.2.555.0, Culture=neutral, PublicKeyToken=36ff2196ab5654b9, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\References\Actipro\ActiproSoftware.SyntaxEditor.Wpf.dll</HintPath>
-    </Reference>
-    <Reference Include="ActiproSoftware.Text.Addons.DotNet.Wpf, Version=11.2.555.0, Culture=neutral, PublicKeyToken=36ff2196ab5654b9, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\References\Actipro\ActiproSoftware.Text.Addons.DotNet.Wpf.dll</HintPath>
-    </Reference>
-    <Reference Include="ActiproSoftware.Text.Wpf, Version=11.2.555.0, Culture=neutral, PublicKeyToken=36ff2196ab5654b9, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\References\Actipro\ActiproSoftware.Text.Wpf.dll</HintPath>
-    </Reference>
     <Reference Include="Antlr3.Runtime">
       <HintPath>..\References\Antlr3.Runtime.dll</HintPath>
     </Reference>
@@ -192,27 +160,11 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Code\CodePanel.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Code\CodeReferencesWindow.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
     <Page Include="CommissionPanel.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="CommissionWindow.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="EndPointListEditor.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="ExchangeBoardEditor.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -224,19 +176,11 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="IpAddressEditor.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="NewsMessageGrid.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="NewsMessagePanel.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="PropertyGrid\DateTimeOffsetEditor.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -257,14 +201,6 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="CredentialsWindow.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="EndPointEditor.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="ExchangeEditor.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -466,14 +402,6 @@
     <Compile Include="ChangePasswordWindow.xaml.cs">
       <DependentUpon>ChangePasswordWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Code\CodePanel.xaml.cs">
-      <DependentUpon>CodePanel.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Code\CodeReference.cs" />
-    <Compile Include="Code\CodeReferencesWindow.xaml.cs">
-      <DependentUpon>CodeReferencesWindow.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Code\CodeExtensions.cs" />
     <Compile Include="CommissionPanel.xaml.cs">
       <DependentUpon>CommissionPanel.xaml</DependentUpon>
     </Compile>
@@ -482,21 +410,12 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="ConnectorInfo.cs" />
-    <Compile Include="EndPointListEditor.xaml.cs">
-      <DependentUpon>EndPointListEditor.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="ExchangeBoardEditor.xaml.cs">
-      <DependentUpon>ExchangeBoardEditor.xaml</DependentUpon>
-    </Compile>
     <Compile Include="ExecutionGrid.xaml.cs">
       <DependentUpon>ExecutionGrid.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Extensions.cs" />
     <Compile Include="HelpButton.xaml.cs">
       <DependentUpon>HelpButton.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="IpAddressEditor.xaml.cs">
-      <DependentUpon>IpAddressEditor.xaml</DependentUpon>
-      <SubType>Code</SubType>
     </Compile>
     <Compile Include="MultiIdConverter.cs" />
     <Compile Include="NewsMessageGrid.xaml.cs">
@@ -506,9 +425,6 @@
       <DependentUpon>NewsMessagePanel.xaml</DependentUpon>
     </Compile>
     <Compile Include="OrderConditionalGrid.cs" />
-    <Compile Include="PropertyGrid\DateTimeOffsetEditor.xaml.cs">
-      <DependentUpon>DateTimeOffsetEditor.xaml</DependentUpon>
-    </Compile>
     <Compile Include="ProxySettings.cs" />
     <Compile Include="ProxySettingsEditor.xaml.cs">
       <DependentUpon>ProxySettingsEditor.xaml</DependentUpon>
@@ -525,13 +441,6 @@
     <Compile Include="CredentialsWindow.xaml.cs">
       <DependentUpon>CredentialsWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="EndPointEditor.xaml.cs">
-      <DependentUpon>EndPointEditor.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="ExchangeEditor.xaml.cs">
-      <DependentUpon>ExchangeEditor.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Extensions.cs" />
     <Compile Include="ExchangeBoardComboBox.cs" />
     <Compile Include="ExtensionInfoPicker.xaml.cs">
       <DependentUpon>ExtensionInfoPicker.xaml</DependentUpon>
@@ -790,7 +699,6 @@
     <Resource Include="Resources\Launcher.x86.exe" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Properties\Licenses.licx" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>

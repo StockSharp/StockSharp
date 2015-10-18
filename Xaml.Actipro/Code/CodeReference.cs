@@ -1,4 +1,4 @@
-namespace StockSharp.Xaml.Code
+namespace StockSharp.Xaml.Actipro.Code
 {
 	/// <summary>
 	/// The link to the .NET build.

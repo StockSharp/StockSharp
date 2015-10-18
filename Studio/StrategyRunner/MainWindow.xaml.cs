@@ -31,6 +31,7 @@
 	using StockSharp.Xaml;
 	using StockSharp.Xaml.Charting;
 	using StockSharp.Xaml.Diagram;
+	using StockSharp.Xaml.Actipro;
 	using StockSharp.Configuration;
 
 	public partial class MainWindow

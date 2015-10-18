@@ -198,9 +198,6 @@ namespace StockSharp.Xaml
 		/// <param name="e">Argument.</param>
 		protected override void OnStartup(StartupEventArgs e)
 		{
-			Extensions.TranslateActiproDocking();
-			Extensions.TranslateActiproNavigation();
-
 			GuiDispatcher.InitGlobalDispatcher();
 			DispatcherPropertyChangedEventManager.Init();
 

@@ -1,5 +1,5 @@
 <UserControl
-				x:Class="StockSharp.Xaml.Code.CodePanel"
+				x:Class="StockSharp.Xaml.Actipro.Code.CodePanel"
 				xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
 				xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 				xmlns:loc="clr-namespace:StockSharp.Localization;assembly=StockSharp.Localization"
@@ -10,7 +10,7 @@
 				xmlns:ug="clr-namespace:Ecng.Xaml.Grids;assembly=Ecng.Xaml"
 				xmlns:themes="clr-namespace:ActiproSoftware.Windows.Themes;assembly=ActiproSoftware.Shared.Wpf"
 				xmlns:converters="clr-namespace:Ecng.Xaml.Converters;assembly=Ecng.Xaml"
-				xmlns:code="clr-namespace:StockSharp.Xaml.Code"
+				xmlns:code="clr-namespace:StockSharp.Xaml.Actipro.Code"
 				x:Name="Ctrl">
 	
 	<UserControl.CommandBindings>

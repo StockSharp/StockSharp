@@ -29,11 +29,10 @@ namespace StockSharp.Hydra.Panes
 	using StockSharp.Hydra.Core;
 	using StockSharp.Logging;
 	using StockSharp.Algo.Strategies;
-	using StockSharp.Xaml.Code;
+	using StockSharp.Xaml.Actipro.Code;
+	using StockSharp.Localization;
 
 	using Xceed.Wpf.Toolkit.PropertyGrid.Attributes;
-
-	using StockSharp.Localization;
 
 	public partial class AnalyticsPane : IPane
 	{

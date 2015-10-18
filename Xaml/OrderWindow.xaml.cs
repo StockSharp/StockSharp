@@ -6,8 +6,6 @@ namespace StockSharp.Xaml
 	using System.Windows;
 	using System.Windows.Controls;
 
-	using ActiproSoftware.Windows;
-
 	using Ecng.Common;
 	using Ecng.ComponentModel;
 	using Ecng.Xaml;
@@ -537,7 +535,7 @@ namespace StockSharp.Xaml
 			TryEnableSend();
 		}
 
-		private void ExpiryDate_OnValueChanged(object sender, PropertyChangedRoutedEventArgs<DateTime?> e)
+		private void ExpiryDate_OnValueChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
 		{
 			TryEnableSend();
 		}

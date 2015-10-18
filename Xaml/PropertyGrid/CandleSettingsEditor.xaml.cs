@@ -7,8 +7,6 @@ namespace StockSharp.Xaml.PropertyGrid
 	using System.Windows.Data;
 	using System.Linq;
 
-	using ActiproSoftware.Windows;
-
 	using Ecng.Common;
 	using Ecng.ComponentModel;
 
@@ -189,7 +187,7 @@ namespace StockSharp.Xaml.PropertyGrid
 			FillSettingsArg();
 		}
 
-		private void TimeFrameValueChanged(object sender, PropertyChangedRoutedEventArgs<TimeSpan?> e)
+		private void TimeFrameValueChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
 		{
 			FillSettingsArg();
 		}

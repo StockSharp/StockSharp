@@ -1,4 +1,4 @@
-namespace StockSharp.Xaml
+namespace StockSharp.Xaml.Actipro
 {
 	using System;
 	using System.Collections.Generic;

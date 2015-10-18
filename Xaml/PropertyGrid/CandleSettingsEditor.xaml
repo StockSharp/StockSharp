@@ -5,7 +5,6 @@
 			xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
 			xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
 			xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
-			xmlns:editors="http://schemas.actiprosoftware.com/winfx/xaml/editors"
 			xmlns:local="clr-namespace:StockSharp.Xaml"
 			Loaded="CandleSettingsEditor_OnLoaded"
 			mc:Ignorable="d" d:DesignWidth="200" Margin="0" HorizontalContentAlignment="Left">
@@ -23,8 +22,9 @@
 				<TextBlock Grid.Row="0" Grid.Column="0">
 					<Run Text="{x:Static loc:LocalizedStrings.Str1242}"/><Run Text=":"/>
 				</TextBlock>
-                <editors:TimeSpanEditBox x:Name="TimeFrame" Grid.Row="0" Grid.Column="1" Format="d hh:mm:ss" CenterSlotHorizontalAlignment="Right" ValueChanged="TimeFrameValueChanged" />
+                <xctk:TimeSpanUpDown x:Name="TimeFrame" Grid.Row="0" Grid.Column="1" TextAlignment="Right" ValueChanged="TimeFrameValueChanged" />
             </Grid>
+			
             <Grid x:Name="UnitValuePanel" Visibility="Collapsed">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition/>

@@ -11,9 +11,9 @@ namespace StockSharp.Studio.Controls
 
 	using StockSharp.Studio.Core;
 	using StockSharp.Studio.Core.Commands;
-	using StockSharp.Xaml;
 	using StockSharp.Xaml.Diagram;
 	using StockSharp.Localization;
+	using StockSharp.Xaml.Actipro;
 
 	[DisplayNameLoc(LocalizedStrings.Str3230Key)]
 	[DescriptionLoc(LocalizedStrings.Str3231Key)]

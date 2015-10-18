@@ -1,4 +1,4 @@
-﻿<sx:ExtendedBaseApplication 
+﻿<sx:ActiproBaseApplication 
 			x:Class="StockSharp.Hydra.App"
 			xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
 			xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
@@ -6,7 +6,7 @@
 			xmlns:sx="http://schemas.stocksharp.com/xaml"
 			xmlns:xaml="clr-namespace:Ecng.Xaml;assembly=Ecng.Xaml">
 
-	<sx:ExtendedBaseApplication.Resources>
+	<sx:ActiproBaseApplication.Resources>
 		<Style TargetType="{x:Type xaml:BmpImage}" x:Key="ToolbarImageStyle">
 			<Style.Triggers>
 				<DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType={x:Type Button}, AncestorLevel=1}, Path=IsEnabled}" Value="False">
@@ -14,6 +14,6 @@
 				</DataTrigger>
 			</Style.Triggers>
 		</Style>
-	</sx:ExtendedBaseApplication.Resources>
+	</sx:ActiproBaseApplication.Resources>
 	
-</sx:ExtendedBaseApplication>
+</sx:ActiproBaseApplication>

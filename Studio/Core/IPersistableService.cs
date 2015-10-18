@@ -7,7 +7,7 @@
 	using Ecng.Serialization;
 
 	using StockSharp.Community;
-	using StockSharp.Xaml.Code;
+	using StockSharp.Xaml.Actipro.Code;
 
 	public interface IPersistableService
 	{
