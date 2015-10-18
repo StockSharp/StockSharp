@@ -6,6 +6,7 @@ namespace StockSharp.Hydra.ITCH
 
 	using Ecng.Common;
 	using Ecng.Net;
+	using Ecng.Serialization;
 	using Ecng.Xaml;
 
 	using StockSharp.Hydra.Core;
@@ -114,6 +115,13 @@ namespace StockSharp.Hydra.ITCH
 			{
 				get { return (string)ExtensionInfo["SecurityGroupId"]; }
 				set { ExtensionInfo["SecurityGroupId"] = value; }
+			}
+
+			public override HydraTaskSettings Clone()
+			{
+				var clone = (ItchSettings)base.Clone();
+				clone.PrimaryMulticast = PrimaryMulticast.Clone();
+				return clone;
 			}
 		}
 
