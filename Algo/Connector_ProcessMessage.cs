@@ -1194,6 +1194,9 @@ namespace StockSharp.Algo
 
 			RaiseNewOrderLogItems(new[] { logItem });
 
+			if (message.IsSystem == false)
+				return;
+
 			if (CreateDepthFromOrdersLog)
 			{
 				try
