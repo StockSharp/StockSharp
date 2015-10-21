@@ -48,6 +48,12 @@ namespace StockSharp.Algo.Risk
 		/// <returns>List of rules, activated by the message.</returns>
 		public IEnumerable<IRiskRule> ProcessRules(Message message)
 		{
+			if (message.Type == MessageTypes.Reset)
+			{
+				Reset();
+				return Enumerable.Empty<IRiskRule>();
+			}
+
 			return _rules.Cache.Where(r => r.ProcessMessage(message)).ToArray();
 		}
 

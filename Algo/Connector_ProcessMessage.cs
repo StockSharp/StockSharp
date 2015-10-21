@@ -7,6 +7,11 @@ namespace StockSharp.Algo
 	using Ecng.Collections;
 	using Ecng.Common;
 
+	using StockSharp.Algo.Commissions;
+	using StockSharp.Algo.Latency;
+	using StockSharp.Algo.PnL;
+	using StockSharp.Algo.Risk;
+	using StockSharp.Algo.Slippage;
 	using StockSharp.BusinessEntities;
 	using StockSharp.Logging;
 	using StockSharp.Messages;
@@ -177,6 +182,23 @@ namespace StockSharp.Algo
 			}
 		}
 
+		private IMessageChannel _inMessageChannel;
+
+		/// <summary>
+		/// Input message channel.
+		/// </summary>
+		public IMessageChannel InMessageChannel
+		{
+			get { return _inMessageChannel; }
+			protected set
+			{
+				if (value == null)
+					throw new ArgumentNullException();
+
+				_inMessageChannel = value;
+			}
+		}
+
 		private void OutMessageChannelOnNewOutMessage(Message message)
 		{
 			OnProcessMessage(message);
@@ -219,8 +241,25 @@ namespace StockSharp.Algo
 
 				if (_adapter != null)
 				{
-					if (CalculateMessages)
-						_inAdapter = new ManagedMessageAdapter(_inAdapter).ToChannel(this);
+					if (LatencyManager != null)
+						_inAdapter = new LatencyMessageAdapter(_inAdapter) { LatencyManager = LatencyManager };
+
+					if (SlippageManager != null)
+						_inAdapter = new SlippageMessageAdapter(_inAdapter) { SlippageManager = SlippageManager };
+
+					if (PnLManager != null)
+						_inAdapter = new PnLMessageAdapter(_inAdapter) { PnLManager = PnLManager };
+
+					if (CommissionManager != null)
+						_inAdapter = new CommissionMessageAdapter(_inAdapter) { CommissionManager = CommissionManager };
+
+					if (RiskManager != null)
+						_inAdapter = new RiskMessageAdapter(_inAdapter) { RiskManager = RiskManager };
+
+					_inAdapter = new ChannelMessageAdapter(_inAdapter, InMessageChannel, new PassThroughMessageChannel())
+					{
+						OwnInputChannel = true
+					};
 
 					_adapter.InnerAdapters.Added += InnerAdaptersOnAdded;
 					_adapter.InnerAdapters.Removed += InnerAdaptersOnRemoved;
@@ -891,9 +930,6 @@ namespace StockSharp.Algo
 
 			RaiseValuesChanged(security, message.Changes, message.ServerTime, message.LocalTime);
 
-			if (CalculateMessages)
-				SlippageManager.ProcessMessage(message);
-
 			if (CreateDepthFromLevel1)
 			{
 				// генерация стакана из Level1
@@ -1141,9 +1177,6 @@ namespace StockSharp.Algo
 				}
 			}
 
-			if (CalculateMessages)
-				SlippageManager.ProcessMessage(message);
-
 			if (CreateDepthFromLevel1)
 				GetBuilder(message.SecurityId).HasDepth = true;
 
@@ -1373,9 +1406,6 @@ namespace StockSharp.Algo
 		private void ProcessMyTradeMessage(Security security, ExecutionMessage message)
 		{
 			var tuple = _entityCache.ProcessMyTradeMessage(security, message);
-
-			if (CalculateMessages && message.Slippage == null)
-				message.Slippage = SlippageManager.ProcessMessage(message);
 
 			if (tuple == null)
 			{

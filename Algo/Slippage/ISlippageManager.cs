@@ -1,11 +1,13 @@
 namespace StockSharp.Algo.Slippage
 {
+	using Ecng.Serialization;
+
 	using StockSharp.Messages;
 
 	/// <summary>
 	/// The interface for the slippage calculation manager.
 	/// </summary>
-	public interface ISlippageManager
+	public interface ISlippageManager : IPersistable
 	{
 		/// <summary>
 		/// Total slippage.

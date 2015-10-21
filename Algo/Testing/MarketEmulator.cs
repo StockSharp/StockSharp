@@ -1247,7 +1247,7 @@ namespace StockSharp.Algo.Testing
 				else
 					pos.Second -= orderMsg.GetBalance() * sign;
 
-				var commission = _parent._commissionManager.ProcessExecution(orderMsg);
+				var commission = _parent._commissionManager.Process(orderMsg);
 
 				_blockedValue += ((pos.First + pos.Second).Abs() - totalPos.Abs()) * reqMoney;
 
@@ -1262,7 +1262,7 @@ namespace StockSharp.Algo.Testing
 
 				PnLInfo info;
 				_pnLManager.ProcessMyTrade(tradeMsg, out info);
-				tradeMsg.Commission = _parent._commissionManager.ProcessExecution(tradeMsg);
+				tradeMsg.Commission = _parent._commissionManager.Process(tradeMsg);
 
 				bool isNew;
 				var pos = _positions.SafeAdd(tradeMsg.SecurityId, k => RefTuple.Create(0m, 0m), out isNew);

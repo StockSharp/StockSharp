@@ -5,9 +5,9 @@ namespace StockSharp.Algo.Latency
 
 	using Ecng.Common;
 	using Ecng.Collections;
+	using Ecng.Serialization;
 
 	using StockSharp.Messages;
-
 	using StockSharp.Localization;
 
 	/// <summary>
@@ -45,6 +45,12 @@ namespace StockSharp.Algo.Latency
 		{
 			switch (message.Type)
 			{
+				case MessageTypes.Reset:
+				{
+					Reset();
+					break;
+				}
+
 				case MessageTypes.OrderRegister:
 				{
 					var regMsg = (OrderRegisterMessage)message;
@@ -172,6 +178,22 @@ namespace StockSharp.Algo.Latency
 		public virtual void Reset()
 		{
 			LatencyRegistration = LatencyCancellation = TimeSpan.Zero;
+		}
+
+		/// <summary>
+		/// Load settings.
+		/// </summary>
+		/// <param name="storage">Storage.</param>
+		public void Load(SettingsStorage storage)
+		{
+		}
+
+		/// <summary>
+		/// Save settings.
+		/// </summary>
+		/// <param name="storage">Storage.</param>
+		public void Save(SettingsStorage storage)
+		{
 		}
 	}
 }

@@ -11,10 +11,14 @@ namespace StockSharp.Algo
 
 	using MoreLinq;
 
+	using StockSharp.Algo.Commissions;
+	using StockSharp.Algo.Latency;
+	using StockSharp.Algo.PnL;
+	using StockSharp.Algo.Risk;
+	using StockSharp.Algo.Slippage;
 	using StockSharp.BusinessEntities;
 	using StockSharp.Logging;
 	using StockSharp.Messages;
-	using StockSharp.Algo.Slippage;
 	using StockSharp.Localization;
 
 	using Wintellect.PowerCollections;
@@ -210,11 +214,17 @@ namespace StockSharp.Algo
 
 			CreateDepthFromLevel1 = true;
 
+			LatencyManager = new LatencyManager();
+			CommissionManager = new CommissionManager();
+			//PnLManager = new PnLManager();
+			RiskManager = new RiskManager();
+			SlippageManager = new SlippageManager();
+
 			_connectorStat.Add(this);
 
 			_securityProvider = new ConnectorSecurityProvider(this);
-			SlippageManager = new SlippageManager();
 
+			InMessageChannel = new InMemoryMessageChannel("Connector In", RaiseError);
 			OutMessageChannel = new InMemoryMessageChannel("Connector Out", RaiseError);
 
 			Adapter = new BasketMessageAdapter(new MillisecondIncrementalIdGenerator());
@@ -447,17 +457,29 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// To calculate data on basis of <see cref="ManagedMessageAdapter"/>. The default is enabled.
+		/// Orders registration delay calculation manager.
 		/// </summary>
-		public virtual bool CalculateMessages
-		{
-			get { return true; }
-		}
+		public ILatencyManager LatencyManager { get; set; }
 
 		/// <summary>
-		/// The slippage calculation manager.
+		/// The profit-loss manager.
 		/// </summary>
-		public ISlippageManager SlippageManager { get; private set; }
+		public IPnLManager PnLManager { get; set; }
+
+		/// <summary>
+		/// Risk control manager.
+		/// </summary>
+		public IRiskManager RiskManager { get; set; }
+
+		/// <summary>
+		/// The commission calculating manager.
+		/// </summary>
+		public ICommissionManager CommissionManager { get; set; }
+
+		/// <summary>
+		/// Slippage manager.
+		/// </summary>
+		public ISlippageManager SlippageManager { get; set; }
 
 		/// <summary>
 		/// Connection state.
@@ -1163,9 +1185,6 @@ namespace StockSharp.Algo
 			if (depoName != null)
 				regMsg.AddValue(PositionChangeTypes.DepoName, depoName);
 
-			if (CalculateMessages)
-				SlippageManager.ProcessMessage(regMsg);
-
 			SendInMessage(regMsg);
 		}
 
@@ -1623,6 +1642,12 @@ namespace StockSharp.Algo
 			UpdateSecurityByLevel1 = storage.GetValue("UpdateSecurityByLevel1", true);
 			ReConnectionSettings.Load(storage.GetValue<SettingsStorage>("ReConnectionSettings"));
 
+			LatencyManager = storage.GetValue<SettingsStorage>("LatencyManager").LoadEntire<ILatencyManager>();
+			CommissionManager = storage.GetValue<SettingsStorage>("CommissionManager").LoadEntire<ICommissionManager>();
+			PnLManager = storage.GetValue<SettingsStorage>("PnLManager").LoadEntire<IPnLManager>();
+			SlippageManager = storage.GetValue<SettingsStorage>("SlippageManager").LoadEntire<ISlippageManager>();
+			RiskManager = storage.GetValue<SettingsStorage>("RiskManager").LoadEntire<IRiskManager>();
+
 			Adapter.Load(storage.GetValue<SettingsStorage>("Adapter"));
 
 			CreateDepthFromOrdersLog = storage.GetValue<bool>("CreateDepthFromOrdersLog");
@@ -1650,6 +1675,12 @@ namespace StockSharp.Algo
 			storage.SetValue("UpdateSecurityLastQuotes", UpdateSecurityLastQuotes);
 			storage.SetValue("UpdateSecurityByLevel1", UpdateSecurityByLevel1);
 			storage.SetValue("ReConnectionSettings", ReConnectionSettings.Save());
+
+			storage.SetValue("LatencyManager", LatencyManager.SaveEntire(false));
+			storage.SetValue("CommissionManager", CommissionManager.SaveEntire(false));
+			storage.SetValue("PnLManager", PnLManager.SaveEntire(false));
+			storage.SetValue("SlippageManager", SlippageManager.SaveEntire(false));
+			storage.SetValue("RiskManager", RiskManager.SaveEntire(false));
 
 			storage.SetValue("Adapter", Adapter.Save());
 

@@ -1803,7 +1803,7 @@ namespace StockSharp.Algo.Strategies
 		private TimeSpan _unrealizedPnLInterval = TimeSpan.FromMinutes(1);
 
 		/// <summary>
-		/// The interval for unrealized gain recalculation. The default value is 1 minute.
+		/// The interval for unrealized profit recalculation. The default value is 1 minute.
 		/// </summary>
 		[Browsable(false)]
 		public virtual TimeSpan UnrealizedPnLInterval
@@ -2235,7 +2235,7 @@ namespace StockSharp.Algo.Strategies
 
 				UpdatePnLManager(trade.Trade.Security);
 
-				var tradeInfo = PnLManager.ProcessMyTrade(trade.ToMessage());
+				var tradeInfo = PnLManager.ProcessMessage(trade.ToMessage());
 				if (tradeInfo.PnL != 0)
 					isPnLChanged = true;
 

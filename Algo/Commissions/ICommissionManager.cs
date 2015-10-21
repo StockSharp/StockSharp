@@ -11,10 +11,5 @@ namespace StockSharp.Algo.Commissions
 		/// The list of commission calculating rules.
 		/// </summary>
 		ISynchronizedCollection<ICommissionRule> Rules { get; }
-
-		///// <summary>
-		///// Ñóììàðíîå çíà÷åíèå êîìèññèè, ñãðóïïèðîâàííîå ïî òèïàì.
-		///// </summary>
-		//IDictionary<CommissionTypes, decimal> CommissionPerTypes { get; }
 	}
 }

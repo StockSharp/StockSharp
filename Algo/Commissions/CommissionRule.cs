@@ -82,9 +82,9 @@ namespace StockSharp.Algo.Commissions
 		/// </summary>
 		/// <param name="message">The message containing the information about the order or own trade.</param>
 		/// <returns>The commission. If the commission can not be calculated then <see langword="null" /> will be returned.</returns>
-		public decimal? ProcessExecution(ExecutionMessage message)
+		public decimal? Process(Message message)
 		{
-			var commission = OnProcessExecution(message);
+			var commission = OnProcessExecution((ExecutionMessage)message);
 
 			if (commission != null)
 				Commission += commission.Value;

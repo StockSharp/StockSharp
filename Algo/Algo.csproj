@@ -160,9 +160,13 @@
     <Compile Include="..\StockSharpAssemblyInfo.cs">
       <Link>Properties\StockSharpAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="Commissions\CommissionMessageAdapter.cs" />
     <Compile Include="FilterableSecurityProvider.cs" />
     <Compile Include="Indicators\Correlation.cs" />
     <Compile Include="Indicators\Covariance.cs" />
+    <Compile Include="PnL\PnLMessageAdapter.cs" />
+    <Compile Include="Risk\RiskMessageAdapter.cs" />
+    <Compile Include="Slippage\SlippageMessageAdapter.cs" />
     <Compile Include="Storages\Backup\AmazonExtensions.cs" />
     <Compile Include="Storages\Backup\AmazonGlacierService.cs" />
     <Compile Include="Storages\Backup\AmazonS3Service.cs" />
@@ -318,7 +322,7 @@
     <Compile Include="Indicators\GatorOscillator.cs" />
     <Compile Include="Indicators\MarketFacilitationIndex.cs" />
     <Compile Include="Indicators\WilliamsR.cs" />
-    <Compile Include="ManagedMessageAdapter.cs" />
+    <Compile Include="Latency\LatencyMessageAdapter.cs" />
     <Compile Include="PnL\PortfolioPnLManager.cs" />
     <Compile Include="Risk\IRiskManager.cs">
       <SubType>Code</SubType>

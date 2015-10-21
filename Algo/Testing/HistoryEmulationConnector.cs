@@ -110,7 +110,14 @@ namespace StockSharp.Algo.Testing
 			_initialMoney = portfolios.ToDictionary(pf => pf, pf => pf.BeginValue);
 			EntityFactory = new EmulationEntityFactory(securityProvider, _initialMoney.Keys);
 
+			InMessageChannel = new PassThroughMessageChannel();
 			OutMessageChannel = new PassThroughMessageChannel();
+
+			LatencyManager = null;
+			RiskManager = null;
+			CommissionManager = null;
+			PnLManager = null;
+			SlippageManager = null;
 
 			_historyAdapter = new HistoryMessageAdapter(TransactionIdGenerator, securityProvider) { StorageRegistry = storageRegistry };
 			_historyChannel = new InMemoryMessageChannel("History Out", SendOutError);
@@ -181,14 +188,6 @@ namespace StockSharp.Algo.Testing
 		public IDictionary<Portfolio, decimal> InitialMoney
 		{
 			get { return _initialMoney; }
-		}
-
-		/// <summary>
-		/// To calculate data on basis of <see cref="ManagedMessageAdapter"/>. The default is enabled.
-		/// </summary>
-		public override bool CalculateMessages
-		{
-			get { return false; }
 		}
 
 		/// <summary>

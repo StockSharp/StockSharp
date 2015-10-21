@@ -4,11 +4,12 @@ namespace StockSharp.Algo.PnL
 	using System.Linq;
 
 	using Ecng.Collections;
+	using Ecng.Serialization;
 
 	using StockSharp.Messages;
 
 	/// <summary>
-	/// The gain-loss manager.
+	/// The profit-loss manager.
 	/// </summary>
 	public class PnLManager : IPnLManager
 	{
@@ -40,7 +41,7 @@ namespace StockSharp.Algo.PnL
 		}
 
 		/// <summary>
-		/// The value of unrealized gain-loss.
+		/// The value of unrealized profit-loss.
 		/// </summary>
 		public virtual decimal UnrealizedPnL
 		{
@@ -60,39 +61,67 @@ namespace StockSharp.Algo.PnL
 		}
 
 		/// <summary>
-		/// To calculate trade profitability. If the trade was already processed earlier, previous information returns.
+		/// To process the message, containing market data or trade. If the trade was already processed earlier, previous information returns.
 		/// </summary>
-		/// <param name="trade">Trade.</param>
+		/// <param name="message">The message, containing market data or trade.</param>
 		/// <returns>Information on new trade.</returns>
-		public virtual PnLInfo ProcessMyTrade(ExecutionMessage trade)
-		{
-			if (trade == null)
-				throw new ArgumentNullException("trade");
-
-			lock (_portfolioManagers.SyncRoot)
-			{
-				var manager = _portfolioManagers.SafeAdd(trade.PortfolioName, pf => new PortfolioPnLManager(pf));
-				
-				PnLInfo info;
-
-				if (manager.ProcessMyTrade(trade, out info))
-					_realizedPnL += info.PnL;
-
-				return info;
-			}
-		}
-
-		/// <summary>
-		/// To process the message, containing market data.
-		/// </summary>
-		/// <param name="message">The message, containing market data.</param>
-		public void ProcessMessage(Message message)
+		public PnLInfo ProcessMessage(Message message)
 		{
 			if (message == null)
 				throw new ArgumentNullException("message");
 
-			foreach (var pnLManager in _portfolioManagers.CachedValues)
-				pnLManager.ProcessMessage(message);
+			switch (message.Type)
+			{
+				case MessageTypes.Reset:
+				{
+					Reset();
+					return null;
+				}
+
+				case MessageTypes.Execution:
+				{
+					var trade = (ExecutionMessage)message;
+
+					if (trade.ExecutionType != ExecutionTypes.Trade)
+						return null;
+
+					lock (_portfolioManagers.SyncRoot)
+					{
+						var manager = _portfolioManagers.SafeAdd(trade.PortfolioName, pf => new PortfolioPnLManager(pf));
+
+						PnLInfo info;
+
+						if (manager.ProcessMyTrade(trade, out info))
+							_realizedPnL += info.PnL;
+
+						return info;
+					}
+				}
+
+				default:
+				{
+					foreach (var pnLManager in _portfolioManagers.CachedValues)
+						pnLManager.ProcessMessage(message);
+
+					return null;
+				}
+			}
+		}
+
+		/// <summary>
+		/// Load settings.
+		/// </summary>
+		/// <param name="storage">Storage.</param>
+		public void Load(SettingsStorage storage)
+		{
+		}
+
+		/// <summary>
+		/// Save settings.
+		/// </summary>
+		/// <param name="storage">Storage.</param>
+		public void Save(SettingsStorage storage)
+		{
 		}
 	}
 }

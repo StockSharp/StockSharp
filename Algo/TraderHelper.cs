@@ -3429,46 +3429,46 @@ namespace StockSharp.Algo
 			return fields.ToDictionary(f => f, f => provider.GetSecurityValue(security, f));
 		}
 
-		/// <summary>
-		/// To deduce the adapter to the <typeparamref name="T" /> type.
-		/// </summary>
-		/// <typeparam name="T">The adapter type.</typeparam>
-		/// <param name="adapter">The initial adapter.</param>
-		/// <returns>Adapter.</returns>
-		public static T To<T>(this IMessageAdapter adapter)
-			where T : class, IMessageAdapter
-		{
-			if (adapter == null)
-				throw new ArgumentNullException("adapter");
+		///// <summary>
+		///// To deduce the adapter to the <typeparamref name="T" /> type.
+		///// </summary>
+		///// <typeparam name="T">The adapter type.</typeparam>
+		///// <param name="adapter">The initial adapter.</param>
+		///// <returns>Adapter.</returns>
+		//public static T To<T>(this IMessageAdapter adapter)
+		//	where T : class, IMessageAdapter
+		//{
+		//	if (adapter == null)
+		//		throw new ArgumentNullException("adapter");
 
-			var outAdapter = adapter as T;
+		//	var outAdapter = adapter as T;
 
-			if (outAdapter != null)
-				return outAdapter;
+		//	if (outAdapter != null)
+		//		return outAdapter;
 
-			var managedAdapter = adapter as ManagedMessageAdapter;
+		//	var managedAdapter = adapter as ManagedMessageAdapter;
 
-			if (managedAdapter != null)
-				return managedAdapter.InnerAdapter.To<T>();
+		//	if (managedAdapter != null)
+		//		return managedAdapter.InnerAdapter.To<T>();
 
-			throw new InvalidCastException(LocalizedStrings.Str3843.Put(adapter.GetType(), typeof(T)));
-		}
+		//	throw new InvalidCastException(LocalizedStrings.Str3843.Put(adapter.GetType(), typeof(T)));
+		//}
 
-		/// <summary>
-		/// To convert the adapter into <see cref="ChannelMessageAdapter"/>.
-		/// </summary>
-		/// <param name="adapter">Adapter.</param>
-		/// <param name="connector">The connection. It is used to determine the channel name.</param>
-		/// <param name="name">The channel name.</param>
-		/// <returns>Message adapter, forward messages through a transport channel <see cref="IMessageChannel"/>.</returns>
-		public static ChannelMessageAdapter ToChannel(this IMessageAdapter adapter, Connector connector, string name = null)
-		{
-			name = name ?? connector.GetType().GetDisplayName();
-			return new ChannelMessageAdapter(adapter, new InMemoryMessageChannel(name, connector.SendOutError), new PassThroughMessageChannel())
-			{
-				OwnInputChannel = true
-			};
-		}
+		///// <summary>
+		///// To convert the adapter into <see cref="ChannelMessageAdapter"/>.
+		///// </summary>
+		///// <param name="adapter">Adapter.</param>
+		///// <param name="connector">The connection. It is used to determine the channel name.</param>
+		///// <param name="name">The channel name.</param>
+		///// <returns>Message adapter, forward messages through a transport channel <see cref="IMessageChannel"/>.</returns>
+		//public static ChannelMessageAdapter ToChannel(this IMessageAdapter adapter, Connector connector, string name = null)
+		//{
+		//	name = name ?? connector.GetType().GetDisplayName();
+		//	return new ChannelMessageAdapter(adapter, new InMemoryMessageChannel(name, connector.SendOutError), new PassThroughMessageChannel())
+		//	{
+		//		OwnInputChannel = true
+		//	};
+		//}
 
 		private const double _minValue = (double)decimal.MinValue;
 		private const double _maxValue = (double)decimal.MaxValue;
