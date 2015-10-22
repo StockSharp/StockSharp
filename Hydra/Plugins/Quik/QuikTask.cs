@@ -153,6 +153,16 @@ namespace StockSharp.Hydra.Quik
 				set { ExtensionInfo["IsDownloadSecurityChangesHistory"] = value; }
 			}
 
+			[CategoryLoc(_ddeCategory)]
+			[DisplayNameLoc(LocalizedStrings.OverrideKey)]
+			[DescriptionLoc(LocalizedStrings.OverrideDllKey)]
+			[PropertyOrder(5)]
+			public bool OverrideDll
+			{
+				get { return (bool)ExtensionInfo["OverrideDll"]; }
+				set { ExtensionInfo["OverrideDll"] = value; }
+			}
+
 			[CategoryLoc(_luaCategory)]
 			[DisplayNameLoc(LocalizedStrings.AddressKey)]
 			[DescriptionLoc(LocalizedStrings.AddressKey, true)]
@@ -335,6 +345,7 @@ namespace StockSharp.Hydra.Quik
 				_settings.IsDde = false;
 				_settings.ExtendedColumns = new List<string>();
 				_settings.ExtendedColumnsHistory = new List<string>();
+				_settings.OverrideDll = true;
 				_settings.LuaAddress = QuikTrader.DefaultLuaAddress;
 				_settings.LuaLogin = "quik";
 				_settings.LuaPassword = new SecureString();
@@ -351,6 +362,7 @@ namespace StockSharp.Hydra.Quik
 				Path = _settings.Path,
 				DdeServer = _settings.DdeServer,
 				LuaFixServerAddress = _settings.LuaAddress,
+				OverrideDll = _settings.OverrideDll
 			};
 
 			if (!_settings.LuaLogin.IsEmpty())
