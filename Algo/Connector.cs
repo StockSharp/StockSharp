@@ -179,7 +179,6 @@ namespace StockSharp.Algo
 		private readonly Dictionary<string, List<ExecutionMessage>> _nonOrderedByStringIdMyTrades = new Dictionary<string, List<ExecutionMessage>>();
 		private readonly MultiDictionary<Tuple<long?, string>, RefPair<Order, Action<Order, Order>>> _orderStopOrderAssociations = new MultiDictionary<Tuple<long?, string>, RefPair<Order, Action<Order, Order>>>(false);
 
-		private readonly Dictionary<object, Security> _nativeIdSecurities = new Dictionary<object, Security>();
 		private readonly Dictionary<SecurityId, List<Message>> _suspendedSecurityMessages = new Dictionary<SecurityId, List<Message>>();
 		private readonly object _suspendSync = new object();
 		private readonly List<Security> _lookupResult = new List<Security>();
@@ -288,29 +287,25 @@ namespace StockSharp.Algo
 			}
 		}
 
-		private readonly CachedSynchronizedSet<ExchangeBoard> _exchangeBoards = new CachedSynchronizedSet<ExchangeBoard>();
-
 		/// <summary>
 		/// List of all exchange boards, for which instruments are loaded <see cref="IConnector.Securities"/>.
 		/// </summary>
 		public IEnumerable<ExchangeBoard> ExchangeBoards
 		{
-			get { return _exchangeBoards.Cache; }
+			get { return _entityCache.ExchangeBoards; }
 		}
-
-		private readonly CachedSynchronizedDictionary<string, Security> _securities = new CachedSynchronizedDictionary<string, Security>(StringComparer.InvariantCultureIgnoreCase);
 
 		/// <summary>
 		/// List of all loaded instruments. It should be called after event <see cref="IConnector.NewSecurities"/> arisen. Otherwise the empty set will be returned.
 		/// </summary>
 		public virtual IEnumerable<Security> Securities
 		{
-			get { return _securities.CachedValues; }
+			get { return _entityCache.Securities; }
 		}
 
 		int ISecurityProvider.Count
 		{
-			get { return _securities.Count; }
+			get { return _entityCache.SecurityCount; }
 		}
 
 		private Action<Security> _added;
@@ -352,10 +347,7 @@ namespace StockSharp.Algo
 		/// <returns>Native (internal) trading system security id.</returns>
 		public object GetNativeId(Security security)
 		{
-			if (security == null)
-				throw new ArgumentNullException("security");
-
-			return _nativeIdSecurities.LastOrDefault(p => p.Value == security).Key;
+			return _entityCache.GetNativeId(security);
 		}
 
 		private DateTimeOffset _currentTime;
@@ -394,24 +386,20 @@ namespace StockSharp.Algo
 			get { return Orders.Where(o => o.Type == OrderTypes.Conditional); }
 		}
 
-		private readonly SynchronizedList<OrderFail> _orderRegisterFails = new SynchronizedList<OrderFail>();
-
 		/// <summary>
 		/// Get all registration errors.
 		/// </summary>
 		public IEnumerable<OrderFail> OrderRegisterFails
 		{
-			get { return _orderRegisterFails.SyncGet(c => c.ToArray()); }
+			get { return _entityCache.OrderRegisterFails; }
 		}
-
-		private readonly SynchronizedList<OrderFail> _orderCancelFails = new SynchronizedList<OrderFail>();
 
 		/// <summary>
 		/// Get all cancellation errors.
 		/// </summary>
 		public IEnumerable<OrderFail> OrderCancelFails
 		{
-			get { return _orderCancelFails.SyncGet(c => c.ToArray()); }
+			get { return _entityCache.OrderCancelFails; }
 		}
 
 		/// <summary>
@@ -438,14 +426,12 @@ namespace StockSharp.Algo
 			get { return _entityCache.Portfolios; }
 		}
 
-		private readonly CachedSynchronizedDictionary<Tuple<Portfolio, Security, string, TPlusLimits?>, Position> _positions = new CachedSynchronizedDictionary<Tuple<Portfolio, Security, string, TPlusLimits?>, Position>();
-
 		/// <summary>
 		/// Get all positions.
 		/// </summary>
 		public IEnumerable<Position> Positions
 		{
-			get { return _positions.CachedValues; }
+			get { return _entityCache.Positions; }
 		}
 
 		/// <summary>
@@ -782,28 +768,8 @@ namespace StockSharp.Algo
 			if (security == null)
 				throw new ArgumentNullException("security");
 
-			Position position;
-
-			var isNew = false;
-
-			lock (_positions.SyncRoot)
-			{
-				if (depoName == null)
-					depoName = string.Empty;
-
-				var key = Tuple.Create(portfolio, security, depoName, limitType);
-
-				if (!_positions.TryGetValue(key, out position))
-				{
-					isNew = true;
-
-					position = EntityFactory.CreatePosition(portfolio, security);
-					position.DepoName = depoName;
-					position.LimitType = limitType;
-					position.Description = description;
-					_positions.Add(key, position);
-				}
-			}
+			bool isNew;
+			var position = _entityCache.TryAddPosition(portfolio, security, depoName, limitType, description, out isNew);
 
 			if (isNew)
 				RaiseNewPositions(new[] { position });
@@ -1321,31 +1287,10 @@ namespace StockSharp.Algo
 
 			bool isNew;
 
-			var security = _securities.SafeAdd(id, key =>
+			var security = _entityCache.TryAddSecurity(id, idStr =>
 			{
-				var s = EntityFactory.CreateSecurity(key);
-
-				if (s == null)
-					throw new InvalidOperationException(LocalizedStrings.Str1102Params.Put(key));
-
-				if (s.ExtensionInfo == null)
-					s.ExtensionInfo = new Dictionary<object, object>();
-
-				var info = SecurityIdGenerator.Split(key);
-
-				if (s.Board == null)
-					s.Board = ExchangeBoard.GetOrCreateBoard(GetBoardCode(info.Item2));
-
-				if (s.Code.IsEmpty())
-					s.Code = info.Item1;
-
-				if (s.Name.IsEmpty())
-					s.Name = info.Item1;
-
-				if (s.Class.IsEmpty())
-					s.Class = info.Item2;
-
-				return s;
+				var info = SecurityIdGenerator.Split(idStr);
+				return Tuple.Create(info.Item1, ExchangeBoard.GetOrCreateBoard(GetBoardCode(info.Item2)));
 			}, out isNew);
 
 			var isChanged = changeSecurity(security);
@@ -1355,7 +1300,7 @@ namespace StockSharp.Algo
 				if (security.Board == null)
 					throw new InvalidOperationException(LocalizedStrings.Str903Params.Put(id));
 
-				_exchangeBoards.TryAdd(security.Board);
+				_entityCache.TryAddBoard(security.Board);
 				RaiseNewSecurities(new[] { security });
 			}
 			else if (isChanged)
@@ -1512,28 +1457,17 @@ namespace StockSharp.Algo
 			_entityCache.Clear();
 			_prevTime = default(DateTimeOffset);
 
-			_exchangeBoards.Clear();
-			_securities.Clear();
-
 			_securityLookups.Clear();
 			_portfolioLookups.Clear();
-
-			_positions.Clear();
-			_filteredMarketDepths.Clear();
 
 			_lookupQueue.Clear();
 			_lookupResult.Clear();
 
 			_marketDepths.Clear();
 
-			_nativeIdSecurities.Clear();
-
 			_nonOrderedByIdMyTrades.Clear();
 			_nonOrderedByStringIdMyTrades.Clear();
 			_nonOrderedByTransactionIdMyTrades.Clear();
-
-			_orderCancelFails.Clear();
-			_orderRegisterFails.Clear();
 
 			ConnectionState = ConnectionStates.Disconnected;
 

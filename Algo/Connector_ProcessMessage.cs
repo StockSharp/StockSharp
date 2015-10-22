@@ -518,7 +518,7 @@ namespace StockSharp.Algo
 				// если указан код и тип инструмента, то пытаемся найти инструмент по ним
 				if (!securityCode.IsEmpty() && securityId.SecurityType != null)
 				{
-					var securities = _securities.CachedValues.Where(s => s.Code.CompareIgnoreCase(securityCode)).ToArray();
+					var securities = _entityCache.GetSecuritiesByCode(securityCode).ToArray();
 
 					security = securities.FirstOrDefault(s => s.Type == securityId.SecurityType)
 					           ?? securities.FirstOrDefault(s => s.Type == null);
@@ -535,10 +535,10 @@ namespace StockSharp.Algo
 			lock (_suspendSync)
 			{
 				if (!isSecurityIdEmpty)
-					security = _securities.TryGetValue(stockSharpId);
+					security = _entityCache.GetSecurityById(stockSharpId);
 
 				if (security == null && !isNativeIdNull)
-					security = _nativeIdSecurities.TryGetValue(nativeSecurityId);
+					security = _entityCache.GetSecurityByNativeId(nativeSecurityId);
 
 				if (security == null && !isSecurityIdEmpty)
 				{
@@ -743,10 +743,10 @@ namespace StockSharp.Algo
 
 			lock (_suspendSync)
 			{
-				var sec = _nativeIdSecurities.TryGetValue(native);
+				var sec = _entityCache.GetSecurityByNativeId(native);
 
 				if (sec == null)
-					_nativeIdSecurities.Add(native, _securities[stocksharp]);
+					_entityCache.AddSecurityByNativeId(native, stocksharp);
 				else
 				{
 					if (!sec.Id.CompareIgnoreCase(stocksharp))
@@ -1356,7 +1356,7 @@ namespace StockSharp.Algo
 
 				if (isRegisterFail)
 				{
-					_orderRegisterFails.Add(fail);
+					_entityCache.AddRegisterFail(fail);
 
 					if (isStop)
 						RaiseStopOrdersRegisterFailed(fails);
@@ -1365,7 +1365,7 @@ namespace StockSharp.Algo
 				}
 				else
 				{
-					_orderCancelFails.Add(fail);
+					_entityCache.AddCancelFail(fail);
 
 					if (isStop)
 						RaiseStopOrdersCancelFailed(fails);
