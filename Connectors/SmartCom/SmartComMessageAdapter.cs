@@ -30,6 +30,19 @@ namespace StockSharp.SmartCom
 			SecurityClassInfo.Add("OPT", RefTuple.Create(SecurityTypes.Option, ExchangeBoard.Forts.Code));
 			SecurityClassInfo.Add("OPTM", RefTuple.Create(SecurityTypes.Option, ExchangeBoard.Forts.Code));
 			SecurityClassInfo.Add("FUT", RefTuple.Create(SecurityTypes.Future, ExchangeBoard.Forts.Code));
+			SecurityClassInfo.Add("FXMFD", RefTuple.Create(SecurityTypes.Currency, ExchangeBoard.Mfd.Code));
+			SecurityClassInfo.Add("WFMFD", RefTuple.Create(SecurityTypes.Index, ExchangeBoard.Mfd.Code));
+			SecurityClassInfo.Add("WIMFD", RefTuple.Create(SecurityTypes.Index, ExchangeBoard.Mfd.Code));
+			SecurityClassInfo.Add("EQBR", RefTuple.Create(SecurityTypes.Stock, ExchangeBoard.MicexEqbr.Code));
+			SecurityClassInfo.Add("TQBR", RefTuple.Create(SecurityTypes.Stock, ExchangeBoard.MicexTqbr.Code));
+			SecurityClassInfo.Add("TQNE", RefTuple.Create(SecurityTypes.Stock, ExchangeBoard.MicexTqne.Code));
+			SecurityClassInfo.Add("EQNE", RefTuple.Create(SecurityTypes.Stock, ExchangeBoard.MicexEqne.Code));
+			SecurityClassInfo.Add("EQOB", RefTuple.Create(SecurityTypes.Bond, ExchangeBoard.MicexEqob.Code));
+			SecurityClassInfo.Add("EQNB", RefTuple.Create(SecurityTypes.Bond, ExchangeBoard.MicexEqnb.Code));
+			SecurityClassInfo.Add("EQDB", RefTuple.Create(SecurityTypes.Bond, ExchangeBoard.MicexEqdb.Code));
+			SecurityClassInfo.Add("EQOS", RefTuple.Create(SecurityTypes.Bond, ExchangeBoard.MicexEqos.Code));
+			SecurityClassInfo.Add("TQOB", RefTuple.Create(SecurityTypes.Bond, ExchangeBoard.MicexTqob.Code));
+			SecurityClassInfo.Add("TQLV", RefTuple.Create(SecurityTypes.Stock, ExchangeBoard.MicexTqlv.Code));
 
 			PortfolioBoardCodes = new Dictionary<string, string>
 			{
