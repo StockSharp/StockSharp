@@ -59,6 +59,12 @@ namespace StockSharp.Xaml
 			automaticUpdater.Translation.ViewError = LocalizedStrings.Str1492;
 		}
 
+		/// <summary>
+		/// Cast value to specified type.
+		/// </summary>
+		/// <typeparam name="T">Return type.</typeparam>
+		/// <param name="value">Source value.</param>
+		/// <returns>Casted value.</returns>
 		public static T WpfCast<T>(this object value)
 		{
 			return value == DependencyProperty.UnsetValue ? default(T) : value.To<T>();
