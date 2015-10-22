@@ -2,8 +2,6 @@ namespace StockSharp.Algo.PnL
 {
 	using System;
 
-	using Ecng.Common;
-
 	using StockSharp.Messages;
 
 	/// <summary>
@@ -18,10 +16,6 @@ namespace StockSharp.Algo.PnL
 		public PnLMessageAdapter(IMessageAdapter innerAdapter)
 			: base(innerAdapter)
 		{
-			if (innerAdapter == null)
-				throw new ArgumentNullException("innerAdapter");
-
-			InnerAdapter.NewOutMessage += ProcessOutMessage;
 		}
 
 		private IPnLManager _pnLManager = new PnLManager();
@@ -42,43 +36,28 @@ namespace StockSharp.Algo.PnL
 		}
 
 		/// <summary>
-		/// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
-		/// </summary>
-		public override void Dispose()
-		{
-			InnerAdapter.NewOutMessage -= ProcessOutMessage;
-			base.Dispose();
-		}
-
-		private Action<Message> _newOutMessage;
-
-		/// <summary>
-		/// New message event.
-		/// </summary>
-		public override event Action<Message> NewOutMessage
-		{
-			add { _newOutMessage += value; }
-			remove { _newOutMessage -= value; }
-		}
-
-		/// <summary>
 		/// Send message.
 		/// </summary>
 		/// <param name="message">Message.</param>
 		public override void SendInMessage(Message message)
 		{
 			PnLManager.ProcessMessage(message);
-			InnerAdapter.SendInMessage(message);
+
+			base.SendInMessage(message);
 		}
 
-		private void ProcessOutMessage(Message message)
+		/// <summary>
+		/// Process <see cref="MessageAdapterWrapper.InnerAdapter"/> output message.
+		/// </summary>
+		/// <param name="message">The message.</param>
+		protected override void OnInnerAdapterNewOutMessage(Message message)
 		{
 			var info = PnLManager.ProcessMessage(message);
 
 			if (info != null && info.PnL != 0)
 				((ExecutionMessage)message).PnL = info.PnL;
 
-			_newOutMessage.SafeInvoke(message);
+			base.OnInnerAdapterNewOutMessage(message);
 		}
 
 		/// <summary>

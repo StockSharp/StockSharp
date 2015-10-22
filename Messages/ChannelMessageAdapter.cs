@@ -29,8 +29,6 @@ namespace StockSharp.Messages
 
 			InputChannel.NewOutMessage += InputChannelOnNewOutMessage;
 			OutputChannel.NewOutMessage += OutputChannelOnNewOutMessage;
-
-			InnerAdapter.NewOutMessage += AdapterOnNewOutMessage;
 		}
 
 		/// <summary>
@@ -58,7 +56,11 @@ namespace StockSharp.Messages
 			_newMessage.SafeInvoke(message);
 		}
 
-		private void AdapterOnNewOutMessage(Message message)
+		/// <summary>
+		/// Process <see cref="MessageAdapterWrapper.InnerAdapter"/> output message.
+		/// </summary>
+		/// <param name="message">The message.</param>
+		protected override void OnInnerAdapterNewOutMessage(Message message)
 		{
 			if (!OutputChannel.IsOpened)
 				OutputChannel.Open();
@@ -84,8 +86,6 @@ namespace StockSharp.Messages
 
 			if (OwnOutputChannel)
 				OutputChannel.Dispose();
-
-			InnerAdapter.NewOutMessage -= AdapterOnNewOutMessage;
 
 			base.Dispose();
 		}

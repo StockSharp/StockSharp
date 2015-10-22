@@ -2,7 +2,6 @@ namespace StockSharp.Algo.Risk
 {
 	using System;
 
-	using Ecng.Common;
 	using Ecng.ComponentModel;
 
 	using StockSharp.Localization;
@@ -21,10 +20,6 @@ namespace StockSharp.Algo.Risk
 		public RiskMessageAdapter(IMessageAdapter innerAdapter)
 			: base(innerAdapter)
 		{
-			if (innerAdapter == null)
-				throw new ArgumentNullException("innerAdapter");
-
-			InnerAdapter.NewOutMessage += ProcessOutMessage;
 		}
 
 		private IRiskManager _riskManager = new RiskManager();
@@ -45,26 +40,6 @@ namespace StockSharp.Algo.Risk
 		}
 
 		/// <summary>
-		/// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
-		/// </summary>
-		public override void Dispose()
-		{
-			InnerAdapter.NewOutMessage -= ProcessOutMessage;
-			base.Dispose();
-		}
-
-		private Action<Message> _newOutMessage;
-
-		/// <summary>
-		/// New message event.
-		/// </summary>
-		public override event Action<Message> NewOutMessage
-		{
-			add { _newOutMessage += value; }
-			remove { _newOutMessage -= value; }
-		}
-
-		/// <summary>
 		/// Send message.
 		/// </summary>
 		/// <param name="message">Message.</param>
@@ -74,10 +49,15 @@ namespace StockSharp.Algo.Risk
 			InnerAdapter.SendInMessage(message);
 		}
 
-		private void ProcessOutMessage(Message message)
+		/// <summary>
+		/// Process <see cref="MessageAdapterWrapper.InnerAdapter"/> output message.
+		/// </summary>
+		/// <param name="message">The message.</param>
+		protected override void OnInnerAdapterNewOutMessage(Message message)
 		{
 			ProcessRisk(message);
-			_newOutMessage.SafeInvoke(message);
+
+			base.OnInnerAdapterNewOutMessage(message);
 		}
 
 		private void ProcessRisk(Message message)

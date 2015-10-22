@@ -2,8 +2,6 @@ namespace StockSharp.Algo.Commissions
 {
 	using System;
 
-	using Ecng.Common;
-
 	using StockSharp.Messages;
 
 	/// <summary>
@@ -18,30 +16,6 @@ namespace StockSharp.Algo.Commissions
 		public CommissionMessageAdapter(IMessageAdapter innerAdapter)
 			: base(innerAdapter)
 		{
-			if (innerAdapter == null)
-				throw new ArgumentNullException("innerAdapter");
-
-			InnerAdapter.NewOutMessage += ProcessOutMessage;
-		}
-
-		/// <summary>
-		/// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
-		/// </summary>
-		public override void Dispose()
-		{
-			InnerAdapter.NewOutMessage -= ProcessOutMessage;
-			base.Dispose();
-		}
-
-		private Action<Message> _newOutMessage;
-
-		/// <summary>
-		/// New message event.
-		/// </summary>
-		public override event Action<Message> NewOutMessage
-		{
-			add { _newOutMessage += value; }
-			remove { _newOutMessage -= value; }
 		}
 
 		private ICommissionManager _commissionManager = new CommissionManager();
@@ -68,17 +42,21 @@ namespace StockSharp.Algo.Commissions
 		public override void SendInMessage(Message message)
 		{
 			CommissionManager.Process(message);
-			InnerAdapter.SendInMessage(message);
+			base.SendInMessage(message);
 		}
 
-		private void ProcessOutMessage(Message message)
+		/// <summary>
+		/// Process <see cref="MessageAdapterWrapper.InnerAdapter"/> output message.
+		/// </summary>
+		/// <param name="message">The message.</param>
+		protected override void OnInnerAdapterNewOutMessage(Message message)
 		{
 			var execMsg = message as ExecutionMessage;
 
 			if (execMsg != null && (execMsg.ExecutionType == ExecutionTypes.Order || execMsg.ExecutionType == ExecutionTypes.Trade) && execMsg.Commission == null)
 				execMsg.Commission = CommissionManager.Process(execMsg);
 
-			_newOutMessage.SafeInvoke(message);
+			base.OnInnerAdapterNewOutMessage(message);
 		}
 
 		/// <summary>
