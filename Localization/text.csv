@@ -1751,8 +1751,10 @@ Str1874Params;No transaction with SmartCOM ID {0} found.;Не найдена н�
 Str1875;Connection to SmartCOM is not initialized.;Подключение к SmartCOM не инициализировано.
 Str1876;SmartCOM connection timeout.;Время установления связи со SmartCOM вышло.
 NetworkError;Network error.;Сетевая ошибка.
-Main;Main;Основной
-MainServer;Main server;Основной сервер
+Main;Main;Основная
+MainUDP;The main UDP group;Основная UDP группа
+Duplicate;Duplicate;Дублирующая
+DuplicateUDP;Duplicate UDP group;Дублирующая UDP группа
 Demo;Demo;Демо
 Backup;Backup;Резервный
 BackupServer;Backup server;Резервный сервер
@@ -5878,7 +5880,7 @@ DocStr1722;The event of strategy portfolio change;Событие изменен�
 DocStr1723;The event of strategy position change;Событие изменения позиций стратегии
 DocStr1724;The event of error occurrence in the strategy;Событие возникновения ошибки в стратегии
 DocStr1725;The event of the strategy re-initialization;Событие переинициализации стратегии
-DocStr1726;The interval for unrealized gain recalculation. The default value is 1 minute;Интервал пересчета нереализованной прибыли. Значение по-умолчанию равно 1 минуте
+DocStr1726;The interval for unrealized profit recalculation. The default value is 1 minute;Интервал пересчета нереализованной прибыли. Значение по-умолчанию равно 1 минуте
 DocStr1727;The event of strategy parameters change;Событие изменения параметров стратегии
 DocStr1728;The collection of subsidiary strategies;Коллекция дочерних стратегий
 DocStr1729;To analyze;Анализировать
@@ -6208,10 +6210,10 @@ DocStr2054;The candle processing event;Событие обработки све�
 DocStr2055;The series parameters change event;Событие изменения параметров серии
 DocStr2056;To process the message for transaction delay calculation. Messages of types {0}, {1}, {2}, {3} and {4} are accepted;Обработать сообщение для вычисления задержки транзакции. Принимаются сообщения типа {0}, {1}, {2}, {3} и {4}
 DocStr2057;Transaction delay;Задержка транзакции
-DocStr2058;The gain-loss manager;Менеджер прибыли-убытка
-DocStr2059;The interface of the gain-loss calculation manager;Интерфейс менеджера расчета прибыли-убытка
-DocStr2060;The value of realized gain-loss;Значение реализованной прибыли-убытка
-DocStr2061;The value of unrealized gain-loss;Значение нереализованной прибыли-убытка
+DocStr2058;The profit-loss manager;Менеджер прибыли-убытка
+DocStr2059;The interface of the profit-loss calculation manager;Интерфейс менеджера расчета прибыли-убытка
+DocStr2060;The value of realized profit-loss;Значение реализованной прибыли-убытка
+DocStr2061;The value of unrealized profit-loss;Значение нереализованной прибыли-убытка
 DocStr2062;The position calculation manager;Менеджер расчета позиции
 DocStr2063;The interface for the position calculation manager;Интерфейс для менеджера расчета позиции
 DocStr2064;To null position;Обнулить позицию

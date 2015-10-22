@@ -37,7 +37,7 @@ namespace StockSharp.Hydra.ITCH
 
 			[CategoryLoc(_sourceName)]
 			[DisplayNameLoc(LocalizedStrings.MainKey)]
-			[DescriptionLoc(LocalizedStrings.MainServerKey, true)]
+			[DescriptionLoc(LocalizedStrings.MainUDPKey, true)]
 			[PropertyOrder(0)]
 			[ExpandableObject]
 			public MulticastSourceAddress PrimaryMulticast
@@ -47,9 +47,20 @@ namespace StockSharp.Hydra.ITCH
 			}
 
 			[CategoryLoc(_sourceName)]
+			[DisplayNameLoc(LocalizedStrings.DuplicateKey)]
+			[DescriptionLoc(LocalizedStrings.DuplicateUDPKey, true)]
+			[PropertyOrder(1)]
+			[ExpandableObject]
+			public MulticastSourceAddress DuplicateMulticast
+			{
+				get { return (MulticastSourceAddress)ExtensionInfo["DuplicateMulticast"]; }
+				set { ExtensionInfo["DuplicateMulticast"] = value; }
+			}
+
+			[CategoryLoc(_sourceName)]
 			[DisplayNameLoc(LocalizedStrings.RecoveryKey)]
 			[DescriptionLoc(LocalizedStrings.RecoveryServerKey, true)]
-			[PropertyOrder(1)]
+			[PropertyOrder(2)]
 			public EndPoint RecoveryAddress
 			{
 				get { return ExtensionInfo["RecoveryAddress"].To<EndPoint>(); }
@@ -111,16 +122,17 @@ namespace StockSharp.Hydra.ITCH
 			[DisplayNameLoc(LocalizedStrings.GroupIdKey)]
 			[DescriptionLoc(LocalizedStrings.GroupIdKey, true)]
 			[PropertyOrder(7)]
-			public string SecurityGroupId
+			public char GroupId
 			{
-				get { return (string)ExtensionInfo["SecurityGroupId"]; }
-				set { ExtensionInfo["SecurityGroupId"] = value; }
+				get { return (char)ExtensionInfo["GroupId"]; }
+				set { ExtensionInfo["GroupId"] = value; }
 			}
 
 			public override HydraTaskSettings Clone()
 			{
 				var clone = (ItchSettings)base.Clone();
 				clone.PrimaryMulticast = PrimaryMulticast.Clone();
+				clone.DuplicateMulticast = DuplicateMulticast.Clone();
 				return clone;
 			}
 		}
@@ -144,12 +156,18 @@ namespace StockSharp.Hydra.ITCH
 					Port = 1,
 					SourceAddress = IPAddress.Any,
 				};
+				_settings.DuplicateMulticast = new MulticastSourceAddress
+				{
+					GroupAddress = IPAddress.Any,
+					Port = 1,
+					SourceAddress = IPAddress.Any,
+				};
 				_settings.Login = string.Empty;
 				_settings.Password = new SecureString();
 				_settings.ReplayAddress = _settings.RecoveryAddress = new IPEndPoint(IPAddress.Loopback, 3);
 				_settings.SecurityCsvFile = string.Empty;
 				_settings.OnlyActiveSecurities = true;
-				_settings.SecurityGroupId = string.Empty;
+				_settings.GroupId = 'A';
 			}
 
 			return new MarketDataConnector<ItchTrader>(EntityRegistry.Securities, this, () => new ItchTrader
@@ -157,11 +175,12 @@ namespace StockSharp.Hydra.ITCH
 				Login = _settings.Login,
 				Password = _settings.Password.To<string>(),
 				PrimaryMulticast = _settings.PrimaryMulticast,
+				DuplicateMulticast = _settings.DuplicateMulticast,
 				RecoveryAddress = _settings.RecoveryAddress,
 				ReplayAddress = _settings.ReplayAddress,
 				SecurityCsvFile = _settings.SecurityCsvFile,
 				OnlyActiveSecurities = _settings.OnlyActiveSecurities,
-				SecurityGroupId = _settings.SecurityGroupId
+				GroupId = _settings.GroupId
 			});
 		}
 	}
