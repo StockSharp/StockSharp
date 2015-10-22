@@ -423,7 +423,7 @@ namespace StockSharp.Hydra
 
 						InitTask(task, settings);
 
-						var allSec = _entityRegistry.Securities.ReadById(Core.Extensions.AllSecurityId);
+						var allSec = _entityRegistry.Securities.GetAllSecurity();
 
 						task.Settings.Securities.Add(task.ToTaskSecurity(allSec));
 						task.Settings.Securities.DelayAction.WaitFlush();

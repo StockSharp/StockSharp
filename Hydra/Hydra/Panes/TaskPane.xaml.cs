@@ -114,7 +114,46 @@ namespace StockSharp.Hydra.Panes
 				_propertyChanged.SafeInvoke(this, "Title");
 		}
 
-		private readonly List<HydraTaskSecurity> _allSecurities = new List<HydraTaskSecurity>();
+		private class HydraSecurityTrie : SecurityTrie
+		{
+			private readonly Dictionary<Security, HydraTaskSecurity> _securities = new Dictionary<Security, HydraTaskSecurity>();
+
+			public void AddRange(IEnumerable<HydraTaskSecurity> securities)
+			{
+				foreach (var security in securities)
+				{
+					Add(security);
+				}
+			}
+
+			public void Add(HydraTaskSecurity security)
+			{
+				Add(security.Security);
+				_securities.Add(security.Security, security);
+			}
+
+			public HydraTaskSecurity GetAllSecurity()
+			{
+				return RetrieveHydra(Core.Extensions.AllSecurityId).FirstOrDefault();
+			}
+
+			public IEnumerable<HydraTaskSecurity> RetrieveHydra(string filter)
+			{
+				var securities = Retrieve(filter);
+				return securities.Select(s => _securities[s]);
+			}
+
+			public void RemoveRange(IEnumerable<HydraTaskSecurity> securities)
+			{
+				foreach (var security in securities)
+				{
+					Remove(security.Security);
+					_securities.Remove(security.Security);
+				}
+			}
+		}
+
+		private readonly HydraSecurityTrie _allSecurities = new HydraSecurityTrie();
 		private readonly ObservableCollection<TaskVisualSecurity> _filteredSecurities = new ObservableCollection<TaskVisualSecurity>();
 		private readonly Dictionary<CheckBox, Tuple<Type, Func<TaskVisualSecurity, bool>, Action<TaskVisualSecurity, bool>>> _dataTypes = new Dictionary<CheckBox, Tuple<Type, Func<TaskVisualSecurity, bool>, Action<TaskVisualSecurity, bool>>>();
 
@@ -266,7 +305,7 @@ namespace StockSharp.Hydra.Panes
 				.ContinueWithExceptionHandling(this.GetWindow(), rest =>
 				{
 					FilterSecurities();
-					AddAllSecurity.IsEnabled = _allSecurities.All(s => !s.Security.IsAllSecurity());
+					AddAllSecurity.IsEnabled = _allSecurities.GetAllSecurity() == null;
 					Mouse.OverrideCursor = null;
 				});
 		}
@@ -288,20 +327,8 @@ namespace StockSharp.Hydra.Panes
 
 		private void FilterSecurities()
 		{
-			var secLike = NameLike.Text;
-
-			var selectedSecurities = _allSecurities
-				.Where
-				(s =>
-					secLike.IsEmpty() ||
-					(!s.Security.Id.IsEmpty() && s.Security.Id.ContainsIgnoreCase(secLike)) ||
-					(!s.Security.Code.IsEmpty() && s.Security.Code.ContainsIgnoreCase(secLike)) ||
-					(!s.Security.Name.IsEmpty() && s.Security.Name.ContainsIgnoreCase(secLike))
-				)
-				.ToArray();
-
 			_filteredSecurities.Clear();
-			_filteredSecurities.AddRange(selectedSecurities.Select(ToVisualSecurity));
+			_filteredSecurities.AddRange(_allSecurities.RetrieveHydra(NameLike.Text).Select(ToVisualSecurity));
 		}
 
 		private void ExecutedOpenDirectory(object sender, ExecutedRoutedEventArgs e)
@@ -395,12 +422,12 @@ namespace StockSharp.Hydra.Panes
 				SecurityProvider = ConfigManager.GetService<ISecurityProvider>()
 			};
 			secWnd.SecuritiesAll.ExcludeAllSecurity();
-			secWnd.SelectSecurities(_allSecurities.Select(s => s.Security).Where(s => !s.IsAllSecurity()).ToArray());
+			secWnd.SelectSecurities(_allSecurities.Retrieve(string.Empty).Where(s => !s.IsAllSecurity()).ToArray());
 
 			if (!secWnd.ShowModal(this))
 				return;
 
-			var allSecurity = _allSecurities.FirstOrDefault(s => s.Security.IsAllSecurity());
+			var allSecurity = _allSecurities.GetAllSecurity();
 
 			var selectedSecurities = secWnd.SelectedSecurities;
 
@@ -424,8 +451,8 @@ namespace StockSharp.Hydra.Panes
 			}
 			else
 			{
-				var toRemove = _allSecurities.Where(s => !selectedSecurities.Contains(s.Security)).ToArray();
-				var toAdd = selectedSecurities.Except(_allSecurities.Select(s => s.Security)).Select(CreateSecurity).ToArray();
+				var toRemove = _allSecurities.RetrieveHydra(string.Empty).Where(s => !selectedSecurities.Contains(s.Security)).ToArray();
+				var toAdd = selectedSecurities.Except(_allSecurities.Retrieve(string.Empty)).Select(CreateSecurity).ToArray();
 
 				Task.Settings.Securities.RemoveRange(toRemove);
 				Task.Settings.Securities.AddRange(toAdd);
@@ -447,7 +474,7 @@ namespace StockSharp.Hydra.Panes
 		{
 			if (_allSecurities.Count > 0)
 			{
-				Task.Settings.Securities.RemoveRange(_allSecurities);
+				Task.Settings.Securities.RemoveRange(_allSecurities.RetrieveHydra(string.Empty));
 
 				_allSecurities.Clear();
 				_filteredSecurities.Clear();
@@ -476,7 +503,7 @@ namespace StockSharp.Hydra.Panes
 
 		private void AllSecurityAdd()
 		{
-			var allSecurity = EntityRegistry.Securities.ReadById(Core.Extensions.AllSecurityId);
+			var allSecurity = EntityRegistry.Securities.GetAllSecurity();
 			var taskSecurity = Task.ToTaskSecurity(allSecurity);
 
 			Task.Settings.Securities.Save(taskSecurity);
