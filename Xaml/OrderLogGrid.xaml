@@ -15,7 +15,7 @@
 		<DataGridTemplateColumn Header="{x:Static loc:LocalizedStrings.Str504}" Width="100" SortMemberPath="Order.Id">
 			<DataGridTemplateColumn.CellTemplate>
 				<DataTemplate>
-					<TextBlock>
+					<TextBlock HorizontalAlignment="Center">
 						<TextBlock.Text>
 							<MultiBinding Converter="{StaticResource MultiIdConverter}">
 								<Binding Path="Order.Id"/>
@@ -92,7 +92,7 @@
 		<DataGridTemplateColumn Header="{x:Static loc:LocalizedStrings.Str506}" Width="100" SortMemberPath="Trade.Id">
 			<DataGridTemplateColumn.CellTemplate>
 				<DataTemplate>
-					<TextBlock>
+					<TextBlock HorizontalAlignment="Center">
 						<TextBlock.Text>
 							<MultiBinding Converter="{StaticResource MultiIdConverter}">
 								<Binding Path="Trade.Id"/>

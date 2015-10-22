@@ -1,7 +1,9 @@
 namespace StockSharp.Xaml
 {
 	using System;
+	using System.Windows;
 
+	using Ecng.Common;
 	using Ecng.Localization;
 
 	using wyDay.Controls;
@@ -55,6 +57,11 @@ namespace StockSharp.Xaml
 			automaticUpdater.Translation.UpdateNowButton = LocalizedStrings.Str1490;
 			automaticUpdater.Translation.ViewChangesMenu = LocalizedStrings.Str1491;
 			automaticUpdater.Translation.ViewError = LocalizedStrings.Str1492;
+		}
+
+		public static T WpfCast<T>(this object value)
+		{
+			return value == DependencyProperty.UnsetValue ? default(T) : value.To<T>();
 		}
 	}
 }
