@@ -64,26 +64,6 @@ namespace StockSharp.Xaml
 					throw new ArgumentNullException("security");
 
 				Security = security;
-
-				Id = security.Id;
-				Code = security.Code;
-				Name = security.Name;
-				ShortName = security.ShortName;
-				Board = security.Board;
-				Class = security.Class;
-				UnderlyingSecurityId = security.UnderlyingSecurityId;
-				Type = security.Type;
-				OptionType = security.OptionType;
-				ExternalId = security.ExternalId;
-				SettlementDate = security.SettlementDate;
-				Currency = security.Currency;
-				ExpiryDate = security.ExpiryDate;
-				Multiplier = security.Multiplier;
-				PriceStep = security.PriceStep;
-				VolumeStep = security.VolumeStep;
-				Decimals = security.Decimals;
-				Strike = security.Strike;
-				BinaryOptionType = security.BinaryOptionType;
 			}
 
 			public void RefreshLastTradeDirection()
@@ -234,19 +214,6 @@ namespace StockSharp.Xaml
 			InitializeComponent();
 
 			var itemsSource = new ObservableCollectionEx<SecurityItem>();
-			//var itemsSource = new ObservableCollection<SecurityItem>();
-			//itemsSource.CollectionChanged += (sender, args) =>
-			//{
-			//	var newCount = args.NewItems == null ? 0 : args.NewItems.Count;
-			//	var oldCount = args.OldItems == null ? 0 : args.OldItems.Count;
-			//	Console.WriteLine("{0:X4} ColChange={1} NewCnt={2} OldCnt={3} NewIdx={4} OldIdx={5}",
-			//		GetHashCode(), args.Action, newCount, oldCount,
-			//		args.NewStartingIndex, args.OldStartingIndex);
-			//};
-			//((INotifyPropertyChanged)itemsSource).PropertyChanged += (sender, args) =>
-			//{
-			//	Console.WriteLine("{0:X4} PropChange {1}", GetHashCode(), args.PropertyName);
-			//};
 			ItemsSource = itemsSource;
 
 			_securities = new ConvertibleObservableCollection<Security, SecurityItem>(new ThreadSafeObservableCollection<SecurityItem>(itemsSource), CreateItem);

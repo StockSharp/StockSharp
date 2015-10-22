@@ -42,20 +42,20 @@
         </Style>
     </ug:UniversalGrid.RowStyle>
     <ug:UniversalGrid.Columns>
-		<DataGridTextColumn Visibility="Collapsed" Width="130" Header="{x:Static loc:LocalizedStrings.Str361}" Binding="{Binding Path=Id}" SortMemberPath="Id" />
-		<DataGridTextColumn Visibility="Collapsed" Width="200" Header="{x:Static loc:LocalizedStrings.NameKey}" Binding="{Binding Path=Name}" SortMemberPath="Name" />
-		<DataGridTextColumn Visibility="Collapsed" Width="120" Header="{x:Static loc:LocalizedStrings.XamlStr317}" Binding="{Binding Path=ShortName}" SortMemberPath="ShortName" />
-		<DataGridTextColumn Width="90" Header="{x:Static loc:LocalizedStrings.Code}" Binding="{Binding Path=Code}" SortMemberPath="Code" />
-		<DataGridTextColumn Width="90" Header="{x:Static loc:LocalizedStrings.Board}" Binding="{Binding Path=Board}" SortMemberPath="Board" />
-		<DataGridTextColumn Visibility="Collapsed" Width="50" Header="{x:Static loc:LocalizedStrings.PriceStep}" Binding="{Binding Path=PriceStep}" SortMemberPath="PriceStep" />
+		<DataGridTextColumn Visibility="Collapsed" Width="130" Header="{x:Static loc:LocalizedStrings.Str361}" Binding="{Binding Path=Security.Id}" SortMemberPath="Security.Id" />
+		<DataGridTextColumn Visibility="Collapsed" Width="200" Header="{x:Static loc:LocalizedStrings.NameKey}" Binding="{Binding Path=Security.Name}" SortMemberPath="Security.Name" />
+		<DataGridTextColumn Visibility="Collapsed" Width="120" Header="{x:Static loc:LocalizedStrings.XamlStr317}" Binding="{Binding Path=Security.ShortName}" SortMemberPath="Security.ShortName" />
+		<DataGridTextColumn Width="90" Header="{x:Static loc:LocalizedStrings.Code}" Binding="{Binding Path=Security.Code}" SortMemberPath="Security.Code" />
+		<DataGridTextColumn Width="90" Header="{x:Static loc:LocalizedStrings.Board}" Binding="{Binding Path=Security.Board}" SortMemberPath="Security.Board" />
+		<DataGridTextColumn Visibility="Collapsed" Width="50" Header="{x:Static loc:LocalizedStrings.PriceStep}" Binding="{Binding Path=Security.PriceStep}" SortMemberPath="Security.PriceStep" />
 		<DataGridTextColumn Visibility="Collapsed" Width="50" Header="{x:Static loc:LocalizedStrings.Str290}" Binding="{Binding Path=StepPrice}" SortMemberPath="StepPrice" />
-		<DataGridTextColumn Visibility="Collapsed" Width="50" Header="{x:Static loc:LocalizedStrings.VolumeStep}" Binding="{Binding Path=VolumeStep}" SortMemberPath="VolumeStep" />
-		<DataGridTextColumn Visibility="Collapsed" Width="50" Header="{x:Static loc:LocalizedStrings.Str330}" Binding="{Binding Path=Multiplier}" SortMemberPath="Multiplier" />
-		<DataGridTextColumn Visibility="Collapsed" Width="50" Header="{x:Static loc:LocalizedStrings.Decimals}" Binding="{Binding Path=Decimals}" SortMemberPath="Decimals" />
+		<DataGridTextColumn Visibility="Collapsed" Width="50" Header="{x:Static loc:LocalizedStrings.VolumeStep}" Binding="{Binding Path=Security.VolumeStep}" SortMemberPath="Security.VolumeStep" />
+		<DataGridTextColumn Visibility="Collapsed" Width="50" Header="{x:Static loc:LocalizedStrings.Str330}" Binding="{Binding Path=Security.Multiplier}" SortMemberPath="Security.Multiplier" />
+		<DataGridTextColumn Visibility="Collapsed" Width="50" Header="{x:Static loc:LocalizedStrings.Decimals}" Binding="{Binding Path=Security.Decimals}" SortMemberPath="Security.Decimals" />
 		<DataGridTextColumn Visibility="Collapsed" Width="50" Header="{x:Static loc:LocalizedStrings.State}" Binding="{Binding Path=State, Converter={StaticResource EnumDisplayNameConverter}}" SortMemberPath="State" />
-		<DataGridTextColumn Width="50" Header="{x:Static loc:LocalizedStrings.Type}" Binding="{Binding Path=Type, Converter={StaticResource EnumDisplayNameConverter}}" SortMemberPath="Type" />
-		<DataGridTextColumn Visibility="Collapsed" Width="70" Header="{x:Static loc:LocalizedStrings.UnderlyingAsset}" Binding="{Binding Path=UnderlyingSecurityId}" SortMemberPath="UnderlyingSecurityId" />
-		<DataGridTextColumn Visibility="Collapsed" Width="50" Header="{x:Static loc:LocalizedStrings.Currency}" Binding="{Binding Path=Currency, Converter={StaticResource EnumDisplayNameConverter}}" SortMemberPath="Currency" />
+		<DataGridTextColumn Width="50" Header="{x:Static loc:LocalizedStrings.Type}" Binding="{Binding Path=Security.Type, Converter={StaticResource EnumDisplayNameConverter}}" SortMemberPath="Security.Type" />
+		<DataGridTextColumn Visibility="Collapsed" Width="70" Header="{x:Static loc:LocalizedStrings.UnderlyingAsset}" Binding="{Binding Path=Security.UnderlyingSecurityId}" SortMemberPath="Security.UnderlyingSecurityId" />
+		<DataGridTextColumn Visibility="Collapsed" Width="50" Header="{x:Static loc:LocalizedStrings.Currency}" Binding="{Binding Path=Security.Currency, Converter={StaticResource EnumDisplayNameConverter}}" SortMemberPath="Security.Currency" />
 
 		<DataGridTextColumn Visibility="Collapsed" Width="70" Header="{x:Static loc:LocalizedStrings.XamlStr833}" Binding="{Binding Path=LastTrade.Price}" SortMemberPath="LastTrade.Price" />
 		<DataGridTextColumn Visibility="Collapsed" Width="70" Header="{x:Static loc:LocalizedStrings.XamlStr382}" Binding="{Binding Path=LastTrade.Volume}" SortMemberPath="LastTrade.Volume" />
@@ -80,12 +80,12 @@
 		<DataGridTextColumn Visibility="Collapsed" Width="70" Header="{x:Static loc:LocalizedStrings.Str304}" Binding="{Binding Path=MarginBuy}" SortMemberPath="MarginBuy" />
 		<DataGridTextColumn Visibility="Collapsed" Width="70" Header="{x:Static loc:LocalizedStrings.Str305}" Binding="{Binding Path=MarginSell}" SortMemberPath="MarginSell" />
 
-		<DataGridTextColumn Visibility="Collapsed" Width="100" Header="{x:Static loc:LocalizedStrings.ExpiryDate}" Binding="{Binding Path=ExpiryDate, Converter={StaticResource ValueConverter}, ConverterParameter='\{0:d\}'}" SortMemberPath="ExpiryDate" />
-		<DataGridTextColumn Visibility="Collapsed" Width="100" Header="{x:Static loc:LocalizedStrings.XamlStr527}" Binding="{Binding Path=SettlementDate, Converter={StaticResource ValueConverter}, ConverterParameter='\{0:d\}'}" SortMemberPath="SettlementDate" />
+		<DataGridTextColumn Visibility="Collapsed" Width="100" Header="{x:Static loc:LocalizedStrings.ExpiryDate}" Binding="{Binding Path=Security.ExpiryDate, Converter={StaticResource ValueConverter}, ConverterParameter='\{0:d\}'}" SortMemberPath="Security.ExpiryDate" />
+		<DataGridTextColumn Visibility="Collapsed" Width="100" Header="{x:Static loc:LocalizedStrings.XamlStr527}" Binding="{Binding Path=Security.SettlementDate, Converter={StaticResource ValueConverter}, ConverterParameter='\{0:d\}'}" SortMemberPath="Security.SettlementDate" />
 
-		<DataGridTextColumn Visibility="Collapsed" Width="70" Header="{x:Static loc:LocalizedStrings.Strike}" Binding="{Binding Path=Strike}" SortMemberPath="Strike" />
-		<DataGridTextColumn Visibility="Collapsed" Width="70" Header="{x:Static loc:LocalizedStrings.XamlStr763}" Binding="{Binding Path=OptionType, Converter={StaticResource EnumDisplayNameConverter}}" SortMemberPath="OptionType" />
-		<DataGridTextColumn Visibility="Collapsed" Width="70" Header="{x:Static loc:LocalizedStrings.Str552}" Binding="{Binding Path=BinaryOptionType}" SortMemberPath="BinaryOptionType" />
+		<DataGridTextColumn Visibility="Collapsed" Width="70" Header="{x:Static loc:LocalizedStrings.Strike}" Binding="{Binding Path=Security.Strike}" SortMemberPath="Security.Strike" />
+		<DataGridTextColumn Visibility="Collapsed" Width="70" Header="{x:Static loc:LocalizedStrings.XamlStr763}" Binding="{Binding Path=Security.OptionType, Converter={StaticResource EnumDisplayNameConverter}}" SortMemberPath="Security.OptionType" />
+		<DataGridTextColumn Visibility="Collapsed" Width="70" Header="{x:Static loc:LocalizedStrings.Str552}" Binding="{Binding Path=Security.BinaryOptionType}" SortMemberPath="Security.BinaryOptionType" />
 		<DataGridTextColumn Visibility="Collapsed" Width="70" Header="{x:Static loc:LocalizedStrings.XamlStr743}" Binding="{Binding Path=TheorPrice}" SortMemberPath="TheorPrice" />
 
 		<DataGridTextColumn Visibility="Collapsed" Width="70" Header="IV" Binding="{Binding Path=ImpliedVolatility}" SortMemberPath="ImpliedVolatility" />
@@ -112,13 +112,13 @@
 		<DataGridTextColumn Visibility="Collapsed" Width="70" Header="{x:Static loc:LocalizedStrings.Str312}" Binding="{Binding Path=SettlementPrice}" SortMemberPath="SettlementPrice" />
 		<DataGridTextColumn Visibility="Collapsed" Width="70" Header="{x:Static loc:LocalizedStrings.AveragePrice}" Binding="{Binding Path=AveragePrice}" SortMemberPath="AveragePrice" />
 
-		<DataGridTextColumn Visibility="Collapsed" Width="70" Header="SEDOL" Binding="{Binding Path=ExternalId.Sedol}" SortMemberPath="ExternalId.Sedol" />
-		<DataGridTextColumn Visibility="Collapsed" Width="70" Header="CUSIP" Binding="{Binding Path=ExternalId.Cusip}" SortMemberPath="ExternalId.Cusip" />
-		<DataGridTextColumn Visibility="Collapsed" Width="70" Header="ISIN" Binding="{Binding Path=ExternalId.Isin}" SortMemberPath="ExternalId.Isin" />
-		<DataGridTextColumn Visibility="Collapsed" Width="70" Header="RIC" Binding="{Binding Path=ExternalId.Ric}" SortMemberPath="ExternalId.Ric" />
-		<DataGridTextColumn Visibility="Collapsed" Width="70" Header="BLOOM" Binding="{Binding Path=ExternalId.Bloomberg}" SortMemberPath="ExternalId.Bloomberg" />
-		<DataGridTextColumn Visibility="Collapsed" Width="70" Header="IQFeed" Binding="{Binding Path=ExternalId.IQFeed}" SortMemberPath="ExternalId.IQFeed" />
-		<DataGridTextColumn Visibility="Collapsed" Width="70" Header="IB" Binding="{Binding Path=ExternalId.InteractiveBrokers}" SortMemberPath="ExternalId.InteractiveBrokers" />
-		<DataGridTextColumn Visibility="Collapsed" Width="70" Header="Plaza" Binding="{Binding Path=ExternalId.Plaza}" SortMemberPath="ExternalId.Plaza" />
+		<DataGridTextColumn Visibility="Collapsed" Width="70" Header="SEDOL" Binding="{Binding Path=Security.ExternalId.Sedol}" SortMemberPath="Security.ExternalId.Sedol" />
+		<DataGridTextColumn Visibility="Collapsed" Width="70" Header="CUSIP" Binding="{Binding Path=Security.ExternalId.Cusip}" SortMemberPath="Security.ExternalId.Cusip" />
+		<DataGridTextColumn Visibility="Collapsed" Width="70" Header="ISIN" Binding="{Binding Path=Security.ExternalId.Isin}" SortMemberPath="Security.ExternalId.Isin" />
+		<DataGridTextColumn Visibility="Collapsed" Width="70" Header="RIC" Binding="{Binding Path=Security.ExternalId.Ric}" SortMemberPath="Security.ExternalId.Ric" />
+		<DataGridTextColumn Visibility="Collapsed" Width="70" Header="BLOOM" Binding="{Binding Path=Security.ExternalId.Bloomberg}" SortMemberPath="Security.ExternalId.Bloomberg" />
+		<DataGridTextColumn Visibility="Collapsed" Width="70" Header="IQFeed" Binding="{Binding Path=Security.ExternalId.IQFeed}" SortMemberPath="Security.ExternalId.IQFeed" />
+		<DataGridTextColumn Visibility="Collapsed" Width="70" Header="IB" Binding="{Binding Path=Security.ExternalId.InteractiveBrokers}" SortMemberPath="Security.ExternalId.InteractiveBrokers" />
+		<DataGridTextColumn Visibility="Collapsed" Width="70" Header="Plaza" Binding="{Binding Path=Security.ExternalId.Plaza}" SortMemberPath="Security.ExternalId.Plaza" />
 	</ug:UniversalGrid.Columns>
 </ug:UniversalGrid>
