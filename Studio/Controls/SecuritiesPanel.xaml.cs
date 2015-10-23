@@ -46,7 +46,7 @@ namespace StockSharp.Studio.Controls
 		//{
 		//	get
 		//	{
-		//		var entityRegistry = ConfigManager.GetService<IStudioEntityRegistry>();
+		//		var entityRegistry = ConfigurationManager.GetService<IStudioEntityRegistry>();
 
 		//		return _securityIds
 		//			.Select(id => entityRegistry.Securities.ReadById(id))

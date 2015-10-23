@@ -1,4 +1,4 @@
-namespace StockSharp.Studio.Services
+﻿namespace StockSharp.Studio.Services
 {
 	using System;
 	using System.Collections.Generic;
@@ -488,7 +488,7 @@ namespace StockSharp.Studio.Services
 			//	source.DoIf<object, ICandleBuilderSource>(s => candleManager.Sources.OfType<ICandleBuilder>().ForEach(b => b.Sources.Add(s)));
 			//}
 
-			//candleManager.StorageRegistry = ConfigManager.GetService<IStorageRegistry>();
+			//candleManager.StorageRegistry = ConfigurationManager.GetService<IStorageRegistry>();
 
 			//return candleManager;
 		}

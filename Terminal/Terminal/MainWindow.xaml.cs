@@ -16,6 +16,7 @@ using StockSharp.Algo;
 using StockSharp.Algo.Storages;
 using StockSharp.BusinessEntities;
 using StockSharp.Configuration;
+using StockSharp.Configuration.ConfigManager;
 using StockSharp.Localization;
 using StockSharp.Messages;
 using StockSharp.Terminal.Layout;
@@ -38,7 +39,7 @@ namespace StockSharp.Terminal
 		{
 			InitializeComponent();
 
-			LayoutManager = new LayoutManager(this, ProgrammaticDockSite) { LayoutFile = Path.Combine(_settingsFolder, "layout.xml") };
+            LayoutManager = new LayoutManager(this, ProgrammaticDockSite) { LayoutFile = Path.Combine(_settingsFolder, "layout.xml") };
 
 			ConnectCommand = new DelegateCommand(Connect, CanConnect);
 			SettingsCommand = new DelegateCommand(Settings, CanSettings);
@@ -117,25 +118,26 @@ namespace StockSharp.Terminal
 		}
 
 		private void DockSite_OnLoaded(object sender, RoutedEventArgs e)
-		{
-			//var dockSite = sender as DockSite;
-			//if (dockSite == null)
-			//	return;
+        {
+            var configurationManager = new ConfigurationManager("Terminal", DockSite1);
+            //var dockSite = sender as DockSite;
+            //if (dockSite == null)
+            //	return;
 
-			//CreateToolWindow(LocalizedStrings.Securities, "Securities", _secView);
-			//CreateToolWindow(LocalizedStrings.Str972, "Positions", new PortfolioGrid());
-			//CreateToolWindow(LocalizedStrings.Ticks, "Trades", new TradeGrid());
-			//CreateToolWindow(LocalizedStrings.Orders, "Orders", new OrderGrid());
-			//CreateToolWindow(LocalizedStrings.MyTrades, "MyTrades", new MyTradeGrid());
-			//CreateToolWindow(LocalizedStrings.OrderLog, "OrderLog", new OrderLogGrid());
-			//CreateToolWindow(LocalizedStrings.News, "News", new NewsGrid());
+            //CreateToolWindow(LocalizedStrings.Securities, "Securities", _secView);
+            //CreateToolWindow(LocalizedStrings.Str972, "Positions", new PortfolioGrid());
+            //CreateToolWindow(LocalizedStrings.Ticks, "Trades", new TradeGrid());
+            //CreateToolWindow(LocalizedStrings.Orders, "Orders", new OrderGrid());
+            //CreateToolWindow(LocalizedStrings.MyTrades, "MyTrades", new MyTradeGrid());
+            //CreateToolWindow(LocalizedStrings.OrderLog, "OrderLog", new OrderLogGrid());
+            //CreateToolWindow(LocalizedStrings.News, "News", new NewsGrid());
 
-			//_isLoaded = true;
-		}
+            //_isLoaded = true;
+        }
 
 		private void ProgrammaticDockSite_OnLoaded(object sender, RoutedEventArgs e)
 		{
-			var dockSite = sender as DockSite;
+			/*var dockSite = sender as DockSite;
 			if (dockSite == null)
 				return;
 
@@ -175,7 +177,7 @@ namespace StockSharp.Terminal
 				true);
 			LayoutManager.DockToolWindowToToolWindow(twPositions, twTrades, Direction.Content);
 
-			LayoutManager.IsLoaded = true;
+			LayoutManager.IsLoaded = true;*/
 		}
 
 		private void DockSite_OnWindowClosed(object sender, DockingWindowEventArgs e)

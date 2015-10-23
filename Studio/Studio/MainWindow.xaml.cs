@@ -1,4 +1,4 @@
-namespace StockSharp.Studio
+﻿namespace StockSharp.Studio
 {
 	using System;
 	using System.Collections.Generic;
@@ -555,7 +555,7 @@ namespace StockSharp.Studio
 
 				if (((Window)wnd).ShowModal(Application.Current.GetActiveOrMainWindow()))
 				{
-					//wnd.Security.Connector = ConfigManager.GetService<IConnector>();
+					//wnd.Security.Connector = ConfigurationManager.GetService<IConnector>();
 					_entityRegistry.Securities.Save(wnd.Security);
 					cmd.Security = wnd.Security;
 				}
@@ -669,7 +669,7 @@ namespace StockSharp.Studio
 		//private void InitializeChat()
 		//{
 		//	var chatClient = new ChatClient();
-		//	ConfigManager.RegisterService(chatClient);
+		//	ConfigurationManager.RegisterService(chatClient);
 		//}
 
 		private void AddToolControl(Type type)
@@ -1252,7 +1252,7 @@ namespace StockSharp.Studio
 			// если что-то еще не "сбросилось" в БД
 			_entityRegistry.DelayAction.WaitFlush();
 
-			//ConfigManager.GetService<ChatClient>().Dispose();
+			//ConfigurationManager.GetService<ChatClient>().Dispose();
 			ConfigManager.GetService<AuthenticationClient>().Dispose();
 
 			_connector.Connected -= Trader_Connected;

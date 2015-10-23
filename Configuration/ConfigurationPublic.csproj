@@ -35,6 +35,8 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="ActiproSoftware.Docking.Wpf, Version=11.2.555.0, Culture=neutral, PublicKeyToken=36ff2196ab5654b9, processorArchitecture=MSIL" />
+    <Reference Include="ActiproSoftware.Shared.Wpf, Version=11.2.555.0, Culture=neutral, PublicKeyToken=36ff2196ab5654b9, processorArchitecture=MSIL" />
     <Reference Include="Ecng.Collections">
       <HintPath>..\References\Ecng\Ecng.Collections.dll</HintPath>
     </Reference>
@@ -101,6 +103,19 @@
     </Compile>
     <Compile Include="CandleElement.cs" />
     <Compile Include="CandleElementCollection.cs" />
+    <Compile Include="ConfigManager\Layout\LayoutManager_DocumentWindow.cs" />
+    <Compile Include="ConfigManager\Layout\LayoutManager_Persist.cs" />
+    <Compile Include="ConfigManager\Layout\LayoutManager_ToolWindow.cs" />
+    <Compile Include="ConfigManager\Layout\LayoutManager_Docking.cs" />
+    <Compile Include="ConfigManager\Layout\Windows\Behaviors\DockSiteViewModelBehavior.cs" />
+    <Compile Include="ConfigManager\Layout\Windows\ViewModels\DockingItemViewModelBase.cs" />
+    <Compile Include="ConfigManager\Layout\Windows\ViewModels\DocumentWindowViewModel.cs" />
+    <Compile Include="ConfigManager\Layout\Windows\ViewModels\ViewModelBase.cs" />
+    <Compile Include="ConfigManager\Layout\Windows\Views\ToolWindowView.xaml.cs">
+      <DependentUpon>ToolWindowView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ConfigManager\Layout\Windows\ViewModels\ToolWindowViewModel.cs" />
+    <Compile Include="ConfigurationConstants.cs" />
     <Compile Include="ConnectionElement.cs" />
     <Compile Include="ConnectionElementCollection.cs" />
     <Compile Include="DiagramElement.cs" />
@@ -108,6 +123,12 @@
     <Compile Include="Extensions.cs" />
     <Compile Include="IndicatorElement.cs" />
     <Compile Include="IndicatorElementCollection.cs" />
+    <Compile Include="ConfigManager\ConfigurationManager.cs" />
+    <Compile Include="ConfigManager\FolderManager.cs" />
+    <Compile Include="ConfigManager\Layout\LayoutManager.cs" />
+    <Compile Include="ConfigManager\OutputManager.cs" />
+    <Compile Include="ConfigManager\SettingsManager.cs" />
+    <Compile Include="Properties\Annotations.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StockSharpSection.cs" />
   </ItemGroup>
@@ -200,6 +221,12 @@
       <Project>{64E4D6F0-36B6-4904-9BA7-FFFBE5FF71D8}</Project>
       <Name>Xaml</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Include="ConfigManager\Layout\Windows\Views\ToolWindowView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
