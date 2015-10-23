@@ -48,6 +48,15 @@
 		/// <param name="message">The message.</param>
 		protected virtual void OnInnerAdapterNewOutMessage(Message message)
 		{
+			RaiseNewOutMessage(message);
+		}
+
+		/// <summary>
+		/// To call the event <see cref="NewOutMessage"/>.
+		/// </summary>
+		/// <param name="message">The message.</param>
+		protected void RaiseNewOutMessage(Message message)
+		{
 			NewOutMessage.SafeInvoke(message);
 		}
 

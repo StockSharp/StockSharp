@@ -2,8 +2,6 @@ namespace StockSharp.Messages
 {
 	using System;
 
-	using Ecng.Common;
-
 	/// <summary>
 	/// Message adapter, forward messages through a transport channel <see cref="IMessageChannel"/>.
 	/// </summary>
@@ -53,7 +51,7 @@ namespace StockSharp.Messages
 
 		private void OutputChannelOnNewOutMessage(Message message)
 		{
-			_newMessage.SafeInvoke(message);
+			RaiseNewOutMessage(message);
 		}
 
 		/// <summary>
@@ -100,17 +98,6 @@ namespace StockSharp.Messages
 				InputChannel.Open();
 
 			InputChannel.SendInMessage(message);
-		}
-
-		private Action<Message> _newMessage;
-
-		/// <summary>
-		/// New message event.
-		/// </summary>
-		public override event Action<Message> NewOutMessage
-		{
-			add { _newMessage += value; }
-			remove { _newMessage -= value; }
 		}
 
 		/// <summary>
