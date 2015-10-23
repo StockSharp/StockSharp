@@ -42,8 +42,6 @@ namespace SampleTransaq
 			_newsWindow.MakeHideable();
 
 			Instance = this;
-
-			Address.Text = TransaqAddresses.FinamDemo.ToString();
 		}
 
 		protected override void OnClosing(CancelEventArgs e)

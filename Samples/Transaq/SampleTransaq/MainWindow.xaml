@@ -2,7 +2,12 @@
 	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
 	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 	xmlns:loc="clr-namespace:StockSharp.Localization;assembly=StockSharp.Localization"
+	xmlns:transaq="clr-namespace:StockSharp.Transaq;assembly=StockSharp.Transaq"
+	xmlns:converters="clr-namespace:Ecng.Xaml.Converters;assembly=Ecng.Xaml"
 	Title="{x:Static loc:LocalizedStrings.XamlStr540}" Height="110" Width="512">
+	<Window.Resources>
+		<converters:EndPointConverter x:Key="AddrConverter" />
+	</Window.Resources>
 	<Grid>
 		<Grid.ColumnDefinitions>
 			<ColumnDefinition />
@@ -25,7 +30,7 @@
 			<PasswordBox x:Name="Password" Password="" Width="100" />
 
 			<Label Content="{x:Static loc:LocalizedStrings.XamlStr651}" HorizontalAlignment="Right" />
-			<TextBox Name="Address" Width="120"/>
+			<TextBox Name="Address" Width="120" Text="{Binding Source={x:Static transaq:TransaqAddresses.FinamDemo}, Converter={StaticResource AddrConverter}, Mode=OneTime}"/>
 
 			<Label Content="HFT:" HorizontalAlignment="Right" />
 			<CheckBox Name="IsHFT" VerticalAlignment="Center" />
