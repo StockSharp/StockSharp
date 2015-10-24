@@ -11,6 +11,7 @@ namespace StockSharp.Configuration
         public const string ChartTemplates = "Chart Templates";
         public const string Code = "Code";
         public const string Command = "Command";
+        public const string Connection = "Connection";
         public const string Id = "Id";
         public const string Indicators = "Indicators";
         public const string Layout = "Layout";

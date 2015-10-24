@@ -28,10 +28,10 @@ namespace StockSharp.Configuration.ConfigManager.Layout
             }
 
             _configurationManager = configurationManager;
-            //_layoutFile = _configurationManager.FolderManager.LayoutDirectory;
+
             LayoutFile =
                 new FileInfo(Path.Combine(_configurationManager.FolderManager.LayoutDirectory,
-                    _configurationManager.FolderManager.LayoutFileName));
+                    _configurationManager.FolderManager.LayoutFileInfo.Name));
             _isLayoutLoading = false;
 
             ToolItems = new DeferrableObservableCollection<ToolWindow>();

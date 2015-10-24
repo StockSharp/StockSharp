@@ -57,6 +57,9 @@ namespace StockSharp.Configuration.ConfigManager
 
 
 
+            ConnectionDirectory = Path.Combine(SettingsDirectory, ConfigurationConstants.Connection);
+            CheckCreateDirectory(ConnectionDirectory);
+
             LayoutDirectory = Path.Combine(WorkspaceDirectory, ConfigurationConstants.Layout);
             CheckCreateDirectory(LayoutDirectory);
 
@@ -66,30 +69,41 @@ namespace StockSharp.Configuration.ConfigManager
             StrategiesDirectory = Path.Combine(CodeDirectory, ConfigurationConstants.Strategies);
             CheckCreateDirectory(StrategiesDirectory);
 
+            
 
-
-            LayoutFileName = ConfigurationConstants.ApplicationName + ConfigurationConstants.Layout + ConfigurationConstants.XmlFileExtension;
-            LogsFileName = ConfigurationConstants.ApplicationName + ConfigurationConstants.Logs + ConfigurationConstants.XmlFileExtension;
-            SettingFileName = ConfigurationConstants.ApplicationName + ConfigurationConstants.Settings + ConfigurationConstants.XmlFileExtension;
+            ConnectionFileInfo = CreateNewFileInfo(ConnectionDirectory, ConfigurationConstants.ApplicationName + ConfigurationConstants.Connection + ConfigurationConstants.XmlFileExtension);
+            LayoutFileInfo = CreateNewFileInfo(LayoutDirectory, ConfigurationConstants.ApplicationName + ConfigurationConstants.Layout + ConfigurationConstants.XmlFileExtension);
+            LogsFileInfo = CreateNewFileInfo(LogsDirectory, ConfigurationConstants.ApplicationName + ConfigurationConstants.Logs + ConfigurationConstants.XmlFileExtension);
+            SettingFileInfo = CreateNewFileInfo(SettingsDirectory, ConfigurationConstants.ApplicationName + ConfigurationConstants.Settings + ConfigurationConstants.XmlFileExtension);
         }
 
-        public string MainDirectory { get; }
-        public string WorkspaceDirectory { get; }
+        public string ConnectionDirectory { get; }
         public string ChartTemplateDirectory { get; }
-        public string ReportsDirectory { get; }
         public string CodeDirectory { get; }
         public string IndicatorsDirectory { get; }
         public string LayoutDirectory { get; set; }
         public string LogsDirectory { get; set; }
+        public string MainDirectory { get; }
+        public string ReportsDirectory { get; }
         public string SettingsDirectory { get; set; }
         public string StrategiesDirectory { get; }
         public string SoundDirectory { get; }
         public string ScreenshotDirectory { get; }
         public string WatchListDirectory { get; }
+        public string WorkspaceDirectory { get; }
 
-        public string LayoutFileName { get; set; }
-        public string LogsFileName { get; set; }
-        public string SettingFileName { get; private set; }
+
+        public FileInfo ConnectionFileInfo { get; private set; }
+        public FileInfo LayoutFileInfo { get; private set; }
+        public FileInfo LogsFileInfo { get; private set; }
+        public FileInfo SettingFileInfo { get; private set; }
+
+
+
+        private FileInfo CreateNewFileInfo(string connectionDirectory, string connectionFileName)
+        {
+            return new FileInfo(Path.Combine(connectionDirectory, connectionFileName));
+        }
 
 
         public static void CheckCreateDirectory([NotNull] string directory)

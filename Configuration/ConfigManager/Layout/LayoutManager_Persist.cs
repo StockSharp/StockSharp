@@ -1,9 +1,13 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Windows;
 using ActiproSoftware.Windows.Controls.Docking;
 using ActiproSoftware.Windows.Controls.Docking.Serialization;
+using Ecng.Common;
+using Ecng.Serialization;
 using StockSharp.Logging;
+using StockSharp.Messages;
 
 namespace StockSharp.Configuration.ConfigManager.Layout
 {
@@ -124,6 +128,24 @@ namespace StockSharp.Configuration.ConfigManager.Layout
             if (dockSite == null) throw new ArgumentNullException(nameof(dockSite));
 
             LayoutSerializer.SaveToFile(LayoutFile.FullName, DockSite);
+        }
+
+        /// <summary>
+		/// Save settings.
+		/// </summary>
+		/// <param name="storage">Settings storage.</param>
+		public void Save(SettingsStorage storage, string fileName)
+        {
+            new XmlSerializer<SettingsStorage>().Serialize(storage, fileName);
+        }
+
+        /// <summary>
+        /// Load settings.
+        /// </summary>
+        /// <param name="storage">Settings storage.</param>
+        public void Load(string file)
+        {
+            new XmlSerializer<SettingsStorage>().Deserialize(file);
         }
     }
 }

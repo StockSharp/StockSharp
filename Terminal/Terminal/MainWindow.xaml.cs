@@ -30,13 +30,13 @@ namespace StockSharp.Terminal
 {
 	public partial class MainWindow
 	{
-		private readonly SecuritiesView _secView;
+		private SecuritiesView _secView;
 
 		public readonly SynchronizedDictionary<Security, MarketDepthControl> Depths =
 			new SynchronizedDictionary<Security, MarketDepthControl>();
 
 		private const string _settingsFolder = "Settings";
-		private readonly string _connectionFile;
+		private string _connectionFile;
 
 		public MainWindow()
 		{
@@ -44,43 +44,50 @@ namespace StockSharp.Terminal
 
 			ConnectCommand = new DelegateCommand(Connect, CanConnect);
 			SettingsCommand = new DelegateCommand(Settings, CanSettings);
-
-            // TODO: move to after dock site loaded
-			Directory.CreateDirectory(_settingsFolder);
-
-			var storageRegistry = new StorageRegistry {DefaultDrive = new LocalMarketDataDrive(_settingsFolder)};
-
-			Connector = new Connector { EntityFactory = new StorageEntityFactory(new EntityRegistry(), storageRegistry) };
-			ConfigManager.RegisterService<ISecurityProvider>(new FilterableSecurityProvider(storageRegistry.GetSecurityStorage()));
-			ConfigManager.RegisterService<IConnector>(Connector);
-			ConfigManager.RegisterService<IMarketDataProvider>(Connector);
-
-			_connectionFile = Path.Combine(_settingsFolder, "connection.xml");
-
-			if (File.Exists(_connectionFile))
-				Connector.Adapter.Load(new XmlSerializer<SettingsStorage>().Deserialize(_connectionFile));
-
-			_secView = new SecuritiesView(this) {SecurityGrid = {MarketDataProvider = Connector}};
-
-			Connector.MarketDepthsChanged += depths =>
-			{
-				foreach (var depth in depths)
-				{
-					var ctrl = Depths.TryGetValue(depth.Security);
-
-				    ctrl?.UpdateDepth(depth);
-				}
-			};
 		}
 
 	    public ConfigurationManager ConfigurationManager { get; set; }
+
 	    public Connector Connector { private set; get; }
+
 	    public LayoutManager LayoutManager { get; set; }
 
 
 	    public DelegateCommand ConnectCommand { private set; get; }
 
-		private void Connect(object obj)
+	    /// <summary>
+	    /// Create connector once dock site is loaded and <see cref="ConfigurationManager"/> has been created.
+	    /// </summary>
+	    private void CreateConnector(string settingsFolder, string connectionFile)
+	    {
+	        Directory.CreateDirectory(_settingsFolder);
+
+	        var storageRegistry = new StorageRegistry { DefaultDrive = new LocalMarketDataDrive(settingsFolder) };
+
+	        Connector = new Connector { EntityFactory = new StorageEntityFactory(new EntityRegistry(), storageRegistry) };
+	        ConfigManager.RegisterService<ISecurityProvider>(new FilterableSecurityProvider(storageRegistry.GetSecurityStorage()));
+	        ConfigManager.RegisterService<IConnector>(Connector);
+	        ConfigManager.RegisterService<IMarketDataProvider>(Connector);
+
+	        connectionFile = Path.Combine(settingsFolder, ConfigurationManager.FolderManager.ConnectionFileInfo.Name);
+
+	        if (File.Exists(connectionFile))
+	            Connector.Adapter.Load(new XmlSerializer<SettingsStorage>().Deserialize(connectionFile));
+            
+	        _secView = new SecuritiesView(this) {SecurityGrid = {MarketDataProvider = Connector}};
+
+	        Connector.MarketDepthsChanged += depths =>
+	        {
+	            foreach (var depth in depths)
+	            {
+	                var ctrl = Depths.TryGetValue(depth.Security);
+
+	                ctrl?.UpdateDepth(depth);
+	            }
+	        };
+	    }
+
+	    private void Connect(object obj)
 		{
 			switch (Connector.ConnectionState)
 			{
@@ -94,9 +101,9 @@ namespace StockSharp.Terminal
 			}
 		}
 
-		private bool CanConnect(object obj)
+	    private bool CanConnect(object obj)
 		{
-			return Connector.Adapter.InnerAdapters.SortedAdapters.Any();
+			return Connector != null && Connector.Adapter.InnerAdapters.SortedAdapters.Any();
 		}
 
 		public DelegateCommand SettingsCommand { private set; get; }
@@ -124,6 +131,7 @@ namespace StockSharp.Terminal
 		    var name = Assembly.GetExecutingAssembly().GetName().Name;
 
             ConfigurationManager = new ConfigurationManager(name, DockSite1);
+            CreateConnector(ConfigurationManager.FolderManager.SettingsDirectory, ConfigurationManager.FolderManager.ConnectionFileInfo.Name);
 
 		    if (File.Exists(ConfigurationManager.LayoutManager.LayoutFile.FullName))
 		    {
@@ -161,6 +169,11 @@ namespace StockSharp.Terminal
 		        }
 
 		    }
+
+            ConfigurationManager.LayoutManager.Save(new SettingsStorage(), ConfigurationManager.FolderManager.ConnectionFileInfo.Name);
+            ConfigurationManager.LayoutManager.Save(new SettingsStorage(), ConfigurationManager.FolderManager.LayoutFileInfo.Name);
+            ConfigurationManager.LayoutManager.Save(new SettingsStorage(), ConfigurationManager.FolderManager.LogsFileInfo.Name);
+            ConfigurationManager.LayoutManager.Save(new SettingsStorage(), ConfigurationManager.FolderManager.SettingFileInfo.Name);
 
         }
 
