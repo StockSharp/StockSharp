@@ -17,7 +17,8 @@ namespace StockSharp.Configuration.ConfigManager
             _configurationManager = configurationManager;
 
             // NOTE: order important for directory structure
-            MainDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), ConfigConstants.PlatformName);
+            MainDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
+                ConfigConstants.ApplicationName);
             CreateDirectoryIfNeeded(MainDirectory);
 
             ChartTemplateDirectory = Path.Combine(MainDirectory, ConfigConstants.ChartTemplates);
@@ -35,6 +36,9 @@ namespace StockSharp.Configuration.ConfigManager
             ScreenshotDirectory = Path.Combine(MainDirectory, ConfigConstants.Screenshots);
             CreateDirectoryIfNeeded(ScreenshotDirectory);
 
+            SettingsDirectory = Path.Combine(MainDirectory, ConfigConstants.Settings);
+            CreateDirectoryIfNeeded(SettingsDirectory);
+
             SoundDirectory = Path.Combine(MainDirectory, ConfigConstants.Sounds);
             CreateDirectoryIfNeeded(SoundDirectory);
 
@@ -44,33 +48,33 @@ namespace StockSharp.Configuration.ConfigManager
             WorkspaceDirectory = Path.Combine(MainDirectory, ConfigConstants.Workspace);
             CreateDirectoryIfNeeded(WorkspaceDirectory);
 
+            LayoutDirectory = Path.Combine(WorkspaceDirectory, ConfigConstants.Layout);
+            CreateDirectoryIfNeeded(LayoutDirectory);
+
             IndicatorsDirectory = Path.Combine(CodeDirectory, ConfigConstants.Indicators);
             CreateDirectoryIfNeeded(IndicatorsDirectory);
-
-            LayoutDirectory = Path.Combine(SettingsDirectory, ConfigConstants.Settings);
-            CreateDirectoryIfNeeded(LayoutDirectory);
 
             StrategiesDirectory = Path.Combine(CodeDirectory, ConfigConstants.Strategies);
             CreateDirectoryIfNeeded(StrategiesDirectory);
 
-            LayoutFile = ConfigConstants.PlatformName + ConfigConstants.Layout + ".xml";
-            SettingFile = Path.Combine(MainDirectory, ConfigConstants.PlatformName + ConfigConstants.Settings);
+            LayoutFileName = ConfigConstants.ApplicationName + ConfigConstants.Layout + ".xml";
+            SettingFile = Path.Combine(MainDirectory, ConfigConstants.ApplicationName + ConfigConstants.Settings);
         }
 
-        public string MainDirectory { get; private set; }
-        public string WorkspaceDirectory { get; private set; }
-        public string ChartTemplateDirectory { get; private set; }
-        public string ReportsDirectory { get; private set; }
-        public string CodeDirectory { get; private set; }
-        public string IndicatorsDirectory { get; private set; }
+        public string MainDirectory { get; }
+        public string WorkspaceDirectory { get; }
+        public string ChartTemplateDirectory { get; }
+        public string ReportsDirectory { get; }
+        public string CodeDirectory { get; }
+        public string IndicatorsDirectory { get; }
         public string LayoutDirectory { get; set; }
-        public string LayoutFile { get; set; }
+        public string LayoutFileName { get; set; }
         public string SettingFile { get; private set; }
         public string SettingsDirectory { get; set; }
-        public string StrategiesDirectory { get; private set; }
-        public string SoundDirectory { get; private set; }
-        public string ScreenshotDirectory { get; private set; }
-        public string WatchListDirectory { get; private set; }
+        public string StrategiesDirectory { get; }
+        public string SoundDirectory { get; }
+        public string ScreenshotDirectory { get; }
+        public string WatchListDirectory { get; }
 
 
         public static void CreateDirectoryIfNeeded([NotNull] string directory)

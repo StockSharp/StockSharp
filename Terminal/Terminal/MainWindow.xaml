@@ -3,6 +3,7 @@
 		xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 		xmlns:docking="clr-namespace:ActiproSoftware.Windows.Controls.Docking;assembly=ActiproSoftware.Docking.Wpf"
 		xmlns:loc="clr-namespace:StockSharp.Localization;assembly=StockSharp.Localization"
+        ResizeMode="CanResizeWithGrip"
 		DataContext="{Binding RelativeSource={RelativeSource Self}}"
 		Height="600" Width="800" Loaded="MainWindow_OnLoaded">
 	
@@ -18,7 +19,6 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
 	        <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 		
@@ -31,24 +31,11 @@
                 </Button>
         </ToolBar>
 
-        <docking:DockSite x:Name="DockSite1" Grid.Row="1" 
-			ToolItemsSource="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.ToolItems}"
+			<!--ToolItemsSource="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.ToolItems}"-->
+        <docking:DockSite x:Name="DockSite1" Grid.Row="1"
 			ToolItemContainerStyle="{StaticResource ToolItemStyle}" 
 			Loaded="DockSite_OnLoaded" 
 			WindowClosed="DockSite_OnWindowClosed">
-            <docking:Workspace>
-                <docking:TabbedMdiHost>
-					<docking:TabbedMdiContainer>
-						<docking:ToolWindow x:Name="MasterToolWindow"/>
-					</docking:TabbedMdiContainer>
-                </docking:TabbedMdiHost>
-            </docking:Workspace>
         </docking:DockSite>
-		
-		<docking:DockSite Grid.Row="2" x:Name="ProgrammaticDockSite"
-			ToolItemsSource="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.ToolItems}"
-			ToolItemContainerStyle="{StaticResource ToolItemStyle}" 
-			Loaded="ProgrammaticDockSite_OnLoaded"
-			WindowClosed="DockSite_OnWindowClosed"/>
     </Grid>
 </Window>

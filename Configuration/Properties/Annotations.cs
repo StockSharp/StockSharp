@@ -134,7 +134,7 @@ namespace StockSharp.Configuration.Annotations
   /// </remarks>
   /// <example><code>
   /// public class Foo : INotifyPropertyChanged {
-  ///   public event PropertyChangedEventHandler PropertyChanged;
+  ///   public event PropertyChangedEventHandler NotifyPropertyChanged;
   ///   [NotifyPropertyChangedInvocator]
   ///   protected virtual void NotifyChanged(string propertyName) { ... }
   ///

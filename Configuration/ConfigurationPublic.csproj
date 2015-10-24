@@ -107,14 +107,6 @@
     <Compile Include="ConfigManager\Layout\LayoutManager_Persist.cs" />
     <Compile Include="ConfigManager\Layout\LayoutManager_ToolWindow.cs" />
     <Compile Include="ConfigManager\Layout\LayoutManager_Docking.cs" />
-    <Compile Include="ConfigManager\Layout\Windows\Behaviors\DockSiteViewModelBehavior.cs" />
-    <Compile Include="ConfigManager\Layout\Windows\ViewModels\DockingItemViewModelBase.cs" />
-    <Compile Include="ConfigManager\Layout\Windows\ViewModels\DocumentWindowViewModel.cs" />
-    <Compile Include="ConfigManager\Layout\Windows\ViewModels\ViewModelBase.cs" />
-    <Compile Include="ConfigManager\Layout\Windows\Views\ToolWindowView.xaml.cs">
-      <DependentUpon>ToolWindowView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="ConfigManager\Layout\Windows\ViewModels\ToolWindowViewModel.cs" />
     <Compile Include="ConfigurationConstants.cs" />
     <Compile Include="ConnectionElement.cs" />
     <Compile Include="ConnectionElementCollection.cs" />
@@ -223,10 +215,9 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Page Include="ConfigManager\Layout\Windows\Views\ToolWindowView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
+    <Folder Include="ConfigManager\Layout\Windows\Behaviors\" />
+    <Folder Include="ConfigManager\Layout\Windows\ViewModels\" />
+    <Folder Include="ConfigManager\Layout\Windows\Views\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

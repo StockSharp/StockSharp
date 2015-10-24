@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -8,6 +9,7 @@ using ActiproSoftware.Windows.Controls.Docking;
 using ActiproSoftware.Windows.Controls.Docking.Serialization;
 
 using Ecng.Collections;
+using Ecng.ComponentModel;
 using Ecng.Configuration;
 using Ecng.Serialization;
 using Ecng.Xaml;
@@ -18,6 +20,7 @@ using StockSharp.BusinessEntities;
 using StockSharp.Configuration;
 using StockSharp.Configuration.ConfigManager;
 using StockSharp.Localization;
+using StockSharp.Logging;
 using StockSharp.Messages;
 using StockSharp.Terminal.Layout;
 using StockSharp.Xaml;
@@ -39,11 +42,10 @@ namespace StockSharp.Terminal
 		{
 			InitializeComponent();
 
-            LayoutManager = new LayoutManager(this, ProgrammaticDockSite) { LayoutFile = Path.Combine(_settingsFolder, "layout.xml") };
-
 			ConnectCommand = new DelegateCommand(Connect, CanConnect);
 			SettingsCommand = new DelegateCommand(Settings, CanSettings);
 
+            // TODO: move to after dock site loaded
 			Directory.CreateDirectory(_settingsFolder);
 
 			var storageRegistry = new StorageRegistry {DefaultDrive = new LocalMarketDataDrive(_settingsFolder)};
@@ -66,17 +68,17 @@ namespace StockSharp.Terminal
 				{
 					var ctrl = Depths.TryGetValue(depth.Security);
 
-					if (ctrl != null)
-						ctrl.UpdateDepth(depth);
+				    ctrl?.UpdateDepth(depth);
 				}
 			};
 		}
 
-		public LayoutManager LayoutManager { get; set; }
+	    public ConfigurationManager ConfigurationManager { get; set; }
+	    public Connector Connector { private set; get; }
+	    public LayoutManager LayoutManager { get; set; }
 
-		public Connector Connector { private set; get; }
 
-		public DelegateCommand ConnectCommand { private set; get; }
+	    public DelegateCommand ConnectCommand { private set; get; }
 
 		private void Connect(object obj)
 		{
@@ -118,76 +120,51 @@ namespace StockSharp.Terminal
 		}
 
 		private void DockSite_OnLoaded(object sender, RoutedEventArgs e)
-        {
-            var configurationManager = new ConfigurationManager("Terminal", DockSite1);
-            //var dockSite = sender as DockSite;
-            //if (dockSite == null)
-            //	return;
+		{
+		    var name = Assembly.GetExecutingAssembly().GetName().Name;
 
-            //CreateToolWindow(LocalizedStrings.Securities, "Securities", _secView);
-            //CreateToolWindow(LocalizedStrings.Str972, "Positions", new PortfolioGrid());
-            //CreateToolWindow(LocalizedStrings.Ticks, "Trades", new TradeGrid());
-            //CreateToolWindow(LocalizedStrings.Orders, "Orders", new OrderGrid());
-            //CreateToolWindow(LocalizedStrings.MyTrades, "MyTrades", new MyTradeGrid());
-            //CreateToolWindow(LocalizedStrings.OrderLog, "OrderLog", new OrderLogGrid());
-            //CreateToolWindow(LocalizedStrings.News, "News", new NewsGrid());
+            ConfigurationManager = new ConfigurationManager(name, DockSite1);
 
-            //_isLoaded = true;
+		    if (File.Exists(ConfigurationManager.LayoutManager.LayoutFile.FullName))
+		    {
+		        try
+		        {
+		            ConfigurationManager.LayoutManager.LoadLayout();
+		        }
+		        catch (Exception exception)
+		        {
+		            exception.LogError();
+		        }
+		    }
+		    else
+		    {
+		        int i = 1;
+                // create a default or temp layout
+                var wnd = ConfigurationManager.LayoutManager.CreateToolWindow("ToolWindow" + i++);
+                wnd.Dock(ConfigurationManager.LayoutManager.DockSite, Direction.None);
+
+                var temp = ConfigurationManager.LayoutManager.CreateToolWindow("ToolWindow" + i++);
+                temp.Dock(wnd, Direction.ContentRight);
+		        for (int j = 1; j <= 15; j++)
+		        {
+		            var tw = ConfigurationManager.LayoutManager.CreateToolWindow("ToolWindow" + i++);
+		            tw.Name = "ToolWindow" + i;
+                    tw.Dock(temp, j % 2 == 0 ? Direction.Top : Direction.Content);
+		            j++;
+		        }
+
+		    }
+
         }
 
-		private void ProgrammaticDockSite_OnLoaded(object sender, RoutedEventArgs e)
+	    private void DockSite_OnWindowClosed(object sender, DockingWindowEventArgs e)
 		{
-			/*var dockSite = sender as DockSite;
-			if (dockSite == null)
-				return;
-
-			LayoutManager.AddTabbedMdiHost(dockSite);
-
-			var docWindow1 = LayoutManager.CreateDocumentWindow(dockSite, LayoutKey.Window, "Chart title", null, new ChartPanel());
-			docWindow1.Activate(true);
-
-			// Top right
-			var twNews = LayoutManager.CreateToolWindow(LayoutKey.OrderLog, "News", LocalizedStrings.News, new NewsGrid(), true);
-			LayoutManager.DockToolWindowToDockSite(dockSite, twNews, Dock.Right);
-
-			// Bottom left
-			var twSecurities = LayoutManager.CreateToolWindow(LayoutKey.Security, "Securities", LocalizedStrings.Securities,
-				_secView, true);
-			LayoutManager.DockToolWindowToDockSite(dockSite, twSecurities, Dock.Bottom);
-
-			var twMyTrades = LayoutManager.CreateToolWindow(LayoutKey.Trade, "MyTrades", LocalizedStrings.MyTrades,
-				new MyTradeGrid(), true);
-			LayoutManager.DockToolWindowToToolWindow(twSecurities, twMyTrades, Direction.Content);
-
-			// Bottom right
-			var twOrders = LayoutManager.CreateToolWindow(LayoutKey.Order, "Orders", LocalizedStrings.Orders, new OrderGrid(),
-				true);
-			LayoutManager.DockToolWindowToToolWindow(twSecurities, twOrders, Direction.ContentRight);
-
-			var twOrderLog = LayoutManager.CreateToolWindow(LayoutKey.OrderLog, "OrderLog", LocalizedStrings.OrderLog,
-				new OrderLogGrid(), true);
-			LayoutManager.DockToolWindowToToolWindow(twOrders, twOrderLog, Direction.Content);
-
-			// Right bottom
-			var twPositions = LayoutManager.CreateToolWindow(LayoutKey.Portfolio, "Positions", LocalizedStrings.Str972,
-				new PortfolioGrid(), true);
-			LayoutManager.DockToolWindowToToolWindow(twNews, twPositions, Direction.ContentBottom);
-
-			var twTrades = LayoutManager.CreateToolWindow(LayoutKey.Trade, "Trades", LocalizedStrings.Ticks, new TradeGrid(),
-				true);
-			LayoutManager.DockToolWindowToToolWindow(twPositions, twTrades, Direction.Content);
-
-			LayoutManager.IsLoaded = true;*/
-		}
-
-		private void DockSite_OnWindowClosed(object sender, DockingWindowEventArgs e)
-		{
-			LayoutManager.ToolItems.Remove(e.Window);
+			//LayoutManager.ToolItems.Remove(e.Window);
 		}
 
 		protected override void OnClosed(EventArgs e)
 		{
-			LayoutSerializer.SaveToFile(LayoutManager.LayoutFile, DockSite1);
+			//LayoutSerializer.SaveToFile(LayoutManager.LayoutFileName, DockSite1);
 			base.OnClosed(e);
 		}
 
@@ -206,8 +183,8 @@ namespace StockSharp.Terminal
 
 		private void MainWindow_OnLoaded(object sender, RoutedEventArgs e)
 		{
-			if (File.Exists(LayoutManager.LayoutFile))
-				LayoutSerializer.LoadFromFile(LayoutManager.LayoutFile, DockSite1);
+			//if (File.Exists(LayoutManager.LayoutFileName))
+			//	LayoutSerializer.LoadFromFile(LayoutManager.LayoutFileName, DockSite1);
 		}
 	}
 }

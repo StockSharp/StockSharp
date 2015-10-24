@@ -1,4 +1,4 @@
-namespace StockSharp.Studio
+﻿namespace StockSharp.Studio
 {
 	using System;
 	using System.Collections.Generic;
@@ -38,7 +38,7 @@ namespace StockSharp.Studio
 			LogsPath = Path.Combine(MainFolder, "Logs");
 			CandleSeriesDumpPath = Path.Combine(MainFolder, "CandleSources", "Dump");
 			//UIPath = Path.Combine(MainFolder, "UI");
-			//LayoutFile = Path.Combine(UIPath, "Layout.xml");
+			//LayoutFileName = Path.Combine(UIPath, "Layout.xml");
 			StrategiesAssemblyPath = Path.Combine(MainFolder, "Strategies", "Assemblies");
 			StrategiesTempPath = Path.Combine(MainFolder, "Strategies", "Temp");
 			ExecutionStoragePath = Path.Combine(MainFolder, "TradingData");

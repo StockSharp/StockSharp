@@ -1,28 +1,22 @@
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
+using System.IO;
 using System.Windows;
 using System.Windows.Threading;
 using ActiproSoftware.Windows;
 using ActiproSoftware.Windows.Controls.Docking;
-using ActiproSoftware.Windows.Controls.Docking.Serialization;
-using ActiproSoftware.Windows.Media;
-using StockSharp.Configuration.ConfigManager.Layout.Windows.ViewModels;
-using StockSharp.Logging;
 
 #pragma warning disable 1591
 
 namespace StockSharp.Configuration.ConfigManager.Layout
 {
     /// <summary>
-    /// Layout manager.  Uses multiple partial classes for different functions.
+    ///     Layout manager.  Uses multiple partial classes for different functions.
     /// </summary>
     public partial class LayoutManager : Window
     {
-        private bool _isLayoutLoading;
         private readonly ConfigurationManager _configurationManager;
-        private DockSite _dockSite;
-        private readonly string _layoutFile;
+        private bool _isLayoutLoading;
         private int toolWindowIndex;
 
         public LayoutManager(ConfigurationManager configurationManager, DockSite dockSite)
@@ -30,62 +24,66 @@ namespace StockSharp.Configuration.ConfigManager.Layout
             if (configurationManager == null) throw new ArgumentNullException(nameof(configurationManager));
             if (dockSite == null)
             {
-                this.CreateDockSite();
-                //throw new ArgumentNullException(nameof(dockSite));
+                CreateDockSite();
             }
 
             _configurationManager = configurationManager;
+            //_layoutFile = _configurationManager.FolderManager.LayoutDirectory;
+            LayoutFile =
+                new FileInfo(Path.Combine(_configurationManager.FolderManager.LayoutDirectory,
+                    _configurationManager.FolderManager.LayoutFileName));
             _isLayoutLoading = false;
-            ToolItems = new DeferrableObservableCollection<ToolWindowViewModel>();
-            DocumentItems = new DeferrableObservableCollection<DocumentWindowViewModel>();
 
-            _dockSite = dockSite;
-            _layoutFile = _configurationManager.FolderManager.LayoutFile;
+            ToolItems = new DeferrableObservableCollection<ToolWindow>();
+            DocumentItems = new DeferrableObservableCollection<DocumentWindow>();
+            DockSite = dockSite;
 
-            if (_layoutFile == null) throw new ArgumentNullException(nameof(_layoutFile));
+            if (LayoutFile == null) throw new ArgumentNullException(nameof(LayoutFile));
 
-            this.LayoutSerializer.DockingWindowDeserializing += LayoutSerializerOnDockingWindowDeserializing;
-            this.Loaded += OnLoaded;
-            this.Closing += OnClosing;
+            LayoutSerializer.DockingWindowDeserializing += LayoutSerializerOnDockingWindowDeserializing;
+            Loaded += OnLoaded;
+            Closing += OnClosing;
         }
 
+        public DockSite DockSite { get; private set; }
+        public FileInfo LayoutFile { get; }
+
         /// <summary>
-        /// Destructor for unsubscribing from events.
+        ///     Unsubscribe from events to prevent memory leaks.
         /// </summary>
-        ~LayoutManager()
+        private void Dispose()
         {
-            this.LayoutSerializer.DockingWindowDeserializing -= LayoutSerializerOnDockingWindowDeserializing;
-            this.Loaded -= OnLoaded;
-            this.Closing -= OnClosing;
+            LayoutSerializer.DockingWindowDeserializing -= LayoutSerializerOnDockingWindowDeserializing;
+            Loaded -= OnLoaded;
+            Closing -= OnClosing;
         }
 
         /// <summary>
-        /// Saves layout when closing.
+        ///     Saves layout when closing.
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void OnClosing(object sender, CancelEventArgs e)
         {
-            SaveLayout(this._dockSite);
+            if (DockSite != null) SaveLayout(DockSite);
         }
 
         /// <summary>
-		/// Occurs when the sample is loaded.
-		/// </summary>
-		/// <param name="sender">The sender of the event.</param>
-		/// <param name="e">A <see cref="RoutedEventArgs"/> that contains the event data.</param>
-		private void OnLoaded(object sender, RoutedEventArgs e)
+        ///     Occurs when the sample is loaded.
+        /// </summary>
+        /// <param name="sender">The sender of the event.</param>
+        /// <param name="e">A <see cref="RoutedEventArgs" /> that contains the event data.</param>
+        private void OnLoaded(object sender, RoutedEventArgs e)
         {
             // Invoke so that we can ensure everything is properly loaded before persisting the layout... even from the control's
             //   Loaded event handler, property values may not yet be properly set from the XAML load
-            this.Dispatcher.BeginInvoke(DispatcherPriority.Send, (DispatcherOperationCallback)(arg =>
+            Dispatcher.BeginInvoke(DispatcherPriority.Send, (DispatcherOperationCallback) (arg =>
             {
                 // Activate the first document
-                if (this._dockSite.Documents.Count > 0)
-                    _dockSite.Documents[0].Activate();
+                if (DockSite.Documents.Count > 0)
+                    DockSite.Documents[0].Activate();
                 return null;
             }), null);
         }
     }
-    
 }

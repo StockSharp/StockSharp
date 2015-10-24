@@ -10,7 +10,7 @@ namespace StockSharp.Configuration.ConfigManager
     public class ConfigurationManager
     {
         /// <summary>
-        /// Manager for storing app configuration.
+        ///     Manager for storing app configuration.
         /// </summary>
         /// <param name="appName">The app name.</param>
         /// <param name="dockSite">The dock site.  If null, a new dock site will be created.</param>
@@ -19,23 +19,16 @@ namespace StockSharp.Configuration.ConfigManager
         {
             if (appName == null) throw new ArgumentNullException(nameof(appName));
 
-            ConfigConstants.PlatformName = appName;
+            ConfigConstants.ApplicationName = appName;
             FolderManager = new FolderManager(this);
             LayoutManager = new LayoutManager(this, dockSite);
             OutputManager = new OutputManager(this);
             SettingsManager = new SettingsManager(this);
         }
 
-        static ConfigurationManager()
-        {
-            new ConfigurationManager("unknown", null);
-        }
-
         public FolderManager FolderManager { get; private set; }
         public LayoutManager LayoutManager { get; private set; }
         public OutputManager OutputManager { get; private set; }
         public SettingsManager SettingsManager { get; private set; }
-
-
     }
 }

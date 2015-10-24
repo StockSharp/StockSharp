@@ -1,5 +1,4 @@
-﻿
-using System;
+﻿using System;
 
 #pragma warning disable 1591
 

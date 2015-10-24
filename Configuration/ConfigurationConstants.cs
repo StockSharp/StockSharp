@@ -25,6 +25,6 @@ namespace StockSharp.Configuration
         public const string WatchList = "Watch List";
         public const string Workspace = "Workspace";
 
-        public static string PlatformName { get; set; }
+        public static string ApplicationName { get; set; }
     }
 }
