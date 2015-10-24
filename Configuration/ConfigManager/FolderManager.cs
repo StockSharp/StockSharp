@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using Ecng.ComponentModel;
 using StockSharp.Logging;
@@ -10,57 +11,60 @@ namespace StockSharp.Configuration.ConfigManager
     public class FolderManager
     {
         private readonly ConfigurationManager _configurationManager;
+        
+        private static readonly List<string> _directories = new List<string>(); 
 
         public FolderManager(ConfigurationManager configurationManager)
         {
             if (configurationManager == null) throw new ArgumentNullException(nameof(configurationManager));
             _configurationManager = configurationManager;
 
-            // NOTE: order important for directory structure
-            MainDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), ConfigurationConstants.StockSharp,
-                ConfigurationConstants.ApplicationName);
-            CreateDirectoryIfNeeded(MainDirectory);
+            // Create core directory structure.  Order is important for directory structure.
+            MainDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
+                                         ConfigurationConstants.StockSharp,
+                                         ConfigurationConstants.ApplicationName);
+            CheckCreateDirectory(MainDirectory);
 
             ChartTemplateDirectory = Path.Combine(MainDirectory, ConfigurationConstants.ChartTemplates);
-            CreateDirectoryIfNeeded(ChartTemplateDirectory);
+            CheckCreateDirectory(ChartTemplateDirectory);
 
             CodeDirectory = Path.Combine(MainDirectory, ConfigurationConstants.Code);
-            CreateDirectoryIfNeeded(CodeDirectory);
+            CheckCreateDirectory(CodeDirectory);
 
             LogsDirectory = Path.Combine(MainDirectory, ConfigurationConstants.Logs);
-            CreateDirectoryIfNeeded(LogsDirectory);
+            CheckCreateDirectory(LogsDirectory);
 
             SettingsDirectory = Path.Combine(MainDirectory, ConfigurationConstants.Settings);
-            CreateDirectoryIfNeeded(SettingsDirectory);
+            CheckCreateDirectory(SettingsDirectory);
 
             ReportsDirectory = Path.Combine(MainDirectory, ConfigurationConstants.Reports);
-            CreateDirectoryIfNeeded(ReportsDirectory);
+            CheckCreateDirectory(ReportsDirectory);
 
             ScreenshotDirectory = Path.Combine(MainDirectory, ConfigurationConstants.Screenshots);
-            CreateDirectoryIfNeeded(ScreenshotDirectory);
+            CheckCreateDirectory(ScreenshotDirectory);
 
             SettingsDirectory = Path.Combine(MainDirectory, ConfigurationConstants.Settings);
-            CreateDirectoryIfNeeded(SettingsDirectory);
+            CheckCreateDirectory(SettingsDirectory);
 
             SoundDirectory = Path.Combine(MainDirectory, ConfigurationConstants.Sounds);
-            CreateDirectoryIfNeeded(SoundDirectory);
+            CheckCreateDirectory(SoundDirectory);
 
             WatchListDirectory = Path.Combine(MainDirectory, ConfigurationConstants.WatchList);
-            CreateDirectoryIfNeeded(WatchListDirectory);
+            CheckCreateDirectory(WatchListDirectory);
 
             WorkspaceDirectory = Path.Combine(MainDirectory, ConfigurationConstants.Workspace);
-            CreateDirectoryIfNeeded(WorkspaceDirectory);
+            CheckCreateDirectory(WorkspaceDirectory);
 
 
 
             LayoutDirectory = Path.Combine(WorkspaceDirectory, ConfigurationConstants.Layout);
-            CreateDirectoryIfNeeded(LayoutDirectory);
+            CheckCreateDirectory(LayoutDirectory);
 
             IndicatorsDirectory = Path.Combine(CodeDirectory, ConfigurationConstants.Indicators);
-            CreateDirectoryIfNeeded(IndicatorsDirectory);
+            CheckCreateDirectory(IndicatorsDirectory);
 
             StrategiesDirectory = Path.Combine(CodeDirectory, ConfigurationConstants.Strategies);
-            CreateDirectoryIfNeeded(StrategiesDirectory);
+            CheckCreateDirectory(StrategiesDirectory);
 
 
 
@@ -88,7 +92,7 @@ namespace StockSharp.Configuration.ConfigManager
         public string SettingFileName { get; private set; }
 
 
-        public static void CreateDirectoryIfNeeded([NotNull] string directory)
+        public static void CheckCreateDirectory([NotNull] string directory)
         {
             if (string.IsNullOrWhiteSpace(directory))
                 throw new ArgumentNullException(nameof(directory));
@@ -96,7 +100,10 @@ namespace StockSharp.Configuration.ConfigManager
             try
             {
                 if (!Directory.Exists(directory))
+                {
                     Directory.CreateDirectory(directory);
+                    _directories.Add(directory);
+                }
             }
             catch (Exception ex)
             {
