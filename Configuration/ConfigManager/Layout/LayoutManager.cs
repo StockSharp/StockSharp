@@ -13,7 +13,7 @@ namespace StockSharp.Configuration.ConfigManager.Layout
     /// <summary>
     ///     Layout manager.  Uses multiple partial classes for different functions.
     /// </summary>
-    public partial class LayoutManager : Window
+    public partial class LayoutManager : ManagerBase
     {
         private readonly ConfigurationManager _configurationManager;
         private bool _isLayoutLoading;
@@ -21,7 +21,7 @@ namespace StockSharp.Configuration.ConfigManager.Layout
 
         public LayoutManager(ConfigurationManager configurationManager, DockSite dockSite)
         {
-            if (configurationManager == null) throw new ArgumentNullException(nameof(configurationManager));
+            if (configurationManager == null) throw new ArgumentNullException("configurationManager");
             if (dockSite == null)
             {
                 CreateDockSite();
@@ -38,7 +38,7 @@ namespace StockSharp.Configuration.ConfigManager.Layout
             DocumentItems = new DeferrableObservableCollection<DocumentWindow>();
             DockSite = dockSite;
 
-            if (LayoutFile == null) throw new ArgumentNullException(nameof(LayoutFile));
+            if (LayoutFile == null) throw new ArgumentNullException("LayoutFile");
 
             LayoutSerializer.DockingWindowDeserializing += LayoutSerializerOnDockingWindowDeserializing;
             Loaded += OnLoaded;
@@ -46,7 +46,7 @@ namespace StockSharp.Configuration.ConfigManager.Layout
         }
 
         public DockSite DockSite { get; private set; }
-        public FileInfo LayoutFile { get; }
+        public FileInfo LayoutFile { get; private set; }
 
         /// <summary>
         ///     Unsubscribe from events to prevent memory leaks.

@@ -107,6 +107,7 @@
     <Compile Include="ConfigManager\Layout\LayoutManager_Persist.cs" />
     <Compile Include="ConfigManager\Layout\LayoutManager_ToolWindow.cs" />
     <Compile Include="ConfigManager\Layout\LayoutManager_Docking.cs" />
+    <Compile Include="ConfigManager\ManagerBase.cs" />
     <Compile Include="ConfigurationConstants.cs" />
     <Compile Include="ConnectionElement.cs" />
     <Compile Include="ConnectionElementCollection.cs" />

@@ -8,7 +8,7 @@ using StockSharp.Logging;
 
 namespace StockSharp.Configuration.ConfigManager
 {
-    public class FolderManager
+    public class FolderManager : ManagerBase
     {
         private readonly ConfigurationManager _configurationManager;
         
@@ -16,7 +16,7 @@ namespace StockSharp.Configuration.ConfigManager
 
         public FolderManager(ConfigurationManager configurationManager)
         {
-            if (configurationManager == null) throw new ArgumentNullException(nameof(configurationManager));
+            if (configurationManager == null) throw new ArgumentNullException("configurationManager");
             _configurationManager = configurationManager;
 
             // Create core directory structure.  Order is important for directory structure.
@@ -77,20 +77,20 @@ namespace StockSharp.Configuration.ConfigManager
             SettingFileInfo = CreateNewFileInfo(SettingsDirectory, ConfigurationConstants.ApplicationName + ConfigurationConstants.Settings + ConfigurationConstants.XmlFileExtension);
         }
 
-        public string ConnectionDirectory { get; }
-        public string ChartTemplateDirectory { get; }
-        public string CodeDirectory { get; }
-        public string IndicatorsDirectory { get; }
-        public string LayoutDirectory { get; set; }
-        public string LogsDirectory { get; set; }
-        public string MainDirectory { get; }
-        public string ReportsDirectory { get; }
-        public string SettingsDirectory { get; set; }
-        public string StrategiesDirectory { get; }
-        public string SoundDirectory { get; }
-        public string ScreenshotDirectory { get; }
-        public string WatchListDirectory { get; }
-        public string WorkspaceDirectory { get; }
+		public string ConnectionDirectory { get; private set; }
+		public string ChartTemplateDirectory { get; private set; }
+		public string CodeDirectory { get; private set; }
+		public string IndicatorsDirectory { get; private set; }
+		public string LayoutDirectory { get; private set; }
+		public string LogsDirectory { get; private set; }
+		public string MainDirectory { get; private set; }
+		public string ReportsDirectory { get; private set; }
+		public string SettingsDirectory { get; private set; }
+		public string StrategiesDirectory { get; private set; }
+		public string SoundDirectory { get; private set; }
+		public string ScreenshotDirectory { get; private set; }
+		public string WatchListDirectory { get; private set; }
+		public string WorkspaceDirectory { get; private set; }
 
 
         public FileInfo ConnectionFileInfo { get; private set; }
@@ -109,7 +109,7 @@ namespace StockSharp.Configuration.ConfigManager
         public static void CheckCreateDirectory([NotNull] string directory)
         {
             if (string.IsNullOrWhiteSpace(directory))
-                throw new ArgumentNullException(nameof(directory));
+                throw new ArgumentNullException("directory");
 
             try
             {

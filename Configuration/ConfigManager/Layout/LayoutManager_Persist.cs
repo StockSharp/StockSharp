@@ -16,7 +16,7 @@ namespace StockSharp.Configuration.ConfigManager.Layout
     /// </summary>
     public partial class LayoutManager
     {
-        private DockSiteLayoutSerializer LayoutSerializer => new DockSiteLayoutSerializer
+        private DockSiteLayoutSerializer LayoutSerializer = new DockSiteLayoutSerializer
         {
             SerializationBehavior = DockSiteSerializationBehavior.All,
             DocumentWindowDeserializationBehavior = DockingWindowDeserializationBehavior.AutoCreate,
@@ -123,20 +123,22 @@ namespace StockSharp.Configuration.ConfigManager.Layout
         ///     Saves layout asynchronously using dispatcher.
         /// </summary>
         /// <param name="dockSite">The dock site to save.</param>
-        public void SaveLayout(DockSite dockSite)
+        public void SaveLayout(DockSite dockSite, string fileName)
         {
-            if (dockSite == null) throw new ArgumentNullException(nameof(dockSite));
+            if (dockSite == null) throw new ArgumentNullException("dockSite");
 
-            LayoutSerializer.SaveToFile(LayoutFile.FullName, DockSite);
+            //LayoutSerializer.SaveToFile(LayoutFile.FullName, DockSite);
+
+            new XmlSerializer<SettingsStorage>(_configurationManager.LayoutManager.DockSite.Save(), fileName);
         }
 
         /// <summary>
 		/// Save settings.
 		/// </summary>
 		/// <param name="storage">Settings storage.</param>
-		public void Save(SettingsStorage storage, string fileName)
+		public void Save(DockSite dockSite, string fileName)
         {
-            new XmlSerializer<SettingsStorage>().Serialize(storage, fileName);
+            new XmlSerializer<SettingsStorage>().Serialize(dockSite, fileName);
         }
 
         /// <summary>

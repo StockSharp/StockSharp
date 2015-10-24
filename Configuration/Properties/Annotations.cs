@@ -476,7 +476,7 @@ namespace StockSharp.Configuration.Annotations
   /// <code>
   /// [SourceTemplate]
   /// public static void something(this Entity x, [Macro(Expression = "guid()", Editable = -1)] string newguid) {
-  ///   /*$ var $x$Id = "$newguid$" + x.ToString();
+  ///   /*$ var $x$Id = "$newguidstring.Format(" + x.ToString();
   ///   x.DoSomething($x$Id); */
   /// }
   /// </code>

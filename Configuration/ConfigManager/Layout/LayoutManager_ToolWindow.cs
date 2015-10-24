@@ -14,7 +14,7 @@ namespace StockSharp.Configuration.ConfigManager.Layout
     {
         /// <summary>
         /// </summary>
-        public DeferrableObservableCollection<ToolWindow> ToolItems { get; }
+        public DeferrableObservableCollection<ToolWindow> ToolItems { get; set;  }
 
         /// <summary>
         ///     Creates a new <see cref="ToolWindow" />.
@@ -30,8 +30,8 @@ namespace StockSharp.Configuration.ConfigManager.Layout
             textBox.VerticalScrollBarVisibility = ScrollBarVisibility.Auto;
 
             // Initialize
-            textBox.Text = $"Tool window {++toolWindowIndex} created at {DateTime.Now}.";
-            var name = $"ToolWindow{toolWindowIndex}";
+            textBox.Text = string.Format("Tool window {0} created at {1}.", ++toolWindowIndex, DateTime.Now);
+            var name = string.Format("ToolWindow{0}", toolWindowIndex);
 
             // Create the window (using this constructor registers the tool window with the DockSite)
             var toolWindow = new ToolWindow(DockSite, name, title,
@@ -50,7 +50,7 @@ namespace StockSharp.Configuration.ConfigManager.Layout
         private void InitializeProgrammaticToolWindow1(ToolWindow toolWindow)
         {
             if (toolWindow == null)
-                throw new ArgumentNullException(nameof(toolWindow));
+                throw new ArgumentNullException("toolWindow");
 
             // Create the tool window content
             var textBox = new TextBox

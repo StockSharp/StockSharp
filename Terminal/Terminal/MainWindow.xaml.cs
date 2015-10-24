@@ -82,7 +82,8 @@ namespace StockSharp.Terminal
 	            {
 	                var ctrl = Depths.TryGetValue(depth.Security);
 
-	                ctrl?.UpdateDepth(depth);
+					if(ctrl != null)
+						ctrl.UpdateDepth(depth);
 	            }
 	        };
 	    }
@@ -188,18 +189,18 @@ namespace StockSharp.Terminal
 			base.OnClosed(e);
 		}
 
-		private static DockSiteLayoutSerializer LayoutSerializer
-		{
-			get
-			{
-				return new DockSiteLayoutSerializer
-				{
-					SerializationBehavior = DockSiteSerializationBehavior.All,
-					DocumentWindowDeserializationBehavior = DockingWindowDeserializationBehavior.AutoCreate,
-					ToolWindowDeserializationBehavior = DockingWindowDeserializationBehavior.LazyLoad
-				};
-			}
-		}
+		//private static DockSiteLayoutSerializer LayoutSerializer
+		//{
+		//	get
+		//	{
+		//		return new DockSiteLayoutSerializer
+		//		{
+		//			SerializationBehavior = DockSiteSerializationBehavior.All,
+		//			DocumentWindowDeserializationBehavior = DockingWindowDeserializationBehavior.AutoCreate,
+		//			ToolWindowDeserializationBehavior = DockingWindowDeserializationBehavior.LazyLoad
+		//		};
+		//	}
+		//}
 
 		private void MainWindow_OnLoaded(object sender, RoutedEventArgs e)
 		{

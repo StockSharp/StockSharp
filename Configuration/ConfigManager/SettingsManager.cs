@@ -4,13 +4,13 @@
 
 namespace StockSharp.Configuration.ConfigManager
 {
-    public class SettingsManager
+    public class SettingsManager : ManagerBase
     {
         private readonly ConfigurationManager _configurationManager;
 
         public SettingsManager(ConfigurationManager configurationManager)
         {
-            if (configurationManager == null) throw new ArgumentNullException(nameof(configurationManager));
+            if (configurationManager == null) throw new ArgumentNullException("configurationManager");
             _configurationManager = configurationManager;
         }
     }

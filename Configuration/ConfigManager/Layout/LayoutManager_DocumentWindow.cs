@@ -14,7 +14,7 @@ namespace StockSharp.Configuration.ConfigManager.Layout
     {
         /// <summary>
         /// </summary>
-        public DeferrableObservableCollection<DocumentWindow> DocumentItems { get; }
+        public DeferrableObservableCollection<DocumentWindow> DocumentItems { get; private set; }
 
         /// <summary>
         ///     Creates a new <see cref="DocumentWindow" />.
@@ -30,8 +30,8 @@ namespace StockSharp.Configuration.ConfigManager.Layout
             textBox.VerticalScrollBarVisibility = ScrollBarVisibility.Auto;
 
             // Initialize
-            textBox.Text = $"Document window {++toolWindowIndex} created at {DateTime.Now}.";
-            string name = $"DocumentWindow{toolWindowIndex}";
+            textBox.Text = string.Format("Document window {0} created at {1}.", ++toolWindowIndex, DateTime.Now);
+            string name = string.Format("DocumentWindow{0}",toolWindowIndex);
 
             // Create the window (using this constructor registers the document window with the DockSite)
             var window = new DocumentWindow(DockSite, name, title,

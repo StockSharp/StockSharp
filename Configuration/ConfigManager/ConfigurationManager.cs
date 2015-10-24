@@ -7,7 +7,7 @@ using StockSharp.Configuration.ConfigManager.Layout;
 
 namespace StockSharp.Configuration.ConfigManager
 {
-    public class ConfigurationManager
+    public class ConfigurationManager : ManagerBase
     {
         /// <summary>
         ///     Manager for storing app configuration.
@@ -17,7 +17,7 @@ namespace StockSharp.Configuration.ConfigManager
         /// <exception cref="ArgumentNullException">App name required.</exception>
         public ConfigurationManager([NotNull] string appName, DockSite dockSite)
         {
-            if (appName == null) throw new ArgumentNullException(nameof(appName));
+            if (appName == null) throw new ArgumentNullException("appName");
 
             ConfigurationConstants.ApplicationName = appName;
             FolderManager = new FolderManager(this);
