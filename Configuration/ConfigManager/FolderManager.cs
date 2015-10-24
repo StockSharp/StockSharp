@@ -17,48 +17,56 @@ namespace StockSharp.Configuration.ConfigManager
             _configurationManager = configurationManager;
 
             // NOTE: order important for directory structure
-            MainDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
-                ConfigConstants.ApplicationName);
+            MainDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), ConfigurationConstants.StockSharp,
+                ConfigurationConstants.ApplicationName);
             CreateDirectoryIfNeeded(MainDirectory);
 
-            ChartTemplateDirectory = Path.Combine(MainDirectory, ConfigConstants.ChartTemplates);
+            ChartTemplateDirectory = Path.Combine(MainDirectory, ConfigurationConstants.ChartTemplates);
             CreateDirectoryIfNeeded(ChartTemplateDirectory);
 
-            CodeDirectory = Path.Combine(MainDirectory, ConfigConstants.Code);
+            CodeDirectory = Path.Combine(MainDirectory, ConfigurationConstants.Code);
             CreateDirectoryIfNeeded(CodeDirectory);
 
-            SettingsDirectory = Path.Combine(MainDirectory, ConfigConstants.Settings);
+            LogsDirectory = Path.Combine(MainDirectory, ConfigurationConstants.Logs);
+            CreateDirectoryIfNeeded(LogsDirectory);
+
+            SettingsDirectory = Path.Combine(MainDirectory, ConfigurationConstants.Settings);
             CreateDirectoryIfNeeded(SettingsDirectory);
 
-            ReportsDirectory = Path.Combine(MainDirectory, ConfigConstants.Reports);
+            ReportsDirectory = Path.Combine(MainDirectory, ConfigurationConstants.Reports);
             CreateDirectoryIfNeeded(ReportsDirectory);
 
-            ScreenshotDirectory = Path.Combine(MainDirectory, ConfigConstants.Screenshots);
+            ScreenshotDirectory = Path.Combine(MainDirectory, ConfigurationConstants.Screenshots);
             CreateDirectoryIfNeeded(ScreenshotDirectory);
 
-            SettingsDirectory = Path.Combine(MainDirectory, ConfigConstants.Settings);
+            SettingsDirectory = Path.Combine(MainDirectory, ConfigurationConstants.Settings);
             CreateDirectoryIfNeeded(SettingsDirectory);
 
-            SoundDirectory = Path.Combine(MainDirectory, ConfigConstants.Sounds);
+            SoundDirectory = Path.Combine(MainDirectory, ConfigurationConstants.Sounds);
             CreateDirectoryIfNeeded(SoundDirectory);
 
-            WatchListDirectory = Path.Combine(MainDirectory, ConfigConstants.WatchList);
+            WatchListDirectory = Path.Combine(MainDirectory, ConfigurationConstants.WatchList);
             CreateDirectoryIfNeeded(WatchListDirectory);
 
-            WorkspaceDirectory = Path.Combine(MainDirectory, ConfigConstants.Workspace);
+            WorkspaceDirectory = Path.Combine(MainDirectory, ConfigurationConstants.Workspace);
             CreateDirectoryIfNeeded(WorkspaceDirectory);
 
-            LayoutDirectory = Path.Combine(WorkspaceDirectory, ConfigConstants.Layout);
+
+
+            LayoutDirectory = Path.Combine(WorkspaceDirectory, ConfigurationConstants.Layout);
             CreateDirectoryIfNeeded(LayoutDirectory);
 
-            IndicatorsDirectory = Path.Combine(CodeDirectory, ConfigConstants.Indicators);
+            IndicatorsDirectory = Path.Combine(CodeDirectory, ConfigurationConstants.Indicators);
             CreateDirectoryIfNeeded(IndicatorsDirectory);
 
-            StrategiesDirectory = Path.Combine(CodeDirectory, ConfigConstants.Strategies);
+            StrategiesDirectory = Path.Combine(CodeDirectory, ConfigurationConstants.Strategies);
             CreateDirectoryIfNeeded(StrategiesDirectory);
 
-            LayoutFileName = ConfigConstants.ApplicationName + ConfigConstants.Layout + ".xml";
-            SettingFile = Path.Combine(MainDirectory, ConfigConstants.ApplicationName + ConfigConstants.Settings);
+
+
+            LayoutFileName = ConfigurationConstants.ApplicationName + ConfigurationConstants.Layout + ConfigurationConstants.XmlFileExtension;
+            LogsFileName = ConfigurationConstants.ApplicationName + ConfigurationConstants.Logs + ConfigurationConstants.XmlFileExtension;
+            SettingFileName = ConfigurationConstants.ApplicationName + ConfigurationConstants.Settings + ConfigurationConstants.XmlFileExtension;
         }
 
         public string MainDirectory { get; }
@@ -68,13 +76,16 @@ namespace StockSharp.Configuration.ConfigManager
         public string CodeDirectory { get; }
         public string IndicatorsDirectory { get; }
         public string LayoutDirectory { get; set; }
-        public string LayoutFileName { get; set; }
-        public string SettingFile { get; private set; }
+        public string LogsDirectory { get; set; }
         public string SettingsDirectory { get; set; }
         public string StrategiesDirectory { get; }
         public string SoundDirectory { get; }
         public string ScreenshotDirectory { get; }
         public string WatchListDirectory { get; }
+
+        public string LayoutFileName { get; set; }
+        public string LogsFileName { get; set; }
+        public string SettingFileName { get; private set; }
 
 
         public static void CreateDirectoryIfNeeded([NotNull] string directory)

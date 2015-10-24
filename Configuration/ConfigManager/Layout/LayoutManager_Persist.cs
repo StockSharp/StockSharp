@@ -31,7 +31,7 @@ namespace StockSharp.Configuration.ConfigManager.Layout
             //   window may have been retrieved from the DockSite, or automatically created (when using DockingWindowDeserializationBehavior.AutoCreate).
             //   For the latter case, the e.Window property can be set to a new window. In both cases, any properties can be set.
 
-            // TODO: change to type checking
+            // TODO: change to type checking and generic windows
 
             if (args.Node.Name == "programmaticToolWindow1")
             {
@@ -56,7 +56,7 @@ namespace StockSharp.Configuration.ConfigManager.Layout
         public void LoadLayout()
         {
             if (LayoutFile == null)
-                throw new ArgumentNullException(ConfigConstants.Layout, @"Layout file is null.");
+                throw new ArgumentNullException(ConfigurationConstants.Layout, @"Layout file is null.");
 
             if (_isLayoutLoading) return;
 
@@ -85,7 +85,7 @@ namespace StockSharp.Configuration.ConfigManager.Layout
             //TODO: implement file browsing dialog functionality
 
             if (file == null)
-                throw new ArgumentNullException(ConfigConstants.Layout, @"Layout file is null or invalid.");
+                throw new ArgumentNullException(ConfigurationConstants.Layout, @"Layout file is null or invalid.");
 
             if (_isLayoutLoading) return;
 

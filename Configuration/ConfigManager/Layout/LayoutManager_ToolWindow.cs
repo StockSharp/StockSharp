@@ -30,8 +30,8 @@ namespace StockSharp.Configuration.ConfigManager.Layout
             textBox.VerticalScrollBarVisibility = ScrollBarVisibility.Auto;
 
             // Initialize
-            textBox.Text = string.Format("Tool window {0} created at {1}.", ++toolWindowIndex, DateTime.Now);
-            var name = string.Format("ToolWindow{0}", toolWindowIndex);
+            textBox.Text = $"Tool window {++toolWindowIndex} created at {DateTime.Now}.";
+            var name = $"ToolWindow{toolWindowIndex}";
 
             // Create the window (using this constructor registers the tool window with the DockSite)
             var toolWindow = new ToolWindow(DockSite, name, title,

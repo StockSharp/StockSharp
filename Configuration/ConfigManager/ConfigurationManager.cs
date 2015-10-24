@@ -19,7 +19,7 @@ namespace StockSharp.Configuration.ConfigManager
         {
             if (appName == null) throw new ArgumentNullException(nameof(appName));
 
-            ConfigConstants.ApplicationName = appName;
+            ConfigurationConstants.ApplicationName = appName;
             FolderManager = new FolderManager(this);
             LayoutManager = new LayoutManager(this, dockSite);
             OutputManager = new OutputManager(this);

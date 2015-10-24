@@ -144,12 +144,19 @@ namespace StockSharp.Terminal
                 wnd.Dock(ConfigurationManager.LayoutManager.DockSite, Direction.None);
 
                 var temp = ConfigurationManager.LayoutManager.CreateToolWindow("ToolWindow" + i++);
+		        temp.Name = "ToolWindow" + i;
+		        temp.Title = temp.Name;
+		        temp.Tag = temp.Name;
+		        temp.Header = temp.Name;
                 temp.Dock(wnd, Direction.ContentRight);
-		        for (int j = 1; j <= 15; j++)
+		        for (int j = 1; j <= 5; j++)
 		        {
 		            var tw = ConfigurationManager.LayoutManager.CreateToolWindow("ToolWindow" + i++);
 		            tw.Name = "ToolWindow" + i;
-                    tw.Dock(temp, j % 2 == 0 ? Direction.Top : Direction.Content);
+		            tw.Title = tw.Name;
+		            tw.Tag = tw.Name;
+		            tw.Header = tw.Name;
+                    tw.Dock(temp, j % 2 == 0 ? Direction.ContentTop : Direction.Content);
 		            j++;
 		        }
 
