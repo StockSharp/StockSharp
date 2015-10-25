@@ -11,11 +11,9 @@ namespace StockSharp.Hydra.Windows
 	using Ecng.Common;
 	using Ecng.Xaml;
 
-	using StockSharp.Algo;
 	using StockSharp.Algo.Storages;
 	using StockSharp.BusinessEntities;
 	using StockSharp.Hydra.Core;
-	using StockSharp.Messages;
 	using StockSharp.Localization;
 
 	public partial class EraseDataWindow
@@ -84,10 +82,9 @@ namespace StockSharp.Hydra.Windows
 				return;
 			}
 
-			var securities = (AllSecurities.IsChecked == true
-				? EntityRegistry.Securities.Where(s => !s.IsAllSecurity())
-				: SelectSecurityBtn.SelectedSecurities
-			).ToArray();
+			var securities = AllSecurities.IsChecked == true
+				? null
+				: SelectSecurityBtn.SelectedSecurities.ToArray();
 
 			var from = From.Value ?? DateTime.MinValue;
 			var to = To.Value ?? DateTime.MaxValue;
@@ -104,7 +101,7 @@ namespace StockSharp.Hydra.Windows
 				return;
 			}
 
-			if (securities.IsEmpty())
+			if (securities != null && securities.IsEmpty())
 			{
 				new MessageBoxBuilder()
 					.Caption(LocalizedStrings.Str2879)
@@ -156,10 +153,9 @@ namespace StockSharp.Hydra.Windows
 
 			Task.Factory.StartNew(() =>
 			{
-				var dataTypes = new[] { typeof(Trade), typeof(QuoteChangeMessage), typeof(Level1ChangeMessage), typeof(OrderLogItem), typeof(CandleMessage) };
 				var formats = Enumerator.GetValues<StorageFormats>().ToArray();
 
-				var iterCount = drives.Length * securities.Length * dataTypes.Length * formats.Length;
+				var iterCount = drives.Length * (securities == null ? ((IStorageEntityList<Security>)EntityRegistry.Securities).Count : securities.Length) * 5 /* message types count */ * formats.Length;
 
 				this.GuiSync(() => Progress.Maximum = iterCount);
 
@@ -168,36 +164,35 @@ namespace StockSharp.Hydra.Windows
 					if (_token.IsCancellationRequested)
 						break;
 
-					foreach (var security in securities)
+					foreach (var securityId in drive.AvailableSecurities)
 					{
 						if (_token.IsCancellationRequested)
 							break;
+
+						var id = securityId.SecurityCode + "@" + securityId.BoardCode;
+
+						var security = securities == null
+							? EntityRegistry.Securities.ReadById(id)
+							: securities.FirstOrDefault(s => s.Id.CompareIgnoreCase(id));
+
+						if (security == null)
+						{
+							continue;
+						}
 
 						foreach (var format in formats)
 						{
 							if (_token.IsCancellationRequested)
 								break;
 							
-							foreach (var dataType in dataTypes)
+							foreach (var dataType in drive.GetAvailableDataTypes(securityId, format))
 							{
 								if (_token.IsCancellationRequested)
 									break;
 
-								if (dataType == typeof(CandleMessage))
-								{
-									foreach (var candleType in drive.GetCandleTypes(security.ToSecurityId(), format))
-									{
-										StorageRegistry
-											.GetStorage(security, candleType.Item1, candleType.Item2, drive, format)
-											.Delete(from, to);
-									}
-								}
-								else
-								{
-									StorageRegistry
-										.GetStorage(security, dataType, null, drive, format)
+								StorageRegistry
+										.GetStorage(security, dataType.Item1, dataType.Item2, drive, format)
 										.Delete(from, to);
-								}
 
 								this.GuiSync(() =>
 								{

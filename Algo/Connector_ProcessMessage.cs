@@ -723,16 +723,12 @@ namespace StockSharp.Algo
 			SessionStateChanged.SafeInvoke(board, message.State);
 		}
 
-		private static void ProcessBoardMessage(BoardMessage message)
+		private void ProcessBoardMessage(BoardMessage message)
 		{
-			ExchangeBoard.GetOrCreateBoard(message.Code, code => new ExchangeBoard
+			ExchangeBoard.GetOrCreateBoard(message.Code, code =>
 			{
-				Code = code,
-				WorkingTime = message.WorkingTime,
-				IsSupportAtomicReRegister = message.IsSupportAtomicReRegister,
-				IsSupportMarketOrders = message.IsSupportMarketOrders,
-				ExpiryTime = message.ExpiryTime,
-				Exchange = new Exchange { Name = message.ExchangeCode, TimeZoneInfo = message.TimeZoneInfo },
+				var exchange = message.ToExchange(EntityFactory.CreateExchange(message.ExchangeCode));
+				return message.ToBoard(EntityFactory.CreateBoard(code, exchange));
 			});
 		}
 
@@ -1454,7 +1450,7 @@ namespace StockSharp.Algo
 						ProcessOrderLogMessage(security, message);
 						break;
 					default:
-						throw new ArgumentOutOfRangeException();
+						throw new ArgumentOutOfRangeException(LocalizedStrings.Str1695Params.Put(message.ExecutionType));
 				}
 			};
 
@@ -1499,7 +1495,7 @@ namespace StockSharp.Algo
 				}
 				
 				default:
-					throw new ArgumentOutOfRangeException();
+				throw new ArgumentOutOfRangeException(LocalizedStrings.Str1695Params.Put(message.ExecutionType));
 			}
 		}
 

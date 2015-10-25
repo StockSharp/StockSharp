@@ -335,12 +335,29 @@ namespace StockSharp.Algo.Storages
 		}
 
 		/// <summary>
-		/// To get available candles types with parameters for the instrument.
+		/// Get all available instruments.
 		/// </summary>
-		/// <param name="securityId">Security ID.</param>
+		public override IEnumerable<SecurityId> AvailableSecurities
+		{
+			get
+			{
+				var idGenerator = new SecurityIdGenerator();
+
+				return Directory
+					.EnumerateDirectories(Path)
+					.SelectMany(Directory.EnumerateDirectories)
+					.Select(n => idGenerator.Split(n, true))
+					.Where(t => !t.IsDefault());
+			}
+		}
+
+		/// <summary>
+		/// Get all available data types.
+		/// </summary>
+		/// <param name="securityId">Instrument identifier.</param>
 		/// <param name="format">Format type.</param>
-		/// <returns>Available candles types with parameters.</returns>
-		public override IEnumerable<Tuple<Type, object[]>> GetCandleTypes(SecurityId securityId, StorageFormats format)
+		/// <returns>Data types.</returns>
+		public override IEnumerable<Tuple<Type, object>> GetAvailableDataTypes(SecurityId securityId, StorageFormats format)
 		{
 			var secPath = GetSecurityPath(securityId);
 
@@ -350,17 +367,8 @@ namespace StockSharp.Algo.Storages
 				.GetDirectories(secPath)
 				.SelectMany(dir => Directory.GetFiles(dir, "candles_*" + ext).Select(IOPath.GetFileNameWithoutExtension))
 				.Distinct()
-				.Select(fileName =>
-				{
-					var parts = fileName.Split('_');
-					var type = "{0}.{1}Message, {2}".Put(typeof(CandleMessage).Namespace, parts[1], typeof(CandleMessage).Assembly.FullName).To<Type>();
-					var value = type.ToCandleArg(parts[2]);
-
-					return Tuple.Create(type, value);
-				})
-				.GroupBy(t => t.Item1)
-				.Select(g => Tuple.Create(g.Key, g.Select(t => t.Item2).ToArray()))
-				.ToArray();
+				.Select(GetDataType)
+				.Where(t => t != null);
 		}
 
 		/// <summary>
@@ -377,7 +385,7 @@ namespace StockSharp.Algo.Storages
 				throw new ArgumentNullException("securityId");
 
 			return _drives.SafeAdd(Tuple.Create(securityId, dataType, arg, format),
-				key => new LocalMarketDataStorageDrive(CreateFileName(dataType, arg), GetSecurityPath(securityId), format, this));
+				key => new LocalMarketDataStorageDrive(GetFileName(dataType, arg), GetSecurityPath(securityId), format, this));
 		}
 
 		/// <summary>
@@ -398,46 +406,64 @@ namespace StockSharp.Algo.Storages
 			}
 		}
 
+		private static readonly SynchronizedPairSet<Tuple<Type, object>, string> _fileNames = new SynchronizedPairSet<Tuple<Type, object>, string>
+		{
+			{ Tuple.Create(typeof(ExecutionMessage), (object)ExecutionTypes.Tick), "trades" },
+			{ Tuple.Create(typeof(ExecutionMessage), (object)ExecutionTypes.OrderLog), "orderLog" },
+			{ Tuple.Create(typeof(ExecutionMessage), (object)ExecutionTypes.Order), "execution" },
+			{ Tuple.Create(typeof(ExecutionMessage), (object)ExecutionTypes.Trade), "execution" },
+			{ Tuple.Create(typeof(QuoteChangeMessage), (object)null), "quotes" },
+			{ Tuple.Create(typeof(Level1ChangeMessage), (object)null), "security" },
+			{ Tuple.Create(typeof(NewsMessage), (object)null), "news" },
+		};
+
+		/// <summary>
+		/// Get data type and parameter for the specified file name.
+		/// </summary>
+		/// <param name="fileName">The file name.</param>
+		/// <returns>Data type and parameter associated with the type. For example, <see cref="CandleMessage.Arg"/>.</returns>
+		public static Tuple<Type, object> GetDataType(string fileName)
+		{
+			var info = _fileNames.TryGetKey(fileName);
+
+			if (info != null)
+				return info;
+
+			if (!fileName.ContainsIgnoreCase("Candle"))
+				return null;
+
+			var parts = fileName.Split('_');
+			var type = "{0}.{1}Message, {2}".Put(typeof(CandleMessage).Namespace, parts[1], typeof(CandleMessage).Assembly.FullName).To<Type>();
+			var arg = type.ToCandleArg(parts[2]);
+
+			return Tuple.Create(type, arg);
+		}
+
 		/// <summary>
 		/// To get the file name by the type of data.
 		/// </summary>
-		/// <param name="dataType">Market data type.</param>
+		/// <param name="dataType">Data type.</param>
 		/// <param name="arg">The parameter associated with the <paramref name="dataType" /> type. For example, <see cref="CandleMessage.Arg"/>.</param>
 		/// <returns>The file name.</returns>
-		public static string CreateFileName(Type dataType, object arg)
+		public static string GetFileName(Type dataType, object arg)
 		{
 			if (dataType == null)
 				throw new ArgumentNullException("dataType");
 
-			if (dataType == typeof(ExecutionMessage))
-			{
-				switch ((ExecutionTypes)arg)
-				{
-					case ExecutionTypes.Tick:
-						return "trades";
-					case ExecutionTypes.Order:
-					case ExecutionTypes.Trade:
-						return "execution";
-					case ExecutionTypes.OrderLog:
-						return "orderLog";
-					default:
-						throw new ArgumentOutOfRangeException();
-				}
-			}
-			else if (dataType == typeof(QuoteChangeMessage))
-				return "quotes";
-			else if (dataType == typeof(Level1ChangeMessage))
-				return "security";
-			else if (dataType == typeof(NewsMessage))
-				return "news";
-			else if (dataType.IsSubclassOf(typeof(CandleMessage)))
+			if (dataType.IsSubclassOf(typeof(CandleMessage)))
 				return "candles_{0}_{1}".Put(dataType.Name.Replace("Message", string.Empty), TraderHelper.CandleArgToFolderName(arg));
 			else
-				throw new NotSupportedException(LocalizedStrings.Str2872Params.Put(dataType.FullName));
+			{
+				var fileName = _fileNames.TryGetValue(Tuple.Create(dataType, arg));
+
+				if (fileName == null)
+					throw new NotSupportedException(LocalizedStrings.Str2872Params.Put(dataType.FullName));
+
+				return fileName;
+			}
 		}
 
 #pragma warning disable 612
-
 		/// <summary>
 		/// Load settings.
 		/// </summary>

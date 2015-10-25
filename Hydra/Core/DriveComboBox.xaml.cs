@@ -54,7 +54,12 @@ namespace StockSharp.Hydra.Core
 				throw new NotSupportedException();
 			}
 
-			IEnumerable<Tuple<Type, object[]>> IMarketDataDrive.GetCandleTypes(SecurityId securityId, StorageFormats format)
+			IEnumerable<SecurityId> IMarketDataDrive.AvailableSecurities
+			{
+				get { throw new NotSupportedException(); }
+			}
+
+			IEnumerable<Tuple<Type, object>> IMarketDataDrive.GetAvailableDataTypes(SecurityId securityId, StorageFormats format)
 			{
 				throw new NotSupportedException();
 			}

@@ -17,7 +17,6 @@
 	using StockSharp.Hydra.Core;
 	using StockSharp.Localization;
 	using StockSharp.Logging;
-	using StockSharp.Messages;
 
 	using Xceed.Wpf.Toolkit.PropertyGrid.Attributes;
 
@@ -173,17 +172,6 @@
 
 			var pathEntry = ToEntry(new DirectoryInfo(_settings.Drive.Path));
 
-			IEnumerable<Tuple<Type, object>> dataTypes = new[]
-			{
-				Tuple.Create(typeof(ExecutionMessage), (object)ExecutionTypes.Tick),
-				Tuple.Create(typeof(ExecutionMessage), (object)ExecutionTypes.OrderLog),
-				Tuple.Create(typeof(ExecutionMessage), (object)ExecutionTypes.Order),
-				Tuple.Create(typeof(ExecutionMessage), (object)ExecutionTypes.Trade),
-				Tuple.Create(typeof(QuoteChangeMessage), (object)null),
-				Tuple.Create(typeof(Level1ChangeMessage), (object)null),
-				Tuple.Create(typeof(NewsMessage), (object)null)
-			};
-
 			var workingSecurities = GetWorkingSecurities().ToArray();
 
 			foreach (var date in allDates)
@@ -209,13 +197,11 @@
 						}
 					};
 
-					var candleTypes = _settings.Drive.GetCandleTypes(security.Security.ToSecurityId(), _settings.StorageFormat);
+					var dataTypes = _settings.Drive.GetAvailableDataTypes(security.Security.ToSecurityId(), _settings.StorageFormat);
 
-					var secDataTypes = dataTypes.Concat(candleTypes.SelectMany(t => t.Item2.Select(a => Tuple.Create(t.Item1, a))));
-
-					foreach (var tuple in secDataTypes)
+					foreach (var dataType in dataTypes)
 					{
-						var storage = StorageRegistry.GetStorage(security.Security, tuple.Item1, tuple.Item2, _settings.Drive, _settings.StorageFormat);
+						var storage = StorageRegistry.GetStorage(security.Security, dataType.Item1, dataType.Item2, _settings.Drive, _settings.StorageFormat);
 
 						var drive = storage.Drive;
 
@@ -226,7 +212,7 @@
 
 						var entry = new BackupEntry
 						{
-							Name = LocalMarketDataDrive.CreateFileName(tuple.Item1, tuple.Item2) + LocalMarketDataDrive.GetExtension(StorageFormats.Binary),
+							Name = LocalMarketDataDrive.GetFileName(dataType.Item1, dataType.Item2) + LocalMarketDataDrive.GetExtension(StorageFormats.Binary),
 							Parent = dateEntry,
 						};
 

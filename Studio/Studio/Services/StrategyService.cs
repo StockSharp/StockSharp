@@ -70,7 +70,7 @@ namespace StockSharp.Studio.Services
 
 				var storageRegistry = new StudioStorageRegistry { MarketDataSettings = strategy.MarketDataSettings };
 
-				EntityFactory = new StorageEntityFactory(entityRegistry, storageRegistry);
+				//EntityFactory = new StorageEntityFactory(entityRegistry, storageRegistry);
 
 				Adapter.InnerAdapters.Add(_historyMessageAdapter = new HistoryMessageAdapter(TransactionIdGenerator, _securityProvider)
 				{

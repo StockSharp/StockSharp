@@ -20,7 +20,6 @@ namespace StockSharp.Hydra.Windows
 	using StockSharp.Logging;
 	using StockSharp.BusinessEntities;
 	using StockSharp.Hydra.Core;
-	using StockSharp.Messages;
 	using StockSharp.Localization;
 
 	public partial class SynchronizeWindow
@@ -141,7 +140,7 @@ namespace StockSharp.Hydra.Windows
 
 						if (firstDataFile != null)
 						{
-							var info = securityIdGenerator.Split(securityId);
+							var id = securityIdGenerator.Split(securityId);
 
 							decimal priceStep;
 
@@ -163,9 +162,9 @@ namespace StockSharp.Hydra.Windows
 							{
 								Id = securityId,
 								PriceStep = priceStep,
-								Name = info.Item1,
-								Code = info.Item1,
-								Board = ExchangeBoard.GetOrCreateBoard(info.Item2),
+								Name = id.SecurityCode,
+								Code = id.SecurityCode,
+								Board = ExchangeBoard.GetOrCreateBoard(id.BoardCode),
 								ExtensionInfo = new Dictionary<object, object>()
 							};
 
@@ -189,42 +188,33 @@ namespace StockSharp.Hydra.Windows
 				if (_token.IsCancellationRequested)
 					return;
 
-				var dataTypes = new[]
-				{
-					Tuple.Create(typeof(ExecutionMessage), (object)ExecutionTypes.Tick),
-					Tuple.Create(typeof(ExecutionMessage), (object)ExecutionTypes.OrderLog),
-					Tuple.Create(typeof(ExecutionMessage), (object)ExecutionTypes.Order),
-					Tuple.Create(typeof(ExecutionMessage), (object)ExecutionTypes.Trade),
-					Tuple.Create(typeof(QuoteChangeMessage), (object)null),
-					Tuple.Create(typeof(Level1ChangeMessage), (object)null),
-					Tuple.Create(typeof(NewsMessage), (object)null)
-				};
+				//var dataTypes = new[]
+				//{
+				//	Tuple.Create(typeof(ExecutionMessage), (object)ExecutionTypes.Tick),
+				//	Tuple.Create(typeof(ExecutionMessage), (object)ExecutionTypes.OrderLog),
+				//	Tuple.Create(typeof(ExecutionMessage), (object)ExecutionTypes.Order),
+				//	Tuple.Create(typeof(ExecutionMessage), (object)ExecutionTypes.Trade),
+				//	Tuple.Create(typeof(QuoteChangeMessage), (object)null),
+				//	Tuple.Create(typeof(Level1ChangeMessage), (object)null),
+				//	Tuple.Create(typeof(NewsMessage), (object)null)
+				//};
 
 				var formats = Enumerator.GetValues<StorageFormats>().ToArray();
 
 				foreach (var drive in DriveCache.Instance.AllDrives)
 				{
-					foreach (var security in EntityRegistry.Securities)
+					foreach (var secId in drive.AvailableSecurities)
 					{
-						foreach (var dataType in dataTypes)
+						foreach (var format in formats)
 						{
-							foreach (var format in formats)
+							foreach (var dataType in drive.GetAvailableDataTypes(secId, format))
 							{
 								if (_token.IsCancellationRequested)
 									break;
 
-								var secId = security.ToSecurityId();
-
 								drive
 									.GetStorageDrive(secId, dataType.Item1, dataType.Item2, format)
 									.ClearDatesCache();
-
-								foreach (var candleType in drive.GetCandleTypes(security.ToSecurityId(), format))
-								{
-									drive
-										.GetStorageDrive(secId, candleType.Item1, candleType.Item2, format)
-										.ClearDatesCache();
-								}
 							}
 						}
 
@@ -235,7 +225,7 @@ namespace StockSharp.Hydra.Windows
 						{
 							Progress.Value++;
 							Logs.Messages.Add(new LogMessage(logSource, TimeHelper.NowWithOffset, LogLevels.Info,
-								LocalizedStrings.Str2931Params.Put(security, drive.Path)));
+								LocalizedStrings.Str2931Params.Put(secId, drive.Path)));
 						});
 					}
 

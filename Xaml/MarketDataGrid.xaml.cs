@@ -20,6 +20,7 @@ namespace StockSharp.Xaml
 	using StockSharp.Algo.Storages;
 	using StockSharp.BusinessEntities;
 	using StockSharp.Localization;
+	using StockSharp.Messages;
 
 	using Query = System.Tuple<Algo.Storages.IStorageRegistry, BusinessEntities.Security, Algo.Storages.StorageFormats, Algo.Storages.IMarketDataDrive>;
 
@@ -282,13 +283,13 @@ namespace StockSharp.Xaml
 					return;
 			}
 
-			foreach (var tuple in drive.GetCandleTypes(security.ToSecurityId(), format))
+			foreach (var tuple in drive.GetAvailableDataTypes(security.ToSecurityId(), format))
 			{
-				foreach (var arg in tuple.Item2)
-				{
-					var key = tuple.Item1.Name.Replace("CandleMessage", string.Empty) + " " + arg;
-					candles.Add(key, Tuple.Create(tuple.Item1, arg));
-				}
+				if (tuple.Item1.IsSubclassOf(typeof(CandleMessage)))
+					continue;
+
+				var key = tuple.Item1.Name.Replace("CandleMessage", string.Empty) + " " + tuple.Item2;
+				candles.Add(key, Tuple.Create(tuple.Item1, tuple.Item2));
 			}
 
 			var candleNames = candles.Keys.ToArray();

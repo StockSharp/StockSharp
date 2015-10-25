@@ -188,7 +188,7 @@ namespace SampleHistoryTesting
 			}
 
 			var secGen = new SecurityIdGenerator();
-			var secIdParts = secGen.Split(SecId.Text);
+			var id = secGen.Split(SecId.Text);
 
 			//if (secIdParts.Length != 2)
 			//{
@@ -198,8 +198,8 @@ namespace SampleHistoryTesting
 
 			var timeFrame = TimeSpan.FromMinutes(TimeFrame.SelectedIndex == 0 ? 1 : 5);
 
-			var secCode = secIdParts.Item1;
-			var board = ExchangeBoard.GetOrCreateBoard(secIdParts.Item2);
+			var secCode = id.SecurityCode;
+			var board = ExchangeBoard.GetOrCreateBoard(id.BoardCode);
 
 			// create test security
 			var security = new Security
@@ -328,7 +328,7 @@ namespace SampleHistoryTesting
 					SecurityId = security.ToSecurityId(),
 					ServerTime = startTime,
 				}
-				.TryAdd(Level1Fields.PriceStep, secIdParts.Item1 == "RIZ2" ? 10m : 1)
+				.TryAdd(Level1Fields.PriceStep, secCode == "RIZ2" ? 10m : 1)
 				.TryAdd(Level1Fields.StepPrice, 6m)
 				.TryAdd(Level1Fields.MinPrice, 10m)
 				.TryAdd(Level1Fields.MaxPrice, 1000000m)

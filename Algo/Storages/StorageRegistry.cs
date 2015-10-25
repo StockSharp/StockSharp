@@ -1058,9 +1058,9 @@ namespace StockSharp.Algo.Storages
 							proxySet[i].SetValue(security, cells[i].To(proxySet[i].ReturnType));
 						}
 
-						var parts = idGen.Split(security.Id);
-						security.Code = parts.Item1;
-						security.Board = ExchangeBoard.GetOrCreateBoard(parts.Item2);
+						var id = idGen.Split(security.Id);
+						security.Code = id.SecurityCode;
+						security.Board = ExchangeBoard.GetOrCreateBoard(id.BoardCode);
 
 						_securities.Add(security);
 					}

@@ -199,10 +199,10 @@ namespace StockSharp.Studio.Controls
 
 				if (!_security.Id.IsEmpty())
 				{
-					var tuple = _idGenerator.Split(_security.Id);
+					var id = _idGenerator.Split(_security.Id);
 
-					SecurityCode = tuple.Item1;
-					Board = ExchangeBoard.GetOrCreateBoard(tuple.Item2);
+					SecurityCode = id.SecurityCode;
+					Board = ExchangeBoard.GetOrCreateBoard(id.BoardCode);
 
 					CanEdit = false;
 					Title = _security.Id;

@@ -76,12 +76,17 @@ namespace StockSharp.Algo.Storages
 		ISecurityMarketDataDrive GetSecurityDrive(Security security);
 
 		/// <summary>
-		/// To get available candles types with parameters for the instrument.
+		/// Get all available instruments.
 		/// </summary>
-		/// <param name="securityId">Security ID.</param>
+		IEnumerable<SecurityId> AvailableSecurities { get; }
+
+		/// <summary>
+		/// Get all available data types.
+		/// </summary>
+		/// <param name="securityId">Instrument identifier.</param>
 		/// <param name="format">Format type.</param>
-		/// <returns>Available candles types with parameters.</returns>
-		IEnumerable<Tuple<Type, object[]>> GetCandleTypes(SecurityId securityId, StorageFormats format);
+		/// <returns>Data types.</returns>
+		IEnumerable<Tuple<Type, object>> GetAvailableDataTypes(SecurityId securityId, StorageFormats format);
 
 		/// <summary>
 		/// To get the storage for <see cref="IMarketDataStorage"/>.
@@ -132,12 +137,17 @@ namespace StockSharp.Algo.Storages
 		}
 
 		/// <summary>
-		/// To get available candles types with parameters for the instrument.
+		/// Get all available instruments.
 		/// </summary>
-		/// <param name="securityId">Security ID.</param>
+		public abstract IEnumerable<SecurityId> AvailableSecurities { get; }
+
+		/// <summary>
+		/// Get all available data types.
+		/// </summary>
+		/// <param name="securityId">Instrument identifier.</param>
 		/// <param name="format">Format type.</param>
-		/// <returns>Available candles types with parameters.</returns>
-		public abstract IEnumerable<Tuple<Type, object[]>> GetCandleTypes(SecurityId securityId, StorageFormats format);
+		/// <returns>Data types.</returns>
+		public abstract IEnumerable<Tuple<Type, object>> GetAvailableDataTypes(SecurityId securityId, StorageFormats format);
 
 		/// <summary>
 		/// Create storage for <see cref="IMarketDataStorage"/>.

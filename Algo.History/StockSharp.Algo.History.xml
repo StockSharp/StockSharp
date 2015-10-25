@@ -397,14 +397,21 @@
       <param name="format">Format type.</param>
       <returns>The range of available dates.</returns>
     </member>
-    <member name="M:StockSharp.Algo.History.Hydra.IRemoteStorage.GetCandleTypes(System.Guid,System.String,StockSharp.Algo.Storages.StorageFormats)">
+    <member name="M:StockSharp.Algo.History.Hydra.IRemoteStorage.GetAvailableSecurities(System.Guid)">
       <summary>
-            To get all the types and parameters of candles for which market data are recorded.
+            Get all available instruments.
             </summary>
       <param name="sessionId">Session ID.</param>
-      <param name="securityId">Security ID.</param>
+      <returns>Data types.</returns>
+    </member>
+    <member name="M:StockSharp.Algo.History.Hydra.IRemoteStorage.GetAvailableDataTypes(System.Guid,System.String,StockSharp.Algo.Storages.StorageFormats)">
+      <summary>
+            Get all available data types.
+            </summary>
+      <param name="sessionId">Session ID.</param>
+      <param name="securityId">Instrument identifier.</param>
       <param name="format">Format type.</param>
-      <returns>Available types and arguments of candles.</returns>
+      <returns>Data types.</returns>
     </member>
     <member name="M:StockSharp.Algo.History.Hydra.IRemoteStorage.Save(System.Guid,System.String,System.String,System.String,System.DateTime,StockSharp.Algo.Storages.StorageFormats,System.Byte[])">
       <summary>
@@ -631,13 +638,13 @@
       <param name="format">Format type.</param>
       <returns>The wrapper for access to remote market data.</returns>
     </member>
-    <member name="M:StockSharp.Algo.History.Hydra.RemoteStorageClient.GetCandleTypes(StockSharp.Messages.SecurityId,StockSharp.Algo.Storages.StorageFormats)">
+    <member name="M:StockSharp.Algo.History.Hydra.RemoteStorageClient.GetAvailableDataTypes(StockSharp.Messages.SecurityId,StockSharp.Algo.Storages.StorageFormats)">
       <summary>
-            To get available candles types with parameters for the instrument.
+            Get all available data types.
             </summary>
-      <param name="securityId">Security ID.</param>
+      <param name="securityId">Instrument identifier.</param>
       <param name="format">Format type.</param>
-      <returns>Available candles types with parameters.</returns>
+      <returns>Data types.</returns>
     </member>
     <member name="M:StockSharp.Algo.History.Hydra.RemoteStorageClient.Invoke``1(System.Func{StockSharp.Algo.History.Hydra.IRemoteStorage,``0})">
       <summary>
@@ -665,6 +672,11 @@
     <member name="P:StockSharp.Algo.History.Hydra.RemoteStorageClient.SecurityBatchSize">
       <summary>
             The new instruments request block size. By default it does not exceed 1000 elements.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Algo.History.Hydra.RemoteStorageClient.AvailableSecurities">
+      <summary>
+            Get all available instruments.
             </summary>
     </member>
     <member name="T:StockSharp.Algo.History.Forex.OandaHistorySource">
@@ -1251,13 +1263,13 @@
             </summary>
       <param name="client">The client for access to the history server <see cref="T:StockSharp.Algo.History.Hydra.IRemoteStorage" />.</param>
     </member>
-    <member name="M:StockSharp.Algo.Storages.RemoteMarketDataDrive.GetCandleTypes(StockSharp.Messages.SecurityId,StockSharp.Algo.Storages.StorageFormats)">
+    <member name="M:StockSharp.Algo.Storages.RemoteMarketDataDrive.GetAvailableDataTypes(StockSharp.Messages.SecurityId,StockSharp.Algo.Storages.StorageFormats)">
       <summary>
-            To get available candles types with parameters for the instrument.
+            Get all available data types.
             </summary>
-      <param name="securityId">Security ID.</param>
+      <param name="securityId">Instrument identifier.</param>
       <param name="format">Format type.</param>
-      <returns>Available candles types with parameters.</returns>
+      <returns>Data types.</returns>
     </member>
     <member name="M:StockSharp.Algo.Storages.RemoteMarketDataDrive.GetStorageDrive(StockSharp.Messages.SecurityId,System.Type,System.Object,StockSharp.Algo.Storages.StorageFormats)">
       <summary>
@@ -1294,6 +1306,11 @@
     <member name="P:StockSharp.Algo.Storages.RemoteMarketDataDrive.Path">
       <summary>
             Path to market data.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Algo.Storages.RemoteMarketDataDrive.AvailableSecurities">
+      <summary>
+            Get all available instruments.
             </summary>
     </member>
     <member name="T:StockSharp.Algo.History.YahooHistorySource">

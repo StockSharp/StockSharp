@@ -47,7 +47,8 @@ namespace StockSharp.Terminal
 
 			var storageRegistry = new StorageRegistry {DefaultDrive = new LocalMarketDataDrive(_settingsFolder)};
 
-			Connector = new Connector { EntityFactory = new StorageEntityFactory(new EntityRegistry(), storageRegistry) };
+			Connector = new Connector();
+			var storageAdapter = new StorageMessageAdapter(Connector.Adapter, new EntityRegistry(), storageRegistry);
 			ConfigManager.RegisterService<ISecurityProvider>(new FilterableSecurityProvider(storageRegistry.GetSecurityStorage()));
 			ConfigManager.RegisterService<IConnector>(Connector);
 			ConfigManager.RegisterService<IMarketDataProvider>(Connector);

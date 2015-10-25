@@ -54,19 +54,19 @@ namespace StockSharp.Algo.Storages
 
 			var idGenerator = new SecurityIdGenerator();
 
-			var parts = idGenerator.Split(security.Id);
-			var code = parts.Item1;
+			var id = idGenerator.Split(security.Id);
+			var code = id.SecurityCode;
 
 			var securities = InteropHelper
 				.GetDirectories(Path.Combine(Drive.Drive.Path, code.Substring(0, 1)), code + "*")
 				.Select(p => Path.GetFileName(p).FolderNameToSecurityId())
 				.Select(s =>
 				{
-					var id = idGenerator.Split(s);
+					var idInfo = idGenerator.Split(s);
 
 					var clone = security.Clone();
 					clone.Id = s;
-					clone.Board = ExchangeBoard.GetOrCreateBoard(id.Item2);
+					clone.Board = ExchangeBoard.GetOrCreateBoard(idInfo.BoardCode);
 					return clone;
 				});
 

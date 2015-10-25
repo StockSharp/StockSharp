@@ -169,11 +169,11 @@ namespace StockSharp.Studio
 
 		public StudioConnector()
 		{
-			EntityFactory = new StorageEntityFactory(ConfigManager.GetService<IEntityRegistry>(), ConfigManager.GetService<IStorageRegistry>());
+			//EntityFactory = new StorageEntityFactory(ConfigManager.GetService<IEntityRegistry>(), ConfigManager.GetService<IStorageRegistry>());
 
 			_marketDataAdapter = new StudioMarketDataAdapter(TransactionIdGenerator);
 
-			Adapter.InnerAdapters.Add(_marketDataAdapter);
+			Adapter.InnerAdapters.Add(new StorageMessageAdapter(_marketDataAdapter, ConfigManager.GetService<IEntityRegistry>(), ConfigManager.GetService<IStorageRegistry>()));
 
 			CreateEmulationSessionHolder();
 

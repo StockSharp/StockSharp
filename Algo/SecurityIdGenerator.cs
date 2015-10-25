@@ -5,6 +5,7 @@ namespace StockSharp.Algo
 	using Ecng.Common;
 
 	using StockSharp.BusinessEntities;
+	using StockSharp.Messages;
 
 	/// <summary>
 	/// The instrument identifiers generator <see cref="Security.Id"/>.
@@ -49,9 +50,6 @@ namespace StockSharp.Algo
 		/// <returns><see cref="Security.Id"/> security.</returns>
 		public virtual string GenerateId(string secCode/*, string secClass*/, ExchangeBoard board)
 		{
-			if (secCode.IsEmpty())
-				throw new ArgumentNullException("secCode");
-
 			if (board == null)
 				throw new ArgumentNullException("board");
 
@@ -62,8 +60,9 @@ namespace StockSharp.Algo
 		/// To get instrument codes and boards by the instrument identifier.
 		/// </summary>
 		/// <param name="securityId">The instrument identifier <see cref="Security.Id"/>.</param>
-		/// <returns>The instrument code <see cref="Security.Code"/> and the board code <see cref="Security.Board"/>.</returns>
-		public virtual Tuple<string, string> Split(string securityId)
+		/// <param name="nullIfInvalid">Return <see langword="null"/> in case of <paramref name="securityId"/> is invalid value.</param>
+		/// <returns>The instrument code <see cref="SecurityId.SecurityCode"/> and the board code <see cref="SecurityId.BoardCode"/>.</returns>
+		public virtual SecurityId Split(string securityId, bool nullIfInvalid = false)
 		{
 			if (securityId.IsEmpty())
 				throw new ArgumentNullException("securityId");
@@ -71,8 +70,8 @@ namespace StockSharp.Algo
 			var index = securityId.LastIndexOf(Delimiter, StringComparison.InvariantCulture);
 
 			return index == -1
-				? Tuple.Create(securityId, ExchangeBoard.Associated.Code)
-				: Tuple.Create(securityId.Substring(0, index), securityId.Substring(index + Delimiter.Length, securityId.Length - index - Delimiter.Length));
+				? nullIfInvalid ? default(SecurityId) : new SecurityId { SecurityCode = securityId, BoardCode = ExchangeBoard.Associated.Code }
+				: new SecurityId { SecurityCode = securityId.Substring(0, index), BoardCode = securityId.Substring(index + Delimiter.Length, securityId.Length - index - Delimiter.Length) };
 		}
 	}
 }

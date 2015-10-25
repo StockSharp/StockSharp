@@ -729,6 +729,67 @@ namespace StockSharp.Algo
 			};
 		}
 
+		/// <summary>
+		/// To convert the message into exchange.
+		/// </summary>
+		/// <param name="message">Message.</param>
+		/// <returns>Exchange.</returns>
+		public static Exchange ToExchange(this BoardMessage message)
+		{
+			return message.ToExchange(new Exchange { Name = message.ExchangeCode });
+		}
+
+		/// <summary>
+		/// To convert the message into exchange.
+		/// </summary>
+		/// <param name="message">Message.</param>
+		/// <param name="exchange">Exchange.</param>
+		/// <returns>Exchange.</returns>
+		public static Exchange ToExchange(this BoardMessage message, Exchange exchange)
+		{
+			if (message == null)
+				throw new ArgumentNullException("message");
+
+			if (exchange == null)
+				throw new ArgumentNullException("exchange");
+
+			exchange.TimeZoneInfo = message.TimeZoneInfo;
+
+			return exchange;
+		}
+
+		/// <summary>
+		/// To convert the message into board.
+		/// </summary>
+		/// <param name="message">Message.</param>
+		/// <returns>Board.</returns>
+		public static ExchangeBoard ToBoard(this BoardMessage message)
+		{
+			return message.ToBoard(new ExchangeBoard { Code = message.Code, Exchange = new Exchange { Name = message.ExchangeCode } });
+		}
+
+		/// <summary>
+		/// To convert the message into board.
+		/// </summary>
+		/// <param name="message">Message.</param>
+		/// <param name="board">Board.</param>
+		/// <returns>Board.</returns>
+		public static ExchangeBoard ToBoard(this BoardMessage message, ExchangeBoard board)
+		{
+			if (message == null)
+				throw new ArgumentNullException("message");
+
+			if (board == null)
+				throw new ArgumentNullException("board");
+
+			board.WorkingTime = message.WorkingTime;
+			board.IsSupportAtomicReRegister = message.IsSupportAtomicReRegister;
+			board.IsSupportMarketOrders = message.IsSupportMarketOrders;
+			board.ExpiryTime = message.ExpiryTime;
+
+			return board;
+		}
+
 		private class ToMessagesEnumerableEx<TEntity, TMessage> : IEnumerableEx<TMessage>
 		{
 			private readonly IEnumerableEx<TEntity> _entities;
@@ -1261,9 +1322,9 @@ namespace StockSharp.Algo
 			// иногда в Security.Code может быть записано неправильное, и необходимо опираться на Security.Id
 			if (!security.Id.IsEmpty())
 			{
-				var parts = (idGenerator ?? new SecurityIdGenerator()).Split(security.Id);
+				var id = (idGenerator ?? new SecurityIdGenerator()).Split(security.Id);
 
-				secCode = parts.Item1;
+				secCode = id.SecurityCode;
 
 				// http://stocksharp.com/forum/yaf_postst5143findunread_API-4-2-4-0-Nie-vystavliaiutsia-zaiavki-po-niekotorym-instrumientam-FORTS.aspx
 				// для Quik необходимо соблюдение регистра в коде инструмента при выставлении заявок
@@ -1271,7 +1332,7 @@ namespace StockSharp.Algo
 					secCode = security.Code;
 
 				//if (!boardCode.CompareIgnoreCase(ExchangeBoard.Test.Code))
-				boardCode = parts.Item2;
+				boardCode = id.BoardCode;
 			}
 			else
 			{

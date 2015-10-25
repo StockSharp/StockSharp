@@ -25366,12 +25366,12 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
-		/// Sessions {0}. Receiving types of candles for {1}.
+		/// Sessions {0}. Receiving data types for {1}.
 		/// </summary>
 		public const string Str2090ParamsKey = "Str2090Params";
 
 		/// <summary>
-		/// Sessions {0}. Receiving types of candles for {1}.
+		/// Sessions {0}. Receiving data types for {1}.
 		/// </summary>
 		public static string Str2090Params
 		{

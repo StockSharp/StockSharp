@@ -654,13 +654,13 @@ namespace StockSharp.Algo
 
 			if (!criteria.Id.IsEmpty())
 			{
-				var info = SecurityIdGenerator.Split(criteria.Id);
+				var id = SecurityIdGenerator.Split(criteria.Id);
 
 				if (boardCode.IsEmpty())
-					boardCode = GetBoardCode(info.Item2);
+					boardCode = GetBoardCode(id.BoardCode);
 
 				if (securityCode.IsEmpty())
-					securityCode = info.Item1;
+					securityCode = id.SecurityCode;
 			}
 
 			var message = new SecurityLookupMessage
@@ -682,7 +682,7 @@ namespace StockSharp.Algo
 				OptionType = criteria.OptionType,
 				Strike = criteria.Strike,
 				BinaryOptionType = criteria.BinaryOptionType,
-				UnderlyingSecurityCode = criteria.UnderlyingSecurityId.IsEmpty() ? null : SecurityIdGenerator.Split(criteria.UnderlyingSecurityId).Item1
+				UnderlyingSecurityCode = criteria.UnderlyingSecurityId.IsEmpty() ? null : SecurityIdGenerator.Split(criteria.UnderlyingSecurityId).SecurityCode
 			};
 
 			LookupSecurities(message);
@@ -1289,8 +1289,8 @@ namespace StockSharp.Algo
 
 			var security = _entityCache.TryAddSecurity(id, idStr =>
 			{
-				var info = SecurityIdGenerator.Split(idStr);
-				return Tuple.Create(info.Item1, ExchangeBoard.GetOrCreateBoard(GetBoardCode(info.Item2)));
+				var idInfo = SecurityIdGenerator.Split(idStr);
+				return Tuple.Create(idInfo.SecurityCode, ExchangeBoard.GetOrCreateBoard(GetBoardCode(idInfo.BoardCode)));
 			}, out isNew);
 
 			var isChanged = changeSecurity(security);

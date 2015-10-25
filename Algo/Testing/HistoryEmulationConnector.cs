@@ -611,7 +611,8 @@ namespace StockSharp.Algo.Testing
 				yield break;
 
 			var securityId = series.Security.ToSecurityId();
-			var dataType = series.CandleType.ToCandleMessageType().ToCandleMarketDataType();
+			var messageType = series.CandleType.ToCandleMessageType();
+			var dataType = messageType.ToCandleMarketDataType();
 
 			if (_historySourceSubscriptions.ContainsKey(Tuple.Create(securityId, dataType, series.Arg)))
 			{
@@ -619,25 +620,17 @@ namespace StockSharp.Algo.Testing
 				yield break;
 			}
 
-			var types = _historyAdapter.Drive.GetCandleTypes(securityId, _historyAdapter.StorageFormat);
+			var types = _historyAdapter.Drive.GetAvailableDataTypes(securityId, _historyAdapter.StorageFormat);
 
 			foreach (var tuple in types)
 			{
-				if (tuple.Item1 != series.CandleType.ToCandleMessageType())
+				if (tuple.Item1 != messageType || tuple.Item2.Equals(series.Arg))
 					continue;
 
-				foreach (var arg in tuple.Item2)
-				{
-					if (!arg.Equals(series.Arg))
-						continue;
+				var dates = _historyAdapter.StorageRegistry.GetCandleMessageStorage(tuple.Item1, series.Security, series.Arg, _historyAdapter.Drive, _historyAdapter.StorageFormat).Dates.ToArray();
 
-					var dates = _historyAdapter.StorageRegistry.GetCandleMessageStorage(tuple.Item1, series.Security, arg, _historyAdapter.Drive, _historyAdapter.StorageFormat).Dates;
-
-					if (dates.Any())
-						yield return new Range<DateTimeOffset>(dates.First().ApplyTimeZone(TimeZoneInfo.Utc), dates.Last().ApplyTimeZone(TimeZoneInfo.Utc));
-
-					break;
-				}
+				if (dates.Any())
+					yield return new Range<DateTimeOffset>(dates.First().ApplyTimeZone(TimeZoneInfo.Utc), dates.Last().ApplyTimeZone(TimeZoneInfo.Utc));
 
 				break;
 			}

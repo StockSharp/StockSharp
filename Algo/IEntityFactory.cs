@@ -91,6 +91,21 @@ namespace StockSharp.Algo
 		/// </summary>
 		/// <returns>News.</returns>
 		News CreateNews();
+
+		/// <summary>
+		/// To create exchange.
+		/// </summary>
+		/// <param name="code"><see cref="Exchange.Name"/> value.</param>
+		/// <returns>Exchange.</returns>
+		Exchange CreateExchange(string code);
+
+		/// <summary>
+		/// To create exchange.
+		/// </summary>
+		/// <param name="code"><see cref="ExchangeBoard.Code"/> value.</param>
+		/// <param name="exchange"><see cref="ExchangeBoard.Exchange"/> value.</param>
+		/// <returns>Exchange.</returns>
+		ExchangeBoard CreateBoard(string code, Exchange exchange);
 	}
 
 	/// <summary>
@@ -233,6 +248,27 @@ namespace StockSharp.Algo
 		public virtual News CreateNews()
 		{
 			return new News();
+		}
+
+		/// <summary>
+		/// To create exchange.
+		/// </summary>
+		/// <param name="code"><see cref="Exchange.Name"/> value.</param>
+		/// <returns>Exchange.</returns>
+		public Exchange CreateExchange(string code)
+		{
+			return new Exchange { Name = code };
+		}
+
+		/// <summary>
+		/// To create exchange.
+		/// </summary>
+		/// <param name="code"><see cref="ExchangeBoard.Code"/> value.</param>
+		/// <param name="exchange"><see cref="ExchangeBoard.Exchange"/> value.</param>
+		/// <returns>Exchange.</returns>
+		public ExchangeBoard CreateBoard(string code, Exchange exchange)
+		{
+			return new ExchangeBoard { Code = code, Exchange = exchange };
 		}
 
 		long IStorage.GetCount<TEntity>()

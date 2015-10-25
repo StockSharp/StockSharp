@@ -1953,7 +1953,7 @@ Str2086Params;Sessions {0}. Securities search.;Сессии {0}. Поиск ин
 Str2087Params;Sessions {0}. Filtered securities search.;Сессии {0}. Поиск инструментов по фильтру.
 Str2088Params;Sessions {0}. Receiving securities.;Сессии {0}. Получение инструментов.
 Str2089Params;Sessions {0}. Receiving dates for {1} {2} {3}.;Сессии {0}. Получение дат для {1} {2} {3}.
-Str2090Params;Sessions {0}. Receiving types of candles for {1}.;Сессии {0}. Получение типов свечек для {1}.
+Str2090Params;Sessions {0}. Receiving data types for {1}.;Сессии {0}. Получение типов данных для {1}.
 Str2091Params;Sessions {0}. Saving for {1} {2} {3} for {4}.;Сессии {0}. Сохранение для {1} {2} {3} за {4}.
 Str2092Params;Sessions {0}. Deleting for {1} {2} {3} for {4}.;Сессии {0}. Удаление для {1} {2} {3} за {4}.
 Str2093Params;Sessions {0}. Loading stream or {1} {2} {3} for {4}.;Сессии {0}. Загрузка потока для {1} {2} {3} за {4}.

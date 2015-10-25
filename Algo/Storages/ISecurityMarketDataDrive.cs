@@ -72,12 +72,12 @@ namespace StockSharp.Algo.Storages
 		/// <returns>Market-data storage.</returns>
 		IMarketDataStorage GetStorage(Type dataType, object arg, IMarketDataSerializer serializer);
 
-		/// <summary>
-		/// To get available candles types with parameters for the instrument.
-		/// </summary>
-		/// <param name="serializer">The serializer.</param>
-		/// <returns>Available candles types with parameters.</returns>
-		IEnumerable<Tuple<Type, object[]>> GetCandleTypes(IMarketDataSerializer<CandleMessage> serializer);
+		///// <summary>
+		///// To get available candles types with parameters for the instrument.
+		///// </summary>
+		///// <param name="serializer">The serializer.</param>
+		///// <returns>Available candles types with parameters.</returns>
+		//IEnumerable<Tuple<Type, object[]>> GetCandleTypes(IMarketDataSerializer<CandleMessage> serializer);
 	}
 
 	/// <summary>
@@ -696,14 +696,14 @@ namespace StockSharp.Algo.Storages
 				throw new ArgumentOutOfRangeException("dataType", dataType, LocalizedStrings.Str1018);
 		}
 
-		/// <summary>
-		/// To get available candles types with parameters for the instrument.
-		/// </summary>
-		/// <param name="serializer">The serializer.</param>
-		/// <returns>Available candles types with parameters.</returns>
-		public IEnumerable<Tuple<Type, object[]>> GetCandleTypes(IMarketDataSerializer<CandleMessage> serializer)
-		{
-			return Drive.GetCandleTypes(Security.ToSecurityId(), ToFormat(serializer));
-		}
+		///// <summary>
+		///// To get available candles types with parameters for the instrument.
+		///// </summary>
+		///// <param name="serializer">The serializer.</param>
+		///// <returns>Available candles types with parameters.</returns>
+		//public IEnumerable<Tuple<Type, object[]>> GetCandleTypes(IMarketDataSerializer<CandleMessage> serializer)
+		//{
+		//	return Drive.GetCandleTypes(Security.ToSecurityId(), ToFormat(serializer));
+		//}
 	}
 }

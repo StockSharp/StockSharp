@@ -343,6 +343,7 @@
     <Compile Include="Storages\Backup\Xaml\AmazonRegionComboBox.cs" />
     <Compile Include="Storages\Backup\Xaml\AmazonRegionEditor.cs" />
     <Compile Include="Storages\BinaryMarketDataSerializer.cs" />
+    <Compile Include="Storages\BufferMessageAdapter.cs" />
     <Compile Include="Storages\CacheableMarketDataDrive.cs" />
     <Compile Include="Storages\CsvMarketDataSerializer.cs" />
     <Compile Include="Storages\ExchangeInfoProvider.cs" />
@@ -401,7 +402,7 @@
     <Compile Include="Storages\MarketDataBuffer.cs" />
     <Compile Include="Storages\BinaryHelper.cs" />
     <Compile Include="Storages\OrderLogSerializer.cs" />
-    <Compile Include="Storages\StorageEntityFactory.cs" />
+    <Compile Include="Storages\StorageMessageAdapter.cs" />
     <Compile Include="Storages\StorageFormats.cs" />
     <Compile Include="Storages\StorageHelper.cs" />
     <Compile Include="Storages\StorageRegistry.cs" />

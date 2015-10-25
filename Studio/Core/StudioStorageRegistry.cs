@@ -46,9 +46,14 @@
 				return GetDrive().GetNewsMessageStorage(serializer);
 			}
 
-			IEnumerable<Tuple<Type, object[]>> IMarketDataDrive.GetCandleTypes(SecurityId securityId, StorageFormats format)
+			IEnumerable<SecurityId> IMarketDataDrive.AvailableSecurities
 			{
-				return GetDrive().GetCandleTypes(securityId, format);
+				get { return GetDrive().AvailableSecurities; }
+			}
+
+			IEnumerable<Tuple<Type, object>> IMarketDataDrive.GetAvailableDataTypes(SecurityId securityId, StorageFormats format)
+			{
+				return GetDrive().GetAvailableDataTypes(securityId, format);
 			}
 
 			IMarketDataStorageDrive IMarketDataDrive.GetStorageDrive(SecurityId securityId, Type dataType, object arg, StorageFormats format)
