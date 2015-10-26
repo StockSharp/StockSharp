@@ -1,11 +1,11 @@
-﻿namespace StockSharp.Configuration
-{
-	using System.Configuration;
+﻿using System.Configuration;
 
-	/// <summary>
-	/// Represents the custom indicators section in a configuration file.
+namespace StockSharp.Configuration.ConfigCandle
+{
+    /// <summary>
+	/// Represents the custom candles section in a configuration file.
 	/// </summary>
-	public class IndicatorElementCollection : ConfigurationElementCollection
+	public class CandleElementCollection : ConfigurationElementCollection
 	{
 		/// <summary>
 		/// When overridden in a derived class, creates a new <see cref="T:System.Configuration.ConfigurationElement"/>.
@@ -15,7 +15,7 @@
 		/// </returns>
 		protected override ConfigurationElement CreateNewElement()
 		{
-			return new IndicatorElement();
+			return new CandleElement();
 		}
 
 		/// <summary>
@@ -27,7 +27,7 @@
 		/// <param name="element">The <see cref="T:System.Configuration.ConfigurationElement"/> to return the key for. </param>
 		protected override object GetElementKey(ConfigurationElement element)
 		{
-			var elem = (IndicatorElement)element;
+			var elem = (CandleElement)element;
 			return elem.Type;
 		}
 	}

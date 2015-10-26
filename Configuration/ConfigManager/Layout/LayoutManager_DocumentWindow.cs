@@ -8,7 +8,7 @@ using ActiproSoftware.Windows.Controls.Docking;
 namespace StockSharp.Configuration.ConfigManager.Layout
 {
     /// <summary>
-    ///     Partial class for handling document window tasks and creation.
+    /// Partial class for handling document window tasks and creation.
     /// </summary>
     public partial class LayoutManager
     {
@@ -17,7 +17,7 @@ namespace StockSharp.Configuration.ConfigManager.Layout
         public DeferrableObservableCollection<DocumentWindow> DocumentItems { get; private set; }
 
         /// <summary>
-        ///     Creates a new <see cref="DocumentWindow" />.
+        /// Creates a new <see cref="DocumentWindow" />.
         /// </summary>
         /// <param name="title">The title to use.</param>
         /// <returns>The <see cref="DocumentWindow" /> that was created.</returns>

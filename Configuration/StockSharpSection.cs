@@ -1,4 +1,9 @@
-﻿namespace StockSharp.Configuration
+﻿using StockSharp.Configuration.ConfigCandle;
+using StockSharp.Configuration.ConfigConnection;
+using StockSharp.Configuration.ConfigDiagram;
+using StockSharp.Configuration.ConfigIndicator;
+
+namespace StockSharp.Configuration
 {
 	using System.Configuration;
 

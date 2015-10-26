@@ -22,7 +22,6 @@ using StockSharp.Configuration.ConfigManager;
 using StockSharp.Localization;
 using StockSharp.Logging;
 using StockSharp.Messages;
-using StockSharp.Terminal.Layout;
 using StockSharp.Xaml;
 using StockSharp.Xaml.Charting;
 
@@ -49,8 +48,6 @@ namespace StockSharp.Terminal
 	    public ConfigurationManager ConfigurationManager { get; set; }
 
 	    public Connector Connector { private set; get; }
-
-	    public LayoutManager LayoutManager { get; set; }
 
 
 	    public DelegateCommand ConnectCommand { private set; get; }
@@ -171,11 +168,6 @@ namespace StockSharp.Terminal
 
 		    }
 
-            ConfigurationManager.LayoutManager.Save(new SettingsStorage(), ConfigurationManager.FolderManager.ConnectionFileInfo.Name);
-            ConfigurationManager.LayoutManager.Save(new SettingsStorage(), ConfigurationManager.FolderManager.LayoutFileInfo.Name);
-            ConfigurationManager.LayoutManager.Save(new SettingsStorage(), ConfigurationManager.FolderManager.LogsFileInfo.Name);
-            ConfigurationManager.LayoutManager.Save(new SettingsStorage(), ConfigurationManager.FolderManager.SettingFileInfo.Name);
-
         }
 
 	    private void DockSite_OnWindowClosed(object sender, DockingWindowEventArgs e)
@@ -185,27 +177,11 @@ namespace StockSharp.Terminal
 
 		protected override void OnClosed(EventArgs e)
 		{
-			//LayoutSerializer.SaveToFile(LayoutManager.LayoutFileName, DockSite1);
 			base.OnClosed(e);
 		}
 
-		//private static DockSiteLayoutSerializer LayoutSerializer
-		//{
-		//	get
-		//	{
-		//		return new DockSiteLayoutSerializer
-		//		{
-		//			SerializationBehavior = DockSiteSerializationBehavior.All,
-		//			DocumentWindowDeserializationBehavior = DockingWindowDeserializationBehavior.AutoCreate,
-		//			ToolWindowDeserializationBehavior = DockingWindowDeserializationBehavior.LazyLoad
-		//		};
-		//	}
-		//}
-
 		private void MainWindow_OnLoaded(object sender, RoutedEventArgs e)
 		{
-			//if (File.Exists(LayoutManager.LayoutFileName))
-			//	LayoutSerializer.LoadFromFile(LayoutManager.LayoutFileName, DockSite1);
 		}
 	}
 }

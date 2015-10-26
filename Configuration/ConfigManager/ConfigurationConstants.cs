@@ -1,7 +1,7 @@
 ﻿
 #pragma warning disable 1591
 
-namespace StockSharp.Configuration
+namespace StockSharp.Configuration.ConfigManager
 {
     /// <summary>
     /// 

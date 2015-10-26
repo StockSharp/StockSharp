@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using System.Text;
 using System.Windows;
 using ActiproSoftware.Windows.Controls.Docking;
 using ActiproSoftware.Windows.Controls.Docking.Serialization;
@@ -12,11 +14,11 @@ using StockSharp.Messages;
 namespace StockSharp.Configuration.ConfigManager.Layout
 {
     /// <summary>
-    ///     Partial class for handling saving and loading the layout.
+    /// Partial class for handling saving and loading the layout.
     /// </summary>
     public partial class LayoutManager
     {
-        private DockSiteLayoutSerializer LayoutSerializer = new DockSiteLayoutSerializer
+        private readonly DockSiteLayoutSerializer _layoutSerializer = new DockSiteLayoutSerializer
         {
             SerializationBehavior = DockSiteSerializationBehavior.All,
             DocumentWindowDeserializationBehavior = DockingWindowDeserializationBehavior.AutoCreate,
@@ -24,7 +26,7 @@ namespace StockSharp.Configuration.ConfigManager.Layout
         };
 
         /// <summary>
-        ///     Handles the <c>DockingWindowDeserializing</c> event of the <see cref="LayoutSerializer" /> control.
+        /// Handles the <c>DockingWindowDeserializing</c> event of the <see cref="_layoutSerializer" /> control.
         /// </summary>
         /// <param name="sender">The source of the event.</param>
         /// <param name="args">The <see cref="DockingWindowDeserializingEventArgs" /> instance containing the event data.</param>
@@ -54,7 +56,7 @@ namespace StockSharp.Configuration.ConfigManager.Layout
         }
 
         /// <summary>
-        ///     Load the layout from XML file created in <see cref="FolderManager.LayoutFileName" />.
+        /// Load the layout from XML file created in <see cref="FolderManager.LayoutFileName" />.
         /// </summary>
         /// <exception cref="ArgumentNullException"></exception>
         public void LoadLayout()
@@ -67,7 +69,8 @@ namespace StockSharp.Configuration.ConfigManager.Layout
             _isLayoutLoading = true;
             try
             {
-                LayoutSerializer.LoadFromFile(LayoutFile.FullName, DockSite);
+                //BUG: does not load tool window tab titles
+                _layoutSerializer.LoadFromFile(LayoutFile.FullName, DockSite);
             }
             catch (Exception e)
             {
@@ -80,7 +83,7 @@ namespace StockSharp.Configuration.ConfigManager.Layout
         }
 
         /// <summary>
-        ///     Load layout from XML file located from file dialog.
+        /// Load layout from XML file located from file dialog.
         /// </summary>
         /// <param name="file"></param>
         /// <exception cref="ArgumentNullException"></exception>
@@ -96,7 +99,7 @@ namespace StockSharp.Configuration.ConfigManager.Layout
             _isLayoutLoading = true;
             try
             {
-                LayoutSerializer.LoadFromFile(file.FullName, DockSite);
+                _layoutSerializer.LoadFromFile(file.FullName, DockSite);
             }
             catch (Exception e)
             {
@@ -109,27 +112,25 @@ namespace StockSharp.Configuration.ConfigManager.Layout
         }
 
         /// <summary>
-        ///     Occurs when the <c>File.Load Layout</c> menu item is clicked.
-        /// </summary>
-        /// <param name="sender">The sender of the event.</param>
-        /// <param name="e">A <see cref="RoutedEventArgs" /> that contains the event data.</param>
-        private void OnFileLoadLayoutMenuItemClick(object sender, RoutedEventArgs e)
-        {
-            LoadLayout();
-            MessageBox.Show("Layout loaded from static member variable.");
-        }
-
-        /// <summary>
-        ///     Saves layout asynchronously using dispatcher.
+        /// Saves layout asynchronously using dispatcher.
         /// </summary>
         /// <param name="dockSite">The dock site to save.</param>
         public void SaveLayout(DockSite dockSite, string fileName)
         {
             if (dockSite == null) throw new ArgumentNullException("dockSite");
 
-            //LayoutSerializer.SaveToFile(LayoutFile.FullName, DockSite);
+            var layoutString = _layoutSerializer.SaveToString(dockSite);
 
-            new XmlSerializer<SettingsStorage>(_configurationManager.LayoutManager.DockSite.Save(), fileName);
+            if(File.Exists(fileName)) File.Delete(fileName);
+
+            try
+            {
+                File.WriteAllText(fileName, layoutString);
+            }
+            catch (Exception exception)
+            {
+                exception.LogError();
+            }
         }
 
         /// <summary>
@@ -138,7 +139,7 @@ namespace StockSharp.Configuration.ConfigManager.Layout
 		/// <param name="storage">Settings storage.</param>
 		public void Save(DockSite dockSite, string fileName)
         {
-            new XmlSerializer<SettingsStorage>().Serialize(dockSite, fileName);
+            //new XmlSerializer<SettingsStorage>().Serialize(dockSite, fileName);
         }
 
         /// <summary>

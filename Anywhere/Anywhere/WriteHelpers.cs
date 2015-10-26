@@ -8,7 +8,7 @@
     using Messages;
 
     /// <summary>
-    ///     The write functions to text files
+    /// The write functions to text files
     /// </summary>
     public static class WriteHelpers
     {

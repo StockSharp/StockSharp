@@ -1,5 +1,6 @@
 ﻿using System;
 using ActiproSoftware.Windows.Controls.Docking;
+using ActiproSoftware.Windows.Controls.Docking.Serialization;
 using Ecng.ComponentModel;
 using StockSharp.Configuration.ConfigManager.Layout;
 
@@ -10,7 +11,7 @@ namespace StockSharp.Configuration.ConfigManager
     public class ConfigurationManager : ManagerBase
     {
         /// <summary>
-        ///     Manager for storing app configuration.
+        /// Manager for storing app configuration.
         /// </summary>
         /// <param name="appName">The app name.</param>
         /// <param name="dockSite">The dock site.  If null, a new dock site will be created.</param>

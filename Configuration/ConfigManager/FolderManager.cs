@@ -19,7 +19,7 @@ namespace StockSharp.Configuration.ConfigManager
             if (configurationManager == null) throw new ArgumentNullException("configurationManager");
             _configurationManager = configurationManager;
 
-            // Create core directory structure.  Order is important for directory structure.
+            // Create top level directory structure.
             MainDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
                                          ConfigurationConstants.StockSharp,
                                          ConfigurationConstants.ApplicationName);
@@ -57,6 +57,7 @@ namespace StockSharp.Configuration.ConfigManager
 
 
 
+            // Create subdirectory structure.  Order is important.
             ConnectionDirectory = Path.Combine(SettingsDirectory, ConfigurationConstants.Connection);
             CheckCreateDirectory(ConnectionDirectory);
 
@@ -70,7 +71,7 @@ namespace StockSharp.Configuration.ConfigManager
             CheckCreateDirectory(StrategiesDirectory);
 
             
-
+            // Create settings files.
             ConnectionFileInfo = CreateNewFileInfo(ConnectionDirectory, ConfigurationConstants.ApplicationName + ConfigurationConstants.Connection + ConfigurationConstants.XmlFileExtension);
             LayoutFileInfo = CreateNewFileInfo(LayoutDirectory, ConfigurationConstants.ApplicationName + ConfigurationConstants.Layout + ConfigurationConstants.XmlFileExtension);
             LogsFileInfo = CreateNewFileInfo(LogsDirectory, ConfigurationConstants.ApplicationName + ConfigurationConstants.Logs + ConfigurationConstants.XmlFileExtension);

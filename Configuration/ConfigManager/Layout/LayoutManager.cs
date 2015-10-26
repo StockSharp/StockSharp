@@ -5,13 +5,14 @@ using System.Windows;
 using System.Windows.Threading;
 using ActiproSoftware.Windows;
 using ActiproSoftware.Windows.Controls.Docking;
+using ActiproSoftware.Windows.Controls.Docking.Serialization;
 
 #pragma warning disable 1591
 
 namespace StockSharp.Configuration.ConfigManager.Layout
 {
     /// <summary>
-    ///     Layout manager.  Uses multiple partial classes for different functions.
+    /// Layout manager.  Uses multiple partial classes for different functions.
     /// </summary>
     public partial class LayoutManager : ManagerBase
     {
@@ -40,7 +41,7 @@ namespace StockSharp.Configuration.ConfigManager.Layout
 
             if (LayoutFile == null) throw new ArgumentNullException("LayoutFile");
 
-            LayoutSerializer.DockingWindowDeserializing += LayoutSerializerOnDockingWindowDeserializing;
+            _layoutSerializer.DockingWindowDeserializing += LayoutSerializerOnDockingWindowDeserializing;
             Loaded += OnLoaded;
             Closing += OnClosing;
         }
@@ -49,27 +50,27 @@ namespace StockSharp.Configuration.ConfigManager.Layout
         public FileInfo LayoutFile { get; private set; }
 
         /// <summary>
-        ///     Unsubscribe from events to prevent memory leaks.
+        /// Unsubscribe from events to prevent memory leaks.
         /// </summary>
         private void Dispose()
         {
-            LayoutSerializer.DockingWindowDeserializing -= LayoutSerializerOnDockingWindowDeserializing;
+            _layoutSerializer.DockingWindowDeserializing -= LayoutSerializerOnDockingWindowDeserializing;
             Loaded -= OnLoaded;
             Closing -= OnClosing;
         }
 
         /// <summary>
-        ///     Saves layout when closing.
+        /// Saves layout when closing.
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void OnClosing(object sender, CancelEventArgs e)
         {
-            if (DockSite != null) SaveLayout(DockSite);
+            if (DockSite != null) SaveLayout(DockSite, this.LayoutFile.FullName);
         }
 
         /// <summary>
-        ///     Occurs when the sample is loaded.
+        /// Occurs when the sample is loaded.
         /// </summary>
         /// <param name="sender">The sender of the event.</param>
         /// <param name="e">A <see cref="RoutedEventArgs" /> that contains the event data.</param>

@@ -5,12 +5,12 @@ using ActiproSoftware.Windows.Media;
 namespace StockSharp.Configuration.ConfigManager.Layout
 {
     /// <summary>
-    ///     Partial class for handling layout docking tasks.
+    /// Partial class for handling layout docking tasks.
     /// </summary>
     public partial class LayoutManager
     {
         /// <summary>
-        ///     Creates the <see cref="DockSite" />.
+        /// Creates the <see cref="DockSite" />.
         /// </summary>
         private void CreateDockSite()
         {
@@ -20,39 +20,10 @@ namespace StockSharp.Configuration.ConfigManager.Layout
             // Add a TabbedMdiHost
             var mdiHost = new TabbedMdiHost();
             DockSite.Workspace.Content = mdiHost;
-
-            // Add a couple tool windows attached to each other on the right that are 300px wide
-            /*ToolWindow toolWindowR1 = this.CreateToolWindow("DockedRight-1");
-            DockSite.SetControlSize(toolWindowR1, new Size(300, 200));
-            ToolWindow toolWindowR2 = this.CreateToolWindow("DockedRight-2");
-            toolWindowR1.Dock(_dockSite, Direction.Right);
-            toolWindowR2.Dock(toolWindowR1, Direction.Content);
-
-            // Dock bottom
-            ToolWindow toolWindowB = this.CreateToolWindow("DockedBottom");
-            toolWindowB.Dock(_dockSite.Workspace, Direction.Bottom);
-
-            // Auto hide left
-            ToolWindow toolWindowAH = this.CreateToolWindow("Auto-Hidden");
-            toolWindowAH.AutoHide(Dock.Left);
-
-            // Floating
-            ToolWindow toolWindowU = this.CreateToolWindow("Floating");
-            DockSite.SetControlSize(toolWindowU, new Size(400, 200));
-            toolWindowU.Float();
-
-            // Add three documents
-            DocumentWindow documentWindow1 = this.CreateDocumentWindow("Upper-1");
-            documentWindow1.Activate();
-            DocumentWindow documentWindow2 = this.CreateDocumentWindow("Upper-2");
-            documentWindow2.Activate();
-            DocumentWindow documentWindow3 = this.CreateDocumentWindow("Lower");
-            documentWindow3.Activate();
-            documentWindow3.MoveToNewHorizontalContainer();*/
         }
 
         /// <summary>
-        ///     Occurs when the <c>Layout.EvenlyDistributeDocumentsOnly</c> menu item is clicked.
+        /// Occurs when the <c>Layout.EvenlyDistributeDocumentsOnly</c> menu item is clicked.
         /// </summary>
         private void DistributeLayoutEvenly()
         {
@@ -69,7 +40,7 @@ namespace StockSharp.Configuration.ConfigManager.Layout
         }
 
         /// <summary>
-        ///     Occurs when a <c>Button</c> is clicked.
+        /// Occurs when a <c>Button</c> is clicked.
         /// </summary>
         private void DockToDockSite(IDockTarget dockSite, ToolWindow toolWindow, Direction direction)
         {
@@ -80,7 +51,7 @@ namespace StockSharp.Configuration.ConfigManager.Layout
         }
 
         /// <summary>
-        ///     Occurs when a <c>Button</c> is clicked.
+        /// Occurs when a <c>Button</c> is clicked.
         /// </summary>
         private void DockToToolWindow(IDockTarget originalToolWindow, ToolWindow toolWindow, Direction direction)
         {

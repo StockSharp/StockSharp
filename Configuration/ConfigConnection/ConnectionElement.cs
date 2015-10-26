@@ -1,8 +1,8 @@
-﻿namespace StockSharp.Configuration
-{
-	using System.Configuration;
+﻿using System.Configuration;
 
-	/// <summary>
+namespace StockSharp.Configuration.ConfigConnection
+{
+    /// <summary>
 	/// Represents the custom message adapter.
 	/// </summary>
 	public class ConnectionElement : ConfigurationElement

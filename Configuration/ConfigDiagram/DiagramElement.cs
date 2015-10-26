@@ -1,8 +1,8 @@
-﻿namespace StockSharp.Configuration
-{
-	using System.Configuration;
+﻿using System.Configuration;
 
-	/// <summary>
+namespace StockSharp.Configuration.ConfigDiagram
+{
+    /// <summary>
 	/// Represents the custom diagram element.
 	/// </summary>
 	public class DiagramElement : ConfigurationElement

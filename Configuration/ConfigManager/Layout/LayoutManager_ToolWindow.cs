@@ -8,7 +8,7 @@ using ActiproSoftware.Windows.Controls.Docking;
 namespace StockSharp.Configuration.ConfigManager.Layout
 {
     /// <summary>
-    ///     Partial class for handling tool window tasks and creation.
+    /// Partial class for handling tool window tasks and creation.
     /// </summary>
     public partial class LayoutManager
     {
@@ -17,7 +17,7 @@ namespace StockSharp.Configuration.ConfigManager.Layout
         public DeferrableObservableCollection<ToolWindow> ToolItems { get; set;  }
 
         /// <summary>
-        ///     Creates a new <see cref="ToolWindow" />.
+        /// Creates a new <see cref="ToolWindow" />.
         /// </summary>
         /// <param name="title">The title to use.</param>
         /// <returns>The <see cref="ToolWindow" /> that was created.</returns>
@@ -44,7 +44,7 @@ namespace StockSharp.Configuration.ConfigManager.Layout
         }
 
         /// <summary>
-        ///     Initializes the "Programmatic Tool Window 1" tool window.
+        /// Initializes the "Programmatic Tool Window 1" tool window.
         /// </summary>
         /// <param name="toolWindow">The tool window.</param>
         private void InitializeProgrammaticToolWindow1(ToolWindow toolWindow)
