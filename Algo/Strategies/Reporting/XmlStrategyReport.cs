@@ -90,7 +90,7 @@ namespace StockSharp.Algo.Strategies.Reporting
 									new XElement("price", t.Trade.Price),
 									new XElement("volume", t.Trade.Volume),
 									new XElement("order", t.Order.Id),
-									new XElement("PnL", strategy.PnLManager.ProcessMyTrade(t.ToMessage()).PnL),
+									new XElement("PnL", strategy.PnLManager.ProcessMessage(t.ToMessage()).PnL),
 									new XElement("slippage", t.Slippage)
 									))),
 						new XElement("stopOrders",

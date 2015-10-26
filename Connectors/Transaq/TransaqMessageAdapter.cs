@@ -100,7 +100,7 @@ namespace StockSharp.Transaq
 		/// <param name="message">Сообщение.</param>
 		protected override void OnSendInMessage(Message message)
 		{
-			if (_client != null && !_isInitialized && message.Type != MessageTypes.Connect && message.Type != MessageTypes.Disconnect)
+			if (_client != null && !_isInitialized && message.Type != MessageTypes.Reset && message.Type != MessageTypes.Connect && message.Type != MessageTypes.Disconnect)
 			{
 				Init();
 				_isInitialized = true;

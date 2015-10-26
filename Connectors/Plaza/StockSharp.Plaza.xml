@@ -2834,6 +2834,11 @@
             По-умолчанию путь равен локальной директории.
             </remarks>
     </member>
+    <member name="P:StockSharp.Plaza.PlazaMessageAdapter.OverrideDll">
+      <summary>
+            Перезаписать файл библиотеки из ресурсов. По-умолчанию файл будет перезаписан.
+            </summary>
+    </member>
     <member name="P:StockSharp.Plaza.PlazaMessageAdapter.IsValid">
       <summary>
             Проверить введенные параметры на валидность.
@@ -7150,6 +7155,11 @@
     <member name="P:StockSharp.Plaza.PlazaTrader.Tables">
       <summary>
             Таблицы, которые будут использоваться при запуске потоков репликации.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Plaza.PlazaTrader.OverrideDll">
+      <summary>
+            Перезаписать файл библиотеки из ресурсов. По-умолчанию файл будет перезаписан.
             </summary>
     </member>
     <member name="T:StockSharp.Plaza.Metadata.PlazaType">

@@ -223,7 +223,7 @@ namespace StockSharp.Hydra.Transaq
 
 				if (_settings.UseProxy)
 				{
-					trader.Proxy = new StockSharp.Transaq.Proxy
+					trader.Proxy = new Proxy
 					{
 						Login = _settings.ProxyLogin, 
 						Password = _settings.ProxyPassword.To<string>(), 

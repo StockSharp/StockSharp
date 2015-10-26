@@ -7,6 +7,11 @@ namespace StockSharp.Algo
 	using Ecng.Collections;
 	using Ecng.Common;
 
+	using StockSharp.Algo.Commissions;
+	using StockSharp.Algo.Latency;
+	using StockSharp.Algo.PnL;
+	using StockSharp.Algo.Risk;
+	using StockSharp.Algo.Slippage;
 	using StockSharp.BusinessEntities;
 	using StockSharp.Logging;
 	using StockSharp.Messages;
@@ -177,6 +182,23 @@ namespace StockSharp.Algo
 			}
 		}
 
+		private IMessageChannel _inMessageChannel;
+
+		/// <summary>
+		/// Input message channel.
+		/// </summary>
+		public IMessageChannel InMessageChannel
+		{
+			get { return _inMessageChannel; }
+			protected set
+			{
+				if (value == null)
+					throw new ArgumentNullException();
+
+				_inMessageChannel = value;
+			}
+		}
+
 		private void OutMessageChannelOnNewOutMessage(Message message)
 		{
 			OnProcessMessage(message);
@@ -219,8 +241,25 @@ namespace StockSharp.Algo
 
 				if (_adapter != null)
 				{
-					if (CalculateMessages)
-						_inAdapter = new ManagedMessageAdapter(_inAdapter).ToChannel(this);
+					if (LatencyManager != null)
+						_inAdapter = new LatencyMessageAdapter(_inAdapter) { LatencyManager = LatencyManager };
+
+					if (SlippageManager != null)
+						_inAdapter = new SlippageMessageAdapter(_inAdapter) { SlippageManager = SlippageManager };
+
+					if (PnLManager != null)
+						_inAdapter = new PnLMessageAdapter(_inAdapter) { PnLManager = PnLManager };
+
+					if (CommissionManager != null)
+						_inAdapter = new CommissionMessageAdapter(_inAdapter) { CommissionManager = CommissionManager };
+
+					if (RiskManager != null)
+						_inAdapter = new RiskMessageAdapter(_inAdapter) { RiskManager = RiskManager };
+
+					_inAdapter = new ChannelMessageAdapter(_inAdapter, InMessageChannel, new PassThroughMessageChannel())
+					{
+						OwnInputChannel = true
+					};
 
 					_adapter.InnerAdapters.Added += InnerAdaptersOnAdded;
 					_adapter.InnerAdapters.Removed += InnerAdaptersOnRemoved;
@@ -479,7 +518,7 @@ namespace StockSharp.Algo
 				// если указан код и тип инструмента, то пытаемся найти инструмент по ним
 				if (!securityCode.IsEmpty() && securityId.SecurityType != null)
 				{
-					var securities = _securities.CachedValues.Where(s => s.Code.CompareIgnoreCase(securityCode)).ToArray();
+					var securities = _entityCache.GetSecuritiesByCode(securityCode).ToArray();
 
 					security = securities.FirstOrDefault(s => s.Type == securityId.SecurityType)
 					           ?? securities.FirstOrDefault(s => s.Type == null);
@@ -496,10 +535,10 @@ namespace StockSharp.Algo
 			lock (_suspendSync)
 			{
 				if (!isSecurityIdEmpty)
-					security = _securities.TryGetValue(stockSharpId);
+					security = _entityCache.GetSecurityById(stockSharpId);
 
 				if (security == null && !isNativeIdNull)
-					security = _nativeIdSecurities.TryGetValue(nativeSecurityId);
+					security = _entityCache.GetSecurityByNativeId(nativeSecurityId);
 
 				if (security == null && !isSecurityIdEmpty)
 				{
@@ -704,10 +743,10 @@ namespace StockSharp.Algo
 
 			lock (_suspendSync)
 			{
-				var sec = _nativeIdSecurities.TryGetValue(native);
+				var sec = _entityCache.GetSecurityByNativeId(native);
 
 				if (sec == null)
-					_nativeIdSecurities.Add(native, _securities[stocksharp]);
+					_entityCache.AddSecurityByNativeId(native, stocksharp);
 				else
 				{
 					if (!sec.Id.CompareIgnoreCase(stocksharp))
@@ -890,9 +929,6 @@ namespace StockSharp.Algo
 			}
 
 			RaiseValuesChanged(security, message.Changes, message.ServerTime, message.LocalTime);
-
-			if (CalculateMessages)
-				SlippageManager.ProcessMessage(message);
 
 			if (CreateDepthFromLevel1)
 			{
@@ -1141,9 +1177,6 @@ namespace StockSharp.Algo
 				}
 			}
 
-			if (CalculateMessages)
-				SlippageManager.ProcessMessage(message);
-
 			if (CreateDepthFromLevel1)
 				GetBuilder(message.SecurityId).HasDepth = true;
 
@@ -1160,6 +1193,9 @@ namespace StockSharp.Algo
 			//logItem.LocalTime = message.LocalTime;
 
 			RaiseNewOrderLogItems(new[] { logItem });
+
+			if (message.IsSystem == false)
+				return;
 
 			if (CreateDepthFromOrdersLog)
 			{
@@ -1320,7 +1356,7 @@ namespace StockSharp.Algo
 
 				if (isRegisterFail)
 				{
-					_orderRegisterFails.Add(fail);
+					_entityCache.AddRegisterFail(fail);
 
 					if (isStop)
 						RaiseStopOrdersRegisterFailed(fails);
@@ -1329,7 +1365,7 @@ namespace StockSharp.Algo
 				}
 				else
 				{
-					_orderCancelFails.Add(fail);
+					_entityCache.AddCancelFail(fail);
 
 					if (isStop)
 						RaiseStopOrdersCancelFailed(fails);
@@ -1373,9 +1409,6 @@ namespace StockSharp.Algo
 		private void ProcessMyTradeMessage(Security security, ExecutionMessage message)
 		{
 			var tuple = _entityCache.ProcessMyTradeMessage(security, message);
-
-			if (CalculateMessages && message.Slippage == null)
-				message.Slippage = SlippageManager.ProcessMessage(message);
 
 			if (tuple == null)
 			{

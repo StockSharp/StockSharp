@@ -354,7 +354,7 @@ namespace StockSharp.Hydra
 
 			ConfigManager.RegisterService<IExchangeInfoProvider>(new ExchangeInfoProvider(_entityRegistry));
 
-			var allSec = _entityRegistry.Securities.ReadById(Core.Extensions.AllSecurityId);
+			var allSec = _entityRegistry.Securities.GetAllSecurity();
 
 			if (allSec != null)
 				return;

@@ -36,230 +36,108 @@ namespace StockSharp.Algo
 			}
 		}
 
-		private sealed class Cache
+		private class SecurityData
 		{
-			public sealed class SecurityData
+			public readonly CachedSynchronizedDictionary<Tuple<long, long>, MyTrade> MyTrades = new CachedSynchronizedDictionary<Tuple<long, long>, MyTrade>();
+			public readonly CachedSynchronizedDictionary<Tuple<long, bool, bool>, OrderInfo> Orders = new CachedSynchronizedDictionary<Tuple<long, bool, bool>, OrderInfo>();
+
+			public readonly SynchronizedDictionary<long, Trade> TradesById = new SynchronizedDictionary<long, Trade>();
+			public readonly SynchronizedDictionary<string, Trade> TradesByStringId = new SynchronizedDictionary<string, Trade>(StringComparer.InvariantCultureIgnoreCase);
+			public readonly SynchronizedList<Trade> Trades = new SynchronizedList<Trade>();
+
+			public readonly SynchronizedDictionary<long, Order> OrdersById = new SynchronizedDictionary<long, Order>();
+			public readonly SynchronizedDictionary<string, Order> OrdersByStringId = new SynchronizedDictionary<string, Order>(StringComparer.InvariantCultureIgnoreCase);
+		}
+
+		private readonly SynchronizedDictionary<Security, SecurityData> _securityData = new SynchronizedDictionary<Security, SecurityData>();
+
+		private SecurityData GetData(Security security)
+		{
+			return _securityData.SafeAdd(security);
+		}
+
+		private readonly CachedSynchronizedList<Trade> _trades = new CachedSynchronizedList<Trade>();
+
+		public IEnumerable<Trade> Trades
+		{
+			get
 			{
-				public readonly CachedSynchronizedDictionary<Tuple<long, long>, MyTrade> MyTrades = new CachedSynchronizedDictionary<Tuple<long, long>, MyTrade>();
-				public readonly CachedSynchronizedDictionary<Tuple<long, bool, bool>, OrderInfo> Orders = new CachedSynchronizedDictionary<Tuple<long, bool, bool>, OrderInfo>();
-
-				public readonly SynchronizedDictionary<long, Trade> TradesById = new SynchronizedDictionary<long, Trade>();
-				public readonly SynchronizedDictionary<string, Trade> TradesByStringId = new SynchronizedDictionary<string, Trade>(StringComparer.InvariantCultureIgnoreCase);
-				public readonly SynchronizedList<Trade> Trades = new SynchronizedList<Trade>();
-
-				public readonly SynchronizedDictionary<long, Order> OrdersById = new SynchronizedDictionary<long, Order>();
-				public readonly SynchronizedDictionary<string, Order> OrdersByStringId = new SynchronizedDictionary<string, Order>(StringComparer.InvariantCultureIgnoreCase);
-			}
-
-			private readonly SynchronizedDictionary<Security, SecurityData> _securityData = new SynchronizedDictionary<Security, SecurityData>();
-			private readonly CachedSynchronizedList<Trade> _trades = new CachedSynchronizedList<Trade>();
-
-			public readonly SynchronizedDictionary<Tuple<long, bool>, Order> AllOrdersByTransactionId = new SynchronizedDictionary<Tuple<long, bool>, Order>();
-			public readonly SynchronizedDictionary<long, Order> AllOrdersById = new SynchronizedDictionary<long, Order>();
-			public readonly SynchronizedDictionary<string, Order> AllOrdersByStringId = new SynchronizedDictionary<string, Order>(StringComparer.InvariantCultureIgnoreCase);
-
-			public IEnumerable<Trade> Trades
-			{
-				get
-				{
-					return _securityData.SyncGet(d => d.SelectMany(p => p.Value.Trades.SyncGet(t => t.ToArray()).Concat(p.Value.TradesById.SyncGet(t => t.Values.ToArray())).Concat(p.Value.TradesByStringId.SyncGet(t => t.Values.ToArray()))).ToArray());
-				}
-			}
-
-			public readonly SynchronizedDictionary<string, News> NewsById = new SynchronizedDictionary<string, News>(StringComparer.InvariantCultureIgnoreCase);
-			public readonly SynchronizedList<News> NewsWithoutId = new SynchronizedList<News>();
-
-			public IEnumerable<News> News
-			{
-				get
-				{
-					return NewsWithoutId.SyncGet(t => t.ToArray()).Concat(NewsById.SyncGet(t => t.Values.ToArray())).ToArray();
-				}
-			}
-
-			private int _tradesKeepCount = 100000;
-
-			public int TradesKeepCount
-			{
-				get { return _tradesKeepCount; }
-				set
-				{
-					if (_tradesKeepCount == value)
-						return;
-
-					if (value < -1)
-						throw new ArgumentOutOfRangeException("value", value, LocalizedStrings.NegativeTickCountStorage);
-
-					_tradesKeepCount = value;
-					RecycleTrades();
-				}
-			}
-
-			private int _ordersKeepCount = 1000;
-
-			public int OrdersKeepCount
-			{
-				get { return _ordersKeepCount; }
-				set
-				{
-					if (_ordersKeepCount == value)
-						return;
-
-					if (value < -1)
-						throw new ArgumentOutOfRangeException("value", value, LocalizedStrings.NegativeOrderCountStorage);
-
-					_ordersKeepCount = value;
-					RecycleOrders();
-				}
-			}
-
-			public readonly CachedSynchronizedList<MyTrade> MyTrades = new CachedSynchronizedList<MyTrade>();
-			public readonly CachedSynchronizedList<Order> Orders = new CachedSynchronizedList<Order>();
-			
-			public void AddTrade(Trade trade)
-			{
-				if (TradesKeepCount == 0)
-					return;
-
-				_tradeStat.Add(trade);
-				_trades.Add(trade);
-				RecycleTrades();
-			}
-
-			public void AddOrder(Order order)
-			{
-				if (OrdersKeepCount == 0)
-					return;
-
-				Orders.Add(order);
-				RecycleOrders();
-			}
-
-			private void RecycleTrades()
-			{
-				if (TradesKeepCount == 0)
-				{
-					_trades.Clear();
-					_tradeStat.Clear(true);
-					_securityData.SyncDo(d => d.Values.ForEach(v =>
-					{
-						v.Trades.Clear();
-						v.TradesById.Clear();
-						v.TradesByStringId.Clear();
-					}));
-
-					return;
-				}
-
-				var totalCount = _trades.Count;
-
-				if (TradesKeepCount == -1 || totalCount < (1.5 * TradesKeepCount))
-					return;
-
-				var countToRemove = totalCount - TradesKeepCount;
-
-				lock (_securityData.SyncRoot)
-				{
-					var toRemove = _trades.SyncGet(d =>
-					{
-						var tmp = d.Take(countToRemove).ToArray();
-						d.RemoveRange(0, countToRemove);
-						return tmp;
-					});
-
-					foreach (var trade in toRemove)
-					{
-						_tradeStat.Remove(trade);
-
-						var data = GetData(trade.Security);
-
-						if (trade.Id != 0)
-							data.TradesById.Remove(trade.Id);
-						else if (!trade.StringId.IsEmpty())
-							data.TradesByStringId.Remove(trade.StringId);
-						else
-							data.Trades.Remove(trade);
-					}
-				}
-			}
-
-			private void RecycleOrders()
-			{
-				if (OrdersKeepCount == 0)
-				{
-					Orders.Clear();
-
-					AllOrdersByTransactionId.Clear();
-					AllOrdersById.Clear();
-					AllOrdersByStringId.Clear();
-
-					_securityData.SyncDo(d => d.Values.ForEach(v =>
-					{
-						v.Orders.Clear();
-						v.OrdersById.Clear();
-						v.OrdersByStringId.Clear();
-					}));
-
-					return;
-				}
-
-				var totalCount = Orders.Count;
-
-				if (OrdersKeepCount == -1 || totalCount < (1.5 * OrdersKeepCount))
-					return;
-
-				var countToRemove = totalCount - OrdersKeepCount;
-
-				lock (_securityData.SyncRoot)
-				{
-					var toRemove = Orders.SyncGet(d =>
-					{
-						var tmp = d.Where(o => o.State == OrderStates.Done || o.State == OrderStates.Failed).Take(countToRemove).ToHashSet();
-						d.RemoveRange(tmp);
-						return tmp;
-					});
-
-					MyTrades.SyncDo(d => d.RemoveWhere(t => toRemove.Contains(t.Order)));
-					AllOrdersByTransactionId.SyncDo(d => d.RemoveWhere(t => toRemove.Contains(t.Value)));
-					AllOrdersById.SyncDo(d => d.RemoveWhere(t => toRemove.Contains(t.Value)));
-					AllOrdersByStringId.SyncDo(d => d.RemoveWhere(t => toRemove.Contains(t.Value)));
-
-					foreach (var pair in _securityData)
-					{
-						pair.Value.Orders.SyncDo(d => d.RemoveWhere(t => toRemove.Contains(t.Value.Order)));
-						pair.Value.MyTrades.SyncDo(d => d.RemoveWhere(t => toRemove.Contains(t.Value.Order)));
-						pair.Value.OrdersById.SyncDo(d => d.RemoveWhere(t => toRemove.Contains(t.Value)));
-						pair.Value.OrdersByStringId.SyncDo(d => d.RemoveWhere(t => toRemove.Contains(t.Value)));
-					}
-				}
-			}
-
-			public SecurityData GetData(Security security)
-			{
-				return _securityData.SafeAdd(security);
-			}
-
-			public void Clear()
-			{
-				_securityData.Clear();
-
-				AllOrdersById.Clear();
-				AllOrdersByStringId.Clear();
-				AllOrdersByTransactionId.Clear();
-				Orders.Clear();
-
-				NewsById.Clear();
-				NewsWithoutId.Clear();
-
-				MyTrades.Clear();
-
-				_trades.Clear();
-				_tradeStat.Clear();
+				return _securityData.SyncGet(d => d.SelectMany(p => p.Value.Trades.SyncGet(t => t.ToArray()).Concat(p.Value.TradesById.SyncGet(t => t.Values.ToArray())).Concat(p.Value.TradesByStringId.SyncGet(t => t.Values.ToArray()))).ToArray());
 			}
 		}
 
+		private readonly SynchronizedDictionary<Tuple<long, bool>, Order> _allOrdersByTransactionId = new SynchronizedDictionary<Tuple<long, bool>, Order>();
+		private readonly SynchronizedDictionary<long, Order> _allOrdersById = new SynchronizedDictionary<long, Order>();
+		private readonly SynchronizedDictionary<string, Order> _allOrdersByStringId = new SynchronizedDictionary<string, Order>(StringComparer.InvariantCultureIgnoreCase);
+
+		private readonly SynchronizedDictionary<string, News> _newsById = new SynchronizedDictionary<string, News>(StringComparer.InvariantCultureIgnoreCase);
+		private readonly SynchronizedList<News> _newsWithoutId = new SynchronizedList<News>();
+
+		public IEnumerable<News> News
+		{
+			get
+			{
+				return _newsWithoutId.SyncGet(t => t.ToArray()).Concat(_newsById.SyncGet(t => t.Values.ToArray())).ToArray();
+			}
+		}
+
+		private int _tradesKeepCount = 100000;
+
+		public int TradesKeepCount
+		{
+			get { return _tradesKeepCount; }
+			set
+			{
+				if (_tradesKeepCount == value)
+					return;
+
+				if (value < -1)
+					throw new ArgumentOutOfRangeException("value", value, LocalizedStrings.NegativeTickCountStorage);
+
+				_tradesKeepCount = value;
+				RecycleTrades();
+			}
+		}
+
+		private int _ordersKeepCount = 1000;
+
+		public int OrdersKeepCount
+		{
+			get { return _ordersKeepCount; }
+			set
+			{
+				if (_ordersKeepCount == value)
+					return;
+
+				if (value < -1)
+					throw new ArgumentOutOfRangeException("value", value, LocalizedStrings.NegativeOrderCountStorage);
+
+				_ordersKeepCount = value;
+				RecycleOrders();
+			}
+		}
+
+		private void AddTrade(Trade trade)
+		{
+			if (TradesKeepCount == 0)
+				return;
+
+			_tradeStat.Add(trade);
+			_trades.Add(trade);
+			RecycleTrades();
+		}
+
+		private void AddOrder(Order order)
+		{
+			if (OrdersKeepCount == 0)
+				return;
+
+			_orders.Add(order);
+			RecycleOrders();
+		}
+
+		private readonly Dictionary<object, Security> _nativeIdSecurities = new Dictionary<object, Security>();
 		private readonly CachedSynchronizedDictionary<string, Portfolio> _portfolios = new CachedSynchronizedDictionary<string, Portfolio>();
-		private readonly Cache _cache = new Cache();
 		private readonly HashSet<long> _orderStatusTransactions = new HashSet<long>();
 
 		private IEntityFactory _entityFactory = new EntityFactory();
@@ -276,36 +154,18 @@ namespace StockSharp.Algo
 			}
 		}
 
-		public int TradesKeepCount
-		{
-			get { return _cache.TradesKeepCount; }
-			set { _cache.TradesKeepCount = value; }
-		}
-
-		public int OrdersKeepCount
-		{
-			get { return _cache.OrdersKeepCount; }
-			set { _cache.OrdersKeepCount = value; }
-		}
+		private readonly CachedSynchronizedList<Order> _orders = new CachedSynchronizedList<Order>();
 
 		public IEnumerable<Order> Orders
 		{
-			get { return _cache.Orders.Cache; }
+			get { return _orders.Cache; }
 		}
 
-		public IEnumerable<Trade> Trades
-		{
-			get { return _cache.Trades; }
-		}
+		private readonly CachedSynchronizedList<MyTrade> _myTrades = new CachedSynchronizedList<MyTrade>();
 
 		public IEnumerable<MyTrade> MyTrades
 		{
-			get { return _cache.MyTrades.Cache; }
-		}
-
-		public IEnumerable<News> News
-		{
-			get { return _cache.News; }
+			get { return _myTrades.Cache; }
 		}
 
 		public virtual IEnumerable<Portfolio> Portfolios
@@ -313,10 +173,73 @@ namespace StockSharp.Algo
 			get { return _portfolios.CachedValues; }
 		}
 
+		private readonly CachedSynchronizedSet<ExchangeBoard> _exchangeBoards = new CachedSynchronizedSet<ExchangeBoard>();
+
+		public IEnumerable<ExchangeBoard> ExchangeBoards
+		{
+			get { return _exchangeBoards.Cache; }
+		}
+
+		private readonly CachedSynchronizedDictionary<string, Security> _securities = new CachedSynchronizedDictionary<string, Security>(StringComparer.InvariantCultureIgnoreCase);
+
+		public IEnumerable<Security> Securities
+		{
+			get { return _securities.CachedValues; }
+		}
+
+		private readonly SynchronizedList<OrderFail> _orderRegisterFails = new SynchronizedList<OrderFail>();
+
+		public IEnumerable<OrderFail> OrderRegisterFails
+		{
+			get { return _orderRegisterFails.SyncGet(c => c.ToArray()); }
+		}
+
+		private readonly SynchronizedList<OrderFail> _orderCancelFails = new SynchronizedList<OrderFail>();
+
+		public IEnumerable<OrderFail> OrderCancelFails
+		{
+			get { return _orderCancelFails.SyncGet(c => c.ToArray()); }
+		}
+
+		private readonly CachedSynchronizedDictionary<Tuple<Portfolio, Security, string, TPlusLimits?>, Position> _positions = new CachedSynchronizedDictionary<Tuple<Portfolio, Security, string, TPlusLimits?>, Position>();
+
+		public IEnumerable<Position> Positions
+		{
+			get { return _positions.CachedValues; }
+		}
+
+		public int SecurityCount
+		{
+			get { return _securities.Count; }
+		}
+
 		public void Clear()
 		{
-			_cache.Clear();
+			_securityData.Clear();
+
+			_allOrdersById.Clear();
+			_allOrdersByStringId.Clear();
+			_allOrdersByTransactionId.Clear();
+			_orders.Clear();
+
+			_newsById.Clear();
+			_newsWithoutId.Clear();
+
+			_myTrades.Clear();
+
+			_trades.Clear();
+			_tradeStat.Clear();
+
 			_orderStatusTransactions.Clear();
+
+			_exchangeBoards.Clear();
+			_securities.Clear();
+			_nativeIdSecurities.Clear();
+
+			_orderCancelFails.Clear();
+			_orderRegisterFails.Clear();
+
+			_positions.Clear();
 		}
 
 		public void AddOrderStatusTransactionId(long transactionId)
@@ -329,17 +252,17 @@ namespace StockSharp.Algo
 			if (security == null)
 				throw new ArgumentNullException("security");
 
-			return _cache.GetData(security).Orders.CachedValues.Select(info => info.Order).Filter(state);
+			return GetData(security).Orders.CachedValues.Select(info => info.Order).Filter(state);
 		}
 
 		public Order GetOrderById(long id)
 		{
-			return _cache.AllOrdersById.TryGetValue(id);
+			return _allOrdersById.TryGetValue(id);
 		}
 
 		public Order GetOrderByTransactionId(long transactionId, bool isCancel)
 		{
-			return _cache.AllOrdersByTransactionId.TryGetValue(Tuple.Create(transactionId, isCancel));
+			return _allOrdersByTransactionId.TryGetValue(Tuple.Create(transactionId, isCancel));
 		}
 
 		public void AddOrderByCancelTransaction(long transactionId, Order order)
@@ -348,8 +271,8 @@ namespace StockSharp.Algo
 				return;
 
 			var key = CreateOrderKey(order.Type == OrderTypes.Conditional ? OrderTypes.Conditional : OrderTypes.Limit, transactionId, true);
-			_cache.GetData(order.Security).Orders.Add(key, new OrderInfo(order, false));
-			_cache.AllOrdersByTransactionId.Add(Tuple.Create(transactionId, true), order);
+			GetData(order.Security).Orders.Add(key, new OrderInfo(order, false));
+			_allOrdersByTransactionId.Add(Tuple.Create(transactionId, true), order);
 		}
 
 		public bool TryAddOrder(Order order)
@@ -358,7 +281,7 @@ namespace StockSharp.Algo
 				throw new ArgumentNullException("order");
 
 			bool isNew;
-			GetOrderInfo(_cache.GetData(order.Security), order.Type, order.TransactionId, null, null, id => order, out isNew);
+			GetOrderInfo(GetData(order.Security), order.Type, order.TransactionId, null, null, id => order, out isNew);
 			return isNew;
 		}
 
@@ -383,7 +306,7 @@ namespace StockSharp.Algo
 				transactionId = _orderStatusTransactions.Contains(message.OriginalTransactionId) ? 0 : message.OriginalTransactionId;
 			}
 
-			var securityData = _cache.GetData(security);
+			var securityData = GetData(security);
 
 			var orderInfo = GetOrderInfo(securityData, message.OrderType, transactionId, message.OrderId, message.OrderStringId, trId =>
 			{
@@ -492,13 +415,13 @@ namespace StockSharp.Algo
 			if (order.Id != null)
 			{
 				securityData.OrdersById[order.Id.Value] = order;
-				_cache.AllOrdersById[order.Id.Value] = order;
+				_allOrdersById[order.Id.Value] = order;
 			}
 				
 			if (!order.StringId.IsEmpty())
 			{
 				securityData.OrdersByStringId[order.StringId] = order;
-				_cache.AllOrdersByStringId[order.StringId] = order;
+				_allOrdersByStringId[order.StringId] = order;
 			}
 
 			//}
@@ -526,7 +449,7 @@ namespace StockSharp.Algo
 			if (message == null)
 				throw new ArgumentNullException("message");
 
-			var data = _cache.GetData(security);
+			var data = GetData(security);
 
 			Order order = null;
 
@@ -600,7 +523,7 @@ namespace StockSharp.Algo
 			if (originalTransactionId == 0 && message.OrderId == null && message.OrderStringId.IsEmpty())
 				throw new ArgumentOutOfRangeException("message", originalTransactionId, LocalizedStrings.Str715);
 
-			var securityData = _cache.GetData(security);
+			var securityData = GetData(security);
 
 			var myTrade = securityData.MyTrades.TryGetValue(Tuple.Create(originalTransactionId, message.TradeId ?? 0));
 
@@ -634,7 +557,7 @@ namespace StockSharp.Algo
 				message.CopyExtensionInfo(t);
 
 				//trades.Add(t);
-				_cache.MyTrades.Add(t);
+				_myTrades.Add(t);
 
 				return t;
 			});
@@ -697,7 +620,7 @@ namespace StockSharp.Algo
 
 			if (!message.Id.IsEmpty())
 			{
-				news = _cache.NewsById.SafeAdd(message.Id, key =>
+				news = _newsById.SafeAdd(message.Id, key =>
 				{
 					isNew = true;
 					var n = EntityFactory.CreateNews();
@@ -710,7 +633,7 @@ namespace StockSharp.Algo
 				isNew = true;
 
 				news = EntityFactory.CreateNews();
-				_cache.NewsWithoutId.Add(news);
+				_newsWithoutId.Add(news);
 			}
 
 			if (isNew)
@@ -758,7 +681,7 @@ namespace StockSharp.Algo
 			if (transactionId == 0 && orderId == null && orderStringId.IsEmpty())
 				throw new ArgumentException(LocalizedStrings.Str719);
 
-			var data = _cache.GetData(security);
+			var data = GetData(security);
 
 			Order order = null;
 
@@ -777,7 +700,7 @@ namespace StockSharp.Algo
 			return orderStringId == null ? null : data.OrdersByStringId.TryGetValue(orderStringId);
 		}
 
-		private Tuple<Order, bool, bool> GetOrderInfo(Cache.SecurityData securityData, OrderTypes type, long transactionId, long? orderId, string orderStringId, Func<long, Order> createOrder, out bool isNew, bool newOrderRaised = false)
+		private Tuple<Order, bool, bool> GetOrderInfo(SecurityData securityData, OrderTypes type, long transactionId, long? orderId, string orderStringId, Func<long, Order> createOrder, out bool isNew, bool newOrderRaised = false)
 		{
 			if (createOrder == null)
 				throw new ArgumentNullException("createOrder");
@@ -835,10 +758,10 @@ namespace StockSharp.Algo
 					if (o.ExtensionInfo == null)
 						o.ExtensionInfo = new Dictionary<object, object>();
 
-					_cache.AddOrder(o);
+					AddOrder(o);
 
 					// с таким же идентификатором транзакции может быть заявка по другому инструменту
-					_cache.AllOrdersByTransactionId.TryAdd(Tuple.Create(transactionId, type == OrderTypes.Conditional), o);
+					_allOrdersByTransactionId.TryAdd(Tuple.Create(transactionId, type == OrderTypes.Conditional), o);
 
 					return new OrderInfo(o);
 				});
@@ -865,7 +788,7 @@ namespace StockSharp.Algo
 
 			Trade trade;
 
-			var securityData = _cache.GetData(security);
+			var securityData = GetData(security);
 
 			if (id != null)
 			{
@@ -874,7 +797,7 @@ namespace StockSharp.Algo
 					isNew = true;
 
 					var t = createTrade(id.Value, strId);
-					_cache.AddTrade(t);
+					AddTrade(t);
 					return t;
 				});
 			}
@@ -885,7 +808,7 @@ namespace StockSharp.Algo
 					isNew = true;
 
 					var t = createTrade(null, strId);
-					_cache.AddTrade(t);
+					AddTrade(t);
 					return t;
 				});
 			}
@@ -894,7 +817,7 @@ namespace StockSharp.Algo
 				isNew = true;
 
 				trade = createTrade(null, null);
-				_cache.AddTrade(trade);
+				AddTrade(trade);
 				securityData.Trades.Add(trade);
 			}
 
@@ -932,6 +855,208 @@ namespace StockSharp.Algo
 				return Tuple.Create(portfolio, false, true);
 
 			return Tuple.Create(portfolio, false, false);
+		}
+
+		public Security GetSecurityById(string id)
+		{
+			return _securities.TryGetValue(id);
+		}
+
+		public Security GetSecurityByNativeId(object nativeSecurityId)
+		{
+			return _nativeIdSecurities.TryGetValue(nativeSecurityId);
+		}
+
+		public IEnumerable<Security> GetSecuritiesByCode(string code)
+		{
+			return _securities.CachedValues.Where(s => s.Code.CompareIgnoreCase(code));
+		}
+
+		public Security TryAddSecurity(string id, Func<string, Tuple<string, ExchangeBoard>> idConvert, out bool isNew)
+		{
+			if (idConvert == null)
+				throw new ArgumentNullException("idConvert");
+
+			return _securities.SafeAdd(id, key =>
+			{
+				var s = EntityFactory.CreateSecurity(key);
+
+				if (s == null)
+					throw new InvalidOperationException(LocalizedStrings.Str1102Params.Put(key));
+
+				if (s.ExtensionInfo == null)
+					s.ExtensionInfo = new Dictionary<object, object>();
+
+				var info = idConvert(key);
+
+				if (s.Board == null)
+					s.Board = info.Item2;
+
+				if (s.Code.IsEmpty())
+					s.Code = info.Item1;
+
+				if (s.Name.IsEmpty())
+					s.Name = info.Item1;
+
+				if (s.Class.IsEmpty())
+					s.Class = info.Item2.Code;
+
+				return s;
+			}, out isNew);
+		}
+
+		public void TryAddBoard(ExchangeBoard board)
+		{
+			_exchangeBoards.TryAdd(board);
+		}
+
+		public void AddRegisterFail(OrderFail fail)
+		{
+			_orderRegisterFails.Add(fail);
+		}
+
+		public void AddCancelFail(OrderFail fail)
+		{
+			_orderCancelFails.Add(fail);
+		}
+
+		public Position TryAddPosition(Portfolio portfolio, Security security, string depoName, TPlusLimits? limitType, string description, out bool isNew)
+		{
+			isNew = false;
+			Position position;
+
+			lock (_positions.SyncRoot)
+			{
+				if (depoName == null)
+					depoName = string.Empty;
+
+				var key = Tuple.Create(portfolio, security, depoName, limitType);
+
+				if (!_positions.TryGetValue(key, out position))
+				{
+					isNew = true;
+
+					position = EntityFactory.CreatePosition(portfolio, security);
+					position.DepoName = depoName;
+					position.LimitType = limitType;
+					position.Description = description;
+					_positions.Add(key, position);
+				}
+			}
+
+			return position;
+		}
+
+		public object GetNativeId(Security security)
+		{
+			if (security == null)
+				throw new ArgumentNullException("security");
+
+			return _nativeIdSecurities.LastOrDefault(p => p.Value == security).Key;
+		}
+
+		public void AddSecurityByNativeId(object native, string stocksharp)
+		{
+			_nativeIdSecurities.Add(native, GetSecurityById(stocksharp));
+		}
+
+		private void RecycleTrades()
+		{
+			if (TradesKeepCount == 0)
+			{
+				_trades.Clear();
+				_tradeStat.Clear(true);
+				_securityData.SyncDo(d => d.Values.ForEach(v =>
+				{
+					v.Trades.Clear();
+					v.TradesById.Clear();
+					v.TradesByStringId.Clear();
+				}));
+
+				return;
+			}
+
+			var totalCount = _trades.Count;
+
+			if (TradesKeepCount == -1 || totalCount < (1.5 * TradesKeepCount))
+				return;
+
+			var countToRemove = totalCount - TradesKeepCount;
+
+			lock (_securityData.SyncRoot)
+			{
+				var toRemove = _trades.SyncGet(d =>
+				{
+					var tmp = d.Take(countToRemove).ToArray();
+					d.RemoveRange(0, countToRemove);
+					return tmp;
+				});
+
+				foreach (var trade in toRemove)
+				{
+					_tradeStat.Remove(trade);
+
+					var data = GetData(trade.Security);
+
+					if (trade.Id != 0)
+						data.TradesById.Remove(trade.Id);
+					else if (!trade.StringId.IsEmpty())
+						data.TradesByStringId.Remove(trade.StringId);
+					else
+						data.Trades.Remove(trade);
+				}
+			}
+		}
+
+		private void RecycleOrders()
+		{
+			if (OrdersKeepCount == 0)
+			{
+				_orders.Clear();
+
+				_allOrdersByTransactionId.Clear();
+				_allOrdersById.Clear();
+				_allOrdersByStringId.Clear();
+
+				_securityData.SyncDo(d => d.Values.ForEach(v =>
+				{
+					v.Orders.Clear();
+					v.OrdersById.Clear();
+					v.OrdersByStringId.Clear();
+				}));
+
+				return;
+			}
+
+			var totalCount = _orders.Count;
+
+			if (OrdersKeepCount == -1 || totalCount < (1.5 * OrdersKeepCount))
+				return;
+
+			var countToRemove = totalCount - OrdersKeepCount;
+
+			lock (_securityData.SyncRoot)
+			{
+				var toRemove = _orders.SyncGet(d =>
+				{
+					var tmp = d.Where(o => o.State == OrderStates.Done || o.State == OrderStates.Failed).Take(countToRemove).ToHashSet();
+					d.RemoveRange(tmp);
+					return tmp;
+				});
+
+				_myTrades.SyncDo(d => d.RemoveWhere(t => toRemove.Contains(t.Order)));
+				_allOrdersByTransactionId.SyncDo(d => d.RemoveWhere(t => toRemove.Contains(t.Value)));
+				_allOrdersById.SyncDo(d => d.RemoveWhere(t => toRemove.Contains(t.Value)));
+				_allOrdersByStringId.SyncDo(d => d.RemoveWhere(t => toRemove.Contains(t.Value)));
+
+				foreach (var pair in _securityData)
+				{
+					pair.Value.Orders.SyncDo(d => d.RemoveWhere(t => toRemove.Contains(t.Value.Order)));
+					pair.Value.MyTrades.SyncDo(d => d.RemoveWhere(t => toRemove.Contains(t.Value.Order)));
+					pair.Value.OrdersById.SyncDo(d => d.RemoveWhere(t => toRemove.Contains(t.Value)));
+					pair.Value.OrdersByStringId.SyncDo(d => d.RemoveWhere(t => toRemove.Contains(t.Value)));
+				}
+			}
 		}
 	}
 }

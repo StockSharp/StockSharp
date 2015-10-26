@@ -2,8 +2,6 @@ namespace StockSharp.Messages
 {
 	using System;
 
-	using Ecng.Common;
-
 	/// <summary>
 	/// Message adapter, forward messages through a transport channel <see cref="IMessageChannel"/>.
 	/// </summary>
@@ -29,8 +27,6 @@ namespace StockSharp.Messages
 
 			InputChannel.NewOutMessage += InputChannelOnNewOutMessage;
 			OutputChannel.NewOutMessage += OutputChannelOnNewOutMessage;
-
-			InnerAdapter.NewOutMessage += AdapterOnNewOutMessage;
 		}
 
 		/// <summary>
@@ -55,10 +51,14 @@ namespace StockSharp.Messages
 
 		private void OutputChannelOnNewOutMessage(Message message)
 		{
-			_newMessage.SafeInvoke(message);
+			RaiseNewOutMessage(message);
 		}
 
-		private void AdapterOnNewOutMessage(Message message)
+		/// <summary>
+		/// Process <see cref="MessageAdapterWrapper.InnerAdapter"/> output message.
+		/// </summary>
+		/// <param name="message">The message.</param>
+		protected override void OnInnerAdapterNewOutMessage(Message message)
 		{
 			if (!OutputChannel.IsOpened)
 				OutputChannel.Open();
@@ -85,8 +85,6 @@ namespace StockSharp.Messages
 			if (OwnOutputChannel)
 				OutputChannel.Dispose();
 
-			InnerAdapter.NewOutMessage -= AdapterOnNewOutMessage;
-
 			base.Dispose();
 		}
 
@@ -100,17 +98,6 @@ namespace StockSharp.Messages
 				InputChannel.Open();
 
 			InputChannel.SendInMessage(message);
-		}
-
-		private Action<Message> _newMessage;
-
-		/// <summary>
-		/// New message event.
-		/// </summary>
-		public override event Action<Message> NewOutMessage
-		{
-			add { _newMessage += value; }
-			remove { _newMessage -= value; }
 		}
 
 		/// <summary>

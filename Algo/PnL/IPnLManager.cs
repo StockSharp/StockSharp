@@ -1,11 +1,13 @@
 namespace StockSharp.Algo.PnL
 {
+	using Ecng.Serialization;
+
 	using StockSharp.Messages;
 
 	/// <summary>
-	/// The interface of the gain-loss calculation manager.
+	/// The interface of the profit-loss calculation manager.
 	/// </summary>
-	public interface IPnLManager
+	public interface IPnLManager : IPersistable
 	{
 		/// <summary>
 		/// Total profit-loss.
@@ -13,12 +15,12 @@ namespace StockSharp.Algo.PnL
 		decimal PnL { get; }
 
 		/// <summary>
-		/// The value of realized gain-loss.
+		/// The value of realized profit-loss.
 		/// </summary>
 		decimal RealizedPnL { get; }
 
 		/// <summary>
-		/// The value of unrealized gain-loss.
+		/// The value of unrealized profit-loss.
 		/// </summary>
 		decimal UnrealizedPnL { get; }
 
@@ -28,16 +30,10 @@ namespace StockSharp.Algo.PnL
 		void Reset();
 
 		/// <summary>
-		/// To calculate trade profitability. If the trade was already processed earlier, previous information returns.
+		/// To process the message, containing market data or trade. If the trade was already processed earlier, previous information returns.
 		/// </summary>
-		/// <param name="trade">Trade.</param>
+		/// <param name="message">The message, containing market data or trade.</param>
 		/// <returns>Information on new trade.</returns>
-		PnLInfo ProcessMyTrade(ExecutionMessage trade);
-
-		/// <summary>
-		/// To process the message, containing market data.
-		/// </summary>
-		/// <param name="message">The message, containing market data.</param>
-		void ProcessMessage(Message message);
+		PnLInfo ProcessMessage(Message message);
 	}
 }

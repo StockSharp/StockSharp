@@ -6,30 +6,16 @@ namespace StockSharp.Algo
 
 	using Ecng.Common;
 
-	using Gma.DataStructures.StringSearch;
-
 	using MoreLinq;
 
 	using StockSharp.BusinessEntities;
 
 	/// <summary>
-	/// Provider of information about instruments supporting search using <see cref="SuffixTrie{T}"/>.
+	/// Provider of information about instruments supporting search using <see cref="SecurityTrie"/>.
 	/// </summary>
 	public class FilterableSecurityProvider : Disposable, ISecurityProvider
 	{
-		private readonly SyncObject _sync = new SyncObject();
-		private readonly List<Security> _allSecurities = new List<Security>();
-		private readonly ITrie<Security> _trie = new SuffixTrie<Security>(1);
-
-		///// <summary>
-		///// Filter for instruments exclusion.
-		///// </summary>
-		//public Func<Security, bool> ExcludeFilter { get; private set; }
-
-		///// <summary>
-		///// The number of excluded instruments by filter <see cref="ExcludeFilter"/>.
-		///// </summary>
-		//public int ExcludedCount { get; private set; }
+		private readonly SecurityTrie _trie = new SecurityTrie();
 
 		private readonly ISecurityProvider _provider;
 		private readonly bool _ownProvider;
@@ -62,11 +48,7 @@ namespace StockSharp.Algo
 		/// </summary>
 		public int Count
 		{
-			get
-			{
-				lock (_sync)
-					return _allSecurities.Count;
-			}
+			get { return _trie.Count; }
 		}
 
 		/// <summary>
@@ -98,28 +80,12 @@ namespace StockSharp.Algo
 				? (criteria.IsLookupAll() ? string.Empty : criteria.Code.ToLowerInvariant())
 				: criteria.Id.ToLowerInvariant();
 
-			IEnumerable<Security> securities;
+			var securities = _trie.Retrieve(filter);
 
-			lock (_sync)
-			{
-				if (filter.IsEmpty())
-				{
-					securities = _allSecurities;
-				}
-				else
-				{
-					securities = _trie.Retrieve(filter);
-
-					if (!criteria.Id.IsEmpty())
-						securities = securities.Where(s => s.Id.CompareIgnoreCase(criteria.Id));
-					
-				}
-
-				securities = securities.ToArray();
-			}
+			if (!criteria.Id.IsEmpty())
+				securities = securities.Where(s => s.Id.CompareIgnoreCase(criteria.Id));
 
 			return securities;
-			//return ExcludeFilter == null ? securities : securities.Where(s => !ExcludeFilter(s));
 		}
 
 		object ISecurityProvider.GetNativeId(Security security)
@@ -129,59 +95,19 @@ namespace StockSharp.Algo
 
 		private void AddSecurity(Security security)
 		{
-			lock (_sync)
-			{
-				AddSuffix(security.Id, security);
-				AddSuffix(security.Code, security);
-				AddSuffix(security.Name, security);
-				AddSuffix(security.ShortName, security);
-				AddSuffix(security.ExternalId.Bloomberg, security);
-				AddSuffix(security.ExternalId.Cusip, security);
-				AddSuffix(security.ExternalId.Isin, security);
-				AddSuffix(security.ExternalId.Ric, security);
-				AddSuffix(security.ExternalId.Sedol, security);
-
-				_allSecurities.Add(security);
-			}
-
-			//if (ExcludeFilter != null && ExcludeFilter(security))
-			//	ExcludedCount++;
-
+			_trie.Add(security);
 			Added.SafeInvoke(security);
-		}
-
-		private void AddSuffix(string text, Security security)
-		{
-			if (text.IsEmpty())
-				return;
-
-			_trie.Add(text.ToLowerInvariant(), security);
 		}
 
 		private void RemoveSecurity(Security security)
 		{
-			lock (_sync)
-			{
-				_trie.Remove(security);
-				_allSecurities.Remove(security);
-			}
-
-			//if (ExcludeFilter != null && ExcludeFilter(security))
-			//	ExcludedCount--;
-
+			_trie.Remove(security);
 			Removed.SafeInvoke(security);
 		}
 
 		private void ClearSecurities()
 		{
-			lock (_sync)
-			{
-				_trie.Clear();
-				_allSecurities.Clear();
-			}
-
-			//ExcludedCount = 0;
-
+			_trie.Clear();
 			Cleared.SafeInvoke();
 		}
 

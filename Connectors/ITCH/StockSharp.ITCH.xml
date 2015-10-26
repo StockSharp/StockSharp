@@ -53,7 +53,12 @@
         </member>
         <member name="P:StockSharp.ITCH.ItchMessageAdapter.PrimaryMulticast">
             <summary>
-            The main recovery state address.
+            The main UDP group.
+            </summary>
+        </member>
+        <member name="P:StockSharp.ITCH.ItchMessageAdapter.DuplicateMulticast">
+            <summary>
+            Duplicate UDP group.
             </summary>
         </member>
         <member name="P:StockSharp.ITCH.ItchMessageAdapter.RecoveryAddress">
@@ -91,9 +96,14 @@
             Download from <see cref="P:StockSharp.ITCH.ItchMessageAdapter.SecurityCsvFile"/> only active instruments.
             </summary>
         </member>
-        <member name="P:StockSharp.ITCH.ItchMessageAdapter.SecurityGroupId">
+        <member name="P:StockSharp.ITCH.ItchMessageAdapter.GroupId">
             <summary>
             Group ID.
+            </summary>
+        </member>
+        <member name="P:StockSharp.ITCH.ItchMessageAdapter.TimeZone">
+            <summary>
+            Information about the time zone where the exchange is located.
             </summary>
         </member>
         <member name="P:StockSharp.ITCH.ItchMessageAdapter.IsValid">
@@ -152,7 +162,12 @@
         </member>
         <member name="P:StockSharp.ITCH.ItchTrader.PrimaryMulticast">
             <summary>
-            The main recovery state address.
+            The main UDP group.
+            </summary>
+        </member>
+        <member name="P:StockSharp.ITCH.ItchTrader.DuplicateMulticast">
+            <summary>
+            Duplicate UDP group.
             </summary>
         </member>
         <member name="P:StockSharp.ITCH.ItchTrader.RecoveryAddress">
@@ -180,9 +195,14 @@
             Download from <see cref="P:StockSharp.ITCH.ItchTrader.SecurityCsvFile"/> only active instruments.
             </summary>
         </member>
-        <member name="P:StockSharp.ITCH.ItchTrader.SecurityGroupId">
+        <member name="P:StockSharp.ITCH.ItchTrader.GroupId">
             <summary>
             Group ID.
+            </summary>
+        </member>
+        <member name="P:StockSharp.ITCH.ItchTrader.TimeZone">
+            <summary>
+            Information about the time zone where the exchange is located.
             </summary>
         </member>
     </members>

@@ -244,7 +244,7 @@ namespace StockSharp.Algo.Strategies.Reporting
 					rowIndex = 2;
 					foreach (var trade in strategy.MyTrades.ToArray())
 					{
-						var info = strategy.PnLManager.ProcessMyTrade(trade.ToMessage());
+						var info = strategy.PnLManager.ProcessMessage(trade.ToMessage());
 
 						totalPnL += info.PnL;
 						position += trade.GetPosition();

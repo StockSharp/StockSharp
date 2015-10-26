@@ -2,7 +2,6 @@ namespace StockSharp.Algo.Commissions
 {
 	using Ecng.Serialization;
 
-	using StockSharp.BusinessEntities;
 	using StockSharp.Messages;
 
 	/// <summary>
@@ -35,6 +34,6 @@ namespace StockSharp.Algo.Commissions
 		/// </summary>
 		/// <param name="message">The message containing the information about the order or own trade.</param>
 		/// <returns>The commission. If the commission can not be calculated then <see langword="null" /> will be returned.</returns>
-		decimal? ProcessExecution(ExecutionMessage message);
+		decimal? Process(Message message);
 	}
 }

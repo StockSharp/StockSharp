@@ -77,7 +77,17 @@
 		/// <returns>Инструмент "Все инструменты".</returns>
 		public static Security GetAllSecurity()
 		{
-			return ConfigManager.GetService<IEntityRegistry>().Securities.ReadById(AllSecurityId);
+			return ConfigManager.GetService<IEntityRegistry>().Securities.GetAllSecurity();
+		}
+
+		/// <summary>
+		/// Получить инструмент "Все инструменты".
+		/// </summary>
+		/// <param name="securities">Инструменты.</param>
+		/// <returns>Инструмент "Все инструменты".</returns>
+		public static Security GetAllSecurity(this IStorageSecurityList securities)
+		{
+			return securities.ReadById(AllSecurityId);
 		}
 
 		/// <summary>

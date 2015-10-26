@@ -51,17 +51,30 @@ namespace StockSharp.Algo.Commissions
 		/// </summary>
 		/// <param name="message">The message containing the information about the order or own trade.</param>
 		/// <returns>The commission. If the commission can not be calculated then <see langword="null" /> will be returned.</returns>
-		public virtual decimal? ProcessExecution(ExecutionMessage message)
+		public virtual decimal? Process(Message message)
 		{
-			if (_rules.Count == 0)
-				return null;
+			switch (message.Type)
+			{
+				case MessageTypes.Reset:
+				{
+					Reset();
+					return null;
+				}
+				case MessageTypes.Execution:
+				{
+					if (_rules.Count == 0)
+						return null;
 
-			var commission = _rules.Cache.Sum(rule => rule.ProcessExecution(message));
+					var commission = _rules.Cache.Sum(rule => rule.Process(message));
 
-			if (commission != null)
-				Commission += commission.Value;
+					if (commission != null)
+						Commission += commission.Value;
 
-			return commission;
+					return commission;
+				}
+				default:
+					return null;
+			}
 		}
 
 		/// <summary>

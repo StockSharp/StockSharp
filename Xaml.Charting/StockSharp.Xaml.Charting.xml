@@ -1550,6 +1550,11 @@
             InitializeComponent
             </summary>
     </member>
+    <member name="P:StockSharp.Xaml.Charting.ChartPanel.SecurityProvider">
+      <summary>
+            The provider of information about instruments.
+            </summary>
+    </member>
     <member name="E:StockSharp.Xaml.Charting.ChartPanel.SettingsChanged">
       <summary>
             The chart settings change event.

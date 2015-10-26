@@ -4,6 +4,7 @@ namespace StockSharp.Algo.Slippage
 
 	using Ecng.Common;
 	using Ecng.Collections;
+	using Ecng.Serialization;
 
 	using StockSharp.Messages;
 
@@ -52,6 +53,12 @@ namespace StockSharp.Algo.Slippage
 		{
 			switch (message.Type)
 			{
+				case MessageTypes.Reset:
+				{
+					Reset();
+					break;
+				}
+
 				case MessageTypes.Level1Change:
 				{
 					var l1Msg = (Level1ChangeMessage)message;
@@ -128,6 +135,24 @@ namespace StockSharp.Algo.Slippage
 			}
 
 			return null;
+		}
+
+		/// <summary>
+		/// Load settings.
+		/// </summary>
+		/// <param name="storage">Storage.</param>
+		public void Load(SettingsStorage storage)
+		{
+			CalculateNegative = storage.GetValue<bool>("CalculateNegative");
+		}
+
+		/// <summary>
+		/// Save settings.
+		/// </summary>
+		/// <param name="storage">Storage.</param>
+		public void Save(SettingsStorage storage)
+		{
+			storage.SetValue("CalculateNegative", CalculateNegative);
 		}
 	}
 }

@@ -126,11 +126,21 @@ namespace StockSharp.Hydra.Plaza
 			[CategoryLoc(_sourceName)]
 			[DisplayNameLoc(LocalizedStrings.Str2801Key)]
 			[DescriptionLoc(LocalizedStrings.Str2802Key)]
-			[PropertyOrder(7)]
+			[PropertyOrder(8)]
 			public bool IsFastRepl
 			{
 				get { return (bool)ExtensionInfo["IsFastRepl"]; }
 				set { ExtensionInfo["IsFastRepl"] = value; }
+			}
+
+			[CategoryLoc(_sourceName)]
+			[DisplayNameLoc(LocalizedStrings.OverrideKey)]
+			[DescriptionLoc(LocalizedStrings.OverrideDllKey)]
+			[PropertyOrder(9)]
+			public bool OverrideDll
+			{
+				get { return (bool)ExtensionInfo["OverrideDll"]; }
+				set { ExtensionInfo["OverrideDll"] = value; }
 			}
 		}
 
@@ -191,6 +201,7 @@ namespace StockSharp.Hydra.Plaza
 					_settings.CGateKey = PlazaMessageAdapter.DemoCGateKey;
 					_settings.OnlySystemTrades = true;
 					_settings.IsFastRepl = false;
+					_settings.OverrideDll = true;
 
 					var registry = connector.TableRegistry;
 					_settings.Tables = new[]
@@ -225,6 +236,7 @@ namespace StockSharp.Hydra.Plaza
 				IsCGate = _settings.IsCGate,
 				CGateKey = _settings.CGateKey,
 				OnlySystemTrades = _settings.OnlySystemTrades,
+				OverrideDll = _settings.OverrideDll
 			};
 
 			connector.TableRegistry.StreamRegistry.IsFastRepl = _settings.IsFastRepl;

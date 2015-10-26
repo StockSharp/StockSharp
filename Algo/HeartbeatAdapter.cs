@@ -45,12 +45,14 @@ namespace StockSharp.Algo
 		public HeartbeatAdapter(IMessageAdapter innerAdapter)
 			: base(innerAdapter)
 		{
-			InnerAdapter.NewOutMessage += AdapterOnNewOutMessage;
-
 			_reConnectionSettings = InnerAdapter.ReConnectionSettings;
 		}
 
-		private void AdapterOnNewOutMessage(Message message)
+		/// <summary>
+		/// Process <see cref="MessageAdapterWrapper.InnerAdapter"/> output message.
+		/// </summary>
+		/// <param name="message">The message.</param>
+		protected override void OnInnerAdapterNewOutMessage(Message message)
 		{
 			switch (message.Type)
 			{
@@ -109,7 +111,7 @@ namespace StockSharp.Algo
 				}
 			}
 
-			_newOutMessage.SafeInvoke(message);
+			base.OnInnerAdapterNewOutMessage(message);
 		}
 
 		/// <summary>
@@ -125,7 +127,7 @@ namespace StockSharp.Algo
 					if (_isFirstTimeConnect)
 						_isFirstTimeConnect = false;
 					else
-						InnerAdapter.SendInMessage(new ResetMessage());
+						base.SendInMessage(new ResetMessage());
 
 				//	lock (_timeSync)
 				//	{
@@ -164,7 +166,7 @@ namespace StockSharp.Algo
 				}
 			}
 
-			InnerAdapter.SendInMessage(message);
+			base.SendInMessage(message);
 		}
 
 		private void OnHeartbeatTimer()
@@ -281,27 +283,6 @@ namespace StockSharp.Algo
 			// TODO
 			return true;
 			//return SessionHolder.ReConnectionSettings.WorkingTime.IsTradeTime(TimeHelper.Now);
-		}
-
-		/// <summary>
-		/// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
-		/// </summary>
-		public override void Dispose()
-		{
-			InnerAdapter.NewOutMessage -= AdapterOnNewOutMessage;
-
-			base.Dispose();
-		}
-
-		private Action<Message> _newOutMessage;
-
-		/// <summary>
-		/// New message event.
-		/// </summary>
-		public override event Action<Message> NewOutMessage
-		{
-			add { _newOutMessage += value; }
-			remove { _newOutMessage -= value; }
 		}
 
 		/// <summary>

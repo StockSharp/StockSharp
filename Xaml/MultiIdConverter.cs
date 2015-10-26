@@ -10,18 +10,21 @@
 	{
 		object IMultiValueConverter.Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
 		{
-			var longId = values[0].To<long?>();
-			var strId = values[1].To<string>();
+			var longId = values[0].WpfCast<string>();
+			var strId = values[1].WpfCast<string>();
 
-			var str = longId.To<string>();
+			if (longId.IsEmpty())
+			{
+				if (strId.IsEmpty())
+					return Binding.DoNothing;
 
-			if (str == null)
 				return strId;
+			}
 
-			if (strId != null)
-				return str + "/" + strId;
-
-			return str;
+			if (strId.IsEmpty())
+				return longId;
+			
+			return longId + "/" + strId;
 		}
 
 		object[] IMultiValueConverter.ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)

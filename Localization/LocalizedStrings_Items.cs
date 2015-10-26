@@ -22753,16 +22753,42 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
-		/// Main server
+		/// The main UDP group
 		/// </summary>
-		public const string MainServerKey = "MainServer";
+		public const string MainUDPKey = "MainUDP";
 
 		/// <summary>
-		/// Main server
+		/// The main UDP group
 		/// </summary>
-		public static string MainServer
+		public static string MainUDP
 		{
-			get { return GetString(MainServerKey); }
+			get { return GetString(MainUDPKey); }
+		}
+
+		/// <summary>
+		/// Duplicate
+		/// </summary>
+		public const string DuplicateKey = "Duplicate";
+
+		/// <summary>
+		/// Duplicate
+		/// </summary>
+		public static string Duplicate
+		{
+			get { return GetString(DuplicateKey); }
+		}
+
+		/// <summary>
+		/// Duplicate UDP group
+		/// </summary>
+		public const string DuplicateUDPKey = "DuplicateUDP";
+
+		/// <summary>
+		/// Duplicate UDP group
+		/// </summary>
+		public static string DuplicateUDP
+		{
+			get { return GetString(DuplicateUDPKey); }
 		}
 
 		/// <summary>

@@ -34,12 +34,31 @@
 				throw new ArgumentNullException("innerAdapter");
 
 			InnerAdapter = innerAdapter;
+			InnerAdapter.NewOutMessage += OnInnerAdapterNewOutMessage;
 		}
 
 		/// <summary>
 		/// Underlying adapter.
 		/// </summary>
 		public IMessageAdapter InnerAdapter { get; private set; }
+
+		/// <summary>
+		/// Process <see cref="InnerAdapter"/> output message.
+		/// </summary>
+		/// <param name="message">The message.</param>
+		protected virtual void OnInnerAdapterNewOutMessage(Message message)
+		{
+			RaiseNewOutMessage(message);
+		}
+
+		/// <summary>
+		/// To call the event <see cref="NewOutMessage"/>.
+		/// </summary>
+		/// <param name="message">The message.</param>
+		protected void RaiseNewOutMessage(Message message)
+		{
+			NewOutMessage.SafeInvoke(message);
+		}
 
 		bool IMessageChannel.IsOpened
 		{
@@ -60,12 +79,15 @@
 		/// Send message.
 		/// </summary>
 		/// <param name="message">Message.</param>
-		public abstract void SendInMessage(Message message);
+		public virtual void SendInMessage(Message message)
+		{
+			InnerAdapter.SendInMessage(message);
+		}
 
 		/// <summary>
 		/// New message event.
 		/// </summary>
-		public abstract event Action<Message> NewOutMessage;
+		public virtual event Action<Message> NewOutMessage;
 
 		void IPersistable.Load(SettingsStorage storage)
 		{
@@ -192,6 +214,7 @@
 		/// </summary>
 		public virtual void Dispose()
 		{
+			InnerAdapter.NewOutMessage -= OnInnerAdapterNewOutMessage;
 			//InnerAdapter.Dispose();
 		}
 	}

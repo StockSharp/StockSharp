@@ -84,7 +84,7 @@ namespace StockSharp.Algo.Strategies.Reporting
 					foreach (var trade in strategy.MyTrades)
 					{
 						WriteValues(writer, trade.Trade.Id, trade.Order.TransactionId, Format(trade.Trade.Time), trade.Trade.Price, trade.Trade.Volume,
-							Format(trade.Order.Direction), trade.Order.Id, strategy.PnLManager.ProcessMyTrade(trade.ToMessage()).PnL, trade.Slippage);
+							Format(trade.Order.Direction), trade.Order.Id, strategy.PnLManager.ProcessMessage(trade.ToMessage()).PnL, trade.Slippage);
 					}
 				}
 			}

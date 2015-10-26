@@ -270,13 +270,13 @@ namespace StockSharp.Xaml
 	{
 		object IMultiValueConverter.Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
 		{
-			if (values[0] == null || values[0] == DependencyProperty.UnsetValue || values[1] == null || values[1] == DependencyProperty.UnsetValue)
+			var feature = values[0].WpfCast<TargetPlatformFeature>();
+			var platform = values[1].WpfCast<bool?>();
+
+			if (feature == null || platform == null)
 				return Binding.DoNothing;
 
-			var feature = (TargetPlatformFeature)values[0];
-			var platform = (bool)values[1];
-
-			return feature.Platform == Platforms.AnyCPU || (!platform && feature.Platform == Platforms.x86) || (platform && feature.Platform == Platforms.x64)
+			return feature.Platform == Platforms.AnyCPU || (!platform.Value && feature.Platform == Platforms.x86) || (platform.Value && feature.Platform == Platforms.x64)
 				? Brushes.Black
 				: Brushes.Transparent;
 		}

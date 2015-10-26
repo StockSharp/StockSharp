@@ -441,6 +441,16 @@ namespace StockSharp.Messages
 		public CurrencyTypes? Currency { get; set; }
 
 		/// <summary>
+		/// The profit, realized by trade.
+		/// </summary>
+		[DataMember]
+		[DisplayNameLoc(LocalizedStrings.PnLKey)]
+		[DescriptionLoc(LocalizedStrings.PnLKey, true)]
+		[MainCategory]
+		[Nullable]
+		public decimal? PnL { get; set; }
+
+		/// <summary>
 		/// Initializes a new instance of the <see cref="ExecutionMessage"/>.
 		/// </summary>
 		public ExecutionMessage()
