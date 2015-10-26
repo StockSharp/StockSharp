@@ -69,7 +69,7 @@ namespace StockSharp.Configuration.ConfigManager.Layout
             _isLayoutLoading = true;
             try
             {
-                //BUG: does not load tool window tab titles
+                //BUG: does not load tool window tab titles or tool window content
                 _layoutSerializer.LoadFromFile(LayoutFile.FullName, DockSite);
             }
             catch (Exception e)
