@@ -154,6 +154,7 @@ namespace StockSharp.Terminal
 		        temp.Title = temp.Name;
 		        temp.Tag = temp.Name;
 		        temp.Header = temp.Name;
+                temp.Content = new ChartPanel();
                 temp.Dock(wnd, Direction.ContentRight);
 		        for (int j = 1; j <= 5; j++)
 		        {
@@ -162,6 +163,13 @@ namespace StockSharp.Terminal
 		            tw.Title = tw.Name;
 		            tw.Tag = tw.Name;
 		            tw.Header = tw.Name;
+
+                    if (j % 2 == 0) tw.Content = new TradeGrid();
+		            if (j % 3 == 0) tw.Content = new Monitor();
+                    if (j % 4 == 0) tw.Content = new SecurityPicker();
+                    if (j % 5 == 0) tw.Content = new MarketDepthControl();
+
+
                     tw.Dock(temp, j % 2 == 0 ? Direction.ContentTop : Direction.Content);
 		            j++;
 		        }
