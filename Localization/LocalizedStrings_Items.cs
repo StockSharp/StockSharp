@@ -12054,19 +12054,6 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
-		/// Wrong type of data of trade {0}.
-		/// </summary>
-		public const string Str1019ParamsKey = "Str1019Params";
-
-		/// <summary>
-		/// Wrong type of data of trade {0}.
-		/// </summary>
-		public static string Str1019Params
-		{
-			get { return GetString(Str1019ParamsKey); }
-		}
-
-		/// <summary>
 		/// Wrong trade ID.
 		/// </summary>
 		public const string Str1020Key = "Str1020";

@@ -930,7 +930,6 @@ Str1014;To value can not be less than From value.;Значение to не мо�
 Str1016Params;Wrong parameter of candle {0}. Candle parameter is equal {1}, storage accepts {2}.;Неправильный параметр свечи {0}. Параметр свечи равен {1}, хранилище принимает {2}.
 WrongCandleType;Wrong type of candle.;Неправильный тип свечи.
 Str1018;Unknown type of market-data.;Неизвестный тип маркет-данных.
-Str1019Params;Wrong type of data of trade {0}.;Неправильный тип данных сделки {0}.
 Str1020;Wrong trade ID.;Неправильный идентификатор сделки.
 Str1021Params;Wrong price of trade {0}.;Неправильная цена сделки {0}.
 Str1022Params;Wrong volume of trade {0}.;Неправильный объем сделки {0}.

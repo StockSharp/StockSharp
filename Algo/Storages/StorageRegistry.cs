@@ -408,10 +408,10 @@ namespace StockSharp.Algo.Storages
 			}
 		}
 
-		private sealed class ExecutionStorage : MarketDataStorage<ExecutionMessage, long>, IMarketDataStorage<Order>,
+		private sealed class TransactionStorage : MarketDataStorage<ExecutionMessage, long>, IMarketDataStorage<Order>,
 			IMarketDataStorageInfo<Order>, IMarketDataStorage<MyTrade>, IMarketDataStorageInfo<MyTrade>
 		{
-			public ExecutionStorage(Security security, IMarketDataStorageDrive drive, IMarketDataSerializer<ExecutionMessage> serializer)
+			public TransactionStorage(Security security, IMarketDataStorageDrive drive, IMarketDataSerializer<ExecutionMessage> serializer)
 				: base(security, ExecutionTypes.Order, msg => msg.ServerTime, msg => msg.SecurityId, msg => msg.TransactionId, serializer, drive)
 			{
 				AppendOnlyNew = false;
@@ -861,7 +861,7 @@ namespace StockSharp.Algo.Storages
 		}
 
 		/// <summary>
-		/// To get the transactions storage the specified instrument.
+		/// To get the execution storage the specified instrument.
 		/// </summary>
 		/// <param name="security">Security.</param>
 		/// <param name="type">Data type, information about which is contained in the <see cref="ExecutionMessage"/>.</param>
@@ -911,7 +911,7 @@ namespace StockSharp.Algo.Storages
 					}
 					case ExecutionTypes.Order:
 					case ExecutionTypes.Trade:
-						return new ExecutionStorage(security, mdDrive, new ExecutionSerializer(secId));
+						return new TransactionStorage(security, mdDrive, new TransactionSerializer(secId));
 					case ExecutionTypes.OrderLog:
 					{
 						IMarketDataSerializer<ExecutionMessage> serializer;

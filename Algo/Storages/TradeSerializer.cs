@@ -115,7 +115,7 @@ namespace StockSharp.Algo.Storages
 			foreach (var msg in messages)
 			{
 				if (msg.ExecutionType != ExecutionTypes.Tick)
-					throw new ArgumentOutOfRangeException("messages", msg.ExecutionType, LocalizedStrings.Str1019Params.Put(msg.TradeId));
+					throw new ArgumentOutOfRangeException("messages", msg.ExecutionType, LocalizedStrings.Str1695Params.Put(msg.TradeId));
 
 				var tradeId = msg.GetTradeId();
 

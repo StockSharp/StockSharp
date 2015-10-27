@@ -12,9 +12,9 @@ namespace StockSharp.Algo.Storages
 	using StockSharp.Messages;
 	using StockSharp.Localization;
 
-	class ExecutionSerializerMetaInfo : BinaryMetaInfo<ExecutionSerializerMetaInfo>
+	class TransactionSerializerMetaInfo : BinaryMetaInfo<TransactionSerializerMetaInfo>
 	{
-		public ExecutionSerializerMetaInfo(DateTime date)
+		public TransactionSerializerMetaInfo(DateTime date)
 			: base(date)
 		{
 			FirstOrderId = -1;
@@ -148,7 +148,7 @@ namespace StockSharp.Algo.Storages
 			ReadOffsets(stream);
 		}
 
-		public override void CopyFrom(ExecutionSerializerMetaInfo src)
+		public override void CopyFrom(TransactionSerializerMetaInfo src)
 		{
 			base.CopyFrom(src);
 
@@ -179,14 +179,14 @@ namespace StockSharp.Algo.Storages
 		}
 	}
 
-	class ExecutionSerializer : BinaryMarketDataSerializer<ExecutionMessage, ExecutionSerializerMetaInfo>
+	class TransactionSerializer : BinaryMarketDataSerializer<ExecutionMessage, TransactionSerializerMetaInfo>
 	{
-		public ExecutionSerializer(SecurityId securityId)
+		public TransactionSerializer(SecurityId securityId)
 			: base(securityId, 200, MarketDataVersions.Version56)
 		{
 		}
 
-		protected override void OnSave(BitArrayWriter writer, IEnumerable<ExecutionMessage> messages, ExecutionSerializerMetaInfo metaInfo)
+		protected override void OnSave(BitArrayWriter writer, IEnumerable<ExecutionMessage> messages, TransactionSerializerMetaInfo metaInfo)
 		{
 			if (metaInfo.IsEmpty())
 			{
@@ -211,7 +211,7 @@ namespace StockSharp.Algo.Storages
 				var isTrade = msg.ExecutionType == ExecutionTypes.Trade;
 
 				if (msg.ExecutionType != ExecutionTypes.Order && msg.ExecutionType != ExecutionTypes.Trade)
-					throw new ArgumentOutOfRangeException("messages", msg.ExecutionType, LocalizedStrings.Str924);
+					throw new ArgumentOutOfRangeException("messages", msg.ExecutionType, LocalizedStrings.Str1695Params.Put(msg.OrderId ?? msg.TradeId));
 
 				// нулевой номер заявки возможен при сохранении в момент регистрации
 				if (msg.OrderId < 0)
@@ -521,7 +521,7 @@ namespace StockSharp.Algo.Storages
 			return msg;
 		}
 
-		private static void WriteCommission(BitArrayWriter writer, ExecutionSerializerMetaInfo metaInfo, decimal? value)
+		private static void WriteCommission(BitArrayWriter writer, TransactionSerializerMetaInfo metaInfo, decimal? value)
 		{
 			if (value == null)
 				writer.Write(false);
@@ -547,7 +547,7 @@ namespace StockSharp.Algo.Storages
 			}
 		}
 
-		private static decimal? ReadCommission(BitArrayReader reader, ExecutionSerializerMetaInfo metaInfo)
+		private static decimal? ReadCommission(BitArrayReader reader, TransactionSerializerMetaInfo metaInfo)
 		{
 			if (!reader.Read())
 				return null;
