@@ -63,7 +63,7 @@
 			_customConnections = SafeAdd<ConnectionElement, ConnectorInfo>(section.CustomConnections, elem => new ConnectorInfo(elem.Type.To<Type>()));
 			_customIndicators = SafeAdd<IndicatorElement, IndicatorType>(section.CustomIndicators, elem => new IndicatorType(elem.Type.To<Type>(), elem.Painter.To<Type>()));
 			_customCandles = SafeAdd<CandleElement, Type>(section.CustomCandles, elem => elem.Type.To<Type>());
-			_customDiagramElements = SafeAdd<CandleElement, Type>(section.CustomDiagramElements, elem => elem.Type.To<Type>());
+			_customDiagramElements = SafeAdd<DiagramElement, Type>(section.CustomDiagramElements, elem => elem.Type.To<Type>());
 		}
 
 		private static T2[] SafeAdd<T1, T2>(IEnumerable from, Func<T1, T2> func)

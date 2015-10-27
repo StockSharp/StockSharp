@@ -1,0 +1,80 @@
+﻿<UserControl x:Class="SampleDiagramPublic.EmulationControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+             xmlns:sampleDiagramPublic="clr-namespace:SampleDiagramPublic"
+             xmlns:xaml="http://schemas.stocksharp.com/xaml"
+             mc:Ignorable="d" x:Name="Ctrl"
+             d:DesignHeight="300" d:DesignWidth="600">
+
+	<Grid>
+		<Grid.RowDefinitions>
+			<RowDefinition Height="Auto"/>
+			<RowDefinition Height="2*"/>
+			<RowDefinition Height="1.3*"/>
+		</Grid.RowDefinitions>
+
+		<Grid>
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition Width="Auto"/>
+				<ColumnDefinition Width="2*"/>
+				<ColumnDefinition Width="Auto"/>
+				<ColumnDefinition Width="Auto"/>
+				<ColumnDefinition Width="3*"/>
+				<ColumnDefinition Width="Auto"/>
+				<ColumnDefinition Width="Auto"/>
+				<ColumnDefinition Width="1*"/>
+				<ColumnDefinition Width="Auto"/>
+				<ColumnDefinition Width="Auto"/>
+			</Grid.ColumnDefinitions>
+			<Grid.RowDefinitions>
+				<RowDefinition/>
+				<RowDefinition/>
+			</Grid.RowDefinitions>
+
+			<Label Grid.Column="0" Grid.Row="0" Content="Strategy:" />
+			<ComboBox Grid.Column="1" Grid.Row="0" x:Name="StrategiesComboBox"
+					  ItemsSource="{Binding ElementName=Ctrl, Path=StrategiesRegistry.Strategies}"
+					  SelectionChanged="Selector_OnSelectionChanged" />
+			<Button Grid.Column="2" Grid.Row="0" x:Name="ResetStrategyButton" Content="CLS" Width="25" HorizontalAlignment="Left" Click="ResetStrategyClick" />
+			
+			<Label Grid.Column="3" Grid.Row="0" Content="Path:" />
+			<TextBox Grid.Column="4" Grid.Row="0" x:Name="HistoryPathTextBox" Text="" />
+			<Button Grid.Column="5" Grid.Row="0" x:Name="FindPath" Content="..." Width="25" HorizontalAlignment="Left" Click="FindPathClick" />
+
+			<Label Grid.Column="6" Grid.Row="0" Content="Strategy:" />
+			<TextBox Grid.Column="7" Grid.Row="0" x:Name="SecusityTextBox" />
+			<xctk:DateTimePicker Grid.Column="8" Grid.Row="0" x:Name="FromDatePicker" Width="180" />
+			<xctk:DateTimePicker Grid.Column="9" Grid.Row="0" x:Name="ToDatePicke"  Width="180" />
+
+			<ProgressBar Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="8" x:Name="TicksAndDepthsProgress" />
+			<Button Grid.Column="8" Grid.Row="1" x:Name="StartButton" Content="Start" IsEnabled="True" Click="StartButtonOnClick"/>
+			<Button Grid.Column="9" Grid.Row="1" x:Name="StopButton" Content="Stop" IsEnabled="False" Click="StopButtonOnClick"/>
+		</Grid>
+
+		<sampleDiagramPublic:DiagramDebuggerControl Grid.Row="1" x:Name="DiagramDebuggerControl" Composition="{Binding ElementName=Ctrl, Path=Composition}"/>
+
+		<TabControl Grid.Row="2" TabStripPlacement="Bottom">
+			<TabItem Header="Logs">
+				<xaml:Monitor x:Name="Monitor"/>
+			</TabItem>
+			<TabItem Header="Chart">
+				<xaml:Chart x:Name="Chart" />
+			</TabItem>
+			<TabItem Header="Orders">
+				<xaml:OrderGrid x:Name="OrderGrid"/>
+			</TabItem>
+			<TabItem Header="Trades">
+				<xaml:MyTradeGrid x:Name="MyTradeGrid"/>
+			</TabItem>
+			<TabItem Header="Position">
+				<xaml:EquityCurveChart x:Name="PositionCurve" />
+			</TabItem>
+			<TabItem Header="Equity">
+				<xaml:EquityCurveChart x:Name="Curve" />
+			</TabItem>
+		</TabControl>
+	</Grid>
+</UserControl>
