@@ -592,6 +592,39 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
+		/// Convert <see cref="Security"/> criteria to <see cref="SecurityLookupMessage"/>.
+		/// </summary>
+		/// <param name="criteria">Criteria.</param>
+		/// <param name="securityId">Security ID.</param>
+		/// <returns>Message.</returns>
+		public static SecurityLookupMessage ToLookupMessage(this Security criteria, SecurityId? securityId = null)
+		{
+			if (criteria == null)
+				throw new ArgumentNullException("criteria");
+
+			return new SecurityLookupMessage
+			{
+				//LocalTime = CurrentTime,
+				SecurityId = securityId ?? criteria.ToSecurityId(),
+				Name = criteria.Name,
+				Class = criteria.Class,
+				SecurityType = criteria.Type,
+				ExpiryDate = criteria.ExpiryDate,
+				ShortName = criteria.ShortName,
+				VolumeStep = criteria.VolumeStep,
+				Multiplier = criteria.Multiplier,
+				PriceStep = criteria.PriceStep,
+				Decimals = criteria.Decimals,
+				Currency = criteria.Currency,
+				SettlementDate = criteria.SettlementDate,
+				OptionType = criteria.OptionType,
+				Strike = criteria.Strike,
+				BinaryOptionType = criteria.BinaryOptionType,
+				UnderlyingSecurityCode = criteria.UnderlyingSecurityId.IsEmpty() ? null : _defaultGenerator.Split(criteria.UnderlyingSecurityId).SecurityCode
+			};
+		}
+
+		/// <summary>
 		/// To convert the message into instrument.
 		/// </summary>
 		/// <param name="message">Message.</param>
@@ -603,7 +636,7 @@ namespace StockSharp.Algo
 
 			return new Security
 			{
-				Id = message.SecurityId.SecurityCode + "@" + message.SecurityId.BoardCode,
+				Id = message.SecurityId.ToStringId(),
 				Code = message.SecurityId.SecurityCode,
 				Board = ExchangeBoard.GetOrCreateBoard(message.SecurityId.BoardCode),
 				Type = message.SecurityType ?? message.SecurityId.SecurityType,
@@ -623,6 +656,19 @@ namespace StockSharp.Algo
 				VolumeStep = message.VolumeStep,
 				Multiplier = message.Multiplier
 			};
+		}
+
+		private static readonly SecurityIdGenerator _defaultGenerator = new SecurityIdGenerator();
+
+		/// <summary>
+		/// Convert <see cref="SecurityId"/> to <see cref="Security.Id"/> value.
+		/// </summary>
+		/// <param name="securityId"><see cref="SecurityId"/> value.</param>
+		/// <param name="generator">The instrument identifiers generator <see cref="Security.Id"/>. Can be <see langword="null"/>.</param>
+		/// <returns><see cref="Security.Id"/> value.</returns>
+		public static string ToStringId(this SecurityId securityId, SecurityIdGenerator generator = null)
+		{
+			return (generator ?? _defaultGenerator).GenerateId(securityId.SecurityCode, securityId.BoardCode);
 		}
 
 		/// <summary>
@@ -990,6 +1036,20 @@ namespace StockSharp.Algo
 				candle.Arg = series.Arg;
 
 			return candle;
+		}
+
+		/// <summary>
+		/// To convert <see cref="CandleMessage"/> into candle.
+		/// </summary>
+		/// <param name="message">Message.</param>
+		/// <param name="security">Security.</param>
+		/// <returns>Candle.</returns>
+		public static Candle ToCandle(this CandleMessage message, Security security)
+		{
+			if (message == null)
+				throw new ArgumentNullException("message");
+
+			return message.ToCandle(message.GetType().ToCandleType(), security);
 		}
 
 		/// <summary>

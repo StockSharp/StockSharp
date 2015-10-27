@@ -104,7 +104,7 @@ namespace StockSharp.Algo.Storages
 
 		private IMarketDataStorage GetStorage(SecurityId securityId, Type messageType, object arg)
 		{
-			var security = _entityRegistry.Securities.ReadById(securityId.SecurityCode + "@" + securityId.BoardCode);
+			var security = _entityRegistry.Securities.ReadBySecurityId(securityId);
 
 			return _storageRegistry.GetStorage(security, messageType, arg, Drive, Format);
 		}

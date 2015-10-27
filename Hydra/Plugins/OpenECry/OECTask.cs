@@ -24,7 +24,7 @@ namespace StockSharp.Hydra.OpenECry
 	[TaskCategory(TaskCategories.America | TaskCategories.RealTime | TaskCategories.Stock |
 		TaskCategories.Free | TaskCategories.Ticks | TaskCategories.MarketDepth | TaskCategories.Forex |
 		TaskCategories.Level1 | TaskCategories.Candles | TaskCategories.Transactions)]
-	class OECTask : ConnectorHydraTask<OECTrader>
+	class OECTask : ConnectorHydraTask<OpenECryMessageAdapter>
 	{
 		private const string _sourceName = "OpenECry";
 
@@ -108,27 +108,30 @@ namespace StockSharp.Hydra.OpenECry
 			get { return _supportedCandleSeries; }
 		}
 
-		protected override MarketDataConnector<OECTrader> CreateConnector(HydraTaskSettings settings)
+		protected override void ApplySettings(HydraTaskSettings settings)
 		{
 			_settings = new OECSettings(settings);
 
-			if (settings.IsDefault)
-			{
-				_settings.Address = OpenECryAddresses.Api;
-				_settings.Uuid = string.Empty;
-				_settings.Login = string.Empty;
-				_settings.Password = new SecureString();
-				_settings.IsDownloadNews = true;
-				_settings.SupportedLevel1Fields = Enumerator.GetValues<Level1Fields>();
-			}
+			if (!settings.IsDefault)
+				return;
 
-			return new MarketDataConnector<OECTrader>(EntityRegistry.Securities, this, () => new OECTrader
+			_settings.Address = OpenECryAddresses.Api;
+			_settings.Uuid = string.Empty;
+			_settings.Login = string.Empty;
+			_settings.Password = new SecureString();
+			_settings.IsDownloadNews = true;
+			_settings.SupportedLevel1Fields = Enumerator.GetValues<Level1Fields>();
+		}
+
+		protected override OpenECryMessageAdapter GetAdapter(IdGenerator generator)
+		{
+			return new OpenECryMessageAdapter(generator)
 			{
 				Uuid = _settings.Uuid,
 				Login = _settings.Login,
-				Password = _settings.Password.To<string>(),
+				Password = _settings.Password,
 				Address = _settings.Address
-			});
+			};
 		}
 	}
 }

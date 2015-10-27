@@ -34,6 +34,6 @@
 
 		<Button Content="{x:Static loc:LocalizedStrings.XamlStr655}" Grid.Row="0" Grid.Column="6" Click="ButtonBase_OnClick"/>
 
-		<sx:TradeGrid x:Name="Ticks" Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="8" />
+		<sx:ExecutionGrid x:Name="Ticks" Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="8" />
     </Grid>
 </Window>

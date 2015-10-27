@@ -12,7 +12,6 @@ namespace StockSharp.Hydra.IQFeed
 
 	using StockSharp.Algo;
 	using StockSharp.Algo.Candles;
-	using StockSharp.BusinessEntities;
 	using StockSharp.Hydra.Core;
 	using StockSharp.IQFeed;
 	using StockSharp.Logging;
@@ -28,7 +27,7 @@ namespace StockSharp.Hydra.IQFeed
 	[TaskCategory(TaskCategories.America | TaskCategories.RealTime | TaskCategories.History |
 		TaskCategories.Paid | TaskCategories.Ticks | TaskCategories.MarketDepth |
 		TaskCategories.Level1 | TaskCategories.Candles | TaskCategories.Stock | TaskCategories.Forex)]
-	class IQFeedTask : ConnectorHydraTask<IQFeedTrader>
+	class IQFeedTask : ConnectorHydraTask<IQFeedMarketDataMessageAdapter>
 	{
 		private const string _sourceName = "IQFeed";
 
@@ -172,6 +171,7 @@ namespace StockSharp.Hydra.IQFeed
 		private IQFeedSettings _settings;
 
 		public IQFeedTask()
+			: base(new IQFeedTrader())
 		{
 			_supportedCandleSeries = IQFeedMarketDataMessageAdapter.TimeFrames.Select(tf => new CandleSeries
 			{
@@ -199,27 +199,30 @@ namespace StockSharp.Hydra.IQFeed
 			get { return _settings; }
 		}
 
-		protected override MarketDataConnector<IQFeedTrader> CreateConnector(HydraTaskSettings settings)
+		protected override void ApplySettings(HydraTaskSettings settings)
 		{
 			_settings = new IQFeedSettings(settings);
 
-			if (settings.IsDefault)
-			{
-				_settings.Level1Address = IQFeedAddresses.DefaultLevel1Address;
-				_settings.Level2Address = IQFeedAddresses.DefaultLevel2Address;
-				_settings.LookupAddress = IQFeedAddresses.DefaultLookupAddress;
-				_settings.AdminAddress = IQFeedAddresses.DefaultAdminAddress;
-				_settings.Offset = 0;
-				_settings.StartFrom = DateTime.Today.Subtract(TimeSpan.FromDays(30));
-				_settings.IsDownloadSecurityFromSite = false;
-				_settings.IsDownloadNews = true;
-				_settings.Types = new[] { SecurityTypes.Stock };
-				_settings.IsRealTime = false;
-				_settings.Interval = TimeSpan.FromDays(1);
-				_settings.IgnoreWeekends = true;
-			}
+			if (!settings.IsDefault)
+				return;
 
-			return new MarketDataConnector<IQFeedTrader>(EntityRegistry.Securities, this, () => new IQFeedTrader
+			_settings.Level1Address = IQFeedAddresses.DefaultLevel1Address;
+			_settings.Level2Address = IQFeedAddresses.DefaultLevel2Address;
+			_settings.LookupAddress = IQFeedAddresses.DefaultLookupAddress;
+			_settings.AdminAddress = IQFeedAddresses.DefaultAdminAddress;
+			_settings.Offset = 0;
+			_settings.StartFrom = DateTime.Today.Subtract(TimeSpan.FromDays(30));
+			_settings.IsDownloadSecurityFromSite = false;
+			_settings.IsDownloadNews = true;
+			_settings.Types = new[] { SecurityTypes.Stock };
+			_settings.IsRealTime = false;
+			_settings.Interval = TimeSpan.FromDays(1);
+			_settings.IgnoreWeekends = true;
+		}
+
+		protected override IQFeedMarketDataMessageAdapter GetAdapter(IdGenerator generator)
+		{
+			return new IQFeedMarketDataMessageAdapter(generator)
 			{
 				Level1Address = _settings.Level1Address,
 				Level2Address = _settings.Level2Address,
@@ -227,19 +230,7 @@ namespace StockSharp.Hydra.IQFeed
 				AdminAddress = _settings.AdminAddress,
 				IsDownloadSecurityFromSite = _settings.IsDownloadSecurityFromSite,
 				SecurityTypesFilter = _settings.Types
-			});
-		}
-
-		protected override void SubscribeSecurity(Security security)
-		{
-			if (!_settings.IsRealTime)
-			{
-				// если получаем только исторические данные,
-				// то необходимо получить информацию по инструментам (мин. шаг цены)
-				Connector.Connector.RegisterSecurity(security);
-			}
-			else
-				base.SubscribeSecurity(security);
+			};
 		}
 
 		protected override TimeSpan OnProcess()
@@ -286,7 +277,7 @@ namespace StockSharp.Hydra.IQFeed
 						this.AddInfoLog(LocalizedStrings.Str2294Params, date, security.Security.Id);
 
 						bool isSuccess;
-						var trades = Connector.Connector.GetHistoricalLevel1(security.Security.ToSecurityId(), date, date.EndOfDay(), out isSuccess);
+						var trades = ((IQFeedTrader)Connector).GetHistoricalLevel1(security.Security.ToSecurityId(), date, date.EndOfDay(), out isSuccess);
 
 						if (isSuccess)
 						{
@@ -329,7 +320,7 @@ namespace StockSharp.Hydra.IQFeed
 						this.AddInfoLog(LocalizedStrings.Str2298Params, series, date, security.Security.Id);
 
 						bool isSuccess;
-						var candles = Connector.Connector.GetHistoricalCandles(security.Security, series.CandleType, series.Arg, date, date.EndOfDay(), out isSuccess);
+						var candles = ((IQFeedTrader)Connector).GetHistoricalCandles(security.Security, series.CandleType, series.Arg, date, date.EndOfDay(), out isSuccess);
 
 						if (isSuccess)
 						{

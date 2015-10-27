@@ -464,9 +464,9 @@ namespace StockSharp.Messages
 		/// <returns>A string that represents the current object.</returns>
 		public override string ToString()
 		{
-			return base.ToString() + ",T(S)={0:yyyy/MM/dd HH:mm:ss.fff},({1}),Sec={2},Ord={3}/{4}/{5},Fail={6},TId={7},Pf={8},TPrice={9},UId={10}"
+			return base.ToString() + ",T(S)={0:yyyy/MM/dd HH:mm:ss.fff},({1}),Sec={2},Ord={3}/{4}/{5},Fail={6},Price={7},Vol={8},Bal={9},TId={10},Pf={11},TPrice={12},UId={13},State={14}"
 				.Put(ServerTime, ExecutionType, SecurityId, OrderId, TransactionId, OriginalTransactionId,
-					Error, TradeId, PortfolioName, TradePrice, UserOrderId);
+					Error, Price, Volume, Balance, TradeId, PortfolioName, TradePrice, UserOrderId, OrderState);
 		}
 
 		/// <summary>

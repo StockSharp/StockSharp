@@ -971,7 +971,7 @@ namespace StockSharp.Algo.Storages
 		{
 			return new Security
 			{
-				Id = securityId.SecurityCode + "@" + securityId.BoardCode,
+				Id = securityId.ToStringId(),
 				Code = securityId.SecurityCode,
 				Board = ExchangeBoard.GetOrCreateBoard(securityId.BoardCode)
 			};

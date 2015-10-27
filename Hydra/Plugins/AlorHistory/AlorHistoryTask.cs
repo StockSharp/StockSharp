@@ -10,7 +10,6 @@ namespace StockSharp.Hydra.AlorHistory
 	using Ecng.Collections;
 	using Ecng.ComponentModel;
 
-	using StockSharp.Algo;
 	using StockSharp.Algo.Candles;
 	using StockSharp.Algo.History.Russian;
 	using StockSharp.Logging;

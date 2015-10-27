@@ -22,7 +22,7 @@ namespace StockSharp.Hydra.LMAX
 	[TaskCategory(TaskCategories.Forex | TaskCategories.RealTime |
 		TaskCategories.Free | TaskCategories.History | TaskCategories.MarketDepth |
 		TaskCategories.Level1 | TaskCategories.Candles | TaskCategories.Transactions)]
-	class LmaxTask : ConnectorHydraTask<LmaxTrader>
+	class LmaxTask : ConnectorHydraTask<LmaxMessageAdapter>
 	{
 		private const string _sourceName = "LMAX";
 
@@ -104,25 +104,28 @@ namespace StockSharp.Hydra.LMAX
 			get { return _supportedCandleSeries; }
 		}
 
-		protected override MarketDataConnector<LmaxTrader> CreateConnector(HydraTaskSettings settings)
+		protected override void ApplySettings(HydraTaskSettings settings)
 		{
 			_settings = new LmaxSettings(settings);
 
-			if (settings.IsDefault)
-			{
-				_settings.Login = string.Empty;
-				_settings.Password = new SecureString();
-				_settings.IsDemo = false;
-				_settings.IsDownloadSecurityFromSite = false;
-			}
+			if (!settings.IsDefault)
+				return;
 
-			return new MarketDataConnector<LmaxTrader>(EntityRegistry.Securities, this, () => new LmaxTrader
+			_settings.Login = string.Empty;
+			_settings.Password = new SecureString();
+			_settings.IsDemo = false;
+			_settings.IsDownloadSecurityFromSite = false;
+		}
+
+		protected override LmaxMessageAdapter GetAdapter(IdGenerator generator)
+		{
+			return new LmaxMessageAdapter(generator)
 			{
 				Login = _settings.Login,
-				Password = _settings.Password.To<string>(),
+				Password = _settings.Password,
 				IsDemo = _settings.IsDemo,
 				IsDownloadSecurityFromSite = _settings.IsDownloadSecurityFromSite
-			});
+			};
 		}
 	}
 }

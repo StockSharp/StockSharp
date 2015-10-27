@@ -521,7 +521,7 @@ namespace StockSharp.Studio.Database
 		{
 			private sealed class StrategyEvents : Disposable
 			{
-				private readonly MarketDataBuffer<Security, ExecutionMessage> _buffer = new MarketDataBuffer<Security, ExecutionMessage>();
+				//private readonly MarketDataBuffer<Security, ExecutionMessage> _buffer = new MarketDataBuffer<Security, ExecutionMessage>();
 
 				private readonly StrategyContainer _strategy;
 				private readonly SessionStrategy _sessionStrategy;
@@ -549,11 +549,11 @@ namespace StockSharp.Studio.Database
 				{
 					var hasData = false;
 
-					foreach (var pair in _buffer.Get())
-					{
-						_executionRegistry.GetExecutionStorage(pair.Key, ExecutionTypes.Order).Save(pair.Value);
-						hasData = true;
-					}
+					//foreach (var pair in _buffer.Get())
+					//{
+					//	_executionRegistry.GetExecutionStorage(pair.Key, ExecutionTypes.Order).Save(pair.Value);
+					//	hasData = true;
+					//}
 
 					return hasData;
 				}
@@ -636,8 +636,8 @@ namespace StockSharp.Studio.Database
 					if (_strategy.GetIsInitialization())
 						return;
 
-					foreach (var trade in trades)
-						_buffer.Add(trade.Order.Security, trade.ToMessage());
+					//foreach (var trade in trades)
+					//	_buffer.Add(trade.Order.Security, trade.ToMessage());
 
 					_startTimer();
 				}
@@ -655,7 +655,7 @@ namespace StockSharp.Studio.Database
 					if (order.LastChangeTime.IsDefault())
 						order.LastChangeTime = _strategy.CurrentTime;
 
-					_buffer.Add(order.Security, order.ToMessage());
+					//_buffer.Add(order.Security, order.ToMessage());
 					_startTimer();
 				}
 
@@ -664,7 +664,7 @@ namespace StockSharp.Studio.Database
 					if (_strategy.GetIsInitialization())
 						return;
 
-					_buffer.Add(fail.Order.Security, fail.ToMessage());
+					//_buffer.Add(fail.Order.Security, fail.ToMessage());
 					_startTimer();
 				}
 				

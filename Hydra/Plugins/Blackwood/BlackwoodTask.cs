@@ -25,7 +25,7 @@ namespace StockSharp.Hydra.Blackwood
 	[TaskCategory(TaskCategories.America | TaskCategories.RealTime |
 		TaskCategories.Free | TaskCategories.Ticks |
 		TaskCategories.Level1 | TaskCategories.Candles | TaskCategories.Transactions)]
-	class BlackwoodTask : ConnectorHydraTask<BlackwoodTrader>
+	class BlackwoodTask : ConnectorHydraTask<BlackwoodMessageAdapter>
 	{
 		private const string _sourceName = "Fusion/Blackwood";
 
@@ -102,7 +102,7 @@ namespace StockSharp.Hydra.Blackwood
 			get { return _settings; }
 		}
 
-		private readonly Type[] _supportedMarketDataTypes = { /*typeof(MarketDepth),*/ typeof(Candle), typeof(Trade), typeof(Level1ChangeMessage), typeof(ExecutionMessage) };
+		private readonly Type[] _supportedMarketDataTypes = { typeof(Candle), typeof(Trade), typeof(Level1ChangeMessage), typeof(ExecutionMessage) };
 
 		public override IEnumerable<Type> SupportedMarketDataTypes
 		{
@@ -116,28 +116,31 @@ namespace StockSharp.Hydra.Blackwood
 			get { return _supportedCandleSeries; }
 		}
 
-		protected override MarketDataConnector<BlackwoodTrader> CreateConnector(HydraTaskSettings settings)
+		protected override void ApplySettings(HydraTaskSettings settings)
 		{
 			_settings = new BlackwoodSettings(settings);
 
-			if (settings.IsDefault)
-			{
-				_settings.Login = string.Empty;
-				_settings.Password = new SecureString();
-				_settings.IsDownloadNews = true;
-				_settings.SupportedLevel1Fields = Enumerator.GetValues<Level1Fields>();
+			if (!settings.IsDefault)
+				return;
 
-				_settings.HistoricalDataAddress = new IPEndPoint(BlackwoodAddresses.WetBush, BlackwoodAddresses.HistoricalDataPort);
-				_settings.MarketDataAddress = new IPEndPoint(BlackwoodAddresses.WetBush, BlackwoodAddresses.MarketDataPort);
-			}
+			_settings.Login = string.Empty;
+			_settings.Password = new SecureString();
+			_settings.IsDownloadNews = true;
+			_settings.SupportedLevel1Fields = Enumerator.GetValues<Level1Fields>();
 
-			return new MarketDataConnector<BlackwoodTrader>(EntityRegistry.Securities, this, () => new BlackwoodTrader
+			_settings.HistoricalDataAddress = new IPEndPoint(BlackwoodAddresses.WetBush, BlackwoodAddresses.HistoricalDataPort);
+			_settings.MarketDataAddress = new IPEndPoint(BlackwoodAddresses.WetBush, BlackwoodAddresses.MarketDataPort);
+		}
+
+		protected override BlackwoodMessageAdapter GetAdapter(IdGenerator generator)
+		{
+			return new BlackwoodMessageAdapter(generator)
 			{
 				HistoricalDataAddress = _settings.HistoricalDataAddress,
 				MarketDataAddress = _settings.MarketDataAddress,
 				Login = _settings.Login,
-				Password = _settings.Password.To<string>(),
-			});
+				Password = _settings.Password,
+			};
 		}
 	}
 }

@@ -27,7 +27,7 @@ namespace StockSharp.Hydra.Transaq
 	[TaskCategory(TaskCategories.Russia | TaskCategories.Transactions | TaskCategories.RealTime |
 		TaskCategories.Candles | TaskCategories.Level1 | TaskCategories.MarketDepth |
 		TaskCategories.Stock | TaskCategories.Free | TaskCategories.Ticks | TaskCategories.News)]
-	class TransaqTask : ConnectorHydraTask<TransaqTrader>
+	class TransaqTask : ConnectorHydraTask<TransaqMessageAdapter>
 	{
 		private const string _sourceName = "Transaq";
 
@@ -188,52 +188,52 @@ namespace StockSharp.Hydra.Transaq
 			get { return _supportedCandleSeries; }
 		}
 
-		protected override MarketDataConnector<TransaqTrader> CreateConnector(HydraTaskSettings settings)
+		protected override void ApplySettings(HydraTaskSettings settings)
 		{
 			_settings = new TransaqSettings(settings);
 
-			if (settings.IsDefault)
-			{
-				_settings.Login = string.Empty;
-				_settings.Password = new SecureString();
-				_settings.Address = TransaqAddresses.FinamReal1;
-				_settings.IsHFT = false;
-				_settings.MarketDataInterval = null;
-				_settings.IsDownloadNews = true;
-				_settings.OverrideDll = true;
+			if (!settings.IsDefault)
+				return;
 
-				_settings.UseProxy = false;
-				_settings.ProxyType = ProxyTypes.Http.To<string>();
-				_settings.ProxyLogin = string.Empty;
-				_settings.ProxyPassword = new SecureString();
-				_settings.ProxyAddress = new IPEndPoint(IPAddress.Loopback, 8080);
+			_settings.Login = string.Empty;
+			_settings.Password = new SecureString();
+			_settings.Address = TransaqAddresses.FinamReal1;
+			_settings.IsHFT = false;
+			_settings.MarketDataInterval = null;
+			_settings.IsDownloadNews = true;
+			_settings.OverrideDll = true;
+
+			_settings.UseProxy = false;
+			_settings.ProxyType = ProxyTypes.Http.To<string>();
+			_settings.ProxyLogin = string.Empty;
+			_settings.ProxyPassword = new SecureString();
+			_settings.ProxyAddress = new IPEndPoint(IPAddress.Loopback, 8080);
+		}
+
+		protected override TransaqMessageAdapter GetAdapter(IdGenerator generator)
+		{
+			var adapter = new TransaqMessageAdapter(generator)
+			{
+				Login = _settings.Login,
+				Password = _settings.Password,
+				Address = _settings.Address,
+				IsHFT = _settings.IsHFT,
+				MarketDataInterval = _settings.MarketDataInterval,
+				OverrideDll = _settings.OverrideDll,
+			};
+
+			if (_settings.UseProxy)
+			{
+				adapter.Proxy = new Proxy
+				{
+					Login = _settings.ProxyLogin,
+					Password = _settings.ProxyPassword.To<string>(),
+					Address = _settings.ProxyAddress,
+					Type = _settings.ProxyType.To<ProxyTypes>()
+				};
 			}
 
-			return new MarketDataConnector<TransaqTrader>(EntityRegistry.Securities, this, () => 
-			{
-				var trader = new TransaqTrader
-				{
-					Login = _settings.Login, 
-					Password = _settings.Password.To<string>(), 
-					Address = _settings.Address,
-					IsHFT = _settings.IsHFT,
-					MarketDataInterval = _settings.MarketDataInterval,
-					OverrideDll = _settings.OverrideDll,
-				};
-
-				if (_settings.UseProxy)
-				{
-					trader.Proxy = new Proxy
-					{
-						Login = _settings.ProxyLogin, 
-						Password = _settings.ProxyPassword.To<string>(), 
-						Address = _settings.ProxyAddress,
-						Type = _settings.ProxyType.To<ProxyTypes>()
-					};
-				}
-
-				return trader;
-			});
+			return adapter;
 		}
 	}
 }

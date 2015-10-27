@@ -8,7 +8,6 @@ namespace StockSharp.Hydra.Yahoo
 	using Ecng.Common;
 	using Ecng.ComponentModel;
 
-	using StockSharp.Algo;
 	using StockSharp.Algo.Candles;
 	using StockSharp.Algo.History;
 	using StockSharp.Algo.Storages;

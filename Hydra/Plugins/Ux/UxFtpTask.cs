@@ -156,7 +156,7 @@ namespace StockSharp.Hydra.Ux
 
 				this.AddInfoLog(LocalizedStrings.Str2823Params, date);
 
-				var trades = source.LoadTrades(EntityRegistry.Securities, date);
+				var trades = source.LoadTicks(EntityRegistry.Securities, date);
 
 				if (trades.Count == 0)
 				{
@@ -170,7 +170,7 @@ namespace StockSharp.Hydra.Ux
 					foreach (var pair in trades)
 					{
 						SaveSecurity(pair.Key);
-						SaveTrades(pair.Key, pair.Value);
+						SaveTicks(pair.Key, pair.Value);
 					}
 				}
 

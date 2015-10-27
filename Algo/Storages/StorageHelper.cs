@@ -396,5 +396,22 @@ namespace StockSharp.Algo.Storages
 			else
 				throw new ArgumentOutOfRangeException("type", type, LocalizedStrings.WrongCandleType);
 		}
+
+		/// <summary>
+		/// Read instrument by indentifier.
+		/// </summary>
+		/// <param name="securities">Instrument storage collection.</param>
+		/// <param name="securityId">Identifier.</param>
+		/// <returns>Insturment.</returns>
+		public static Security ReadBySecurityId(this IStorageEntityList<Security> securities, SecurityId securityId)
+		{
+			if (securities == null)
+				throw new ArgumentNullException("securities");
+
+			if (securityId.IsDefault())
+				throw new ArgumentNullException("securityId");
+
+			return securities.ReadById(securityId.ToStringId());
+		}
 	}
 }

@@ -20,7 +20,7 @@ namespace StockSharp.Hydra.Rss
 	[DescriptionLoc(LocalizedStrings.RssSourceKey)]
 	[Doc("http://stocksharp.com/doc/html/91454878-ec26-4872-9a85-1bfbc76dc77a.htm")]
 	[TaskCategory(TaskCategories.America | TaskCategories.Russia | TaskCategories.News)]
-	class RssTask : ConnectorHydraTask<RssTrader>
+	class RssTask : ConnectorHydraTask<RssMarketDataMessageAdapter>
 	{
 		private const string _sourceName = "RSS";
 
@@ -81,22 +81,25 @@ namespace StockSharp.Hydra.Rss
 			get { return _settings; }
 		}
 
-		protected override MarketDataConnector<RssTrader> CreateConnector(HydraTaskSettings settings)
+		protected override void ApplySettings(HydraTaskSettings settings)
 		{
 			_settings = new RssSettings(settings);
 
-			if (settings.IsDefault)
-			{
-				_settings.Address = null;
-				_settings.IsDownloadNews = true;
-				_settings.CustomDateFormat = string.Empty;
-			}
+			if (!settings.IsDefault)
+				return;
 
-			return new MarketDataConnector<RssTrader>(EntityRegistry.Securities, this, () => new RssTrader
+			_settings.Address = null;
+			_settings.IsDownloadNews = true;
+			_settings.CustomDateFormat = string.Empty;
+		}
+
+		protected override RssMarketDataMessageAdapter GetAdapter(IdGenerator generator)
+		{
+			return new RssMarketDataMessageAdapter(generator)
 			{
 				Address = _settings.Address,
 				CustomDateFormat = _settings.CustomDateFormat
-			});
+			};
 		}
 	}
 }

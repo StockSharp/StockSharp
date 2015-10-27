@@ -24,7 +24,7 @@ namespace StockSharp.Hydra.AlfaDirect
 	[TaskCategory(TaskCategories.Russia | TaskCategories.Transactions | TaskCategories.RealTime |
 		TaskCategories.Candles | TaskCategories.Level1 | TaskCategories.MarketDepth |
 		TaskCategories.Stock | TaskCategories.Free | TaskCategories.Ticks | TaskCategories.News)]
-	class AlfaTask : ConnectorHydraTask<AlfaTrader>
+	class AlfaTask : ConnectorHydraTask<AlfaDirectMessageAdapter>
 	{
 		private const string _sourceName = "AlfaDirect";
 
@@ -88,22 +88,25 @@ namespace StockSharp.Hydra.AlfaDirect
 			get { return _supportedCandleSeries; }
 		}
 
-		protected override MarketDataConnector<AlfaTrader> CreateConnector(HydraTaskSettings settings)
+		protected override void ApplySettings(HydraTaskSettings settings)
 		{
 			_settings = new AlfaSettings(settings);
 
-			if (settings.IsDefault)
-			{
-				_settings.Login = string.Empty;
-				_settings.Password = new SecureString();
-				_settings.IsDownloadNews = true;
-			}
+			if (!settings.IsDefault)
+				return;
 
-			return new MarketDataConnector<AlfaTrader>(EntityRegistry.Securities, this, () => new AlfaTrader
+			_settings.Login = string.Empty;
+			_settings.Password = new SecureString();
+			_settings.IsDownloadNews = true;
+		}
+
+		protected override AlfaDirectMessageAdapter GetAdapter(IdGenerator generator)
+		{
+			return new AlfaDirectMessageAdapter(generator)
 			{
 				Login = _settings.Login,
-				Password = _settings.Password.To<string>()
-			});
+				Password = _settings.Password
+			};
 		}
 	}
 }

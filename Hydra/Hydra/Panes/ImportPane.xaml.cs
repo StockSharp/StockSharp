@@ -811,7 +811,7 @@ namespace StockSharp.Hydra.Panes
 
 		private Security InitSecurity(SecurityId securityId)
 		{
-			var id = securityId.SecurityCode + "@" + securityId.BoardCode;
+			var id = securityId.ToStringId();
 			var security = _entityRegistry.Securities.ReadById(id);
 
 			if (security != null)

@@ -5,46 +5,146 @@
 	using System.Linq;
 
 	using Ecng.Collections;
+	using Ecng.Common;
+	using Ecng.Serialization;
 
 	using MoreLinq;
 
 	using StockSharp.Algo;
-	using StockSharp.Algo.Candles;
 	using StockSharp.Algo.History;
 	using StockSharp.Algo.Storages;
 	using StockSharp.BusinessEntities;
 	using StockSharp.Messages;
 
 	/// <summary>
-	/// Базовый источник, работающий через <see cref="MarketDataConnector{TConnector}"/>.
+	/// Базовый источник, работающий через <see cref="IMessageAdapter"/>.
 	/// </summary>
-	/// <typeparam name="TConnector">Тип подключения.</typeparam>
-	public abstract class ConnectorHydraTask<TConnector> : BaseHydraTask, ISecurityDownloader
-		where TConnector : Connector
+	/// <typeparam name="TMessageAdapter">Тип подключения.</typeparam>
+	public abstract class ConnectorHydraTask<TMessageAdapter> : BaseHydraTask, ISecurityDownloader
+		where TMessageAdapter : IMessageAdapter
 	{
+		private sealed class StorageEntityFactory : Algo.EntityFactory
+		{
+			private readonly ISecurityProvider _securityProvider;
+
+			public StorageEntityFactory(ISecurityProvider securityProvider)
+			{
+				if (securityProvider == null)
+					throw new ArgumentNullException("securityProvider");
+
+				_securityProvider = securityProvider;
+			}
+
+			public override Security CreateSecurity(string id)
+			{
+				return _securityProvider.LookupById(id) ?? base.CreateSecurity(id);
+			}
+		}
+
 		private HydraTaskSecurity _allSecurity;
 		private readonly SynchronizedDictionary<Security, HydraTaskSecurity> _securityMap = new SynchronizedDictionary<Security, HydraTaskSecurity>();
 		private readonly SynchronizedDictionary<string, HydraTaskSecurity> _associatedSecurityCodes = new SynchronizedDictionary<string, HydraTaskSecurity>(StringComparer.InvariantCultureIgnoreCase);
+		private BufferMessageAdapter _adapter;
 
-		private static readonly bool _isExternalCandleSource = typeof(IExternalCandleSource).IsAssignableFrom(typeof(TConnector));
+		private bool _exportStarted;
+		private Security _criteria;
+		private Action<Security> _newSecurity;
+		private bool _isRefreshed;
+		private readonly SyncObject _refreshSync = new SyncObject();
+		private bool _wasConnected;
 
 		/// <summary>
 		/// Инициализировать <see cref="ConnectorHydraTask{TConnector}"/>.
 		/// </summary>
 		protected ConnectorHydraTask()
+			: this(new Connector())
 		{
-			_supportedMarketDataTypes = new[] { typeof(QuoteChangeMessage), typeof(Trade), typeof(Level1ChangeMessage), typeof(ExecutionMessage) };
-
-			if (_isExternalCandleSource)
-				_supportedMarketDataTypes = _supportedMarketDataTypes.Concat(typeof(Candle)).ToArray();
+			
 		}
 
 		/// <summary>
-		/// Обертка над подключением <see cref="IConnector"/> для получения маркет-данных в реальном времени.
+		/// Инициализировать <see cref="ConnectorHydraTask{TConnector}"/>.
 		/// </summary>
-		public MarketDataConnector<TConnector> Connector { get; private set; }
+		/// <param name="connector">Подключение к торговой системе.</param>
+		protected ConnectorHydraTask(Connector connector)
+		{
+			if (connector == null)
+				throw new ArgumentNullException("connector");
 
-		private readonly Type[] _supportedMarketDataTypes;
+			Connector = connector;
+			Connector.Parent = this;
+			Connector.EntityFactory = new StorageEntityFactory(EntityRegistry.Securities);
+
+			Connector.Connected += OnConnected;
+			Connector.ConnectionError += OnConnectionError;
+			Connector.Disconnected += OnDisconnected;
+			Connector.NewSecurities += OnNewSecurities;
+		}
+
+		/// <summary>
+		/// Подключение к торговой системе.
+		/// </summary>
+		protected Connector Connector { get; private set; }
+
+		/// <summary>
+		/// Адаптер к торговой системе.
+		/// </summary>
+		protected TMessageAdapter Adapter { get; private set; }
+
+		/// <summary>
+		/// Освободить занятые ресурсы.
+		/// </summary>
+		protected override void DisposeManaged()
+		{
+			Connector.Connected -= OnConnected;
+			Connector.ConnectionError -= OnConnectionError;
+			Connector.Disconnected -= OnDisconnected;
+			Connector.NewSecurities -= OnNewSecurities;
+
+			base.DisposeManaged();
+		}
+
+		private void OnNewSecurities(IEnumerable<Security> securities)
+		{
+			foreach (var security in securities)
+			{
+				SaveSecurity(security);
+
+				if (_allSecurity != null)
+					SubscribeSecurity(security);
+			}
+		}
+
+		private void OnDisconnected()
+		{
+			
+		}
+
+		private void OnConnectionError(Exception error)
+		{
+			Stop();
+		}
+
+		private void OnConnected()
+		{
+			if (_allSecurity == null)
+				_securityMap.Keys.ForEach(SubscribeSecurity);
+
+			RaiseStarted();
+
+			var connectorSettings = (ConnectorHydraTaskSettings)Settings;
+
+			if (connectorSettings != null && connectorSettings.IsDownloadNews)
+				Connector.RegisterNews();
+		}
+
+		private readonly Type[] _supportedMarketDataTypes =
+		{
+			typeof(QuoteChangeMessage),
+			typeof(Trade),
+			typeof(Level1ChangeMessage),
+			typeof(ExecutionMessage)
+		};
 
 		/// <summary>
 		/// Поддерживаемые маркет-данные.
@@ -55,39 +155,32 @@
 		}
 
 		/// <summary>
-		/// Применить настройки.
-		/// </summary>
-		/// <param name="settings">Настройки.</param>
-		protected override void ApplySettings(HydraTaskSettings settings)
-		{
-			Connector = CreateConnector(settings);
-			Connector.NewSecurities += securities =>
-			{
-				foreach (var security in securities)
-				{
-					SaveSecurity(security);
-
-					if (_allSecurity != null)
-						SubscribeSecurity(security);
-				}
-			};
-
-			Connector.Connected += () =>
-			{
-				if (_allSecurity == null)
-					_securityMap.Keys.ForEach(SubscribeSecurity);
-
-				RaiseStarted();
-			};
-
-			Connector.ConnectionError += Stop;
-		}
-
-		/// <summary>
 		/// Запустить загрузку данных.
 		/// </summary>
 		protected override void OnStarting()
 		{
+			var connectorSettings = (ConnectorHydraTaskSettings)Settings;
+
+			var settings = Connector.ReConnectionSettings;
+
+			if (connectorSettings == null)
+			{
+				settings.AttemptCount = -1;
+				settings.ReAttemptCount = -1;
+			}
+			else
+			{
+				settings.Load(connectorSettings.ReConnectionSettings.Save());
+
+				Connector.LogLevel = LogLevel;
+			}
+
+			Adapter = GetAdapter(Connector.TransactionIdGenerator);
+			_adapter = new BufferMessageAdapter(Adapter);
+
+			Connector.Adapter.InnerAdapters.Clear();
+			Connector.Adapter.InnerAdapters.Add(_adapter);
+
 			// если фильтр по инструментам выключен (выбран инструмент все инструменты)
 			_allSecurity = this.GetAllSecurity();
 
@@ -106,7 +199,7 @@
 				_associatedSecurityCodes.AddRange(associatedSecurities.ToDictionary(s => s.Security.Code, s => s));
 			}
 
-			Connector.Start();
+			_adapter.SendInMessage(new ConnectMessage());
 		}
 
 		/// <summary>
@@ -114,7 +207,18 @@
 		/// </summary>
 		protected override void OnStopped()
 		{
-			Connector.Stop();
+			Connector.Disconnect();
+
+			_criteria = null;
+			//_isRefreshed = false;
+			_wasConnected = false;
+			_exportStarted = false;
+
+			lock (_refreshSync)
+			{
+				_isRefreshed = true;
+				_refreshSync.Pulse();
+			}
 
 			// обрабатка данных, которые могли успеть прийти в момент остановки подключения
 			ProcessNewData();
@@ -131,33 +235,38 @@
 			if (_allSecurity == null && !_securityMap.ContainsKey(security))
 				return;
 
-			Connector.Connector.RegisterSecurity(security);
+			Connector.RegisterSecurity(security);
 
 			if (CheckSecurity<QuoteChangeMessage>(security))
-				Connector.Connector.RegisterMarketDepth(security);
+				Connector.RegisterMarketDepth(security);
 
 			if (CheckSecurity<Trade>(security))
-				Connector.Connector.RegisterTrades(security);
+				Connector.RegisterTrades(security);
 
 			if (CheckSecurity<OrderLogItem>(security))
-				Connector.Connector.RegisterOrderLog(security);
+				Connector.RegisterOrderLog(security);
 
-			if (CheckSecurity<Level1ChangeMessage>(security))
-				Connector.Connector.RegisterSecurity(security);
+			//if (CheckSecurity<Level1ChangeMessage>(security))
+			//	Connector.RegisterSecurity(security);
 
-			if (_isExternalCandleSource)
+			if (SupportedCandleSeries.Any())
 			{
 				var map = _securityMap.TryGetValue(security);
 
 				if (map == null)
 					return;
 
-				var source = (IExternalCandleSource)Connector.Connector;
-
 				foreach (var series in map.CandleSeries)
 				{
-					source.SubscribeCandles(new CandleSeries(series.CandleType, security, series.Arg),
-						DateTimeOffset.MinValue, DateTimeOffset.MaxValue);
+					_adapter.SendInMessage(new MarketDataMessage
+					{
+						IsSubscribe = true,
+						SecurityId = security.ToSecurityId(),
+						DataType = series.CandleType.ToCandleMessageType().ToCandleMarketDataType(),
+						Arg = series.Arg,
+						To = DateTimeOffset.MaxValue,
+						TransactionId = Connector.TransactionIdGenerator.GetNextId()
+					});
 				}
 			}
 		}
@@ -182,7 +291,54 @@
 
 		void ISecurityDownloader.Refresh(ISecurityStorage storage, Security criteria, Action<Security> newSecurity, Func<bool> isCancelled)
 		{
-			Connector.Refresh(storage, criteria, newSecurity, isCancelled);
+			lock (_refreshSync)
+				_isRefreshed = false;
+
+			if (Connector == null)
+			{
+				_criteria = criteria;
+				_newSecurity = newSecurity;
+				_wasConnected = false;
+
+				Start();
+
+				lock (_refreshSync)
+				{
+					if (!_isRefreshed)
+						_refreshSync.Wait(TimeSpan.FromMinutes(1));
+				}
+			}
+			else
+				ProcessLookupSecurities(criteria, newSecurity, true);
+		}
+
+		private void ProcessLookupSecurities(Security criteria, Action<Security> newSecurity, bool wasConnected)
+		{
+			Action<IEnumerable<Security>> lookupSecuritiesResultHandler = securities =>
+			{
+				securities.ForEach(newSecurity);
+
+				lock (_refreshSync)
+				{
+					_isRefreshed = true;
+					_refreshSync.Pulse();
+				}
+
+				if (!wasConnected)
+					Stop();
+			};
+
+			Connector.LookupSecuritiesResult += lookupSecuritiesResultHandler;
+
+			try
+			{
+				Connector.LookupSecurities(criteria);
+			}
+			catch
+			{
+				Connector.LookupSecuritiesResult -= lookupSecuritiesResultHandler;
+				throw;
+			}
 		}
 
 		/// <summary>
@@ -195,41 +351,38 @@
 			return base.OnProcess();
 		}
 
-		private void SaveValues<T>(Func<IDictionary<Security, IEnumerable<T>>> getNewValues, Action<Security, IEnumerable<T>> saveValues)
+		private void SaveValues<T>(IDictionary<SecurityId, IEnumerable<T>> newValues, Action<Security, IEnumerable<T>> saveValues)
 		{
-			foreach (var pair in getNewValues().Where(pair => CheckSecurity<T>(pair.Key)))
+			if (newValues == null)
+				throw new ArgumentNullException("newValues");
+
+			foreach (var pair in newValues)
 			{
-				saveValues(pair.Key, pair.Value);
+				saveValues(GetSecurity(pair.Key), pair.Value);
 			}
 		}
 
 		private void ProcessNewData()
 		{
-			SaveValues(Connector.GetTrades, SaveTrades);
-			SaveValues(Connector.GetMarketDepths, SaveDepths);
-			SaveValues(Connector.GetOrderLog, SaveOrderLog);
-			SaveValues(Connector.GetLevel1Messages, SaveLevel1Changes);
-			SaveValues(Connector.GetCandles, SaveCandles);
-			SaveValues(Connector.GetExecutionMessages, SaveExecutions);
+			SaveValues(_adapter.GetTicks(), SaveTicks);
+			SaveValues(_adapter.GetOrderBooks(), SaveDepths);
+			SaveValues(_adapter.GetOrderLog(), SaveOrderLog);
+			SaveValues(_adapter.GetLevel1(), SaveLevel1Changes);
+			SaveValues(_adapter.GetTransactions(), SaveTransactions);
 
-			SaveNews(Connector.GetNews());
+			foreach (var tuple in _adapter.GetCandles())
+			{
+				SaveCandles(GetSecurity(tuple.Key.Item1), tuple.Value);
+			}
+
+			SaveNews(_adapter.GetNews());
 		}
 
 		/// <summary>
-		/// Создать подключение к торговой системе.
+		/// Получить адаптер к торговой системе.
 		/// </summary>
-		/// <param name="settings">Настройки.</param>
-		/// <returns>Подключение к торговой системе.</returns>
-		protected abstract MarketDataConnector<TConnector> CreateConnector(HydraTaskSettings settings);
-
-		internal void InitTrader(Connector connector)
-		{
-			connector.Parent = this;
-		}
-
-		internal void UnInitTrader(TConnector connector)
-		{
-			connector.Parent = null;
-		}
+		/// <param name="transactionIdGenerator">Генератор идентификаторов транзакций.</param>
+		/// <returns>Адаптер к торговой системе.</returns>
+		protected abstract TMessageAdapter GetAdapter(IdGenerator transactionIdGenerator);
 	}
 }

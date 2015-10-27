@@ -3,6 +3,7 @@ namespace SampleIQFeed
 	using System;
 	using System.Windows;
 
+	using StockSharp.Algo;
 	using StockSharp.Algo.Candles;
 	using StockSharp.BusinessEntities;
 	using StockSharp.IQFeed;
@@ -46,12 +47,12 @@ namespace SampleIQFeed
 			}
 
 			bool isSuccess;
-			var candles = MainWindow.Instance.Trader.GetHistoricalCandles(_security, typeof(TimeFrameCandle), (TimeSpan)TimeFramePicker.SelectedValue, (DateTime)DateFromPicker.Value, (DateTime)DateToPicker.Value, out isSuccess);
+			var messages = MainWindow.Instance.Trader.GetHistoricalCandles(_security, typeof(TimeFrameCandle), (TimeSpan)TimeFramePicker.SelectedValue, (DateTime)DateFromPicker.Value, (DateTime)DateToPicker.Value, out isSuccess);
 
 			Chart.Reset(new[] { _candlesElem });
 
-			foreach (var candle in candles)
-				Chart.Draw(_candlesElem, candle);
+			foreach (var message in messages)
+				Chart.Draw(_candlesElem, message.ToCandle(_security));
 		}
 	}
 }

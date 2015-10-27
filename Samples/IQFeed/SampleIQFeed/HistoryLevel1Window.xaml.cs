@@ -32,10 +32,10 @@ namespace SampleIQFeed
 				return;
 			}
 
-			L1Grid.Messages.Clear();
-
 			var date = ((DateTime)DatePicker.Value).Date;
 			bool isSuccess;
+
+			L1Grid.Messages.Clear();
 			L1Grid.Messages.AddRange(MainWindow.Instance.Trader.GetHistoricalLevel1(_security.ToSecurityId(), date, date.AddDays(1), out isSuccess));
 		}
 	}

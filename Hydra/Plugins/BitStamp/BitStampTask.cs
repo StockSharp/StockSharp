@@ -19,7 +19,7 @@ namespace StockSharp.Hydra.BitStamp
 	[TaskCategory(TaskCategories.Crypto | TaskCategories.RealTime |
 		TaskCategories.Free | TaskCategories.Ticks | TaskCategories.MarketDepth |
 		TaskCategories.Level1 | TaskCategories.Transactions)]
-	class BitStampTask : ConnectorHydraTask<BitStampTrader>
+	class BitStampTask : ConnectorHydraTask<BitStampMessageAdapter>
 	{
 		private const string _sourceName = "BitStamp";
 
@@ -68,29 +68,29 @@ namespace StockSharp.Hydra.BitStamp
 			get { return _settings; }
 		}
 
-		protected override MarketDataConnector<BitStampTrader> CreateConnector(HydraTaskSettings settings)
+		protected override void ApplySettings(HydraTaskSettings settings)
 		{
 			_settings = new BitStampSettings(settings);
 
-			if (_settings.IsDefault)
+			if (!_settings.IsDefault)
+				return;
+
+			_settings.Key = new SecureString();
+			_settings.Secret = new SecureString();
+		}
+
+		protected override BitStampMessageAdapter GetAdapter(IdGenerator generator)
+		{
+			var adapter = new BitStampMessageAdapter(generator)
 			{
-				_settings.Key = new SecureString();
-				_settings.Secret = new SecureString();
-			}
+				Key = _settings.Key,
+				Secret = _settings.Secret,
+			};
 
-			return new MarketDataConnector<BitStampTrader>(EntityRegistry.Securities, this, () =>
-			{
-				var trader = new BitStampTrader
-				{
-					Key = _settings.Key.To<string>(),
-					Secret = _settings.Secret.To<string>(),
-				};
+			if (adapter.Key.IsEmpty())
+				adapter.RemoveTransactionalSupport();
 
-				if (trader.Key.IsEmpty())
-					trader.TransactionAdapter.RemoveTransactionalSupport();
-
-				return trader;
-			});
+			return adapter;
 		}
 	}
 }

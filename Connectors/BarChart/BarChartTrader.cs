@@ -22,8 +22,8 @@ namespace StockSharp.BarChart
 	[Icon("BarChart_logo.png")]
 	public class BarChartTrader : Connector, IExternalCandleSource
 	{
-		private readonly SynchronizedDictionary<long, RefFive<List<Candle>, SyncObject, bool, CandleSeries, bool>> _candleInfo = new SynchronizedDictionary<long, RefFive<List<Candle>, SyncObject, bool, CandleSeries, bool>>();
-		private readonly SynchronizedDictionary<long, RefFive<List<Trade>, SyncObject, bool, Security, bool>> _ticksInfo = new SynchronizedDictionary<long, RefFive<List<Trade>, SyncObject, bool, Security, bool>>();
+		private readonly SynchronizedDictionary<long, RefFive<List<CandleMessage>, SyncObject, bool, CandleSeries, bool>> _candleInfo = new SynchronizedDictionary<long, RefFive<List<CandleMessage>, SyncObject, bool, CandleSeries, bool>>();
+		private readonly SynchronizedDictionary<long, RefFive<List<ExecutionMessage>, SyncObject, bool, Security, bool>> _ticksInfo = new SynchronizedDictionary<long, RefFive<List<ExecutionMessage>, SyncObject, bool, Security, bool>>();
 		private readonly SynchronizedDictionary<long, CandleSeries> _candleSeries = new SynchronizedDictionary<long, CandleSeries>();
 
 		/// <summary>
@@ -67,7 +67,7 @@ namespace StockSharp.BarChart
 		/// <param name="count">Maximum ticks count.</param>
 		/// <param name="isSuccess">Whether all data were obtained successfully or the download process has been interrupted.</param>
 		/// <returns>Historical ticks.</returns>
-		public IEnumerable<Trade> GetHistoricalTicks(Security security, long count, out bool isSuccess)
+		public IEnumerable<ExecutionMessage> GetHistoricalTicks(Security security, long count, out bool isSuccess)
 		{
 			if (security == null)
 				throw new ArgumentNullException("security");
@@ -76,7 +76,7 @@ namespace StockSharp.BarChart
 
 			var transactionId = TransactionIdGenerator.GetNextId();
 
-			var info = new RefFive<List<Trade>, SyncObject, bool, Security, bool>(new List<Trade>(), new SyncObject(), false, security, false);
+			var info = RefTuple.Create(new List<ExecutionMessage>(), new SyncObject(), false, security, false);
 			_ticksInfo.Add(transactionId, info);
 
 			SendInMessage(new MarketDataMessage
@@ -107,7 +107,7 @@ namespace StockSharp.BarChart
 		/// <param name="to">End period.</param>
 		/// <param name="isSuccess">Whether all data were obtained successfully or the download process has been interrupted.</param>
 		/// <returns>Historical ticks.</returns>
-		public IEnumerable<Trade> GetHistoricalTicks(Security security, DateTime from, DateTime to, out bool isSuccess)
+		public IEnumerable<ExecutionMessage> GetHistoricalTicks(Security security, DateTime from, DateTime to, out bool isSuccess)
 		{
 			if (security == null)
 				throw new ArgumentNullException("security");
@@ -116,7 +116,7 @@ namespace StockSharp.BarChart
 
 			var transactionId = TransactionIdGenerator.GetNextId();
 
-			var info = new RefFive<List<Trade>, SyncObject, bool, Security, bool>(new List<Trade>(), new SyncObject(), false, security, false);
+			var info = RefTuple.Create(new List<ExecutionMessage>(), new SyncObject(), false, security, false);
 			_ticksInfo.Add(transactionId, info);
 
 			SendInMessage(new MarketDataMessage
@@ -149,7 +149,7 @@ namespace StockSharp.BarChart
 		/// <param name="count">Maximum ticks count.</param>
 		/// <param name="isSuccess">Whether all data were obtained successfully or the download process has been interrupted.</param>
 		/// <returns>Historical candles.</returns>
-		public IEnumerable<Candle> GetHistoricalCandles(Security security, Type candleType, object arg, long count, out bool isSuccess)
+		public IEnumerable<CandleMessage> GetHistoricalCandles(Security security, Type candleType, object arg, long count, out bool isSuccess)
 		{
 			if (security == null)
 				throw new ArgumentNullException("security");
@@ -163,7 +163,7 @@ namespace StockSharp.BarChart
 
 			this.AddInfoLog(LocalizedStrings.Str2146Params, series, count);
 
-			var info = new RefFive<List<Candle>, SyncObject, bool, CandleSeries, bool>(new List<Candle>(), new SyncObject(), false, series, false);
+			var info = RefTuple.Create(new List<CandleMessage>(), new SyncObject(), false, series, false);
 			_candleInfo.Add(transactionId, info);
 
 			var mdMsg = new MarketDataMessage
@@ -201,13 +201,10 @@ namespace StockSharp.BarChart
 		/// <param name="to">End period.</param>
 		/// <param name="isSuccess">Whether all data were obtained successfully or the download process has been interrupted.</param>
 		/// <returns>Historical candles.</returns>
-		public IEnumerable<Candle> GetHistoricalCandles(Security security, Type candleType, object arg, DateTime from, DateTime to, out bool isSuccess)
+		public IEnumerable<CandleMessage> GetHistoricalCandles(Security security, Type candleType, object arg, DateTime from, DateTime to, out bool isSuccess)
 		{
 			if (security == null)
 				throw new ArgumentNullException("security");
-
-			//if (timeFrame <= TimeSpan.Zero)
-			//	throw new ArgumentException("Тайм-фрейм должен быть больше 0.");
 
 			if (from > to)
 				throw new ArgumentException(LocalizedStrings.Str2147);
@@ -218,7 +215,7 @@ namespace StockSharp.BarChart
 
 			this.AddInfoLog(LocalizedStrings.Str2148Params, series, from, to);
 
-			var info = new RefFive<List<Candle>, SyncObject, bool, CandleSeries, bool>(new List<Candle>(), new SyncObject(), false, series, false);
+			var info = RefTuple.Create(new List<CandleMessage>(), new SyncObject(), false, series, false);
 			_candleInfo.Add(id, info);
 
 			SubscribeCandles(series, from, to, id);
@@ -385,7 +382,7 @@ namespace StockSharp.BarChart
 							_candleInfo.Remove(candleMsg.OriginalTransactionId);
 						}
 						else
-							info.First.Add(candle);
+							info.First.Add(candleMsg);
 					}
 
 					// DO NOT send historical data to Connector
@@ -425,7 +422,7 @@ namespace StockSharp.BarChart
 							if (info == null)
 								break;
 
-							info.First.Add(execMsg.ToTrade(info.Fourth));
+							info.First.Add(execMsg);
 						}
 
 						// DO NOT send historical data to Connector

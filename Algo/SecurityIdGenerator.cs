@@ -46,7 +46,7 @@ namespace StockSharp.Algo
 		/// Generate <see cref="Security.Id"/> security.
 		/// </summary>
 		/// <param name="secCode">Security code.</param>
-		/// <param name="board">Security boeard.</param>
+		/// <param name="board">Security board.</param>
 		/// <returns><see cref="Security.Id"/> security.</returns>
 		public virtual string GenerateId(string secCode/*, string secClass*/, ExchangeBoard board)
 		{

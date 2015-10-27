@@ -125,7 +125,6 @@
     <Compile Include="HydraTaskSettingsList.cs" />
     <Compile Include="NativeIdSecurityStorage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="MarketDataConnector.cs" />
     <Compile Include="ConnectorHydraTask.cs" />
     <Compile Include="HydraTaskSecurity.cs" />
     <Compile Include="TaskSettingsDisplayNameAttribute.cs" />

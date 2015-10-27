@@ -23,7 +23,7 @@ namespace StockSharp.Hydra.Rithmic
 	[TaskCategory(TaskCategories.America | TaskCategories.RealTime | TaskCategories.Stock |
 		TaskCategories.Free | TaskCategories.Ticks | TaskCategories.MarketDepth |
 		TaskCategories.Level1 | TaskCategories.Candles | TaskCategories.Transactions)]
-	class RithmicTask : ConnectorHydraTask<RithmicTrader>
+	class RithmicTask : ConnectorHydraTask<RithmicMessageAdapter>
 	{
 		private const string _sourceName = "Rithmic";
 
@@ -36,9 +36,6 @@ namespace StockSharp.Hydra.Rithmic
 			{
 			}
 
-			/// <summary>
-			/// Логин.
-			/// </summary>
 			[CategoryLoc(_sourceName)]
 			[DisplayNameLoc(LocalizedStrings.LoginKey)]
 			[DescriptionLoc(LocalizedStrings.LoginKey, true)]
@@ -49,9 +46,6 @@ namespace StockSharp.Hydra.Rithmic
 				set { ExtensionInfo["UserName"] = value; }
 			}
 
-			/// <summary>
-			/// Пароль.
-			/// </summary>
 			[CategoryLoc(_sourceName)]
 			[DisplayNameLoc(LocalizedStrings.PasswordKey)]
 			[DescriptionLoc(LocalizedStrings.PasswordKey, true)]
@@ -62,9 +56,6 @@ namespace StockSharp.Hydra.Rithmic
 				set { ExtensionInfo["Password"] = value; }
 			}
 
-			/// <summary>
-			/// Путь к файлу сертификата, необходимому для подключения к системе Rithmic.
-			/// </summary>
 			[CategoryLoc(_sourceName)]
 			[DisplayNameLoc(LocalizedStrings.Str3465Key)]
 			[DescriptionLoc(LocalizedStrings.Str3466Key)]
@@ -76,9 +67,6 @@ namespace StockSharp.Hydra.Rithmic
 				set { ExtensionInfo["CertFile"] = value; }
 			}
 
-			/// <summary>
-			/// Тип сервера.
-			/// </summary>
 			[CategoryLoc(_sourceName)]
 			[DisplayNameLoc(LocalizedStrings.Str3416Key)]
 			[DescriptionLoc(LocalizedStrings.Str3474Key)]
@@ -89,9 +77,6 @@ namespace StockSharp.Hydra.Rithmic
 				set { ExtensionInfo["Server"] = value.To<string>(); }
 			}
 
-			/// <summary>
-			/// Путь к лог файлу.
-			/// </summary>
 			[CategoryLoc(_sourceName)]
 			[DisplayNameLoc(LocalizedStrings.Str3471Key)]
 			[DescriptionLoc(LocalizedStrings.Str3472Key)]
@@ -127,28 +112,30 @@ namespace StockSharp.Hydra.Rithmic
 			get { return _supportedCandleSeries; }
 		}
 
-		protected override MarketDataConnector<RithmicTrader> CreateConnector(HydraTaskSettings settings)
+		protected override void ApplySettings(HydraTaskSettings settings)
 		{
 			_settings = new RithmicSettings(settings);
 
-			if (settings.IsDefault)
-			{
-				_settings.UserName = string.Empty;
-				_settings.Password = new SecureString();
-				_settings.Server = RithmicServers.Paper;
-				_settings.LogFileName = string.Empty;
-				_settings.CertFile = string.Empty;
-				_settings.SupportedLevel1Fields = Enumerator.GetValues<Level1Fields>();
-			}
+			if (!settings.IsDefault)
+				return;
+			_settings.UserName = string.Empty;
+			_settings.Password = new SecureString();
+			_settings.Server = RithmicServers.Paper;
+			_settings.LogFileName = string.Empty;
+			_settings.CertFile = string.Empty;
+			_settings.SupportedLevel1Fields = Enumerator.GetValues<Level1Fields>();
+		}
 
-			return new MarketDataConnector<RithmicTrader>(EntityRegistry.Securities, this, () => new RithmicTrader
+		protected override RithmicMessageAdapter GetAdapter(IdGenerator generator)
+		{
+			return new RithmicMessageAdapter(generator)
 			{
 				UserName = _settings.UserName,
-				Password = _settings.Password.To<string>(),
+				Password = _settings.Password,
 				CertFile = _settings.CertFile,
 				Server = _settings.Server,
 				LogFileName = _settings.LogFileName
-			});
+			};
 		}
 	}
 }

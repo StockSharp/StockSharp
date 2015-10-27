@@ -10,7 +10,6 @@ namespace StockSharp.Hydra.Mfd
 	using Ecng.Collections;
 	using Ecng.ComponentModel;
 
-	using StockSharp.Algo;
 	using StockSharp.Algo.Candles;
 	using StockSharp.Algo.History;
 	using StockSharp.Algo.History.Russian;
@@ -219,10 +218,10 @@ namespace StockSharp.Hydra.Mfd
 							try
 							{
 								this.AddInfoLog(LocalizedStrings.Str2294Params, emptyDate, security.Security.Id);
-								var trades = source.GetTrades(security.Security, emptyDate, emptyDate);
+								var ticks = source.GetTicks(security.Security, emptyDate, emptyDate);
 
-								if (trades.Any())
-									SaveTrades(security, trades);
+								if (ticks.Any())
+									SaveTicks(security, ticks);
 								else
 									this.AddDebugLog(LocalizedStrings.NoData);
 

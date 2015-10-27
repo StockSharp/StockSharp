@@ -140,8 +140,8 @@ namespace StockSharp.Hydra.RtsCompetition
 
 							if (trades.Any())
 							{
-								foreach (var group in trades.GroupBy(i => i.Order.Security))
-									SaveOrderLog(group.Key, group.OrderBy(i => i.Order.Time));	
+								foreach (var group in trades.GroupBy(i => i.SecurityId))
+									SaveOrderLog(GetSecurity(group.Key), group.OrderBy(i => i.ServerTime));	
 							}
 							else
 								this.AddDebugLog(LocalizedStrings.NoData);

@@ -29,7 +29,7 @@ namespace StockSharp.Hydra.Plaza
 	[TaskCategory(TaskCategories.Russia | TaskCategories.RealTime | TaskCategories.Stock |
 		TaskCategories.Level1 | TaskCategories.MarketDepth | TaskCategories.Transactions |
 		TaskCategories.Paid | TaskCategories.Ticks | TaskCategories.OrderLog)]
-	class PlazaTask : ConnectorHydraTask<PlazaTrader>
+	class PlazaTask : ConnectorHydraTask<PlazaMessageAdapter>
 	{
 		private const string _sourceName = "Plaza2";
 
@@ -182,56 +182,54 @@ namespace StockSharp.Hydra.Plaza
 		private void SaveRevisions()
 		{
 			_changesCount = 0;
-			Connector.Connector.StreamManager.RevisionManager.SaveRevisions();
+			Adapter.StreamManager.RevisionManager.SaveRevisions();
 		}
 
-		protected override MarketDataConnector<PlazaTrader> CreateConnector(HydraTaskSettings settings)
+		protected override void ApplySettings(HydraTaskSettings settings)
 		{
 			_settings = new PlazaSettings(settings);
 
-			if (settings.IsDefault)
+			if (!settings.IsDefault)
+				return;
+
+			using (var connector = new PlazaTrader())
 			{
-				using (var connector = new PlazaTrader())
+				_settings.AppName = "HYD";
+				_settings.Address = connector.Address;
+				_settings.Login = string.Empty;
+				_settings.Password = new SecureString();
+				_settings.IsCGate = false;
+				_settings.CGateKey = PlazaMessageAdapter.DemoCGateKey;
+				_settings.OnlySystemTrades = true;
+				_settings.IsFastRepl = false;
+				_settings.OverrideDll = true;
+
+				var registry = connector.TableRegistry;
+				_settings.Tables = new[]
 				{
-					_settings.AppName = "HYD";
-					_settings.Address = connector.Address;
-					_settings.Login = string.Empty;
-					_settings.Password = new SecureString();
-					_settings.IsCGate = false;
-					_settings.CGateKey = PlazaMessageAdapter.DemoCGateKey;
-					_settings.OnlySystemTrades = true;
-					_settings.IsFastRepl = false;
-					_settings.OverrideDll = true;
-
-					var registry = connector.TableRegistry;
-					_settings.Tables = new[]
-					{
-						registry.CommonFuture,
-						registry.CommonOption,
-						registry.SessionContentsFuture,
-						registry.SessionContentsOption,
-						registry.TradeFuture,
-						registry.TradeOption,
-						registry.Session,
-						registry.Index,
-						registry.Volatility,
-						registry.Aggregation5Future,
-						registry.Aggregation5Option,
-						registry.AnonymousDeal
-					}.Select(t => t.Id);
-				}
+					registry.CommonFuture,
+					registry.CommonOption,
+					registry.SessionContentsFuture,
+					registry.SessionContentsOption,
+					registry.TradeFuture,
+					registry.TradeOption,
+					registry.Session,
+					registry.Index,
+					registry.Volatility,
+					registry.Aggregation5Future,
+					registry.Aggregation5Option,
+					registry.AnonymousDeal
+				}.Select(t => t.Id);
 			}
-
-			return new MarketDataConnector<PlazaTrader>(EntityRegistry.Securities, this, CreatePlazaTrader);
 		}
 
-		private PlazaTrader CreatePlazaTrader()
+		protected override PlazaMessageAdapter GetAdapter(IdGenerator generator)
 		{
-			var connector = new PlazaTrader
+			var adapter = new PlazaMessageAdapter(generator)
 			{
 				Address = _settings.Address,
 				Login = _settings.Login,
-				Password = _settings.Password.To<string>(),
+				Password = _settings.Password,
 				AppName = _settings.AppName,
 				IsCGate = _settings.IsCGate,
 				CGateKey = _settings.CGateKey,
@@ -239,23 +237,23 @@ namespace StockSharp.Hydra.Plaza
 				OverrideDll = _settings.OverrideDll
 			};
 
-			connector.TableRegistry.StreamRegistry.IsFastRepl = _settings.IsFastRepl;
+			adapter.TableRegistry.StreamRegistry.IsFastRepl = _settings.IsFastRepl;
 
-			connector.TableRegistry.SyncTables(_settings.Tables);
+			adapter.TableRegistry.SyncTables(_settings.Tables);
 
 			// добавляем все возможные колонки во все таблицы
-			connector.Tables.ForEach(t => t.Metadata.AllColumns.ForEach(c => t.Columns.TryAdd(c)));
+			adapter.Tables.ForEach(t => t.Metadata.AllColumns.ForEach(c => t.Columns.TryAdd(c)));
 
 			// выключение авто-сохранения. ревизии теперь будут сохраняться вручную
-			connector.StreamManager.RevisionManager.Interval = TimeSpan.Zero;
+			adapter.StreamManager.RevisionManager.Interval = TimeSpan.Zero;
 
 			// включаем отслеживание ревизий для таблиц
-			connector.StreamManager.RevisionManager.Tables.Add(connector.TableRegistry.IndexLog); //не прокачивается таблица
-			connector.StreamManager.RevisionManager.Tables.Add(connector.TableRegistry.TradeFuture);
-			connector.StreamManager.RevisionManager.Tables.Add(connector.TableRegistry.TradeOption);
-			connector.StreamManager.RevisionManager.Tables.Add(connector.TableRegistry.AnonymousOrdersLog);
+			adapter.StreamManager.RevisionManager.Tables.Add(adapter.TableRegistry.IndexLog); //не прокачивается таблица
+			adapter.StreamManager.RevisionManager.Tables.Add(adapter.TableRegistry.TradeFuture);
+			adapter.StreamManager.RevisionManager.Tables.Add(adapter.TableRegistry.TradeOption);
+			adapter.StreamManager.RevisionManager.Tables.Add(adapter.TableRegistry.AnonymousOrdersLog);
 
-			return connector;
+			return adapter;
 		}
 
 		public override HydraTaskSettings Settings

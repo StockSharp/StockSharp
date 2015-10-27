@@ -646,9 +646,6 @@ namespace StockSharp.Algo
 		/// <param name="criteria">The instrument whose fields will be used as a filter.</param>
 		public void LookupSecurities(Security criteria)
 		{
-			if (criteria == null)
-				throw new ArgumentNullException("criteria");
-
 			var boardCode = criteria.Board != null ? criteria.Board.Code : string.Empty;
 			var securityCode = criteria.Code ?? string.Empty;
 
@@ -663,27 +660,8 @@ namespace StockSharp.Algo
 					securityCode = id.SecurityCode;
 			}
 
-			var message = new SecurityLookupMessage
-			{
-				TransactionId = TransactionIdGenerator.GetNextId(),
-				//LocalTime = CurrentTime,
-				SecurityId = criteria.ExternalId.ToSecurityId(securityCode, boardCode, criteria.Type),
-				Name = criteria.Name,
-				Class = criteria.Class,
-				SecurityType = criteria.Type,
-				ExpiryDate = criteria.ExpiryDate,
-				ShortName = criteria.ShortName,
-				VolumeStep = criteria.VolumeStep,
-				Multiplier = criteria.Multiplier,
-				PriceStep = criteria.PriceStep,
-				Decimals = criteria.Decimals,
-				Currency = criteria.Currency,
-				SettlementDate = criteria.SettlementDate,
-				OptionType = criteria.OptionType,
-				Strike = criteria.Strike,
-				BinaryOptionType = criteria.BinaryOptionType,
-				UnderlyingSecurityCode = criteria.UnderlyingSecurityId.IsEmpty() ? null : SecurityIdGenerator.Split(criteria.UnderlyingSecurityId).SecurityCode
-			};
+			var message = criteria.ToLookupMessage(criteria.ExternalId.ToSecurityId(securityCode, boardCode, criteria.Type));
+			message.TransactionId = TransactionIdGenerator.GetNextId();
 
 			LookupSecurities(message);
 		}

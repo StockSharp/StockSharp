@@ -22,7 +22,7 @@ namespace StockSharp.Hydra.Micex
 	[TaskCategory(TaskCategories.Russia | TaskCategories.RealTime | TaskCategories.Forex |
 		TaskCategories.Level1 | TaskCategories.MarketDepth | TaskCategories.Stock |
 		TaskCategories.Transactions | TaskCategories.Paid | TaskCategories.Ticks)]
-	class MicexTask : ConnectorHydraTask<MicexTrader>
+	class MicexTask : ConnectorHydraTask<MicexMessageAdapter>
 	{
 		private const string _sourceName = "Micex";
 
@@ -137,27 +137,30 @@ namespace StockSharp.Hydra.Micex
 			get { return _settings; }
 		}
 
-		protected override MarketDataConnector<MicexTrader> CreateConnector(HydraTaskSettings settings)
+		protected override void ApplySettings(HydraTaskSettings settings)
 		{
 			_settings = new MicexSettings(settings);
 
-			if (settings.IsDefault)
-			{
-				_settings.Address = "127.0.0.1:8000".To<EndPoint>();
-				_settings.Login = string.Empty;
-				_settings.Password = new SecureString();
-				_settings.Interface = MicexInterfaces.Stock22;
-				_settings.Server = string.Empty;
-				_settings.OrderBookDepth = null;
-				_settings.RequestAllDepths = true;
-				_settings.MicexLogLevel = null;
-				_settings.OverrideDll = true;
-			}
+			if (!settings.IsDefault)
+				return;
 
-			return new MarketDataConnector<MicexTrader>(EntityRegistry.Securities, this, () => new MicexTrader
+			_settings.Address = "127.0.0.1:8000".To<EndPoint>();
+			_settings.Login = string.Empty;
+			_settings.Password = new SecureString();
+			_settings.Interface = MicexInterfaces.Stock22;
+			_settings.Server = string.Empty;
+			_settings.OrderBookDepth = null;
+			_settings.RequestAllDepths = true;
+			_settings.MicexLogLevel = null;
+			_settings.OverrideDll = true;
+		}
+
+		protected override MicexMessageAdapter GetAdapter(IdGenerator generator)
+		{
+			return new MicexMessageAdapter(generator)
 			{
 				Login = _settings.Login,
-				Password = _settings.Password.To<string>(),
+				Password = _settings.Password,
 				Interface = _settings.Interface,
 				Server = _settings.Server,
 				Addresses = new[] { _settings.Address },
@@ -165,7 +168,7 @@ namespace StockSharp.Hydra.Micex
 				RequestAllDepths = _settings.RequestAllDepths,
 				MicexLogLevel = _settings.MicexLogLevel,
 				OverrideDll = _settings.OverrideDll
-			});
+			};
 		}
 	}
 }

@@ -496,7 +496,7 @@ namespace StockSharp.Algo.Storages
 			if (securityId.IsDefault())
 				throw new ArgumentNullException("securityId");
 
-			var id = securityId.SecurityCode + "@" + securityId.BoardCode;
+			var id = securityId.ToStringId();
 
 			var folderName = id.SecurityIdToFolderName();
 

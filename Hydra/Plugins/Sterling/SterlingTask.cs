@@ -1,5 +1,6 @@
 namespace StockSharp.Hydra.Sterling
 {
+	using Ecng.Common;
 	using Ecng.ComponentModel;
 
 	using StockSharp.Hydra.Core;
@@ -14,7 +15,7 @@ namespace StockSharp.Hydra.Sterling
 	[TaskCategory(TaskCategories.America | TaskCategories.RealTime |
 		TaskCategories.Stock | TaskCategories.Free | TaskCategories.Ticks |
 		TaskCategories.Level1 | TaskCategories.Candles | TaskCategories.Transactions)]
-	class SterlingTask : ConnectorHydraTask<SterlingTrader>
+	class SterlingTask : ConnectorHydraTask<SterlingMessageAdapter>
 	{
 		private const string _sourceName = "Sterling";
 
@@ -39,15 +40,18 @@ namespace StockSharp.Hydra.Sterling
 			get { return _settings; }
 		}
 
-		protected override MarketDataConnector<SterlingTrader> CreateConnector(HydraTaskSettings settings)
+		protected override void ApplySettings(HydraTaskSettings settings)
 		{
 			_settings = new SterlingSettings(settings);
 
 			if (settings.IsDefault)
 			{
 			}
+		}
 
-			return new MarketDataConnector<SterlingTrader>(EntityRegistry.Securities, this, () => new SterlingTrader());
+		protected override SterlingMessageAdapter GetAdapter(IdGenerator generator)
+		{
+			return new SterlingMessageAdapter(generator);
 		}
 	}
 }

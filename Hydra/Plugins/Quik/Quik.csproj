@@ -86,6 +86,10 @@
       <Project>{5814D093-FA6D-44A5-B75B-4CC7E8F11EB0}</Project>
       <Name>Algo.History</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\..\..\StockSharp %28GitLab%29\Connectors\Fix\Fix.csproj">
+      <Project>{de2dc640-fa5b-46f2-92e7-e5a53232185f}</Project>
+      <Name>Fix</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\Algo\Algo.csproj">
       <Project>{2a5c6fad-106c-4a4a-b602-77a6b1034ca2}</Project>
       <Name>Algo</Name>

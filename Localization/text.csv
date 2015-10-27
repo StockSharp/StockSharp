@@ -4262,7 +4262,7 @@ DocStr92;The base source of market data;Базовый источник марк
 DocStr93;Initialize {0};Инициализировать {0}
 DocStr94;To get the instrument code by its identifier;Получить код инструмента по его идентификатору
 DocStr95;To get the instrument board by its identifier;Получить площадку инструмента по его идентификатору
-DocStr96;Security boeard;Площадка инструмента
+DocStr96;Security board;Площадка инструмента
 DocStr97;Security id generator;Генератор идентификаторов инструментов
 DocStr98;The base source of market data, which saves the downloaded data to a temporary directory;Базовый источник маркет-данных, который сохраняет скаченные данные во временную директорию
 DocStr99;Upload or download text file;Загрузить или скачать текстовый файл

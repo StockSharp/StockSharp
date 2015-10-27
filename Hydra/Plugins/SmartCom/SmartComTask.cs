@@ -27,7 +27,7 @@ namespace StockSharp.Hydra.SmartCom
 	[TaskCategory(TaskCategories.Russia | TaskCategories.RealTime | TaskCategories.Stock |
 		TaskCategories.Candles | TaskCategories.Level1 | TaskCategories.MarketDepth |
 		TaskCategories.Transactions | TaskCategories.Free | TaskCategories.Ticks)]
-	class SmartComTask : ConnectorHydraTask<SmartTrader>
+	class SmartComTask : ConnectorHydraTask<SmartComMessageAdapter>
 	{
 		private const string _sourceName = "SmartCOM";
 
@@ -107,25 +107,28 @@ namespace StockSharp.Hydra.SmartCom
 			get { return _supportedCandleSeries; }
 		}
 
-		protected override MarketDataConnector<SmartTrader> CreateConnector(HydraTaskSettings settings)
+		protected override void ApplySettings(HydraTaskSettings settings)
 		{
 			_settings = new SmartComSettings(settings);
 
-			if (settings.IsDefault)
-			{
-				_settings.Address = SmartComAddresses.Matrix;
-				_settings.Login = string.Empty;
-				_settings.Password = new SecureString();
-				_settings.IsVersion3 = true;
-			}
+			if (!settings.IsDefault)
+				return;
 
-			return new MarketDataConnector<SmartTrader>(EntityRegistry.Securities, this, () => new SmartTrader
+			_settings.Address = SmartComAddresses.Matrix;
+			_settings.Login = string.Empty;
+			_settings.Password = new SecureString();
+			_settings.IsVersion3 = true;
+		}
+
+		protected override SmartComMessageAdapter GetAdapter(IdGenerator generator)
+		{
+			return new SmartComMessageAdapter(generator)
 			{
 				Login = _settings.Login,
-				Password = _settings.Password.To<string>(),
+				Password = _settings.Password,
 				Address = _settings.Address,
 				Version = _settings.IsVersion3 ? SmartComVersions.V3 : SmartComVersions.V2
-			});
+			};
 		}
 	}
 }

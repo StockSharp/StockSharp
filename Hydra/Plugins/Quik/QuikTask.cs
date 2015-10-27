@@ -12,12 +12,12 @@ namespace StockSharp.Hydra.Quik
 	using Ecng.Localization;
 	using Ecng.ComponentModel;
 
-	using StockSharp.BusinessEntities;
 	using StockSharp.Hydra.Core;
 	using StockSharp.Messages;
 	using StockSharp.Quik;
 	using StockSharp.Quik.Xaml;
 	using StockSharp.Localization;
+	using StockSharp.Quik.Lua;
 
 	using Xceed.Wpf.Toolkit.PropertyGrid.Attributes;
 
@@ -28,7 +28,7 @@ namespace StockSharp.Hydra.Quik
 	[TaskCategory(TaskCategories.Russia | TaskCategories.RealTime |
 		TaskCategories.Level1 | TaskCategories.MarketDepth | TaskCategories.Stock |
 		TaskCategories.Transactions | TaskCategories.Free | TaskCategories.Ticks)]
-	class QuikTask : ConnectorHydraTask<QuikTrader>
+	class QuikTask : ConnectorHydraTask<IMessageAdapter>
 	{
 		private const string _sourceName = "Quik";
 
@@ -287,45 +287,6 @@ namespace StockSharp.Hydra.Quik
 			#endregion
 		}
 
-		private sealed class QuikMarketDataConnector : MarketDataConnector<QuikTrader>
-		{
-			private readonly QuikSettings _settings;
-
-			public QuikMarketDataConnector(ISecurityProvider securityProvider, QuikTask task, Func<QuikTrader> createConnector, QuikSettings settings)
-				: base(securityProvider, task, createConnector)
-			{
-				if (settings == null)
-					throw new ArgumentNullException("settings");
-
-				_settings = settings;
-			}
-
-			protected override void InitializeConnector()
-			{
-				base.InitializeConnector();
-				Connector.NewSecurityChanges += OnNewSecurityChanges;
-			}
-
-			protected override void UnInitializeConnector()
-			{
-				Connector.NewSecurityChanges -= OnNewSecurityChanges;
-				base.UnInitializeConnector();
-			}
-
-			private void OnNewSecurityChanges(Security security, Level1ChangeMessage message)
-			{
-				base.AddLevel1Change(security, message); 
-			}
-
-			protected override void AddLevel1Change(Security security, Level1ChangeMessage message)
-			{
-				if (_settings.IsDownloadSecurityChangesHistory)
-					return;
-
-				base.AddLevel1Change(security, message);
-			}
-		}
-
 		private QuikSettings _settings;
 
 		public override HydraTaskSettings Settings
@@ -333,80 +294,68 @@ namespace StockSharp.Hydra.Quik
 			get { return _settings; }
 		}
 
-		protected override MarketDataConnector<QuikTrader> CreateConnector(HydraTaskSettings settings)
+		protected override void ApplySettings(HydraTaskSettings settings)
 		{
 			_settings = new QuikSettings(settings);
 
-			if (settings.IsDefault)
-			{
-				_settings.Path = QuikTerminal.GetDefaultPath() ?? string.Empty;
-				_settings.DdeServer = "hydra";
-				_settings.IsDownloadSecurityChangesHistory = false;
-				_settings.IsDde = false;
-				_settings.ExtendedColumns = new List<string>();
-				_settings.ExtendedColumnsHistory = new List<string>();
-				_settings.OverrideDll = true;
-				_settings.LuaAddress = QuikTrader.DefaultLuaAddress;
-				_settings.LuaLogin = "quik";
-				_settings.LuaPassword = new SecureString();
-			}
+			if (!settings.IsDefault)
+				return;
 
-			return new QuikMarketDataConnector(EntityRegistry.Securities, this, CreateHydraQuikTrader, _settings);
+			_settings.Path = QuikTerminal.GetDefaultPath() ?? string.Empty;
+			_settings.DdeServer = "hydra";
+			_settings.IsDownloadSecurityChangesHistory = false;
+			_settings.IsDde = false;
+			_settings.ExtendedColumns = new List<string>();
+			_settings.ExtendedColumnsHistory = new List<string>();
+			_settings.OverrideDll = true;
+			_settings.LuaAddress = QuikTrader.DefaultLuaAddress;
+			_settings.LuaLogin = "quik";
+			_settings.LuaPassword = new SecureString();
 		}
 
-		private QuikTrader CreateHydraQuikTrader()
+		protected override IMessageAdapter GetAdapter(IdGenerator generator)
 		{
-			var connector = new QuikTrader
+			if (_settings.IsDde)
 			{
-				IsDde = _settings.IsDde,
-				Path = _settings.Path,
-				DdeServer = _settings.DdeServer,
-				LuaFixServerAddress = _settings.LuaAddress,
-				OverrideDll = _settings.OverrideDll
-			};
+				var adapter = new QuikDdeAdapter(generator)
+				{
+					//Path = _settings.Path,
+					DdeServer = _settings.DdeServer,
+					//OverrideDll = _settings.OverrideDll
+				};
 
-			if (!_settings.LuaLogin.IsEmpty())
-				connector.LuaLogin = _settings.LuaLogin;
+				adapter.Tables = new[] { adapter.SecuritiesTable, adapter.TradesTable, adapter.OrdersTable, adapter.StopOrdersTable, adapter.MyTradesTable };
 
-			if (!_settings.LuaPassword.IsEmpty())
-				connector.LuaPassword = _settings.LuaPassword;
+				if (_settings.IsDownloadSecurityChangesHistory)
+					adapter.Tables = adapter.Tables.Concat(new[] { adapter.SecuritiesChangeTable });
 
-			connector.DdeTables = new[] { connector.SecuritiesTable, connector.TradesTable, connector.OrdersTable, connector.StopOrdersTable, connector.MyTradesTable };
+				//Добавление выбранных колонок в экспорт
+				if (!_settings.IsDownloadSecurityChangesHistory)
+				{
+					adapter
+						.SecuritiesTable
+						.Columns
+						.AddRange(DdeSecurityColumnsEditor.GetColumns(_settings.ExtendedColumns));
+				}
+				else
+				{
+					adapter
+						.SecuritiesChangeTable
+						.Columns
+						.AddRange(DdeSecurityChangesColumnsEditor.GetColumns(_settings.ExtendedColumnsHistory));
+				}
 
-			if (_settings.IsDownloadSecurityChangesHistory)
-				connector.DdeTables = connector.DdeTables.Concat(new[] { connector.SecuritiesChangeTable });
-
-			//Добавление выбранных колонок в экспорт
-			if (!_settings.IsDownloadSecurityChangesHistory)
-			{
-				connector
-					.SecuritiesTable
-					.Columns
-					.AddRange(DdeSecurityColumnsEditor.GetColumns(_settings.ExtendedColumns));
+				return adapter;
 			}
 			else
 			{
-				connector
-					.SecuritiesChangeTable
-					.Columns
-					.AddRange(DdeSecurityChangesColumnsEditor.GetColumns(_settings.ExtendedColumnsHistory));				
+				return new LuaFixMarketDataMessageAdapter(generator)
+				{
+					Address = _settings.LuaAddress,
+					Login = _settings.LuaLogin,
+					Password = _settings.LuaPassword
+				};
 			}
-
-			return connector;
 		}
-
-		///// <summary>
-		///// Выполнить задачу.
-		///// </summary>
-		///// <returns>Минимальный интервал, после окончания которого необходимо снова выполнить задачу.</returns>
-		//protected override TimeSpan OnProcess()
-		//{
-		//	// если фильтр по инструментам выключен (выбран инструмент все инструменты)
-		//	if (Connector.Connector.IsDde || this.GetAllSecurity() == null)
-		//		return base.OnProcess();
-
-		//	this.AddWarningLog(LocalizedStrings.Str2812);
-		//	return TimeSpan.MaxValue;
-		//}
 	}
 }

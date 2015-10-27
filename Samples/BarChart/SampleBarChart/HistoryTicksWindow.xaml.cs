@@ -35,8 +35,8 @@ namespace SampleBarChart
 			bool isSuccess;
 			var ticks = MainWindow.Instance.Trader.GetHistoricalTicks(_security, (DateTime)DateFromPicker.Value, (DateTime)DateToPicker.Value, out isSuccess);
 
-			Ticks.Trades.Clear();
-			Ticks.Trades.AddRange(ticks);
+			Ticks.Messages.Clear();
+			Ticks.Messages.AddRange(ticks);
 		}
 	}
 }

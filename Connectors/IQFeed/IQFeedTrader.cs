@@ -22,7 +22,7 @@ namespace StockSharp.IQFeed
 	[Icon("IQFeed_logo.png")]
 	public class IQFeedTrader : Connector, IExternalCandleSource
 	{
-		private readonly SynchronizedDictionary<long, RefFive<List<Candle>, SyncObject, bool, CandleSeries, bool>> _candleInfo = new SynchronizedDictionary<long, RefFive<List<Candle>, SyncObject, bool, CandleSeries, bool>>();
+		private readonly SynchronizedDictionary<long, RefFive<List<CandleMessage>, SyncObject, bool, CandleSeries, bool>> _candleInfo = new SynchronizedDictionary<long, RefFive<List<CandleMessage>, SyncObject, bool, CandleSeries, bool>>();
 		private readonly SynchronizedDictionary<long, RefFive<List<Level1ChangeMessage>, SyncObject, bool, SecurityId, bool>> _level1Info = new SynchronizedDictionary<long, RefFive<List<Level1ChangeMessage>, SyncObject, bool, SecurityId, bool>>();
 		private readonly SynchronizedDictionary<long, CandleSeries> _candleSeries = new SynchronizedDictionary<long, CandleSeries>();
 
@@ -171,7 +171,7 @@ namespace StockSharp.IQFeed
 
 			var transactionId = TransactionIdGenerator.GetNextId();
 
-			var info = new RefFive<List<Level1ChangeMessage>, SyncObject, bool, SecurityId, bool>(new List<Level1ChangeMessage>(), new SyncObject(), false, securityId, false);
+			var info = RefTuple.Create(new List<Level1ChangeMessage>(), new SyncObject(), false, securityId, false);
 			_level1Info.Add(transactionId, info);
 
 			SendInMessage(new MarketDataMessage
@@ -208,7 +208,7 @@ namespace StockSharp.IQFeed
 
 			var transactionId = TransactionIdGenerator.GetNextId();
 
-			var info = new RefFive<List<Level1ChangeMessage>, SyncObject, bool, SecurityId, bool>(new List<Level1ChangeMessage>(), new SyncObject(), false, securityId, false);
+			var info = RefTuple.Create(new List<Level1ChangeMessage>(), new SyncObject(), false, securityId, false);
 			_level1Info.Add(transactionId, info);
 
 			SendInMessage(new MarketDataMessage
@@ -241,7 +241,7 @@ namespace StockSharp.IQFeed
 		/// <param name="count">Maximum ticks count.</param>
 		/// <param name="isSuccess">Whether all data were obtained successfully or the download process has been interrupted.</param>
 		/// <returns>Historical candles.</returns>
-		public IEnumerable<Candle> GetHistoricalCandles(Security security, Type candleType, object arg, long count, out bool isSuccess)
+		public IEnumerable<CandleMessage> GetHistoricalCandles(Security security, Type candleType, object arg, long count, out bool isSuccess)
 		{
 			if (security == null)
 				throw new ArgumentNullException("security");
@@ -255,7 +255,7 @@ namespace StockSharp.IQFeed
 
 			this.AddInfoLog(LocalizedStrings.Str2146Params, series, count);
 
-			var info = new RefFive<List<Candle>, SyncObject, bool, CandleSeries, bool>(new List<Candle>(), new SyncObject(), false, series, false);
+			var info = RefTuple.Create(new List<CandleMessage>(), new SyncObject(), false, series, false);
 			_candleInfo.Add(transactionId, info);
 
 			var mdMsg = new MarketDataMessage
@@ -293,7 +293,7 @@ namespace StockSharp.IQFeed
 		/// <param name="to">End period.</param>
 		/// <param name="isSuccess">Whether all data were obtained successfully or the download process has been interrupted.</param>
 		/// <returns>Historical candles.</returns>
-		public IEnumerable<Candle> GetHistoricalCandles(Security security, Type candleType, object arg, DateTimeOffset from, DateTimeOffset to, out bool isSuccess)
+		public IEnumerable<CandleMessage> GetHistoricalCandles(Security security, Type candleType, object arg, DateTimeOffset from, DateTimeOffset to, out bool isSuccess)
 		{
 			if (security == null)
 				throw new ArgumentNullException("security");
@@ -310,7 +310,7 @@ namespace StockSharp.IQFeed
 
 			this.AddInfoLog(LocalizedStrings.Str2148Params, series, from, to);
 
-			var info = new RefFive<List<Candle>, SyncObject, bool, CandleSeries, bool>(new List<Candle>(), new SyncObject(), false, series, false);
+			var info = RefTuple.Create(new List<CandleMessage>(), new SyncObject(), false, series, false);
 			_candleInfo.Add(id, info);
 			
 			SubscribeCandles(series, from, to, id);
@@ -469,12 +469,10 @@ namespace StockSharp.IQFeed
 					if (series == null)
 						return;
 
-					var candle = candleMsg.ToCandle(series);
-
 					// сообщение с IsFinished = true не содержит данные по свече,
 					// только флаг, что получение исторических данных завершено
 					if (!candleMsg.IsFinished)
-						NewCandles.SafeInvoke(series, new[] { candle });
+						NewCandles.SafeInvoke(series, new[] { candleMsg.ToCandle(series) });
 					else
 					{
 						if (candleMsg.IsFinished)
@@ -497,7 +495,7 @@ namespace StockSharp.IQFeed
 							_candleInfo.Remove(candleMsg.OriginalTransactionId);
 						}
 						else
-							info.First.Add(candle);
+							info.First.Add(candleMsg);
 					}
 
 					// DO NOT send historical data to Connector

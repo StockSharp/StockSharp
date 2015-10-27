@@ -22,7 +22,7 @@ namespace StockSharp.Hydra.Oanda
 	[TaskCategory(TaskCategories.Forex | TaskCategories.RealTime |
 		TaskCategories.Free | TaskCategories.History | TaskCategories.MarketDepth |
 		TaskCategories.Level1 | TaskCategories.Candles | TaskCategories.Transactions)]
-	class OandaTask : ConnectorHydraTask<OandaTrader>
+	class OandaTask : ConnectorHydraTask<OandaMessageAdapter>
 	{
 		private const string _sourceName = "OANDA";
 
@@ -92,7 +92,11 @@ namespace StockSharp.Hydra.Oanda
 			get { return _supportedCandleSeries; }
 		}
 
-		protected override MarketDataConnector<OandaTrader> CreateConnector(HydraTaskSettings settings)
+		/// <summary>
+		/// Применить настройки.
+		/// </summary>
+		/// <param name="settings">Настройки.</param>
+		protected override void ApplySettings(HydraTaskSettings settings)
 		{
 			_settings = new OandaSettings(settings);
 
@@ -101,12 +105,15 @@ namespace StockSharp.Hydra.Oanda
 				_settings.Server = OandaServers.Real;
 				_settings.Token = new SecureString();
 			}
+		}
 
-			return new MarketDataConnector<OandaTrader>(EntityRegistry.Securities, this, () => new OandaTrader
+		protected override OandaMessageAdapter GetAdapter(IdGenerator generator)
+		{
+			return new OandaMessageAdapter(generator)
 			{
 				Server = _settings.Server,
 				Token = _settings.Token,
-			});
+			};
 		}
 	}
 }

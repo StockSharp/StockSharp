@@ -19,7 +19,7 @@ namespace StockSharp.Hydra.Btce
 	[TaskCategory(TaskCategories.Crypto | TaskCategories.RealTime |
 		TaskCategories.Free | TaskCategories.Ticks | TaskCategories.MarketDepth |
 		TaskCategories.Level1 | TaskCategories.Transactions)]
-	class BtceTask : ConnectorHydraTask<BtceTrader>
+	class BtceTask : ConnectorHydraTask<BtceMessageAdapter>
 	{
 		private const string _sourceName = "BTCE";
 
@@ -68,29 +68,29 @@ namespace StockSharp.Hydra.Btce
 			get { return _settings; }
 		}
 
-		protected override MarketDataConnector<BtceTrader> CreateConnector(HydraTaskSettings settings)
+		protected override void ApplySettings(HydraTaskSettings settings)
 		{
 			_settings = new BtceSettings(settings);
 
-			if (_settings.IsDefault)
+			if (!_settings.IsDefault)
+				return;
+
+			_settings.Key = new SecureString();
+			_settings.Secret = new SecureString();
+		}
+
+		protected override BtceMessageAdapter GetAdapter(IdGenerator generator)
+		{
+			var adapter = new BtceMessageAdapter(generator)
 			{
-				_settings.Key = new SecureString();
-				_settings.Secret = new SecureString();
-			}
+				Key = _settings.Key,
+				Secret = _settings.Secret,
+			};
 
-			return new MarketDataConnector<BtceTrader>(EntityRegistry.Securities, this, () =>
-			{
-				var trader = new BtceTrader
-				{
-					Key = _settings.Key.To<string>(),
-					Secret = _settings.Secret.To<string>(),
-				};
+			if (adapter.Key.IsEmpty())
+				adapter.RemoveTransactionalSupport();
 
-				if (trader.Key.IsEmpty())
-					trader.TransactionAdapter.RemoveTransactionalSupport();
-
-				return trader;
-			});
+			return adapter;
 		}
 	}
 }

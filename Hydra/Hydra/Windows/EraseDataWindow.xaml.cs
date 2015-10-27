@@ -11,6 +11,7 @@ namespace StockSharp.Hydra.Windows
 	using Ecng.Common;
 	using Ecng.Xaml;
 
+	using StockSharp.Algo;
 	using StockSharp.Algo.Storages;
 	using StockSharp.BusinessEntities;
 	using StockSharp.Hydra.Core;
@@ -169,7 +170,7 @@ namespace StockSharp.Hydra.Windows
 						if (_token.IsCancellationRequested)
 							break;
 
-						var id = securityId.SecurityCode + "@" + securityId.BoardCode;
+						var id = securityId.ToStringId();
 
 						var security = securities == null
 							? EntityRegistry.Securities.ReadById(id)

@@ -22,7 +22,7 @@ namespace StockSharp.Hydra.InteractiveBrokers
 	[TaskCategory(TaskCategories.America | TaskCategories.RealTime |
 		TaskCategories.Stock | TaskCategories.Free | TaskCategories.Ticks |
 		TaskCategories.Level1 | TaskCategories.Candles | TaskCategories.Transactions)]
-	class IBTask : ConnectorHydraTask<IBTrader>
+	class IBTask : ConnectorHydraTask<InteractiveBrokersMessageAdapter>
 	{
 		private const string _sourceName = "Interactive Brokers";
 
@@ -98,25 +98,28 @@ namespace StockSharp.Hydra.InteractiveBrokers
 			get { return _supportedCandleSeries; }
 		}
 
-		protected override MarketDataConnector<IBTrader> CreateConnector(HydraTaskSettings settings)
+		protected override void ApplySettings(HydraTaskSettings settings)
 		{
 			_settings = new IBSettings(settings);
 
-			if (settings.IsDefault)
-			{
-				_settings.Address = InteractiveBrokersMessageAdapter.DefaultAddress;
-				_settings.IsDownloadNews = true;
-				_settings.ClientId = 0;
-				_settings.ServerLogLevel = ServerLogLevels.System;
-				_settings.SupportedLevel1Fields = Enumerator.GetValues<Level1Fields>();
-			}
+			if (!settings.IsDefault)
+				return;
 
-			return new MarketDataConnector<IBTrader>(EntityRegistry.Securities, this, () => new IBTrader
+			_settings.Address = InteractiveBrokersMessageAdapter.DefaultAddress;
+			_settings.IsDownloadNews = true;
+			_settings.ClientId = 0;
+			_settings.ServerLogLevel = ServerLogLevels.System;
+			_settings.SupportedLevel1Fields = Enumerator.GetValues<Level1Fields>();
+		}
+
+		protected override InteractiveBrokersMessageAdapter GetAdapter(IdGenerator generator)
+		{
+			return new InteractiveBrokersMessageAdapter(generator)
 			{
 				Address = _settings.Address,
 				ClientId = _settings.ClientId,
 				ServerLogLevel = _settings.ServerLogLevel
-			});
+			};
 		}
 	}
 }

@@ -19,7 +19,7 @@ namespace StockSharp.Hydra.Fix
 	[TaskCategory(TaskCategories.America | TaskCategories.Russia | TaskCategories.RealTime |
 		TaskCategories.Stock | TaskCategories.Paid | TaskCategories.Ticks | TaskCategories.OrderLog |
 		TaskCategories.Forex | TaskCategories.Level1 | TaskCategories.Candles | TaskCategories.Transactions)]
-	class FixTask : ConnectorHydraTask<FixTrader>
+	class FixTask : ConnectorHydraTask<FixMessageAdapter>
 	{
 		private const string _sourceName = "FIX";
 
@@ -82,24 +82,21 @@ namespace StockSharp.Hydra.Fix
 			get { return _settings; }
 		}
 
-		protected override MarketDataConnector<FixTrader> CreateConnector(HydraTaskSettings settings)
+		protected override void ApplySettings(HydraTaskSettings settings)
 		{
 			_settings = new FixSettings(settings);
 
 			if (settings.IsDefault)
 				_settings.MarketDataSession = new FixMessageAdapter(new IncrementalIdGenerator());
+		}
 
-			return new MarketDataConnector<FixTrader>(EntityRegistry.Securities, this, () =>
-			{
-				var trader = new FixTrader();
+		protected override FixMessageAdapter GetAdapter(IdGenerator generator)
+		{
+			var adapter = new FixMessageAdapter(generator);
 
-				trader.MarketDataAdapter.Load(_settings.MarketDataSession.Save());
+			adapter.Load(_settings.MarketDataSession.Save());
 
-				if (!this.IsExecLogEnabled())
-					trader.Adapter.InnerAdapters.Remove(trader.TransactionAdapter);
-
-				return trader;
-			});
+			return adapter;
 		}
 	}
 }

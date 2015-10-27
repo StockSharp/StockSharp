@@ -271,14 +271,14 @@ namespace SampleHistoryTesting
 					FinamCandlesProgress,
 					FinamCandlesParameterGrid,
 					// candles
-					new EmulationInfo {UseCandleTimeFrame = timeFrame, HistorySource = d => _finamHistorySource.GetCandles(security, timeFrame, d.Date, d.Date).Select(c => c.ToMessage()), CurveColor = Colors.DarkBlue, StrategyName = LocalizedStrings.FinamCandles}),
+					new EmulationInfo {UseCandleTimeFrame = timeFrame, HistorySource = d => _finamHistorySource.GetCandles(security, timeFrame, d.Date, d.Date), CurveColor = Colors.DarkBlue, StrategyName = LocalizedStrings.FinamCandles}),
 
 				Tuple.Create(
 					YahooCandlesCheckBox,
 					YahooCandlesProgress,
 					YahooCandlesParameterGrid,
 					// candles
-					new EmulationInfo {UseCandleTimeFrame = timeFrame, HistorySource = d => new YahooHistorySource().GetCandles(security, timeFrame, d.Date, d.Date).Select(c => c.ToMessage()), CurveColor = Colors.DarkBlue, StrategyName = LocalizedStrings.YahooCandles}),
+					new EmulationInfo {UseCandleTimeFrame = timeFrame, HistorySource = d => new YahooHistorySource().GetCandles(security, timeFrame, d.Date, d.Date), CurveColor = Colors.DarkBlue, StrategyName = LocalizedStrings.YahooCandles}),
 			};
 
 			// storage to historical data

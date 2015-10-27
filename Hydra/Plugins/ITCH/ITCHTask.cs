@@ -22,7 +22,7 @@ namespace StockSharp.Hydra.ITCH
 	[TaskCategory(TaskCategories.America | TaskCategories.RealTime | TaskCategories.OrderLog |
 		TaskCategories.Level1 | TaskCategories.MarketDepth | TaskCategories.Stock |
 		TaskCategories.Transactions | TaskCategories.Paid | TaskCategories.Ticks)]
-	class ItchTask : ConnectorHydraTask<ItchTrader>
+	class ItchTask : ConnectorHydraTask<ItchMessageAdapter>
 	{
 		private const string _sourceName = "ITCH";
 
@@ -144,36 +144,39 @@ namespace StockSharp.Hydra.ITCH
 			get { return _settings; }
 		}
 
-		protected override MarketDataConnector<ItchTrader> CreateConnector(HydraTaskSettings settings)
+		protected override void ApplySettings(HydraTaskSettings settings)
 		{
 			_settings = new ItchSettings(settings);
 
-			if (settings.IsDefault)
-			{
-				_settings.PrimaryMulticast = new MulticastSourceAddress
-				{
-					GroupAddress = IPAddress.Any,
-					Port = 1,
-					SourceAddress = IPAddress.Any,
-				};
-				_settings.DuplicateMulticast = new MulticastSourceAddress
-				{
-					GroupAddress = IPAddress.Any,
-					Port = 1,
-					SourceAddress = IPAddress.Any,
-				};
-				_settings.Login = string.Empty;
-				_settings.Password = new SecureString();
-				_settings.ReplayAddress = _settings.RecoveryAddress = new IPEndPoint(IPAddress.Loopback, 3);
-				_settings.SecurityCsvFile = string.Empty;
-				_settings.OnlyActiveSecurities = true;
-				_settings.GroupId = 'A';
-			}
+			if (!settings.IsDefault)
+				return;
 
-			return new MarketDataConnector<ItchTrader>(EntityRegistry.Securities, this, () => new ItchTrader
+			_settings.PrimaryMulticast = new MulticastSourceAddress
+			{
+				GroupAddress = IPAddress.Any,
+				Port = 1,
+				SourceAddress = IPAddress.Any,
+			};
+			_settings.DuplicateMulticast = new MulticastSourceAddress
+			{
+				GroupAddress = IPAddress.Any,
+				Port = 1,
+				SourceAddress = IPAddress.Any,
+			};
+			_settings.Login = string.Empty;
+			_settings.Password = new SecureString();
+			_settings.ReplayAddress = _settings.RecoveryAddress = new IPEndPoint(IPAddress.Loopback, 3);
+			_settings.SecurityCsvFile = string.Empty;
+			_settings.OnlyActiveSecurities = true;
+			_settings.GroupId = 'A';
+		}
+
+		protected override ItchMessageAdapter GetAdapter(IdGenerator generator)
+		{
+			return new ItchMessageAdapter(generator)
 			{
 				Login = _settings.Login,
-				Password = _settings.Password.To<string>(),
+				Password = _settings.Password,
 				PrimaryMulticast = _settings.PrimaryMulticast,
 				DuplicateMulticast = _settings.DuplicateMulticast,
 				RecoveryAddress = _settings.RecoveryAddress,
@@ -181,7 +184,7 @@ namespace StockSharp.Hydra.ITCH
 				SecurityCsvFile = _settings.SecurityCsvFile,
 				OnlyActiveSecurities = _settings.OnlyActiveSecurities,
 				GroupId = _settings.GroupId
-			});
+			};
 		}
 	}
 }

@@ -10,7 +10,6 @@ namespace StockSharp.Hydra.BarChart
 
 	using StockSharp.Algo;
 	using StockSharp.Algo.Candles;
-	using StockSharp.BusinessEntities;
 	using StockSharp.Hydra.Core;
 	using StockSharp.BarChart;
 	using StockSharp.Logging;
@@ -26,7 +25,7 @@ namespace StockSharp.Hydra.BarChart
 	[TaskCategory(TaskCategories.America | TaskCategories.RealTime | TaskCategories.History |
 		TaskCategories.Paid | TaskCategories.Ticks | TaskCategories.MarketDepth |
 		TaskCategories.Stock | TaskCategories.Level1 | TaskCategories.Candles)]
-	class BarChartTask : ConnectorHydraTask<BarChartTrader>
+	class BarChartTask : ConnectorHydraTask<BarChartMessageAdapter>
 	{
 		private const string _sourceName = "BarChart";
 
@@ -112,6 +111,7 @@ namespace StockSharp.Hydra.BarChart
 		private BarChartSettings _settings;
 
 		public BarChartTask()
+			: base(new BarChartTrader())
 		{
 			_supportedCandleSeries = BarChartMessageAdapter.TimeFrames.Select(tf => new CandleSeries
 			{
@@ -139,35 +139,30 @@ namespace StockSharp.Hydra.BarChart
 			get { return _settings; }
 		}
 
-		protected override MarketDataConnector<BarChartTrader> CreateConnector(HydraTaskSettings settings)
+		protected override void ApplySettings(HydraTaskSettings settings)
 		{
 			_settings = new BarChartSettings(settings);
 
-			if (settings.IsDefault)
-			{
-				_settings.Offset = 0;
-				_settings.StartFrom = DateTime.Today;
-				_settings.Login = null;
-				_settings.Password = null;
-				_settings.IsDownloadNews = true;
-				_settings.IsRealTime = false;
-				_settings.Interval = TimeSpan.FromDays(1);
-				_settings.IgnoreWeekends = true;
-			}
+			if (!settings.IsDefault)
+				return;
 
-			return new MarketDataConnector<BarChartTrader>(EntityRegistry.Securities, this, () => new BarChartTrader
-			{
-				Login = _settings.Login,
-				Password = _settings.Password.To<string>()
-			});
+			_settings.Offset = 0;
+			_settings.StartFrom = DateTime.Today;
+			_settings.Login = null;
+			_settings.Password = null;
+			_settings.IsDownloadNews = true;
+			_settings.IsRealTime = false;
+			_settings.Interval = TimeSpan.FromDays(1);
+			_settings.IgnoreWeekends = true;
 		}
 
-		protected override void SubscribeSecurity(Security security)
+		protected override BarChartMessageAdapter GetAdapter(IdGenerator generator)
 		{
-			if (!_settings.IsRealTime)
-				Connector.Connector.RegisterSecurity(security);
-			else
-				base.SubscribeSecurity(security);
+			return new BarChartMessageAdapter(generator)
+			{
+				Login = _settings.Login,
+				Password = _settings.Password
+			};
 		}
 
 		protected override TimeSpan OnProcess()
@@ -196,7 +191,7 @@ namespace StockSharp.Hydra.BarChart
 				if (!CanProcess())
 					break;
 
-				if (security.MarketDataTypesSet.Contains(typeof(Trade)))
+				if (security.MarketDataTypesSet.Contains(typeof(Level1ChangeMessage)))
 				{
 					var tradeStorage = StorageRegistry.GetTickMessageStorage(security.Security, _settings.Drive, _settings.StorageFormat);
 
@@ -214,12 +209,12 @@ namespace StockSharp.Hydra.BarChart
 						this.AddInfoLog(LocalizedStrings.Str2294Params, date, security.Security.Id);
 
 						bool isSuccess;
-						var trades = Connector.Connector.GetHistoricalTicks(security.Security, _settings.StartFrom, _settings.StartFrom.EndOfDay(), out isSuccess);
+						var trades = ((BarChartTrader)Connector).GetHistoricalTicks(security.Security, _settings.StartFrom, _settings.StartFrom.EndOfDay(), out isSuccess);
 
 						if (isSuccess)
 						{
 							if (trades.Any())
-								SaveTrades(security, trades);
+								SaveTicks(security, trades);
 							else
 								this.AddDebugLog(LocalizedStrings.NoData);
 						}
@@ -257,7 +252,7 @@ namespace StockSharp.Hydra.BarChart
 						this.AddInfoLog(LocalizedStrings.Str2298Params, series, date, security.Security.Id);
 
 						bool isSuccess;
-						var candles = Connector.Connector.GetHistoricalCandles(security.Security, series.CandleType, series.Arg, date, date.EndOfDay(), out isSuccess);
+						var candles = ((BarChartTrader)Connector).GetHistoricalCandles(security.Security, series.CandleType, series.Arg, date, date.EndOfDay(), out isSuccess);
 
 						if (isSuccess)
 						{

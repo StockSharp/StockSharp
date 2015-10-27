@@ -2,6 +2,7 @@ namespace StockSharp.Algo.Storages
 {
 	using System;
 	using System.Collections.Generic;
+	using System.Linq;
 
 	using Ecng.Collections;
 	using Ecng.Common;
@@ -14,12 +15,86 @@ namespace StockSharp.Algo.Storages
 	/// </summary>
 	public class BufferMessageAdapter : MessageAdapterWrapper
 	{
-		private readonly MarketDataBuffer<SecurityId, ExecutionMessage> _ticksBuffer = new MarketDataBuffer<SecurityId, ExecutionMessage>();
-		private readonly MarketDataBuffer<SecurityId, QuoteChangeMessage> _orderBooksBuffer = new MarketDataBuffer<SecurityId, QuoteChangeMessage>();
-		private readonly MarketDataBuffer<SecurityId, ExecutionMessage> _orderLogBuffer = new MarketDataBuffer<SecurityId, ExecutionMessage>();
-		private readonly MarketDataBuffer<SecurityId, Level1ChangeMessage> _level1Buffer = new MarketDataBuffer<SecurityId, Level1ChangeMessage>();
-		private readonly MarketDataBuffer<Tuple<SecurityId, Type, object>, CandleMessage> _candleBuffer = new MarketDataBuffer<Tuple<SecurityId, Type, object>, CandleMessage>();
-		private readonly MarketDataBuffer<SecurityId, ExecutionMessage> _transactionsBuffer = new MarketDataBuffer<SecurityId, ExecutionMessage>();
+		/// <summary>
+		/// The market data buffer.
+		/// </summary>
+		/// <typeparam name="TKey">The key type.</typeparam>
+		/// <typeparam name="TMarketData">Market data type.</typeparam>
+		class DataBuffer<TKey, TMarketData>
+		{
+			private readonly SynchronizedDictionary<TKey, List<TMarketData>> _data = new SynchronizedDictionary<TKey, List<TMarketData>>();
+
+			///// <summary>
+			///// The buffer size.
+			///// </summary>
+			//public int Size { get; set; }
+
+			/// <summary>
+			/// To add new information to the buffer.
+			/// </summary>
+			/// <param name="key">The key possessing new information.</param>
+			/// <param name="data">New information.</param>
+			public void Add(TKey key, TMarketData data)
+			{
+				Add(key, new[] { data });
+			}
+
+			/// <summary>
+			/// To add new information to the buffer.
+			/// </summary>
+			/// <param name="key">The key possessing new information.</param>
+			/// <param name="data">New information.</param>
+			public void Add(TKey key, IEnumerable<TMarketData> data)
+			{
+				_data.SyncDo(d => d.SafeAdd(key).AddRange(data));
+			}
+
+			/// <summary>
+			/// To get accumulated data from the buffer and delete them.
+			/// </summary>
+			/// <returns>Gotten data.</returns>
+			public IDictionary<TKey, IEnumerable<TMarketData>> Get()
+			{
+				return _data.SyncGet(d =>
+				{
+					var retVal = d.ToDictionary(p => p.Key, p => (IEnumerable<TMarketData>)p.Value);
+					d.Clear();
+					return retVal;
+				});
+			}
+
+			///// <summary>
+			///// To get accumulated data from the buffer and delete them.
+			///// </summary>
+			///// <param name="key">The key possessing market data.</param>
+			///// <returns>Gotten data.</returns>
+			//public IEnumerable<TMarketData> Get(TKey key)
+			//{
+			//	if (key.IsDefault())
+			//		throw new ArgumentNullException("key");
+
+			//	return _data.SyncGet(d =>
+			//	{
+			//		var data = d.TryGetValue(key);
+
+			//		if (data != null)
+			//		{
+			//			var retVal = data.CopyAndClear();
+			//			d.Remove(key);
+			//			return retVal;
+			//		}
+
+			//		return Enumerable.Empty<TMarketData>();
+			//	});
+			//}
+		}
+
+		private readonly DataBuffer<SecurityId, ExecutionMessage> _ticksBuffer = new DataBuffer<SecurityId, ExecutionMessage>();
+		private readonly DataBuffer<SecurityId, QuoteChangeMessage> _orderBooksBuffer = new DataBuffer<SecurityId, QuoteChangeMessage>();
+		private readonly DataBuffer<SecurityId, ExecutionMessage> _orderLogBuffer = new DataBuffer<SecurityId, ExecutionMessage>();
+		private readonly DataBuffer<SecurityId, Level1ChangeMessage> _level1Buffer = new DataBuffer<SecurityId, Level1ChangeMessage>();
+		private readonly DataBuffer<Tuple<SecurityId, Type, object>, CandleMessage> _candleBuffer = new DataBuffer<Tuple<SecurityId, Type, object>, CandleMessage>();
+		private readonly DataBuffer<SecurityId, ExecutionMessage> _transactionsBuffer = new DataBuffer<SecurityId, ExecutionMessage>();
 		private readonly SynchronizedSet<NewsMessage> _newsBuffer = new SynchronizedSet<NewsMessage>(); 
 
 		/// <summary>
@@ -118,7 +193,7 @@ namespace StockSharp.Algo.Storages
 				{
 					var execMsg = (ExecutionMessage)message.Clone();
 
-					MarketDataBuffer<SecurityId, ExecutionMessage> buffer;
+					DataBuffer<SecurityId, ExecutionMessage> buffer;
 
 					switch (execMsg.ExecutionType)
 					{
