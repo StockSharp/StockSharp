@@ -4,6 +4,7 @@ using System.Windows.Controls;
 using System.Windows.Media.Imaging;
 using ActiproSoftware.Windows;
 using ActiproSoftware.Windows.Controls.Docking;
+using StockSharp.Logging;
 
 namespace StockSharp.Configuration.ConfigManager.Layout
 {
@@ -38,6 +39,21 @@ namespace StockSharp.Configuration.ConfigManager.Layout
                 new BitmapImage(new Uri("/Resources/Images/TextDocument16.png", UriKind.Relative)), textBox);
 
             return window;
+        }
+
+        public DocumentWindow CreateDocumentWindow(DockSite dockSite, string name, string title, BitmapImage icon, Type contentType)
+        {
+            DocumentWindow documentWindow = null;
+            try
+            {
+                documentWindow = new DocumentWindow(dockSite, name, title, icon, Activator.CreateInstance(contentType));
+            }
+            catch (Exception e)
+            {
+                e.LogError();
+            }
+
+            return documentWindow;
         }
     }
 }

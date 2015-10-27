@@ -144,37 +144,49 @@ namespace StockSharp.Terminal
 		    }
 		    else
 		    {
-		        int i = 1;
                 // create a default or temp layout
-                var wnd = ConfigurationManager.LayoutManager.CreateToolWindow("ToolWindow" + i++);
-                wnd.Dock(ConfigurationManager.LayoutManager.DockSite, Direction.None);
+		        var chart = ConfigurationManager.LayoutManager.CreateToolWindow(DockSite1, "ChartName", "ChartTitle", null,
+		            typeof (ChartPanel));
+                chart.Dock(DockSite1, Dock.Top);
 
-                var temp = ConfigurationManager.LayoutManager.CreateToolWindow("ToolWindow" + i++);
-		        temp.Name = "ToolWindow" + i;
-		        temp.Title = temp.Name;
-		        temp.Tag = temp.Name;
-		        temp.Header = temp.Name;
-                temp.Content = new ChartPanel();
-                temp.Dock(wnd, Direction.ContentRight);
-		        for (int j = 1; j <= 5; j++)
-		        {
-		            var tw = ConfigurationManager.LayoutManager.CreateToolWindow("ToolWindow" + i++);
-		            tw.Name = "ToolWindow" + i;
-		            tw.Title = tw.Name;
-		            tw.Tag = tw.Name;
-		            tw.Header = tw.Name;
+                var depth = ConfigurationManager.LayoutManager.CreateToolWindow(DockSite1, "DepthName", "DepthTitle", null,
+		            typeof (MarketDepthControl));
+                depth.Dock(chart, Direction.ContentRight);
 
-                    if (j % 2 == 0) tw.Content = new TradeGrid();
-		            if (j % 3 == 0) tw.Content = new Monitor();
-                    if (j % 4 == 0) tw.Content = new SecurityPicker();
-                    if (j % 5 == 0) tw.Content = new MarketDepthControl();
+                var depth1 = ConfigurationManager.LayoutManager.CreateToolWindow(DockSite1, "Depth1Name", "Depth1Title", null,
+                    typeof(MarketDepthControl));
+                depth1.Float();
 
+                var portfolio = ConfigurationManager.LayoutManager.CreateToolWindow(DockSite1, "PortfolioName", "PortfolioTitle",
+		            null, typeof (PortfolioGrid));
+                portfolio.Dock(depth, Direction.ContentBottom);
 
-                    tw.Dock(temp, j % 2 == 0 ? Direction.ContentTop : Direction.Content);
-		            j++;
-		        }
+                var monitor = ConfigurationManager.LayoutManager.CreateToolWindow(DockSite1, "MonitorName", "MonitorTitle",
+		            null, typeof (Monitor));
+                monitor.Dock(DockSite1, Dock.Bottom);
 
-		    }
+		        var stats = ConfigurationManager.LayoutManager.CreateToolWindow(DockSite1, "StatsName", "StatsTitle", null,
+		            typeof (StatisticParameterGrid));
+                stats.Dock(monitor, Direction.Content);
+
+                var trades = ConfigurationManager.LayoutManager.CreateToolWindow(DockSite1, "TradesName", "TradesTitle", null,
+		            typeof (TradeGrid));
+                trades.Dock(monitor, Direction.ContentRight);
+
+                var securityPicker = ConfigurationManager.LayoutManager.CreateToolWindow(DockSite1, "SecurityPickerName",
+                    "SecurityPickerTitle", null, typeof (SecurityPicker));
+                securityPicker.Dock(trades, Direction.Content);
+
+                var news = ConfigurationManager.LayoutManager.CreateToolWindow(DockSite1, "NewsName", "NewsTitle", null,
+                    typeof(NewsPanel));
+                news.Dock(DockSite1, Dock.Left);
+                news.AutoHide();
+
+                var risk = ConfigurationManager.LayoutManager.CreateToolWindow(DockSite1, "RiskName", "RiskTitle", null,
+                    typeof(RiskPanel));
+                risk.Dock(news, Direction.Content);
+
+            }
 
         }
 

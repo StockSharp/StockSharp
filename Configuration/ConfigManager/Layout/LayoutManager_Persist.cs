@@ -26,36 +26,6 @@ namespace StockSharp.Configuration.ConfigManager.Layout
         };
 
         /// <summary>
-        /// Handles the <c>DockingWindowDeserializing</c> event of the <see cref="_layoutSerializer" /> control.
-        /// </summary>
-        /// <param name="sender">The source of the event.</param>
-        /// <param name="args">The <see cref="DockingWindowDeserializingEventArgs" /> instance containing the event data.</param>
-        private void LayoutSerializerOnDockingWindowDeserializing(object sender,
-            DockingWindowDeserializingEventArgs args)
-        {
-            // The e.Node property contains the XML data. The e.Window property contains the associated DocumentWindow or ToolWindow, if any. The
-            //   window may have been retrieved from the DockSite, or automatically created (when using DockingWindowDeserializationBehavior.AutoCreate).
-            //   For the latter case, the e.Window property can be set to a new window. In both cases, any properties can be set.
-
-            // TODO: change to type checking and generic windows
-
-            if (args.Node.Name == "programmaticToolWindow1")
-            {
-                InitializeProgrammaticToolWindow1(args.Window as ToolWindow);
-
-                // Change the menu item's header
-                //this.activeProgrammaticToolWindow1.Header = "Activate Programmatic ToolWindow 1";
-            }
-            else if (args.Node.Name == "programmaticToolWindow2")
-            {
-                // NOTE: We don't need to initialize "programmaticToolWindow2", because it is a custom ToolWindow that sets the appropriate properties when constructed.
-
-                // Change the menu item's header
-                //this.activeProgrammaticToolWindow2.Header = "Activate Programmatic ToolWindow 2";
-            }
-        }
-
-        /// <summary>
         /// Load the layout from XML file created in <see cref="FolderManager.LayoutFileName" />.
         /// </summary>
         /// <exception cref="ArgumentNullException"></exception>

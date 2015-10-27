@@ -40,8 +40,7 @@ namespace StockSharp.Configuration.ConfigManager.Layout
             DockSite = dockSite;
 
             if (LayoutFile == null) throw new ArgumentNullException("LayoutFile");
-
-            _layoutSerializer.DockingWindowDeserializing += LayoutSerializerOnDockingWindowDeserializing;
+            
             Loaded += OnLoaded;
             Closing += OnClosing;
         }
@@ -54,7 +53,6 @@ namespace StockSharp.Configuration.ConfigManager.Layout
         /// </summary>
         private void Dispose()
         {
-            _layoutSerializer.DockingWindowDeserializing -= LayoutSerializerOnDockingWindowDeserializing;
             Loaded -= OnLoaded;
             Closing -= OnClosing;
         }

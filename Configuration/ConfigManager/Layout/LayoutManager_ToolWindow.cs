@@ -4,6 +4,7 @@ using System.Windows.Controls;
 using System.Windows.Media.Imaging;
 using ActiproSoftware.Windows;
 using ActiproSoftware.Windows.Controls.Docking;
+using StockSharp.Logging;
 
 namespace StockSharp.Configuration.ConfigManager.Layout
 {
@@ -36,6 +37,7 @@ namespace StockSharp.Configuration.ConfigManager.Layout
             // Create the window (using this constructor registers the tool window with the DockSite)
             var toolWindow = new ToolWindow(DockSite, name, title,
                 new BitmapImage(new Uri("/Resources/Images/TextDocument16.png", UriKind.Relative)), textBox);
+            ToolItems.Add(toolWindow);
 
             // Activate the window
             toolWindow.Activate();
@@ -43,27 +45,20 @@ namespace StockSharp.Configuration.ConfigManager.Layout
             return toolWindow;
         }
 
-        /// <summary>
-        /// Initializes the "Programmatic Tool Window 1" tool window.
-        /// </summary>
-        /// <param name="toolWindow">The tool window.</param>
-        private void InitializeProgrammaticToolWindow1(ToolWindow toolWindow)
+        public ToolWindow CreateToolWindow(DockSite dockSite, string name, string title, BitmapImage icon, Type contentType)
         {
-            if (toolWindow == null)
-                throw new ArgumentNullException("toolWindow");
-
-            // Create the tool window content
-            var textBox = new TextBox
+            ToolWindow toolWindow = null;
+            try
             {
-                BorderThickness = new Thickness(),
-                IsReadOnly = true,
-                Text = "This ToolWindow was programmatically created in the code-behind."
-            };
+                toolWindow = new ToolWindow(dockSite, name, title, icon, Activator.CreateInstance(contentType));
+                ToolItems.Add(toolWindow);
+            }
+            catch (Exception e)
+            {
+                e.LogError();
+            }
 
-            toolWindow.Name = "programmaticToolWindow1";
-            toolWindow.Title = "Programmatic ToolWindow 1";
-            toolWindow.ImageSource = new BitmapImage(new Uri("/Resources/Images/Properties16.png", UriKind.Relative));
-            toolWindow.Content = textBox;
+            return toolWindow;
         }
     }
 }
