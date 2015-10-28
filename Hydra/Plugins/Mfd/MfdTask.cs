@@ -40,7 +40,7 @@ namespace StockSharp.Hydra.Mfd
 			public MfdSettings(HydraTaskSettings settings)
 				: base(settings)
 			{
-				ExtensionInfo.TryAdd("CandleDayStep", 1);
+				ExtensionInfo.TryAdd("CandleDayStep", 30);
 			}
 
 			[CategoryLoc(_sourceName)]
@@ -126,7 +126,7 @@ namespace StockSharp.Hydra.Mfd
 			_settings.Interval = TimeSpan.FromDays(1);
 			_settings.IgnoreWeekends = true;
 			_settings.UseTemporaryFiles = TempFiles.UseAndDelete;
-			_settings.CandleDayStep = 1;
+			_settings.CandleDayStep = 30;
 		}
 
 		public override HydraTaskSettings Settings
@@ -243,7 +243,7 @@ namespace StockSharp.Hydra.Mfd
 									this.AddDebugLog(LocalizedStrings.NoData);
 
 								if (_settings.UseTemporaryFiles == TempFiles.UseAndDelete)
-									File.Delete(source.GetDumpFile(security.Security, emptyDate, emptyDate, typeof(Trade), null));
+									File.Delete(source.GetDumpFile(security.Security, emptyDate, emptyDate, typeof(ExecutionMessage), ExecutionTypes.Tick));
 							}
 							catch (Exception ex)
 							{
@@ -283,7 +283,7 @@ namespace StockSharp.Hydra.Mfd
 					}
 
 					var currDate = emptyDates.First();
-					var lastDate = emptyDates.First();
+					var lastDate = emptyDates.Last();
 
 					while (currDate <= lastDate)
 					{
@@ -299,8 +299,10 @@ namespace StockSharp.Hydra.Mfd
 
 						try
 						{
-							this.AddInfoLog(LocalizedStrings.Str2298Params, series.Arg, currDate, security.Security.Id);
-							var candles = source.GetCandles(security.Security, (TimeSpan)series.Arg, currDate, currDate.AddDays(_settings.CandleDayStep - 1));
+							var till = currDate.AddDays(_settings.CandleDayStep - 1);
+							this.AddInfoLog(LocalizedStrings.Str2298Params, series.Arg, currDate, till, security.Security.Id);
+							
+							var candles = source.GetCandles(security.Security, (TimeSpan)series.Arg, currDate, till);
 							
 							if (candles.Any())
 								SaveCandles(security, candles);
@@ -308,7 +310,7 @@ namespace StockSharp.Hydra.Mfd
 								this.AddDebugLog(LocalizedStrings.NoData);
 
 							if (_settings.UseTemporaryFiles == TempFiles.UseAndDelete)
-								File.Delete(source.GetDumpFile(security.Security, currDate, currDate.AddDays(_settings.CandleDayStep - 1), typeof(TimeFrameCandle), series.Arg));
+								File.Delete(source.GetDumpFile(security.Security, currDate, till, typeof(TimeFrameCandleMessage), series.Arg));
 						}
 						catch (Exception ex)
 						{

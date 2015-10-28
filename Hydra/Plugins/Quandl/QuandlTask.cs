@@ -17,6 +17,7 @@
 	using StockSharp.Hydra.Core;
 	using StockSharp.Localization;
 	using StockSharp.Logging;
+	using StockSharp.Messages;
 
 	using Xceed.Wpf.Toolkit.PropertyGrid.Attributes;
 
@@ -37,7 +38,7 @@
 			public QuandlSettings(HydraTaskSettings settings)
 				: base(settings)
 			{
-				ExtensionInfo.TryAdd("CandleDayStep", 1);
+				ExtensionInfo.TryAdd("CandleDayStep", 30);
 			}
 
 			[CategoryLoc(_sourceName)]
@@ -153,7 +154,7 @@
 			_settings.IgnoreWeekends = true;
 			_settings.AuthToken = new SecureString();
 			_settings.UseTemporaryFiles = TempFiles.UseAndDelete;
-			_settings.CandleDayStep = 1;
+			_settings.CandleDayStep = 30;
 		}
 
 		public void Refresh(ISecurityStorage storage, Security criteria, Action<Security> newSecurity, Func<bool> isCancelled)
@@ -251,7 +252,7 @@
 					}
 
 					var currDate = emptyDates.First();
-					var lastDate = emptyDates.First();
+					var lastDate = emptyDates.Last();
 
 					while (currDate <= lastDate)
 					{
@@ -267,8 +268,10 @@
 
 						try
 						{
-							this.AddInfoLog(LocalizedStrings.Str2298Params, tf, currDate, security.Security.Id);
-							var candles = source.GetCandles(security.Security, tf, currDate, currDate + TimeSpan.FromDays(_settings.CandleDayStep).Max(tf));
+							var till = currDate + TimeSpan.FromDays(_settings.CandleDayStep).Max(tf);
+
+							this.AddInfoLog(LocalizedStrings.Str2298Params, tf, currDate, till, security.Security.Id);
+							var candles = source.GetCandles(security.Security, tf, currDate, till);
 
 							if (candles.Any())
 								SaveCandles(security, candles);
@@ -276,7 +279,7 @@
 								this.AddDebugLog(LocalizedStrings.NoData);
 
 							if (_settings.UseTemporaryFiles == TempFiles.UseAndDelete)
-								File.Delete(source.GetDumpFile(security.Security, currDate, currDate + TimeSpan.FromDays(_settings.CandleDayStep).Max(tf), typeof(TimeFrameCandle), series.Arg));
+								File.Delete(source.GetDumpFile(security.Security, currDate, till, typeof(TimeFrameCandleMessage), series.Arg));
 						}
 						catch (Exception ex)
 						{

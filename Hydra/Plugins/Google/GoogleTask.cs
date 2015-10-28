@@ -33,7 +33,7 @@ namespace StockSharp.Hydra.Google
 			public GoogleSettings(HydraTaskSettings settings)
 				: base(settings)
 			{
-				ExtensionInfo.TryAdd("CandleDayStep", 1);
+				ExtensionInfo.TryAdd("CandleDayStep", 30);
 			}
 
 			[CategoryLoc(_sourceName)]
@@ -105,7 +105,7 @@ namespace StockSharp.Hydra.Google
 			_settings.StartFrom = new DateTime(2000, 1, 1);
 			_settings.Interval = TimeSpan.FromDays(1);
 			_settings.IgnoreWeekends = true;
-			_settings.CandleDayStep = 1;
+			_settings.CandleDayStep = 30;
 		}
 
 		public override HydraTaskSettings Settings
@@ -168,7 +168,7 @@ namespace StockSharp.Hydra.Google
 					}
 
 					var currDate = emptyDates.First();
-					var lastDate = emptyDates.First();
+					var lastDate = emptyDates.Last();
 
 					while (currDate <= lastDate)
 					{
@@ -184,8 +184,10 @@ namespace StockSharp.Hydra.Google
 
 						try
 						{
-							this.AddInfoLog(LocalizedStrings.Str2298Params, series.Arg, currDate, security.Security.Id);
-							var candles = source.GetCandles(security.Security, (TimeSpan)series.Arg, currDate, currDate + TimeSpan.FromDays(_settings.CandleDayStep).Max((TimeSpan)series.Arg));
+							var till = currDate + TimeSpan.FromDays(_settings.CandleDayStep).Max((TimeSpan)series.Arg);
+							this.AddInfoLog(LocalizedStrings.Str2298Params, series.Arg, currDate, till, security.Security.Id);
+							
+							var candles = source.GetCandles(security.Security, (TimeSpan)series.Arg, currDate, till);
 							
 							if (candles.Any())
 								SaveCandles(security, candles);

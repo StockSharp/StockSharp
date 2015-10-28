@@ -27628,12 +27628,12 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
-		/// Start downloading {0} candles for {1} for {2}.
+		/// Start downloading {0} candles for {1:d}-{2:d} date range and {2} security.
 		/// </summary>
 		public const string Str2298ParamsKey = "Str2298Params";
 
 		/// <summary>
-		/// Start downloading {0} candles for {1} for {2}.
+		/// Start downloading {0} candles for {1:d}-{2:d} date range and {2} security.
 		/// </summary>
 		public static string Str2298Params
 		{

@@ -39,7 +39,7 @@ namespace StockSharp.Hydra.BarChart
 			public BarChartSettings(HydraTaskSettings settings)
 				: base(settings)
 			{
-				CollectionHelper.TryAdd(ExtensionInfo, "CandleDayStep", 1);
+				CollectionHelper.TryAdd(ExtensionInfo, "CandleDayStep", 30);
 			}
 
 			[Category(_category)]
@@ -172,7 +172,7 @@ namespace StockSharp.Hydra.BarChart
 			_settings.IsRealTime = false;
 			_settings.Interval = TimeSpan.FromDays(1);
 			_settings.IgnoreWeekends = true;
-			_settings.CandleDayStep = 1;
+			_settings.CandleDayStep = 30;
 		}
 
 		protected override BarChartMessageAdapter GetAdapter(IdGenerator generator)
@@ -265,7 +265,7 @@ namespace StockSharp.Hydra.BarChart
 					}
 
 					var currDate = emptyDates.First();
-					var lastDate = emptyDates.First();
+					var lastDate = emptyDates.Last();
 
 					while (currDate <= lastDate)
 					{
@@ -279,10 +279,11 @@ namespace StockSharp.Hydra.BarChart
 							continue;
 						}
 
-						this.AddInfoLog(LocalizedStrings.Str2298Params, series, currDate, security.Security.Id);
+						var till = currDate.AddDays(_settings.CandleDayStep - 1).EndOfDay();
+						this.AddInfoLog(LocalizedStrings.Str2298Params, series, currDate, till, security.Security.Id);
 
 						bool isSuccess;
-						var candles = ((BarChartTrader)Connector).GetHistoricalCandles(security.Security, series.CandleType, series.Arg, currDate, currDate.AddDays(_settings.CandleDayStep - 1).EndOfDay(), out isSuccess);
+						var candles = ((BarChartTrader)Connector).GetHistoricalCandles(security.Security, series.CandleType, series.Arg, currDate, till, out isSuccess);
 
 						if (isSuccess)
 						{

@@ -40,7 +40,7 @@ namespace StockSharp.Hydra.Ux
 			public UxWebSettings(HydraTaskSettings settings)
 				: base(settings)
 			{
-				CollectionHelper.TryAdd(ExtensionInfo, "CandleDayStep", 1);
+				CollectionHelper.TryAdd(ExtensionInfo, "CandleDayStep", 30);
 			}
 
 			[CategoryLoc(_sourceName)]
@@ -112,7 +112,7 @@ namespace StockSharp.Hydra.Ux
 			_settings.StartFrom = new DateTime(2001, 1, 1);
 			_settings.Interval = TimeSpan.FromDays(1);
 			_settings.IgnoreWeekends = true;
-			_settings.CandleDayStep = 1;
+			_settings.CandleDayStep = 30;
 		}
 
 		public override HydraTaskSettings Settings
@@ -242,7 +242,7 @@ namespace StockSharp.Hydra.Ux
 					}
 
 					var currDate = emptyDates.First();
-					var lastDate = emptyDates.First();
+					var lastDate = emptyDates.Last();
 
 					while (currDate <= lastDate)
 					{
@@ -258,8 +258,10 @@ namespace StockSharp.Hydra.Ux
 
 						try
 						{
-							this.AddInfoLog(LocalizedStrings.Str2298Params, series.Arg, currDate, security.Security.Id);
-							var candles = source.GetCandles(security.Security, (TimeSpan)series.Arg, currDate, currDate.AddDays(_settings.CandleDayStep - 1));
+							var till = currDate.AddDays(_settings.CandleDayStep - 1);
+							this.AddInfoLog(LocalizedStrings.Str2298Params, series.Arg, currDate, till, security.Security.Id);
+							
+							var candles = source.GetCandles(security.Security, (TimeSpan)series.Arg, currDate, till);
 
 							if (candles.Any())
 								SaveCandles(security, candles);

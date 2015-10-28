@@ -2127,7 +2127,7 @@ Str2294Params;Start downloading trades for {0:d} date and {1} security.;Стар
 Str2295Params;Error loading trades for {0:d} date and {1} security.;Ошибка загрузки сделок за {0:d} для {1}.
 Str2296Params;Candles series {0} is not supported.;Серия свечек {0} не поддерживается.
 Str2297Params;No unsaved days to load {0} candles for {1}.;Нет несохраненных дней для загрузки {0} свечек для {1}.
-Str2298Params;Start downloading {0} candles for {1:d} date and {2} security.;Старт загрузки {0} свечек за {1:d} для {2}.
+Str2298Params;Start downloading {0} candles for {1:d}-{2:d} date range and {2} security.;Старт загрузки {0} свечек за {1:d}-{2:d} диапазон для {2}.
 Str2299Params;Error loading {0} candles for {1:d} date and {2} security.;Ошибка загрузки {0} свечек за {1:d} для {2}.
 Str2300;End of iteration.;Окончание итерации.
 Str2302;Login. Required if server authorization is on.;Имя пользователя. Требуется при включенной авторизации на сервере.

@@ -239,7 +239,7 @@ namespace StockSharp.Hydra.Rts
 
 				if (_settings.UseTemporaryFiles == TempFiles.UseAndDelete)
 				{
-					var dir = source.GetDumpFile(null, date, date, typeof(Trade), null);
+					var dir = source.GetDumpFile(null, date, date, typeof(ExecutionMessage), ExecutionTypes.Tick);
 
 					if (Directory.Exists(dir))
 						Directory.Delete(dir, true);

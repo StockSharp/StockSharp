@@ -240,7 +240,7 @@ namespace StockSharp.Hydra.DukasCopy
 
 						try
 						{
-							this.AddInfoLog(LocalizedStrings.Str2298Params, series.Arg, emptyDate, security.Security.Id);
+							this.AddInfoLog(LocalizedStrings.Str2298Params, series.Arg, emptyDate, emptyDate, security.Security.Id);
 							var candles = source.LoadCandles(security.Security, (TimeSpan)series.Arg, emptyDate, _settings.Side);
 							
 							if (candles.Any())
@@ -249,7 +249,7 @@ namespace StockSharp.Hydra.DukasCopy
 								this.AddDebugLog(LocalizedStrings.NoData);
 
 							if (_settings.UseTemporaryFiles == TempFiles.UseAndDelete)
-								File.Delete(source.GetDumpFile(security.Security, emptyDate, emptyDate, typeof(TimeFrameCandle), series.Arg));
+								File.Delete(source.GetDumpFile(security.Security, emptyDate, emptyDate, typeof(TimeFrameCandleMessage), series.Arg));
 						}
 						catch (Exception ex)
 						{
