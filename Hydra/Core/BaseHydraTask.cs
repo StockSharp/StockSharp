@@ -377,12 +377,15 @@ namespace StockSharp.Hydra.Core
 		private void SafeSave<T>(Security security, object arg, IEnumerable<T> values, Func<T, DateTimeOffset> getTime, IEnumerable<Func<T, string>> getErrors)
 			where T : Message
 		{
-			SafeSave(security, arg, values, getTime, getErrors, (s, d, f) => (IMarketDataStorage<T>)StorageRegistry.GetStorage(s, typeof(T), arg, d, f));
+			SafeSave(security, typeof(T), arg, values, getTime, getErrors, (s, d, f) => (IMarketDataStorage<T>)StorageRegistry.GetStorage(s, typeof(T), arg, d, f));
 		}
 
-		private void SafeSave<T>(Security security, object arg, IEnumerable<T> values, Func<T, DateTimeOffset> getTime, IEnumerable<Func<T, string>> getErrors, Func<Security, IMarketDataDrive, StorageFormats, IMarketDataStorage<T>> getStorage)
+		private void SafeSave<T>(Security security, Type dataType, object arg, IEnumerable<T> values, Func<T, DateTimeOffset> getTime, IEnumerable<Func<T, string>> getErrors, Func<Security, IMarketDataDrive, StorageFormats, IMarketDataStorage<T>> getStorage)
 			where T : Message
 		{
+			if (dataType == null)
+				throw new ArgumentNullException("dataType");
+
 			if (Settings.MaxErrorCount == 0)
 			{
 				var valuesWithResult = values.Select(v =>
@@ -398,14 +401,19 @@ namespace StockSharp.Hydra.Core
 					return Tuple.Create(v, string.Empty);
 				});
 
-				var dict = valuesWithResult.GroupBy(t => t.Item2).ToDictionary(g => g.Key, g => g.Select(t => t.Item1).ToArray());
+				var dict = valuesWithResult
+					.GroupBy(t => t.Item2)
+					.ToDictionary(
+						g => g.Key,
+						g => g.Select(t => t.Item1).ToArray()
+					);
 
 				foreach (var pair in dict)
 				{
 					if (!pair.Key.IsEmpty())
 					{
 						this.AddWarningLog(LocalizedStrings.Str2198Params,
-							security.Id, pair.Value.Length, typeof(T).Name, pair.Key);
+							security.Id, pair.Value.Length, dataType.Name, pair.Key);
 					}
 				}
 
@@ -420,7 +428,7 @@ namespace StockSharp.Hydra.Core
 			try
 			{
 				getStorage(security, Settings.Drive, Settings.StorageFormat).Save(values);
-				RaiseDataLoaded(security, typeof(T), arg, getTime(values.Last()), count);
+				RaiseDataLoaded(security, dataType, arg, getTime(values.Last()), count);
 			}
 			catch (Exception ex)
 			{
@@ -568,7 +576,7 @@ namespace StockSharp.Hydra.Core
 		{
 			candles
 				.GroupBy(c => Tuple.Create(c.GetType(), c.Arg))
-				.ForEach(g => SafeSave(security, g.Key.Item2, g, c => c.OpenTime, new[]
+				.ForEach(g => SafeSave(security, g.Key.Item1, g.Key.Item2, g, c => c.OpenTime, new[]
 				{
 					CreateErrorCheck<CandleMessage>(c => security.PriceStep != null && security.PriceStep != 0 && c.OpenPrice % security.PriceStep != 0, LocalizedStrings.Str2203),
 					CreateErrorCheck<CandleMessage>(c => security.PriceStep != null && security.PriceStep != 0 && c.HighPrice % security.PriceStep != 0, LocalizedStrings.Str2204),

@@ -348,7 +348,7 @@ namespace StockSharp.Algo.Storages
 					case ExecutionTypes.Tick:
 						return "{ServerTime:{0}};{ServerTime:zzz};{TradeId};{TradePrice};{Volume};{OriginSide};{OpenInterest};{IsSystem}";
 					case ExecutionTypes.OrderLog:
-						return "{ServerTime:{0}};{ServerTime:zzz};{TransactionId};{OrderId};{Price};{Volume};{Side};{OrderState};{TimeInForce};{TradeId};{TradePrice};{PortfolioName};{IsSystem}";
+						return "{ServerTime:{0}};{ServerTime:zzz};{TransactionId};{OrderId};{OrderPrice};{Volume};{Side};{OrderState};{TimeInForce};{TradeId};{TradePrice};{PortfolioName};{IsSystem}";
 					case null:
 						throw new ArgumentNullException("executionType");
 					default:
