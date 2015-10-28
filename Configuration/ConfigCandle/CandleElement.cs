@@ -1,8 +1,8 @@
-﻿namespace StockSharp.Configuration
-{
-	using System.Configuration;
+﻿using System.Configuration;
 
-	/// <summary>
+namespace StockSharp.Configuration.ConfigCandle
+{
+    /// <summary>
 	/// Represents the custom candle.
 	/// </summary>
 	public class CandleElement : ConfigurationElement

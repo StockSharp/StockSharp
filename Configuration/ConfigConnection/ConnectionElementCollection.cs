@@ -1,11 +1,11 @@
-﻿namespace StockSharp.Configuration
-{
-	using System.Configuration;
+﻿using System.Configuration;
 
-	/// <summary>
-	/// Represents the custom diagram elements section in a configuration file.
+namespace StockSharp.Configuration.ConfigConnection
+{
+    /// <summary>
+	/// Represents the custom message adapters section in a configuration file.
 	/// </summary>
-	public class DiagramElementCollection : ConfigurationElementCollection
+	public class ConnectionElementCollection : ConfigurationElementCollection
 	{
 		/// <summary>
 		/// When overridden in a derived class, creates a new <see cref="T:System.Configuration.ConfigurationElement"/>.
@@ -15,7 +15,7 @@
 		/// </returns>
 		protected override ConfigurationElement CreateNewElement()
 		{
-			return new DiagramElement();
+			return new ConnectionElement();
 		}
 
 		/// <summary>
@@ -27,7 +27,7 @@
 		/// <param name="element">The <see cref="T:System.Configuration.ConfigurationElement"/> to return the key for. </param>
 		protected override object GetElementKey(ConfigurationElement element)
 		{
-			var elem = (DiagramElement)element;
+			var elem = (ConnectionElement)element;
 			return elem.Type;
 		}
 	}

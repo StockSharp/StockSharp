@@ -120,7 +120,7 @@
 		//	composition.Name = CompositionName.Text;
 		//	composition.Parameters.First(p => p.Name.CompareIgnoreCase("Category")).Value = CompositionCategory.Text;
 
-		//	ConfigManager
+		//	ConfigurationManager
 		//		.GetService<CompositionRegistry>()
 		//		.Save(composition);
 		//}

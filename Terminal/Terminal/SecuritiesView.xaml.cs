@@ -27,7 +27,7 @@ namespace StockSharp.Terminal
 
 		private void CreateNewChart(object obj)
 		{
-			_parent.LayoutManager.CreateNewChart(obj as Security);
+            //TODO
 		}
 
 		private bool CanCreateNewChart(object obj)
@@ -37,7 +37,7 @@ namespace StockSharp.Terminal
 
 		private void CreateNewMarketDepth(object obj)
 		{
-			_parent.LayoutManager.CreateNewMarketDepth(obj as Security);
+            //TODO
 		}
 
 		private bool CanCreateNewMarketDepth(object obj)

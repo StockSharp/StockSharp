@@ -98,7 +98,7 @@ namespace StockSharp.Anywhere
         }
 
         /// <summary>
-        ///     Information about a market data subscribing
+        /// Information about a market data subscribing
         /// </summary>
         public ObservableCollectionEx<UserSubscription> Subscriptions
         {
@@ -112,7 +112,7 @@ namespace StockSharp.Anywhere
         }
 
         /// <summary>
-        ///     Connection status
+        /// Connection status
         /// </summary>
         public bool IsConnected
         {
@@ -468,7 +468,7 @@ namespace StockSharp.Anywhere
         }
 
         /// <summary>
-        ///     Remove usersubscription
+        /// Remove usersubscription
         /// </summary>
         public DelegateCommand DeleteSubscriptionCommand { set; get; }
 

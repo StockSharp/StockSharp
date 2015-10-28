@@ -1,8 +1,8 @@
-﻿namespace StockSharp.Configuration
-{
-	using System.Configuration;
+﻿using System.Configuration;
 
-	/// <summary>
+namespace StockSharp.Configuration.ConfigIndicator
+{
+    /// <summary>
 	/// Represents the custom indicator.
 	/// </summary>
 	public class IndicatorElement : ConfigurationElement

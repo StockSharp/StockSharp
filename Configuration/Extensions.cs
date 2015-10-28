@@ -1,4 +1,8 @@
-﻿namespace StockSharp.Configuration
+﻿using StockSharp.Configuration.ConfigCandle;
+using StockSharp.Configuration.ConfigConnection;
+using StockSharp.Configuration.ConfigIndicator;
+
+namespace StockSharp.Configuration
 {
 	using System;
 	using System.Collections;
@@ -8,40 +12,39 @@
 
 	using Ecng.Collections;
 	using Ecng.Common;
-	using Ecng.Configuration;
 	using Ecng.Serialization;
 	using Ecng.Xaml;
 
-	using StockSharp.AlfaDirect;
-	using StockSharp.Algo;
-	using StockSharp.Algo.Candles;
-	using StockSharp.Algo.Indicators;
-	using StockSharp.BarChart;
-	using StockSharp.BitStamp;
-	using StockSharp.Blackwood;
-	using StockSharp.Btce;
-	using StockSharp.CQG;
-	using StockSharp.ETrade;
-	using StockSharp.Fix;
-	using StockSharp.InteractiveBrokers;
-	using StockSharp.IQFeed;
-	using StockSharp.ITCH;
-	using StockSharp.LMAX;
-	using StockSharp.Logging;
-	using StockSharp.Micex;
-	using StockSharp.Oanda;
-	using StockSharp.OpenECry;
-	using StockSharp.Plaza;
-	using StockSharp.Quik;
-	using StockSharp.Quik.Lua;
-	using StockSharp.Rithmic;
-	using StockSharp.Rss;
-	using StockSharp.SmartCom;
-	using StockSharp.Sterling;
-	using StockSharp.Transaq;
-	using StockSharp.Xaml;
-	using StockSharp.Xaml.Charting;
-	using StockSharp.Xaml.Charting.IndicatorPainters;
+	using AlfaDirect;
+	using Algo;
+	using Algo.Candles;
+	using Algo.Indicators;
+	using BarChart;
+	using BitStamp;
+	using Blackwood;
+	using Btce;
+	using CQG;
+	using ETrade;
+	using Fix;
+	using InteractiveBrokers;
+	using IQFeed;
+	using ITCH;
+	using LMAX;
+	using Logging;
+	using Micex;
+	using Oanda;
+	using OpenECry;
+	using Plaza;
+	using Quik;
+	using Quik.Lua;
+	using Rithmic;
+	using Rss;
+	using SmartCom;
+	using Sterling;
+	using Transaq;
+	using Xaml;
+	using Xaml.Charting;
+	using Xaml.Charting.IndicatorPainters;
 
 	/// <summary>
 	/// Extension class.
@@ -55,16 +58,16 @@
 
 		static Extensions()
 		{
-			var section = ConfigManager.InnerConfig.Sections.OfType<StockSharpSection>().FirstOrDefault();
+            var section = Ecng.Configuration.ConfigManager.InnerConfig.Sections.OfType<StockSharpSection>().FirstOrDefault();
 
-			if (section == null)
-				return;
+            if (section == null)
+                return;
 
-			_customConnections = SafeAdd<ConnectionElement, ConnectorInfo>(section.CustomConnections, elem => new ConnectorInfo(elem.Type.To<Type>()));
-			_customIndicators = SafeAdd<IndicatorElement, IndicatorType>(section.CustomIndicators, elem => new IndicatorType(elem.Type.To<Type>(), elem.Painter.To<Type>()));
-			_customCandles = SafeAdd<CandleElement, Type>(section.CustomCandles, elem => elem.Type.To<Type>());
-			_customDiagramElements = SafeAdd<CandleElement, Type>(section.CustomDiagramElements, elem => elem.Type.To<Type>());
-		}
+            _customConnections = SafeAdd<ConnectionElement, ConnectorInfo>(section.CustomConnections, elem => new ConnectorInfo(elem.Type.To<Type>()));
+            _customIndicators = SafeAdd<IndicatorElement, IndicatorType>(section.CustomIndicators, elem => new IndicatorType(elem.Type.To<Type>(), elem.Painter.To<Type>()));
+            _customCandles = SafeAdd<CandleElement, Type>(section.CustomCandles, elem => elem.Type.To<Type>());
+            _customDiagramElements = SafeAdd<CandleElement, Type>(section.CustomDiagramElements, elem => elem.Type.To<Type>());
+        }
 
 		private static T2[] SafeAdd<T1, T2>(IEnumerable from, Func<T1, T2> func)
 		{
