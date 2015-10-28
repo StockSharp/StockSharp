@@ -2,9 +2,11 @@ namespace SampleITCH
 {
 	using System;
 	using System.ComponentModel;
+	using System.Net;
 	using System.Windows;
 
 	using Ecng.Common;
+	using Ecng.Net;
 	using Ecng.Xaml;
 
 	using StockSharp.BusinessEntities;
@@ -50,6 +52,22 @@ namespace SampleITCH
 			};
 
 			_logManager.Sources.Add(Trader);
+
+			Trader.Login = "ABCB07";
+			Trader.Password = "mit_1234";
+			Trader.PrimaryMulticast = new MulticastSourceAddress
+			{
+				//GroupAddress = "224.4.2.32".To<IPAddress>(),
+				GroupAddress = "224.4.4.38".To<IPAddress>(),
+				SourceAddress = "194.169.8.200".To<IPAddress>(),
+				Port = 61000,
+			};
+			Trader.RecoveryAddress = "194.169.8.216:54038".To<IPEndPoint>();
+			Trader.ReplayAddress = "194.169.8.216:53038".To<IPEndPoint>();
+			Trader.SecurityCsvFile = @"LSE_Ref\20151007_XLON_Instrument.csv";
+			Trader.SecurityDelayLoad = true;
+			Trader.GroupId = 'G';
+			Trader.TimeZone = TimeZoneInfo.FindSystemTimeZoneById("GMT Standard Time");
 
 			Settings.SelectedObject = Trader.MarketDataAdapter;
 		}
@@ -131,10 +149,16 @@ namespace SampleITCH
 					Trader.NewTrades += _tradesWindow.TradeGrid.Trades.AddRange;
 					Trader.NewOrderLogItems += _orderLogWindow.OrderLogGrid.LogItems.AddRange;
 
+					var subscribed = false;
 					//if (AllDepths.IsChecked == true)
 					{
 						Trader.LookupSecuritiesResult += securities =>
 						{
+							if (subscribed)
+								return;
+
+							subscribed = true;
+
 							Trader.SendInMessage(new MarketDataMessage
 							{
 								IsSubscribe = true,

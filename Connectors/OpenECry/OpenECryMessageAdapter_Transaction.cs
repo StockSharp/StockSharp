@@ -308,7 +308,7 @@ namespace StockSharp.OpenECry
 					BoardCode = order.Route == null ? order.Contract.Exchange.Name : order.Route.Name,
 				},
 				Comment = order.Comments,
-				Price = order.Contract.Cast(order.Price) ?? 0,
+				OrderPrice = order.Contract.Cast(order.Price) ?? 0,
 			};
 
 			var currVersion = order.Versions.Current;
@@ -340,7 +340,7 @@ namespace StockSharp.OpenECry
 					case OrderType.StopLimit:
 						condition.StopType = OpenECryStopType.StopLimit;
 						condition.StopPrice = order.Contract.Cast(order.Price);
-						execMsg.Price = order.Contract.Cast(order.Price2) ?? 0;
+						execMsg.OrderPrice = order.Contract.Cast(order.Price2) ?? 0;
 						break;
 					case OrderType.Stop:
 						condition.StopType = OpenECryStopType.StopMarket;

@@ -26,7 +26,7 @@
             To get the instrument board by its identifier.
             </summary>
       <param name="security">Security.</param>
-      <returns>Security boeard.</returns>
+      <returns>Security board.</returns>
     </member>
     <member name="P:StockSharp.Algo.History.BaseHistorySource.SecurityIdGenerator">
       <summary>
@@ -847,7 +847,7 @@
       <param name="arg">Argument.</param>
       <returns>Full path to the downloaded file.</returns>
     </member>
-    <member name="M:StockSharp.Algo.History.Russian.Finam.FinamHistorySource.GetTrades(StockSharp.BusinessEntities.Security,System.DateTime,System.DateTime)">
+    <member name="M:StockSharp.Algo.History.Russian.Finam.FinamHistorySource.GetTicks(StockSharp.BusinessEntities.Security,System.DateTime,System.DateTime)">
       <summary>
             Load historical ticks.
             </summary>
@@ -964,7 +964,7 @@
       <param name="arg">Argument.</param>
       <returns>Full path to the downloaded file.</returns>
     </member>
-    <member name="M:StockSharp.Algo.History.Russian.MfdHistorySource.GetTrades(StockSharp.BusinessEntities.Security,System.DateTime,System.DateTime)">
+    <member name="M:StockSharp.Algo.History.Russian.MfdHistorySource.GetTicks(StockSharp.BusinessEntities.Security,System.DateTime,System.DateTime)">
       <summary>
             To download tick trades.
             </summary>
@@ -1124,7 +1124,7 @@
       <param name="arg">Argument.</param>
       <returns>Full path to the downloaded file.</returns>
     </member>
-    <member name="M:StockSharp.Algo.History.Russian.Rts.RtsHistorySource.LoadTrades(StockSharp.Algo.Storages.ISecurityStorage,System.DateTime)">
+    <member name="M:StockSharp.Algo.History.Russian.Rts.RtsHistorySource.LoadTicks(StockSharp.Algo.Storages.ISecurityStorage,System.DateTime)">
       <summary>
             Load historical ticks.
             </summary>
@@ -1223,7 +1223,7 @@
       <param name="newSecurity">The handler through which a new instrument will be passed.</param>
       <param name="isCancelled">The handler which returns an attribute of search cancel.</param>
     </member>
-    <member name="M:StockSharp.Algo.History.Russian.UxHistorySource.GetTrades(StockSharp.BusinessEntities.Security,System.DateTime,System.DateTime)">
+    <member name="M:StockSharp.Algo.History.Russian.UxHistorySource.GetTicks(StockSharp.BusinessEntities.Security,System.DateTime,System.DateTime)">
       <summary>
             To download tick trades.
             </summary>

@@ -250,7 +250,7 @@ namespace StockSharp.Sterling
 				SecurityId = new SecurityId
 				{
 					SecurityCode = structL2Update.bstrSymbol,
-					BoardCode = "All",
+					BoardCode = AssociatedBoardCode,
 				},
 				Asks = asksUpdate,
 				Bids = bidsUpdate,

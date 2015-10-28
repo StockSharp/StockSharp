@@ -105,7 +105,7 @@
                 order.PortfolioName,
                 order.Volume,
                 order.Balance,
-                order.Price,
+				order.OrderPrice,
                 order.OriginSide,
                 order.OrderType,
                 order.OrderState,

@@ -141,7 +141,7 @@ namespace StockSharp.ETrade
 					SecurityId = secId,
 					PortfolioName = portName,
 					Side = leg.orderAction.ETradeActionToSide(),
-					Price = nativeOrder.limitPrice.To<decimal>(),
+					OrderPrice = nativeOrder.limitPrice.To<decimal>(),
 					Volume = leg.orderedQuantity.To<decimal>(),
 					Balance = (leg.orderedQuantity - leg.filledQuantity).To<decimal>(),
 					OriginalTransactionId = transId,
@@ -157,7 +157,7 @@ namespace StockSharp.ETrade
 				{
 					case OrderTypes.Limit:
 					{
-						msg.Price = (decimal)nativeOrder.limitPrice;
+						msg.OrderPrice = (decimal)nativeOrder.limitPrice;
 						break;
 					}
 					case OrderTypes.Conditional:
@@ -177,7 +177,7 @@ namespace StockSharp.ETrade
 								StopType = ETradeStopTypes.StopLimit,
 								StopPrice = (decimal)nativeOrder.stopPrice
 							};
-							msg.Price = nativeOrder.limitPrice.To<decimal>();
+							msg.OrderPrice = nativeOrder.limitPrice.To<decimal>();
 						}
 						else
 						{

@@ -459,7 +459,7 @@ namespace StockSharp.Hydra.Core
 				// ticks for spreads may be a zero cost or less than zero
 				//CreateErrorCheck<Trade>(t => t.Price <= 0, LocalizedStrings.Str2199),
 
-				CreateErrorCheck<ExecutionMessage>(t => security.PriceStep != null && t.Price % security.PriceStep != 0, LocalizedStrings.Str2200)
+				CreateErrorCheck<ExecutionMessage>(t => security.PriceStep != null && t.TradePrice % security.PriceStep != 0, LocalizedStrings.Str2200)
 			});
 		}
 

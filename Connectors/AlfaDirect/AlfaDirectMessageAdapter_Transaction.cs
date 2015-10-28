@@ -79,7 +79,7 @@ namespace StockSharp.AlfaDirect
 					SecurityId = new SecurityId { Native = f.PaperNo.GetValue(cols) },
 					PortfolioName = GetPortfolioName(f.AccCode.GetValue(cols), this.GetBoardCode(f.PlaceCode.GetValue(cols))),
 					Side = f.BuySellStr.GetValue(cols),
-					Price = f.Price.GetValue(cols),
+					OrderPrice = f.Price.GetValue(cols),
 					Volume = f.Qty.GetValue(cols),
 					Balance = f.Rest.GetValue(cols),
 					OriginalTransactionId = transId,
@@ -108,7 +108,7 @@ namespace StockSharp.AlfaDirect
 							msg.Condition = new AlfaOrderCondition
 							{
 								StopPrice = stopPrice,
-								TargetPrice = msg.Price,
+								TargetPrice = msg.OrderPrice,
 								Slippage = msg.Side == Sides.Buy
 											   ? updateToPrice - updGrowPrice
 											   : updDownPrice - updateToPrice
@@ -122,8 +122,8 @@ namespace StockSharp.AlfaDirect
 								Slippage = stopPrice == 0
 											   ? 0
 											   : msg.Side == Sides.Buy
-													 ? msg.Price - stopPrice
-													 : stopPrice - msg.Price
+													 ? msg.OrderPrice - stopPrice
+													 : stopPrice - msg.OrderPrice
 							};
 						}
 

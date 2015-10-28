@@ -58,7 +58,7 @@
 				{ "BoardCode", value.SecurityId.BoardCode },
 				{ "ServerTime", value.ServerTime },
 				{ "LocalTime", value.LocalTime },
-				{ "OrderPrice", value.Price },
+				{ "OrderPrice", value.OrderPrice },
 				{ "Volume", value.Volume },
 				{ "Side", (int)value.Side },
 				{ "Status", (int?)value.OrderStatus },

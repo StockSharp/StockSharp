@@ -297,7 +297,7 @@ namespace StockSharp.SmartCom
 				SecurityId = new SecurityId { Native = secSmartId },
 				PortfolioName = portfolioName,
 				Side = (Sides)side,
-				Price = price ?? 0,
+				OrderPrice = price ?? 0,
 				Volume = volume,
 				ServerTime = time.ApplyTimeZone(TimeHelper.Moscow),
 				Balance = balance,

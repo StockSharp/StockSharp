@@ -313,7 +313,7 @@ namespace StockSharp.Algo
 				var o = EntityFactory.CreateOrder(security, message.OrderType, trId);
 
 				o.Time = message.ServerTime;
-				o.Price = message.Price;
+				o.Price = message.OrderPrice;
 				o.Volume = message.Volume ?? 0;
 				o.Direction = message.Side;
 				o.Comment = message.Comment;

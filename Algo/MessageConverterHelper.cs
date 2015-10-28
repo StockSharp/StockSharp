@@ -221,24 +221,27 @@ namespace StockSharp.Algo
 			if (trade == null)
 				throw new ArgumentNullException("trade");
 
+			var tick = trade.Trade;
+			var order = trade.Order;
+
 			return new ExecutionMessage
 			{
-				TradeId = trade.Trade.Id,
-				TradeStringId = trade.Trade.StringId,
-				TradePrice = trade.Trade.Price,
-				Volume = trade.Trade.Volume,
-				OriginalTransactionId = trade.Order.TransactionId,
-				OrderId = trade.Order.Id,
-				OrderStringId = trade.Order.StringId,
-				OrderType = trade.Order.Type,
-				Side = trade.Order.Direction,
-				Price = trade.Order.Price,
-				SecurityId = trade.Order.Security.ToSecurityId(),
-				PortfolioName = trade.Order.Portfolio.Name,
+				TradeId = tick.Id,
+				TradeStringId = tick.StringId,
+				TradePrice = tick.Price,
+				Volume = tick.Volume,
+				OriginalTransactionId = order.TransactionId,
+				OrderId = order.Id,
+				OrderStringId = order.StringId,
+				OrderType = order.Type,
+				Side = order.Direction,
+				OrderPrice = order.Price,
+				SecurityId = order.Security.ToSecurityId(),
+				PortfolioName = order.Portfolio.Name,
 				ExecutionType = ExecutionTypes.Trade,
-				ServerTime = trade.Trade.Time,
-				OriginSide = trade.Trade.OrderDirection,
-				Currency = trade.Trade.Currency,
+				ServerTime = tick.Time,
+				OriginSide = tick.OrderDirection,
+				Currency = tick.Currency,
 			};
 		}
 
@@ -261,7 +264,7 @@ namespace StockSharp.Algo
 				SecurityId = order.Security.ToSecurityId(),
 				PortfolioName = order.Portfolio.Name,
 				ExecutionType = ExecutionTypes.Order,
-				Price = order.Price,
+				OrderPrice = order.Price,
 				OrderType = order.Type,
 				Volume = order.Volume,
 				Balance = order.Balance,
@@ -358,7 +361,7 @@ namespace StockSharp.Algo
 				TransactionId = order.TransactionId,
 				OriginalTransactionId = trade == null ? 0 : order.TransactionId,
 				ServerTime = order.Time,
-				Price = order.Price,
+				OrderPrice = order.Price,
 				Volume = order.Volume,
 				Balance = order.Balance,
 				Side = order.Direction,
@@ -1178,7 +1181,7 @@ namespace StockSharp.Algo
 			order.TransactionId = message.TransactionId;
 			order.Portfolio = new Portfolio { Board = order.Security.Board, Name = message.PortfolioName };
 			order.Direction = message.Side;
-			order.Price = message.Price;
+			order.Price = message.OrderPrice;
 			order.Volume = message.Volume ?? 0;
 			order.Balance = message.Balance ?? 0;
 			order.VisibleVolume = message.VisibleVolume;
@@ -1307,7 +1310,7 @@ namespace StockSharp.Algo
 			order.Id = message.OrderId;
 			order.StringId = message.OrderStringId;
 			order.TransactionId = message.TransactionId;
-			order.Price = message.Price;
+			order.Price = message.OrderPrice;
 			order.Volume = message.Volume ?? 0;
 			order.Balance = message.Balance ?? 0;
 			order.Direction = message.Side;

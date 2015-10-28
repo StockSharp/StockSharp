@@ -230,7 +230,7 @@
     <Compile Include="Export\Database\DbProviders\BaseDbProvider.cs" />
     <Compile Include="Export\Database\DbProviders\MSSQLDbProvider.cs" />
     <Compile Include="Export\Database\DbProviders\SQLiteDbProvider.cs" />
-    <Compile Include="Export\Database\ExecutionTable.cs" />
+    <Compile Include="Export\Database\TransactionTable.cs" />
     <Compile Include="Export\Database\Level1Table.cs" />
     <Compile Include="Export\Database\MarketDepthQuoteTable.cs" />
     <Compile Include="Export\Database\NewsTable.cs" />

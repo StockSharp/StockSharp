@@ -39,7 +39,7 @@ namespace StockSharp.Algo.Export
 			{
 				case ExecutionTypes.Tick:
 				{
-					Do(messages, "trades", (writer, trade) =>
+					Do(messages, "ticks", (writer, trade) =>
 					{
 						writer.WriteStartElement("trade");
 
@@ -72,7 +72,7 @@ namespace StockSharp.Algo.Export
 						writer.WriteAttribute("id", item.OrderId == null ? item.OrderStringId : item.OrderId.To<string>());
 						writer.WriteAttribute("serverTime", item.ServerTime.ToString(_timeFormat));
 						writer.WriteAttribute("localTime", item.LocalTime.ToString(_timeFormat));
-						writer.WriteAttribute("price", item.Price);
+						writer.WriteAttribute("price", item.OrderPrice);
 						writer.WriteAttribute("volume", item.Volume);
 						writer.WriteAttribute("side", item.Side);
 						writer.WriteAttribute("state", item.OrderState);
@@ -96,7 +96,7 @@ namespace StockSharp.Algo.Export
 				case ExecutionTypes.Order:
 				case ExecutionTypes.Trade:
 				{
-					Do(messages, "executions", (writer, item) =>
+					Do(messages, "transactions", (writer, item) =>
 					{
 						writer.WriteStartElement("item");
 
@@ -105,7 +105,7 @@ namespace StockSharp.Algo.Export
 						writer.WriteAttribute("portfolio", item.PortfolioName);
 						writer.WriteAttribute("transactionId", item.TransactionId);
 						writer.WriteAttribute("id", item.OrderId == null ? item.OrderStringId : item.OrderId.To<string>());
-						writer.WriteAttribute("price", item.Price);
+						writer.WriteAttribute("orderPrice", item.OrderPrice);
 						writer.WriteAttribute("volume", item.Volume);
 						writer.WriteAttribute("balance", item.Balance);
 						writer.WriteAttribute("side", item.Side);

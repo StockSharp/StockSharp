@@ -220,7 +220,7 @@ namespace StockSharp.Algo.Storages
 
 				metaInfo.LastOrderId = writer.SerializeId(orderId, metaInfo.LastOrderId);
 
-				var orderPrice = message.Price;
+				var orderPrice = message.OrderPrice;
 
 				if (metaInfo.Version < MarketDataVersions.Version45)
 					writer.WritePriceEx(orderPrice, metaInfo, SecurityId);
@@ -377,7 +377,7 @@ namespace StockSharp.Algo.Storages
 				Volume = volume,
 				Side = orderDirection,
 				ServerTime = serverTime,
-				Price = price,
+				OrderPrice = price,
 			};
 
 			if (reader.Read())

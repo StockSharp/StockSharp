@@ -1076,7 +1076,7 @@ namespace StockSharp.InteractiveBrokers
 				OrderType = orderType,
 				Side = direction,
 				Volume = volume,
-				Price = price,
+				OrderPrice = price,
 				Condition = ibCon,
 				ExpiryDate = orderExpiryDate,
 				VisibleVolume = visibleVolume,

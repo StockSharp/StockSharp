@@ -179,7 +179,7 @@ namespace StockSharp.LMAX
 				SecurityId = new SecurityId { Native = lmaxOrder.InstrumentId },
 				OriginalTransactionId = transactionId.Value,
 				OrderType = orderType,
-				Price = price,
+				OrderPrice = price,
 				Condition = condition,
 				Volume = lmaxOrder.Quantity.Abs(),
 				Side = lmaxOrder.Quantity > 0 ? Sides.Buy : Sides.Sell,

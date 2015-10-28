@@ -178,7 +178,7 @@ namespace StockSharp.Algo.Testing
 					OrderState = OrderStates.Active,
 					Volume = Volumes.Next(),
 					Side = RandomGen.GetEnum<Sides>(),
-					Price = _lastOrderPrice,
+					OrderPrice = _lastOrderPrice,
 					ExecutionType = ExecutionTypes.OrderLog,
 				};
 

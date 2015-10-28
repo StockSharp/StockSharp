@@ -124,8 +124,8 @@ namespace StockSharp.Algo.Testing
 				//при обновлении стакана необходимо учитывать направление сдвига, чтобы не было ложного исполнения при наложении бидов и асков.
 				//т.е. если цена сдвинулась вниз, то обновление стакана необходимо начинать с минимального бида.
 				return (spreadPrice < _currSpreadPrice)
-					? diff.OrderBy(m => m.Price)
-					: diff.OrderByDescending(m => m.Price);
+					? diff.OrderBy(m => m.OrderPrice)
+					: diff.OrderByDescending(m => m.OrderPrice);
 			}
 			finally
 			{
@@ -560,7 +560,7 @@ namespace StockSharp.Algo.Testing
 			return new ExecutionMessage
 			{
 				Side = side,
-				Price = price,
+				OrderPrice = price,
 				Volume = volume,
 				ExecutionType = ExecutionTypes.OrderLog,
 				IsCancelled = isCancelling,
@@ -608,7 +608,7 @@ namespace StockSharp.Algo.Testing
 						SecurityId = regMsg.SecurityId,
 						ExecutionType = ExecutionTypes.Order,
 						TransactionId = regMsg.TransactionId,
-						Price = regMsg.Price,
+						OrderPrice = regMsg.Price,
 						Volume = regMsg.Volume,
 						Side = regMsg.Side,
 						PortfolioName = regMsg.PortfolioName,
@@ -651,7 +651,7 @@ namespace StockSharp.Algo.Testing
 						SecurityId = replaceMsg.SecurityId,
 						ExecutionType = ExecutionTypes.Order,
 						TransactionId = replaceMsg.TransactionId,
-						Price = replaceMsg.Price,
+						OrderPrice = replaceMsg.Price,
 						Volume = replaceMsg.Volume,
 						Side = replaceMsg.Side,
 						PortfolioName = replaceMsg.PortfolioName,

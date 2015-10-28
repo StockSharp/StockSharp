@@ -78,7 +78,7 @@ namespace StockSharp.BitStamp
 				ExecutionType = ExecutionTypes.Order,
 				OrderId = order.Id,
 				OriginalTransactionId = info.First,
-				Price = (decimal)order.Price,
+				OrderPrice = (decimal)order.Price,
 				Balance = info.Second,
 				Volume = (decimal)order.Amount,
 				Side = order.Type.ToStockSharp(),

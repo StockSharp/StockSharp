@@ -346,7 +346,7 @@ namespace StockSharp.Transaq
 					execMsg.ServerTime = (usualOrder.WithdrawTime ?? usualOrder.Time ?? usualOrder.AcceptTime ?? DateTime.MinValue).ToDto();
 					execMsg.Comment = usualOrder.BrokerRef;
 					execMsg.SystemComment = usualOrder.Result;
-					execMsg.Price = usualOrder.Price;
+					execMsg.OrderPrice = usualOrder.Price;
 					execMsg.Volume = usualOrder.Quantity;
 					execMsg.OrderType = usualOrder.Price == 0 ? OrderTypes.Market : OrderTypes.Limit;
 					execMsg.Commission = usualOrder.MaxCommission;

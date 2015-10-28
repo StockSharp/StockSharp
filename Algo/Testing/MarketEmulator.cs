@@ -419,7 +419,7 @@ namespace StockSharp.Algo.Testing
 						break;
 
 					case ExecutionTypes.OrderLog:
-						price = execution.Price;
+						price = execution.OrderPrice;
 						break;
 
 					default:
@@ -670,7 +670,7 @@ namespace StockSharp.Algo.Testing
 					{
 						ExecutionType = ExecutionTypes.Order,
 						Side = message.Side,
-						Price = message.Price,
+						OrderPrice = message.OrderPrice,
 						Volume = message.Volume
 					}, false);
 				}
@@ -714,16 +714,16 @@ namespace StockSharp.Algo.Testing
 
 					// для старых заявок, когда стакан пробивает уровень заявки,
 					// матчим по цене ранее выставленной заявки.
-					var execPrice = isNewOrder ? price : order.Price;
+					var execPrice = isNewOrder ? price : order.OrderPrice;
 
 					foreach (var quote in levelQuotes.ToArray())
 					{
 						if (order.OrderType != OrderTypes.Market)
 						{
-							if (sign * price > sign * order.Price)
+							if (sign * price > sign * order.OrderPrice)
 								break;
 
-							if (price == order.Price && !_parent._settings.MatchOnTouch)
+							if (price == order.OrderPrice && !_parent._settings.MatchOnTouch)
 								break;
 						}
 
@@ -958,14 +958,14 @@ namespace StockSharp.Algo.Testing
 			{
 				var quotes = GetQuotes(message.Side);
 
-				var pair = quotes.TryGetValue(message.Price);
+				var pair = quotes.TryGetValue(message.OrderPrice);
 
 				if (pair == null)
 				{
 					if (!register)
 						return;
 
-					quotes[message.Price] = pair = RefTuple.Create(new List<ExecutionMessage>(), new QuoteChange(message.Side, message.Price, 0));
+					quotes[message.OrderPrice] = pair = RefTuple.Create(new List<ExecutionMessage>(), new QuoteChange(message.Side, message.OrderPrice, 0));
 				}
 
 				var level = pair.First;
@@ -979,7 +979,7 @@ namespace StockSharp.Algo.Testing
 					var clone = _messagePool.Allocate<ExecutionMessage>(MessageTypes.Execution);
 					
 					clone.TransactionId = message.TransactionId;
-					clone.Price = message.Price;
+					clone.OrderPrice = message.OrderPrice;
 					clone.PortfolioName = message.PortfolioName;
 					clone.Balance = message.Volume;
 					clone.Volume = message.Volume;
@@ -1014,7 +1014,7 @@ namespace StockSharp.Algo.Testing
 								var clone = _messagePool.Allocate<ExecutionMessage>(MessageTypes.Execution);
 
 								clone.TransactionId = message.TransactionId;
-								clone.Price = message.Price;
+								clone.OrderPrice = message.OrderPrice;
 								clone.PortfolioName = message.PortfolioName;
 								clone.Balance = leftBalance;
 								clone.Volume = message.Volume;
@@ -1055,7 +1055,7 @@ namespace StockSharp.Algo.Testing
 					}
 
 					if (level.Count == 0)
-						quotes.Remove(message.Price);
+						quotes.Remove(message.OrderPrice);
 				}
 			}
 
@@ -1235,7 +1235,7 @@ namespace StockSharp.Algo.Testing
 
 			public decimal? ProcessOrder(ExecutionMessage orderMsg, bool register, ICollection<Message> result)
 			{
-				var reqMoney = GetRequiredMoney(orderMsg.SecurityId, orderMsg.Side, orderMsg.Price);
+				var reqMoney = GetRequiredMoney(orderMsg.SecurityId, orderMsg.Side, orderMsg.OrderPrice);
 
 				var pos = _positions.SafeAdd(orderMsg.SecurityId, k => RefTuple.Create(0m, 0m));
 
@@ -1351,7 +1351,7 @@ namespace StockSharp.Algo.Testing
 
 			public string CheckRegistration(ExecutionMessage execMsg)
 			{
-				var reqMoney = GetRequiredMoney(execMsg.SecurityId, execMsg.Side, execMsg.Price);
+				var reqMoney = GetRequiredMoney(execMsg.SecurityId, execMsg.Side, execMsg.OrderPrice);
 
 				// если задан баланс, то проверям по нему (для частично исполненных заявок)
 				var volume = execMsg.Balance ?? execMsg.SafeGetVolume();
@@ -1753,11 +1753,11 @@ namespace StockSharp.Algo.Testing
 				var minPrice = (decimal?)state.TryGetValue(Level1Fields.MinPrice);
 				var maxPrice = (decimal?)state.TryGetValue(Level1Fields.MaxPrice);
 
-				if (minPrice != null && minPrice > 0 && execMsg.Price < minPrice)
-					return LocalizedStrings.Str1172Params.Put(execMsg.Price, execMsg.TransactionId, minPrice);
+				if (minPrice != null && minPrice > 0 && execMsg.OrderPrice < minPrice)
+					return LocalizedStrings.Str1172Params.Put(execMsg.OrderPrice, execMsg.TransactionId, minPrice);
 
-				if (maxPrice != null && maxPrice > 0 && execMsg.Price > maxPrice)
-					return LocalizedStrings.Str1173Params.Put(execMsg.Price, execMsg.TransactionId, maxPrice);
+				if (maxPrice != null && maxPrice > 0 && execMsg.OrderPrice > maxPrice)
+					return LocalizedStrings.Str1173Params.Put(execMsg.OrderPrice, execMsg.TransactionId, maxPrice);
 			}
 
 			var info = GetPortfolioInfo(execMsg.PortfolioName);

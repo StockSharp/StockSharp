@@ -218,8 +218,8 @@ namespace StockSharp.Algo.Storages
 					throw new ArgumentOutOfRangeException("messages", msg.OrderId, LocalizedStrings.Str925);
 
 				// нулевая цена возможна, если идет "рыночная" продажа по инструменту без планок
-				if (msg.Price < 0)
-					throw new ArgumentOutOfRangeException("messages", msg.Price, LocalizedStrings.Str926Params.Put(msg.OrderId == null ? msg.OrderStringId : msg.OrderId.To<string>()));
+				if (msg.OrderPrice < 0)
+					throw new ArgumentOutOfRangeException("messages", msg.OrderPrice, LocalizedStrings.Str926Params.Put(msg.OrderId == null ? msg.OrderStringId : msg.OrderId.To<string>()));
 
 				var volume = msg.SafeGetVolume();
 
@@ -289,7 +289,7 @@ namespace StockSharp.Algo.Storages
 				}
 
 				writer.Write(msg.Side == Sides.Buy);
-				writer.WritePriceEx(!isTrade ? msg.Price : msg.GetTradePrice(), metaInfo, SecurityId);
+				writer.WritePriceEx(!isTrade ? msg.OrderPrice : msg.GetTradePrice(), metaInfo, SecurityId);
 
 				writer.WriteVolume(volume, metaInfo, SecurityId);
 
@@ -497,7 +497,7 @@ namespace StockSharp.Algo.Storages
 					msg.OrderStringId = orderStringId;
 
 				msg.OrderBoardId = orderBoardId;
-				msg.Price = price;
+				msg.OrderPrice = price;
 			}
 			else
 			{

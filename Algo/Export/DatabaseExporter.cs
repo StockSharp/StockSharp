@@ -73,7 +73,7 @@ namespace StockSharp.Algo.Export
 					Do(messages, () => new OrderLogTable(Security));
 					break;
 				case ExecutionTypes.Order:
-					Do(messages, () => new ExecutionTable(Security));
+					Do(messages, () => new TransactionTable(Security));
 					break;
 				default:
 					throw new ArgumentOutOfRangeException();

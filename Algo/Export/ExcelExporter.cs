@@ -104,7 +104,7 @@ namespace StockSharp.Algo.Export
 							worker
 								.SetCell(0, index, message.OrderId == null ? message.OrderStringId : message.OrderId.To<string>())
 								.SetCell(1, index, message.ServerTime)
-								.SetCell(2, index, message.Price)
+								.SetCell(2, index, message.OrderPrice)
 								.SetCell(3, index, message.Volume)
 								.SetCell(4, index, message.Side)
 								.SetCell(5, index, message.OrderState)
@@ -155,7 +155,7 @@ namespace StockSharp.Algo.Export
 								.SetCell(1, index, message.PortfolioName)
 								.SetCell(2, index, message.TransactionId)
 								.SetCell(3, index, message.OrderId == null ? message.OrderStringId : message.OrderId.To<string>())
-								.SetCell(4, index, message.Price)
+								.SetCell(4, index, message.OrderPrice)
 								.SetCell(5, index, message.Volume)
 								.SetCell(6, index, message.Balance)
 								.SetCell(7, index, message.Side)

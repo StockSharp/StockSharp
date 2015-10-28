@@ -183,7 +183,7 @@ namespace StockSharp.Messages
 		[DisplayNameLoc(LocalizedStrings.PriceKey)]
 		[DescriptionLoc(LocalizedStrings.OrderPriceKey)]
 		[MainCategory]
-		public decimal Price { get; set; }
+		public decimal OrderPrice { get; set; }
 
 		/// <summary>
 		/// Number of contracts in an order.
@@ -466,7 +466,7 @@ namespace StockSharp.Messages
 		{
 			return base.ToString() + ",T(S)={0:yyyy/MM/dd HH:mm:ss.fff},({1}),Sec={2},Ord={3}/{4}/{5},Fail={6},Price={7},Vol={8},Bal={9},TId={10},Pf={11},TPrice={12},UId={13},State={14}"
 				.Put(ServerTime, ExecutionType, SecurityId, OrderId, TransactionId, OriginalTransactionId,
-					Error, Price, Volume, Balance, TradeId, PortfolioName, TradePrice, UserOrderId, OrderState);
+					Error, OrderPrice, Volume, Balance, TradeId, PortfolioName, TradePrice, UserOrderId, OrderState);
 		}
 
 		/// <summary>
@@ -500,7 +500,7 @@ namespace StockSharp.Messages
 				OrderType = OrderType,
 				OriginSide = OriginSide,
 				PortfolioName = PortfolioName,
-				Price = Price,
+				OrderPrice = OrderPrice,
 				SecurityId = SecurityId,
 				Side = Side,
 				SystemComment = SystemComment,

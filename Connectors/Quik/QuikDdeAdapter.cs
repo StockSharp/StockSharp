@@ -1195,7 +1195,7 @@ namespace StockSharp.Quik
 					OrderId = func.Get<long>(DdeOrderColumns.Id),
 					ServerTime = func.GetTime(OrdersTable, DdeOrderColumns.Date, DdeOrderColumns.Time, DdeOrderColumns.TimeMcs),
 
-					Price = func.Get<decimal>(DdeOrderColumns.Price),
+					OrderPrice = func.Get<decimal>(DdeOrderColumns.Price),
 					Volume = func.Get<decimal>(DdeOrderColumns.Volume),
 					Balance = func.Get<decimal>(DdeOrderColumns.Balance),
 					Side = func(DdeOrderColumns.Direction).ToSide(),
@@ -1553,7 +1553,7 @@ namespace StockSharp.Quik
 					OrderId = func.Get<long>(DdeStopOrderColumns.Id),
 					ServerTime = (func.Get<DateTime>(DdeStopOrderColumns.Date) + func.Get<TimeSpan>(DdeStopOrderColumns.Time)).ApplyTimeZone(TimeHelper.Moscow),
 
-					Price = func.Get<decimal>(DdeStopOrderColumns.Price),
+					OrderPrice = func.Get<decimal>(DdeStopOrderColumns.Price),
 					Volume = func.Get<decimal>(DdeStopOrderColumns.Volume),
 					Balance = func.Get<decimal>(DdeStopOrderColumns.Balance),
 					Side = func(DdeStopOrderColumns.Direction).ToSide(),

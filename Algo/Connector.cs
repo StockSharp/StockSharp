@@ -109,7 +109,7 @@ namespace StockSharp.Algo
 				if (message.ExecutionType != ExecutionTypes.Order)
 					return;
 
-				var key = Tuple.Create(message.Side, message.Price);
+				var key = Tuple.Create(message.Side, message.OrderPrice);
 
 				switch (message.OrderState)
 				{
