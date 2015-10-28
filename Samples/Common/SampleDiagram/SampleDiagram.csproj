@@ -36,6 +36,9 @@
     <WarningLevel>4</WarningLevel>
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>..\..\..\References\stocksharp.ico</ApplicationIcon>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="Ecng.Collections">
       <HintPath>..\..\..\References\Ecng\Ecng.Collections.dll</HintPath>
@@ -80,6 +83,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="..\..\..\StockSharpAssemblyInfo.cs">
+      <Link>Properties\StockSharpAssemblyInfo.cs</Link>
+    </Compile>
     <Compile Include="DiagramDebuggerControl.xaml.cs">
       <DependentUpon>DiagramDebuggerControl.xaml</DependentUpon>
     </Compile>
@@ -187,6 +193,11 @@
     <None Include="Strategies\d2d7aeb2_ca92_4a88_9f2b_dccb72949af1.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="..\..\..\References\stocksharp.ico">
+      <Link>Properties\stocksharp.ico</Link>
+    </Resource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
