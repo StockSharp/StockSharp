@@ -410,8 +410,8 @@ namespace StockSharp.Algo.Storages
 		{
 			{ Tuple.Create(typeof(ExecutionMessage), (object)ExecutionTypes.Tick), "trades" },
 			{ Tuple.Create(typeof(ExecutionMessage), (object)ExecutionTypes.OrderLog), "orderLog" },
-			{ Tuple.Create(typeof(ExecutionMessage), (object)ExecutionTypes.Order), "execution" },
-			{ Tuple.Create(typeof(ExecutionMessage), (object)ExecutionTypes.Trade), "execution" },
+			{ Tuple.Create(typeof(ExecutionMessage), (object)ExecutionTypes.Order), "transactions" },
+			//{ Tuple.Create(typeof(ExecutionMessage), (object)ExecutionTypes.Trade), "transactions" },
 			{ Tuple.Create(typeof(QuoteChangeMessage), (object)null), "quotes" },
 			{ Tuple.Create(typeof(Level1ChangeMessage), (object)null), "security" },
 			{ Tuple.Create(typeof(NewsMessage), (object)null), "news" },
@@ -454,6 +454,9 @@ namespace StockSharp.Algo.Storages
 				return "candles_{0}_{1}".Put(dataType.Name.Replace("Message", string.Empty), TraderHelper.CandleArgToFolderName(arg));
 			else
 			{
+				if (arg != null && arg.Equals(ExecutionTypes.Trade))
+					arg = ExecutionTypes.Order;
+
 				var fileName = _fileNames.TryGetValue(Tuple.Create(dataType, arg));
 
 				if (fileName == null)
