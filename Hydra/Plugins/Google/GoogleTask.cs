@@ -33,7 +33,7 @@ namespace StockSharp.Hydra.Google
 			public GoogleSettings(HydraTaskSettings settings)
 				: base(settings)
 			{
-				ExtensionInfo.TryAdd("IgnoreWeekends", true);
+				ExtensionInfo.TryAdd("CandleDayStep", 1);
 			}
 
 			[CategoryLoc(_sourceName)]
@@ -65,6 +65,22 @@ namespace StockSharp.Hydra.Google
 				get { return (bool)ExtensionInfo["IgnoreWeekends"]; }
 				set { ExtensionInfo["IgnoreWeekends"] = value; }
 			}
+
+			[CategoryLoc(_sourceName)]
+			[DisplayNameLoc(LocalizedStrings.TimeIntervalKey)]
+			[DescriptionLoc(LocalizedStrings.CandleTimeIntervalKey)]
+			[PropertyOrder(4)]
+			public int CandleDayStep
+			{
+				get { return ExtensionInfo["CandleDayStep"].To<int>(); }
+				set
+				{
+					if (value < 1)
+						throw new ArgumentOutOfRangeException();
+
+					ExtensionInfo["CandleDayStep"] = value;
+				}
+			}
 		}
 
 		private GoogleSettings _settings;
@@ -82,13 +98,14 @@ namespace StockSharp.Hydra.Google
 		{
 			_settings = new GoogleSettings(settings);
 
-			if (settings.IsDefault)
-			{
-				_settings.DayOffset = 1;
-				_settings.StartFrom = new DateTime(2000, 1, 1);
-				_settings.Interval = TimeSpan.FromDays(1);
-				_settings.IgnoreWeekends = true;
-			}
+			if (!settings.IsDefault)
+				return;
+
+			_settings.DayOffset = 1;
+			_settings.StartFrom = new DateTime(2000, 1, 1);
+			_settings.Interval = TimeSpan.FromDays(1);
+			_settings.IgnoreWeekends = true;
+			_settings.CandleDayStep = 1;
 		}
 
 		public override HydraTaskSettings Settings
@@ -150,21 +167,25 @@ namespace StockSharp.Hydra.Google
 						continue;
 					}
 
-					foreach (var emptyDate in emptyDates)
+					var currDate = emptyDates.First();
+					var lastDate = emptyDates.First();
+
+					while (currDate <= lastDate)
 					{
 						if (!CanProcess())
 							break;
 
-						if (_settings.IgnoreWeekends && !security.IsTradeDate(emptyDate))
+						if (_settings.IgnoreWeekends && !security.IsTradeDate(currDate))
 						{
-							this.AddDebugLog(LocalizedStrings.WeekEndDate, emptyDate);
+							this.AddDebugLog(LocalizedStrings.WeekEndDate, currDate);
+							currDate = currDate.AddDays(1);
 							continue;
 						}
 
 						try
 						{
-							this.AddInfoLog(LocalizedStrings.Str2298Params, series.Arg, emptyDate, security.Security.Id);
-							var candles = source.GetCandles(security.Security, (TimeSpan)series.Arg, emptyDate, emptyDate + TimeSpan.FromDays(1).Max((TimeSpan)series.Arg));
+							this.AddInfoLog(LocalizedStrings.Str2298Params, series.Arg, currDate, security.Security.Id);
+							var candles = source.GetCandles(security.Security, (TimeSpan)series.Arg, currDate, currDate + TimeSpan.FromDays(_settings.CandleDayStep).Max((TimeSpan)series.Arg));
 							
 							if (candles.Any())
 								SaveCandles(security, candles);
@@ -174,8 +195,10 @@ namespace StockSharp.Hydra.Google
 						catch (Exception ex)
 						{
 							HandleError(new InvalidOperationException(LocalizedStrings.Str2299Params
-								.Put(series.Arg, emptyDate, security.Security.Id), ex));
+								.Put(series.Arg, currDate, security.Security.Id), ex));
 						}
+
+						currDate = currDate.AddDays(_settings.CandleDayStep);
 					}
 				}
 			}

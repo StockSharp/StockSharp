@@ -53824,5 +53824,18 @@ namespace StockSharp.Localization
 		{
 			get { return GetString(OnlyActiveSecuritiesKey); }
 		}
+
+		/// <summary>
+		/// Interval (in days), for which the downloaded candles.
+		/// </summary>
+		public const string CandleTimeIntervalKey = "CandleTimeInterval";
+
+		/// <summary>
+		/// Interval (in days), for which the downloaded candles.
+		/// </summary>
+		public static string CandleTimeInterval
+		{
+			get { return GetString(CandleTimeIntervalKey); }
+		}
     }
 }

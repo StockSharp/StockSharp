@@ -7,7 +7,6 @@ namespace StockSharp.Hydra.Oanda
 	using Ecng.Common;
 	using Ecng.ComponentModel;
 
-	using StockSharp.Algo;
 	using StockSharp.Algo.History;
 	using StockSharp.Algo.History.Forex;
 	using StockSharp.Algo.Storages;

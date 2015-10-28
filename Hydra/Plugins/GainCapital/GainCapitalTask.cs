@@ -38,7 +38,6 @@ namespace StockSharp.Hydra.GainCapital
 			public GainCapitalSettings(HydraTaskSettings settings)
 				: base(settings)
 			{
-				ExtensionInfo.TryAdd("UseTemporaryFiles", TempFiles.UseAndDelete.To<string>());
 			}
 
 			[CategoryLoc(_sourceName)]

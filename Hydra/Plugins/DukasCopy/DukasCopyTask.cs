@@ -39,7 +39,6 @@ namespace StockSharp.Hydra.DukasCopy
 			public DukasCopySettings(HydraTaskSettings settings)
 				: base(settings)
 			{
-				ExtensionInfo.TryAdd("UseTemporaryFiles", TempFiles.UseAndDelete.To<string>());
 			}
 
 			[CategoryLoc(_sourceName)]
@@ -98,14 +97,14 @@ namespace StockSharp.Hydra.DukasCopy
 		{
 			_settings = new DukasCopySettings(settings);
 
-			if (settings.IsDefault)
-			{
-				_settings.DayOffset = 1;
-				_settings.StartFrom = new DateTime(2006, 1, 1);
-				_settings.Interval = TimeSpan.FromDays(1);
-				_settings.Side = Sides.Buy;
-				_settings.UseTemporaryFiles = TempFiles.UseAndDelete;
-			}
+			if (!settings.IsDefault)
+				return;
+
+			_settings.DayOffset = 1;
+			_settings.StartFrom = new DateTime(2006, 1, 1);
+			_settings.Interval = TimeSpan.FromDays(1);
+			_settings.Side = Sides.Buy;
+			_settings.UseTemporaryFiles = TempFiles.UseAndDelete;
 		}
 
 		public override HydraTaskSettings Settings

@@ -7,6 +7,7 @@ namespace StockSharp.Hydra.BarChart
 	using System.Security;
 
 	using Ecng.Common;
+	using Ecng.Collections;
 
 	using StockSharp.Algo;
 	using StockSharp.Algo.Candles;
@@ -38,6 +39,7 @@ namespace StockSharp.Hydra.BarChart
 			public BarChartSettings(HydraTaskSettings settings)
 				: base(settings)
 			{
+				CollectionHelper.TryAdd(ExtensionInfo, "CandleDayStep", 1);
 			}
 
 			[Category(_category)]
@@ -100,6 +102,22 @@ namespace StockSharp.Hydra.BarChart
 				set { ExtensionInfo["IgnoreWeekends"] = value; }
 			}
 
+			[CategoryLoc(LocalizedStrings.HistoryKey)]
+			[DisplayNameLoc(LocalizedStrings.TimeIntervalKey)]
+			[DescriptionLoc(LocalizedStrings.CandleTimeIntervalKey)]
+			[PropertyOrder(4)]
+			public int CandleDayStep
+			{
+				get { return ExtensionInfo["CandleDayStep"].To<int>(); }
+				set
+				{
+					if (value < 1)
+						throw new ArgumentOutOfRangeException();
+
+					ExtensionInfo["CandleDayStep"] = value;
+				}
+			}
+
 			[Browsable(true)]
 			public override bool IsDownloadNews
 			{
@@ -154,6 +172,7 @@ namespace StockSharp.Hydra.BarChart
 			_settings.IsRealTime = false;
 			_settings.Interval = TimeSpan.FromDays(1);
 			_settings.IgnoreWeekends = true;
+			_settings.CandleDayStep = 1;
 		}
 
 		protected override BarChartMessageAdapter GetAdapter(IdGenerator generator)
@@ -237,22 +256,33 @@ namespace StockSharp.Hydra.BarChart
 					}
 
 					var candleStorage = StorageRegistry.GetCandleMessageStorage(series.CandleType.ToCandleMessageType(), security.Security, series.Arg, _settings.Drive, _settings.StorageFormat);
+					var emptyDates = allDates.Except(candleStorage.Dates).ToArray();
 
-					foreach (var date in allDates.Except(candleStorage.Dates))
+					if (emptyDates.IsEmpty())
+					{
+						this.AddInfoLog(LocalizedStrings.Str2297Params, series.Arg, security.Security.Id);
+						continue;
+					}
+
+					var currDate = emptyDates.First();
+					var lastDate = emptyDates.First();
+
+					while (currDate <= lastDate)
 					{
 						if (!CanProcess())
 							break;
 
-						if (_settings.IgnoreWeekends && !security.IsTradeDate(date))
+						if (_settings.IgnoreWeekends && !security.IsTradeDate(currDate))
 						{
-							this.AddDebugLog(LocalizedStrings.WeekEndDate, date);
+							this.AddDebugLog(LocalizedStrings.WeekEndDate, currDate);
+							currDate = currDate.AddDays(1);
 							continue;
 						}
 
-						this.AddInfoLog(LocalizedStrings.Str2298Params, series, date, security.Security.Id);
+						this.AddInfoLog(LocalizedStrings.Str2298Params, series, currDate, security.Security.Id);
 
 						bool isSuccess;
-						var candles = ((BarChartTrader)Connector).GetHistoricalCandles(security.Security, series.CandleType, series.Arg, date, date.EndOfDay(), out isSuccess);
+						var candles = ((BarChartTrader)Connector).GetHistoricalCandles(security.Security, series.CandleType, series.Arg, currDate, currDate.AddDays(_settings.CandleDayStep - 1).EndOfDay(), out isSuccess);
 
 						if (isSuccess)
 						{
@@ -263,6 +293,8 @@ namespace StockSharp.Hydra.BarChart
 						}
 						else
 							this.AddErrorLog(LocalizedStrings.Str2550);
+
+						currDate = currDate.AddDays(_settings.CandleDayStep);
 					}
 				}
 			}

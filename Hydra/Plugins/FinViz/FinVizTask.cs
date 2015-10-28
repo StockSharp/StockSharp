@@ -8,7 +8,6 @@ namespace StockSharp.Hydra.FinViz
 
 	using MoreLinq;
 
-	using StockSharp.Algo;
 	using StockSharp.Algo.History;
 	using StockSharp.Algo.Storages;
 	using StockSharp.BusinessEntities;

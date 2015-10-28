@@ -37,7 +37,7 @@ namespace StockSharp.Hydra.AlorHistory
 			public AlorHistorySettings(HydraTaskSettings settings)
 				: base(settings)
 			{
-				ExtensionInfo.TryAdd("UseTemporaryFiles", TempFiles.UseAndDelete.To<string>());
+				ExtensionInfo.TryAdd("CandleDayStep", 1);
 			}
 
 			[CategoryLoc(_sourceName)]
@@ -79,6 +79,22 @@ namespace StockSharp.Hydra.AlorHistory
 				get { return ExtensionInfo["UseTemporaryFiles"].To<TempFiles>(); }
 				set { ExtensionInfo["UseTemporaryFiles"] = value.To<string>(); }
 			}
+
+			[CategoryLoc(_sourceName)]
+			[DisplayNameLoc(LocalizedStrings.TimeIntervalKey)]
+			[DescriptionLoc(LocalizedStrings.CandleTimeIntervalKey)]
+			[PropertyOrder(4)]
+			public int CandleDayStep
+			{
+				get { return ExtensionInfo["CandleDayStep"].To<int>(); }
+				set
+				{
+					if (value < 1)
+						throw new ArgumentOutOfRangeException();
+
+					ExtensionInfo["CandleDayStep"] = value;
+				}
+			}
 		}
 
 		private AlorHistorySettings _settings;
@@ -96,14 +112,15 @@ namespace StockSharp.Hydra.AlorHistory
 		{
 			_settings = new AlorHistorySettings(settings);
 
-			if (settings.IsDefault)
-			{
-				_settings.Offset = 1;
-				_settings.StartFrom = new DateTime(2001, 1, 1);
-				_settings.Interval = TimeSpan.FromDays(1);
-				_settings.IgnoreWeekends = true;
-				_settings.UseTemporaryFiles = TempFiles.UseAndDelete;
-			}
+			if (!settings.IsDefault)
+				return;
+
+			_settings.Offset = 1;
+			_settings.StartFrom = new DateTime(2001, 1, 1);
+			_settings.Interval = TimeSpan.FromDays(1);
+			_settings.IgnoreWeekends = true;
+			_settings.UseTemporaryFiles = TempFiles.UseAndDelete;
+			_settings.CandleDayStep = 1;
 		}
 
 		public override HydraTaskSettings Settings
@@ -173,21 +190,25 @@ namespace StockSharp.Hydra.AlorHistory
 							continue;
 						}
 
-						foreach (var emptyDate in emptyDates)
+						var currDate = emptyDates.First();
+						var lastDate = emptyDates.First();
+
+						while (currDate <= lastDate)
 						{
 							if (!CanProcess())
 								break;
 
-							if (_settings.IgnoreWeekends && !security.IsTradeDate(emptyDate))
+							if (_settings.IgnoreWeekends && !security.IsTradeDate(currDate))
 							{
-								this.AddDebugLog(LocalizedStrings.WeekEndDate, emptyDate);
+								this.AddDebugLog(LocalizedStrings.WeekEndDate, currDate);
+								currDate = currDate.AddDays(1);
 								continue;
 							}
 
 							try
 							{
-								this.AddInfoLog(LocalizedStrings.Str2298Params, series.Arg, emptyDate, security.Security.Id);
-								var candles = source.GetCandles(security.Security, (TimeSpan)series.Arg, emptyDate, emptyDate);
+								this.AddInfoLog(LocalizedStrings.Str2298Params, series.Arg, currDate, security.Security.Id);
+								var candles = source.GetCandles(security.Security, (TimeSpan)series.Arg, currDate, currDate.AddDays(_settings.CandleDayStep - 1));
 								
 								if (candles.Any())
 									SaveCandles(security, candles);
@@ -195,13 +216,15 @@ namespace StockSharp.Hydra.AlorHistory
 									this.AddDebugLog(LocalizedStrings.NoData);
 
 								if (_settings.UseTemporaryFiles == TempFiles.UseAndDelete)
-									File.Delete(source.GetDumpFile(security.Security, emptyDate, emptyDate, typeof(TimeFrameCandle), series.Arg));
+									File.Delete(source.GetDumpFile(security.Security, currDate, currDate.AddDays(_settings.CandleDayStep - 1), typeof(TimeFrameCandle), series.Arg));
 							}
 							catch (Exception ex)
 							{
 								HandleError(new InvalidOperationException(LocalizedStrings.Str2299Params
-									.Put(series.Arg, emptyDate, security.Security.Id), ex));
+									.Put(series.Arg, currDate, security.Security.Id), ex));
 							}
+
+							currDate = currDate.AddDays(_settings.CandleDayStep);
 						}
 					}
 				}

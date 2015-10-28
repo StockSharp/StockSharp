@@ -37,6 +37,7 @@
 			public QuandlSettings(HydraTaskSettings settings)
 				: base(settings)
 			{
+				ExtensionInfo.TryAdd("CandleDayStep", 1);
 			}
 
 			[CategoryLoc(_sourceName)]
@@ -88,6 +89,22 @@
 				get { return ExtensionInfo["UseTemporaryFiles"].To<TempFiles>(); }
 				set { ExtensionInfo["UseTemporaryFiles"] = value.To<string>(); }
 			}
+
+			[CategoryLoc(_sourceName)]
+			[DisplayNameLoc(LocalizedStrings.TimeIntervalKey)]
+			[DescriptionLoc(LocalizedStrings.CandleTimeIntervalKey)]
+			[PropertyOrder(5)]
+			public int CandleDayStep
+			{
+				get { return ExtensionInfo["CandleDayStep"].To<int>(); }
+				set
+				{
+					if (value < 1)
+						throw new ArgumentOutOfRangeException();
+
+					ExtensionInfo["CandleDayStep"] = value;
+				}
+			}
 		}
 
 		private QuandlSettings _settings;
@@ -123,19 +140,20 @@
 
 		protected override void ApplySettings(HydraTaskSettings settings)
 		{
+			_quandlSecurityStorage = new QuandlSecurityStorage(EntityRegistry);
+
 			_settings = new QuandlSettings(settings);
 
-			if (_settings.IsDefault)
-			{
-				_settings.DayOffset = 1;
-				_settings.StartFrom = new DateTime(1980, 1, 1);
-				_settings.Interval = TimeSpan.FromDays(1);
-				_settings.IgnoreWeekends = true;
-				_settings.AuthToken = new SecureString();
-				_settings.UseTemporaryFiles = TempFiles.UseAndDelete;
-			}
+			if (!_settings.IsDefault)
+				return;
 
-			_quandlSecurityStorage = new QuandlSecurityStorage(EntityRegistry);
+			_settings.DayOffset = 1;
+			_settings.StartFrom = new DateTime(1980, 1, 1);
+			_settings.Interval = TimeSpan.FromDays(1);
+			_settings.IgnoreWeekends = true;
+			_settings.AuthToken = new SecureString();
+			_settings.UseTemporaryFiles = TempFiles.UseAndDelete;
+			_settings.CandleDayStep = 1;
 		}
 
 		public void Refresh(ISecurityStorage storage, Security criteria, Action<Security> newSecurity, Func<bool> isCancelled)
@@ -232,21 +250,25 @@
 						continue;
 					}
 
-					foreach (var emptyDate in emptyDates)
+					var currDate = emptyDates.First();
+					var lastDate = emptyDates.First();
+
+					while (currDate <= lastDate)
 					{
 						if (!CanProcess())
 							break;
 
-						if (_settings.IgnoreWeekends && !security.IsTradeDate(emptyDate))
+						if (_settings.IgnoreWeekends && !security.IsTradeDate(currDate))
 						{
-							this.AddDebugLog(LocalizedStrings.WeekEndDate, emptyDate);
+							this.AddDebugLog(LocalizedStrings.WeekEndDate, currDate);
+							currDate = currDate.AddDays(1);
 							continue;
 						}
 
 						try
 						{
-							this.AddInfoLog(LocalizedStrings.Str2298Params, tf, emptyDate, security.Security.Id);
-							var candles = source.GetCandles(security.Security, tf, emptyDate, emptyDate + tf);
+							this.AddInfoLog(LocalizedStrings.Str2298Params, tf, currDate, security.Security.Id);
+							var candles = source.GetCandles(security.Security, tf, currDate, currDate + TimeSpan.FromDays(_settings.CandleDayStep).Max(tf));
 
 							if (candles.Any())
 								SaveCandles(security, candles);
@@ -254,13 +276,15 @@
 								this.AddDebugLog(LocalizedStrings.NoData);
 
 							if (_settings.UseTemporaryFiles == TempFiles.UseAndDelete)
-								File.Delete(source.GetDumpFile(security.Security, emptyDate, emptyDate, typeof(TimeFrameCandle), series.Arg));
+								File.Delete(source.GetDumpFile(security.Security, currDate, currDate + TimeSpan.FromDays(_settings.CandleDayStep).Max(tf), typeof(TimeFrameCandle), series.Arg));
 						}
 						catch (Exception ex)
 						{
 							HandleError(new InvalidOperationException(LocalizedStrings.Str2299Params
-								.Put(series.Arg, emptyDate, security.Security.Id), ex));
+								.Put(series.Arg, currDate, security.Security.Id), ex));
 						}
+
+						currDate = currDate.AddDays(_settings.CandleDayStep);
 					}
 				}
 			}
