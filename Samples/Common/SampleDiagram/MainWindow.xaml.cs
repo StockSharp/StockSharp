@@ -1,4 +1,4 @@
-﻿namespace SampleDiagramPublic
+﻿namespace SampleDiagram
 {
 	using System.Windows;
 	using System.Windows.Input;
@@ -7,11 +7,6 @@
 
 	using StockSharp.Xaml.Diagram;
 
-	using ConfigurationExtensions = StockSharp.Configuration.Extensions;
-
-	/// <summary>
-	/// Interaction logic for MainWindow.xaml
-	/// </summary>
 	public partial class MainWindow
 	{
 		public static RoutedCommand AddCommand = new RoutedCommand();

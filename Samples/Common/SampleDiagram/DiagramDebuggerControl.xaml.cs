@@ -1,4 +1,4 @@
-﻿namespace SampleDiagramPublic
+﻿namespace SampleDiagram
 {
 	using System.Windows;
 	using System.Windows.Input;
@@ -7,9 +7,6 @@
 
 	using StockSharp.Xaml.Diagram;
 
-	/// <summary>
-	/// Interaction logic for DiagramDebuggerControl.xaml
-	/// </summary>
 	public partial class DiagramDebuggerControl
 	{
 		public readonly static RoutedCommand AddBreakpointCommand = new RoutedCommand();

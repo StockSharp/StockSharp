@@ -1,4 +1,4 @@
-﻿namespace SampleDiagramPublic
+﻿namespace SampleDiagram
 {
 	using System;
 	using System.Collections.Generic;
@@ -16,7 +16,6 @@
 	using StockSharp.Algo;
 	using StockSharp.Algo.Candles;
 	using StockSharp.Algo.Commissions;
-	using StockSharp.Algo.Indicators;
 	using StockSharp.Algo.Storages;
 	using StockSharp.Algo.Strategies;
 	using StockSharp.Algo.Testing;
@@ -28,9 +27,6 @@
 	using StockSharp.Xaml.Charting;
 	using StockSharp.Xaml.Diagram;
 
-	/// <summary>
-	/// Interaction logic for EmulationControl.xaml
-	/// </summary>
 	public partial class EmulationControl
 	{
 		#region DependencyProperty
@@ -112,8 +108,8 @@
 
 			var secGen = new SecurityIdGenerator();
 			var secIdParts = secGen.Split(SecusityTextBox.Text);
-			var secCode = secIdParts.Item1;
-			var board = ExchangeBoard.GetOrCreateBoard(secIdParts.Item2);
+			var secCode = secIdParts.SecurityCode;
+			var board = ExchangeBoard.GetOrCreateBoard(secIdParts.BoardCode);
 			var timeFrame = TimeSpan.FromMinutes(5);
 
 			// create test security
@@ -146,7 +142,7 @@
 				SecurityId = security.ToSecurityId(),
 				ServerTime = startTime,
 			}
-			.TryAdd(Level1Fields.PriceStep, secIdParts.Item1 == "RIZ2" ? 10m : 1)
+			.TryAdd(Level1Fields.PriceStep, secIdParts.SecurityCode == "RIZ2" ? 10m : 1)
 			.TryAdd(Level1Fields.StepPrice, 6m)
 			.TryAdd(Level1Fields.MinPrice, 10m)
 			.TryAdd(Level1Fields.MaxPrice, 1000000m)

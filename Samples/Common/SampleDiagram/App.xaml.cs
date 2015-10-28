@@ -1,12 +1,9 @@
-﻿namespace SampleDiagramPublic
+﻿namespace SampleDiagram
 {
 	using Ecng.Configuration;
 
 	using StockSharp.Alerts;
 
-	/// <summary>
-	/// Interaction logic for App.xaml
-	/// </summary>
 	public partial class App
 	{
 		public App()

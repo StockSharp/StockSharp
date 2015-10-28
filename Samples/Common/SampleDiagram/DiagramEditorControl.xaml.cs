@@ -1,17 +1,11 @@
-﻿namespace SampleDiagramPublic
+﻿namespace SampleDiagram
 {
-	using System;
 	using System.Windows;
 
 	using Ecng.Collections;
 
 	using StockSharp.Xaml.Diagram;
 
-	using ConfigurationExtensions = StockSharp.Configuration.Extensions;
-
-	/// <summary>
-	/// Interaction logic for DiagramEditorControl.xaml
-	/// </summary>
 	public partial class DiagramEditorControl
 	{
 		public static readonly DependencyProperty CompositionProperty = DependencyProperty.Register("Composition", typeof (CompositionDiagramElement), typeof (DiagramEditorControl), 

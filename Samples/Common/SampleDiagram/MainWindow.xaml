@@ -1,7 +1,7 @@
-﻿<Window x:Class="SampleDiagramPublic.MainWindow"
+﻿<Window x:Class="SampleDiagram.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:sampleDiagramPublic="clr-namespace:SampleDiagramPublic"
+        xmlns:sampleDiagramPublic="clr-namespace:SampleDiagram"
         Title="Sample diagram" Height="768" Width="1024" WindowState="Maximized"
 		WindowStartupLocation="CenterScreen">
 	

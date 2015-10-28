@@ -1,4 +1,4 @@
-namespace SampleDiagramPublic
+namespace SampleDiagram
 {
 	using System;
 	using System.Collections.Generic;
