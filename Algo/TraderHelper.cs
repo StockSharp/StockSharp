@@ -648,7 +648,7 @@ namespace StockSharp.Algo
 			if (board == null)
 				throw new ArgumentNullException("board");
 
-			var exchangeTime = time.ToLocalTime(board.TimeZoneInfo);
+			var exchangeTime = time.ToLocalTime(board.TimeZone);
 			var workingTime = board.WorkingTime;
 
 			var isWorkingDay = board.IsTradeDate(time);
@@ -686,7 +686,7 @@ namespace StockSharp.Algo
 			if (board == null)
 				throw new ArgumentNullException("board");
 
-			var exchangeTime = date.ToLocalTime(board.TimeZoneInfo);
+			var exchangeTime = date.ToLocalTime(board.TimeZone);
 			var workingTime = board.WorkingTime;
 
 			var period = workingTime.GetPeriod(exchangeTime);
@@ -2269,7 +2269,7 @@ namespace StockSharp.Algo
 						case 9:
 						case 12:
 						{
-							var dt = new DateTime(year, month, 15).ApplyTimeZone(ExchangeBoard.Forts.Exchange.TimeZoneInfo);
+							var dt = new DateTime(year, month, 15).ApplyTimeZone(ExchangeBoard.Forts.TimeZone);
 
 							while (!ExchangeBoard.Forts.IsTradeDate(dt))
 							{

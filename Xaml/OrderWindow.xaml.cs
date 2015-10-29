@@ -202,11 +202,11 @@ namespace StockSharp.Xaml
 						break;
 					case OrderWindowTif.Today:
 						_order.TimeInForce = TimeInForce.PutInQueue;
-						_order.ExpiryDate = (DateTimeOffset.Now.Date + TimeHelper.LessOneDay).ApplyTimeZone(Security.Board.Exchange.TimeZoneInfo);
+						_order.ExpiryDate = (DateTimeOffset.Now.Date + TimeHelper.LessOneDay).ApplyTimeZone(Security.Board.TimeZone);
 						break;
 					case OrderWindowTif.Gtd:
 						_order.TimeInForce = TimeInForce.PutInQueue;
-						_order.ExpiryDate = (ExpiryDate.Value ?? DateTime.Today).ApplyTimeZone(Security.Board.Exchange.TimeZoneInfo);
+						_order.ExpiryDate = (ExpiryDate.Value ?? DateTime.Today).ApplyTimeZone(Security.Board.TimeZone);
 						break;
 					case null:
 						break;
@@ -258,7 +258,7 @@ namespace StockSharp.Xaml
 					{
 						if (value.ExpiryDate == null || value.ExpiryDate == DateTimeOffset.MaxValue)
 							TimeInForceCtrl.SelectedValue = OrderWindowTif.Gtc;
-						else if (value.ExpiryDate == (DateTimeOffset.Now.Date + TimeHelper.LessOneDay).ApplyTimeZone(Security.Board.Exchange.TimeZoneInfo))
+						else if (value.ExpiryDate == (DateTimeOffset.Now.Date + TimeHelper.LessOneDay).ApplyTimeZone(Security.Board.TimeZone))
 							TimeInForceCtrl.SelectedValue = OrderWindowTif.Today;
 						else
 						{

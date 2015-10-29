@@ -9,6 +9,7 @@
 		xmlns:converters="clr-namespace:Ecng.Xaml.Converters;assembly=Ecng.Xaml"
 		xmlns:xaml="clr-namespace:StockSharp.Xaml.Actipro"
 		xmlns:system="clr-namespace:System;assembly=mscorlib"
+		xmlns:ex="clr-namespace:Ecng.Xaml;assembly=Ecng.Xaml"
 		mc:Ignorable="d">
 
 	<UserControl.Resources>
@@ -19,6 +20,7 @@
 	<ScrollViewer VerticalScrollBarVisibility="Auto">
 		<Grid Margin="3">
 			<Grid.RowDefinitions>
+				<RowDefinition Height="Auto" />
 				<RowDefinition Height="Auto" />
 				<RowDefinition Height="Auto" />
 				<RowDefinition Height="Auto" />
@@ -57,7 +59,7 @@
 					</Grid>
 
 					<GroupBox Header="{x:Static loc:LocalizedStrings.ExchangeInfo}" Margin="0,5">
-						<xaml:ExchangeEditor HorizontalAlignment="Stretch" x:Name="_exchangeEditor" SelectedExchangeChanged="ExchangeEditor_OnSelectedExchangeChanged"/>
+						<xaml:ExchangeEditor HorizontalAlignment="Stretch" x:Name="ExchangeEditor" SelectedExchangeChanged="ExchangeEditor_OnSelectedExchangeChanged"/>
 					</GroupBox>
 
 					<GroupBox Header="{x:Static loc:LocalizedStrings.XamlStr596}" Padding="3">
@@ -218,6 +220,14 @@
 					Grid.Column="1" Width="180" Visibility="{Binding IsNewBoard, Converter={StaticResource BoolToVisHide}}"
 					HorizontalAlignment="Right" Margin="0,5,5,5" FontWeight="SemiBold"/>
 			</Grid>
+
+			<StackPanel Grid.Row="3" Grid.ColumnSpan="2" Margin="3,3,0,3">
+				<TextBlock VerticalAlignment="Center">
+					<Run Text="{x:Static loc:LocalizedStrings.TimeZone}"/>:
+				</TextBlock>
+
+				<ex:TimeZoneComboBox SelectedTimeZone="{Binding BoardTimeZone}" HorizontalAlignment="Stretch"/>
+			</StackPanel>
 		</Grid>
 	</ScrollViewer>
 </UserControl>

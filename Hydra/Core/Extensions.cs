@@ -270,7 +270,7 @@
 			if (security == null)
 				throw new ArgumentNullException("security");
 
-			return security.Security.Board.IsTradeDate(date.ApplyTimeZone(security.Security.Board.Exchange.TimeZoneInfo), true);
+			return security.Security.Board.IsTradeDate(date.ApplyTimeZone(security.Security.Board.TimeZone), true);
 		}
 
 		/// <summary>

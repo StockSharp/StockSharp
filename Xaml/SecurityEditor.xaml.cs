@@ -141,7 +141,7 @@ namespace StockSharp.Xaml
         {
             var wnd = new SecurityPickerWindow
             {
-				SecurityProvider = GetSecurityProvider(),
+				SecurityProvider = SecurityProvider,
 				SelectionMode = DataGridSelectionMode.Single
             };
 

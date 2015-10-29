@@ -70,16 +70,7 @@
 			</ComboBox.ItemTemplate>
 		</ComboBox>
 
-		<StackPanel Grid.Column="2" Grid.Row="2" Grid.ColumnSpan="2" Margin="3,3,0,3">
-			<TextBlock VerticalAlignment="Center">
-				<Run Text="{x:Static loc:LocalizedStrings.TimeZone}"/>:
-			</TextBlock>
-			<ComboBox ItemsSource="{Binding TimeZones, Mode=OneWay, RelativeSource={RelativeSource FindAncestor, AncestorType=xaml:ExchangeEditor}}" 
-								SelectedItem="{Binding ExchangeTimeZone}" HorizontalAlignment="Stretch"/>
-		</StackPanel>
-
 		<TextBlock Margin="20,0,0,0" Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="4" FontWeight="Bold" Foreground="Red"
 				   Text="{Binding SaveErrorMessage, Mode=OneWay}"/>
-
 	</Grid>
 </UserControl>

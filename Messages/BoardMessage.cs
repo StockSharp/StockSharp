@@ -84,7 +84,7 @@ namespace StockSharp.Messages
 		}
 
 		[field: NonSerialized]
-		private TimeZoneInfo _timeZoneInfo = TimeZoneInfo.Utc;
+		private TimeZoneInfo _timeZone = TimeZoneInfo.Utc;
 
 		/// <summary>
 		/// Information about the time zone where the exchange is located.
@@ -93,18 +93,18 @@ namespace StockSharp.Messages
 		[DisplayNameLoc(LocalizedStrings.TimeZoneKey)]
 		[DescriptionLoc(LocalizedStrings.Str68Key)]
 		[MainCategory]
-		public TimeZoneInfo TimeZoneInfo
+		public TimeZoneInfo TimeZone
 		{
-			get { return _timeZoneInfo; }
+			get { return _timeZone; }
 			set
 			{
 				if (value == null)
 					throw new ArgumentNullException("value");
 
-				if (TimeZoneInfo == value)
+				if (TimeZone == value)
 					return;
 
-				_timeZoneInfo = value;
+				_timeZone = value;
 			}
 		}
 
@@ -130,7 +130,7 @@ namespace StockSharp.Messages
 				IsSupportAtomicReRegister = IsSupportAtomicReRegister,
 				IsSupportMarketOrders = IsSupportMarketOrders,
 				WorkingTime = WorkingTime.Clone(),
-				TimeZoneInfo = TimeZoneInfo,
+				TimeZone = TimeZone,
 			};
 		}
 

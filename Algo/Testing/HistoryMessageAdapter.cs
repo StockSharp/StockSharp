@@ -622,7 +622,7 @@ namespace StockSharp.Algo.Testing
 				.Where(b => b.IsTradeDate(date, true))
 				.SelectMany(board =>
 				{
-					var period = board.WorkingTime.GetPeriod(date.ToLocalTime(board.Exchange.TimeZoneInfo));
+					var period = board.WorkingTime.GetPeriod(date.ToLocalTime(board.TimeZone));
 
 					return period == null || period.Times.Length == 0
 						? new[] { Tuple.Create(board, new Range<TimeSpan>(TimeSpan.Zero, TimeHelper.LessOneDay)) }
@@ -658,8 +658,8 @@ namespace StockSharp.Algo.Testing
 			var min = DateTime.MinValue + range.Min;
 			var max = DateTime.MinValue + range.Max;
 
-			var utcMin = min.To(board.Exchange.TimeZoneInfo);
-			var utcMax = max.To(board.Exchange.TimeZoneInfo);
+			var utcMin = min.To(board.TimeZone);
+			var utcMax = max.To(board.TimeZone);
 
 			return new Range<TimeSpan>(utcMin.TimeOfDay, utcMax.TimeOfDay);
 		}

@@ -714,7 +714,7 @@ namespace StockSharp.Algo.Candles
 			if (time == null)
 				throw new ArgumentNullException("time");
 
-			var exchangeTime = currentTime.ToLocalTime(board.Exchange.TimeZoneInfo);
+			var exchangeTime = currentTime.ToLocalTime(board.TimeZone);
 			Range<DateTime> bounds;
 
 			if (timeFrame.Ticks == _weekTf)
@@ -969,8 +969,8 @@ namespace StockSharp.Algo.Candles
 
 			var workingTime = board.WorkingTime;
 
-			var to = range.Max.ToLocalTime(board.Exchange.TimeZoneInfo);
-			var from = range.Min.ToLocalTime(board.Exchange.TimeZoneInfo);
+			var to = range.Max.ToLocalTime(board.TimeZone);
+			var from = range.Min.ToLocalTime(board.TimeZone);
 
 			var days = (int)(to.Date - from.Date).TotalDays;
 

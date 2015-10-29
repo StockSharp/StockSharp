@@ -384,7 +384,7 @@ namespace StockSharp.Algo.Storages
 
 			var board = ExchangeBoard.GetBoard(securityId.BoardCode);
 
-			return board == null ? metaInfo.LocalOffset : board.Exchange.TimeZoneInfo.BaseUtcOffset;
+			return board == null ? metaInfo.LocalOffset : board.TimeZone.BaseUtcOffset;
 		}
 
 		public static void WriteNullableInt<T>(this BitArrayWriter writer, T? value)

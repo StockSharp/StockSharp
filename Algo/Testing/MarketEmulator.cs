@@ -1140,7 +1140,7 @@ namespace StockSharp.Algo.Testing
 					var board = _parent._boardDefinitions.TryGetValue(_securityId.BoardCode);
 
 					if (board != null)
-						destTimeZone = board.TimeZoneInfo;	
+						destTimeZone = board.TimeZone;	
 				}
 
 				if (destTimeZone == null)

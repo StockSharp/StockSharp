@@ -18,12 +18,12 @@ namespace StockSharp.Xaml.Actipro
 	using Ecng.Collections;
 	using Ecng.Serialization;
 	using Ecng.Xaml;
+
 	using StockSharp.BusinessEntities;
 	using StockSharp.Messages;
+	using StockSharp.Localization;
 
 	using MoreLinq;
-
-	using StockSharp.Localization;
 
 	/// <summary>
 	/// Editor of exchange boards.
@@ -55,7 +55,7 @@ namespace StockSharp.Xaml.Actipro
 
 		internal Exchange SelectedExchange
 		{
-			get { return _exchangeEditor.GetSelectedExchange(); }
+			get { return ExchangeEditor.GetSelectedExchange(); }
 		}
 
 		/// <summary>
@@ -102,13 +102,13 @@ namespace StockSharp.Xaml.Actipro
 				if (boardCode.IsEmpty())
 				{
 					ResetBoardEditor();
-					_exchangeEditor.SetExchange(null);
+					ExchangeEditor.SetExchange(null);
 					return;
 				}
 
 				ViewModel.SetBoard(boardCode);
 				CbBoardCode.SelectedItem = Boards.FirstOrDefault(b => b.Code == ViewModel.BoardCode);
-				_exchangeEditor.SetExchange(ViewModel.Board == null ? null : ViewModel.Board.Exchange.Name);
+				ExchangeEditor.SetExchange(ViewModel.Board == null ? null : ViewModel.Board.Exchange.Name);
 			}
 			finally
 			{
@@ -139,7 +139,7 @@ namespace StockSharp.Xaml.Actipro
 				if (curText.IsEmpty())
 					return;
 
-				_exchangeEditor.SetExchange(null);
+				ExchangeEditor.SetExchange(null);
 				SetBoardCode(curText);
 			}
 		}
@@ -147,7 +147,7 @@ namespace StockSharp.Xaml.Actipro
 		private void ButtonClear_Click(object sender, RoutedEventArgs e)
 		{
 			ResetBoardEditor();
-			_exchangeEditor.SetExchange(null);
+			ExchangeEditor.SetExchange(null);
 		}
 
 		private void ResetBoardEditor()
@@ -159,7 +159,7 @@ namespace StockSharp.Xaml.Actipro
 				ViewModel.SetBoard(null);
 				SetSaveError(null);
 				CbBoardCode.Text = string.Empty;
-				_exchangeEditor.SetExchange(null);
+				ExchangeEditor.SetExchange(null);
 			}
 			finally
 			{
@@ -224,13 +224,13 @@ namespace StockSharp.Xaml.Actipro
 		private void ExchangeEditor_OnSelectedExchangeChanged()
 		{
 			if (!_updatingUI)
-				ViewModel.SaveBoard(_exchangeEditor.GetSelectedExchange());
+				ViewModel.SaveBoard(ExchangeEditor.GetSelectedExchange());
 		}
 
 		private void VmOnDataChanged()
 		{
 			if (!_updatingUI)
-				ViewModel.SaveBoard(_exchangeEditor.GetSelectedExchange());
+				ViewModel.SaveBoard(ExchangeEditor.GetSelectedExchange());
 		}
 
 		private void OnTimer()
@@ -350,6 +350,7 @@ namespace StockSharp.Xaml.Actipro
 		private bool _isNewBoard;
 		private bool _isSupportAtomicReRegister, _isSupportMarketOrders;
 		private DateTime _expiryTime, _newPeriodTill, _newTimeFrom, _newTimeTill, _newSpecialWorkingDay, _newSpecialHoliday;
+		private TimeZoneInfo _boardTimeZone;
 		private readonly ObservableCollection<WorkingTimePeriodViewModel> _periods = new ObservableCollection<WorkingTimePeriodViewModel>();
 		private WorkingTimePeriodViewModel _selectedPeriod;
 		private readonly ObservableCollection<DateTimeViewModel> _specialWorkingDays = new ObservableCollection<DateTimeViewModel>();
@@ -439,6 +440,7 @@ namespace StockSharp.Xaml.Actipro
 			IsSupportAtomicReRegister = Board.IsSupportAtomicReRegister;
 			IsSupportMarketOrders = Board.IsSupportMarketOrders;
 			ExpiryTime = DateTime.MinValue + Board.ExpiryTime;
+			BoardTimeZone = Board.TimeZone;
 
 			_periods.Clear();
 			_specialWorkingDays.Clear();
@@ -454,6 +456,7 @@ namespace StockSharp.Xaml.Actipro
 			Board = null;
 			BoardCode = null;
 			IsNewBoard = true;
+			BoardTimeZone = null;
 
 			IsSupportAtomicReRegister = false;
 			IsSupportMarketOrders = false;
@@ -496,6 +499,12 @@ namespace StockSharp.Xaml.Actipro
 		{
 			get { return _expiryTime; }
 			set { SetField(ref _expiryTime, value, () => ExpiryTime); }
+		}
+
+		public TimeZoneInfo BoardTimeZone
+		{
+			get { return _boardTimeZone; }
+			set { SetField(ref _boardTimeZone, value, () => BoardTimeZone); }
 		}
 
 		public IEnumerable<WorkingTimePeriodViewModel> Periods
@@ -717,6 +726,12 @@ namespace StockSharp.Xaml.Actipro
 				return false;
 			}
 
+			if (BoardTimeZone == null)
+			{
+				_editor.SetSaveError(LocalizedStrings.Str1465);
+				return false;
+			}
+
 			return true;
 		}
 
@@ -738,6 +753,7 @@ namespace StockSharp.Xaml.Actipro
 					SpecialWorkingDays = SpecialWorkingDays.Select(m => m.DateTime).ToArray(),
 					SpecialHolidays = SpecialHolidays.Select(m => m.DateTime).ToArray()
 				},
+				TimeZone = BoardTimeZone
 			};
 		}
 
