@@ -124,7 +124,7 @@ namespace StockSharp.MatLab
 		public event EventHandler<PositionsEventArgs> PositionsChanged;
 
 		/// <summary>
-		/// Tick tades received.
+		/// Tick trades received.
 		/// </summary>
 		public event EventHandler<TradesEventArgs> NewTrades;
 

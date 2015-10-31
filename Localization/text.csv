@@ -5028,7 +5028,7 @@ DocStr864;Message adapter;Адаптер сообщений
 DocStr865;Transactional adapter;Адаптер для транзакций
 DocStr866;Market-data adapter;Адаптер для маркет-данных
 DocStr867;Own trades received;Событие появления собственных новых сделок
-DocStr868;Tick tades received;Событие появления всех новых сделок
+DocStr868;Tick trades received;Событие появления всех новых сделок
 DocStr869;Orders received;Событие появления новых заявок
 DocStr870;Stop-orders received;Событие появления новых стоп-заявок
 DocStr871;Orders changed (cancelled, matched);Событие изменения состояния заявок (снята, удовлетворена)

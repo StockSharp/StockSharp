@@ -164,7 +164,7 @@ namespace StockSharp.Xaml
 		#region NewTrades
 
 		/// <summary>
-		/// Tick tades received.
+		/// Tick trades received.
 		/// </summary>
 		public event Action<IEnumerable<Trade>> NewTrades;
 
