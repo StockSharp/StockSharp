@@ -82,7 +82,7 @@ namespace StockSharp.Algo.Strategies.Analytics
 
 			chart.GuiSync(() =>
 			{
-				// очищаем данные с предыдущего запуска скрипта
+				// clear prev values
 				chart.RenderableSeries.Clear();
 				grid.Columns.Clear();
 
@@ -109,71 +109,71 @@ namespace StockSharp.Algo.Strategies.Analytics
 				grid.SetSort(volumeColumn, ListSortDirection.Descending);
 			});
 
-			// получаем хранилище свечек
+			// get candle storage
 			var storage = StorateRegistry.GetCandleStorage(typeof(TimeFrameCandle), Security, TimeFrame, format: StorageFormat);
 			
-			// получаем набор доступных дат за указанный период
+			// get available dates for the specified period
 			var dates = storage.GetDates(From, To).ToArray();
 
 			var rows = new Dictionary<TimeSpan, GridRow>();
 
 			foreach (var loadDate in dates)
 			{
-				// проверяем флаг остановки
+				// check if stopped
 				if (ProcessState != ProcessStates.Started)
 					break;
 
-				// загружаем свечки
+				// load candles
 				var candles = storage.Load(loadDate);
 
-				// группируем свечки по часовой отметке времени
+				// groupping candles by open time
 				var groupedCandles = candles.GroupBy(c => c.OpenTime.TimeOfDay.Truncate(TimeSpan.FromHours(1)));
 
 				foreach (var group in groupedCandles.OrderBy(g => g.Key))
 				{
-					// проверяем флаг остановки
+					// check if stopped
 					if (ProcessState != ProcessStates.Started)
 						break;
 
 					var time = group.Key;
 
-					// получаем суммарный объем в пределах часовой отметки
+					// calc total volume for the specified time frame
 					var sumVol = group.Sum(c => c.TotalVolume);
 
 					var row = rows.TryGetValue(time);
 					if (row == null)
 					{
-						// пришел новый уровень - добавляем новую запись
+						// new volume level
 						rows.Add(time, row = new GridRow { Time = time, Volume = sumVol });
 
-						// выводим на график
+						// draw on chart
 						chartSeries.Append(DateTime.Today + time, (double)sumVol, (double)sumVol / 1000);
 
-						// выводит в таблицу
+						// draw on table
 						gridSeries.Add(row);
 					}
 					else
 					{
-						// увеличиваем суммарный объем
+						// update existing volume level
 						row.Volume += sumVol;
 
-						// обновляем график
+						// update chart
 						chartSeries.Update(DateTime.Today + time, (double)row.Volume, (double)row.Volume / 1000);
 					}
 				}
 				
 				chart.GuiAsync(() =>
 				{
-					// обновление сортировки в таблице
+					// update grid sorting
 					grid.RefreshSort();
 
-					// автомасштабирование графика
+					// scale chart
 					chart.ZoomExtents();
 				});
 			}
 
-			// оповещаем программу об окончании выполнения скрипта
-			base.Stop();
+			// notify the script stopped
+			Stop();
 		}
 	}
 }

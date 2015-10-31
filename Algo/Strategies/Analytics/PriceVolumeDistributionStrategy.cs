@@ -81,7 +81,7 @@ namespace StockSharp.Algo.Strategies.Analytics
 
 			chart.GuiSync(() =>
 			{
-				// очищаем данные с предыдущего запуска скрипта
+				// clear prev values
 				chart.RenderableSeries.Clear();
 				grid.Columns.Clear();
 
@@ -107,71 +107,71 @@ namespace StockSharp.Algo.Strategies.Analytics
 				grid.SetSort(volumeColumn, ListSortDirection.Descending);
 			});
 
-			// получаем хранилище свечек
+			// get candle storage
 			var storage = StorateRegistry.GetCandleStorage(typeof(TimeFrameCandle), Security, TimeFrame, format: StorageFormat);
 
-			// получаем набор доступных дат за указанный период
+			// get available dates for the specified period
 			var dates = storage.GetDates(From, To).ToArray();
 
 			var rows = new Dictionary<decimal, GridRow>();
 
 			foreach (var loadDate in dates)
 			{
-				// проверяем флаг остановки
+				// check if stopped
 				if (ProcessState != ProcessStates.Started)
 					break;
 
-				// загружаем свечки
+				// load candles
 				var candles = storage.Load(loadDate);
 
-				// группируем свечки по цене (середина свечи)
+				// groupping candles by candle's middle price
 				var groupedCandles = candles.GroupBy(c => c.LowPrice + c.GetLength() / 2);
 
 				foreach (var group in groupedCandles.OrderBy(g => g.Key))
 				{
-					// проверяем флаг остановки
+					// check if stopped
 					if (ProcessState != ProcessStates.Started)
 						break;
 
 					var price = group.Key;
 
-					// получаем суммарный объем в пределах ценового уровня за день
+					// calc total volume for the specified time frame
 					var sumVol = group.Sum(c => c.TotalVolume);
 
 					var row = rows.TryGetValue(price);
 					if (row == null)
 					{
-						// пришел новый уровень - добавляем новую запись
+						// new price level
 						rows.Add(price, row = new GridRow { Price = price, Volume = sumVol });
 
-						// выводим на график
+						// draw on chart
 						chartSeries.Append((double)price, (double)sumVol);
 
-						// выводит в таблицу
+						// draw on table
 						gridSeries.Add(row);
 					}
 					else
 					{
-						// увеличиваем суммарный объем
+						// update existing price level
 						row.Volume += sumVol;
 
-						// обновляем график
+						// update chart
 						chartSeries.Update((double)price, (double)row.Volume);
 					}
 				}
 
 				chart.GuiAsync(() =>
 				{
-					// обновление сортировки в таблице
+					// update grid sorting
 					grid.RefreshSort();
 
-					// автомасштабирование графика
+					// scale chart
 					chart.ZoomExtents();
 				});
 			}
 
-			// оповещаем программу об окончании выполнения скрипта
-			base.Stop();
+			// notify the script stopped
+			Stop();
 		}
 	}
 }
