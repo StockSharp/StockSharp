@@ -95,16 +95,27 @@ namespace StockSharp.Sterling
 				ServerTime = structQuoteUpdate.bstrUpdateTime.StrToTime(),
 			};
 
-			message.TryAdd(Level1Fields.BestAskPrice, (decimal)structQuoteUpdate.fAskPrice);
-			message.TryAdd(Level1Fields.BestBidPrice, (decimal)structQuoteUpdate.fAskPrice);
+			if (structQuoteUpdate.bAskPrice != 0)
+				message.TryAdd(Level1Fields.BestAskPrice, (decimal)structQuoteUpdate.fAskPrice);
+
+			if (structQuoteUpdate.bBidPrice != 0)
+				message.TryAdd(Level1Fields.BestBidPrice, (decimal)structQuoteUpdate.fBidPrice);
+
 			message.TryAdd(Level1Fields.BestAskVolume, (decimal)structQuoteUpdate.nAskSize);
 			message.TryAdd(Level1Fields.BestBidVolume, (decimal)structQuoteUpdate.nBidSize);
-			
-			message.TryAdd(Level1Fields.OpenPrice, (decimal)structQuoteUpdate.fOpenPrice);
-			message.TryAdd(Level1Fields.HighPrice, (decimal)structQuoteUpdate.fHighPrice);
-			message.TryAdd(Level1Fields.LowPrice, (decimal)structQuoteUpdate.fLowPrice);
 
-			message.TryAdd(Level1Fields.LastTradePrice, (decimal)structQuoteUpdate.fLastPrice);
+			if (structQuoteUpdate.bOpenPrice != 0)
+				message.TryAdd(Level1Fields.OpenPrice, (decimal)structQuoteUpdate.fOpenPrice);
+			
+			if (structQuoteUpdate.bHighPrice != 0)
+				message.TryAdd(Level1Fields.HighPrice, (decimal)structQuoteUpdate.fHighPrice);
+			
+			if (structQuoteUpdate.bLowPrice != 0)
+				message.TryAdd(Level1Fields.LowPrice, (decimal)structQuoteUpdate.fLowPrice);
+
+			if (structQuoteUpdate.bLastPrice != 0)
+				message.TryAdd(Level1Fields.LastTradePrice, (decimal)structQuoteUpdate.fLastPrice);
+
 			message.TryAdd(Level1Fields.LastTradeVolume, (decimal)structQuoteUpdate.nLastSize);
 
 			message.TryAdd(Level1Fields.OpenInterest, (decimal)structQuoteUpdate.nOpenInterest);
@@ -142,16 +153,27 @@ namespace StockSharp.Sterling
 				ServerTime = structQuoteSnap.bstrUpdateTime.StrToTime(),
 			};
 
-			l1CngMsg.TryAdd(Level1Fields.BestAskPrice, (decimal)structQuoteSnap.fAskPrice);
-			l1CngMsg.TryAdd(Level1Fields.BestBidPrice, (decimal)structQuoteSnap.fAskPrice);
+			if (structQuoteSnap.bAskPrice != 0)
+				l1CngMsg.TryAdd(Level1Fields.BestAskPrice, (decimal)structQuoteSnap.fAskPrice);
+
+			if (structQuoteSnap.bBidPrice != 0)
+				l1CngMsg.TryAdd(Level1Fields.BestBidPrice, (decimal)structQuoteSnap.fBidPrice);
+
 			l1CngMsg.TryAdd(Level1Fields.BestAskVolume, (decimal)structQuoteSnap.nAskSize);
 			l1CngMsg.TryAdd(Level1Fields.BestBidVolume, (decimal)structQuoteSnap.nBidSize);
 
-			l1CngMsg.TryAdd(Level1Fields.OpenPrice, (decimal)structQuoteSnap.fOpenPrice);
-			l1CngMsg.TryAdd(Level1Fields.HighPrice, (decimal)structQuoteSnap.fHighPrice);
-			l1CngMsg.TryAdd(Level1Fields.LowPrice, (decimal)structQuoteSnap.fLowPrice);
+			if (structQuoteSnap.bOpenPrice != 0)
+				l1CngMsg.TryAdd(Level1Fields.OpenPrice, (decimal)structQuoteSnap.fOpenPrice);
 
-			l1CngMsg.TryAdd(Level1Fields.LastTradePrice, (decimal)structQuoteSnap.fLastPrice);
+			if (structQuoteSnap.bHighPrice != 0)
+				l1CngMsg.TryAdd(Level1Fields.HighPrice, (decimal)structQuoteSnap.fHighPrice);
+
+			if (structQuoteSnap.bLowPrice != 0)
+				l1CngMsg.TryAdd(Level1Fields.LowPrice, (decimal)structQuoteSnap.fLowPrice);
+
+			if (structQuoteSnap.bLastPrice != 0)
+				l1CngMsg.TryAdd(Level1Fields.LastTradePrice, (decimal)structQuoteSnap.fLastPrice);
+
 			l1CngMsg.TryAdd(Level1Fields.LastTradeVolume, (decimal)structQuoteSnap.nLastSize);
 
 			l1CngMsg.TryAdd(Level1Fields.OpenInterest, (decimal)structQuoteSnap.nOpenInterest);
@@ -187,73 +209,46 @@ namespace StockSharp.Sterling
 
 		private void SessionOnStil2Update(ref structSTIL2Update structL2Update)
 		{
-			var asksUpdate = _depths[structL2Update.bstrSymbol].Item1;
-			var bidsUpdate = _depths[structL2Update.bstrSymbol].Item2;
+			var depth = _depths[structL2Update.bstrSymbol];
 
-			var quote = new QuoteChange(structL2Update.bstrSide.ToSide(), (decimal) structL2Update.fPrice, structL2Update.nQty) {BoardCode = structL2Update.bstrMaker};
+			var quote = new QuoteChange(structL2Update.bstrSide.ToSide(), (decimal)structL2Update.fPrice, structL2Update.nQty);
 
-			switch (structL2Update.bstrSide.ToSide())
+			var quotes = quote.Side == Sides.Sell ? depth.Item1 : depth.Item2;
+
+			switch (structL2Update.bstrAction)
 			{
-				case Sides.Buy:
+				case "A": // add
 				{
-					switch (structL2Update.bstrAction)
-					{
-						case "A": // add
-						{
-							bidsUpdate.Add(quote);
-							break;
-						}
-						case "C": // change
-						{
-							bidsUpdate.RemoveWhere(q => q.Price == quote.Price && q.BoardCode == quote.BoardCode);
-							bidsUpdate.Add(quote);
-							break;
-						}
-						case "D": // delete
-						{
-							bidsUpdate.RemoveWhere(q => q.Price == quote.Price && q.BoardCode == quote.BoardCode);
-							break;
-						}
-					}
-
+					quotes.Add(quote);
 					break;
 				}
-
-				case Sides.Sell:
+				case "C": // change
 				{
-					switch (structL2Update.bstrAction)
-					{
-						case "A": // add
-						{
-							asksUpdate.Add(quote);
-							break;
-						}
-						case "C": // change
-						{
-							asksUpdate.RemoveWhere(q => q.Price == quote.Price && q.BoardCode == quote.BoardCode);
-							asksUpdate.Add(quote);
-							break;
-						}
-						case "D": // delete
-						{
-							asksUpdate.RemoveWhere(q => q.Price == quote.Price && q.BoardCode == quote.BoardCode);
-							break;
-						}
-					}
-
+					quotes.RemoveWhere(q => q.Price == quote.Price && q.BoardCode == quote.BoardCode);
+					quotes.Add(quote);
+					break;
+				}
+				case "D": // delete
+				{
+					quotes.RemoveWhere(q => q.Price == quote.Price && q.BoardCode == quote.BoardCode);
 					break;
 				}
 			}
+
+			var board = structL2Update.bstrMaker;
+
+			if (board.IsEmpty())
+				board = AssociatedBoardCode;
 
 			var message = new QuoteChangeMessage
 			{
 				SecurityId = new SecurityId
 				{
 					SecurityCode = structL2Update.bstrSymbol,
-					BoardCode = AssociatedBoardCode,
+					BoardCode = board,
 				},
-				Asks = asksUpdate,
-				Bids = bidsUpdate,
+				Asks = depth.Item1.ToArray(),
+				Bids = depth.Item2.ToArray(),
 				ServerTime = structL2Update.bstrTime.StrToTime(),
 			};
 
@@ -271,12 +266,12 @@ namespace StockSharp.Sterling
 				{
 					case Sides.Buy:
 					{
-						bidsUpdate.Add(new QuoteChange(structL2Update.bstrSide.ToSide(), (decimal) structL2Update.fPrice, structL2Update.nQty) {BoardCode = structL2Update.bstrMaker});
+						bidsUpdate.Add(new QuoteChange(structL2Update.bstrSide.ToSide(), (decimal)structL2Update.fPrice, structL2Update.nQty) { BoardCode = structL2Update.bstrMaker });
 						break;
 					}
 					case Sides.Sell:
 					{
-						asksUpdate.Add(new QuoteChange(structL2Update.bstrSide.ToSide(), (decimal)structL2Update.fPrice, structL2Update.nQty) { BoardCode = structL2Update.bstrMaker});
+						asksUpdate.Add(new QuoteChange(structL2Update.bstrSide.ToSide(), (decimal)structL2Update.fPrice, structL2Update.nQty) { BoardCode = structL2Update.bstrMaker });
 						break;
 					}
 				}
@@ -284,12 +279,7 @@ namespace StockSharp.Sterling
 
 			var quote = (structSTIL2Update)arrayL2Update.GetValue(0);
 
-			if (_depths.ContainsKey(quote.bstrSymbol))
-			{
-				_depths.Remove(quote.bstrSymbol);
-			}
-
-			_depths.Add(quote.bstrSymbol, new Tuple<List<QuoteChange>, List<QuoteChange>>(asksUpdate, bidsUpdate));
+			_depths[quote.bstrSymbol] = Tuple.Create(asksUpdate, bidsUpdate);
 
 			var message = new QuoteChangeMessage
 			{
