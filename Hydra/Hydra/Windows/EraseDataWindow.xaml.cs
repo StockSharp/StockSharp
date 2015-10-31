@@ -6,6 +6,7 @@ namespace StockSharp.Hydra.Windows
 	using System.Threading;
 	using System.Threading.Tasks;
 	using System.Windows;
+	using System.Windows.Controls;
 
 	using Ecng.Collections;
 	using Ecng.Common;
@@ -40,7 +41,7 @@ namespace StockSharp.Hydra.Windows
 			From.Value = DateTime.Today - TimeSpan.FromDays(7);
 			To.Value = DateTime.Today + TimeSpan.FromDays(1);
 
-			Drive.SelectedDrive = null;
+			Drive.ShowAllDrive = true;
 		}
 
 		protected override void OnClosing(CancelEventArgs e)
@@ -145,7 +146,7 @@ namespace StockSharp.Hydra.Windows
 			Erase.Content = LocalizedStrings.Str2890;
 			_token = new CancellationTokenSource();
 
-			var drives = Drive.SelectedDrive == null
+			var drives = Drive.IsAllDrive
 					? DriveCache.Instance.AllDrives.ToArray()
 					: new[] { Drive.SelectedDrive };
 
@@ -232,6 +233,11 @@ namespace StockSharp.Hydra.Windows
 		private void AllSecurities_Click(object sender, RoutedEventArgs e)
 		{
 			SelectSecurityBtn.IsEnabled = AllSecurities.IsChecked != true;
+		}
+
+		private void Drive_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
+		{
+			Erase.IsEnabled = Drive.SelectedDrive != null;
 		}
 	}
 }

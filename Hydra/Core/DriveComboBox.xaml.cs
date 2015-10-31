@@ -27,8 +27,18 @@ namespace StockSharp.Hydra.Core
 	/// </summary>
 	public partial class DriveComboBox
 	{
-		private class SelectPathDrive : Disposable, IMarketDataDrive
+		private class TitledDrive : Disposable, IMarketDataDrive
 		{
+			private readonly string _name;
+
+			public TitledDrive(string name)
+			{
+				if (name.IsEmpty())
+					throw new ArgumentNullException("name");
+
+				_name = name;
+			}
+
 			void IPersistable.Load(SettingsStorage storage)
 			{
 				throw new NotSupportedException();
@@ -41,7 +51,7 @@ namespace StockSharp.Hydra.Core
 
 			string IMarketDataDrive.Path
 			{
-				get { return LocalizedStrings.Str2210; }
+				get { return _name; }
 			}
 
 			IMarketDataStorage<NewsMessage> IMarketDataDrive.GetNewsMessageStorage(IMarketDataSerializer<NewsMessage> serializer)
@@ -70,7 +80,9 @@ namespace StockSharp.Hydra.Core
 			}
 		}
 
-		private static readonly SelectPathDrive _selectPath = new SelectPathDrive();
+		private static readonly IMarketDataDrive _allDrive = new TitledDrive(LocalizedStrings.Str1569);
+		private static readonly IMarketDataDrive _selectPath = new TitledDrive(LocalizedStrings.Str2210);
+
 		private IMarketDataDrive _prevSelected;
 
 		/// <summary>
@@ -96,9 +108,15 @@ namespace StockSharp.Hydra.Core
 			if (!Items.Contains(_selectPath))
 				Items.Add(_selectPath);
 
+			if (ShowAllDrive)
+				TryAddDrive(_allDrive);
+
 			DriveCache.Instance.NewDriveCreated += OnNewDriveCreated;
 
-			SelectedDrive = _prevSelected ?? Drives.FirstOrDefault();
+			if (ShowAllDrive)
+				IsAllDrive = true;
+			else
+				SelectedDrive = _prevSelected ?? Drives.FirstOrDefault();
 		}
 
 		private void DriveComboBox_OnUnloaded(object sender, RoutedEventArgs e)
@@ -158,6 +176,52 @@ namespace StockSharp.Hydra.Core
 		{
 			get { return (IMarketDataDrive)GetValue(SelectedDriveProperty); }
 			set { SetValue(SelectedDriveProperty, value); }
+		}
+
+		/// <summary>
+		/// <see cref="DependencyProperty"/> для <see cref="ShowAllDrive"/>.
+		/// </summary>
+		public static DependencyProperty ShowAllDriveProperty =
+			DependencyProperty.Register("ShowAllDrive", typeof(bool),
+									typeof(DriveComboBox), new PropertyMetadata(false, ShowAllDriveChanged));
+
+		private static void ShowAllDriveChanged(DependencyObject sender, DependencyPropertyChangedEventArgs args)
+		{
+			var comboBox = sender as DriveComboBox;
+			if (comboBox == null)
+				return;
+
+			if (comboBox.Drives == null)
+				return;
+
+			if ((bool)args.NewValue)
+			{
+				comboBox.TryAddDrive(_allDrive);
+				comboBox.SelectedDrive = _allDrive;
+			}
+			else
+			{
+				comboBox.Items.Remove(_allDrive);
+				comboBox.SelectedDrive = comboBox.Drives.FirstOrDefault();
+			}
+		}
+
+		/// <summary>
+		/// Показать хранилище "Все".
+		/// </summary>
+		public bool ShowAllDrive
+		{
+			get { return (bool)GetValue(ShowAllDriveProperty); }
+			set { SetValue(ShowAllDriveProperty, value); }
+		}
+
+		/// <summary>
+		/// Выбрано ли хранилище "Все".
+		/// </summary>
+		public bool IsAllDrive
+		{
+			get { return SelectedDrive == _allDrive; }
+			set { SelectedDrive = value ? _allDrive : _prevSelected; }
 		}
 
 		private void TryAddDrive(IMarketDataDrive drive)
