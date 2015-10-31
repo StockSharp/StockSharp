@@ -1,4 +1,4 @@
-namespace StockSharp.Hydra.Panes
+﻿namespace StockSharp.Hydra.Panes
 {
 	using System;
 	using System.Collections.Generic;
@@ -43,9 +43,6 @@ namespace StockSharp.Hydra.Panes
 			public string Body { get; set; }
 		}
 
-		/// <summary>
-		/// Параметры скрипта.
-		/// </summary>
 		[DisplayNameLoc(LocalizedStrings.Str225Key)]
 		[DescriptionLoc(LocalizedStrings.Str2836Key)]
 		private class AnalyticsScriptParameters : NotifiableObject, IPersistable
@@ -56,17 +53,11 @@ namespace StockSharp.Hydra.Panes
 			private IMarketDataDrive _drive;
 			private StorageFormats _storageFormat;
 
-			/// <summary>
-			/// Создать <see cref="AnalyticsScriptParameters"/>.
-			/// </summary>
 			public AnalyticsScriptParameters()
 			{
 				To = DateTime.MaxValue;
 			}
 
-			/// <summary>
-			/// Инструмент.
-			/// </summary>
 			[DisplayNameLoc(LocalizedStrings.SecurityKey)]
 			[DescriptionLoc(LocalizedStrings.SecurityKey, true)]
 			[CategoryLoc(LocalizedStrings.GeneralKey)]
@@ -81,9 +72,6 @@ namespace StockSharp.Hydra.Panes
 				}
 			}
 
-			/// <summary>
-			/// Дата начала.
-			/// </summary>
 			[DisplayNameLoc(LocalizedStrings.Str343Key)]
 			[DescriptionLoc(LocalizedStrings.Str1222Key)]
 			[CategoryLoc(LocalizedStrings.GeneralKey)]
@@ -98,9 +86,6 @@ namespace StockSharp.Hydra.Panes
 				}
 			}
 
-			/// <summary>
-			/// Дата окончания.
-			/// </summary>
 			[DisplayNameLoc(LocalizedStrings.Str345Key)]
 			[DescriptionLoc(LocalizedStrings.Str418Key, true)]
 			[CategoryLoc(LocalizedStrings.GeneralKey)]
@@ -115,9 +100,6 @@ namespace StockSharp.Hydra.Panes
 				}
 			}
 
-			/// <summary>
-			/// Путь к данным.
-			/// </summary>
 			[DisplayNameLoc(LocalizedStrings.Str2804Key)]
 			[DescriptionLoc(LocalizedStrings.Str2838Key)]
 			[CategoryLoc(LocalizedStrings.GeneralKey)]
@@ -133,9 +115,6 @@ namespace StockSharp.Hydra.Panes
 				}
 			}
 
-			/// <summary>
-			/// Формат данных.
-			/// </summary>
 			[DisplayNameLoc(LocalizedStrings.Str2239Key)]
 			[DescriptionLoc(LocalizedStrings.Str2240Key)]
 			[CategoryLoc(LocalizedStrings.GeneralKey)]
@@ -150,10 +129,6 @@ namespace StockSharp.Hydra.Panes
 				}
 			}
 
-			/// <summary>
-			/// Загрузить настройки.
-			/// </summary>
-			/// <param name="storage">Хранилище настроек.</param>
 			public void Load(SettingsStorage storage)
 			{
 				if (storage.ContainsKey("Security"))
@@ -168,10 +143,6 @@ namespace StockSharp.Hydra.Panes
 				StorageFormat = storage.GetValue<StorageFormats>("StorageFormat");
 			}
 
-			/// <summary>
-			/// Сохранить настройки.
-			/// </summary>
-			/// <param name="storage">Хранилище настроек.</param>
 			public void Save(SettingsStorage storage)
 			{
 				if (Security != null)
@@ -187,24 +158,12 @@ namespace StockSharp.Hydra.Panes
 			}
 		}
 
-		/// <summary>
-		/// Команда на сохранение кода в файл.
-		/// </summary>
 		public static RoutedCommand SaveCommand = new RoutedCommand();
 
-		/// <summary>
-		/// Команда на загрузку кода из файла.
-		/// </summary>
 		public static RoutedCommand LoadCommand = new RoutedCommand();
 
-		/// <summary>
-		/// Команда на запуск выполнения.
-		/// </summary>
 		public static RoutedCommand StartCommand = new RoutedCommand();
 
-		/// <summary>
-		/// Команда на остановку выполнения.
-		/// </summary>
 		public static RoutedCommand StopCommand = new RoutedCommand();
 
 		private readonly AnalyticsScriptParameters _parameters = new AnalyticsScriptParameters();
