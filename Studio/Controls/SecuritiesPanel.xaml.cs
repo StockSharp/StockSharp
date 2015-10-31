@@ -133,6 +133,8 @@ namespace StockSharp.Studio.Controls
 				list.Clear();
 				list.AddRange(storage.GetValue("Securities", ArrayHelper.Empty<string>()));
 			});
+
+			SecurityPicker.SecurityProvider = ConfigManager.GetService<ISecurityProvider>();
 		}
 
 		private void SecurityPicker_SecuritySelected(Security security)

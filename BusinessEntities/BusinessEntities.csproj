@@ -124,6 +124,8 @@
     <Compile Include="IConnector.cs" />
     <Compile Include="IExchangeInfoProvider.cs" />
     <Compile Include="IMarketDataProvider.cs" />
+    <Compile Include="INewsProvider.cs" />
+    <Compile Include="IPortfolioProvider.cs" />
     <Compile Include="ISecurityProvider.cs" />
     <Compile Include="MarketDepth.cs" />
     <Compile Include="MarketDepthPair.cs" />

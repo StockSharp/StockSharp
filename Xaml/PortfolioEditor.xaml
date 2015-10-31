@@ -47,7 +47,7 @@
             <ColumnDefinition Width="Auto" />
         </Grid.ColumnDefinitions>
 
-        <ComboBox x:Name="PortfolioTextBox" IsEditable="True"
+        <ComboBox x:Name="PortfolioComboBox" IsEditable="True"
                   BorderBrush="{x:Null}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" VerticalContentAlignment="Center" BorderThickness="0"
                   SelectedItem="{Binding ElementName=Ctrl, Path=SelectedPortfolio, Mode=TwoWay}">
             <ComboBox.Resources>

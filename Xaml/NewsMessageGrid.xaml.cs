@@ -5,7 +5,6 @@ namespace StockSharp.Xaml
 	using System.Windows.Input;
 
 	using Ecng.Collections;
-	using Ecng.Configuration;
 	using Ecng.Interop;
 	using Ecng.Xaml;
 
@@ -78,14 +77,19 @@ namespace StockSharp.Xaml
 			get { return SelectedItems.Cast<NewsMessage>(); }
 		}
 
+		/// <summary>
+		/// The provider of information about news.
+		/// </summary>
+		public INewsProvider NewsProvider { get; set; }
+
 		private void ExecutedRequestStoryCommand(object sender, ExecutedRoutedEventArgs e)
 		{
-			SelectedMessages.Where(n => n.Story.IsEmpty()).ForEach(m => ConfigManager.GetService<IConnector>().RequestNewsStory(m.ToNews()));
+			SelectedMessages.Where(n => n.Story.IsEmpty()).ForEach(m => NewsProvider.RequestNewsStory(m.ToNews()));
 		}
 
 		private void CanExecuteRequestStoryCommand(object sender, CanExecuteRoutedEventArgs e)
 		{
-			e.CanExecute = ConfigManager.IsServiceRegistered<IConnector>() && SelectedMessages.Any(n => n.Story.IsEmpty());
+			e.CanExecute = NewsProvider != null && SelectedMessages.Any(n => n.Story.IsEmpty());
 		}
 
 		private void CanExecuteOpenUrlCommand(object sender, CanExecuteRoutedEventArgs e)

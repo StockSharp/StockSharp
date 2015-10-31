@@ -30,6 +30,7 @@ namespace SampleSMA
 	using StockSharp.Quik;
 	using StockSharp.Xaml.Charting;
 	using StockSharp.Localization;
+	using StockSharp.Xaml;
 
 	public partial class MainWindow
 	{
@@ -98,7 +99,7 @@ namespace SampleSMA
 					// создаем подключение
 					_trader = new QuikTrader(Path.Text) { IsDde = true };
 
-					Portfolios.Connector = _trader;
+					Portfolios.Portfolios = new PortfolioDataSource(_trader);
 
 					_trader.Connected += () =>
 					{

@@ -7,7 +7,6 @@ namespace StockSharp.Xaml
 	using System.Windows.Input;
 
 	using Ecng.Common;
-	using Ecng.Configuration;
 	using Ecng.Xaml;
 
 	using StockSharp.BusinessEntities;
@@ -28,22 +27,50 @@ namespace StockSharp.Xaml
 		public SecurityEditor()
 		{
 			InitializeComponent();
-
-			SecurityProvider = GetSecurityProvider();
-
-			if (SecurityProvider == null)
-			{
-				ConfigManager.ServiceRegistered += (t, s) =>
-				{
-					if (typeof(ISecurityProvider) != t)
-						return;
-
-					GuiDispatcher.GlobalDispatcher.AddAction(() => SecurityProvider = (ISecurityProvider)s);
-				};
-			}
 		}
 
 		private ThreadSafeObservableCollection<Security> _itemsSource;
+
+		private void UpdateProvider(ISecurityProvider provider)
+		{
+			if (_securityProvider == provider)
+				return;
+
+			if (_securityProvider != null)
+			{
+				_securityProvider.Added -= AddSecurity;
+				_securityProvider.Removed -= RemoveSecurity;
+				_securityProvider.Cleared -= ClearSecurities;
+
+				SecurityTextBox.ItemsSource = Enumerable.Empty<Security>();
+				_itemsSource = null;
+			}
+
+			_securityProvider = provider;
+
+			if (_securityProvider == null)
+				return;
+
+			var itemsSource = new ObservableCollectionEx<Security>();
+
+			_itemsSource = new ThreadSafeObservableCollection<Security>(itemsSource);
+
+			_securityProvider.Added += AddSecurity;
+			_securityProvider.Removed += RemoveSecurity;
+			_securityProvider.Cleared += ClearSecurities;
+
+			SecurityTextBox.ItemsSource = itemsSource;
+		}
+
+		/// <summary>
+		/// <see cref="DependencyProperty"/> for <see cref="SecurityProvider"/>.
+		/// </summary>
+		public static readonly DependencyProperty SecurityProviderProperty = DependencyProperty.Register("SecurityProvider", typeof(ISecurityProvider), typeof(SecurityEditor), new PropertyMetadata(null, (o, args) =>
+		{
+			var editor = (SecurityEditor)o;
+			editor.UpdateProvider((ISecurityProvider)args.NewValue);
+		}));
+
 		private ISecurityProvider _securityProvider;
 
 		/// <summary>
@@ -52,36 +79,7 @@ namespace StockSharp.Xaml
 		public ISecurityProvider SecurityProvider
 		{
 			get { return _securityProvider; }
-			set
-			{
-				if (_securityProvider == value)
-					return;
-
-				if (_securityProvider != null)
-				{
-					_securityProvider.Added -= AddSecurity;
-					_securityProvider.Removed -= RemoveSecurity;
-					_securityProvider.Cleared -= ClearSecurities;
-
-					SecurityTextBox.ItemsSource = Enumerable.Empty<Security>();
-					_itemsSource = null;
-				}
-
-				_securityProvider = value;
-
-				if (_securityProvider == null)
-					return;
-
-				var itemsSource = new ObservableCollectionEx<Security>();
-
-				_itemsSource = new ThreadSafeObservableCollection<Security>(itemsSource);
-
-				_securityProvider.Added += AddSecurity;
-				_securityProvider.Removed += RemoveSecurity;
-				_securityProvider.Cleared += ClearSecurities;
-
-				SecurityTextBox.ItemsSource = itemsSource;
-			}
+			set { SetValue(SecurityProviderProperty, value); }
 		}
 
 		private void AddSecurity(Security security)
@@ -161,11 +159,6 @@ namespace StockSharp.Xaml
 		private void ClearCommand_OnExecuted(object sender, ExecutedRoutedEventArgs e)
 		{
 			SelectedSecurity = null;
-		}
-
-		private ISecurityProvider GetSecurityProvider()
-		{
-			return SecurityProvider ?? ConfigManager.TryGetService<ISecurityProvider>();
 		}
 	}
 }

@@ -36,7 +36,9 @@ namespace SampleIB
 			var newOrder = new OrderWindow
 			{
 				Order = new Order { Security = SecurityPicker.SelectedSecurity },
-				Connector = MainWindow.Instance.Trader,
+				SecurityProvider = MainWindow.Instance.Trader,
+				MarketDataProvider = MainWindow.Instance.Trader,
+				Portfolios = new PortfolioDataSource(MainWindow.Instance.Trader),
 			};
 
 			if (newOrder.ShowModal(this))

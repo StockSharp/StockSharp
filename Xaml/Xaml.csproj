@@ -425,6 +425,7 @@
       <DependentUpon>NewsMessagePanel.xaml</DependentUpon>
     </Compile>
     <Compile Include="OrderConditionalGrid.cs" />
+    <Compile Include="PortfolioDataSource.cs" />
     <Compile Include="ProxySettings.cs" />
     <Compile Include="ProxySettingsEditor.xaml.cs">
       <DependentUpon>ProxySettingsEditor.xaml</DependentUpon>

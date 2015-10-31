@@ -140,6 +140,9 @@ namespace SampleIB
 
 						// set market data provider
 						_securitiesWindow.SecurityPicker.MarketDataProvider = Trader;
+
+						// set news provider
+						_newsWindow.NewsPanel.NewsProvider = Trader;
 					}
 
 					Trader.Address = Address.Text.To<EndPoint>();

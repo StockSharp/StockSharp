@@ -47,14 +47,6 @@ namespace StockSharp.Xaml
 			get { return Picker.SelectedSecurities; }
 		}
 
-		///// <summary>
-		///// Available instruments.
-		///// </summary>
-		//public ISecurityList Securities
-		//{
-		//	get { return Picker.Securities; }
-		//}
-
 		/// <summary>
 		/// Instruments that should be hidden.
 		/// </summary>
@@ -70,6 +62,15 @@ namespace StockSharp.Xaml
 		{
 			get { return Picker.SecurityProvider; }
 			set { Picker.SecurityProvider = value; }
+		}
+
+		/// <summary>
+		/// The market data provider.
+		/// </summary>
+		public IMarketDataProvider MarketDataProvider
+		{
+			get { return Picker.MarketDataProvider; }
+			set { Picker.MarketDataProvider = value; }
 		}
 
 		/// <summary>

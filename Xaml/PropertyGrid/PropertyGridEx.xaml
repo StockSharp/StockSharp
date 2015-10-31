@@ -30,7 +30,7 @@
 		<xctk:EditorTemplateDefinition TargetProperties="{x:Type be:Security}">
 			<xctk:EditorTemplateDefinition.EditingTemplate>
 				<DataTemplate>
-					<local:SecurityEditor SelectedSecurity="{Binding Value, Mode=TwoWay}" />
+					<local:SecurityEditor SecurityProvider="{Binding Path=SecurityProvider, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type propertyGrid:PropertyGridEx}}}" SelectedSecurity="{Binding Value, Mode=TwoWay}" />
 				</DataTemplate>
 			</xctk:EditorTemplateDefinition.EditingTemplate>
 		</xctk:EditorTemplateDefinition>
@@ -38,7 +38,7 @@
 		<xctk:EditorTemplateDefinition TargetProperties="{x:Type be:Portfolio}">
 			<xctk:EditorTemplateDefinition.EditingTemplate>
 				<DataTemplate>
-					<local:PortfolioEditor SelectedPortfolio="{Binding Value, Mode=TwoWay}" />
+					<local:PortfolioEditor Portfolios="{Binding Path=Portfolios, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type propertyGrid:PropertyGridEx}}}" SelectedPortfolio="{Binding Value, Mode=TwoWay}" />
 				</DataTemplate>
 			</xctk:EditorTemplateDefinition.EditingTemplate>
 		</xctk:EditorTemplateDefinition>
@@ -46,7 +46,7 @@
 		<xctk:EditorTemplateDefinition TargetProperties="{x:Type be:ExchangeBoard}">
 			<xctk:EditorTemplateDefinition.EditingTemplate>
 				<DataTemplate>
-					<local:ExchangeBoardComboBox SelectedBoard="{Binding Value, Mode=TwoWay}" />
+					<local:ExchangeBoardComboBox ExchangeInfoProvider="{Binding Path=ExchangeInfoProvider, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type propertyGrid:PropertyGridEx}}}" SelectedBoard="{Binding Value, Mode=TwoWay}" />
 				</DataTemplate>
 			</xctk:EditorTemplateDefinition.EditingTemplate>
 		</xctk:EditorTemplateDefinition>

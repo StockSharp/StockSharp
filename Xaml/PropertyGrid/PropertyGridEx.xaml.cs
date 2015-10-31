@@ -8,10 +8,12 @@ namespace StockSharp.Xaml.PropertyGrid
 	using System.Windows.Data;
 
 	using Ecng.Common;
+	using Ecng.Configuration;
 	using Ecng.Xaml;
 
 	using MoreLinq;
 
+	using StockSharp.BusinessEntities;
 	using StockSharp.Messages;
 	using StockSharp.Xaml;
 
@@ -81,6 +83,48 @@ namespace StockSharp.Xaml.PropertyGrid
 		/// To open the enclosed properties by default.
 		/// </summary>
 		public bool AutoExpandProperties { get; set; }
+
+		/// <summary>
+		/// <see cref="DependencyProperty"/> for <see cref="SecurityProvider"/>.
+		/// </summary>
+		public static readonly DependencyProperty SecurityProviderProperty = DependencyProperty.Register("SecurityProvider", typeof(ISecurityProvider), typeof(PropertyGridEx));
+
+		/// <summary>
+		/// The provider of information about instruments.
+		/// </summary>
+		public ISecurityProvider SecurityProvider
+		{
+			get { return (ISecurityProvider)GetValue(SecurityProviderProperty); }
+			set { SetValue(SecurityProviderProperty, value); }
+		}
+
+		/// <summary>
+		/// <see cref="DependencyProperty"/> for <see cref="ExchangeInfoProvider"/>.
+		/// </summary>
+		public static readonly DependencyProperty ExchangeInfoProviderProperty = DependencyProperty.Register("ExchangeInfoProvider", typeof(IExchangeInfoProvider), typeof(PropertyGridEx));
+
+		/// <summary>
+		/// The exchange boards provider.
+		/// </summary>
+		public IExchangeInfoProvider ExchangeInfoProvider
+		{
+			get { return (IExchangeInfoProvider)GetValue(ExchangeInfoProviderProperty); }
+			set { SetValue(ExchangeInfoProviderProperty, value); }
+		}
+
+		/// <summary>
+		/// <see cref="DependencyProperty"/> for <see cref="Portfolios"/>.
+		/// </summary>
+		public static readonly DependencyProperty PortfoliosProperty = DependencyProperty.Register("Portfolios", typeof(ThreadSafeObservableCollection<Portfolio>), typeof(PropertyGridEx));
+
+		/// <summary>
+		/// Available portfolios.
+		/// </summary>
+		public ThreadSafeObservableCollection<Portfolio> Portfolios
+		{
+			get { return (ThreadSafeObservableCollection<Portfolio>)GetValue(PortfoliosProperty); }
+			set { SetValue(PortfoliosProperty, value); }
+		}
 
 		/// <summary>
 		/// The value change handle.
@@ -265,6 +309,46 @@ namespace StockSharp.Xaml.PropertyGrid
 			EditorDefinitions.Add(CreateNullableEnumEditor<OptionTypes?>());
 			EditorDefinitions.Add(CreateNullableEnumEditor<TPlusLimits?>());
 			EditorDefinitions.Add(CreateNullableEnumEditor<CurrencyTypes?>(true));
+
+			SecurityProvider = ConfigManager.TryGetService<ISecurityProvider>();
+			ExchangeInfoProvider = ConfigManager.TryGetService<IExchangeInfoProvider>();
+			Portfolios = ConfigManager.TryGetService<ThreadSafeObservableCollection<Portfolio>>();
+
+			ConfigManager.ServiceRegistered += (t, s) =>
+			{
+				var sp = s as ISecurityProvider;
+
+				if (sp != null)
+				{
+					this.GuiAsync(() =>
+					{
+						if (SecurityProvider == null)
+							SecurityProvider = sp;
+					});
+				}
+
+				var ep = s as IExchangeInfoProvider;
+
+				if (ep != null)
+				{
+					this.GuiAsync(() =>
+					{
+						if (ExchangeInfoProvider == null)
+							ExchangeInfoProvider = ep;
+					});
+				}
+
+				var portfolios = s as ThreadSafeObservableCollection<Portfolio>;
+
+				if (portfolios != null)
+				{
+					this.GuiAsync(() =>
+					{
+						if (Portfolios == null)
+							Portfolios = portfolios;
+					});
+				}
+			};
 		}
 	}
 }

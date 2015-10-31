@@ -28,6 +28,8 @@ namespace StockSharp.Hydra.Windows
 				return;
 
 			_entityRegistry = ConfigManager.GetService<IEntityRegistry>();
+
+			ExchangeCtrl.ExchangeInfoProvider = ConfigManager.GetService<IExchangeInfoProvider>();
 		}
 
 		private bool CanEditCommonInfo

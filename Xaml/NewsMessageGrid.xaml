@@ -28,8 +28,8 @@
 			<Setter Property="ContextMenu">
 				<Setter.Value>
 					<ContextMenu>
-						<MenuItem Header="{x:Static loc:LocalizedStrings.RequestNewsBody}" Command="{x:Static local:NewsGrid.RequestStoryCommand}" />
-						<MenuItem Header="{x:Static loc:LocalizedStrings.OpenUrl}" Command="{x:Static local:NewsGrid.OpenUrlCommand}" />
+						<MenuItem Header="{x:Static loc:LocalizedStrings.RequestNewsBody}" Command="{x:Static local:NewsMessageGrid.RequestStoryCommand}" />
+						<MenuItem Header="{x:Static loc:LocalizedStrings.OpenUrl}" Command="{x:Static local:NewsMessageGrid.OpenUrlCommand}" />
 					</ContextMenu>
 				</Setter.Value>
 			</Setter>

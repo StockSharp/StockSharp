@@ -81,6 +81,8 @@ namespace StockSharp.Studio.Controls
 			base.Load(storage);
 
 			SubscribeNews = storage.GetValue("SubscribeNews", false);
+
+			NewsGrid.NewsProvider = ConfigManager.GetService<INewsProvider>();
 			NewsGrid.Load(storage.GetValue<SettingsStorage>("NewsGrid"));
 
 			var alertSettings = storage.GetValue<SettingsStorage>("AlertSettings");

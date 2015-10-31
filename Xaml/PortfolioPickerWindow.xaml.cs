@@ -1,10 +1,8 @@
 namespace StockSharp.Xaml
 {
 	using System;
-	using System.Collections.Generic;
 	using System.Windows.Input;
 
-	using Ecng.Collections;
 	using Ecng.Xaml;
 
 	using StockSharp.BusinessEntities;
@@ -21,9 +19,7 @@ namespace StockSharp.Xaml
 		{
 			InitializeComponent();
 
-			var itemsSource = new ObservableCollectionEx<Portfolio>();
-			PortfoliosCtrl.ItemsSource = itemsSource;
-			Portfolios = new ThreadSafeObservableCollection<Portfolio>(itemsSource);
+			_portfolios = new ThreadSafeObservableCollection<Portfolio>(new ObservableCollectionEx<Portfolio>());
 		}
 
 		/// <summary>
@@ -35,43 +31,22 @@ namespace StockSharp.Xaml
 			set { PortfoliosCtrl.SelectedItem = value; }
 		}
 
+		private ThreadSafeObservableCollection<Portfolio> _portfolios;
+
 		/// <summary>
 		/// Available portfolios.
 		/// </summary>
-		public IListEx<Portfolio> Portfolios { get; private set; }
-
-		private IConnector _connector;
-
-		/// <summary>
-		/// Connection to the trading system.
-		/// </summary>
-		public IConnector Connector
+		public ThreadSafeObservableCollection<Portfolio> Portfolios
 		{
-			get { return _connector; }
+			get { return _portfolios; }
 			set
 			{
-				if (_connector == value)
-					return;
+				if (value == null)
+					throw new ArgumentNullException("value");
 
-				if (_connector != null)
-				{
-					_connector.NewPortfolios -= OnNewPortfolios;
-					Portfolios.Clear();
-				}
-
-				_connector = value;
-
-				if (_connector != null)
-				{
-					OnNewPortfolios(_connector.Portfolios);
-					_connector.NewPortfolios += OnNewPortfolios;
-				}
+				_portfolios = value;
+				PortfoliosCtrl.ItemsSource = value.Items;
 			}
-		}
-
-		private void OnNewPortfolios(IEnumerable<Portfolio> portfolios)
-		{
-			Portfolios.AddRange(portfolios);
 		}
 
 		private void PortfoliosCtrl_OnSelectionChanged(object sender, EventArgs e)

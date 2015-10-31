@@ -55,7 +55,9 @@ namespace SampleQuikSmart
 			var newOrder = new OrderWindow
 			{
 				Order = new Order { Security = SecurityPicker.SelectedSecurity },
-				Connector = MainWindow.Instance.Connector,
+				SecurityProvider = MainWindow.Instance.Connector,
+				MarketDataProvider = MainWindow.Instance.Connector,
+				Portfolios = new PortfolioDataSource(MainWindow.Instance.Connector),
 			};
 
 			if (newOrder.ShowModal(this))

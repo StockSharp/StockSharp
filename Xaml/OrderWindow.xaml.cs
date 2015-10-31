@@ -10,7 +10,6 @@ namespace StockSharp.Xaml
 	using Ecng.ComponentModel;
 	using Ecng.Xaml;
 
-	using StockSharp.Algo;
 	using StockSharp.BusinessEntities;
 	using StockSharp.Messages;
 	using StockSharp.Localization;
@@ -113,24 +112,12 @@ namespace StockSharp.Xaml
 		private SecurityData Data { get; set; }
 
 		/// <summary>
-		/// Connection to the trading system.
+		/// Available portfolios.
 		/// </summary>
-		public IConnector Connector
+		public ThreadSafeObservableCollection<Portfolio> Portfolios
 		{
-			get { return PortfolioCtrl.Connector; }
-			set
-			{
-				PortfolioCtrl.Connector = value;
-
-				if (value == null)
-					return;
-
-				if (SecurityProvider == null)
-					SecurityProvider = new FilterableSecurityProvider(value);
-
-				if (MarketDataProvider == null)
-					MarketDataProvider = value;
-			}
+			get { return PortfolioCtrl.Portfolios; }
+			set { PortfolioCtrl.Portfolios = value; }
 		}
 
 		private IMarketDataProvider _marketDataProvider;

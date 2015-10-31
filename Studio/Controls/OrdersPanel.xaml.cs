@@ -45,8 +45,10 @@ namespace StockSharp.Studio.Controls
 			{
 				var wnd = new OrderWindow
 				{
-					SecurityProvider = ConfigManager.TryGetService<ISecurityProvider>(),
-					Order = createOrder(prevType)
+					SecurityProvider = ConfigManager.GetService<ISecurityProvider>(),
+					MarketDataProvider = ConfigManager.GetService<IMarketDataProvider>(),
+					Order = createOrder(prevType),
+					Portfolios = ConfigManager.GetService<PortfolioDataSource>()
 				};
 
 				if (!wnd.ShowModal(this))

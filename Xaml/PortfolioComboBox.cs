@@ -1,11 +1,8 @@
 namespace StockSharp.Xaml
 {
-	using System.Collections.Generic;
 	using System.Windows;
 	using System.Windows.Controls;
 
-	using Ecng.Collections;
-	using Ecng.Configuration;
 	using Ecng.Xaml;
 
 	using StockSharp.BusinessEntities;
@@ -21,51 +18,33 @@ namespace StockSharp.Xaml
 		public PortfolioComboBox()
 		{
 			DisplayMemberPath = "Name";
-
-			var itemsSource = new ObservableCollectionEx<Portfolio>();
-			ItemsSource = itemsSource;
-
-			Portfolios = new ThreadSafeObservableCollection<Portfolio>(itemsSource);
-			Connector = ConfigManager.TryGetService<IConnector>();
+			//Portfolios = new ThreadSafeObservableCollection<Portfolio>(new ObservableCollectionEx<Portfolio>());
 		}
-
-		private IConnector _connector;
 
 		/// <summary>
-		/// Connection to the trading system.
+		/// <see cref="DependencyProperty"/> for <see cref="Portfolios"/>.
 		/// </summary>
-		public IConnector Connector
+		public static readonly DependencyProperty PortfoliosProperty = DependencyProperty.Register("Portfolios", typeof(ThreadSafeObservableCollection<Portfolio>), typeof(PortfolioComboBox), new PropertyMetadata(null, (o, args) =>
 		{
-			get { return _connector; }
-			set
-			{
-				if (_connector == value)
-					return;
+			var cb = (PortfolioComboBox)o;
+			cb.UpdatePortfolios((ThreadSafeObservableCollection<Portfolio>)args.NewValue);
+		}));
 
-				if (_connector != null)
-				{
-					_connector.NewPortfolios -= OnNewPortfolios;
-					Portfolios.Clear();
-				}
-
-				_connector = value;
-
-				if (_connector != null)
-				{
-					OnNewPortfolios(_connector.Portfolios);
-					_connector.NewPortfolios += OnNewPortfolios;
-				}
-			}
+		private void UpdatePortfolios(ThreadSafeObservableCollection<Portfolio> portfolios)
+		{
+			_portfolios = portfolios;
+			ItemsSource = _portfolios == null ? null : _portfolios.Items;
 		}
+
+		private ThreadSafeObservableCollection<Portfolio> _portfolios;
 
 		/// <summary>
 		/// Available portfolios.
 		/// </summary>
-		public IListEx<Portfolio> Portfolios { get; private set; }
-
-		private void OnNewPortfolios(IEnumerable<Portfolio> portfolios)
+		public ThreadSafeObservableCollection<Portfolio> Portfolios
 		{
-			Portfolios.AddRange(portfolios);
+			get { return _portfolios; }
+			set { SetValue(PortfoliosProperty, value); }
 		}
 
 		/// <summary>
@@ -89,7 +68,7 @@ namespace StockSharp.Xaml
 			var portfolio = (Portfolio)e.NewValue;
 			var cb = (PortfolioComboBox)source;
 
-			if (portfolio != null && !cb.Portfolios.Contains(portfolio))
+			if (portfolio != null && cb.Portfolios != null && !cb.Portfolios.Contains(portfolio))
 				cb.Portfolios.Add(portfolio);
 
 			cb.SelectedItem = portfolio;

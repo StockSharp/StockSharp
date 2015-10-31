@@ -32,6 +32,7 @@ namespace StockSharp.Hydra
 	using StockSharp.Algo.History.Hydra;
 	using StockSharp.Algo.Storages;
 	using StockSharp.BusinessEntities;
+	using StockSharp.Community;
 	using StockSharp.Xaml;
 	using StockSharp.Messages;
 
@@ -309,6 +310,15 @@ namespace StockSharp.Hydra
 						AddTasks(newTasks);
 				}
 			}, TaskScheduler.FromCurrentSynchronizationContext());
+
+			try
+			{
+				AdvertisePanel.Client = new NotificationClient();
+			}
+			catch (Exception ex)
+			{
+				ex.LogError();
+			}
 		}
 
 		private void InitializeDataSource()
