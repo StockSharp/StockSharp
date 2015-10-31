@@ -410,6 +410,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="ConnectorInfo.cs" />
+    <Compile Include="ExchangeComboBox.cs" />
     <Compile Include="ExecutionGrid.xaml.cs">
       <DependentUpon>ExecutionGrid.xaml</DependentUpon>
     </Compile>

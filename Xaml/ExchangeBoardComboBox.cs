@@ -65,7 +65,7 @@ namespace StockSharp.Xaml
 		private IExchangeInfoProvider _exchangeInfoProvider;
 
 		/// <summary>
-		/// The exchange boards provider.
+		/// The exchange info provider.
 		/// </summary>
 		public IExchangeInfoProvider ExchangeInfoProvider
 		{
@@ -79,7 +79,7 @@ namespace StockSharp.Xaml
 		public IList<ExchangeBoard> Boards { get; private set; }
 
 		/// <summary>
-		/// <see cref="DependencyProperty"/> for <see cref="ExchangeBoardComboBox.SelectedBoard"/>.
+		/// <see cref="DependencyProperty"/> for <see cref="SelectedBoard"/>.
 		/// </summary>
 		public static readonly DependencyProperty SelectedBoardProperty =
 			 DependencyProperty.Register("SelectedBoard", typeof(ExchangeBoard), typeof(ExchangeBoardComboBox),
@@ -105,10 +105,10 @@ namespace StockSharp.Xaml
 		private static void OnSelectedBoardPropertyChanged(DependencyObject source, DependencyPropertyChangedEventArgs e)
 		{
 			var board = (ExchangeBoard)e.NewValue;
-			var editor = (ExchangeBoardComboBox)source;
+			var combo = (ExchangeBoardComboBox)source;
 
-			editor.SelectedItem = board;
-			editor._selectedBoard = board;
+			combo.SelectedItem = board;
+			combo._selectedBoard = board;
 		}
 
 		/// <summary>

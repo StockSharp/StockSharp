@@ -51,6 +51,14 @@
 			</xctk:EditorTemplateDefinition.EditingTemplate>
 		</xctk:EditorTemplateDefinition>
 
+		<xctk:EditorTemplateDefinition TargetProperties="{x:Type be:Exchange}">
+			<xctk:EditorTemplateDefinition.EditingTemplate>
+				<DataTemplate>
+					<local:ExchangeComboBox ExchangeInfoProvider="{Binding Path=ExchangeInfoProvider, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type propertyGrid:PropertyGridEx}}}" SelectedExchange="{Binding Value, Mode=TwoWay}" />
+				</DataTemplate>
+			</xctk:EditorTemplateDefinition.EditingTemplate>
+		</xctk:EditorTemplateDefinition>
+
 		<xctk:EditorTemplateDefinition TargetProperties="{x:Type sys:TimeSpan}">
 			<xctk:EditorTemplateDefinition.EditingTemplate>
 				<DataTemplate>

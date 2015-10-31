@@ -296,7 +296,7 @@ namespace StockSharp.Xaml.PropertyGrid
 		{
 			InitializeComponent();
 
-			if (DesignerProperties.GetIsInDesignMode(this))
+			if (this.IsDesignMode())
 				return;
 
 			SetDescriptionsProvider(false);
