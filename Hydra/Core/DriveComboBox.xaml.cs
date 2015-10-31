@@ -2,7 +2,6 @@ namespace StockSharp.Hydra.Core
 {
 	using System;
 	using System.Collections.Generic;
-	using System.ComponentModel;
 	using System.Linq;
 	using System.Windows;
 	using System.Windows.Controls;
@@ -100,7 +99,7 @@ namespace StockSharp.Hydra.Core
 
 		private void DriveComboBox_OnLoaded(object sender, RoutedEventArgs e)
 		{
-			if (DesignerProperties.GetIsInDesignMode(this))
+			if (this.IsDesignMode())
 				return;
 
 			Drives = DriveCache.Instance.AllDrives;
@@ -121,7 +120,7 @@ namespace StockSharp.Hydra.Core
 
 		private void DriveComboBox_OnUnloaded(object sender, RoutedEventArgs e)
 		{
-			if (DesignerProperties.GetIsInDesignMode(this))
+			if (this.IsDesignMode())
 				return;
 
 			DriveCache.Instance.NewDriveCreated -= OnNewDriveCreated;

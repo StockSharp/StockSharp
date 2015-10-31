@@ -2,7 +2,6 @@ namespace StockSharp.Hydra.Windows
 {
 	using System;
 	using System.Collections.Generic;
-	using System.ComponentModel;
 	using System.Linq;
 	using System.Windows;
 
@@ -24,7 +23,7 @@ namespace StockSharp.Hydra.Windows
 		{
 			InitializeComponent();
 
-			if (DesignerProperties.GetIsInDesignMode(this))
+			if (this.IsDesignMode())
 				return;
 
 			_entityRegistry = ConfigManager.GetService<IEntityRegistry>();
