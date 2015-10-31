@@ -14,14 +14,29 @@ namespace StockSharp.BusinessEntities
 	public interface IConnector : IPersistable, ILogReceiver, IMarketDataProvider, ISecurityProvider
 	{
 		/// <summary>
+		/// Own trade received.
+		/// </summary>
+		event Action<MyTrade> NewMyTrade;
+
+		/// <summary>
 		/// Own trades received.
 		/// </summary>
 		event Action<IEnumerable<MyTrade>> NewMyTrades;
 
 		/// <summary>
-		/// Tick tades received.
+		/// Tick trade received.
+		/// </summary>
+		event Action<Trade> NewTrade;
+
+		/// <summary>
+		/// Tick trades received.
 		/// </summary>
 		event Action<IEnumerable<Trade>> NewTrades;
+
+		/// <summary>
+		/// Order received.
+		/// </summary>
+		event Action<Order> NewOrder;
 
 		/// <summary>
 		/// Orders received.
@@ -29,9 +44,24 @@ namespace StockSharp.BusinessEntities
 		event Action<IEnumerable<Order>> NewOrders;
 
 		/// <summary>
+		/// Order changed (cancelled, matched).
+		/// </summary>
+		event Action<Order> OrderChanged;
+
+		/// <summary>
 		/// Orders changed (cancelled, matched).
 		/// </summary>
 		event Action<IEnumerable<Order>> OrdersChanged;
+
+		/// <summary>
+		/// Order registration error event.
+		/// </summary>
+		event Action<OrderFail> OrderRegisterFailed;
+
+		/// <summary>
+		/// Order cancellation error event.
+		/// </summary>
+		event Action<OrderFail> OrderCancelFailed;
 
 		/// <summary>
 		/// Order registration errors event.
@@ -64,9 +94,19 @@ namespace StockSharp.BusinessEntities
 		event Action<IEnumerable<Order>> StopOrdersChanged;
 
 		/// <summary>
+		/// Security received.
+		/// </summary>
+		event Action<Security> NewSecurity;
+
+		/// <summary>
 		/// Securities received.
 		/// </summary>
 		event Action<IEnumerable<Security>> NewSecurities;
+
+		/// <summary>
+		/// Security changed.
+		/// </summary>
+		event Action<Security> SecurityChanged;
 
 		/// <summary>
 		/// Securities changed.
@@ -79,9 +119,19 @@ namespace StockSharp.BusinessEntities
 		event Action<IEnumerable<Portfolio>> NewPortfolios;
 
 		/// <summary>
+		/// Portfolio changed.
+		/// </summary>
+		event Action<Portfolio> PortfolioChanged;
+
+		/// <summary>
 		/// Portfolios changed.
 		/// </summary>
 		event Action<IEnumerable<Portfolio>> PortfoliosChanged;
+
+		/// <summary>
+		/// Position received.
+		/// </summary>
+		event Action<Position> NewPosition;
 
 		/// <summary>
 		/// Positions received.
@@ -89,9 +139,24 @@ namespace StockSharp.BusinessEntities
 		event Action<IEnumerable<Position>> NewPositions;
 
 		/// <summary>
+		/// Position changed.
+		/// </summary>
+		event Action<Position> PositionChanged;
+
+		/// <summary>
 		/// Positions changed.
 		/// </summary>
 		event Action<IEnumerable<Position>> PositionsChanged;
+
+		/// <summary>
+		/// Order book received.
+		/// </summary>
+		event Action<MarketDepth> NewMarketDepth;
+
+		/// <summary>
+		/// Order book changed.
+		/// </summary>
+		event Action<MarketDepth> MarketDepthChanged;
 
 		/// <summary>
 		/// Order books received.
@@ -102,6 +167,11 @@ namespace StockSharp.BusinessEntities
 		/// Order books changed.
 		/// </summary>
 		event Action<IEnumerable<MarketDepth>> MarketDepthsChanged;
+
+		/// <summary>
+		/// Order log received.
+		/// </summary>
+		event Action<OrderLogItem> NewOrderLogItem;
 
 		/// <summary>
 		/// Order log received.
@@ -219,11 +289,6 @@ namespace StockSharp.BusinessEntities
 		/// Get all own trades.
 		/// </summary>
 		IEnumerable<MyTrade> MyTrades { get; }
-
-		/// <summary>
-		/// Get all portfolios.
-		/// </summary>
-		IEnumerable<Portfolio> Portfolios { get; }
 
 		/// <summary>
 		/// Get all positions.
@@ -457,11 +522,5 @@ namespace StockSharp.BusinessEntities
 		/// Unsubscribe from news.
 		/// </summary>
 		void UnRegisterNews();
-
-		/// <summary>
-		/// Request news <see cref="BusinessEntities.News.Story"/> body. After receiving the event <see cref="IConnector.NewsChanged"/> will be triggered.
-		/// </summary>
-		/// <param name="news">News.</param>
-		void RequestNewsStory(News news);
 	}
 }

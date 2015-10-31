@@ -1168,7 +1168,7 @@ namespace StockSharp.Algo
 							innerSecurity.LastChangeTime = message.ServerTime;
 						}
 
-						RaiseSecuritiesChanged(changedSecurities.Keys);
+						RaiseSecuritiesChanged(changedSecurities.Keys.ToArray());
 					}
 				}
 			}

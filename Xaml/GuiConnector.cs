@@ -74,6 +74,21 @@ namespace StockSharp.Xaml
 				Connector.MarketDataSubscriptionFailed += MarketDataSubscriptionFailedHandler;
 				Connector.SessionStateChanged += SessionStateChangedHandler;
 				Connector.ValuesChanged += ValuesChangedHandler;
+				Connector.NewPortfolio += NewPortfolioHandler;
+				Connector.PortfolioChanged += PortfolioChangedHandler;
+				Connector.NewPosition += NewPositionHandler;
+				Connector.PositionChanged += PositionChangedHandler;
+				Connector.NewSecurity += NewSecurityHandler;
+				Connector.SecurityChanged += SecurityChangedHandler;
+				Connector.NewTrade += NewTradeHandler;
+				Connector.NewMyTrade += NewMyTradeHandler;
+				Connector.NewOrder += NewOrderHandler;
+				Connector.OrderChanged += OrderChangedHandler;
+				Connector.OrderRegisterFailed += OrderRegisterFailedHandler;
+				Connector.OrderCancelFailed += OrderCancelFailedHandler;
+				Connector.NewMarketDepth += NewMarketDepthHandler;
+				Connector.MarketDepthChanged += MarketDepthChangedHandler;
+				Connector.NewOrderLogItem += NewOrderLogItemHandler;
 			}
 		}
 
@@ -521,6 +536,216 @@ namespace StockSharp.Xaml
 		private void SessionStateChangedHandler(ExchangeBoard board, SessionStates state)
 		{
 			AddGuiAction(() => SessionStateChanged.SafeInvoke(board, state));
+		}
+
+		#endregion
+
+		#region NewPortfolio
+
+		/// <summary>
+		/// Portfolio received.
+		/// </summary>
+		public event Action<Portfolio> NewPortfolio;
+
+		private void NewPortfolioHandler(Portfolio portfolio)
+		{
+			AddGuiAction(() => NewPortfolio.SafeInvoke(portfolio));
+		}
+
+		#endregion
+
+		#region PortfolioChanged
+
+		/// <summary>
+		/// Portfolio changed.
+		/// </summary>
+		public event Action<Portfolio> PortfolioChanged;
+
+		private void PortfolioChangedHandler(Portfolio portfolio)
+		{
+			AddGuiAction(() => PortfolioChanged.SafeInvoke(portfolio));
+		}
+
+		#endregion
+
+		#region NewPosition
+
+		/// <summary>
+		/// Position received.
+		/// </summary>
+		public event Action<Position> NewPosition;
+
+		private void NewPositionHandler(Position position)
+		{
+			AddGuiAction(() => NewPosition.SafeInvoke(position));
+		}
+
+		#endregion
+
+		#region PositionChanged
+
+		/// <summary>
+		/// Position changed.
+		/// </summary>
+		public event Action<Position> PositionChanged;
+
+		private void PositionChangedHandler(Position position)
+		{
+			AddGuiAction(() => PositionChanged.SafeInvoke(position));
+		}
+
+		#endregion
+
+		#region NewSecurity
+
+		/// <summary>
+		/// Security received.
+		/// </summary>
+		public event Action<Security> NewSecurity;
+
+		private void NewSecurityHandler(Security security)
+		{
+			AddGuiAction(() => NewSecurity.SafeInvoke(security));
+		}
+
+		#endregion
+
+		#region SecurityChanged
+
+		/// <summary>
+		/// Security changed.
+		/// </summary>
+		public event Action<Security> SecurityChanged;
+
+		private void SecurityChangedHandler(Security security)
+		{
+			AddGuiAction(() => SecurityChanged.SafeInvoke(security));
+		}
+
+		#endregion
+
+		#region NewTrade
+
+		/// <summary>
+		/// Tick trade received.
+		/// </summary>
+		public event Action<Trade> NewTrade;
+
+		private void NewTradeHandler(Trade trade)
+		{
+			AddGuiAction(() => NewTrade.SafeInvoke(trade));
+		}
+
+		#endregion
+
+		#region NewMyTrade
+
+		/// <summary>
+		/// Own trade received.
+		/// </summary>
+		public event Action<MyTrade> NewMyTrade;
+
+		private void NewMyTradeHandler(MyTrade trade)
+		{
+			AddGuiAction(() => NewMyTrade.SafeInvoke(trade));
+		}
+
+		#endregion
+
+		#region NewOrder
+
+		/// <summary>
+		/// Order received.
+		/// </summary>
+		public event Action<Order> NewOrder;
+
+		private void NewOrderHandler(Order order)
+		{
+			AddGuiAction(() => NewOrder.SafeInvoke(order));
+		}
+
+		#endregion
+
+		#region OrderChanged
+
+		/// <summary>
+		/// Order changed (cancelled, matched).
+		/// </summary>
+		public event Action<Order> OrderChanged;
+
+		private void OrderChangedHandler(Order order)
+		{
+			AddGuiAction(() => OrderChanged.SafeInvoke(order));
+		}
+
+		#endregion
+
+		#region OrderRegisterFailed
+
+		/// <summary>
+		/// Order registration error event.
+		/// </summary>
+		public event Action<OrderFail> OrderRegisterFailed;
+
+		private void OrderRegisterFailedHandler(OrderFail fail)
+		{
+			AddGuiAction(() => OrderRegisterFailed.SafeInvoke(fail));
+		}
+
+		#endregion
+
+		#region OrdersCancelFailed
+
+		/// <summary>
+		/// Order cancellation error event.
+		/// </summary>
+		public event Action<OrderFail> OrderCancelFailed;
+
+		private void OrderCancelFailedHandler(OrderFail fail)
+		{
+			AddGuiAction(() => OrderCancelFailed.SafeInvoke(fail));
+		}
+
+		#endregion
+
+		#region NewMarketDepth
+
+		/// <summary>
+		/// Order book received.
+		/// </summary>
+		public event Action<MarketDepth> NewMarketDepth;
+
+		private void NewMarketDepthHandler(MarketDepth marketDepth)
+		{
+			AddGuiAction(() => NewMarketDepth.SafeInvoke(marketDepth));
+		}
+
+		#endregion
+
+		#region MarketDepthChanged
+
+		/// <summary>
+		/// Order book changed.
+		/// </summary>
+		public event Action<MarketDepth> MarketDepthChanged;
+
+		private void MarketDepthChangedHandler(MarketDepth marketDepth)
+		{
+			AddGuiAction(() => MarketDepthChanged.SafeInvoke(marketDepth));
+		}
+
+		#endregion
+
+		#region NewOrderLogItem
+
+		/// <summary>
+		/// Order log received.
+		/// </summary>
+		public event Action<OrderLogItem> NewOrderLogItem;
+
+		private void NewOrderLogItemHandler(OrderLogItem item)
+		{
+			AddGuiAction(() => NewOrderLogItem.SafeInvoke(item));
 		}
 
 		#endregion
@@ -1092,6 +1317,21 @@ namespace StockSharp.Xaml
 			Connector.MarketDataSubscriptionFailed -= MarketDataSubscriptionFailedHandler;
 			Connector.SessionStateChanged -= SessionStateChangedHandler;
 			Connector.ValuesChanged -= ValuesChangedHandler;
+			Connector.NewPortfolio -= NewPortfolioHandler;
+			Connector.PortfolioChanged -= PortfolioChangedHandler;
+			Connector.NewPosition -= NewPositionHandler;
+			Connector.PositionChanged -= PositionChangedHandler;
+			Connector.NewSecurity -= NewSecurityHandler;
+			Connector.SecurityChanged -= SecurityChangedHandler;
+			Connector.NewTrade -= NewTradeHandler;
+			Connector.NewMyTrade -= NewMyTradeHandler;
+			Connector.NewOrder -= NewOrderHandler;
+			Connector.OrderChanged -= OrderChangedHandler;
+			Connector.OrderRegisterFailed -= OrderRegisterFailedHandler;
+			Connector.OrderCancelFailed -= OrderCancelFailedHandler;
+			Connector.NewMarketDepth -= NewMarketDepthHandler;
+			Connector.MarketDepthChanged -= MarketDepthChangedHandler;
+			Connector.NewOrderLogItem -= NewOrderLogItemHandler;
 
 			base.DisposeManaged();
 		}
