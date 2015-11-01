@@ -59,10 +59,12 @@ namespace StockSharp.Xaml
 
 				AllPortfolios.Clear();
 				AllPortfolios.AddRange(_connector.Portfolios);
+
+				_portfolio = new WeightedPortfolio(_connector);
 			}
 		}
 
-		private WeightedPortfolio _portfolio = new WeightedPortfolio();
+		private WeightedPortfolio _portfolio;
 
 		/// <summary>
 		/// Basket portfolio.

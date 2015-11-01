@@ -102,6 +102,7 @@ namespace StockSharp.BusinessEntities
 		[Ignore]
 		[XmlIgnore]
 		[Browsable(false)]
+		[Obsolete("The property Connector was obsoleted and is always null.")]
 		public IConnector Connector
 		{
 			get { return _connector; }
@@ -174,7 +175,7 @@ namespace StockSharp.BusinessEntities
 			destination.Board = Board;
 			destination.Currency = Currency;
 			destination.Leverage = Leverage;
-			destination.Connector = Connector;
+			//destination.Connector = Connector;
 			destination.State = State;
 		}
 

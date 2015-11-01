@@ -49,7 +49,7 @@ namespace StockSharp.Algo
 					var currentValue = 0m;
 					var blockedValue = 0m;
 
-					foreach (var position in innerPositions)
+					foreach (var position in _innerPositions)
 					{
 						var mult = portfolio.Weights[position.Portfolio];
 
@@ -72,13 +72,15 @@ namespace StockSharp.Algo
 			}
 
 			private readonly WeightedPortfolio _parent;
+			private readonly IConnector _connector;
 
-			public WeightsDictionary(WeightedPortfolio parent)
+			public WeightsDictionary(WeightedPortfolio parent, IConnector connector)
 			{
 				if (parent == null)
 					throw new ArgumentNullException("parent");
 
 				_parent = parent;
+				_connector = connector;
 			}
 
 			public IEnumerable<BasketPosition> Positions
@@ -86,7 +88,7 @@ namespace StockSharp.Algo
 				get
 				{
 					return CachedKeys
-								.SelectMany(pf => pf.Connector.Positions.Where(pos => pos.Portfolio == pf))
+								.SelectMany(pf => _connector.Positions.Where(pos => pos.Portfolio == pf))
 								.GroupBy(pos => pos.Security)
 								.Select(g => new WeightedPosition(_parent, g));
 				}
@@ -172,9 +174,10 @@ namespace StockSharp.Algo
 		/// <summary>
 		/// Initializes a new instance of the <see cref="WeightedPortfolio"/>.
 		/// </summary>
-		public WeightedPortfolio()
+		/// <param name="connector">The connection of interaction with trade systems.</param>
+		public WeightedPortfolio(IConnector connector)
 		{
-			_weights = new WeightsDictionary(this);
+			_weights = new WeightsDictionary(this, connector);
 		}
 
 		private readonly WeightsDictionary _weights;

@@ -1322,14 +1322,14 @@ namespace StockSharp.Algo.Strategies
 			if (!CancelOrdersWhenStopping)
 				return;
 
-			IMarketRule matchedRule = order.WhenMatched();
+			IMarketRule matchedRule = order.WhenMatched(Connector);
 
 			if (WaitAllTrades)
-				matchedRule = matchedRule.And(order.WhenAllTrades());
+				matchedRule = matchedRule.And(order.WhenAllTrades(Connector));
 
 			var successRule = order
-				.WhenCanceled()
-				.Or(matchedRule, order.WhenRegisterFailed())
+				.WhenCanceled(Connector)
+				.Or(matchedRule, order.WhenRegisterFailed(Connector))
 				.Do(() => this.AddInfoLog(LocalizedStrings.Str1386Params.Put(order.GetTraceId())))
 				.Until(() =>
 				{
@@ -1342,7 +1342,7 @@ namespace StockSharp.Algo.Strategies
 					if (!WaitAllTrades)
 						return true;
 
-					var matchedVolume = order.GetMatchedVolume();
+					var matchedVolume = order.GetMatchedVolume(Connector);
 
 					if (matchedVolume == 0)
 						return true;
@@ -1359,7 +1359,7 @@ namespace StockSharp.Algo.Strategies
 			var canFinish = false;
 
 			order
-				.WhenCancelFailed()
+				.WhenCancelFailed(Connector)
 				.Do(() =>
 				{
 					if (ProcessState != ProcessStates.Stopping)

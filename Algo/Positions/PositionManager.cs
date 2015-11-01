@@ -100,7 +100,7 @@ namespace StockSharp.Algo.Positions
 
 			lock (_syncRoot)
 			{
-				var newPosition = order.GetPosition();
+				var newPosition = order.GetPosition(null);
 
 				decimal oldPosition;
 

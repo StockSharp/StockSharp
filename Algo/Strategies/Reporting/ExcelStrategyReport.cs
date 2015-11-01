@@ -312,7 +312,7 @@ namespace StockSharp.Algo.Strategies.Reporting
 								.SetCell(columnShift + 4, rowIndex, Format(order.LastChangeTime))
 								.SetCell(columnShift + 5, rowIndex, Format(order.LastChangeTime - order.Time))
 								.SetCell(columnShift + 6, rowIndex, order.Price)
-								.SetCell(columnShift + 7, rowIndex, MathHelper.Round(order.GetAveragePrice(), Decimals))
+								.SetCell(columnShift + 7, rowIndex, MathHelper.Round(order.GetAveragePrice(strategy.Connector), Decimals))
 								.SetCell(columnShift + 8, rowIndex, Format(order.State))
 								.SetCell(columnShift + 9, rowIndex, order.IsMatched() ? LocalizedStrings.Str1328 : (order.IsCanceled() ? LocalizedStrings.Str1329 : LocalizedStrings.Str238))
 								.SetCell(columnShift + 10, rowIndex, order.Balance)
