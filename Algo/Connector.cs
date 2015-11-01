@@ -750,7 +750,7 @@ namespace StockSharp.Algo
 			var position = _entityCache.TryAddPosition(portfolio, security, depoName, limitType, description, out isNew);
 
 			if (isNew)
-				RaiseNewPositions(new[] { position });
+				RaiseNewPosition(position);
 
 			return position;
 		}
@@ -802,7 +802,7 @@ namespace StockSharp.Algo
 			}
 
 			if (isNew)
-				RaiseNewMarketDepths(new[] { info.First });
+				RaiseNewMarketDepth(info.First);
 
 			return info.First;
 		}
@@ -1102,7 +1102,7 @@ namespace StockSharp.Algo
 			if (order.TransactionId == 0)
 				order.TransactionId = TransactionIdGenerator.GetNextId();
 
-			order.Connector = this;
+			//order.Connector = this;
 
 			if (order.Security is ContinuousSecurity)
 				order.Security = ((ContinuousSecurity)order.Security).GetSecurity(CurrentTime);
@@ -1279,7 +1279,7 @@ namespace StockSharp.Algo
 					throw new InvalidOperationException(LocalizedStrings.Str903Params.Put(id));
 
 				_entityCache.TryAddBoard(security.Board);
-				RaiseNewSecurities(new[] { security });
+				RaiseNewSecurity(security);
 			}
 			else if (isChanged)
 				RaiseSecurityChanged(security);
@@ -1330,11 +1330,12 @@ namespace StockSharp.Algo
 			var trades = retVal
 				.Select(t => _entityCache.ProcessMyTradeMessage(order.Security, t))
 				.Where(t => t != null && t.Item2)
-				.Select(t => t.Item1)
-				.ToArray();
+				.Select(t => t.Item1);
 
-			if (trades.Length > 0)
-				RaiseNewMyTrades(trades);
+			foreach (var trade in trades)
+			{
+				RaiseNewMyTrade(trade);
+			}
 		}
 
 		/// <summary>
@@ -1357,10 +1358,10 @@ namespace StockSharp.Algo
 			if (isNew)
 			{
 				this.AddInfoLog(LocalizedStrings.Str1105Params, portfolio.Name);
-				RaiseNewPortfolios(new[] { portfolio });
+				RaiseNewPortfolio(portfolio);
 			}
 			else if (isChanged)
-				RaisePortfoliosChanged(new[] { portfolio });
+				RaisePortfolioChanged(portfolio);
 
 			return portfolio;
 		}

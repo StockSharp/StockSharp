@@ -265,55 +265,52 @@ namespace StockSharp.Algo
 		/// </summary>
 		public event Action TimeOut;
 
-		/// <summary>
-		/// To call the event <see cref="Connector.NewMyTrades"/>.
-		/// </summary>
-		/// <param name="trades">My trades to be passed to the event.</param>
-		private void RaiseNewMyTrades(MyTrade[] trades)
+		private void RaiseNewMyTrade(MyTrade trade)
 		{
-			NewMyTrades.SafeInvoke(trades);
+			NewMyTrade.SafeInvoke(trade);
 
-			var evt = NewMyTrade;
+			var multiEvt = NewMyTrades;
 
-			if (evt == null)
+			if (multiEvt == null)
 				return;
 
-			foreach (var trade in trades)
-				evt(trade);
+			multiEvt.SafeInvoke(new[] { trade });
 		}
 
-		/// <summary>
-		/// To call the event <see cref="Connector.NewTrades"/>.
-		/// </summary>
-		/// <param name="trades">Trades that should be passed to the event.</param>
-		private void RaiseNewTrades(Trade[] trades)
+		private void RaiseNewTrade(Trade trade)
 		{
-			NewTrades.SafeInvoke(trades);
+			NewTrade.SafeInvoke(trade);
 
-			var evt = NewTrade;
+			var multiEvt = NewTrades;
 
-			if (evt == null)
+			if (multiEvt == null)
 				return;
 
-			foreach (var trade in trades)
-				evt(trade);
+			multiEvt.SafeInvoke(new[] { trade });
 		}
 
-		/// <summary>
-		/// To call the event <see cref="Connector.NewOrders"/>.
-		/// </summary>
-		/// <param name="orders">Orders that should be passed to the event.</param>
-		private void RaiseNewOrders(Order[] orders)
+		private void RaiseNewOrder(Order order)
 		{
-			NewOrders.SafeInvoke(orders);
+			NewOrder.SafeInvoke(order);
 
-			var evt = NewOrder;
+			var multiEvt = NewOrders;
 
-			if (evt == null)
+			if (multiEvt == null)
 				return;
 
-			foreach (var order in orders)
-				evt(order);
+			multiEvt.SafeInvoke(new[] { order });
+		}
+
+		private void RaiseOrderChanged(Order order)
+		{
+			OrderChanged.SafeInvoke(order);
+
+			var multiEvt = OrdersChanged;
+
+			if (multiEvt == null)
+				return;
+
+			multiEvt.SafeInvoke(new[] { order });
 		}
 
 		/// <summary>
@@ -326,23 +323,6 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// To call the event <see cref="Connector.OrdersChanged"/>.
-		/// </summary>
-		/// <param name="orders">Orders that should be passed to the event.</param>
-		private void RaiseOrdersChanged(Order[] orders)
-		{
-			OrdersChanged.SafeInvoke(orders);
-
-			var evt = OrderChanged;
-
-			if (evt == null)
-				return;
-
-			foreach (var order in orders)
-				evt(order);
-		}
-
-		/// <summary>
 		/// To call the event <see cref="Connector.StopOrdersChanged"/>.
 		/// </summary>
 		/// <param name="stopOrders">Stop orders that should be passed to the event.</param>
@@ -351,38 +331,28 @@ namespace StockSharp.Algo
 			StopOrdersChanged.SafeInvoke(stopOrders);
 		}
 
-		/// <summary>
-		/// To call the event <see cref="Connector.OrdersRegisterFailed"/>.
-		/// </summary>
-		/// <param name="fails">Error information that should be passed to the event.</param>
-		private void RaiseOrdersRegisterFailed(OrderFail[] fails)
+		private void RaiseOrderRegisterFailed(OrderFail fail)
 		{
-			OrdersRegisterFailed.SafeInvoke(fails);
+			OrderRegisterFailed.SafeInvoke(fail);
 
-			var evt = OrderRegisterFailed;
+			var multiEvt = OrdersRegisterFailed;
 
-			if (evt == null)
+			if (multiEvt == null)
 				return;
 
-			foreach (var fail in fails)
-				evt(fail);
+			multiEvt.SafeInvoke(new[] { fail });
 		}
 
-		/// <summary>
-		/// To call the event <see cref="Connector.OrdersCancelFailed"/>.
-		/// </summary>
-		/// <param name="fails">Error information that should be passed to the event.</param>
-		private void RaiseOrdersCancelFailed(OrderFail[] fails)
+		private void RaiseOrderCancelFailed(OrderFail fail)
 		{
-			OrdersCancelFailed.SafeInvoke(fails);
+			OrderCancelFailed.SafeInvoke(fail);
 
-			var evt = OrderCancelFailed;
+			var multiEvt = OrdersCancelFailed;
 
-			if (evt == null)
+			if (multiEvt == null)
 				return;
 
-			foreach (var fail in fails)
-				evt(fail);
+			multiEvt.SafeInvoke(new[] { fail });
 		}
 
 		/// <summary>
@@ -403,25 +373,20 @@ namespace StockSharp.Algo
 			StopOrdersCancelFailed.SafeInvoke(fails);
 		}
 
-		/// <summary>
-		/// To call the event <see cref="Connector.NewSecurities"/>.
-		/// </summary>
-		/// <param name="securities">Instruments that should be passed to the event.</param>
-		private void RaiseNewSecurities(Security[] securities)
+		private void RaiseNewSecurity(Security security)
 		{
-			NewSecurities.SafeInvoke(securities);
+			_added.SafeInvoke(security);
 
-			foreach (var security in securities)
-			{
-				_added.SafeInvoke(security);
-				NewSecurity.SafeInvoke(security);
-			}
+			NewSecurity.SafeInvoke(security);
+
+			var multiEvt = NewSecurities;
+
+			if (multiEvt == null)
+				return;
+
+			multiEvt.SafeInvoke(new[] { security });
 		}
 
-		/// <summary>
-		/// To call the event <see cref="Connector.SecuritiesChanged"/>.
-		/// </summary>
-		/// <param name="securities">Instruments that should be passed to the event.</param>
 		private void RaiseSecuritiesChanged(Security[] securities)
 		{
 			SecuritiesChanged.SafeInvoke(securities);
@@ -435,115 +400,88 @@ namespace StockSharp.Algo
 				evt(security);
 		}
 
-		/// <summary>
-		/// To call the event <see cref="Connector.SecuritiesChanged"/>.
-		/// </summary>
-		/// <param name="security">Instrument that should be passed to the event.</param>
 		private void RaiseSecurityChanged(Security security)
 		{
-			RaiseSecuritiesChanged(new[] { security });
-		}
+			SecurityChanged.SafeInvoke(security);
 
-		/// <summary>
-		/// To call the event <see cref="Connector.NewPortfolios"/>.
-		/// </summary>
-		/// <param name="portfolios">Portfolios that should be passed to the event.</param>
-		private void RaiseNewPortfolios(Portfolio[] portfolios)
-		{
-			NewPortfolios.SafeInvoke(portfolios);
+			var multiEvt = SecuritiesChanged;
 
-			var evt = NewPortfolio;
-
-			if (evt == null)
+			if (multiEvt == null)
 				return;
 
-			foreach (var portfolio in portfolios)
-				evt(portfolio);
+			multiEvt.SafeInvoke(new[] { security });
 		}
 
-		/// <summary>
-		/// To call the event <see cref="Connector.PortfoliosChanged"/>.
-		/// </summary>
-		/// <param name="portfolios">Portfolios that should be passed to the event.</param>
-		private void RaisePortfoliosChanged(Portfolio[] portfolios)
+		private void RaiseNewPortfolio(Portfolio portfolio)
 		{
-			PortfoliosChanged.SafeInvoke(portfolios);
+			NewPortfolio.SafeInvoke(portfolio);
 
-			var evt = PortfolioChanged;
+			var multiEvt = NewPortfolios;
 
-			if (evt == null)
+			if (multiEvt == null)
 				return;
 
-			foreach (var portfolio in portfolios)
-				evt(portfolio);
+			multiEvt.SafeInvoke(new[] { portfolio });
 		}
 
-		/// <summary>
-		/// To call the event <see cref="Connector.NewPositions"/>.
-		/// </summary>
-		/// <param name="positions">Positions that should be passed to the event.</param>
-		private void RaiseNewPositions(Position[] positions)
+		private void RaisePortfolioChanged(Portfolio portfolio)
 		{
-			NewPositions.SafeInvoke(positions);
+			PortfolioChanged.SafeInvoke(portfolio);
 
-			var evt = NewPosition;
+			var multiEvt = PortfoliosChanged;
 
-			if (evt == null)
+			if (multiEvt == null)
 				return;
 
-			foreach (var position in positions)
-				evt(position);
+			multiEvt.SafeInvoke(new[] { portfolio });
 		}
 
-		/// <summary>
-		/// To call the event <see cref="Connector.PositionsChanged"/>.
-		/// </summary>
-		/// <param name="positions">Positions that should be passed to the event.</param>
-		private void RaisePositionsChanged(Position[] positions)
+		private void RaiseNewPosition(Position position)
 		{
-			PositionsChanged.SafeInvoke(positions);
+			NewPosition.SafeInvoke(position);
 
-			var evt = PositionChanged;
+			var multiEvt = NewPositions;
 
-			if (evt == null)
+			if (multiEvt == null)
 				return;
 
-			foreach (var position in positions)
-				evt(position);
+			multiEvt.SafeInvoke(new[] { position });
 		}
 
-		/// <summary>
-		/// To call the event <see cref="Connector.NewMarketDepths"/>.
-		/// </summary>
-		/// <param name="marketDepths">Order books that should be passed to the event.</param>
-		private void RaiseNewMarketDepths(MarketDepth[] marketDepths)
+		private void RaisePositionChanged(Position position)
 		{
-			NewMarketDepths.SafeInvoke(marketDepths);
+			PositionChanged.SafeInvoke(position);
 
-			var evt = NewMarketDepth;
+			var multiEvt = PositionsChanged;
 
-			if (evt == null)
+			if (multiEvt == null)
 				return;
 
-			foreach (var marketDepth in marketDepths)
-				evt(marketDepth);
+			multiEvt.SafeInvoke(new[] { position });
 		}
 
-		/// <summary>
-		/// To call the event <see cref="Connector.MarketDepthsChanged"/>.
-		/// </summary>
-		/// <param name="marketDepths">Order books that should be passed to the event.</param>
-		private void RaiseMarketDepthsChanged(MarketDepth[] marketDepths)
+		private void RaiseNewMarketDepth(MarketDepth marketDepth)
 		{
-			MarketDepthsChanged.SafeInvoke(marketDepths);
+			NewMarketDepth.SafeInvoke(marketDepth);
 
-			var evt = MarketDepthChanged;
+			var multiEvt = NewMarketDepths;
 
-			if (evt == null)
+			if (multiEvt == null)
 				return;
 
-			foreach (var marketDepth in marketDepths)
-				evt(marketDepth);
+			multiEvt.SafeInvoke(new[] { marketDepth });
+		}
+
+		private void RaiseMarketDepthChanged(MarketDepth marketDepth)
+		{
+			MarketDepthChanged.SafeInvoke(marketDepth);
+
+			var multiEvt = MarketDepthsChanged;
+
+			if (multiEvt == null)
+				return;
+
+			multiEvt.SafeInvoke(new[] { marketDepth });
 		}
 
 		/// <summary>
@@ -564,21 +502,16 @@ namespace StockSharp.Algo
 			NewsChanged.SafeInvoke(news);
 		}
 
-		/// <summary>
-		/// To call the event <see cref="Connector.NewOrderLogItems"/>.
-		/// </summary>
-		/// <param name="items">Orders log lines.</param>
-		private void RaiseNewOrderLogItems(OrderLogItem[] items)
+		private void RaiseNewOrderLogItem(OrderLogItem item)
 		{
-			NewOrderLogItems.SafeInvoke(items);
+			NewOrderLogItem.SafeInvoke(item);
 
-			var evt = NewOrderLogItem;
+			var multiEvt = NewOrderLogItems;
 
-			if (evt == null)
+			if (multiEvt == null)
 				return;
 
-			foreach (var item in items)
-				evt(item);
+			multiEvt.SafeInvoke(new[] { item });
 		}
 
 		/// <summary>
