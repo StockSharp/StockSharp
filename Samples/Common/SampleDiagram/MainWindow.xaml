@@ -6,14 +6,6 @@
 		WindowStartupLocation="CenterScreen">
 	
 	<Window.CommandBindings>
-		<CommandBinding Command="{x:Static sampleDiagramPublic:MainWindow.AddCommand}"
-						CanExecute="AddCommand_OnCanExecute"
-						Executed="AddCommand_OnExecuted"/>
-		
-		<CommandBinding Command="{x:Static sampleDiagramPublic:MainWindow.RemoveCommand}"
-						CanExecute="RemoveCommand_OnCanExecute"
-						Executed="RemoveCommand_OnExecuted"/>
-
 		<CommandBinding Command="{x:Static sampleDiagramPublic:MainWindow.SaveCommand}"
 						CanExecute="SaveCommand_OnCanExecute"
 						Executed="SaveCommand_OnExecuted"/>
@@ -35,36 +27,21 @@
 						<RowDefinition Height="Auto"/>
 						<RowDefinition Height="*"/>
 					</Grid.RowDefinitions>
-					
-					<ToolBar Grid.Row="0" Grid.Column="0">
-						<Button Content="Add" Width="50" 
-								Command="{x:Static sampleDiagramPublic:MainWindow.AddCommand}"
-								CommandParameter="{Binding ElementName=StrategiesListBox, Path=SelectedItem}"/>
-						<Button Content="Remove" Width="50" 
-								Command="{x:Static sampleDiagramPublic:MainWindow.RemoveCommand}"
-								CommandParameter="{Binding ElementName=StrategiesListBox, Path=SelectedItem}"/>
-					</ToolBar>
 
-					<ListBox Grid.Row="1" Grid.Column="0" x:Name="StrategiesListBox" Margin="1">
-						<ListBox.ItemContainerStyle>
-							<Style TargetType="ListBoxItem">
-								<EventSetter Event="MouseDoubleClick" Handler="Strategies_OnMouseDoubleClick" />
-							</Style>
-						</ListBox.ItemContainerStyle>
-						<ListBox.ItemTemplate>
-							<DataTemplate>
-								<Grid Margin="1">
-									<Grid.RowDefinitions>
-										<RowDefinition/>
-										<RowDefinition/>
-									</Grid.RowDefinitions>
-									
-									<TextBlock Grid.Row="0" Text="{Binding Name}"/>
-									<TextBlock Grid.Row="1" Foreground="Gray" Text="{Binding TypeId}"/>
-								</Grid>
-							</DataTemplate>
-						</ListBox.ItemTemplate>
-					</ListBox>
+					<TabControl Grid.Row="0" Grid.Column="0" Grid.RowSpan="2" TabStripPlacement="Bottom">
+						<TabItem Header="Strategies">
+							<sampleDiagramPublic:DiagramElementsControl  x:Name="StrategiesControl"
+																		 Added="StrategiesControl_OnAdded"
+																		 Removed="StrategiesControl_OnRemoved"
+																		 Selected="StrategiesControl_OnSelected"/>
+						</TabItem>
+						<TabItem Header="Elements">
+							<sampleDiagramPublic:DiagramElementsControl  x:Name="ElementsControl"
+																		 Added="ElementsControl_OnAdded"
+																		 Removed="ElementsControl_OnRemoved"
+																		 Selected="ElementsControl_OnSelected"/>
+						</TabItem>
+					</TabControl>
 
 					<ToolBar Grid.Row="0" Grid.Column="1">
 						<Label Content="Name:"/>

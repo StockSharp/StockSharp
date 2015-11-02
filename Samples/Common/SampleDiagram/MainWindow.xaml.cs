@@ -1,9 +1,12 @@
 ﻿namespace SampleDiagram
 {
+	using System;
+	using System.Linq;
 	using System.Windows;
 	using System.Windows.Input;
 
 	using Ecng.Common;
+	using Ecng.Xaml;
 
 	using StockSharp.Xaml.Diagram;
 
@@ -16,30 +19,60 @@
 
 		private readonly StrategiesRegistry _strategiesRegistry = new StrategiesRegistry();
 
+		private bool _isCompositionSelected;
+
 		public MainWindow()
 		{
 			InitializeComponent();
 
 			DiagramEditorControl.PaletteElements = _strategiesRegistry.DiagramElements;
-			StrategiesListBox.ItemsSource = _strategiesRegistry.Strategies;
+			StrategiesControl.Elements = _strategiesRegistry.Strategies;
+			ElementsControl.Elements = _strategiesRegistry.Compositions;
 			EmulationControl.StrategiesRegistry = _strategiesRegistry;
 		}
 
-		private void Strategies_OnMouseDoubleClick(object sender, MouseButtonEventArgs e)
+		private void StrategiesControl_OnAdded(DiagramElementsControl ctrl, CompositionDiagramElement element)
 		{
-			var element = (CompositionDiagramElement)StrategiesListBox.SelectedItem;
-
-			if (element == null)
-				return;
-
-			CheckIsStrategyChanged();
-			SelectStrategy(element);
+			_strategiesRegistry.Save(element, false);
+			SelectElement(element, false);
 		}
 
-		private void SelectStrategy(CompositionDiagramElement element)
+		private void StrategiesControl_OnRemoved(DiagramElementsControl ctrl, CompositionDiagramElement element)
 		{
-			StrategiesListBox.SelectedItem = element;
+			_strategiesRegistry.Remove(element, false);
+			SelectElement(null, false);
+		}
+
+		private void StrategiesControl_OnSelected(DiagramElementsControl ctrl, CompositionDiagramElement element)
+		{
+			CheckIsStrategyChanged();
+			SelectElement(element, false);
+		}
+
+		private void ElementsControl_OnAdded(DiagramElementsControl ctrl, CompositionDiagramElement element)
+		{
+			_strategiesRegistry.Save(element, true);
+			SelectElement(element, true);
+		}
+
+		private void ElementsControl_OnRemoved(DiagramElementsControl ctrl, CompositionDiagramElement element)
+		{
+			_strategiesRegistry.Remove(element, true);
+			SelectElement(null, true);
+		}
+
+		private void ElementsControl_OnSelected(DiagramElementsControl ctrl, CompositionDiagramElement element)
+		{
+			CheckIsStrategyChanged();
+			SelectElement(element, true);
+		}
+
+		private void SelectElement(CompositionDiagramElement element, bool isCompositionSelected)
+		{
+			//StrategiesListBox.SelectedItem = element;
 			DiagramEditorControl.Composition = element;
+
+			_isCompositionSelected = isCompositionSelected;
 		}
 
 		private void CheckIsStrategyChanged()
@@ -49,44 +82,12 @@
 
 			var element = DiagramEditorControl.Composition;
 
-			if (MessageBox.Show("Strategy {0} was changed. Save?".Put(element.Name), Title, MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
+			if (MessageBox.Show("Element {0} was changed. Save?".Put(element.Name), Title, MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
 			{
-				_strategiesRegistry.Save(element);
+				_strategiesRegistry.Save(element, _isCompositionSelected);
 			}
 			else
-				_strategiesRegistry.Discard(element);
-		}
-
-		private void AddCommand_OnCanExecute(object sender, CanExecuteRoutedEventArgs e)
-		{
-			e.CanExecute = true;
-		}
-
-		private void AddCommand_OnExecuted(object sender, ExecutedRoutedEventArgs e)
-		{
-			var element = new CompositionDiagramElement
-			{
-				Name = "New strategy"
-			};
-
-			_strategiesRegistry.Save(element);
-			SelectStrategy(element);
-		}
-
-		private void RemoveCommand_OnCanExecute(object sender, CanExecuteRoutedEventArgs e)
-		{
-			e.CanExecute = e.Parameter != null;
-		}
-
-		private void RemoveCommand_OnExecuted(object sender, ExecutedRoutedEventArgs e)
-		{
-			var element = (CompositionDiagramElement)e.Parameter;
-
-			if (MessageBox.Show("Remove {0} strategy?".Put(element.Name), Title, MessageBoxButton.YesNo, MessageBoxImage.Question) != MessageBoxResult.Yes)
-				return;
-
-			SelectStrategy(null);
-			_strategiesRegistry.Remove(element);
+				_strategiesRegistry.Discard(element, _isCompositionSelected);
 		}
 
 		private void SaveCommand_OnCanExecute(object sender, CanExecuteRoutedEventArgs e)
@@ -96,7 +97,7 @@
 
 		private void SaveCommand_OnExecuted(object sender, ExecutedRoutedEventArgs e)
 		{
-			_strategiesRegistry.Save((CompositionDiagramElement)e.Parameter);
+			_strategiesRegistry.Save((CompositionDiagramElement)e.Parameter, _isCompositionSelected);
 			DiagramEditorControl.ResetIsChanged();
 		}
 
@@ -107,9 +108,9 @@
 
 		private void DiscardCommand_OnExecuted(object sender, ExecutedRoutedEventArgs e)
 		{
-			var element = _strategiesRegistry.Discard((CompositionDiagramElement)e.Parameter);
+			var element = _strategiesRegistry.Discard((CompositionDiagramElement)e.Parameter, _isCompositionSelected);
 
-			SelectStrategy(element);
+			SelectElement(element, _isCompositionSelected);
 			DiagramEditorControl.ResetIsChanged();
 		}
 	}
