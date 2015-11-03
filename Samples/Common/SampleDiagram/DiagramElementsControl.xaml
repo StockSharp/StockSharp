@@ -1,0 +1,56 @@
+﻿<UserControl x:Class="SampleDiagram.DiagramElementsControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:sampleDiagramPublic="clr-namespace:SampleDiagram"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="300">
+
+	<UserControl.CommandBindings>
+		<CommandBinding Command="{x:Static sampleDiagramPublic:DiagramElementsControl.AddCommand}"
+						CanExecute="AddCommand_OnCanExecute"
+						Executed="AddCommand_OnExecuted"/>
+
+		<CommandBinding Command="{x:Static sampleDiagramPublic:DiagramElementsControl.RemoveCommand}"
+						CanExecute="RemoveCommand_OnCanExecute"
+						Executed="RemoveCommand_OnExecuted"/>
+	</UserControl.CommandBindings>
+	
+	<Grid>
+		<Grid.RowDefinitions>
+			<RowDefinition Height="Auto"/>
+			<RowDefinition Height="*"/>
+		</Grid.RowDefinitions>
+
+		<ToolBar Grid.Row="0" Grid.Column="0">
+			<Button Content="Add" Width="50" 
+					Command="{x:Static sampleDiagramPublic:DiagramElementsControl.AddCommand}"
+					CommandParameter="{Binding ElementName=StrategiesListBox, Path=SelectedItem}"/>
+			<Button Content="Remove" Width="50" 
+					Command="{x:Static sampleDiagramPublic:DiagramElementsControl.RemoveCommand}"
+					CommandParameter="{Binding ElementName=StrategiesListBox, Path=SelectedItem}"/>
+		</ToolBar>
+
+		<ListBox Grid.Row="1" Grid.Column="0" x:Name="StrategiesListBox" Margin="1">
+			<ListBox.ItemContainerStyle>
+				<Style TargetType="ListBoxItem">
+					<EventSetter Event="MouseDoubleClick" Handler="Strategies_OnMouseDoubleClick" />
+				</Style>
+			</ListBox.ItemContainerStyle>
+			<ListBox.ItemTemplate>
+				<DataTemplate>
+					<Grid Margin="1">
+						<Grid.RowDefinitions>
+							<RowDefinition/>
+							<RowDefinition/>
+						</Grid.RowDefinitions>
+
+						<TextBlock Grid.Row="0" Text="{Binding Name}"/>
+						<TextBlock Grid.Row="1" Foreground="Gray" Text="{Binding TypeId}"/>
+					</Grid>
+				</DataTemplate>
+			</ListBox.ItemTemplate>
+		</ListBox>
+	</Grid>
+</UserControl>

@@ -229,7 +229,10 @@
 			{
 				_diagramElements = typeof(Xaml.Diagram.DiagramElement).Assembly
 					.GetTypes()
-					.Where(t => !t.IsAbstract && t.IsSubclassOf(typeof(Xaml.Diagram.DiagramElement)))
+					.Where(t => !t.IsAbstract && 
+						t.IsSubclassOf(typeof(Xaml.Diagram.DiagramElement)) && 
+						t != typeof(Xaml.Diagram.CompositionDiagramElement) &&
+						t != typeof(Xaml.Diagram.ExportDiagramElement))
 					.Concat(_customDiagramElements)
 					.ToArray();
 			}
