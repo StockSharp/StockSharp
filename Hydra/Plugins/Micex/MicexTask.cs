@@ -33,9 +33,9 @@ namespace StockSharp.Hydra.Micex
 			public MicexSettings(HydraTaskSettings settings)
 				: base(settings)
 			{
-				CollectionHelper.TryAdd(ExtensionInfo, "OrderBookDepth", null);
+				ExtensionInfo.TryAdd("OrderBookDepth", null);
 				ExtensionInfo.TryAdd("RequestAllDepths", true);
-				CollectionHelper.TryAdd(ExtensionInfo, "MicexLogLevel", null);
+				ExtensionInfo.TryAdd("MicexLogLevel", null);
 				ExtensionInfo.TryAdd("OverrideDll", true);
 			}
 
@@ -128,6 +128,16 @@ namespace StockSharp.Hydra.Micex
 				get { return (bool)ExtensionInfo["OverrideDll"]; }
 				set { ExtensionInfo["OverrideDll"] = value; }
 			}
+
+			[CategoryLoc(LocalizedStrings.GeneralKey)]
+			[DisplayNameLoc(LocalizedStrings.Str2121Key)]
+			[DescriptionLoc(LocalizedStrings.Str2121Key, true)]
+			[PropertyOrder(16)]
+			public string ExtraSettings
+			{
+				get { return (string)ExtensionInfo.TryGetValue("ExtraSettings"); }
+				set { ExtensionInfo["ExtraSettings"] = value; }
+			}
 		}
 
 		private MicexSettings _settings;
@@ -153,6 +163,7 @@ namespace StockSharp.Hydra.Micex
 			_settings.RequestAllDepths = true;
 			_settings.MicexLogLevel = null;
 			_settings.OverrideDll = true;
+			_settings.ExtraSettings = string.Empty;
 		}
 
 		protected override MicexMessageAdapter GetAdapter(IdGenerator generator)
@@ -167,7 +178,8 @@ namespace StockSharp.Hydra.Micex
 				OrderBookDepth = _settings.OrderBookDepth,
 				RequestAllDepths = _settings.RequestAllDepths,
 				MicexLogLevel = _settings.MicexLogLevel,
-				OverrideDll = _settings.OverrideDll
+				OverrideDll = _settings.OverrideDll,
+				ExtraSettings = _settings.ExtraSettings
 			};
 		}
 	}

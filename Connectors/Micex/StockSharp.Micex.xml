@@ -176,6 +176,11 @@
             Перезаписать файл библиотеки из ресурсов. По-умолчанию файл будет перезаписан.
             </summary>
     </member>
+    <member name="P:StockSharp.Micex.MicexMessageAdapter.ExtraSettings">
+      <summary>
+            Дополнительные настройки.
+            </summary>
+    </member>
     <member name="P:StockSharp.Micex.MicexMessageAdapter.IsValid">
       <summary>
             Проверить введенные параметры на валидность.
@@ -3776,6 +3781,11 @@
             Перезаписать файл библиотеки из ресурсов. По-умолчанию файл будет перезаписан.
             </summary>
     </member>
+    <member name="P:StockSharp.Micex.MicexTrader.ExtraSettings">
+      <summary>
+            Дополнительные настройки.
+            </summary>
+    </member>
     <member name="T:StockSharp.Micex.Native.MicexPtrReader">
       <summary>
             Читательн данных из указателя на неуправляемую память.
@@ -3828,7 +3838,7 @@
             Клиент для прямого доступа к API.
             </summary>
     </member>
-    <member name="M:StockSharp.Micex.Native.MicexClient.#ctor(System.String,System.Boolean,StockSharp.Micex.ConnectionTypes,System.Collections.Generic.IEnumerable{System.Net.EndPoint},System.Net.EndPoint,System.String,System.String,System.Security.SecureString,System.String,System.String,StockSharp.Micex.CompressionLevels,System.Collections.Generic.IEnumerable{System.String},System.String,System.String)">
+    <member name="M:StockSharp.Micex.Native.MicexClient.#ctor(System.String,System.Boolean,StockSharp.Micex.ConnectionTypes,System.Collections.Generic.IEnumerable{System.Net.EndPoint},System.Net.EndPoint,System.String,System.String,System.Security.SecureString,System.String,System.String,StockSharp.Micex.CompressionLevels,System.Collections.Generic.IEnumerable{System.String},System.String,System.String,System.String)">
       <summary>
             Создать <see cref="T:StockSharp.Micex.Native.MicexClient" />.
             </summary>
@@ -3849,6 +3859,7 @@
       <param name="boards">Список площадок, с которыми будет вестись работа.</param>
       <param name="service">Имя сервиса торговой системы.</param>
       <param name="language">Язык для сообщений об ошибках. Допустимые значения: “English”, “Russian”, “Ukrainian”.</param>
+      <param name="extraSettings">Дополнительные настройки.</param>
     </member>
     <member name="M:StockSharp.Micex.Native.MicexClient.ExecuteTransaction(StockSharp.Micex.Native.Transactions.BaseTransaction,System.Int32)">
       <summary>
@@ -5330,6 +5341,11 @@
     <member name="P:StockSharp.Micex.Native.MicexClient.Language">
       <summary>
             Язык для сообщений об ошибках. Допустимые значения: “English”, “Russian”, “Ukrainian”.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Micex.Native.MicexClient.ExtraSettings">
+      <summary>
+            Дополнительные настройки.
             </summary>
     </member>
     <member name="P:StockSharp.Micex.Native.MicexClient.ServerInfo">
