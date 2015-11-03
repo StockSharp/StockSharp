@@ -207,6 +207,11 @@
             License body.
             </summary>
         </member>
+        <member name="P:StockSharp.Licensing.License.ExpireAction">
+            <summary>
+            Action when the license expired.
+            </summary>
+        </member>
         <member name="T:StockSharp.Licensing.LicenseClient">
             <summary>
             StockSharp licensing service client.
@@ -319,6 +324,21 @@
             Name.
             </summary>
         </member>
+        <member name="T:StockSharp.Licensing.LicenseExpireActions">
+            <summary>
+            Actions when a license expired.
+            </summary>
+        </member>
+        <member name="F:StockSharp.Licensing.LicenseExpireActions.PreventWork">
+            <summary>
+            Prevent work.
+            </summary>
+        </member>
+        <member name="F:StockSharp.Licensing.LicenseExpireActions.PreventUpgrade">
+            <summary>
+            Prevent upgrade.
+            </summary>
+        </member>
         <member name="T:StockSharp.Licensing.LicenseHelper">
             <summary>
             Extension class for licenses.
@@ -348,12 +368,13 @@
             <param name="license">License.</param>
             <returns>Remaining time of the license. If the license is expired, the value <see cref="F:System.TimeSpan.Zero"/> will be returned.</returns>
         </member>
-        <member name="M:StockSharp.Licensing.LicenseHelper.ValidateLicense(System.String,System.String)">
+        <member name="M:StockSharp.Licensing.LicenseHelper.ValidateLicense(System.String,System.String,System.Reflection.Assembly)">
             <summary>
             Check the license supported the feature.
             </summary>
             <param name="featureName">Feature.</param>
             <param name="portfolioName">The account number that will be used for verification.</param>
+            <param name="component">Component.</param>
             <returns>Error info, if the license does not support the feature.</returns>
         </member>
         <member name="M:StockSharp.Licensing.LicenseHelper.Save(StockSharp.Licensing.License)">
