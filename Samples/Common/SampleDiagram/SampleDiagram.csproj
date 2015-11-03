@@ -89,6 +89,9 @@
     <Compile Include="DiagramDebuggerControl.xaml.cs">
       <DependentUpon>DiagramDebuggerControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="DiagramElementsControl.xaml.cs">
+      <DependentUpon>DiagramElementsControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="EmulationControl.xaml.cs">
       <DependentUpon>EmulationControl.xaml</DependentUpon>
     </Compile>
@@ -100,6 +103,10 @@
     <Page Include="DiagramEditorControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="DiagramElementsControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="EmulationControl.xaml">
       <SubType>Designer</SubType>
@@ -198,6 +205,19 @@
     <Resource Include="..\..\..\References\stocksharp.ico">
       <Link>Properties\stocksharp.ico</Link>
     </Resource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Strategies\b4fcbed7_eb78_4846_a108_7f570fc3660d.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Compositions\923f7b2e_0c1d_4c4c_a87f_baf3aaac2048.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Compositions\bf591486_88ac_41b2_8079_ca0c9eabf349.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
