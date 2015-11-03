@@ -2471,40 +2471,19 @@ namespace StockSharp.Algo
 				set { throw new NotSupportedException(); }
 			}
 
-			event Action<Position> IPositionManager.NewPosition
+			event Action<KeyValuePair<Tuple<SecurityId, string>, decimal>> IPositionManager.NewPosition
 			{
 				add { }
 				remove { }
 			}
 
-			event Action<Position> IPositionManager.PositionChanged
+			event Action<KeyValuePair<Tuple<SecurityId, string>, decimal>> IPositionManager.PositionChanged
 			{
 				add { }
 				remove { }
 			}
 
-			/// <summary>
-			/// To calculate position by the order.
-			/// </summary>
-			/// <param name="order">Order.</param>
-			/// <returns>The position by the order.</returns>
-			decimal IPositionManager.ProcessOrder(Order order)
-			{
-				throw new NotSupportedException();
-			}
-
-			/// <summary>
-			/// To calculate the position by the trade.
-			/// </summary>
-			/// <param name="trade">Trade.</param>
-			/// <returns>The position by the trade.</returns>
-			decimal IPositionManager.ProcessMyTrade(MyTrade trade)
-			{
-				throw new NotSupportedException();
-			}
-
-
-			IEnumerable<Position> IPositionManager.Positions
+			IEnumerable<KeyValuePair<Tuple<SecurityId, string>, decimal>> IPositionManager.Positions
 			{
 				get
 				{
@@ -2517,6 +2496,11 @@ namespace StockSharp.Algo
 			}
 
 			void IPositionManager.Reset()
+			{
+				throw new NotSupportedException();
+			}
+
+			decimal? IPositionManager.ProcessMessage(Message message)
 			{
 				throw new NotSupportedException();
 			}

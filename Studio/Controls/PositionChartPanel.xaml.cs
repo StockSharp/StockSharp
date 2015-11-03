@@ -26,7 +26,7 @@ namespace StockSharp.Studio.Controls
 			var cmdSvc = ConfigManager.GetService<IStudioCommandService>();
 			cmdSvc.Register<ResetedCommand>(this, false, cmd => _positionCurve.Clear());
 			cmdSvc.Register<PositionCommand>(this, false, cmd =>
-				_positionCurve.Add(new EquityData { Time = cmd.Time, Value = cmd.Position.CurrentValue }));
+				_positionCurve.Add(new EquityData { Time = cmd.Time, Value = cmd.Position.Value }));
 		}
 
 		public override void Dispose()

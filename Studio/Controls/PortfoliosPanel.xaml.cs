@@ -12,6 +12,7 @@ namespace StockSharp.Studio.Controls
 	using StockSharp.BusinessEntities;
 	using StockSharp.Studio.Core.Commands;
 	using StockSharp.Localization;
+	using StockSharp.Messages;
 
 	[DisplayNameLoc(LocalizedStrings.PortfoliosKey)]
 	[DescriptionLoc(LocalizedStrings.Str3269Key)]
@@ -36,7 +37,12 @@ namespace StockSharp.Studio.Controls
 			AlertBtn.SchemaChanged += RaiseChangedCommand;
 
 			var cmdSvc = ConfigManager.GetService<IStudioCommandService>();
-			cmdSvc.Register<PositionCommand>(this, true, cmd => AlertBtn.Process(cmd.Position.ToMessage(TimeHelper.Now)));
+			cmdSvc.Register<PositionCommand>(this, true, cmd => AlertBtn.Process(new PositionChangeMessage
+			{
+				SecurityId = cmd.Position.Key.Item1,
+				PortfolioName = cmd.Position.Key.Item2,
+				ServerTime = TimeHelper.NowWithOffset,
+			}.Add(PositionChangeTypes.CurrentValue, cmd.Position.Value)));
 			cmdSvc.Register<BindConnectorCommand>(this, true, cmd =>
 			{
 				if (!cmd.CheckControl(this))

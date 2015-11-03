@@ -40,8 +40,8 @@ namespace StockSharp.Studio.Controls
 			});
 			cmdSvc.Register<PositionCommand>(this, false, cmd =>
 			{
-				if (cmd.IsNew)
-					PortfolioGrid.Positions.Add(cmd.Position);
+				//if (cmd.IsNew)
+				//	PortfolioGrid.Positions.Add(cmd.Position);
 			});
 			cmdSvc.Register<ResetedCommand>(this, false, cmd => PortfolioGrid.Positions.Clear());
 

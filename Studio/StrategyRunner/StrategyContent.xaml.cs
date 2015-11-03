@@ -9,6 +9,7 @@
 
 	using StockSharp.BusinessEntities;
 	using StockSharp.Localization;
+	using StockSharp.Messages;
 	using StockSharp.Xaml.Charting;
 	using StockSharp.Xaml.Diagram;
 
@@ -90,9 +91,9 @@
 			MyTradeGrid.Trades.AddRange(trades);
 		}
 
-		private void OnStrategyNewPosition(Position position)
+		private void OnStrategyNewPosition(KeyValuePair<Tuple<SecurityId, string>, decimal> position)
 		{
-			PositionGrid.Positions.Add(position);
+			//PositionGrid.Positions.Add(position);
 		}
 
 		private void OnStrategyPnLChanged()

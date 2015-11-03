@@ -165,6 +165,7 @@
     <Compile Include="Indicators\Correlation.cs" />
     <Compile Include="Indicators\Covariance.cs" />
     <Compile Include="PnL\PnLMessageAdapter.cs" />
+    <Compile Include="Positions\PositionMessageAdapter.cs" />
     <Compile Include="Risk\RiskMessageAdapter.cs" />
     <Compile Include="SecurityTrie.cs" />
     <Compile Include="Slippage\SlippageMessageAdapter.cs" />

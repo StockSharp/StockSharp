@@ -277,7 +277,7 @@ namespace StockSharp.Algo.Strategies
 				}
 			}
 
-			var positions = storage.GetValue<IEnumerable<Position>>("Positions");
+			var positions = storage.GetValue<IEnumerable<KeyValuePair<Tuple<SecurityId, string>, decimal>>>("Positions");
 			if (positions != null)
 			{
 				strategy.PositionManager.Positions = positions;
