@@ -19,13 +19,13 @@
   			</listItem>
   			
   			<listItem>
-  				<para>Компоненты для выбора инструмента - <codeEntityReference>T:StockSharp.Xaml.SecurityPicker</codeEntityReference>, 
+  				<para>Компоненты для поиска и выбора инструментов - <codeEntityReference>T:StockSharp.Xaml.SecurityPicker</codeEntityReference>, 
   				<codeEntityReference>T:StockSharp.Xaml.SecurityPickerWindow</codeEntityReference> и <codeEntityReference>T:StockSharp.Xaml.SecurityEditor</codeEntityReference>.
   				</para>
   			</listItem>
   			
   			<listItem>
-  				<para>Компонент для поиска инструмента по заданным критериям - <codeEntityReference>T:StockSharp.Xaml.SecurityLookupPanel</codeEntityReference>. </para>
+  				<para>Компонент для поиска инструментов по заданным критериям - <codeEntityReference>T:StockSharp.Xaml.SecurityLookupPanel</codeEntityReference>. </para>
   			</listItem>
   			
 		</list>
