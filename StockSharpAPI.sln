@@ -37,7 +37,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SampleAlfaPublic", "Samples
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SampleCurrencyPublic", "Samples\Common\SampleCurrency\SampleCurrencyPublic.csproj", "{76EB6796-F693-4EA8-BFC6-5CD7478EE85A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SampleQuikSmartPublic", "Samples\Common\SampleQuikSmart\SampleQuikSmartPublic.csproj", "{DDEE1CE2-7283-4394-8FCF-514E8581F10F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SampleMultiConnectionPublic", "Samples\Common\SampleMultiConnection\SampleMultiConnectionPublic.csproj", "{DDEE1CE2-7283-4394-8FCF-514E8581F10F}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SampleStoragePublic", "Samples\Common\SampleStorage\SampleStoragePublic.csproj", "{9E39C9C9-C05C-4D79-ADAA-22C287E02F78}"
 EndProject

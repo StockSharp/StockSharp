@@ -1,4 +1,4 @@
-namespace SampleQuikSmart
+namespace SampleMultiConnection
 {
 	using System;
 	using System.Collections.Generic;
