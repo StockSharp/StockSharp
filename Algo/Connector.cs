@@ -1555,11 +1555,20 @@ namespace StockSharp.Algo
 			UpdateSecurityByLevel1 = storage.GetValue("UpdateSecurityByLevel1", true);
 			ReConnectionSettings.Load(storage.GetValue<SettingsStorage>("ReConnectionSettings"));
 
-			LatencyManager = storage.GetValue<SettingsStorage>("LatencyManager").LoadEntire<ILatencyManager>();
-			CommissionManager = storage.GetValue<SettingsStorage>("CommissionManager").LoadEntire<ICommissionManager>();
-			PnLManager = storage.GetValue<SettingsStorage>("PnLManager").LoadEntire<IPnLManager>();
-			SlippageManager = storage.GetValue<SettingsStorage>("SlippageManager").LoadEntire<ISlippageManager>();
-			RiskManager = storage.GetValue<SettingsStorage>("RiskManager").LoadEntire<IRiskManager>();
+			if (storage.ContainsKey("LatencyManager"))
+				LatencyManager = storage.GetValue<SettingsStorage>("LatencyManager").LoadEntire<ILatencyManager>();
+
+			if (storage.ContainsKey("CommissionManager"))
+				CommissionManager = storage.GetValue<SettingsStorage>("CommissionManager").LoadEntire<ICommissionManager>();
+
+			if (storage.ContainsKey("PnLManager"))
+				PnLManager = storage.GetValue<SettingsStorage>("PnLManager").LoadEntire<IPnLManager>();
+
+			if (storage.ContainsKey("SlippageManager"))
+				SlippageManager = storage.GetValue<SettingsStorage>("SlippageManager").LoadEntire<ISlippageManager>();
+
+			if (storage.ContainsKey("RiskManager"))
+				RiskManager = storage.GetValue<SettingsStorage>("RiskManager").LoadEntire<IRiskManager>();
 
 			Adapter.Load(storage.GetValue<SettingsStorage>("Adapter"));
 
@@ -1568,7 +1577,6 @@ namespace StockSharp.Algo
 			CreateDepthFromLevel1 = storage.GetValue("CreateDepthFromLevel1", CreateDepthFromLevel1);
 
 			MarketTimeChangedInterval = storage.GetValue<TimeSpan>("MarketTimeChangedInterval");
-
 			CreateAssociatedSecurity = storage.GetValue("CreateAssociatedSecurity", CreateAssociatedSecurity);
 
 			base.Load(storage);
@@ -1589,11 +1597,20 @@ namespace StockSharp.Algo
 			storage.SetValue("UpdateSecurityByLevel1", UpdateSecurityByLevel1);
 			storage.SetValue("ReConnectionSettings", ReConnectionSettings.Save());
 
-			storage.SetValue("LatencyManager", LatencyManager.SaveEntire(false));
-			storage.SetValue("CommissionManager", CommissionManager.SaveEntire(false));
-			storage.SetValue("PnLManager", PnLManager.SaveEntire(false));
-			storage.SetValue("SlippageManager", SlippageManager.SaveEntire(false));
-			storage.SetValue("RiskManager", RiskManager.SaveEntire(false));
+			if (LatencyManager != null)
+				storage.SetValue("LatencyManager", LatencyManager.SaveEntire(false));
+
+			if (CommissionManager != null)
+				storage.SetValue("CommissionManager", CommissionManager.SaveEntire(false));
+
+			if (PnLManager != null)
+				storage.SetValue("PnLManager", PnLManager.SaveEntire(false));
+
+			if (SlippageManager != null)
+				storage.SetValue("SlippageManager", SlippageManager.SaveEntire(false));
+
+			if (RiskManager != null)
+				storage.SetValue("RiskManager", RiskManager.SaveEntire(false));
 
 			storage.SetValue("Adapter", Adapter.Save());
 
@@ -1602,7 +1619,6 @@ namespace StockSharp.Algo
 			storage.SetValue("CreateDepthFromLevel1", CreateDepthFromLevel1);
 
 			storage.SetValue("MarketTimeChangedInterval", MarketTimeChangedInterval);
-
 			storage.SetValue("CreateAssociatedSecurity", CreateAssociatedSecurity);
 
 			base.Save(storage);
