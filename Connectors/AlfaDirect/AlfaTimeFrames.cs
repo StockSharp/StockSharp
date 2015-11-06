@@ -116,7 +116,7 @@
 		public static explicit operator TimeSpan(AlfaTimeFrames timeFrame)
 		{
 			if (timeFrame == null)
-				throw new ArgumentNullException("timeFrame");
+				throw new ArgumentNullException(nameof(timeFrame));
 
 			return timeFrame._value;
 		}

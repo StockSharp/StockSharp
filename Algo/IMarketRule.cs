@@ -149,22 +149,16 @@ namespace StockSharp.Algo
 			set
 			{
 				if (value.IsEmpty())
-					throw new ArgumentNullException("value");
+					throw new ArgumentNullException(nameof(value));
 
 				_name = value;
 			}
 		}
 
-		private LogLevels _logLevel = LogLevels.Inherit;
-
 		/// <summary>
 		/// The level, at which logging of this rule is performed. The default is <see cref="LogLevels.Inherit"/>.
 		/// </summary>
-		public virtual LogLevels LogLevel
-		{
-			get { return _logLevel; } 
-			set { _logLevel = value; } 
-		}
+		public virtual LogLevels LogLevel { get; set; } = LogLevels.Inherit;
 
 		private bool _isSuspended;
 
@@ -188,20 +182,14 @@ namespace StockSharp.Algo
 		/// <summary>
 		/// Token-rules, it is associated with (for example, for rule <see cref="MarketRuleHelper.WhenRegistered"/> the order will be a token). If rule is not associated with anything, <see langword="null" /> will be returned.
 		/// </summary>
-		public virtual object Token
-		{
-			get { return _token; }
-		}
+		public virtual object Token => _token;
 
 		private readonly SynchronizedSet<IMarketRule> _exclusiveRules = new SynchronizedSet<IMarketRule>();
 
 		/// <summary>
 		/// Rules, opposite to given rule. They are deleted automatically at activation of this rule.
 		/// </summary>
-		public virtual ISynchronizedCollection<IMarketRule> ExclusiveRules
-		{
-			get { return _exclusiveRules; }
-		}
+		public virtual ISynchronizedCollection<IMarketRule> ExclusiveRules => _exclusiveRules;
 
 		private IMarketRuleContainer _container;
 
@@ -214,7 +202,7 @@ namespace StockSharp.Algo
 			set
 			{
 				if (value == null)
-					throw new ArgumentNullException("value");
+					throw new ArgumentNullException(nameof(value));
 
 				if (Container != null)
 					throw new ArgumentException(LocalizedStrings.Str1091Params.Put(Name, Container));
@@ -233,7 +221,7 @@ namespace StockSharp.Algo
 		public MarketRule<TToken, TArg> Until(Func<bool> canFinish)
 		{
 			if (canFinish == null)
-				throw new ArgumentNullException("canFinish");
+				throw new ArgumentNullException(nameof(canFinish));
 
 			_canFinish = canFinish;
 			return this;
@@ -247,7 +235,7 @@ namespace StockSharp.Algo
 		public MarketRule<TToken, TArg> Do(Action<TArg> action)
 		{
 			if (action == null)
-				throw new ArgumentNullException("action");
+				throw new ArgumentNullException(nameof(action));
 
 			//return Do((r, a) => action(a));
 
@@ -265,7 +253,7 @@ namespace StockSharp.Algo
 		public MarketRule<TToken, TArg> Do(Action<MarketRule<TToken, TArg>, TArg> action)
 		{
 			if (action == null)
-				throw new ArgumentNullException("action");
+				throw new ArgumentNullException(nameof(action));
 
 			return Do<object>((r, a) =>
 			{
@@ -283,7 +271,7 @@ namespace StockSharp.Algo
 		public MarketRule<TToken, TArg> Do<TResult>(Func<TArg, TResult> action)
 		{
 			if (action == null)
-				throw new ArgumentNullException("action");
+				throw new ArgumentNullException(nameof(action));
 
 			return Do((r, a) => action(a));
 		}
@@ -297,7 +285,7 @@ namespace StockSharp.Algo
 		public MarketRule<TToken, TArg> Do<TResult>(Func<MarketRule<TToken, TArg>, TArg, TResult> action)
 		{
 			if (action == null)
-				throw new ArgumentNullException("action");
+				throw new ArgumentNullException(nameof(action));
 
 			_action = a => action(this, a);
 			_process = ProcessRule;
@@ -313,7 +301,7 @@ namespace StockSharp.Algo
 		public MarketRule<TToken, TArg> Do(Action action)
 		{
 			if (action == null)
-				throw new ArgumentNullException("action");
+				throw new ArgumentNullException(nameof(action));
 
 			return Do(a => action());
 		}
@@ -327,7 +315,7 @@ namespace StockSharp.Algo
 		public MarketRule<TToken, TArg> Do<TResult>(Func<TResult> action)
 		{
 			if (action == null)
-				throw new ArgumentNullException("action");
+				throw new ArgumentNullException(nameof(action));
 
 			return Do(a => action());
 		}
@@ -340,7 +328,7 @@ namespace StockSharp.Algo
 		public MarketRule<TToken, TArg> Activated(Action handler)
 		{
 			if (handler == null)
-				throw new ArgumentNullException("handler");
+				throw new ArgumentNullException(nameof(handler));
 
 			return Activated<object>(arg => handler());
 		}
@@ -354,7 +342,7 @@ namespace StockSharp.Algo
 		public MarketRule<TToken, TArg> Activated<TResult>(Action<TResult> handler)
 		{
 			if (handler == null)
-				throw new ArgumentNullException("handler");
+				throw new ArgumentNullException(nameof(handler));
 
 			_activatedHandler = arg => handler((TResult)arg);
 			return this;
@@ -428,10 +416,7 @@ namespace StockSharp.Algo
 		/// <summary>
 		/// Is the rule formed.
 		/// </summary>
-		public bool IsReady
-		{
-			get { return !IsDisposed && !ReferenceEquals(_container, null); }
-		}
+		public bool IsReady => !IsDisposed && !ReferenceEquals(_container, null);
 
 		/// <summary>
 		/// Is the rule currently activated.
@@ -451,7 +436,7 @@ namespace StockSharp.Algo
 		IMarketRule IMarketRule.Do(Action<object> action)
 		{
 			if (action == null)
-				throw new ArgumentNullException("action");
+				throw new ArgumentNullException(nameof(action));
 
 			return Do(arg => action(arg));
 		}

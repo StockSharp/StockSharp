@@ -18,7 +18,7 @@ namespace StockSharp.Studio.Core.Commands
 		protected SelectCommand(Type instanceType, object instance, Func<bool> canEdit)
 		{
 			if (canEdit == null)
-				throw new ArgumentNullException("canEdit");
+				throw new ArgumentNullException(nameof(canEdit));
 
 			_canEditFunc = canEdit;
 

@@ -32,7 +32,7 @@ namespace StockSharp.Algo.Export
 			: base(security, arg, isCancelled, fileName)
 		{
 			if (breaked == null)
-				throw new ArgumentNullException("breaked");
+				throw new ArgumentNullException(nameof(breaked));
 
 			_breaked = breaked;
 		}
@@ -470,7 +470,7 @@ namespace StockSharp.Algo.Export
 		private void Do(Action<ExcelWorker> action)
 		{
 			if (action == null)
-				throw new ArgumentNullException("action");
+				throw new ArgumentNullException(nameof(action));
 
 			using (var worker = new ExcelWorker())
 			{

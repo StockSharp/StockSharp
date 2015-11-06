@@ -31,10 +31,7 @@ namespace StockSharp.Xaml.Actipro.Code
 		/// <summary>
 		/// References.
 		/// </summary>
-		public IList<CodeReference> References
-		{
-			get { return _references; }
-		}
+		public IList<CodeReference> References => _references;
 
 		private void OnAddReferenceButtonClick(object sender, RoutedEventArgs e)
 		{

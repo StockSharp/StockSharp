@@ -51,7 +51,7 @@ namespace StockSharp.Algo
 		public static bool IsOrderLogRegistered(this ExecutionMessage item)
 		{
 			if (item == null)
-				throw new ArgumentNullException("item");
+				throw new ArgumentNullException(nameof(item));
 
 			return item.OrderState == OrderStates.Active && item.TradePrice == null;
 		}
@@ -74,7 +74,7 @@ namespace StockSharp.Algo
 		public static bool IsOrderLogCanceled(this ExecutionMessage item)
 		{
 			if (item == null)
-				throw new ArgumentNullException("item");
+				throw new ArgumentNullException(nameof(item));
 
 			return item.OrderState == OrderStates.Done && item.TradePrice == null;
 		}
@@ -97,7 +97,7 @@ namespace StockSharp.Algo
 		public static bool IsOrderLogMatched(this ExecutionMessage item)
 		{
 			if (item == null)
-				throw new ArgumentNullException("item");
+				throw new ArgumentNullException(nameof(item));
 
 			return item.TradeId != null;
 		}
@@ -120,10 +120,10 @@ namespace StockSharp.Algo
 		public static OrderLogCancelReasons GetOrderLogCancelReason(this ExecutionMessage item)
 		{
 			if (!item.IsOrderLogCanceled())
-				throw new ArgumentException(LocalizedStrings.Str937, "item");
+				throw new ArgumentException(LocalizedStrings.Str937, nameof(item));
 
 			if (item.OrderStatus == null)
-				throw new ArgumentException(LocalizedStrings.Str938, "item");
+				throw new ArgumentException(LocalizedStrings.Str938, nameof(item));
 
 			var status = (int)item.OrderStatus;
 
@@ -136,7 +136,7 @@ namespace StockSharp.Algo
 			else if (status.HasBits(0x800000))
 				return OrderLogCancelReasons.CrossTrade;
 			else
-				throw new ArgumentOutOfRangeException("item", status, LocalizedStrings.Str939);
+				throw new ArgumentOutOfRangeException(nameof(item), status, LocalizedStrings.Str939);
 		}
 
 		/// <summary>
@@ -161,13 +161,13 @@ namespace StockSharp.Algo
 				public DepthEnumerator(IEnumerable<ExecutionMessage> items, IOrderLogMarketDepthBuilder builder, TimeSpan interval, int maxDepth)
 				{
 					if (builder == null)
-						throw new ArgumentNullException("builder");
+						throw new ArgumentNullException(nameof(builder));
 
 					if (items == null)
-						throw new ArgumentNullException("items");
+						throw new ArgumentNullException(nameof(items));
 
 					if (maxDepth < 1)
-						throw new ArgumentOutOfRangeException("maxDepth", maxDepth, LocalizedStrings.Str941);
+						throw new ArgumentOutOfRangeException(nameof(maxDepth), maxDepth, LocalizedStrings.Str941);
 
 					_itemsEnumerator = items.GetEnumerator();
 					_builder = builder;
@@ -214,10 +214,7 @@ namespace StockSharp.Algo
 					Current = null;
 				}
 
-				object IEnumerator.Current
-				{
-					get { return Current; }
-				}
+				object IEnumerator.Current => Current;
 
 				void IDisposable.Dispose()
 				{
@@ -232,18 +229,15 @@ namespace StockSharp.Algo
 				: base(() => new DepthEnumerator(items, builder, interval, maxDepth))
 			{
 				if (items == null)
-					throw new ArgumentNullException("items");
+					throw new ArgumentNullException(nameof(items));
 
 				if (interval < TimeSpan.Zero)
-					throw new ArgumentOutOfRangeException("interval", interval, LocalizedStrings.Str940);
+					throw new ArgumentOutOfRangeException(nameof(interval), interval, LocalizedStrings.Str940);
 
 				_items = items;
 			}
 
-			int IEnumerableEx.Count
-			{
-				get { return _items.Count; }
-			}
+			int IEnumerableEx.Count => _items.Count;
 		}
 
 		/// <summary>
@@ -289,7 +283,7 @@ namespace StockSharp.Algo
 				public OrderLogTickEnumerator(IEnumerable<ExecutionMessage> items)
 				{
 					if (items == null)
-						throw new ArgumentNullException("items");
+						throw new ArgumentNullException(nameof(items));
 
 					_itemsEnumerator = items.GetEnumerator();
 				}
@@ -347,10 +341,7 @@ namespace StockSharp.Algo
 					Current = null;
 				}
 
-				object IEnumerator.Current
-				{
-					get { return Current; }
-				}
+				object IEnumerator.Current => Current;
 
 				void IDisposable.Dispose()
 				{
@@ -364,15 +355,12 @@ namespace StockSharp.Algo
 				: base(() => new OrderLogTickEnumerator(items))
 			{
 				if (items == null)
-					throw new ArgumentNullException("items");
+					throw new ArgumentNullException(nameof(items));
 
 				_items = items;
 			}
 
-			int IEnumerableEx.Count
-			{
-				get { return _items.Count; }
-			}
+			int IEnumerableEx.Count => _items.Count;
 		}
 
 		/// <summary>

@@ -28,7 +28,7 @@ namespace StockSharp.ETrade.Xaml
 		public AuthDialog(string authUrl)
 		{
 			if (authUrl.IsEmpty())
-				throw new ArgumentNullException("authUrl");
+				throw new ArgumentNullException(nameof(authUrl));
 
 			_authUrl = authUrl;
 			InitializeComponent();

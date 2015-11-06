@@ -106,10 +106,10 @@ namespace StockSharp.Community
 		public void Login(string login, string password)
 		{
 			if (login.IsEmpty())
-				throw new ArgumentNullException("login");
+				throw new ArgumentNullException(nameof(login));
 
 			if (password.IsEmpty())
-				throw new ArgumentNullException("password");
+				throw new ArgumentNullException(nameof(password));
 
 			var sessionId = Invoke(f => f.Login(login, password));
 

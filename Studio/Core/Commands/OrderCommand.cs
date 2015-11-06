@@ -18,7 +18,7 @@ namespace StockSharp.Studio.Core.Commands
 		public OrderCommand(Order order, OrderActions action)
 		{
 			if (order == null)
-				throw new ArgumentNullException("order");
+				throw new ArgumentNullException(nameof(order));
 
 			Order = order;
 			Action = action;

@@ -17,7 +17,7 @@ namespace StockSharp.InteractiveBrokers.Native
 		public static IBSocket SendIf(this IBSocket socket, ServerVersions minVersion, Action<IBSocket> handler)
 		{
 			if (handler == null)
-				throw new ArgumentNullException("handler");
+				throw new ArgumentNullException(nameof(handler));
 
 			if (socket.ServerVersion >= minVersion)
 				handler(socket);
@@ -50,7 +50,7 @@ namespace StockSharp.InteractiveBrokers.Native
 				case SecurityTypes.Swap:
 					throw new NotSupportedException(LocalizedStrings.Str2499Params.Put(securityType));
 				default:
-					throw new ArgumentOutOfRangeException("securityType");
+					throw new ArgumentOutOfRangeException(nameof(securityType));
 			}
 		}
 
@@ -69,7 +69,7 @@ namespace StockSharp.InteractiveBrokers.Native
 		public static IBSocket SendPrimaryExchange(this IBSocket socket, SecurityMessage security)
 		{
 			if (security == null)
-				throw new ArgumentNullException("security");
+				throw new ArgumentNullException(nameof(security));
 
 			if (socket.ServerVersion < ServerVersions.V14)
 				return socket;
@@ -137,7 +137,7 @@ namespace StockSharp.InteractiveBrokers.Native
 		public static IBSocket SendSecurity(this IBSocket socket, SecurityMessage security, bool sendPrimExchange = true, bool sendPrimExchange2 = true)
 		{
 			if (security == null)
-				throw new ArgumentNullException("security");
+				throw new ArgumentNullException(nameof(security));
 
 			var multiplier = security.Multiplier;
 
@@ -225,18 +225,18 @@ namespace StockSharp.InteractiveBrokers.Native
 						case IBOrderCondition.ExtendedOrderTypes.LimitIfTouched:
 							return socket.Send("LIT");
 						default:
-							throw new ArgumentOutOfRangeException("extendedOrderType", extendedOrderType, LocalizedStrings.Str2500);
+							throw new ArgumentOutOfRangeException(nameof(extendedOrderType), extendedOrderType, LocalizedStrings.Str2500);
 					}
 				}
 				default:
-					throw new ArgumentOutOfRangeException("orderType", orderType, LocalizedStrings.Str1600);
+					throw new ArgumentOutOfRangeException(nameof(orderType), orderType, LocalizedStrings.Str1600);
 			}
 		}
 
 		public static IBSocket SendOrderExpiration(this IBSocket socket, OrderRegisterMessage msg)
 		{
 			if (msg == null)
-				throw new ArgumentNullException("msg");
+				throw new ArgumentNullException(nameof(msg));
 
 			if (msg.OrderType != OrderTypes.Conditional)
 			{
@@ -267,7 +267,7 @@ namespace StockSharp.InteractiveBrokers.Native
 				return socket.Send(ibCon.IsMarketOnOpen ? "OPG" : "DAY");
 			}
 			else
-				throw new ArgumentException(LocalizedStrings.Str2501Params.Put(msg.Type), "msg");
+				throw new ArgumentException(LocalizedStrings.Str2501Params.Put(msg.Type), nameof(msg));
 		}
 
 		public static IBSocket SendFinancialAdvisor(this IBSocket socket, IBOrderCondition.FinancialAdvisorAllocations? allocation)
@@ -323,7 +323,7 @@ namespace StockSharp.InteractiveBrokers.Native
 		public static IBSocket SendDeltaNeutral(this IBSocket socket, IBOrderCondition condition)
 		{
 			if (condition == null)
-				throw new ArgumentNullException("condition");
+				throw new ArgumentNullException(nameof(condition));
 
 			var volatility = condition.Volatility;
 
@@ -368,7 +368,7 @@ namespace StockSharp.InteractiveBrokers.Native
 			if (allowNull)
 				return socket.Send(string.Empty);
 
-			throw new ArgumentNullException("portfolioName");
+			throw new ArgumentNullException(nameof(portfolioName));
 		}
 
 		public static IBSocket SendIntent(this IBSocket socket, IBOrderCondition.ClearingIntents? intent)
@@ -401,7 +401,7 @@ namespace StockSharp.InteractiveBrokers.Native
 		public static IBSocket SendTimeFrame(this IBSocket socket, IBTimeFrames timeFrame)
 		{
 			if (timeFrame == null)
-				throw new ArgumentNullException("timeFrame");
+				throw new ArgumentNullException(nameof(timeFrame));
 
 			if (socket.ServerVersion < ServerVersions.V20)
 				return socket;
@@ -436,14 +436,14 @@ namespace StockSharp.InteractiveBrokers.Native
 				case CandleDataTypes.YieldLast:
 					return socket.Send("YIELD_LAST");
 				default:
-					throw new ArgumentOutOfRangeException("field");
+					throw new ArgumentOutOfRangeException(nameof(field));
 			}
 		}
 
 		public static IBSocket SendHedge(this IBSocket socket, IBOrderCondition condition)
 		{
 			if (condition == null)
-				throw new ArgumentNullException("condition");
+				throw new ArgumentNullException(nameof(condition));
 
 			if (socket.ServerVersion < ServerVersions.V54)
 				return socket;
@@ -491,7 +491,7 @@ namespace StockSharp.InteractiveBrokers.Native
 		public static IBSocket SendCombo(this IBSocket socket, WeightedIndexSecurity security, IBOrderCondition condition = null)
 		{
 			if (security == null)
-				throw new ArgumentNullException("security");
+				throw new ArgumentNullException(nameof(security));
 
 			var innerSecurities = security.InnerSecurities.ToArray();
 
@@ -537,7 +537,7 @@ namespace StockSharp.InteractiveBrokers.Native
 				case FundamentalReports.Calendar:
 					return socket.Send("CalendarReport");
 				default:
-					throw new ArgumentOutOfRangeException("report");
+					throw new ArgumentOutOfRangeException(nameof(report));
 			}
 		}
 
@@ -559,7 +559,7 @@ namespace StockSharp.InteractiveBrokers.Native
 		public static string ReadLocalCode(this IBSocket socket, string secCode)
 		{
 			if (secCode.IsEmpty())
-				throw new ArgumentNullException("secCode");
+				throw new ArgumentNullException(nameof(secCode));
 
 			var localCode = socket.ReadStr();
 

@@ -32,10 +32,10 @@ namespace StockSharp.Algo.Indicators
 		public MovingAverageConvergenceDivergence(ExponentialMovingAverage longMa, ExponentialMovingAverage shortMa)
 		{
 			if (longMa == null)
-				throw new ArgumentNullException("longMa");
+				throw new ArgumentNullException(nameof(longMa));
 
 			if (shortMa == null)
-				throw new ArgumentNullException("shortMa");
+				throw new ArgumentNullException(nameof(shortMa));
 
 			ShortMa = shortMa;
 			LongMa = longMa;
@@ -48,7 +48,7 @@ namespace StockSharp.Algo.Indicators
 		[DisplayNameLoc(LocalizedStrings.Str798Key)]
 		[DescriptionLoc(LocalizedStrings.Str799Key)]
 		[CategoryLoc(LocalizedStrings.GeneralKey)]
-		public ExponentialMovingAverage LongMa { get; private set; }
+		public ExponentialMovingAverage LongMa { get; }
 
 		/// <summary>
 		/// Short moving average.
@@ -57,15 +57,12 @@ namespace StockSharp.Algo.Indicators
 		[DisplayNameLoc(LocalizedStrings.Str800Key)]
 		[DescriptionLoc(LocalizedStrings.Str801Key)]
 		[CategoryLoc(LocalizedStrings.GeneralKey)]
-		public ExponentialMovingAverage ShortMa { get; private set; }
+		public ExponentialMovingAverage ShortMa { get; }
 
 		/// <summary>
 		/// Whether the indicator is set.
 		/// </summary>
-		public override bool IsFormed
-		{
-			get { return LongMa.IsFormed; }
-		}
+		public override bool IsFormed => LongMa.IsFormed;
 
 		/// <summary>
 		/// To handle the input value.

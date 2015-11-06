@@ -39,19 +39,19 @@ namespace StockSharp.Algo.Indicators
 		/// Middle line.
 		/// </summary>
 		[Browsable(false)]
-		public LengthIndicator<decimal> Middle { get; private set; }
+		public LengthIndicator<decimal> Middle { get; }
 
 		/// <summary>
 		/// Upper line.
 		/// </summary>
 		[Browsable(false)]
-		public LengthIndicator<decimal> Upper { get; private set; }
+		public LengthIndicator<decimal> Upper { get; }
 
 		/// <summary>
 		/// Lower line.
 		/// </summary>
 		[Browsable(false)]
-		public LengthIndicator<decimal> Lower { get; private set; }
+		public LengthIndicator<decimal> Lower { get; }
 
 		/// <summary>
 		/// Period length. By default equal to 1.
@@ -83,7 +83,7 @@ namespace StockSharp.Algo.Indicators
 			set
 			{
 				if (value < 0)
-					throw new ArgumentNullException("value");
+					throw new ArgumentNullException(nameof(value));
 
 				_shift = value;
 				Reset();
@@ -93,10 +93,7 @@ namespace StockSharp.Algo.Indicators
 		/// <summary>
 		/// Whether the indicator is set.
 		/// </summary>
-		public override bool IsFormed
-		{
-			get { return Middle.IsFormed; }
-		}
+		public override bool IsFormed => Middle.IsFormed;
 
 		/// <summary>
 		/// To handle the input value.

@@ -87,9 +87,6 @@ namespace StockSharp.Algo.Indicators
 		/// <summary>
 		/// Whether the indicator is set.
 		/// </summary>
-		public override bool IsFormed
-		{
-			get { return _buffer.Count >= Length; }
-		}
+		public override bool IsFormed => _buffer.Count >= Length;
 	}
 }

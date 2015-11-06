@@ -30,10 +30,10 @@ namespace StockSharp.Algo.Indicators
 		public AverageDirectionalIndex(DirectionalIndex dx, LengthIndicator<decimal> movingAverage)
 		{
 			if (dx == null)
-				throw new ArgumentNullException("dx");
+				throw new ArgumentNullException(nameof(dx));
 
 			if (movingAverage == null)
-				throw new ArgumentNullException("movingAverage");
+				throw new ArgumentNullException(nameof(movingAverage));
 
 			InnerIndicators.Add(Dx = dx);
 			InnerIndicators.Add(MovingAverage = movingAverage);
@@ -44,13 +44,13 @@ namespace StockSharp.Algo.Indicators
 		/// Welles Wilder Directional Movement Index.
 		/// </summary>
 		[Browsable(false)]
-		public DirectionalIndex Dx { get; private set; }
+		public DirectionalIndex Dx { get; }
 
 		/// <summary>
 		/// Moving Average.
 		/// </summary>
 		[Browsable(false)]
-		public LengthIndicator<decimal> MovingAverage { get; private set; }
+		public LengthIndicator<decimal> MovingAverage { get; }
 
 		/// <summary>
 		/// Period length.

@@ -181,7 +181,7 @@ namespace StockSharp.Algo.Storages
 		private IEnumerable<Security> ReadAllByCodeAndTypeAndExpiryDate(Security criteria)
 		{
 			if (criteria.ExpiryDate == null)
-				throw new ArgumentNullException("criteria", "ExpiryDate == null");
+				throw new ArgumentNullException(nameof(criteria), "ExpiryDate == null");
 
 			var fields = new[]
 			{
@@ -207,7 +207,7 @@ namespace StockSharp.Algo.Storages
 		private IEnumerable<Security> ReadAllByTypeAndExpiryDate(Security criteria)
 		{
 			if (criteria.ExpiryDate == null)
-				throw new ArgumentNullException("criteria", "ExpiryDate == null");
+				throw new ArgumentNullException(nameof(criteria), "ExpiryDate == null");
 
 			var fields = new[]
 			{

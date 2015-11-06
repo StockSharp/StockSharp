@@ -1,4 +1,4 @@
-namespace StockSharp.Algo.Indicators
+﻿namespace StockSharp.Algo.Indicators
 {
 	using System.ComponentModel;
 
@@ -38,10 +38,7 @@ namespace StockSharp.Algo.Indicators
 		/// <summary>
 		/// Whether the indicator is set.
 		/// </summary>
-		public override bool IsFormed
-		{
-			get { return _ema1.IsFormed && _ema2.IsFormed; }
-		}
+		public override bool IsFormed => _ema1.IsFormed && _ema2.IsFormed;
 
 		/// <summary>
 		/// To handle the input value.

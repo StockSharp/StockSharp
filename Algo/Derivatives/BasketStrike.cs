@@ -23,13 +23,13 @@ namespace StockSharp.Algo.Derivatives
 		protected BasketStrike(Security underlyingAsset, ISecurityProvider securityProvider, IMarketDataProvider dataProvider)
 		{
 			if (underlyingAsset == null)
-				throw new ArgumentNullException("underlyingAsset");
+				throw new ArgumentNullException(nameof(underlyingAsset));
 
 			if (securityProvider == null)
-				throw new ArgumentNullException("securityProvider");
+				throw new ArgumentNullException(nameof(securityProvider));
 
 			if (dataProvider == null)
-				throw new ArgumentNullException("dataProvider");
+				throw new ArgumentNullException(nameof(dataProvider));
 
 			UnderlyingAsset = underlyingAsset;
 			SecurityProvider = securityProvider;
@@ -39,17 +39,17 @@ namespace StockSharp.Algo.Derivatives
 		/// <summary>
 		/// The provider of information about instruments.
 		/// </summary>
-		public ISecurityProvider SecurityProvider { get; private set; }
+		public ISecurityProvider SecurityProvider { get; }
 
 		/// <summary>
 		/// The market data provider.
 		/// </summary>
-		public virtual IMarketDataProvider DataProvider { get; private set; }
+		public virtual IMarketDataProvider DataProvider { get; }
 
 		/// <summary>
 		/// Underlying asset.
 		/// </summary>
-		public Security UnderlyingAsset { get; private set; }
+		public Security UnderlyingAsset { get; }
 
 		/// <summary>
 		/// Instruments, from which this basket is created.
@@ -96,7 +96,7 @@ namespace StockSharp.Algo.Derivatives
 			: base(underlyingSecurity, securityProvider, dataProvider)
 		{
 			if (strikeOffset == null)
-				throw new ArgumentNullException("strikeOffset");
+				throw new ArgumentNullException(nameof(strikeOffset));
 
 			_strikeOffset = strikeOffset;
 		}
@@ -146,7 +146,7 @@ namespace StockSharp.Algo.Derivatives
 			: base(underlyingAsset, securityProvider, dataProvider)
 		{
 			if (volatilityRange == null)
-				throw new ArgumentNullException("volatilityRange");
+				throw new ArgumentNullException(nameof(volatilityRange));
 
 			_volatilityRange = volatilityRange;
 		}

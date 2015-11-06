@@ -9,10 +9,10 @@ namespace StockSharp.Studio.Core.Commands
 		public ReRegisterOrderCommand(Order oldOrder, Order newOrder)
 		{
 			if (oldOrder == null)
-				throw new ArgumentNullException("oldOrder");
+				throw new ArgumentNullException(nameof(oldOrder));
 
 			if (newOrder == null)
-				throw new ArgumentNullException("newOrder");
+				throw new ArgumentNullException(nameof(newOrder));
 
 			OldOrder = oldOrder;
 			NewOrder = newOrder;

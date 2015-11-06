@@ -38,19 +38,19 @@ namespace StockSharp.Algo.Indicators
 		/// Middle line.
 		/// </summary>
 		[Browsable(false)]
-		public LengthIndicator<decimal> MovingAverage { get; private set; }
+		public LengthIndicator<decimal> MovingAverage { get; }
 
 		/// <summary>
 		/// Upper band +.
 		/// </summary>
 		[Browsable(false)]
-		public BollingerBand UpBand { get; private set; }
+		public BollingerBand UpBand { get; }
 
 		/// <summary>
 		/// Lower band -.
 		/// </summary>
 		[Browsable(false)]
-		public BollingerBand LowBand { get; private set; }
+		public BollingerBand LowBand { get; }
 
 		/// <summary>
 		/// Period length. By default equal to 1.
@@ -80,7 +80,7 @@ namespace StockSharp.Algo.Indicators
 			set
 			{
 				if (value < 0)
-					throw new ArgumentOutOfRangeException("value", value, LocalizedStrings.Str782);
+					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.Str782);
 
 				UpBand.Width = value;
 				LowBand.Width = -value;
@@ -104,10 +104,7 @@ namespace StockSharp.Algo.Indicators
 		/// <summary>
 		/// Whether the indicator is set.
 		/// </summary>
-		public override bool IsFormed
-		{
-			get { return MovingAverage.IsFormed; }
-		}
+		public override bool IsFormed => MovingAverage.IsFormed;
 
 		/// <summary>
 		/// To handle the input value.

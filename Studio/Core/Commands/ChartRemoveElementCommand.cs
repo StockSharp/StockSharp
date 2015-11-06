@@ -13,10 +13,10 @@
 		public ChartRemoveElementCommand(ChartArea area, IChartElement element)
 		{
 			if (area == null)
-				throw new ArgumentNullException("area");
+				throw new ArgumentNullException(nameof(area));
 
 			if (element == null)
-				throw new ArgumentNullException("element");
+				throw new ArgumentNullException(nameof(element));
 
 			Area = area;
 			Element = element;

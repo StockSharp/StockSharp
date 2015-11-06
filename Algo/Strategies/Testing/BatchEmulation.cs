@@ -34,10 +34,7 @@ namespace StockSharp.Algo.Strategies.Testing
 
 			private DateTimeOffset _currentTime;
 
-			public override DateTimeOffset CurrentTime
-			{
-				get { return _currentTime; }
-			}
+			public override DateTimeOffset CurrentTime => _currentTime;
 
 			protected override void OnSendInMessage(Message message)
 			{
@@ -165,20 +162,17 @@ namespace StockSharp.Algo.Strategies.Testing
 		private int _totalBatches;
 		private int _currentBatch;
 
-		private IEnumerable<Security> EmulatorSecurities
-		{
-			get { return ((HistoryMessageAdapter)EmulationConnector.MarketDataAdapter).SecurityProvider.LookupAll(); }
-		}
+		private IEnumerable<Security> EmulatorSecurities => ((HistoryMessageAdapter)EmulationConnector.MarketDataAdapter).SecurityProvider.LookupAll();
 
 		/// <summary>
 		/// Emulation settings.
 		/// </summary>
-		public EmulationSettings EmulationSettings { get; private set; }
+		public EmulationSettings EmulationSettings { get; }
 
 		/// <summary>
 		/// The emulational connection.
 		/// </summary>
-		public HistoryEmulationConnector EmulationConnector { get; private set; }
+		public HistoryEmulationConnector EmulationConnector { get; }
 
 		/// <summary>
 		/// The startegy for testing.
@@ -188,7 +182,7 @@ namespace StockSharp.Algo.Strategies.Testing
 		/// <summary>
 		/// Has the emulator ended its operation due to end of data, or it was interrupted through the <see cref="BatchEmulation.Stop"/>method.
 		/// </summary>
-		public bool IsFinished { get { return EmulationConnector.IsFinished; } }
+		public bool IsFinished => EmulationConnector.IsFinished;
 
 		private int _progress;
 
@@ -207,20 +201,14 @@ namespace StockSharp.Algo.Strategies.Testing
 
 				TotalProgress = (int)((100m / _totalBatches) * (_currentBatch + _progress / 100m));
 
-				ProgressChanged.SafeInvoke(_progress, _totalProgress);
+				ProgressChanged.SafeInvoke(_progress, TotalProgress);
 			}
 		}
-
-		private int _totalProgress;
 
 		/// <summary>
 		/// The general progress of paper trade.
 		/// </summary>
-		public int TotalProgress
-		{
-			get { return _totalProgress; }
-			set { _totalProgress = value; }
-		}
+		public int TotalProgress { get; set; }
 
 		private EmulationStates _state = EmulationStates.Stopped;
 		
@@ -244,7 +232,7 @@ namespace StockSharp.Algo.Strategies.Testing
 		/// <summary>
 		/// Current tested strategies.
 		/// </summary>
-		public IEnumerable<Strategy> BatchStrategies { get { return _batch; } }
+		public IEnumerable<Strategy> BatchStrategies => _batch;
 
 		/// <summary>
 		/// The event on change of paper trade state.
@@ -276,13 +264,13 @@ namespace StockSharp.Algo.Strategies.Testing
 		public BatchEmulation(ISecurityProvider securityProvider, IEnumerable<Portfolio> portfolios, IStorageRegistry storageRegistry)
 		{
 			if (securityProvider == null)
-				throw new ArgumentNullException("securityProvider");
+				throw new ArgumentNullException(nameof(securityProvider));
 
 			if (portfolios == null)
-				throw new ArgumentNullException("portfolios");
+				throw new ArgumentNullException(nameof(portfolios));
 
 			if (storageRegistry == null)
-				throw new ArgumentNullException("storageRegistry");
+				throw new ArgumentNullException(nameof(storageRegistry));
 
 			Strategies = Enumerable.Empty<Strategy>().ToEx();
 
@@ -352,7 +340,7 @@ namespace StockSharp.Algo.Strategies.Testing
 		public void Start(IEnumerableEx<Strategy> strategies)
 		{
 			if (strategies == null)
-				throw new ArgumentNullException("strategies");
+				throw new ArgumentNullException(nameof(strategies));
 
 			_progressStep = ((EmulationSettings.StopTime - EmulationSettings.StartTime).Ticks / 100).To<TimeSpan>();
 			

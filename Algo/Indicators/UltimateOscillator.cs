@@ -52,15 +52,9 @@ namespace StockSharp.Algo.Indicators
 		/// <summary>
 		/// Whether the indicator is set.
 		/// </summary>
-		public override bool IsFormed
-		{
-			get
-			{
-				return _period7BpSum.IsFormed && _period14BpSum.IsFormed &&
-					_period28BpSum.IsFormed && _period7TrSum.IsFormed &&
-					_period14TrSum.IsFormed && _period28TrSum.IsFormed;
-			}
-		}
+		public override bool IsFormed => _period7BpSum.IsFormed && _period14BpSum.IsFormed &&
+		                                 _period28BpSum.IsFormed && _period7TrSum.IsFormed &&
+		                                 _period14TrSum.IsFormed && _period28TrSum.IsFormed;
 
 		/// <summary>
 		/// To handle the input value.

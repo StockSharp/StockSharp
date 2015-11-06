@@ -17,7 +17,7 @@ namespace StockSharp.Logging
 			public TraceListenerEx(TraceSource source)
 			{
 				if (source == null)
-					throw new ArgumentNullException("source");
+					throw new ArgumentNullException(nameof(source));
 
 				_source = source;
 			}
@@ -76,7 +76,7 @@ namespace StockSharp.Logging
 					case TraceEventType.Transfer:
 						return null;
 					default:
-						throw new ArgumentOutOfRangeException("eventType");
+						throw new ArgumentOutOfRangeException(nameof(eventType));
 				}
 			}
 		}
@@ -97,13 +97,7 @@ namespace StockSharp.Logging
 		/// <summary>
 		/// Name.
 		/// </summary>
-		public override string Name
-		{
-			get
-			{
-				return "Trace";
-			}
-		}
+		public override string Name => "Trace";
 
 		/// <summary>
 		/// Release resources.

@@ -35,10 +35,10 @@ namespace StockSharp.Algo.Indicators
 		public AwesomeOscillator(SimpleMovingAverage longSma, SimpleMovingAverage shortSma)
 		{
 			if (longSma == null)
-				throw new ArgumentNullException("longSma");
+				throw new ArgumentNullException(nameof(longSma));
 
 			if (shortSma == null)
-				throw new ArgumentNullException("shortSma");
+				throw new ArgumentNullException(nameof(shortSma));
 
 			ShortMa = shortSma;
 			LongMa = longSma;
@@ -52,7 +52,7 @@ namespace StockSharp.Algo.Indicators
 		[DisplayNameLoc(LocalizedStrings.Str798Key)]
 		[DescriptionLoc(LocalizedStrings.Str799Key)]
 		[CategoryLoc(LocalizedStrings.GeneralKey)]
-		public SimpleMovingAverage LongMa { get; private set; }
+		public SimpleMovingAverage LongMa { get; }
 
 		/// <summary>
 		/// Short moving average.
@@ -61,7 +61,7 @@ namespace StockSharp.Algo.Indicators
 		[DisplayNameLoc(LocalizedStrings.Str800Key)]
 		[DescriptionLoc(LocalizedStrings.Str799Key)]
 		[CategoryLoc(LocalizedStrings.GeneralKey)]
-		public SimpleMovingAverage ShortMa { get; private set; }
+		public SimpleMovingAverage ShortMa { get; }
 
 		/// <summary>
 		/// Median price.
@@ -70,12 +70,12 @@ namespace StockSharp.Algo.Indicators
 		[DisplayNameLoc(LocalizedStrings.Str843Key)]
 		[DescriptionLoc(LocalizedStrings.Str745Key)]
 		[CategoryLoc(LocalizedStrings.GeneralKey)]
-		public MedianPrice MedianPrice { get; private set; }
+		public MedianPrice MedianPrice { get; }
 
 		/// <summary>
 		/// Whether the indicator is set.
 		/// </summary>
-		public override bool IsFormed { get { return LongMa.IsFormed; } }
+		public override bool IsFormed => LongMa.IsFormed;
 
 		/// <summary>
 		/// To handle the input value.

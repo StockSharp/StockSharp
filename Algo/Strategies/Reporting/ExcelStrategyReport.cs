@@ -29,7 +29,7 @@ namespace StockSharp.Algo.Strategies.Reporting
 			: this(new[] { strategy }, fileName)
 		{
 			if (strategy == null)
-				throw new ArgumentNullException("strategy");
+				throw new ArgumentNullException(nameof(strategy));
 		}
 
 		/// <summary>
@@ -56,7 +56,7 @@ namespace StockSharp.Algo.Strategies.Reporting
 			: this(strategies, fileName)
 		{
 			if (template.IsEmpty())
-				throw new ArgumentNullException("template");
+				throw new ArgumentNullException(nameof(template));
 
 			Template = template;
 		}
@@ -80,7 +80,7 @@ namespace StockSharp.Algo.Strategies.Reporting
 		/// <summary>
 		/// The template file, to be copied into <see cref="StrategyReport.FileName"/> and filled up with Strategy, Orders and Trades sheets.
 		/// </summary>
-		public string Template { get; private set; }
+		public string Template { get; }
 
 		///// <summary>
 		///// Названия листа, в который будет записан отчет.

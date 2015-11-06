@@ -543,7 +543,7 @@ namespace StockSharp.Algo
 		private void RaiseConnectionError(Exception exception)
 		{
 			if (exception == null)
-				throw new ArgumentNullException("exception");
+				throw new ArgumentNullException(nameof(exception));
 
 			// адаптеры маркет-данных сами должны оповещать коннектор
 			//if (!IsMarketDataIndependent)
@@ -562,7 +562,7 @@ namespace StockSharp.Algo
 		private void RaiseError(Exception exception)
 		{
 			if (exception == null)
-				throw new ArgumentNullException("exception");
+				throw new ArgumentNullException(nameof(exception));
 
 			ErrorCount++;
 

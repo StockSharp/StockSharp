@@ -26,7 +26,7 @@
 		protected NativeIdSecurityStorage(IEntityRegistry entityRegistry, IEqualityComparer<TNativeId> comparer)
 		{
 			if (entityRegistry == null)
-				throw new ArgumentNullException("entityRegistry");
+				throw new ArgumentNullException(nameof(entityRegistry));
 
 			_entityRegistry = entityRegistry;
 			_cacheByNativeId = new SynchronizedDictionary<TNativeId, Security>(comparer);
@@ -78,7 +78,7 @@
 		private void TryAddToCache(Security security)
 		{
 			if (security == null)
-				throw new ArgumentNullException("security");
+				throw new ArgumentNullException(nameof(security));
 
 			var nativeId = security.ExtensionInfo == null ? default(TNativeId) : CreateNativeId(security);
 

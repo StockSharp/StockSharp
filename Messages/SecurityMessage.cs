@@ -208,7 +208,7 @@ namespace StockSharp.Messages
 		public void CopyTo(SecurityMessage destination)
 		{
 			if (destination == null)
-				throw new ArgumentNullException("destination");
+				throw new ArgumentNullException(nameof(destination));
 
 			destination.SecurityId = SecurityId;
 			destination.Name = Name;

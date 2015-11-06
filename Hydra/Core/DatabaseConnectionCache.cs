@@ -71,7 +71,7 @@ namespace StockSharp.Hydra.Core
 		public void AddConnection(DatabaseConnectionPair connection)
 		{
 			if (connection == null)
-				throw new ArgumentNullException("connection");
+				throw new ArgumentNullException(nameof(connection));
 
 			_connections.Add(connection);
 			NewConnectionCreated.SafeInvoke(connection);

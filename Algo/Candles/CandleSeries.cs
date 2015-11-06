@@ -31,16 +31,16 @@ namespace StockSharp.Algo.Candles
 		public CandleSeries(Type candleType, Security security, object arg)
 		{
 			if (candleType == null)
-				throw new ArgumentNullException("candleType");
+				throw new ArgumentNullException(nameof(candleType));
 
 			if (!candleType.IsSubclassOf(typeof(Candle)))
-				throw new ArgumentOutOfRangeException("candleType", candleType, "Íåïðàâèëüíûé òèï ñâå÷êè.");
+				throw new ArgumentOutOfRangeException(nameof(candleType), candleType, "Íåïðàâèëüíûé òèï ñâå÷êè.");
 
 			if (security == null)
-				throw new ArgumentNullException("security");
+				throw new ArgumentNullException(nameof(security));
 
 			if (arg == null)
-				throw new ArgumentNullException("arg");
+				throw new ArgumentNullException(nameof(arg));
 
 			_security = security;
 			_candleType = candleType;
@@ -145,27 +145,15 @@ namespace StockSharp.Algo.Candles
 		/// </summary>
 		public event Action Stopped;
 
-		private DateTimeOffset _from = DateTimeOffset.MinValue;
-
 		/// <summary>
 		/// The initial date from which you need to get data.
 		/// </summary>
-		public DateTimeOffset From
-		{
-			get { return _from; }
-			set { _from = value; }
-		}
+		public DateTimeOffset From { get; set; } = DateTimeOffset.MinValue;
 
-		private DateTimeOffset _to = DateTimeOffset.MaxValue;
-		
 		/// <summary>
 		/// The final date by which you need to get data.
 		/// </summary>
-		public DateTimeOffset To
-		{
-			get { return _to; }
-			set { _to = value; }
-		}
+		public DateTimeOffset To { get; set; } = DateTimeOffset.MaxValue;
 
 		private void CandleManagerStopped(CandleSeries series)
 		{

@@ -23,24 +23,18 @@ namespace StockSharp.Algo.Storages
 		public CacheableMarketDataDrive(IMarketDataStorageDrive sourceDrive, IMarketDataStorageDrive cacheDrive)
 		{
 			if (sourceDrive == null)
-				throw new ArgumentNullException("sourceDrive");
+				throw new ArgumentNullException(nameof(sourceDrive));
 
 			if (cacheDrive == null)
-				throw new ArgumentNullException("cacheDrive");
+				throw new ArgumentNullException(nameof(cacheDrive));
 
 			_sourceDrive = sourceDrive;
 			_cacheDrive = cacheDrive;
 		}
 
-		IMarketDataDrive IMarketDataStorageDrive.Drive
-		{
-			get { return _sourceDrive.Drive; }
-		}
+		IMarketDataDrive IMarketDataStorageDrive.Drive => _sourceDrive.Drive;
 
-		IEnumerable<DateTime> IMarketDataStorageDrive.Dates
-		{
-			get { return _sourceDrive.Dates.Concat(_cacheDrive.Dates).Distinct().OrderBy(); }
-		}
+		IEnumerable<DateTime> IMarketDataStorageDrive.Dates => _sourceDrive.Dates.Concat(_cacheDrive.Dates).Distinct().OrderBy();
 
 		void IMarketDataStorageDrive.ClearDatesCache()
 		{

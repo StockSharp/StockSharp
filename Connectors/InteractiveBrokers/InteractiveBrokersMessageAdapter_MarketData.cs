@@ -166,7 +166,7 @@ namespace StockSharp.InteractiveBrokers
 		private void SubscribeScanner(ScannerMarketDataMessage message)
 		{
 			if (message == null)
-				throw new ArgumentNullException("message");
+				throw new ArgumentNullException(nameof(message));
 
 			ProcessRequest(RequestMessages.SubscribeScanner, ServerVersions.V24, ServerVersions.V4,
 				socket =>
@@ -266,7 +266,7 @@ namespace StockSharp.InteractiveBrokers
 		private void SubscribeMarketData(MarketDataMessage message, IEnumerable<GenericFieldTypes> genericFields, bool snapshot, bool marketDataOff)
 		{
 			if (message == null)
-				throw new ArgumentNullException("message");
+				throw new ArgumentNullException(nameof(message));
 
 			//var security = SessionHolder.Securities[message.SecurityId];
 
@@ -378,7 +378,7 @@ namespace StockSharp.InteractiveBrokers
 			long unit;
 
 			if (secs < 1)
-				throw new ArgumentOutOfRangeException("endTime", "Period cannot be less than 1 second.");
+				throw new ArgumentOutOfRangeException(nameof(endTime), "Period cannot be less than 1 second.");
 
 			if (secs < 86400)
 			{
@@ -397,7 +397,7 @@ namespace StockSharp.InteractiveBrokers
 			unit = (long)Math.Ceiling(weeks);
 
 			if (unit > 52)
-				throw new ArgumentOutOfRangeException("endTime", "Period cannot be bigger than 52 weeks.");
+				throw new ArgumentOutOfRangeException(nameof(endTime), "Period cannot be bigger than 52 weeks.");
 
 			return unit + " W";
 		}
@@ -421,13 +421,13 @@ namespace StockSharp.InteractiveBrokers
 		private void SubscribeHistoricalCandles(MarketDataMessage message, Level1Fields field, bool useRth = true)
 		{
 			if (message == null)
-				throw new ArgumentNullException("message");
+				throw new ArgumentNullException(nameof(message));
 
 			//if (message.CandleType != typeof(TimeFrameCandle))
 			//	throw new ArgumentException("Interactive Brokers не поддерживает свечи типа {0}.".Put(series.CandleType), "series");
 
 			if (!(message.Arg is TimeSpan))
-				throw new ArgumentException(LocalizedStrings.WrongCandleArg.Put(message.Arg), "message");
+				throw new ArgumentException(LocalizedStrings.WrongCandleArg.Put(message.Arg), nameof(message));
 
 			var timeFrame = (TimeSpan)message.Arg;
 
@@ -495,7 +495,7 @@ namespace StockSharp.InteractiveBrokers
 		private void SubscribeRealTimeCandles(MarketDataMessage message, Level1Fields field = CandleDataTypes.Trades, bool useRth = true)
 		{
 			if (message == null)
-				throw new ArgumentNullException("message");
+				throw new ArgumentNullException(nameof(message));
 
 			//var security = SessionHolder.Securities[message.SecurityId];
 
@@ -537,7 +537,7 @@ namespace StockSharp.InteractiveBrokers
 		private void UnSubscribeRealTimeCandles(MarketDataMessage message, long requestId)
 		{
 			if (message == null)
-				throw new ArgumentNullException("message");
+				throw new ArgumentNullException(nameof(message));
 
 			ProcessRequest(RequestMessages.UnSubscribeRealTimeCandles, ServerVersions.V34, ServerVersions.V1,
 				socket => socket.Send(requestId));
@@ -550,7 +550,7 @@ namespace StockSharp.InteractiveBrokers
 		private void SubscribeMarketDepth(MarketDataMessage message)
 		{
 			if (message == null)
-				throw new ArgumentNullException("message");
+				throw new ArgumentNullException(nameof(message));
 
 			//var security = SessionHolder.Securities[message.SecurityId];
 
@@ -614,7 +614,7 @@ namespace StockSharp.InteractiveBrokers
 		private void RequestSecurityInfo(SecurityLookupMessage criteria)
 		{
 			if (criteria == null)
-				throw new ArgumentNullException("criteria");
+				throw new ArgumentNullException(nameof(criteria));
 
 			ProcessRequest(RequestMessages.RequestContractData, ServerVersions.V4, ServerVersions.V7, socket =>
 			{
@@ -644,7 +644,7 @@ namespace StockSharp.InteractiveBrokers
 		private void SubscribeFundamentalReport(FundamentalReportMarketDataMessage message)
 		{
 			if (message == null)
-				throw new ArgumentNullException("message");
+				throw new ArgumentNullException(nameof(message));
 
 			//var security = SessionHolder.Securities[message.SecurityId];
 
@@ -678,7 +678,7 @@ namespace StockSharp.InteractiveBrokers
 		private void SubscribeCalculateImpliedVolatility(OptionCalcMarketDataMessage message)
 		{
 			if (message == null)
-				throw new ArgumentNullException("message");
+				throw new ArgumentNullException(nameof(message));
 
 			//var security = SessionHolder.Securities[message.SecurityId];
 
@@ -708,7 +708,7 @@ namespace StockSharp.InteractiveBrokers
 		private void SubscribeCalculateOptionPrice(OptionCalcMarketDataMessage message)
 		{
 			if (message == null)
-				throw new ArgumentNullException("message");
+				throw new ArgumentNullException(nameof(message));
 
 			//var security = SessionHolder.Securities[message.SecurityId];
 

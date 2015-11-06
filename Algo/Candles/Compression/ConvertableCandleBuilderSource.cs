@@ -42,7 +42,7 @@ namespace StockSharp.Algo.Candles.Compression
 		/// <summary>
 		/// The default function to convert data from the <typeparamref name="TSourceValue" /> type to the <see cref="ICandleBuilderSourceValue"/>.
 		/// </summary>
-		public static Func<TSourceValue, ICandleBuilderSourceValue> DefaultConverter { get; private set; }
+		public static Func<TSourceValue, ICandleBuilderSourceValue> DefaultConverter { get; }
 
 		private Func<TSourceValue, ICandleBuilderSourceValue> _converter = DefaultConverter;
 
@@ -55,7 +55,7 @@ namespace StockSharp.Algo.Candles.Compression
 			set
 			{
 				if (value == null)
-					throw new ArgumentNullException("value");
+					throw new ArgumentNullException(nameof(value));
 
 				_converter = value;
 			}
@@ -64,7 +64,7 @@ namespace StockSharp.Algo.Candles.Compression
 		/// <summary>
 		/// The default function to filter data <typeparamref name="TSourceValue" />.
 		/// </summary>
-		public static Func<TSourceValue, bool> DefaultFilter { get; private set; }
+		public static Func<TSourceValue, bool> DefaultFilter { get; }
 
 		private Func<TSourceValue, bool> _filter = DefaultFilter;
 
@@ -77,7 +77,7 @@ namespace StockSharp.Algo.Candles.Compression
 			set
 			{
 				if (value == null)
-					throw new ArgumentNullException("value");
+					throw new ArgumentNullException(nameof(value));
 
 				_filter = value;
 			}
@@ -124,10 +124,10 @@ namespace StockSharp.Algo.Candles.Compression
 		public RawConvertableCandleBuilderSource(Security security, DateTimeOffset from, DateTimeOffset to, IEnumerable<TSourceValue> values)
 		{
 			if (security == null)
-				throw new ArgumentNullException("security");
+				throw new ArgumentNullException(nameof(security));
 
 			if (values == null)
-				throw new ArgumentNullException("values");
+				throw new ArgumentNullException(nameof(values));
 
 			_security = security;
 			_from = from;
@@ -139,15 +139,12 @@ namespace StockSharp.Algo.Candles.Compression
 		/// <summary>
 		/// The source priority by speed (0 - the best).
 		/// </summary>
-		public override int SpeedPriority
-		{
-			get { return 0; }
-		}
+		public override int SpeedPriority => 0;
 
 		/// <summary>
 		/// Ready data collection.
 		/// </summary>
-		public IEnumerable<TSourceValue> Values { get; private set; }
+		public IEnumerable<TSourceValue> Values { get; }
 
 		/// <summary>
 		/// To get time ranges for which this source of passed candles series has data.
@@ -157,7 +154,7 @@ namespace StockSharp.Algo.Candles.Compression
 		public override IEnumerable<Range<DateTimeOffset>> GetSupportedRanges(CandleSeries series)
 		{
 			if (series == null)
-				throw new ArgumentNullException("series");
+				throw new ArgumentNullException(nameof(series));
 
 			if (series.Security != _security)
 				yield break;
@@ -174,7 +171,7 @@ namespace StockSharp.Algo.Candles.Compression
 		public override void Start(CandleSeries series, DateTimeOffset from, DateTimeOffset to)
 		{
 			if (series == null)
-				throw new ArgumentNullException("series");
+				throw new ArgumentNullException(nameof(series));
 
 			if (series.Security != _security)
 				return;

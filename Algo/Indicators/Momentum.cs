@@ -1,4 +1,4 @@
-namespace StockSharp.Algo.Indicators
+﻿namespace StockSharp.Algo.Indicators
 {
 	using System.ComponentModel;
 
@@ -25,10 +25,7 @@ namespace StockSharp.Algo.Indicators
 		/// <summary>
 		/// Whether the indicator is set.
 		/// </summary>
-		public override bool IsFormed
-		{
-			get { return Buffer.Count > Length; }
-		}
+		public override bool IsFormed => Buffer.Count > Length;
 
 		/// <summary>
 		/// To handle the input value.

@@ -186,7 +186,7 @@ namespace StockSharp.Messages
 		public static explicit operator decimal(Unit unit)
 		{
 			if (unit == null)
-				throw new ArgumentNullException("unit");
+				throw new ArgumentNullException(nameof(unit));
 
 			switch (unit.Type)
 			{
@@ -194,13 +194,13 @@ namespace StockSharp.Messages
 				case UnitTypes.Absolute:
 					return unit.Value;
 				case UnitTypes.Percent:
-					throw new ArgumentException(LocalizedStrings.PercentagesConvert, "unit");
+					throw new ArgumentException(LocalizedStrings.PercentagesConvert, nameof(unit));
 				case UnitTypes.Point:
 					return unit.Value * unit.SafeGetTypeValue(null);
 				case UnitTypes.Step:
 					return unit.Value * unit.SafeGetTypeValue(null);
 				default:
-					throw new ArgumentOutOfRangeException("unit");
+					throw new ArgumentOutOfRangeException(nameof(unit));
 			}
 		}
 
@@ -237,7 +237,7 @@ namespace StockSharp.Messages
 				return value.Value;
 
 			if (getTypeValue == null)
-				throw new ArgumentNullException("getTypeValue");
+				throw new ArgumentNullException(nameof(getTypeValue));
 
 			value = getTypeValue(Type);
 
@@ -252,20 +252,20 @@ namespace StockSharp.Messages
 			//  ïðåäîâðàòèòü âûçîâ ïåðåîïðåäåëåííîãî îïåðàòîðà
 			//if (u1 == null)
 			if (u1.IsNull())
-				throw new ArgumentNullException("u1");
+				throw new ArgumentNullException(nameof(u1));
 
 			//if (u2 == null)
 			if (u2.IsNull())
-				throw new ArgumentNullException("u2");
+				throw new ArgumentNullException(nameof(u2));
 
 			if (u1.Type == UnitTypes.Limit || u2.Type == UnitTypes.Limit)
 				throw new ArgumentException(LocalizedStrings.LimitedValueNotMath);
 
 			if (operation == null)
-				throw new ArgumentNullException("operation");
+				throw new ArgumentNullException(nameof(operation));
 
 			if (percentOperation == null)
-				throw new ArgumentNullException("percentOperation");
+				throw new ArgumentNullException(nameof(percentOperation));
 
 			//if (u1.CheckGetTypeValue(false) != u2.CheckGetTypeValue(false))
 			//	throw new ArgumentException("Ó îäíîé èç âåëè÷èí íå óñòàíîâëåíî ïîëó÷åíèå çíà÷åíèÿ.");
@@ -492,7 +492,7 @@ namespace StockSharp.Messages
 			if (destinationType == UnitTypes.Point || destinationType == UnitTypes.Step)
 			{
 				if (getTypeValue == null)
-					throw new ArgumentException(LocalizedStrings.UnitHandlerNotSet, "destinationType");
+					throw new ArgumentException(LocalizedStrings.UnitHandlerNotSet, nameof(destinationType));
 
 				switch (destinationType)
 				{
@@ -527,10 +527,10 @@ namespace StockSharp.Messages
 		public static bool operator >(Unit u1, Unit u2)
 		{
 			if (u1.IsNull())
-				throw new ArgumentNullException("u1");
+				throw new ArgumentNullException(nameof(u1));
 
 			if (u2.IsNull())
-				throw new ArgumentNullException("u2");
+				throw new ArgumentNullException(nameof(u2));
 
 			//if (u1.Type == UnitTypes.Limit || u2.Type == UnitTypes.Limit)
 			//	throw new ArgumentException("Ëèìèòèðîâàííîå çíà÷åíèå íå ìîæåò ó÷àñòâîâàòü â àðèôìåòè÷åñêèõ îïåðàöèÿõ.");
@@ -593,7 +593,7 @@ namespace StockSharp.Messages
 		public static Unit operator -(Unit u)
 		{
 			if (u == null)
-				throw new ArgumentNullException("u");
+				throw new ArgumentNullException(nameof(u));
 
 			return new Unit
 			{
@@ -668,7 +668,7 @@ namespace StockSharp.Messages
 		public static Unit ToUnit(this string str, Func<UnitTypes, decimal?> getTypeValue = null)
 		{
 			if (str.IsEmpty())
-				throw new ArgumentNullException("str");
+				throw new ArgumentNullException(nameof(str));
 
 			var lastSymbol = str.Last();
 
@@ -684,14 +684,14 @@ namespace StockSharp.Messages
 				case 'ø':
 				case 's':
 					if (getTypeValue == null)
-						throw new ArgumentNullException("getTypeValue");
+						throw new ArgumentNullException(nameof(getTypeValue));
 
 					type = UnitTypes.Step;
 					break;
 				case 'ï':
 				case 'p':
 					if (getTypeValue == null)
-						throw new ArgumentNullException("getTypeValue");
+						throw new ArgumentNullException(nameof(getTypeValue));
 			
 					type = UnitTypes.Point;
 					break;
@@ -703,7 +703,7 @@ namespace StockSharp.Messages
 					type = UnitTypes.Limit;
 					break;
 				default:
-					throw new ArgumentException(LocalizedStrings.UnknownUnitMeasurement.Put(lastSymbol), "str");
+					throw new ArgumentException(LocalizedStrings.UnknownUnitMeasurement.Put(lastSymbol), nameof(str));
 			}
 
 			return new Unit(value, type, getTypeValue);

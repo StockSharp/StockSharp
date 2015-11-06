@@ -123,7 +123,7 @@ namespace StockSharp.Quik
 			set
 			{
 				if (value.IsEmpty())
-					throw new ArgumentNullException("value");
+					throw new ArgumentNullException(nameof(value));
 
 				if (value == _dllName)
 					return;
@@ -266,7 +266,7 @@ namespace StockSharp.Quik
 		public void RegisterTransaction(Transaction transaction)
 		{
 			if (transaction == null)
-				throw new ArgumentNullException("transaction");
+				throw new ArgumentNullException(nameof(transaction));
 
 			if (transaction.GetInstruction<long>(Transaction.TransactionId) != 0)
 				throw new ArgumentException();
@@ -294,7 +294,7 @@ namespace StockSharp.Quik
 				var execution = transaction.Message.ToExecutionMessage();
 
 				if (execution == null)
-					throw new ArgumentException(LocalizedStrings.Str1835, "transaction");
+					throw new ArgumentException(LocalizedStrings.Str1835, nameof(transaction));
 
 				var isReRegistering = transaction.TransactionType == TransactionTypes.ReRegister;
 				var isRegistering = transaction.TransactionType == TransactionTypes.Register || isReRegistering;

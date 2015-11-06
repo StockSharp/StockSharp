@@ -44,7 +44,7 @@ namespace StockSharp.Algo.Indicators
 			set
 			{
 				if (value < 1)
-					throw new ArgumentOutOfRangeException("value", value, LocalizedStrings.Str916);
+					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.Str916);
 
 				_length = value;
 
@@ -55,16 +55,13 @@ namespace StockSharp.Algo.Indicators
 		/// <summary>
 		/// Whether the indicator is set.
 		/// </summary>
-		public override bool IsFormed
-		{
-			get { return Buffer.Count >= Length; }
-		}
+		public override bool IsFormed => Buffer.Count >= Length;
 
 		/// <summary>
 		/// The buffer for data storage.
 		/// </summary>
 		[Browsable(false)]
-		protected IList<TResult> Buffer { get; private set; }
+		protected IList<TResult> Buffer { get; }
 
 		/// <summary>
 		/// Load settings.

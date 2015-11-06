@@ -20,20 +20,15 @@ namespace StockSharp.Algo.Storages
 	public abstract class BaseStorageEntityList<T> : HierarchicalPageLoadList<T>, IStorageEntityList<T>, ICollectionEx<T>
 		where T : class
 	{
-		private readonly SyncObject _syncRoot = new SyncObject();
-
 		/// <summary>
 		/// The object of synchronization.
 		/// </summary>
-		public SyncObject SyncRoot { get { return _syncRoot; } }
+		public SyncObject SyncRoot { get; } = new SyncObject();
 
 		/// <summary>
 		/// The time designating field.
 		/// </summary>
-		protected virtual Field TimeField
-		{
-			get { return Schema.Fields["Time"]; }
-		}
+		protected virtual Field TimeField => Schema.Fields["Time"];
 
 		/// <summary>
 		/// Initialize <see cref="BaseStorageEntityList{T}"/>.
@@ -51,7 +46,7 @@ namespace StockSharp.Algo.Storages
 		public override void Add(T entity)
 		{
 			if (entity == null)
-				throw new ArgumentNullException("entity");
+				throw new ArgumentNullException(nameof(entity));
 
 			base.Add(entity);
 		}
@@ -64,7 +59,7 @@ namespace StockSharp.Algo.Storages
 		public override bool Remove(T entity)
 		{
 			if (entity == null)
-				throw new ArgumentNullException("entity");
+				throw new ArgumentNullException(nameof(entity));
 
 			return base.Remove(entity);
 		}
@@ -76,9 +71,9 @@ namespace StockSharp.Algo.Storages
 		public override void Save(T entity)
 		{
 			if (entity == null)
-				throw new ArgumentNullException("entity");
+				throw new ArgumentNullException(nameof(entity));
 
-			lock (_syncRoot)
+			lock (SyncRoot)
 				base.Save(entity);
 		}
 

@@ -83,10 +83,10 @@ namespace StockSharp.Algo.Derivatives
 		public static Security GetUnderlyingAsset(this Security derivative, ISecurityProvider provider)
 		{
 			if (derivative == null)
-				throw new ArgumentNullException("derivative");
+				throw new ArgumentNullException(nameof(derivative));
 
 			if (provider == null)
-				throw new ArgumentNullException("provider");
+				throw new ArgumentNullException(nameof(provider));
 
 			if (derivative.Type == SecurityTypes.Option)
 			{
@@ -139,7 +139,7 @@ namespace StockSharp.Algo.Derivatives
 		public static IEnumerable<Security> FilterByUnderlying(this IEnumerable<Security> securities, Security asset)
 		{
 			if (asset == null)
-				throw new ArgumentNullException("asset");
+				throw new ArgumentNullException(nameof(asset));
 
 			return securities.Where(s => s.UnderlyingSecurityId == asset.Id);
 		}
@@ -212,7 +212,7 @@ namespace StockSharp.Algo.Derivatives
 		public static Security GetOppositeOption(this Security option, ISecurityProvider provider)
 		{
 			if (provider == null)
-				throw new ArgumentNullException("provider");
+				throw new ArgumentNullException(nameof(provider));
 
 			option.CheckOption();
 
@@ -227,7 +227,7 @@ namespace StockSharp.Algo.Derivatives
 				.FirstOrDefault();
 
 			if (oppositeOption == null)
-				throw new ArgumentException(LocalizedStrings.Str706Params.Put(option.Id), "option");
+				throw new ArgumentException(LocalizedStrings.Str706Params.Put(option.Id), nameof(option));
 
 			return oppositeOption;
 		}
@@ -270,10 +270,10 @@ namespace StockSharp.Algo.Derivatives
 		public static Security GetOption(this Security future, ISecurityProvider provider, decimal strike, DateTimeOffset expirationDate, OptionTypes optionType)
 		{
 			if (future == null)
-				throw new ArgumentNullException("future");
+				throw new ArgumentNullException(nameof(future));
 
 			if (provider == null)
-				throw new ArgumentNullException("provider");
+				throw new ArgumentNullException(nameof(provider));
 
 			var option = provider
 				.Lookup(new Security
@@ -286,7 +286,7 @@ namespace StockSharp.Algo.Derivatives
 				.FirstOrDefault();
 
 			if (option == null)
-				throw new ArgumentException(LocalizedStrings.Str707Params.Put(future.Id), "future");
+				throw new ArgumentException(LocalizedStrings.Str707Params.Put(future.Id), nameof(future));
 
 			return option;
 		}
@@ -365,7 +365,7 @@ namespace StockSharp.Algo.Derivatives
 		public static IEnumerable<Security> GetOutOfTheMoney(this Security underlyingAsset, IMarketDataProvider provider, IEnumerable<Security> allStrikes)
 		{
 			if (underlyingAsset == null)
-				throw new ArgumentNullException("underlyingAsset");
+				throw new ArgumentNullException(nameof(underlyingAsset));
 
 			var cs = underlyingAsset.GetCentralStrike(provider, allStrikes);
 
@@ -394,7 +394,7 @@ namespace StockSharp.Algo.Derivatives
 		public static IEnumerable<Security> GetInTheMoney(this Security underlyingAsset, IMarketDataProvider provider, IEnumerable<Security> allStrikes)
 		{
 			if (underlyingAsset == null)
-				throw new ArgumentNullException("underlyingAsset");
+				throw new ArgumentNullException(nameof(underlyingAsset));
 
 			var cs = underlyingAsset.GetCentralStrike(provider, allStrikes);
 
@@ -423,7 +423,7 @@ namespace StockSharp.Algo.Derivatives
 		public static IEnumerable<Security> GetAtTheMoney(this Security underlyingAsset, IMarketDataProvider provider, IEnumerable<Security> allStrikes)
 		{
 			if (underlyingAsset == null)
-				throw new ArgumentNullException("underlyingAsset");
+				throw new ArgumentNullException(nameof(underlyingAsset));
 
 			var centralStrikes = new List<Security>();
 
@@ -450,7 +450,7 @@ namespace StockSharp.Algo.Derivatives
 		public static decimal? GetIntrinsicValue(this Security option, ISecurityProvider securityProvider, IMarketDataProvider dataProvider)
 		{
 			if (securityProvider == null)
-				throw new ArgumentNullException("securityProvider");
+				throw new ArgumentNullException(nameof(securityProvider));
 			
 			option.CheckOption();
 
@@ -472,7 +472,7 @@ namespace StockSharp.Algo.Derivatives
 		public static decimal? GetTimeValue(this Security option, ISecurityProvider securityProvider, IMarketDataProvider dataProvider)
 		{
 			if (securityProvider == null)
-				throw new ArgumentNullException("securityProvider");
+				throw new ArgumentNullException(nameof(securityProvider));
 
 			option.CheckOption();
 
@@ -488,7 +488,7 @@ namespace StockSharp.Algo.Derivatives
 		internal static DateTimeOffset GetExpirationTime(this Security security)
 		{
 			if (security.ExpiryDate == null)
-				throw new ArgumentException(LocalizedStrings.Str709Params.Put(security.Id), "security");
+				throw new ArgumentException(LocalizedStrings.Str709Params.Put(security.Id), nameof(security));
 
 			var expDate = security.ExpiryDate.Value;
 
@@ -518,10 +518,10 @@ namespace StockSharp.Algo.Derivatives
 		public static Security GetOptionInfo(this string optionName, ExchangeBoard board)
 		{
 			if (board == null)
-				throw new ArgumentNullException("board");
+				throw new ArgumentNullException(nameof(board));
 
 			if (optionName.IsEmpty())
-				throw new ArgumentNullException("optionName");
+				throw new ArgumentNullException(nameof(optionName));
 
 			var matches = _optionNameRegex.Matches(optionName);
 
@@ -554,13 +554,13 @@ namespace StockSharp.Algo.Derivatives
 		public static SecurityMessage GetFutureInfo(this string futureName, string optionCode, ExchangeBoard board)
 		{
 			if (board == null)
-				throw new ArgumentNullException("board");
+				throw new ArgumentNullException(nameof(board));
 
 			if (futureName.IsEmpty())
-				throw new ArgumentNullException("futureName");
+				throw new ArgumentNullException(nameof(futureName));
 
 			if (optionCode.IsEmpty())
-				throw new ArgumentNullException("optionCode");
+				throw new ArgumentNullException(nameof(optionCode));
 
 			var matches = _futureNameRegex.Matches(futureName);
 
@@ -602,7 +602,7 @@ namespace StockSharp.Algo.Derivatives
 		public static MarketDepth ImpliedVolatility(this MarketDepth depth, ISecurityProvider securityProvider, IMarketDataProvider dataProvider, DateTimeOffset currentTime, decimal riskFree = 0, decimal dividend = 0)
 		{
 			if (depth == null)
-				throw new ArgumentNullException("depth");
+				throw new ArgumentNullException(nameof(depth));
 
 			return depth.ImpliedVolatility(new BlackScholes(depth.Security, securityProvider, dataProvider) { RiskFree = riskFree, Dividend = dividend }, currentTime);
 		}
@@ -617,10 +617,10 @@ namespace StockSharp.Algo.Derivatives
 		public static MarketDepth ImpliedVolatility(this MarketDepth depth, BlackScholes model, DateTimeOffset currentTime)
 		{
 			if (depth == null)
-				throw new ArgumentNullException("depth");
+				throw new ArgumentNullException(nameof(depth));
 
 			if (model == null)
-				throw new ArgumentNullException("model");
+				throw new ArgumentNullException(nameof(model));
 
 			Func<Quote, Quote> convert = quote =>
 			{
@@ -693,7 +693,7 @@ namespace StockSharp.Algo.Derivatives
 		public static double D1(decimal assetPrice, decimal strike, decimal riskFree, decimal dividend, decimal deviation, double timeToExp)
 		{
 			if (deviation < 0)
-				throw new ArgumentOutOfRangeException("deviation", deviation, LocalizedStrings.Str711);
+				throw new ArgumentOutOfRangeException(nameof(deviation), deviation, LocalizedStrings.Str711);
 
 			return (((double)assetPrice / (double)strike).Log() +
 				(double)(riskFree - dividend + deviation * deviation / 2.0m) * timeToExp) / ((double)deviation * timeToExp.Sqrt());
@@ -837,7 +837,7 @@ namespace StockSharp.Algo.Derivatives
 		public static decimal? ImpliedVolatility(decimal premium, Func<decimal, decimal?> getPremium)
 		{
 			if (getPremium == null)
-				throw new ArgumentNullException("getPremium");
+				throw new ArgumentNullException(nameof(getPremium));
 
 			const decimal min = 0.00001m;
 

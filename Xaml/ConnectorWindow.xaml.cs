@@ -38,7 +38,7 @@ namespace StockSharp.Xaml
 				Name = type.GetDisplayName();
 			}
 
-			public MessageTypes Type { get; private set; }
+			public MessageTypes Type { get; }
 			public string Name { get; private set; }
 
 			public event Action SelectedChanged;
@@ -63,10 +63,10 @@ namespace StockSharp.Xaml
 			public GridRow(ConnectorInfo info, IMessageAdapter adapter/*, IMessageAdapter innerAdapter*/)
 			{
 				if (info == null)
-					throw new ArgumentNullException("info");
+					throw new ArgumentNullException(nameof(info));
 
 				if (adapter == null)
-					throw new ArgumentNullException("adapter");
+					throw new ArgumentNullException(nameof(adapter));
 
 				//if (innerAdapter == null)
 				//	throw new ArgumentNullException("innerAdapter");
@@ -85,18 +85,12 @@ namespace StockSharp.Xaml
 
 			public ConnectorInfo Info { get; private set; }
 
-			public IMessageAdapter Adapter { get; private set; }
+			public IMessageAdapter Adapter { get; }
 			//public IMessageAdapter InnerAdapter { get; private set; }
 
-			public bool IsTransactionEnabled
-			{
-				get { return Adapter.IsMessageSupported(MessageTypes.OrderRegister); }
-			}
+			public bool IsTransactionEnabled => Adapter.IsMessageSupported(MessageTypes.OrderRegister);
 
-			public bool IsMarketDataEnabled
-			{
-				get { return Adapter.IsMessageSupported(MessageTypes.MarketData) || Adapter.IsMessageSupported(MessageTypes.SecurityLookup); }
-			}
+			public bool IsMarketDataEnabled => Adapter.IsMessageSupported(MessageTypes.MarketData) || Adapter.IsMessageSupported(MessageTypes.SecurityLookup);
 
 			private bool _isEnabled = true;
 
@@ -110,10 +104,7 @@ namespace StockSharp.Xaml
 				}
 			}
 
-			public string Description
-			{
-				get { return Adapter.ToString(); }
-			}
+			public string Description => Adapter.ToString();
 
 			public Uri Icon { get; private set; }
 
@@ -124,7 +115,7 @@ namespace StockSharp.Xaml
 			//	NotifyChanged("IsMarketDataEnabled");
 			//}
 
-			public SupportedMessage[] SupportedMessages { get; private set; }
+			public SupportedMessage[] SupportedMessages { get; }
 		}
 
 		private sealed class ConnectorInfoList : BaseList<ConnectorInfo>
@@ -136,16 +127,13 @@ namespace StockSharp.Xaml
 			public ConnectorInfoList(ConnectorWindow parent)
 			{
 				if (parent == null)
-					throw new ArgumentNullException("parent");
+					throw new ArgumentNullException(nameof(parent));
 
 				_parent = parent;
 				_language = Thread.CurrentThread.CurrentCulture.Name == "en-US" ? Languages.English : Languages.Russian;
 			}
 
-			private ItemCollection Items
-			{
-				get { return _parent.ConnectionsMenu.Items; }
-			}
+			private ItemCollection Items => _parent.ConnectionsMenu.Items;
 
 			protected override bool OnAdding(ConnectorInfo item)
 			{
@@ -305,14 +293,14 @@ namespace StockSharp.Xaml
 		private GridRow CreateRow(IMessageAdapter adapter)
 		{
 			if (adapter == null)
-				throw new ArgumentNullException("adapter");
+				throw new ArgumentNullException(nameof(adapter));
 
 			var innerAdapter = adapter.Clone();//GetInnerAdapter(adapter);
 
 			var info = ConnectorsInfo.FirstOrDefault(i => i.AdapterType.IsInstanceOfType(innerAdapter));
 
 			if (info == null)
-				throw new ArgumentException(LocalizedStrings.Str1553Params.Put(innerAdapter.GetType()), "adapter");
+				throw new ArgumentException(LocalizedStrings.Str1553Params.Put(innerAdapter.GetType()), nameof(adapter));
 
 			return new GridRow(info, adapter/*, innerAdapter*/) { IsEnabled = Adapter.InnerAdapters[adapter] != -1 };
 		}
@@ -322,10 +310,7 @@ namespace StockSharp.Xaml
 		/// <summary>
 		/// Visual description of available connections.
 		/// </summary>
-		public IList<ConnectorInfo> ConnectorsInfo
-		{
-			get { return _connectorsInfo; }
-		}
+		public IList<ConnectorInfo> ConnectorsInfo => _connectorsInfo;
 
 		///// <summary>
 		///// The settings change event.
@@ -337,15 +322,9 @@ namespace StockSharp.Xaml
 		///// </summary>
 		//public event Func<ConnectionStates> CheckConnectionState;
 
-		private GridRow SelectedRow
-		{
-			get { return ConnectorsGrid != null ? (GridRow)ConnectorsGrid.SelectedItem : null; }
-		}
+		private GridRow SelectedRow => ConnectorsGrid != null ? (GridRow)ConnectorsGrid.SelectedItem : null;
 
-		private IEnumerable<GridRow> SelectedRows
-		{
-			get { return ConnectorsGrid != null ? ConnectorsGrid.SelectedItems.Cast<GridRow>() : Enumerable.Empty<GridRow>(); }
-		}
+		private IEnumerable<GridRow> SelectedRows => ConnectorsGrid != null ? ConnectorsGrid.SelectedItems.Cast<GridRow>() : Enumerable.Empty<GridRow>();
 
 		//private bool CheckConnected(string message)
 		//{

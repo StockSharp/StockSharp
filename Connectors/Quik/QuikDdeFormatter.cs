@@ -26,16 +26,16 @@ namespace StockSharp.Quik
 		public static void Deserialize(this DdeTable table, IList<IList<object>> rows, Action<IList<object>, Func<DdeTableColumn, object>> handler, Action<Exception> errorHandler, bool skipErrors)
 		{
 			if (table == null)
-				throw new ArgumentNullException("table");
+				throw new ArgumentNullException(nameof(table));
 
 			if (rows == null)
-				throw new ArgumentNullException("rows");
+				throw new ArgumentNullException(nameof(rows));
 
 			if (handler == null)
-				throw new ArgumentNullException("handler");
+				throw new ArgumentNullException(nameof(handler));
 
 			if (errorHandler == null)
-				throw new ArgumentNullException("errorHandler");
+				throw new ArgumentNullException(nameof(errorHandler));
 
 			try
 			{
@@ -81,7 +81,7 @@ namespace StockSharp.Quik
 		public static OrderStates? GetState(this Func<DdeTableColumn, object> func, DdeTableColumn column)
 		{
 			if (func == null)
-				throw new ArgumentNullException("func");
+				throw new ArgumentNullException(nameof(func));
 
 			var value = (string)func(column);
 
@@ -94,14 +94,14 @@ namespace StockSharp.Quik
 				case "KILLED":
 					return null;
 				default:
-					throw new ArgumentOutOfRangeException("column", value, LocalizedStrings.Str1712);
+					throw new ArgumentOutOfRangeException(nameof(column), value, LocalizedStrings.Str1712);
 			}
 		}
 
 		public static Sides ToSide(this object value)
 		{
 			if (value == null)
-				throw new ArgumentNullException("value");
+				throw new ArgumentNullException(nameof(value));
 
 			switch ((string)value)
 			{
@@ -110,14 +110,14 @@ namespace StockSharp.Quik
 				case "S":
 					return Sides.Sell;
 				default:
-					throw new ArgumentOutOfRangeException("value", value, LocalizedStrings.Str1713);
+					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.Str1713);
 			}
 		}
 
 		public static DateTimeOffset GetExpiryDate(this Func<DdeTableColumn, object> func, DdeTableColumn column)
 		{
 			if (func == null)
-				throw new ArgumentNullException("func");
+				throw new ArgumentNullException(nameof(func));
 
 			var expiryDate = func.Get<string>(column);
 
@@ -129,7 +129,7 @@ namespace StockSharp.Quik
 		public static T Get<T>(this Func<DdeTableColumn, object> func, DdeTableColumn column)
 		{
 			if (func == null)
-				throw new ArgumentNullException("func");
+				throw new ArgumentNullException(nameof(func));
 
 			var value = func(column);
 			return Get<T>(value, column);
@@ -138,7 +138,7 @@ namespace StockSharp.Quik
 		private static T Get<T>(object value, DdeTableColumn column)
 		{
 			if (column == null)
-				throw new ArgumentNullException("column");
+				throw new ArgumentNullException(nameof(column));
 
 			try
 			{
@@ -146,14 +146,14 @@ namespace StockSharp.Quik
 			}
 			catch (Exception ex)
 			{
-				throw new ArgumentException(LocalizedStrings.Str1714Params.Put(column.Name, value, typeof(T).Name), "value", ex);
+				throw new ArgumentException(LocalizedStrings.Str1714Params.Put(column.Name, value, typeof(T).Name), nameof(value), ex);
 			}
 		}
 
 		public static object Get(object value, DdeTableColumn column)
 		{
 			if (column == null)
-				throw new ArgumentNullException("column");
+				throw new ArgumentNullException(nameof(column));
 
 			try
 			{
@@ -164,7 +164,7 @@ namespace StockSharp.Quik
 			}
 			catch (Exception ex)
 			{
-				throw new ArgumentException(LocalizedStrings.Str1714Params.Put(column.Name, value, column.DataType.Name), "value", ex);
+				throw new ArgumentException(LocalizedStrings.Str1714Params.Put(column.Name, value, column.DataType.Name), nameof(value), ex);
 			}
 		}
 
@@ -178,7 +178,7 @@ namespace StockSharp.Quik
 			where T : struct
 		{
 			if (func == null)
-				throw new ArgumentNullException("func");
+				throw new ArgumentNullException(nameof(func));
 
 			var value = func(column);
 
@@ -218,7 +218,7 @@ namespace StockSharp.Quik
 					type = UnitTypes.Percent;
 					break;
 				default:
-					throw new ArgumentOutOfRangeException("func", typeStr, LocalizedStrings.Str1715Params.Put(typeColumn.Name));
+					throw new ArgumentOutOfRangeException(nameof(func), typeStr, LocalizedStrings.Str1715Params.Put(typeColumn.Name));
 			}
 
 			return type == null ? null : new Unit { Value = Get<decimal>(func, valueColumn), Type = (UnitTypes)type };
@@ -237,7 +237,7 @@ namespace StockSharp.Quik
 				case "Нет":
 					return false;
 				default:
-					throw new ArgumentOutOfRangeException("func", value, LocalizedStrings.Str1716Params.Put(column.Name));
+					throw new ArgumentOutOfRangeException(nameof(func), value, LocalizedStrings.Str1716Params.Put(column.Name));
 			}
 		}
 
@@ -261,7 +261,7 @@ namespace StockSharp.Quik
 				case "Тэйк-профит и стоп-лимит по заявке":
 					return QuikOrderConditionTypes.TakeProfitStopLimit;
 				default:
-					throw new ArgumentOutOfRangeException("func", value, LocalizedStrings.Str1717);
+					throw new ArgumentOutOfRangeException(nameof(func), value, LocalizedStrings.Str1717);
 			}
 		}
 
@@ -300,7 +300,7 @@ namespace StockSharp.Quik
 		public static QuikOrderConditionResults? GetStopResult(this Func<DdeTableColumn, object> func)
 		{
 			if (func == null)
-				throw new ArgumentNullException("func");
+				throw new ArgumentNullException(nameof(func));
 
 			var value = func.Get<string>(DdeStopOrderColumns.Result);
 
@@ -327,14 +327,14 @@ namespace StockSharp.Quik
 				case "WAITING FOR ACTIVATION AND CALCULATE MIN/MAX":
 					return QuikOrderConditionResults.CalculateMinMaxAndWaitForActivation;
 				default:
-					throw new ArgumentOutOfRangeException("func", value, LocalizedStrings.Str1718);
+					throw new ArgumentOutOfRangeException(nameof(func), value, LocalizedStrings.Str1718);
 			}
 		}
 
 		public static DerivativeLimitTypes GetLimitType(this Func<DdeTableColumn, object> func)
 		{
 			if (func == null)
-				throw new ArgumentNullException("func");
+				throw new ArgumentNullException(nameof(func));
 
 			var value = (string)func(DdeDerivativePortfolioColumns.LimitType);
 
@@ -357,7 +357,7 @@ namespace StockSharp.Quik
 				case "По совокупным средствам":
 					return DerivativeLimitTypes.Term;
 				default:
-					throw new ArgumentOutOfRangeException("func", value, LocalizedStrings.Str1719);
+					throw new ArgumentOutOfRangeException(nameof(func), value, LocalizedStrings.Str1719);
 			}
 		}
 
@@ -421,7 +421,7 @@ namespace StockSharp.Quik
 		public static DateTimeOffset? GetNullableTime(this Func<DdeTableColumn, object> func, DdeTable table, DdeTableColumn dateColumn, DdeTableColumn timeColumn, DdeTableColumn mcsColumn)
 		{
 			if (func == null)
-				throw new ArgumentNullException("func");
+				throw new ArgumentNullException(nameof(func));
 
 			var date = func.GetNullable2<DateTime>(dateColumn);
 
@@ -444,7 +444,7 @@ namespace StockSharp.Quik
 		public static string GetSecurityClass(this IDictionary<string, RefPair<SecurityTypes, string>> securityClassInfo, SecurityId securityId)
 		{
 			if (securityClassInfo == null)
-				throw new ArgumentNullException("securityClassInfo");
+				throw new ArgumentNullException(nameof(securityClassInfo));
 
 			var pairs = securityClassInfo
 				.Where(p =>

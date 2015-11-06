@@ -28,13 +28,13 @@ namespace StockSharp.Studio.Ribbon
 		public SecurityPopupButton(Type securityType, Func<IEnumerable<Security>> getSecurities, Action<Security> open)
 		{
 			if (securityType == null)
-				throw new ArgumentNullException("securityType");
+				throw new ArgumentNullException(nameof(securityType));
 
 			if (getSecurities == null)
-				throw new ArgumentNullException("getSecurities");
+				throw new ArgumentNullException(nameof(getSecurities));
 
 			if (open == null)
-				throw new ArgumentNullException("open");
+				throw new ArgumentNullException(nameof(open));
 
 			_securityType = securityType;
 			_getSecurities = getSecurities;

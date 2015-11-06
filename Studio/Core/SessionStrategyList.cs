@@ -83,7 +83,7 @@ namespace StockSharp.Studio.Core
 		public IEnumerable<SessionStrategy> ReadAllByStrategyInfo(StrategyInfo info)
 		{
 			if (info == null)
-				throw new ArgumentNullException("info");
+				throw new ArgumentNullException(nameof(info));
 
 			return Database.ReadAll<SessionStrategy>(_readAllByStrategyInfo, new SerializationItemCollection(new[] { new SerializationItem(_infoField, info.Id.ToString(CultureInfo.InvariantCulture)) }));
 		}
@@ -91,7 +91,7 @@ namespace StockSharp.Studio.Core
 		public SessionStrategy ReadByStrategy(Strategy strategy)
 		{
 			if (strategy == null)
-				throw new ArgumentNullException("strategy");
+				throw new ArgumentNullException(nameof(strategy));
 
 			return ReadByStrategyId(strategy.Id);
 		}

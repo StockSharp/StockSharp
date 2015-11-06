@@ -27,7 +27,7 @@ namespace StockSharp.Community
 		protected BaseServiceClient(Uri address, string endpointName, bool hasCallbacks = false)
 		{
 			if (address == null)
-				throw new ArgumentNullException("address");
+				throw new ArgumentNullException(nameof(address));
 
 			Address = address;
 			_endpointName = endpointName;
@@ -37,7 +37,7 @@ namespace StockSharp.Community
 		/// <summary>
 		/// Server address.
 		/// </summary>
-		public Uri Address { get; private set; }
+		public Uri Address { get; }
 
 		/// <summary>
 		/// Whether the connection has been established.
@@ -84,7 +84,7 @@ namespace StockSharp.Community
 		protected virtual TResult Invoke<TResult>(Func<TService, TResult> handler)
 		{
 			if (handler == null)
-				throw new ArgumentNullException("handler");
+				throw new ArgumentNullException(nameof(handler));
 
 			if (!IsConnected)
 				Connect();
@@ -99,7 +99,7 @@ namespace StockSharp.Community
 		protected void Invoke(Action<TService> handler)
 		{
 			if (handler == null)
-				throw new ArgumentNullException("handler");
+				throw new ArgumentNullException(nameof(handler));
 
 			Invoke<object>(srv =>
 			{

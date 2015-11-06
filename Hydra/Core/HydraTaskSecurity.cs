@@ -88,7 +88,7 @@
 			set
 			{
 				if (value == null)
-					throw new ArgumentNullException("value");
+					throw new ArgumentNullException(nameof(value));
 
 				MarketDataTypesSet.Clear();
 				MarketDataTypesSet.AddRange(value);
@@ -107,7 +107,7 @@
 			set
 			{
 				if (value == null)
-					throw new ArgumentNullException("value");
+					throw new ArgumentNullException(nameof(value));
 
 				_candleSeries = value;
 			}
@@ -133,7 +133,7 @@
 			set
 			{
 				if (value == null)
-					throw new ArgumentNullException("value");
+					throw new ArgumentNullException(nameof(value));
 
 				_tradeInfo = value;
 			}
@@ -153,7 +153,7 @@
 			set
 			{
 				if (value == null)
-					throw new ArgumentNullException("value");
+					throw new ArgumentNullException(nameof(value));
 
 				_depthInfo = value;
 			}
@@ -173,7 +173,7 @@
 			set
 			{
 				if (value == null)
-					throw new ArgumentNullException("value");
+					throw new ArgumentNullException(nameof(value));
 
 				_orderLogInfo = value;
 			}
@@ -193,7 +193,7 @@
 			set
 			{
 				if (value == null)
-					throw new ArgumentNullException("value");
+					throw new ArgumentNullException(nameof(value));
 
 				_level1Info = value;
 			}
@@ -213,7 +213,7 @@
 			set
 			{
 				if (value == null)
-					throw new ArgumentNullException("value");
+					throw new ArgumentNullException(nameof(value));
 
 				_candleInfo = value;
 			}
@@ -233,7 +233,7 @@
 			set
 			{
 				if (value == null)
-					throw new ArgumentNullException("value");
+					throw new ArgumentNullException(nameof(value));
 
 				_executionInfo = value;
 			}

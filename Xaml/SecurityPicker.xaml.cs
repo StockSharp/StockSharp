@@ -1,4 +1,4 @@
-namespace StockSharp.Xaml
+﻿namespace StockSharp.Xaml
 {
 	using System;
 	using System.Collections.Generic;
@@ -206,18 +206,12 @@ namespace StockSharp.Xaml
 		/// <summary>
 		/// Selected instruments.
 		/// </summary>
-		public IList<Security> SelectedSecurities
-		{
-			get { return SecuritiesCtrl.SelectedSecurities; }
-		}
+		public IList<Security> SelectedSecurities => SecuritiesCtrl.SelectedSecurities;
 
 		/// <summary>
 		/// Instruments filtered.
 		/// </summary>
-		public IListEx<Security> FilteredSecurities
-		{
-			get { return SecuritiesCtrl.Securities; }
-		}
+		public IListEx<Security> FilteredSecurities => SecuritiesCtrl.Securities;
 
 		private SecurityTypes? _selectedType;
 
@@ -284,10 +278,7 @@ namespace StockSharp.Xaml
 		/// <summary>
 		/// Instruments that should be hidden.
 		/// </summary>
-		public ISet<Security> ExcludeSecurities
-		{
-			get { return _excludeSecurities; }
-		}
+		public ISet<Security> ExcludeSecurities => _excludeSecurities;
 
 		private ISecurityProvider _securityProvider;
 
@@ -374,7 +365,7 @@ namespace StockSharp.Xaml
 		public void AddContextMenuItem(Control menuItem)
 		{
 			if (menuItem == null)
-				throw new ArgumentNullException("menuItem");
+				throw new ArgumentNullException(nameof(menuItem));
 
 			SecuritiesCtrl.ContextMenu.Items.Add(menuItem);
 		}
@@ -425,7 +416,7 @@ namespace StockSharp.Xaml
 				}
 
 				default:
-					throw new ArgumentOutOfRangeException("action");
+					throw new ArgumentOutOfRangeException(nameof(action));
 			}
 
 			UpdateCounter();

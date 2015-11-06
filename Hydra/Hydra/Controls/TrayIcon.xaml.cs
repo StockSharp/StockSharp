@@ -24,7 +24,7 @@ namespace StockSharp.Hydra.Controls
 		public void Show(MainWindow window)
 		{
 			if (window == null)
-				throw new ArgumentNullException("window");
+				throw new ArgumentNullException(nameof(window));
 
 			_window = window;
 			_window.IsVisibleChanged += WindowOnIsVisibleChanged;
@@ -61,7 +61,7 @@ namespace StockSharp.Hydra.Controls
 		public void ShowErrorMessage(Exception error)
 		{
 			if (error == null)
-				throw new ArgumentNullException("error");
+				throw new ArgumentNullException(nameof(error));
 
 			_trayIcon.BalloonTipTitle = error.Message;
 			_trayIcon.BalloonTipText = error.ToString();

@@ -37,10 +37,10 @@ namespace StockSharp.Algo.Storages
 			: this(security.ToSecurityId(), arg, getTime, getSecurity, getId, serializer, drive)
 		{
 			if (security == null)
-				throw new ArgumentNullException("security");
+				throw new ArgumentNullException(nameof(security));
 
 			if (security.Id.IsEmpty())
-				throw new ArgumentException(LocalizedStrings.Str1025, "security");
+				throw new ArgumentException(LocalizedStrings.Str1025, nameof(security));
 
 			Security = security;
 		}
@@ -48,22 +48,22 @@ namespace StockSharp.Algo.Storages
 		protected MarketDataStorage(SecurityId securityId, object arg, Func<TData, DateTimeOffset> getTime, Func<TData, SecurityId> getSecurityId, Func<TData, TId> getId, IMarketDataSerializer<TData> serializer, IMarketDataStorageDrive drive)
 		{
 			if (securityId.IsDefault())
-				throw new ArgumentException(LocalizedStrings.Str1025, "securityId");
+				throw new ArgumentException(LocalizedStrings.Str1025, nameof(securityId));
 
 			if (getTime == null)
-				throw new ArgumentNullException("getTime");
+				throw new ArgumentNullException(nameof(getTime));
 
 			if (getSecurityId == null)
-				throw new ArgumentNullException("getSecurityId");
+				throw new ArgumentNullException(nameof(getSecurityId));
 
 			if (getId == null)
-				throw new ArgumentNullException("getId");
+				throw new ArgumentNullException(nameof(getId));
 
 			if (serializer == null)
-				throw new ArgumentNullException("serializer");
+				throw new ArgumentNullException(nameof(serializer));
 
 			if (drive == null)
-				throw new ArgumentNullException("drive");
+				throw new ArgumentNullException(nameof(drive));
 
 			SecurityId = securityId;
 
@@ -77,33 +77,24 @@ namespace StockSharp.Algo.Storages
 			_arg = arg;
 		}
 
-		IEnumerable<DateTime> IMarketDataStorage.Dates
-		{
-			get { return Drive.Dates; }
-		}
+		IEnumerable<DateTime> IMarketDataStorage.Dates => Drive.Dates;
 
-		Type IMarketDataStorage.DataType
-		{
-			get { return typeof(TData); }
-		}
+		Type IMarketDataStorage.DataType => typeof(TData);
 
-		public SecurityId SecurityId { get; private set; }
+		public SecurityId SecurityId { get; }
 
-		public Security Security { get; private set; }
+		public Security Security { get; }
 
 		private readonly object _arg;
 
-		object IMarketDataStorage.Arg
-		{
-			get { return _arg; }
-		}
+		object IMarketDataStorage.Arg => _arg;
 
 		public bool AppendOnlyNew { get; set; }
 
-		IMarketDataSerializer IMarketDataStorage.Serializer { get { return Serializer; } }
-		public IMarketDataSerializer<TData> Serializer { get; private set; }
+		IMarketDataSerializer IMarketDataStorage.Serializer => Serializer;
+		public IMarketDataSerializer<TData> Serializer { get; }
 
-		public IMarketDataStorageDrive Drive { get; private set; }
+		public IMarketDataStorageDrive Drive { get; }
 
 		private DateTime GetTruncatedTime(TData data)
 		{
@@ -123,7 +114,7 @@ namespace StockSharp.Algo.Storages
 		public void Save(IEnumerable<TData> data)
 		{
 			if (data == null)
-				throw new ArgumentNullException("data");
+				throw new ArgumentNullException(nameof(data));
 
 			foreach (var group in data.GroupBy(d =>
 			{
@@ -176,16 +167,16 @@ namespace StockSharp.Algo.Storages
 		private void Save(Stream stream, IMarketDataMetaInfo metaInfo, TData[] data, bool isOverride)
 		{
 			if (stream == null)
-				throw new ArgumentNullException("stream");
+				throw new ArgumentNullException(nameof(stream));
 
 			if (metaInfo == null)
-				throw new ArgumentNullException("metaInfo");
+				throw new ArgumentNullException(nameof(metaInfo));
 
 			if (data == null)
-				throw new ArgumentNullException("data");
+				throw new ArgumentNullException(nameof(data));
 
 			if (data.Length == 0)
-				throw new ArgumentOutOfRangeException("data");
+				throw new ArgumentOutOfRangeException(nameof(data));
 
 			if (metaInfo.Count == 0)
 			{
@@ -247,7 +238,7 @@ namespace StockSharp.Algo.Storages
 		public void Delete(IEnumerable<TData> data)
 		{
 			if (data == null)
-				throw new ArgumentNullException("data");
+				throw new ArgumentNullException(nameof(data));
 
 			foreach (var group in data.GroupBy(i => _getTime(i).UtcDateTime.Date))
 			{

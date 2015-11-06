@@ -124,7 +124,7 @@ namespace StockSharp.Studio
 			public StrategyCommandAdapter(StrategyContainer strategy)
 			{
 				if (strategy == null)
-					throw new ArgumentNullException("strategy");
+					throw new ArgumentNullException(nameof(strategy));
 
 				var strategyContainer = strategy;
 

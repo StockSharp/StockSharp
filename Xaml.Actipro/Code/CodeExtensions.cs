@@ -39,7 +39,10 @@ namespace StockSharp.Xaml.Actipro.Code
 			return result.Errors.Any(e => e.Type == CompilationErrorTypes.Error);
 		}
 
-		private static readonly string[] _defaultReferences =
+		/// <summary>
+		/// Default builds.
+		/// </summary>
+		public static IEnumerable<string> DefaultReferences => new[]
 		{
 			"System",
 			"System.Core",
@@ -79,14 +82,6 @@ namespace StockSharp.Xaml.Actipro.Code
 		};
 
 		/// <summary>
-		/// Default builds.
-		/// </summary>
-		public static IEnumerable<string> DefaultReferences
-		{
-			get { return _defaultReferences; }
-		}
-
-		/// <summary>
 		/// To modify the build name to <see cref="CodeReference"/>.
 		/// </summary>
 		/// <param name="referenceName">The build name.</param>
@@ -95,10 +90,10 @@ namespace StockSharp.Xaml.Actipro.Code
 		public static CodeReference ToReference(this string referenceName, Assembly[] assemblies)
 		{
 			if (referenceName.IsEmpty())
-				throw new ArgumentNullException("referenceName");
+				throw new ArgumentNullException(nameof(referenceName));
 
 			if (assemblies == null)
-				throw new ArgumentNullException("assemblies");
+				throw new ArgumentNullException(nameof(assemblies));
 
 			var asm = assemblies.FirstOrDefault(a => a.ManifestModule.Name == referenceName + ".dll");
 
@@ -129,7 +124,7 @@ namespace StockSharp.Xaml.Actipro.Code
 		public static IEnumerable<CodeReference> ToReferences(this IEnumerable<string> referenceNames)
 		{
 			if (referenceNames == null)
-				throw new ArgumentNullException("referenceNames");
+				throw new ArgumentNullException(nameof(referenceNames));
 
 			var assemblies = AppDomain.CurrentDomain.GetAssemblies();
 

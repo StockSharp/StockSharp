@@ -30,19 +30,19 @@ namespace StockSharp.Algo.Storages
 		public AllSecurityMarketDataStorage(Security security, object arg, Func<T, DateTimeOffset> getTime, Func<T, Security> getSecurity, Func<Security, IMarketDataDrive, IMarketDataStorage<T>> getStorage, IMarketDataStorageDrive drive)
 		{
 			if (security == null)
-				throw new ArgumentNullException("security");
+				throw new ArgumentNullException(nameof(security));
 
 			if (getTime == null)
-				throw new ArgumentNullException("getTime");
+				throw new ArgumentNullException(nameof(getTime));
 
 			if (getSecurity == null)
-				throw new ArgumentNullException("getSecurity");
+				throw new ArgumentNullException(nameof(getSecurity));
 
 			if (getStorage == null)
-				throw new ArgumentNullException("getStorage");
+				throw new ArgumentNullException(nameof(getStorage));
 
 			if (drive == null)
-				throw new ArgumentNullException("drive");
+				throw new ArgumentNullException(nameof(drive));
 
 			_security = security;
 			_getTime = getTime;
@@ -74,47 +74,26 @@ namespace StockSharp.Algo.Storages
 				_basket.InnerStorages.Add(getStorage(sec, Drive.Drive));
 		}
 
-		IMarketDataSerializer IMarketDataStorage.Serializer
-		{
-			get { return ((IMarketDataStorage<T>)this).Serializer; }
-		}
+		IMarketDataSerializer IMarketDataStorage.Serializer => ((IMarketDataStorage<T>)this).Serializer;
 
 		IMarketDataSerializer<T> IMarketDataStorage<T>.Serializer
 		{
 			get { throw new NotSupportedException(); }
 		}
 
-		IEnumerable<DateTime> IMarketDataStorage.Dates
-		{
-			get { return Drive.Dates; }
-		}
+		IEnumerable<DateTime> IMarketDataStorage.Dates => Drive.Dates;
 
-		Type IMarketDataStorage.DataType
-		{
-			get { return typeof(T); }
-		}
+		Type IMarketDataStorage.DataType => typeof(T);
 
-		Security IMarketDataStorage.Security
-		{
-			get { return _security; }
-		}
+		Security IMarketDataStorage.Security => _security;
 
 		private readonly object _arg;
 
-		object IMarketDataStorage.Arg
-		{
-			get { return _arg; }
-		}
+		object IMarketDataStorage.Arg => _arg;
 
-		public IMarketDataStorageDrive Drive { get; private set; }
+		public IMarketDataStorageDrive Drive { get; }
 
-		private bool _appendOnlyNew = true;
-
-		bool IMarketDataStorage.AppendOnlyNew
-		{
-			get { return _appendOnlyNew; }
-			set { _appendOnlyNew = value; }
-		}
+		bool IMarketDataStorage.AppendOnlyNew { get; set; } = true;
 
 		/// <summary>
 		/// To save market data in storage.
@@ -198,7 +177,7 @@ namespace StockSharp.Algo.Storages
 			: base(security, arg, getTime, getSecurity, getStorage, drive)
 		{
 			if (getEntityTime == null)
-				throw new ArgumentNullException("getEntityTime");
+				throw new ArgumentNullException(nameof(getEntityTime));
 
 			_security = security;
 			_getEntityTime = getEntityTime;

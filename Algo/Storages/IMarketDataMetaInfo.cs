@@ -65,7 +65,7 @@ namespace StockSharp.Algo.Storages
 			Date = date;
 		}
 
-		public DateTime Date { get; private set; }
+		public DateTime Date { get; }
 		public int Count { get; set; }
 
 		public decimal PriceStep { get; set; }

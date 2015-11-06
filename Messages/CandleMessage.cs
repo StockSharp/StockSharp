@@ -244,7 +244,7 @@ namespace StockSharp.Messages
 		protected CandleMessage CopyTo(CandleMessage copy)
 		{
 			if (copy == null)
-				throw new ArgumentNullException("copy");
+				throw new ArgumentNullException(nameof(copy));
 
 			copy.LocalTime = LocalTime;
 			copy.ClosePrice = ClosePrice;
@@ -491,7 +491,7 @@ namespace StockSharp.Messages
 			set
 			{
 				if (value == null)
-					throw new ArgumentNullException("value");
+					throw new ArgumentNullException(nameof(value));
 
 				_boxSize = value;
 			}

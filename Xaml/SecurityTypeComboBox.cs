@@ -32,7 +32,7 @@ namespace StockSharp.Xaml
 		/// <summary>
 		/// The entry for <see cref="SecurityTypeComboBox.SelectedType"/> which equals to <see langword="null" />.
 		/// </summary>
-		public EnumComboBoxHelper.EnumerationMember NullItem { get; private set; }
+		public EnumComboBoxHelper.EnumerationMember NullItem { get; }
 
 		/// <summary>
 		/// The selected instrument type.

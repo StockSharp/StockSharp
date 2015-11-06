@@ -104,7 +104,7 @@ namespace StockSharp.Xaml
 		/// <summary>
 		/// The set of selected default fields.
 		/// </summary>
-		public static IEnumerable<Level1Fields> DefaultFields { get; private set; }
+		public static IEnumerable<Level1Fields> DefaultFields { get; }
 
 		/// <summary>
 		/// The method that is called when the value of the item is changed.

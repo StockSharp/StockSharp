@@ -30,7 +30,7 @@ namespace StockSharp.Alor
 		public static AlorException GetException(int result, string message)
 		{
 			if (message.IsEmpty())
-				throw new ArgumentNullException("message");
+				throw new ArgumentNullException(nameof(message));
 
 			var code = (SFE)result;
 

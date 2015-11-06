@@ -26,7 +26,7 @@ namespace StockSharp.Studio
 			set
 			{
 				if (value == null)
-					throw new ArgumentNullException("value");
+					throw new ArgumentNullException(nameof(value));
 
 				_strategyInfo = value;
 				CodePanel.Code = _strategyInfo.Body;

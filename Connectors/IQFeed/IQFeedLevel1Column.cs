@@ -14,10 +14,10 @@ namespace StockSharp.IQFeed
 		internal IQFeedLevel1Column(string name, Type type)
 		{
 			if (name.IsEmpty())
-				throw new ArgumentNullException("name");
+				throw new ArgumentNullException(nameof(name));
 
 			if (type == null)
-				throw new ArgumentNullException("type");
+				throw new ArgumentNullException(nameof(type));
 
 			Name = name;
 			Type = type;
@@ -29,7 +29,7 @@ namespace StockSharp.IQFeed
 			: this(name, type)
 		{
 			if (format.IsEmpty())
-				throw new ArgumentNullException("format");
+				throw new ArgumentNullException(nameof(format));
 
 			Format = format;
 		}

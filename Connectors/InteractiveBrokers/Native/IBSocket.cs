@@ -57,7 +57,7 @@ namespace StockSharp.InteractiveBrokers.Native
 		public void Connect(EndPoint address)
 		{
 			if (address == null)
-				throw new ArgumentNullException("address");
+				throw new ArgumentNullException(nameof(address));
 
 			if (_client != null)
 				throw new InvalidOperationException(LocalizedStrings.Str2152);
@@ -76,7 +76,7 @@ namespace StockSharp.InteractiveBrokers.Native
 		public void StartListening(Action<Exception> processError)
 		{
 			if (processError == null)
-				throw new ArgumentNullException("processError");
+				throw new ArgumentNullException(nameof(processError));
 
 			ThreadingHelper
 				.Thread(() =>

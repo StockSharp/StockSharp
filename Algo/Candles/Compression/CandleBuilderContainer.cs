@@ -35,7 +35,7 @@ namespace StockSharp.Algo.Candles.Compression
 			public SeriesInfo(CandleBuilderContainer container)
 			{
 				if (container == null)
-					throw new ArgumentNullException("container");
+					throw new ArgumentNullException(nameof(container));
 
 				_container = container;
 			}
@@ -92,10 +92,10 @@ namespace StockSharp.Algo.Candles.Compression
 			public void AddValue(Candle candle, ICandleBuilderSourceValue value)
 			{
 				if (candle == null)
-					throw new ArgumentNullException("candle");
+					throw new ArgumentNullException(nameof(candle));
 
 				if (value == null)
-					throw new ArgumentNullException("value");
+					throw new ArgumentNullException(nameof(value));
 
 				_candleValues.SafeAdd(candle).AddLast(value);
 				_valuesStat.Add(value);
@@ -111,7 +111,7 @@ namespace StockSharp.Algo.Candles.Compression
 			public IEnumerable<ICandleBuilderSourceValue> GetValues(Candle candle)
 			{
 				if (candle == null)
-					throw new ArgumentNullException("candle");
+					throw new ArgumentNullException(nameof(candle));
 
 				var trades = _candleValues.TryGetValue(candle);
 				return trades != null ? trades.SyncGet(c => c.ToArray()) : Enumerable.Empty<ICandleBuilderSourceValue>();
@@ -140,7 +140,7 @@ namespace StockSharp.Algo.Candles.Compression
 			set
 			{
 				if (value < TimeSpan.Zero)
-					throw new ArgumentOutOfRangeException("value", value, LocalizedStrings.Str652);
+					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.Str652);
 
 				_valuesKeepTime = value;
 				_maxValuesKeepTime = (long)(value.Ticks * 1.5);
@@ -158,7 +158,7 @@ namespace StockSharp.Algo.Candles.Compression
 		public void Start(CandleSeries series, DateTimeOffset from, DateTimeOffset to)
 		{
 			if (series == null)
-				throw new ArgumentNullException("series");
+				throw new ArgumentNullException(nameof(series));
 
 			var info = _info.SafeAdd(series, key => new SeriesInfo(this));
 			info.Reset(from);
@@ -192,7 +192,7 @@ namespace StockSharp.Algo.Candles.Compression
 		private SeriesInfo GetInfo(CandleSeries series)
 		{
 			if (series == null)
-				throw new ArgumentNullException("series");
+				throw new ArgumentNullException(nameof(series));
 
 			var info = _info.TryGetValue(series);
 

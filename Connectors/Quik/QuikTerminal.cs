@@ -60,7 +60,7 @@ namespace StockSharp.Quik
 		private QuikTerminal(Process process)
 		{
 			if (process == null)
-				throw new ArgumentNullException("process");
+				throw new ArgumentNullException(nameof(process));
 
 			InitVersion(process.GetFileName());
 			AssignProcess(process);
@@ -243,7 +243,7 @@ namespace StockSharp.Quik
 		private void AssignProcess(Process process)
 		{
 			if (process == null)
-				throw new ArgumentNullException("process");
+				throw new ArgumentNullException(nameof(process));
 
 			SystemProcess = process;
 			MainWindow = QuikWindows.FirstOrDefault(IsQuikMainWindow);
@@ -259,7 +259,7 @@ namespace StockSharp.Quik
 					wnd = new SystemWindow(process.MainWindowHandle);
 
 					if (!IsQuikMainWindow(wnd))
-						throw new ArgumentException(LocalizedStrings.Str1811, "process");
+						throw new ArgumentException(LocalizedStrings.Str1811, nameof(process));
 				}
 
 				MainWindow = wnd;
@@ -279,7 +279,7 @@ namespace StockSharp.Quik
 		public static QuikTerminal Get(string path)
 		{
 			if (path.IsEmpty())
-				throw new ArgumentNullException("path");
+				throw new ArgumentNullException(nameof(path));
 
 			var dir = GetDirectory(path).TrimEnd('\\');
 
@@ -292,7 +292,7 @@ namespace StockSharp.Quik
 				if (File.Exists(path))
 					terminal = new QuikTerminal(path);
 				else
-					throw new ArgumentException(LocalizedStrings.Str1813Params.Put(path), "path");
+					throw new ArgumentException(LocalizedStrings.Str1813Params.Put(path), nameof(path));
 			}
 
 			return terminal;
@@ -337,7 +337,7 @@ namespace StockSharp.Quik
 		public void LoginWithCertificate(string certPath, string password = null, IPEndPoint address = null)
 		{
 			if (certPath.IsEmpty())
-				throw new ArgumentNullException("certPath");
+				throw new ArgumentNullException(nameof(certPath));
 
 			lock (_winApiLock)
 			{
@@ -369,7 +369,7 @@ namespace StockSharp.Quik
 					var index = addresses.IndexOf(address);
 
 					if (index == -1)
-						throw new ArgumentOutOfRangeException("address", address, LocalizedStrings.Str1815);
+						throw new ArgumentOutOfRangeException(nameof(address), address, LocalizedStrings.Str1815);
 
 					var combo = wnd.AllChildWindows.First(e => e.DialogID == 0x2777);
 
@@ -405,10 +405,10 @@ namespace StockSharp.Quik
 		public void Login(string login, string password, IPEndPoint address = null)
 		{
 			if (login.IsEmpty())
-				throw new ArgumentNullException("login");
+				throw new ArgumentNullException(nameof(login));
 
 			if (password == null)
-				throw new ArgumentNullException("password");
+				throw new ArgumentNullException(nameof(password));
 
 			lock (_winApiLock)
 			{
@@ -441,7 +441,7 @@ namespace StockSharp.Quik
 					var index = addresses.IndexOf(address);
 
 					if (index == -1)
-						throw new ArgumentOutOfRangeException("address", address, LocalizedStrings.Str1815);
+						throw new ArgumentOutOfRangeException(nameof(address), address, LocalizedStrings.Str1815);
 
 					var combo = wnd.AllChildWindows.First(e => e.DialogID == 10103);
 
@@ -569,7 +569,7 @@ namespace StockSharp.Quik
 			set
 			{
 				if (value == null)
-					throw new ArgumentNullException("value");
+					throw new ArgumentNullException(nameof(value));
 
 				_securityIdGenerator = value;
 			}
@@ -635,7 +635,7 @@ namespace StockSharp.Quik
 			set
 			{
 				if (value.IsEmpty())
-					throw new ArgumentNullException("value");
+					throw new ArgumentNullException(nameof(value));
 
 				_ddeWindowCaption = value;
 			}
@@ -656,7 +656,7 @@ namespace StockSharp.Quik
 			set
 			{
 				if (value.IsEmpty())
-					throw new ArgumentNullException("value");
+					throw new ArgumentNullException(nameof(value));
 
 				_editWindowCaption = value;
 			}
@@ -677,7 +677,7 @@ namespace StockSharp.Quik
 			set
 			{
 				if (value.IsEmpty())
-					throw new ArgumentNullException("value");
+					throw new ArgumentNullException(nameof(value));
 
 				_accountWindowCaption = value;
 			}
@@ -728,7 +728,7 @@ namespace StockSharp.Quik
 		public bool IsDdeStarted(DdeTable table)
 		{
 			if (table == null)
-				throw new ArgumentNullException("table");
+				throw new ArgumentNullException(nameof(table));
 
 			return _activeDdeExport.Contains(DdeExportTypes.ByDdeTable, table);
 		}
@@ -741,7 +741,7 @@ namespace StockSharp.Quik
 		public bool IsDdeStarted(DdeCustomTable table)
 		{
 			if (table == null)
-				throw new ArgumentNullException("table");
+				throw new ArgumentNullException(nameof(table));
 
 			return IsDdeStarted(table.TableName);
 		}
@@ -754,7 +754,7 @@ namespace StockSharp.Quik
 		public bool IsDdeStarted(string caption)
 		{
 			if (caption.IsEmpty())
-				throw new ArgumentNullException("caption");
+				throw new ArgumentNullException(nameof(caption));
 
 			return _activeDdeExport.Contains(DdeExportTypes.ByCaption, caption);
 		}
@@ -767,7 +767,7 @@ namespace StockSharp.Quik
 		public bool IsDdeStarted(Security security)
 		{
 			if (security == null)
-				throw new ArgumentNullException("security");
+				throw new ArgumentNullException(nameof(security));
 
 			return _activeDdeExport.Contains(DdeExportTypes.BySecurity, security);
 		}
@@ -786,7 +786,7 @@ namespace StockSharp.Quik
 			ThrowIfQuotesTable(ddeTables);
 
 			if (ddeTables.IsEmpty())
-				throw new ArgumentOutOfRangeException("ddeTables", LocalizedStrings.Str1818);
+				throw new ArgumentOutOfRangeException(nameof(ddeTables), LocalizedStrings.Str1818);
 
 			foreach (var table in OrderBy(ddeTables, true))
 				StartDde(table.Caption);
@@ -802,7 +802,7 @@ namespace StockSharp.Quik
 			ThrowIfQuotesTable(ddeTables);
 
 			if (ddeTables.IsEmpty())
-				throw new ArgumentOutOfRangeException("ddeTables", LocalizedStrings.Str1818);
+				throw new ArgumentOutOfRangeException(nameof(ddeTables), LocalizedStrings.Str1818);
 
 			foreach (var table in OrderBy(ddeTables, false))
 				StopDde(table.Caption);
@@ -811,10 +811,10 @@ namespace StockSharp.Quik
 		private void ThrowIfQuotesTable(IEnumerable<DdeTable> ddeTables)
 		{
 			if (ddeTables == null)
-				throw new ArgumentNullException("ddeTables");
+				throw new ArgumentNullException(nameof(ddeTables));
 
 			if (ddeTables.Any(t => t == Adapter.QuotesTable))
-				throw new ArgumentException(LocalizedStrings.Str1819, "ddeTables");
+				throw new ArgumentException(LocalizedStrings.Str1819, nameof(ddeTables));
 		}
 
 		private string GetSecurityId(SecurityId security)
@@ -855,7 +855,7 @@ namespace StockSharp.Quik
 		internal void StartDde(DdeCustomTable customTable)
 		{
 			if (customTable == null)
-				throw new ArgumentNullException("customTable");
+				throw new ArgumentNullException(nameof(customTable));
 
 			StartDde(customTable.DdeSettings);
 		}
@@ -863,7 +863,7 @@ namespace StockSharp.Quik
 		internal void StopDde(DdeCustomTable customTable)
 		{
 			if (customTable == null)
-				throw new ArgumentNullException("customTable");
+				throw new ArgumentNullException(nameof(customTable));
 
 			StopDde(customTable.TableName);
 		}
@@ -894,7 +894,7 @@ namespace StockSharp.Quik
 		private void StartDde(DdeSettings ddeSettings)
 		{
 			if (ddeSettings == null)
-				throw new ArgumentNullException("ddeSettings");
+				throw new ArgumentNullException(nameof(ddeSettings));
 
 			lock (_winApiLock)
 			{
@@ -920,7 +920,7 @@ namespace StockSharp.Quik
 		private DdeTable GetWellKnownTable(string caption)
 		{
 			if (caption.IsEmpty())
-				throw new ArgumentNullException("caption");
+				throw new ArgumentNullException(nameof(caption));
 
 			return Adapter.AllTables.FirstOrDefault(t => t.Caption == caption);
 		}
@@ -972,7 +972,7 @@ namespace StockSharp.Quik
 		public bool IsTableOpened(DdeTable table)
 		{
 			if (table == null)
-				throw new ArgumentNullException("table");
+				throw new ArgumentNullException(nameof(table));
 
 			ThrowIfQuotesTable(new[] { table });
 
@@ -987,7 +987,7 @@ namespace StockSharp.Quik
 		public bool IsTableOpened(string caption)
 		{
 			if (caption.IsEmpty())
-				throw new ArgumentNullException("caption");
+				throw new ArgumentNullException(nameof(caption));
 
 			lock (_winApiLock)
 				return GetTableWindow(caption, false) != null;
@@ -1048,7 +1048,7 @@ namespace StockSharp.Quik
 		public void StartTableCalculation(DdeCustomTable table)
 		{
 			if (table == null)
-				throw new ArgumentNullException("table");
+				throw new ArgumentNullException(nameof(table));
 
 			StartTableCalculation(table.TableName);
 		}
@@ -1060,7 +1060,7 @@ namespace StockSharp.Quik
 		public void StartTableCalculation(string caption)
 		{
 			if (caption == null)
-				throw new ArgumentNullException("caption");
+				throw new ArgumentNullException(nameof(caption));
 
 			var window = GetTableWindow(caption);
 			
@@ -1217,7 +1217,7 @@ namespace StockSharp.Quik
 		public void OpenTable(DdeTable table)
 		{
 			if (table == null)
-				throw new ArgumentNullException("table");
+				throw new ArgumentNullException(nameof(table));
 
 			ThrowIfQuotesTable(new[] { table });
 			throw new NotImplementedException();
@@ -1568,10 +1568,10 @@ namespace StockSharp.Quik
 		private void StartDde(DdeWindow ddeWindow, DdeSettings ddeSettings)
 		{
 			if (ddeWindow == null)
-				throw new ArgumentNullException("ddeWindow");
+				throw new ArgumentNullException(nameof(ddeWindow));
 
 			if (ddeSettings == null)
-				throw new ArgumentNullException("ddeSettings");
+				throw new ArgumentNullException(nameof(ddeSettings));
 
 			ddeWindow.DdeServer = Adapter.DdeServer;
 
@@ -1600,7 +1600,7 @@ namespace StockSharp.Quik
 		private static void StopDdeOutput(DdeWindow ddeWindow)
 		{
 			if (ddeWindow == null)
-				throw new ArgumentNullException("ddeWindow");
+				throw new ArgumentNullException(nameof(ddeWindow));
 
 			if (!ddeWindow.BeginOutBtn.Enabled)
 			{
@@ -1621,7 +1621,7 @@ namespace StockSharp.Quik
 		private void CloseDde(DdeWindow ddeWindow)
 		{
 			if (ddeWindow == null)
-				throw new ArgumentNullException("ddeWindow");
+				throw new ArgumentNullException(nameof(ddeWindow));
 
 			ddeWindow.Window.Command(ddeWindow.CloseBtn);
 			WaitForClose(() => DdeWindows, "Закрытие DDE окна");
@@ -1630,7 +1630,7 @@ namespace StockSharp.Quik
 		private IEnumerable<DdeTable> OrderBy(IEnumerable<DdeTable> ddeTables, bool isAscending)
 		{
 			if (ddeTables == null)
-				throw new ArgumentNullException("ddeTables");
+				throw new ArgumentNullException(nameof(ddeTables));
 
 			return ddeTables.Select(t =>
 			{
@@ -1651,7 +1651,7 @@ namespace StockSharp.Quik
 		private DdeWindow OpenDdeWindow(SystemWindow window)
 		{
 			if (window == null)
-				throw new ArgumentNullException("window");
+				throw new ArgumentNullException(nameof(window));
 
 			var menu = window.Parent.Parent.HWnd.GetMenu();
 
@@ -1679,7 +1679,7 @@ namespace StockSharp.Quik
 		private void CloseLoginWindow(SystemWindow loginWindow)
 		{
 			if (loginWindow == null)
-				throw new ArgumentNullException("loginWindow");
+				throw new ArgumentNullException(nameof(loginWindow));
 
 			CloseCancel(loginWindow);
 			WaitForClose(() => LoginWindows, "Закрытие окна подключений");
@@ -1693,7 +1693,7 @@ namespace StockSharp.Quik
 		private void CloseEditWindow(SystemWindow editWindow, bool isOk)
 		{
 			if (editWindow == null)
-				throw new ArgumentNullException("editWindow");
+				throw new ArgumentNullException(nameof(editWindow));
 
 			if (isOk)
 				CloseOk(editWindow);
@@ -1706,7 +1706,7 @@ namespace StockSharp.Quik
 		private SystemWindow OpenEditWindow(DdeTable table)
 		{
 			if (table == null)
-				throw new ArgumentNullException("table");
+				throw new ArgumentNullException(nameof(table));
 
 			var window = GetTableWindow(table.Caption);
 			return OpenEditWindow(window);
@@ -1727,7 +1727,7 @@ namespace StockSharp.Quik
 		private void CloseAccountWindow(SystemWindow accountWindow)
 		{
 			if (accountWindow == null)
-				throw new ArgumentNullException("accountWindow");
+				throw new ArgumentNullException(nameof(accountWindow));
 
 			CloseCancel(accountWindow);
 			WaitForClose(() => AccountWindows, "Закрытие окна счетов");
@@ -1741,7 +1741,7 @@ namespace StockSharp.Quik
 		private void CloseConnectionWindow(SystemWindow connectionWindow)
 		{
 			if (connectionWindow == null)
-				throw new ArgumentNullException("connectionWindow");
+				throw new ArgumentNullException(nameof(connectionWindow));
 
 			CloseCancel(connectionWindow);
 			WaitForClose(() => ConnectionWindows, "Закрытие окна соединений");
@@ -1987,7 +1987,7 @@ namespace StockSharp.Quik
 		private static SystemWindow WaitForOpen(Func<IEnumerable<SystemWindow>> getWindows, string action, int interval = 60)
 		{
 			if (getWindows == null)
-				throw new ArgumentNullException("getWindows");
+				throw new ArgumentNullException(nameof(getWindows));
 
 			SystemWindow window = null;
 			WaitFor(() => (window = getWindows().FirstOrDefault()) == null, action, interval);
@@ -1997,7 +1997,7 @@ namespace StockSharp.Quik
 		private static void WaitForClose(Func<IEnumerable<SystemWindow>> getWindows, string action)
 		{
 			if (getWindows == null)
-				throw new ArgumentNullException("getWindows");
+				throw new ArgumentNullException(nameof(getWindows));
 
 			WaitFor(() => !getWindows().IsEmpty(), action);
 		}
@@ -2005,7 +2005,7 @@ namespace StockSharp.Quik
 		private static void WaitFor(Func<bool> condition, string action, int interval = 60)
 		{
 			if (condition == null)
-				throw new ArgumentNullException("condition");
+				throw new ArgumentNullException(nameof(condition));
 
 			var now = DateTime.Now;
 
@@ -2031,7 +2031,7 @@ namespace StockSharp.Quik
 		private static void CloseWindow(SystemWindow window, int id)
 		{
 			if (window == null)
-				throw new ArgumentNullException("window");
+				throw new ArgumentNullException(nameof(window));
 
 			var btn = window.AllChildWindows.First(w => w.DialogID == id);
 			window.Command(btn);

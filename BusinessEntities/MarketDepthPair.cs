@@ -25,7 +25,7 @@ namespace StockSharp.BusinessEntities
 		public MarketDepthPair(Security security, Quote bid, Quote ask)
 		{
 			if (security == null)
-				throw new ArgumentNullException("security");
+				throw new ArgumentNullException(nameof(security));
 
 			if (bid != null && bid.OrderDirection != Sides.Buy)
 				throw new ArgumentException(LocalizedStrings.Str492);
@@ -50,14 +50,14 @@ namespace StockSharp.BusinessEntities
 		/// </summary>
 		[DisplayNameLoc(LocalizedStrings.BidKey)]
 		[DescriptionLoc(LocalizedStrings.Str494Key)]
-		public Quote Bid { get; private set; }
+		public Quote Bid { get; }
 
 		/// <summary>
 		/// Ask.
 		/// </summary>
 		[DisplayNameLoc(LocalizedStrings.AskKey)]
 		[DescriptionLoc(LocalizedStrings.Str495Key)]
-		public Quote Ask { get; private set; }
+		public Quote Ask { get; }
 
 		/// <summary>
 		/// Spread by price. Is <see langword="null" />, if one of the quotes is empty.

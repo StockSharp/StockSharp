@@ -86,10 +86,10 @@ namespace StockSharp.Algo.Testing
 			set
 			{
 				if (value < 0)
-					throw new ArgumentOutOfRangeException("value", value, LocalizedStrings.Str1182);
+					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.Str1182);
 
 				if (value > 100)
-					throw new ArgumentOutOfRangeException("value", value, LocalizedStrings.Str1183);
+					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.Str1183);
 
 				_failing = value;
 				NotifyChanged("Failing");
@@ -111,7 +111,7 @@ namespace StockSharp.Algo.Testing
 			set
 			{
 				if (value < TimeSpan.Zero)
-					throw new ArgumentOutOfRangeException("value", value, LocalizedStrings.Str1185);
+					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.Str1185);
 
 				_latency = value;
 				NotifyChanged("Latency");
@@ -152,7 +152,7 @@ namespace StockSharp.Algo.Testing
 			set
 			{
 				if (value < TimeSpan.Zero)
-					throw new ArgumentOutOfRangeException("value", value, LocalizedStrings.Str940);
+					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.Str940);
 
 				_bufferTime = value;
 				NotifyChanged("BufferTime");
@@ -321,7 +321,7 @@ namespace StockSharp.Algo.Testing
 			set
 			{
 				if (value < TimeSpan.Zero)
-					throw new ArgumentOutOfRangeException("value", value, LocalizedStrings.Str940);
+					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.Str940);
 
 				_portfolioRecalcInterval = value;
 				NotifyChanged("PortfolioRecalcInterval");
@@ -381,7 +381,7 @@ namespace StockSharp.Algo.Testing
 			set
 			{
 				if (value == null)
-					throw new ArgumentNullException("value");
+					throw new ArgumentNullException(nameof(value));
 
 				_priceLimitOffset = value;
 			}

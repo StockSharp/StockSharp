@@ -10,7 +10,7 @@
 		public LookupSecuritiesResultCommand(IEnumerable<Security> securities)
 		{
 			if (securities == null)
-				throw new ArgumentNullException("securities");
+				throw new ArgumentNullException(nameof(securities));
 
 			Securities = securities;
 		}

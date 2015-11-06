@@ -16,10 +16,10 @@ namespace StockSharp.Algo.Indicators
 		internal GatorHistogram(AlligatorLine line1, AlligatorLine line2, bool isNegative)
 		{
 			if (line1 == null)
-				throw new ArgumentNullException("line1");
+				throw new ArgumentNullException(nameof(line1));
 
 			if (line2 == null)
-				throw new ArgumentNullException("line2");
+				throw new ArgumentNullException(nameof(line2));
 
 			_line1 = line1;
 			_line2 = line2;

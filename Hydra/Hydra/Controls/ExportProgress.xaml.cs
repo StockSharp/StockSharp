@@ -46,10 +46,10 @@ namespace StockSharp.Hydra.Controls
 		public void Init(ExportButton button, Grid mainGrid)
 		{
 			if (button == null)
-				throw new ArgumentNullException("button");
+				throw new ArgumentNullException(nameof(button));
 
 			if (mainGrid == null)
-				throw new ArgumentNullException("mainGrid");
+				throw new ArgumentNullException(nameof(mainGrid));
 
 			_button = button;
 			_mainGrid = mainGrid;
@@ -58,13 +58,13 @@ namespace StockSharp.Hydra.Controls
 		public void Start(Security security, Type dataType, object arg, IEnumerableEx values, object path)
 		{
 			if (dataType == null)
-				throw new ArgumentNullException("dataType");
+				throw new ArgumentNullException(nameof(dataType));
 
 			if (security == null && dataType != typeof(NewsMessage) && dataType != typeof(SecurityMessage))
-				throw new ArgumentNullException("security");
+				throw new ArgumentNullException(nameof(security));
 
 			if (values == null)
-				throw new ArgumentNullException("values");
+				throw new ArgumentNullException(nameof(values));
 
 			var currProgress = 5;
 
@@ -132,7 +132,7 @@ namespace StockSharp.Hydra.Controls
 					else if (dataType == typeof(ExecutionMessage))
 					{
 						if (arg == null)
-							throw new ArgumentNullException("arg");
+							throw new ArgumentNullException(nameof(arg));
 
 						switch ((ExecutionTypes)arg)
 						{
@@ -151,7 +151,7 @@ namespace StockSharp.Hydra.Controls
 						}
 					}
 					else
-						throw new ArgumentOutOfRangeException("dataType", dataType, LocalizedStrings.Str721);
+						throw new ArgumentOutOfRangeException(nameof(dataType), dataType, LocalizedStrings.Str721);
 
 
 					if (!wnd.ShowModal(this))
@@ -170,7 +170,7 @@ namespace StockSharp.Hydra.Controls
 					else if (dataType == typeof(ExecutionMessage))
 					{
 						if (arg == null)
-							throw new ArgumentNullException("arg");
+							throw new ArgumentNullException(nameof(arg));
 
 						switch ((ExecutionTypes)arg)
 						{
@@ -189,7 +189,7 @@ namespace StockSharp.Hydra.Controls
 						}
 					}
 					else
-						throw new ArgumentOutOfRangeException("dataType", dataType, LocalizedStrings.Str721);
+						throw new ArgumentOutOfRangeException(nameof(dataType), dataType, LocalizedStrings.Str721);
 
 					fileName = (string)path;
 					exporter = new TextExporter(security, arg, isCancelled, fileName, wnd.TxtTemplate, wnd.TxtHeader);

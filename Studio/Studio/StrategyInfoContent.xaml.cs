@@ -278,10 +278,10 @@ namespace StockSharp.Studio
 		private IStudioControl OpenControl(string id, Type ctrlType, object tag, Func<IStudioControl> getControl)
 		{
 			if (ctrlType == null)
-				throw new ArgumentNullException("ctrlType");
+				throw new ArgumentNullException(nameof(ctrlType));
 
 			if (getControl == null)
-				throw new ArgumentNullException("getControl");
+				throw new ArgumentNullException(nameof(getControl));
 
 			id = id.ToLowerInvariant();
 

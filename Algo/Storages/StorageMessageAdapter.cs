@@ -28,10 +28,10 @@ namespace StockSharp.Algo.Storages
 			: base(innerAdapter)
 		{
 			if (entityRegistry == null)
-				throw new ArgumentNullException("entityRegistry");
+				throw new ArgumentNullException(nameof(entityRegistry));
 
 			if (storageRegistry == null)
-				throw new ArgumentNullException("storageRegistry");
+				throw new ArgumentNullException(nameof(storageRegistry));
 
 			_entityRegistry = entityRegistry;
 			_storageRegistry = storageRegistry;
@@ -91,7 +91,7 @@ namespace StockSharp.Algo.Storages
 			set
 			{
 				if (value == null)
-					throw new ArgumentNullException("value");
+					throw new ArgumentNullException(nameof(value));
 
 				_drive = value;
 			}
@@ -113,7 +113,7 @@ namespace StockSharp.Algo.Storages
 			set
 			{
 				if (value < TimeSpan.Zero)
-					throw new ArgumentOutOfRangeException("value");
+					throw new ArgumentOutOfRangeException(nameof(value));
 
 				_daysLoad = value;
 			}

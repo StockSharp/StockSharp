@@ -9,7 +9,7 @@
 		public NewNewsCommand(News news)
 		{
 			if (news == null)
-				throw new ArgumentNullException("news");
+				throw new ArgumentNullException(nameof(news));
 
 			News = news;
 		}

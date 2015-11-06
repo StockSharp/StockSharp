@@ -29,7 +29,7 @@ namespace StockSharp.Algo.Storages.Backup
 		public AmazonGlacierService(RegionEndpoint endpoint, string vaultName, string accessKey, string secretKey)
 		{
 			if (vaultName.IsEmpty())
-				throw new ArgumentNullException("vaultName");
+				throw new ArgumentNullException(nameof(vaultName));
 
 			_client = new AmazonS3Client(new BasicAWSCredentials(accessKey, secretKey), endpoint);
 			_vaultName = vaultName;

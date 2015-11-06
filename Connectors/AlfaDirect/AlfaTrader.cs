@@ -139,7 +139,7 @@
 		public IEnumerable<Range<DateTimeOffset>> GetSupportedRanges(CandleSeries series)
 		{
 			if (series == null)
-				throw new ArgumentNullException("series");
+				throw new ArgumentNullException(nameof(series));
 
 			if (series.CandleType == typeof(TimeFrameCandle) &&
 				series.Arg is TimeSpan && AlfaTimeFrames.CanConvert((TimeSpan)series.Arg))
@@ -157,7 +157,7 @@
 		public void SubscribeCandles(CandleSeries series, DateTimeOffset from, DateTimeOffset to)
 		{
 			if (series == null)
-				throw new ArgumentNullException("series");
+				throw new ArgumentNullException(nameof(series));
 
 			var timeFrame = series.Arg.To<TimeSpan>();
 			var transactionId = TransactionIdGenerator.GetNextId();

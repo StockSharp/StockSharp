@@ -129,10 +129,10 @@ namespace StockSharp.Hydra.Panes
 		public void Draw(CandleSeries series, IEnumerable<Candle> candles)
 		{
 			if (series == null)
-				throw new ArgumentNullException("series");
+				throw new ArgumentNullException(nameof(series));
 
 			if (candles == null)
-				throw new ArgumentNullException("candles");
+				throw new ArgumentNullException(nameof(candles));
 
 			Series = series;
 			_candles = candles;

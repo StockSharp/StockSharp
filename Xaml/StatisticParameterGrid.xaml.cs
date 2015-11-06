@@ -30,7 +30,7 @@ namespace StockSharp.Xaml
 		/// <summary>
 		/// The parameters to be displayed.
 		/// </summary>
-		public IList<IStatisticParameter> Parameters { get; private set; }
+		public IList<IStatisticParameter> Parameters { get; }
 
 		private StatisticManager _statisticManager;
 

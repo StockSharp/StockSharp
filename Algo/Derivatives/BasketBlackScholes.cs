@@ -28,10 +28,10 @@ namespace StockSharp.Algo.Derivatives
 			public InnerModel(BlackScholes model, IPositionManager positionManager)
 			{
 				if (model == null)
-					throw new ArgumentNullException("model");
+					throw new ArgumentNullException(nameof(model));
 
 				if (positionManager == null)
-					throw new ArgumentNullException("positionManager");
+					throw new ArgumentNullException(nameof(positionManager));
 
 				Model = model;
 				PositionManager = positionManager;
@@ -40,12 +40,12 @@ namespace StockSharp.Algo.Derivatives
 			/// <summary>
 			/// The model for calculating Greeks values by the Black-Scholes formula.
 			/// </summary>
-			public BlackScholes Model { get; private set; }
+			public BlackScholes Model { get; }
 
 			/// <summary>
 			/// The position manager.
 			/// </summary>
-			public IPositionManager PositionManager { get; private set; }
+			public IPositionManager PositionManager { get; }
 		}
 
 		/// <summary>
@@ -68,7 +68,7 @@ namespace StockSharp.Algo.Derivatives
 			public InnerModelList(BasketBlackScholes parent)
 			{
 				if (parent == null)
-					throw new ArgumentNullException("parent");
+					throw new ArgumentNullException(nameof(parent));
 
 				_parent = parent;
 			}
@@ -78,7 +78,7 @@ namespace StockSharp.Algo.Derivatives
 				get
 				{
 					if (option == null)
-						throw new ArgumentNullException("option");
+						throw new ArgumentNullException(nameof(option));
 
 					return this.SyncGet(c => c.FirstOrDefault(i => i.Model.Option == option));
 				}
@@ -113,10 +113,7 @@ namespace StockSharp.Algo.Derivatives
 		/// <summary>
 		/// Information about options.
 		/// </summary>
-		public IInnerModelList InnerModels
-		{
-			get { return _innerModels; }
-		}
+		public IInnerModelList InnerModels => _innerModels;
 
 		/// <summary>
 		/// The position by the underlying asset.

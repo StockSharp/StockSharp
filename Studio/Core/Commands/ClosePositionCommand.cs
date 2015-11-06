@@ -15,7 +15,7 @@ namespace StockSharp.Studio.Core.Commands
 		public ClosePositionCommand(Position position)
 		{
 			if (position == null)
-				throw new ArgumentNullException("position");
+				throw new ArgumentNullException(nameof(position));
 
 			Position = position;
 		}

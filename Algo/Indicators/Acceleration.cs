@@ -35,10 +35,10 @@ namespace StockSharp.Algo.Indicators
 		public Acceleration(AwesomeOscillator ao, SimpleMovingAverage sma)
 		{
 			if (ao == null)
-				throw new ArgumentNullException("ao");
+				throw new ArgumentNullException(nameof(ao));
 
 			if (sma == null)
-				throw new ArgumentNullException("sma");
+				throw new ArgumentNullException(nameof(sma));
 
 			Ao = ao;
 			Sma = sma;
@@ -51,7 +51,7 @@ namespace StockSharp.Algo.Indicators
 		[DisplayName("MA")]
 		[DescriptionLoc(LocalizedStrings.Str731Key)]
 		[CategoryLoc(LocalizedStrings.GeneralKey)]
-		public SimpleMovingAverage Sma { get; private set; }
+		public SimpleMovingAverage Sma { get; }
 
 		/// <summary>
 		/// Awesome Oscillator.
@@ -60,12 +60,12 @@ namespace StockSharp.Algo.Indicators
 		[DisplayName("AO")]
 		[DescriptionLoc(LocalizedStrings.Str836Key)]
 		[CategoryLoc(LocalizedStrings.GeneralKey)]
-		public AwesomeOscillator Ao { get; private set; }
+		public AwesomeOscillator Ao { get; }
 
 		/// <summary>
 		/// Whether the indicator is set.
 		/// </summary>
-		public override bool IsFormed { get { return Sma.IsFormed; } }
+		public override bool IsFormed => Sma.IsFormed;
 
 		/// <summary>
 		/// To handle the input value.

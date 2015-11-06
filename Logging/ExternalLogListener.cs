@@ -15,7 +15,7 @@ namespace StockSharp.Logging
 		public ExternalLogListener(ILogListener logger)
 		{
 			if (logger == null)
-				throw new ArgumentNullException("logger");
+				throw new ArgumentNullException(nameof(logger));
 
 			Logger = logger;
 		}
@@ -23,7 +23,7 @@ namespace StockSharp.Logging
 		/// <summary>
 		/// External recipient of messages.
 		/// </summary>
-		public ILogListener Logger { get; private set; }
+		public ILogListener Logger { get; }
 
 		/// <summary>
 		/// To record messages.

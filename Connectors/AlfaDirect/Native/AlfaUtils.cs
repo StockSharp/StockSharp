@@ -44,7 +44,7 @@
 				case "OCM": return OptionTypes.Call;
 				case "OPM": return OptionTypes.Put;
 			}
-			throw new ArgumentOutOfRangeException("atCode");
+			throw new ArgumentOutOfRangeException(nameof(atCode));
 		}
 
 		public static string GetSecurityClass(this IDictionary<string, RefPair<SecurityTypes, string>> securityClassInfo, SecurityTypes? secType, string boardName)

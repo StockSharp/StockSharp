@@ -87,7 +87,7 @@ namespace StockSharp.Messages
 		public static explicit operator decimal(Currency unit)
 		{
 			if (unit == null)
-				throw new ArgumentNullException("unit");
+				throw new ArgumentNullException(nameof(unit));
 
 			return unit.Value;
 		}
@@ -104,10 +104,10 @@ namespace StockSharp.Messages
 		public static Currency operator +(Currency c1, Currency c2)
 		{
 			if (c1 == null)
-				throw new ArgumentNullException("c1");
+				throw new ArgumentNullException(nameof(c1));
 
 			if (c2 == null)
-				throw new ArgumentNullException("c2");
+				throw new ArgumentNullException(nameof(c2));
 
 			return (decimal)c1 + (decimal)c2;
 		}
@@ -121,10 +121,10 @@ namespace StockSharp.Messages
 		public static Currency operator -(Currency c1, Currency c2)
 		{
 			if (c1 == null)
-				throw new ArgumentNullException("c1");
+				throw new ArgumentNullException(nameof(c1));
 
 			if (c2 == null)
-				throw new ArgumentNullException("c2");
+				throw new ArgumentNullException(nameof(c2));
 
 			return (decimal)c1 - (decimal)c2;
 		}
@@ -138,10 +138,10 @@ namespace StockSharp.Messages
 		public static Currency operator *(Currency c1, Currency c2)
 		{
 			if (c1 == null)
-				throw new ArgumentNullException("c1");
+				throw new ArgumentNullException(nameof(c1));
 
 			if (c2 == null)
-				throw new ArgumentNullException("c2");
+				throw new ArgumentNullException(nameof(c2));
 
 			return (decimal)c1 * (decimal)c2;
 		}
@@ -155,10 +155,10 @@ namespace StockSharp.Messages
 		public static Currency operator /(Currency c1, Currency c2)
 		{
 			if (c1 == null)
-				throw new ArgumentNullException("c1");
+				throw new ArgumentNullException(nameof(c1));
 
 			if (c2 == null)
-				throw new ArgumentNullException("c2");
+				throw new ArgumentNullException(nameof(c2));
 
 			return (decimal)c1 / (decimal)c2;
 		}

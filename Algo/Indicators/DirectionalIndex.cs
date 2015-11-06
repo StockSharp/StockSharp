@@ -71,7 +71,7 @@ namespace StockSharp.Algo.Indicators
 		[DisplayName("DI+")]
 		[Description("DI+.")]
 		[CategoryLoc(LocalizedStrings.GeneralKey)]
-		public DiPlus Plus { get; private set; }
+		public DiPlus Plus { get; }
 
 		/// <summary>
 		/// DI-.
@@ -80,7 +80,7 @@ namespace StockSharp.Algo.Indicators
 		[DisplayName("DI-")]
 		[Description("DI-.")]
 		[CategoryLoc(LocalizedStrings.GeneralKey)]
-		public DiMinus Minus { get; private set; }
+		public DiMinus Minus { get; }
 
 		/// <summary>
 		/// To handle the input value.

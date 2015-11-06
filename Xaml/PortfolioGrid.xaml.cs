@@ -22,7 +22,7 @@ namespace StockSharp.Xaml
 			public PositionItem(BasePosition position)
 			{
 				if (position == null)
-					throw new ArgumentNullException("position");
+					throw new ArgumentNullException(nameof(position));
 
 				Position = position;
 				Portfolio = position as Portfolio;
@@ -48,9 +48,9 @@ namespace StockSharp.Xaml
 
 			public string Name { get; private set; }
 
-			public BasePosition Position { get; private set; }
+			public BasePosition Position { get; }
 
-			public Portfolio Portfolio { get; private set; }
+			public Portfolio Portfolio { get; }
 
 			public string DepoName { get; private set; }
 
@@ -77,26 +77,17 @@ namespace StockSharp.Xaml
 		/// <summary>
 		/// The list of portfolios added to the table.
 		/// </summary>
-		public IListEx<BasePosition> Portfolios
-		{
-			get { return _positions; }
-		}
+		public IListEx<BasePosition> Portfolios => _positions;
 
 		/// <summary>
 		/// The list of positions added to the table.
 		/// </summary>
-		public IListEx<BasePosition> Positions
-		{
-			get { return _positions; }
-		}
+		public IListEx<BasePosition> Positions => _positions;
 
 		/// <summary>
 		/// The selected position.
 		/// </summary>
-		public BasePosition SelectedPosition
-		{
-			get { return SelectedPositions.FirstOrDefault(); }
-		}
+		public BasePosition SelectedPosition => SelectedPositions.FirstOrDefault();
 
 		/// <summary>
 		/// Selected trades.

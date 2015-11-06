@@ -19,7 +19,7 @@ namespace StockSharp.Alor
 		private void Async(Action handler)
 		{
 			if (handler == null)
-				throw new ArgumentNullException("handler");
+				throw new ArgumentNullException(nameof(handler));
 
 			handler.DoAsync(RaiseProcessDataError);
 		}
@@ -77,7 +77,7 @@ namespace StockSharp.Alor
 		private void OpenTable(AlorTable table, Action<int, object[]> handler, bool openTable = true)
 		{
 			if (table == null)
-				throw new ArgumentNullException("table");
+				throw new ArgumentNullException(nameof(table));
 
 			var slotTables = (ISlotTables)_slot.tables;
 			if (slotTables == null)
@@ -100,7 +100,7 @@ namespace StockSharp.Alor
 				throw new ArgumentException(LocalizedStrings.Str3702Params.Put(table.Name));
 
 			if (openTable && handler == null)
-				throw new ArgumentNullException("handler");
+				throw new ArgumentNullException(nameof(handler));
 
 			Action<int, int, object> safeHandler = (openIdLocal, rowIdLocal, fieldsLocal) => Async(() =>
 			{
@@ -119,7 +119,7 @@ namespace StockSharp.Alor
 				meta.Open(_slot.ID, meta.Name);
 
 				if (meta.ID == 0)
-					throw new ArgumentException(LocalizedStrings.Str3703Params.Put(table.Name), "table");
+					throw new ArgumentException(LocalizedStrings.Str3703Params.Put(table.Name), nameof(table));
 			}
 			else
 			{
@@ -131,16 +131,16 @@ namespace StockSharp.Alor
 		private Security GetSecurity(AlorTable table, object[] values, AlorColumn codeColumn, AlorColumn boardColumn)
 		{
 			if (table == null)
-				throw new ArgumentNullException("table");
+				throw new ArgumentNullException(nameof(table));
 
 			if (values == null)
-				throw new ArgumentNullException("values");
+				throw new ArgumentNullException(nameof(values));
 
 			if (codeColumn == null)
-				throw new ArgumentNullException("codeColumn");
+				throw new ArgumentNullException(nameof(codeColumn));
 
 			if (boardColumn == null)
-				throw new ArgumentNullException("boardColumn");
+				throw new ArgumentNullException(nameof(boardColumn));
 
 			var secCode = table.GetValue<string>(values, codeColumn);
 			var secBoard = ExchangeBoard.GetBoard(table.GetValue<string>(values, boardColumn));

@@ -31,10 +31,7 @@ namespace StockSharp.Algo.Testing
 		/// <summary>
 		/// Market data type.
 		/// </summary>
-		public override MarketDataTypes DataType
-		{
-			get { return MarketDataTypes.MarketDepth; }
-		}
+		public override MarketDataTypes DataType => MarketDataTypes.MarketDepth;
 
 		/// <summary>
 		/// To use to generate best quotes in the order book volume of history trades.
@@ -58,7 +55,7 @@ namespace StockSharp.Algo.Testing
 			set
 			{
 				if (value < 1)
-					throw new ArgumentOutOfRangeException("value", value, LocalizedStrings.Str1137);
+					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.Str1137);
 
 				_minSpreadStepCount = value;
 			}
@@ -78,7 +75,7 @@ namespace StockSharp.Algo.Testing
 			set
 			{
 				if (value < 1)
-					throw new ArgumentOutOfRangeException("value", value, LocalizedStrings.Str1138);
+					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.Str1138);
 
 				_maxSpreadStepCount = value;
 			}
@@ -98,7 +95,7 @@ namespace StockSharp.Algo.Testing
 			set
 			{
 				if (value < 0)
-					throw new ArgumentOutOfRangeException("value", value, LocalizedStrings.Str1139);
+					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.Str1139);
 
 				_maxBidsDepth = value;
 			}
@@ -118,7 +115,7 @@ namespace StockSharp.Algo.Testing
 			set
 			{
 				if (value < 0)
-					throw new ArgumentOutOfRangeException("value", value, LocalizedStrings.Str1140);
+					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.Str1140);
 
 				_maxAsksDepth = value;
 			}
@@ -143,7 +140,7 @@ namespace StockSharp.Algo.Testing
 			set
 			{
 				if (value < 1)
-					throw new ArgumentOutOfRangeException("value", value, LocalizedStrings.Str1141);
+					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.Str1141);
 
 				_maxGenerations = value;
 			}

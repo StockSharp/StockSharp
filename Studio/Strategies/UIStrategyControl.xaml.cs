@@ -22,7 +22,7 @@ namespace StockSharp.Studio.Strategies
 			: this()
 		{
 			if (strategy == null)
-				throw new ArgumentNullException("strategy");
+				throw new ArgumentNullException(nameof(strategy));
 
 			_strategy = strategy;
 		}

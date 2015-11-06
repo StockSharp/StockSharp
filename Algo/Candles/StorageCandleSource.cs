@@ -26,17 +26,17 @@ namespace StockSharp.Algo.Candles
 			public SeriesInfo(CandleSeries series, DateTimeOffset from, DateTimeOffset to, IMarketDataStorage<Candle> storage)
 			{
 				if (series == null)
-					throw new ArgumentNullException("series");
+					throw new ArgumentNullException(nameof(series));
 
 				if (storage == null)
-					throw new ArgumentNullException("storage");
+					throw new ArgumentNullException(nameof(storage));
 
 				Series = series;
 				Reader = storage.Load(from, to).GetEnumerator();
 			}
 
-			public CandleSeries Series { get; private set; }
-			public IEnumerator<Candle> Reader { get; private set; }
+			public CandleSeries Series { get; }
+			public IEnumerator<Candle> Reader { get; }
 			public bool IsStopping { get; set; }
 		}
 
@@ -57,10 +57,7 @@ namespace StockSharp.Algo.Candles
 		/// <summary>
 		/// The source priority by speed (0 - the best).
 		/// </summary>
-		public override int SpeedPriority
-		{
-			get { return 0; }
-		}
+		public override int SpeedPriority => 0;
 
 		/// <summary>
 		/// Market data storage.
@@ -99,7 +96,7 @@ namespace StockSharp.Algo.Candles
 		public override void Start(CandleSeries series, DateTimeOffset from, DateTimeOffset to)
 		{
 			if (series == null)
-				throw new ArgumentNullException("series");
+				throw new ArgumentNullException(nameof(series));
 
 			var storage = GetStorage(series);
 
@@ -111,7 +108,7 @@ namespace StockSharp.Algo.Candles
 			lock (_series.SyncRoot)
 			{
 				if (_series.ContainsKey(series))
-					throw new ArgumentException(LocalizedStrings.Str650Params.Put(series), "series");
+					throw new ArgumentException(LocalizedStrings.Str650Params.Put(series), nameof(series));
 
 				_series.Add(series, new SeriesInfo(series, range.Min, range.Max, storage));
 

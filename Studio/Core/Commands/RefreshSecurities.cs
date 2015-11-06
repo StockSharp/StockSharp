@@ -20,19 +20,19 @@
 		public RefreshSecurities(MarketDataSettings settings, IEnumerable<SecurityTypes> types, Func<bool> isCancelled, Action<int> progressChanged, Action<int> whenFinished)
 		{
 			if (settings == null)
-				throw new ArgumentNullException("settings");
+				throw new ArgumentNullException(nameof(settings));
 
 			if (types == null)
-				throw new ArgumentNullException("types");
+				throw new ArgumentNullException(nameof(types));
 
 			if (isCancelled == null)
-				throw new ArgumentNullException("isCancelled");
+				throw new ArgumentNullException(nameof(isCancelled));
 
 			if (progressChanged == null)
-				throw new ArgumentNullException("progressChanged");
+				throw new ArgumentNullException(nameof(progressChanged));
 
 			if (whenFinished == null)
-				throw new ArgumentNullException("whenFinished");
+				throw new ArgumentNullException(nameof(whenFinished));
 
 			Settings = settings;
 			Types = types;

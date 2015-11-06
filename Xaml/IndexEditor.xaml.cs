@@ -1,4 +1,4 @@
-namespace StockSharp.Xaml
+﻿namespace StockSharp.Xaml
 {
 	using System;
 	using System.Collections.Generic;
@@ -110,15 +110,12 @@ namespace StockSharp.Xaml
 		/// <summary>
 		/// All available instruments.
 		/// </summary>
-		public IList<Security> Securities { get; private set; }
+		public IList<Security> Securities { get; }
 
 		/// <summary>
 		/// Mathematical formula.
 		/// </summary>
-		public Expression Expression
-		{
-			get { return new Expression(ExpressionHelper.Encode(Text)); }
-		}
+		public Expression Expression => new Expression(ExpressionHelper.Encode(Text));
 
 		private string _text = string.Empty;
 
@@ -200,10 +197,7 @@ namespace StockSharp.Xaml
 		/// <remarks>
 		/// By default, it includes: abs, acos, asin, atan, ceiling, cos, exp, floor, ieeeremainder, log, log10, max, min, pow, round, sign, sin, sqrt, tan, truncate.
 		/// </remarks>
-		public IList<string> HighligthFunctions
-		{
-			get { return _highligthFunctions; }
-		}
+		public IList<string> HighligthFunctions => _highligthFunctions;
 
 		private Brush _highligthForeColor = Brushes.Red;
 
@@ -216,7 +210,7 @@ namespace StockSharp.Xaml
 			set
 			{
 				if (value == null)
-					throw new ArgumentNullException("value");
+					throw new ArgumentNullException(nameof(value));
 
 				_highligthForeColor = value;
 			}
@@ -233,7 +227,7 @@ namespace StockSharp.Xaml
 			set
 			{
 				if (value == null)
-					throw new ArgumentNullException("value");
+					throw new ArgumentNullException(nameof(value));
 
 				_highligthBackColor = value;
 			}
@@ -518,13 +512,13 @@ namespace StockSharp.Xaml
 				: base(new InlineUIContainer(tb) { Cursor = Cursors.Hand })
 			{
 				if (security == null)
-					throw new ArgumentNullException("security");
+					throw new ArgumentNullException(nameof(security));
 
 				Security = security;
 				Cursor = Cursors.Hand;
 			}
 
-			public Security Security { get; private set; }
+			public Security Security { get; }
 		}
 
 		private SecurityHyperLink CreateSecurityLink(Security security)

@@ -1,4 +1,4 @@
-namespace StockSharp.Algo.Indicators
+﻿namespace StockSharp.Algo.Indicators
 {
 	using Ecng.Serialization;
 
@@ -56,7 +56,7 @@ namespace StockSharp.Algo.Indicators
 		/// <summary>
 		/// Whether the indicator is set.
 		/// </summary>
-		public override bool IsFormed { get { return Buffer.Count > Shift; } }
+		public override bool IsFormed => Buffer.Count > Shift;
 
 		/// <summary>
 		/// To handle the input value.

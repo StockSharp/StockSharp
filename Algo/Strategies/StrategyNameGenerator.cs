@@ -23,10 +23,10 @@ namespace StockSharp.Algo.Strategies
 			public Source(SmartFormatter formatter, Dictionary<string, string> values)
 			{
 				if (formatter == null)
-					throw new ArgumentNullException("formatter");
+					throw new ArgumentNullException(nameof(formatter));
 
 				if (values == null)
-					throw new ArgumentNullException("values");
+					throw new ArgumentNullException(nameof(values));
 
 				formatter.Parser.AddAlphanumericSelectors();
 				formatter.Parser.AddAdditionalSelectorChars("_");
@@ -63,7 +63,7 @@ namespace StockSharp.Algo.Strategies
 		public StrategyNameGenerator(Strategy strategy)
 		{
 			if (strategy == null)
-				throw new ArgumentNullException("strategy");
+				throw new ArgumentNullException(nameof(strategy));
 
 			_strategy = strategy;
 			_strategy.SecurityChanged += () =>
@@ -105,7 +105,7 @@ namespace StockSharp.Algo.Strategies
 		/// <summary>
 		/// The startegy brief name.
 		/// </summary>
-		public string ShortName { get; private set; }
+		public string ShortName { get; }
 
 		/// <summary>
 		/// The pattern for strategy name formation.

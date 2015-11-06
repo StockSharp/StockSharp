@@ -13,7 +13,7 @@ namespace StockSharp.Studio.Core.Commands
 		public AddStrategyCommand(StrategyInfo info, SessionType sessionType)
 		{
 			if (info == null)
-				throw new ArgumentNullException("info");
+				throw new ArgumentNullException(nameof(info));
 
 			Info = info;
 			SessionType = sessionType;
@@ -22,10 +22,10 @@ namespace StockSharp.Studio.Core.Commands
 		public AddStrategyCommand(StrategyInfo info, StrategyContainer strategy, SessionType sessionType)
 		{
 			if (info == null)
-				throw new ArgumentNullException("info");
+				throw new ArgumentNullException(nameof(info));
 
 			if (strategy == null)
-				throw new ArgumentNullException("strategy");
+				throw new ArgumentNullException(nameof(strategy));
 
 			Info = info;
 			Strategy = strategy;

@@ -119,10 +119,10 @@ namespace StockSharp.LMAX
 		private void SearchSecurities(string secCode, long transactionId, ICollection<Instrument> instruments, bool hasMoreResults)
 		{
 			if (secCode.IsEmpty())
-				throw new ArgumentNullException("secCode", LocalizedStrings.Str3391);
+				throw new ArgumentNullException(nameof(secCode), LocalizedStrings.Str3391);
 
 			if (instruments == null)
-				throw new ArgumentNullException("instruments");
+				throw new ArgumentNullException(nameof(instruments));
 
 			foreach (var instrument in instruments)
 			{

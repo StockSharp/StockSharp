@@ -42,7 +42,7 @@ namespace StockSharp.Algo.Storages
 			public BasketMarketDataStorageEnumerator(BasketMarketDataStorage<T> storage, DateTime date)
 			{
 				if (storage == null)
-					throw new ArgumentNullException("storage");
+					throw new ArgumentNullException(nameof(storage));
 
 				_storage = storage;
 				_date = date;
@@ -100,7 +100,7 @@ namespace StockSharp.Algo.Storages
 			/// <summary>
 			/// Available data types.
 			/// </summary>
-			public IEnumerable<MessageTypes> DataTypes { get; private set; }
+			public IEnumerable<MessageTypes> DataTypes { get; }
 
 			bool IEnumerator.MoveNext()
 			{
@@ -188,10 +188,7 @@ namespace StockSharp.Algo.Storages
 				return serverTime.Value;
 			}
 
-			object IEnumerator.Current
-			{
-				get { return Current; }
-			}
+			object IEnumerator.Current => Current;
 
 			void IEnumerator.Reset()
 			{
@@ -230,10 +227,7 @@ namespace StockSharp.Algo.Storages
 		/// <summary>
 		/// Embedded storages of market data.
 		/// </summary>
-		public ISynchronizedCollection<IMarketDataStorage> InnerStorages
-		{
-			get { return _innerStorages; }
-		}
+		public ISynchronizedCollection<IMarketDataStorage> InnerStorages => _innerStorages;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="BasketMarketDataStorage{T}"/>.

@@ -369,10 +369,7 @@ namespace StockSharp.Algo.Candles
 		/// <summary>
 		/// Volume profile.
 		/// </summary>
-		public VolumeProfile VolumeProfileInfo
-		{
-			get { return _volumeProfileInfo; }
-		}
+		public VolumeProfile VolumeProfileInfo => _volumeProfileInfo;
 
 		/// <summary>
 		/// Open interest.

@@ -13,7 +13,7 @@
 		public RequestLicenseCommand(long brokerId, string account)
 		{
 			if (account.IsEmpty())
-				throw new ArgumentNullException("account");
+				throw new ArgumentNullException(nameof(account));
 
 			BrokerId = brokerId;
 			Account = account;

@@ -9,7 +9,7 @@ namespace StockSharp.Studio.Core.Commands
 		public ResetStrategyCommand(StrategyContainer strategy)
 		{
 			if (strategy == null)
-				throw new ArgumentNullException("strategy");
+				throw new ArgumentNullException(nameof(strategy));
 			Strategy = strategy;
 		}
 	}

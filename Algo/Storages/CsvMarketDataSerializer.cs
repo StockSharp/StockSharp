@@ -53,10 +53,7 @@ namespace StockSharp.Algo.Storages
 
 			private object _lastId;
 
-			public override object LastId
-			{
-				get { return _lastId; }
-			}
+			public override object LastId => _lastId;
 
 			public override void Write(Stream stream)
 			{
@@ -108,7 +105,7 @@ namespace StockSharp.Algo.Storages
 			public CsvReader(Stream stream, Encoding encoding, SecurityId securityId, DateTime date, ExecutionTypes? executionType, object candleArg, MemberProxy[] members)
 			{
 				if (stream == null)
-					throw new ArgumentNullException("stream");
+					throw new ArgumentNullException(nameof(stream));
 
 				_enumerator = stream.EnumerateLines(encoding).GetEnumerator();
 				_stream = stream;
@@ -295,7 +292,7 @@ namespace StockSharp.Algo.Storages
 		public CsvMarketDataSerializer(SecurityId securityId, ExecutionTypes? executionType = null, object candleArg = null, Encoding encoding = null)
 		{
 			if (securityId.IsDefault() && !_isNews)
-				throw new ArgumentNullException("securityId");
+				throw new ArgumentNullException(nameof(securityId));
 
 			SecurityId = securityId;
 			_executionType = executionType;
@@ -337,7 +334,7 @@ namespace StockSharp.Algo.Storages
 		/// <summary>
 		/// Security ID.
 		/// </summary>
-		public SecurityId SecurityId { get; private set; }
+		public SecurityId SecurityId { get; }
 
 		private static string GetFormat(ExecutionTypes? executionType)
 		{
@@ -350,9 +347,9 @@ namespace StockSharp.Algo.Storages
 					case ExecutionTypes.OrderLog:
 						return "{ServerTime:{0}};{ServerTime:zzz};{TransactionId};{OrderId};{OrderPrice};{Volume};{Side};{OrderState};{TimeInForce};{TradeId};{TradePrice};{PortfolioName};{IsSystem}";
 					case null:
-						throw new ArgumentNullException("executionType");
+						throw new ArgumentNullException(nameof(executionType));
 					default:
-						throw new ArgumentOutOfRangeException("executionType");
+						throw new ArgumentOutOfRangeException(nameof(executionType));
 				}
 			}
 			

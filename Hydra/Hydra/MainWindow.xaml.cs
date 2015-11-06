@@ -64,7 +64,7 @@ namespace StockSharp.Hydra
 			public HydraEmailLogListener(MainWindow parent)
 			{
 				if (parent == null)
-					throw new ArgumentNullException("parent");
+					throw new ArgumentNullException(nameof(parent));
 
 				_parent = parent;
 
@@ -867,7 +867,7 @@ namespace StockSharp.Hydra
 					break;
 
 				default:
-					throw new ArgumentOutOfRangeException("e", param, LocalizedStrings.Str1655);
+					throw new ArgumentOutOfRangeException(nameof(e), param, LocalizedStrings.Str1655);
 			}
 
 			var importWnd = DockSite.DocumentWindows.FirstOrDefault(w =>
@@ -979,7 +979,7 @@ namespace StockSharp.Hydra
 		public void ShowPane(IPane pane)
 		{
 			if (pane == null)
-				throw new ArgumentNullException("pane");
+				throw new ArgumentNullException(nameof(pane));
 
 			var wnd = new PaneWindow { Pane = pane };
 			DockSite.DocumentWindows.Add(wnd);

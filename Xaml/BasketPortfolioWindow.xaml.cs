@@ -96,15 +96,9 @@ namespace StockSharp.Xaml
 			InitializeComponent();
 		}
 
-		private Portfolio SelectedAllPortfolio
-		{
-			get { return ComboBoxAllPortfolios != null ? (Portfolio)ComboBoxAllPortfolios.SelectedItem : null; }
-		}
+		private Portfolio SelectedAllPortfolio => ComboBoxAllPortfolios != null ? (Portfolio)ComboBoxAllPortfolios.SelectedItem : null;
 
-		private Portfolio SelectedInnerPortfolio
-		{
-			get { return ListBoxPortfolios != null ? (Portfolio)ListBoxPortfolios.SelectedItem : null; }
-		}
+		private Portfolio SelectedInnerPortfolio => ListBoxPortfolios != null ? (Portfolio)ListBoxPortfolios.SelectedItem : null;
 
 		private void ExecutedOk(object sender, ExecutedRoutedEventArgs e)
 		{

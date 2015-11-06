@@ -13,14 +13,14 @@ namespace StockSharp.Xaml
 		/// <summary>
 		/// The unique key.
 		/// </summary>
-		public Guid Key { get; private set; }
+		public Guid Key { get; }
 
 		internal readonly string KeyStr;
 
 		/// <summary>
 		/// The display name.
 		/// </summary>
-		public string Name { get; private set; }
+		public string Name { get; }
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="LogSourceNode"/>.
@@ -34,7 +34,7 @@ namespace StockSharp.Xaml
 			//	throw new ArgumentNullException("key");
 
 			if (name.IsEmpty())
-				throw new ArgumentNullException("name");
+				throw new ArgumentNullException(nameof(name));
 
 			Key = key;
 			Name = name;

@@ -20,7 +20,7 @@ namespace StockSharp.Algo
 
 		private sealed class OrderInfo
 		{
-			public Order Order { get; private set; }
+			public Order Order { get; }
 
 			public bool RaiseNewOrder { get; set; }
 
@@ -92,7 +92,7 @@ namespace StockSharp.Algo
 					return;
 
 				if (value < -1)
-					throw new ArgumentOutOfRangeException("value", value, LocalizedStrings.NegativeTickCountStorage);
+					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.NegativeTickCountStorage);
 
 				_tradesKeepCount = value;
 				RecycleTrades();
@@ -110,7 +110,7 @@ namespace StockSharp.Algo
 					return;
 
 				if (value < -1)
-					throw new ArgumentOutOfRangeException("value", value, LocalizedStrings.NegativeOrderCountStorage);
+					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.NegativeOrderCountStorage);
 
 				_ordersKeepCount = value;
 				RecycleOrders();
@@ -148,7 +148,7 @@ namespace StockSharp.Algo
 			set
 			{
 				if (value == null)
-					throw new ArgumentNullException("value");
+					throw new ArgumentNullException(nameof(value));
 
 				_entityFactory = value;
 			}
@@ -156,36 +156,21 @@ namespace StockSharp.Algo
 
 		private readonly CachedSynchronizedList<Order> _orders = new CachedSynchronizedList<Order>();
 
-		public IEnumerable<Order> Orders
-		{
-			get { return _orders.Cache; }
-		}
+		public IEnumerable<Order> Orders => _orders.Cache;
 
 		private readonly CachedSynchronizedList<MyTrade> _myTrades = new CachedSynchronizedList<MyTrade>();
 
-		public IEnumerable<MyTrade> MyTrades
-		{
-			get { return _myTrades.Cache; }
-		}
+		public IEnumerable<MyTrade> MyTrades => _myTrades.Cache;
 
-		public virtual IEnumerable<Portfolio> Portfolios
-		{
-			get { return _portfolios.CachedValues; }
-		}
+		public virtual IEnumerable<Portfolio> Portfolios => _portfolios.CachedValues;
 
 		private readonly CachedSynchronizedSet<ExchangeBoard> _exchangeBoards = new CachedSynchronizedSet<ExchangeBoard>();
 
-		public IEnumerable<ExchangeBoard> ExchangeBoards
-		{
-			get { return _exchangeBoards.Cache; }
-		}
+		public IEnumerable<ExchangeBoard> ExchangeBoards => _exchangeBoards.Cache;
 
 		private readonly CachedSynchronizedDictionary<string, Security> _securities = new CachedSynchronizedDictionary<string, Security>(StringComparer.InvariantCultureIgnoreCase);
 
-		public IEnumerable<Security> Securities
-		{
-			get { return _securities.CachedValues; }
-		}
+		public IEnumerable<Security> Securities => _securities.CachedValues;
 
 		private readonly SynchronizedList<OrderFail> _orderRegisterFails = new SynchronizedList<OrderFail>();
 
@@ -203,15 +188,9 @@ namespace StockSharp.Algo
 
 		private readonly CachedSynchronizedDictionary<Tuple<Portfolio, Security, string, TPlusLimits?>, Position> _positions = new CachedSynchronizedDictionary<Tuple<Portfolio, Security, string, TPlusLimits?>, Position>();
 
-		public IEnumerable<Position> Positions
-		{
-			get { return _positions.CachedValues; }
-		}
+		public IEnumerable<Position> Positions => _positions.CachedValues;
 
-		public int SecurityCount
-		{
-			get { return _securities.Count; }
-		}
+		public int SecurityCount => _securities.Count;
 
 		public void Clear()
 		{
@@ -250,7 +229,7 @@ namespace StockSharp.Algo
 		public IEnumerable<Order> GetOrders(Security security, OrderStates state)
 		{
 			if (security == null)
-				throw new ArgumentNullException("security");
+				throw new ArgumentNullException(nameof(security));
 
 			return GetData(security).Orders.CachedValues.Select(info => info.Order).Filter(state);
 		}
@@ -278,7 +257,7 @@ namespace StockSharp.Algo
 		public bool TryAddOrder(Order order)
 		{
 			if (order == null)
-				throw new ArgumentNullException("order");
+				throw new ArgumentNullException(nameof(order));
 
 			bool isNew;
 			GetOrderInfo(GetData(order.Security), order.Type, order.TransactionId, null, null, id => order, out isNew);
@@ -288,10 +267,10 @@ namespace StockSharp.Algo
 		public Tuple<Order, bool, bool> ProcessOrderMessage(Security security, ExecutionMessage message)
 		{
 			if (security == null)
-				throw new ArgumentNullException("security");
+				throw new ArgumentNullException(nameof(security));
 
 			if (message == null)
-				throw new ArgumentNullException("message");
+				throw new ArgumentNullException(nameof(message));
 
 			if (message.Error != null)
 				throw new ArgumentException(LocalizedStrings.Str714Params.PutEx(message));
@@ -444,10 +423,10 @@ namespace StockSharp.Algo
 		public Tuple<OrderFail, bool> ProcessOrderFailMessage(Security security, ExecutionMessage message)
 		{
 			if (security == null)
-				throw new ArgumentNullException("security");
+				throw new ArgumentNullException(nameof(security));
 
 			if (message == null)
-				throw new ArgumentNullException("message");
+				throw new ArgumentNullException(nameof(message));
 
 			var data = GetData(security);
 
@@ -461,7 +440,7 @@ namespace StockSharp.Algo
 			if (order == null)
 			{
 				if (message.OriginalTransactionId == 0)
-					throw new ArgumentOutOfRangeException("message", message.OriginalTransactionId, LocalizedStrings.Str715);
+					throw new ArgumentOutOfRangeException(nameof(message), message.OriginalTransactionId, LocalizedStrings.Str715);
 
 				var orders = data.Orders;
 
@@ -512,16 +491,16 @@ namespace StockSharp.Algo
 		public Tuple<MyTrade, bool> ProcessMyTradeMessage(Security security, ExecutionMessage message)
 		{
 			if (security == null)
-				throw new ArgumentNullException("security");
+				throw new ArgumentNullException(nameof(security));
 
 			if (message == null)
-				throw new ArgumentNullException("message");
+				throw new ArgumentNullException(nameof(message));
 
 			var originalTransactionId = _orderStatusTransactions.Contains(message.OriginalTransactionId)
 				? 0 : message.OriginalTransactionId;
 
 			if (originalTransactionId == 0 && message.OrderId == null && message.OrderStringId.IsEmpty())
-				throw new ArgumentOutOfRangeException("message", originalTransactionId, LocalizedStrings.Str715);
+				throw new ArgumentOutOfRangeException(nameof(message), originalTransactionId, LocalizedStrings.Str715);
 
 			var securityData = GetData(security);
 
@@ -592,10 +571,10 @@ namespace StockSharp.Algo
 		public Tuple<Trade, bool> ProcessTradeMessage(Security security, ExecutionMessage message)
 		{
 			if (security == null)
-				throw new ArgumentNullException("security");
+				throw new ArgumentNullException(nameof(security));
 
 			if (message == null)
-				throw new ArgumentNullException("message");
+				throw new ArgumentNullException(nameof(message));
 
 			var trade = GetTrade(security, message.TradeId, message.TradeStringId, (id, stringId) =>
 			{
@@ -612,7 +591,7 @@ namespace StockSharp.Algo
 		public Tuple<News, bool> ProcessNewsMessage(Security security, NewsMessage message)
 		{
 			if (message == null)
-				throw new ArgumentNullException("message");
+				throw new ArgumentNullException(nameof(message));
 
 			var isNew = false;
 
@@ -668,7 +647,7 @@ namespace StockSharp.Algo
 		private static Tuple<long, bool, bool> CreateOrderKey(OrderTypes type, long transactionId, bool isCancel)
 		{
 			if (transactionId <= 0)
-				throw new ArgumentOutOfRangeException("transactionId", transactionId, LocalizedStrings.Str718);
+				throw new ArgumentOutOfRangeException(nameof(transactionId), transactionId, LocalizedStrings.Str718);
 
 			return Tuple.Create(transactionId, type == OrderTypes.Conditional, isCancel);
 		}
@@ -676,7 +655,7 @@ namespace StockSharp.Algo
 		public Order GetOrder(Security security, long transactionId, long? orderId, string orderStringId, OrderTypes orderType = OrderTypes.Limit, bool isCancel = false)
 		{
 			if (security == null)
-				throw new ArgumentNullException("security");
+				throw new ArgumentNullException(nameof(security));
 
 			if (transactionId == 0 && orderId == null && orderStringId.IsEmpty())
 				throw new ArgumentException(LocalizedStrings.Str719);
@@ -703,7 +682,7 @@ namespace StockSharp.Algo
 		private Tuple<Order, bool, bool> GetOrderInfo(SecurityData securityData, OrderTypes type, long transactionId, long? orderId, string orderStringId, Func<long, Order> createOrder, out bool isNew, bool newOrderRaised = false)
 		{
 			if (createOrder == null)
-				throw new ArgumentNullException("createOrder");
+				throw new ArgumentNullException(nameof(createOrder));
 
 			if (transactionId == 0 && orderId == null && orderStringId.IsEmpty())
 				throw new ArgumentException(LocalizedStrings.Str719);
@@ -779,10 +758,10 @@ namespace StockSharp.Algo
 		public Tuple<Trade, bool> GetTrade(Security security, long? id, string strId, Func<long?, string, Trade> createTrade)
 		{
 			if (security == null)
-				throw new ArgumentNullException("security");
+				throw new ArgumentNullException(nameof(security));
 
 			if (createTrade == null)
-				throw new ArgumentNullException("createTrade");
+				throw new ArgumentNullException(nameof(createTrade));
 
 			var isNew = false;
 
@@ -827,7 +806,7 @@ namespace StockSharp.Algo
 		public Tuple<Portfolio, bool, bool> ProcessPortfolio(string name, Func<Portfolio, bool> changePortfolio = null)
 		{
 			if (name.IsEmpty())
-				throw new ArgumentNullException("name");
+				throw new ArgumentNullException(nameof(name));
 
 			bool isNew;
 
@@ -875,7 +854,7 @@ namespace StockSharp.Algo
 		public Security TryAddSecurity(string id, Func<string, Tuple<string, ExchangeBoard>> idConvert, out bool isNew)
 		{
 			if (idConvert == null)
-				throw new ArgumentNullException("idConvert");
+				throw new ArgumentNullException(nameof(idConvert));
 
 			return _securities.SafeAdd(id, key =>
 			{
@@ -950,7 +929,7 @@ namespace StockSharp.Algo
 		public object GetNativeId(Security security)
 		{
 			if (security == null)
-				throw new ArgumentNullException("security");
+				throw new ArgumentNullException(nameof(security));
 
 			return _nativeIdSecurities.LastOrDefault(p => p.Value == security).Key;
 		}

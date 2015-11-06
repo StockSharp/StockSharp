@@ -189,7 +189,7 @@ namespace StockSharp.Xaml
 			set
 			{
 				if (value == null)
-					throw new ArgumentNullException("value");
+					throw new ArgumentNullException(nameof(value));
 
 				_priceTextFormat = value;
 			}
@@ -206,7 +206,7 @@ namespace StockSharp.Xaml
 			set
 			{
 				if (value == null)
-					throw new ArgumentNullException("value");
+					throw new ArgumentNullException(nameof(value));
 
 				_volumeTextFormat = value;
 			}
@@ -219,7 +219,7 @@ namespace StockSharp.Xaml
 		public void UpdateFormat(Security security)
 		{
 			if (security == null)
-				throw new ArgumentNullException("security");
+				throw new ArgumentNullException(nameof(security));
 
 			if (security.Decimals != null)
 			{
@@ -243,7 +243,7 @@ namespace StockSharp.Xaml
 		public void ProcessNewOrder(Order order)
 		{
 			if (order == null)
-				throw new ArgumentNullException("order");
+				throw new ArgumentNullException(nameof(order));
 
 			var registry = order.Type == OrderTypes.Conditional ? _stopOrdersRegistry : _ordersRegistry;
 			registry.ProcessNewOrder(order);
@@ -256,7 +256,7 @@ namespace StockSharp.Xaml
 		public void ProcessChangedOrder(Order order)
 		{
 			if (order == null)
-				throw new ArgumentNullException("order");
+				throw new ArgumentNullException(nameof(order));
 
 			var registry = order.Type == OrderTypes.Conditional ? _stopOrdersRegistry : _ordersRegistry;
 			registry.ProcessChangedOrder(order);
@@ -269,7 +269,7 @@ namespace StockSharp.Xaml
 		public void UpdateDepth(MarketDepth depth)
 		{
 			if (depth == null)
-				throw new ArgumentNullException("depth");
+				throw new ArgumentNullException(nameof(depth));
 
 			lock (_lastDepthSync)
 				_lastDepth = depth;
@@ -288,7 +288,7 @@ namespace StockSharp.Xaml
 		public void UpdateDepth(QuoteChangeMessage message)
 		{
 			if (message == null)
-				throw new ArgumentNullException("message");
+				throw new ArgumentNullException(nameof(message));
 
 			var clone = new QuoteChangeMessage
 			{
@@ -388,7 +388,7 @@ namespace StockSharp.Xaml
 		public MarketDepthColumns GetColumnIndex(DataGridCell cell)
 		{
 			if (cell == null)
-				throw new ArgumentNullException("cell");
+				throw new ArgumentNullException(nameof(cell));
 
 			return _columnIndecies[cell.Column];
 		}

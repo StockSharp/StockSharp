@@ -54,10 +54,7 @@ namespace StockSharp.Algo.Testing
 				_parent = parent;
 			}
 
-			public override DateTimeOffset CurrentTime
-			{
-				get { return _parent.CurrentTime; }
-			}
+			public override DateTimeOffset CurrentTime => _parent.CurrentTime;
 		}
 
 		private readonly CachedSynchronizedDictionary<Tuple<SecurityId, MarketDataTypes, object>, int> _subscribedCandles = new CachedSynchronizedDictionary<Tuple<SecurityId, MarketDataTypes, object>, int>();
@@ -96,13 +93,13 @@ namespace StockSharp.Algo.Testing
 		public HistoryEmulationConnector(ISecurityProvider securityProvider, IEnumerable<Portfolio> portfolios, IStorageRegistry storageRegistry)
 		{
 			if (securityProvider == null)
-				throw new ArgumentNullException("securityProvider");
+				throw new ArgumentNullException(nameof(securityProvider));
 
 			if (portfolios == null)
-				throw new ArgumentNullException("portfolios");
+				throw new ArgumentNullException(nameof(portfolios));
 
 			if (storageRegistry == null)
-				throw new ArgumentNullException("storageRegistry");
+				throw new ArgumentNullException(nameof(storageRegistry));
 
 			// чтобы каждый раз при повторной эмуляции получать одинаковые номера транзакций
 			TransactionIdGenerator = new IncrementalIdGenerator();
@@ -119,12 +116,12 @@ namespace StockSharp.Algo.Testing
 			PnLManager = null;
 			SlippageManager = null;
 
-			_historyAdapter = new HistoryMessageAdapter(TransactionIdGenerator, securityProvider) { StorageRegistry = storageRegistry };
+			HistoryMessageAdapter = new HistoryMessageAdapter(TransactionIdGenerator, securityProvider) { StorageRegistry = storageRegistry };
 			_historyChannel = new InMemoryMessageChannel("History Out", SendOutError);
 
 			Adapter = new HistoryBasketMessageAdapter(this);
 			Adapter.InnerAdapters.Add(EmulationAdapter);
-			Adapter.InnerAdapters.Add(new ChannelMessageAdapter(_historyAdapter, new InMemoryMessageChannel("History In", SendOutError), _historyChannel));
+			Adapter.InnerAdapters.Add(new ChannelMessageAdapter(HistoryMessageAdapter, new InMemoryMessageChannel("History In", SendOutError), _historyChannel));
 
 			// при тестировании по свечкам, время меняется быстрее и таймаут должен быть больше 30с.
 			ReConnectionSettings.TimeOutInterval = TimeSpan.MaxValue;
@@ -134,15 +131,10 @@ namespace StockSharp.Algo.Testing
 			TradesKeepCount = 0;
 		}
 
-		private readonly HistoryMessageAdapter _historyAdapter;
-
 		/// <summary>
 		/// The adapter, receiving messages form the storage <see cref="IStorageRegistry"/>.
 		/// </summary>
-		public HistoryMessageAdapter HistoryMessageAdapter
-		{
-			get { return _historyAdapter; }
-		}
+		public HistoryMessageAdapter HistoryMessageAdapter { get; }
 
 		///// <summary>
 		///// Интервал генерации сообщения <see cref="TimeMessage"/>. По-умолчанию равно 10 миллисекундам.
@@ -185,20 +177,17 @@ namespace StockSharp.Algo.Testing
 		/// <summary>
 		/// The initial size of monetary funds on accounts.
 		/// </summary>
-		public IDictionary<Portfolio, decimal> InitialMoney
-		{
-			get { return _initialMoney; }
-		}
+		public IDictionary<Portfolio, decimal> InitialMoney => _initialMoney;
 
 		/// <summary>
 		/// The number of loaded messages.
 		/// </summary>
-		public int LoadedMessageCount { get { return _historyAdapter.LoadedMessageCount; } }
+		public int LoadedMessageCount => HistoryMessageAdapter.LoadedMessageCount;
 
 		/// <summary>
 		/// The number of processed messages.
 		/// </summary>
-		public int ProcessedMessageCount { get { return EmulationAdapter.ProcessedMessageCount; } }
+		public int ProcessedMessageCount => EmulationAdapter.ProcessedMessageCount;
 
 		private EmulationStates _state = EmulationStates.Stopped;
 
@@ -237,7 +226,7 @@ namespace StockSharp.Algo.Testing
 						throwError = (_state != EmulationStates.Suspending);
 						break;
 					default:
-						throw new ArgumentOutOfRangeException("value");
+						throw new ArgumentOutOfRangeException(nameof(value));
 				}
 
 				if (throwError)
@@ -310,10 +299,7 @@ namespace StockSharp.Algo.Testing
 		/// <summary>
 		/// To call the <see cref="Connector.Connected"/> event when the first adapter connects to <see cref="Connector.Adapter"/>.
 		/// </summary>
-		protected override bool RaiseConnectedOnFirstAdapter
-		{
-			get { return false; }
-		}
+		protected override bool RaiseConnectedOnFirstAdapter => false;
 
 		///// <summary>
 		///// Подключиться к торговой системе.
@@ -620,14 +606,14 @@ namespace StockSharp.Algo.Testing
 				yield break;
 			}
 
-			var types = _historyAdapter.Drive.GetAvailableDataTypes(securityId, _historyAdapter.StorageFormat);
+			var types = HistoryMessageAdapter.Drive.GetAvailableDataTypes(securityId, HistoryMessageAdapter.StorageFormat);
 
 			foreach (var tuple in types)
 			{
 				if (tuple.Item1 != messageType || !tuple.Item2.Equals(series.Arg))
 					continue;
 
-				var dates = _historyAdapter.StorageRegistry.GetCandleMessageStorage(tuple.Item1, series.Security, series.Arg, _historyAdapter.Drive, _historyAdapter.StorageFormat).Dates.ToArray();
+				var dates = HistoryMessageAdapter.StorageRegistry.GetCandleMessageStorage(tuple.Item1, series.Security, series.Arg, HistoryMessageAdapter.Drive, HistoryMessageAdapter.StorageFormat).Dates.ToArray();
 
 				if (dates.Any())
 					yield return new Range<DateTimeOffset>(dates.First().ApplyTimeZone(TimeZoneInfo.Utc), dates.Last().ApplyTimeZone(TimeZoneInfo.Utc));

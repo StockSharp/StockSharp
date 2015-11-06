@@ -42,26 +42,17 @@ namespace StockSharp.Xaml
 		/// <summary>
 		/// The list of messages added to the table.
 		/// </summary>
-		public IListEx<ExecutionMessage> Messages
-		{
-			get { return _messages; }
-		}
+		public IListEx<ExecutionMessage> Messages => _messages;
 
 		/// <summary>
 		/// The selected message.
 		/// </summary>
-		public ExecutionMessage SelectedMessage
-		{
-			get { return SelectedMessages.FirstOrDefault(); }
-		}
+		public ExecutionMessage SelectedMessage => SelectedMessages.FirstOrDefault();
 
 		/// <summary>
 		/// Selected messages.
 		/// </summary>
-		public IEnumerable<ExecutionMessage> SelectedMessages
-		{
-			get { return SelectedItems.Cast<ExecutionMessage>(); }
-		}
+		public IEnumerable<ExecutionMessage> SelectedMessages => SelectedItems.Cast<ExecutionMessage>();
 
 		/// <summary>
 		/// To hide columns which do not show data for the passed type.
@@ -94,7 +85,7 @@ namespace StockSharp.Xaml
 				case ExecutionTypes.OrderLog:
 					break;
 				default:
-					throw new ArgumentOutOfRangeException("type");
+					throw new ArgumentOutOfRangeException(nameof(type));
 			}
 		}
 	}

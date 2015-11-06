@@ -45,16 +45,16 @@ namespace StockSharp.Algo.Testing
 			MarketEmulatorSettings settings, Func<DateTime, DateTimeOffset> getServerTime)
 		{
 			if (bids == null)
-				throw new ArgumentNullException("bids");
+				throw new ArgumentNullException(nameof(bids));
 
 			if (asks == null)
-				throw new ArgumentNullException("asks");
+				throw new ArgumentNullException(nameof(asks));
 
 			if (settings == null)
-				throw new ArgumentNullException("settings");
+				throw new ArgumentNullException(nameof(settings));
 
 			if (getServerTime == null)
-				throw new ArgumentNullException("getServerTime");
+				throw new ArgumentNullException(nameof(getServerTime));
 
 			_bids = bids;
 			_asks = asks;
@@ -66,7 +66,7 @@ namespace StockSharp.Algo.Testing
 		/// <summary>
 		/// Security ID.
 		/// </summary>
-		public SecurityId SecurityId { get; private set; }
+		public SecurityId SecurityId { get; }
 
 		/// <summary>
 		/// To convert quotes.
@@ -76,7 +76,7 @@ namespace StockSharp.Algo.Testing
 		public IEnumerable<ExecutionMessage> ToExecutionLog(QuoteChangeMessage message)
 		{
 			if (message == null)
-				throw new ArgumentNullException("message");
+				throw new ArgumentNullException(nameof(message));
 
 			if (!_priceStepUpdated || !_volumeStepUpdated)
 			{
@@ -264,7 +264,7 @@ namespace StockSharp.Algo.Testing
 		public IEnumerable<ExecutionMessage> ToExecutionLog(ExecutionMessage message)
 		{
 			if (message == null)
-				throw new ArgumentNullException("message");
+				throw new ArgumentNullException(nameof(message));
 
 			if (!_priceStepUpdated)
 			{
@@ -426,7 +426,7 @@ namespace StockSharp.Algo.Testing
 		public IEnumerable<Message> ToExecutionLog(Level1ChangeMessage message)
 		{
 			if (message == null)
-				throw new ArgumentNullException("message");
+				throw new ArgumentNullException(nameof(message));
 
 			if (message.IsContainsTick())
 				yield return message.ToTick();
@@ -549,7 +549,7 @@ namespace StockSharp.Algo.Testing
 		private ExecutionMessage CreateMessage(DateTime localTime, DateTimeOffset serverTime, Sides side, decimal price, decimal volume, bool isCancelling = false, TimeInForce tif = TimeInForce.PutInQueue)
 		{
 			if (price <= 0)
-				throw new ArgumentOutOfRangeException("price", price, LocalizedStrings.Str1144);
+				throw new ArgumentOutOfRangeException(nameof(price), price, LocalizedStrings.Str1144);
 
 			//if (volume <= 0)
 			//	throw new ArgumentOutOfRangeException("volume", volume, "Объем задан не верно.");
@@ -585,7 +585,7 @@ namespace StockSharp.Algo.Testing
 		public IEnumerable<ExecutionMessage> ToExecutionLog(OrderMessage message, decimal quotesVolume)
 		{
 			if (message == null)
-				throw new ArgumentNullException("message");
+				throw new ArgumentNullException(nameof(message));
 
 			var serverTime = _getServerTime(message.LocalTime);
 
@@ -747,7 +747,7 @@ namespace StockSharp.Algo.Testing
 		public void UpdateSecurityDefinition(SecurityMessage securityDefinition)
 		{
 			if (securityDefinition == null)
-				throw new ArgumentNullException("securityDefinition");
+				throw new ArgumentNullException(nameof(securityDefinition));
 
 			_securityDefinition = securityDefinition;
 

@@ -188,7 +188,7 @@ namespace StockSharp.Quik
 			: base(StringComparer.InvariantCultureIgnoreCase)
 		{
 			if (message == null)
-				throw new ArgumentNullException("message");
+				throw new ArgumentNullException(nameof(message));
 
 			TransactionType = transactionType;
 			Message = (OrderMessage)message.Clone();
@@ -520,7 +520,7 @@ namespace StockSharp.Quik
 		public string GetInstruction(string name)
 		{
 			if (name.IsEmpty())
-				throw new ArgumentNullException("name");
+				throw new ArgumentNullException(nameof(name));
 
 			return this.TryGetValue(name);
 		}
@@ -567,7 +567,7 @@ namespace StockSharp.Quik
 		public Transaction SetInstruction(string name, string value)
 		{
 			if (name.IsEmpty())
-				throw new ArgumentNullException("name");
+				throw new ArgumentNullException(nameof(name));
 
 			this[name] = value;
 			return this;
@@ -614,7 +614,7 @@ namespace StockSharp.Quik
 		public Transaction RemoveInstruction(string name)
 		{
 			if (name.IsEmpty())
-				throw new ArgumentNullException("name");
+				throw new ArgumentNullException(nameof(name));
 
 			Remove(name);
 			return this;
@@ -675,7 +675,7 @@ namespace StockSharp.Quik
 		public Transaction SetAction(string action)
 		{
 			if (action.IsEmpty())
-				throw new ArgumentNullException("action");
+				throw new ArgumentNullException(nameof(action));
 
 			return SetInstruction(Action, action);
 		}
@@ -688,7 +688,7 @@ namespace StockSharp.Quik
 		public Transaction SetAccount(string account)
 		{
 			if (account.IsEmpty())
-				throw new ArgumentNullException("account");
+				throw new ArgumentNullException(nameof(account));
 
 			return SetInstruction(Account, account);
 		}
@@ -726,7 +726,7 @@ namespace StockSharp.Quik
 		public Transaction SetClassCode(string classCode)
 		{
 			if (classCode.IsEmpty())
-				throw new ArgumentNullException("classCode");
+				throw new ArgumentNullException(nameof(classCode));
 
 			return SetInstruction(ClassCode, classCode);
 		}
@@ -739,7 +739,7 @@ namespace StockSharp.Quik
 		public Transaction SetBaseContract(string baseContract)
 		{
 			if (baseContract.IsEmpty())
-				throw new ArgumentNullException("baseContract");
+				throw new ArgumentNullException(nameof(baseContract));
 
 			return SetInstruction(BaseContract, baseContract);
 		}
@@ -752,7 +752,7 @@ namespace StockSharp.Quik
 		public Transaction SetSecurityCode(string securityCode)
 		{
 			if (securityCode.IsEmpty())
-				throw new ArgumentNullException("securityCode");
+				throw new ArgumentNullException(nameof(securityCode));
 
 			return SetInstruction(SecurityCode, securityCode);
 		}
@@ -765,7 +765,7 @@ namespace StockSharp.Quik
 		public Transaction SetClientCode(string clientCode)
 		{
 			if (clientCode.IsEmpty())
-				throw new ArgumentNullException("clientCode");
+				throw new ArgumentNullException(nameof(clientCode));
 
 			return SetInstruction(ClientCode, clientCode);
 		}
@@ -786,7 +786,7 @@ namespace StockSharp.Quik
 				case OrderTypes.Conditional:
 					throw new NotSupportedException();
 				default:
-					throw new ArgumentOutOfRangeException("type", type, LocalizedStrings.Str1845);
+					throw new ArgumentOutOfRangeException(nameof(type), type, LocalizedStrings.Str1845);
 			}
 		}
 
@@ -841,7 +841,7 @@ namespace StockSharp.Quik
 					value = "KILL_BALANCE";
 					break;
 				default:
-					throw new ArgumentOutOfRangeException("timeInForce", timeInForce, LocalizedStrings.Str1846);
+					throw new ArgumentOutOfRangeException(nameof(timeInForce), timeInForce, LocalizedStrings.Str1846);
 			}
 
 			return SetInstruction(TimeInForce, value);
@@ -910,7 +910,7 @@ namespace StockSharp.Quik
 		public Transaction SetComment(string comment)
 		{
 			if (comment.IsEmpty())
-				throw new ArgumentNullException("comment");
+				throw new ArgumentNullException(nameof(comment));
 
 			return SetInstruction(Comment, comment);
 		}
@@ -923,7 +923,7 @@ namespace StockSharp.Quik
 		public Transaction SetOffset(Unit offset)
 		{
 			if (offset == null)
-				throw new ArgumentNullException("offset");
+				throw new ArgumentNullException(nameof(offset));
 
 			return	SetInstruction(OffsetValue, offset.Value).
 					SetInstruction(OffsetUnit, offset.Type == UnitTypes.Percent ? "PERCENTS" : "PRICE_UNITS");
@@ -937,7 +937,7 @@ namespace StockSharp.Quik
 		public Transaction SetSpread(Unit spread)
 		{
 			if (spread == null)
-				throw new ArgumentNullException("spread");
+				throw new ArgumentNullException(nameof(spread));
 
 			return	SetInstruction(SpreadValue, spread.Value).
 					SetInstruction(SpreadUnit, spread.Type == UnitTypes.Percent ? "PERCENTS" : "PRICE_UNITS");
@@ -1012,10 +1012,10 @@ namespace StockSharp.Quik
 		public Transaction SetOtherSecurity(string secCode, string secClass)
 		{
 			if (secCode == null)
-				throw new ArgumentNullException("secCode");
+				throw new ArgumentNullException(nameof(secCode));
 
 			if (secClass == null)
-				throw new ArgumentNullException("secClass");
+				throw new ArgumentNullException(nameof(secClass));
 
 			return
 				SetInstruction(OtherSecurityClassCode, secClass).
@@ -1050,7 +1050,7 @@ namespace StockSharp.Quik
 		public Transaction SetStopOrderKind(string stopOrderKind)
 		{
 			if (stopOrderKind.IsEmpty())
-				throw new ArgumentNullException("stopOrderKind");
+				throw new ArgumentNullException(nameof(stopOrderKind));
 
 			return SetInstruction(StopOrderKind, stopOrderKind);
 		}
@@ -1063,7 +1063,7 @@ namespace StockSharp.Quik
 		public Transaction SetStopPriceCondition(string stopPriceCondition)
 		{
 			if (stopPriceCondition.IsEmpty())
-				throw new ArgumentNullException("stopPriceCondition");
+				throw new ArgumentNullException(nameof(stopPriceCondition));
 
 			return SetInstruction(StopPriceCondition, stopPriceCondition);
 		}

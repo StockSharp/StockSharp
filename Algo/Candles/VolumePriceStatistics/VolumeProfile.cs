@@ -23,10 +23,7 @@ namespace StockSharp.Algo.Candles.VolumePriceStatistics
 		/// <summary>
 		/// Price levels.
 		/// </summary>
-		public IEnumerable<PriceLevel> PriceLevels 
-		{
-			get { return _volumeProfileInfo.CachedValues; }
-		}
+		public IEnumerable<PriceLevel> PriceLevels => _volumeProfileInfo.CachedValues;
 
 		/// <summary>
 		/// To update the profile with new value.

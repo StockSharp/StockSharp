@@ -54,7 +54,7 @@ namespace StockSharp.Algo
 			public SubscriptionManager(Connector connector)
 			{
 				if (connector == null)
-					throw new ArgumentNullException("connector");
+					throw new ArgumentNullException(nameof(connector));
 
 				_connector = connector;
 
@@ -163,37 +163,22 @@ namespace StockSharp.Algo
 				return _subscribers.SafeAdd(type);
 			}
 
-			public IEnumerable<Security> RegisteredSecurities
-			{
-				get { return GetSubscribers(MarketDataTypes.Level1).CachedKeys; }
-			}
+			public IEnumerable<Security> RegisteredSecurities => GetSubscribers(MarketDataTypes.Level1).CachedKeys;
 
-			public IEnumerable<Security> RegisteredMarketDepths
-			{
-				get { return GetSubscribers(MarketDataTypes.MarketDepth).CachedKeys; }
-			}
+			public IEnumerable<Security> RegisteredMarketDepths => GetSubscribers(MarketDataTypes.MarketDepth).CachedKeys;
 
-			public IEnumerable<Security> RegisteredTrades
-			{
-				get { return GetSubscribers(MarketDataTypes.Trades).CachedKeys; }
-			}
+			public IEnumerable<Security> RegisteredTrades => GetSubscribers(MarketDataTypes.Trades).CachedKeys;
 
-			public IEnumerable<Security> RegisteredOrderLogs
-			{
-				get { return GetSubscribers(MarketDataTypes.OrderLog).CachedKeys; }
-			}
+			public IEnumerable<Security> RegisteredOrderLogs => GetSubscribers(MarketDataTypes.OrderLog).CachedKeys;
 
 			private readonly CachedSynchronizedDictionary<Portfolio, int> _registeredPortfolios = new CachedSynchronizedDictionary<Portfolio, int>();
 
-			public IEnumerable<Portfolio> RegisteredPortfolios
-			{
-				get { return _registeredPortfolios.CachedKeys; }
-			}
+			public IEnumerable<Portfolio> RegisteredPortfolios => _registeredPortfolios.CachedKeys;
 
 			public void Subscribe(Security security, MarketDataTypes type)
 			{
 				if (security == null)
-					throw new ArgumentNullException("security");
+					throw new ArgumentNullException(nameof(security));
 
 				if (security is IndexSecurity)
 					((IndexSecurity)security).InnerSecurities.ForEach(s => _connector.SubscribeMarketData(s, type));
@@ -206,7 +191,7 @@ namespace StockSharp.Algo
 			public void UnSubscribe(Security security, MarketDataTypes type)
 			{
 				if (security == null)
-					throw new ArgumentNullException("security");
+					throw new ArgumentNullException(nameof(security));
 
 				if (security is IndexSecurity)
 					((IndexSecurity)security).InnerSecurities.ForEach(s => _connector.UnSubscribeMarketData(s, type));
@@ -219,7 +204,7 @@ namespace StockSharp.Algo
 			public void RegisterPortfolio(Portfolio portfolio)
 			{
 				if (portfolio == null)
-					throw new ArgumentNullException("portfolio");
+					throw new ArgumentNullException(nameof(portfolio));
 
 				if (portfolio is BasketPortfolio)
 					((BasketPortfolio)portfolio).InnerPortfolios.ForEach(_connector.RegisterPortfolio);
@@ -230,7 +215,7 @@ namespace StockSharp.Algo
 			public void UnRegisterPortfolio(Portfolio portfolio)
 			{
 				if (portfolio == null)
-					throw new ArgumentNullException("portfolio");
+					throw new ArgumentNullException(nameof(portfolio));
 
 				if (portfolio is BasketPortfolio)
 					((BasketPortfolio)portfolio).InnerPortfolios.ForEach(_connector.UnRegisterPortfolio);
@@ -241,7 +226,7 @@ namespace StockSharp.Algo
 			public void RegisterFilteredMarketDepth(Security security)
 			{
 				if (security == null)
-					throw new ArgumentNullException("security");
+					throw new ArgumentNullException(nameof(security));
 
 				if (TrySubscribe(_registeredFilteredMarketDepths, security))
 					_connector.OnRegisterFilteredMarketDepth(security);
@@ -252,7 +237,7 @@ namespace StockSharp.Algo
 			public void UnRegisterFilteredMarketDepth(Security security)
 			{
 				if (security == null)
-					throw new ArgumentNullException("security");
+					throw new ArgumentNullException(nameof(security));
 
 				if (TryUnSubscribe(_registeredFilteredMarketDepths, security))
 					_connector.OnUnRegisterFilteredMarketDepth(security);
@@ -329,7 +314,7 @@ namespace StockSharp.Algo
 			private DateTime NextExpInUtc(LinkedListNode<ContinuousInfo> node)
 			{
 				if (node == null)
-					throw new ArgumentNullException("node");
+					throw new ArgumentNullException(nameof(node));
 
 				var contSec = node.Value.Item1;
 				var currSec = contSec.GetSecurity(_connector.CurrentTime);
@@ -528,42 +513,27 @@ namespace StockSharp.Algo
 		/// <summary>
 		/// List of all securities, subscribed via <see cref="RegisterSecurity"/>.
 		/// </summary>
-		public IEnumerable<Security> RegisteredSecurities
-		{
-			get { return _subscriptionManager.RegisteredSecurities; }
-		}
+		public IEnumerable<Security> RegisteredSecurities => _subscriptionManager.RegisteredSecurities;
 
 		/// <summary>
 		/// List of all securities, subscribed via <see cref="RegisterMarketDepth"/>.
 		/// </summary>
-		public IEnumerable<Security> RegisteredMarketDepths
-		{
-			get { return _subscriptionManager.RegisteredMarketDepths; }
-		}
+		public IEnumerable<Security> RegisteredMarketDepths => _subscriptionManager.RegisteredMarketDepths;
 
 		/// <summary>
 		/// List of all securities, subscribed via <see cref="RegisterTrades"/>.
 		/// </summary>
-		public IEnumerable<Security> RegisteredTrades
-		{
-			get { return _subscriptionManager.RegisteredTrades; }
-		}
+		public IEnumerable<Security> RegisteredTrades => _subscriptionManager.RegisteredTrades;
 
 		/// <summary>
 		/// List of all securities, subscribed via <see cref="RegisterOrderLog"/>.
 		/// </summary>
-		public IEnumerable<Security> RegisteredOrderLogs
-		{
-			get { return _subscriptionManager.RegisteredOrderLogs; }
-		}
+		public IEnumerable<Security> RegisteredOrderLogs => _subscriptionManager.RegisteredOrderLogs;
 
 		/// <summary>
 		/// List of all portfolios, subscribed via <see cref="RegisterPortfolio"/>.
 		/// </summary>
-		public IEnumerable<Portfolio> RegisteredPortfolios
-		{
-			get { return _subscriptionManager.RegisteredPortfolios; }
-		}
+		public IEnumerable<Portfolio> RegisteredPortfolios => _subscriptionManager.RegisteredPortfolios;
 
 		/// <summary>
 		/// To sign up to get market data by the instrument.
@@ -777,7 +747,7 @@ namespace StockSharp.Algo
 		public virtual void RequestNewsStory(News news)
 		{
 			if (news == null)
-				throw new ArgumentNullException("news");
+				throw new ArgumentNullException(nameof(news));
 
 			SendInMessage(new MarketDataMessage
 			{

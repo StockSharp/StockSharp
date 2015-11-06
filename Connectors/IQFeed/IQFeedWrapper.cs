@@ -45,13 +45,13 @@ namespace StockSharp.IQFeed
 		public IQFeedWrapper(ILogReceiver logReceiver, string name, EndPoint address)
 		{
 			if (logReceiver == null)
-				throw new ArgumentNullException("logReceiver");
+				throw new ArgumentNullException(nameof(logReceiver));
 
 			if (name.IsEmpty())
-				throw new ArgumentNullException("name");
+				throw new ArgumentNullException(nameof(name));
 
 			if (address == null)
-				throw new ArgumentNullException("address");
+				throw new ArgumentNullException(nameof(address));
 
 			Address = address;
 			_logReceiver = logReceiver;

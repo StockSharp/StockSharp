@@ -48,7 +48,7 @@ namespace StockSharp.Logging
 		public MemoryStatisticsValue(string name/*, MemoryStatistics parent*/)
 		{
 			if (name.IsEmpty())
-				throw new ArgumentNullException("name");
+				throw new ArgumentNullException(nameof(name));
 
 			//if (parent == null)
 			//	throw new ArgumentNullException("parent");
@@ -60,25 +60,19 @@ namespace StockSharp.Logging
 		/// <summary>
 		/// Active objects.
 		/// </summary>
-		public T[] Objects
-		{
-			get { return _objects.Cache; }
-		}
+		public T[] Objects => _objects.Cache;
 
 		/// <summary>
 		/// Name.
 		/// </summary>
-		public string Name { get; private set; }
+		public string Name { get; }
 
 		private int _objectCount;
 
 		/// <summary>
 		/// The number of active objects.
 		/// </summary>
-		public int ObjectCount
-		{
-			get { return _objectCount; }
-		}
+		public int ObjectCount => _objectCount;
 
 		/// <summary>
 		/// To check that they are going to delete a previously deleted object.

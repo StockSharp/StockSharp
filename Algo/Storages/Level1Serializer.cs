@@ -466,7 +466,7 @@ namespace StockSharp.Algo.Storages
 					var count = message.Changes.Count;
 
 					if (count == 0)
-						throw new ArgumentException(LocalizedStrings.Str920, "messages");
+						throw new ArgumentException(LocalizedStrings.Str920, nameof(messages));
 
 					writer.WriteInt(count);
 				}
@@ -831,7 +831,7 @@ namespace StockSharp.Algo.Storages
 							break;
 						}
 						default:
-							throw new ArgumentOutOfRangeException("messages", change.Key, LocalizedStrings.Str922);
+							throw new ArgumentOutOfRangeException(nameof(messages), change.Key, LocalizedStrings.Str922);
 					}
 				}
 			}
@@ -1264,7 +1264,7 @@ namespace StockSharp.Algo.Storages
 		private static void SerializeChange(BitArrayWriter writer, RefPair<decimal, decimal> info, decimal price)
 		{
 			if (price == 0)
-				throw new ArgumentOutOfRangeException("price");
+				throw new ArgumentOutOfRangeException(nameof(price));
 
 			if (info.First == 0)
 				info.First = info.Second = price;

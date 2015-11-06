@@ -23,7 +23,7 @@ namespace StockSharp.BusinessEntities
 			public InnerQuotesList(AggregatedQuote parent)
 			{
 				if (parent == null)
-					throw new ArgumentNullException("parent");
+					throw new ArgumentNullException(nameof(parent));
 
 				_parent = parent;
 			}
@@ -39,13 +39,13 @@ namespace StockSharp.BusinessEntities
 				else
 				{
 					if (_parent._checkInnerPrice && _parent.Price != item.Price)
-						throw new ArgumentException(LocalizedStrings.Str421Params.Put(_parent.Price, item.Price), "item");
+						throw new ArgumentException(LocalizedStrings.Str421Params.Put(_parent.Price, item.Price), nameof(item));
 
 					if (_parent.OrderDirection != item.OrderDirection)
-						throw new ArgumentException(LocalizedStrings.Str422Params.Put(_parent.OrderDirection, item.OrderDirection), "item");
+						throw new ArgumentException(LocalizedStrings.Str422Params.Put(_parent.OrderDirection, item.OrderDirection), nameof(item));
 
 					if (_parent.Security != item.Security)
-						throw new ArgumentException(LocalizedStrings.Str423Params.Put(_parent.Security.Id, item.Security.Id), "item");
+						throw new ArgumentException(LocalizedStrings.Str423Params.Put(_parent.Security.Id, item.Security.Id), nameof(item));
 				}
 
 				_parent.Volume += item.Volume;
@@ -75,7 +75,7 @@ namespace StockSharp.BusinessEntities
 		/// <summary>
 		/// Collection of enclosed quotes, which are combined into a single quote.
 		/// </summary>
-		public IList<Quote> InnerQuotes { get; private set; }
+		public IList<Quote> InnerQuotes { get; }
 
 		/// <summary>
 		/// Create a copy of <see cref="AggregatedQuote"/>.

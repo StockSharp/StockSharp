@@ -39,10 +39,10 @@ namespace SampleDiagram
 		public StrategiesRegistry(string compositionsPath = "Compositions", string strategiesPath = "Strategies")
 		{
 			if (compositionsPath == null)
-				throw new ArgumentNullException("compositionsPath");
+				throw new ArgumentNullException(nameof(compositionsPath));
 			
 			if (strategiesPath == null)
-				throw new ArgumentNullException("strategiesPath");
+				throw new ArgumentNullException(nameof(strategiesPath));
 
 			_compositionRegistry = new CompositionRegistry();
 			_compositionsPath = Path.GetFullPath(compositionsPath);
@@ -55,7 +55,7 @@ namespace SampleDiagram
 		public void Save(CompositionDiagramElement element, bool isComposition)
 		{
 			if (element == null)
-				throw new ArgumentNullException("element");
+				throw new ArgumentNullException(nameof(element));
 
 			if (!isComposition)
 			{
@@ -80,7 +80,7 @@ namespace SampleDiagram
 		public void Remove(CompositionDiagramElement element, bool isComposition)
 		{
 			if (element == null)
-				throw new ArgumentNullException("element");
+				throw new ArgumentNullException(nameof(element));
 
 			if (isComposition)
 			{
@@ -100,7 +100,7 @@ namespace SampleDiagram
 		public CompositionDiagramElement Discard(CompositionDiagramElement element, bool isComposition)
 		{
 			if (element == null)
-				throw new ArgumentNullException("element");
+				throw new ArgumentNullException(nameof(element));
 
 			var path = isComposition ? _compositionsPath : _strategiesPath;
 			var file = Path.Combine(path, element.GetFileName());

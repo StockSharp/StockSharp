@@ -22,7 +22,7 @@
 			: base(storageRegistry, entityRegistry)
 		{
 			if (tasks == null)
-				throw new ArgumentNullException("tasks");
+				throw new ArgumentNullException(nameof(tasks));
 
 			_tasks = tasks;
 		}

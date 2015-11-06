@@ -57,7 +57,7 @@ namespace StockSharp.Algo
 		public CollectionSecurityProvider(IEnumerable<Security> securities)
 		{
 			if (securities == null)
-				throw new ArgumentNullException("securities");
+				throw new ArgumentNullException(nameof(securities));
 
 			_securities = securities.ToArray();
 		}
@@ -67,18 +67,12 @@ namespace StockSharp.Algo
 		/// <summary>
 		/// The instruments collection.
 		/// </summary>
-		protected virtual IEnumerable<Security> Securities
-		{
-			get { return _securities; }
-		}
+		protected virtual IEnumerable<Security> Securities => _securities;
 
 		/// <summary>
 		/// Gets the number of instruments contained in the <see cref="ISecurityProvider"/>.
 		/// </summary>
-		public int Count
-		{
-			get { return _securities.Length; }
-		}
+		public int Count => _securities.Length;
 
 		event Action<Security> ISecurityProvider.Added
 		{
@@ -130,7 +124,7 @@ namespace StockSharp.Algo
 			: base(Enumerable.Empty<Security>())
 		{
 			if (connector == null)
-				throw new ArgumentNullException("connector");
+				throw new ArgumentNullException(nameof(connector));
 
 			_connector = connector;
 		}
@@ -138,10 +132,7 @@ namespace StockSharp.Algo
 		/// <summary>
 		/// The instruments collection.
 		/// </summary>
-		protected override IEnumerable<Security> Securities
-		{
-			get { return _connector.Securities; }
-		}
+		protected override IEnumerable<Security> Securities => _connector.Securities;
 	}
 
 	/// <summary>
@@ -159,13 +150,13 @@ namespace StockSharp.Algo
 		public static IEnumerable<Quote> GetFilteredQuotes(this IEnumerable<Quote> quotes, IEnumerable<Order> ownOrders, IEnumerable<Order> orders)
 		{
 			if (quotes == null)
-				throw new ArgumentNullException("quotes");
+				throw new ArgumentNullException(nameof(quotes));
 
 			if (ownOrders == null)
-				throw new ArgumentNullException("ownOrders");
+				throw new ArgumentNullException(nameof(ownOrders));
 
 			if (orders == null)
-				throw new ArgumentNullException("orders");
+				throw new ArgumentNullException(nameof(orders));
 
 			var dict = new MultiDictionary<Tuple<Sides, decimal>, Order>(false);
 
@@ -208,7 +199,7 @@ namespace StockSharp.Algo
 			var board = security.CheckExchangeBoard();
 
 			if (board.IsSupportMarketOrders)
-				throw new ArgumentException(LocalizedStrings.Str1210Params.Put(board.Code), "security");
+				throw new ArgumentException(LocalizedStrings.Str1210Params.Put(board.Code), nameof(security));
 
 			var minPrice = (decimal?)provider.GetSecurityValue(security, Level1Fields.MinPrice);
 			var maxPrice = (decimal?)provider.GetSecurityValue(security, Level1Fields.MaxPrice);
@@ -234,7 +225,7 @@ namespace StockSharp.Algo
 		public static Unit GetCurrentPrice(this Security security, IMarketDataProvider provider, Sides? direction = null, MarketPriceTypes priceType = MarketPriceTypes.Following, IEnumerable<Order> orders = null)
 		{
 			if (provider == null)
-				throw new ArgumentNullException("provider");
+				throw new ArgumentNullException(nameof(provider));
 
 			var depth = provider.GetMarketDepth(security);
 
@@ -274,7 +265,7 @@ namespace StockSharp.Algo
 		public static Unit GetCurrentPrice(this MarketDepth depth, Sides side, MarketPriceTypes priceType = MarketPriceTypes.Following, IEnumerable<Order> orders = null)
 		{
 			if (depth == null)
-				throw new ArgumentNullException("depth");
+				throw new ArgumentNullException(nameof(depth));
 
 			if (orders != null)
 			{
@@ -299,7 +290,7 @@ namespace StockSharp.Algo
 		public static Unit GetCurrentPrice(this MarketDepthPair bestPair, Sides side, MarketPriceTypes priceType = MarketPriceTypes.Following)
 		{
 			if (bestPair == null)
-				throw new ArgumentNullException("bestPair");
+				throw new ArgumentNullException(nameof(bestPair));
 
 			decimal? currentPrice;
 
@@ -326,7 +317,7 @@ namespace StockSharp.Algo
 					break;
 				}
 				default:
-					throw new ArgumentOutOfRangeException("priceType");
+					throw new ArgumentOutOfRangeException(nameof(priceType));
 			}
 
 			return currentPrice == null
@@ -345,10 +336,10 @@ namespace StockSharp.Algo
 		public static decimal ApplyOffset(this Unit price, Sides side, Unit offset, Security security)
 		{
 			if (price == null)
-				throw new ArgumentNullException("price");
+				throw new ArgumentNullException(nameof(price));
 
 			if (security == null)
-				throw new ArgumentNullException("security");
+				throw new ArgumentNullException(nameof(security));
 
 			if (price.GetTypeValue == null)
 				price.SetSecurity(security);
@@ -367,7 +358,7 @@ namespace StockSharp.Algo
 		public static void ShrinkPrice(this Order order, ShrinkRules rule = ShrinkRules.Auto)
 		{
 			if (order == null)
-				throw new ArgumentNullException("order");
+				throw new ArgumentNullException(nameof(order));
 
 			order.Price = order.Security.ShrinkPrice(order.Price, rule);
 		}
@@ -397,7 +388,7 @@ namespace StockSharp.Algo
 		public static decimal GetPosition(this MyTrade trade)
 		{
 			if (trade == null)
-				throw new ArgumentNullException("trade");
+				throw new ArgumentNullException(nameof(trade));
 
 			return trade.Order.Direction == Sides.Buy ? trade.Trade.Volume : -trade.Trade.Volume;
 		}
@@ -410,7 +401,7 @@ namespace StockSharp.Algo
 		public static decimal GetPosition(this ExecutionMessage message)
 		{
 			if (message == null)
-				throw new ArgumentNullException("message");
+				throw new ArgumentNullException(nameof(message));
 
 			return (message.Side == Sides.Buy ? message.Volume : -message.Volume) ?? 0;
 		}
@@ -437,10 +428,10 @@ namespace StockSharp.Algo
 		public static decimal GetPosition(this Portfolio portfolio, IConnector connector)
 		{
 			if (portfolio == null)
-				throw new ArgumentNullException("portfolio");
+				throw new ArgumentNullException(nameof(portfolio));
 
 			if (connector == null)
-				throw new ArgumentNullException("connector");
+				throw new ArgumentNullException(nameof(connector));
 
 			return connector.Positions.Filter(portfolio).Sum(p => p.CurrentValue);
 		}
@@ -463,7 +454,7 @@ namespace StockSharp.Algo
 		public static decimal GetOrderVolume(this Position position)
 		{
 			if (position == null)
-				throw new ArgumentNullException("position");
+				throw new ArgumentNullException(nameof(position));
 
 			return (position.CurrentValue / position.Security.VolumeStep ?? 1m).Abs();
 		}
@@ -479,7 +470,7 @@ namespace StockSharp.Algo
 		public static IEnumerable<Order> Join(this IEnumerable<Order> orders)
 		{
 			if (orders == null)
-				throw new ArgumentNullException("orders");
+				throw new ArgumentNullException(nameof(orders));
 
 			return orders.GroupBy(o => Tuple.Create(o.Security, o.Portfolio)).Select(g =>
 			{
@@ -555,7 +546,7 @@ namespace StockSharp.Algo
 		public static decimal GetPnL(this MyTrade trade, decimal currentPrice)
 		{
 			if (trade == null)
-				throw new ArgumentNullException("trade");
+				throw new ArgumentNullException(nameof(trade));
 
 			return trade.ToMessage().GetPnL(currentPrice);
 		}
@@ -584,7 +575,7 @@ namespace StockSharp.Algo
 		public static decimal GetPnL(this Portfolio portfolio)
 		{
 			if (portfolio == null)
-				throw new ArgumentNullException("portfolio");
+				throw new ArgumentNullException(nameof(portfolio));
 
 			return portfolio.CurrentValue - portfolio.BeginValue;
 		}
@@ -598,7 +589,7 @@ namespace StockSharp.Algo
 		public static decimal GetPrice(this Position position, decimal currentPrice)
 		{
 			if (position == null)
-				throw new ArgumentNullException("position");
+				throw new ArgumentNullException(nameof(position));
 
 			var security = position.Security;
 
@@ -644,7 +635,7 @@ namespace StockSharp.Algo
 		public static bool IsTradeTime(this BoardMessage board, DateTimeOffset time)
 		{
 			if (board == null)
-				throw new ArgumentNullException("board");
+				throw new ArgumentNullException(nameof(board));
 
 			var exchangeTime = time.ToLocalTime(board.TimeZone);
 			var workingTime = board.WorkingTime;
@@ -682,7 +673,7 @@ namespace StockSharp.Algo
 		public static bool IsTradeDate(this BoardMessage board, DateTimeOffset date, bool checkHolidays = false)
 		{
 			if (board == null)
-				throw new ArgumentNullException("board");
+				throw new ArgumentNullException(nameof(board));
 
 			var exchangeTime = date.ToLocalTime(board.TimeZone);
 			var workingTime = board.WorkingTime;
@@ -712,7 +703,7 @@ namespace StockSharp.Algo
 		public static Order ReRegisterClone(this Order oldOrder, decimal? newPrice = null, decimal? newVolume = null)
 		{
 			if (oldOrder == null)
-				throw new ArgumentNullException("oldOrder");
+				throw new ArgumentNullException(nameof(oldOrder));
 
 			return new Order
 			{
@@ -738,7 +729,7 @@ namespace StockSharp.Algo
 		public static Currency Convert(this Currency currencyFrom, CurrencyTypes currencyTypeTo)
 		{
 			if (currencyFrom == null)
-				throw new ArgumentNullException("currencyFrom");
+				throw new ArgumentNullException(nameof(currencyFrom));
 
 			return new Currency { Type = currencyTypeTo, Value = currencyFrom.Value * currencyFrom.Type.Convert(currencyTypeTo) };
 		}
@@ -773,10 +764,10 @@ namespace StockSharp.Algo
 			});
 
 			if (from != CurrencyTypes.RUB && !info.ContainsKey(from))
-				throw new ArgumentException(LocalizedStrings.Str1212Params.Put(from), "from");
+				throw new ArgumentException(LocalizedStrings.Str1212Params.Put(from), nameof(@from));
 
 			if (to != CurrencyTypes.RUB && !info.ContainsKey(to))
-				throw new ArgumentException(LocalizedStrings.Str1212Params.Put(to), "to");
+				throw new ArgumentException(LocalizedStrings.Str1212Params.Put(to), nameof(to));
 
 			if (from == CurrencyTypes.RUB)
 				return 1 / info[to];
@@ -796,7 +787,7 @@ namespace StockSharp.Algo
 		public static MarketDepth Sparse(this MarketDepth depth)
 		{
 			if (depth == null)
-				throw new ArgumentNullException("depth");
+				throw new ArgumentNullException(nameof(depth));
 
 			return depth.Sparse(depth.Security.PriceStep ?? 1m);
 		}
@@ -812,7 +803,7 @@ namespace StockSharp.Algo
 		public static MarketDepth Sparse(this MarketDepth depth, decimal priceStep)
 		{
 			if (depth == null)
-				throw new ArgumentNullException("depth");
+				throw new ArgumentNullException(nameof(depth));
 
 			var bids = depth.Bids.Sparse(priceStep);
 			var asks = depth.Asks.Sparse(priceStep);
@@ -837,10 +828,10 @@ namespace StockSharp.Algo
 		public static IEnumerable<Quote> Sparse(this MarketDepthPair pair, decimal priceStep)
 		{
 			if (pair == null)
-				throw new ArgumentNullException("pair");
+				throw new ArgumentNullException(nameof(pair));
 
 			if (priceStep <= 0)
-				throw new ArgumentOutOfRangeException("priceStep", priceStep, LocalizedStrings.Str1213);
+				throw new ArgumentOutOfRangeException(nameof(priceStep), priceStep, LocalizedStrings.Str1213);
 
 			if (pair.SpreadPrice == null)
 				return Enumerable.Empty<Quote>();
@@ -892,10 +883,10 @@ namespace StockSharp.Algo
 		public static IEnumerable<Quote> Sparse(this IEnumerable<Quote> quotes, decimal priceStep)
 		{
 			if (quotes == null)
-				throw new ArgumentNullException("quotes");
+				throw new ArgumentNullException(nameof(quotes));
 
 			if (priceStep <= 0)
-				throw new ArgumentOutOfRangeException("priceStep", priceStep, LocalizedStrings.Str1213);
+				throw new ArgumentOutOfRangeException(nameof(priceStep), priceStep, LocalizedStrings.Str1213);
 
 			var list = quotes.OrderBy(q => q.Price).ToList();
 
@@ -911,7 +902,7 @@ namespace StockSharp.Algo
 				var from = list[i];
 
 				if (from.OrderDirection != firstQuote.OrderDirection)
-					throw new ArgumentException(LocalizedStrings.Str1214, "quotes");
+					throw new ArgumentException(LocalizedStrings.Str1214, nameof(quotes));
 
 				var toPrice = list[i + 1].Price;
 
@@ -941,10 +932,10 @@ namespace StockSharp.Algo
 		public static MarketDepth Join(this MarketDepth original, MarketDepth rare)
 		{
 			if (original == null)
-				throw new ArgumentNullException("original");
+				throw new ArgumentNullException(nameof(original));
 
 			if (rare == null)
-				throw new ArgumentNullException("rare");
+				throw new ArgumentNullException(nameof(rare));
 
 			return new MarketDepth(original.Security).Update(original.Concat(rare), original.LastChangeTime);
 		}
@@ -981,10 +972,10 @@ namespace StockSharp.Algo
 		public static void EmulateTrades(this MarketDepth depth, IEnumerable<ExecutionMessage> trades)
 		{
 			if (depth == null)
-				throw new ArgumentNullException("depth");
+				throw new ArgumentNullException(nameof(depth));
 
 			if (trades == null)
-				throw new ArgumentNullException("trades");
+				throw new ArgumentNullException(nameof(trades));
 
 			var changedVolume = new Dictionary<decimal, decimal>();
 
@@ -1101,10 +1092,10 @@ namespace StockSharp.Algo
 		public static IEnumerable<AggregatedQuote> Group(this IEnumerable<Quote> quotes, Unit priceRange)
 		{
 			if (quotes == null)
-				throw new ArgumentNullException("quotes");
+				throw new ArgumentNullException(nameof(quotes));
 
 			if (priceRange == null)
-				throw new ArgumentNullException("priceRange");
+				throw new ArgumentNullException(nameof(priceRange));
 
 			//if (priceRange.Value < double.Epsilon)
 			//	throw new ArgumentOutOfRangeException("priceRange", priceRange, "Размер группировки меньше допустимого.");
@@ -1132,7 +1123,7 @@ namespace StockSharp.Algo
 		internal static decimal AlignPrice(this Unit priceRange, decimal firstPrice, decimal price)
 		{
 			if (priceRange == null)
-				throw new ArgumentNullException("priceRange");
+				throw new ArgumentNullException(nameof(priceRange));
 
 			decimal priceLevel;
 
@@ -1153,10 +1144,10 @@ namespace StockSharp.Algo
 		public static QuoteChangeMessage GetDelta(this QuoteChangeMessage from, QuoteChangeMessage to)
 		{
 			if (from == null)
-				throw new ArgumentNullException("from");
+				throw new ArgumentNullException(nameof(@from));
 
 			if (to == null)
-				throw new ArgumentNullException("to");
+				throw new ArgumentNullException(nameof(to));
 
 			return new QuoteChangeMessage
 			{
@@ -1216,10 +1207,10 @@ namespace StockSharp.Algo
 		public static QuoteChangeMessage AddDelta(this QuoteChangeMessage from, QuoteChangeMessage delta)
 		{
 			if (from == null)
-				throw new ArgumentNullException("from");
+				throw new ArgumentNullException(nameof(@from));
 
 			if (delta == null)
-				throw new ArgumentNullException("delta");
+				throw new ArgumentNullException(nameof(delta));
 
 			if (!from.IsSorted)
 				throw new ArgumentException("from");
@@ -1361,7 +1352,7 @@ namespace StockSharp.Algo
 		public static bool IsCanceled(this ExecutionMessage order)
 		{
 			if (order == null)
-				throw new ArgumentNullException("order");
+				throw new ArgumentNullException(nameof(order));
 
 			if (order.OrderState != OrderStates.Done)	// для ускорения в эмуляторе
 				return false;
@@ -1377,7 +1368,7 @@ namespace StockSharp.Algo
 		public static bool IsMatched(this ExecutionMessage order)
 		{
 			if (order == null)
-				throw new ArgumentNullException("order");
+				throw new ArgumentNullException(nameof(order));
 
 			return order.OrderState == OrderStates.Done && order.Balance == 0;
 		}
@@ -1390,7 +1381,7 @@ namespace StockSharp.Algo
 		public static bool IsMatchedPartially(this ExecutionMessage order)
 		{
 			if (order == null)
-				throw new ArgumentNullException("order");
+				throw new ArgumentNullException(nameof(order));
 
 			return order.Balance > 0 && order.Balance != order.Volume;
 		}
@@ -1403,7 +1394,7 @@ namespace StockSharp.Algo
 		public static bool IsMatchedEmpty(this ExecutionMessage order)
 		{
 			if (order == null)
-				throw new ArgumentNullException("order");
+				throw new ArgumentNullException(nameof(order));
 
 			return order.Balance > 0 && order.Balance == order.Volume;
 		}
@@ -1417,10 +1408,10 @@ namespace StockSharp.Algo
 		public static IEnumerable<MyTrade> GetTrades(this Order order, IConnector connector)
 		{
 			if (order == null)
-				throw new ArgumentNullException("order");
+				throw new ArgumentNullException(nameof(order));
 
 			if (connector == null)
-				throw new ArgumentNullException("connector");
+				throw new ArgumentNullException(nameof(connector));
 
 			return connector.MyTrades.Filter(order);
 		}
@@ -1435,7 +1426,7 @@ namespace StockSharp.Algo
 		public static decimal GetMatchedVolume(this Order order, IConnector connector, bool byOrder = true)
 		{
 			if (order == null)
-				throw new ArgumentNullException("order");
+				throw new ArgumentNullException(nameof(order));
 
 			if (order.Type == OrderTypes.Conditional)
 			{
@@ -1469,7 +1460,7 @@ namespace StockSharp.Algo
 		public static decimal GetAveragePrice(this IEnumerable<MyTrade> trades)
 		{
 			if (trades == null)
-				throw new ArgumentNullException("trades");
+				throw new ArgumentNullException(nameof(trades));
 
 			var numerator = 0m;
 			var denominator = 0m;
@@ -1515,10 +1506,10 @@ namespace StockSharp.Algo
 		public static IEnumerable<MyTrade> GetTheoreticalTrades(this MarketDepth depth, Order order)
 		{
 			if (depth == null)
-				throw new ArgumentNullException("depth");
+				throw new ArgumentNullException(nameof(depth));
 
 			if (order == null)
-				throw new ArgumentNullException("order");
+				throw new ArgumentNullException(nameof(order));
 
 			order = order.ReRegisterClone();
 			depth = depth.Clone();
@@ -1603,7 +1594,7 @@ namespace StockSharp.Algo
 		public static IEnumerable<MyTrade> GetTheoreticalTrades(this MarketDepth depth, Sides orderDirection, decimal volume, decimal price)
 		{
 			if (depth == null)
-				throw new ArgumentNullException("depth");
+				throw new ArgumentNullException(nameof(depth));
 
 			return depth.GetTheoreticalTrades(new Order
 			{
@@ -1636,7 +1627,7 @@ namespace StockSharp.Algo
 		public static Sides? GetDirection(this Position position)
 		{
 			if (position == null)
-				throw new ArgumentNullException("position");
+				throw new ArgumentNullException(nameof(position));
 
 			return position.CurrentValue.GetDirection();
 		}
@@ -1670,10 +1661,10 @@ namespace StockSharp.Algo
 		public static void CancelOrders(this IConnector connector, IEnumerable<Order> orders, bool? isStopOrder = null, Portfolio portfolio = null, Sides? direction = null, ExchangeBoard board = null, Security security = null)
 		{
 			if (connector == null)
-				throw new ArgumentNullException("connector");
+				throw new ArgumentNullException(nameof(connector));
 
 			if (orders == null)
-				throw new ArgumentNullException("orders");
+				throw new ArgumentNullException(nameof(orders));
 
 			foreach (var order in orders.Where(o => o.State != OrderStates.Done).ToArray())
 			{
@@ -1705,10 +1696,10 @@ namespace StockSharp.Algo
 		public static IEnumerable<Order> Filter(this IEnumerable<Order> orders, Security security)
 		{
 			if (orders == null)
-				throw new ArgumentNullException("orders");
+				throw new ArgumentNullException(nameof(orders));
 
 			if (security == null)
-				throw new ArgumentNullException("security");
+				throw new ArgumentNullException(nameof(security));
 
 			var basket = security as BasketSecurity;
 			return basket == null ? orders.Where(o => o.Security == security) : basket.InnerSecurities.SelectMany(s => Filter(orders, s));
@@ -1723,10 +1714,10 @@ namespace StockSharp.Algo
 		public static IEnumerable<Order> Filter(this IEnumerable<Order> orders, Portfolio portfolio)
 		{
 			if (orders == null)
-				throw new ArgumentNullException("orders");
+				throw new ArgumentNullException(nameof(orders));
 
 			if (portfolio == null)
-				throw new ArgumentNullException("portfolio");
+				throw new ArgumentNullException(nameof(portfolio));
 
 			return orders.Where(p => p.Portfolio == portfolio);
 		}
@@ -1740,7 +1731,7 @@ namespace StockSharp.Algo
 		public static IEnumerable<Order> Filter(this IEnumerable<Order> orders, OrderStates state)
 		{
 			if (orders == null)
-				throw new ArgumentNullException("orders");
+				throw new ArgumentNullException(nameof(orders));
 
 			return orders.Where(p => p.State == state);
 		}
@@ -1754,7 +1745,7 @@ namespace StockSharp.Algo
 		public static IEnumerable<Order> Filter(this IEnumerable<Order> orders, Sides direction)
 		{
 			if (orders == null)
-				throw new ArgumentNullException("orders");
+				throw new ArgumentNullException(nameof(orders));
 
 			return orders.Where(p => p.Direction == direction);
 		}
@@ -1768,10 +1759,10 @@ namespace StockSharp.Algo
 		public static IEnumerable<Trade> Filter(this IEnumerable<Trade> trades, Security security)
 		{
 			if (trades == null)
-				throw new ArgumentNullException("trades");
+				throw new ArgumentNullException(nameof(trades));
 
 			if (security == null)
-				throw new ArgumentNullException("security");
+				throw new ArgumentNullException(nameof(security));
 
 			var basket = security as BasketSecurity;
 			return basket == null ? trades.Where(t => t.Security == security) : basket.InnerSecurities.SelectMany(s => Filter(trades, s));
@@ -1787,7 +1778,7 @@ namespace StockSharp.Algo
 		public static IEnumerable<Trade> Filter(this IEnumerable<Trade> trades, DateTimeOffset from, DateTimeOffset to)
 		{
 			if (trades == null)
-				throw new ArgumentNullException("trades");
+				throw new ArgumentNullException(nameof(trades));
 
 			return trades.Where(trade => trade.Time >= from && trade.Time < to);
 		}
@@ -1801,10 +1792,10 @@ namespace StockSharp.Algo
 		public static IEnumerable<Position> Filter(this IEnumerable<Position> positions, Security security)
 		{
 			if (positions == null)
-				throw new ArgumentNullException("positions");
+				throw new ArgumentNullException(nameof(positions));
 
 			if (security == null)
-				throw new ArgumentNullException("security");
+				throw new ArgumentNullException(nameof(security));
 
 			var basket = security as BasketSecurity;
 			return basket == null ? positions.Where(p => p.Security == security) : basket.InnerSecurities.SelectMany(s => Filter(positions, s));
@@ -1819,10 +1810,10 @@ namespace StockSharp.Algo
 		public static IEnumerable<Position> Filter(this IEnumerable<Position> positions, Portfolio portfolio)
 		{
 			if (positions == null)
-				throw new ArgumentNullException("positions");
+				throw new ArgumentNullException(nameof(positions));
 
 			if (portfolio == null)
-				throw new ArgumentNullException("portfolio");
+				throw new ArgumentNullException(nameof(portfolio));
 
 			return positions.Where(p => p.Portfolio == portfolio);
 		}
@@ -1836,10 +1827,10 @@ namespace StockSharp.Algo
 		public static IEnumerable<MyTrade> Filter(this IEnumerable<MyTrade> myTrades, Security security)
 		{
 			if (myTrades == null)
-				throw new ArgumentNullException("myTrades");
+				throw new ArgumentNullException(nameof(myTrades));
 
 			if (security == null)
-				throw new ArgumentNullException("security");
+				throw new ArgumentNullException(nameof(security));
 
 			var basket = security as BasketSecurity;
 			return basket == null ? myTrades.Where(t => t.Order.Security == security) : basket.InnerSecurities.SelectMany(s => Filter(myTrades, s));
@@ -1854,10 +1845,10 @@ namespace StockSharp.Algo
 		public static IEnumerable<MyTrade> Filter(this IEnumerable<MyTrade> myTrades, Portfolio portfolio)
 		{
 			if (myTrades == null)
-				throw new ArgumentNullException("myTrades");
+				throw new ArgumentNullException(nameof(myTrades));
 
 			if (portfolio == null)
-				throw new ArgumentNullException("portfolio");
+				throw new ArgumentNullException(nameof(portfolio));
 
 			return myTrades.Where(t => t.Order.Portfolio == portfolio);
 		}
@@ -1871,10 +1862,10 @@ namespace StockSharp.Algo
 		public static IEnumerable<MyTrade> Filter(this IEnumerable<MyTrade> myTrades, Order order)
 		{
 			if (myTrades == null)
-				throw new ArgumentNullException("myTrades");
+				throw new ArgumentNullException(nameof(myTrades));
 
 			if (order == null)
-				throw new ArgumentNullException("order");
+				throw new ArgumentNullException(nameof(order));
 
 			return myTrades.Where(t => t.Order == order);
 		}
@@ -1888,10 +1879,10 @@ namespace StockSharp.Algo
 		public static IEnumerable<Security> FilterSecurities(this Connector connector, SecurityLookupMessage criteria)
 		{
 			if (connector == null)
-				throw new ArgumentNullException("connector");
+				throw new ArgumentNullException(nameof(connector));
 
 			if (criteria == null)
-				throw new ArgumentNullException("criteria");
+				throw new ArgumentNullException(nameof(criteria));
 
 			var security = connector.GetSecurityCriteria(criteria);
 
@@ -1907,10 +1898,10 @@ namespace StockSharp.Algo
 		public static Security GetSecurityCriteria(this Connector connector, SecurityLookupMessage criteria)
 		{
 			if (connector == null)
-				throw new ArgumentNullException("connector");
+				throw new ArgumentNullException(nameof(connector));
 
 			if (criteria == null)
-				throw new ArgumentNullException("criteria");
+				throw new ArgumentNullException(nameof(criteria));
 
 			var stocksharpId = criteria.SecurityId.SecurityCode.IsEmpty() || criteria.SecurityId.BoardCode.IsEmpty()
 				                   ? string.Empty
@@ -1952,10 +1943,10 @@ namespace StockSharp.Algo
 		public static IEnumerable<Security> Filter(this IEnumerable<Security> securities, ExchangeBoard board)
 		{
 			if (securities == null)
-				throw new ArgumentNullException("securities");
+				throw new ArgumentNullException(nameof(securities));
 
 			if (board == null)
-				throw new ArgumentNullException("board");
+				throw new ArgumentNullException(nameof(board));
 
 			return securities.Where(s => s.Board == board);
 		}
@@ -1969,10 +1960,10 @@ namespace StockSharp.Algo
 		public static IEnumerable<Security> Filter(this IEnumerable<Security> securities, Security criteria)
 		{
 			if (securities == null)
-				throw new ArgumentNullException("securities");
+				throw new ArgumentNullException(nameof(securities));
 
 			if (criteria == null)
-				throw new ArgumentNullException("criteria");
+				throw new ArgumentNullException(nameof(criteria));
 
 			if (criteria.IsLookupAll())
 				return securities.ToArray();
@@ -2065,7 +2056,7 @@ namespace StockSharp.Algo
 		public static bool IsFullEmpty(this MarketDepth depth)
 		{
 			if (depth == null)
-				throw new ArgumentNullException("depth");
+				throw new ArgumentNullException(nameof(depth));
 
 			return depth.Bids.Length ==0 && depth.Asks.Length == 0;
 		}
@@ -2078,7 +2069,7 @@ namespace StockSharp.Algo
 		public static bool IsHalfEmpty(this MarketDepth depth)
 		{
 			if (depth == null)
-				throw new ArgumentNullException("depth");
+				throw new ArgumentNullException(nameof(depth));
 
 			return (depth.BestPair.Bid == null || depth.BestPair.Ask == null) && (depth.BestPair.Bid != depth.BestPair.Ask);
 		}
@@ -2093,7 +2084,7 @@ namespace StockSharp.Algo
 		public static DateTimeOffset GetTPlusNDate(this ExchangeBoard board, DateTimeOffset date, int n)
 		{
 			if (board == null)
-				throw new ArgumentNullException("board");
+				throw new ArgumentNullException(nameof(board));
 
 			date = date.Date.ApplyTimeZone(date.Offset);
 
@@ -2220,7 +2211,7 @@ namespace StockSharp.Algo
 			var board = ExchangeBoard.GetBoard(securityId.BoardCode);
 
 			if (board == null)
-				throw new ArgumentException(LocalizedStrings.Str1217Params.Put(securityId.BoardCode), "securityId");
+				throw new ArgumentException(LocalizedStrings.Str1217Params.Put(securityId.BoardCode), nameof(securityId));
 
 			return localTime - serverTime.LocalDateTime;
 		}
@@ -2234,7 +2225,7 @@ namespace StockSharp.Algo
 		public static decimal GetFreeMoney(this Portfolio portfolio, bool useLeverage = false)
 		{
 			if (portfolio == null)
-				throw new ArgumentNullException("portfolio");
+				throw new ArgumentNullException(nameof(portfolio));
 
 			var freeMoney = portfolio.Board == ExchangeBoard.Forts
 				? portfolio.BeginValue - portfolio.CurrentValue + portfolio.VariationMargin
@@ -2252,7 +2243,7 @@ namespace StockSharp.Algo
 		public static IEnumerable<DateTimeOffset> GetExpiryDates(this DateTime from, DateTime to)
 		{
 			if (from > to)
-				throw new ArgumentOutOfRangeException("from");
+				throw new ArgumentOutOfRangeException(nameof(@from));
 
 			for (var year = from.Year; year <= to.Year; year++)
 			{
@@ -2297,13 +2288,13 @@ namespace StockSharp.Algo
 		public static IEnumerable<Security> GetFortsJumps(this string baseCode, DateTime from, DateTime to, Func<string, Security> getSecurity, bool throwIfNotExists = true)
 		{
 			if (baseCode.IsEmpty())
-				throw new ArgumentNullException("baseCode");
+				throw new ArgumentNullException(nameof(baseCode));
 
 			if (from > to)
-				throw new ArgumentOutOfRangeException("from");
+				throw new ArgumentOutOfRangeException(nameof(@from));
 
 			if (getSecurity == null)
-				throw new ArgumentNullException("getSecurity");
+				throw new ArgumentNullException(nameof(getSecurity));
 
 			for (var year = from.Year; year <= to.Year; year++)
 			{
@@ -2363,10 +2354,10 @@ namespace StockSharp.Algo
 		public static IEnumerable<Security> GetFortsJumps(this ContinuousSecurity continuousSecurity, ISecurityProvider provider, string baseCode, DateTime from, DateTime to, bool throwIfNotExists = true)
 		{
 			if (continuousSecurity == null)
-				throw new ArgumentNullException("continuousSecurity");
+				throw new ArgumentNullException(nameof(continuousSecurity));
 
 			if (provider == null)
-				throw new ArgumentNullException("provider");
+				throw new ArgumentNullException(nameof(provider));
 
 			return baseCode.GetFortsJumps(from, to, code => provider.LookupByCode(code).FirstOrDefault(), throwIfNotExists);
 		}
@@ -2400,10 +2391,10 @@ namespace StockSharp.Algo
 			public CashPosition(Portfolio portfolio, IConnector connector)
 			{
 				if (portfolio == null)
-					throw new ArgumentNullException("portfolio");
+					throw new ArgumentNullException(nameof(portfolio));
 
 				if (connector == null)
-					throw new ArgumentNullException("connector");
+					throw new ArgumentNullException(nameof(connector));
 
 				_portfolio = portfolio;
 				_connector = connector;
@@ -2457,7 +2448,7 @@ namespace StockSharp.Algo
 			public NativePositionManager(Position position)
 			{
 				if (position == null)
-					throw new ArgumentNullException("position");
+					throw new ArgumentNullException(nameof(position));
 
 				_position = position;
 			}
@@ -2514,7 +2505,7 @@ namespace StockSharp.Algo
 		public static IPositionManager ToPositionManager(this Position position)
 		{
 			if (position == null)
-				throw new ArgumentNullException("position");
+				throw new ArgumentNullException(nameof(position));
 
 			return new NativePositionManager(position);
 		}
@@ -2546,10 +2537,10 @@ namespace StockSharp.Algo
 		private static void AddOrderLog(this ILogReceiver receiver, LogLevels type, Order order, string operation, Func<string> getAdditionalInfo)
 		{
 			if (receiver == null)
-				throw new ArgumentNullException("receiver");
+				throw new ArgumentNullException(nameof(receiver));
 
 			if (order == null)
-				throw new ArgumentNullException("order");
+				throw new ArgumentNullException(nameof(order));
 
 			var orderDescription = order.ToString();
 			var additionalInfo = getAdditionalInfo == null ? string.Empty : getAdditionalInfo();
@@ -2568,10 +2559,10 @@ namespace StockSharp.Algo
 			public LookupSecurityUpdate(IConnector connector, Security criteria, TimeSpan timeOut)
 			{
 				if (connector == null)
-					throw new ArgumentNullException("connector");
+					throw new ArgumentNullException(nameof(connector));
 
 				if (criteria == null)
-					throw new ArgumentNullException("criteria");
+					throw new ArgumentNullException(nameof(criteria));
 				
 				_securities = new SynchronizedList<Security>();
 
@@ -2619,10 +2610,10 @@ namespace StockSharp.Algo
 		public static IEnumerable<Security> SyncLookupSecurities(this IConnector connector, Security criteria)
 		{
 			if (connector == null)
-				throw new ArgumentNullException("connector");
+				throw new ArgumentNullException(nameof(connector));
 
 			if (criteria == null)
-				throw new ArgumentNullException("criteria");
+				throw new ArgumentNullException(nameof(criteria));
 
 			using (var lsu = new LookupSecurityUpdate(connector, criteria, TimeSpan.FromSeconds(180)))
 			{
@@ -2638,10 +2629,10 @@ namespace StockSharp.Algo
 		public static void ApplyChanges(this Portfolio portfolio, PortfolioChangeMessage message)
 		{
 			if (portfolio == null)
-				throw new ArgumentNullException("portfolio");
+				throw new ArgumentNullException(nameof(portfolio));
 
 			if (message == null)
-				throw new ArgumentNullException("message");
+				throw new ArgumentNullException(nameof(message));
 
 			foreach (var change in message.Changes)
 			{
@@ -2675,10 +2666,10 @@ namespace StockSharp.Algo
 		public static void ApplyChanges(this Position position, PositionChangeMessage message)
 		{
 			if (position == null)
-				throw new ArgumentNullException("position");
+				throw new ArgumentNullException(nameof(position));
 
 			if (message == null)
-				throw new ArgumentNullException("message");
+				throw new ArgumentNullException(nameof(message));
 
 			foreach (var change in message.Changes)
 				ApplyChange(position, change);
@@ -2729,7 +2720,7 @@ namespace StockSharp.Algo
 						position.ExtensionInfo[change.Key] = change.Value;
 						break;
 					default:
-						throw new ArgumentOutOfRangeException("change", change.Key, LocalizedStrings.Str1219);
+						throw new ArgumentOutOfRangeException(nameof(change), change.Key, LocalizedStrings.Str1219);
 				}
 			}
 			catch (Exception ex)
@@ -2748,10 +2739,10 @@ namespace StockSharp.Algo
 		public static void ApplyChanges(this Security security, IEnumerable<KeyValuePair<Level1Fields, object>> changes, DateTimeOffset serverTime, DateTime localTime)
 		{
 			if (security == null)
-				throw new ArgumentNullException("security");
+				throw new ArgumentNullException(nameof(security));
 
 			if (changes == null)
-				throw new ArgumentNullException("changes");
+				throw new ArgumentNullException(nameof(changes));
 
 			var bidChanged = false;
 			var askChanged = false;
@@ -2980,10 +2971,10 @@ namespace StockSharp.Algo
 		public static void ApplyChanges(this Security security, Level1ChangeMessage message)
 		{
 			if (security == null)
-				throw new ArgumentNullException("security");
+				throw new ArgumentNullException(nameof(security));
 
 			if (message == null)
-				throw new ArgumentNullException("message");
+				throw new ArgumentNullException(nameof(message));
 
 			security.ApplyChanges(message.Changes, message.ServerTime, message.LocalTime);
 		}
@@ -3184,7 +3175,7 @@ namespace StockSharp.Algo
 		public static WorkingTimePeriod GetPeriod(this WorkingTime time, DateTime date)
 		{
 			if (time == null)
-				throw new ArgumentNullException("time");
+				throw new ArgumentNullException(nameof(time));
 
 			return time.Periods.FirstOrDefault(p => p.Till >= date);
 		}
@@ -3210,7 +3201,7 @@ namespace StockSharp.Algo
 		public static string GetBoardCode(this IMessageAdapter adapter, string secClass)
 		{
 			if (adapter == null)
-				throw new ArgumentNullException("adapter");
+				throw new ArgumentNullException(nameof(adapter));
 
 			return adapter.SecurityClassInfo.GetSecurityClassInfo(secClass).Item2;
 		}
@@ -3251,7 +3242,7 @@ namespace StockSharp.Algo
 		public static string SecurityIdToFolderName(this string id)
 		{
 			if (id.IsEmpty())
-				throw new ArgumentNullException("id");
+				throw new ArgumentNullException(nameof(id));
 
 			var folderName = id;
 
@@ -3272,7 +3263,7 @@ namespace StockSharp.Algo
 		public static string FolderNameToSecurityId(this string folderName)
 		{
 			if (folderName.IsEmpty())
-				throw new ArgumentNullException("folderName");
+				throw new ArgumentNullException(nameof(folderName));
 
 			var id = folderName.ToUpperInvariant();
 
@@ -3303,10 +3294,10 @@ namespace StockSharp.Algo
 		public static Security LookupById(this ISecurityProvider provider, string id)
 		{
 			if (provider == null)
-				throw new ArgumentNullException("provider");
+				throw new ArgumentNullException(nameof(provider));
 
 			if (id.IsEmpty())
-				throw new ArgumentNullException("id");
+				throw new ArgumentNullException(nameof(id));
 
 			return provider.Lookup(new Security { Id = id }).SingleOrDefault();
 		}
@@ -3320,10 +3311,10 @@ namespace StockSharp.Algo
 		public static IEnumerable<Security> LookupByCode(this ISecurityProvider provider, string code)
 		{
 			if (provider == null)
-				throw new ArgumentNullException("provider");
+				throw new ArgumentNullException(nameof(provider));
 
 			if (code.IsEmpty())
-				throw new ArgumentNullException("code");
+				throw new ArgumentNullException(nameof(code));
 
 			return provider.Lookup(new Security { Code = code });
 		}
@@ -3341,7 +3332,7 @@ namespace StockSharp.Algo
 		public static bool IsLookupAll(this Security criteria)
 		{
 			if (criteria == null)
-				throw new ArgumentNullException("criteria");
+				throw new ArgumentNullException(nameof(criteria));
 
 			if (criteria == LookupAllCriteria)
 				return true;
@@ -3360,7 +3351,7 @@ namespace StockSharp.Algo
 		public static IEnumerable<Security> LookupAll(this ISecurityProvider provider)
 		{
 			if (provider == null)
-				throw new ArgumentNullException("provider");
+				throw new ArgumentNullException(nameof(provider));
 
 			return provider.Lookup(LookupAllCriteria);
 		}
@@ -3372,7 +3363,7 @@ namespace StockSharp.Algo
 		public static void DeleteAll(this ISecurityStorage storage)
 		{
 			if (storage == null)
-				throw new ArgumentNullException("storage");
+				throw new ArgumentNullException(nameof(storage));
 
 			storage.DeleteBy(LookupAllCriteria);
 		}
@@ -3388,10 +3379,10 @@ namespace StockSharp.Algo
 		public static T GetSecurityValue<T>(this IMarketDataProvider provider, Security security, Level1Fields field)
 		{
 			if (provider == null)
-				throw new ArgumentNullException("provider");
+				throw new ArgumentNullException(nameof(provider));
 
 			if (security == null)
-				throw new ArgumentNullException("security");
+				throw new ArgumentNullException(nameof(security));
 
 			return (T)provider.GetSecurityValue(security, field);
 		}
@@ -3405,10 +3396,10 @@ namespace StockSharp.Algo
 		public static IDictionary<Level1Fields, object> GetSecurityValues(this IMarketDataProvider provider, Security security)
 		{
 			if (provider == null)
-				throw new ArgumentNullException("provider");
+				throw new ArgumentNullException(nameof(provider));
 
 			if (security == null)
-				throw new ArgumentNullException("security");
+				throw new ArgumentNullException(nameof(security));
 
 			var fields = provider.GetLevel1Fields(security);
 
@@ -3490,7 +3481,7 @@ namespace StockSharp.Algo
 		public static string GetIso10962(this Security security)
 		{
 			if (security == null)
-				throw new ArgumentNullException("security");
+				throw new ArgumentNullException(nameof(security));
 
 			// https://en.wikipedia.org/wiki/ISO_10962
 
@@ -3543,7 +3534,7 @@ namespace StockSharp.Algo
 				case null:
 					return "XXXXXX";
 				default:
-					throw new ArgumentOutOfRangeException("security");
+					throw new ArgumentOutOfRangeException(nameof(security));
 			}
 		}
 
@@ -3555,10 +3546,10 @@ namespace StockSharp.Algo
 		public static SecurityTypes? FromIso10962(string type)
 		{
 			if (type.IsEmpty())
-				throw new ArgumentNullException("type");
+				throw new ArgumentNullException(nameof(type));
 
 			if (type.Length != 6)
-				throw new ArgumentOutOfRangeException("type", type, LocalizedStrings.Str2117);
+				throw new ArgumentOutOfRangeException(nameof(type), type, LocalizedStrings.Str2117);
 
 			switch (type[0])
 			{
@@ -3649,7 +3640,7 @@ namespace StockSharp.Algo
 		public static decimal SafeGetVolume(this ExecutionMessage message)
 		{
 			if (message == null)
-				throw new ArgumentNullException("message");
+				throw new ArgumentNullException(nameof(message));
 
 			var volume = message.Volume;
 
@@ -3660,7 +3651,7 @@ namespace StockSharp.Algo
 				? LocalizedStrings.Str1022Params.Put((object)message.TradeId ?? message.TradeStringId)
 				: LocalizedStrings.Str927Params.Put((object)message.OrderId ?? message.OrderStringId);
 
-			throw new ArgumentOutOfRangeException("message", null, errorMsg);
+			throw new ArgumentOutOfRangeException(nameof(message), null, errorMsg);
 		}
 
 		/// <summary>
@@ -3671,14 +3662,14 @@ namespace StockSharp.Algo
 		public static long SafeGetOrderId(this ExecutionMessage message)
 		{
 			if (message == null)
-				throw new ArgumentNullException("message");
+				throw new ArgumentNullException(nameof(message));
 
 			var orderId = message.OrderId;
 
 			if (orderId != null)
 				return orderId.Value;
 
-			throw new ArgumentOutOfRangeException("message", null, LocalizedStrings.Str925);
+			throw new ArgumentOutOfRangeException(nameof(message), null, LocalizedStrings.Str925);
 		}
 
 		private class TickEnumerable : SimpleEnumerable<ExecutionMessage>, IEnumerableEx<ExecutionMessage>
@@ -3690,7 +3681,7 @@ namespace StockSharp.Algo
 				public TickEnumerator(IEnumerator<Level1ChangeMessage> level1Enumerator)
 				{
 					if (level1Enumerator == null)
-						throw new ArgumentNullException("level1Enumerator");
+						throw new ArgumentNullException(nameof(level1Enumerator));
 
 					_level1Enumerator = level1Enumerator;
 				}
@@ -3720,10 +3711,7 @@ namespace StockSharp.Algo
 					Current = null;
 				}
 
-				object IEnumerator.Current
-				{
-					get { return Current; }
-				}
+				object IEnumerator.Current => Current;
 
 				void IDisposable.Dispose()
 				{
@@ -3738,15 +3726,12 @@ namespace StockSharp.Algo
 				: base(() => new TickEnumerator(level1.GetEnumerator()))
 			{
 				if (level1 == null)
-					throw new ArgumentNullException("level1");
+					throw new ArgumentNullException(nameof(level1));
 
 				_level1 = level1;
 			}
 
-			int IEnumerableEx.Count
-			{
-				get { return _level1.Count; }
-			}
+			int IEnumerableEx.Count => _level1.Count;
 		}
 
 		/// <summary>
@@ -3767,7 +3752,7 @@ namespace StockSharp.Algo
 		public static bool IsContainsTick(this Level1ChangeMessage level1)
 		{
 			if (level1 == null)
-				throw new ArgumentNullException("level1");
+				throw new ArgumentNullException(nameof(level1));
 
 			return level1.Changes.ContainsKey(Level1Fields.LastTradePrice);
 		}
@@ -3780,7 +3765,7 @@ namespace StockSharp.Algo
 		public static ExecutionMessage ToTick(this Level1ChangeMessage level1)
 		{
 			if (level1 == null)
-				throw new ArgumentNullException("level1");
+				throw new ArgumentNullException(nameof(level1));
 
 			return new ExecutionMessage
 			{
@@ -3810,7 +3795,7 @@ namespace StockSharp.Algo
 				public OrderBookEnumerator(IEnumerator<Level1ChangeMessage> level1Enumerator)
 				{
 					if (level1Enumerator == null)
-						throw new ArgumentNullException("level1Enumerator");
+						throw new ArgumentNullException(nameof(level1Enumerator));
 
 					_level1Enumerator = level1Enumerator;
 				}
@@ -3867,10 +3852,7 @@ namespace StockSharp.Algo
 					Current = null;
 				}
 
-				object IEnumerator.Current
-				{
-					get { return Current; }
-				}
+				object IEnumerator.Current => Current;
 
 				void IDisposable.Dispose()
 				{
@@ -3885,15 +3867,12 @@ namespace StockSharp.Algo
 				: base(() => new OrderBookEnumerator(level1.GetEnumerator()))
 			{
 				if (level1 == null)
-					throw new ArgumentNullException("level1");
+					throw new ArgumentNullException(nameof(level1));
 
 				_level1 = level1;
 			}
 
-			int IEnumerableEx.Count
-			{
-				get { return _level1.Count; }
-			}
+			int IEnumerableEx.Count => _level1.Count;
 		}
 
 		/// <summary>
@@ -3914,7 +3893,7 @@ namespace StockSharp.Algo
 		public static bool IsContainsQuotes(this Level1ChangeMessage level1)
 		{
 			if (level1 == null)
-				throw new ArgumentNullException("level1");
+				throw new ArgumentNullException(nameof(level1));
 
 			return level1.Changes.ContainsKey(Level1Fields.BestBidPrice) || level1.Changes.ContainsKey(Level1Fields.BestAskPrice);
 		}

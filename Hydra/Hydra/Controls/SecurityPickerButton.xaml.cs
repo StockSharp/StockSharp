@@ -39,7 +39,7 @@
 			set
 			{
 				if (value == null)
-					throw new ArgumentNullException("value");
+					throw new ArgumentNullException(nameof(value));
 
 				_selectedSecurities = value;
 				Content = value.IsEmpty() ? _contentTemplate : value.Select(s => s.Id).Join(", ");

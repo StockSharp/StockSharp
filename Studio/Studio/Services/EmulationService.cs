@@ -127,7 +127,7 @@ namespace StockSharp.Studio.Services
 		public EmulationService(StrategyContainer strategy)
 		{
 			if (strategy == null)
-				throw new ArgumentNullException("strategy");
+				throw new ArgumentNullException(nameof(strategy));
 
 			Strategy = strategy;
 			Strategies = new[] { strategy }.ToEx(1);

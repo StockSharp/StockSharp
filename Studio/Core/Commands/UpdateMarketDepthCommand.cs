@@ -9,7 +9,7 @@ namespace StockSharp.Studio.Core.Commands
 		public UpdateMarketDepthCommand(MarketDepth depth)
 		{
 			if (depth == null)
-				throw new ArgumentNullException("depth");
+				throw new ArgumentNullException(nameof(depth));
 
 			Depth = depth;
 		}

@@ -63,23 +63,17 @@ namespace StockSharp.Xaml
 		/// <summary>
 		/// The list of commission rules added to the table.
 		/// </summary>
-		public IListEx<ICommissionRule> Rules
-		{
-			get { return _rules; }
-		}
+		public IListEx<ICommissionRule> Rules => _rules;
 
 		private RuleItem CreateItem(ICommissionRule rule)
 		{
 			if (rule == null)
-				throw new ArgumentNullException("rule");
+				throw new ArgumentNullException(nameof(rule));
 
 			return new RuleItem { Rule = rule, Name = _names[rule.GetType()] };
 		}
 
-		private KeyValuePair<Type, string>? SelectedType
-		{
-			get { return (KeyValuePair<Type, string>?)TypeCtrl.SelectedItem; }
-		}
+		private KeyValuePair<Type, string>? SelectedType => (KeyValuePair<Type, string>?)TypeCtrl.SelectedItem;
 
 		private void AddRule_OnClick(object sender, RoutedEventArgs e)
 		{

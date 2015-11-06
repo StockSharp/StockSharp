@@ -45,7 +45,7 @@ namespace StockSharp.Algo.Indicators
 		[DisplayName("Jaw")]
 		[DescriptionLoc(LocalizedStrings.Str838Key)]
 		[CategoryLoc(LocalizedStrings.GeneralKey)]
-		public AlligatorLine Jaw { get; private set; }
+		public AlligatorLine Jaw { get; }
 
 		/// <summary>
 		/// Teeth.
@@ -68,6 +68,6 @@ namespace StockSharp.Algo.Indicators
 		/// <summary>
 		/// Whether the indicator is set.
 		/// </summary>
-		public override bool IsFormed { get { return Jaw.IsFormed; } }
+		public override bool IsFormed => Jaw.IsFormed;
 	}
 }

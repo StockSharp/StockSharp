@@ -29,7 +29,7 @@ namespace StockSharp.Algo.Candles.VolumePriceStatistics
 		/// <summary>
 		/// Price levels.
 		/// </summary>
-		public List<PriceLevel> PriceLevels { get; private set; }
+		public List<PriceLevel> PriceLevels { get; }
 
 		/// <summary>
 		/// The upper price level.
@@ -53,7 +53,7 @@ namespace StockSharp.Algo.Candles.VolumePriceStatistics
 		public ValueArea(IEnumerable<PriceLevel> priceLevels)
 		{
 			if (priceLevels == null)
-				throw new ArgumentNullException("priceLevels");
+				throw new ArgumentNullException(nameof(priceLevels));
 
 			PriceLevels = priceLevels
 				.GroupBy(p => p.Price)

@@ -22,13 +22,7 @@ namespace StockSharp.Logging
 		/// <summary>
 		/// Name.
 		/// </summary>
-		public override string Name
-		{
-			get
-			{
-				return "Unhandled Exception";
-			}
-		}
+		public override string Name => "Unhandled Exception";
 
 		private void OnUnhandledException(object sender, UnhandledExceptionEventArgs e)
 		{

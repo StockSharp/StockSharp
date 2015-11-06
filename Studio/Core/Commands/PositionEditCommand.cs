@@ -11,7 +11,7 @@ namespace StockSharp.Studio.Core.Commands
 		public PositionEditCommand(BasePosition position)
 		{
 			if (position == null)
-				throw new ArgumentNullException("position");
+				throw new ArgumentNullException(nameof(position));
 
 			Position = position;
 		}

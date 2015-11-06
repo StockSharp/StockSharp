@@ -1,4 +1,4 @@
-namespace StockSharp.Xaml
+﻿namespace StockSharp.Xaml
 {
 	using System;
 	using System.Collections.Generic;
@@ -55,10 +55,7 @@ namespace StockSharp.Xaml
 		/// <summary>
 		/// The extended functionality that will be displayed in the window <see cref="TargetPlatformWindow"/>.
 		/// </summary>
-		protected internal virtual IEnumerable<TargetPlatformFeature> ExtendedFeatures
-		{
-			get { return Enumerable.Empty<TargetPlatformFeature>(); }
-		}
+		protected internal virtual IEnumerable<TargetPlatformFeature> ExtendedFeatures => Enumerable.Empty<TargetPlatformFeature>();
 
 		private void HandleException(Exception exception, bool isWpf)
 		{
@@ -137,10 +134,7 @@ namespace StockSharp.Xaml
 			HandleException((Exception)e.ExceptionObject, false);
 		}
 
-		private static string Title
-		{
-			get { return TypeHelper.ApplicationName.Replace("S#.", string.Empty); }
-		}
+		private static string Title => TypeHelper.ApplicationName.Replace("S#.", string.Empty);
 
 		/// <summary>
 		/// The path to the settings directory.

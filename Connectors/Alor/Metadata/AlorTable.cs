@@ -31,10 +31,10 @@ using StockSharp.Localization;	internal enum AlorTableTypes
 		internal AlorTable(AlorTableTypes type, string name, Action<Exception> processDataError)
 		{
 			if (name.IsEmpty())
-				throw new ArgumentNullException("name");
+				throw new ArgumentNullException(nameof(name));
 
 			if (processDataError == null)
-				throw new ArgumentNullException("processDataError");
+				throw new ArgumentNullException(nameof(processDataError));
 
 			Type = type;
 			Name = name;
@@ -64,7 +64,7 @@ using StockSharp.Localization;	internal enum AlorTableTypes
 			{
 				var allFieldNames = MetaTable.AllFieldNames.Split(',');
 				if (value == null)
-					throw new ArgumentNullException("value");
+					throw new ArgumentNullException(nameof(value));
 				MetaTable.FieldNames = "";
 				foreach (var alorColumn in value)
 				{
@@ -84,13 +84,13 @@ using StockSharp.Localization;	internal enum AlorTableTypes
 		internal object GetObject(object[] values, AlorColumn column)
 		{
 			if (values == null)
-				throw new ArgumentNullException("values");
+				throw new ArgumentNullException(nameof(values));
 			if (column == null)
-				throw new ArgumentNullException("column");
+				throw new ArgumentNullException(nameof(column));
 
 			int index = Columns.FindIndex(item => item.Name == column.Name);
 			if (index == -1)
-				throw new ArgumentException(LocalizedStrings.Str3700Params.Put(column.Name, Name), "column");
+				throw new ArgumentException(LocalizedStrings.Str3700Params.Put(column.Name, Name), nameof(column));
 
 			return values[index];
 		}
@@ -137,10 +137,10 @@ using StockSharp.Localization;	internal enum AlorTableTypes
 		internal void FillNonMandatoryInfo(IExtendableEntity entity, object[] values)
 		{
 			if (entity == null)
-				throw new ArgumentNullException("entity");
+				throw new ArgumentNullException(nameof(entity));
 
 			if (values == null)
-				throw new ArgumentNullException("values");
+				throw new ArgumentNullException(nameof(values));
 
 			if (entity.ExtensionInfo == null)
 				entity.ExtensionInfo = new Dictionary<object, object>();

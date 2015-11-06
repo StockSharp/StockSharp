@@ -22,17 +22,14 @@ namespace StockSharp.Xaml.Actipro
 	/// </summary>
 	public partial class ExchangeEditor
 	{
-		private IExchangeInfoProvider Provider { get; set; }
+		private IExchangeInfoProvider Provider { get; }
 
 		/// <summary>
 		/// List of exchanges.
 		/// </summary>
-		public ObservableCollection<Exchange> Exchanges { get; private set; }
+		public ObservableCollection<Exchange> Exchanges { get; }
 
-		private ExchangeEditorViewModel ViewModel
-		{
-			get { return (ExchangeEditorViewModel)DataContext; }
-		}
+		private ExchangeEditorViewModel ViewModel => (ExchangeEditorViewModel)DataContext;
 
 		private static readonly Regex _checkCodeRegex = new Regex("^[a-z0-9]{1,15}$", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
@@ -200,32 +197,25 @@ namespace StockSharp.Xaml.Actipro
 		private CountryCodes? _countryCode;
 
 		private readonly ExchangeEditor _editor;
-		private readonly IExchangeInfoProvider _provider;
 
 		private bool _updatingModel;
 
 		public event Action DataChanged;
 
-		private IExchangeInfoProvider Provider
-		{
-			get { return _provider; }
-		}
+		private IExchangeInfoProvider Provider { get; }
 
-		private IEnumerable<Exchange> Exchanges
-		{
-			get { return _editor.Exchanges; }
-		}
+		private IEnumerable<Exchange> Exchanges => _editor.Exchanges;
 
 		public ExchangeEditorViewModel(ExchangeEditor editor, IExchangeInfoProvider provider)
 		{
 			if (editor == null)
-				throw new ArgumentNullException("editor");
+				throw new ArgumentNullException(nameof(editor));
 
 			if (provider == null)
-				throw new ArgumentNullException("provider");
+				throw new ArgumentNullException(nameof(provider));
 
 			_editor = editor;
-			_provider = provider;
+			Provider = provider;
 			_isNew = true;
 		}
 

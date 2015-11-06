@@ -101,10 +101,7 @@ namespace StockSharp.Xaml
 		/// <summary>
 		/// Available functionality for all platforms.
 		/// </summary>
-		public ObservableCollection<TargetPlatformFeature> Features
-		{
-			get { return _features; }
-		}
+		public ObservableCollection<TargetPlatformFeature> Features => _features;
 
 		/// <summary>
 		/// The selected platform.

@@ -29,7 +29,7 @@ namespace StockSharp.Algo
 		public FilterableSecurityProvider(ISecurityProvider provider, bool ownProvider = false/*, Func<Security, bool> excludeFilter = null*/)
 		{
 			if (provider == null)
-				throw new ArgumentNullException("provider");
+				throw new ArgumentNullException(nameof(provider));
 
 			_provider = provider;
 			_ownProvider = ownProvider;
@@ -46,10 +46,7 @@ namespace StockSharp.Algo
 		/// <summary>
 		/// Gets the number of instruments contained in the <see cref="ISecurityProvider"/>.
 		/// </summary>
-		public int Count
-		{
-			get { return _trie.Count; }
-		}
+		public int Count => _trie.Count;
 
 		/// <summary>
 		/// New instrument created.
@@ -74,7 +71,7 @@ namespace StockSharp.Algo
 		public IEnumerable<Security> Lookup(Security criteria)
 		{
 			if (criteria == null)
-				throw new ArgumentNullException("criteria");
+				throw new ArgumentNullException(nameof(criteria));
 
 			var filter = criteria.Id.IsEmpty()
 				? (criteria.IsLookupAll() ? string.Empty : criteria.Code.ToLowerInvariant())

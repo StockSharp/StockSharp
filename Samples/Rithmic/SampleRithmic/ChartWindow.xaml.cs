@@ -20,7 +20,7 @@
 			InitializeComponent();
 
 			if (candleSeries == null)
-				throw new ArgumentNullException("candleSeries");
+				throw new ArgumentNullException(nameof(candleSeries));
 
 			_candleSeries = candleSeries;
 			_trader = MainWindow.Instance.Trader;

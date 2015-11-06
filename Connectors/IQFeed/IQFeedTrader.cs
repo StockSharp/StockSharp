@@ -244,7 +244,7 @@ namespace StockSharp.IQFeed
 		public IEnumerable<CandleMessage> GetHistoricalCandles(Security security, Type candleType, object arg, long count, out bool isSuccess)
 		{
 			if (security == null)
-				throw new ArgumentNullException("security");
+				throw new ArgumentNullException(nameof(security));
 
 			//if (timeFrame <= TimeSpan.Zero)
 			//	throw new ArgumentException("Тайм-фрейм должен быть больше 0.");
@@ -296,7 +296,7 @@ namespace StockSharp.IQFeed
 		public IEnumerable<CandleMessage> GetHistoricalCandles(Security security, Type candleType, object arg, DateTimeOffset from, DateTimeOffset to, out bool isSuccess)
 		{
 			if (security == null)
-				throw new ArgumentNullException("security");
+				throw new ArgumentNullException(nameof(security));
 
 			//if (timeFrame <= TimeSpan.Zero)
 			//	throw new ArgumentException("Тайм-фрейм должен быть больше 0.");
@@ -360,7 +360,7 @@ namespace StockSharp.IQFeed
 			else if (candleType == typeof(VolumeCandle))
 				return MarketDataTypes.CandleVolume;
 
-			throw new ArgumentOutOfRangeException("candleType", candleType, LocalizedStrings.WrongCandleType);
+			throw new ArgumentOutOfRangeException(nameof(candleType), candleType, LocalizedStrings.WrongCandleType);
 		}
 
 		/// <summary>

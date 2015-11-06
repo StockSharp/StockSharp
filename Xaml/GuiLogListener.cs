@@ -22,7 +22,7 @@ namespace StockSharp.Xaml
 		public GuiLogListener(ILogListener listener)
 		{
 			if (listener == null)
-				throw new ArgumentNullException("listener");
+				throw new ArgumentNullException(nameof(listener));
 
 			_listener = listener;
 		}

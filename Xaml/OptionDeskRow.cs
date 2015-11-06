@@ -31,10 +31,10 @@ namespace StockSharp.Xaml
 			internal OptionDeskRowSide(OptionDesk desk, Security option)
 			{
 				if (desk == null)
-					throw new ArgumentNullException("desk");
+					throw new ArgumentNullException(nameof(desk));
 
 				if (option == null)
-					throw new ArgumentNullException("option");
+					throw new ArgumentNullException(nameof(option));
 
 				_desk = desk;
 				Option = option;
@@ -74,7 +74,7 @@ namespace StockSharp.Xaml
 			[ReadOnly(true)]
 			[DisplayNameLoc(LocalizedStrings.OptionsContractKey)]
 			[DescriptionLoc(LocalizedStrings.Str1526Key)]
-			public Security Option { get; private set; }
+			public Security Option { get; }
 
 			/// <summary>
 			/// Option delta.
@@ -154,7 +154,7 @@ namespace StockSharp.Xaml
 		internal OptionDeskRow(OptionDesk desk, Security call, Security put)
 		{
 			if (desk == null)
-				throw new ArgumentNullException("desk");
+				throw new ArgumentNullException(nameof(desk));
 
 			if (call == null && put == null)
 				throw new ArgumentException(LocalizedStrings.Str1530);
@@ -276,7 +276,7 @@ namespace StockSharp.Xaml
 		[DisplayName("Call")]
 		[DescriptionLoc(LocalizedStrings.Str1534Key)]
 		[CategoryLoc(LocalizedStrings.Str1529Key)]
-		public OptionDeskRowSide Call { get; private set; }
+		public OptionDeskRowSide Call { get; }
 
 		/// <summary>
 		/// Option parameters <see cref="OptionTypes.Put"/>.
@@ -284,6 +284,6 @@ namespace StockSharp.Xaml
 		[DisplayName("Put")]
 		[DescriptionLoc(LocalizedStrings.Str1535Key)]
 		[CategoryLoc(LocalizedStrings.Str1529Key)]
-		public OptionDeskRowSide Put { get; private set; }
+		public OptionDeskRowSide Put { get; }
 	}
 }

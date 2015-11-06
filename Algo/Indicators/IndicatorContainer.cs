@@ -27,10 +27,7 @@ namespace StockSharp.Algo.Indicators
 		/// <summary>
 		/// The current number of saved values.
 		/// </summary>
-		public int Count
-		{
-			get { return _values.Count; }
-		}
+		public int Count => _values.Count;
 
 		/// <summary>
 		/// Add new values.
@@ -59,12 +56,12 @@ namespace StockSharp.Algo.Indicators
 		public virtual Tuple<IIndicatorValue, IIndicatorValue> GetValue(int index)
 		{
 			if (index < 0)
-				throw new ArgumentOutOfRangeException("index", index, LocalizedStrings.Str912);
+				throw new ArgumentOutOfRangeException(nameof(index), index, LocalizedStrings.Str912);
 
 			lock (_values.SyncRoot)
 			{
 				if (index >= _values.Count)
-					throw new ArgumentOutOfRangeException("index", index, LocalizedStrings.Str913);
+					throw new ArgumentOutOfRangeException(nameof(index), index, LocalizedStrings.Str913);
 
 				return _values[_values.Count - 1 - index];
 			}

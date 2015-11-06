@@ -9,7 +9,7 @@
 		public EditSecurityCommand(Security security)
 		{
 			if (security == null)
-				throw new ArgumentNullException("security");
+				throw new ArgumentNullException(nameof(security));
 
 			Security = security;
 		}

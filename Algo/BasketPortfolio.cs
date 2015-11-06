@@ -41,7 +41,7 @@ namespace StockSharp.Algo
 				public WeightedPosition(WeightedPortfolio portfolio, IEnumerable<Position> innerPositions)
 				{
 					if (innerPositions == null)
-						throw new ArgumentNullException("innerPositions");
+						throw new ArgumentNullException(nameof(innerPositions));
 
 					_innerPositions = innerPositions;
 
@@ -65,10 +65,7 @@ namespace StockSharp.Algo
 
 				private readonly IEnumerable<Position> _innerPositions; 
 
-				public override IEnumerable<Position> InnerPositions
-				{
-					get { return _innerPositions; }
-				}
+				public override IEnumerable<Position> InnerPositions => _innerPositions;
 			}
 
 			private readonly WeightedPortfolio _parent;
@@ -77,7 +74,7 @@ namespace StockSharp.Algo
 			public WeightsDictionary(WeightedPortfolio parent, IConnector connector)
 			{
 				if (parent == null)
-					throw new ArgumentNullException("parent");
+					throw new ArgumentNullException(nameof(parent));
 
 				_parent = parent;
 				_connector = connector;
@@ -159,10 +156,10 @@ namespace StockSharp.Algo
 			private static Currency Multiple(Currency currency, Currency weight, Currency part)
 			{
 				if (currency == null)
-					throw new ArgumentNullException("currency");
+					throw new ArgumentNullException(nameof(currency));
 
 				if (part == null)
-					throw new ArgumentNullException("part");
+					throw new ArgumentNullException(nameof(part));
 
 				if (currency.Type != part.Type)
 					part = part.Convert(currency.Type);
@@ -185,25 +182,16 @@ namespace StockSharp.Algo
 		/// <summary>
 		/// Instruments and their weighting coefficients in the basket.
 		/// </summary>
-		public SynchronizedDictionary<Portfolio, decimal> Weights
-		{
-			get { return _weights; }
-		}
+		public SynchronizedDictionary<Portfolio, decimal> Weights => _weights;
 
 		/// <summary>
 		/// Portfolios from which this basket is created.
 		/// </summary>
-		public override IEnumerable<Portfolio> InnerPortfolios
-		{
-			get { return _weights.CachedKeys; }
-		}
+		public override IEnumerable<Portfolio> InnerPortfolios => _weights.CachedKeys;
 
 		/// <summary>
 		/// Positions from which this basket is created.
 		/// </summary>
-		public override IEnumerable<BasketPosition> InnerPositions
-		{
-			get { return _weights.Positions; }
-		}
+		public override IEnumerable<BasketPosition> InnerPositions => _weights.Positions;
 	}
 }

@@ -41,7 +41,7 @@
 		public DdeCustomTable(Schema schema)
 		{
 			if (schema == null)
-				throw new ArgumentNullException("schema");
+				throw new ArgumentNullException(nameof(schema));
 
 			Init(schema, schema.Name);
 		}
@@ -49,7 +49,7 @@
 		private void Init(Schema schema, string tableName)
 		{
 			if (schema == null)
-				throw new ArgumentNullException("schema");
+				throw new ArgumentNullException(nameof(schema));
 
 			DdeSettings = new DdeSettings();
 
@@ -77,7 +77,7 @@
 			set
 			{
 				if (value.IsEmpty())
-					throw new ArgumentNullException("value");
+					throw new ArgumentNullException(nameof(value));
 
 				DdeSettings.TableName = value.ToLowerInvariant();
 			}

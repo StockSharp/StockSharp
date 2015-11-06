@@ -41,7 +41,7 @@ namespace StockSharp.Xaml
 			set
 			{
 				if (value == null)
-					throw new ArgumentNullException("value");
+					throw new ArgumentNullException(nameof(value));
 
 				_validateId = value;
 			}
@@ -56,7 +56,7 @@ namespace StockSharp.Xaml
 			set
 			{
 				if (value == null)
-					throw new ArgumentNullException("value");
+					throw new ArgumentNullException(nameof(value));
 
 				SecurityId.Security = value;
 				PropertyGrid.SelectedObject = value;

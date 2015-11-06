@@ -12,7 +12,7 @@
 		public TaskInfo(Type task)
 		{
 			if (task == null)
-				throw new ArgumentNullException("task");
+				throw new ArgumentNullException(nameof(task));
 
 			Task = task;
 			Name = task.GetDisplayName();

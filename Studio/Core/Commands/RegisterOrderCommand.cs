@@ -9,7 +9,7 @@ namespace StockSharp.Studio.Core.Commands
 		public RegisterOrderCommand(Order order)
 		{
 			if (order == null)
-				throw new ArgumentNullException("order");
+				throw new ArgumentNullException(nameof(order));
 
 			Order = order;
 		}

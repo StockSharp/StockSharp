@@ -23,13 +23,13 @@ namespace StockSharp.Algo.Strategies.Reporting
 		protected StrategyReport(IEnumerable<Strategy> strategies, string fileName)
 		{
 			if (strategies == null)
-				throw new ArgumentNullException("strategies");
+				throw new ArgumentNullException(nameof(strategies));
 
 			if (strategies.IsEmpty())
-				throw new ArgumentOutOfRangeException("strategies");
+				throw new ArgumentOutOfRangeException(nameof(strategies));
 
 			if (fileName.IsEmpty())
-				throw new ArgumentNullException("fileName");
+				throw new ArgumentNullException(nameof(fileName));
 
 			Strategies = strategies;
 			FileName = fileName;
@@ -100,7 +100,7 @@ namespace StockSharp.Algo.Strategies.Reporting
 				case OrderStates.Failed:
 					return LocalizedStrings.Str152;
 				default:
-					throw new ArgumentOutOfRangeException("state");
+					throw new ArgumentOutOfRangeException(nameof(state));
 			}
 		}
 
@@ -124,7 +124,7 @@ namespace StockSharp.Algo.Strategies.Reporting
 				case OrderTypes.ExtRepo:
 					return LocalizedStrings.Str244;
 				default:
-					throw new ArgumentOutOfRangeException("type");
+					throw new ArgumentOutOfRangeException(nameof(type));
 			}
 		}
 	}

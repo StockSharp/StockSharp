@@ -181,15 +181,9 @@ namespace StockSharp.Algo
 					_enumerator.Dispose();
 			}
 
-			Security IExpirationJumpList.FirstSecurity
-			{
-				get { return GetSecurity(DateTimeOffset.MinValue); }
-			}
+			Security IExpirationJumpList.FirstSecurity => GetSecurity(DateTimeOffset.MinValue);
 
-			Security IExpirationJumpList.LastSecurity
-			{
-				get { return _expirationRanges.LastOrDefault().Value; }
-			}
+			Security IExpirationJumpList.LastSecurity => _expirationRanges.LastOrDefault().Value;
 
 			Security IExpirationJumpList.GetNextSecurity(Security security)
 			{
@@ -218,7 +212,7 @@ namespace StockSharp.Algo
 			Range<DateTimeOffset> IExpirationJumpList.GetActivityRange(Security security)
 			{
 				if (security == null)
-					throw new ArgumentNullException("security");
+					throw new ArgumentNullException(nameof(security));
 
 				lock (SyncRoot)
 				{
@@ -244,19 +238,13 @@ namespace StockSharp.Algo
 		/// Instruments and dates of transition at which the transition to the next instrument takes place.
 		/// </summary>
 		[Browsable(false)]
-		public IExpirationJumpList ExpirationJumps
-		{
-			get { return _expirationJumps; }
-		}
+		public IExpirationJumpList ExpirationJumps => _expirationJumps;
 
 		/// <summary>
 		/// Instruments, from which this basket is created.
 		/// </summary>
 		[Browsable(false)]
-		public override IEnumerable<Security> InnerSecurities
-		{
-			get { return _expirationJumps.InnerSecurities; }
-		}
+		public override IEnumerable<Security> InnerSecurities => _expirationJumps.InnerSecurities;
 
 		///// <summary>
 		///// Проверить, используется ли указанный инструмент в настоящее время.
@@ -311,7 +299,7 @@ namespace StockSharp.Algo
 					var expiryDate = (DateTimeOffset)security.ExpiryDate + offset;
 
 					if (expiryDate > security.ExpiryDate)
-						throw new ArgumentOutOfRangeException("offset", offset, LocalizedStrings.Str699Params.Put(security.Id, expiryDate, security.ExpiryDate));
+						throw new ArgumentOutOfRangeException(nameof(offset), offset, LocalizedStrings.Str699Params.Put(security.Id, expiryDate, security.ExpiryDate));
 
 					dict.Add(security, expiryDate);
 				}

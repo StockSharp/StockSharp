@@ -99,13 +99,13 @@ namespace StockSharp.Hydra.Panes
 		protected void Init(ExportButton exportBtn, Grid mainGrid, Func<IEnumerableEx> getItems)
 		{
 			if (exportBtn == null)
-				throw new ArgumentNullException("exportBtn");
+				throw new ArgumentNullException(nameof(exportBtn));
 
 			if (mainGrid == null)
-				throw new ArgumentNullException("mainGrid");
+				throw new ArgumentNullException(nameof(mainGrid));
 
 			if (getItems == null)
-				throw new ArgumentNullException("getItems");
+				throw new ArgumentNullException(nameof(getItems));
 
 			_exportBtn = exportBtn;
 			_exportBtn.ExportStarted += ExportBtnOnExportStarted;

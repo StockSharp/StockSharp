@@ -82,7 +82,7 @@ namespace StockSharp.Community
 		public void DeleteStrategy(StrategyData strategy)
 		{
 			if (strategy == null)
-				throw new ArgumentNullException("strategy");
+				throw new ArgumentNullException(nameof(strategy));
 
 			Invoke(f => f.DeleteStrategy(SessionId, strategy.Id));
 		}
@@ -94,7 +94,7 @@ namespace StockSharp.Community
 		public void Download(StrategyData strategy)
 		{
 			if (strategy == null)
-				throw new ArgumentNullException("strategy");
+				throw new ArgumentNullException(nameof(strategy));
 
 			var info = Invoke(f => f.GetFullInfo(SessionId, strategy.Id));
 
@@ -109,7 +109,7 @@ namespace StockSharp.Community
 		public void Subscribe(StrategyData strategy)
 		{
 			if (strategy == null)
-				throw new ArgumentNullException("strategy");
+				throw new ArgumentNullException(nameof(strategy));
 
 			Invoke(f => f.Subscribe(SessionId, strategy.Id));
 		}
@@ -121,7 +121,7 @@ namespace StockSharp.Community
 		public void UnSubscribe(StrategyData strategy)
 		{
 			if (strategy == null)
-				throw new ArgumentNullException("strategy");
+				throw new ArgumentNullException(nameof(strategy));
 
 			Invoke(f => f.UnSubscribe(SessionId, strategy.Id));
 		}

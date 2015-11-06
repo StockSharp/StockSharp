@@ -20,10 +20,10 @@ namespace StockSharp.Algo.Indicators
 		public BollingerBand(LengthIndicator<decimal> ma, StandardDeviation dev)
 		{
 			if (ma == null)
-				throw new ArgumentNullException("ma");
+				throw new ArgumentNullException(nameof(ma));
 
 			if (dev == null)
-				throw new ArgumentNullException("dev");
+				throw new ArgumentNullException(nameof(dev));
 
 			_ma = ma;
 			_dev = dev;

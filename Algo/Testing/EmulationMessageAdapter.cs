@@ -52,7 +52,7 @@ namespace StockSharp.Algo.Testing
 			set
 			{
 				if (value == null)
-					throw new ArgumentNullException("value");
+					throw new ArgumentNullException(nameof(value));
 
 				if (value == _emulator)
 					return;
@@ -74,10 +74,7 @@ namespace StockSharp.Algo.Testing
 		/// <summary>
 		/// The current time.
 		/// </summary>
-		public override DateTimeOffset CurrentTime
-		{
-			get { return _currentTime; }
-		}
+		public override DateTimeOffset CurrentTime => _currentTime;
 
 		/// <summary>
 		/// The number of processed messages.

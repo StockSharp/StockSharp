@@ -2155,7 +2155,7 @@ namespace StockSharp.BusinessEntities
 		/// <summary>
 		/// Information about FORTS board of <see cref="BusinessEntities.Exchange.Moex"/> exchange.
 		/// </summary>
-		public static ExchangeBoard Forts { get; private set; }
+		public static ExchangeBoard Forts { get; }
 
 		/// <summary>
 		/// Information about indecies of <see cref="BusinessEntities.Exchange.Moex"/> exchange.
@@ -2670,7 +2670,7 @@ namespace StockSharp.BusinessEntities
 		/// <summary>
 		/// Information about derivatives market of <see cref="BusinessEntities.Exchange.Ux"/> exchange.
 		/// </summary>
-		public static ExchangeBoard Ux { get; private set; }
+		public static ExchangeBoard Ux { get; }
 
 		/// <summary>
 		/// Information about stock market of <see cref="BusinessEntities.Exchange.Ux"/> exchange.

@@ -55,7 +55,7 @@ namespace StockSharp.Messages
 		private static IDictionary<object, object> GetExtInfo(this IExtendableEntity entity, bool createIfNotExist)
 		{
 			if (entity == null)
-				throw new ArgumentNullException("entity");
+				throw new ArgumentNullException(nameof(entity));
 
 			var info = entity.ExtensionInfo;
 

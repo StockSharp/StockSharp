@@ -154,13 +154,13 @@ namespace StockSharp.OpenECry
 		public void SubscribeCandles(CandleSeries series, DateTimeOffset from, DateTimeOffset to)
 		{
 			if (series == null)
-				throw new ArgumentNullException("series");
+				throw new ArgumentNullException(nameof(series));
 
 			if (series.CandleType != typeof(TimeFrameCandle))
-				throw new ArgumentException(LocalizedStrings.NotSupportCandle.Put("OpenECry", series.CandleType), "series");
+				throw new ArgumentException(LocalizedStrings.NotSupportCandle.Put("OpenECry", series.CandleType), nameof(series));
 
 			if (!(series.Arg is TimeSpan))
-				throw new ArgumentException(LocalizedStrings.WrongCandleArg.Put(series.Arg), "series");
+				throw new ArgumentException(LocalizedStrings.WrongCandleArg.Put(series.Arg), nameof(series));
 
 			var transactionId = TransactionIdGenerator.GetNextId();
 

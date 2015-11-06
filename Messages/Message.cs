@@ -32,10 +32,7 @@ namespace StockSharp.Messages
 		/// <summary>
 		/// Message type.
 		/// </summary>
-		public MessageTypes Type
-		{
-			get { return _type; }
-		}
+		public MessageTypes Type => _type;
 
 		[field: NonSerialized]
 		private IDictionary<object, object> _extensionInfo;

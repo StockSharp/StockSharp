@@ -53,7 +53,7 @@
 				<DataTemplate>
 					<TextBlock>
 						<xaml:HyperlinkEx NavigateUri="{Binding Path=Url, Converter={StaticResource ValueConverter}}" ToolTip="{Binding Path=Url, Converter={StaticResource ValueConverter}}">
-							<TextBlock Text="{Binding Path=Url, Converter={StaticResource ValueConverter}}"></TextBlock>
+							<TextBlock Text="{Binding Path=Url, Converter={StaticResource ValueConverter}}" />
 						</xaml:HyperlinkEx>
 					</TextBlock>
 				</DataTemplate>

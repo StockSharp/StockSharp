@@ -97,7 +97,7 @@ namespace StockSharp.Algo.Strategies
 		public static Order CreateOrder(this Strategy strategy, Sides direction, decimal? price, decimal? volume = null)
 		{
 			if (strategy == null)
-				throw new ArgumentNullException("strategy");
+				throw new ArgumentNullException(nameof(strategy));
 
 			var security = strategy.Security;
 
@@ -136,7 +136,7 @@ namespace StockSharp.Algo.Strategies
 		public static void ClosePosition(this Strategy strategy, decimal slippage = 0)
 		{
 			if (strategy == null)
-				throw new ArgumentNullException("strategy");
+				throw new ArgumentNullException(nameof(strategy));
 
 			var position = strategy.Position;
 
@@ -163,7 +163,7 @@ namespace StockSharp.Algo.Strategies
 		public static ICandleManager GetCandleManager(this Strategy strategy)
 		{
 			if (strategy == null)
-				throw new ArgumentNullException("strategy");
+				throw new ArgumentNullException(nameof(strategy));
 
 			return strategy.Environment.GetValue<ICandleManager>("CandleManager");
 		}
@@ -176,10 +176,10 @@ namespace StockSharp.Algo.Strategies
 		public static void SetCandleManager(this Strategy strategy, ICandleManager candleManager)
 		{
 			if (strategy == null)
-				throw new ArgumentNullException("strategy");
+				throw new ArgumentNullException(nameof(strategy));
 
 			if (candleManager == null)
-				throw new ArgumentNullException("candleManager");
+				throw new ArgumentNullException(nameof(candleManager));
 
 			strategy.Environment.SetValue("CandleManager", candleManager);
 		}
@@ -235,10 +235,10 @@ namespace StockSharp.Algo.Strategies
 		public static void LoadState(this Strategy strategy, SettingsStorage storage)
 		{
 			if (strategy == null)
-				throw new ArgumentNullException("strategy");
+				throw new ArgumentNullException(nameof(strategy));
 
 			if (storage == null)
-				throw new ArgumentNullException("storage");
+				throw new ArgumentNullException(nameof(storage));
 
 			var settings = storage.GetValue<SettingsStorage>("Settings");
 			if (settings != null && settings.Count != 0)
@@ -294,7 +294,7 @@ namespace StockSharp.Algo.Strategies
 		public static T GetSecurityValue<T>(this Strategy strategy, Level1Fields field)
 		{
 			if (strategy == null)
-				throw new ArgumentNullException("strategy");
+				throw new ArgumentNullException(nameof(strategy));
 
 			return strategy.GetSecurityValue<T>(strategy.Security, field);
 		}
@@ -308,7 +308,7 @@ namespace StockSharp.Algo.Strategies
 		public static decimal? GetMarketPrice(this Strategy strategy, Sides side)
 		{
 			if (strategy == null)
-				throw new ArgumentNullException("strategy");
+				throw new ArgumentNullException(nameof(strategy));
 
 			return strategy.Security.GetMarketPrice(strategy.SafeGetConnector(), side);
 		}
@@ -368,18 +368,18 @@ namespace StockSharp.Algo.Strategies
 		public static Strategy EmulateOrders(this IEnumerable<Order> orders, IStorageRegistry storageRegistry, IDictionary<Security, decimal> openedPositions)
 		{
 			if (openedPositions == null)
-				throw new ArgumentNullException("openedPositions");
+				throw new ArgumentNullException(nameof(openedPositions));
 
 			if (storageRegistry == null)
-				throw new ArgumentNullException("storageRegistry");
+				throw new ArgumentNullException(nameof(storageRegistry));
 
 			if (orders == null)
-				throw new ArgumentNullException("orders");
+				throw new ArgumentNullException(nameof(orders));
 
 			var array = orders.ToArray();
 
 			if (array.IsEmpty())
-				throw new ArgumentOutOfRangeException("orders");
+				throw new ArgumentOutOfRangeException(nameof(orders));
 
 			using (var connector = new RealTimeEmulationTrader<HistoryMessageAdapter>(new HistoryMessageAdapter(new IncrementalIdGenerator(), new CollectionSecurityProvider(array.Select(o => o.Security).Distinct()))
 			{
@@ -429,12 +429,12 @@ namespace StockSharp.Algo.Strategies
 				: base(strategy)
 			{
 				if (strategy == null)
-					throw new ArgumentNullException("strategy");
+					throw new ArgumentNullException(nameof(strategy));
 
 				Strategy = strategy;
 			}
 
-			protected Strategy Strategy { get; private set; }
+			protected Strategy Strategy { get; }
 		}
 
 		private sealed class PnLManagerStrategyRule : StrategyRule<decimal>
@@ -451,7 +451,7 @@ namespace StockSharp.Algo.Strategies
 				: base(strategy)
 			{
 				if (changed == null)
-					throw new ArgumentNullException("changed");
+					throw new ArgumentNullException(nameof(changed));
 
 				_changed = changed;
 
@@ -485,7 +485,7 @@ namespace StockSharp.Algo.Strategies
 				: base(strategy)
 			{
 				if (changed == null)
-					throw new ArgumentNullException("changed");
+					throw new ArgumentNullException(nameof(changed));
 
 				_changed = changed;
 
@@ -570,7 +570,7 @@ namespace StockSharp.Algo.Strategies
 				: base(strategy)
 			{
 				if (condition == null)
-					throw new ArgumentNullException("condition");
+					throw new ArgumentNullException(nameof(condition));
 
 				_condition = condition;
 
@@ -598,7 +598,7 @@ namespace StockSharp.Algo.Strategies
 				: base(strategy)
 			{
 				if (condition == null)
-					throw new ArgumentNullException("condition");
+					throw new ArgumentNullException(nameof(condition));
 
 				_condition = condition;
 
@@ -688,10 +688,10 @@ namespace StockSharp.Algo.Strategies
 		public static MarketRule<Strategy, decimal> WhenPositionLess(this Strategy strategy, Unit value)
 		{
 			if (strategy == null)
-				throw new ArgumentNullException("strategy");
+				throw new ArgumentNullException(nameof(strategy));
 
 			if (value == null)
-				throw new ArgumentNullException("value");
+				throw new ArgumentNullException(nameof(value));
 
 			var finishPosition = value.Type == UnitTypes.Limit ? value : strategy.Position - value;
 
@@ -710,10 +710,10 @@ namespace StockSharp.Algo.Strategies
 		public static MarketRule<Strategy, decimal> WhenPositionMore(this Strategy strategy, Unit value)
 		{
 			if (strategy == null)
-				throw new ArgumentNullException("strategy");
+				throw new ArgumentNullException(nameof(strategy));
 
 			if (value == null)
-				throw new ArgumentNullException("value");
+				throw new ArgumentNullException(nameof(value));
 
 			var finishPosition = value.Type == UnitTypes.Limit ? value : strategy.Position + value;
 
@@ -732,10 +732,10 @@ namespace StockSharp.Algo.Strategies
 		public static MarketRule<Strategy, decimal> WhenPnLLess(this Strategy strategy, Unit value)
 		{
 			if (strategy == null)
-				throw new ArgumentNullException("strategy");
+				throw new ArgumentNullException(nameof(strategy));
 
 			if (value == null)
-				throw new ArgumentNullException("value");
+				throw new ArgumentNullException(nameof(value));
 
 			var finishPosition = value.Type == UnitTypes.Limit ? value : strategy.PnL - value;
 
@@ -754,10 +754,10 @@ namespace StockSharp.Algo.Strategies
 		public static MarketRule<Strategy, decimal> WhenPnLMore(this Strategy strategy, Unit value)
 		{
 			if (strategy == null)
-				throw new ArgumentNullException("strategy");
+				throw new ArgumentNullException(nameof(strategy));
 
 			if (value == null)
-				throw new ArgumentNullException("value");
+				throw new ArgumentNullException(nameof(value));
 
 			var finishPosition = value.Type == UnitTypes.Limit ? value : strategy.PnL + value;
 
@@ -852,10 +852,10 @@ namespace StockSharp.Algo.Strategies
 		public static IMarketRule Register(this IMarketRule rule, Order order)
 		{
 			if (rule == null)
-				throw new ArgumentNullException("rule");
+				throw new ArgumentNullException(nameof(rule));
 
 			if (order == null)
-				throw new ArgumentNullException("order");
+				throw new ArgumentNullException(nameof(order));
 
 			return rule.Do(() => GetRuleStrategy(rule).RegisterOrder(order));
 		}
@@ -870,13 +870,13 @@ namespace StockSharp.Algo.Strategies
 		public static IMarketRule ReRegister(this IMarketRule rule, Order oldOrder, Order newOrder)
 		{
 			if (rule == null)
-				throw new ArgumentNullException("rule");
+				throw new ArgumentNullException(nameof(rule));
 
 			if (oldOrder == null)
-				throw new ArgumentNullException("oldOrder");
+				throw new ArgumentNullException(nameof(oldOrder));
 
 			if (newOrder == null)
-				throw new ArgumentNullException("newOrder");
+				throw new ArgumentNullException(nameof(newOrder));
 
 			return rule.Do(() => GetRuleStrategy(rule).ReRegisterOrder(oldOrder, newOrder));
 		}
@@ -890,10 +890,10 @@ namespace StockSharp.Algo.Strategies
 		public static IMarketRule Cancel(this IMarketRule rule, Order order)
 		{
 			if (rule == null)
-				throw new ArgumentNullException("rule");
+				throw new ArgumentNullException(nameof(rule));
 
 			if (order == null)
-				throw new ArgumentNullException("order");
+				throw new ArgumentNullException(nameof(order));
 
 			return rule.Do(() => GetRuleStrategy(rule).CancelOrder(order));
 		}
@@ -903,12 +903,12 @@ namespace StockSharp.Algo.Strategies
 		private static Strategy GetRuleStrategy(IMarketRule rule)
 		{
 			if (rule == null)
-				throw new ArgumentNullException("rule");
+				throw new ArgumentNullException(nameof(rule));
 
 			var strategy = rule.Container as Strategy;
 
 			if (strategy == null)
-				throw new ArgumentException(LocalizedStrings.Str1263Params.Put(rule.Name), "rule");
+				throw new ArgumentException(LocalizedStrings.Str1263Params.Put(rule.Name), nameof(rule));
 
 			return strategy;
 		}

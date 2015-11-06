@@ -9,7 +9,7 @@
 		public LookupSecuritiesCommand(Security criteria)
 		{
 			if (criteria == null)
-				throw new ArgumentNullException("criteria");
+				throw new ArgumentNullException(nameof(criteria));
 
 			Criteria = criteria;
 		}

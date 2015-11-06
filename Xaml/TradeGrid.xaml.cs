@@ -40,25 +40,16 @@ namespace StockSharp.Xaml
 		/// <summary>
 		/// List of trades added to the table.
 		/// </summary>
-		public IListEx<Trade> Trades
-		{
-			get { return _trades; }
-		}
+		public IListEx<Trade> Trades => _trades;
 
 		/// <summary>
 		/// The selected trade.
 		/// </summary>
-		public Trade SelectedTrade
-		{
-			get { return SelectedTrades.FirstOrDefault(); }
-		}
+		public Trade SelectedTrade => SelectedTrades.FirstOrDefault();
 
 		/// <summary>
 		/// Selected trades.
 		/// </summary>
-		public IEnumerable<Trade> SelectedTrades
-		{
-			get { return SelectedItems.Cast<Trade>(); }
-		}
+		public IEnumerable<Trade> SelectedTrades => SelectedItems.Cast<Trade>();
 	}
 }

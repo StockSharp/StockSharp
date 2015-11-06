@@ -147,13 +147,13 @@ namespace StockSharp.Algo.Latency
 		private void AddRegister(long transactionId, DateTime localTime)
 		{
 			if (transactionId == 0)
-				throw new ArgumentNullException("transactionId");
+				throw new ArgumentNullException(nameof(transactionId));
 
 			if (localTime == default(DateTime))
-				throw new ArgumentNullException("localTime");
+				throw new ArgumentNullException(nameof(localTime));
 
 			if (_register.ContainsKey(transactionId))
-				throw new ArgumentException(LocalizedStrings.Str1106Params.Put(transactionId), "transactionId");
+				throw new ArgumentException(LocalizedStrings.Str1106Params.Put(transactionId), nameof(transactionId));
 
 			_register.Add(transactionId, localTime);
 		}
@@ -161,13 +161,13 @@ namespace StockSharp.Algo.Latency
 		private void AddCancel(long transactionId, DateTime localTime)
 		{
 			if (transactionId == 0)
-				throw new ArgumentNullException("transactionId");
+				throw new ArgumentNullException(nameof(transactionId));
 
 			if (localTime == default(DateTime))
-				throw new ArgumentNullException("localTime");
+				throw new ArgumentNullException(nameof(localTime));
 
 			if (_cancel.ContainsKey(transactionId))
-				throw new ArgumentException(LocalizedStrings.Str1107Params.Put(transactionId), "transactionId");
+				throw new ArgumentException(LocalizedStrings.Str1107Params.Put(transactionId), nameof(transactionId));
 
 			_cancel.Add(transactionId, localTime);
 		}

@@ -37,19 +37,19 @@ namespace StockSharp.Hydra.Panes
 			public FieldMapping(Settings settings, string name, string displayName, string description, Type type, Action<dynamic, dynamic> apply)
 			{
 				if (settings == null)
-					throw new ArgumentNullException("settings");
+					throw new ArgumentNullException(nameof(settings));
 
 				if (name.IsEmpty())
-					throw new ArgumentNullException("name");
+					throw new ArgumentNullException(nameof(name));
 				
 				if (displayName.IsEmpty())
-					throw new ArgumentNullException("displayName");
+					throw new ArgumentNullException(nameof(displayName));
 
 				if (type == null)
-					throw new ArgumentNullException("type");
+					throw new ArgumentNullException(nameof(type));
 
 				if (apply == null)
-					throw new ArgumentNullException("apply");
+					throw new ArgumentNullException(nameof(apply));
 
 				if (description.IsEmpty())
 					description = displayName;
@@ -269,7 +269,7 @@ namespace StockSharp.Hydra.Panes
 				set
 				{
 					if (value == null)
-						throw new ArgumentNullException("value");
+						throw new ArgumentNullException(nameof(value));
 
 					_timeZone = value;
 					NotifyChanged("TimeZone");
@@ -368,7 +368,7 @@ namespace StockSharp.Hydra.Panes
 			set
 			{
 				if (value == null)
-					throw new ArgumentNullException("value");
+					throw new ArgumentNullException(nameof(value));
 
 				_dataType = value;
 
@@ -584,7 +584,7 @@ namespace StockSharp.Hydra.Panes
 					_fields.Add(new FieldMapping(_settings, "Url", LocalizedStrings.Str221, LocalizedStrings.Str222, typeof(Uri), (i, v) => i.Url = v));
 				}
 				else
-					throw new ArgumentOutOfRangeException("value", value, LocalizedStrings.Str1655);
+					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.Str1655);
 			}
 		}
 

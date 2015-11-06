@@ -357,7 +357,7 @@ namespace StockSharp.Hydra.Tools
 		private string GetTxtTemplate(Type dataType, object arg)
 		{
 			if (dataType == null)
-				throw new ArgumentNullException("dataType");
+				throw new ArgumentNullException(nameof(dataType));
 
 			var registry = _settings.TemplateTxtRegistry;
 
@@ -374,7 +374,7 @@ namespace StockSharp.Hydra.Tools
 			else if (dataType == typeof(ExecutionMessage))
 			{
 				if (arg == null)
-					throw new ArgumentNullException("arg");
+					throw new ArgumentNullException(nameof(arg));
 
 				switch ((ExecutionTypes)arg)
 				{
@@ -390,7 +390,7 @@ namespace StockSharp.Hydra.Tools
 				}
 			}
 			else
-				throw new ArgumentOutOfRangeException("dataType", dataType, LocalizedStrings.Str721);
+				throw new ArgumentOutOfRangeException(nameof(dataType), dataType, LocalizedStrings.Str721);
 		}
 	}
 }

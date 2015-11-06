@@ -23,16 +23,12 @@ namespace StockSharp.Algo.Testing
 		/// </summary>
 		public EmulationMessageAdapter EmulationAdapter
 		{
-			get; private set;
-		}
+			get; }
 
 		/// <summary>
 		/// Gets a value indicating whether the re-registration orders via the method <see cref="IConnector.ReRegisterOrder(StockSharp.BusinessEntities.Order,StockSharp.BusinessEntities.Order)"/> as a single transaction.
 		/// </summary>
-		public override bool IsSupportAtomicReRegister
-		{
-			get { return EmulationAdapter.Emulator.Settings.IsSupportAtomicReRegister; }
-		}
+		public override bool IsSupportAtomicReRegister => EmulationAdapter.Emulator.Settings.IsSupportAtomicReRegister;
 
 		///// <summary>
 		///// Ýìóëÿòîð òîðãîâ.
@@ -94,7 +90,7 @@ namespace StockSharp.Algo.Testing
 		private void SendInGeneratorMessage(MarketDataGenerator generator, bool isSubscribe)
 		{
 			if (generator == null)
-				throw new ArgumentNullException("generator");
+				throw new ArgumentNullException(nameof(generator));
 
 			SendInMessage(new GeneratorMessage
 			{

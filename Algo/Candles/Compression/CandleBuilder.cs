@@ -36,13 +36,13 @@ namespace StockSharp.Algo.Candles.Compression
 			public CandleSeriesInfo(CandleSeries series, DateTimeOffset from, DateTimeOffset to, IEnumerable<ICandleBuilderSource> sources, Func<CandleSeries, IEnumerable<ICandleBuilderSourceValue>, DateTimeOffset> handler, Action<CandleSeries> stopped)
 			{
 				if (series == null)
-					throw new ArgumentNullException("series");
+					throw new ArgumentNullException(nameof(series));
 
 				if (handler == null)
-					throw new ArgumentNullException("handler");
+					throw new ArgumentNullException(nameof(handler));
 
 				if (stopped == null)
-					throw new ArgumentNullException("stopped");
+					throw new ArgumentNullException(nameof(stopped));
 
 				_enumerator = new CandleSourceEnumerator<ICandleBuilderSource, IEnumerable<ICandleBuilderSourceValue>>(series, from, to,
 					sources, v => handler(series, v), () => stopped(series));
@@ -127,7 +127,7 @@ namespace StockSharp.Algo.Candles.Compression
 		protected CandleBuilder(ICandleBuilderContainer container)
 		{
 			if (container == null)
-				throw new ArgumentNullException("container");
+				throw new ArgumentNullException(nameof(container));
 
 			Sources = new CandleBuilderSourceList(this) { Holder.TradeStorage, Holder.OrderLogStorage };
 
@@ -137,22 +137,19 @@ namespace StockSharp.Algo.Candles.Compression
 		/// <summary>
 		/// Data sources.
 		/// </summary>
-		public ICandleBuilderSourceList Sources { get; private set; }
+		public ICandleBuilderSourceList Sources { get; }
 
 		/// <summary>
 		/// The data container.
 		/// </summary>
-		public ICandleBuilderContainer Container { get; private set; }
+		public ICandleBuilderContainer Container { get; }
 
 		/// <summary>
 		/// The candles manager. To be filled in if the builder is a source inside the <see cref="ICandleManager.Sources"/>.
 		/// </summary>
 		public ICandleManager CandleManager { get; set; }
 
-		Type ICandleBuilder.CandleType
-		{
-			get { return typeof(TCandle); }
-		}
+		Type ICandleBuilder.CandleType => typeof(TCandle);
 
 		private IStorageRegistry _storageRegistry;
 
@@ -172,10 +169,7 @@ namespace StockSharp.Algo.Candles.Compression
 		/// <summary>
 		/// The source priority by speed (0 - the best).
 		/// </summary>
-		public int SpeedPriority
-		{
-			get { return 2; }
-		}
+		public int SpeedPriority => 2;
 
 		/// <summary>
 		/// A new value for processing occurrence event.
@@ -202,7 +196,7 @@ namespace StockSharp.Algo.Candles.Compression
 		public virtual IEnumerable<Range<DateTimeOffset>> GetSupportedRanges(CandleSeries series)
 		{
 			if (series == null)
-				throw new ArgumentNullException("series");
+				throw new ArgumentNullException(nameof(series));
 
 			if (series.CandleType != typeof(TCandle))
 				return Enumerable.Empty<Range<DateTimeOffset>>();
@@ -219,7 +213,7 @@ namespace StockSharp.Algo.Candles.Compression
 		public virtual void Start(CandleSeries series, DateTimeOffset from, DateTimeOffset to)
 		{
 			if (series == null)
-				throw new ArgumentNullException("series");
+				throw new ArgumentNullException(nameof(series));
 
 			CandleSeriesInfo info;
 
@@ -228,7 +222,7 @@ namespace StockSharp.Algo.Candles.Compression
 				info = _info.TryGetValue(series);
 
 				if (info != null)
-					throw new ArgumentException(LocalizedStrings.Str636Params.Put(series), "series");
+					throw new ArgumentException(LocalizedStrings.Str636Params.Put(series), nameof(series));
 
 				info = new CandleSeriesInfo(series, from, to, Sources, OnNewValues, s =>
 				{
@@ -251,7 +245,7 @@ namespace StockSharp.Algo.Candles.Compression
 		public virtual void Stop(CandleSeries series)
 		{
 			if (series == null)
-				throw new ArgumentNullException("series");
+				throw new ArgumentNullException(nameof(series));
 
 			var info = _info.TryGetValue(series);
 
@@ -282,7 +276,7 @@ namespace StockSharp.Algo.Candles.Compression
 		protected virtual DateTimeOffset OnNewValues(CandleSeries series, IEnumerable<ICandleBuilderSourceValue> values)
 		{
 			if (values == null)
-				throw new ArgumentNullException("values");
+				throw new ArgumentNullException(nameof(values));
 
 			var info = _info.TryGetValue(series);
 
@@ -377,10 +371,10 @@ namespace StockSharp.Algo.Candles.Compression
 		protected virtual TCandle FirstInitCandle(CandleSeries series, TCandle candle, ICandleBuilderSourceValue value)
 		{
 			if (candle == null)
-				throw new ArgumentNullException("candle");
+				throw new ArgumentNullException(nameof(candle));
 
 			if (value == null)
-				throw new ArgumentNullException("value");
+				throw new ArgumentNullException(nameof(value));
 
 			candle.Security = value.Security;
 
@@ -408,10 +402,10 @@ namespace StockSharp.Algo.Candles.Compression
 		protected virtual void UpdateCandle(CandleSeries series, TCandle candle, ICandleBuilderSourceValue value)
 		{
 			if (candle == null)
-				throw new ArgumentNullException("candle");
+				throw new ArgumentNullException(nameof(candle));
 
 			if (value == null)
-				throw new ArgumentNullException("value");
+				throw new ArgumentNullException(nameof(value));
 
 			if (value.Price < candle.LowPrice)
 			{
@@ -486,10 +480,10 @@ namespace StockSharp.Algo.Candles.Compression
 		protected virtual void RaiseProcessing(CandleSeries series, Candle candle)
 		{
 			if (series == null)
-				throw new ArgumentNullException("series");
+				throw new ArgumentNullException(nameof(series));
 
 			if (candle == null)
-				throw new ArgumentNullException("candle");
+				throw new ArgumentNullException(nameof(candle));
 
 			// mika: чтобы построение свечек продолжалось, даже если в пользовательских обработчиках ошибки.
 			// иначе это может привести к испорченной последовательности последующих вызовов свечек.
@@ -683,10 +677,10 @@ namespace StockSharp.Algo.Candles.Compression
 			set
 			{
 				if (value == null)
-					throw new ArgumentNullException("value");
+					throw new ArgumentNullException(nameof(value));
 
 				if (value < 0)
-					throw new ArgumentOutOfRangeException("value", value, LocalizedStrings.OffsetValueIncorrect);
+					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.OffsetValueIncorrect);
 
 				_timeout = value;
 			}
@@ -726,10 +720,10 @@ namespace StockSharp.Algo.Candles.Compression
 			if (!ranges.IsEmpty())
 			{
 				if (!(series.Arg is TimeSpan))
-					throw new ArgumentException(LocalizedStrings.WrongCandleArg.Put(series.Arg), "series");
+					throw new ArgumentException(LocalizedStrings.WrongCandleArg.Put(series.Arg), nameof(series));
 
 				if ((TimeSpan)series.Arg <= TimeSpan.Zero)
-					throw new ArgumentOutOfRangeException("series", series.Arg, LocalizedStrings.Str640);
+					throw new ArgumentOutOfRangeException(nameof(series), series.Arg, LocalizedStrings.Str640);
 			}
 
 			return ranges;
@@ -835,10 +829,10 @@ namespace StockSharp.Algo.Candles.Compression
 			if (!ranges.IsEmpty())
 			{
 				if (!(series.Arg is int))
-					throw new ArgumentException(LocalizedStrings.WrongCandleArg.Put(series.Arg), "series");
+					throw new ArgumentException(LocalizedStrings.WrongCandleArg.Put(series.Arg), nameof(series));
 
 				if ((int)series.Arg <= 0)
-					throw new ArgumentOutOfRangeException("series", series.Arg, LocalizedStrings.TickCountMustBePositive);
+					throw new ArgumentOutOfRangeException(nameof(series), series.Arg, LocalizedStrings.TickCountMustBePositive);
 			}
 
 			return ranges;
@@ -920,10 +914,10 @@ namespace StockSharp.Algo.Candles.Compression
 			if (!ranges.IsEmpty())
 			{
 				if (!(series.Arg is decimal))
-					throw new ArgumentException(LocalizedStrings.WrongCandleArg.Put(series.Arg), "series");
+					throw new ArgumentException(LocalizedStrings.WrongCandleArg.Put(series.Arg), nameof(series));
 
 				if ((decimal)series.Arg <= 0)
-					throw new ArgumentOutOfRangeException("series", series.Arg, LocalizedStrings.VolumeMustBeGreaterThanZero);
+					throw new ArgumentOutOfRangeException(nameof(series), series.Arg, LocalizedStrings.VolumeMustBeGreaterThanZero);
 			}
 
 			return ranges;
@@ -993,10 +987,10 @@ namespace StockSharp.Algo.Candles.Compression
 			if (!ranges.IsEmpty())
 			{
 				if (!(series.Arg is Unit))
-					throw new ArgumentException(LocalizedStrings.WrongCandleArg.Put(series.Arg), "series");
+					throw new ArgumentException(LocalizedStrings.WrongCandleArg.Put(series.Arg), nameof(series));
 
 				if ((Unit)series.Arg <= 0)
-					throw new ArgumentOutOfRangeException("series", series.Arg, LocalizedStrings.PriceRangeMustBeGreaterThanZero);
+					throw new ArgumentOutOfRangeException(nameof(series), series.Arg, LocalizedStrings.PriceRangeMustBeGreaterThanZero);
 			}
 
 			return ranges;
@@ -1066,7 +1060,7 @@ namespace StockSharp.Algo.Candles.Compression
 			if (!ranges.IsEmpty())
 			{
 				if (!(series.Arg is PnFArg))
-					throw new ArgumentException(LocalizedStrings.WrongCandleArg.Put(series.Arg), "series");
+					throw new ArgumentException(LocalizedStrings.WrongCandleArg.Put(series.Arg), nameof(series));
 			}
 
 			return ranges;
@@ -1221,10 +1215,10 @@ namespace StockSharp.Algo.Candles.Compression
 			if (!ranges.IsEmpty())
 			{
 				if (!(series.Arg is Unit))
-					throw new ArgumentException(LocalizedStrings.WrongCandleArg.Put(series.Arg), "series");
+					throw new ArgumentException(LocalizedStrings.WrongCandleArg.Put(series.Arg), nameof(series));
 
 				if ((Unit)series.Arg <= 0)
-					throw new ArgumentOutOfRangeException("series", series.Arg, LocalizedStrings.Str645);
+					throw new ArgumentOutOfRangeException(nameof(series), series.Arg, LocalizedStrings.Str645);
 			}
 
 			return ranges;
@@ -1240,7 +1234,7 @@ namespace StockSharp.Algo.Candles.Compression
 		public override RenkoCandle ProcessValue(CandleSeries series, RenkoCandle currentCandle, ICandleBuilderSourceValue value)
 		{
 			if (value == null)
-				throw new ArgumentNullException("value");
+				throw new ArgumentNullException(nameof(value));
 
 			if (currentCandle == null)
 				return NewCandle(series, value.Price, value.Price, value);

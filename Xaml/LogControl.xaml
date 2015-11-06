@@ -17,7 +17,7 @@
 		<Style TargetType="{x:Type ex:BmpImage}" x:Key="toolbarImageStyle">
             <Style.Triggers>
                 <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType={x:Type Button}, AncestorLevel=1}, Path=IsEnabled}" Value="False">
-                    <Setter Property="Opacity" Value="0.3"></Setter>
+                    <Setter Property="Opacity" Value="0.3" />
                 </DataTrigger>
             </Style.Triggers>
         </Style>

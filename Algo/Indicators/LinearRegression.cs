@@ -65,7 +65,7 @@ namespace StockSharp.Algo.Indicators
 		[DisplayName("LinearReg")]
 		[DescriptionLoc(LocalizedStrings.Str738Key)]
 		[CategoryLoc(LocalizedStrings.GeneralKey)]
-		public LinearReg LinearReg { get; private set; }
+		public LinearReg LinearReg { get; }
 
 		/// <summary>
 		/// Regression R-squared.
@@ -74,7 +74,7 @@ namespace StockSharp.Algo.Indicators
 		[DisplayName("RSquared")]
 		[DescriptionLoc(LocalizedStrings.Str739Key)]
 		[CategoryLoc(LocalizedStrings.GeneralKey)]
-		public RSquared RSquared { get; private set; }
+		public RSquared RSquared { get; }
 
 		/// <summary>
 		/// Standard error.
@@ -83,7 +83,7 @@ namespace StockSharp.Algo.Indicators
 		[DisplayName("StdErr")]
 		[DescriptionLoc(LocalizedStrings.Str740Key)]
 		[CategoryLoc(LocalizedStrings.GeneralKey)]
-		public StandardError StandardError { get; private set; }
+		public StandardError StandardError { get; }
 
 		/// <summary>
 		/// Coefficient with independent variable, slope of a straight line.
@@ -92,7 +92,7 @@ namespace StockSharp.Algo.Indicators
 		[DisplayName("LinearRegSlope")]
 		[DescriptionLoc(LocalizedStrings.Str741Key)]
 		[CategoryLoc(LocalizedStrings.GeneralKey)]
-		public LinearRegSlope LinearRegSlope { get; private set; }
+		public LinearRegSlope LinearRegSlope { get; }
 
 		/// <summary>
 		/// Load settings.

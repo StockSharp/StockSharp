@@ -9,7 +9,7 @@ namespace StockSharp.Studio.Core.Commands
 		public LoadLayoutCommand(string layout)
 		{
 			if (layout.IsEmpty())
-				throw new ArgumentNullException("layout");
+				throw new ArgumentNullException(nameof(layout));
 
 			Layout = layout;
 		}

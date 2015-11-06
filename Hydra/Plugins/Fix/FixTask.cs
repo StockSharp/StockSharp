@@ -53,7 +53,7 @@ namespace StockSharp.Hydra.Fix
 				set
 				{
 					if (value == null)
-						throw new ArgumentNullException("value");
+						throw new ArgumentNullException(nameof(value));
 
 					ExtensionInfo["MarketDataSession"] = value.Save();
 					_marketDataSession = value;

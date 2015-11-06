@@ -22,7 +22,7 @@ namespace StockSharp.Xaml
 		public static void Translate(this AutomaticUpdater automaticUpdater)
 		{
 			if (automaticUpdater == null)
-				throw new ArgumentNullException("automaticUpdater");
+				throw new ArgumentNullException(nameof(automaticUpdater));
 
 			if (LocalizedStrings.ActiveLanguage == Languages.English)
 				return;

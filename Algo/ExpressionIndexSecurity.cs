@@ -126,7 +126,7 @@ namespace StockSharp.Algo
 		public override decimal? Calculate(IDictionary<Security, decimal> prices)
 		{
 			if (prices == null)
-				throw new ArgumentNullException("prices");
+				throw new ArgumentNullException(nameof(prices));
 
 			if (prices.Count != _expression.Parameters.Count || !_innerSecurities.All(prices.ContainsKey))
 				return null;

@@ -109,7 +109,7 @@ namespace StockSharp.Xaml
 			DataContext = Data = new SecurityData();
 		}
 
-		private SecurityData Data { get; set; }
+		private SecurityData Data { get; }
 
 		/// <summary>
 		/// Available portfolios.
@@ -206,7 +206,7 @@ namespace StockSharp.Xaml
 			set
 			{
 				if (value == null)
-					throw new ArgumentNullException("value");
+					throw new ArgumentNullException(nameof(value));
 
 				_order = value;
 

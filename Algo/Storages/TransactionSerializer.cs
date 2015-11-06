@@ -28,10 +28,7 @@ namespace StockSharp.Algo.Storages
 			Errors = new List<string>();
 		}
 
-		public override object LastId
-		{
-			get { return LastTransactionId; }
-		}
+		public override object LastId => LastTransactionId;
 
 		public long FirstOrderId { get; set; }
 		public long LastOrderId { get; set; }
@@ -48,13 +45,13 @@ namespace StockSharp.Algo.Storages
 		public decimal FirstCommission { get; set; }
 		public decimal LastCommission { get; set; }
 
-		public IList<string> Portfolios { get; private set; }
+		public IList<string> Portfolios { get; }
 
-		public IList<string> StrategyIds { get; private set; }
+		public IList<string> StrategyIds { get; }
 
-		public IList<string> Comments { get; private set; }
+		public IList<string> Comments { get; }
 
-		public IList<string> Errors { get; private set; }
+		public IList<string> Errors { get; }
 
 		public override void Write(Stream stream)
 		{
@@ -211,28 +208,28 @@ namespace StockSharp.Algo.Storages
 				var isTrade = msg.ExecutionType == ExecutionTypes.Trade;
 
 				if (msg.ExecutionType != ExecutionTypes.Order && msg.ExecutionType != ExecutionTypes.Trade)
-					throw new ArgumentOutOfRangeException("messages", msg.ExecutionType, LocalizedStrings.Str1695Params.Put(msg.OrderId ?? msg.TradeId));
+					throw new ArgumentOutOfRangeException(nameof(messages), msg.ExecutionType, LocalizedStrings.Str1695Params.Put(msg.OrderId ?? msg.TradeId));
 
 				// нулевой номер заявки возможен при сохранении в момент регистрации
 				if (msg.OrderId < 0)
-					throw new ArgumentOutOfRangeException("messages", msg.OrderId, LocalizedStrings.Str925);
+					throw new ArgumentOutOfRangeException(nameof(messages), msg.OrderId, LocalizedStrings.Str925);
 
 				// нулевая цена возможна, если идет "рыночная" продажа по инструменту без планок
 				if (msg.OrderPrice < 0)
-					throw new ArgumentOutOfRangeException("messages", msg.OrderPrice, LocalizedStrings.Str926Params.Put(msg.OrderId == null ? msg.OrderStringId : msg.OrderId.To<string>()));
+					throw new ArgumentOutOfRangeException(nameof(messages), msg.OrderPrice, LocalizedStrings.Str926Params.Put(msg.OrderId == null ? msg.OrderStringId : msg.OrderId.To<string>()));
 
 				var volume = msg.SafeGetVolume();
 
 				if (volume < 0)
-					throw new ArgumentOutOfRangeException("messages", volume, LocalizedStrings.Str927Params.Put(msg.OrderId == null ? msg.OrderStringId : msg.OrderId.To<string>()));
+					throw new ArgumentOutOfRangeException(nameof(messages), volume, LocalizedStrings.Str927Params.Put(msg.OrderId == null ? msg.OrderStringId : msg.OrderId.To<string>()));
 
 				if (isTrade)
 				{
 					if ((msg.TradeId == null && msg.TradeStringId.IsEmpty()) || msg.TradeId <= 0)
-						throw new ArgumentOutOfRangeException("messages", msg.TradeId, LocalizedStrings.Str928Params.Put(msg.TransactionId));
+						throw new ArgumentOutOfRangeException(nameof(messages), msg.TradeId, LocalizedStrings.Str928Params.Put(msg.TransactionId));
 
 					if (msg.TradePrice == null || msg.TradePrice <= 0)
-						throw new ArgumentOutOfRangeException("messages", msg.TradePrice, LocalizedStrings.Str929Params.Put(msg.TradeId, msg.OrderId));
+						throw new ArgumentOutOfRangeException(nameof(messages), msg.TradePrice, LocalizedStrings.Str929Params.Put(msg.TradeId, msg.OrderId));
 				}
 
 				writer.WriteInt((int)msg.ExecutionType);

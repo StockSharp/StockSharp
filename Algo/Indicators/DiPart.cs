@@ -1,4 +1,4 @@
-namespace StockSharp.Algo.Indicators
+﻿namespace StockSharp.Algo.Indicators
 {
 	using StockSharp.Algo.Candles;
 
@@ -40,10 +40,7 @@ namespace StockSharp.Algo.Indicators
 		/// <summary>
 		/// Whether the indicator is set.
 		/// </summary>
-		public override bool IsFormed
-		{
-			get { return _isFormed; }
-		}
+		public override bool IsFormed => _isFormed;
 
 		/// <summary>
 		/// To handle the input value.

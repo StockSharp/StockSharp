@@ -35,7 +35,7 @@ namespace StockSharp.Algo.Indicators
 		[DisplayName("MA")]
 		[DescriptionLoc(LocalizedStrings.Str731Key)]
 		[CategoryLoc(LocalizedStrings.GeneralKey)]
-		public ExponentialMovingAverage Ema { get; private set; }
+		public ExponentialMovingAverage Ema { get; }
 
 		/// <summary>
 		/// Rate of change.
@@ -44,15 +44,12 @@ namespace StockSharp.Algo.Indicators
 		[DisplayName("ROC")]
 		[DescriptionLoc(LocalizedStrings.Str732Key)]
 		[CategoryLoc(LocalizedStrings.GeneralKey)]
-		public RateOfChange Roc { get; private set; }
+		public RateOfChange Roc { get; }
 
 		/// <summary>
 		/// Whether the indicator is set.
 		/// </summary>
-		public override bool IsFormed
-		{
-			get { return Roc.IsFormed; }
-		}
+		public override bool IsFormed => Roc.IsFormed;
 
 		/// <summary>
 		/// To handle the input value.

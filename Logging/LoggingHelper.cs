@@ -51,7 +51,7 @@ namespace StockSharp.Logging
 		public static void AddLog(this ILogReceiver receiver, LogLevels level, Func<string> getMessage)
 		{
 			if (receiver == null)
-				throw new ArgumentNullException("receiver");
+				throw new ArgumentNullException(nameof(receiver));
 
 			receiver.AddLog(new LogMessage(receiver, receiver.CurrentTime, level, getMessage));
 		}
@@ -108,10 +108,10 @@ namespace StockSharp.Logging
 		public static void AddErrorLog(this ILogReceiver receiver, Exception exception, string message)
 		{
 			if (receiver == null)
-				throw new ArgumentNullException("receiver");
+				throw new ArgumentNullException(nameof(receiver));
 
 			if (exception == null)
-				throw new ArgumentNullException("exception");
+				throw new ArgumentNullException(nameof(exception));
 
 			receiver.AddLog(new LogMessage(receiver, receiver.CurrentTime, LogLevels.Error, () =>
 			{
@@ -149,7 +149,7 @@ namespace StockSharp.Logging
 		private static void AddMessage(this ILogReceiver receiver, LogLevels level, string message, params object[] args)
 		{
 			if (receiver == null)
-				throw new ArgumentNullException("receiver");
+				throw new ArgumentNullException(nameof(receiver));
 
 			if (level < receiver.LogLevel)
 				return;
@@ -165,7 +165,7 @@ namespace StockSharp.Logging
 		public static void LogError(this Exception error, string message = null)
 		{
 			if (error == null)
-				throw new ArgumentNullException("error");
+				throw new ArgumentNullException(nameof(error));
 
 			var manager = ConfigManager.TryGetService<LogManager>();
 
@@ -181,7 +181,7 @@ namespace StockSharp.Logging
 		public static LogLevels GetLogLevel(this ILogSource source)
 		{
 			if (source == null)
-				throw new ArgumentNullException("source");
+				throw new ArgumentNullException(nameof(source));
 
 			do
 			{

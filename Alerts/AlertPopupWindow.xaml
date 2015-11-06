@@ -9,8 +9,8 @@
 			<RowDefinition/>
 		</Grid.RowDefinitions>
 
-		<TextBlock x:Name="TimeCtrl" FontWeight="Bold" FontSize="30" Grid.Row="0" HorizontalAlignment="Center"></TextBlock>
-		
-		<TextBlock x:Name="MessageCtrl" FontWeight="Bold" Foreground="Red" FontSize="20" Grid.Row="1" TextWrapping="Wrap" Margin="0,20,0,0"></TextBlock>
+		<TextBlock x:Name="TimeCtrl" FontWeight="Bold" FontSize="30" Grid.Row="0" HorizontalAlignment="Center" />
+
+	    <TextBlock x:Name="MessageCtrl" FontWeight="Bold" Foreground="Red" FontSize="20" Grid.Row="1" TextWrapping="Wrap" Margin="0,20,0,0" />
     </Grid>
 </Window>

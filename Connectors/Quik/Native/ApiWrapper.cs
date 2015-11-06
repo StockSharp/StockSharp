@@ -93,9 +93,9 @@ namespace StockSharp.Quik.Native
 			catch (ApiException ex)
 			{
 				if (!fileExists)
-					throw new ArgumentException(LocalizedStrings.Str1722Params.Put(path), "path", ex);
+					throw new ArgumentException(LocalizedStrings.Str1722Params.Put(path), nameof(path), ex);
 				else
-					throw new ArgumentException(LocalizedStrings.Str1723, "path", ex);
+					throw new ArgumentException(LocalizedStrings.Str1723, nameof(path), ex);
 			}
 
 			//var c = IsDllConnected();

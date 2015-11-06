@@ -17,10 +17,10 @@ namespace StockSharp.Messages
 			: base(innerAdapter)
 		{
 			if (inputChannel == null)
-				throw new ArgumentNullException("inputChannel");
+				throw new ArgumentNullException(nameof(inputChannel));
 
 			if (outputChannel == null)
-				throw new ArgumentNullException("outputChannel");
+				throw new ArgumentNullException(nameof(outputChannel));
 
 			InputChannel = inputChannel;
 			OutputChannel = outputChannel;
@@ -32,12 +32,12 @@ namespace StockSharp.Messages
 		/// <summary>
 		/// Adapter.
 		/// </summary>
-		public IMessageChannel InputChannel { get; private set; }
+		public IMessageChannel InputChannel { get; }
 
 		/// <summary>
 		/// Adapter.
 		/// </summary>
-		public IMessageChannel OutputChannel { get; private set; }
+		public IMessageChannel OutputChannel { get; }
 
 		/// <summary>
 		/// Control the lifetime of the incoming messages channel.

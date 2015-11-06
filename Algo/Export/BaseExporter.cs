@@ -33,10 +33,10 @@ namespace StockSharp.Algo.Export
 			//	throw new ArgumentNullException("security");
 
 			if (isCancelled == null)
-				throw new ArgumentNullException("isCancelled");
+				throw new ArgumentNullException(nameof(isCancelled));
 
 			if (path.IsEmpty())
-				throw new ArgumentNullException("path");
+				throw new ArgumentNullException(nameof(path));
 
 			Security = security;
 			Arg = arg;
@@ -67,7 +67,7 @@ namespace StockSharp.Algo.Export
 		public void Export(Type dataType, IEnumerable values)
 		{
 			if (values == null)
-				throw new ArgumentNullException("values");
+				throw new ArgumentNullException(nameof(values));
 
 			CultureInfo.InvariantCulture.DoInCulture(() =>
 			{
@@ -96,7 +96,7 @@ namespace StockSharp.Algo.Export
 				else if (dataType == typeof(SecurityMessage))
 					Export((IEnumerable<SecurityMessage>)values);
 				else
-					throw new ArgumentOutOfRangeException("dataType", dataType, LocalizedStrings.Str721);
+					throw new ArgumentOutOfRangeException(nameof(dataType), dataType, LocalizedStrings.Str721);
 			});
 		}
 

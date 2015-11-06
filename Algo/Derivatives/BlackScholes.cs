@@ -21,10 +21,10 @@ namespace StockSharp.Algo.Derivatives
 		protected BlackScholes(ISecurityProvider securityProvider, IMarketDataProvider dataProvider)
 		{
 			if (securityProvider == null)
-				throw new ArgumentNullException("securityProvider");
+				throw new ArgumentNullException(nameof(securityProvider));
 
 			if (dataProvider == null)
-				throw new ArgumentNullException("dataProvider");
+				throw new ArgumentNullException(nameof(dataProvider));
 
 			SecurityProvider = securityProvider;
 			DataProvider = dataProvider;
@@ -40,7 +40,7 @@ namespace StockSharp.Algo.Derivatives
 			: this(securityProvider, dataProvider)
 		{
 			if (option == null)
-				throw new ArgumentNullException("option");
+				throw new ArgumentNullException(nameof(option));
 
 			Option = option;
 		}
@@ -48,17 +48,17 @@ namespace StockSharp.Algo.Derivatives
 		/// <summary>
 		/// The provider of information about instruments.
 		/// </summary>
-		public ISecurityProvider SecurityProvider { get; private set; }
+		public ISecurityProvider SecurityProvider { get; }
 
 		/// <summary>
 		/// The market data provider.
 		/// </summary>
-		public virtual IMarketDataProvider DataProvider { get; private set; }
+		public virtual IMarketDataProvider DataProvider { get; }
 
 		/// <summary>
 		/// Options contract.
 		/// </summary>
-		public virtual Security Option { get; private set; }
+		public virtual Security Option { get; }
 
 		/// <summary>
 		/// The risk free interest rate.
@@ -81,7 +81,7 @@ namespace StockSharp.Algo.Derivatives
 			set
 			{
 				if (value < -1)
-					throw new ArgumentOutOfRangeException("value", value, LocalizedStrings.Str702);
+					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.Str702);
 
 				_roundDecimals = value;
 			}
@@ -92,18 +92,12 @@ namespace StockSharp.Algo.Derivatives
 		/// <summary>
 		/// Underlying asset.
 		/// </summary>
-		public virtual Security UnderlyingAsset
-		{
-			get { return _underlyingAsset ?? (_underlyingAsset = Option.GetUnderlyingAsset(SecurityProvider)); }
-		}
+		public virtual Security UnderlyingAsset => _underlyingAsset ?? (_underlyingAsset = Option.GetUnderlyingAsset(SecurityProvider));
 
 		/// <summary>
 		/// The standard deviation by default.
 		/// </summary>
-		public decimal DefaultDeviation
-		{
-			get { return ((decimal?)DataProvider.GetSecurityValue(Option, Level1Fields.ImpliedVolatility) ?? 0) / 100; }
-		}
+		public decimal DefaultDeviation => ((decimal?)DataProvider.GetSecurityValue(Option, Level1Fields.ImpliedVolatility) ?? 0) / 100;
 
 		/// <summary>
 		/// The time before expiration calculation.

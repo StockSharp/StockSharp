@@ -131,7 +131,7 @@
 		public static object Convert(this IQFeedLevel1Column column, string value)
 		{
 			if (column == null)
-				throw new ArgumentNullException("column");
+				throw new ArgumentNullException(nameof(column));
 
 			if (value.IsEmpty())
 				return null;
@@ -147,7 +147,7 @@
 		public static TimeSpan? ConvertToTimeSpan(this IQFeedLevel1Column column, string value)
 		{
 			if (column == null)
-				throw new ArgumentNullException("column");
+				throw new ArgumentNullException(nameof(column));
 
 			// http://stocksharp.com/forum/yaf_postsm32150_API-4-2-2-24--InvalidCastException.aspx#post32150
 			if (value.ContainsIgnoreCase("99:99:99"))
@@ -167,7 +167,7 @@
 		public static DateTime ToEst(this DateTimeOffset? time)
 		{
 			if (time == null)
-				throw new ArgumentNullException("time");
+				throw new ArgumentNullException(nameof(time));
 
 			return time.Value.ToLocalTime(TimeHelper.Est);
 		}

@@ -41,10 +41,10 @@
 		public SubscribeCandleElementCommand(ChartCandleElement element, CandleSeries candleSeries)
 		{
 			if (element == null)
-				throw new ArgumentNullException("element");
+				throw new ArgumentNullException(nameof(element));
 
 			if (candleSeries == null)
-				throw new ArgumentNullException("candleSeries");
+				throw new ArgumentNullException(nameof(candleSeries));
 
 			Element = element;
 			CandleSeries = candleSeries;
@@ -58,7 +58,7 @@
 		public UnSubscribeCandleElementCommand(ChartCandleElement element)
 		{
 			if (element == null)
-				throw new ArgumentNullException("element");
+				throw new ArgumentNullException(nameof(element));
 
 			Element = element;
 		}
@@ -75,13 +75,13 @@
 		public SubscribeIndicatorElementCommand(ChartIndicatorElement element, CandleSeries candleSeries, IIndicator indicator)
 		{
 			if (element == null)
-				throw new ArgumentNullException("element");
+				throw new ArgumentNullException(nameof(element));
 
 			if (candleSeries == null)
-				throw new ArgumentNullException("candleSeries");
+				throw new ArgumentNullException(nameof(candleSeries));
 
 			if (indicator == null)
-				throw new ArgumentNullException("indicator");
+				throw new ArgumentNullException(nameof(indicator));
 
 			Element = element;
 			CandleSeries = candleSeries;
@@ -96,7 +96,7 @@
 		public UnSubscribeIndicatorElementCommand(ChartIndicatorElement element)
 		{
 			if (element == null)
-				throw new ArgumentNullException("element");
+				throw new ArgumentNullException(nameof(element));
 
 			Element = element;
 		}
@@ -111,10 +111,10 @@
 		public SubscribeOrderElementCommand(ChartOrderElement element, Security security)
 		{
 			if (element == null)
-				throw new ArgumentNullException("element");
+				throw new ArgumentNullException(nameof(element));
 
 			if (security == null)
-				throw new ArgumentNullException("security");
+				throw new ArgumentNullException(nameof(security));
 
 			Element = element;
 			Security = security;
@@ -128,7 +128,7 @@
 		public UnSubscribeOrderElementCommand(ChartOrderElement element)
 		{
 			if (element == null)
-				throw new ArgumentNullException("element");
+				throw new ArgumentNullException(nameof(element));
 
 			Element = element;
 		}
@@ -143,10 +143,10 @@
 		public SubscribeTradeElementCommand(ChartTradeElement element, Security security)
 		{
 			if (element == null)
-				throw new ArgumentNullException("element");
+				throw new ArgumentNullException(nameof(element));
 
 			if (security == null)
-				throw new ArgumentNullException("security");
+				throw new ArgumentNullException(nameof(security));
 
 			Element = element;
 			Security = security;
@@ -160,7 +160,7 @@
 		public UnSubscribeTradeElementCommand(ChartTradeElement element)
 		{
 			if (element == null)
-				throw new ArgumentNullException("element");
+				throw new ArgumentNullException(nameof(element));
 
 			Element = element;
 		}

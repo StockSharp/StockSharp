@@ -49,7 +49,7 @@ namespace StockSharp.AlfaDirect.Native
 		public AlfaWrapper(AlfaDirectMessageAdapter adapter)
 		{
 			if (adapter == null)
-				throw new ArgumentNullException("adapter");
+				throw new ArgumentNullException(nameof(adapter));
 
 			_adapter = adapter;
 

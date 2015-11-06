@@ -20,10 +20,7 @@ namespace StockSharp.Algo.Storages
 			FirstId = -1;
 		}
 
-		public override object LastId
-		{
-			get { return PrevId; }
-		}
+		public override object LastId => PrevId;
 
 		public long FirstId { get; set; }
 		public long PrevId { get; set; }
@@ -115,13 +112,13 @@ namespace StockSharp.Algo.Storages
 			foreach (var msg in messages)
 			{
 				if (msg.ExecutionType != ExecutionTypes.Tick)
-					throw new ArgumentOutOfRangeException("messages", msg.ExecutionType, LocalizedStrings.Str1695Params.Put(msg.TradeId));
+					throw new ArgumentOutOfRangeException(nameof(messages), msg.ExecutionType, LocalizedStrings.Str1695Params.Put(msg.TradeId));
 
 				var tradeId = msg.GetTradeId();
 
 				// сделки для индексов имеют нулевой номер
 				if (tradeId < 0)
-					throw new ArgumentOutOfRangeException("messages", tradeId, LocalizedStrings.Str1020);
+					throw new ArgumentOutOfRangeException(nameof(messages), tradeId, LocalizedStrings.Str1020);
 
 				// execution ticks (like option execution) may be a zero cost
 				// ticks for spreads may be a zero cost or less than zero
@@ -138,10 +135,10 @@ namespace StockSharp.Algo.Storages
 				if (metaInfo.Version < MarketDataVersions.Version53)
 				{
 					if (volume == null)
-						throw new ArgumentException(LocalizedStrings.Str1022Params.Put((object)msg.TradeId ?? msg.TradeStringId), "messages");
+						throw new ArgumentException(LocalizedStrings.Str1022Params.Put((object)msg.TradeId ?? msg.TradeStringId), nameof(messages));
 
 					if (volume < 0)
-						throw new ArgumentOutOfRangeException("messages", volume, LocalizedStrings.Str1022Params.Put(msg.TradeId));
+						throw new ArgumentOutOfRangeException(nameof(messages), volume, LocalizedStrings.Str1022Params.Put(msg.TradeId));
 
 					writer.WriteVolume(volume.Value, metaInfo, SecurityId);
 				}
@@ -152,7 +149,7 @@ namespace StockSharp.Algo.Storages
 					if (volume != null)
 					{
 						if (volume < 0)
-							throw new ArgumentOutOfRangeException("messages", volume, LocalizedStrings.Str1022Params.Put(msg.TradeId));
+							throw new ArgumentOutOfRangeException(nameof(messages), volume, LocalizedStrings.Str1022Params.Put(msg.TradeId));
 
 						writer.WriteVolume(volume.Value, metaInfo, SecurityId);
 					}

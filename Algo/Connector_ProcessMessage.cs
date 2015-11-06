@@ -98,10 +98,7 @@ namespace StockSharp.Algo
 		private readonly SynchronizedDictionary<SecurityId, Level1DepthBuilder> _level1DepthBuilders = new SynchronizedDictionary<SecurityId, Level1DepthBuilder>();
 		private readonly SynchronizedDictionary<string, QuoteChangeDepthBuilder> _quoteChangeDepthBuilders = new SynchronizedDictionary<string, QuoteChangeDepthBuilder>(StringComparer.InvariantCultureIgnoreCase);
 
-		private string AssociatedBoardCode
-		{
-			get { return Adapter.AssociatedBoardCode; }
-		}
+		private string AssociatedBoardCode => Adapter.AssociatedBoardCode;
 
 		private bool IsAssociated(string boardCode)
 		{
@@ -152,10 +149,7 @@ namespace StockSharp.Algo
 		/// <summary>
 		/// To call the <see cref="Connector.Connected"/> event when the first adapter connects to <see cref="Connector.Adapter"/>.
 		/// </summary>
-		protected virtual bool RaiseConnectedOnFirstAdapter
-		{
-			get { return true; }
-		}
+		protected virtual bool RaiseConnectedOnFirstAdapter => true;
 
 		private IMessageChannel _outMessageChannel;
 
@@ -216,7 +210,7 @@ namespace StockSharp.Algo
 			protected set
 			{
 				if (!_isDisposing && value == null)
-					throw new ArgumentNullException("value");
+					throw new ArgumentNullException(nameof(value));
 
 				if (_adapter == value)
 					return;
@@ -494,10 +488,10 @@ namespace StockSharp.Algo
 			where TMessage : Message
 		{
 			if (message == null)
-				throw new ArgumentNullException("message");
+				throw new ArgumentNullException(nameof(message));
 
 			if (getId == null)
-				throw new ArgumentNullException("getId");
+				throw new ArgumentNullException(nameof(getId));
 
 			var securityId = getId(message);
 
@@ -524,7 +518,7 @@ namespace StockSharp.Algo
 					           ?? securities.FirstOrDefault(s => s.Type == null);
 				}
 				else
-					throw new ArgumentNullException("message", LocalizedStrings.Str682Params.Put(securityCode, securityId.SecurityType));
+					throw new ArgumentNullException(nameof(message), LocalizedStrings.Str682Params.Put(securityCode, securityId.SecurityType));
 			}
 
 			string stockSharpId = null;

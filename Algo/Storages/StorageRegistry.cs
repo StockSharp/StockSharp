@@ -116,7 +116,7 @@ namespace StockSharp.Algo.Storages
 					: base(() => new QuoteEnumerator(quotes.GetEnumerator(), securityId))
 				{
 					if (quotes == null)
-						throw new ArgumentNullException("quotes");
+						throw new ArgumentNullException(nameof(quotes));
 				}
 			}
 
@@ -352,7 +352,7 @@ namespace StockSharp.Algo.Storages
 				var expectedArg = ((IMarketDataStorage)this).Arg;
 
 				if (!arg.Equals(expectedArg))
-					throw new ArgumentException(LocalizedStrings.Str1016Params.Put(candle, candle.Arg, expectedArg), "candle");
+					throw new ArgumentException(LocalizedStrings.Str1016Params.Put(candle, candle.Arg, expectedArg), nameof(candle));
 
 				return (TCandleMessage)candle.ToMessage();
 			}
@@ -528,7 +528,7 @@ namespace StockSharp.Algo.Storages
 			set
 			{
 				if (value == null)
-					throw new ArgumentNullException("value");
+					throw new ArgumentNullException(nameof(value));
 
 				if (value == _defaultDrive)
 					return;
@@ -613,10 +613,10 @@ namespace StockSharp.Algo.Storages
 		private static void RegisterStorage<T>(SynchronizedDictionary<Tuple<SecurityId, IMarketDataStorageDrive>, IMarketDataStorage<T>> storages, IMarketDataStorage<T> storage)
 		{
 			if (storages == null)
-				throw new ArgumentNullException("storages");
+				throw new ArgumentNullException(nameof(storages));
 
 			if (storage == null)
-				throw new ArgumentNullException("storage");
+				throw new ArgumentNullException(nameof(storage));
 
 			storages.Add(Tuple.Create(storage.Security.ToSecurityId(), storage.Drive), storage);
 		}
@@ -624,10 +624,10 @@ namespace StockSharp.Algo.Storages
 		private static void RegisterStorage<T>(SynchronizedDictionary<Tuple<SecurityId, ExecutionTypes, IMarketDataStorageDrive>, IMarketDataStorage<T>> storages, ExecutionTypes type, IMarketDataStorage<T> storage)
 		{
 			if (storages == null)
-				throw new ArgumentNullException("storages");
+				throw new ArgumentNullException(nameof(storages));
 
 			if (storage == null)
-				throw new ArgumentNullException("storage");
+				throw new ArgumentNullException(nameof(storage));
 
 			storages.Add(Tuple.Create(storage.Security.ToSecurityId(), type, storage.Drive), storage);
 		}
@@ -639,7 +639,7 @@ namespace StockSharp.Algo.Storages
 		public void RegisterCandleStorage(IMarketDataStorage<CandleMessage> storage)
 		{
 			if (storage == null)
-				throw new ArgumentNullException("storage");
+				throw new ArgumentNullException(nameof(storage));
 
 			_candleStorages.Add(Tuple.Create(storage.Security.ToSecurityId(), storage.Drive), storage);
 		}
@@ -716,7 +716,7 @@ namespace StockSharp.Algo.Storages
 		public IMarketDataStorage<QuoteChangeMessage> GetQuoteMessageStorage(Security security, IMarketDataDrive drive = null, StorageFormats format = StorageFormats.Binary)
 		{
 			if (security == null)
-				throw new ArgumentNullException("security");
+				throw new ArgumentNullException(nameof(security));
 
 			var securityId = security.ToSecurityId();
 
@@ -741,7 +741,7 @@ namespace StockSharp.Algo.Storages
 							serializer = new MarketDepthCsvSerializer(key.Item1);
 							break;
 						default:
-							throw new ArgumentOutOfRangeException("format");
+							throw new ArgumentOutOfRangeException(nameof(format));
 					}
 
 					return new MarketDepthStorage(security, key.Item2, serializer);
@@ -771,7 +771,7 @@ namespace StockSharp.Algo.Storages
 		public IMarketDataStorage<Level1ChangeMessage> GetLevel1MessageStorage(Security security, IMarketDataDrive drive = null, StorageFormats format = StorageFormats.Binary)
 		{
 			if (security == null)
-				throw new ArgumentNullException("security");
+				throw new ArgumentNullException(nameof(security));
 
 			var securityId = security.ToSecurityId();
 
@@ -791,7 +791,7 @@ namespace StockSharp.Algo.Storages
 						serializer = new CsvMarketDataSerializer<Level1ChangeMessage>(key.Item1);
 						break;
 					default:
-						throw new ArgumentOutOfRangeException("format");
+						throw new ArgumentOutOfRangeException(nameof(format));
 				}
 
 				return new Level1Storage(security, key.Item2, serializer);
@@ -810,16 +810,16 @@ namespace StockSharp.Algo.Storages
 		public IMarketDataStorage<CandleMessage> GetCandleMessageStorage(Type candleMessageType, Security security, object arg, IMarketDataDrive drive = null, StorageFormats format = StorageFormats.Binary)
 		{
 			if (candleMessageType == null)
-				throw new ArgumentNullException("candleMessageType");
+				throw new ArgumentNullException(nameof(candleMessageType));
 
 			if (!candleMessageType.IsSubclassOf(typeof(CandleMessage)))
-				throw new ArgumentOutOfRangeException("candleMessageType", candleMessageType, LocalizedStrings.WrongCandleType);
+				throw new ArgumentOutOfRangeException(nameof(candleMessageType), candleMessageType, LocalizedStrings.WrongCandleType);
 
 			if (security == null)
-				throw new ArgumentNullException("security");
+				throw new ArgumentNullException(nameof(security));
 
 			if (arg.IsNull(true))
-				throw new ArgumentNullException("arg", LocalizedStrings.EmptyCandleArg);
+				throw new ArgumentNullException(nameof(arg), LocalizedStrings.EmptyCandleArg);
 
 			var securityId = security.ToSecurityId();
 
@@ -852,7 +852,7 @@ namespace StockSharp.Algo.Storages
 							serializer = typeof(CsvMarketDataSerializer<>).Make(candleMessageType).CreateInstance<IMarketDataSerializer>(security.ToSecurityId(), null, arg, null);
 							break;
 						default:
-							throw new ArgumentOutOfRangeException("format");
+							throw new ArgumentOutOfRangeException(nameof(format));
 					}
 
 					return typeof(CandleStorage<,>).Make(candleMessageType, candleMessageType.ToCandleType()).CreateInstance<IMarketDataStorage<CandleMessage>>(security, arg, key.Item2, serializer);
@@ -871,7 +871,7 @@ namespace StockSharp.Algo.Storages
 		public IMarketDataStorage<ExecutionMessage> GetExecutionStorage(Security security, ExecutionTypes type, IMarketDataDrive drive = null, StorageFormats format = StorageFormats.Binary)
 		{
 			if (security == null)
-				throw new ArgumentNullException("security");
+				throw new ArgumentNullException(nameof(security));
 
 			var securityId = security.ToSecurityId();
 
@@ -903,7 +903,7 @@ namespace StockSharp.Algo.Storages
 									serializer = new CsvMarketDataSerializer<ExecutionMessage>(key.Item1, ExecutionTypes.Tick);
 									break;
 								default:
-									throw new ArgumentOutOfRangeException("format");
+									throw new ArgumentOutOfRangeException(nameof(format));
 							}
 
 							return new TradeStorage(security, mdDrive, serializer);
@@ -925,13 +925,13 @@ namespace StockSharp.Algo.Storages
 								serializer = new CsvMarketDataSerializer<ExecutionMessage>(secId, ExecutionTypes.OrderLog);
 								break;
 							default:
-								throw new ArgumentOutOfRangeException("format");
+								throw new ArgumentOutOfRangeException(nameof(format));
 						}
 
 						return new OrderLogStorage(security, mdDrive, serializer);
 					}
 					default:
-						throw new ArgumentOutOfRangeException("type");
+						throw new ArgumentOutOfRangeException(nameof(type));
 				}
 			});
 		}
@@ -948,7 +948,7 @@ namespace StockSharp.Algo.Storages
 		public IMarketDataStorage GetStorage(Security security, Type dataType, object arg, IMarketDataDrive drive = null, StorageFormats format = StorageFormats.Binary)
 		{
 			if (dataType == null)
-				throw new ArgumentNullException("dataType");
+				throw new ArgumentNullException(nameof(dataType));
 
 			if (!dataType.IsSubclassOf(typeof(Message)))
 				dataType = dataType.ToMessageType(ref arg);
@@ -964,7 +964,7 @@ namespace StockSharp.Algo.Storages
 			else if (dataType.IsSubclassOf(typeof(CandleMessage)))
 				return GetCandleMessageStorage(dataType, security, arg, drive, format);
 			else
-				throw new ArgumentOutOfRangeException("dataType", dataType, LocalizedStrings.Str1018);
+				throw new ArgumentOutOfRangeException(nameof(dataType), dataType, LocalizedStrings.Str1018);
 		}
 
 		private static Security ToSecurity(SecurityId securityId)
@@ -1011,7 +1011,7 @@ namespace StockSharp.Algo.Storages
 						serializer = new CsvMarketDataSerializer<NewsMessage>();
 						break;
 					default:
-						throw new ArgumentOutOfRangeException("format");
+						throw new ArgumentOutOfRangeException(nameof(format));
 				}
 
 				return new NewsStorage(_newsSecurity, serializer, key);
@@ -1027,7 +1027,7 @@ namespace StockSharp.Algo.Storages
 			public SecurityStorage(IMarketDataDrive drive)
 			{
 				if (drive == null)
-					throw new ArgumentNullException("drive");
+					throw new ArgumentNullException(nameof(drive));
 
 				_file = Path.Combine(drive.Path, "instruments.csv");
 				Load();
@@ -1067,10 +1067,7 @@ namespace StockSharp.Algo.Storages
 				});
 			}
 
-			int ISecurityProvider.Count
-			{
-				get { return _securities.Count; }
-			}
+			int ISecurityProvider.Count => _securities.Count;
 
 			public event Action<Security> Added;
 			public event Action<Security> Removed;

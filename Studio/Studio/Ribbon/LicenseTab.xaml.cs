@@ -48,7 +48,7 @@ namespace StockSharp.Studio.Ribbon
 			set
 			{
 				if (value == null)
-					throw new ArgumentNullException("value");
+					throw new ArgumentNullException(nameof(value));
 
 				_licenses = value.ToArray();
 
@@ -91,7 +91,7 @@ namespace StockSharp.Studio.Ribbon
 			set
 			{
 				if (value == null)
-					throw new ArgumentNullException("value");
+					throw new ArgumentNullException(nameof(value));
 
 				_brokers = value.ToArray();
 
@@ -113,7 +113,7 @@ namespace StockSharp.Studio.Ribbon
 			set
 			{
 				if (value == null)
-					throw new ArgumentNullException("value");
+					throw new ArgumentNullException(nameof(value));
 
 				_features = value;
 

@@ -25,12 +25,12 @@ namespace StockSharp.Alerts
 		/// <summary>
 		/// Message type.
 		/// </summary>
-		public Type MessageType { get; private set; }
+		public Type MessageType { get; }
 
 		/// <summary>
 		/// Rules.
 		/// </summary>
-		public IList<AlertRule> Rules { get; private set; }
+		public IList<AlertRule> Rules { get; }
 
 		/// <summary>
 		/// Alert type.

@@ -34,20 +34,14 @@ namespace StockSharp.Xaml
 		/// <summary>
 		/// The root node of the strategies tree.
 		/// </summary>
-		public LogSourceNode StrategyRootNode
-		{
-			get { return _strategyRootNode; }
-		}
+		public LogSourceNode StrategyRootNode => _strategyRootNode;
 
 		private readonly LogSourceNode _coreRootNode;
 
 		/// <summary>
 		/// The root node of the logger.
 		/// </summary>
-		public LogSourceNode CoreRootNode
-		{
-			get { return _coreRootNode; }
-		}
+		public LogSourceNode CoreRootNode => _coreRootNode;
 
 		/// <summary>
 		/// Generates a unique identifier for a given item that is represented as a node of the tree.

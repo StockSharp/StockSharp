@@ -29,10 +29,10 @@ namespace StockSharp.Algo
 				: base(order)
 			{
 				if (order == null)
-					throw new ArgumentNullException("order");
+					throw new ArgumentNullException(nameof(order));
 
 				if (connector == null)
-					throw new ArgumentNullException("connector");
+					throw new ArgumentNullException(nameof(connector));
 
 				Order = order;
 				Connector = connector;
@@ -62,9 +62,9 @@ namespace StockSharp.Algo
 			//	}
 			//}
 
-			protected Order Order { get; private set; }
+			protected Order Order { get; }
 
-			protected IConnector Connector { get; private set; }
+			protected IConnector Connector { get; }
 
 			protected void TrySubscribe()
 			{
@@ -218,7 +218,7 @@ namespace StockSharp.Algo
 				: base(order, connector)
 			{
 				if (condition == null)
-					throw new ArgumentNullException("condition");
+					throw new ArgumentNullException(nameof(condition));
 
 				_condition = condition;
 
@@ -271,13 +271,7 @@ namespace StockSharp.Algo
 		{
 			private decimal _receivedVolume;
 
-			protected bool AllTradesReceived
-			{
-				get
-				{
-					return Order.State == OrderStates.Done && (Order.Volume - Order.Balance == _receivedVolume);
-				}
-			}
+			protected bool AllTradesReceived => Order.State == OrderStates.Done && (Order.Volume - Order.Balance == _receivedVolume);
 
 			public NewTradesOrderRule(Order order, IConnector connector)
 				: base(order, connector)
@@ -391,7 +385,7 @@ namespace StockSharp.Algo
 		public static MarketRule<Order, Order> WhenRegistered(this Order order, IConnector connector)
 		{
 			if (order == null)
-				throw new ArgumentNullException("order");
+				throw new ArgumentNullException(nameof(order));
 
 			return new ChangedOrNewOrderRule(order, connector, o => o.State == OrderStates.Active) { Name = LocalizedStrings.Str1034 }.Once();
 		}
@@ -405,7 +399,7 @@ namespace StockSharp.Algo
 		public static MarketRule<Order, Order> WhenActivated(this Order stopOrder, IConnector connector)
 		{
 			if (stopOrder == null)
-				throw new ArgumentNullException("stopOrder");
+				throw new ArgumentNullException(nameof(stopOrder));
 
 			return new ChangedOrNewOrderRule(stopOrder, connector, o => o.DerivedOrder != null) { Name = LocalizedStrings.Str1035 }.Once();
 		}
@@ -419,7 +413,7 @@ namespace StockSharp.Algo
 		public static MarketRule<Order, Order> WhenPartiallyMatched(this Order order, IConnector connector)
 		{
 			if (order == null)
-				throw new ArgumentNullException("order");
+				throw new ArgumentNullException(nameof(order));
 
 			var balance = order.Volume;
 			var hasVolume = balance != 0;
@@ -533,13 +527,13 @@ namespace StockSharp.Algo
 				: base(portfolio)
 			{
 				if (portfolio == null)
-					throw new ArgumentNullException("portfolio");
+					throw new ArgumentNullException(nameof(portfolio));
 
 				if (connector == null)
-					throw new ArgumentNullException("connector");
+					throw new ArgumentNullException(nameof(connector));
 
 				if (changed == null)
-					throw new ArgumentNullException("changed");
+					throw new ArgumentNullException(nameof(changed));
 
 				_changed = changed;
 
@@ -571,10 +565,10 @@ namespace StockSharp.Algo
 		public static MarketRule<Portfolio, Portfolio> WhenMoneyLess(this Portfolio portfolio, IConnector connector, Unit money)
 		{
 			if (portfolio == null)
-				throw new ArgumentNullException("portfolio");
+				throw new ArgumentNullException(nameof(portfolio));
 
 			if (money == null)
-				throw new ArgumentNullException("money");
+				throw new ArgumentNullException(nameof(money));
 
 			var finishMoney = money.Type == UnitTypes.Limit ? money : portfolio.CurrentValue - money;
 
@@ -594,10 +588,10 @@ namespace StockSharp.Algo
 		public static MarketRule<Portfolio, Portfolio> WhenMoneyMore(this Portfolio portfolio, IConnector connector, Unit money)
 		{
 			if (portfolio == null)
-				throw new ArgumentNullException("portfolio");
+				throw new ArgumentNullException(nameof(portfolio));
 
 			if (money == null)
-				throw new ArgumentNullException("money");
+				throw new ArgumentNullException(nameof(money));
 
 			var finishMoney = money.Type == UnitTypes.Limit ? money : portfolio.CurrentValue + money;
 
@@ -627,13 +621,13 @@ namespace StockSharp.Algo
 				: base(position)
 			{
 				if (position == null)
-					throw new ArgumentNullException("position");
+					throw new ArgumentNullException(nameof(position));
 
 				if (connector == null)
-					throw new ArgumentNullException("connector");
+					throw new ArgumentNullException(nameof(connector));
 
 				if (changed == null)
-					throw new ArgumentNullException("changed");
+					throw new ArgumentNullException(nameof(changed));
 
 				_changed = changed;
 
@@ -665,10 +659,10 @@ namespace StockSharp.Algo
 		public static MarketRule<Position, Position> WhenLess(this Position position, IConnector connector, Unit value)
 		{
 			if (position == null)
-				throw new ArgumentNullException("position");
+				throw new ArgumentNullException(nameof(position));
 
 			if (value == null)
-				throw new ArgumentNullException("value");
+				throw new ArgumentNullException(nameof(value));
 
 			var finishPosition = value.Type == UnitTypes.Limit ? value : position.CurrentValue - value;
 
@@ -688,10 +682,10 @@ namespace StockSharp.Algo
 		public static MarketRule<Position, Position> WhenMore(this Position position, IConnector connector, Unit value)
 		{
 			if (position == null)
-				throw new ArgumentNullException("position");
+				throw new ArgumentNullException(nameof(position));
 
 			if (value == null)
-				throw new ArgumentNullException("value");
+				throw new ArgumentNullException(nameof(value));
 
 			var finishPosition = value.Type == UnitTypes.Limit ? value : position.CurrentValue + value;
 
@@ -722,17 +716,17 @@ namespace StockSharp.Algo
 				: base(security)
 			{
 				if (security == null)
-					throw new ArgumentNullException("security");
+					throw new ArgumentNullException(nameof(security));
 
 				if (connector == null)
-					throw new ArgumentNullException("connector");
+					throw new ArgumentNullException(nameof(connector));
 
 				Security = security;
 				Connector = connector;
 			}
 
-			protected Security Security { get; private set; }
-			protected IConnector Connector { get; private set; }
+			protected Security Security { get; }
+			protected IConnector Connector { get; }
 		}
 
 		private sealed class SecurityChangedRule : SecurityRule<Security>
@@ -748,7 +742,7 @@ namespace StockSharp.Algo
 				: base(security, connector)
 			{
 				if (condition == null)
-					throw new ArgumentNullException("condition");
+					throw new ArgumentNullException(nameof(condition));
 
 				_condition = condition;
 
@@ -869,7 +863,7 @@ namespace StockSharp.Algo
 				: base(security, connector)
 			{
 				if (condition == null)
-					throw new ArgumentNullException("condition");
+					throw new ArgumentNullException(nameof(condition));
 
 				_condition = condition;
 
@@ -1118,16 +1112,16 @@ namespace StockSharp.Algo
 		private static SecurityChangedRule CreateSecurityCondition(Security security, IConnector connector, Level1Fields field, Unit offset, bool isLess)
 		{
 			if (security == null)
-				throw new ArgumentNullException("security");
+				throw new ArgumentNullException(nameof(security));
 
 			if (offset == null)
-				throw new ArgumentNullException("offset");
+				throw new ArgumentNullException(nameof(offset));
 
 			if (offset.Value == 0)
-				throw new ArgumentException(LocalizedStrings.Str1051, "offset");
+				throw new ArgumentException(LocalizedStrings.Str1051, nameof(offset));
 
 			if (offset.Value < 0)
-				throw new ArgumentException(LocalizedStrings.Str1052, "offset");
+				throw new ArgumentException(LocalizedStrings.Str1052, nameof(offset));
 
 			var price = (decimal?)connector.GetSecurityValue(security, field);
 
@@ -1157,24 +1151,24 @@ namespace StockSharp.Algo
 		private static SecurityLastTradeRule CreateLastTradeCondition(Security security, IConnector connector, IMarketDataProvider provider, Unit offset, bool isLess)
 		{
 			if (security == null)
-				throw new ArgumentNullException("security");
+				throw new ArgumentNullException(nameof(security));
 
 			if (provider == null)
-				throw new ArgumentNullException("provider");
+				throw new ArgumentNullException(nameof(provider));
 
 			if (offset == null)
-				throw new ArgumentNullException("offset");
+				throw new ArgumentNullException(nameof(offset));
 
 			if (offset.Value == 0)
-				throw new ArgumentException(LocalizedStrings.Str1051, "offset");
+				throw new ArgumentException(LocalizedStrings.Str1051, nameof(offset));
 
 			if (offset.Value < 0)
-				throw new ArgumentException(LocalizedStrings.Str1052, "offset");
+				throw new ArgumentException(LocalizedStrings.Str1052, nameof(offset));
 
 			var price = (decimal?)provider.GetSecurityValue(security, Level1Fields.LastTradePrice);
 
 			if (price == null && offset.Type != UnitTypes.Limit)
-				throw new ArgumentException(LocalizedStrings.Str1054, "security");
+				throw new ArgumentException(LocalizedStrings.Str1054, nameof(security));
 
 			if (isLess)
 			{
@@ -1196,7 +1190,7 @@ namespace StockSharp.Algo
 				: base(security, connector)
 			{
 				if (times == null)
-					throw new ArgumentNullException("times");
+					throw new ArgumentNullException(nameof(times));
 
 				var currentTime = connector.CurrentTime;
 
@@ -1290,12 +1284,12 @@ namespace StockSharp.Algo
 				: base(depth)
 			{
 				if (depth == null)
-					throw new ArgumentNullException("depth");
+					throw new ArgumentNullException(nameof(depth));
 
 				Depth = depth;
 			}
 
-			protected MarketDepth Depth { get; private set; }
+			protected MarketDepth Depth { get; }
 		}
 
 		private sealed class MarketDepthChangedRule : MarketDepthRule
@@ -1311,7 +1305,7 @@ namespace StockSharp.Algo
 				: base(depth)
 			{
 				if (condition == null)
-					throw new ArgumentNullException("condition");
+					throw new ArgumentNullException(nameof(condition));
 
 				_condition = condition;
 
@@ -1433,20 +1427,20 @@ namespace StockSharp.Algo
 		private static Func<MarketDepth, bool> CreateDepthCondition(Unit price, Func<Quote> currentQuote, bool isLess)
 		{
 			if (price == null)
-				throw new ArgumentNullException("price");
+				throw new ArgumentNullException(nameof(price));
 
 			if (currentQuote == null)
-				throw new ArgumentNullException("currentQuote");
+				throw new ArgumentNullException(nameof(currentQuote));
 
 			if (price.Value == 0)
-				throw new ArgumentException(LocalizedStrings.Str1051, "price");
+				throw new ArgumentException(LocalizedStrings.Str1051, nameof(price));
 
 			if (price.Value < 0)
-				throw new ArgumentException(LocalizedStrings.Str1052, "price");
+				throw new ArgumentException(LocalizedStrings.Str1052, nameof(price));
 
 			var curQuote = currentQuote();
 			if (curQuote == null)
-				throw new ArgumentException(LocalizedStrings.Str1063, "currentQuote");
+				throw new ArgumentException(LocalizedStrings.Str1063, nameof(currentQuote));
 
 			if (isLess)
 			{
@@ -1478,12 +1472,12 @@ namespace StockSharp.Algo
 				: base(series)
 			{
 				if (series == null)
-					throw new ArgumentNullException("series");
+					throw new ArgumentNullException(nameof(series));
 
 				Series = series;
 			}
 
-			protected CandleSeries Series { get; private set; }
+			protected CandleSeries Series { get; }
 		}
 
 		private abstract class CandleSeriesRule<TArg> : BaseCandleSeriesRule<TArg>
@@ -1512,10 +1506,10 @@ namespace StockSharp.Algo
 				: base(series)
 			{
 				if (states == null)
-					throw new ArgumentNullException("states");
+					throw new ArgumentNullException(nameof(states));
 
 				if (states.IsEmpty())
-					throw new ArgumentOutOfRangeException("states");
+					throw new ArgumentOutOfRangeException(nameof(states));
 
 				_state = states[0];
 
@@ -1543,7 +1537,7 @@ namespace StockSharp.Algo
 				: base(series)
 			{
 				if (condition == null)
-					throw new ArgumentNullException("condition");
+					throw new ArgumentNullException(nameof(condition));
 
 				_condition = condition;
 				Name = LocalizedStrings.Str1064 + " " + series;
@@ -1564,7 +1558,7 @@ namespace StockSharp.Algo
 				: base(series)
 			{
 				if (condition == null)
-					throw new ArgumentNullException("condition");
+					throw new ArgumentNullException(nameof(condition));
 
 				_condition = condition;
 			}
@@ -1584,7 +1578,7 @@ namespace StockSharp.Algo
 				Candle = candle;
 			}
 
-			protected Candle Candle { get; private set; }
+			protected Candle Candle { get; }
 		}
 
 		private sealed class ChangedCandleRule : CandleRule
@@ -1600,7 +1594,7 @@ namespace StockSharp.Algo
 				: base(candle)
 			{
 				if (condition == null)
-					throw new ArgumentNullException("condition");
+					throw new ArgumentNullException(nameof(condition));
 
 				_condition = condition;
 				Name = LocalizedStrings.Str1065 + " " + candle;
@@ -1659,19 +1653,19 @@ namespace StockSharp.Algo
 		private static Func<Candle, bool> CreateCandleCondition(this Candle candle, Unit price, Func<Candle, decimal> currentPrice, bool isLess)
 		{
 			if (candle == null)
-				throw new ArgumentNullException("candle");
+				throw new ArgumentNullException(nameof(candle));
 
 			if (price == null)
-				throw new ArgumentNullException("price");
+				throw new ArgumentNullException(nameof(price));
 
 			if (currentPrice == null)
-				throw new ArgumentNullException("currentPrice");
+				throw new ArgumentNullException(nameof(currentPrice));
 
 			if (price.Value == 0)
-				throw new ArgumentException(LocalizedStrings.Str1051, "price");
+				throw new ArgumentException(LocalizedStrings.Str1051, nameof(price));
 
 			if (price.Value < 0)
-				throw new ArgumentException(LocalizedStrings.Str1052, "price");
+				throw new ArgumentException(LocalizedStrings.Str1052, nameof(price));
 
 			if (isLess)
 			{
@@ -1694,7 +1688,7 @@ namespace StockSharp.Algo
 		public static MarketRule<CandleSeries, Candle> WhenTotalVolumeMore(this Candle candle, Unit volume)
 		{
 			if (candle == null)
-				throw new ArgumentNullException("candle");
+				throw new ArgumentNullException(nameof(candle));
 
 			var finishVolume = volume.Type == UnitTypes.Limit ? volume : candle.TotalVolume + volume;
 
@@ -1713,7 +1707,7 @@ namespace StockSharp.Algo
 		public static MarketRule<CandleSeries, Candle> WhenCurrentCandleTotalVolumeMore(this CandleSeries series, Unit volume)
 		{
 			if (series == null)
-				throw new ArgumentNullException("series");
+				throw new ArgumentNullException(nameof(series));
 
 			var finishVolume = volume;
 
@@ -1722,7 +1716,7 @@ namespace StockSharp.Algo
 				var curCandle = series.GetCurrentCandle<Candle>();
 
 				if (curCandle == null)
-					throw new ArgumentException(LocalizedStrings.Str1070, "series");
+					throw new ArgumentException(LocalizedStrings.Str1070, nameof(series));
 
 				finishVolume = curCandle.TotalVolume + volume;	
 			}
@@ -1867,16 +1861,16 @@ namespace StockSharp.Algo
 		private static MarketTimer CreateAndActivateTimeFrameTimer(CandleSeries series, IConnector connector, Action callback, decimal percent, bool periodical)
 		{
 			if (series == null)
-				throw new ArgumentNullException("series");
+				throw new ArgumentNullException(nameof(series));
 
 			if (connector == null)
-				throw new ArgumentNullException("connector");
+				throw new ArgumentNullException(nameof(connector));
 
 			if (callback == null)
-				throw new ArgumentNullException("callback");
+				throw new ArgumentNullException(nameof(callback));
 
 			if (percent <= 0)
-				throw new ArgumentOutOfRangeException("percent", LocalizedStrings.Str1077);
+				throw new ArgumentOutOfRangeException(nameof(percent), LocalizedStrings.Str1077);
 
 			var timeFrame = (TimeSpan)series.Arg;
 
@@ -1914,7 +1908,7 @@ namespace StockSharp.Algo
 		private static Func<Candle, bool> IsCandlePartiallyFinished(this Candle candle, decimal percent)
 		{
 			if (candle == null)
-				throw new ArgumentNullException("candle");
+				throw new ArgumentNullException(nameof(candle));
 
 			return candle.Series.IsCandlePartiallyFinished(percent);
 		}
@@ -1922,10 +1916,10 @@ namespace StockSharp.Algo
 		private static Func<Candle, bool> IsCandlePartiallyFinished(this CandleSeries series, decimal percent)
 		{
 			if (series == null)
-				throw new ArgumentNullException("series");
+				throw new ArgumentNullException(nameof(series));
 
 			if (percent <= 0)
-				throw new ArgumentOutOfRangeException("percent", LocalizedStrings.Str1077);
+				throw new ArgumentOutOfRangeException(nameof(percent), LocalizedStrings.Str1077);
 
 			var realPercent = percent / 100;
 
@@ -1944,7 +1938,7 @@ namespace StockSharp.Algo
 				return newCandle => newCandle.TotalVolume >= volume;
 			}
 			else
-				throw new ArgumentOutOfRangeException("series", series.CandleType, LocalizedStrings.WrongCandleType);
+				throw new ArgumentOutOfRangeException(nameof(series), series.CandleType, LocalizedStrings.WrongCandleType);
 		}
 
 		#endregion
@@ -1957,12 +1951,12 @@ namespace StockSharp.Algo
 				: base(connector)
 			{
 				if (connector == null)
-					throw new ArgumentNullException("connector");
+					throw new ArgumentNullException(nameof(connector));
 
 				Connector = connector;
 			}
 
-			protected IConnector Connector { get; private set; }
+			protected IConnector Connector { get; }
 		}
 
 		private sealed class MarketTimeRule : ConnectorRule<IConnector>
@@ -2039,7 +2033,7 @@ namespace StockSharp.Algo
 			/*/// <param name="firstTimeRun">Сработает ли правило в момент создания (нулевое время). False по умолчанию.</param>*/
 
 			if (connector == null)
-				throw new ArgumentNullException("connector");
+				throw new ArgumentNullException(nameof(connector));
 
 			return new MarketTimeRule(connector, interval/*, firstTimeRun*/);
 		}
@@ -2076,7 +2070,7 @@ namespace StockSharp.Algo
 		public static IMarketRule Apply(this IMarketRule rule)
 		{
 			if (rule == null)
-				throw new ArgumentNullException("rule");
+				throw new ArgumentNullException(nameof(rule));
 
 			return rule.Apply(DefaultRuleContainer);
 		}
@@ -2090,10 +2084,10 @@ namespace StockSharp.Algo
 		public static IMarketRule Apply(this IMarketRule rule, IMarketRuleContainer container)
 		{
 			if (rule == null)
-				throw new ArgumentNullException("rule");
+				throw new ArgumentNullException(nameof(rule));
 
 			if (container == null)
-				throw new ArgumentNullException("container");
+				throw new ArgumentNullException(nameof(container));
 
 			container.Rules.Add(rule);
 			return rule;
@@ -2184,20 +2178,14 @@ namespace StockSharp.Algo
 				_rules = new MarketRuleList(this);
 			}
 
-			ProcessStates IMarketRuleContainer.ProcessState
-			{
-				get { return ProcessStates.Started; }
-			}
+			ProcessStates IMarketRuleContainer.ProcessState => ProcessStates.Started;
 
 			void IMarketRuleContainer.ActivateRule(IMarketRule rule, Func<bool> process)
 			{
 				this.ActiveRule(rule, process);
 			}
 
-			bool IMarketRuleContainer.IsRulesSuspended
-			{
-				get { return _rulesSuspendCount > 0; }
-			}
+			bool IMarketRuleContainer.IsRulesSuspended => _rulesSuspendCount > 0;
 
 			void IMarketRuleContainer.SuspendRules()
 			{
@@ -2216,10 +2204,7 @@ namespace StockSharp.Algo
 
 			private readonly MarketRuleList _rules;
 
-			IMarketRuleList IMarketRuleContainer.Rules
-			{
-				get { return _rules; }
-			}
+			IMarketRuleList IMarketRuleContainer.Rules => _rules;
 		}
 
 		/// <summary>
@@ -2244,10 +2229,10 @@ namespace StockSharp.Algo
 		public static void SuspendRules(this IMarketRuleContainer container, Action action)
 		{
 			if (container == null)
-				throw new ArgumentNullException("container");
+				throw new ArgumentNullException(nameof(container));
 
 			if (action == null)
-				throw new ArgumentNullException("action");
+				throw new ArgumentNullException(nameof(action));
 
 			container.SuspendRules();
 
@@ -2273,10 +2258,10 @@ namespace StockSharp.Algo
 		public static bool TryRemoveRule(this IMarketRuleContainer container, IMarketRule rule, bool checkCanFinish = true)
 		{
 			if (container == null)
-				throw new ArgumentNullException("container");
+				throw new ArgumentNullException(nameof(container));
 
 			if (rule == null)
-				throw new ArgumentNullException("rule");
+				throw new ArgumentNullException(nameof(rule));
 
 			// не блокируем выполнение, если правило активно в данный момент
 			// оно в последствии само удалится, так как стратегия уже перешла в состояние Stopping
@@ -2314,10 +2299,10 @@ namespace StockSharp.Algo
 		public static bool TryRemoveWithExclusive(this IMarketRuleContainer container, IMarketRule rule)
 		{
 			if (container == null)
-				throw new ArgumentNullException("container");
+				throw new ArgumentNullException(nameof(container));
 
 			if (rule == null)
-				throw new ArgumentNullException("rule");
+				throw new ArgumentNullException(nameof(rule));
 
 			if (container.TryRemoveRule(rule))
 			{
@@ -2343,13 +2328,13 @@ namespace StockSharp.Algo
 		public static void Exclusive(this IMarketRule rule1, IMarketRule rule2)
 		{
 			if (rule1 == null)
-				throw new ArgumentNullException("rule1");
+				throw new ArgumentNullException(nameof(rule1));
 
 			if (rule2 == null)
-				throw new ArgumentNullException("rule2");
+				throw new ArgumentNullException(nameof(rule2));
 
 			if (rule1 == rule2)
-				throw new ArgumentException(LocalizedStrings.Str1085Params.Put(rule1), "rule2");
+				throw new ArgumentException(LocalizedStrings.Str1085Params.Put(rule1), nameof(rule2));
 
 			rule1.ExclusiveRules.Add(rule2);
 			rule2.ExclusiveRules.Add(rule1);
@@ -2365,7 +2350,7 @@ namespace StockSharp.Algo
 				: base(default(TToken))
 			{
 				if (innerRules == null)
-					throw new ArgumentNullException("innerRules");
+					throw new ArgumentNullException(nameof(innerRules));
 
 				_innerRules.AddRange(innerRules.Select(Init));
 
@@ -2407,12 +2392,7 @@ namespace StockSharp.Algo
 
 			#region Implementation of ILogSource
 
-			private readonly Guid _id = Guid.NewGuid();
-
-			Guid ILogSource.Id
-			{
-				get { return _id; }
-			}
+			Guid ILogSource.Id { get; } = Guid.NewGuid();
 
 			ILogSource ILogSource.Parent
 			{
@@ -2435,15 +2415,9 @@ namespace StockSharp.Algo
 				remove { Container.Log -= value; }
 			}
 
-			DateTimeOffset ILogSource.CurrentTime
-			{
-				get { return Container.CurrentTime; }
-			}
+			DateTimeOffset ILogSource.CurrentTime => Container.CurrentTime;
 
-			bool ILogSource.IsRoot
-			{
-				get { return Container.IsRoot; }
-			}
+			bool ILogSource.IsRoot => Container.IsRoot;
 
 			#endregion
 
@@ -2454,20 +2428,14 @@ namespace StockSharp.Algo
 
 			#region Implementation of IMarketRuleContainer
 
-			ProcessStates IMarketRuleContainer.ProcessState
-			{
-				get { return Container.ProcessState; }
-			}
+			ProcessStates IMarketRuleContainer.ProcessState => Container.ProcessState;
 
 			void IMarketRuleContainer.ActivateRule(IMarketRule rule, Func<bool> process)
 			{
 				process();
 			}
 
-			bool IMarketRuleContainer.IsRulesSuspended
-			{
-				get { return Container.IsRulesSuspended; }
-			}
+			bool IMarketRuleContainer.IsRulesSuspended => Container.IsRulesSuspended;
 
 			void IMarketRuleContainer.SuspendRules()
 			{
@@ -2724,7 +2692,7 @@ namespace StockSharp.Algo
 			where TRule : IMarketRule
 		{
 			if (rule.IsNull())
-				throw new ArgumentNullException("rule");
+				throw new ArgumentNullException(nameof(rule));
 
 			action(rule);
 
@@ -2745,7 +2713,7 @@ namespace StockSharp.Algo
 				return; // правило еще не было добавлено в контейнер
 
 			if (rule == null)
-				throw new ArgumentNullException("rule");
+				throw new ArgumentNullException(nameof(rule));
 
 			if (rule.LogLevel != LogLevels.Inherit && rule.LogLevel > level)
 				return;

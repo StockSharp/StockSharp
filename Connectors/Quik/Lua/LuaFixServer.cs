@@ -38,7 +38,7 @@ namespace StockSharp.Quik.Lua
 			public void AddTransactionId(long transactionId)
 			{
 				if (transactionId == 0)
-					throw new ArgumentNullException("transactionId");
+					throw new ArgumentNullException(nameof(transactionId));
 
 				this.AddInfoLog("Added trans id {0} mapping.", transactionId);
 				_transactionIds.Add(transactionId);
@@ -418,7 +418,7 @@ namespace StockSharp.Quik.Lua
 		public void Process(Message message)
 		{
 			if (message == null)
-				throw new ArgumentNullException("message");
+				throw new ArgumentNullException(nameof(message));
 
 			LogReceiver.AddDebugLog("Out. {0}", message);
 
@@ -580,7 +580,7 @@ namespace StockSharp.Quik.Lua
 		private void ReplaceSecurityId(SecurityId securityId, Action<SecurityId> setSecurityId)
 		{
 			if (setSecurityId == null)
-				throw new ArgumentNullException("setSecurityId");
+				throw new ArgumentNullException(nameof(setSecurityId));
 
 			ReplaceBoardCode(securityId.BoardCode, boardCode => setSecurityId(new SecurityId { SecurityCode = securityId.SecurityCode, BoardCode = boardCode }));
 		}
@@ -588,7 +588,7 @@ namespace StockSharp.Quik.Lua
 		private void ReplaceBoardCode(string classCode, Action<string> setBoardCode)
 		{
 			if (setBoardCode == null)
-				throw new ArgumentNullException("setBoardCode");
+				throw new ArgumentNullException(nameof(setBoardCode));
 
 			if (classCode.IsEmpty())
 				return;

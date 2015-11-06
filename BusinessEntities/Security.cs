@@ -471,7 +471,7 @@ namespace StockSharp.BusinessEntities
 			set
 			{
 				if (value == null)
-					throw new ArgumentNullException("value");
+					throw new ArgumentNullException(nameof(value));
 
 				_externalId = value;
 				Notify("ExternalId");
@@ -522,7 +522,7 @@ namespace StockSharp.BusinessEntities
 			set
 			{
 				if (value < 0)
-					throw new ArgumentOutOfRangeException("value", value, LocalizedStrings.Str556);
+					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.Str556);
 
 				if (_stepPrice == value)
 					return;
@@ -1500,7 +1500,7 @@ namespace StockSharp.BusinessEntities
 		public void CopyTo(Security destination)
 		{
 			if (destination == null)
-				throw new ArgumentNullException("destination");
+				throw new ArgumentNullException(nameof(destination));
 
 			destination.Id = Id;
 			destination.Name = Name;

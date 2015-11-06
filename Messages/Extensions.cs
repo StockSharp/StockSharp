@@ -20,7 +20,7 @@ namespace StockSharp.Messages
 		public static PortfolioChangeMessage CreatePortfolioChangeMessage(this IMessageAdapter adapter, string pfName)
 		{
 			if (adapter == null)
-				throw new ArgumentNullException("adapter");
+				throw new ArgumentNullException(nameof(adapter));
 
 			var time = adapter.CurrentTime;
 
@@ -42,7 +42,7 @@ namespace StockSharp.Messages
 		public static PositionChangeMessage CreatePositionChangeMessage(this IMessageAdapter adapter, string pfName, SecurityId securityId)
 		{
 			if (adapter == null)
-				throw new ArgumentNullException("adapter");
+				throw new ArgumentNullException(nameof(adapter));
 
 			var time = adapter.CurrentTime;
 
@@ -63,7 +63,7 @@ namespace StockSharp.Messages
 		public static QuoteChange GetBestBid(this QuoteChangeMessage message)
 		{
 			if (message == null)
-				throw new ArgumentNullException("message");
+				throw new ArgumentNullException(nameof(message));
 
 			return (message.IsSorted ? message.Bids : message.Bids.OrderByDescending(q => q.Price)).FirstOrDefault();
 		}
@@ -76,7 +76,7 @@ namespace StockSharp.Messages
 		public static QuoteChange GetBestAsk(this QuoteChangeMessage message)
 		{
 			if (message == null)
-				throw new ArgumentNullException("message");
+				throw new ArgumentNullException(nameof(message));
 
 			return (message.IsSorted ? message.Asks : message.Asks.OrderBy(q => q.Price)).FirstOrDefault();
 		}
@@ -210,10 +210,10 @@ namespace StockSharp.Messages
 		public static void CopyExtensionInfo(this IExtendableEntity from, IExtendableEntity to)
 		{
 			if (from == null)
-				throw new ArgumentNullException("from");
+				throw new ArgumentNullException(nameof(@from));
 
 			if (to == null)
-				throw new ArgumentNullException("to");
+				throw new ArgumentNullException(nameof(to));
 
 			if (from.ExtensionInfo == null)
 				return;
@@ -314,7 +314,7 @@ namespace StockSharp.Messages
 		public static void AddSupportedMessage(this IMessageAdapter adapter, MessageTypes type)
 		{
 			if (adapter == null)
-				throw new ArgumentNullException("adapter");
+				throw new ArgumentNullException(nameof(adapter));
 
 			adapter.SupportedMessages = adapter.SupportedMessages.Concat(type).ToArray();
 		}
@@ -327,7 +327,7 @@ namespace StockSharp.Messages
 		public static void RemoveSupportedMessage(this IMessageAdapter adapter, MessageTypes type)
 		{
 			if (adapter == null)
-				throw new ArgumentNullException("adapter");
+				throw new ArgumentNullException(nameof(adapter));
 
 			adapter.SupportedMessages = adapter.SupportedMessages.Except(new[] { type }).ToArray();
 		}
@@ -341,7 +341,7 @@ namespace StockSharp.Messages
 		public static bool IsMessageSupported(this IMessageAdapter adapter, MessageTypes type)
 		{
 			if (adapter == null)
-				throw new ArgumentNullException("adapter");
+				throw new ArgumentNullException(nameof(adapter));
 
 			return adapter.SupportedMessages.Contains(type);
 		}

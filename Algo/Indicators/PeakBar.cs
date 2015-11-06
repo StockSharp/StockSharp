@@ -46,7 +46,7 @@ namespace StockSharp.Algo.Indicators
 			set
 			{
 				if (value == null)
-					throw new ArgumentNullException("value");
+					throw new ArgumentNullException(nameof(value));
 
 				_reversalAmount = value;
 

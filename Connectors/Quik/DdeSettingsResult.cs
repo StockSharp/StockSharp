@@ -10,10 +10,10 @@
 		internal DdeSettingsResult(DdeTable table, Exception error, bool isCritical)
 		{
 			if (table == null)
-				throw new ArgumentNullException("table");
+				throw new ArgumentNullException(nameof(table));
 
 			if (error == null)
-				throw new ArgumentNullException("error");
+				throw new ArgumentNullException(nameof(error));
 
 			Table = table;
 			Error = error;

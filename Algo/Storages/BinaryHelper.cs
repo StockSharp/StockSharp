@@ -20,7 +20,7 @@ namespace StockSharp.Algo.Storages
 			var diff = value - prevValue;
 
 			if (value != prevValue + diff)
-				throw new ArgumentOutOfRangeException("value", LocalizedStrings.Str1006Params.Put(value, prevValue));
+				throw new ArgumentOutOfRangeException(nameof(value), LocalizedStrings.Str1006Params.Put(value, prevValue));
 
 			writer.Write(diff >= 0);
 
@@ -52,7 +52,7 @@ namespace StockSharp.Algo.Storages
 		public static void WritePrice(this BitArrayWriter writer, decimal price, decimal prevPrice, MetaInfo info, SecurityId securityId, bool useLong = false)
 		{
 			if ((price % info.PriceStep) != 0)
-				throw new ArgumentException(LocalizedStrings.Str1007Params.Put(info.PriceStep, securityId, price), "info");
+				throw new ArgumentException(LocalizedStrings.Str1007Params.Put(info.PriceStep, securityId, price), nameof(info));
 
 			try
 			{
@@ -141,7 +141,7 @@ namespace StockSharp.Algo.Storages
 		public static DateTime WriteTime(this BitArrayWriter writer, DateTimeOffset dto, DateTime prevTime, string name, bool allowNonOrdered, bool isUtc, TimeSpan offset, bool allowDiffOffsets, ref TimeSpan prevOffset)
 		{
 			if (writer == null)
-				throw new ArgumentNullException("writer");
+				throw new ArgumentNullException(nameof(writer));
 
 			if (allowDiffOffsets)
 			{
@@ -206,7 +206,7 @@ namespace StockSharp.Algo.Storages
 			else
 			{
 				if (timeDiff < TimeSpan.Zero)
-					throw new ArgumentException(LocalizedStrings.Str1009Params.Put(name, prevTime, time), "dto");
+					throw new ArgumentException(LocalizedStrings.Str1009Params.Put(name, prevTime, time), nameof(dto));
 
 				if (timeDiff >= TimeSpan.FromMinutes(1))
 				{

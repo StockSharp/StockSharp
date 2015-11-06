@@ -104,12 +104,12 @@ namespace StockSharp.Algo.Testing
 		/// <summary>
 		/// The aggregator-storage.
 		/// </summary>
-		public BasketMarketDataStorage<Message> BasketStorage { get; private set; }
+		public BasketMarketDataStorage<Message> BasketStorage { get; }
 
 		/// <summary>
 		/// The provider of information about instruments.
 		/// </summary>
-		public ISecurityProvider SecurityProvider { get; private set; }
+		public ISecurityProvider SecurityProvider { get; }
 
 		private TimeSpan _marketTimeChangedInterval = TimeSpan.FromSeconds(1);
 
@@ -125,7 +125,7 @@ namespace StockSharp.Algo.Testing
 			set
 			{
 				if (value <= TimeSpan.Zero)
-					throw new ArgumentOutOfRangeException("value", value, LocalizedStrings.Str196);
+					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.Str196);
 
 				_marketTimeChangedInterval = value;
 			}
@@ -174,10 +174,7 @@ namespace StockSharp.Algo.Testing
 		/// <summary>
 		/// The current time.
 		/// </summary>
-		public override DateTimeOffset CurrentTime
-		{
-			get { return _currentTime; }
-		}
+		public override DateTimeOffset CurrentTime => _currentTime;
 
 		/// <summary>
 		/// Release resources.
@@ -192,10 +189,7 @@ namespace StockSharp.Algo.Testing
 		/// <summary>
 		/// <see cref="SecurityLookupMessage"/> required to get securities.
 		/// </summary>
-		public override bool SecurityLookupRequired
-		{
-			get { return true; }
-		}
+		public override bool SecurityLookupRequired => true;
 
 		private void TryResume()
 		{

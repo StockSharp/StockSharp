@@ -28,10 +28,7 @@ namespace StockSharp.Algo.Risk
 		/// <summary>
 		/// Rule list.
 		/// </summary>
-		public SynchronizedSet<IRiskRule> Rules
-		{
-			get { return _rules; }
-		}
+		public SynchronizedSet<IRiskRule> Rules => _rules;
 
 		/// <summary>
 		/// To reset the state.

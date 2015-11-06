@@ -31,7 +31,7 @@
 		protected MessageAdapterWrapper(IMessageAdapter innerAdapter)
 		{
 			if (innerAdapter == null)
-				throw new ArgumentNullException("innerAdapter");
+				throw new ArgumentNullException(nameof(innerAdapter));
 
 			InnerAdapter = innerAdapter;
 			InnerAdapter.NewOutMessage += OnInnerAdapterNewOutMessage;
@@ -40,7 +40,7 @@
 		/// <summary>
 		/// Underlying adapter.
 		/// </summary>
-		public IMessageAdapter InnerAdapter { get; private set; }
+		public IMessageAdapter InnerAdapter { get; }
 
 		/// <summary>
 		/// Process <see cref="InnerAdapter"/> output message.
@@ -60,10 +60,7 @@
 			NewOutMessage.SafeInvoke(message);
 		}
 
-		bool IMessageChannel.IsOpened
-		{
-			get { return InnerAdapter.IsOpened; }
-		}
+		bool IMessageChannel.IsOpened => InnerAdapter.IsOpened;
 
 		void IMessageChannel.Open()
 		{
@@ -99,15 +96,9 @@
 			InnerAdapter.Save(storage);
 		}
 
-		Guid ILogSource.Id
-		{
-			get { return InnerAdapter.Id; }
-		}
+		Guid ILogSource.Id => InnerAdapter.Id;
 
-		string ILogSource.Name
-		{
-			get { return InnerAdapter.Name; }
-		}
+		string ILogSource.Name => InnerAdapter.Name;
 
 		ILogSource ILogSource.Parent
 		{
@@ -121,15 +112,9 @@
 			set { InnerAdapter.LogLevel = value; }
 		}
 
-		DateTimeOffset ILogSource.CurrentTime
-		{
-			get { return InnerAdapter.CurrentTime; }
-		}
+		DateTimeOffset ILogSource.CurrentTime => InnerAdapter.CurrentTime;
 
-		bool ILogSource.IsRoot
-		{
-			get { return InnerAdapter.IsRoot; }
-		}
+		bool ILogSource.IsRoot => InnerAdapter.IsRoot;
 
 		event Action<LogMessage> ILogSource.Log
 		{
@@ -142,15 +127,9 @@
 			InnerAdapter.AddLog(message);
 		}
 
-		ReConnectionSettings IMessageAdapter.ReConnectionSettings
-		{
-			get { return InnerAdapter.ReConnectionSettings; }
-		}
+		ReConnectionSettings IMessageAdapter.ReConnectionSettings => InnerAdapter.ReConnectionSettings;
 
-		IdGenerator IMessageAdapter.TransactionIdGenerator
-		{
-			get { return InnerAdapter.TransactionIdGenerator; }
-		}
+		IdGenerator IMessageAdapter.TransactionIdGenerator => InnerAdapter.TransactionIdGenerator;
 
 		MessageTypes[] IMessageAdapter.SupportedMessages
 		{
@@ -158,15 +137,9 @@
 			set { InnerAdapter.SupportedMessages = value; }
 		}
 
-		bool IMessageAdapter.IsValid
-		{
-			get { return InnerAdapter.IsValid; }
-		}
+		bool IMessageAdapter.IsValid => InnerAdapter.IsValid;
 
-		IDictionary<string, RefPair<SecurityTypes, string>> IMessageAdapter.SecurityClassInfo
-		{
-			get { return InnerAdapter.SecurityClassInfo; }
-		}
+		IDictionary<string, RefPair<SecurityTypes, string>> IMessageAdapter.SecurityClassInfo => InnerAdapter.SecurityClassInfo;
 
 		TimeSpan IMessageAdapter.HeartbeatInterval
 		{
@@ -174,25 +147,13 @@
 			set { InnerAdapter.HeartbeatInterval = value; }
 		}
 
-		bool IMessageAdapter.PortfolioLookupRequired
-		{
-			get { return InnerAdapter.PortfolioLookupRequired; }
-		}
+		bool IMessageAdapter.PortfolioLookupRequired => InnerAdapter.PortfolioLookupRequired;
 
-		bool IMessageAdapter.SecurityLookupRequired
-		{
-			get { return InnerAdapter.SecurityLookupRequired; }
-		}
+		bool IMessageAdapter.SecurityLookupRequired => InnerAdapter.SecurityLookupRequired;
 
-		bool IMessageAdapter.OrderStatusRequired
-		{
-			get { return InnerAdapter.OrderStatusRequired; }
-		}
+		bool IMessageAdapter.OrderStatusRequired => InnerAdapter.OrderStatusRequired;
 
-		string IMessageAdapter.AssociatedBoardCode
-		{
-			get { return InnerAdapter.AssociatedBoardCode; }
-		}
+		string IMessageAdapter.AssociatedBoardCode => InnerAdapter.AssociatedBoardCode;
 
 		OrderCondition IMessageAdapter.CreateOrderCondition()
 		{

@@ -94,7 +94,7 @@
 		public static bool Configure(this Connector connector, Window owner)
 		{
 			if (connector == null)
-				throw new ArgumentNullException("connector");
+				throw new ArgumentNullException(nameof(connector));
 
 			return connector.Adapter.Configure(owner);
 		}
@@ -121,10 +121,10 @@
 		public static bool Configure(this BasketMessageAdapter adapter, Window owner, ref bool autoConnect)
 		{
 			if (adapter == null)
-				throw new ArgumentNullException("adapter");
+				throw new ArgumentNullException(nameof(adapter));
 
 			if (owner == null)
-				throw new ArgumentNullException("owner");
+				throw new ArgumentNullException(nameof(owner));
 
 			var wnd = new ConnectorWindow();
 
@@ -171,7 +171,7 @@
 		private static void AddConnectorInfo(ConnectorWindow wnd, Type adapterType)
 		{
 			if (wnd == null)
-				throw new ArgumentNullException("wnd");
+				throw new ArgumentNullException(nameof(wnd));
 
 			wnd.ConnectorsInfo.Add(new ConnectorInfo(adapterType));
 		}
@@ -211,7 +211,7 @@
 		public static void FillIndicators(this IChart chart)
 		{
 			if (chart == null)
-				throw new ArgumentNullException("chart");
+				throw new ArgumentNullException(nameof(chart));
 
 			chart.IndicatorTypes.Clear();
 			chart.IndicatorTypes.AddRange(GetIndicatorTypes());

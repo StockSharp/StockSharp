@@ -114,7 +114,7 @@ namespace StockSharp.Hydra.Core
 		public void Init(HydraTaskSettings settings)
 		{
 			if (settings == null)
-				throw new ArgumentNullException("settings");
+				throw new ArgumentNullException(nameof(settings));
 
 			if (settings.Title.IsEmpty())
 				settings.Title = this.GetDisplayName();
@@ -172,7 +172,7 @@ namespace StockSharp.Hydra.Core
 							throw new InvalidOperationException(LocalizedStrings.Str2189Params.Put(_state, value));
 						break;
 					default:
-						throw new ArgumentOutOfRangeException("value");
+						throw new ArgumentOutOfRangeException(nameof(value));
 				}
 
 				_state = value;
@@ -384,7 +384,7 @@ namespace StockSharp.Hydra.Core
 			where T : Message
 		{
 			if (dataType == null)
-				throw new ArgumentNullException("dataType");
+				throw new ArgumentNullException(nameof(dataType));
 
 			if (Settings.MaxErrorCount == 0)
 			{
@@ -479,7 +479,7 @@ namespace StockSharp.Hydra.Core
 		protected void SaveDepths(HydraTaskSecurity security, IEnumerable<QuoteChangeMessage> depths)
 		{
 			if (security == null)
-				throw new ArgumentNullException("security");
+				throw new ArgumentNullException(nameof(security));
 
 			SaveDepths(security.Security, depths);
 		}
@@ -512,7 +512,7 @@ namespace StockSharp.Hydra.Core
 		protected void SaveOrderLog(HydraTaskSecurity security, IEnumerable<ExecutionMessage> items)
 		{
 			if (security == null)
-				throw new ArgumentNullException("security");
+				throw new ArgumentNullException(nameof(security));
 
 			SaveOrderLog(security.Security, items);
 		}
@@ -536,7 +536,7 @@ namespace StockSharp.Hydra.Core
 		protected void SaveLevel1Changes(HydraTaskSecurity security, IEnumerable<Level1ChangeMessage> messages)
 		{
 			if (security == null)
-				throw new ArgumentNullException("security");
+				throw new ArgumentNullException(nameof(security));
 
 			SaveLevel1Changes(security.Security, messages);
 		}
@@ -562,7 +562,7 @@ namespace StockSharp.Hydra.Core
 		protected void SaveCandles(HydraTaskSecurity security, IEnumerable<CandleMessage> candles)
 		{
 			if (security == null)
-				throw new ArgumentNullException("security");
+				throw new ArgumentNullException(nameof(security));
 
 			SaveCandles(security.Security, candles);
 		}

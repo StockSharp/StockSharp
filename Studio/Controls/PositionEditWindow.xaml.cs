@@ -25,7 +25,7 @@ namespace StockSharp.Studio.Controls
 			set
 			{
 				if (value == null)
-					throw new ArgumentNullException("value");
+					throw new ArgumentNullException(nameof(value));
 
 				_position = value;
 				PropertyGrid.SelectedObject = value;

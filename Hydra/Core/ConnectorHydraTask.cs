@@ -30,7 +30,7 @@
 			public StorageEntityFactory(ISecurityProvider securityProvider)
 			{
 				if (securityProvider == null)
-					throw new ArgumentNullException("securityProvider");
+					throw new ArgumentNullException(nameof(securityProvider));
 
 				_securityProvider = securityProvider;
 			}
@@ -69,7 +69,7 @@
 		protected ConnectorHydraTask(Connector connector)
 		{
 			if (connector == null)
-				throw new ArgumentNullException("connector");
+				throw new ArgumentNullException(nameof(connector));
 
 			Connector = connector;
 			Connector.Parent = this;
@@ -354,7 +354,7 @@
 		private void SaveValues<T>(IDictionary<SecurityId, IEnumerable<T>> newValues, Action<Security, IEnumerable<T>> saveValues)
 		{
 			if (newValues == null)
-				throw new ArgumentNullException("newValues");
+				throw new ArgumentNullException(nameof(newValues));
 
 			foreach (var pair in newValues)
 			{

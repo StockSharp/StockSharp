@@ -54,7 +54,7 @@ namespace StockSharp.BusinessEntities
 			void IExchangeInfoProvider.Save(ExchangeBoard board)
 			{
 				if (board == null)
-					throw new ArgumentNullException("board");
+					throw new ArgumentNullException(nameof(board));
 
 				lock (_boards.SyncRoot)
 				{
@@ -68,7 +68,7 @@ namespace StockSharp.BusinessEntities
 			void IExchangeInfoProvider.Save(Exchange exchange)
 			{
 				if (exchange == null)
-					throw new ArgumentNullException("exchange");
+					throw new ArgumentNullException(nameof(exchange));
 
 				lock (_exchanges.SyncRoot)
 				{
@@ -187,7 +187,7 @@ namespace StockSharp.BusinessEntities
 			set
 			{
 				if (value == null)
-					throw new ArgumentNullException("value");
+					throw new ArgumentNullException(nameof(value));
 
 				if (Code == value)
 					return;
@@ -284,7 +284,7 @@ namespace StockSharp.BusinessEntities
 			set
 			{
 				if (value == null)
-					throw new ArgumentNullException("value");
+					throw new ArgumentNullException(nameof(value));
 
 				if (WorkingTime == value)
 					return;
@@ -309,7 +309,7 @@ namespace StockSharp.BusinessEntities
 			set
 			{
 				if (value == null)
-					throw new ArgumentNullException("value");
+					throw new ArgumentNullException(nameof(value));
 
 				if (TimeZone == value)
 					return;
@@ -346,7 +346,7 @@ namespace StockSharp.BusinessEntities
 		public static ExchangeBoard GetOrCreateBoard(string code, Func<string, ExchangeBoard> createBoard = null)
 		{
 			if (code.IsEmpty())
-				throw new ArgumentNullException("code");
+				throw new ArgumentNullException(nameof(code));
 
 			if (code.CompareIgnoreCase("RTS"))
 				return Forts;
@@ -392,7 +392,7 @@ namespace StockSharp.BusinessEntities
 		public static void SaveBoard(ExchangeBoard board)
 		{
 			if (board == null)
-				throw new ArgumentNullException("board");
+				throw new ArgumentNullException(nameof(board));
 
 			ExchangeInfoProvider.Save(board);
 		}
@@ -415,7 +415,7 @@ namespace StockSharp.BusinessEntities
 			set
 			{
 				if (value == null)
-					throw new ArgumentNullException("value");
+					throw new ArgumentNullException(nameof(value));
 
 				_extensionInfo = value;
 				Notify("ExtensionInfo");

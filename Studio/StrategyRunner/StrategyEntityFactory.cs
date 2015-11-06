@@ -85,7 +85,7 @@
 		public Portfolio LookupPortfolio(string name)
 		{
 			if (name == null)
-				throw new ArgumentNullException("name");
+				throw new ArgumentNullException(nameof(name));
 
 			return CreatePortfolio(name);
 		}

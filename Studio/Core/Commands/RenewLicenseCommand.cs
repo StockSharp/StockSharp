@@ -15,7 +15,7 @@
 		public RenewLicenseCommand(License license)
 		{
 			if (license == null)
-				throw new ArgumentNullException("license");
+				throw new ArgumentNullException(nameof(license));
 
 			License = license;
 		}

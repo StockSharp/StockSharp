@@ -34,10 +34,10 @@ namespace StockSharp.Algo
 		public virtual string GenerateId(string secCode, string boardCode)
 		{
 			if (secCode.IsEmpty())
-				throw new ArgumentNullException("secCode");
+				throw new ArgumentNullException(nameof(secCode));
 
 			if (boardCode.IsEmpty())
-				throw new ArgumentNullException("boardCode");
+				throw new ArgumentNullException(nameof(boardCode));
 
 			return (secCode + Delimiter + boardCode).ToUpperInvariant();
 		}
@@ -51,7 +51,7 @@ namespace StockSharp.Algo
 		public virtual string GenerateId(string secCode/*, string secClass*/, ExchangeBoard board)
 		{
 			if (board == null)
-				throw new ArgumentNullException("board");
+				throw new ArgumentNullException(nameof(board));
 
 			return GenerateId(secCode, board.Code);
 		}
@@ -65,7 +65,7 @@ namespace StockSharp.Algo
 		public virtual SecurityId Split(string securityId, bool nullIfInvalid = false)
 		{
 			if (securityId.IsEmpty())
-				throw new ArgumentNullException("securityId");
+				throw new ArgumentNullException(nameof(securityId));
 
 			var index = securityId.LastIndexOf(Delimiter, StringComparison.InvariantCulture);
 

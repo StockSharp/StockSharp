@@ -30,19 +30,19 @@ namespace StockSharp.Algo.Candles
 			public IndexSeriesInfo(ICandleManager candleManager, IEnumerable<CandleSeries> innerSeries, DateTimeOffset from, DateTimeOffset to, IndexSecurity security, Action<Candle> processing, Action stopped)
 			{
 				if (candleManager == null)
-					throw new ArgumentNullException("candleManager");
+					throw new ArgumentNullException(nameof(candleManager));
 
 				if (innerSeries == null)
-					throw new ArgumentNullException("innerSeries");
+					throw new ArgumentNullException(nameof(innerSeries));
 
 				if (security == null)
-					throw new ArgumentNullException("security");
+					throw new ArgumentNullException(nameof(security));
 
 				if (processing == null)
-					throw new ArgumentNullException("processing");
+					throw new ArgumentNullException(nameof(processing));
 
 				if (stopped == null)
-					throw new ArgumentNullException("stopped");
+					throw new ArgumentNullException(nameof(stopped));
 
 				_candleManager = candleManager;
 				_innerSeries = innerSeries;
@@ -115,10 +115,7 @@ namespace StockSharp.Algo.Candles
 
 		public ICandleManager CandleManager { get; set; }
 
-		public int SpeedPriority
-		{
-			get { return 2; }
-		}
+		public int SpeedPriority => 2;
 
 		public event Action<CandleSeries, Candle> Processing;
 		public event Action<CandleSeries> Stopped;
@@ -127,7 +124,7 @@ namespace StockSharp.Algo.Candles
 		IEnumerable<Range<DateTimeOffset>> ICandleSource<Candle>.GetSupportedRanges(CandleSeries series)
 		{
 			if (series == null)
-				throw new ArgumentNullException("series");
+				throw new ArgumentNullException(nameof(series));
 
 			if (series.Security is IndexSecurity)
 			{
@@ -138,7 +135,7 @@ namespace StockSharp.Algo.Candles
 		void ICandleSource<Candle>.Start(CandleSeries series, DateTimeOffset from, DateTimeOffset to)
 		{
 			if (series == null)
-				throw new ArgumentNullException("series");
+				throw new ArgumentNullException(nameof(series));
 
 			var indexSecurity = (IndexSecurity)series.Security;
 
@@ -187,10 +184,10 @@ namespace StockSharp.Algo.Candles
 		private static object CloneArg(object arg, Security security)
 		{
 			if (arg == null)
-				throw new ArgumentNullException("arg");
+				throw new ArgumentNullException(nameof(arg));
 
 			if (security == null)
-				throw new ArgumentNullException("security");
+				throw new ArgumentNullException(nameof(security));
 
 			var clone = arg;
 			clone.DoIf<object, ICloneable>(c => clone = c.Clone());

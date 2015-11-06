@@ -48,7 +48,7 @@ namespace StockSharp.Algo.Strategies
 		/// <summary>
 		/// The condition of subsidiary strategies operation end.
 		/// </summary>
-		public BasketStrategyFinishModes FinishMode { get; private set; }
+		public BasketStrategyFinishModes FinishMode { get; }
 
 		/// <summary>
 		/// First stopped subsidiary strategy. The property is filled at <see cref="BasketStrategy.FinishMode"/> equals to <see cref="BasketStrategyFinishModes.First"/>.

@@ -70,7 +70,7 @@ namespace StockSharp.BarChart
 		public IEnumerable<ExecutionMessage> GetHistoricalTicks(Security security, long count, out bool isSuccess)
 		{
 			if (security == null)
-				throw new ArgumentNullException("security");
+				throw new ArgumentNullException(nameof(security));
 
 			this.AddInfoLog(LocalizedStrings.Str2144Params, security, count);
 
@@ -110,7 +110,7 @@ namespace StockSharp.BarChart
 		public IEnumerable<ExecutionMessage> GetHistoricalTicks(Security security, DateTime from, DateTime to, out bool isSuccess)
 		{
 			if (security == null)
-				throw new ArgumentNullException("security");
+				throw new ArgumentNullException(nameof(security));
 
 			this.AddInfoLog(LocalizedStrings.Str2145Params, security, from, to);
 
@@ -152,7 +152,7 @@ namespace StockSharp.BarChart
 		public IEnumerable<CandleMessage> GetHistoricalCandles(Security security, Type candleType, object arg, long count, out bool isSuccess)
 		{
 			if (security == null)
-				throw new ArgumentNullException("security");
+				throw new ArgumentNullException(nameof(security));
 
 			//if (timeFrame <= TimeSpan.Zero)
 			//	throw new ArgumentException("Тайм-фрейм должен быть больше 0.");
@@ -204,7 +204,7 @@ namespace StockSharp.BarChart
 		public IEnumerable<CandleMessage> GetHistoricalCandles(Security security, Type candleType, object arg, DateTime from, DateTime to, out bool isSuccess)
 		{
 			if (security == null)
-				throw new ArgumentNullException("security");
+				throw new ArgumentNullException(nameof(security));
 
 			if (from > to)
 				throw new ArgumentException(LocalizedStrings.Str2147);
@@ -253,7 +253,7 @@ namespace StockSharp.BarChart
 			if (candleType == typeof(TimeFrameCandle))
 				return MarketDataTypes.CandleTimeFrame;
 
-			throw new ArgumentOutOfRangeException("candleType", candleType, LocalizedStrings.WrongCandleType);
+			throw new ArgumentOutOfRangeException(nameof(candleType), candleType, LocalizedStrings.WrongCandleType);
 		}
 
 		/// <summary>

@@ -198,13 +198,13 @@ namespace StockSharp.SmartCom
 		public void SubscribeCandles(CandleSeries series, DateTimeOffset from, DateTimeOffset to)
 		{
 			if (series == null)
-				throw new ArgumentNullException("series");
+				throw new ArgumentNullException(nameof(series));
 
 			if (series.CandleType != typeof(TimeFrameCandle))
-				throw new ArgumentException(LocalizedStrings.NotSupportCandle.Put("SmartCOM", series.CandleType), "series");
+				throw new ArgumentException(LocalizedStrings.NotSupportCandle.Put("SmartCOM", series.CandleType), nameof(series));
 
 			if (!(series.Arg is TimeSpan))
-				throw new ArgumentException(LocalizedStrings.WrongCandleArg.Put(series.Arg), "series");
+				throw new ArgumentException(LocalizedStrings.WrongCandleArg.Put(series.Arg), nameof(series));
 
 			var timeFrame = (TimeSpan)series.Arg;
 
@@ -229,7 +229,7 @@ namespace StockSharp.SmartCom
 		public void UnSubscribeCandles(CandleSeries series)
 		{
 			if (series == null)
-				throw new ArgumentNullException("series");
+				throw new ArgumentNullException(nameof(series));
 
 			_realTimeSeries.Remove(series);
 		}
@@ -243,13 +243,13 @@ namespace StockSharp.SmartCom
 		public void RequestCandles(Security security, SmartComTimeFrames timeFrame, Range<DateTimeOffset> range)
 		{
 			if (security == null)
-				throw new ArgumentNullException("security");
+				throw new ArgumentNullException(nameof(security));
 
 			if (timeFrame == null)
-				throw new ArgumentNullException("timeFrame");
+				throw new ArgumentNullException(nameof(timeFrame));
 
 			if (range == null)
-				throw new ArgumentNullException("range");
+				throw new ArgumentNullException(nameof(range));
 
 			var count = security.GetTimeFrameCount(range, (TimeSpan)timeFrame);
 			RequestCandles(security, timeFrame, range.Max, count, SmartComHistoryDirections.Backward);
@@ -268,13 +268,13 @@ namespace StockSharp.SmartCom
 		public void RequestCandles(Security security, SmartComTimeFrames timeFrame, DateTimeOffset from, long count, SmartComHistoryDirections direction)
 		{
 			if (security == null)
-				throw new ArgumentNullException("security");
+				throw new ArgumentNullException(nameof(security));
 
 			if (timeFrame == null)
-				throw new ArgumentNullException("timeFrame");
+				throw new ArgumentNullException(nameof(timeFrame));
 
 			if (count <= 0)
-				throw new ArgumentOutOfRangeException("count", count, LocalizedStrings.Str1890);
+				throw new ArgumentOutOfRangeException(nameof(count), count, LocalizedStrings.Str1890);
 
 			// http://stocksharp.com/forum/yaf_postst658_provierka-na-vriemia-birzhi-pri-zaghruzkie-istorii.aspx
 			//if (from > MarketTime)

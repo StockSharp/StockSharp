@@ -1,4 +1,4 @@
-namespace StockSharp.Xaml
+﻿namespace StockSharp.Xaml
 {
 	using System;
 	using System.Collections.Generic;
@@ -34,10 +34,7 @@ namespace StockSharp.Xaml
 				///// <summary>
 				///// Активные заявки, цена которых равна <see cref="Price"/>.
 				///// </summary>
-				public IEnumerable<Order> Orders
-				{
-					get { return _orders.Cache; }
-				}
+				public IEnumerable<Order> Orders => _orders.Cache;
 
 				public void RefreshTotals()
 				{
@@ -58,7 +55,7 @@ namespace StockSharp.Xaml
 				public void Add(Order order)
 				{
 					if (order == null)
-						throw new ArgumentNullException("order");
+						throw new ArgumentNullException(nameof(order));
 
 					_orders.Add(order);
 				}
@@ -66,7 +63,7 @@ namespace StockSharp.Xaml
 				public void Remove(Order order)
 				{
 					if (order == null)
-						throw new ArgumentNullException("order");
+						throw new ArgumentNullException(nameof(order));
 
 					_orders.Remove(order);
 				}
@@ -98,7 +95,7 @@ namespace StockSharp.Xaml
 			private OrderContainer GetContainer(Order order)
 			{
 				if (order == null)
-					throw new ArgumentNullException("order");
+					throw new ArgumentNullException(nameof(order));
 
 				return _orders.SafeAdd(order.Price);
 			}
@@ -114,7 +111,7 @@ namespace StockSharp.Xaml
 		public MarketDepthQuote(MarketDepthControl depthControl)
 		{
 			if (depthControl == null)
-				throw new ArgumentNullException("depthControl");
+				throw new ArgumentNullException(nameof(depthControl));
 
 			_depthControl = depthControl;
 		}

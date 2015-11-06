@@ -52,7 +52,7 @@ namespace StockSharp.ETrade.Native
 		public ETradeApi(ETradeClient client)
 		{
 			if (client == null)
-				throw new ArgumentNullException("client");
+				throw new ArgumentNullException(nameof(client));
 
 			_client = client;
 		}

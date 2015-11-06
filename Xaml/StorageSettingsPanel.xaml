@@ -35,7 +35,7 @@
 			</Grid.RowDefinitions>
 
 			<Label VerticalAlignment="Center"><TextBlock Text="{x:Static loc:LocalizedStrings.XamlStr594}"/></Label>
-			<TextBox x:Name="PathCtrl" Grid.Row="0" Grid.Column="1" VerticalAlignment="Center"></TextBox>
+			<TextBox x:Name="PathCtrl" Grid.Row="0" Grid.Column="1" VerticalAlignment="Center" />
 			<Button x:Name="Browse" Grid.Row="0" Grid.Column="3" Click="Browse_Click">...</Button>
 
 			<!--<Label VerticalAlignment="Center" Grid.Row="2" Grid.Column="0"><TextBlock Text="{x:Static loc:LocalizedStrings.XamlStr24}"/></Label>

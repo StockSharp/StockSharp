@@ -72,10 +72,10 @@ namespace StockSharp.Algo.Testing
 		public RealTimeEmulationTrader(TUnderlyingMarketDataAdapter underlyngMarketDataAdapter, Portfolio portfolio, bool ownAdapter = true)
 		{
 			if (underlyngMarketDataAdapter == null)
-				throw new ArgumentNullException("underlyngMarketDataAdapter");
+				throw new ArgumentNullException(nameof(underlyngMarketDataAdapter));
 
 			if (portfolio == null)
-				throw new ArgumentNullException("portfolio");
+				throw new ArgumentNullException(nameof(portfolio));
 
 			UnderlyngMarketDataAdapter = underlyngMarketDataAdapter;
 			UnderlyngMarketDataAdapter.RemoveTransactionalSupport();
@@ -101,7 +101,7 @@ namespace StockSharp.Algo.Testing
 		/// <summary>
 		/// <see cref="IMessageAdapter"/>, through which market data will be got.
 		/// </summary>
-		public TUnderlyingMarketDataAdapter UnderlyngMarketDataAdapter { get; private set; }
+		public TUnderlyingMarketDataAdapter UnderlyngMarketDataAdapter { get; }
 
 		///// <summary>
 		///// Подключиться к торговой системе.

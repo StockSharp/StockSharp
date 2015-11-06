@@ -100,17 +100,17 @@ namespace StockSharp.Algo.Statistics
 		/// <summary>
 		/// The displayed parameter name.
 		/// </summary>
-		public string DisplayName { get; private set; }
+		public string DisplayName { get; }
 
 		/// <summary>
 		/// The parameter description.
 		/// </summary>
-		public string Description { get; private set; }
+		public string Description { get; }
 
 		/// <summary>
 		/// Category.
 		/// </summary>
-		public string Category { get; private set; }
+		public string Category { get; }
 
 		private TValue _value;
 
@@ -151,10 +151,7 @@ namespace StockSharp.Algo.Statistics
 		/// <summary>
 		/// The current value of the parameter.
 		/// </summary>
-		object IStatisticParameter.Value
-		{
-			get { return Value; }
-		}
+		object IStatisticParameter.Value => Value;
 
 		/// <summary>
 		/// <see cref="Value"/> change event.

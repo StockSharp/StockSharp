@@ -52,7 +52,7 @@ namespace StockSharp.Algo.Indicators
 		{
 			if (length % 2 == 0)
 			{
-				throw new ArgumentOutOfRangeException("length", length, LocalizedStrings.Str845);
+				throw new ArgumentOutOfRangeException(nameof(length), length, LocalizedStrings.Str845);
 			}
 
 			_length = length;
@@ -80,10 +80,7 @@ namespace StockSharp.Algo.Indicators
 		/// <summary>
 		/// Whether the indicator is set.
 		/// </summary>
-		public override bool IsFormed
-		{
-			get { return _buffer.Count >= Length && base.IsFormed; }
-		}
+		public override bool IsFormed => _buffer.Count >= Length && base.IsFormed;
 
 		/// <summary>
 		/// Up fractal.
@@ -92,7 +89,7 @@ namespace StockSharp.Algo.Indicators
 		[DisplayNameLoc(LocalizedStrings.Str846Key)]
 		[DescriptionLoc(LocalizedStrings.Str847Key)]
 		[CategoryLoc(LocalizedStrings.GeneralKey)]
-		public FractalPart Up { get; private set; }
+		public FractalPart Up { get; }
 
 		/// <summary>
 		/// Down fractal.
@@ -101,7 +98,7 @@ namespace StockSharp.Algo.Indicators
 		[DisplayNameLoc(LocalizedStrings.Str848Key)]
 		[DescriptionLoc(LocalizedStrings.Str849Key)]
 		[CategoryLoc(LocalizedStrings.GeneralKey)]
-		public FractalPart Down { get; private set; }
+		public FractalPart Down { get; }
 
 		/// <summary>
 		/// To reset the indicator status to initial. The method is called each time when initial settings are changed (for example, the length of period).

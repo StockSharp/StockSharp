@@ -61,7 +61,7 @@
 			where T : struct
 		{
 			if (elem == null)
-				throw new ArgumentNullException("elem");
+				throw new ArgumentNullException(nameof(elem));
 
 			elem = elem.Element(name);
 
@@ -79,7 +79,7 @@
 			if (typeof(T) == typeof(DateTime))
 			{
 				if (getNow == null)
-					throw new ArgumentNullException("getNow");
+					throw new ArgumentNullException(nameof(getNow));
 
 				if (value == "0")
 					return null;
@@ -93,7 +93,7 @@
 		public static Unit GetElementValueToUnit(this XElement elem, string name)
 		{
 			if (elem == null)
-				throw new ArgumentNullException("elem");
+				throw new ArgumentNullException(nameof(elem));
 
 			elem = elem.Element(name);
 

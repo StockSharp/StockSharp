@@ -65,10 +65,10 @@ namespace StockSharp.Algo.Strategies
 		public StrategyParam(Strategy strategy, string name, T initialValue)
 		{
 			if (strategy == null)
-				throw new ArgumentNullException("strategy");
+				throw new ArgumentNullException(nameof(strategy));
 
 			if (name.IsEmpty())
-				throw new ArgumentNullException("name");
+				throw new ArgumentNullException(nameof(name));
 
 			_strategy = strategy;
 			Name = name;
@@ -82,16 +82,10 @@ namespace StockSharp.Algo.Strategies
 		/// </summary>
 		public string Name { get; private set; }
 
-		private bool _allowNull = typeof(T).IsNullable();
-
 		/// <summary>
 		/// Is it possible to store in <see cref="Value"/> a value, equal to <see langword="null" />.
 		/// </summary>
-		public bool AllowNull
-		{
-			get { return _allowNull; }
-			set { _allowNull = value; }
-		}
+		public bool AllowNull { get; set; } = typeof(T).IsNullable();
 
 		private T _value;
 
@@ -107,7 +101,7 @@ namespace StockSharp.Algo.Strategies
 			set
 			{
 				if (!AllowNull && value.IsNull())
-					throw new ArgumentNullException("value");
+					throw new ArgumentNullException(nameof(value));
 
 				if (EqualityComparer<T>.Default.Equals(_value, value))
 					return;
@@ -208,7 +202,7 @@ namespace StockSharp.Algo.Strategies
 		public static StrategyParam<T> Optimize<T>(this StrategyParam<T> param, T optimizeFrom = default(T), T optimizeTo = default(T), T optimizeStep = default(T))
 		{
 			if (param == null)
-				throw new ArgumentNullException("param");
+				throw new ArgumentNullException(nameof(param));
 
 			param.OptimizeFrom = optimizeFrom;
 			param.OptimizeTo = optimizeTo;

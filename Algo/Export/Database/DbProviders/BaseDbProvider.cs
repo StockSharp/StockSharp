@@ -24,7 +24,7 @@ namespace StockSharp.Algo.Export.Database.DbProviders
 		protected BaseDbProvider(DatabaseConnectionPair connection)
 		{
 			if (connection == null)
-				throw new ArgumentNullException("connection");
+				throw new ArgumentNullException(nameof(connection));
 
 			Database = new Database("Export", connection.ConnectionString) { Provider = connection.Provider };
 		}
@@ -40,7 +40,7 @@ namespace StockSharp.Algo.Export.Database.DbProviders
 		/// </summary>
 		public bool CheckUnique { get; set; }
 
-		public Database Database { get; private set; }
+		public Database Database { get; }
 
 		public abstract void InsertBatch(Table table, IEnumerable<IDictionary<string, object>> parameters);
 

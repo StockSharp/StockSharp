@@ -36,10 +36,10 @@ namespace StockSharp.Xaml
 			where TWindow : Window
 		{
 			if (createWindow == null)
-				throw new ArgumentNullException("createWindow");
+				throw new ArgumentNullException(nameof(createWindow));
 
 			if (wndClosed == null)
-				throw new ArgumentNullException("wndClosed");
+				throw new ArgumentNullException(nameof(wndClosed));
 
 			var dispatcher = Application.Current != null ? Application.Current.Dispatcher : null;
 

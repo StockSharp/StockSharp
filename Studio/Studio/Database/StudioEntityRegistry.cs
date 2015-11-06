@@ -136,10 +136,10 @@ namespace StockSharp.Studio.Database
 			public MultiEnumerator(params IEnumerator<T>[] enumerators)
 			{
 				if (enumerators == null)
-					throw new ArgumentNullException("enumerators");
+					throw new ArgumentNullException(nameof(enumerators));
 
 				if (enumerators.IsEmpty())
-					throw new ArgumentOutOfRangeException("enumerators");
+					throw new ArgumentOutOfRangeException(nameof(enumerators));
 
 				_currentEnumerator = ((IEnumerable<IEnumerator<T>>)enumerators).GetEnumerator();
 			}
@@ -531,10 +531,10 @@ namespace StockSharp.Studio.Database
 				public StrategyEvents(SessionStrategy sessionStrategy, Action startTimer)
 				{
 					if (sessionStrategy == null)
-						throw new ArgumentNullException("sessionStrategy");
+						throw new ArgumentNullException(nameof(sessionStrategy));
 
 					if (startTimer == null)
-						throw new ArgumentNullException("startTimer");
+						throw new ArgumentNullException(nameof(startTimer));
 
 					_strategy = sessionStrategy.Strategy;
 					_sessionStrategy = sessionStrategy;
@@ -699,7 +699,7 @@ namespace StockSharp.Studio.Database
 				: base(parent.Storage)
 			{
 				if (session == null) 
-					throw new ArgumentNullException("session");
+					throw new ArgumentNullException(nameof(session));
 
 				Recycle = false;
 

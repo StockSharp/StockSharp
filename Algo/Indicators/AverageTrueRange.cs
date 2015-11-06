@@ -30,10 +30,10 @@ namespace StockSharp.Algo.Indicators
 		public AverageTrueRange(LengthIndicator<decimal> movingAverage, TrueRange trueRange)
 		{
 			if (movingAverage == null)
-				throw new ArgumentNullException("movingAverage");
+				throw new ArgumentNullException(nameof(movingAverage));
 
 			if (trueRange == null)
-				throw new ArgumentNullException("trueRange");
+				throw new ArgumentNullException(nameof(trueRange));
 
 			MovingAverage = movingAverage;
 			TrueRange = trueRange;
@@ -43,21 +43,18 @@ namespace StockSharp.Algo.Indicators
 		/// Moving Average.
 		/// </summary>
 		[Browsable(false)]
-		public LengthIndicator<decimal> MovingAverage { get; private set; }
+		public LengthIndicator<decimal> MovingAverage { get; }
 
 		/// <summary>
 		/// True range.
 		/// </summary>
 		[Browsable(false)]
-		public TrueRange TrueRange { get; private set; }
+		public TrueRange TrueRange { get; }
 
 		/// <summary>
 		/// Whether the indicator is set.
 		/// </summary>
-		public override bool IsFormed
-		{
-			get { return _isFormed; }
-		}
+		public override bool IsFormed => _isFormed;
 
 		/// <summary>
 		/// To reset the indicator status to initial. The method is called each time when initial settings are changed (for example, the length of period).

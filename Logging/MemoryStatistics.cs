@@ -25,7 +25,7 @@ namespace StockSharp.Logging
 		/// <summary>
 		/// An object of class <see cref="MemoryStatistics"/>.
 		/// </summary>
-		public static MemoryStatistics Instance { get; private set; }
+		public static MemoryStatistics Instance { get; }
 
 		private readonly Timer _timer;
 
@@ -83,10 +83,7 @@ namespace StockSharp.Logging
 		/// <summary>
 		/// Monitored objects.
 		/// </summary>
-		public IList<IMemoryStatisticsValue> Values
-		{
-			get { return _values; }
-		}
+		public IList<IMemoryStatisticsValue> Values => _values;
 
 		/// <summary>
 		/// Save settings.
@@ -131,13 +128,7 @@ namespace StockSharp.Logging
 		/// <summary>
 		/// Is the source on.
 		/// </summary>
-		public static bool IsEnabled
-		{
-			get
-			{
-				return ConfigManager.GetService<LogManager>().Sources.OfType<MemoryStatistics>().Any();
-			}
-		}
+		public static bool IsEnabled => ConfigManager.GetService<LogManager>().Sources.OfType<MemoryStatistics>().Any();
 
 		/// <summary>
 		/// To add or to remove the source <see cref="MemoryStatistics"/> from the registered <see cref="LogManager"/>.

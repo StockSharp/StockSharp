@@ -42,18 +42,12 @@ namespace StockSharp.Xaml
 		/// <summary>
 		/// Selected instruments.
 		/// </summary>
-		public IList<Security> SelectedSecurities
-		{
-			get { return Picker.SelectedSecurities; }
-		}
+		public IList<Security> SelectedSecurities => Picker.SelectedSecurities;
 
 		/// <summary>
 		/// Instruments that should be hidden.
 		/// </summary>
-		public ISet<Security> ExcludeSecurities
-		{
-			get { return Picker.ExcludeSecurities; }
-		}
+		public ISet<Security> ExcludeSecurities => Picker.ExcludeSecurities;
 
 		/// <summary>
 		/// The provider of information about instruments.

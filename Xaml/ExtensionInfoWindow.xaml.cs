@@ -147,7 +147,7 @@ namespace StockSharp.Xaml
 			}
 
 			[Browsable(false)]
-			public IDictionary<object, object> Data { get; private set; }
+			public IDictionary<object, object> Data { get; }
 
 			private sealed class CustomObjectConverter : ExpandableObjectConverter
 			{
@@ -186,20 +186,11 @@ namespace StockSharp.Xaml
 					_prop = prop;
 				}
 
-				public override string Category
-				{
-					get { return string.Empty; }
-				}
+				public override string Category => string.Empty;
 
-				public override string Description
-				{
-					get { return _prop.Key; }
-				}
+				public override string Description => _prop.Key;
 
-				public override string Name
-				{
-					get { return _prop.Key; }
-				}
+				public override string Name => _prop.Key;
 
 				public override bool ShouldSerializeValue(object component)
 				{
@@ -210,25 +201,16 @@ namespace StockSharp.Xaml
 				{
 				}
 
-				public override bool IsReadOnly
-				{
-					get { return false; }
-				}
+				public override bool IsReadOnly => false;
 
-				public override Type PropertyType
-				{
-					get { return _prop.Value.GetType(); }
-				}
+				public override Type PropertyType => _prop.Value.GetType();
 
 				public override bool CanResetValue(object component)
 				{
 					return false;
 				}
 
-				public override Type ComponentType
-				{
-					get { return typeof(ExtensionInfoField); }
-				}
+				public override Type ComponentType => typeof(ExtensionInfoField);
 
 				public override void SetValue(object component, object value)
 				{

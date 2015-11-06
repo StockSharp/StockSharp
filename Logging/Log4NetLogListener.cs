@@ -24,13 +24,7 @@ namespace StockSharp.Logging
 
 			private readonly string _name;
 
-			public override string Name
-			{
-				get
-				{
-					return _name;
-				}
-			}
+			public override string Name => _name;
 		}
 
 		private readonly Dictionary<string, Source> _sources = new Dictionary<string,Source>();
@@ -123,7 +117,7 @@ namespace StockSharp.Logging
 					_log.Debug(str);
 					break;
 				default:
-					throw new ArgumentOutOfRangeException("message");
+					throw new ArgumentOutOfRangeException(nameof(message));
 			}
 		}
 	}
