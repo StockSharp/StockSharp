@@ -1,9 +1,12 @@
 namespace StockSharp.Algo.Storages
 {
 	using System;
+	using System.Collections.Generic;
 	using System.Linq;
 
 	using Ecng.Common;
+
+	using MoreLinq;
 
 	using StockSharp.Messages;
 
@@ -39,17 +42,17 @@ namespace StockSharp.Algo.Storages
 			{
 				foreach (var pair in GetTicks())
 				{
-					GetStorage(pair.Key, typeof(ExecutionMessage), ExecutionTypes.Tick).Save(pair.Value);
+					GetStorage<ExecutionMessage>(pair.Key, ExecutionTypes.Tick).Save(pair.Value);
 				}
 
 				foreach (var pair in GetOrderLog())
 				{
-					GetStorage(pair.Key, typeof(ExecutionMessage), ExecutionTypes.OrderLog).Save(pair.Value);
+					GetStorage<ExecutionMessage>(pair.Key, ExecutionTypes.OrderLog).Save(pair.Value);
 				}
 
 				foreach (var pair in GetTransactions())
 				{
-					GetStorage(pair.Key, typeof(ExecutionMessage), ExecutionTypes.Order).Save(pair.Value);
+					GetStorage<ExecutionMessage>(pair.Key, ExecutionTypes.Order).Save(pair.Value);
 				}
 
 				foreach (var pair in GetOrderBooks())
@@ -70,7 +73,9 @@ namespace StockSharp.Algo.Storages
 				var news = GetNews().ToArray();
 
 				if (news.Length > 0)
+				{
 					_storageRegistry.GetNewsMessageStorage(Drive, Format).Save(news);
+				}
 
 			}).Interval(TimeSpan.FromSeconds(10));
 		}
@@ -97,15 +102,32 @@ namespace StockSharp.Algo.Storages
 		/// </summary>
 		public StorageFormats Format { get; set; }
 
+		private TimeSpan _daysLoad;
+
 		/// <summary>
 		/// Total days to load stored data.
 		/// </summary>
-		public TimeSpan DaysLoad { get; set; }
+		public TimeSpan DaysLoad
+		{
+			get { return _daysLoad; }
+			set
+			{
+				if (value < TimeSpan.Zero)
+					throw new ArgumentOutOfRangeException("value");
+
+				_daysLoad = value;
+			}
+		}
+
+		private IMarketDataStorage<TMessage> GetStorage<TMessage>(SecurityId securityId, object arg)
+			where TMessage : Message
+        {
+			return (IMarketDataStorage<TMessage>)GetStorage(securityId, typeof(TMessage), arg);
+		}
 
 		private IMarketDataStorage GetStorage(SecurityId securityId, Type messageType, object arg)
 		{
 			var security = _entityRegistry.Securities.ReadBySecurityId(securityId);
-
 			return _storageRegistry.GetStorage(security, messageType, arg, Drive, Format);
 		}
 
@@ -114,11 +136,41 @@ namespace StockSharp.Algo.Storages
 		/// </summary>
 		public void Load()
 		{
+			var requiredSecurities = new List<SecurityId>();
+			var availableSecurities = Drive.AvailableSecurities.ToHashSet();
+
 			foreach (var security in _entityRegistry.Securities)
-				RaiseNewOutMessage(security.ToMessage());
+			{
+				var msg = security.ToMessage();
+
+				if (availableSecurities.Remove(msg.SecurityId))
+				{
+                    requiredSecurities.Add(msg.SecurityId);
+				}
+
+                RaiseNewOutMessage(msg);
+			}
 
 			foreach (var board in _entityRegistry.ExchangeBoards)
 				RaiseNewOutMessage(board.ToMessage());
+
+			if (DaysLoad == TimeSpan.Zero)
+				return;
+
+			foreach (var secId in requiredSecurities)
+			{
+				GetStorage<ExecutionMessage>(secId, ExecutionTypes.Tick)
+					.Load(DateTimeOffset.Now - DaysLoad, DateTimeOffset.Now)
+					.ForEach(RaiseNewOutMessage);
+
+				GetStorage<ExecutionMessage>(secId, ExecutionTypes.Order)
+					.Load(DateTimeOffset.Now - DaysLoad, DateTimeOffset.Now)
+					.ForEach(RaiseNewOutMessage);
+
+				GetStorage<ExecutionMessage>(secId, ExecutionTypes.OrderLog)
+					.Load(DateTimeOffset.Now - DaysLoad, DateTimeOffset.Now)
+					.ForEach(RaiseNewOutMessage);
+			}
 
 			//_storageRegistry.DefaultDrive.GetCandleTypes();
 		}
