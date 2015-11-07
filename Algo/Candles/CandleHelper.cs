@@ -768,8 +768,8 @@ namespace StockSharp.Algo.Candles
 			var offset = currentTime.Offset;
 
 			return new Range<DateTimeOffset>(
-				(bounds.Min + offset).ApplyTimeZone(offset),
-				(bounds.Max + offset).ApplyTimeZone(offset));
+				(bounds.Min + (offset - board.TimeZone.BaseUtcOffset)).ApplyTimeZone(offset),
+				(bounds.Max + (offset - board.TimeZone.BaseUtcOffset)).ApplyTimeZone(offset));
 		}
 
 		/// <summary>
