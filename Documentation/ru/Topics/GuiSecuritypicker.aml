@@ -15,7 +15,7 @@
   			<para>Текстового поля, для ввода кода (или Id) инструмента. При вводе выполняется фильтрация списка по введенной подстроке.</para>
   		</listItem>
   		<listItem>
-  			<para>Специального комбинированного списка <codeEntityReference>T:StockSharp.XamSecurityTypeComboBox</codeEntityReference> 
+  			<para>Специального комбинированного списка <codeEntityReference>T:StockSharp.SecurityTypeComboBox</codeEntityReference> 
   			для фильтрации инструментов по их типу.</para>
   		</listItem>
   		<listItem>
@@ -26,7 +26,7 @@
       <para>
        <legacyBold>Основные свойства</legacyBold>
       </para>
-      
+     
 	  <list class="bullet">
   		<listItem>
   			<para><codeEntityReference>P:StockSharp.Xaml.SecurityGrid.SelectionMode</codeEntityReference> - режим выбора инструмента: одиночный, множественный.</para>

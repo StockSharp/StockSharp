@@ -1566,6 +1566,22 @@
       <ImageId>Gui_SecurityEditor</ImageId>
       <AlternateText>Gui Security Editor</AlternateText>
     </Image>
+    <Image Include="Art\GUI_TradeGrid.png">
+      <ImageId>GUI_TradeGrid</ImageId>
+      <AlternateText>GUI Trade Grid</AlternateText>
+    </Image>
+    <Image Include="Art\GUI_OrderGrid.png">
+      <ImageId>GUI_OrderGrid</ImageId>
+      <AlternateText>GUI Order Grid</AlternateText>
+    </Image>
+    <Image Include="Art\multiconnection_main.png">
+      <ImageId>multiconnection_main</ImageId>
+      <AlternateText>multiconnection main</AlternateText>
+    </Image>
+    <Image Include="Art\multiconnection_settings.png">
+      <ImageId>multiconnection_settings</ImageId>
+      <AlternateText>multiconnection settings</AlternateText>
+    </Image>
   </ItemGroup>
   <ItemGroup>
     <None Include="Art\sample_options_calc.png">
@@ -2086,9 +2102,6 @@
     </Reference>
     <Reference Include="StockSharp.Logging">
       <HintPath>..\..\..\References\ru\StockSharp.Logging.dll</HintPath>
-    </Reference>
-    <Reference Include="StockSharp.Messages">
-      <HintPath>..\..\..\References\ru\StockSharp.Messages.dll</HintPath>
     </Reference>
     <Reference Include="StockSharp.Messages">
       <HintPath>..\..\..\References\ru\StockSharp.Messages.dll</HintPath>
