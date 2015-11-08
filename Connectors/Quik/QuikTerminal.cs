@@ -602,7 +602,7 @@ namespace StockSharp.Quik
 						var serverTime = srvTimeString.Substring(startIndex, endIndex - startIndex).To<DateTime>();
 
 						// http://groups.google.ru/group/stocksharp/msg/3685e1c26c35e249
-						var delta = TimeZoneInfo.Local.BaseUtcOffset - Exchange.Moex.TimeZoneInfo.BaseUtcOffset;
+						var delta = TimeZoneInfo.Local.BaseUtcOffset - ExchangeBoard.Micex.TimeZone.BaseUtcOffset;
 
 						var deltaDate = serverTime.Add(delta).Date;
 

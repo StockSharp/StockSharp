@@ -65,6 +65,9 @@ namespace SampleRss
 				_trader.RegisterNews();
 			};
 
+			// set news provider
+			NewsPanel.NewsProvider = _trader;
+
 			_trader.NewNews += news => NewsPanel.NewsGrid.News.Add(news);
 
 			_trader.Error += error => this.GuiAsync(() => MessageBox.Show(this, error.ToString(), LocalizedStrings.Str2955));

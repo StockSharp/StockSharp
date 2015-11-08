@@ -6,6 +6,7 @@ namespace StockSharp.Xaml
 
 	using Ecng.Common;
 	using Ecng.Collections;
+	using Ecng.Xaml;
 
 	using StockSharp.Algo;
 	using StockSharp.BusinessEntities;
@@ -28,18 +29,12 @@ namespace StockSharp.Xaml
 		}
 
 		/// <summary>
-		/// Connection to the trading system.
+		/// Available portfolios.
 		/// </summary>
-		public IConnector Connector
+		public ThreadSafeObservableCollection<Portfolio> Portfolios
 		{
-			get { return PortfolioCtrl.Connector; }
-			set
-			{
-				PortfolioCtrl.Connector = value;
-
-				if (SecurityProvider == null)
-					SecurityProvider = new FilterableSecurityProvider(value);
-			}
+			get { return PortfolioCtrl.Portfolios; }
+			set { PortfolioCtrl.Portfolios = value; }
 		}
 
 		/// <summary>
@@ -50,6 +45,16 @@ namespace StockSharp.Xaml
 			get { return SecurityCtrl.SecurityProvider; }
 			set { SecurityCtrl.SecurityProvider = value; }
 		}
+
+		/// <summary>
+		/// The market data provider.
+		/// </summary>
+		public IMarketDataProvider MarketDataProvider { get; set; } // reserved for future
+
+		/// <summary>
+		/// The message adapter.
+		/// </summary>
+		public IMessageAdapter Adapter { get; set; }
 
 		private Order _order;
 
@@ -109,9 +114,7 @@ namespace StockSharp.Xaml
 				Condition.SelectedObject = null;
 			else
 			{
-				var connector = Connector;
-
-				var adapter = connector.TransactionAdapter;
+				var adapter = Adapter;
 
 				var basketAdapter = adapter as BasketMessageAdapter;
 				if (basketAdapter != null)

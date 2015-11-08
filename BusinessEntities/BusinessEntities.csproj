@@ -119,9 +119,13 @@
     <Compile Include="CategoryAttributes.cs" />
     <Compile Include="Exchange.cs" />
     <Compile Include="ExchangeBoard.cs" />
+    <Compile Include="ExchangeBoard_Instances.cs" />
+    <Compile Include="Exchange_Instances.cs" />
     <Compile Include="IConnector.cs" />
     <Compile Include="IExchangeInfoProvider.cs" />
     <Compile Include="IMarketDataProvider.cs" />
+    <Compile Include="INewsProvider.cs" />
+    <Compile Include="IPortfolioProvider.cs" />
     <Compile Include="ISecurityProvider.cs" />
     <Compile Include="MarketDepth.cs" />
     <Compile Include="MarketDepthPair.cs" />

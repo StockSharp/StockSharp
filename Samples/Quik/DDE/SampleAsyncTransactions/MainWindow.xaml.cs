@@ -12,6 +12,7 @@ namespace SampleAsyncTransactions
 	using StockSharp.Quik;
 	using StockSharp.BusinessEntities;
 	using StockSharp.Localization;
+	using StockSharp.Xaml;
 
 	public partial class MainWindow
 	{
@@ -71,7 +72,7 @@ namespace SampleAsyncTransactions
 			{
 				Trader = new QuikTrader(Path.Text) { IsDde = true, IsAsyncMode = true };
 
-				Portfolios.Connector = Trader;
+				Portfolios.Portfolios = new PortfolioDataSource(Trader);
 
 				Trader.NewSecurities += securities => _securitiesWindow.SecurityPicker.Securities.AddRange(securities);
 

@@ -91,7 +91,7 @@ namespace StockSharp.Studio.Core
 					{ "Settings", _storage },
 					{ "Statistics", GetStatistics() },
 					{ "Orders", GetActiveOrders() },
-					{ "Positions", GetPositions() },
+					{ "Positions", PositionManager.Positions.ToArray() },
 				};
 
 				_strategy.NameGenerator.AutoGenerateStrategyName = false;
@@ -234,16 +234,6 @@ namespace StockSharp.Studio.Core
 				statistics.SetValue(parameter.Name, parameter.Save());
 
 			return statistics;
-		}
-
-		private IEnumerable<Position> GetPositions()
-		{
-			return PositionManager.Positions.Select(p => new Position
-			{
-				Security = p.Security,
-				Portfolio = p.Portfolio,
-				CurrentValue = p.CurrentValue
-			}).ToArray();
 		}
 
 		private void OnLog(LogMessage message)

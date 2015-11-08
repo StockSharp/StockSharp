@@ -410,6 +410,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="ConnectorInfo.cs" />
+    <Compile Include="ExchangeComboBox.cs" />
     <Compile Include="ExecutionGrid.xaml.cs">
       <DependentUpon>ExecutionGrid.xaml</DependentUpon>
     </Compile>
@@ -425,6 +426,7 @@
       <DependentUpon>NewsMessagePanel.xaml</DependentUpon>
     </Compile>
     <Compile Include="OrderConditionalGrid.cs" />
+    <Compile Include="PortfolioDataSource.cs" />
     <Compile Include="ProxySettings.cs" />
     <Compile Include="ProxySettingsEditor.xaml.cs">
       <DependentUpon>ProxySettingsEditor.xaml</DependentUpon>

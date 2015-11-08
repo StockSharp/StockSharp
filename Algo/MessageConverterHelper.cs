@@ -774,7 +774,7 @@ namespace StockSharp.Algo
 				IsSupportMarketOrders = board.IsSupportMarketOrders,
 				IsSupportAtomicReRegister = board.IsSupportAtomicReRegister,
 				ExpiryTime = board.ExpiryTime,
-				TimeZoneInfo = board.Exchange.TimeZoneInfo
+				TimeZone = board.TimeZone
 			};
 		}
 
@@ -801,8 +801,6 @@ namespace StockSharp.Algo
 
 			if (exchange == null)
 				throw new ArgumentNullException("exchange");
-
-			exchange.TimeZoneInfo = message.TimeZoneInfo;
 
 			return exchange;
 		}
@@ -835,6 +833,7 @@ namespace StockSharp.Algo
 			board.IsSupportAtomicReRegister = message.IsSupportAtomicReRegister;
 			board.IsSupportMarketOrders = message.IsSupportMarketOrders;
 			board.ExpiryTime = message.ExpiryTime;
+			board.TimeZone = message.TimeZone;
 
 			return board;
 		}

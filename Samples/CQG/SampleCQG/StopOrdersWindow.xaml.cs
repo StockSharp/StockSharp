@@ -29,7 +29,9 @@
 			var window = new OrderWindow
 			{
 				Title = LocalizedStrings.Str2976Params.Put(order.TransactionId),
-				Connector = MainWindow.Instance.Trader,
+				SecurityProvider = MainWindow.Instance.Trader,
+				MarketDataProvider = MainWindow.Instance.Trader,
+				Portfolios = new PortfolioDataSource(MainWindow.Instance.Trader),
 				Order = order.ReRegisterClone(newVolume: order.Balance),
 			};
 

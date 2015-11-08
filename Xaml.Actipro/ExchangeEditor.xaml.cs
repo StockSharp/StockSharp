@@ -15,7 +15,6 @@ namespace StockSharp.Xaml.Actipro
 	using Ecng.Xaml;
 
 	using StockSharp.BusinessEntities;
-
 	using StockSharp.Localization;
 
 	/// <summary>
@@ -29,11 +28,6 @@ namespace StockSharp.Xaml.Actipro
 		/// List of exchanges.
 		/// </summary>
 		public ObservableCollection<Exchange> Exchanges { get; private set; }
-
-		/// <summary>
-		/// List of time zones.
-		/// </summary>
-		public IEnumerable<TimeZoneInfo> TimeZones { get; private set; }
 
 		private ExchangeEditorViewModel ViewModel
 		{
@@ -76,11 +70,6 @@ namespace StockSharp.Xaml.Actipro
 			Provider = ConfigManager.GetService<IExchangeInfoProvider>();
 
 			Exchanges = new ObservableCollection<Exchange>(Provider.Exchanges);
-
-			TimeZones = TimeZoneInfo.GetSystemTimeZones()
-				.Concat(new[] { Exchange.Moex.TimeZoneInfo, Exchange.Test.TimeZoneInfo, Exchange.Ux.TimeZoneInfo })
-				.Distinct()
-				.ToArray();
 
 			InitializeComponent();
 
@@ -209,7 +198,6 @@ namespace StockSharp.Xaml.Actipro
 		private bool _isNew;
 		private string _exchangeRusName, _exchangeEngName, _saveErrorMessage;
 		private CountryCodes? _countryCode;
-		private TimeZoneInfo _exchangeTimeZone;
 
 		private readonly ExchangeEditor _editor;
 		private readonly IExchangeInfoProvider _provider;
@@ -276,7 +264,6 @@ namespace StockSharp.Xaml.Actipro
 				ExchangeRusName = Exchange.RusName;
 				ExchangeEngName = Exchange.EngName;
 				CountryCode = Exchange.CountryCode;
-				ExchangeTimeZone = Exchange.TimeZoneInfo;
 			}
 			finally
 			{
@@ -293,7 +280,6 @@ namespace StockSharp.Xaml.Actipro
 				Exchange = null;
 				ExchangeName = ExchangeRusName = ExchangeEngName = string.Empty;
 				CountryCode = null;
-				ExchangeTimeZone = null;
 				IsNew = true;
 			}
 			finally
@@ -336,12 +322,6 @@ namespace StockSharp.Xaml.Actipro
 			set { SetField(ref _countryCode, value, () => CountryCode); }
 		}
 
-		public TimeZoneInfo ExchangeTimeZone
-		{
-			get { return _exchangeTimeZone; }
-			set { SetField(ref _exchangeTimeZone, value, () => ExchangeTimeZone); }
-		}
-
 		public string SaveErrorMessage
 		{
 			get { return _saveErrorMessage; }
@@ -375,8 +355,6 @@ namespace StockSharp.Xaml.Actipro
 				SaveErrorMessage = LocalizedStrings.Str1463;
 			else if (CountryCode == null)
 				SaveErrorMessage = LocalizedStrings.Str1464;
-			else if (ExchangeTimeZone == null)
-				SaveErrorMessage = LocalizedStrings.Str1465;
 			else
 				return true;
 
@@ -402,7 +380,6 @@ namespace StockSharp.Xaml.Actipro
 				RusName = ExchangeRusName,
 				EngName = ExchangeEngName,
 				CountryCode = CountryCode,
-				TimeZoneInfo = ExchangeTimeZone
 			};
 		}
 

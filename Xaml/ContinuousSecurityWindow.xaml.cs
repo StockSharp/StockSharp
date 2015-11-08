@@ -119,7 +119,7 @@ namespace StockSharp.Xaml
 			continuousSecurity.Type = underlyingSecurity.Type;
 
 			continuousSecurity.ExpirationJumps.Clear();
-			continuousSecurity.ExpirationJumps.AddRange(JumpsGrid.Jumps.Select(j => new KeyValuePair<Security, DateTimeOffset>(j.Security, j.Date.ApplyTimeZone(underlyingSecurity.Board.Exchange.TimeZoneInfo))));
+			continuousSecurity.ExpirationJumps.AddRange(JumpsGrid.Jumps.Select(j => new KeyValuePair<Security, DateTimeOffset>(j.Security, j.Date.ApplyTimeZone(underlyingSecurity.Board.TimeZone))));
 
 			DialogResult = true;
 			Close();

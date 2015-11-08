@@ -170,7 +170,7 @@ namespace StockSharp.Studio.Services
 					{
 						new ChartAutoRangeCommand(false).Process(_strategy);
 
-						_strategy.PositionManager.Positions = _sessionStrategy.Positions.Select(p => p.Position).ToArray();
+						_strategy.PositionManager.Positions = _sessionStrategy.Positions.Select(p => new KeyValuePair<Tuple<SecurityId, string>, decimal>(Tuple.Create(p.Position.Security.ToSecurityId(), p.Position.Portfolio.Name), p.Position.CurrentValue)).ToArray();
 
 						if (_onlyInitialize)
 						{

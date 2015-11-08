@@ -1322,14 +1322,14 @@ namespace StockSharp.Algo.Strategies
 			if (!CancelOrdersWhenStopping)
 				return;
 
-			IMarketRule matchedRule = order.WhenMatched();
+			IMarketRule matchedRule = order.WhenMatched(Connector);
 
 			if (WaitAllTrades)
-				matchedRule = matchedRule.And(order.WhenAllTrades());
+				matchedRule = matchedRule.And(order.WhenAllTrades(Connector));
 
 			var successRule = order
-				.WhenCanceled()
-				.Or(matchedRule, order.WhenRegisterFailed())
+				.WhenCanceled(Connector)
+				.Or(matchedRule, order.WhenRegisterFailed(Connector))
 				.Do(() => this.AddInfoLog(LocalizedStrings.Str1386Params.Put(order.GetTraceId())))
 				.Until(() =>
 				{
@@ -1342,7 +1342,7 @@ namespace StockSharp.Algo.Strategies
 					if (!WaitAllTrades)
 						return true;
 
-					var matchedVolume = order.GetMatchedVolume();
+					var matchedVolume = order.GetMatchedVolume(Connector);
 
 					if (matchedVolume == 0)
 						return true;
@@ -1359,7 +1359,7 @@ namespace StockSharp.Algo.Strategies
 			var canFinish = false;
 
 			order
-				.WhenCancelFailed()
+				.WhenCancelFailed(Connector)
 				.Do(() =>
 				{
 					if (ProcessState != ProcessStates.Stopping)
@@ -1472,7 +1472,7 @@ namespace StockSharp.Algo.Strategies
 
 						//SlippageManager.Registered(order);
 
-						var isPosChanged = PositionManager.ProcessOrder(order) != 0;
+						var pos = PositionManager.ProcessMessage(order.ToMessage());
 
 						StatisticManager.AddNewOrder(order);
 
@@ -1482,7 +1482,7 @@ namespace StockSharp.Algo.Strategies
 							RaiseCommissionChanged();
 						}
 
-						if (isPosChanged)
+						if (pos != null)
 							RaisePositionChanged();
 					}
 
@@ -1520,7 +1520,9 @@ namespace StockSharp.Algo.Strategies
 				{
 					OnOrderChanged(order);
 
-					if (PositionManager.ProcessOrder(order) != 0)
+					var pos = PositionManager.ProcessMessage(order.ToMessage());
+
+					if (pos != null)
 						RaisePositionChanged();
 
 					StatisticManager.AddChangedOrder(order);
@@ -1554,7 +1556,7 @@ namespace StockSharp.Algo.Strategies
 			AddOrder(order);
 
 			if (order.Type != OrderTypes.Conditional)
-				PositionManager.ProcessOrder(order);
+				PositionManager.ProcessMessage(order.ToMessage());
 
 			ProcessOrder(order);
 
@@ -2217,7 +2219,7 @@ namespace StockSharp.Algo.Strategies
 
 			var isComChanged = false;
 			var isPnLChanged = false;
-			var isPosChanged = false;
+			decimal? pos = null;
 			var isSlipChanged = false;
 
 			foreach (var trade in filteredTrades)
@@ -2239,8 +2241,7 @@ namespace StockSharp.Algo.Strategies
 				if (tradeInfo.PnL != 0)
 					isPnLChanged = true;
 
-				if (PositionManager.ProcessMyTrade(trade) != 0)
-					isPosChanged = true;
+				pos = PositionManager.ProcessMessage(trade.ToMessage());
 
 				if (trade.Slippage != null)
 				{
@@ -2259,7 +2260,7 @@ namespace StockSharp.Algo.Strategies
 				if (isPnLChanged)
 					RaisePnLChanged();
 
-				if (isPosChanged)
+				if (pos != null)
 					RaisePositionChanged();
 
 				if (isSlipChanged)
@@ -2280,7 +2281,7 @@ namespace StockSharp.Algo.Strategies
 
 		private void RaisePositionChanged()
 		{
-			this.AddInfoLog(LocalizedStrings.Str1399Params, PositionManager.Positions.Select(pos => pos + "=" + pos.CurrentValue).Join(", "));
+			this.AddInfoLog(LocalizedStrings.Str1399Params, PositionManager.Positions.Select(pos => pos.Key + "=" + pos.Value).Join(", "));
 
 			this.Notify("Position");
 			PositionChanged.SafeInvoke();

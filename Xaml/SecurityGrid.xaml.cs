@@ -9,10 +9,7 @@ namespace StockSharp.Xaml
 
 	using Ecng.Collections;
 	using Ecng.Common;
-	using Ecng.Configuration;
 	using Ecng.Xaml;
-
-	using MoreLinq;
 
 	using StockSharp.Algo;
 	using StockSharp.BusinessEntities;
@@ -219,21 +216,6 @@ namespace StockSharp.Xaml
 			_securities = new ConvertibleObservableCollection<Security, SecurityItem>(new ThreadSafeObservableCollection<SecurityItem>(itemsSource), CreateItem);
 
 			_selectedSecurities = new SelectedSecurityList(this);
-
-			MarketDataProvider = ConfigManager.TryGetService<IMarketDataProvider>();
-
-			if (MarketDataProvider == null)
-			{
-				ConfigManager.ServiceRegistered += (t, s) =>
-				{
-					if (MarketDataProvider != null || typeof(IMarketDataProvider) != t)
-						return;
-
-					MarketDataProvider = (IMarketDataProvider)s;
-
-					itemsSource.ForEach(item => UpdateData(item.Security, item));
-				};
-			}
 		}
 
 		/// <summary>

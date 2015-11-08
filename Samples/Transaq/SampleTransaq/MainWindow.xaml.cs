@@ -162,6 +162,9 @@ namespace SampleTransaq
 					// устанавливаем поставщик маркет-данных
 					_securitiesWindow.SecurityPicker.MarketDataProvider = Trader;
 
+					// set news provider
+					_newsWindow.NewsPanel.NewsProvider = Trader;
+
 					ShowSecurities.IsEnabled = ShowTrades.IsEnabled = ShowNews.IsEnabled =
 					ShowMyTrades.IsEnabled = ShowOrders.IsEnabled = 
 					ShowPortfolios.IsEnabled = ShowStopOrders.IsEnabled = true;

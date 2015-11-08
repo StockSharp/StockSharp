@@ -13,6 +13,7 @@ namespace StockSharp.Xaml
 	using Ecng.Xaml;
 
 	using StockSharp.Algo;
+	using StockSharp.BusinessEntities;
 	using StockSharp.Messages;
 	using StockSharp.Localization;
 	using Row = System.Tuple<string, Messages.IMessageAdapter>;
@@ -73,6 +74,15 @@ namespace StockSharp.Xaml
 
 			PortfoliosCtrl.ItemsSource = _items;
 			//TODO PortfoliosCtrl.GroupingColumns.Add(PortfoliosCtrl.Columns[0]);
+		}
+
+		/// <summary>
+		/// Available portfolios.
+		/// </summary>
+		public ThreadSafeObservableCollection<Portfolio> Portfolios
+		{
+			get { return PortfoliosComboBox.Portfolios; }
+			set { PortfoliosComboBox.Portfolios = value; }
 		}
 
 		private void ExecutedRemove(object sender, ExecutedRoutedEventArgs e)

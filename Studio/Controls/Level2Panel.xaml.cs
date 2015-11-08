@@ -26,8 +26,8 @@ namespace StockSharp.Studio.Controls
 	[Icon("images/level2_16x16.png")]
 	public partial class Level2Panel : IStudioControl
 	{
-		private readonly string[] _askDefaultColumns = { "Board", "BestAsk.Price", "BestAsk.Volume" };
-		private readonly string[] _bidDefaultColumns = { "Board", "BestBid.Price", "BestBid.Volume" };
+		private readonly HashSet<string> _askDefaultColumns = new HashSet<string> { "Board", "BestAsk.Price", "BestAsk.Volume" };
+		private readonly HashSet<string> _bidDefaultColumns = new HashSet<string> { "Board", "BestBid.Price", "BestBid.Volume" };
 
 		private Security[] _securities;
 
@@ -49,13 +49,16 @@ namespace StockSharp.Studio.Controls
 			SecurityBidsGrid.SelectionChanged += SecuritiesCtrlOnSelectionChanged;
 
 			SecurityPicker.SecuritySelected += SecurityPickerSecuritySelected;
+
 			SecurityPicker.SecurityProvider = SecurityProvider;
+
+			SecurityAsksGrid.MarketDataProvider = SecurityBidsGrid.MarketDataProvider = ConfigManager.GetService<IMarketDataProvider>();
 
 			SetVisibleColumns(SecurityAsksGrid, _askDefaultColumns);
 			SetVisibleColumns(SecurityBidsGrid, _bidDefaultColumns);
 		}
 
-		private static void SetVisibleColumns(DataGrid grid, IEnumerable<string> columns)
+		private static void SetVisibleColumns(DataGrid grid, HashSet<string> columns)
 		{
 			foreach (var column in grid.Columns)
 			{

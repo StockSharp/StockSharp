@@ -5,7 +5,7 @@ using System.Windows;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("SampleQuikSmart")]
+[assembly: AssemblyTitle("SampleMultiConnection")]
 [assembly: AssemblyDescription("")]
 
 [assembly: Guid("19F844D6-B36C-4F24-92B5-2F29D0B27FEC")]

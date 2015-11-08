@@ -624,7 +624,7 @@ namespace StockSharp.Algo.Testing
 
 			foreach (var tuple in types)
 			{
-				if (tuple.Item1 != messageType || tuple.Item2.Equals(series.Arg))
+				if (tuple.Item1 != messageType || !tuple.Item2.Equals(series.Arg))
 					continue;
 
 				var dates = _historyAdapter.StorageRegistry.GetCandleMessageStorage(tuple.Item1, series.Security, series.Arg, _historyAdapter.Drive, _historyAdapter.StorageFormat).Dates.ToArray();

@@ -47,7 +47,7 @@
 		/// <summary>
 		/// Последняя версия, которой должна быть актуальная база данных Hydra.
 		/// </summary>
-		public static readonly Version LatestVersion = new Version(2, 15);
+		public static readonly Version LatestVersion = new Version(2, 16);
 
 		/// <summary>
 		/// Версия.

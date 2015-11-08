@@ -4,6 +4,8 @@ namespace StockSharp.Xaml
 
 	using Ecng.Common;
 
+	using StockSharp.BusinessEntities;
+
 	/// <summary>
 	/// The visual panel with the news.
 	/// </summary>
@@ -15,6 +17,15 @@ namespace StockSharp.Xaml
 		public NewsMessagePanel()
 		{
 			InitializeComponent();
+		}
+
+		/// <summary>
+		/// The provider of information about news.
+		/// </summary>
+		public INewsProvider NewsProvider
+		{
+			get { return NewsGrid.NewsProvider; }
+			set { NewsGrid.NewsProvider = value; }
 		}
 
 		private void NewsMessageGrid_OnSelectionChanged(object sender, SelectionChangedEventArgs e)

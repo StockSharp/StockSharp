@@ -2,7 +2,6 @@ namespace StockSharp.Studio.Ribbon
 {
 	using System;
 	using System.Collections.Generic;
-	using System.ComponentModel;
 	using System.IO;
 	using System.Windows;
 	using System.Windows.Input;
@@ -44,7 +43,7 @@ namespace StockSharp.Studio.Ribbon
 		{
 			InitializeComponent();
 
-			if (DesignerProperties.GetIsInDesignMode(this))
+			if (this.IsDesignMode())
 				return;
 
 			ControlTypes = AppConfig.Instance.GetControlTypes();

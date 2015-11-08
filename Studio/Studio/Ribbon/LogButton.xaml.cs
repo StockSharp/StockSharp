@@ -2,7 +2,6 @@
 {
 	using System;
 	using System.Collections.Generic;
-	using System.ComponentModel;
 	using System.Diagnostics;
 	using System.Linq;
 	using System.Windows;
@@ -45,7 +44,7 @@
 		{
 			InitializeComponent();
 
-			if (DesignerProperties.GetIsInDesignMode(this))
+			if (this.IsDesignMode())
 				return;
 
 			ConfigManager

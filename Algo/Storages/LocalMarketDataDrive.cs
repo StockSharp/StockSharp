@@ -343,6 +343,9 @@ namespace StockSharp.Algo.Storages
 			{
 				var idGenerator = new SecurityIdGenerator();
 
+				if (!Directory.Exists(Path))
+					return Enumerable.Empty<SecurityId>();
+
 				return Directory
 					.EnumerateDirectories(Path)
 					.SelectMany(Directory.EnumerateDirectories)
@@ -360,6 +363,9 @@ namespace StockSharp.Algo.Storages
 		public override IEnumerable<Tuple<Type, object>> GetAvailableDataTypes(SecurityId securityId, StorageFormats format)
 		{
 			var secPath = GetSecurityPath(securityId);
+
+			if (!Directory.Exists(secPath))
+				return Enumerable.Empty<Tuple<Type, object>>();
 
 			var ext = GetExtension(format);
 

@@ -23,6 +23,7 @@ namespace StockSharp.Studio
 	using StockSharp.Studio.Core.Commands;
 	using StockSharp.Studio.Services;
 	using StockSharp.Localization;
+	using StockSharp.Messages;
 
 	public partial class StrategyContent : IStudioControl, IStudioCommandScope
 	{
@@ -251,12 +252,12 @@ namespace StockSharp.Studio
 				new NewMyTradesCommand(trades).Process(_strategy);
 			}
 
-			private void RaiseNewPositionCommand(Position position)
+			private void RaiseNewPositionCommand(KeyValuePair<Tuple<SecurityId, string>, decimal> position)
 			{
 				new PositionCommand(_strategy.CurrentTime, position, true).Process(_strategy);
 			}
 
-			private void RaisePositionChangedCommand(Position position)
+			private void RaisePositionChangedCommand(KeyValuePair<Tuple<SecurityId, string>, decimal> position)
 			{
 				new PositionCommand(_strategy.CurrentTime, position, false).Process(_strategy);
 			}

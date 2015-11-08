@@ -150,6 +150,9 @@ namespace SampleMicex
 
 						// устанавливаем поставщик маркет-данных
 						_securitiesWindow.SecurityPicker.MarketDataProvider = Trader;
+
+						// set news provider
+						_newsWindow.NewsPanel.NewsProvider = Trader;
 					}
 
 					Trader.Connect();

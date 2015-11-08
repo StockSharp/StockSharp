@@ -3,20 +3,18 @@ namespace StockSharp.Algo.Positions
 	using System;
 	using System.Collections.Generic;
 	using System.Linq;
-	using Ecng.Common;
+
 	using Ecng.Collections;
+	using Ecng.Common;
 
-	using MoreLinq;
-
-	using StockSharp.BusinessEntities;
+	using StockSharp.Messages;
 
 	/// <summary>
 	/// The position calculation manager.
 	/// </summary>
 	public class PositionManager : IPositionManager
 	{
-		private readonly object _syncRoot = new object();
-		private readonly Dictionary<Order, decimal> _byOrderPositions = new Dictionary<Order, decimal>();
+		private readonly Dictionary<long, Tuple<Sides, decimal>> _byOrderPositions = new Dictionary<long, Tuple<Sides, decimal>>();
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="PositionManager"/>.
@@ -35,155 +33,148 @@ namespace StockSharp.Algo.Positions
 		/// <summary>
 		/// The position aggregate value.
 		/// </summary>
-		public virtual decimal Position { get; set; }
+		public decimal Position { get; set; }
 
-		private readonly CachedSynchronizedDictionary<Tuple<Security, Portfolio>, Position> _positions = new CachedSynchronizedDictionary<Tuple<Security, Portfolio>, Position>();
+		private readonly CachedSynchronizedDictionary<Tuple<SecurityId, string>, decimal> _positions = new CachedSynchronizedDictionary<Tuple<SecurityId, string>, decimal>();
 
 		/// <summary>
 		/// Positions, grouped by instruments and portfolios.
 		/// </summary>
-		public IEnumerable<Position> Positions
+		public IEnumerable<KeyValuePair<Tuple<SecurityId, string>, decimal>> Positions
 		{
-			get { return _positions.CachedValues; }
+			get { return _positions.CachedPairs; }
 			set
 			{
 				if (value == null)
 					throw new ArgumentNullException("value");
 
-				lock (_syncRoot)
-					Position = value.Sum(p => p.CurrentValue);
-
-				Dictionary<Tuple<Security, Portfolio>, decimal> positions;
-
 				lock (_positions.SyncRoot)
 				{
-					positions = _positions.ToDictionary(p => p.Key, p => -p.Value.CurrentValue);
+					_positions.Clear();
+					_positions.AddRange(value);
 
-					foreach (var position in value)
-					{
-						var key = Tuple.Create(position.Security, position.Portfolio);
-
-						var pos = positions.TryGetValue2(key);
-
-						if (pos.HasValue)
-							positions[key] = pos.Value + position.CurrentValue;
-						else
-							positions[key] = position.CurrentValue;
-					}
+					Position = value.Sum(p => p.Value);
 				}
-
-				positions.ForEach(p => ChangePosition(p.Key.Item1, p.Key.Item2, p.Value));
 			}
 		}
 
 		/// <summary>
 		/// The event of new position occurrence in <see cref="IPositionManager.Positions"/>.
 		/// </summary>
-		public event Action<Position> NewPosition;
+		public event Action<KeyValuePair<Tuple<SecurityId, string>, decimal>> NewPosition;
 
 		/// <summary>
 		/// The event of position change in <see cref="IPositionManager.Positions"/>.
 		/// </summary>
-		public event Action<Position> PositionChanged;
-
-		/// <summary>
-		/// To calculate position by the order.
-		/// </summary>
-		/// <param name="order">Order.</param>
-		/// <returns>The position by the order.</returns>
-		public decimal ProcessOrder(Order order)
-		{
-			if (!ByOrders)
-				return 0;
-
-			decimal position;
-
-			lock (_syncRoot)
-			{
-				var newPosition = order.GetPosition();
-
-				decimal oldPosition;
-
-				if (_byOrderPositions.TryGetValue(order, out oldPosition))
-				{
-					if (newPosition != oldPosition)
-						_byOrderPositions[order] = newPosition;
-
-					position = newPosition - oldPosition;
-				}
-				else
-				{
-					_byOrderPositions.Add(order, newPosition);
-					position = newPosition;
-				}
-				
-				//TODO:PYH: Если для Done-заявки ProcessOrder придет 2 раза(в Квике) то будет сделка-дубль.
-				//Избежать можно храня где-то oldState заявки и исключая такие варианты.
-				//
-				// mika: пока подключения не доделаны, временно отключил
-				//
-				//if (order.State == OrderStates.Done)
-				//    _byOrderPositions.Remove(order);
-				
-				Position += position;
-			}
-			
-			ChangePosition(order.Security, order.Portfolio, position);
-			return position;
-		}
+		public event Action<KeyValuePair<Tuple<SecurityId, string>, decimal>> PositionChanged;
 
 		/// <summary>
 		/// To null position.
 		/// </summary>
 		public virtual void Reset()
 		{
-			_positions.Clear();
-
-			lock (_syncRoot)
-			{
-				_byOrderPositions.Clear();
-				Position = 0;
-			}
+			Positions = Enumerable.Empty<KeyValuePair<Tuple<SecurityId, string>, decimal>>();
 		}
 
 		/// <summary>
-		/// To calculate the position by the trade.
+		/// To calculate position.
 		/// </summary>
-		/// <param name="trade">Trade.</param>
-		/// <returns>The position by the trade.</returns>
-		public virtual decimal ProcessMyTrade(MyTrade trade)
+		/// <param name="message">Message.</param>
+		/// <returns>The position by order or trade.</returns>
+		public decimal? ProcessMessage(Message message)
 		{
-			if (ByOrders)
-				return 0;
+			switch (message.Type)
+			{
+				case MessageTypes.Reset:
+				{
+					Reset();
+					break;
+				}
 
-			var position = trade.GetPosition();
+				case MessageTypes.Execution:
+				{
+					var execMsg = (ExecutionMessage)message;
+					var key = Tuple.Create(execMsg.SecurityId, execMsg.PortfolioName);
 
-			lock (_syncRoot)
-				Position += position;
+					switch (execMsg.ExecutionType)
+					{
+						case ExecutionTypes.Order:
+						{
+							if (!ByOrders)
+								return 0;
 
-			ChangePosition(trade.Order.Security, trade.Order.Portfolio, position);
+							var orderId = execMsg.OriginalTransactionId;
+							var newPosition = execMsg.GetPosition();
 
-			return position;
-		}
+							bool? isNew = null;
+							decimal position;
 
-		private void ChangePosition(Security security, Portfolio portfolio, decimal diff)
-		{
-			if (security == null)
-				throw new ArgumentNullException("security");
+							lock (_positions.SyncRoot)
+							{
+								Tuple<Sides, decimal> oldPosition;
 
-			if (portfolio == null)
-				throw new ArgumentNullException("portfolio");
+								if (_byOrderPositions.TryGetValue(orderId, out oldPosition))
+								{
+									if (newPosition != oldPosition.Item2)
+									{
+										_byOrderPositions[orderId] = Tuple.Create(execMsg.Side, newPosition);
+										isNew = false;
+									}
 
-			bool isNew;
-			var position = _positions.SafeAdd(Tuple.Create(security, portfolio),
-			    key => new Position { Security = key.Item1, Portfolio = key.Item2 }, out isNew);
+									position = newPosition - oldPosition.Item2;
+								}
+								else
+								{
+									_byOrderPositions.Add(orderId, Tuple.Create(execMsg.Side, newPosition));
+									position = newPosition;
+									isNew = true;
+								}
 
-			position.CurrentValue += diff;
+								_positions[key] = _positions.TryGetValue(key) + position;
+								Position += position;
+							}
 
-			if (isNew)
-				NewPosition.SafeInvoke(position);
-			else
-				PositionChanged.SafeInvoke(position);
+							if (isNew == true)
+								NewPosition.SafeInvoke(new KeyValuePair<Tuple<SecurityId, string>, decimal>(key, position));
+							else if (isNew == false)
+								PositionChanged.SafeInvoke(new KeyValuePair<Tuple<SecurityId, string>, decimal>(key, position));
+
+							return position;
+						}
+						case ExecutionTypes.Trade:
+						{
+							if (ByOrders)
+								return 0;
+
+							var position = execMsg.GetPosition();
+
+							if (position == 0)
+								break;
+
+							bool isNew;
+
+							lock (_positions.SyncRoot)
+							{
+								decimal prev;
+								isNew = _positions.TryGetValue(key, out prev);
+								_positions[key] = prev + position;
+								Position += position;
+							}
+
+							if (isNew)
+								NewPosition.SafeInvoke(new KeyValuePair<Tuple<SecurityId, string>, decimal>(key, position));
+							else
+								PositionChanged.SafeInvoke(new KeyValuePair<Tuple<SecurityId, string>, decimal>(key, position));
+
+							return position;
+						}
+					}
+
+					break;
+				}
+			}
+
+			return null;
 		}
 	}
 }

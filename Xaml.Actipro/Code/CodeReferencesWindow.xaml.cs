@@ -2,9 +2,9 @@ namespace StockSharp.Xaml.Actipro.Code
 {
 	using System.Collections.Generic;
 	using System.Collections.ObjectModel;
-	using System.Reflection;
 	using System.Windows;
 
+	using Ecng.Reflection;
 	using Ecng.Xaml;
 
 	using Ookii.Dialogs.Wpf;
@@ -48,7 +48,7 @@ namespace StockSharp.Xaml.Actipro.Code
 			if (dialog.ShowDialog(this.GetWindow()) != true)
 				return;
 
-			var assembly = Assembly.ReflectionOnlyLoadFrom(dialog.FileName);
+			var assembly = dialog.FileName.VerifyAssembly();
 			if (assembly != null)
 			{
 				_references.Add(new CodeReference

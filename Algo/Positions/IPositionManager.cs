@@ -3,7 +3,7 @@ namespace StockSharp.Algo.Positions
 	using System;
 	using System.Collections.Generic;
 
-	using StockSharp.BusinessEntities;
+	using StockSharp.Messages;
 
 	/// <summary>
 	/// The interface for the position calculation manager.
@@ -18,17 +18,17 @@ namespace StockSharp.Algo.Positions
 		/// <summary>
 		/// Positions, grouped by instruments and portfolios.
 		/// </summary>
-		IEnumerable<Position> Positions { get; set; }
+		IEnumerable<KeyValuePair<Tuple<SecurityId, string>, decimal>> Positions { get; set; }
 
 		/// <summary>
 		/// The event of new position occurrence in <see cref="IPositionManager.Positions"/>.
 		/// </summary>
-		event Action<Position> NewPosition;
+		event Action<KeyValuePair<Tuple<SecurityId, string>, decimal>> NewPosition;
 
 		/// <summary>
 		/// The event of position change in <see cref="IPositionManager.Positions"/>.
 		/// </summary>
-		event Action<Position> PositionChanged;
+		event Action<KeyValuePair<Tuple<SecurityId, string>, decimal>> PositionChanged;
 
 		/// <summary>
 		/// To null position.
@@ -36,17 +36,10 @@ namespace StockSharp.Algo.Positions
 		void Reset();
 
 		/// <summary>
-		/// To calculate position by the order.
+		/// To calculate position.
 		/// </summary>
-		/// <param name="order">Order.</param>
-		/// <returns>The position by the order.</returns>
-		decimal ProcessOrder(Order order);
-
-		/// <summary>
-		/// To calculate the position by the trade.
-		/// </summary>
-		/// <param name="trade">Trade.</param>
-		/// <returns>The position by the trade.</returns>
-		decimal ProcessMyTrade(MyTrade trade);
+		/// <param name="message">Message.</param>
+		/// <returns>The position by order or trade.</returns>
+		decimal? ProcessMessage(Message message);
 	}
 }

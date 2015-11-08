@@ -10,7 +10,6 @@ namespace StockSharp.Algo
 	using Ecng.Net;
 	using Ecng.Common;
 	using Ecng.Collections;
-	using Ecng.ComponentModel;
 
 	using MoreLinq;
 
@@ -420,13 +419,11 @@ namespace StockSharp.Algo
 		/// To get the position by the order.
 		/// </summary>
 		/// <param name="order">The order, used for the position calculation. At purchase the position is taken with positive sign, at sale � with negative.</param>
+		/// <param name="connector">The connection of interaction with trade systems.</param>
 		/// <returns>Position.</returns>
-		public static decimal GetPosition(this Order order)
+		public static decimal GetPosition(this Order order, IConnector connector)
 		{
-			if (order == null)
-				throw new ArgumentNullException("order");
-
-			var volume = order.GetMatchedVolume();
+			var volume = order.GetMatchedVolume(connector);
 
 			return order.Direction == Sides.Buy ? volume : -volume;
 		}
@@ -435,16 +432,17 @@ namespace StockSharp.Algo
 		/// To get the position by the portfolio.
 		/// </summary>
 		/// <param name="portfolio">The portfolio, for which the position needs to be got.</param>
+		/// <param name="connector">The connection of interaction with trade systems.</param>
 		/// <returns>The position by the portfolio.</returns>
-		public static decimal GetPosition(this Portfolio portfolio)
+		public static decimal GetPosition(this Portfolio portfolio, IConnector connector)
 		{
 			if (portfolio == null)
 				throw new ArgumentNullException("portfolio");
 
-			if (portfolio.Connector == null)
-				throw new ArgumentException(LocalizedStrings.Str1039);
+			if (connector == null)
+				throw new ArgumentNullException("connector");
 
-			return portfolio.Connector.Positions.Filter(portfolio).Sum(p => p.CurrentValue);
+			return connector.Positions.Filter(portfolio).Sum(p => p.CurrentValue);
 		}
 
 		/// <summary>
@@ -648,7 +646,7 @@ namespace StockSharp.Algo
 			if (board == null)
 				throw new ArgumentNullException("board");
 
-			var exchangeTime = time.ToLocalTime(board.TimeZoneInfo);
+			var exchangeTime = time.ToLocalTime(board.TimeZone);
 			var workingTime = board.WorkingTime;
 
 			var isWorkingDay = board.IsTradeDate(time);
@@ -686,7 +684,7 @@ namespace StockSharp.Algo
 			if (board == null)
 				throw new ArgumentNullException("board");
 
-			var exchangeTime = date.ToLocalTime(board.TimeZoneInfo);
+			var exchangeTime = date.ToLocalTime(board.TimeZone);
 			var workingTime = board.WorkingTime;
 
 			var period = workingTime.GetPeriod(exchangeTime);
@@ -1414,16 +1412,15 @@ namespace StockSharp.Algo
 		/// To get order trades.
 		/// </summary>
 		/// <param name="order">Orders.</param>
+		/// <param name="connector">The connection of interaction with trade systems.</param>
 		/// <returns>Trades.</returns>
-		public static IEnumerable<MyTrade> GetTrades(this Order order)
+		public static IEnumerable<MyTrade> GetTrades(this Order order, IConnector connector)
 		{
 			if (order == null)
 				throw new ArgumentNullException("order");
 
-			var connector = order.Connector;
-
 			if (connector == null)
-				throw new ArgumentException(LocalizedStrings.Str904Params.Put(order.TransactionId), "order");
+				throw new ArgumentNullException("connector");
 
 			return connector.MyTrades.Filter(order);
 		}
@@ -1432,9 +1429,10 @@ namespace StockSharp.Algo
 		/// To calculate the implemented part of volume for order.
 		/// </summary>
 		/// <param name="order">The order, for which the implemented part of volume shall be calculated.</param>
+		/// <param name="connector">The connection of interaction with trade systems.</param>
 		/// <param name="byOrder">To check implemented volume by order balance (<see cref="Order.Balance"/>) or by received trades. The default is checked by the order.</param>
 		/// <returns>The implemented part of volume.</returns>
-		public static decimal GetMatchedVolume(this Order order, bool byOrder = true)
+		public static decimal GetMatchedVolume(this Order order, IConnector connector, bool byOrder = true)
 		{
 			if (order == null)
 				throw new ArgumentNullException("order");
@@ -1449,17 +1447,18 @@ namespace StockSharp.Algo
 					return 0;
 			}
 
-			return order.Volume - (byOrder ? order.Balance : order.GetTrades().Sum(o => o.Trade.Volume));
+			return order.Volume - (byOrder ? order.Balance : order.GetTrades(connector).Sum(o => o.Trade.Volume));
 		}
 
 		/// <summary>
 		/// To get weighted mean price of order matching.
 		/// </summary>
 		/// <param name="order">The order, for which the weighted mean matching price shall be got.</param>
+		/// <param name="connector">The connection of interaction with trade systems.</param>
 		/// <returns>The weighted mean price. If no order exists no trades, 0 is returned.</returns>
-		public static decimal GetAveragePrice(this Order order)
+		public static decimal GetAveragePrice(this Order order, IConnector connector)
 		{
-			return order.GetTrades().GetAveragePrice();
+			return order.GetTrades(connector).GetAveragePrice();
 		}
 
 		/// <summary>
@@ -2269,7 +2268,7 @@ namespace StockSharp.Algo
 						case 9:
 						case 12:
 						{
-							var dt = new DateTime(year, month, 15).ApplyTimeZone(ExchangeBoard.Forts.Exchange.TimeZoneInfo);
+							var dt = new DateTime(year, month, 15).ApplyTimeZone(ExchangeBoard.Forts.TimeZone);
 
 							while (!ExchangeBoard.Forts.IsTradeDate(dt))
 							{
@@ -2396,13 +2395,18 @@ namespace StockSharp.Algo
 		private sealed class CashPosition : Position, IDisposable
 		{
 			private readonly Portfolio _portfolio;
+			private readonly IConnector _connector;
 
-			public CashPosition(Portfolio portfolio)
+			public CashPosition(Portfolio portfolio, IConnector connector)
 			{
 				if (portfolio == null)
 					throw new ArgumentNullException("portfolio");
 
+				if (connector == null)
+					throw new ArgumentNullException("connector");
+
 				_portfolio = portfolio;
+				_connector = connector;
 
 				Portfolio = _portfolio;
 				Security = new Security
@@ -2413,7 +2417,7 @@ namespace StockSharp.Algo
 
 				UpdatePosition();
 
-				_portfolio.Connector.PortfoliosChanged += TraderOnPortfoliosChanged;
+				_connector.PortfoliosChanged += TraderOnPortfoliosChanged;
 			}
 
 			private void UpdatePosition()
@@ -2431,7 +2435,7 @@ namespace StockSharp.Algo
 
 			void IDisposable.Dispose()
 			{
-				_portfolio.Connector.PortfoliosChanged -= TraderOnPortfoliosChanged;
+				_connector.PortfoliosChanged -= TraderOnPortfoliosChanged;
 			}
 		}
 
@@ -2439,10 +2443,11 @@ namespace StockSharp.Algo
 		/// To convert portfolio into the monetary position.
 		/// </summary>
 		/// <param name="portfolio">Portfolio with trading account.</param>
+		/// <param name="connector">The connection of interaction with trading system.</param>
 		/// <returns>Money position.</returns>
-		public static Position ToCashPosition(this Portfolio portfolio)
+		public static Position ToCashPosition(this Portfolio portfolio, IConnector connector)
 		{
-			return new CashPosition(portfolio);
+			return new CashPosition(portfolio, connector);
 		}
 
 		private sealed class NativePositionManager : IPositionManager
@@ -2466,40 +2471,19 @@ namespace StockSharp.Algo
 				set { throw new NotSupportedException(); }
 			}
 
-			event Action<Position> IPositionManager.NewPosition
+			event Action<KeyValuePair<Tuple<SecurityId, string>, decimal>> IPositionManager.NewPosition
 			{
 				add { }
 				remove { }
 			}
 
-			event Action<Position> IPositionManager.PositionChanged
+			event Action<KeyValuePair<Tuple<SecurityId, string>, decimal>> IPositionManager.PositionChanged
 			{
 				add { }
 				remove { }
 			}
 
-			/// <summary>
-			/// To calculate position by the order.
-			/// </summary>
-			/// <param name="order">Order.</param>
-			/// <returns>The position by the order.</returns>
-			decimal IPositionManager.ProcessOrder(Order order)
-			{
-				throw new NotSupportedException();
-			}
-
-			/// <summary>
-			/// To calculate the position by the trade.
-			/// </summary>
-			/// <param name="trade">Trade.</param>
-			/// <returns>The position by the trade.</returns>
-			decimal IPositionManager.ProcessMyTrade(MyTrade trade)
-			{
-				throw new NotSupportedException();
-			}
-
-
-			IEnumerable<Position> IPositionManager.Positions
+			IEnumerable<KeyValuePair<Tuple<SecurityId, string>, decimal>> IPositionManager.Positions
 			{
 				get
 				{
@@ -2512,6 +2496,11 @@ namespace StockSharp.Algo
 			}
 
 			void IPositionManager.Reset()
+			{
+				throw new NotSupportedException();
+			}
+
+			decimal? IPositionManager.ProcessMessage(Message message)
 			{
 				throw new NotSupportedException();
 			}

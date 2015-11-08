@@ -151,6 +151,9 @@ namespace SampleAlfa
 						// устанавливаем поставщик маркет-данных
 						_securitiesWindow.SecurityPicker.MarketDataProvider = Trader;
 
+						// set news provider
+						_newsWindow.NewsPanel.NewsProvider = Trader;
+
 						ShowSecurities.IsEnabled = ShowNews.IsEnabled =
 						ShowMyTrades.IsEnabled = ShowOrders.IsEnabled = ShowStopOrders.IsEnabled =
 						ShowPortfolios.IsEnabled = true;

@@ -10,7 +10,6 @@ namespace StockSharp.Xaml
 	using Ecng.ComponentModel;
 	using Ecng.Xaml;
 
-	using StockSharp.Algo;
 	using StockSharp.BusinessEntities;
 	using StockSharp.Messages;
 	using StockSharp.Localization;
@@ -113,24 +112,12 @@ namespace StockSharp.Xaml
 		private SecurityData Data { get; set; }
 
 		/// <summary>
-		/// Connection to the trading system.
+		/// Available portfolios.
 		/// </summary>
-		public IConnector Connector
+		public ThreadSafeObservableCollection<Portfolio> Portfolios
 		{
-			get { return PortfolioCtrl.Connector; }
-			set
-			{
-				PortfolioCtrl.Connector = value;
-
-				if (value == null)
-					return;
-
-				if (SecurityProvider == null)
-					SecurityProvider = new FilterableSecurityProvider(value);
-
-				if (MarketDataProvider == null)
-					MarketDataProvider = value;
-			}
+			get { return PortfolioCtrl.Portfolios; }
+			set { PortfolioCtrl.Portfolios = value; }
 		}
 
 		private IMarketDataProvider _marketDataProvider;
@@ -202,11 +189,11 @@ namespace StockSharp.Xaml
 						break;
 					case OrderWindowTif.Today:
 						_order.TimeInForce = TimeInForce.PutInQueue;
-						_order.ExpiryDate = (DateTimeOffset.Now.Date + TimeHelper.LessOneDay).ApplyTimeZone(Security.Board.Exchange.TimeZoneInfo);
+						_order.ExpiryDate = (DateTimeOffset.Now.Date + TimeHelper.LessOneDay).ApplyTimeZone(Security.Board.TimeZone);
 						break;
 					case OrderWindowTif.Gtd:
 						_order.TimeInForce = TimeInForce.PutInQueue;
-						_order.ExpiryDate = (ExpiryDate.Value ?? DateTime.Today).ApplyTimeZone(Security.Board.Exchange.TimeZoneInfo);
+						_order.ExpiryDate = (ExpiryDate.Value ?? DateTime.Today).ApplyTimeZone(Security.Board.TimeZone);
 						break;
 					case null:
 						break;
@@ -258,7 +245,7 @@ namespace StockSharp.Xaml
 					{
 						if (value.ExpiryDate == null || value.ExpiryDate == DateTimeOffset.MaxValue)
 							TimeInForceCtrl.SelectedValue = OrderWindowTif.Gtc;
-						else if (value.ExpiryDate == (DateTimeOffset.Now.Date + TimeHelper.LessOneDay).ApplyTimeZone(Security.Board.Exchange.TimeZoneInfo))
+						else if (value.ExpiryDate == (DateTimeOffset.Now.Date + TimeHelper.LessOneDay).ApplyTimeZone(Security.Board.TimeZone))
 							TimeInForceCtrl.SelectedValue = OrderWindowTif.Today;
 						else
 						{

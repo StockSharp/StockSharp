@@ -23,6 +23,7 @@ namespace SampleOptionQuoting
 	using StockSharp.Algo.Strategies.Derivatives;
 	using StockSharp.Messages;
 	using StockSharp.Localization;
+	using StockSharp.Xaml;
 
 	public partial class MainWindow
 	{
@@ -189,7 +190,7 @@ namespace SampleOptionQuoting
 			//_trader = new PlazaTrader { IsCGate = true };
 			//_trader.Tables.Add(_trader.TableRegistry.Volatility);
 
-			Portfolio.Connector = Connector;
+			Portfolio.Portfolios = new PortfolioDataSource(Connector);
 
 			PosChart.MarketDataProvider = Connector;
 			PosChart.SecurityProvider = Connector;

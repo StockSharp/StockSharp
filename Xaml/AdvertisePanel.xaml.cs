@@ -7,21 +7,18 @@ namespace StockSharp.Xaml
 
 	using Ecng.Common;
 	using Ecng.Collections;
-	using Ecng.Configuration;
 	using Ecng.Localization;
 	using Ecng.Web.BBCodes;
 	using Ecng.Xaml;
 
 	using StockSharp.Community;
 	using StockSharp.Localization;
-	using StockSharp.Logging;
 
 	/// <summary>
 	/// Panel for advertising action displaying.
 	/// </summary>
 	public partial class AdvertisePanel
 	{
-		private readonly NotificationClient _client;
 		private readonly SynchronizedList<CommunityNews> _news = new SynchronizedList<CommunityNews>();
 		private int _index = -1;
 		private readonly BBCodeParser _parser;
@@ -36,9 +33,6 @@ namespace StockSharp.Xaml
 
 			if (DesignerProperties.GetIsInDesignMode(this))
 				return;
-
-			_client = ConfigManager.TryGetService<NotificationClient>() ?? new NotificationClient();
-			_client.NewsReceived += OnNewsReceived;
 
 			var sizes = new[] { 10, 20, 30, 40, 50, 60, 70, 110, 120 };
 
@@ -61,6 +55,35 @@ namespace StockSharp.Xaml
 			_timer.Tick += OnTick;
 			_timer.Interval = new TimeSpan(0, 1, 0);
 			_timer.Start();
+		}
+
+		private NotificationClient _client;
+
+		/// <summary>
+		/// The client for access to the StockSharp notification service.
+		/// </summary>
+		public NotificationClient Client
+		{
+			get { return _client; }
+			set
+			{
+				if (_client == value)
+					return;
+
+				if (_client != null)
+				{
+					_client.NewsReceived -= OnNewsReceived;
+					_client.UnSubscribeNews();
+				}
+
+				_client = value;
+
+				if (_client != null)
+				{
+					_client.NewsReceived += OnNewsReceived;
+					_client.SubscribeNews();
+				}
+			}
 		}
 
 		private void OnTick(object sender, EventArgs e)
@@ -97,20 +120,20 @@ namespace StockSharp.Xaml
 			HtmlPanel.Text = _parser.ToHtml(GetContent(news));
 		}
 
-		private void AdvertisePanel_OnLoaded(object sender, RoutedEventArgs e)
-		{
-			if (DesignerProperties.GetIsInDesignMode(this))
-				return;
+		//private void AdvertisePanel_OnLoaded(object sender, RoutedEventArgs e)
+		//{
+		//	if (DesignerProperties.GetIsInDesignMode(this))
+		//		return;
 
-			try
-			{
-				_client.SubscribeNews();
-			}
-			catch (Exception ex)
-			{
-				ex.LogError();
-			}
-		}
+		//	try
+		//	{
+		//		_client.SubscribeNews();
+		//	}
+		//	catch (Exception ex)
+		//	{
+		//		ex.LogError();
+		//	}
+		//}
 
 		private void OnNextClick(object sender, RoutedEventArgs e)
 		{

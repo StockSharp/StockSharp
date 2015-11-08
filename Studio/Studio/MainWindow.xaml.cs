@@ -599,7 +599,7 @@ namespace StockSharp.Studio
 
 					_entityRegistry.Positions.Save(pos);
 					_connector.SendToEmulator(new[] { pos.ToChangeMessage() });
-					new PositionCommand(DateTime.Now, pos, wnd.IsNew).Process(this);
+					//new PositionCommand(DateTime.Now, pos, wnd.IsNew).Process(this);
 				}
 			});
 

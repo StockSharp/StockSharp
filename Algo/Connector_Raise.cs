@@ -16,19 +16,39 @@ namespace StockSharp.Algo
 	partial class Connector
 	{
 		/// <summary>
+		/// Own trade received.
+		/// </summary>
+		public event Action<MyTrade> NewMyTrade;
+
+		/// <summary>
 		/// Own trades received.
 		/// </summary>
 		public event Action<IEnumerable<MyTrade>> NewMyTrades;
 
 		/// <summary>
-		/// Tick tades received.
+		/// Tick trade received.
+		/// </summary>
+		public event Action<Trade> NewTrade;
+
+		/// <summary>
+		/// Tick trades received.
 		/// </summary>
 		public event Action<IEnumerable<Trade>> NewTrades;
+
+		/// <summary>
+		/// Order received.
+		/// </summary>
+		public event Action<Order> NewOrder;
 
 		/// <summary>
 		/// Orders received.
 		/// </summary>
 		public event Action<IEnumerable<Order>> NewOrders;
+
+		/// <summary>
+		/// Order changed (cancelled, matched).
+		/// </summary>
+		public event Action<Order> OrderChanged;
 
 		/// <summary>
 		/// Stop-orders received.
@@ -41,9 +61,24 @@ namespace StockSharp.Algo
 		public event Action<IEnumerable<Order>> OrdersChanged;
 
 		/// <summary>
+		/// Order registration error event.
+		/// </summary>
+		public event Action<OrderFail> OrderRegisterFailed;
+
+		/// <summary>
+		/// Order cancellation error event.
+		/// </summary>
+		public event Action<OrderFail> OrderCancelFailed;
+
+		/// <summary>
 		/// Stop-orders changed.
 		/// </summary>
 		public event Action<IEnumerable<Order>> StopOrdersChanged;
+
+		/// <summary>
+		/// Security received.
+		/// </summary>
+		public event Action<Security> NewSecurity;
 
 		/// <summary>
 		/// Order registration errors event.
@@ -71,9 +106,19 @@ namespace StockSharp.Algo
 		public event Action<IEnumerable<Security>> NewSecurities;
 
 		/// <summary>
+		/// Security changed.
+		/// </summary>
+		public event Action<Security> SecurityChanged;
+
+		/// <summary>
 		/// Securities changed.
 		/// </summary>
 		public event Action<IEnumerable<Security>> SecuritiesChanged;
+
+		/// <summary>
+		/// New portfolio received.
+		/// </summary>
+		public event Action<Portfolio> NewPortfolio;
 
 		/// <summary>
 		/// Portfolios received.
@@ -81,9 +126,19 @@ namespace StockSharp.Algo
 		public event Action<IEnumerable<Portfolio>> NewPortfolios;
 
 		/// <summary>
+		/// Portfolio changed.
+		/// </summary>
+		public event Action<Portfolio> PortfolioChanged;
+
+		/// <summary>
 		/// Portfolios changed.
 		/// </summary>
 		public event Action<IEnumerable<Portfolio>> PortfoliosChanged;
+
+		/// <summary>
+		/// Position received.
+		/// </summary>
+		public event Action<Position> NewPosition;
 
 		/// <summary>
 		/// Positions received.
@@ -91,9 +146,24 @@ namespace StockSharp.Algo
 		public event Action<IEnumerable<Position>> NewPositions;
 
 		/// <summary>
+		/// Position changed.
+		/// </summary>
+		public event Action<Position> PositionChanged;
+
+		/// <summary>
 		/// Positions changed.
 		/// </summary>
 		public event Action<IEnumerable<Position>> PositionsChanged;
+
+		/// <summary>
+		/// Order book received.
+		/// </summary>
+		public event Action<MarketDepth> NewMarketDepth;
+
+		/// <summary>
+		/// Order book changed.
+		/// </summary>
+		public event Action<MarketDepth> MarketDepthChanged;
 
 		/// <summary>
 		/// Order books received.
@@ -104,6 +174,11 @@ namespace StockSharp.Algo
 		/// Order books changed.
 		/// </summary>
 		public event Action<IEnumerable<MarketDepth>> MarketDepthsChanged;
+
+		/// <summary>
+		/// Order log received.
+		/// </summary>
+		public event Action<OrderLogItem> NewOrderLogItem;
 
 		/// <summary>
 		/// Order log received.
@@ -190,31 +265,52 @@ namespace StockSharp.Algo
 		/// </summary>
 		public event Action TimeOut;
 
-		/// <summary>
-		/// To call the event <see cref="Connector.NewMyTrades"/>.
-		/// </summary>
-		/// <param name="trades">My trades to be passed to the event.</param>
-		private void RaiseNewMyTrades(IEnumerable<MyTrade> trades)
+		private void RaiseNewMyTrade(MyTrade trade)
 		{
-			NewMyTrades.SafeInvoke(trades);
+			NewMyTrade.SafeInvoke(trade);
+
+			var multiEvt = NewMyTrades;
+
+			if (multiEvt == null)
+				return;
+
+			multiEvt.SafeInvoke(new[] { trade });
 		}
 
-		/// <summary>
-		/// To call the event <see cref="Connector.NewTrades"/>.
-		/// </summary>
-		/// <param name="trades">Trades that should be passed to the event.</param>
-		private void RaiseNewTrades(IEnumerable<Trade> trades)
+		private void RaiseNewTrade(Trade trade)
 		{
-			NewTrades.SafeInvoke(trades);
+			NewTrade.SafeInvoke(trade);
+
+			var multiEvt = NewTrades;
+
+			if (multiEvt == null)
+				return;
+
+			multiEvt.SafeInvoke(new[] { trade });
 		}
 
-		/// <summary>
-		/// To call the event <see cref="Connector.NewOrders"/>.
-		/// </summary>
-		/// <param name="orders">Orders that should be passed to the event.</param>
-		private void RaiseNewOrders(IEnumerable<Order> orders)
+		private void RaiseNewOrder(Order order)
 		{
-			NewOrders.SafeInvoke(orders);
+			NewOrder.SafeInvoke(order);
+
+			var multiEvt = NewOrders;
+
+			if (multiEvt == null)
+				return;
+
+			multiEvt.SafeInvoke(new[] { order });
+		}
+
+		private void RaiseOrderChanged(Order order)
+		{
+			OrderChanged.SafeInvoke(order);
+
+			var multiEvt = OrdersChanged;
+
+			if (multiEvt == null)
+				return;
+
+			multiEvt.SafeInvoke(new[] { order });
 		}
 
 		/// <summary>
@@ -227,15 +323,6 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// To call the event <see cref="Connector.OrdersChanged"/>.
-		/// </summary>
-		/// <param name="orders">Orders that should be passed to the event.</param>
-		private void RaiseOrdersChanged(IEnumerable<Order> orders)
-		{
-			OrdersChanged.SafeInvoke(orders);
-		}
-
-		/// <summary>
 		/// To call the event <see cref="Connector.StopOrdersChanged"/>.
 		/// </summary>
 		/// <param name="stopOrders">Stop orders that should be passed to the event.</param>
@@ -244,22 +331,28 @@ namespace StockSharp.Algo
 			StopOrdersChanged.SafeInvoke(stopOrders);
 		}
 
-		/// <summary>
-		/// To call the event <see cref="Connector.OrdersRegisterFailed"/>.
-		/// </summary>
-		/// <param name="fails">Error information that should be passed to the event.</param>
-		private void RaiseOrdersRegisterFailed(IEnumerable<OrderFail> fails)
+		private void RaiseOrderRegisterFailed(OrderFail fail)
 		{
-			OrdersRegisterFailed.SafeInvoke(fails);
+			OrderRegisterFailed.SafeInvoke(fail);
+
+			var multiEvt = OrdersRegisterFailed;
+
+			if (multiEvt == null)
+				return;
+
+			multiEvt.SafeInvoke(new[] { fail });
 		}
 
-		/// <summary>
-		/// To call the event <see cref="Connector.OrdersCancelFailed"/>.
-		/// </summary>
-		/// <param name="fails">Error information that should be passed to the event.</param>
-		private void RaiseOrdersCancelFailed(IEnumerable<OrderFail> fails)
+		private void RaiseOrderCancelFailed(OrderFail fail)
 		{
-			OrdersCancelFailed.SafeInvoke(fails);
+			OrderCancelFailed.SafeInvoke(fail);
+
+			var multiEvt = OrdersCancelFailed;
+
+			if (multiEvt == null)
+				return;
+
+			multiEvt.SafeInvoke(new[] { fail });
 		}
 
 		/// <summary>
@@ -280,90 +373,115 @@ namespace StockSharp.Algo
 			StopOrdersCancelFailed.SafeInvoke(fails);
 		}
 
-		/// <summary>
-		/// To call the event <see cref="Connector.NewSecurities"/>.
-		/// </summary>
-		/// <param name="securities">Instruments that should be passed to the event.</param>
-		private void RaiseNewSecurities(Security[] securities)
+		private void RaiseNewSecurity(Security security)
 		{
-			NewSecurities.SafeInvoke(securities);
+			_added.SafeInvoke(security);
 
-			foreach (var security in securities)
-			{
-				_added.SafeInvoke(security);
-			}
+			NewSecurity.SafeInvoke(security);
+
+			var multiEvt = NewSecurities;
+
+			if (multiEvt == null)
+				return;
+
+			multiEvt.SafeInvoke(new[] { security });
 		}
 
-		/// <summary>
-		/// To call the event <see cref="Connector.SecuritiesChanged"/>.
-		/// </summary>
-		/// <param name="securities">Instruments that should be passed to the event.</param>
-		private void RaiseSecuritiesChanged(IEnumerable<Security> securities)
+		private void RaiseSecuritiesChanged(Security[] securities)
 		{
 			SecuritiesChanged.SafeInvoke(securities);
+
+			var evt = SecurityChanged;
+
+			if (evt == null)
+				return;
+
+			foreach (var security in securities)
+				evt(security);
 		}
 
-		/// <summary>
-		/// To call the event <see cref="Connector.SecuritiesChanged"/>.
-		/// </summary>
-		/// <param name="security">Instrument that should be passed to the event.</param>
 		private void RaiseSecurityChanged(Security security)
 		{
-			RaiseSecuritiesChanged(new[] { security });
+			SecurityChanged.SafeInvoke(security);
+
+			var multiEvt = SecuritiesChanged;
+
+			if (multiEvt == null)
+				return;
+
+			multiEvt.SafeInvoke(new[] { security });
 		}
 
-		/// <summary>
-		/// To call the event <see cref="Connector.NewPortfolios"/>.
-		/// </summary>
-		/// <param name="portfolios">Portfolios that should be passed to the event.</param>
-		private void RaiseNewPortfolios(IEnumerable<Portfolio> portfolios)
+		private void RaiseNewPortfolio(Portfolio portfolio)
 		{
-			NewPortfolios.SafeInvoke(portfolios);
+			NewPortfolio.SafeInvoke(portfolio);
+
+			var multiEvt = NewPortfolios;
+
+			if (multiEvt == null)
+				return;
+
+			multiEvt.SafeInvoke(new[] { portfolio });
 		}
 
-		/// <summary>
-		/// To call the event <see cref="Connector.PortfoliosChanged"/>.
-		/// </summary>
-		/// <param name="portfolios">Portfolios that should be passed to the event.</param>
-		private void RaisePortfoliosChanged(IEnumerable<Portfolio> portfolios)
+		private void RaisePortfolioChanged(Portfolio portfolio)
 		{
-			PortfoliosChanged.SafeInvoke(portfolios);
+			PortfolioChanged.SafeInvoke(portfolio);
+
+			var multiEvt = PortfoliosChanged;
+
+			if (multiEvt == null)
+				return;
+
+			multiEvt.SafeInvoke(new[] { portfolio });
 		}
 
-		/// <summary>
-		/// To call the event <see cref="Connector.NewPositions"/>.
-		/// </summary>
-		/// <param name="positions">Positions that should be passed to the event.</param>
-		private void RaiseNewPositions(IEnumerable<Position> positions)
+		private void RaiseNewPosition(Position position)
 		{
-			NewPositions.SafeInvoke(positions);
+			NewPosition.SafeInvoke(position);
+
+			var multiEvt = NewPositions;
+
+			if (multiEvt == null)
+				return;
+
+			multiEvt.SafeInvoke(new[] { position });
 		}
 
-		/// <summary>
-		/// To call the event <see cref="Connector.PositionsChanged"/>.
-		/// </summary>
-		/// <param name="positions">Positions that should be passed to the event.</param>
-		private void RaisePositionsChanged(IEnumerable<Position> positions)
+		private void RaisePositionChanged(Position position)
 		{
-			PositionsChanged.SafeInvoke(positions);
+			PositionChanged.SafeInvoke(position);
+
+			var multiEvt = PositionsChanged;
+
+			if (multiEvt == null)
+				return;
+
+			multiEvt.SafeInvoke(new[] { position });
 		}
 
-		/// <summary>
-		/// To call the event <see cref="Connector.NewMarketDepths"/>.
-		/// </summary>
-		/// <param name="marketDepths">Order books that should be passed to the event.</param>
-		private void RaiseNewMarketDepths(IEnumerable<MarketDepth> marketDepths)
+		private void RaiseNewMarketDepth(MarketDepth marketDepth)
 		{
-			NewMarketDepths.SafeInvoke(marketDepths);
+			NewMarketDepth.SafeInvoke(marketDepth);
+
+			var multiEvt = NewMarketDepths;
+
+			if (multiEvt == null)
+				return;
+
+			multiEvt.SafeInvoke(new[] { marketDepth });
 		}
 
-		/// <summary>
-		/// To call the event <see cref="Connector.MarketDepthsChanged"/>.
-		/// </summary>
-		/// <param name="marketDepths">Order books that should be passed to the event.</param>
-		private void RaiseMarketDepthsChanged(IEnumerable<MarketDepth> marketDepths)
+		private void RaiseMarketDepthChanged(MarketDepth marketDepth)
 		{
-			MarketDepthsChanged.SafeInvoke(marketDepths);
+			MarketDepthChanged.SafeInvoke(marketDepth);
+
+			var multiEvt = MarketDepthsChanged;
+
+			if (multiEvt == null)
+				return;
+
+			multiEvt.SafeInvoke(new[] { marketDepth });
 		}
 
 		/// <summary>
@@ -384,13 +502,16 @@ namespace StockSharp.Algo
 			NewsChanged.SafeInvoke(news);
 		}
 
-		/// <summary>
-		/// To call the event <see cref="Connector.NewOrderLogItems"/>.
-		/// </summary>
-		/// <param name="items">Orders log lines.</param>
-		private void RaiseNewOrderLogItems(IEnumerable<OrderLogItem> items)
+		private void RaiseNewOrderLogItem(OrderLogItem item)
 		{
-			NewOrderLogItems.SafeInvoke(items);
+			NewOrderLogItem.SafeInvoke(item);
+
+			var multiEvt = NewOrderLogItems;
+
+			if (multiEvt == null)
+				return;
+
+			multiEvt.SafeInvoke(new[] { item });
 		}
 
 		/// <summary>

@@ -15,6 +15,7 @@
 
 	using StockSharp.Algo;
 	using StockSharp.Algo.Candles;
+	using StockSharp.Algo.Candles.Compression;
 	using StockSharp.Algo.Commissions;
 	using StockSharp.Algo.Storages;
 	using StockSharp.Algo.Strategies;
@@ -29,6 +30,22 @@
 
 	public partial class EmulationControl
 	{
+		private class TradeCandleBuilderSourceEx : TradeCandleBuilderSource
+		{
+			public TradeCandleBuilderSourceEx(IConnector connector)
+				: base(connector)
+			{
+			}
+
+			protected override void RegisterSecurity(Security security)
+			{
+			}
+
+			protected override void UnRegisterSecurity(Security security)
+			{
+			}
+		}
+
 		#region DependencyProperty
 
 		public static readonly DependencyProperty StrategiesRegistryProperty = DependencyProperty.Register("StrategiesRegistry", typeof(StrategiesRegistry), typeof(EmulationControl),
@@ -64,6 +81,12 @@
 			SecusityTextBox.Text = "RIZ2@FORTS";
 			FromDatePicker.Value = new DateTime(2012, 10, 1);
 			ToDatePicke.Value = new DateTime(2012, 10, 25);
+
+			MarketDataTypeComboBox.ItemsSource = new[] { "Ticks", "Candles" };
+			MarketDataTypeComboBox.SelectedItem = "Candles";
+
+			TimeFrameComboBox.ItemsSource = new[] { TimeSpan.FromMinutes(1), TimeSpan.FromMinutes(5) };
+			TimeFrameComboBox.SelectedItem = TimeSpan.FromMinutes(5);
 
 			_bufferedChart = new BufferedChart(Chart);
 
@@ -106,11 +129,18 @@
 				return;
 			}
 
+			if (Composition == null)
+			{
+				MessageBox.Show("No strategy selected.");
+				return;
+			}
+
 			var secGen = new SecurityIdGenerator();
 			var secIdParts = secGen.Split(SecusityTextBox.Text);
 			var secCode = secIdParts.SecurityCode;
 			var board = ExchangeBoard.GetOrCreateBoard(secIdParts.BoardCode);
-			var timeFrame = TimeSpan.FromMinutes(5);
+			var timeFrame = (TimeSpan)TimeFrameComboBox.SelectedItem;
+			var useCandles = (string)MarketDataTypeComboBox.SelectedItem != "Ticks";
 
 			// create test security
 			var security = new Security
@@ -175,7 +205,7 @@
 					}
 				},
 
-				UseExternalCandleSource = false,
+				UseExternalCandleSource = useCandles,
 
 				HistoryMessageAdapter =
 				{
@@ -194,7 +224,9 @@
 
 			_logManager.Sources.Add(_connector);
 
-			var candleManager = new CandleManager(_connector);
+			var candleManager = !useCandles
+					? new CandleManager(new TradeCandleBuilderSourceEx(_connector))
+					: new CandleManager(_connector);
 
 			// create strategy based on 80 5-min и 10 5-min
 			var strategy = new DiagramStrategy
@@ -269,7 +301,8 @@
 				_connector.SendInMessage(level1Info);
 
 				//_connector.RegisterMarketDepth(security);
-				_connector.RegisterTrades(security);
+				if (!useCandles)
+					_connector.RegisterTrades(security);
 
 				// start strategy before emulation started
 				strategy.Start();

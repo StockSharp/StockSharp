@@ -535,7 +535,7 @@ namespace StockSharp.Algo.Derivatives
 				return new Security
 				{
 					UnderlyingSecurityId = groups["code"].Value,
-					ExpiryDate = groups["expiryDate"].Value.ToDateTime("ddMMyy").ApplyTimeZone(board.Exchange.TimeZoneInfo),
+					ExpiryDate = groups["expiryDate"].Value.ToDateTime("ddMMyy").ApplyTimeZone(board.TimeZone),
 					OptionType = groups["optionType"].Value == "C" ? OptionTypes.Call : OptionTypes.Put,
 					Strike = decimal.Parse(groups["strike"].Value, CultureInfo.InvariantCulture),
 				};
@@ -584,7 +584,7 @@ namespace StockSharp.Algo.Derivatives
 				{
 					SecurityCode = optionMatch.Groups["code"].Value + _futureMonthCodes[month] + yearStr.Last(),
 				},
-				ExpiryDate = new DateTime(2000 + yearStr.To<int>(), month, 1).ApplyTimeZone(board.Exchange.TimeZoneInfo),
+				ExpiryDate = new DateTime(2000 + yearStr.To<int>(), month, 1).ApplyTimeZone(board.TimeZone),
 				Name = futureName,
 			};
 		}

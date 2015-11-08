@@ -88,7 +88,7 @@ namespace SampleSmartSMA
 
 					_logManager.Sources.Add(_trader);
 
-					Portfolios.Connector = _trader;
+					Portfolios.Portfolios = new PortfolioDataSource(_trader);
 
 					// подписываемся на событие успешного соединения
 					_trader.Connected += () =>

@@ -67,7 +67,9 @@ namespace StockSharp.Transaq
 							command.Items.Add(new SubscribeTicksSecurity
 							{
 								SecId = (int)id.Native,
-								TradeNo = id.Equals(mdMsg.SecurityId) ? 1 : 0,
+								// http://stocksharp.com/forum/yaf_postsm35978_Obnovlieniie-Tranzak-do-viersii-2-16-1.aspx#post35978
+								//TradeNo = id.Equals(mdMsg.SecurityId) ? 1 : 0,
+								TradeNo = 1,
 							});
 						}
 

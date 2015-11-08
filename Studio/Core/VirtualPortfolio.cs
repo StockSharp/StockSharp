@@ -4,6 +4,7 @@
 	using System.Linq;
 
 	using Ecng.Collections;
+	using Ecng.Configuration;
 	using Ecng.Serialization;
 
 	using StockSharp.BusinessEntities;
@@ -36,7 +37,7 @@
 			if (values != null)
 			{
 				var pairs = values
-					.Select(v => new KeyValuePair<Portfolio, decimal>(Connector.Portfolios.FirstOrDefault(p => p.Name == v.Key), v.Value))
+					.Select(v => new KeyValuePair<Portfolio, decimal>(ConfigManager.GetService<IConnector>().Portfolios.FirstOrDefault(p => p.Name == v.Key), v.Value))
 					.ToArray();
 
 				InnerPortfolios.AddRange(pairs);

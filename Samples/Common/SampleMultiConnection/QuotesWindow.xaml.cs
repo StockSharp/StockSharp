@@ -1,4 +1,4 @@
-﻿namespace SampleQuikSmart
+﻿namespace SampleMultiConnection
 {
 	public partial class QuotesWindow
 	{

@@ -110,6 +110,9 @@ namespace SampleIQFeed
 				// set market data provider
 				_securitiesWindow.SecurityPicker.MarketDataProvider = Trader;
 
+				// set news provider
+				_newsWindow.NewsGrid.NewsProvider = Trader;
+
 				ShowNews.IsEnabled = ShowSecurities.IsEnabled = true;
 			}
 

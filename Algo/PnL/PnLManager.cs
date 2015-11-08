@@ -3,6 +3,7 @@ namespace StockSharp.Algo.PnL
 	using System;
 	using System.Linq;
 
+	using Ecng.Common;
 	using Ecng.Collections;
 	using Ecng.Serialization;
 
@@ -82,30 +83,36 @@ namespace StockSharp.Algo.PnL
 				{
 					var trade = (ExecutionMessage)message;
 
-					if (trade.ExecutionType != ExecutionTypes.Trade)
-						return null;
-
-					lock (_portfolioManagers.SyncRoot)
+					switch (trade.ExecutionType)
 					{
-						var manager = _portfolioManagers.SafeAdd(trade.PortfolioName, pf => new PortfolioPnLManager(pf));
+						case ExecutionTypes.Trade:
+						{
+							// TODO
+							if (trade.PortfolioName.IsEmpty())
+								return null;
 
-						PnLInfo info;
+							lock (_portfolioManagers.SyncRoot)
+							{
+								var manager = _portfolioManagers.SafeAdd(trade.PortfolioName, pf => new PortfolioPnLManager(pf));
 
-						if (manager.ProcessMyTrade(trade, out info))
-							_realizedPnL += info.PnL;
+								PnLInfo info;
 
-						return info;
+								if (manager.ProcessMyTrade(trade, out info))
+									_realizedPnL += info.PnL;
+
+								return info;
+							}
+						}
 					}
-				}
 
-				default:
-				{
-					foreach (var pnLManager in _portfolioManagers.CachedValues)
-						pnLManager.ProcessMessage(message);
-
-					return null;
+					break;
 				}
 			}
+
+			foreach (var pnLManager in _portfolioManagers.CachedValues)
+				pnLManager.ProcessMessage(message);
+
+			return null;
 		}
 
 		/// <summary>

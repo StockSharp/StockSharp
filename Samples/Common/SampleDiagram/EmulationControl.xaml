@@ -20,7 +20,7 @@
 
 					<Grid>
 						<Grid.ColumnDefinitions>
-							<ColumnDefinition Width="Auto"/>
+							<ColumnDefinition Width="80"/>
 							<ColumnDefinition Width="2*"/>
 							<ColumnDefinition Width="Auto"/>
 							<ColumnDefinition Width="Auto"/>
@@ -51,7 +51,10 @@
 						<xctk:DateTimePicker Grid.Column="8" Grid.Row="0" x:Name="FromDatePicker" Width="180" />
 						<xctk:DateTimePicker Grid.Column="9" Grid.Row="0" x:Name="ToDatePicke"  Width="180" />
 
-						<ProgressBar Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="8" x:Name="TicksAndDepthsProgress" />
+						<ComboBox Grid.Column="0" Grid.Row="1" x:Name="MarketDataTypeComboBox"/>
+						<ComboBox Grid.Column="1" Grid.Row="1" x:Name="TimeFrameComboBox" />
+
+						<ProgressBar Grid.Column="2" Grid.Row="1" Grid.ColumnSpan="6" x:Name="TicksAndDepthsProgress" />
 						<Button Grid.Column="8" Grid.Row="1" x:Name="StartButton" Content="Start" IsEnabled="True" Click="StartButtonOnClick"/>
 						<Button Grid.Column="9" Grid.Row="1" x:Name="StopButton" Content="Stop" IsEnabled="False" Click="StopButtonOnClick"/>
 					</Grid>

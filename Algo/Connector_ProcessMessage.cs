@@ -1009,7 +1009,7 @@ namespace StockSharp.Algo
 			var position = GetPosition(portfolio, security, message.DepoName, message.LimitType, message.Description);
 			position.ApplyChanges(message);
 
-			RaisePositionsChanged(new[] { position });
+			RaisePositionChanged(position);
 		}
 
 		private void ProcessNewsMessage(Security security, NewsMessage message)
@@ -1040,7 +1040,7 @@ namespace StockSharp.Algo
 				if (_subscriptionManager.IsFilteredMarketDepthRegistered(security))
 					GetFilteredMarketDepthInfo(security).Process(message);
 
-				RaiseMarketDepthsChanged(new[] { marketDepth });
+				RaiseMarketDepthChanged(marketDepth);
 			}
 			else
 			{
@@ -1168,7 +1168,7 @@ namespace StockSharp.Algo
 							innerSecurity.LastChangeTime = message.ServerTime;
 						}
 
-						RaiseSecuritiesChanged(changedSecurities.Keys);
+						RaiseSecuritiesChanged(changedSecurities.Keys.ToArray());
 					}
 				}
 			}
@@ -1188,7 +1188,7 @@ namespace StockSharp.Algo
 			var logItem = message.ToOrderLog(EntityFactory.CreateOrderLogItem(new Order { Security = security }, trade));
 			//logItem.LocalTime = message.LocalTime;
 
-			RaiseNewOrderLogItems(new[] { logItem });
+			RaiseNewOrderLogItem(logItem);
 
 			if (message.IsSystem == false)
 				return;
@@ -1221,7 +1221,7 @@ namespace StockSharp.Algo
 				});
 
 				if (tuple.Item2)
-					RaiseNewTrades(new[] { tuple.Item1 });
+					RaiseNewTrade(tuple.Item1);
 			}
 		}
 
@@ -1230,7 +1230,7 @@ namespace StockSharp.Algo
 			var tuple = _entityCache.ProcessTradeMessage(security, message);
 
 			if (tuple.Item2)
-				RaiseNewTrades(new[] { tuple.Item1 });
+				RaiseNewTrade(tuple.Item1);
 
 			var values = GetSecurityValues(security);
 
@@ -1309,7 +1309,7 @@ namespace StockSharp.Algo
 					if (order.Type == OrderTypes.Conditional)
 						RaiseNewStopOrders(new[] { order });
 					else
-						RaiseNewOrders(new[] { order });
+						RaiseNewOrder(order);
 				}
 				else if (isChanged)
 				{
@@ -1318,7 +1318,7 @@ namespace StockSharp.Algo
 					if (order.Type == OrderTypes.Conditional)
 						RaiseStopOrdersChanged(new[] { order });
 					else
-						RaiseOrdersChanged(new[] { order });
+						RaiseOrderChanged(order);
 				}
 
 				if (order.Id != null)
@@ -1347,7 +1347,6 @@ namespace StockSharp.Algo
 				this.AddErrorLog(() => (isRegisterFail ? "OrderFailed" : "OrderCancelFailed")
 					+ Environment.NewLine + fail.Order + Environment.NewLine + fail.Error);
 
-				var fails = new[] { fail };
 				var isStop = fail.Order.Type == OrderTypes.Conditional;
 
 				if (isRegisterFail)
@@ -1355,18 +1354,18 @@ namespace StockSharp.Algo
 					_entityCache.AddRegisterFail(fail);
 
 					if (isStop)
-						RaiseStopOrdersRegisterFailed(fails);
+						RaiseStopOrdersRegisterFailed(new[] { fail });
 					else
-						RaiseOrdersRegisterFailed(fails);
+						RaiseOrderRegisterFailed(fail);
 				}
 				else
 				{
 					_entityCache.AddCancelFail(fail);
 
 					if (isStop)
-						RaiseStopOrdersCancelFailed(fails);
+						RaiseStopOrdersCancelFailed(new[] { fail });
 					else
-						RaiseOrdersCancelFailed(fails);
+						RaiseOrderCancelFailed(fail);
 				}
 			}
 		}
@@ -1425,7 +1424,7 @@ namespace StockSharp.Algo
 			if (!tuple.Item2)
 				return;
 
-			RaiseNewMyTrades(new[] { tuple.Item1 });
+			RaiseNewMyTrade(tuple.Item1);
 		}
 
 		private void ProcessExecutionMessage(ExecutionMessage message)

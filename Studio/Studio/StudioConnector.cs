@@ -182,14 +182,14 @@ namespace StockSharp.Studio
 			cmdSvc.Register<LookupSecuritiesCommand>(this, false, cmd => LookupSecurities(cmd.Criteria));
 			cmdSvc.Register<RequestTradesCommand>(this, false, cmd => new NewTradesCommand(Trades).Process(this));
 			//cmdSvc.Register<RequestPortfoliosCommand>(this, cmd => Portfolios.ForEach(pf => new PortfolioCommand(pf, true).Process(this)));
-			cmdSvc.Register<RequestPositionsCommand>(this, false, cmd => Positions.ForEach(pos => new PositionCommand(CurrentTime, pos, true).Process(this)));
+			//cmdSvc.Register<RequestPositionsCommand>(this, false, cmd => Positions.ForEach(pos => new PositionCommand(CurrentTime, pos, true).Process(this)));
 			cmdSvc.Register<RequestMarketDataCommand>(this, false, cmd => AddExport(cmd.Security, cmd.Type));
 			cmdSvc.Register<RefuseMarketDataCommand>(this, false, cmd => RemoveExport(cmd.Security, cmd.Type));
 
 			//NewPortfolios += portfolios => portfolios.ForEach(pf => new PortfolioCommand(pf, true).Process(this));
 			PortfoliosChanged += portfolios => portfolios.ForEach(pf => new PortfolioCommand(pf, false).Process(this));
-			NewPositions += positions => positions.ForEach(pos => new PositionCommand(CurrentTime, pos, true).Process(this));
-			PositionsChanged += positions => positions.ForEach(pos => new PositionCommand(CurrentTime, pos, false).Process(this));
+			//NewPositions += positions => positions.ForEach(pos => new PositionCommand(CurrentTime, pos, true).Process(this));
+			//PositionsChanged += positions => positions.ForEach(pos => new PositionCommand(CurrentTime, pos, false).Process(this));
 			NewTrades += trades => new NewTradesCommand(trades).Process(this);
 			NewNews += news => new NewNewsCommand(news).Process(this);
 			LookupSecuritiesResult += securities => new LookupSecuritiesResultCommand(securities).Process(this);

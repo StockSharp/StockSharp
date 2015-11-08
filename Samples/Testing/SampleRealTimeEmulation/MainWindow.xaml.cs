@@ -248,7 +248,9 @@ namespace SampleRealTimeEmulation
 			var newOrder = new OrderWindow
 			{
 				Order = new Order { Security = _security },
-				Connector = _connector
+				SecurityProvider = _connector,
+				MarketDataProvider = _connector,
+				Portfolios = new PortfolioDataSource(_connector),
 			};
 
 			if (newOrder.ShowModal(this))
@@ -265,7 +267,9 @@ namespace SampleRealTimeEmulation
 			var window = new OrderWindow
 			{
 				Title = LocalizedStrings.Str2976Params.Put(order.TransactionId),
-				Connector = _connector,
+				SecurityProvider = _connector,
+				MarketDataProvider = _connector,
+				Portfolios = new PortfolioDataSource(_connector),
 				Order = order.ReRegisterClone(newVolume: order.Balance)
 			};
 

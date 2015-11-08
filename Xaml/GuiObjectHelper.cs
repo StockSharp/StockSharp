@@ -3,7 +3,6 @@ namespace StockSharp.Xaml
 	using System;
 	using System.Windows;
 
-	using Ecng.Configuration;
 	using Ecng.Xaml;
 
 	using StockSharp.BusinessEntities;
@@ -42,11 +41,7 @@ namespace StockSharp.Xaml
 			if (wndClosed == null)
 				throw new ArgumentNullException("wndClosed");
 
-			var w1 = ConfigManager.TryGetService<Window>();
-
-			var dispatcher = w1 != null && w1.Dispatcher != null ?
-							w1.Dispatcher :
-							Application.Current != null ? Application.Current.Dispatcher : null;
+			var dispatcher = Application.Current != null ? Application.Current.Dispatcher : null;
 
 			if (dispatcher == null)
 				throw new InvalidOperationException(LocalizedStrings.Str1564);
@@ -55,8 +50,7 @@ namespace StockSharp.Xaml
 
 			dispatcher.GuiSync(() =>
 			{
-				var w2 = Application.Current.MainWindow;
-				var owner = (w1 != null && w1.IsVisible) ? w1 : (w2 != null && w2.IsVisible) ? w2 : null;
+				var owner = Application.Current.MainWindow;
 
 				var wnd = createWindow();
 

@@ -1,13 +1,9 @@
 namespace StockSharp.Xaml
 {
-	using System;
 	using System.Collections.Generic;
-	using System.Linq;
 	using System.Windows;
 	using System.Windows.Controls;
 	
-	using Ecng.Collections;
-	using Ecng.Configuration;
 	using Ecng.Xaml;
 
 	using StockSharp.BusinessEntities;
@@ -19,6 +15,7 @@ namespace StockSharp.Xaml
 	public class ExchangeBoardComboBox : ComboBox
 	{
 		private static readonly ExchangeBoard _emptyBoard = new ExchangeBoard { Code = LocalizedStrings.Str1521 };
+		private readonly ThreadSafeObservableCollection<ExchangeBoard> _boards;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="ExchangeBoardComboBox"/>.
@@ -27,44 +24,53 @@ namespace StockSharp.Xaml
 		{
 			IsEditable = true;
 
-			var provider = ConfigManager.TryGetService<IExchangeInfoProvider>();
+			var itemsSource = new ObservableCollectionEx<ExchangeBoard> { _emptyBoard };
+			_boards = new ThreadSafeObservableCollection<ExchangeBoard>(itemsSource);
 
-			if (provider == null)
-			{
-				Boards = new ObservableCollectionEx<ExchangeBoard> { _emptyBoard };
-				Boards.AddRange(ExchangeBoard.EnumerateExchangeBoards().OrderBy(b => b.Code));
+			//_boards.AddRange(ExchangeBoard.EnumerateExchangeBoards().OrderBy(b => b.Code));
 
-				ConfigManager.ServiceRegistered += ConfigManagerServiceRegistered;
-			}
-			else
-				FillBoards(provider);
-
-			ItemsSource = Boards;
 			DisplayMemberPath = "Code";
+
+			Boards = _boards;
+			ItemsSource = Boards;
 
 			SelectedBoard = _emptyBoard;
 		}
 
-		private void ConfigManagerServiceRegistered(Type type, object service)
+		/// <summary>
+		/// <see cref="DependencyProperty"/> for <see cref="ExchangeInfoProvider"/>.
+		/// </summary>
+		public static readonly DependencyProperty ExchangeInfoProviderProperty = DependencyProperty.Register("ExchangeInfoProvider", typeof(IExchangeInfoProvider), typeof(ExchangeBoardComboBox), new PropertyMetadata(null, (o, args) =>
 		{
-			if (typeof(IExchangeInfoProvider) != type)
-				return;
+			var cb = (ExchangeBoardComboBox)o;
+			cb.UpdateProvider((IExchangeInfoProvider)args.NewValue);
+		}));
 
-			FillBoards((IExchangeInfoProvider)service);
+		private void UpdateProvider(IExchangeInfoProvider provider)
+		{
+			_boards.Clear();
 
-			GuiDispatcher.GlobalDispatcher.AddAction(() => ItemsSource = Boards);
+			if (_exchangeInfoProvider != null)
+				_exchangeInfoProvider.BoardAdded -= _boards.Add;
+
+			_exchangeInfoProvider = provider;
+
+			if (_exchangeInfoProvider != null)
+			{
+				_boards.AddRange(_exchangeInfoProvider.Boards);
+				_exchangeInfoProvider.BoardAdded += _boards.Add;
+			}
 		}
 
-		private void FillBoards(IExchangeInfoProvider provider)
+		private IExchangeInfoProvider _exchangeInfoProvider;
+
+		/// <summary>
+		/// The exchange info provider.
+		/// </summary>
+		public IExchangeInfoProvider ExchangeInfoProvider
 		{
-			var itemsSource = new ObservableCollectionEx<ExchangeBoard> { _emptyBoard };
-			var boards = new ThreadSafeObservableCollection<ExchangeBoard>(itemsSource);
-
-			boards.AddRange(provider.Boards);
-
-			provider.BoardAdded += boards.Add;
-			
-			Boards = boards;
+			get { return _exchangeInfoProvider; }
+			set { SetValue(ExchangeInfoProviderProperty, value); }
 		}
 
 		/// <summary>
@@ -73,7 +79,7 @@ namespace StockSharp.Xaml
 		public IList<ExchangeBoard> Boards { get; private set; }
 
 		/// <summary>
-		/// <see cref="DependencyProperty"/> for <see cref="ExchangeBoardComboBox.SelectedBoard"/>.
+		/// <see cref="DependencyProperty"/> for <see cref="SelectedBoard"/>.
 		/// </summary>
 		public static readonly DependencyProperty SelectedBoardProperty =
 			 DependencyProperty.Register("SelectedBoard", typeof(ExchangeBoard), typeof(ExchangeBoardComboBox),
@@ -99,10 +105,10 @@ namespace StockSharp.Xaml
 		private static void OnSelectedBoardPropertyChanged(DependencyObject source, DependencyPropertyChangedEventArgs e)
 		{
 			var board = (ExchangeBoard)e.NewValue;
-			var editor = (ExchangeBoardComboBox)source;
+			var combo = (ExchangeBoardComboBox)source;
 
-			editor.SelectedItem = board;
-			editor._selectedBoard = board;
+			combo.SelectedItem = board;
+			combo._selectedBoard = board;
 		}
 
 		/// <summary>

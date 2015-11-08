@@ -49,6 +49,15 @@ namespace StockSharp.Hydra
 
 			var database = (Database)_entityRegistry.Storage;
 
+			var conStrBuilder = new DbConnectionStringBuilder { ConnectionString = database.ConnectionString };
+
+			var path = (string)conStrBuilder.Cast<KeyValuePair<string, object>>().ToDictionary(StringComparer.InvariantCultureIgnoreCase).TryGetValue("Data Source");
+
+			if (path == null)
+				throw new InvalidOperationException(LocalizedStrings.Str2895);
+
+			File.Copy(path, "{0}.bak.{1:yyyyMMdd}".Put(path, DateTime.Now), true);
+
 			if (_entityRegistry.Version.Compare(new Version(2, 5)) == 0)
 			{
 				var schema = typeof(Security).GetSchema();
@@ -188,6 +197,17 @@ namespace StockSharp.Hydra
 					drop table tmp;");
 
 				_entityRegistry.Version = new Version(2, 15);
+			}
+
+			if (_entityRegistry.Version.Compare(new Version(2, 15)) == 0)
+			{
+				Execute(@"
+					alter table [ExchangeBoard] add column TimeZone varchar;
+					update [ExchangeBoard]
+					set
+						TimeZone = (select [TimeZoneInfo] from [Exchange] where [Name] = [ExchangeBoard].[Exchange])");
+
+				_entityRegistry.Version = new Version(2, 16);
 				return;
 			}
 
@@ -202,21 +222,8 @@ namespace StockSharp.Hydra
 					.Show();
 			});
 
-			var conStrBuilder = new DbConnectionStringBuilder { ConnectionString = database.ConnectionString };
-
 			try
 			{
-				var path = (string)conStrBuilder.Cast<KeyValuePair<string, object>>().ToDictionary(StringComparer.InvariantCultureIgnoreCase).TryGetValue("Data Source");
-
-				if (path == null)
-					throw new InvalidOperationException(LocalizedStrings.Str2895);
-
-				var targetPath = "{0}.bak.{1:yyyyMMdd}".Put(path, DateTime.Now);
-
-				if (File.Exists(targetPath))
-					File.Delete(targetPath);
-
-				File.Move(path, targetPath);
 				File.WriteAllBytes(path, Properties.Resources.StockSharp);
 
 				// обнуляем настройки, так как БД перезаписана на новую

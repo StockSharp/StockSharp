@@ -159,8 +159,6 @@ namespace StockSharp.Studio.Strategies
 		{
 			var portfolio = type.CreateInstance<WeighedVirtualPortfolio>();
 
-			portfolio.Connector = Connector;
-
 			if (settings != null)
 				portfolio.Load(settings);
 

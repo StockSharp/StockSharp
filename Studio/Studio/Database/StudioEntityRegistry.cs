@@ -617,12 +617,12 @@ namespace StockSharp.Studio.Database
 					SaveStatistics();
 				}
 
-				private void StrategyPositionsChanged(Position position)
+				private void StrategyPositionsChanged(KeyValuePair<Tuple<SecurityId, string>, decimal> position)
 				{
 					if (_strategy.GetIsInitialization())
 						return;
 
-					_sessionStrategy.Positions.Save(position);
+					//_sessionStrategy.Positions.Save(position);
 				}
 
 				protected override void DisposeManaged()
