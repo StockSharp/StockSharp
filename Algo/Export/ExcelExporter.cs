@@ -3,6 +3,7 @@ namespace StockSharp.Algo.Export
 	using System;
 	using System.Collections.Generic;
 	using System.Linq;
+	using System.Windows.Media;
 
 	using Ecng.Collections;
 	using Ecng.Common;
@@ -58,6 +59,9 @@ namespace StockSharp.Algo.Export
 							.SetCell(5, 0, LocalizedStrings.OI).SetStyle(5, typeof(decimal))
 							.SetCell(6, 0, "UP_DOWN").SetStyle(5, typeof(bool));
 
+						worker.SetConditionalFormatting(4, ComparisonOperator.Equal, "\"{0}\"".Put(Sides.Buy), null, Colors.Green);
+						worker.SetConditionalFormatting(4, ComparisonOperator.Equal, "\"{0}\"".Put(Sides.Sell), null, Colors.Red);
+
 						var index = 1;
 
 						foreach (var message in messages)
@@ -67,7 +71,7 @@ namespace StockSharp.Algo.Export
 								.SetCell(1, index, message.ServerTime)
 								.SetCell(2, index, message.TradePrice)
 								.SetCell(3, index, message.Volume)
-								.SetCell(4, index, message.Side)
+								.SetCell(4, index, message.OriginSide)
 								.SetCell(5, index, message.OpenInterest)
 								.SetCell(6, index, message.IsUpTick);
 
@@ -96,6 +100,9 @@ namespace StockSharp.Algo.Export
 							.SetCell(8, 0, LocalizedStrings.Str723).SetStyle(8, typeof(string))
 							.SetCell(9, 0, LocalizedStrings.Str724).SetStyle(9, typeof(decimal))
 							.SetCell(10, 0, LocalizedStrings.Str725).SetStyle(10, typeof(decimal));
+
+						worker.SetConditionalFormatting(4, ComparisonOperator.Equal, "\"{0}\"".Put(Sides.Buy), null, Colors.Green);
+						worker.SetConditionalFormatting(4, ComparisonOperator.Equal, "\"{0}\"".Put(Sides.Sell), null, Colors.Red);
 
 						var index = 1;
 
@@ -145,6 +152,13 @@ namespace StockSharp.Algo.Export
 							.SetCell(9, 0, LocalizedStrings.Str134)
 							.SetCell(10, 0, LocalizedStrings.Str506)
 							.SetCell(11, 0, LocalizedStrings.TradePrice).SetStyle(3, typeof(decimal));
+
+						worker.SetConditionalFormatting(7, ComparisonOperator.Equal, "\"{0}\"".Put(Sides.Buy), null, Colors.Green);
+						worker.SetConditionalFormatting(7, ComparisonOperator.Equal, "\"{0}\"".Put(Sides.Sell), null, Colors.Red);
+
+						worker.SetConditionalFormatting(9, ComparisonOperator.Equal, "\"{0}\"".Put(OrderStates.Active), null, Colors.Blue);
+						worker.SetConditionalFormatting(9, ComparisonOperator.Equal, "\"{0}\"".Put(OrderStates.Done), null, Colors.Green);
+						worker.SetConditionalFormatting(9, ComparisonOperator.Equal, "\"{0}\"".Put(OrderStates.Failed), null, Colors.Red);
 
 						var index = 1;
 
@@ -199,9 +213,8 @@ namespace StockSharp.Algo.Export
 					foreach (var quote in message.Bids.Concat(message.Asks).OrderByDescending(q => q.Price))
 					{
 						worker
-							.SetCell(columnIndex, rowIndex + 1, quote.Price)
-							.SetCell(columnIndex, rowIndex + 2, quote.Volume)
-							.SetCell(columnIndex, rowIndex + 3, quote.Side == Sides.Buy ? "B" : "A");
+							.SetCell(columnIndex, rowIndex + (quote.Side == Sides.Buy ? 1 : 3), quote.Price)
+							.SetCell(columnIndex, rowIndex + 2, quote.Volume);
 
 						columnIndex++;
 					}
