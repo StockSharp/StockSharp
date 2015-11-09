@@ -46,7 +46,7 @@
 		private const DataGridSelectionMode _defaultSelectionMode = DataGridSelectionMode.Extended;
 
 		/// <summary>
-		/// <see cref="DependencyProperty"/> for <see cref="SecurityPicker.SelectionMode"/>.
+		/// <see cref="DependencyProperty"/> for <see cref="SelectionMode"/>.
 		/// </summary>
 		public static readonly DependencyProperty SelectionModeProperty = DependencyProperty.Register("SelectionMode", typeof(DataGridSelectionMode), typeof(SecurityPicker), new PropertyMetadata(_defaultSelectionMode, OnSelectionModePropertyChanged));
 
@@ -77,7 +77,7 @@
 		}
 
 		/// <summary>
-		/// <see cref="DependencyProperty"/> for <see cref="SecurityPicker.ShowCommonStatColumns"/>.
+		/// <see cref="DependencyProperty"/> for <see cref="ShowCommonStatColumns"/>.
 		/// </summary>
 		public static readonly DependencyProperty ShowCommonStatColumnsProperty = DependencyProperty.Register("ShowCommonStatColumns", typeof(bool), typeof(SecurityPicker), new PropertyMetadata(false, ShowCommonStatColumnsPropertyChanged));
 
@@ -105,7 +105,7 @@
 		}
 
 		/// <summary>
-		/// <see cref="DependencyProperty"/> for <see cref="SecurityPicker.ShowCommonOptionColumns"/>.
+		/// <see cref="DependencyProperty"/> for <see cref="ShowCommonOptionColumns"/>.
 		/// </summary>
 		public static readonly DependencyProperty ShowCommonOptionColumnsProperty = DependencyProperty.Register("ShowCommonOptionColumns", typeof(bool), typeof(SecurityPicker), new PropertyMetadata(false, ShowCommonOptionColumnsPropertyChanged));
 
@@ -236,7 +236,7 @@
 		}
 
 		/// <summary>
-		/// <see cref="DependencyProperty"/> for <see cref="SecurityPicker.Title"/>.
+		/// <see cref="DependencyProperty"/> for <see cref="Title"/>.
 		/// </summary>
 		public static readonly DependencyProperty TitleProperty = DependencyProperty.Register("Title", typeof(string), typeof(SecurityPicker),
 			new PropertyMetadata(string.Empty, (d, e) =>
