@@ -52,6 +52,10 @@
     <Reference Include="Ecng.Configuration">
       <HintPath>..\..\..\References\Ecng\Ecng.Configuration.dll</HintPath>
     </Reference>
+    <Reference Include="Ecng.Localization, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\References\Ecng\Ecng.Localization.dll</HintPath>
+    </Reference>
     <Reference Include="Ecng.Serialization">
       <HintPath>..\..\..\References\Ecng\Ecng.Serialization.dll</HintPath>
     </Reference>
@@ -215,6 +219,7 @@
   <ItemGroup>
     <None Include="Strategies\b4fcbed7_eb78_4846_a108_7f570fc3660d.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <SubType>Designer</SubType>
     </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
