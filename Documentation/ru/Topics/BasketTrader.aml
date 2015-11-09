@@ -1,11 +1,159 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <topic id="1cfb4f7c-b9fc-43da-a958-b0e0f881479d" revisionNumber="0">
   <developerWalkthroughDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <!--<summary>
-      <para>Optional abstract</para>
-    </summary>-->
+	<introduction>
+		<para>
+			 <token>stocksharp</token> имеет механизм для работы одновременно с несколькими соединениями (коннекторами). Например, робот может одновременно вести торговлю через
+			<token>quik</token> и <token>smartcom</token>, или работать с несколькими терминалами <token>quik</token>.
+			 Этот механизм реализован на уровне сообщений. (см. <link xlink:href="5794f4b0-c536-4713-ad08-955a4a01b196">Сообщения</link>). За кулисами механизма лежит использование класса
+			 <codeEntityReference>T:StockSharp.Algo.BasketMessageAdapter</codeEntityReference>, который позволяет последовательно оперировать несколькими адаптерами, связанными с различными
+			 торговыми системами. Класс <codeEntityReference>T:StockSharp.Algo.Connector</codeEntityReference> имеет свойство <codeEntityReference>P:StockSharp.Algo.Connector.Adapter</codeEntityReference> этого типа.
+		</para>
+		<para>
+			Организовать работу с несколькими коннекторами можно загрузив настойки из специального конфигурационного файла, в котором сохранены настройки коннектора, 
+			в том числе настройки адаптеров, или ли же можно воспользоваться компонентом <codeEntityReference>T:StockSharp.Xaml.ConnectorWindow</codeEntityReference>, который
+			является графическим сервисом для конфигурации коннектора.
+		</para>
+		<para>
+			Ниже показан пример создания множественного подключения. Исходные коды примера находятся в проекте <legacyItalic>Samples/Common/SampleMultiConnection</legacyItalic>. 
+		</para>
+		<mediaLink><image placement="left" xlink:href="multiconnection_main" /></mediaLink>
+	</introduction>
+	
+	<procedure>
+      <title>Создание множественного подключения</title>
+     <steps class="ordered">
+		<step>
+			<content>
+				<para>
+					  В конструкторе главного окна вызываем метод InitConnector, в котором выполняется конфигурирование коннектора, а также подписка на необходимые события.
+				</para>
+				<code language="C#">
+				<![CDATA[
+public MainWindow()
+{
+	InitializeComponent();
+	Instance = this;
 
-    <introduction>
+	Title = Title.Put("Multi connection");
+
+	_ordersWindow.MakeHideable();
+	_securitiesWindow.MakeHideable();
+
+	var logManager = new LogManager();
+	logManager.Listeners.Add(new FileLogListener("sample.log"));
+	logManager.Sources.Add(Connector);
+
+	InitConnector();
+}
+		]]>
+				</code> 
+		 	</content>
+		</step>
+		<step>
+			<content>
+				<para>
+					   В методе InitConnector выполняется подписка на события коннектора, а также загрузка настроек коннектора из конфигурационного файла при помощи метода
+					   <codeEntityReference qualifyHint="true">M:StockSharp.Algo.Connector.Load(SettingsStorage)</codeEntityReference>.
+				</para>
+				<code language="C#">
+				<![CDATA[
+private void InitConnector()
+{
+	// subscribe on connection successfully event
+	Connector.Connected += () =>
+	{
+		this.GuiAsync(() => ChangeConnectStatus(true));
+	};
+
+	// subscribe on connection error event
+	Connector.ConnectionError += error => this.GuiAsync(() =>
+	{
+		ChangeConnectStatus(false);
+		MessageBox.Show(this, error.ToString(), LocalizedStrings.Str2959);
+	});
+
+	Connector.Disconnected += () => this.GuiAsync(() => ChangeConnectStatus(false));
+
+	// subscribe on error event
+	Connector.Error += error =>
+		this.GuiAsync(() => MessageBox.Show(this, error.ToString(), LocalizedStrings.Str2955));
+
+	// subscribe on error of market data subscription event
+	Connector.MarketDataSubscriptionFailed += (security, type, error) =>
+		this.GuiAsync(() => MessageBox.Show(this, error.ToString(), LocalizedStrings.Str2956Params.Put(type, security)));
+
+	Connector.NewSecurities += securities => _securitiesWindow.SecurityPicker.Securities.AddRange(securities);
+	Connector.NewOrders += orders => _ordersWindow.OrderGrid.Orders.AddRange(orders);
+
+	// subscribe on error of order registration event
+	Connector.OrdersRegisterFailed += OrdersFailed;
+	// subscribe on error of order cancelling event
+	Connector.OrdersCancelFailed += OrdersFailed;
+
+	// set market data provider
+	_securitiesWindow.SecurityPicker.MarketDataProvider = Connector;
+
+	try
+	{
+		if (File.Exists(_settingsFile))
+			Connector.Load(new XmlSerializer<SettingsStorage>().Deserialize(_settingsFile));
+	}
+	catch
+	{
+	}
+}
+]]>
+			</code> 
+		 </content>
+		  </step>
+		  <step>
+			<content>
+				<para>
+					 Ниже показан код обработчика события <legacyBold>Click</legacyBold> кнопки <legacyBold>Настройки</legacyBold>. В обработчике вызывается метод 
+					 <codeEntityReference>M:StockSharp.Configuration.Extensions.Configure(Connector,Window)</codeEntityReference>. Этот метод открывает окно Настройки подключений (см. ниже).
+					 Также в обработчике выполняется сохранение настроек коннектора в конфигурационный файл. Этот файл в последующем можно использовать для конфигурирования коннектора без вызова окна Настроек подключения.  
+				</para>
+				<code language="C#">
+				<![CDATA[
+private void SettingsClick(object sender, RoutedEventArgs e)
+{
+	Connector.Configure(this);
+	new XmlSerializer<SettingsStorage>().Serialize(Connector.Save(), _settingsFile);
+}
+		]]>
+				</code> 
+		 	</content>
+		</step>
+		  <step>
+			<content>
+				<para>
+				 Здесь представлено окно настройки подключений. Из раскрывающегося списка (открывается кнопкой '+') необходимо выбрать нужные адаптеры и настроить их свойства
+				 в окне свойств, расположенном справа. Например, для <token>smartcom</token> нужно указать адрес сервера, логин и пароль. Для работы с несколькими <token>quik</token> будет нужно указать
+				 адреса серверов Lua.
+				</para>
+				<mediaLink><image placement="left" xlink:href="multiconnection_settings" /></mediaLink>
+				
+				<alert class="note">
+  					<para>Корректность подключения можно проверить при помощи кнопки <legacyBold>Проверить</legacyBold>.</para>
+				</alert>
+				
+				<para>
+				Результатом работы этого окна будет создание и добавление адаптеров в список <legacyItalic>внутренних</legacyItalic> адаптеров свойства 
+				<codeEntityReference qualifyHint="true" >P:StockSharp.Algo.Connector.Adapter</codeEntityReference>.
+				</para>
+		 	</content>
+		</step>
+
+      </steps>
+    </procedure> 
+	 
+	 
+	 
+	 
+	 
+	
+ <!--  <introduction>
 		<para>
 			Для работы одновременно с несколькими <codeEntityReference>T:StockSharp.BusinessEntities.IConnector</codeEntityReference>, <token>stocksharp</token>
 			предоставляет класс <codeEntityReference>T:StockSharp.Algo.BasketTrader</codeEntityReference>. Например, когда робот одновременно ведет торговлю через
@@ -25,7 +173,7 @@
       </content>
     </prerequisites>
     
-    <!-- One or more procedure or section elements -->
+
 
     <procedure>
       <title>Работа с BasketTrader</title>
@@ -138,13 +286,13 @@ MainWindow.Instance.Trader.RegisterOrder(order);]]></code>
       </steps>
     </procedure>
 
-	  <!-- <section>
+	  <section>
       <title>Optional section</title>
 
       <content>
         <para>Some topic content</para>
       </content>
-    </section>-->
+    </section>
 
     <nextSteps>
       <content>
@@ -152,62 +300,7 @@ MainWindow.Instance.Trader.RegisterOrder(order);]]></code>
 			<link xlink:href="a8486498-a2d8-4924-b009-8b93138b268a">Арифметические операции</link>
 		</para>
       </content>
-    </nextSteps>
-    
-    <relatedTopics>
-      <!-- Supported Link Types
-    
-         All of the following linking mechanisms may be used in the topic's content 
-         as well as in the related topics section.
-    
-    Linking to API reference documentation: 
-    
-		    <codeEntityReference>API reference ID</codeEntityReference>
-
-    Linking to external resources and custom HTML topics: 
-
-        <externalLink>
-          <linkText>  Required hyperlink text  </linkText>
-          <linkAlternateText>  Optional link title  </linkAlternateText>
-          <linkUri>  Required URI  </linkUri>
-        </externalLink>
-    
-    Linking to other conceptual topics: 
-    
-        <link xlink:href="GUID topic name (without file extension)" />
-                
-    Linking to named references:
-    
-        (Refer to the project's Help\Settings\links.xml file for more information)
-    
-        <link xref="id"> Optional link text </link>
-        <link vref="id or URI"> Optional link text </link>
-        
-    -->
-
-      <!-- Example Usage 
-
-      <codeEntityReference>T:MyNamespace.MyClass</codeEntityReference>
-      <codeEntityReference>P:MyNamespace.MyClass.MyProp</codeEntityReference>
-      <codeEntityReference>M:System.IO.File.OpenText(System.String)</codeEntityReference>
-
-      <externalLink>
-        <linkText>Sandcastle Styles</linkText>
-        <linkAlternateText>Sandcastle Styles on CodePlex</linkAlternateText>
-        <linkUri>http://www.codeplex.com/SandcastleStyles</linkUri>
-      </externalLink>
-
-      <externalLink>
-        <linkText>Change Log</linkText>
-        <linkUri>ChangeLog.html</linkUri>
-      </externalLink>
-
-      <link xlink:href="2BFD9215-1216-403d-8C46-8420A4D01B83"/>
-      
-      <link xref="home">Our Home Page</link>
-      <link vref="/controls/design.aspx">Control Architecture</link>
-      -->
-    </relatedTopics>
+    </nextSteps>-->
     
   </developerWalkthroughDocument>
 </topic>
