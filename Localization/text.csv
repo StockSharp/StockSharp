@@ -1236,9 +1236,9 @@ Str1334;Total working time;Общее время работы:
 Str1335;Total execution time:;Общее время исполнения:
 Str1340;Strategy parameters:;Параметры стратегии:
 Str1341;Order price;Цена заявки
-Str1342;Profit in rubles;Прибыль в рублях
+Str1342;Profit in currency;Прибыль в деньгах
 Str1343;Profit in points;Прибыль в пунктах
-Str1344;Profit in rubles (total);Прибыль в рублях (суммарная)
+Str1344;Profit in currency (total);Прибыль в деньгах (суммарная)
 Str1345;Profit in points (total);Прибыль в пунктах (суммарная)
 Str1346;Registered;Зарегистрирована
 Str1347;Changed;Изменена

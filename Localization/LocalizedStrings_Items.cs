@@ -16045,12 +16045,12 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
-		/// Profit in rubles
+		/// Profit in currency
 		/// </summary>
 		public const string Str1342Key = "Str1342";
 
 		/// <summary>
-		/// Profit in rubles
+		/// Profit in currency
 		/// </summary>
 		public static string Str1342
 		{
@@ -16071,12 +16071,12 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
-		/// Profit in rubles (total)
+		/// Profit in currency (total)
 		/// </summary>
 		public const string Str1344Key = "Str1344";
 
 		/// <summary>
-		/// Profit in rubles (total)
+		/// Profit in currency (total)
 		/// </summary>
 		public static string Str1344
 		{
