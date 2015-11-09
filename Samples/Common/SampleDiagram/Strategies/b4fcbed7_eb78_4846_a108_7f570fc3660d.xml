@@ -768,7 +768,7 @@
                 </value>
               </KeyValuePairBeginStringAndObjectEnd>
               <KeyValuePairBeginStringAndObjectEnd>
-                <key>ДлиннаяLength</key>
+                <key>Long SMALength</key>
                 <value>
                   <Type type="string">Ecng.Serialization.SettingsStorage, Ecng.Serialization</Type>
                   <Value type="Ecng.Serialization.SettingsStorage, Ecng.Serialization">
@@ -783,7 +783,7 @@
                 </value>
               </KeyValuePairBeginStringAndObjectEnd>
               <KeyValuePairBeginStringAndObjectEnd>
-                <key>КороткаяLength</key>
+                <key>Short SMALength</key>
                 <value>
                   <Type type="string">Ecng.Serialization.SettingsStorage, Ecng.Serialization</Type>
                   <Value type="Ecng.Serialization.SettingsStorage, Ecng.Serialization">
@@ -798,7 +798,67 @@
                 </value>
               </KeyValuePairBeginStringAndObjectEnd>
               <KeyValuePairBeginStringAndObjectEnd>
-                <key>ИнструментValue</key>
+                <key>CrossingDownComparisonOperator</key>
+                <value>
+                  <Type type="string">Ecng.Serialization.SettingsStorage, Ecng.Serialization</Type>
+                  <Value type="Ecng.Serialization.SettingsStorage, Ecng.Serialization">
+                    <KeyValuePairBeginStringAndObjectEnd>
+                      <key>Value</key>
+                      <value>
+                        <Type type="string">Ecng.ComponentModel.ComparisonOperator, Ecng.ComponentModel</Type>
+                        <Value type="Ecng.ComponentModel.ComparisonOperator, Ecng.ComponentModel">Equal</Value>
+                      </value>
+                    </KeyValuePairBeginStringAndObjectEnd>
+                  </Value>
+                </value>
+              </KeyValuePairBeginStringAndObjectEnd>
+              <KeyValuePairBeginStringAndObjectEnd>
+                <key>CrossingDownPrevComparisonOperator</key>
+                <value>
+                  <Type type="string">Ecng.Serialization.SettingsStorage, Ecng.Serialization</Type>
+                  <Value type="Ecng.Serialization.SettingsStorage, Ecng.Serialization">
+                    <KeyValuePairBeginStringAndObjectEnd>
+                      <key>Value</key>
+                      <value>
+                        <Type type="string">Ecng.ComponentModel.ComparisonOperator, Ecng.ComponentModel</Type>
+                        <Value type="Ecng.ComponentModel.ComparisonOperator, Ecng.ComponentModel">Equal</Value>
+                      </value>
+                    </KeyValuePairBeginStringAndObjectEnd>
+                  </Value>
+                </value>
+              </KeyValuePairBeginStringAndObjectEnd>
+              <KeyValuePairBeginStringAndObjectEnd>
+                <key>CrossingUpComparisonOperator</key>
+                <value>
+                  <Type type="string">Ecng.Serialization.SettingsStorage, Ecng.Serialization</Type>
+                  <Value type="Ecng.Serialization.SettingsStorage, Ecng.Serialization">
+                    <KeyValuePairBeginStringAndObjectEnd>
+                      <key>Value</key>
+                      <value>
+                        <Type type="string">Ecng.ComponentModel.ComparisonOperator, Ecng.ComponentModel</Type>
+                        <Value type="Ecng.ComponentModel.ComparisonOperator, Ecng.ComponentModel">Equal</Value>
+                      </value>
+                    </KeyValuePairBeginStringAndObjectEnd>
+                  </Value>
+                </value>
+              </KeyValuePairBeginStringAndObjectEnd>
+              <KeyValuePairBeginStringAndObjectEnd>
+                <key>CrossingUpPrevComparisonOperator</key>
+                <value>
+                  <Type type="string">Ecng.Serialization.SettingsStorage, Ecng.Serialization</Type>
+                  <Value type="Ecng.Serialization.SettingsStorage, Ecng.Serialization">
+                    <KeyValuePairBeginStringAndObjectEnd>
+                      <key>Value</key>
+                      <value>
+                        <Type type="string">Ecng.ComponentModel.ComparisonOperator, Ecng.ComponentModel</Type>
+                        <Value type="Ecng.ComponentModel.ComparisonOperator, Ecng.ComponentModel">Equal</Value>
+                      </value>
+                    </KeyValuePairBeginStringAndObjectEnd>
+                  </Value>
+                </value>
+              </KeyValuePairBeginStringAndObjectEnd>
+              <KeyValuePairBeginStringAndObjectEnd>
+                <key>SecurityValue</key>
                 <value>
                   <Type type="string">Ecng.Serialization.SettingsStorage, Ecng.Serialization</Type>
                   <Value type="Ecng.Serialization.SettingsStorage, Ecng.Serialization">
@@ -1028,7 +1088,7 @@
                                     <key>Value</key>
                                     <value>
                                       <Type type="string">string</Type>
-                                      <Value type="string">Длинная</Value>
+                                      <Value type="string">Long SMA</Value>
                                     </value>
                                   </KeyValuePairBeginStringAndObjectEnd>
                                 </Value>
@@ -1327,7 +1387,7 @@
                                     <key>Value</key>
                                     <value>
                                       <Type type="string">string</Type>
-                                      <Value type="string">Короткая</Value>
+                                      <Value type="string">Short SMA</Value>
                                     </value>
                                   </KeyValuePairBeginStringAndObjectEnd>
                                 </Value>
@@ -1699,7 +1759,7 @@
                                     <key>Value</key>
                                     <value>
                                       <Type type="string">string</Type>
-                                      <Value type="string">ПересечениеВниз</Value>
+                                      <Value type="string">CrossingDown</Value>
                                     </value>
                                   </KeyValuePairBeginStringAndObjectEnd>
                                 </Value>
@@ -1766,7 +1826,7 @@
                               </value>
                             </KeyValuePairBeginStringAndObjectEnd>
                             <KeyValuePairBeginStringAndObjectEnd>
-                              <key>УсловиеOperator</key>
+                              <key>ComparisonOperator</key>
                               <value>
                                 <Type type="string">Ecng.Serialization.SettingsStorage, Ecng.Serialization</Type>
                                 <Value type="Ecng.Serialization.SettingsStorage, Ecng.Serialization">
@@ -1774,14 +1834,14 @@
                                     <key>Value</key>
                                     <value>
                                       <Type type="string">Ecng.ComponentModel.ComparisonOperator, Ecng.ComponentModel</Type>
-                                      <Value type="Ecng.ComponentModel.ComparisonOperator, Ecng.ComponentModel">GreaterOrEqual</Value>
+                                      <Value type="Ecng.ComponentModel.ComparisonOperator, Ecng.ComponentModel">Equal</Value>
                                     </value>
                                   </KeyValuePairBeginStringAndObjectEnd>
                                 </Value>
                               </value>
                             </KeyValuePairBeginStringAndObjectEnd>
                             <KeyValuePairBeginStringAndObjectEnd>
-                              <key>УсловиеПредOperator</key>
+                              <key>PrevComparisonOperator</key>
                               <value>
                                 <Type type="string">Ecng.Serialization.SettingsStorage, Ecng.Serialization</Type>
                                 <Value type="Ecng.Serialization.SettingsStorage, Ecng.Serialization">
@@ -1789,7 +1849,7 @@
                                     <key>Value</key>
                                     <value>
                                       <Type type="string">Ecng.ComponentModel.ComparisonOperator, Ecng.ComponentModel</Type>
-                                      <Value type="Ecng.ComponentModel.ComparisonOperator, Ecng.ComponentModel">Less</Value>
+                                      <Value type="Ecng.ComponentModel.ComparisonOperator, Ecng.ComponentModel">Equal</Value>
                                     </value>
                                   </KeyValuePairBeginStringAndObjectEnd>
                                 </Value>
@@ -2078,7 +2138,7 @@
                                     <key>Value</key>
                                     <value>
                                       <Type type="string">string</Type>
-                                      <Value type="string">ПересечениеВверх</Value>
+                                      <Value type="string">CrossingUp</Value>
                                     </value>
                                   </KeyValuePairBeginStringAndObjectEnd>
                                 </Value>
@@ -2145,7 +2205,7 @@
                               </value>
                             </KeyValuePairBeginStringAndObjectEnd>
                             <KeyValuePairBeginStringAndObjectEnd>
-                              <key>УсловиеOperator</key>
+                              <key>ComparisonOperator</key>
                               <value>
                                 <Type type="string">Ecng.Serialization.SettingsStorage, Ecng.Serialization</Type>
                                 <Value type="Ecng.Serialization.SettingsStorage, Ecng.Serialization">
@@ -2153,14 +2213,14 @@
                                     <key>Value</key>
                                     <value>
                                       <Type type="string">Ecng.ComponentModel.ComparisonOperator, Ecng.ComponentModel</Type>
-                                      <Value type="Ecng.ComponentModel.ComparisonOperator, Ecng.ComponentModel">Greater</Value>
+                                      <Value type="Ecng.ComponentModel.ComparisonOperator, Ecng.ComponentModel">Equal</Value>
                                     </value>
                                   </KeyValuePairBeginStringAndObjectEnd>
                                 </Value>
                               </value>
                             </KeyValuePairBeginStringAndObjectEnd>
                             <KeyValuePairBeginStringAndObjectEnd>
-                              <key>УсловиеПредOperator</key>
+                              <key>PrevComparisonOperator</key>
                               <value>
                                 <Type type="string">Ecng.Serialization.SettingsStorage, Ecng.Serialization</Type>
                                 <Value type="Ecng.Serialization.SettingsStorage, Ecng.Serialization">
@@ -2168,7 +2228,7 @@
                                     <key>Value</key>
                                     <value>
                                       <Type type="string">Ecng.ComponentModel.ComparisonOperator, Ecng.ComponentModel</Type>
-                                      <Value type="Ecng.ComponentModel.ComparisonOperator, Ecng.ComponentModel">LessOrEqual</Value>
+                                      <Value type="Ecng.ComponentModel.ComparisonOperator, Ecng.ComponentModel">Equal</Value>
                                     </value>
                                   </KeyValuePairBeginStringAndObjectEnd>
                                 </Value>
@@ -2780,7 +2840,7 @@
                                                 <key>Name</key>
                                                 <value>
                                                   <Type type="string">string</Type>
-                                                  <Value type="string">Числовое значение</Value>
+                                                  <Value type="string">Numeric value</Value>
                                                 </value>
                                               </KeyValuePairBeginStringAndObjectEnd>
                                               <KeyValuePairBeginStringAndObjectEnd>
@@ -2809,7 +2869,6 @@
                                     <value>
                                       <Type type="string">StockSharp.Messages.Unit, StockSharp.Messages</Type>
                                       <Value type="StockSharp.Messages.Unit, StockSharp.Messages">
-                                        <Security isNull="true" />
                                         <Type>0</Type>
                                         <Value>2</Value>
                                       </Value>
@@ -3164,7 +3223,7 @@
                   <key>X</key>
                   <value>
                     <Type type="string">double</Type>
-                    <Value type="double">180</Value>
+                    <Value type="double">190</Value>
                   </value>
                 </KeyValuePairBeginStringAndObjectEnd>
                 <KeyValuePairBeginStringAndObjectEnd>
@@ -3355,7 +3414,7 @@
                                     <key>Value</key>
                                     <value>
                                       <Type type="string">string</Type>
-                                      <Value type="string">Объединение (1)</Value>
+                                      <Value type="string">Pool</Value>
                                     </value>
                                   </KeyValuePairBeginStringAndObjectEnd>
                                 </Value>
@@ -3925,7 +3984,7 @@
                               </value>
                             </KeyValuePairBeginStringAndObjectEnd>
                             <KeyValuePairBeginStringAndObjectEnd>
-                              <key>ПерВыхНеРавнValue</key>
+                              <key>VarOutNotEqualValue</key>
                               <value>
                                 <Type type="string">Ecng.Serialization.SettingsStorage, Ecng.Serialization</Type>
                                 <Value type="Ecng.Serialization.SettingsStorage, Ecng.Serialization">
@@ -3934,7 +3993,6 @@
                                     <value>
                                       <Type type="string">StockSharp.Messages.Unit, StockSharp.Messages</Type>
                                       <Value type="StockSharp.Messages.Unit, StockSharp.Messages">
-                                        <Security isNull="true" />
                                         <Type>0</Type>
                                         <Value>0</Value>
                                       </Value>
@@ -3944,7 +4002,7 @@
                               </value>
                             </KeyValuePairBeginStringAndObjectEnd>
                             <KeyValuePairBeginStringAndObjectEnd>
-                              <key>ПерВыхРавнValue</key>
+                              <key>VarOutEqualValue</key>
                               <value>
                                 <Type type="string">Ecng.Serialization.SettingsStorage, Ecng.Serialization</Type>
                                 <Value type="Ecng.Serialization.SettingsStorage, Ecng.Serialization">
@@ -3953,7 +4011,6 @@
                                     <value>
                                       <Type type="string">StockSharp.Messages.Unit, StockSharp.Messages</Type>
                                       <Value type="StockSharp.Messages.Unit, StockSharp.Messages">
-                                        <Security isNull="true" />
                                         <Type>0</Type>
                                         <Value>1</Value>
                                       </Value>
@@ -3963,7 +4020,7 @@
                               </value>
                             </KeyValuePairBeginStringAndObjectEnd>
                             <KeyValuePairBeginStringAndObjectEnd>
-                              <key>ПерВх2Value</key>
+                              <key>VarIn2Value</key>
                               <value>
                                 <Type type="string">Ecng.Serialization.SettingsStorage, Ecng.Serialization</Type>
                                 <Value type="Ecng.Serialization.SettingsStorage, Ecng.Serialization">
@@ -3972,7 +4029,6 @@
                                     <value>
                                       <Type type="string">StockSharp.Messages.Unit, StockSharp.Messages</Type>
                                       <Value type="StockSharp.Messages.Unit, StockSharp.Messages">
-                                        <Security isNull="true" />
                                         <Type>0</Type>
                                         <Value>0</Value>
                                       </Value>
@@ -4124,7 +4180,7 @@
                                     <key>Value</key>
                                     <value>
                                       <Type type="string">string</Type>
-                                      <Value type="string">Сделки стратегии</Value>
+                                      <Value type="string">Strategy trades</Value>
                                     </value>
                                   </KeyValuePairBeginStringAndObjectEnd>
                                 </Value>
@@ -4186,7 +4242,7 @@
                   <key>Y</key>
                   <value>
                     <Type type="string">double</Type>
-                    <Value type="double">-150</Value>
+                    <Value type="double">-160</Value>
                   </value>
                 </KeyValuePairBeginStringAndObjectEnd>
                 <KeyValuePairBeginStringAndObjectEnd>
@@ -4370,7 +4426,7 @@
                                     <key>Value</key>
                                     <value>
                                       <Type type="string">string</Type>
-                                      <Value type="string">Свечи</Value>
+                                      <Value type="string">Candles</Value>
                                     </value>
                                   </KeyValuePairBeginStringAndObjectEnd>
                                 </Value>
@@ -4445,15 +4501,15 @@
                                               <KeyValuePairBeginStringAndObjectEnd>
                                                 <key>From</key>
                                                 <value>
-                                                  <Type type="string">date</Type>
-                                                  <Value type="date">01.01.0001 0:00:00</Value>
+                                                  <Type type="string">System.DateTimeOffset, mscorlib</Type>
+                                                  <Value type="System.DateTimeOffset, mscorlib">01.01.0001 0:00:00 +00:00</Value>
                                                 </value>
                                               </KeyValuePairBeginStringAndObjectEnd>
                                               <KeyValuePairBeginStringAndObjectEnd>
                                                 <key>To</key>
                                                 <value>
-                                                  <Type type="string">date</Type>
-                                                  <Value type="date">9999-12-31T23:59:59.9999999</Value>
+                                                  <Type type="string">System.DateTimeOffset, mscorlib</Type>
+                                                  <Value type="System.DateTimeOffset, mscorlib">9999-12-31T23:59:59.9999999+00:00</Value>
                                                 </value>
                                               </KeyValuePairBeginStringAndObjectEnd>
                                               <KeyValuePairBeginStringAndObjectEnd>
@@ -4782,7 +4838,7 @@
                                     <key>Value</key>
                                     <value>
                                       <Type type="string">string</Type>
-                                      <Value type="string">Инструмент</Value>
+                                      <Value type="string">Security</Value>
                                     </value>
                                   </KeyValuePairBeginStringAndObjectEnd>
                                 </Value>
@@ -5290,7 +5346,7 @@
                                     <key>Value</key>
                                     <value>
                                       <Type type="string">string</Type>
-                                      <Value type="string">Покупка</Value>
+                                      <Value type="string">Buy</Value>
                                     </value>
                                   </KeyValuePairBeginStringAndObjectEnd>
                                 </Value>
@@ -5776,7 +5832,7 @@
                                     <key>Value</key>
                                     <value>
                                       <Type type="string">string</Type>
-                                      <Value type="string">Продажа</Value>
+                                      <Value type="string">Sell</Value>
                                     </value>
                                   </KeyValuePairBeginStringAndObjectEnd>
                                 </Value>
@@ -6064,7 +6120,7 @@
                                     <key>Value</key>
                                     <value>
                                       <Type type="string">string</Type>
-                                      <Value type="string">Позиция</Value>
+                                      <Value type="string">Position</Value>
                                     </value>
                                   </KeyValuePairBeginStringAndObjectEnd>
                                 </Value>
@@ -6199,7 +6255,7 @@
                                 <key>Name</key>
                                 <value>
                                   <Type type="string">string</Type>
-                                  <Value type="string">Свечи 1</Value>
+                                  <Value type="string">Candles 1</Value>
                                 </value>
                               </KeyValuePairBeginStringAndObjectEnd>
                               <KeyValuePairBeginStringAndObjectEnd>
@@ -6265,7 +6321,7 @@
                                 <key>Name</key>
                                 <value>
                                   <Type type="string">string</Type>
-                                  <Value type="string">Значение индикатора 2</Value>
+                                  <Value type="string">Indicator value 2</Value>
                                 </value>
                               </KeyValuePairBeginStringAndObjectEnd>
                               <KeyValuePairBeginStringAndObjectEnd>
@@ -6331,7 +6387,7 @@
                                 <key>Name</key>
                                 <value>
                                   <Type type="string">string</Type>
-                                  <Value type="string">Значение индикатора 3</Value>
+                                  <Value type="string">Indicator value 3</Value>
                                 </value>
                               </KeyValuePairBeginStringAndObjectEnd>
                               <KeyValuePairBeginStringAndObjectEnd>
@@ -6397,7 +6453,7 @@
                                 <key>Name</key>
                                 <value>
                                   <Type type="string">string</Type>
-                                  <Value type="string">Сделка 4</Value>
+                                  <Value type="string">MyTrade 4</Value>
                                 </value>
                               </KeyValuePairBeginStringAndObjectEnd>
                               <KeyValuePairBeginStringAndObjectEnd>
@@ -6468,7 +6524,7 @@
                                     <key>Value</key>
                                     <value>
                                       <Type type="string">string</Type>
-                                      <Value type="string">Панель графика</Value>
+                                      <Value type="string">Chart</Value>
                                     </value>
                                   </KeyValuePairBeginStringAndObjectEnd>
                                 </Value>
@@ -6513,14 +6569,255 @@
                                     <key>Value</key>
                                     <value>
                                       <Type type="string">string</Type>
-                                      <Value type="string">Панель графика</Value>
+                                      <Value type="string">Panel 1</Value>
                                     </value>
                                   </KeyValuePairBeginStringAndObjectEnd>
                                 </Value>
                               </value>
                             </KeyValuePairBeginStringAndObjectEnd>
                             <KeyValuePairBeginStringAndObjectEnd>
-                              <key>Свечи 1</key>
+                              <key>X</key>
+                              <value>
+                                <Type type="string">Ecng.Serialization.SettingsStorage, Ecng.Serialization</Type>
+                                <Value type="Ecng.Serialization.SettingsStorage, Ecng.Serialization">
+                                  <KeyValuePairBeginStringAndObjectEnd>
+                                    <key>Value</key>
+                                    <value>
+                                      <Type type="string">Ecng.Serialization.SettingsStorage, Ecng.Serialization</Type>
+                                      <Value type="Ecng.Serialization.SettingsStorage, Ecng.Serialization">
+                                        <KeyValuePairBeginStringAndObjectEnd>
+                                          <key>type</key>
+                                          <value>
+                                            <Type type="string">string</Type>
+                                            <Value type="string">StockSharp.Xaml.Charting.ChartAxis, StockSharp.Xaml.Charting</Value>
+                                          </value>
+                                        </KeyValuePairBeginStringAndObjectEnd>
+                                        <KeyValuePairBeginStringAndObjectEnd>
+                                          <key>settings</key>
+                                          <value>
+                                            <Type type="string">Ecng.Serialization.SettingsStorage, Ecng.Serialization</Type>
+                                            <Value type="Ecng.Serialization.SettingsStorage, Ecng.Serialization">
+                                              <KeyValuePairBeginStringAndObjectEnd>
+                                                <key>Name</key>
+                                                <value>
+                                                  <Type type="string">string</Type>
+                                                  <Value type="string">X</Value>
+                                                </value>
+                                              </KeyValuePairBeginStringAndObjectEnd>
+                                              <KeyValuePairBeginStringAndObjectEnd>
+                                                <key>Title</key>
+                                                <value>
+                                                  <Type type="string">string</Type>
+                                                  <Value type="string">X</Value>
+                                                </value>
+                                              </KeyValuePairBeginStringAndObjectEnd>
+                                              <KeyValuePairBeginStringAndObjectEnd>
+                                                <key>Group</key>
+                                                <value>
+                                                  <Type type="string">string</Type>
+                                                  <Value type="string">CategoryDateTimeX</Value>
+                                                </value>
+                                              </KeyValuePairBeginStringAndObjectEnd>
+                                              <KeyValuePairBeginStringAndObjectEnd>
+                                                <key>AutoRange</key>
+                                                <value>
+                                                  <Type type="string">bool</Type>
+                                                  <Value type="bool">True</Value>
+                                                </value>
+                                              </KeyValuePairBeginStringAndObjectEnd>
+                                              <KeyValuePairBeginStringAndObjectEnd>
+                                                <key>DrawMinorTicks</key>
+                                                <value>
+                                                  <Type type="string">bool</Type>
+                                                  <Value type="bool">False</Value>
+                                                </value>
+                                              </KeyValuePairBeginStringAndObjectEnd>
+                                              <KeyValuePairBeginStringAndObjectEnd>
+                                                <key>DrawMajorTicks</key>
+                                                <value>
+                                                  <Type type="string">bool</Type>
+                                                  <Value type="bool">True</Value>
+                                                </value>
+                                              </KeyValuePairBeginStringAndObjectEnd>
+                                              <KeyValuePairBeginStringAndObjectEnd>
+                                                <key>DrawMajorGridLines</key>
+                                                <value>
+                                                  <Type type="string">bool</Type>
+                                                  <Value type="bool">True</Value>
+                                                </value>
+                                              </KeyValuePairBeginStringAndObjectEnd>
+                                              <KeyValuePairBeginStringAndObjectEnd>
+                                                <key>DrawMinorGridLines</key>
+                                                <value>
+                                                  <Type type="string">bool</Type>
+                                                  <Value type="bool">False</Value>
+                                                </value>
+                                              </KeyValuePairBeginStringAndObjectEnd>
+                                              <KeyValuePairBeginStringAndObjectEnd>
+                                                <key>DrawLabels</key>
+                                                <value>
+                                                  <Type type="string">bool</Type>
+                                                  <Value type="bool">True</Value>
+                                                </value>
+                                              </KeyValuePairBeginStringAndObjectEnd>
+                                              <KeyValuePairBeginStringAndObjectEnd>
+                                                <key>TextFormatting</key>
+                                                <value>
+                                                  <Type type="string">string</Type>
+                                                  <Value type="string">dd.MM.yyyy HH:mm:ss</Value>
+                                                </value>
+                                              </KeyValuePairBeginStringAndObjectEnd>
+                                              <KeyValuePairBeginStringAndObjectEnd>
+                                                <key>SubDayTextFormatting</key>
+                                                <value>
+                                                  <Type type="string">string</Type>
+                                                  <Value type="string">HH:mm:ss</Value>
+                                                </value>
+                                              </KeyValuePairBeginStringAndObjectEnd>
+                                              <KeyValuePairBeginStringAndObjectEnd>
+                                                <key>AxisAlignment</key>
+                                                <value>
+                                                  <Type type="string">StockSharp.Xaml.Charting.ChartAxisAlignment, StockSharp.Xaml.Charting</Type>
+                                                  <Value type="StockSharp.Xaml.Charting.ChartAxisAlignment, StockSharp.Xaml.Charting">Bottom</Value>
+                                                </value>
+                                              </KeyValuePairBeginStringAndObjectEnd>
+                                              <KeyValuePairBeginStringAndObjectEnd>
+                                                <key>AxisType</key>
+                                                <value>
+                                                  <Type type="string">StockSharp.Xaml.Charting.ChartAxisType, StockSharp.Xaml.Charting</Type>
+                                                  <Value type="StockSharp.Xaml.Charting.ChartAxisType, StockSharp.Xaml.Charting">CategoryDateTime</Value>
+                                                </value>
+                                              </KeyValuePairBeginStringAndObjectEnd>
+                                            </Value>
+                                          </value>
+                                        </KeyValuePairBeginStringAndObjectEnd>
+                                      </Value>
+                                    </value>
+                                  </KeyValuePairBeginStringAndObjectEnd>
+                                </Value>
+                              </value>
+                            </KeyValuePairBeginStringAndObjectEnd>
+                            <KeyValuePairBeginStringAndObjectEnd>
+                              <key>Y</key>
+                              <value>
+                                <Type type="string">Ecng.Serialization.SettingsStorage, Ecng.Serialization</Type>
+                                <Value type="Ecng.Serialization.SettingsStorage, Ecng.Serialization">
+                                  <KeyValuePairBeginStringAndObjectEnd>
+                                    <key>Value</key>
+                                    <value>
+                                      <Type type="string">Ecng.Serialization.SettingsStorage, Ecng.Serialization</Type>
+                                      <Value type="Ecng.Serialization.SettingsStorage, Ecng.Serialization">
+                                        <KeyValuePairBeginStringAndObjectEnd>
+                                          <key>type</key>
+                                          <value>
+                                            <Type type="string">string</Type>
+                                            <Value type="string">StockSharp.Xaml.Charting.ChartAxis, StockSharp.Xaml.Charting</Value>
+                                          </value>
+                                        </KeyValuePairBeginStringAndObjectEnd>
+                                        <KeyValuePairBeginStringAndObjectEnd>
+                                          <key>settings</key>
+                                          <value>
+                                            <Type type="string">Ecng.Serialization.SettingsStorage, Ecng.Serialization</Type>
+                                            <Value type="Ecng.Serialization.SettingsStorage, Ecng.Serialization">
+                                              <KeyValuePairBeginStringAndObjectEnd>
+                                                <key>Name</key>
+                                                <value>
+                                                  <Type type="string">string</Type>
+                                                  <Value type="string">Y</Value>
+                                                </value>
+                                              </KeyValuePairBeginStringAndObjectEnd>
+                                              <KeyValuePairBeginStringAndObjectEnd>
+                                                <key>Title</key>
+                                                <value>
+                                                  <Type type="string">string</Type>
+                                                  <Value type="string">Y</Value>
+                                                </value>
+                                              </KeyValuePairBeginStringAndObjectEnd>
+                                              <KeyValuePairBeginStringAndObjectEnd>
+                                                <key>Group</key>
+                                                <value>
+                                                  <Type type="string">string</Type>
+                                                  <Value type="string">NumericY2</Value>
+                                                </value>
+                                              </KeyValuePairBeginStringAndObjectEnd>
+                                              <KeyValuePairBeginStringAndObjectEnd>
+                                                <key>AutoRange</key>
+                                                <value>
+                                                  <Type type="string">bool</Type>
+                                                  <Value type="bool">True</Value>
+                                                </value>
+                                              </KeyValuePairBeginStringAndObjectEnd>
+                                              <KeyValuePairBeginStringAndObjectEnd>
+                                                <key>DrawMinorTicks</key>
+                                                <value>
+                                                  <Type type="string">bool</Type>
+                                                  <Value type="bool">False</Value>
+                                                </value>
+                                              </KeyValuePairBeginStringAndObjectEnd>
+                                              <KeyValuePairBeginStringAndObjectEnd>
+                                                <key>DrawMajorTicks</key>
+                                                <value>
+                                                  <Type type="string">bool</Type>
+                                                  <Value type="bool">True</Value>
+                                                </value>
+                                              </KeyValuePairBeginStringAndObjectEnd>
+                                              <KeyValuePairBeginStringAndObjectEnd>
+                                                <key>DrawMajorGridLines</key>
+                                                <value>
+                                                  <Type type="string">bool</Type>
+                                                  <Value type="bool">True</Value>
+                                                </value>
+                                              </KeyValuePairBeginStringAndObjectEnd>
+                                              <KeyValuePairBeginStringAndObjectEnd>
+                                                <key>DrawMinorGridLines</key>
+                                                <value>
+                                                  <Type type="string">bool</Type>
+                                                  <Value type="bool">False</Value>
+                                                </value>
+                                              </KeyValuePairBeginStringAndObjectEnd>
+                                              <KeyValuePairBeginStringAndObjectEnd>
+                                                <key>DrawLabels</key>
+                                                <value>
+                                                  <Type type="string">bool</Type>
+                                                  <Value type="bool">True</Value>
+                                                </value>
+                                              </KeyValuePairBeginStringAndObjectEnd>
+                                              <KeyValuePairBeginStringAndObjectEnd>
+                                                <key>TextFormatting</key>
+                                                <value>
+                                                  <Type type="string">string</Type>
+                                                  <Value type="string">#.####</Value>
+                                                </value>
+                                              </KeyValuePairBeginStringAndObjectEnd>
+                                              <KeyValuePairBeginStringAndObjectEnd>
+                                                <key>SubDayTextFormatting</key>
+                                                <value isNull="true" />
+                                              </KeyValuePairBeginStringAndObjectEnd>
+                                              <KeyValuePairBeginStringAndObjectEnd>
+                                                <key>AxisAlignment</key>
+                                                <value>
+                                                  <Type type="string">StockSharp.Xaml.Charting.ChartAxisAlignment, StockSharp.Xaml.Charting</Type>
+                                                  <Value type="StockSharp.Xaml.Charting.ChartAxisAlignment, StockSharp.Xaml.Charting">Right</Value>
+                                                </value>
+                                              </KeyValuePairBeginStringAndObjectEnd>
+                                              <KeyValuePairBeginStringAndObjectEnd>
+                                                <key>AxisType</key>
+                                                <value>
+                                                  <Type type="string">StockSharp.Xaml.Charting.ChartAxisType, StockSharp.Xaml.Charting</Type>
+                                                  <Value type="StockSharp.Xaml.Charting.ChartAxisType, StockSharp.Xaml.Charting">Numeric</Value>
+                                                </value>
+                                              </KeyValuePairBeginStringAndObjectEnd>
+                                            </Value>
+                                          </value>
+                                        </KeyValuePairBeginStringAndObjectEnd>
+                                      </Value>
+                                    </value>
+                                  </KeyValuePairBeginStringAndObjectEnd>
+                                </Value>
+                              </value>
+                            </KeyValuePairBeginStringAndObjectEnd>
+                            <KeyValuePairBeginStringAndObjectEnd>
+                              <key>Candles 1</key>
                               <value>
                                 <Type type="string">Ecng.Serialization.SettingsStorage, Ecng.Serialization</Type>
                                 <Value type="Ecng.Serialization.SettingsStorage, Ecng.Serialization">
@@ -6553,6 +6850,20 @@
                                                 <value>
                                                   <Type type="string">bool</Type>
                                                   <Value type="bool">False</Value>
+                                                </value>
+                                              </KeyValuePairBeginStringAndObjectEnd>
+                                              <KeyValuePairBeginStringAndObjectEnd>
+                                                <key>XAxisId</key>
+                                                <value>
+                                                  <Type type="string">string</Type>
+                                                  <Value type="string">X</Value>
+                                                </value>
+                                              </KeyValuePairBeginStringAndObjectEnd>
+                                              <KeyValuePairBeginStringAndObjectEnd>
+                                                <key>YAxisId</key>
+                                                <value>
+                                                  <Type type="string">string</Type>
+                                                  <Value type="string">Y</Value>
                                                 </value>
                                               </KeyValuePairBeginStringAndObjectEnd>
                                               <KeyValuePairBeginStringAndObjectEnd>
@@ -6724,7 +7035,7 @@
                                                 <key>Title</key>
                                                 <value>
                                                   <Type type="string">string</Type>
-                                                  <Value type="string">Свечи</Value>
+                                                  <Value type="string">Candles</Value>
                                                 </value>
                                               </KeyValuePairBeginStringAndObjectEnd>
                                               <KeyValuePairBeginStringAndObjectEnd>
@@ -6744,7 +7055,7 @@
                               </value>
                             </KeyValuePairBeginStringAndObjectEnd>
                             <KeyValuePairBeginStringAndObjectEnd>
-                              <key>Значение индикатора 2</key>
+                              <key>Indicator value 2</key>
                               <value>
                                 <Type type="string">Ecng.Serialization.SettingsStorage, Ecng.Serialization</Type>
                                 <Value type="Ecng.Serialization.SettingsStorage, Ecng.Serialization">
@@ -6780,10 +7091,24 @@
                                                 </value>
                                               </KeyValuePairBeginStringAndObjectEnd>
                                               <KeyValuePairBeginStringAndObjectEnd>
+                                                <key>XAxisId</key>
+                                                <value>
+                                                  <Type type="string">string</Type>
+                                                  <Value type="string">X</Value>
+                                                </value>
+                                              </KeyValuePairBeginStringAndObjectEnd>
+                                              <KeyValuePairBeginStringAndObjectEnd>
+                                                <key>YAxisId</key>
+                                                <value>
+                                                  <Type type="string">string</Type>
+                                                  <Value type="string">Y</Value>
+                                                </value>
+                                              </KeyValuePairBeginStringAndObjectEnd>
+                                              <KeyValuePairBeginStringAndObjectEnd>
                                                 <key>Title</key>
                                                 <value>
                                                   <Type type="string">string</Type>
-                                                  <Value type="string">Короткая</Value>
+                                                  <Value type="string">Short</Value>
                                                 </value>
                                               </KeyValuePairBeginStringAndObjectEnd>
                                               <KeyValuePairBeginStringAndObjectEnd>
@@ -6838,7 +7163,7 @@
                               </value>
                             </KeyValuePairBeginStringAndObjectEnd>
                             <KeyValuePairBeginStringAndObjectEnd>
-                              <key>Значение индикатора 3</key>
+                              <key>Indicator value 3</key>
                               <value>
                                 <Type type="string">Ecng.Serialization.SettingsStorage, Ecng.Serialization</Type>
                                 <Value type="Ecng.Serialization.SettingsStorage, Ecng.Serialization">
@@ -6874,10 +7199,24 @@
                                                 </value>
                                               </KeyValuePairBeginStringAndObjectEnd>
                                               <KeyValuePairBeginStringAndObjectEnd>
+                                                <key>XAxisId</key>
+                                                <value>
+                                                  <Type type="string">string</Type>
+                                                  <Value type="string">X</Value>
+                                                </value>
+                                              </KeyValuePairBeginStringAndObjectEnd>
+                                              <KeyValuePairBeginStringAndObjectEnd>
+                                                <key>YAxisId</key>
+                                                <value>
+                                                  <Type type="string">string</Type>
+                                                  <Value type="string">Y</Value>
+                                                </value>
+                                              </KeyValuePairBeginStringAndObjectEnd>
+                                              <KeyValuePairBeginStringAndObjectEnd>
                                                 <key>Title</key>
                                                 <value>
                                                   <Type type="string">string</Type>
-                                                  <Value type="string">Длинная</Value>
+                                                  <Value type="string">Long</Value>
                                                 </value>
                                               </KeyValuePairBeginStringAndObjectEnd>
                                               <KeyValuePairBeginStringAndObjectEnd>
@@ -6932,7 +7271,7 @@
                               </value>
                             </KeyValuePairBeginStringAndObjectEnd>
                             <KeyValuePairBeginStringAndObjectEnd>
-                              <key>Сделка 4</key>
+                              <key>MyTrade 4</key>
                               <value>
                                 <Type type="string">Ecng.Serialization.SettingsStorage, Ecng.Serialization</Type>
                                 <Value type="Ecng.Serialization.SettingsStorage, Ecng.Serialization">
@@ -6965,6 +7304,27 @@
                                                 <value>
                                                   <Type type="string">bool</Type>
                                                   <Value type="bool">False</Value>
+                                                </value>
+                                              </KeyValuePairBeginStringAndObjectEnd>
+                                              <KeyValuePairBeginStringAndObjectEnd>
+                                                <key>XAxisId</key>
+                                                <value>
+                                                  <Type type="string">string</Type>
+                                                  <Value type="string">X</Value>
+                                                </value>
+                                              </KeyValuePairBeginStringAndObjectEnd>
+                                              <KeyValuePairBeginStringAndObjectEnd>
+                                                <key>YAxisId</key>
+                                                <value>
+                                                  <Type type="string">string</Type>
+                                                  <Value type="string">Y</Value>
+                                                </value>
+                                              </KeyValuePairBeginStringAndObjectEnd>
+                                              <KeyValuePairBeginStringAndObjectEnd>
+                                                <key>Title</key>
+                                                <value>
+                                                  <Type type="string">string</Type>
+                                                  <Value type="string">Trades</Value>
                                                 </value>
                                               </KeyValuePairBeginStringAndObjectEnd>
                                               <KeyValuePairBeginStringAndObjectEnd>

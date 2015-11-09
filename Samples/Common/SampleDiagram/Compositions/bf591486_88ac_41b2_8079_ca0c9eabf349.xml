@@ -1625,7 +1625,7 @@
                       <key>Value</key>
                       <value>
                         <Type type="string">string</Type>
-                        <Value type="string">УсловныйОператор</Value>
+                        <Value type="string">Conditional operator</Value>
                       </value>
                     </KeyValuePairBeginStringAndObjectEnd>
                   </Value>
@@ -1692,7 +1692,7 @@
                 </value>
               </KeyValuePairBeginStringAndObjectEnd>
               <KeyValuePairBeginStringAndObjectEnd>
-                <key>ПерВыхНеРавнValue</key>
+                <key>VarOutNotEqualValue</key>
                 <value>
                   <Type type="string">Ecng.Serialization.SettingsStorage, Ecng.Serialization</Type>
                   <Value type="Ecng.Serialization.SettingsStorage, Ecng.Serialization">
@@ -1701,7 +1701,6 @@
                       <value>
                         <Type type="string">StockSharp.Messages.Unit, StockSharp.Messages</Type>
                         <Value type="StockSharp.Messages.Unit, StockSharp.Messages">
-                          <Security isNull="true" />
                           <Type>0</Type>
                           <Value>0</Value>
                         </Value>
@@ -1711,7 +1710,7 @@
                 </value>
               </KeyValuePairBeginStringAndObjectEnd>
               <KeyValuePairBeginStringAndObjectEnd>
-                <key>ПерВыхРавнValue</key>
+                <key>VarOutEqualValue</key>
                 <value>
                   <Type type="string">Ecng.Serialization.SettingsStorage, Ecng.Serialization</Type>
                   <Value type="Ecng.Serialization.SettingsStorage, Ecng.Serialization">
@@ -1720,7 +1719,6 @@
                       <value>
                         <Type type="string">StockSharp.Messages.Unit, StockSharp.Messages</Type>
                         <Value type="StockSharp.Messages.Unit, StockSharp.Messages">
-                          <Security isNull="true" />
                           <Type>0</Type>
                           <Value>1</Value>
                         </Value>
@@ -1730,7 +1728,7 @@
                 </value>
               </KeyValuePairBeginStringAndObjectEnd>
               <KeyValuePairBeginStringAndObjectEnd>
-                <key>ПерВх2Value</key>
+                <key>VarIn2Value</key>
                 <value>
                   <Type type="string">Ecng.Serialization.SettingsStorage, Ecng.Serialization</Type>
                   <Value type="Ecng.Serialization.SettingsStorage, Ecng.Serialization">
@@ -1739,7 +1737,6 @@
                       <value>
                         <Type type="string">StockSharp.Messages.Unit, StockSharp.Messages</Type>
                         <Value type="StockSharp.Messages.Unit, StockSharp.Messages">
-                          <Security isNull="true" />
                           <Type>0</Type>
                           <Value>0</Value>
                         </Value>
@@ -1967,7 +1964,7 @@
                                     <key>Value</key>
                                     <value>
                                       <Type type="string">string</Type>
-                                      <Value type="string">не</Value>
+                                      <Value type="string">Not</Value>
                                     </value>
                                   </KeyValuePairBeginStringAndObjectEnd>
                                 </Value>
@@ -2037,7 +2034,7 @@
                   <key>X</key>
                   <value>
                     <Type type="string">double</Type>
-                    <Value type="double">-260</Value>
+                    <Value type="double">-270</Value>
                   </value>
                 </KeyValuePairBeginStringAndObjectEnd>
                 <KeyValuePairBeginStringAndObjectEnd>
@@ -2228,7 +2225,7 @@
                                     <key>Value</key>
                                     <value>
                                       <Type type="string">string</Type>
-                                      <Value type="string">ВыхРавн</Value>
+                                      <Value type="string">OutEqual</Value>
                                     </value>
                                   </KeyValuePairBeginStringAndObjectEnd>
                                 </Value>
@@ -2526,7 +2523,7 @@
                                     <key>Value</key>
                                     <value>
                                       <Type type="string">string</Type>
-                                      <Value type="string">Вх1</Value>
+                                      <Value type="string">In1</Value>
                                     </value>
                                   </KeyValuePairBeginStringAndObjectEnd>
                                 </Value>
@@ -2824,7 +2821,7 @@
                                     <key>Value</key>
                                     <value>
                                       <Type type="string">string</Type>
-                                      <Value type="string">Вх2</Value>
+                                      <Value type="string">In2</Value>
                                     </value>
                                   </KeyValuePairBeginStringAndObjectEnd>
                                 </Value>
@@ -3122,7 +3119,7 @@
                                     <key>Value</key>
                                     <value>
                                       <Type type="string">string</Type>
-                                      <Value type="string">ВыхНеРавн</Value>
+                                      <Value type="string">OuqNotEqual</Value>
                                     </value>
                                   </KeyValuePairBeginStringAndObjectEnd>
                                 </Value>
@@ -3420,7 +3417,7 @@
                                     <key>Value</key>
                                     <value>
                                       <Type type="string">string</Type>
-                                      <Value type="string">Вых</Value>
+                                      <Value type="string">Out</Value>
                                     </value>
                                   </KeyValuePairBeginStringAndObjectEnd>
                                 </Value>
@@ -3784,7 +3781,7 @@
                                     <key>Value</key>
                                     <value>
                                       <Type type="string">string</Type>
-                                      <Value type="string">ПерВыхНеРавн</Value>
+                                      <Value type="string">VarOutNotEqual</Value>
                                     </value>
                                   </KeyValuePairBeginStringAndObjectEnd>
                                 </Value>
@@ -3853,7 +3850,7 @@
                                                 <key>Name</key>
                                                 <value>
                                                   <Type type="string">string</Type>
-                                                  <Value type="string">Числовое значение</Value>
+                                                  <Value type="string">Numeric value</Value>
                                                 </value>
                                               </KeyValuePairBeginStringAndObjectEnd>
                                               <KeyValuePairBeginStringAndObjectEnd>
@@ -3882,7 +3879,6 @@
                                     <value>
                                       <Type type="string">StockSharp.Messages.Unit, StockSharp.Messages</Type>
                                       <Value type="StockSharp.Messages.Unit, StockSharp.Messages">
-                                        <Security isNull="true" />
                                         <Type>0</Type>
                                         <Value>0</Value>
                                       </Value>
@@ -4167,7 +4163,7 @@
                                     <key>Value</key>
                                     <value>
                                       <Type type="string">string</Type>
-                                      <Value type="string">ПерВыхРавн</Value>
+                                      <Value type="string">VarOutEqual</Value>
                                     </value>
                                   </KeyValuePairBeginStringAndObjectEnd>
                                 </Value>
@@ -4236,7 +4232,7 @@
                                                 <key>Name</key>
                                                 <value>
                                                   <Type type="string">string</Type>
-                                                  <Value type="string">Числовое значение</Value>
+                                                  <Value type="string">Numeric value</Value>
                                                 </value>
                                               </KeyValuePairBeginStringAndObjectEnd>
                                               <KeyValuePairBeginStringAndObjectEnd>
@@ -4265,7 +4261,6 @@
                                     <value>
                                       <Type type="string">StockSharp.Messages.Unit, StockSharp.Messages</Type>
                                       <Value type="StockSharp.Messages.Unit, StockSharp.Messages">
-                                        <Security isNull="true" />
                                         <Type>0</Type>
                                         <Value>1</Value>
                                       </Value>
@@ -4550,7 +4545,7 @@
                                     <key>Value</key>
                                     <value>
                                       <Type type="string">string</Type>
-                                      <Value type="string">ПерВх2</Value>
+                                      <Value type="string">VarIn2</Value>
                                     </value>
                                   </KeyValuePairBeginStringAndObjectEnd>
                                 </Value>
@@ -4619,7 +4614,7 @@
                                                 <key>Name</key>
                                                 <value>
                                                   <Type type="string">string</Type>
-                                                  <Value type="string">Числовое значение</Value>
+                                                  <Value type="string">Numeric value</Value>
                                                 </value>
                                               </KeyValuePairBeginStringAndObjectEnd>
                                               <KeyValuePairBeginStringAndObjectEnd>
@@ -4648,7 +4643,6 @@
                                     <value>
                                       <Type type="string">StockSharp.Messages.Unit, StockSharp.Messages</Type>
                                       <Value type="StockSharp.Messages.Unit, StockSharp.Messages">
-                                        <Security isNull="true" />
                                         <Type>0</Type>
                                         <Value>0</Value>
                                       </Value>
@@ -4933,7 +4927,7 @@
                                     <key>Value</key>
                                     <value>
                                       <Type type="string">string</Type>
-                                      <Value type="string">вх1 == вх2</Value>
+                                      <Value type="string">In1 == In2</Value>
                                     </value>
                                   </KeyValuePairBeginStringAndObjectEnd>
                                 </Value>
