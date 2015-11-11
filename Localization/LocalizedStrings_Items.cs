@@ -3,6 +3,162 @@ namespace StockSharp.Localization
 	partial class LocalizedStrings
 	{
 		/// <summary>
+		/// Box chart settings
+		/// </summary>
+		public const string BoxChartSettingsKey = "BoxChartSettings";
+
+		/// <summary>
+		/// Box chart settings
+		/// </summary>
+		public static string BoxChartSettings
+		{
+			get { return GetString(BoxChartSettingsKey); }
+		}
+
+		/// <summary>
+		/// Cluster profile chart settings
+		/// </summary>
+		public const string ClusterProfileSettingsKey = "ClusterProfileSettings";
+
+		/// <summary>
+		/// Cluster profile chart settings
+		/// </summary>
+		public static string ClusterProfileSettings
+		{
+			get { return GetString(ClusterProfileSettingsKey); }
+		}
+		
+		/// <summary>
+		/// Price step for this chart element
+		/// </summary>
+		public const string PriceStepForChartElementKey = "PriceStepForChartElement";
+
+		/// <summary>
+		/// Price step for this chart element
+		/// </summary>
+		public static string PriceStepForChartElement
+		{
+			get { return GetString(PriceStepForChartElementKey); }
+		}
+		
+		/// <summary>
+		/// Timeframe for this chart element
+		/// </summary>
+		public const string TimeframeForChartElementKey = "TimeframeForChartElement";
+
+		/// <summary>
+		/// Timeframe for this chart element
+		/// </summary>
+		public static string TimeframeForChartElement
+		{
+			get { return GetString(TimeframeForChartElementKey); }
+		}
+		
+		/// <summary>
+		/// Timeframe2 multiplier
+		/// </summary>
+		public const string Timeframe2MultiplierKey = "Timeframe2Multiplier";
+
+		/// <summary>
+		/// Timeframe2 multiplier
+		/// </summary>
+		public static string Timeframe2Multiplier
+		{
+			get { return GetString(Timeframe2MultiplierKey); }
+		}
+		
+		/// <summary>
+		/// Timeframe3 multiplier
+		/// </summary>
+		public const string Timeframe3MultiplierKey = "Timeframe3Multiplier";
+
+		/// <summary>
+		/// Timeframe3 multiplier
+		/// </summary>
+		public static string Timeframe3Multiplier
+		{
+			get { return GetString(Timeframe3MultiplierKey); }
+		}
+		
+		/// <summary>
+		/// A multiplier which is applied to the first timeframe to calculate grouping timeframe
+		/// </summary>
+		public const string TimeframeMultiplierDescrKey = "TimeframeMultiplierDescr";
+
+		/// <summary>
+		/// A multiplier which is applied to the first timeframe to calculate grouping timeframe
+		/// </summary>
+		public static string TimeframeMultiplierDescr
+		{
+			get { return GetString(TimeframeMultiplierDescrKey); }
+		}
+		
+		/// <summary>
+		/// Timeframe2 grid color
+		/// </summary>
+		public const string Timeframe2GridColorKey = "Timeframe2GridColor";
+
+		/// <summary>
+		/// Timeframe2 grid color
+		/// </summary>
+		public static string Timeframe2GridColor
+		{
+			get { return GetString(Timeframe2GridColorKey); }
+		}
+		
+		/// <summary>
+		/// Timeframe3 grid color
+		/// </summary>
+		public const string Timeframe3GridColorKey = "Timeframe3GridColor";
+
+		/// <summary>
+		/// Timeframe3 grid color
+		/// </summary>
+		public static string Timeframe3GridColor
+		{
+			get { return GetString(Timeframe3GridColorKey); }
+		}
+		
+		/// <summary>
+		/// Timeframe2 frame color
+		/// </summary>
+		public const string Timeframe2FrameColorKey = "Timeframe2FrameColor";
+
+		/// <summary>
+		/// Timeframe2 frame color
+		/// </summary>
+		public static string Timeframe2FrameColor
+		{
+			get { return GetString(Timeframe2FrameColorKey); }
+		}
+		
+		/// <summary>
+		/// Max volume color
+		/// </summary>
+		public const string MaxVolumeColorKey = "MaxVolumeColor";
+
+		/// <summary>
+		/// Max volume color
+		/// </summary>
+		public static string MaxVolumeColor
+		{
+			get { return GetString(MaxVolumeColorKey); }
+		}
+		
+		/// <summary>
+		/// Cluster color
+		/// </summary>
+		public const string ClusterColorKey = "ClusterColor";
+
+		/// <summary>
+		/// Cluster color
+		/// </summary>
+		public static string ClusterColor
+		{
+			get { return GetString(ClusterColorKey); }
+		}
+		
+		/// <summary>
 		/// Cannot create a console window.
 		/// </summary>
 		public const string CannotCreateConsoleWindowKey = "CannotCreateConsoleWindow";
