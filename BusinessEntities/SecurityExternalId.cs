@@ -6,6 +6,7 @@ namespace StockSharp.BusinessEntities
 
 	using Ecng.Common;
 	using Ecng.Serialization;
+
 	using StockSharp.Localization;
 
 	/// <summary>
@@ -15,14 +16,14 @@ namespace StockSharp.BusinessEntities
 	[System.Runtime.Serialization.DataContract]
 	[DisplayNameLoc(LocalizedStrings.IdentifiersKey)]
 	[DescriptionLoc(LocalizedStrings.Str603Key)]
-	public class SecurityExternalId : Cloneable<SecurityExternalId>
+	public struct SecurityExternalId : ICloneable<SecurityExternalId>
 	{
-		/// <summary>
-		/// Initializes a new instance of the <see cref="SecurityExternalId"/>.
-		/// </summary>
-		public SecurityExternalId()
-		{
-		}
+		///// <summary>
+		///// Initializes a new instance of the <see cref="SecurityExternalId"/>.
+		///// </summary>
+		//public SecurityExternalId()
+		//{
+		//}
 
 		/// <summary>
 		/// ID in SEDOL format (Stock Exchange Daily Official List).
@@ -90,6 +91,24 @@ namespace StockSharp.BusinessEntities
 		public string Plaza { get; set; }
 
 		/// <summary>
+		/// Create a copy of <see cref="SecurityExternalId"/>.
+		/// </summary>
+		/// <returns>Copy.</returns>
+		public SecurityExternalId Clone()
+		{
+			return new SecurityExternalId
+			{
+				Bloomberg = Bloomberg,
+				Cusip = Cusip,
+				IQFeed = IQFeed,
+				Isin = Isin,
+				Ric = Ric,
+				Sedol = Sedol,
+				InteractiveBrokers = InteractiveBrokers
+			};
+		}
+
+		/// <summary>
 		/// Returns a string that represents the current object.
 		/// </summary>
 		/// <returns>A string that represents the current object.</returns>
@@ -125,21 +144,14 @@ namespace StockSharp.BusinessEntities
 		}
 
 		/// <summary>
-		/// Create a copy of <see cref="SecurityExternalId"/>.
+		/// Creates a new object that is a copy of the current instance.
 		/// </summary>
-		/// <returns>Copy.</returns>
-		public override SecurityExternalId Clone()
+		/// <returns>
+		/// A new object that is a copy of this instance.
+		/// </returns>
+		object ICloneable.Clone()
 		{
-			return new SecurityExternalId
-			{
-				Bloomberg = Bloomberg,
-				Cusip = Cusip,
-				IQFeed = IQFeed,
-				Isin = Isin,
-				Ric = Ric,
-				Sedol = Sedol,
-				InteractiveBrokers = InteractiveBrokers
-			};
+			throw new NotImplementedException();
 		}
 	}
 }

@@ -1452,8 +1452,8 @@ namespace StockSharp.Algo
 		/// <returns><see cref="SecurityId"/>.</returns>
 		public static SecurityId ToSecurityId(this SecurityExternalId externalId, string securityCode, string boardCode, SecurityTypes? securityType)
 		{
-			if (externalId == null)
-				throw new ArgumentNullException(nameof(externalId));
+			//if (externalId == null)
+			//	throw new ArgumentNullException(nameof(externalId));
 
 			return new SecurityId
 			{
