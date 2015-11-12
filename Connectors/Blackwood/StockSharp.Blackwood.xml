@@ -9,6 +9,11 @@
             Blackwood address list.
             </summary>
     </member>
+    <member name="F:StockSharp.Blackwood.BlackwoodAddresses.WetBush">
+      <summary>
+            WedBush brokerage server address.
+            </summary>
+    </member>
     <member name="F:StockSharp.Blackwood.BlackwoodAddresses.ExecutionPort">
       <summary>
             Transaction server default port.
@@ -22,11 +27,6 @@
     <member name="F:StockSharp.Blackwood.BlackwoodAddresses.HistoricalDataPort">
       <summary>
             Historical data server default port.
-            </summary>
-    </member>
-    <member name="F:StockSharp.Blackwood.BlackwoodAddresses.WetBush">
-      <summary>
-            WedBush brokerage server address.
             </summary>
     </member>
     <member name="T:StockSharp.Blackwood.BlackwoodImbalance">
@@ -119,6 +119,11 @@
             </summary>
       <returns>Order condition. If the connection does not support the order type <see cref="F:StockSharp.Messages.OrderTypes.Conditional" />, it will be returned <see langword="null" />.</returns>
     </member>
+    <member name="P:StockSharp.Blackwood.BlackwoodMessageAdapter.SecurityLookupRequired">
+      <summary>
+        <see cref="T:StockSharp.Messages.SecurityLookupMessage" /> required to get securities.
+            </summary>
+    </member>
     <member name="M:StockSharp.Blackwood.BlackwoodMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)">
       <summary>
             Send message.
@@ -131,29 +136,6 @@
             </summary>
       <returns>
         <see langword="true" />, is the connection still alive, <see langword="false" />, if the connection was rejected.</returns>
-    </member>
-    <member name="M:StockSharp.Blackwood.BlackwoodMessageAdapter.Save(Ecng.Serialization.SettingsStorage)">
-      <summary>
-            Save settings.
-            </summary>
-      <param name="storage">Settings storage.</param>
-    </member>
-    <member name="M:StockSharp.Blackwood.BlackwoodMessageAdapter.Load(Ecng.Serialization.SettingsStorage)">
-      <summary>
-            Load settings.
-            </summary>
-      <param name="storage">Settings storage.</param>
-    </member>
-    <member name="M:StockSharp.Blackwood.BlackwoodMessageAdapter.ToString">
-      <summary>
-            Returns a string that represents the current object.
-            </summary>
-      <returns>A string that represents the current object.</returns>
-    </member>
-    <member name="P:StockSharp.Blackwood.BlackwoodMessageAdapter.SecurityLookupRequired">
-      <summary>
-        <see cref="T:StockSharp.Messages.SecurityLookupMessage" /> required to get securities.
-            </summary>
     </member>
     <member name="P:StockSharp.Blackwood.BlackwoodMessageAdapter.Login">
       <summary>
@@ -194,6 +176,24 @@
       <summary>
             Available time frames.
             </summary>
+    </member>
+    <member name="M:StockSharp.Blackwood.BlackwoodMessageAdapter.Save(Ecng.Serialization.SettingsStorage)">
+      <summary>
+            Save settings.
+            </summary>
+      <param name="storage">Settings storage.</param>
+    </member>
+    <member name="M:StockSharp.Blackwood.BlackwoodMessageAdapter.Load(Ecng.Serialization.SettingsStorage)">
+      <summary>
+            Load settings.
+            </summary>
+      <param name="storage">Settings storage.</param>
+    </member>
+    <member name="M:StockSharp.Blackwood.BlackwoodMessageAdapter.ToString">
+      <summary>
+            Returns a string that represents the current object.
+            </summary>
+      <returns>A string that represents the current object.</returns>
     </member>
     <member name="T:StockSharp.Blackwood.BlackwoodOrderConditionTypes">
       <summary>
@@ -380,59 +380,6 @@
             Initializes a new instance of the <see cref="T:StockSharp.Blackwood.BlackwoodTrader" />.
             </summary>
     </member>
-    <member name="M:StockSharp.Blackwood.BlackwoodTrader.SubscribeCrossLock">
-      <summary>
-            Subscribe to the event imbalance prices of bids and asks. The data will transfer through event <see cref="E:StockSharp.Blackwood.BlackwoodTrader.NewCrossLock" />.
-            </summary>
-    </member>
-    <member name="M:StockSharp.Blackwood.BlackwoodTrader.SubscribeImbalance">
-      <summary>
-            Subscribe to the new imbalance event for orders type <see cref="F:StockSharp.Blackwood.BlackwoodOrderConditionTypes.MarketClose" />, which have not been filled. The data will transfer through event <see cref="E:StockSharp.Blackwood.BlackwoodTrader.NewImbalance" />.
-            </summary>
-    </member>
-    <member name="M:StockSharp.Blackwood.BlackwoodTrader.RequestPreMarketIndications">
-      <summary>
-            Request information about prices in the pre-market. The data will transfer through event <see cref="E:StockSharp.Blackwood.BlackwoodTrader.NewPreMarketIndication" />.
-            </summary>
-    </member>
-    <member name="M:StockSharp.Blackwood.BlackwoodTrader.SubscribeHighLow(System.Boolean)">
-      <summary>
-            Subscribe to the event getting the maximum and minimum values of a instruments. The data will transfer through event <see cref="E:StockSharp.BusinessEntities.IConnector.SecuritiesChanged" />.
-            </summary>
-      <param name="isSubscribe">
-        <see langword="true" />, if you want to subscribe to data, otherwise, <see langword="false" />.</param>
-    </member>
-    <member name="M:StockSharp.Blackwood.BlackwoodTrader.SubscribeMarketSorter">
-      <summary>
-            Subscribe to receive information about the best and worst instruments per session.
-            </summary>
-    </member>
-    <member name="M:StockSharp.Blackwood.BlackwoodTrader.SubscribeCandles(StockSharp.Algo.Candles.CandleSeries,System.DateTimeOffset,System.DateTimeOffset)">
-      <summary>
-            Subscribe to receive new candles.
-            </summary>
-      <param name="series">Candles series.</param>
-      <param name="from">The initial date from which you need to get data.</param>
-      <param name="to">The final date by which you need to get data.</param>
-    </member>
-    <member name="M:StockSharp.Blackwood.BlackwoodTrader.UnSubscribeCandles(StockSharp.Algo.Candles.CandleSeries)">
-      <summary>
-            To stop the candles receiving subscription, previously created by <see cref="M:StockSharp.Blackwood.BlackwoodTrader.SubscribeCandles(StockSharp.Algo.Candles.CandleSeries,System.DateTimeOffset,System.DateTimeOffset)" />.
-            </summary>
-      <param name="series">Candles series.</param>
-    </member>
-    <member name="M:StockSharp.Blackwood.BlackwoodTrader.RequestNewsStory(StockSharp.BusinessEntities.News)">
-      <summary>
-            Request news <see cref="P:StockSharp.BusinessEntities.News.Story" /> body. After receiving the event <see cref="E:StockSharp.Algo.Connector.NewsChanged" /> will be triggered.
-            </summary>
-      <param name="news">News.</param>
-    </member>
-    <member name="M:StockSharp.Blackwood.BlackwoodTrader.OnProcessMessage(StockSharp.Messages.Message)">
-      <summary>
-            Process message.
-            </summary>
-      <param name="message">Message.</param>
-    </member>
     <member name="P:StockSharp.Blackwood.BlackwoodTrader.Login">
       <summary>
             Login.
@@ -468,14 +415,41 @@
             Event imbalance in prices, when a bid price of one board more than or equal to ask price on another board.
             </summary>
     </member>
+    <member name="M:StockSharp.Blackwood.BlackwoodTrader.SubscribeCrossLock">
+      <summary>
+            Subscribe to the event imbalance prices of bids and asks. The data will transfer through event <see cref="E:StockSharp.Blackwood.BlackwoodTrader.NewCrossLock" />.
+            </summary>
+    </member>
     <member name="E:StockSharp.Blackwood.BlackwoodTrader.NewImbalance">
       <summary>
             Event receiving of imbalance for orders type <see cref="F:StockSharp.Blackwood.BlackwoodOrderConditionTypes.MarketClose" />, which have not been filled.
             </summary>
     </member>
+    <member name="M:StockSharp.Blackwood.BlackwoodTrader.SubscribeImbalance">
+      <summary>
+            Subscribe to the new imbalance event for orders type <see cref="F:StockSharp.Blackwood.BlackwoodOrderConditionTypes.MarketClose" />, which have not been filled. The data will transfer through event <see cref="E:StockSharp.Blackwood.BlackwoodTrader.NewImbalance" />.
+            </summary>
+    </member>
     <member name="E:StockSharp.Blackwood.BlackwoodTrader.NewPreMarketIndication">
       <summary>
             Event receiving of a new signal in the pre-market.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Blackwood.BlackwoodTrader.RequestPreMarketIndications">
+      <summary>
+            Request information about prices in the pre-market. The data will transfer through event <see cref="E:StockSharp.Blackwood.BlackwoodTrader.NewPreMarketIndication" />.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Blackwood.BlackwoodTrader.SubscribeHighLow(System.Boolean)">
+      <summary>
+            Subscribe to the event getting the maximum and minimum values of a instruments. The data will transfer through event <see cref="E:StockSharp.BusinessEntities.IConnector.SecuritiesChanged" />.
+            </summary>
+      <param name="isSubscribe">
+        <see langword="true" />, if you want to subscribe to data, otherwise, <see langword="false" />.</param>
+    </member>
+    <member name="M:StockSharp.Blackwood.BlackwoodTrader.SubscribeMarketSorter">
+      <summary>
+            Subscribe to receive information about the best and worst instruments per session.
             </summary>
     </member>
     <member name="E:StockSharp.Blackwood.BlackwoodTrader.NewCandles">
@@ -487,6 +461,32 @@
       <summary>
             The series processing end event.
             </summary>
+    </member>
+    <member name="M:StockSharp.Blackwood.BlackwoodTrader.SubscribeCandles(StockSharp.Algo.Candles.CandleSeries,System.DateTimeOffset,System.DateTimeOffset)">
+      <summary>
+            Subscribe to receive new candles.
+            </summary>
+      <param name="series">Candles series.</param>
+      <param name="from">The initial date from which you need to get data.</param>
+      <param name="to">The final date by which you need to get data.</param>
+    </member>
+    <member name="M:StockSharp.Blackwood.BlackwoodTrader.UnSubscribeCandles(StockSharp.Algo.Candles.CandleSeries)">
+      <summary>
+            To stop the candles receiving subscription, previously created by <see cref="M:StockSharp.Blackwood.BlackwoodTrader.SubscribeCandles(StockSharp.Algo.Candles.CandleSeries,System.DateTimeOffset,System.DateTimeOffset)" />.
+            </summary>
+      <param name="series">Candles series.</param>
+    </member>
+    <member name="M:StockSharp.Blackwood.BlackwoodTrader.RequestNewsStory(StockSharp.BusinessEntities.News)">
+      <summary>
+            Request news <see cref="P:StockSharp.BusinessEntities.News.Story" /> body. After receiving the event <see cref="E:StockSharp.Algo.Connector.NewsChanged" /> will be triggered.
+            </summary>
+      <param name="news">News.</param>
+    </member>
+    <member name="M:StockSharp.Blackwood.BlackwoodTrader.OnProcessMessage(StockSharp.Messages.Message)">
+      <summary>
+            Process message.
+            </summary>
+      <param name="message">Message.</param>
     </member>
   </members>
 </doc>
