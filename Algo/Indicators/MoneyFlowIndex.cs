@@ -9,11 +9,9 @@ namespace StockSharp.Algo.Indicators
 	/// Money Flow Index.
 	/// </summary>
 	[DisplayName("MFI")]
-	// TODO: create Money Flow Indicator localization item between Str769Key and Str770Key
-	[DescriptionLoc("Money Flow Index")] 
+	[DescriptionLoc(LocalizedStrings.StrMoneyFlowIndexKey)]
 	public class MoneyFlowIndex : LengthIndicator<decimal>
 	{
-		private decimal _typicalPrice;
 		private decimal _previousPrice;
 		private readonly Sum _positiveFlow = new Sum();
 		private readonly Sum _negativeFlow = new Sum();
@@ -26,6 +24,9 @@ namespace StockSharp.Algo.Indicators
 		    Length = 14;
 		}
 		
+		/// <summary>
+		/// Initializes a new instance of the <see cref="MoneyFlowIndex"/> using a specified length.
+		/// </summary>
 		public MoneyFlowIndex(int length)
 		{
 		    Length = length;
@@ -37,7 +38,7 @@ namespace StockSharp.Algo.Indicators
 		public override void Reset()
 		{
 			base.Reset();
-			_positiveFlow.Length = _negativeLength.Length = Length;
+			_positiveFlow.Length = _negativeFlow.Length = Length;
 		}
 
 		/// <summary>
@@ -57,18 +58,18 @@ namespace StockSharp.Algo.Indicators
 			var typicalPrice = (candle.HighPrice + candle.LowPrice + candle.ClosePrice) / 3.0m;
 			var moneyFlow = typicalPrice * candle.TotalVolume;
 			
-			var positiveFlow = _positiveFlow.Process(input.SetValue(this, typicalPrice > _lastPrice ? moneyFlow : 0.0m)).GetValue<decimal>();
-			var negativeFlow = _negativeFlow.Process(input.SetValue(this, typicalPrice < _lastPrice ? moneyFlow : 0.0m)).GetValue<decimal>();
+			var positiveFlow = _positiveFlow.Process(input.SetValue(this, typicalPrice > _previousPrice ? moneyFlow : 0.0m)).GetValue<decimal>();
+			var negativeFlow = _negativeFlow.Process(input.SetValue(this, typicalPrice < _previousPrice ? moneyFlow : 0.0m)).GetValue<decimal>();
 			_previousPrice = typicalPrice;
 			
 			if (negativeFlow == 0)
 				return new DecimalIndicatorValue(this, 100m);
 			
-			if (postiveFlow / negativeFlow == 1)
+			if (positiveFlow / negativeFlow == 1)
 				return new DecimalIndicatorValue(this, 0m);
 
 			return negativeFlow != 0 
-				? new DecimalIndicatorValue(this, 100m - 100m / (1m + postiveFlow / negativeFlow))
+				? new DecimalIndicatorValue(this, 100m - 100m / (1m + positiveFlow / negativeFlow))
 				: new DecimalIndicatorValue(this);
 		}
 	}
