@@ -16,12 +16,12 @@ namespace StockSharp.Xaml
 		/// <summary>
 		/// The key for <see cref="LocalizedStrings"/>, by which a localized name will be obtained.
 		/// </summary>
-		public string LocalizationKey { get; private set; }
+		public string LocalizationKey { get; }
 
 		/// <summary>
 		/// The target audience.
 		/// </summary>
-		public Languages PreferLanguage { get; private set; }
+		public Languages PreferLanguage { get; }
 
 		/// <summary>
 		/// Platform.
@@ -37,7 +37,7 @@ namespace StockSharp.Xaml
 		public TargetPlatformFeature(string localizationKey, Languages preferLanguage = Languages.English, Platforms platform = Platforms.AnyCPU)
 		{
 			if (localizationKey.IsEmpty())
-				throw new ArgumentNullException("localizationKey");
+				throw new ArgumentNullException(nameof(localizationKey));
 
 			LocalizationKey = localizationKey;
 			PreferLanguage = preferLanguage;

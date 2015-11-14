@@ -17,10 +17,10 @@
 			: base("Candle", CreateColumns(security))
 		{
 			if (candleType == null)
-				throw new ArgumentNullException("candleType");
+				throw new ArgumentNullException(nameof(candleType));
 
 			if (arg == null)
-				throw new ArgumentNullException("arg");
+				throw new ArgumentNullException(nameof(arg));
 
 			_candleType = candleType;
 			_arg = arg;

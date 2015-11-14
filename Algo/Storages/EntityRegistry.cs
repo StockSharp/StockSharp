@@ -29,7 +29,7 @@ namespace StockSharp.Algo.Storages
 		public EntityRegistry(IStorage storage)
 		{
 			if (storage == null)
-				throw new ArgumentNullException("storage");
+				throw new ArgumentNullException(nameof(storage));
 
 			Storage = storage;
 
@@ -50,57 +50,57 @@ namespace StockSharp.Algo.Storages
 		/// <summary>
 		/// The special interface for direct access to the storage.
 		/// </summary>
-		public IStorage Storage { get; private set; }
+		public IStorage Storage { get; }
 
 		/// <summary>
 		/// List of exchanges.
 		/// </summary>
-		public virtual IStorageEntityList<Exchange> Exchanges { get; private set; }
+		public virtual IStorageEntityList<Exchange> Exchanges { get; }
 
 		/// <summary>
 		/// The list of stock boards.
 		/// </summary>
-		public virtual IStorageEntityList<ExchangeBoard> ExchangeBoards { get; private set; }
+		public virtual IStorageEntityList<ExchangeBoard> ExchangeBoards { get; }
 
 		/// <summary>
 		/// The list of instruments.
 		/// </summary>
-		public virtual IStorageSecurityList Securities { get; private set; }
+		public virtual IStorageSecurityList Securities { get; }
 
 		/// <summary>
 		/// The list of portfolios.
 		/// </summary>
-		public virtual IStorageEntityList<Portfolio> Portfolios { get; private set; }
+		public virtual IStorageEntityList<Portfolio> Portfolios { get; }
 
 		/// <summary>
 		/// The list of positions.
 		/// </summary>
-		public virtual IStorageEntityList<Position> Positions { get; private set; }
+		public virtual IStorageEntityList<Position> Positions { get; }
 
 		/// <summary>
 		/// The list of own trades.
 		/// </summary>
-		public virtual IStorageEntityList<MyTrade> MyTrades { get; private set; }
+		public virtual IStorageEntityList<MyTrade> MyTrades { get; }
 
 		/// <summary>
 		/// The list of tick trades.
 		/// </summary>
-		public virtual IStorageEntityList<Trade> Trades { get; private set; }
+		public virtual IStorageEntityList<Trade> Trades { get; }
 
 		/// <summary>
 		/// The list of orders.
 		/// </summary>
-		public virtual IStorageEntityList<Order> Orders { get; private set; }
+		public virtual IStorageEntityList<Order> Orders { get; }
 
 		/// <summary>
 		/// The list of orders registration and cancelling errors.
 		/// </summary>
-		public virtual IStorageEntityList<OrderFail> OrderFails { get; private set; }
+		public virtual IStorageEntityList<OrderFail> OrderFails { get; }
 
 		/// <summary>
 		/// The list of news.
 		/// </summary>
-		public virtual IStorageEntityList<News> News { get; private set; }
+		public virtual IStorageEntityList<News> News { get; }
 
 		/// <summary>
 		/// The time delayed action.

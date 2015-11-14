@@ -35,10 +35,10 @@
 		public static void WriteOrderCondition(this IFixWriter writer, QuikOrderCondition condition, string dateTimeFormat)
 		{
 			if (writer == null)
-				throw new ArgumentNullException("writer");
+				throw new ArgumentNullException(nameof(writer));
 
 			if (condition == null)
-				throw new ArgumentNullException("condition");
+				throw new ArgumentNullException(nameof(condition));
 
 			if (condition.Type != null)
 			{
@@ -149,7 +149,7 @@
 		public static bool ReadOrderCondition(this IFixReader reader, FixTags tag, TimeZoneInfo timeZone, string dateTimeFormat, Func<QuikOrderCondition> getCondition)
 		{
 			if (getCondition == null)
-				throw new ArgumentNullException("getCondition");
+				throw new ArgumentNullException(nameof(getCondition));
 
 			switch ((QuikFixTags)tag)
 			{

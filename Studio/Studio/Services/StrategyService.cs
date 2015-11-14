@@ -45,7 +45,7 @@ namespace StockSharp.Studio.Services
 			public StrategyConnector(StrategyContainer strategy, DateTimeOffset startDate, DateTimeOffset stopDate, TimeSpan useCandlesTimeFrame, bool onlyInitialize)
 			{
 				if (strategy == null)
-					throw new ArgumentNullException("strategy");
+					throw new ArgumentNullException(nameof(strategy));
 
 				UpdateSecurityLastQuotes = false;
 				UpdateSecurityByLevel1 = false;
@@ -468,7 +468,7 @@ namespace StockSharp.Studio.Services
 		public void InitStrategy(Strategy strategy)
 		{
 			if (strategy == null)
-				throw new ArgumentNullException("strategy");
+				throw new ArgumentNullException(nameof(strategy));
 
 			strategy.Connector = ConfigManager.GetService<IConnector>();
 			//strategy.SetCandleManager(new StrategyCandleManager(_candleManager));

@@ -19,7 +19,7 @@
         public StartStrategyCommand(StrategyContainer strategy, bool step = false)
 		{
 			if (strategy == null)
-				throw new ArgumentNullException("strategy");
+				throw new ArgumentNullException(nameof(strategy));
 
 			Strategy = strategy;
 			Step = step;
@@ -28,7 +28,7 @@
 		public StartStrategyCommand(StrategyContainer strategy, DateTime startDate, DateTime stopDate, TimeSpan? candlesTimeFrame, bool onlyInitialize)
 		{
 			if (strategy == null)
-				throw new ArgumentNullException("strategy");
+				throw new ArgumentNullException(nameof(strategy));
 
 			Strategy = strategy;
 			StartDate = startDate;
@@ -45,7 +45,7 @@
         public StopStrategyCommand(StrategyContainer strategy)
 		{
 			if (strategy == null)
-				throw new ArgumentNullException("strategy");
+				throw new ArgumentNullException(nameof(strategy));
 
 			Strategy = strategy;
 		}

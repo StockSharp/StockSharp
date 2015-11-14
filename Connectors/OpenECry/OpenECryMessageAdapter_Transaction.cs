@@ -191,7 +191,7 @@ namespace StockSharp.OpenECry
 		private void ProcessPosition(OEC.API.Position position)
 		{
 			if (position == null)
-				throw new ArgumentNullException("position");
+				throw new ArgumentNullException(nameof(position));
 
 			SendOutMessage(this
 				.CreatePositionChangeMessage(
@@ -225,7 +225,7 @@ namespace StockSharp.OpenECry
 		private void ProcessAccount(OEC.API.Account account, OEC.API.Currency currency)
 		{
 			if (account == null)
-				throw new ArgumentNullException("account");
+				throw new ArgumentNullException(nameof(account));
 
 			var balance = currency == null ? account.TotalBalance : account.Balances[currency];
 
@@ -287,10 +287,10 @@ namespace StockSharp.OpenECry
 		private void ProcessOrder(OEC.API.Order order, long trasactionId)
 		{
 			if (order == null)
-				throw new ArgumentNullException("order");
+				throw new ArgumentNullException(nameof(order));
 
 			if (trasactionId == 0)
-				throw new ArgumentOutOfRangeException("trasactionId");
+				throw new ArgumentOutOfRangeException(nameof(trasactionId));
 
 			var execMsg = new ExecutionMessage
 			{

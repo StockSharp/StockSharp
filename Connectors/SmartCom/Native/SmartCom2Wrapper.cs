@@ -104,7 +104,7 @@
 					smartAction = StOrder_Action.StOrder_Action_Cover;
 					break;
 				default:
-					throw new ArgumentOutOfRangeException("action");
+					throw new ArgumentOutOfRangeException(nameof(action));
 			}
 
 			StOrder_Type smartType;
@@ -124,7 +124,7 @@
 					smartType = StOrder_Type.StOrder_Type_Market;
 					break;
 				default:
-					throw new ArgumentOutOfRangeException("type");
+					throw new ArgumentOutOfRangeException(nameof(type));
 			}
 
 			StOrder_Validity smartValidity;
@@ -138,7 +138,7 @@
 					smartValidity = StOrder_Validity.StOrder_Validity_Gtc;
 					break;
 				default:
-					throw new ArgumentOutOfRangeException("validity");
+					throw new ArgumentOutOfRangeException(nameof(validity));
 			}
 
 			SafeGetServer().PlaceOrder(portfolioName, securityId, smartAction, smartType, smartValidity, price, volume, stopPrice, transactionId);
@@ -153,7 +153,7 @@
 		public override void ReRegisterOrder(string portfolioName, double newPrice, string smartId)
 		{
 			if (portfolioName.IsEmpty())
-				throw new ArgumentNullException("portfolioName");
+				throw new ArgumentNullException(nameof(portfolioName));
 
 			SafeGetServer().MoveOrder(portfolioName, smartId, newPrice);
 		}
@@ -167,13 +167,13 @@
 		public override void CancelOrder(string portfolioName, string securityId, string smartId)
 		{
 			if (portfolioName.IsEmpty())
-				throw new ArgumentNullException("portfolioName");
+				throw new ArgumentNullException(nameof(portfolioName));
 
 			if (securityId.IsEmpty())
-				throw new ArgumentNullException("securityId");
+				throw new ArgumentNullException(nameof(securityId));
 
 			if (smartId.IsEmpty())
-				throw new ArgumentNullException("smartId");
+				throw new ArgumentNullException(nameof(smartId));
 
 			SafeGetServer().CancelOrder(portfolioName, securityId, smartId);
 		}
@@ -193,7 +193,7 @@
 		public override void SubscribeSecurity(string securityId)
 		{
 			if (securityId.IsEmpty())
-				throw new ArgumentNullException("securityId");
+				throw new ArgumentNullException(nameof(securityId));
 
 			SafeGetServer().ListenQuotes(securityId);
 		}
@@ -205,7 +205,7 @@
 		public override void UnSubscribeSecurity(string securityId)
 		{
 			if (securityId.IsEmpty())
-				throw new ArgumentNullException("securityId");
+				throw new ArgumentNullException(nameof(securityId));
 
 			//if (!IsConnected)
 			//	return;
@@ -221,7 +221,7 @@
 		public override void SubscribeMarketDepth(string securityId)
 		{
 			if (securityId.IsEmpty())
-				throw new ArgumentNullException("securityId");
+				throw new ArgumentNullException(nameof(securityId));
 
 			SafeGetServer().ListenBidAsks(securityId);
 		}
@@ -233,7 +233,7 @@
 		public override void UnSubscribeMarketDepth(string securityId)
 		{
 			if (securityId.IsEmpty())
-				throw new ArgumentNullException("securityId");
+				throw new ArgumentNullException(nameof(securityId));
 
 			//if (!IsConnected)
 			//	return;
@@ -248,7 +248,7 @@
 		public override void SubscribeTrades(string securityId)
 		{
 			if (securityId.IsEmpty())
-				throw new ArgumentNullException("securityId");
+				throw new ArgumentNullException(nameof(securityId));
 
 			// http://www.itinvest.ru/forum/index.php?showtopic=63071
 			//_server.GetBars(security.Id, StBarInterval.StBarInterval_Tick, DateTime.MinValue, int.MaxValue);
@@ -262,7 +262,7 @@
 		public override void UnSubscribeTrades(string securityId)
 		{
 			if (securityId.IsEmpty())
-				throw new ArgumentNullException("securityId");
+				throw new ArgumentNullException(nameof(securityId));
 
 			//if (!IsConnected)
 			//	return;
@@ -277,7 +277,7 @@
 		public override void SubscribePortfolio(string portfolioName)
 		{
 			if (portfolioName.IsEmpty())
-				throw new ArgumentNullException("portfolioName");
+				throw new ArgumentNullException(nameof(portfolioName));
 
 			SafeGetServer().ListenPortfolio(portfolioName);
 		}
@@ -289,7 +289,7 @@
 		public override void UnSubscribePortfolio(string portfolioName)
 		{
 			if (portfolioName.IsEmpty())
-				throw new ArgumentNullException("portfolioName");
+				throw new ArgumentNullException(nameof(portfolioName));
 
 			//if (!IsConnected)
 			//	return;
@@ -306,7 +306,7 @@
 		public override void RequestHistoryTrades(string securityId, DateTime from, int count)
 		{
 			if (securityId.IsEmpty())
-				throw new ArgumentNullException("securityId");
+				throw new ArgumentNullException(nameof(securityId));
 
 			SafeGetServer().GetTrades(securityId, from, count);
 		}
@@ -321,7 +321,7 @@
 		public override void RequestHistoryBars(string securityId, SmartComTimeFrames timeFrame, DateTime from, int count)
 		{
 			if (securityId.IsEmpty())
-				throw new ArgumentNullException("securityId");
+				throw new ArgumentNullException(nameof(securityId));
 
 			StBarInterval interval;
 
@@ -415,7 +415,7 @@
 				case StOrder_Action.StOrder_Action_Cover:
 					return SmartOrderAction.Cover;
 				default:
-					throw new ArgumentOutOfRangeException("smartAction");
+					throw new ArgumentOutOfRangeException(nameof(smartAction));
 			}
 		}
 
@@ -459,7 +459,7 @@
 					state = SmartOrderState.SystemCancel;
 					break;
 				default:
-					throw new ArgumentOutOfRangeException("smartState");
+					throw new ArgumentOutOfRangeException(nameof(smartState));
 			}
 
 			SmartOrderType type;
@@ -479,7 +479,7 @@
 					type = SmartOrderType.StopLimit;
 					break;
 				default:
-					throw new ArgumentOutOfRangeException("smartType");
+					throw new ArgumentOutOfRangeException(nameof(smartType));
 			}
 
 			SmartOrderValidity validity;
@@ -493,7 +493,7 @@
 					validity = SmartOrderValidity.Gtc;
 					break;
 				default:
-					throw new ArgumentOutOfRangeException("smartValidity");
+					throw new ArgumentOutOfRangeException(nameof(smartValidity));
 			}
 
 			OnUpdateOrder(portfolio, symbol, state, ToWrapper(smartAction), type, validity, price, amount, stop, filled, datetime, orderid, orderno, statusMask, cookie);
@@ -527,7 +527,7 @@
 					status = SmartPortfolioStatus.OrderNotSigned;
 					break;
 				default:
-					throw new ArgumentOutOfRangeException("smartStatus");
+					throw new ArgumentOutOfRangeException(nameof(smartStatus));
 			}
 
 			OnAddPortfolio(row, nrows, portfolioname, portfolioexch, status);
@@ -592,7 +592,7 @@
 					interval = SmartBarInterval.Year;
 					break;
 				default:
-					throw new ArgumentOutOfRangeException("smartInterval");
+					throw new ArgumentOutOfRangeException(nameof(smartInterval));
 			}
 
 			OnAddBar(row, nrows, symbol, interval, datetime, open, high, low, close, volume, openInt);

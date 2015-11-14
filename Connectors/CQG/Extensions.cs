@@ -28,7 +28,7 @@ namespace StockSharp.CQG
 				case OrderTypes.Execute:
 					throw new NotSupportedException();
 				default:
-					throw new ArgumentOutOfRangeException("type");
+					throw new ArgumentOutOfRangeException(nameof(type));
 			}
 		}
 
@@ -41,7 +41,7 @@ namespace StockSharp.CQG
 				case Sides.Sell:
 					return eOrderSide.osdSell;
 				default:
-					throw new ArgumentOutOfRangeException("side");
+					throw new ArgumentOutOfRangeException(nameof(side));
 			}
 		}
 
@@ -68,7 +68,7 @@ namespace StockSharp.CQG
 				case eInstrumentType.itAllInstruments:
 					throw new NotSupportedException(LocalizedStrings.UnsupportSecType.Put(type));
 				default:
-					throw new ArgumentOutOfRangeException("type", type, LocalizedStrings.Str1603);
+					throw new ArgumentOutOfRangeException(nameof(type), type, LocalizedStrings.Str1603);
 			}
 		}
 	}

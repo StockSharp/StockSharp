@@ -18,10 +18,10 @@ namespace StockSharp.Hydra
 		public static HydraTaskSecurity ToTaskSecurity(this IHydraTask task, Security security)
 		{
 			if (task == null)
-				throw new ArgumentNullException("task");
+				throw new ArgumentNullException(nameof(task));
 
 			if (security == null)
-				throw new ArgumentNullException("security");
+				throw new ArgumentNullException(nameof(security));
 
 			return new HydraTaskSecurity
 			{
@@ -35,13 +35,13 @@ namespace StockSharp.Hydra
 		public static Task ContinueWithExceptionHandling(this Task task, Window window, Action<bool> action)
 		{
 			if (task == null)
-				throw new ArgumentNullException("task");
+				throw new ArgumentNullException(nameof(task));
 
 			if (window == null)
-				throw new ArgumentNullException("window");
+				throw new ArgumentNullException(nameof(window));
 
 			if (action == null)
-				throw new ArgumentNullException("action");
+				throw new ArgumentNullException(nameof(action));
 
 			return task.ContinueWith(t =>
 			{

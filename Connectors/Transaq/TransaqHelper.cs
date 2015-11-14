@@ -82,7 +82,7 @@ namespace StockSharp.Transaq
 		public static NewStopOrderElement CreateStopLoss(TransaqOrderCondition cond)
 		{
 			if (cond == null)
-				throw new ArgumentNullException("cond");
+				throw new ArgumentNullException(nameof(cond));
 
 			return new NewStopOrderElement
 			{
@@ -99,7 +99,7 @@ namespace StockSharp.Transaq
 		public static NewStopOrderElement CreateTakeProfit(TransaqOrderCondition cond)
 		{
 			if (cond == null)
-				throw new ArgumentNullException("cond");
+				throw new ArgumentNullException(nameof(cond));
 
 			return new NewStopOrderElement
 			{
@@ -117,7 +117,7 @@ namespace StockSharp.Transaq
 		public static bool CheckConditionUnitType(this TransaqOrderCondition cond)
 		{
 			if (cond == null)
-				throw new ArgumentNullException("cond");
+				throw new ArgumentNullException(nameof(cond));
 
 			if ((cond.StopLossOrderPrice != null && cond.StopLossOrderPrice.Type != UnitTypes.Absolute & cond.StopLossOrderPrice.Type != UnitTypes.Percent) ||
 				(cond.StopLossVolume != null && cond.StopLossVolume.Type != UnitTypes.Absolute & cond.StopLossVolume.Type != UnitTypes.Percent) ||
@@ -207,7 +207,7 @@ namespace StockSharp.Transaq
 					return SecurityTypes.Commodity;
 
 				case "ERROR":
-					throw new ArgumentException(LocalizedStrings.Str3569, "type");
+					throw new ArgumentException(LocalizedStrings.Str3569, nameof(type));
 
 				default:
 					return null;
@@ -223,7 +223,7 @@ namespace StockSharp.Transaq
 				case SecInfoPutCalls.P:
 					return OptionTypes.Put;
 				default:
-					throw new ArgumentOutOfRangeException("type");
+					throw new ArgumentOutOfRangeException(nameof(type));
 			}
 		}
 
@@ -244,7 +244,7 @@ namespace StockSharp.Transaq
 				case TransaqSecurityStatus.S:
 					return SecurityStates.Stoped;
 				default:
-					throw new ArgumentOutOfRangeException("status");
+					throw new ArgumentOutOfRangeException(nameof(status));
 			}
 		}
 

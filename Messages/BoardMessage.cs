@@ -74,7 +74,7 @@ namespace StockSharp.Messages
 			set
 			{
 				if (value == null)
-					throw new ArgumentNullException("value");
+					throw new ArgumentNullException(nameof(value));
 
 				if (WorkingTime == value)
 					return;
@@ -99,7 +99,7 @@ namespace StockSharp.Messages
 			set
 			{
 				if (value == null)
-					throw new ArgumentNullException("value");
+					throw new ArgumentNullException(nameof(value));
 
 				if (TimeZone == value)
 					return;

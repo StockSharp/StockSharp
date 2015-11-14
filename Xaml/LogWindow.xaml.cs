@@ -32,10 +32,7 @@ namespace StockSharp.Xaml
 		/// <summary>
 		/// The log entries collection.
 		/// </summary>
-		public IList<LogMessage> Messages
-		{
-			get { return LogCtrl.Messages; }
-		}
+		public IList<LogMessage> Messages => LogCtrl.Messages;
 
 		void ILogListener.WriteMessages(IEnumerable<LogMessage> messages)
 		{

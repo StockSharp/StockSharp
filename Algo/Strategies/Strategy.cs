@@ -47,7 +47,7 @@ namespace StockSharp.Algo.Strategies
 				: base(true)
 			{
 				if (parent == null)
-					throw new ArgumentNullException("parent");
+					throw new ArgumentNullException(nameof(parent));
 
 				_parent = parent;
 			}
@@ -183,7 +183,7 @@ namespace StockSharp.Algo.Strategies
 				: base(strategy)
 			{
 				if (strategy == null)
-					throw new ArgumentNullException("strategy");
+					throw new ArgumentNullException(nameof(strategy));
 
 				_strategy = strategy;
 			}
@@ -210,7 +210,6 @@ namespace StockSharp.Algo.Strategies
 		}
 
 		private readonly CachedSynchronizedDictionary<Order, OrderInfo> _ordersInfo = new CachedSynchronizedDictionary<Order, OrderInfo>();
-		private readonly StrategyNameGenerator _nameGenerator;
 
 		private DateTimeOffset _firstOrderTime;
 		private DateTimeOffset _lastOrderTime;
@@ -230,8 +229,8 @@ namespace StockSharp.Algo.Strategies
 
 			Rules = new StrategyRuleList(this);
 
-			_nameGenerator = new StrategyNameGenerator(this);
-			_nameGenerator.Changed += name => _name.Value = name;
+			NameGenerator = new StrategyNameGenerator(this);
+			NameGenerator.Changed += name => _name.Value = name;
 
 			_id = this.Param("Id", base.Id);
 			_volume = this.Param<decimal>("Volume", 1);
@@ -292,7 +291,7 @@ namespace StockSharp.Algo.Strategies
 				if (value == Name)
 					return;
 
-				_nameGenerator.Value = value;
+				NameGenerator.Value = value;
 				_name.Value = value;
 			}
 		}
@@ -301,7 +300,7 @@ namespace StockSharp.Algo.Strategies
 		/// The generator of strategy name.
 		/// </summary>
 		[Browsable(false)]
-		public StrategyNameGenerator NameGenerator { get { return _nameGenerator; } }
+		public StrategyNameGenerator NameGenerator { get; }
 
 		private IConnector _connector;
 
@@ -475,7 +474,7 @@ namespace StockSharp.Algo.Strategies
 			set
 			{
 				if (value == null)
-					throw new ArgumentNullException("value");
+					throw new ArgumentNullException(nameof(value));
 
 				_pnLManager = value;
 			}
@@ -489,10 +488,7 @@ namespace StockSharp.Algo.Strategies
 		[DisplayNameLoc(LocalizedStrings.PnLKey)]
 		[DescriptionLoc(LocalizedStrings.Str1364Key)]
 		[ReadOnly(true)]
-		public decimal PnL
-		{
-			get { return PnLManager.PnL; }
-		}
+		public decimal PnL => PnLManager.PnL;
 
 		/// <summary>
 		/// <see cref="Strategy.PnL"/> change event.
@@ -526,7 +522,7 @@ namespace StockSharp.Algo.Strategies
 			set
 			{
 				if (value == null)
-					throw new ArgumentNullException("value");
+					throw new ArgumentNullException(nameof(value));
 
 				_positionManager = value;
 			}
@@ -581,7 +577,7 @@ namespace StockSharp.Algo.Strategies
 			protected set
 			{
 				if (value == null)
-					throw new ArgumentNullException("value");
+					throw new ArgumentNullException(nameof(value));
 
 				_statisticManager = value;
 			}
@@ -599,7 +595,7 @@ namespace StockSharp.Algo.Strategies
 			set
 			{
 				if (value == null)
-					throw new ArgumentNullException("value");
+					throw new ArgumentNullException(nameof(value));
 
 				_riskManager = value;
 			}
@@ -611,10 +607,7 @@ namespace StockSharp.Algo.Strategies
 		/// Strategy parameters.
 		/// </summary>
 		[Browsable(false)]
-		public ISynchronizedCollection<IStrategyParam> Parameters
-		{
-			get { return _parameters; }
-		}
+		public ISynchronizedCollection<IStrategyParam> Parameters => _parameters;
 
 		/// <summary>
 		/// <see cref="Strategy.Parameters"/> change event.
@@ -631,16 +624,11 @@ namespace StockSharp.Algo.Strategies
 			this.Notify(name);
 		}
 
-		private readonly SettingsStorage _environment = new SettingsStorage();
-
 		/// <summary>
 		/// Strategy environment parameters.
 		/// </summary>
 		[Browsable(false)]
-		public SettingsStorage Environment
-		{
-			get { return _environment; }
-		}
+		public SettingsStorage Environment { get; } = new SettingsStorage();
 
 		private readonly StrategyParam<int> _maxErrorCount;
 
@@ -657,7 +645,7 @@ namespace StockSharp.Algo.Strategies
 			set
 			{
 				if (value < 1)
-					throw new ArgumentOutOfRangeException("value", value, LocalizedStrings.Str1367);
+					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.Str1367);
 
 				_maxErrorCount.Value = value;
 			}
@@ -790,16 +778,13 @@ namespace StockSharp.Algo.Strategies
 					stateStr = LocalizedStrings.Str1373;
 					break;
 				default:
-					throw new ArgumentOutOfRangeException("state");
+					throw new ArgumentOutOfRangeException(nameof(state));
 			}
 
 			this.AddInfoLog(LocalizedStrings.Str1374Params, stateStr, ChildStrategies.Count, Parent != null ? ParentStrategy.ChildStrategies.Count : -1, Position);
 		}
 
-		private Strategy ParentStrategy
-		{
-			get { return (Strategy)Parent; }
-		}
+		private Strategy ParentStrategy => (Strategy)Parent;
 
 		/// <summary>
 		/// <see cref="Strategy.ProcessState"/> change event.
@@ -813,7 +798,7 @@ namespace StockSharp.Algo.Strategies
 		protected void RaiseProcessStateChanged(Strategy strategy)
 		{
 			if (strategy == null)
-				throw new ArgumentNullException("strategy");
+				throw new ArgumentNullException(nameof(strategy));
 
 			ProcessStateChanged.SafeInvoke(strategy);
 		}
@@ -860,7 +845,7 @@ namespace StockSharp.Algo.Strategies
 			set
 			{
 				if (value < TimeSpan.Zero)
-					throw new ArgumentOutOfRangeException("value", value, LocalizedStrings.Str1375);
+					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.Str1375);
 
 				_ordersKeepTime.Value = value;
 				InitMaxOrdersKeepTime();
@@ -879,10 +864,7 @@ namespace StockSharp.Algo.Strategies
 		/// Trades, matched during the strategy operation.
 		/// </summary>
 		[Browsable(false)]
-		public IEnumerable<MyTrade> MyTrades
-		{
-			get { return _myTrades.Cache; }
-		}
+		public IEnumerable<MyTrade> MyTrades => _myTrades.Cache;
 
 		//private readonly CachedSynchronizedSet<OrderFail> _orderFails = new CachedSynchronizedSet<OrderFail> { ThrowIfDuplicate = true };
 
@@ -913,7 +895,7 @@ namespace StockSharp.Algo.Strategies
 			set
 			{
 				if (value < 0)
-					throw new ArgumentOutOfRangeException("value", value, LocalizedStrings.Str1377);
+					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.Str1377);
 
 				_volume.Value = value;
 			}
@@ -944,10 +926,7 @@ namespace StockSharp.Algo.Strategies
 		/// Subsidiary trade strategies.
 		/// </summary>
 		[Browsable(false)]
-		public IStrategyChildStrategyList ChildStrategies
-		{
-			get { return _childStrategies; }
-		}
+		public IStrategyChildStrategyList ChildStrategies => _childStrategies;
 
 		private DateTimeOffset _startedTime;
 
@@ -1045,7 +1024,7 @@ namespace StockSharp.Algo.Strategies
 		/// Registered rules.
 		/// </summary>
 		[Browsable(false)]
-		public IMarketRuleList Rules { get; private set; }
+		public IMarketRuleList Rules { get; }
 
 		private readonly object _rulesSuspendLock = new object();
 		private int _rulesSuspendCount;
@@ -1057,10 +1036,7 @@ namespace StockSharp.Algo.Strategies
 		/// Rules suspension is performed through the method <see cref="Strategy.SuspendRules"/>.
 		/// </remarks>
 		[Browsable(false)]
-		public bool IsRulesSuspended
-		{
-			get { return _rulesSuspendCount > 0; }
-		}
+		public bool IsRulesSuspended => _rulesSuspendCount > 0;
 
 		/// <summary>
 		/// The event of sending order for registration.
@@ -1214,7 +1190,7 @@ namespace StockSharp.Algo.Strategies
 		public virtual void RegisterOrder(Order order)
 		{
 			if (order == null)
-				throw new ArgumentNullException("order");
+				throw new ArgumentNullException(nameof(order));
 
 			this.AddInfoLog(LocalizedStrings.Str1382Params,
 				order.Type, order.Direction, order.Price, order.Volume, order.Comment, order.GetHashCode());
@@ -1258,10 +1234,10 @@ namespace StockSharp.Algo.Strategies
 		public virtual void ReRegisterOrder(Order oldOrder, Order newOrder)
 		{
 			if (oldOrder == null)
-				throw new ArgumentNullException("oldOrder");
+				throw new ArgumentNullException(nameof(oldOrder));
 
 			if (newOrder == null)
-				throw new ArgumentNullException("newOrder");
+				throw new ArgumentNullException(nameof(newOrder));
 
 			this.AddInfoLog(LocalizedStrings.Str1384Params, oldOrder.GetTraceId(), oldOrder.Price, newOrder.Price, oldOrder.Comment);
 
@@ -1386,7 +1362,7 @@ namespace StockSharp.Algo.Strategies
 			}
 
 			if (order == null)
-				throw new ArgumentNullException("order");
+				throw new ArgumentNullException(nameof(order));
 
 			lock (_ordersInfo.SyncRoot)
 			{
@@ -1410,7 +1386,7 @@ namespace StockSharp.Algo.Strategies
 		private void CancelOrderHandler(Order order)
 		{
 			if (order == null)
-				throw new ArgumentNullException("order");
+				throw new ArgumentNullException(nameof(order));
 
 			this.AddInfoLog(LocalizedStrings.Str1315Params, order.GetTraceId());
 
@@ -1439,7 +1415,7 @@ namespace StockSharp.Algo.Strategies
 		private void ProcessOrder(Order order, bool isChanging)
 		{
 			if (order == null)
-				throw new ArgumentNullException("order");
+				throw new ArgumentNullException(nameof(order));
 
 			var info = _ordersInfo.TryGetValue(order);
 
@@ -1541,10 +1517,10 @@ namespace StockSharp.Algo.Strategies
 		public virtual void AttachOrder(Order order, IEnumerable<MyTrade> myTrades)
 		{
 			if (order == null)
-				throw new ArgumentNullException("order");
+				throw new ArgumentNullException(nameof(order));
 
 			if (myTrades == null)
-				throw new ArgumentNullException("myTrades");
+				throw new ArgumentNullException(nameof(myTrades));
 
 			AttachOrder(order);
 
@@ -1597,13 +1573,7 @@ namespace StockSharp.Algo.Strategies
 		/// <summary>
 		/// Current time, which will be passed to the <see cref="LogMessage.Time"/>.
 		/// </summary>
-		public override DateTimeOffset CurrentTime
-		{
-			get
-			{
-				return Connector == null ? TimeHelper.NowWithOffset : Connector.CurrentTime;
-			}
-		}
+		public override DateTimeOffset CurrentTime => Connector == null ? TimeHelper.NowWithOffset : Connector.CurrentTime;
 
 		/// <summary>
 		/// To call the event <see cref="ILogSource.Log"/>.
@@ -1612,7 +1582,7 @@ namespace StockSharp.Algo.Strategies
 		protected override void RaiseLog(LogMessage message)
 		{
 			if (message == null)
-				throw new ArgumentNullException("message");
+				throw new ArgumentNullException(nameof(message));
 
 			switch (message.Level)
 			{
@@ -2590,7 +2560,7 @@ namespace StockSharp.Algo.Strategies
 		public object GetSecurityValue(Security security, Level1Fields field)
 		{
 			if (security == null)
-				throw new ArgumentNullException("security");
+				throw new ArgumentNullException(nameof(security));
 
 			return SafeGetConnector().GetSecurityValue(security, field);
 		}
@@ -2603,15 +2573,12 @@ namespace StockSharp.Algo.Strategies
 		public IEnumerable<Level1Fields> GetLevel1Fields(Security security)
 		{
 			if (security == null)
-				throw new ArgumentNullException("security");
+				throw new ArgumentNullException(nameof(security));
 
 			return SafeGetConnector().GetLevel1Fields(security);
 		}
 
-		int ISecurityProvider.Count
-		{
-			get { return SafeGetConnector().Count; }
-		}
+		int ISecurityProvider.Count => SafeGetConnector().Count;
 
 		event Action<Security> ISecurityProvider.Added
 		{

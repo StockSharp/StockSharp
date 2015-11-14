@@ -21,7 +21,7 @@ namespace StockSharp.Xaml
 			: base(new ObservableCollectionEx<Portfolio>())
 		{
 			if (provider == null)
-				throw new ArgumentNullException("provider");
+				throw new ArgumentNullException(nameof(provider));
 
 			AddRange(provider.Portfolios);
 

@@ -23,10 +23,10 @@ namespace StockSharp.Algo.Derivatives
 		public Synthetic(Security security, ISecurityProvider provider)
 		{
 			if (security == null)
-				throw new ArgumentNullException("security");
+				throw new ArgumentNullException(nameof(security));
 
 			if (provider == null)
-				throw new ArgumentNullException("provider");
+				throw new ArgumentNullException(nameof(provider));
 
 			_security = security;
 			_provider = provider;

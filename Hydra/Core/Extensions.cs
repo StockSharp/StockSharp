@@ -66,7 +66,7 @@
 		public static HydraTaskSecurity GetAllSecurity(this IHydraTask task)
 		{
 			if (task == null)
-				throw new ArgumentNullException("task");
+				throw new ArgumentNullException(nameof(task));
 			
 			return task.Settings.Securities.FirstOrDefault(s => s.Security.IsAllSecurity());
 		}
@@ -97,7 +97,7 @@
 		public static void ExcludeAllSecurity(this SecurityPicker picker)
 		{
 			if (picker == null)
-				throw new ArgumentNullException("picker");
+				throw new ArgumentNullException(nameof(picker));
 
 			picker.ExcludeSecurities.Add(GetAllSecurity());
 		}
@@ -110,7 +110,7 @@
 		public static bool IsExecLogEnabled(this IHydraTask task)
 		{
 			if (task == null)
-				throw new ArgumentNullException("task");
+				throw new ArgumentNullException(nameof(task));
 
 			return task.Settings.Securities.Any(s => s.MarketDataTypesSet.Contains(typeof(ExecutionMessage)));
 		}
@@ -123,7 +123,7 @@
 		public static bool IsAllSecurity(this Security security)
 		{
 			if (security == null)
-				throw new ArgumentNullException("security");
+				throw new ArgumentNullException(nameof(security));
 
 			return security.Id.CompareIgnoreCase(AllSecurityId);
 		}
@@ -137,10 +137,10 @@
 		public static IEnumerable<HydraTaskSecurity> ToHydraSecurities(this IHydraTask task, IEnumerable<Security> securities)
 		{
 			if (task == null)
-				throw new ArgumentNullException("task");
+				throw new ArgumentNullException(nameof(task));
 
 			if (securities == null)
-				throw new ArgumentNullException("securities");
+				throw new ArgumentNullException(nameof(securities));
 
 			var allSec = task.GetAllSecurity();
 
@@ -162,7 +162,7 @@
 		public static string GetDisplayName(this IHydraTask task)
 		{
 			if (task == null)
-				throw new ArgumentNullException("task");
+				throw new ArgumentNullException(nameof(task));
 
 			return task.GetType().GetDisplayName();
 		}
@@ -175,7 +175,7 @@
 		public static string GetDescription(this IHydraTask task)
 		{
 			if (task == null)
-				throw new ArgumentNullException("task");
+				throw new ArgumentNullException(nameof(task));
 
 			return task.GetType().GetDescription();
 		}
@@ -193,10 +193,10 @@
 		public static string GetFileName(this Security security, Type dataType, object arg, DateTime? from, DateTime? to, ExportTypes type)
 		{
 			if (dataType == null)
-				throw new ArgumentNullException("dataType");
+				throw new ArgumentNullException(nameof(dataType));
 
 			if (security == null && dataType != typeof(NewsMessage) && dataType != typeof(SecurityMessage))
-				throw new ArgumentNullException("security");
+				throw new ArgumentNullException(nameof(security));
 
 			string fileName;
 
@@ -224,11 +224,11 @@
 						fileName = "executions";
 						break;
 					default:
-						throw new ArgumentOutOfRangeException("arg");
+						throw new ArgumentOutOfRangeException(nameof(arg));
 				}
 			}
 			else
-				throw new ArgumentOutOfRangeException("dataType");
+				throw new ArgumentOutOfRangeException(nameof(dataType));
 
 			if (security != null)
 				fileName += security.Id.SecurityIdToFolderName();
@@ -253,7 +253,7 @@
 					fileName += ".bin";
 					break;
 				default:
-					throw new ArgumentOutOfRangeException("type");
+					throw new ArgumentOutOfRangeException(nameof(type));
 			}
 
 			return fileName;
@@ -268,7 +268,7 @@
 		public static bool IsTradeDate(this HydraTaskSecurity security, DateTime date)
 		{
 			if (security == null)
-				throw new ArgumentNullException("security");
+				throw new ArgumentNullException(nameof(security));
 
 			return security.Security.Board.IsTradeDate(date.ApplyTimeZone(security.Security.Board.TimeZone), true);
 		}
@@ -282,7 +282,7 @@
 		public static string GetTxtTemplate(this Type dataType, object arg = null)
 		{
 			if (dataType == null)
-				throw new ArgumentNullException("dataType");
+				throw new ArgumentNullException(nameof(dataType));
 
 			string templateName;
 
@@ -299,7 +299,7 @@
 			else if (dataType == typeof(ExecutionMessage))
 			{
 				if (arg == null)
-					throw new ArgumentNullException("arg");
+					throw new ArgumentNullException(nameof(arg));
 
 				switch ((ExecutionTypes)arg)
 				{
@@ -318,7 +318,7 @@
 				}
 			}
 			else
-				throw new ArgumentOutOfRangeException("dataType", dataType, LocalizedStrings.Str721);
+				throw new ArgumentOutOfRangeException(nameof(dataType), dataType, LocalizedStrings.Str721);
 
 			return ConfigurationManager.AppSettings.Get(templateName);
 		}
@@ -332,7 +332,7 @@
 		public static bool IsCategoryOf(this IHydraTask task, TaskCategories category)
 		{
 			if (task == null)
-				throw new ArgumentNullException("task");
+				throw new ArgumentNullException(nameof(task));
 
 			return task.GetType().IsCategoryOf(category);
 		}
@@ -380,7 +380,7 @@
 				case OrderLogBuilders.ITCH:
 					return new ItchOrderLogMarketDepthBuilder(securityId);
 				default:
-					throw new ArgumentOutOfRangeException("builder", builder, null);
+					throw new ArgumentOutOfRangeException(nameof(builder), builder, null);
 			}
 		}
 	}

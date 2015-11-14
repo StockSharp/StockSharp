@@ -52,7 +52,7 @@ namespace StockSharp.Sterling
 				case STIOrderStatus.osSTIStatused:
 					return OrderStates.Active;
 				default:
-					throw new ArgumentOutOfRangeException("status");
+					throw new ArgumentOutOfRangeException(nameof(status));
 			}
 		}
 
@@ -72,7 +72,7 @@ namespace StockSharp.Sterling
 					return Sides.Sell;
 
 				default:
-					throw new ArgumentOutOfRangeException("side", side, LocalizedStrings.Str3802);
+					throw new ArgumentOutOfRangeException(nameof(side), side, LocalizedStrings.Str3802);
 			}
 		}
 
@@ -123,7 +123,7 @@ namespace StockSharp.Sterling
 				case TimeInForce.CancelBalance:
 					return "I";	// IOC
 				default:
-					throw new ArgumentOutOfRangeException("tif");
+					throw new ArgumentOutOfRangeException(nameof(tif));
 			}
 		}
 
@@ -152,7 +152,7 @@ namespace StockSharp.Sterling
 				case STIPriceTypes.ptSTITrailStp:
 					return OrderTypes.Conditional;
 				default:
-					throw new ArgumentOutOfRangeException("priceType");
+					throw new ArgumentOutOfRangeException(nameof(priceType));
 			}
 		}
 
@@ -167,7 +167,7 @@ namespace StockSharp.Sterling
 				case OrderTypes.Conditional:
 				{
 					if (condition == null)
-						throw new ArgumentNullException("condition");
+						throw new ArgumentNullException(nameof(condition));
 
 					switch (condition.ExtendedOrderType)
 					{
@@ -204,13 +204,13 @@ namespace StockSharp.Sterling
 						case SterlingExtendedOrderTypes.Last:
 							return STIPriceTypes.ptSTILast;
 						case null:
-							throw new ArgumentException(LocalizedStrings.Str3803, "condition");
+							throw new ArgumentException(LocalizedStrings.Str3803, nameof(condition));
 						default:
-							throw new ArgumentOutOfRangeException("condition", condition.ExtendedOrderType, LocalizedStrings.Str2500);
+							throw new ArgumentOutOfRangeException(nameof(condition), condition.ExtendedOrderType, LocalizedStrings.Str2500);
 					}
 				}
 				default:
-					throw new ArgumentOutOfRangeException("type");
+					throw new ArgumentOutOfRangeException(nameof(type));
 			}
 		}
 
@@ -355,7 +355,7 @@ namespace StockSharp.Sterling
 				//case "*": // Composite (Equities)
 				//case "O": // Composite (Options)
 				default:
-					throw new ArgumentOutOfRangeException("exch");
+					throw new ArgumentOutOfRangeException(nameof(exch));
 			}
 		}
 

@@ -49,13 +49,13 @@ namespace StockSharp.Quik
 		private void Init(DdeTableTypes type, string caption, string className, IEnumerable<DdeTableColumn> columns)
 		{
 			if (caption.IsEmpty())
-				throw new ArgumentNullException("caption");
+				throw new ArgumentNullException(nameof(caption));
 
 			if (className == null)
-				throw new ArgumentNullException("className");
+				throw new ArgumentNullException(nameof(className));
 
 			if (columns == null)
-				throw new ArgumentNullException("columns");
+				throw new ArgumentNullException(nameof(columns));
 
 			Type = type;
 			Caption = caption;

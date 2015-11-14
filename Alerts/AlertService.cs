@@ -33,7 +33,7 @@ namespace StockSharp.Alerts
 		public AlertService(string dumpDir)
 		{
 			if (dumpDir.IsEmpty())
-				throw new ArgumentNullException("dumpDir");
+				throw new ArgumentNullException(nameof(dumpDir));
 
 			ThreadingHelper
 				.Thread(() =>
@@ -129,7 +129,7 @@ namespace StockSharp.Alerts
 		public void Register(AlertSchema schema)
 		{
 			if (schema == null)
-				throw new ArgumentNullException("schema");
+				throw new ArgumentNullException(nameof(schema));
 
 			_schemas[schema.MessageType] = schema;
 		}
@@ -141,7 +141,7 @@ namespace StockSharp.Alerts
 		public void UnRegister(AlertSchema schema)
 		{
 			if (schema == null)
-				throw new ArgumentNullException("schema");
+				throw new ArgumentNullException(nameof(schema));
 
 			_schemas.Remove(schema.MessageType);
 		}
@@ -153,7 +153,7 @@ namespace StockSharp.Alerts
 		public void Process(Message message)
 		{
 			if (message == null)
-				throw new ArgumentNullException("message");
+				throw new ArgumentNullException(nameof(message));
 
 			var schema = _schemas.TryGetValue(message.GetType());
 

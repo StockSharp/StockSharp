@@ -14,7 +14,7 @@ namespace StockSharp.Studio.Core.Commands
 		public CancelOrderCommand(Order mask)
 		{
 			if (mask == null)
-				throw new ArgumentNullException("mask");
+				throw new ArgumentNullException(nameof(mask));
 
 			Mask = mask;
 		}
@@ -22,7 +22,7 @@ namespace StockSharp.Studio.Core.Commands
 		public CancelOrderCommand(IEnumerable<Order> orders)
 		{
 			if (orders == null)
-				throw new ArgumentNullException("orders");
+				throw new ArgumentNullException(nameof(orders));
 
 			Orders = orders;
 		}

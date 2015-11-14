@@ -34,7 +34,7 @@ namespace StockSharp.Algo.Statistics
 		public void Add(PnLInfo info)
 		{
 			if (info == null)
-				throw new ArgumentNullException("info");
+				throw new ArgumentNullException(nameof(info));
 
 			if (info.PnL <= 0)
 				return;
@@ -58,7 +58,7 @@ namespace StockSharp.Algo.Statistics
 		public void Add(PnLInfo info)
 		{
 			if (info == null)
-				throw new ArgumentNullException("info");
+				throw new ArgumentNullException(nameof(info));
 
 			if (info.ClosedVolume > 0 && info.PnL <= 0)
 				Value++;
@@ -120,7 +120,7 @@ namespace StockSharp.Algo.Statistics
 		public void Add(PnLInfo info)
 		{
 			if (info == null)
-				throw new ArgumentNullException("info");
+				throw new ArgumentNullException(nameof(info));
 
 			if (info.ClosedVolume == 0)
 				return;
@@ -174,7 +174,7 @@ namespace StockSharp.Algo.Statistics
 		public void Add(PnLInfo info)
 		{
 			if (info == null)
-				throw new ArgumentNullException("info");
+				throw new ArgumentNullException(nameof(info));
 
 			if (info.ClosedVolume == 0)
 				return;
@@ -231,7 +231,7 @@ namespace StockSharp.Algo.Statistics
 		public void Add(PnLInfo info)
 		{
 			if (info == null)
-				throw new ArgumentNullException("info");
+				throw new ArgumentNullException(nameof(info));
 
 			if (info.ClosedVolume == 0)
 				return;

@@ -12,7 +12,7 @@
 		public OpenCompositionCommand(CompositionDiagramElement composition)
 		{
 			if (composition == null) 
-				throw new ArgumentNullException("composition");
+				throw new ArgumentNullException(nameof(composition));
 
 			Composition = composition;
 		}

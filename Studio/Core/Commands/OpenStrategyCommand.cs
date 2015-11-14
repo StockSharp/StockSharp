@@ -11,7 +11,7 @@ namespace StockSharp.Studio.Core.Commands
 		public OpenStrategyCommand(StrategyContainer strategy, string contentTemplate = null)
 		{
 			if (strategy == null)
-				throw new ArgumentNullException("strategy");
+				throw new ArgumentNullException(nameof(strategy));
 
 			Strategy = strategy;
 			ContentTemplate = contentTemplate;

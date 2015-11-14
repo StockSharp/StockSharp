@@ -55,7 +55,7 @@ namespace StockSharp.Studio.Strategies
 			public FreeMoneyPortfolio(UIStrategy strategy)
 			{
 				if (strategy == null)
-					throw new ArgumentNullException("strategy");
+					throw new ArgumentNullException(nameof(strategy));
 
 				_strategy = strategy;
 			}

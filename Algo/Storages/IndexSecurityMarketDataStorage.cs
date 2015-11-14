@@ -22,7 +22,7 @@ namespace StockSharp.Algo.Storages
 			public IndexMarketDataEnumerator(IEnumerable<IEnumerator<T>> enumerators)
 			{
 				if (enumerators.IsEmpty())
-					throw new ArgumentOutOfRangeException("enumerators");
+					throw new ArgumentOutOfRangeException(nameof(enumerators));
 
 				_enumerators = enumerators;
 				_aliveEnumerators.AddRange(_enumerators);
@@ -62,15 +62,9 @@ namespace StockSharp.Algo.Storages
 				_currentEnumerator = 0;
 			}
 
-			public T Current
-			{
-				get { return _aliveEnumerators[_currentEnumerator].Current; }
-			}
+			public T Current => _aliveEnumerators[_currentEnumerator].Current;
 
-			object IEnumerator.Current
-			{
-				get { return Current; }
-			}
+			object IEnumerator.Current => Current;
 		}
 
 		private readonly Func<Security, IMarketDataDrive, IMarketDataStorage<T>> _getStorage;
@@ -80,19 +74,19 @@ namespace StockSharp.Algo.Storages
 		public IndexSecurityMarketDataStorage(IndexSecurity security, object arg, Func<T, Security> getSecurity, Func<Security, IMarketDataDrive, IMarketDataStorage<T>> getStorage, IMarketDataStorageDrive drive)
 		{
 			if (security == null)
-				throw new ArgumentNullException("security");
+				throw new ArgumentNullException(nameof(security));
 
 			if (security.InnerSecurities.IsEmpty())
-				throw new ArgumentOutOfRangeException("security");
+				throw new ArgumentOutOfRangeException(nameof(security));
 
 			if (getSecurity == null)
-				throw new ArgumentNullException("getSecurity");
+				throw new ArgumentNullException(nameof(getSecurity));
 
 			if (getStorage == null)
-				throw new ArgumentNullException("getStorage");
+				throw new ArgumentNullException(nameof(getStorage));
 
 			if (drive == null)
-				throw new ArgumentNullException("drive");
+				throw new ArgumentNullException(nameof(drive));
 
 			_security = security;
 			_arg = arg;
@@ -107,24 +101,15 @@ namespace StockSharp.Algo.Storages
 			get { return _security.InnerSecurities.SelectMany(s => _getStorage(s, Drive.Drive).Dates).Distinct().OrderBy(); }
 		}
 
-		Type IMarketDataStorage.DataType
-		{
-			get { return typeof(T); }
-		}
+		Type IMarketDataStorage.DataType => typeof(T);
 
-		Security IMarketDataStorage.Security
-		{
-			get { return _security; }
-		}
+		Security IMarketDataStorage.Security => _security;
 
 		private readonly object _arg;
 
-		object IMarketDataStorage.Arg
-		{
-			get { return _arg; }
-		}
+		object IMarketDataStorage.Arg => _arg;
 
-		public IMarketDataStorageDrive Drive { get; private set; }
+		public IMarketDataStorageDrive Drive { get; }
 
 		private bool _appendOnlyNew = true;
 
@@ -138,10 +123,7 @@ namespace StockSharp.Algo.Storages
 			}
 		}
 
-		IMarketDataSerializer IMarketDataStorage.Serializer
-		{
-			get { return ((IMarketDataStorage<T>)this).Serializer; }
-		}
+		IMarketDataSerializer IMarketDataStorage.Serializer => ((IMarketDataStorage<T>)this).Serializer;
 
 		IMarketDataSerializer<T> IMarketDataStorage<T>.Serializer
 		{

@@ -37,7 +37,7 @@ namespace StockSharp.Algo.Indicators
 		protected BaseComplexIndicator(params IIndicator[] innerIndicators)
 		{
 			if (innerIndicators == null)
-				throw new ArgumentNullException("innerIndicators");
+				throw new ArgumentNullException(nameof(innerIndicators));
 
 			if (innerIndicators.Any(i => i == null))
 				throw new ArgumentException("innerIndicators");
@@ -57,12 +57,9 @@ namespace StockSharp.Algo.Indicators
 		/// Embedded indicators.
 		/// </summary>
 		[Browsable(false)]
-		protected IList<IIndicator> InnerIndicators { get; private set; }
+		protected IList<IIndicator> InnerIndicators { get; }
 
-		IEnumerable<IIndicator> IComplexIndicator.InnerIndicators
-		{
-			get { return InnerIndicators; }
-		}
+		IEnumerable<IIndicator> IComplexIndicator.InnerIndicators => InnerIndicators;
 
 		/// <summary>
 		/// Whether the indicator is set.

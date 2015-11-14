@@ -37,7 +37,7 @@
 			: this(CustomExportType.Table)
 		{
 			if (table == null)
-				throw new ArgumentNullException("table");
+				throw new ArgumentNullException(nameof(table));
 
 			Table = table;
 		}
@@ -46,7 +46,7 @@
 			: this(CustomExportType.Tables)
 		{
 			if (tables == null)
-				throw new ArgumentNullException("tables");
+				throw new ArgumentNullException(nameof(tables));
 
 			Tables = tables;
 		}
@@ -55,7 +55,7 @@
 			: this(CustomExportType.Caption)
 		{
 			if (caption.IsEmpty())
-				throw new ArgumentNullException("caption");
+				throw new ArgumentNullException(nameof(caption));
 
 			Caption = caption;
 		}

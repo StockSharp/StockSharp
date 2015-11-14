@@ -32,7 +32,7 @@ namespace StockSharp.Algo.Candles
 				public SourceInfo(ICandleManagerSource source, CandleManager manager)
 				{
 					if (source == null)
-						throw new ArgumentNullException("source");
+						throw new ArgumentNullException(nameof(source));
 
 					_source = source;
 					_manager = manager;
@@ -69,7 +69,7 @@ namespace StockSharp.Algo.Candles
 			public CandleManagerSourceList(CandleManager manager)
 			{
 				if (manager == null)
-					throw new ArgumentNullException("manager");
+					throw new ArgumentNullException(nameof(manager));
 
 				_manager = manager;
 			}
@@ -123,17 +123,14 @@ namespace StockSharp.Algo.Candles
 			public ExternalCandleSource(IExternalCandleSource source)
 			{
 				if (source == null)
-					throw new ArgumentNullException("source");
+					throw new ArgumentNullException(nameof(source));
 
 				_source = source;
 				_source.NewCandles += OnNewCandles;
 				_source.Stopped += OnStopped;
 			}
 
-			public int SpeedPriority
-			{
-				get { return 1; }
-			}
+			public int SpeedPriority => 1;
 
 			public event Action<CandleSeries, Candle> Processing;
 			public event Action<CandleSeries> Stopped;
@@ -222,7 +219,7 @@ namespace StockSharp.Algo.Candles
 			: this()
 		{
 			if (builderSource == null)
-				throw new ArgumentNullException("builderSource");
+				throw new ArgumentNullException(nameof(builderSource));
 
 			Sources.OfType<ICandleBuilder>().ForEach(b => b.Sources.Add(builderSource));
 		}
@@ -251,7 +248,7 @@ namespace StockSharp.Algo.Candles
 			set
 			{
 				if (value == null)
-					throw new ArgumentNullException("value");
+					throw new ArgumentNullException(nameof(value));
 
 				if (value == _container)
 					return;
@@ -287,7 +284,7 @@ namespace StockSharp.Algo.Candles
 		/// <summary>
 		/// Candles sources.
 		/// </summary>
-		public ICandleManagerSourceList Sources { get; private set; }
+		public ICandleManagerSourceList Sources { get; }
 
 		/// <summary>
 		/// The source priority by speed (0 - the best).
@@ -320,7 +317,7 @@ namespace StockSharp.Algo.Candles
 		public virtual IEnumerable<Range<DateTimeOffset>> GetSupportedRanges(CandleSeries series)
 		{
 			if (series == null)
-				throw new ArgumentNullException("series");
+				throw new ArgumentNullException(nameof(series));
 
 			return Sources.SelectMany(s => s.GetSupportedRanges(series)).JoinRanges().ToArray();
 		}
@@ -334,14 +331,14 @@ namespace StockSharp.Algo.Candles
 		public virtual void Start(CandleSeries series, DateTimeOffset from, DateTimeOffset to)
 		{
 			if (series == null)
-				throw new ArgumentNullException("series");
+				throw new ArgumentNullException(nameof(series));
 
 			CandleSourceEnumerator<ICandleManagerSource, Candle> enumerator;
 
 			lock (_series.SyncRoot)
 			{
 				if (_series.ContainsKey(series))
-					throw new ArgumentException(LocalizedStrings.Str650Params.Put(series), "series");
+					throw new ArgumentException(LocalizedStrings.Str650Params.Put(series), nameof(series));
 
 				enumerator = new CandleSourceEnumerator<ICandleManagerSource, Candle>(series, from, to,
 					series.Security is IndexSecurity ? (IEnumerable<ICandleManagerSource>)new[] { new IndexSecurityCandleManagerSource(this, from, to) } : Sources,
@@ -376,7 +373,7 @@ namespace StockSharp.Algo.Candles
 		public virtual void Stop(CandleSeries series)
 		{
 			if (series == null)
-				throw new ArgumentNullException("series");
+				throw new ArgumentNullException(nameof(series));
 
 			var enumerator = _series.TryGetValue(series);
 

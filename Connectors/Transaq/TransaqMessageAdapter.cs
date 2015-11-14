@@ -80,7 +80,7 @@ namespace StockSharp.Transaq
 			where T : BaseResponse
 		{
 			if (handler == null)
-				throw new ArgumentNullException("handler");
+				throw new ArgumentNullException(nameof(handler));
 
 			_handlerBunch[typeof(T)] = response => handler((T)response);
 		}

@@ -27,10 +27,7 @@ namespace StockSharp.Algo.Commissions
 		/// <summary>
 		/// The list of commission calculating rules.
 		/// </summary>
-		public ISynchronizedCollection<ICommissionRule> Rules
-		{
-			get { return _rules; }
-		}
+		public ISynchronizedCollection<ICommissionRule> Rules => _rules;
 
 		/// <summary>
 		/// Total commission.

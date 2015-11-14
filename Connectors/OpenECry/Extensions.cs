@@ -19,7 +19,7 @@ namespace StockSharp.OpenECry
 		public static SecurityTypes GetSecurityType(this OEC.API.Contract contract)
 		{
 			if (contract == null)
-				throw new ArgumentNullException("contract");
+				throw new ArgumentNullException(nameof(contract));
 
 			if (contract.IsCompound)
 				return SecurityTypes.Index;
@@ -147,7 +147,7 @@ namespace StockSharp.OpenECry
 				case TriggerType.Ask:
 					return Level1Fields.BestAskPrice;
 				default:
-					throw new ArgumentOutOfRangeException("type");
+					throw new ArgumentOutOfRangeException(nameof(type));
 			}
 		}
 
@@ -163,7 +163,7 @@ namespace StockSharp.OpenECry
 				case Level1Fields.BestAskPrice:
 					return TriggerType.Ask;
 				default:
-					throw new ArgumentOutOfRangeException("type");
+					throw new ArgumentOutOfRangeException(nameof(type));
 			}
 		}
 
@@ -202,7 +202,7 @@ namespace StockSharp.OpenECry
 				case OrderType.Iceberg:
 					return OrderTypes.Limit;
 				default:
-					throw new ArgumentOutOfRangeException("type");
+					throw new ArgumentOutOfRangeException(nameof(type));
 			}
 		}
 

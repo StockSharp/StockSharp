@@ -9,7 +9,7 @@ namespace SampleDiagram
 		public static string GetFileName(this CompositionDiagramElement element)
 		{
 			if (element == null)
-				throw new ArgumentNullException("element");
+				throw new ArgumentNullException(nameof(element));
 
 			return element.TypeId.ToString().Replace("-", "_") + ".xml";
 		}

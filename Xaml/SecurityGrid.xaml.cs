@@ -27,7 +27,7 @@ namespace StockSharp.Xaml
 			private bool _isLastTradeUp;
 			private bool _isLastTradeDown;
 
-			public Security Security { get; private set; }
+			public Security Security { get; }
 
 			public bool IsLastTradeUp
 			{
@@ -58,7 +58,7 @@ namespace StockSharp.Xaml
 			public SecurityItem(Security security)
 			{
 				if (security == null)
-					throw new ArgumentNullException("security");
+					throw new ArgumentNullException(nameof(security));
 
 				Security = security;
 			}
@@ -97,7 +97,7 @@ namespace StockSharp.Xaml
 			public SelectedSecurityList(SecurityGrid parent)
 			{
 				if (parent == null)
-					throw new ArgumentNullException("parent");
+					throw new ArgumentNullException(nameof(parent));
 
 				_parent = parent;
 			}
@@ -105,7 +105,7 @@ namespace StockSharp.Xaml
 			private SecurityItem GetItem(Security security)
 			{
 				if (security == null)
-					throw new ArgumentNullException("security");
+					throw new ArgumentNullException(nameof(security));
 
 				var data = _parent.TryGetItem(security);
 
@@ -115,10 +115,7 @@ namespace StockSharp.Xaml
 				return data;
 			}
 
-			private IList<object> SelectedItems
-			{
-				get { return (IList<object>)_parent.SelectedItems; }
-			}
+			private IList<object> SelectedItems => (IList<object>)_parent.SelectedItems;
 
 			void ICollection<Security>.Add(Security item)
 			{
@@ -152,15 +149,9 @@ namespace StockSharp.Xaml
 				return SelectedItems.Remove(GetItem(item));
 			}
 
-			int ICollection<Security>.Count
-			{
-				get { return SelectedItems.Count; }
-			}
+			int ICollection<Security>.Count => SelectedItems.Count;
 
-			bool ICollection<Security>.IsReadOnly
-			{
-				get { return false; }
-			}
+			bool ICollection<Security>.IsReadOnly => false;
 
 			public IEnumerator<Security> GetEnumerator()
 			{
@@ -252,18 +243,12 @@ namespace StockSharp.Xaml
 		/// <summary>
 		/// All available instruments.
 		/// </summary>
-		public IListEx<Security> Securities
-		{
-			get { return _securities; }
-		}
+		public IListEx<Security> Securities => _securities;
 
 		/// <summary>
 		/// Selected instruments.
 		/// </summary>
-		public IList<Security> SelectedSecurities
-		{
-			get { return _selectedSecurities; }
-		}
+		public IList<Security> SelectedSecurities => _selectedSecurities;
 
 		private IMarketDataProvider _marketDataProvider;
 

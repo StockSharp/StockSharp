@@ -36,10 +36,10 @@ namespace StockSharp.Logging
 		public LogMessage(ILogSource source, DateTimeOffset time, LogLevels level, Func<string> getMessage)
 		{
 			if (source == null)
-				throw new ArgumentNullException("source");
+				throw new ArgumentNullException(nameof(source));
 
 			if (getMessage == null)
-				throw new ArgumentNullException("getMessage");
+				throw new ArgumentNullException(nameof(getMessage));
 
 			_getMessage = getMessage;
 
@@ -51,17 +51,17 @@ namespace StockSharp.Logging
 		/// <summary>
 		/// The log source.
 		/// </summary>
-		public ILogSource Source { get; private set; }
+		public ILogSource Source { get; }
 
 		/// <summary>
 		/// Message creating time.
 		/// </summary>
-		public DateTimeOffset Time { get; private set; }
+		public DateTimeOffset Time { get; }
 
 		/// <summary>
 		/// The level of the log message.
 		/// </summary>
-		public LogLevels Level { get; private set; }
+		public LogLevels Level { get; }
 
 		private string _message;
 

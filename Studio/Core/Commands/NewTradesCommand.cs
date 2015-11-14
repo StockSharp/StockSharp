@@ -10,7 +10,7 @@
 		public NewTradesCommand(IEnumerable<Trade> trades)
 		{
 			if (trades == null)
-				throw new ArgumentNullException("trades");
+				throw new ArgumentNullException(nameof(trades));
 
 			Trades = trades;
 		}

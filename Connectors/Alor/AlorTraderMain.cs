@@ -109,13 +109,13 @@ namespace StockSharp.Alor
 		public AlorTrader(int slotId, string address, string login, string password)
 		{
 			if (address == null)
-				throw new ArgumentNullException("address");
+				throw new ArgumentNullException(nameof(address));
 
 			if (login.IsEmpty())
-				throw new ArgumentNullException("login");
+				throw new ArgumentNullException(nameof(login));
 
 			if (password.IsEmpty())
-				throw new ArgumentNullException("password");
+				throw new ArgumentNullException(nameof(password));
 
 			Address = address;
 			Login = login;
@@ -216,7 +216,7 @@ namespace StockSharp.Alor
 		private static void CloseTable(AlorTable table)
 		{
 			if (table == null)
-				throw new ArgumentNullException("table");
+				throw new ArgumentNullException(nameof(table));
 			if (table.MetaTable != null && table.MetaTable.ID != 0)
 				table.MetaTable.Close(table.MetaTable.ID);
 		}

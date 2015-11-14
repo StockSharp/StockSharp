@@ -83,7 +83,7 @@ namespace StockSharp.Alerts
 			set
 			{
 				if (value == null)
-					throw new ArgumentNullException("value");
+					throw new ArgumentNullException(nameof(value));
 
 				_schema = value;
 				_rules.AddRange(value.Rules.Select(r => new AlertRule

@@ -200,10 +200,10 @@ namespace StockSharp.Btce.Native
 			decimal volume)
 		{
 			if (price < 0)
-				throw new ArgumentOutOfRangeException("price", price, LocalizedStrings.Str3343);
+				throw new ArgumentOutOfRangeException(nameof(price), price, LocalizedStrings.Str3343);
 
 			if (volume <= 0)
-				throw new ArgumentOutOfRangeException("volume", volume, LocalizedStrings.Str3344);
+				throw new ArgumentOutOfRangeException(nameof(volume), volume, LocalizedStrings.Str3344);
 
 			var instr = instrument.ToLower();
 			//var dir = command.Direction.ToString().ToLower();
@@ -240,7 +240,7 @@ namespace StockSharp.Btce.Native
 		public CommandReply CancelOrder(Command command)
 		{
 			if (command == null)
-				throw new ArgumentNullException("command");
+				throw new ArgumentNullException(nameof(command));
 			if (command.OrderId == 0)
 				throw new ArgumentException("OrderId");
 
@@ -302,7 +302,7 @@ namespace StockSharp.Btce.Native
 		public DepthsReply GetDepths(int depth, IEnumerable<string> instruments)
 		{
 			if (depth <= 0)
-				throw new ArgumentOutOfRangeException("depth");
+				throw new ArgumentOutOfRangeException(nameof(depth));
 
 			depth = Math.Min(depth, 2000);
 
@@ -322,7 +322,7 @@ namespace StockSharp.Btce.Native
 		public TradesReply GetTrades(int count, IEnumerable<string> instruments)
 		{
 			if (count <= 0)
-				throw new ArgumentOutOfRangeException("count");
+				throw new ArgumentOutOfRangeException(nameof(count));
 
 			count = Math.Min(count, 2000);
 

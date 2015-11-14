@@ -231,7 +231,7 @@ namespace StockSharp.Algo.Candles
 		private static CandleSeries ThrowIfNull(this CandleSeries series)
 		{
 			if (series == null)
-				throw new ArgumentNullException("series");
+				throw new ArgumentNullException(nameof(series));
 
 			return series;
 		}
@@ -239,7 +239,7 @@ namespace StockSharp.Algo.Candles
 		private static ICandleManager ThrowIfNull(this ICandleManager manager)
 		{
 			if (manager == null)
-				throw new ArgumentNullException("manager");
+				throw new ArgumentNullException(nameof(manager));
 
 			return manager;
 		}
@@ -255,20 +255,17 @@ namespace StockSharp.Algo.Candles
 					public EnumeratorCandleBuilderSource(Security security)
 					{
 						if (security == null)
-							throw new ArgumentNullException("security");
+							throw new ArgumentNullException(nameof(security));
 
 						_security = security;
 					}
 
-					public override int SpeedPriority
-					{
-						get { return 0; }
-					}
+					public override int SpeedPriority => 0;
 
 					public override IEnumerable<Range<DateTimeOffset>> GetSupportedRanges(CandleSeries series)
 					{
 						if (series == null)
-							throw new ArgumentNullException("series");
+							throw new ArgumentNullException(nameof(series));
 
 						if (series.Security != _security)
 							yield break;
@@ -301,10 +298,10 @@ namespace StockSharp.Algo.Candles
 				public CandleEnumerator(CandleSeries series, IEnumerable<TValue> values)
 				{
 					if (series == null)
-						throw new ArgumentNullException("series");
+						throw new ArgumentNullException(nameof(series));
 
 					if (values == null)
-						throw new ArgumentNullException("values");
+						throw new ArgumentNullException(nameof(values));
 
 					_series = series;
 					_series.ProcessCandle += SeriesOnProcessCandle;
@@ -378,10 +375,7 @@ namespace StockSharp.Algo.Candles
 				_values = values;
 			}
 
-			int IEnumerableEx.Count
-			{
-				get { return _values.Count; }
-			}
+			int IEnumerableEx.Count => _values.Count;
 		}
 
 		/// <summary>
@@ -491,7 +485,7 @@ namespace StockSharp.Algo.Candles
 		public static IEnumerable<ExecutionMessage> ToTrades(this CandleMessage candleMsg, decimal volumeStep, int decimals)
 		{
 			if (candleMsg == null)
-				throw new ArgumentNullException("candleMsg");
+				throw new ArgumentNullException(nameof(candleMsg));
 
 			var vol = MathHelper.Round(candleMsg.TotalVolume / 4, volumeStep, decimals, MidpointRounding.AwayFromZero);
 			var isUptrend = candleMsg.ClosePrice >= candleMsg.OpenPrice;
@@ -622,27 +616,21 @@ namespace StockSharp.Algo.Candles
 
 				public ExecutionMessage Current { get; private set; }
 
-				object IEnumerator.Current
-				{
-					get { return Current; }
-				}
+				object IEnumerator.Current => Current;
 			}
 
 			public TradeEnumerable(IEnumerableEx<CandleMessage> candles, decimal volumeStep)
 				: base(() => new TradeEnumerator(candles, volumeStep))
 			{
 				if (candles == null)
-					throw new ArgumentNullException("candles");
+					throw new ArgumentNullException(nameof(candles));
 
 				_values = candles;
 			}
 
 			private readonly IEnumerableEx<CandleMessage> _values;
 
-			public int Count
-			{
-				get { return _values.Count * 4; }
-			}
+			public int Count => _values.Count * 4;
 		}
 
 		/// <summary>
@@ -691,7 +679,7 @@ namespace StockSharp.Algo.Candles
 		public static Range<DateTimeOffset> GetCandleBounds(this TimeSpan timeFrame, DateTimeOffset currentTime, ExchangeBoard board)
 		{
 			if (board == null)
-				throw new ArgumentNullException("board");
+				throw new ArgumentNullException(nameof(board));
 
 			return timeFrame.GetCandleBounds(currentTime, board, board.WorkingTime);
 		}
@@ -709,10 +697,10 @@ namespace StockSharp.Algo.Candles
 		public static Range<DateTimeOffset> GetCandleBounds(this TimeSpan timeFrame, DateTimeOffset currentTime, ExchangeBoard board, WorkingTime time)
 		{
 			if (board == null)
-				throw new ArgumentNullException("board");
+				throw new ArgumentNullException(nameof(board));
 
 			if (time == null)
-				throw new ArgumentNullException("time");
+				throw new ArgumentNullException(nameof(time));
 
 			var exchangeTime = currentTime.ToLocalTime(board.TimeZone);
 			Range<DateTime> bounds;
@@ -780,8 +768,8 @@ namespace StockSharp.Algo.Candles
 			var offset = currentTime.Offset;
 
 			return new Range<DateTimeOffset>(
-				(bounds.Min + offset).ApplyTimeZone(offset),
-				(bounds.Max + offset).ApplyTimeZone(offset));
+				(bounds.Min + (offset - board.TimeZone.BaseUtcOffset)).ApplyTimeZone(offset),
+				(bounds.Max + (offset - board.TimeZone.BaseUtcOffset)).ApplyTimeZone(offset));
 		}
 
 		/// <summary>
@@ -792,7 +780,7 @@ namespace StockSharp.Algo.Candles
 		public static decimal GetLength(this Candle candle)
 		{
 			if (candle == null)
-				throw new ArgumentNullException("candle");
+				throw new ArgumentNullException(nameof(candle));
 
 			return candle.HighPrice - candle.LowPrice;
 		}
@@ -805,7 +793,7 @@ namespace StockSharp.Algo.Candles
 		public static decimal GetBody(this Candle candle)
 		{
 			if (candle == null)
-				throw new ArgumentNullException("candle");
+				throw new ArgumentNullException(nameof(candle));
 
 			return (candle.OpenPrice - candle.ClosePrice).Abs();
 		}
@@ -818,7 +806,7 @@ namespace StockSharp.Algo.Candles
 		public static decimal GetTopShadow(this Candle candle)
 		{
 			if (candle == null)
-				throw new ArgumentNullException("candle");
+				throw new ArgumentNullException(nameof(candle));
 
 			return candle.HighPrice - candle.OpenPrice.Max(candle.ClosePrice);
 		}
@@ -831,7 +819,7 @@ namespace StockSharp.Algo.Candles
 		public static decimal GetBottomShadow(this Candle candle)
 		{
 			if (candle == null)
-				throw new ArgumentNullException("candle");
+				throw new ArgumentNullException(nameof(candle));
 
 			return candle.OpenPrice.Min(candle.ClosePrice) - candle.LowPrice;
 		}
@@ -848,7 +836,7 @@ namespace StockSharp.Algo.Candles
 		public static bool? IsWhiteOrBlack(this Candle candle)
 		{
 			if (candle == null)
-				throw new ArgumentNullException("candle");
+				throw new ArgumentNullException(nameof(candle));
 
 			if (candle.OpenPrice == candle.ClosePrice)
 				return null;
@@ -864,7 +852,7 @@ namespace StockSharp.Algo.Candles
 		public static bool IsMarubozu(this Candle candle)
 		{
 			if (candle == null)
-				throw new ArgumentNullException("candle");
+				throw new ArgumentNullException(nameof(candle));
 
 			return candle.GetLength() == candle.GetBody();
 		}
@@ -918,7 +906,7 @@ namespace StockSharp.Algo.Candles
 		public static bool? IsBullishOrBearish(this Candle candle)
 		{
 			if (candle == null)
-				throw new ArgumentNullException("candle");
+				throw new ArgumentNullException(nameof(candle));
 
 			var isWhiteOrBlack = candle.IsWhiteOrBlack();
 
@@ -947,7 +935,7 @@ namespace StockSharp.Algo.Candles
 		public static long GetTimeFrameCount(this Security security, Range<DateTimeOffset> range, TimeSpan timeFrame)
 		{
 			if (security == null)
-				throw new ArgumentNullException("security");
+				throw new ArgumentNullException(nameof(security));
 
 			return security.Board.GetTimeFrameCount(range, timeFrame);
 		}
@@ -962,10 +950,10 @@ namespace StockSharp.Algo.Candles
 		public static long GetTimeFrameCount(this ExchangeBoard board, Range<DateTimeOffset> range, TimeSpan timeFrame)
 		{
 			if (board == null)
-				throw new ArgumentNullException("board");
+				throw new ArgumentNullException(nameof(board));
 
 			if (range == null)
-				throw new ArgumentNullException("range");
+				throw new ArgumentNullException(nameof(range));
 
 			var workingTime = board.WorkingTime;
 
@@ -1001,10 +989,10 @@ namespace StockSharp.Algo.Candles
 		private static long GetTimeFrameCount(this WorkingTime workingTime, DateTime date, Range<TimeSpan> fromToRange, TimeSpan timeFrame)
 		{
 			if (workingTime == null)
-				throw new ArgumentNullException("workingTime");
+				throw new ArgumentNullException(nameof(workingTime));
 
 			if (fromToRange == null)
-				throw new ArgumentNullException("fromToRange");
+				throw new ArgumentNullException(nameof(fromToRange));
 
 			var period = workingTime.GetPeriod(date);
 
@@ -1020,7 +1008,7 @@ namespace StockSharp.Algo.Candles
 		internal static CandleSeries CheckSeries(this Candle candle)
 		{
 			if (candle == null)
-				throw new ArgumentNullException("candle");
+				throw new ArgumentNullException(nameof(candle));
 
 			var series = candle.Series;
 
@@ -1033,7 +1021,7 @@ namespace StockSharp.Algo.Candles
 		internal static bool CheckTime(this CandleSeries series, DateTimeOffset time)
 		{
 			if (series == null)
-				throw new ArgumentNullException("series");
+				throw new ArgumentNullException(nameof(series));
 
 			return series.Security.Board.IsTradeTime(time) && time >= series.From && time < series.To;
 		}
@@ -1064,13 +1052,13 @@ namespace StockSharp.Algo.Candles
 			where TConnector : class, IConnector, IExternalCandleSource
 		{
 			if (connector == null)
-				throw new ArgumentNullException("connector");
+				throw new ArgumentNullException(nameof(connector));
 
 			if (registeredSeries == null)
-				throw new ArgumentNullException("registeredSeries");
+				throw new ArgumentNullException(nameof(registeredSeries));
 
 			if (requestNewCandles == null)
-				throw new ArgumentNullException("requestNewCandles");
+				throw new ArgumentNullException(nameof(requestNewCandles));
 
 			return ThreadingHelper.Timer(() =>
 			{

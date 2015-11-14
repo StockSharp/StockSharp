@@ -38,7 +38,7 @@ namespace StockSharp.Quik
 		private static IDictionary<string, DdeTableColumn> GetColumnsDictionary(Type type)
 		{
 			if (type == null)
-				throw new ArgumentNullException("type");
+				throw new ArgumentNullException(nameof(type));
 
 			return type.GetMembers<PropertyInfo>().ToDictionary(p => p.Name, p => p.GetValue<VoidType, DdeTableColumn>(null));
 		}
@@ -56,7 +56,7 @@ namespace StockSharp.Quik
 		object IValueConverter.Convert(object value, Type targetType, object parameter, CultureInfo culture)
 		{
 			if (value == null)
-				throw new ArgumentNullException("value");
+				throw new ArgumentNullException(nameof(value));
 
 			if (parameter == null)
 				return null;
@@ -67,11 +67,11 @@ namespace StockSharp.Quik
 
 			var columns = _columns.TryGetValue(GetKey(entity));
 			if(columns == null)
-				throw new ArgumentException(LocalizedStrings.Str1708Params.Put(entity.GetType()), "value");
+				throw new ArgumentException(LocalizedStrings.Str1708Params.Put(entity.GetType()), nameof(value));
 
 			var column = columns.TryGetValue((string)parameter);
 			if (column == null)
-				throw new ArgumentException(LocalizedStrings.Str1709Params.Put(parameter, entity.GetType()), "parameter");
+				throw new ArgumentException(LocalizedStrings.Str1709Params.Put(parameter, entity.GetType()), nameof(parameter));
 
 			return entity.ExtensionInfo.TryGetValue(column);
 		}

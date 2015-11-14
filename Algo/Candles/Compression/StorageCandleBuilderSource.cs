@@ -28,17 +28,17 @@ namespace StockSharp.Algo.Candles.Compression
 			public SeriesInfo(CandleSeries series, IEnumerator<TSourceValue> reader)
 			{
 				if (series == null)
-					throw new ArgumentNullException("series");
+					throw new ArgumentNullException(nameof(series));
 
 				if (reader == null)
-					throw new ArgumentNullException("reader");
+					throw new ArgumentNullException(nameof(reader));
 
 				Series = series;
 				Reader = reader;
 			}
 
-			public CandleSeries Series { get; private set; }
-			public IEnumerator<TSourceValue> Reader { get; private set; }
+			public CandleSeries Series { get; }
+			public IEnumerator<TSourceValue> Reader { get; }
 			public bool IsStopping { get; set; }
 		}
 
@@ -59,10 +59,7 @@ namespace StockSharp.Algo.Candles.Compression
 		/// <summary>
 		/// The source priority by speed (0 - the best).
 		/// </summary>
-		public override int SpeedPriority
-		{
-			get { return 1; }
-		}
+		public override int SpeedPriority => 1;
 
 		/// <summary>
 		/// Market data storage.
@@ -107,7 +104,7 @@ namespace StockSharp.Algo.Candles.Compression
 		public override IEnumerable<Range<DateTimeOffset>> GetSupportedRanges(CandleSeries series)
 		{
 			if (series == null)
-				throw new ArgumentNullException("series");
+				throw new ArgumentNullException(nameof(series));
 
 			if (StorageRegistry == null)
 				return Enumerable.Empty<Range<DateTimeOffset>>();
@@ -143,7 +140,7 @@ namespace StockSharp.Algo.Candles.Compression
 		public override void Start(CandleSeries series, DateTimeOffset from, DateTimeOffset to)
 		{
 			if (series == null)
-				throw new ArgumentNullException("series");
+				throw new ArgumentNullException(nameof(series));
 
 			var values = GetValues(series, from, to);
 
@@ -153,7 +150,7 @@ namespace StockSharp.Algo.Candles.Compression
 			lock (_series.SyncRoot)
 			{
 				if (_series.ContainsKey(series))
-					throw new ArgumentException(LocalizedStrings.Str650Params.Put(series), "series");
+					throw new ArgumentException(LocalizedStrings.Str650Params.Put(series), nameof(series));
 
 				_series.Add(series, new SeriesInfo(series, values.GetEnumerator()));
 
@@ -307,10 +304,7 @@ namespace StockSharp.Algo.Candles.Compression
 		/// <summary>
 		/// The source priority by speed (0 - the best).
 		/// </summary>
-		public override int SpeedPriority
-		{
-			get { return 2; }
-		}
+		public override int SpeedPriority => 2;
 
 		/// <summary>
 		/// To get the data storage.
@@ -330,7 +324,7 @@ namespace StockSharp.Algo.Candles.Compression
 		public override IEnumerable<Range<DateTimeOffset>> GetSupportedRanges(CandleSeries series)
 		{
 			if (series == null)
-				throw new ArgumentNullException("series");
+				throw new ArgumentNullException(nameof(series));
 
 			if (StorageRegistry == null)
 				return Enumerable.Empty<Range<DateTimeOffset>>();

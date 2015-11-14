@@ -22,10 +22,7 @@ namespace StockSharp.Logging
 
 			private static readonly Lazy<ErrorHandler> _instance = new Lazy<ErrorHandler>(() => new ErrorHandler());
 
-			public static ErrorHandler Instance
-			{
-				get { return _instance.Value; }
-			}
+			public static ErrorHandler Instance => _instance.Value;
 
 			public void ProvideFault(Exception error, MessageVersion version, ref Message fault)
 			{

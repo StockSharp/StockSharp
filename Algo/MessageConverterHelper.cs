@@ -26,7 +26,7 @@ namespace StockSharp.Algo
 		public static QuoteChangeMessage ToMessage(this MarketDepth depth)
 		{
 			if (depth == null)
-				throw new ArgumentNullException("depth");
+				throw new ArgumentNullException(nameof(depth));
 
 			var securityId = depth.Security.ToSecurityId();
 
@@ -82,7 +82,7 @@ namespace StockSharp.Algo
 			var messageType = _candleMarketDataTypes.TryGetKey(type);
 
 			if (messageType == null)
-				throw new ArgumentOutOfRangeException("type", type, LocalizedStrings.WrongCandleType);
+				throw new ArgumentOutOfRangeException(nameof(type), type, LocalizedStrings.WrongCandleType);
 
 			return messageType;
 		}
@@ -95,12 +95,12 @@ namespace StockSharp.Algo
 		public static MarketDataTypes ToCandleMarketDataType(this Type messageType)
 		{
 			if (messageType == null)
-				throw new ArgumentNullException("messageType");
+				throw new ArgumentNullException(nameof(messageType));
 
 			var dataType = _candleMarketDataTypes.TryGetValue2(messageType);
 
 			if (dataType == null)
-				throw new ArgumentOutOfRangeException("messageType", messageType, LocalizedStrings.WrongCandleType);
+				throw new ArgumentOutOfRangeException(nameof(messageType), messageType, LocalizedStrings.WrongCandleType);
 
 			return dataType.Value;
 		}
@@ -113,12 +113,12 @@ namespace StockSharp.Algo
 		public static Type ToCandleMessageType(this Type candleType)
 		{
 			if (candleType == null)
-				throw new ArgumentNullException("candleType");
+				throw new ArgumentNullException(nameof(candleType));
 
 			var messageType = _candleTypes.TryGetValue(candleType);
 
 			if (messageType == null)
-				throw new ArgumentOutOfRangeException("candleType", candleType, LocalizedStrings.WrongCandleType);
+				throw new ArgumentOutOfRangeException(nameof(candleType), candleType, LocalizedStrings.WrongCandleType);
 
 			return messageType;
 		}
@@ -131,12 +131,12 @@ namespace StockSharp.Algo
 		public static Type ToCandleType(this Type messageType)
 		{
 			if (messageType == null)
-				throw new ArgumentNullException("messageType");
+				throw new ArgumentNullException(nameof(messageType));
 
 			var candleType = _candleTypes.TryGetKey(messageType);
 
 			if (candleType == null)
-				throw new ArgumentOutOfRangeException("messageType", messageType, LocalizedStrings.WrongCandleType);
+				throw new ArgumentOutOfRangeException(nameof(messageType), messageType, LocalizedStrings.WrongCandleType);
 
 			return candleType;
 		}
@@ -169,7 +169,7 @@ namespace StockSharp.Algo
 		public static CandleMessage ToMessage(this Candle candle)
 		{
 			if (candle == null)
-				throw new ArgumentNullException("candle");
+				throw new ArgumentNullException(nameof(candle));
 
 			CandleMessage message;
 
@@ -186,7 +186,7 @@ namespace StockSharp.Algo
 			else if (candle is RenkoCandle)
 				message = new RenkoCandleMessage();
 			else
-				throw new ArgumentException("Неизвестный тип '{0}' свечки.".Put(candle.GetType()), "candle");
+				throw new ArgumentException("Неизвестный тип '{0}' свечки.".Put(candle.GetType()), nameof(candle));
 
 			message.LocalTime = candle.OpenTime.LocalDateTime;
 			message.SecurityId = candle.Security.ToSecurityId();
@@ -219,7 +219,7 @@ namespace StockSharp.Algo
 		public static ExecutionMessage ToMessage(this MyTrade trade)
 		{
 			if (trade == null)
-				throw new ArgumentNullException("trade");
+				throw new ArgumentNullException(nameof(trade));
 
 			var tick = trade.Trade;
 			var order = trade.Order;
@@ -253,7 +253,7 @@ namespace StockSharp.Algo
 		public static ExecutionMessage ToMessage(this Order order)
 		{
 			if (order == null)
-				throw new ArgumentNullException("order");
+				throw new ArgumentNullException(nameof(order));
 
 			var message = new ExecutionMessage
 			{
@@ -294,7 +294,7 @@ namespace StockSharp.Algo
 		public static ExecutionMessage ToMessage(this OrderFail fail)
 		{
 			if (fail == null)
-				throw new ArgumentNullException("fail");
+				throw new ArgumentNullException(nameof(fail));
 
 			return new ExecutionMessage
 			{
@@ -320,7 +320,7 @@ namespace StockSharp.Algo
 		public static ExecutionMessage ToMessage(this Trade trade)
 		{
 			if (trade == null)
-				throw new ArgumentNullException("trade");
+				throw new ArgumentNullException(nameof(trade));
 
 			return new ExecutionMessage
 			{
@@ -347,7 +347,7 @@ namespace StockSharp.Algo
 		public static ExecutionMessage ToMessage(this OrderLogItem item)
 		{
 			if (item == null)
-				throw new ArgumentNullException("item");
+				throw new ArgumentNullException(nameof(item));
 
 			var order = item.Order;
 			var trade = item.Trade;
@@ -388,7 +388,7 @@ namespace StockSharp.Algo
 		public static OrderRegisterMessage CreateRegisterMessage(this Order order, SecurityId securityId)
 		{
 			if (order == null)
-				throw new ArgumentNullException("order");
+				throw new ArgumentNullException(nameof(order));
 
 			var msg = new OrderRegisterMessage
 			{
@@ -428,7 +428,7 @@ namespace StockSharp.Algo
 		public static OrderCancelMessage CreateCancelMessage(this Order order, SecurityId securityId, long transactionId, decimal? volume = null)
 		{
 			if (order == null)
-				throw new ArgumentNullException("order");
+				throw new ArgumentNullException(nameof(order));
 
 			var msg = new OrderCancelMessage
 			{
@@ -460,10 +460,10 @@ namespace StockSharp.Algo
 		public static OrderReplaceMessage CreateReplaceMessage(this Order oldOrder, Order newOrder, SecurityId securityId)
 		{
 			if (oldOrder == null)
-				throw new ArgumentNullException("oldOrder");
+				throw new ArgumentNullException(nameof(oldOrder));
 
 			if (newOrder == null)
-				throw new ArgumentNullException("newOrder");
+				throw new ArgumentNullException(nameof(newOrder));
 
 			var msg = new OrderReplaceMessage
 			{
@@ -572,7 +572,7 @@ namespace StockSharp.Algo
 		public static SecurityMessage ToMessage(this Security security, SecurityId? securityId = null)
 		{
 			if (security == null)
-				throw new ArgumentNullException("security");
+				throw new ArgumentNullException(nameof(security));
 
 			return new SecurityMessage
 			{
@@ -603,7 +603,7 @@ namespace StockSharp.Algo
 		public static SecurityLookupMessage ToLookupMessage(this Security criteria, SecurityId? securityId = null)
 		{
 			if (criteria == null)
-				throw new ArgumentNullException("criteria");
+				throw new ArgumentNullException(nameof(criteria));
 
 			return new SecurityLookupMessage
 			{
@@ -635,7 +635,7 @@ namespace StockSharp.Algo
 		public static Security ToSecurity(this SecurityMessage message)
 		{
 			if (message == null)
-				throw new ArgumentNullException("message");
+				throw new ArgumentNullException(nameof(message));
 
 			return new Security
 			{
@@ -682,7 +682,7 @@ namespace StockSharp.Algo
 		public static PortfolioMessage ToMessage(this Portfolio portfolio)
 		{
 			if (portfolio == null)
-				throw new ArgumentNullException("portfolio");
+				throw new ArgumentNullException(nameof(portfolio));
 
 			return new PortfolioMessage
 			{
@@ -700,7 +700,7 @@ namespace StockSharp.Algo
 		public static PortfolioChangeMessage ToChangeMessage(this Portfolio portfolio)
 		{
 			if (portfolio == null)
-				throw new ArgumentNullException("portfolio");
+				throw new ArgumentNullException(nameof(portfolio));
 
 			return new PortfolioChangeMessage
 			{
@@ -722,7 +722,7 @@ namespace StockSharp.Algo
 		public static PositionMessage ToMessage(this Position position, DateTime localTime)
 		{
 			if (position == null)
-				throw new ArgumentNullException("position");
+				throw new ArgumentNullException(nameof(position));
 
 			return new PositionMessage
 			{
@@ -742,7 +742,7 @@ namespace StockSharp.Algo
 		public static PositionChangeMessage ToChangeMessage(this Position position)
 		{
 			if (position == null)
-				throw new ArgumentNullException("position");
+				throw new ArgumentNullException(nameof(position));
 
 			return new PositionChangeMessage
 			{
@@ -764,7 +764,7 @@ namespace StockSharp.Algo
 		public static BoardMessage ToMessage(this ExchangeBoard board)
 		{
 			if (board == null)
-				throw new ArgumentNullException("board");
+				throw new ArgumentNullException(nameof(board));
 
 			return new BoardMessage
 			{
@@ -797,10 +797,10 @@ namespace StockSharp.Algo
 		public static Exchange ToExchange(this BoardMessage message, Exchange exchange)
 		{
 			if (message == null)
-				throw new ArgumentNullException("message");
+				throw new ArgumentNullException(nameof(message));
 
 			if (exchange == null)
-				throw new ArgumentNullException("exchange");
+				throw new ArgumentNullException(nameof(exchange));
 
 			return exchange;
 		}
@@ -824,10 +824,10 @@ namespace StockSharp.Algo
 		public static ExchangeBoard ToBoard(this BoardMessage message, ExchangeBoard board)
 		{
 			if (message == null)
-				throw new ArgumentNullException("message");
+				throw new ArgumentNullException(nameof(message));
 
 			if (board == null)
-				throw new ArgumentNullException("board");
+				throw new ArgumentNullException(nameof(board));
 
 			board.WorkingTime = message.WorkingTime;
 			board.IsSupportAtomicReRegister = message.IsSupportAtomicReRegister;
@@ -845,7 +845,7 @@ namespace StockSharp.Algo
 			public ToMessagesEnumerableEx(IEnumerableEx<TEntity> entities)
 			{
 				if (entities == null)
-					throw new ArgumentNullException("entities");
+					throw new ArgumentNullException(nameof(entities));
 
 				_entities = entities;
 			}
@@ -860,10 +860,7 @@ namespace StockSharp.Algo
 				return GetEnumerator();
 			}
 
-			int IEnumerableEx.Count
-			{
-				get { return _entities.Count; }
-			}
+			int IEnumerableEx.Count => _entities.Count;
 
 			private static TMessage Convert(TEntity value)
 			{
@@ -903,10 +900,10 @@ namespace StockSharp.Algo
 			public ToEntitiesEnumerableEx(IEnumerableEx<TMessage> messages, Security security)
 			{
 				if (messages == null)
-					throw new ArgumentNullException("messages");
+					throw new ArgumentNullException(nameof(messages));
 
 				if (security == null)
-					throw new ArgumentNullException("security");
+					throw new ArgumentNullException(nameof(security));
 
 				_messages = messages;
 				_security = security;
@@ -929,10 +926,7 @@ namespace StockSharp.Algo
 				return GetEnumerator();
 			}
 
-			int IEnumerableEx.Count
-			{
-				get { return _messages.Count; }
-			}
+			int IEnumerableEx.Count => _messages.Count;
 
 			private TEntity Convert(TMessage message)
 			{
@@ -954,7 +948,7 @@ namespace StockSharp.Algo
 								return execMsg.ToOrder(_security).To<TEntity>();
 
 							default:
-								throw new ArgumentOutOfRangeException("message", LocalizedStrings.Str1122Params.Put(execMsg.ExecutionType));
+								throw new ArgumentOutOfRangeException(nameof(message), LocalizedStrings.Str1122Params.Put(execMsg.ExecutionType));
 						}
 					}
 
@@ -1026,10 +1020,10 @@ namespace StockSharp.Algo
 		public static Candle ToCandle(this CandleMessage message, CandleSeries series)
 		{
 			if (message == null)
-				throw new ArgumentNullException("message");
+				throw new ArgumentNullException(nameof(message));
 
 			if (series == null)
-				throw new ArgumentNullException("series");
+				throw new ArgumentNullException(nameof(series));
 
 			var candle = message.ToCandle(series.CandleType, series.Security);
 			candle.Series = series;
@@ -1049,7 +1043,7 @@ namespace StockSharp.Algo
 		public static Candle ToCandle(this CandleMessage message, Security security)
 		{
 			if (message == null)
-				throw new ArgumentNullException("message");
+				throw new ArgumentNullException(nameof(message));
 
 			return message.ToCandle(message.GetType().ToCandleType(), security);
 		}
@@ -1064,13 +1058,13 @@ namespace StockSharp.Algo
 		public static Candle ToCandle(this CandleMessage message, Type type, Security security)
 		{
 			if (message == null)
-				throw new ArgumentNullException("message");
+				throw new ArgumentNullException(nameof(message));
 
 			if (security == null)
-				throw new ArgumentNullException("security");
+				throw new ArgumentNullException(nameof(security));
 
 			if (type == null)
-				throw new ArgumentNullException("type");
+				throw new ArgumentNullException(nameof(type));
 
 			//if (arg == null)
 			//	throw new ArgumentNullException("arg");
@@ -1119,7 +1113,7 @@ namespace StockSharp.Algo
 		public static Trade ToTrade(this ExecutionMessage message, Security security)
 		{
 			if (security == null)
-				throw new ArgumentNullException("security");
+				throw new ArgumentNullException(nameof(security));
 
 			return message.ToTrade(new Trade { Security = security });
 		}
@@ -1133,7 +1127,7 @@ namespace StockSharp.Algo
 		public static Trade ToTrade(this ExecutionMessage message, Trade trade)
 		{
 			if (message == null)
-				throw new ArgumentNullException("message");
+				throw new ArgumentNullException(nameof(message));
 
 			trade.Id = message.TradeId ?? 0;
 			trade.Price = message.TradePrice ?? 0;
@@ -1159,7 +1153,7 @@ namespace StockSharp.Algo
 		public static Order ToOrder(this ExecutionMessage message, Security security)
 		{
 			if (security == null)
-				throw new ArgumentNullException("security");
+				throw new ArgumentNullException(nameof(security));
 
 			return message.ToOrder(new Order { Security = security });
 		}
@@ -1173,7 +1167,7 @@ namespace StockSharp.Algo
 		public static Order ToOrder(this ExecutionMessage message, Order order)
 		{
 			if (order == null)
-				throw new ArgumentNullException("order");
+				throw new ArgumentNullException(nameof(order));
 
 			order.Id = message.OrderId;
 			order.StringId = message.OrderStringId;
@@ -1225,10 +1219,10 @@ namespace StockSharp.Algo
 		public static MarketDepth ToMarketDepth(this QuoteChangeMessage message, MarketDepth marketDepth, Func<SecurityId, Security> getSecurity = null)
 		{
 			if (message == null)
-				throw new ArgumentNullException("message");
+				throw new ArgumentNullException(nameof(message));
 
 			if (marketDepth == null)
-				throw new ArgumentNullException("marketDepth");
+				throw new ArgumentNullException(nameof(marketDepth));
 
 			var security = marketDepth.Security;
 
@@ -1279,7 +1273,7 @@ namespace StockSharp.Algo
 		public static OrderLogItem ToOrderLog(this ExecutionMessage message, Security security)
 		{
 			if (security == null)
-				throw new ArgumentNullException("security");
+				throw new ArgumentNullException(nameof(security));
 
 			return message.ToOrderLog(new OrderLogItem
 			{
@@ -1297,10 +1291,10 @@ namespace StockSharp.Algo
 		public static OrderLogItem ToOrderLog(this ExecutionMessage message, OrderLogItem item)
 		{
 			if (message == null)
-				throw new ArgumentNullException("message");
+				throw new ArgumentNullException(nameof(message));
 
 			if (item == null)
-				throw new ArgumentNullException("item");
+				throw new ArgumentNullException(nameof(item));
 
 			var order = item.Order;
 
@@ -1350,7 +1344,7 @@ namespace StockSharp.Algo
 		public static NewsMessage ToMessage(this News news)
 		{
 			if (news == null)
-				throw new ArgumentNullException("news");
+				throw new ArgumentNullException(nameof(news));
 
 			return new NewsMessage
 			{
@@ -1375,7 +1369,7 @@ namespace StockSharp.Algo
 		public static SecurityId ToSecurityId(this Security security, SecurityIdGenerator idGenerator = null)
 		{
 			if (security == null)
-				throw new ArgumentNullException("security");
+				throw new ArgumentNullException(nameof(security));
 
 			string secCode;
 			string boardCode;
@@ -1458,8 +1452,8 @@ namespace StockSharp.Algo
 		/// <returns><see cref="SecurityId"/>.</returns>
 		public static SecurityId ToSecurityId(this SecurityExternalId externalId, string securityCode, string boardCode, SecurityTypes? securityType)
 		{
-			if (externalId == null)
-				throw new ArgumentNullException("externalId");
+			//if (externalId == null)
+			//	throw new ArgumentNullException(nameof(externalId));
 
 			return new SecurityId
 			{
@@ -1487,13 +1481,13 @@ namespace StockSharp.Algo
 		public static MarketDataMessage FillSecurityInfo(this MarketDataMessage message, Connector connector, Security security)
 		{
 			if (message == null)
-				throw new ArgumentNullException("message");
+				throw new ArgumentNullException(nameof(message));
 
 			if (connector == null)
-				throw new ArgumentNullException("connector");
+				throw new ArgumentNullException(nameof(connector));
 
 			if (security == null)
-				throw new ArgumentNullException("security");
+				throw new ArgumentNullException(nameof(security));
 
 			security.ToMessage(connector.GetSecurityId(security)).CopyTo(message);
 			return message;
@@ -1576,7 +1570,7 @@ namespace StockSharp.Algo
 			else if (dataType.IsSubclassOf(typeof(Candle)))
 			{
 				if (arg == null)
-					throw new ArgumentNullException("arg");
+					throw new ArgumentNullException(nameof(arg));
 
 				return dataType.ToCandleMessageType();
 			}
@@ -1585,7 +1579,7 @@ namespace StockSharp.Algo
 			else if (dataType == typeof(Security))
 				return typeof(SecurityMessage);
 			else
-				throw new ArgumentOutOfRangeException("dataType", dataType, LocalizedStrings.Str721);
+				throw new ArgumentOutOfRangeException(nameof(dataType), dataType, LocalizedStrings.Str721);
 		}
 	}
 }

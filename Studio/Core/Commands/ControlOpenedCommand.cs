@@ -11,7 +11,7 @@
 		public ControlOpenedCommand(IStudioControl control, bool isMainWindow)
 		{
 			if (control == null)
-				throw new ArgumentNullException("control");
+				throw new ArgumentNullException(nameof(control));
 
 			Control = control;
 			IsMainWindow = isMainWindow;

@@ -46,14 +46,14 @@ namespace StockSharp.Quik
 			public DdeCustomTable GetTable(Type entityType)
 			{
 				if (entityType == null)
-					throw new ArgumentNullException("entityType");
+					throw new ArgumentNullException(nameof(entityType));
 
 				lock (SyncRoot)
 				{
 					var tables = _customTablesByType[entityType];
 
 					if (tables.Count == 0)
-						throw new ArgumentException(LocalizedStrings.Str1702Params.Put(entityType.Name), "entityType");
+						throw new ArgumentException(LocalizedStrings.Str1702Params.Put(entityType.Name), nameof(entityType));
 
 					return tables.First();
 				}
@@ -79,10 +79,10 @@ namespace StockSharp.Quik
 		public bool TryDeserialize(string category, IList<IList<object>> rows)
 		{
 			if (category.IsEmpty())
-				throw new ArgumentNullException("category");
+				throw new ArgumentNullException(nameof(category));
 
 			if (rows == null)
-				throw new ArgumentNullException("rows");
+				throw new ArgumentNullException(nameof(rows));
 
 			var table = CustomTables.GetTable(category);
 
@@ -134,10 +134,10 @@ namespace StockSharp.Quik
 		private static SerializationItemCollection ToSource(Schema schema, IList<object> row)
 		{
 			if (schema == null)
-				throw new ArgumentNullException("schema");
+				throw new ArgumentNullException(nameof(schema));
 
 			if (row == null)
-				throw new ArgumentNullException("row");
+				throw new ArgumentNullException(nameof(row));
 
 			return new SerializationItemCollection(schema.Fields.Select(field => ToSource(field, row)));
 		}
@@ -145,10 +145,10 @@ namespace StockSharp.Quik
 		private static SerializationItem ToSource(Field field, IList<object> row)
 		{
 			if (field == null)
-				throw new ArgumentNullException("field");
+				throw new ArgumentNullException(nameof(field));
 
 			if (row == null)
-				throw new ArgumentNullException("row");
+				throw new ArgumentNullException(nameof(row));
 
 			if (field.IsInnerSchema())
 			{
@@ -156,7 +156,7 @@ namespace StockSharp.Quik
 			}
 
 			if (field.OrderedIndex >= row.Count)
-				throw new ArgumentOutOfRangeException("row", LocalizedStrings.Str1703Params.Put(field.Schema.Name, field.Name, row.Count, field.OrderedIndex));
+				throw new ArgumentOutOfRangeException(nameof(row), LocalizedStrings.Str1703Params.Put(field.Schema.Name, field.Name, row.Count, field.OrderedIndex));
 
 			return new SerializationItem(field, row[field.OrderedIndex]);
 		}

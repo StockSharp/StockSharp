@@ -28,7 +28,7 @@ namespace StockSharp.Algo.Storages
 		public ExchangeInfoProvider(IEntityRegistry entityRegistry)
 		{
 			if (entityRegistry == null)
-				throw new ArgumentNullException("entityRegistry");
+				throw new ArgumentNullException(nameof(entityRegistry));
 
 			ExchangeBoard.EnumerateExchanges().ForEach(exchange => _exchanges.Add(exchange.Name, exchange));
 			ExchangeBoard.EnumerateExchangeBoards().ForEach(board => _boards.Add(board.Code, board));
@@ -60,18 +60,12 @@ namespace StockSharp.Algo.Storages
 		/// <summary>
 		/// All exchanges.
 		/// </summary>
-		public IEnumerable<ExchangeBoard> Boards
-		{
-			get { return _boards.CachedValues; }
-		}
+		public IEnumerable<ExchangeBoard> Boards => _boards.CachedValues;
 
 		/// <summary>
 		/// All boards.
 		/// </summary>
-		public IEnumerable<Exchange> Exchanges
-		{
-			get { return _exchanges.CachedValues; }
-		}
+		public IEnumerable<Exchange> Exchanges => _exchanges.CachedValues;
 
 		/// <summary>
 		/// Notification about adding a new board.
@@ -90,7 +84,7 @@ namespace StockSharp.Algo.Storages
 		public void Save(ExchangeBoard board)
 		{
 			if (board == null)
-				throw new ArgumentNullException("board");
+				throw new ArgumentNullException(nameof(board));
 
 			_entityRegistry.ExchangeBoards.Save(board);
 
@@ -110,7 +104,7 @@ namespace StockSharp.Algo.Storages
 		public void Save(Exchange exchange)
 		{
 			if (exchange == null)
-				throw new ArgumentNullException("exchange");
+				throw new ArgumentNullException(nameof(exchange));
 
 			_entityRegistry.Exchanges.Save(exchange);
 
@@ -131,7 +125,7 @@ namespace StockSharp.Algo.Storages
 		public ExchangeBoard GetExchangeBoard(string code)
 		{
 			if (code.IsEmpty())
-				throw new ArgumentNullException("code");
+				throw new ArgumentNullException(nameof(code));
 
 			return _boards.TryGetValue(code);
 		}
@@ -144,7 +138,7 @@ namespace StockSharp.Algo.Storages
 		public Exchange GetExchange(string code)
 		{
 			if (code.IsEmpty())
-				throw new ArgumentNullException("code");
+				throw new ArgumentNullException(nameof(code));
 
 			return _exchanges.TryGetValue(code);
 		}

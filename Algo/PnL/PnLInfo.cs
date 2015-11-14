@@ -20,10 +20,10 @@ namespace StockSharp.Algo.PnL
 		public PnLInfo(ExecutionMessage trade, decimal closedVolume, decimal pnL)
 		{
 			if (trade == null)
-				throw new ArgumentNullException("trade");
+				throw new ArgumentNullException(nameof(trade));
 
 			if (closedVolume < 0)
-				throw new ArgumentOutOfRangeException("closedVolume", closedVolume, LocalizedStrings.Str946);
+				throw new ArgumentOutOfRangeException(nameof(closedVolume), closedVolume, LocalizedStrings.Str946);
 
 			Trade = trade;
 			ClosedVolume = closedVolume;

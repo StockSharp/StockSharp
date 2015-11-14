@@ -55,26 +55,17 @@ namespace StockSharp.Xaml
 		/// <summary>
 		/// The list of news added to the table.
 		/// </summary>
-		public IListEx<News> News
-		{
-			get { return _news; }
-		}
+		public IListEx<News> News => _news;
 
 		/// <summary>
 		/// Selected news item.
 		/// </summary>
-		public News FirstSelectedNews
-		{
-			get { return SelectedNews.FirstOrDefault(); }
-		}
+		public News FirstSelectedNews => SelectedNews.FirstOrDefault();
 
 		/// <summary>
 		/// Selected news items.
 		/// </summary>
-		public IEnumerable<News> SelectedNews
-		{
-			get { return SelectedItems.Cast<News>(); }
-		}
+		public IEnumerable<News> SelectedNews => SelectedItems.Cast<News>();
 
 		/// <summary>
 		/// The provider of information about news.

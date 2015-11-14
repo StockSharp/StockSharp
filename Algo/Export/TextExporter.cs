@@ -35,7 +35,7 @@ namespace StockSharp.Algo.Export
 			: base(security, arg, isCancelled, fileName)
 		{
 			if (template.IsEmpty())
-				throw new ArgumentNullException("template");
+				throw new ArgumentNullException(nameof(template));
 
 			_template = template;
 			_header = header;

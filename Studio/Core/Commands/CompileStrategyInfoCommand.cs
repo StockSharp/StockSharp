@@ -12,10 +12,10 @@ namespace StockSharp.Studio.Core.Commands
 		public CompileStrategyInfoCommand(StrategyInfo info, IEnumerable<CodeReference> references)
 		{
 			if (info == null)
-				throw new ArgumentNullException("info");
+				throw new ArgumentNullException(nameof(info));
 
 			if (references == null)
-				throw new ArgumentNullException("references");
+				throw new ArgumentNullException(nameof(references));
 
 			Info = info;
 			References = references;
@@ -30,7 +30,7 @@ namespace StockSharp.Studio.Core.Commands
 		public CompileStrategyInfoResultCommand(CompilationResult result)
 		{
 			if (result == null)
-				throw new ArgumentNullException("result");
+				throw new ArgumentNullException(nameof(result));
 
 			Result = result;
 		}

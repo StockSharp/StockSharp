@@ -12,7 +12,7 @@
 		public ChartDrawCommand(IEnumerable<RefPair<DateTimeOffset, IDictionary<IChartElement, object>>> values)
 		{
 			if (values == null)
-				throw new ArgumentNullException("values");
+				throw new ArgumentNullException(nameof(values));
 
 			Values = values;
 		}
@@ -20,7 +20,7 @@
 		public ChartDrawCommand(DateTimeOffset time, IDictionary<IChartElement, object> values)
 		{
 			if (values == null)
-				throw new ArgumentNullException("values");
+				throw new ArgumentNullException(nameof(values));
 
 			Values = new List<RefPair<DateTimeOffset, IDictionary<IChartElement, object>>>
 			{
@@ -31,10 +31,10 @@
 		public ChartDrawCommand(DateTimeOffset time, IChartElement element, object value)
 		{
 			if (element == null)
-				throw new ArgumentNullException("element");
+				throw new ArgumentNullException(nameof(element));
 
 			if (value == null)
-				throw new ArgumentNullException("value");
+				throw new ArgumentNullException(nameof(value));
 
 			Values = new List<RefPair<DateTimeOffset, IDictionary<IChartElement, object>>>
 			{

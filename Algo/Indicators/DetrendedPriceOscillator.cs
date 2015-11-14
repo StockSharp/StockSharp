@@ -34,7 +34,7 @@ namespace StockSharp.Algo.Indicators
 		/// <summary>
 		/// The indicator is formed.
 		/// </summary>
-		public override bool IsFormed { get { return Buffer.Count >= Length; } }
+		public override bool IsFormed => Buffer.Count >= Length;
 
 		/// <summary>
 		/// To handle the input value.

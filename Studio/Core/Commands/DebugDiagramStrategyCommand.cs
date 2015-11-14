@@ -9,7 +9,7 @@
         public DebugDiagramStrategyCommand(StrategyContainer strategy)
 		{
 			if (strategy == null) 
-				throw new ArgumentNullException("strategy");
+				throw new ArgumentNullException(nameof(strategy));
 
 			Strategy = strategy;
 		}

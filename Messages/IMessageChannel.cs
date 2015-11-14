@@ -52,10 +52,7 @@ namespace StockSharp.Messages
 		{
 		}
 
-		bool IMessageChannel.IsOpened
-		{
-			get { return true; }
-		}
+		bool IMessageChannel.IsOpened => true;
 
 		void IMessageChannel.Open()
 		{

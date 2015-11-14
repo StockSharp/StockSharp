@@ -1,4 +1,4 @@
-namespace StockSharp.Xaml
+﻿namespace StockSharp.Xaml
 {
 	using System;
 	using System.Collections.Generic;
@@ -46,7 +46,7 @@ namespace StockSharp.Xaml
 		private const DataGridSelectionMode _defaultSelectionMode = DataGridSelectionMode.Extended;
 
 		/// <summary>
-		/// <see cref="DependencyProperty"/> for <see cref="SecurityPicker.SelectionMode"/>.
+		/// <see cref="DependencyProperty"/> for <see cref="SelectionMode"/>.
 		/// </summary>
 		public static readonly DependencyProperty SelectionModeProperty = DependencyProperty.Register("SelectionMode", typeof(DataGridSelectionMode), typeof(SecurityPicker), new PropertyMetadata(_defaultSelectionMode, OnSelectionModePropertyChanged));
 
@@ -77,7 +77,7 @@ namespace StockSharp.Xaml
 		}
 
 		/// <summary>
-		/// <see cref="DependencyProperty"/> for <see cref="SecurityPicker.ShowCommonStatColumns"/>.
+		/// <see cref="DependencyProperty"/> for <see cref="ShowCommonStatColumns"/>.
 		/// </summary>
 		public static readonly DependencyProperty ShowCommonStatColumnsProperty = DependencyProperty.Register("ShowCommonStatColumns", typeof(bool), typeof(SecurityPicker), new PropertyMetadata(false, ShowCommonStatColumnsPropertyChanged));
 
@@ -105,7 +105,7 @@ namespace StockSharp.Xaml
 		}
 
 		/// <summary>
-		/// <see cref="DependencyProperty"/> for <see cref="SecurityPicker.ShowCommonOptionColumns"/>.
+		/// <see cref="DependencyProperty"/> for <see cref="ShowCommonOptionColumns"/>.
 		/// </summary>
 		public static readonly DependencyProperty ShowCommonOptionColumnsProperty = DependencyProperty.Register("ShowCommonOptionColumns", typeof(bool), typeof(SecurityPicker), new PropertyMetadata(false, ShowCommonOptionColumnsPropertyChanged));
 
@@ -206,18 +206,12 @@ namespace StockSharp.Xaml
 		/// <summary>
 		/// Selected instruments.
 		/// </summary>
-		public IList<Security> SelectedSecurities
-		{
-			get { return SecuritiesCtrl.SelectedSecurities; }
-		}
+		public IList<Security> SelectedSecurities => SecuritiesCtrl.SelectedSecurities;
 
 		/// <summary>
 		/// Instruments filtered.
 		/// </summary>
-		public IListEx<Security> FilteredSecurities
-		{
-			get { return SecuritiesCtrl.Securities; }
-		}
+		public IListEx<Security> FilteredSecurities => SecuritiesCtrl.Securities;
 
 		private SecurityTypes? _selectedType;
 
@@ -242,7 +236,7 @@ namespace StockSharp.Xaml
 		}
 
 		/// <summary>
-		/// <see cref="DependencyProperty"/> for <see cref="SecurityPicker.Title"/>.
+		/// <see cref="DependencyProperty"/> for <see cref="Title"/>.
 		/// </summary>
 		public static readonly DependencyProperty TitleProperty = DependencyProperty.Register("Title", typeof(string), typeof(SecurityPicker),
 			new PropertyMetadata(string.Empty, (d, e) =>
@@ -284,10 +278,7 @@ namespace StockSharp.Xaml
 		/// <summary>
 		/// Instruments that should be hidden.
 		/// </summary>
-		public ISet<Security> ExcludeSecurities
-		{
-			get { return _excludeSecurities; }
-		}
+		public ISet<Security> ExcludeSecurities => _excludeSecurities;
 
 		private ISecurityProvider _securityProvider;
 
@@ -374,7 +365,7 @@ namespace StockSharp.Xaml
 		public void AddContextMenuItem(Control menuItem)
 		{
 			if (menuItem == null)
-				throw new ArgumentNullException("menuItem");
+				throw new ArgumentNullException(nameof(menuItem));
 
 			SecuritiesCtrl.ContextMenu.Items.Add(menuItem);
 		}
@@ -425,7 +416,7 @@ namespace StockSharp.Xaml
 				}
 
 				default:
-					throw new ArgumentOutOfRangeException("action");
+					throw new ArgumentOutOfRangeException(nameof(action));
 			}
 
 			UpdateCounter();

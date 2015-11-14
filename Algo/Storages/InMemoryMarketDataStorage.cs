@@ -30,7 +30,7 @@ namespace StockSharp.Algo.Storages
 		public InMemoryMarketDataStorage(Security security, object arg, Func<DateTimeOffset, IEnumerable<Message>> getData, Type dataType = null)
 		{
 			if (getData == null)
-				throw new ArgumentNullException("getData");
+				throw new ArgumentNullException(nameof(getData));
 
 			_security = security;
 			_arg = arg;
@@ -47,7 +47,7 @@ namespace StockSharp.Algo.Storages
 		public InMemoryMarketDataStorage(Security security, object arg, Func<DateTimeOffset, IEnumerable<T>> getData)
 		{
 			if (getData == null)
-				throw new ArgumentNullException("getData");
+				throw new ArgumentNullException(nameof(getData));
 
 			_security = security;
 			_arg = arg;
@@ -61,17 +61,11 @@ namespace StockSharp.Algo.Storages
 
 		private readonly Security _security;
 
-		Security IMarketDataStorage.Security
-		{
-			get { return _security; }
-		}
+		Security IMarketDataStorage.Security => _security;
 
 		private readonly object _arg;
 
-		object IMarketDataStorage.Arg
-		{
-			get { return _arg; }
-		}
+		object IMarketDataStorage.Arg => _arg;
 
 		IMarketDataStorageDrive IMarketDataStorage.Drive
 		{
@@ -82,15 +76,9 @@ namespace StockSharp.Algo.Storages
 
 		private readonly Type _dataType = typeof(T);
 
-		Type IMarketDataStorage.DataType
-		{
-			get { return _dataType; }
-		}
+		Type IMarketDataStorage.DataType => _dataType;
 
-		IMarketDataSerializer IMarketDataStorage.Serializer
-		{
-			get { return ((IMarketDataStorage<T>)this).Serializer; }
-		}
+		IMarketDataSerializer IMarketDataStorage.Serializer => ((IMarketDataStorage<T>)this).Serializer;
 
 		IMarketDataSerializer<T> IMarketDataStorage<T>.Serializer
 		{

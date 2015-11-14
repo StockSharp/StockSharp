@@ -34,7 +34,7 @@ namespace StockSharp.Algo.Storages.Backup
 		public AmazonS3Service(RegionEndpoint endpoint, string bucket, string accessKey, string secretKey)
 		{
 			if (bucket.IsEmpty())
-				throw new ArgumentNullException("bucket");
+				throw new ArgumentNullException(nameof(bucket));
 
 			_client = new AmazonS3Client(new BasicAWSCredentials(accessKey, secretKey), endpoint);
 			_bucket = bucket;
@@ -89,13 +89,13 @@ namespace StockSharp.Algo.Storages.Backup
 		CancellationTokenSource IBackupService.Download(BackupEntry entry, Stream stream, Action<int> progress)
 		{
 			if (entry == null)
-				throw new ArgumentNullException("entry");
+				throw new ArgumentNullException(nameof(entry));
 
 			if (stream == null)
-				throw new ArgumentNullException("stream");
+				throw new ArgumentNullException(nameof(stream));
 
 			if (progress == null)
-				throw new ArgumentNullException("progress");
+				throw new ArgumentNullException(nameof(progress));
 
 			var source = new CancellationTokenSource();
 
@@ -134,13 +134,13 @@ namespace StockSharp.Algo.Storages.Backup
 		CancellationTokenSource IBackupService.Upload(BackupEntry entry, Stream stream, Action<int> progress)
 		{
 			if (entry == null)
-				throw new ArgumentNullException("entry");
+				throw new ArgumentNullException(nameof(entry));
 
 			if (stream == null)
-				throw new ArgumentNullException("stream");
+				throw new ArgumentNullException(nameof(stream));
 
 			if (progress == null)
-				throw new ArgumentNullException("progress");
+				throw new ArgumentNullException(nameof(progress));
 
 			var key = GetKey(entry);
 

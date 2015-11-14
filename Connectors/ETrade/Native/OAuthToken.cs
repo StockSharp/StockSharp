@@ -59,7 +59,7 @@ namespace StockSharp.ETrade.Native
 
 			var arr = serialized.Split('\n');
 
-			if(arr.Length != 3) throw new ArgumentException(LocalizedStrings.Str3372, "serialized");
+			if(arr.Length != 3) throw new ArgumentException(LocalizedStrings.Str3372, nameof(serialized));
 
 			return new OAuthToken(arr[0], arr[1], arr[2]);
 		}

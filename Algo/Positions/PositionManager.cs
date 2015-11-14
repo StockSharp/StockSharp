@@ -28,7 +28,7 @@ namespace StockSharp.Algo.Positions
 		/// <summary>
 		/// To calculate the position on realized volume for orders (<see langword="true" />) or by trades (<see langword="false" />).
 		/// </summary>
-		public bool ByOrders { get; private set; }
+		public bool ByOrders { get; }
 
 		/// <summary>
 		/// The position aggregate value.
@@ -46,7 +46,7 @@ namespace StockSharp.Algo.Positions
 			set
 			{
 				if (value == null)
-					throw new ArgumentNullException("value");
+					throw new ArgumentNullException(nameof(value));
 
 				lock (_positions.SyncRoot)
 				{

@@ -36,18 +36,12 @@ namespace StockSharp.Xaml
 		/// <summary>
 		/// Current password.
 		/// </summary>
-		public string CurrentPassword
-		{
-			get { return CurrentPasswordCtrl.Password; }
-		}
+		public string CurrentPassword => CurrentPasswordCtrl.Password;
 
 		/// <summary>
 		/// New password.
 		/// </summary>
-		public string NewPassword
-		{
-			get { return NewPasswordCtrl.Password; }
-		}
+		public string NewPassword => NewPasswordCtrl.Password;
 
 		private void ChangePassword_OnClick(object sender, RoutedEventArgs e)
 		{

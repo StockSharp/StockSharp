@@ -87,7 +87,7 @@ namespace StockSharp.Algo.Testing
 			public SecurityMarketEmulator(MarketEmulator parent, SecurityId securityId)
 			{
 				if (parent == null)
-					throw new ArgumentNullException("parent");
+					throw new ArgumentNullException(nameof(parent));
 
 				_parent = parent;
 				_securityId = securityId;
@@ -151,10 +151,10 @@ namespace StockSharp.Algo.Testing
 							}
 							case ExecutionTypes.Order:
 							{
-								if (_parent._settings.Latency > TimeSpan.Zero)
+								if (_parent.Settings.Latency > TimeSpan.Zero)
 								{
 									this.AddInfoLog(LocalizedStrings.Str1145Params, execMsg.IsCancelled ? LocalizedStrings.Str1146 : LocalizedStrings.Str1147, execMsg.TransactionId == 0 ? execMsg.OriginalTransactionId : execMsg.TransactionId);
-									_pendingExecutions.Add((ExecutionMessage)execMsg.Clone(), _parent._settings.Latency);
+									_pendingExecutions.Add((ExecutionMessage)execMsg.Clone(), _parent.Settings.Latency);
 								}
 								else
 									AcceptExecution(execMsg.LocalTime, execMsg, result);
@@ -498,9 +498,9 @@ namespace StockSharp.Algo.Testing
 
 			private void AcceptExecution(DateTime time, ExecutionMessage execution, ICollection<Message> result)
 			{
-				if (_parent._settings.Failing > 0)
+				if (_parent.Settings.Failing > 0)
 				{
-					if (RandomGen.GetDouble() < (_parent._settings.Failing / 100.0))
+					if (RandomGen.GetDouble() < (_parent.Settings.Failing / 100.0))
 					{
 						this.AddErrorLog(LocalizedStrings.Str1151Params, execution.IsCancelled ? LocalizedStrings.Str1152 : LocalizedStrings.Str1153, execution.OriginalTransactionId == 0 ? execution.TransactionId : execution.OriginalTransactionId);
 
@@ -571,7 +571,7 @@ namespace StockSharp.Algo.Testing
 						{
 							replyMsg.Balance = execution.Volume;
 							replyMsg.OrderState = OrderStates.Active;
-							replyMsg.OrderId = _parent._orderIdGenerator.GetNextId();
+							replyMsg.OrderId = _parent.OrderIdGenerator.GetNextId();
 						}
 						else
 							replyMsg.ServerTime = execution.ServerTime; // при восстановлении не меняем время
@@ -639,10 +639,10 @@ namespace StockSharp.Algo.Testing
 				// матчинг чужих заявок на равне со своими дает наиболее реалистичный сценарий обновления стакана.
 
 				if (message.TradeId != null)
-					throw new ArgumentException(LocalizedStrings.Str1159, "message");
+					throw new ArgumentException(LocalizedStrings.Str1159, nameof(message));
 
 				if (message.Volume == null || message.Volume <= 0)
-					throw new ArgumentOutOfRangeException("message", message.Volume, LocalizedStrings.Str1160Params.Put(message.TransactionId));
+					throw new ArgumentOutOfRangeException(nameof(message), message.Volume, LocalizedStrings.Str1160Params.Put(message.TransactionId));
 
 				UpdateQuote(message, !message.IsCancelled);
 
@@ -691,7 +691,7 @@ namespace StockSharp.Algo.Testing
 					case Sides.Sell:
 						return _asks;
 					default:
-						throw new ArgumentOutOfRangeException("side");
+						throw new ArgumentOutOfRangeException(nameof(side));
 				}
 				//return _quotes.SafeAdd(side, key => new SortedDictionary<decimal, List<ExecutionMessage>>(side == Sides.Buy ? new BackwardComparer<decimal>() : null));
 			}
@@ -723,7 +723,7 @@ namespace StockSharp.Algo.Testing
 							if (sign * price > sign * order.OrderPrice)
 								break;
 
-							if (price == order.OrderPrice && !_parent._settings.MatchOnTouch)
+							if (price == order.OrderPrice && !_parent.Settings.MatchOnTouch)
 								break;
 						}
 
@@ -1119,7 +1119,7 @@ namespace StockSharp.Algo.Testing
 					SecurityId = message.SecurityId,
 					OrderId = message.OrderId,
 					OriginalTransactionId = message.TransactionId,
-					TradeId = _parent._tradeIdGenerator.GetNextId(),
+					TradeId = _parent.TradeIdGenerator.GetNextId(),
 					TradePrice = price,
 					Volume = volume,
 					ExecutionType = ExecutionTypes.Trade,
@@ -1167,21 +1167,20 @@ namespace StockSharp.Algo.Testing
 		{
 			private readonly MarketEmulator _parent;
 			private readonly string _name;
-			private readonly PortfolioPnLManager _pnLManager;
 			private readonly Dictionary<SecurityId, RefPair<decimal, decimal>> _positions;
 
 			private decimal _beginValue;
 			private decimal _currentValue;
 			private decimal _blockedValue;
 
-			public PortfolioPnLManager PnLManager { get { return _pnLManager; } }
+			public PortfolioPnLManager PnLManager { get; }
 
 			public PortfolioEmulator(MarketEmulator parent, string name)
 			{
 				_parent = parent;
 				_name = name;
 
-				_pnLManager = new PortfolioPnLManager(name);
+				PnLManager = new PortfolioPnLManager(name);
 				_positions = new Dictionary<SecurityId, RefPair<decimal, decimal>>();
 			}
 
@@ -1261,7 +1260,7 @@ namespace StockSharp.Algo.Testing
 				var time = tradeMsg.ServerTime;
 
 				PnLInfo info;
-				_pnLManager.ProcessMyTrade(tradeMsg, out info);
+				PnLManager.ProcessMyTrade(tradeMsg, out info);
 				tradeMsg.Commission = _parent._commissionManager.Process(tradeMsg);
 
 				bool isNew;
@@ -1328,8 +1327,8 @@ namespace StockSharp.Algo.Testing
 
 			public PortfolioChangeMessage CreateChangeMessage(DateTimeOffset time)
 			{
-				var realizedPnL = _pnLManager.RealizedPnL;
-				var unrealizedPnL = _pnLManager.UnrealizedPnL;
+				var realizedPnL = PnLManager.RealizedPnL;
+				var unrealizedPnL = PnLManager.UnrealizedPnL;
 				var commission = _parent._commissionManager.Commission;
 				var totalPnL = realizedPnL + unrealizedPnL - commission;
 
@@ -1398,8 +1397,6 @@ namespace StockSharp.Algo.Testing
 			}
 		}
 
-		private IncrementalIdGenerator _orderIdGenerator = new IncrementalIdGenerator();
-		private IncrementalIdGenerator _tradeIdGenerator = new IncrementalIdGenerator();
 		private readonly Dictionary<SecurityId, SecurityMarketEmulator> _securityEmulators = new Dictionary<SecurityId, SecurityMarketEmulator>();
 		private readonly Dictionary<string, List<SecurityMarketEmulator>> _securityEmulatorsByBoard = new Dictionary<string, List<SecurityMarketEmulator>>(StringComparer.InvariantCultureIgnoreCase);
 		private readonly Dictionary<string, PortfolioEmulator> _portfolios = new Dictionary<string, PortfolioEmulator>();
@@ -1418,33 +1415,20 @@ namespace StockSharp.Algo.Testing
 		{
 		}
 
-		private readonly MarketEmulatorSettings _settings = new MarketEmulatorSettings();
-
 		/// <summary>
 		/// Emulator settings.
 		/// </summary>
-		public MarketEmulatorSettings Settings
-		{
-			get { return _settings; }
-		}
+		public MarketEmulatorSettings Settings { get; } = new MarketEmulatorSettings();
 
 		/// <summary>
 		/// The generator of identifiers for orders.
 		/// </summary>
-		public IncrementalIdGenerator OrderIdGenerator
-		{
-			get { return _orderIdGenerator; }
-			set { _orderIdGenerator = value; }
-		}
+		public IncrementalIdGenerator OrderIdGenerator { get; set; } = new IncrementalIdGenerator();
 
 		/// <summary>
 		/// The generator of identifiers for trades.
 		/// </summary>
-		public IncrementalIdGenerator TradeIdGenerator
-		{
-			get { return _tradeIdGenerator; }
-			set { _tradeIdGenerator = value; }
-		}
+		public IncrementalIdGenerator TradeIdGenerator { get; set; } = new IncrementalIdGenerator();
 
 		/// <summary>
 		/// Send message.
@@ -1453,7 +1437,7 @@ namespace StockSharp.Algo.Testing
 		public void SendInMessage(Message message)
 		{
 			if (message == null) 
-				throw new ArgumentNullException("message");
+				throw new ArgumentNullException(nameof(message));
 
 			var retVal = new List<Message>();
 
@@ -1498,8 +1482,8 @@ namespace StockSharp.Algo.Testing
 					_securityEmulators.Clear();
 					_securityEmulatorsByBoard.Clear();
 
-					_orderIdGenerator.Current = _settings.InitialOrderId;
-					_tradeIdGenerator.Current = _settings.InitialTradeId;
+					OrderIdGenerator.Current = Settings.InitialOrderId;
+					TradeIdGenerator.Current = Settings.InitialTradeId;
 
 					_portfolios.Clear();
 					_boardDefinitions.Clear();
@@ -1670,14 +1654,14 @@ namespace StockSharp.Algo.Testing
 		private IEnumerable<Message> BufferResult(IEnumerable<Message> result, DateTime time)
 		{
 			if (_needBuffer == null)
-				_needBuffer = _settings.BufferTime > TimeSpan.Zero;
+				_needBuffer = Settings.BufferTime > TimeSpan.Zero;
 
 			if (_needBuffer == false)
 				return result;
 
 			_buffer.AddRange(result);
 
-			if ((time - _bufferPrevFlush) > _settings.BufferTime)
+			if ((time - _bufferPrevFlush) > Settings.BufferTime)
 			{
 				_bufferPrevFlush = time;
 				return _buffer.CopyAndClear();
@@ -1767,7 +1751,7 @@ namespace StockSharp.Algo.Testing
 
 		private void RecalcPnL(ICollection<Message> messages)
 		{
-			if (_settings.PortfolioRecalcInterval == TimeSpan.Zero)
+			if (Settings.PortfolioRecalcInterval == TimeSpan.Zero)
 				return;
 
 			var time = _portfoliosPrevRecalc;
@@ -1780,7 +1764,7 @@ namespace StockSharp.Algo.Testing
 				time = message.LocalTime;
 			}
 
-			if (time - _portfoliosPrevRecalc <= _settings.PortfolioRecalcInterval)
+			if (time - _portfoliosPrevRecalc <= Settings.PortfolioRecalcInterval)
 				return;
 
 			foreach (var emulator in _portfolios.Values)
@@ -1789,10 +1773,7 @@ namespace StockSharp.Algo.Testing
 			_portfoliosPrevRecalc = time;
 		}
 
-		bool IMessageChannel.IsOpened
-		{
-			get { return true; }
-		}
+		bool IMessageChannel.IsOpened => true;
 
 		void IMessageChannel.Open()
 		{

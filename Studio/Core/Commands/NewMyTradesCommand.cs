@@ -10,7 +10,7 @@ namespace StockSharp.Studio.Core.Commands
 		public NewMyTradesCommand(IEnumerable<MyTrade> trades)
 		{
 			if (trades == null)
-				throw new ArgumentNullException("trades");
+				throw new ArgumentNullException(nameof(trades));
 
 			Trades = trades;
 		}

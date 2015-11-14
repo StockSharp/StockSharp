@@ -14,7 +14,7 @@ namespace StockSharp.MatLab
 		internal ErrorEventArgs(Exception error)
 		{
 			if (error == null)
-				throw new ArgumentNullException("error");
+				throw new ArgumentNullException(nameof(error));
 
 			Error = error;
 		}
@@ -33,7 +33,7 @@ namespace StockSharp.MatLab
 		internal SecuritiesEventArgs(IEnumerable<Security> securities)
 		{
 			if (securities == null)
-				throw new ArgumentNullException("securities");
+				throw new ArgumentNullException(nameof(securities));
 
 			Securities = securities.ToArray();
 		}
@@ -52,7 +52,7 @@ namespace StockSharp.MatLab
 		internal OrdersEventArgs(IEnumerable<Order> orders)
 		{
 			if (orders == null)
-				throw new ArgumentNullException("orders");
+				throw new ArgumentNullException(nameof(orders));
 
 			Orders = orders.ToArray();
 		}
@@ -71,7 +71,7 @@ namespace StockSharp.MatLab
 		internal OrderFailsEventArgs(IEnumerable<OrderFail> orderFails)
 		{
 			if (orderFails == null)
-				throw new ArgumentNullException("orderFails");
+				throw new ArgumentNullException(nameof(orderFails));
 
 			OrderFails = orderFails.ToArray();
 		}
@@ -90,7 +90,7 @@ namespace StockSharp.MatLab
 		internal TradesEventArgs(IEnumerable<Trade> trades)
 		{
 			if (trades == null)
-				throw new ArgumentNullException("trades");
+				throw new ArgumentNullException(nameof(trades));
 
 			Trades = trades.ToArray();
 		}
@@ -109,7 +109,7 @@ namespace StockSharp.MatLab
 		internal MyTradesEventArgs(IEnumerable<MyTrade> trades)
 		{
 			if (trades == null)
-				throw new ArgumentNullException("trades");
+				throw new ArgumentNullException(nameof(trades));
 
 			Trades = trades.ToArray();
 		}
@@ -128,7 +128,7 @@ namespace StockSharp.MatLab
 		internal PortfoliosEventArgs(IEnumerable<Portfolio> portfolios)
 		{
 			if (portfolios == null)
-				throw new ArgumentNullException("portfolios");
+				throw new ArgumentNullException(nameof(portfolios));
 
 			Portfolios = portfolios.ToArray();
 		}
@@ -147,7 +147,7 @@ namespace StockSharp.MatLab
 		internal PositionsEventArgs(IEnumerable<Position> positions)
 		{
 			if (positions == null)
-				throw new ArgumentNullException("positions");
+				throw new ArgumentNullException(nameof(positions));
 
 			Positions = positions.ToArray();
 		}
@@ -166,7 +166,7 @@ namespace StockSharp.MatLab
 		internal MarketDepthsEventArgs(IEnumerable<MarketDepth> depths)
 		{
 			if (depths == null)
-				throw new ArgumentNullException("depths");
+				throw new ArgumentNullException(nameof(depths));
 
 			Depths = depths.ToArray();
 		}
@@ -185,7 +185,7 @@ namespace StockSharp.MatLab
 		internal OrderLogItemsEventArg(IEnumerable<OrderLogItem> items)
 		{
 			if (items == null)
-				throw new ArgumentNullException("items");
+				throw new ArgumentNullException(nameof(items));
 
 			Items = items.ToArray();
 		}

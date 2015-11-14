@@ -76,7 +76,7 @@ namespace StockSharp.Xaml
 		/// <summary>
 		/// All exchanges.
 		/// </summary>
-		public IList<Exchange> Exchanges { get; private set; }
+		public IList<Exchange> Exchanges { get; }
 
 		/// <summary>
 		/// <see cref="DependencyProperty"/> for <see cref="SelectedExchange"/>.

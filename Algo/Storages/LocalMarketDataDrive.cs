@@ -37,13 +37,13 @@ namespace StockSharp.Algo.Storages
 			public LocalMarketDataStorageDrive(string fileName, string path, StorageFormats format, IMarketDataDrive drive)
 			{
 				if (drive == null)
-					throw new ArgumentNullException("drive");
+					throw new ArgumentNullException(nameof(drive));
 
 				if (fileName.IsEmpty())
-					throw new ArgumentNullException("fileName");
+					throw new ArgumentNullException(nameof(fileName));
 
 				if (path.IsEmpty())
-					throw new ArgumentNullException("path");
+					throw new ArgumentNullException(nameof(path));
 
 				_path = path;
 				_drive = drive;
@@ -78,22 +78,13 @@ namespace StockSharp.Algo.Storages
 
 			private readonly IMarketDataDrive _drive;
 
-			IMarketDataDrive IMarketDataStorageDrive.Drive
-			{
-				get { return _drive; }
-			}
+			IMarketDataDrive IMarketDataStorageDrive.Drive => _drive;
 
-			public IEnumerable<DateTime> Dates
-			{
-				get { return DatesDict.CachedValues; }
-			}
+			public IEnumerable<DateTime> Dates => DatesDict.CachedValues;
 
 			private readonly Lazy<CachedSynchronizedOrderedDictionary<DateTime, DateTime>> _datesDict;
 
-			private CachedSynchronizedOrderedDictionary<DateTime, DateTime> DatesDict
-			{
-				get { return _datesDict.Value; }
-			}
+			private CachedSynchronizedOrderedDictionary<DateTime, DateTime> DatesDict => _datesDict.Value;
 
 			public void ClearDatesCache()
 			{
@@ -299,7 +290,7 @@ namespace StockSharp.Algo.Storages
 			set
 			{
 				if (value.IsEmpty())
-					throw new ArgumentNullException("value");
+					throw new ArgumentNullException(nameof(value));
 
 				if (Path == value)
 					return;
@@ -388,7 +379,7 @@ namespace StockSharp.Algo.Storages
 		public override IMarketDataStorageDrive GetStorageDrive(SecurityId securityId, Type dataType, object arg, StorageFormats format)
 		{
 			if (securityId.IsDefault())
-				throw new ArgumentNullException("securityId");
+				throw new ArgumentNullException(nameof(securityId));
 
 			return _drives.SafeAdd(Tuple.Create(securityId, dataType, arg, format),
 				key => new LocalMarketDataStorageDrive(GetFileName(dataType, arg), GetSecurityPath(securityId), format, this));
@@ -408,7 +399,7 @@ namespace StockSharp.Algo.Storages
 				case StorageFormats.Csv:
 					return ".csv";
 				default:
-					throw new ArgumentOutOfRangeException("format");
+					throw new ArgumentOutOfRangeException(nameof(format));
 			}
 		}
 
@@ -454,7 +445,7 @@ namespace StockSharp.Algo.Storages
 		public static string GetFileName(Type dataType, object arg)
 		{
 			if (dataType == null)
-				throw new ArgumentNullException("dataType");
+				throw new ArgumentNullException(nameof(dataType));
 
 			if (dataType.IsSubclassOf(typeof(CandleMessage)))
 				return "candles_{0}_{1}".Put(dataType.Name.Replace("Message", string.Empty), TraderHelper.CandleArgToFolderName(arg));
@@ -503,7 +494,7 @@ namespace StockSharp.Algo.Storages
 		public string GetSecurityPath(SecurityId securityId)
 		{
 			if (securityId.IsDefault())
-				throw new ArgumentNullException("securityId");
+				throw new ArgumentNullException(nameof(securityId));
 
 			var id = securityId.ToStringId();
 

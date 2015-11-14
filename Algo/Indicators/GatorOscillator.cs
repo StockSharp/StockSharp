@@ -41,7 +41,7 @@ namespace StockSharp.Algo.Indicators
 			: base(histogram1, histogram2)
 		{
 			if (alligator == null)
-				throw new ArgumentNullException("alligator");
+				throw new ArgumentNullException(nameof(alligator));
 
 			_alligator = alligator;
 			Histogram1 = histogram1;
@@ -55,7 +55,7 @@ namespace StockSharp.Algo.Indicators
 		[DisplayName("Histogram1")]
 		[DescriptionLoc(LocalizedStrings.Str851Key)]
 		[CategoryLoc(LocalizedStrings.GeneralKey)]
-		public GatorHistogram Histogram1 { get; private set; }
+		public GatorHistogram Histogram1 { get; }
 
 		/// <summary>
 		/// Lower histogram.
@@ -64,18 +64,12 @@ namespace StockSharp.Algo.Indicators
 		[DisplayName("Histogram2")]
 		[DescriptionLoc(LocalizedStrings.Str852Key)]
 		[CategoryLoc(LocalizedStrings.GeneralKey)]
-		public GatorHistogram Histogram2 { get; private set; }
+		public GatorHistogram Histogram2 { get; }
 
 		/// <summary>
 		/// Whether the indicator is set.
 		/// </summary>
-		public override bool IsFormed
-		{
-			get
-			{
-				return _alligator.IsFormed;
-			}
-		}
+		public override bool IsFormed => _alligator.IsFormed;
 
 		/// <summary>
 		/// To handle the input value.

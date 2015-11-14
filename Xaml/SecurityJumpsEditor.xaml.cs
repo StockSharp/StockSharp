@@ -71,26 +71,17 @@ namespace StockSharp.Xaml
 		/// <summary>
 		/// Rollovers.
 		/// </summary>
-		public IList<SecurityJump> Jumps
-		{
-			get { return _jumps; }
-		}
+		public IList<SecurityJump> Jumps => _jumps;
 
 		/// <summary>
 		/// Selected rollover.
 		/// </summary>
-		public SecurityJump SelectedJump
-		{
-			get { return (SecurityJump)JumpsGrid.SelectedItem; }
-		}
+		public SecurityJump SelectedJump => (SecurityJump)JumpsGrid.SelectedItem;
 
 		/// <summary>
 		/// Selected rollovers.
 		/// </summary>
-		public IEnumerable<SecurityJump> SelectedJumps
-		{
-			get { return JumpsGrid.SelectedItems.Cast<SecurityJump>().ToArray(); }
-		}
+		public IEnumerable<SecurityJump> SelectedJumps => JumpsGrid.SelectedItems.Cast<SecurityJump>().ToArray();
 
 		/// <summary>
 		/// The rollover change event.

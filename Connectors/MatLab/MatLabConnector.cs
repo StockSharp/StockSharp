@@ -31,7 +31,7 @@ namespace StockSharp.MatLab
 		public MatLabConnector(IConnector realConnector, bool ownTrader)
 		{
 			if (realConnector == null)
-				throw new ArgumentNullException("realConnector");
+				throw new ArgumentNullException(nameof(realConnector));
 
 			RealConnector = realConnector;
 

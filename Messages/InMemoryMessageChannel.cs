@@ -91,10 +91,10 @@ namespace StockSharp.Messages
 		public InMemoryMessageChannel(string name, Action<Exception> errorHandler)
 		{
 			if (name.IsEmpty())
-				throw new ArgumentNullException("name");
+				throw new ArgumentNullException(nameof(name));
 
 			if (errorHandler == null)
-				throw new ArgumentNullException("errorHandler");
+				throw new ArgumentNullException(nameof(errorHandler));
 
 			Name = name;
 
@@ -105,15 +105,12 @@ namespace StockSharp.Messages
 		/// <summary>
 		/// Handler name.
 		/// </summary>
-		public string Name { get; private set; }
+		public string Name { get; }
 
 		/// <summary>
 		/// Message queue count.
 		/// </summary>
-		public int MessageCount
-		{
-			get { return _messageQueue.Count; }
-		}
+		public int MessageCount => _messageQueue.Count;
 
 		/// <summary>
 		/// Max message queue count.
@@ -135,10 +132,7 @@ namespace StockSharp.Messages
 		/// <summary>
 		/// Is channel opened.
 		/// </summary>
-		public bool IsOpened
-		{
-			get { return !_messageQueue.IsClosed; }
-		}
+		public bool IsOpened => !_messageQueue.IsClosed;
 
 		/// <summary>
 		/// Open channel.

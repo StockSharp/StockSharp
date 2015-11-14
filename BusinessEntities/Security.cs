@@ -454,7 +454,7 @@ namespace StockSharp.BusinessEntities
 			}
 		}
 
-		private SecurityExternalId _externalId = new SecurityExternalId();
+		private SecurityExternalId _externalId;
 
 		/// <summary>
 		/// Security ID in other systems.
@@ -470,9 +470,6 @@ namespace StockSharp.BusinessEntities
 			get { return _externalId; }
 			set
 			{
-				if (value == null)
-					throw new ArgumentNullException("value");
-
 				_externalId = value;
 				Notify("ExternalId");
 			}
@@ -522,7 +519,7 @@ namespace StockSharp.BusinessEntities
 			set
 			{
 				if (value < 0)
-					throw new ArgumentOutOfRangeException("value", value, LocalizedStrings.Str556);
+					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.Str556);
 
 				if (_stepPrice == value)
 					return;
@@ -1500,7 +1497,7 @@ namespace StockSharp.BusinessEntities
 		public void CopyTo(Security destination)
 		{
 			if (destination == null)
-				throw new ArgumentNullException("destination");
+				throw new ArgumentNullException(nameof(destination));
 
 			destination.Id = Id;
 			destination.Name = Name;

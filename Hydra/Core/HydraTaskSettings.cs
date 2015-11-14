@@ -68,7 +68,7 @@ namespace StockSharp.Hydra.Core
 		protected HydraTaskSettings(HydraTaskSettings settings)
 		{
 			if (settings == null)
-				throw new ArgumentNullException("settings");
+				throw new ArgumentNullException(nameof(settings));
 
 			Securities = settings.Securities;
 			Id = settings.Id;
@@ -217,7 +217,7 @@ namespace StockSharp.Hydra.Core
 					do
 					{
 						if (currTask.Id == Id)
-							throw new ArgumentException(LocalizedStrings.Str2243Params.Put(Title), "value");
+							throw new ArgumentException(LocalizedStrings.Str2243Params.Put(Title), nameof(value));
 
 						currTask = currTask.Settings.DependFrom;
 					}
@@ -245,7 +245,7 @@ namespace StockSharp.Hydra.Core
 			set
 			{
 				if (value < 0)
-					throw new ArgumentOutOfRangeException("value");
+					throw new ArgumentOutOfRangeException(nameof(value));
 
 				ExtensionInfo["MaxErrorCount"] = value;
 			}
@@ -353,7 +353,7 @@ namespace StockSharp.Hydra.Core
 			private set
 			{
 				if (value == null)
-					throw new ArgumentNullException("value");
+					throw new ArgumentNullException(nameof(value));
 
 				_extensionInfo.Clear();
 

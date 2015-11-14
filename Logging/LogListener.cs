@@ -43,7 +43,7 @@ namespace StockSharp.Logging
 		/// <summary>
 		/// Messages filters that specify which messages should be handled.
 		/// </summary>
-		public IList<Func<LogMessage, bool>> Filters { get; private set; }
+		public IList<Func<LogMessage, bool>> Filters { get; }
 
 		private string _dateFormat = "yyyy/MM/dd";
 
@@ -56,7 +56,7 @@ namespace StockSharp.Logging
 			set
 			{
 				if (value.IsEmpty())
-					throw new ArgumentNullException("value");
+					throw new ArgumentNullException(nameof(value));
 
 				_dateFormat = value;
 			}
@@ -73,7 +73,7 @@ namespace StockSharp.Logging
 			set
 			{
 				if (value.IsEmpty())
-					throw new ArgumentNullException("value");
+					throw new ArgumentNullException(nameof(value));
 				
 				_timeFormat = value;
 			}

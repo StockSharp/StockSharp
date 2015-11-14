@@ -33,7 +33,7 @@ namespace StockSharp.Messages
 				set
 				{
 					if (value <= TimeSpan.Zero)
-						throw new ArgumentOutOfRangeException("value", value, LocalizedStrings.IntervalMustBePositive);
+						throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.IntervalMustBePositive);
 
 					_timeOut = value;
 				}
@@ -84,7 +84,7 @@ namespace StockSharp.Messages
 		protected MessageAdapter(IdGenerator transactionIdGenerator)
 		{
 			if (transactionIdGenerator == null)
-				throw new ArgumentNullException("transactionIdGenerator");
+				throw new ArgumentNullException(nameof(transactionIdGenerator));
 
 			Platform = Platforms.AnyCPU;
 
@@ -104,11 +104,11 @@ namespace StockSharp.Messages
 			set
 			{
 				if (value == null)
-					throw new ArgumentNullException("value");
+					throw new ArgumentNullException(nameof(value));
 
 				var dulicate = value.GroupBy(m => m).FirstOrDefault(g => g.Count() > 1);
 				if (dulicate != null)
-					throw new ArgumentException(LocalizedStrings.Str415Params.Put(dulicate.Key), "value");
+					throw new ArgumentException(LocalizedStrings.Str415Params.Put(dulicate.Key), nameof(value));
 
 				_supportedMessages = value;
 			}
@@ -118,13 +118,13 @@ namespace StockSharp.Messages
 		/// The parameters validity check.
 		/// </summary>
 		[Browsable(false)]
-		public virtual bool IsValid { get { return true; } }
+		public virtual bool IsValid => true;
 
 		/// <summary>
 		/// Description of the class of securities, depending on which will be marked in the <see cref="SecurityMessage.SecurityType"/> and <see cref="SecurityId.BoardCode"/>.
 		/// </summary>
 		[Browsable(false)]
-		public IDictionary<string, RefPair<SecurityTypes, string>> SecurityClassInfo { get; private set; }
+		public IDictionary<string, RefPair<SecurityTypes, string>> SecurityClassInfo { get; }
 
 		private TimeSpan _heartbeatInterval = TimeSpan.Zero;
 
@@ -150,44 +150,29 @@ namespace StockSharp.Messages
 		/// <see cref="SecurityLookupMessage"/> required to get securities.
 		/// </summary>
 		[Browsable(false)]
-		public virtual bool SecurityLookupRequired
-		{
-			get { return this.IsMessageSupported(MessageTypes.SecurityLookup); }
-		}
+		public virtual bool SecurityLookupRequired => this.IsMessageSupported(MessageTypes.SecurityLookup);
 
 		/// <summary>
 		/// <see cref="PortfolioLookupMessage"/> required to get portfolios and positions.
 		/// </summary>
 		[Browsable(false)]
-		public virtual bool PortfolioLookupRequired
-		{
-			get { return this.IsMessageSupported(MessageTypes.PortfolioLookup); }
-		}
+		public virtual bool PortfolioLookupRequired => this.IsMessageSupported(MessageTypes.PortfolioLookup);
 
 		/// <summary>
 		/// <see cref="OrderStatusMessage"/> required to get orders and ow trades.
 		/// </summary>
 		[Browsable(false)]
-		public virtual bool OrderStatusRequired
-		{
-			get { return this.IsMessageSupported(MessageTypes.OrderStatus); }
-		}
+		public virtual bool OrderStatusRequired => this.IsMessageSupported(MessageTypes.OrderStatus);
 
 		/// <summary>
 		/// Gets a value indicating whether the connector supports security lookup.
 		/// </summary>
-		protected virtual bool IsSupportNativeSecurityLookup
-		{
-			get { return false; }
-		}
+		protected virtual bool IsSupportNativeSecurityLookup => false;
 
 		/// <summary>
 		/// Gets a value indicating whether the connector supports position lookup.
 		/// </summary>
-		protected virtual bool IsSupportNativePortfolioLookup
-		{
-			get { return false; }
-		}
+		protected virtual bool IsSupportNativePortfolioLookup => false;
 
 		/// <summary>
 		/// Bit process, which can run the adapter. By default is <see cref="Platforms.AnyCPU"/>.
@@ -204,15 +189,10 @@ namespace StockSharp.Messages
 			return null;
 		}
 
-		private readonly ReConnectionSettings _reConnectionSettings = new ReConnectionSettings();
-
 		/// <summary>
 		/// Connection tracking settings <see cref="IMessageAdapter"/> with a server.
 		/// </summary>
-		public ReConnectionSettings ReConnectionSettings
-		{
-			get { return _reConnectionSettings; }
-		}
+		public ReConnectionSettings ReConnectionSettings { get; } = new ReConnectionSettings();
 
 		private IdGenerator _transactionIdGenerator;
 
@@ -226,7 +206,7 @@ namespace StockSharp.Messages
 			set
 			{
 				if (value == null)
-					throw new ArgumentNullException("value");
+					throw new ArgumentNullException(nameof(value));
 
 				_transactionIdGenerator = value;
 			}
@@ -249,28 +229,19 @@ namespace StockSharp.Messages
 			}
 		}
 
-		private string _associatedBoardCode = "ALL";
-
 		/// <summary>
 		/// Associated board code. The default is ALL.
 		/// </summary>
 		[DisplayNameLoc(LocalizedStrings.AssociatedSecurityBoardKey)]
 		[DescriptionLoc(LocalizedStrings.Str199Key)]
-		public string AssociatedBoardCode
-		{
-			get { return _associatedBoardCode; }
-			set { _associatedBoardCode = value; }
-		}
+		public string AssociatedBoardCode { get; set; } = "ALL";
 
 		/// <summary>
 		/// Outgoing message event.
 		/// </summary>
 		public event Action<Message> NewOutMessage;
 
-		bool IMessageChannel.IsOpened
-		{
-			get { return true; }
-		}
+		bool IMessageChannel.IsOpened => true;
 
 		void IMessageChannel.Open()
 		{

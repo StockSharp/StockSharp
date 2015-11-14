@@ -52,7 +52,7 @@ namespace StockSharp.Xaml
 		public ConnectorInfo(Type adapterType)
 		{
 			if (adapterType == null)
-				throw new ArgumentNullException("adapterType");
+				throw new ArgumentNullException(nameof(adapterType));
 
 			if (!typeof(IMessageAdapter).IsAssignableFrom(adapterType))
 				throw new ArgumentException("adapterType");

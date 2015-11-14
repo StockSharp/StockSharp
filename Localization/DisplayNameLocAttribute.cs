@@ -8,7 +8,7 @@
 	/// <summary>
 	/// Specifies the display name for a property, event, or public void method which takes no arguments.
 	/// </summary>
-	[AttributeUsageAttribute(AttributeTargets.Class|AttributeTargets.Method|AttributeTargets.Property|AttributeTargets.Event)]
+	[AttributeUsage(AttributeTargets.Class | AttributeTargets.Struct | AttributeTargets.Method | AttributeTargets.Property | AttributeTargets.Event)]
 	public class DisplayNameLocAttribute : DisplayNameAttribute
 	{
 		/// <summary>

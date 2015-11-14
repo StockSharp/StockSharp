@@ -9,6 +9,7 @@ namespace StockSharp.Xaml
 	using Ecng.Common;
 	using Ecng.Xaml;
 
+	using StockSharp.Algo;
 	using StockSharp.BusinessEntities;
 
 	/// <summary>
@@ -54,6 +55,7 @@ namespace StockSharp.Xaml
 			var itemsSource = new ObservableCollectionEx<Security>();
 
 			_itemsSource = new ThreadSafeObservableCollection<Security>(itemsSource);
+			_itemsSource.AddRange(_securityProvider.LookupAll());
 
 			_securityProvider.Added += AddSecurity;
 			_securityProvider.Removed += RemoveSecurity;

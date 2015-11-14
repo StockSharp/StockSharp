@@ -17,7 +17,7 @@ namespace StockSharp.Btce
 				case Sides.Sell:
 					return "sell";
 				default:
-					throw new ArgumentOutOfRangeException("side");
+					throw new ArgumentOutOfRangeException(nameof(side));
 			}
 		}
 
@@ -32,7 +32,7 @@ namespace StockSharp.Btce
 				case "bid":
 					return Sides.Buy;
 				default:
-					throw new ArgumentOutOfRangeException("direction");
+					throw new ArgumentOutOfRangeException(nameof(direction));
 			}
 		}
 
@@ -50,7 +50,7 @@ namespace StockSharp.Btce
 				case 1:
 					return OrderStates.Done;
 				default:
-					throw new ArgumentOutOfRangeException("status", status, LocalizedStrings.Str1598);
+					throw new ArgumentOutOfRangeException(nameof(status), status, LocalizedStrings.Str1598);
 			}
 		}
 

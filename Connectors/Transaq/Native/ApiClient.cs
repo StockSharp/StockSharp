@@ -19,7 +19,7 @@
 		public ApiClient(Action<string> callback, string dllPath, bool overrideDll, bool isHft, string logsPath, ApiLogLevels logLevel)
 		{
 			if (callback == null)
-				throw new ArgumentNullException("callback");
+				throw new ArgumentNullException(nameof(callback));
 
 			_callback = callback;
 

@@ -45,7 +45,7 @@ namespace StockSharp.Messages
 			set
 			{
 				if (value == null)
-					throw new ArgumentNullException("value");
+					throw new ArgumentNullException(nameof(value));
 
 				_periods = value;
 			}
@@ -89,12 +89,12 @@ namespace StockSharp.Messages
 				return dates;
 
 			if (dates == null)
-				throw new ArgumentNullException("dates");
+				throw new ArgumentNullException(nameof(dates));
 
 			var dupDate = dates.GroupBy(d => d).FirstOrDefault(g => g.Count() > 1);
 
 			if (dupDate != null)
-				throw new ArgumentException(LocalizedStrings.Str415Params.Put(dupDate.Key), "dates");
+				throw new ArgumentException(LocalizedStrings.Str415Params.Put(dupDate.Key), nameof(dates));
 
 			return dates;
 		}

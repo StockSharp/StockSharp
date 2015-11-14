@@ -226,7 +226,7 @@ namespace StockSharp.Hydra
 							break;
 						}
 						default:
-							throw new ArgumentOutOfRangeException("arg");
+							throw new ArgumentOutOfRangeException(nameof(arg));
 					}
 				}
 				else if (dataType == typeof(QuoteChangeMessage))
@@ -251,7 +251,7 @@ namespace StockSharp.Hydra
 					LoadedCandles += count;
 				}
 				else
-					throw new ArgumentOutOfRangeException("dataType", dataType, LocalizedStrings.Str1018);
+					throw new ArgumentOutOfRangeException(nameof(dataType), dataType, LocalizedStrings.Str1018);
 
 				if (allInfo != null)
 				{
@@ -390,7 +390,7 @@ namespace StockSharp.Hydra
 		private void AddTasks(IEnumerable<Type> taskTypes)
 		{
 			if (taskTypes == null)
-				throw new ArgumentNullException("taskTypes");
+				throw new ArgumentNullException(nameof(taskTypes));
 
 			BusyIndicator.IsBusy = true;
 			BusyIndicator.BusyContent = LocalizedStrings.Str2904Params.Put(taskTypes.First().GetDisplayName());

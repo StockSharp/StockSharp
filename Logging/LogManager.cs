@@ -43,7 +43,7 @@ namespace StockSharp.Logging
 			public LogSourceList(LogManager parent)
 			{
 				if (parent == null)
-					throw new ArgumentNullException("parent");
+					throw new ArgumentNullException(nameof(parent));
 
 				_parent = parent;
 			}
@@ -160,7 +160,7 @@ namespace StockSharp.Logging
 			set
 			{
 				if (value == null)
-					throw new ArgumentNullException("value");
+					throw new ArgumentNullException(nameof(value));
 
 				if (value == _application)
 					return;
@@ -176,15 +176,12 @@ namespace StockSharp.Logging
 		/// <summary>
 		/// Messages loggers arriving from <see cref="LogManager.Sources"/>.
 		/// </summary>
-		public IList<ILogListener> Listeners
-		{
-			get { return _listeners; }
-		}
+		public IList<ILogListener> Listeners => _listeners;
 
 		/// <summary>
 		/// Logs sources which are listened to the event <see cref="ILogSource.Log"/>.
 		/// </summary>
-		public IList<ILogSource> Sources { get; private set; }
+		public IList<ILogSource> Sources { get; }
 
 		/// <summary>
 		/// Sending interval of messages collected from <see cref="LogManager.Sources"/> to the <see cref="LogManager.Listeners"/>. The default is 500 ms.
@@ -195,7 +192,7 @@ namespace StockSharp.Logging
 			set
 			{
 				if (value < TimeSpan.FromMilliseconds(1))
-					throw new ArgumentOutOfRangeException("value", value, LocalizedStrings.IntervalMustBePositive);
+					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.IntervalMustBePositive);
 
 				_flushTimer.Interval(value);
 			}
@@ -223,7 +220,7 @@ namespace StockSharp.Logging
 		private void SourceLog(LogMessage message)
 		{
 			if (message == null)
-				throw new ArgumentNullException("message");
+				throw new ArgumentNullException(nameof(message));
 
 			_logMsgStat.Add(message);
 

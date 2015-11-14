@@ -22,10 +22,7 @@ namespace StockSharp.Algo.Storages
 			Portfolios = new List<string>();
 		}
 
-		public override object LastId
-		{
-			get { return LastTransactionId; }
-		}
+		public override object LastId => LastTransactionId;
 
 		public long FirstOrderId { get; set; }
 		public long LastOrderId { get; set; }
@@ -39,7 +36,7 @@ namespace StockSharp.Algo.Storages
 		public decimal FirstOrderPrice { get; set; }
 		public decimal LastOrderPrice { get; set; }
 
-		public IList<string> Portfolios { get; private set; }
+		public IList<string> Portfolios { get; }
 
 		public override void Write(Stream stream)
 		{
@@ -188,10 +185,10 @@ namespace StockSharp.Algo.Storages
 
 				var orderId = message.SafeGetOrderId();
 				if (orderId < 0)
-					throw new ArgumentOutOfRangeException("messages", orderId, LocalizedStrings.Str925);
+					throw new ArgumentOutOfRangeException(nameof(messages), orderId, LocalizedStrings.Str925);
 
 				if (message.ExecutionType != ExecutionTypes.OrderLog)
-					throw new ArgumentOutOfRangeException("messages", message.ExecutionType, LocalizedStrings.Str1695Params.Put(orderId));
+					throw new ArgumentOutOfRangeException(nameof(messages), message.ExecutionType, LocalizedStrings.Str1695Params.Put(orderId));
 
 				// sell market orders has zero price (if security do not have min allowed price)
 				// execution ticks (like option execution) may be a zero cost
@@ -201,7 +198,7 @@ namespace StockSharp.Algo.Storages
 
 				var volume = message.SafeGetVolume();
 				if (volume <= 0)
-					throw new ArgumentOutOfRangeException("messages", volume, LocalizedStrings.Str927Params.Put(message.OrderId));
+					throw new ArgumentOutOfRangeException(nameof(messages), volume, LocalizedStrings.Str927Params.Put(message.OrderId));
 
 				long? tradeId = null;
 
@@ -210,7 +207,7 @@ namespace StockSharp.Algo.Storages
 					tradeId = message.GetTradeId();
 
 					if (tradeId <= 0)
-						throw new ArgumentOutOfRangeException("messages", tradeId, LocalizedStrings.Str1012Params.Put(message.OrderId));
+						throw new ArgumentOutOfRangeException(nameof(messages), tradeId, LocalizedStrings.Str1012Params.Put(message.OrderId));
 
 					// execution ticks (like option execution) may be a zero cost
 					// ticks for spreads may be a zero cost or less than zero

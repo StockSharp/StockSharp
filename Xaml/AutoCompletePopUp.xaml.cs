@@ -40,7 +40,7 @@ namespace StockSharp.Xaml
 		/// <summary>
 		/// All suitable instruments.
 		/// </summary>
-		public ObservableCollection<Security> Securities { get; private set; }
+		public ObservableCollection<Security> Securities { get; }
 
 		/// <summary>
 		/// The change event <see cref="AutoCompletePopUp.SelectedSecurity"/>.

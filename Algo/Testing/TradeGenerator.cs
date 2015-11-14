@@ -26,10 +26,7 @@ namespace StockSharp.Algo.Testing
 		/// <summary>
 		/// Market data type.
 		/// </summary>
-		public override MarketDataTypes DataType
-		{
-			get { return MarketDataTypes.Trades; }
-		}
+		public override MarketDataTypes DataType => MarketDataTypes.Trades;
 
 		/// <summary>
 		/// To generate the value for <see cref="Trade.OrderDirection"/>. By default is disabled.
@@ -47,7 +44,7 @@ namespace StockSharp.Algo.Testing
 			set
 			{
 				if (value == null)
-					throw new ArgumentNullException("value");
+					throw new ArgumentNullException(nameof(value));
 
 				_idGenerator = value;
 			}

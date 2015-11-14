@@ -37,7 +37,7 @@ namespace StockSharp.Xaml
 			set
 			{
 				if (value == null)
-					throw new ArgumentNullException("value");
+					throw new ArgumentNullException(nameof(value));
 
 				_validateId = value;
 			}
@@ -52,10 +52,7 @@ namespace StockSharp.Xaml
 		/// <summary>
 		/// All available instruments.
 		/// </summary>
-		public IList<Security> Securities
-		{
-			get { return IndexEditor.Securities; }
-		}
+		public IList<Security> Securities => IndexEditor.Securities;
 
 		/// <summary>
 		/// Index.
@@ -66,7 +63,7 @@ namespace StockSharp.Xaml
 			set
 			{
 				if (value == null)
-					throw new ArgumentNullException("value");
+					throw new ArgumentNullException(nameof(value));
 
 				SecurityId.Security = value;
 				IndexEditor.Text = value.Expression;

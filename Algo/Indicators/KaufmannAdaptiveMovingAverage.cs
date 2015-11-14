@@ -1,4 +1,4 @@
-namespace StockSharp.Algo.Indicators
+﻿namespace StockSharp.Algo.Indicators
 {
 	using System.Collections.Generic;
 	using System.ComponentModel;
@@ -48,10 +48,7 @@ namespace StockSharp.Algo.Indicators
 		/// <summary>
 		/// Whether the indicator is set.
 		/// </summary>
-		public override bool IsFormed
-		{
-			get { return Buffer.Count > Length; }
-		}
+		public override bool IsFormed => Buffer.Count > Length;
 
 		/// <summary>
 		/// To reset the indicator status to initial. The method is called each time when initial settings are changed (for example, the length of period).

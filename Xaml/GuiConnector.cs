@@ -768,162 +768,102 @@ namespace StockSharp.Xaml
 		/// <summary>
 		/// List of all exchange boards, for which instruments are loaded <see cref="IConnector.Securities"/>.
 		/// </summary>
-		public IEnumerable<ExchangeBoard> ExchangeBoards
-		{
-			get { return Connector.ExchangeBoards; }
-		}
+		public IEnumerable<ExchangeBoard> ExchangeBoards => Connector.ExchangeBoards;
 
 		/// <summary>
 		/// List of all loaded instruments. It should be called after event <see cref="IConnector.NewSecurities"/> arisen. Otherwise the empty set will be returned.
 		/// </summary>
-		public IEnumerable<Security> Securities
-		{
-			get { return Connector.Securities; }
-		}
+		public IEnumerable<Security> Securities => Connector.Securities;
 
 		/// <summary>
 		/// Get all orders.
 		/// </summary>
-		public IEnumerable<Order> Orders
-		{
-			get { return Connector.Orders; }
-		}
+		public IEnumerable<Order> Orders => Connector.Orders;
 
 		/// <summary>
 		/// Get all stop-orders.
 		/// </summary>
-		public IEnumerable<Order> StopOrders
-		{
-			get { return Connector.StopOrders; }
-		}
+		public IEnumerable<Order> StopOrders => Connector.StopOrders;
 
 		/// <summary>
 		/// Get all registration errors.
 		/// </summary>
-		public IEnumerable<OrderFail> OrderRegisterFails
-		{
-			get { return Connector.OrderRegisterFails; }
-		}
+		public IEnumerable<OrderFail> OrderRegisterFails => Connector.OrderRegisterFails;
 
 		/// <summary>
 		/// Get all cancellation errors.
 		/// </summary>
-		public IEnumerable<OrderFail> OrderCancelFails
-		{
-			get { return Connector.OrderCancelFails; }
-		}
+		public IEnumerable<OrderFail> OrderCancelFails => Connector.OrderCancelFails;
 
 		/// <summary>
 		/// Get all tick trades.
 		/// </summary>
-		public IEnumerable<Trade> Trades
-		{
-			get { return Connector.Trades; }
-		}
+		public IEnumerable<Trade> Trades => Connector.Trades;
 
 		/// <summary>
 		/// Get all own trades.
 		/// </summary>
-		public IEnumerable<MyTrade> MyTrades
-		{
-			get { return Connector.MyTrades; }
-		}
+		public IEnumerable<MyTrade> MyTrades => Connector.MyTrades;
 
 		/// <summary>
 		/// Get all portfolios.
 		/// </summary>
-		public IEnumerable<Portfolio> Portfolios
-		{
-			get { return Connector.Portfolios; }
-		}
+		public IEnumerable<Portfolio> Portfolios => Connector.Portfolios;
 
 		/// <summary>
 		/// Get all positions.
 		/// </summary>
-		public IEnumerable<Position> Positions
-		{
-			get { return Connector.Positions; }
-		}
+		public IEnumerable<Position> Positions => Connector.Positions;
 
 		/// <summary>
 		/// All news.
 		/// </summary>
-		public IEnumerable<News> News
-		{
-			get { return Connector.News; }
-		}
+		public IEnumerable<News> News => Connector.News;
 
 		/// <summary>
 		/// Connection state.
 		/// </summary>
-		public ConnectionStates ConnectionState
-		{
-			get { return Connector.ConnectionState; }
-		}
+		public ConnectionStates ConnectionState => Connector.ConnectionState;
 
 		/// <summary>
 		/// Gets a value indicating whether the re-registration orders via the method <see cref="IConnector.ReRegisterOrder(StockSharp.BusinessEntities.Order,StockSharp.BusinessEntities.Order)"/> as a single transaction.
 		/// </summary>
-		public bool IsSupportAtomicReRegister
-		{
-			get { return Connector.IsSupportAtomicReRegister; }
-		}
+		public bool IsSupportAtomicReRegister => Connector.IsSupportAtomicReRegister;
 
 		/// <summary>
 		/// List of all securities, subscribed via <see cref="IConnector.RegisterSecurity"/>.
 		/// </summary>
-		public IEnumerable<Security> RegisteredSecurities
-		{
-			get { return Connector.RegisteredSecurities; }
-		}
+		public IEnumerable<Security> RegisteredSecurities => Connector.RegisteredSecurities;
 
 		/// <summary>
 		/// List of all securities, subscribed via <see cref="IConnector.RegisterMarketDepth"/>.
 		/// </summary>
-		public IEnumerable<Security> RegisteredMarketDepths
-		{
-			get { return Connector.RegisteredMarketDepths; }
-		}
+		public IEnumerable<Security> RegisteredMarketDepths => Connector.RegisteredMarketDepths;
 
 		/// <summary>
 		/// List of all securities, subscribed via <see cref="IConnector.RegisterTrades"/>.
 		/// </summary>
-		public IEnumerable<Security> RegisteredTrades
-		{
-			get { return Connector.RegisteredTrades; }
-		}
+		public IEnumerable<Security> RegisteredTrades => Connector.RegisteredTrades;
 
 		/// <summary>
 		/// List of all securities, subscribed via <see cref="IConnector.RegisterOrderLog"/>.
 		/// </summary>
-		public IEnumerable<Security> RegisteredOrderLogs
-		{
-			get { return Connector.RegisteredOrderLogs; }
-		}
+		public IEnumerable<Security> RegisteredOrderLogs => Connector.RegisteredOrderLogs;
 
 		/// <summary>
 		/// List of all portfolios, subscribed via <see cref="IConnector.RegisterPortfolio"/>.
 		/// </summary>
-		public IEnumerable<Portfolio> RegisteredPortfolios
-		{
-			get { return Connector.RegisteredPortfolios; }
-		}
+		public IEnumerable<Portfolio> RegisteredPortfolios => Connector.RegisteredPortfolios;
 
 		/// <summary>
 		/// Transactional adapter.
 		/// </summary>
-		public IMessageAdapter TransactionAdapter
-		{
-			get { return Connector.TransactionAdapter; }
-		}
+		public IMessageAdapter TransactionAdapter => Connector.TransactionAdapter;
 
 		/// <summary>
 		/// Market-data adapter.
 		/// </summary>
-		public IMessageAdapter MarketDataAdapter
-		{
-			get { return Connector.MarketDataAdapter; }
-		}
+		public IMessageAdapter MarketDataAdapter => Connector.MarketDataAdapter;
 
 		/// <summary>
 		/// Connect to trading system.
@@ -1237,10 +1177,7 @@ namespace StockSharp.Xaml
 			return Connector.GetLevel1Fields(security);
 		}
 
-		int ISecurityProvider.Count
-		{
-			get { return Connector.Count; }
-		}
+		int ISecurityProvider.Count => Connector.Count;
 
 		event Action<Security> ISecurityProvider.Added
 		{

@@ -28,10 +28,10 @@ namespace StockSharp.Quik
 		internal DdeTableColumn(DdeTableTypes tableType, string name, Type dataType)
 		{
 			if (name.IsEmpty())
-				throw new ArgumentNullException("name");
+				throw new ArgumentNullException(nameof(name));
 
 			if (dataType == null)
-				throw new ArgumentNullException("dataType");
+				throw new ArgumentNullException(nameof(dataType));
 
 			TableType = tableType;
 			Name = name;

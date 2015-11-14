@@ -30,7 +30,7 @@ namespace StockSharp.InteractiveBrokers
 			internal BaseCondition(IBOrderCondition condition)
 			{
 				if (condition == null)
-					throw new ArgumentNullException("condition");
+					throw new ArgumentNullException(nameof(condition));
 
 				_condition = condition;
 			}
@@ -44,7 +44,7 @@ namespace StockSharp.InteractiveBrokers
 			protected T GetValue<T>(string name)
 			{
 				if (!_condition.Parameters.ContainsKey(name))
-					throw new ArgumentException(LocalizedStrings.Str2311Params.Put(name), "name");
+					throw new ArgumentException(LocalizedStrings.Str2311Params.Put(name), nameof(name));
 
 				return (T)_condition.Parameters[name];
 			}
@@ -695,7 +695,7 @@ namespace StockSharp.InteractiveBrokers
 				: base(condition)
 			{
 				if (prefix == null)
-					throw new ArgumentNullException("prefix");
+					throw new ArgumentNullException(nameof(prefix));
 
 				_prefix = prefix;
 

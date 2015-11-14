@@ -95,7 +95,7 @@ namespace StockSharp.Algo.Indicators
 		/// <summary>
 		/// Embedded values.
 		/// </summary>
-		public IDictionary<decimal, decimal> Levels { get; private set; }
+		public IDictionary<decimal, decimal> Levels { get; }
 
 		/// <summary>
 		/// Does value support data type, required for the indicator.

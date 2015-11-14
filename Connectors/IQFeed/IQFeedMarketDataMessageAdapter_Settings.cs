@@ -44,7 +44,7 @@ namespace StockSharp.IQFeed
 			set
 			{
 				if (value == null)
-					throw new ArgumentNullException("value");
+					throw new ArgumentNullException(nameof(value));
 
 				_level1Address = value;
 			}
@@ -65,7 +65,7 @@ namespace StockSharp.IQFeed
 			set
 			{
 				if (value == null)
-					throw new ArgumentNullException("value");
+					throw new ArgumentNullException(nameof(value));
 
 				_level2Address = value;
 			}
@@ -86,7 +86,7 @@ namespace StockSharp.IQFeed
 			set
 			{
 				if (value == null)
-					throw new ArgumentNullException("value");
+					throw new ArgumentNullException(nameof(value));
 
 				_lookupAddress = value;
 			}
@@ -107,7 +107,7 @@ namespace StockSharp.IQFeed
 			set
 			{
 				if (value == null)
-					throw new ArgumentNullException("value");
+					throw new ArgumentNullException(nameof(value));
 
 				_adminAddress = value;
 			}
@@ -128,7 +128,7 @@ namespace StockSharp.IQFeed
 			set
 			{
 				if (value == null)
-					throw new ArgumentNullException("value");
+					throw new ArgumentNullException(nameof(value));
 
 				_derivativeAddress = value;
 			}
@@ -174,7 +174,7 @@ namespace StockSharp.IQFeed
 			set
 			{
 				if (value == null)
-					throw new ArgumentNullException("value");
+					throw new ArgumentNullException(nameof(value));
 
 				_securityTypesFilter = value;
 			}

@@ -37,7 +37,7 @@
 			: base(ExtendedMessageTypes.System)
 		{
 			if (feed == null)
-				throw new ArgumentNullException("feed");
+				throw new ArgumentNullException(nameof(feed));
 
 			Feed = feed;
 			Value = value;

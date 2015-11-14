@@ -33,10 +33,10 @@ namespace StockSharp.Algo.Indicators
 		public Ichimoku(IchimokuLine tenkan, IchimokuLine kijun)
 		{
 			if (tenkan == null)
-				throw new ArgumentNullException("tenkan");
+				throw new ArgumentNullException(nameof(tenkan));
 
 			if (kijun == null)
-				throw new ArgumentNullException("kijun");
+				throw new ArgumentNullException(nameof(kijun));
 
 			InnerIndicators.Add(Tenkan = tenkan);
 			InnerIndicators.Add(Kijun = kijun);
@@ -52,7 +52,7 @@ namespace StockSharp.Algo.Indicators
 		[DisplayName("Tenkan")]
 		[DescriptionLoc(LocalizedStrings.Str764Key)]
 		[CategoryLoc(LocalizedStrings.GeneralKey)]
-		public IchimokuLine Tenkan { get; private set; }
+		public IchimokuLine Tenkan { get; }
 
 		/// <summary>
 		/// Kijun line.
@@ -61,7 +61,7 @@ namespace StockSharp.Algo.Indicators
 		[DisplayName("Kijun")]
 		[DescriptionLoc(LocalizedStrings.Str765Key)]
 		[CategoryLoc(LocalizedStrings.GeneralKey)]
-		public IchimokuLine Kijun { get; private set; }
+		public IchimokuLine Kijun { get; }
 
 		/// <summary>
 		/// Senkou Span A line.

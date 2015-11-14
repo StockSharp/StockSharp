@@ -685,7 +685,7 @@ namespace StockSharp.Studio
 		private static RibbonButton CreateRibbonButton(Type type)
 		{
 			if (type == null)
-				throw new ArgumentNullException("type");
+				throw new ArgumentNullException(nameof(type));
 
 			var iconUrl = type.GetIconUrl();
 
@@ -700,7 +700,7 @@ namespace StockSharp.Studio
 		private static RibbonPopupButton CreateRibbonPopupButton(Type controlType, Type securityType, Func<IEnumerable<Security>> getSecurities, Action<Security> open)
 		{
 			if (controlType == null)
-				throw new ArgumentNullException("controlType");
+				throw new ArgumentNullException(nameof(controlType));
 
 			var iconUrl = controlType.GetIconUrl();
 
@@ -805,10 +805,10 @@ namespace StockSharp.Studio
 		private IStudioControl OpenWindow(string id, Type ctrlType, bool isToolWindow, object context, Func<IStudioControl> getControl)
 		{
 			if (ctrlType == null)
-				throw new ArgumentNullException("ctrlType");
+				throw new ArgumentNullException(nameof(ctrlType));
 
 			if (getControl == null)
-				throw new ArgumentNullException("getControl");
+				throw new ArgumentNullException(nameof(getControl));
 
 			id = id.ToLowerInvariant();
 			var name = "ToolWindow" + id.Replace("-", "").Replace("@", "") + ctrlType.Name;
@@ -932,7 +932,7 @@ namespace StockSharp.Studio
 		private void CloseWindow(string id, Type ctrlType)
 		{
 			if (ctrlType == null)
-				throw new ArgumentNullException("ctrlType");
+				throw new ArgumentNullException(nameof(ctrlType));
 
 			var key = Tuple.Create(id, ctrlType);
 
@@ -1293,7 +1293,7 @@ namespace StockSharp.Studio
 		private bool CheckState(StrategyInfo info)
 		{
 			if (info == null)
-				throw new ArgumentNullException("info");
+				throw new ArgumentNullException(nameof(info));
 
 			if (info.State == StrategyInfoStates.Runned)
 			{

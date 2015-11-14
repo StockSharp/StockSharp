@@ -20,9 +20,6 @@ namespace StockSharp.Xaml
 		/// <summary>
 		/// The list of rules added to the table.
 		/// </summary>
-		public IListEx<ICommissionRule> Rules
-		{
-			get { return Panel.Rules; }
-		}
+		public IListEx<ICommissionRule> Rules => Panel.Rules;
 	}
 }

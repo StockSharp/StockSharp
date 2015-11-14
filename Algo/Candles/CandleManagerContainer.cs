@@ -39,15 +39,12 @@ namespace StockSharp.Algo.Candles
 			public SeriesInfo(CandleManagerContainer container)
 			{
 				if (container == null)
-					throw new ArgumentNullException("container");
+					throw new ArgumentNullException(nameof(container));
 
 				_container = container;
 			}
 
-			public int CandleCount
-			{
-				get { return _allCandles.Count; }
-			}
+			public int CandleCount => _allCandles.Count;
 
 			public void Reset(DateTimeOffset from)
 			{
@@ -65,7 +62,7 @@ namespace StockSharp.Algo.Candles
 			public bool AddCandle(Candle candle)
 			{
 				if (candle == null)
-					throw new ArgumentNullException("candle");
+					throw new ArgumentNullException(nameof(candle));
 
 				if (!_byTime.SafeAdd(candle.OpenTime).TryAdd(candle))
 					return false;
@@ -150,7 +147,7 @@ namespace StockSharp.Algo.Candles
 			set
 			{
 				if (value < TimeSpan.Zero)
-					throw new ArgumentOutOfRangeException("value", value, LocalizedStrings.Str647);
+					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.Str647);
 
 				_candlesKeepTime = value;
 				_maxCandlesKeepTime = (long)(value.Ticks * 1.5);
@@ -207,7 +204,7 @@ namespace StockSharp.Algo.Candles
 		public Candle GetCandle(CandleSeries series, int candleIndex)
 		{
 			if (candleIndex < 0)
-				throw new ArgumentOutOfRangeException("candleIndex");
+				throw new ArgumentOutOfRangeException(nameof(candleIndex));
 
 			var info = GetInfo(series);
 			return info != null ? info.GetCandle(candleIndex) : null;
@@ -235,7 +232,7 @@ namespace StockSharp.Algo.Candles
 		public IEnumerable<Candle> GetCandles(CandleSeries series, int candleCount)
 		{
 			if (candleCount <= 0)
-				throw new ArgumentOutOfRangeException("candleCount");
+				throw new ArgumentOutOfRangeException(nameof(candleCount));
 
 			return GetCandles(series)
 							.OrderByDescending(c => c.OpenTime)
@@ -263,7 +260,7 @@ namespace StockSharp.Algo.Candles
 		public void Start(CandleSeries series, DateTimeOffset from, DateTimeOffset to)
 		{
 			if (series == null)
-				throw new ArgumentNullException("series");
+				throw new ArgumentNullException(nameof(series));
 
 			var info = _info.SafeAdd(series, key => new SeriesInfo(this));
 			info.Reset(from);
@@ -272,7 +269,7 @@ namespace StockSharp.Algo.Candles
 		private SeriesInfo GetInfo(CandleSeries series)
 		{
 			if (series == null)
-				throw new ArgumentNullException("series");
+				throw new ArgumentNullException(nameof(series));
 
 			return _info.TryGetValue(series);
 		}

@@ -9,7 +9,7 @@ namespace StockSharp.Studio.Core.Commands
 		public PortfolioCommand(Portfolio portfolio, bool isNew)
 		{
 			if (portfolio == null)
-				throw new ArgumentNullException("portfolio");
+				throw new ArgumentNullException(nameof(portfolio));
 
 			Portfolio = portfolio;
 			IsNew = isNew;

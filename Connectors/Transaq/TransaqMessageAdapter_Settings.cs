@@ -62,7 +62,7 @@ namespace StockSharp.Transaq
 			set
 			{
 				if (value == null)
-					throw new ArgumentNullException("value");
+					throw new ArgumentNullException(nameof(value));
 
 				_address = value;
 			}
@@ -111,7 +111,7 @@ namespace StockSharp.Transaq
 			set
 			{
 				if (value.IsEmpty())
-					throw new ArgumentNullException("value");
+					throw new ArgumentNullException(nameof(value));
 
 				_dllPath = value;
 			}

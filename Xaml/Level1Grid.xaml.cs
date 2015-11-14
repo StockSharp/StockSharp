@@ -40,25 +40,16 @@ namespace StockSharp.Xaml
 		/// <summary>
 		/// The list of messages added to the table.
 		/// </summary>
-		public IListEx<Level1ChangeMessage> Messages
-		{
-			get { return _messages; }
-		}
+		public IListEx<Level1ChangeMessage> Messages => _messages;
 
 		/// <summary>
 		/// The selected message.
 		/// </summary>
-		public Level1ChangeMessage SelectedMessage
-		{
-			get { return SelectedMessages.FirstOrDefault(); }
-		}
+		public Level1ChangeMessage SelectedMessage => SelectedMessages.FirstOrDefault();
 
 		/// <summary>
 		/// Selected messages.
 		/// </summary>
-		public IEnumerable<Level1ChangeMessage> SelectedMessages
-		{
-			get { return SelectedItems.Cast<Level1ChangeMessage>(); }
-		}
+		public IEnumerable<Level1ChangeMessage> SelectedMessages => SelectedItems.Cast<Level1ChangeMessage>();
 	}
 }

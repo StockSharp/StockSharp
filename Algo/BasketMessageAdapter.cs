@@ -115,15 +115,12 @@ namespace StockSharp.Algo
 		/// <summary>
 		/// Adapters with which the aggregator operates.
 		/// </summary>
-		public IInnerAdapterList InnerAdapters
-		{
-			get { return _innerAdapters; }
-		}
+		public IInnerAdapterList InnerAdapters => _innerAdapters;
 
 		/// <summary>
 		/// Portfolios which are used to send transactions.
 		/// </summary>
-		public IDictionary<string, IMessageAdapter> Portfolios { get; private set; }
+		public IDictionary<string, IMessageAdapter> Portfolios { get; }
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="BasketMessageAdapter"/>.
@@ -171,18 +168,12 @@ namespace StockSharp.Algo
 		/// <summary>
 		/// Gets a value indicating whether the connector supports position lookup.
 		/// </summary>
-		protected override bool IsSupportNativePortfolioLookup
-		{
-			get { return true; }
-		}
+		protected override bool IsSupportNativePortfolioLookup => true;
 
 		/// <summary>
 		/// Gets a value indicating whether the connector supports security lookup.
 		/// </summary>
-		protected override bool IsSupportNativeSecurityLookup
-		{
-			get { return true; }
-		}
+		protected override bool IsSupportNativeSecurityLookup => true;
 
 		/// <summary>
 		/// Create condition for order type <see cref="OrderTypes.Conditional"/>, that supports the adapter.
@@ -476,7 +467,7 @@ namespace StockSharp.Algo
 					_subscriptionKeys.Remove(originalTransactionId);
 
 				_subscriptionStates.Remove(key);
-				RaiseMarketDataMessage(null, originalTransactionId, new ArgumentException(LocalizedStrings.Str629Params.Put(key.Item1 + " " + key.Item2), "message"), true);
+				RaiseMarketDataMessage(null, originalTransactionId, new ArgumentException(LocalizedStrings.Str629Params.Put(key.Item1 + " " + key.Item2), nameof(message)), true);
 			}
 		}
 

@@ -14,7 +14,7 @@
 		public CreateSecurityCommand(Type securityType)
 		{
 			if (securityType == null)
-				throw new ArgumentNullException("securityType");
+				throw new ArgumentNullException(nameof(securityType));
 
 			SecurityType = securityType;
 		}

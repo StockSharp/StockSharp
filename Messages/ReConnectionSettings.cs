@@ -37,7 +37,7 @@ namespace StockSharp.Messages
 			set
 			{
 				if (value < TimeSpan.Zero)
-					throw new ArgumentOutOfRangeException("value", value, LocalizedStrings.Str177);
+					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.Str177);
 
 				_interval = value;
 			}
@@ -57,7 +57,7 @@ namespace StockSharp.Messages
 			set
 			{
 				if (value < -1)
-					throw new ArgumentOutOfRangeException("value", value, LocalizedStrings.Str177);
+					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.Str177);
 
 				_attemptCount = value;
 			}
@@ -77,7 +77,7 @@ namespace StockSharp.Messages
 			set
 			{
 				if (value < -1)
-					throw new ArgumentOutOfRangeException("value", value, LocalizedStrings.Str177);
+					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.Str177);
 
 				_reAttemptCount = value;
 			}
@@ -97,7 +97,7 @@ namespace StockSharp.Messages
 			set
 			{
 				if (value < TimeSpan.Zero)
-					throw new ArgumentOutOfRangeException("value", value, LocalizedStrings.Str177);
+					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.Str177);
 
 				_timeOutInterval = value;
 			}
@@ -117,7 +117,7 @@ namespace StockSharp.Messages
 			set
 			{
 				if (value == null)
-					throw new ArgumentNullException("value");
+					throw new ArgumentNullException(nameof(value));
 
 				_workingTime = value;
 			}

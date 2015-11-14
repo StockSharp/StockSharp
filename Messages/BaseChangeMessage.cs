@@ -33,10 +33,7 @@ namespace StockSharp.Messages
 		/// </summary>
 		[Browsable(false)]
 		[DataMember]
-		public IDictionary<TField, object> Changes
-		{
-			get { return _changes; }
-		}
+		public IDictionary<TField, object> Changes => _changes;
 
 		/// <summary>
 		/// Initialize <see cref="BaseChangeMessage{T}"/>.

@@ -32,7 +32,7 @@ namespace StockSharp.BusinessEntities
 		public MarketDepth(Security security)
 		{
 			if (ReferenceEquals(security, null))
-				throw new ArgumentNullException("security");
+				throw new ArgumentNullException(nameof(security));
 
 			Security = security;
 			_bids = _asks = ArrayHelper.Empty<Quote>();
@@ -52,7 +52,7 @@ namespace StockSharp.BusinessEntities
 			set
 			{
 				if (value < 1)
-					throw new ArgumentOutOfRangeException("value", value, LocalizedStrings.Str480);
+					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.Str480);
 
 				_maxDepth = value;
 
@@ -63,7 +63,7 @@ namespace StockSharp.BusinessEntities
 		/// <summary>
 		/// Security.
 		/// </summary>
-		public Security Security { get; private set; }
+		public Security Security { get; }
 
 		[field: NonSerialized]
 		private IConnector _connector;
@@ -126,7 +126,7 @@ namespace StockSharp.BusinessEntities
 			private set
 			{
 				if (value == null)
-					throw new ArgumentNullException("value");
+					throw new ArgumentNullException(nameof(value));
 
 				_bids = value;
 				//_bidsCache = null;
@@ -152,7 +152,7 @@ namespace StockSharp.BusinessEntities
 			private set
 			{
 				if (value == null)
-					throw new ArgumentNullException("value");
+					throw new ArgumentNullException(nameof(value));
 
 				_asks = value;
 				//_asksCache = null;
@@ -308,9 +308,9 @@ namespace StockSharp.BusinessEntities
 			var currentDepth = Depth;
 
 			if (newDepth < 0)
-				throw new ArgumentOutOfRangeException("newDepth", newDepth, LocalizedStrings.Str481);
+				throw new ArgumentOutOfRangeException(nameof(newDepth), newDepth, LocalizedStrings.Str481);
 			else if (newDepth > currentDepth)
-				throw new ArgumentOutOfRangeException("newDepth", newDepth, LocalizedStrings.Str482Params.Put(currentDepth));
+				throw new ArgumentOutOfRangeException(nameof(newDepth), newDepth, LocalizedStrings.Str482Params.Put(currentDepth));
 
 			lock (_syncRoot)
 			{
@@ -326,7 +326,7 @@ namespace StockSharp.BusinessEntities
 		private static Quote[] Decrease(Quote[] quotes, int newDepth)
 		{
 			if (quotes == null)
-				throw new ArgumentNullException("quotes");
+				throw new ArgumentNullException(nameof(quotes));
 
 			if (newDepth <= quotes.Length)
 				Array.Resize(ref quotes, newDepth);
@@ -386,7 +386,7 @@ namespace StockSharp.BusinessEntities
 		public MarketDepthPair GetPair(int depthIndex)
 		{
 			if (depthIndex < 0)
-				throw new ArgumentOutOfRangeException("depthIndex", depthIndex, LocalizedStrings.Str483);
+				throw new ArgumentOutOfRangeException(nameof(depthIndex), depthIndex, LocalizedStrings.Str483);
 
 			lock (_syncRoot)
 			{
@@ -408,7 +408,7 @@ namespace StockSharp.BusinessEntities
 		public IEnumerable<MarketDepthPair> GetTopPairs(int depth)
 		{
 			if (depth < 0)
-				throw new ArgumentOutOfRangeException("depth", depth, LocalizedStrings.Str484);
+				throw new ArgumentOutOfRangeException(nameof(depth), depth, LocalizedStrings.Str484);
 
 			var retVal = new List<MarketDepthPair>();
 
@@ -436,7 +436,7 @@ namespace StockSharp.BusinessEntities
 		public IEnumerable<Quote> GetTopQuotes(int depth)
 		{
 			if (depth < 0)
-				throw new ArgumentOutOfRangeException("depth", depth, LocalizedStrings.Str484);
+				throw new ArgumentOutOfRangeException(nameof(depth), depth, LocalizedStrings.Str484);
 
 			var retVal = new List<Quote>();
 
@@ -476,7 +476,7 @@ namespace StockSharp.BusinessEntities
 		public MarketDepth Update(IEnumerable<Quote> quotes, DateTimeOffset lastChangeTime = default(DateTimeOffset))
 		{
 			if (quotes == null)
-				throw new ArgumentNullException("quotes");
+				throw new ArgumentNullException(nameof(quotes));
 
 			var bids = Enumerable.Empty<Quote>();
 			var asks = Enumerable.Empty<Quote>();
@@ -506,10 +506,10 @@ namespace StockSharp.BusinessEntities
 		public MarketDepth Update(IEnumerable<Quote> bids, IEnumerable<Quote> asks, bool isSorted = false, DateTimeOffset lastChangeTime = default(DateTimeOffset))
 		{
 			if (bids == null)
-				throw new ArgumentNullException("bids");
+				throw new ArgumentNullException(nameof(bids));
 
 			if (asks == null)
-				throw new ArgumentNullException("asks");
+				throw new ArgumentNullException(nameof(asks));
 
 			if (!isSorted)
 			{
@@ -774,7 +774,7 @@ namespace StockSharp.BusinessEntities
 		public void Remove(Quote quote, DateTimeOffset lastChangeTime = default(DateTimeOffset))
 		{
 			if (quote == null)
-				throw new ArgumentNullException("quote");
+				throw new ArgumentNullException(nameof(quote));
 
 			Remove(quote.OrderDirection, quote.Price, quote.Volume, lastChangeTime);
 		}
@@ -792,7 +792,7 @@ namespace StockSharp.BusinessEntities
 				var dir = GetDirection(price);
 
 				if (dir == null)
-					throw new ArgumentOutOfRangeException("price", price, LocalizedStrings.Str487);
+					throw new ArgumentOutOfRangeException(nameof(price), price, LocalizedStrings.Str487);
 
 				Remove((Sides)dir, price, volume, lastChangeTime);
 			}
@@ -808,10 +808,10 @@ namespace StockSharp.BusinessEntities
 		public void Remove(Sides direction, decimal price, decimal volume = 0, DateTimeOffset lastChangeTime = default(DateTimeOffset))
 		{
 			if (price <= 0)
-				throw new ArgumentOutOfRangeException("price", price, LocalizedStrings.Str488);
+				throw new ArgumentOutOfRangeException(nameof(price), price, LocalizedStrings.Str488);
 
 			if (volume < 0)
-				throw new ArgumentOutOfRangeException("volume", volume, LocalizedStrings.Str489);
+				throw new ArgumentOutOfRangeException(nameof(volume), volume, LocalizedStrings.Str489);
 
 			lock (_syncRoot)
 			{
@@ -819,7 +819,7 @@ namespace StockSharp.BusinessEntities
 				var index = GetQuoteIndex(quotes, price);
 
 				if (index == -1)
-					throw new ArgumentOutOfRangeException("price", price, LocalizedStrings.Str487);
+					throw new ArgumentOutOfRangeException(nameof(price), price, LocalizedStrings.Str487);
 
 				var quote = quotes[index];
 
@@ -828,7 +828,7 @@ namespace StockSharp.BusinessEntities
 				if (volume > 0)
 				{
 					if (quote.Volume < volume)
-						throw new ArgumentOutOfRangeException("volume", volume, LocalizedStrings.Str490Params.Put(quote));
+						throw new ArgumentOutOfRangeException(nameof(volume), volume, LocalizedStrings.Str490Params.Put(quote));
 
 					leftVolume = quote.Volume - volume;
 
@@ -974,19 +974,19 @@ namespace StockSharp.BusinessEntities
 		private void CheckQuote(Quote quote)
 		{
 			if (quote == null)
-				throw new ArgumentNullException("quote");
+				throw new ArgumentNullException(nameof(quote));
 
 			if (quote.Security != null && quote.Security != Security)
-				throw new ArgumentException(LocalizedStrings.Str491Params.Put(quote.Security.Id, Security.Id), "quote");
+				throw new ArgumentException(LocalizedStrings.Str491Params.Put(quote.Security.Id, Security.Id), nameof(quote));
 
 			if (quote.Security == null)
 				quote.Security = Security;
 
 			if (quote.Price <= 0)
-				throw new ArgumentOutOfRangeException("quote", quote.Price, LocalizedStrings.Str488);
+				throw new ArgumentOutOfRangeException(nameof(quote), quote.Price, LocalizedStrings.Str488);
 
 			if (quote.Volume < 0)
-				throw new ArgumentOutOfRangeException("quote", quote.Volume, LocalizedStrings.Str489);
+				throw new ArgumentOutOfRangeException(nameof(quote), quote.Volume, LocalizedStrings.Str489);
 		}
 
 		private void UpdateDepthAndTime(DateTimeOffset lastChangeTime = default(DateTimeOffset), bool depthChangedEventNeeded = true)
@@ -1114,7 +1114,7 @@ namespace StockSharp.BusinessEntities
 		private bool Verify(Quote quote, bool isBids)
 		{
 			if (quote == null)
-				throw new ArgumentNullException("quote");
+				throw new ArgumentNullException(nameof(quote));
 
 			return
 				quote.Price > 0 &&

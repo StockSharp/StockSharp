@@ -225,7 +225,7 @@ namespace StockSharp.OpenECry
 					criteria.OptionType = SymbolLookupCriteriaOptionType.All;
 					break;
 				default:
-					throw new ArgumentOutOfRangeException("message", message.SecurityType, LocalizedStrings.Str2117);
+					throw new ArgumentOutOfRangeException(nameof(message), message.SecurityType, LocalizedStrings.Str2117);
 			}
 
 			_client.SymbolLookup(criteria);

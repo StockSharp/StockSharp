@@ -77,7 +77,7 @@ namespace StockSharp.Algo.Indicators
 		protected BaseIndicatorValue(IIndicator indicator)
 		{
 			if (indicator == null)
-				throw new ArgumentNullException("indicator");
+				throw new ArgumentNullException(nameof(indicator));
 
 			Indicator = indicator;
 			IsFormed = indicator.IsFormed;
@@ -86,7 +86,7 @@ namespace StockSharp.Algo.Indicators
 		/// <summary>
 		/// Indicator.
 		/// </summary>
-		public IIndicator Indicator { get; private set; }
+		public IIndicator Indicator { get; }
 
 		/// <summary>
 		/// No indicator value.
@@ -101,7 +101,7 @@ namespace StockSharp.Algo.Indicators
 		/// <summary>
 		/// Whether the indicator is set.
 		/// </summary>
-		public bool IsFormed { get; private set; }
+		public bool IsFormed { get; }
 
 		/// <summary>
 		/// The input value.
@@ -148,7 +148,7 @@ namespace StockSharp.Algo.Indicators
 			var value = other as IIndicatorValue;
 
 			if (other == null)
-				throw new ArgumentException(LocalizedStrings.Str911, "other");
+				throw new ArgumentException(LocalizedStrings.Str911, nameof(other));
 
 			return CompareTo(value);
 		}
@@ -185,7 +185,7 @@ namespace StockSharp.Algo.Indicators
 		/// <summary>
 		/// Value.
 		/// </summary>
-		public TValue Value { get; private set; }
+		public TValue Value { get; }
 
 		/// <summary>
 		/// No indicator value.
@@ -327,10 +327,10 @@ namespace StockSharp.Algo.Indicators
 			: base(indicator, value)
 		{
 			if (value == null)
-				throw new ArgumentNullException("value");
+				throw new ArgumentNullException(nameof(value));
 
 			if (getPart == null)
-				throw new ArgumentNullException("getPart");
+				throw new ArgumentNullException(nameof(getPart));
 
 			_getPart = getPart;
 
@@ -426,10 +426,10 @@ namespace StockSharp.Algo.Indicators
 			: base(indicator, depth)
 		{
 			if (depth == null)
-				throw new ArgumentNullException("depth");
+				throw new ArgumentNullException(nameof(depth));
 
 			if (getPart == null)
-				throw new ArgumentNullException("getPart");
+				throw new ArgumentNullException(nameof(getPart));
 
 			_getPart = getPart;
 		}
@@ -561,7 +561,7 @@ namespace StockSharp.Algo.Indicators
 		/// <summary>
 		/// Embedded values.
 		/// </summary>
-		public IDictionary<IIndicator, IIndicatorValue> InnerValues { get; private set; }
+		public IDictionary<IIndicator, IIndicatorValue> InnerValues { get; }
 
 		/// <summary>
 		/// Does value support data type, required for the indicator.

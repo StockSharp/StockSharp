@@ -45,16 +45,16 @@ namespace StockSharp.Studio
 			// TODO Временный метод для проверки ошибки с нулевой биржей.
 
 			if (security == null)
-				throw new ArgumentNullException("security");
+				throw new ArgumentNullException(nameof(security));
 
 			if (security.Board == null)
-				throw new ArgumentException(LocalizedStrings.Str903Params.Put(security), "security");
+				throw new ArgumentException(LocalizedStrings.Str903Params.Put(security), nameof(security));
 		}
 
         public static StrategyContainer CreateStrategy(this StrategyInfo info, SessionType sessionType)
 		{
 			if (info == null)
-				throw new ArgumentNullException("info");
+				throw new ArgumentNullException(nameof(info));
 
 			var registry = ConfigManager.GetService<IStudioEntityRegistry>();
 			var security = "RI".GetFortsJumps(DateTime.Today, DateTime.Today.AddMonths(3), code => registry.Securities.LookupById(code + "@" + ExchangeBoard.Forts.Code)).Last();
@@ -232,7 +232,7 @@ namespace StockSharp.Studio
 		public static void InitStrategyType(this StrategyInfo info)
 		{
 			if (info == null)
-				throw new ArgumentNullException("info");
+				throw new ArgumentNullException(nameof(info));
 
 			switch (info.Type)
 			{
@@ -265,10 +265,10 @@ namespace StockSharp.Studio
 		public static CompilationResult CompileStrategy(this StrategyInfo info, IEnumerable<CodeReference> references)
 		{
 			if (info == null)
-				throw new ArgumentNullException("info");
+				throw new ArgumentNullException(nameof(info));
 
 			if (references == null)
-				throw new ArgumentNullException("references");
+				throw new ArgumentNullException(nameof(references));
 
 			var result = CompilationLanguages.CSharp.CompileCode(info.Body, info.Name, references, UserConfig.Instance.StrategiesAssemblyPath, UserConfig.Instance.StrategiesTempPath);
 
@@ -290,7 +290,7 @@ namespace StockSharp.Studio
 		public static void CreateDefaultStrategies(this IStudioEntityRegistry registry)
 		{
 			if (registry == null)
-				throw new ArgumentNullException("registry");
+				throw new ArgumentNullException(nameof(registry));
 
 			if (registry.Strategies.Count != 0)
 				return;
@@ -329,10 +329,10 @@ namespace StockSharp.Studio
 		public static void LoadState(this Strategy strategy, SessionStrategy sessionStrategy)
 		{
 			if (strategy == null)
-				throw new ArgumentNullException("strategy");
+				throw new ArgumentNullException(nameof(strategy));
 
 			if (sessionStrategy == null)
-				throw new ArgumentNullException("sessionStrategy");
+				throw new ArgumentNullException(nameof(sessionStrategy));
 
 			var storage = new SettingsStorage
 			{
@@ -737,7 +737,7 @@ namespace StockSharp.Studio
 		public static void OpenFile(this string file)
 		{
 			if (file.IsEmpty())
-				throw new ArgumentNullException("file");
+				throw new ArgumentNullException(nameof(file));
 
 			try
 			{

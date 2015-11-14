@@ -38,13 +38,13 @@ namespace StockSharp.Algo.Storages
 				public RangeEnumerator(IMarketDataStorage<TData> storage, DateTimeOffset from, DateTimeOffset to, Func<TData, DateTimeOffset> getTime)
 				{
 					if (storage == null)
-						throw new ArgumentNullException("storage");
+						throw new ArgumentNullException(nameof(storage));
 
 					if (getTime == null)
-						throw new ArgumentNullException("getTime");
+						throw new ArgumentNullException(nameof(getTime));
 
 					if (from > to)
-						throw new ArgumentOutOfRangeException("from");
+						throw new ArgumentOutOfRangeException(nameof(@from));
 
 					_storage = storage;
 					_from = from.UtcDateTime;
@@ -125,15 +125,9 @@ namespace StockSharp.Algo.Storages
 					_currDate = _from.Date;
 				}
 
-				public TData Current
-				{
-					get { return _current.Current; }
-				}
+				public TData Current => _current.Current;
 
-				object IEnumerator.Current
-				{
-					get { return Current; }
-				}
+				object IEnumerator.Current => Current;
 			}
 
 			private readonly IMarketDataStorage<TData> _storage;
@@ -201,7 +195,7 @@ namespace StockSharp.Algo.Storages
 		public static IMarketDataStorage<Candle> GetCandleStorage(this IStorageRegistry storageRegistry, CandleSeries series, IMarketDataDrive drive = null, StorageFormats format = StorageFormats.Binary)
 		{
 			if (series == null)
-				throw new ArgumentNullException("series");
+				throw new ArgumentNullException(nameof(series));
 
 			return storageRegistry.ThrowIfNull().GetCandleStorage(series.CandleType, series.Security, series.Arg, drive, format);
 		}
@@ -209,7 +203,7 @@ namespace StockSharp.Algo.Storages
 		private static IStorageRegistry ThrowIfNull(this IStorageRegistry storageRegistry)
 		{
 			if (storageRegistry == null)
-				throw new ArgumentNullException("storageRegistry");
+				throw new ArgumentNullException(nameof(storageRegistry));
 
 			return storageRegistry;
 		}
@@ -217,7 +211,7 @@ namespace StockSharp.Algo.Storages
 		internal static IEnumerable<Range<DateTimeOffset>> GetRanges<TValue>(this IMarketDataStorage<TValue> storage)
 		{
 			if (storage == null)
-				throw new ArgumentNullException("storage");
+				throw new ArgumentNullException(nameof(storage));
 
 			var range = GetRange(storage, null, null);
 
@@ -253,7 +247,7 @@ namespace StockSharp.Algo.Storages
 		public static void Delete(this IMarketDataStorage storage, DateTimeOffset? from = null, DateTimeOffset? to = null)
 		{
 			if (storage == null)
-				throw new ArgumentNullException("storage");
+				throw new ArgumentNullException(nameof(storage));
 
 			var range = GetRange(storage, from, to);
 
@@ -303,10 +297,10 @@ namespace StockSharp.Algo.Storages
 		internal static Range<DateTimeOffset> GetRange(this IMarketDataStorage storage, DateTimeOffset? from, DateTimeOffset? to)
 		{
 			if (storage == null)
-				throw new ArgumentNullException("storage");
+				throw new ArgumentNullException(nameof(storage));
 
 			if (from > to)
-				throw new ArgumentOutOfRangeException("to", to, LocalizedStrings.Str1014);
+				throw new ArgumentOutOfRangeException(nameof(to), to, LocalizedStrings.Str1014);
 
 			var dates = storage.Dates.ToArray();
 
@@ -368,10 +362,10 @@ namespace StockSharp.Algo.Storages
 		public static object ToCandleArg(this Type type, string str)
 		{
 			if (type == null)
-				throw new ArgumentNullException("type");
+				throw new ArgumentNullException(nameof(type));
 
 			if (str.IsEmpty())
-				throw new ArgumentNullException("str");
+				throw new ArgumentNullException(nameof(str));
 
 			if (type == typeof(TimeFrameCandleMessage))
 			{
@@ -394,7 +388,7 @@ namespace StockSharp.Algo.Storages
 				return str.To<PnFArg>();
 			}
 			else
-				throw new ArgumentOutOfRangeException("type", type, LocalizedStrings.WrongCandleType);
+				throw new ArgumentOutOfRangeException(nameof(type), type, LocalizedStrings.WrongCandleType);
 		}
 
 		/// <summary>
@@ -406,10 +400,10 @@ namespace StockSharp.Algo.Storages
 		public static Security ReadBySecurityId(this IStorageEntityList<Security> securities, SecurityId securityId)
 		{
 			if (securities == null)
-				throw new ArgumentNullException("securities");
+				throw new ArgumentNullException(nameof(securities));
 
 			if (securityId.IsDefault())
-				throw new ArgumentNullException("securityId");
+				throw new ArgumentNullException(nameof(securityId));
 
 			return securities.ReadById(securityId.ToStringId());
 		}

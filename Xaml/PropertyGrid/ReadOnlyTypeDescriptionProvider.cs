@@ -16,15 +16,15 @@
 				_propDesc = propDesc;
 			}
 
-			public override string Category { get { return _propDesc.Category; } }
+			public override string Category => _propDesc.Category;
 
-			public override string DisplayName { get { return _propDesc.DisplayName; } }
+			public override string DisplayName => _propDesc.DisplayName;
 
-			public override Type ComponentType { get { return _propDesc.ComponentType; } }
+			public override Type ComponentType => _propDesc.ComponentType;
 
-			public override bool IsReadOnly { get { return true; } }
+			public override bool IsReadOnly => true;
 
-			public override Type PropertyType { get { return _propDesc.PropertyType; } }
+			public override Type PropertyType => _propDesc.PropertyType;
 
 			public override AttributeCollection Attributes
 			{

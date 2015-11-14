@@ -9,7 +9,7 @@ namespace StockSharp.Studio.Core.Commands
 		public OrderFailCommand(OrderFail fail, OrderActions action)
 		{
 			if (fail == null)
-				throw new ArgumentNullException("fail");
+				throw new ArgumentNullException(nameof(fail));
 
 			Fail = fail;
 			Action = action;

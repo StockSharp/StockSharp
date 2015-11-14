@@ -26,11 +26,11 @@ namespace StockSharp.Xaml
 	{
 		private class StrategyItem : NotifiableObject
 		{
-			public Strategy Strategy { get; private set; }
+			public Strategy Strategy { get; }
 
-			public IStrategyParam[] Parameters { get { return Strategy.Parameters.ToArray(); } }
+			public IStrategyParam[] Parameters => Strategy.Parameters.ToArray();
 
-			public IStatisticParameter[] Statistics { get { return Strategy.StatisticManager.Parameters.ToArray(); } }
+			public IStatisticParameter[] Statistics => Strategy.StatisticManager.Parameters.ToArray();
 
 			private int _progress;
 
@@ -50,7 +50,7 @@ namespace StockSharp.Xaml
 			public StrategyItem(Strategy strategy)
 			{
 				if (strategy == null)
-					throw new ArgumentNullException("strategy");
+					throw new ArgumentNullException(nameof(strategy));
 
 				Strategy = strategy;
 			}
@@ -59,7 +59,7 @@ namespace StockSharp.Xaml
 		/// <summary>
 		/// Parameters of the strategy which is excluded from the display.
 		/// </summary>
-		public HashSet<string> ExcludeParameters { get; private set; }
+		public HashSet<string> ExcludeParameters { get; }
 
 		/// <summary>
 		/// To show the Test Progress column.

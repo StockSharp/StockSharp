@@ -90,7 +90,7 @@ namespace StockSharp.Logging
 			set
 			{
 				if (value.IsEmpty())
-					throw new ArgumentNullException("value");
+					throw new ArgumentNullException(nameof(value));
 
 				_name = value;
 			}
@@ -111,7 +111,7 @@ namespace StockSharp.Logging
 					return;
 
 				if (value != null && _parent != null)
-					throw new ArgumentException(LocalizedStrings.Str8Params.Put(this, _parent), "value");
+					throw new ArgumentException(LocalizedStrings.Str8Params.Put(this, _parent), nameof(value));
 
 				_parent = value;
 			}
@@ -135,10 +135,7 @@ namespace StockSharp.Logging
 		/// Current time, which will be passed to the <see cref="LogMessage.Time"/>.
 		/// </summary>
 		[Browsable(false)]
-		public virtual DateTimeOffset CurrentTime
-		{
-			get { return TimeHelper.NowWithOffset; }
-		}
+		public virtual DateTimeOffset CurrentTime => TimeHelper.NowWithOffset;
 
 		/// <summary>
 		/// Whether the source is the root (even if <see cref="ILogSource.Parent"/> is not equal to <see langword="null" />).
@@ -164,7 +161,7 @@ namespace StockSharp.Logging
 		protected virtual void RaiseLog(LogMessage message)
 		{
 			if (message == null)
-				throw new ArgumentNullException("message");
+				throw new ArgumentNullException(nameof(message));
 
 			if (message.Level < message.Source.LogLevel)
 				return;

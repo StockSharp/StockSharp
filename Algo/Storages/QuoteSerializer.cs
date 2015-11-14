@@ -85,7 +85,7 @@ namespace StockSharp.Algo.Storages
 				var firstDepth = messages.FirstOrDefault(d => !d.Bids.IsEmpty() || !d.Asks.IsEmpty());
 
 				if (firstDepth == null)
-					throw new ArgumentException(LocalizedStrings.Str931, "messages");
+					throw new ArgumentException(LocalizedStrings.Str931, nameof(messages));
 
 				metaInfo.LastPrice = metaInfo.FirstPrice = GetDepthPrice(firstDepth);
 
@@ -123,7 +123,7 @@ namespace StockSharp.Algo.Storages
 
 				// LMAX has equals best bid and ask
 				if (bid != null && ask != null && bid.Price > ask.Price)
-					throw new ArgumentException(LocalizedStrings.Str932Params.Put(bid.Price, ask.Price, quoteMsg.ServerTime), "messages");
+					throw new ArgumentException(LocalizedStrings.Str932Params.Put(bid.Price, ask.Price, quoteMsg.ServerTime), nameof(messages));
 
 				var lastOffset = metaInfo.LastServerOffset;
 				metaInfo.LastTime = writer.WriteTime(quoteMsg.ServerTime, metaInfo.LastTime, LocalizedStrings.MarketDepth, allowNonOrdered, isUtc, metaInfo.ServerOffset, allowDiffOffsets, ref lastOffset);
@@ -256,13 +256,13 @@ namespace StockSharp.Algo.Storages
 		private void SerializeQuotes(BitArrayWriter writer, IEnumerable<QuoteChange> quotes, QuoteMetaInfo metaInfo/*, bool isFull*/)
 		{
 			if (writer == null)
-				throw new ArgumentNullException("writer");
+				throw new ArgumentNullException(nameof(writer));
 
 			if (quotes == null)
-				throw new ArgumentNullException("quotes");
+				throw new ArgumentNullException(nameof(quotes));
 
 			if (metaInfo == null)
-				throw new ArgumentNullException("metaInfo");
+				throw new ArgumentNullException(nameof(metaInfo));
 
 			var prevPrice = metaInfo.LastPrice;
 
@@ -277,7 +277,7 @@ namespace StockSharp.Algo.Storages
 				// some forex connectors do not translate volume
 				//
 				if (quote.Volume < 0/* || (isFull && quote.Volume == 0)*/)
-					throw new ArgumentOutOfRangeException("quotes", quote.Volume, LocalizedStrings.Str936);
+					throw new ArgumentOutOfRangeException(nameof(quotes), quote.Volume, LocalizedStrings.Str936);
 
 				writer.WritePrice(quote.Price, prevPrice, metaInfo, SecurityId);
 				writer.WriteVolume(quote.Volume, metaInfo, SecurityId);
@@ -289,10 +289,10 @@ namespace StockSharp.Algo.Storages
 		private static IEnumerable<QuoteChange> DeserializeQuotes(BitArrayReader reader, QuoteMetaInfo metaInfo, Sides side)
 		{
 			if (reader == null)
-				throw new ArgumentNullException("reader");
+				throw new ArgumentNullException(nameof(reader));
 
 			if (metaInfo == null)
-				throw new ArgumentNullException("metaInfo");
+				throw new ArgumentNullException(nameof(metaInfo));
 
 			var list = new List<QuoteChange>();
 

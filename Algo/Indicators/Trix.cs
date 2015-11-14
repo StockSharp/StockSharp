@@ -55,10 +55,7 @@ namespace StockSharp.Algo.Indicators
 		/// <summary>
 		/// Whether the indicator is set.
 		/// </summary>
-		public override bool IsFormed
-		{
-			get { return _ema1.IsFormed && _ema2.IsFormed && _ema3.IsFormed && _roc.IsFormed; }
-		}
+		public override bool IsFormed => _ema1.IsFormed && _ema2.IsFormed && _ema3.IsFormed && _roc.IsFormed;
 
 		/// <summary>
 		/// To handle the input value.

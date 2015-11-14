@@ -446,7 +446,7 @@ namespace StockSharp.Xaml
 		void ILogListener.WriteMessages(IEnumerable<LogMessage> messages)
 		{
 			if (messages == null)
-				throw new ArgumentNullException("messages");
+				throw new ArgumentNullException(nameof(messages));
 
 			_messages.AddRange(messages);
 		}

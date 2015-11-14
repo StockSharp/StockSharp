@@ -49,7 +49,7 @@ namespace StockSharp.Xaml
 					return;
 
 				if (value == null)
-					throw new ArgumentNullException("value");
+					throw new ArgumentNullException(nameof(value));
 
 				_adapter = value;
 
@@ -60,10 +60,7 @@ namespace StockSharp.Xaml
 			}
 		}
 
-		private Row SelectedItem
-		{
-			get { return PortfoliosCtrl != null ? (Row)PortfoliosCtrl.SelectedItem : null; }
-		}
+		private Row SelectedItem => PortfoliosCtrl != null ? (Row)PortfoliosCtrl.SelectedItem : null;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="PortfolioMessageAdaptersWindow"/>.

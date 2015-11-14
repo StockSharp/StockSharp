@@ -14,7 +14,7 @@ namespace StockSharp.Studio.Core.Commands
 		public BindCommand(T source, IStudioControl control = null)
 		{
 			if (source == null)
-				throw new ArgumentNullException("source");
+				throw new ArgumentNullException(nameof(source));
 
 			Source = source;
 			Control = control;

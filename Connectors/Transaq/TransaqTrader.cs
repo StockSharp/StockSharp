@@ -200,7 +200,7 @@ namespace StockSharp.Transaq
 		public void SubscribeCandles(CandleSeries series, DateTimeOffset from, DateTimeOffset to)
 		{
 			if (series == null)
-				throw new ArgumentNullException("series");
+				throw new ArgumentNullException(nameof(series));
 
 			if (_candleSeries.Values.Contains(series))
 			{

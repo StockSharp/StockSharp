@@ -130,7 +130,7 @@ namespace StockSharp.Algo.Export
 			where TTable : Table<TValue>
 		{
 			if (getTable == null)
-				throw new ArgumentNullException("getTable");
+				throw new ArgumentNullException(nameof(getTable));
 
 			using (var provider = BaseDbProvider.Create(_connection))
 			{

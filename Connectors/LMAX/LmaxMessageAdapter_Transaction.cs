@@ -68,7 +68,7 @@ namespace StockSharp.LMAX
 				case OrderTypes.Execute:
 					throw new NotSupportedException(LocalizedStrings.Str1849Params.Put(message.OrderType));
 				default:
-					throw new ArgumentOutOfRangeException("message", message.OrderType, LocalizedStrings.Str1600);
+					throw new ArgumentOutOfRangeException(nameof(message), message.OrderType, LocalizedStrings.Str1600);
 			}
 		}
 
@@ -120,7 +120,7 @@ namespace StockSharp.LMAX
 					orderType = OrderTypes.Limit;
 
 					if (lmaxOrder.LimitPrice == null)
-						throw new ArgumentException(LocalizedStrings.Str3394Params.Put(transactionId), "lmaxOrder");
+						throw new ArgumentException(LocalizedStrings.Str3394Params.Put(transactionId), nameof(lmaxOrder));
 
 					price = (decimal)lmaxOrder.LimitPrice;
 					break;
@@ -130,7 +130,7 @@ namespace StockSharp.LMAX
 					orderType = OrderTypes.Conditional;
 
 					if (lmaxOrder.StopPrice == null)
-						throw new ArgumentException(LocalizedStrings.Str3395Params.Put(transactionId), "lmaxOrder");
+						throw new ArgumentException(LocalizedStrings.Str3395Params.Put(transactionId), nameof(lmaxOrder));
 
 					price = (decimal)lmaxOrder.StopPrice;
 

@@ -24,7 +24,7 @@ namespace StockSharp.Algo
 		public TimeQuoteChange(QuoteChange quote, QuoteChangeMessage message)
 		{
 			if (quote == null)
-				throw new ArgumentNullException("quote");
+				throw new ArgumentNullException(nameof(quote));
 
 			SecurityId = message.SecurityId;
 			ServerTime = message.ServerTime;

@@ -32,7 +32,7 @@ namespace StockSharp.Algo.Indicators
 		[DisplayNameLoc(LocalizedStrings.Str800Key)]
 		[DescriptionLoc(LocalizedStrings.Str801Key)]
 		[CategoryLoc(LocalizedStrings.GeneralKey)]
-		public SimpleMovingAverage ShortSma { get; private set; }
+		public SimpleMovingAverage ShortSma { get; }
 
 		/// <summary>
 		/// Long moving average.
@@ -41,12 +41,12 @@ namespace StockSharp.Algo.Indicators
 		[DisplayNameLoc(LocalizedStrings.Str798Key)]
 		[DescriptionLoc(LocalizedStrings.Str799Key)]
 		[CategoryLoc(LocalizedStrings.GeneralKey)]
-		public SimpleMovingAverage LongSma { get; private set; }
+		public SimpleMovingAverage LongSma { get; }
 
 		/// <summary>
 		/// Whether the indicator is set.
 		/// </summary>
-		public override bool IsFormed { get { return LongSma.IsFormed; } }
+		public override bool IsFormed => LongSma.IsFormed;
 
 		/// <summary>
 		/// To handle the input value.

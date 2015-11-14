@@ -40,25 +40,16 @@ namespace StockSharp.Xaml
 		/// <summary>
 		/// Order log.
 		/// </summary>
-		public IListEx<OrderLogItem> LogItems
-		{
-			get { return _items; }
-		}
+		public IListEx<OrderLogItem> LogItems => _items;
 
 		/// <summary>
 		/// The selected row.
 		/// </summary>
-		public OrderLogItem SelectedLogItem
-		{
-			get { return SelectedLogItems.FirstOrDefault(); }
-		}
+		public OrderLogItem SelectedLogItem => SelectedLogItems.FirstOrDefault();
 
 		/// <summary>
 		/// Selected rows.
 		/// </summary>
-		public IEnumerable<OrderLogItem> SelectedLogItems
-		{
-			get { return SelectedItems.Cast<OrderLogItem>(); }
-		}
+		public IEnumerable<OrderLogItem> SelectedLogItems => SelectedItems.Cast<OrderLogItem>();
 	}
 }

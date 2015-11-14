@@ -32,10 +32,10 @@ namespace StockSharp.Studio.Controls
 			public Command(MarketDepthControl parent, MarketDepthControlAction action)
 			{
 				if (parent == null)
-					throw new ArgumentNullException("parent");
+					throw new ArgumentNullException(nameof(parent));
 
 				if (action == null)
-					throw new ArgumentNullException("action");
+					throw new ArgumentNullException(nameof(action));
 
 				_parent = parent;
 				_action = action;
@@ -130,7 +130,7 @@ namespace StockSharp.Studio.Controls
 			public MarketDepthControlActionList(MarketDepthControl parent)
 			{
 				if (parent == null)
-					throw new ArgumentNullException("parent");
+					throw new ArgumentNullException(nameof(parent));
 
 				_parent = parent;
 			}
@@ -341,7 +341,7 @@ namespace StockSharp.Studio.Controls
 		private Order CreateOrder(MarketDepthColumns column, Quote quote)
 		{
 			if (quote == null)
-				throw new ArgumentNullException("quote");
+				throw new ArgumentNullException(nameof(quote));
 
 			Sides direction;
 

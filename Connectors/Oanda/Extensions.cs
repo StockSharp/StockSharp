@@ -58,7 +58,7 @@ namespace StockSharp.Oanda
 			var name = _timeFrames.TryGetValue(timeFrame);
 
 			if (name == null)
-				throw new ArgumentOutOfRangeException("timeFrame", timeFrame, LocalizedStrings.Str3439);
+				throw new ArgumentOutOfRangeException(nameof(timeFrame), timeFrame, LocalizedStrings.Str3439);
 
 			return name;
 		}

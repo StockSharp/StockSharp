@@ -261,7 +261,7 @@ namespace StockSharp.Studio
 		public void SendToEmulator(IEnumerable<Message> messages)
 		{
 			if (messages == null)
-				throw new ArgumentNullException("messages");
+				throw new ArgumentNullException(nameof(messages));
 
 			var emu = Adapter.InnerAdapters.OfType<EmulationMessageAdapter>().FirstOrDefault();
 
@@ -332,7 +332,7 @@ namespace StockSharp.Studio
 		private void AddExport(Security security, MarketDataTypes type)
 		{
 			if (security == null)
-				throw new ArgumentNullException("security");
+				throw new ArgumentNullException(nameof(security));
 
 			_exports.SafeAdd(security).SafeAdd(type);
 
@@ -343,7 +343,7 @@ namespace StockSharp.Studio
 		private void RemoveExport(Security security, MarketDataTypes type)
 		{
 			if (security == null)
-				throw new ArgumentNullException("security");
+				throw new ArgumentNullException(nameof(security));
 
 			_exports.SyncDo(d =>
 			{

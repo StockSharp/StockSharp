@@ -17,7 +17,7 @@ namespace StockSharp.Studio.Core
 		public static bool GetIsInteracted(this StrategyContainer strategy)
 		{
 			if (strategy == null)
-				throw new ArgumentNullException("strategy");
+				throw new ArgumentNullException(nameof(strategy));
 
 			return strategy.StrategyInfo.StrategyType != null && strategy.StrategyInfo.StrategyType.GetAttribute<InteractedStrategyAttribute>() != null;
 		}
@@ -25,7 +25,7 @@ namespace StockSharp.Studio.Core
 		public static bool GetIsAutoStart(this StrategyContainer strategy)
 		{
 			if (strategy == null)
-				throw new ArgumentNullException("strategy");
+				throw new ArgumentNullException(nameof(strategy));
 
 			return strategy.StrategyInfo.StrategyType != null && strategy.StrategyInfo.StrategyType.GetAttribute<AutoStartAttribute>() != null;
 		}
@@ -33,7 +33,7 @@ namespace StockSharp.Studio.Core
 		public static bool GetIsNoEmulation(this StrategyInfo strategyInfo)
 		{
 			if (strategyInfo == null)
-				throw new ArgumentNullException("strategyInfo");
+				throw new ArgumentNullException(nameof(strategyInfo));
 
 			return strategyInfo.Type == StrategyInfoTypes.Analytics || 
 				strategyInfo.StrategyType == null || 

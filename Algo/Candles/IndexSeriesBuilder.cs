@@ -31,24 +31,21 @@ namespace StockSharp.Algo.Candles
 
 			public DateTimeOffset OpenTime { get; private set; }
 			public DateTimeOffset CloseTime { get; private set; }
-			public Candle[] Candles { get; private set; }
+			public Candle[] Candles { get; }
 
-			public bool IsFilled
-			{
-				get { return _counter <= 0; }
-			}
+			public bool IsFilled => _counter <= 0;
 
 			public void AddCandle(int securityIndex, Candle candle)
 			{
 				if (candle == null)
-					throw new ArgumentNullException("candle");
+					throw new ArgumentNullException(nameof(candle));
 
 				if (Candles[securityIndex] != null)
 				{
 					if (_isSparseBuffer)
 						return;
 					
-					throw new ArgumentException(LocalizedStrings.Str654Params.Put(candle.OpenTime), "candle");
+					throw new ArgumentException(LocalizedStrings.Str654Params.Put(candle.OpenTime), nameof(candle));
 				}
 
 				Candles[securityIndex] = candle;
@@ -74,7 +71,7 @@ namespace StockSharp.Algo.Candles
 			public void Fill(CandleBuffer prevBuffer)
 			{
 				if (prevBuffer == null)
-					throw new ArgumentNullException("prevBuffer");
+					throw new ArgumentNullException(nameof(prevBuffer));
 
 				for (var i = 0; i < Candles.Length; i++)
 				{
@@ -92,7 +89,7 @@ namespace StockSharp.Algo.Candles
 			private Candle CreateFilledCandle(Candle candle)
 			{
 				if (candle == null)
-					throw new ArgumentNullException("candle");
+					throw new ArgumentNullException(nameof(candle));
 
 				var filledCandle = candle.GetType().CreateInstance<Candle>();
 
@@ -131,7 +128,7 @@ namespace StockSharp.Algo.Candles
 		public IndexCandleBuilder(IndexSecurity security)
 		{
 			if (security == null)
-				throw new ArgumentNullException("security");
+				throw new ArgumentNullException(nameof(security));
 
 			_security = security;
 			FillSecurityIndecies(_security);
@@ -374,10 +371,10 @@ namespace StockSharp.Algo.Candles
 		private static object CloneArg(object arg, Security security)
 		{
 			if (arg == null)
-				throw new ArgumentNullException("arg");
+				throw new ArgumentNullException(nameof(arg));
 
 			if (security == null)
-				throw new ArgumentNullException("security");
+				throw new ArgumentNullException(nameof(security));
 
 			var clone = arg;
 			clone.DoIf<object, ICloneable>(c => clone = c.Clone());

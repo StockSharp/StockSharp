@@ -77,7 +77,7 @@ namespace StockSharp.Algo.Storages
 			: base(securityId, 74, MarketDataVersions.Version53)
 		{
 			if (arg == null)
-				throw new ArgumentNullException("arg");
+				throw new ArgumentNullException(nameof(arg));
 
 			_arg = arg;
 		}

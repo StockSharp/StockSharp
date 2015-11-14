@@ -120,10 +120,10 @@ namespace StockSharp.Xaml
 		private static T Do<T>(string file, Window owner, Func<DiskSdkClient, string, T> action)
 		{
 			if (file.IsEmpty())
-				throw new ArgumentNullException("file");
+				throw new ArgumentNullException(nameof(file));
 
 			if (action == null)
-				throw new ArgumentNullException("action");
+				throw new ArgumentNullException(nameof(action));
 
 			if (!File.Exists(file))
 				throw new FileNotFoundException(LocalizedStrings.Str1575, file);

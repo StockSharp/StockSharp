@@ -23,7 +23,7 @@ namespace StockSharp.Algo.Strategies.Reporting
 			: this(new[] { strategy }, fileName)
 		{
 			if (strategy == null)
-				throw new ArgumentNullException("strategy");
+				throw new ArgumentNullException(nameof(strategy));
 		}
 
 		/// <summary>

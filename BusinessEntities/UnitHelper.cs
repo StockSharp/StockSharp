@@ -43,7 +43,7 @@ namespace StockSharp.BusinessEntities
 		public static Unit Pips(this decimal value, Security security)
 		{
 			if (security == null)
-				throw new ArgumentNullException("security");
+				throw new ArgumentNullException(nameof(security));
 
 			return new Unit(value, UnitTypes.Step, type => GetTypeValue(security, type));
 		}
@@ -79,7 +79,7 @@ namespace StockSharp.BusinessEntities
 		public static Unit Points(this decimal value, Security security)
 		{
 			if (security == null)
-				throw new ArgumentNullException("security");
+				throw new ArgumentNullException(nameof(security));
 
 			return new Unit(value, UnitTypes.Point, type => GetTypeValue(security, type));
 		}
@@ -110,10 +110,10 @@ namespace StockSharp.BusinessEntities
 		internal static decimal ShrinkPrice(this Security security, decimal price)
 		{
 			if (security == null)
-				throw new ArgumentNullException("security");
+				throw new ArgumentNullException(nameof(security));
 
 			if (security.PriceStep == null)
-				throw new ArgumentException(LocalizedStrings.Str1546, "security");
+				throw new ArgumentException(LocalizedStrings.Str1546, nameof(security));
 
 			return price.Round(security.PriceStep ?? 1m, security.Decimals ?? 0, null);
 		}
@@ -127,7 +127,7 @@ namespace StockSharp.BusinessEntities
 		public static Unit SetSecurity(this Unit unit, Security security)
 		{
 			if (unit == null)
-				throw new ArgumentNullException("unit");
+				throw new ArgumentNullException(nameof(unit));
 
 			unit.GetTypeValue = type => GetTypeValue(security, type);
 
@@ -140,16 +140,16 @@ namespace StockSharp.BusinessEntities
 			{
 				case UnitTypes.Point:
 					if (security == null)
-						throw new ArgumentNullException("security");
+						throw new ArgumentNullException(nameof(security));
 
 					return security.StepPrice;
 				case UnitTypes.Step:
 					if (security == null)
-						throw new ArgumentNullException("security");
+						throw new ArgumentNullException(nameof(security));
 
 					return security.PriceStep;
 				default:
-					throw new ArgumentOutOfRangeException("type", type, LocalizedStrings.Str1291);
+					throw new ArgumentOutOfRangeException(nameof(type), type, LocalizedStrings.Str1291);
 			}
 		}
 	}

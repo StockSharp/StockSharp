@@ -51,7 +51,7 @@ namespace StockSharp.Algo
 		public static IEnumerable<string> GetSecurityIds(this Expression expression)
 		{
 			if (expression == null)
-				throw new ArgumentNullException("expression");
+				throw new ArgumentNullException(nameof(expression));
 
 			return expression.ParsedExpression.GetSecurityIds().Distinct(StringComparer.CurrentCultureIgnoreCase);
 		}
@@ -59,7 +59,7 @@ namespace StockSharp.Algo
 		private static IEnumerable<string> GetSecurityIds(this LogicalExpression expression)
 		{
 			if (expression == null)
-				throw new ArgumentNullException("expression");
+				throw new ArgumentNullException(nameof(expression));
 
 			if (expression is BinaryExpression)
 			{

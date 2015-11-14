@@ -24,14 +24,14 @@ namespace StockSharp.InteractiveBrokers
 		private void RegisterOrder(OrderRegisterMessage message)
 		{
 			if (message == null)
-				throw new ArgumentNullException("message");
+				throw new ArgumentNullException(nameof(message));
 
 			if (message.OrderType == OrderTypes.Execute)
 			{
 				var ibCon = (IBOrderCondition)message.Condition;
 
 				if (ibCon == null)
-					throw new ArgumentException(LocalizedStrings.Str2514Params.Put(message.TransactionId), "message");
+					throw new ArgumentException(LocalizedStrings.Str2514Params.Put(message.TransactionId), nameof(message));
 
 				ExerciseOptions(message, ibCon.OptionExercise.IsExercise, message.Volume, message.PortfolioName, ibCon.OptionExercise.IsOverride);
 				return;
@@ -396,7 +396,7 @@ namespace StockSharp.InteractiveBrokers
 		private void SubscribePortfolio(string portfolioName, bool isSubscribe)
 		{
 			if (portfolioName.IsEmpty())
-				throw new ArgumentNullException("portfolioName");
+				throw new ArgumentNullException(nameof(portfolioName));
 
 			ProcessRequest(RequestMessages.RequestAccountData, 0, ServerVersions.V2,
 				socket =>
@@ -413,7 +413,7 @@ namespace StockSharp.InteractiveBrokers
 		private void ReqeustMyTrades(long requestId, MyTradeFilter filter)
 		{
 			if (filter == null)
-				throw new ArgumentNullException("filter");
+				throw new ArgumentNullException(nameof(filter));
 
 			ProcessRequest(RequestMessages.RequestTrades, 0, ServerVersions.V3, socket =>
 			{
@@ -480,7 +480,7 @@ namespace StockSharp.InteractiveBrokers
 		private void SubscribeAccountSummary(long requestId, string group, IEnumerable<AccountSummaryTag> tags)
 		{
 			if (tags == null)
-				throw new ArgumentNullException("tags");
+				throw new ArgumentNullException(nameof(tags));
 
 			ProcessRequest(RequestMessages.SubscribeAccountSummary, ServerVersions.V67, ServerVersions.V1,
 				socket =>

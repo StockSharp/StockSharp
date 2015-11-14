@@ -13,7 +13,7 @@
 			: base(storage)
 		{
 			if (session == null)
-				throw new ArgumentNullException("session");
+				throw new ArgumentNullException(nameof(session));
 
 			Session = session;
 		}

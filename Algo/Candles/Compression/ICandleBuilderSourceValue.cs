@@ -55,32 +55,17 @@ namespace StockSharp.Algo.Candles.Compression
 		/// <summary>
 		/// Tick trade.
 		/// </summary>
-		public Trade Trade { get; private set; }
+		public Trade Trade { get; }
 
-		Security ICandleBuilderSourceValue.Security
-		{
-			get { return Trade.Security; }
-		}
+		Security ICandleBuilderSourceValue.Security => Trade.Security;
 
-		DateTimeOffset ICandleBuilderSourceValue.Time
-		{
-			get { return Trade.Time; }
-		}
+		DateTimeOffset ICandleBuilderSourceValue.Time => Trade.Time;
 
-		decimal ICandleBuilderSourceValue.Price
-		{
-			get { return Trade.Price; }
-		}
+		decimal ICandleBuilderSourceValue.Price => Trade.Price;
 
-		decimal ICandleBuilderSourceValue.Volume
-		{
-			get { return Trade.Volume; }
-		}
+		decimal ICandleBuilderSourceValue.Volume => Trade.Volume;
 
-		Sides? ICandleBuilderSourceValue.OrderDirection
-		{
-			get { return Trade.OrderDirection; }
-		}
+		Sides? ICandleBuilderSourceValue.OrderDirection => Trade.OrderDirection;
 	}
 
 	/// <summary>
@@ -103,34 +88,19 @@ namespace StockSharp.Algo.Candles.Compression
 		/// <summary>
 		/// Tick trade.
 		/// </summary>
-		public ExecutionMessage Tick { get; private set; }
+		public ExecutionMessage Tick { get; }
 
 		private readonly Security _security;
 
-		Security ICandleBuilderSourceValue.Security
-		{
-			get { return _security; }
-		}
+		Security ICandleBuilderSourceValue.Security => _security;
 
-		DateTimeOffset ICandleBuilderSourceValue.Time
-		{
-			get { return Tick.ServerTime; }
-		}
+		DateTimeOffset ICandleBuilderSourceValue.Time => Tick.ServerTime;
 
-		decimal ICandleBuilderSourceValue.Price
-		{
-			get { return Tick.TradePrice ?? 0; }
-		}
+		decimal ICandleBuilderSourceValue.Price => Tick.TradePrice ?? 0;
 
-		decimal ICandleBuilderSourceValue.Volume
-		{
-			get { return Tick.Volume ?? 0; }
-		}
+		decimal ICandleBuilderSourceValue.Volume => Tick.Volume ?? 0;
 
-		Sides? ICandleBuilderSourceValue.OrderDirection
-		{
-			get { return Tick.OriginSide; }
-		}
+		Sides? ICandleBuilderSourceValue.OrderDirection => Tick.OriginSide;
 	}
 
 	/// <summary>
@@ -151,17 +121,11 @@ namespace StockSharp.Algo.Candles.Compression
 		/// <summary>
 		/// Market depth.
 		/// </summary>
-		public MarketDepth Depth { get; private set; }
+		public MarketDepth Depth { get; }
 
-		Security ICandleBuilderSourceValue.Security
-		{
-			get { return Depth.Security; }
-		}
+		Security ICandleBuilderSourceValue.Security => Depth.Security;
 
-		DateTimeOffset ICandleBuilderSourceValue.Time
-		{
-			get { return Depth.LastChangeTime; }
-		}
+		DateTimeOffset ICandleBuilderSourceValue.Time => Depth.LastChangeTime;
 
 		decimal ICandleBuilderSourceValue.Price
 		{
@@ -172,14 +136,8 @@ namespace StockSharp.Algo.Candles.Compression
 			}
 		}
 
-		decimal ICandleBuilderSourceValue.Volume
-		{
-			get { return Depth.TotalBidsVolume - Depth.TotalAsksVolume; }
-		}
+		decimal ICandleBuilderSourceValue.Volume => Depth.TotalBidsVolume - Depth.TotalAsksVolume;
 
-		Sides? ICandleBuilderSourceValue.OrderDirection
-		{
-			get { return null; }
-		}
+		Sides? ICandleBuilderSourceValue.OrderDirection => null;
 	}
 }

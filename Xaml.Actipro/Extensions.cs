@@ -106,7 +106,7 @@ namespace StockSharp.Xaml.Actipro
 		public static string SaveLayout(this DockSite dockSite, bool toolWindowOnly = false)
 		{
 			if (dockSite == null)
-				throw new ArgumentNullException("dockSite");
+				throw new ArgumentNullException(nameof(dockSite));
 
 			return CultureInfo.InvariantCulture.DoInCulture(() => CreateDockSiteSerializer(toolWindowOnly).SaveToString(dockSite));
 		}
@@ -120,10 +120,10 @@ namespace StockSharp.Xaml.Actipro
 		public static void LoadLayout(this DockSite dockSite, string layout, bool toolWindowOnly = false)
 		{
 			if (dockSite == null)
-				throw new ArgumentNullException("dockSite");
+				throw new ArgumentNullException(nameof(dockSite));
 
 			if (layout == null)
-				throw new ArgumentNullException("layout");
+				throw new ArgumentNullException(nameof(layout));
 
 			CultureInfo.InvariantCulture.DoInCulture(() => CreateDockSiteSerializer(toolWindowOnly).LoadFromString(layout, dockSite));
 		}
@@ -141,7 +141,7 @@ namespace StockSharp.Xaml.Actipro
 		public static string SaveLayout(this NavigationBar navigationBar)
 		{
 			if (navigationBar == null)
-				throw new ArgumentNullException("navigationBar");
+				throw new ArgumentNullException(nameof(navigationBar));
 
 			return CultureInfo.InvariantCulture.DoInCulture(() => CreateNavigationSerializer().SaveToString(navigationBar));
 		}
@@ -154,10 +154,10 @@ namespace StockSharp.Xaml.Actipro
 		public static void LoadLayout(this NavigationBar navigationBar, string layout)
 		{
 			if (navigationBar == null)
-				throw new ArgumentNullException("navigationBar");
+				throw new ArgumentNullException(nameof(navigationBar));
 
 			if (layout == null)
-				throw new ArgumentNullException("layout");
+				throw new ArgumentNullException(nameof(layout));
 
 			CultureInfo.InvariantCulture.DoInCulture(() => CreateNavigationSerializer().LoadFromString(layout, navigationBar));
 		}

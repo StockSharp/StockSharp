@@ -76,35 +76,23 @@ namespace StockSharp.Algo.Strategies.Analytics
 		/// <summary>
 		/// Current time, which will be passed to the <see cref="LogMessage.Time"/>.
 		/// </summary>
-		public override DateTimeOffset CurrentTime
-		{
-			get { return TimeHelper.NowWithOffset; }
-		}
+		public override DateTimeOffset CurrentTime => TimeHelper.NowWithOffset;
 
 		/// <summary>
 		/// Chart.
 		/// </summary>
 		[CLSCompliant(false)]
-		protected SciChartSurface Chart
-		{
-			get { return Environment.GetValue<SciChartSurface>("Chart"); }
-		}
+		protected SciChartSurface Chart => Environment.GetValue<SciChartSurface>("Chart");
 
 		/// <summary>
 		/// Table.
 		/// </summary>
-		protected UniversalGrid Grid
-		{
-			get { return Environment.GetValue<UniversalGrid>("Grid"); }
-		}
+		protected UniversalGrid Grid => Environment.GetValue<UniversalGrid>("Grid");
 
 		/// <summary>
 		/// Data format.
 		/// </summary>
-		protected StorageFormats StorageFormat
-		{
-			get { return Environment.GetValue<StorageFormats>("StorageFormat"); }
-		}
+		protected StorageFormats StorageFormat => Environment.GetValue<StorageFormats>("StorageFormat");
 
 		/// <summary>
 		/// The method is called when the <see cref="Strategy.Start"/> method has been called and the <see cref="Strategy.ProcessState"/> state has been taken the <see cref="ProcessStates.Started"/> value.

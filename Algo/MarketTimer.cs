@@ -28,10 +28,10 @@ namespace StockSharp.Algo
 		public MarketTimer(IConnector connector, Action activated)
 		{
 			if (connector == null)
-				throw new ArgumentNullException("connector");
+				throw new ArgumentNullException(nameof(connector));
 
 			if (activated == null)
-				throw new ArgumentNullException("activated");
+				throw new ArgumentNullException(nameof(activated));
 
 			_connector = connector;
 			_activated = activated;
@@ -45,7 +45,7 @@ namespace StockSharp.Algo
 		public MarketTimer Interval(TimeSpan interval)
 		{
 			if (interval <= TimeSpan.Zero)
-				throw new ArgumentOutOfRangeException("interval", interval, LocalizedStrings.Str944);
+				throw new ArgumentOutOfRangeException(nameof(interval), interval, LocalizedStrings.Str944);
 
 			lock (_syncLock)
 			{

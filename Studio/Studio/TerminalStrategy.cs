@@ -286,7 +286,7 @@ namespace StockSharp.Studio
 		private static int ChangeSubscribers(SynchronizedDictionary<Security, int> subscribers, Security subscriber, int delta)
 		{
 			if (subscribers == null)
-				throw new ArgumentNullException("subscribers");
+				throw new ArgumentNullException(nameof(subscribers));
 
 			lock (subscribers.SyncRoot)
 			{

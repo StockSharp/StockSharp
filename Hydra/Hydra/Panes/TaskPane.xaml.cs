@@ -171,7 +171,7 @@ namespace StockSharp.Hydra.Panes
 			public bool GetIsEnabled(Type dataType)
 			{
 				if (dataType == null)
-					throw new ArgumentNullException("dataType");
+					throw new ArgumentNullException(nameof(dataType));
 
 				return TaskSecurity.MarketDataTypesSet.Contains(dataType);
 			}
@@ -179,7 +179,7 @@ namespace StockSharp.Hydra.Panes
 			public void SetIsEnabled(Type dataType, bool value)
 			{
 				if (dataType == null)
-					throw new ArgumentNullException("dataType");
+					throw new ArgumentNullException(nameof(dataType));
 
 				var set = TaskSecurity.MarketDataTypesSet;
 
@@ -253,7 +253,7 @@ namespace StockSharp.Hydra.Panes
 		private TaskVisualSecurity ToVisualSecurity(HydraTaskSecurity security)
 		{
 			if (security == null)
-				throw new ArgumentNullException("security");
+				throw new ArgumentNullException(nameof(security));
 
 			return _visualSecurities.SafeAdd(security, key => new TaskVisualSecurity(key));
 		}
@@ -371,7 +371,7 @@ namespace StockSharp.Hydra.Panes
 			public SelectableObject(CandleSeries value)
 			{
 				if (value == null)
-					throw new ArgumentNullException("value");
+					throw new ArgumentNullException(nameof(value));
 
 				Value = value;
 			}

@@ -63,7 +63,7 @@ namespace StockSharp.Logging
 					Trace.TraceError(str);
 					break;
 				default:
-					throw new ArgumentOutOfRangeException("level", level, LocalizedStrings.UnknownLevelLog);
+					throw new ArgumentOutOfRangeException(nameof(level), level, LocalizedStrings.UnknownLevelLog);
 			}
 
 			builder.Clear();

@@ -241,7 +241,7 @@ namespace SampleTransaq
 		private static void ShowOrHide(Window window)
 		{
 			if (window == null)
-				throw new ArgumentNullException("window");
+				throw new ArgumentNullException(nameof(window));
 
 			if (window.Visibility == Visibility.Visible)
 				window.Hide();

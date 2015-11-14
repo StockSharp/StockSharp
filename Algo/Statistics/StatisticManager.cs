@@ -122,10 +122,7 @@ namespace StockSharp.Algo.Statistics
 		/// <summary>
 		/// Calculated parameters.
 		/// </summary>
-		public ISynchronizedCollection<IStatisticParameter> Parameters
-		{
-			get { return _parameters; }
-		}
+		public ISynchronizedCollection<IStatisticParameter> Parameters => _parameters;
 
 		/// <summary>
 		/// To add the new profit-loss value.

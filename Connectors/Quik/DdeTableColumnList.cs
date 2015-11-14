@@ -52,7 +52,7 @@ namespace StockSharp.Quik
 		protected override bool OnAdding(DdeTableColumn item)
 		{
 			if (item == null)
-				throw new ArgumentNullException("item");
+				throw new ArgumentNullException(nameof(item));
 
 			// разные QuikTrader могут иметь свои настройки и уникальные значения для DdeTableColumn.Index
 			//
@@ -64,14 +64,14 @@ namespace StockSharp.Quik
 				if (item.TableType != DdeTableTypes.None)
 				{
 					if (item.TableType != TableType())
-						throw new ArgumentException(LocalizedStrings.Str1704Params.Put(item.Name), "item");
+						throw new ArgumentException(LocalizedStrings.Str1704Params.Put(item.Name), nameof(item));
 				}
 				else
 					item.TableType = TableType();
 			}
 
 			if (Contains(item))
-				throw new ArgumentException(LocalizedStrings.Str1705Params.Put(item.Name), "item");
+				throw new ArgumentException(LocalizedStrings.Str1705Params.Put(item.Name), nameof(item));
 
 			TryAddAsExtended(item);
 
@@ -86,7 +86,7 @@ namespace StockSharp.Quik
 		protected override bool OnRemoving(DdeTableColumn item)
 		{
 			if (item == null)
-				throw new ArgumentNullException("item");
+				throw new ArgumentNullException(nameof(item));
 
 			if (item.IsMandatory)
 				throw new ArgumentException(LocalizedStrings.Str1706Params.Put(item.Name));
@@ -114,10 +114,10 @@ namespace StockSharp.Quik
 		protected override bool OnInserting(int index, DdeTableColumn item)
 		{
 			if (item == null)
-				throw new ArgumentNullException("item");
+				throw new ArgumentNullException(nameof(item));
 
 			if (Contains(item))
-				throw new ArgumentException(LocalizedStrings.Str1705Params.Put(item.Name), "item");
+				throw new ArgumentException(LocalizedStrings.Str1705Params.Put(item.Name), nameof(item));
 
 			// разные QuikTrader могут иметь свои настройки и уникальные значения для DdeTableColumn.Index
 			//
@@ -142,7 +142,7 @@ namespace StockSharp.Quik
 		private void TryAddAsExtended(DdeTableColumn column)
 		{
 			if (column == null)
-				throw new ArgumentNullException("column");
+				throw new ArgumentNullException(nameof(column));
 
 			if (column.IsMandatory)
 				return;

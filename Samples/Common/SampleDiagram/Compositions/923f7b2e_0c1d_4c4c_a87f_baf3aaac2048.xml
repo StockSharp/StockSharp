@@ -239,7 +239,7 @@
                       <key>Value</key>
                       <value>
                         <Type type="string">string</Type>
-                        <Value type="string">Пересечение</Value>
+                        <Value type="string">Intersection</Value>
                       </value>
                     </KeyValuePairBeginStringAndObjectEnd>
                   </Value>
@@ -306,7 +306,7 @@
                 </value>
               </KeyValuePairBeginStringAndObjectEnd>
               <KeyValuePairBeginStringAndObjectEnd>
-                <key>УсловиеOperator</key>
+                <key>ComparisonOperator</key>
                 <value>
                   <Type type="string">Ecng.Serialization.SettingsStorage, Ecng.Serialization</Type>
                   <Value type="Ecng.Serialization.SettingsStorage, Ecng.Serialization">
@@ -321,7 +321,7 @@
                 </value>
               </KeyValuePairBeginStringAndObjectEnd>
               <KeyValuePairBeginStringAndObjectEnd>
-                <key>УсловиеПредOperator</key>
+                <key>PrevComparisonOperator</key>
                 <value>
                   <Type type="string">Ecng.Serialization.SettingsStorage, Ecng.Serialization</Type>
                   <Value type="Ecng.Serialization.SettingsStorage, Ecng.Serialization">
@@ -554,7 +554,7 @@
                                     <key>Value</key>
                                     <value>
                                       <Type type="string">string</Type>
-                                      <Value type="string">Вх1</Value>
+                                      <Value type="string">In1</Value>
                                     </value>
                                   </KeyValuePairBeginStringAndObjectEnd>
                                 </Value>
@@ -852,7 +852,7 @@
                                     <key>Value</key>
                                     <value>
                                       <Type type="string">string</Type>
-                                      <Value type="string">Вх2</Value>
+                                      <Value type="string">Out2</Value>
                                     </value>
                                   </KeyValuePairBeginStringAndObjectEnd>
                                 </Value>
@@ -1150,7 +1150,7 @@
                                     <key>Value</key>
                                     <value>
                                       <Type type="string">string</Type>
-                                      <Value type="string">ПредВх1</Value>
+                                      <Value type="string">PrevIn1</Value>
                                     </value>
                                   </KeyValuePairBeginStringAndObjectEnd>
                                 </Value>
@@ -1463,7 +1463,7 @@
                                     <key>Value</key>
                                     <value>
                                       <Type type="string">string</Type>
-                                      <Value type="string">ПредВх2</Value>
+                                      <Value type="string">PrevIn2</Value>
                                     </value>
                                   </KeyValuePairBeginStringAndObjectEnd>
                                 </Value>
@@ -1842,7 +1842,7 @@
                                     <key>Value</key>
                                     <value>
                                       <Type type="string">string</Type>
-                                      <Value type="string">Условие</Value>
+                                      <Value type="string">Comparison</Value>
                                     </value>
                                   </KeyValuePairBeginStringAndObjectEnd>
                                 </Value>
@@ -2359,7 +2359,7 @@
                                     <key>Value</key>
                                     <value>
                                       <Type type="string">string</Type>
-                                      <Value type="string">УсловиеПред</Value>
+                                      <Value type="string">PrevComparison</Value>
                                     </value>
                                   </KeyValuePairBeginStringAndObjectEnd>
                                 </Value>
@@ -2876,7 +2876,7 @@
                                     <key>Value</key>
                                     <value>
                                       <Type type="string">string</Type>
-                                      <Value type="string">И</Value>
+                                      <Value type="string">And</Value>
                                     </value>
                                   </KeyValuePairBeginStringAndObjectEnd>
                                 </Value>

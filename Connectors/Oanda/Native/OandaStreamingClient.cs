@@ -39,16 +39,16 @@ namespace StockSharp.Oanda.Native
 			public StreamingWorker(OandaStreamingClient parent, string methodName, Action<QueryString, TData[]> fillQuery, Action<TResponse> newLine)
 			{
 				if (parent == null)
-					throw new ArgumentNullException("parent");
+					throw new ArgumentNullException(nameof(parent));
 
 				if (methodName.IsEmpty())
-					throw new ArgumentNullException("methodName");
+					throw new ArgumentNullException(nameof(methodName));
 
 				if (fillQuery == null)
-					throw new ArgumentNullException("fillQuery");
+					throw new ArgumentNullException(nameof(fillQuery));
 
 				if (newLine == null)
-					throw new ArgumentNullException("newLine");
+					throw new ArgumentNullException(nameof(newLine));
 
 				_parent = parent;
 				_methodName = methodName;
@@ -285,7 +285,7 @@ namespace StockSharp.Oanda.Native
 		public OandaStreamingClient(OandaServers server, SecureString token, Func<string, int> getAccountId)
 		{
 			if (getAccountId == null)
-				throw new ArgumentNullException("getAccountId");
+				throw new ArgumentNullException(nameof(getAccountId));
 
 			switch (server)
 			{
@@ -297,18 +297,18 @@ namespace StockSharp.Oanda.Native
 					break;
 				case OandaServers.Practice:
 					if (token == null)
-						throw new ArgumentNullException("token");
+						throw new ArgumentNullException(nameof(token));
 
 					_streamingUrl = "https://stream-fxpractice.oanda.com";
 					break;
 				case OandaServers.Real:
 					if (token == null)
-						throw new ArgumentNullException("token");
+						throw new ArgumentNullException(nameof(token));
 
 					_streamingUrl = "https://stream-fxtrade.oanda.com";
 					break;
 				default:
-					throw new ArgumentOutOfRangeException("server");
+					throw new ArgumentOutOfRangeException(nameof(server));
 			}
 
 			_token = token;

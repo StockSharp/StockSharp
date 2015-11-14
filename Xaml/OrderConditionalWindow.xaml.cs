@@ -77,7 +77,7 @@ namespace StockSharp.Xaml
 			set
 			{
 				if (value == null)
-					throw new ArgumentNullException("value");
+					throw new ArgumentNullException(nameof(value));
 
 				if (value.Type != OrderTypes.Conditional)
 					throw new NotSupportedException(LocalizedStrings.Str2872Params.Put(value.Type));

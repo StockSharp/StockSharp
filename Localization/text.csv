@@ -1,3 +1,15 @@
+BoxChartSettings;Box chart settings;Настройки боксового графика
+ClusterProfileSettings;Cluster profile chart settings;Настройки графика кластерного профиля
+PriceStepForChartElement;Price step for this chart element;Шаг цены для данного элемена графика
+TimeframeForChartElement;Timeframe for this chart element;Таймфрейм для данного элемена графика
+Timeframe2Multiplier;Timeframe2 multiplier;Мультипликатор 2-го таймфрейма
+Timeframe3Multiplier;Timeframe3 multiplier;Мультипликатор 3-го таймфрейма
+TimeframeMultiplierDescr;A multiplier which is applied to the first timeframe to calculate grouping timeframe;Мультипликатор, применяемый к основному таймфрейму для получения таймфрейма группировки
+Timeframe2GridColor;Timeframe2 grid color;Цвет сетки 2-го таймфрейма
+Timeframe3GridColor;Timeframe3 grid color;Цвет сетки 3-го таймфрейма
+Timeframe2FrameColor;Timeframe2 frame color;Цвет рамки 2-го таймфрейма
+MaxVolumeColor;Max volume color;Цвет максимального объема
+ClusterColor;Cluster color;Цвет кластера
 CannotCreateConsoleWindow;Cannot create a console window.;Невозможно создать консольное окно.
 UnknownLevelLog;Unknown level of logs.;Неизвестный уровень логов.
 NameFileNotContainFileName;Name of file {0} does not contain a file name.;Название файла {0} не содержит имя файла.
@@ -1236,9 +1248,9 @@ Str1334;Total working time;Общее время работы:
 Str1335;Total execution time:;Общее время исполнения:
 Str1340;Strategy parameters:;Параметры стратегии:
 Str1341;Order price;Цена заявки
-Str1342;Profit in rubles;Прибыль в рублях
+Str1342;Profit in currency;Прибыль в деньгах
 Str1343;Profit in points;Прибыль в пунктах
-Str1344;Profit in rubles (total);Прибыль в рублях (суммарная)
+Str1344;Profit in currency (total);Прибыль в деньгах (суммарная)
 Str1345;Profit in points (total);Прибыль в пунктах (суммарная)
 Str1346;Registered;Зарегистрирована
 Str1347;Changed;Изменена

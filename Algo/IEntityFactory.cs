@@ -149,10 +149,10 @@ namespace StockSharp.Algo
 		public virtual Position CreatePosition(Portfolio portfolio, Security security)
 		{
 			if (portfolio == null)
-				throw new ArgumentNullException("portfolio");
+				throw new ArgumentNullException(nameof(portfolio));
 
 			if (security == null)
-				throw new ArgumentNullException("security");
+				throw new ArgumentNullException(nameof(security));
 
 			return new Position
 			{

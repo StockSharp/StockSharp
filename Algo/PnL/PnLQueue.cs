@@ -121,7 +121,7 @@ namespace StockSharp.Algo.PnL
 		public PnLInfo Process(ExecutionMessage trade)
 		{
 			if (trade == null)
-				throw new ArgumentNullException("trade");
+				throw new ArgumentNullException(nameof(trade));
 
 			var closedVolume = 0m;
 			var pnl = 0m;

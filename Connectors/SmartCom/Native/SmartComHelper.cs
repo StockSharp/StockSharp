@@ -37,14 +37,14 @@ namespace StockSharp.SmartCom.Native
 				case 0:
 					return null;
 				default:
-					throw new ArgumentOutOfRangeException("action", action, LocalizedStrings.Str1882);
+					throw new ArgumentOutOfRangeException(nameof(action), action, LocalizedStrings.Str1882);
 			}
 		}
 
 		public static SmartOrderType GetSmartOrderType(this OrderRegisterMessage order)
 		{
 			if (order == null)
-				throw new ArgumentNullException("order");
+				throw new ArgumentNullException(nameof(order));
 
 			switch (order.OrderType)
 			{
@@ -55,7 +55,7 @@ namespace StockSharp.SmartCom.Native
 				case OrderTypes.Conditional:
 					return order.Price != 0 ? SmartOrderType.StopLimit : SmartOrderType.Stop;
 				default:
-					throw new ArgumentOutOfRangeException("order");
+					throw new ArgumentOutOfRangeException(nameof(order));
 			}
 		}
 
@@ -71,7 +71,7 @@ namespace StockSharp.SmartCom.Native
 				case SmartOrderType.StopLimit:
 					return OrderTypes.Conditional;
 				default:
-					throw new ArgumentOutOfRangeException("smartType", smartType, LocalizedStrings.Str1883);
+					throw new ArgumentOutOfRangeException(nameof(smartType), smartType, LocalizedStrings.Str1883);
 			}
 		}
 

@@ -20,7 +20,7 @@ namespace StockSharp.Algo.Candles
 				Range = range;
 			}
 
-			public TSource Source { get; private set; }
+			public TSource Source { get; }
 			public Range<DateTimeOffset> Range { get; private set; }
 
 			public override string ToString()
@@ -44,19 +44,19 @@ namespace StockSharp.Algo.Candles
 		public CandleSourceEnumerator(CandleSeries series, DateTimeOffset from, DateTimeOffset to, IEnumerable<TSource> sources, Func<TValue, DateTimeOffset> processing, Action stopped)
 		{
 			if (series == null)
-				throw new ArgumentNullException("series");
+				throw new ArgumentNullException(nameof(series));
 
 			if (from >= to)
-				throw new ArgumentOutOfRangeException("to", to, LocalizedStrings.Str635Params.Put(from));
+				throw new ArgumentOutOfRangeException(nameof(to), to, LocalizedStrings.Str635Params.Put(from));
 
 			if (sources == null)
-				throw new ArgumentNullException("sources");
+				throw new ArgumentNullException(nameof(sources));
 
 			if (processing == null)
-				throw new ArgumentNullException("processing");
+				throw new ArgumentNullException(nameof(processing));
 
 			if (stopped == null)
-				throw new ArgumentNullException("stopped");
+				throw new ArgumentNullException(nameof(stopped));
 
 			var info = new List<SourceInfo>();
 

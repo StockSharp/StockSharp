@@ -7,7 +7,7 @@ namespace StockSharp.Studio.Core.Commands
 		public ControlChangedCommand(IStudioControl control)
 		{
 			if (control == null)
-				throw new ArgumentNullException("control");
+				throw new ArgumentNullException(nameof(control));
 
 			Control = control;
 		}

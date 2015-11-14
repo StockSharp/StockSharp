@@ -30,7 +30,7 @@ namespace StockSharp.Algo.Export
 			: base(security, arg, isCancelled, drive.Path)
 		{
 			if (drive == null)
-				throw new ArgumentNullException("drive");
+				throw new ArgumentNullException(nameof(drive));
 
 			_drive = drive;
 		}

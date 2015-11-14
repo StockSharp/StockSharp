@@ -156,7 +156,7 @@ namespace StockSharp.Xaml.Actipro.Code
 		/// <summary>
 		/// References.
 		/// </summary>
-		public IList<CodeReference> References { get; private set; }
+		public IList<CodeReference> References { get; }
 
 		/// <summary>
 		/// The links update event.
@@ -191,7 +191,7 @@ namespace StockSharp.Xaml.Actipro.Code
 		public void ShowCompilationResult(CompilationResult result, bool isRunning)
 		{
 			if (result == null)
-				throw new ArgumentNullException("result");
+				throw new ArgumentNullException(nameof(result));
 
 			_errorsSource.Clear();
 

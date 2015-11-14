@@ -18,7 +18,7 @@ namespace SampleIQFeed
 		public HistoryCandlesWindow(Security security)
 		{
 			if (security == null)
-				throw new ArgumentNullException("security");
+				throw new ArgumentNullException(nameof(security));
 
 			_security = security;
 

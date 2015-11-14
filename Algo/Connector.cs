@@ -52,7 +52,7 @@ namespace StockSharp.Algo
 			public FilteredMarketDepthInfo(MarketDepth depth)
 			{
 				if (depth == null)
-					throw new ArgumentNullException("depth");
+					throw new ArgumentNullException(nameof(depth));
 
 				_depth = depth;
 			}
@@ -60,10 +60,10 @@ namespace StockSharp.Algo
 			public void Init(MarketDepth source, IEnumerable<Order> currentOrders)
 			{
 				if (source == null)
-					throw new ArgumentNullException("source");
+					throw new ArgumentNullException(nameof(source));
 
 				if (currentOrders == null)
-					throw new ArgumentNullException("currentOrders");
+					throw new ArgumentNullException(nameof(currentOrders));
 
 				currentOrders.Select(o => o.ToMessage()).ForEach(Process);
 
@@ -90,7 +90,7 @@ namespace StockSharp.Algo
 			public void Process(QuoteChangeMessage message)
 			{
 				if (message == null)
-					throw new ArgumentNullException("message");
+					throw new ArgumentNullException(nameof(message));
 
 				_quote = new QuoteChangeMessage
 				{
@@ -164,10 +164,7 @@ namespace StockSharp.Algo
 			{
 			}
 
-			public bool HasChanges
-			{
-				get { return Second != null; }
-			}
+			public bool HasChanges => Second != null;
 		}
 
 		private readonly EntityCache _entityCache = new EntityCache();
@@ -232,7 +229,7 @@ namespace StockSharp.Algo
 		/// <summary>
 		/// Settings of the connection control <see cref="IConnector"/> to the trading system.
 		/// </summary>
-		public ReConnectionSettings ReConnectionSettings { get; private set; }
+		public ReConnectionSettings ReConnectionSettings { get; }
 
 		/// <summary>
 		/// Entity factory (<see cref="Security"/>, <see cref="Order"/> etc.).
@@ -281,7 +278,7 @@ namespace StockSharp.Algo
 			set
 			{
 				if (value == null)
-					throw new ArgumentNullException("value");
+					throw new ArgumentNullException(nameof(value));
 
 				_securityIdGenerator = value;
 			}
@@ -290,23 +287,14 @@ namespace StockSharp.Algo
 		/// <summary>
 		/// List of all exchange boards, for which instruments are loaded <see cref="IConnector.Securities"/>.
 		/// </summary>
-		public IEnumerable<ExchangeBoard> ExchangeBoards
-		{
-			get { return _entityCache.ExchangeBoards; }
-		}
+		public IEnumerable<ExchangeBoard> ExchangeBoards => _entityCache.ExchangeBoards;
 
 		/// <summary>
 		/// List of all loaded instruments. It should be called after event <see cref="IConnector.NewSecurities"/> arisen. Otherwise the empty set will be returned.
 		/// </summary>
-		public virtual IEnumerable<Security> Securities
-		{
-			get { return _entityCache.Securities; }
-		}
+		public virtual IEnumerable<Security> Securities => _entityCache.Securities;
 
-		int ISecurityProvider.Count
-		{
-			get { return _entityCache.SecurityCount; }
-		}
+		int ISecurityProvider.Count => _entityCache.SecurityCount;
 
 		private Action<Security> _added;
 
@@ -355,10 +343,7 @@ namespace StockSharp.Algo
 		/// <summary>
 		/// Current time, which will be passed to the <see cref="LogMessage.Time"/>.
 		/// </summary>
-		public override DateTimeOffset CurrentTime
-		{
-			get { return _currentTime; }
-		}
+		public override DateTimeOffset CurrentTime => _currentTime;
 
 		/// <summary>
 		/// Get session state for required board.
@@ -373,10 +358,7 @@ namespace StockSharp.Algo
 		/// <summary>
 		/// Get all orders.
 		/// </summary>
-		public IEnumerable<Order> Orders
-		{
-			get { return _entityCache.Orders; }
-		}
+		public IEnumerable<Order> Orders => _entityCache.Orders;
 
 		/// <summary>
 		/// Get all stop-orders.
@@ -389,58 +371,37 @@ namespace StockSharp.Algo
 		/// <summary>
 		/// Get all registration errors.
 		/// </summary>
-		public IEnumerable<OrderFail> OrderRegisterFails
-		{
-			get { return _entityCache.OrderRegisterFails; }
-		}
+		public IEnumerable<OrderFail> OrderRegisterFails => _entityCache.OrderRegisterFails;
 
 		/// <summary>
 		/// Get all cancellation errors.
 		/// </summary>
-		public IEnumerable<OrderFail> OrderCancelFails
-		{
-			get { return _entityCache.OrderCancelFails; }
-		}
+		public IEnumerable<OrderFail> OrderCancelFails => _entityCache.OrderCancelFails;
 
 		/// <summary>
 		/// Get all tick trades.
 		/// </summary>
-		public IEnumerable<Trade> Trades
-		{
-			get { return _entityCache.Trades; }
-		}
+		public IEnumerable<Trade> Trades => _entityCache.Trades;
 
 		/// <summary>
 		/// Get all own trades.
 		/// </summary>
-		public IEnumerable<MyTrade> MyTrades
-		{
-			get { return _entityCache.MyTrades; }
-		}
+		public IEnumerable<MyTrade> MyTrades => _entityCache.MyTrades;
 
 		/// <summary>
 		/// Get all portfolios.
 		/// </summary>
-		public virtual IEnumerable<Portfolio> Portfolios
-		{
-			get { return _entityCache.Portfolios; }
-		}
+		public virtual IEnumerable<Portfolio> Portfolios => _entityCache.Portfolios;
 
 		/// <summary>
 		/// Get all positions.
 		/// </summary>
-		public IEnumerable<Position> Positions
-		{
-			get { return _entityCache.Positions; }
-		}
+		public IEnumerable<Position> Positions => _entityCache.Positions;
 
 		/// <summary>
 		/// All news.
 		/// </summary>
-		public IEnumerable<News> News
-		{
-			get { return _entityCache.News; }
-		}
+		public IEnumerable<News> News => _entityCache.News;
 
 		/// <summary>
 		/// Orders registration delay calculation manager.
@@ -472,16 +433,10 @@ namespace StockSharp.Algo
 		/// </summary>
 		public ConnectionStates ConnectionState { get; private set; }
 
-		private bool _isSupportAtomicReRegister = true;
-
 		/// <summary>
 		/// Gets a value indicating whether the re-registration orders via the method <see cref="ReRegisterOrder(StockSharp.BusinessEntities.Order,StockSharp.BusinessEntities.Order)"/> as a single transaction. The default is enabled.
 		/// </summary>
-		public virtual bool IsSupportAtomicReRegister
-		{
-			get { return _isSupportAtomicReRegister; }
-			protected set { _isSupportAtomicReRegister = value; }
-		}
+		public virtual bool IsSupportAtomicReRegister { get; protected set; } = true;
 
 		/// <summary>
 		/// Use orders log to create market depths. Disabled by default.
@@ -542,7 +497,7 @@ namespace StockSharp.Algo
 			set
 			{
 				if (value <= TimeSpan.Zero)
-					throw new ArgumentOutOfRangeException("value", value, LocalizedStrings.Str196);
+					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.Str196);
 
 				_marketTimeChangedInterval = value;
 			}
@@ -673,7 +628,7 @@ namespace StockSharp.Algo
 		public virtual void LookupSecurities(SecurityLookupMessage criteria)
 		{
 			if (criteria == null)
-				throw new ArgumentNullException("criteria");
+				throw new ArgumentNullException(nameof(criteria));
 
 			//если для критерия указаны код биржи и код инструмента, то сначала смотрим нет ли такого инструмента
 			if (!NeedLookupSecurities(criteria.SecurityId))
@@ -711,7 +666,7 @@ namespace StockSharp.Algo
 		public virtual void LookupPortfolios(Portfolio criteria)
 		{
 			if (criteria == null)
-				throw new ArgumentNullException("criteria");
+				throw new ArgumentNullException(nameof(criteria));
 
 			var msg = new PortfolioLookupMessage
 			{
@@ -741,10 +696,10 @@ namespace StockSharp.Algo
 		private Position GetPosition(Portfolio portfolio, Security security, string depoName, TPlusLimits? limitType, string description)
 		{
 			if (portfolio == null)
-				throw new ArgumentNullException("portfolio");
+				throw new ArgumentNullException(nameof(portfolio));
 
 			if (security == null)
-				throw new ArgumentNullException("security");
+				throw new ArgumentNullException(nameof(security));
 
 			bool isNew;
 			var position = _entityCache.TryAddPosition(portfolio, security, depoName, limitType, description, out isNew);
@@ -763,7 +718,7 @@ namespace StockSharp.Algo
 		public MarketDepth GetMarketDepth(Security security)
 		{
 			if (security == null)
-				throw new ArgumentNullException("security");
+				throw new ArgumentNullException(nameof(security));
 
 			MarketDepthInfo info;
 
@@ -815,7 +770,7 @@ namespace StockSharp.Algo
 		public MarketDepth GetFilteredMarketDepth(Security security)
 		{
 			if (security == null)
-				throw new ArgumentNullException("security");
+				throw new ArgumentNullException(nameof(security));
 
 			if (!_subscriptionManager.IsFilteredMarketDepthRegistered(security))
 				throw new InvalidOperationException(LocalizedStrings.Str1097Params.Put(security.Id));
@@ -877,7 +832,7 @@ namespace StockSharp.Algo
 		public Order ReRegisterOrder(Order oldOrder, decimal price, decimal volume = 0)
 		{
 			if (oldOrder == null)
-				throw new ArgumentNullException("oldOrder");
+				throw new ArgumentNullException(nameof(oldOrder));
 
 			var newOrder = oldOrder.ReRegisterClone(price, volume);
 			ReRegisterOrder(oldOrder, newOrder);
@@ -892,15 +847,15 @@ namespace StockSharp.Algo
 		public virtual void ReRegisterOrder(Order oldOrder, Order newOrder)
 		{
 			if (oldOrder == null)
-				throw new ArgumentNullException("oldOrder");
+				throw new ArgumentNullException(nameof(oldOrder));
 
 			if (newOrder == null)
-				throw new ArgumentNullException("newOrder");
+				throw new ArgumentNullException(nameof(newOrder));
 
 			try
 			{
 				if (oldOrder.Security != newOrder.Security)
-					throw new ArgumentException(LocalizedStrings.Str1098Params.Put(newOrder.Security.Id, oldOrder.Security.Id), "newOrder");
+					throw new ArgumentException(LocalizedStrings.Str1098Params.Put(newOrder.Security.Id, oldOrder.Security.Id), nameof(newOrder));
 
 				if (oldOrder.Type == OrderTypes.Conditional)
 				{
@@ -938,24 +893,24 @@ namespace StockSharp.Algo
 		public void ReRegisterOrderPair(Order oldOrder1, Order newOrder1, Order oldOrder2, Order newOrder2)
 		{
 			if (oldOrder1 == null)
-				throw new ArgumentNullException("oldOrder1");
+				throw new ArgumentNullException(nameof(oldOrder1));
 
 			if (newOrder1 == null)
-				throw new ArgumentNullException("newOrder1");
+				throw new ArgumentNullException(nameof(newOrder1));
 
 			if (oldOrder2 == null)
-				throw new ArgumentNullException("oldOrder2");
+				throw new ArgumentNullException(nameof(oldOrder2));
 
 			if (newOrder2 == null)
-				throw new ArgumentNullException("newOrder2");
+				throw new ArgumentNullException(nameof(newOrder2));
 
 			try
 			{
 				if (oldOrder1.Security != newOrder1.Security)
-					throw new ArgumentException(LocalizedStrings.Str1099Params.Put(newOrder1.Security.Id, oldOrder1.Security.Id), "newOrder1");
+					throw new ArgumentException(LocalizedStrings.Str1099Params.Put(newOrder1.Security.Id, oldOrder1.Security.Id), nameof(newOrder1));
 
 				if (oldOrder2.Security != newOrder2.Security)
-					throw new ArgumentException(LocalizedStrings.Str1100Params.Put(newOrder2.Security.Id, oldOrder2.Security.Id), "newOrder2");
+					throw new ArgumentException(LocalizedStrings.Str1100Params.Put(newOrder2.Security.Id, oldOrder2.Security.Id), nameof(newOrder2));
 
 				if (oldOrder1.Type == OrderTypes.Conditional || oldOrder2.Type == OrderTypes.Conditional)
 				{
@@ -1039,23 +994,23 @@ namespace StockSharp.Algo
 			if (checkVolume)
 			{
 				if (order.Volume == 0)
-					throw new ArgumentException(LocalizedStrings.Str894, "order");
+					throw new ArgumentException(LocalizedStrings.Str894, nameof(order));
 
 				if (order.Volume < 0)
-					throw new ArgumentOutOfRangeException("order", order.Volume, LocalizedStrings.Str895);
+					throw new ArgumentOutOfRangeException(nameof(order), order.Volume, LocalizedStrings.Str895);
 			}
 
 			if (order.Id != null || !order.StringId.IsEmpty())
-				throw new ArgumentException(LocalizedStrings.Str896Params.Put(order.Id == null ? order.StringId : order.Id.To<string>()), "order");
+				throw new ArgumentException(LocalizedStrings.Str896Params.Put(order.Id == null ? order.StringId : order.Id.To<string>()), nameof(order));
 
 			if (!checkTransactionId)
 				return;
 
 			if (order.TransactionId != 0)
-				throw new ArgumentException(LocalizedStrings.Str897Params.Put(order.TransactionId), "order");
+				throw new ArgumentException(LocalizedStrings.Str897Params.Put(order.TransactionId), nameof(order));
 
 			if (order.State != OrderStates.None)
-				throw new ArgumentException(LocalizedStrings.Str898Params.Put(order.State), "order");
+				throw new ArgumentException(LocalizedStrings.Str898Params.Put(order.State), nameof(order));
 		}
 
 		private static void CheckOnOld(Order order)
@@ -1063,28 +1018,28 @@ namespace StockSharp.Algo
 			ChechOrderState(order);
 
 			if (order.TransactionId == 0 && order.Id == null && order.StringId.IsEmpty())
-				throw new ArgumentException(LocalizedStrings.Str899, "order");
+				throw new ArgumentException(LocalizedStrings.Str899, nameof(order));
 		}
 
 		private static void ChechOrderState(Order order)
 		{
 			if (order == null)
-				throw new ArgumentNullException("order");
+				throw new ArgumentNullException(nameof(order));
 
 			if (order.Type == OrderTypes.Conditional && order.Condition == null)
-				throw new ArgumentException(LocalizedStrings.Str889, "order");
+				throw new ArgumentException(LocalizedStrings.Str889, nameof(order));
 
 			if (order.Security == null)
-				throw new ArgumentException(LocalizedStrings.Str890, "order");
+				throw new ArgumentException(LocalizedStrings.Str890, nameof(order));
 
 			if (order.Portfolio == null)
-				throw new ArgumentException(LocalizedStrings.Str891, "order");
+				throw new ArgumentException(LocalizedStrings.Str891, nameof(order));
 
 			if (order.Price < 0)
-				throw new ArgumentOutOfRangeException("order", order.Price, LocalizedStrings.Str892);
+				throw new ArgumentOutOfRangeException(nameof(order), order.Price, LocalizedStrings.Str892);
 
 			if (order.Price == 0 && (order.Type == OrderTypes.Limit || order.Type == OrderTypes.ExtRepo || order.Type == OrderTypes.Repo || order.Type == OrderTypes.Rps))
-				throw new ArgumentException(LocalizedStrings.Str893, "order");
+				throw new ArgumentException(LocalizedStrings.Str893, nameof(order));
 		}
 
 		/// <summary>
@@ -1258,10 +1213,10 @@ namespace StockSharp.Algo
 		private Security GetSecurity(string id, Func<Security, bool> changeSecurity)
 		{
 			if (id.IsEmpty())
-				throw new ArgumentNullException("id");
+				throw new ArgumentNullException(nameof(id));
 
 			if (changeSecurity == null)
-				throw new ArgumentNullException("changeSecurity");
+				throw new ArgumentNullException(nameof(changeSecurity));
 
 			bool isNew;
 
@@ -1295,7 +1250,7 @@ namespace StockSharp.Algo
 		public SecurityId GetSecurityId(Security security)
 		{
 			if (security == null)
-				throw new ArgumentNullException("security");
+				throw new ArgumentNullException(nameof(security));
 
 			var secId = security.ToSecurityId(SecurityIdGenerator);
 
@@ -1347,7 +1302,7 @@ namespace StockSharp.Algo
 		private Portfolio GetPortfolio(string name, Func<Portfolio, bool> changePortfolio = null)
 		{
 			if (name.IsEmpty())
-				throw new ArgumentNullException("name");
+				throw new ArgumentNullException(nameof(name));
 
 			var result = _entityCache.ProcessPortfolio(name, changePortfolio);
 
@@ -1391,7 +1346,7 @@ namespace StockSharp.Algo
 		public object GetSecurityValue(Security security, Level1Fields field)
 		{
 			if (security == null)
-				throw new ArgumentNullException("security");
+				throw new ArgumentNullException(nameof(security));
 
 			var values = _securityValues.TryGetValue(security);
 			return values == null ? null : values[(int)field];
@@ -1405,7 +1360,7 @@ namespace StockSharp.Algo
 		public IEnumerable<Level1Fields> GetLevel1Fields(Security security)
 		{
 			if (security == null)
-				throw new ArgumentNullException("security");
+				throw new ArgumentNullException(nameof(security));
 
 			var values = _securityValues.TryGetValue(security);
 
@@ -1547,7 +1502,7 @@ namespace StockSharp.Algo
 		public override void Load(SettingsStorage storage)
 		{
 			if (storage == null)
-				throw new ArgumentNullException("storage");
+				throw new ArgumentNullException(nameof(storage));
 
 			TradesKeepCount = storage.GetValue("TradesKeepCount", TradesKeepCount);
 			OrdersKeepCount = storage.GetValue("OrdersKeepCount", OrdersKeepCount);
@@ -1589,7 +1544,7 @@ namespace StockSharp.Algo
 		public override void Save(SettingsStorage storage)
 		{
 			if (storage == null)
-				throw new ArgumentNullException("storage");
+				throw new ArgumentNullException(nameof(storage));
 
 			storage.SetValue("TradesKeepCount", TradesKeepCount);
 			storage.SetValue("OrdersKeepCount", OrdersKeepCount);

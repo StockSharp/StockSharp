@@ -65,7 +65,7 @@ namespace StockSharp.Hydra.Quik
 				public DynamicPropertyFilterAttribute(string propName, object showOn)
 				{
 					if (propName.IsEmpty())
-						throw new ArgumentNullException("propName");
+						throw new ArgumentNullException(nameof(propName));
 
 					PropertyName = propName;
 					ShowOn = showOn;

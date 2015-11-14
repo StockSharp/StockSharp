@@ -65,7 +65,7 @@ namespace StockSharp.InteractiveBrokers
 		public static implicit operator IBTimeFrames(TimeSpan value)
 		{
 			if (!CanConvert(value))
-				throw new ArgumentException(LocalizedStrings.Str2531Params.Put(value), "value");
+				throw new ArgumentException(LocalizedStrings.Str2531Params.Put(value), nameof(value));
 
 			return _values[value];
 		}
@@ -78,7 +78,7 @@ namespace StockSharp.InteractiveBrokers
 		public static explicit operator TimeSpan(IBTimeFrames timeFrame)
 		{
 			if (timeFrame == null)
-				throw new ArgumentNullException("timeFrame");
+				throw new ArgumentNullException(nameof(timeFrame));
 
 			return timeFrame._value;
 		}

@@ -22,16 +22,11 @@ namespace StockSharp.Algo.Indicators
 			_name = GetType().GetDisplayName();
 		}
 
-		private Guid _id = Guid.NewGuid();
-
 		/// <summary>
 		/// Unique ID.
 		/// </summary>
 		[Browsable(false)]
-		public Guid Id
-		{
-			get { return _id; }
-		}
+		public Guid Id { get; private set; } = Guid.NewGuid();
 
 		private string _name;
 
@@ -47,7 +42,7 @@ namespace StockSharp.Algo.Indicators
 			set
 			{
 				if (value.IsEmpty())
-					throw new ArgumentNullException("value");
+					throw new ArgumentNullException(nameof(value));
 
 				_name = value;
 			}
@@ -69,7 +64,7 @@ namespace StockSharp.Algo.Indicators
 		/// <param name="storage">Settings storage.</param>
 		public virtual void Save(SettingsStorage storage)
 		{
-			storage.SetValue("Id", _id);
+			storage.SetValue("Id", Id);
 			storage.SetValue("Name", Name);
 		}
 
@@ -79,7 +74,7 @@ namespace StockSharp.Algo.Indicators
 		/// <param name="storage">Settings storage.</param>
 		public virtual void Load(SettingsStorage storage)
 		{
-			_id = storage.GetValue<Guid>("Id");
+			Id = storage.GetValue<Guid>("Id");
 			Name = storage.GetValue<string>("Name");
 		}
 
@@ -89,16 +84,11 @@ namespace StockSharp.Algo.Indicators
 		[Browsable(false)]
 		public virtual bool IsFormed { get; protected set; }
 
-		private readonly IIndicatorContainer _container = new IndicatorContainer();
-
 		/// <summary>
 		/// The container storing indicator data.
 		/// </summary>
 		[Browsable(false)]
-		public IIndicatorContainer Container
-		{
-			get { return _container; }
-		}
+		public IIndicatorContainer Container { get; } = new IndicatorContainer();
 
 		/// <summary>
 		/// The indicator change event (for example, a new value is added).
@@ -149,10 +139,10 @@ namespace StockSharp.Algo.Indicators
 		protected void RaiseChangedEvent(IIndicatorValue input, IIndicatorValue result)
 		{
 			if (input == null)
-				throw new ArgumentNullException("input");
+				throw new ArgumentNullException(nameof(input));
 
 			if (result == null)
-				throw new ArgumentNullException("result");
+				throw new ArgumentNullException(nameof(result));
 
 			Changed.SafeInvoke(input, result);
 		}

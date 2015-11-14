@@ -12,18 +12,18 @@ namespace StockSharp.Alor
 		public static OrderTypes ToOrderType(this string value)
 		{
 			if (value.IsEmpty())
-				throw new ArgumentNullException("value");
+				throw new ArgumentNullException(nameof(value));
 			if (value == "M")
 				return OrderTypes.Market;
 			if (value == "L")
 				return OrderTypes.Limit;
-			throw new ArgumentException(LocalizedStrings.Str3706Params.Put(value), "value");
+			throw new ArgumentException(LocalizedStrings.Str3706Params.Put(value), nameof(value));
 		}
 
 		public static OrderDirections ToOrderDirection(this string value)
 		{
 			if (value.IsEmpty())
-				throw new ArgumentNullException("value");
+				throw new ArgumentNullException(nameof(value));
 
 			switch (value)
 			{
@@ -32,14 +32,14 @@ namespace StockSharp.Alor
 				case "S":
 					return OrderDirections.Sell;
 				default:
-					throw new ArgumentException(LocalizedStrings.Str3707Params.Put(value), "value");
+					throw new ArgumentException(LocalizedStrings.Str3707Params.Put(value), nameof(value));
 			}
 		}
 
 		public static TimeInForce ToOrderExecutionCondition(this string value)
 		{
 			if (value.IsEmpty())
-				throw new ArgumentNullException("value");
+				throw new ArgumentNullException(nameof(value));
 
 			switch (value)
 			{
@@ -50,14 +50,14 @@ namespace StockSharp.Alor
 				case "W":
 					return TimeInForce.CancelBalance;
 				default:
-					throw new ArgumentException(LocalizedStrings.Str3706Params.Put(value), "value");
+					throw new ArgumentException(LocalizedStrings.Str3706Params.Put(value), nameof(value));
 			}
 		}
 
 		public static OrderStates ToOrderState(this string value)
 		{
 			if (value.IsEmpty())
-				throw new ArgumentNullException("value");
+				throw new ArgumentNullException(nameof(value));
 
 			switch (value)
 			{
@@ -78,7 +78,7 @@ namespace StockSharp.Alor
 		public static OrderStatus ToOrderStatus(this string value)
 		{
 			if (value.IsEmpty())
-				throw new ArgumentNullException("value");
+				throw new ArgumentNullException(nameof(value));
 
 			switch (value)
 			{
@@ -119,7 +119,7 @@ namespace StockSharp.Alor
 		public static AlorOrderConditionTypes ToOrderConditionType(this string value)
 		{
 			if (value.IsEmpty())
-				throw new ArgumentNullException("value");
+				throw new ArgumentNullException(nameof(value));
 
 			switch (value)
 			{
@@ -130,7 +130,7 @@ namespace StockSharp.Alor
 				case " ":
 					return AlorOrderConditionTypes.Inactive;
 				default:
-					throw new ArgumentException(LocalizedStrings.Str3708Params.Put(value), "value");
+					throw new ArgumentException(LocalizedStrings.Str3708Params.Put(value), nameof(value));
 			}
 		}
 
@@ -145,7 +145,7 @@ namespace StockSharp.Alor
 				case AlorOrderConditionTypes.Inactive:
 					return " ";
 				default:
-					throw new ArgumentException(LocalizedStrings.Str3708Params.Put(value), "value");
+					throw new ArgumentException(LocalizedStrings.Str3708Params.Put(value), nameof(value));
 			}
 		}
 	}

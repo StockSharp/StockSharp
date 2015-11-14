@@ -34,18 +34,18 @@ namespace StockSharp.Oanda.Native
 					break;
 				case OandaServers.Practice:
 					if (token == null)
-						throw new ArgumentNullException("token");
+						throw new ArgumentNullException(nameof(token));
 
 					_restUrl = "https://api-fxpractice.oanda.com";
 					break;
 				case OandaServers.Real:
 					if (token == null)
-						throw new ArgumentNullException("token");
+						throw new ArgumentNullException(nameof(token));
 
 					_restUrl = "https://api-fxtrade.oanda.com";
 					break;
 				default:
-					throw new ArgumentOutOfRangeException("server");
+					throw new ArgumentOutOfRangeException(nameof(server));
 			}
 
 			_token = token;

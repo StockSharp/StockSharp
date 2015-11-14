@@ -17,7 +17,7 @@ namespace StockSharp.Studio.Core.Commands
 		public AddStrategyInfoCommand(params StrategyInfoTypes[] types)
 		{
 			if (types == null)
-				throw new ArgumentNullException("types");
+				throw new ArgumentNullException(nameof(types));
 
 			Types = types;
 		}

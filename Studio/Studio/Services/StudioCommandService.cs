@@ -180,10 +180,10 @@ namespace StockSharp.Studio.Services
 		void IStudioCommandService.Bind(object sender, IStudioCommandScope scope)
 		{
 			if (sender == null)
-				throw new ArgumentNullException("sender");
+				throw new ArgumentNullException(nameof(sender));
 
 			if (scope == null)
-				throw new ArgumentNullException("scope");
+				throw new ArgumentNullException(nameof(scope));
 
 			_binds.Add(sender, scope);
 
@@ -199,7 +199,7 @@ namespace StockSharp.Studio.Services
 		void IStudioCommandService.UnBind(object sender)
 		{
 			if (sender == null)
-				throw new ArgumentNullException("sender");
+				throw new ArgumentNullException(nameof(sender));
 
 			_binds.Remove(sender);
 			_scopes.Remove(sender);
@@ -208,7 +208,7 @@ namespace StockSharp.Studio.Services
 		private IStudioCommandScope GetScope(object listener)
 		{
 			if (listener == null)
-				throw new ArgumentNullException("listener");
+				throw new ArgumentNullException(nameof(listener));
 
 			var sc = listener as StrategyContainer;
 
@@ -221,7 +221,7 @@ namespace StockSharp.Studio.Services
 		private IStudioCommandScope InternalGetScope(object listener)
 		{
 			if (listener == null)
-				throw new ArgumentNullException("listener");
+				throw new ArgumentNullException(nameof(listener));
 
 			var scope = listener as IStudioCommandScope;
 
@@ -299,7 +299,7 @@ namespace StockSharp.Studio.Services
 		private Dictionary<IStudioCommandScope, CachedSynchronizedDictionary<object, CommandTuple>> TryGetHandlers(IStudioCommand command)
 		{
 			if (command == null)
-				throw new ArgumentNullException("command");
+				throw new ArgumentNullException(nameof(command));
 
 			var commandType = command.GetType();
 

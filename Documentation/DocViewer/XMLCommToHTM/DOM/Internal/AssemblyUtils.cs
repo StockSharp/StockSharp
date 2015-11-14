@@ -21,7 +21,7 @@ namespace XMLCommToHTM.DOM.Internal
 		private static bool IsNestedTypeVisible(this Type type)
 		{
 			if (type == null)
-				throw new ArgumentNullException("type");
+				throw new ArgumentNullException(nameof(type));
 
 			return
 				type.IsNestedPublic &&

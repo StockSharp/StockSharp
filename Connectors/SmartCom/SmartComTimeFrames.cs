@@ -146,7 +146,7 @@ namespace StockSharp.SmartCom
 		public static implicit operator SmartComTimeFrames(TimeSpan value)
 		{
 			if (!CanConvert(value))
-				throw new ArgumentException(LocalizedStrings.WrongCandleArg.Put(value), "value");
+				throw new ArgumentException(LocalizedStrings.WrongCandleArg.Put(value), nameof(value));
 
 			return _values[value];
 		}
@@ -159,7 +159,7 @@ namespace StockSharp.SmartCom
 		public static explicit operator TimeSpan(SmartComTimeFrames timeFrame)
 		{
 			if (timeFrame == null)
-				throw new ArgumentNullException("timeFrame");
+				throw new ArgumentNullException(nameof(timeFrame));
 
 			return timeFrame._value;
 		}

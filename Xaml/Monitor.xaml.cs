@@ -1,4 +1,4 @@
-namespace StockSharp.Xaml
+﻿namespace StockSharp.Xaml
 {
 	using System;
 	using System.Globalization;
@@ -115,7 +115,7 @@ namespace StockSharp.Xaml
 		/// <summary>
 		/// The graphical component for logs displaying.
 		/// </summary>
-		public LogControl LogControl { get { return LogCtrl; } }
+		public LogControl LogControl => LogCtrl;
 
 		/// <summary>
 		/// To delete all messages.
@@ -154,7 +154,7 @@ namespace StockSharp.Xaml
 		public void WriteMessages(IEnumerable<LogMessage> messages)
 		{
 			if (messages == null)
-				throw new ArgumentNullException("messages");
+				throw new ArgumentNullException(nameof(messages));
 			
 			messages.GroupBy(m => m.Source).ForEach(g => WriteMessages(g.Key, g));
 

@@ -35,17 +35,14 @@ namespace StockSharp.Xaml.Actipro
 		/// </summary>
 		public static readonly DependencyProperty SaveErrorMessageProperty = DependencyProperty.Register("SaveErrorMessage", typeof(string), typeof(ExchangeBoardEditor), new PropertyMetadata(default(string)));
 
-		private IExchangeInfoProvider Provider { get; set; }
+		private IExchangeInfoProvider Provider { get; }
 
 		/// <summary>
 		/// List of boards.
 		/// </summary>
-		public ObservableCollection<ExchangeBoard> Boards { get; private set; }
+		public ObservableCollection<ExchangeBoard> Boards { get; }
 
-		private ExchangeBoardEditorViewModel ViewModel
-		{
-			get { return (ExchangeBoardEditorViewModel)DataContext; }
-		}
+		private ExchangeBoardEditorViewModel ViewModel => (ExchangeBoardEditorViewModel)DataContext;
 
 		internal string SaveErrorMessage
 		{
@@ -53,15 +50,12 @@ namespace StockSharp.Xaml.Actipro
 			private set { SetValue(SaveErrorMessageProperty, value); }
 		}
 
-		internal Exchange SelectedExchange
-		{
-			get { return ExchangeEditor.GetSelectedExchange(); }
-		}
+		internal Exchange SelectedExchange => ExchangeEditor.GetSelectedExchange();
 
 		/// <summary>
 		/// The code of board which is currently being edited.
 		/// </summary>
-		public string SelectedBoardCode { get { return ViewModel.BoardCode; }}
+		public string SelectedBoardCode => ViewModel.BoardCode;
 
 		private static readonly Regex _checkCodeRegex = new Regex("^[a-z0-9]{1,15}$", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
@@ -358,32 +352,24 @@ namespace StockSharp.Xaml.Actipro
 
 		private readonly ExchangeBoardEditor _editor;
 
-		private readonly IExchangeInfoProvider _provider;
-
 		private bool _updatingModel;
 
-		private IExchangeInfoProvider Provider
-		{
-			get { return _provider; }
-		}
+		private IExchangeInfoProvider Provider { get; }
 
-		private IEnumerable<ExchangeBoard> Boards
-		{
-			get { return _editor.Boards; }
-		}
+		private IEnumerable<ExchangeBoard> Boards => _editor.Boards;
 
 		public event Action DataChanged;
 
 		public ExchangeBoardEditorViewModel(ExchangeBoardEditor editor, IExchangeInfoProvider provider)
 		{
 			if (editor == null)
-				throw new ArgumentNullException("editor");
+				throw new ArgumentNullException(nameof(editor));
 
 			if (provider == null)
-				throw new ArgumentNullException("provider");
+				throw new ArgumentNullException(nameof(provider));
 
 			_editor = editor;
-			_provider = provider;
+			Provider = provider;
 			IsNewBoard = true;
 
 			NewPeriodTill = new DateTime(DateTime.Now.Year + 1, 1, 1) - TimeSpan.FromDays(1);
@@ -507,20 +493,11 @@ namespace StockSharp.Xaml.Actipro
 			set { SetField(ref _boardTimeZone, value, () => BoardTimeZone); }
 		}
 
-		public IEnumerable<WorkingTimePeriodViewModel> Periods
-		{
-			get { return _periods; }
-		}
+		public IEnumerable<WorkingTimePeriodViewModel> Periods => _periods;
 
-		public IEnumerable<DateTimeViewModel> SpecialWorkingDays
-		{
-			get { return _specialWorkingDays; }
-		}
+		public IEnumerable<DateTimeViewModel> SpecialWorkingDays => _specialWorkingDays;
 
-		public IEnumerable<DateTimeViewModel> SpecialHolidays
-		{
-			get { return _specialHolidays; }
-		}
+		public IEnumerable<DateTimeViewModel> SpecialHolidays => _specialHolidays;
 
 		public WorkingTimePeriodViewModel SelectedPeriod
 		{
@@ -773,31 +750,22 @@ namespace StockSharp.Xaml.Actipro
 
 		public class WorkingTimePeriodViewModel : ViewModelBase
 		{
-			private readonly DateTime _till;
-			private readonly ObservableCollection<Range<TimeSpan>> _workTimes = new ObservableCollection<Range<TimeSpan>>();
-
 			private Range<TimeSpan> _selectedWorkTime;
 
 			public WorkingTimePeriodViewModel(DateTime till)
 			{
-				_till = till;
+				Till = till;
 			}
 
 			public WorkingTimePeriodViewModel(WorkingTimePeriod period)
 			{
-				_till = period.Till;
-				period.Times.ForEach(r => _workTimes.Add(r));
+				Till = period.Till;
+				period.Times.ForEach(r => WorkTimes.Add(r));
 			}
 
-			public DateTime Till
-			{
-				get { return _till; }
-			}
+			public DateTime Till { get; }
 
-			public ObservableCollection<Range<TimeSpan>> WorkTimes
-			{
-				get { return _workTimes; }
-			}
+			public ObservableCollection<Range<TimeSpan>> WorkTimes { get; } = new ObservableCollection<Range<TimeSpan>>();
 
 			public Range<TimeSpan> SelectedWorkTime
 			{
@@ -808,18 +776,14 @@ namespace StockSharp.Xaml.Actipro
 
 		public class DateTimeViewModel : ViewModelBase
 		{
-			private readonly DateTime _dateTime;
 			private bool _isSelected;
 
 			public DateTimeViewModel(DateTime dateTime)
 			{
-				_dateTime = dateTime;
+				DateTime = dateTime;
 			}
 
-			public DateTime DateTime
-			{
-				get { return _dateTime; }
-			}
+			public DateTime DateTime { get; }
 
 			public bool IsSelected
 			{

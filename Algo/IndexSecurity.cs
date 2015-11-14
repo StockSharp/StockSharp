@@ -43,7 +43,7 @@ namespace StockSharp.Algo
 			public WeightsDictionary(WeightedIndexSecurity parent)
 			{
 				if (parent == null)
-					throw new ArgumentNullException("parent");
+					throw new ArgumentNullException(nameof(parent));
 
 				_parent = parent;
 			}
@@ -97,18 +97,12 @@ namespace StockSharp.Algo
 		/// <summary>
 		/// Instruments and their weighting coefficients in the basket.
 		/// </summary>
-		public SynchronizedDictionary<Security, decimal> Weights
-		{
-			get { return _weights; }
-		}
+		public SynchronizedDictionary<Security, decimal> Weights => _weights;
 
 		/// <summary>
 		/// Instruments, from which this basket is created.
 		/// </summary>
-		public override IEnumerable<Security> InnerSecurities
-		{
-			get { return _weights.CachedKeys; }
-		}
+		public override IEnumerable<Security> InnerSecurities => _weights.CachedKeys;
 
 		/// <summary>
 		/// To calculate the basket value.
@@ -118,7 +112,7 @@ namespace StockSharp.Algo
 		public override decimal? Calculate(IDictionary<Security, decimal> prices)
 		{
 			if (prices == null)
-				throw new ArgumentNullException("prices");
+				throw new ArgumentNullException(nameof(prices));
 
 			if (prices.Count != _weights.Count || !InnerSecurities.All(prices.ContainsKey))
 				return null;

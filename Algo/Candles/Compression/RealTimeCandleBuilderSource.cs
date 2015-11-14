@@ -24,7 +24,7 @@ namespace StockSharp.Algo.Candles.Compression
 		protected RealTimeCandleBuilderSource(IConnector connector)
 		{
 			if (connector == null)
-				throw new ArgumentNullException("connector");
+				throw new ArgumentNullException(nameof(connector));
 
 			Connector = connector;
 		}
@@ -32,15 +32,12 @@ namespace StockSharp.Algo.Candles.Compression
 		/// <summary>
 		/// The source priority by speed (0 - the best).
 		/// </summary>
-		public override int SpeedPriority
-		{
-			get { return 1; }
-		}
+		public override int SpeedPriority => 1;
 
 		/// <summary>
 		/// The connection through which new data will be received.
 		/// </summary>
-		public IConnector Connector { get; private set; }
+		public IConnector Connector { get; }
 
 		/// <summary>
 		/// To send data request.
@@ -51,7 +48,7 @@ namespace StockSharp.Algo.Candles.Compression
 		public override void Start(CandleSeries series, DateTimeOffset from, DateTimeOffset to)
 		{
 			if (series == null)
-				throw new ArgumentNullException("series");
+				throw new ArgumentNullException(nameof(series));
 
 			bool registerSecurity;
 
@@ -69,7 +66,7 @@ namespace StockSharp.Algo.Candles.Compression
 		public override void Stop(CandleSeries series)
 		{
 			if (series == null)
-				throw new ArgumentNullException("series");
+				throw new ArgumentNullException(nameof(series));
 
 			var registeredSeries = _registeredSeries.TryGetValue(series.Security);
 
@@ -167,7 +164,7 @@ namespace StockSharp.Algo.Candles.Compression
 		public override IEnumerable<Range<DateTimeOffset>> GetSupportedRanges(CandleSeries series)
 		{
 			if (series == null)
-				throw new ArgumentNullException("series");
+				throw new ArgumentNullException(nameof(series));
 
 			var trades = GetSecurityValues(series.Security);
 
@@ -235,7 +232,7 @@ namespace StockSharp.Algo.Candles.Compression
 		public override IEnumerable<Range<DateTimeOffset>> GetSupportedRanges(CandleSeries series)
 		{
 			if (series == null)
-				throw new ArgumentNullException("series");
+				throw new ArgumentNullException(nameof(series));
 
 			yield return new Range<DateTimeOffset>(Connector.CurrentTime, DateTimeOffset.MaxValue);
 		}

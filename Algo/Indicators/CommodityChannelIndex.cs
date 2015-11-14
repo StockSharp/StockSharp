@@ -34,7 +34,7 @@ namespace StockSharp.Algo.Indicators
 		/// <summary>
 		/// Whether the indicator is set.
 		/// </summary>
-		public override bool IsFormed { get { return _mean.IsFormed; } }
+		public override bool IsFormed => _mean.IsFormed;
 
 		/// <summary>
 		/// To handle the input value.

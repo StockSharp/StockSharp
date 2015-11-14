@@ -33,7 +33,7 @@
 		internal DdeWindow(SystemWindow wnd)
 		{
 			if (wnd == null)
-				throw new ArgumentNullException("wnd");
+				throw new ArgumentNullException(nameof(wnd));
 
 			Window = wnd;
 

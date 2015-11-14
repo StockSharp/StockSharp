@@ -206,10 +206,7 @@ namespace StockSharp.Xaml
 		/// <summary>
 		/// The list of orders that have been added to the table.
 		/// </summary>
-		public IListEx<Order> Orders
-		{
-			get { return _orders; }
-		}
+		public IListEx<Order> Orders => _orders;
 
 		/// <summary>
 		/// To add a description of the registration error to the table.
@@ -218,7 +215,7 @@ namespace StockSharp.Xaml
 		public void AddRegistrationFail(OrderFail fail)
 		{
 			if (fail == null)
-				throw new ArgumentNullException("fail");
+				throw new ArgumentNullException(nameof(fail));
 
 			var item = _orders.TryGet(fail.Order);
 
@@ -229,10 +226,7 @@ namespace StockSharp.Xaml
 		/// <summary>
 		/// The selected order.
 		/// </summary>
-		public Order SelectedOrder
-		{
-			get { return SelectedOrders.FirstOrDefault(); }
-		}
+		public Order SelectedOrder => SelectedOrders.FirstOrDefault();
 
 		/// <summary>
 		/// Selected orders.
@@ -329,7 +323,7 @@ namespace StockSharp.Xaml
 				case OrderStates.Done:
 					return order.IsMatched() ? LocalizedStrings.Str1328 : LocalizedStrings.Str1329;
 				default:
-					throw new ArgumentOutOfRangeException("values", state, LocalizedStrings.Str1597Params.Put(order));
+					throw new ArgumentOutOfRangeException(nameof(values), state, LocalizedStrings.Str1597Params.Put(order));
 			}
 		}
 

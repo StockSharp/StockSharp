@@ -50,7 +50,7 @@ namespace StockSharp.OpenECry
 			public OECLogger(OpenECryMessageAdapter adapter)
 			{
 				if (adapter == null)
-					throw new ArgumentNullException("adapter");
+					throw new ArgumentNullException(nameof(adapter));
 
 				_adapter = adapter;
 			}
@@ -83,7 +83,7 @@ namespace StockSharp.OpenECry
 						_adapter.AddErrorLog(format, args);
 						break;
 					default:
-						throw new ArgumentOutOfRangeException("severity");
+						throw new ArgumentOutOfRangeException(nameof(severity));
 				}
 			}
 		}

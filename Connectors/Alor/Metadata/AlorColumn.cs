@@ -13,10 +13,10 @@ namespace StockSharp.Alor.Metadata
 		{
 			//TableTypeName = TableType.ToString();
 			if (name.IsEmpty())
-				throw new ArgumentNullException("name");
+				throw new ArgumentNullException(nameof(name));
 
 			if (dataType == null)
-				throw new ArgumentNullException("dataType");
+				throw new ArgumentNullException(nameof(dataType));
 
 			TableType = tableType;
 			IsMandatory = isMandatory;

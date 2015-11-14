@@ -120,7 +120,7 @@ namespace StockSharp.InteractiveBrokers.Web
 		public IEnumerable<Product> DownloadProducts(Market market) //Страница  Market
 		{
 			if (market == null)
-				throw new ArgumentNullException("market");
+				throw new ArgumentNullException(nameof(market));
 
 			var page = 1;
 
@@ -159,7 +159,7 @@ namespace StockSharp.InteractiveBrokers.Web
 		public ProductDescripton DownloadDescription(Product product)
 		{
 			if (product == null)
-				throw new ArgumentNullException("product");
+				throw new ArgumentNullException(nameof(product));
 
 			var url = "http://www1.interactivebrokers.ch/contract_info/v3.8/index.php?action=Details&site=GEN&conid="
 				+ product.ContractId;
@@ -217,7 +217,7 @@ namespace StockSharp.InteractiveBrokers.Web
 				case "Contract for Difference (CFD)":
 					return SecurityTypes.Cfd;
 				default:
-					throw new ArgumentOutOfRangeException("type", type, LocalizedStrings.Str1603);
+					throw new ArgumentOutOfRangeException(nameof(type), type, LocalizedStrings.Str1603);
 			}
 		}
 
@@ -229,7 +229,7 @@ namespace StockSharp.InteractiveBrokers.Web
 		public IEnumerable<ProductBoard> DownloadBoards(Product product)
 		{
 			if (product == null)
-				throw new ArgumentNullException("product");
+				throw new ArgumentNullException(nameof(product));
 
 			var url = "http://www1.interactivebrokers.ch/contract_info/v3.8/index.php?action=Details&site=GEN&conid="
 				+ product.ContractId;

@@ -15,11 +15,11 @@ namespace StockSharp.Quik
 		public static Transaction CreateMoveTransaction(this OrderReplaceMessage message, IDictionary<string, RefPair<SecurityTypes, string>> securityClassInfo)
 		{
 			if (message == null)
-				throw new ArgumentNullException("message");
+				throw new ArgumentNullException(nameof(message));
 
 			if (message.OrderType == OrderTypes.ExtRepo || message.OrderType == OrderTypes.Repo || message.OrderType == OrderTypes.Rps)
 			{
-				throw new ArgumentOutOfRangeException("message", message.Type, LocalizedStrings.Str1847);
+				throw new ArgumentOutOfRangeException(nameof(message), message.Type, LocalizedStrings.Str1847);
 			}
 
 			if (message.OldOrderId == null)
@@ -38,10 +38,10 @@ namespace StockSharp.Quik
 		public static Transaction CreateRegisterTransaction(this OrderRegisterMessage message, string orderAccount, IDictionary<string, RefPair<SecurityTypes, string>> securityClassInfo)
 		{
 			if (securityClassInfo == null)
-				throw new ArgumentNullException("securityClassInfo");
+				throw new ArgumentNullException(nameof(securityClassInfo));
 
 			if (message == null)
-				throw new ArgumentNullException("message");
+				throw new ArgumentNullException(nameof(message));
 
 			var board = ExchangeBoard.GetOrCreateBoard(message.SecurityId.BoardCode);
 			var needDepoAccount = board.IsMicex || board.IsUxStock;
@@ -319,7 +319,7 @@ namespace StockSharp.Quik
 		public static Transaction CreateCancelTransaction(this OrderCancelMessage message, IDictionary<string, RefPair<SecurityTypes, string>> securityClassInfo)
 		{
 			if (message == null)
-				throw new ArgumentNullException("message");
+				throw new ArgumentNullException(nameof(message));
 
 			var transaction = new Transaction(TransactionTypes.Cancel, message);
 
@@ -344,7 +344,7 @@ namespace StockSharp.Quik
 					action = TransactionActions.KillNegDeal;
 					break;
 				default:
-					throw new ArgumentOutOfRangeException("message", message.Type, LocalizedStrings.Str1600);
+					throw new ArgumentOutOfRangeException(nameof(message), message.Type, LocalizedStrings.Str1600);
 			}
 
 			if (message.OrderId == null)
@@ -358,7 +358,7 @@ namespace StockSharp.Quik
 		public static Transaction CreateCancelFuturesTransaction(this OrderGroupCancelMessage message, IDictionary<string, RefPair<SecurityTypes, string>> securityClassInfo)
 		{
 			if (message == null) 
-				throw new ArgumentNullException("message");
+				throw new ArgumentNullException(nameof(message));
 
 			if (message.PortfolioName.IsEmpty())
 				throw new ArgumentException("message");
@@ -369,12 +369,12 @@ namespace StockSharp.Quik
 			var underlyingSecurityCode = message.GetValue<string>("UnderlyingSecurityCode");
 
 			if (underlyingSecurityCode.IsEmpty())
-				throw new ArgumentException(LocalizedStrings.Str1850, "message");
+				throw new ArgumentException(LocalizedStrings.Str1850, nameof(message));
 
 			var secType = message.SecurityId.SecurityType;
 
 			if (secType != SecurityTypes.Future)
-				throw new ArgumentException(LocalizedStrings.Str1851Params.Put(secType), "message");
+				throw new ArgumentException(LocalizedStrings.Str1851Params.Put(secType), nameof(message));
 
 			var transaction = new Transaction(TransactionTypes.CancelGroup, message);
 

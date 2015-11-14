@@ -16,7 +16,7 @@ namespace StockSharp.Algo.PnL
 		public PortfolioPnLManager(string portfolioName)
 		{
 			if (portfolioName.IsEmpty())
-				throw new ArgumentNullException("portfolioName");
+				throw new ArgumentNullException(nameof(portfolioName));
 
 			PortfolioName = portfolioName;
 		}
@@ -26,20 +26,14 @@ namespace StockSharp.Algo.PnL
 		/// <summary>
 		/// Total profit-loss.
 		/// </summary>
-		public decimal PnL
-		{
-			get { return RealizedPnL + UnrealizedPnL; }
-		}
+		public decimal PnL => RealizedPnL + UnrealizedPnL;
 
 		private decimal _realizedPnL;
 
 		/// <summary>
 		/// The relative value of profit-loss without open position accounting.
 		/// </summary>
-		public virtual decimal RealizedPnL
-		{
-			get { return _realizedPnL; }
-		}
+		public virtual decimal RealizedPnL => _realizedPnL;
 
 		/// <summary>
 		/// To zero <see cref="PortfolioPnLManager.PnL"/>.
@@ -64,7 +58,7 @@ namespace StockSharp.Algo.PnL
 		public bool ProcessMyTrade(ExecutionMessage trade, out PnLInfo info)
 		{
 			if (trade == null)
-				throw new ArgumentNullException("trade");
+				throw new ArgumentNullException(nameof(trade));
 
 			var tradeId = trade.GetTradeId();
 

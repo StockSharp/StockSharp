@@ -501,7 +501,7 @@ namespace StockSharp.Quik
 			set
 			{
 				if (value.IsEmpty())
-					throw new ArgumentNullException("value");
+					throw new ArgumentNullException(nameof(value));
 
 				if (DdeServer == value)
 					return;
@@ -570,10 +570,10 @@ namespace StockSharp.Quik
 			set
 			{
 				if (value == null)
-					throw new ArgumentNullException("value");
+					throw new ArgumentNullException(nameof(value));
 
 				if (value.IsEmpty())
-					throw new ArgumentOutOfRangeException("value");
+					throw new ArgumentOutOfRangeException(nameof(value));
 
 				_tables = value.ToArray();
 			}
@@ -673,7 +673,7 @@ namespace StockSharp.Quik
 					}
 
 					default:
-						throw new ArgumentOutOfRangeException("message", customTablesMessage.ExportType, LocalizedStrings.Str1618);
+						throw new ArgumentOutOfRangeException(nameof(message), customTablesMessage.ExportType, LocalizedStrings.Str1618);
 				}
 			}
 			else
@@ -797,16 +797,16 @@ namespace StockSharp.Quik
 			where TItem : class
 		{
 			if (wellKnownDdeData == null)
-				throw new ArgumentNullException("wellKnownDdeData");
+				throw new ArgumentNullException(nameof(wellKnownDdeData));
 
 			if (item == null)
-				throw new ArgumentNullException("item");
+				throw new ArgumentNullException(nameof(item));
 
 			if (row == null)
-				throw new ArgumentNullException("row");
+				throw new ArgumentNullException(nameof(row));
 
 			if (wellKnownDdeData.ContainsKey(item))
-				throw new ArgumentException(LocalizedStrings.Str1724Params.Put(typeof(TItem).Name, id), "item");
+				throw new ArgumentException(LocalizedStrings.Str1724Params.Put(typeof(TItem).Name, id), nameof(item));
 
 			wellKnownDdeData.Add(item, row);
 		}
@@ -891,7 +891,7 @@ namespace StockSharp.Quik
 					if (ProcessUnknownDdeData != null)
 						ProcessUnknownDdeData(category, rows);
 					else
-						SendOutError(new ArgumentOutOfRangeException("category", category));
+						SendOutError(new ArgumentOutOfRangeException(nameof(category), category));
 				}
 			}
 		}
@@ -1619,13 +1619,13 @@ namespace StockSharp.Quik
 		private void UpdateStopOrder(Func<DdeTableColumn, object> func, ExecutionMessage message, IList<object> row)
 		{
 			if (func == null)
-				throw new ArgumentNullException("func");
+				throw new ArgumentNullException(nameof(func));
 
 			if (message == null)
-				throw new ArgumentNullException("message");
+				throw new ArgumentNullException(nameof(message));
 
 			if (row == null)
-				throw new ArgumentNullException("row");
+				throw new ArgumentNullException(nameof(row));
 
 			// Когда заявка уже была снята через асинхронный колбэк 
 			// http://groups.google.ru/group/stocksharp/browse_thread/thread/c2a0adef8a430726#
@@ -1672,13 +1672,13 @@ namespace StockSharp.Quik
 		private void UpdateOrder(Func<DdeTableColumn, object> func, ExecutionMessage message, IList<object> row)
 		{
 			if (func == null)
-				throw new ArgumentNullException("func");
+				throw new ArgumentNullException(nameof(func));
 
 			if (message == null)
-				throw new ArgumentNullException("message");
+				throw new ArgumentNullException(nameof(message));
 
 			if (row == null)
-				throw new ArgumentNullException("row");
+				throw new ArgumentNullException(nameof(row));
 
 			var cancelTime = func.GetNullableTime(OrdersTable, DdeOrderColumns.Date, DdeOrderColumns.CancelTime, DdeOrderColumns.CancelTimeMcs);
 			if (cancelTime.HasValue)
@@ -1717,16 +1717,16 @@ namespace StockSharp.Quik
 		private static void ExportExtendedProperties(DdeTable table, IExtendableEntity entity, IList<object> row, Func<DdeTableColumn, object> func)
 		{
 			if (table == null)
-				throw new ArgumentNullException("table");
+				throw new ArgumentNullException(nameof(table));
 
 			if (entity == null)
-				throw new ArgumentNullException("entity");
+				throw new ArgumentNullException(nameof(entity));
 
 			if (row == null)
-				throw new ArgumentNullException("row");
+				throw new ArgumentNullException(nameof(row));
 
 			if (func == null)
-				throw new ArgumentNullException("func");
+				throw new ArgumentNullException(nameof(func));
 
 			if (table.Columns.ExtendedColumns.Count > 0)
 			{

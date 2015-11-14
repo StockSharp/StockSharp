@@ -39,29 +39,20 @@ namespace StockSharp.Xaml
 			public MarketDataEntry(DateTime date, IEnumerable<string> candleKeys)
 			{
 				if (candleKeys == null)
-					throw new ArgumentNullException("candleKeys");
+					throw new ArgumentNullException(nameof(candleKeys));
 
 				Date = date;
 				Candles = new Dictionary<string, bool>();
 				candleKeys.ForEach(c => Candles[c] = false);
 			}
 
-			public DateTime Date { get; set; }
+			public DateTime Date { get; }
 
-			public int Year
-			{
-				get { return Date.Year; }
-			}
+			public int Year => Date.Year;
 
-			public int Month
-			{
-				get { return Date.Month; }
-			}
+			public int Month => Date.Month;
 
-			public int Day
-			{
-				get { return Date.Day; }
-			}
+			public int Day => Date.Day;
 
 			public bool IsDepth
 			{
@@ -103,7 +94,7 @@ namespace StockSharp.Xaml
 				}
 			}
 
-			public Dictionary<string, bool> Candles { get; private set; }
+			public Dictionary<string, bool> Candles { get; }
 		}
 
 		private readonly Dictionary<string, DataGridColumn> _candleColumns = new Dictionary<string, DataGridColumn>();
@@ -170,10 +161,7 @@ namespace StockSharp.Xaml
 		/// <summary>
 		/// Saved columns.
 		/// </summary>
-		protected override IList<DataGridColumn> SerializableColumns
-		{
-			get { return _serializableColumns; }
-		}
+		protected override IList<DataGridColumn> SerializableColumns => _serializableColumns;
 
 		/// <summary>
 		/// To refresh the table. It is carried out asynchronously.
@@ -185,7 +173,7 @@ namespace StockSharp.Xaml
 		public void BeginMakeEntries(IStorageRegistry storageRegistry, Security security, StorageFormats format, IMarketDataDrive drive)
 		{
 			if (storageRegistry == null)
-				throw new ArgumentNullException("storageRegistry");
+				throw new ArgumentNullException(nameof(storageRegistry));
 
 			lock (_syncObject)
 			{

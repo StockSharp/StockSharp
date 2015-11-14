@@ -106,7 +106,7 @@ namespace StockSharp.Alerts
 		public void Process(IEnumerable<Message> messages)
 		{
 			if (messages == null)
-				throw new ArgumentNullException("messages");
+				throw new ArgumentNullException(nameof(messages));
 
 			if (_alertSchema == null)
 				return;
@@ -127,7 +127,7 @@ namespace StockSharp.Alerts
 		public void Process(Message message)
 		{
 			if (message == null)
-				throw new ArgumentNullException("message");
+				throw new ArgumentNullException(nameof(message));
 
 			if (_alertSchema == null)
 				return;

@@ -25,7 +25,7 @@
 		public ExportCompositionWindow(CompositionDiagramElement composition)
 		{
 			if (composition == null)
-				throw new ArgumentNullException("composition");
+				throw new ArgumentNullException(nameof(composition));
 
 			//_composition = new ExportDiagramElement(composition);
 

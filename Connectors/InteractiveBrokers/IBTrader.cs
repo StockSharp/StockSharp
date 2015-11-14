@@ -46,7 +46,7 @@ namespace StockSharp.InteractiveBrokers
 		public ScannerMarketDataMessage(ScannerFilter filter)
 		{
 			if (filter == null)
-				throw new ArgumentNullException("filter");
+				throw new ArgumentNullException(nameof(filter));
 
 			Filter = filter;
 			DataType = ExtendedMarketDataTypes.Scanner;

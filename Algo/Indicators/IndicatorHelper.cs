@@ -21,7 +21,7 @@ namespace StockSharp.Algo.Indicators
 		public static decimal GetCurrentValue(this IIndicator indicator)
 		{
 			if (indicator == null)
-				throw new ArgumentNullException("indicator");
+				throw new ArgumentNullException(nameof(indicator));
 
 			return indicator.GetCurrentValue<decimal>();
 		}
@@ -35,7 +35,7 @@ namespace StockSharp.Algo.Indicators
 		public static T GetCurrentValue<T>(this IIndicator indicator)
 		{
 			if (indicator == null)
-				throw new ArgumentNullException("indicator");
+				throw new ArgumentNullException(nameof(indicator));
 
 			return indicator.GetValue<T>(0);
 		}
@@ -49,7 +49,7 @@ namespace StockSharp.Algo.Indicators
 		public static decimal GetValue(this IIndicator indicator, int index)
 		{
 			if (indicator == null)
-				throw new ArgumentNullException("indicator");
+				throw new ArgumentNullException(nameof(indicator));
 
 			return indicator.GetValue<decimal>(index);
 		}
@@ -64,14 +64,14 @@ namespace StockSharp.Algo.Indicators
 		public static T GetValue<T>(this IIndicator indicator, int index)
 		{
 			if (indicator == null)
-				throw new ArgumentNullException("indicator");
+				throw new ArgumentNullException(nameof(indicator));
 
 			if (index >= indicator.Container.Count)
 			{
 				if (index == 0 && typeof(decimal) == typeof(T))
 					return 0m.To<T>();
 				else
-					throw new ArgumentOutOfRangeException("index", index, LocalizedStrings.Str914Params.Put(indicator.Name));
+					throw new ArgumentOutOfRangeException(nameof(index), index, LocalizedStrings.Str914Params.Put(indicator.Name));
 			}
 
 			var value = indicator.Container.GetValue(index).Item2;

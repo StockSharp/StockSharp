@@ -30,10 +30,7 @@ namespace StockSharp.Xaml
 		/// <summary>
 		/// Saved columns.
 		/// </summary>
-		protected override IList<DataGridColumn> SerializableColumns
-		{
-			get { return _serializableColumns; }
-		}
+		protected override IList<DataGridColumn> SerializableColumns => _serializableColumns;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="OrderConditionalGrid"/>.

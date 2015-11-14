@@ -83,7 +83,7 @@ namespace StockSharp.Algo.Testing
 			set
 			{
 				if (value < 1)
-					throw new ArgumentOutOfRangeException("value", value, LocalizedStrings.Str1133);
+					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.Str1133);
 
 				_maxVolume = value;
 			}
@@ -103,7 +103,7 @@ namespace StockSharp.Algo.Testing
 			set
 			{
 				if (value < 1)
-					throw new ArgumentOutOfRangeException("value", value, LocalizedStrings.Str1134);
+					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.Str1134);
 
 				_minVolume = value;
 			}
@@ -123,7 +123,7 @@ namespace StockSharp.Algo.Testing
 			set
 			{
 				if (value < 1)
-					throw new ArgumentOutOfRangeException("value", value, LocalizedStrings.Str1135);
+					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.Str1135);
 
 				_maxPriceStepCount = value;
 			}
@@ -137,7 +137,7 @@ namespace StockSharp.Algo.Testing
 		public virtual Message Process(Message message)
 		{
 			if (message == null)
-				throw new ArgumentNullException("message");
+				throw new ArgumentNullException(nameof(message));
 
 			if (message.Type == MessageTypes.Security)
 				SecurityDefinition = (SecurityMessage)message.Clone();
@@ -181,7 +181,7 @@ namespace StockSharp.Algo.Testing
 			protected set
 			{
 				if (value == null)
-					throw new ArgumentNullException("value");
+					throw new ArgumentNullException(nameof(value));
 
 				_volumes = value;
 			}
@@ -204,7 +204,7 @@ namespace StockSharp.Algo.Testing
 			protected set
 			{
 				if (value == null)
-					throw new ArgumentNullException("value");
+					throw new ArgumentNullException(nameof(value));
 
 				_steps = value;
 			}

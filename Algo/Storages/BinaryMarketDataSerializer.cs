@@ -73,10 +73,7 @@
 		public TimeSpan FirstServerOffset { get; set; }
 		public TimeSpan LastServerOffset { get; set; }
 
-		public override object LastId
-		{
-			get { return LastTime; }
-		}
+		public override object LastId => LastTime;
 
 		public bool IsEmpty()
 		{
@@ -246,13 +243,13 @@
 			public MarketDataEnumerator(BinaryMarketDataSerializer<TData, TMetaInfo> serializer, BitArrayReader reader, TMetaInfo metaInfo)
 			{
 				if (serializer == null)
-					throw new ArgumentNullException("serializer");
+					throw new ArgumentNullException(nameof(serializer));
 
 				if (reader == null)
-					throw new ArgumentNullException("reader");
+					throw new ArgumentNullException(nameof(reader));
 
 				if (metaInfo == null)
-					throw new ArgumentNullException("metaInfo");
+					throw new ArgumentNullException(nameof(metaInfo));
 
 				Serializer = serializer;
 				Index = -1;
@@ -261,11 +258,11 @@
 				_originalMetaInfo = metaInfo;
 			}
 
-			public BitArrayReader Reader { get; private set; }
+			public BitArrayReader Reader { get; }
 
 			public TMetaInfo MetaInfo { get; private set; }
 
-			public BinaryMarketDataSerializer<TData, TMetaInfo> Serializer { get; private set; }
+			public BinaryMarketDataSerializer<TData, TMetaInfo> Serializer { get; }
 
 			public int Index { get; private set; }
 
@@ -323,7 +320,7 @@
 		protected BinaryMarketDataSerializer(SecurityId securityId, int dataSize, Version version)
 		{
 			if (securityId == null)
-				throw new ArgumentNullException("securityId");
+				throw new ArgumentNullException(nameof(securityId));
 
 			SecurityId = securityId;
 			DataSize = dataSize;

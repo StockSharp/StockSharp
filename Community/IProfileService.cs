@@ -59,10 +59,16 @@ namespace StockSharp.Community
 		public bool? Gender { get; set; }
 
 		/// <summary>
-		/// Is the mailout enabled.
+		/// Is the mail-out enabled.
 		/// </summary>
 		[DataMember]
 		public bool IsSubscription { get; set; }
+
+		/// <summary>
+		/// Language.
+		/// </summary>
+		[DataMember]
+		public string Language { get; set; }
 	}
 
 	/// <summary>

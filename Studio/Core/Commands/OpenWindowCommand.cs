@@ -7,7 +7,7 @@ namespace StockSharp.Studio.Core.Commands
 		public OpenWindowCommand(string id, Type ctrlType, bool isToolWindow, object context = null)
 		{
 			if (ctrlType == null)
-				throw new ArgumentNullException("ctrlType");
+				throw new ArgumentNullException(nameof(ctrlType));
 
 			Id = id;
 			CtrlType = ctrlType;

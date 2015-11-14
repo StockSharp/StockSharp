@@ -46,7 +46,7 @@ namespace StockSharp.Hydra.Windows
 			set
 			{
 				if (value == null)
-					throw new ArgumentNullException("value");
+					throw new ArgumentNullException(nameof(value));
 
 				_task = value;
 				_clonnedSettings = _task.Settings.Clone();

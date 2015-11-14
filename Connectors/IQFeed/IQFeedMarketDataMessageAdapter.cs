@@ -133,7 +133,7 @@ namespace StockSharp.IQFeed
 					break;
 				}
 				default:
-					throw new ArgumentOutOfRangeException("type", type, LocalizedStrings.WrongCandleType);
+					throw new ArgumentOutOfRangeException(nameof(type), type, LocalizedStrings.WrongCandleType);
 			}
 		}
 

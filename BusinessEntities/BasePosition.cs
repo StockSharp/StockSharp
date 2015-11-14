@@ -315,7 +315,7 @@ namespace StockSharp.BusinessEntities
 		public void CopyTo(BasePosition destination)
 		{
 			if (destination == null)
-				throw new ArgumentNullException("destination");
+				throw new ArgumentNullException(nameof(destination));
 
 			destination.CurrentValue = CurrentValue;
 			destination.BeginValue = BeginValue;

@@ -34,7 +34,7 @@ namespace StockSharp.Algo.Testing
 			: base(securityId)
 		{
 			if (tradeGenerator == null)
-				throw new ArgumentNullException("tradeGenerator");
+				throw new ArgumentNullException(nameof(tradeGenerator));
 
 			//_lastOrderPrice = startPrice;
 
@@ -45,15 +45,12 @@ namespace StockSharp.Algo.Testing
 		/// <summary>
 		/// Market data type.
 		/// </summary>
-		public override MarketDataTypes DataType
-		{
-			get { return MarketDataTypes.OrderLog; }
-		}
+		public override MarketDataTypes DataType => MarketDataTypes.OrderLog;
 
 		/// <summary>
 		/// Tick trades generator using random method.
 		/// </summary>
-		public TradeGenerator TradeGenerator { get; private set; }
+		public TradeGenerator TradeGenerator { get; }
 
 		private IdGenerator _idGenerator;
 
@@ -66,7 +63,7 @@ namespace StockSharp.Algo.Testing
 			set
 			{
 				if (value == null)
-					throw new ArgumentNullException("value");
+					throw new ArgumentNullException(nameof(value));
 
 				_idGenerator = value;
 			}

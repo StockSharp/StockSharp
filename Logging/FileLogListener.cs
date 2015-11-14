@@ -67,12 +67,12 @@ namespace StockSharp.Logging
 		public FileLogListener(string fileName)
 		{
 			if (fileName.IsEmpty())
-				throw new ArgumentNullException("fileName");
+				throw new ArgumentNullException(nameof(fileName));
 
 			var info = new FileInfo(fileName);
 
 			if (info.Name.IsEmpty())
-				throw new ArgumentException(LocalizedStrings.NameFileNotContainFileName.Put(fileName), "fileName");
+				throw new ArgumentException(LocalizedStrings.NameFileNotContainFileName.Put(fileName), nameof(fileName));
 
 			FileName = Path.GetFileNameWithoutExtension(info.Name);
 
@@ -108,7 +108,7 @@ namespace StockSharp.Logging
 			set
 			{
 				if (value == null)
-					throw new ArgumentNullException("value");
+					throw new ArgumentNullException(nameof(value));
 
 				_encoding = value;
 			}
@@ -167,7 +167,7 @@ namespace StockSharp.Logging
 			set
 			{
 				if (value.IsEmpty())
-					throw new ArgumentNullException("value");
+					throw new ArgumentNullException(nameof(value));
 
 				Directory.CreateDirectory(value);
 
@@ -197,7 +197,7 @@ namespace StockSharp.Logging
 			set
 			{
 				if (value.IsEmpty())
-					throw new ArgumentNullException("value");
+					throw new ArgumentNullException(nameof(value));
 
 				_extension = value;
 			}
@@ -219,7 +219,7 @@ namespace StockSharp.Logging
 			set
 			{
 				if (value.IsEmpty())
-					throw new ArgumentNullException("value");
+					throw new ArgumentNullException(nameof(value));
 
 				_directoryDateFormat = value;
 			}
@@ -385,7 +385,7 @@ namespace StockSharp.Logging
 		private static string GetRollingFileName(string fileName, int index)
 		{
 			if (index <= 0)
-				throw new ArgumentOutOfRangeException("index", index, LocalizedStrings.RollerFileIndexMustGreatZero);
+				throw new ArgumentOutOfRangeException(nameof(index), index, LocalizedStrings.RollerFileIndexMustGreatZero);
 
 			return Path.Combine(Path.GetDirectoryName(fileName), Path.GetFileNameWithoutExtension(fileName) + "." + index + Path.GetExtension(fileName));
 		}
@@ -393,7 +393,7 @@ namespace StockSharp.Logging
 		private string GetSourceName(ILogSource source)
 		{
 			if (source == null)
-				throw new ArgumentNullException("source");
+				throw new ArgumentNullException(nameof(source));
 
 			var name = source.Name;
 

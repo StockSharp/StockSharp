@@ -67,7 +67,7 @@ namespace StockSharp.InteractiveBrokers
 		private void ProcessRequest(RequestMessages message, ServerVersions minServerVersion, ServerVersions version, Action<IBSocket> handler)
 		{
 			if (handler == null)
-				throw new ArgumentNullException("handler");
+				throw new ArgumentNullException(nameof(handler));
 
 			var socket = Session;
 

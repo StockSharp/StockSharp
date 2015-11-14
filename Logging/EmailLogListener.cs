@@ -51,7 +51,7 @@ namespace StockSharp.Logging
 		protected virtual string GetSubject(LogMessage message)
 		{
 			if (message == null)
-				throw new ArgumentNullException("message");
+				throw new ArgumentNullException(nameof(message));
 
 			return message.Source.Name + " " + message.Level + " " + message.Time.ToString(TimeFormat);
 		}

@@ -26,20 +26,14 @@ namespace StockSharp.Algo.PnL
 		/// <summary>
 		/// Total profit-loss.
 		/// </summary>
-		public virtual decimal PnL
-		{
-			get { return RealizedPnL + UnrealizedPnL; }
-		}
+		public virtual decimal PnL => RealizedPnL + UnrealizedPnL;
 
 		private decimal _realizedPnL;
 
 		/// <summary>
 		/// The relative value of profit-loss without open position accounting.
 		/// </summary>
-		public virtual decimal RealizedPnL
-		{
-			get { return _realizedPnL; }
-		}
+		public virtual decimal RealizedPnL => _realizedPnL;
 
 		/// <summary>
 		/// The value of unrealized profit-loss.
@@ -69,7 +63,7 @@ namespace StockSharp.Algo.PnL
 		public PnLInfo ProcessMessage(Message message)
 		{
 			if (message == null)
-				throw new ArgumentNullException("message");
+				throw new ArgumentNullException(nameof(message));
 
 			switch (message.Type)
 			{
