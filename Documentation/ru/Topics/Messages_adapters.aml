@@ -3,9 +3,11 @@
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     <introduction>
        <para>
-       Механизм сообщений позволяет опустить использование специфичных коннекторов и использовать специфичные для торговой системы <legacyItalic>адаптеры сообщений</legacyItalic>.
-       Для создания подключения нужный адаптер необходимо добавить в список внутренних адаптеров коннектора 
-       <codeEntityReference qualifyHint="true">T:StockSharp.Algo.Connector.Adapter.InnerAdapters</codeEntityReference>.
+       Коннектор каждой торговой системы имеет свой собственный специфический адаптер (адаптеры). Механизм сообщений позволяет исключить использование специфических коннекторов,
+       и вместо этого использовать <legacyItalic>адаптеры сообщений</legacyItalic>.
+       Для создания подключения нужный адаптер необходимо добавить в список внутренних адаптеров 
+       <codeEntityReference qualifyHint="true">T:StockSharp.Algo.Connector.Adapter.InnerAdapters</codeEntityReference>
+        экземпляра базового класса коннектора.
        </para>
        <para>
         Ниже показан пример создания подключения к <token>smartcom</token>.

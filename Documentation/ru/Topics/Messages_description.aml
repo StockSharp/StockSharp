@@ -11,8 +11,8 @@
 		<list class="bullet">
   			<listItem>
   			       <para>
-           				<legacyBold>Сообщение</legacyBold> выполняет роль агента, передающего информацию. Сообшения имеют определенный тип <codeEntityReference>T:StockSharp.Messages.MessageTypes</codeEntityReference>.
-           				Каждому типу сообщения соответсвует отдельный класс. В свою очередь классы всех сообщений наследуются от класса <codeEntityReference>T:StockSharp.Messages.Message</codeEntityReference>, который
+           				<legacyBold>Сообщение</legacyBold> выполняет роль агента, передающего информацию. Сообшения имеют свой тип <codeEntityReference>T:StockSharp.Messages.MessageTypes</codeEntityReference>.
+           				Каждому типу сообщения соответсвует определенный класс. В свою очередь все классы сообщений наследуют от абстрактного класса <codeEntityReference>T:StockSharp.Messages.Message</codeEntityReference>, который
            				наделяет потомков такими свойствами, как тип сообщения <codeEntityReference>P:StockSharp.Messages.Message.Type</codeEntityReference> и 
            				<codeEntityReference>P:StockSharp.Messages.Message.LocalTime</codeEntityReference> - локальное время создания/получения сообщения.
            			</para>
@@ -29,8 +29,8 @@
   						</listItem>
   						<listItem>
   							<para>
-  								<legacyItalic>Входящие</legacyItalic> сообщения - это сообщения передающие
-           						информацию о рыночных данных, транзакциях, событиях соединения (установлено, разорвано) и т.п. Например, сообщение 
+  								<legacyItalic>Входящие</legacyItalic> сообщения - сообщения поступающие из внешней системы. Это сообщения передающие
+           						информацию о рыночных данных, транзакциях, портфелях, событиях соединения и т.п. Например, сообщение 
            						<codeEntityReference>T:StockSharp.Messages.QuoteChangeMessage</codeEntityReference> - передает информацию об изменении <legacyItalic>стакана</legacyItalic>.
   							</para>
   						</listItem>
@@ -45,7 +45,8 @@
   			</listItem>
   			<listItem>
   				    <para>
-           				<legacyBold>Адаптер сообщений</legacyBold> играет роль <legacyItalic>посредника</legacyItalic> между торговой системой и программой. Для каждого типа коннектора имеется свой класс адаптера, которые наследуются 
+           				<legacyBold>Адаптер сообщений</legacyBold> играет роль <legacyItalic>посредника</legacyItalic> между торговой системой и программой. 
+           				Для каждого типа коннектора имеется свой класс(ы) адаптера, который наследуется
            				от абстрактного класса <codeEntityReference>T:StockSharp.Messages.MessageAdapter</codeEntityReference>. 
        				</para>
 			        <para>

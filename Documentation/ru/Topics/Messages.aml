@@ -3,23 +3,9 @@
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     <introduction>
       <para>
-           Адаптер сообщений играет роль <legacyItalic>посредника</legacyItalic> между торговой системой и программой. Для каждого типа коннектора имеется свой класс адаптера, которые наследуются 
-           от абстрактного класса <codeEntityReference>T:StockSharp.Messages.MessageAdapter</codeEntityReference>. 
+           Механизм сообщений является внутренним логическим слоем архитектуры <token>stocksharp</token>, который обеспечивает 
+           взаимодействие различных элементов платформы по стандартному протоколу.
       </para>
-      <para>
-      	Адаптер выполняет две основыне функции:
-      </para>
-		<list class="ordered">
-  			<listItem>
-  				<para>Преобразует сообщения в команды конкретной торговой системы.</para>
-  			</listItem>
-  			<listItem>
-  				<para>Преобразует информацию, поступающую от торговой системы, (соединение, рыночные данные, транзакции и т.п.) в сообщения.</para>
-  			</listItem>
-		</list>
-		
-		
-
 
     </introduction>
     <!-- Описание, Адаптеры, Хранилище сообщений, Сетевое взаимодействие. -->

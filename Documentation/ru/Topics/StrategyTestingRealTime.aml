@@ -113,7 +113,7 @@ _connector.Connect();
 						  На следующем рисунке показан результат работы примера.
 					  </para>
 					  <mediaLink>
-						  <image placement="center" xlink:href="sample_realtaime_emulation" />
+						  <image placement="left" xlink:href="sample_realtaime_emulation" />
 					  </mediaLink>
 				  </content>
 			  </step>
