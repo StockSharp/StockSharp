@@ -9,7 +9,7 @@ namespace StockSharp.Algo.Indicators
 	/// Money Flow Index.
 	/// </summary>
 	[DisplayName("MFI")]
-	[DescriptionLoc(LocalizedStrings.StrMoneyFlowIndexKey)]
+	[DescriptionLoc(LocalizedStrings.MoneyFlowIndexKey)]
 	public class MoneyFlowIndex : LengthIndicator<decimal>
 	{
 		private decimal _previousPrice;
@@ -38,7 +38,9 @@ namespace StockSharp.Algo.Indicators
 		public override void Reset()
 		{
 			base.Reset();
+
 			_positiveFlow.Length = _negativeFlow.Length = Length;
+			_previousPrice = 0;
 		}
 
 		/// <summary>
@@ -53,13 +55,14 @@ namespace StockSharp.Algo.Indicators
 		/// <returns>The resulting value.</returns>
 		protected override IIndicatorValue OnProcess(IIndicatorValue input)
 		{
-			var newValue = input.GetValue<decimal>();
 			var candle = input.GetValue<Candle>();
+
 			var typicalPrice = (candle.HighPrice + candle.LowPrice + candle.ClosePrice) / 3.0m;
 			var moneyFlow = typicalPrice * candle.TotalVolume;
 			
 			var positiveFlow = _positiveFlow.Process(input.SetValue(this, typicalPrice > _previousPrice ? moneyFlow : 0.0m)).GetValue<decimal>();
 			var negativeFlow = _negativeFlow.Process(input.SetValue(this, typicalPrice < _previousPrice ? moneyFlow : 0.0m)).GetValue<decimal>();
+
 			_previousPrice = typicalPrice;
 			
 			if (negativeFlow == 0)
