@@ -208,11 +208,12 @@
       <Topic id="efad2861-7392-4ed6-957d-f7fde651a48f" visible="True" title="Синтетика" />
       <Topic id="667d9230-82d2-4052-9e23-6cdd983d3461" visible="True" title="Графические компоненты для опционов" />
     </Topic>
-    <Topic id="febbcf31-63d1-449d-847e-92fd8424f926" visible="True" title="Тестирование">
+    <Topic id="febbcf31-63d1-449d-847e-92fd8424f926" visible="True" isExpanded="true" title="Тестирование">
       <Topic id="5b90a23e-24b9-474a-a699-da47b666194a" visible="True" title="На истории" />
       <Topic id="24a5c734-199f-4090-943d-6324a04f335b" visible="True" title="На истории (оптимизация)" />
       <Topic id="ab42038e-836b-4c00-9332-0b2db2cbd948" visible="True" title="На случайных данных" />
       <Topic id="d27245ae-abfd-4d6b-b8c4-d1a24a45116f" visible="True" title="На рыночных данных" />
+      <Topic id="abfde7cc-fa0e-4705-b610-41b2ba1a2252" visible="True" isSelected="true" title="На истории с Финам" />
       <Topic id="9e72851f-2a19-4680-b344-cdc39d1b85e1" visible="True" title="Настройки тестирования" />
     </Topic>
     <Topic id="1cfb4f7c-b9fc-43da-a958-b0e0f881479d" visible="True" title="Множество подключений" />
@@ -252,7 +253,7 @@
         <Topic id="00026219-17a5-4749-82ab-ec018aa1ab0b" visible="True" title="NewsPanel" />
       </Topic>
       <Topic id="20b858de-424e-43ee-89ab-00002d344f89" visible="True" isExpanded="true" title="Визуальные компоненты: торговля">
-        <Topic id="5bb4f6f0-9057-4a88-b968-a5fd60641d4d" visible="True" isSelected="true" title="OrderGrid" />
+        <Topic id="5bb4f6f0-9057-4a88-b968-a5fd60641d4d" visible="True" title="OrderGrid" />
         <Topic id="cfc729e7-65e7-4ec3-b215-57031be290c7" visible="True" title="OrderWindow" />
         <Topic id="7ffeb2d8-55f3-447b-beb7-9b8017f5e7f4" visible="True" title="MyTradeGrid" />
         <Topic id="49fd7aaf-85e3-4cc1-94b4-5365b584f9bf" visible="True" title="OrderConditionalGrid" />
