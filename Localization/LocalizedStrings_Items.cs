@@ -9038,6 +9038,19 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
+		/// Money Flow Index.
+		/// </summary>
+		public const string StrMoneyFlowIndexKey = "StrMoneyFlowIndex";
+
+        /// <summary>
+        /// Money Flow Index.
+        /// </summary>
+        public static string StrMoneyFlowIndex
+        {
+			get { return GetString(StrMoneyFlowIndexKey); }
+		}
+
+		/// <summary>
 		/// Relative Strength Index.
 		/// </summary>
 		public const string Str770Key = "Str770";

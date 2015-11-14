@@ -164,6 +164,7 @@
     <Compile Include="FilterableSecurityProvider.cs" />
     <Compile Include="Indicators\Correlation.cs" />
     <Compile Include="Indicators\Covariance.cs" />
+    <Compile Include="Indicators\MoneyFlowIndex.cs" />
     <Compile Include="PnL\PnLMessageAdapter.cs" />
     <Compile Include="Positions\PositionMessageAdapter.cs" />
     <Compile Include="Risk\RiskMessageAdapter.cs" />
