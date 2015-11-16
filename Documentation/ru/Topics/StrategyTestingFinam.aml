@@ -1,0 +1,75 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="abfde7cc-fa0e-4705-b610-41b2ba1a2252" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <introduction>
+     <para>Для тестирования на истории <token>stocksharp</token> предоставляет функционал для получения данных непосредственно с
+     серверов поставщиков исторической информации, в частности с сервера Финам. Для получения данных с сервиса Финам в <token>stocksharp</token>
+     существует специальный класс <codeEntityReference>T:StockSharp.Algo.History.Russian.Finam.FinamHistorySource</codeEntityReference>, который
+     позволяет получать свечи, тики и информацию об инструментах.
+     </para>
+     <para>
+      Как использовать <legacyItalic>прямое</legacyItalic> получение данных вместе с <legacyItalic>тестором </legacyItalic> 
+      <codeEntityReference>T:StockSharp.Algo.Testing.HistoryEmulationConnector</codeEntityReference>, показано в примере <legacyItalic>Samples/Testing/SampleHistoryTesting</legacyItalic>. 
+      См. раздел тестирование <link xlink:href="5b90a23e-24b9-474a-a699-da47b666194a">На истории</link>.
+     </para>
+	<procedure>
+		<title>Тестирование с данными, загруженными с Финама</title>
+		<steps class="ordered">
+			<step>
+				<content>
+				<para>
+				Создается класс <legacyBold>FinamSecurityStorage</legacyBold>, который является хранилищем инструментов, загруженных с Финама.
+				</para>
+				</content>
+			</step>
+			<step>
+				<content>
+				<para>
+					Создаем экземпляр <codeEntityReference>T:StockSharp.Algo.History.Russian.Finam.FinamHistorySource</codeEntityReference>.
+				</para>
+				<code >
+				<![CDATA[
+private readonly FinamHistorySource _finamHistorySource = new FinamHistorySource();
+					  ]]>
+				</code>
+				</content>
+			</step>
+			<step>
+			<content>
+				<para>
+				Загружаем инструмент.
+				</para>
+				<code >
+				<![CDATA[
+_finamHistorySource.Refresh(new FinamSecurityStorage(security), security, s => {}, () => false);
+				
+ ]]></code>
+			</content>
+			</step>
+			<step>
+			<content>
+				<para>
+				 Загружаем свечи с заданным таймфремом за определенный период. Загруженная информация присваивается свойству <legacyBold>HistorySource</legacyBold> класса настроек эмуляции <legacyBold>EmulationInfo</legacyBold>.
+				</para>
+				<code >
+				<![CDATA[
+new EmulationInfo {UseCandleTimeFrame = timeFrame, HistorySource = d => _finamHistorySource.GetCandles(security, timeFrame, d.Date, d.Date), CurveColor = Colors.DarkBlue, StrategyName = LocalizedStrings.FinamCandles}),
+ ]]></code>
+			</content>
+			</step>
+			<step>
+			<content>
+				<para>
+				Регистрируем источник исторической информации в коннекторе <codeEntityReference>T:StockSharp.Algo.Testing.HistoryEmulationConnector</codeEntityReference>.
+				</para>
+				<code >
+				<![CDATA[
+connector.RegisterHistorySource(security, MarketDataTypes.CandleTimeFrame, emulationInfo.UseCandleTimeFrame.Value, emulationInfo.HistorySource);
+ ]]></code>
+			</content>
+			</step>
+		  </steps>
+	  </procedure>
+    </introduction>
+  </developerConceptualDocument>
+</topic>
