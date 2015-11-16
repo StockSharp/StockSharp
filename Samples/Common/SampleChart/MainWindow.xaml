@@ -1,0 +1,62 @@
+﻿<Window x:Class="SampleChart.MainWindow"
+		xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+		xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+		xmlns:charting="http://schemas.stocksharp.com/xaml"
+		xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+		xmlns:s="http://schemas.ulcsoftware.co.uk/ultrachart"
+		xmlns:loc="clr-namespace:StockSharp.Localization;assembly=StockSharp.Localization"
+		Title="{x:Static loc:LocalizedStrings.XamlStr540}" Height="400" Width="900">
+    <xctk:BusyIndicator x:Name="BusyIndicator">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <StackPanel Orientation="Horizontal">
+                <GroupBox Padding="5">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="{x:Static loc:LocalizedStrings.Str1242}"/>
+                        <ComboBox x:Name="_comboMainTimeframe" Width="120" Margin="3,0" IsEditable="False" IsReadOnly="True">
+                            <ComboBoxItem Content="1 minute" Tag="1"/>
+                            <ComboBoxItem Content="2 minute" Tag="2"/>
+                            <ComboBoxItem Content="3 minute" Tag="3"/>
+                            <ComboBoxItem Content="4 minute" Tag="4"/>
+                            <ComboBoxItem Content="5 minute" IsSelected="True" Tag="5"/>
+                            <ComboBoxItem Content="6 minute" Tag="6"/>
+                            <ComboBoxItem Content="9 minute" Tag="9"/>
+                            <ComboBoxItem Content="10 minute" Tag="10"/>
+                            <ComboBoxItem Content="12 minute" Tag="12"/>
+                            <ComboBoxItem Content="15 minute" Tag="15"/>
+                            <ComboBoxItem Content="30 minute" Tag="30"/>
+                            <ComboBoxItem Content="1 hour" Tag="600"/>
+                            <ComboBoxItem Content="2 hour" Tag="120"/>
+                            <ComboBoxItem Content="4 hour" Tag="240"/>
+                            <ComboBoxItem Content="day" Tag="1440"/>
+                            <ComboBoxItem Content="week" Tag="10080"/>
+                        </ComboBox>
+
+                        <TextBlock Text="{x:Static loc:LocalizedStrings.PriceStep}" Margin="10,0,0,0"/>
+                        <xctk:DoubleUpDown x:Name="_updownPriceStep" VerticalAlignment="Center" Minimum="0" Value="10"/>
+
+                        <Button Content="{x:Static loc:LocalizedStrings.XamlStr655}" Click="LoadData_OnClick" Margin="50,0,0,0"/>
+                    </StackPanel>
+                </GroupBox>
+
+                <ComboBox Margin="50,0,0,0" x:Name="_comboTheme" ItemsSource="{Binding Source={x:Static s:ThemeManager.AllThemes}}"
+					  SelectionChanged="_comboTheme_OnSelectionChanged" VerticalAlignment="Center" Width="150"/>
+
+                <CheckBox Content="{x:Static loc:LocalizedStrings.RealTime}" Margin="50,0,0,0" x:Name="_checkRealtime" VerticalAlignment="Center"/>
+            </StackPanel>
+
+            <TabControl Grid.Row="1">
+                <TabItem Header="Box chart">
+                    <charting:ChartPanel x:Name="_chartCombined" IsInteracted="True"/>
+                </TabItem>
+                <TabItem Header="Cluster chart">
+                    <charting:ChartPanel x:Name="_chartBindVisibleRange" IsInteracted="True"/>
+                </TabItem>
+            </TabControl>
+        </Grid>
+    </xctk:BusyIndicator>
+</Window>
