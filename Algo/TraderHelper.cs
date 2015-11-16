@@ -2634,6 +2634,9 @@ namespace StockSharp.Algo
 			if (message == null)
 				throw new ArgumentNullException(nameof(message));
 
+			if (!message.BoardCode.IsEmpty())
+				portfolio.Board = ExchangeBoard.GetOrCreateBoard(message.BoardCode);
+
 			foreach (var change in message.Changes)
 			{
 				switch (change.Key)
@@ -2977,6 +2980,85 @@ namespace StockSharp.Algo
 				throw new ArgumentNullException(nameof(message));
 
 			security.ApplyChanges(message.Changes, message.ServerTime, message.LocalTime);
+		}
+
+		/// <summary>
+		/// Apply change to the security object.
+		/// </summary>
+		/// <param name="security">Security.</param>
+		/// <param name="message">Meta info.</param>
+		public static void ApplyChanges(this Security security, SecurityMessage message)
+		{
+			if (security == null)
+				throw new ArgumentNullException(nameof(security));
+
+			if (message == null)
+				throw new ArgumentNullException(nameof(message));
+
+			if (!message.SecurityId.SecurityCode.IsEmpty())
+				security.Code = message.SecurityId.SecurityCode;
+
+			if (message.Currency != null)
+				security.Currency = message.Currency;
+
+			security.Board = ExchangeBoard.GetOrCreateBoard(message.SecurityId.BoardCode);
+
+			if (message.ExpiryDate != null)
+				security.ExpiryDate = message.ExpiryDate;
+
+			if (message.VolumeStep != null)
+				security.VolumeStep = message.VolumeStep.Value;
+
+			if (message.Multiplier != null)
+				security.Multiplier = message.Multiplier.Value;
+
+			if (message.PriceStep != null)
+			{
+				security.PriceStep = message.PriceStep.Value;
+
+				if (message.Decimals == null && security.Decimals == null)
+					security.Decimals = message.PriceStep.Value.GetCachedDecimals();
+			}
+
+			if (message.Decimals != null)
+			{
+				security.Decimals = message.Decimals.Value;
+
+				if (message.PriceStep == null)
+					security.PriceStep = message.Decimals.Value.GetPriceStep();
+			}
+
+			if (!message.Name.IsEmpty())
+				security.Name = message.Name;
+
+			if (!message.Class.IsEmpty())
+				security.Class = message.Class;
+
+			if (message.OptionType != null)
+				security.OptionType = message.OptionType;
+
+			if (message.Strike != null)
+				security.Strike = message.Strike.Value;
+
+			if (!message.BinaryOptionType.IsEmpty())
+				security.BinaryOptionType = message.BinaryOptionType;
+
+			if (message.SettlementDate != null)
+				security.SettlementDate = message.SettlementDate;
+
+			if (!message.ShortName.IsEmpty())
+				security.ShortName = message.ShortName;
+
+			if (message.SecurityType != null)
+				security.Type = message.SecurityType.Value;
+
+			if (!message.UnderlyingSecurityCode.IsEmpty())
+				security.UnderlyingSecurityId = message.UnderlyingSecurityCode + "@" + message.SecurityId.BoardCode;
+
+			if (message.SecurityId.HasExternalId())
+				security.ExternalId = message.SecurityId.ToExternalId();
+
+			message.CopyExtensionInfo(security);
 		}
 
 		/// <summary>

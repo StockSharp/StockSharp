@@ -30,7 +30,7 @@ namespace StockSharp.Algo.Storages
 		/// <summary>
 		/// The list of positions.
 		/// </summary>
-		IStorageEntityList<Position> Positions { get; }
+		IStoragePositionList Positions { get; }
 
 		/// <summary>
 		/// The list of own trades.

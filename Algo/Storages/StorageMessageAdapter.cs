@@ -8,6 +8,7 @@ namespace StockSharp.Algo.Storages
 
 	using MoreLinq;
 
+	using StockSharp.BusinessEntities;
 	using StockSharp.Messages;
 
 	/// <summary>
@@ -154,6 +155,12 @@ namespace StockSharp.Algo.Storages
 			foreach (var board in _entityRegistry.ExchangeBoards)
 				RaiseNewOutMessage(board.ToMessage());
 
+			foreach (var portfolio in _entityRegistry.Portfolios)
+				RaiseNewOutMessage(portfolio.ToMessage());
+
+			foreach (var position in _entityRegistry.Positions)
+				RaiseNewOutMessage(position.ToMessage());
+
 			if (DaysLoad == TimeSpan.Zero)
 				return;
 
@@ -184,14 +191,134 @@ namespace StockSharp.Algo.Storages
 			switch (message.Type)
 			{
 				case MessageTypes.Security:
-					_entityRegistry.Securities.Add(((SecurityMessage)message).ToSecurity());
+				{
+					var secMsg = (SecurityMessage)message;
+                    var security = _entityRegistry.Securities.ReadBySecurityId(secMsg.SecurityId);
+
+					if (security == null)
+						security = secMsg.ToSecurity();
+					else
+						security.ApplyChanges(secMsg);
+
+                    _entityRegistry.Securities.Save(security);
 					break;
+				}
 				case MessageTypes.Board:
-					_entityRegistry.ExchangeBoards.Add(((BoardMessage)message).ToBoard());
+				{
+					var boardMsg = (BoardMessage)message;
+					var board = _entityRegistry.ExchangeBoards.ReadById(boardMsg.Code);
+
+					if (board == null)
+					{
+						board = ExchangeBoard.GetOrCreateBoard(boardMsg.Code, code =>
+						{
+							var exchange = boardMsg.ToExchange(new Exchange { Name = boardMsg.ExchangeCode });
+							return boardMsg.ToBoard(new ExchangeBoard { Code = code, Exchange = exchange });
+						});
+					}
+					else
+					{
+						// TODO apply changes
+					}
+
+                    _entityRegistry.ExchangeBoards.Save(board);
 					break;
+				}
+
+				case MessageTypes.Portfolio:
+				{
+					var portfolioMsg = (PortfolioMessage)message;
+					var portfolio = _entityRegistry.Portfolios.ReadById(portfolioMsg.PortfolioName)
+							?? new Portfolio { Name = portfolioMsg.PortfolioName };
+
+					portfolioMsg.ToPortfolio(portfolio);
+					_entityRegistry.Portfolios.Save(portfolio);
+
+					break;
+				}
+
+				case MessageTypes.PortfolioChange:
+				{
+					var portfolioMsg = (PortfolioChangeMessage)message;
+					var portfolio = _entityRegistry.Portfolios.ReadById(portfolioMsg.PortfolioName)
+							?? new Portfolio { Name = portfolioMsg.PortfolioName };
+
+					portfolio.ApplyChanges(portfolioMsg);
+					_entityRegistry.Portfolios.Save(portfolio);
+
+					break;
+				}
+
+				case MessageTypes.Position:
+				{
+					var positionMsg = (PositionMessage)message;
+					var position = GetPosition(positionMsg.SecurityId, positionMsg.PortfolioName);
+
+					if (position == null)
+						break;
+
+					if (!positionMsg.DepoName.IsEmpty())
+						position.DepoName = positionMsg.DepoName;
+
+					if (positionMsg.LimitType != null)
+						position.LimitType = positionMsg.LimitType;
+
+					if (!positionMsg.Description.IsEmpty())
+						position.Description = positionMsg.Description;
+
+					_entityRegistry.Positions.Save(position);
+
+					break;
+				}
+
+				case MessageTypes.PositionChange:
+				{
+					var positionMsg = (PositionChangeMessage)message;
+					var position = GetPosition(positionMsg.SecurityId, positionMsg.PortfolioName);
+
+					if (position == null)
+						break;
+
+					position.ApplyChanges(positionMsg);
+					_entityRegistry.Positions.Save(position);
+
+					break;
+				}
 			}
 
 			base.OnInnerAdapterNewOutMessage(message);
+		}
+
+		private Position GetPosition(SecurityId securityId, string portfolioName)
+		{
+			var security = _entityRegistry.Securities.ReadBySecurityId(securityId);
+			var portfolio = _entityRegistry.Portfolios.ReadById(portfolioName);
+
+			if (security == null)
+			{
+				if (securityId.SecurityCode.IsEmpty())
+					return null;
+
+				security = new Security
+				{
+					Id = securityId.SecurityCode + "@" + securityId.BoardCode
+				};
+
+				_entityRegistry.Securities.Add(security);
+			}
+
+			if (portfolio == null)
+			{
+				portfolio = new Portfolio
+				{
+					Name = portfolioName
+				};
+
+                _entityRegistry.Portfolios.Add(portfolio);
+			}
+
+			return _entityRegistry.Positions.ReadBySecurityAndPortfolio(security, portfolio)
+				?? new Position { Security = security, Portfolio = portfolio };
 		}
 
 		/// <summary>

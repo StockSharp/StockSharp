@@ -75,7 +75,7 @@ namespace StockSharp.Algo.Storages
 		/// <summary>
 		/// The list of positions.
 		/// </summary>
-		public virtual IStorageEntityList<Position> Positions { get; }
+		public virtual IStoragePositionList Positions { get; }
 
 		/// <summary>
 		/// The list of own trades.

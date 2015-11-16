@@ -368,11 +368,13 @@
     <Compile Include="Storages\InMemoryMarketDataStorage.cs" />
     <Compile Include="Storages\ISecurityMarketDataDrive.cs" />
     <Compile Include="Storages\ISecurityStorage.cs" />
+    <Compile Include="Storages\IStoragePositionList.cs" />
     <Compile Include="Storages\IStorageSecurityList.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Storages\Level1Serializer.cs" />
     <Compile Include="Storages\NewsList.cs" />
+    <Compile Include="Storages\StorageEntityFactory.cs" />
     <Compile Include="Storages\TransactionSerializer.cs" />
     <Compile Include="Storages\NewsSerializer.cs" />
     <Compile Include="Storages\QuoteSerializer.cs" />
