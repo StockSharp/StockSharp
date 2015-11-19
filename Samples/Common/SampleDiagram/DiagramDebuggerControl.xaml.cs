@@ -13,6 +13,8 @@
 		public readonly static RoutedCommand RemoveBreakpointCommand = new RoutedCommand();
 		public readonly static RoutedCommand StepToOutParamCommand = new RoutedCommand();
 		public readonly static RoutedCommand StepNextCommand = new RoutedCommand();
+		public readonly static RoutedCommand StepIntoCommand = new RoutedCommand();
+		public readonly static RoutedCommand StepOutCommand = new RoutedCommand();
 		public readonly static RoutedCommand ContinueCommand = new RoutedCommand();
 
 		public static readonly DependencyProperty CompositionProperty = DependencyProperty.Register("Composition", typeof(CompositionDiagramElement), typeof(DiagramDebuggerControl),
@@ -47,6 +49,7 @@
 			{
 				_debugger = new DiagramDebugger(newComposition);
 				_debugger.Break += OnDebuggerBreak;
+				_debugger.CompositionChanged += OnDebuggerCompositionChanged;
 
 				NoStrategyLabel.Visibility = Visibility.Hidden;
 				DiagramEditor.Composition = newComposition;
@@ -67,7 +70,14 @@
 			this.GuiAsync(() =>
 			{
 				ShowElementProperties(element);
-				CommandManager.InvalidateRequerySuggested();
+			});
+		}
+
+		private void OnDebuggerCompositionChanged(CompositionDiagramElement element)
+		{
+			this.GuiAsync(() =>
+			{
+				DiagramEditor.Composition = element;
 			});
 		}
 
@@ -121,6 +131,26 @@
 		}
 
 		private void StepToOutParamCommand_Executed(object sender, ExecutedRoutedEventArgs e)
+		{
+			_debugger.StepOut();
+		}
+
+		private void StepIntoCommand_OnCanExecute(object sender, CanExecuteRoutedEventArgs e)
+		{
+			e.CanExecute = _debugger != null && _debugger.IsWaitingOnInput && _debugger.CanStepInto;
+		}
+
+		private void StepIntoCommand_Executed(object sender, ExecutedRoutedEventArgs e)
+		{
+			_debugger.StepInto();
+		}
+
+		private void StepOutCommand_OnCanExecute(object sender, CanExecuteRoutedEventArgs e)
+		{
+			e.CanExecute = _debugger != null && _debugger.CanStepOut;
+		}
+
+		private void StepOutCommand_Executed(object sender, ExecutedRoutedEventArgs e)
 		{
 			_debugger.StepOut();
 		}
