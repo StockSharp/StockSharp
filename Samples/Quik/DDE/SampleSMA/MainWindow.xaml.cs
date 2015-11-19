@@ -63,11 +63,7 @@ namespace SampleSMA
 
 		protected override void OnClosing(CancelEventArgs e)
 		{
-			if (_trader != null)
-			{
-				_trader.Dispose();
-			}
-
+			_trader?.Dispose();
 			base.OnClosing(e);
 		}
 
@@ -197,7 +193,7 @@ namespace SampleSMA
 				var series = new CandleSeries(typeof(TimeFrameCandle), _lkoh, _timeFrame);
 
 				// создаем торговую стратегию, скользящие средние на 80 5-минуток и 10 5-минуток
-				_strategy = new SmaStrategy(series, new SimpleMovingAverage { Length = 80 }, new SimpleMovingAverage { Length = 10 })
+				_strategy = new SmaStrategy(_candleManager, series, new SimpleMovingAverage { Length = 80 }, new SimpleMovingAverage { Length = 10 })
 				{
 					Volume = 1,
 					Security = _lkoh,

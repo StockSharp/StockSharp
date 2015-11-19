@@ -21,10 +21,10 @@ namespace StockSharp.Algo.Candles
 			private readonly IEnumerable<CandleSeries> _innerSeries;
 			private readonly DateTimeOffset _from;
 			private readonly DateTimeOffset _to;
-			private readonly Action<Candle> _processing;
-			private readonly Action _stopped;
-			private int _startedSeriesCount;
-			private readonly object _lock = new object();
+			//private readonly Action<Candle> _processing;
+			//private readonly Action _stopped;
+			//private int _startedSeriesCount;
+			//private readonly object _lock = new object();
 			private readonly IndexCandleBuilder _builder;
 
 			public IndexSeriesInfo(ICandleManager candleManager, IEnumerable<CandleSeries> innerSeries, DateTimeOffset from, DateTimeOffset to, IndexSecurity security, Action<Candle> processing, Action stopped)
@@ -48,18 +48,18 @@ namespace StockSharp.Algo.Candles
 				_innerSeries = innerSeries;
 				_from = from;
 				_to = to;
-				_processing = processing;
-				_stopped = stopped;
+				//_processing = processing;
+				//_stopped = stopped;
 
 				_builder = new IndexCandleBuilder(security);
 
-				_innerSeries.ForEach(s =>
-				{
-					s.ProcessCandle += OnInnerSourceProcessCandle;
-					s.Stopped += OnInnerSourceStopped;
+				//_innerSeries.ForEach(s =>
+				//{
+				//	s.ProcessCandle += OnInnerSourceProcessCandle;
+				//	s.Stopped += OnInnerSourceStopped;
 
-					_startedSeriesCount++;
-				});
+				//	_startedSeriesCount++;
+				//});
 			}
 
 			public void Start()
@@ -68,38 +68,38 @@ namespace StockSharp.Algo.Candles
 				_innerSeries.ForEach(s => _candleManager.Start(s, _from, _to));
 			}
 
-			private void OnInnerSourceProcessCandle(Candle candle)
-			{
-				if (candle.State != CandleStates.Finished)
-					return;
+			//private void OnInnerSourceProcessCandle(Candle candle)
+			//{
+			//	if (candle.State != CandleStates.Finished)
+			//		return;
 
-				_builder.ProcessCandle(candle).ForEach(_processing);
-			}
+			//	_builder.ProcessCandle(candle).ForEach(_processing);
+			//}
 
-			private void OnInnerSourceStopped()
-			{
-				lock (_lock)
-				{
-					if (--_startedSeriesCount > 0)
-						return;
-				}
+			//private void OnInnerSourceStopped()
+			//{
+			//	lock (_lock)
+			//	{
+			//		if (--_startedSeriesCount > 0)
+			//			return;
+			//	}
 
-				// отписываемся только после обработки остановки всех серий
-				_innerSeries.ForEach(s => s.Stopped -= OnInnerSourceStopped);
+			//	// отписываемся только после обработки остановки всех серий
+			//	_innerSeries.ForEach(s => s.Stopped -= OnInnerSourceStopped);
 
-				_stopped();
-			}
+			//	_stopped();
+			//}
 
-			protected override void DisposeManaged()
-			{
-				base.DisposeManaged();
+			//protected override void DisposeManaged()
+			//{
+			//	base.DisposeManaged();
 
-				_innerSeries.ForEach(s =>
-				{
-					s.Dispose();
-					s.ProcessCandle -= OnInnerSourceProcessCandle;
-				});
-			}
+			//	_innerSeries.ForEach(s =>
+			//	{
+			//		s.Dispose();
+			//		s.ProcessCandle -= OnInnerSourceProcessCandle;
+			//	});
+			//}
 		}
 
 		private readonly DateTimeOffset _from;
@@ -149,17 +149,16 @@ namespace StockSharp.Algo.Candles
 				from, to, indexSecurity,
 				c =>
 				{
-					if (c.Series == null)
-					{
-						c.Series = series;
-						c.Source = this;
-					}
+					//if (c.Series == null)
+					//{
+					//	c.Series = series;
+					//	c.Source = this;
+					//}
 
 					CandleManager.Container.AddCandle(series, c);
 					Processing.SafeInvoke(series, c);
 				},
-				() =>
-					Stopped.SafeInvoke(series));
+				() => Stopped.SafeInvoke(series));
 
 			_info.Add(series, basketInfo);
 

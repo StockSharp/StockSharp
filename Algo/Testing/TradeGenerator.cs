@@ -28,11 +28,6 @@ namespace StockSharp.Algo.Testing
 		/// </summary>
 		public override MarketDataTypes DataType => MarketDataTypes.Trades;
 
-		/// <summary>
-		/// To generate the value for <see cref="Trade.OrderDirection"/>. By default is disabled.
-		/// </summary>
-		public bool GenerateDirection { get; set; }
-
 		private IdGenerator _idGenerator;
 
 		/// <summary>
@@ -67,6 +62,11 @@ namespace StockSharp.Algo.Testing
 		{
 			Interval = TimeSpan.FromMilliseconds(50);
 		}
+
+		/// <summary>
+		/// To generate the value for <see cref="ExecutionMessage.OriginSide"/>. By default is disabled.
+		/// </summary>
+		public bool GenerateOriginSide { get; set; }
 
 		/// <summary>
 		/// Process message.
@@ -137,7 +137,7 @@ namespace StockSharp.Algo.Testing
 				TradeId = IdGenerator.GetNextId(),
 				ServerTime = time,
 				LocalTime = time.LocalDateTime,
-				OriginSide = GenerateDirection ? RandomGen.GetEnum<Sides>() : (Sides?)null,
+				OriginSide = GenerateOriginSide ? RandomGen.GetEnum<Sides>() : (Sides?)null,
 				Volume = Volumes.Next(),
 				ExecutionType = ExecutionTypes.Tick
 			};
@@ -173,7 +173,7 @@ namespace StockSharp.Algo.Testing
 				Volumes = Volumes,
 				Steps = Steps,
 
-				GenerateDirection = GenerateDirection,
+				GenerateOriginSide = GenerateOriginSide,
 				IdGenerator = IdGenerator
 			};
 		}

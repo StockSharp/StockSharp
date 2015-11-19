@@ -103,8 +103,8 @@ namespace StockSharp.Studio.Strategies
 				})
 				.Apply(this);
 
-			_series
-				.WhenCandles()
+			this.GetCandleManager()
+				.WhenCandles(_series)
 				.Do(Process)
 				.Apply(this);
 

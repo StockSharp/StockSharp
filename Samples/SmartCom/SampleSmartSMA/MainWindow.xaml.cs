@@ -244,7 +244,7 @@ namespace SampleSmartSMA
 				var series = new CandleSeries(typeof(TimeFrameCandle), _lkoh, _timeFrame);
 
 				// создаем торговую стратегию
-				_strategy = new SmaStrategy(series, longSma, shortSma)
+				_strategy = new SmaStrategy(_candleManager, series, longSma, shortSma)
 				{
 					Volume = 1,
 					Security = _lkoh,

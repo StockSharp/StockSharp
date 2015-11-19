@@ -204,10 +204,8 @@
     <Compile Include="Candles\IndexSeriesBuilder.cs" />
     <Compile Include="Candles\IStorageCandleSource.cs" />
     <Compile Include="Candles\StorageCandleSource.cs" />
-    <Compile Include="Candles\VolumePriceStatistics\PriceLevel.cs" />
-    <Compile Include="Candles\VolumePriceStatistics\ValueArea.cs" />
-    <Compile Include="Candles\VolumePriceStatistics\VolumePriceStatisticHelper.cs" />
-    <Compile Include="Candles\VolumePriceStatistics\VolumeProfile.cs" />
+    <Compile Include="Candles\Compression\VolumeProfileHelper.cs" />
+    <Compile Include="Candles\Compression\VolumeProfile.cs" />
     <Compile Include="Commissions\CommissionManager.cs" />
     <Compile Include="Commissions\CommissionRule.cs" />
     <Compile Include="Commissions\ICommissionManager.cs" />

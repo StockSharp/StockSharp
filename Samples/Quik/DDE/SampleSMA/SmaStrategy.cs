@@ -11,24 +11,26 @@ namespace SampleSMA
 
 	class SmaStrategy : Strategy
 	{
+		private readonly ICandleManager _candleManager;
 		private readonly CandleSeries _series;
 		private bool _isShortLessThenLong;
 
-		public SmaStrategy(CandleSeries series, SimpleMovingAverage longSma, SimpleMovingAverage shortSma)
+		public SmaStrategy(ICandleManager candleManager, CandleSeries series, SimpleMovingAverage longSma, SimpleMovingAverage shortSma)
 		{
+			_candleManager = candleManager;
 			_series = series;
 
 			LongSma = longSma;
 			ShortSma = shortSma;
 		}
 
-		public SimpleMovingAverage LongSma { get; private set; }
-		public SimpleMovingAverage ShortSma { get; private set; }
+		public SimpleMovingAverage LongSma { get; }
+		public SimpleMovingAverage ShortSma { get; }
 
 		protected override void OnStarted()
 		{
-			_series
-				.WhenCandlesFinished()
+			_candleManager
+				.WhenCandlesFinished(_series)
 				.Do(ProcessCandle)
 				.Apply(this);
 

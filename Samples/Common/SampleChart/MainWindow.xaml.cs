@@ -34,6 +34,7 @@
 		private ChartClusterProfileElement _cpElement;
 		private ChartCandleElement _candleElement1, _candleElement2;
 		private TimeFrameCandle _candle;
+		private VolumeProfile _volumeProfile;
 		private readonly DispatcherTimer _chartUpdateTimer = new DispatcherTimer();
 		private readonly HashSet<TimeFrameCandle> _updatedCandles = new HashSet<TimeFrameCandle>();
 		private readonly List<TimeFrameCandle> _allCandles = new List<TimeFrameCandle>();
@@ -201,7 +202,7 @@
 
 				foreach (var tick in storage.GetTickMessageStorage(_security, new LocalMarketDataDrive(path)).Load())
 				{
-					AppendTick(tick.ServerTime, tick.TradePrice.Value, tick.Volume.Value);
+					AppendTick(tick);
 					_lastTime = tick.ServerTime;
 
 					if (date != tick.ServerTime.Date)
@@ -237,7 +238,12 @@
 			{
 				var step = _updownPriceStep.Value ?? 10;
 				var price = Round(_lastPrice + (decimal)((RandomGen.GetDouble() - 0.5) * 5 * step), (decimal)step);
-				AppendTick(_lastTime, price, RandomGen.GetInt(50) + 1);
+				AppendTick(new ExecutionMessage
+				{
+					ServerTime = _lastTime,
+					TradePrice = price,
+					Volume = RandomGen.GetInt(50) + 1
+				});
 				_lastTime += TimeSpan.FromSeconds(10);
 			}
 
@@ -254,14 +260,17 @@
 			});
 		}
 
-		private void AppendTick(DateTimeOffset time, decimal price, decimal vol)
+		private void AppendTick(ExecutionMessage tick)
 		{
-			_updatedCandles.Add(GetCandle(time, price, vol));
-			_lastPrice = price;
+			_updatedCandles.Add(GetCandle(tick));
+			_lastPrice = _candle.ClosePrice;
 		}
 
-		private TimeFrameCandle GetCandle(DateTimeOffset time, decimal price, decimal vol)
+		private TimeFrameCandle GetCandle(ExecutionMessage tick)
 		{
+			var time = tick.ServerTime;
+			var price = tick.TradePrice.Value;
+
 			if (_candle == null || time >= _candle.CloseTime)
 			{
 				//var t = TimeframeSegmentDataSeries.GetTimeframePeriod(time.DateTime, _timeframe);
@@ -273,9 +282,10 @@
 					OpenTime = bounds.Min,
 					CloseTime = bounds.Max,
 				};
+				_volumeProfile = new VolumeProfile();
 
-				_candle.OpenPrice = _candle.HighPrice = _candle.LowPrice = _candle.ClosePrice = price;
-				_candle.VolumeProfileInfo.Update(new InputTick(time, price, vol));
+                _candle.OpenPrice = _candle.HighPrice = _candle.LowPrice = _candle.ClosePrice = price;
+				_volumeProfile.Update(new TickCandleBuilderSourceValue(_security, tick));
 
 				_allCandles.Add(_candle);
 
@@ -293,9 +303,9 @@
 
 			_candle.ClosePrice = price;
 
-			_candle.TotalVolume += vol;
+			_candle.TotalVolume += tick.Volume.Value;
 
-			_candle.VolumeProfileInfo.Update(new InputTick(time, price, vol));
+			_volumeProfile.Update(new TickCandleBuilderSourceValue(_security, tick));
 
 			return _candle;
 		}
@@ -312,22 +322,6 @@
 				.Error()
 				.Text(msg)
 				.Show();
-		}
-
-		private class InputTick : ICandleBuilderSourceValue
-		{
-			public InputTick(DateTimeOffset time, decimal price, decimal volume)
-			{
-				Time = time;
-				Price = price;
-				Volume = volume;
-			}
-
-			public Security Security => null;
-			public DateTimeOffset Time { get; }
-			public decimal Price { get; }
-			public decimal Volume { get; }
-			public Sides? OrderDirection => Sides.Buy;
 		}
 
 		private void _comboTheme_OnSelectionChanged(object sender, SelectionChangedEventArgs e)

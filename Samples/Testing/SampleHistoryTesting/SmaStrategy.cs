@@ -22,6 +22,7 @@ namespace SampleHistoryTesting
 		private readonly ChartTradeElement _tradesElem;
 		private readonly ChartIndicatorElement _shortElem;
 		private readonly ChartIndicatorElement _longElem;
+		private readonly ICandleManager _candleManager;
 		private readonly List<MyTrade> _myTrades = new List<MyTrade>();
 		private readonly CandleSeries _series;
 		private bool _isShortLessThenLong;
@@ -29,27 +30,28 @@ namespace SampleHistoryTesting
 		public SmaStrategy(IChart chart, ChartCandleElement candlesElem, ChartTradeElement tradesElem, 
 			SimpleMovingAverage shortMa, ChartIndicatorElement shortElem,
 			SimpleMovingAverage longMa, ChartIndicatorElement longElem,
-			CandleSeries series)
+			ICandleManager candleManager, CandleSeries series)
 		{
 			_chart = chart;
 			_candlesElem = candlesElem;
 			_tradesElem = tradesElem;
 			_shortElem = shortElem;
 			_longElem = longElem;
-			
+			_candleManager = candleManager;
+
 			_series = series;
 
 			ShortSma = shortMa;
 			LongSma = longMa;
 		}
 
-		public SimpleMovingAverage LongSma { get; private set; }
-		public SimpleMovingAverage ShortSma { get; private set; }
+		public SimpleMovingAverage LongSma { get; }
+		public SimpleMovingAverage ShortSma { get; }
 
 		protected override void OnStarted()
 		{
-			_series
-				.WhenCandlesFinished()
+			_candleManager
+				.WhenCandlesFinished(_series)
 				.Do(ProcessCandle)
 				.Apply(this);
 
