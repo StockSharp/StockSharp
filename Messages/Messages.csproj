@@ -89,6 +89,7 @@
     <Compile Include="BaseConnectionMessage.cs" />
     <Compile Include="BoardMessage.cs" />
     <Compile Include="CandleMessage.cs" />
+    <Compile Include="CandlePriceLevel.cs" />
     <Compile Include="ChangePasswordMessage.cs" />
     <Compile Include="ChannelMessageAdapter.cs" />
     <Compile Include="ClearQueueMessage.cs" />

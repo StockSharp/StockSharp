@@ -13,7 +13,6 @@ namespace StockSharp.Algo.Candles
 	using MoreLinq;
 
 	using StockSharp.Algo.Candles.Compression;
-	using StockSharp.Algo.Candles.VolumePriceStatistics;
 	using StockSharp.BusinessEntities;
 	using StockSharp.Messages;
 
@@ -98,142 +97,142 @@ namespace StockSharp.Algo.Candles
 			manager.ThrowIfNull().Start(series, series.From, series.To);
 		}
 
-		/// <summary>
-		/// To stop candles getting.
-		/// </summary>
-		/// <param name="series">Candles series.</param>
-		public static void Stop(this CandleSeries series)
-		{
-			var manager = series.ThrowIfNull().CandleManager;
+		///// <summary>
+		///// To stop candles getting.
+		///// </summary>
+		///// <param name="series">Candles series.</param>
+		//public static void Stop(this CandleSeries series)
+		//{
+		//	var manager = series.ThrowIfNull().CandleManager;
 
-			// серию ранее не запускали, значит и останавливать не нужно
-			if (manager == null)
-				return;
+		//	// серию ранее не запускали, значит и останавливать не нужно
+		//	if (manager == null)
+		//		return;
 
-			manager.Stop(series);
-		}
+		//	manager.Stop(series);
+		//}
 
-		private static ICandleManagerContainer GetContainer(this CandleSeries series)
-		{
-			return series.ThrowIfNull().CandleManager.Container;
-		}
+		//private static ICandleManagerContainer GetContainer(this CandleSeries series)
+		//{
+		//	return series.ThrowIfNull().CandleManager.Container;
+		//}
 
 		/// <summary>
 		/// To get the number of candles.
 		/// </summary>
+		/// <param name="candleManager">The candles manager.</param>
 		/// <param name="series">Candles series.</param>
 		/// <returns>Number of candles.</returns>
-		public static int GetCandleCount(this CandleSeries series)
+		public static int GetCandleCount(this ICandleManager candleManager, CandleSeries series)
 		{
-			return series.GetContainer().GetCandleCount(series);
+			return candleManager.ThrowIfNull().Container.GetCandleCount(series);
 		}
 
 		/// <summary>
 		/// To get all candles for the <paramref name="time" /> period.
 		/// </summary>
 		/// <typeparam name="TCandle">The candles type.</typeparam>
+		/// <param name="candleManager">The candles manager.</param>
 		/// <param name="series">Candles series.</param>
 		/// <param name="time">The candle period.</param>
 		/// <returns>Candles.</returns>
-		public static IEnumerable<TCandle> GetCandles<TCandle>(this CandleSeries series, DateTimeOffset time) 
+		public static IEnumerable<TCandle> GetCandles<TCandle>(this ICandleManager candleManager, CandleSeries series, DateTimeOffset time) 
 			where TCandle : Candle
 		{
-			return series.GetContainer().GetCandles(series, time).OfType<TCandle>();
+			return candleManager.ThrowIfNull().Container.GetCandles(series, time).OfType<TCandle>();
 		}
 
 		/// <summary>
 		/// To get all candles.
 		/// </summary>
 		/// <typeparam name="TCandle">The candles type.</typeparam>
+		/// <param name="candleManager">The candles manager.</param>
 		/// <param name="series">Candles series.</param>
 		/// <returns>Candles.</returns>
-		public static IEnumerable<TCandle> GetCandles<TCandle>(this CandleSeries series)
+		public static IEnumerable<TCandle> GetCandles<TCandle>(this ICandleManager candleManager, CandleSeries series)
 			where TCandle : Candle
 		{
-			return series.GetContainer().GetCandles(series).OfType<TCandle>();
+			return candleManager.ThrowIfNull().Container.GetCandles(series).OfType<TCandle>();
 		}
 
 		/// <summary>
 		/// To get candles by date range.
 		/// </summary>
 		/// <typeparam name="TCandle">The candles type.</typeparam>
+		/// <param name="candleManager">The candles manager.</param>
 		/// <param name="series">Candles series.</param>
 		/// <param name="timeRange">The date range which should include candles. The <see cref="Candle.OpenTime"/> value is taken into consideration.</param>
 		/// <returns>Found candles.</returns>
-		public static IEnumerable<TCandle> GetCandles<TCandle>(this CandleSeries series, Range<DateTimeOffset> timeRange)
+		public static IEnumerable<TCandle> GetCandles<TCandle>(this ICandleManager candleManager, CandleSeries series, Range<DateTimeOffset> timeRange)
 			where TCandle : Candle
 		{
-			return series.GetContainer().GetCandles(series, timeRange).OfType<TCandle>();
+			return candleManager.ThrowIfNull().Container.GetCandles(series, timeRange).OfType<TCandle>();
 		}
 
 		/// <summary>
 		/// To get candles by the total number.
 		/// </summary>
 		/// <typeparam name="TCandle">The candles type.</typeparam>
+		/// <param name="candleManager">The candles manager.</param>
 		/// <param name="series">Candles series.</param>
 		/// <param name="candleCount">The number of candles that should be returned.</param>
 		/// <returns>Found candles.</returns>
-		public static IEnumerable<TCandle> GetCandles<TCandle>(this CandleSeries series, int candleCount)
+		public static IEnumerable<TCandle> GetCandles<TCandle>(this ICandleManager candleManager, CandleSeries series, int candleCount)
 		{
-			return series.GetContainer().GetCandles(series, candleCount).OfType<TCandle>();
+			return candleManager.ThrowIfNull().Container.GetCandles(series, candleCount).OfType<TCandle>();
 		}
 
 		/// <summary>
 		/// To get a candle by the index.
 		/// </summary>
 		/// <typeparam name="TCandle">The candles type.</typeparam>
+		/// <param name="candleManager">The candles manager.</param>
 		/// <param name="series">Candles series.</param>
 		/// <param name="candleIndex">The candle's position number from the end.</param>
 		/// <returns>The found candle. If the candle does not exist, then <see langword="null" /> will be returned.</returns>
-		public static TCandle GetCandle<TCandle>(this CandleSeries series, int candleIndex)
+		public static TCandle GetCandle<TCandle>(this ICandleManager candleManager, CandleSeries series, int candleIndex)
 			where TCandle : Candle
 		{
-			return (TCandle)series.GetContainer().GetCandle(series, candleIndex);
+			return (TCandle)candleManager.ThrowIfNull().Container.GetCandle(series, candleIndex);
 		}
 
 		/// <summary>
 		/// To get a temporary candle on the specific date.
 		/// </summary>
+		/// <param name="candleManager">The candles manager.</param>
 		/// <param name="series">Candles series.</param>
 		/// <param name="time">The candle date.</param>
 		/// <returns>The found candle (<see langword="null" />, if the candle by the specified criteria does not exist).</returns>
-		public static TimeFrameCandle GetTimeFrameCandle(this CandleSeries series, DateTimeOffset time)
+		public static TimeFrameCandle GetTimeFrameCandle(this ICandleManager candleManager, CandleSeries series, DateTimeOffset time)
 		{
-			return series.GetCandles<TimeFrameCandle>().FirstOrDefault(c => c.OpenTime == time);
+			return candleManager.GetCandles<TimeFrameCandle>(series).FirstOrDefault(c => c.OpenTime == time);
 		}
 
 		/// <summary>
 		/// To get the current candle.
 		/// </summary>
 		/// <typeparam name="TCandle">The candles type.</typeparam>
+		/// <param name="candleManager">The candles manager.</param>
 		/// <param name="series">Candles series.</param>
 		/// <returns>The found candle. If the candle does not exist, the <see langword="null" /> will be returned.</returns>
-		public static TCandle GetCurrentCandle<TCandle>(this CandleSeries series)
+		public static TCandle GetCurrentCandle<TCandle>(this ICandleManager candleManager, CandleSeries series)
 			where TCandle : Candle
 		{
-			return series.GetCandle<TCandle>(0);
+			return candleManager.GetCandle<TCandle>(series, 0);
 		}
 
 		/// <summary>
 		/// To get a candles series by the specified parameters.
 		/// </summary>
 		/// <typeparam name="TCandle">The candles type.</typeparam>
-		/// <param name="manager">The candles manager.</param>
+		/// <param name="candleManager">The candles manager.</param>
 		/// <param name="security">The instrument by which trades should be filtered for the candles creation.</param>
 		/// <param name="arg">Candle arg.</param>
 		/// <returns>The candles series. <see langword="null" /> if this series is not registered.</returns>
-		public static CandleSeries GetSeries<TCandle>(this ICandleManager manager, Security security, object arg)
+		public static CandleSeries GetSeries<TCandle>(this ICandleManager candleManager, Security security, object arg)
 			where TCandle : Candle
 		{
-			return manager.ThrowIfNull().Series.FirstOrDefault(s => s.CandleType == typeof(TCandle) && s.Security == security && s.Arg.Equals(arg));
-		}
-
-		private static CandleSeries ThrowIfNull(this CandleSeries series)
-		{
-			if (series == null)
-				throw new ArgumentNullException(nameof(series));
-
-			return series;
+			return candleManager.ThrowIfNull().Series.FirstOrDefault(s => s.CandleType == typeof(TCandle) && s.Security == security && s.Arg.Equals(arg));
 		}
 
 		private static ICandleManager ThrowIfNull(this ICandleManager manager)
@@ -304,11 +303,11 @@ namespace StockSharp.Algo.Candles
 						throw new ArgumentNullException(nameof(values));
 
 					_series = series;
-					_series.ProcessCandle += SeriesOnProcessCandle;
 
 					_valuesEnumerator = values.GetEnumerator();
 
 					_candleManager = new CandleManager();
+					_candleManager.Processing += OnProcessCandle;
 
 					_builderSource = new EnumeratorCandleBuilderSource(series.Security);
 					_candleManager.Sources.OfType<ICandleBuilder>().ForEach(b => b.Sources.Add(_builderSource));
@@ -316,8 +315,11 @@ namespace StockSharp.Algo.Candles
 					_candleManager.Start(series);
 				}
 
-				private void SeriesOnProcessCandle(Candle candle)
+				private void OnProcessCandle(CandleSeries series, Candle candle)
 				{
+					if (series != _series)
+						return;
+
 					_lastCandle = candle;
 
 					if (candle.State != CandleStates.Finished)
@@ -359,9 +361,9 @@ namespace StockSharp.Algo.Candles
 				protected override void DisposeManaged()
 				{
 					Reset();
-					_series.ProcessCandle -= SeriesOnProcessCandle;
-					_series.Stop();
-					_candleManager.Dispose();
+					_candleManager.Processing -= OnProcessCandle;
+					_candleManager.Stop(_series);
+                    _candleManager.Dispose();
 
 					base.DisposeManaged();
 				}
@@ -1005,18 +1007,18 @@ namespace StockSharp.Algo.Candles
 						.Sum(intersection => intersection.Length.Ticks / timeFrame.Ticks);
 		}
 
-		internal static CandleSeries CheckSeries(this Candle candle)
-		{
-			if (candle == null)
-				throw new ArgumentNullException(nameof(candle));
+		//internal static CandleSeries CheckSeries(this Candle candle)
+		//{
+		//	if (candle == null)
+		//		throw new ArgumentNullException(nameof(candle));
 
-			var series = candle.Series;
+		//	var series = candle.Series;
 
-			if (series == null)
-				throw new ArgumentException("candle");
+		//	if (series == null)
+		//		throw new ArgumentException("candle");
 
-			return series;
-		}
+		//	return series;
+		//}
 
 		internal static bool CheckTime(this CandleSeries series, DateTimeOffset time)
 		{
@@ -1027,15 +1029,27 @@ namespace StockSharp.Algo.Candles
 		}
 
 		/// <summary>
-		/// To calculate the <see cref="ValueArea"/> for the candles group.
+		/// To calculate the area for the candles group.
 		/// </summary>
 		/// <param name="candles">Candles.</param>
-		/// <returns><see cref="ValueArea"/>.</returns>
-		public static ValueArea GetValueArea(this IEnumerable<Candle> candles)
+		/// <returns>The area.</returns>
+		public static VolumeProfile GetValueArea(this IEnumerable<Candle> candles)
 		{
-			var va = new ValueArea(candles.SelectMany(c => c.VolumeProfileInfo.PriceLevels));
-			va.Calculate();
-			return va;
+			var area = new VolumeProfile();
+
+			foreach (var candle in candles)
+			{
+				if (candle.PriceLevels == null)
+					continue;
+
+				foreach (var priceLevel in candle.PriceLevels)
+				{
+					area.Update(priceLevel);
+				}
+			}
+
+			area.Calculate();
+			return area;
 		}
 
 		/// <summary>

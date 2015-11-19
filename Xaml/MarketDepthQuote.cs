@@ -22,18 +22,15 @@
 				private readonly CachedSynchronizedList<Order> _orders = new CachedSynchronizedList<Order>();
 
 				/// <summary>
-				/// The total balance to buy. Calculation by internal orders <see cref="OrderContainer.Orders"/>.
+				/// The total balance of bids. Calculation by internal orders <see cref="OrderContainer.Orders"/>.
 				/// </summary>
 				public decimal TotalBuyBalance { get; private set; }
 
 				/// <summary>
-				/// The total balance to sale. Calculation by internal orders <see cref="OrderContainer.Orders"/>.
+				/// The total balance of asks. Calculation by internal orders <see cref="OrderContainer.Orders"/>.
 				/// </summary>
 				public decimal TotalSellBalance { get; private set; }
 
-				///// <summary>
-				///// Активные заявки, цена которых равна <see cref="Price"/>.
-				///// </summary>
 				public IEnumerable<Order> Orders => _orders.Cache;
 
 				public void RefreshTotals()

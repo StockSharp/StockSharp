@@ -54,8 +54,11 @@ namespace StockSharp.Algo.Indicators
 
 			if (!UseTotalVolume)
 			{
-				foreach (var priceLevel in candle.VolumeProfileInfo.PriceLevels)
-					AddVolume(priceLevel.Price, priceLevel.BuyVolume + priceLevel.SellVolume);
+				if (candle.PriceLevels != null)
+				{
+					foreach (var priceLevel in candle.PriceLevels)
+						AddVolume(priceLevel.Price, priceLevel.BuyVolume + priceLevel.SellVolume);
+				}
 			}
 			else
 				AddVolume(candle.ClosePrice, candle.TotalVolume);

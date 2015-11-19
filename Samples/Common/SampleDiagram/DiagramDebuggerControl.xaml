@@ -25,7 +25,15 @@
 						CanExecute="StepToOutParamCommand_OnCanExecute"
                         Executed="StepToOutParamCommand_Executed" />
 
-		<CommandBinding Command="{x:Static sampleDiagramPublic:DiagramDebuggerControl.ContinueCommand}"
+        <CommandBinding Command="{x:Static sampleDiagramPublic:DiagramDebuggerControl.StepIntoCommand}"
+						CanExecute="StepIntoCommand_OnCanExecute"
+                        Executed="StepIntoCommand_Executed" />
+
+        <CommandBinding Command="{x:Static sampleDiagramPublic:DiagramDebuggerControl.StepOutCommand}"
+						CanExecute="StepOutCommand_OnCanExecute"
+                        Executed="StepOutCommand_Executed" />
+
+        <CommandBinding Command="{x:Static sampleDiagramPublic:DiagramDebuggerControl.ContinueCommand}"
                         CanExecute="ContinueCommand_OnCanExecute"
                         Executed="ContinueCommand_Executed" />
 	</UserControl.CommandBindings>

@@ -1,12 +1,13 @@
 namespace StockSharp.Algo.Candles
 {
 	using System;
+	using System.Collections.Generic;
 	using System.ComponentModel;
+	using System.Linq;
 	using System.Runtime.Serialization;
 
 	using Ecng.Common;
 
-	using StockSharp.Algo.Candles.VolumePriceStatistics;
 	using StockSharp.BusinessEntities;
 	using StockSharp.Messages;
 	using StockSharp.Localization;
@@ -270,29 +271,29 @@ namespace StockSharp.Algo.Candles
 			}
 		}
 
-		[field: NonSerialized]
-		private CandleSeries _series;
+		//[field: NonSerialized]
+		//private CandleSeries _series;
 
-		/// <summary>
-		/// Candles series.
-		/// </summary>
-		public CandleSeries Series
-		{
-			get { return _series; }
-			set { _series = value; }
-		}
+		///// <summary>
+		///// Candles series.
+		///// </summary>
+		//public CandleSeries Series
+		//{
+		//	get { return _series; }
+		//	set { _series = value; }
+		//}
 
-		[field: NonSerialized]
-		private ICandleManagerSource _source;
+		//[field: NonSerialized]
+		//private ICandleManagerSource _source;
 
-		/// <summary>
-		/// Candle's source.
-		/// </summary>
-		public ICandleManagerSource Source
-		{
-			get { return _source; }
-			set { _source = value; }
-		}
+		///// <summary>
+		///// Candle's source.
+		///// </summary>
+		//public ICandleManagerSource Source
+		//{
+		//	get { return _source; }
+		//	set { _source = value; }
+		//}
 
 		/// <summary>
 		/// Candle arg.
@@ -363,13 +364,11 @@ namespace StockSharp.Algo.Candles
 			}
 		}
 
-		[field: NonSerialized]
-		private readonly VolumeProfile _volumeProfileInfo = new VolumeProfile();
-
 		/// <summary>
-		/// Volume profile.
+		/// Price levels.
 		/// </summary>
-		public VolumeProfile VolumeProfileInfo => _volumeProfileInfo;
+		[DataMember]
+		public IEnumerable<CandlePriceLevel> PriceLevels { get; set; }
 
 		/// <summary>
 		/// Open interest.
@@ -384,8 +383,7 @@ namespace StockSharp.Algo.Candles
 		public override string ToString()
 		{
 			return "{0:HH:mm:ss} {1} (O:{2}, H:{3}, L:{4}, C:{5}, V:{6})"
-				.Put(OpenTime, Series == null ? GetType().Name + "_" + Security + "_" + Arg : Series.ToString(),
-						OpenPrice, HighPrice, LowPrice, ClosePrice, TotalVolume);
+				.Put(OpenTime, GetType().Name + "_" + Security + "_" + Arg, OpenPrice, HighPrice, LowPrice, ClosePrice, TotalVolume);
 		}
 
 		private void ThrowIfFinished()
@@ -420,13 +418,14 @@ namespace StockSharp.Algo.Candles
 			destination.OpenVolume = OpenVolume;
 			destination.RelativeVolume = RelativeVolume;
 			destination.Security = Security;
-			destination.Series = Series;
-			destination.Source = Source;
+			//destination.Series = Series;
+			//destination.Source = Source;
 			//destination.State = State;
 			destination.TotalPrice = TotalPrice;
 			destination.TotalTicks = TotalTicks;
 			destination.TotalVolume = TotalVolume;
 			//destination.VolumeProfileInfo = VolumeProfileInfo;
+			destination.PriceLevels = PriceLevels?.Select(l => l.Clone()).ToArray();
 
 			return destination;
 		}

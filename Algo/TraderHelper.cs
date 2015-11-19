@@ -255,7 +255,7 @@ namespace StockSharp.Algo
 		/// To calculate the current price by the order book depending on the order direction.
 		/// </summary>
 		/// <param name="depth">The order book for the current price calculation.</param>
-		/// <param name="side">The order direction. If it is a purchase, <see cref="MarketDepth.BestAsk"/> value is used, otherwise <see cref="MarketDepth.BestBid"/>.</param>
+		/// <param name="side">The order direction. If it is a buy, <see cref="MarketDepth.BestAsk"/> value is used, otherwise <see cref="MarketDepth.BestBid"/>.</param>
 		/// <param name="priceType">The type of current price.</param>
 		/// <param name="orders">Orders to be ignored.</param>
 		/// <returns>The current price. If information in order book is insufficient, then <see langword="null" /> will be returned.</returns>
@@ -281,7 +281,7 @@ namespace StockSharp.Algo
 		/// To calculate the current price based on the best pair of quotes, depending on the order direction.
 		/// </summary>
 		/// <param name="bestPair">The best pair of quotes, used for the current price calculation.</param>
-		/// <param name="side">The order direction. If it is a purchase, <see cref="MarketDepthPair.Ask"/> value is used, otherwise <see cref="MarketDepthPair.Bid"/>.</param>
+		/// <param name="side">The order direction. If it is a buy, <see cref="MarketDepthPair.Ask"/> value is used, otherwise <see cref="MarketDepthPair.Bid"/>.</param>
 		/// <param name="priceType">The type of current price.</param>
 		/// <returns>The current price. If information in order book is insufficient, then <see langword="null" /> will be returned.</returns>
 		/// <remarks>
@@ -329,7 +329,7 @@ namespace StockSharp.Algo
 		/// To use shifting for price, depending on direction <paramref name="side" />.
 		/// </summary>
 		/// <param name="price">Price.</param>
-		/// <param name="side">The order direction, used as shift direction (for purchase the shift is added, for sale - subtracted).</param>
+		/// <param name="side">The order direction, used as shift direction (for buy the shift is added, for sell - subtracted).</param>
 		/// <param name="offset">Price shift.</param>
 		/// <param name="security">Security.</param>
 		/// <returns>New price.</returns>
@@ -383,7 +383,7 @@ namespace StockSharp.Algo
 		/// <summary>
 		/// To get the position on My trade.
 		/// </summary>
-		/// <param name="trade">My trade, used for position calculation. At purchase the trade volume <see cref="Trade.Volume"/> is taken with positive sign, at sale � with negative.</param>
+		/// <param name="trade">My trade, used for position calculation. At buy the trade volume <see cref="Trade.Volume"/> is taken with positive sign, at sell - with negative.</param>
 		/// <returns>Position.</returns>
 		public static decimal GetPosition(this MyTrade trade)
 		{
@@ -396,7 +396,7 @@ namespace StockSharp.Algo
 		/// <summary>
 		/// To get the position on My trade.
 		/// </summary>
-		/// <param name="message">My trade, used for position calculation. At purchase the trade volume <see cref="ExecutionMessage.Volume"/> is taken with positive sign, at sale � with negative.</param>
+		/// <param name="message">My trade, used for position calculation. At buy the trade volume <see cref="ExecutionMessage.Volume"/> is taken with positive sign, at sell - with negative.</param>
 		/// <returns>Position.</returns>
 		public static decimal GetPosition(this ExecutionMessage message)
 		{
@@ -409,7 +409,7 @@ namespace StockSharp.Algo
 		/// <summary>
 		/// To get the position by the order.
 		/// </summary>
-		/// <param name="order">The order, used for the position calculation. At purchase the position is taken with positive sign, at sale � with negative.</param>
+		/// <param name="order">The order, used for the position calculation. At buy the position is taken with positive sign, at sell - with negative.</param>
 		/// <param name="connector">The connection of interaction with trade systems.</param>
 		/// <returns>Position.</returns>
 		public static decimal GetPosition(this Order order, IConnector connector)
@@ -2634,6 +2634,9 @@ namespace StockSharp.Algo
 			if (message == null)
 				throw new ArgumentNullException(nameof(message));
 
+			if (!message.BoardCode.IsEmpty())
+				portfolio.Board = ExchangeBoard.GetOrCreateBoard(message.BoardCode);
+
 			foreach (var change in message.Changes)
 			{
 				switch (change.Key)
@@ -2977,6 +2980,85 @@ namespace StockSharp.Algo
 				throw new ArgumentNullException(nameof(message));
 
 			security.ApplyChanges(message.Changes, message.ServerTime, message.LocalTime);
+		}
+
+		/// <summary>
+		/// Apply change to the security object.
+		/// </summary>
+		/// <param name="security">Security.</param>
+		/// <param name="message">Meta info.</param>
+		public static void ApplyChanges(this Security security, SecurityMessage message)
+		{
+			if (security == null)
+				throw new ArgumentNullException(nameof(security));
+
+			if (message == null)
+				throw new ArgumentNullException(nameof(message));
+
+			if (!message.SecurityId.SecurityCode.IsEmpty())
+				security.Code = message.SecurityId.SecurityCode;
+
+			if (message.Currency != null)
+				security.Currency = message.Currency;
+
+			security.Board = ExchangeBoard.GetOrCreateBoard(message.SecurityId.BoardCode);
+
+			if (message.ExpiryDate != null)
+				security.ExpiryDate = message.ExpiryDate;
+
+			if (message.VolumeStep != null)
+				security.VolumeStep = message.VolumeStep.Value;
+
+			if (message.Multiplier != null)
+				security.Multiplier = message.Multiplier.Value;
+
+			if (message.PriceStep != null)
+			{
+				security.PriceStep = message.PriceStep.Value;
+
+				if (message.Decimals == null && security.Decimals == null)
+					security.Decimals = message.PriceStep.Value.GetCachedDecimals();
+			}
+
+			if (message.Decimals != null)
+			{
+				security.Decimals = message.Decimals.Value;
+
+				if (message.PriceStep == null)
+					security.PriceStep = message.Decimals.Value.GetPriceStep();
+			}
+
+			if (!message.Name.IsEmpty())
+				security.Name = message.Name;
+
+			if (!message.Class.IsEmpty())
+				security.Class = message.Class;
+
+			if (message.OptionType != null)
+				security.OptionType = message.OptionType;
+
+			if (message.Strike != null)
+				security.Strike = message.Strike.Value;
+
+			if (!message.BinaryOptionType.IsEmpty())
+				security.BinaryOptionType = message.BinaryOptionType;
+
+			if (message.SettlementDate != null)
+				security.SettlementDate = message.SettlementDate;
+
+			if (!message.ShortName.IsEmpty())
+				security.ShortName = message.ShortName;
+
+			if (message.SecurityType != null)
+				security.Type = message.SecurityType.Value;
+
+			if (!message.UnderlyingSecurityCode.IsEmpty())
+				security.UnderlyingSecurityId = message.UnderlyingSecurityCode + "@" + message.SecurityId.BoardCode;
+
+			if (message.SecurityId.HasExternalId())
+				security.ExternalId = message.SecurityId.ToExternalId();
+
+			message.CopyExtensionInfo(security);
 		}
 
 		/// <summary>

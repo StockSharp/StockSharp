@@ -49,6 +49,7 @@ namespace StockSharp.Algo.Candles.Compression
 			}
 
 			public Candle CurrentCandle { get; set; }
+			public VolumeProfile VolumeProfile { get; set; }
 
 			public void Start()
 			{
@@ -249,19 +250,12 @@ namespace StockSharp.Algo.Candles.Compression
 
 			var info = _info.TryGetValue(series);
 
-			if (info == null)
-				return;
-
-			info.Stop();
+			info?.Stop();
 		}
 
 		#endregion
 
-		/// <summary>
-		/// The handler method of the <see cref="CandleSeries.Stopped"/> event.
-		/// </summary>
-		/// <param name="series">The candles series for which the event was called.</param>
-		protected virtual void OnStopped(CandleSeries series)
+		private void OnStopped(CandleSeries series)
 		{
 			_info.Remove(series);
 			Stopped.SafeInvoke(series);
@@ -297,15 +291,24 @@ namespace StockSharp.Algo.Candles.Compression
 
 					if (candle == null)
 					{
-						// если значение не может быть обработано, то просто его пропускаем
+						// skip the value that cannot be processed
 						break;
-						//throw new InvalidOperationException("Фабрика вернула пустую свечу.");
 					}
 
 					if (candle == currCandle)
 					{
 						if (!valueAdded)
+						{
 							Container.AddValue(series, candle, value);
+
+							if (series.IsCalcVolumeProfile)
+							{
+								if (info.VolumeProfile == null)
+									throw new InvalidOperationException();
+
+								info.VolumeProfile.Update(value);
+							}
+						}
 
 						//candle.State = CandleStates.Changed;
 						RaiseProcessing(series, candle);
@@ -317,12 +320,21 @@ namespace StockSharp.Algo.Candles.Compression
 						if (currCandle != null)
 						{
 							info.CurrentCandle = null;
+							info.VolumeProfile = null;
 
 							currCandle.State = CandleStates.Finished;
 							RaiseProcessing(series, currCandle);
 						}
 
 						info.CurrentCandle = candle;
+
+						if (series.IsCalcVolumeProfile)
+						{
+							info.VolumeProfile = new VolumeProfile();
+							info.VolumeProfile.Update(value);
+
+                            candle.PriceLevels = info.VolumeProfile.PriceLevels;
+						}
 
 						Container.AddValue(series, candle, value);
 						valueAdded = true;
@@ -335,7 +347,7 @@ namespace StockSharp.Algo.Candles.Compression
 				lastValue = value;
 			}
 
-			return lastValue == null ? default(DateTimeOffset) : lastValue.Time;
+			return lastValue?.Time ?? default(DateTimeOffset);
 		}
 
 		/// <summary>
@@ -433,9 +445,6 @@ namespace StockSharp.Algo.Candles.Compression
 			}
 
 			candle.CloseTime = value.Time;
-
-			if (series.IsCalcVolumeProfile)
-				candle.VolumeProfileInfo.Update(value);
 		}
 
 		/// <summary>
@@ -468,7 +477,6 @@ namespace StockSharp.Algo.Candles.Compression
 
 			UpdateCandle(series, currentCandle, value);
 			this.AddDebugLog("UpdatedCandle {0} ForValue {1}", currentCandle, value);
-
 			return currentCandle;
 		}
 
@@ -715,7 +723,7 @@ namespace StockSharp.Algo.Candles.Compression
 		/// <returns>Time ranges.</returns>
 		public override IEnumerable<Range<DateTimeOffset>> GetSupportedRanges(CandleSeries series)
 		{
-			var ranges = base.GetSupportedRanges(series);
+			var ranges = base.GetSupportedRanges(series).ToArray();
 
 			if (!ranges.IsEmpty())
 			{
@@ -824,7 +832,7 @@ namespace StockSharp.Algo.Candles.Compression
 		/// <returns>Time ranges.</returns>
 		public override IEnumerable<Range<DateTimeOffset>> GetSupportedRanges(CandleSeries series)
 		{
-			var ranges = base.GetSupportedRanges(series);
+			var ranges = base.GetSupportedRanges(series).ToArray();
 
 			if (!ranges.IsEmpty())
 			{
@@ -909,7 +917,7 @@ namespace StockSharp.Algo.Candles.Compression
 		/// <returns>Time ranges.</returns>
 		public override IEnumerable<Range<DateTimeOffset>> GetSupportedRanges(CandleSeries series)
 		{
-			var ranges = base.GetSupportedRanges(series);
+			var ranges = base.GetSupportedRanges(series).ToArray();
 
 			if (!ranges.IsEmpty())
 			{
@@ -982,7 +990,7 @@ namespace StockSharp.Algo.Candles.Compression
 		/// <returns>Time ranges.</returns>
 		public override IEnumerable<Range<DateTimeOffset>> GetSupportedRanges(CandleSeries series)
 		{
-			var ranges = base.GetSupportedRanges(series);
+			var ranges = base.GetSupportedRanges(series).ToArray();
 
 			if (!ranges.IsEmpty())
 			{
@@ -1055,7 +1063,7 @@ namespace StockSharp.Algo.Candles.Compression
 		/// <returns>Time ranges.</returns>
 		public override IEnumerable<Range<DateTimeOffset>> GetSupportedRanges(CandleSeries series)
 		{
-			var ranges = base.GetSupportedRanges(series);
+			var ranges = base.GetSupportedRanges(series).ToArray();
 
 			if (!ranges.IsEmpty())
 			{
@@ -1210,7 +1218,7 @@ namespace StockSharp.Algo.Candles.Compression
 		/// <returns>Time ranges.</returns>
 		public override IEnumerable<Range<DateTimeOffset>> GetSupportedRanges(CandleSeries series)
 		{
-			var ranges = base.GetSupportedRanges(series);
+			var ranges = base.GetSupportedRanges(series).ToArray();
 
 			if (!ranges.IsEmpty())
 			{

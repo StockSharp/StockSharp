@@ -232,11 +232,15 @@ namespace StockSharp.Studio
 				.Do(ProcessTrades)
 				.Apply(this);
 
+			this.GetCandleManager().Processing += Process;
+
 			base.OnStarted();
 		}
 
 		protected override void OnStopping()
 		{
+			this.GetCandleManager().Processing -= Process;
+
 			_subscriptions.ForEach(s => s.Value.Where(p => p.Value > 0).ForEach(v => UnSubscribe(s.Key, v.Key)));
 
 			lock (_syncRoot)
@@ -392,7 +396,7 @@ namespace StockSharp.Studio
 				if (elements.Count != 0)
 					return;
 
-				UnSubscribeSeries(info.Second);
+				StopSeries(info.Second);
 				_elementsBySeries.Remove(info.Second);
 			}
 		}
@@ -404,7 +408,7 @@ namespace StockSharp.Studio
 				var isNew = !_elementsBySeries.ContainsKey(candleSeries);
 
 				if ((isNew || !CanProcess) && isNew)
-					SubscribeSeries(candleSeries);
+					StartSeries(candleSeries);
 
 				_elementsInfo.SafeAdd(element, e => RefTuple.Create(DateTimeOffset.MinValue, candleSeries));
 				_elementsBySeries.SafeAdd(candleSeries).Add(element);
@@ -426,7 +430,7 @@ namespace StockSharp.Studio
 					values = ProcessHistoryCandles(element, candleSeries);
 				}
 				else if (isNew)
-					SubscribeSeries(candleSeries);
+					StartSeries(candleSeries);
 
 				var lastDate = values == null || values.IsEmpty() ? DateTimeOffset.MinValue : values.Last().First;
 
@@ -440,7 +444,7 @@ namespace StockSharp.Studio
 
 		private RefPair<DateTimeOffset, IDictionary<IChartElement, object>>[] ProcessHistoryCandles(ChartIndicatorElement element, CandleSeries series)
 		{
-			var candles = series.GetCandles<Candle>().Where(c => c.State == CandleStates.Finished).ToArray();
+			var candles = this.GetCandleManager().GetCandles<Candle>(series).Where(c => c.State == CandleStates.Finished).ToArray();
 
 			return candles
 				.Select(candle => new RefPair<DateTimeOffset, IDictionary<IChartElement, object>>(candle.OpenTime, new Dictionary<IChartElement, object>
@@ -460,18 +464,6 @@ namespace StockSharp.Studio
 			return indicator.Process(candle);
 		}
 
-		private void SubscribeSeries(CandleSeries series)
-		{
-			series.ProcessCandle += Process;
-			StartSeries(series);
-		}
-
-		private void UnSubscribeSeries(CandleSeries series)
-		{
-			series.ProcessCandle -= Process;
-			StopSeries(series);
-		}
-
 		private void StartSeries(CandleSeries series)
 		{
 			if (!CanProcess)
@@ -488,12 +480,10 @@ namespace StockSharp.Studio
 		private void StopSeries(CandleSeries series)
 		{
 			var candleManager = this.GetCandleManager();
-
-			if (candleManager != null)
-				candleManager.Stop(series);
+			candleManager?.Stop(series);
 		}
 
-		private void Process(Candle candle)
+		private void Process(CandleSeries series, Candle candle)
 		{
 			var values = new Dictionary<IChartElement, object>();
 
@@ -501,10 +491,10 @@ namespace StockSharp.Studio
 			{
 				this.AddInfoLog("{0}: {1}", candle.OpenTime, candle.State);
 
-				var elements = _elementsBySeries[candle.Series]
+				var elements = _elementsBySeries[series]
 					.OfType<ChartIndicatorElement>();
 
-				var candleElement = _elementsBySeries[candle.Series]
+				var candleElement = _elementsBySeries[series]
 					.OfType<ChartCandleElement>()
 					.FirstOrDefault();
 

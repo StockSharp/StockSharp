@@ -6,12 +6,12 @@ namespace StockSharp.Xaml
 	public enum MarketDepthColumns
 	{
 		/// <summary>
-		/// The own amount to buy (+ stop amount to buy).
+		/// The own amount of bid (+ stop amount to buy).
 		/// </summary>
 		OwnBuy,
 
 		/// <summary>
-		/// The amount to buy.
+		/// The amount of bid.
 		/// </summary>
 		Buy,
 
@@ -21,12 +21,12 @@ namespace StockSharp.Xaml
 		Price,
 
 		/// <summary>
-		/// The amount to sale.
+		/// The amount of ask.
 		/// </summary>
 		Sell,
 
 		/// <summary>
-		/// The net amount to sale (+ stop amount to sale).
+		/// The net amount of ask (+ stop amount to sale).
 		/// </summary>
 		OwnSell,
 	}

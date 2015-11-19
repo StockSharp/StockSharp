@@ -698,6 +698,7 @@ Str766;Senkou Span A line.;Линия Senkou Span A.
 Str767;Senkou Span B line.;Линия Senkou Span B.
 Str768;Chinkou line.;Линия Chinkou.
 Str769;Momentum.;Моментум.
+MoneyFlowIndex;Money Flow Index.;Индекс денежных потоков.
 Str770;Relative Strength Index.;Индекс относительной силы.
 Str771;Relative Vigor Index.;Индекс Относительной Энергии.
 Str772;Average indicator part.;Средневзвешанная часть индикатора.
@@ -4538,7 +4539,7 @@ DocStr360;To create a quoting strategy to change the position;Создать с�
 DocStr361;The strategy of quoting;Стратегия котирования
 DocStr362;Portfolio model for calculating the values of Greeks by the Black-Scholes formula;"Портфельная модель расчета значений ""греков"" по формуле Блэка-Шоулза"
 DocStr363;Whether to quote the registered order by the market price. The default mode is disabled;Котировать ли выставленную заявку по рыночной цене. По-умолчанию режим выключен
-DocStr364;The price shift for the registering order. It determines the amount of shift from the best quote (for the purchase it is added to the price, for the sale it is subtracted);Отступ цены для выставляемой заявки. Определяет размер отступа от лучшей котировки (для покупки прибавляется к цене, для продажи - вычитается)
+DocStr364;The price shift for the registering order. It determines the amount of shift from the best quote (for the buy it is added to the price, for the sell it is subtracted);Отступ цены для выставляемой заявки. Определяет размер отступа от лучшей котировки (для покупки прибавляется к цене, для продажи - вычитается)
 DocStr366;To open the position via quoting;Открыть позицию через котирование
 DocStr367;The position value that should be reached. A negative value means the short position;Значение позиции, которое необходимо достичь. Отрицательное значение означает короткую позицию
 DocStr368;To close the open position via quoting;Закрыть открытую позицию через котирование
@@ -4882,10 +4883,10 @@ DocStr706;The price level;Ценовой уровень
 DocStr707;The volumes collection to buy;Коллекция объемов на покупку
 DocStr708;The volumes collection for sale;Коллекция объемов на продажу
 DocStr709;To update the price level with the new value;Обновить ценовой уровень новым значением
-DocStr710;The volume of purchases;Объем покупок
-DocStr711;The volume of sales;Объем продаж
-DocStr712;The number of purchases;Количество покупок
-DocStr713;The number of sales;Количество продаж
+DocStr710;The volume of bids;Объем покупок
+DocStr711;The volume of asks;Объем продаж
+DocStr712;The number of bids;Количество покупок
+DocStr713;The number of asks;Количество продаж
 DocStr714;The value area;Область стоимости
 DocStr715;The collection of {0} for which you need to calculate the value area;Коллекция {0}, для которых необходимо рассчитать область стоимости
 DocStr716;To calculate the value area;Рассчитать область стоимости
@@ -4895,20 +4896,20 @@ DocStr719;The upper price level;Верхний ценовой уровень
 DocStr720;The lower price level;Нижний ценовой уровень
 DocStr721;POC;POC
 DocStr722;Extension class for {0};Вспомогательный класс для работы с {0}
-DocStr723;The total volume of purchases in the {0};Суммарный объем покупок в {0}
-DocStr724;The total volume of purchases;Суммарный объем покупок
-DocStr725;The total volume of sales in the {0};Суммарный объем продаж в {0}
-DocStr726;The total volume of sales;Суммарный объем продаж
-DocStr727;The total number of purchases in the {0};Суммарное количество покупок в {0}
-DocStr728;The total number of purchases;Суммарное количество покупок
-DocStr729;The total number of sales in the {0};Суммарное количество продаж в {0}
-DocStr730;The total number of sales;Суммарное количество продаж
+DocStr723;The total volume of bids in the {0};Суммарный объем покупок в {0}
+DocStr724;The total volume of bids;Суммарный объем покупок
+DocStr725;The total volume of asks in the {0};Суммарный объем продаж в {0}
+DocStr726;The total volume of asks;Суммарный объем продаж
+DocStr727;The total number of bids in the {0};Суммарное количество покупок в {0}
+DocStr728;The total number of bids;Суммарное количество покупок
+DocStr729;The total number of asks in the {0};Суммарное количество продаж в {0}
+DocStr730;The total number of asks;Суммарное количество продаж
 DocStr731;POC (Point Of Control) returns {0} which had the maximum volume;POC (Point Of Control) возвращает {0}, по которому прошел максимальный объем
 DocStr732;The {0} which had the maximum volume;{0}, по которому прошел максимальный объем
-DocStr733;The total volume of purchases which was above {0};Суммарный объем покупок, который прошел выше {0}
-DocStr734;The total volume of purchases which was below {0};Суммарный объем покупок, который прошел ниже {0}
-DocStr735;The total volume of sales which was above {0};Суммарный объем продаж, который прошел выше {0}
-DocStr736;The total volume of sales which was below {0};Суммарный объем продаж, который прошел ниже {0}
+DocStr733;The total volume of bids which was above {0};Суммарный объем покупок, который прошел выше {0}
+DocStr734;The total volume of bids which was below {0};Суммарный объем покупок, который прошел ниже {0}
+DocStr735;The total volume of asks which was above {0};Суммарный объем продаж, который прошел выше {0}
+DocStr736;The total volume of asks which was below {0};Суммарный объем продаж, который прошел ниже {0}
 DocStr737;The total volume which was above {0};Суммарный объем, который прошел выше {0}
 DocStr738;The total volume which was below {0};Суммарный объем, который прошел ниже {0}
 DocStr739;The difference between {0} and {1};Разница между {0} и {1}
@@ -5928,13 +5929,13 @@ DocStr1758;The number of decimal places. By default, it equals to 2;Количе
 DocStr1759;The report generator for the strategy in the xml format;Генератор отчета для стратегии в формате xml
 DocStr1760;The name of the file, in which report in the Xml format will be generated;Название файла, в котором сгенерируется отчет в формате Xml
 DocStr1761;The name of the file, in which report in the xml format will be generated;Название файла, в котором сгенерируется отчет в формате xml
-DocStr1763;To create initialized object of purchase order at market price;Создать инициализированный объект заявки на покупку по рыночной цене
+DocStr1763;To create initialized object of buy order at market price;Создать инициализированный объект заявки на покупку по рыночной цене
 DocStr1764;The order is not registered, only the object is created;Заявка не регистрируется, а только создается объект
 DocStr1765;The volume. If {0} value is passed, then {1} value is used;Объем. Если передается значение {0}, то используется значение {1}
 DocStr1766;The initialized order object;Инициализированный объект заявки
-DocStr1767;To create the initialized order object for sale at market price;Создать инициализированный объект заявки на продажу по рыночной цене
-DocStr1768;To create the initialized order object for purchase;Создать инициализированный объект заявки на покупку
-DocStr1769;To create the initialized order object for sale;Создать инициализированный объект заявки на продажу
+DocStr1767;To create the initialized order object for sell at market price;Создать инициализированный объект заявки на продажу по рыночной цене
+DocStr1768;To create the initialized order object for buy;Создать инициализированный объект заявки на покупку
+DocStr1769;To create the initialized order object for sell;Создать инициализированный объект заявки на продажу
 DocStr1770;To create the initialized order object;Создать инициализированный объект заявки
 DocStr1771;The price. If {0} value is passed, the order is registered at market price;Цена. Если передается значение {0}, то выставляется заявка по рыночной цене
 DocStr1772;To close open position by market (to register the order of the type {0});Закрыть открытую позицию по рынку (выставить заявку типа {0})
@@ -6434,12 +6435,12 @@ DocStr2267;The current price. If information in order book is insufficient, then
 DocStr2268;To calculate the current price by the order book depending on the order direction;Высчитать текущую цену по стакану в зависимости от направления заявки
 DocStr2269;For correct operation of the method the order book export shall be launched;Для корректной работы метода необходимо запустить экспорт стакана
 DocStr2270;The order book for the current price calculation;Стакан, по которому нужно высчитать текущую цену
-DocStr2271;The order direction. If it is a purchase, {0} value is used, otherwise {1};Направление заявки. Если это покупка, то будет использоваться значение {0}, иначе {1}
+DocStr2271;The order direction. If it is a buy, {0} value is used, otherwise {1};Направление заявки. Если это покупка, то будет использоваться значение {0}, иначе {1}
 DocStr2272;The type of current price;Тип текущей цены
 DocStr2273;To calculate the current price based on the best pair of quotes, depending on the order direction;Высчитать текущую цену по лучшей паре котировок в зависимости от направления заявки
 DocStr2274;The best pair of quotes, used for the current price calculation;Лучшая пара котировок, по которой вычисляется текущая цена
 DocStr2275;To use shifting for price, depending on direction {0};Применить для цены сдвиг в зависимости от направления {0}
-DocStr2276;The order direction, used as shift direction (for purchase the shift is added, for sale - subtracted);Направление заявки, которое используется в качестве направления для сдвига (для покупки сдвиг прибавляется, для продажи - вычитается)
+DocStr2276;The order direction, used as shift direction (for buy the shift is added, for sell - subtracted);Направление заявки, которое используется в качестве направления для сдвига (для покупки сдвиг прибавляется, для продажи - вычитается)
 DocStr2277;New price;Новая цена
 DocStr2278;To cut the price for the order, to make it multiple of the minimal step, also to limit number of decimal places;Обрезать цену для заявки, чтобы она стала кратной минимальному шагу, а так же ограничить количество знаков после запятой
 DocStr2279;The order for which the price will be cut {0};Заявка, для которой будет обрезана цена {0}
@@ -6449,9 +6450,9 @@ DocStr2282;The instrument from which the {0} and {1} values are taken;Инстр
 DocStr2283;The price to be made multiple;Цена, которую нужно сделать кратной
 DocStr2284;The multiple price;Кратная цена
 DocStr2285;To get the position on My trade;Получить позицию по Моей сделке
-DocStr2286;My trade, used for position calculation. At purchase the trade volume {0} is taken with positive sign, at sale � with negative;Моя сделка, по которой рассчитывается позиция. При покупке объем сделки {0} берется с положительным знаком, при продаже - с отрицательным
+DocStr2286;My trade, used for position calculation. At buy the trade volume {0} is taken with positive sign, at sell - with negative;Моя сделка, по которой рассчитывается позиция. При покупке объем сделки {0} берется с положительным знаком, при продаже - с отрицательным
 DocStr2287;To get the position by the order;Получить позицию по заявке
-DocStr2288;The order, used for the position calculation. At purchase the position is taken with positive sign, at sale � with negative;Заявка, по которой рассчитывается позиция. При покупке позиция берется с положительным знаком, при продаже - с отрицательным
+DocStr2288;The order, used for the position calculation. At buy the position is taken with positive sign, at sell - with negative;Заявка, по которой рассчитывается позиция. При покупке позиция берется с положительным знаком, при продаже - с отрицательным
 DocStr2289;To get the position by the portfolio;Получить позицию по портфелю
 DocStr2290;The portfolio, for which the position needs to be got;Портфель, для которого необходимо получить позицию
 DocStr2291;The position by the portfolio;Позиция по портфелю

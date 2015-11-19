@@ -204,10 +204,8 @@
     <Compile Include="Candles\IndexSeriesBuilder.cs" />
     <Compile Include="Candles\IStorageCandleSource.cs" />
     <Compile Include="Candles\StorageCandleSource.cs" />
-    <Compile Include="Candles\VolumePriceStatistics\PriceLevel.cs" />
-    <Compile Include="Candles\VolumePriceStatistics\ValueArea.cs" />
-    <Compile Include="Candles\VolumePriceStatistics\VolumePriceStatisticHelper.cs" />
-    <Compile Include="Candles\VolumePriceStatistics\VolumeProfile.cs" />
+    <Compile Include="Candles\Compression\VolumeProfileHelper.cs" />
+    <Compile Include="Candles\Compression\VolumeProfile.cs" />
     <Compile Include="Commissions\CommissionManager.cs" />
     <Compile Include="Commissions\CommissionRule.cs" />
     <Compile Include="Commissions\ICommissionManager.cs" />
@@ -368,11 +366,13 @@
     <Compile Include="Storages\InMemoryMarketDataStorage.cs" />
     <Compile Include="Storages\ISecurityMarketDataDrive.cs" />
     <Compile Include="Storages\ISecurityStorage.cs" />
+    <Compile Include="Storages\IStoragePositionList.cs" />
     <Compile Include="Storages\IStorageSecurityList.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Storages\Level1Serializer.cs" />
     <Compile Include="Storages\NewsList.cs" />
+    <Compile Include="Storages\StorageEntityFactory.cs" />
     <Compile Include="Storages\TransactionSerializer.cs" />
     <Compile Include="Storages\NewsSerializer.cs" />
     <Compile Include="Storages\QuoteSerializer.cs" />

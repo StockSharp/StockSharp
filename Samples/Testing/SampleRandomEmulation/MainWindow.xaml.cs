@@ -110,7 +110,7 @@ namespace SampleRandomEmulation
 			var series = new CandleSeries(typeof(TimeFrameCandle), security, timeFrame);
 
 			// create strategy based on 80 5-min и 10 5-min
-			_strategy = new SmaStrategy(series, new SimpleMovingAverage { Length = 80 }, new SimpleMovingAverage { Length = 10 })
+			_strategy = new SmaStrategy(candleManager, series, new SimpleMovingAverage { Length = 80 }, new SimpleMovingAverage { Length = 10 })
 			{
 				Volume = 1,
 				Security = security,

@@ -1,18 +1,19 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{4DF3DBDF-FA5B-469F-B625-6A255BD05069}</ProjectGuid>
+    <ProjectGuid>{8B430A27-B392-4129-9AA2-731A52427E40}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>SampleDiagramPublic</RootNamespace>
-    <AssemblyName>SampleDiagram</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <RootNamespace>SampleChart</RootNamespace>
+    <AssemblyName>SampleChart</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <WarningLevel>4</WarningLevel>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -24,7 +25,6 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -34,7 +34,6 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup>
     <ApplicationIcon>..\..\..\References\stocksharp.ico</ApplicationIcon>
@@ -49,13 +48,6 @@
     <Reference Include="Ecng.ComponentModel">
       <HintPath>..\..\..\References\Ecng\Ecng.ComponentModel.dll</HintPath>
     </Reference>
-    <Reference Include="Ecng.Configuration">
-      <HintPath>..\..\..\References\Ecng\Ecng.Configuration.dll</HintPath>
-    </Reference>
-    <Reference Include="Ecng.Localization, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\References\Ecng\Ecng.Localization.dll</HintPath>
-    </Reference>
     <Reference Include="Ecng.Serialization">
       <HintPath>..\..\..\References\Ecng\Ecng.Serialization.dll</HintPath>
     </Reference>
@@ -68,20 +60,13 @@
     <Reference Include="MoreLinq">
       <HintPath>..\..\..\References\Ecng\MoreLinq.dll</HintPath>
     </Reference>
-    <Reference Include="StockSharp.Licensing">
-      <HintPath>..\..\..\References\StockSharp.Licensing.dll</HintPath>
-    </Reference>
-    <Reference Include="StockSharp.Xaml.Charting">
+    <Reference Include="StockSharp.Xaml.Charting, Version=4.3.13.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\Xaml.Charting\StockSharp.Xaml.Charting.dll</HintPath>
     </Reference>
-    <Reference Include="StockSharp.Xaml.Diagram">
-      <HintPath>..\..\..\Xaml.Diagram\StockSharp.Xaml.Diagram.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
-    <Reference Include="System.Configuration" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-    <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Xaml">
@@ -99,47 +84,17 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="..\..\..\StockSharpAssemblyInfo.cs">
-      <Link>Properties\StockSharpAssemblyInfo.cs</Link>
-    </Compile>
-    <Compile Include="DiagramDebuggerControl.xaml.cs">
-      <DependentUpon>DiagramDebuggerControl.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="DiagramElementsControl.xaml.cs">
-      <DependentUpon>DiagramElementsControl.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="EmulationControl.xaml.cs">
-      <DependentUpon>EmulationControl.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="StrategiesRegistry.cs" />
-    <Page Include="DiagramDebuggerControl.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="DiagramEditorControl.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="DiagramElementsControl.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="EmulationControl.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Compile Include="..\..\..\StockSharpAssemblyInfo.cs">
+      <Link>Properties\StockSharpAssemblyInfo.cs</Link>
+    </Compile>
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="DiagramEditorControl.xaml.cs">
-      <DependentUpon>DiagramEditorControl.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Extensions.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -163,7 +118,6 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <None Include="App.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -171,62 +125,30 @@
     <AppDesigner Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\Alerts\Alerts.csproj">
-      <Project>{96725e45-f785-4612-9743-bfb40a9e725d}</Project>
-      <Name>Alerts</Name>
-    </ProjectReference>
+    <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\..\..\Algo\Algo.csproj">
-      <Project>{2a5c6fad-106c-4a4a-b602-77a6b1034ca2}</Project>
+      <Project>{2A5C6FAD-106C-4A4A-B602-77A6B1034CA2}</Project>
       <Name>Algo</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\BusinessEntities\BusinessEntities.csproj">
-      <Project>{dce69db8-53ca-4b7f-9368-02f175a31074}</Project>
+      <Project>{DCE69DB8-53CA-4B7F-9368-02F175A31074}</Project>
       <Name>BusinessEntities</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\Configuration\ConfigurationPublic.csproj">
-      <Project>{2cff1903-4ef5-46f8-ab5d-bb623ca75ce6}</Project>
-      <Name>ConfigurationPublic</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\..\Localization\Localization.csproj">
-      <Project>{a98a81ce-75a1-4fab-9c02-e6eef4b51f4f}</Project>
+      <Project>{A98A81CE-75A1-4FAB-9C02-E6EEF4B51F4F}</Project>
       <Name>Localization</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\Logging\Logging.csproj">
-      <Project>{c4476add-a3d5-41bb-9d43-55d865863b78}</Project>
-      <Name>Logging</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\..\Messages\Messages.csproj">
-      <Project>{b47f9c23-a4bd-46a9-bf27-54cb3d653503}</Project>
+      <Project>{B47F9C23-A4BD-46A9-BF27-54CB3D653503}</Project>
       <Name>Messages</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\Xaml\Xaml.csproj">
-      <Project>{64e4d6f0-36b6-4904-9ba7-fffbe5ff71d8}</Project>
-      <Name>Xaml</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Strategies\d2d7aeb2_ca92_4a88_9f2b_dccb72949af1.xml">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
   </ItemGroup>
   <ItemGroup>
     <Resource Include="..\..\..\References\stocksharp.ico">
       <Link>Properties\stocksharp.ico</Link>
     </Resource>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Compositions\923f7b2e_0c1d_4c4c_a87f_baf3aaac2048.xml">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="Compositions\bf591486_88ac_41b2_8079_ca0c9eabf349.xml">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Strategies\b4fcbed7_eb78_4846_a108_7f570fc3660d.xml">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <SubType>Designer</SubType>
-    </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

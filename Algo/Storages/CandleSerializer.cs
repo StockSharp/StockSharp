@@ -74,7 +74,7 @@ namespace StockSharp.Algo.Storages
 		private readonly object _arg;
 
 		public CandleSerializer(SecurityId securityId, object arg)
-			: base(securityId, 74, MarketDataVersions.Version53)
+			: base(securityId, 74, MarketDataVersions.Version54)
 		{
 			if (arg == null)
 				throw new ArgumentNullException(nameof(arg));
@@ -274,6 +274,67 @@ namespace StockSharp.Algo.Storages
 
 				if (candle.TotalTicks != null)
 					writer.WriteInt(candle.TotalTicks.Value);
+
+				if (metaInfo.Version < MarketDataVersions.Version54)
+					continue;
+
+				var priceLevels = candle.PriceLevels;
+
+				writer.Write(priceLevels != null);
+
+				if (priceLevels == null)
+					continue;
+
+				priceLevels = priceLevels.ToArray();
+
+				writer.WriteInt(priceLevels.Count());
+
+				foreach (var level in priceLevels)
+				{
+					writer.WritePrice(level.Price, metaInfo.LastPrice, metaInfo, SecurityId);
+
+					writer.WriteInt(level.BuyCount);
+					writer.WriteInt(level.SellCount);
+
+					writer.WriteVolume(level.BuyVolume, metaInfo, SecurityId);
+					writer.WriteVolume(level.SellVolume, metaInfo, SecurityId);
+
+					var volumes = level.BuyVolumes;
+
+					if (volumes == null)
+						writer.Write(false);
+					else
+					{
+						writer.Write(true);
+
+						volumes = volumes.ToArray();
+
+						writer.WriteInt(volumes.Count());
+
+						foreach (var volume in volumes)
+						{
+							writer.WriteVolume(volume, metaInfo, SecurityId);
+						}
+					}
+
+					volumes = level.SellVolumes;
+
+					if (volumes == null)
+						writer.Write(false);
+					else
+					{
+						writer.Write(true);
+
+						volumes = volumes.ToArray();
+
+						writer.WriteInt(volumes.Count());
+
+						foreach (var volume in volumes)
+						{
+							writer.WriteVolume(volume, metaInfo, SecurityId);
+						}
+					}
+				}
 			}
 		}
 
@@ -369,6 +430,47 @@ namespace StockSharp.Algo.Storages
 				candle.DownTicks = reader.Read() ? reader.ReadInt() : (int?)null;
 				candle.UpTicks = reader.Read() ? reader.ReadInt() : (int?)null;
 				candle.TotalTicks = reader.Read() ? reader.ReadInt() : (int?)null;
+			}
+
+			if (metaInfo.Version >= MarketDataVersions.Version54 && reader.Read())
+			{
+				var priceLevels = new CandlePriceLevel[reader.ReadInt()];
+
+				for (var i = 0; i < priceLevels.Length; i++)
+				{
+					var priceLevel = new CandlePriceLevel
+					{
+						Price = reader.ReadPrice(candle.LowPrice, metaInfo),
+						BuyCount = reader.ReadInt(),
+						SellCount = reader.ReadInt(),
+						BuyVolume = reader.ReadVolume(metaInfo),
+						SellVolume = reader.ReadVolume(metaInfo)
+					};
+
+					if (reader.Read())
+					{
+						var volumes = new decimal[reader.ReadInt()];
+
+						for (var j = 0; j < volumes.Length; j++)
+							volumes[j] = reader.ReadVolume(metaInfo);
+
+						priceLevel.BuyVolumes = volumes;
+					}
+
+					if (reader.Read())
+					{
+						var volumes = new decimal[reader.ReadInt()];
+
+						for (var j = 0; j < volumes.Length; j++)
+							volumes[j] = reader.ReadVolume(metaInfo);
+
+						priceLevel.SellVolumes = volumes;
+					}
+
+					priceLevels[i] = priceLevel;
+				}
+
+				candle.PriceLevels = priceLevels;
 			}
 
 			return candle;

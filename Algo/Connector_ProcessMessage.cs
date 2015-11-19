@@ -751,70 +751,7 @@ namespace StockSharp.Algo
 
 			var security = GetSecurity(secId, s =>
 			{
-				if (!message.SecurityId.SecurityCode.IsEmpty())
-					s.Code = message.SecurityId.SecurityCode;
-
-				if (message.Currency != null)
-					s.Currency = message.Currency;
-
-				s.Board = ExchangeBoard.GetOrCreateBoard(message.SecurityId.BoardCode);
-
-				if (message.ExpiryDate != null)
-					s.ExpiryDate = message.ExpiryDate;
-
-				if (message.VolumeStep != null)
-					s.VolumeStep = message.VolumeStep.Value;
-
-				if (message.Multiplier != null)
-					s.Multiplier = message.Multiplier.Value;
-
-				if (message.PriceStep != null)
-				{
-					s.PriceStep = message.PriceStep.Value;
-
-					if (message.Decimals == null && s.Decimals == null)
-						s.Decimals = message.PriceStep.Value.GetCachedDecimals();
-				}
-
-				if (message.Decimals != null)
-				{
-					s.Decimals = message.Decimals.Value;
-
-					if (message.PriceStep == null)
-						s.PriceStep = message.Decimals.Value.GetPriceStep();
-				}
-
-				if (!message.Name.IsEmpty())
-					s.Name = message.Name;
-
-				if (!message.Class.IsEmpty())
-					s.Class = message.Class;
-
-				if (message.OptionType != null)
-					s.OptionType = message.OptionType;
-
-				if (message.Strike != null)
-					s.Strike = message.Strike.Value;
-
-				if (!message.BinaryOptionType.IsEmpty())
-					s.BinaryOptionType = message.BinaryOptionType;
-
-				if (message.SettlementDate != null)
-					s.SettlementDate = message.SettlementDate;
-
-				if (!message.ShortName.IsEmpty())
-					s.ShortName = message.ShortName;
-
-				if (message.SecurityType != null)
-					s.Type = message.SecurityType.Value;
-
-				if (!message.UnderlyingSecurityCode.IsEmpty())
-					s.UnderlyingSecurityId = SecurityIdGenerator.GenerateId(message.UnderlyingSecurityCode, message.SecurityId.BoardCode);
-
-				if (message.SecurityId.HasExternalId())
-					s.ExternalId = message.SecurityId.ToExternalId();
-
-				message.CopyExtensionInfo(s);
+				s.ApplyChanges(message);
 
 				//если для инструмента есть NativeId, то его надо  связать с инструментом до вызова NewSecurities,
 				//т.к. в обработчике может выполняться подписка на маркет-данные где нужен nativeId.
@@ -950,16 +887,7 @@ namespace StockSharp.Algo
 		{
 			GetPortfolio(message.PortfolioName, p =>
 			{
-				p.Board = message.BoardCode.IsEmpty() ? null : ExchangeBoard.GetOrCreateBoard(message.BoardCode);
-
-				if (message.Currency != null)
-					p.Currency = message.Currency;
-
-				if (message.State != null)
-					p.State = message.State;
-
-				message.CopyExtensionInfo(p);
-
+				message.ToPortfolio(p);
 				return true;
 			});
 		}
@@ -968,9 +896,6 @@ namespace StockSharp.Algo
 		{
 			GetPortfolio(message.PortfolioName, portfolio =>
 			{
-				if (!message.BoardCode.IsEmpty())
-					portfolio.Board = ExchangeBoard.GetOrCreateBoard(message.BoardCode);
-
 				portfolio.ApplyChanges(message);
 				return true;
 			});

@@ -26,7 +26,7 @@ namespace StockSharp.Algo.Strategies
 	public static class StrategyHelper
 	{
 		/// <summary>
-		/// To create initialized object of purchase order at market price.
+		/// To create initialized object of buy order at market price.
 		/// </summary>
 		/// <param name="strategy">Strategy.</param>
 		/// <param name="volume">The volume. If <see langword="null" /> value is passed, then <see cref="Strategy.Volume"/> value is used.</param>
@@ -40,7 +40,7 @@ namespace StockSharp.Algo.Strategies
 		}
 
 		/// <summary>
-		/// To create the initialized order object for sale at market price.
+		/// To create the initialized order object of sell order at market price.
 		/// </summary>
 		/// <param name="strategy">Strategy.</param>
 		/// <param name="volume">The volume. If <see langword="null" /> value is passed, then <see cref="Strategy.Volume"/> value is used.</param>
@@ -54,7 +54,7 @@ namespace StockSharp.Algo.Strategies
 		}
 
 		/// <summary>
-		/// To create the initialized order object for purchase.
+		/// To create the initialized order object for buy.
 		/// </summary>
 		/// <param name="strategy">Strategy.</param>
 		/// <param name="price">Price.</param>
@@ -69,7 +69,7 @@ namespace StockSharp.Algo.Strategies
 		}
 
 		/// <summary>
-		/// To create the initialized order object for sale.
+		/// To create the initialized order object for sell.
 		/// </summary>
 		/// <param name="strategy">Strategy.</param>
 		/// <param name="price">Price.</param>

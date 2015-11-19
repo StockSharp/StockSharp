@@ -9040,14 +9040,14 @@ namespace StockSharp.Localization
 		/// <summary>
 		/// Money Flow Index.
 		/// </summary>
-		public const string StrMoneyFlowIndexKey = "StrMoneyFlowIndex";
+		public const string MoneyFlowIndexKey = "MoneyFlowIndex";
 
         /// <summary>
         /// Money Flow Index.
         /// </summary>
-        public static string StrMoneyFlowIndex
+        public static string MoneyFlowIndex
         {
-			get { return GetString(StrMoneyFlowIndexKey); }
+			get { return GetString(MoneyFlowIndexKey); }
 		}
 
 		/// <summary>

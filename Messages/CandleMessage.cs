@@ -1,6 +1,8 @@
 namespace StockSharp.Messages
 {
 	using System;
+	using System.Collections.Generic;
+	using System.Linq;
 	using System.Runtime.Serialization;
 
 	using Ecng.Common;
@@ -223,6 +225,12 @@ namespace StockSharp.Messages
 		public bool IsFinished { get; set; }
 
 		/// <summary>
+		/// Price levels.
+		/// </summary>
+		[DataMember]
+		public IEnumerable<CandlePriceLevel> PriceLevels { get; set; }
+
+		/// <summary>
 		/// Candle arg.
 		/// </summary>
 		public abstract object Arg { get; set; }
@@ -266,6 +274,7 @@ namespace StockSharp.Messages
 			copy.UpTicks = UpTicks;
 			copy.TotalTicks = TotalTicks;
 			copy.IsFinished = IsFinished;
+			copy.PriceLevels = PriceLevels?.Select(l => l.Clone()).ToArray();
 
 			return copy;
 		}
