@@ -1,6 +1,9 @@
 ﻿namespace SampleDiagram
 {
+	using System.Windows.Input;
+
 	using Ecng.Localization;
+	using Ecng.Xaml;
 
 	using StockSharp.Localization;
 
@@ -9,6 +12,7 @@
 		public App()
 		{
 			LocalizedStrings.ActiveLanguage = Languages.English;
+			GuiDispatcher.GlobalDispatcher.AddPeriodicalAction(CommandManager.InvalidateRequerySuggested);
 		}
 	}
 }
