@@ -9,9 +9,527 @@
             Composite element.
             </summary>
     </member>
+    <member name="P:StockSharp.Xaml.Diagram.CompositionDiagramElement.TypeId">
+      <summary>
+            The unique identifier of the diagram element type.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Diagram.CompositionDiagramElement.Icon">
+      <summary>
+            Icon.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Diagram.CompositionDiagramElement.Parameters">
+      <summary>
+            Diagram element settings.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Diagram.CompositionDiagramElement.Category">
+      <summary>
+            The name of the group which includes a diagram element.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Diagram.CompositionDiagramElement.Description">
+      <summary>
+            The diagram element description.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Diagram.CompositionDiagramElement.IsModifiable">
+      <summary>
+            Is it possible to edit a composite element diagram.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Diagram.CompositionDiagramElement.HasErrors">
+      <summary>
+            To check the composite element for errors in diagram.
+            </summary>
+    </member>
+    <member name="E:StockSharp.Xaml.Diagram.CompositionDiagramElement.Changed">
+      <summary>
+            The composite element diagram change event.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.Diagram.CompositionDiagramElement.#ctor">
+      <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Xaml.Diagram.CompositionDiagramElement" />.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.Diagram.CompositionDiagramElement.RaisePropertyChanged(System.Object,System.ComponentModel.PropertyChangedEventArgs)">
+      <summary>
+            To call the diagram element property value change event.
+            </summary>
+      <param name="sender">Sender.</param>
+      <param name="args">Arguments.</param>
+    </member>
+    <member name="M:StockSharp.Xaml.Diagram.CompositionDiagramElement.Save(Ecng.Serialization.SettingsStorage)">
+      <summary>
+            Save settings.
+            </summary>
+      <param name="storage">Settings storage.</param>
+    </member>
+    <member name="M:StockSharp.Xaml.Diagram.CompositionDiagramElement.Load(Ecng.Serialization.SettingsStorage)">
+      <summary>
+            Load settings.
+            </summary>
+      <param name="storage">Settings storage.</param>
+    </member>
+    <member name="M:StockSharp.Xaml.Diagram.CompositionDiagramElement.OnInit">
+      <summary>
+            The method is called at initialization of the diagram element.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.Diagram.CompositionDiagramElement.OnUnInit">
+      <summary>
+            The method is called at deinitialization of the diagram element.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.Diagram.CompositionDiagramElement.OnBind(StockSharp.Xaml.Diagram.DiagramElement)">
+      <summary>
+            The method is called at subscription to the processing of diagram element output values.
+            </summary>
+      <param name="element">The diagram element.</param>
+    </member>
+    <member name="M:StockSharp.Xaml.Diagram.CompositionDiagramElement.OnUnBind(StockSharp.Xaml.Diagram.DiagramElement)">
+      <summary>
+            The method is called at unsubscription from the processing of diagram element output values.
+            </summary>
+      <param name="element">The diagram element.</param>
+    </member>
+    <member name="M:StockSharp.Xaml.Diagram.CompositionDiagramElement.OnStart">
+      <summary>
+            The method is called at the start of the diagram element algorithm.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.Diagram.CompositionDiagramElement.OnStop">
+      <summary>
+            The method is called at the stop of the diagram element algorithm.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.Diagram.CompositionDiagramElement.OnReseted">
+      <summary>
+            The method is called at re-initialisation of the diagram element state.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.Diagram.CompositionDiagramElement.Clone(System.Boolean)">
+      <summary>
+            Create a copy of <see cref="T:StockSharp.Xaml.Diagram.CompositionDiagramElement" />.
+            </summary>
+      <param name="cloneSockets">To create copies of connections.</param>
+      <returns>Copy.</returns>
+    </member>
+    <member name="T:StockSharp.Xaml.Diagram.CompositionRegistry">
+      <summary>
+            The storage of composite elements.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Diagram.CompositionRegistry.DiagramElements">
+      <summary>
+            List of elements.
+            </summary>
+    </member>
+    <member name="E:StockSharp.Xaml.Diagram.CompositionRegistry.SaveComposition">
+      <summary>
+            The diagram composite element saving event.
+            </summary>
+    </member>
+    <member name="E:StockSharp.Xaml.Diagram.CompositionRegistry.RemoveComposition">
+      <summary>
+            The diagram composite element removing event.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.Diagram.CompositionRegistry.#ctor">
+      <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Xaml.Diagram.CompositionRegistry" />.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.Diagram.CompositionRegistry.Save(StockSharp.Xaml.Diagram.CompositionDiagramElement)">
+      <summary>
+            Save settings.
+            </summary>
+      <param name="composition">Composite element.</param>
+    </member>
+    <member name="M:StockSharp.Xaml.Diagram.CompositionRegistry.TryRemove(StockSharp.Xaml.Diagram.CompositionDiagramElement)">
+      <summary>
+            To remove the composite element, if it is not used in other composite diagrams.
+            </summary>
+      <param name="element">Composite element.</param>
+    </member>
+    <member name="M:StockSharp.Xaml.Diagram.CompositionRegistry.Load(Ecng.Serialization.SettingsStorage,System.Boolean)">
+      <summary>
+            Load settings.
+            </summary>
+      <param name="data">The data string.</param>
+      <param name="readOnly">Is it possible to modify the element.</param>
+    </member>
+    <member name="M:StockSharp.Xaml.Diagram.CompositionRegistry.Serialize(StockSharp.Xaml.Diagram.CompositionDiagramElement)">
+      <summary>
+            To serialize the composite element.
+            </summary>
+      <param name="composition">Composite element.</param>
+      <returns>Settings storage.</returns>
+    </member>
+    <member name="M:StockSharp.Xaml.Diagram.CompositionRegistry.Deserialize(Ecng.Serialization.SettingsStorage)">
+      <summary>
+            To deserialize the composite element.
+            </summary>
+      <param name="storage">Settings storage.</param>
+      <returns>Composite element.</returns>
+    </member>
+    <member name="M:StockSharp.Xaml.Diagram.CompositionRegistry.DeserializeExported(Ecng.Serialization.SettingsStorage)">
+      <summary>
+            To deserialize the composite element.
+            </summary>
+      <param name="storage">Settings storage.</param>
+      <returns>Composite element.</returns>
+    </member>
+    <member name="T:StockSharp.Xaml.Diagram.DebuggerSyncObject">
+      <summary>
+            The synchronization object for the composite elements debugger.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Diagram.DebuggerSyncObject.CurrentElement">
+      <summary>
+            The current element.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.Diagram.DebuggerSyncObject.#ctor(System.Func{StockSharp.Xaml.Diagram.DiagramElement,System.Boolean},System.Action{StockSharp.Xaml.Diagram.DebuggerSyncObject})">
+      <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Xaml.Diagram.DebuggerSyncObject" />.
+            </summary>
+      <param name="isBreak">The handler that returns a stop flag for the element.</param>
+      <param name="breakAction">The action with the element at stop.</param>
+    </member>
+    <member name="P:StockSharp.Xaml.Diagram.DebuggerSyncObject.IsWaitingOnInput">
+      <summary>
+        <see langword="true" />, if the debugger is stopped at the entry of the diagram element. Otherwise, <see langword="false" />.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Diagram.DebuggerSyncObject.IsWaitingOnOutput">
+      <summary>
+        <see langword="true" />, if the debugger is stopped at the exit of the diagram element. Otherwise, <see langword="false" />.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.Diagram.DebuggerSyncObject.IsBreakpointAt(StockSharp.Xaml.Diagram.DiagramElement)">
+      <summary>
+            To check the breakpoint presence in an element.
+            </summary>
+      <param name="element">Element.</param>
+      <returns>
+        <see langword="true" />, if there is a breakpoint in the diagram element. Otherwise, <see langword="false" />.</returns>
+    </member>
+    <member name="M:StockSharp.Xaml.Diagram.DebuggerSyncObject.SetWaitOnNext">
+      <summary>
+            To set the flag for waiting at the entry of the next diagram element.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.Diagram.DebuggerSyncObject.SetWaitOnOutput">
+      <summary>
+            To set the flag for waiting at the exit of the current diagram element.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.Diagram.DebuggerSyncObject.Continue">
+      <summary>
+            Continue.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.Diagram.DebuggerSyncObject.ContinueAndWaitOnNext">
+      <summary>
+            To continue and stop at the next element.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.Diagram.DebuggerSyncObject.ContinueAndWaitOnOutput">
+      <summary>
+            To continue and stop at the exit of the current diagram element.
+            </summary>
+    </member>
+    <member name="T:StockSharp.Xaml.Diagram.DiagramDebugger">
+      <summary>
+            The debugger of the diagram composite element.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Diagram.DiagramDebugger.Breakpoints">
+      <summary>
+            Breakpoints (elements, on which the data transmission will be stopped).
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Diagram.DiagramDebugger.IsWaitingOnInput">
+      <summary>
+        <see langword="true" />, if the debugger is stopped at the entry of the diagram element. Otherwise, <see langword="false" />.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Diagram.DiagramDebugger.IsWaitingOnOutput">
+      <summary>
+        <see langword="true" />, if the debugger is stopped at the exit of the diagram element. Otherwise, <see langword="false" />.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Diagram.DiagramDebugger.IsWaiting">
+      <summary>
+        <see langword="true" />, if the debugger is stopped at the entry or exit of the diagram element. Otherwise, <see langword="false" />.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Diagram.DiagramDebugger.CanStepInto">
+      <summary>
+        <see langword="true" />, if it is possible to go inside of the current diagram element. Otherwise, <see langword="false" />.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Diagram.DiagramDebugger.CanStepOut">
+      <summary>
+        <see langword="true" />, if it is possible to go outside from the current diagram element. Otherwise, <see langword="false" />.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Diagram.DiagramDebugger.IsEnabled">
+      <summary>
+        <see langword="true" />, if the debugger is used. Otherwise, <see langword="false" />.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Diagram.DiagramDebugger.Composition">
+      <summary>
+            Composite element.
+            </summary>
+    </member>
+    <member name="E:StockSharp.Xaml.Diagram.DiagramDebugger.CompositionChanged">
+      <summary>
+            The diagram composite element change event.
+            </summary>
+    </member>
+    <member name="E:StockSharp.Xaml.Diagram.DiagramDebugger.Break">
+      <summary>
+            The event of the stop at the breakpoint.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.Diagram.DiagramDebugger.#ctor(StockSharp.Xaml.Diagram.CompositionDiagramElement)">
+      <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Xaml.Diagram.DiagramDebugger" />.
+            </summary>
+      <param name="composition">Composite element.</param>
+    </member>
+    <member name="M:StockSharp.Xaml.Diagram.DiagramDebugger.AddBreak(StockSharp.Xaml.Diagram.DiagramElement)">
+      <summary>
+            To add a breakpoint in the element.
+            </summary>
+      <param name="element">Element.</param>
+    </member>
+    <member name="M:StockSharp.Xaml.Diagram.DiagramDebugger.RemoveBreak(StockSharp.Xaml.Diagram.DiagramElement)">
+      <summary>
+            To remove the breakpoint from the element.
+            </summary>
+      <param name="element">Element.</param>
+    </member>
+    <member name="M:StockSharp.Xaml.Diagram.DiagramDebugger.IsBreak(StockSharp.Xaml.Diagram.DiagramElement)">
+      <summary>
+            Whether the element is the breakpoint.
+            </summary>
+      <param name="element">Element.</param>
+      <returns>
+        <see langword="true" />, if the element is the breakpoint, otherwise, <see langword="false" />.</returns>
+    </member>
+    <member name="M:StockSharp.Xaml.Diagram.DiagramDebugger.StepNext">
+      <summary>
+            To go to the next element.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.Diagram.DiagramDebugger.StepToOutput">
+      <summary>
+            To go to the exit from the diagram element.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.Diagram.DiagramDebugger.StepInto">
+      <summary>
+            To go inside the diagram composite element.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.Diagram.DiagramDebugger.StepOut">
+      <summary>
+            To exit from the diagram composite element.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.Diagram.DiagramDebugger.Continue">
+      <summary>
+            Continue.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.Diagram.DiagramDebugger.Load(Ecng.Serialization.SettingsStorage)">
+      <summary>
+            Load settings.
+            </summary>
+      <param name="storage">Settings storage.</param>
+    </member>
+    <member name="M:StockSharp.Xaml.Diagram.DiagramDebugger.Save(Ecng.Serialization.SettingsStorage)">
+      <summary>
+            Save settings.
+            </summary>
+      <param name="storage">Settings storage.</param>
+    </member>
+    <member name="T:StockSharp.Xaml.Diagram.DiagramEditorControl">
+      <summary>
+            Graphical component for editing <see cref="T:StockSharp.Xaml.Diagram.CompositionDiagramElement" />.
+            </summary>
+      <summary>
+            DiagramEditorControl
+            </summary>
+    </member>
+    <member name="F:StockSharp.Xaml.Diagram.DiagramEditorControl.CompositionProperty">
+      <summary>
+        <see cref="T:System.Windows.DependencyProperty" /> for <see cref="P:StockSharp.Xaml.Diagram.DiagramEditorControl.Composition" />.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Diagram.DiagramEditorControl.Composition">
+      <summary>
+            Composite element.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Xaml.Diagram.DiagramEditorControl.ShowOverviewProperty">
+      <summary>
+        <see cref="T:System.Windows.DependencyProperty" /> for <see cref="P:StockSharp.Xaml.Diagram.DiagramEditorControl.ShowOverview" />.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Diagram.DiagramEditorControl.ShowOverview">
+      <summary>
+            To show the review panel.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Xaml.Diagram.DiagramEditorControl.ScaleProperty">
+      <summary>
+        <see cref="T:System.Windows.DependencyProperty" /> for <see cref="P:StockSharp.Xaml.Diagram.DiagramEditorControl.Scale" />.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Diagram.DiagramEditorControl.Scale">
+      <summary>
+            Scale.
+            </summary>
+    </member>
+    <member name="E:StockSharp.Xaml.Diagram.DiagramEditorControl.SelectionChanged">
+      <summary>
+            The event of the element selection on the diagram.
+            </summary>
+    </member>
+    <member name="E:StockSharp.Xaml.Diagram.DiagramEditorControl.ElementDoubleClicked">
+      <summary>
+            The event of the double click on the diagram element.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Diagram.DiagramEditorControl.SelectedElements">
+      <summary>
+            Selected elements.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Diagram.DiagramEditorControl.SelectedElement">
+      <summary>
+            The selected element.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Diagram.DiagramEditorControl.IndicatorTypes">
+      <summary>
+            The list of available indicators types.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.Diagram.DiagramEditorControl.#ctor">
+      <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Xaml.Diagram.DiagramEditorControl" />.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.Diagram.DiagramEditorControl.GetSelectionCopyElement">
+      <summary>
+            To create a new element from the selected elements in the diagram.
+            </summary>
+      <returns>Composite element.</returns>
+    </member>
+    <member name="M:StockSharp.Xaml.Diagram.DiagramEditorControl.Load(Ecng.Serialization.SettingsStorage)">
+      <summary>
+            Load settings.
+            </summary>
+      <param name="storage">Settings storage.</param>
+    </member>
+    <member name="M:StockSharp.Xaml.Diagram.DiagramEditorControl.Save(Ecng.Serialization.SettingsStorage)">
+      <summary>
+            Save settings.
+            </summary>
+      <param name="storage">Settings storage.</param>
+    </member>
+    <member name="M:StockSharp.Xaml.Diagram.DiagramEditorControl.SaveToImage(System.String)">
+      <summary>
+            To save the diagram as an image.
+            </summary>
+      <param name="fileName">The full path to the file.</param>
+    </member>
+    <member name="M:StockSharp.Xaml.Diagram.DiagramEditorControl.InitializeComponent">
+      <summary>
+            InitializeComponent
+            </summary>
+    </member>
     <member name="T:StockSharp.Xaml.Diagram.DiagramElement">
       <summary>
             The diagram element.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Diagram.DiagramElement.TypeId">
+      <summary>
+            The unique identifier of the diagram element type.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Diagram.DiagramElement.InputSockets">
+      <summary>
+            Incoming connections.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Diagram.DiagramElement.OutputSockets">
+      <summary>
+            Outgoing connections.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Diagram.DiagramElement.Parameters">
+      <summary>
+            Diagram element settings.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Diagram.DiagramElement.Category">
+      <summary>
+            The name of the group which includes a diagram element.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Diagram.DiagramElement.Name">
+      <summary>
+            Name.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Diagram.DiagramElement.Description">
+      <summary>
+            The diagram element description.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Diagram.DiagramElement.LogLevel">
+      <summary>
+            The logging level. The default is set to <see cref="F:StockSharp.Logging.LogLevels.Inherit" />.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Diagram.DiagramElement.ShowParameters">
+      <summary>
+            Show element parameters in higher order elements.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Diagram.DiagramElement.Icon">
+      <summary>
+            Icon.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Diagram.DiagramElement.Strategy">
+      <summary>
+            The strategy to which the element is attached.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Diagram.DiagramElement.DebuggerSyncObject">
+      <summary>
+            The synchronization object for the debugger.
+            </summary>
+    </member>
+    <member name="E:StockSharp.Xaml.Diagram.DiagramElement.ProcessOutput">
+      <summary>
+            New data occurring event.
+            </summary>
+    </member>
+    <member name="E:StockSharp.Xaml.Diagram.DiagramElement.NameChanging">
+      <summary>
+            The diagram element name change event.
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.DiagramElement.#ctor">
@@ -180,6 +698,11 @@
             The method is called at re-initialisation of the diagram element state.
             </summary>
     </member>
+    <member name="E:StockSharp.Xaml.Diagram.DiagramElement.PropertyChanged">
+      <summary>
+            The diagram element properties value change event.
+            </summary>
+    </member>
     <member name="M:StockSharp.Xaml.Diagram.DiagramElement.RaisePropertyChanged(System.String)">
       <summary>
             To call the diagram element property value change event.
@@ -212,197 +735,14 @@
             </summary>
       <param name="storage">Settings storage.</param>
     </member>
-    <member name="M:StockSharp.Xaml.Diagram.DiagramElement.RaisePropertiesChanged">
-      <summary>
-            To call the available properties change event.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Xaml.Diagram.DiagramElement.TypeId">
-      <summary>
-            The unique identifier of the diagram element type.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Xaml.Diagram.DiagramElement.InputSockets">
-      <summary>
-            Incoming connections.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Xaml.Diagram.DiagramElement.OutputSockets">
-      <summary>
-            Outgoing connections.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Xaml.Diagram.DiagramElement.Parameters">
-      <summary>
-            Diagram element settings.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Xaml.Diagram.DiagramElement.Category">
-      <summary>
-            The name of the group which includes a diagram element.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Xaml.Diagram.DiagramElement.Name">
-      <summary>
-            Name.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Xaml.Diagram.DiagramElement.Description">
-      <summary>
-            The diagram element description.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Xaml.Diagram.DiagramElement.LogLevel">
-      <summary>
-            The logging level. The default is set to <see cref="F:StockSharp.Logging.LogLevels.Inherit" />.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Xaml.Diagram.DiagramElement.ShowParameters">
-      <summary>
-            Show element parameters in higher order elements.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Xaml.Diagram.DiagramElement.Icon">
-      <summary>
-            Icon.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Xaml.Diagram.DiagramElement.Strategy">
-      <summary>
-            The strategy to which the element is attached.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Xaml.Diagram.DiagramElement.DebuggerSyncObject">
-      <summary>
-            The synchronization object for the debugger.
-            </summary>
-    </member>
-    <member name="E:StockSharp.Xaml.Diagram.DiagramElement.ProcessOutput">
-      <summary>
-            New data occurring event.
-            </summary>
-    </member>
-    <member name="E:StockSharp.Xaml.Diagram.DiagramElement.NameChanging">
-      <summary>
-            The diagram element name change event.
-            </summary>
-    </member>
-    <member name="E:StockSharp.Xaml.Diagram.DiagramElement.PropertyChanged">
-      <summary>
-            The diagram element properties value change event.
-            </summary>
-    </member>
     <member name="E:StockSharp.Xaml.Diagram.DiagramElement.PropertiesChanged">
       <summary>
             The available properties change event.
             </summary>
     </member>
-    <member name="M:StockSharp.Xaml.Diagram.CompositionDiagramElement.#ctor">
+    <member name="M:StockSharp.Xaml.Diagram.DiagramElement.RaisePropertiesChanged">
       <summary>
-            Initializes a new instance of the <see cref="T:StockSharp.Xaml.Diagram.CompositionDiagramElement" />.
-            </summary>
-    </member>
-    <member name="M:StockSharp.Xaml.Diagram.CompositionDiagramElement.RaisePropertyChanged(System.Object,System.ComponentModel.PropertyChangedEventArgs)">
-      <summary>
-            To call the diagram element property value change event.
-            </summary>
-      <param name="sender">Sender.</param>
-      <param name="args">Arguments.</param>
-    </member>
-    <member name="M:StockSharp.Xaml.Diagram.CompositionDiagramElement.Save(Ecng.Serialization.SettingsStorage)">
-      <summary>
-            Save settings.
-            </summary>
-      <param name="storage">Settings storage.</param>
-    </member>
-    <member name="M:StockSharp.Xaml.Diagram.CompositionDiagramElement.Load(Ecng.Serialization.SettingsStorage)">
-      <summary>
-            Load settings.
-            </summary>
-      <param name="storage">Settings storage.</param>
-    </member>
-    <member name="M:StockSharp.Xaml.Diagram.CompositionDiagramElement.OnInit">
-      <summary>
-            The method is called at initialization of the diagram element.
-            </summary>
-    </member>
-    <member name="M:StockSharp.Xaml.Diagram.CompositionDiagramElement.OnUnInit">
-      <summary>
-            The method is called at deinitialization of the diagram element.
-            </summary>
-    </member>
-    <member name="M:StockSharp.Xaml.Diagram.CompositionDiagramElement.OnBind(StockSharp.Xaml.Diagram.DiagramElement)">
-      <summary>
-            The method is called at subscription to the processing of diagram element output values.
-            </summary>
-      <param name="element">The diagram element.</param>
-    </member>
-    <member name="M:StockSharp.Xaml.Diagram.CompositionDiagramElement.OnUnBind(StockSharp.Xaml.Diagram.DiagramElement)">
-      <summary>
-            The method is called at unsubscription from the processing of diagram element output values.
-            </summary>
-      <param name="element">The diagram element.</param>
-    </member>
-    <member name="M:StockSharp.Xaml.Diagram.CompositionDiagramElement.OnStart">
-      <summary>
-            The method is called at the start of the diagram element algorithm.
-            </summary>
-    </member>
-    <member name="M:StockSharp.Xaml.Diagram.CompositionDiagramElement.OnStop">
-      <summary>
-            The method is called at the stop of the diagram element algorithm.
-            </summary>
-    </member>
-    <member name="M:StockSharp.Xaml.Diagram.CompositionDiagramElement.OnReseted">
-      <summary>
-            The method is called at re-initialisation of the diagram element state.
-            </summary>
-    </member>
-    <member name="M:StockSharp.Xaml.Diagram.CompositionDiagramElement.Clone(System.Boolean)">
-      <summary>
-            Create a copy of <see cref="T:StockSharp.Xaml.Diagram.CompositionDiagramElement" />.
-            </summary>
-      <param name="cloneSockets">To create copies of connections.</param>
-      <returns>Copy.</returns>
-    </member>
-    <member name="P:StockSharp.Xaml.Diagram.CompositionDiagramElement.TypeId">
-      <summary>
-            The unique identifier of the diagram element type.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Xaml.Diagram.CompositionDiagramElement.Icon">
-      <summary>
-            Icon.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Xaml.Diagram.CompositionDiagramElement.Parameters">
-      <summary>
-            Diagram element settings.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Xaml.Diagram.CompositionDiagramElement.Category">
-      <summary>
-            The name of the group which includes a diagram element.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Xaml.Diagram.CompositionDiagramElement.Description">
-      <summary>
-            The diagram element description.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Xaml.Diagram.CompositionDiagramElement.IsModifiable">
-      <summary>
-            Is it possible to edit a composite element diagram.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Xaml.Diagram.CompositionDiagramElement.HasErrors">
-      <summary>
-            To check the composite element for errors in diagram.
-            </summary>
-    </member>
-    <member name="E:StockSharp.Xaml.Diagram.CompositionDiagramElement.Changed">
-      <summary>
-            The composite element diagram change event.
+            To call the available properties change event.
             </summary>
     </member>
     <member name="T:StockSharp.Xaml.Diagram.IDiagramElementParam">
@@ -468,381 +808,10 @@
             To ignore when saving.
             </summary>
     </member>
-    <member name="T:StockSharp.Xaml.Diagram.CompositionRegistry">
-      <summary>
-            The storage of composite elements.
-            </summary>
-    </member>
-    <member name="M:StockSharp.Xaml.Diagram.CompositionRegistry.#ctor">
-      <summary>
-            Initializes a new instance of the <see cref="T:StockSharp.Xaml.Diagram.CompositionRegistry" />.
-            </summary>
-    </member>
-    <member name="M:StockSharp.Xaml.Diagram.CompositionRegistry.Save(StockSharp.Xaml.Diagram.CompositionDiagramElement)">
-      <summary>
-            Save settings.
-            </summary>
-      <param name="composition">Composite element.</param>
-    </member>
-    <member name="M:StockSharp.Xaml.Diagram.CompositionRegistry.TryRemove(StockSharp.Xaml.Diagram.CompositionDiagramElement)">
-      <summary>
-            To remove the composite element, if it is not used in other composite diagrams.
-            </summary>
-      <param name="element">Composite element.</param>
-    </member>
-    <member name="M:StockSharp.Xaml.Diagram.CompositionRegistry.Load(Ecng.Serialization.SettingsStorage,System.Boolean)">
-      <summary>
-            Load settings.
-            </summary>
-      <param name="data">The data string.</param>
-      <param name="readOnly">Is it possible to modify the element.</param>
-    </member>
-    <member name="M:StockSharp.Xaml.Diagram.CompositionRegistry.Serialize(StockSharp.Xaml.Diagram.CompositionDiagramElement)">
-      <summary>
-            To serialize the composite element.
-            </summary>
-      <param name="composition">Composite element.</param>
-      <returns>Settings storage.</returns>
-    </member>
-    <member name="M:StockSharp.Xaml.Diagram.CompositionRegistry.Deserialize(Ecng.Serialization.SettingsStorage)">
-      <summary>
-            To deserialize the composite element.
-            </summary>
-      <param name="storage">Settings storage.</param>
-      <returns>Composite element.</returns>
-    </member>
-    <member name="M:StockSharp.Xaml.Diagram.CompositionRegistry.DeserializeExported(Ecng.Serialization.SettingsStorage)">
-      <summary>
-            To deserialize the composite element.
-            </summary>
-      <param name="storage">Settings storage.</param>
-      <returns>Composite element.</returns>
-    </member>
-    <member name="P:StockSharp.Xaml.Diagram.CompositionRegistry.DiagramElements">
-      <summary>
-            List of elements.
-            </summary>
-    </member>
-    <member name="E:StockSharp.Xaml.Diagram.CompositionRegistry.SaveComposition">
-      <summary>
-            The diagram composite element saving event.
-            </summary>
-    </member>
-    <member name="E:StockSharp.Xaml.Diagram.CompositionRegistry.RemoveComposition">
-      <summary>
-            The diagram composite element removing event.
-            </summary>
-    </member>
-    <member name="T:StockSharp.Xaml.Diagram.DebuggerSyncObject">
-      <summary>
-            The synchronization object for the composite elements debugger.
-            </summary>
-    </member>
-    <member name="M:StockSharp.Xaml.Diagram.DebuggerSyncObject.#ctor(System.Func{StockSharp.Xaml.Diagram.DiagramElement,System.Boolean},System.Action{StockSharp.Xaml.Diagram.DebuggerSyncObject})">
-      <summary>
-            Initializes a new instance of the <see cref="T:StockSharp.Xaml.Diagram.DebuggerSyncObject" />.
-            </summary>
-      <param name="isBreak">The handler that returns a stop flag for the element.</param>
-      <param name="breakAction">The action with the element at stop.</param>
-    </member>
-    <member name="M:StockSharp.Xaml.Diagram.DebuggerSyncObject.IsBreakpointAt(StockSharp.Xaml.Diagram.DiagramElement)">
-      <summary>
-            To check the breakpoint presence in an element.
-            </summary>
-      <param name="element">Element.</param>
-      <returns>
-        <see langword="true" />, if there is a breakpoint in the diagram element. Otherwise, <see langword="false" />.</returns>
-    </member>
-    <member name="M:StockSharp.Xaml.Diagram.DebuggerSyncObject.SetWaitOnNext">
-      <summary>
-            To set the flag for waiting at the entry of the next diagram element.
-            </summary>
-    </member>
-    <member name="M:StockSharp.Xaml.Diagram.DebuggerSyncObject.SetWaitOnOutput">
-      <summary>
-            To set the flag for waiting at the exit of the current diagram element.
-            </summary>
-    </member>
-    <member name="M:StockSharp.Xaml.Diagram.DebuggerSyncObject.Continue">
-      <summary>
-            Continue.
-            </summary>
-    </member>
-    <member name="M:StockSharp.Xaml.Diagram.DebuggerSyncObject.ContinueAndWaitOnNext">
-      <summary>
-            To continue and stop at the next element.
-            </summary>
-    </member>
-    <member name="M:StockSharp.Xaml.Diagram.DebuggerSyncObject.ContinueAndWaitOnOutput">
-      <summary>
-            To continue and stop at the exit of the current diagram element.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Xaml.Diagram.DebuggerSyncObject.CurrentElement">
-      <summary>
-            The current element.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Xaml.Diagram.DebuggerSyncObject.IsWaitingOnInput">
-      <summary>
-        <see langword="true" />, if the debugger is stopped at the entry of the diagram element. Otherwise, <see langword="false" />.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Xaml.Diagram.DebuggerSyncObject.IsWaitingOnOutput">
-      <summary>
-        <see langword="true" />, if the debugger is stopped at the exit of the diagram element. Otherwise, <see langword="false" />.
-            </summary>
-    </member>
-    <member name="T:StockSharp.Xaml.Diagram.DiagramDebugger">
-      <summary>
-            The debugger of the diagram composite element.
-            </summary>
-    </member>
-    <member name="M:StockSharp.Xaml.Diagram.DiagramDebugger.#ctor(StockSharp.Xaml.Diagram.CompositionDiagramElement)">
-      <summary>
-            Initializes a new instance of the <see cref="T:StockSharp.Xaml.Diagram.DiagramDebugger" />.
-            </summary>
-      <param name="composition">Composite element.</param>
-    </member>
-    <member name="M:StockSharp.Xaml.Diagram.DiagramDebugger.AddBreak(StockSharp.Xaml.Diagram.DiagramElement)">
-      <summary>
-            To add a breakpoint in the element.
-            </summary>
-      <param name="element">Element.</param>
-    </member>
-    <member name="M:StockSharp.Xaml.Diagram.DiagramDebugger.RemoveBreak(StockSharp.Xaml.Diagram.DiagramElement)">
-      <summary>
-            To remove the breakpoint from the element.
-            </summary>
-      <param name="element">Element.</param>
-    </member>
-    <member name="M:StockSharp.Xaml.Diagram.DiagramDebugger.IsBreak(StockSharp.Xaml.Diagram.DiagramElement)">
-      <summary>
-            Whether the element is the breakpoint.
-            </summary>
-      <param name="element">Element.</param>
-      <returns>
-        <see langword="true" />, if the element is the breakpoint, otherwise, <see langword="false" />.</returns>
-    </member>
-    <member name="M:StockSharp.Xaml.Diagram.DiagramDebugger.StepNext">
-      <summary>
-            To go to the next element.
-            </summary>
-    </member>
-    <member name="M:StockSharp.Xaml.Diagram.DiagramDebugger.StepToOutput">
-      <summary>
-            To go to the exit from the diagram element.
-            </summary>
-    </member>
-    <member name="M:StockSharp.Xaml.Diagram.DiagramDebugger.StepInto">
-      <summary>
-            To go inside the diagram composite element.
-            </summary>
-    </member>
-    <member name="M:StockSharp.Xaml.Diagram.DiagramDebugger.StepOut">
-      <summary>
-            To exit from the diagram composite element.
-            </summary>
-    </member>
-    <member name="M:StockSharp.Xaml.Diagram.DiagramDebugger.Continue">
-      <summary>
-            Continue.
-            </summary>
-    </member>
-    <member name="M:StockSharp.Xaml.Diagram.DiagramDebugger.Load(Ecng.Serialization.SettingsStorage)">
-      <summary>
-            Load settings.
-            </summary>
-      <param name="storage">Settings storage.</param>
-    </member>
-    <member name="M:StockSharp.Xaml.Diagram.DiagramDebugger.Save(Ecng.Serialization.SettingsStorage)">
-      <summary>
-            Save settings.
-            </summary>
-      <param name="storage">Settings storage.</param>
-    </member>
-    <member name="P:StockSharp.Xaml.Diagram.DiagramDebugger.Breakpoints">
-      <summary>
-            Breakpoints (elements, on which the data transmission will be stopped).
-            </summary>
-    </member>
-    <member name="P:StockSharp.Xaml.Diagram.DiagramDebugger.IsWaitingOnInput">
-      <summary>
-        <see langword="true" />, if the debugger is stopped at the entry of the diagram element. Otherwise, <see langword="false" />.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Xaml.Diagram.DiagramDebugger.IsWaitingOnOutput">
-      <summary>
-        <see langword="true" />, if the debugger is stopped at the exit of the diagram element. Otherwise, <see langword="false" />.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Xaml.Diagram.DiagramDebugger.IsWaiting">
-      <summary>
-        <see langword="true" />, if the debugger is stopped at the entry or exit of the diagram element. Otherwise, <see langword="false" />.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Xaml.Diagram.DiagramDebugger.CanStepInto">
-      <summary>
-        <see langword="true" />, if it is possible to go inside of the current diagram element. Otherwise, <see langword="false" />.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Xaml.Diagram.DiagramDebugger.CanStepOut">
-      <summary>
-        <see langword="true" />, if it is possible to go outside from the current diagram element. Otherwise, <see langword="false" />.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Xaml.Diagram.DiagramDebugger.IsEnabled">
-      <summary>
-        <see langword="true" />, if the debugger is used. Otherwise, <see langword="false" />.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Xaml.Diagram.DiagramDebugger.Composition">
-      <summary>
-            Composite element.
-            </summary>
-    </member>
-    <member name="E:StockSharp.Xaml.Diagram.DiagramDebugger.CompositionChanged">
-      <summary>
-            The diagram composite element change event.
-            </summary>
-    </member>
-    <member name="E:StockSharp.Xaml.Diagram.DiagramDebugger.Break">
-      <summary>
-            The event of the stop at the breakpoint.
-            </summary>
-    </member>
-    <member name="T:StockSharp.Xaml.Diagram.DiagramEditorControl">
-      <summary>
-            Graphical component for editing <see cref="T:StockSharp.Xaml.Diagram.CompositionDiagramElement" />.
-            </summary>
-      <summary>
-            DiagramEditorControl
-            </summary>
-    </member>
-    <member name="F:StockSharp.Xaml.Diagram.DiagramEditorControl.CompositionProperty">
-      <summary>
-        <see cref="T:System.Windows.DependencyProperty" /> for <see cref="P:StockSharp.Xaml.Diagram.DiagramEditorControl.Composition" />.
-            </summary>
-    </member>
-    <member name="F:StockSharp.Xaml.Diagram.DiagramEditorControl.ShowOverviewProperty">
-      <summary>
-        <see cref="T:System.Windows.DependencyProperty" /> for <see cref="P:StockSharp.Xaml.Diagram.DiagramEditorControl.ShowOverview" />.
-            </summary>
-    </member>
-    <member name="F:StockSharp.Xaml.Diagram.DiagramEditorControl.ScaleProperty">
-      <summary>
-        <see cref="T:System.Windows.DependencyProperty" /> for <see cref="P:StockSharp.Xaml.Diagram.DiagramEditorControl.Scale" />.
-            </summary>
-    </member>
-    <member name="M:StockSharp.Xaml.Diagram.DiagramEditorControl.#ctor">
-      <summary>
-            Initializes a new instance of the <see cref="T:StockSharp.Xaml.Diagram.DiagramEditorControl" />.
-            </summary>
-    </member>
-    <member name="M:StockSharp.Xaml.Diagram.DiagramEditorControl.GetSelectionCopyElement">
-      <summary>
-            To create a new element from the selected elements in the diagram.
-            </summary>
-      <returns>Composite element.</returns>
-    </member>
-    <member name="M:StockSharp.Xaml.Diagram.DiagramEditorControl.Load(Ecng.Serialization.SettingsStorage)">
-      <summary>
-            Load settings.
-            </summary>
-      <param name="storage">Settings storage.</param>
-    </member>
-    <member name="M:StockSharp.Xaml.Diagram.DiagramEditorControl.Save(Ecng.Serialization.SettingsStorage)">
-      <summary>
-            Save settings.
-            </summary>
-      <param name="storage">Settings storage.</param>
-    </member>
-    <member name="M:StockSharp.Xaml.Diagram.DiagramEditorControl.SaveToImage(System.String)">
-      <summary>
-            To save the diagram as an image.
-            </summary>
-      <param name="fileName">The full path to the file.</param>
-    </member>
-    <member name="M:StockSharp.Xaml.Diagram.DiagramEditorControl.InitializeComponent">
-      <summary>
-            InitializeComponent
-            </summary>
-    </member>
-    <member name="P:StockSharp.Xaml.Diagram.DiagramEditorControl.Composition">
-      <summary>
-            Composite element.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Xaml.Diagram.DiagramEditorControl.ShowOverview">
-      <summary>
-            To show the review panel.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Xaml.Diagram.DiagramEditorControl.Scale">
-      <summary>
-            Scale.
-            </summary>
-    </member>
-    <member name="E:StockSharp.Xaml.Diagram.DiagramEditorControl.SelectionChanged">
-      <summary>
-            The event of the element selection on the diagram.
-            </summary>
-    </member>
-    <member name="E:StockSharp.Xaml.Diagram.DiagramEditorControl.ElementDoubleClicked">
-      <summary>
-            The event of the double click on the diagram element.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Xaml.Diagram.DiagramEditorControl.SelectedElements">
-      <summary>
-            Selected elements.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Xaml.Diagram.DiagramEditorControl.SelectedElement">
-      <summary>
-            The selected element.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Xaml.Diagram.DiagramEditorControl.IndicatorTypes">
-      <summary>
-            The list of available indicators types.
-            </summary>
-    </member>
     <member name="T:StockSharp.Xaml.Diagram.DiagramElementParam`1">
       <summary>
             The diagram element parameter.
             </summary>
-    </member>
-    <member name="M:StockSharp.Xaml.Diagram.DiagramElementParam`1.op_Implicit(StockSharp.Xaml.Diagram.DiagramElementParam{`0})~`0">
-      <summary>
-            To reduce the parameter value to the object <typeparamref name="T" />.
-            </summary>
-      <param name="param">Parameter.</param>
-      <returns>Object <typeparamref name="T" />.</returns>
-    </member>
-    <member name="M:StockSharp.Xaml.Diagram.DiagramElementParam`1.OnPropertyChanged(System.String)">
-      <summary>
-            To call the connection property value change event.
-            </summary>
-      <param name="propertyName">Property name.</param>
-    </member>
-    <member name="M:StockSharp.Xaml.Diagram.DiagramElementParam`1.Load(Ecng.Serialization.SettingsStorage)">
-      <summary>
-            Load settings.
-            </summary>
-      <param name="storage">Settings storage.</param>
-    </member>
-    <member name="M:StockSharp.Xaml.Diagram.DiagramElementParam`1.Save(Ecng.Serialization.SettingsStorage)">
-      <summary>
-            Save settings.
-            </summary>
-      <param name="storage">Settings storage.</param>
-    </member>
-    <member name="M:StockSharp.Xaml.Diagram.DiagramElementParam`1.ToString">
-      <summary>
-            Returns a string that represents the current object.
-            </summary>
-      <returns>A string that represents the current object.</returns>
     </member>
     <member name="E:StockSharp.Xaml.Diagram.DiagramElementParam`1.ValueChanging">
       <summary>
@@ -922,10 +891,41 @@
             The parameter value loading handler.
             </summary>
     </member>
+    <member name="M:StockSharp.Xaml.Diagram.DiagramElementParam`1.op_Implicit(StockSharp.Xaml.Diagram.DiagramElementParam{`0})~`0">
+      <summary>
+            To reduce the parameter value to the object <typeparamref name="T" />.
+            </summary>
+      <param name="param">Parameter.</param>
+      <returns>Object <typeparamref name="T" />.</returns>
+    </member>
     <member name="E:StockSharp.Xaml.Diagram.DiagramElementParam`1.PropertyChanged">
       <summary>
             The connection properties value change event.
             </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.Diagram.DiagramElementParam`1.OnPropertyChanged(System.String)">
+      <summary>
+            To call the connection property value change event.
+            </summary>
+      <param name="propertyName">Property name.</param>
+    </member>
+    <member name="M:StockSharp.Xaml.Diagram.DiagramElementParam`1.Load(Ecng.Serialization.SettingsStorage)">
+      <summary>
+            Load settings.
+            </summary>
+      <param name="storage">Settings storage.</param>
+    </member>
+    <member name="M:StockSharp.Xaml.Diagram.DiagramElementParam`1.Save(Ecng.Serialization.SettingsStorage)">
+      <summary>
+            Save settings.
+            </summary>
+      <param name="storage">Settings storage.</param>
+    </member>
+    <member name="M:StockSharp.Xaml.Diagram.DiagramElementParam`1.ToString">
+      <summary>
+            Returns a string that represents the current object.
+            </summary>
+      <returns>A string that represents the current object.</returns>
     </member>
     <member name="T:StockSharp.Xaml.Diagram.DiagramElementParameters">
       <summary>
@@ -1082,16 +1082,6 @@
             DiagramPaletteControl
             </summary>
     </member>
-    <member name="M:StockSharp.Xaml.Diagram.DiagramPaletteControl.#ctor">
-      <summary>
-            Initializes a new instance of the <see cref="T:StockSharp.Xaml.Diagram.DiagramPaletteControl" />.
-            </summary>
-    </member>
-    <member name="M:StockSharp.Xaml.Diagram.DiagramPaletteControl.InitializeComponent">
-      <summary>
-            InitializeComponent
-            </summary>
-    </member>
     <member name="P:StockSharp.Xaml.Diagram.DiagramPaletteControl.PaletteElements">
       <summary>
             Available elements.
@@ -1110,6 +1100,16 @@
     <member name="E:StockSharp.Xaml.Diagram.DiagramPaletteControl.PaletteElementDoubleClicked">
       <summary>
             The event of the double click on the element in the Toolbox .
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.Diagram.DiagramPaletteControl.#ctor">
+      <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Xaml.Diagram.DiagramPaletteControl" />.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.Diagram.DiagramPaletteControl.InitializeComponent">
+      <summary>
+            InitializeComponent
             </summary>
     </member>
     <member name="T:StockSharp.Xaml.Diagram.DiagramSocketDirection">
@@ -1131,64 +1131,6 @@
       <summary>
             Connection.
             </summary>
-    </member>
-    <member name="M:StockSharp.Xaml.Diagram.DiagramSocket.CanConnect(StockSharp.Xaml.Diagram.DiagramSocket)">
-      <summary>
-            To check the ability to make a connection.
-            </summary>
-      <param name="to">Connection.</param>
-      <returns>The test result.</returns>
-    </member>
-    <member name="M:StockSharp.Xaml.Diagram.DiagramSocket.GetValue">
-      <summary>
-            To get the value for the connection.
-            </summary>
-      <returns>Value.</returns>
-    </member>
-    <member name="M:StockSharp.Xaml.Diagram.DiagramSocket.GetValue``1">
-      <summary>
-            To get the value for the connection.
-            </summary>
-      <typeparam name="T">Data type.</typeparam>
-      <returns>Value.</returns>
-    </member>
-    <member name="M:StockSharp.Xaml.Diagram.DiagramSocket.Load(Ecng.Serialization.SettingsStorage)">
-      <summary>
-            Load settings.
-            </summary>
-      <param name="storage">Settings storage.</param>
-    </member>
-    <member name="M:StockSharp.Xaml.Diagram.DiagramSocket.Save(Ecng.Serialization.SettingsStorage)">
-      <summary>
-            Save settings.
-            </summary>
-      <param name="storage">Settings storage.</param>
-    </member>
-    <member name="M:StockSharp.Xaml.Diagram.DiagramSocket.OnPropertyChanged(System.String)">
-      <summary>
-            To call the connection property value change event.
-            </summary>
-      <param name="propertyName">Property name.</param>
-    </member>
-    <member name="M:StockSharp.Xaml.Diagram.DiagramSocket.Clone">
-      <summary>
-            Create a copy of <see cref="T:StockSharp.Xaml.Diagram.DiagramSocket" />.
-            </summary>
-      <returns>Copy.</returns>
-    </member>
-    <member name="M:StockSharp.Xaml.Diagram.DiagramSocket.OnEquals(StockSharp.Xaml.Diagram.DiagramSocket)">
-      <summary>
-            Compare <see cref="T:StockSharp.Xaml.Diagram.DiagramSocket" /> on the equivalence.
-            </summary>
-      <param name="other">Another value with which to compare.</param>
-      <returns>
-        <see langword="true" />, if the specified object is equal to the current object, otherwise, <see langword="false" />.</returns>
-    </member>
-    <member name="M:StockSharp.Xaml.Diagram.DiagramSocket.ToString">
-      <summary>
-            Returns a string that represents the current object.
-            </summary>
-      <returns>A string that represents the current object.</returns>
     </member>
     <member name="P:StockSharp.Xaml.Diagram.DiagramSocket.Id">
       <summary>
@@ -1235,10 +1177,68 @@
             The socket disconnection event.
             </summary>
     </member>
+    <member name="M:StockSharp.Xaml.Diagram.DiagramSocket.CanConnect(StockSharp.Xaml.Diagram.DiagramSocket)">
+      <summary>
+            To check the ability to make a connection.
+            </summary>
+      <param name="to">Connection.</param>
+      <returns>The test result.</returns>
+    </member>
+    <member name="M:StockSharp.Xaml.Diagram.DiagramSocket.GetValue">
+      <summary>
+            To get the value for the connection.
+            </summary>
+      <returns>Value.</returns>
+    </member>
+    <member name="M:StockSharp.Xaml.Diagram.DiagramSocket.GetValue``1">
+      <summary>
+            To get the value for the connection.
+            </summary>
+      <typeparam name="T">Data type.</typeparam>
+      <returns>Value.</returns>
+    </member>
+    <member name="M:StockSharp.Xaml.Diagram.DiagramSocket.Load(Ecng.Serialization.SettingsStorage)">
+      <summary>
+            Load settings.
+            </summary>
+      <param name="storage">Settings storage.</param>
+    </member>
+    <member name="M:StockSharp.Xaml.Diagram.DiagramSocket.Save(Ecng.Serialization.SettingsStorage)">
+      <summary>
+            Save settings.
+            </summary>
+      <param name="storage">Settings storage.</param>
+    </member>
     <member name="E:StockSharp.Xaml.Diagram.DiagramSocket.PropertyChanged">
       <summary>
             The connection properties value change event.
             </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.Diagram.DiagramSocket.OnPropertyChanged(System.String)">
+      <summary>
+            To call the connection property value change event.
+            </summary>
+      <param name="propertyName">Property name.</param>
+    </member>
+    <member name="M:StockSharp.Xaml.Diagram.DiagramSocket.Clone">
+      <summary>
+            Create a copy of <see cref="T:StockSharp.Xaml.Diagram.DiagramSocket" />.
+            </summary>
+      <returns>Copy.</returns>
+    </member>
+    <member name="M:StockSharp.Xaml.Diagram.DiagramSocket.OnEquals(StockSharp.Xaml.Diagram.DiagramSocket)">
+      <summary>
+            Compare <see cref="T:StockSharp.Xaml.Diagram.DiagramSocket" /> on the equivalence.
+            </summary>
+      <param name="other">Another value with which to compare.</param>
+      <returns>
+        <see langword="true" />, if the specified object is equal to the current object, otherwise, <see langword="false" />.</returns>
+    </member>
+    <member name="M:StockSharp.Xaml.Diagram.DiagramSocket.ToString">
+      <summary>
+            Returns a string that represents the current object.
+            </summary>
+      <returns>A string that represents the current object.</returns>
     </member>
     <member name="T:StockSharp.Xaml.Diagram.DiagramSocketListBox">
       <summary>
@@ -1267,6 +1267,21 @@
             Connection type.
             </summary>
     </member>
+    <member name="P:StockSharp.Xaml.Diagram.DiagramSocketType.Name">
+      <summary>
+            The name of the connection type.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Diagram.DiagramSocketType.Type">
+      <summary>
+            Connection type.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Diagram.DiagramSocketType.Color">
+      <summary>
+            The connection color.
+            </summary>
+    </member>
     <member name="M:StockSharp.Xaml.Diagram.DiagramSocketType.#ctor">
       <summary>
             Initializes a new instance of the <see cref="T:StockSharp.Xaml.Diagram.DiagramSocketType" />.
@@ -1280,12 +1295,22 @@
       <param name="name">The name of the connection type.</param>
       <param name="color">The connection color.</param>
     </member>
+    <member name="P:StockSharp.Xaml.Diagram.DiagramSocketType.AllTypes">
+      <summary>
+            All available connection types for elements.
+            </summary>
+    </member>
     <member name="M:StockSharp.Xaml.Diagram.DiagramSocketType.RegisterType``1(System.String,System.Windows.Media.Color)">
       <summary>
             To register the connection type.
             </summary>
       <param name="name">The name of the connection type.</param>
       <param name="color">The connection color.</param>
+    </member>
+    <member name="E:StockSharp.Xaml.Diagram.DiagramSocketType.PropertyChanged">
+      <summary>
+            The connection properties value change event.
+            </summary>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.DiagramSocketType.OnPropertyChanged(System.String)">
       <summary>
@@ -1380,34 +1405,24 @@
             Comparable values.
             </summary>
     </member>
-    <member name="P:StockSharp.Xaml.Diagram.DiagramSocketType.Name">
-      <summary>
-            The name of the connection type.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Xaml.Diagram.DiagramSocketType.Type">
-      <summary>
-            Connection type.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Xaml.Diagram.DiagramSocketType.Color">
-      <summary>
-            The connection color.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Xaml.Diagram.DiagramSocketType.AllTypes">
-      <summary>
-            All available connection types for elements.
-            </summary>
-    </member>
-    <member name="E:StockSharp.Xaml.Diagram.DiagramSocketType.PropertyChanged">
-      <summary>
-            The connection properties value change event.
-            </summary>
-    </member>
     <member name="T:StockSharp.Xaml.Diagram.DiagramSocketValue">
       <summary>
             The value for the connection.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Diagram.DiagramSocketValue.Sender">
+      <summary>
+            The element sender of the value.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Diagram.DiagramSocketValue.Socket">
+      <summary>
+            Connection.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Diagram.DiagramSocketValue.Value">
+      <summary>
+            Value.
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.DiagramSocketValue.#ctor(StockSharp.Xaml.Diagram.DiagramElement,StockSharp.Xaml.Diagram.DiagramSocket)">
@@ -1430,24 +1445,19 @@
             </summary>
       <returns>A string that represents the current object.</returns>
     </member>
-    <member name="P:StockSharp.Xaml.Diagram.DiagramSocketValue.Sender">
-      <summary>
-            The element sender of the value.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Xaml.Diagram.DiagramSocketValue.Socket">
-      <summary>
-            Connection.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Xaml.Diagram.DiagramSocketValue.Value">
-      <summary>
-            Value.
-            </summary>
-    </member>
     <member name="T:StockSharp.Xaml.Diagram.DiagramStrategy">
       <summary>
             The strategy whose algorithm is presented in the form of a diagram.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Diagram.DiagramStrategy.Composition">
+      <summary>
+            The strategy diagram.
+            </summary>
+    </member>
+    <member name="E:StockSharp.Xaml.Diagram.DiagramStrategy.CompositionChanged">
+      <summary>
+            The strategy diagram change event .
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.DiagramStrategy.#ctor">
@@ -1496,24 +1506,14 @@
       <returns>
         <see langword="true" />, if necessary to show the property, otherwise <see langword="false" />.</returns>
     </member>
-    <member name="M:StockSharp.Xaml.Diagram.DiagramStrategy.RaisePropertiesChanged">
-      <summary>
-            To call the available properties change event.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Xaml.Diagram.DiagramStrategy.Composition">
-      <summary>
-            The strategy diagram.
-            </summary>
-    </member>
-    <member name="E:StockSharp.Xaml.Diagram.DiagramStrategy.CompositionChanged">
-      <summary>
-            The strategy diagram change event .
-            </summary>
-    </member>
     <member name="E:StockSharp.Xaml.Diagram.DiagramStrategy.PropertiesChanged">
       <summary>
             The available properties change event.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.Diagram.DiagramStrategy.RaisePropertiesChanged">
+      <summary>
+            To call the available properties change event.
             </summary>
     </member>
     <member name="T:StockSharp.Xaml.Diagram.Elements.CandleSourceDiagramElement">
@@ -1521,9 +1521,24 @@
             Candles source element.
             </summary>
     </member>
+    <member name="P:StockSharp.Xaml.Diagram.Elements.CandleSourceDiagramElement.Series">
+      <summary>
+            Candles series.
+            </summary>
+    </member>
     <member name="M:StockSharp.Xaml.Diagram.Elements.CandleSourceDiagramElement.#ctor">
       <summary>
             Initializes a new instance of the <see cref="T:StockSharp.Xaml.Diagram.Elements.CandleSourceDiagramElement" />.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Diagram.Elements.CandleSourceDiagramElement.TypeId">
+      <summary>
+            The unique identifier of the diagram element type.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Diagram.Elements.CandleSourceDiagramElement.Icon">
+      <summary>
+            Icon.
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.Elements.CandleSourceDiagramElement.OnStop">
@@ -1536,21 +1551,6 @@
             The method is called at the processing of the new incoming value.
             </summary>
       <param name="value">The processed value.</param>
-    </member>
-    <member name="P:StockSharp.Xaml.Diagram.Elements.CandleSourceDiagramElement.Series">
-      <summary>
-            Candles series.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Xaml.Diagram.Elements.CandleSourceDiagramElement.TypeId">
-      <summary>
-            The unique identifier of the diagram element type.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Xaml.Diagram.Elements.CandleSourceDiagramElement.Icon">
-      <summary>
-            Icon.
-            </summary>
     </member>
     <member name="T:StockSharp.Xaml.Diagram.Elements.ChartDiagramElement">
       <summary>
@@ -1596,6 +1596,16 @@
             </summary>
       <param name="storage">Settings storage.</param>
     </member>
+    <member name="P:StockSharp.Xaml.Diagram.Elements.ChartDiagramElement.TypeId">
+      <summary>
+            The unique identifier of the diagram element type.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Diagram.Elements.ChartDiagramElement.Icon">
+      <summary>
+            Icon.
+            </summary>
+    </member>
     <member name="M:StockSharp.Xaml.Diagram.Elements.ChartDiagramElement.OnUnInit">
       <summary>
             The method is called at deinitialization of the diagram element.
@@ -1622,19 +1632,19 @@
             </summary>
       <param name="value">The processed value.</param>
     </member>
-    <member name="P:StockSharp.Xaml.Diagram.Elements.ChartDiagramElement.TypeId">
+    <member name="T:StockSharp.Xaml.Diagram.Elements.CheckWorkingTimeDiagramElement">
+      <summary>
+            Working time verification element for a specified security.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Diagram.Elements.CheckWorkingTimeDiagramElement.TypeId">
       <summary>
             The unique identifier of the diagram element type.
             </summary>
     </member>
-    <member name="P:StockSharp.Xaml.Diagram.Elements.ChartDiagramElement.Icon">
+    <member name="P:StockSharp.Xaml.Diagram.Elements.CheckWorkingTimeDiagramElement.Icon">
       <summary>
             Icon.
-            </summary>
-    </member>
-    <member name="T:StockSharp.Xaml.Diagram.Elements.CheckWorkingTimeDiagramElement">
-      <summary>
-            Working time verification element for a specified security.
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.Elements.CheckWorkingTimeDiagramElement.#ctor">
@@ -1648,16 +1658,6 @@
             </summary>
       <param name="value">The processed value.</param>
     </member>
-    <member name="P:StockSharp.Xaml.Diagram.Elements.CheckWorkingTimeDiagramElement.TypeId">
-      <summary>
-            The unique identifier of the diagram element type.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Xaml.Diagram.Elements.CheckWorkingTimeDiagramElement.Icon">
-      <summary>
-            Icon.
-            </summary>
-    </member>
     <member name="T:StockSharp.Xaml.Diagram.Elements.ComparisonDiagramElement">
       <summary>
             Two values comparison element.
@@ -1666,6 +1666,16 @@
     <member name="M:StockSharp.Xaml.Diagram.Elements.ComparisonDiagramElement.#ctor">
       <summary>
             Initializes a new instance of the <see cref="T:StockSharp.Xaml.Diagram.Elements.ComparisonDiagramElement" />.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Diagram.Elements.ComparisonDiagramElement.TypeId">
+      <summary>
+            The unique identifier of the diagram element type.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Diagram.Elements.ComparisonDiagramElement.Icon">
+      <summary>
+            Icon.
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.Elements.ComparisonDiagramElement.OnStart">
@@ -1684,19 +1694,19 @@
             </summary>
       <param name="value">The processed value.</param>
     </member>
-    <member name="P:StockSharp.Xaml.Diagram.Elements.ComparisonDiagramElement.TypeId">
+    <member name="T:StockSharp.Xaml.Diagram.Elements.IndexerDiagramElement">
+      <summary>
+            The element of collection or dictionary.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Diagram.Elements.IndexerDiagramElement.TypeId">
       <summary>
             The unique identifier of the diagram element type.
             </summary>
     </member>
-    <member name="P:StockSharp.Xaml.Diagram.Elements.ComparisonDiagramElement.Icon">
+    <member name="P:StockSharp.Xaml.Diagram.Elements.IndexerDiagramElement.Icon">
       <summary>
             Icon.
-            </summary>
-    </member>
-    <member name="T:StockSharp.Xaml.Diagram.Elements.IndexerDiagramElement">
-      <summary>
-            The element of collection or dictionary.
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.Elements.IndexerDiagramElement.#ctor">
@@ -1710,24 +1720,34 @@
             </summary>
       <param name="value">The processed value.</param>
     </member>
-    <member name="P:StockSharp.Xaml.Diagram.Elements.IndexerDiagramElement.TypeId">
-      <summary>
-            The unique identifier of the diagram element type.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Xaml.Diagram.Elements.IndexerDiagramElement.Icon">
-      <summary>
-            Icon.
-            </summary>
-    </member>
     <member name="T:StockSharp.Xaml.Diagram.Elements.IndicatorDiagramElement">
       <summary>
             Indicator element.
             </summary>
     </member>
+    <member name="P:StockSharp.Xaml.Diagram.Elements.IndicatorDiagramElement.IndicatorType">
+      <summary>
+            Indicator type.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Diagram.Elements.IndicatorDiagramElement.Indicator">
+      <summary>
+            The indicator parameters.
+            </summary>
+    </member>
     <member name="M:StockSharp.Xaml.Diagram.Elements.IndicatorDiagramElement.#ctor">
       <summary>
             Initializes a new instance of the <see cref="T:StockSharp.Xaml.Diagram.Elements.IndicatorDiagramElement" />.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Diagram.Elements.IndicatorDiagramElement.TypeId">
+      <summary>
+            The unique identifier of the diagram element type.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Diagram.Elements.IndicatorDiagramElement.Icon">
+      <summary>
+            Icon.
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.Elements.IndicatorDiagramElement.OnInit">
@@ -1746,60 +1766,9 @@
             </summary>
       <param name="value">The processed value.</param>
     </member>
-    <member name="P:StockSharp.Xaml.Diagram.Elements.IndicatorDiagramElement.IndicatorType">
-      <summary>
-            Indicator type.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Xaml.Diagram.Elements.IndicatorDiagramElement.Indicator">
-      <summary>
-            The indicator parameters.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Xaml.Diagram.Elements.IndicatorDiagramElement.TypeId">
-      <summary>
-            The unique identifier of the diagram element type.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Xaml.Diagram.Elements.IndicatorDiagramElement.Icon">
-      <summary>
-            Icon.
-            </summary>
-    </member>
     <member name="T:StockSharp.Xaml.Diagram.Elements.LogicalConditionDiagramElement">
       <summary>
             Logical condition element.
-            </summary>
-    </member>
-    <member name="M:StockSharp.Xaml.Diagram.Elements.LogicalConditionDiagramElement.#ctor">
-      <summary>
-            Initializes a new instance of the <see cref="T:StockSharp.Xaml.Diagram.Elements.LogicalConditionDiagramElement" />.
-            </summary>
-    </member>
-    <member name="M:StockSharp.Xaml.Diagram.Elements.LogicalConditionDiagramElement.OnStart">
-      <summary>
-            The method is called at the start of the diagram element algorithm.
-            </summary>
-    </member>
-    <member name="M:StockSharp.Xaml.Diagram.Elements.LogicalConditionDiagramElement.OnStop">
-      <summary>
-            The method is called at the stop of the diagram element algorithm.
-            </summary>
-    </member>
-    <member name="M:StockSharp.Xaml.Diagram.Elements.LogicalConditionDiagramElement.OnProcess(StockSharp.Xaml.Diagram.DiagramSocketValue)">
-      <summary>
-            The method is called at the processing of the new incoming value.
-            </summary>
-      <param name="value">The processed value.</param>
-    </member>
-    <member name="P:StockSharp.Xaml.Diagram.Elements.LogicalConditionDiagramElement.TypeId">
-      <summary>
-            The unique identifier of the diagram element type.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Xaml.Diagram.Elements.LogicalConditionDiagramElement.Icon">
-      <summary>
-            Icon.
             </summary>
     </member>
     <member name="T:StockSharp.Xaml.Diagram.Elements.LogicalConditionDiagramElement.Condition">
@@ -1822,9 +1791,50 @@
             Exclusive OR.
             </summary>
     </member>
+    <member name="M:StockSharp.Xaml.Diagram.Elements.LogicalConditionDiagramElement.#ctor">
+      <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Xaml.Diagram.Elements.LogicalConditionDiagramElement" />.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Diagram.Elements.LogicalConditionDiagramElement.TypeId">
+      <summary>
+            The unique identifier of the diagram element type.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Diagram.Elements.LogicalConditionDiagramElement.Icon">
+      <summary>
+            Icon.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.Diagram.Elements.LogicalConditionDiagramElement.OnStart">
+      <summary>
+            The method is called at the start of the diagram element algorithm.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.Diagram.Elements.LogicalConditionDiagramElement.OnStop">
+      <summary>
+            The method is called at the stop of the diagram element algorithm.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.Diagram.Elements.LogicalConditionDiagramElement.OnProcess(StockSharp.Xaml.Diagram.DiagramSocketValue)">
+      <summary>
+            The method is called at the processing of the new incoming value.
+            </summary>
+      <param name="value">The processed value.</param>
+    </member>
     <member name="T:StockSharp.Xaml.Diagram.Elements.LogicOneParamFunctionDiagramElement">
       <summary>
             Logical function with one argument element.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Diagram.Elements.LogicOneParamFunctionDiagramElement.TypeId">
+      <summary>
+            The unique identifier of the diagram element type.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Diagram.Elements.LogicOneParamFunctionDiagramElement.Icon">
+      <summary>
+            Icon.
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.Elements.LogicOneParamFunctionDiagramElement.#ctor">
@@ -1838,19 +1848,19 @@
             </summary>
       <param name="value">The processed value.</param>
     </member>
-    <member name="P:StockSharp.Xaml.Diagram.Elements.LogicOneParamFunctionDiagramElement.TypeId">
+    <member name="T:StockSharp.Xaml.Diagram.Elements.MarketDepthDiagramElement">
+      <summary>
+            Security market depth changes receiving element.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Diagram.Elements.MarketDepthDiagramElement.TypeId">
       <summary>
             The unique identifier of the diagram element type.
             </summary>
     </member>
-    <member name="P:StockSharp.Xaml.Diagram.Elements.LogicOneParamFunctionDiagramElement.Icon">
+    <member name="P:StockSharp.Xaml.Diagram.Elements.MarketDepthDiagramElement.Icon">
       <summary>
             Icon.
-            </summary>
-    </member>
-    <member name="T:StockSharp.Xaml.Diagram.Elements.MarketDepthDiagramElement">
-      <summary>
-            Security market depth changes receiving element.
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.Elements.MarketDepthDiagramElement.#ctor">
@@ -1869,19 +1879,19 @@
             </summary>
       <param name="value">The processed value.</param>
     </member>
-    <member name="P:StockSharp.Xaml.Diagram.Elements.MarketDepthDiagramElement.TypeId">
+    <member name="T:StockSharp.Xaml.Diagram.Elements.OneParamFunctionDiagramElement">
+      <summary>
+            Formula with one argument element.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Diagram.Elements.OneParamFunctionDiagramElement.TypeId">
       <summary>
             The unique identifier of the diagram element type.
             </summary>
     </member>
-    <member name="P:StockSharp.Xaml.Diagram.Elements.MarketDepthDiagramElement.Icon">
+    <member name="P:StockSharp.Xaml.Diagram.Elements.OneParamFunctionDiagramElement.Icon">
       <summary>
             Icon.
-            </summary>
-    </member>
-    <member name="T:StockSharp.Xaml.Diagram.Elements.OneParamFunctionDiagramElement">
-      <summary>
-            Formula with one argument element.
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.Elements.OneParamFunctionDiagramElement.#ctor">
@@ -1895,19 +1905,19 @@
             </summary>
       <param name="value">The processed value.</param>
     </member>
-    <member name="P:StockSharp.Xaml.Diagram.Elements.OneParamFunctionDiagramElement.TypeId">
+    <member name="T:StockSharp.Xaml.Diagram.Elements.TwoParamFunctionDiagramElement">
+      <summary>
+            Formula with two arguments element.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Diagram.Elements.TwoParamFunctionDiagramElement.TypeId">
       <summary>
             The unique identifier of the diagram element type.
             </summary>
     </member>
-    <member name="P:StockSharp.Xaml.Diagram.Elements.OneParamFunctionDiagramElement.Icon">
+    <member name="P:StockSharp.Xaml.Diagram.Elements.TwoParamFunctionDiagramElement.Icon">
       <summary>
             Icon.
-            </summary>
-    </member>
-    <member name="T:StockSharp.Xaml.Diagram.Elements.TwoParamFunctionDiagramElement">
-      <summary>
-            Formula with two arguments element.
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.Elements.TwoParamFunctionDiagramElement.#ctor">
@@ -1926,16 +1936,6 @@
             </summary>
       <param name="value">The processed value.</param>
     </member>
-    <member name="P:StockSharp.Xaml.Diagram.Elements.TwoParamFunctionDiagramElement.TypeId">
-      <summary>
-            The unique identifier of the diagram element type.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Xaml.Diagram.Elements.TwoParamFunctionDiagramElement.Icon">
-      <summary>
-            Icon.
-            </summary>
-    </member>
     <member name="T:StockSharp.Xaml.Diagram.Elements.OpenPositionDiagramElement">
       <summary>
             Position opening element.
@@ -1944,6 +1944,16 @@
     <member name="M:StockSharp.Xaml.Diagram.Elements.OpenPositionDiagramElement.#ctor">
       <summary>
             Initializes a new instance of the <see cref="T:StockSharp.Xaml.Diagram.Elements.OpenPositionDiagramElement" />.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Diagram.Elements.OpenPositionDiagramElement.TypeId">
+      <summary>
+            The unique identifier of the diagram element type.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Diagram.Elements.OpenPositionDiagramElement.Icon">
+      <summary>
+            Icon.
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.Elements.OpenPositionDiagramElement.OnStop">
@@ -1957,16 +1967,6 @@
             </summary>
       <param name="value">The processed value.</param>
     </member>
-    <member name="P:StockSharp.Xaml.Diagram.Elements.OpenPositionDiagramElement.TypeId">
-      <summary>
-            The unique identifier of the diagram element type.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Xaml.Diagram.Elements.OpenPositionDiagramElement.Icon">
-      <summary>
-            Icon.
-            </summary>
-    </member>
     <member name="T:StockSharp.Xaml.Diagram.Elements.OrderTradesDiagramElement">
       <summary>
             Trades per order element.
@@ -1976,12 +1976,6 @@
       <summary>
             Initializes a new instance of the <see cref="T:StockSharp.Xaml.Diagram.Elements.OrderTradesDiagramElement" />.
             </summary>
-    </member>
-    <member name="M:StockSharp.Xaml.Diagram.Elements.OrderTradesDiagramElement.OnProcess(StockSharp.Xaml.Diagram.DiagramSocketValue)">
-      <summary>
-            The method is called at the processing of the new incoming value.
-            </summary>
-      <param name="value">The processed value.</param>
     </member>
     <member name="P:StockSharp.Xaml.Diagram.Elements.OrderTradesDiagramElement.TypeId">
       <summary>
@@ -1993,14 +1987,242 @@
             Icon.
             </summary>
     </member>
+    <member name="M:StockSharp.Xaml.Diagram.Elements.OrderTradesDiagramElement.OnProcess(StockSharp.Xaml.Diagram.DiagramSocketValue)">
+      <summary>
+            The method is called at the processing of the new incoming value.
+            </summary>
+      <param name="value">The processed value.</param>
+    </member>
     <member name="T:StockSharp.Xaml.Diagram.Elements.PartDiagramElement">
       <summary>
             Composite value of a complex object receiving element.
             </summary>
     </member>
+    <member name="P:StockSharp.Xaml.Diagram.Elements.PartDiagramElement.TypeId">
+      <summary>
+            The unique identifier of the diagram element type.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Diagram.Elements.PartDiagramElement.Icon">
+      <summary>
+            Icon.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.Diagram.Elements.PartDiagramElement.#ctor">
+      <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Xaml.Diagram.Elements.PartDiagramElement" />.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.Diagram.Elements.PartDiagramElement.TypeChanged">
+      <summary>
+            The method is called when the data type is changed.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.Diagram.Elements.PartDiagramElement.OnProcess(StockSharp.Xaml.Diagram.DiagramSocketValue)">
+      <summary>
+            The method is called at the processing of the new incoming value.
+            </summary>
+      <param name="value">The processed value.</param>
+    </member>
+    <member name="T:StockSharp.Xaml.Diagram.Elements.PassThroughDiagramElement">
+      <summary>
+            Combined values element.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.Diagram.Elements.PassThroughDiagramElement.#ctor">
+      <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Xaml.Diagram.Elements.PassThroughDiagramElement" />.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Diagram.Elements.PassThroughDiagramElement.TypeId">
+      <summary>
+            The unique identifier of the diagram element type.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Diagram.Elements.PassThroughDiagramElement.Icon">
+      <summary>
+            Icon.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.Diagram.Elements.PassThroughDiagramElement.TypeChanged">
+      <summary>
+            The method is called when the data type is changed.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.Diagram.Elements.PassThroughDiagramElement.OnProcess(StockSharp.Xaml.Diagram.DiagramSocketValue)">
+      <summary>
+            The method is called at the processing of the new incoming value.
+            </summary>
+      <param name="value">The processed value.</param>
+    </member>
+    <member name="T:StockSharp.Xaml.Diagram.Elements.PositionDiagramElement">
+      <summary>
+            Position element (for security and money) for the specified portfolio.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Diagram.Elements.PositionDiagramElement.TypeId">
+      <summary>
+            The unique identifier of the diagram element type.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Diagram.Elements.PositionDiagramElement.Icon">
+      <summary>
+            Icon.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.Diagram.Elements.PositionDiagramElement.#ctor">
+      <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Xaml.Diagram.Elements.PositionDiagramElement" />.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.Diagram.Elements.PositionDiagramElement.OnStart">
+      <summary>
+            The method is called at the start of the diagram element algorithm.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.Diagram.Elements.PositionDiagramElement.OnStop">
+      <summary>
+            The method is called at the stop of the diagram element algorithm.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.Diagram.Elements.PositionDiagramElement.OnProcess(StockSharp.Xaml.Diagram.DiagramSocketValue)">
+      <summary>
+            The method is called at the processing of the new incoming value.
+            </summary>
+      <param name="value">The processed value.</param>
+    </member>
+    <member name="T:StockSharp.Xaml.Diagram.Elements.PreviousValueDiagramElement">
+      <summary>
+            Previous value receiving element.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.Diagram.Elements.PreviousValueDiagramElement.#ctor">
+      <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Xaml.Diagram.Elements.PreviousValueDiagramElement" />.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Diagram.Elements.PreviousValueDiagramElement.TypeId">
+      <summary>
+            The unique identifier of the diagram element type.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Diagram.Elements.PreviousValueDiagramElement.Icon">
+      <summary>
+            Icon.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.Diagram.Elements.PreviousValueDiagramElement.OnStart">
+      <summary>
+            The method is called at the start of the diagram element algorithm.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.Diagram.Elements.PreviousValueDiagramElement.OnProcess(StockSharp.Xaml.Diagram.DiagramSocketValue)">
+      <summary>
+            The method is called at the processing of the new incoming value.
+            </summary>
+      <param name="value">The processed value.</param>
+    </member>
+    <member name="T:StockSharp.Xaml.Diagram.Elements.ProtectPositionDiagramElement">
+      <summary>
+            Open position protection element.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.Diagram.Elements.ProtectPositionDiagramElement.#ctor">
+      <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Xaml.Diagram.Elements.ProtectPositionDiagramElement" />.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Diagram.Elements.ProtectPositionDiagramElement.TypeId">
+      <summary>
+            The unique identifier of the diagram element type.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Diagram.Elements.ProtectPositionDiagramElement.Icon">
+      <summary>
+            Icon.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.Diagram.Elements.ProtectPositionDiagramElement.OnStart">
+      <summary>
+            The method is called at the start of the diagram element algorithm.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.Diagram.Elements.ProtectPositionDiagramElement.OnProcess(StockSharp.Xaml.Diagram.DiagramSocketValue)">
+      <summary>
+            The method is called at the processing of the new incoming value.
+            </summary>
+      <param name="value">The processed value.</param>
+    </member>
+    <member name="M:StockSharp.Xaml.Diagram.Elements.ProtectPositionDiagramElement.OnStop">
+      <summary>
+            The method is called at the stop of the diagram element algorithm.
+            </summary>
+    </member>
+    <member name="T:StockSharp.Xaml.Diagram.Elements.SecurityDiagramElement">
+      <summary>
+            Security changes receiving element.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Diagram.Elements.SecurityDiagramElement.TypeId">
+      <summary>
+            The unique identifier of the diagram element type.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Diagram.Elements.SecurityDiagramElement.Icon">
+      <summary>
+            Icon.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.Diagram.Elements.SecurityDiagramElement.#ctor">
+      <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Xaml.Diagram.Elements.SecurityDiagramElement" />.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.Diagram.Elements.SecurityDiagramElement.OnProcess(StockSharp.Xaml.Diagram.DiagramSocketValue)">
+      <summary>
+            The method is called at the processing of the new incoming value.
+            </summary>
+      <param name="value">The processed value.</param>
+    </member>
+    <member name="T:StockSharp.Xaml.Diagram.Elements.StrategyTradesDiagramElement">
+      <summary>
+            Strategy trades element.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.Diagram.Elements.StrategyTradesDiagramElement.#ctor">
+      <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Xaml.Diagram.Elements.OrderTradesDiagramElement" />.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Diagram.Elements.StrategyTradesDiagramElement.TypeId">
+      <summary>
+            The unique identifier of the diagram element type.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Diagram.Elements.StrategyTradesDiagramElement.Icon">
+      <summary>
+            Icon.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.Diagram.Elements.StrategyTradesDiagramElement.OnStart">
+      <summary>
+            The method is called at the start of the diagram element algorithm.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.Diagram.Elements.StrategyTradesDiagramElement.OnProcess(StockSharp.Xaml.Diagram.DiagramSocketValue)">
+      <summary>
+            The method is called at the processing of the new incoming value.
+            </summary>
+      <param name="value">The processed value.</param>
+    </member>
     <member name="T:StockSharp.Xaml.Diagram.Elements.TypedDiagramElement">
       <summary>
             The diagram element with the changeable data type.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Diagram.Elements.TypedDiagramElement.Type">
+      <summary>
+            Data type.
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.Elements.TypedDiagramElement.#ctor">
@@ -2025,231 +2247,19 @@
             </summary>
       <param name="storage">Settings storage.</param>
     </member>
-    <member name="P:StockSharp.Xaml.Diagram.Elements.TypedDiagramElement.Type">
-      <summary>
-            Data type.
-            </summary>
-    </member>
-    <member name="M:StockSharp.Xaml.Diagram.Elements.PartDiagramElement.#ctor">
-      <summary>
-            Initializes a new instance of the <see cref="T:StockSharp.Xaml.Diagram.Elements.PartDiagramElement" />.
-            </summary>
-    </member>
-    <member name="M:StockSharp.Xaml.Diagram.Elements.PartDiagramElement.TypeChanged">
-      <summary>
-            The method is called when the data type is changed.
-            </summary>
-    </member>
-    <member name="M:StockSharp.Xaml.Diagram.Elements.PartDiagramElement.OnProcess(StockSharp.Xaml.Diagram.DiagramSocketValue)">
-      <summary>
-            The method is called at the processing of the new incoming value.
-            </summary>
-      <param name="value">The processed value.</param>
-    </member>
-    <member name="P:StockSharp.Xaml.Diagram.Elements.PartDiagramElement.TypeId">
-      <summary>
-            The unique identifier of the diagram element type.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Xaml.Diagram.Elements.PartDiagramElement.Icon">
-      <summary>
-            Icon.
-            </summary>
-    </member>
-    <member name="T:StockSharp.Xaml.Diagram.Elements.PassThroughDiagramElement">
-      <summary>
-            Combined values element.
-            </summary>
-    </member>
-    <member name="M:StockSharp.Xaml.Diagram.Elements.PassThroughDiagramElement.#ctor">
-      <summary>
-            Initializes a new instance of the <see cref="T:StockSharp.Xaml.Diagram.Elements.PassThroughDiagramElement" />.
-            </summary>
-    </member>
-    <member name="M:StockSharp.Xaml.Diagram.Elements.PassThroughDiagramElement.TypeChanged">
-      <summary>
-            The method is called when the data type is changed.
-            </summary>
-    </member>
-    <member name="M:StockSharp.Xaml.Diagram.Elements.PassThroughDiagramElement.OnProcess(StockSharp.Xaml.Diagram.DiagramSocketValue)">
-      <summary>
-            The method is called at the processing of the new incoming value.
-            </summary>
-      <param name="value">The processed value.</param>
-    </member>
-    <member name="P:StockSharp.Xaml.Diagram.Elements.PassThroughDiagramElement.TypeId">
-      <summary>
-            The unique identifier of the diagram element type.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Xaml.Diagram.Elements.PassThroughDiagramElement.Icon">
-      <summary>
-            Icon.
-            </summary>
-    </member>
-    <member name="T:StockSharp.Xaml.Diagram.Elements.PositionDiagramElement">
-      <summary>
-            Position element (for security and money) for the specified portfolio.
-            </summary>
-    </member>
-    <member name="M:StockSharp.Xaml.Diagram.Elements.PositionDiagramElement.#ctor">
-      <summary>
-            Initializes a new instance of the <see cref="T:StockSharp.Xaml.Diagram.Elements.PositionDiagramElement" />.
-            </summary>
-    </member>
-    <member name="M:StockSharp.Xaml.Diagram.Elements.PositionDiagramElement.OnStart">
-      <summary>
-            The method is called at the start of the diagram element algorithm.
-            </summary>
-    </member>
-    <member name="M:StockSharp.Xaml.Diagram.Elements.PositionDiagramElement.OnStop">
-      <summary>
-            The method is called at the stop of the diagram element algorithm.
-            </summary>
-    </member>
-    <member name="M:StockSharp.Xaml.Diagram.Elements.PositionDiagramElement.OnProcess(StockSharp.Xaml.Diagram.DiagramSocketValue)">
-      <summary>
-            The method is called at the processing of the new incoming value.
-            </summary>
-      <param name="value">The processed value.</param>
-    </member>
-    <member name="P:StockSharp.Xaml.Diagram.Elements.PositionDiagramElement.TypeId">
-      <summary>
-            The unique identifier of the diagram element type.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Xaml.Diagram.Elements.PositionDiagramElement.Icon">
-      <summary>
-            Icon.
-            </summary>
-    </member>
-    <member name="T:StockSharp.Xaml.Diagram.Elements.PreviousValueDiagramElement">
-      <summary>
-            Previous value receiving element.
-            </summary>
-    </member>
-    <member name="M:StockSharp.Xaml.Diagram.Elements.PreviousValueDiagramElement.#ctor">
-      <summary>
-            Initializes a new instance of the <see cref="T:StockSharp.Xaml.Diagram.Elements.PreviousValueDiagramElement" />.
-            </summary>
-    </member>
-    <member name="M:StockSharp.Xaml.Diagram.Elements.PreviousValueDiagramElement.OnStart">
-      <summary>
-            The method is called at the start of the diagram element algorithm.
-            </summary>
-    </member>
-    <member name="M:StockSharp.Xaml.Diagram.Elements.PreviousValueDiagramElement.OnProcess(StockSharp.Xaml.Diagram.DiagramSocketValue)">
-      <summary>
-            The method is called at the processing of the new incoming value.
-            </summary>
-      <param name="value">The processed value.</param>
-    </member>
-    <member name="P:StockSharp.Xaml.Diagram.Elements.PreviousValueDiagramElement.TypeId">
-      <summary>
-            The unique identifier of the diagram element type.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Xaml.Diagram.Elements.PreviousValueDiagramElement.Icon">
-      <summary>
-            Icon.
-            </summary>
-    </member>
-    <member name="T:StockSharp.Xaml.Diagram.Elements.ProtectPositionDiagramElement">
-      <summary>
-            Open position protection element.
-            </summary>
-    </member>
-    <member name="M:StockSharp.Xaml.Diagram.Elements.ProtectPositionDiagramElement.#ctor">
-      <summary>
-            Initializes a new instance of the <see cref="T:StockSharp.Xaml.Diagram.Elements.ProtectPositionDiagramElement" />.
-            </summary>
-    </member>
-    <member name="M:StockSharp.Xaml.Diagram.Elements.ProtectPositionDiagramElement.OnStart">
-      <summary>
-            The method is called at the start of the diagram element algorithm.
-            </summary>
-    </member>
-    <member name="M:StockSharp.Xaml.Diagram.Elements.ProtectPositionDiagramElement.OnProcess(StockSharp.Xaml.Diagram.DiagramSocketValue)">
-      <summary>
-            The method is called at the processing of the new incoming value.
-            </summary>
-      <param name="value">The processed value.</param>
-    </member>
-    <member name="M:StockSharp.Xaml.Diagram.Elements.ProtectPositionDiagramElement.OnStop">
-      <summary>
-            The method is called at the stop of the diagram element algorithm.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Xaml.Diagram.Elements.ProtectPositionDiagramElement.TypeId">
-      <summary>
-            The unique identifier of the diagram element type.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Xaml.Diagram.Elements.ProtectPositionDiagramElement.Icon">
-      <summary>
-            Icon.
-            </summary>
-    </member>
-    <member name="T:StockSharp.Xaml.Diagram.Elements.SecurityDiagramElement">
-      <summary>
-            Security changes receiving element.
-            </summary>
-    </member>
-    <member name="M:StockSharp.Xaml.Diagram.Elements.SecurityDiagramElement.#ctor">
-      <summary>
-            Initializes a new instance of the <see cref="T:StockSharp.Xaml.Diagram.Elements.SecurityDiagramElement" />.
-            </summary>
-    </member>
-    <member name="M:StockSharp.Xaml.Diagram.Elements.SecurityDiagramElement.OnProcess(StockSharp.Xaml.Diagram.DiagramSocketValue)">
-      <summary>
-            The method is called at the processing of the new incoming value.
-            </summary>
-      <param name="value">The processed value.</param>
-    </member>
-    <member name="P:StockSharp.Xaml.Diagram.Elements.SecurityDiagramElement.TypeId">
-      <summary>
-            The unique identifier of the diagram element type.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Xaml.Diagram.Elements.SecurityDiagramElement.Icon">
-      <summary>
-            Icon.
-            </summary>
-    </member>
-    <member name="T:StockSharp.Xaml.Diagram.Elements.StrategyTradesDiagramElement">
-      <summary>
-            Strategy trades element.
-            </summary>
-    </member>
-    <member name="M:StockSharp.Xaml.Diagram.Elements.StrategyTradesDiagramElement.#ctor">
-      <summary>
-            Initializes a new instance of the <see cref="T:StockSharp.Xaml.Diagram.Elements.OrderTradesDiagramElement" />.
-            </summary>
-    </member>
-    <member name="M:StockSharp.Xaml.Diagram.Elements.StrategyTradesDiagramElement.OnStart">
-      <summary>
-            The method is called at the start of the diagram element algorithm.
-            </summary>
-    </member>
-    <member name="M:StockSharp.Xaml.Diagram.Elements.StrategyTradesDiagramElement.OnProcess(StockSharp.Xaml.Diagram.DiagramSocketValue)">
-      <summary>
-            The method is called at the processing of the new incoming value.
-            </summary>
-      <param name="value">The processed value.</param>
-    </member>
-    <member name="P:StockSharp.Xaml.Diagram.Elements.StrategyTradesDiagramElement.TypeId">
-      <summary>
-            The unique identifier of the diagram element type.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Xaml.Diagram.Elements.StrategyTradesDiagramElement.Icon">
-      <summary>
-            Icon.
-            </summary>
-    </member>
     <member name="T:StockSharp.Xaml.Diagram.Elements.VariableDiagramElement">
       <summary>
             Value storage element.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Diagram.Elements.VariableDiagramElement.TypeId">
+      <summary>
+            The unique identifier of the diagram element type.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Diagram.Elements.VariableDiagramElement.Icon">
+      <summary>
+            Icon.
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.Elements.VariableDiagramElement.#ctor">
@@ -2273,15 +2283,31 @@
             </summary>
       <param name="value">The processed value.</param>
     </member>
-    <member name="P:StockSharp.Xaml.Diagram.Elements.VariableDiagramElement.TypeId">
+    <member name="T:StockSharp.Xaml.Diagram.Elements.AlertDiagramElement">
+      <summary>
+            Notification element (sound, window etc.) for speceific market events.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.Diagram.Elements.AlertDiagramElement.#ctor">
+      <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Xaml.Diagram.Elements.ChartDiagramElement" />.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Diagram.Elements.AlertDiagramElement.TypeId">
       <summary>
             The unique identifier of the diagram element type.
             </summary>
     </member>
-    <member name="P:StockSharp.Xaml.Diagram.Elements.VariableDiagramElement.Icon">
+    <member name="P:StockSharp.Xaml.Diagram.Elements.AlertDiagramElement.Icon">
       <summary>
             Icon.
             </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.Diagram.Elements.AlertDiagramElement.OnProcess(StockSharp.Xaml.Diagram.DiagramSocketValue)">
+      <summary>
+            The method is called when an input value is processed.
+            </summary>
+      <param name="value">Value.</param>
     </member>
     <member name="T:StockSharp.Xaml.Diagram.ExportDiagramElement">
       <summary>
@@ -2336,32 +2362,6 @@
             To get a list of available connection types.
             </summary>
       <returns>The list of connection types.</returns>
-    </member>
-    <member name="T:StockSharp.Xaml.Diagram.Elements.AlertDiagramElement">
-      <summary>
-            Notification element (sound, window etc.) for speceific market events.
-            </summary>
-    </member>
-    <member name="M:StockSharp.Xaml.Diagram.Elements.AlertDiagramElement.#ctor">
-      <summary>
-            Initializes a new instance of the <see cref="T:StockSharp.Xaml.Diagram.Elements.ChartDiagramElement" />.
-            </summary>
-    </member>
-    <member name="M:StockSharp.Xaml.Diagram.Elements.AlertDiagramElement.OnProcess(StockSharp.Xaml.Diagram.DiagramSocketValue)">
-      <summary>
-            The method is called when an input value is processed.
-            </summary>
-      <param name="value">Value.</param>
-    </member>
-    <member name="P:StockSharp.Xaml.Diagram.Elements.AlertDiagramElement.TypeId">
-      <summary>
-            The unique identifier of the diagram element type.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Xaml.Diagram.Elements.AlertDiagramElement.Icon">
-      <summary>
-            Icon.
-            </summary>
     </member>
   </members>
 </doc>
