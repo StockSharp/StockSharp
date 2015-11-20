@@ -228,6 +228,26 @@
             </summary>
             <param name="address">Service address.</param>
         </member>
+        <member name="P:StockSharp.Licensing.LicenseClient.Features">
+            <summary>
+            All license features.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Licensing.LicenseClient.Brokers">
+            <summary>
+            All brokers.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Licensing.LicenseClient.BrokerCriterias">
+            <summary>
+            Criteria search of brokerage.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Licensing.LicenseClient.AwaitingLicenses">
+            <summary>
+            Unapproved client licenses.
+            </summary>
+        </member>
         <member name="M:StockSharp.Licensing.LicenseClient.GetAnonymousLicense">
             <summary>
             Get the anonymous license.
@@ -284,26 +304,6 @@
             <param name="expirationDate">License expiry date.</param>
             <returns>License.</returns>
         </member>
-        <member name="P:StockSharp.Licensing.LicenseClient.Features">
-            <summary>
-            All license features.
-            </summary>
-        </member>
-        <member name="P:StockSharp.Licensing.LicenseClient.Brokers">
-            <summary>
-            All brokers.
-            </summary>
-        </member>
-        <member name="P:StockSharp.Licensing.LicenseClient.BrokerCriterias">
-            <summary>
-            Criteria search of brokerage.
-            </summary>
-        </member>
-        <member name="P:StockSharp.Licensing.LicenseClient.AwaitingLicenses">
-            <summary>
-            Unapproved client licenses.
-            </summary>
-        </member>
         <member name="T:StockSharp.Licensing.LicenseErrorLogSource">
             <summary>
             Log source, send information about license errors <see cref="E:StockSharp.Licensing.LicenseHelper.LicenseError"/>.
@@ -314,14 +314,14 @@
             Initializes a new instance of the <see cref="T:StockSharp.Licensing.LicenseErrorLogSource"/>.
             </summary>
         </member>
-        <member name="M:StockSharp.Licensing.LicenseErrorLogSource.DisposeManaged">
-            <summary>
-            Release resources.
-            </summary>
-        </member>
         <member name="P:StockSharp.Licensing.LicenseErrorLogSource.Name">
             <summary>
             Name.
+            </summary>
+        </member>
+        <member name="M:StockSharp.Licensing.LicenseErrorLogSource.DisposeManaged">
+            <summary>
+            Release resources.
             </summary>
         </member>
         <member name="T:StockSharp.Licensing.LicenseExpireActions">
@@ -344,9 +344,19 @@
             Extension class for licenses.
             </summary>
         </member>
-        <member name="F:StockSharp.Licensing.LicenseHelper.SpecialSplitter">
+        <member name="E:StockSharp.Licensing.LicenseHelper.LicenseChanged">
             <summary>
-            The special combination of '!!!' for the separation of account numbers.
+            <see cref="P:StockSharp.Licensing.LicenseHelper.Licenses"/> change event.
+            </summary>
+        </member>
+        <member name="E:StockSharp.Licensing.LicenseHelper.LicenseError">
+            <summary>
+            License verification error event.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Licensing.LicenseHelper.Licenses">
+            <summary>
+            Download licenses.
             </summary>
         </member>
         <member name="F:StockSharp.Licensing.LicenseHelper.RenewOffset">
@@ -359,7 +369,7 @@
             Check the possibility of license renewal (until the end of time, the license remains less <see cref="F:StockSharp.Licensing.LicenseHelper.RenewOffset"/>).
             </summary>
             <param name="license">License.</param>
-            <returns><see langword="true"/>, if the license can be renewed, otherwise, <see langword="false"/>.</returns>
+            <returns><see langword="true" />, if the license can be renewed, otherwise, <see langword="false" />.</returns>
         </member>
         <member name="M:StockSharp.Licensing.LicenseHelper.GetEstimatedTime(StockSharp.Licensing.License)">
             <summary>
@@ -367,6 +377,11 @@
             </summary>
             <param name="license">License.</param>
             <returns>Remaining time of the license. If the license is expired, the value <see cref="F:System.TimeSpan.Zero"/> will be returned.</returns>
+        </member>
+        <member name="F:StockSharp.Licensing.LicenseHelper.SpecialSplitter">
+            <summary>
+            The special combination of '!!!' for the separation of account numbers.
+            </summary>
         </member>
         <member name="M:StockSharp.Licensing.LicenseHelper.ValidateLicense(System.String,System.String,System.Reflection.Assembly)">
             <summary>
@@ -396,21 +411,6 @@
             <param name="license">License.</param>
             <returns><see langword="true" />, if the license if trial, otherwise, <see langword="false" />.</returns>
         </member>
-        <member name="E:StockSharp.Licensing.LicenseHelper.LicenseChanged">
-            <summary>
-            <see cref="P:StockSharp.Licensing.LicenseHelper.Licenses"/> change event.
-            </summary>
-        </member>
-        <member name="E:StockSharp.Licensing.LicenseHelper.LicenseError">
-            <summary>
-            License verification error event.
-            </summary>
-        </member>
-        <member name="P:StockSharp.Licensing.LicenseHelper.Licenses">
-            <summary>
-            Download licenses.
-            </summary>
-        </member>
         <member name="T:StockSharp.Licensing.Xaml.LicensePanel">
             <summary>
             UI component for <see cref="T:StockSharp.Licensing.License"/>.
@@ -424,14 +424,14 @@
             Initializes a new instance of the <see cref="T:StockSharp.Licensing.Xaml.LicensePanel"/>.
             </summary>
         </member>
-        <member name="M:StockSharp.Licensing.Xaml.LicensePanel.InitializeComponent">
-            <summary>
-            InitializeComponent
-            </summary>
-        </member>
         <member name="P:StockSharp.Licensing.Xaml.LicensePanel.Licenses">
             <summary>
             Licenses.
+            </summary>
+        </member>
+        <member name="M:StockSharp.Licensing.Xaml.LicensePanel.InitializeComponent">
+            <summary>
+            InitializeComponent
             </summary>
         </member>
     </members>
