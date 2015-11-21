@@ -42,9 +42,6 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Abt.Controls.SciChart.Wpf">
-      <HintPath>..\..\Xaml.Charting\Abt.Controls.SciChart.Wpf.dll</HintPath>
-    </Reference>
     <Reference Include="ActiproSoftware.Docking.Wpf, Version=11.2.552.0, Culture=neutral, PublicKeyToken=36ff2196ab5654b9, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\References\Actipro\ActiproSoftware.Docking.Wpf.dll</HintPath>
@@ -94,6 +91,9 @@
     </Reference>
     <Reference Include="Ecng.Xaml">
       <HintPath>..\..\References\Ecng\Ecng.Xaml.dll</HintPath>
+    </Reference>
+    <Reference Include="Ecng.Xaml.Charting">
+      <HintPath>..\..\References\Ecng\Ecng.Xaml.Charting.dll</HintPath>
     </Reference>
     <Reference Include="MoreLinq">
       <HintPath>..\..\References\Ecng\MoreLinq.dll</HintPath>
@@ -176,9 +176,6 @@
     <Compile Include="PositionsPanel.xaml.cs">
       <DependentUpon>PositionsPanel.xaml</DependentUpon>
     </Compile>
-    <Compile Include="SciChartPanel.xaml.cs">
-      <DependentUpon>SciChartPanel.xaml</DependentUpon>
-    </Compile>
     <Compile Include="SecuritiesWindowEx.xaml.cs">
       <DependentUpon>SecuritiesWindowEx.xaml</DependentUpon>
     </Compile>
@@ -227,6 +224,9 @@
     </Compile>
     <Compile Include="TradesPanel.xaml.cs">
       <DependentUpon>TradesPanel.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UltraChartPanel.xaml.cs">
+      <DependentUpon>UltraChartPanel.xaml</DependentUpon>
     </Compile>
     <Compile Include="UniversalGridPanel.xaml.cs">
       <DependentUpon>UniversalGridPanel.xaml</DependentUpon>
@@ -293,10 +293,6 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="SciChartPanel.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="SecuritiesWindowEx.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -352,6 +348,10 @@
     <Page Include="TradesPanel.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UltraChartPanel.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="UniversalGridPanel.xaml">
       <SubType>Designer</SubType>

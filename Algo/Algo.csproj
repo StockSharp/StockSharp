@@ -63,9 +63,6 @@
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Abt.Controls.SciChart.Wpf">
-      <HintPath>..\Xaml.Charting\Abt.Controls.SciChart.Wpf.dll</HintPath>
-    </Reference>
     <Reference Include="Antlr3.Runtime">
       <HintPath>..\References\Antlr3.Runtime.dll</HintPath>
     </Reference>
@@ -126,6 +123,9 @@
     </Reference>
     <Reference Include="Ecng.Xaml">
       <HintPath>..\References\Ecng\Ecng.Xaml.dll</HintPath>
+    </Reference>
+    <Reference Include="Ecng.Xaml.Charting">
+      <HintPath>..\References\Ecng\Ecng.Xaml.Charting.dll</HintPath>
     </Reference>
     <Reference Include="MathNet.Numerics">
       <HintPath>..\References\MathNet.Numerics.dll</HintPath>

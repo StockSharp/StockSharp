@@ -8,10 +8,9 @@
 	using System.Windows.Controls;
 	using System.Windows.Input;
 
-	using Abt.Controls.SciChart;
-	using Abt.Controls.SciChart.ChartModifiers;
-	using Abt.Controls.SciChart.Visuals;
-
+	using Ecng.Xaml.Charting;
+	using Ecng.Xaml.Charting.ChartModifiers;
+	using Ecng.Xaml.Charting.Visuals;
 	using Ecng.Collections;
 	using Ecng.Common;
 	using Ecng.ComponentModel;
@@ -182,7 +181,7 @@
 				_refs = CodeExtensions
 					.DefaultReferences
 					.Where(s => !s.CompareIgnoreCase("StockSharp.Xaml.Diagram"))
-					.Concat(new[] { typeof(SciChartSurface).Assembly.GetName().Name, "Hydra" })
+					.Concat(new[] { typeof(UltrachartSurface).Assembly.GetName().Name, "Hydra" })
 					.ToReferences();	
 			}
 
@@ -291,7 +290,7 @@
 
 		private void ExecutedStartCommand(object sender, ExecutedRoutedEventArgs e)
 		{
-			var chart = new SciChartSurface
+			var chart = new UltrachartSurface
 			{
 				ChartModifier = new ModifierGroup(
 					new RubberBandXyZoomModifier { ExecuteOn = ExecuteOn.MouseLeftButton },

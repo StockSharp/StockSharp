@@ -57,8 +57,9 @@
     <ApplicationIcon>..\stocksharp_data.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Abt.Controls.SciChart.Wpf">
-      <HintPath>..\..\Xaml.Charting\Abt.Controls.SciChart.Wpf.dll</HintPath>
+    <Reference Include="Ecng.Xaml.Charting, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\References\Ecng\Ecng.Xaml.Charting.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Microsoft.VisualBasic" />
