@@ -38,9 +38,6 @@
     <Reference Include="StockSharp.Algo.History">
       <HintPath>..\..\..\Algo.History\StockSharp.Algo.History.dll</HintPath>
     </Reference>
-    <Reference Include="StockSharp.Rithmic">
-      <HintPath>..\..\..\Connectors\Rithmic\StockSharp.Rithmic.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.configuration" />
     <Reference Include="System.Core" />
@@ -83,6 +80,10 @@
     <ProjectReference Include="..\..\..\BusinessEntities\BusinessEntities.csproj">
       <Project>{DCE69DB8-53CA-4B7F-9368-02F175A31074}</Project>
       <Name>BusinessEntities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Connectors\Rithmic\Rithmic.csproj">
+      <Project>{FFBC7740-0D2B-49BA-8F95-59E4FC915D06}</Project>
+      <Name>Rithmic</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\Localization\Localization.csproj">
       <Project>{A98A81CE-75A1-4FAB-9C02-E6EEF4B51F4F}</Project>
