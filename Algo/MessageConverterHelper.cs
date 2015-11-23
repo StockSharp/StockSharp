@@ -717,9 +717,8 @@ namespace StockSharp.Algo
 		/// To convert the position into message.
 		/// </summary>
 		/// <param name="position">Position.</param>
-		/// <param name="localTime">The local time label.</param>
 		/// <returns>Message.</returns>
-		public static PositionMessage ToMessage(this Position position, DateTime localTime)
+		public static PositionMessage ToMessage(this Position position)
 		{
 			if (position == null)
 				throw new ArgumentNullException(nameof(position));
@@ -730,7 +729,6 @@ namespace StockSharp.Algo
 				SecurityId = position.Security.ToSecurityId(),
 				DepoName = position.DepoName,
 				LimitType = position.LimitType,
-				LocalTime = localTime,
 			};
 		}
 
@@ -1535,6 +1533,33 @@ namespace StockSharp.Algo
 					Id = message.SecurityId.Value.SecurityCode
 				}
 			};
+		}
+
+		/// <summary>
+		/// Cast <see cref="PortfolioMessage"/> to the <see cref="Portfolio"/>.
+		/// </summary>
+		/// <param name="message">Message.</param>
+		/// <param name="portfolio">Portfolio.</param>
+		/// <returns>Portfolio.</returns>
+		public static Portfolio ToPortfolio(this PortfolioMessage message, Portfolio portfolio)
+		{
+			if (message == null)
+				throw new ArgumentNullException(nameof(message));
+
+			if (portfolio == null)
+				throw new ArgumentNullException(nameof(portfolio));
+
+			portfolio.Board = message.BoardCode.IsEmpty() ? null : ExchangeBoard.GetOrCreateBoard(message.BoardCode);
+
+			if (message.Currency != null)
+				portfolio.Currency = message.Currency;
+
+			if (message.State != null)
+				portfolio.State = message.State;
+
+			message.CopyExtensionInfo(portfolio);
+
+			return portfolio;
 		}
 
 		/// <summary>

@@ -2,7 +2,11 @@
 <topic id="5794f4b0-c536-4713-ad08-955a4a01b196" revisionNumber="1">
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     <introduction>
-      <para>Раздел в разработке</para>
+      <para>
+           Механизм сообщений является внутренним логическим слоем архитектуры <token>stocksharp</token>, который обеспечивает 
+           взаимодействие различных элементов платформы по стандартному протоколу.
+      </para>
+
     </introduction>
     <!-- Описание, Адаптеры, Хранилище сообщений, Сетевое взаимодействие. -->
     <relatedTopics>

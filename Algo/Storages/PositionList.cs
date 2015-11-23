@@ -7,7 +7,7 @@ namespace StockSharp.Algo.Storages
 	/// <summary>
 	/// The class for representation in the form of list of positions, stored in external storage.
 	/// </summary>
-	public class PositionList : BaseStorageEntityList<Position>
+	public class PositionList : BaseStorageEntityList<Position>, IStoragePositionList
 	{
 		/// <summary>
 		/// Initializes a new instance of the <see cref="PositionList"/>.
