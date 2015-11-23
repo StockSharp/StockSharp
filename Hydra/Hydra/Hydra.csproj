@@ -94,12 +94,10 @@
     <Reference Include="AutomaticUpdaterWPF">
       <HintPath>..\..\References\AutomaticUpdaterWPF.dll</HintPath>
     </Reference>
-    <Reference Include="Ecng.Data, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="Ecng.Data">
       <HintPath>..\..\References\Ecng\Ecng.Data.dll</HintPath>
     </Reference>
-    <Reference Include="Ecng.Serialization, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="Ecng.Serialization">
       <HintPath>..\..\References\Ecng\Ecng.Serialization.dll</HintPath>
     </Reference>
     <Reference Include="Ecng.Xaml.Charting">

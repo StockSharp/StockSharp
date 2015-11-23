@@ -12,33 +12,10 @@
     <AssemblyName>StockSharp.Algo</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <SccProjectName>
-    </SccProjectName>
-    <SccLocalPath>
-    </SccLocalPath>
-    <SccAuxPath>
-    </SccAuxPath>
-    <SccProvider>
-    </SccProvider>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
     <OldToolsVersion>3.5</OldToolsVersion>
     <UpgradeBackupLocation />
-    <PublishUrl>publish\</PublishUrl>
-    <Install>true</Install>
-    <InstallFrom>Disk</InstallFrom>
-    <UpdateEnabled>false</UpdateEnabled>
-    <UpdateMode>Foreground</UpdateMode>
-    <UpdateInterval>7</UpdateInterval>
-    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
-    <UpdatePeriodically>false</UpdatePeriodically>
-    <UpdateRequired>false</UpdateRequired>
-    <MapFileExtensions>true</MapFileExtensions>
-    <ApplicationRevision>0</ApplicationRevision>
-    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
-    <IsWebBootstrapper>false</IsWebBootstrapper>
-    <UseApplicationTrust>false</UseApplicationTrust>
-    <BootstrapperEnabled>true</BootstrapperEnabled>
     <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -75,51 +52,35 @@
     <Reference Include="AWSSDK.S3">
       <HintPath>..\References\Amazon\AWSSDK.S3.dll</HintPath>
     </Reference>
-    <Reference Include="Ecng.Collections, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="Ecng.Collections">
       <HintPath>..\References\Ecng\Ecng.Collections.dll</HintPath>
     </Reference>
-    <Reference Include="Ecng.Common, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="Ecng.Common">
       <HintPath>..\References\Ecng\Ecng.Common.dll</HintPath>
     </Reference>
-    <Reference Include="Ecng.ComponentModel, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="Ecng.ComponentModel">
       <HintPath>..\References\Ecng\Ecng.ComponentModel.dll</HintPath>
     </Reference>
-    <Reference Include="Ecng.Configuration, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="Ecng.Configuration">
       <HintPath>..\References\Ecng\Ecng.Configuration.dll</HintPath>
     </Reference>
     <Reference Include="Ecng.Data">
       <HintPath>..\References\Ecng\Ecng.Data.dll</HintPath>
     </Reference>
-    <Reference Include="Ecng.Interop, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="Ecng.Interop">
       <HintPath>..\References\Ecng\Ecng.Interop.dll</HintPath>
     </Reference>
-    <Reference Include="Ecng.Net, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="Ecng.Net">
       <HintPath>..\References\Ecng\Ecng.Net.dll</HintPath>
     </Reference>
-    <Reference Include="Ecng.Reflection, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="Ecng.Reflection">
       <HintPath>..\References\Ecng\Ecng.Reflection.dll</HintPath>
     </Reference>
-    <Reference Include="Ecng.Serialization, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="Ecng.Serialization">
       <HintPath>..\References\Ecng\Ecng.Serialization.dll</HintPath>
     </Reference>
-    <Reference Include="Ecng.Serialization.FieldFactories, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="Ecng.Serialization.FieldFactories">
       <HintPath>..\References\Ecng\Ecng.Serialization.FieldFactories.dll</HintPath>
-    </Reference>
-    <Reference Include="Ecng.Localization">
-      <HintPath>..\References\Ecng\Ecng.Localization.dll</HintPath>
-    </Reference>
-    <Reference Include="Ecng.Web, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\References\Ecng\Ecng.Web.dll</HintPath>
     </Reference>
     <Reference Include="Ecng.Xaml">
       <HintPath>..\References\Ecng\Ecng.Xaml.dll</HintPath>

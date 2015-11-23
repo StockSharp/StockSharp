@@ -11,14 +11,6 @@
     <AssemblyName>StockSharp.Rithmic</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <SccProjectName>
-    </SccProjectName>
-    <SccLocalPath>
-    </SccLocalPath>
-    <SccAuxPath>
-    </SccAuxPath>
-    <SccProvider>
-    </SccProvider>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -43,8 +35,7 @@
     <Reference Include="Ecng.Localization">
       <HintPath>..\..\..\StockSharp (GitHub)\References\Ecng\Ecng.Localization.dll</HintPath>
     </Reference>
-    <Reference Include="Ecng.Collections, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="Ecng.Collections">
       <HintPath>..\..\..\StockSharp (GitHub)\References\Ecng\Ecng.Collections.dll</HintPath>
     </Reference>
     <Reference Include="Ecng.Common">
@@ -59,12 +50,10 @@
     <Reference Include="Ecng.Serialization">
       <HintPath>..\..\..\StockSharp (GitHub)\References\Ecng\Ecng.Serialization.dll</HintPath>
     </Reference>
-    <Reference Include="Ecng.Xaml, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="Ecng.Xaml">
       <HintPath>..\..\..\StockSharp (GitHub)\References\Ecng\Ecng.Xaml.dll</HintPath>
     </Reference>
-    <Reference Include="MoreLinq, Version=1.0.16127.0, Culture=neutral, PublicKeyToken=384d532d7e88985d, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="MoreLinq">
       <HintPath>..\..\..\StockSharp (GitHub)\References\Ecng\MoreLinq.dll</HintPath>
     </Reference>
     <Reference Include="PresentationCore" />

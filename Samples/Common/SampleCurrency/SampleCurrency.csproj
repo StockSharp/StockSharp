@@ -69,8 +69,7 @@
     <Reference Include="Ecng.Localization">
       <HintPath>..\..\..\References\Ecng\Ecng.Localization.dll</HintPath>
     </Reference>
-    <Reference Include="Ecng.Serialization, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="Ecng.Serialization">
       <HintPath>..\..\..\References\Ecng\Ecng.Serialization.dll</HintPath>
     </Reference>
     <Reference Include="System" />

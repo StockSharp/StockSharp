@@ -34,8 +34,7 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Ecng.Xaml.Charting, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="Ecng.Xaml.Charting">
       <HintPath>..\..\References\Ecng\Ecng.Xaml.Charting.dll</HintPath>
     </Reference>
     <Reference Include="PresentationCore" />

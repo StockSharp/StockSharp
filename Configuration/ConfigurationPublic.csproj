@@ -55,32 +55,25 @@
     </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
-    <Reference Include="StockSharp.Blackwood, Version=4.3.13.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="StockSharp.Blackwood">
       <HintPath>..\Connectors\Blackwood\StockSharp.Blackwood.dll</HintPath>
     </Reference>
-    <Reference Include="StockSharp.Fix, Version=4.3.13.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="StockSharp.Fix">
       <HintPath>..\Connectors\Fix\StockSharp.Fix.dll</HintPath>
     </Reference>
-    <Reference Include="StockSharp.ITCH, Version=4.3.13.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="StockSharp.ITCH">
       <HintPath>..\Connectors\ITCH\StockSharp.ITCH.dll</HintPath>
     </Reference>
-    <Reference Include="StockSharp.Micex, Version=4.3.13.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="StockSharp.Micex">
       <HintPath>..\Connectors\Micex\StockSharp.Micex.dll</HintPath>
     </Reference>
-    <Reference Include="StockSharp.Plaza, Version=4.3.13.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="StockSharp.Plaza">
       <HintPath>..\Connectors\Plaza\StockSharp.Plaza.dll</HintPath>
     </Reference>
-    <Reference Include="StockSharp.Xaml.Charting, Version=4.3.13.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="StockSharp.Xaml.Charting">
       <HintPath>..\Xaml.Charting\StockSharp.Xaml.Charting.dll</HintPath>
     </Reference>
-    <Reference Include="StockSharp.Xaml.Diagram, Version=4.3.13.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="StockSharp.Xaml.Diagram">
       <HintPath>..\Xaml.Diagram\StockSharp.Xaml.Diagram.dll</HintPath>
     </Reference>
     <Reference Include="System" />

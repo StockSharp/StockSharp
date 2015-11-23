@@ -98,13 +98,8 @@
     <Reference Include="MoreLinq">
       <HintPath>..\..\References\Ecng\MoreLinq.dll</HintPath>
     </Reference>
-    <Reference Include="NCalc, Version=1.3.8.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="NCalc">
       <HintPath>..\..\References\NCalc.dll</HintPath>
-    </Reference>
-    <Reference Include="Northwoods.GoWPF, Version=2.1.1.4, Culture=neutral, PublicKeyToken=616e2dc80068a33d, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Xaml.Diagram\Northwoods.GoWPF.dll</HintPath>
     </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />

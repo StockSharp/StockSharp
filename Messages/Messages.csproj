@@ -11,14 +11,6 @@
     <AssemblyName>StockSharp.Messages</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <SccProjectName>
-    </SccProjectName>
-    <SccLocalPath>
-    </SccLocalPath>
-    <SccAuxPath>
-    </SccAuxPath>
-    <SccProvider>
-    </SccProvider>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -49,26 +41,22 @@
     <Reference Include="Ecng.ComponentModel">
       <HintPath>..\References\Ecng\Ecng.ComponentModel.dll</HintPath>
     </Reference>
-    <Reference Include="Ecng.Interop, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="Ecng.Interop">
       <HintPath>..\References\Ecng\Ecng.Interop.dll</HintPath>
     </Reference>
-    <Reference Include="Ecng.Reflection, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="Ecng.Reflection">
       <HintPath>..\References\Ecng\Ecng.Reflection.dll</HintPath>
     </Reference>
     <Reference Include="Ecng.Serialization">
       <HintPath>..\References\Ecng\Ecng.Serialization.dll</HintPath>
     </Reference>
-    <Reference Include="Ecng.Serialization.FieldFactories, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="Ecng.Serialization.FieldFactories">
       <HintPath>..\References\Ecng\Ecng.Serialization.FieldFactories.dll</HintPath>
     </Reference>
     <Reference Include="Ecng.Localization">
       <HintPath>..\References\Ecng\Ecng.Localization.dll</HintPath>
     </Reference>
-    <Reference Include="MoreLinq, Version=1.0.16127.0, Culture=neutral, PublicKeyToken=384d532d7e88985d, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="MoreLinq">
       <HintPath>..\References\Ecng\MoreLinq.dll</HintPath>
     </Reference>
     <Reference Include="System" />
