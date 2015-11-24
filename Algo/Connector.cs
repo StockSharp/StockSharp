@@ -188,8 +188,6 @@ namespace StockSharp.Algo
 		private readonly SynchronizedDictionary<ExchangeBoard, SessionStates> _sessionStates = new SynchronizedDictionary<ExchangeBoard, SessionStates>();
 		private readonly SynchronizedDictionary<Security, object[]> _securityValues = new SynchronizedDictionary<Security, object[]>();
 
-		private readonly ISecurityProvider _securityProvider;
-
 		private readonly SyncObject _marketTimerSync = new SyncObject();
 		private Timer _marketTimer;
 		private readonly TimeMessage _marketTimeMessage = new TimeMessage();
@@ -217,8 +215,6 @@ namespace StockSharp.Algo
 			SlippageManager = new SlippageManager();
 
 			_connectorStat.Add(this);
-
-			_securityProvider = new ConnectorSecurityProvider(this);
 
 			InMessageChannel = new InMemoryMessageChannel("Connector In", RaiseError);
 			OutMessageChannel = new InMemoryMessageChannel("Connector Out", RaiseError);
@@ -296,15 +292,15 @@ namespace StockSharp.Algo
 
 		int ISecurityProvider.Count => _entityCache.SecurityCount;
 
-		private Action<Security> _added;
+		private Action<IEnumerable<Security>> _added;
 
-		event Action<Security> ISecurityProvider.Added
+		event Action<IEnumerable<Security>> ISecurityProvider.Added
 		{
 			add { _added += value; }
 			remove { _added -= value; }
 		}
 
-		event Action<Security> ISecurityProvider.Removed
+		event Action<IEnumerable<Security>> ISecurityProvider.Removed
 		{
 			add { }
 			remove { }
@@ -325,7 +321,7 @@ namespace StockSharp.Algo
 		/// <returns>Found instruments.</returns>
 		public virtual IEnumerable<Security> Lookup(Security criteria)
 		{
-			return _securityProvider.Lookup(criteria);
+			return Securities.Filter(criteria);
 		}
 
 		/// <summary>

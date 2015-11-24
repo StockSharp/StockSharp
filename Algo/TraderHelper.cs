@@ -48,8 +48,16 @@ namespace StockSharp.Algo
 	/// <summary>
 	/// The supplier of information on instruments, getting data from the collection.
 	/// </summary>
-	public class CollectionSecurityProvider : Disposable, ISecurityProvider
+	public class CollectionSecurityProvider : SynchronizedList<Security>, ISecurityProvider
 	{
+		/// <summary>
+		/// Initializes a new instance of the <see cref="CollectionSecurityProvider"/>.
+		/// </summary>
+		public CollectionSecurityProvider()
+			: this(Enumerable.Empty<Security>())
+		{
+		}
+
 		/// <summary>
 		/// Initializes a new instance of the <see cref="CollectionSecurityProvider"/>.
 		/// </summary>
@@ -59,37 +67,48 @@ namespace StockSharp.Algo
 			if (securities == null)
 				throw new ArgumentNullException(nameof(securities));
 
-			_securities = securities.ToArray();
+			//_securities = securities.ToArray();
+
+			AddedRange += s => _added.SafeInvoke(s);
+			RemovedRange += s => _removed.SafeInvoke(s);
 		}
 
-		private readonly Security[] _securities;
+		//private readonly Security[] _securities;
 
-		/// <summary>
-		/// The instruments collection.
-		/// </summary>
-		protected virtual IEnumerable<Security> Securities => _securities;
+		///// <summary>
+		///// The instruments collection.
+		///// </summary>
+		//protected virtual IEnumerable<Security> Securities => _securities;
 
-		/// <summary>
-		/// Gets the number of instruments contained in the <see cref="ISecurityProvider"/>.
-		/// </summary>
-		public int Count => _securities.Length;
+		///// <summary>
+		///// Gets the number of instruments contained in the <see cref="ISecurityProvider"/>.
+		///// </summary>
+		//public int Count => _securities.Length;
 
-		event Action<Security> ISecurityProvider.Added
+		private Action<IEnumerable<Security>> _added;
+
+		event Action<IEnumerable<Security>> ISecurityProvider.Added
 		{
-			add { }
-			remove { }
+			add { _added += value; }
+			remove { _added -= value; }
 		}
 
-		event Action<Security> ISecurityProvider.Removed
+		private Action<IEnumerable<Security>> _removed;
+
+		event Action<IEnumerable<Security>> ISecurityProvider.Removed
 		{
-			add { }
-			remove { }
+			add { _removed += value; }
+			remove { _removed -= value; }
 		}
 
-		event Action ISecurityProvider.Cleared
+		//event Action ISecurityProvider.Cleared
+		//{
+		//	add { }
+		//	remove { }
+		//}
+
+		void IDisposable.Dispose()
 		{
-			add { }
-			remove { }
 		}
 
 		/// <summary>
@@ -99,40 +118,15 @@ namespace StockSharp.Algo
 		/// <returns>Found instruments.</returns>
 		public IEnumerable<Security> Lookup(Security criteria)
 		{
-			var provider = Securities as ISecurityProvider;
-			return provider == null ? Securities.Filter(criteria) : provider.Lookup(criteria);
+			//var provider = Securities as ISecurityProvider;
+			//return provider == null ? Securities.Filter(criteria) : provider.Lookup(criteria);
+			return this.Filter(criteria);
 		}
 
 		object ISecurityProvider.GetNativeId(Security security)
 		{
 			return null;
 		}
-	}
-
-	/// <summary>
-	/// The supplier of information on instruments, getting data from <see cref="IConnector"/>.
-	/// </summary>
-	public class ConnectorSecurityProvider : CollectionSecurityProvider
-	{
-		private readonly IConnector _connector;
-
-		/// <summary>
-		/// Initializes a new instance of the <see cref="ConnectorSecurityProvider"/>.
-		/// </summary>
-		/// <param name="connector">Connection to the trading system.</param>
-		public ConnectorSecurityProvider(IConnector connector)
-			: base(Enumerable.Empty<Security>())
-		{
-			if (connector == null)
-				throw new ArgumentNullException(nameof(connector));
-
-			_connector = connector;
-		}
-
-		/// <summary>
-		/// The instruments collection.
-		/// </summary>
-		protected override IEnumerable<Security> Securities => _connector.Securities;
 	}
 
 	/// <summary>

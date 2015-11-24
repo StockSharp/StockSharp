@@ -44,13 +44,13 @@ namespace StockSharp.Studio.Services
 			get { return _securities.Count; }
 		}
 
-		event Action<Security> ISecurityProvider.Added
+		event Action<IEnumerable<Security>> ISecurityProvider.Added
 		{
 			add { }
 			remove { }
 		}
 
-		event Action<Security> ISecurityProvider.Removed
+		event Action<IEnumerable<Security>> ISecurityProvider.Removed
 		{
 			add { }
 			remove { }

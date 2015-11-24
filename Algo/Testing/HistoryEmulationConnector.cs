@@ -80,7 +80,7 @@ namespace StockSharp.Algo.Testing
 		/// <param name="portfolios">Portfolios, the operation will be performed with.</param>
 		/// <param name="storageRegistry">Market data storage.</param>
 		public HistoryEmulationConnector(IEnumerable<Security> securities, IEnumerable<Portfolio> portfolios, IStorageRegistry storageRegistry)
-			: this(new CollectionSecurityProvider(securities), portfolios, storageRegistry)
+			: this((ISecurityProvider)new CollectionSecurityProvider(securities), portfolios, storageRegistry)
 		{
 		}
 

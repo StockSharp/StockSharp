@@ -344,24 +344,7 @@ namespace StockSharp.Anywhere
                 _messAdapter.SendInMessage(new DisconnectMessage());
         }
 
-        private class SecurityList : SynchronizedList<Security>, ISecurityProvider
-        {
-			IEnumerable<Security> ISecurityProvider.Lookup(Security criteria)
-			{
-				return this.Filter(criteria);
-			}
-
-			object ISecurityProvider.GetNativeId(Security security)
-			{
-				return null;
-			}
-
-			void IDisposable.Dispose()
-			{
-			}
-        }
-
-        #region Commands
+       #region Commands
 
         public DelegateCommand ConnectCommand { set; get; }
 

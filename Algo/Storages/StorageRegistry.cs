@@ -1069,8 +1069,8 @@ namespace StockSharp.Algo.Storages
 
 			int ISecurityProvider.Count => _securities.Count;
 
-			public event Action<Security> Added;
-			public event Action<Security> Removed;
+			public event Action<IEnumerable<Security>> Added;
+			public event Action<IEnumerable<Security>> Removed;
 
 			public event Action Cleared
 			{
@@ -1099,7 +1099,7 @@ namespace StockSharp.Algo.Storages
 						file.WriteLine(_format.PutEx(security));
 				});
 
-				Added.SafeInvoke(security);
+				Added.SafeInvoke(new[] { security });
 			}
 
 			void ISecurityStorage.Delete(Security security)
@@ -1108,16 +1108,20 @@ namespace StockSharp.Algo.Storages
 					return;
 
 				Save();
-				Removed.SafeInvoke(security);
+				Removed.SafeInvoke(new[] { security });
 			}
 
 			void ISecurityStorage.DeleteBy(Security criteria)
 			{
+				var removed = new List<Security>();
+
 				foreach (var security in _securities.Cache.Filter(criteria))
 				{
 					if (_securities.Remove(security))
-						Removed.SafeInvoke(security);
+						removed.Add(security);
 				}
+
+				Removed.SafeInvoke(removed);
 				
 				Save();
 			}
