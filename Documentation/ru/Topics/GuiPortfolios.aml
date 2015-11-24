@@ -22,6 +22,14 @@
   			</listItem>
   			
 		</list>
+		
+<alert class="note">
+  <para>
+  		Обратите внимание, что во всех компонентах для списка портфелей (свойство <legacyBold>Portfolios</legacyBold>) используется класс 
+  		<legacyBold>ThreadSafeObservableCollection&lt;TItem&gt;</legacyBold> (находится в Ecng.Xaml), который обеспечивает потоковую безопасность. 
+  </para>
+</alert>
+
 
     </introduction>
     
