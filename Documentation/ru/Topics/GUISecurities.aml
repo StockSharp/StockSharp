@@ -1,11 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <topic id="c4bfe1be-0e21-4480-814b-abaa13536f1f" revisionNumber="1">
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <!--
-    <summary>
-      <para>Optional summary abstract</para>
-    </summary>
-    -->
+   
     <introduction>
       <para> <token>stocksharp</token> предлагает большой набор графических компонентов для работы с инструментами. В этот набор входят:</para>
       

@@ -1583,6 +1583,10 @@
       <ImageId>multiconnection_settings</ImageId>
       <AlternateText>multiconnection settings</AlternateText>
     </Image>
+    <Image Include="Art\Gui_PortfolioComboBox.png">
+      <ImageId>Gui_PortfolioComboBox</ImageId>
+      <AlternateText>Gui Portfolio Combo Box</AlternateText>
+    </Image>
   </ItemGroup>
   <ItemGroup>
     <None Include="Art\sample_options_calc.png">
