@@ -1583,6 +1583,18 @@
       <ImageId>multiconnection_settings</ImageId>
       <AlternateText>multiconnection settings</AlternateText>
     </Image>
+    <Image Include="Art\Gui_PortfolioComboBox.png">
+      <ImageId>Gui_PortfolioComboBox</ImageId>
+      <AlternateText>Gui Portfolio Combo Box</AlternateText>
+    </Image>
+    <Image Include="Art\GUI_PortfolioGrid.png">
+      <ImageId>GUI_PortfolioGrid</ImageId>
+      <AlternateText>GUI Portfolio Grid</AlternateText>
+    </Image>
+    <Image Include="Art\GUI_PortfolioPickerWindow.png">
+      <ImageId>GUI_PortfolioPickerWindow</ImageId>
+      <AlternateText>GUI Portfolio Picker Window</AlternateText>
+    </Image>
   </ItemGroup>
   <ItemGroup>
     <None Include="Art\sample_options_calc.png">
