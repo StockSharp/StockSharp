@@ -3293,14 +3293,27 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// The delimiter, replacing '/' in path for instruments of USD/EUR type. Is equal to '__'.
+		/// The delimiter, replacing '/' in path for instruments with id like USD/EUR. Is equal to '__'.
 		/// </summary>
 		public const string SecurityPairSeparator = "__";
 
 		/// <summary>
-		/// The delimiter, replacing '*' in the path for instruments of the C.BPO-*@CANADIAN type. Is equal to '##STAR##'.
+		/// The delimiter, replacing '*' in the path for instruments with id like C.BPO-*@CANADIAN. Is equal to '##STAR##'.
 		/// </summary>
 		public const string SecurityStarSeparator = "##STAR##";
+		// http://stocksharp.com/forum/yaf_postst4637_API-4-2-2-18--System-ArgumentException--Illegal-characters-in-path.aspx
+
+		/// <summary>
+		/// The delimiter, replacing ':' in the path for instruments with id like AA-CA:SPB@SPBEX. Is equal to '##COLON##'.
+		/// </summary>
+		public const string SecurityColonSeparator = "##COLON##";
+
+		private static readonly CachedSynchronizedDictionary<string, string> _securitySeparators = new CachedSynchronizedDictionary<string, string>
+		{
+			{ "/", SecurityPairSeparator },
+			{ "*", SecurityStarSeparator },
+			{ ":", SecurityColonSeparator }
+		};
 
 		// http://stackoverflow.com/questions/62771/how-check-if-given-string-is-legal-allowed-file-name-under-windows
 		private static readonly string[] _reservedDos =
@@ -3325,14 +3338,13 @@ namespace StockSharp.Algo
 			if (_reservedDos.Any(d => folderName.StartsWith(d, StringComparison.InvariantCultureIgnoreCase)))
 				folderName = "_" + folderName;
 
-			return folderName
-				.Replace("/", SecurityPairSeparator) // для пар вида USD/EUR
-				.Replace("*", SecurityStarSeparator) // http://stocksharp.com/forum/yaf_postst4637_API-4-2-2-18--System-ArgumentException--Illegal-characters-in-path.aspx
-				;
+			return _securitySeparators
+				.CachedPairs
+				.Aggregate(folderName, (current, pair) => current.Replace(pair.Key, pair.Value));
 		}
 
 		/// <summary>
-		/// The inverse conversion from the <see cref="SecurityIdToFolderName(System.String)"/> method.
+		/// The inverse conversion from the <see cref="SecurityIdToFolderName"/> method.
 		/// </summary>
 		/// <param name="folderName">Directory name.</param>
 		/// <returns>Security ID.</returns>
@@ -3346,9 +3358,9 @@ namespace StockSharp.Algo
 			if (id[0] == '_' && _reservedDos.Any(d => id.StartsWith("_" + d, StringComparison.InvariantCultureIgnoreCase)))
 				id = id.Substring(1);
 
-			return id
-				.ReplaceIgnoreCase(SecurityPairSeparator, "/")
-				.ReplaceIgnoreCase(SecurityStarSeparator, "*");
+			return _securitySeparators
+				.CachedPairs
+				.Aggregate(id, (current, pair) => current.ReplaceIgnoreCase(pair.Value, pair.Key));
 		}
 
 		/// <summary>
