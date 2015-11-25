@@ -49,23 +49,12 @@ _finamHistorySource.Refresh(new FinamSecurityStorage(security), security, s => {
 			<step>
 			<content>
 				<para>
-				 В следующем фрагменте кода показано создание экземпляра класса EmulationInfo (настройки тестирования). 
-				 Для свойства HistorySource, которое имеет тип делегата <legacyBold> Func&lt;DateTimeOffset, IEnumerable&lt;Message&gt;&gt; </legacyBold>,
-				 указываем функцию <legacyBold>_finamHistorySource.GetCandles</legacyBold>, которая будет использована для загрузки исторических данных.
+				 Загружаем свечи с заданным таймфремом за определенный период. Загруженная информация присваивается свойству <legacyBold>HistorySource</legacyBold> класса настроек эмуляции <legacyBold>EmulationInfo</legacyBold>.
 				</para>
 				<code >
 				<![CDATA[
-........				
-Tuple.Create(
-			FinamCandlesCheckBox,
-			FinamCandlesProgress,
-			FinamCandlesParameterGrid,
-			// candles
-			new EmulationInfo {UseCandleTimeFrame = timeFrame, HistorySource = d => _finamHistorySource.GetCandles(security, timeFrame, d.Date, d.Date), CurveColor = Colors.DarkBlue, StrategyName = LocalizedStrings.FinamCandles}), 
-.........			
-			
-			]]>
-					</code>
+new EmulationInfo {UseCandleTimeFrame = timeFrame, HistorySource = d => _finamHistorySource.GetCandles(security, timeFrame, d.Date, d.Date), CurveColor = Colors.DarkBlue, StrategyName = LocalizedStrings.FinamCandles}),
+ ]]></code>
 			</content>
 			</step>
 			<step>
