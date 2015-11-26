@@ -145,11 +145,12 @@ namespace StockSharp.Hydra.Panes
 
 			public void RemoveRange(IEnumerable<HydraTaskSecurity> securities)
 			{
-				foreach (var security in securities)
-				{
-					Remove(security.Security);
-					_securities.Remove(security.Security);
-				}
+				var keys = securities.Select(s => s.Security).ToArray();
+
+                RemoveRange(keys);
+
+				foreach (var security in keys)
+					_securities.Remove(security);
 			}
 		}
 

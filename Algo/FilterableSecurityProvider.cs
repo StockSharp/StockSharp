@@ -36,11 +36,11 @@ namespace StockSharp.Algo
 
 			//ExcludeFilter = excludeFilter;
 
-			_provider.Added += AddSecurity;
-			_provider.Removed += RemoveSecurity;
+			_provider.Added += AddSecurities;
+			_provider.Removed += RemoveSecurities;
 			_provider.Cleared += ClearSecurities;
 
-			_provider.LookupAll().ForEach(AddSecurity);
+			AddSecurities(_provider.LookupAll());
 		}
 
 		/// <summary>
@@ -49,14 +49,14 @@ namespace StockSharp.Algo
 		public int Count => _trie.Count;
 
 		/// <summary>
-		/// New instrument created.
+		/// New instruments added.
 		/// </summary>
-		public event Action<Security> Added;
+		public event Action<IEnumerable<Security>> Added;
 
 		/// <summary>
-		/// Instrument deleted.
+		/// Instruments removed.
 		/// </summary>
-		public event Action<Security> Removed;
+		public event Action<IEnumerable<Security>> Removed;
 
 		/// <summary>
 		/// The storage was cleared.
@@ -90,16 +90,16 @@ namespace StockSharp.Algo
 			return null;
 		}
 
-		private void AddSecurity(Security security)
+		private void AddSecurities(IEnumerable<Security> securities)
 		{
-			_trie.Add(security);
-			Added.SafeInvoke(security);
+			securities.ForEach(_trie.Add);
+            Added.SafeInvoke(securities);
 		}
 
-		private void RemoveSecurity(Security security)
+		private void RemoveSecurities(IEnumerable<Security> securities)
 		{
-			_trie.Remove(security);
-			Removed.SafeInvoke(security);
+			_trie.RemoveRange(securities);
+            Removed.SafeInvoke(securities);
 		}
 
 		private void ClearSecurities()
@@ -113,8 +113,8 @@ namespace StockSharp.Algo
 		/// </summary>
 		protected override void DisposeManaged()
 		{
-			_provider.Added -= AddSecurity;
-			_provider.Removed -= RemoveSecurity;
+			_provider.Added -= AddSecurities;
+			_provider.Removed -= RemoveSecurities;
 			_provider.Cleared -= ClearSecurities;
 
 			if (_ownProvider)

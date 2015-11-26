@@ -80,8 +80,7 @@
     <Reference Include="Ecng.Localization">
       <HintPath>..\References\Ecng\Ecng.Localization.dll</HintPath>
     </Reference>
-    <Reference Include="Ecng.Reflection, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="Ecng.Reflection">
       <HintPath>..\References\Ecng\Ecng.Reflection.dll</HintPath>
     </Reference>
     <Reference Include="Ecng.Serialization">
@@ -95,8 +94,7 @@
     </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
-    <Reference Include="StockSharp.Xaml.Charting, Version=4.3.13.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="StockSharp.Xaml.Charting">
       <HintPath>..\Xaml.Charting\StockSharp.Xaml.Charting.dll</HintPath>
     </Reference>
     <Reference Include="System" />

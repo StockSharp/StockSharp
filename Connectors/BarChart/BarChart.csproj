@@ -48,8 +48,7 @@
     <Reference Include="Ecng.Serialization">
       <HintPath>..\..\References\Ecng\Ecng.Serialization.dll</HintPath>
     </Reference>
-    <Reference Include="Ecng.Web, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="Ecng.Web">
       <HintPath>..\..\References\Ecng\Ecng.Web.dll</HintPath>
     </Reference>
     <Reference Include="MoreLinq">

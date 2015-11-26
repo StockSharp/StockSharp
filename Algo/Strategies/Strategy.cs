@@ -2580,13 +2580,13 @@ namespace StockSharp.Algo.Strategies
 
 		int ISecurityProvider.Count => SafeGetConnector().Count;
 
-		event Action<Security> ISecurityProvider.Added
+		event Action<IEnumerable<Security>> ISecurityProvider.Added
 		{
 			add { SafeGetConnector().Added += value; }
 			remove { SafeGetConnector().Added -= value; }
 		}
 
-		event Action<Security> ISecurityProvider.Removed
+		event Action<IEnumerable<Security>> ISecurityProvider.Removed
 		{
 			add { SafeGetConnector().Removed += value; }
 			remove { SafeGetConnector().Removed -= value; }

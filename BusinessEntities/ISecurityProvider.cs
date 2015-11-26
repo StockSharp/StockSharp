@@ -14,14 +14,14 @@ namespace StockSharp.BusinessEntities
 		int Count { get; }
 
 		/// <summary>
-		/// New instrument created.
+		/// New instruments added.
 		/// </summary>
-		event Action<Security> Added;
+		event Action<IEnumerable<Security>> Added;
 
 		/// <summary>
-		/// Instrument deleted.
+		/// Instruments removed.
 		/// </summary>
-		event Action<Security> Removed;
+		event Action<IEnumerable<Security>> Removed;
 
 		/// <summary>
 		/// The storage was cleared.

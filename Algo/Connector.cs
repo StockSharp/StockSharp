@@ -221,8 +221,6 @@ namespace StockSharp.Algo
 
 			_connectorStat.Add(this);
 
-			_securityProvider = new ConnectorSecurityProvider(this);
-
 			InMessageChannel = new InMemoryMessageChannel("Connector In", RaiseError);
 			OutMessageChannel = new InMemoryMessageChannel("Connector Out", RaiseError);
 
@@ -319,15 +317,15 @@ namespace StockSharp.Algo
 
 		int ISecurityProvider.Count => _entityCache.SecurityCount;
 
-		private Action<Security> _added;
+		private Action<IEnumerable<Security>> _added;
 
-		event Action<Security> ISecurityProvider.Added
+		event Action<IEnumerable<Security>> ISecurityProvider.Added
 		{
 			add { _added += value; }
 			remove { _added -= value; }
 		}
 
-		event Action<Security> ISecurityProvider.Removed
+		event Action<IEnumerable<Security>> ISecurityProvider.Removed
 		{
 			add { }
 			remove { }
@@ -348,7 +346,7 @@ namespace StockSharp.Algo
 		/// <returns>Found instruments.</returns>
 		public virtual IEnumerable<Security> Lookup(Security criteria)
 		{
-			return _securityProvider.Lookup(criteria);
+			return Securities.Filter(criteria);
 		}
 
 		/// <summary>

@@ -48,8 +48,16 @@ namespace StockSharp.Algo
 	/// <summary>
 	/// The supplier of information on instruments, getting data from the collection.
 	/// </summary>
-	public class CollectionSecurityProvider : Disposable, ISecurityProvider
+	public class CollectionSecurityProvider : SynchronizedList<Security>, ISecurityProvider
 	{
+		/// <summary>
+		/// Initializes a new instance of the <see cref="CollectionSecurityProvider"/>.
+		/// </summary>
+		public CollectionSecurityProvider()
+			: this(Enumerable.Empty<Security>())
+		{
+		}
+
 		/// <summary>
 		/// Initializes a new instance of the <see cref="CollectionSecurityProvider"/>.
 		/// </summary>
@@ -59,37 +67,48 @@ namespace StockSharp.Algo
 			if (securities == null)
 				throw new ArgumentNullException(nameof(securities));
 
-			_securities = securities.ToArray();
+			//_securities = securities.ToArray();
+
+			AddedRange += s => _added.SafeInvoke(s);
+			RemovedRange += s => _removed.SafeInvoke(s);
 		}
 
-		private readonly Security[] _securities;
+		//private readonly Security[] _securities;
 
-		/// <summary>
-		/// The instruments collection.
-		/// </summary>
-		protected virtual IEnumerable<Security> Securities => _securities;
+		///// <summary>
+		///// The instruments collection.
+		///// </summary>
+		//protected virtual IEnumerable<Security> Securities => _securities;
 
-		/// <summary>
-		/// Gets the number of instruments contained in the <see cref="ISecurityProvider"/>.
-		/// </summary>
-		public int Count => _securities.Length;
+		///// <summary>
+		///// Gets the number of instruments contained in the <see cref="ISecurityProvider"/>.
+		///// </summary>
+		//public int Count => _securities.Length;
 
-		event Action<Security> ISecurityProvider.Added
+		private Action<IEnumerable<Security>> _added;
+
+		event Action<IEnumerable<Security>> ISecurityProvider.Added
 		{
-			add { }
-			remove { }
+			add { _added += value; }
+			remove { _added -= value; }
 		}
 
-		event Action<Security> ISecurityProvider.Removed
+		private Action<IEnumerable<Security>> _removed;
+
+		event Action<IEnumerable<Security>> ISecurityProvider.Removed
 		{
-			add { }
-			remove { }
+			add { _removed += value; }
+			remove { _removed -= value; }
 		}
 
-		event Action ISecurityProvider.Cleared
+		//event Action ISecurityProvider.Cleared
+		//{
+		//	add { }
+		//	remove { }
+		//}
+
+		void IDisposable.Dispose()
 		{
-			add { }
-			remove { }
 		}
 
 		/// <summary>
@@ -99,40 +118,15 @@ namespace StockSharp.Algo
 		/// <returns>Found instruments.</returns>
 		public IEnumerable<Security> Lookup(Security criteria)
 		{
-			var provider = Securities as ISecurityProvider;
-			return provider == null ? Securities.Filter(criteria) : provider.Lookup(criteria);
+			//var provider = Securities as ISecurityProvider;
+			//return provider == null ? Securities.Filter(criteria) : provider.Lookup(criteria);
+			return this.Filter(criteria);
 		}
 
 		object ISecurityProvider.GetNativeId(Security security)
 		{
 			return null;
 		}
-	}
-
-	/// <summary>
-	/// The supplier of information on instruments, getting data from <see cref="IConnector"/>.
-	/// </summary>
-	public class ConnectorSecurityProvider : CollectionSecurityProvider
-	{
-		private readonly IConnector _connector;
-
-		/// <summary>
-		/// Initializes a new instance of the <see cref="ConnectorSecurityProvider"/>.
-		/// </summary>
-		/// <param name="connector">Connection to the trading system.</param>
-		public ConnectorSecurityProvider(IConnector connector)
-			: base(Enumerable.Empty<Security>())
-		{
-			if (connector == null)
-				throw new ArgumentNullException(nameof(connector));
-
-			_connector = connector;
-		}
-
-		/// <summary>
-		/// The instruments collection.
-		/// </summary>
-		protected override IEnumerable<Security> Securities => _connector.Securities;
 	}
 
 	/// <summary>
@@ -3299,14 +3293,27 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// The delimiter, replacing '/' in path for instruments of USD/EUR type. Is equal to '__'.
+		/// The delimiter, replacing '/' in path for instruments with id like USD/EUR. Is equal to '__'.
 		/// </summary>
 		public const string SecurityPairSeparator = "__";
 
 		/// <summary>
-		/// The delimiter, replacing '*' in the path for instruments of the C.BPO-*@CANADIAN type. Is equal to '##STAR##'.
+		/// The delimiter, replacing '*' in the path for instruments with id like C.BPO-*@CANADIAN. Is equal to '##STAR##'.
 		/// </summary>
 		public const string SecurityStarSeparator = "##STAR##";
+		// http://stocksharp.com/forum/yaf_postst4637_API-4-2-2-18--System-ArgumentException--Illegal-characters-in-path.aspx
+
+		/// <summary>
+		/// The delimiter, replacing ':' in the path for instruments with id like AA-CA:SPB@SPBEX. Is equal to '##COLON##'.
+		/// </summary>
+		public const string SecurityColonSeparator = "##COLON##";
+
+		private static readonly CachedSynchronizedDictionary<string, string> _securitySeparators = new CachedSynchronizedDictionary<string, string>
+		{
+			{ "/", SecurityPairSeparator },
+			{ "*", SecurityStarSeparator },
+			{ ":", SecurityColonSeparator }
+		};
 
 		// http://stackoverflow.com/questions/62771/how-check-if-given-string-is-legal-allowed-file-name-under-windows
 		private static readonly string[] _reservedDos =
@@ -3331,14 +3338,13 @@ namespace StockSharp.Algo
 			if (_reservedDos.Any(d => folderName.StartsWith(d, StringComparison.InvariantCultureIgnoreCase)))
 				folderName = "_" + folderName;
 
-			return folderName
-				.Replace("/", SecurityPairSeparator) // для пар вида USD/EUR
-				.Replace("*", SecurityStarSeparator) // http://stocksharp.com/forum/yaf_postst4637_API-4-2-2-18--System-ArgumentException--Illegal-characters-in-path.aspx
-				;
+			return _securitySeparators
+				.CachedPairs
+				.Aggregate(folderName, (current, pair) => current.Replace(pair.Key, pair.Value));
 		}
 
 		/// <summary>
-		/// The inverse conversion from the <see cref="SecurityIdToFolderName(System.String)"/> method.
+		/// The inverse conversion from the <see cref="SecurityIdToFolderName"/> method.
 		/// </summary>
 		/// <param name="folderName">Directory name.</param>
 		/// <returns>Security ID.</returns>
@@ -3352,9 +3358,9 @@ namespace StockSharp.Algo
 			if (id[0] == '_' && _reservedDos.Any(d => id.StartsWith("_" + d, StringComparison.InvariantCultureIgnoreCase)))
 				id = id.Substring(1);
 
-			return id
-				.ReplaceIgnoreCase(SecurityPairSeparator, "/")
-				.ReplaceIgnoreCase(SecurityStarSeparator, "*");
+			return _securitySeparators
+				.CachedPairs
+				.Aggregate(id, (current, pair) => current.ReplaceIgnoreCase(pair.Value, pair.Key));
 		}
 
 		/// <summary>

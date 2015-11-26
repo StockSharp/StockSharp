@@ -10,27 +10,10 @@
 
 	class StrategyEntityFactory : EntityFactory, ISecurityProvider
 	{
-		private class SecurityList : SynchronizedList<Security>, ISecurityProvider
-		{
-			IEnumerable<Security> ISecurityProvider.Lookup(Security criteria)
-			{
-				return this.Filter(criteria);
-			}
-
-			object ISecurityProvider.GetNativeId(Security security)
-			{
-				return null;
-			}
-
-			void IDisposable.Dispose()
-			{
-			}
-		}
-
 		private readonly CachedSynchronizedDictionary<string, Security> _securities = new CachedSynchronizedDictionary<string, Security>();
 		private readonly CachedSynchronizedDictionary<string, Portfolio> _portfolios = new CachedSynchronizedDictionary<string, Portfolio>();
 
-		private readonly SecurityList _securityList = new SecurityList();
+		private readonly CollectionSecurityProvider _securityList = new CollectionSecurityProvider();
 
 		public ISecurityProvider SecurityProvider
 		{
@@ -95,13 +78,13 @@
 			get { return _securityList.Count; }
 		}
 
-		event Action<Security> ISecurityProvider.Added
+		event Action<IEnumerable<Security>> ISecurityProvider.Added
 		{
 			add { }
 			remove { }
 		}
 
-		event Action<Security> ISecurityProvider.Removed
+		event Action<IEnumerable<Security>> ISecurityProvider.Removed
 		{
 			add { }
 			remove { }

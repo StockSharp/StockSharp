@@ -55,36 +55,25 @@
     </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
-    <Reference Include="StockSharp.Blackwood, Version=4.3.13.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="StockSharp.Blackwood">
       <HintPath>..\Connectors\Blackwood\StockSharp.Blackwood.dll</HintPath>
     </Reference>
-    <Reference Include="StockSharp.Fix, Version=4.3.13.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="StockSharp.Fix">
       <HintPath>..\Connectors\Fix\StockSharp.Fix.dll</HintPath>
     </Reference>
-    <Reference Include="StockSharp.ITCH, Version=4.3.13.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="StockSharp.ITCH">
       <HintPath>..\Connectors\ITCH\StockSharp.ITCH.dll</HintPath>
     </Reference>
-    <Reference Include="StockSharp.Micex, Version=4.3.13.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="StockSharp.Micex">
       <HintPath>..\Connectors\Micex\StockSharp.Micex.dll</HintPath>
     </Reference>
-    <Reference Include="StockSharp.Plaza, Version=4.3.13.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="StockSharp.Plaza">
       <HintPath>..\Connectors\Plaza\StockSharp.Plaza.dll</HintPath>
     </Reference>
-    <Reference Include="StockSharp.Rithmic, Version=4.3.13.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Connectors\Rithmic\StockSharp.Rithmic.dll</HintPath>
-    </Reference>
-    <Reference Include="StockSharp.Xaml.Charting, Version=4.3.13.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="StockSharp.Xaml.Charting">
       <HintPath>..\Xaml.Charting\StockSharp.Xaml.Charting.dll</HintPath>
     </Reference>
-    <Reference Include="StockSharp.Xaml.Diagram, Version=4.3.13.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="StockSharp.Xaml.Diagram">
       <HintPath>..\Xaml.Diagram\StockSharp.Xaml.Diagram.dll</HintPath>
     </Reference>
     <Reference Include="System" />
@@ -167,6 +156,10 @@
     <ProjectReference Include="..\Connectors\Quik\Quik.csproj">
       <Project>{1B798A4E-2271-46F9-9C2D-4E563114E268}</Project>
       <Name>Quik</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Connectors\Rithmic\Rithmic.csproj">
+      <Project>{FFBC7740-0D2B-49BA-8F95-59E4FC915D06}</Project>
+      <Name>Rithmic</Name>
     </ProjectReference>
     <ProjectReference Include="..\Connectors\Rss\Rss.csproj">
       <Project>{FBC5BE61-E6D9-47DF-9515-900184DDEBA0}</Project>

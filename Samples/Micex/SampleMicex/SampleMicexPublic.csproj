@@ -44,12 +44,10 @@
     <StartupObject>SampleMicex.App</StartupObject>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="MoreLinq, Version=1.0.16127.0, Culture=neutral, PublicKeyToken=384d532d7e88985d, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="MoreLinq">
       <HintPath>..\..\..\References\Ecng\MoreLinq.dll</HintPath>
     </Reference>
-    <Reference Include="StockSharp.Licensing, Version=4.2.73.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="StockSharp.Licensing">
       <HintPath>..\..\..\References\StockSharp.Licensing.dll</HintPath>
     </Reference>
     <Reference Include="StockSharp.Micex">

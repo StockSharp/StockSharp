@@ -6,12 +6,11 @@ namespace StockSharp.Algo.Strategies.Analytics
 	using System.Linq;
 	using System.Windows.Media;
 
-	using Abt.Controls.SciChart;
-	using Abt.Controls.SciChart.Model.DataSeries;
-	using Abt.Controls.SciChart.Numerics;
-	using Abt.Controls.SciChart.Visuals.Axes;
-	using Abt.Controls.SciChart.Visuals.RenderableSeries;
-
+	using Ecng.Xaml.Charting;
+	using Ecng.Xaml.Charting.Model.DataSeries;
+	using Ecng.Xaml.Charting.Numerics;
+	using Ecng.Xaml.Charting.Visuals.Axes;
+	using Ecng.Xaml.Charting.Visuals.RenderableSeries;
 	using Ecng.Collections;
 	using Ecng.ComponentModel;
 	using Ecng.Xaml;

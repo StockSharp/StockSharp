@@ -26,23 +26,6 @@
 	/// </summary>
 	public partial class SecurityPicker : IPersistable
 	{
-		private class SecurityList : SynchronizedList<Security>, ISecurityProvider
-		{
-			IEnumerable<Security> ISecurityProvider.Lookup(Security criteria)
-			{
-				return this.Filter(criteria);
-			}
-
-			object ISecurityProvider.GetNativeId(Security security)
-			{
-				return null;
-			}
-
-			void IDisposable.Dispose()
-			{
-			}
-		}
-
 		private const DataGridSelectionMode _defaultSelectionMode = DataGridSelectionMode.Extended;
 
 		/// <summary>
@@ -166,8 +149,8 @@
 			});
 
 			_excludeSecurities = new CachedSynchronizedSet<Security>();
-			_excludeSecurities.Added += s => SecurityProviderOnSecuritiesChanged(true, NotifyCollectionChangedAction.Add, s);
-			_excludeSecurities.Removed += s => SecurityProviderOnSecuritiesChanged(true, NotifyCollectionChangedAction.Remove, s);
+			_excludeSecurities.AddedRange += s => SecurityProviderOnSecuritiesChanged(true, NotifyCollectionChangedAction.Add, s);
+			_excludeSecurities.RemovedRange += s => SecurityProviderOnSecuritiesChanged(true, NotifyCollectionChangedAction.Remove, s);
 			_excludeSecurities.Cleared += () => SecurityProviderOnSecuritiesChanged(true, NotifyCollectionChangedAction.Reset, null);
 
 			SecurityProvider = null;
@@ -259,7 +242,7 @@
 			set { SetValue(TitleProperty, value); }
 		}
 
-		private readonly SecurityList _securities = new SecurityList();
+		private readonly CollectionSecurityProvider _securities = new CollectionSecurityProvider();
 
 		/// <summary>
 		/// Available instruments.
@@ -295,8 +278,8 @@
 
 				if (_securityProvider != null)
 				{
-					_securityProvider.Added -= AddSecurity;
-					_securityProvider.Removed -= RemoveSecurity;
+					_securityProvider.Added -= AddSecurities;
+					_securityProvider.Removed -= RemoveSecurities;
 					_securityProvider.Cleared -= ClearSecurities;
 
 					if (_ownProvider)
@@ -313,22 +296,22 @@
 
 				_securityProvider = value;
 
-				_securityProvider.Added += AddSecurity;
-				_securityProvider.Removed += RemoveSecurity;
+				_securityProvider.Added += AddSecurities;
+				_securityProvider.Removed += RemoveSecurities;
 				_securityProvider.Cleared += ClearSecurities;
 
 				FilterSecurities();
 			}
 		}
 
-		private void AddSecurity(Security security)
+		private void AddSecurities(IEnumerable<Security> securities)
 		{
-			SecurityProviderOnSecuritiesChanged(false, NotifyCollectionChangedAction.Add, security);
+			SecurityProviderOnSecuritiesChanged(false, NotifyCollectionChangedAction.Add, securities);
 		}
 
-		private void RemoveSecurity(Security security)
+		private void RemoveSecurities(IEnumerable<Security> securities)
 		{
-			SecurityProviderOnSecuritiesChanged(false, NotifyCollectionChangedAction.Remove, security);
+			SecurityProviderOnSecuritiesChanged(false, NotifyCollectionChangedAction.Remove, securities);
 		}
 
 		private void ClearSecurities()
@@ -370,7 +353,7 @@
 			SecuritiesCtrl.ContextMenu.Items.Add(menuItem);
 		}
 
-		private void SecurityProviderOnSecuritiesChanged(bool exclude, NotifyCollectionChangedAction action, Security security)
+		private void SecurityProviderOnSecuritiesChanged(bool exclude, NotifyCollectionChangedAction action, IEnumerable<Security> securities)
 		{
 			if (!CheckAccess())
 			{
@@ -387,10 +370,7 @@
 					if (exclude)
 						FilterSecurities();
 					else
-					{
-						if (CheckCondition(security))
-							FilteredSecurities.Add(security);
-					}
+						FilteredSecurities.AddRange(securities.Where(CheckCondition));
 
 					break;
 				}
@@ -400,7 +380,7 @@
 					if (exclude)
 						FilterSecurities(true);
 					else
-						FilteredSecurities.Remove(security);
+						FilteredSecurities.RemoveRange(securities);
 
 					break;
 				}
