@@ -16,6 +16,7 @@ namespace StockSharp.Algo
 	using StockSharp.Algo.PnL;
 	using StockSharp.Algo.Risk;
 	using StockSharp.Algo.Slippage;
+	using StockSharp.Algo.Storages;
 	using StockSharp.BusinessEntities;
 	using StockSharp.Logging;
 	using StockSharp.Messages;
@@ -189,6 +190,8 @@ namespace StockSharp.Algo
 		private readonly SynchronizedDictionary<Security, object[]> _securityValues = new SynchronizedDictionary<Security, object[]>();
 
 		private readonly ISecurityProvider _securityProvider;
+		private readonly IEntityRegistry _entityRegistry;
+		private readonly IStorageRegistry _storageRegistry;
 
 		private readonly SyncObject _marketTimerSync = new SyncObject();
 		private Timer _marketTimer;
@@ -222,6 +225,26 @@ namespace StockSharp.Algo
 
 			InMessageChannel = new InMemoryMessageChannel("Connector In", RaiseError);
 			OutMessageChannel = new InMemoryMessageChannel("Connector Out", RaiseError);
+
+			Adapter = new BasketMessageAdapter(new MillisecondIncrementalIdGenerator());
+		}
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="Connector"/>.
+		/// </summary>
+		/// <param name="entityRegistry">The storage of trade objects.</param>
+		/// <param name="storageRegistry">The storage of market data.</param>
+		public Connector(IEntityRegistry entityRegistry, IStorageRegistry storageRegistry)
+			: this()
+		{
+			if (entityRegistry == null)
+				throw new ArgumentNullException(nameof(entityRegistry));
+
+			if (storageRegistry == null)
+				throw new ArgumentNullException(nameof(storageRegistry));
+
+			_entityRegistry = entityRegistry;
+			_storageRegistry = storageRegistry;
 
 			Adapter = new BasketMessageAdapter(new MillisecondIncrementalIdGenerator());
 		}
@@ -532,8 +555,6 @@ namespace StockSharp.Algo
 				{
 					_adapterStates[adapter] = ConnectionStates.Connecting;
 				}
-
-				TryOpenChannel();
 
 				StartMarketTimer();
 				OnConnect();

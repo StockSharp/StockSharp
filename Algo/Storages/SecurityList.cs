@@ -234,6 +234,7 @@ namespace StockSharp.Algo.Storages
 		/// <param name="entity">The trading object.</param>
 		public override void Save(Security entity)
 		{
+			_registry.Exchanges.Save(entity.Board.Exchange);
 			_registry.ExchangeBoards.Save(entity.Board);
 
 			base.Save(entity);
@@ -258,7 +259,9 @@ namespace StockSharp.Algo.Storages
 		/// <param name="entity">The trading object.</param>
 		protected override void OnAdd(Security entity)
 		{
+			_registry.Exchanges.Save(entity.Board.Exchange);
 			_registry.ExchangeBoards.Save(entity.Board);
+
 			base.OnAdd(entity);
 		}
 
