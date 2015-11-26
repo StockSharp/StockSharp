@@ -210,7 +210,7 @@
     </Topic>
     <Topic id="febbcf31-63d1-449d-847e-92fd8424f926" visible="True" isExpanded="true" title="Тестирование">
       <Topic id="5b90a23e-24b9-474a-a699-da47b666194a" visible="True" isExpanded="true" title="На истории">
-        <Topic id="abfde7cc-fa0e-4705-b610-41b2ba1a2252" visible="True" isSelected="true" title="На истории с Финам" />
+        <Topic id="abfde7cc-fa0e-4705-b610-41b2ba1a2252" visible="True" title="На истории с Финам" />
       </Topic>
       <Topic id="24a5c734-199f-4090-943d-6324a04f335b" visible="True" title="На истории (оптимизация)" />
       <Topic id="ab42038e-836b-4c00-9332-0b2db2cbd948" visible="True" title="На случайных данных" />
@@ -245,15 +245,14 @@
         <Topic id="43ce1f81-83aa-4e83-816f-7362de518f9e" visible="True" title="ContinuousSecurityWindow" />
         <Topic id="c3ee456c-31a9-4bc9-b296-c5f805bafb9e" visible="True" title="IndexSecurityWindow" />
       </Topic>
-      <Topic id="af144c31-4138-4d15-8097-fd0137370830" visible="True" title="Визуальные компоненты: рыночные данные">
+      <Topic id="af144c31-4138-4d15-8097-fd0137370830" visible="True" isExpanded="true" title="Визуальные компоненты: рыночные данные">
         <Topic id="8ec4f4b6-e7c8-4bf0-b05e-1d98960ca45f" visible="True" title="TradeGrid" />
-        <Topic id="cec80fb2-5072-4900-92d8-0e5c88becce3" visible="True" title="Level1Grid" />
         <Topic id="3a23bf32-fcbd-409b-99b3-2ff1b953c85a" visible="True" title="MarketDepthControl" />
-        <Topic id="583c9ad6-8798-4167-a6a1-667e9929fe2d" visible="True" title="OrderLogGrid" />
+        <Topic id="583c9ad6-8798-4167-a6a1-667e9929fe2d" visible="True" isSelected="true" title="OrderLogGrid" />
         <Topic id="f9005237-fc93-4086-9300-6b081056a0fa" visible="True" title="NewsGrid" />
         <Topic id="00026219-17a5-4749-82ab-ec018aa1ab0b" visible="True" title="NewsPanel" />
       </Topic>
-      <Topic id="20b858de-424e-43ee-89ab-00002d344f89" visible="True" isExpanded="true" title="Визуальные компоненты: торговля">
+      <Topic id="20b858de-424e-43ee-89ab-00002d344f89" visible="True" title="Визуальные компоненты: торговля">
         <Topic id="5bb4f6f0-9057-4a88-b968-a5fd60641d4d" visible="True" title="OrderGrid" />
         <Topic id="cfc729e7-65e7-4ec3-b215-57031be290c7" visible="True" title="OrderWindow" />
         <Topic id="7ffeb2d8-55f3-447b-beb7-9b8017f5e7f4" visible="True" title="MyTradeGrid" />
