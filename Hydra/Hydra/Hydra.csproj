@@ -68,10 +68,6 @@
     <Reference Include="Ecng.Localization">
       <HintPath>..\..\References\Ecng\Ecng.Localization.dll</HintPath>
     </Reference>
-    <Reference Include="Abt.Controls.SciChart.Wpf">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Xaml.Charting\Abt.Controls.SciChart.Wpf.dll</HintPath>
-    </Reference>
     <Reference Include="ActiproSoftware.Docking.Wpf, Version=11.2.555.0, Culture=neutral, PublicKeyToken=36ff2196ab5654b9, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\References\Actipro\ActiproSoftware.Docking.Wpf.dll</HintPath>
@@ -98,13 +94,14 @@
     <Reference Include="AutomaticUpdaterWPF">
       <HintPath>..\..\References\AutomaticUpdaterWPF.dll</HintPath>
     </Reference>
-    <Reference Include="Ecng.Data, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="Ecng.Data">
       <HintPath>..\..\References\Ecng\Ecng.Data.dll</HintPath>
     </Reference>
-    <Reference Include="Ecng.Serialization, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="Ecng.Serialization">
       <HintPath>..\..\References\Ecng\Ecng.Serialization.dll</HintPath>
+    </Reference>
+    <Reference Include="Ecng.Xaml.Charting">
+      <HintPath>..\..\References\Ecng\Ecng.Xaml.Charting.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Microsoft.VisualBasic" />

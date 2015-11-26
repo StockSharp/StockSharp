@@ -1,6 +1,6 @@
 namespace StockSharp.Studio.Controls
 {
-	using Abt.Controls.SciChart.Visuals;
+	using Ecng.Xaml.Charting.Visuals;
 
 	using Ecng.Configuration;
 
@@ -9,11 +9,11 @@ namespace StockSharp.Studio.Controls
 	using StockSharp.Localization;
 
 	[DisplayNameLoc(LocalizedStrings.Str3200Key)]
-	public partial class SciChartPanel
+	public partial class UltraChartPanel
 	{
 		private StrategyContainer _strategy;
 
-		public SciChartPanel()
+		public UltraChartPanel()
 		{
 			InitializeComponent();
 
@@ -28,7 +28,7 @@ namespace StockSharp.Studio.Controls
 						return;
 
 					_strategy = cmd.Source;
-					SetSurface(SciChartSurface);
+					SetSurface(UltrachartSurface);
 				});
 
 			WhenLoaded(() => new RequestBindSource(this).SyncProcess(this));
@@ -44,7 +44,7 @@ namespace StockSharp.Studio.Controls
 				.UnRegister<BindStrategyCommand>(this);
 		}
 
-		private void SetSurface(SciChartSurface surface)
+		private void SetSurface(UltrachartSurface surface)
 		{
 			_strategy.Environment.SetValue("Chart", surface);
 		}

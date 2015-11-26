@@ -44,8 +44,7 @@
     <Reference Include="Ecng.Localization">
       <HintPath>..\..\..\References\Ecng\Ecng.Localization.dll</HintPath>
     </Reference>
-    <Reference Include="Ecng.Collections, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="Ecng.Collections">
       <HintPath>..\..\..\References\Ecng\Ecng.Collections.dll</HintPath>
     </Reference>
     <Reference Include="PresentationCore" />
@@ -91,7 +90,7 @@
       <Project>{dce69db8-53ca-4b7f-9368-02f175a31074}</Project>
       <Name>BusinessEntities</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\..\StockSharp %28GitLab%29\Connectors\Rithmic\Rithmic.csproj">
+    <ProjectReference Include="..\..\..\Connectors\Rithmic\Rithmic.csproj">
       <Project>{FFBC7740-0D2B-49BA-8F95-59E4FC915D06}</Project>
       <Name>Rithmic</Name>
     </ProjectReference>

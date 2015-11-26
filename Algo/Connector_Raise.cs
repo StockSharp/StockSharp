@@ -314,7 +314,7 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// To call the event <see cref="Connector.NewStopOrders"/>.
+		/// To call the event <see cref="NewStopOrders"/>.
 		/// </summary>
 		/// <param name="stopOrders">Stop orders that should be passed to the event.</param>
 		private void RaiseNewStopOrders(IEnumerable<Order> stopOrders)
@@ -323,7 +323,7 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// To call the event <see cref="Connector.StopOrdersChanged"/>.
+		/// To call the event <see cref="StopOrdersChanged"/>.
 		/// </summary>
 		/// <param name="stopOrders">Stop orders that should be passed to the event.</param>
 		private void RaiseStopOrdersChanged(IEnumerable<Order> stopOrders)
@@ -356,7 +356,7 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// To call the event <see cref="Connector.StopOrdersRegisterFailed"/>.
+		/// To call the event <see cref="StopOrdersRegisterFailed"/>.
 		/// </summary>
 		/// <param name="fails">Error information that should be passed to the event.</param>
 		private void RaiseStopOrdersRegisterFailed(IEnumerable<OrderFail> fails)
@@ -365,7 +365,7 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// To call the event <see cref="Connector.StopOrdersCancelFailed"/>.
+		/// To call the event <see cref="StopOrdersCancelFailed"/>.
 		/// </summary>
 		/// <param name="fails">Error information that should be passed to the event.</param>
 		private void RaiseStopOrdersCancelFailed(IEnumerable<OrderFail> fails)
@@ -375,7 +375,9 @@ namespace StockSharp.Algo
 
 		private void RaiseNewSecurity(Security security)
 		{
-			_added.SafeInvoke(security);
+			var arr = new[] { security };
+
+            _added.SafeInvoke(arr);
 
 			NewSecurity.SafeInvoke(security);
 
@@ -384,7 +386,7 @@ namespace StockSharp.Algo
 			if (multiEvt == null)
 				return;
 
-			multiEvt.SafeInvoke(new[] { security });
+			multiEvt.SafeInvoke(arr);
 		}
 
 		private void RaiseSecuritiesChanged(Security[] securities)

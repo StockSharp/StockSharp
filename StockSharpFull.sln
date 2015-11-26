@@ -351,6 +351,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SampleDiagramPublic", "Samp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SampleChartPublic", "Samples\Common\SampleChart\SampleChartPublic.csproj", "{8B430A27-B392-4129-9AA2-731A52427E40}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rithmic", "Connectors\Rithmic\Rithmic.csproj", "{FFBC7740-0D2B-49BA-8F95-59E4FC915D06}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -847,6 +849,10 @@ Global
 		{8B430A27-B392-4129-9AA2-731A52427E40}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8B430A27-B392-4129-9AA2-731A52427E40}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8B430A27-B392-4129-9AA2-731A52427E40}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FFBC7740-0D2B-49BA-8F95-59E4FC915D06}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FFBC7740-0D2B-49BA-8F95-59E4FC915D06}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FFBC7740-0D2B-49BA-8F95-59E4FC915D06}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FFBC7740-0D2B-49BA-8F95-59E4FC915D06}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -994,6 +1000,7 @@ Global
 		{0B9F6527-5AA5-4ACC-8D31-2797351E7BED} = {9828D9EF-0EFE-4315-9EFB-25171FF51D0E}
 		{4DF3DBDF-FA5B-469F-B625-6A255BD05069} = {1B4765C2-0B77-4D68-9860-25F7FCA17D94}
 		{8B430A27-B392-4129-9AA2-731A52427E40} = {1B4765C2-0B77-4D68-9860-25F7FCA17D94}
+		{FFBC7740-0D2B-49BA-8F95-59E4FC915D06} = {42B35529-B842-4F17-9277-0618B074AA91}
 	EndGlobalSection
 	GlobalSection(TestCaseManagementSettings) = postSolution
 		CategoryFile = Trading.vsmdi

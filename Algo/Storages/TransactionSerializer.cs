@@ -179,7 +179,7 @@ namespace StockSharp.Algo.Storages
 	class TransactionSerializer : BinaryMarketDataSerializer<ExecutionMessage, TransactionSerializerMetaInfo>
 	{
 		public TransactionSerializer(SecurityId securityId)
-			: base(securityId, 200, MarketDataVersions.Version56)
+			: base(securityId, 200, MarketDataVersions.Version57)
 		{
 		}
 
@@ -218,7 +218,7 @@ namespace StockSharp.Algo.Storages
 				if (msg.OrderPrice < 0)
 					throw new ArgumentOutOfRangeException(nameof(messages), msg.OrderPrice, LocalizedStrings.Str926Params.Put(msg.OrderId == null ? msg.OrderStringId : msg.OrderId.To<string>()));
 
-				var volume = msg.SafeGetVolume();
+				var volume = msg.Volume;
 
 				if (volume < 0)
 					throw new ArgumentOutOfRangeException(nameof(messages), volume, LocalizedStrings.Str927Params.Put(msg.OrderId == null ? msg.OrderStringId : msg.OrderId.To<string>()));
@@ -288,7 +288,18 @@ namespace StockSharp.Algo.Storages
 				writer.Write(msg.Side == Sides.Buy);
 				writer.WritePriceEx(!isTrade ? msg.OrderPrice : msg.GetTradePrice(), metaInfo, SecurityId);
 
-				writer.WriteVolume(volume, metaInfo, SecurityId);
+
+				if (metaInfo.Version < MarketDataVersions.Version57)
+				{
+					writer.WriteVolume(volume ?? 0, metaInfo, SecurityId);
+				}
+				else
+				{
+					writer.Write(volume != null);
+
+					if (volume != null)
+						writer.WriteVolume(volume.Value, metaInfo, SecurityId);
+				}
 
 				if (metaInfo.Version < MarketDataVersions.Version54)
 				{
@@ -413,7 +424,8 @@ namespace StockSharp.Algo.Storages
 			var side = reader.Read() ? Sides.Buy : Sides.Sell;
 
 			var price = reader.ReadPriceEx(metaInfo);
-			var volume = reader.ReadVolume(metaInfo);
+			var volume = (metaInfo.Version < MarketDataVersions.Version57 || reader.Read())
+				? reader.ReadVolume(metaInfo) : (decimal?) null;
 
 			var visibleVolume = (metaInfo.Version < MarketDataVersions.Version54 || reader.Read())
 				? reader.ReadVolume(metaInfo) : (decimal?)null;

@@ -1,6 +1,7 @@
 namespace StockSharp.Xaml
 {
 	using System;
+	using System.Collections.Generic;
 	using System.Linq;
 	using System.Windows;
 	using System.Windows.Controls;
@@ -39,8 +40,8 @@ namespace StockSharp.Xaml
 
 			if (_securityProvider != null)
 			{
-				_securityProvider.Added -= AddSecurity;
-				_securityProvider.Removed -= RemoveSecurity;
+				_securityProvider.Added -= AddSecurities;
+				_securityProvider.Removed -= RemoveSecurities;
 				_securityProvider.Cleared -= ClearSecurities;
 
 				SecurityTextBox.ItemsSource = Enumerable.Empty<Security>();
@@ -57,8 +58,8 @@ namespace StockSharp.Xaml
 			_itemsSource = new ThreadSafeObservableCollection<Security>(itemsSource);
 			_itemsSource.AddRange(_securityProvider.LookupAll());
 
-			_securityProvider.Added += AddSecurity;
-			_securityProvider.Removed += RemoveSecurity;
+			_securityProvider.Added += AddSecurities;
+			_securityProvider.Removed += RemoveSecurities;
 			_securityProvider.Cleared += ClearSecurities;
 
 			SecurityTextBox.ItemsSource = itemsSource;
@@ -84,14 +85,14 @@ namespace StockSharp.Xaml
 			set { SetValue(SecurityProviderProperty, value); }
 		}
 
-		private void AddSecurity(Security security)
+		private void AddSecurities(IEnumerable<Security> securities)
 		{
-			_itemsSource.Add(security);
+			_itemsSource.AddRange(securities);
 		}
 
-		private void RemoveSecurity(Security security)
+		private void RemoveSecurities(IEnumerable<Security> securities)
 		{
-			_itemsSource.Remove(security);
+			_itemsSource.RemoveRange(securities);
 		}
 
 		private void ClearSecurities()

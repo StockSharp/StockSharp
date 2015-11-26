@@ -340,6 +340,7 @@ namespace StockSharp.Algo.Storages
 				return Directory
 					.EnumerateDirectories(Path)
 					.SelectMany(Directory.EnumerateDirectories)
+					.Select(System.IO.Path.GetFileName)
 					.Select(n => idGenerator.Split(n, true))
 					.Where(t => !t.IsDefault());
 			}

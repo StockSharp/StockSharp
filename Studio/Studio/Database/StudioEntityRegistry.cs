@@ -355,6 +355,18 @@ namespace StockSharp.Studio.Database
 				_readSecurityIds = database.GetCommand(readSecurityIds, null, new FieldList(), new FieldList());
 			}
 
+			event Action<IEnumerable<Security>> ISecurityProvider.Added
+			{
+				add { }
+				remove { }
+			}
+
+			event Action<IEnumerable<Security>> ISecurityProvider.Removed
+			{
+				add { }
+				remove { }
+			}
+
 			IEnumerable<Security> ISecurityProvider.Lookup(Security criteria)
 			{
 				if (!criteria.Id.IsEmpty())

@@ -12,6 +12,7 @@ namespace StockSharp.Algo
 	using StockSharp.Algo.PnL;
 	using StockSharp.Algo.Risk;
 	using StockSharp.Algo.Slippage;
+	using StockSharp.Algo.Storages;
 	using StockSharp.BusinessEntities;
 	using StockSharp.Logging;
 	using StockSharp.Messages;
@@ -143,6 +144,7 @@ namespace StockSharp.Algo
 
 		private void AdapterOnNewOutMessage(Message message)
 		{
+			TryOpenChannel();
 			OutMessageChannel.SendInMessage(message);
 		}
 
@@ -220,7 +222,8 @@ namespace StockSharp.Algo
 					_adapter.InnerAdapters.Added -= InnerAdaptersOnAdded;
 					_adapter.InnerAdapters.Removed -= InnerAdaptersOnRemoved;
 					_adapter.InnerAdapters.Cleared -= InnerAdaptersOnCleared;
-					_adapter.NewOutMessage -= AdapterOnNewOutMessage;
+
+					_inAdapter.NewOutMessage -= AdapterOnNewOutMessage;
 
 					SendInMessage(new ResetMessage());
 
@@ -250,6 +253,9 @@ namespace StockSharp.Algo
 					if (RiskManager != null)
 						_inAdapter = new RiskMessageAdapter(_inAdapter) { RiskManager = RiskManager };
 
+					if (_entityRegistry != null && _storageRegistry != null)
+						_inAdapter = StorageAdapter = new StorageMessageAdapter(_inAdapter, _entityRegistry, _storageRegistry);
+
 					_inAdapter = new ChannelMessageAdapter(_inAdapter, InMessageChannel, new PassThroughMessageChannel())
 					{
 						OwnInputChannel = true
@@ -258,7 +264,8 @@ namespace StockSharp.Algo
 					_adapter.InnerAdapters.Added += InnerAdaptersOnAdded;
 					_adapter.InnerAdapters.Removed += InnerAdaptersOnRemoved;
 					_adapter.InnerAdapters.Cleared += InnerAdaptersOnCleared;
-					_adapter.NewOutMessage += AdapterOnNewOutMessage;
+
+					_inAdapter.NewOutMessage += AdapterOnNewOutMessage;
 
 					_adapter.Parent = this;
 				}
@@ -274,7 +281,7 @@ namespace StockSharp.Algo
 			if (message.LocalTime.IsDefault())
 				message.LocalTime = CurrentTime.LocalDateTime;
 
-			OutMessageChannel.SendInMessage(message);
+			AdapterOnNewOutMessage(message);
 		}
 
 		/// <summary>
@@ -330,6 +337,11 @@ namespace StockSharp.Algo
 		/// Market-data adapter.
 		/// </summary>
 		public IMessageAdapter MarketDataAdapter { get; private set; }
+
+		/// <summary>
+		/// Storage adapter.
+		/// </summary>
+		public StorageMessageAdapter StorageAdapter { get; private set; }
 
 		/// <summary>
 		/// Process message.

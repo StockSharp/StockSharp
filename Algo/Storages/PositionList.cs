@@ -1,5 +1,7 @@
 namespace StockSharp.Algo.Storages
 {
+	using System.Linq;
+
 	using Ecng.Serialization;
 
 	using StockSharp.BusinessEntities;
@@ -58,7 +60,19 @@ namespace StockSharp.Algo.Storages
 			if (ReadBySecurityAndPortfolio(entity.Security, entity.Portfolio) == null)
 				Add(entity);
 			else
-				Update(entity);
+				UpdateByKey(entity);
+		}
+
+		private void UpdateByKey(Position position)
+		{
+			var keyFields = new[]
+			{
+				Schema.Fields["Portfolio"],
+				Schema.Fields["Security"]
+			};
+			var fields = Schema.Fields.Where(f => !keyFields.Contains(f)).ToArray();
+
+			Database.Update(position, new FieldList(keyFields), new FieldList(fields));
 		}
 
 		private static SerializationItemCollection CreateSource(Position position)

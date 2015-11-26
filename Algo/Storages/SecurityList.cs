@@ -5,6 +5,7 @@ namespace StockSharp.Algo.Storages
 	using System.Data;
 	using System.Linq;
 
+	using Ecng.Collections;
 	using Ecng.Common;
 	using Ecng.Data;
 	using Ecng.Data.Sql;
@@ -122,6 +123,25 @@ namespace StockSharp.Algo.Storages
 
 				_readAllByType = database.GetCommand(readAllByType, Schema, new FieldList(Schema.Fields["Type"]), new FieldList());
 			}
+
+			((ICollectionEx<Security>)this).AddedRange += s => _added.SafeInvoke(s);
+			((ICollectionEx<Security>)this).RemovedRange += s => _removed.SafeInvoke(s);
+		}
+
+		private Action<IEnumerable<Security>> _added;
+
+		event Action<IEnumerable<Security>> ISecurityProvider.Added
+		{
+			add { _added += value; }
+			remove { _added -= value; }
+		}
+
+		private Action<IEnumerable<Security>> _removed;
+
+		event Action<IEnumerable<Security>> ISecurityProvider.Removed
+		{
+			add { _removed += value; }
+			remove { _removed -= value; }
 		}
 
 		/// <summary>
@@ -234,6 +254,7 @@ namespace StockSharp.Algo.Storages
 		/// <param name="entity">The trading object.</param>
 		public override void Save(Security entity)
 		{
+			_registry.Exchanges.Save(entity.Board.Exchange);
 			_registry.ExchangeBoards.Save(entity.Board);
 
 			base.Save(entity);
@@ -258,7 +279,9 @@ namespace StockSharp.Algo.Storages
 		/// <param name="entity">The trading object.</param>
 		protected override void OnAdd(Security entity)
 		{
+			_registry.Exchanges.Save(entity.Board.Exchange);
 			_registry.ExchangeBoards.Save(entity.Board);
+
 			base.OnAdd(entity);
 		}
 

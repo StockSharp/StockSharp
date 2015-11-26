@@ -1179,13 +1179,13 @@ namespace StockSharp.Xaml
 
 		int ISecurityProvider.Count => Connector.Count;
 
-		event Action<Security> ISecurityProvider.Added
+		event Action<IEnumerable<Security>> ISecurityProvider.Added
 		{
 			add { Connector.Added += value; }
 			remove { Connector.Added -= value; }
 		}
 
-		event Action<Security> ISecurityProvider.Removed
+		event Action<IEnumerable<Security>> ISecurityProvider.Removed
 		{
 			add { Connector.Removed += value; }
 			remove { Connector.Removed -= value; }
