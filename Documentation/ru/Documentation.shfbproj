@@ -1595,6 +1595,10 @@
       <ImageId>GUI_PortfolioPickerWindow</ImageId>
       <AlternateText>GUI Portfolio Picker Window</AlternateText>
     </Image>
+    <Image Include="Art\GUI_MarketDepthControl.png">
+      <ImageId>GUI_MarketDepthControl</ImageId>
+      <AlternateText>GUI Market Depth Control</AlternateText>
+    </Image>
   </ItemGroup>
   <ItemGroup>
     <None Include="Art\sample_options_calc.png">
