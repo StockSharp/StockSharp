@@ -812,7 +812,7 @@ namespace StockSharp.Algo.Storages
 			if (candleMessageType == null)
 				throw new ArgumentNullException(nameof(candleMessageType));
 
-			if (!candleMessageType.IsSubclassOf(typeof(CandleMessage)))
+			if (!candleMessageType.IsCandleMessage())
 				throw new ArgumentOutOfRangeException(nameof(candleMessageType), candleMessageType, LocalizedStrings.WrongCandleType);
 
 			if (security == null)
@@ -961,7 +961,7 @@ namespace StockSharp.Algo.Storages
 				return GetQuoteMessageStorage(security, drive, format);
 			else if (dataType == typeof(NewsMessage))
 				return GetNewsMessageStorage(drive, format);
-			else if (dataType.IsSubclassOf(typeof(CandleMessage)))
+			else if (dataType.IsCandleMessage())
 				return GetCandleMessageStorage(dataType, security, arg, drive, format);
 			else
 				throw new ArgumentOutOfRangeException(nameof(dataType), dataType, LocalizedStrings.Str1018);

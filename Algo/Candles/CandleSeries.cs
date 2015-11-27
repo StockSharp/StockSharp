@@ -33,7 +33,7 @@ namespace StockSharp.Algo.Candles
 			if (candleType == null)
 				throw new ArgumentNullException(nameof(candleType));
 
-			if (!candleType.IsSubclassOf(typeof(Candle)))
+			if (!candleType.IsCandle())
 				throw new ArgumentOutOfRangeException(nameof(candleType), candleType, "Íåïðàâèëüíûé òèï ñâå÷êè.");
 
 			if (security == null)

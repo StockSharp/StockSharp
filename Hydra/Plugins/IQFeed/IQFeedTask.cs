@@ -11,7 +11,6 @@ namespace StockSharp.Hydra.IQFeed
 	using Ecng.ComponentModel;
 
 	using StockSharp.Algo;
-	using StockSharp.Algo.Candles;
 	using StockSharp.Hydra.Core;
 	using StockSharp.IQFeed;
 	using StockSharp.Logging;
@@ -178,36 +177,25 @@ namespace StockSharp.Hydra.IQFeed
 			}
 		}
 
-		private IQFeedSettings _settings;
-
 		public IQFeedTask()
 			: base(new IQFeedTrader())
 		{
-			_supportedCandleSeries = IQFeedMarketDataMessageAdapter.TimeFrames.Select(tf => new CandleSeries
-			{
-				CandleType = typeof(TimeFrameCandle),
-				Arg = tf
-			}).ToArray();
+			SupportedDataTypes = IQFeedMarketDataMessageAdapter
+				.TimeFrames
+				.Select(tf => DataType.Create(typeof(TimeFrameCandleMessage), tf))
+				.Concat(new[]
+				{
+					DataType.Create(typeof(QuoteChangeMessage), null),
+					DataType.Create(typeof(Level1ChangeMessage), null),
+				})
+				.ToArray();
 		}
 
-		private readonly Type[] _supportedMarketDataTypes = { typeof(Candle), typeof(QuoteChangeMessage), typeof(Level1ChangeMessage) };
+		public override IEnumerable<DataType> SupportedDataTypes { get; }
 
-		public override IEnumerable<Type> SupportedMarketDataTypes
-		{
-			get { return _supportedMarketDataTypes; }
-		}
+		private IQFeedSettings _settings;
 
-		private readonly IEnumerable<CandleSeries> _supportedCandleSeries;
-
-		public override IEnumerable<CandleSeries> SupportedCandleSeries
-		{
-			get { return _supportedCandleSeries; }
-		}
-
-		public override HydraTaskSettings Settings
-		{
-			get { return _settings; }
-		}
+		public override HydraTaskSettings Settings => _settings;
 
 		protected override void ApplySettings(HydraTaskSettings settings)
 		{
@@ -270,7 +258,7 @@ namespace StockSharp.Hydra.IQFeed
 				if (!CanProcess())
 					break;
 
-				if (security.MarketDataTypesSet.Contains(typeof(Level1ChangeMessage)))
+				if (security.IsLevel1Enabled())
 				{
 					var tradeStorage = StorageRegistry.GetTickMessageStorage(security.Security, _settings.Drive, _settings.StorageFormat);
 
@@ -304,23 +292,25 @@ namespace StockSharp.Hydra.IQFeed
 				else
 					this.AddDebugLog(LocalizedStrings.MarketDataNotEnabled, security.Security.Id, typeof(Level1ChangeMessage).Name);
 
-				foreach (var series in security.CandleSeries)
+				foreach (var series in security.GetCandleSeries())
 				{
 					if (!CanProcess())
 						break;
 
-					if (series.CandleType != typeof(TimeFrameCandle))
+					if (series.MessageType != typeof(TimeFrameCandleMessage))
 					{
 						this.AddWarningLog(LocalizedStrings.Str2296Params, series);
 						continue;
 					}
 
-					var candleStorage = StorageRegistry.GetCandleMessageStorage(series.CandleType.ToCandleMessageType(), security.Security, series.Arg, _settings.Drive, _settings.StorageFormat);
+					var tf = (TimeSpan)series.Arg;
+
+					var candleStorage = StorageRegistry.GetCandleMessageStorage(series.MessageType, security.Security, tf, _settings.Drive, _settings.StorageFormat);
 					var emptyDates = allDates.Except(candleStorage.Dates).ToArray();
 
 					if (emptyDates.IsEmpty())
 					{
-						this.AddInfoLog(LocalizedStrings.Str2297Params, series.Arg, security.Security.Id);
+						this.AddInfoLog(LocalizedStrings.Str2297Params, tf, security.Security.Id);
 						continue;
 					}
 
@@ -343,7 +333,7 @@ namespace StockSharp.Hydra.IQFeed
 						this.AddInfoLog(LocalizedStrings.Str2298Params, series, currDate, till, security.Security.Id);
 
 						bool isSuccess;
-						var candles = ((IQFeedTrader)Connector).GetHistoricalCandles(security.Security, series.CandleType, series.Arg, currDate, till, out isSuccess);
+						var candles = ((IQFeedTrader)Connector).GetHistoricalCandles(security.Security, series.MessageType, tf, currDate, till, out isSuccess);
 
 						if (isSuccess)
 						{

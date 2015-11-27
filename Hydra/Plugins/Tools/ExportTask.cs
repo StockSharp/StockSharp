@@ -18,7 +18,6 @@ namespace StockSharp.Hydra.Tools
 	using StockSharp.Algo.Candles;
 	using StockSharp.Algo.Export;
 	using StockSharp.Algo.Storages;
-	using StockSharp.BusinessEntities;
 	using StockSharp.Hydra.Core;
 	using StockSharp.Logging;
 	using StockSharp.Xaml.PropertyGrid;
@@ -183,15 +182,17 @@ namespace StockSharp.Hydra.Tools
 
 		private ExportSettings _settings;
 
-		public override HydraTaskSettings Settings
-		{
-			get { return _settings; }
-		}
+		public override HydraTaskSettings Settings => _settings;
 
-		public override IEnumerable<Type> SupportedMarketDataTypes
+		public override IEnumerable<DataType> SupportedDataTypes { get; } = new[]
 		{
-			get { return new[] { typeof(Trade), typeof(QuoteChangeMessage), typeof(Level1ChangeMessage), typeof(OrderLogItem), typeof(ExecutionMessage), typeof(NewsMessage), typeof(Candle) }; }
-		}
+			DataType.Create(typeof(ExecutionMessage), ExecutionTypes.Tick),
+			DataType.Create(typeof(ExecutionMessage), ExecutionTypes.OrderLog),
+			DataType.Create(typeof(ExecutionMessage), ExecutionTypes.Order),
+			DataType.Create(typeof(NewsMessage), null),
+			DataType.Create(typeof(QuoteChangeMessage), null),
+			DataType.Create(typeof(Level1ChangeMessage), null),
+		};
 
 		protected override void ApplySettings(HydraTaskSettings settings)
 		{
@@ -224,8 +225,8 @@ namespace StockSharp.Hydra.Tools
 
 			var allSecurity = this.GetAllSecurity();
 			var supportedDataTypes = (allSecurity == null
-					? Enumerable.Empty<Type>()
-					: SupportedMarketDataTypes.Intersect(allSecurity.MarketDataTypes)
+					? Enumerable.Empty<DataType>()
+					: SupportedDataTypes.Intersect(allSecurity.DataTypes)
 				).ToArray();
 
 			this.AddInfoLog(LocalizedStrings.Str2306Params.Put(_settings.StartFrom));
@@ -241,25 +242,13 @@ namespace StockSharp.Hydra.Tools
 				if (!CanProcess())
 					break;
 
-				foreach (var t in (allSecurity == null ? security.MarketDataTypes : supportedDataTypes))
+				foreach (var t in (allSecurity == null ? security.DataTypes : supportedDataTypes))
 				{
 					if (!CanProcess())
 						break;
 
-					var arg = _settings.CandleSettings.Arg;
-					Type dataType;
-
-					if (t.IsSubclassOf(typeof(Message)))
-					{
-						if (t == typeof(ExecutionMessage))
-							arg = ExecutionTypes.Order;
-
-						dataType = t;
-					}
-					else
-					{
-						dataType = t == typeof(Candle) ? _settings.CandleSettings.CandleType : t.ToMessageType(ref arg);
-					}
+					var dataType = t.MessageType;
+					var arg = t.Arg;
 
 					this.AddInfoLog(LocalizedStrings.Str3769Params.Put(security.Security.Id, dataType.Name, _settings.ExportType));
 
@@ -365,7 +354,7 @@ namespace StockSharp.Hydra.Tools
 				return registry.TemplateTxtSecurity;
 			else if (dataType == typeof(NewsMessage))
 				return registry.TemplateTxtNews;
-			else if (dataType.IsSubclassOf(typeof(CandleMessage)))
+			else if (dataType.IsCandleMessage())
 				return registry.TemplateTxtCandle;
 			else if (dataType == typeof(Level1ChangeMessage))
 				return registry.TemplateTxtLevel1;

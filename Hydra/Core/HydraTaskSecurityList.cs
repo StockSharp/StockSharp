@@ -40,7 +40,7 @@ namespace StockSharp.Hydra.Core
 
 			UpdateQuery = Query
 				.Update(Schema)
-				.Set(Schema.Fields["MarketDataTypes"], Schema.Fields["CandleSeries"])
+				.Set(Schema.Fields["DataTypes"])
 				.Where()
 				.Equals(Schema.Fields["Id"]);
 

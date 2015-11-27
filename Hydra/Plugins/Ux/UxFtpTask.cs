@@ -109,15 +109,12 @@ namespace StockSharp.Hydra.Ux
 			_settings.UseTemporaryFiles = TempFiles.UseAndDelete;
 		}
 
-		public override HydraTaskSettings Settings
-		{
-			get { return _settings; }
-		}
+		public override HydraTaskSettings Settings => _settings;
 
-		public override IEnumerable<Type> SupportedMarketDataTypes
+		public override IEnumerable<DataType> SupportedDataTypes { get; } = new[]
 		{
-			get { return new[] { typeof(Trade) }; }
-		}
+			DataType.Create(typeof(ExecutionMessage), ExecutionTypes.Tick),
+		};
 
 		protected override TimeSpan OnProcess()
 		{

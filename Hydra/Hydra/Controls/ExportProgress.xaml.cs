@@ -123,7 +123,7 @@ namespace StockSharp.Hydra.Controls
 						wnd.TxtTemplate = registry.TemplateTxtSecurity;
 					else if (dataType == typeof(NewsMessage))
 						wnd.TxtTemplate = registry.TemplateTxtNews;
-					else if (dataType.IsSubclassOf(typeof(CandleMessage)))
+					else if (dataType.IsCandleMessage())
 						wnd.TxtTemplate = registry.TemplateTxtCandle;
 					else if (dataType == typeof(Level1ChangeMessage))
 						wnd.TxtTemplate = registry.TemplateTxtLevel1;
@@ -161,7 +161,7 @@ namespace StockSharp.Hydra.Controls
 						registry.TemplateTxtSecurity = wnd.TxtTemplate;
 					else if (dataType == typeof(NewsMessage))
 						registry.TemplateTxtNews = wnd.TxtTemplate;
-					else if (dataType.IsSubclassOf(typeof(CandleMessage)))
+					else if (dataType.IsCandleMessage())
 						registry.TemplateTxtCandle = wnd.TxtTemplate;
 					else if (dataType == typeof(Level1ChangeMessage))
 						registry.TemplateTxtLevel1 = wnd.TxtTemplate;
@@ -253,7 +253,7 @@ namespace StockSharp.Hydra.Controls
 								count = ((IMarketDataStorage<QuoteChangeMessage>)storage).Load(d).Count;
 							else if (dataType == typeof(Level1ChangeMessage))
 								count = ((IMarketDataStorage<Level1ChangeMessage>)storage).Load(d).Count;
-							else if (dataType.IsSubclassOf(typeof(CandleMessage)))
+							else if (dataType.IsCandleMessage())
 								count = ((IMarketDataStorage<CandleMessage>)storage).Load(d).Count;
 							else
 								throw new NotSupportedException(LocalizedStrings.Str2872Params.Put(dataType.Name));

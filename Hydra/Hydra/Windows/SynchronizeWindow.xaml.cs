@@ -213,7 +213,7 @@ namespace StockSharp.Hydra.Windows
 									break;
 
 								drive
-									.GetStorageDrive(secId, dataType.Item1, dataType.Item2, format)
+									.GetStorageDrive(secId, dataType.MessageType, dataType.Arg, format)
 									.ClearDatesCache();
 							}
 						}

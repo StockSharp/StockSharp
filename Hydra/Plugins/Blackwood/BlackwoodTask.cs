@@ -1,6 +1,5 @@
 namespace StockSharp.Hydra.Blackwood
 {
-	using System;
 	using System.Collections.Generic;
 	using System.ComponentModel;
 	using System.Linq;
@@ -10,9 +9,8 @@ namespace StockSharp.Hydra.Blackwood
 	using Ecng.Common;
 	using Ecng.ComponentModel;
 
-	using StockSharp.Algo.Candles;
+	using StockSharp.Algo;
 	using StockSharp.Blackwood;
-	using StockSharp.BusinessEntities;
 	using StockSharp.Hydra.Core;
 	using StockSharp.Messages;
 	using StockSharp.Localization;
@@ -88,33 +86,23 @@ namespace StockSharp.Hydra.Blackwood
 
 		public BlackwoodTask()
 		{
-			_supportedCandleSeries = BlackwoodMessageAdapter.TimeFrames.Select(tf => new CandleSeries
-			{
-				CandleType = typeof(TimeFrameCandle),
-				Arg = tf
-			}).ToArray();
+			SupportedDataTypes = BlackwoodMessageAdapter
+				.TimeFrames
+				.Select(tf => DataType.Create(typeof(TimeFrameCandleMessage), tf))
+				.Concat(new[]
+				{
+					DataType.Create(typeof(ExecutionMessage), ExecutionTypes.Tick),
+					DataType.Create(typeof(ExecutionMessage), ExecutionTypes.Order),
+					DataType.Create(typeof(Level1ChangeMessage), null),
+				})
+				.ToArray();
 		}
 
 		private BlackwoodSettings _settings;
 
-		public override HydraTaskSettings Settings
-		{
-			get { return _settings; }
-		}
+		public override HydraTaskSettings Settings => _settings;
 
-		private readonly Type[] _supportedMarketDataTypes = { typeof(Candle), typeof(Trade), typeof(Level1ChangeMessage), typeof(ExecutionMessage) };
-
-		public override IEnumerable<Type> SupportedMarketDataTypes
-		{
-			get { return _supportedMarketDataTypes; }
-		}
-
-		private readonly IEnumerable<CandleSeries> _supportedCandleSeries;
-
-		public override IEnumerable<CandleSeries> SupportedCandleSeries
-		{
-			get { return _supportedCandleSeries; }
-		}
+		public override IEnumerable<DataType> SupportedDataTypes { get; }
 
 		protected override void ApplySettings(HydraTaskSettings settings)
 		{

@@ -10,7 +10,7 @@
 	using Ecng.Common;
 	using Ecng.ComponentModel;
 
-	using StockSharp.Algo.Candles;
+	using StockSharp.Algo;
 	using StockSharp.Algo.History;
 	using StockSharp.Algo.Storages;
 	using StockSharp.BusinessEntities;
@@ -38,7 +38,7 @@
 			public QuandlSettings(HydraTaskSettings settings)
 				: base(settings)
 			{
-				ExtensionInfo.TryAdd("CandleDayStep", 30);
+				CollectionHelper.TryAdd(ExtensionInfo, "CandleDayStep", 30);
 			}
 
 			[CategoryLoc(_sourceName)]
@@ -108,36 +108,21 @@
 			}
 		}
 
-		private QuandlSettings _settings;
 		private QuandlSecurityStorage _quandlSecurityStorage;
 
 		public QuandlTask()
 		{
-			_supportedCandleSeries = QuandlHistorySource.TimeFrames.Select(tf => new CandleSeries
-			{
-				CandleType = typeof(TimeFrameCandle),
-				Arg = tf
-			}).ToArray();
+			SupportedDataTypes = QuandlHistorySource
+				.TimeFrames
+				.Select(tf => DataType.Create(typeof(TimeFrameCandleMessage), tf))
+				.ToArray();
 		}
 
-		public override HydraTaskSettings Settings
-		{
-			get { return _settings; }
-		}
+		private QuandlSettings _settings;
 
-		private readonly IEnumerable<CandleSeries> _supportedCandleSeries;
+		public override HydraTaskSettings Settings => _settings;
 
-		public override IEnumerable<CandleSeries> SupportedCandleSeries
-		{
-			get { return _supportedCandleSeries; }
-		}
-
-		private readonly Type[] _supportedMarketDataTypes = { typeof(Candle) };
-
-		public override IEnumerable<Type> SupportedMarketDataTypes
-		{
-			get { return _supportedMarketDataTypes; }
-		}
+		public override IEnumerable<DataType> SupportedDataTypes { get; }
 
 		protected override void ApplySettings(HydraTaskSettings settings)
 		{
@@ -229,12 +214,12 @@
 				if (!CanProcess())
 					break;
 
-				foreach (var series in (allSecurity ?? security).CandleSeries)
+				foreach (var series in (allSecurity ?? security).GetCandleSeries())
 				{
 					if (!CanProcess())
 						break;
 
-					if (series.CandleType != typeof(TimeFrameCandle))
+					if (series.MessageType != typeof(TimeFrameCandleMessage))
 					{
 						this.AddWarningLog(LocalizedStrings.Str2296Params, series);
 						continue;
@@ -242,7 +227,7 @@
 
 					var tf = (TimeSpan)series.Arg;
 
-					var storage = StorageRegistry.GetCandleStorage(series.CandleType, security.Security, tf, _settings.Drive, _settings.StorageFormat);
+					var storage = StorageRegistry.GetCandleMessageStorage(series.MessageType, security.Security, tf, _settings.Drive, _settings.StorageFormat);
 					var emptyDates = allDates.Except(storage.Dates).ToArray();
 
 					if (emptyDates.IsEmpty())
@@ -279,12 +264,12 @@
 								this.AddDebugLog(LocalizedStrings.NoData);
 
 							if (_settings.UseTemporaryFiles == TempFiles.UseAndDelete)
-								File.Delete(source.GetDumpFile(security.Security, currDate, till, typeof(TimeFrameCandleMessage), series.Arg));
+								File.Delete(source.GetDumpFile(security.Security, currDate, till, typeof(TimeFrameCandleMessage), tf));
 						}
 						catch (Exception ex)
 						{
 							HandleError(new InvalidOperationException(LocalizedStrings.Str2299Params
-								.Put(series.Arg, currDate, security.Security.Id), ex));
+								.Put(tf, currDate, security.Security.Id), ex));
 						}
 
 						currDate = currDate.AddDays(_settings.CandleDayStep);

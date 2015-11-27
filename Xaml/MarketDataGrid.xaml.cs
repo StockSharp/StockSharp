@@ -263,7 +263,7 @@ namespace StockSharp.Xaml
 
 			drive = drive ?? storageRegistry.DefaultDrive;
 
-			var candles = new Dictionary<string, Tuple<Type, object>>();
+			var candles = new Dictionary<string, DataType>();
 
 			lock (_syncObject)
 			{
@@ -273,11 +273,11 @@ namespace StockSharp.Xaml
 
 			foreach (var tuple in drive.GetAvailableDataTypes(security.ToSecurityId(), format))
 			{
-				if (tuple.Item1.IsSubclassOf(typeof(CandleMessage)))
+				if (tuple.MessageType.IsCandleMessage())
 					continue;
 
-				var key = tuple.Item1.Name.Replace("CandleMessage", string.Empty) + " " + tuple.Item2;
-				candles.Add(key, Tuple.Create(tuple.Item1, tuple.Item2));
+				var key = tuple.MessageType.Name.Replace("CandleMessage", string.Empty) + " " + tuple.Arg;
+				candles.Add(key, tuple.Clone());
 			}
 
 			var candleNames = candles.Keys.ToArray();
@@ -342,7 +342,7 @@ namespace StockSharp.Xaml
 				}
 
 				var tuple = candles[candleName];
-				Add(dict, storageRegistry.GetCandleMessageStorage(tuple.Item1, security, tuple.Item2, drive, format).Dates, candleNames, e => e.Candles[candleName] = true);
+				Add(dict, storageRegistry.GetCandleMessageStorage(tuple.MessageType, security, tuple.Arg, drive, format).Dates, candleNames, e => e.Candles[candleName] = true);
 			}
 
 			if (dict.Count > 0)

@@ -14,6 +14,7 @@ namespace StockSharp.Hydra.Core
 
 	using Ookii.Dialogs.Wpf;
 
+	using StockSharp.Algo;
 	using StockSharp.Algo.Storages;
 	using StockSharp.BusinessEntities;
 	using StockSharp.Messages;
@@ -48,10 +49,7 @@ namespace StockSharp.Hydra.Core
 				throw new NotSupportedException();
 			}
 
-			string IMarketDataDrive.Path
-			{
-				get { return _name; }
-			}
+			string IMarketDataDrive.Path => _name;
 
 			IMarketDataStorage<NewsMessage> IMarketDataDrive.GetNewsMessageStorage(IMarketDataSerializer<NewsMessage> serializer)
 			{
@@ -68,7 +66,7 @@ namespace StockSharp.Hydra.Core
 				get { throw new NotSupportedException(); }
 			}
 
-			IEnumerable<Tuple<Type, object>> IMarketDataDrive.GetAvailableDataTypes(SecurityId securityId, StorageFormats format)
+			IEnumerable<DataType> IMarketDataDrive.GetAvailableDataTypes(SecurityId securityId, StorageFormats format)
 			{
 				throw new NotSupportedException();
 			}

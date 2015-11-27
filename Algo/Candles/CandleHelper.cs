@@ -22,6 +22,19 @@ namespace StockSharp.Algo.Candles
 	public static class CandleHelper
 	{
 		/// <summary>
+		/// Determines whether the specified type is derived from <see cref="Candle"/>.
+		/// </summary>
+		/// <param name="candleType">The candle type.</param>
+		/// <returns><see langword="true"/> if the specified type is derived from <see cref="Candle"/>, otherwise, <see langword="false"/>.</returns>
+		public static bool IsCandle(this Type candleType)
+		{
+			if (candleType == null)
+				throw new ArgumentNullException(nameof(candleType));
+
+			return candleType.IsSubclassOf(typeof(Candle));
+		}
+
+		/// <summary>
 		/// To create <see cref="CandleSeries"/> for <see cref="TimeFrameCandle"/> candles.
 		/// </summary>
 		/// <param name="security">Security.</param>

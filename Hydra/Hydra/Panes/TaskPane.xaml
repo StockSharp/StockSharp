@@ -236,12 +236,12 @@
 									<ColumnDefinition />
 								</Grid.ColumnDefinitions>
 								
-								<TextBlock Grid.Column="0" Text="T" Margin="1" ToolTip="{x:Static loc:LocalizedStrings.Ticks}" Visibility="{Binding Path=IsTradeEnabled, Converter={StaticResource BoolToVisibilityConverter}}" />
-								<TextBlock Grid.Column="1" Text="D" Margin="1" ToolTip="{x:Static loc:LocalizedStrings.MarketDepths}" Visibility="{Binding Path=IsDepthEnabled, Converter={StaticResource BoolToVisibilityConverter}}" />
-								<TextBlock Grid.Column="2" Text="C" Margin="1" ToolTip="{x:Static loc:LocalizedStrings.Candles}" Visibility="{Binding Path=IsCandleEnabled, Converter={StaticResource BoolToVisibilityConverter}}" />
+								<TextBlock Grid.Column="0" Text="T" Margin="1" ToolTip="{x:Static loc:LocalizedStrings.Ticks}" Visibility="{Binding Path=IsTicksEnabled, Converter={StaticResource BoolToVisibilityConverter}}" />
+								<TextBlock Grid.Column="1" Text="D" Margin="1" ToolTip="{x:Static loc:LocalizedStrings.MarketDepths}" Visibility="{Binding Path=IsDepthsEnabled, Converter={StaticResource BoolToVisibilityConverter}}" />
+								<TextBlock Grid.Column="2" Text="C" Margin="1" ToolTip="{x:Static loc:LocalizedStrings.Candles}" Visibility="{Binding Path=IsCandlesEnabled, Converter={StaticResource BoolToVisibilityConverter}}" />
 								<TextBlock Grid.Column="3" Text="O" Margin="1" ToolTip="{x:Static loc:LocalizedStrings.OrderLog}" Visibility="{Binding Path=IsOrderLogEnabled, Converter={StaticResource BoolToVisibilityConverter}}" />
 								<TextBlock Grid.Column="4" Text="L1" Margin="1" ToolTip="{x:Static loc:LocalizedStrings.Level1}" Visibility="{Binding Path=IsLevel1Enabled, Converter={StaticResource BoolToVisibilityConverter}}" />
-                                <TextBlock Grid.Column="5" Text="TS" Margin="1" ToolTip="{x:Static loc:LocalizedStrings.Transactions}" Visibility="{Binding Path=IsExecutionEnabled, Converter={StaticResource BoolToVisibilityConverter}}" />
+								<TextBlock Grid.Column="5" Text="TS" Margin="1" ToolTip="{x:Static loc:LocalizedStrings.Transactions}" Visibility="{Binding Path=IsTransactionsEnabled, Converter={StaticResource BoolToVisibilityConverter}}" />
 								<TextBlock Grid.Column="6" Text="N" Margin="1" ToolTip="{x:Static loc:LocalizedStrings.News}" Visibility="{Binding Path=IsNewsEnabled, Converter={StaticResource BoolToVisibilityConverter}}" />
 							</Grid>
 						</DataTemplate>
@@ -256,7 +256,7 @@
 				<DataGridTextColumn Width="70" Header="{x:Static loc:LocalizedStrings.OrderLogOf}" Binding="{Binding Path=TaskSecurity.OrderLogInfo.Count}" SortMemberPath="TaskSecurity.OrderLogInfo.Count" ElementStyle="{StaticResource TextRightStyle}" />
 				<DataGridTextColumn Width="70" Header="Level 1" Binding="{Binding Path=TaskSecurity.Level1Info.Count}" SortMemberPath="TaskSecurity.Level1Info.Count" ElementStyle="{StaticResource TextRightStyle}" />
 				<DataGridTextColumn Width="70" Header="{x:Static loc:LocalizedStrings.XamlStr631}" Binding="{Binding Path=TaskSecurity.CandleInfo.Count}" SortMemberPath="TaskSecurity.CandleInfo.Count" ElementStyle="{StaticResource TextRightStyle}" />
-                <DataGridTextColumn Width="70" Header="{x:Static loc:LocalizedStrings.Transactions}" Binding="{Binding Path=TaskSecurity.ExecutionInfo.Count}" SortMemberPath="TaskSecurity.ExecutionInfo.Count" ElementStyle="{StaticResource TextRightStyle}" />
+				<DataGridTextColumn Width="70" Header="{x:Static loc:LocalizedStrings.Transactions}" Binding="{Binding Path=TaskSecurity.TransactionInfo.Count}" SortMemberPath="TaskSecurity.TransactionInfo.Count" ElementStyle="{StaticResource TextRightStyle}" />
 
 				<DataGridTextColumn Width="140" Header="{x:Static loc:LocalizedStrings.XamlStr518}" Visibility="Collapsed" Binding="{Binding Path=TaskSecurity.TradeInfo.LastTime}" SortMemberPath="TaskSecurity.TradeInfo.LastTime" ElementStyle="{StaticResource TextCenterStyle}" />
 				<DataGridTextColumn Width="140" Header="{x:Static loc:LocalizedStrings.XamlStr525}" Visibility="Collapsed" Binding="{Binding Path=TaskSecurity.DepthInfo.LastTime}" SortMemberPath="TaskSecurity.DepthInfo.LastTime" ElementStyle="{StaticResource TextCenterStyle}" />
@@ -288,12 +288,12 @@
 
 			<Grid>
 				<StackPanel x:Name="MarketDataPanel" Orientation="Horizontal" FlowDirection="LeftToRight" IsEnabled="False">
-					<CheckBox Content="{x:Static loc:LocalizedStrings.TicksKey}" Height="23" x:Name="Trades" Margin="5,0,0,0" MinHeight="25" IsEnabled="False" Click="CheckBoxClick" Style="{StaticResource CheckBoxStyle}" />
+					<CheckBox Content="{x:Static loc:LocalizedStrings.TicksKey}" Height="23" x:Name="Ticks" Margin="5,0,0,0" MinHeight="25" IsEnabled="False" Click="CheckBoxClick" Style="{StaticResource CheckBoxStyle}" />
 					<CheckBox Content="{x:Static loc:LocalizedStrings.MarketDepths}" Height="23" x:Name="Depths" Margin="5,0,0,0" MinHeight="25" IsEnabled="False" Click="CheckBoxClick" Style="{StaticResource CheckBoxStyle}" />
 					<Button Content="{x:Static loc:LocalizedStrings.Candles}" Height="23" x:Name="Candles" Margin="5,0,0,0" MinHeight="25" IsEnabled="False" Click="Candles_OnClick" MouseEnter="Candles_OnMouseEnter" Style="{StaticResource CandleStyle}" />
 					<CheckBox Content="{x:Static loc:LocalizedStrings.OrderLog}" Height="23" x:Name="OrderLog" Margin="5,0,0,0" MinHeight="25" IsEnabled="False" Click="CheckBoxClick" Style="{StaticResource CheckBoxStyle}" />
-					<CheckBox Content="{x:Static loc:LocalizedStrings.Level1}" Height="23" x:Name="Level1Changes" Margin="5,0,0,0" MinHeight="25" IsEnabled="False" Click="CheckBoxClick" Style="{StaticResource CheckBoxStyle}" />
-                    <CheckBox Content="{x:Static loc:LocalizedStrings.Transactions}" Height="23" x:Name="Transactions" Margin="5,0,0,0" MinHeight="25" IsEnabled="False" Click="CheckBoxClick" Style="{StaticResource CheckBoxStyle}" />
+					<CheckBox Content="{x:Static loc:LocalizedStrings.Level1}" Height="23" x:Name="Level1" Margin="5,0,0,0" MinHeight="25" IsEnabled="False" Click="CheckBoxClick" Style="{StaticResource CheckBoxStyle}" />
+                    			<CheckBox Content="{x:Static loc:LocalizedStrings.Transactions}" Height="23" x:Name="Transactions" Margin="5,0,0,0" MinHeight="25" IsEnabled="False" Click="CheckBoxClick" Style="{StaticResource CheckBoxStyle}" />
 					<CheckBox Content="{x:Static loc:LocalizedStrings.News}" Height="23" x:Name="News" Margin="5,0,0,0" MinHeight="25" IsEnabled="False" Click="CheckBoxClick" Style="{StaticResource CheckBoxStyle}" />
 				</StackPanel>
 

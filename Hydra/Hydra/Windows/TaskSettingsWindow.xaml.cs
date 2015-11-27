@@ -11,8 +11,7 @@ namespace StockSharp.Hydra.Windows
 	using Ecng.ComponentModel;
 	using Ecng.Xaml;
 
-	using StockSharp.Algo.Candles;
-	using StockSharp.BusinessEntities;
+	using StockSharp.Algo;
 	using StockSharp.Hydra.Core;
 	using StockSharp.Messages;
 	using StockSharp.Localization;
@@ -22,15 +21,14 @@ namespace StockSharp.Hydra.Windows
 		private HydraTaskSettings _clonnedSettings;
 		private bool _isError;
 
-		private readonly Dictionary<Type, string> _dataTypes = new Dictionary<Type, string>
+		private readonly Dictionary<DataType, string> _dataTypes = new Dictionary<DataType, string>
 		{
-			{ typeof(Trade), LocalizedStrings.Str985 },
-			{ typeof(QuoteChangeMessage), LocalizedStrings.MarketDepths },
-			{ typeof(OrderLogItem), LocalizedStrings.OrderLog },
-			{ typeof(Level1ChangeMessage), LocalizedStrings.Level1 },
-			{ typeof(Candle), LocalizedStrings.Candles },
-			{ typeof(ExecutionMessage), LocalizedStrings.Transactions },
-			{ typeof(NewsMessage), LocalizedStrings.News },
+			{ DataType.Create(typeof(ExecutionMessage), ExecutionTypes.Tick), LocalizedStrings.Str985 },
+			{ DataType.Create(typeof(QuoteChangeMessage), null), LocalizedStrings.MarketDepths },
+			{ DataType.Create(typeof(ExecutionMessage), ExecutionTypes.OrderLog), LocalizedStrings.OrderLog },
+			{ DataType.Create(typeof(Level1ChangeMessage), null), LocalizedStrings.Level1 },
+			{ DataType.Create(typeof(ExecutionMessage), ExecutionTypes.Order), LocalizedStrings.Transactions },
+			{ DataType.Create(typeof(NewsMessage), null), LocalizedStrings.News },
 		};
 
 		public TaskSettingsWindow()
@@ -55,7 +53,10 @@ namespace StockSharp.Hydra.Windows
 				TaskSettings.SelectedObject = _clonnedSettings;
 
 				DescriptionCtrl.Text = _task.GetDescription();
-				AbilitiesCtrl.Text = _task.SupportedMarketDataTypes.Select(t => _dataTypes[t]).Join(", ");
+				AbilitiesCtrl.Text = _task.SupportedDataTypes.Select(t => _dataTypes[t]).Join(", ");
+
+				if (_task.SupportedDataTypes.Any(t => t.MessageType.IsCandleMessage()))
+					AbilitiesCtrl.Text = AbilitiesCtrl.Text.IsEmpty() ? string.Empty : ", " + LocalizedStrings.Candles;
 
 				Help.DocUrl = _task.GetType().GetDocUrl();
 			}

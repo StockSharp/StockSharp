@@ -8,7 +8,7 @@ namespace StockSharp.Hydra.Yahoo
 	using Ecng.Common;
 	using Ecng.ComponentModel;
 
-	using StockSharp.Algo.Candles;
+	using StockSharp.Algo;
 	using StockSharp.Algo.History;
 	using StockSharp.Algo.Storages;
 	using StockSharp.BusinessEntities;
@@ -36,7 +36,7 @@ namespace StockSharp.Hydra.Yahoo
 			public YahooSettings(HydraTaskSettings settings)
 				: base(settings)
 			{
-				ExtensionInfo.TryAdd("CandleDayStep", 30);
+				CollectionHelper.TryAdd(ExtensionInfo, "CandleDayStep", 30);
 			}
 
 			[CategoryLoc(_sourceName)]
@@ -90,11 +90,14 @@ namespace StockSharp.Hydra.Yahoo
 
 		public YahooTask()
 		{
-			_supportedCandleSeries = YahooHistorySource.TimeFrames.Select(tf => new CandleSeries
-			{
-				CandleType = typeof(TimeFrameCandle),
-				Arg = tf
-			}).ToArray();
+			SupportedDataTypes = YahooHistorySource
+				.TimeFrames
+				.Select(tf => DataType.Create(typeof(TimeFrameCandleMessage), tf))
+				.Concat(new[]
+				{
+					DataType.Create(typeof(Level1ChangeMessage), null),
+				})
+				.ToArray();
 		}
 
 		protected override void ApplySettings(HydraTaskSettings settings)
@@ -111,24 +114,9 @@ namespace StockSharp.Hydra.Yahoo
 			_settings.CandleDayStep = 30;
 		}
 
-		public override HydraTaskSettings Settings
-		{
-			get { return _settings; }
-		}
+		public override HydraTaskSettings Settings => _settings;
 
-		private readonly IEnumerable<CandleSeries> _supportedCandleSeries;
-
-		public override IEnumerable<CandleSeries> SupportedCandleSeries
-		{
-			get { return _supportedCandleSeries; }
-		}
-
-		private readonly Type[] _supportedMarketDataTypes = { typeof(Candle), typeof(Level1ChangeMessage) };
-
-		public override IEnumerable<Type> SupportedMarketDataTypes
-		{
-			get { return _supportedMarketDataTypes; }
-		}
+		public override IEnumerable<DataType> SupportedDataTypes { get; }
 
 		protected override TimeSpan OnProcess()
 		{
@@ -166,23 +154,25 @@ namespace StockSharp.Hydra.Yahoo
 				if (!CanProcess())
 					break;
 
-				foreach (var series in (allSecurity ?? security).CandleSeries)
+				foreach (var pair in (allSecurity ?? security).GetCandleSeries())
 				{
 					if (!CanProcess())
 						break;
 
-					if (series.CandleType != typeof(TimeFrameCandle))
+					if (pair.MessageType != typeof(TimeFrameCandleMessage))
 					{
-						this.AddWarningLog(LocalizedStrings.Str2296Params, series);
+						this.AddWarningLog(LocalizedStrings.Str2296Params, pair);
 						continue;
 					}
 
-					var storage = StorageRegistry.GetCandleStorage(series.CandleType, security.Security, series.Arg, _settings.Drive, _settings.StorageFormat);
+					var tf = (TimeSpan)pair.Arg;
+
+					var storage = StorageRegistry.GetCandleMessageStorage(pair.MessageType, security.Security, tf, _settings.Drive, _settings.StorageFormat);
 					var emptyDates = allDates.Except(storage.Dates).ToArray();
 
 					if (emptyDates.IsEmpty())
 					{
-						this.AddInfoLog(LocalizedStrings.Str2297Params, series.Arg, security.Security.Id);
+						this.AddInfoLog(LocalizedStrings.Str2297Params, tf, security.Security.Id);
 						continue;
 					}
 
@@ -203,10 +193,10 @@ namespace StockSharp.Hydra.Yahoo
 
 						try
 						{
-							var till = currDate + TimeSpan.FromDays(_settings.CandleDayStep).Max((TimeSpan)series.Arg);
-							this.AddInfoLog(LocalizedStrings.Str2298Params, series.Arg, currDate, till, security.Security.Id);
+							var till = currDate + TimeSpan.FromDays(_settings.CandleDayStep).Max(tf);
+							this.AddInfoLog(LocalizedStrings.Str2298Params, tf, currDate, till, security.Security.Id);
 							
-							var candles = source.GetCandles(security.Security, (TimeSpan)series.Arg, currDate, till);
+							var candles = source.GetCandles(security.Security, tf, currDate, till);
 
 							if (candles.Any())
 								SaveCandles(security, candles);
@@ -216,7 +206,7 @@ namespace StockSharp.Hydra.Yahoo
 						catch (Exception ex)
 						{
 							HandleError(new InvalidOperationException(LocalizedStrings.Str2299Params
-								.Put(series.Arg, currDate, security.Security.Id), ex));
+								.Put(tf, currDate, security.Security.Id), ex));
 						}
 
 						currDate = currDate.AddDays(_settings.CandleDayStep);
