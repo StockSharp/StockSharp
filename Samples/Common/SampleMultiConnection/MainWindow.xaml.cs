@@ -1,5 +1,3 @@
-using MoreLinq;
-
 namespace SampleMultiConnection
 {
 	using System;
