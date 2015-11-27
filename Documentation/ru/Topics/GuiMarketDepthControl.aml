@@ -21,19 +21,19 @@
   				<para><codeEntityReference>P:StockSharp.Xaml.MarketDepthControl.IsBidsOnTop</codeEntityReference> - отображать покупки сверху.</para>
   			</listItem>
   			<listItem>
-  				<para><codeEntityReference>M:StockSharp.Xaml.MarketDepthControl.UpdateFormat(Security)</codeEntityReference> - обновить формат отображения цен и объёмов при помощи инструмента.</para>
+  				<para><codeEntityReference>M:StockSharp.Xaml.MarketDepthControl.UpdateFormat(StockSharp.BusinessEntities.Security)</codeEntityReference> - обновить формат отображения цен и объёмов при помощи инструмента.</para>
   			</listItem>
   			<listItem>
-  				<para><codeEntityReference>M:StockSharp.Xaml.MarketDepthControl.ProcessNewOrder(Order)</codeEntityReference> - обработать новую заявку.</para>
+  				<para><codeEntityReference>M:StockSharp.Xaml.MarketDepthControl.ProcessNewOrder(StockSharp.BusinessEntities.Order)</codeEntityReference> - обработать новую заявку.</para>
   			</listItem>
   			<listItem>
-  				<para><codeEntityReference>M:StockSharp.Xaml.MarketDepthControl.ProcessChangedOrder(Order)</codeEntityReference> - обработать изменение состояния заявки.</para>
+  				<para><codeEntityReference>M:StockSharp.Xaml.MarketDepthControl.ProcessChangedOrder(StockSharp.BusinessEntities.Order)</codeEntityReference> - обработать изменение состояния заявки.</para>
   			</listItem>
   			<listItem>
-  				<para><codeEntityReference>M:StockSharp.Xaml.MarketDepthControl.UpdateDepth(MarketDepth)</codeEntityReference> - обновить стакан.</para>
+  				<para><codeEntityReference>M:StockSharp.Xaml.MarketDepthControl.UpdateDepth(StockSharp.BusinessEntities.MarketDepth)</codeEntityReference> - обновить стакан.</para>
   			</listItem>
   			<listItem>
-  				<para><codeEntityReference>M:StockSharp.Xaml.MarketDepthControl.UpdateDepth(QuoteChangeMessage)</codeEntityReference> - обновить стакан при помощи сообщения.</para>
+  				<para><codeEntityReference>M:StockSharp.Xaml.MarketDepthControl.UpdateDepth(StockSharp.Messages.QuoteChangeMessage)</codeEntityReference> - обновить стакан при помощи сообщения.</para>
   			</listItem>
 		</list>
 		

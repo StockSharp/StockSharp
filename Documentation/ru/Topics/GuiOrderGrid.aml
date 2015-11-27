@@ -27,7 +27,7 @@
   			<para><codeEntityReference>P:StockSharp.Xaml.OrderGrid.SelectedOrders</codeEntityReference> - выбранные заявки.</para>
   		</listItem>
   		<listItem>
-  			<para><codeEntityReference>M:StockSharp.Xaml.OrderGrid.AddRegistrationFail(OrderFail)</codeEntityReference> - метод, который добавляет сообщение об ошибке регистрации заявки в поле комментария.</para>
+  			<para><codeEntityReference>M:StockSharp.Xaml.OrderGrid.AddRegistrationFail(StockSharp.BusinessEntities.OrderFail)</codeEntityReference> - метод, который добавляет сообщение об ошибке регистрации заявки в поле комментария.</para>
   		</listItem>
   		<listItem>
   			<para><codeEntityReference>E:StockSharp.Xaml.OrderGrid.OrderRegistering</codeEntityReference> - событие регистрации заявки (возникает после выбора соответствующего пункта контекстного меню).</para>
