@@ -1599,6 +1599,18 @@
       <ImageId>GUI_MarketDepthControl</ImageId>
       <AlternateText>GUI Market Depth Control</AlternateText>
     </Image>
+    <Image Include="Art\GUI_OrderConditionalWindow.png">
+      <ImageId>GUI_OrderConditionalWindow</ImageId>
+      <AlternateText>GUI Order Conditional Window</AlternateText>
+    </Image>
+    <Image Include="Art\GUI_OrderWindow.png">
+      <ImageId>GUI_OrderWindow</ImageId>
+      <AlternateText>GUI Order Window</AlternateText>
+    </Image>
+    <Image Include="Art\GUI_MytradeGrid.png">
+      <ImageId>GUI_MytradeGrid</ImageId>
+      <AlternateText>GUI Mytrade Grid</AlternateText>
+    </Image>
   </ItemGroup>
   <ItemGroup>
     <None Include="Art\sample_options_calc.png">

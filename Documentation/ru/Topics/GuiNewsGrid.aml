@@ -1,8 +1,33 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <topic id="f9005237-fc93-4086-9300-6b081056a0fa" revisionNumber="1">
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <introduction>
-      <para>Раздел в разработке</para>
+       <introduction>
+      <para>
+      	<codeEntityReference>T:StockSharp.Xaml.NewsGrid</codeEntityReference> - таблица для отображения новостей. В основе данного компонента лежит <link xlink:href="88a40124-43a6-4be9-b04b-a245000fca70">универсальная таблица</link>.
+      </para>
+      <para>
+      
+       <legacyBold>Основные свойства</legacyBold>
+      </para>
+      
+		<list class="bullet">
+  			<listItem>
+  				<para><codeEntityReference>P:StockSharp.Xaml.NewsGrid.News</codeEntityReference> - список новостей.</para>
+  			</listItem>
+  			<listItem>
+  				<para><codeEntityReference>P:StockSharp.Xaml.NewsGrid.FirstSelectedNews</codeEntityReference> - выбранная новость.</para>
+  			</listItem>
+  			<listItem>
+  				<para><codeEntityReference>P:StockSharp.Xaml.NewsGrid.SelectedNews</codeEntityReference> - выбраннаые новости.</para>
+  			</listItem>
+  			<listItem>
+  				<para><codeEntityReference>T:StockSharp.Xaml.NewsGrid.NewsProvider</codeEntityReference> - поставщик новостей.</para>
+  			</listItem>
+		</list>
+		
+	  <para>
+	  Внеший вид компонета в составе <codeEntityReference>T:StockSharp.Xaml.NewsPanel</codeEntityReference>, а также фрагменты кода см. в разделе <link xlink:href="00026219-17a5-4749-82ab-ec018aa1ab0b">NewsPanel</link>.
+      </para>
     </introduction>
   </developerConceptualDocument>
 </topic>
