@@ -1611,6 +1611,10 @@
       <ImageId>GUI_MytradeGrid</ImageId>
       <AlternateText>GUI Mytrade Grid</AlternateText>
     </Image>
+    <Image Include="Art\GUI_PropertyDataGridEx.png">
+      <ImageId>GUI_PropertyDataGridEx</ImageId>
+      <AlternateText>GUI Property Data Grid Ex</AlternateText>
+    </Image>
   </ItemGroup>
   <ItemGroup>
     <None Include="Art\sample_options_calc.png">
