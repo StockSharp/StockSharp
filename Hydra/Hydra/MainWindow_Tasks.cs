@@ -65,7 +65,7 @@ namespace StockSharp.Hydra
 			private static Languages GetLanguage(IHydraTask task)
 			{
 				var targetPlatform = task.GetType().GetAttribute<TargetPlatformAttribute>();
-				return targetPlatform != null ? targetPlatform.PreferLanguage : Languages.English;
+				return targetPlatform?.PreferLanguage ?? Languages.English;
 			}
 		}
 
@@ -202,16 +202,16 @@ namespace StockSharp.Hydra
 					{
 						case ExecutionTypes.Tick:
 						{
-							info = taskSecurity == null ? null : taskSecurity.TradeInfo;
-							allInfo = allSecurity == null ? null : allSecurity.TradeInfo;
+							info = taskSecurity?.TradeInfo;
+							allInfo = allSecurity?.TradeInfo;
 
 							LoadedTrades += count;
 							break;
 						}
 						case ExecutionTypes.OrderLog:
 						{
-							info = taskSecurity == null ? null : taskSecurity.OrderLogInfo;
-							allInfo = allSecurity == null ? null : allSecurity.OrderLogInfo;
+							info = taskSecurity?.OrderLogInfo;
+							allInfo = allSecurity?.OrderLogInfo;
 
 							LoadedOrderLog += count;
 							break;
@@ -219,8 +219,8 @@ namespace StockSharp.Hydra
 						case ExecutionTypes.Order:
 						case ExecutionTypes.Trade:
 						{
-							info = taskSecurity == null ? null : taskSecurity.ExecutionInfo;
-							allInfo = allSecurity == null ? null : allSecurity.ExecutionInfo;
+							info = taskSecurity?.TransactionInfo;
+							allInfo = allSecurity?.TransactionInfo;
 
 							LoadedTransactions += count;
 							break;
@@ -231,22 +231,22 @@ namespace StockSharp.Hydra
 				}
 				else if (dataType == typeof(QuoteChangeMessage))
 				{
-					info = taskSecurity == null ? null : taskSecurity.DepthInfo;
-					allInfo = allSecurity == null ? null : allSecurity.DepthInfo;
+					info = taskSecurity?.DepthInfo;
+					allInfo = allSecurity?.DepthInfo;
 
 					LoadedDepths += count;
 				}
 				else if (dataType == typeof(Level1ChangeMessage))
 				{
-					info = taskSecurity == null ? null : taskSecurity.Level1Info;
-					allInfo = allSecurity == null ? null : allSecurity.Level1Info;
+					info = taskSecurity?.Level1Info;
+					allInfo = allSecurity?.Level1Info;
 
 					LoadedLevel1 += count;
 				}
-				else if (dataType.IsSubclassOf(typeof(CandleMessage)))
+				else if (dataType.IsCandleMessage())
 				{
-					info = taskSecurity == null ? null : taskSecurity.CandleInfo;
-					allInfo = allSecurity == null ? null : allSecurity.CandleInfo;
+					info = taskSecurity?.CandleInfo;
+					allInfo = allSecurity?.CandleInfo;
 
 					LoadedCandles += count;
 				}
@@ -307,8 +307,7 @@ namespace StockSharp.Hydra
 							.Where(w => w.Pane is TaskPane)
 							.FirstOrDefault(w => ((TaskPane)w.Pane).Task == task);
 
-						if (wnd != null)
-							wnd.Close();
+						wnd?.Close();
 
 						Tasks.Remove(task);
 

@@ -640,7 +640,7 @@ namespace StockSharp.Algo.Storages
 			if (candleType == null)
 				throw new ArgumentNullException(nameof(candleType));
 
-			if (!candleType.IsSubclassOf(typeof(CandleMessage)))
+			if (!candleType.IsCandleMessage())
 				throw new ArgumentOutOfRangeException(nameof(candleType), candleType, LocalizedStrings.WrongCandleType);
 
 			return typeof(CandleStorage<,>).Make(candleType, candleType.ToCandleType()).CreateInstance<IMarketDataStorage<CandleMessage>>(Security, arg, GetStorageDrive(serializer, candleType, arg), serializer);
@@ -690,7 +690,7 @@ namespace StockSharp.Algo.Storages
 				return GetLevel1Storage((IMarketDataSerializer<Level1ChangeMessage>)serializer);
 			else if (dataType == typeof(QuoteChangeMessage))
 				return GetQuoteStorage((IMarketDataSerializer<QuoteChangeMessage>)serializer);
-			else if (dataType.IsSubclassOf(typeof(CandleMessage)))
+			else if (dataType.IsCandleMessage())
 				return GetCandleStorage(dataType, arg, (IMarketDataSerializer<CandleMessage>)serializer);
 			else
 				throw new ArgumentOutOfRangeException(nameof(dataType), dataType, LocalizedStrings.Str1018);

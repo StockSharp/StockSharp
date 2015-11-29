@@ -10,7 +10,7 @@ namespace StockSharp.Hydra.SmartCom
 	using Ecng.Localization;
 	using Ecng.ComponentModel;
 
-	using StockSharp.Algo.Candles;
+	using StockSharp.Algo;
 	using StockSharp.Hydra.Core;
 	using StockSharp.Messages;
 	using StockSharp.SmartCom;
@@ -86,26 +86,18 @@ namespace StockSharp.Hydra.SmartCom
 
 		public SmartComTask()
 		{
-			_supportedCandleSeries = SmartComTimeFrames.AllTimeFrames.Select(tf => new CandleSeries
-			{
-				CandleType = typeof(TimeFrameCandle),
-				Arg = tf
-			}).ToArray();
+			SupportedDataTypes = SmartComTimeFrames
+				.AllTimeFrames
+				.Select(tf => DataType.Create(typeof(TimeFrameCandleMessage), tf))
+				.Concat(base.SupportedDataTypes)
+				.ToArray();
 		}
 
 		private SmartComSettings _settings;
 
-		public override HydraTaskSettings Settings
-		{
-			get { return _settings; }
-		}
+		public override HydraTaskSettings Settings => _settings;
 
-		private readonly IEnumerable<CandleSeries> _supportedCandleSeries;
-
-		public override IEnumerable<CandleSeries> SupportedCandleSeries
-		{
-			get { return _supportedCandleSeries; }
-		}
+		public override IEnumerable<DataType> SupportedDataTypes { get; }
 
 		protected override void ApplySettings(HydraTaskSettings settings)
 		{

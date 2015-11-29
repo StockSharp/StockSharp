@@ -1,6 +1,5 @@
 namespace StockSharp.Hydra.Oanda
 {
-	using System;
 	using System.Collections.Generic;
 	using System.Linq;
 	using System.Security;
@@ -8,7 +7,7 @@ namespace StockSharp.Hydra.Oanda
 	using Ecng.Common;
 	using Ecng.ComponentModel;
 
-	using StockSharp.Algo.Candles;
+	using StockSharp.Algo;
 	using StockSharp.Hydra.Core;
 	using StockSharp.Oanda;
 	using StockSharp.Messages;
@@ -58,44 +57,23 @@ namespace StockSharp.Hydra.Oanda
 
 		public OandaTask()
 		{
-			_supportedCandleSeries = OandaMessageAdapter.TimeFrames.Select(tf => new CandleSeries
-			{
-				CandleType = typeof(TimeFrameCandle),
-				Arg = tf
-			}).ToArray();
+			SupportedDataTypes = OandaMessageAdapter
+				.TimeFrames
+				.Select(tf => DataType.Create(typeof(TimeFrameCandleMessage), tf))
+				.Concat(new[]
+				{
+					DataType.Create(typeof(Level1ChangeMessage), null),
+					DataType.Create(typeof(ExecutionMessage), ExecutionTypes.Order),
+				})
+				.ToArray();
 		}
 
 		private OandaSettings _settings;
 
-		public override HydraTaskSettings Settings
-		{
-			get { return _settings; }
-		}
+		public override HydraTaskSettings Settings => _settings;
 
-		public override IEnumerable<Type> SupportedMarketDataTypes
-		{
-			get
-			{
-				return new[]
-				{
-					typeof(Candle),
-					typeof(Level1ChangeMessage), 
-					typeof(ExecutionMessage)
-				}; 
-			}
-		}
+		public override IEnumerable<DataType> SupportedDataTypes { get; }
 
-		private readonly IEnumerable<CandleSeries> _supportedCandleSeries;
-
-		public override IEnumerable<CandleSeries> SupportedCandleSeries
-		{
-			get { return _supportedCandleSeries; }
-		}
-
-		/// <summary>
-		/// Применить настройки.
-		/// </summary>
-		/// <param name="settings">Настройки.</param>
 		protected override void ApplySettings(HydraTaskSettings settings)
 		{
 			_settings = new OandaSettings(settings);

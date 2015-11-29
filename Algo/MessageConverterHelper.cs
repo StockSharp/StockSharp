@@ -1596,7 +1596,7 @@ namespace StockSharp.Algo
 				arg = ExecutionTypes.OrderLog;
 				return typeof(ExecutionMessage);
 			}
-			else if (dataType.IsSubclassOf(typeof(Candle)))
+			else if (dataType.IsCandle())
 			{
 				if (arg == null)
 					throw new ArgumentNullException(nameof(arg));

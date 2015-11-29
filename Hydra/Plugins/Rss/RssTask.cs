@@ -8,6 +8,7 @@ namespace StockSharp.Hydra.Rss
 	using Ecng.Common;
 	using Ecng.ComponentModel;
 
+	using StockSharp.Algo;
 	using StockSharp.Hydra.Core;
 	using StockSharp.Messages;
 	using StockSharp.Rss;
@@ -71,15 +72,12 @@ namespace StockSharp.Hydra.Rss
 
 		private RssSettings _settings;
 
-		public override IEnumerable<Type> SupportedMarketDataTypes
-		{
-			get { return new[] { typeof(NewsMessage) }; }
-		}
+		public override HydraTaskSettings Settings => _settings;
 
-		public override HydraTaskSettings Settings
+		public override IEnumerable<DataType> SupportedDataTypes { get; } = new[]
 		{
-			get { return _settings; }
-		}
+			DataType.Create(typeof(NewsMessage), null)
+		};
 
 		protected override void ApplySettings(HydraTaskSettings settings)
 		{

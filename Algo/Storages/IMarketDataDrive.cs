@@ -86,7 +86,7 @@ namespace StockSharp.Algo.Storages
 		/// <param name="securityId">Instrument identifier.</param>
 		/// <param name="format">Format type.</param>
 		/// <returns>Data types.</returns>
-		IEnumerable<Tuple<Type, object>> GetAvailableDataTypes(SecurityId securityId, StorageFormats format);
+		IEnumerable<DataType> GetAvailableDataTypes(SecurityId securityId, StorageFormats format);
 
 		/// <summary>
 		/// To get the storage for <see cref="IMarketDataStorage"/>.
@@ -147,7 +147,7 @@ namespace StockSharp.Algo.Storages
 		/// <param name="securityId">Instrument identifier.</param>
 		/// <param name="format">Format type.</param>
 		/// <returns>Data types.</returns>
-		public abstract IEnumerable<Tuple<Type, object>> GetAvailableDataTypes(SecurityId securityId, StorageFormats format);
+		public abstract IEnumerable<DataType> GetAvailableDataTypes(SecurityId securityId, StorageFormats format);
 
 		/// <summary>
 		/// Create storage for <see cref="IMarketDataStorage"/>.

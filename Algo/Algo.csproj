@@ -122,6 +122,7 @@
       <Link>Properties\StockSharpAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="Commissions\CommissionMessageAdapter.cs" />
+    <Compile Include="DataType.cs" />
     <Compile Include="FilterableSecurityProvider.cs" />
     <Compile Include="Indicators\Correlation.cs" />
     <Compile Include="Indicators\Covariance.cs" />

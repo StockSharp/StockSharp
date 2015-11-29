@@ -12,7 +12,7 @@ namespace StockSharp.Hydra.Transaq
 	using Ecng.Common;
 	using Ecng.ComponentModel;
 
-	using StockSharp.Algo.Candles;
+	using StockSharp.Algo;
 	using StockSharp.Messages;
 	using StockSharp.Transaq;
 	using StockSharp.Hydra.Core;
@@ -162,31 +162,22 @@ namespace StockSharp.Hydra.Transaq
 
 		public TransaqTask()
 		{
-			_supportedCandleSeries = new[]
+			SupportedDataTypes = new[]
 			{
 				TimeSpan.FromMinutes(1),
 				TimeSpan.FromHours(1),
 				TimeSpan.FromDays(1)
-			}.Select(tf => new CandleSeries
-			{
-				CandleType = typeof(TimeFrameCandle),
-				Arg = tf
-			}).ToArray();
+			}
+			.Select(tf => DataType.Create(typeof(TimeFrameCandleMessage), tf))
+			.Concat(base.SupportedDataTypes)
+			.ToArray();
 		}
 
 		private TransaqSettings _settings;
 
-		public override HydraTaskSettings Settings
-		{
-			get { return _settings; }
-		}
+		public override HydraTaskSettings Settings => _settings;
 
-		private readonly IEnumerable<CandleSeries> _supportedCandleSeries;
-
-		public override IEnumerable<CandleSeries> SupportedCandleSeries
-		{
-			get { return _supportedCandleSeries; }
-		}
+		public override IEnumerable<DataType> SupportedDataTypes { get; }
 
 		protected override void ApplySettings(HydraTaskSettings settings)
 		{

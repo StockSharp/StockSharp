@@ -851,7 +851,7 @@ namespace StockSharp.Hydra.Panes
 						var secId = secGroup.Key;
 						var security = InitSecurity(secGroup.Key);
 
-						if (dataType.IsSubclassOf(typeof(CandleMessage)))
+						if (dataType.IsCandleMessage())
 						{
 							var timeFrame = (TimeSpan)_settings.CandleSettings.Arg;
 							var candles = secGroup.Cast<CandleMessage>().ToArray();

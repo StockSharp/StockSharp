@@ -8,6 +8,7 @@
 	using Ecng.Configuration;
 	using Ecng.Serialization;
 
+	using StockSharp.Algo;
 	using StockSharp.Algo.History.Hydra;
 	using StockSharp.Algo.Storages;
 	using StockSharp.BusinessEntities;
@@ -31,10 +32,7 @@
 				_cacheDrive = new LocalMarketDataDrive(Path.Combine(BaseApplication.AppDataPath, "Cache"));
 			}
 
-			string IMarketDataDrive.Path
-			{
-				get { return GetDrive().Path; }
-			}
+			string IMarketDataDrive.Path => GetDrive().Path;
 
 			ISecurityMarketDataDrive IMarketDataDrive.GetSecurityDrive(Security security)
 			{
@@ -46,12 +44,9 @@
 				return GetDrive().GetNewsMessageStorage(serializer);
 			}
 
-			IEnumerable<SecurityId> IMarketDataDrive.AvailableSecurities
-			{
-				get { return GetDrive().AvailableSecurities; }
-			}
+			IEnumerable<SecurityId> IMarketDataDrive.AvailableSecurities => GetDrive().AvailableSecurities;
 
-			IEnumerable<Tuple<Type, object>> IMarketDataDrive.GetAvailableDataTypes(SecurityId securityId, StorageFormats format)
+			IEnumerable<DataType> IMarketDataDrive.GetAvailableDataTypes(SecurityId securityId, StorageFormats format)
 			{
 				return GetDrive().GetAvailableDataTypes(securityId, format);
 			}

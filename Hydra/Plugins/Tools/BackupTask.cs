@@ -118,32 +118,26 @@
 
 		private BackupSettings _settings;
 
-		public override HydraTaskSettings Settings
-		{
-			get { return _settings; }
-		}
+		public override HydraTaskSettings Settings => _settings;
 
 		protected override void ApplySettings(HydraTaskSettings settings)
 		{
 			_settings = new BackupSettings(settings);
 
-			if (settings.IsDefault)
-			{
-				_settings.Offset = 1;
-				_settings.StartFrom = new DateTime(1900, 1, 1);
-				_settings.Interval = TimeSpan.FromDays(1);
-				_settings.Service = BackupServices.AwsS3;
-				_settings.Address = RegionEndpoint.USEast1.SystemName;
-				_settings.ServiceRepo = "stocksharp";
-				_settings.Login = string.Empty;
-				_settings.Password = new SecureString();
-			}
+			if (!settings.IsDefault)
+				return;
+
+			_settings.Offset = 1;
+			_settings.StartFrom = new DateTime(1900, 1, 1);
+			_settings.Interval = TimeSpan.FromDays(1);
+			_settings.Service = BackupServices.AwsS3;
+			_settings.Address = RegionEndpoint.USEast1.SystemName;
+			_settings.ServiceRepo = "stocksharp";
+			_settings.Login = string.Empty;
+			_settings.Password = new SecureString();
 		}
 
-		public override IEnumerable<Type> SupportedMarketDataTypes
-		{
-			get { return Enumerable.Empty<Type>(); }
-		}
+		public override IEnumerable<DataType> SupportedDataTypes => Enumerable.Empty<DataType>();
 
 		protected override TimeSpan OnProcess()
 		{
@@ -201,7 +195,7 @@
 
 					foreach (var dataType in dataTypes)
 					{
-						var storage = StorageRegistry.GetStorage(security.Security, dataType.Item1, dataType.Item2, _settings.Drive, _settings.StorageFormat);
+						var storage = StorageRegistry.GetStorage(security.Security, dataType.MessageType, dataType.Arg, _settings.Drive, _settings.StorageFormat);
 
 						var drive = storage.Drive;
 
@@ -212,7 +206,7 @@
 
 						var entry = new BackupEntry
 						{
-							Name = LocalMarketDataDrive.GetFileName(dataType.Item1, dataType.Item2) + LocalMarketDataDrive.GetExtension(StorageFormats.Binary),
+							Name = LocalMarketDataDrive.GetFileName(dataType.MessageType, dataType.Arg) + LocalMarketDataDrive.GetExtension(StorageFormats.Binary),
 							Parent = dateEntry,
 						};
 

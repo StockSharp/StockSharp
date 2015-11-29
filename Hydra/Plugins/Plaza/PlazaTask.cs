@@ -13,10 +13,10 @@ namespace StockSharp.Hydra.Plaza
 
 	using MoreLinq;
 
+	using StockSharp.Algo;
 	using StockSharp.Hydra.Core;
 	using StockSharp.Messages;
 	using StockSharp.Plaza;
-	using StockSharp.BusinessEntities;
 	using StockSharp.Plaza.Xaml;
 	using StockSharp.Localization;
 
@@ -147,19 +147,15 @@ namespace StockSharp.Hydra.Plaza
 		private int _changesCount;
 		private PlazaSettings _settings;
 
-		private readonly Type[] _supportedMarketDataTypes = { typeof(Trade), typeof(QuoteChangeMessage), typeof(OrderLogItem), typeof(Level1ChangeMessage), typeof(ExecutionMessage) };
-
-		/// <summary>
-		/// Поддерживаемые маркет-данные.
-		/// </summary>
-		public override IEnumerable<Type> SupportedMarketDataTypes
+		public override IEnumerable<DataType> SupportedDataTypes { get; } = new[]
 		{
-			get { return _supportedMarketDataTypes; }
-		}
+			DataType.Create(typeof(ExecutionMessage), ExecutionTypes.Tick),
+			DataType.Create(typeof(ExecutionMessage), ExecutionTypes.Order),
+			DataType.Create(typeof(ExecutionMessage), ExecutionTypes.OrderLog),
+			DataType.Create(typeof(QuoteChangeMessage), null),
+			DataType.Create(typeof(Level1ChangeMessage), null),
+		};
 
-		/// <summary>
-		/// Загрузить порцию данных и сохранить их в хранилище.
-		/// </summary>
 		protected override TimeSpan OnProcess()
 		{
 			var interval = base.OnProcess();
@@ -170,9 +166,6 @@ namespace StockSharp.Hydra.Plaza
 			return interval;
 		}
 
-		/// <summary>
-		/// Остановить загрузку данных.
-		/// </summary>
 		protected override void OnStopped()
 		{
 			SaveRevisions();

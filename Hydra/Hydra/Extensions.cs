@@ -5,7 +5,6 @@ namespace StockSharp.Hydra
 	using System.Threading.Tasks;
 	using System.Windows;
 
-	using Ecng.Serialization;
 	using Ecng.Xaml;
 
 	using StockSharp.BusinessEntities;
@@ -25,8 +24,7 @@ namespace StockSharp.Hydra
 
 			return new HydraTaskSecurity
 			{
-				MarketDataTypes = task.SupportedMarketDataTypes.ToArray(),
-				CandleSeries = task.SupportedCandleSeries.Select(s => s.Clone()).ToArray(),
+				DataTypes = task.SupportedDataTypes.ToArray(),
 				Settings = task.Settings,
 				Security = security,
 			};

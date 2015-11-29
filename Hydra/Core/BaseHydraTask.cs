@@ -13,7 +13,6 @@ namespace StockSharp.Hydra.Core
 	using MoreLinq;
 
 	using StockSharp.Algo;
-	using StockSharp.Algo.Candles;
 	using StockSharp.Algo.Storages;
 	using StockSharp.Logging;
 	using StockSharp.BusinessEntities;
@@ -54,58 +53,34 @@ namespace StockSharp.Hydra.Core
 		/// <summary>
 		/// Название источника (для различия в лог файлах).
 		/// </summary>
-		public override string Name
-		{
-			get
-			{
-				return Settings == null ? this.GetDisplayName() : Settings.Title;
-			}
-		}
+		public override string Name => Settings == null ? this.GetDisplayName() : Settings.Title;
 
 		/// <summary>
 		/// Уровень логирования для источника.
 		/// </summary>
-		public override LogLevels LogLevel
-		{
-			get
-			{
-				return Settings == null ? base.LogLevel : Settings.LogLevel;
-			}
-		}
+		public override LogLevels LogLevel => Settings == null ? base.LogLevel : Settings.LogLevel;
 
 		/// <summary>
 		/// Адрес иконки, для визуального обозначения.
 		/// </summary>
-		public Uri Icon
-		{
-			get { return GetType().GetIcon(); }
-		}
+		public Uri Icon => GetType().GetIcon();
 
 		/// <summary>
 		/// Хранилище торговых объектов.
 		/// </summary>
-		public HydraEntityRegistry EntityRegistry
-		{
-			get { return ConfigManager.GetService<HydraEntityRegistry>(); }
-		}
+		public HydraEntityRegistry EntityRegistry => ConfigManager.GetService<HydraEntityRegistry>();
 
 		/// <summary>
 		/// Хранилище маркет-данных.
 		/// </summary>
-		public IStorageRegistry StorageRegistry
-		{
-			get { return ConfigManager.GetService<IStorageRegistry>(); }
-		}
+		public IStorageRegistry StorageRegistry => ConfigManager.GetService<IStorageRegistry>();
 
 		private HydraTaskSettings _settings;
 
 		/// <summary>
 		/// Настройки задачи <see cref="IHydraTask"/>.
 		/// </summary>
-		public virtual HydraTaskSettings Settings
-		{
-			get { return _settings; }
-		}
+		public virtual HydraTaskSettings Settings => _settings;
 
 		/// <summary>
 		/// Инициализировать задачу.
@@ -362,17 +337,9 @@ namespace StockSharp.Hydra.Core
 		}
 
 		/// <summary>
-		/// Поддерживаемые маркет-данные.
+		/// Поддерживаемые типы данных.
 		/// </summary>
-		public abstract IEnumerable<Type> SupportedMarketDataTypes { get; }
-
-		/// <summary>
-		/// Поддерживаемые серии свечек.
-		/// </summary>
-		public virtual IEnumerable<CandleSeries> SupportedCandleSeries
-		{
-			get { return Enumerable.Empty<CandleSeries>(); }
-		}
+		public abstract IEnumerable<DataType> SupportedDataTypes { get; }
 
 		private void SafeSave<T>(Security security, object arg, IEnumerable<T> values, Func<T, DateTimeOffset> getTime, IEnumerable<Func<T, string>> getErrors)
 			where T : Message

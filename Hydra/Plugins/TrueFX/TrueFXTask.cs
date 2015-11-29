@@ -87,17 +87,12 @@ namespace StockSharp.Hydra.TrueFX
 			}
 		}
 
-		public override HydraTaskSettings Settings
-		{
-			get { return _settings; }
-		}
+		public override HydraTaskSettings Settings => _settings;
 
-		private readonly Type[] _supportedMarketDataTypes = { typeof(Level1ChangeMessage) };
-
-		public override IEnumerable<Type> SupportedMarketDataTypes
+		public override IEnumerable<DataType> SupportedDataTypes { get; } = new[]
 		{
-			get { return _supportedMarketDataTypes; }
-		}
+			DataType.Create(typeof(Level1ChangeMessage), null)
+		};
 
 		protected override TimeSpan OnProcess()
 		{
@@ -139,7 +134,7 @@ namespace StockSharp.Hydra.TrueFX
 				if (!CanProcess())
 					break;
 
-				if ((allSecurity ?? security).MarketDataTypesSet.Contains(typeof(Level1ChangeMessage)))
+				if ((allSecurity ?? security).IsLevel1Enabled())
 				{
 					var storage = StorageRegistry.GetLevel1MessageStorage(security.Security, _settings.Drive, _settings.StorageFormat);
 					var emptyDates = allDates.Except(storage.Dates).ToArray();

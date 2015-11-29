@@ -1,5 +1,6 @@
 namespace StockSharp.Hydra.ITCH
 {
+	using System.Collections.Generic;
 	using System.ComponentModel;
 	using System.Net;
 	using System.Security;
@@ -9,9 +10,11 @@ namespace StockSharp.Hydra.ITCH
 	using Ecng.Serialization;
 	using Ecng.Xaml;
 
+	using StockSharp.Algo;
 	using StockSharp.Hydra.Core;
 	using StockSharp.ITCH;
 	using StockSharp.Localization;
+	using StockSharp.Messages;
 
 	using Xceed.Wpf.Toolkit.PropertyGrid.Attributes;
 
@@ -139,10 +142,15 @@ namespace StockSharp.Hydra.ITCH
 
 		private ItchSettings _settings;
 
-		public override HydraTaskSettings Settings
+		public override HydraTaskSettings Settings => _settings;
+
+		public override IEnumerable<DataType> SupportedDataTypes { get; } = new[]
 		{
-			get { return _settings; }
-		}
+			DataType.Create(typeof(ExecutionMessage), ExecutionTypes.Tick),
+			DataType.Create(typeof(ExecutionMessage), ExecutionTypes.OrderLog),
+			DataType.Create(typeof(QuoteChangeMessage), null),
+			DataType.Create(typeof(Level1ChangeMessage), null),
+		};
 
 		protected override void ApplySettings(HydraTaskSettings settings)
 		{

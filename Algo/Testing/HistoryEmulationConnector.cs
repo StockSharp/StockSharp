@@ -610,10 +610,10 @@ namespace StockSharp.Algo.Testing
 
 			foreach (var tuple in types)
 			{
-				if (tuple.Item1 != messageType || !tuple.Item2.Equals(series.Arg))
+				if (tuple.MessageType != messageType || !tuple.Arg.Equals(series.Arg))
 					continue;
 
-				var dates = HistoryMessageAdapter.StorageRegistry.GetCandleMessageStorage(tuple.Item1, series.Security, series.Arg, HistoryMessageAdapter.Drive, HistoryMessageAdapter.StorageFormat).Dates.ToArray();
+				var dates = HistoryMessageAdapter.StorageRegistry.GetCandleMessageStorage(tuple.MessageType, series.Security, series.Arg, HistoryMessageAdapter.Drive, HistoryMessageAdapter.StorageFormat).Dates.ToArray();
 
 				if (dates.Any())
 					yield return new Range<DateTimeOffset>(dates.First().ApplyTimeZone(TimeZoneInfo.Utc), dates.Last().ApplyTimeZone(TimeZoneInfo.Utc));

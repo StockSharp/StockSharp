@@ -73,10 +73,7 @@ namespace StockSharp.Hydra.RtsCompetition
 
 		private RtsCompetitionSettings _settings;
 
-		public override HydraTaskSettings Settings
-		{
-			get { return _settings; }
-		}
+		public override HydraTaskSettings Settings => _settings;
 
 		protected override void ApplySettings(HydraTaskSettings settings)
 		{
@@ -91,10 +88,10 @@ namespace StockSharp.Hydra.RtsCompetition
 			}
 		}
 
-		public override IEnumerable<Type> SupportedMarketDataTypes
+		public override IEnumerable<DataType> SupportedDataTypes { get; } = new[]
 		{
-			get { return new[] { typeof(OrderLogItem) }; }
-		}
+			DataType.Create(typeof(ExecutionMessage), ExecutionTypes.OrderLog),
+		};
 
 		protected override TimeSpan OnProcess()
 		{
