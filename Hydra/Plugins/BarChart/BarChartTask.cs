@@ -10,7 +10,6 @@ namespace StockSharp.Hydra.BarChart
 	using Ecng.Collections;
 
 	using StockSharp.Algo;
-	using StockSharp.Algo.Candles;
 	using StockSharp.Hydra.Core;
 	using StockSharp.BarChart;
 	using StockSharp.Logging;
@@ -131,31 +130,20 @@ namespace StockSharp.Hydra.BarChart
 		public BarChartTask()
 			: base(new BarChartTrader())
 		{
-			_supportedCandleSeries = BarChartMessageAdapter.TimeFrames.Select(tf => new CandleSeries
-			{
-				CandleType = typeof(TimeFrameCandle),
-				Arg = tf
-			}).ToArray();
+			SupportedDataTypes = BarChartMessageAdapter
+				.TimeFrames
+				.Select(tf => DataType.Create(typeof(TimeFrameCandleMessage), tf))
+				.Concat(new[]
+				{
+					DataType.Create(typeof(QuoteChangeMessage), null),
+					DataType.Create(typeof(Level1ChangeMessage), null),
+				})
+				.ToArray();
 		}
 
-		private readonly Type[] _supportedMarketDataTypes = { typeof(Candle), typeof(QuoteChangeMessage), typeof(Level1ChangeMessage) };
+		public override IEnumerable<DataType> SupportedDataTypes { get; }
 
-		public override IEnumerable<Type> SupportedMarketDataTypes
-		{
-			get { return _supportedMarketDataTypes; }
-		}
-
-		private readonly IEnumerable<CandleSeries> _supportedCandleSeries;
-
-		public override IEnumerable<CandleSeries> SupportedCandleSeries
-		{
-			get { return _supportedCandleSeries; }
-		}
-
-		public override HydraTaskSettings Settings
-		{
-			get { return _settings; }
-		}
+		public override HydraTaskSettings Settings => _settings;
 
 		protected override void ApplySettings(HydraTaskSettings settings)
 		{
@@ -210,7 +198,7 @@ namespace StockSharp.Hydra.BarChart
 				if (!CanProcess())
 					break;
 
-				if (security.MarketDataTypesSet.Contains(typeof(Level1ChangeMessage)))
+				if (security.IsLevel1Enabled())
 				{
 					var tradeStorage = StorageRegistry.GetTickMessageStorage(security.Security, _settings.Drive, _settings.StorageFormat);
 
@@ -244,23 +232,25 @@ namespace StockSharp.Hydra.BarChart
 				else
 					this.AddDebugLog(LocalizedStrings.MarketDataNotEnabled, security.Security.Id, typeof(Level1ChangeMessage).Name);
 
-				foreach (var series in security.CandleSeries)
+				foreach (var pair in security.GetCandleSeries())
 				{
 					if (!CanProcess())
 						break;
 
-					if (series.CandleType != typeof(TimeFrameCandle))
+					if (pair.MessageType != typeof(TimeFrameCandleMessage))
 					{
-						this.AddWarningLog(LocalizedStrings.Str2296Params, series);
+						this.AddWarningLog(LocalizedStrings.Str2296Params, pair);
 						continue;
 					}
 
-					var candleStorage = StorageRegistry.GetCandleMessageStorage(series.CandleType.ToCandleMessageType(), security.Security, series.Arg, _settings.Drive, _settings.StorageFormat);
+					var tf = (TimeSpan)pair.Arg;
+
+					var candleStorage = StorageRegistry.GetCandleMessageStorage(pair.MessageType, security.Security, tf, _settings.Drive, _settings.StorageFormat);
 					var emptyDates = allDates.Except(candleStorage.Dates).ToArray();
 
 					if (emptyDates.IsEmpty())
 					{
-						this.AddInfoLog(LocalizedStrings.Str2297Params, series.Arg, security.Security.Id);
+						this.AddInfoLog(LocalizedStrings.Str2297Params, tf, security.Security.Id);
 						continue;
 					}
 
@@ -280,10 +270,10 @@ namespace StockSharp.Hydra.BarChart
 						}
 
 						var till = currDate.AddDays(_settings.CandleDayStep - 1).EndOfDay();
-						this.AddInfoLog(LocalizedStrings.Str2298Params, series, currDate, till, security.Security.Id);
+						this.AddInfoLog(LocalizedStrings.Str2298Params, pair, currDate, till, security.Security.Id);
 
 						bool isSuccess;
-						var candles = ((BarChartTrader)Connector).GetHistoricalCandles(security.Security, series.CandleType, series.Arg, currDate, till, out isSuccess);
+						var candles = ((BarChartTrader)Connector).GetHistoricalCandles(security.Security, pair.MessageType, tf, currDate, till, out isSuccess);
 
 						if (isSuccess)
 						{

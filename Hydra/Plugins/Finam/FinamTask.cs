@@ -10,7 +10,7 @@ namespace StockSharp.Hydra.Finam
 	using Ecng.Collections;
 	using Ecng.ComponentModel;
 
-	using StockSharp.Algo.Candles;
+	using StockSharp.Algo;
 	using StockSharp.Algo.History;
 	using StockSharp.Algo.History.Russian.Finam;
 	using StockSharp.Algo.Storages;
@@ -40,7 +40,7 @@ namespace StockSharp.Hydra.Finam
 			public FinamSettings(HydraTaskSettings settings)
 				: base(settings)
 			{
-				ExtensionInfo.TryAdd("CandleDayStep", 30);
+				CollectionHelper.TryAdd(ExtensionInfo, "CandleDayStep", 30);
 			}
 
 			[CategoryLoc(_sourceName)]
@@ -105,11 +105,14 @@ namespace StockSharp.Hydra.Finam
 
 		public FinamTask()
 		{
-			_supportedCandleSeries = FinamHistorySource.TimeFrames.Select(tf => new CandleSeries
-			{
-				CandleType = typeof(TimeFrameCandle),
-				Arg = tf
-			}).ToArray();
+			SupportedDataTypes = FinamHistorySource
+				.TimeFrames
+				.Select(tf => DataType.Create(typeof(TimeFrameCandleMessage), tf))
+				.Concat(new[]
+				{
+					DataType.Create(typeof(ExecutionMessage), ExecutionTypes.Tick),
+				})
+				.ToArray();
 		}
 
 		protected override void ApplySettings(HydraTaskSettings settings)
@@ -128,24 +131,9 @@ namespace StockSharp.Hydra.Finam
 			_settings.CandleDayStep = 30;
 		}
 
-		public override HydraTaskSettings Settings
-		{
-			get { return _settings; }
-		}
+		public override HydraTaskSettings Settings => _settings;
 
-		private readonly Type[] _supportedMarketDataTypes = { typeof(Trade), typeof(Candle) };
-
-		public override IEnumerable<Type> SupportedMarketDataTypes
-		{
-			get { return _supportedMarketDataTypes; }
-		}
-
-		private readonly IEnumerable<CandleSeries> _supportedCandleSeries;
-
-		public override IEnumerable<CandleSeries> SupportedCandleSeries
-		{
-			get { return _supportedCandleSeries; }
-		}
+		public override IEnumerable<DataType> SupportedDataTypes { get; }
 
 		private static bool IsFinam(HydraTaskSecurity taskSecurity)
 		{
@@ -209,7 +197,7 @@ namespace StockSharp.Hydra.Finam
 					break;
 
 				#region LoadTrades
-				if ((allSecurity ?? security).MarketDataTypesSet.Contains(typeof(Trade)))
+				if ((allSecurity ?? security).IsTicksEnabled())
 				{
 					var storage = StorageRegistry.GetTradeStorage(security.Security, _settings.Drive, _settings.StorageFormat);
 					var emptyDates = allDates.Except(storage.Dates).ToArray();
@@ -261,23 +249,25 @@ namespace StockSharp.Hydra.Finam
 					break;
 
 				#region LoadCandles
-				foreach (var series in (allSecurity ?? security).CandleSeries)
+				foreach (var pair in (allSecurity ?? security).GetCandleSeries())
 				{
 					if (!CanProcess())
 						break;
 
-					if (series.CandleType != typeof(TimeFrameCandle))
+					if (pair.MessageType != typeof(TimeFrameCandleMessage))
 					{
-						this.AddWarningLog(LocalizedStrings.Str2296Params, series);
+						this.AddWarningLog(LocalizedStrings.Str2296Params, pair);
 						continue;
 					}
 
-					var storage = StorageRegistry.GetCandleStorage(series.CandleType, security.Security, series.Arg, _settings.Drive, _settings.StorageFormat);
+					var tf = (TimeSpan)pair.Arg;
+
+					var storage = StorageRegistry.GetCandleMessageStorage(pair.MessageType, security.Security, tf, _settings.Drive, _settings.StorageFormat);
 					var emptyDates = allDates.Except(storage.Dates).ToArray();
 
 					if (emptyDates.IsEmpty())
 					{
-						this.AddInfoLog(LocalizedStrings.Str2297Params, series.Arg, security.Security.Id);
+						this.AddInfoLog(LocalizedStrings.Str2297Params, tf, security.Security.Id);
 						continue;
 					}
 
@@ -299,9 +289,9 @@ namespace StockSharp.Hydra.Finam
 						try
 						{
 							var till = currDate.AddDays(_settings.CandleDayStep - 1);
-							this.AddInfoLog(LocalizedStrings.Str2298Params, series.Arg, currDate, till, security.Security.Id);
+							this.AddInfoLog(LocalizedStrings.Str2298Params, tf, currDate, till, security.Security.Id);
 							
-							var candles = source.GetCandles(security.Security, (TimeSpan)series.Arg, currDate, till);
+							var candles = source.GetCandles(security.Security, tf, currDate, till);
 							
 							if (candles.Any())
 								SaveCandles(security, candles);
@@ -309,14 +299,14 @@ namespace StockSharp.Hydra.Finam
 								this.AddDebugLog(LocalizedStrings.NoData);
 
 							if (_settings.UseTemporaryFiles == TempFiles.UseAndDelete)
-								File.Delete(source.GetDumpFile(security.Security, currDate, till, typeof(TimeFrameCandleMessage), series.Arg));
+								File.Delete(source.GetDumpFile(security.Security, currDate, till, typeof(TimeFrameCandleMessage), tf));
 
 							currDate = currDate.AddDays(_settings.CandleDayStep);
 						}
 						catch (Exception ex)
 						{
 							HandleError(new InvalidOperationException(LocalizedStrings.Str2299Params
-								.Put(series.Arg, currDate, security.Security.Id), ex));
+								.Put(tf, currDate, security.Security.Id), ex));
 						}
 					}
 				}

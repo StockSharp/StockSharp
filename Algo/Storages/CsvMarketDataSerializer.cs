@@ -249,7 +249,7 @@ namespace StockSharp.Algo.Storages
 
 		static CsvMarketDataSerializer()
 		{
-			var isCandles = typeof(TData).IsSubclassOf(typeof(CandleMessage));
+			var isCandles = typeof(TData).IsCandleMessage();
 
 			if (typeof(TData) == typeof(ExecutionMessage) || isCandles)
 				_setSecurityId = MemberProxy.Create(typeof(TData), "SecurityId");
@@ -377,7 +377,7 @@ namespace StockSharp.Algo.Storages
 				return "{ServerTime:{0}};{ServerTime:zzz};" + "{{Changes:{0}}}".Put(fields);
 			}
 
-			if (typeof(TData).IsSubclassOf(typeof(CandleMessage)))
+			if (typeof(TData).IsCandleMessage())
 				return "{OpenTime:{0}};{OpenTime:zzz};{OpenPrice};{HighPrice};{LowPrice};{ClosePrice};{TotalVolume}";
 
 			if (typeof(TData) == typeof(NewsMessage))

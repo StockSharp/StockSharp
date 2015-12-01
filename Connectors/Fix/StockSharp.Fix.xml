@@ -18,6 +18,11 @@
             FIX server.
             </summary>
     </member>
+    <member name="E:StockSharp.Fix.FixServer.NewOutMessage">
+      <summary>
+            New message event.
+            </summary>
+    </member>
     <member name="M:StockSharp.Fix.FixServer.RaiseNewOutMessage(StockSharp.Messages.Message)">
       <summary>
             To call the event <see cref="E:StockSharp.Fix.FixServer.NewOutMessage" />.
@@ -60,6 +65,51 @@
             Initializes a new instance of the <see cref="T:StockSharp.Fix.FixServer" />.
             </summary>
       <param name="authorize">The customer authentication.</param>
+    </member>
+    <member name="P:StockSharp.Fix.FixServer.InitialTransactionId">
+      <summary>
+            The <see cref="T:StockSharp.Fix.FixServer" /> number from which transaction numbers will be generated.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.FixServer.TransactionSession">
+      <summary>
+            Transactional session.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.FixServer.MarketDataSession">
+      <summary>
+            Transactional session.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.FixServer.State">
+      <summary>
+            Is the server online.
+            </summary>
+    </member>
+    <member name="E:StockSharp.Fix.FixServer.StateChanged">
+      <summary>
+        <see cref="P:StockSharp.Fix.FixServer.State" /> change event.
+            </summary>
+    </member>
+    <member name="E:StockSharp.Fix.FixServer.SessionCreated">
+      <summary>
+            Session change event.
+            </summary>
+    </member>
+    <member name="E:StockSharp.Fix.FixServer.UserLoggedOut">
+      <summary>
+            User disconnect event.
+            </summary>
+    </member>
+    <member name="E:StockSharp.Fix.FixServer.UserPasswordChanging">
+      <summary>
+            Password change event.
+            </summary>
+    </member>
+    <member name="E:StockSharp.Fix.FixServer.UserFinding">
+      <summary>
+            User lookup event.
+            </summary>
     </member>
     <member name="M:StockSharp.Fix.FixServer.Start">
       <summary>
@@ -132,56 +182,6 @@
       <param name="securityId">Security ID.</param>
       <returns>Are there subscribers.</returns>
     </member>
-    <member name="E:StockSharp.Fix.FixServer.NewOutMessage">
-      <summary>
-            New message event.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Fix.FixServer.InitialTransactionId">
-      <summary>
-            The <see cref="T:StockSharp.Fix.FixServer" /> number from which transaction numbers will be generated.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Fix.FixServer.TransactionSession">
-      <summary>
-            Transactional session.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Fix.FixServer.MarketDataSession">
-      <summary>
-            Transactional session.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Fix.FixServer.State">
-      <summary>
-            Is the server online.
-            </summary>
-    </member>
-    <member name="E:StockSharp.Fix.FixServer.StateChanged">
-      <summary>
-        <see cref="P:StockSharp.Fix.FixServer.State" /> change event.
-            </summary>
-    </member>
-    <member name="E:StockSharp.Fix.FixServer.SessionCreated">
-      <summary>
-            Session change event.
-            </summary>
-    </member>
-    <member name="E:StockSharp.Fix.FixServer.UserLoggedOut">
-      <summary>
-            User disconnect event.
-            </summary>
-    </member>
-    <member name="E:StockSharp.Fix.FixServer.UserPasswordChanging">
-      <summary>
-            Password change event.
-            </summary>
-    </member>
-    <member name="E:StockSharp.Fix.FixServer.UserFinding">
-      <summary>
-            User lookup event.
-            </summary>
-    </member>
     <member name="T:StockSharp.Fix.FixSession">
       <summary>
             Session settings.
@@ -191,18 +191,6 @@
       <summary>
             Initializes a new instance of the <see cref="T:StockSharp.Fix.FixSession" />.
             </summary>
-    </member>
-    <member name="M:StockSharp.Fix.FixSession.Load(Ecng.Serialization.SettingsStorage)">
-      <summary>
-            Load settings.
-            </summary>
-      <param name="storage">Settings storage.</param>
-    </member>
-    <member name="M:StockSharp.Fix.FixSession.Save(Ecng.Serialization.SettingsStorage)">
-      <summary>
-            Save settings.
-            </summary>
-      <param name="storage">Settings storage.</param>
     </member>
     <member name="P:StockSharp.Fix.FixSession.Address">
       <summary>
@@ -274,69 +262,21 @@
             The timeout of sending data to the server. The default value is <see cref="F:Ecng.Common.SyncObject.InfiniteTimeSpan" />.
             </summary>
     </member>
+    <member name="M:StockSharp.Fix.FixSession.Load(Ecng.Serialization.SettingsStorage)">
+      <summary>
+            Load settings.
+            </summary>
+      <param name="storage">Settings storage.</param>
+    </member>
+    <member name="M:StockSharp.Fix.FixSession.Save(Ecng.Serialization.SettingsStorage)">
+      <summary>
+            Save settings.
+            </summary>
+      <param name="storage">Settings storage.</param>
+    </member>
     <member name="T:StockSharp.Fix.Native.BaseFixReader">
       <summary>
             Data reader base class.
-            </summary>
-    </member>
-    <member name="T:StockSharp.Fix.Native.FixBase">
-      <summary>
-            Data reader/writer base class.
-            </summary>
-    </member>
-    <member name="M:StockSharp.Fix.Native.FixBase.#ctor(System.IO.Stream,System.Text.Encoding)">
-      <summary>
-            Initialize <see cref="T:StockSharp.Fix.Native.FixBase" />.
-            </summary>
-      <param name="stream">The stream.</param>
-      <param name="encoding">Text encoding.</param>
-    </member>
-    <member name="M:StockSharp.Fix.Native.FixBase.Dump(System.Byte)">
-      <summary>
-            Add to the data log a new byte.
-            </summary>
-      <param name="value">New byte.</param>
-    </member>
-    <member name="M:StockSharp.Fix.Native.FixBase.Dump(System.Byte[])">
-      <summary>
-            Add to the data log a new bytes.
-            </summary>
-      <param name="values">New bytes.</param>
-    </member>
-    <member name="M:StockSharp.Fix.Native.FixBase.FlushDump">
-      <summary>
-            Get data log.
-            </summary>
-      <returns>Data log.</returns>
-    </member>
-    <member name="P:StockSharp.Fix.Native.FixBase.Stream">
-      <summary>
-            The stream.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Fix.Native.FixBase.Encoding">
-      <summary>
-            Text encoding.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Fix.Native.FixBase.CheckSum">
-      <summary>
-            Check sum.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Fix.Native.FixBase.IsDump">
-      <summary>
-            Gets a value indicating whether the log incoming data required.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Fix.Native.FixBase.LastTag">
-      <summary>
-            Last tag.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Fix.Native.FixBase.IsValueRead">
-      <summary>
-            Whether the tag value was read.
             </summary>
     </member>
     <member name="M:StockSharp.Fix.Native.BaseFixReader.#ctor(System.IO.Stream,System.Text.Encoding)">
@@ -346,16 +286,16 @@
       <param name="stream">The stream from which data will be read.</param>
       <param name="encoding">Text encoding.</param>
     </member>
+    <member name="P:StockSharp.Fix.Native.BaseFixReader.ReadBytes">
+      <summary>
+            The number of bytes read.
+            </summary>
+    </member>
     <member name="M:StockSharp.Fix.Native.BaseFixReader.ReadByte">
       <summary>
             Get byte.
             </summary>
       <returns>Byte.</returns>
-    </member>
-    <member name="P:StockSharp.Fix.Native.BaseFixReader.ReadBytes">
-      <summary>
-            The number of bytes read.
-            </summary>
     </member>
     <member name="T:StockSharp.Fix.Native.BaseFixWriter">
       <summary>
@@ -390,121 +330,6 @@
     <member name="T:StockSharp.Fix.Native.BinaryFixReader">
       <summary>
             The reader of data recorded in the binary FIX protocol format (FAST).
-            </summary>
-    </member>
-    <member name="T:StockSharp.Fix.Native.IFixReader">
-      <summary>
-            The interface describing the reader of data recorded in the FIX protocol format.
-            </summary>
-    </member>
-    <member name="M:StockSharp.Fix.Native.IFixReader.ReadTag">
-      <summary>
-            To read the following tag.
-            </summary>
-      <returns>The next tag. The -1 indicates the end of data.</returns>
-    </member>
-    <member name="M:StockSharp.Fix.Native.IFixReader.FlushDump">
-      <summary>
-            Get data log.
-            </summary>
-      <returns>Data log.</returns>
-    </member>
-    <member name="M:StockSharp.Fix.Native.IFixReader.ReadDateTime(System.String)">
-      <summary>
-            Read <see cref="T:System.DateTime" /> value.
-            </summary>
-      <param name="format">Time format.</param>
-      <returns>
-        <see cref="T:System.DateTime" /> value.</returns>
-    </member>
-    <member name="M:StockSharp.Fix.Native.IFixReader.ReadTimeSpan(System.String)">
-      <summary>
-            Read <see cref="T:System.TimeSpan" /> value.
-            </summary>
-      <param name="format">Time format.</param>
-      <returns>
-        <see cref="T:System.TimeSpan" /> value.</returns>
-    </member>
-    <member name="M:StockSharp.Fix.Native.IFixReader.ReadInt">
-      <summary>
-            Read <see cref="T:System.Int32" /> value.
-            </summary>
-      <returns>
-        <see cref="T:System.Int32" /> value.</returns>
-    </member>
-    <member name="M:StockSharp.Fix.Native.IFixReader.ReadLong">
-      <summary>
-            Read <see cref="T:System.Int64" /> value.
-            </summary>
-      <returns>
-        <see cref="T:System.Int64" /> value.</returns>
-    </member>
-    <member name="M:StockSharp.Fix.Native.IFixReader.ReadDecimal">
-      <summary>
-            Read <see cref="T:System.Decimal" /> value.
-            </summary>
-      <returns>
-        <see cref="T:System.Decimal" /> value.</returns>
-    </member>
-    <member name="M:StockSharp.Fix.Native.IFixReader.ReadChar">
-      <summary>
-            Read <see cref="T:System.Char" /> value.
-            </summary>
-      <returns>
-        <see cref="T:System.Char" /> value.</returns>
-    </member>
-    <member name="M:StockSharp.Fix.Native.IFixReader.ReadString">
-      <summary>
-            Read <see cref="T:System.String" /> value.
-            </summary>
-      <returns>
-        <see cref="T:System.String" /> value.</returns>
-    </member>
-    <member name="M:StockSharp.Fix.Native.IFixReader.ReadBool">
-      <summary>
-            Read <see cref="T:System.Boolean" /> value.
-            </summary>
-      <returns>
-        <see cref="T:System.Boolean" /> value.</returns>
-    </member>
-    <member name="M:StockSharp.Fix.Native.IFixReader.SkipValue">
-      <summary>
-            Skip value.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Fix.Native.IFixReader.Stream">
-      <summary>
-            The stream.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Fix.Native.IFixReader.ReadBytes">
-      <summary>
-            The number of bytes read.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Fix.Native.IFixReader.CheckSum">
-      <summary>
-            Check sum.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Fix.Native.IFixReader.IsDump">
-      <summary>
-            Gets a value indicating whether the log incoming data required.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Fix.Native.IFixReader.Encoding">
-      <summary>
-            Text encoding.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Fix.Native.IFixReader.IsValueRead">
-      <summary>
-            Whether the tag value was read.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Fix.Native.IFixReader.LastTag">
-      <summary>
-            Last read tag.
             </summary>
     </member>
     <member name="M:StockSharp.Fix.Native.BinaryFixReader.#ctor(System.IO.Stream,System.Text.Encoding)">
@@ -598,112 +423,6 @@
     <member name="T:StockSharp.Fix.Native.BinaryFixWriter">
       <summary>
             The data recorder which records in the binary FIX protocol format (FAST).
-            </summary>
-    </member>
-    <member name="T:StockSharp.Fix.Native.IFixWriter">
-      <summary>
-            The interface describing the recorder of data in the FIX protocol format.
-            </summary>
-    </member>
-    <member name="M:StockSharp.Fix.Native.IFixWriter.FlushDump">
-      <summary>
-            Get data log.
-            </summary>
-      <returns>Data log.</returns>
-    </member>
-    <member name="M:StockSharp.Fix.Native.IFixWriter.Write(StockSharp.Fix.Native.FixTags)">
-      <summary>
-            Last tag.
-            </summary>
-      <param name="tag">Tag.</param>
-    </member>
-    <member name="M:StockSharp.Fix.Native.IFixWriter.Write(System.Boolean)">
-      <summary>
-            To record the <see cref="T:System.Boolean" /> value.
-            </summary>
-      <param name="value">
-        <see cref="T:System.Boolean" /> value.</param>
-    </member>
-    <member name="M:StockSharp.Fix.Native.IFixWriter.Write(System.Int32)">
-      <summary>
-            To record the <see cref="T:System.Int32" /> value.
-            </summary>
-      <param name="value">
-        <see cref="T:System.Int32" /> value.</param>
-    </member>
-    <member name="M:StockSharp.Fix.Native.IFixWriter.Write(System.Int64)">
-      <summary>
-            To record the <see cref="T:System.Int64" /> value.
-            </summary>
-      <param name="value">
-        <see cref="T:System.Int64" /> value.</param>
-    </member>
-    <member name="M:StockSharp.Fix.Native.IFixWriter.Write(System.Decimal)">
-      <summary>
-            To record the <see cref="T:System.Decimal" /> value.
-            </summary>
-      <param name="value">
-        <see cref="T:System.Decimal" /> value.</param>
-    </member>
-    <member name="M:StockSharp.Fix.Native.IFixWriter.Write(System.DateTime,System.String)">
-      <summary>
-            To record the <see cref="T:System.DateTime" /> value.
-            </summary>
-      <param name="value">
-        <see cref="T:System.DateTime" /> value.</param>
-      <param name="format">Time format.</param>
-    </member>
-    <member name="M:StockSharp.Fix.Native.IFixWriter.Write(System.TimeSpan,System.String)">
-      <summary>
-            To record the <see cref="T:System.TimeSpan" /> value.
-            </summary>
-      <param name="value">
-        <see cref="T:System.TimeSpan" /> value.</param>
-      <param name="format">Time format.</param>
-    </member>
-    <member name="M:StockSharp.Fix.Native.IFixWriter.Write(System.String)">
-      <summary>
-            To record the <see cref="T:System.String" /> value.
-            </summary>
-      <param name="value">
-        <see cref="T:System.String" /> value.</param>
-    </member>
-    <member name="M:StockSharp.Fix.Native.IFixWriter.Write(System.Char)">
-      <summary>
-            To record the <see cref="T:System.Char" /> value.
-            </summary>
-      <param name="value">
-        <see cref="T:System.Char" /> value.</param>
-    </member>
-    <member name="M:StockSharp.Fix.Native.IFixWriter.WriteBytes(System.Byte[])">
-      <summary>
-            To record an array of bytes.
-            </summary>
-      <param name="bytes">Bytes array.</param>
-    </member>
-    <member name="P:StockSharp.Fix.Native.IFixWriter.Stream">
-      <summary>
-            The stream.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Fix.Native.IFixWriter.CheckSum">
-      <summary>
-            Check sum.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Fix.Native.IFixWriter.IsDump">
-      <summary>
-            Gets a value indicating whether the log incoming data required.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Fix.Native.IFixWriter.Encoding">
-      <summary>
-            Text encoding.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Fix.Native.IFixWriter.LastTag">
-      <summary>
-            Last written tag.
             </summary>
     </member>
     <member name="M:StockSharp.Fix.Native.BinaryFixWriter.#ctor(System.IO.Stream,System.Text.Encoding)">
@@ -3267,6 +2986,13 @@
             FIX messages codes.
             </summary>
     </member>
+    <member name="M:StockSharp.Fix.Native.FixMessages.GetName(System.String)">
+      <summary>
+            To get the message name by its type.
+            </summary>
+      <param name="msgType">Message type.</param>
+      <returns>The message name.</returns>
+    </member>
     <member name="F:StockSharp.Fix.Native.FixMessages.Heartbeat">
       <summary>
             The response to ping.
@@ -3446,13 +3172,6 @@
       <summary>
             The response to <see cref="F:StockSharp.Fix.Native.FixMessages.OrderMassCancelRequest" />.
             </summary>
-    </member>
-    <member name="M:StockSharp.Fix.Native.FixMessages.GetName(System.String)">
-      <summary>
-            To get the message name by its type.
-            </summary>
-      <param name="msgType">Message type.</param>
-      <returns>The message name.</returns>
     </member>
     <member name="T:StockSharp.Fix.Native.MDEntry">
       <summary>
@@ -3698,6 +3417,11 @@
       <param name="dateTimeFormat">Date and time format.</param>
       <param name="timeFormat">Time format.</param>
     </member>
+    <member name="P:StockSharp.Fix.Native.FixMessageWriter.Writer">
+      <summary>
+            FIX protocol writer.
+            </summary>
+    </member>
     <member name="M:StockSharp.Fix.Native.FixMessageWriter.WriteLogonRequest(System.TimeSpan,System.Boolean,System.String,System.String)">
       <summary>
             To record the <see cref="F:StockSharp.Fix.Native.FixMessages.Logon" /> message (request).
@@ -3769,11 +3493,6 @@
       <param name="msgType">Message type.</param>
       <param name="tag">Tag.</param>
       <param name="sessionRejectReason">Error code.</param>
-    </member>
-    <member name="P:StockSharp.Fix.Native.FixMessageWriter.Writer">
-      <summary>
-            FIX protocol writer.
-            </summary>
     </member>
     <member name="T:StockSharp.Fix.Native.FixTags">
       <summary>
@@ -4344,6 +4063,444 @@
       <summary>
       </summary>
     </member>
+    <member name="T:StockSharp.Fix.Native.FixBase">
+      <summary>
+            Data reader/writer base class.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Fix.Native.FixBase.#ctor(System.IO.Stream,System.Text.Encoding)">
+      <summary>
+            Initialize <see cref="T:StockSharp.Fix.Native.FixBase" />.
+            </summary>
+      <param name="stream">The stream.</param>
+      <param name="encoding">Text encoding.</param>
+    </member>
+    <member name="P:StockSharp.Fix.Native.FixBase.Stream">
+      <summary>
+            The stream.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.Native.FixBase.Encoding">
+      <summary>
+            Text encoding.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.Native.FixBase.CheckSum">
+      <summary>
+            Check sum.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.Native.FixBase.IsDump">
+      <summary>
+            Gets a value indicating whether the log incoming data required.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.Native.FixBase.LastTag">
+      <summary>
+            Last tag.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.Native.FixBase.IsValueRead">
+      <summary>
+            Whether the tag value was read.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Fix.Native.FixBase.Dump(System.Byte)">
+      <summary>
+            Add to the data log a new byte.
+            </summary>
+      <param name="value">New byte.</param>
+    </member>
+    <member name="M:StockSharp.Fix.Native.FixBase.Dump(System.Byte[])">
+      <summary>
+            Add to the data log a new bytes.
+            </summary>
+      <param name="values">New bytes.</param>
+    </member>
+    <member name="M:StockSharp.Fix.Native.FixBase.FlushDump">
+      <summary>
+            Get data log.
+            </summary>
+      <returns>Data log.</returns>
+    </member>
+    <member name="T:StockSharp.Fix.Native.IFixWriter">
+      <summary>
+            The interface describing the recorder of data in the FIX protocol format.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.Native.IFixWriter.Stream">
+      <summary>
+            The stream.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.Native.IFixWriter.CheckSum">
+      <summary>
+            Check sum.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.Native.IFixWriter.IsDump">
+      <summary>
+            Gets a value indicating whether the log incoming data required.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.Native.IFixWriter.Encoding">
+      <summary>
+            Text encoding.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.Native.IFixWriter.LastTag">
+      <summary>
+            Last written tag.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Fix.Native.IFixWriter.FlushDump">
+      <summary>
+            Get data log.
+            </summary>
+      <returns>Data log.</returns>
+    </member>
+    <member name="M:StockSharp.Fix.Native.IFixWriter.Write(StockSharp.Fix.Native.FixTags)">
+      <summary>
+            Last tag.
+            </summary>
+      <param name="tag">Tag.</param>
+    </member>
+    <member name="M:StockSharp.Fix.Native.IFixWriter.Write(System.Boolean)">
+      <summary>
+            To record the <see cref="T:System.Boolean" /> value.
+            </summary>
+      <param name="value">
+        <see cref="T:System.Boolean" /> value.</param>
+    </member>
+    <member name="M:StockSharp.Fix.Native.IFixWriter.Write(System.Int32)">
+      <summary>
+            To record the <see cref="T:System.Int32" /> value.
+            </summary>
+      <param name="value">
+        <see cref="T:System.Int32" /> value.</param>
+    </member>
+    <member name="M:StockSharp.Fix.Native.IFixWriter.Write(System.Int64)">
+      <summary>
+            To record the <see cref="T:System.Int64" /> value.
+            </summary>
+      <param name="value">
+        <see cref="T:System.Int64" /> value.</param>
+    </member>
+    <member name="M:StockSharp.Fix.Native.IFixWriter.Write(System.Decimal)">
+      <summary>
+            To record the <see cref="T:System.Decimal" /> value.
+            </summary>
+      <param name="value">
+        <see cref="T:System.Decimal" /> value.</param>
+    </member>
+    <member name="M:StockSharp.Fix.Native.IFixWriter.Write(System.DateTime,System.String)">
+      <summary>
+            To record the <see cref="T:System.DateTime" /> value.
+            </summary>
+      <param name="value">
+        <see cref="T:System.DateTime" /> value.</param>
+      <param name="format">Time format.</param>
+    </member>
+    <member name="M:StockSharp.Fix.Native.IFixWriter.Write(System.TimeSpan,System.String)">
+      <summary>
+            To record the <see cref="T:System.TimeSpan" /> value.
+            </summary>
+      <param name="value">
+        <see cref="T:System.TimeSpan" /> value.</param>
+      <param name="format">Time format.</param>
+    </member>
+    <member name="M:StockSharp.Fix.Native.IFixWriter.Write(System.String)">
+      <summary>
+            To record the <see cref="T:System.String" /> value.
+            </summary>
+      <param name="value">
+        <see cref="T:System.String" /> value.</param>
+    </member>
+    <member name="M:StockSharp.Fix.Native.IFixWriter.Write(System.Char)">
+      <summary>
+            To record the <see cref="T:System.Char" /> value.
+            </summary>
+      <param name="value">
+        <see cref="T:System.Char" /> value.</param>
+    </member>
+    <member name="M:StockSharp.Fix.Native.IFixWriter.WriteBytes(System.Byte[])">
+      <summary>
+            To record an array of bytes.
+            </summary>
+      <param name="bytes">Bytes array.</param>
+    </member>
+    <member name="T:StockSharp.Fix.Native.TextFixReader">
+      <summary>
+            The reader of data recorded in the text FIX protocol format.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Fix.Native.TextFixReader.#ctor(System.IO.Stream,System.Text.Encoding)">
+      <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Fix.Native.TextFixReader" />.
+            </summary>
+      <param name="stream">The stream from which data will be read.</param>
+      <param name="encoding">Text encoding.</param>
+    </member>
+    <member name="M:StockSharp.Fix.Native.TextFixReader.ReadTag">
+      <summary>
+            To read the following tag.
+            </summary>
+      <returns>The next tag. The -1 indicates the end of data.</returns>
+    </member>
+    <member name="M:StockSharp.Fix.Native.TextFixReader.ReadDateTime(System.String)">
+      <summary>
+            Read <see cref="T:System.DateTime" /> value.
+            </summary>
+      <param name="format">Time format.</param>
+      <returns>
+        <see cref="T:System.DateTime" /> value.</returns>
+    </member>
+    <member name="M:StockSharp.Fix.Native.TextFixReader.ReadTimeSpan(System.String)">
+      <summary>
+            Read <see cref="T:System.TimeSpan" /> value.
+            </summary>
+      <param name="format">Time format.</param>
+      <returns>
+        <see cref="T:System.TimeSpan" /> value.</returns>
+    </member>
+    <member name="M:StockSharp.Fix.Native.TextFixReader.ReadInt">
+      <summary>
+            Read <see cref="T:System.Int32" /> value.
+            </summary>
+      <returns>
+        <see cref="T:System.Int32" /> value.</returns>
+    </member>
+    <member name="M:StockSharp.Fix.Native.TextFixReader.ReadLong">
+      <summary>
+            Read <see cref="T:System.Int64" /> value.
+            </summary>
+      <returns>
+        <see cref="T:System.Int64" /> value.</returns>
+    </member>
+    <member name="M:StockSharp.Fix.Native.TextFixReader.ReadDecimal">
+      <summary>
+            Read <see cref="T:System.Decimal" /> value.
+            </summary>
+      <returns>
+        <see cref="T:System.Decimal" /> value.</returns>
+    </member>
+    <member name="M:StockSharp.Fix.Native.TextFixReader.ReadChar">
+      <summary>
+            Read <see cref="T:System.Char" /> value.
+            </summary>
+      <returns>
+        <see cref="T:System.Char" /> value.</returns>
+    </member>
+    <member name="M:StockSharp.Fix.Native.TextFixReader.ReadString">
+      <summary>
+            Read <see cref="T:System.String" /> value.
+            </summary>
+      <returns>
+        <see cref="T:System.String" /> value.</returns>
+    </member>
+    <member name="M:StockSharp.Fix.Native.TextFixReader.ReadBool">
+      <summary>
+            Read <see cref="T:System.Boolean" /> value.
+            </summary>
+      <returns>
+        <see cref="T:System.Boolean" /> value.</returns>
+    </member>
+    <member name="M:StockSharp.Fix.Native.TextFixReader.SkipValue">
+      <summary>
+            Skip value.
+            </summary>
+    </member>
+    <member name="T:StockSharp.Fix.Native.TextFixWriter">
+      <summary>
+            The data recorder which records in the text FIX protocol format.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Fix.Native.TextFixWriter.#ctor(System.IO.Stream,System.Text.Encoding)">
+      <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Fix.Native.TextFixWriter" />.
+            </summary>
+      <param name="stream">Writing stream.</param>
+      <param name="encoding">Text encoding.</param>
+    </member>
+    <member name="M:StockSharp.Fix.Native.TextFixWriter.Write(StockSharp.Fix.Native.FixTags)">
+      <summary>
+            Last tag.
+            </summary>
+      <param name="tag">Tag.</param>
+    </member>
+    <member name="M:StockSharp.Fix.Native.TextFixWriter.Write(System.Boolean)">
+      <summary>
+            To record the <see cref="T:System.Boolean" /> value.
+            </summary>
+      <param name="value">
+        <see cref="T:System.Boolean" /> value.</param>
+    </member>
+    <member name="M:StockSharp.Fix.Native.TextFixWriter.Write(System.Int32)">
+      <summary>
+            To record the <see cref="T:System.Int32" /> value.
+            </summary>
+      <param name="value">
+        <see cref="T:System.Int32" /> value.</param>
+    </member>
+    <member name="M:StockSharp.Fix.Native.TextFixWriter.Write(System.Int64)">
+      <summary>
+            To record the <see cref="T:System.Int64" /> value.
+            </summary>
+      <param name="value">
+        <see cref="T:System.Int64" /> value.</param>
+    </member>
+    <member name="M:StockSharp.Fix.Native.TextFixWriter.Write(System.Decimal)">
+      <summary>
+            To record the <see cref="T:System.Decimal" /> value.
+            </summary>
+      <param name="value">
+        <see cref="T:System.Decimal" /> value.</param>
+    </member>
+    <member name="M:StockSharp.Fix.Native.TextFixWriter.Write(System.DateTime,System.String)">
+      <summary>
+            To record the <see cref="T:System.DateTime" /> value.
+            </summary>
+      <param name="value">
+        <see cref="T:System.DateTime" /> value.</param>
+      <param name="format">Time format.</param>
+    </member>
+    <member name="M:StockSharp.Fix.Native.TextFixWriter.Write(System.TimeSpan,System.String)">
+      <summary>
+            To record the <see cref="T:System.TimeSpan" /> value.
+            </summary>
+      <param name="value">
+        <see cref="T:System.TimeSpan" /> value.</param>
+      <param name="format">Time format.</param>
+    </member>
+    <member name="M:StockSharp.Fix.Native.TextFixWriter.Write(System.String)">
+      <summary>
+            To record the <see cref="T:System.String" /> value.
+            </summary>
+      <param name="value">
+        <see cref="T:System.String" /> value.</param>
+    </member>
+    <member name="M:StockSharp.Fix.Native.TextFixWriter.Write(System.Char)">
+      <summary>
+            To record the <see cref="T:System.Char" /> value.
+            </summary>
+      <param name="value">
+        <see cref="T:System.Char" /> value.</param>
+    </member>
+    <member name="T:StockSharp.Fix.Native.IFixReader">
+      <summary>
+            The interface describing the reader of data recorded in the FIX protocol format.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.Native.IFixReader.Stream">
+      <summary>
+            The stream.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.Native.IFixReader.ReadBytes">
+      <summary>
+            The number of bytes read.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.Native.IFixReader.CheckSum">
+      <summary>
+            Check sum.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.Native.IFixReader.IsDump">
+      <summary>
+            Gets a value indicating whether the log incoming data required.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.Native.IFixReader.Encoding">
+      <summary>
+            Text encoding.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.Native.IFixReader.IsValueRead">
+      <summary>
+            Whether the tag value was read.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.Native.IFixReader.LastTag">
+      <summary>
+            Last read tag.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Fix.Native.IFixReader.ReadTag">
+      <summary>
+            To read the following tag.
+            </summary>
+      <returns>The next tag. The -1 indicates the end of data.</returns>
+    </member>
+    <member name="M:StockSharp.Fix.Native.IFixReader.FlushDump">
+      <summary>
+            Get data log.
+            </summary>
+      <returns>Data log.</returns>
+    </member>
+    <member name="M:StockSharp.Fix.Native.IFixReader.ReadDateTime(System.String)">
+      <summary>
+            Read <see cref="T:System.DateTime" /> value.
+            </summary>
+      <param name="format">Time format.</param>
+      <returns>
+        <see cref="T:System.DateTime" /> value.</returns>
+    </member>
+    <member name="M:StockSharp.Fix.Native.IFixReader.ReadTimeSpan(System.String)">
+      <summary>
+            Read <see cref="T:System.TimeSpan" /> value.
+            </summary>
+      <param name="format">Time format.</param>
+      <returns>
+        <see cref="T:System.TimeSpan" /> value.</returns>
+    </member>
+    <member name="M:StockSharp.Fix.Native.IFixReader.ReadInt">
+      <summary>
+            Read <see cref="T:System.Int32" /> value.
+            </summary>
+      <returns>
+        <see cref="T:System.Int32" /> value.</returns>
+    </member>
+    <member name="M:StockSharp.Fix.Native.IFixReader.ReadLong">
+      <summary>
+            Read <see cref="T:System.Int64" /> value.
+            </summary>
+      <returns>
+        <see cref="T:System.Int64" /> value.</returns>
+    </member>
+    <member name="M:StockSharp.Fix.Native.IFixReader.ReadDecimal">
+      <summary>
+            Read <see cref="T:System.Decimal" /> value.
+            </summary>
+      <returns>
+        <see cref="T:System.Decimal" /> value.</returns>
+    </member>
+    <member name="M:StockSharp.Fix.Native.IFixReader.ReadChar">
+      <summary>
+            Read <see cref="T:System.Char" /> value.
+            </summary>
+      <returns>
+        <see cref="T:System.Char" /> value.</returns>
+    </member>
+    <member name="M:StockSharp.Fix.Native.IFixReader.ReadString">
+      <summary>
+            Read <see cref="T:System.String" /> value.
+            </summary>
+      <returns>
+        <see cref="T:System.String" /> value.</returns>
+    </member>
+    <member name="M:StockSharp.Fix.Native.IFixReader.ReadBool">
+      <summary>
+            Read <see cref="T:System.Boolean" /> value.
+            </summary>
+      <returns>
+        <see cref="T:System.Boolean" /> value.</returns>
+    </member>
+    <member name="M:StockSharp.Fix.Native.IFixReader.SkipValue">
+      <summary>
+            Skip value.
+            </summary>
+    </member>
     <member name="T:StockSharp.Fix.FixFormats">
       <summary>
             FIX protocol formats.
@@ -4384,61 +4541,6 @@
             </summary>
       <returns>Order condition. If the connection does not support the order type <see cref="F:StockSharp.Messages.OrderTypes.Conditional" />, it will be returned <see langword="null" />.</returns>
     </member>
-    <member name="M:StockSharp.Fix.FixMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)">
-      <summary>
-            Send message.
-            </summary>
-      <param name="message">Message.</param>
-    </member>
-    <member name="M:StockSharp.Fix.FixMessageAdapter.Load(Ecng.Serialization.SettingsStorage)">
-      <summary>
-            Load settings.
-            </summary>
-      <param name="storage">Settings storage.</param>
-    </member>
-    <member name="M:StockSharp.Fix.FixMessageAdapter.Save(Ecng.Serialization.SettingsStorage)">
-      <summary>
-            Save settings.
-            </summary>
-      <param name="storage">Settings storage.</param>
-    </member>
-    <member name="M:StockSharp.Fix.FixMessageAdapter.ToString">
-      <summary>
-            Returns a string that represents the current object.
-            </summary>
-      <returns>A string that represents the current object.</returns>
-    </member>
-    <member name="M:StockSharp.Fix.FixMessageAdapter.ReadOrderCondition(StockSharp.Fix.Native.IFixReader,StockSharp.Fix.Native.FixTags,System.Func{StockSharp.Messages.OrderCondition})">
-      <summary>
-            To read the order registration condition <see cref="P:StockSharp.Messages.OrderRegisterMessage.Condition" />.
-            </summary>
-      <param name="reader">Data reader.</param>
-      <param name="tag">Tag.</param>
-      <param name="getCondition">The function returning the order condition.</param>
-      <returns>Whether the data was successfully processed.</returns>
-    </member>
-    <member name="M:StockSharp.Fix.FixMessageAdapter.PostInitCondition(System.Char,StockSharp.Messages.OrderCondition)">
-      <summary>
-            The final initialization of the order condition.
-            </summary>
-      <param name="ordType">Order type.</param>
-      <param name="condition">The order condition.</param>
-    </member>
-    <member name="M:StockSharp.Fix.FixMessageAdapter.ProcessTransactionMessage(System.String,StockSharp.Fix.Native.IFixReader)">
-      <summary>
-            The method is called when the received message is processing.
-            </summary>
-      <param name="msgType">FIX message type.</param>
-      <param name="reader">The reader of data recorded in the FIX protocol format.</param>
-      <returns>Whether the data was successfully processed.</returns>
-    </member>
-    <member name="M:StockSharp.Fix.FixMessageAdapter.WriteOrderCondition(StockSharp.Fix.Native.IFixWriter,StockSharp.Messages.OrderRegisterMessage)">
-      <summary>
-            To record data by the order condition.
-            </summary>
-      <param name="writer">FIX data writer.</param>
-      <param name="regMsg">The message containing the information for the order registration.</param>
-    </member>
     <member name="P:StockSharp.Fix.FixMessageAdapter.IsSupportNativeSecurityLookup">
       <summary>
             Gets a value indicating whether the connector supports security lookup.
@@ -4453,6 +4555,12 @@
       <summary>
         <see cref="T:StockSharp.Messages.SecurityLookupMessage" /> required to get securities.
             </summary>
+    </member>
+    <member name="M:StockSharp.Fix.FixMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)">
+      <summary>
+            Send message.
+            </summary>
+      <param name="message">Message.</param>
     </member>
     <member name="P:StockSharp.Fix.FixMessageAdapter.Version">
       <summary>
@@ -4554,86 +4662,54 @@
             The parameters validity check.
             </summary>
     </member>
-    <member name="T:StockSharp.Fix.Native.TextFixReader">
+    <member name="M:StockSharp.Fix.FixMessageAdapter.Load(Ecng.Serialization.SettingsStorage)">
       <summary>
-            The reader of data recorded in the text FIX protocol format.
+            Load settings.
             </summary>
+      <param name="storage">Settings storage.</param>
     </member>
-    <member name="M:StockSharp.Fix.Native.TextFixReader.#ctor(System.IO.Stream,System.Text.Encoding)">
+    <member name="M:StockSharp.Fix.FixMessageAdapter.Save(Ecng.Serialization.SettingsStorage)">
       <summary>
-            Initializes a new instance of the <see cref="T:StockSharp.Fix.Native.TextFixReader" />.
+            Save settings.
             </summary>
-      <param name="stream">The stream from which data will be read.</param>
-      <param name="encoding">Text encoding.</param>
+      <param name="storage">Settings storage.</param>
     </member>
-    <member name="M:StockSharp.Fix.Native.TextFixReader.ReadTag">
+    <member name="M:StockSharp.Fix.FixMessageAdapter.ToString">
       <summary>
-            To read the following tag.
+            Returns a string that represents the current object.
             </summary>
-      <returns>The next tag. The -1 indicates the end of data.</returns>
+      <returns>A string that represents the current object.</returns>
     </member>
-    <member name="M:StockSharp.Fix.Native.TextFixReader.ReadDateTime(System.String)">
+    <member name="M:StockSharp.Fix.FixMessageAdapter.ReadOrderCondition(StockSharp.Fix.Native.IFixReader,StockSharp.Fix.Native.FixTags,System.Func{StockSharp.Messages.OrderCondition})">
       <summary>
-            Read <see cref="T:System.DateTime" /> value.
+            To read the order registration condition <see cref="P:StockSharp.Messages.OrderRegisterMessage.Condition" />.
             </summary>
-      <param name="format">Time format.</param>
-      <returns>
-        <see cref="T:System.DateTime" /> value.</returns>
+      <param name="reader">Data reader.</param>
+      <param name="tag">Tag.</param>
+      <param name="getCondition">The function returning the order condition.</param>
+      <returns>Whether the data was successfully processed.</returns>
     </member>
-    <member name="M:StockSharp.Fix.Native.TextFixReader.ReadTimeSpan(System.String)">
+    <member name="M:StockSharp.Fix.FixMessageAdapter.PostInitCondition(System.Char,StockSharp.Messages.OrderCondition)">
       <summary>
-            Read <see cref="T:System.TimeSpan" /> value.
+            The final initialization of the order condition.
             </summary>
-      <param name="format">Time format.</param>
-      <returns>
-        <see cref="T:System.TimeSpan" /> value.</returns>
+      <param name="ordType">Order type.</param>
+      <param name="condition">The order condition.</param>
     </member>
-    <member name="M:StockSharp.Fix.Native.TextFixReader.ReadInt">
+    <member name="M:StockSharp.Fix.FixMessageAdapter.ProcessTransactionMessage(System.String,StockSharp.Fix.Native.IFixReader)">
       <summary>
-            Read <see cref="T:System.Int32" /> value.
+            The method is called when the received message is processing.
             </summary>
-      <returns>
-        <see cref="T:System.Int32" /> value.</returns>
+      <param name="msgType">FIX message type.</param>
+      <param name="reader">The reader of data recorded in the FIX protocol format.</param>
+      <returns>Whether the data was successfully processed.</returns>
     </member>
-    <member name="M:StockSharp.Fix.Native.TextFixReader.ReadLong">
+    <member name="M:StockSharp.Fix.FixMessageAdapter.WriteOrderCondition(StockSharp.Fix.Native.IFixWriter,StockSharp.Messages.OrderRegisterMessage)">
       <summary>
-            Read <see cref="T:System.Int64" /> value.
+            To record data by the order condition.
             </summary>
-      <returns>
-        <see cref="T:System.Int64" /> value.</returns>
-    </member>
-    <member name="M:StockSharp.Fix.Native.TextFixReader.ReadDecimal">
-      <summary>
-            Read <see cref="T:System.Decimal" /> value.
-            </summary>
-      <returns>
-        <see cref="T:System.Decimal" /> value.</returns>
-    </member>
-    <member name="M:StockSharp.Fix.Native.TextFixReader.ReadChar">
-      <summary>
-            Read <see cref="T:System.Char" /> value.
-            </summary>
-      <returns>
-        <see cref="T:System.Char" /> value.</returns>
-    </member>
-    <member name="M:StockSharp.Fix.Native.TextFixReader.ReadString">
-      <summary>
-            Read <see cref="T:System.String" /> value.
-            </summary>
-      <returns>
-        <see cref="T:System.String" /> value.</returns>
-    </member>
-    <member name="M:StockSharp.Fix.Native.TextFixReader.ReadBool">
-      <summary>
-            Read <see cref="T:System.Boolean" /> value.
-            </summary>
-      <returns>
-        <see cref="T:System.Boolean" /> value.</returns>
-    </member>
-    <member name="M:StockSharp.Fix.Native.TextFixReader.SkipValue">
-      <summary>
-            Skip value.
-            </summary>
+      <param name="writer">FIX data writer.</param>
+      <param name="regMsg">The message containing the information for the order registration.</param>
     </member>
     <member name="T:StockSharp.Fix.FixClientRoles">
       <summary>
@@ -4740,6 +4816,11 @@
             Initializes a new instance of the <see cref="T:StockSharp.Fix.FixTrader" />.
             </summary>
     </member>
+    <member name="P:StockSharp.Fix.FixTrader.TransactionCopyAdapter">
+      <summary>
+            Transactional session (copy, used with MICEX to receive orders and trades, registered for connections).
+            </summary>
+    </member>
     <member name="M:StockSharp.Fix.FixTrader.OnCancelOrder(StockSharp.BusinessEntities.Order,System.Int64)">
       <summary>
             Cancel the order.
@@ -4770,11 +4851,6 @@
             Process message.
             </summary>
       <param name="message">Message.</param>
-    </member>
-    <member name="P:StockSharp.Fix.FixTrader.TransactionCopyAdapter">
-      <summary>
-            Transactional session (copy, used with MICEX to receive orders and trades, registered for connections).
-            </summary>
     </member>
     <member name="T:StockSharp.Fix.FixStopOrderType">
       <summary>
@@ -4820,82 +4896,6 @@
       <summary>
             Stop-price.
             </summary>
-    </member>
-    <member name="T:StockSharp.Fix.Native.TextFixWriter">
-      <summary>
-            The data recorder which records in the text FIX protocol format.
-            </summary>
-    </member>
-    <member name="M:StockSharp.Fix.Native.TextFixWriter.#ctor(System.IO.Stream,System.Text.Encoding)">
-      <summary>
-            Initializes a new instance of the <see cref="T:StockSharp.Fix.Native.TextFixWriter" />.
-            </summary>
-      <param name="stream">Writing stream.</param>
-      <param name="encoding">Text encoding.</param>
-    </member>
-    <member name="M:StockSharp.Fix.Native.TextFixWriter.Write(StockSharp.Fix.Native.FixTags)">
-      <summary>
-            Last tag.
-            </summary>
-      <param name="tag">Tag.</param>
-    </member>
-    <member name="M:StockSharp.Fix.Native.TextFixWriter.Write(System.Boolean)">
-      <summary>
-            To record the <see cref="T:System.Boolean" /> value.
-            </summary>
-      <param name="value">
-        <see cref="T:System.Boolean" /> value.</param>
-    </member>
-    <member name="M:StockSharp.Fix.Native.TextFixWriter.Write(System.Int32)">
-      <summary>
-            To record the <see cref="T:System.Int32" /> value.
-            </summary>
-      <param name="value">
-        <see cref="T:System.Int32" /> value.</param>
-    </member>
-    <member name="M:StockSharp.Fix.Native.TextFixWriter.Write(System.Int64)">
-      <summary>
-            To record the <see cref="T:System.Int64" /> value.
-            </summary>
-      <param name="value">
-        <see cref="T:System.Int64" /> value.</param>
-    </member>
-    <member name="M:StockSharp.Fix.Native.TextFixWriter.Write(System.Decimal)">
-      <summary>
-            To record the <see cref="T:System.Decimal" /> value.
-            </summary>
-      <param name="value">
-        <see cref="T:System.Decimal" /> value.</param>
-    </member>
-    <member name="M:StockSharp.Fix.Native.TextFixWriter.Write(System.DateTime,System.String)">
-      <summary>
-            To record the <see cref="T:System.DateTime" /> value.
-            </summary>
-      <param name="value">
-        <see cref="T:System.DateTime" /> value.</param>
-      <param name="format">Time format.</param>
-    </member>
-    <member name="M:StockSharp.Fix.Native.TextFixWriter.Write(System.TimeSpan,System.String)">
-      <summary>
-            To record the <see cref="T:System.TimeSpan" /> value.
-            </summary>
-      <param name="value">
-        <see cref="T:System.TimeSpan" /> value.</param>
-      <param name="format">Time format.</param>
-    </member>
-    <member name="M:StockSharp.Fix.Native.TextFixWriter.Write(System.String)">
-      <summary>
-            To record the <see cref="T:System.String" /> value.
-            </summary>
-      <param name="value">
-        <see cref="T:System.String" /> value.</param>
-    </member>
-    <member name="M:StockSharp.Fix.Native.TextFixWriter.Write(System.Char)">
-      <summary>
-            To record the <see cref="T:System.Char" /> value.
-            </summary>
-      <param name="value">
-        <see cref="T:System.Char" /> value.</param>
     </member>
   </members>
 </doc>

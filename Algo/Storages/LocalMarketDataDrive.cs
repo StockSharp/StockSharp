@@ -340,6 +340,7 @@ namespace StockSharp.Algo.Storages
 				return Directory
 					.EnumerateDirectories(Path)
 					.SelectMany(Directory.EnumerateDirectories)
+					.Select(System.IO.Path.GetFileName)
 					.Select(n => idGenerator.Split(n, true))
 					.Where(t => !t.IsDefault());
 			}
@@ -351,12 +352,12 @@ namespace StockSharp.Algo.Storages
 		/// <param name="securityId">Instrument identifier.</param>
 		/// <param name="format">Format type.</param>
 		/// <returns>Data types.</returns>
-		public override IEnumerable<Tuple<Type, object>> GetAvailableDataTypes(SecurityId securityId, StorageFormats format)
+		public override IEnumerable<DataType> GetAvailableDataTypes(SecurityId securityId, StorageFormats format)
 		{
 			var secPath = GetSecurityPath(securityId);
 
 			if (!Directory.Exists(secPath))
-				return Enumerable.Empty<Tuple<Type, object>>();
+				return Enumerable.Empty<DataType>();
 
 			var ext = GetExtension(format);
 
@@ -403,15 +404,15 @@ namespace StockSharp.Algo.Storages
 			}
 		}
 
-		private static readonly SynchronizedPairSet<Tuple<Type, object>, string> _fileNames = new SynchronizedPairSet<Tuple<Type, object>, string>
+		private static readonly SynchronizedPairSet<DataType, string> _fileNames = new SynchronizedPairSet<DataType, string>
 		{
-			{ Tuple.Create(typeof(ExecutionMessage), (object)ExecutionTypes.Tick), "trades" },
-			{ Tuple.Create(typeof(ExecutionMessage), (object)ExecutionTypes.OrderLog), "orderLog" },
-			{ Tuple.Create(typeof(ExecutionMessage), (object)ExecutionTypes.Order), "transactions" },
-			//{ Tuple.Create(typeof(ExecutionMessage), (object)ExecutionTypes.Trade), "transactions" },
-			{ Tuple.Create(typeof(QuoteChangeMessage), (object)null), "quotes" },
-			{ Tuple.Create(typeof(Level1ChangeMessage), (object)null), "security" },
-			{ Tuple.Create(typeof(NewsMessage), (object)null), "news" },
+			{ DataType.Create(typeof(ExecutionMessage), ExecutionTypes.Tick), "trades" },
+			{ DataType.Create(typeof(ExecutionMessage), ExecutionTypes.OrderLog), "orderLog" },
+			{ DataType.Create(typeof(ExecutionMessage), ExecutionTypes.Order), "transactions" },
+			//{ DataType.Create(typeof(ExecutionMessage), ExecutionTypes.Trade), "transactions" },
+			{ DataType.Create(typeof(QuoteChangeMessage), null), "quotes" },
+			{ DataType.Create(typeof(Level1ChangeMessage), null), "security" },
+			{ DataType.Create(typeof(NewsMessage), null), "news" },
 		};
 
 		/// <summary>
@@ -419,7 +420,7 @@ namespace StockSharp.Algo.Storages
 		/// </summary>
 		/// <param name="fileName">The file name.</param>
 		/// <returns>Data type and parameter associated with the type. For example, <see cref="CandleMessage.Arg"/>.</returns>
-		public static Tuple<Type, object> GetDataType(string fileName)
+		public static DataType GetDataType(string fileName)
 		{
 			var info = _fileNames.TryGetKey(fileName);
 
@@ -433,7 +434,7 @@ namespace StockSharp.Algo.Storages
 			var type = "{0}.{1}Message, {2}".Put(typeof(CandleMessage).Namespace, parts[1], typeof(CandleMessage).Assembly.FullName).To<Type>();
 			var arg = type.ToCandleArg(parts[2]);
 
-			return Tuple.Create(type, arg);
+			return DataType.Create(type, arg);
 		}
 
 		/// <summary>
@@ -447,14 +448,14 @@ namespace StockSharp.Algo.Storages
 			if (dataType == null)
 				throw new ArgumentNullException(nameof(dataType));
 
-			if (dataType.IsSubclassOf(typeof(CandleMessage)))
+			if (dataType.IsCandleMessage())
 				return "candles_{0}_{1}".Put(dataType.Name.Replace("Message", string.Empty), TraderHelper.CandleArgToFolderName(arg));
 			else
 			{
 				if (arg != null && arg.Equals(ExecutionTypes.Trade))
 					arg = ExecutionTypes.Order;
 
-				var fileName = _fileNames.TryGetValue(Tuple.Create(dataType, arg));
+				var fileName = _fileNames.TryGetValue(DataType.Create(dataType, arg));
 
 				if (fileName == null)
 					throw new NotSupportedException(LocalizedStrings.Str2872Params.Put(dataType.FullName));

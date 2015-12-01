@@ -8,6 +8,7 @@ namespace StockSharp.Hydra.FinViz
 
 	using MoreLinq;
 
+	using StockSharp.Algo;
 	using StockSharp.Algo.History;
 	using StockSharp.Algo.Storages;
 	using StockSharp.BusinessEntities;
@@ -48,21 +49,12 @@ namespace StockSharp.Hydra.FinViz
 				_settings.Interval = TimeSpan.FromDays(1);
 		}
 
-		public override HydraTaskSettings Settings
-		{
-			get { return _settings; }
-		}
+		public override HydraTaskSettings Settings => _settings;
 
-		public override IEnumerable<Type> SupportedMarketDataTypes
+		public override IEnumerable<DataType> SupportedDataTypes { get; } = new[]
 		{
-			get
-			{
-				return new[]
-				{
-					typeof(Level1ChangeMessage)
-				}; 
-			}
-		}
+			DataType.Create(typeof(Level1ChangeMessage), null)
+		};
 
 		protected override TimeSpan OnProcess()
 		{

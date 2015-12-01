@@ -3,7 +3,7 @@
 	using System;
 	using System.Collections.Generic;
 
-	using StockSharp.Algo.Candles;
+	using StockSharp.Algo;
 	using StockSharp.Logging;
 	using StockSharp.BusinessEntities;
 
@@ -70,14 +70,9 @@
 		void Stop();
 
 		/// <summary>
-		/// Поддерживаемые маркет-данные.
+		/// Поддерживаемые типы данных.
 		/// </summary>
-		IEnumerable<Type> SupportedMarketDataTypes { get; }
-
-		/// <summary>
-		/// Поддерживаемые серии свечек.
-		/// </summary>
-		IEnumerable<CandleSeries> SupportedCandleSeries { get; }
+		IEnumerable<DataType> SupportedDataTypes { get; }
 
 		/// <summary>
 		/// Событие о загрузке маркет-данных.

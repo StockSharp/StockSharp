@@ -142,9 +142,6 @@
     <Reference Include="MoreLinq">
       <HintPath>..\..\References\Ecng\MoreLinq.dll</HintPath>
     </Reference>
-    <Reference Include="Northwoods.GoWPF">
-      <HintPath>..\..\Xaml.Diagram\Northwoods.GoWPF.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.configuration" />
     <Reference Include="System.Data" />
@@ -395,6 +392,10 @@
     <Resource Include="StockSharp.db" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\StockSharp %28GitLab%29\Connectors\Fix\Fix.csproj">
+      <Project>{DE2DC640-FA5B-46F2-92E7-E5A53232185F}</Project>
+      <Name>Fix</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Alerts\Alerts.csproj">
       <Project>{96725E45-F785-4612-9743-BFB40A9E725D}</Project>
       <Name>Alerts</Name>
@@ -422,86 +423,6 @@
     <ProjectReference Include="..\..\Configuration\Configuration.csproj">
       <Project>{2CFF1903-4EF5-46F8-AB5D-BB623CA75CE6}</Project>
       <Name>Configuration</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Connectors\AlfaDirect\AlfaDirect.csproj">
-      <Project>{aaa445e0-aa85-4b49-ad45-edd1b4839137}</Project>
-      <Name>AlfaDirect</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Connectors\BitStamp\BitStamp.csproj">
-      <Project>{90b93af4-3168-4415-b916-9e078f192696}</Project>
-      <Name>BitStamp</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\StockSharp %28GitLab%29\Connectors\Blackwood\Blackwood.csproj">
-      <Project>{c0d530dd-1e5a-4be4-9ac6-ff11e5fc9b26}</Project>
-      <Name>Blackwood</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Connectors\Btce\Btce.csproj">
-      <Project>{af225452-1cf1-48a2-b381-c02bebe643d7}</Project>
-      <Name>Btce</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Connectors\CQG\CQG.csproj">
-      <Project>{34984b57-9200-47b9-ac78-0d93fdfa437a}</Project>
-      <Name>CQG</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Connectors\ETrade\ETrade.csproj">
-      <Project>{480539a8-ca30-4b87-b038-6ad854da0c6a}</Project>
-      <Name>ETrade</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\StockSharp %28GitLab%29\Connectors\Fix\Fix.csproj">
-      <Project>{de2dc640-fa5b-46f2-92e7-e5a53232185f}</Project>
-      <Name>Fix</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Connectors\InteractiveBrokers\InteractiveBrokers.csproj">
-      <Project>{f17d780e-6f82-40fd-84e1-c4eb09853bbd}</Project>
-      <Name>InteractiveBrokers</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Connectors\IQFeed\IQFeed.csproj">
-      <Project>{f3068408-9764-432e-8fb4-596b308edb4f}</Project>
-      <Name>IQFeed</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Connectors\LMAX\LMAX.csproj">
-      <Project>{4b37342e-9a01-499b-9e32-2e9948a6d0c4}</Project>
-      <Name>LMAX</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\StockSharp %28GitLab%29\Connectors\Micex\Micex.csproj">
-      <Project>{e0c3bdd6-e75f-48c9-bf8c-05efece3e0b2}</Project>
-      <Name>Micex</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Connectors\Oanda\Oanda.csproj">
-      <Project>{9188d051-7faa-4cf7-9d93-6d59e2faedd0}</Project>
-      <Name>Oanda</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Connectors\OpenECry\OpenECry.csproj">
-      <Project>{17eae926-c9a9-40c7-8d54-3545077b4ab7}</Project>
-      <Name>OpenECry</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\StockSharp %28GitLab%29\Connectors\Plaza\Plaza.csproj">
-      <Project>{7eaba894-fc98-4f5e-a212-c40550260886}</Project>
-      <Name>Plaza</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\StockSharp %28GitLab%29\Connectors\Rithmic\Rithmic.csproj">
-      <Project>{ffbc7740-0d2b-49ba-8f95-59e4fc915d06}</Project>
-      <Name>Rithmic</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Connectors\Rss\Rss.csproj">
-      <Project>{fbc5be61-e6d9-47df-9515-900184ddeba0}</Project>
-      <Name>Rss</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Connectors\SmartCom\SmartCom.csproj">
-      <Project>{3EBEC334-3476-4F65-81C4-BC9D217550C1}</Project>
-      <Name>SmartCom</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Connectors\Quik\Quik.csproj">
-      <Project>{1b798a4e-2271-46f9-9c2d-4e563114e268}</Project>
-      <Name>Quik</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Connectors\Sterling\Sterling.csproj">
-      <Project>{9add140b-1c43-4077-b32e-0eba81648c4d}</Project>
-      <Name>Sterling</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Connectors\Transaq\Transaq.csproj">
-      <Project>{a00e5a4b-cb24-474a-8f2b-06a2e370c4f6}</Project>
-      <Name>Transaq</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\StockSharp %28GitLab%29\Licensing\Licensing.csproj">
       <Project>{baffe041-f00c-4af5-8871-1c4578953352}</Project>

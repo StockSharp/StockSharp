@@ -48,8 +48,16 @@ namespace StockSharp.Algo
 	/// <summary>
 	/// The supplier of information on instruments, getting data from the collection.
 	/// </summary>
-	public class CollectionSecurityProvider : Disposable, ISecurityProvider
+	public class CollectionSecurityProvider : SynchronizedList<Security>, ISecurityProvider
 	{
+		/// <summary>
+		/// Initializes a new instance of the <see cref="CollectionSecurityProvider"/>.
+		/// </summary>
+		public CollectionSecurityProvider()
+			: this(Enumerable.Empty<Security>())
+		{
+		}
+
 		/// <summary>
 		/// Initializes a new instance of the <see cref="CollectionSecurityProvider"/>.
 		/// </summary>
@@ -59,37 +67,48 @@ namespace StockSharp.Algo
 			if (securities == null)
 				throw new ArgumentNullException(nameof(securities));
 
-			_securities = securities.ToArray();
+			//_securities = securities.ToArray();
+
+			AddedRange += s => _added.SafeInvoke(s);
+			RemovedRange += s => _removed.SafeInvoke(s);
 		}
 
-		private readonly Security[] _securities;
+		//private readonly Security[] _securities;
 
-		/// <summary>
-		/// The instruments collection.
-		/// </summary>
-		protected virtual IEnumerable<Security> Securities => _securities;
+		///// <summary>
+		///// The instruments collection.
+		///// </summary>
+		//protected virtual IEnumerable<Security> Securities => _securities;
 
-		/// <summary>
-		/// Gets the number of instruments contained in the <see cref="ISecurityProvider"/>.
-		/// </summary>
-		public int Count => _securities.Length;
+		///// <summary>
+		///// Gets the number of instruments contained in the <see cref="ISecurityProvider"/>.
+		///// </summary>
+		//public int Count => _securities.Length;
 
-		event Action<Security> ISecurityProvider.Added
+		private Action<IEnumerable<Security>> _added;
+
+		event Action<IEnumerable<Security>> ISecurityProvider.Added
 		{
-			add { }
-			remove { }
+			add { _added += value; }
+			remove { _added -= value; }
 		}
 
-		event Action<Security> ISecurityProvider.Removed
+		private Action<IEnumerable<Security>> _removed;
+
+		event Action<IEnumerable<Security>> ISecurityProvider.Removed
 		{
-			add { }
-			remove { }
+			add { _removed += value; }
+			remove { _removed -= value; }
 		}
 
-		event Action ISecurityProvider.Cleared
+		//event Action ISecurityProvider.Cleared
+		//{
+		//	add { }
+		//	remove { }
+		//}
+
+		void IDisposable.Dispose()
 		{
-			add { }
-			remove { }
 		}
 
 		/// <summary>
@@ -99,40 +118,15 @@ namespace StockSharp.Algo
 		/// <returns>Found instruments.</returns>
 		public IEnumerable<Security> Lookup(Security criteria)
 		{
-			var provider = Securities as ISecurityProvider;
-			return provider == null ? Securities.Filter(criteria) : provider.Lookup(criteria);
+			//var provider = Securities as ISecurityProvider;
+			//return provider == null ? Securities.Filter(criteria) : provider.Lookup(criteria);
+			return this.Filter(criteria);
 		}
 
 		object ISecurityProvider.GetNativeId(Security security)
 		{
 			return null;
 		}
-	}
-
-	/// <summary>
-	/// The supplier of information on instruments, getting data from <see cref="IConnector"/>.
-	/// </summary>
-	public class ConnectorSecurityProvider : CollectionSecurityProvider
-	{
-		private readonly IConnector _connector;
-
-		/// <summary>
-		/// Initializes a new instance of the <see cref="ConnectorSecurityProvider"/>.
-		/// </summary>
-		/// <param name="connector">Connection to the trading system.</param>
-		public ConnectorSecurityProvider(IConnector connector)
-			: base(Enumerable.Empty<Security>())
-		{
-			if (connector == null)
-				throw new ArgumentNullException(nameof(connector));
-
-			_connector = connector;
-		}
-
-		/// <summary>
-		/// The instruments collection.
-		/// </summary>
-		protected override IEnumerable<Security> Securities => _connector.Securities;
 	}
 
 	/// <summary>
@@ -255,7 +249,7 @@ namespace StockSharp.Algo
 		/// To calculate the current price by the order book depending on the order direction.
 		/// </summary>
 		/// <param name="depth">The order book for the current price calculation.</param>
-		/// <param name="side">The order direction. If it is a purchase, <see cref="MarketDepth.BestAsk"/> value is used, otherwise <see cref="MarketDepth.BestBid"/>.</param>
+		/// <param name="side">The order direction. If it is a buy, <see cref="MarketDepth.BestAsk"/> value is used, otherwise <see cref="MarketDepth.BestBid"/>.</param>
 		/// <param name="priceType">The type of current price.</param>
 		/// <param name="orders">Orders to be ignored.</param>
 		/// <returns>The current price. If information in order book is insufficient, then <see langword="null" /> will be returned.</returns>
@@ -281,7 +275,7 @@ namespace StockSharp.Algo
 		/// To calculate the current price based on the best pair of quotes, depending on the order direction.
 		/// </summary>
 		/// <param name="bestPair">The best pair of quotes, used for the current price calculation.</param>
-		/// <param name="side">The order direction. If it is a purchase, <see cref="MarketDepthPair.Ask"/> value is used, otherwise <see cref="MarketDepthPair.Bid"/>.</param>
+		/// <param name="side">The order direction. If it is a buy, <see cref="MarketDepthPair.Ask"/> value is used, otherwise <see cref="MarketDepthPair.Bid"/>.</param>
 		/// <param name="priceType">The type of current price.</param>
 		/// <returns>The current price. If information in order book is insufficient, then <see langword="null" /> will be returned.</returns>
 		/// <remarks>
@@ -329,7 +323,7 @@ namespace StockSharp.Algo
 		/// To use shifting for price, depending on direction <paramref name="side" />.
 		/// </summary>
 		/// <param name="price">Price.</param>
-		/// <param name="side">The order direction, used as shift direction (for purchase the shift is added, for sale - subtracted).</param>
+		/// <param name="side">The order direction, used as shift direction (for buy the shift is added, for sell - subtracted).</param>
 		/// <param name="offset">Price shift.</param>
 		/// <param name="security">Security.</param>
 		/// <returns>New price.</returns>
@@ -383,7 +377,7 @@ namespace StockSharp.Algo
 		/// <summary>
 		/// To get the position on My trade.
 		/// </summary>
-		/// <param name="trade">My trade, used for position calculation. At purchase the trade volume <see cref="Trade.Volume"/> is taken with positive sign, at sale � with negative.</param>
+		/// <param name="trade">My trade, used for position calculation. At buy the trade volume <see cref="Trade.Volume"/> is taken with positive sign, at sell - with negative.</param>
 		/// <returns>Position.</returns>
 		public static decimal GetPosition(this MyTrade trade)
 		{
@@ -396,7 +390,7 @@ namespace StockSharp.Algo
 		/// <summary>
 		/// To get the position on My trade.
 		/// </summary>
-		/// <param name="message">My trade, used for position calculation. At purchase the trade volume <see cref="ExecutionMessage.Volume"/> is taken with positive sign, at sale � with negative.</param>
+		/// <param name="message">My trade, used for position calculation. At buy the trade volume <see cref="ExecutionMessage.Volume"/> is taken with positive sign, at sell - with negative.</param>
 		/// <returns>Position.</returns>
 		public static decimal GetPosition(this ExecutionMessage message)
 		{
@@ -409,7 +403,7 @@ namespace StockSharp.Algo
 		/// <summary>
 		/// To get the position by the order.
 		/// </summary>
-		/// <param name="order">The order, used for the position calculation. At purchase the position is taken with positive sign, at sale � with negative.</param>
+		/// <param name="order">The order, used for the position calculation. At buy the position is taken with positive sign, at sell - with negative.</param>
 		/// <param name="connector">The connection of interaction with trade systems.</param>
 		/// <returns>Position.</returns>
 		public static decimal GetPosition(this Order order, IConnector connector)
@@ -3299,14 +3293,27 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// The delimiter, replacing '/' in path for instruments of USD/EUR type. Is equal to '__'.
+		/// The delimiter, replacing '/' in path for instruments with id like USD/EUR. Is equal to '__'.
 		/// </summary>
 		public const string SecurityPairSeparator = "__";
 
 		/// <summary>
-		/// The delimiter, replacing '*' in the path for instruments of the C.BPO-*@CANADIAN type. Is equal to '##STAR##'.
+		/// The delimiter, replacing '*' in the path for instruments with id like C.BPO-*@CANADIAN. Is equal to '##STAR##'.
 		/// </summary>
 		public const string SecurityStarSeparator = "##STAR##";
+		// http://stocksharp.com/forum/yaf_postst4637_API-4-2-2-18--System-ArgumentException--Illegal-characters-in-path.aspx
+
+		/// <summary>
+		/// The delimiter, replacing ':' in the path for instruments with id like AA-CA:SPB@SPBEX. Is equal to '##COLON##'.
+		/// </summary>
+		public const string SecurityColonSeparator = "##COLON##";
+
+		private static readonly CachedSynchronizedDictionary<string, string> _securitySeparators = new CachedSynchronizedDictionary<string, string>
+		{
+			{ "/", SecurityPairSeparator },
+			{ "*", SecurityStarSeparator },
+			{ ":", SecurityColonSeparator }
+		};
 
 		// http://stackoverflow.com/questions/62771/how-check-if-given-string-is-legal-allowed-file-name-under-windows
 		private static readonly string[] _reservedDos =
@@ -3331,14 +3338,13 @@ namespace StockSharp.Algo
 			if (_reservedDos.Any(d => folderName.StartsWith(d, StringComparison.InvariantCultureIgnoreCase)))
 				folderName = "_" + folderName;
 
-			return folderName
-				.Replace("/", SecurityPairSeparator) // для пар вида USD/EUR
-				.Replace("*", SecurityStarSeparator) // http://stocksharp.com/forum/yaf_postst4637_API-4-2-2-18--System-ArgumentException--Illegal-characters-in-path.aspx
-				;
+			return _securitySeparators
+				.CachedPairs
+				.Aggregate(folderName, (current, pair) => current.Replace(pair.Key, pair.Value));
 		}
 
 		/// <summary>
-		/// The inverse conversion from the <see cref="SecurityIdToFolderName(System.String)"/> method.
+		/// The inverse conversion from the <see cref="SecurityIdToFolderName"/> method.
 		/// </summary>
 		/// <param name="folderName">Directory name.</param>
 		/// <returns>Security ID.</returns>
@@ -3352,9 +3358,9 @@ namespace StockSharp.Algo
 			if (id[0] == '_' && _reservedDos.Any(d => id.StartsWith("_" + d, StringComparison.InvariantCultureIgnoreCase)))
 				id = id.Substring(1);
 
-			return id
-				.ReplaceIgnoreCase(SecurityPairSeparator, "/")
-				.ReplaceIgnoreCase(SecurityStarSeparator, "*");
+			return _securitySeparators
+				.CachedPairs
+				.Aggregate(id, (current, pair) => current.ReplaceIgnoreCase(pair.Value, pair.Key));
 		}
 
 		/// <summary>

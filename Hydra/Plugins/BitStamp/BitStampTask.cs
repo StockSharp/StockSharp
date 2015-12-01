@@ -63,10 +63,7 @@ namespace StockSharp.Hydra.BitStamp
 
 		private BitStampSettings _settings;
 
-		public override HydraTaskSettings Settings
-		{
-			get { return _settings; }
-		}
+		public override HydraTaskSettings Settings => _settings;
 
 		protected override void ApplySettings(HydraTaskSettings settings)
 		{

@@ -157,7 +157,7 @@ namespace StockSharp.Hydra.Windows
 			{
 				var formats = Enumerator.GetValues<StorageFormats>().ToArray();
 
-				var iterCount = drives.Length * (securities == null ? ((IStorageEntityList<Security>)EntityRegistry.Securities).Count : securities.Length) * 5 /* message types count */ * formats.Length;
+				var iterCount = drives.Length * (securities?.Length ?? ((IStorageEntityList<Security>)EntityRegistry.Securities).Count) * 5 /* message types count */ * formats.Length;
 
 				this.GuiSync(() => Progress.Maximum = iterCount);
 
@@ -193,7 +193,7 @@ namespace StockSharp.Hydra.Windows
 									break;
 
 								StorageRegistry
-										.GetStorage(security, dataType.Item1, dataType.Item2, drive, format)
+										.GetStorage(security, dataType.MessageType, dataType.Arg, drive, format)
 										.Delete(from, to);
 
 								this.GuiSync(() =>

@@ -7,6 +7,7 @@ namespace StockSharp.Hydra.Oanda
 	using Ecng.Common;
 	using Ecng.ComponentModel;
 
+	using StockSharp.Algo;
 	using StockSharp.Algo.History;
 	using StockSharp.Algo.History.Forex;
 	using StockSharp.Algo.Storages;
@@ -72,17 +73,12 @@ namespace StockSharp.Hydra.Oanda
 			}
 		}
 
-		public override HydraTaskSettings Settings
-		{
-			get { return _settings; }
-		}
+		public override HydraTaskSettings Settings => _settings;
 
-		private readonly Type[] _supportedMarketDataTypes = { typeof(Level1ChangeMessage) };
-
-		public override IEnumerable<Type> SupportedMarketDataTypes
+		public override IEnumerable<DataType> SupportedDataTypes { get; } = new[]
 		{
-			get { return _supportedMarketDataTypes; }
-		}
+			DataType.Create(typeof(Level1ChangeMessage), null)
+		};
 
 		protected override TimeSpan OnProcess()
 		{
@@ -106,7 +102,7 @@ namespace StockSharp.Hydra.Oanda
 				if (!CanProcess())
 					break;
 
-				if (!security.MarketDataTypesSet.Contains(typeof(Level1ChangeMessage)))
+				if (!security.IsLevel1Enabled())
 				{
 					this.AddDebugLog(LocalizedStrings.MarketDataNotEnabled, security.Security.Id, typeof(Level1ChangeMessage).Name);
 					break;

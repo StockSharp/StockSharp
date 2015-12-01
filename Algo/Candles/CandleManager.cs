@@ -44,11 +44,11 @@ namespace StockSharp.Algo.Candles
 
 				private void OnProcessing(CandleSeries series, Candle candle)
 				{
-					if (candle.Series == null)
-					{
-						candle.Series = series;
-						candle.Source = _source;
-					}
+					//if (candle.Series == null)
+					//{
+					//	candle.Series = series;
+					//	candle.Source = _source;
+					//}
 
 					_manager.Container.AddCandle(series, candle);
 				}
@@ -356,7 +356,7 @@ namespace StockSharp.Algo.Candles
 
 				_series.Add(series, enumerator);
 
-				series.CandleManager = this;
+				//series.CandleManager = this;
 				series.From = from;
 				series.To = to;
 

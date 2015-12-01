@@ -1,13 +1,13 @@
 ﻿namespace StockSharp.Hydra.Core
 {
 	using System;
+	using System.Linq;
 
 	using Ecng.Collections;
-	using Ecng.Common;
 	using Ecng.ComponentModel;
 	using Ecng.Serialization;
 
-	using StockSharp.Algo.Candles;
+	using StockSharp.Algo;
 	using StockSharp.BusinessEntities;
 
 	/// <summary>
@@ -82,42 +82,45 @@
 		/// Типы данных, которые нужно получать для данного инструмента.
 		/// </summary>
 		[Collection]
-		public Type[] MarketDataTypes
+		public DataType[] DataTypes
 		{
-			get { return MarketDataTypesSet.Cache; }
+			get { return DataTypesSet.Cache; }
 			set
 			{
 				if (value == null)
 					throw new ArgumentNullException(nameof(value));
 
-				MarketDataTypesSet.Clear();
-				MarketDataTypesSet.AddRange(value);
+				if (value.Any(t => t.MessageType == null))
+					throw new ArgumentException(nameof(value));
+
+				DataTypesSet.Clear();
+				DataTypesSet.AddRange(value);
 			}
 		}
 
-		private CandleSeries[] _candleSeries = ArrayHelper.Empty<CandleSeries>();
+		//private CandleSeries[] _candleSeries = ArrayHelper.Empty<CandleSeries>();
+
+		///// <summary>
+		///// Серии свечек, которые необходимо скачивать для данного инструмента.
+		///// </summary>
+		//[Collection]
+		//public CandleSeries[] CandleSeries
+		//{
+		//	get { return _candleSeries; }
+		//	set
+		//	{
+		//		if (value == null)
+		//			throw new ArgumentNullException(nameof(value));
+
+		//		_candleSeries = value;
+		//	}
+		//}
 
 		/// <summary>
-		/// Серии свечек, которые необходимо скачивать для данного инструмента.
-		/// </summary>
-		[Collection]
-		public CandleSeries[] CandleSeries
-		{
-			get { return _candleSeries; }
-			set
-			{
-				if (value == null)
-					throw new ArgumentNullException(nameof(value));
-
-				_candleSeries = value;
-			}
-		}
-
-		/// <summary>
-		/// Хэш-коллекция для быстрой проверки <see cref="MarketDataTypes"/>.
+		/// Хэш-коллекция для быстрой проверки <see cref="DataTypes"/>.
 		/// </summary>
 		[Ignore]
-		public readonly CachedSynchronizedSet<Type> MarketDataTypesSet = new CachedSynchronizedSet<Type>();
+		public readonly CachedSynchronizedSet<DataType> DataTypesSet = new CachedSynchronizedSet<DataType>();
 
 		private TypeInfo _tradeInfo = new TypeInfo();
 
@@ -219,7 +222,7 @@
 			}
 		}
 
-		private TypeInfo _executionInfo = new TypeInfo();
+		private TypeInfo _transactionInfo = new TypeInfo();
 
 		/// <summary>
 		/// Информация о логе собственных транзакций.
@@ -227,15 +230,15 @@
 		[InnerSchema]
 		[NameOverride("Count", "ExecutionCount")]
 		[NameOverride("LastTime", "ExecutionLastTime")]
-		public TypeInfo ExecutionInfo
+		public TypeInfo TransactionInfo
 		{
-			get { return _executionInfo; }
+			get { return _transactionInfo; }
 			set
 			{
 				if (value == null)
 					throw new ArgumentNullException(nameof(value));
 
-				_executionInfo = value;
+				_transactionInfo = value;
 			}
 		}
 
@@ -246,7 +249,7 @@
 		public override string ToString()
 		{
 			var s = Security;
-			return s == null ? string.Empty : s.ToString();
+			return s?.ToString() ?? string.Empty;
 		}
 	}
 }

@@ -1,12 +1,16 @@
 namespace StockSharp.Algo
 {
+	using System;
 	using System.Collections;
 	using System.Collections.Generic;
 	using System.Linq;
 
+	using Ecng.Collections;
 	using Ecng.Common;
 
 	using Gma.DataStructures.StringSearch;
+
+	using MoreLinq;
 
 	using StockSharp.BusinessEntities;
 
@@ -17,7 +21,7 @@ namespace StockSharp.Algo
 	{
 		private readonly SyncObject _sync = new SyncObject();
 
-		private readonly List<Security> _allSecurities = new List<Security>();
+		private readonly HashSet<Security> _allSecurities = new HashSet<Security>();
 		private readonly ITrie<Security> _trie = new SuffixTrie<Security>(1);
 
 		/// <summary>
@@ -110,6 +114,31 @@ namespace StockSharp.Algo
 			{
 				_trie.Remove(security);
 				return _allSecurities.Remove(security);
+			}
+		}
+
+		/// <summary>
+		/// Remove the instruments.
+		/// </summary>
+		/// <param name="securities">The instruments.</param>
+		public void RemoveRange(IEnumerable<Security> securities)
+		{
+			if (securities == null)
+				throw new ArgumentNullException(nameof(securities));
+
+			securities = securities.ToArray();
+
+            lock (_sync)
+			{
+				if (securities.Count() > 1000 || securities.Count() > _allSecurities.Count * 0.1)
+				{
+					_trie.Clear();
+					securities.ForEach(Add);
+                }
+				else
+					_trie.RemoveRange(securities);
+
+				_allSecurities.RemoveRange(securities);
 			}
 		}
 

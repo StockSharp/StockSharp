@@ -247,7 +247,7 @@ namespace StockSharp.Messages
 				default:
 				{
 					var candleMsg = message as CandleMessage;
-					return candleMsg == null ? (DateTimeOffset?)null : candleMsg.OpenTime;
+					return candleMsg?.OpenTime;
 				}
 			}
 		}
@@ -344,6 +344,19 @@ namespace StockSharp.Messages
 				throw new ArgumentNullException(nameof(adapter));
 
 			return adapter.SupportedMessages.Contains(type);
+		}
+
+		/// <summary>
+		/// Determines whether the specified message type is derived from <see cref="CandleMessage"/>.
+		/// </summary>
+		/// <param name="messageType">The message type.</param>
+		/// <returns><see langword="true"/> if the specified message type is derived from <see cref="CandleMessage"/>, otherwise, <see langword="false"/>.</returns>
+		public static bool IsCandleMessage(this Type messageType)
+		{
+			if (messageType == null)
+				throw new ArgumentNullException(nameof(messageType));
+
+			return messageType.IsSubclassOf(typeof(CandleMessage));
 		}
 	}
 }

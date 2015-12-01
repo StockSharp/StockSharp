@@ -31,8 +31,7 @@
 			_entityRegistry = entityRegistry;
 			_cacheByNativeId = new SynchronizedDictionary<TNativeId, Security>(comparer);
 
-			foreach (var security in entityRegistry.Securities)
-				TryAddToCache(security);
+			TryAddToCache(entityRegistry.Securities);
 		}
 
 		private readonly SynchronizedDictionary<TNativeId, Security> _cacheByNativeId;
@@ -40,15 +39,9 @@
 		/// <summary>
 		/// All available securities.
 		/// </summary>
-		public IEnumerable<Security> Securities
-		{
-			get { return _cacheByNativeId.Values; }
-		}
+		public IEnumerable<Security> Securities => _cacheByNativeId.Values;
 
-		int ISecurityProvider.Count
-		{
-			get { return _cacheByNativeId.Count; }
-		}
+		int ISecurityProvider.Count => _cacheByNativeId.Count;
 
 		object ISecurityProvider.GetNativeId(Security security)
 		{
@@ -75,29 +68,36 @@
 			return security == null ? Enumerable.Empty<Security>() : new[] { security };
 		}
 
-		private void TryAddToCache(Security security)
+		private void TryAddToCache(IEnumerable<Security> securities)
 		{
-			if (security == null)
-				throw new ArgumentNullException(nameof(security));
+			if (securities == null)
+				throw new ArgumentNullException(nameof(securities));
 
-			var nativeId = security.ExtensionInfo == null ? default(TNativeId) : CreateNativeId(security);
+			var newSecurities = new List<Security>();
 
-			if (nativeId == null)
-				return;
+			foreach (var security in securities)
+			{
+				var nativeId = security.ExtensionInfo == null ? default(TNativeId) : CreateNativeId(security);
 
-			bool isNew;
-			_cacheByNativeId.SafeAdd(nativeId, key => security, out isNew);
+				if (nativeId == null)
+					return;
 
-			if (isNew)
-				Added.SafeInvoke(security);
+				bool isNew;
+				_cacheByNativeId.SafeAdd(nativeId, key => security, out isNew);
+
+				if (isNew)
+					newSecurities.Add(security);
+			}
+
+			Added.SafeInvoke(newSecurities);
 		}
 
 		/// <summary>
-		/// New instrument created.
+		/// New instruments added.
 		/// </summary>
-		public event Action<Security> Added;
+		public event Action<IEnumerable<Security>> Added;
 
-		event Action<Security> ISecurityProvider.Removed
+		event Action<IEnumerable<Security>> ISecurityProvider.Removed
 		{
 			add { }
 			remove { }
@@ -112,7 +112,7 @@
 		void ISecurityStorage.Save(Security security)
 		{
 			_entityRegistry.Securities.Save(security);
-			TryAddToCache(security);
+			TryAddToCache(new[] { security });
 		}
 
 		IEnumerable<string> ISecurityStorage.GetSecurityIds()

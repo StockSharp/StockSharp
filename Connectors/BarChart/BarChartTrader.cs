@@ -144,12 +144,12 @@ namespace StockSharp.BarChart
 		/// To get historical candles.
 		/// </summary>
 		/// <param name="security">The instrument for which you need to get candles.</param>
-		/// <param name="candleType">The candle type.</param>
+		/// <param name="candleMessageType">The candle message type.</param>
 		/// <param name="arg">The candle parameter (for example, time-frame).</param>
 		/// <param name="count">Maximum ticks count.</param>
 		/// <param name="isSuccess">Whether all data were obtained successfully or the download process has been interrupted.</param>
 		/// <returns>Historical candles.</returns>
-		public IEnumerable<CandleMessage> GetHistoricalCandles(Security security, Type candleType, object arg, long count, out bool isSuccess)
+		public IEnumerable<CandleMessage> GetHistoricalCandles(Security security, Type candleMessageType, object arg, long count, out bool isSuccess)
 		{
 			if (security == null)
 				throw new ArgumentNullException(nameof(security));
@@ -159,7 +159,7 @@ namespace StockSharp.BarChart
 
 			var transactionId = TransactionIdGenerator.GetNextId();
 
-			var series = new CandleSeries(candleType, security, arg);
+			var series = new CandleSeries(candleMessageType.ToCandleType(), security, arg);
 
 			this.AddInfoLog(LocalizedStrings.Str2146Params, series, count);
 
@@ -195,13 +195,13 @@ namespace StockSharp.BarChart
 		/// To get historical candles.
 		/// </summary>
 		/// <param name="security">The instrument for which you need to get candles.</param>
-		/// <param name="candleType">The candle type.</param>
+		/// <param name="candleMessageType">The candle message type.</param>
 		/// <param name="arg">The candle parameter (for example, time-frame).</param>
 		/// <param name="from">Begin period.</param>
 		/// <param name="to">End period.</param>
 		/// <param name="isSuccess">Whether all data were obtained successfully or the download process has been interrupted.</param>
 		/// <returns>Historical candles.</returns>
-		public IEnumerable<CandleMessage> GetHistoricalCandles(Security security, Type candleType, object arg, DateTime from, DateTime to, out bool isSuccess)
+		public IEnumerable<CandleMessage> GetHistoricalCandles(Security security, Type candleMessageType, object arg, DateTime from, DateTime to, out bool isSuccess)
 		{
 			if (security == null)
 				throw new ArgumentNullException(nameof(security));
@@ -211,7 +211,7 @@ namespace StockSharp.BarChart
 
 			var id = TransactionIdGenerator.GetNextId();
 
-			var series = new CandleSeries(candleType, security, arg);
+			var series = new CandleSeries(candleMessageType.ToCandleType(), security, arg);
 
 			this.AddInfoLog(LocalizedStrings.Str2148Params, series, from, to);
 

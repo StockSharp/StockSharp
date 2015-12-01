@@ -83,9 +83,9 @@ namespace StockSharp.Algo.Export
 					Export(((IEnumerable<OrderLogItem>)values).Select(i => i.ToMessage()));
 				else if (dataType == typeof(ExecutionMessage))
 					Export((IEnumerable<ExecutionMessage>)values);
-				else if (dataType.IsSubclassOf(typeof(Candle)))
+				else if (dataType.IsCandle())
 					Export(((IEnumerable<Candle>)values).Select(c => c.ToMessage()));
-				else if (dataType.IsSubclassOf(typeof(CandleMessage)))
+				else if (dataType.IsCandleMessage())
 					Export((IEnumerable<CandleMessage>)values);
 				else if (dataType == typeof(News))
 					Export(((IEnumerable<News>)values).Select(s => s.ToMessage()));

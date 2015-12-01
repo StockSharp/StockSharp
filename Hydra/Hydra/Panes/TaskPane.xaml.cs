@@ -22,7 +22,6 @@ namespace StockSharp.Hydra.Panes
 	using MoreLinq;
 
 	using StockSharp.Algo;
-	using StockSharp.Algo.Candles;
 	using StockSharp.Algo.Storages;
 	using StockSharp.BusinessEntities;
 	using StockSharp.Hydra.Windows;
@@ -35,10 +34,7 @@ namespace StockSharp.Hydra.Panes
 	{
 		public static RoutedUICommand OpenDirectoryCommand = new RoutedUICommand();
 
-		private static IEntityRegistry EntityRegistry
-		{
-			get { return ConfigManager.GetService<IEntityRegistry>();  }
-		}
+		private static IEntityRegistry EntityRegistry => ConfigManager.GetService<IEntityRegistry>();
 
 		public static readonly DependencyProperty TaskProperty = DependencyProperty.Register("Task", typeof(IHydraTask), typeof(TaskPane), new PropertyMetadata(null,
 			(o, args) =>
@@ -70,7 +66,7 @@ namespace StockSharp.Hydra.Panes
 				task.Stopped += pane.OnStopedTask;
 
 				pane.AddAllSecurity.Content = Core.Extensions.AllSecurityId;
-				pane.TimeFrames.ItemsSource = new ObservableCollection<SelectableObject>(task.SupportedCandleSeries.Select(s => new SelectableObject(s)));
+				pane.TimeFrames.ItemsSource = new ObservableCollection<SelectableObject>(task.SupportedDataTypes.Where(t => t.MessageType.IsCandleMessage()).Select(s => new SelectableObject(s)));
 
 				//pane.DeleteSecurities.IsEnabled = false;
 
@@ -78,7 +74,7 @@ namespace StockSharp.Hydra.Panes
 				{
 					var checkBox = pair.Key;
 
-					checkBox.IsEnabled = task.SupportedMarketDataTypes.Contains(pair.Value.Item1);
+					checkBox.IsEnabled = task.SupportedDataTypes.Contains(pair.Value.Item1);
 
 					if (checkBox.IsEnabled)
 						continue;
@@ -87,7 +83,7 @@ namespace StockSharp.Hydra.Panes
 					checkBox.IsChecked = false;
 				}
 
-				pane.Candles.IsEnabled = task.SupportedMarketDataTypes.Contains(typeof(Candle));
+				pane.Candles.IsEnabled = task.SupportedDataTypes.Any(t => t.MessageType.IsCandleMessage());
 			}));
 
 		private IHydraTask _task;
@@ -145,109 +141,76 @@ namespace StockSharp.Hydra.Panes
 
 			public void RemoveRange(IEnumerable<HydraTaskSecurity> securities)
 			{
-				foreach (var security in securities)
-				{
-					Remove(security.Security);
-					_securities.Remove(security.Security);
-				}
+				var keys = securities.Select(s => s.Security).ToArray();
+
+                RemoveRange(keys);
+
+				foreach (var security in keys)
+					_securities.Remove(security);
 			}
 		}
 
 		private readonly HydraSecurityTrie _allSecurities = new HydraSecurityTrie();
 		private readonly ObservableCollection<TaskVisualSecurity> _filteredSecurities = new ObservableCollection<TaskVisualSecurity>();
-		private readonly Dictionary<CheckBox, Tuple<Type, Func<TaskVisualSecurity, bool>, Action<TaskVisualSecurity, bool>>> _dataTypes = new Dictionary<CheckBox, Tuple<Type, Func<TaskVisualSecurity, bool>, Action<TaskVisualSecurity, bool>>>();
+		private readonly Dictionary<CheckBox, Tuple<DataType, Func<TaskVisualSecurity, bool>, Action<TaskVisualSecurity, bool>>> _dataTypes = new Dictionary<CheckBox, Tuple<DataType, Func<TaskVisualSecurity, bool>, Action<TaskVisualSecurity, bool>>>();
 
 		private readonly PairSet<HydraTaskSecurity, TaskVisualSecurity> _visualSecurities = new PairSet<HydraTaskSecurity, TaskVisualSecurity>(); 
 
 		public class TaskVisualSecurity : NotifiableObject
 		{
-			public HydraTaskSecurity TaskSecurity { get; private set; }
+			public HydraTaskSecurity TaskSecurity { get; }
 
 			public TaskVisualSecurity(HydraTaskSecurity taskSecurity)
 			{
 				TaskSecurity = taskSecurity;
 			}
 
-			public bool GetIsEnabled(Type dataType)
+			public bool GetIsEnabled(Type dataType, object arg)
 			{
 				if (dataType == null)
 					throw new ArgumentNullException(nameof(dataType));
 
-				return TaskSecurity.MarketDataTypesSet.Contains(dataType);
+				return TaskSecurity.DataTypesSet.Contains(DataType.Create(dataType, arg));
 			}
 
-			public void SetIsEnabled(Type dataType, bool value)
+			public void SetIsEnabled(string name, Type dataType, object arg, bool value)
 			{
 				if (dataType == null)
 					throw new ArgumentNullException(nameof(dataType));
 
-				var set = TaskSecurity.MarketDataTypesSet;
+				var set = TaskSecurity.DataTypesSet;
 
 				if (value)
-					set.Add(dataType);
+					set.Add(DataType.Create(dataType, arg));
 				else
-					set.Remove(dataType);
+					set.Remove(DataType.Create(dataType, arg));
 
-				TaskSecurity.MarketDataTypes = set.ToArray();
+				TaskSecurity.DataTypes = set.ToArray();
 
-				NotifyChanged("Is{0}Enabled".Put(dataType.Name
-					.Replace("ChangeMessage", string.Empty)
-					.Replace("Message", string.Empty)
-					.Replace("Market", string.Empty)
-					.Replace("Item", string.Empty)));
+				SetIsEnabled(name);
+			}
 
+			public void SetIsEnabled(string name)
+			{
+				NotifyChanged("Is{0}Enabled".Put(name));
 				NotifyChanged("IsInvalid");
 			}
 
-			public bool IsTradeEnabled
-			{
-				get { return GetIsEnabled(typeof(Trade)); }
-			}
+			public bool IsTicksEnabled => GetIsEnabled(typeof(ExecutionMessage), ExecutionTypes.Tick);
+			public bool IsDepthsEnabled => GetIsEnabled(typeof(QuoteChangeMessage), null);
+			public bool IsLevel1Enabled => GetIsEnabled(typeof(Level1ChangeMessage), null);
+			public bool IsOrderLogEnabled => GetIsEnabled(typeof(ExecutionMessage), ExecutionTypes.OrderLog);
+			public bool IsCandlesEnabled => TaskSecurity.GetCandleSeries().Any();
+			public bool IsTransactionsEnabled => GetIsEnabled(typeof(ExecutionMessage), ExecutionTypes.Order);
+			public bool IsNewsEnabled => GetIsEnabled(typeof(NewsMessage), null);
 
-			public bool IsDepthEnabled
-			{
-				get { return GetIsEnabled(typeof(QuoteChangeMessage)); }
-			}
-
-			public bool IsLevel1Enabled
-			{
-				get { return GetIsEnabled(typeof(Level1ChangeMessage)); }
-			}
-
-			public bool IsOrderLogEnabled
-			{
-				get { return GetIsEnabled(typeof(OrderLogItem)); }
-			}
-
-			public bool IsCandleEnabled
-			{
-				get { return GetIsEnabled(typeof(Candle)); }
-			}
-
-			public bool IsExecutionEnabled
-			{
-				get { return GetIsEnabled(typeof(ExecutionMessage)); }
-			}
-
-			public bool IsNewsEnabled
-			{
-				get { return GetIsEnabled(typeof(NewsMessage)); }
-			}
-
-			public bool IsInvalid
-			{
-				get
-				{
-					return
-						!IsTradeEnabled &&
-						!IsDepthEnabled &&
-						!IsLevel1Enabled &&
-						!IsOrderLogEnabled &&
-						!IsCandleEnabled &&
-						!IsExecutionEnabled &&
-						!IsNewsEnabled;
-				}
-			}
+			public bool IsInvalid => !IsTicksEnabled &&
+			                         !IsDepthsEnabled &&
+			                         !IsLevel1Enabled &&
+			                         !IsOrderLogEnabled &&
+			                         !IsCandlesEnabled &&
+			                         !IsTransactionsEnabled &&
+			                         !IsNewsEnabled;
 		}
 
 		private TaskVisualSecurity ToVisualSecurity(HydraTaskSecurity security)
@@ -269,19 +232,20 @@ namespace StockSharp.Hydra.Panes
 				Command = OpenDirectoryCommand,
 			});
 
-			AddDataType<Trade>(Trades);
-			AddDataType<QuoteChangeMessage>(Depths);
-			AddDataType<Level1ChangeMessage>(Level1Changes);
-			AddDataType<OrderLogItem>(OrderLog);
-			AddDataType<ExecutionMessage>(Transactions);
-			AddDataType<NewsMessage>(News);
+			AddDataType<ExecutionMessage>(Ticks, ExecutionTypes.Tick);
+			AddDataType<QuoteChangeMessage>(Depths, null);
+			AddDataType<Level1ChangeMessage>(Level1, null);
+			AddDataType<ExecutionMessage>(OrderLog, ExecutionTypes.OrderLog);
+			AddDataType<ExecutionMessage>(Transactions, ExecutionTypes.Order);
+			AddDataType<NewsMessage>(News, null);
 		}
 
-		private void AddDataType<T>(CheckBox checkBox)
+		private void AddDataType<T>(CheckBox checkBox, object arg)
+			where T : Message
 		{
-			Func<TaskVisualSecurity, bool> get = s => s.GetIsEnabled(typeof(T));
-			Action<TaskVisualSecurity, bool> set = (s, v) => s.SetIsEnabled(typeof(T), v);
-			_dataTypes.Add(checkBox, Tuple.Create(typeof(T), get, set));
+			Func<TaskVisualSecurity, bool> get = s => s.GetIsEnabled(typeof(T), arg);
+			Action<TaskVisualSecurity, bool> set = (s, v) => s.SetIsEnabled(checkBox.Name, typeof(T), arg, v);
+			_dataTypes.Add(checkBox, Tuple.Create(DataType.Create(typeof(T), arg), get, set));
 		}
 
 		private bool _isInitialized;
@@ -310,15 +274,9 @@ namespace StockSharp.Hydra.Panes
 				});
 		}
 
-		private TaskVisualSecurity SelectedSecurity
-		{
-			get { return SelectedSecurities.FirstOrDefault(); }
-		}
+		private TaskVisualSecurity SelectedSecurity => SelectedSecurities.FirstOrDefault();
 
-		public TaskVisualSecurity[] SelectedSecurities
-		{
-			get { return SecuritiesCtrl.SelectedItems.Cast<TaskVisualSecurity>().ToArray(); }
-		}
+		public TaskVisualSecurity[] SelectedSecurities => SecuritiesCtrl.SelectedItems.Cast<TaskVisualSecurity>().ToArray();
 
 		private void NameLikeTextChanged(object sender, TextChangedEventArgs e)
 		{
@@ -368,7 +326,7 @@ namespace StockSharp.Hydra.Panes
 
 		sealed class SelectableObject : NotifiableObject
 		{
-			public SelectableObject(CandleSeries value)
+			public SelectableObject(DataType value)
 			{
 				if (value == null)
 					throw new ArgumentNullException(nameof(value));
@@ -376,7 +334,7 @@ namespace StockSharp.Hydra.Panes
 				Value = value;
 			}
 
-			public CandleSeries Value { get; private set; }
+			public DataType Value { get; }
 
 			private bool? _isSelected;
 
@@ -409,8 +367,7 @@ namespace StockSharp.Hydra.Panes
 			{
 				Security = security,
 				Settings = Task.Settings,
-				MarketDataTypes = Task.SupportedMarketDataTypes.ToArray(),
-				CandleSeries = Task.SupportedCandleSeries.ToArray(),
+				DataTypes = Task.SupportedDataTypes.ToArray(),
 			};
 		}
 
@@ -531,7 +488,7 @@ namespace StockSharp.Hydra.Panes
 					var item = i;
 
 					var states = selectedSecurities
-						.Select(security => _visualSecurities[security].CandleSeries
+						.Select(security => _visualSecurities[security].GetCandleSeries()
 							.Select(a => a.Arg)
 							.Contains(item.Value.Arg))
 						.ToArray();
@@ -619,16 +576,15 @@ namespace StockSharp.Hydra.Panes
 			{
 				var taskSecurity = _visualSecurities[selectedSecurity];
 
-				var series = taskSecurity.CandleSeries.ToList();
-
-				if (checkBox.IsChecked == true && !series.Any(s => s.CandleType == selectedSeries.CandleType && s.Arg.Equals(selectedSeries.Arg)))
-					series.Add(selectedSeries.Clone());
+				if (checkBox.IsChecked == true && !taskSecurity.DataTypesSet.Contains(selectedSeries))
+					taskSecurity.DataTypesSet.Add(selectedSeries);
 
 				if (checkBox.IsChecked != true)
-					series.RemoveWhere(s => s.CandleType == selectedSeries.CandleType && s.Arg.Equals(selectedSeries.Arg));
+					taskSecurity.DataTypesSet.Remove(selectedSeries);
 
-				taskSecurity.CandleSeries = series.ToArray();
-				selectedSecurity.SetIsEnabled(typeof(Candle), taskSecurity.CandleSeries.Any());
+				taskSecurity.DataTypes = taskSecurity.DataTypesSet.ToArray();
+
+				selectedSecurity.SetIsEnabled("Candles");
 			}
 
 			SaveSecurities();
@@ -674,20 +630,11 @@ namespace StockSharp.Hydra.Panes
 			storage.SetValue("Securities", SecuritiesCtrl.Save());
 		}
 
-		bool IPane.IsValid
-		{
-			get { return Task != null; }
-		}
+		bool IPane.IsValid => Task != null;
 
-		string IPane.Title
-		{
-			get { return Task.Settings.Title; }
-		}
+		string IPane.Title => Task.Settings.Title;
 
-		Uri IPane.Icon
-		{
-			get { return Task.Icon; }
-		}
+		Uri IPane.Icon => Task.Icon;
 
 		void IDisposable.Dispose()
 		{
@@ -705,11 +652,11 @@ namespace StockSharp.Hydra.Panes
 
 	sealed class CandleSeriesCheckBox : CheckBox
 	{
-		public static readonly DependencyProperty SeriesProperty = DependencyProperty.Register("Series", typeof(CandleSeries), typeof(CandleSeriesCheckBox));
+		public static readonly DependencyProperty SeriesProperty = DependencyProperty.Register("Series", typeof(DataType), typeof(CandleSeriesCheckBox));
 
-		public CandleSeries Series
+		public DataType Series
 		{
-			get { return (CandleSeries)GetValue(SeriesProperty); }
+			get { return (DataType)GetValue(SeriesProperty); }
 			set { SetValue(SeriesProperty, value); }
 		}
 	}
@@ -746,7 +693,7 @@ namespace StockSharp.Hydra.Panes
 	{
 		object IValueConverter.Convert(object value, Type targetType, object parameter, CultureInfo culture)
 		{
-			var tf = (TimeSpan)((CandleSeries)value).Arg;
+			var tf = (TimeSpan)((DataType)value).Arg;
 
 			var str = string.Empty;
 

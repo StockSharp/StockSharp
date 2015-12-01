@@ -129,6 +129,13 @@ namespace StockSharp.Algo.Storages
 		private IMarketDataStorage GetStorage(SecurityId securityId, Type messageType, object arg)
 		{
 			var security = _entityRegistry.Securities.ReadBySecurityId(securityId);
+
+			if (security == null)
+				security = TryCreateSecurity(securityId);
+
+			if (security == null)
+				throw new InvalidOperationException(Localization.LocalizedStrings.Str704Params.Put(securityId));
+
 			return _storageRegistry.GetStorage(security, messageType, arg, Drive, Format);
 		}
 
@@ -140,6 +147,9 @@ namespace StockSharp.Algo.Storages
 			var requiredSecurities = new List<SecurityId>();
 			var availableSecurities = Drive.AvailableSecurities.ToHashSet();
 
+			foreach (var board in _entityRegistry.ExchangeBoards)
+				RaiseStorageMessage(board.ToMessage());
+
 			foreach (var security in _entityRegistry.Securities)
 			{
 				var msg = security.ToMessage();
@@ -149,17 +159,20 @@ namespace StockSharp.Algo.Storages
                     requiredSecurities.Add(msg.SecurityId);
 				}
 
-                RaiseNewOutMessage(msg);
+				RaiseStorageMessage(msg);
 			}
 
-			foreach (var board in _entityRegistry.ExchangeBoards)
-				RaiseNewOutMessage(board.ToMessage());
-
 			foreach (var portfolio in _entityRegistry.Portfolios)
-				RaiseNewOutMessage(portfolio.ToMessage());
+			{
+				RaiseStorageMessage(portfolio.ToMessage());
+				RaiseStorageMessage(portfolio.ToChangeMessage());
+			}
 
 			foreach (var position in _entityRegistry.Positions)
-				RaiseNewOutMessage(position.ToMessage());
+			{
+				RaiseStorageMessage(position.ToMessage());
+				RaiseStorageMessage(position.ToChangeMessage());
+			}
 
 			if (DaysLoad == TimeSpan.Zero)
 				return;
@@ -168,15 +181,15 @@ namespace StockSharp.Algo.Storages
 			{
 				GetStorage<ExecutionMessage>(secId, ExecutionTypes.Tick)
 					.Load(DateTimeOffset.Now - DaysLoad, DateTimeOffset.Now)
-					.ForEach(RaiseNewOutMessage);
+					.ForEach(RaiseStorageMessage);
 
 				GetStorage<ExecutionMessage>(secId, ExecutionTypes.Order)
 					.Load(DateTimeOffset.Now - DaysLoad, DateTimeOffset.Now)
-					.ForEach(RaiseNewOutMessage);
+					.ForEach(RaiseStorageMessage);
 
 				GetStorage<ExecutionMessage>(secId, ExecutionTypes.OrderLog)
 					.Load(DateTimeOffset.Now - DaysLoad, DateTimeOffset.Now)
-					.ForEach(RaiseNewOutMessage);
+					.ForEach(RaiseStorageMessage);
 			}
 
 			//_storageRegistry.DefaultDrive.GetCandleTypes();
@@ -221,6 +234,7 @@ namespace StockSharp.Algo.Storages
 						// TODO apply changes
 					}
 
+					_entityRegistry.Exchanges.Save(board.Exchange);
                     _entityRegistry.ExchangeBoards.Save(board);
 					break;
 				}
@@ -291,21 +305,17 @@ namespace StockSharp.Algo.Storages
 
 		private Position GetPosition(SecurityId securityId, string portfolioName)
 		{
-			var security = _entityRegistry.Securities.ReadBySecurityId(securityId);
-			var portfolio = _entityRegistry.Portfolios.ReadById(portfolioName);
+			var security = !securityId.SecurityCode.IsEmpty() && !securityId.BoardCode.IsEmpty()
+				? _entityRegistry.Securities.ReadBySecurityId(securityId)
+				: _entityRegistry.Securities.Lookup(new Security { Code = securityId.SecurityCode, Type = securityId.SecurityType }).FirstOrDefault();
 
 			if (security == null)
-			{
-				if (securityId.SecurityCode.IsEmpty())
-					return null;
+				security = TryCreateSecurity(securityId);
 
-				security = new Security
-				{
-					Id = securityId.SecurityCode + "@" + securityId.BoardCode
-				};
+			if (security == null)
+				return null;
 
-				_entityRegistry.Securities.Add(security);
-			}
+			var portfolio = _entityRegistry.Portfolios.ReadById(portfolioName);
 
 			if (portfolio == null)
 			{
@@ -319,6 +329,32 @@ namespace StockSharp.Algo.Storages
 
 			return _entityRegistry.Positions.ReadBySecurityAndPortfolio(security, portfolio)
 				?? new Position { Security = security, Portfolio = portfolio };
+		}
+
+		private Security TryCreateSecurity(SecurityId securityId)
+		{
+			if (securityId.SecurityCode.IsEmpty() || securityId.BoardCode.IsEmpty())
+				return null;
+
+			var security = new Security
+			{
+				Id = securityId.SecurityCode + "@" + securityId.BoardCode,
+				Code = securityId.SecurityCode,
+				Board = ExchangeBoard.GetOrCreateBoard(securityId.BoardCode),
+				ExtensionInfo = new Dictionary<object, object>()
+			};
+
+			_entityRegistry.Securities.Add(security);
+
+			return security;
+		}
+
+		private void RaiseStorageMessage(Message message)
+		{
+			if (message.LocalTime.IsDefault())
+				message.LocalTime = InnerAdapter.CurrentTime.LocalDateTime;
+
+			RaiseNewOutMessage(message);
 		}
 
 		/// <summary>

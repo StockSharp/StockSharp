@@ -252,7 +252,7 @@
 		{
 			return _candles ?? (_candles = typeof(Candle).Assembly
 				.GetTypes()
-				.Where(t => !t.IsAbstract && t.IsSubclassOf(typeof(Candle)))
+				.Where(t => !t.IsAbstract && t.IsCandle())
 				.Concat(_customCandles)
 				.ToArray());
 		}

@@ -181,7 +181,7 @@
 					.Add(Level1Fields.BestAskVolume, 6m),
 				};
 			}
-			else if (DataType.IsSubclassOf(typeof(CandleMessage)))
+			else if (DataType.IsCandleMessage())
 			{
 				var tf = TimeSpan.FromMinutes(5);
 

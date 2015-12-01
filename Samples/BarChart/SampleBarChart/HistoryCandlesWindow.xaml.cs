@@ -4,11 +4,11 @@ namespace SampleBarChart
 	using System.Windows;
 
 	using StockSharp.Algo;
-	using StockSharp.Algo.Candles;
 	using StockSharp.BarChart;
 	using StockSharp.BusinessEntities;
 	using StockSharp.Xaml.Charting;
 	using StockSharp.Localization;
+	using StockSharp.Messages;
 
 	public partial class HistoryCandlesWindow
 	{
@@ -47,7 +47,7 @@ namespace SampleBarChart
 			}
 
 			bool isSuccess;
-			var messages = MainWindow.Instance.Trader.GetHistoricalCandles(_security, typeof(TimeFrameCandle), (TimeSpan)TimeFramePicker.SelectedValue, (DateTime)DateFromPicker.Value, (DateTime)DateToPicker.Value, out isSuccess);
+			var messages = MainWindow.Instance.Trader.GetHistoricalCandles(_security, typeof(TimeFrameCandleMessage), (TimeSpan)TimeFramePicker.SelectedValue, (DateTime)DateFromPicker.Value, (DateTime)DateToPicker.Value, out isSuccess);
 
 			Chart.Reset(new[] { _candlesElem });
 

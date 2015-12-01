@@ -7,12 +7,15 @@ namespace SampleMultiConnection
 	using System.Windows;
 
 	using Ecng.Common;
+	using Ecng.Configuration;
 	using Ecng.Serialization;
 	using Ecng.Xaml;
 
+	using StockSharp.Algo;
+	using StockSharp.Algo.Storages;
 	using StockSharp.BusinessEntities;
 	using StockSharp.Logging;
-	using StockSharp.Algo;
+	
 	using StockSharp.Configuration;
 	using StockSharp.Localization;
 
@@ -20,10 +23,14 @@ namespace SampleMultiConnection
 	{
 		private bool _isConnected;
 
-		public readonly Connector Connector = new Connector();
+		public readonly Connector Connector;
 
 		private readonly SecuritiesWindow _securitiesWindow = new SecuritiesWindow();
 		private readonly OrdersWindow _ordersWindow = new OrdersWindow();
+		private readonly StopOrderWindow _stopOrdersWindow = new StopOrderWindow();
+		private readonly PortfoliosWindow _portfoliosWindow = new PortfoliosWindow();
+		private readonly MyTradesWindow _myTradesWindow = new MyTradesWindow();
+		private readonly TradesWindow _tradesWindow = new TradesWindow();
 
 		private const string _settingsFile = "connection.xml";
 
@@ -35,10 +42,19 @@ namespace SampleMultiConnection
 			Title = Title.Put("Multi connection");
 
 			_ordersWindow.MakeHideable();
+			_myTradesWindow.MakeHideable();
+			_tradesWindow.MakeHideable();
 			_securitiesWindow.MakeHideable();
+			_stopOrdersWindow.MakeHideable();
+			_portfoliosWindow.MakeHideable();
 
 			var logManager = new LogManager();
 			logManager.Listeners.Add(new FileLogListener("sample.log"));
+
+			var entityRegistry = ConfigManager.GetService<IEntityRegistry>();
+			var storageRegistry = ConfigManager.GetService<IStorageRegistry>();
+
+			Connector = new Connector(entityRegistry, storageRegistry);
 			logManager.Sources.Add(Connector);
 
 			InitConnector();
@@ -70,12 +86,22 @@ namespace SampleMultiConnection
 				this.GuiAsync(() => MessageBox.Show(this, error.ToString(), LocalizedStrings.Str2956Params.Put(type, security)));
 
 			Connector.NewSecurities += securities => _securitiesWindow.SecurityPicker.Securities.AddRange(securities);
+			Connector.NewTrades += trades => _tradesWindow.TradeGrid.Trades.AddRange(trades);
+
 			Connector.NewOrders += orders => _ordersWindow.OrderGrid.Orders.AddRange(orders);
+			Connector.NewStopOrders += orders => _stopOrdersWindow.OrderGrid.Orders.AddRange(orders);
+			Connector.NewMyTrades += trades => _myTradesWindow.TradeGrid.Trades.AddRange(trades);
+			
+			Connector.NewPortfolios += portfolios => _portfoliosWindow.PortfolioGrid.Portfolios.AddRange(portfolios);
+			Connector.NewPositions += positions => _portfoliosWindow.PortfolioGrid.Positions.AddRange(positions);
 
 			// subscribe on error of order registration event
 			Connector.OrdersRegisterFailed += OrdersFailed;
+			Connector.StopOrdersRegisterFailed += OrdersFailed;
+
 			// subscribe on error of order cancelling event
 			Connector.OrdersCancelFailed += OrdersFailed;
+			Connector.StopOrdersCancelFailed += OrdersFailed;
 
 			// set market data provider
 			_securitiesWindow.SecurityPicker.MarketDataProvider = Connector;
@@ -88,15 +114,29 @@ namespace SampleMultiConnection
 			catch
 			{
 			}
+
+			if (Connector.StorageAdapter == null)
+				return;
+
+			Connector.StorageAdapter.DaysLoad = TimeSpan.FromDays(3);
+			Connector.StorageAdapter.Load();
 		}
 
 		protected override void OnClosing(CancelEventArgs e)
 		{
 			_ordersWindow.DeleteHideable();
+			_myTradesWindow.DeleteHideable();
+			_tradesWindow.DeleteHideable();
 			_securitiesWindow.DeleteHideable();
-			
+			_stopOrdersWindow.DeleteHideable();
+			_portfoliosWindow.DeleteHideable();
+
 			_securitiesWindow.Close();
+			_tradesWindow.Close();
+			_myTradesWindow.Close();
+			_stopOrdersWindow.Close();
 			_ordersWindow.Close();
+			_portfoliosWindow.Close();
 
 			Connector.Dispose();
 
@@ -144,9 +184,29 @@ namespace SampleMultiConnection
 			ShowOrHide(_securitiesWindow);
 		}
 
+		private void ShowPortfoliosClick(object sender, RoutedEventArgs e)
+		{
+			ShowOrHide(_portfoliosWindow);
+		}
+
 		private void ShowOrdersClick(object sender, RoutedEventArgs e)
 		{
 			ShowOrHide(_ordersWindow);
+		}
+
+		private void ShowStopOrdersClick(object sender, RoutedEventArgs e)
+		{
+			ShowOrHide(_stopOrdersWindow);
+		}
+
+		private void ShowTradesClick(object sender, RoutedEventArgs e)
+		{
+			ShowOrHide(_tradesWindow);
+		}
+
+		private void ShowMyTradesClick(object sender, RoutedEventArgs e)
+		{
+			ShowOrHide(_myTradesWindow);
 		}
 
 		private static void ShowOrHide(Window window)

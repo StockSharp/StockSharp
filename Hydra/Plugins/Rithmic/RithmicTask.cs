@@ -9,7 +9,7 @@ namespace StockSharp.Hydra.Rithmic
 	using Ecng.Xaml;
 	using Ecng.ComponentModel;
 
-	using StockSharp.Algo.Candles;
+	using StockSharp.Algo;
 	using StockSharp.Hydra.Core;
 	using StockSharp.Messages;
 	using StockSharp.Rithmic;
@@ -91,26 +91,18 @@ namespace StockSharp.Hydra.Rithmic
 
 		public RithmicTask()
 		{
-			_supportedCandleSeries = RithmicMessageAdapter.TimeFrames.Select(tf => new CandleSeries
-			{
-				CandleType = typeof(TimeFrameCandle),
-				Arg = tf
-			}).ToArray();
+			SupportedDataTypes = RithmicMessageAdapter
+				.TimeFrames
+				.Select(tf => DataType.Create(typeof(TimeFrameCandleMessage), tf))
+				.Concat(base.SupportedDataTypes)
+				.ToArray();
 		}
 
 		private RithmicSettings _settings;
 
-		public override HydraTaskSettings Settings
-		{
-			get { return _settings; }
-		}
+		public override HydraTaskSettings Settings => _settings;
 
-		private readonly IEnumerable<CandleSeries> _supportedCandleSeries;
-
-		public override IEnumerable<CandleSeries> SupportedCandleSeries
-		{
-			get { return _supportedCandleSeries; }
-		}
+		public override IEnumerable<DataType> SupportedDataTypes { get; }
 
 		protected override void ApplySettings(HydraTaskSettings settings)
 		{
@@ -118,6 +110,7 @@ namespace StockSharp.Hydra.Rithmic
 
 			if (!settings.IsDefault)
 				return;
+
 			_settings.UserName = string.Empty;
 			_settings.Password = new SecureString();
 			_settings.Server = RithmicServers.Paper;

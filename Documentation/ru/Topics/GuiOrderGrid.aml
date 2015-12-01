@@ -83,35 +83,13 @@ private void ConnectClick(object sender, RoutedEventArgs e)
 
             .......................................			
 			
-			// Добавляем инструменты в компонент SecurityPicker
-			Trader.NewSecurities += securities => _securitiesWindow.SecurityPicker.Securities.AddRange(securities);
-			
-			// Добавляем свои сделки в таблицу MyTradeGrid
-			Trader.NewMyTrades += trades => _myTradesWindow.TradeGrid.Trades.AddRange(trades);
-			
-			// Добавляем сделки в таблицу TradeGrid
-			Trader.NewTrades += trades => _tradesWindow.TradeGrid.Trades.AddRange(trades);
-			
 			// Добавляем заявки в таблицу OrderGrid
 			Trader.NewOrders += orders => _ordersWindow.OrderGrid.Orders.AddRange(orders);
 			
 			// Добавляем стоп-заявки в таблицу OrderGrid
 			Trader.NewStopOrders += orders => _stopOrderWindow.OrderGrid.Orders.AddRange(orders);
 			
-			Trader.OrdersRegisterFailed += fails => fails.ForEach(fail => this.GuiAsync(() => MessageBox.Show(this, fail.Error.Message, LocalizedStrings.Str2960)));
-			Trader.OrdersCancelFailed += fails => fails.ForEach(fail => this.GuiAsync(() => MessageBox.Show(this, fail.Error.Message, LocalizedStrings.Str2981)));
-			Trader.StopOrdersRegisterFailed += fails => fails.ForEach(fail => this.GuiAsync(() => MessageBox.Show(this, fail.Error.Message, LocalizedStrings.Str2960)));
-			Trader.StopOrdersCancelFailed += fails => fails.ForEach(fail => this.GuiAsync(() => MessageBox.Show(this, fail.Error.Message, LocalizedStrings.Str2981)));
-			
-			
-			// Добавляем портфели в таблицу PortfolioGrid
-			Trader.NewPortfolios += portfolios => _portfoliosWindow.PortfolioGrid.Portfolios.AddRange(portfolios);
-			
-			// Добавляем позиции в таблицу PortfolioGrid
-			Trader.NewPositions += positions => _portfoliosWindow.PortfolioGrid.Positions.AddRange(positions);
-
-			// устанавливаем поставщик маркет-данных для компонента SecurityPicker
-			_securitiesWindow.SecurityPicker.MarketDataProvider = Trader;
+			.......................................			
 
 			ShowSecurities.IsEnabled = ShowTrades.IsEnabled =
 				ShowMyTrades.IsEnabled = ShowOrders.IsEnabled =

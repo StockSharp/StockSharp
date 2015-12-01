@@ -93,7 +93,7 @@ namespace StockSharp.Algo.Candles
 
 				var filledCandle = candle.GetType().CreateInstance<Candle>();
 
-				filledCandle.Series = candle.Series;
+				//filledCandle.Series = candle.Series;
 				filledCandle.Security = candle.Security;
 				filledCandle.Arg = CloneArg(candle.Arg, candle.Security);
 				filledCandle.OpenTime = candle.OpenTime;
@@ -244,7 +244,7 @@ namespace StockSharp.Algo.Candles
 			lock (_buffers.SyncRoot)
 			{
 				var buffer = _buffers.SafeAdd(candle.OpenTime, key => new CandleBuffer(candle.OpenTime, candle.CloseTime, _bufferSize, false));
-				buffer.AddCandle(_securityIndecies[candle.Series.Security], candle);
+				buffer.AddCandle(_securityIndecies[candle.Security], candle);
 
 				if (!buffer.IsFilled)
 				{
@@ -355,7 +355,7 @@ namespace StockSharp.Algo.Candles
 
 		private decimal? TryCalculate(CandleBuffer buffer, Func<Candle, decimal> getPart)
 		{
-			return _security.Calculate(buffer.Candles.ToDictionary(c => _securityToSecurity[c.Series.Security], getPart));
+			return _security.Calculate(buffer.Candles.ToDictionary(c => _securityToSecurity[c.Security], getPart));
 		}
 
 		private decimal Calculate(CandleBuffer buffer, Func<Candle, decimal> getPart)

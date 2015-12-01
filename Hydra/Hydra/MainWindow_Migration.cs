@@ -208,6 +208,27 @@ namespace StockSharp.Hydra
 						TimeZone = (select [TimeZoneInfo] from [Exchange] where [Name] = [ExchangeBoard].[Exchange])");
 
 				_entityRegistry.Version = new Version(2, 16);
+			}
+
+			if (_entityRegistry.Version.Compare(new Version(2, 16)) == 0)
+			{
+				Execute(@"
+					alter table [HydraTaskSecurity] RENAME TO tmp;
+					CREATE TABLE HydraTaskSecurity (Id integer NOT NULL PRIMARY KEY AUTOINCREMENT,
+						Security varchar NOT NULL,DataTypes varchar NOT NULL,
+						CandleSeries text NULL,Settings binary NOT NULL,
+						TradeCount integer NOT NULL,TradeLastTime time,
+						DepthCount integer NOT NULL,DepthLastTime time,
+						OrderLogCount integer NOT NULL,OrderLogLastTime time,
+						Level1Count integer NOT NULL,Level1LastTime time,
+						CandleCount integer NOT NULL,CandleLastTime time,
+						ExecutionCount integer NOT NULL,ExecutionLastTime time);
+					insert into [HydraTaskSecurity] select * from tmp;
+					drop table tmp;
+
+					update HydraTaskSecurity set DataTypes = '<DataTypeArray />'");
+
+				_entityRegistry.Version = new Version(2, 17);
 				return;
 			}
 

@@ -117,7 +117,7 @@ namespace StockSharp.Hydra.HydraServer
 
 		public HydraServerTask()
 		{
-			_supportedCandleSeries = new[]
+			SupportedDataTypes = new[]
 			{
 				TimeSpan.FromMinutes(1),
 				TimeSpan.FromMinutes(5),
@@ -125,11 +125,17 @@ namespace StockSharp.Hydra.HydraServer
 				TimeSpan.FromHours(1),
 				TimeSpan.FromDays(1)
 			}
-			.Select(tf => new CandleSeries
+			.Select(tf => DataType.Create(typeof(TimeFrameCandleMessage), tf))
+			.Concat(new[]
 			{
-				CandleType = typeof(TimeFrameCandle),
-				Arg = tf
-			}).ToArray();
+				DataType.Create(typeof(ExecutionMessage), ExecutionTypes.Tick),
+				DataType.Create(typeof(ExecutionMessage), ExecutionTypes.Order),
+				DataType.Create(typeof(ExecutionMessage), ExecutionTypes.OrderLog),
+				DataType.Create(typeof(QuoteChangeMessage), null),
+				DataType.Create(typeof(Level1ChangeMessage), null),
+				DataType.Create(typeof(NewsMessage), null),
+			})
+			.ToArray();
 		}
 
 		protected override void ApplySettings(HydraTaskSettings settings)
@@ -148,31 +154,9 @@ namespace StockSharp.Hydra.HydraServer
 			}
 		}
 
-		public override HydraTaskSettings Settings
-		{
-			get { return _settings; }
-		}
+		public override HydraTaskSettings Settings => _settings;
 
-		private readonly Type[] _supportedMarketDataTypes =
-		{
-			typeof(Trade),
-			typeof(QuoteChangeMessage),
-			typeof(OrderLogItem),
-			typeof(Level1ChangeMessage),
-			typeof(Candle)
-		};
-
-		private readonly IEnumerable<CandleSeries> _supportedCandleSeries;
-
-		public override IEnumerable<CandleSeries> SupportedCandleSeries
-		{
-			get { return _supportedCandleSeries; }
-		}
-
-		public override IEnumerable<Type> SupportedMarketDataTypes
-		{
-			get { return _supportedMarketDataTypes; }
-		}
+		public override IEnumerable<DataType> SupportedDataTypes { get; }
 
 		protected override TimeSpan OnProcess()
 		{
@@ -186,10 +170,10 @@ namespace StockSharp.Hydra.HydraServer
 					client.Refresh(EntityRegistry.Securities, new Security(), SaveSecurity, () => !CanProcess(false));
 				}
 
-				var supportedDataTypes = Enumerable.Empty<Type>();
+				var supportedDataTypes = Enumerable.Empty<DataType>();
 
 				if (allSecurity != null)
-					supportedDataTypes = SupportedMarketDataTypes.Intersect(allSecurity.MarketDataTypes).ToArray();
+					supportedDataTypes = SupportedDataTypes.Intersect(allSecurity.DataTypes).ToArray();
 
 				this.AddInfoLog(LocalizedStrings.Str2306Params.Put(_settings.StartFrom));
 
@@ -205,24 +189,13 @@ namespace StockSharp.Hydra.HydraServer
 					this.AddInfoLog(LocalizedStrings.Str2307Params.Put(security.Security.Id));
 
 					//foreach (var dataType in security.GetSupportDataTypes(this))
-					foreach (var dataType in (allSecurity == null ? security.MarketDataTypes : supportedDataTypes))
+					foreach (var pair in (allSecurity == null ? security.DataTypes : supportedDataTypes))
 					{
 						if (!CanProcess())
 							break;
 
-						if (dataType == typeof(Candle))
-						{
-							foreach (var series in (allSecurity ?? security).CandleSeries)
-							{
-								if (!DownloadData(security, typeof(TimeFrameCandle), series.Arg, client))
-									break;
-							}
-						}
-						else
-						{
-							if (!DownloadData(security, dataType, null, client))
-								break;	
-						}
+						if (!DownloadData(security, pair.MessageType, pair.Arg, client))
+							break;
 					}
 				}
 
@@ -297,7 +270,7 @@ namespace StockSharp.Hydra.HydraServer
 							dataType = typeof(ExecutionMessage);
 							arg = ExecutionTypes.OrderLog;
 						}
-						else if (dataType.IsSubclassOf(typeof(Candle)))
+						else if (dataType.IsCandle())
 						{
 							dataType = dataType.ToCandleMessageType();
 						}

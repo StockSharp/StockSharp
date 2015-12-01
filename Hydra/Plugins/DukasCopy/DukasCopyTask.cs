@@ -10,7 +10,6 @@ namespace StockSharp.Hydra.DukasCopy
 	using Ecng.ComponentModel;
 
 	using StockSharp.Algo;
-	using StockSharp.Algo.Candles;
 	using StockSharp.Algo.History;
 	using StockSharp.Algo.History.Forex;
 	using StockSharp.Algo.Storages;
@@ -86,11 +85,14 @@ namespace StockSharp.Hydra.DukasCopy
 
 		public DukasCopyTask()
 		{
-			_supportedCandleSeries = DukasCopySource.TimeFrames.Select(tf => new CandleSeries
-			{
-				CandleType = typeof(TimeFrameCandle),
-				Arg = tf
-			}).ToArray();
+			SupportedDataTypes = DukasCopySource
+				.TimeFrames
+				.Select(tf => DataType.Create(typeof(TimeFrameCandleMessage), tf))
+				.Concat(new[]
+				{
+					DataType.Create(typeof(Level1ChangeMessage), null),
+				})
+				.ToArray();
 		}
 
 		protected override void ApplySettings(HydraTaskSettings settings)
@@ -107,24 +109,9 @@ namespace StockSharp.Hydra.DukasCopy
 			_settings.UseTemporaryFiles = TempFiles.UseAndDelete;
 		}
 
-		public override HydraTaskSettings Settings
-		{
-			get { return _settings; }
-		}
+		public override HydraTaskSettings Settings => _settings;
 
-		private readonly Type[] _supportedMarketDataTypes = { typeof(Level1ChangeMessage), typeof(Candle) };
-
-		public override IEnumerable<Type> SupportedMarketDataTypes
-		{
-			get { return _supportedMarketDataTypes; }
-		}
-
-		private readonly IEnumerable<CandleSeries> _supportedCandleSeries;
-
-		public override IEnumerable<CandleSeries> SupportedCandleSeries
-		{
-			get { return _supportedCandleSeries; }
-		}
+		public override IEnumerable<DataType> SupportedDataTypes { get; }
 
 		protected override TimeSpan OnProcess()
 		{
@@ -167,7 +154,7 @@ namespace StockSharp.Hydra.DukasCopy
 					break;
 
 				#region LoadTicks
-				if ((allSecurity ?? security).MarketDataTypesSet.Contains(typeof(Level1ChangeMessage)))
+				if ((allSecurity ?? security).IsLevel1Enabled())
 				{
 					var storage = StorageRegistry.GetLevel1MessageStorage(security.Security, _settings.Drive, _settings.StorageFormat);
 					var emptyDates = allDates.Except(storage.Dates).ToArray();
@@ -213,23 +200,25 @@ namespace StockSharp.Hydra.DukasCopy
 					break;
 
 				#region LoadCandles
-				foreach (var series in (allSecurity ?? security).CandleSeries)
+				foreach (var pair in (allSecurity ?? security).GetCandleSeries())
 				{
 					if (!CanProcess())
 						break;
 
-					if (series.CandleType != typeof(TimeFrameCandle))
+					if (pair.MessageType != typeof(TimeFrameCandleMessage))
 					{
-						this.AddWarningLog(LocalizedStrings.Str2296Params, series);
+						this.AddWarningLog(LocalizedStrings.Str2296Params, pair);
 						continue;
 					}
 
-					var storage = StorageRegistry.GetCandleStorage(series.CandleType, security.Security, series.Arg, _settings.Drive, _settings.StorageFormat);
+					var tf = (TimeSpan)pair.Arg;
+
+					var storage = StorageRegistry.GetCandleMessageStorage(pair.MessageType, security.Security, tf, _settings.Drive, _settings.StorageFormat);
 					var emptyDates = allDates.Except(storage.Dates).ToArray();
 
 					if (emptyDates.IsEmpty())
 					{
-						this.AddInfoLog(LocalizedStrings.Str2297Params, series.Arg, security.Security.Id);
+						this.AddInfoLog(LocalizedStrings.Str2297Params, tf, security.Security.Id);
 						continue;
 					}
 
@@ -240,8 +229,8 @@ namespace StockSharp.Hydra.DukasCopy
 
 						try
 						{
-							this.AddInfoLog(LocalizedStrings.Str2298Params, series.Arg, emptyDate, emptyDate, security.Security.Id);
-							var candles = source.LoadCandles(security.Security, (TimeSpan)series.Arg, emptyDate, _settings.Side);
+							this.AddInfoLog(LocalizedStrings.Str2298Params, tf, emptyDate, emptyDate, security.Security.Id);
+							var candles = source.LoadCandles(security.Security, tf, emptyDate, _settings.Side);
 							
 							if (candles.Any())
 								SaveCandles(security, candles);
@@ -249,12 +238,12 @@ namespace StockSharp.Hydra.DukasCopy
 								this.AddDebugLog(LocalizedStrings.NoData);
 
 							if (_settings.UseTemporaryFiles == TempFiles.UseAndDelete)
-								File.Delete(source.GetDumpFile(security.Security, emptyDate, emptyDate, typeof(TimeFrameCandleMessage), series.Arg));
+								File.Delete(source.GetDumpFile(security.Security, emptyDate, emptyDate, typeof(TimeFrameCandleMessage), tf));
 						}
 						catch (Exception ex)
 						{
 							HandleError(new InvalidOperationException(LocalizedStrings.Str2299Params
-								.Put(series.Arg, emptyDate, security.Security.Id), ex));
+								.Put(tf, emptyDate, security.Security.Id), ex));
 						}
 					}
 				}

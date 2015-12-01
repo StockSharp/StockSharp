@@ -52,8 +52,7 @@
     <Reference Include="Ecng.Configuration">
       <HintPath>..\..\..\References\Ecng\Ecng.Configuration.dll</HintPath>
     </Reference>
-    <Reference Include="Ecng.Localization, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="Ecng.Localization">
       <HintPath>..\..\..\References\Ecng\Ecng.Localization.dll</HintPath>
     </Reference>
     <Reference Include="Ecng.Serialization">
@@ -62,8 +61,14 @@
     <Reference Include="Ecng.Xaml">
       <HintPath>..\..\..\References\Ecng\Ecng.Xaml.dll</HintPath>
     </Reference>
+    <Reference Include="Ecng.Xaml.Charting">
+      <HintPath>..\..\..\References\Ecng\Ecng.Xaml.Charting.dll</HintPath>
+    </Reference>
     <Reference Include="MoreLinq">
       <HintPath>..\..\..\References\Ecng\MoreLinq.dll</HintPath>
+    </Reference>
+    <Reference Include="StockSharp.Licensing">
+      <HintPath>..\..\..\References\StockSharp.Licensing.dll</HintPath>
     </Reference>
     <Reference Include="StockSharp.Xaml.Charting">
       <HintPath>..\..\..\Xaml.Charting\StockSharp.Xaml.Charting.dll</HintPath>

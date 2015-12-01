@@ -166,7 +166,7 @@ namespace StockSharp.Hydra.Tools
 				}
 				set
 				{
-					ExtensionInfo["DestinationDrive"] = value == null ? null : value.Path;
+					ExtensionInfo["DestinationDrive"] = value?.Path;
 				}
 			}
 
@@ -180,15 +180,7 @@ namespace StockSharp.Hydra.Tools
 
 		private ConvertTaskSettings _settings;
 
-		public override HydraTaskSettings Settings
-		{
-			get { return _settings; }
-		}
-
-		public override IEnumerable<Type> SupportedMarketDataTypes
-		{
-			get { return Enumerable.Empty<Type>(); }
-		}
+		public override IEnumerable<DataType> SupportedDataTypes => Enumerable.Empty<DataType>();
 
 		protected override void ApplySettings(HydraTaskSettings settings)
 		{

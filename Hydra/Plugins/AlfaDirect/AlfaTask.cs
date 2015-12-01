@@ -9,9 +9,9 @@ namespace StockSharp.Hydra.AlfaDirect
 	using Ecng.Localization;
 	using Ecng.ComponentModel;
 
-	using StockSharp.Algo.Candles;
 	using StockSharp.Hydra.Core;
 	using StockSharp.AlfaDirect;
+	using StockSharp.Algo;
 	using StockSharp.Localization;
 	using StockSharp.Messages;
 
@@ -67,26 +67,18 @@ namespace StockSharp.Hydra.AlfaDirect
 
 		public AlfaTask()
 		{
-			_supportedCandleSeries = AlfaTimeFrames.AllTimeFrames.Select(tf => new CandleSeries
-			{
-				CandleType = typeof(TimeFrameCandle),
-				Arg = tf
-			}).ToArray();
+			SupportedDataTypes = base.SupportedDataTypes.Concat(
+				AlfaTimeFrames
+					.AllTimeFrames
+					.Select(tf => DataType.Create(typeof(TimeFrameCandleMessage), (object)tf)))
+				.ToArray();
 		}
 
 		private AlfaSettings _settings;
 
-		public override HydraTaskSettings Settings
-		{
-			get { return _settings; }
-		}
+		public override HydraTaskSettings Settings => _settings;
 
-		private readonly IEnumerable<CandleSeries> _supportedCandleSeries;
-
-		public override IEnumerable<CandleSeries> SupportedCandleSeries
-		{
-			get { return _supportedCandleSeries; }
-		}
+		public override IEnumerable<DataType> SupportedDataTypes { get; }
 
 		protected override void ApplySettings(HydraTaskSettings settings)
 		{

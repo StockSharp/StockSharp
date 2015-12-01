@@ -164,9 +164,9 @@ namespace StockSharp.Algo.Storages
 		/// </summary>
 		/// <param name="items">Elements to be deleted.</param>
 		/// <returns>Deleted elements.</returns>
-		public IEnumerable<T> RemoveRange(IEnumerable<T> items)
+		public void RemoveRange(IEnumerable<T> items)
 		{
-			return CollectionHelper.RemoveRange(this, items);
+			items.ForEach(i => Remove(i));
 		}
 
 		/// <summary>
@@ -178,6 +178,22 @@ namespace StockSharp.Algo.Storages
 		public int RemoveRange(int index, int count)
 		{
 			throw new NotSupportedException();
+		}
+
+		private Action<IEnumerable<T>> _addedRange;
+
+		event Action<IEnumerable<T>> ICollectionEx<T>.AddedRange
+		{
+			add { _addedRange += value; }
+			remove { _addedRange -= value; }
+		}
+
+		private Action<IEnumerable<T>> _removedRange;
+
+		event Action<IEnumerable<T>> ICollectionEx<T>.RemovedRange
+		{
+			add { _removedRange += value; }
+			remove { _removedRange -= value; }
 		}
 	}
 }

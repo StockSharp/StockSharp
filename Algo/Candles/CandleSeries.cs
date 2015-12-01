@@ -1,9 +1,9 @@
 namespace StockSharp.Algo.Candles
 {
 	using System;
-	using System.ComponentModel;
 
 	using Ecng.Common;
+	using Ecng.ComponentModel;
 	using Ecng.Configuration;
 	using Ecng.Serialization;
 
@@ -13,7 +13,7 @@ namespace StockSharp.Algo.Candles
 	/// <summary>
 	/// Candles series.
 	/// </summary>
-	public class CandleSeries : Disposable, IPersistable, INotifyPropertyChanged
+	public class CandleSeries : NotifiableObject, IPersistable
 	{
 		/// <summary>
 		/// Initializes a new instance of the <see cref="CandleSeries"/>.
@@ -33,7 +33,7 @@ namespace StockSharp.Algo.Candles
 			if (candleType == null)
 				throw new ArgumentNullException(nameof(candleType));
 
-			if (!candleType.IsSubclassOf(typeof(Candle)))
+			if (!candleType.IsCandle())
 				throw new ArgumentOutOfRangeException(nameof(candleType), candleType, "Íåïðàâèëüíûé òèï ñâå÷êè.");
 
 			if (security == null)
@@ -59,7 +59,7 @@ namespace StockSharp.Algo.Candles
 			set
 			{
 				_security = value;
-				RaisePropertyChanged("Security");
+				NotifyChanged("Security");
 			}
 		}
 
@@ -74,7 +74,7 @@ namespace StockSharp.Algo.Candles
 			set
 			{
 				_candleType = value;
-				RaisePropertyChanged("CandleType");
+				NotifyChanged("CandleType");
 			}
 		}
 
@@ -89,7 +89,7 @@ namespace StockSharp.Algo.Candles
 			set
 			{
 				_arg = value;
-				RaisePropertyChanged("Arg");
+				NotifyChanged("Arg");
 			}
 		}
 
@@ -98,52 +98,52 @@ namespace StockSharp.Algo.Candles
 		/// </summary>
 		public WorkingTime WorkingTime { get; set; }
 
-		private ICandleManager _candleManager;
+		//private ICandleManager _candleManager;
+
+		///// <summary>
+		///// The candle manager, which has registered given series.
+		///// </summary>
+		//public ICandleManager CandleManager
+		//{
+		//	get { return _candleManager; }
+		//	set
+		//	{
+		//		if (value != _candleManager)
+		//		{
+		//			if (_candleManager != null)
+		//			{
+		//				_candleManager.Processing -= CandleManagerProcessing;
+		//				_candleManager.Stopped -= CandleManagerStopped;
+		//			}
+
+		//			_candleManager = value;
+
+		//			if (_candleManager != null)
+		//			{
+		//				_candleManager.Processing += CandleManagerProcessing;
+		//				_candleManager.Stopped += CandleManagerStopped;
+		//			}
+		//		}
+		//	}
+		//}
 
 		/// <summary>
-		/// The candle manager, which has registered given series.
-		/// </summary>
-		public ICandleManager CandleManager
-		{
-			get { return _candleManager; }
-			set
-			{
-				if (value != _candleManager)
-				{
-					if (_candleManager != null)
-					{
-						_candleManager.Processing -= CandleManagerProcessing;
-						_candleManager.Stopped -= CandleManagerStopped;
-					}
-
-					_candleManager = value;
-
-					if (_candleManager != null)
-					{
-						_candleManager.Processing += CandleManagerProcessing;
-						_candleManager.Stopped += CandleManagerStopped;
-					}
-				}
-			}
-		}
-
-		/// <summary>
-		/// To perform the calculation <see cref="Candle.VolumeProfileInfo"/>. By default, it is disabled.
+		/// To perform the calculation <see cref="Candle.PriceLevels"/>. By default, it is disabled.
 		/// </summary>
 		public bool IsCalcVolumeProfile { get; set; }
 
-		// èñïîëüçóåòñÿ RealTimeCandleBuilderSource
+		// uses by RealTimeCandleBuilderSource
 		internal bool IsNew { get; set; }
 
-		/// <summary>
-		/// The candle processing event.
-		/// </summary>
-		public event Action<Candle> ProcessCandle;
+		///// <summary>
+		///// The candle processing event.
+		///// </summary>
+		//public event Action<Candle> ProcessCandle;
 
-		/// <summary>
-		/// The series processing end event.
-		/// </summary>
-		public event Action Stopped;
+		///// <summary>
+		///// The series processing end event.
+		///// </summary>
+		//public event Action Stopped;
 
 		/// <summary>
 		/// The initial date from which you need to get data.
@@ -155,28 +155,28 @@ namespace StockSharp.Algo.Candles
 		/// </summary>
 		public DateTimeOffset To { get; set; } = DateTimeOffset.MaxValue;
 
-		private void CandleManagerStopped(CandleSeries series)
-		{
-			if (series == this)
-				Stopped.SafeInvoke();
-		}
+		//private void CandleManagerStopped(CandleSeries series)
+		//{
+		//	if (series == this)
+		//		Stopped.SafeInvoke();
+		//}
 
-		private void CandleManagerProcessing(CandleSeries series, Candle candle)
-		{
-			if (series == this)
-				ProcessCandle.SafeInvoke(candle);
-		}
+		//private void CandleManagerProcessing(CandleSeries series, Candle candle)
+		//{
+		//	if (series == this)
+		//		ProcessCandle.SafeInvoke(candle);
+		//}
 
-		/// <summary>
-		/// Release resources.
-		/// </summary>
-		protected override void DisposeManaged()
-		{
-			base.DisposeManaged();
+		///// <summary>
+		///// Release resources.
+		///// </summary>
+		//protected override void DisposeManaged()
+		//{
+		//	base.DisposeManaged();
 
-			if (CandleManager != null)
-				CandleManager.Stop(this);
-		}
+		//	if (CandleManager != null)
+		//		CandleManager.Stop(this);
+		//}
 
 		/// <summary>
 		/// Returns a string that represents the current object.
@@ -231,23 +231,6 @@ namespace StockSharp.Algo.Candles
 			storage.SetValue("WorkingTime", WorkingTime);
 
 			storage.SetValue("IsCalcVolumeProfile", IsCalcVolumeProfile);
-		}
-
-		#endregion
-
-		#region INotifyPropertyChanged
-
-		/// <summary>
-		/// The series parameters change event.
-		/// </summary>
-		public event PropertyChangedEventHandler PropertyChanged;
-
-		/// <summary>
-		/// To call series parameters change event.
-		/// </summary>
-		protected void RaisePropertyChanged(string propertyName)
-		{
-			PropertyChanged.SafeInvoke(this, propertyName);
 		}
 
 		#endregion

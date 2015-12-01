@@ -4,8 +4,7 @@ namespace StockSharp.Algo.Strategies.Analytics
 	using System.ComponentModel;
 	using System.Globalization;
 
-	using Abt.Controls.SciChart.Visuals;
-
+	using Ecng.Xaml.Charting.Visuals;
 	using Ecng.Common;
 	using Ecng.Xaml.Grids;
 
@@ -82,7 +81,7 @@ namespace StockSharp.Algo.Strategies.Analytics
 		/// Chart.
 		/// </summary>
 		[CLSCompliant(false)]
-		protected SciChartSurface Chart => Environment.GetValue<SciChartSurface>("Chart");
+		protected UltrachartSurface Chart => Environment.GetValue<UltrachartSurface>("Chart");
 
 		/// <summary>
 		/// Table.

@@ -471,8 +471,8 @@ namespace StockSharp.Studio.Controls
 
 			lock (_syncRoot)
 			{
-				allValues = series
-					.GetCandles<TimeFrameCandle>()
+				allValues = _candleManager
+					.GetCandles<TimeFrameCandle>(series)
 					.Take(_candlesCount)
 					.Select(candle => new RefPair<DateTimeOffset, IDictionary<IChartElement, object>>(candle.OpenTime, new Dictionary<IChartElement, object>
 					{
@@ -537,7 +537,7 @@ namespace StockSharp.Studio.Controls
 
 		private void ProcessIndexSourceElements(Candle candle)
 		{
-			var element = _sourceElements.TryGetValue(candle.Series.Security);
+			var element = _sourceElements.TryGetValue(candle.Security);
 
 			if (element == null)
 				return;

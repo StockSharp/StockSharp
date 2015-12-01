@@ -1,6 +1,5 @@
 namespace StockSharp.Hydra.LMAX
 {
-	using System;
 	using System.Collections.Generic;
 	using System.Linq;
 	using System.Security;
@@ -8,7 +7,7 @@ namespace StockSharp.Hydra.LMAX
 	using Ecng.Common;
 	using Ecng.ComponentModel;
 
-	using StockSharp.Algo.Candles;
+	using StockSharp.Algo;
 	using StockSharp.Hydra.Core;
 	using StockSharp.LMAX;
 	using StockSharp.Messages;
@@ -78,31 +77,23 @@ namespace StockSharp.Hydra.LMAX
 
 		public LmaxTask()
 		{
-			_supportedCandleSeries = LmaxMessageAdapter.TimeFrames.Select(tf => new CandleSeries
-			{
-				CandleType = typeof(TimeFrameCandle),
-				Arg = tf
-			}).ToArray();
+			SupportedDataTypes = LmaxMessageAdapter
+				.TimeFrames
+				.Select(tf => DataType.Create(typeof(TimeFrameCandleMessage), tf))
+				.Concat(new[]
+				{
+					DataType.Create(typeof(ExecutionMessage), ExecutionTypes.Order),
+					DataType.Create(typeof(QuoteChangeMessage), null),
+					DataType.Create(typeof(Level1ChangeMessage), null),
+				})
+				.ToArray();
 		}
 
 		private LmaxSettings _settings;
 
-		public override HydraTaskSettings Settings
-		{
-			get { return _settings; }
-		}
+		public override HydraTaskSettings Settings => _settings;
 
-		public override IEnumerable<Type> SupportedMarketDataTypes
-		{
-			get { return new[] { typeof(Candle), typeof(QuoteChangeMessage), typeof(Level1ChangeMessage), typeof(ExecutionMessage) }; }
-		}
-
-		private readonly IEnumerable<CandleSeries> _supportedCandleSeries;
-
-		public override IEnumerable<CandleSeries> SupportedCandleSeries
-		{
-			get { return _supportedCandleSeries; }
-		}
+		public override IEnumerable<DataType> SupportedDataTypes { get; }
 
 		protected override void ApplySettings(HydraTaskSettings settings)
 		{

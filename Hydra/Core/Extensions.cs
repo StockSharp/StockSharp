@@ -102,18 +102,18 @@
 			picker.ExcludeSecurities.Add(GetAllSecurity());
 		}
 
-		/// <summary>
-		/// Включено ли у задачи закачка лога собственной торговли.
-		/// </summary>
-		/// <param name="task">Задача.</param>
-		/// <returns>Включено ли у задачи закачка лога собственной торговли.</returns>
-		public static bool IsExecLogEnabled(this IHydraTask task)
-		{
-			if (task == null)
-				throw new ArgumentNullException(nameof(task));
+		///// <summary>
+		///// Включено ли у задачи закачка лога собственной торговли.
+		///// </summary>
+		///// <param name="task">Задача.</param>
+		///// <returns>Включено ли у задачи закачка лога собственной торговли.</returns>
+		//public static bool IsExecLogEnabled(this IHydraTask task)
+		//{
+		//	if (task == null)
+		//		throw new ArgumentNullException(nameof(task));
 
-			return task.Settings.Securities.Any(s => s.MarketDataTypesSet.Contains(typeof(ExecutionMessage)));
-		}
+		//	return task.Settings.Securities.Any(s => s.DataTypesSet.Contains(typeof(ExecutionMessage)));
+		//}
 
 		/// <summary>
 		/// Проверить, является ли инструмент "Все инструменты".
@@ -150,7 +150,7 @@
 			{
 				Security = s,
 				Settings = task.Settings,
-				MarketDataTypes = allSec == null ? ArrayHelper.Empty<Type>() : allSec.MarketDataTypes,
+				DataTypes = allSec == null ? ArrayHelper.Empty<DataType>() : allSec.DataTypes,
 			});
 		}
 
@@ -204,7 +204,7 @@
 				fileName = "depths";
 			else if (dataType == typeof(Level1ChangeMessage))
 				fileName = "level1";
-			else if (dataType.IsSubclassOf(typeof(CandleMessage)))
+			else if (dataType.IsCandleMessage())
 				fileName = "candles_{0}_{1}".Put(typeof(TimeFrameCandle).Name, arg).Replace(':', '_');
 			else if (dataType == typeof(NewsMessage))
 				fileName = "news";
@@ -290,7 +290,7 @@
 				templateName = "txt_export_securities";
 			else if (dataType == typeof(NewsMessage))
 				templateName = "txt_export_news";
-			else if (dataType.IsSubclassOf(typeof(CandleMessage)))
+			else if (dataType.IsCandleMessage())
 				templateName = "txt_export_candles";
 			else if (dataType == typeof(Level1ChangeMessage))
 				templateName = "txt_export_level1";
@@ -382,6 +382,45 @@
 				default:
 					throw new ArgumentOutOfRangeException(nameof(builder), builder, null);
 			}
+		}
+
+		/// <summary>
+		/// Проверить, включена ли закачка данных <see cref="Level1ChangeMessage"/> для инструмента.
+		/// </summary>
+		/// <param name="security">Инструмент.</param>
+		/// <returns>Результат проверки.</returns>
+		public static bool IsLevel1Enabled(this HydraTaskSecurity security)
+		{
+			if (security == null)
+				throw new ArgumentNullException(nameof(security));
+
+			return security.DataTypesSet.Contains(DataType.Create(typeof(Level1ChangeMessage), null));
+		}
+
+		/// <summary>
+		/// Проверить, включена ли закачка данных тиков для инструмента.
+		/// </summary>
+		/// <param name="security">Инструмент.</param>
+		/// <returns>Результат проверки.</returns>
+		public static bool IsTicksEnabled(this HydraTaskSecurity security)
+		{
+			if (security == null)
+				throw new ArgumentNullException(nameof(security));
+
+			return security.DataTypesSet.Contains(DataType.Create(typeof(ExecutionMessage), ExecutionTypes.Tick));
+		}
+
+		/// <summary>
+		/// Получить серии свечек.
+		/// </summary>
+		/// <param name="security">Инструмент.</param>
+		/// <returns>Серии свечек.</returns>
+		public static IEnumerable<DataType> GetCandleSeries(this HydraTaskSecurity security)
+		{
+			if (security == null)
+				throw new ArgumentNullException(nameof(security));
+
+			return security.DataTypes.Where(t => t.MessageType.IsCandleMessage());
 		}
 	}
 }

@@ -84,7 +84,7 @@
 		/// <summary>
 		/// Подключение к торговой системе.
 		/// </summary>
-		protected Connector Connector { get; private set; }
+		protected Connector Connector { get; }
 
 		/// <summary>
 		/// Адаптер к торговой системе.
@@ -138,21 +138,15 @@
 				Connector.RegisterNews();
 		}
 
-		private readonly Type[] _supportedMarketDataTypes =
-		{
-			typeof(QuoteChangeMessage),
-			typeof(Trade),
-			typeof(Level1ChangeMessage),
-			typeof(ExecutionMessage)
-		};
-
 		/// <summary>
-		/// Поддерживаемые маркет-данные.
+		/// Поддерживаемые типы данных.
 		/// </summary>
-		public override IEnumerable<Type> SupportedMarketDataTypes
+		public override IEnumerable<DataType> SupportedDataTypes { get; } = new[]
 		{
-			get { return _supportedMarketDataTypes; }
-		}
+			DataType.Create(typeof(QuoteChangeMessage), null),
+			DataType.Create(typeof(Level1ChangeMessage), null),
+			DataType.Create(typeof(ExecutionMessage), ExecutionTypes.Tick)
+		};
 
 		/// <summary>
 		/// Запустить загрузку данных.
@@ -237,33 +231,44 @@
 
 			Connector.RegisterSecurity(security);
 
-			if (CheckSecurity<QuoteChangeMessage>(security))
-				Connector.RegisterMarketDepth(security);
-
-			if (CheckSecurity<Trade>(security))
-				Connector.RegisterTrades(security);
-
-			if (CheckSecurity<OrderLogItem>(security))
-				Connector.RegisterOrderLog(security);
-
-			//if (CheckSecurity<Level1ChangeMessage>(security))
-			//	Connector.RegisterSecurity(security);
-
-			if (SupportedCandleSeries.Any())
+			foreach (var tuple in GetDataTypes(security))
 			{
-				var map = _securityMap.TryGetValue(security);
+				var msgType = tuple.MessageType;
 
-				if (map == null)
-					return;
-
-				foreach (var series in map.CandleSeries)
+                if (msgType == typeof(QuoteChangeMessage))
+					Connector.RegisterMarketDepth(security);
+				//else if (msgType == typeof(Level1ChangeMessage))
+				//	Connector.RegisterSecurity(security);
+				else if (msgType == typeof(ExecutionMessage))
 				{
+					switch ((ExecutionTypes)tuple.Arg)
+					{
+						case ExecutionTypes.Tick:
+							Connector.RegisterTrades(security);
+							break;
+						case ExecutionTypes.Order:
+						case ExecutionTypes.Trade:
+							break;
+						case ExecutionTypes.OrderLog:
+							Connector.RegisterOrderLog(security);
+							break;
+						default:
+							throw new ArgumentOutOfRangeException();
+					}
+				}
+				else if (msgType.IsCandleMessage())
+				{
+					var map = _securityMap.TryGetValue(security);
+
+					if (map == null)
+						continue;
+
 					_adapter.SendInMessage(new MarketDataMessage
 					{
 						IsSubscribe = true,
 						SecurityId = security.ToSecurityId(),
-						DataType = series.CandleType.ToCandleMessageType().ToCandleMarketDataType(),
-						Arg = series.Arg,
+						DataType = msgType.ToCandleMarketDataType(),
+						Arg = tuple.Arg,
 						To = DateTimeOffset.MaxValue,
 						TransactionId = Connector.TransactionIdGenerator.GetNextId()
 					});
@@ -271,22 +276,22 @@
 			}
 		}
 
-		private bool CheckSecurity<T>(Security security)
+		private IEnumerable<DataType> GetDataTypes(Security security)
 		{
 			if (_allSecurity != null)
-				return _allSecurity.MarketDataTypesSet.Contains(typeof(T));
+				return _allSecurity.DataTypesSet;
 
 			if (security.Board == ExchangeBoard.Associated)
-				return false;
+				return Enumerable.Empty<DataType>();
 
 			var map = _securityMap.TryGetValue(security);
 
 			if (map != null)
-				return map.MarketDataTypesSet.Contains(typeof(T));
+				return map.DataTypesSet;
 
 			var associatedMap = _associatedSecurityCodes.TryGetValue(security.Code);
 
-			return associatedMap != null && associatedMap.MarketDataTypesSet.Contains(typeof(T));
+			return associatedMap?.DataTypesSet ?? Enumerable.Empty<DataType>();
 		}
 
 		void ISecurityDownloader.Refresh(ISecurityStorage storage, Security criteria, Action<Security> newSecurity, Func<bool> isCancelled)
@@ -357,9 +362,7 @@
 				throw new ArgumentNullException(nameof(newValues));
 
 			foreach (var pair in newValues)
-			{
 				saveValues(GetSecurity(pair.Key), pair.Value);
-			}
 		}
 
 		private void ProcessNewData()
@@ -371,9 +374,7 @@
 			SaveValues(_adapter.GetTransactions(), SaveTransactions);
 
 			foreach (var tuple in _adapter.GetCandles())
-			{
 				SaveCandles(GetSecurity(tuple.Key.Item1), tuple.Value);
-			}
 
 			SaveNews(_adapter.GetNews());
 		}

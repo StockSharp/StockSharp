@@ -41,12 +41,10 @@
     <Reference Include="StockSharp.Algo.History">
       <HintPath>..\..\Algo.History\StockSharp.Algo.History.dll</HintPath>
     </Reference>
-    <Reference Include="StockSharp.ITCH, Version=4.3.9.1, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="StockSharp.ITCH">
       <HintPath>..\..\Connectors\ITCH\StockSharp.ITCH.dll</HintPath>
     </Reference>
-    <Reference Include="StockSharp.Plaza, Version=4.3.9.1, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="StockSharp.Plaza">
       <HintPath>..\..\Connectors\Plaza\StockSharp.Plaza.dll</HintPath>
     </Reference>
     <Reference Include="System" />

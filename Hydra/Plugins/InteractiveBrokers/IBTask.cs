@@ -8,7 +8,7 @@ namespace StockSharp.Hydra.InteractiveBrokers
 	using Ecng.Common;
 	using Ecng.ComponentModel;
 
-	using StockSharp.Algo.Candles;
+	using StockSharp.Algo;
 	using StockSharp.Hydra.Core;
 	using StockSharp.InteractiveBrokers;
 	using StockSharp.Messages;
@@ -77,26 +77,18 @@ namespace StockSharp.Hydra.InteractiveBrokers
 
 		public IBTask()
 		{
-			_supportedCandleSeries = IBTimeFrames.AllTimeFrames.Select(tf => new CandleSeries
-			{
-				CandleType = typeof(TimeFrameCandle),
-				Arg = tf
-			}).ToArray();
+			SupportedDataTypes = IBTimeFrames
+				.AllTimeFrames
+				.Select(tf => DataType.Create(typeof(TimeFrameCandleMessage), tf))
+				.Concat(base.SupportedDataTypes)
+				.ToArray();
 		}
 
 		private IBSettings _settings;
 
-		public override HydraTaskSettings Settings
-		{
-			get { return _settings; }
-		}
+		public override HydraTaskSettings Settings => _settings;
 
-		private readonly IEnumerable<CandleSeries> _supportedCandleSeries;
-
-		public override IEnumerable<CandleSeries> SupportedCandleSeries
-		{
-			get { return _supportedCandleSeries; }
-		}
+		public override IEnumerable<DataType> SupportedDataTypes { get; }
 
 		protected override void ApplySettings(HydraTaskSettings settings)
 		{
