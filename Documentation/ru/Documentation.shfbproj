@@ -1615,6 +1615,10 @@
       <ImageId>GUI_PropertyDataGridEx</ImageId>
       <AlternateText>GUI Property Data Grid Ex</AlternateText>
     </Image>
+    <Image Include="Art\GUI_StrategiesStatisticsPanel.png">
+      <ImageId>GUI_StrategiesStatisticsPanel</ImageId>
+      <AlternateText>GUI Strategies Statistics Panel</AlternateText>
+    </Image>
   </ItemGroup>
   <ItemGroup>
     <None Include="Art\sample_options_calc.png">
