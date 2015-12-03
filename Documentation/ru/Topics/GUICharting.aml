@@ -2,7 +2,76 @@
 <topic id="956b3163-c537-4e1d-af29-cf80b633db3c" revisionNumber="1">
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     <introduction>
-     <para>Раздел в разработке</para>
+    <para>
+      <token>stocksharp</token> предоставляет удобные компоненты для построения графиков. Эти компоненты собраны в пространстве
+      имен <codeEntityReference qualifyHint="true">N:StockSharp.Xaml.Charting</codeEntityReference>.
+     </para>
+     <para>
+        Ключевым понятием в графической библиотеке является понятие <legacyItalic>chart</legacyItalic>. <legacyItalic>Chart</legacyItalic> - это контейнер для других элементов, которые используются при построении графиков.
+        В <token>stocksharp</token> имеется несколько типов <legacyItalic>чартов</legacyItalic>. 
+     </para>
+     
+	<list class="bullet">
+  		<listItem>
+  			<para><codeEntityReference>T:StockSharp.Xaml.Charting.Chart</codeEntityReference> - графический компонент для отображения биржевых графиков.</para>
+  		</listItem>
+  		<listItem>
+  			<para><codeEntityReference>T:StockSharp.Xaml.Charting.ChartPanel</codeEntityReference> - расширенный графический компонент для отображения биржевых графиков.</para>
+  		</listItem>
+  		<listItem>
+  			<para><codeEntityReference>T:StockSharp.Xaml.Charting.BufferedChart</codeEntityReference> - графический компонент для отображения биржевых графиков, который использует буфферизацию при выводе данных.</para>
+  		</listItem>
+  		<listItem>
+  			<para><codeEntityReference>T:StockSharp.Xaml.Charting.EquityCurveChart</codeEntityReference> - графический компонент для отображения кривой доходности.</para>
+  		</listItem>
+  		<listItem>
+  			<para><codeEntityReference>T:StockSharp.Xaml.Charting.OptionPositionChart</codeEntityReference> - графический компонент, показывающий позиции и "греки" опционов относительно подлежащего инструмента. См. <link xlink:href="5d9f8c0d-d05c-4a39-9fad-7148df4411ad">OptionPositionChart</link>.</para>
+  		</listItem>
+	</list>
+	
+	<para>
+	  На следующем рисунке показаны основные элементы графического компонета.
+	</para>
+	 <mediaLink><image placement="left" xlink:href="Gui_ChartElements" /></mediaLink>
+
+	
+	<sections>
+	 <title>Основные свойства и методы элементов графического компонета</title>
+	 <section>
+      <title>Chart</title>
+      <content>
+        <para>
+           Содержание        
+		</para>
+      </content>
+    </section>
+    <section>
+      <title>ChartArea</title>
+      <content>
+        <para>
+           Содержание        
+		</para>
+      </content>
+    </section>
+    <section>
+      <title>IChartElement</title>
+      <content>
+        <para>
+           Содержание        
+		</para>
+      </content>
+    </section>
+    </sections>
+	
+
     </introduction>
+     <relatedTopics>
+		<link xlink:href="a76a0a9c-bb95-4596-9464-9903379b3096">Chart</link>
+		<link xlink:href="bb71ead8-62c4-47f8-a1aa-242d63d631fb">ChartPanel</link>
+		<link xlink:href="d71b5e6e-fc05-429d-9888-7603f6b7c508">BufferedChart</link>
+		<link xlink:href="da275a7f-ff6f-4dc7-8451-bf4fc22624a6">EquityCurveChart</link>
+    </relatedTopics>
   </developerConceptualDocument>
 </topic>
+
+

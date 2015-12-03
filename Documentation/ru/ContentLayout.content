@@ -252,7 +252,7 @@
         <Topic id="f9005237-fc93-4086-9300-6b081056a0fa" visible="True" title="NewsGrid" />
         <Topic id="00026219-17a5-4749-82ab-ec018aa1ab0b" visible="True" title="NewsPanel" />
       </Topic>
-      <Topic id="20b858de-424e-43ee-89ab-00002d344f89" visible="True" isExpanded="true" isSelected="true" title="Визуальные компоненты: торговля">
+      <Topic id="20b858de-424e-43ee-89ab-00002d344f89" visible="True" isExpanded="true" title="Визуальные компоненты: торговля">
         <Topic id="5bb4f6f0-9057-4a88-b968-a5fd60641d4d" visible="True" title="OrderGrid" />
         <Topic id="cfc729e7-65e7-4ec3-b215-57031be290c7" visible="True" title="OrderWindow" />
         <Topic id="7ffeb2d8-55f3-447b-beb7-9b8017f5e7f4" visible="True" title="MyTradeGrid" />
@@ -265,7 +265,12 @@
         <Topic id="0bcd3950-6fc9-463a-b473-6b0c6587f7f1" visible="True" title="OptionDesk" />
         <Topic id="5d9f8c0d-d05c-4a39-9fad-7148df4411ad" visible="True" title="OptionPositionChart" />
       </Topic>
-      <Topic id="956b3163-c537-4e1d-af29-cf80b633db3c" visible="True" title="Компоненты для построения графиков" />
+      <Topic id="956b3163-c537-4e1d-af29-cf80b633db3c" visible="True" isExpanded="true" title="Компоненты для построения графиков">
+        <Topic id="a76a0a9c-bb95-4596-9464-9903379b3096" visible="True" title="Chart" />
+        <Topic id="bb71ead8-62c4-47f8-a1aa-242d63d631fb" visible="True" title="ChartPanel" />
+        <Topic id="d71b5e6e-fc05-429d-9888-7603f6b7c508" visible="True" title="BufferedChart" />
+        <Topic id="da275a7f-ff6f-4dc7-8451-bf4fc22624a6" visible="True" isSelected="true" title="EquityCurveChart" />
+      </Topic>
     </Topic>
     <Topic id="5794f4b0-c536-4713-ad08-955a4a01b196" visible="True" title="Сообщения">
       <Topic id="fcd2df04-2463-4f85-aa0c-9b7a8f95a56a" visible="True" title="Описание" />
