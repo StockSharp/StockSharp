@@ -36,29 +36,128 @@
 
 	
 	<sections>
-	 <title>Основные свойства и методы элементов графического компонета</title>
+	 <title>Элементы графического компонета</title>
 	 <section>
       <title>Chart</title>
       <content>
         <para>
-           Содержание        
+            <codeEntityReference>T:StockSharp.Xaml.Charting.Chart</codeEntityReference> является родительским контейнером для других элементов графического контрола. Он содержит
+            методы для добавления/удаления других элементов, свойства для настройки внешнего вида компонента и способа отрисовки графиков, а также методы для отрисовки самих графиков.
+            <legacyItalic>Chart</legacyItalic> может содержать несколько областей (<codeEntityReference>T:StockSharp.Xaml.Charting.ChartArea</codeEntityReference>) для построения графиков (см. рисунок).
+            <codeEntityReference>T:StockSharp.Xaml.Charting.Chart</codeEntityReference> также содержит область предварительного просмотра <legacyBold>OverView</legacyBold> (см. рисунок). В этой области 
+            при помощи ползунков можно установить диапазон отображаемых значений, а также скролировать график, перетаскивая выбранный диапазон при помощи мыши. Кроме того, можно скроллировать и зуммировать 
+            график при помощи перетаскивания области <codeEntityReference>T:StockSharp.Xaml.Charting.ChartArea</codeEntityReference>, оси X и при помощи колесика мыши.
 		</para>
+		<para>
+		<legacyBold>Основные свойства и методы <codeEntityReference>T:StockSharp.Xaml.Charting.Chart</codeEntityReference></legacyBold>
+		</para>
+		
+		<list class="bullet">
+  			<listItem>
+  				<para><codeEntityReference>P:StockSharp.Xaml.Charting.Chart.Areas</codeEntityReference> - список областей <legacyBold>ChartArea</legacyBold>.</para>
+  			</listItem>
+  			<listItem>
+  				<para><codeEntityReference>P:StockSharp.Xaml.Charting.Chart.ChartTheme</codeEntityReference> - тема компонента.</para>
+  			</listItem>
+  			<listItem>
+  				<para><codeEntityReference>P:StockSharp.Xaml.Charting.Chart.IndicatorTypes</codeEntityReference> - список индикаторов, которые можно отображать на чарте.</para>
+  			</listItem>
+  			<listItem>
+  				<para><codeEntityReference>P:StockSharp.Xaml.Charting.Chart.CrossHair</codeEntityReference> - включить/выключить отображение перекрестья.</para>
+  			</listItem>
+  			<listItem>
+  				<para><codeEntityReference>P:StockSharp.Xaml.Charting.Chart.CrossHairAxisLabels</codeEntityReference> - включить/выключить отображение на осях меток перекрестья.</para>
+  			</listItem>
+  			<listItem>
+  				<para><codeEntityReference>P:StockSharp.Xaml.Charting.Chart.IsAutoRange</codeEntityReference> - включить/выключить автоматическое масштабирование оси X.</para> 
+  			</listItem>
+  			<listItem>
+  				<para><codeEntityReference>P:StockSharp.Xaml.Charting.Chart.IsAutoScroll</codeEntityReference> - включить/выключить автопрокрутку по оси X.</para>
+  			</listItem>
+  			<listItem>
+  				<para><codeEntityReference>P:StockSharp.Xaml.Charting.Chart.ShowLegend</codeEntityReference> - включить/выключить отображение легенды.</para>
+  			</listItem>
+  			<listItem>
+  				<para><codeEntityReference>P:StockSharp.Xaml.Charting.Chart.ShowOverview</codeEntityReference> - включить/выключить отображение области предпросмотра <legacyBold>OverView</legacyBold>.</para>
+  			</listItem>
+  			<listItem>
+  				<para><codeEntityReference>M:StockSharp.Xaml.Charting.Chart.AddArea(StockSharp.Xaml.Charting.ChartArea)</codeEntityReference> - добавить <legacyBold>ChartArea</legacyBold>.</para>
+  			</listItem>
+  			<listItem>
+  				<para><codeEntityReference>M:StockSharp.Xaml.Charting.Chart.AddElement()</codeEntityReference> - добавить элемент серии данных. Имеет несколько перегрузок.</para>
+  			</listItem>
+  			<listItem>
+  				<para><codeEntityReference>M:StockSharp.Xaml.Charting.Chart.Reset()</codeEntityReference> - "сбросить" ранее отрисованные значения.</para>
+  			</listItem>
+  			<listItem>
+  				<para><codeEntityReference>M:StockSharp.Xaml.Charting.Chart.Draw()</codeEntityReference> - отрисовать значение на графике. Имеет несколько перегрузок.</para>
+  			</listItem>
+  			
+		</list>
+
       </content>
     </section>
     <section>
       <title>ChartArea</title>
       <content>
         <para>
-           Содержание        
+           <codeEntityReference>T:StockSharp.Xaml.Charting.ChartArea</codeEntityReference> - область построения графика, является контейнером для элементов <codeEntityReference>T:StockSharp.Xaml.Charting.IChartElement</codeEntityReference> (индикаторы, свечи и т.п.),
+           которые отрисовываются на графике, и осей (<codeEntityReference>T:StockSharp.Xaml.Charting.ChartAxis</codeEntityReference>) графика.
 		</para>
+		
+		<para>
+		<legacyBold>Основные свойства <codeEntityReference>T:StockSharp.Xaml.Charting.ChartArea</codeEntityReference></legacyBold>
+		</para>
+			<list class="bullet">
+  			<listItem>
+  				<para><codeEntityReference>P:StockSharp.Xaml.Charting.ChartArea.Elements</codeEntityReference> - список элементов <codeEntityReference>T:StockSharp.Xaml.Charting.IChartElement</codeEntityReference>.</para>
+  			</listItem>
+  			<listItem>
+  				<para><codeEntityReference>T:StockSharp.Xaml.Charting.ChartArea.XAxises</codeEntityReference> - список горизонтальных осей.</para>
+  			</listItem>
+  			<listItem>
+  				<para><codeEntityReference>T:StockSharp.Xaml.Charting.ChartArea.YAxises</codeEntityReference> - список вертикальных осей.</para>
+  			</listItem>
+		</list>
+		
       </content>
     </section>
     <section>
       <title>IChartElement</title>
       <content>
         <para>
-           Содержание        
-		</para>
+           Все элементы, которые отображаются на графике должны реализовывать интерфейс <codeEntityReference>T:StockSharp.Xaml.Charting.IChartElement</codeEntityReference>. 
+           В <token>stocksharp</token> имеются следующие классы, реализующие этот интерфейс:
+        </para>   
+           <list class="bullet">
+  			<listItem>
+  				<para><codeEntityReference>T:StockSharp.Xaml.Charting.ChartCandleElement</codeEntityReference> - элемент для отображения свечей.</para>
+  			</listItem>
+  			<listItem>
+  				<para><codeEntityReference>T:StockSharp.Xaml.Charting.LineElement</codeEntityReference> - элемент для отображения линии.</para>
+  			</listItem>
+  			<listItem>
+  				<para><codeEntityReference>T:StockSharp.Xaml.Charting.ChartIndicatorElement</codeEntityReference> - элемент для отображения индикаторов.</para>
+  			</listItem>
+  			<listItem>
+  				<para><codeEntityReference>T:StockSharp.Xaml.Charting.ChartOrderElement</codeEntityReference> - элемент для отображения заявок.</para>
+  			</listItem>
+  			<listItem>
+  				<para><codeEntityReference>T:StockSharp.Xaml.Charting.ChartTradeElement</codeEntityReference> - элемент для оторбажения сделок.</para>
+  			</listItem>
+		</list>
+		
+		<para>   
+		Классы визуальных элементов имеют ряд свойств для настройки внешнего вида графиков. Можно настроить цвета, толщину линий и стиль элементов. Например,
+		при помощи свойства <codeEntityReference qualifyHint="true">P:StockSharp.Xaml.Charting.ChartCandleElement.DrawStyle</codeEntityReference> можно изменять внешний вид 
+		свечи (свеча или бар). При помощи свойства <codeEntityReference qualifyHint="true">P:StockSharp.Xaml.Charting.ChartIndicatorElement.DrawStyle</codeEntityReference> 
+		можно установить стиль линии индикатора. Так чтобы отображать индикатор в виде гистограмы нужно использовать значение 
+		<codeEntityReference qualifyHint="true">F:StockSharp.Xaml.Charting.ChartIndicatorDrawStyles.Histogram</codeEntityReference>.
+		Свойства <codeEntityReference qualifyHint="true">P:StockSharp.Xaml.Charting.ChartCandleElement.ShowAxisMarker</codeEntityReference> и
+		<codeEntityReference qualifyHint="true">P:StockSharp.Xaml.Charting.ChartIndicatorElement.ShowAxisMarker</codeEntityReference> позволяют включать/выключать отбражение
+		маркёра (см. рисунок) на осях графика.  
+		</para>   
+		
       </content>
     </section>
     </sections>
