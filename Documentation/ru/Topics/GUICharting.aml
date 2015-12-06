@@ -154,8 +154,8 @@
 		можно установить стиль линии индикатора. Так чтобы отображать индикатор в виде гистограмы нужно использовать значение 
 		<codeEntityReference qualifyHint="true">F:StockSharp.Xaml.Charting.ChartIndicatorDrawStyles.Histogram</codeEntityReference>.
 		Свойства <codeEntityReference qualifyHint="true">P:StockSharp.Xaml.Charting.ChartCandleElement.ShowAxisMarker</codeEntityReference> и
-		<codeEntityReference qualifyHint="true">P:StockSharp.Xaml.Charting.ChartIndicatorElement.ShowAxisMarker</codeEntityReference> позволяют включать/выключать отбражение
-		маркёра (см. рисунок) на осях графика.  
+		<codeEntityReference qualifyHint="true">P:StockSharp.Xaml.Charting.ChartIndicatorElement.ShowAxisMarker</codeEntityReference> позволяют включать/выключать отбражения
+		маркёров (см. рисунок) на осях графика.  
 		</para>   
 		
       </content>

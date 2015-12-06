@@ -1627,6 +1627,10 @@
       <ImageId>Gui_ChartElements</ImageId>
       <AlternateText>Gui Chart Elements</AlternateText>
     </Image>
+    <Image Include="Art\Gui_ChartSample.png">
+      <ImageId>Gui_ChartSample</ImageId>
+      <AlternateText>Gui Chart Sample</AlternateText>
+    </Image>
   </ItemGroup>
   <ItemGroup>
     <None Include="Art\sample_options_calc.png">

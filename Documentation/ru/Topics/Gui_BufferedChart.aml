@@ -2,7 +2,34 @@
 <topic id="d71b5e6e-fc05-429d-9888-7603f6b7c508" revisionNumber="1">
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     <introduction>
-      <para>Раздел в разработке</para>
+      <para>
+      <codeEntityReference>T:StockSharp.Xaml.Charting.BufferedChart</codeEntityReference> - графический компонет для построения 
+      биржевых графиков, который использует буфферизацию при выводе данных.
+      </para>
+      <para>
+      	<!-- Ниже приведен пример построения графика при помощи компонета <codeEntityReference>T:StockSharp.Xaml.Charting.Chart</codeEntityReference>. За основу взят
+      	пример из Samples/Quik/SampleCandles, в который внесены некоторые изменения.--> 
+      </para>
     </introduction>
+    
+      <procedure>
+      <title>Пример построения графика при помощи BufferedChart</title>
+
+      <steps class="ordered">
+		  <step>
+			  <content>
+				  <para>
+					  <!-- В XAML создаем окно и добавляет в него графический компонент <codeEntityReference qualifyHint="true">T:StockSharp.Xaml.Charting.Chart</codeEntityReference>.
+					  Присваиваем компоненту имя <legacyBold>Chart</legacyBold>. Обратите внимание, что при создании окна нужно добавить пространство имен
+					  <legacyItalic>http://schemas.stocksharp.com/xaml</legacyItalic>.-->
+				  </para>
+				   <code title="XAML" language="XAML">
+	  				<![CDATA[
+	  				]]>
+              </code>
+			  </content>
+		  </step>
+		  </steps>
+    </procedure>
   </developerConceptualDocument>
 </topic>
