@@ -407,5 +407,10 @@ namespace StockSharp.Algo.Storages
 
 			return securities.ReadById(securityId.ToStringId());
 		}
+
+		internal static DateTimeOffset Truncate(this DateTimeOffset time)
+		{
+			return time.Truncate(TimeSpan.TicksPerMillisecond);
+		}
 	}
 }

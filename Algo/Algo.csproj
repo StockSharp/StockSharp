@@ -55,7 +55,8 @@
     <Reference Include="Ecng.Collections">
       <HintPath>..\References\Ecng\Ecng.Collections.dll</HintPath>
     </Reference>
-    <Reference Include="Ecng.Common">
+    <Reference Include="Ecng.Common, Version=1.0.0.0, Culture=neutral, PublicKeyToken=b10e79ed0227b515, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\References\Ecng\Ecng.Common.dll</HintPath>
     </Reference>
     <Reference Include="Ecng.ComponentModel">
@@ -304,10 +305,18 @@
     <Compile Include="Storages\AllSecurityMarketDataStorage.cs" />
     <Compile Include="Storages\Backup\Xaml\AmazonRegionComboBox.cs" />
     <Compile Include="Storages\Backup\Xaml\AmazonRegionEditor.cs" />
-    <Compile Include="Storages\BinaryMarketDataSerializer.cs" />
+    <Compile Include="Storages\Binary\BinaryMarketDataSerializer.cs" />
     <Compile Include="Storages\BufferMessageAdapter.cs" />
     <Compile Include="Storages\CacheableMarketDataDrive.cs" />
-    <Compile Include="Storages\CsvMarketDataSerializer.cs" />
+    <Compile Include="Storages\Csv\CandleCsvSerializer.cs" />
+    <Compile Include="Storages\Csv\CsvHelper.cs" />
+    <Compile Include="Storages\Csv\CsvMarketDataSerializer.cs" />
+    <Compile Include="Storages\Csv\Level1CsvSerializer.cs" />
+    <Compile Include="Storages\Csv\NewsCsvSerializer.cs" />
+    <Compile Include="Storages\Csv\OrderLogCsvSerializer.cs" />
+    <Compile Include="Storages\Csv\QuoteCsvSerializer.cs" />
+    <Compile Include="Storages\Csv\TickCsvSerializer.cs" />
+    <Compile Include="Storages\Csv\TransactionCsvSerializer.cs" />
     <Compile Include="Storages\ExchangeInfoProvider.cs" />
     <Compile Include="Storages\ExchangeList.cs" />
     <Compile Include="Helper.cs" />
@@ -332,12 +341,12 @@
     <Compile Include="Storages\IStorageSecurityList.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Storages\Level1Serializer.cs" />
+    <Compile Include="Storages\Binary\Level1BinarySerializer.cs" />
     <Compile Include="Storages\NewsList.cs" />
     <Compile Include="Storages\StorageEntityFactory.cs" />
-    <Compile Include="Storages\TransactionSerializer.cs" />
-    <Compile Include="Storages\NewsSerializer.cs" />
-    <Compile Include="Storages\QuoteSerializer.cs" />
+    <Compile Include="Storages\Binary\TransactionBinarySerializer.cs" />
+    <Compile Include="Storages\Binary\NewsBinarySerializer.cs" />
+    <Compile Include="Storages\Binary\QuoteBinarySerializer.cs" />
     <Compile Include="OrderLogHelper.cs" />
     <Compile Include="MarketTimer.cs" />
     <Compile Include="PnL\PnLInfo.cs" />
@@ -354,7 +363,7 @@
     <Compile Include="SecurityIdGenerator.cs" />
     <Compile Include="Slippage\ISlippageManager.cs" />
     <Compile Include="Storages\ContinuousSecurityMarketDataStorage.cs" />
-    <Compile Include="Storages\CandleSerializer.cs" />
+    <Compile Include="Storages\Binary\CandleBinarySerializer.cs" />
     <Compile Include="Storages\EntityRegistry.cs" />
     <Compile Include="Storages\ExchangeBoardList.cs" />
     <Compile Include="Storages\IEntityRegistry.cs" />
@@ -363,8 +372,8 @@
     <Compile Include="Storages\IMarketDataDrive.cs" />
     <Compile Include="Storages\IndexSecurityMarketDataStorage.cs" />
     <Compile Include="Storages\LocalMarketDataDrive.cs" />
-    <Compile Include="Storages\BinaryHelper.cs" />
-    <Compile Include="Storages\OrderLogSerializer.cs" />
+    <Compile Include="Storages\Binary\BinaryHelper.cs" />
+    <Compile Include="Storages\Binary\OrderLogBinarySerializer.cs" />
     <Compile Include="Storages\StorageMessageAdapter.cs" />
     <Compile Include="Storages\StorageFormats.cs" />
     <Compile Include="Storages\StorageHelper.cs" />
@@ -390,7 +399,7 @@
     <Compile Include="Testing\HistorySourceMessage.cs" />
     <Compile Include="TimeQuoteChange.cs" />
     <Compile Include="Storages\TradeList.cs" />
-    <Compile Include="Storages\TradeSerializer.cs" />
+    <Compile Include="Storages\Binary\TickBinarySerializer.cs" />
     <Compile Include="Storages\IStorageRegistry.cs" />
     <Compile Include="Storages\IStorageEntityList.cs" />
     <Compile Include="Storages\MarketDataStorage.cs" />

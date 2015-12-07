@@ -1,4 +1,4 @@
-﻿namespace StockSharp.Algo.Storages
+﻿namespace StockSharp.Algo.Storages.Binary
 {
 	using System;
 	using System.Collections;

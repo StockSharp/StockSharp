@@ -1,4 +1,4 @@
-namespace StockSharp.Algo.Storages
+namespace StockSharp.Algo.Storages.Binary
 {
 	using System;
 	using System.Collections.Generic;
@@ -71,9 +71,9 @@ namespace StockSharp.Algo.Storages
 		}
 	}
 
-	class QuoteSerializer : BinaryMarketDataSerializer<QuoteChangeMessage, QuoteMetaInfo>
+	class QuoteBinarySerializer : BinaryMarketDataSerializer<QuoteChangeMessage, QuoteMetaInfo>
 	{
-		public QuoteSerializer(SecurityId securityId)
+		public QuoteBinarySerializer(SecurityId securityId)
 			: base(securityId, 16 + 20 * 25, MarketDataVersions.Version52)
 		{
 		}

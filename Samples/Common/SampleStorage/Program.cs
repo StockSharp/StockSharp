@@ -6,9 +6,9 @@ namespace SampleStorage
 	using Ecng.Common;
 
 	using StockSharp.Algo.Storages;
+	using StockSharp.Algo.Storages.Csv;
 	using StockSharp.BusinessEntities;
 	using StockSharp.Localization;
-	using StockSharp.Messages;
 
 	class Program
 	{
@@ -47,7 +47,7 @@ namespace SampleStorage
 				var aaplStorage = drive.GetSecurityDrive(security);
 
 				// get tick storage
-				var tradeStorage = (IMarketDataStorage<Trade>)aaplStorage.GetTickStorage(new CsvMarketDataSerializer<ExecutionMessage>());
+				var tradeStorage = (IMarketDataStorage<Trade>)aaplStorage.GetTickStorage(new TickCsvSerializer(aaplStorage.SecurityId));
 
 				// saving ticks
 				tradeStorage.Save(trades);

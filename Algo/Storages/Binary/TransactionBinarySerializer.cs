@@ -1,4 +1,4 @@
-namespace StockSharp.Algo.Storages
+namespace StockSharp.Algo.Storages.Binary
 {
 	using System;
 	using System.Collections.Generic;
@@ -176,9 +176,9 @@ namespace StockSharp.Algo.Storages
 		}
 	}
 
-	class TransactionSerializer : BinaryMarketDataSerializer<ExecutionMessage, TransactionSerializerMetaInfo>
+	class TransactionBinarySerializer : BinaryMarketDataSerializer<ExecutionMessage, TransactionSerializerMetaInfo>
 	{
-		public TransactionSerializer(SecurityId securityId)
+		public TransactionBinarySerializer(SecurityId securityId)
 			: base(securityId, 200, MarketDataVersions.Version57)
 		{
 		}

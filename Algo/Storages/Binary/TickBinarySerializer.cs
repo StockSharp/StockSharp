@@ -1,4 +1,4 @@
-namespace StockSharp.Algo.Storages
+namespace StockSharp.Algo.Storages.Binary
 {
 	using System;
 	using System.Collections.Generic;
@@ -12,9 +12,9 @@ namespace StockSharp.Algo.Storages
 	using StockSharp.Messages;
 	using StockSharp.Localization;
 
-	class TradeMetaInfo : BinaryMetaInfo<TradeMetaInfo>
+	class TickMetaInfo : BinaryMetaInfo<TickMetaInfo>
 	{
-		public TradeMetaInfo(DateTime date)
+		public TickMetaInfo(DateTime date)
 			: base(date)
 		{
 			FirstId = -1;
@@ -75,7 +75,7 @@ namespace StockSharp.Algo.Storages
 			ReadOffsets(stream);
 		}
 
-		public override void CopyFrom(TradeMetaInfo src)
+		public override void CopyFrom(TickMetaInfo src)
 		{
 			base.CopyFrom(src);
 
@@ -86,14 +86,14 @@ namespace StockSharp.Algo.Storages
 		}
 	}
 
-	class TradeSerializer : BinaryMarketDataSerializer<ExecutionMessage, TradeMetaInfo>
+	class TickBinarySerializer : BinaryMarketDataSerializer<ExecutionMessage, TickMetaInfo>
 	{
-		public TradeSerializer(SecurityId securityId)
+		public TickBinarySerializer(SecurityId securityId)
 			: base(securityId, 50, MarketDataVersions.Version54)
 		{
 		}
 
-		protected override void OnSave(BitArrayWriter writer, IEnumerable<ExecutionMessage> messages, TradeMetaInfo metaInfo)
+		protected override void OnSave(BitArrayWriter writer, IEnumerable<ExecutionMessage> messages, TickMetaInfo metaInfo)
 		{
 			if (metaInfo.IsEmpty())
 			{

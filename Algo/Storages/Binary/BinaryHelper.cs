@@ -1,4 +1,4 @@
-namespace StockSharp.Algo.Storages
+namespace StockSharp.Algo.Storages.Binary
 {
 	using System;
 	using System.Collections;
@@ -131,11 +131,6 @@ namespace StockSharp.Algo.Storages
 		{
 			writer.WriteLong(id - prevId);
 			return id;
-		}
-
-		public static DateTimeOffset Truncate(this DateTimeOffset time)
-		{
-			return time.Truncate(TimeSpan.TicksPerMillisecond);
 		}
 
 		public static DateTime WriteTime(this BitArrayWriter writer, DateTimeOffset dto, DateTime prevTime, string name, bool allowNonOrdered, bool isUtc, TimeSpan offset, bool allowDiffOffsets, ref TimeSpan prevOffset)

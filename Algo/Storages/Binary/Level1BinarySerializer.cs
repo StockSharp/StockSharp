@@ -1,4 +1,4 @@
-namespace StockSharp.Algo.Storages
+namespace StockSharp.Algo.Storages.Binary
 {
 	using System;
 	using System.Collections.Generic;
@@ -362,7 +362,7 @@ namespace StockSharp.Algo.Storages
 		}
 	}
 
-	class Level1Serializer : BinaryMarketDataSerializer<Level1ChangeMessage, Level1MetaInfo>
+	class Level1BinarySerializer : BinaryMarketDataSerializer<Level1ChangeMessage, Level1MetaInfo>
 	{
 		private static readonly SynchronizedPairSet<Level1Fields, int> _oldMap = new SynchronizedPairSet<Level1Fields, int>
 		{
@@ -394,7 +394,7 @@ namespace StockSharp.Algo.Storages
 			{ Level1Fields.VolumeStep,				1 << 25 },
 		};
 
-		public Level1Serializer(SecurityId securityId)
+		public Level1BinarySerializer(SecurityId securityId)
 			: base(securityId, 50, MarketDataVersions.Version54)
 		{
 		}

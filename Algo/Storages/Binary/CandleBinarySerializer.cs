@@ -1,4 +1,4 @@
-namespace StockSharp.Algo.Storages
+namespace StockSharp.Algo.Storages.Binary
 {
 	using System;
 	using System.Collections.Generic;
@@ -68,12 +68,12 @@ namespace StockSharp.Algo.Storages
 		}
 	}
 
-	class CandleSerializer<TCandleMessage> : BinaryMarketDataSerializer<TCandleMessage, CandleMetaInfo>
+	class CandleBinarySerializer<TCandleMessage> : BinaryMarketDataSerializer<TCandleMessage, CandleMetaInfo>
 		where TCandleMessage : CandleMessage, new()
 	{
 		private readonly object _arg;
 
-		public CandleSerializer(SecurityId securityId, object arg)
+		public CandleBinarySerializer(SecurityId securityId, object arg)
 			: base(securityId, 74, MarketDataVersions.Version54)
 		{
 			if (arg == null)
