@@ -42,10 +42,10 @@
       <content>
         <para>
             <codeEntityReference>T:StockSharp.Xaml.Charting.Chart</codeEntityReference> является родительским контейнером для других элементов графического контрола. Он содержит
-            методы для добавления/удаления других элементов, свойства для настройки внешнего вида компонента и способа отрисовки графиков, а также методы для отрисовки самих графиков.
+            методы для добавления и удаления "дочерних" элементов, свойства для настройки внешнего вида компонента и способа отрисовки графиков, а также метод отрисовки самих графиков.
             <legacyItalic>Chart</legacyItalic> может содержать несколько областей (<codeEntityReference>T:StockSharp.Xaml.Charting.ChartArea</codeEntityReference>) для построения графиков (см. рисунок).
             <codeEntityReference>T:StockSharp.Xaml.Charting.Chart</codeEntityReference> также содержит область предварительного просмотра <legacyBold>OverView</legacyBold> (см. рисунок). В этой области 
-            при помощи ползунков можно установить диапазон отображаемых значений, а также скролировать график, перетаскивая выбранный диапазон при помощи мыши. Кроме того, можно скроллировать и зуммировать 
+            при помощи ползунков можно выбрать зону просмотра графика. Кроме того, можно скроллировать и зуммировать 
             график при помощи перетаскивания области <codeEntityReference>T:StockSharp.Xaml.Charting.ChartArea</codeEntityReference>, оси X и при помощи колесика мыши.
 		</para>
 		<para>
@@ -66,7 +66,7 @@
   				<para><codeEntityReference>P:StockSharp.Xaml.Charting.Chart.CrossHair</codeEntityReference> - включить/выключить отображение перекрестья.</para>
   			</listItem>
   			<listItem>
-  				<para><codeEntityReference>P:StockSharp.Xaml.Charting.Chart.CrossHairAxisLabels</codeEntityReference> - включить/выключить отображение на осях меток перекрестья.</para>
+  				<para><codeEntityReference>P:StockSharp.Xaml.Charting.Chart.CrossHairAxisLabels</codeEntityReference> - включить/выключить отображение меток перекрестья на осях.</para>
   			</listItem>
   			<listItem>
   				<para><codeEntityReference>P:StockSharp.Xaml.Charting.Chart.IsAutoRange</codeEntityReference> - включить/выключить автоматическое масштабирование оси X.</para> 
@@ -126,7 +126,7 @@
       <title>IChartElement</title>
       <content>
         <para>
-           Все элементы, которые отображаются на графике должны реализовывать интерфейс <codeEntityReference>T:StockSharp.Xaml.Charting.IChartElement</codeEntityReference>. 
+           Все элементы, которые отображаются на графике должны, реализовывать интерфейс <codeEntityReference>T:StockSharp.Xaml.Charting.IChartElement</codeEntityReference>. 
            В <token>stocksharp</token> имеются следующие классы, реализующие этот интерфейс:
         </para>   
            <list class="bullet">
@@ -148,7 +148,7 @@
 		</list>
 		
 		<para>   
-		Классы визуальных элементов имеют ряд свойств для настройки внешнего вида графиков. Можно настроить цвета, толщину линий и стиль элементов. Например,
+		Классы визуальных элементов имеют ряд свойств для настройки внешнего вида графика. Можно настроить цвета, толщину линий и стиль элементов. Например,
 		при помощи свойства <codeEntityReference qualifyHint="true">P:StockSharp.Xaml.Charting.ChartCandleElement.DrawStyle</codeEntityReference> можно изменять внешний вид 
 		свечи (свеча или бар). При помощи свойства <codeEntityReference qualifyHint="true">P:StockSharp.Xaml.Charting.ChartIndicatorElement.DrawStyle</codeEntityReference> 
 		можно установить стиль линии индикатора. Так чтобы отображать индикатор в виде гистограмы нужно использовать значение 

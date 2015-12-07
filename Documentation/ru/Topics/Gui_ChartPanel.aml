@@ -4,32 +4,24 @@
     <introduction>
       <para>
       <codeEntityReference>T:StockSharp.Xaml.Charting.ChartPanel</codeEntityReference> - расширенный компонет для построения биржевых графиков, который имеет панель
-      инструментов и дополнительный функционал.
+      инструментов и дополнительный функционал. Техника построения графиков при помощи <codeEntityReference>T:StockSharp.Xaml.Charting.ChartPanel</codeEntityReference> 
+      существенно не отличается от таковой при помощи <link xlink:href="a76a0a9c-bb95-4596-9464-9903379b3096">Chart</link>.
       </para>
       <para>
-      	Ниже приведен пример построения графика при помощи компонета <codeEntityReference>T:StockSharp.Xaml.Charting.ChartPanel</codeEntityReference>.
+      	На следующих рисунках показаны внешний вид компонента, а также функции кнопок панели инструментов.
       </para>
+      
+      <mediaLink><image placement="left" xlink:href="Gui_ChartPanel" /></mediaLink>
+      
+      <para>
+      	<legacyBold>Функционал панели инструментов</legacyBold>
+      </para>
+      
+      <mediaLink><image placement="left" xlink:href="Gui_ChartPanelTools" /></mediaLink>
+      
+      
     </introduction>
     
-      <procedure>
-      <title>Пример построения графика при помощи ChartPanel</title>
-
-      <steps class="ordered">
-		  <step>
-			  <content>
-				  <para>
-					  <!--В XAML создаем окно и добавляет в него графический компонент <codeEntityReference qualifyHint="true">T:StockSharp.Xaml.Charting.Chart</codeEntityReference>.
-					  Присваиваем компоненту имя <legacyBold>Chart</legacyBold>. Обратите внимание, что при создании окна нужно добавить пространство имен
-					  <legacyItalic>http://schemas.stocksharp.com/xaml</legacyItalic>. -->
-				  </para>
-				   <code title="XAML" language="XAML">
-	  				<![CDATA[
-
-	  				]]>
-              </code>
-			  </content>
-		  </step>
-		  </steps>
-    </procedure>
+     
   </developerConceptualDocument>
 </topic>

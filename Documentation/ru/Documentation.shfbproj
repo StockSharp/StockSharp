@@ -1631,6 +1631,14 @@
       <ImageId>Gui_ChartSample</ImageId>
       <AlternateText>Gui Chart Sample</AlternateText>
     </Image>
+    <Image Include="Art\Gui_ChartPanel.png">
+      <ImageId>Gui_ChartPanel</ImageId>
+      <AlternateText>Gui Chart Panel</AlternateText>
+    </Image>
+    <Image Include="Art\Gui_ChartPanelTools.png">
+      <ImageId>Gui_ChartPanelTools</ImageId>
+      <AlternateText>Gui Chart Panel Tools</AlternateText>
+    </Image>
   </ItemGroup>
   <ItemGroup>
     <None Include="Art\sample_options_calc.png">
