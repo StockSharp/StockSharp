@@ -172,20 +172,11 @@ namespace StockSharp.Hydra.Panes
 			ChartPanel.Save(storage);
 		}
 
-		string IPane.Title
-		{
-			get { return LocalizedStrings.Str3200 + " " + Series; }
-		}
+		string IPane.Title => LocalizedStrings.Str3200 + " " + Series;
 
-		Uri IPane.Icon
-		{
-			get { return null; }
-		}
+		Uri IPane.Icon => null;
 
-		bool IPane.IsValid
-		{
-			get { return false; }
-		}
+		bool IPane.IsValid => false;
 
 		void IDisposable.Dispose()
 		{

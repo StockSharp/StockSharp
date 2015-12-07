@@ -21,20 +21,11 @@
 			Init(ExportBtn, MainGrid, GetExecutions);
 		}
 
-		protected override object Arg
-		{
-			get { return ExecutionTypes.Order; }
-		}
+		protected override object Arg => ExecutionTypes.Order;
 
-		protected override Type DataType
-		{
-			get { return typeof(ExecutionMessage); }
-		}
+		protected override Type DataType => typeof(ExecutionMessage);
 
-		public override string Title
-		{
-			get { return LocalizedStrings.Transactions + " " + SelectedSecurity; }
-		}
+		public override string Title => LocalizedStrings.Transactions + " " + SelectedSecurity;
 
 		public override Security SelectedSecurity
 		{

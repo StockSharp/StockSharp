@@ -33,9 +33,6 @@ namespace StockSharp.Hydra
 			new TargetPlatformFeature("S#.Data server")
 		};
 
-		protected override IEnumerable<TargetPlatformFeature> ExtendedFeatures
-		{
-			get { return _extendedFeatures; }
-		}
+		protected override IEnumerable<TargetPlatformFeature> ExtendedFeatures => _extendedFeatures;
 	}
 }

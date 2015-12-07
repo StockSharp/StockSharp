@@ -21,15 +21,9 @@ namespace StockSharp.Hydra.Panes
 			Init(ExportBtn, MainGrid, GetNews);
 		}
 
-		protected override Type DataType
-		{
-			get { return typeof(NewsMessage); }
-		}
+		protected override Type DataType => typeof(NewsMessage);
 
-		public override string Title
-		{
-			get { return LocalizedStrings.News; }
-		}
+		public override string Title => LocalizedStrings.News;
 
 		public override Security SelectedSecurity
 		{

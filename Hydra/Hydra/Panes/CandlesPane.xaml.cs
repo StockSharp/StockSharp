@@ -25,20 +25,11 @@ namespace StockSharp.Hydra.Panes
 			Init(ExportBtn, MainGrid, GetCandles);
 		}
 
-		protected override Type DataType
-		{
-			get { return CandleSettings.Settings.CandleType.ToCandleMessageType(); }
-		}
+		protected override Type DataType => CandleSettings.Settings.CandleType.ToCandleMessageType();
 
-		protected override object Arg
-		{
-			get { return CandleSettings.Settings.Arg; }
-		}
+		protected override object Arg => CandleSettings.Settings.Arg;
 
-		public override string Title
-		{
-			get { return LocalizedStrings.Candles + " " + SelectedSecurity; }
-		}
+		public override string Title => LocalizedStrings.Candles + " " + SelectedSecurity;
 
 		public override Security SelectedSecurity
 		{
@@ -46,10 +37,7 @@ namespace StockSharp.Hydra.Panes
 			set { SelectSecurityBtn.SelectedSecurity = value; }
 		}
 
-		private CandleSeries CandleSeries
-		{
-			get { return new CandleSeries(CandleSettings.Settings.CandleType, SelectedSecurity, Arg); }
-		}
+		private CandleSeries CandleSeries => new CandleSeries(CandleSettings.Settings.CandleType, SelectedSecurity, Arg);
 
 		private IEnumerableEx<CandleMessage> GetCandles()
 		{
@@ -102,10 +90,7 @@ namespace StockSharp.Hydra.Panes
 			}
 		}
 
-		protected override bool CanDirectBinExport
-		{
-			get { return base.CanDirectBinExport && BuildFrom.SelectedIndex == 0; }
-		}
+		protected override bool CanDirectBinExport => base.CanDirectBinExport && BuildFrom.SelectedIndex == 0;
 
 		private void FindClick(object sender, RoutedEventArgs e)
 		{

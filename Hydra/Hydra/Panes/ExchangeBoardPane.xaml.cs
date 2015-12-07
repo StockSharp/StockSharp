@@ -27,19 +27,10 @@ namespace StockSharp.Hydra.Panes
 		{
 		}
 
-		string IPane.Title
-		{
-			get { return LocalizedStrings.Str2831; }
-		}
+		string IPane.Title => LocalizedStrings.Str2831;
 
-		Uri IPane.Icon
-		{
-			get { return null; }
-		}
+		Uri IPane.Icon => null;
 
-		bool IPane.IsValid
-		{
-			get { return true; }
-		}
+		bool IPane.IsValid => true;
 	}
 }

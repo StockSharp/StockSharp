@@ -629,20 +629,11 @@ namespace StockSharp.Hydra.Panes
 
 		private string _title;
 
-		string IPane.Title
-		{
-			get { return LocalizedStrings.Str2864 + " '{0}'".Put(_title); }
-		}
+		string IPane.Title => LocalizedStrings.Str2864 + " '{0}'".Put(_title);
 
-		Uri IPane.Icon
-		{
-			get { return null; }
-		}
+		Uri IPane.Icon => null;
 
-		bool IPane.IsValid
-		{
-			get { return DataType != null; }
-		}
+		bool IPane.IsValid => DataType != null;
 
 		private void ImportBtn_OnClick(object sender, RoutedEventArgs e)
 		{

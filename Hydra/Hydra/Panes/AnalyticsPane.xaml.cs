@@ -225,21 +225,11 @@
 			storage.SetValue("Parameters", _parameters.Save());
 		}
 
-		string IPane.Title
-		{
-			get { return LocalizedStrings.Str1221; }
-		}
+		string IPane.Title => LocalizedStrings.Str1221;
 
-		Uri IPane.Icon
-		{
-			get { return null; }
-		}
+		Uri IPane.Icon => null;
 
-
-		bool IPane.IsValid
-		{
-			get { return true; }
-		}
+		bool IPane.IsValid => true;
 
 		private void CodePanel_OnCompilingCode()
 		{

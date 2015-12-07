@@ -136,20 +136,11 @@ namespace StockSharp.Hydra.Panes
 			new SecurityEditWindow { Securities = securities }.ShowModal(this);
 		}
 
-		string IPane.Title
-		{
-			get { return LocalizedStrings.Str2835; }
-		}
+		string IPane.Title => LocalizedStrings.Str2835;
 
-		Uri IPane.Icon
-		{
-			get { return null; }
-		}
+		Uri IPane.Icon => null;
 
-		bool IPane.IsValid
-		{
-			get { return true; }
-		}
+		bool IPane.IsValid => true;
 
 		void IPersistable.Load(SettingsStorage storage)
 		{

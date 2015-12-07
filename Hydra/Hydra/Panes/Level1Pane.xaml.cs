@@ -45,15 +45,9 @@ namespace StockSharp.Hydra.Panes
 			}
 		}
 
-		protected override Type DataType
-		{
-			get { return typeof(Level1ChangeMessage); }
-		}
+		protected override Type DataType => typeof(Level1ChangeMessage);
 
-		public override string Title
-		{
-			get { return LocalizedStrings.Level1 + " " + SelectedSecurity; }
-		}
+		public override string Title => LocalizedStrings.Level1 + " " + SelectedSecurity;
 
 		public override Security SelectedSecurity
 		{

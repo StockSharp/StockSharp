@@ -37,23 +37,14 @@
 
 		public static UserConfig Instance { get; private set; }
 
-		private static MainWindow MainWindow
-		{
-			get { return MainWindow.Instance; }
-		}
+		private static MainWindow MainWindow => MainWindow.Instance;
 
-		private static DockSiteLayoutSerializer LayoutSerializer
+		private static DockSiteLayoutSerializer LayoutSerializer => new DockSiteLayoutSerializer
 		{
-			get
-			{
-				return new DockSiteLayoutSerializer
-				{
-					SerializationBehavior = DockSiteSerializationBehavior.All,
-					DocumentWindowDeserializationBehavior = DockingWindowDeserializationBehavior.AutoCreate,
-					ToolWindowDeserializationBehavior = DockingWindowDeserializationBehavior.LazyLoad
-				};
-			}
-		}
+			SerializationBehavior = DockSiteSerializationBehavior.All,
+			DocumentWindowDeserializationBehavior = DockingWindowDeserializationBehavior.AutoCreate,
+			ToolWindowDeserializationBehavior = DockingWindowDeserializationBehavior.LazyLoad
+		};
 
 		static UserConfig()
 		{
@@ -91,10 +82,7 @@
 		}
 
 		// после обфускации название типа нечитаемо
-		public override string Name
-		{
-			get { return TypeHelper.ApplicationName; }
-		}
+		public override string Name => TypeHelper.ApplicationName;
 
 		private void Save()
 		{

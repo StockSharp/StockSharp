@@ -33,15 +33,9 @@ namespace StockSharp.Hydra.Panes
 			DepthGrid.Columns[0].Width = DepthGrid.Columns[2].Width = 50;
 		}
 
-		protected override Type DataType
-		{
-			get { return typeof(QuoteChangeMessage); }
-		}
+		protected override Type DataType => typeof(QuoteChangeMessage);
 
-		public override string Title
-		{
-			get { return LocalizedStrings.MarketDepths + " " + SelectedSecurity; }
-		}
+		public override string Title => LocalizedStrings.MarketDepths + " " + SelectedSecurity;
 
 		public override Security SelectedSecurity
 		{
@@ -158,10 +152,7 @@ namespace StockSharp.Hydra.Panes
 			DepthDate.Text = depth.ServerTime.ToString("yyyy.MM.dd HH:mm:ss.fff");
 		}
 
-		protected override bool CanDirectBinExport
-		{
-			get { return base.CanDirectBinExport && BuildFrom.SelectedIndex == 0; }
-		}
+		protected override bool CanDirectBinExport => base.CanDirectBinExport && BuildFrom.SelectedIndex == 0;
 
 		//protected override void OnClosed(EventArgs e)
 		//{

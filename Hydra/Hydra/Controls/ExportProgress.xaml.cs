@@ -38,10 +38,7 @@ namespace StockSharp.Hydra.Controls
 			InitializeComponent();
 		}
 
-		public bool IsStarted
-		{
-			get { return _worker != null; }
-		}
+		public bool IsStarted => _worker != null;
 
 		public void Init(ExportButton button, Grid mainGrid)
 		{
