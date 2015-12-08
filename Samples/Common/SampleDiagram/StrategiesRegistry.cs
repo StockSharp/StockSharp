@@ -1,10 +1,7 @@
 namespace SampleDiagram
 {
 	using System;
-	using System.Collections.Generic;
-	using System.Collections.ObjectModel;
 	using System.IO;
-	using System.Linq;
 
 	using Ecng.Collections;
 	using Ecng.Serialization;
@@ -23,18 +20,17 @@ namespace SampleDiagram
 	public class StrategiesRegistry : BaseLogReceiver
 	{
 		private readonly string _compositionsPath;
-		private readonly ObservableCollection<CompositionDiagramElement> _strategies = new ObservableCollection<CompositionDiagramElement>();
-		private readonly ObservableCollection<CompositionDiagramElement> _compositions = new ObservableCollection<CompositionDiagramElement>();
+		private readonly SynchronizedList<DiagramElement> _strategies = new SynchronizedList<DiagramElement>();
 		private readonly XmlSerializer<SettingsStorage> _serializer = new XmlSerializer<SettingsStorage>();
 
 		private readonly CompositionRegistry _compositionRegistry;
 		private readonly string _strategiesPath;
 
-		public IEnumerable<CompositionDiagramElement> Strategies { get { return _strategies; } }
+		public INotifyList<DiagramElement> Strategies => _strategies;
 
-		public IEnumerable<CompositionDiagramElement> Compositions { get { return _compositions; } }
+		public INotifyList<DiagramElement> Compositions => _compositionRegistry.DiagramElements;
 
-		public INotifyList<DiagramElement> DiagramElements { get { return _compositionRegistry.DiagramElements; } }
+		public INotifyList<DiagramElement> DiagramElements => _compositionRegistry.DiagramElements;
 
 		public StrategiesRegistry(string compositionsPath = "Compositions", string strategiesPath = "Strategies")
 		{
@@ -52,6 +48,11 @@ namespace SampleDiagram
 			LoadStrategies();
 		}
 
+		public void Save(CompositionItem element)
+		{
+			Save(element.Element, element.Type == CompositionType.Composition);
+		}
+
 		public void Save(CompositionDiagramElement element, bool isComposition)
 		{
 			if (element == null)
@@ -63,18 +64,18 @@ namespace SampleDiagram
 					_strategies.Add(element);
 			}
 			else
-			{
 				DiagramElements.Add(element);
-
-				if (!_compositions.Contains(element))
-					_compositions.Add(element);
-			}
 
 			var path = isComposition ? _compositionsPath : _strategiesPath;
 			var settings = _compositionRegistry.Serialize(element);
 			var file = Path.Combine(path, element.GetFileName());
 
 			_serializer.Serialize(settings, file);
+		}
+
+		public void Remove(CompositionItem element)
+		{
+			Remove(element.Element, element.Type == CompositionType.Composition);
 		}
 
 		public void Remove(CompositionDiagramElement element, bool isComposition)
@@ -85,7 +86,6 @@ namespace SampleDiagram
 			if (isComposition)
 			{
 				_compositionRegistry.TryRemove(element);
-				_compositions.Remove(element);
 			}
 			else
 				_strategies.Remove(element);
@@ -95,6 +95,11 @@ namespace SampleDiagram
 
 			if (File.Exists(file))
 				File.Delete(file);
+		}
+
+		public CompositionItem Discard(CompositionItem element)
+		{
+			return new CompositionItem(element.Type, Discard(element.Element, element.Type == CompositionType.Composition));
 		}
 
 		public CompositionDiagramElement Discard(CompositionDiagramElement element, bool isComposition)
@@ -112,9 +117,6 @@ namespace SampleDiagram
 				// TODO discard in CompositionRegistry
 				DiagramElements.Remove(element);
 				DiagramElements.Add(discardedElement);
-
-				var index = _compositions.IndexOf(element);
-				_compositions[index] = discardedElement;
 			}
 			else
 			{
@@ -154,9 +156,6 @@ namespace SampleDiagram
 					this.AddErrorLog("Load {0} composition element error: {1}", file, excp);
 				}
 			}
-
-			_compositions.Clear();
-			_compositions.AddRange(DiagramElements.OfType<CompositionDiagramElement>());
 		}
 
 		private void LoadStrategies()

@@ -8,20 +8,20 @@
 
 	public partial class DiagramEditorControl
 	{
-		public static readonly DependencyProperty CompositionProperty = DependencyProperty.Register("Composition", typeof (CompositionDiagramElement), typeof (DiagramEditorControl), 
+		public static readonly DependencyProperty CompositionProperty = DependencyProperty.Register("Composition", typeof (CompositionItem), typeof (DiagramEditorControl), 
 			new PropertyMetadata(null, CompositionPropertyChanged));
 
 		private static void CompositionPropertyChanged(DependencyObject sender, DependencyPropertyChangedEventArgs args)
 		{
-			var oldComposition = (CompositionDiagramElement)args.OldValue;
-			var newComposition = (CompositionDiagramElement)args.NewValue;
+			var oldComposition = (CompositionItem)args.OldValue;
+			var newComposition = (CompositionItem)args.NewValue;
 
 			((DiagramEditorControl)sender).CompositionPropertyChanged(oldComposition, newComposition);
 		}
 
-		public CompositionDiagramElement Composition
+		public CompositionItem Composition
 		{
-			get { return (CompositionDiagramElement)GetValue(CompositionProperty); }
+			get { return (CompositionItem)GetValue(CompositionProperty); }
 			set { SetValue(CompositionProperty, value); }
 		}
 
@@ -55,17 +55,17 @@
 			PropertyGridControl.SelectedObject = element;
 		}
 
-		private void CompositionPropertyChanged(CompositionDiagramElement oldComposition, CompositionDiagramElement newComposition)
+		private void CompositionPropertyChanged(CompositionItem oldComposition, CompositionItem newComposition)
 		{
 			if (oldComposition != null)
-				oldComposition.Changed -= CompositionChanged;
+				oldComposition.Element.Changed -= CompositionChanged;
 
 			if (newComposition != null)
 			{
 				NoStrategyLabel.Visibility = Visibility.Hidden;
-				DiagramEditor.Composition = newComposition;
+				DiagramEditor.Composition = newComposition.Element;
 
-				newComposition.Changed += CompositionChanged;
+				newComposition.Element.Changed += CompositionChanged;
 			}
 			else
 			{

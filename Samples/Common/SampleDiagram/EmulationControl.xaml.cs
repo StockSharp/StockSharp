@@ -5,13 +5,12 @@
 	using System.IO;
 	using System.Linq;
 	using System.Windows;
-	using System.Windows.Controls;
+	using System.Windows.Input;
 	using System.Windows.Media;
 
 	using Ecng.Common;
+	using Ecng.Configuration;
 	using Ecng.Xaml;
-
-	using Ookii.Dialogs.Wpf;
 
 	using StockSharp.Algo;
 	using StockSharp.Algo.Candles;
@@ -24,9 +23,7 @@
 	using StockSharp.Localization;
 	using StockSharp.Logging;
 	using StockSharp.Messages;
-	using StockSharp.Xaml;
 	using StockSharp.Xaml.Charting;
-	using StockSharp.Xaml.Diagram;
 
 	public partial class EmulationControl
 	{
@@ -48,104 +45,96 @@
 
 		#region DependencyProperty
 
-		public static readonly DependencyProperty StrategiesRegistryProperty = DependencyProperty.Register("StrategiesRegistry", typeof(StrategiesRegistry), typeof(EmulationControl),
-			new PropertyMetadata(null));
+		public static readonly DependencyProperty StrategyProperty = DependencyProperty.Register("Strategy", typeof(EmulationDiagramStrategy), 
+			typeof(EmulationControl), new PropertyMetadata(null));
 
-		public StrategiesRegistry StrategiesRegistry
+		public EmulationDiagramStrategy Strategy
 		{
-			get { return (StrategiesRegistry)GetValue(StrategiesRegistryProperty); }
-			set { SetValue(StrategiesRegistryProperty, value); }
-		}
-
-		public static readonly DependencyProperty CompositionProperty = DependencyProperty.Register("Composition", typeof(CompositionDiagramElement), typeof(EmulationControl),
-			new PropertyMetadata(null));
-
-		public CompositionDiagramElement Composition
-		{
-			get { return (CompositionDiagramElement)GetValue(CompositionProperty); }
-			set { SetValue(CompositionProperty, value); }
+			get { return (EmulationDiagramStrategy)GetValue(StrategyProperty); }
+			set { SetValue(StrategyProperty, value); }
 		}
 
 		#endregion
 
 		private readonly BufferedChart _bufferedChart;
-		private readonly LogManager _logManager;
 
 		private HistoryEmulationConnector _connector;
 
+		public ICommand StartCommand { get; private set; }
+
+		public ICommand StopCommand { get; private set; }
+
+		public ICommand AddBreakpointCommand => DiagramDebuggerControl.AddBreakpointCommand;
+
+		public ICommand RemoveBreakpointCommand => DiagramDebuggerControl.RemoveBreakpointCommand;
+
+		public ICommand StepNextCommand => DiagramDebuggerControl.StepNextCommand;
+
+		public ICommand StepToOutParamCommand => DiagramDebuggerControl.StepToOutParamCommand;
+
+		public ICommand StepIntoCommand => DiagramDebuggerControl.StepIntoCommand;
+
+		public ICommand StepOutCommand => DiagramDebuggerControl.StepOutCommand;
+
+		public ICommand ContinueCommand => DiagramDebuggerControl.ContinueCommand;
+
 		public EmulationControl()
 		{
-			InitializeComponent();
-
-			HistoryPathTextBox.Text = @"..\..\..\..\Testing\HistoryData\".ToFullPath();
-			SecusityTextBox.Text = "RIZ2@FORTS";
-			FromDatePicker.Value = new DateTime(2012, 10, 1);
-			ToDatePicke.Value = new DateTime(2012, 10, 25);
-
-			MarketDataTypeComboBox.ItemsSource = new[] { "Ticks", "Candles" };
-			MarketDataTypeComboBox.SelectedItem = "Candles";
-
-			TimeFrameComboBox.ItemsSource = new[] { TimeSpan.FromMinutes(1), TimeSpan.FromMinutes(5) };
-			TimeFrameComboBox.SelectedItem = TimeSpan.FromMinutes(5);
+			InitializeCommands();
+            InitializeComponent();
 
 			_bufferedChart = new BufferedChart(Chart);
-
-			_logManager = new LogManager();
-			_logManager.Listeners.Add(new FileLogListener("sample.log"));
-			_logManager.Listeners.Add(new GuiLogListener(Monitor));
-			//logManager.Listeners.Add(new DebugLogListener());	// for track logs in output window in Vusial Studio (poor performance).
 		}
 
-		private void FindPathClick(object sender, RoutedEventArgs e)
+		private void InitializeCommands()
 		{
-			var dlg = new VistaFolderBrowserDialog();
+			StartCommand = new DelegateCommand(
+				obj => StartEmulation(),
+				obj => _connector == null || _connector.State == EmulationStates.Stopped);
 
-			if (!HistoryPathTextBox.Text.IsEmpty())
-				dlg.SelectedPath = HistoryPathTextBox.Text;
-
-			if (dlg.ShowDialog(Application.Current.MainWindow) == true)
-			{
-				HistoryPathTextBox.Text = dlg.SelectedPath;
-			}
+			StopCommand = new DelegateCommand(
+				obj => StopEmulation(),
+				obj => _connector != null && _connector.State == EmulationStates.Started);
 		}
 
-		private void StartButtonOnClick(object sender, RoutedEventArgs e)
+		private void StartEmulation()
 		{
-			_logManager.Sources.Clear();
-			_bufferedChart.ClearAreas();
-
-			Curve.Clear();
-			PositionCurve.Clear();
-
-			if (HistoryPathTextBox.Text.IsEmpty() || !Directory.Exists(HistoryPathTextBox.Text))
-			{
-				MessageBox.Show("Wrong path.");
-				return;
-			}
-
 			if (_connector != null && _connector.State != EmulationStates.Stopped)
 			{
 				MessageBox.Show("Already launched.");
 				return;
 			}
 
-			if (Composition == null)
+			if (Strategy == null)
 			{
 				MessageBox.Show("No strategy selected.");
 				return;
 			}
 
+			var strategy = Strategy;
+
+			if (strategy.DataPath.IsEmpty() || !Directory.Exists(strategy.DataPath))
+			{
+				MessageBox.Show("Wrong path.");
+				return;
+			}
+
+			_bufferedChart.ClearAreas();
+
+			Curve.Clear();
+			PositionCurve.Clear();
+
 			var secGen = new SecurityIdGenerator();
-			var secIdParts = secGen.Split(SecusityTextBox.Text);
+			var secIdParts = secGen.Split(strategy.SecurityId);
 			var secCode = secIdParts.SecurityCode;
 			var board = ExchangeBoard.GetOrCreateBoard(secIdParts.BoardCode);
-			var timeFrame = (TimeSpan)TimeFrameComboBox.SelectedItem;
-			var useCandles = (string)MarketDataTypeComboBox.SelectedItem != "Ticks";
+			var timeFrame = strategy.CandlesTimeFrame;
+			var useCandles = strategy.MarketDataSource == MarketDataSource.Candles;
 
 			// create test security
 			var security = new Security
 			{
-				Id = SecusityTextBox.Text, // sec id has the same name as folder with historical data
+				Id = strategy.SecurityId, // sec id has the same name as folder with historical data
 				Code = secCode,
 				Board = board,
 			};
@@ -154,11 +143,11 @@
 			var storageRegistry = new StorageRegistry
 			{
 				// set historical path
-				DefaultDrive = new LocalMarketDataDrive(HistoryPathTextBox.Text)
+				DefaultDrive = new LocalMarketDataDrive(strategy.DataPath)
 			};
 
-			var startTime = ((DateTime)FromDatePicker.Value).ChangeKind(DateTimeKind.Utc);
-			var stopTime = ((DateTime)ToDatePicke.Value).ChangeKind(DateTimeKind.Utc);
+			var startTime = strategy.StartDate.ChangeKind(DateTimeKind.Utc);
+			var stopTime = strategy.StopDate.ChangeKind(DateTimeKind.Utc);
 
 			// ProgressBar refresh step
 			var progressStep = ((stopTime - startTime).Ticks / 100).To<TimeSpan>();
@@ -172,12 +161,12 @@
 				SecurityId = security.ToSecurityId(),
 				ServerTime = startTime,
 			}
-			.TryAdd(Level1Fields.PriceStep, secIdParts.SecurityCode == "RIZ2" ? 10m : 1)
-			.TryAdd(Level1Fields.StepPrice, 6m)
-			.TryAdd(Level1Fields.MinPrice, 10m)
-			.TryAdd(Level1Fields.MaxPrice, 1000000m)
-			.TryAdd(Level1Fields.MarginBuy, 10000m)
-			.TryAdd(Level1Fields.MarginSell, 10000m);
+				.TryAdd(Level1Fields.PriceStep, secIdParts.SecurityCode == "RIZ2" ? 10m : 1)
+				.TryAdd(Level1Fields.StepPrice, 6m)
+				.TryAdd(Level1Fields.MinPrice, 10m)
+				.TryAdd(Level1Fields.MaxPrice, 1000000m)
+				.TryAdd(Level1Fields.MarginBuy, 10000m)
+				.TryAdd(Level1Fields.MarginSell, 10000m);
 
 			// test portfolio
 			var portfolio = new Portfolio
@@ -222,47 +211,43 @@
 
 			//((ILogSource)_connector).LogLevel = DebugLogCheckBox.IsChecked == true ? LogLevels.Debug : LogLevels.Info;
 
-			_logManager.Sources.Add(_connector);
+			ConfigManager.GetService<LogManager>().Sources.Add(_connector);
 
 			var candleManager = !useCandles
-					? new CandleManager(new TradeCandleBuilderSourceEx(_connector))
-					: new CandleManager(_connector);
+									? new CandleManager(new TradeCandleBuilderSourceEx(_connector))
+									: new CandleManager(_connector);
 
-			// create strategy based on 80 5-min и 10 5-min
-			var strategy = new DiagramStrategy
-			{
-				Volume = 1,
-				Portfolio = portfolio,
-				Security = security,
-				Connector = _connector,
-				//LogLevel = DebugLogCheckBox.IsChecked == true ? LogLevels.Debug : LogLevels.Info,
+			strategy.Volume = 1;
+			strategy.Portfolio = portfolio;
+			strategy.Security = security;
+			strategy.Connector = _connector;
+			//LogLevel = DebugLogCheckBox.IsChecked == true ? LogLevels.Debug : LogLevels.Info,
 
-				Composition = Composition,
-
-				// by default interval is 1 min,
-				// it is excessively for time range with several months
-				UnrealizedPnLInterval = ((stopTime - startTime).Ticks / 1000).To<TimeSpan>()
-			};
+			// by default interval is 1 min,
+			// it is excessively for time range with several months
+			strategy.UnrealizedPnLInterval = ((stopTime - startTime).Ticks / 1000).To<TimeSpan>();
 
 			strategy.SetChart(_bufferedChart);
 			strategy.SetCandleManager(candleManager);
 
-			_logManager.Sources.Add(strategy);
+			ConfigManager.GetService<LogManager>().Sources.Add(strategy);
 
 			strategy.OrderRegistering += OnStrategyOrderRegistering;
 			strategy.OrderReRegistering += OnStrategyOrderReRegistering;
 			strategy.OrderRegisterFailed += OnStrategyOrderRegisterFailed;
-			
+
 			strategy.StopOrderRegistering += OnStrategyOrderRegistering;
 			strategy.StopOrderReRegistering += OnStrategyOrderReRegistering;
 			strategy.StopOrderRegisterFailed += OnStrategyOrderRegisterFailed;
 
 			strategy.NewMyTrades += OnStrategyNewMyTrade;
 
-			var pnlCurve = Curve.CreateCurve(LocalizedStrings.PnL + " " + strategy.Name, Colors.DarkGreen, EquityCurveChartStyles.Area);
+			var pnlCurve = Curve.CreateCurve(LocalizedStrings.PnL + " " + strategy.Name, Colors.DarkGreen,
+											 EquityCurveChartStyles.Area);
 			var unrealizedPnLCurve = Curve.CreateCurve(LocalizedStrings.PnLUnreal + strategy.Name, Colors.Black);
-			var commissionCurve = Curve.CreateCurve(LocalizedStrings.Str159 + " " + strategy.Name, Colors.Red, EquityCurveChartStyles.DashedLine);
-			
+			var commissionCurve = Curve.CreateCurve(LocalizedStrings.Str159 + " " + strategy.Name, Colors.Red,
+													EquityCurveChartStyles.DashedLine);
+
 			strategy.PnLChanged += () =>
 			{
 				var pnl = new EquityData
@@ -290,7 +275,11 @@
 
 			var posItems = PositionCurve.CreateCurve(strategy.Name, Colors.DarkGreen);
 
-			strategy.PositionChanged += () => posItems.Add(new EquityData { Time = strategy.CurrentTime, Value = strategy.Position });
+			strategy.PositionChanged += () => posItems.Add(new EquityData
+			{
+				Time = strategy.CurrentTime,
+				Value = strategy.Position
+			});
 
 			_connector.NewSecurities += securities =>
 			{
@@ -330,7 +319,6 @@
 				{
 					case EmulationStates.Stopped:
 						strategy.Stop();
-						SetIsEnabled(false);
 
 						this.GuiAsync(() =>
 						{
@@ -344,7 +332,6 @@
 						});
 						break;
 					case EmulationStates.Started:
-						SetIsEnabled(true);
 						break;
 				}
 			};
@@ -357,22 +344,16 @@
 			// 1 cent commission for trade
 			_connector.SendInMessage(new CommissionRuleMessage
 			{
-				Rule = new CommissionPerTradeRule { Value = 0.01m }
+				Rule = new CommissionPerTradeRule
+				{
+					Value = 0.01m
+				}
 			});
 		}
 
-		private void StopButtonOnClick(object sender, RoutedEventArgs e)
+		private void StopEmulation()
 		{
 			_connector.Disconnect();
-		}
-
-		private void SetIsEnabled(bool started)
-		{
-			this.GuiAsync(() =>
-			{
-				StopButton.IsEnabled = started;
-				StartButton.IsEnabled = !started;
-			});
 		}
 
 		private void OnStrategyOrderRegisterFailed(OrderFail fail)
@@ -393,18 +374,6 @@
 		private void OnStrategyNewMyTrade(IEnumerable<MyTrade> trades)
 		{
 			MyTradeGrid.Trades.AddRange(trades);
-		}
-
-		private void Selector_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
-		{
-			var element = (CompositionDiagramElement)StrategiesComboBox.SelectedItem;
-			
-			Composition = element != null ? StrategiesRegistry.Clone(element) : null;
-		}
-
-		private void ResetStrategyClick(object sender, RoutedEventArgs e)
-		{
-			StrategiesComboBox.SelectedItem = null;
 		}
 	}
 }
