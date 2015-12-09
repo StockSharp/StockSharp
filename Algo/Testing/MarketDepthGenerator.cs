@@ -339,7 +339,7 @@ namespace StockSharp.Algo.Testing
 			{
 				SecurityId = SecurityId,
 				ServerTime = time,
-				LocalTime = time.LocalDateTime,
+				LocalTime = time,
 			};
 
 			if (_bestBidPrice == null || _bestAskPrice == null)

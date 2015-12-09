@@ -13,7 +13,7 @@ namespace StockSharp.BusinessEntities
 		/// <summary>
 		/// Security changed.
 		/// </summary>
-		event Action<Security, IEnumerable<KeyValuePair<Level1Fields, object>>, DateTimeOffset, DateTime> ValuesChanged;
+		event Action<Security, IEnumerable<KeyValuePair<Level1Fields, object>>, DateTimeOffset, DateTimeOffset> ValuesChanged;
 
 		/// <summary>
 		/// To get the quotes order book.

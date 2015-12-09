@@ -1149,9 +1149,9 @@ namespace StockSharp.Xaml
 		/// <summary>
 		/// Security changed.
 		/// </summary>
-		public event Action<Security, IEnumerable<KeyValuePair<Level1Fields, object>>, DateTimeOffset, DateTime> ValuesChanged;
+		public event Action<Security, IEnumerable<KeyValuePair<Level1Fields, object>>, DateTimeOffset, DateTimeOffset> ValuesChanged;
 
-		private void ValuesChangedHandler(Security security, IEnumerable<KeyValuePair<Level1Fields, object>> changes, DateTimeOffset serverTime, DateTime localTime)
+		private void ValuesChangedHandler(Security security, IEnumerable<KeyValuePair<Level1Fields, object>> changes, DateTimeOffset serverTime, DateTimeOffset localTime)
 		{
 			AddGuiAction(() => ValuesChanged.SafeInvoke(security, changes, serverTime, localTime));
 		}

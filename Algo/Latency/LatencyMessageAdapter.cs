@@ -44,7 +44,7 @@ namespace StockSharp.Algo.Latency
 		public override void SendInMessage(Message message)
 		{
 			if (message.LocalTime.IsDefault())
-				message.LocalTime = InnerAdapter.CurrentTime.LocalDateTime;
+				message.LocalTime = InnerAdapter.CurrentTime;
 
 			LatencyManager.ProcessMessage(message);
 

@@ -223,7 +223,7 @@ namespace StockSharp.Algo.Storages.Binary
 				return quoteMsg;
 
 			if (metaInfo.Version < MarketDataVersions.Version46)
-				quoteMsg.LocalTime = quoteMsg.ServerTime.LocalDateTime - reader.ReadLong().To<TimeSpan>() + metaInfo.LocalOffset;
+				quoteMsg.LocalTime = quoteMsg.ServerTime - reader.ReadLong().To<TimeSpan>() + metaInfo.LocalOffset;
 			else
 			{
 				var hasLocalTime = true;
@@ -237,7 +237,7 @@ namespace StockSharp.Algo.Storages.Binary
 					lastOffset = metaInfo.FirstLocalOffset;
 					var localTime = reader.ReadTime(ref prevLocalTime, allowNonOrdered, isUtc, metaInfo.LocalOffset, allowDiffOffsets, ref lastOffset);
 					metaInfo.FirstLocalTime = prevLocalTime;
-					quoteMsg.LocalTime = localTime.LocalDateTime;
+					quoteMsg.LocalTime = localTime;
 					metaInfo.FirstLocalOffset = lastOffset;
 				}
 				//else

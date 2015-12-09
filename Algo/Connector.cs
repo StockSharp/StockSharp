@@ -1081,7 +1081,7 @@ namespace StockSharp.Algo
 			if (order.Security is ContinuousSecurity)
 				order.Security = ((ContinuousSecurity)order.Security).GetSecurity(CurrentTime);
 
-			order.LocalTime = CurrentTime.LocalDateTime;
+			order.LocalTime = CurrentTime;
 			order.State = OrderStates.Pending;
 
 			if (!_entityCache.TryAddOrder(order))

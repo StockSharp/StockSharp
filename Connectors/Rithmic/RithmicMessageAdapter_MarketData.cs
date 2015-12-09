@@ -161,7 +161,7 @@ namespace StockSharp.Rithmic
 				Name = info.Description,
 				SecurityType = RithmicUtils.ToSecurityType(info.InstrumentType),
 				UnderlyingSecurityCode = info.Underlying,
-				LocalTime = RithmicUtils.ToTime(info.Ssboe).LocalDateTime,
+				LocalTime = RithmicUtils.ToTime(info.Ssboe),
 				Class = info.ProductCode,
 				PriceStep = info.SinglePointValue.ToDecimal(),
 				OriginalTransactionId = originalTransactionId ?? 0,
@@ -307,7 +307,7 @@ namespace StockSharp.Rithmic
 				ExecutionType = ExecutionTypes.Tick,
 				SecurityId = secId,
 				ServerTime = RithmicUtils.ToTime(info.SourceSsboe, info.SourceUsecs),
-				LocalTime = RithmicUtils.ToTime(info.Ssboe, info.Usecs).LocalDateTime,
+				LocalTime = RithmicUtils.ToTime(info.Ssboe, info.Usecs),
 				TradePrice = info.Price.ToDecimal(),
 				Volume = info.Size,
 				OriginSide = RithmicUtils.ToOriginSide(info.AggressorSide)

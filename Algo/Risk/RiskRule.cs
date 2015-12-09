@@ -229,7 +229,7 @@ namespace StockSharp.Algo.Risk
 	[DescriptionLoc(LocalizedStrings.Str866Key)]
 	public class RiskPositionTimeRule : RiskRule
 	{
-		private readonly Dictionary<Tuple<SecurityId, string>, DateTime> _posOpenTime = new Dictionary<Tuple<SecurityId, string>, DateTime>();
+		private readonly Dictionary<Tuple<SecurityId, string>, DateTimeOffset> _posOpenTime = new Dictionary<Tuple<SecurityId, string>, DateTimeOffset>();
 		private TimeSpan _time;
 
 		/// <summary>
@@ -641,7 +641,7 @@ namespace StockSharp.Algo.Risk
 	[DescriptionLoc(LocalizedStrings.Str877Key)]
 	public class RiskOrderFreqRule : RiskRule
 	{
-		private DateTime? _endTime;
+		private DateTimeOffset? _endTime;
 		private int _current;
 
 		private int _count;
@@ -899,7 +899,7 @@ namespace StockSharp.Algo.Risk
 	[DescriptionLoc(LocalizedStrings.Str884Key)]
 	public class RiskTradeFreqRule : RiskRule
 	{
-		private DateTime? _endTime;
+		private DateTimeOffset? _endTime;
 		private int _current;
 
 		private int _count;

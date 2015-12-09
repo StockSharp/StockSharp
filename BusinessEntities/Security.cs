@@ -1138,7 +1138,7 @@ namespace StockSharp.BusinessEntities
 			}
 		}
 
-		private DateTime _localTime;
+		private DateTimeOffset _localTime;
 
 		/// <summary>
 		/// Local time of the last instrument change.
@@ -1146,7 +1146,7 @@ namespace StockSharp.BusinessEntities
 		[Browsable(false)]
 		[Ignore]
 		[XmlIgnore]
-		public DateTime LocalTime
+		public DateTimeOffset LocalTime
 		{
 			get { return _localTime; }
 			set

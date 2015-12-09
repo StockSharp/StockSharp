@@ -351,7 +351,7 @@ namespace StockSharp.Xaml
 				&& (ExpiryDate.IsEnabled != true || ExpiryDate.Value != null);
 		}
 
-		private void MarketDataProviderOnValuesChanged(Security security, IEnumerable<KeyValuePair<Level1Fields, object>> changes, DateTimeOffset serverTime, DateTime localTime)
+		private void MarketDataProviderOnValuesChanged(Security security, IEnumerable<KeyValuePair<Level1Fields, object>> changes, DateTimeOffset serverTime, DateTimeOffset localTime)
 		{
 			if (Security != security)
 				return;

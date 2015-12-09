@@ -47,6 +47,6 @@ namespace StockSharp.Algo
 		/// <summary>
 		/// The local time mark.
 		/// </summary>
-		public DateTime LocalTime { get; set; }
+		public DateTimeOffset LocalTime { get; set; }
 	}
 }

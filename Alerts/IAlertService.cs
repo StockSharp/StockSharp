@@ -52,7 +52,7 @@ namespace StockSharp.Alerts
 		/// <param name="caption">Signal header.</param>
 		/// <param name="message">Alert text.</param>
 		/// <param name="time">Creation time.</param>
-		void PushAlert(AlertTypes type, string caption, string message, DateTime time);
+		void PushAlert(AlertTypes type, string caption, string message, DateTimeOffset time);
 
 		/// <summary>
 		/// Register schema.

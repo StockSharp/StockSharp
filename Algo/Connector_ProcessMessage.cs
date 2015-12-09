@@ -279,7 +279,7 @@ namespace StockSharp.Algo
 		public void SendOutMessage(Message message)
 		{
 			if (message.LocalTime.IsDefault())
-				message.LocalTime = CurrentTime.LocalDateTime;
+				message.LocalTime = CurrentTime;
 
 			AdapterOnNewOutMessage(message);
 		}

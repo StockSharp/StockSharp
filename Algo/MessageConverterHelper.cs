@@ -188,7 +188,7 @@ namespace StockSharp.Algo
 			else
 				throw new ArgumentException("Неизвестный тип '{0}' свечки.".Put(candle.GetType()), nameof(candle));
 
-			message.LocalTime = candle.OpenTime.LocalDateTime;
+			message.LocalTime = candle.OpenTime;
 			message.SecurityId = candle.Security.ToSecurityId();
 			message.OpenTime = candle.OpenTime;
 			message.HighTime = candle.HighTime;

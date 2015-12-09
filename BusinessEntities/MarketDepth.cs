@@ -104,7 +104,7 @@ namespace StockSharp.BusinessEntities
 		/// <summary>
 		/// The order book local time stamp.
 		/// </summary>
-		public DateTime LocalTime { get; set; }
+		public DateTimeOffset LocalTime { get; set; }
 
 		// TODO
 		//private Quote[] _bidsCache;

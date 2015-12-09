@@ -101,7 +101,7 @@ namespace StockSharp.BusinessEntities
 		[DisplayNameLoc(LocalizedStrings.Str514Key)]
 		[DescriptionLoc(LocalizedStrings.Str515Key)]
 		[MainCategory]
-		public DateTime LocalTime { get; set; }
+		public DateTimeOffset LocalTime { get; set; }
 
 		/// <summary>
 		/// News link in the internet.

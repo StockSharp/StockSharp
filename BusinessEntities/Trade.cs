@@ -78,7 +78,7 @@ namespace StockSharp.BusinessEntities
 		[DescriptionLoc(LocalizedStrings.Str606Key)]
 		[MainCategory]
 		[PropertyOrder(9)]
-		public DateTime LocalTime { get; set; }
+		public DateTimeOffset LocalTime { get; set; }
 
 		/// <summary>
 		/// Number of contracts in a trade.

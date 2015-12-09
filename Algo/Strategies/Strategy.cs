@@ -2149,7 +2149,7 @@ namespace StockSharp.Algo.Strategies
 			ProcessRegisterOrderFails(fails, OnStopOrderRegisterFailed);
 		}
 
-		private void OnConnectorValuesChanged(Security security, IEnumerable<KeyValuePair<Level1Fields, object>> changes, DateTimeOffset serverTime, DateTime localTime)
+		private void OnConnectorValuesChanged(Security security, IEnumerable<KeyValuePair<Level1Fields, object>> changes, DateTimeOffset serverTime, DateTimeOffset localTime)
 		{
 			ValuesChanged.SafeInvoke(security, changes, serverTime, localTime);
 		}
@@ -2544,7 +2544,7 @@ namespace StockSharp.Algo.Strategies
 		/// <summary>
 		/// Security changed.
 		/// </summary>
-		public event Action<Security, IEnumerable<KeyValuePair<Level1Fields, object>>, DateTimeOffset, DateTime> ValuesChanged;
+		public event Action<Security, IEnumerable<KeyValuePair<Level1Fields, object>>, DateTimeOffset, DateTimeOffset> ValuesChanged;
 
 		/// <summary>
 		/// To get the quotes order book.
