@@ -64,8 +64,16 @@
     <Reference Include="StockSharp.Algo.History">
       <HintPath>..\..\..\Algo.History\StockSharp.Algo.History.dll</HintPath>
     </Reference>
+    <Reference Include="StockSharp.ITCH, Version=4.3.13.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Connectors\ITCH\StockSharp.ITCH.dll</HintPath>
+    </Reference>
     <Reference Include="StockSharp.Licensing">
       <HintPath>..\..\..\References\StockSharp.Licensing.dll</HintPath>
+    </Reference>
+    <Reference Include="StockSharp.Plaza, Version=4.3.13.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Connectors\Plaza\StockSharp.Plaza.dll</HintPath>
     </Reference>
     <Reference Include="StockSharp.Xaml.Charting">
       <HintPath>..\..\..\Xaml.Charting\StockSharp.Xaml.Charting.dll</HintPath>
