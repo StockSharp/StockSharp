@@ -136,33 +136,6 @@ namespace StockSharp.Algo.Testing
 		/// </summary>
 		public HistoryMessageAdapter HistoryMessageAdapter { get; }
 
-		///// <summary>
-		///// Интервал генерации сообщения <see cref="TimeMessage"/>. По-умолчанию равно 10 миллисекундам.
-		///// </summary>
-		//public override TimeSpan MarketTimeChangedInterval
-		//{
-		//	get { return _historyAdapter.MarketTimeChangedInterval; }
-		//	set { _historyAdapter.MarketTimeChangedInterval = value; }
-		//}
-
-		///// <summary>
-		///// Дата в истории, с которой необходимо начать эмуляцию.
-		///// </summary>
-		//public DateTimeOffset StartDate
-		//{
-		//	get { return _historyAdapter.StartDate; }
-		//	set { _historyAdapter.StartDate = value; }
-		//}
-
-		///// <summary>
-		///// Дата в истории, на которой необходимо закончить эмуляцию (дата включается).
-		///// </summary>
-		//public DateTimeOffset StopDate
-		//{
-		//	get { return _historyAdapter.StopDate; }
-		//	set { _historyAdapter.StopDate = value; }
-		//}
-
 		/// <summary>
 		/// The maximal size of the message queue, up to which history data are red. By default, it is equal to 1000.
 		/// </summary>
@@ -246,36 +219,9 @@ namespace StockSharp.Algo.Testing
 		}
 
 		/// <summary>
-		/// The event on the emulator state change <see cref="HistoryEmulationConnector.State"/>.
+		/// The event on the emulator state change <see cref="State"/>.
 		/// </summary>
 		public event Action StateChanged;
-
-		///// <summary>
-		///// Хранилище данных.
-		///// </summary>
-		//public IStorageRegistry StorageRegistry
-		//{
-		//	get { return _historyAdapter.StorageRegistry; }
-		//	set { _historyAdapter.StorageRegistry = value; }
-		//}
-
-		///// <summary>
-		///// Хранилище, которое используется по-умолчанию. По умолчанию используется <see cref="IStorageRegistry.DefaultDrive"/>.
-		///// </summary>
-		//public IMarketDataDrive Drive
-		//{
-		//	get { return _historyAdapter.Drive; }
-		//	set { _historyAdapter.Drive = value; }
-		//}
-
-		///// <summary>
-		///// Формат маркет-данных. По умолчанию используется <see cref="StorageFormats.Binary"/>.
-		///// </summary>
-		//public StorageFormats StorageFormat
-		//{
-		//	get { return _historyAdapter.StorageFormat; }
-		//	set { _historyAdapter.StorageFormat = value; }
-		//}
 
 		/// <summary>
 		/// Has the emulator ended its operation due to end of data, or it was interrupted through the <see cref="IConnector.Disconnect"/>method.
@@ -300,15 +246,6 @@ namespace StockSharp.Algo.Testing
 		/// To call the <see cref="Connector.Connected"/> event when the first adapter connects to <see cref="Connector.Adapter"/>.
 		/// </summary>
 		protected override bool RaiseConnectedOnFirstAdapter => false;
-
-		///// <summary>
-		///// Подключиться к торговой системе.
-		///// </summary>
-		//protected override void OnConnect()
-		//{
-		//	//SendInMessage(new TimeMessage { LocalTime = StartDate.LocalDateTime });
-		//	SendInMessage(new ConnectMessage { LocalTime = StartDate.LocalDateTime });
-		//}
 
 		/// <summary>
 		/// Disconnect from trading system.
