@@ -781,10 +781,11 @@ namespace StockSharp.Algo.Candles
 			}
 
 			var offset = currentTime.Offset;
+			var diff = currentTime.DateTime - exchangeTime;
 
 			return new Range<DateTimeOffset>(
-				(bounds.Min + (offset - board.TimeZone.BaseUtcOffset)).ApplyTimeZone(offset),
-				(bounds.Max + (offset - board.TimeZone.BaseUtcOffset)).ApplyTimeZone(offset));
+				(bounds.Min + diff).ApplyTimeZone(offset),
+				(bounds.Max + diff).ApplyTimeZone(offset));
 		}
 
 		/// <summary>
