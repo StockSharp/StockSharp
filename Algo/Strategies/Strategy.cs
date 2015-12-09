@@ -1978,6 +1978,8 @@ namespace StockSharp.Algo.Strategies
 
 		private void OnConnectorNewMessage(Message message)
 		{
+			DateTimeOffset? msgTime = null;
+
 			switch (message.Type)
 			{
 				case MessageTypes.QuoteChange:
@@ -1995,12 +1997,14 @@ namespace StockSharp.Algo.Strategies
 						return;
 					
 					PnLManager.ProcessMessage(message);
+					msgTime = quoteMsg.ServerTime;
 
 					break;
 				}
 
 				case MessageTypes.Level1Change:
 					PnLManager.ProcessMessage(message);
+					msgTime = ((Level1ChangeMessage)message).ServerTime;
 					break;
 
 				case MessageTypes.Execution:
@@ -2018,6 +2022,7 @@ namespace StockSharp.Algo.Strategies
 							return;
 					}
 
+					msgTime = execMsg.ServerTime;
 					break;
 				}
 
@@ -2028,10 +2033,10 @@ namespace StockSharp.Algo.Strategies
 					return;
 			}
 
-			if (message.LocalTime - _lastPnlRefreshTime < UnrealizedPnLInterval)
+			if (msgTime == null || msgTime.Value - _lastPnlRefreshTime < UnrealizedPnLInterval)
 				return;
 
-			_lastPnlRefreshTime = message.LocalTime;
+			_lastPnlRefreshTime = msgTime.Value;
 
 			ExchangeBoard board = null;
 
