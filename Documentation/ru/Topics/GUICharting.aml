@@ -84,13 +84,13 @@
   				<para><codeEntityReference>M:StockSharp.Xaml.Charting.Chart.AddArea(StockSharp.Xaml.Charting.ChartArea)</codeEntityReference> - добавить <legacyBold>ChartArea</legacyBold>.</para>
   			</listItem>
   			<listItem>
-  				<para><codeEntityReference>M:StockSharp.Xaml.Charting.Chart.AddElement()</codeEntityReference> - добавить элемент серии данных. Имеет несколько перегрузок.</para>
+  				<para><codeEntityReference>M:StockSharp.Xaml.Charting.Chart.AddElement</codeEntityReference> - добавить элемент серии данных. Имеет несколько перегрузок.</para>
   			</listItem>
   			<listItem>
-  				<para><codeEntityReference>M:StockSharp.Xaml.Charting.Chart.Reset()</codeEntityReference> - "сбросить" ранее отрисованные значения.</para>
+  				<para><codeEntityReference>M:StockSharp.Xaml.Charting.Chart.Reset</codeEntityReference> - "сбросить" ранее отрисованные значения.</para>
   			</listItem>
   			<listItem>
-  				<para><codeEntityReference>M:StockSharp.Xaml.Charting.Chart.Draw()</codeEntityReference> - отрисовать значение на графике. Имеет несколько перегрузок.</para>
+  				<para><codeEntityReference>M:StockSharp.Xaml.Charting.Chart.Draw</codeEntityReference> - отрисовать значение на графике. Имеет несколько перегрузок.</para>
   			</listItem>
   			
 		</list>
@@ -113,10 +113,10 @@
   				<para><codeEntityReference>P:StockSharp.Xaml.Charting.ChartArea.Elements</codeEntityReference> - список элементов <codeEntityReference>T:StockSharp.Xaml.Charting.IChartElement</codeEntityReference>.</para>
   			</listItem>
   			<listItem>
-  				<para><codeEntityReference>T:StockSharp.Xaml.Charting.ChartArea.XAxises</codeEntityReference> - список горизонтальных осей.</para>
+  				<para><codeEntityReference>P:StockSharp.Xaml.Charting.ChartArea.XAxises</codeEntityReference> - список горизонтальных осей.</para>
   			</listItem>
   			<listItem>
-  				<para><codeEntityReference>T:StockSharp.Xaml.Charting.ChartArea.YAxises</codeEntityReference> - список вертикальных осей.</para>
+  				<para><codeEntityReference>P:StockSharp.Xaml.Charting.ChartArea.YAxises</codeEntityReference> - список вертикальных осей.</para>
   			</listItem>
 		</list>
 		

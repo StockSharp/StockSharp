@@ -46,9 +46,6 @@
       
 		<list class="bullet">
   			<listItem>
-  				<para><codeEntityReference>P:StockSharp.Xaml.IndexSecurityWindow.Security</codeEntityReference> - инструмент.</para>
-  			</listItem>
-  			<listItem>
   				<para><codeEntityReference>P:StockSharp.Xaml.IndexSecurityWindow.Securities</codeEntityReference> - список подлежащих инструментов.</para>
   			</listItem>
   			<listItem>

@@ -21,7 +21,7 @@
   				<para><codeEntityReference>P:StockSharp.Xaml.NewsGrid.SelectedNews</codeEntityReference> - выбраннаые новости.</para>
   			</listItem>
   			<listItem>
-  				<para><codeEntityReference>T:StockSharp.Xaml.NewsGrid.NewsProvider</codeEntityReference> - поставщик новостей.</para>
+  				<para><codeEntityReference>P:StockSharp.Xaml.NewsGrid.NewsProvider</codeEntityReference> - поставщик новостей.</para>
   			</listItem>
 		</list>
 		
