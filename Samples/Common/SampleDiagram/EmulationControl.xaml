@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:sampleDiagramPublic="clr-namespace:SampleDiagram"
+             xmlns:local="clr-namespace:SampleDiagram"
              xmlns:xaml="http://schemas.stocksharp.com/xaml"
              xmlns:xcad="http://schemas.xceed.com/wpf/xaml/avalondock"
              mc:Ignorable="d" x:Name="Ctrl"
@@ -27,7 +27,7 @@
                     <xcad:LayoutAnchorablePaneGroup>
                         <xcad:LayoutAnchorablePane>
                             <xcad:LayoutAnchorable Title="Strategy" CanClose="False">
-                                <sampleDiagramPublic:DiagramDebuggerControl x:Name="DiagramDebuggerControl" Strategy="{Binding ElementName=Ctrl, Path=Strategy}"/>
+                                <local:DiagramDebuggerControl x:Name="DiagramDebuggerControl" Strategy="{Binding ElementName=Ctrl, Path=Strategy}"/>
                             </xcad:LayoutAnchorable>
                             <xcad:LayoutAnchorable Title="Chart" CanClose="False">
                                 <xaml:Chart x:Name="Chart" />
