@@ -1,4 +1,4 @@
-namespace StockSharp.Algo.Storages
+namespace StockSharp.Algo.Storages.Binary
 {
 	using System;
 	using System.Collections.Generic;
@@ -155,9 +155,9 @@ namespace StockSharp.Algo.Storages
 		}
 	}
 
-	class OrderLogSerializer : BinaryMarketDataSerializer<ExecutionMessage, OrderLogMetaInfo>
+	class OrderLogBinarySerializer : BinaryMarketDataSerializer<ExecutionMessage, OrderLogMetaInfo>
 	{
-		public OrderLogSerializer(SecurityId securityId)
+		public OrderLogBinarySerializer(SecurityId securityId)
 			: base(securityId, 200, MarketDataVersions.Version52)
 		{
 		}

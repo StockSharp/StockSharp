@@ -25,10 +25,12 @@ namespace SampleHistoryTesting
 	using StockSharp.Algo.Testing;
 	using StockSharp.Algo.Indicators;
 	using StockSharp.BusinessEntities;
+	using StockSharp.ITCH;
 	using StockSharp.Logging;
 	using StockSharp.Messages;
 	using StockSharp.Xaml.Charting;
 	using StockSharp.Localization;
+	using StockSharp.Plaza;
 
 	public partial class MainWindow
 	{
@@ -293,7 +295,7 @@ namespace SampleHistoryTesting
 
 			// (ru only) ОЛ необходимо загружать с 18.45 пред дня, чтобы стаканы строились правильно
 			if (OrderLogCheckBox.IsChecked == true)
-				startTime = startTime.Subtract(TimeSpan.FromDays(1)).AddHours(18).AddMinutes(45).AddTicks(1);
+				startTime = startTime.Subtract(TimeSpan.FromDays(1)).AddHours(18).AddMinutes(45).AddTicks(1).ApplyTimeZone(TimeHelper.Moscow).UtcDateTime;
 
 			// ProgressBar refresh step
 			var progressStep = ((stopTime - startTime).Ticks / 100).To<TimeSpan>();
@@ -313,6 +315,7 @@ namespace SampleHistoryTesting
 			var generateDepths = GenDepthsCheckBox.IsChecked == true;
 			var maxDepth = MaxDepth.Text.To<int>();
 			var maxVolume = MaxVolume.Text.To<int>();
+			var secId = security.ToSecurityId();
 
 			foreach (var set in settings)
 			{
@@ -325,7 +328,7 @@ namespace SampleHistoryTesting
 
 				var level1Info = new Level1ChangeMessage
 				{
-					SecurityId = security.ToSecurityId(),
+					SecurityId = secId,
 					ServerTime = startTime,
 				}
 				.TryAdd(Level1Fields.PriceStep, secCode == "RIZ2" ? 10m : 1)
@@ -373,6 +376,16 @@ namespace SampleHistoryTesting
 						// set history range
 						StartDate = startTime,
 						StopDate = stopTime,
+
+						OrderLogMarketDepthBuilders =
+						{
+							{
+								secId,
+								LocalizedStrings.ActiveLanguage == Languages.Russian
+									? (IOrderLogMarketDepthBuilder)new PlazaOrderLogMarketDepthBuilder(secId)
+									: new ItchOrderLogMarketDepthBuilder(secId)
+							}
+						}
 					},
 
 					// set market time freq as time frame
@@ -646,7 +659,7 @@ namespace SampleHistoryTesting
 			_candlesElem = new ChartCandleElement { ShowAxisMarker = false };
 			_bufferedChart.AddElement(_area, _candlesElem);
 
-			_tradesElem = new ChartTradeElement { FullTitle = "Сделки" };
+			_tradesElem = new ChartTradeElement { FullTitle = LocalizedStrings.Str985 };
 			_bufferedChart.AddElement(_area, _tradesElem);
 		}
 

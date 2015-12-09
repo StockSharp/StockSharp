@@ -67,23 +67,11 @@ namespace StockSharp.Algo
 			if (securities == null)
 				throw new ArgumentNullException(nameof(securities));
 
-			//_securities = securities.ToArray();
+			AddRange(securities);
 
 			AddedRange += s => _added.SafeInvoke(s);
 			RemovedRange += s => _removed.SafeInvoke(s);
 		}
-
-		//private readonly Security[] _securities;
-
-		///// <summary>
-		///// The instruments collection.
-		///// </summary>
-		//protected virtual IEnumerable<Security> Securities => _securities;
-
-		///// <summary>
-		///// Gets the number of instruments contained in the <see cref="ISecurityProvider"/>.
-		///// </summary>
-		//public int Count => _securities.Length;
 
 		private Action<IEnumerable<Security>> _added;
 
@@ -100,12 +88,6 @@ namespace StockSharp.Algo
 			add { _removed += value; }
 			remove { _removed -= value; }
 		}
-
-		//event Action ISecurityProvider.Cleared
-		//{
-		//	add { }
-		//	remove { }
-		//}
 
 		void IDisposable.Dispose()
 		{

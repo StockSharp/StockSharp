@@ -61,6 +61,9 @@
     <Reference Include="Ecng.Xaml">
       <HintPath>..\..\..\References\Ecng\Ecng.Xaml.dll</HintPath>
     </Reference>
+    <Reference Include="Fluent">
+      <HintPath>..\..\..\References\Fluent.Ribbon\Fluent.dll</HintPath>
+    </Reference>
     <Reference Include="MoreLinq">
       <HintPath>..\..\..\References\Ecng\MoreLinq.dll</HintPath>
     </Reference>
@@ -77,6 +80,12 @@
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
+    <Reference Include="Xceed.Wpf.AvalonDock">
+      <HintPath>..\..\..\References\Ecng\Xceed.Wpf.AvalonDock.dll</HintPath>
+    </Reference>
+    <Reference Include="Xceed.Wpf.AvalonDock.Themes.Metro">
+      <HintPath>..\..\..\References\Ecng\Xceed.Wpf.AvalonDock.Themes.Metro.dll</HintPath>
+    </Reference>
     <Reference Include="Xceed.Wpf.Toolkit">
       <HintPath>..\..\..\References\Ecng\Xceed.Wpf.Toolkit.dll</HintPath>
     </Reference>
@@ -89,14 +98,16 @@
     <Compile Include="..\..\..\StockSharpAssemblyInfo.cs">
       <Link>Properties\StockSharpAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="CompositionItem.cs" />
     <Compile Include="DiagramDebuggerControl.xaml.cs">
       <DependentUpon>DiagramDebuggerControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="DiagramElementsControl.xaml.cs">
-      <DependentUpon>DiagramElementsControl.xaml</DependentUpon>
-    </Compile>
     <Compile Include="EmulationControl.xaml.cs">
       <DependentUpon>EmulationControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="EmulationDiagramStrategy.cs" />
+    <Compile Include="SolutionExplorerControl.xaml.cs">
+      <DependentUpon>SolutionExplorerControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="StrategiesRegistry.cs" />
     <Page Include="DiagramDebuggerControl.xaml">
@@ -106,10 +117,6 @@
     <Page Include="DiagramEditorControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="DiagramElementsControl.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
     </Page>
     <Page Include="EmulationControl.xaml">
       <SubType>Designer</SubType>
@@ -131,6 +138,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="SolutionExplorerControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs">
@@ -221,6 +232,22 @@
     <None Include="Compositions\bf591486_88ac_41b2_8079_ca0c9eabf349.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\BreakpointOff_16x16.png" />
+    <Resource Include="Images\BreakpointOn_16x16.png" />
+    <Resource Include="Images\Continue_16x16.png" />
+    <Resource Include="Images\FolderClosed.png" />
+    <Resource Include="Images\FolderOpen.png" />
+    <Resource Include="Images\FolderSelected.png" />
+    <Resource Include="Images\history-testing-icon_24x24.png" />
+    <Resource Include="Images\start_32x32.png" />
+    <Resource Include="Images\StepIn_16x16.png" />
+    <Resource Include="Images\Stepout_16x16.png" />
+    <Resource Include="Images\StepOver_16x16.png" />
+    <Resource Include="Images\stop_32x32.png" />
+    <Resource Include="Images\terminal_32x32.png" />
+    <Resource Include="Images\ToOutput_16x16.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

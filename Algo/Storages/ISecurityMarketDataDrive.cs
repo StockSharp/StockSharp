@@ -10,6 +10,7 @@ namespace StockSharp.Algo.Storages
 	using Ecng.Reflection;
 
 	using StockSharp.Algo.Candles;
+	using StockSharp.Algo.Storages.Csv;
 	using StockSharp.BusinessEntities;
 	using StockSharp.Localization;
 	using StockSharp.Messages;
@@ -19,6 +20,11 @@ namespace StockSharp.Algo.Storages
 	/// </summary>
 	public interface ISecurityMarketDataDrive
 	{
+		/// <summary>
+		/// Instrument identifier.
+		/// </summary>
+		SecurityId SecurityId { get; }
+
 		/// <summary>
 		/// To get the storage of tick trades for the specified instrument.
 		/// </summary>
@@ -189,7 +195,7 @@ namespace StockSharp.Algo.Storages
 			public MarketDepthCsvSerializer(SecurityId securityId)
 				: base(securityId)
 			{
-				_quoteSerializer = new CsvMarketDataSerializer<TimeQuoteChange>(securityId);
+				_quoteSerializer = new QuoteCsvSerializer(securityId);
 			}
 
 			public override IMarketDataMetaInfo CreateMetaInfo(DateTime date)
@@ -224,6 +230,16 @@ namespace StockSharp.Algo.Storages
 			public override IEnumerableEx<QuoteChangeMessage> Deserialize(Stream stream, IMarketDataMetaInfo metaInfo)
 			{
 				return new QuoteEnumerable(_quoteSerializer.Deserialize(stream, metaInfo), SecurityId).ToEx(metaInfo.Count);
+			}
+
+			protected override void Write(TextWriter writer, QuoteChangeMessage data)
+			{
+				throw new NotSupportedException();
+			}
+
+			protected override QuoteChangeMessage Read(FastCsvReader reader, DateTime date)
+			{
+				throw new NotSupportedException();
 			}
 		}
 
@@ -555,6 +571,7 @@ namespace StockSharp.Algo.Storages
 
 			Drive = drive;
 			Security = security;
+			SecurityId = security.ToSecurityId();
 		}
 
 		/// <summary>
@@ -587,6 +604,11 @@ namespace StockSharp.Algo.Storages
 		{
 			return Drive.GetStorageDrive(Security.ToSecurityId(), messageType, arg, ToFormat(serializer));
 		}
+
+		/// <summary>
+		/// Instrument identifier.
+		/// </summary>
+		public SecurityId SecurityId { get; }
 
 		/// <summary>
 		/// To get the storage of tick trades for the specified instrument.

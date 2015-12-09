@@ -64,6 +64,9 @@
     <Reference Include="Ecng.Xaml.Charting">
       <HintPath>..\..\..\References\Ecng\Ecng.Xaml.Charting.dll</HintPath>
     </Reference>
+    <Reference Include="Fluent">
+      <HintPath>..\..\..\References\Fluent.Ribbon\Fluent.dll</HintPath>
+    </Reference>
     <Reference Include="MoreLinq">
       <HintPath>..\..\..\References\Ecng\MoreLinq.dll</HintPath>
     </Reference>
@@ -89,6 +92,12 @@
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
+    <Reference Include="Xceed.Wpf.AvalonDock">
+      <HintPath>..\..\..\References\Ecng\Xceed.Wpf.AvalonDock.dll</HintPath>
+    </Reference>
+    <Reference Include="Xceed.Wpf.AvalonDock.Themes.Metro">
+      <HintPath>..\..\..\References\Ecng\Xceed.Wpf.AvalonDock.Themes.Metro.dll</HintPath>
+    </Reference>
     <Reference Include="Xceed.Wpf.Toolkit">
       <HintPath>..\..\..\References\Ecng\Xceed.Wpf.Toolkit.dll</HintPath>
     </Reference>
@@ -101,14 +110,16 @@
     <Compile Include="..\..\..\StockSharpAssemblyInfo.cs">
       <Link>Properties\StockSharpAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="CompositionItem.cs" />
     <Compile Include="DiagramDebuggerControl.xaml.cs">
       <DependentUpon>DiagramDebuggerControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="DiagramElementsControl.xaml.cs">
-      <DependentUpon>DiagramElementsControl.xaml</DependentUpon>
-    </Compile>
     <Compile Include="EmulationControl.xaml.cs">
       <DependentUpon>EmulationControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="EmulationDiagramStrategy.cs" />
+    <Compile Include="SolutionExplorerControl.xaml.cs">
+      <DependentUpon>SolutionExplorerControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="StrategiesRegistry.cs" />
     <Page Include="DiagramDebuggerControl.xaml">
@@ -116,10 +127,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="DiagramEditorControl.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="DiagramElementsControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -143,6 +150,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="SolutionExplorerControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs">
@@ -181,6 +192,10 @@
     <ProjectReference Include="..\..\..\BusinessEntities\BusinessEntities.csproj">
       <Project>{dce69db8-53ca-4b7f-9368-02f175a31074}</Project>
       <Name>BusinessEntities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Community\Community.csproj">
+      <Project>{e8e18f8f-97bd-41ae-8888-f54f2411d575}</Project>
+      <Name>Community</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\Configuration\ConfigurationPublic.csproj">
       <Project>{2cff1903-4ef5-46f8-ab5d-bb623ca75ce6}</Project>
@@ -226,6 +241,26 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <SubType>Designer</SubType>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\BreakpointOff_16x16.png" />
+    <Resource Include="Images\BreakpointOn_16x16.png" />
+    <Resource Include="Images\Continue_16x16.png" />
+    <Resource Include="Images\history-testing-icon_24x24.png" />
+    <Resource Include="Images\StepIn_16x16.png" />
+    <Resource Include="Images\Stepout_16x16.png" />
+    <Resource Include="Images\StepOver_16x16.png" />
+    <Resource Include="Images\terminal_32x32.png" />
+    <Resource Include="Images\ToOutput_16x16.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\start_32x32.png" />
+    <Resource Include="Images\stop_32x32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\FolderClosed.png" />
+    <Resource Include="Images\FolderOpen.png" />
+    <Resource Include="Images\FolderSelected.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -44,10 +44,7 @@ namespace StockSharp.Hydra.Panes
 			MarketData.DataLoaded += () => MarketDataBusyIndicator.IsBusy = false;
 		}
 
-		private static IStorageRegistry StorageRegistry
-		{
-			get { return ConfigManager.GetService<IStorageRegistry>(); }
-		}
+		private static IStorageRegistry StorageRegistry => ConfigManager.GetService<IStorageRegistry>();
 
 		private void CreateContinuousSecurity_OnClick(object sender, RoutedEventArgs e)
 		{
@@ -234,20 +231,11 @@ namespace StockSharp.Hydra.Panes
 			new SecurityEditWindow { Security = security }.ShowModal(this);
 		}
 
-		string IPane.Title
-		{
-			get { return LocalizedStrings.Str2892; }
-		}
+		string IPane.Title => LocalizedStrings.Str2892;
 
-		Uri IPane.Icon
-		{
-			get { return null; }
-		}
+		Uri IPane.Icon => null;
 
-		bool IPane.IsValid
-		{
-			get { return true; }
-		}
+		bool IPane.IsValid => true;
 
 		void IPersistable.Load(SettingsStorage storage)
 		{

@@ -12,6 +12,8 @@ namespace StockSharp.Algo.Storages
 	using Ecng.Reflection.Path;
 
 	using StockSharp.Algo.Candles;
+	using StockSharp.Algo.Storages.Binary;
+	using StockSharp.Algo.Storages.Csv;
 	using StockSharp.BusinessEntities;
 	using StockSharp.Messages;
 	using StockSharp.Localization;
@@ -125,7 +127,7 @@ namespace StockSharp.Algo.Storages
 			public MarketDepthCsvSerializer(SecurityId securityId)
 				: base(securityId)
 			{
-				_quoteSerializer = new CsvMarketDataSerializer<TimeQuoteChange>(securityId);
+				_quoteSerializer = new QuoteCsvSerializer(securityId);
 			}
 
 			public override IMarketDataMetaInfo CreateMetaInfo(DateTime date)
@@ -160,6 +162,16 @@ namespace StockSharp.Algo.Storages
 			public override IEnumerableEx<QuoteChangeMessage> Deserialize(Stream stream, IMarketDataMetaInfo metaInfo)
 			{
 				return new QuoteEnumerable(_quoteSerializer.Deserialize(stream, metaInfo), SecurityId).ToEx(metaInfo.Count);
+			}
+
+			protected override void Write(TextWriter writer, QuoteChangeMessage data)
+			{
+				throw new NotSupportedException();
+			}
+
+			protected override QuoteChangeMessage Read(FastCsvReader reader, DateTime date)
+			{
+				throw new NotSupportedException();
 			}
 		}
 
@@ -205,14 +217,14 @@ namespace StockSharp.Algo.Storages
 
 			protected override IEnumerable<ExecutionMessage> FilterNewData(IEnumerable<ExecutionMessage> data, IMarketDataMetaInfo metaInfo)
 			{
-				var prevId = (long)metaInfo.LastId;
+				var prevId = (long?)metaInfo.LastId;
 				var prevTime = metaInfo.LastTime.ApplyTimeZone(TimeZoneInfo.Utc);
 
 				return data.Where(t =>
 				{
 					if (t.ServerTime > prevTime)
 						return true;
-					else if (t.ServerTime == prevTime)
+					else if (t.ServerTime == prevTime && prevId != null)
 						return t.TradeId != prevId; // если разные сделки имеют одинаковое время
 					else
 						return false;
@@ -735,7 +747,7 @@ namespace StockSharp.Algo.Storages
 					switch (format)
 					{
 						case StorageFormats.Binary:
-							serializer = new QuoteSerializer(key.Item1);
+							serializer = new QuoteBinarySerializer(key.Item1);
 							break;
 						case StorageFormats.Csv:
 							serializer = new MarketDepthCsvSerializer(key.Item1);
@@ -785,10 +797,10 @@ namespace StockSharp.Algo.Storages
 				switch (format)
 				{
 					case StorageFormats.Binary:
-						serializer = new Level1Serializer(key.Item1);
+						serializer = new Level1BinarySerializer(key.Item1);
 						break;
 					case StorageFormats.Csv:
-						serializer = new CsvMarketDataSerializer<Level1ChangeMessage>(key.Item1);
+						serializer = new Level1CsvSerializer(key.Item1);
 						break;
 					default:
 						throw new ArgumentOutOfRangeException(nameof(format));
@@ -846,10 +858,10 @@ namespace StockSharp.Algo.Storages
 					switch (format)
 					{
 						case StorageFormats.Binary:
-							serializer = typeof(CandleSerializer<>).Make(candleMessageType).CreateInstance<IMarketDataSerializer>(security.ToSecurityId(), arg);
+							serializer = typeof(CandleBinarySerializer<>).Make(candleMessageType).CreateInstance<IMarketDataSerializer>(security.ToSecurityId(), arg);
 							break;
 						case StorageFormats.Csv:
-							serializer = typeof(CsvMarketDataSerializer<>).Make(candleMessageType).CreateInstance<IMarketDataSerializer>(security.ToSecurityId(), null, arg, null);
+							serializer = typeof(CandleCsvSerializer<>).Make(candleMessageType).CreateInstance<IMarketDataSerializer>(security.ToSecurityId(), arg, null);
 							break;
 						default:
 							throw new ArgumentOutOfRangeException(nameof(format));
@@ -897,10 +909,10 @@ namespace StockSharp.Algo.Storages
 							switch (format)
 							{
 								case StorageFormats.Binary:
-									serializer = new TradeSerializer(key.Item1);
+									serializer = new TickBinarySerializer(key.Item1);
 									break;
 								case StorageFormats.Csv:
-									serializer = new CsvMarketDataSerializer<ExecutionMessage>(key.Item1, ExecutionTypes.Tick);
+									serializer = new TickCsvSerializer(key.Item1);
 									break;
 								default:
 									throw new ArgumentOutOfRangeException(nameof(format));
@@ -911,7 +923,23 @@ namespace StockSharp.Algo.Storages
 					}
 					case ExecutionTypes.Order:
 					case ExecutionTypes.Trade:
-						return new TransactionStorage(security, mdDrive, new TransactionSerializer(secId));
+					{
+						IMarketDataSerializer<ExecutionMessage> serializer;
+
+						switch (format)
+						{
+							case StorageFormats.Binary:
+								serializer = new TransactionBinarySerializer(secId);
+								break;
+							case StorageFormats.Csv:
+								serializer = new TransactionCsvSerializer(secId);
+								break;
+							default:
+								throw new ArgumentOutOfRangeException(nameof(format));
+						}
+
+						return new TransactionStorage(security, mdDrive, serializer);
+					}
 					case ExecutionTypes.OrderLog:
 					{
 						IMarketDataSerializer<ExecutionMessage> serializer;
@@ -919,10 +947,10 @@ namespace StockSharp.Algo.Storages
 						switch (format)
 						{
 							case StorageFormats.Binary:
-								serializer = new OrderLogSerializer(secId);
+								serializer = new OrderLogBinarySerializer(secId);
 								break;
 							case StorageFormats.Csv:
-								serializer = new CsvMarketDataSerializer<ExecutionMessage>(secId, ExecutionTypes.OrderLog);
+								serializer = new OrderLogCsvSerializer(secId);
 								break;
 							default:
 								throw new ArgumentOutOfRangeException(nameof(format));
@@ -1005,10 +1033,10 @@ namespace StockSharp.Algo.Storages
 				switch (format)
 				{
 					case StorageFormats.Binary:
-						serializer = new NewsSerializer();
+						serializer = new NewsBinarySerializer();
 						break;
 					case StorageFormats.Csv:
-						serializer = new CsvMarketDataSerializer<NewsMessage>();
+						serializer = new NewsCsvSerializer();
 						break;
 					default:
 						throw new ArgumentOutOfRangeException(nameof(format));

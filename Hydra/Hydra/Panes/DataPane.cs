@@ -24,12 +24,9 @@ namespace StockSharp.Hydra.Panes
 
 		protected abstract Type DataType { get; }
 
-		protected virtual object Arg { get { return null; } }
+		protected virtual object Arg => null;
 
-		protected IStorageRegistry StorageRegistry
-		{
-			get { return ConfigManager.GetService<IStorageRegistry>(); }
-		}
+		protected IStorageRegistry StorageRegistry => ConfigManager.GetService<IStorageRegistry>();
 
 		public abstract string Title { get; }
 
@@ -38,20 +35,11 @@ namespace StockSharp.Hydra.Panes
 			_propertyChanged.SafeInvoke(this, "Title");
 		}
 
-		Uri IPane.Icon
-		{
-			get { return null; }
-		}
+		Uri IPane.Icon => null;
 
-		public virtual bool InProcess
-		{
-			get { return Progress.IsStarted; }
-		}
+		public virtual bool InProcess => Progress.IsStarted;
 
-		public virtual bool IsValid
-		{
-			get { return true; }
-		}
+		public virtual bool IsValid => true;
 
 		protected DateTime? From
 		{
@@ -85,10 +73,7 @@ namespace StockSharp.Hydra.Panes
 			set { _drivePanel.StorageFormat = value; }
 		}
 
-		private ExportProgress Progress
-		{
-			get { return ((dynamic)this).Progress; }
-		}
+		private ExportProgress Progress => ((dynamic)this).Progress;
 
 		private ExportButton _exportBtn;
 		private Func<IEnumerableEx> _getItems;
@@ -139,10 +124,7 @@ namespace StockSharp.Hydra.Panes
 			return false;
 		}
 
-		protected virtual bool CanDirectBinExport
-		{
-			get { return _exportBtn.ExportType == ExportTypes.Bin; }
-		}
+		protected virtual bool CanDirectBinExport => _exportBtn.ExportType == ExportTypes.Bin;
 
 		protected virtual void ExportBtnOnExportStarted()
 		{

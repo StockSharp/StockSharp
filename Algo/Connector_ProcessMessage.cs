@@ -1129,10 +1129,17 @@ namespace StockSharp.Algo
 				try
 				{
 					var builder = _olBuilders.SafeAdd(security, key => MarketDataAdapter.CreateOrderLogMarketDepthBuilder(message.SecurityId));
+
+					if (builder == null)
+						throw new InvalidOperationException();
+
 					var updated = builder.Update(message);
-					
+
 					if (updated)
+					{
+						RaiseNewMessage(builder.Depth.Clone());
 						ProcessQuotesMessage(security, builder.Depth, false);
+					}
 				}
 				catch (Exception ex)
 				{

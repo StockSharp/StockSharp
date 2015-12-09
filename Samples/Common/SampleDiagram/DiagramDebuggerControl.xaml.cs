@@ -9,33 +9,71 @@
 
 	public partial class DiagramDebuggerControl
 	{
-		public readonly static RoutedCommand AddBreakpointCommand = new RoutedCommand();
-		public readonly static RoutedCommand RemoveBreakpointCommand = new RoutedCommand();
-		public readonly static RoutedCommand StepToOutParamCommand = new RoutedCommand();
-		public readonly static RoutedCommand StepNextCommand = new RoutedCommand();
-		public readonly static RoutedCommand StepIntoCommand = new RoutedCommand();
-		public readonly static RoutedCommand StepOutCommand = new RoutedCommand();
-		public readonly static RoutedCommand ContinueCommand = new RoutedCommand();
+		public static readonly DependencyProperty StrategyProperty = DependencyProperty.Register("Strategy", typeof(EmulationDiagramStrategy), typeof(DiagramDebuggerControl),
+			new PropertyMetadata(null, StrategyPropertyChanged));
 
-		public static readonly DependencyProperty CompositionProperty = DependencyProperty.Register("Composition", typeof(CompositionDiagramElement), typeof(DiagramDebuggerControl),
-			new PropertyMetadata(null, CompositionPropertyChanged));
-
-		private static void CompositionPropertyChanged(DependencyObject sender, DependencyPropertyChangedEventArgs args)
+		private static void StrategyPropertyChanged(DependencyObject sender, DependencyPropertyChangedEventArgs args)
 		{
-			((DiagramDebuggerControl)sender).CompositionPropertyChanged((CompositionDiagramElement)args.NewValue);
+			((DiagramDebuggerControl)sender).StrategyPropertyChanged((EmulationDiagramStrategy)args.NewValue);
 		}
 
-		public CompositionDiagramElement Composition
+		public EmulationDiagramStrategy Strategy
 		{
-			get { return (CompositionDiagramElement)GetValue(CompositionProperty); }
-			set { SetValue(CompositionProperty, value); }
+			get { return (EmulationDiagramStrategy)GetValue(StrategyProperty); }
+			set { SetValue(StrategyProperty, value); }
 		}
 
 		private DiagramDebugger _debugger;
 
+		public ICommand AddBreakpointCommand { get; private set; }
+
+		public ICommand RemoveBreakpointCommand { get; private set; }
+
+		public ICommand StepNextCommand { get; private set; }
+
+		public ICommand StepToOutParamCommand { get; private set; }
+
+		public ICommand StepIntoCommand { get; private set; }
+
+		public ICommand StepOutCommand { get; private set; }
+
+		public ICommand ContinueCommand { get; private set; }
+
 		public DiagramDebuggerControl()
 		{
-			InitializeComponent();
+			InitializeCommands();
+            InitializeComponent();
+		}
+
+		private void InitializeCommands()
+		{
+			AddBreakpointCommand = new DelegateCommand(
+				obj => _debugger.AddBreak(DiagramEditor.SelectedElement),
+				obj => _debugger != null && DiagramEditor.SelectedElement != null && !_debugger.IsBreak(DiagramEditor.SelectedElement));
+
+			RemoveBreakpointCommand = new DelegateCommand(
+				obj => _debugger.RemoveBreak(DiagramEditor.SelectedElement),
+				obj => _debugger != null && DiagramEditor.SelectedElement != null && _debugger.IsBreak(DiagramEditor.SelectedElement));
+
+			StepNextCommand = new DelegateCommand(
+				obj => _debugger.StepNext(),
+				obj => _debugger != null && _debugger.IsWaiting);
+
+			StepToOutParamCommand = new DelegateCommand(
+				obj => _debugger.StepOut(),
+				obj => _debugger != null && _debugger.IsWaitingOnInput);
+
+			StepIntoCommand = new DelegateCommand(
+				obj => _debugger.StepInto(),
+				obj => _debugger != null && _debugger.IsWaitingOnInput && _debugger.CanStepInto);
+
+			StepOutCommand = new DelegateCommand(
+				obj => _debugger.StepOut(),
+				obj => _debugger != null && _debugger.CanStepOut);
+
+			ContinueCommand = new DelegateCommand(
+				obj => _debugger.Continue(),
+				obj => _debugger != null && _debugger.IsWaiting);
 		}
 
 		private void DiagramEditor_OnSelectionChanged(DiagramElement element)
@@ -43,16 +81,20 @@
 			ShowElementProperties(element);
 		}
 
-		private void CompositionPropertyChanged(CompositionDiagramElement newComposition)
+		private void StrategyPropertyChanged(EmulationDiagramStrategy strategy)
 		{
-			if (newComposition != null)
+			if (strategy != null)
 			{
-				_debugger = new DiagramDebugger(newComposition);
+				var composition = strategy.Composition;
+
+				_debugger = new DiagramDebugger(composition);
 				_debugger.Break += OnDebuggerBreak;
 				_debugger.CompositionChanged += OnDebuggerCompositionChanged;
 
 				NoStrategyLabel.Visibility = Visibility.Hidden;
-				DiagramEditor.Composition = newComposition;
+				DiagramEditor.Composition = composition;
+
+				ShowElementProperties(null);
 			}
 			else
 			{
@@ -92,77 +134,10 @@
 				PropertyGridControl.IsReadOnly = true;
 			}
 			else
-				PropertyGridControl.SelectedObject = null;
-		}
-
-		private void AddBreakpointCommand_OnCanExecute(object sender, CanExecuteRoutedEventArgs e)
-		{
-			e.CanExecute = _debugger != null && DiagramEditor.SelectedElement != null && !_debugger.IsBreak(DiagramEditor.SelectedElement);
-		}
-
-		private void AddBreakpointCommand_Executed(object sender, ExecutedRoutedEventArgs e)
-		{
-			_debugger.AddBreak(DiagramEditor.SelectedElement);
-		}
-
-		private void RemoveBreakpointCommand_OnCanExecute(object sender, CanExecuteRoutedEventArgs e)
-		{
-			e.CanExecute = _debugger != null && DiagramEditor.SelectedElement != null && _debugger.IsBreak(DiagramEditor.SelectedElement);
-		}
-
-		private void RemoveBreakpointCommand_Executed(object sender, ExecutedRoutedEventArgs e)
-		{
-			_debugger.RemoveBreak(DiagramEditor.SelectedElement);
-		}
-
-		private void StepNextCommand_OnCanExecute(object sender, CanExecuteRoutedEventArgs e)
-		{
-			e.CanExecute = _debugger != null && _debugger.IsWaiting;
-		}
-
-		private void StepNextCommand_Executed(object sender, ExecutedRoutedEventArgs e)
-		{
-			_debugger.StepNext();
-		}
-
-		private void StepToOutParamCommand_OnCanExecute(object sender, CanExecuteRoutedEventArgs e)
-		{
-			e.CanExecute = _debugger != null && _debugger.IsWaitingOnInput;
-		}
-
-		private void StepToOutParamCommand_Executed(object sender, ExecutedRoutedEventArgs e)
-		{
-			_debugger.StepOut();
-		}
-
-		private void StepIntoCommand_OnCanExecute(object sender, CanExecuteRoutedEventArgs e)
-		{
-			e.CanExecute = _debugger != null && _debugger.IsWaitingOnInput && _debugger.CanStepInto;
-		}
-
-		private void StepIntoCommand_Executed(object sender, ExecutedRoutedEventArgs e)
-		{
-			_debugger.StepInto();
-		}
-
-		private void StepOutCommand_OnCanExecute(object sender, CanExecuteRoutedEventArgs e)
-		{
-			e.CanExecute = _debugger != null && _debugger.CanStepOut;
-		}
-
-		private void StepOutCommand_Executed(object sender, ExecutedRoutedEventArgs e)
-		{
-			_debugger.StepOut();
-		}
-
-		private void ContinueCommand_OnCanExecute(object sender, CanExecuteRoutedEventArgs e)
-		{
-			e.CanExecute = _debugger != null && _debugger.IsWaiting;
-		}
-
-		private void ContinueCommand_Executed(object sender, ExecutedRoutedEventArgs e)
-		{
-			_debugger.Continue();
+			{
+				PropertyGridControl.SelectedObject = Strategy;
+				PropertyGridControl.IsReadOnly = false;
+			}
 		}
 	}
 }

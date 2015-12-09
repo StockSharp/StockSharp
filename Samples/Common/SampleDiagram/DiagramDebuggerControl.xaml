@@ -4,43 +4,11 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:diagram="http://schemas.stocksharp.com/xaml"
-             xmlns:sampleDiagramPublic="clr-namespace:SampleDiagram"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="600">
 
-	<UserControl.CommandBindings>
-		<CommandBinding Command="{x:Static sampleDiagramPublic:DiagramDebuggerControl.AddBreakpointCommand}"
-						CanExecute="AddBreakpointCommand_OnCanExecute"
-                        Executed="AddBreakpointCommand_Executed" />
-
-		<CommandBinding Command="{x:Static sampleDiagramPublic:DiagramDebuggerControl.RemoveBreakpointCommand}"
-                        CanExecute="RemoveBreakpointCommand_OnCanExecute"
-                        Executed="RemoveBreakpointCommand_Executed" />
-
-		<CommandBinding Command="{x:Static sampleDiagramPublic:DiagramDebuggerControl.StepNextCommand}"
-                        CanExecute="StepNextCommand_OnCanExecute"
-                        Executed="StepNextCommand_Executed" />
-
-		<CommandBinding Command="{x:Static sampleDiagramPublic:DiagramDebuggerControl.StepToOutParamCommand}"
-						CanExecute="StepToOutParamCommand_OnCanExecute"
-                        Executed="StepToOutParamCommand_Executed" />
-
-        <CommandBinding Command="{x:Static sampleDiagramPublic:DiagramDebuggerControl.StepIntoCommand}"
-						CanExecute="StepIntoCommand_OnCanExecute"
-                        Executed="StepIntoCommand_Executed" />
-
-        <CommandBinding Command="{x:Static sampleDiagramPublic:DiagramDebuggerControl.StepOutCommand}"
-						CanExecute="StepOutCommand_OnCanExecute"
-                        Executed="StepOutCommand_Executed" />
-
-        <CommandBinding Command="{x:Static sampleDiagramPublic:DiagramDebuggerControl.ContinueCommand}"
-                        CanExecute="ContinueCommand_OnCanExecute"
-                        Executed="ContinueCommand_Executed" />
-	</UserControl.CommandBindings>
-	
 	<Grid>
 		<Grid.RowDefinitions>
-			<RowDefinition Height="Auto"/>
 			<RowDefinition Height="*"/>
 		</Grid.RowDefinitions>
 		<Grid.ColumnDefinitions>
@@ -48,28 +16,17 @@
 			<ColumnDefinition Width="300"/>
 		</Grid.ColumnDefinitions>
 		
-		<ToolBar Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2">
-			<Button Content="Add break" Command="{x:Static sampleDiagramPublic:DiagramDebuggerControl.AddBreakpointCommand}" />
-			<Button Content="Remove break" Command="{x:Static sampleDiagramPublic:DiagramDebuggerControl.RemoveBreakpointCommand}" />
-
-			<Separator/>
-
-			<Button Content="Step next" Command="{x:Static sampleDiagramPublic:DiagramDebuggerControl.StepNextCommand}" />
-			<Button Content="Step to out" Command="{x:Static sampleDiagramPublic:DiagramDebuggerControl.StepToOutParamCommand}" />
-			<Button Content="Continue" Command="{x:Static sampleDiagramPublic:DiagramDebuggerControl.ContinueCommand}" />
-		</ToolBar>
-
-		<diagram:DiagramEditorControl Grid.Row="1" Grid.Column="0" x:Name="DiagramEditor"
+		<diagram:DiagramEditorControl Grid.Row="0" Grid.Column="0" x:Name="DiagramEditor"
 									  SelectionChanged="DiagramEditor_OnSelectionChanged"/>
 
-		<Label Grid.Row="1" Grid.Column="0" x:Name="NoStrategyLabel" VerticalAlignment="Center" HorizontalAlignment="Center" 
+		<Label Grid.Row="0" Grid.Column="0" x:Name="NoStrategyLabel" VerticalAlignment="Center" HorizontalAlignment="Center" 
 			   FontSize="25" FontWeight="Bold" Foreground="Gray" Content="No strategy selected."/>
 
-		<diagram:PropertyGridEx Grid.Row="1" Grid.Column="1" x:Name="PropertyGridControl" 
+		<diagram:PropertyGridEx Grid.Row="0" Grid.Column="1" x:Name="PropertyGridControl" 
 								ShowAdvancedOptions="False" ShowDescriptionByTooltip="False" ShowPreview="False" ShowSearchBox="False"
 								ShowSortOptions="False" ShowSummary="True" ShowTitle="False"/>
 
-		<GridSplitter Grid.Row="1" Grid.Column="1" Width="5" ResizeDirection="Columns"
+		<GridSplitter Grid.Row="0" Grid.Column="1" Width="5" ResizeDirection="Columns"
 					  VerticalAlignment="Stretch" HorizontalAlignment="Left"/>
 	</Grid>
 </UserControl>

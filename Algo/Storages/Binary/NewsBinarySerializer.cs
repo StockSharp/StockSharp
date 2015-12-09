@@ -1,4 +1,4 @@
-﻿namespace StockSharp.Algo.Storages
+﻿namespace StockSharp.Algo.Storages.Binary
 {
 	using System;
 	using System.Collections.Generic;
@@ -50,9 +50,9 @@
 		}
 	}
 
-	class NewsSerializer : BinaryMarketDataSerializer<NewsMessage, NewsMetaInfo>
+	class NewsBinarySerializer : BinaryMarketDataSerializer<NewsMessage, NewsMetaInfo>
 	{
-		public NewsSerializer()
+		public NewsBinarySerializer()
 			: base(default(SecurityId), 200, MarketDataVersions.Version46)
 		{
 		}

@@ -49,15 +49,9 @@ namespace StockSharp.Hydra.Windows
 
 		private readonly ObservableCollection<MappingValue> _values = new ObservableCollection<MappingValue>();
 
-		public ObservableCollection<MappingValue> Values
-		{
-			get { return _values; }
-		}
+		public ObservableCollection<MappingValue> Values => _values;
 
-		private MappingValue SelectedValue
-		{
-			get { return (MappingValue)ValuesGrid.SelectedItem; }
-		}
+		private MappingValue SelectedValue => (MappingValue)ValuesGrid.SelectedItem;
 
 		private void Ok_Click(object sender, RoutedEventArgs e)
 		{

@@ -169,6 +169,21 @@ namespace StockSharp.Algo.Testing
 		/// </summary>
 		public DateTimeOffset StopDate { get; set; }
 
+		/// <summary>
+		/// Order book builders.
+		/// </summary>
+		public IDictionary<SecurityId, IOrderLogMarketDepthBuilder> OrderLogMarketDepthBuilders { get; } = new Dictionary<SecurityId, IOrderLogMarketDepthBuilder>();
+
+		/// <summary>
+		/// Create market depth builder.
+		/// </summary>
+		/// <param name="securityId">Security ID.</param>
+		/// <returns>Order log to market depth builder.</returns>
+		public override IOrderLogMarketDepthBuilder CreateOrderLogMarketDepthBuilder(SecurityId securityId)
+		{
+			return OrderLogMarketDepthBuilders[securityId];
+		}
+
 		private DateTimeOffset _currentTime;
 
 		/// <summary>

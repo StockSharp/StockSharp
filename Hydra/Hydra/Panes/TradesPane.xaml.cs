@@ -24,20 +24,11 @@ namespace StockSharp.Hydra.Panes
 			Init(ExportBtn, MainGrid, GetTrades);
 		}
 
-		protected override Type DataType
-		{
-			get { return typeof(ExecutionMessage); }
-		}
+		protected override Type DataType => typeof(ExecutionMessage);
 
-		protected override object Arg
-		{
-			get { return ExecutionTypes.Tick; }
-		}
+		protected override object Arg => ExecutionTypes.Tick;
 
-		public override string Title
-		{
-			get { return LocalizedStrings.Str985 + " " + SelectedSecurity; }
-		}
+		public override string Title => LocalizedStrings.Str985 + " " + SelectedSecurity;
 
 		public override Security SelectedSecurity
 		{
@@ -96,10 +87,7 @@ namespace StockSharp.Hydra.Panes
 			Progress.Load(GetTrades(), FindedTrades.Messages.AddRange, 10000);
 		}
 
-		protected override bool CanDirectBinExport
-		{
-			get { return base.CanDirectBinExport && BuildFrom.SelectedIndex == 0; }
-		}
+		protected override bool CanDirectBinExport => base.CanDirectBinExport && BuildFrom.SelectedIndex == 0;
 
 		private void OnDateValueChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
 		{

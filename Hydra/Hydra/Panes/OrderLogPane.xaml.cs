@@ -23,20 +23,11 @@ namespace StockSharp.Hydra.Panes
 			Init(ExportBtn, MainGrid, GetOrderLog);
 		}
 
-		protected override Type DataType
-		{
-			get { return typeof(ExecutionMessage); }
-		}
+		protected override Type DataType => typeof(ExecutionMessage);
 
-		protected override object Arg
-		{
-			get { return ExecutionTypes.OrderLog; }
-		}
+		protected override object Arg => ExecutionTypes.OrderLog;
 
-		public override string Title
-		{
-			get { return LocalizedStrings.OrderLog + " " + SelectedSecurity; }
-		}
+		public override string Title => LocalizedStrings.OrderLog + " " + SelectedSecurity;
 
 		public override Security SelectedSecurity
 		{

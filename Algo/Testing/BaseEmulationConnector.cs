@@ -30,62 +30,12 @@ namespace StockSharp.Algo.Testing
 		/// </summary>
 		public override bool IsSupportAtomicReRegister => EmulationAdapter.Emulator.Settings.IsSupportAtomicReRegister;
 
-		///// <summary>
-		///// Ýìóëÿòîð òîðãîâ.
-		///// </summary>
-		//public IMarketEmulator MarketEmulator
-		//{
-		//	get { return EmulationAdapter.Emulator; }
-		//	set { EmulationAdapter.Emulator = value; }
-		//}
-
 		/// <summary>
 		/// To start the messages generating timer <see cref="TimeMessage"/> with the <see cref="Connector.MarketTimeChangedInterval"/> interval.
 		/// </summary>
 		protected override void StartMarketTimer()
 		{
 		}
-
-		///// <summary>
-		///// Îáðàáîòàòü ñîîáùåíèå, ñîäåðæàùåå ðûíî÷íûå äàííûå.
-		///// </summary>
-		///// <param name="message">Ñîîáùåíèå, ñîäåðæàùåå ðûíî÷íûå äàííûå.</param>
-		///// <param name="direction">Íàïðàâëåíèå ñîîáùåíèÿ.</param>
-		//protected override void OnProcessMessage(Message message, MessageDirections direction)
-		//{
-		//	if (adapter == MarketDataAdapter && direction == MessageDirections.Out)
-		//	{
-		//		switch (message.Type)
-		//		{
-		//			case MessageTypes.Connect:
-		//			case MessageTypes.Disconnect:
-		//			case MessageTypes.MarketData:
-		//			case MessageTypes.Error:
-		//			case MessageTypes.SecurityLookupResult:
-		//			case MessageTypes.PortfolioLookupResult:
-		//				base.OnProcessMessage(message, direction);
-		//				break;
-
-		//			case MessageTypes.Execution:
-		//			{
-		//				var execMsg = (ExecutionMessage)message;
-
-		//				if (execMsg.ExecutionType != ExecutionTypes.Trade)
-		//					SendInMessage(message);
-		//				else
-		//					base.OnProcessMessage(message, direction);
-
-		//				break;
-		//			}
-
-		//			default:
-		//				SendInMessage(message);
-		//				break;
-		//		}
-		//	}
-		//	else
-		//		base.OnProcessMessage(message, direction);
-		//}
 
 		private void SendInGeneratorMessage(MarketDataGenerator generator, bool isSubscribe)
 		{
