@@ -21,7 +21,7 @@ namespace StockSharp.Algo.Testing
 		private readonly SortedDictionary<decimal, RefPair<List<ExecutionMessage>, QuoteChange>> _asks;
 		private decimal _currSpreadPrice;
 		private readonly MarketEmulatorSettings _settings;
-		private readonly Func<DateTime, DateTimeOffset> _getServerTime;
+		private readonly Func<DateTimeOffset, DateTimeOffset> _getServerTime;
 		private decimal _prevTickPrice;
 		// указывает, есть ли реальные стаканы, чтобы своей псевдо генерацией не портить настоящую историю
 		private DateTime _lastDepthDate;
@@ -42,7 +42,7 @@ namespace StockSharp.Algo.Testing
 		public ExecutionLogConverter(SecurityId securityId,
 			SortedDictionary<decimal, RefPair<List<ExecutionMessage>, QuoteChange>> bids,
 			SortedDictionary<decimal, RefPair<List<ExecutionMessage>, QuoteChange>> asks,
-			MarketEmulatorSettings settings, Func<DateTime, DateTimeOffset> getServerTime)
+			MarketEmulatorSettings settings, Func<DateTimeOffset, DateTimeOffset> getServerTime)
 		{
 			if (bids == null)
 				throw new ArgumentNullException(nameof(bids));
@@ -103,7 +103,7 @@ namespace StockSharp.Algo.Testing
 			return ProcessQuoteChange(message.LocalTime, message.ServerTime, newBids.ToArray(), newAsks.ToArray());
 		}
 
-		private IEnumerable<ExecutionMessage> ProcessQuoteChange(DateTime time, DateTimeOffset serverTime, QuoteChange[] newBids, QuoteChange[] newAsks)
+		private IEnumerable<ExecutionMessage> ProcessQuoteChange(DateTimeOffset time, DateTimeOffset serverTime, QuoteChange[] newBids, QuoteChange[] newAsks)
 		{
 			decimal bestBidPrice;
 			decimal bestAskPrice;
@@ -133,7 +133,7 @@ namespace StockSharp.Algo.Testing
 			}
 		}
 
-		private void GetDiff(List<ExecutionMessage> diff, DateTime time, DateTimeOffset serverTime, SortedDictionary<decimal, RefPair<List<ExecutionMessage>, QuoteChange>> from, IEnumerable<QuoteChange> to, Sides side, out decimal newBestPrice)
+		private void GetDiff(List<ExecutionMessage> diff, DateTimeOffset time, DateTimeOffset serverTime, SortedDictionary<decimal, RefPair<List<ExecutionMessage>, QuoteChange>> from, IEnumerable<QuoteChange> to, Sides side, out decimal newBestPrice)
 		{
 			newBestPrice = 0;
 
@@ -224,7 +224,7 @@ namespace StockSharp.Algo.Testing
 
 		private readonly RandomArray<bool> _isMatch = new RandomArray<bool>(100);
 
-		private void AddExecMsg(List<ExecutionMessage> diff, DateTime time, DateTimeOffset serverTime, QuoteChange quote, decimal volume, bool isSpread)
+		private void AddExecMsg(List<ExecutionMessage> diff, DateTimeOffset time, DateTimeOffset serverTime, QuoteChange quote, decimal volume, bool isSpread)
 		{
 			if (volume > 0)
 				diff.Add(CreateMessage(time, serverTime, quote.Side, quote.Price, volume));
@@ -463,7 +463,7 @@ namespace StockSharp.Algo.Testing
 			}
 		}
 
-		private void ProcessMarketOrder(List<ExecutionMessage> retVal, SortedDictionary<decimal, RefPair<List<ExecutionMessage>, QuoteChange>> quotes, DateTimeOffset time, DateTime localTime, Sides orderSide, decimal tradePrice, decimal volume)
+		private void ProcessMarketOrder(List<ExecutionMessage> retVal, SortedDictionary<decimal, RefPair<List<ExecutionMessage>, QuoteChange>> quotes, DateTimeOffset time, DateTimeOffset localTime, Sides orderSide, decimal tradePrice, decimal volume)
 		{
 			// вычисляем объем заявки по рынку, который смог бы пробить текущие котировки.
 
@@ -519,7 +519,7 @@ namespace StockSharp.Algo.Testing
 				retVal.Add(CreateMessage(localTime, time, orderSide.Invert(), tradePrice, volume));
 		}
 
-		private void TryCreateOppositeOrder(List<ExecutionMessage> retVal, SortedDictionary<decimal, RefPair<List<ExecutionMessage>, QuoteChange>> quotes, DateTime localTime, DateTimeOffset serverTime, decimal tradePrice, decimal volume, Sides originSide)
+		private void TryCreateOppositeOrder(List<ExecutionMessage> retVal, SortedDictionary<decimal, RefPair<List<ExecutionMessage>, QuoteChange>> quotes, DateTimeOffset localTime, DateTimeOffset serverTime, decimal tradePrice, decimal volume, Sides originSide)
 		{
 			if (HasDepth(localTime))
 				return;
@@ -532,7 +532,7 @@ namespace StockSharp.Algo.Testing
 				retVal.Add(CreateMessage(localTime, serverTime, originSide.Invert(), oppositePrice, volume));
 		}
 
-		private void CancelWorstQuote(List<ExecutionMessage> retVal, DateTime time, DateTimeOffset serverTime, Sides side, SortedDictionary<decimal, RefPair<List<ExecutionMessage>, QuoteChange>> quotes)
+		private void CancelWorstQuote(List<ExecutionMessage> retVal, DateTimeOffset time, DateTimeOffset serverTime, Sides side, SortedDictionary<decimal, RefPair<List<ExecutionMessage>, QuoteChange>> quotes)
 		{
 			if (quotes.Count <= _settings.MaxDepth)
 				return;
@@ -546,7 +546,7 @@ namespace StockSharp.Algo.Testing
 			retVal.Add(CreateMessage(time, serverTime, side, worst.Key, volume, true));
 		}
 
-		private ExecutionMessage CreateMessage(DateTime localTime, DateTimeOffset serverTime, Sides side, decimal price, decimal volume, bool isCancelling = false, TimeInForce tif = TimeInForce.PutInQueue)
+		private ExecutionMessage CreateMessage(DateTimeOffset localTime, DateTimeOffset serverTime, Sides side, decimal price, decimal volume, bool isCancelling = false, TimeInForce tif = TimeInForce.PutInQueue)
 		{
 			if (price <= 0)
 				throw new ArgumentOutOfRangeException(nameof(price), price, LocalizedStrings.Str1144);
@@ -571,7 +571,7 @@ namespace StockSharp.Algo.Testing
 			};
 		}
 
-		private bool HasDepth(DateTime time)
+		private bool HasDepth(DateTimeOffset time)
 		{
 			return _lastDepthDate == time.Date;
 		}
@@ -715,7 +715,7 @@ namespace StockSharp.Algo.Testing
 			return orderSide == Sides.Buy ? price >= bestPrice.Value : price <= bestPrice.Value;
 		}
 
-		private IEnumerable<ExecutionMessage> IncreaseDepthVolume(DateTime time, DateTimeOffset serverTime, Sides orderSide, decimal leftVolume)
+		private IEnumerable<ExecutionMessage> IncreaseDepthVolume(DateTimeOffset time, DateTimeOffset serverTime, Sides orderSide, decimal leftVolume)
 		{
 			var quotes = orderSide == Sides.Buy ? _asks : _bids;
 			var quote = quotes.LastOrDefault();

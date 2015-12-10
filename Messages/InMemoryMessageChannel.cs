@@ -15,24 +15,24 @@ namespace StockSharp.Messages
 	/// </summary>
 	public class InMemoryMessageChannel : Cloneable<IMessageChannel>, IMessageChannel
 	{
-		private class BlockingPriorityQueue : BaseBlockingQueue<KeyValuePair<DateTime, Message>, OrderedPriorityQueue<DateTime, Message>>
+		private class BlockingPriorityQueue : BaseBlockingQueue<KeyValuePair<DateTimeOffset, Message>, OrderedPriorityQueue<DateTimeOffset, Message>>
 		{
 			public BlockingPriorityQueue()
-				: base(new OrderedPriorityQueue<DateTime, Message>())
+				: base(new OrderedPriorityQueue<DateTimeOffset, Message>())
 			{
 			}
 
-			protected override void OnEnqueue(KeyValuePair<DateTime, Message> item, bool force)
+			protected override void OnEnqueue(KeyValuePair<DateTimeOffset, Message> item, bool force)
 			{
 				InnerCollection.Enqueue(item.Key, item.Value);
 			}
 
-			protected override KeyValuePair<DateTime, Message> OnDequeue()
+			protected override KeyValuePair<DateTimeOffset, Message> OnDequeue()
 			{
 				return InnerCollection.Dequeue();
 			}
 
-			protected override KeyValuePair<DateTime, Message> OnPeek()
+			protected override KeyValuePair<DateTimeOffset, Message> OnPeek()
 			{
 				return InnerCollection.Peek();
 			}
@@ -148,7 +148,7 @@ namespace StockSharp.Messages
 					{
 						try
 						{
-							KeyValuePair<DateTime, Message> pair;
+							KeyValuePair<DateTimeOffset, Message> pair;
 
 							if (!_messageQueue.TryDequeue(out pair))
 							{
@@ -203,7 +203,7 @@ namespace StockSharp.Messages
 				//	Console.WriteLine(">> ({0}) {1}", System.Threading.Thread.CurrentThread.Name, message);
 
 				_msgStat.Add(message);
-				_messageQueue.Enqueue(new KeyValuePair<DateTime, Message>(message.LocalTime, message));	
+				_messageQueue.Enqueue(new KeyValuePair<DateTimeOffset, Message>(message.LocalTime, message));	
 			}
 		}
 

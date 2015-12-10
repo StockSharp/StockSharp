@@ -40,7 +40,7 @@ namespace StockSharp.Studio.Services
 
 			private bool _isHistory = true;
 			private bool _isInitialization;
-			private DateTime _connectTime;
+			private DateTimeOffset _connectTime;
 
 			public StrategyConnector(StrategyContainer strategy, DateTimeOffset startDate, DateTimeOffset stopDate, TimeSpan useCandlesTimeFrame, bool onlyInitialize)
 			{
@@ -135,7 +135,7 @@ namespace StockSharp.Studio.Services
 				if (exchangeBoard == null)
 					return;
 
-				if (time.LocalDateTime <= _connectTime)
+				if (time <= _connectTime)
 					return;
 
 				_isInitialization = false;

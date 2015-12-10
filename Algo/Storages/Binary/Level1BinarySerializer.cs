@@ -861,7 +861,7 @@ namespace StockSharp.Algo.Storages.Binary
 				{
 					prevTime = metaInfo.FirstLocalTime;
 					lastOffset = metaInfo.FirstLocalOffset;
-					l1Msg.LocalTime = reader.ReadTime(ref prevTime, allowNonOrdered, isUtc, metaInfo.LocalOffset, allowDiffOffsets, ref lastOffset).LocalDateTime;
+					l1Msg.LocalTime = reader.ReadTime(ref prevTime, allowNonOrdered, isUtc, metaInfo.LocalOffset, allowDiffOffsets, ref lastOffset);
 					metaInfo.FirstLocalTime = prevTime;
 					metaInfo.FirstLocalOffset = lastOffset;
 				}

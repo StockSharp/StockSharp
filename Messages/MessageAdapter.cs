@@ -72,7 +72,7 @@ namespace StockSharp.Messages
 			}
 		}
 
-		private DateTime _prevTime;
+		private DateTimeOffset _prevTime;
 
 		private readonly CodeTimeOut _secLookupTimeOut = new CodeTimeOut();
 		private readonly CodeTimeOut _pfLookupTimeOut = new CodeTimeOut();
@@ -427,7 +427,7 @@ namespace StockSharp.Messages
 		{
 			InitMessageLocalTime(message);
 
-			if (_prevTime != DateTime.MinValue)
+			if (_prevTime != DateTimeOffset.MinValue)
 			{
 				var diff = message.LocalTime - _prevTime;
 
@@ -451,7 +451,7 @@ namespace StockSharp.Messages
 		private void InitMessageLocalTime(Message message)
 		{
 			if (message.LocalTime.IsDefault())
-				message.LocalTime = CurrentTime.LocalDateTime;
+				message.LocalTime = CurrentTime;
 		}
 
 		/// <summary>

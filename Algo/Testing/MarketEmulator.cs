@@ -68,7 +68,7 @@ namespace StockSharp.Algo.Testing
 			private readonly SortedDictionary<decimal, RefPair<List<ExecutionMessage>, QuoteChange>> _bids = new SortedDictionary<decimal, RefPair<List<ExecutionMessage>, QuoteChange>>(new BackwardComparer<decimal>());
 			private readonly SortedDictionary<decimal, RefPair<List<ExecutionMessage>, QuoteChange>> _asks = new SortedDictionary<decimal, RefPair<List<ExecutionMessage>, QuoteChange>>();
 			private readonly Dictionary<ExecutionMessage, TimeSpan> _pendingExecutions = new Dictionary<ExecutionMessage, TimeSpan>();
-			private DateTime _prevTime;
+			private DateTimeOffset _prevTime;
 			private readonly ExecutionLogConverter _execLogConverter;
 			private SecurityMessage _securityDefinition;
 			private int _volumeDecimals;
@@ -117,7 +117,7 @@ namespace StockSharp.Algo.Testing
 
 			private void Process(Message message, ICollection<Message> result)
 			{
-				if (_prevTime == DateTime.MinValue)
+				if (_prevTime == DateTimeOffset.MinValue)
 					_prevTime = message.LocalTime;
 
 				LogMessage(message, true);
@@ -490,13 +490,13 @@ namespace StockSharp.Algo.Testing
 				var replyMsg = (ExecutionMessage)original.Clone();
 
 				replyMsg.ServerTime = time;
-				replyMsg.LocalTime = time.LocalDateTime;
+				replyMsg.LocalTime = time;
 				replyMsg.OriginalTransactionId = original.TransactionId;
 
 				return replyMsg;
 			}
 
-			private void AcceptExecution(DateTime time, ExecutionMessage execution, ICollection<Message> result)
+			private void AcceptExecution(DateTimeOffset time, ExecutionMessage execution, ICollection<Message> result)
 			{
 				if (_parent.Settings.Failing > 0)
 				{
@@ -612,7 +612,7 @@ namespace StockSharp.Algo.Testing
 				}
 			}
 
-			private QuoteChangeMessage CreateQuoteMessage(SecurityId securityId, DateTime timeStamp, DateTimeOffset time)
+			private QuoteChangeMessage CreateQuoteMessage(SecurityId securityId, DateTimeOffset timeStamp, DateTimeOffset time)
 			{
 				return new QuoteChangeMessage
 				{
@@ -696,7 +696,7 @@ namespace StockSharp.Algo.Testing
 				//return _quotes.SafeAdd(side, key => new SortedDictionary<decimal, List<ExecutionMessage>>(side == Sides.Buy ? new BackwardComparer<decimal>() : null));
 			}
 
-			private void MatchOrder(DateTime time, ExecutionMessage order, ICollection<Message> result, bool isNewOrder)
+			private void MatchOrder(DateTimeOffset time, ExecutionMessage order, ICollection<Message> result, bool isNewOrder)
 			{
 				string matchError = null;
 
@@ -1095,7 +1095,7 @@ namespace StockSharp.Algo.Testing
 				}
 			}
 
-			private ExecutionMessage ToOrder(DateTime time, ExecutionMessage message)
+			private ExecutionMessage ToOrder(DateTimeOffset time, ExecutionMessage message)
 			{
 				return new ExecutionMessage
 				{
@@ -1111,7 +1111,7 @@ namespace StockSharp.Algo.Testing
 				};
 			}
 
-			private ExecutionMessage ToMyTrade(DateTime time, ExecutionMessage message, decimal price, decimal volume)
+			private ExecutionMessage ToMyTrade(DateTimeOffset time, ExecutionMessage message, decimal price, decimal volume)
 			{
 				return new ExecutionMessage
 				{
@@ -1128,7 +1128,7 @@ namespace StockSharp.Algo.Testing
 				};
 			}
 
-			private DateTimeOffset GetServerTime(DateTime time)
+			private DateTimeOffset GetServerTime(DateTimeOffset time)
 			{
 				if (!_parent.Settings.ConvertTime)
 					return time;
@@ -1146,9 +1146,9 @@ namespace StockSharp.Algo.Testing
 				if (destTimeZone == null)
 					return time;
 
-				var sourceZone = time.Kind == DateTimeKind.Utc ? TimeZoneInfo.Utc : TimeZoneInfo.Local;
+				//var sourceZone = time.Kind == DateTimeKind.Utc ? TimeZoneInfo.Utc : TimeZoneInfo.Local;
 
-				return TimeZoneInfo.ConvertTime(time, sourceZone, destTimeZone).ApplyTimeZone(destTimeZone);
+				return TimeZoneInfo.ConvertTime(time, destTimeZone);//.ApplyTimeZone(destTimeZone);
 			}
 
 			public decimal? GetBestPrice(Sides side)
@@ -1279,7 +1279,7 @@ namespace StockSharp.Algo.Testing
 				{
 					result.Add(new PositionMessage
 					{
-						LocalTime = time.LocalDateTime,
+						LocalTime = time,
 						PortfolioName = _name,
 						SecurityId = tradeMsg.SecurityId,
 					});
@@ -1288,7 +1288,7 @@ namespace StockSharp.Algo.Testing
 				result.Add(
 					new PositionChangeMessage
 					{
-						LocalTime = time.LocalDateTime,
+						LocalTime = time,
 						ServerTime = time,
 						PortfolioName = _name,
 						SecurityId = tradeMsg.SecurityId,
@@ -1298,7 +1298,7 @@ namespace StockSharp.Algo.Testing
 				result.Add(CreateChangeMessage(time));
 			}
 
-			public void ProcessMarginChange(DateTime time, SecurityId securityId, ICollection<Message> result)
+			public void ProcessMarginChange(DateTimeOffset time, SecurityId securityId, ICollection<Message> result)
 			{
 				var pos = _positions.TryGetValue(securityId);
 
@@ -1337,7 +1337,7 @@ namespace StockSharp.Algo.Testing
 				return new PortfolioChangeMessage
 				{
 					ServerTime = time,
-					LocalTime = time.LocalDateTime,
+					LocalTime = time,
 					PortfolioName = _name,
 				}
 				.Add(PositionChangeTypes.RealizedPnL, realizedPnL)
@@ -1404,8 +1404,8 @@ namespace StockSharp.Algo.Testing
 		private readonly Dictionary<SecurityId, Dictionary<Level1Fields, object>> _secStates = new Dictionary<SecurityId, Dictionary<Level1Fields, object>>();
 		private bool? _needBuffer;
 		private readonly List<Message> _buffer = new List<Message>();
-		private DateTime _bufferPrevFlush;
-		private DateTime _portfoliosPrevRecalc;
+		private DateTimeOffset _bufferPrevFlush;
+		private DateTimeOffset _portfoliosPrevRecalc;
 		private readonly ICommissionManager _commissionManager = new CommissionManager();
 
 		/// <summary>
@@ -1651,7 +1651,7 @@ namespace StockSharp.Algo.Testing
 			});
 		}
 
-		private IEnumerable<Message> BufferResult(IEnumerable<Message> result, DateTime time)
+		private IEnumerable<Message> BufferResult(IEnumerable<Message> result, DateTimeOffset time)
 		{
 			if (_needBuffer == null)
 				_needBuffer = Settings.BufferTime > TimeSpan.Zero;

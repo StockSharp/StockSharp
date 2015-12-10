@@ -165,7 +165,7 @@ namespace StockSharp.Sterling
 				OrderId = msg.OrderRecordID,
 				TradeId = msg.TradeRecordID,
 				ServerTime = msg.TradeTime.StrToDateTime(),
-				LocalTime = msg.UpdateTime.StrToDateTime().LocalDateTime
+				LocalTime = msg.UpdateTime.StrToDateTime()
 			});
 		}
 
@@ -184,7 +184,7 @@ namespace StockSharp.Sterling
 				OrderId = msg.OrderRecordID,
 				VisibleVolume = msg.Display,
 				ServerTime = msg.OrderTime.StrToDateTime(),
-				LocalTime = msg.UpdateTime.StrToDateTime().LocalDateTime
+				LocalTime = msg.UpdateTime.StrToDateTime()
 			});
 		}
 

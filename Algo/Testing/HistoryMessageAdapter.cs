@@ -245,7 +245,7 @@ namespace StockSharp.Algo.Testing
 					if (_loadingThread != null)
 						throw new InvalidOperationException(LocalizedStrings.Str1116);
 
-					SendOutMessage(new ConnectMessage { LocalTime = StartDate.LocalDateTime });
+					SendOutMessage(new ConnectMessage { LocalTime = StartDate });
 					return;
 				}
 
@@ -529,7 +529,7 @@ namespace StockSharp.Algo.Testing
 					loadDate = loadDate.Date.AddDays(1).ApplyTimeZone(loadDate.Offset);
 				}
 
-				SendOutMessage(new LastMessage { LocalTime = StopDate.LocalDateTime });
+				SendOutMessage(new LastMessage { LocalTime = StopDate });
 			}
 			catch (Exception ex)
 			{
@@ -579,7 +579,7 @@ namespace StockSharp.Algo.Testing
 				if (serverTime == null)
 					throw new InvalidOperationException();
 
-				msg.LocalTime = serverTime.Value.LocalDateTime;
+				msg.LocalTime = serverTime.Value;
 
 				if (checkFromTime)
 				{

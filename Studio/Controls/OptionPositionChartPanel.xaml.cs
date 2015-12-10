@@ -7,7 +7,6 @@ namespace StockSharp.Studio.Controls
 
 	using ActiproSoftware.Windows;
 
-	using Ecng.Collections;
 	using Ecng.Common;
 	using Ecng.Configuration;
 	using Ecng.Serialization;
@@ -132,7 +131,7 @@ namespace StockSharp.Studio.Controls
 				_needRefresh = true;
 		}
 
-		private void StudioConnectorValuesChanged(Security security, IEnumerable<KeyValuePair<Level1Fields, object>> values, DateTimeOffset serverTime, DateTime localTime)
+		private void StudioConnectorValuesChanged(Security security, IEnumerable<KeyValuePair<Level1Fields, object>> values, DateTimeOffset serverTime, DateTimeOffset localTime)
 		{
 			if (_currentSecurity == null || security != _currentSecurity)
 				return;

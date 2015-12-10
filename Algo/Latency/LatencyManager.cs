@@ -16,8 +16,8 @@ namespace StockSharp.Algo.Latency
 	public class LatencyManager : ILatencyManager
 	{
 		private readonly SyncObject _syncObject = new SyncObject();
-		private readonly Dictionary<long, DateTime> _register = new Dictionary<long, DateTime>();
-		private readonly Dictionary<long, DateTime> _cancel = new Dictionary<long, DateTime>();
+		private readonly Dictionary<long, DateTimeOffset> _register = new Dictionary<long, DateTimeOffset>();
+		private readonly Dictionary<long, DateTimeOffset> _cancel = new Dictionary<long, DateTimeOffset>();
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="LatencyManager"/>.
@@ -144,7 +144,7 @@ namespace StockSharp.Algo.Latency
 			return null;
 		}
 
-		private void AddRegister(long transactionId, DateTime localTime)
+		private void AddRegister(long transactionId, DateTimeOffset localTime)
 		{
 			if (transactionId == 0)
 				throw new ArgumentNullException(nameof(transactionId));
@@ -158,7 +158,7 @@ namespace StockSharp.Algo.Latency
 			_register.Add(transactionId, localTime);
 		}
 
-		private void AddCancel(long transactionId, DateTime localTime)
+		private void AddCancel(long transactionId, DateTimeOffset localTime)
 		{
 			if (transactionId == 0)
 				throw new ArgumentNullException(nameof(transactionId));

@@ -247,7 +247,7 @@ namespace StockSharp.Rithmic
 			message.OrderType = RithmicUtils.ToOrderType(report.OrderType);
 			message.Side = RithmicUtils.ToSide(report.BuySellType);
 			message.ServerTime = RithmicUtils.ToTime(report.GatewaySsboe, report.GatewayUsecs);
-			message.LocalTime = RithmicUtils.ToTime(report.Ssboe, report.Usecs).LocalDateTime;
+			message.LocalTime = RithmicUtils.ToTime(report.Ssboe, report.Usecs);
 			message.TimeInForce = RithmicUtils.ToTif(report.OrderDuration);
 
 			if (report.OrderDuration == Constants.ORDER_DURATION_DAY)

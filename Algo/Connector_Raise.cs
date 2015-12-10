@@ -253,7 +253,7 @@ namespace StockSharp.Algo
 		/// <summary>
 		/// Security changed.
 		/// </summary>
-		public event Action<Security, IEnumerable<KeyValuePair<Level1Fields, object>>, DateTimeOffset, DateTime> ValuesChanged;
+		public event Action<Security, IEnumerable<KeyValuePair<Level1Fields, object>>, DateTimeOffset, DateTimeOffset> ValuesChanged;
 
 		/// <summary>
 		/// Connection restored.
@@ -626,7 +626,7 @@ namespace StockSharp.Algo
 			NewMessage.SafeInvoke(message);
 		}
 
-		private void RaiseValuesChanged(Security security, IEnumerable<KeyValuePair<Level1Fields, object>> changes, DateTimeOffset serverTime, DateTime localTime)
+		private void RaiseValuesChanged(Security security, IEnumerable<KeyValuePair<Level1Fields, object>> changes, DateTimeOffset serverTime, DateTimeOffset localTime)
 		{
 			ValuesChanged.SafeInvoke(security, changes, serverTime, localTime);
 		}

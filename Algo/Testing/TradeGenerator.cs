@@ -136,7 +136,7 @@ namespace StockSharp.Algo.Testing
 				SecurityId = SecurityId,
 				TradeId = IdGenerator.GetNextId(),
 				ServerTime = time,
-				LocalTime = time.LocalDateTime,
+				LocalTime = time,
 				OriginSide = GenerateOriginSide ? RandomGen.GetEnum<Sides>() : (Sides?)null,
 				Volume = Volumes.Next(),
 				ExecutionType = ExecutionTypes.Tick

@@ -270,7 +270,7 @@ namespace StockSharp.BusinessEntities
 			}
 		}
 
-		private DateTime _localTime;
+		private DateTimeOffset _localTime;
 
 		/// <summary>
 		/// Local time of the last position change.
@@ -279,7 +279,7 @@ namespace StockSharp.BusinessEntities
 		[DisplayNameLoc(LocalizedStrings.Str530Key)]
 		[DescriptionLoc(LocalizedStrings.Str530Key, true)]
 		[StatisticsCategory]
-		public DateTime LocalTime
+		public DateTimeOffset LocalTime
 		{
 			get { return _localTime; }
 			set

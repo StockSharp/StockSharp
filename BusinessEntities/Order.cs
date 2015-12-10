@@ -253,16 +253,16 @@ namespace StockSharp.BusinessEntities
 			}
 		}
 
-		private DateTime _localTime;
+		private DateTimeOffset _localTime;
 
 		/// <summary>
-		/// Last trade change local time (Cancellation, Fill).
+		/// Last order change local time (Cancellation, Fill).
 		/// </summary>
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.Str530Key)]
 		[DescriptionLoc(LocalizedStrings.Str531Key)]
 		[MainCategory]
-		public DateTime LocalTime
+		public DateTimeOffset LocalTime
 		{
 			get { return _localTime; }
 			set

@@ -24,7 +24,7 @@ namespace StockSharp.Messages
 		[DescriptionLoc(LocalizedStrings.Str204Key)]
 		[MainCategory]
 		[DataMember]
-		public DateTime LocalTime { get; set; }
+		public DateTimeOffset LocalTime { get; set; }
 
 		[field: NonSerialized]
 		private readonly MessageTypes _type;

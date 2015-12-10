@@ -133,7 +133,7 @@ namespace SampleIQFeed
 			}
 		}
 
-		private void TraderOnValuesChanged(Security security, IEnumerable<KeyValuePair<Level1Fields, object>> changes, DateTimeOffset serverTime, DateTime localTime)
+		private void TraderOnValuesChanged(Security security, IEnumerable<KeyValuePair<Level1Fields, object>> changes, DateTimeOffset serverTime, DateTimeOffset localTime)
 		{
 			var wnd = _level1Windows.TryGetValue(security);
 

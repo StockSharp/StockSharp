@@ -46,7 +46,7 @@ namespace StockSharp.BusinessEntities
 		/// <summary>
 		/// Local time, when the error has been received.
 		/// </summary>
-		public DateTime LocalTime { get; set; }
+		public DateTimeOffset LocalTime { get; set; }
 
 		/// <summary>
 		/// Extended information on the order with an error.

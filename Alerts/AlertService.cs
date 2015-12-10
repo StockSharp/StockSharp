@@ -23,7 +23,7 @@ namespace StockSharp.Alerts
 	/// </summary>
 	public class AlertService : Disposable, IAlertService
 	{
-		private readonly BlockingQueue<Tuple<AlertTypes, string, string, DateTime>> _alerts = new BlockingQueue<Tuple<AlertTypes, string, string, DateTime>>();
+		private readonly BlockingQueue<Tuple<AlertTypes, string, string, DateTimeOffset>> _alerts = new BlockingQueue<Tuple<AlertTypes, string, string, DateTimeOffset>>();
 		private readonly SynchronizedDictionary<Type, AlertSchema> _schemas = new SynchronizedDictionary<Type, AlertSchema>(); 
 
 		/// <summary>
@@ -57,7 +57,7 @@ namespace StockSharp.Alerts
 						{
 							while (!IsDisposed)
 							{
-								Tuple<AlertTypes, string, string, DateTime> alert;
+								Tuple<AlertTypes, string, string, DateTimeOffset> alert;
 
 								if (!_alerts.TryDequeue(out alert))
 									break;
@@ -77,7 +77,7 @@ namespace StockSharp.Alerts
 											{
 												Title = alert.Item2,
 												Message = alert.Item3,
-												Time = alert.Item4
+												Time = alert.Item4.UtcDateTime
 											}.Show());
 											break;
 										case AlertTypes.Sms:
@@ -117,7 +117,7 @@ namespace StockSharp.Alerts
 		/// <param name="caption">Signal header.</param>
 		/// <param name="message">Alert text.</param>
 		/// <param name="time">Creation time.</param>
-		public void PushAlert(AlertTypes type, string caption, string message, DateTime time)
+		public void PushAlert(AlertTypes type, string caption, string message, DateTimeOffset time)
 		{
 			_alerts.Enqueue(Tuple.Create(type, caption, message, time));
 		}

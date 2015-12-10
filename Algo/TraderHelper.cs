@@ -2170,9 +2170,9 @@ namespace StockSharp.Algo
 		/// <param name="serverTime">Server time.</param>
 		/// <param name="localTime">Local time.</param>
 		/// <returns>Latency.</returns>
-		public static TimeSpan GetLatency(this Security security, DateTimeOffset serverTime, DateTime localTime)
+		public static TimeSpan GetLatency(this Security security, DateTimeOffset serverTime, DateTimeOffset localTime)
 		{
-			return localTime - serverTime.LocalDateTime;
+			return localTime - serverTime;
 		}
 
 		/// <summary>
@@ -2182,14 +2182,14 @@ namespace StockSharp.Algo
 		/// <param name="serverTime">Server time.</param>
 		/// <param name="localTime">Local time.</param>
 		/// <returns>Latency.</returns>
-		public static TimeSpan GetLatency(this SecurityId securityId, DateTimeOffset serverTime, DateTime localTime)
+		public static TimeSpan GetLatency(this SecurityId securityId, DateTimeOffset serverTime, DateTimeOffset localTime)
 		{
 			var board = ExchangeBoard.GetBoard(securityId.BoardCode);
 
 			if (board == null)
 				throw new ArgumentException(LocalizedStrings.Str1217Params.Put(securityId.BoardCode), nameof(securityId));
 
-			return localTime - serverTime.LocalDateTime;
+			return localTime - serverTime;
 		}
 
 		/// <summary>
@@ -2715,7 +2715,7 @@ namespace StockSharp.Algo
 		/// <param name="changes">Changes.</param>
 		/// <param name="serverTime">Change server time.</param>
 		/// <param name="localTime">Local time label when a message was received/created.</param>
-		public static void ApplyChanges(this Security security, IEnumerable<KeyValuePair<Level1Fields, object>> changes, DateTimeOffset serverTime, DateTime localTime)
+		public static void ApplyChanges(this Security security, IEnumerable<KeyValuePair<Level1Fields, object>> changes, DateTimeOffset serverTime, DateTimeOffset localTime)
 		{
 			if (security == null)
 				throw new ArgumentNullException(nameof(security));
