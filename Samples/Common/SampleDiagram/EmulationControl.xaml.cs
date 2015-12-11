@@ -10,6 +10,7 @@
 
 	using Ecng.Common;
 	using Ecng.Configuration;
+	using Ecng.Serialization;
 	using Ecng.Xaml;
 
 	using StockSharp.Algo;
@@ -24,6 +25,7 @@
 	using StockSharp.Logging;
 	using StockSharp.Messages;
 	using StockSharp.Xaml.Charting;
+	using StockSharp.Xaml.Diagram;
 
 	public partial class EmulationControl
 	{
@@ -59,6 +61,8 @@
 		private readonly BufferedChart _bufferedChart;
 
 		private HistoryEmulationConnector _connector;
+
+		public override object Key => Strategy;
 
 		public ICommand StartCommand { get; private set; }
 
@@ -375,5 +379,46 @@
 		{
 			MyTradeGrid.Trades.AddRange(trades);
 		}
+
+		#region IPersistable
+
+		public override void Load(SettingsStorage storage)
+		{
+			base.Load(storage);
+
+			var compositionId = storage.GetValue<Guid>("CompositionId");
+
+			var registry = ConfigManager.GetService<StrategiesRegistry>();
+			var composition = (CompositionDiagramElement)registry.Strategies.FirstOrDefault(c => c.TypeId == compositionId);
+
+			Strategy = new EmulationDiagramStrategy
+			{
+				DataPath = storage.GetValue<string>("DataPath"),
+				StartDate = storage.GetValue<DateTime>("StartDate"),
+				StopDate = storage.GetValue<DateTime>("StopDate"),
+				SecurityId = storage.GetValue<string>("SecurityId"),
+				MarketDataSource = storage.GetValue<MarketDataSource>("MarketDataSource"),
+				CandlesTimeFrame = storage.GetValue<TimeSpan>("CandlesTimeFrame"),
+				Composition = registry.Clone(composition)
+			};
+		}
+
+		public override void Save(SettingsStorage storage)
+		{
+			base.Save(storage);
+
+			if (Strategy == null)
+				return;
+
+			storage.SetValue("CompositionId", Strategy.Composition.TypeId);
+			storage.SetValue("DataPath", Strategy.DataPath);
+			storage.SetValue("StartDate", Strategy.StartDate);
+			storage.SetValue("StopDate", Strategy.StopDate);
+			storage.SetValue("SecurityId", Strategy.SecurityId);
+			storage.SetValue("MarketDataSource", Strategy.MarketDataSource);
+			storage.SetValue("CandlesTimeFrame", Strategy.CandlesTimeFrame);
+		}
+
+		#endregion
 	}
 }

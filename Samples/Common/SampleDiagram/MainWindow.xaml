@@ -9,7 +9,8 @@
 		xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
 		mc:Ignorable="d"
 		Title="Sample diagram" Height="768" Width="1024" WindowState="Maximized"
-        DontUseDwm="False" WindowStartupLocation="CenterScreen">
+        DontUseDwm="False" WindowStartupLocation="CenterScreen"
+        Closing="MainWindow_OnClosing" Loaded="MainWindow_OnLoaded">
 
     <Window.CommandBindings>
         <CommandBinding Command="{x:Static local:MainWindow.AddCommand}"

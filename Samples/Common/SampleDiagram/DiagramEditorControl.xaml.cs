@@ -1,8 +1,12 @@
 ﻿namespace SampleDiagram
 {
+	using System;
+	using System.Linq;
 	using System.Windows;
 
 	using Ecng.Collections;
+	using Ecng.Configuration;
+	using Ecng.Serialization;
 
 	using StockSharp.Xaml.Diagram;
 
@@ -28,6 +32,8 @@
 		public static readonly DependencyProperty IsChangedProperty = DependencyProperty.Register("IsChanged", typeof(bool), typeof(DiagramEditorControl),
 			new PropertyMetadata(false));
 
+		public override object Key => Composition;
+
 		public bool IsChanged
 		{
 			get { return (bool)GetValue(IsChangedProperty); }
@@ -43,6 +49,8 @@
 		public DiagramEditorControl()
 		{
 			InitializeComponent();
+
+			PaletteElements = ConfigManager.GetService<StrategiesRegistry>().DiagramElements;
 		}
 
 		public void ResetIsChanged()
@@ -81,5 +89,36 @@
 			//TODO add CompositionDiagramElement.IsChanged
 			IsChanged = true;
 		}
+
+		#region IPersistable
+
+		public override void Load(SettingsStorage storage)
+		{
+			base.Load(storage);
+
+			var compositionType = storage.GetValue<CompositionType>("CompositionType");
+			var compositionId = storage.GetValue<Guid>("CompositionId");
+
+			var registry = ConfigManager.GetService<StrategiesRegistry>();
+
+			var composition = compositionType == CompositionType.Composition
+				                  ? registry.Compositions.FirstOrDefault(c => c.TypeId == compositionId)
+				                  : registry.Strategies.FirstOrDefault(c => c.TypeId == compositionId);
+
+			Composition = new CompositionItem(compositionType, (CompositionDiagramElement)composition);
+		}
+
+		public override void Save(SettingsStorage storage)
+		{
+			base.Save(storage);
+
+			if (Composition == null)
+				return;
+
+			storage.SetValue("CompositionType", Composition.Type);
+			storage.SetValue("CompositionId", Composition.Element.TypeId);
+		}
+
+		#endregion
 	}
 }

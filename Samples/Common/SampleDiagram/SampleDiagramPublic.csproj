@@ -118,6 +118,8 @@
       <DependentUpon>EmulationControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="EmulationDiagramStrategy.cs" />
+    <Compile Include="Layout\DockingControl.cs" />
+    <Compile Include="Layout\LayoutManager.cs" />
     <Compile Include="SolutionExplorerControl.xaml.cs">
       <DependentUpon>SolutionExplorerControl.xaml</DependentUpon>
     </Compile>
