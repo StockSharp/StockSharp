@@ -104,24 +104,15 @@
 		private void StartEmulation()
 		{
 			if (_connector != null && _connector.State != EmulationStates.Stopped)
-			{
-				MessageBox.Show("Already launched.");
-				return;
-			}
+				throw new InvalidOperationException(LocalizedStrings.Str3015);
 
 			if (Strategy == null)
-			{
-				MessageBox.Show("No strategy selected.");
-				return;
-			}
+				throw new InvalidOperationException("Strategy not selected.");
 
 			var strategy = Strategy;
 
 			if (strategy.DataPath.IsEmpty() || !Directory.Exists(strategy.DataPath))
-			{
-				MessageBox.Show("Wrong path.");
-				return;
-			}
+				throw new InvalidOperationException(LocalizedStrings.Str3014);
 
 			_bufferedChart.ClearAreas();
 
@@ -218,8 +209,8 @@
 			ConfigManager.GetService<LogManager>().Sources.Add(_connector);
 
 			var candleManager = !useCandles
-									? new CandleManager(new TradeCandleBuilderSourceEx(_connector))
-									: new CandleManager(_connector);
+				                    ? new CandleManager(new TradeCandleBuilderSourceEx(_connector))
+				                    : new CandleManager(_connector);
 
 			strategy.Volume = 1;
 			strategy.Portfolio = portfolio;
@@ -246,11 +237,9 @@
 
 			strategy.NewMyTrades += OnStrategyNewMyTrade;
 
-			var pnlCurve = Curve.CreateCurve(LocalizedStrings.PnL + " " + strategy.Name, Colors.DarkGreen,
-											 EquityCurveChartStyles.Area);
+			var pnlCurve = Curve.CreateCurve(LocalizedStrings.PnL + " " + strategy.Name, Colors.DarkGreen, EquityCurveChartStyles.Area);
 			var unrealizedPnLCurve = Curve.CreateCurve(LocalizedStrings.PnLUnreal + strategy.Name, Colors.Black);
-			var commissionCurve = Curve.CreateCurve(LocalizedStrings.Str159 + " " + strategy.Name, Colors.Red,
-													EquityCurveChartStyles.DashedLine);
+			var commissionCurve = Curve.CreateCurve(LocalizedStrings.Str159 + " " + strategy.Name, Colors.Red, EquityCurveChartStyles.DashedLine);
 
 			strategy.PnLChanged += () =>
 			{
@@ -329,10 +318,10 @@
 							if (_connector.IsFinished)
 							{
 								TicksAndDepthsProgress.Value = TicksAndDepthsProgress.Maximum;
-								MessageBox.Show("Done.");
+								//MessageBox.Show("Done.");
 							}
-							else
-								MessageBox.Show("Cancelled.");
+							//else
+							//	MessageBox.Show("Cancelled.");
 						});
 						break;
 					case EmulationStates.Started:

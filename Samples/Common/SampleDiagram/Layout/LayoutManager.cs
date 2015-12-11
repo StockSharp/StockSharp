@@ -11,7 +11,7 @@
 	using Ecng.Collections;
 	using Ecng.Common;
 	using Ecng.Xaml;
-
+	using StockSharp.Localization;
 	using StockSharp.Logging;
 
 	using Xceed.Wpf.AvalonDock;
@@ -186,7 +186,7 @@
 			}
 			catch (Exception excp)
 			{
-				this.AddErrorLog("Ошибка загрузки разметки: {0}", excp);
+				this.AddErrorLog(excp, LocalizedStrings.Str3649);
 			}
 		}
 
@@ -206,7 +206,7 @@
 			}
 			catch (Exception excp)
 			{
-				this.AddErrorLog("Ошибка сохранения разметки: {0}", excp);
+				this.AddErrorLog(excp, LocalizedStrings.Str3649);
 			}
 
 			return builder.ToString();

@@ -7,6 +7,7 @@
              xmlns:xaml="http://schemas.stocksharp.com/xaml"
              xmlns:xcad="http://schemas.xceed.com/wpf/xaml/avalondock"
              xmlns:layout="clr-namespace:SampleDiagram.Layout"
+             xmlns:localization="clr-namespace:StockSharp.Localization;assembly=StockSharp.Localization"
              mc:Ignorable="d" x:Name="Ctrl"
              d:DesignHeight="300" d:DesignWidth="600">
 
@@ -27,22 +28,22 @@
                 <xcad:LayoutPanel>
                     <xcad:LayoutAnchorablePaneGroup>
                         <xcad:LayoutAnchorablePane>
-                            <xcad:LayoutAnchorable Title="Strategy" CanClose="False">
+                            <xcad:LayoutAnchorable Title="{x:Static localization:LocalizedStrings.Strategy}" CanClose="False">
                                 <local:DiagramDebuggerControl x:Name="DiagramDebuggerControl" Strategy="{Binding ElementName=Ctrl, Path=Strategy}"/>
                             </xcad:LayoutAnchorable>
-                            <xcad:LayoutAnchorable Title="Chart" CanClose="False">
+                            <xcad:LayoutAnchorable Title="{x:Static localization:LocalizedStrings.Str3200}" CanClose="False">
                                 <xaml:Chart x:Name="Chart" />
                             </xcad:LayoutAnchorable>
-                            <xcad:LayoutAnchorable Title="Orders" CanClose="False">
+                            <xcad:LayoutAnchorable Title="{x:Static localization:LocalizedStrings.Orders}" CanClose="False">
                                 <xaml:OrderGrid x:Name="OrderGrid"/>
                             </xcad:LayoutAnchorable>
-                            <xcad:LayoutAnchorable Title="Trades" CanClose="False">
+                            <xcad:LayoutAnchorable Title="{x:Static localization:LocalizedStrings.Str985}" CanClose="False">
                                 <xaml:MyTradeGrid x:Name="MyTradeGrid"/>
                             </xcad:LayoutAnchorable>
-                            <xcad:LayoutAnchorable Title="Position" CanClose="False">
+                            <xcad:LayoutAnchorable Title="{x:Static localization:LocalizedStrings.Str862}" CanClose="False">
                                 <xaml:EquityCurveChart x:Name="PositionCurve" />
                             </xcad:LayoutAnchorable>
-                            <xcad:LayoutAnchorable Title="Equity" CanClose="False">
+                            <xcad:LayoutAnchorable Title="{x:Static localization:LocalizedStrings.Equity}" CanClose="False">
                                 <xaml:EquityCurveChart x:Name="Curve" />
                             </xcad:LayoutAnchorable>
                         </xcad:LayoutAnchorablePane>

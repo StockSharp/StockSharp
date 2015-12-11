@@ -2,11 +2,15 @@ namespace SampleDiagram
 {
 	using System;
 
+	using StockSharp.Localization;
 	using StockSharp.Xaml.Diagram;
 
 	public enum CompositionType
 	{
+		[EnumDisplayNameLoc(LocalizedStrings.Str3050Key)]
 		Composition,
+
+		[EnumDisplayNameLoc(LocalizedStrings.Str1355Key)]
 		Strategy
 	}
 

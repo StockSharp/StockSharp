@@ -8,6 +8,7 @@
 
 	using Ecng.Collections;
 	using Ecng.Common;
+	using Ecng.ComponentModel;
 
 	using Hardcodet.Wpf.GenericTreeView;
 
@@ -146,7 +147,7 @@
 		}
 
 		public SolutionExplorerItem(CompositionType type)
-			: this(Guid.NewGuid(), type.ToString(), null)
+			: this(Guid.NewGuid(), type.GetDisplayName(), null)
 		{
 			Type = type;
 		}

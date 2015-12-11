@@ -23,7 +23,7 @@
 									  SelectionChanged="DiagramEditor_OnSelectionChanged"/>
 
 		<Label Grid.Column="1" x:Name="NoStrategyLabel" VerticalAlignment="Center" HorizontalAlignment="Center" 
-			   FontSize="25" FontWeight="Bold" Foreground="Gray" Content="No strategy selected."/>
+			   FontSize="25" FontWeight="Bold" Foreground="Gray" Content="Стратегия не выбрана."/>
 		
 		<diagram:PropertyGridEx Grid.Column="2" x:Name="PropertyGridControl" 
 								ShowAdvancedOptions="False" ShowDescriptionByTooltip="False" ShowPreview="False" ShowSearchBox="False"

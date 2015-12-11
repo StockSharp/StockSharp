@@ -11,9 +11,11 @@
 	using Ecng.Common;
 	using Ecng.Configuration;
 	using Ecng.Serialization;
+	using Ecng.Xaml;
 
 	using SampleDiagram.Layout;
 
+	using StockSharp.Localization;
 	using StockSharp.Logging;
 	using StockSharp.Xaml;
 	using StockSharp.Xaml.Diagram;
@@ -56,8 +58,8 @@
 			SolutionExplorer.Compositions = _strategiesRegistry.Compositions;
 			SolutionExplorer.Strategies = _strategiesRegistry.Strategies;
 
-			DesignerRibbonGroup.Visibility = Visibility.Collapsed;
-			EmulationRibbonGroup.Visibility = Visibility.Collapsed;
+			//DesignerRibbonGroup.Visibility = Visibility.Collapsed;
+			//EmulationRibbonGroup.Visibility = Visibility.Collapsed;
 		}
 
 		#region Event handlers
@@ -116,12 +118,12 @@
 				.DoIfElse<DiagramEditorControl>(editor =>
 				{
 					RibbonDesignerTab.DataContext = editor.Composition;
-					DesignerRibbonGroup.Visibility = Visibility.Visible;
+					//DesignerRibbonGroup.Visibility = Visibility.Visible;
 					Ribbon.SelectedTabItem = RibbonDesignerTab;
 					//CompositionNameTextBox.SetBindings(TextBox.TextProperty, editor.Composition.Element, "Name");
 				}, () =>
 				{
-					DesignerRibbonGroup.Visibility = Visibility.Collapsed;
+					//DesignerRibbonGroup.Visibility = Visibility.Collapsed;
 					RibbonDesignerTab.DataContext = null;
 					//BindingOperations.ClearBinding(CompositionNameTextBox, TextBox.TextProperty);
 				});
@@ -131,11 +133,11 @@
 				.DoIfElse<EmulationControl>(editor =>
 				{
 					RibbonEmulationTab.DataContext = editor;
-					EmulationRibbonGroup.Visibility = Visibility.Visible;
+					//EmulationRibbonGroup.Visibility = Visibility.Visible;
 					Ribbon.SelectedTabItem = RibbonEmulationTab;
 				}, () =>
 				{
-					EmulationRibbonGroup.Visibility = Visibility.Collapsed;
+					//EmulationRibbonGroup.Visibility = Visibility.Collapsed;
 					RibbonEmulationTab.DataContext = null;
 				});
 
@@ -159,7 +161,15 @@
 
 				if (diagramEditor.IsChanged)
 				{
-					if (MessageBox.Show("Element {0} was changed. Save?".Put(element.Element.Name), Title, MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
+					var res = new MessageBoxBuilder()
+						.Owner(this)
+						.Caption(Title)
+						.Text(LocalizedStrings.Str3676)
+						.Button(MessageBoxButton.YesNo)
+						.Icon(MessageBoxImage.Question)
+						.Show();
+
+					if (res == MessageBoxResult.Yes)
 					{
 						_strategiesRegistry.Save(element);
 					}
@@ -216,7 +226,15 @@
 		{
 			var item = (CompositionItem)e.Parameter;
 
-			if (MessageBox.Show("Remove {0} {1}?".Put(item.Element.Name, item.Type.ToString().ToLower()), "Remove", MessageBoxButton.YesNo, MessageBoxImage.Question) != MessageBoxResult.Yes)
+			var res = new MessageBoxBuilder()
+				.Owner(this)
+				.Caption(Title)
+				.Text(LocalizedStrings.Str2884Params.Put(item.Element.Name))
+				.Button(MessageBoxButton.YesNo)
+				.Icon(MessageBoxImage.Question)
+				.Show();
+
+			if (res != MessageBoxResult.Yes)
 				return;
 
 			_strategiesRegistry.Remove(item);
