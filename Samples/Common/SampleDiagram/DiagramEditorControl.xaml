@@ -6,7 +6,8 @@
              xmlns:diagram="http://schemas.stocksharp.com/xaml"
              xmlns:layout="clr-namespace:SampleDiagram.Layout"
              mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="600" x:Name="Ctrl">
+             d:DesignHeight="300" d:DesignWidth="600" x:Name="Ctrl"
+             Title="{Binding RelativeSource={RelativeSource Self}, Path=Composition.Element.Name}">
     <Grid>
 		<Grid.ColumnDefinitions>
 			<ColumnDefinition Width="170"/>

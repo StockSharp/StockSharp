@@ -2,6 +2,10 @@ namespace SampleDiagram
 {
 	using System;
 
+	using Ecng.Serialization;
+
+	using SampleDiagram.Layout;
+
 	using StockSharp.Xaml.Diagram;
 
 	static class Extensions
@@ -31,6 +35,16 @@ namespace SampleDiagram
 			}
 			else
 				elseAction();
+		}
+
+		public static DockingControl LoadDockingControl(this SettingsStorage settings)
+		{
+			var type = settings.GetValue<Type>("ControlType");
+			var control = (DockingControl)Activator.CreateInstance(type);
+
+			control.Load(settings);
+
+			return control;
 		}
 	}
 }

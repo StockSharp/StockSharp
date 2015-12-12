@@ -70,30 +70,12 @@
 				return;
 
 			var settings = new XmlSerializer<SettingsStorage>().Deserialize(_settingsFile);
-
 			var controls = settings.GetValue<SettingsStorage[]>("Controls");
 
-			foreach (var controlSettings in controls)
-			{
-				var control = Load(controlSettings);
-
+			foreach (var control in controls.Select(c => c.LoadDockingControl()))
 				_layoutManager.OpenDocumentWindow(control);
-			}
 
-			var layout = settings.GetValue<string>("Layout");
-
-			if (!layout.IsEmpty())
-				_layoutManager.Load(layout);
-		}
-
-		private DockingControl Load(SettingsStorage settings)
-		{
-			var type = settings.GetValue<Type>("ControlType");
-			var control = (DockingControl)Activator.CreateInstance(type);
-
-			control.Load(settings);
-
-			return control;
+			_layoutManager.Load(settings.GetValue<string>("Layout"));
 		}
 
 		private void MainWindow_OnClosing(object sender, CancelEventArgs e)
@@ -322,9 +304,5 @@
 
 			_layoutManager.OpenDocumentWindow(content);
 		}
-
-		
-
-		
 	}
 }

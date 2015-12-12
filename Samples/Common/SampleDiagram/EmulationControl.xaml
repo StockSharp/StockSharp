@@ -9,7 +9,8 @@
              xmlns:layout="clr-namespace:SampleDiagram.Layout"
              xmlns:localization="clr-namespace:StockSharp.Localization;assembly=StockSharp.Localization"
              mc:Ignorable="d" x:Name="Ctrl"
-             d:DesignHeight="300" d:DesignWidth="600">
+             d:DesignHeight="300" d:DesignWidth="600"
+             Title="{Binding RelativeSource={RelativeSource Self}, Path=Strategy.Composition.Name}">
 
 	<Grid>
         <Grid.RowDefinitions>
@@ -19,7 +20,7 @@
 
         <ProgressBar Grid.Row="0" Height="5" x:Name="TicksAndDepthsProgress" />
 		
-        <xcad:DockingManager Grid.Row="1">
+        <xcad:DockingManager Grid.Row="1" x:Name="DockingManager">
             <!--<xcad:DockingManager.Theme>
                 <xcad:MetroTheme />
             </xcad:DockingManager.Theme>-->

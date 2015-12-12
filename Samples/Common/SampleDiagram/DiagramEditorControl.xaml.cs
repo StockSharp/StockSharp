@@ -32,7 +32,7 @@
 		public static readonly DependencyProperty IsChangedProperty = DependencyProperty.Register("IsChanged", typeof(bool), typeof(DiagramEditorControl),
 			new PropertyMetadata(false));
 
-		public override object Key => Composition;
+		public override object Key => Composition.Element.TypeId;
 
 		public bool IsChanged
 		{

@@ -33,15 +33,13 @@
 		{
 			get
 			{
-				var documents = _documents
-					.Select(d => d.Value.Content)
-					.OfType<DockingControl>();
-
-				var anchorables = _anchorables
-					.Select(d => d.Value.Content)
-					.OfType<DockingControl>();
-
-				return documents.Concat(anchorables).ToArray();
+				return DockingManager
+					.Layout
+					.Descendents()
+					.OfType<LayoutContent>()
+					.Select(c => c.Content)
+					.OfType<DockingControl>()
+					.ToArray();
 			}
 		}
 
@@ -172,15 +170,39 @@
 			{
 				CultureInfo.InvariantCulture.DoInCulture(() =>
 				{
+					var titles = DockingManager
+						.Layout
+						.Descendents()
+						.OfType<LayoutContent>()
+						.ToDictionary(c => c.ContentId, c => c.Title);
+
 					using (var reader = new StringReader(settings))
 					{
 						var layoutSerializer = new XmlLayoutSerializer(DockingManager);
 						layoutSerializer.LayoutSerializationCallback += (s, e) =>
 						{
-							//if (e.Content == null)
-							//	e.Model.Close();
+							if (e.Content == null)
+								e.Model.Close();
 						};
 						layoutSerializer.Deserialize(reader);
+					}
+
+					var items = DockingManager
+							.Layout
+							.Descendents()
+							.OfType<LayoutContent>();
+
+					foreach (var content in items.Where(c => c.Content is DockingControl))
+					{
+						if (!(content.Content is DockingControl))
+						{
+							//var title = titles.TryGetValue(content.ContentId);
+
+							//if (!title.IsEmpty())
+							//	content.Title = title;
+						}
+						else
+							content.SetBindings(LayoutContent.TitleProperty, content.Content, "Title");
 					}
 				});
 			}

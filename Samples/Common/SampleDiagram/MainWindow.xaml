@@ -155,6 +155,15 @@
 
             <fluent:RibbonTabItem Header="{x:Static localization:LocalizedStrings.Str1174}"
 								  x:Name="RibbonEmulationTab">
+                <fluent:RibbonTabItem.Resources>
+                    <Style TargetType="{x:Type fluent:Button}">
+                        <Style.Triggers>
+                            <Trigger Property="Command" Value="{x:Null}">
+                                <Setter Property="IsEnabled" Value="False" />
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </fluent:RibbonTabItem.Resources>
                 <fluent:RibbonGroupBox Header="{x:Static localization:LocalizedStrings.Str1559}">
                     <fluent:Button Header="{x:Static localization:LocalizedStrings.Str2421}"
 								   SizeDefinition="Large"

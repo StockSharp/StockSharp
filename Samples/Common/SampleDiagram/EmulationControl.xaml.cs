@@ -13,6 +13,8 @@
 	using Ecng.Serialization;
 	using Ecng.Xaml;
 
+	using SampleDiagram.Layout;
+
 	using StockSharp.Algo;
 	using StockSharp.Algo.Candles;
 	using StockSharp.Algo.Candles.Compression;
@@ -59,10 +61,11 @@
 		#endregion
 
 		private readonly BufferedChart _bufferedChart;
+		private readonly LayoutManager _layoutManager;
 
 		private HistoryEmulationConnector _connector;
 
-		public override object Key => Strategy;
+		public override object Key => Strategy.Id;
 
 		public ICommand StartCommand { get; private set; }
 
@@ -88,7 +91,8 @@
             InitializeComponent();
 
 			_bufferedChart = new BufferedChart(Chart);
-		}
+			_layoutManager = new LayoutManager(DockingManager);
+        }
 
 		private void InitializeCommands()
 		{
@@ -114,7 +118,7 @@
 			if (strategy.DataPath.IsEmpty() || !Directory.Exists(strategy.DataPath))
 				throw new InvalidOperationException(LocalizedStrings.Str3014);
 
-			_bufferedChart.ClearAreas();
+			strategy.Reset();
 
 			Curve.Clear();
 			PositionCurve.Clear();
@@ -382,6 +386,7 @@
 
 			Strategy = new EmulationDiagramStrategy
 			{
+				Id = storage.GetValue<Guid>("StrategyId"),
 				DataPath = storage.GetValue<string>("DataPath"),
 				StartDate = storage.GetValue<DateTime>("StartDate"),
 				StopDate = storage.GetValue<DateTime>("StopDate"),
@@ -390,6 +395,8 @@
 				CandlesTimeFrame = storage.GetValue<TimeSpan>("CandlesTimeFrame"),
 				Composition = registry.Clone(composition)
 			};
+
+			_layoutManager.Load(storage.GetValue<string>("Layout"));
 		}
 
 		public override void Save(SettingsStorage storage)
@@ -400,12 +407,15 @@
 				return;
 
 			storage.SetValue("CompositionId", Strategy.Composition.TypeId);
+			storage.SetValue("StrategyId", Strategy.Id);
 			storage.SetValue("DataPath", Strategy.DataPath);
 			storage.SetValue("StartDate", Strategy.StartDate);
 			storage.SetValue("StopDate", Strategy.StopDate);
 			storage.SetValue("SecurityId", Strategy.SecurityId);
 			storage.SetValue("MarketDataSource", Strategy.MarketDataSource);
 			storage.SetValue("CandlesTimeFrame", Strategy.CandlesTimeFrame);
+
+			storage.SetValue("Layout", _layoutManager.Save());
 		}
 
 		#endregion
