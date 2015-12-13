@@ -54,7 +54,7 @@ public MainWindow()
 			<content>
 				<para>
 					   В методе InitConnector выполняется подписка на события коннектора, а также загрузка настроек коннектора из конфигурационного файла при помощи метода
-					   <codeEntityReference qualifyHint="true">M:StockSharp.Algo.Connector.Load(SettingsStorage)</codeEntityReference>.
+					   <codeEntityReference qualifyHint="true">M:StockSharp.Algo.Connector.Load(Ecng.Serialization.SettingsStorage)</codeEntityReference>.
 				</para>
 				<code language="C#">
 				<![CDATA[
@@ -111,7 +111,7 @@ private void InitConnector()
 			<content>
 				<para>
 					 Ниже показан код обработчика события <legacyBold>Click</legacyBold> кнопки <legacyBold>Настройки</legacyBold>. В обработчике вызывается метод 
-					 <codeEntityReference>M:StockSharp.Configuration.Extensions.Configure(Connector,Window)</codeEntityReference>. Этот метод открывает окно Настройки подключений (см. ниже).
+					 <codeEntityReference>M:StockSharp.Configuration.Extensions.Configure(StockSharp.Algo.Connector,System.Windows.Window)</codeEntityReference>. Этот метод открывает окно Настройки подключений (см. ниже).
 					 Также в обработчике выполняется сохранение настроек коннектора в конфигурационный файл. Этот файл в последующем можно использовать для конфигурирования коннектора без вызова окна Настроек подключения.  
 				</para>
 				<code language="C#">

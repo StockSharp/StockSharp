@@ -213,6 +213,8 @@ var prev5Candle = _series.GetCandle<TimeFrameCandle>(5);
 			<para><link xlink:href="99da6499-9ac1-4e7e-bcaf-a0c832dce4de">Собственный тип свечек</link></para>
 		</content>
 	</nextSteps>
+	
+	 
     
 	</developerWalkthroughDocument>
 </topic>

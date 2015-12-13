@@ -59,7 +59,7 @@ var finamHistorySource = new FinamHistorySource();
   					<listItem>
   					<para>
   					Далее необходимо обновить хранилище инструментов. Для этого используется метод
-  					<codeEntityReference qualifyHint="true">M:StockSharp.Algo.History.Russian.Finam.FinamHistorySource.Refresh(StockSharp.Algo.Storages.ISecurityStorage,StockSharp.BusinessEntities.Security,System.Action`1,System.Func`1)</codeEntityReference>
+  					<codeEntityReference qualifyHint="true">M:StockSharp.Algo.History.Russian.Finam.FinamHistorySource.Refresh(StockSharp.Algo.Storages.ISecurityStorage,StockSharp.BusinessEntities.Security,System.Action(StockSharp.BusinessEntities.Security),System.Func(System.Boolean))</codeEntityReference>
   					Фактически этот метод записывает в свойство <codeEntityReference qualifyHint="true">P:StockSharp.BusinessEntities.Security.ExtensionInfo</codeEntityReference>
   					коды инструмента и площадки, используемые в Финам, которые будут использованы при загрузке данных по инструменту. 
   					Обратите внимание, что первый аргумент метода имеет
@@ -81,7 +81,7 @@ finamHistorySource.Refresh(finamSecurityStorage, security, s => {}, () => false)
 				<para>
 					Теперь нужно зарегистрировать в <codeEntityReference>T:StockSharp.Algo.Testing.HistoryEmulationConnector</codeEntityReference> новый источник данных. Это делается при помощи
 					метода 
-					<codeEntityReference qualifyHint="true">M:StockSharp.Algo.Testing.HistoryEmulationConnector.RegisterHistorySource(StockSharp.BusinessEntities.Security, StockSharp.Messages.MarketDataTypes,System.Object,System.Func(`1))</codeEntityReference>.
+					<codeEntityReference qualifyHint="true">M:StockSharp.Algo.Testing.HistoryEmulationConnector.RegisterHistorySource(StockSharp.BusinessEntities.Security, StockSharp.Messages.MarketDataTypes,System.Object,System.Func(System.DateTimeOffset))</codeEntityReference>.
 					Первый аргумент метода - это инструмент. Далее указывается тип данных источника. В нашем случае - это 
 					обычные свечи <codeEntityReference>F:StockSharp.Messages.MarketDataTypes.CandleTimeFrame</codeEntityReference>. Третий аргумент - параметр, связанный с типом рыночных данных. Для обычных свечей - это таймфрейм свечи.  
 				</para>

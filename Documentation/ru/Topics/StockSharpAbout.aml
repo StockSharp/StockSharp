@@ -12,6 +12,11 @@
 				На базе библиотеки созданы такие решения как <token>stocksharpstudio</token>, <token>hydra</token> и т.д. 
 				А также наши адаптеры <token>wealthlab</token>, <token>matlab</token>.
 			</para>
+			<para>
+				В S#.API используется механизм <link xlink:href="5794f4b0-c536-4713-ad08-955a4a01b196">сообщений</link>, что дает возможность унифицировать разработку адаптеров, а также позволяет создавать 
+				<link xlink:href="fb79e67d-945c-493d-bdac-85d0040af828">собственные подключения</link> к любой внешней торговой системе.
+			</para>
+			
 		</summary>
 		
 		<procedure>
@@ -72,6 +77,10 @@
 						<legacyBold>Распространенность</legacyBold> - широко используемый язык <token>csharp</token>, популярная среда программирования Visual Studio.
 						</content>
 					</step>
+					
+					
+				
+					
 				</steps>
 		</procedure>
 	
