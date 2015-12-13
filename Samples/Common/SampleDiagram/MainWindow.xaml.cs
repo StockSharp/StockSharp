@@ -2,18 +2,20 @@
 {
 	using System;
 	using System.Collections.Generic;
+	using System.ComponentModel;
+	using System.IO;
 	using System.Linq;
 	using System.Windows;
-	using System.Windows.Data;
 	using System.Windows.Input;
 
 	using Ecng.Common;
-	using Ecng.Collections;
 	using Ecng.Configuration;
+	using Ecng.Serialization;
 	using Ecng.Xaml;
 
-	using Fluent;
+	using SampleDiagram.Layout;
 
+	using StockSharp.Localization;
 	using StockSharp.Logging;
 	using StockSharp.Xaml;
 	using StockSharp.Xaml.Diagram;
@@ -31,12 +33,13 @@
 		public static RoutedCommand EmulateStrategyCommand = new RoutedCommand();
 		public static RoutedCommand ExecuteStrategyCommand = new RoutedCommand();
 
+		private readonly string _settingsFile = "settings.xml";
+
 		private readonly Dictionary<object, LayoutDocument> _documents = new Dictionary<object, LayoutDocument>();
 		private readonly StrategiesRegistry _strategiesRegistry = new StrategiesRegistry();
 
 		private readonly LogManager _logManager;
-
-		private IEnumerable<LayoutDocumentPane> Tabs => DockingManager.Layout.Descendents().OfType<LayoutDocumentPane>().ToArray();
+		private readonly LayoutManager _layoutManager;
 
 		public MainWindow()
 		{
@@ -47,15 +50,43 @@
 			_logManager.Listeners.Add(new GuiLogListener(Monitor));
 
 			ConfigManager.RegisterService(_logManager);
+			ConfigManager.RegisterService(_strategiesRegistry);
+
+			_layoutManager = new LayoutManager(DockingManager);
+			_logManager.Sources.Add(_layoutManager);
 
 			SolutionExplorer.Compositions = _strategiesRegistry.Compositions;
 			SolutionExplorer.Strategies = _strategiesRegistry.Strategies;
 
-			DesignerRibbonGroup.Visibility = Visibility.Collapsed;
-			EmulationRibbonGroup.Visibility = Visibility.Collapsed;
+			//DesignerRibbonGroup.Visibility = Visibility.Collapsed;
+			//EmulationRibbonGroup.Visibility = Visibility.Collapsed;
 		}
 
 		#region Event handlers
+
+		private void MainWindow_OnLoaded(object sender, RoutedEventArgs e)
+		{
+			if (!File.Exists(_settingsFile))
+				return;
+
+			var settings = new XmlSerializer<SettingsStorage>().Deserialize(_settingsFile);
+			var controls = settings.GetValue<SettingsStorage[]>("Controls");
+
+			foreach (var control in controls.Select(c => c.LoadDockingControl()))
+				_layoutManager.OpenDocumentWindow(control);
+
+			_layoutManager.Load(settings.GetValue<string>("Layout"));
+		}
+
+		private void MainWindow_OnClosing(object sender, CancelEventArgs e)
+		{
+			var settings = new SettingsStorage();
+
+			settings.SetValue("Controls", _layoutManager.DockingControls.Select(c => c.Save()).ToArray());
+			settings.SetValue("Layout", _layoutManager.Save());
+
+			new XmlSerializer<SettingsStorage>().Serialize(settings, _settingsFile);
+		}
 
 		private void SolutionExplorer_OnOpen(CompositionItem element)
 		{
@@ -69,12 +100,12 @@
 				.DoIfElse<DiagramEditorControl>(editor =>
 				{
 					RibbonDesignerTab.DataContext = editor.Composition;
-					DesignerRibbonGroup.Visibility = Visibility.Visible;
+					//DesignerRibbonGroup.Visibility = Visibility.Visible;
 					Ribbon.SelectedTabItem = RibbonDesignerTab;
 					//CompositionNameTextBox.SetBindings(TextBox.TextProperty, editor.Composition.Element, "Name");
 				}, () =>
 				{
-					DesignerRibbonGroup.Visibility = Visibility.Collapsed;
+					//DesignerRibbonGroup.Visibility = Visibility.Collapsed;
 					RibbonDesignerTab.DataContext = null;
 					//BindingOperations.ClearBinding(CompositionNameTextBox, TextBox.TextProperty);
 				});
@@ -84,11 +115,11 @@
 				.DoIfElse<EmulationControl>(editor =>
 				{
 					RibbonEmulationTab.DataContext = editor;
-					EmulationRibbonGroup.Visibility = Visibility.Visible;
+					//EmulationRibbonGroup.Visibility = Visibility.Visible;
 					Ribbon.SelectedTabItem = RibbonEmulationTab;
 				}, () =>
 				{
-					EmulationRibbonGroup.Visibility = Visibility.Collapsed;
+					//EmulationRibbonGroup.Visibility = Visibility.Collapsed;
 					RibbonEmulationTab.DataContext = null;
 				});
 
@@ -112,7 +143,15 @@
 
 				if (diagramEditor.IsChanged)
 				{
-					if (MessageBox.Show("Element {0} was changed. Save?".Put(element.Element.Name), Title, MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
+					var res = new MessageBoxBuilder()
+						.Owner(this)
+						.Caption(Title)
+						.Text(LocalizedStrings.Str3676)
+						.Button(MessageBoxButton.YesNo)
+						.Icon(MessageBoxImage.Question)
+						.Show();
+
+					if (res == MessageBoxResult.Yes)
 					{
 						_strategiesRegistry.Save(element);
 					}
@@ -169,7 +208,15 @@
 		{
 			var item = (CompositionItem)e.Parameter;
 
-			if (MessageBox.Show("Remove {0} {1}?".Put(item.Element.Name, item.Type.ToString().ToLower()), "Remove", MessageBoxButton.YesNo, MessageBoxImage.Question) != MessageBoxResult.Yes)
+			var res = new MessageBoxBuilder()
+				.Owner(this)
+				.Caption(Title)
+				.Text(LocalizedStrings.Str2884Params.Put(item.Element.Name))
+				.Button(MessageBoxButton.YesNo)
+				.Icon(MessageBoxImage.Question)
+				.Show();
+
+			if (res != MessageBoxResult.Yes)
 				return;
 
 			_strategiesRegistry.Remove(item);
@@ -235,25 +282,12 @@
 			if (item == null)
 				throw new ArgumentNullException(nameof(item));
 
-			var document = _documents.TryGetValue(item);
-
-			if (document == null)
+			var content = new DiagramEditorControl
 			{
-				document = new LayoutDocument
-				{
-					Title = item.Element.Name,
-					Content = new DiagramEditorControl
-					{
-						PaletteElements = _strategiesRegistry.DiagramElements,
-						Composition = item
-					}
-				};
+				Composition = item
+			};
 
-				_documents.Add(item, document);
-				Tabs.First().Children.Add(document);
-			}
-
-			DockingManager.ActiveContent = document.Content;
+            _layoutManager.OpenDocumentWindow(content);
 		}
 
 		private void OpenEmulation(CompositionItem item)
@@ -263,19 +297,12 @@
 				Composition = _strategiesRegistry.Clone(item.Element)
 			};
 
-			var document = new LayoutDocument
+			var content = new EmulationControl
 			{
-				Title = "Emulation " + item.Element.Name,
-				Content = new EmulationControl
-				{
-					Strategy = strategy
-				}
+				Strategy = strategy
 			};
 
-			_documents.Add(strategy, document);
-			Tabs.First().Children.Add(document);
-
-			DockingManager.ActiveContent = document.Content;
+			_layoutManager.OpenDocumentWindow(content);
 		}
 	}
 }

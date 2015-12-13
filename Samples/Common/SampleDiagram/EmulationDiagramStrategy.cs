@@ -19,33 +19,33 @@ namespace SampleDiagram
 
 	public class EmulationDiagramStrategy : DiagramStrategy
 	{
-		[DisplayName(@"Storage path")]
-		[Category("Emulation settings")]
+		[DisplayNameLoc(LocalizedStrings.Str2804Key)]
+		[CategoryLoc(LocalizedStrings.Str1174Key)]
 		[PropertyOrder(10)]
 		public string DataPath { get; set; }
 
-		[DisplayName(@"Start date")]
-		[Category("Emulation settings")]
+		[DisplayNameLoc(LocalizedStrings.Str343Key)]
+		[CategoryLoc(LocalizedStrings.Str1174Key)]
 		[PropertyOrder(20)]
 		public DateTime StartDate { get; set; }
 
-		[DisplayName(@"Stop date")]
-		[Category("Emulation settings")]
+		[DisplayNameLoc(LocalizedStrings.Str345Key)]
+		[CategoryLoc(LocalizedStrings.Str1174Key)]
 		[PropertyOrder(30)]
 		public DateTime StopDate { get; set; }
 
-		[DisplayName(@"Data type")]
-		[Category("Emulation settings")]
+		[DisplayNameLoc(LocalizedStrings.DataTypeKey)]
+		[CategoryLoc(LocalizedStrings.Str1174Key)]
 		[PropertyOrder(40)]
 		public MarketDataSource MarketDataSource { get; set; }
 
-		[DisplayName(@"Candles timeframe")]
-		[Category("Emulation settings")]
+		[DisplayNameLoc(LocalizedStrings.Str1242Key)]
+		[CategoryLoc(LocalizedStrings.Str1174Key)]
 		[PropertyOrder(50)]
 		public TimeSpan CandlesTimeFrame { get; set; }
 
-		[DisplayName(@"Security Id")]
-		[Category("Emulation settings")]
+		[DisplayNameLoc(LocalizedStrings.SecurityIdKey)]
+		[CategoryLoc(LocalizedStrings.Str1174Key)]
 		[PropertyOrder(60)]
 		public string SecurityId { get; set; }
 

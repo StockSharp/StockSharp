@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="SampleDiagram.EmulationControl"
+﻿<layout:DockingControl x:Class="SampleDiagram.EmulationControl"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -6,8 +6,11 @@
              xmlns:local="clr-namespace:SampleDiagram"
              xmlns:xaml="http://schemas.stocksharp.com/xaml"
              xmlns:xcad="http://schemas.xceed.com/wpf/xaml/avalondock"
+             xmlns:layout="clr-namespace:SampleDiagram.Layout"
+             xmlns:localization="clr-namespace:StockSharp.Localization;assembly=StockSharp.Localization"
              mc:Ignorable="d" x:Name="Ctrl"
-             d:DesignHeight="300" d:DesignWidth="600">
+             d:DesignHeight="300" d:DesignWidth="600"
+             Title="{Binding RelativeSource={RelativeSource Self}, Path=Strategy.Composition.Name}">
 
 	<Grid>
         <Grid.RowDefinitions>
@@ -17,7 +20,7 @@
 
         <ProgressBar Grid.Row="0" Height="5" x:Name="TicksAndDepthsProgress" />
 		
-        <xcad:DockingManager Grid.Row="1">
+        <xcad:DockingManager Grid.Row="1" x:Name="DockingManager">
             <!--<xcad:DockingManager.Theme>
                 <xcad:MetroTheme />
             </xcad:DockingManager.Theme>-->
@@ -26,22 +29,22 @@
                 <xcad:LayoutPanel>
                     <xcad:LayoutAnchorablePaneGroup>
                         <xcad:LayoutAnchorablePane>
-                            <xcad:LayoutAnchorable Title="Strategy" CanClose="False">
+                            <xcad:LayoutAnchorable Title="{x:Static localization:LocalizedStrings.Strategy}" CanClose="False">
                                 <local:DiagramDebuggerControl x:Name="DiagramDebuggerControl" Strategy="{Binding ElementName=Ctrl, Path=Strategy}"/>
                             </xcad:LayoutAnchorable>
-                            <xcad:LayoutAnchorable Title="Chart" CanClose="False">
+                            <xcad:LayoutAnchorable Title="{x:Static localization:LocalizedStrings.Str3200}" CanClose="False">
                                 <xaml:Chart x:Name="Chart" />
                             </xcad:LayoutAnchorable>
-                            <xcad:LayoutAnchorable Title="Orders" CanClose="False">
+                            <xcad:LayoutAnchorable Title="{x:Static localization:LocalizedStrings.Orders}" CanClose="False">
                                 <xaml:OrderGrid x:Name="OrderGrid"/>
                             </xcad:LayoutAnchorable>
-                            <xcad:LayoutAnchorable Title="Trades" CanClose="False">
+                            <xcad:LayoutAnchorable Title="{x:Static localization:LocalizedStrings.Str985}" CanClose="False">
                                 <xaml:MyTradeGrid x:Name="MyTradeGrid"/>
                             </xcad:LayoutAnchorable>
-                            <xcad:LayoutAnchorable Title="Position" CanClose="False">
+                            <xcad:LayoutAnchorable Title="{x:Static localization:LocalizedStrings.Str862}" CanClose="False">
                                 <xaml:EquityCurveChart x:Name="PositionCurve" />
                             </xcad:LayoutAnchorable>
-                            <xcad:LayoutAnchorable Title="Equity" CanClose="False">
+                            <xcad:LayoutAnchorable Title="{x:Static localization:LocalizedStrings.Equity}" CanClose="False">
                                 <xaml:EquityCurveChart x:Name="Curve" />
                             </xcad:LayoutAnchorable>
                         </xcad:LayoutAnchorablePane>
@@ -50,4 +53,4 @@
             </xcad:LayoutRoot>
         </xcad:DockingManager>
 	</Grid>
-</UserControl>
+</layout:DockingControl>

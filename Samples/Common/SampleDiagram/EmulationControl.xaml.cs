@@ -10,7 +10,10 @@
 
 	using Ecng.Common;
 	using Ecng.Configuration;
+	using Ecng.Serialization;
 	using Ecng.Xaml;
+
+	using SampleDiagram.Layout;
 
 	using StockSharp.Algo;
 	using StockSharp.Algo.Candles;
@@ -24,6 +27,7 @@
 	using StockSharp.Logging;
 	using StockSharp.Messages;
 	using StockSharp.Xaml.Charting;
+	using StockSharp.Xaml.Diagram;
 
 	public partial class EmulationControl
 	{
@@ -57,8 +61,11 @@
 		#endregion
 
 		private readonly BufferedChart _bufferedChart;
+		private readonly LayoutManager _layoutManager;
 
 		private HistoryEmulationConnector _connector;
+
+		public override object Key => Strategy.Id;
 
 		public ICommand StartCommand { get; private set; }
 
@@ -84,7 +91,8 @@
             InitializeComponent();
 
 			_bufferedChart = new BufferedChart(Chart);
-		}
+			_layoutManager = new LayoutManager(DockingManager);
+        }
 
 		private void InitializeCommands()
 		{
@@ -100,26 +108,17 @@
 		private void StartEmulation()
 		{
 			if (_connector != null && _connector.State != EmulationStates.Stopped)
-			{
-				MessageBox.Show("Already launched.");
-				return;
-			}
+				throw new InvalidOperationException(LocalizedStrings.Str3015);
 
 			if (Strategy == null)
-			{
-				MessageBox.Show("No strategy selected.");
-				return;
-			}
+				throw new InvalidOperationException("Strategy not selected.");
 
 			var strategy = Strategy;
 
 			if (strategy.DataPath.IsEmpty() || !Directory.Exists(strategy.DataPath))
-			{
-				MessageBox.Show("Wrong path.");
-				return;
-			}
+				throw new InvalidOperationException(LocalizedStrings.Str3014);
 
-			_bufferedChart.ClearAreas();
+			strategy.Reset();
 
 			Curve.Clear();
 			PositionCurve.Clear();
@@ -214,8 +213,8 @@
 			ConfigManager.GetService<LogManager>().Sources.Add(_connector);
 
 			var candleManager = !useCandles
-									? new CandleManager(new TradeCandleBuilderSourceEx(_connector))
-									: new CandleManager(_connector);
+				                    ? new CandleManager(new TradeCandleBuilderSourceEx(_connector))
+				                    : new CandleManager(_connector);
 
 			strategy.Volume = 1;
 			strategy.Portfolio = portfolio;
@@ -242,11 +241,9 @@
 
 			strategy.NewMyTrades += OnStrategyNewMyTrade;
 
-			var pnlCurve = Curve.CreateCurve(LocalizedStrings.PnL + " " + strategy.Name, Colors.DarkGreen,
-											 EquityCurveChartStyles.Area);
+			var pnlCurve = Curve.CreateCurve(LocalizedStrings.PnL + " " + strategy.Name, Colors.DarkGreen, EquityCurveChartStyles.Area);
 			var unrealizedPnLCurve = Curve.CreateCurve(LocalizedStrings.PnLUnreal + strategy.Name, Colors.Black);
-			var commissionCurve = Curve.CreateCurve(LocalizedStrings.Str159 + " " + strategy.Name, Colors.Red,
-													EquityCurveChartStyles.DashedLine);
+			var commissionCurve = Curve.CreateCurve(LocalizedStrings.Str159 + " " + strategy.Name, Colors.Red, EquityCurveChartStyles.DashedLine);
 
 			strategy.PnLChanged += () =>
 			{
@@ -325,10 +322,10 @@
 							if (_connector.IsFinished)
 							{
 								TicksAndDepthsProgress.Value = TicksAndDepthsProgress.Maximum;
-								MessageBox.Show("Done.");
+								//MessageBox.Show("Done.");
 							}
-							else
-								MessageBox.Show("Cancelled.");
+							//else
+							//	MessageBox.Show("Cancelled.");
 						});
 						break;
 					case EmulationStates.Started:
@@ -375,5 +372,52 @@
 		{
 			MyTradeGrid.Trades.AddRange(trades);
 		}
+
+		#region IPersistable
+
+		public override void Load(SettingsStorage storage)
+		{
+			base.Load(storage);
+
+			var compositionId = storage.GetValue<Guid>("CompositionId");
+
+			var registry = ConfigManager.GetService<StrategiesRegistry>();
+			var composition = (CompositionDiagramElement)registry.Strategies.FirstOrDefault(c => c.TypeId == compositionId);
+
+			Strategy = new EmulationDiagramStrategy
+			{
+				Id = storage.GetValue<Guid>("StrategyId"),
+				DataPath = storage.GetValue<string>("DataPath"),
+				StartDate = storage.GetValue<DateTime>("StartDate"),
+				StopDate = storage.GetValue<DateTime>("StopDate"),
+				SecurityId = storage.GetValue<string>("SecurityId"),
+				MarketDataSource = storage.GetValue<MarketDataSource>("MarketDataSource"),
+				CandlesTimeFrame = storage.GetValue<TimeSpan>("CandlesTimeFrame"),
+				Composition = registry.Clone(composition)
+			};
+
+			_layoutManager.Load(storage.GetValue<string>("Layout"));
+		}
+
+		public override void Save(SettingsStorage storage)
+		{
+			base.Save(storage);
+
+			if (Strategy == null)
+				return;
+
+			storage.SetValue("CompositionId", Strategy.Composition.TypeId);
+			storage.SetValue("StrategyId", Strategy.Id);
+			storage.SetValue("DataPath", Strategy.DataPath);
+			storage.SetValue("StartDate", Strategy.StartDate);
+			storage.SetValue("StopDate", Strategy.StopDate);
+			storage.SetValue("SecurityId", Strategy.SecurityId);
+			storage.SetValue("MarketDataSource", Strategy.MarketDataSource);
+			storage.SetValue("CandlesTimeFrame", Strategy.CandlesTimeFrame);
+
+			storage.SetValue("Layout", _layoutManager.Save());
+		}
+
+		#endregion
 	}
 }

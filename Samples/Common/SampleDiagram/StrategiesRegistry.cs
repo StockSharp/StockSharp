@@ -6,6 +6,7 @@ namespace SampleDiagram
 	using Ecng.Collections;
 	using Ecng.Serialization;
 
+	using StockSharp.Localization;
 	using StockSharp.Logging;
 	using StockSharp.Xaml.Diagram;
 
@@ -153,7 +154,7 @@ namespace SampleDiagram
 				}
 				catch (Exception excp)
 				{
-					this.AddErrorLog("Load {0} composition element error: {1}", file, excp);
+					this.AddErrorLog(LocalizedStrings.Str3046Params, file, excp);
 				}
 			}
 		}
@@ -176,7 +177,7 @@ namespace SampleDiagram
 				}
 				catch (Exception excp)
 				{
-					this.AddErrorLog("Load {0} strategy error: {1}", file, excp);
+					this.AddErrorLog(LocalizedStrings.Str3627Params, file, excp);
 				}
 			}
 		}
