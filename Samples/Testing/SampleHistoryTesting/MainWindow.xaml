@@ -6,7 +6,8 @@
 		xmlns:sx="clr-namespace:StockSharp.Xaml;assembly=StockSharp.Xaml"
 		xmlns:ex="clr-namespace:Ecng.Xaml.Converters;assembly=Ecng.Xaml"
         xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
-        xmlns:charting="http://schemas.stocksharp.com/xaml">
+        xmlns:charting="http://schemas.stocksharp.com/xaml"
+        xmlns:xaml="clr-namespace:Ecng.Xaml;assembly=Ecng.Xaml">
 
 	<Window.Resources>
 		<ex:BoolToVisibilityConverter x:Key="Converter" FalseVisibilityValue="Hidden" />
@@ -33,7 +34,6 @@
 				<Grid.ColumnDefinitions>
 					<ColumnDefinition Width="100" />
 					<ColumnDefinition Width="*" />
-					<ColumnDefinition Width="Auto" />
 				</Grid.ColumnDefinitions>
 				<Grid.RowDefinitions>
 					<RowDefinition Height="Auto" />
@@ -43,10 +43,9 @@
 				</Grid.RowDefinitions>
 
 				<Label Grid.Column="0" Grid.Row="0" Content="{x:Static loc:LocalizedStrings.XamlStr593}" />
-				<TextBox x:Name="HistoryPath" Text="" Grid.Column="1" Grid.Row="0" />
-				<Button x:Name="FindPath" Grid.Column="2" Grid.Row="0" Content="..." Width="25" HorizontalAlignment="Left" Click="FindPathClick" />
+                <xaml:FolderBrowserPicker x:Name="HistoryPath" Grid.Column="1" Grid.Row="0" />
 
-				<Grid Grid.ColumnSpan="3" Grid.Column="0" Grid.Row="2">
+                <Grid Grid.ColumnSpan="3" Grid.Column="0" Grid.Row="2">
 					<Grid.ColumnDefinitions>
 						<ColumnDefinition Width="130" />
 						<ColumnDefinition Width="*" />

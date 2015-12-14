@@ -26,8 +26,6 @@ namespace Sample
 	using Ecng.Common;
 	using Ecng.Xaml;
 
-	using Ookii.Dialogs.Wpf;
-
 	using StockSharp.BusinessEntities;
 	using StockSharp.Quik;
 	using StockSharp.Localization;
@@ -61,7 +59,7 @@ namespace Sample
 			_portfoliosWindow.MakeHideable();
 
 			// попробовать сразу найти месторасположение Quik по запущенному процессу
-			Path.Text = QuikTerminal.GetDefaultPath();
+			QuikPath.Folder = QuikTerminal.GetDefaultPath();
 
 			_logManager.Listeners.Add(new FileLogListener("quik_logs.txt"));
 		}
@@ -89,19 +87,6 @@ namespace Sample
 		}
 
 		public static MainWindow Instance { get; private set; }
-
-		private void FindPathClick(object sender, RoutedEventArgs e)
-		{
-			var dlg = new VistaFolderBrowserDialog();
-
-			if (!Path.Text.IsEmpty())
-				dlg.SelectedPath = Path.Text;
-
-			if (dlg.ShowDialog(this) == true)
-			{
-				Path.Text = dlg.SelectedPath;
-			}
-		}
 
 		private bool _isConnected;
 
@@ -133,7 +118,7 @@ namespace Sample
 				}
 				else
 				{
-					if (Path.Text.IsEmpty())
+					if (QuikPath.Folder.IsEmpty())
 					{
 						MessageBox.Show(this, LocalizedStrings.Str2969);
 						return;
@@ -150,7 +135,7 @@ namespace Sample
 							LuaLogin = Login.Text,
 							LuaPassword = Password.Password.To<SecureString>()
 						}
-						: new QuikTrader(Path.Text) { IsDde = true };
+						: new QuikTrader(QuikPath.Folder) { IsDde = true };
 
 					Trader.LogLevel = LogLevels.Debug;
 

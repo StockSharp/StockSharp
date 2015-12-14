@@ -25,8 +25,6 @@ namespace SampleCandles
 	using Ecng.Common;
 	using Ecng.Xaml;
 
-	using Ookii.Dialogs.Wpf;
-
 	using StockSharp.Algo;
 	using StockSharp.Algo.Candles;
 	using StockSharp.BusinessEntities;
@@ -47,7 +45,7 @@ namespace SampleCandles
 			InitializeComponent();
 
 			// попробовать сразу найти месторасположение Quik по запущенному процессу
-			Path.Text = QuikTerminal.GetDefaultPath();
+			QuikPath.Folder = QuikTerminal.GetDefaultPath();
 
 			//Добавим логирование
 			_logManager = new LogManager
@@ -61,19 +59,6 @@ namespace SampleCandles
 				SeparateByDates = SeparateByDateModes.SubDirectories,
 				Append = false,
 			});
-		}
-
-		private void FindPathClick(object sender, RoutedEventArgs e)
-		{
-			var dlg = new VistaFolderBrowserDialog();
-
-			if (!Path.Text.IsEmpty())
-				dlg.SelectedPath = Path.Text;
-
-			if (dlg.ShowDialog(this) == true)
-			{
-				Path.Text = dlg.SelectedPath;
-			}
 		}
 
 		private void ConnectClick(object sender, RoutedEventArgs e)
@@ -102,7 +87,7 @@ namespace SampleCandles
 			}
 			else
 			{
-				if (Path.Text.IsEmpty())
+				if (QuikPath.Folder.IsEmpty())
 				{
 					MessageBox.Show(this, LocalizedStrings.Str2983);
 					return;
@@ -119,7 +104,7 @@ namespace SampleCandles
 						LuaLogin = Login.Text,
 						LuaPassword = Password.Password.To<SecureString>()
 					}
-					: new QuikTrader(Path.Text) { IsDde = true };
+					: new QuikTrader(QuikPath.Folder) { IsDde = true };
 
 				if (_trader.IsDde)
 				{

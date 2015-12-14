@@ -4,6 +4,7 @@
         xmlns:loc="clr-namespace:StockSharp.Localization;assembly=StockSharp.Localization"
         xmlns:xaml="http://schemas.stocksharp.com/xaml"
         xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+        xmlns:ex="clr-namespace:Ecng.Xaml;assembly=Ecng.Xaml"
         Title="{x:Static loc:LocalizedStrings.XamlStr539}" Height="430" Width="630">
 	<Grid Margin="5,5,5,5">
 		<Grid.ColumnDefinitions>
@@ -27,8 +28,7 @@
 		</Grid.RowDefinitions>
 
 		<Label Grid.Column="0" Grid.Row="0" HorizontalAlignment="Center" Content="{x:Static loc:LocalizedStrings.XamlStr592}" IsEnabled="{Binding ElementName=IsDde, Path=IsChecked}" />
-		<TextBox x:Name="Path" Text="" Grid.Column="1" Grid.ColumnSpan="3" Grid.Row="0" IsEnabled="{Binding ElementName=IsDde, Path=IsChecked}" />
-		<Button x:Name="FindPath" Grid.Column="3" Grid.Row="0" Content="..." Width="25" HorizontalAlignment="Right" Click="FindPathClick" IsEnabled="{Binding ElementName=IsDde, Path=IsChecked}" />
+        <ex:FolderBrowserPicker x:Name="QuikPath" Grid.Column="1" Grid.ColumnSpan="3" Grid.Row="0" IsEnabled="{Binding ElementName=IsDde, Path=IsChecked}" />
         <CheckBox x:Name="IsDde" Grid.Column="4" Grid.Row="0" VerticalAlignment="Center" Content="{x:Static loc:LocalizedStrings.ObsoleteDDE}" />
 		<Button x:Name="Connect" Content="{x:Static loc:LocalizedStrings.XamlStr666}" Grid.Row="0" Grid.Column="5" Click="ConnectClick" />
 

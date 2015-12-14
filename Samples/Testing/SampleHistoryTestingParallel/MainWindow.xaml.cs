@@ -21,8 +21,6 @@ namespace SampleHistoryTestingParallel
 	using System.Windows;
 	using System.Windows.Media;
 
-	using Ookii.Dialogs.Wpf;
-
 	using Ecng.Collections;
 	using Ecng.Xaml;
 	using Ecng.Common;
@@ -48,25 +46,12 @@ namespace SampleHistoryTestingParallel
 		{
 			InitializeComponent();
 
-			HistoryPath.Text = @"..\..\..\HistoryData\".ToFullPath();
-		}
-
-		private void FindPathClick(object sender, RoutedEventArgs e)
-		{
-			var dlg = new VistaFolderBrowserDialog();
-
-			if (!HistoryPath.Text.IsEmpty())
-				dlg.SelectedPath = HistoryPath.Text;
-
-			if (dlg.ShowDialog() == true)
-			{
-				HistoryPath.Text = dlg.SelectedPath;
-			}
+			HistoryPath.Folder = @"..\..\..\HistoryData\".ToFullPath();
 		}
 
 		private void StartBtnClick(object sender, RoutedEventArgs e)
 		{
-			if (HistoryPath.Text.IsEmpty() || !Directory.Exists(HistoryPath.Text))
+			if (HistoryPath.Folder.IsEmpty() || !Directory.Exists(HistoryPath.Folder))
 			{
 				MessageBox.Show(this, LocalizedStrings.Str3014);
 				return;
@@ -94,7 +79,7 @@ namespace SampleHistoryTestingParallel
 			var storageRegistry = new StorageRegistry
 			{
 				// set historical path
-				DefaultDrive = new LocalMarketDataDrive(HistoryPath.Text)
+				DefaultDrive = new LocalMarketDataDrive(HistoryPath.Folder)
 			};
 
 			var timeFrame = TimeSpan.FromMinutes(5);

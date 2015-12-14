@@ -28,8 +28,6 @@ namespace SampleHistoryTesting
 	using Ecng.Collections;
 	using Ecng.Localization;
 
-	using Ookii.Dialogs.Wpf;
-
 	using StockSharp.Algo;
 	using StockSharp.Algo.Candles;
 	using StockSharp.Algo.Candles.Compression;
@@ -127,7 +125,7 @@ namespace SampleHistoryTesting
 
 			_bufferedChart = new BufferedChart(Chart);
 
-			HistoryPath.Text = @"..\..\..\HistoryData\".ToFullPath();
+			HistoryPath.Folder = @"..\..\..\HistoryData\".ToFullPath();
 
 			if (LocalizedStrings.ActiveLanguage == Languages.Russian)
 			{
@@ -175,24 +173,11 @@ namespace SampleHistoryTesting
 			});
 		}
 
-		private void FindPathClick(object sender, RoutedEventArgs e)
-		{
-			var dlg = new VistaFolderBrowserDialog();
-
-			if (!HistoryPath.Text.IsEmpty())
-				dlg.SelectedPath = HistoryPath.Text;
-
-			if (dlg.ShowDialog(this) == true)
-			{
-				HistoryPath.Text = dlg.SelectedPath;
-			}
-		}
-
 		private void StartBtnClick(object sender, RoutedEventArgs e)
 		{
 			InitChart();
 
-			if (HistoryPath.Text.IsEmpty() || !Directory.Exists(HistoryPath.Text))
+			if (HistoryPath.Folder.IsEmpty() || !Directory.Exists(HistoryPath.Folder))
 			{
 				MessageBox.Show(this, LocalizedStrings.Str3014);
 				return;
@@ -302,7 +287,7 @@ namespace SampleHistoryTesting
 			var storageRegistry = new StorageRegistry
 			{
 				// set historical path
-				DefaultDrive = new LocalMarketDataDrive(HistoryPath.Text)
+				DefaultDrive = new LocalMarketDataDrive(HistoryPath.Folder)
 			};
 
 			var startTime = ((DateTime)From.Value).ChangeKind(DateTimeKind.Utc);

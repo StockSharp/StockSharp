@@ -20,8 +20,6 @@ namespace SampleSync
 	using System.ComponentModel;
 	using System.Windows;
 
-	using Ookii.Dialogs.Wpf;
-
 	using Ecng.Common;
 	using Ecng.Collections;
 	using Ecng.Xaml;
@@ -44,7 +42,7 @@ namespace SampleSync
 			InitializeComponent();
 
 			// попробовать сразу найти месторасположение Quik по запущенному процессу
-			Path.Text = QuikTerminal.GetDefaultPath();
+			QuikPath.Folder = QuikTerminal.GetDefaultPath();
 		}
 
 		protected override void OnClosing(CancelEventArgs e)
@@ -61,27 +59,14 @@ namespace SampleSync
 			base.OnClosing(e);
 		}
 
-		private void FindPathClick(object sender, RoutedEventArgs e)
-		{
-			var dlg = new VistaFolderBrowserDialog();
-
-			if (!Path.Text.IsEmpty())
-				dlg.SelectedPath = Path.Text;
-
-			if (dlg.ShowDialog(this) == true)
-			{
-				Path.Text = dlg.SelectedPath;
-			}
-		}
-
 		private void ConnectClick(object sender, RoutedEventArgs e)
 		{
-			if (Path.Text.IsEmpty())
+			if (QuikPath.Folder.IsEmpty())
 				MessageBox.Show(this, LocalizedStrings.Str2969);
 			else
 			{
 				// создаем подключение к Quik-у и синхронизуем его
-				_connector = new QuikTrader(Path.Text).GuiSyncTrader();
+				_connector = new QuikTrader(QuikPath.Folder).GuiSyncTrader();
 
 				// или напрямую через конструктор GuiTrader
 				// (пред. нужно закомментировать, это - раскомментировать)

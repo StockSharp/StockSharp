@@ -23,9 +23,6 @@ namespace SampleOptionQuoting
 	using System.Windows.Controls;
 	using System.Windows.Threading;
 
-	using Ookii.Dialogs.Wpf;
-
-	using Ecng.Collections;
 	using Ecng.ComponentModel;
 	using Ecng.Common;
 	using Ecng.Xaml;
@@ -95,7 +92,7 @@ namespace SampleOptionQuoting
 			_options = new ThreadSafeObservableCollection<Security>(optionsSource);
 
 			// попробовать сразу найти месторасположение Quik по запущенному процессу
-			Path.Text = QuikTerminal.GetDefaultPath();
+			QuikPath.Folder = QuikTerminal.GetDefaultPath();
 
 			var timer = new DispatcherTimer { Interval = TimeSpan.FromSeconds(5) };
 			timer.Tick += (sender, args) =>
@@ -144,19 +141,6 @@ namespace SampleOptionQuoting
 
 		public static MainWindow Instance { get; private set; }
 
-		private void FindPathClick(object sender, RoutedEventArgs e)
-		{
-			var dlg = new VistaFolderBrowserDialog();
-
-			if (!Path.Text.IsEmpty())
-				dlg.SelectedPath = Path.Text;
-
-			if (dlg.ShowDialog(this) == true)
-			{
-				Path.Text = dlg.SelectedPath;
-			}
-		}
-
 		protected override void OnClosing(CancelEventArgs e)
 		{
 			if (Connector != null)
@@ -171,7 +155,7 @@ namespace SampleOptionQuoting
 		{
 			var isDde = IsDde.IsChecked == true;
 
-			if (isDde && Path.Text.IsEmpty())
+			if (isDde && QuikPath.Folder.IsEmpty())
 			{
 				MessageBox.Show(this, LocalizedStrings.Str2969);
 				return;
@@ -185,7 +169,7 @@ namespace SampleOptionQuoting
 			PosChart.Refresh(1, 1, default(DateTimeOffset), default(DateTimeOffset));
 
 			// создаем подключение
-			Connector = new QuikTrader(Path.Text)
+			Connector = new QuikTrader(QuikPath.Folder)
 			{
 				IsDde = isDde
 			};

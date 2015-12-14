@@ -3,6 +3,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:loc="clr-namespace:StockSharp.Localization;assembly=StockSharp.Localization"
 	xmlns:sx="http://schemas.stocksharp.com/xaml"
+	xmlns:xaml="clr-namespace:Ecng.Xaml;assembly=Ecng.Xaml"
 	Title="{x:Static loc:LocalizedStrings.XamlStr568}" Height="190" Width="500">
     <Grid>
 		<Grid.ColumnDefinitions>
@@ -49,8 +50,7 @@
 			<RadioButton x:Name="IsDde" Content="{x:Static loc:LocalizedStrings.ObsoleteDDE}" Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="2"/>
 			<StackPanel Grid.Column="1" Grid.Row="3" Orientation="Horizontal" IsEnabled="{Binding ElementName=IsDde, Path=IsChecked}">
 				<Label Content="{x:Static loc:LocalizedStrings.XamlStr592}" />
-				<TextBox x:Name="Path" Text="" Width="350"/>
-				<Button x:Name="FindPath" Content="..." Width="25" HorizontalAlignment="Left" Click="FindPathClick" />
+                <xaml:FolderBrowserPicker x:Name="QuikPath" Width="350" />
 			</StackPanel>
 		</Grid>
 
