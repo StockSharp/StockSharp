@@ -28,9 +28,6 @@ namespace StockSharp.Algo
 	using StockSharp.Messages;
 	using StockSharp.Localization;
 
-	/// <summary>
-	/// The class to create connections to trading systems.
-	/// </summary>
 	partial class Connector
 	{
 		private const MarketDataTypes _filteredMarketDepth = (MarketDataTypes)(-1);

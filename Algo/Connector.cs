@@ -204,7 +204,6 @@ namespace StockSharp.Algo
 		private readonly SynchronizedDictionary<ExchangeBoard, SessionStates> _sessionStates = new SynchronizedDictionary<ExchangeBoard, SessionStates>();
 		private readonly SynchronizedDictionary<Security, object[]> _securityValues = new SynchronizedDictionary<Security, object[]>();
 
-		private readonly ISecurityProvider _securityProvider;
 		private readonly IEntityRegistry _entityRegistry;
 		private readonly IStorageRegistry _storageRegistry;
 

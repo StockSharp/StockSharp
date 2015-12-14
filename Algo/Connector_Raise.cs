@@ -25,9 +25,6 @@ namespace StockSharp.Algo
 	using StockSharp.Messages;
 	using StockSharp.Localization;
 
-	/// <summary>
-	/// The class to create connections to trading systems.
-	/// </summary>
 	partial class Connector
 	{
 		/// <summary>
