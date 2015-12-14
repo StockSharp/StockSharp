@@ -39,7 +39,7 @@ Release notes - [RELEASE_NOTES.md](../master/_ReleaseNotes/CHANGE_LOG_API.md).
 
 ## License
 
-StockSharp codes is licensed under the [LGPL 3.0 license](../master/LICENSE).
+StockSharp code is licensed under the [Apache License 2.0](../master/LICENSE).
 
   [1]: http://stocksharp.com
   [2]: http://stocksharp.com/doc
