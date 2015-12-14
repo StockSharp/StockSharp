@@ -64,5 +64,8 @@ private void Draw(CandleSeries series, Candle candle)
 		
 		<mediaLink><image placement="center" xlink:href="indicators_chart" /></mediaLink>
     </introduction>
+    <relatedTopics>
+		<link xlink:href="956b3163-c537-4e1d-af29-cf80b633db3c">Компоненты для построения графиков</link>
+    </relatedTopics>
 	</developerWalkthroughDocument>
 </topic>
