@@ -29,13 +29,15 @@
        <para>
        	Прежде чем приступить к описанию разработки собственного адаптера, рассмотрим процесс создания и обработки входящих и исходящих сообщений в <token>stocksharp</token>
 		на примере сообщения	<codeEntityReference>T:StockSharp.Messages.ConnectMessage</codeEntityReference>. Предположим, что в программе был вызван метод
-						<codeEntityReference>M:StockSharp.Algo.Connector.Connect()</codeEntityReference>, тогда в базовом классе  
+						<codeEntityReference>M:StockSharp.Algo.Connector.Connect</codeEntityReference>, тогда в базовом классе  
 						<codeEntityReference>T:StockSharp.Algo.Connector</codeEntityReference> будет происходить следующее:
 		</para>
 		<list class="ordered">
   			<listItem>
-  				<para>Вызывается метод <legacyBold>OnConnect</legacyBold>, в котором создается сообщение и передается в метод
-  					<codeEntityReference>M:StockSharp.Algo.Connector.SendInMessage(Message)</codeEntityReference>.</para>
+  				<para>Вызывается защищенный метод
+  				<codeEntityReference qualifyHint="true">M:StockSharp.Algo.Connector.OnConnect</codeEntityReference>, 
+  				в котором создается сообщение и передается в метод
+  					<codeEntityReference qualifyHint="true">M:StockSharp.Algo.Connector.SendInMessage(StockSharp.Messages.Message)</codeEntityReference>.</para>
   				<code language="C#">
 protected virtual void OnConnect()
 {
@@ -44,8 +46,8 @@ protected virtual void OnConnect()
   				</code>
   			</listItem>
   			<listItem>
-  			<para>В методе <codeEntityReference>M:StockSharp.Algo.Connector.SendInMessage(Message)</codeEntityReference> сообщение передается
-  					в одноименный метод адаптера.</para>
+  			<para>В методе <codeEntityReference qualifyHint="true">M:StockSharp.Algo.Connector.SendInMessage(StockSharp.Messages.Message)</codeEntityReference>
+  			сообщение передается в одноименный метод адаптера.</para>
   			<code language="C#">
 public void SendInMessage(Message message)
 {
@@ -54,22 +56,30 @@ public void SendInMessage(Message message)
   			</code>
   			</listItem>
   			<listItem>
-  				<para>В методе <codeEntityReference>M:StockSharp.Messages.MessageAdapter.SendInMessage(message)</codeEntityReference> адаптера
+  				<para>В методе <codeEntityReference qualifyHint="true">M:StockSharp.Messages.MessageAdapter.SendInMessage(StockSharp.Messages.Message)</codeEntityReference> адаптера
   					выполняются дополнительные проверки. Если все нормально, то сообщение передается в метод
-  					<codeEntityReference>M:StockSharp.Messages.MessageAdapter.OnSendInMessage(Message)</codeEntityReference> (см.ниже). Если сгенерирована ошибка, то создается создается 
-  					новое входящее сообщение аналогичного типа, в свойство <codeEntityReference>M:StockSharp.Messages.Message.Error</codeEntityReference> сообщения передается 
-  					объект исключения. Это новое сообщение передается в метод <codeEntityReference>M:StockSharp.Messages.MessageAdapter.SendOutMessage(Message)</codeEntityReference>, 
-  					в котором будет сгенерировано событие появления нового входящего сообщения <codeEntityReference>E:StockSharp.Messages.MessageAdapter.NewOutMessage</codeEntityReference>, 
+  					<codeEntityReference qualifyHint="true">M:StockSharp.Messages.MessageAdapter.OnSendInMessage(StockSharp.Messages.Message)</codeEntityReference> (см.ниже).
+  					Если сгенерирована ошибка, то создается создается
+  					новое входящее сообщение аналогичного типа, в свойство 
+  					<codeEntityReference>P:StockSharp.Messages.ConnectMessage.Error</codeEntityReference>
+  					сообщения передается объект исключения. Это новое сообщение передается в метод 
+  					<codeEntityReference>M:StockSharp.Messages.MessageAdapter.SendOutMessage(StockSharp.Messages.Message)</codeEntityReference>,
+  					в котором будет сгенерировано событие появления нового входящего сообщения 
+  					<codeEntityReference>E:StockSharp.Messages.MessageAdapter.NewOutMessage</codeEntityReference>,
   					сигнализирующего об ошибке.
   				</para>
   			</listItem>
 		</list>
 		
 		<para>
-			Входящие сообщения создаются при помощи метода <codeEntityReference qualifyHint="true">M:StockSharp.Messages.MessageAdapter.SendOutMessage(Message)</codeEntityReference>,
-			в который передается объект сообщения. В этом методе генерируется событие нового входящего сообщения <codeEntityReference>E:StockSharp.Messages.MessageAdapter.NewOutMessage</codeEntityReference>.
-			Далее это событие обрабатывается в базовом классе коннектора в защищенном методе <legacyBold>Connector.OnProcessMessage</legacyBold>, где в зависимости от ситуации 
-			сообщение преобразуется в соответствующий тип <token>stocksharp</token> и генерируется событие коннектора, а также могут создаваться дополнительное исходящие сообщения.
+			Входящие сообщения создаются при помощи метода 
+			<codeEntityReference qualifyHint="true">M:StockSharp.Messages.MessageAdapter.SendOutMessage(StockSharp.Messages.Message)</codeEntityReference>,
+			в который передается объект сообщения. В этом методе генерируется событие нового входящего сообщения 
+			<codeEntityReference>E:StockSharp.Messages.MessageAdapter.NewOutMessage</codeEntityReference>.
+			Далее это событие обрабатывается в базовом классе коннектора в защищенном методе
+			<codeEntityReference qualifyHint="true">M:StockSharp.Algo.Connector.OnProcessMessage(StockSharp.Messages.Message)</codeEntityReference>, 
+			где в зависимости от ситуации сообщение преобразуется в соответствующий тип <token>stocksharp</token> и генерируется событие коннектора, 
+			а также могут создаваться дополнительное исходящие сообщения.
 		</para>
 		
 		<para>
@@ -117,12 +127,13 @@ public class SmartAdapter: MessageAdapter
   								<codeEntityReference>P:StockSharp.BusinessEntities.Security.Type</codeEntityReference> и кодом площадки в <token>stocksharp</token>.</para>
   							</listItem>
   							<listItem>
-  								<para>Заполняется словарь <codeEntityReference>P:StockSharp.Messages.MessageAdapter.PortfolioBoardCodes</codeEntityReference>, который сопоставляет
+  								<para>Заполняется словарь <legacyBold>PortfolioBoardCodes</legacyBold>, который сопоставляет
   								коды площадок для портфелей.</para>
   							</listItem>
   							<listItem>
   								<para>
-  								При помощи метода <codeEntityReference>M:StockSharp.Messages.MessageAdapter.AddSupportedMessage(MessageTypes)</codeEntityReference> 
+  								При помощи метода 
+  								<codeEntityReference>M:StockSharp.Messages.Extensions.AddSupportedMessage(StockSharp.Messages.IMessageAdapter,StockSharp.Messages.MessageTypes)</codeEntityReference>
     							добавляем в массив <codeEntityReference>P:StockSharp.Messages.MessageAdapter.SupportedMessages</codeEntityReference> типы сообщений, 
     							которые будет поддерживать адаптер.
   								</para>
@@ -200,22 +211,25 @@ protected override bool IsSupportNativeSecurityLookup
 				<step>
 					<content>
 					<para>
-					 Метод <codeEntityReference>M:StockSharp.Messages.MessageAdapter.OnSendInMessage(Message)</codeEntityReference>.
+					 Метод <codeEntityReference>M:StockSharp.Messages.MessageAdapter.OnSendInMessage(StockSharp.Messages.Message)</codeEntityReference>.
 					</para>
 						<para>
 					    Далее необходимо переопределить метод 
-					    <codeEntityReference>M:StockSharp.Messages.MessageAdapter.OnSendInMessage(Message)</codeEntityReference>. Как говорилось выше,
-					    в этот метод передаются все исходящие сообщения и для каждого типа сообщения нужно написать код, 
+					    <codeEntityReference>M:StockSharp.Messages.MessageAdapter.OnSendInMessage(StockSharp.Messages.Message)</codeEntityReference>. 
+					    Как говорилось выше, в этот метод передаются все исходящие сообщения и для каждого типа сообщения нужно написать код, 
 					    преобразующий сообщения в команды <token>smartcom</token>.
 						</para>
 						<para>
-						При получении сообщения <legacyBold>MessageTypes.Reset</legacyBold> необходимо выполнить "обнуление" состояния и освободить ресурсы. 
+						При получении сообщения 
+						<codeEntityReference qualifyHint="true">F:StockSharp.Messages.MessageTypes.Reset</codeEntityReference> 
+						необходимо выполнить "обнуление" состояния и освободить ресурсы.
 						По завершении этих операций нужно отправить исходящие сообщение 
 						<codeEntityReference>T:StockSharp.Messages.ResetMessage</codeEntityReference>.
 						</para>
 						<para>
-						 При поступлении сообщения <legacyBold>MessageTypes.Connect</legacyBold> инициализируем переменную _smartCom, 
-						 подписываемся на события <token>smartcom</token> и устанавливаем соединение при помощи метода 
+						 При поступлении сообщения 
+						 <codeEntityReference qualifyHint="true">F:StockSharp.Messages.MessageTypes.Connect</codeEntityReference> 
+						 инициализируем переменную _smartCom, подписываемся на события <token>smartcom</token> и устанавливаем соединение при помощи метода 
 						 <legacyBold>Connect</legacyBold> нативного API. В случае удачного соединения должно наступить событие 
 						 <legacyBold>StServer.Connected</legacyBold>.
 						</para>
@@ -372,7 +386,9 @@ protected override void OnSendInMessage(Message message)
 					<para>
 					 Если значение <legacyBold>true</legacyBold>, то соответсвующее сообщение будет послано. По умолчанию значения этих свойств зависят от
 					 наличия соответсвующего типа сообщения в списке поддерживаемых сообщений. В нашем примере (см. Конструктор адаптера.) в этот список были
-					 добавлены типы <legacyBold>MessageTypes.SecurityLookup</legacyBold> и <legacyBold>MessageTypes.PortfolioLookup</legacyBold>, поэтому
+					 добавлены типы 
+					 <codeEntityReference qualifyHint="true">F:StockSharp.Messages.MessageTypes.SecurityLookup</codeEntityReference> и  
+					 <codeEntityReference qualifyHint="true">F:StockSharp.Messages.MessageTypes.PortfolioLookup</codeEntityReference>, поэтому
 					 следует ожидать получения исходящих сообщений <codeEntityReference>T:StockSharp.Messages.SecurityLookupMessage</codeEntityReference> и
 					 <codeEntityReference>T:StockSharp.Messages.PortfolioLookupMessage</codeEntityReference>.
 					</para>
@@ -393,7 +409,8 @@ private void smartCom_Connected()
 				</para>
 				<para>
 				При получении этих сообщений необходимо вызвать функции <token>smartcom</token>, запрашивающие портфели и инструменты соответственно.
-				Вызов этих функций приведет к возникновению событий <legacyBold>StServer.AddPortfolio</legacyBold> (портфели) и <legacyBold>StServer.AddSymbol</legacyBold> (инструменты).
+				Вызов этих функций приведет к возникновению событий 
+				<legacyBold>StServer.AddPortfolio</legacyBold> (портфели) и <legacyBold>StServer.AddSymbol</legacyBold> (инструменты).
 				</para>
 				<code language="C#">
 						<![CDATA[
@@ -434,9 +451,11 @@ private void ProcessSecurityLookupMessage(SecurityLookupMessage message)
                 <para>
 					 В обработчике события <legacyBold>StServer.AddPortfolio</legacyBold> полученную информацию о портфеле
 					 необходимо преобразовать во входящее сообщение <codeEntityReference>T:StockSharp.Messages.PortfolioMessage</codeEntityReference>.
-					 А после получения всех портфелей необходимо послать входящее сообщение <codeEntityReference>T:StockSharp.Messages.PortfolioLookupResultMessage</codeEntityReference>.
-					 Обратите внимание, что в последнем случае свойству <codeEntityReference>P:StockSharp.Messages.PortfolioLookupResultMessage.OriginalTransactionId</codeEntityReference> нужно 
-					 присвоить значение <legacyBold>TransactionId</legacyBold> соответсвующего исходящего сообщения.  
+					 А после получения всех портфелей необходимо послать входящее сообщение 
+					 <codeEntityReference>T:StockSharp.Messages.PortfolioLookupResultMessage</codeEntityReference>.
+					 Обратите внимание, что в последнем случае свойству 
+					 <codeEntityReference>P:StockSharp.Messages.PortfolioLookupResultMessage.OriginalTransactionId</codeEntityReference> нужно
+					 присвоить значение <legacyBold>TransactionId</legacyBold> соответствующего исходящего сообщения.  
 				</para>
 				<code language="C#">
 				<![CDATA[
@@ -592,8 +611,8 @@ private void smartCom_AddSymbol(int row, int rowCount, string smartId, string na
 				 <legacyBold>Регистрация/отмена регистрации сделок.</legacyBold>
 				</para>
 				<para>
-				 При вызове методов <codeEntityReference>M:StockSharp.Algo.Connector.RegisterTrades(Security)</codeEntityReference> или
-				 <codeEntityReference>M:StockSharp.Algo.Connector.UnRegisterTrades(Security)</codeEntityReference> будет получено исходящее
+				 При вызове методов <codeEntityReference>M:StockSharp.Algo.Connector.RegisterTrades(StockSharp.BusinessEntities.Security)</codeEntityReference> или
+				 <codeEntityReference>M:StockSharp.Algo.Connector.UnRegisterTrades(StockSharp.BusinessEntities.Security)</codeEntityReference> будет получено исходящее
 				 сообщение <codeEntityReference>T:StockSharp.Messages.MarketDataMessage</codeEntityReference>.
 				 </para>
 				 <para>
@@ -602,7 +621,7 @@ private void smartCom_AddSymbol(int row, int rowCount, string smartId, string na
 				 <para>
 				 Так как сообщение используется для работы со всем типами рыночных данных, то для вычленения конкретного типа нужно использовать свойство 
 				 <codeEntityReference>P:StockSharp.Messages.MarketDataMessage.DataType</codeEntityReference>. Для сделок значение этого свойства равно
-				 <legacyBold>MarketDataTypes.Trades</legacyBold>.
+				 <codeEntityReference qualifyHint="true">F:StockSharp.Messages.MarketDataTypes.Trades</codeEntityReference>.
 				</para>
 				<para>
 				  Посде вызова метода <legacyBold>StServer.ListenTicks</legacyBold> сделки будут поступать в событии <legacyBold>StServer.AddTick</legacyBold>.
@@ -671,7 +690,9 @@ private void ProcessMarketDataMessage(MarketDataMessage mdMsg)
 				В обработчике события <legacyBold>StServer.AddTick</legacyBold> полученную информацию о сделке 
 				необходимо преобразовать во входящее сообщение <codeEntityReference>T:StockSharp.Messages.ExecutionMessage</codeEntityReference>.
 				Обратите внимание, что сообщения <codeEntityReference>T:StockSharp.Messages.ExecutionMessage</codeEntityReference> используются как для сделок, так и для заявок. 
-  				Поэтому в сообщении уточняется, что оно относится к сделке - <legacyBold>ExecutionType = ExecutionTypes.Tick</legacyBold>.
+  				Поэтому в сообщении уточняется, что оно относится к сделке - 
+  				<codeEntityReference>P:StockSharp.Messages.ExecutionMessage.ExecutionType</codeEntityReference> = 
+  				<codeEntityReference qualifyHint="true">F:StockSharp.Messages.ExecutionTypes.Tick</codeEntityReference>.
 				</para>
 				<code language="C#">
 				<![CDATA[

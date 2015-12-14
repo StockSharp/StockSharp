@@ -12,7 +12,7 @@
 	<list class="bullet">
   			<listItem>
   				<para>
-  					Специальное текстовое поле <codeEntityReference>T:StockSharp.Xaml.SecurityIdTextBox</codeEntityReference> - предназначено для ввода id <legacyItalic>непрерывного</legacyItalic> инструмента. 
+  					Специальное текстовое поле <codeEntityReference>T:StockSharp.Xaml.SecurityIdTextBox</codeEntityReference> - генерирует <legacyItalic>непрерывный</legacyItalic> инструмент при помощи введенного Id - [Code]@[Board]. 
   				</para>
   			</listItem>
   			<listItem>

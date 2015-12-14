@@ -15,7 +15,7 @@
   			<para>Текстового поля, для ввода кода (или Id) инструмента. При вводе выполняется фильтрация списка по введенной подстроке.</para>
   		</listItem>
   		<listItem>
-  			<para>Специального комбинированного списка <codeEntityReference>T:StockSharp.SecurityTypeComboBox</codeEntityReference> 
+  			<para>Специального комбинированного списка <codeEntityReference>T:StockSharp.Xaml.<codeInline></codeInline>SecurityTypeComboBox</codeEntityReference> 
   			для фильтрации инструментов по их типу.</para>
   		</listItem>
   		<listItem>
@@ -29,40 +29,40 @@
      
 	  <list class="bullet">
   		<listItem>
-  			<para><codeEntityReference>P:StockSharp.Xaml.SecurityGrid.SelectionMode</codeEntityReference> - режим выбора инструмента: одиночный, множественный.</para>
+  			<para><codeEntityReference>P:StockSharp.Xaml.SecurityPicker.SelectionMode</codeEntityReference> - режим выбора инструмента: одиночный, множественный.</para>
   		</listItem>
   		<listItem>
-  			<para><codeEntityReference>P:StockSharp.Xaml.SecurityGrid.ShowCommonStatColumns</codeEntityReference> - отображать основные колонки.</para>
+  			<para><codeEntityReference>P:StockSharp.Xaml.SecurityPicker.ShowCommonStatColumns</codeEntityReference> - отображать основные колонки.</para>
   		</listItem>
   		<listItem>
-  			<para><codeEntityReference>P:StockSharp.Xaml.SecurityGrid.ShowCommonOptionColumns</codeEntityReference> - отображать основные колонки для опционов.</para>
+  			<para><codeEntityReference>P:StockSharp.Xaml.SecurityPicker.ShowCommonOptionColumns</codeEntityReference> - отображать основные колонки для опционов.</para>
   		</listItem>
   		<listItem>
-  			<para><codeEntityReference>P:StockSharp.Xaml.SecurityGrid.Title</codeEntityReference> - заголовок, который отображается в верхней части компонента.</para>
+  			<para><codeEntityReference>P:StockSharp.Xaml.SecurityPicker.Title</codeEntityReference> - заголовок, который отображается в верхней части компонента.</para>
   		</listItem>
   		<listItem>
-  			<para><codeEntityReference>P:StockSharp.Xaml.SecurityGrid.Securities</codeEntityReference> - список инструментов.</para>
+  			<para><codeEntityReference>P:StockSharp.Xaml.SecurityPicker.Securities</codeEntityReference> - список инструментов.</para>
   		</listItem>
   	 	<listItem>
-  			<para><codeEntityReference>P:StockSharp.Xaml.SecurityGrid.SelectedSecurity</codeEntityReference> - выбранный инструмент.</para>
+  			<para><codeEntityReference>P:StockSharp.Xaml.SecurityPicker.SelectedSecurity</codeEntityReference> - выбранный инструмент.</para>
   		</listItem>
   		<listItem>
-  			<para><codeEntityReference>P:StockSharp.Xaml.SecurityGrid.SelectedSecurities</codeEntityReference> - список выбранных инструментов.</para>
+  			<para><codeEntityReference>P:StockSharp.Xaml.SecurityPicker.SelectedSecurities</codeEntityReference> - список выбранных инструментов.</para>
   		</listItem>
   		<listItem>
-  			<para><codeEntityReference>P:StockSharp.Xaml.SecurityGrid.FilteredSecurities</codeEntityReference> - список отфильтрованных инструментов.</para>
+  			<para><codeEntityReference>P:StockSharp.Xaml.SecurityPicker.FilteredSecurities</codeEntityReference> - список отфильтрованных инструментов.</para>
   		</listItem>
   		<listItem>
-  			<para><codeEntityReference>P:StockSharp.Xaml.SecurityGrid.ExcludeSecurities</codeEntityReference> - список скрытых в списке инструментов.</para>
+  			<para><codeEntityReference>P:StockSharp.Xaml.SecurityPicker.ExcludeSecurities</codeEntityReference> - список скрытых в списке инструментов.</para>
   		</listItem>
   		<listItem>
-  			<para><codeEntityReference>P:StockSharp.Xaml.SecurityGrid.SelectedType</codeEntityReference> - выбранный тип инструмента.</para>
+  			<para><codeEntityReference>P:StockSharp.Xaml.SecurityPicker.SelectedType</codeEntityReference> - выбранный тип инструмента.</para>
   		</listItem>
   		<listItem>
-  			<para><codeEntityReference>P:StockSharp.Xaml.SecurityGrid.SecurityProvider</codeEntityReference> - провайдер информации об инструментах.</para>
+  			<para><codeEntityReference>P:StockSharp.Xaml.SecurityPicker.SecurityProvider</codeEntityReference> - провайдер информации об инструментах.</para>
   		</listItem>
   		<listItem>
-  			<para><codeEntityReference>P:StockSharp.Xaml.SecurityGrid.MarketDataProvider</codeEntityReference> - провайдер рыночных данных.</para>
+  			<para><codeEntityReference>P:StockSharp.Xaml.SecurityPicker.MarketDataProvider</codeEntityReference> - провайдер рыночных данных.</para>
   		</listItem>
   		
 	  </list>

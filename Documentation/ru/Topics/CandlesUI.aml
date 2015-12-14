@@ -3,8 +3,8 @@
 	<developerWalkthroughDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     
 	<introduction>
-		<para>Для графического отображения свечек можно использовать специальный компонент <codeEntityReference>T:StockSharp.Xaml.Charting.Chart</codeEntityReference>,
-		который отрисовывает свечки следующим образом:</para>
+		<para>Для графического отображения свечек можно использовать специальный компонент <codeEntityReference>T:StockSharp.Xaml.Charting.Chart</codeEntityReference>
+		(см. <link xlink:href="956b3163-c537-4e1d-af29-cf80b633db3c">Компоненты для построения графиков</link>), который отрисовывает свечки следующим образом:</para>
       
 		<mediaLink><image placement="center" xlink:href="sample_candleschart" /></mediaLink>
 	  
@@ -45,6 +45,10 @@ private void DrawCandle(CandleSeries series, Candle candle)
 		</code>	
 	
 	</introduction>
+	
+	<relatedTopics>
+		<link xlink:href="956b3163-c537-4e1d-af29-cf80b633db3c">Компоненты для построения графиков</link>
+    </relatedTopics>
 
 	</developerWalkthroughDocument>
 </topic>
