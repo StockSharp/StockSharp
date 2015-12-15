@@ -9,8 +9,15 @@
              xmlns:layout="clr-namespace:SampleDiagram.Layout"
              xmlns:localization="clr-namespace:StockSharp.Localization;assembly=StockSharp.Localization"
              mc:Ignorable="d" x:Name="Ctrl"
-             d:DesignHeight="300" d:DesignWidth="600"
-             Title="{Binding RelativeSource={RelativeSource Self}, Path=Strategy.Composition.Name}">
+             d:DesignHeight="300" d:DesignWidth="600">
+
+    <layout:DockingControl.Title>
+        <Binding RelativeSource="{RelativeSource Self}" Path="Strategy.Composition.Name">
+            <Binding.Converter>
+                <local:EmulationTitleConverter />
+            </Binding.Converter>
+        </Binding>
+    </layout:DockingControl.Title>
 
 	<Grid>
         <Grid.RowDefinitions>
@@ -30,7 +37,8 @@
                     <xcad:LayoutAnchorablePaneGroup>
                         <xcad:LayoutAnchorablePane>
                             <xcad:LayoutAnchorable Title="{x:Static localization:LocalizedStrings.Strategy}" CanClose="False">
-                                <local:DiagramDebuggerControl x:Name="DiagramDebuggerControl" Strategy="{Binding ElementName=Ctrl, Path=Strategy}"/>
+                                <local:DiagramDebuggerControl x:Name="DiagramDebuggerControl" 
+															  Changed="OnDiagramDebuggerControlChanged"/>
                             </xcad:LayoutAnchorable>
                             <xcad:LayoutAnchorable Title="{x:Static localization:LocalizedStrings.Str3200}" CanClose="False">
                                 <xaml:Chart x:Name="Chart" />

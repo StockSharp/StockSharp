@@ -120,13 +120,22 @@
 
             <fluent:RibbonTabItem Header="{x:Static localization:LocalizedStrings.Str3181}" 
 								  x:Name="RibbonDesignerTab">
+                <fluent:RibbonTabItem.Resources>
+                    <Style TargetType="{x:Type fluent:TextBox}">
+                        <Style.Triggers>
+                            <Trigger Property="DataContext" Value="{x:Null}">
+                                <Setter Property="IsEnabled" Value="False" />
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </fluent:RibbonTabItem.Resources>
                 <fluent:RibbonGroupBox Header="{x:Static localization:LocalizedStrings.Str1559}">
                     <fluent:TextBox Header="{x:Static localization:LocalizedStrings.Name}"
 									x:Name="CompositionNameTextBox"
 									InputWidth="90"
                                     MaxLength="128"
-									Text="{Binding Element.Name}"/>
-                    <fluent:Button Header="{x:Static localization:LocalizedStrings.Str1519}"
+									Text="{Binding Element.Name, UpdateSourceTrigger=PropertyChanged}" />
+	                <fluent:Button Header="{x:Static localization:LocalizedStrings.Str1519}"
 								   Icon="pack://application:,,,/StockSharp.Xaml;component/Images/save_16x16.png"
 								   LargeIcon="pack://application:,,,/StockSharp.Xaml;component/Images/save_16x16.png"
 								   SizeDefinition="Middle" 
@@ -212,8 +221,7 @@
 		
         <xcad:DockingManager Grid.Row="1" 
 							 x:Name="DockingManager" 
-							 ActiveContentChanged="DockingManager_OnActiveContentChanged"
-							 DocumentClosing="DockingManager_OnDocumentClosing">
+							 ActiveContentChanged="DockingManager_OnActiveContentChanged">
             <!--<xcad:DockingManager.Theme>
                 <xcad:MetroTheme />
             </xcad:DockingManager.Theme>-->

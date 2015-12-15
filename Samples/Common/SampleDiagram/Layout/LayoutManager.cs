@@ -21,10 +21,11 @@ namespace SampleDiagram.Layout
 	using System.IO;
 	using System.Linq;
 	using System.Text;
-	using System.Windows.Controls;
+	using System.Threading;
 
 	using Ecng.Collections;
 	using Ecng.Common;
+	using Ecng.Serialization;
 	using Ecng.Xaml;
 	using StockSharp.Localization;
 	using StockSharp.Logging;
@@ -33,10 +34,21 @@ namespace SampleDiagram.Layout
 	using Xceed.Wpf.AvalonDock.Layout;
 	using Xceed.Wpf.AvalonDock.Layout.Serialization;
 
-	public class LayoutManager : BaseLogReceiver
+	public sealed class LayoutManager : BaseLogReceiver
 	{
-		private readonly Dictionary<object, LayoutDocument> _documents = new Dictionary<object, LayoutDocument>();
-		private readonly Dictionary<object, LayoutAnchorable> _anchorables = new Dictionary<object, LayoutAnchorable>();
+		private readonly Dictionary<string, LayoutDocument> _documents = new Dictionary<string, LayoutDocument>();
+		private readonly Dictionary<string, LayoutAnchorable> _anchorables = new Dictionary<string, LayoutAnchorable>();
+
+		private readonly SynchronizedDictionary<DockingControl, SettingsStorage> _dockingControlSettings = new SynchronizedDictionary<DockingControl, SettingsStorage>();
+		private readonly SynchronizedSet<DockingControl> _changedControls = new CachedSynchronizedSet<DockingControl>();
+
+		private readonly TimeSpan _period = TimeSpan.FromSeconds(5);
+		private readonly object _syncRoot = new object();
+
+		private Timer _flushTimer;
+		private bool _isFlushing;
+		private bool _isLayoutChanged;
+		private string _layout;
 
 		private IEnumerable<LayoutDocumentPane> TabGroups => DockingManager.Layout.Descendents().OfType<LayoutDocumentPane>().ToArray();
 
@@ -58,15 +70,22 @@ namespace SampleDiagram.Layout
 			}
 		}
 
+		public event Action Changed; 
+
 		public LayoutManager(DockingManager dockingManager)
 		{
 			if (dockingManager == null)
 				throw new ArgumentNullException(nameof(dockingManager));
 
 			DockingManager = dockingManager;
+			DockingManager.LayoutChanged += OnDockingManagerLayoutChanged;
+			DockingManager.DocumentClosing += OnDockingManagerDocumentClosing;
+			DockingManager.DocumentClosed += OnDockingManagerDocumentClosed;
+
+			OnDockingManagerLayoutChanged(null, null);
 		}
 
-		public void OpenToolWindow(object key, string title, object content, bool canClose = true)
+		public void OpenToolWindow(string key, string title, object content, bool canClose = true)
 		{
 			if (key == null)
 				throw new ArgumentNullException(nameof(key));
@@ -105,9 +124,11 @@ namespace SampleDiagram.Layout
 
 			if (anchorable == null)
 			{
+				content.Changed += OnDockingControlChanged;
+
 				anchorable = new LayoutAnchorable
 				{
-					ContentId = content.Key.ToString(),
+					ContentId = content.Key,
 					Content = content,
 					CanClose = canClose
 				};
@@ -115,13 +136,15 @@ namespace SampleDiagram.Layout
 				anchorable.SetBindings(LayoutContent.TitleProperty, content, "Title");
 
 				_anchorables.Add(content.Key, anchorable);
+			
 				RootGroup.Children.Add(new LayoutAnchorablePane(anchorable));
+				OnDockingControlChanged(content);
 			}
 
 			DockingManager.ActiveContent = anchorable.Content;
 		}
 
-		public void OpenDocumentWindow(object key, string title, object content, bool canClose = true)
+		public void OpenDocumentWindow(string key, string title, object content, bool canClose = true)
 		{
 			if (key == null)
 				throw new ArgumentNullException(nameof(key));
@@ -160,9 +183,11 @@ namespace SampleDiagram.Layout
 
 			if (document == null)
 			{
+				content.Changed += OnDockingControlChanged;
+
 				document = new LayoutDocument
 				{
-					ContentId = content.Key.ToString(),
+					ContentId = content.Key,
 					Content = content,
 					CanClose = canClose
 				};
@@ -170,56 +195,103 @@ namespace SampleDiagram.Layout
 				document.SetBindings(LayoutContent.TitleProperty, content, "Title");
 
 				_documents.Add(content.Key, document);
+
 				TabGroups.First().Children.Add(document);
+				OnDockingControlChanged(content);
 			}
 
 			DockingManager.ActiveContent = document.Content;
 		}
 
-		public void Load(string settings)
+		public override void Load(SettingsStorage storage)
+		{
+			if (storage == null)
+				throw new ArgumentNullException(nameof(storage));
+
+			_documents.Clear();
+			_anchorables.Clear();
+			_changedControls.Clear();
+			_dockingControlSettings.Clear();
+
+			CultureInfo.InvariantCulture.DoInCulture(() =>
+			{
+				var controls = storage.GetValue<SettingsStorage[]>("Controls");
+
+				foreach (var settings in controls)
+				{
+					try
+					{
+						var control = LoadDockingControl(settings);
+
+						_dockingControlSettings.Add(control, settings);
+						OpenDocumentWindow(control);
+					}
+					catch (Exception excp)
+					{
+						this.AddErrorLog(excp);
+					}
+				}
+
+				_layout = storage.GetValue<string>("Layout");
+
+				if (!_layout.IsEmpty())
+					LoadLayout(_layout);
+			});
+		}
+
+		public override void Save(SettingsStorage storage)
+		{
+			if (storage == null)
+				throw new ArgumentNullException(nameof(storage));
+
+			storage.SetValue("Controls", _dockingControlSettings.SyncGet(c => c.Select(p => p.Value).ToArray()));
+			storage.SetValue("Layout", _layout);
+		}
+
+		public void LoadLayout(string settings)
 		{
 			if (settings == null)
 				throw new ArgumentNullException(nameof(settings));
 
 			try
 			{
-				CultureInfo.InvariantCulture.DoInCulture(() =>
+				var titles = DockingManager
+					.Layout
+					.Descendents()
+					.OfType<LayoutContent>()
+					.ToDictionary(c => c.ContentId, c => c.Title);
+
+				using (var reader = new StringReader(settings))
 				{
-					var titles = DockingManager
-						.Layout
-						.Descendents()
-						.OfType<LayoutContent>()
-						.ToDictionary(c => c.ContentId, c => c.Title);
-
-					using (var reader = new StringReader(settings))
+					var layoutSerializer = new XmlLayoutSerializer(DockingManager);
+					layoutSerializer.LayoutSerializationCallback += (s, e) =>
 					{
-						var layoutSerializer = new XmlLayoutSerializer(DockingManager);
-						layoutSerializer.LayoutSerializationCallback += (s, e) =>
-						{
-							if (e.Content == null)
-								e.Model.Close();
-						};
-						layoutSerializer.Deserialize(reader);
-					}
+						if (e.Content == null)
+							e.Model.Close();
+					};
+					layoutSerializer.Deserialize(reader);
+				}
 
-					var items = DockingManager
-							.Layout
-							.Descendents()
-							.OfType<LayoutContent>();
+				var items = DockingManager
+					.Layout
+					.Descendents()
+					.OfType<LayoutContent>();
 
-					foreach (var content in items.Where(c => c.Content is DockingControl))
+				foreach (var content in items.Where(c => c.Content is DockingControl))
+				{
+					content.DoIfElse<LayoutDocument>(d => _documents[d.ContentId] = d, () => { });
+					content.DoIfElse<LayoutAnchorable>(d => _anchorables[d.ContentId] = d, () => { });
+
+					if (!(content.Content is DockingControl))
 					{
-						if (!(content.Content is DockingControl))
-						{
-							//var title = titles.TryGetValue(content.ContentId);
+						//var title = titles.TryGetValue(content.ContentId);
 
-							//if (!title.IsEmpty())
-							//	content.Title = title;
-						}
-						else
-							content.SetBindings(LayoutContent.TitleProperty, content.Content, "Title");
+						//if (!title.IsEmpty())
+						//	content.Title = title;
 					}
-				});
+					else
+						content.SetBindings(LayoutContent.TitleProperty, content.Content, "Title");
+				}
 			}
 			catch (Exception excp)
 			{
@@ -227,19 +299,16 @@ namespace SampleDiagram.Layout
 			}
 		}
 
-		public string Save()
+		public string SaveLayout()
 		{
 			var builder = new StringBuilder();
 
 			try
 			{
-				CultureInfo.InvariantCulture.DoInCulture(() =>
+				using (var writer = new StringWriter(builder))
 				{
-					using (var writer = new StringWriter(builder))
-					{
-						new XmlLayoutSerializer(DockingManager).Serialize(writer);
-					}
-				});
+					new XmlLayoutSerializer(DockingManager).Serialize(writer);
+				}
 			}
 			catch (Exception excp)
 			{
@@ -247,6 +316,132 @@ namespace SampleDiagram.Layout
 			}
 
 			return builder.ToString();
+		}
+
+		private void OnDockingManagerLayoutChanged(object sender, EventArgs e)
+		{
+			if (DockingManager.Layout == null)
+				return;
+
+			DockingManager.Layout.Updated += OnLayoutUpdated;
+		}
+
+		private void OnLayoutUpdated(object sender, EventArgs e)
+		{
+			_isLayoutChanged = true;
+			Flush();
+		}
+
+		private void OnDockingManagerDocumentClosing(object sender, DocumentClosingEventArgs e)
+		{
+			var control = e.Document.Content as DockingControl;
+
+			if (control == null)
+				return;
+
+			e.Cancel = !control.CanClose();
+		}
+
+		private void OnDockingManagerDocumentClosed(object sender, DocumentClosedEventArgs e)
+		{
+			var control = e.Document.Content as DockingControl;
+
+			if (control == null)
+				return;
+
+			_documents.RemoveWhere(p => Equals(p.Value, e.Document));
+
+			_isLayoutChanged = true;
+
+			_changedControls.Remove(control);
+			_dockingControlSettings.Remove(control);
+
+			Flush();
+		}
+
+		private void OnDockingControlChanged(DockingControl control)
+		{
+			_changedControls.Add(control);
+			Flush();
+		}
+
+		private void Flush()
+		{
+			lock (_syncRoot)
+			{
+				if (_isFlushing || _flushTimer != null)
+					return;
+
+				_flushTimer = new Timer(OnFlush, null, _period, _period);
+			}
+		}
+
+		private void OnFlush(object state)
+		{
+			DockingControl[] items;
+			bool isLayoutChanged;
+
+			lock (_syncRoot)
+			{
+				if (_isFlushing)
+					return;
+
+				isLayoutChanged = _isLayoutChanged;
+				items = _changedControls.CopyAndClear();
+
+				_isFlushing = true;
+				_isLayoutChanged = false;
+			}
+
+			try
+			{
+				if (items.Length > 0 || isLayoutChanged)
+				{
+					GuiDispatcher.GlobalDispatcher.AddSyncAction(() =>
+					{
+						CultureInfo.InvariantCulture.DoInCulture(() =>
+						{
+							foreach (var control in items)
+								_dockingControlSettings[control] = control.Save();
+
+							if (isLayoutChanged)
+								_layout = SaveLayout();
+						});
+					});
+
+					Changed.SafeInvoke();
+				}
+				else
+				{
+					lock (_syncRoot)
+					{
+						if (_flushTimer == null)
+							return;
+
+						_flushTimer.Dispose();
+						_flushTimer = null;
+					}
+				}
+			}
+			catch (Exception excp)
+			{
+				this.AddErrorLog(excp, "Flush layout changed error.");
+			}
+			finally
+			{
+				lock (_syncRoot)
+				_isFlushing = false;
+			}
+		}
+
+		private static DockingControl LoadDockingControl(SettingsStorage settings)
+		{
+			var type = settings.GetValue<Type>("ControlType");
+			var control = (DockingControl)Activator.CreateInstance(type);
+
+			control.Load(settings);
+
+			return control;
 		}
 	}
 }

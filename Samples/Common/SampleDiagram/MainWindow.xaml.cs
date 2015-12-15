@@ -16,10 +16,9 @@ Copyright 2010 by StockSharp, LLC
 namespace SampleDiagram
 {
 	using System;
-	using System.Collections.Generic;
 	using System.ComponentModel;
+	using System.Globalization;
 	using System.IO;
-	using System.Linq;
 	using System.Windows;
 	using System.Windows.Input;
 
@@ -35,9 +34,6 @@ namespace SampleDiagram
 	using StockSharp.Xaml;
 	using StockSharp.Xaml.Diagram;
 
-	using Xceed.Wpf.AvalonDock;
-	using Xceed.Wpf.AvalonDock.Layout;
-
 	public partial class MainWindow
 	{
 		public static RoutedCommand AddCommand = new RoutedCommand();
@@ -50,25 +46,23 @@ namespace SampleDiagram
 
 		private readonly string _settingsFile = "settings.xml";
 
-		private readonly Dictionary<object, LayoutDocument> _documents = new Dictionary<object, LayoutDocument>();
 		private readonly StrategiesRegistry _strategiesRegistry = new StrategiesRegistry();
-
-		private readonly LogManager _logManager;
 		private readonly LayoutManager _layoutManager;
 
 		public MainWindow()
 		{
 			InitializeComponent();
 
-			_logManager = new LogManager();
-			_logManager.Listeners.Add(new FileLogListener("sample.log"));
-			_logManager.Listeners.Add(new GuiLogListener(Monitor));
+			var logManager = new LogManager();
+			logManager.Listeners.Add(new FileLogListener("sample.log"));
+			logManager.Listeners.Add(new GuiLogListener(Monitor));
 
-			ConfigManager.RegisterService(_logManager);
+			ConfigManager.RegisterService(logManager);
 			ConfigManager.RegisterService(_strategiesRegistry);
 
 			_layoutManager = new LayoutManager(DockingManager);
-			_logManager.Sources.Add(_layoutManager);
+			_layoutManager.Changed += SaveSettings;
+			logManager.Sources.Add(_layoutManager);
 
 			SolutionExplorer.Compositions = _strategiesRegistry.Compositions;
 			SolutionExplorer.Strategies = _strategiesRegistry.Strategies;
@@ -81,26 +75,12 @@ namespace SampleDiagram
 
 		private void MainWindow_OnLoaded(object sender, RoutedEventArgs e)
 		{
-			if (!File.Exists(_settingsFile))
-				return;
-
-			var settings = new XmlSerializer<SettingsStorage>().Deserialize(_settingsFile);
-			var controls = settings.GetValue<SettingsStorage[]>("Controls");
-
-			foreach (var control in controls.Select(c => c.LoadDockingControl()))
-				_layoutManager.OpenDocumentWindow(control);
-
-			_layoutManager.Load(settings.GetValue<string>("Layout"));
+			LoadSettings();
 		}
 
 		private void MainWindow_OnClosing(object sender, CancelEventArgs e)
 		{
-			var settings = new SettingsStorage();
-
-			settings.SetValue("Controls", _layoutManager.DockingControls.Select(c => c.Save()).ToArray());
-			settings.SetValue("Layout", _layoutManager.Save());
-
-			new XmlSerializer<SettingsStorage>().Serialize(settings, _settingsFile);
+			SaveSettings();
 		}
 
 		private void SolutionExplorer_OnOpen(CompositionItem element)
@@ -146,41 +126,6 @@ namespace SampleDiagram
 				}, () =>
 				{
 				});
-		}
-
-		private void DockingManager_OnDocumentClosing(object sender, DocumentClosingEventArgs e)
-		{
-			var content = e.Document.Content;
-
-			content.DoIfElse<DiagramEditorControl>(diagramEditor =>
-			{
-				var element = diagramEditor.Composition;
-
-				if (diagramEditor.IsChanged)
-				{
-					var res = new MessageBoxBuilder()
-						.Owner(this)
-						.Caption(Title)
-						.Text(LocalizedStrings.Str3676)
-						.Button(MessageBoxButton.YesNo)
-						.Icon(MessageBoxImage.Question)
-						.Show();
-
-					if (res == MessageBoxResult.Yes)
-					{
-						_strategiesRegistry.Save(element);
-					}
-					else
-						_strategiesRegistry.Discard(element);
-				}
-
-				_documents.Remove(element);
-			}, () => { });
-
-			content.DoIfElse<EmulationControl>(emulationControl =>
-			{
-				_documents.Remove(emulationControl.Strategy);
-			}, () => { });
 		}
 
 		#endregion
@@ -318,6 +263,25 @@ namespace SampleDiagram
 			};
 
 			_layoutManager.OpenDocumentWindow(content);
+		}
+
+		private void LoadSettings()
+		{
+			if (!File.Exists(_settingsFile))
+				return;
+
+			var settings = CultureInfo
+				.InvariantCulture
+				.DoInCulture(() => new XmlSerializer<SettingsStorage>().Deserialize(_settingsFile));
+
+			_layoutManager.Load(settings);
+		}
+
+		private void SaveSettings()
+		{
+			CultureInfo
+				.InvariantCulture
+				.DoInCulture(() => new XmlSerializer<SettingsStorage>().Serialize(_layoutManager.Save(), _settingsFile));
 		}
 	}
 }

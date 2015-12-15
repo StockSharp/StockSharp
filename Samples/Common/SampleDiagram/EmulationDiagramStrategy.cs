@@ -19,6 +19,7 @@ namespace SampleDiagram
 	using System.ComponentModel;
 
 	using Ecng.Common;
+	using Ecng.ComponentModel;
 	using Ecng.Serialization;
 
 	using StockSharp.Localization;
@@ -34,35 +35,90 @@ namespace SampleDiagram
 
 	public class EmulationDiagramStrategy : DiagramStrategy
 	{
+		private string _dataPath;
+		private DateTime _startDate;
+		private DateTime _stopDate;
+		private MarketDataSource _marketDataSource;
+		private TimeSpan _candlesTimeFrame;
+		private string _securityId;
+
 		[DisplayNameLoc(LocalizedStrings.Str2804Key)]
 		[CategoryLoc(LocalizedStrings.Str1174Key)]
 		[PropertyOrder(10)]
-		public string DataPath { get; set; }
+		public string DataPath
+		{
+			get { return _dataPath; }
+			set
+			{
+				_dataPath = value;
+				this.Notify("DataPath");
+			}
+		}
 
 		[DisplayNameLoc(LocalizedStrings.Str343Key)]
 		[CategoryLoc(LocalizedStrings.Str1174Key)]
 		[PropertyOrder(20)]
-		public DateTime StartDate { get; set; }
+		public DateTime StartDate
+		{
+			get { return _startDate; }
+			set
+			{
+				_startDate = value;
+				this.Notify("StartDate");
+			}
+		}
 
 		[DisplayNameLoc(LocalizedStrings.Str345Key)]
 		[CategoryLoc(LocalizedStrings.Str1174Key)]
 		[PropertyOrder(30)]
-		public DateTime StopDate { get; set; }
+		public DateTime StopDate
+		{
+			get { return _stopDate; }
+			set
+			{
+				_stopDate = value;
+				this.Notify("StopDate");
+			}
+		}
 
 		[DisplayNameLoc(LocalizedStrings.DataTypeKey)]
 		[CategoryLoc(LocalizedStrings.Str1174Key)]
 		[PropertyOrder(40)]
-		public MarketDataSource MarketDataSource { get; set; }
+		public MarketDataSource MarketDataSource
+		{
+			get { return _marketDataSource; }
+			set
+			{
+				_marketDataSource = value;
+				this.Notify("MarketDataSource");
+			}
+		}
 
 		[DisplayNameLoc(LocalizedStrings.Str1242Key)]
 		[CategoryLoc(LocalizedStrings.Str1174Key)]
 		[PropertyOrder(50)]
-		public TimeSpan CandlesTimeFrame { get; set; }
+		public TimeSpan CandlesTimeFrame
+		{
+			get { return _candlesTimeFrame; }
+			set
+			{
+				_candlesTimeFrame = value;
+				this.Notify("CandlesTimeFrame");
+			}
+		}
 
 		[DisplayNameLoc(LocalizedStrings.SecurityIdKey)]
 		[CategoryLoc(LocalizedStrings.Str1174Key)]
 		[PropertyOrder(60)]
-		public string SecurityId { get; set; }
+		public string SecurityId
+		{
+			get { return _securityId; }
+			set
+			{
+				_securityId = value;
+				this.Notify("SecurityId");
+			}
+		}
 
 		public EmulationDiagramStrategy()
 		{
