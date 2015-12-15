@@ -36,8 +36,8 @@ namespace SampleDiagram.Layout
 
 	public sealed class LayoutManager : BaseLogReceiver
 	{
-		private readonly Dictionary<object, LayoutDocument> _documents = new Dictionary<object, LayoutDocument>();
-		private readonly Dictionary<object, LayoutAnchorable> _anchorables = new Dictionary<object, LayoutAnchorable>();
+		private readonly Dictionary<string, LayoutDocument> _documents = new Dictionary<string, LayoutDocument>();
+		private readonly Dictionary<string, LayoutAnchorable> _anchorables = new Dictionary<string, LayoutAnchorable>();
 
 		private readonly SynchronizedDictionary<DockingControl, SettingsStorage> _dockingControlSettings = new SynchronizedDictionary<DockingControl, SettingsStorage>();
 		private readonly SynchronizedSet<DockingControl> _changedControls = new CachedSynchronizedSet<DockingControl>();
@@ -79,12 +79,13 @@ namespace SampleDiagram.Layout
 
 			DockingManager = dockingManager;
 			DockingManager.LayoutChanged += OnDockingManagerLayoutChanged;
+			DockingManager.DocumentClosing += OnDockingManagerDocumentClosing;
+			DockingManager.DocumentClosed += OnDockingManagerDocumentClosed;
 
-			if (DockingManager.Layout != null)
-				DockingManager.Layout.Updated += OnLayoutUpdated;
+			OnDockingManagerLayoutChanged(null, null);
 		}
 
-		public void OpenToolWindow(object key, string title, object content, bool canClose = true)
+		public void OpenToolWindow(string key, string title, object content, bool canClose = true)
 		{
 			if (key == null)
 				throw new ArgumentNullException(nameof(key));
@@ -127,7 +128,7 @@ namespace SampleDiagram.Layout
 
 				anchorable = new LayoutAnchorable
 				{
-					ContentId = content.Key.ToString(),
+					ContentId = content.Key,
 					Content = content,
 					CanClose = canClose
 				};
@@ -143,7 +144,7 @@ namespace SampleDiagram.Layout
 			DockingManager.ActiveContent = anchorable.Content;
 		}
 
-		public void OpenDocumentWindow(object key, string title, object content, bool canClose = true)
+		public void OpenDocumentWindow(string key, string title, object content, bool canClose = true)
 		{
 			if (key == null)
 				throw new ArgumentNullException(nameof(key));
@@ -186,7 +187,7 @@ namespace SampleDiagram.Layout
 
 				document = new LayoutDocument
 				{
-					ContentId = content.Key.ToString(),
+					ContentId = content.Key,
 					Content = content,
 					CanClose = canClose
 				};
@@ -278,6 +279,9 @@ namespace SampleDiagram.Layout
 
 				foreach (var content in items.Where(c => c.Content is DockingControl))
 				{
+					content.DoIfElse<LayoutDocument>(d => _documents[d.ContentId] = d, () => { });
+					content.DoIfElse<LayoutAnchorable>(d => _anchorables[d.ContentId] = d, () => { });
+
 					if (!(content.Content is DockingControl))
 					{
 						//var title = titles.TryGetValue(content.ContentId);
@@ -325,6 +329,33 @@ namespace SampleDiagram.Layout
 		private void OnLayoutUpdated(object sender, EventArgs e)
 		{
 			_isLayoutChanged = true;
+			Flush();
+		}
+
+		private void OnDockingManagerDocumentClosing(object sender, DocumentClosingEventArgs e)
+		{
+			var control = e.Document.Content as DockingControl;
+
+			if (control == null)
+				return;
+
+			e.Cancel = !control.CanClose();
+		}
+
+		private void OnDockingManagerDocumentClosed(object sender, DocumentClosedEventArgs e)
+		{
+			var control = e.Document.Content as DockingControl;
+
+			if (control == null)
+				return;
+
+			_documents.RemoveWhere(p => Equals(p.Value, e.Document));
+
+			_isLayoutChanged = true;
+
+			_changedControls.Remove(control);
+			_dockingControlSettings.Remove(control);
+
 			Flush();
 		}
 

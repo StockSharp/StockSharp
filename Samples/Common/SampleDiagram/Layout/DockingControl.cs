@@ -44,7 +44,7 @@ namespace SampleDiagram.Layout
 			set { SetValue(TitleProperty, value); }
 		}
 
-		public virtual object Key => Guid.NewGuid();
+		public virtual string Key => Guid.NewGuid().ToString();
 
 		public event Action<DockingControl> Changed;
 
@@ -54,6 +54,11 @@ namespace SampleDiagram.Layout
 
 			Title = type.GetDisplayName();
 			Icon = type.GetIconUrl();
+		}
+
+		public virtual bool CanClose()
+		{
+			return true;
 		}
 
 		public virtual void Load(SettingsStorage storage)

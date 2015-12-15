@@ -22,7 +22,9 @@ namespace SampleDiagram
 	using Ecng.Collections;
 	using Ecng.Configuration;
 	using Ecng.Serialization;
+	using Ecng.Xaml;
 
+	using StockSharp.Localization;
 	using StockSharp.Xaml.Diagram;
 
 	public partial class DiagramEditorControl
@@ -47,7 +49,7 @@ namespace SampleDiagram
 		public static readonly DependencyProperty IsChangedProperty = DependencyProperty.Register("IsChanged", typeof(bool), typeof(DiagramEditorControl),
 			new PropertyMetadata(false));
 
-		public override object Key => Composition.Element.TypeId;
+		public override string Key => Composition.Element.TypeId.ToString();
 
 		public bool IsChanged
 		{
@@ -66,6 +68,29 @@ namespace SampleDiagram
 			InitializeComponent();
 
 			PaletteElements = ConfigManager.GetService<StrategiesRegistry>().DiagramElements;
+		}
+
+		public override bool CanClose()
+		{
+			if (!IsChanged)
+				return true;
+
+			var res = new MessageBoxBuilder()
+				.Owner(this)
+				.Caption(Title)
+				.Text(LocalizedStrings.Str3676)
+				.Icon(MessageBoxImage.Question)
+				.Button(MessageBoxButton.YesNo)
+				.Show();
+
+			if (res == MessageBoxResult.Yes)
+				ConfigManager.GetService<StrategiesRegistry>().Save(Composition);
+			else
+				ConfigManager.GetService<StrategiesRegistry>().Discard(Composition);
+
+			ResetIsChanged();
+
+			return true;
 		}
 
 		public void ResetIsChanged()

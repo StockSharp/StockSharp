@@ -117,7 +117,10 @@ namespace SampleDiagram
 
 				var composition = strategy.Composition;
 
-				Debugger = new DiagramDebugger(composition);
+				Debugger = new DiagramDebugger(composition)
+				{
+					IsEnabled = true
+				};
 				Debugger.Break += OnDebuggerBreak;
 				Debugger.CompositionChanged += OnDebuggerCompositionChanged;
 
@@ -144,7 +147,11 @@ namespace SampleDiagram
 
 		private void OnDebuggerBreak(DiagramElement element)
 		{
-			this.GuiAsync(() => ShowElementProperties(element));
+			this.GuiAsync(() =>
+			{
+				DiagramEditor.SelectedElement = element;
+				ShowElementProperties(element);
+			});
 		}
 
 		private void OnDebuggerCompositionChanged(CompositionDiagramElement element)
