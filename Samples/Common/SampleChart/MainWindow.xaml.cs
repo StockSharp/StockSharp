@@ -17,7 +17,6 @@ namespace SampleChart
 {
 	using System;
 	using System.Collections.Generic;
-	using System.IO;
 	using System.Linq;
 	using System.Threading.Tasks;
 	using System.Windows;
@@ -30,8 +29,7 @@ namespace SampleChart
 
 	using MoreLinq;
 
-	using Ookii.Dialogs.Wpf;
-
+	using StockSharp.Algo;
 	using StockSharp.Algo.Candles;
 	using StockSharp.Algo.Candles.Compression;
 	using StockSharp.Algo.Indicators;
@@ -51,10 +49,10 @@ namespace SampleChart
 		private TimeFrameCandle _candle;
 		private VolumeProfile _volumeProfile;
 		private readonly DispatcherTimer _chartUpdateTimer = new DispatcherTimer();
-		private readonly HashSet<TimeFrameCandle> _updatedCandles = new HashSet<TimeFrameCandle>();
-		private readonly List<TimeFrameCandle> _allCandles = new List<TimeFrameCandle>();
+		private readonly SynchronizedDictionary<DateTimeOffset, TimeFrameCandle> _updatedCandles = new SynchronizedDictionary<DateTimeOffset, TimeFrameCandle>();
+		private readonly CachedSynchronizedList<TimeFrameCandle> _allCandles = new CachedSynchronizedList<TimeFrameCandle>();
 		private decimal _lastPrice;
-		private readonly Security _security = new Security
+		private Security _security = new Security
 		{
 			Id = "RIZ2@FORTS",
 			PriceStep = 5,
@@ -80,18 +78,19 @@ namespace SampleChart
 
 		private void OnLoaded(object sender, RoutedEventArgs routedEventArgs)
 		{
-			_comboTheme.SelectedItem = "Chrome";
+			Theme.SelectedItem = "Chrome";
 			InitCharts();
 
-			_chartCombined.SubscribeIndicatorElement += (elem, ser, arg) => Chart_OnSubscribeIndicatorElement(elem, ser, arg, _chartCombined);
-			_chartBindVisibleRange.SubscribeIndicatorElement += (elem, ser, arg) => Chart_OnSubscribeIndicatorElement(elem, ser, arg, _chartBindVisibleRange);
+			BoxChart.SubscribeIndicatorElement += (elem, ser, arg) => Chart_OnSubscribeIndicatorElement(elem, ser, arg, BoxChart);
+			ClusterChart.SubscribeIndicatorElement += (elem, ser, arg) => Chart_OnSubscribeIndicatorElement(elem, ser, arg, ClusterChart);
 
-			LoadData(@"..\..\..\..\Testing\HistoryData\".ToFullPath());
+			HistoryPath.Folder = @"..\..\..\..\Testing\HistoryData\".ToFullPath();
+            LoadData();
 		}
 
 		private void Chart_OnSubscribeIndicatorElement(ChartIndicatorElement element, CandleSeries series, IIndicator indicator, ChartPanel chart)
 		{
-			var values = _allCandles
+			var values = _allCandles.Cache
 				.Select(candle =>
 				{
 					if (candle.State != CandleStates.Finished)
@@ -101,20 +100,15 @@ namespace SampleChart
 					{
 						{ element, indicator.Process(candle) }
 					});
-				})
-				.ToArray();
+				});
 
 			chart.Draw(values);
 		}
 
 		private void InitCharts()
 		{
-			_candle = null;
-			_lastPrice = 0m;
-			_allCandles.Clear();
-			_chartCombined.ClearAreas();
-
-			_chartBindVisibleRange.ClearAreas();
+			BoxChart.ClearAreas();
+			ClusterChart.ClearAreas();
 
 			_areaComb = new ChartArea();
 			_areaBVR1 = new ChartArea();
@@ -136,12 +130,13 @@ namespace SampleChart
 				AxisAlignment = ChartAxisAlignment.Right,
 			});
 
-			_chartCombined.AddArea(_areaComb);
-			_chartBindVisibleRange.AddArea(_areaBVR1);
-			_chartBindVisibleRange.AddArea(_areaBVR2);
+			BoxChart.AddArea(_areaComb);
 
-			_timeframe = int.Parse((string)((ComboBoxItem)_comboMainTimeframe.SelectedItem).Tag);
-			var step = (decimal)_updownPriceStep.Value.Value;
+			ClusterChart.AddArea(_areaBVR1);
+			ClusterChart.AddArea(_areaBVR2);
+
+			_timeframe = int.Parse((string)((ComboBoxItem)Timeframe.SelectedItem).Tag);
+			var step = (decimal)PriceStep.Value.Value;
 
 			var series = new CandleSeries(
 				typeof(TimeFrameCandle),
@@ -149,16 +144,16 @@ namespace SampleChart
 				TimeSpan.FromMinutes(_timeframe));
 
 			_candleElement1 = new ChartCandleElement { FullTitle = "Candles", YAxisId = _chartMainYAxis };
-			_chartCombined.AddElement(_areaComb, _candleElement1, series);
+			BoxChart.AddElement(_areaComb, _candleElement1, series);
 
 			_bvElement = new ChartBoxVolumeElement(_timeframe, step) { FullTitle = "BoxVolume", YAxisId = _chartMainYAxis };
-			_chartCombined.AddElement(_areaComb, _bvElement);
+			BoxChart.AddElement(_areaComb, _bvElement);
 
 			_cpElement = new ChartClusterProfileElement(_timeframe, step) { FullTitle = "Cluster profile" };
-			_chartBindVisibleRange.AddElement(_areaBVR1, _cpElement);
+			ClusterChart.AddElement(_areaBVR1, _cpElement);
 
 			_candleElement2 = new ChartCandleElement { FullTitle = "Candles", YAxisId = _chartMainYAxis };
-			_chartBindVisibleRange.AddElement(_areaBVR2, _candleElement2, series);
+			ClusterChart.AddElement(_areaBVR2, _candleElement2, series);
 
 			var ns = typeof(IIndicator).Namespace;
 
@@ -186,30 +181,41 @@ namespace SampleChart
 				})
 				.ToArray();
 
-			_chartCombined.IndicatorTypes.AddRange(indicators);
-			_chartBindVisibleRange.IndicatorTypes.AddRange(indicators);
+			BoxChart.IndicatorTypes.AddRange(indicators);
+			ClusterChart.IndicatorTypes.AddRange(indicators);
 		}
 
-		private void LoadData_OnClick(object sender, RoutedEventArgs e)
+		private void Draw_Click(object sender, RoutedEventArgs e)
 		{
-			var dialog = new VistaFolderBrowserDialog
+			LoadData();
+		}
+
+		private void LoadData()
+		{
+			_candle = null;
+			_lastPrice = 0m;
+			_allCandles.Clear();
+
+			var id = new SecurityIdGenerator().Split(SecurityId.Text);
+
+			_security = new Security
 			{
-				SelectedPath = Directory.GetCurrentDirectory()
+				Id = SecurityId.Text,
+				PriceStep = 5,
+				Board = ExchangeBoard.GetBoard(id.BoardCode)
 			};
 
-			if (dialog.ShowDialog() != true)
-				return;
+			// TODO
+			//BoxChart.Reset(new IChartElement[] { _candleElement1, _bvElement });
+			//ClusterChart.Reset(new IChartElement[] { _candleElement2, _cpElement });
 
-			LoadData(dialog.SelectedPath);
-		}
-
-		private void LoadData(string path)
-		{
 			var storage = new StorageRegistry();
 
 			var maxDays = 2;
 
 			BusyIndicator.IsBusy = true;
+
+			var path = HistoryPath.Folder;
 
 			Task.Factory.StartNew(() =>
 			{
@@ -217,7 +223,7 @@ namespace SampleChart
 
 				foreach (var tick in storage.GetTickMessageStorage(_security, new LocalMarketDataDrive(path)).Load())
 				{
-					AppendTick(tick);
+					AppendTick(_security, tick);
 					_lastTime = tick.ServerTime;
 
 					if (date != tick.ServerTime.Date)
@@ -249,11 +255,11 @@ namespace SampleChart
 
 		private void ChartUpdateTimerOnTick(object sender, EventArgs eventArgs)
 		{
-			if (_checkRealtime.IsChecked == true && _lastPrice != 0m)
+			if (IsRealtime.IsChecked == true && _lastPrice != 0m)
 			{
-				var step = _updownPriceStep.Value ?? 10;
+				var step = PriceStep.Value ?? 10;
 				var price = Round(_lastPrice + (decimal)((RandomGen.GetDouble() - 0.5) * 5 * step), (decimal)step);
-				AppendTick(new ExecutionMessage
+				AppendTick(_security, new ExecutionMessage
 				{
 					ServerTime = _lastTime,
 					TradePrice = price,
@@ -262,32 +268,45 @@ namespace SampleChart
 				_lastTime += TimeSpan.FromSeconds(10);
 			}
 
-			var candlesToUpdate = _updatedCandles.OrderBy(c => c.OpenTime).ToArray();
-			_updatedCandles.Clear();
+			TimeFrameCandle[] candlesToUpdate;
+			lock (_updatedCandles.SyncRoot)
+			{
+				candlesToUpdate = _updatedCandles.OrderBy(p => p.Key).Select(p => p.Value).ToArray();
+				_updatedCandles.Clear();
+			}
+
+			_allCandles.AddRange(candlesToUpdate);
 
 			candlesToUpdate.ForEach(c =>
 			{
-				_chartCombined.Draw(c.OpenTime, new Dictionary<IChartElement, object> { { _candleElement1, c } });
-				_chartCombined.Draw(c.OpenTime, new Dictionary<IChartElement, object> { { _bvElement, c } });
+				BoxChart.Draw(c.OpenTime, new Dictionary<IChartElement, object>
+				{
+					{ _candleElement1, c },
+					{ _bvElement, c }
+				});
 
-				_chartBindVisibleRange.Draw(c.OpenTime, new Dictionary<IChartElement, object> { { _candleElement2, c } });
-				_chartBindVisibleRange.Draw(c.OpenTime, new Dictionary<IChartElement, object> { { _cpElement, c } });
+				ClusterChart.Draw(c.OpenTime, new Dictionary<IChartElement, object>
+				{
+					{ _candleElement2, c },
+					{ _cpElement, c }
+				});
 			});
 		}
 
-		private void AppendTick(ExecutionMessage tick)
-		{
-			_updatedCandles.Add(GetCandle(tick));
-			_lastPrice = _candle.ClosePrice;
-		}
-
-		private TimeFrameCandle GetCandle(ExecutionMessage tick)
+		private void AppendTick(Security security, ExecutionMessage tick)
 		{
 			var time = tick.ServerTime;
 			var price = tick.TradePrice.Value;
 
 			if (_candle == null || time >= _candle.CloseTime)
 			{
+				if (_candle != null)
+				{
+					var candle = (TimeFrameCandle)_candle.Clone();
+					_updatedCandles[candle.OpenTime] = candle;
+					_lastPrice = candle.ClosePrice;
+				}
+
 				//var t = TimeframeSegmentDataSeries.GetTimeframePeriod(time.DateTime, _timeframe);
 				var tf = TimeSpan.FromMinutes(_timeframe);
 				var bounds = tf.GetCandleBounds(time, _security.Board);
@@ -298,13 +317,10 @@ namespace SampleChart
 					CloseTime = bounds.Max,
 				};
 				_volumeProfile = new VolumeProfile();
+				_candle.PriceLevels = _volumeProfile.PriceLevels;
 
-                _candle.OpenPrice = _candle.HighPrice = _candle.LowPrice = _candle.ClosePrice = price;
-				_volumeProfile.Update(new TickCandleBuilderSourceValue(_security, tick));
-
-				_allCandles.Add(_candle);
-
-				return _candle;
+				_candle.OpenPrice = _candle.HighPrice = _candle.LowPrice = _candle.ClosePrice = price;
+				_volumeProfile.Update(new TickCandleBuilderSourceValue(security, tick));
 			}
 
 			if (time < _candle.OpenTime)
@@ -320,9 +336,7 @@ namespace SampleChart
 
 			_candle.TotalVolume += tick.Volume.Value;
 
-			_volumeProfile.Update(new TickCandleBuilderSourceValue(_security, tick));
-
-			return _candle;
+			_volumeProfile.Update(new TickCandleBuilderSourceValue(security, tick));
 		}
 
 		public static decimal Round(decimal value, decimal nearest)
@@ -339,11 +353,11 @@ namespace SampleChart
 				.Show();
 		}
 
-		private void _comboTheme_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
+		private void OnThemeSelectionChanged(object sender, SelectionChangedEventArgs e)
 		{
-			var theme = (string)_comboTheme.SelectedValue;
-			_chartCombined.ChartTheme = theme;
-			_chartBindVisibleRange.ChartTheme = theme;
+			var theme = (string)Theme.SelectedValue;
+			BoxChart.ChartTheme = theme;
+			ClusterChart.ChartTheme = theme;
 		}
 	}
 }

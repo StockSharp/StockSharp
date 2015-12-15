@@ -5,6 +5,7 @@
 		xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
 		xmlns:s="http://schemas.ulcsoftware.co.uk/ultrachart"
 		xmlns:loc="clr-namespace:StockSharp.Localization;assembly=StockSharp.Localization"
+		xmlns:xaml="clr-namespace:Ecng.Xaml;assembly=Ecng.Xaml"
 		Title="{x:Static loc:LocalizedStrings.XamlStr540}" Height="400" Width="900">
     <xctk:BusyIndicator x:Name="BusyIndicator">
         <Grid>
@@ -16,8 +17,8 @@
             <StackPanel Orientation="Horizontal">
                 <GroupBox Padding="5">
                     <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="{x:Static loc:LocalizedStrings.Str1242}"/>
-                        <ComboBox x:Name="_comboMainTimeframe" Width="120" Margin="3,0" IsEditable="False" IsReadOnly="True">
+                        <TextBlock Text="{x:Static loc:LocalizedStrings.Str1242}" VerticalAlignment="Center"/>
+                        <ComboBox x:Name="Timeframe" Width="80" Margin="3,0" IsEditable="False" IsReadOnly="True">
                             <ComboBoxItem Content="1 minute" Tag="1"/>
                             <ComboBoxItem Content="2 minute" Tag="2"/>
                             <ComboBoxItem Content="3 minute" Tag="3"/>
@@ -36,25 +37,29 @@
                             <ComboBoxItem Content="week" Tag="10080"/>
                         </ComboBox>
 
-                        <TextBlock Text="{x:Static loc:LocalizedStrings.PriceStep}" Margin="10,0,0,0"/>
-                        <xctk:DoubleUpDown x:Name="_updownPriceStep" VerticalAlignment="Center" Minimum="0" Value="10"/>
+                        <TextBlock Text="{x:Static loc:LocalizedStrings.PriceStep}" Margin="10,0,5,0" VerticalAlignment="Center"/>
+                        <xctk:DoubleUpDown x:Name="PriceStep" VerticalAlignment="Center" Minimum="0" Value="10"/>
 
-                        <Button Content="{x:Static loc:LocalizedStrings.XamlStr655}" Click="LoadData_OnClick" Margin="50,0,0,0"/>
+                        <xaml:FolderBrowserPicker x:Name="HistoryPath" Width="250" Margin="10,0,10,0" />
+						
+						<TextBox x:Name="SecurityId" Text="RIZ2@FORTS" Width="100" />
+
+                        <Button Content="{x:Static loc:LocalizedStrings.Str3200}" Margin="10,0,10,0" Click="Draw_Click"/>
                     </StackPanel>
                 </GroupBox>
 
-                <ComboBox Margin="50,0,0,0" x:Name="_comboTheme" ItemsSource="{Binding Source={x:Static s:ThemeManager.AllThemes}}"
-					  SelectionChanged="_comboTheme_OnSelectionChanged" VerticalAlignment="Center" Width="150"/>
+                <ComboBox Margin="10,0,0,0" x:Name="Theme" ItemsSource="{Binding Source={x:Static s:ThemeManager.AllThemes}}"
+					  SelectionChanged="OnThemeSelectionChanged" VerticalAlignment="Center" Width="150"/>
 
-                <CheckBox Content="{x:Static loc:LocalizedStrings.RealTime}" Margin="50,0,0,0" x:Name="_checkRealtime" VerticalAlignment="Center"/>
+                <CheckBox Content="{x:Static loc:LocalizedStrings.RealTime}" Margin="10,0,0,0" x:Name="IsRealtime" VerticalAlignment="Center"/>
             </StackPanel>
 
             <TabControl Grid.Row="1">
                 <TabItem Header="Box chart">
-                    <charting:ChartPanel x:Name="_chartCombined" IsInteracted="True"/>
+                    <charting:ChartPanel x:Name="BoxChart" IsInteracted="True"/>
                 </TabItem>
                 <TabItem Header="Cluster chart">
-                    <charting:ChartPanel x:Name="_chartBindVisibleRange" IsInteracted="True"/>
+                    <charting:ChartPanel x:Name="ClusterChart" IsInteracted="True"/>
                 </TabItem>
             </TabControl>
         </Grid>
