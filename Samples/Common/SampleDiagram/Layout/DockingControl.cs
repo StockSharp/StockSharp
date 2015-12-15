@@ -46,6 +46,8 @@ namespace SampleDiagram.Layout
 
 		public virtual object Key => Guid.NewGuid();
 
+		public event Action<DockingControl> Changed;
+
 		public DockingControl()
 		{
 			var type = GetType();
@@ -61,6 +63,11 @@ namespace SampleDiagram.Layout
 		public virtual void Save(SettingsStorage storage)
 		{
 			storage.SetValue("ControlType", GetType().GetTypeName(false));
+		}
+
+		protected void RaiseChanged()
+		{
+			Changed.SafeInvoke(this);
 		}
 	}
 }

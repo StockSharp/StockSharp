@@ -30,7 +30,9 @@
                     <xcad:LayoutAnchorablePaneGroup>
                         <xcad:LayoutAnchorablePane>
                             <xcad:LayoutAnchorable Title="{x:Static localization:LocalizedStrings.Strategy}" CanClose="False">
-                                <local:DiagramDebuggerControl x:Name="DiagramDebuggerControl" Strategy="{Binding ElementName=Ctrl, Path=Strategy}"/>
+                                <local:DiagramDebuggerControl x:Name="DiagramDebuggerControl" 
+															  Strategy="{Binding ElementName=Ctrl, Path=Strategy}"
+															  Changed="OnDiagramDebuggerControlChanged"/>
                             </xcad:LayoutAnchorable>
                             <xcad:LayoutAnchorable Title="{x:Static localization:LocalizedStrings.Str3200}" CanClose="False">
                                 <xaml:Chart x:Name="Chart" />

@@ -18,6 +18,7 @@ namespace SampleDiagram
 	using System;
 	using System.Collections.Generic;
 	using System.ComponentModel;
+	using System.Globalization;
 	using System.IO;
 	using System.Linq;
 	using System.Windows;
@@ -68,6 +69,7 @@ namespace SampleDiagram
 			ConfigManager.RegisterService(_strategiesRegistry);
 
 			_layoutManager = new LayoutManager(DockingManager);
+			_layoutManager.Changed += SaveSettings;
 			_logManager.Sources.Add(_layoutManager);
 
 			SolutionExplorer.Compositions = _strategiesRegistry.Compositions;
@@ -81,26 +83,12 @@ namespace SampleDiagram
 
 		private void MainWindow_OnLoaded(object sender, RoutedEventArgs e)
 		{
-			if (!File.Exists(_settingsFile))
-				return;
-
-			var settings = new XmlSerializer<SettingsStorage>().Deserialize(_settingsFile);
-			var controls = settings.GetValue<SettingsStorage[]>("Controls");
-
-			foreach (var control in controls.Select(c => c.LoadDockingControl()))
-				_layoutManager.OpenDocumentWindow(control);
-
-			_layoutManager.Load(settings.GetValue<string>("Layout"));
+			LoadSettings();
 		}
 
 		private void MainWindow_OnClosing(object sender, CancelEventArgs e)
 		{
-			var settings = new SettingsStorage();
-
-			settings.SetValue("Controls", _layoutManager.DockingControls.Select(c => c.Save()).ToArray());
-			settings.SetValue("Layout", _layoutManager.Save());
-
-			new XmlSerializer<SettingsStorage>().Serialize(settings, _settingsFile);
+			SaveSettings();
 		}
 
 		private void SolutionExplorer_OnOpen(CompositionItem element)
@@ -318,6 +306,25 @@ namespace SampleDiagram
 			};
 
 			_layoutManager.OpenDocumentWindow(content);
+		}
+
+		private void LoadSettings()
+		{
+			if (!File.Exists(_settingsFile))
+				return;
+
+			var settings = CultureInfo
+				.InvariantCulture
+				.DoInCulture(() => new XmlSerializer<SettingsStorage>().Deserialize(_settingsFile));
+
+			_layoutManager.Load(settings);
+		}
+
+		private void SaveSettings()
+		{
+			CultureInfo
+				.InvariantCulture
+				.DoInCulture(() => new XmlSerializer<SettingsStorage>().Serialize(_layoutManager.Save(), _settingsFile));
 		}
 	}
 }

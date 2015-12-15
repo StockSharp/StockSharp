@@ -17,7 +17,7 @@
 		</Grid.ColumnDefinitions>
 		
 		<diagram:DiagramEditorControl Grid.Row="0" Grid.Column="0" x:Name="DiagramEditor"
-									  SelectionChanged="DiagramEditor_OnSelectionChanged"/>
+									  SelectionChanged="OnDiagramEditorSelectionChanged"/>
 
 		<Label Grid.Row="0" Grid.Column="0" x:Name="NoStrategyLabel" VerticalAlignment="Center" HorizontalAlignment="Center" 
 			   FontSize="25" FontWeight="Bold" Foreground="Gray" Content="Стратегия не выбрана."/>

@@ -15,9 +15,12 @@ Copyright 2010 by StockSharp, LLC
 #endregion S# License
 namespace SampleDiagram
 {
+	using System;
+	using System.ComponentModel;
 	using System.Windows;
 	using System.Windows.Input;
 
+	using Ecng.Common;
 	using Ecng.Xaml;
 
 	using StockSharp.Xaml.Diagram;
@@ -25,11 +28,11 @@ namespace SampleDiagram
 	public partial class DiagramDebuggerControl
 	{
 		public static readonly DependencyProperty StrategyProperty = DependencyProperty.Register("Strategy", typeof(EmulationDiagramStrategy), typeof(DiagramDebuggerControl),
-			new PropertyMetadata(null, StrategyPropertyChanged));
+			new PropertyMetadata(null, OnStrategyPropertyChanged));
 
-		private static void StrategyPropertyChanged(DependencyObject sender, DependencyPropertyChangedEventArgs args)
+		private static void OnStrategyPropertyChanged(DependencyObject sender, DependencyPropertyChangedEventArgs args)
 		{
-			((DiagramDebuggerControl)sender).StrategyPropertyChanged((EmulationDiagramStrategy)args.NewValue);
+			((DiagramDebuggerControl)sender).OnStrategyPropertyChanged((EmulationDiagramStrategy)args.NewValue);
 		}
 
 		public EmulationDiagramStrategy Strategy
@@ -38,7 +41,7 @@ namespace SampleDiagram
 			set { SetValue(StrategyProperty, value); }
 		}
 
-		private DiagramDebugger _debugger;
+		public DiagramDebugger Debugger { get; private set; }
 
 		public ICommand AddBreakpointCommand { get; private set; }
 
@@ -54,6 +57,8 @@ namespace SampleDiagram
 
 		public ICommand ContinueCommand { get; private set; }
 
+		public event Action Changed;
+
 		public DiagramDebuggerControl()
 		{
 			InitializeCommands();
@@ -63,48 +68,58 @@ namespace SampleDiagram
 		private void InitializeCommands()
 		{
 			AddBreakpointCommand = new DelegateCommand(
-				obj => _debugger.AddBreak(DiagramEditor.SelectedElement),
-				obj => _debugger != null && DiagramEditor.SelectedElement != null && !_debugger.IsBreak(DiagramEditor.SelectedElement));
+				obj =>
+				{
+					Debugger.AddBreak(DiagramEditor.SelectedElement);
+					Changed.SafeInvoke();
+				},
+				obj => Debugger != null && DiagramEditor.SelectedElement != null && !Debugger.IsBreak(DiagramEditor.SelectedElement));
 
 			RemoveBreakpointCommand = new DelegateCommand(
-				obj => _debugger.RemoveBreak(DiagramEditor.SelectedElement),
-				obj => _debugger != null && DiagramEditor.SelectedElement != null && _debugger.IsBreak(DiagramEditor.SelectedElement));
+				obj =>
+				{
+					Debugger.RemoveBreak(DiagramEditor.SelectedElement);
+					Changed.SafeInvoke();
+				},
+				obj => Debugger != null && DiagramEditor.SelectedElement != null && Debugger.IsBreak(DiagramEditor.SelectedElement));
 
 			StepNextCommand = new DelegateCommand(
-				obj => _debugger.StepNext(),
-				obj => _debugger != null && _debugger.IsWaiting);
+				obj => Debugger.StepNext(),
+				obj => Debugger != null && Debugger.IsWaiting);
 
 			StepToOutParamCommand = new DelegateCommand(
-				obj => _debugger.StepOut(),
-				obj => _debugger != null && _debugger.IsWaitingOnInput);
+				obj => Debugger.StepOut(),
+				obj => Debugger != null && Debugger.IsWaitingOnInput);
 
 			StepIntoCommand = new DelegateCommand(
-				obj => _debugger.StepInto(),
-				obj => _debugger != null && _debugger.IsWaitingOnInput && _debugger.CanStepInto);
+				obj => Debugger.StepInto(),
+				obj => Debugger != null && Debugger.IsWaitingOnInput && Debugger.CanStepInto);
 
 			StepOutCommand = new DelegateCommand(
-				obj => _debugger.StepOut(),
-				obj => _debugger != null && _debugger.CanStepOut);
+				obj => Debugger.StepOut(),
+				obj => Debugger != null && Debugger.CanStepOut);
 
 			ContinueCommand = new DelegateCommand(
-				obj => _debugger.Continue(),
-				obj => _debugger != null && _debugger.IsWaiting);
+				obj => Debugger.Continue(),
+				obj => Debugger != null && Debugger.IsWaiting);
 		}
 
-		private void DiagramEditor_OnSelectionChanged(DiagramElement element)
+		private void OnDiagramEditorSelectionChanged(DiagramElement element)
 		{
 			ShowElementProperties(element);
 		}
 
-		private void StrategyPropertyChanged(EmulationDiagramStrategy strategy)
+		private void OnStrategyPropertyChanged(EmulationDiagramStrategy strategy)
 		{
 			if (strategy != null)
 			{
+				strategy.PropertyChanged += OnStrategyPropertyChanged;
+
 				var composition = strategy.Composition;
 
-				_debugger = new DiagramDebugger(composition);
-				_debugger.Break += OnDebuggerBreak;
-				_debugger.CompositionChanged += OnDebuggerCompositionChanged;
+				Debugger = new DiagramDebugger(composition);
+				Debugger.Break += OnDebuggerBreak;
+				Debugger.CompositionChanged += OnDebuggerCompositionChanged;
 
 				NoStrategyLabel.Visibility = Visibility.Hidden;
 				DiagramEditor.Composition = composition;
@@ -113,7 +128,7 @@ namespace SampleDiagram
 			}
 			else
 			{
-				_debugger = null;
+				Debugger = null;
 
 				NoStrategyLabel.Visibility = Visibility.Visible;
 				DiagramEditor.Composition = new CompositionDiagramElement { Name = string.Empty };
@@ -122,20 +137,19 @@ namespace SampleDiagram
 			DiagramEditor.Composition.IsModifiable = false;
 		}
 
+		private void OnStrategyPropertyChanged(object sender, PropertyChangedEventArgs e)
+		{
+			Changed.SafeInvoke();
+		}
+
 		private void OnDebuggerBreak(DiagramElement element)
 		{
-			this.GuiAsync(() =>
-			{
-				ShowElementProperties(element);
-			});
+			this.GuiAsync(() => ShowElementProperties(element));
 		}
 
 		private void OnDebuggerCompositionChanged(CompositionDiagramElement element)
 		{
-			this.GuiAsync(() =>
-			{
-				DiagramEditor.Composition = element;
-			});
+			this.GuiAsync(() => DiagramEditor.Composition = element);
 		}
 
 		private void ShowElementProperties(DiagramElement element)

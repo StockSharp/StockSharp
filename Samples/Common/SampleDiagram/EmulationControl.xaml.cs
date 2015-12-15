@@ -388,6 +388,11 @@ namespace SampleDiagram
 			MyTradeGrid.Trades.AddRange(trades);
 		}
 
+		private void OnDiagramDebuggerControlChanged()
+		{
+			RaiseChanged();
+		}
+
 		#region IPersistable
 
 		public override void Load(SettingsStorage storage)
@@ -411,7 +416,9 @@ namespace SampleDiagram
 				Composition = registry.Clone(composition)
 			};
 
-			_layoutManager.Load(storage.GetValue<string>("Layout"));
+			DiagramDebuggerControl.Debugger.Load(storage.GetValue<SettingsStorage>("Debugger"));
+
+			_layoutManager.LoadLayout(storage.GetValue<string>("Layout"));
 		}
 
 		public override void Save(SettingsStorage storage)
@@ -430,7 +437,9 @@ namespace SampleDiagram
 			storage.SetValue("MarketDataSource", Strategy.MarketDataSource);
 			storage.SetValue("CandlesTimeFrame", Strategy.CandlesTimeFrame);
 
-			storage.SetValue("Layout", _layoutManager.Save());
+			storage.SetValue("Debugger", DiagramDebuggerControl.Debugger.Save());
+
+			storage.SetValue("Layout", _layoutManager.SaveLayout());
 		}
 
 		#endregion
