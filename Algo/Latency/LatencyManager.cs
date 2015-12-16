@@ -164,7 +164,7 @@ namespace StockSharp.Algo.Latency
 			if (transactionId == 0)
 				throw new ArgumentNullException(nameof(transactionId));
 
-			if (localTime == default(DateTime))
+			if (localTime.IsDefault())
 				throw new ArgumentNullException(nameof(localTime));
 
 			if (_register.ContainsKey(transactionId))
@@ -178,7 +178,7 @@ namespace StockSharp.Algo.Latency
 			if (transactionId == 0)
 				throw new ArgumentNullException(nameof(transactionId));
 
-			if (localTime == default(DateTime))
+			if (localTime.IsDefault())
 				throw new ArgumentNullException(nameof(localTime));
 
 			if (_cancel.ContainsKey(transactionId))
