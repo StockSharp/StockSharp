@@ -95,6 +95,9 @@
     <Reference Include="MoreLinq">
       <HintPath>..\..\References\Ecng\MoreLinq.dll</HintPath>
     </Reference>
+    <Reference Include="StockSharp.Licensing">
+      <HintPath>..\..\References\StockSharp.Licensing.dll</HintPath>
+    </Reference>
     <Reference Include="StockSharp.Xaml.Charting">
       <HintPath>..\..\Xaml.Charting\StockSharp.Xaml.Charting.dll</HintPath>
     </Reference>
