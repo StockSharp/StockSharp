@@ -92,6 +92,9 @@
     <Reference Include="Ecng.Xaml">
       <HintPath>..\..\References\Ecng\Ecng.Xaml.dll</HintPath>
     </Reference>
+    <Reference Include="Fluent">
+      <HintPath>..\..\References\Fluent.Ribbon\Fluent.dll</HintPath>
+    </Reference>
     <Reference Include="MoreLinq">
       <HintPath>..\..\References\Ecng\MoreLinq.dll</HintPath>
     </Reference>
@@ -100,6 +103,10 @@
     </Reference>
     <Reference Include="StockSharp.Xaml.Charting">
       <HintPath>..\..\Xaml.Charting\StockSharp.Xaml.Charting.dll</HintPath>
+    </Reference>
+    <Reference Include="StockSharp.Xaml.Diagram, Version=4.3.13.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Xaml.Diagram\StockSharp.Xaml.Diagram.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.configuration" />
@@ -113,6 +120,12 @@
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
+    <Reference Include="Xceed.Wpf.AvalonDock">
+      <HintPath>..\..\References\Ecng\Xceed.Wpf.AvalonDock.dll</HintPath>
+    </Reference>
+    <Reference Include="Xceed.Wpf.AvalonDock.Themes.Metro">
+      <HintPath>..\..\References\Ecng\Xceed.Wpf.AvalonDock.Themes.Metro.dll</HintPath>
+    </Reference>
     <Reference Include="Xceed.Wpf.Toolkit, Version=2.5.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\References\Ecng\Xceed.Wpf.Toolkit.dll</HintPath>
@@ -126,12 +139,42 @@
     <Compile Include="..\..\StockSharpAssemblyInfo.cs">
       <Link>Properties\StockSharpAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="Layout\DockingControl.cs" />
+    <Compile Include="Layout\LayoutManager.cs" />
+    <Compile Include="Logics\CompositionItem.cs" />
+    <Compile Include="Controls\DiagramDebuggerControl.xaml.cs">
+      <DependentUpon>DiagramDebuggerControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\DiagramEditorControl.xaml.cs">
+      <DependentUpon>DiagramEditorControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\EmulationControl.xaml.cs">
+      <DependentUpon>EmulationControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Logics\EmulationDiagramStrategy.cs" />
+    <Compile Include="Logics\Extensions.cs" />
     <Compile Include="Layout\ILayoutManager.cs" />
     <Compile Include="Layout\LayoutKeys.cs" />
-    <Compile Include="Layout\LayoutManager.cs" />
-    <Compile Include="SecuritiesView.xaml.cs">
+    <Compile Include="Layout\LayoutManagerOld.cs" />
+    <Compile Include="Controls\SecuritiesView.xaml.cs">
       <DependentUpon>SecuritiesView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\SolutionExplorerControl.xaml.cs">
+      <DependentUpon>SolutionExplorerControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Logics\StrategiesRegistry.cs" />
+    <Page Include="Controls\DiagramDebuggerControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Controls\DiagramEditorControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Controls\EmulationControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -144,9 +187,13 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="SecuritiesView.xaml">
+    <Page Include="Controls\SecuritiesView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\SolutionExplorerControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
   </ItemGroup>
   <ItemGroup>

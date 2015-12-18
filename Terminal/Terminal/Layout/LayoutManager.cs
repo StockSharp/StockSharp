@@ -6,245 +6,444 @@ Viewing or use of this code requires your acceptance of the license
 agreement found at https://github.com/StockSharp/StockSharp/blob/master/LICENSE
 Removal of this comment is a violation of the license agreement.
 
-Project: StockSharp.Terminal.Layout.TerminalPublic
+Project: SampleDiagram.Layout.SampleDiagramPublic
 File: LayoutManager.cs
-Created: 2015, 12, 2, 8:18 PM
+Created: 2015, 12, 14, 1:43 PM
 
 Copyright 2010 by StockSharp, LLC
 *******************************************************************************************/
 #endregion S# License
+
 using System;
-using System.Collections.ObjectModel;
+using System.Collections.Generic;
+using System.Globalization;
+using System.IO;
 using System.Linq;
-using System.Windows.Controls;
-using System.Windows.Media;
-using ActiproSoftware.Windows.Controls.Docking;
-using ActiproSoftware.Windows.Controls.Docking.Serialization;
-using StockSharp.BusinessEntities;
-using StockSharp.Xaml;
-using StockSharp.Xaml.Charting;
+using System.Text;
+using System.Threading;
+
+using Ecng.Collections;
+using Ecng.Common;
+using Ecng.Serialization;
+using Ecng.Xaml;
+using StockSharp.Localization;
+using StockSharp.Logging;
+
+using Xceed.Wpf.AvalonDock;
+using Xceed.Wpf.AvalonDock.Layout;
+using Xceed.Wpf.AvalonDock.Layout.Serialization;
+using StockSharp.Terminal.Logics;
 
 namespace StockSharp.Terminal.Layout
 {
-	/// <summary>
-	/// Class for programmatically creating UI tool windows.
-	/// 
-	/// Proper use: 
-	/// 1) Create DockSite object in Xaml Window or UserControl.
-	/// 2) Set x:Name="SomeDockSiteName" and add no other child Xaml components.
-	/// 3) Instantiate LayoutManager with the x:Name="SomeDockSiteName" DockSite object.
-	/// </summary>
-	public class LayoutManager : ILayoutManager
+	public sealed class LayoutManager : BaseLogReceiver
 	{
-		private int _lastChartWindowId;
-		private int _lastDepthWindowId;
-		private readonly DockSite _dockSite;
+		private readonly Dictionary<string, LayoutDocument> _documents = new Dictionary<string, LayoutDocument>();
+		private readonly Dictionary<string, LayoutAnchorable> _anchorables = new Dictionary<string, LayoutAnchorable>();
 
-		private readonly ObservableCollection<DockingWindow> _toolItems = new ObservableCollection<DockingWindow>();
-		private readonly MainWindow _parent;
+		private readonly SynchronizedDictionary<DockingControl, SettingsStorage> _dockingControlSettings = new SynchronizedDictionary<DockingControl, SettingsStorage>();
+		private readonly SynchronizedSet<DockingControl> _changedControls = new CachedSynchronizedSet<DockingControl>();
 
-		public ObservableCollection<DockingWindow> ToolItems
-		{
-			get { return _toolItems; }
-		}
+		private readonly TimeSpan _period = TimeSpan.FromSeconds(5);
+		private readonly object _syncRoot = new object();
 
-		private static DockSiteLayoutSerializer LayoutSerializer
+		private Timer _flushTimer;
+		private bool _isFlushing;
+		private bool _isLayoutChanged;
+		private string _layout;
+
+		private IEnumerable<LayoutDocumentPane> TabGroups => DockingManager.Layout.Descendents().OfType<LayoutDocumentPane>().ToArray();
+
+		private LayoutPanel RootGroup => DockingManager.Layout.RootPanel;
+
+		public DockingManager DockingManager { get; }
+
+		public IEnumerable<DockingControl> DockingControls
 		{
 			get
 			{
-				return new DockSiteLayoutSerializer
+				return DockingManager
+					.Layout
+					.Descendents()
+					.OfType<LayoutContent>()
+					.Select(c => c.Content)
+					.OfType<DockingControl>()
+					.ToArray();
+			}
+		}
+
+		public event Action Changed; 
+
+		public LayoutManager(DockingManager dockingManager)
+		{
+			if (dockingManager == null)
+				throw new ArgumentNullException(nameof(dockingManager));
+
+			DockingManager = dockingManager;
+			DockingManager.LayoutChanged += OnDockingManagerLayoutChanged;
+			DockingManager.DocumentClosing += OnDockingManagerDocumentClosing;
+			DockingManager.DocumentClosed += OnDockingManagerDocumentClosed;
+
+			OnDockingManagerLayoutChanged(null, null);
+		}
+
+		public void OpenToolWindow(string key, string title, object content, bool canClose = true)
+		{
+			if (key == null)
+				throw new ArgumentNullException(nameof(key));
+
+			if (title == null)
+				throw new ArgumentNullException(nameof(title));
+
+			if (content == null)
+				throw new ArgumentNullException(nameof(content));
+
+			var anchorable = _anchorables.TryGetValue(key);
+
+			if (anchorable == null)
+			{
+				anchorable = new LayoutAnchorable
 				{
-					SerializationBehavior = DockSiteSerializationBehavior.All,
-					DocumentWindowDeserializationBehavior = DockingWindowDeserializationBehavior.AutoCreate,
-					ToolWindowDeserializationBehavior = DockingWindowDeserializationBehavior.LazyLoad
+					ContentId = key.ToString(),
+					Title = title,
+					Content = content,
+					CanClose = canClose
 				};
+
+				_anchorables.Add(key, anchorable);
+				RootGroup.Children.Add(new LayoutAnchorablePane(anchorable));
 			}
+
+			DockingManager.ActiveContent = anchorable.Content;
 		}
 
-		public string LayoutFile;
-		public bool IsLoaded;
-
-		public LayoutManager(MainWindow parent, DockSite dockSite)
+		public void OpenToolWindow(DockingControl content, bool canClose = true)
 		{
-			ParameterNullCheck(dockSite);
-			ParameterNullCheck(parent);
+			if (content == null)
+				throw new ArgumentNullException(nameof(content));
 
-			_parent = parent;
+			var anchorable = _anchorables.TryGetValue(content.Key);
 
-			_dockSite = dockSite;
-			_dockSite.Content = new Workspace();
-		}
-
-		public void AddTabbedMdiHost(DockSite dockSite)
-		{
-			ParameterNullCheck(dockSite);
-
-			var mdiHost = new TabbedMdiHost();
-			dockSite.Workspace.Content = mdiHost;
-		}
-
-		public DocumentWindow CreateDocumentWindow(DockSite dockSite, string name, string title, ImageSource image,
-			object content)
-		{
-			ParameterNullCheck(dockSite);
-			// Create the window (using this constructor registers the document window with the DockSite)
-			var doc = new DocumentWindow(dockSite, name, title, image, content);
-
-			return doc;
-		}
-
-		public void CreateNewChart(Security security)
-		{
-			if (security == null)
-				return;
-
-			_lastChartWindowId++;
-
-			CreateToolWindow(_dockSite, security.Id, "Chart" + _lastChartWindowId, new ChartPanel(), true);
-		}
-
-		public void CreateNewMarketDepth(Security security)
-		{
-			if (security == null)
-				return;
-
-			_lastDepthWindowId++;
-
-			if (!_parent.Connector.RegisteredMarketDepths.Contains(security))
-				_parent.Connector.RegisterMarketDepth(security);
-
-			var depthControl = new MarketDepthControl();
-			depthControl.UpdateFormat(security);
-
-			_parent.Depths.Add(security, depthControl);
-
-			CreateToolWindow(_dockSite, security.Id, "Depth" + _lastDepthWindowId, depthControl, true);
-		}
-
-		/// <summary>
-		/// Create a simple tool window.
-		/// </summary>
-		/// <param name="layoutKey">The layout <see cref="LayoutKey"/> key</param>
-		/// <param name="name">Window name.</param>
-		/// <param name="title">The title.  May not contain spaces.</param>
-		/// <param name="content">The window content.</param>
-		/// <param name="canClose">Nullable bool.</param>
-		/// <returns>A new tool window.</returns>
-		public ToolWindow CreateToolWindow(string layoutKey, string name, string title, object content, bool? canClose)
-		{
-			ParameterNullCheck(layoutKey);
-
-			if (name.Contains(" "))
-				throw new ArgumentException(string.Format("Parameter {0} may not contain space(s)", name));
-
-
-			var tool = new ToolWindow(_dockSite)
+			if (anchorable == null)
 			{
-				Name = name,
-				Title = title,
-				Content = content,
-				CanClose = canClose
-			};
-			ToolItems.Add(tool);
-			OpenDockingWindow(tool);
+				content.Changed += OnDockingControlChanged;
 
-			return tool;
+				anchorable = new LayoutAnchorable
+				{
+					ContentId = content.Key,
+					Content = content,
+					CanClose = canClose
+				};
+
+				anchorable.SetBindings(LayoutContent.TitleProperty, content, "Title");
+
+				_anchorables.Add(content.Key, anchorable);
+			
+				RootGroup.Children.Add(new LayoutAnchorablePane(anchorable));
+				OnDockingControlChanged(content);
+			}
+
+			DockingManager.ActiveContent = anchorable.Content;
 		}
 
-		private void CreateToolWindow(DockSite dockSite, string title, string name, object content, bool canClose = false)
+		public void OpenDocumentWindow(string key, string title, object content, bool canClose = true)
 		{
-			var wnd = new ToolWindow(dockSite)
+			if (key == null)
+				throw new ArgumentNullException(nameof(key));
+
+			if (title == null)
+				throw new ArgumentNullException(nameof(title));
+
+			if (content == null)
+				throw new ArgumentNullException(nameof(content));
+
+			var document = _documents.TryGetValue(key);
+
+			if (document == null)
 			{
-				Name = name,
-				Title = title,
-				Content = content,
-				CanClose = canClose
-			};
-			ToolItems.Add(wnd);
-			OpenDockingWindow(wnd);
-			//return wnd;
+				document = new LayoutDocument
+				{
+					ContentId = key.ToString(),
+					Title = title,
+					Content = content,
+					CanClose = canClose
+				};
+
+				_documents.Add(key, document);
+				TabGroups.First().Children.Add(document);
+			}
+
+			DockingManager.ActiveContent = document.Content;
 		}
 
-		public void DockToolWindowToDockSite(DockSite dockSite, ToolWindow toolWindow, Dock dock)
+		public void OpenDocumentWindow(DockingControl content, bool canClose = true)
 		{
-			ParameterNullCheck(dockSite);
+			if (content == null)
+				throw new ArgumentNullException(nameof(content));
+
+			var document = _documents.TryGetValue(content.Key);
+
+			if (document == null)
+			{
+				content.Changed += OnDockingControlChanged;
+
+				document = new LayoutDocument
+				{
+					ContentId = content.Key,
+					Content = content,
+					CanClose = canClose
+				};
+
+				document.SetBindings(LayoutContent.TitleProperty, content, "Title");
+
+				_documents.Add(content.Key, document);
+
+				TabGroups.First().Children.Add(document);
+				OnDockingControlChanged(content);
+			}
+
+			DockingManager.ActiveContent = document.Content;
+		}
+
+		public override void Load(SettingsStorage storage)
+		{
+			if (storage == null)
+				throw new ArgumentNullException(nameof(storage));
+
+			_documents.Clear();
+			_anchorables.Clear();
+			_changedControls.Clear();
+			_dockingControlSettings.Clear();
+
+			CultureInfo.InvariantCulture.DoInCulture(() =>
+			{
+				var controls = storage.GetValue<SettingsStorage[]>("Controls");
+
+				foreach (var settings in controls)
+				{
+					try
+					{
+						var control = LoadDockingControl(settings);
+
+						_dockingControlSettings.Add(control, settings);
+						OpenDocumentWindow(control);
+					}
+					catch (Exception excp)
+					{
+						this.AddErrorLog(excp);
+					}
+				}
+
+				_layout = storage.GetValue<string>("Layout");
+
+				if (!_layout.IsEmpty())
+					LoadLayout(_layout);
+			});
+		}
+
+		public override void Save(SettingsStorage storage)
+		{
+			if (storage == null)
+				throw new ArgumentNullException(nameof(storage));
+
+			storage.SetValue("Controls", _dockingControlSettings.SyncGet(c => c.Select(p => p.Value).ToArray()));
+			storage.SetValue("Layout", _layout);
+		}
+
+		public void LoadLayout(string settings)
+		{
+			if (settings == null)
+				throw new ArgumentNullException(nameof(settings));
+
 			try
 			{
-				toolWindow.Dock(dockSite, dock);
+				var titles = DockingManager
+					.Layout
+					.Descendents()
+					.OfType<LayoutContent>()
+					.ToDictionary(c => c.ContentId, c => c.Title);
+
+				using (var reader = new StringReader(settings))
+				{
+					var layoutSerializer = new XmlLayoutSerializer(DockingManager);
+					layoutSerializer.LayoutSerializationCallback += (s, e) =>
+					{
+						if (e.Content == null)
+							e.Model.Close();
+					};
+					layoutSerializer.Deserialize(reader);
+				}
+
+				var items = DockingManager
+					.Layout
+					.Descendents()
+					.OfType<LayoutContent>();
+
+				foreach (var content in items.Where(c => c.Content is DockingControl))
+				{
+					content.DoIfElse<LayoutDocument>(d => _documents[d.ContentId] = d, () => { });
+					content.DoIfElse<LayoutAnchorable>(d => _anchorables[d.ContentId] = d, () => { });
+
+					if (!(content.Content is DockingControl))
+					{
+						//var title = titles.TryGetValue(content.ContentId);
+
+						//if (!title.IsEmpty())
+						//	content.Title = title;
+					}
+					else
+						content.SetBindings(LayoutContent.TitleProperty, content.Content, "Title");
+				}
 			}
-			catch (Exception e)
+			catch (Exception excp)
 			{
-				throw new InvalidOperationException("Invalid dock site.");
+				this.AddErrorLog(excp, LocalizedStrings.Str3649);
 			}
 		}
 
-		public void DockToolWindowToToolWindow(ToolWindow toolWindowParent, ToolWindow toolWindow, Direction direction)
+		public string SaveLayout()
 		{
-			ParameterNullCheck(toolWindowParent);
+			var builder = new StringBuilder();
+
 			try
 			{
-				toolWindow.Dock(toolWindowParent, direction);
+				using (var writer = new StringWriter(builder))
+				{
+					new XmlLayoutSerializer(DockingManager).Serialize(writer);
+				}
 			}
-			catch (Exception e)
+			catch (Exception excp)
 			{
-				throw new InvalidOperationException("Invalid parent tool window.");
+				this.AddErrorLog(excp, LocalizedStrings.Str3649);
+			}
+
+			return builder.ToString();
+		}
+
+		private void OnDockingManagerLayoutChanged(object sender, EventArgs e)
+		{
+			if (DockingManager.Layout == null)
+				return;
+
+			DockingManager.Layout.Updated += OnLayoutUpdated;
+		}
+
+		private void OnLayoutUpdated(object sender, EventArgs e)
+		{
+			_isLayoutChanged = true;
+			Flush();
+		}
+
+		private void OnDockingManagerDocumentClosing(object sender, DocumentClosingEventArgs e)
+		{
+			var control = e.Document.Content as DockingControl;
+
+			if (control == null)
+				return;
+
+			e.Cancel = !control.CanClose();
+		}
+
+		private void OnDockingManagerDocumentClosed(object sender, DocumentClosedEventArgs e)
+		{
+			var control = e.Document.Content as DockingControl;
+
+			if (control == null)
+				return;
+
+			_documents.RemoveWhere(p => Equals(p.Value, e.Document));
+
+			_isLayoutChanged = true;
+
+			_changedControls.Remove(control);
+			_dockingControlSettings.Remove(control);
+
+			Flush();
+		}
+
+		private void OnDockingControlChanged(DockingControl control)
+		{
+			_changedControls.Add(control);
+			Flush();
+		}
+
+		private void Flush()
+		{
+			lock (_syncRoot)
+			{
+				if (_isFlushing || _flushTimer != null)
+					return;
+
+				_flushTimer = new Timer(OnFlush, null, _period, _period);
 			}
 		}
 
-		internal void OpenDockingWindow(DockingWindow dockingWindow)
+		private void OnFlush(object state)
 		{
-			if (dockingWindow.IsOpen)
-				return;
+			DockingControl[] items;
+			bool isLayoutChanged;
 
-			var toolWindow = dockingWindow as ToolWindow;
+			lock (_syncRoot)
+			{
+				if (_isFlushing)
+					return;
 
-			if (toolWindow != null)
-				toolWindow.Dock(_dockSite, Dock.Top);
+				isLayoutChanged = _isLayoutChanged;
+				items = _changedControls.CopyAndClear();
 
-			if (!IsLoaded)
-				return;
+				_isFlushing = true;
+				_isLayoutChanged = false;
+			}
 
-			LayoutSerializer.SaveToFile(LayoutFile, _parent.DockSite1);
+			try
+			{
+				if (items.Length > 0 || isLayoutChanged)
+				{
+					GuiDispatcher.GlobalDispatcher.AddSyncAction(() =>
+					{
+						CultureInfo.InvariantCulture.DoInCulture(() =>
+						{
+							foreach (var control in items)
+								_dockingControlSettings[control] = control.Save();
+
+							if (isLayoutChanged)
+								_layout = SaveLayout();
+						});
+					});
+
+					Changed.SafeInvoke();
+				}
+				else
+				{
+					lock (_syncRoot)
+					{
+						if (_flushTimer == null)
+							return;
+
+						_flushTimer.Dispose();
+						_flushTimer = null;
+					}
+				}
+			}
+			catch (Exception excp)
+			{
+				this.AddErrorLog(excp, "Flush layout changed error.");
+			}
+			finally
+			{
+				lock (_syncRoot)
+				_isFlushing = false;
+			}
 		}
 
-		private static void ParameterNullCheck(object parameter)
+		private static DockingControl LoadDockingControl(SettingsStorage settings)
 		{
-			if (parameter == null)
-				throw new ArgumentNullException();
+			var type = settings.GetValue<Type>("ControlType");
+			var control = (DockingControl)Activator.CreateInstance(type);
+
+			control.Load(settings);
+
+			return control;
 		}
 	}
 }
-
-/* example code usage
-	 LayoutManager.AddTabbedMdiHost(dockSite);
-
-			var docWindow1 = LayoutManager.CreateDocumentWindow(dockSite, LayoutKey.Window, "Chart title", null, new ChartPanel());
-			docWindow1.Activate(true);
-
-			// Top right
-			var twNews = LayoutManager.CreateToolWindow(LayoutKey.OrderLog, "News", LocalizedStrings.News, new NewsGrid(), true);
-			LayoutManager.DockToolWindowToDockSite(dockSite, twNews, Dock.Right);
-
-			// Bottom left
-			var twSecurities = LayoutManager.CreateToolWindow(LayoutKey.Security, "Securities", LocalizedStrings.Securities, _secView, true);
-			LayoutManager.DockToolWindowToDockSite(dockSite, twSecurities, Dock.Bottom);
-
-			var twMyTrades = LayoutManager.CreateToolWindow(LayoutKey.Trade, "MyTrades", LocalizedStrings.MyTrades, new MyTradeGrid(), true);
-			LayoutManager.DockToolWindowToToolWindow(twSecurities, twMyTrades, Direction.Content);
-
-			// Bottom right
-			var twOrders = LayoutManager.CreateToolWindow(LayoutKey.Order, "Orders", LocalizedStrings.Orders, new OrderGrid(), true);
-			LayoutManager.DockToolWindowToToolWindow(twSecurities, twOrders, Direction.ContentRight);
-
-			var twOrderLog = LayoutManager.CreateToolWindow(LayoutKey.OrderLog, "OrderLog", LocalizedStrings.OrderLog, new OrderLogGrid(), true);
-			LayoutManager.DockToolWindowToToolWindow(twOrders, twOrderLog, Direction.Content);
-
-			// Right bottom
-			var twPositions = LayoutManager.CreateToolWindow(LayoutKey.Portfolio, "Positions", LocalizedStrings.Str972, new PortfolioGrid(), true);
-			LayoutManager.DockToolWindowToToolWindow(twNews, twPositions, Direction.ContentBottom);
-
-			var twTrades = LayoutManager.CreateToolWindow(LayoutKey.Trade, "Trades", LocalizedStrings.Ticks, new TradeGrid(), true);
-			LayoutManager.DockToolWindowToToolWindow(twPositions, twTrades, Direction.Content);
-
-			LayoutManager._isLoaded = true;
-	*/
