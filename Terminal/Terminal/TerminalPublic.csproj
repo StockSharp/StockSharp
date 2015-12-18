@@ -278,6 +278,48 @@
       <Link>stocksharp.ico</Link>
     </Resource>
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\BreakpointOff_16x16.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\BreakpointOn_16x16.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Continue_16x16.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\FolderClosed.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\FolderOpen.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\FolderSelected.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\history-testing-icon_24x24.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\start_32x32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\StepIn_16x16.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Stepout_16x16.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\StepOver_16x16.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\stop_32x32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\terminal_32x32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\ToOutput_16x16.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
