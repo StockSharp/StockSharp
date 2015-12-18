@@ -24,7 +24,7 @@
         </Style>
 
         <!-- a data template for bound ShopCategory instances -->
-        <DataTemplate x:Key="CategoryTemplate" DataType="{x:Type local:SolutionExplorerItem}">
+        <DataTemplate x:Key="CategoryTemplate" DataType="{ x:Type local:SolutionExplorerItem }">
             <StackPanel x:Name="GroupPanel" Orientation="Horizontal" Margin="0,2,0,2">
                 <Image x:Name="Folder" Source="/Images/FolderClosed.png" />
                 <TextBlock x:Name="CategoryName" Margin="2,0,0,0" Text="{Binding Path=Name}" />
@@ -48,7 +48,7 @@
         </DataTemplate>
 
         <!-- this is the style that is applied to the tree -->
-        <Style x:Key="SimpleFolders" TargetType="{x:Type TreeViewItem}">
+        <Style x:Key="SimpleFolders" TargetType="{x:Type TreeViewItem }">
             <Style.Resources>
                 <!-- override default brushes that show bad background colors -->
                 <Brush x:Key="{x:Static SystemColors.HighlightBrushKey}">Transparent</Brush>
