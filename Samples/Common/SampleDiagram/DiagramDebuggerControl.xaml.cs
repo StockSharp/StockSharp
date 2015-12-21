@@ -70,18 +70,18 @@ namespace SampleDiagram
 			AddBreakpointCommand = new DelegateCommand(
 				obj =>
 				{
-					Debugger.AddBreak(DiagramEditor.SelectedElement);
+					Debugger.AddBreak(DiagramEditor.SelectedElement.SelectedSocket);
 					Changed.SafeInvoke();
 				},
-				obj => Debugger != null && DiagramEditor.SelectedElement != null && !Debugger.IsBreak(DiagramEditor.SelectedElement));
+				obj => SafeCheckDebugger((d, s) => !d.IsBreak(s)));
 
 			RemoveBreakpointCommand = new DelegateCommand(
 				obj =>
 				{
-					Debugger.RemoveBreak(DiagramEditor.SelectedElement);
+					Debugger.RemoveBreak(DiagramEditor.SelectedElement.SelectedSocket);
 					Changed.SafeInvoke();
 				},
-				obj => Debugger != null && DiagramEditor.SelectedElement != null && Debugger.IsBreak(DiagramEditor.SelectedElement));
+				obj => SafeCheckDebugger((d, s) => d.IsBreak(s)));
 
 			StepNextCommand = new DelegateCommand(
 				obj => Debugger.StepNext(),
@@ -145,10 +145,12 @@ namespace SampleDiagram
 			Changed.SafeInvoke();
 		}
 
-		private void OnDebuggerBreak(DiagramElement element)
+		private void OnDebuggerBreak(DiagramSocket socket)
 		{
 			this.GuiAsync(() =>
 			{
+				var element = socket.Parent;
+
 				DiagramEditor.SelectedElement = element;
 				ShowElementProperties(element);
 			});
@@ -174,6 +176,14 @@ namespace SampleDiagram
 				PropertyGridControl.SelectedObject = Strategy;
 				PropertyGridControl.IsReadOnly = false;
 			}
+		}
+
+		private bool SafeCheckDebugger(Func<DiagramDebugger, DiagramSocket, bool> func)
+		{
+			return Debugger != null && 
+				DiagramEditor.SelectedElement != null &&
+				DiagramEditor.SelectedElement.SelectedSocket != null && 
+				func(Debugger, DiagramEditor.SelectedElement.SelectedSocket);
 		}
 	}
 }

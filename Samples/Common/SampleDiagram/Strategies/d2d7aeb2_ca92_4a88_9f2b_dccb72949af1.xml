@@ -1,16 +1,3 @@
-<!--
-NOTICE!!!  This program and source code is owned and licensed by
-StockSharp, LLC, www.stocksharp.com
-Viewing or use of this code requires your acceptance of the license
-agreement found at https://github.com/StockSharp/StockSharp/blob/master/LICENSE
-Removal of this comment is a violation of the license agreement.
-
-Project: %Namespace%.SampleDiagramPublic
-File: d2d7aeb2_ca92_4a88_9f2b_dccb72949af1.xml
-Created: 2015, 11, 11, 2:32 PM
-
-Copyright 2010 by StockSharp, LLC
--->
 <SettingsStorage>
   <KeyValuePairBeginStringAndObjectEnd>
     <key>Composition</key>
@@ -22,6 +9,13 @@ Copyright 2010 by StockSharp, LLC
           <value>
             <Type type="string">string</Type>
             <Value type="string">d2d7aeb2-ca92-4a88-9f2b-dccb72949af1</Value>
+          </value>
+        </KeyValuePairBeginStringAndObjectEnd>
+        <KeyValuePairBeginStringAndObjectEnd>
+          <key>Id</key>
+          <value>
+            <Type type="string">guid</Type>
+            <Value type="guid">c1e0be75-b443-48e3-9635-eefcee4e6459</Value>
           </value>
         </KeyValuePairBeginStringAndObjectEnd>
         <KeyValuePairBeginStringAndObjectEnd>
@@ -453,6 +447,13 @@ Copyright 2010 by StockSharp, LLC
                   <value>
                     <Type type="string">Ecng.Serialization.SettingsStorage, Ecng.Serialization</Type>
                     <Value type="Ecng.Serialization.SettingsStorage, Ecng.Serialization">
+                      <KeyValuePairBeginStringAndObjectEnd>
+                        <key>Id</key>
+                        <value>
+                          <Type type="string">guid</Type>
+                          <Value type="guid">1cbf0ef3-4f38-4905-a1e7-b1caf5f3e3ee</Value>
+                        </value>
+                      </KeyValuePairBeginStringAndObjectEnd>
                       <KeyValuePairBeginStringAndObjectEnd>
                         <key>InputSockets</key>
                         <value>
@@ -1127,6 +1128,13 @@ Copyright 2010 by StockSharp, LLC
                     <Type type="string">Ecng.Serialization.SettingsStorage, Ecng.Serialization</Type>
                     <Value type="Ecng.Serialization.SettingsStorage, Ecng.Serialization">
                       <KeyValuePairBeginStringAndObjectEnd>
+                        <key>Id</key>
+                        <value>
+                          <Type type="string">guid</Type>
+                          <Value type="guid">78f8d89d-185a-4b00-b269-2f507cf25848</Value>
+                        </value>
+                      </KeyValuePairBeginStringAndObjectEnd>
+                      <KeyValuePairBeginStringAndObjectEnd>
                         <key>InputSockets</key>
                         <value>
                           <Type type="string">Ecng.Serialization.SettingsStorage[], Ecng.Serialization</Type>
@@ -1472,6 +1480,13 @@ Copyright 2010 by StockSharp, LLC
                   <value>
                     <Type type="string">Ecng.Serialization.SettingsStorage, Ecng.Serialization</Type>
                     <Value type="Ecng.Serialization.SettingsStorage, Ecng.Serialization">
+                      <KeyValuePairBeginStringAndObjectEnd>
+                        <key>Id</key>
+                        <value>
+                          <Type type="string">guid</Type>
+                          <Value type="guid">09205347-188a-44be-976a-d5c308501e18</Value>
+                        </value>
+                      </KeyValuePairBeginStringAndObjectEnd>
                       <KeyValuePairBeginStringAndObjectEnd>
                         <key>InputSockets</key>
                         <value>
