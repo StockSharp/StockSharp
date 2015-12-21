@@ -12,51 +12,41 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
-	        <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
         </Grid.RowDefinitions>
-		
+
         <ToolBar Visibility="Collapsed">
             <Button x:Name="ConnectButton" 
 					Content="{x:Static loc:LocalizedStrings.Connect}"
 					Command="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.ConnectCommand}" />
             <Button Command="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.SettingsCommand}" 
                     Content="{x:Static loc:LocalizedStrings.Settings}">
-                </Button>
+            </Button>
         </ToolBar>
-
         <fluent:Ribbon Grid.Row="0" x:Name="Ribbon" AutomaticStateManagement="True">
-            
+
         </fluent:Ribbon>
-
         <xcad:DockingManager Grid.Row="1" x:Name="DockingManager" ActiveContentChanged="DockingManager_OnActiveContentChanged">
-            <!--<xcad:DockingManager.Theme>
-                <xcad:MetroTheme />
-            </xcad:DockingManager.Theme>-->
-
             <xcad:LayoutRoot>
-                <xcad:LayoutPanel Orientation="Vertical">
-                    <xcad:LayoutPanel Orientation="Horizontal">
-                        <xcad:LayoutAnchorablePaneGroup DockWidth="200">
-                            <xcad:LayoutAnchorablePane>
-                                <xcad:LayoutAnchorable Title="Схемы" ContentId="SolutionExplorer" CanClose="False" AutoHideWidth="200">
-                                    <local:SolutionExplorerControl x:Name="SolutionExplorer" Open="SolutionExplorer_OnOpen"/>
-                                </xcad:LayoutAnchorable>
-                            </xcad:LayoutAnchorablePane>
-                        </xcad:LayoutAnchorablePaneGroup>
-
-                        <xcad:LayoutDocumentPaneGroup>
-                            <xcad:LayoutDocumentPane />
-                        </xcad:LayoutDocumentPaneGroup>
-                    </xcad:LayoutPanel>
-
-                    <xcad:LayoutAnchorablePaneGroup DockHeight="200">
+                <xcad:LayoutPanel>                    
+                    <xcad:LayoutAnchorablePaneGroup DockWidth="200">
                         <xcad:LayoutAnchorablePane>
-                            <xcad:LayoutAnchorable Title="{x:Static loc:LocalizedStrings.Str3237}" ContentId="Logs"
-                                                   CanClose="False" AutoHideHeight="200">
-                                <xaml:Monitor x:Name="Monitor"/>
+                            <xcad:LayoutAnchorable Title="Рабочая область 1" CanClose="False" AutoHideWidth="200">
+                                <local:EmulationControl />
+                            </xcad:LayoutAnchorable>
+                        </xcad:LayoutAnchorablePane>
+                    </xcad:LayoutAnchorablePaneGroup>                    
+                    <xcad:LayoutAnchorablePaneGroup DockWidth="200">
+                        <xcad:LayoutAnchorablePane>
+                            <xcad:LayoutAnchorable Title="Рабочая область 2" CanClose="False" AutoHideWidth="200">
+                                <local:EmulationControl />
                             </xcad:LayoutAnchorable>
                         </xcad:LayoutAnchorablePane>
                     </xcad:LayoutAnchorablePaneGroup>
+
+                    <xcad:LayoutDocumentPaneGroup>
+                        <xcad:LayoutDocumentPane />
+                    </xcad:LayoutDocumentPaneGroup>
                 </xcad:LayoutPanel>
             </xcad:LayoutRoot>
         </xcad:DockingManager>

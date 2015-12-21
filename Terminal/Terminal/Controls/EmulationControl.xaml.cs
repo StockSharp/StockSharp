@@ -99,19 +99,19 @@ namespace StockSharp.Terminal.Controls
 
 		public ICommand StopCommand { get; private set; }
 
-		public ICommand AddBreakpointCommand => DiagramDebuggerControl.AddBreakpointCommand;
+		//public ICommand AddBreakpointCommand => DiagramDebuggerControl.AddBreakpointCommand;
 
-		public ICommand RemoveBreakpointCommand => DiagramDebuggerControl.RemoveBreakpointCommand;
+		//public ICommand RemoveBreakpointCommand => DiagramDebuggerControl.RemoveBreakpointCommand;
 
-		public ICommand StepNextCommand => DiagramDebuggerControl.StepNextCommand;
+		//public ICommand StepNextCommand => DiagramDebuggerControl.StepNextCommand;
 
-		public ICommand StepToOutParamCommand => DiagramDebuggerControl.StepToOutParamCommand;
+		//public ICommand StepToOutParamCommand => DiagramDebuggerControl.StepToOutParamCommand;
 
-		public ICommand StepIntoCommand => DiagramDebuggerControl.StepIntoCommand;
+		//public ICommand StepIntoCommand => DiagramDebuggerControl.StepIntoCommand;
 
-		public ICommand StepOutCommand => DiagramDebuggerControl.StepOutCommand;
+		//public ICommand StepOutCommand => DiagramDebuggerControl.StepOutCommand;
 
-		public ICommand ContinueCommand => DiagramDebuggerControl.ContinueCommand;
+		//public ICommand ContinueCommand => DiagramDebuggerControl.ContinueCommand;
 
 		public EmulationControl()
 		{
@@ -353,8 +353,8 @@ namespace StockSharp.Terminal.Controls
 		{
 			_connector.Disconnect();
 
-			if (DiagramDebuggerControl.Debugger.IsWaiting)
-				DiagramDebuggerControl.Debugger.Continue();
+			//if (DiagramDebuggerControl.Debugger.IsWaiting)
+			//	DiagramDebuggerControl.Debugger.Continue();
 		}
 
 		private void OnStrategyChanged(EmulationDiagramStrategy oldStrategy, EmulationDiagramStrategy newStrategy)
@@ -377,7 +377,7 @@ namespace StockSharp.Terminal.Controls
 				oldStrategy.NewMyTrades += OnStrategyNewMyTrade;
 			}
 
-			DiagramDebuggerControl.Strategy = newStrategy;
+			//DiagramDebuggerControl.Strategy = newStrategy;
 
 			if (newStrategy == null)
 				return;
@@ -462,8 +462,8 @@ namespace StockSharp.Terminal.Controls
 
 			var compositionId = storage.GetValue<Guid>("CompositionId");
 
-			var registry = ConfigManager.GetService<StrategiesRegistry>();
-			var composition = (CompositionDiagramElement)registry.Strategies.FirstOrDefault(c => c.TypeId == compositionId);
+			//var registry = ConfigManager.GetService<StrategiesRegistry>();
+			//var composition = (CompositionDiagramElement)registry.Strategies.FirstOrDefault(c => c.TypeId == compositionId);
 
 			Strategy = new EmulationDiagramStrategy
 			{
@@ -474,10 +474,10 @@ namespace StockSharp.Terminal.Controls
 				SecurityId = storage.GetValue<string>("SecurityId"),
 				MarketDataSource = storage.GetValue<MarketDataSource>("MarketDataSource"),
 				CandlesTimeFrame = storage.GetValue<TimeSpan>("CandlesTimeFrame"),
-				Composition = registry.Clone(composition)
+				//Composition = registry.Clone(composition)
 			};
 
-            DiagramDebuggerControl.Debugger.Load(storage.GetValue<SettingsStorage>("Debugger"));
+            //DiagramDebuggerControl.Debugger.Load(storage.GetValue<SettingsStorage>("Debugger"));
 
 			_layoutManager.LoadLayout(storage.GetValue<string>("Layout"));
 		}
@@ -498,7 +498,7 @@ namespace StockSharp.Terminal.Controls
 			storage.SetValue("MarketDataSource", Strategy.MarketDataSource);
 			storage.SetValue("CandlesTimeFrame", Strategy.CandlesTimeFrame);
 
-			storage.SetValue("Debugger", DiagramDebuggerControl.Debugger.Save());
+			//storage.SetValue("Debugger", DiagramDebuggerControl.Debugger.Save());
 
 			storage.SetValue("Layout", _layoutManager.SaveLayout());
 		}

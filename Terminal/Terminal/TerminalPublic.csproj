@@ -130,35 +130,11 @@
     <Compile Include="Layout\DockingControl.cs" />
     <Compile Include="Layout\LayoutManager.cs" />
     <Compile Include="Logics\CompositionItem.cs" />
-    <Compile Include="Controls\DiagramDebuggerControl.xaml.cs">
-      <DependentUpon>DiagramDebuggerControl.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Controls\DiagramEditorControl.xaml.cs">
-      <DependentUpon>DiagramEditorControl.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Controls\EmulationControl.xaml.cs">
       <DependentUpon>EmulationControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Logics\EmulationDiagramStrategy.cs" />
-    <Compile Include="Logics\Extensions.cs" />
-    <Compile Include="Layout\ILayoutManager.cs" />
     <Compile Include="Layout\LayoutKeys.cs" />
-    <Compile Include="Layout\LayoutManagerOld.cs" />
-    <Compile Include="Controls\SecuritiesView.xaml.cs">
-      <DependentUpon>SecuritiesView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Controls\SolutionExplorerControl.xaml.cs">
-      <DependentUpon>SolutionExplorerControl.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Logics\StrategiesRegistry.cs" />
-    <Page Include="Controls\DiagramDebuggerControl.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Controls\DiagramEditorControl.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
     <Page Include="Controls\EmulationControl.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -171,18 +147,11 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Logics\Extensions.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="Controls\SecuritiesView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Controls\SolutionExplorerControl.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs">
@@ -263,46 +232,7 @@
     </Resource>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Images\BreakpointOff_16x16.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Images\BreakpointOn_16x16.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Images\Continue_16x16.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Images\FolderClosed.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Images\FolderOpen.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Images\FolderSelected.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Images\history-testing-icon_24x24.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Images\start_32x32.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Images\StepIn_16x16.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Images\Stepout_16x16.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Images\StepOver_16x16.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Images\stop_32x32.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Images\terminal_32x32.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Images\ToOutput_16x16.png" />
+    <Folder Include="Images\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
