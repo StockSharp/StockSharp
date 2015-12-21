@@ -56,18 +56,6 @@
     <ApplicationIcon>..\..\References\stocksharp.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="ActiproSoftware.Docking.Wpf, Version=11.2.555.0, Culture=neutral, PublicKeyToken=36ff2196ab5654b9, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\References\Actipro\ActiproSoftware.Docking.Wpf.dll</HintPath>
-    </Reference>
-    <Reference Include="ActiproSoftware.Shared.Wpf, Version=11.2.555.0, Culture=neutral, PublicKeyToken=36ff2196ab5654b9, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\References\Actipro\ActiproSoftware.Shared.Wpf.dll</HintPath>
-    </Reference>
-    <Reference Include="ActiproSoftware.Text.Wpf, Version=11.2.555.0, Culture=neutral, PublicKeyToken=36ff2196ab5654b9, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\References\Actipro\ActiproSoftware.Text.Wpf.dll</HintPath>
-    </Reference>
     <Reference Include="Ecng.Collections">
       <HintPath>..\..\References\Ecng\Ecng.Collections.dll</HintPath>
     </Reference>
@@ -92,11 +80,21 @@
     <Reference Include="Ecng.Xaml">
       <HintPath>..\..\References\Ecng\Ecng.Xaml.dll</HintPath>
     </Reference>
+    <Reference Include="Fluent">
+      <HintPath>..\..\References\Fluent.Ribbon\Fluent.dll</HintPath>
+    </Reference>
     <Reference Include="MoreLinq">
       <HintPath>..\..\References\Ecng\MoreLinq.dll</HintPath>
     </Reference>
+    <Reference Include="StockSharp.Licensing">
+      <HintPath>..\..\References\StockSharp.Licensing.dll</HintPath>
+    </Reference>
     <Reference Include="StockSharp.Xaml.Charting">
       <HintPath>..\..\Xaml.Charting\StockSharp.Xaml.Charting.dll</HintPath>
+    </Reference>
+    <Reference Include="StockSharp.Xaml.Diagram, Version=4.3.13.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Xaml.Diagram\StockSharp.Xaml.Diagram.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.configuration" />
@@ -110,6 +108,12 @@
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
+    <Reference Include="Xceed.Wpf.AvalonDock">
+      <HintPath>..\..\References\Ecng\Xceed.Wpf.AvalonDock.dll</HintPath>
+    </Reference>
+    <Reference Include="Xceed.Wpf.AvalonDock.Themes.Metro">
+      <HintPath>..\..\References\Ecng\Xceed.Wpf.AvalonDock.Themes.Metro.dll</HintPath>
+    </Reference>
     <Reference Include="Xceed.Wpf.Toolkit, Version=2.5.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\References\Ecng\Xceed.Wpf.Toolkit.dll</HintPath>
@@ -123,12 +127,18 @@
     <Compile Include="..\..\StockSharpAssemblyInfo.cs">
       <Link>Properties\StockSharpAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="Layout\ILayoutManager.cs" />
-    <Compile Include="Layout\LayoutKeys.cs" />
+    <Compile Include="Layout\DockingControl.cs" />
     <Compile Include="Layout\LayoutManager.cs" />
-    <Compile Include="SecuritiesView.xaml.cs">
-      <DependentUpon>SecuritiesView.xaml</DependentUpon>
+    <Compile Include="Logics\CompositionItem.cs" />
+    <Compile Include="Controls\EmulationControl.xaml.cs">
+      <DependentUpon>EmulationControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Logics\EmulationDiagramStrategy.cs" />
+    <Compile Include="Layout\LayoutKeys.cs" />
+    <Page Include="Controls\EmulationControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -137,14 +147,11 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Logics\Extensions.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="SecuritiesView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs">
@@ -214,10 +221,6 @@
       <Project>{B47F9C23-A4BD-46A9-BF27-54CB3D653503}</Project>
       <Name>Messages</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Xaml.Actipro\Xaml.ActiproPublic.csproj">
-      <Project>{D556FA3F-E40E-4F76-B3CA-B18134247FD1}</Project>
-      <Name>Xaml.ActiproPublic</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\Xaml\Xaml.csproj">
       <Project>{64E4D6F0-36B6-4904-9BA7-FFFBE5FF71D8}</Project>
       <Name>Xaml</Name>
@@ -227,6 +230,9 @@
     <Resource Include="..\..\References\stocksharp.ico">
       <Link>stocksharp.ico</Link>
     </Resource>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Images\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
