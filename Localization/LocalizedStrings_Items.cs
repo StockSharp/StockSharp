@@ -45791,6 +45791,58 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
+		/// Schemas
+		/// </summary>
+		public const string SchemasKey = "Schemas";
+
+		/// <summary>
+		/// Schemas
+		/// </summary>
+		public static string Schemas
+		{
+			get { return GetString(SchemasKey); }
+		}
+
+		/// <summary>
+		/// Composition elements / strategies
+		/// </summary>
+		public const string CompositionElementsStrategiesKey = "CompositionElementsStrategies";
+
+		/// <summary>
+		/// Composition elements / strategies
+		/// </summary>
+		public static string CompositionElementsStrategies
+		{
+			get { return GetString(CompositionElementsStrategiesKey); }
+		}
+
+		/// <summary>
+		/// Action for socket {0} not found.
+		/// </summary>
+		public const string SocketActionNotFoundParamsKey = "SocketActionNotFoundParams";
+
+		/// <summary>
+		/// Action for socket {0} not found.
+		/// </summary>
+		public static string SocketActionNotFoundParams
+		{
+			get { return GetString(SocketActionNotFoundParamsKey); }
+		}
+
+		/// <summary>
+		/// Chart elements
+		/// </summary>
+		public const string ChartElementsKey = "ChartElements";
+
+		/// <summary>
+		/// Chart elements
+		/// </summary>
+		public static string ChartElements
+		{
+			get { return GetString(ChartElementsKey); }
+		}
+
+		/// <summary>
 		/// Buy: Ctrl + left mouse button
 		/// </summary>
 		public const string XamlStr4Key = "XamlStr4";

@@ -59,7 +59,10 @@ namespace SampleDiagram
 			_compositionRegistry = new CompositionRegistry();
 			_compositionsPath = Path.GetFullPath(compositionsPath);
 			_strategiesPath = Path.GetFullPath(strategiesPath);
+		}
 
+		public void Init()
+		{
 			LoadElements();
 			LoadStrategies();
 		}

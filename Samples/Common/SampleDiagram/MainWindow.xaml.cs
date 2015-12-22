@@ -57,6 +57,9 @@ namespace SampleDiagram
 			logManager.Listeners.Add(new FileLogListener("sample.log"));
 			logManager.Listeners.Add(new GuiLogListener(Monitor));
 
+			logManager.Sources.Add(_strategiesRegistry);
+			_strategiesRegistry.Init();
+
 			ConfigManager.RegisterService(logManager);
 			ConfigManager.RegisterService(_strategiesRegistry);
 

@@ -87,9 +87,9 @@ namespace SampleDiagram
 				obj => Debugger.StepNext(),
 				obj => Debugger != null && Debugger.IsWaiting);
 
-			StepToOutParamCommand = new DelegateCommand(
-				obj => Debugger.StepOut(),
-				obj => Debugger != null && Debugger.IsWaitingOnInput);
+			//StepToOutParamCommand = new DelegateCommand(
+			//	obj => Debugger.StepOut(),
+			//	obj => Debugger != null && Debugger.IsWaitingOnInput);
 
 			StepIntoCommand = new DelegateCommand(
 				obj => Debugger.StepInto(),

@@ -3529,6 +3529,10 @@ TaskSettings;{0} task settings;Настройки задачи {0}
 Str3846; for period of; за период
 IndicatorNotFound;Indicator for {0} element is not found.;Индикатор для элемента {0} не найден.
 Candles1Min;1 min. candles;1 мин. свечек
+Schemas;Schemas;Схемы
+CompositionElementsStrategies;Composition elements / strategies;Составные элементы / стратегии
+ChartElements;Chart elements;Элементы графика
+SocketActionNotFoundParams;Action for socket {0} not found.;Действие для параметра {0} не найдено.
 XamlStr4;Buy: Ctrl + left mouse button;Buy: Ctrl + левая кнопка мыши
 XamlStr8;Sell: Ctrl + right mouse button;Sell: Ctrl + правая кнопка мыши
 SlnProj;Sln проект:;Sln проект:

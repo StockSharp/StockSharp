@@ -67,6 +67,7 @@ namespace SampleDiagram
 		{
 			InitializeComponent();
 
+			DiagramEditor.IndicatorTypes.AddRange(StockSharp.Configuration.Extensions.GetIndicatorTypes());
 			PaletteElements = ConfigManager.GetService<StrategiesRegistry>().DiagramElements;
 		}
 

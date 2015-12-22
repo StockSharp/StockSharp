@@ -67,9 +67,9 @@
                                                  Visibility="Visible" />
             </fluent:Ribbon.ContextualGroups>-->
 
-            <fluent:RibbonTabItem Header="Схемы"
+            <fluent:RibbonTabItem Header="{x:Static localization:LocalizedStrings.Schemas}"
 								  x:Name="RibbonCommonTab">
-                <fluent:RibbonGroupBox Header="Составные элементы / стратегии">
+                <fluent:RibbonGroupBox Header="{x:Static localization:LocalizedStrings.CompositionElementsStrategies}">
                     <fluent:SplitButton Header="{x:Static localization:LocalizedStrings.Str3229}" 
 										SizeDefinition="Middle"
                                         Icon="pack://application:,,,/StockSharp.Xaml;component/Images/add_16x16.png"
@@ -199,10 +199,10 @@
 								   SizeDefinition="Large"
 								   LargeIcon="pack://application:,,,/SampleDiagram;component/Images/StepOver_16x16.png"
 								   Command="{Binding StepNextCommand}" />
-                    <fluent:Button Header="{x:Static localization:LocalizedStrings.XamlStr229}"
+                    <!--<fluent:Button Header="{x:Static localization:LocalizedStrings.XamlStr229}"
 								   SizeDefinition="Large"
 								   LargeIcon="pack://application:,,,/SampleDiagram;component/Images/ToOutput_16x16.png"
-								   Command="{Binding StepToOutParamCommand}" />
+								   Command="{Binding StepToOutParamCommand}" />-->
                     <fluent:Button Header="{x:Static localization:LocalizedStrings.ToCompositeElem}"
 								   SizeDefinition="Large"
 								   LargeIcon="pack://application:,,,/SampleDiagram;component/Images/StepIn_16x16.png"
@@ -231,7 +231,8 @@
                     <xcad:LayoutPanel Orientation="Horizontal">
                         <xcad:LayoutAnchorablePaneGroup DockWidth="200">
                             <xcad:LayoutAnchorablePane>
-                                <xcad:LayoutAnchorable Title="Схемы" ContentId="SolutionExplorer" CanClose="False" AutoHideWidth="200">
+                                <xcad:LayoutAnchorable Title="{x:Static localization:LocalizedStrings.Schemas}" 
+													   ContentId="SolutionExplorer" CanClose="False" AutoHideWidth="200">
                                     <local:SolutionExplorerControl x:Name="SolutionExplorer" Open="SolutionExplorer_OnOpen"/>
                                 </xcad:LayoutAnchorable>
                             </xcad:LayoutAnchorablePane>
