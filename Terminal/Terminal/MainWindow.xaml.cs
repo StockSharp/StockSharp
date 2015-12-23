@@ -32,6 +32,7 @@ using StockSharp.Terminal.Layout;
 using StockSharp.Xaml;
 using StockSharp.Terminal.Controls;
 using StockSharp.Terminal.Logics;
+using Xceed.Wpf.AvalonDock.Layout;
 
 namespace StockSharp.Terminal
 {
@@ -52,6 +53,8 @@ namespace StockSharp.Terminal
 		private readonly string _connectionFile;
 		private readonly LayoutManager _layoutManager;
 
+		private int _countWorkArea = 2;
+
 		public MainWindow()
 		{
 			InitializeComponent();
@@ -61,6 +64,8 @@ namespace StockSharp.Terminal
 			
 			ConnectCommand = new DelegateCommand(Connect, CanConnect);
 			SettingsCommand = new DelegateCommand(Settings, CanSettings);
+
+			AddDocumentElement.IsSelectedChanged += AddDocumentElement_IsSelectedChanged;
 
 			Directory.CreateDirectory(_settingsFolder);
 
@@ -87,6 +92,31 @@ namespace StockSharp.Terminal
 						ctrl.UpdateDepth(depth);
 				}
 			};
+		}
+
+		private void AddDocumentElement_IsSelectedChanged(object sender, EventArgs e)
+		{
+			var element = (LayoutDocument)sender;
+
+			if (!element.IsSelected)
+				return;
+
+			LayoutDocument newWorkArea = new LayoutDocument()
+			{
+				Title = "Рабочая область " + ++_countWorkArea,
+				Content = new WorkAreaControl()
+			};
+
+			var offset = LayoutDocuments.Children.Count - 1;
+			LayoutDocuments.Children.RemoveAt(offset);
+
+			//var offset = LayoutDocuments.Children.Count - 2;
+			LayoutDocuments.Children.Add(newWorkArea);
+			LayoutDocuments.Children.Add(element);
+			LayoutDocuments.SelectedContentIndex = offset;
+
+			//var offset = LayoutDocuments.IndexOfChild(element);
+			//LayoutDocuments.InsertChildAt(offset, newWorkArea);
 		}
 
 		private void Connect(object obj)
@@ -128,7 +158,7 @@ namespace StockSharp.Terminal
 		
         private void DockingManager_OnActiveContentChanged(object sender, EventArgs e)
         {
-            DockingManager.ActiveContent.DoIfElse<EmulationControl>(editor =>
+            DockingManager.ActiveContent.DoIfElse<WorkAreaControl>(editor =>
             {
                 //RibbonEmulationTab.DataContext = editor;
                 //EmulationRibbonGroup.Visibility = Visibility.Visible;

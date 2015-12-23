@@ -29,23 +29,21 @@
         <xcad:DockingManager Grid.Row="1" x:Name="DockingManager" ActiveContentChanged="DockingManager_OnActiveContentChanged">
             <xcad:LayoutRoot>
                 <xcad:LayoutPanel>                    
-                    <xcad:LayoutAnchorablePaneGroup DockWidth="200">
+                    <xcad:LayoutAnchorablePaneGroup>
                         <xcad:LayoutAnchorablePane>
-                            <xcad:LayoutAnchorable Title="Рабочая область 1" CanClose="False" AutoHideWidth="200">
-                                <local:EmulationControl />
-                            </xcad:LayoutAnchorable>
-                        </xcad:LayoutAnchorablePane>
-                    </xcad:LayoutAnchorablePaneGroup>                    
-                    <xcad:LayoutAnchorablePaneGroup DockWidth="200">
-                        <xcad:LayoutAnchorablePane>
-                            <xcad:LayoutAnchorable Title="Рабочая область 2" CanClose="False" AutoHideWidth="200">
-                                <local:EmulationControl />
-                            </xcad:LayoutAnchorable>
+                            
                         </xcad:LayoutAnchorablePane>
                     </xcad:LayoutAnchorablePaneGroup>
-
                     <xcad:LayoutDocumentPaneGroup>
-                        <xcad:LayoutDocumentPane />
+                        <xcad:LayoutDocumentPane x:Name="LayoutDocuments">
+                            <xcad:LayoutDocument Title="Рабочая область 1">
+                                <local:WorkAreaControl />
+                            </xcad:LayoutDocument>
+                            <xcad:LayoutDocument Title="Рабочая область 2">
+                                <local:WorkAreaControl />
+                            </xcad:LayoutDocument>
+                            <xcad:LayoutDocument Title="+" x:Name="AddDocumentElement" CanFloat="False" CanClose="False"/>
+                        </xcad:LayoutDocumentPane>
                     </xcad:LayoutDocumentPaneGroup>
                 </xcad:LayoutPanel>
             </xcad:LayoutRoot>
