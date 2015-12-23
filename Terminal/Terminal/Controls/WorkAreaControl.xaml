@@ -1,0 +1,43 @@
+﻿<layout:DockingControl x:Class="StockSharp.Terminal.Controls.WorkAreaControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:StockSharp.Terminal.Controls"
+             xmlns:xaml="http://schemas.stocksharp.com/xaml"
+             xmlns:xcad="http://schemas.xceed.com/wpf/xaml/avalondock"
+             xmlns:layout="clr-namespace:StockSharp.Terminal.Layout"
+             xmlns:localization="clr-namespace:StockSharp.Localization;assembly=StockSharp.Localization"
+             mc:Ignorable="d" d:DesignHeight="300" d:DesignWidth="600">
+
+    <layout:DockingControl.Title>
+        <Binding RelativeSource="{RelativeSource Self}" Path="Strategy.Composition.Name">
+            <Binding.Converter>
+                <local:EmulationTitleConverter />
+            </Binding.Converter>
+        </Binding>
+    </layout:DockingControl.Title>
+
+	<Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!--<ProgressBar Grid.Row="0" Height="5" x:Name="TicksAndDepthsProgress" />-->
+		
+        <xcad:DockingManager Grid.Row="1" x:Name="DockingManager">
+            <xcad:LayoutRoot>
+                <xcad:LayoutPanel>
+                    <xcad:LayoutAnchorablePaneGroup>
+                        <xcad:LayoutAnchorablePane x:Name="WorkArea">
+                            <!--<xcad:LayoutAnchorable Title="{x:Static localization:LocalizedStrings.Str3200}" CanClose="False">
+                                <xaml:Chart />
+                            </xcad:LayoutAnchorable>-->
+                        </xcad:LayoutAnchorablePane>
+                    </xcad:LayoutAnchorablePaneGroup>
+                </xcad:LayoutPanel>
+            </xcad:LayoutRoot>
+        </xcad:DockingManager>
+	</Grid>
+</layout:DockingControl>
