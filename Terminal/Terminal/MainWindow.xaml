@@ -24,8 +24,9 @@
             </Button>
         </ToolBar>
         <fluent:Ribbon Grid.Row="0" x:Name="Ribbon" AutomaticStateManagement="True">
-
+            
         </fluent:Ribbon>
+        <Button Click="AddDocument" Width="90" Height="25" Content="Add work area" HorizontalAlignment="Left" Margin="10, 5" />
         <xcad:DockingManager Grid.Row="1" x:Name="DockingManager" ActiveContentChanged="DockingManager_OnActiveContentChanged">
             <xcad:LayoutRoot>
                 <xcad:LayoutPanel>                    
@@ -36,13 +37,15 @@
                     </xcad:LayoutAnchorablePaneGroup>
                     <xcad:LayoutDocumentPaneGroup>
                         <xcad:LayoutDocumentPane x:Name="LayoutDocuments">
-                            <xcad:LayoutDocument Title="Рабочая область 1">
+                            <xcad:LayoutDocument Title="Work area #1">
                                 <local:WorkAreaControl />
                             </xcad:LayoutDocument>
-                            <xcad:LayoutDocument Title="Рабочая область 2">
+                            <xcad:LayoutDocument Title="Work area #2">
                                 <local:WorkAreaControl />
                             </xcad:LayoutDocument>
-                            <xcad:LayoutDocument Title="+" x:Name="AddDocumentElement" CanFloat="False" CanClose="False"/>
+                            <!--<xcad:LayoutDocument Title="+" x:Name="AddDocumentElement" CanFloat="False" CanClose="False">
+                                <Grid Background="Gray" />
+                            </xcad:LayoutDocument>-->
                         </xcad:LayoutDocumentPane>
                     </xcad:LayoutDocumentPaneGroup>
                 </xcad:LayoutPanel>

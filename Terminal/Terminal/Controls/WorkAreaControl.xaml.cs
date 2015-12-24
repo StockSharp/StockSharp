@@ -161,7 +161,7 @@ namespace StockSharp.Terminal.Controls
 			//	.Button(MessageBoxButton.OK)
 			//	.Show();
 
-			return false;
+			return true;
 		}
 
 		private void InitializeCommands()
