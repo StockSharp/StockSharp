@@ -35,6 +35,7 @@ namespace StockSharp.Xaml.Actipro.Code
 
 	using StockSharp.Logging;
 	using StockSharp.Localization;
+	using StockSharp.Xaml.Code;
 
 	/// <summary>
 	/// The visual panel for code editing and compiling.

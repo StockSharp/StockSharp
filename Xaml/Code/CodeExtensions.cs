@@ -13,7 +13,7 @@ Created: 2015, 11, 11, 2:32 PM
 Copyright 2010 by StockSharp, LLC
 *******************************************************************************************/
 #endregion S# License
-namespace StockSharp.Xaml.Actipro.Code
+namespace StockSharp.Xaml.Code
 {
 	using System;
 	using System.Collections.Generic;
@@ -77,6 +77,7 @@ namespace StockSharp.Xaml.Actipro.Code
 			"Ecng.Localization",
 			"Ecng.Serialization",
 			"Ecng.Xaml",
+			"Ecng.Xaml.Charting",
 
 			"MoreLinq",
 			"MathNet.Numerics",
@@ -92,7 +93,6 @@ namespace StockSharp.Xaml.Actipro.Code
 			"StockSharp.Xaml.Charting",
 			"StockSharp.Xaml.Diagram",
 
-			"Abt.Controls.SciChart.Wpf",
 			"Xceed.Wpf.Toolkit"
 		};
 

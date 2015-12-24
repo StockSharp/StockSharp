@@ -111,11 +111,9 @@
       <Link>Properties\StockSharpAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="ActiproBaseApplication.cs" />
-    <Compile Include="Code\CodeExtensions.cs" />
     <Compile Include="Code\CodePanel.xaml.cs">
       <DependentUpon>CodePanel.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Code\CodeReference.cs" />
     <Compile Include="Code\CodeReferencesWindow.xaml.cs">
       <DependentUpon>CodeReferencesWindow.xaml</DependentUpon>
     </Compile>

@@ -228,10 +228,6 @@
       <Project>{e5d21a65-1b77-4b4b-87c7-8ac7eee4f085}</Project>
       <Name>Xaml.Diagram</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Xaml.Actipro\Xaml.Actipro.csproj">
-      <Project>{D556FA3F-E40E-4F76-B3CA-B18134247FD1}</Project>
-      <Name>Xaml.Actipro</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\Xaml\Xaml.csproj">
       <Project>{64E4D6F0-36B6-4904-9BA7-FFFBE5FF71D8}</Project>
       <Name>Xaml</Name>

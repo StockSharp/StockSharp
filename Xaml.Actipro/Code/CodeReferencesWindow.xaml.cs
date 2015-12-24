@@ -25,6 +25,7 @@ namespace StockSharp.Xaml.Actipro.Code
 	using Ookii.Dialogs.Wpf;
 
 	using StockSharp.Localization;
+	using StockSharp.Xaml.Code;
 
 	/// <summary>
 	/// The window for editing the list of references to the .NET builds.
