@@ -18,131 +18,138 @@ using System;
 using System.IO;
 using System.Linq;
 using System.Windows;
-using Ecng.Collections;
-using Ecng.Configuration;
-using Ecng.Serialization;
-using Ecng.Xaml;
 
-using StockSharp.Algo;
-using StockSharp.Algo.Storages;
-using StockSharp.BusinessEntities;
-using StockSharp.Configuration;
-using StockSharp.Messages;
 using StockSharp.Terminal.Layout;
-using StockSharp.Xaml;
 using StockSharp.Terminal.Controls;
 using StockSharp.Terminal.Logics;
+using Xceed.Wpf.AvalonDock.Layout;
+using Xceed.Wpf.AvalonDock;
 
 namespace StockSharp.Terminal
 {
 	public partial class MainWindow
 	{
-		public readonly SynchronizedDictionary<Security, MarketDepthControl> Depths =
-			new SynchronizedDictionary<Security, MarketDepthControl>();
-
-		public DelegateCommand SettingsCommand { private set; get; }
-
 		public LayoutManager LayoutManager { get; set; }
 
-		public Connector Connector { private set; get; }
-
-		public DelegateCommand ConnectCommand { private set; get; }
-
-		private const string _settingsFolder = "Settings";
-		private readonly string _connectionFile;
-		private readonly LayoutManager _layoutManager;
+		private int _countWorkArea = 2;
 
 		public MainWindow()
 		{
 			InitializeComponent();
 
-			//LayoutManager = new LayoutManager(this, ProgrammaticDockSite) { LayoutFile = Path.Combine(_settingsFolder, "layout.xml") };
-			_layoutManager = new LayoutManager(DockingManager);
-			
-			ConnectCommand = new DelegateCommand(Connect, CanConnect);
-			SettingsCommand = new DelegateCommand(Settings, CanSettings);
+			LayoutManager = new LayoutManager(DockingManager);
 
-			Directory.CreateDirectory(_settingsFolder);
+			//AddDocumentElement.IsSelectedChanged += AddDocumentElement_IsSelectedChanged;
+			DockingManager.DocumentClosed += DockingManager_DocumentClosed;
+		}
 
-			var storageRegistry = new StorageRegistry {DefaultDrive = new LocalMarketDataDrive(_settingsFolder)};
+		private void DockingManager_DocumentClosed(object sender, DocumentClosedEventArgs e)
+		{
+			var manager = (DockingManager)sender;
 
-			Connector = new Connector();
-			var storageAdapter = new StorageMessageAdapter(Connector.Adapter, new EntityRegistry(), storageRegistry);
-			ConfigManager.RegisterService<ISecurityProvider>(new FilterableSecurityProvider(storageRegistry.GetSecurityStorage()));
-			ConfigManager.RegisterService<IConnector>(Connector);
-			ConfigManager.RegisterService<IMarketDataProvider>(Connector);
+			if (LayoutDocuments.Children.Count == 0 &&
+				manager.FloatingWindows.ToList().Count == 0)
+				_countWorkArea = 0;
+		}
 
-			_connectionFile = Path.Combine(_settingsFolder, "connection.xml");
+		//private void DockingManager_DocumentClosing(object sender, Xceed.Wpf.AvalonDock.DocumentClosingEventArgs e)
+		//{
+		//	var element = e.Document;
+		//	var manager = (Xceed.Wpf.AvalonDock.DockingManager)sender;
 
-			if (File.Exists(_connectionFile))
-				Connector.Adapter.Load(new XmlSerializer<SettingsStorage>().Deserialize(_connectionFile));
-			
-			Connector.MarketDepthsChanged += depths =>
+		//	var item = manager.FloatingWindows.FirstOrDefault(x =>
+		//	{
+		//		var doc = (LayoutDocumentFloatingWindow)x.Model;
+		//		return doc.Children.Contains(element);
+		//	});
+
+		//	if (item != null)
+		//	{
+		//		manager.FloatingWindows.ToList().Remove(item);
+		//	}
+		//	else
+		//		LayoutDocuments.RemoveChild(element);
+
+		//	if (LayoutDocuments.Children.Count == 0)
+		//		_countWorkArea = 0;
+
+		//	//if (LayoutDocuments.Children.Count == 2)
+		//	//{
+		//	//	var item = LayoutDocuments.Children.FirstOrDefault(x => x.Title != "+");
+		//	//	item.CanClose = false;
+		//	//	LayoutDocuments.SelectedContentIndex = LayoutDocuments.IndexOfChild(item);
+		//	//}
+		//}
+
+		private void AddDocument(object sender, RoutedEventArgs e)
+		{
+			var newWorkArea = new LayoutDocument()
 			{
-				foreach (var depth in depths)
-				{
-					var ctrl = Depths.TryGetValue(depth.Security);
-
-					if (ctrl != null)
-						ctrl.UpdateDepth(depth);
-				}
+				Title = "Work area #" + ++_countWorkArea,
+				Content = new WorkAreaControl()
 			};
+
+			newWorkArea.Closing += NewWorkArea_Closing;
+
+			LayoutDocuments.Children.Add(newWorkArea);
+			
+			var offset = LayoutDocuments.Children.Count - 1;
+			offset = (offset < 0) ? 0 : offset;
+
+			LayoutDocuments.SelectedContentIndex = offset;
 		}
 
-		private void Connect(object obj)
+		private void NewWorkArea_Closing(object sender, System.ComponentModel.CancelEventArgs e)
 		{
-			switch (Connector.ConnectionState)
-			{
-				case ConnectionStates.Failed:
-				case ConnectionStates.Disconnected:
-					Connect();
-					break;
-				case ConnectionStates.Connected:
-					Connector.Disconnect();
-					break;
-			}
+			
 		}
 
-		private bool CanConnect(object obj)
-		{
-			return Connector.Adapter.InnerAdapters.SortedAdapters.Any();
-		}
+		//private void AddDocumentElement_IsSelectedChanged(object sender, EventArgs e)
+		//{
+		//	var element = (LayoutDocument)sender;
 
-		private void Settings(object obj)
-		{
-			if (!Connector.Configure(this))
-				return;
+		//	if (!element.IsSelected || LayoutDocuments.Children.Count == 1)
+		//		return;
 
-			new XmlSerializer<SettingsStorage>().Serialize(Connector.Adapter.Save(), _connectionFile);
-		}
+		//	LayoutDocument newWorkArea = new LayoutDocument()
+		//	{
+		//		Title = "Рабочая область " + ++_countWorkArea,
+		//		Content = new WorkAreaControl()
+		//	};
 
-		private bool CanSettings(object obj)
-		{
-			return true;
-		}
+		//	var offset = LayoutDocuments.Children.Count - 1;
 
-		private void Connect()
-		{
-			Connector.Connect();
-		}
-		
-        private void DockingManager_OnActiveContentChanged(object sender, EventArgs e)
+		//	//if (offset != LayoutDocuments.IndexOfChild(element))
+		//	//	return;
+
+		//	LayoutDocuments.Children.RemoveAt(offset);
+
+		//	LayoutDocuments.Children.Add(newWorkArea);
+		//	LayoutDocuments.Children.Add(element);
+		//	LayoutDocuments.SelectedContentIndex = offset;
+
+		//	//var offset = LayoutDocuments.IndexOfChild(element);
+		//	//LayoutDocuments.InsertChildAt(offset, newWorkArea);
+		//	//LayoutDocuments.SelectedContentIndex = offset;
+		//}
+
+		private void DockingManager_OnActiveContentChanged(object sender, EventArgs e)
         {
-            DockingManager.ActiveContent.DoIfElse<EmulationControl>(editor =>
-            {
-                //RibbonEmulationTab.DataContext = editor;
-                //EmulationRibbonGroup.Visibility = Visibility.Visible;
-                //Ribbon.SelectedTabItem = RibbonEmulationTab;
-            }, () =>
-            {
-                //EmulationRibbonGroup.Visibility = Visibility.Collapsed;
-                //RibbonEmulationTab.DataContext = null;
-            });
+            DockingManager.ActiveContent.DoIfElse<WorkAreaControl>(editor =>
+			{
+				var element = (Xceed.Wpf.AvalonDock.DockingManager)sender;
+
+			}, () =>
+			{
+				var element = (Xceed.Wpf.AvalonDock.DockingManager)sender;
+
+			});
         }
 		
 		protected override void OnClosed(EventArgs e)
 		{
 			base.OnClosed(e);
+
 		}
 		
 		private void MainWindow_OnLoaded(object sender, RoutedEventArgs e)

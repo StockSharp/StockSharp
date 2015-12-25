@@ -130,12 +130,12 @@
     <Compile Include="Layout\DockingControl.cs" />
     <Compile Include="Layout\LayoutManager.cs" />
     <Compile Include="Logics\CompositionItem.cs" />
-    <Compile Include="Controls\EmulationControl.xaml.cs">
-      <DependentUpon>EmulationControl.xaml</DependentUpon>
+    <Compile Include="Controls\WorkAreaControl.xaml.cs">
+      <DependentUpon>WorkAreaControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Logics\EmulationDiagramStrategy.cs" />
     <Compile Include="Layout\LayoutKeys.cs" />
-    <Page Include="Controls\EmulationControl.xaml">
+    <Page Include="Controls\WorkAreaControl.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
