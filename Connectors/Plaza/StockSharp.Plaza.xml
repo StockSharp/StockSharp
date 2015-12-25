@@ -62,116 +62,116 @@
     </member>
     <member name="T:StockSharp.Plaza.Metadata.PlazaAnonymousMultiLegOrdersLogColumns">
       <summary>
-            FORTS_ORDLOG_REPL - Àíîíèìíûé orders_log.
-            Òàáëèöà multileg_orders_log - Æóðíàë çàÿâîê ïî ñâÿçêàì.
+            FORTS_ORDLOG_REPL - Анонимный orders_log.
+            Таблица multileg_orders_log - Журнал заявок по связкам.
             </summary>
     </member>
     <member name="F:StockSharp.Plaza.Metadata.PlazaAnonymousMultiLegOrdersLogColumns.RatePrice">
       <summary>
-            Ñòàâêà çàÿâêè. Ïîëå rate_price äëÿ âàëþòíûõ ñâîïîâ ñîäåðæèò ñâîï-öåíó.
+            Ставка заявки. Поле rate_price для валютных свопов содержит своп-цену.
             </summary>
     </member>
     <member name="F:StockSharp.Plaza.Metadata.PlazaAnonymousMultiLegOrdersLogColumns.SwapPrice">
       <summary>
-            Ñâîï-öåíà çàÿâêè.
+            Своп-цена заявки.
             </summary>
     </member>
     <member name="T:StockSharp.Plaza.Metadata.PlazaAnonymousOrdersBookColumns">
       <summary>
-            FORTS_ORDBOOK_REPL - Ñðåç ñòàêàíà. Àíîíèìíûé orders_log.
-            Òàáëèöà orders - Ëîãîâàÿ òàáëèöà çàÿâîê.
+            FORTS_ORDBOOK_REPL - Срез стакана. Анонимный orders_log.
+            Таблица orders - Логовая таблица заявок.
             </summary>
     </member>
     <member name="F:StockSharp.Plaza.Metadata.PlazaAnonymousOrdersBookColumns.ClientCode">
       <summary>
-            Êîä êëèåíòà.
+            Код клиента.
             </summary>
     </member>
     <member name="F:StockSharp.Plaza.Metadata.PlazaAnonymousOrdersBookColumns.InitMoment">
       <summary>
-            Âðåìÿ ïîÿâëåíèÿ çàÿâêè.
+            Время появления заявки.
             </summary>
     </member>
     <member name="F:StockSharp.Plaza.Metadata.PlazaAnonymousOrdersBookColumns.InitAmount">
       <summary>
-            Íà÷àëüíîå êîëè÷åñòâî â çàÿâêå.
+            Начальное количество в заявке.
             </summary>
     </member>
     <member name="T:StockSharp.Plaza.Metadata.PlazaAnonymousOrdersBookInfoColumns">
       <summary>
-            FORTS_ORDBOOK_REPL - Ñðåç ñòàêàíà. Àíîíèìíûé orders_log.
-            Òàáëèöà info - Èíôîðìàöèÿ î ñòàêàíàõ.
+            FORTS_ORDBOOK_REPL - Срез стакана. Анонимный orders_log.
+            Таблица info - Информация о стаканах.
             </summary>
     </member>
     <member name="T:StockSharp.Plaza.Metadata.PlazaAnonymousOrdersLogColumns">
       <summary>
-            FORTS_ORDLOG_REPL - Àíîíèìíûé orders_log.
-            Òàáëèöà orders_log - Æóðíàë çàÿâîê.
+            FORTS_ORDLOG_REPL - Анонимный orders_log.
+            Таблица orders_log - Журнал заявок.
             </summary>
     </member>
     <member name="F:StockSharp.Plaza.Metadata.PlazaAnonymousOrdersLogColumns.DealId">
       <summary>
-            Èäåíòèôèêàòîð ñäåëêè ïî äàííîé çàïèñè æóðíàëà çàÿâîê.
+            Идентификатор сделки по данной записи журнала заявок.
             </summary>
     </member>
     <member name="F:StockSharp.Plaza.Metadata.PlazaAnonymousOrdersLogColumns.DealPrice">
       <summary>
-            Öåíà çàêëþ÷åííîé ñäåëêè.
+            Цена заключенной сделки.
             </summary>
     </member>
     <member name="T:StockSharp.Plaza.Metadata.PlazaBaseOrdersColumns">
       <summary>
-            Êîëîíêè òàáëèöû, ñîäåðæàùåé áàçîâóþ èíôîðìàöèþ î çàÿâêàõ.
+            Колонки таблицы, содержащей базовую информацию о заявках.
             </summary>
     </member>
     <member name="F:StockSharp.Plaza.Metadata.PlazaBaseOrdersColumns.OrderId">
       <summary>
-            Íîìåð çàÿâêè.
+            Номер заявки.
             </summary>
     </member>
     <member name="F:StockSharp.Plaza.Metadata.PlazaBaseOrdersColumns.SessionId">
       <summary>
-            Èäåíòèôèêàòîð òîðãîâîé ñåññèè.
+            Идентификатор торговой сессии.
             </summary>
     </member>
     <member name="F:StockSharp.Plaza.Metadata.PlazaBaseOrdersColumns.Moment">
       <summary>
-            Âðåìÿ èçìåíåíèÿ ñîñòîÿíèÿ çàÿâêè.
+            Время изменения состояния заявки.
             </summary>
     </member>
     <member name="F:StockSharp.Plaza.Metadata.PlazaBaseOrdersColumns.Status">
       <summary>
-            Ñòàòóñ çàÿâêè.
+            Статус заявки.
             </summary>
     </member>
     <member name="F:StockSharp.Plaza.Metadata.PlazaBaseOrdersColumns.Action">
       <summary>
-            Äåéñòâèå ñ çàÿâêîé.
+            Действие с заявкой.
             </summary>
     </member>
     <member name="F:StockSharp.Plaza.Metadata.PlazaBaseOrdersColumns.IsinId">
       <summary>
-            Óíèêàëüíûé ÷èñëîâîé èäåíòèôèêàòîð èíñòðóìåíòà.
+            Уникальный числовой идентификатор инструмента.
             </summary>
     </member>
     <member name="F:StockSharp.Plaza.Metadata.PlazaBaseOrdersColumns.Direction">
       <summary>
-            Íàïðàâëåíèå.
+            Направление.
             </summary>
     </member>
     <member name="F:StockSharp.Plaza.Metadata.PlazaBaseOrdersColumns.Price">
       <summary>
-            Öåíà.
+            Цена.
             </summary>
     </member>
     <member name="F:StockSharp.Plaza.Metadata.PlazaBaseOrdersColumns.AmountOperation">
       <summary>
-            Êîëè÷åñòâî â îïåðàöèè.
+            Количество в операции.
             </summary>
     </member>
     <member name="F:StockSharp.Plaza.Metadata.PlazaBaseOrdersColumns.AmountRest">
       <summary>
-            Îñòàâøååñÿ êîëè÷åñòâî â çàÿâêå.
+            Оставшееся количество в заявке.
             </summary>
     </member>
     <member name="T:StockSharp.Plaza.Metadata.PlazaClearingPositionDerivativeColumns">
@@ -315,168 +315,168 @@
     </member>
     <member name="T:StockSharp.Plaza.Metadata.PlazaFutInstrumentsColumns">
       <summary>
-            FORTS_FUTINFO_REPL - Ôüþ÷åðñû: ñïðàâî÷íàÿ è ñåññèîííàÿ èíôîðìàöèÿ.
-            Òàáëèöà fut_instruments: Ñïðàâî÷íèê èíñòðóìåíòîâ.
+            FORTS_FUTINFO_REPL - Фьючерсы: справочная и сессионная информация.
+            Таблица fut_instruments: Справочник инструментов.
             </summary>
     </member>
     <member name="F:StockSharp.Plaza.Metadata.PlazaFutInstrumentsColumns.IsinId">
       <summary>
-            Óíèêàëüíûé ÷èñëîâîé èäåíòèôèêàòîð èíñòðóìåíòà.
+            Уникальный числовой идентификатор инструмента.
             </summary>
     </member>
     <member name="F:StockSharp.Plaza.Metadata.PlazaFutInstrumentsColumns.ShortIsin">
       <summary>
-            Îïèñàòåëü èíñòðóìåíòà.
+            Описатель инструмента.
             </summary>
     </member>
     <member name="F:StockSharp.Plaza.Metadata.PlazaFutInstrumentsColumns.Isin">
       <summary>
-            Ñèìâîëüíûé êîä èíñòðóìåíòà.
+            Символьный код инструмента.
             </summary>
     </member>
     <member name="F:StockSharp.Plaza.Metadata.PlazaFutInstrumentsColumns.Name">
       <summary>
-            Íàèìåíîâàíèå èíñòðóìåíòà.
+            Наименование инструмента.
             </summary>
     </member>
     <member name="F:StockSharp.Plaza.Metadata.PlazaFutInstrumentsColumns.InstTerm">
       <summary>
-            Ñìåùåíèå îò ñïîòà.
+            Смещение от спота.
             </summary>
     </member>
     <member name="F:StockSharp.Plaza.Metadata.PlazaFutInstrumentsColumns.IsLimited">
       <summary>
-            Ïðèçíàê íàëè÷èÿ ëèìèòîâ â òîðãàõ.
+            Признак наличия лимитов в торгах.
             </summary>
     </member>
     <member name="F:StockSharp.Plaza.Metadata.PlazaFutInstrumentsColumns.LimitUpOpt">
       <summary>
-            Äëÿ îïöèîíîâ â äåíüãàõ: âåðõíèé ëèìèò îòêëîíåíèÿ îò âîëàòèëüíîñòè öåíòðàëüíîãî ñòðàéêà.
+            Для опционов в деньгах: верхний лимит отклонения от волатильности центрального страйка.
             </summary>
     </member>
     <member name="F:StockSharp.Plaza.Metadata.PlazaFutInstrumentsColumns.LimitDownOpt">
       <summary>
-            Äëÿ îïöèîíîâ â äåíüãàõ: íèæíèé ëèìèò îòêëîíåíèÿ îò âîëàòèëüíîñòè öåíòðàëüíîãî ñòðàéêà.
+            Для опционов в деньгах: нижний лимит отклонения от волатильности центрального страйка.
             </summary>
     </member>
     <member name="F:StockSharp.Plaza.Metadata.PlazaFutInstrumentsColumns.OldKotir">
       <summary>
-            Ñêîððåêòèðîâàííàÿ ðàñ÷åòíàÿ öåíà ïðåäûäóùåé ñåññèè.
+            Скорректированная расчетная цена предыдущей сессии.
             </summary>
     </member>
     <member name="F:StockSharp.Plaza.Metadata.PlazaFutInstrumentsColumns.CodeVcb">
       <summary>
-            Êîä áàçîâîãî àêòèâà.
+            Код базового актива.
             </summary>
     </member>
     <member name="F:StockSharp.Plaza.Metadata.PlazaFutInstrumentsColumns.MinStep">
       <summary>
-            Ìèíèìàëüíûé øàã öåíû.
+            Минимальный шаг цены.
             </summary>
     </member>
     <member name="F:StockSharp.Plaza.Metadata.PlazaFutInstrumentsColumns.LotVolume">
       <summary>
-            Ê-âî åäèíèö áàçîâîãî àêòèâà â èíñòðóìåíòå.
+            К-во единиц базового актива в инструменте.
             </summary>
     </member>
     <member name="F:StockSharp.Plaza.Metadata.PlazaFutInstrumentsColumns.StepPrice">
       <summary>
-            Ñòîèìîñòü øàãà öåíû.
+            Стоимость шага цены.
             </summary>
     </member>
     <member name="F:StockSharp.Plaza.Metadata.PlazaFutInstrumentsColumns.DateEnd">
       <summary>
-            Äàòà îêîí÷àíèÿ îáðàùåíèÿ èíñòðóìåíòà.
+            Дата окончания обращения инструмента.
             </summary>
     </member>
     <member name="F:StockSharp.Plaza.Metadata.PlazaFutInstrumentsColumns.LastClearingQuote">
       <summary>
-            Êîòèðîâêà ïîñëå ïîñëåäíåãî êëèðèíãà.
+            Котировка после последнего клиринга.
             </summary>
     </member>
     <member name="F:StockSharp.Plaza.Metadata.PlazaFutInstrumentsColumns.Signs">
       <summary>
-            Ïîëå ïðèçíàêîâ.
+            Поле признаков.
             </summary>
     </member>
     <member name="F:StockSharp.Plaza.Metadata.PlazaFutInstrumentsColumns.RoundTo">
       <summary>
-            Êîëè÷åñòâî çíàêîâ ïîñëå çàïÿòîé â öåíå.
+            Количество знаков после запятой в цене.
             </summary>
     </member>
     <member name="F:StockSharp.Plaza.Metadata.PlazaFutInstrumentsColumns.IsSpread">
       <summary>
-            Ïðèçíàê âõîæäåíèÿ ôüþ÷åðñà â ìåæìåñÿ÷íûé ñïðýä.
+            Признак вхождения фьючерса в межмесячный спрэд.
             </summary>
     </member>
     <member name="F:StockSharp.Plaza.Metadata.PlazaFutInstrumentsColumns.Coeff">
       <summary>
-            Êîýôôèöèåíò ìåæìåñÿ÷íîãî ñïðýäà.
+            Коэффициент межмесячного спрэда.
             </summary>
     </member>
     <member name="F:StockSharp.Plaza.Metadata.PlazaFutInstrumentsColumns.DateExpiry">
       <summary>
-            Äàòà èñïîëíåíèÿ èíñòðóìåíòà.
+            Дата исполнения инструмента.
             </summary>
     </member>
     <member name="F:StockSharp.Plaza.Metadata.PlazaFutInstrumentsColumns.IsPercent">
       <summary>
-            Ïðèçíàê òîãî, ÷òî ôüþ÷åðñ òîðãóåòñÿ â ïðîöåíòàõ.
+            Признак того, что фьючерс торгуется в процентах.
             </summary>
     </member>
     <member name="F:StockSharp.Plaza.Metadata.PlazaFutInstrumentsColumns.PercentRate">
       <summary>
-            Ïðîöåíòíàÿ ñòàâêà äëÿ ðàñ÷åòà âàðèàöèîííîé ìàðæè ïî ïðîöåíòíûì ôüþ÷åðñàì.
+            Процентная ставка для расчета вариационной маржи по процентным фьючерсам.
             </summary>
     </member>
     <member name="F:StockSharp.Plaza.Metadata.PlazaFutInstrumentsColumns.VolatilityMin">
       <summary>
-            Íèæíÿÿ ãðàíèöà âîëàòèëüíîñòè.
+            Нижняя граница волатильности.
             </summary>
     </member>
     <member name="F:StockSharp.Plaza.Metadata.PlazaFutInstrumentsColumns.VolatilityMax">
       <summary>
-            Âåðõíÿÿ ãðàíèöà âîëàòèëüíîñòè.
+            Верхняя граница волатильности.
             </summary>
     </member>
     <member name="F:StockSharp.Plaza.Metadata.PlazaFutInstrumentsColumns.PriceDir">
       <summary>
-            Íàïðàâëåíèå öåíû èíñòðóìåíòà.
+            Направление цены инструмента.
             </summary>
     </member>
     <member name="F:StockSharp.Plaza.Metadata.PlazaFutInstrumentsColumns.MultilegType">
       <summary>
-            Òèï ñâÿçêè.
+            Тип связки.
             </summary>
     </member>
     <member name="F:StockSharp.Plaza.Metadata.PlazaFutInstrumentsColumns.LegsQty">
       <summary>
-            Êîëè÷åñòâî èíñòðóìåíòîâ â ñâÿçêå.
+            Количество инструментов в связке.
             </summary>
     </member>
     <member name="F:StockSharp.Plaza.Metadata.PlazaFutInstrumentsColumns.StepPriceClr">
       <summary>
-            Còîèìîñòü øàãà öåíû âå÷åðíåãî êëèðèíãà.
+            Cтоимость шага цены вечернего клиринга.
             </summary>
     </member>
     <member name="F:StockSharp.Plaza.Metadata.PlazaFutInstrumentsColumns.StepPriceInterClr">
       <summary>
-            Còîèìîñòü øàãà öåíû ïðîì. êëèðèíãà.
+            Cтоимость шага цены пром. клиринга.
             </summary>
     </member>
     <member name="F:StockSharp.Plaza.Metadata.PlazaFutInstrumentsColumns.StepPriceCurr">
       <summary>
-            Ñòîèìîñòü ìèíèìàëüíîãî øàãà öåíû, âûðàæåííàÿ â âàëþòå.
+            Стоимость минимального шага цены, выраженная в валюте.
             </summary>
     </member>
     <member name="F:StockSharp.Plaza.Metadata.PlazaFutInstrumentsColumns.DateStart">
       <summary>
-            Äàòà ââîäà èíñòðóìåíòà â îáðàùåíèå.
+            Дата ввода инструмента в обращение.
             </summary>
     </member>
     <member name="F:StockSharp.Plaza.Metadata.PlazaFutInstrumentsColumns.IsLimitOpt">
       <summary>
-            Ðàññ÷èòûâàòü ëè ëèìèòû ïî îïöèîíàì íà ýòîò áàçîâûé ôüþ÷åðñ.
+            Рассчитывать ли лимиты по опционам на этот базовый фьючерс.
             </summary>
     </member>
     <member name="T:StockSharp.Plaza.Metadata.PlazaInvestorColumns">
@@ -2090,27 +2090,27 @@
     </member>
     <member name="T:StockSharp.Plaza.Metadata.PlazaSysEventsColumns">
       <summary>
-            Òàáëèöà sys_events: Òàáëèöà ñîáûòèé.
+            Таблица sys_events: Таблица событий.
             </summary>
     </member>
     <member name="F:StockSharp.Plaza.Metadata.PlazaSysEventsColumns.EventId">
       <summary>
-            Óíèêàëüíûé èäåíòèôèêàòîð ñîáûòèÿ.
+            Уникальный идентификатор события.
             </summary>
     </member>
     <member name="F:StockSharp.Plaza.Metadata.PlazaSysEventsColumns.SessionId">
       <summary>
-            Íîìåð ñåññèè.
+            Номер сессии.
             </summary>
     </member>
     <member name="F:StockSharp.Plaza.Metadata.PlazaSysEventsColumns.EventType">
       <summary>
-            Òèï ñîáûòèÿ.
+            Тип события.
             </summary>
     </member>
     <member name="F:StockSharp.Plaza.Metadata.PlazaSysEventsColumns.Message">
       <summary>
-            Îïèñàíèå ñîáûòèÿ.
+            Описание события.
             </summary>
     </member>
     <member name="T:StockSharp.Plaza.Metadata.PlazaSysMessagesColumns">
@@ -5773,101 +5773,101 @@
     </member>
     <member name="T:StockSharp.Plaza.PlazaBaseManager">
       <summary>
-            Áàçîâûé ìåíåäæåð.
+            Базовый менеджер.
             </summary>
     </member>
     <member name="T:StockSharp.Plaza.PlazaMessageAdapter">
       <summary>
-            Àäàïòåð ñîîáùåíèé äëÿ Plaza 2.
+            Адаптер сообщений для Plaza 2.
             </summary>
     </member>
     <member name="F:StockSharp.Plaza.PlazaMessageAdapter.DemoCGateKey">
       <summary>
-            Èäåíòèôèêàòîð êëèåíòñêîãî ÏÎ äëÿ ïîäêëþ÷åíèÿ ÷åðåç CGate ê òåñòîâîìó ñåðâåðó.
+            Идентификатор клиентского ПО для подключения через CGate к тестовому серверу.
             </summary>
     </member>
     <member name="P:StockSharp.Plaza.PlazaMessageAdapter.Address">
       <summary>
-            Àäðåñ ñåðâåðà. Ïî-óìîë÷àíèþ çíà÷åíèå ðàâíî àäðåñó ëîêàëüíîãî êîìïüþòåðà 127.0.0.1:4001.
+            Адрес сервера. По-умолчанию значение равно адресу локального компьютера 127.0.0.1:4001.
             </summary>
     </member>
     <member name="P:StockSharp.Plaza.PlazaMessageAdapter.AppName">
       <summary>
-            Ïðåôèêñ â èìåíè ïðèëîæåíèÿ Plaza ñîåäèíåíèÿ.
+            Префикс в имени приложения Plaza соединения.
             </summary>
       <remarks>
-            Âñå ñîçäàííûå <see cref="T:StockSharp.Plaza.PlazaTrader" /> ñîåäèíåíèÿ èìåíóþòñÿ êàê <see cref="P:StockSharp.Plaza.PlazaMessageAdapter.AppName" />_N, ãäå N - ïîðÿäêîâûé íîìåð ñîåäèíåíèå â ïðåäåëàõ îäíîãî ðîáîòà.
-            Åñëè ïëàíèðóåòñÿ ïîäêëþ÷àòü íåñêîëüêî <see cref="T:StockSharp.Plaza.PlazaTrader" /> ê îäíîìó ðîóòåðó, îíè äîëæíû èìåòü óíèêàëüíûå <see cref="P:StockSharp.Plaza.PlazaMessageAdapter.AppName" />.
+            Все созданные <see cref="T:StockSharp.Plaza.PlazaTrader" /> соединения именуются как <see cref="P:StockSharp.Plaza.PlazaMessageAdapter.AppName" />_N, где N - порядковый номер соединение в пределах одного робота.
+            Если планируется подключать несколько <see cref="T:StockSharp.Plaza.PlazaTrader" /> к одному роутеру, они должны иметь уникальные <see cref="P:StockSharp.Plaza.PlazaMessageAdapter.AppName" />.
             </remarks>
     </member>
     <member name="P:StockSharp.Plaza.PlazaMessageAdapter.IsCGate">
       <summary>
-            Èñïîëüçîâàòü ëè CGate äëÿ òîðãîâëè ÷åðåç Plaza èëè èñïîëüçîâàòü ñòàðûé COM.
-            Ïî-óìîë÷àíèþ, âûêëþ÷åíî.
+            Использовать ли CGate для торговли через Plaza или использовать старый COM.
+            По-умолчанию, выключено.
             </summary>
     </member>
     <member name="P:StockSharp.Plaza.PlazaMessageAdapter.CGateKey">
       <summary>
-            Èäåíòèôèêàòîð êëèåíòñêîãî ÏÎ. Èñïîëüçóåòñÿ ïðè ðåæèìå <see cref="P:StockSharp.Plaza.PlazaMessageAdapter.IsCGate" />.
+            Идентификатор клиентского ПО. Используется при режиме <see cref="P:StockSharp.Plaza.PlazaMessageAdapter.IsCGate" />.
             </summary>
     </member>
     <member name="P:StockSharp.Plaza.PlazaMessageAdapter.Login">
       <summary>
-            Ëîãèí. Èñïîëüçóåòñÿ â ñëó÷àå àâòîðèçîâàííîãî ïîäêëþ÷åíèÿ ê ðîóòåðó.
+            Логин. Используется в случае авторизованного подключения к роутеру.
             </summary>
     </member>
     <member name="P:StockSharp.Plaza.PlazaMessageAdapter.Password">
       <summary>
-            Ïàðîëü. Èñïîëüçóåòñÿ â ñëó÷àå àâòîðèçîâàííîãî ïîäêëþ÷åíèÿ ê ðîóòåðó.
+            Пароль. Используется в случае авторизованного подключения к роутеру.
             </summary>
     </member>
     <member name="P:StockSharp.Plaza.PlazaMessageAdapter.PollTimeOut">
       <summary>
-            Âðåìÿ, â òå÷åíèå êîòîðîãî îæèäàåòñÿ ïîëó÷åíèå ñîîáùåíèÿ èç ïîòîêà äàííûõ èëè îòïðàâêà òðàíçàêöèé.
+            Время, в течение которого ожидается получение сообщения из потока данных или отправка транзакций.
             </summary>
       <remarks>
-            Ïî-óìîë÷àíèþ ðàâíî 10 ìèëèñåêóíäàì.
+            По-умолчанию равно 10 милисекундам.
             </remarks>
     </member>
     <member name="P:StockSharp.Plaza.PlazaMessageAdapter.UseLocalProtocol">
       <summary>
-            Èñïîëüçîâàòü SharedMem ïðîòîêîë ïðè ñîåäèíåíèè ñ ëîêàëüíûì ðîóòåðîì. Ïî-óìîë÷àíèþ íå èñïîëüçóåòñÿ.
+            Использовать SharedMem протокол при соединении с локальным роутером. По-умолчанию не используется.
             </summary>
     </member>
     <member name="P:StockSharp.Plaza.PlazaMessageAdapter.IsControlConnectionLost">
       <summary>
-            Êîíòðîëèðîâàòü ïîòåðþ ñîåäèíåíèÿ ñ ðîóòåðîì. Ïî-óìîë÷àíèþ âêëþ÷åíî.
+            Контролировать потерю соединения с роутером. По-умолчанию включено.
             </summary>
     </member>
     <member name="P:StockSharp.Plaza.PlazaMessageAdapter.ApiPath">
       <summary>
-            Ïóòü ê äèðåêòîðèè, êóäà áóäóò ñîõðàíÿòüñÿ ôàéëû Plaza SDK.
+            Путь к директории, куда будут сохраняться файлы Plaza SDK.
             </summary>
       <remarks>
-            Ïî-óìîë÷àíèþ ïóòü ðàâåí ëîêàëüíîé äèðåêòîðèè.
+            По-умолчанию путь равен локальной директории.
             </remarks>
     </member>
     <member name="P:StockSharp.Plaza.PlazaMessageAdapter.OverrideDll">
       <summary>
-            Ïåðåçàïèñàòü ôàéë áèáëèîòåêè èç ðåñóðñîâ. Ïî-óìîë÷àíèþ ôàéë áóäåò ïåðåçàïèñàí.
+            Перезаписать файл библиотеки из ресурсов. По-умолчанию файл будет перезаписан.
             </summary>
     </member>
     <member name="P:StockSharp.Plaza.PlazaMessageAdapter.IsValid">
       <summary>
-            Ïðîâåðèòü ââåäåííûå ïàðàìåòðû íà âàëèäíîñòü.
+            Проверить введенные параметры на валидность.
             </summary>
     </member>
     <member name="M:StockSharp.Plaza.PlazaMessageAdapter.Load(Ecng.Serialization.SettingsStorage)">
       <summary>
-            Çàãðóçèòü íàñòðîéêè.
+            Загрузить настройки.
             </summary>
-      <param name="storage">Õðàíèëèùå íàñòðîåê.</param>
+      <param name="storage">Хранилище настроек.</param>
     </member>
     <member name="M:StockSharp.Plaza.PlazaMessageAdapter.Save(Ecng.Serialization.SettingsStorage)">
       <summary>
-            Ñîõðàíèòü íàñòðîéêè.
+            Сохранить настройки.
             </summary>
-      <param name="storage">Õðàíèëèùå íàñòðîåê.</param>
+      <param name="storage">Хранилище настроек.</param>
     </member>
     <member name="M:StockSharp.Plaza.PlazaMessageAdapter.#ctor(Ecng.Common.IdGenerator)">
       <summary>
@@ -6042,38 +6042,38 @@
     </member>
     <member name="T:StockSharp.Plaza.PlazaRevisionManager">
       <summary>
-            Ìåíåäæåð óïðàâëåíèÿ ðåâèçèÿìè ïîòîêîâ <see cref="T:StockSharp.Plaza.PlazaStreamManager" />.
+            Менеджер управления ревизиями потоков <see cref="T:StockSharp.Plaza.PlazaStreamManager" />.
             </summary>
     </member>
     <member name="P:StockSharp.Plaza.PlazaRevisionManager.Tables">
       <summary>
-            Òàáëèöû, êîòîðûå íåîáõîäèìî îòñëåæèâàòü íà èçìåíåíèå ðåâèçèé.
+            Таблицы, которые необходимо отслеживать на изменение ревизий.
             </summary>
     </member>
     <member name="P:StockSharp.Plaza.PlazaRevisionManager.Interval">
       <summary>
-            Èíòåðâàë ñîõðàíåíèÿ èçìåíåííûõ ðåâèçèé. Ïî-óìîë÷àíèþ ðàâíî 10 ñåêóíäàì.
+            Интервал сохранения измененных ревизий. По-умолчанию равно 10 секундам.
             </summary>
-      <remarks>Åñëè çíà÷åíèå óñòàíîâëåíî â <see cref="F:System.TimeSpan.Zero" />,
-            òî òàéìåð ñîõðàíåíèÿ ðåâèçèé â ôàéë âûêëþ÷åí,
-            è íåîáõîäèìî ñàìîñòîÿòåëüíî âûçûâàòü ìåòîä <see cref="M:StockSharp.Plaza.PlazaRevisionManager.SaveRevisions" />.</remarks>
+      <remarks>Если значение установлено в <see cref="F:System.TimeSpan.Zero" />,
+            то таймер сохранения ревизий в файл выключен,
+            и необходимо самостоятельно вызывать метод <see cref="M:StockSharp.Plaza.PlazaRevisionManager.SaveRevisions" />.</remarks>
     </member>
     <member name="P:StockSharp.Plaza.PlazaRevisionManager.RevisionPath">
       <summary>
-            Ïóòü ê äèðåêòîðèè, êóäà áóäóò ñîõðàíÿòüñÿ ðåâèçèè.
+            Путь к директории, куда будут сохраняться ревизии.
             </summary>
       <remarks>
-            Ïî-óìîë÷àíèþ ïóòü ðàâåí äèðåêòîðèè \StockSharp_Plaza\Revisions, êîòîðàÿ áóäåò ñîçäàíà â ëîêàëüíîé äèðåêòîðèè.
+            По-умолчанию путь равен директории \StockSharp_Plaza\Revisions, которая будет создана в локальной директории.
             </remarks>
     </member>
     <member name="M:StockSharp.Plaza.PlazaRevisionManager.SaveRevisions">
       <summary>
-            Ñîõðàíèòü ðåâèçèè â ôàéë.
+            Сохранить ревизии в файл.
             </summary>
     </member>
     <member name="M:StockSharp.Plaza.PlazaRevisionManager.DisposeManaged">
       <summary>
-            Îñâîáîäèòü çàíÿòûå ðåñóðñû.
+            Освободить занятые ресурсы.
             </summary>
     </member>
     <member name="T:StockSharp.Plaza.PlazaStreamRegistry">
@@ -7649,7 +7649,7 @@
     </member>
     <member name="T:StockSharp.Plaza.Native.ClientGate.MessageDispatcher">
       <summary>
-            Âíóòðåííèé êëàññ äëÿ îáðàáîòêè Plaza ñîîáùåíèé.
+            Внутренний класс для обработки Plaza сообщений.
             </summary>
     </member>
     <member name="T:StockSharp.Plaza.Xaml.PlazaTableListComboBox">
