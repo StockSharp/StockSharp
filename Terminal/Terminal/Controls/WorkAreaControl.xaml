@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:StockSharp.Terminal.Controls"
+             xmlns:controls="clr-namespace:StockSharp.Studio.Controls;assembly=StockSharp.Studio.Controls"
              xmlns:xaml="http://schemas.stocksharp.com/xaml"
              xmlns:xcad="http://schemas.xceed.com/wpf/xaml/avalondock"
              xmlns:layout="clr-namespace:StockSharp.Terminal.Layout"
@@ -31,9 +32,11 @@
                 <xcad:LayoutPanel>
                     <xcad:LayoutAnchorablePaneGroup>
                         <xcad:LayoutAnchorablePane x:Name="WorkArea">
-                            <!--<xcad:LayoutAnchorable Title="{x:Static localization:LocalizedStrings.Str3200}" CanClose="False">
-                                <xaml:Chart />
-                            </xcad:LayoutAnchorable>-->
+                            <xcad:LayoutAnchorable Title="Диаграмма" CanClose="False">
+                                <controls:DiagramPanel>
+                                    
+                                </controls:DiagramPanel>
+                            </xcad:LayoutAnchorable>
                         </xcad:LayoutAnchorablePane>
                     </xcad:LayoutAnchorablePaneGroup>
                 </xcad:LayoutPanel>
