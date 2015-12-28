@@ -221,6 +221,10 @@
       <Project>{B47F9C23-A4BD-46A9-BF27-54CB3D653503}</Project>
       <Name>Messages</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\Studio\Controls\ControlsPublic.csproj">
+      <Project>{6d205f4b-6b2a-4082-b717-f6baaa4e0f3a}</Project>
+      <Name>ControlsPublic</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Xaml\Xaml.csproj">
       <Project>{64E4D6F0-36B6-4904-9BA7-FFFBE5FF71D8}</Project>
       <Name>Xaml</Name>
