@@ -121,20 +121,20 @@ namespace StockSharp.Algo.Positions
 							var orderId = execMsg.OriginalTransactionId;
 							var newPosition = execMsg.GetPosition();
 
-							bool? isNew = null;
+							bool isNew;
 							decimal position;
 
 							lock (_positions.SyncRoot)
 							{
+								decimal prev;
+								isNew = _positions.TryGetValue(key, out prev);
+
 								Tuple<Sides, decimal> oldPosition;
 
 								if (_byOrderPositions.TryGetValue(orderId, out oldPosition))
 								{
 									if (newPosition != oldPosition.Item2)
-									{
 										_byOrderPositions[orderId] = Tuple.Create(execMsg.Side, newPosition);
-										isNew = false;
-									}
 
 									position = newPosition - oldPosition.Item2;
 								}
@@ -142,17 +142,16 @@ namespace StockSharp.Algo.Positions
 								{
 									_byOrderPositions.Add(orderId, Tuple.Create(execMsg.Side, newPosition));
 									position = newPosition;
-									isNew = true;
 								}
 
-								_positions[key] = _positions.TryGetValue(key) + position;
+								_positions[key] = prev + position;
 								Position += position;
 							}
 
-							if (isNew == true)
-								NewPosition.SafeInvoke(new KeyValuePair<Tuple<SecurityId, string>, decimal>(key, position));
-							else if (isNew == false)
-								PositionChanged.SafeInvoke(new KeyValuePair<Tuple<SecurityId, string>, decimal>(key, position));
+							if (isNew)
+								NewPosition.SafeInvoke(new KeyValuePair<Tuple<SecurityId, string>, decimal>(key, Position));
+							else
+								PositionChanged.SafeInvoke(new KeyValuePair<Tuple<SecurityId, string>, decimal>(key, Position));
 
 							return position;
 						}
@@ -177,9 +176,9 @@ namespace StockSharp.Algo.Positions
 							}
 
 							if (isNew)
-								NewPosition.SafeInvoke(new KeyValuePair<Tuple<SecurityId, string>, decimal>(key, position));
+								NewPosition.SafeInvoke(new KeyValuePair<Tuple<SecurityId, string>, decimal>(key, Position));
 							else
-								PositionChanged.SafeInvoke(new KeyValuePair<Tuple<SecurityId, string>, decimal>(key, position));
+								PositionChanged.SafeInvoke(new KeyValuePair<Tuple<SecurityId, string>, decimal>(key, Position));
 
 							return position;
 						}

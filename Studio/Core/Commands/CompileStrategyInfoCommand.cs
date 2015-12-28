@@ -20,7 +20,7 @@ namespace StockSharp.Studio.Core.Commands
 
 	using Ecng.Common;
 
-	using StockSharp.Xaml.Actipro.Code;
+	using StockSharp.Xaml.Code;
 
 	public class CompileStrategyInfoCommand : BaseStudioCommand
 	{

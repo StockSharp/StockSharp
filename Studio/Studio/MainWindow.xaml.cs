@@ -55,15 +55,13 @@ namespace StockSharp.Studio
 	using StockSharp.Studio.Services;
 	using StockSharp.Alerts;
 	using StockSharp.Xaml;
-	using StockSharp.Xaml.Actipro.Code;
 	using StockSharp.Xaml.Diagram;
 	using StockSharp.Configuration;
 	using StockSharp.Localization;
+	using StockSharp.Xaml.Code;
 
 	using IStrategyService = StockSharp.Studio.Core.IStrategyService;
 	using RibbonButton = ActiproSoftware.Windows.Controls.Ribbon.Controls.Button;
-	using RibbonMenu = ActiproSoftware.Windows.Controls.Ribbon.Controls.Menu;
-	using RibbonMenuItem = ActiproSoftware.Windows.Controls.Ribbon.Controls.Primitives.MenuItem;
 	using RibbonPopupButton = ActiproSoftware.Windows.Controls.Ribbon.Controls.PopupButton;
 	using RibbonSeparator = ActiproSoftware.Windows.Controls.Ribbon.Controls.Separator;
 

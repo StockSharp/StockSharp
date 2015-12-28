@@ -135,9 +135,9 @@ namespace StockSharp.Studio.Controls
 			WhenLoaded(() => new RequestBindSource(this).SyncProcess(this));
 		}
 
-		private void OnDebuggerBreak(DiagramElement element)
+		private void OnDebuggerBreak(DiagramSocket socket)
 		{
-			GuiDispatcher.GlobalDispatcher.AddAction(() => ShowElementProperties(element));
+			GuiDispatcher.GlobalDispatcher.AddAction(() => ShowElementProperties(socket.Parent));
 		}
 
 		private void OnDebuggerCompositionChanged(CompositionDiagramElement composition)
@@ -202,24 +202,24 @@ namespace StockSharp.Studio.Controls
 
 		private void ExecutedAddBreakpointCommand(object sender, ExecutedRoutedEventArgs e)
 		{
-			Debugger.AddBreak(DiagramEditor.SelectedElement);
+			Debugger.AddBreak(DiagramEditor.SelectedElement.SelectedSocket);
 			RaiseChangedCommand();
 		}
 
 		private void CanExecuteAddBreakpointCommand(object sender, CanExecuteRoutedEventArgs e)
 		{
-			e.CanExecute = DiagramEditor != null && DiagramEditor.SelectedElement != null && DebuggerSafeCheck(d => !d.IsBreak(DiagramEditor.SelectedElement));
+			e.CanExecute = DiagramEditor?.SelectedElement != null && DebuggerSafeCheck(d => !d.IsBreak(DiagramEditor.SelectedElement.SelectedSocket));
 		}
 
 		private void ExecutedRemoveBreakpointCommand(object sender, ExecutedRoutedEventArgs e)
 		{
-			Debugger.RemoveBreak(DiagramEditor.SelectedElement);
+			Debugger.RemoveBreak(DiagramEditor.SelectedElement.SelectedSocket);
 			RaiseChangedCommand();
 		}
 
 		private void CanExecuteRemoveBreakpointCommand(object sender, CanExecuteRoutedEventArgs e)
 		{
-			e.CanExecute = DiagramEditor != null && DiagramEditor.SelectedElement != null && DebuggerSafeCheck(d => d.IsBreak(DiagramEditor.SelectedElement));
+			e.CanExecute = DiagramEditor?.SelectedElement != null && DebuggerSafeCheck(d => d.IsBreak(DiagramEditor.SelectedElement.SelectedSocket));
 		}
 
 		private void ExecutedStepNextCommand(object sender, ExecutedRoutedEventArgs e)
@@ -234,7 +234,7 @@ namespace StockSharp.Studio.Controls
 
 		private void ExecutedStepToOutParamCommand(object sender, ExecutedRoutedEventArgs e)
 		{
-			Debugger.StepToOutput();
+			Debugger.StepOut();
 		}
 
 		private void CanExecuteStepToOutParamCommand(object sender, CanExecuteRoutedEventArgs e)
