@@ -35,7 +35,6 @@ namespace StockSharp.Studio.Controls
 	using StockSharp.Studio.Core;
 	using StockSharp.Studio.Core.Commands;
 	using StockSharp.Localization;
-	using StockSharp.Xaml.Actipro;
 
 	[DisplayNameLoc(LocalizedStrings.SecuritiesKey)]
 	[DescriptionLoc(LocalizedStrings.Str3274Key)]

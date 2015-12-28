@@ -3,33 +3,37 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"             xmlns:loc="clr-namespace:StockSharp.Localization;assembly=StockSharp.Localization"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:docking="http://schemas.actiprosoftware.com/winfx/xaml/docking"
+             xmlns:docking="http://schemas.xceed.com/wpf/xaml/avalondock"
              xmlns:xaml="http://schemas.stocksharp.com/xaml"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="600">
 
-    <docking:DockSite x:Name="DockSite">
-        <docking:SplitContainer>
-            <docking:ToolWindowContainer>
-                <docking:ToolWindow Title="{x:Static loc:LocalizedStrings.XamlStr445}" x:Name="PaletteWindow" CanClose="False">
-                    <xaml:DiagramPaletteControl x:Name="Palette" Background="White"
+    <docking:DockingManager x:Name="DockSite">
+        <docking:LayoutRoot>
+            <docking:LayoutPanel>
+                <docking:LayoutAnchorablePaneGroup>
+                    <docking:LayoutAnchorablePane>
+                        <docking:LayoutAnchorable Title="{x:Static loc:LocalizedStrings.XamlStr445}" x:Name="PaletteWindow" CanClose="False">
+                            <xaml:DiagramPaletteControl x:Name="Palette" Background="White"
                                                 PaletteSelectionChanged="DiagramEditor_OnPaletteSelectionChanged" PaletteElementDoubleClicked="Palette_OnElementDoubleClicked"/>
-                </docking:ToolWindow>
-            </docking:ToolWindowContainer>
-            
-            <docking:Workspace x:Name="MainWorkspace">
-                <xaml:DiagramEditorControl x:Name="DiagramEditor" Background="White"
+                        </docking:LayoutAnchorable>
+                    </docking:LayoutAnchorablePane>
+
+                    <docking:LayoutAnchorablePane>
+                        <docking:LayoutAnchorable x:Name="MainWorkspace">
+                            <xaml:DiagramEditorControl x:Name="DiagramEditor" Background="White"
                                            SelectionChanged="DiagramEditor_OnSelectionChanged"
                                            ElementDoubleClicked="DiagramEditor_OnElementDoubleClicked"/>
-            </docking:Workspace>
+                        </docking:LayoutAnchorable>
+                    </docking:LayoutAnchorablePane>
 
-            <docking:ToolWindowContainer>
-                <docking:ToolWindow Title="{x:Static loc:LocalizedStrings.Str1507}" x:Name="PropertyGridWindow" CanClose="False">
-                    <xaml:PropertyGridEx x:Name="PropertyGrid"/>
-                </docking:ToolWindow>
-            </docking:ToolWindowContainer>
-        </docking:SplitContainer>
-        
-    </docking:DockSite>
-
+                    <docking:LayoutAnchorablePane>
+                        <docking:LayoutAnchorable Title="{x:Static loc:LocalizedStrings.Str1507}" x:Name="PropertyGridWindow" CanClose="False">
+                            <xaml:PropertyGridEx x:Name="PropertyGrid"/>
+                        </docking:LayoutAnchorable>
+                    </docking:LayoutAnchorablePane>
+                </docking:LayoutAnchorablePaneGroup>
+            </docking:LayoutPanel>
+        </docking:LayoutRoot>
+    </docking:DockingManager>
 </UserControl>

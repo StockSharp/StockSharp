@@ -27,7 +27,7 @@
     <docking:DockingManager x:Name="DockSite">
         <docking:LayoutRoot>
             <docking:LayoutPanel>
-                <docking:LayoutAnchorablePaneGroup DockWidth="240" DockHeight="150">
+                <docking:LayoutAnchorablePaneGroup DockWidth="450" DockHeight="150">
                     <docking:LayoutAnchorablePane>
                         <docking:LayoutAnchorable Title="{x:Static loc:LocalizedStrings.Securities}" x:Name="SecuritiesWindow">
                             <sx:SecurityPicker x:Name="SecurityPicker" SelectionMode="Single" SecuritySelected="SecurityPicker_SecuritySelected" />
