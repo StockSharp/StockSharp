@@ -7,6 +7,7 @@
              xmlns:xaml="clr-namespace:Ecng.Xaml;assembly=Ecng.Xaml"
              xmlns:diagram="http://schemas.stocksharp.com/xaml"
              xmlns:controls="clr-namespace:StockSharp.Studio.Controls"
+             xmlns:xcad="http://schemas.xceed.com/wpf/xaml/avalondock"
              xmlns:docking="http://schemas.actiprosoftware.com/winfx/xaml/docking"
              mc:Ignorable="d" d:DesignHeight="300" d:DesignWidth="600">
     
@@ -49,8 +50,70 @@
             </Style.Triggers>
         </Style>
     </UserControl.Resources>
-    
-    <docking:DockSite x:Name="DockSite">
+
+    <xcad:DockingManager x:Name="DockingManager">
+        <xcad:LayoutRoot>
+            <xcad:LayoutPanel>
+
+                <xcad:LayoutAnchorablePaneGroup DockWidth="10*">
+                    <xcad:LayoutAnchorablePane>
+                        <xcad:LayoutAnchorable Title="{x:Static loc:LocalizedStrings.XamlStr146}" CanClose="False">
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="*" />
+                                </Grid.RowDefinitions>
+
+                                <ToolBar>
+                                    <Button ToolTip="{x:Static loc:LocalizedStrings.XamlStr146}" ToolTipService.ShowOnDisabled="True" Command="{x:Static controls:DiagramDebuggerPanel.AddBreakpointCommand}">
+                                        <xaml:BmpImage Source="Images/BreakpointOn_16x16.png" Style="{StaticResource ToolbarImageStyle}"/>
+                                    </Button>
+                                    <Button ToolTip="{x:Static loc:LocalizedStrings.XamlStr800}" ToolTipService.ShowOnDisabled="True" Command="{x:Static controls:DiagramDebuggerPanel.RemoveBreakpointCommand}">
+                                        <xaml:BmpImage Source="Images/BreakpointOff_16x16.png" Style="{StaticResource ToolbarImageStyle}"/>
+                                    </Button>
+
+                                    <Separator/>
+
+                                    <Button ToolTip="{x:Static loc:LocalizedStrings.XamlStr229}" ToolTipService.ShowOnDisabled="True" Command="{x:Static controls:DiagramDebuggerPanel.StepToOutParamCommand}">
+                                        <xaml:BmpImage Source="Images/ToOutput_16x16.png" Style="{StaticResource ToolbarImageStyle}"/>
+                                    </Button>
+                                    <Button ToolTip="{x:Static loc:LocalizedStrings.XamlStr230}" ToolTipService.ShowOnDisabled="True" Command="{x:Static controls:DiagramDebuggerPanel.StepNextCommand}">
+                                        <xaml:BmpImage Source="Images/StepOver_16x16.png" Style="{StaticResource ToolbarImageStyle}"/>
+                                    </Button>
+                                    <Button ToolTip="{x:Static loc:LocalizedStrings.ToCompositeElem}" ToolTipService.ShowOnDisabled="True" Command="{x:Static controls:DiagramDebuggerPanel.StepIntoCommand}">
+                                        <xaml:BmpImage Source="Images/StepIn_16x16.png" Style="{StaticResource ToolbarImageStyle}"/>
+                                    </Button>
+                                    <Button ToolTip="{x:Static loc:LocalizedStrings.XamlStr192}" ToolTipService.ShowOnDisabled="True" Command="{x:Static controls:DiagramDebuggerPanel.StepOverCommand}">
+                                        <xaml:BmpImage Source="Images/Stepout_16x16.png" Style="{StaticResource ToolbarImageStyle}"/>
+                                    </Button>
+                                    <Button ToolTip="{x:Static loc:LocalizedStrings.XamlStr584}" ToolTipService.ShowOnDisabled="True" Command="{x:Static controls:DiagramDebuggerPanel.ContinueCommand}">
+                                        <xaml:BmpImage Source="Images/Continue_16x16.png" Style="{StaticResource ToolbarImageStyle}"/>
+                                    </Button>
+                                </ToolBar>
+
+                                <diagram:DiagramEditorControl x:Name="DiagramEditor" Grid.Row="1" Background="White" SelectionChanged="DiagramEditor_OnSelectionChanged"/>
+
+                                <TextBlock x:Name="WatermarkTextBlock" Grid.RowSpan="2" Grid.Row="0" TextAlignment="Center" 
+                               VerticalAlignment="Center" HorizontalAlignment="Center" TextWrapping="WrapWithOverflow"/>
+                            </Grid>
+                        </xcad:LayoutAnchorable>
+                    </xcad:LayoutAnchorablePane>
+                </xcad:LayoutAnchorablePaneGroup>
+
+                <xcad:LayoutAnchorablePaneGroup DockWidth="4*">
+                    <xcad:LayoutAnchorablePane>
+                        <xcad:LayoutAnchorable Title="{x:Static loc:LocalizedStrings.Str1507}" CanClose="False">
+                            <diagram:PropertyGridEx x:Name="PropertyGridControl" 
+													ShowAdvancedOptions="False" ShowDescriptionByTooltip="False" ShowPreview="False" ShowSearchBox="False"
+													ShowSortOptions="False" ShowSummary="True" ShowTitle="False"/>
+                        </xcad:LayoutAnchorable>
+                    </xcad:LayoutAnchorablePane>
+                </xcad:LayoutAnchorablePaneGroup>
+            </xcad:LayoutPanel>
+        </xcad:LayoutRoot>
+    </xcad:DockingManager>
+
+    <!--<docking:DockSite x:Name="DockSite">
         <docking:SplitContainer>
             <docking:Workspace x:Name="MainWorkspace">
                 <Grid>
@@ -99,5 +162,5 @@
                 </docking:ToolWindow>
             </docking:ToolWindowContainer>
         </docking:SplitContainer>
-    </docking:DockSite>
+    </docking:DockSite>-->
 </controls:BaseStudioControl>
