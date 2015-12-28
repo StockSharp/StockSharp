@@ -726,12 +726,12 @@ namespace StockSharp.Algo.Testing
 			var bestPrice = quote.Key;
 
 			return (orderSide == Sides.Buy ? price >= bestPrice : price <= bestPrice)
-				&& quotesVolume < message.Volume;
+				&& quotesVolume <= message.Volume;
 		}
 
 		private IEnumerable<ExecutionMessage> IncreaseDepthVolume(OrderRegisterMessage message, DateTimeOffset serverTime, decimal quotesVolume)
 		{
-			var leftVolume = message.Volume - quotesVolume;
+			var leftVolume = (message.Volume - quotesVolume) + 1;
 			var orderSide = message.Side;
 
 			var quotes = orderSide == Sides.Buy ? _asks : _bids;
