@@ -21,7 +21,7 @@
                     CanExecute="CanExecuteDrawSecurityCommand"/>
     </controls:BaseStudioControl.CommandBindings>
 
-    <xcad:DockingManager x:Name="DockingManager" ActiveContentChanged="DockingManager_OnActiveContentChanged">
+    <xcad:DockingManager x:Name="DockingManager">
         <xcad:LayoutRoot>
             <xcad:LayoutPanel Orientation="Vertical">
                 <xcad:LayoutPanel>

@@ -103,7 +103,7 @@
                 <xcad:LayoutAnchorablePaneGroup DockWidth="4*">
                     <xcad:LayoutAnchorablePane>
                         <xcad:LayoutAnchorable Title="{x:Static loc:LocalizedStrings.Str1507}" CanClose="False">
-                            <diagram:PropertyGridEx x:Name="PropertyGridControl" 
+                            <diagram:PropertyGridEx x:Name="PropertyGrid" 
 													ShowAdvancedOptions="False" ShowDescriptionByTooltip="False" ShowPreview="False" ShowSearchBox="False"
 													ShowSortOptions="False" ShowSummary="True" ShowTitle="False"/>
                         </xcad:LayoutAnchorable>
