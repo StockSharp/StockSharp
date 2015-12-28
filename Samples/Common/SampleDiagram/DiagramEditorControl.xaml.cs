@@ -19,16 +19,21 @@ namespace SampleDiagram
 	using System.Linq;
 	using System.Windows;
 
+	using Ecng.Common;
 	using Ecng.Collections;
 	using Ecng.Configuration;
 	using Ecng.Serialization;
 	using Ecng.Xaml;
+
+	using SampleDiagram.Layout;
 
 	using StockSharp.Localization;
 	using StockSharp.Xaml.Diagram;
 
 	public partial class DiagramEditorControl
 	{
+		private readonly LayoutManager _layoutManager;
+
 		public static readonly DependencyProperty CompositionProperty = DependencyProperty.Register("Composition", typeof (CompositionItem), typeof (DiagramEditorControl), 
 			new PropertyMetadata(null, CompositionPropertyChanged));
 
@@ -49,7 +54,7 @@ namespace SampleDiagram
 		public static readonly DependencyProperty IsChangedProperty = DependencyProperty.Register("IsChanged", typeof(bool), typeof(DiagramEditorControl),
 			new PropertyMetadata(false));
 
-		public override string Key => Composition.Element.TypeId.ToString();
+		public override string Key => Composition.Key;
 
 		public bool IsChanged
 		{
@@ -66,6 +71,8 @@ namespace SampleDiagram
 		public DiagramEditorControl()
 		{
 			InitializeComponent();
+
+			_layoutManager = new LayoutManager(DockingManager);
 
 			DiagramEditor.IndicatorTypes.AddRange(StockSharp.Configuration.Extensions.GetIndicatorTypes());
 			PaletteElements = ConfigManager.GetService<StrategiesRegistry>().DiagramElements;
@@ -103,6 +110,21 @@ namespace SampleDiagram
 		{
 			PropertyGridControl.SelectedObject = element;
 		}
+
+		private void DiagramEditor_OnElementDoubleClicked(DiagramElement element)
+		{
+			var compositionElement = element as CompositionDiagramElement;
+
+			if (compositionElement == null)
+				return;
+
+			ConfigManager
+				.GetService<LayoutManager>()
+				.OpenDocumentWindow(new DiagramEditorControl
+				{
+					Composition = new CompositionItem(CompositionType.Composition, compositionElement)
+				});
+        }
 
 		private void CompositionPropertyChanged(CompositionItem oldComposition, CompositionItem newComposition)
 		{
@@ -147,6 +169,11 @@ namespace SampleDiagram
 				                  : registry.Strategies.FirstOrDefault(c => c.TypeId == compositionId);
 
 			Composition = new CompositionItem(compositionType, (CompositionDiagramElement)composition);
+
+			var layout = storage.GetValue<string>("Layout");
+
+			if (!layout.IsEmpty())
+				_layoutManager.LoadLayout(layout);
 		}
 
 		public override void Save(SettingsStorage storage)
@@ -158,6 +185,7 @@ namespace SampleDiagram
 
 			storage.SetValue("CompositionType", Composition.Type);
 			storage.SetValue("CompositionId", Composition.Element.TypeId);
+			storage.SetValue("Layout", _layoutManager.SaveLayout());
 		}
 
 		#endregion

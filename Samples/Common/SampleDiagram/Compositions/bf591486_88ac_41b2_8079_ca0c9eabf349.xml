@@ -117,7 +117,7 @@
                       <key>Value</key>
                       <value>
                         <Type type="string">string</Type>
-                        <Value type="string">Составные элементы</Value>
+                        <Value type="string">Compositions</Value>
                       </value>
                     </KeyValuePairBeginStringAndObjectEnd>
                   </Value>
@@ -132,7 +132,7 @@
                       <key>Value</key>
                       <value>
                         <Type type="string">string</Type>
-                        <Value type="string">Составной элемент</Value>
+                        <Value type="string">Conditional ternary operator.</Value>
                       </value>
                     </KeyValuePairBeginStringAndObjectEnd>
                   </Value>

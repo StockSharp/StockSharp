@@ -2946,7 +2946,7 @@ Str3172;Days of history data;Дней истории
 Str3173;Number of history days for strategy initialization.;Количество дней истории для инициализации стратегии.
 Str3174;Strategy not compiled.;Стратегия не скомпилирована.
 Str3175Params;Error initializing strategy diagram: {0};Ошибка инициализации схемы стратегии: {0}
-Str3176;Real;Реал
+Str3176;Live;Реал
 Str3177;Optimization;Оптимизация
 Str3178;Stopped;Остановлена
 Str3179;Running;Выполняется
@@ -4186,6 +4186,8 @@ Delay;Delay;Отложенно
 SecurityDelayLoad;Delay load instruments.;Отложенная загрузка инструментов.
 OnlyActiveSecurities;Only active instruments.;Только активные инструменты.
 CandleTimeInterval;Interval (in days), for which the downloaded candles.;Интервал в днях, за который скачиваются свечи.
+StrategyNotSelected;Strategy is not selected;Стратегия не выбрана
+Palette;Palette;Палитра
 DocStr0;Button activation alert settings;Кнопка активации настроек сигнала
 DocStr1;Initializes a new instance of the {0};Создать {0}
 DocStr2;Load settings;Загрузить настройки

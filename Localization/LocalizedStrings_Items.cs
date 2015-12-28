@@ -54073,5 +54073,31 @@ namespace StockSharp.Localization
 		{
 			get { return GetString(CandleTimeIntervalKey); }
 		}
-    }
+
+		/// <summary>
+		/// Strategy is not selected
+		/// </summary>
+		public const string StrategyNotSelectedKey = "StrategyNotSelected";
+
+		/// <summary>
+		/// Strategy is not selected
+		/// </summary>
+		public static string StrategyNotSelected
+		{
+			get { return GetString(StrategyNotSelectedKey); }
+		}
+
+		/// <summary>
+		/// Palette
+		/// </summary>
+		public const string PaletteKey = "Palette";
+
+		/// <summary>
+		/// Palette
+		/// </summary>
+		public static string Palette
+		{
+			get { return GetString(PaletteKey); }
+		}
+	}
 }

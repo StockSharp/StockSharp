@@ -107,7 +107,7 @@
                       <key>Value</key>
                       <value>
                         <Type type="string">string</Type>
-                        <Value type="string">Составные элементы</Value>
+                        <Value type="string">Strategies</Value>
                       </value>
                     </KeyValuePairBeginStringAndObjectEnd>
                   </Value>
@@ -122,7 +122,7 @@
                       <key>Value</key>
                       <value>
                         <Type type="string">string</Type>
-                        <Value type="string">Составной элемент</Value>
+                        <Value type="string">Strategy based on intersection of simple moving averages.</Value>
                       </value>
                     </KeyValuePairBeginStringAndObjectEnd>
                   </Value>

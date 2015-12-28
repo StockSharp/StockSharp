@@ -19,6 +19,7 @@ namespace SampleDiagram
 	using System.ComponentModel;
 	using System.Globalization;
 	using System.IO;
+	using System.Linq;
 	using System.Windows;
 	using System.Windows.Input;
 
@@ -60,12 +61,13 @@ namespace SampleDiagram
 			logManager.Sources.Add(_strategiesRegistry);
 			_strategiesRegistry.Init();
 
-			ConfigManager.RegisterService(logManager);
-			ConfigManager.RegisterService(_strategiesRegistry);
-
 			_layoutManager = new LayoutManager(DockingManager);
 			_layoutManager.Changed += SaveSettings;
 			logManager.Sources.Add(_layoutManager);
+
+			ConfigManager.RegisterService(logManager);
+			ConfigManager.RegisterService(_strategiesRegistry);
+			ConfigManager.RegisterService(_layoutManager);
 
 			SolutionExplorer.Compositions = _strategiesRegistry.Compositions;
 			SolutionExplorer.Strategies = _strategiesRegistry.Strategies;
@@ -148,8 +150,11 @@ namespace SampleDiagram
 			{
 				Name = "New " + type.ToString().ToLower()
 			};
+			var item = new CompositionItem(type, element);
 
-			_strategiesRegistry.Save(element, type == CompositionType.Composition);
+			_strategiesRegistry.Save(item);
+
+			OpenComposition(item);
 		}
 
 		private void OpenCommand_OnCanExecute(object sender, CanExecuteRoutedEventArgs e)
@@ -181,6 +186,17 @@ namespace SampleDiagram
 
 			if (res != MessageBoxResult.Yes)
 				return;
+
+			var control = _layoutManager
+				.DockingControls
+				.OfType<DiagramEditorControl>()
+				.FirstOrDefault(c => c.Key.CompareIgnoreCase(item.Key));
+
+			if (control != null)
+			{
+				control.ResetIsChanged();
+				_layoutManager.CloseDocumentWindow(control);
+			}
 
 			_strategiesRegistry.Remove(item);
 		}

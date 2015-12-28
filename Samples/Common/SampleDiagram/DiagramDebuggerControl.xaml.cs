@@ -21,12 +21,17 @@ namespace SampleDiagram
 	using System.Windows.Input;
 
 	using Ecng.Common;
+	using Ecng.Serialization;
 	using Ecng.Xaml;
+
+	using SampleDiagram.Layout;
 
 	using StockSharp.Xaml.Diagram;
 
-	public partial class DiagramDebuggerControl
+	public partial class DiagramDebuggerControl : IPersistable
 	{
+		private readonly LayoutManager _layoutManager;
+
 		public static readonly DependencyProperty StrategyProperty = DependencyProperty.Register("Strategy", typeof(EmulationDiagramStrategy), typeof(DiagramDebuggerControl),
 			new PropertyMetadata(null, OnStrategyPropertyChanged));
 
@@ -49,8 +54,6 @@ namespace SampleDiagram
 
 		public ICommand StepNextCommand { get; private set; }
 
-		public ICommand StepToOutParamCommand { get; private set; }
-
 		public ICommand StepIntoCommand { get; private set; }
 
 		public ICommand StepOutCommand { get; private set; }
@@ -63,6 +66,8 @@ namespace SampleDiagram
 		{
 			InitializeCommands();
             InitializeComponent();
+
+			_layoutManager = new LayoutManager(DockingManager);
 		}
 
 		private void InitializeCommands()
@@ -117,10 +122,7 @@ namespace SampleDiagram
 
 				var composition = strategy.Composition;
 
-				Debugger = new DiagramDebugger(composition)
-				{
-					IsEnabled = true
-				};
+				Debugger = new DiagramDebugger(composition);
 				Debugger.Break += OnDebuggerBreak;
 				Debugger.CompositionChanged += OnDebuggerCompositionChanged;
 
@@ -185,5 +187,27 @@ namespace SampleDiagram
 				DiagramEditor.SelectedElement.SelectedSocket != null && 
 				func(Debugger, DiagramEditor.SelectedElement.SelectedSocket);
 		}
+
+		#region IPersistable
+
+		public void Load(SettingsStorage storage)
+		{
+			Debugger.Load(storage);
+
+			var layout = storage.GetValue<string>("Layout");
+
+			if (!layout.IsEmpty())
+				_layoutManager.LoadLayout(layout);
+		}
+
+		public void Save(SettingsStorage storage)
+		{
+			Debugger.Save(storage);
+
+			storage.SetValue("Layout", _layoutManager.SaveLayout());
+		}
+
+		#endregion
+
 	}
 }

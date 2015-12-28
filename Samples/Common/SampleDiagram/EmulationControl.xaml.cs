@@ -103,8 +103,6 @@ namespace SampleDiagram
 
 		public ICommand StepNextCommand => DiagramDebuggerControl.StepNextCommand;
 
-		public ICommand StepToOutParamCommand => DiagramDebuggerControl.StepToOutParamCommand;
-
 		public ICommand StepIntoCommand => DiagramDebuggerControl.StepIntoCommand;
 
 		public ICommand StepOutCommand => DiagramDebuggerControl.StepOutCommand;
@@ -334,6 +332,8 @@ namespace SampleDiagram
 
 			TicksAndDepthsProgress.Value = 0;
 
+			DiagramDebuggerControl.Debugger.IsEnabled = true;
+
 			// raise NewSecurities and NewPortfolio for full fill strategy properties
 			_connector.Connect();
 
@@ -350,6 +350,8 @@ namespace SampleDiagram
 		private void StopEmulation()
 		{
 			_connector.Disconnect();
+
+			DiagramDebuggerControl.Debugger.IsEnabled = false;
 
 			if (DiagramDebuggerControl.Debugger.IsWaiting)
 				DiagramDebuggerControl.Debugger.Continue();
@@ -475,7 +477,10 @@ namespace SampleDiagram
 				Composition = registry.Clone(composition)
 			};
 
-            DiagramDebuggerControl.Debugger.Load(storage.GetValue<SettingsStorage>("Debugger"));
+			var debuggerControl = storage.GetValue<SettingsStorage>("DebuggerControl");
+
+			if (debuggerControl != null)
+				DiagramDebuggerControl.Load(debuggerControl);
 
 			_layoutManager.LoadLayout(storage.GetValue<string>("Layout"));
 		}
@@ -496,7 +501,7 @@ namespace SampleDiagram
 			storage.SetValue("MarketDataSource", Strategy.MarketDataSource);
 			storage.SetValue("CandlesTimeFrame", Strategy.CandlesTimeFrame);
 
-			storage.SetValue("Debugger", DiagramDebuggerControl.Debugger.Save());
+			storage.SetValue("DebuggerControl", DiagramDebuggerControl.Save());
 
 			storage.SetValue("Layout", _layoutManager.SaveLayout());
 		}
