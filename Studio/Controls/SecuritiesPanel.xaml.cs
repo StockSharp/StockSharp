@@ -126,22 +126,26 @@ namespace StockSharp.Studio.Controls
 			cmdSvc.UnRegister<BindConnectorCommand>(this);
 		}
 
+		//TODO: дописать логику сохранения состояния для DockSite
 		public override void Save(SettingsStorage storage)
 		{
 			storage.SetValue("SecurityPicker", SecurityPicker.Save());
-			storage.SetValue("Layout", DockSite.SaveLayout());
+			//storage.SetValue("Layout", DockSite.SaveLayout());
 			storage.SetValue("Securities", _securityIds.ToArray());
 		}
 
+		//TODO: дописать логику загрузки состояния для DockSite
 		public override void Load(SettingsStorage storage)
 		{
 			var gridSettings = storage.GetValue<SettingsStorage>("SecurityPicker");
+
 			if (gridSettings != null)
 				SecurityPicker.Load(gridSettings);
 
 			var layout = storage.GetValue<string>("Layout");
-			if (layout != null)
-				DockSite.LoadLayout(layout);
+
+			//if (layout != null)
+			//	DockSite.LoadLayout(layout);
 
 			_securityIds.SyncDo(list =>
 			{
