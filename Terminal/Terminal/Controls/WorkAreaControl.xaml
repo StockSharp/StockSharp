@@ -37,6 +37,11 @@
                                     
                                 </controls:DiagramPanel>
                             </xcad:LayoutAnchorable>
+                            <xcad:LayoutAnchorable Title="2" CanClose="False">
+                                <controls:OrdersPanel>
+                                    
+                                </controls:OrdersPanel>
+                            </xcad:LayoutAnchorable>
                         </xcad:LayoutAnchorablePane>
                     </xcad:LayoutAnchorablePaneGroup>
                 </xcad:LayoutPanel>
