@@ -51,15 +51,6 @@
 			set { SetValue(StrategyProperty, value); }
 		}
 
-		public static readonly DependencyProperty TitleConverterProperty = DependencyProperty.Register("TitleConverter", typeof(IValueConverter),
-			typeof(StrategyControl), new PropertyMetadata(null));
-
-		public IValueConverter TitleConverter
-		{
-			get { return (IValueConverter)GetValue(TitleConverterProperty); }
-			set { SetValue(TitleConverterProperty, value); }
-		}
-
 		#endregion
 
 		private readonly BufferedChart _bufferedChart;
@@ -74,6 +65,8 @@
 		public ICommand StartCommand { get; protected set; }
 
 		public ICommand StopCommand { get; protected set; }
+
+		public ICommand RefreshCompositionCommand { get; private set; }
 
 		public ICommand AddBreakpointCommand => DiagramDebuggerControl.AddBreakpointCommand;
 
@@ -99,6 +92,8 @@
 			_commissionCurve = Curve.CreateCurve(LocalizedStrings.Str159, Colors.Red, EquityCurveChartStyles.DashedLine);
 
 			_posItems = PositionCurve.CreateCurve(LocalizedStrings.Str862, Colors.DarkGreen);
+
+			RefreshCompositionCommand = new DelegateCommand(obj => Load(this.Save()));
 		}
 
 		protected void Reset()

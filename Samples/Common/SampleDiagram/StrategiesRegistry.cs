@@ -116,12 +116,12 @@ namespace SampleDiagram
 				File.Delete(file);
 		}
 
-		public CompositionItem Discard(CompositionItem element)
+		public void Discard(CompositionItem element)
 		{
-			return new CompositionItem(element.Type, Discard(element.Element, element.Type == CompositionType.Composition));
+			Discard(element.Element, element.Type == CompositionType.Composition);
 		}
 
-		public CompositionDiagramElement Discard(CompositionDiagramElement element, bool isComposition)
+		public void Discard(CompositionDiagramElement element, bool isComposition)
 		{
 			if (element == null)
 				throw new ArgumentNullException(nameof(element));
@@ -129,21 +129,8 @@ namespace SampleDiagram
 			var path = isComposition ? _compositionsPath : _strategiesPath;
 			var file = Path.Combine(path, element.GetFileName());
 			var settings = _serializer.Deserialize(file);
-			var discardedElement = _compositionRegistry.Deserialize(settings);
 
-			if (isComposition)
-			{
-				// TODO discard in CompositionRegistry
-				DiagramElements.Remove(element);
-				DiagramElements.Add(discardedElement);
-			}
-			else
-			{
-				var index = _strategies.IndexOf(element);
-				_strategies[index] = discardedElement;
-			}
-
-			return discardedElement;
+			_compositionRegistry.Load(element, settings);
 		}
 
 		public CompositionDiagramElement Clone(CompositionDiagramElement element)

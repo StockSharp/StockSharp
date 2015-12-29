@@ -263,12 +263,12 @@ namespace SampleDiagram
 		private void DiscardCommand_OnExecuted(object sender, ExecutedRoutedEventArgs e)
 		{
 			var diagramEditor = (DiagramEditorControl)DockingManager.ActiveContent;
-			var item = diagramEditor.Composition;
+			var composition = diagramEditor.Composition;
 
-			var discardedItem = _strategiesRegistry.Discard(item);
+			_strategiesRegistry.Discard(composition);
 
-			diagramEditor.Composition = discardedItem;
-			diagramEditor.ResetIsChanged();
+			diagramEditor.Composition = null;
+			diagramEditor.Composition = composition;
 		}
 
 		private void EmulateStrategyCommand_OnCanExecute(object sender, CanExecuteRoutedEventArgs e)

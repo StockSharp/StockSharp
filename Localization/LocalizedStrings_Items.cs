@@ -54099,5 +54099,18 @@ namespace StockSharp.Localization
 		{
 			get { return GetString(PaletteKey); }
 		}
+
+		/// <summary>
+		/// Refresh scheme
+		/// </summary>
+		public const string RefreshSchemeKey = "RefreshScheme";
+
+		/// <summary>
+		/// Refresh scheme
+		/// </summary>
+		public static string RefreshScheme
+		{
+			get { return GetString(RefreshSchemeKey); }
+		}
 	}
 }

@@ -4188,6 +4188,7 @@ OnlyActiveSecurities;Only active instruments.;Только активные ин
 CandleTimeInterval;Interval (in days), for which the downloaded candles.;Интервал в днях, за который скачиваются свечи.
 StrategyNotSelected;Strategy is not selected;Стратегия не выбрана
 Palette;Palette;Палитра
+RefreshScheme;Refresh scheme;Обновить схему
 DocStr0;Button activation alert settings;Кнопка активации настроек сигнала
 DocStr1;Initializes a new instance of the {0};Создать {0}
 DocStr2;Load settings;Загрузить настройки

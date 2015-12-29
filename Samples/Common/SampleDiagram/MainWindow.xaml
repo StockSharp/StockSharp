@@ -211,6 +211,11 @@
                     </Style>
                 </fluent:RibbonTabItem.Resources>
                 <fluent:RibbonGroupBox Header="{x:Static localization:LocalizedStrings.Str1559}">
+                    <fluent:Button Header="{x:Static localization:LocalizedStrings.RefreshScheme}"
+								   SizeDefinition="Large"
+								   LargeIcon="pack://application:,,,/SampleDiagram;component/Images/Refresh_32x32.png"
+								   Command="{Binding RefreshCompositionCommand}" />
+					<Separator />
                     <fluent:Button Header="{x:Static localization:LocalizedStrings.Str2421}"
 								   SizeDefinition="Large"
 								   LargeIcon="pack://application:,,,/SampleDiagram;component/Images/start_32x32.png"
@@ -263,6 +268,11 @@
                     </Style>
                 </fluent:RibbonTabItem.Resources>
                 <fluent:RibbonGroupBox Header="{x:Static localization:LocalizedStrings.Str1559}">
+                    <fluent:Button Header="{x:Static localization:LocalizedStrings.RefreshScheme}"
+								   SizeDefinition="Large"
+								   LargeIcon="pack://application:,,,/SampleDiagram;component/Images/Refresh_32x32.png"
+								   Command="{Binding RefreshCompositionCommand}" />
+                    <Separator />
                     <fluent:Button Header="{x:Static localization:LocalizedStrings.Str2421}"
 								   SizeDefinition="Large"
 								   LargeIcon="pack://application:,,,/SampleDiagram;component/Images/start_32x32.png" />
