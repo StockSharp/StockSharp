@@ -1,23 +1,7 @@
-﻿#region S# License
-/******************************************************************************************
-NOTICE!!!  This program and source code is owned and licensed by
-StockSharp, LLC, www.stocksharp.com
-Viewing or use of this code requires your acceptance of the license
-agreement found at https://github.com/StockSharp/StockSharp/blob/master/LICENSE
-Removal of this comment is a violation of the license agreement.
-
-Project: SampleDiagram.SampleDiagramPublic
-File: EmulationControl.xaml.cs
-Created: 2015, 11, 11, 2:32 PM
-
-Copyright 2010 by StockSharp, LLC
-*******************************************************************************************/
-#endregion S# License
-namespace SampleDiagram
+﻿namespace SampleDiagram
 {
 	using System;
 	using System.Collections.Generic;
-	using System.Globalization;
 	using System.IO;
 	using System.Linq;
 	using System.Windows;
@@ -46,7 +30,284 @@ namespace SampleDiagram
 	using StockSharp.Xaml.Charting;
 	using StockSharp.Xaml.Diagram;
 
-	public partial class EmulationControl
+	/// <summary>
+	/// Логика взаимодействия для LiveStrategyControl.xaml
+	/// </summary>
+	public partial class StrategyControl
+	{
+		#region DependencyProperty
+
+		public static readonly DependencyProperty StrategyProperty = DependencyProperty.Register("Strategy", typeof(DiagramStrategy),
+			typeof(StrategyControl), new PropertyMetadata(null, OnStrategyPropertyChanged));
+
+		private static void OnStrategyPropertyChanged(DependencyObject s, DependencyPropertyChangedEventArgs e)
+		{
+			((StrategyControl)s).OnStrategyChanged((DiagramStrategy)e.OldValue, (DiagramStrategy)e.NewValue);
+		}
+
+		public DiagramStrategy Strategy
+		{
+			get { return (DiagramStrategy)GetValue(StrategyProperty); }
+			set { SetValue(StrategyProperty, value); }
+		}
+
+		public static readonly DependencyProperty TitleConverterProperty = DependencyProperty.Register("TitleConverter", typeof(IValueConverter),
+			typeof(StrategyControl), new PropertyMetadata(null));
+
+		public IValueConverter TitleConverter
+		{
+			get { return (IValueConverter)GetValue(TitleConverterProperty); }
+			set { SetValue(TitleConverterProperty, value); }
+		}
+
+		#endregion
+
+		private readonly BufferedChart _bufferedChart;
+		private readonly LayoutManager _layoutManager;
+		private readonly ICollection<EquityData> _pnlCurve;
+		private readonly ICollection<EquityData> _unrealizedPnLCurve;
+		private readonly ICollection<EquityData> _commissionCurve;
+		private readonly ICollection<EquityData> _posItems;
+
+		public override string Key => Strategy.Id.ToString();
+
+		public ICommand StartCommand { get; protected set; }
+
+		public ICommand StopCommand { get; protected set; }
+
+		public ICommand AddBreakpointCommand => DiagramDebuggerControl.AddBreakpointCommand;
+
+		public ICommand RemoveBreakpointCommand => DiagramDebuggerControl.RemoveBreakpointCommand;
+
+		public ICommand StepNextCommand => DiagramDebuggerControl.StepNextCommand;
+
+		public ICommand StepIntoCommand => DiagramDebuggerControl.StepIntoCommand;
+
+		public ICommand StepOutCommand => DiagramDebuggerControl.StepOutCommand;
+
+		public ICommand ContinueCommand => DiagramDebuggerControl.ContinueCommand;
+
+		public StrategyControl()
+		{
+			InitializeComponent();
+
+			_bufferedChart = new BufferedChart(Chart);
+			_layoutManager = new LayoutManager(DockingManager);
+
+			_pnlCurve = Curve.CreateCurve(LocalizedStrings.PnL, Colors.DarkGreen, EquityCurveChartStyles.Area);
+			_unrealizedPnLCurve = Curve.CreateCurve(LocalizedStrings.PnLUnreal, Colors.Black);
+			_commissionCurve = Curve.CreateCurve(LocalizedStrings.Str159, Colors.Red, EquityCurveChartStyles.DashedLine);
+
+			_posItems = PositionCurve.CreateCurve(LocalizedStrings.Str862, Colors.DarkGreen);
+		}
+
+		protected void Reset()
+		{
+			OrderGrid.Orders.Clear();
+			MyTradeGrid.Trades.Clear();
+
+			_pnlCurve.Clear();
+			_unrealizedPnLCurve.Clear();
+			_commissionCurve.Clear();
+			_posItems.Clear();
+		}
+
+		private void OnStrategyChanged(DiagramStrategy oldStrategy, DiagramStrategy newStrategy)
+		{
+			if (oldStrategy != null)
+			{
+				ConfigManager
+					.GetService<LogManager>()
+					.Sources
+					.Remove(oldStrategy);
+
+				oldStrategy.OrderRegistering += OnStrategyOrderRegistering;
+				oldStrategy.OrderReRegistering += OnStrategyOrderReRegistering;
+				oldStrategy.OrderRegisterFailed += OnStrategyOrderRegisterFailed;
+
+				oldStrategy.StopOrderRegistering += OnStrategyOrderRegistering;
+				oldStrategy.StopOrderReRegistering += OnStrategyOrderReRegistering;
+				oldStrategy.StopOrderRegisterFailed += OnStrategyOrderRegisterFailed;
+
+				oldStrategy.NewMyTrades += OnStrategyNewMyTrade;
+			}
+
+			DiagramDebuggerControl.Strategy = newStrategy;
+
+			if (newStrategy == null)
+				return;
+
+			ConfigManager
+				.GetService<LogManager>()
+				.Sources
+				.Add(newStrategy);
+
+			newStrategy.OrderRegistering += OnStrategyOrderRegistering;
+			newStrategy.OrderReRegistering += OnStrategyOrderReRegistering;
+			newStrategy.OrderRegisterFailed += OnStrategyOrderRegisterFailed;
+
+			newStrategy.StopOrderRegistering += OnStrategyOrderRegistering;
+			newStrategy.StopOrderReRegistering += OnStrategyOrderReRegistering;
+			newStrategy.StopOrderRegisterFailed += OnStrategyOrderRegisterFailed;
+
+			newStrategy.NewMyTrades += OnStrategyNewMyTrade;
+
+			newStrategy.PnLChanged += () =>
+			{
+				var pnl = new EquityData
+				{
+					Time = newStrategy.CurrentTime,
+					Value = newStrategy.PnL - newStrategy.Commission ?? 0
+				};
+
+				var unrealizedPnL = new EquityData
+				{
+					Time = newStrategy.CurrentTime,
+					Value = newStrategy.PnLManager.UnrealizedPnL
+				};
+
+				var commission = new EquityData
+				{
+					Time = newStrategy.CurrentTime,
+					Value = newStrategy.Commission ?? 0
+				};
+
+				_pnlCurve.Add(pnl);
+				_unrealizedPnLCurve.Add(unrealizedPnL);
+				_commissionCurve.Add(commission);
+			};
+
+			newStrategy.PositionChanged += () => _posItems.Add(new EquityData
+			{
+				Time = newStrategy.CurrentTime,
+				Value = newStrategy.Position
+			});
+
+			newStrategy.SetChart(_bufferedChart);
+		}
+
+		private void OnStrategyOrderRegisterFailed(OrderFail fail)
+		{
+			OrderGrid.AddRegistrationFail(fail);
+		}
+
+		private void OnStrategyOrderReRegistering(Order oldOrder, Order newOrder)
+		{
+			OrderGrid.Orders.Add(newOrder);
+		}
+
+		private void OnStrategyOrderRegistering(Order order)
+		{
+			OrderGrid.Orders.Add(order);
+		}
+
+		private void OnStrategyNewMyTrade(IEnumerable<MyTrade> trades)
+		{
+			MyTradeGrid.Trades.AddRange(trades);
+		}
+
+		private void OnDiagramDebuggerControlChanged()
+		{
+			RaiseChanged();
+		}
+
+		#region IPersistable
+
+		public override void Load(SettingsStorage storage)
+		{
+			base.Load(storage);
+
+			storage.TryLoadSettings<SettingsStorage>("DebuggerControl", s => DiagramDebuggerControl.Load(s));
+			storage.TryLoadSettings<string>("Layout", s => _layoutManager.LoadLayout(s));
+		}
+
+		public override void Save(SettingsStorage storage)
+		{
+			base.Save(storage);
+
+			storage.SetValue("DebuggerControl", DiagramDebuggerControl.Save());
+			storage.SetValue("Layout", _layoutManager.SaveLayout());
+		}
+
+		#endregion
+	}
+
+	public class LiveStrategyControl : StrategyControl
+	{
+		public LiveStrategyControl()
+		{
+			InitializeCommands();
+
+			this.SetBindings(TitleProperty, this, "Strategy.Composition.Name", BindingMode.OneWay, new TitleConverter(LocalizedStrings.Str3176));
+		}
+
+		private void InitializeCommands()
+		{
+			StartCommand = new DelegateCommand(
+				obj =>
+				{
+					var connector = ConfigManager.GetService<IConnector>();
+
+					Strategy.Connector = connector;
+
+					Strategy.SetCandleManager(new CandleManager(connector));
+					Strategy.Start();
+				},
+				obj => Strategy != null && Strategy.ProcessState == ProcessStates.Stopped);
+
+			StopCommand = new DelegateCommand(
+				obj => Strategy.Start(),
+				obj => Strategy != null && Strategy.ProcessState == ProcessStates.Started);
+		}
+
+		public override bool CanClose()
+		{
+			if (Strategy == null || Strategy.ProcessState == ProcessStates.Stopped)
+				return true;
+
+			new MessageBoxBuilder()
+				.Owner(this)
+				.Caption(Title)
+				.Text(LocalizedStrings.Str3617Params.Put(Title))
+				.Icon(MessageBoxImage.Warning)
+				.Button(MessageBoxButton.OK)
+				.Show();
+
+			return false;
+		}
+
+		#region IPersistable
+
+		public override void Load(SettingsStorage storage)
+		{
+			var compositionId = storage.GetValue<Guid>("CompositionId");
+			var registry = ConfigManager.GetService<StrategiesRegistry>();
+			var composition = (CompositionDiagramElement)registry.Strategies.FirstOrDefault(c => c.TypeId == compositionId);
+
+			Strategy = new DiagramStrategy
+			{
+				Id = storage.GetValue<Guid>("StrategyId"),
+				Composition = registry.Clone(composition)
+			};
+
+			base.Load(storage);
+		}
+
+		public override void Save(SettingsStorage storage)
+		{
+			if (Strategy != null)
+			{
+				storage.SetValue("CompositionId", Strategy.Composition.TypeId);
+				storage.SetValue("StrategyId", Strategy.Id);
+			}
+
+			base.Save(storage);
+		}
+
+		#endregion
+	}
+
+	public class EmulationStrategyControl : StrategyControl
 	{
 		private class TradeCandleBuilderSourceEx : TradeCandleBuilderSource
 		{
@@ -64,64 +325,24 @@ namespace SampleDiagram
 			}
 		}
 
-		#region DependencyProperty
-
-		public static readonly DependencyProperty StrategyProperty = DependencyProperty.Register("Strategy", typeof(EmulationDiagramStrategy), 
-			typeof(EmulationControl), new PropertyMetadata(null, OnStrategyPropertyChanged));
-
-		private static void OnStrategyPropertyChanged(DependencyObject s, DependencyPropertyChangedEventArgs e)
-		{
-			((EmulationControl)s).OnStrategyChanged((EmulationDiagramStrategy)e.OldValue, (EmulationDiagramStrategy)e.NewValue);
-		}
-
-		public EmulationDiagramStrategy Strategy
-		{
-			get { return (EmulationDiagramStrategy)GetValue(StrategyProperty); }
-			set { SetValue(StrategyProperty, value); }
-		}
-
-		#endregion
-
-		private readonly BufferedChart _bufferedChart;
-		private readonly LayoutManager _layoutManager;
-		private readonly ICollection<EquityData> _pnlCurve;
-		private readonly ICollection<EquityData> _unrealizedPnLCurve;
-		private readonly ICollection<EquityData> _commissionCurve;
-		private readonly ICollection<EquityData> _posItems;
-
 		private HistoryEmulationConnector _connector;
 
-		public override string Key => Strategy.Id.ToString();
-
-		public ICommand StartCommand { get; private set; }
-
-		public ICommand StopCommand { get; private set; }
-
-		public ICommand AddBreakpointCommand => DiagramDebuggerControl.AddBreakpointCommand;
-
-		public ICommand RemoveBreakpointCommand => DiagramDebuggerControl.RemoveBreakpointCommand;
-
-		public ICommand StepNextCommand => DiagramDebuggerControl.StepNextCommand;
-
-		public ICommand StepIntoCommand => DiagramDebuggerControl.StepIntoCommand;
-
-		public ICommand StepOutCommand => DiagramDebuggerControl.StepOutCommand;
-
-		public ICommand ContinueCommand => DiagramDebuggerControl.ContinueCommand;
-
-		public EmulationControl()
+		public EmulationStrategyControl()
 		{
 			InitializeCommands();
-            InitializeComponent();
 
-			_bufferedChart = new BufferedChart(Chart);
-			_layoutManager = new LayoutManager(DockingManager);
+			this.SetBindings(TitleProperty, this, "Strategy.Composition.Name", BindingMode.OneWay, new TitleConverter(LocalizedStrings.Str1174));
+		}
 
-			_pnlCurve = Curve.CreateCurve(LocalizedStrings.PnL, Colors.DarkGreen, EquityCurveChartStyles.Area);
-			_unrealizedPnLCurve = Curve.CreateCurve(LocalizedStrings.PnLUnreal, Colors.Black);
-			_commissionCurve = Curve.CreateCurve(LocalizedStrings.Str159, Colors.Red, EquityCurveChartStyles.DashedLine);
+		private void InitializeCommands()
+		{
+			StartCommand = new DelegateCommand(
+				obj => StartEmulation(),
+				obj => _connector == null || _connector.State == EmulationStates.Stopped);
 
-			_posItems = PositionCurve.CreateCurve(LocalizedStrings.Str862, Colors.DarkGreen);
+			StopCommand = new DelegateCommand(
+				obj => StopEmulation(),
+				obj => _connector != null && _connector.State == EmulationStates.Started);
 		}
 
 		public override bool CanClose()
@@ -140,17 +361,6 @@ namespace SampleDiagram
 			return false;
 		}
 
-		private void InitializeCommands()
-		{
-			StartCommand = new DelegateCommand(
-				obj => StartEmulation(),
-				obj => _connector == null || _connector.State == EmulationStates.Stopped);
-
-			StopCommand = new DelegateCommand(
-				obj => StopEmulation(),
-				obj => _connector != null && _connector.State == EmulationStates.Started);
-		}
-
 		private void StartEmulation()
 		{
 			if (_connector != null && _connector.State != EmulationStates.Stopped)
@@ -159,20 +369,13 @@ namespace SampleDiagram
 			if (Strategy == null)
 				throw new InvalidOperationException("Strategy not selected.");
 
-			var strategy = Strategy;
+			var strategy = (EmulationDiagramStrategy)Strategy;
 
 			if (strategy.DataPath.IsEmpty() || !Directory.Exists(strategy.DataPath))
 				throw new InvalidOperationException(LocalizedStrings.Str3014);
 
 			strategy.Reset();
-
-			OrderGrid.Orders.Clear();
-			MyTradeGrid.Trades.Clear();
-
-			_pnlCurve.Clear();
-			_unrealizedPnLCurve.Clear();
-			_commissionCurve.Clear();
-			_posItems.Clear();
+			Reset();
 
 			var secGen = new SecurityIdGenerator();
 			var secIdParts = secGen.Split(strategy.SecurityId);
@@ -264,8 +467,8 @@ namespace SampleDiagram
 			ConfigManager.GetService<LogManager>().Sources.Add(_connector);
 
 			var candleManager = !useCandles
-				                    ? new CandleManager(new TradeCandleBuilderSourceEx(_connector))
-				                    : new CandleManager(_connector);
+									? new CandleManager(new TradeCandleBuilderSourceEx(_connector))
+									: new CandleManager(_connector);
 
 			strategy.Volume = 1;
 			strategy.Portfolio = portfolio;
@@ -277,7 +480,6 @@ namespace SampleDiagram
 			// it is excessively for time range with several months
 			strategy.UnrealizedPnLInterval = ((stopTime - startTime).Ticks / 1000).To<TimeSpan>();
 
-			strategy.SetChart(_bufferedChart);
 			strategy.SetCandleManager(candleManager);
 
 			_connector.NewSecurities += securities =>
@@ -357,111 +559,11 @@ namespace SampleDiagram
 				DiagramDebuggerControl.Debugger.Continue();
 		}
 
-		private void OnStrategyChanged(EmulationDiagramStrategy oldStrategy, EmulationDiagramStrategy newStrategy)
-		{
-			if (oldStrategy != null)
-			{
-				ConfigManager
-					.GetService<LogManager>()
-					.Sources
-					.Remove(oldStrategy);
-
-				oldStrategy.OrderRegistering += OnStrategyOrderRegistering;
-				oldStrategy.OrderReRegistering += OnStrategyOrderReRegistering;
-				oldStrategy.OrderRegisterFailed += OnStrategyOrderRegisterFailed;
-
-				oldStrategy.StopOrderRegistering += OnStrategyOrderRegistering;
-				oldStrategy.StopOrderReRegistering += OnStrategyOrderReRegistering;
-				oldStrategy.StopOrderRegisterFailed += OnStrategyOrderRegisterFailed;
-
-				oldStrategy.NewMyTrades += OnStrategyNewMyTrade;
-			}
-
-			DiagramDebuggerControl.Strategy = newStrategy;
-
-			if (newStrategy == null)
-				return;
-
-			ConfigManager
-				.GetService<LogManager>()
-				.Sources
-				.Add(newStrategy);
-
-			newStrategy.OrderRegistering += OnStrategyOrderRegistering;
-			newStrategy.OrderReRegistering += OnStrategyOrderReRegistering;
-			newStrategy.OrderRegisterFailed += OnStrategyOrderRegisterFailed;
-
-			newStrategy.StopOrderRegistering += OnStrategyOrderRegistering;
-			newStrategy.StopOrderReRegistering += OnStrategyOrderReRegistering;
-			newStrategy.StopOrderRegisterFailed += OnStrategyOrderRegisterFailed;
-
-			newStrategy.NewMyTrades += OnStrategyNewMyTrade;
-
-			newStrategy.PnLChanged += () =>
-			{
-				var pnl = new EquityData
-				{
-					Time = newStrategy.CurrentTime,
-					Value = newStrategy.PnL - newStrategy.Commission ?? 0
-				};
-
-				var unrealizedPnL = new EquityData
-				{
-					Time = newStrategy.CurrentTime,
-					Value = newStrategy.PnLManager.UnrealizedPnL
-				};
-
-				var commission = new EquityData
-				{
-					Time = newStrategy.CurrentTime,
-					Value = newStrategy.Commission ?? 0
-				};
-
-				_pnlCurve.Add(pnl);
-				_unrealizedPnLCurve.Add(unrealizedPnL);
-				_commissionCurve.Add(commission);
-			};
-
-			newStrategy.PositionChanged += () => _posItems.Add(new EquityData
-			{
-				Time = newStrategy.CurrentTime,
-				Value = newStrategy.Position
-			});
-		}
-
-		private void OnStrategyOrderRegisterFailed(OrderFail fail)
-		{
-			OrderGrid.AddRegistrationFail(fail);
-		}
-
-		private void OnStrategyOrderReRegistering(Order oldOrder, Order newOrder)
-		{
-			OrderGrid.Orders.Add(newOrder);
-		}
-
-		private void OnStrategyOrderRegistering(Order order)
-		{
-			OrderGrid.Orders.Add(order);
-		}
-
-		private void OnStrategyNewMyTrade(IEnumerable<MyTrade> trades)
-		{
-			MyTradeGrid.Trades.AddRange(trades);
-		}
-
-		private void OnDiagramDebuggerControlChanged()
-		{
-			RaiseChanged();
-		}
-
 		#region IPersistable
 
 		public override void Load(SettingsStorage storage)
 		{
-			base.Load(storage);
-
 			var compositionId = storage.GetValue<Guid>("CompositionId");
-
 			var registry = ConfigManager.GetService<StrategiesRegistry>();
 			var composition = (CompositionDiagramElement)registry.Strategies.FirstOrDefault(c => c.TypeId == compositionId);
 
@@ -477,48 +579,28 @@ namespace SampleDiagram
 				Composition = registry.Clone(composition)
 			};
 
-			var debuggerControl = storage.GetValue<SettingsStorage>("DebuggerControl");
-
-			if (debuggerControl != null)
-				DiagramDebuggerControl.Load(debuggerControl);
-
-			_layoutManager.LoadLayout(storage.GetValue<string>("Layout"));
+			base.Load(storage);
 		}
 
 		public override void Save(SettingsStorage storage)
 		{
+			if (Strategy != null)
+			{
+				var strategy = (EmulationDiagramStrategy)Strategy;
+
+				storage.SetValue("CompositionId", strategy.Composition.TypeId);
+				storage.SetValue("StrategyId", strategy.Id);
+				storage.SetValue("DataPath", strategy.DataPath);
+				storage.SetValue("StartDate", strategy.StartDate);
+				storage.SetValue("StopDate", strategy.StopDate);
+				storage.SetValue("SecurityId", strategy.SecurityId);
+				storage.SetValue("MarketDataSource", strategy.MarketDataSource);
+				storage.SetValue("CandlesTimeFrame", strategy.CandlesTimeFrame);
+			}
+
 			base.Save(storage);
-
-			if (Strategy == null)
-				return;
-
-			storage.SetValue("CompositionId", Strategy.Composition.TypeId);
-			storage.SetValue("StrategyId", Strategy.Id);
-			storage.SetValue("DataPath", Strategy.DataPath);
-			storage.SetValue("StartDate", Strategy.StartDate);
-			storage.SetValue("StopDate", Strategy.StopDate);
-			storage.SetValue("SecurityId", Strategy.SecurityId);
-			storage.SetValue("MarketDataSource", Strategy.MarketDataSource);
-			storage.SetValue("CandlesTimeFrame", Strategy.CandlesTimeFrame);
-
-			storage.SetValue("DebuggerControl", DiagramDebuggerControl.Save());
-
-			storage.SetValue("Layout", _layoutManager.SaveLayout());
 		}
 
 		#endregion
-	}
-
-	sealed class EmulationTitleConverter : IValueConverter
-	{
-		public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
-		{
-			return $"{LocalizedStrings.Str1174} {value}";
-		}
-
-		public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
-		{
-			throw new NotSupportedException();
-		}
 	}
 }

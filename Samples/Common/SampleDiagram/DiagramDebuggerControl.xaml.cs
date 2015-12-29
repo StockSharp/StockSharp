@@ -32,17 +32,17 @@ namespace SampleDiagram
 	{
 		private readonly LayoutManager _layoutManager;
 
-		public static readonly DependencyProperty StrategyProperty = DependencyProperty.Register("Strategy", typeof(EmulationDiagramStrategy), typeof(DiagramDebuggerControl),
+		public static readonly DependencyProperty StrategyProperty = DependencyProperty.Register("Strategy", typeof(DiagramStrategy), typeof(DiagramDebuggerControl),
 			new PropertyMetadata(null, OnStrategyPropertyChanged));
 
 		private static void OnStrategyPropertyChanged(DependencyObject sender, DependencyPropertyChangedEventArgs args)
 		{
-			((DiagramDebuggerControl)sender).OnStrategyPropertyChanged((EmulationDiagramStrategy)args.NewValue);
+			((DiagramDebuggerControl)sender).OnStrategyPropertyChanged((DiagramStrategy)args.NewValue);
 		}
 
-		public EmulationDiagramStrategy Strategy
+		public DiagramStrategy Strategy
 		{
-			get { return (EmulationDiagramStrategy)GetValue(StrategyProperty); }
+			get { return (DiagramStrategy)GetValue(StrategyProperty); }
 			set { SetValue(StrategyProperty, value); }
 		}
 
@@ -114,7 +114,7 @@ namespace SampleDiagram
 			ShowElementProperties(element);
 		}
 
-		private void OnStrategyPropertyChanged(EmulationDiagramStrategy strategy)
+		private void OnStrategyPropertyChanged(DiagramStrategy strategy)
 		{
 			if (strategy != null)
 			{

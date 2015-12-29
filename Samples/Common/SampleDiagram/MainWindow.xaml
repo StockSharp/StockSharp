@@ -41,6 +41,14 @@
         <CommandBinding Command="{x:Static local:MainWindow.ExecuteStrategyCommand}"
 						CanExecute="ExecuteStrategyCommand_OnCanExecute"
 						Executed="ExecuteStrategyCommand_OnExecuted"/>
+
+        <CommandBinding Command="{x:Static local:MainWindow.ConnectorSettingsCommand}"
+						CanExecute="ConnectorSettingsCommand_OnCanExecute"
+						Executed="ConnectorSettingsCommand_OnExecuted"/>
+
+        <CommandBinding Command="{x:Static local:MainWindow.ConnectDisconnectCommand}"
+						CanExecute="ConnectDisconnectCommand_OnCanExecute"
+						Executed="ConnectDisconnectCommand_OnExecuted"/>
     </Window.CommandBindings>
 	
     <Grid Margin="3">
@@ -49,8 +57,27 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <fluent:Ribbon Grid.Row="0" AutomaticStateManagement="True"
+        <fluent:Ribbon Grid.Row="0" AutomaticStateManagement="False"
                        x:Name="Ribbon">
+
+            <fluent:Ribbon.QuickAccessItems>
+                <fluent:QuickAccessMenuItem IsChecked="true">
+                    <fluent:Button Size="Small" 
+								   Header="{x:Static localization:LocalizedStrings.Settings}"
+								   ToolTip="{x:Static localization:LocalizedStrings.ConnectionSettings}"
+								   Icon="pack://application:,,,/StockSharp.Xaml;component/Images/connection-settings-icon_24x24.png" 
+								   Command="{x:Static local:MainWindow.ConnectorSettingsCommand}"/>
+                </fluent:QuickAccessMenuItem>
+                <fluent:QuickAccessMenuItem IsChecked="true">
+                    <fluent:Button x:Name="ConnectButton"
+								   Size="Small" 
+								   Header="{x:Static localization:LocalizedStrings.Connect}"
+								   ToolTip="{x:Static localization:LocalizedStrings.Connect}"
+								   Icon="pack://application:,,,/SampleDiagram;component/Images/Connect_24x24.png" 
+								   Command="{x:Static local:MainWindow.ConnectDisconnectCommand}"/>
+                </fluent:QuickAccessMenuItem>
+            </fluent:Ribbon.QuickAccessItems>
+			
             <!--<fluent:Ribbon.ContextualGroups>
                 <fluent:RibbonContextualTabGroup x:Name="DesignerRibbonGroup"
                                                  BorderBrush="DodgerBlue"
@@ -221,6 +248,27 @@
 								   SizeDefinition="Large"
 								   LargeIcon="pack://application:,,,/SampleDiagram;component/Images/Continue_16x16.png"
 								   Command="{Binding ContinueCommand}" />
+                </fluent:RibbonGroupBox>
+            </fluent:RibbonTabItem>
+
+            <fluent:RibbonTabItem Header="{x:Static localization:LocalizedStrings.Str3176}"
+								  x:Name="RibbonLiveTab">
+                <fluent:RibbonTabItem.Resources>
+                    <Style TargetType="{x:Type fluent:Button}">
+                        <Style.Triggers>
+                            <Trigger Property="Command" Value="{x:Null}">
+                                <Setter Property="IsEnabled" Value="False" />
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </fluent:RibbonTabItem.Resources>
+                <fluent:RibbonGroupBox Header="{x:Static localization:LocalizedStrings.Str1559}">
+                    <fluent:Button Header="{x:Static localization:LocalizedStrings.Str2421}"
+								   SizeDefinition="Large"
+								   LargeIcon="pack://application:,,,/SampleDiagram;component/Images/start_32x32.png" />
+                    <fluent:Button Header="{x:Static localization:LocalizedStrings.Str242}"
+								   SizeDefinition="Large"
+								   LargeIcon="pack://application:,,,/SampleDiagram;component/Images/stop_32x32.png"  />
                 </fluent:RibbonGroupBox>
             </fluent:RibbonTabItem>
         </fluent:Ribbon>

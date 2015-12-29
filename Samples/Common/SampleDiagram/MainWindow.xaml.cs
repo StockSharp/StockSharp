@@ -22,6 +22,7 @@ namespace SampleDiagram
 	using System.Linq;
 	using System.Windows;
 	using System.Windows.Input;
+	using System.Windows.Media.Imaging;
 
 	using Ecng.Common;
 	using Ecng.Configuration;
@@ -30,8 +31,12 @@ namespace SampleDiagram
 
 	using SampleDiagram.Layout;
 
+	using StockSharp.Algo;
+	using StockSharp.BusinessEntities;
+	using StockSharp.Configuration;
 	using StockSharp.Localization;
 	using StockSharp.Logging;
+	using StockSharp.Messages;
 	using StockSharp.Xaml;
 	using StockSharp.Xaml.Diagram;
 
@@ -44,10 +49,13 @@ namespace SampleDiagram
 		public static RoutedCommand DiscardCommand = new RoutedCommand();
 		public static RoutedCommand EmulateStrategyCommand = new RoutedCommand();
 		public static RoutedCommand ExecuteStrategyCommand = new RoutedCommand();
+		public static RoutedCommand ConnectorSettingsCommand = new RoutedCommand();
+		public static RoutedCommand ConnectDisconnectCommand = new RoutedCommand();
 
 		private readonly string _settingsFile = "settings.xml";
 
 		private readonly StrategiesRegistry _strategiesRegistry = new StrategiesRegistry();
+		private readonly Connector _connector;
 		private readonly LayoutManager _layoutManager;
 
 		public MainWindow()
@@ -65,9 +73,16 @@ namespace SampleDiagram
 			_layoutManager.Changed += SaveSettings;
 			logManager.Sources.Add(_layoutManager);
 
+			_connector = new Connector();
+			_connector.Connected += ConnectorOnConnectionStateChanged;
+			_connector.Disconnected += ConnectorOnConnectionStateChanged;
+			_connector.ConnectionError += ConnectorOnConnectionError;
+			logManager.Sources.Add(_connector);
+
 			ConfigManager.RegisterService(logManager);
 			ConfigManager.RegisterService(_strategiesRegistry);
 			ConfigManager.RegisterService(_layoutManager);
+			ConfigManager.RegisterService<IConnector>(_connector);
 
 			SolutionExplorer.Compositions = _strategiesRegistry.Compositions;
 			SolutionExplorer.Strategies = _strategiesRegistry.Strategies;
@@ -100,37 +115,59 @@ namespace SampleDiagram
 				.DoIfElse<DiagramEditorControl>(editor =>
 				{
 					RibbonDesignerTab.DataContext = editor.Composition;
-					//DesignerRibbonGroup.Visibility = Visibility.Visible;
 					Ribbon.SelectedTabItem = RibbonDesignerTab;
-					//CompositionNameTextBox.SetBindings(TextBox.TextProperty, editor.Composition.Element, "Name");
-				}, () =>
-				{
-					//DesignerRibbonGroup.Visibility = Visibility.Collapsed;
-					RibbonDesignerTab.DataContext = null;
-					//BindingOperations.ClearBinding(CompositionNameTextBox, TextBox.TextProperty);
-				});
+				}, () => RibbonDesignerTab.DataContext = null);
 
 			DockingManager
 				.ActiveContent
-				.DoIfElse<EmulationControl>(editor =>
+				.DoIfElse<EmulationStrategyControl>(editor =>
 				{
 					RibbonEmulationTab.DataContext = editor;
-					//EmulationRibbonGroup.Visibility = Visibility.Visible;
 					Ribbon.SelectedTabItem = RibbonEmulationTab;
-				}, () =>
+				}, () => RibbonEmulationTab.DataContext = null);
+
+			DockingManager
+				.ActiveContent
+				.DoIfElse<LiveStrategyControl>(editor =>
 				{
-					//EmulationRibbonGroup.Visibility = Visibility.Collapsed;
-					RibbonEmulationTab.DataContext = null;
-				});
+					RibbonLiveTab.DataContext = editor;
+					Ribbon.SelectedTabItem = RibbonLiveTab;
+				}, () => RibbonLiveTab.DataContext = null);
 
 			DockingManager
 				.ActiveContent
 				.DoIfElse<SolutionExplorerControl>(editor =>
 				{
 					Ribbon.SelectedTabItem = RibbonCommonTab;
-				}, () =>
-				{
-				});
+				}, () => { });
+		}
+
+		private void ConnectorOnConnectionStateChanged()
+		{
+			this.GuiAsync(() =>
+			{
+				var uri = _connector.ConnectionState == ConnectionStates.Disconnected
+							  ? "pack://application:,,,/SampleDiagram;component/Images/Connect_24x24.png"
+							  : "pack://application:,,,/SampleDiagram;component/Images/Disconnect_24x24.png";
+
+				ConnectButton.Icon = new BitmapImage(new Uri(uri));
+			});
+		}
+
+		private void ConnectorOnConnectionError(Exception obj)
+		{
+			this.GuiAsync(() =>
+			{
+				new MessageBoxBuilder()
+					.Owner(this)
+					.Caption(Title)
+					.Text(LocalizedStrings.Str626)
+					.Button(MessageBoxButton.OK)
+					.Icon(MessageBoxImage.Warning)
+					.Show();
+
+				_connector.Disconnect();
+			});
 		}
 
 		#endregion
@@ -247,11 +284,40 @@ namespace SampleDiagram
 
 		private void ExecuteStrategyCommand_OnCanExecute(object sender, CanExecuteRoutedEventArgs e)
 		{
-			e.CanExecute = false;
+			var item = e.Parameter as CompositionItem;
+			e.CanExecute = item != null && item.Type == CompositionType.Strategy;
 		}
 
 		private void ExecuteStrategyCommand_OnExecuted(object sender, ExecutedRoutedEventArgs e)
 		{
+			OpenLive((CompositionItem)e.Parameter);
+		}
+
+		private void ConnectorSettingsCommand_OnCanExecute(object sender, CanExecuteRoutedEventArgs e)
+		{
+			e.CanExecute = true;
+		}
+
+		private void ConnectorSettingsCommand_OnExecuted(object sender, ExecutedRoutedEventArgs e)
+		{
+			_connector.Configure(this);
+
+			SaveSettings();
+		}
+
+		private void ConnectDisconnectCommand_OnCanExecute(object sender, CanExecuteRoutedEventArgs e)
+		{
+			e.CanExecute = _connector.ConnectionState == ConnectionStates.Connected || _connector.ConnectionState == ConnectionStates.Disconnected;
+		}
+
+		private void ConnectDisconnectCommand_OnExecuted(object sender, ExecutedRoutedEventArgs e)
+		{
+			if (_connector.ConnectionState == ConnectionStates.Disconnected)
+			{
+				_connector.Connect();
+			}
+			else
+				_connector.Disconnect();
 		}
 
 		#endregion
@@ -276,7 +342,22 @@ namespace SampleDiagram
 				Composition = _strategiesRegistry.Clone(item.Element)
 			};
 
-			var content = new EmulationControl
+			var content = new EmulationStrategyControl
+			{
+				Strategy = strategy
+			};
+
+			_layoutManager.OpenDocumentWindow(content);
+		}
+
+		private void OpenLive(CompositionItem item)
+		{
+			var strategy = new DiagramStrategy
+			{
+				Composition = _strategiesRegistry.Clone(item.Element)
+			};
+
+			var content = new LiveStrategyControl
 			{
 				Strategy = strategy
 			};
@@ -289,18 +370,30 @@ namespace SampleDiagram
 			if (!File.Exists(_settingsFile))
 				return;
 
-			var settings = CultureInfo
+			CultureInfo
 				.InvariantCulture
-				.DoInCulture(() => new XmlSerializer<SettingsStorage>().Deserialize(_settingsFile));
+				.DoInCulture(() =>
+				{
+					var settings = new XmlSerializer<SettingsStorage>().Deserialize(_settingsFile);
 
-			_layoutManager.Load(settings);
+					settings.TryLoadSettings<SettingsStorage>("Layout", s => _layoutManager.Load(s));
+					settings.TryLoadSettings<SettingsStorage>("Connector", s => _connector.Load(s));
+				});
 		}
 
 		private void SaveSettings()
 		{
 			CultureInfo
 				.InvariantCulture
-				.DoInCulture(() => new XmlSerializer<SettingsStorage>().Serialize(_layoutManager.Save(), _settingsFile));
+				.DoInCulture(() =>
+				{
+					var settings = new SettingsStorage();
+
+					settings.SetValue("Layout", _layoutManager.Save());
+					settings.SetValue("Connector", _connector.Save());
+
+					new XmlSerializer<SettingsStorage>().Serialize(settings, _settingsFile);
+				});
 		}
 	}
 }

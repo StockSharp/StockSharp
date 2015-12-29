@@ -17,6 +17,10 @@ namespace SampleDiagram
 {
 	using System;
 
+	using Ecng.Configuration;
+	using Ecng.Serialization;
+
+	using StockSharp.Logging;
 	using StockSharp.Xaml.Diagram;
 
 	static class Extensions
@@ -46,6 +50,23 @@ namespace SampleDiagram
 			}
 			else
 				elseAction();
+		}
+
+		public static void TryLoadSettings<T>(this SettingsStorage storage, string name, Action<T> load)
+		{
+			try
+			{
+				var settings = storage.GetValue<T>(name);
+
+				if (settings == null)
+					return;
+
+				load(settings);
+			}
+			catch (Exception excp)
+			{
+				ConfigManager.GetService<LogManager>().Application.AddErrorLog(excp);
+			}
 		}
 	}
 }

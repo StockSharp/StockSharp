@@ -13,6 +13,7 @@
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <WarningLevel>4</WarningLevel>
+    <ApplicationIcon>..\..\..\References\stocksharp.ico</ApplicationIcon>
     <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -76,9 +77,6 @@
     <Reference Include="StockSharp.Xaml.Charting">
       <HintPath>..\..\..\Xaml.Charting\StockSharp.Xaml.Charting.dll</HintPath>
     </Reference>
-    <Reference Include="StockSharp.Xaml.Diagram">
-      <HintPath>..\..\..\Xaml.Diagram\StockSharp.Xaml.Diagram.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Data" />
@@ -114,12 +112,13 @@
     <Compile Include="DiagramDebuggerControl.xaml.cs">
       <DependentUpon>DiagramDebuggerControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="EmulationControl.xaml.cs">
-      <DependentUpon>EmulationControl.xaml</DependentUpon>
-    </Compile>
     <Compile Include="EmulationDiagramStrategy.cs" />
     <Compile Include="Layout\DockingControl.cs" />
     <Compile Include="Layout\LayoutManager.cs" />
+    <Compile Include="TitleConverter.cs" />
+    <Compile Include="StrategyControl.xaml.cs">
+      <DependentUpon>StrategyControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="SolutionExplorerControl.xaml.cs">
       <DependentUpon>SolutionExplorerControl.xaml</DependentUpon>
     </Compile>
@@ -132,7 +131,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="EmulationControl.xaml">
+    <Page Include="StrategyControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -215,6 +214,10 @@
       <Project>{b47f9c23-a4bd-46a9-bf27-54cb3d653503}</Project>
       <Name>Messages</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\..\Xaml.Diagram\Xaml.DiagramPublic.csproj">
+      <Project>{e5d21a65-1b77-4b4b-87c7-8ac7eee4f085}</Project>
+      <Name>Xaml.DiagramPublic</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\Xaml\Xaml.csproj">
       <Project>{64e4d6f0-36b6-4904-9ba7-fffbe5ff71d8}</Project>
       <Name>Xaml</Name>
@@ -240,8 +243,8 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Strategies\b4fcbed7_eb78_4846_a108_7f570fc3660d.xml">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <SubType>Designer</SubType>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
   <ItemGroup>
@@ -263,6 +266,10 @@
     <Resource Include="Images\FolderClosed.png" />
     <Resource Include="Images\FolderOpen.png" />
     <Resource Include="Images\FolderSelected.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Connect_24x24.png" />
+    <Resource Include="Images\Disconnect_24x24.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

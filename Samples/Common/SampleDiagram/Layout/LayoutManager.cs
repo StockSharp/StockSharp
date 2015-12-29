@@ -226,30 +226,27 @@ namespace SampleDiagram.Layout
 			_changedControls.Clear();
 			_dockingControlSettings.Clear();
 
-			CultureInfo.InvariantCulture.DoInCulture(() =>
+			var controls = storage.GetValue<SettingsStorage[]>("Controls");
+
+			foreach (var settings in controls)
 			{
-				var controls = storage.GetValue<SettingsStorage[]>("Controls");
-
-				foreach (var settings in controls)
+				try
 				{
-					try
-					{
-						var control = LoadDockingControl(settings);
+					var control = LoadDockingControl(settings);
 
-						_dockingControlSettings.Add(control, settings);
-						OpenDocumentWindow(control);
-					}
-					catch (Exception excp)
-					{
-						this.AddErrorLog(excp);
-					}
+					_dockingControlSettings.Add(control, settings);
+					OpenDocumentWindow(control);
 				}
+				catch (Exception excp)
+				{
+					this.AddErrorLog(excp);
+				}
+			}
 
-				_layout = storage.GetValue<string>("Layout");
+			_layout = storage.GetValue<string>("Layout");
 
-				if (!_layout.IsEmpty())
-					LoadLayout(_layout);
-			});
+			if (!_layout.IsEmpty())
+				LoadLayout(_layout);
 		}
 
 		public override void Save(SettingsStorage storage)
