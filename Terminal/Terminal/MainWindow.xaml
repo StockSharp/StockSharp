@@ -26,7 +26,10 @@
         <fluent:Ribbon Grid.Row="0" x:Name="Ribbon" AutomaticStateManagement="True">
             
         </fluent:Ribbon>
-        <Button Click="AddDocument" Width="90" Height="25" Content="Add work area" HorizontalAlignment="Left" Margin="10, 5" />
+        <StackPanel Orientation="Horizontal">
+            <Button Click="AddDocument" Width="90" Height="25" Content="Add work area" HorizontalAlignment="Left" Margin="10, 5" />
+            <Button Click="AddDocument" Width="90" Height="25" Content="Add work area" HorizontalAlignment="Left" Margin="5, 5" />
+        </StackPanel>
         <xcad:DockingManager Grid.Row="1" x:Name="DockingManager" ActiveContentChanged="DockingManager_OnActiveContentChanged">
             <xcad:LayoutRoot>
                 <xcad:LayoutPanel>                    

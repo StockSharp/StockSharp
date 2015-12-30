@@ -32,16 +32,49 @@
                 <xcad:LayoutPanel>
                     <xcad:LayoutAnchorablePaneGroup>
                         <xcad:LayoutAnchorablePane x:Name="WorkArea">
-                            <xcad:LayoutAnchorable Title="Диаграмма" CanClose="False">
-                                <controls:DiagramPanel>
-                                    
-                                </controls:DiagramPanel>
+
+                            <xcad:LayoutAnchorable Title="TradePanel" CanClose="False">
+                                <controls:TradesPanel>
+
+                                </controls:TradesPanel>
                             </xcad:LayoutAnchorable>
-                            <xcad:LayoutAnchorable Title="2" CanClose="False">
+                            
+                            <xcad:LayoutAnchorable Title="OrdersPanel" CanClose="False">
                                 <controls:OrdersPanel>
-                                    
+
                                 </controls:OrdersPanel>
                             </xcad:LayoutAnchorable>
+                            
+                            <xcad:LayoutAnchorable Title="SecurityPanel" CanClose="False">
+                                <controls:SecuritiesPanel>
+
+                                </controls:SecuritiesPanel>
+                            </xcad:LayoutAnchorable>
+                            
+                            <xcad:LayoutAnchorable Title="Level2Panel" CanClose="False">
+                                <controls:Level2Panel>
+
+                                </controls:Level2Panel>
+                            </xcad:LayoutAnchorable>
+                            
+                            <xcad:LayoutAnchorable Title="NewsPanel" CanClose="False">
+                                <controls:NewsPanel>
+
+                                </controls:NewsPanel>
+                            </xcad:LayoutAnchorable>
+
+                            <xcad:LayoutAnchorable Title="PortfoliosPanel" CanClose="False">
+                                <controls:PortfoliosPanel>
+
+                                </controls:PortfoliosPanel>
+                            </xcad:LayoutAnchorable>
+
+                            <xcad:LayoutAnchorable Title="CandleChartPanel" CanClose="False">
+                                <controls:CandleChartPanel>
+
+                                </controls:CandleChartPanel>
+                            </xcad:LayoutAnchorable>
+
                         </xcad:LayoutAnchorablePane>
                     </xcad:LayoutAnchorablePaneGroup>
                 </xcad:LayoutPanel>
