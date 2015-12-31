@@ -7,7 +7,7 @@
 		xmlns:fluent="clr-namespace:Fluent;assembly=Fluent"
 		xmlns:loc="clr-namespace:StockSharp.Localization;assembly=StockSharp.Localization"
 		DataContext="{Binding RelativeSource={RelativeSource Self}}"
-		Height="600" Width="800" Loaded="MainWindow_OnLoaded">
+		Height="600" Width="800" Title="Trade Terminal (UI test)" Loaded="MainWindow_OnLoaded">
 
     <Grid>
         <Grid.RowDefinitions>
@@ -26,7 +26,18 @@
         <fluent:Ribbon Grid.Row="0" x:Name="Ribbon" AutomaticStateManagement="True">
             
         </fluent:Ribbon>
-        <Button Click="AddDocument" Width="90" Height="25" Content="Add work area" HorizontalAlignment="Left" Margin="10, 5" />
+        <StackPanel Orientation="Horizontal">
+            <Button Click="AddDocument" Width="90" Height="25" Content="Add work area" HorizontalAlignment="Left" Margin="10, 5" />
+            <ComboBox x:Name="NewControlComboBox" Width="100" Height="25" Text="123" SelectionChanged="ComboBox_SelectionChanged">
+                <ComboBoxItem Content="TradesPanel"/>
+                <ComboBoxItem Content="OrdersPanel"/>
+                <ComboBoxItem Content="SecuritiesPanel"/>
+                <ComboBoxItem Content="Level2Panel"/>
+                <ComboBoxItem Content="NewsPanel"/>
+                <ComboBoxItem Content="PortfoliosPanel"/>
+                <ComboBoxItem Content="CandleChartPanel"/>
+            </ComboBox>
+        </StackPanel>
         <xcad:DockingManager Grid.Row="1" x:Name="DockingManager" ActiveContentChanged="DockingManager_OnActiveContentChanged">
             <xcad:LayoutRoot>
                 <xcad:LayoutPanel>                    

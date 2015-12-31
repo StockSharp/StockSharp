@@ -18,6 +18,7 @@ namespace SampleDiagram
 	using System;
 	using System.Collections.Generic;
 	using System.Collections.ObjectModel;
+	using System.ComponentModel;
 	using System.Windows;
 	using System.Windows.Input;
 
@@ -131,15 +132,24 @@ namespace SampleDiagram
 		}
 	}
 
-	public class SolutionExplorerItem
+	public class SolutionExplorerItem : NotifiableObject
 	{
 		private INotifyList<DiagramElement> _source;
+		private string _name;
 
 		public Guid Id { get; }
 
 		public string TextId { get; }
 
-		public string Name { get; }
+		public string Name
+		{
+			get { return _name; }
+			set
+			{
+				_name = value;
+				NotifyChanged("Name");
+			}
+		}
 
 		public CompositionType Type { get; }
 
@@ -176,8 +186,16 @@ namespace SampleDiagram
 			if (parent == null)
 				throw new ArgumentNullException(nameof(parent));
 
-			Element = new CompositionItem(parent.Type, element);
 			Type = parent.Type;
+
+			Element = new CompositionItem(parent.Type, element);
+			Element.Element.PropertyChanged += OnElementPropertyChanged;
+		}
+
+		private void OnElementPropertyChanged(object sender, PropertyChangedEventArgs e)
+		{
+			if (e.PropertyName == "Name")
+				Name = Element.Element.Name;
 		}
 
 		public void SetSource(INotifyList<DiagramElement> elements)

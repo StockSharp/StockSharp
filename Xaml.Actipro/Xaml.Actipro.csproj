@@ -111,19 +111,11 @@
       <Link>Properties\StockSharpAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="ActiproBaseApplication.cs" />
-    <Compile Include="Code\CodeExtensions.cs" />
     <Compile Include="Code\CodePanel.xaml.cs">
       <DependentUpon>CodePanel.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Code\CodeReference.cs" />
     <Compile Include="Code\CodeReferencesWindow.xaml.cs">
       <DependentUpon>CodeReferencesWindow.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="ExchangeBoardEditor.xaml.cs">
-      <DependentUpon>ExchangeBoardEditor.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="ExchangeEditor.xaml.cs">
-      <DependentUpon>ExchangeEditor.xaml</DependentUpon>
     </Compile>
     <Compile Include="Extensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -134,14 +126,6 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Code\CodeReferencesWindow.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="ExchangeBoardEditor.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="ExchangeEditor.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

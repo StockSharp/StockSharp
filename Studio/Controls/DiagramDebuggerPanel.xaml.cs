@@ -28,7 +28,6 @@ namespace StockSharp.Studio.Controls
 	using StockSharp.Studio.Core.Commands;
 	using StockSharp.Xaml.Diagram;
 	using StockSharp.Localization;
-	using StockSharp.Xaml.Actipro;
 
 	[DisplayNameLoc(LocalizedStrings.Str3230Key)]
 	[DescriptionLoc(LocalizedStrings.Str3231Key)]
@@ -135,9 +134,9 @@ namespace StockSharp.Studio.Controls
 			WhenLoaded(() => new RequestBindSource(this).SyncProcess(this));
 		}
 
-		private void OnDebuggerBreak(DiagramElement element)
+		private void OnDebuggerBreak(DiagramSocket socket)
 		{
-			GuiDispatcher.GlobalDispatcher.AddAction(() => ShowElementProperties(element));
+			GuiDispatcher.GlobalDispatcher.AddAction(() => ShowElementProperties(socket.Parent));
 		}
 
 		private void OnDebuggerCompositionChanged(CompositionDiagramElement composition)
@@ -173,22 +172,25 @@ namespace StockSharp.Studio.Controls
 
 		#region IStudioControl
 
+		//TODO: дописать логику загрузки состояния для DockingManager
 		public override void Load(SettingsStorage storage)
 		{
 			_debuggerSettings = storage.GetValue<SettingsStorage>("DebuggerSettings");
 			SafeLoadDebuggerSettings();
 
 			var layout = storage.GetValue<string>("Layout");
-			if (layout != null)
-				DockSite.LoadLayout(layout, true);
+
+			//if (layout != null)
+			//	DockingManager.LoadLayout(layout, true);
 		}
 
+		//TODO: дописать логику сохранения состояния для DockingManager
 		public override void Save(SettingsStorage storage)
 		{
 			if (Debugger != null)
 				storage.SetValue("DebuggerSettings", Debugger.Save());
 
-			storage.SetValue("Layout", DockSite.SaveLayout(true));
+			//storage.SetValue("Layout", DockingManager.SaveLayout(true));
 		}
 
 		public override void Dispose()
@@ -202,24 +204,24 @@ namespace StockSharp.Studio.Controls
 
 		private void ExecutedAddBreakpointCommand(object sender, ExecutedRoutedEventArgs e)
 		{
-			Debugger.AddBreak(DiagramEditor.SelectedElement);
+			Debugger.AddBreak(DiagramEditor.SelectedElement.SelectedSocket);
 			RaiseChangedCommand();
 		}
 
 		private void CanExecuteAddBreakpointCommand(object sender, CanExecuteRoutedEventArgs e)
 		{
-			e.CanExecute = DiagramEditor != null && DiagramEditor.SelectedElement != null && DebuggerSafeCheck(d => !d.IsBreak(DiagramEditor.SelectedElement));
+			e.CanExecute = DiagramEditor?.SelectedElement != null && DebuggerSafeCheck(d => !d.IsBreak(DiagramEditor.SelectedElement.SelectedSocket));
 		}
 
 		private void ExecutedRemoveBreakpointCommand(object sender, ExecutedRoutedEventArgs e)
 		{
-			Debugger.RemoveBreak(DiagramEditor.SelectedElement);
+			Debugger.RemoveBreak(DiagramEditor.SelectedElement.SelectedSocket);
 			RaiseChangedCommand();
 		}
 
 		private void CanExecuteRemoveBreakpointCommand(object sender, CanExecuteRoutedEventArgs e)
 		{
-			e.CanExecute = DiagramEditor != null && DiagramEditor.SelectedElement != null && DebuggerSafeCheck(d => d.IsBreak(DiagramEditor.SelectedElement));
+			e.CanExecute = DiagramEditor?.SelectedElement != null && DebuggerSafeCheck(d => d.IsBreak(DiagramEditor.SelectedElement.SelectedSocket));
 		}
 
 		private void ExecutedStepNextCommand(object sender, ExecutedRoutedEventArgs e)
@@ -234,7 +236,7 @@ namespace StockSharp.Studio.Controls
 
 		private void ExecutedStepToOutParamCommand(object sender, ExecutedRoutedEventArgs e)
 		{
-			Debugger.StepToOutput();
+			Debugger.StepOut();
 		}
 
 		private void CanExecuteStepToOutParamCommand(object sender, CanExecuteRoutedEventArgs e)

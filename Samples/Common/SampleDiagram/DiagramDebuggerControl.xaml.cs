@@ -21,12 +21,17 @@ namespace SampleDiagram
 	using System.Windows.Input;
 
 	using Ecng.Common;
+	using Ecng.Serialization;
 	using Ecng.Xaml;
+
+	using SampleDiagram.Layout;
 
 	using StockSharp.Xaml.Diagram;
 
-	public partial class DiagramDebuggerControl
+	public partial class DiagramDebuggerControl : IPersistable
 	{
+		private readonly LayoutManager _layoutManager;
+
 		public static readonly DependencyProperty StrategyProperty = DependencyProperty.Register("Strategy", typeof(EmulationDiagramStrategy), typeof(DiagramDebuggerControl),
 			new PropertyMetadata(null, OnStrategyPropertyChanged));
 
@@ -49,8 +54,6 @@ namespace SampleDiagram
 
 		public ICommand StepNextCommand { get; private set; }
 
-		public ICommand StepToOutParamCommand { get; private set; }
-
 		public ICommand StepIntoCommand { get; private set; }
 
 		public ICommand StepOutCommand { get; private set; }
@@ -63,6 +66,8 @@ namespace SampleDiagram
 		{
 			InitializeCommands();
             InitializeComponent();
+
+			_layoutManager = new LayoutManager(DockingManager);
 		}
 
 		private void InitializeCommands()
@@ -70,26 +75,26 @@ namespace SampleDiagram
 			AddBreakpointCommand = new DelegateCommand(
 				obj =>
 				{
-					Debugger.AddBreak(DiagramEditor.SelectedElement);
+					Debugger.AddBreak(DiagramEditor.SelectedElement.SelectedSocket);
 					Changed.SafeInvoke();
 				},
-				obj => Debugger != null && DiagramEditor.SelectedElement != null && !Debugger.IsBreak(DiagramEditor.SelectedElement));
+				obj => SafeCheckDebugger((d, s) => !d.IsBreak(s)));
 
 			RemoveBreakpointCommand = new DelegateCommand(
 				obj =>
 				{
-					Debugger.RemoveBreak(DiagramEditor.SelectedElement);
+					Debugger.RemoveBreak(DiagramEditor.SelectedElement.SelectedSocket);
 					Changed.SafeInvoke();
 				},
-				obj => Debugger != null && DiagramEditor.SelectedElement != null && Debugger.IsBreak(DiagramEditor.SelectedElement));
+				obj => SafeCheckDebugger((d, s) => d.IsBreak(s)));
 
 			StepNextCommand = new DelegateCommand(
 				obj => Debugger.StepNext(),
 				obj => Debugger != null && Debugger.IsWaiting);
 
-			StepToOutParamCommand = new DelegateCommand(
-				obj => Debugger.StepOut(),
-				obj => Debugger != null && Debugger.IsWaitingOnInput);
+			//StepToOutParamCommand = new DelegateCommand(
+			//	obj => Debugger.StepOut(),
+			//	obj => Debugger != null && Debugger.IsWaitingOnInput);
 
 			StepIntoCommand = new DelegateCommand(
 				obj => Debugger.StepInto(),
@@ -117,10 +122,7 @@ namespace SampleDiagram
 
 				var composition = strategy.Composition;
 
-				Debugger = new DiagramDebugger(composition)
-				{
-					IsEnabled = true
-				};
+				Debugger = new DiagramDebugger(composition);
 				Debugger.Break += OnDebuggerBreak;
 				Debugger.CompositionChanged += OnDebuggerCompositionChanged;
 
@@ -145,10 +147,12 @@ namespace SampleDiagram
 			Changed.SafeInvoke();
 		}
 
-		private void OnDebuggerBreak(DiagramElement element)
+		private void OnDebuggerBreak(DiagramSocket socket)
 		{
 			this.GuiAsync(() =>
 			{
+				var element = socket.Parent;
+
 				DiagramEditor.SelectedElement = element;
 				ShowElementProperties(element);
 			});
@@ -175,5 +179,35 @@ namespace SampleDiagram
 				PropertyGridControl.IsReadOnly = false;
 			}
 		}
+
+		private bool SafeCheckDebugger(Func<DiagramDebugger, DiagramSocket, bool> func)
+		{
+			return Debugger != null && 
+				DiagramEditor.SelectedElement != null &&
+				DiagramEditor.SelectedElement.SelectedSocket != null && 
+				func(Debugger, DiagramEditor.SelectedElement.SelectedSocket);
+		}
+
+		#region IPersistable
+
+		public void Load(SettingsStorage storage)
+		{
+			Debugger.Load(storage);
+
+			var layout = storage.GetValue<string>("Layout");
+
+			if (!layout.IsEmpty())
+				_layoutManager.LoadLayout(layout);
+		}
+
+		public void Save(SettingsStorage storage)
+		{
+			Debugger.Save(storage);
+
+			storage.SetValue("Layout", _layoutManager.SaveLayout());
+		}
+
+		#endregion
+
 	}
 }

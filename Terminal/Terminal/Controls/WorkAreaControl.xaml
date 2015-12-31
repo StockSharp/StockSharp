@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:StockSharp.Terminal.Controls"
+             xmlns:controls="clr-namespace:StockSharp.Studio.Controls;assembly=StockSharp.Studio.Controls"
              xmlns:xaml="http://schemas.stocksharp.com/xaml"
              xmlns:xcad="http://schemas.xceed.com/wpf/xaml/avalondock"
              xmlns:layout="clr-namespace:StockSharp.Terminal.Layout"
@@ -29,12 +30,62 @@
         <xcad:DockingManager Grid.Row="1" x:Name="DockingManager">
             <xcad:LayoutRoot>
                 <xcad:LayoutPanel>
-                    <xcad:LayoutAnchorablePaneGroup>
-                        <xcad:LayoutAnchorablePane x:Name="WorkArea">
-                            <!--<xcad:LayoutAnchorable Title="{x:Static localization:LocalizedStrings.Str3200}" CanClose="False">
-                                <xaml:Chart />
-                            </xcad:LayoutAnchorable>-->
+                    <xcad:LayoutAnchorablePaneGroup x:Name="DockingManagerGroup">
+                        <xcad:LayoutAnchorablePane>
+                            <xcad:LayoutAnchorable Title="TradePanel" CanClose="False">
+                                <controls:TradesPanel>
+
+                                </controls:TradesPanel>
+                            </xcad:LayoutAnchorable>
                         </xcad:LayoutAnchorablePane>
+
+                        <!--<xcad:LayoutAnchorablePane>
+                            <xcad:LayoutAnchorable Title="OrdersPanel" CanClose="False">
+                                <controls:OrdersPanel>
+
+                                </controls:OrdersPanel>
+                            </xcad:LayoutAnchorable>
+                        </xcad:LayoutAnchorablePane>
+
+                        <xcad:LayoutAnchorablePane>
+                            <xcad:LayoutAnchorable Title="SecuritiesPanel" CanClose="False">
+                                <controls:SecuritiesPanel>
+
+                                </controls:SecuritiesPanel>
+                            </xcad:LayoutAnchorable>
+                        </xcad:LayoutAnchorablePane>
+
+                        <xcad:LayoutAnchorablePane>
+                            <xcad:LayoutAnchorable Title="Level2Panel" CanClose="False">
+                                <controls:Level2Panel>
+
+                                </controls:Level2Panel>
+                            </xcad:LayoutAnchorable>
+                        </xcad:LayoutAnchorablePane>
+
+                        <xcad:LayoutAnchorablePane>
+                            <xcad:LayoutAnchorable Title="NewsPanel" CanClose="False">
+                                <controls:NewsPanel>
+
+                                </controls:NewsPanel>
+                            </xcad:LayoutAnchorable>
+                        </xcad:LayoutAnchorablePane>
+
+                        <xcad:LayoutAnchorablePane>
+                            <xcad:LayoutAnchorable Title="PortfoliosPanel" CanClose="False">
+                                <controls:PortfoliosPanel>
+
+                                </controls:PortfoliosPanel>
+                            </xcad:LayoutAnchorable>
+                        </xcad:LayoutAnchorablePane>
+
+                        <xcad:LayoutAnchorablePane>
+                            <xcad:LayoutAnchorable Title="CandleChartPanel" CanClose="False">
+                                <controls:CandleChartPanel>
+
+                                </controls:CandleChartPanel>
+                            </xcad:LayoutAnchorable>
+                        </xcad:LayoutAnchorablePane>-->
                     </xcad:LayoutAnchorablePaneGroup>
                 </xcad:LayoutPanel>
             </xcad:LayoutRoot>

@@ -203,6 +203,19 @@ namespace SampleDiagram.Layout
 			DockingManager.ActiveContent = document.Content;
 		}
 
+		public void CloseDocumentWindow(DockingControl content)
+		{
+			if (content == null)
+				throw new ArgumentNullException(nameof(content));
+
+			var document = _documents.TryGetValue(content.Key);
+
+			if (document == null)
+				return;
+
+			document.Close();
+		}
+
 		public override void Load(SettingsStorage storage)
 		{
 			if (storage == null)

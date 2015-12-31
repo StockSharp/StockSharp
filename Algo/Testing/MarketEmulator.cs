@@ -1508,8 +1508,8 @@ namespace StockSharp.Algo.Testing
 					_buffer.Clear();
 					_needBuffer = null;
 
-					_bufferPrevFlush = default(DateTime);
-					_portfoliosPrevRecalc = default(DateTime);
+					_bufferPrevFlush = default(DateTimeOffset);
+					_portfoliosPrevRecalc = default(DateTimeOffset);
 
 					retVal.Add(new ResetMessage());
 					break;

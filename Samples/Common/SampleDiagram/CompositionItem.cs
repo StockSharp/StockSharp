@@ -17,6 +17,8 @@ namespace SampleDiagram
 {
 	using System;
 
+	using Ecng.Common;
+
 	using StockSharp.Localization;
 	using StockSharp.Xaml.Diagram;
 
@@ -29,11 +31,13 @@ namespace SampleDiagram
 		Strategy
 	}
 
-	public class CompositionItem
+	public class CompositionItem : Equatable<CompositionItem>
 	{
 		public CompositionType Type { get; }
 
 		public CompositionDiagramElement Element { get; }
+
+		public string Key => Element.TypeId.ToString();
 
 		public CompositionItem(CompositionType type, CompositionDiagramElement element)
 		{
@@ -42,6 +46,16 @@ namespace SampleDiagram
 
 			Type = type;
 			Element = element;
+		}
+
+		public override CompositionItem Clone()
+		{
+			return new CompositionItem(Type, Element);
+		}
+
+		protected override bool OnEquals(CompositionItem other)
+		{
+			return Type == other.Type && Element == other.Element;
 		}
 	}
 }

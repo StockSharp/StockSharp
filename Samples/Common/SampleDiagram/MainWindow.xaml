@@ -67,9 +67,9 @@
                                                  Visibility="Visible" />
             </fluent:Ribbon.ContextualGroups>-->
 
-            <fluent:RibbonTabItem Header="Схемы"
+            <fluent:RibbonTabItem Header="{x:Static localization:LocalizedStrings.Schemas}"
 								  x:Name="RibbonCommonTab">
-                <fluent:RibbonGroupBox Header="Составные элементы / стратегии">
+                <fluent:RibbonGroupBox Header="{x:Static localization:LocalizedStrings.CompositionElementsStrategies}">
                     <fluent:SplitButton Header="{x:Static localization:LocalizedStrings.Str3229}" 
 										SizeDefinition="Middle"
                                         Icon="pack://application:,,,/StockSharp.Xaml;component/Images/add_16x16.png"
@@ -132,19 +132,29 @@
                 <fluent:RibbonGroupBox Header="{x:Static localization:LocalizedStrings.Str1559}">
                     <fluent:TextBox Header="{x:Static localization:LocalizedStrings.Name}"
 									x:Name="CompositionNameTextBox"
-									InputWidth="90"
+									InputWidth="150"
                                     MaxLength="128"
 									Text="{Binding Element.Name, UpdateSourceTrigger=PropertyChanged}" />
-	                <fluent:Button Header="{x:Static localization:LocalizedStrings.Str1519}"
+                    <fluent:TextBox Header="{x:Static localization:LocalizedStrings.XamlStr233}"
+									x:Name="CompositionCategoryTextBox"
+									InputWidth="150"
+                                    MaxLength="128"
+									Text="{Binding Element.Category, UpdateSourceTrigger=PropertyChanged}" />
+                    <fluent:TextBox Header="{x:Static localization:LocalizedStrings.Description}"
+									x:Name="CompositionDescriptionTextBox"
+									InputWidth="150"
+                                    MaxLength="512"
+									Text="{Binding Element.Description, UpdateSourceTrigger=PropertyChanged}" />
+                    <fluent:Button Header="{x:Static localization:LocalizedStrings.Str1519}"
 								   Icon="pack://application:,,,/StockSharp.Xaml;component/Images/save_16x16.png"
 								   LargeIcon="pack://application:,,,/StockSharp.Xaml;component/Images/save_16x16.png"
-								   SizeDefinition="Middle" 
+								   SizeDefinition="Large" 
 								   Command="{x:Static local:MainWindow.SaveCommand}"
 								   CommandParameter="{Binding}"/>
                     <fluent:Button Header="{x:Static localization:LocalizedStrings.Undo}"
 								   Icon="pack://application:,,,/StockSharp.Xaml;component/Images/undo_16x16.png"
 								   LargeIcon="pack://application:,,,/StockSharp.Xaml;component/Images/undo_16x16.png"
-								   SizeDefinition="Middle" 
+								   SizeDefinition="Large" 
 								   Command="{x:Static local:MainWindow.DiscardCommand}"
 								   CommandParameter="{Binding}"/>
                 </fluent:RibbonGroupBox>
@@ -199,10 +209,6 @@
 								   SizeDefinition="Large"
 								   LargeIcon="pack://application:,,,/SampleDiagram;component/Images/StepOver_16x16.png"
 								   Command="{Binding StepNextCommand}" />
-                    <fluent:Button Header="{x:Static localization:LocalizedStrings.XamlStr229}"
-								   SizeDefinition="Large"
-								   LargeIcon="pack://application:,,,/SampleDiagram;component/Images/ToOutput_16x16.png"
-								   Command="{Binding StepToOutParamCommand}" />
                     <fluent:Button Header="{x:Static localization:LocalizedStrings.ToCompositeElem}"
 								   SizeDefinition="Large"
 								   LargeIcon="pack://application:,,,/SampleDiagram;component/Images/StepIn_16x16.png"
@@ -231,7 +237,8 @@
                     <xcad:LayoutPanel Orientation="Horizontal">
                         <xcad:LayoutAnchorablePaneGroup DockWidth="200">
                             <xcad:LayoutAnchorablePane>
-                                <xcad:LayoutAnchorable Title="Схемы" ContentId="SolutionExplorer" CanClose="False" AutoHideWidth="200">
+                                <xcad:LayoutAnchorable Title="{x:Static localization:LocalizedStrings.Schemas}" 
+													   ContentId="SolutionExplorer" CanClose="False" AutoHideWidth="200">
                                     <local:SolutionExplorerControl x:Name="SolutionExplorer" Open="SolutionExplorer_OnOpen"/>
                                 </xcad:LayoutAnchorable>
                             </xcad:LayoutAnchorablePane>

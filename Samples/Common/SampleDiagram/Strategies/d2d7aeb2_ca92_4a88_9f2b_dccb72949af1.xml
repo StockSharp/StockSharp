@@ -1,16 +1,3 @@
-<!--
-NOTICE!!!  This program and source code is owned and licensed by
-StockSharp, LLC, www.stocksharp.com
-Viewing or use of this code requires your acceptance of the license
-agreement found at https://github.com/StockSharp/StockSharp/blob/master/LICENSE
-Removal of this comment is a violation of the license agreement.
-
-Project: %Namespace%.SampleDiagramPublic
-File: d2d7aeb2_ca92_4a88_9f2b_dccb72949af1.xml
-Created: 2015, 11, 11, 2:32 PM
-
-Copyright 2010 by StockSharp, LLC
--->
 <SettingsStorage>
   <KeyValuePairBeginStringAndObjectEnd>
     <key>Composition</key>
@@ -25,282 +12,28 @@ Copyright 2010 by StockSharp, LLC
           </value>
         </KeyValuePairBeginStringAndObjectEnd>
         <KeyValuePairBeginStringAndObjectEnd>
+          <key>Id</key>
+          <value>
+            <Type type="string">guid</Type>
+            <Value type="guid">c1e0be75-b443-48e3-9635-eefcee4e6459</Value>
+          </value>
+        </KeyValuePairBeginStringAndObjectEnd>
+        <KeyValuePairBeginStringAndObjectEnd>
           <key>InputSockets</key>
           <value>
-            <Type type="string">Ecng.Serialization.SettingsStorage[], Ecng.Serialization</Type>
-            <Value type="Ecng.Serialization.SettingsStorage[], Ecng.Serialization">
-              <SettingsStorage>
-                <KeyValuePairBeginStringAndObjectEnd>
-                  <key>Id</key>
-                  <value>
-                    <Type type="string">string</Type>
-                    <Value type="string">1110e386-926b-4268-9d2f-1462fbd3c182</Value>
-                  </value>
-                </KeyValuePairBeginStringAndObjectEnd>
-                <KeyValuePairBeginStringAndObjectEnd>
-                  <key>ExternalId</key>
-                  <value>
-                    <Type type="string">string</Type>
-                    <Value type="string">6109ab54-39df-42fd-91bc-26e0cbb2d500</Value>
-                  </value>
-                </KeyValuePairBeginStringAndObjectEnd>
-                <KeyValuePairBeginStringAndObjectEnd>
-                  <key>Name</key>
-                  <value>
-                    <Type type="string">string</Type>
-                    <Value type="string">Инструмент - Свечи</Value>
-                  </value>
-                </KeyValuePairBeginStringAndObjectEnd>
-                <KeyValuePairBeginStringAndObjectEnd>
-                  <key>Type</key>
-                  <value>
-                    <Type type="string">Ecng.Serialization.SettingsStorage, Ecng.Serialization</Type>
-                    <Value type="Ecng.Serialization.SettingsStorage, Ecng.Serialization">
-                      <KeyValuePairBeginStringAndObjectEnd>
-                        <key>Type</key>
-                        <value>
-                          <Type type="string">string</Type>
-                          <Value type="string">StockSharp.BusinessEntities.Security, StockSharp.BusinessEntities</Value>
-                        </value>
-                      </KeyValuePairBeginStringAndObjectEnd>
-                      <KeyValuePairBeginStringAndObjectEnd>
-                        <key>Name</key>
-                        <value>
-                          <Type type="string">string</Type>
-                          <Value type="string">Инструмент</Value>
-                        </value>
-                      </KeyValuePairBeginStringAndObjectEnd>
-                      <KeyValuePairBeginStringAndObjectEnd>
-                        <key>Color</key>
-                        <value>
-                          <Type type="string">System.Windows.Media.Color, PresentationCore</Type>
-                          <Value type="int">-16751616</Value>
-                        </value>
-                      </KeyValuePairBeginStringAndObjectEnd>
-                    </Value>
-                  </value>
-                </KeyValuePairBeginStringAndObjectEnd>
-                <KeyValuePairBeginStringAndObjectEnd>
-                  <key>Directon</key>
-                  <value>
-                    <Type type="string">StockSharp.Xaml.Diagram.DiagramSocketDirection, StockSharp.Xaml.Diagram</Type>
-                    <Value type="StockSharp.Xaml.Diagram.DiagramSocketDirection, StockSharp.Xaml.Diagram">In</Value>
-                  </value>
-                </KeyValuePairBeginStringAndObjectEnd>
-                <KeyValuePairBeginStringAndObjectEnd>
-                  <key>LinkableMaximum</key>
-                  <value>
-                    <Type type="string">int</Type>
-                    <Value type="int">1</Value>
-                  </value>
-                </KeyValuePairBeginStringAndObjectEnd>
-              </SettingsStorage>
-              <SettingsStorage>
-                <KeyValuePairBeginStringAndObjectEnd>
-                  <key>Id</key>
-                  <value>
-                    <Type type="string">string</Type>
-                    <Value type="string">8dd77dae-2c29-409e-bcbb-fd84885a2f42</Value>
-                  </value>
-                </KeyValuePairBeginStringAndObjectEnd>
-                <KeyValuePairBeginStringAndObjectEnd>
-                  <key>ExternalId</key>
-                  <value>
-                    <Type type="string">string</Type>
-                    <Value type="string">82caa3e4-3b1f-42c8-bd82-ccb08af9ba22</Value>
-                  </value>
-                </KeyValuePairBeginStringAndObjectEnd>
-                <KeyValuePairBeginStringAndObjectEnd>
-                  <key>Name</key>
-                  <value>
-                    <Type type="string">string</Type>
-                    <Value type="string">Вход - Переменная</Value>
-                  </value>
-                </KeyValuePairBeginStringAndObjectEnd>
-                <KeyValuePairBeginStringAndObjectEnd>
-                  <key>Type</key>
-                  <value>
-                    <Type type="string">Ecng.Serialization.SettingsStorage, Ecng.Serialization</Type>
-                    <Value type="Ecng.Serialization.SettingsStorage, Ecng.Serialization">
-                      <KeyValuePairBeginStringAndObjectEnd>
-                        <key>Type</key>
-                        <value>
-                          <Type type="string">string</Type>
-                          <Value type="string">StockSharp.BusinessEntities.Security, StockSharp.BusinessEntities</Value>
-                        </value>
-                      </KeyValuePairBeginStringAndObjectEnd>
-                      <KeyValuePairBeginStringAndObjectEnd>
-                        <key>Name</key>
-                        <value>
-                          <Type type="string">string</Type>
-                          <Value type="string">Инструмент</Value>
-                        </value>
-                      </KeyValuePairBeginStringAndObjectEnd>
-                      <KeyValuePairBeginStringAndObjectEnd>
-                        <key>Color</key>
-                        <value>
-                          <Type type="string">System.Windows.Media.Color, PresentationCore</Type>
-                          <Value type="int">-16751616</Value>
-                        </value>
-                      </KeyValuePairBeginStringAndObjectEnd>
-                    </Value>
-                  </value>
-                </KeyValuePairBeginStringAndObjectEnd>
-                <KeyValuePairBeginStringAndObjectEnd>
-                  <key>Directon</key>
-                  <value>
-                    <Type type="string">StockSharp.Xaml.Diagram.DiagramSocketDirection, StockSharp.Xaml.Diagram</Type>
-                    <Value type="StockSharp.Xaml.Diagram.DiagramSocketDirection, StockSharp.Xaml.Diagram">In</Value>
-                  </value>
-                </KeyValuePairBeginStringAndObjectEnd>
-                <KeyValuePairBeginStringAndObjectEnd>
-                  <key>LinkableMaximum</key>
-                  <value>
-                    <Type type="string">int</Type>
-                    <Value type="int">1</Value>
-                  </value>
-                </KeyValuePairBeginStringAndObjectEnd>
-              </SettingsStorage>
-              <SettingsStorage>
-                <KeyValuePairBeginStringAndObjectEnd>
-                  <key>Id</key>
-                  <value>
-                    <Type type="string">string</Type>
-                    <Value type="string">008fd72d-8366-4878-bf02-489f82c4ab4d</Value>
-                  </value>
-                </KeyValuePairBeginStringAndObjectEnd>
-                <KeyValuePairBeginStringAndObjectEnd>
-                  <key>ExternalId</key>
-                  <value>
-                    <Type type="string">string</Type>
-                    <Value type="string">22b4c3b0-e765-4c86-993e-2b68ecf827c0</Value>
-                  </value>
-                </KeyValuePairBeginStringAndObjectEnd>
-                <KeyValuePairBeginStringAndObjectEnd>
-                  <key>Name</key>
-                  <value>
-                    <Type type="string">string</Type>
-                    <Value type="string">Триггер - Переменная</Value>
-                  </value>
-                </KeyValuePairBeginStringAndObjectEnd>
-                <KeyValuePairBeginStringAndObjectEnd>
-                  <key>Type</key>
-                  <value>
-                    <Type type="string">Ecng.Serialization.SettingsStorage, Ecng.Serialization</Type>
-                    <Value type="Ecng.Serialization.SettingsStorage, Ecng.Serialization">
-                      <KeyValuePairBeginStringAndObjectEnd>
-                        <key>Type</key>
-                        <value>
-                          <Type type="string">string</Type>
-                          <Value type="string">System.Object, mscorlib</Value>
-                        </value>
-                      </KeyValuePairBeginStringAndObjectEnd>
-                      <KeyValuePairBeginStringAndObjectEnd>
-                        <key>Name</key>
-                        <value>
-                          <Type type="string">string</Type>
-                          <Value type="string">Любые данные</Value>
-                        </value>
-                      </KeyValuePairBeginStringAndObjectEnd>
-                      <KeyValuePairBeginStringAndObjectEnd>
-                        <key>Color</key>
-                        <value>
-                          <Type type="string">System.Windows.Media.Color, PresentationCore</Type>
-                          <Value type="int">-16777216</Value>
-                        </value>
-                      </KeyValuePairBeginStringAndObjectEnd>
-                    </Value>
-                  </value>
-                </KeyValuePairBeginStringAndObjectEnd>
-                <KeyValuePairBeginStringAndObjectEnd>
-                  <key>Directon</key>
-                  <value>
-                    <Type type="string">StockSharp.Xaml.Diagram.DiagramSocketDirection, StockSharp.Xaml.Diagram</Type>
-                    <Value type="StockSharp.Xaml.Diagram.DiagramSocketDirection, StockSharp.Xaml.Diagram">In</Value>
-                  </value>
-                </KeyValuePairBeginStringAndObjectEnd>
-                <KeyValuePairBeginStringAndObjectEnd>
-                  <key>LinkableMaximum</key>
-                  <value>
-                    <Type type="string">int</Type>
-                    <Value type="int">2147483647</Value>
-                  </value>
-                </KeyValuePairBeginStringAndObjectEnd>
-              </SettingsStorage>
+            <Type type="string">System.String[], mscorlib</Type>
+            <Value type="System.String[], mscorlib">
+              <String>2f47d3ea-e01a-4901-8e55-4252e5ab2ef9</String>
+              <String>d1c32ea2-10b1-427a-b1c5-ea0a0a8e91a2</String>
             </Value>
           </value>
         </KeyValuePairBeginStringAndObjectEnd>
         <KeyValuePairBeginStringAndObjectEnd>
           <key>OutputSockets</key>
           <value>
-            <Type type="string">Ecng.Serialization.SettingsStorage[], Ecng.Serialization</Type>
-            <Value type="Ecng.Serialization.SettingsStorage[], Ecng.Serialization">
-              <SettingsStorage>
-                <KeyValuePairBeginStringAndObjectEnd>
-                  <key>Id</key>
-                  <value>
-                    <Type type="string">string</Type>
-                    <Value type="string">5d77d339-38a4-4dff-a047-6d31da887f73</Value>
-                  </value>
-                </KeyValuePairBeginStringAndObjectEnd>
-                <KeyValuePairBeginStringAndObjectEnd>
-                  <key>ExternalId</key>
-                  <value>
-                    <Type type="string">string</Type>
-                    <Value type="string">8a714773-7d1c-4e6c-83f8-0f0735940278</Value>
-                  </value>
-                </KeyValuePairBeginStringAndObjectEnd>
-                <KeyValuePairBeginStringAndObjectEnd>
-                  <key>Name</key>
-                  <value>
-                    <Type type="string">string</Type>
-                    <Value type="string">Выход - Переменная</Value>
-                  </value>
-                </KeyValuePairBeginStringAndObjectEnd>
-                <KeyValuePairBeginStringAndObjectEnd>
-                  <key>Type</key>
-                  <value>
-                    <Type type="string">Ecng.Serialization.SettingsStorage, Ecng.Serialization</Type>
-                    <Value type="Ecng.Serialization.SettingsStorage, Ecng.Serialization">
-                      <KeyValuePairBeginStringAndObjectEnd>
-                        <key>Type</key>
-                        <value>
-                          <Type type="string">string</Type>
-                          <Value type="string">StockSharp.BusinessEntities.Security, StockSharp.BusinessEntities</Value>
-                        </value>
-                      </KeyValuePairBeginStringAndObjectEnd>
-                      <KeyValuePairBeginStringAndObjectEnd>
-                        <key>Name</key>
-                        <value>
-                          <Type type="string">string</Type>
-                          <Value type="string">Инструмент</Value>
-                        </value>
-                      </KeyValuePairBeginStringAndObjectEnd>
-                      <KeyValuePairBeginStringAndObjectEnd>
-                        <key>Color</key>
-                        <value>
-                          <Type type="string">System.Windows.Media.Color, PresentationCore</Type>
-                          <Value type="int">-16751616</Value>
-                        </value>
-                      </KeyValuePairBeginStringAndObjectEnd>
-                    </Value>
-                  </value>
-                </KeyValuePairBeginStringAndObjectEnd>
-                <KeyValuePairBeginStringAndObjectEnd>
-                  <key>Directon</key>
-                  <value>
-                    <Type type="string">StockSharp.Xaml.Diagram.DiagramSocketDirection, StockSharp.Xaml.Diagram</Type>
-                    <Value type="StockSharp.Xaml.Diagram.DiagramSocketDirection, StockSharp.Xaml.Diagram">Out</Value>
-                  </value>
-                </KeyValuePairBeginStringAndObjectEnd>
-                <KeyValuePairBeginStringAndObjectEnd>
-                  <key>LinkableMaximum</key>
-                  <value>
-                    <Type type="string">int</Type>
-                    <Value type="int">2147483647</Value>
-                  </value>
-                </KeyValuePairBeginStringAndObjectEnd>
-              </SettingsStorage>
+            <Type type="string">System.String[], mscorlib</Type>
+            <Value type="System.String[], mscorlib">
+              <String>7752dd63-7e59-46d3-96f3-47d8bf71e650</String>
             </Value>
           </value>
         </KeyValuePairBeginStringAndObjectEnd>
@@ -363,7 +96,7 @@ Copyright 2010 by StockSharp, LLC
                       <key>Value</key>
                       <value>
                         <Type type="string">string</Type>
-                        <Value type="string">Составные элементы</Value>
+                        <Value type="string">Strategies</Value>
                       </value>
                     </KeyValuePairBeginStringAndObjectEnd>
                   </Value>
@@ -378,7 +111,7 @@ Copyright 2010 by StockSharp, LLC
                       <key>Value</key>
                       <value>
                         <Type type="string">string</Type>
-                        <Value type="string">Составной элемент.</Value>
+                        <Value type="string">Simple strategy for drawing candles.</Value>
                       </value>
                     </KeyValuePairBeginStringAndObjectEnd>
                   </Value>
@@ -417,6 +150,388 @@ Copyright 2010 by StockSharp, LLC
                   <key>Key</key>
                   <value>
                     <Type type="string">string</Type>
+                    <Value type="string">3</Value>
+                  </value>
+                </KeyValuePairBeginStringAndObjectEnd>
+                <KeyValuePairBeginStringAndObjectEnd>
+                  <key>X</key>
+                  <value>
+                    <Type type="string">double</Type>
+                    <Value type="double">420</Value>
+                  </value>
+                </KeyValuePairBeginStringAndObjectEnd>
+                <KeyValuePairBeginStringAndObjectEnd>
+                  <key>Y</key>
+                  <value>
+                    <Type type="string">double</Type>
+                    <Value type="double">370</Value>
+                  </value>
+                </KeyValuePairBeginStringAndObjectEnd>
+                <KeyValuePairBeginStringAndObjectEnd>
+                  <key>Figure</key>
+                  <value>
+                    <Type type="string">Northwoods.GoXam.NodeFigure, Northwoods.GoWPF</Type>
+                    <Value type="Northwoods.GoXam.NodeFigure, Northwoods.GoWPF">Procedure</Value>
+                  </value>
+                </KeyValuePairBeginStringAndObjectEnd>
+                <KeyValuePairBeginStringAndObjectEnd>
+                  <key>TypeId</key>
+                  <value>
+                    <Type type="string">string</Type>
+                    <Value type="string">3d773273-0cee-4d40-8eef-acded2d07ab8</Value>
+                  </value>
+                </KeyValuePairBeginStringAndObjectEnd>
+                <KeyValuePairBeginStringAndObjectEnd>
+                  <key>Settings</key>
+                  <value>
+                    <Type type="string">Ecng.Serialization.SettingsStorage, Ecng.Serialization</Type>
+                    <Value type="Ecng.Serialization.SettingsStorage, Ecng.Serialization">
+                      <KeyValuePairBeginStringAndObjectEnd>
+                        <key>Id</key>
+                        <value>
+                          <Type type="string">guid</Type>
+                          <Value type="guid">78f8d89d-185a-4b00-b269-2f507cf25848</Value>
+                        </value>
+                      </KeyValuePairBeginStringAndObjectEnd>
+                      <KeyValuePairBeginStringAndObjectEnd>
+                        <key>InputSockets</key>
+                        <value>
+                          <Type type="string">System.String[], mscorlib</Type>
+                          <Value type="System.String[], mscorlib">
+                            <String>e230c2f6-2cd2-4c89-8dea-296c30fa0221</String>
+                          </Value>
+                        </value>
+                      </KeyValuePairBeginStringAndObjectEnd>
+                      <KeyValuePairBeginStringAndObjectEnd>
+                        <key>OutputSockets</key>
+                        <value>
+                          <Type type="string">System.String[], mscorlib</Type>
+                          <Value type="System.String[], mscorlib">
+                            <String>7752dd63-7e59-46d3-96f3-47d8bf71e650</String>
+                          </Value>
+                        </value>
+                      </KeyValuePairBeginStringAndObjectEnd>
+                      <KeyValuePairBeginStringAndObjectEnd>
+                        <key>Parameters</key>
+                        <value>
+                          <Type type="string">Ecng.Serialization.SettingsStorage, Ecng.Serialization</Type>
+                          <Value type="Ecng.Serialization.SettingsStorage, Ecng.Serialization">
+                            <KeyValuePairBeginStringAndObjectEnd>
+                              <key>Name</key>
+                              <value>
+                                <Type type="string">Ecng.Serialization.SettingsStorage, Ecng.Serialization</Type>
+                                <Value type="Ecng.Serialization.SettingsStorage, Ecng.Serialization">
+                                  <KeyValuePairBeginStringAndObjectEnd>
+                                    <key>Value</key>
+                                    <value>
+                                      <Type type="string">string</Type>
+                                      <Value type="string">Candles</Value>
+                                    </value>
+                                  </KeyValuePairBeginStringAndObjectEnd>
+                                </Value>
+                              </value>
+                            </KeyValuePairBeginStringAndObjectEnd>
+                            <KeyValuePairBeginStringAndObjectEnd>
+                              <key>LogLevel</key>
+                              <value>
+                                <Type type="string">Ecng.Serialization.SettingsStorage, Ecng.Serialization</Type>
+                                <Value type="Ecng.Serialization.SettingsStorage, Ecng.Serialization">
+                                  <KeyValuePairBeginStringAndObjectEnd>
+                                    <key>Value</key>
+                                    <value>
+                                      <Type type="string">StockSharp.Logging.LogLevels, StockSharp.Logging</Type>
+                                      <Value type="StockSharp.Logging.LogLevels, StockSharp.Logging">Inherit</Value>
+                                    </value>
+                                  </KeyValuePairBeginStringAndObjectEnd>
+                                </Value>
+                              </value>
+                            </KeyValuePairBeginStringAndObjectEnd>
+                            <KeyValuePairBeginStringAndObjectEnd>
+                              <key>ShowParameters</key>
+                              <value>
+                                <Type type="string">Ecng.Serialization.SettingsStorage, Ecng.Serialization</Type>
+                                <Value type="Ecng.Serialization.SettingsStorage, Ecng.Serialization">
+                                  <KeyValuePairBeginStringAndObjectEnd>
+                                    <key>Value</key>
+                                    <value>
+                                      <Type type="string">bool</Type>
+                                      <Value type="bool">False</Value>
+                                    </value>
+                                  </KeyValuePairBeginStringAndObjectEnd>
+                                </Value>
+                              </value>
+                            </KeyValuePairBeginStringAndObjectEnd>
+                            <KeyValuePairBeginStringAndObjectEnd>
+                              <key>Series</key>
+                              <value>
+                                <Type type="string">Ecng.Serialization.SettingsStorage, Ecng.Serialization</Type>
+                                <Value type="Ecng.Serialization.SettingsStorage, Ecng.Serialization">
+                                  <KeyValuePairBeginStringAndObjectEnd>
+                                    <key>Value</key>
+                                    <value>
+                                      <Type type="string">Ecng.Serialization.SettingsStorage, Ecng.Serialization</Type>
+                                      <Value type="Ecng.Serialization.SettingsStorage, Ecng.Serialization">
+                                        <KeyValuePairBeginStringAndObjectEnd>
+                                          <key>type</key>
+                                          <value>
+                                            <Type type="string">string</Type>
+                                            <Value type="string">StockSharp.Algo.Candles.CandleSeries, StockSharp.Algo</Value>
+                                          </value>
+                                        </KeyValuePairBeginStringAndObjectEnd>
+                                        <KeyValuePairBeginStringAndObjectEnd>
+                                          <key>settings</key>
+                                          <value>
+                                            <Type type="string">Ecng.Serialization.SettingsStorage, Ecng.Serialization</Type>
+                                            <Value type="Ecng.Serialization.SettingsStorage, Ecng.Serialization">
+                                              <KeyValuePairBeginStringAndObjectEnd>
+                                                <key>CandleType</key>
+                                                <value>
+                                                  <Type type="string">string</Type>
+                                                  <Value type="string">StockSharp.Algo.Candles.TimeFrameCandle, StockSharp.Algo</Value>
+                                                </value>
+                                              </KeyValuePairBeginStringAndObjectEnd>
+                                              <KeyValuePairBeginStringAndObjectEnd>
+                                                <key>Arg</key>
+                                                <value>
+                                                  <Type type="string">time</Type>
+                                                  <Value type="time">00:05:00</Value>
+                                                </value>
+                                              </KeyValuePairBeginStringAndObjectEnd>
+                                              <KeyValuePairBeginStringAndObjectEnd>
+                                                <key>From</key>
+                                                <value>
+                                                  <Type type="string">System.DateTimeOffset, mscorlib</Type>
+                                                  <Value type="System.DateTimeOffset, mscorlib">01.01.0001 0:00:00 +00:00</Value>
+                                                </value>
+                                              </KeyValuePairBeginStringAndObjectEnd>
+                                              <KeyValuePairBeginStringAndObjectEnd>
+                                                <key>To</key>
+                                                <value>
+                                                  <Type type="string">System.DateTimeOffset, mscorlib</Type>
+                                                  <Value type="System.DateTimeOffset, mscorlib">9999-12-31T23:59:59.9999999+00:00</Value>
+                                                </value>
+                                              </KeyValuePairBeginStringAndObjectEnd>
+                                              <KeyValuePairBeginStringAndObjectEnd>
+                                                <key>WorkingTime</key>
+                                                <value isNull="true" />
+                                              </KeyValuePairBeginStringAndObjectEnd>
+                                              <KeyValuePairBeginStringAndObjectEnd>
+                                                <key>IsCalcVolumeProfile</key>
+                                                <value>
+                                                  <Type type="string">bool</Type>
+                                                  <Value type="bool">False</Value>
+                                                </value>
+                                              </KeyValuePairBeginStringAndObjectEnd>
+                                            </Value>
+                                          </value>
+                                        </KeyValuePairBeginStringAndObjectEnd>
+                                      </Value>
+                                    </value>
+                                  </KeyValuePairBeginStringAndObjectEnd>
+                                </Value>
+                              </value>
+                            </KeyValuePairBeginStringAndObjectEnd>
+                            <KeyValuePairBeginStringAndObjectEnd>
+                              <key>IsFinal</key>
+                              <value>
+                                <Type type="string">Ecng.Serialization.SettingsStorage, Ecng.Serialization</Type>
+                                <Value type="Ecng.Serialization.SettingsStorage, Ecng.Serialization">
+                                  <KeyValuePairBeginStringAndObjectEnd>
+                                    <key>Value</key>
+                                    <value>
+                                      <Type type="string">bool</Type>
+                                      <Value type="bool">True</Value>
+                                    </value>
+                                  </KeyValuePairBeginStringAndObjectEnd>
+                                </Value>
+                              </value>
+                            </KeyValuePairBeginStringAndObjectEnd>
+                            <KeyValuePairBeginStringAndObjectEnd>
+                              <key>IsCalcVolumeProfile</key>
+                              <value>
+                                <Type type="string">Ecng.Serialization.SettingsStorage, Ecng.Serialization</Type>
+                                <Value type="Ecng.Serialization.SettingsStorage, Ecng.Serialization">
+                                  <KeyValuePairBeginStringAndObjectEnd>
+                                    <key>Value</key>
+                                    <value>
+                                      <Type type="string">bool</Type>
+                                      <Value type="bool">False</Value>
+                                    </value>
+                                  </KeyValuePairBeginStringAndObjectEnd>
+                                </Value>
+                              </value>
+                            </KeyValuePairBeginStringAndObjectEnd>
+                          </Value>
+                        </value>
+                      </KeyValuePairBeginStringAndObjectEnd>
+                    </Value>
+                  </value>
+                </KeyValuePairBeginStringAndObjectEnd>
+              </SettingsStorage>
+              <SettingsStorage>
+                <KeyValuePairBeginStringAndObjectEnd>
+                  <key>Key</key>
+                  <value>
+                    <Type type="string">string</Type>
+                    <Value type="string">5</Value>
+                  </value>
+                </KeyValuePairBeginStringAndObjectEnd>
+                <KeyValuePairBeginStringAndObjectEnd>
+                  <key>X</key>
+                  <value>
+                    <Type type="string">double</Type>
+                    <Value type="double">190</Value>
+                  </value>
+                </KeyValuePairBeginStringAndObjectEnd>
+                <KeyValuePairBeginStringAndObjectEnd>
+                  <key>Y</key>
+                  <value>
+                    <Type type="string">double</Type>
+                    <Value type="double">370</Value>
+                  </value>
+                </KeyValuePairBeginStringAndObjectEnd>
+                <KeyValuePairBeginStringAndObjectEnd>
+                  <key>Figure</key>
+                  <value>
+                    <Type type="string">Northwoods.GoXam.NodeFigure, Northwoods.GoWPF</Type>
+                    <Value type="Northwoods.GoXam.NodeFigure, Northwoods.GoWPF">Procedure</Value>
+                  </value>
+                </KeyValuePairBeginStringAndObjectEnd>
+                <KeyValuePairBeginStringAndObjectEnd>
+                  <key>TypeId</key>
+                  <value>
+                    <Type type="string">string</Type>
+                    <Value type="string">95b3aefe-23fd-4cee-b49e-09764f2ab2e2</Value>
+                  </value>
+                </KeyValuePairBeginStringAndObjectEnd>
+                <KeyValuePairBeginStringAndObjectEnd>
+                  <key>Settings</key>
+                  <value>
+                    <Type type="string">Ecng.Serialization.SettingsStorage, Ecng.Serialization</Type>
+                    <Value type="Ecng.Serialization.SettingsStorage, Ecng.Serialization">
+                      <KeyValuePairBeginStringAndObjectEnd>
+                        <key>Id</key>
+                        <value>
+                          <Type type="string">guid</Type>
+                          <Value type="guid">d38d579f-a7e2-4e85-81e4-5905b5e95286</Value>
+                        </value>
+                      </KeyValuePairBeginStringAndObjectEnd>
+                      <KeyValuePairBeginStringAndObjectEnd>
+                        <key>InputSockets</key>
+                        <value>
+                          <Type type="string">System.String[], mscorlib</Type>
+                          <Value type="System.String[], mscorlib">
+                            <String>2f47d3ea-e01a-4901-8e55-4252e5ab2ef9</String>
+                            <String>d1c32ea2-10b1-427a-b1c5-ea0a0a8e91a2</String>
+                          </Value>
+                        </value>
+                      </KeyValuePairBeginStringAndObjectEnd>
+                      <KeyValuePairBeginStringAndObjectEnd>
+                        <key>OutputSockets</key>
+                        <value>
+                          <Type type="string">System.String[], mscorlib</Type>
+                          <Value type="System.String[], mscorlib">
+                            <String>75e8c91e-4ec2-4770-af5d-389e55cb9828</String>
+                          </Value>
+                        </value>
+                      </KeyValuePairBeginStringAndObjectEnd>
+                      <KeyValuePairBeginStringAndObjectEnd>
+                        <key>Parameters</key>
+                        <value>
+                          <Type type="string">Ecng.Serialization.SettingsStorage, Ecng.Serialization</Type>
+                          <Value type="Ecng.Serialization.SettingsStorage, Ecng.Serialization">
+                            <KeyValuePairBeginStringAndObjectEnd>
+                              <key>Name</key>
+                              <value>
+                                <Type type="string">Ecng.Serialization.SettingsStorage, Ecng.Serialization</Type>
+                                <Value type="Ecng.Serialization.SettingsStorage, Ecng.Serialization">
+                                  <KeyValuePairBeginStringAndObjectEnd>
+                                    <key>Value</key>
+                                    <value>
+                                      <Type type="string">string</Type>
+                                      <Value type="string">Security</Value>
+                                    </value>
+                                  </KeyValuePairBeginStringAndObjectEnd>
+                                </Value>
+                              </value>
+                            </KeyValuePairBeginStringAndObjectEnd>
+                            <KeyValuePairBeginStringAndObjectEnd>
+                              <key>LogLevel</key>
+                              <value>
+                                <Type type="string">Ecng.Serialization.SettingsStorage, Ecng.Serialization</Type>
+                                <Value type="Ecng.Serialization.SettingsStorage, Ecng.Serialization">
+                                  <KeyValuePairBeginStringAndObjectEnd>
+                                    <key>Value</key>
+                                    <value>
+                                      <Type type="string">StockSharp.Logging.LogLevels, StockSharp.Logging</Type>
+                                      <Value type="StockSharp.Logging.LogLevels, StockSharp.Logging">Inherit</Value>
+                                    </value>
+                                  </KeyValuePairBeginStringAndObjectEnd>
+                                </Value>
+                              </value>
+                            </KeyValuePairBeginStringAndObjectEnd>
+                            <KeyValuePairBeginStringAndObjectEnd>
+                              <key>ShowParameters</key>
+                              <value>
+                                <Type type="string">Ecng.Serialization.SettingsStorage, Ecng.Serialization</Type>
+                                <Value type="Ecng.Serialization.SettingsStorage, Ecng.Serialization">
+                                  <KeyValuePairBeginStringAndObjectEnd>
+                                    <key>Value</key>
+                                    <value>
+                                      <Type type="string">bool</Type>
+                                      <Value type="bool">True</Value>
+                                    </value>
+                                  </KeyValuePairBeginStringAndObjectEnd>
+                                </Value>
+                              </value>
+                            </KeyValuePairBeginStringAndObjectEnd>
+                            <KeyValuePairBeginStringAndObjectEnd>
+                              <key>Type</key>
+                              <value>
+                                <Type type="string">Ecng.Serialization.SettingsStorage, Ecng.Serialization</Type>
+                                <Value type="Ecng.Serialization.SettingsStorage, Ecng.Serialization">
+                                  <KeyValuePairBeginStringAndObjectEnd>
+                                    <key>Value</key>
+                                    <value>
+                                      <Type type="string">Ecng.Serialization.SettingsStorage, Ecng.Serialization</Type>
+                                      <Value type="Ecng.Serialization.SettingsStorage, Ecng.Serialization">
+                                        <KeyValuePairBeginStringAndObjectEnd>
+                                          <key>Type</key>
+                                          <value>
+                                            <Type type="string">string</Type>
+                                            <Value type="string">StockSharp.BusinessEntities.Security, StockSharp.BusinessEntities</Value>
+                                          </value>
+                                        </KeyValuePairBeginStringAndObjectEnd>
+                                      </Value>
+                                    </value>
+                                  </KeyValuePairBeginStringAndObjectEnd>
+                                </Value>
+                              </value>
+                            </KeyValuePairBeginStringAndObjectEnd>
+                            <KeyValuePairBeginStringAndObjectEnd>
+                              <key>Value</key>
+                              <value>
+                                <Type type="string">Ecng.Serialization.SettingsStorage, Ecng.Serialization</Type>
+                                <Value type="Ecng.Serialization.SettingsStorage, Ecng.Serialization">
+                                  <KeyValuePairBeginStringAndObjectEnd>
+                                    <key>Value</key>
+                                    <value isNull="true" />
+                                  </KeyValuePairBeginStringAndObjectEnd>
+                                </Value>
+                              </value>
+                            </KeyValuePairBeginStringAndObjectEnd>
+                          </Value>
+                        </value>
+                      </KeyValuePairBeginStringAndObjectEnd>
+                    </Value>
+                  </value>
+                </KeyValuePairBeginStringAndObjectEnd>
+              </SettingsStorage>
+              <SettingsStorage>
+                <KeyValuePairBeginStringAndObjectEnd>
+                  <key>Key</key>
+                  <value>
+                    <Type type="string">string</Type>
                     <Value type="string">2</Value>
                   </value>
                 </KeyValuePairBeginStringAndObjectEnd>
@@ -424,7 +539,7 @@ Copyright 2010 by StockSharp, LLC
                   <key>X</key>
                   <value>
                     <Type type="string">double</Type>
-                    <Value type="double">630</Value>
+                    <Value type="double">670</Value>
                   </value>
                 </KeyValuePairBeginStringAndObjectEnd>
                 <KeyValuePairBeginStringAndObjectEnd>
@@ -454,84 +569,26 @@ Copyright 2010 by StockSharp, LLC
                     <Type type="string">Ecng.Serialization.SettingsStorage, Ecng.Serialization</Type>
                     <Value type="Ecng.Serialization.SettingsStorage, Ecng.Serialization">
                       <KeyValuePairBeginStringAndObjectEnd>
+                        <key>Id</key>
+                        <value>
+                          <Type type="string">guid</Type>
+                          <Value type="guid">b3094c6c-8d9f-4d61-8a0b-58e3b0bdf02a</Value>
+                        </value>
+                      </KeyValuePairBeginStringAndObjectEnd>
+                      <KeyValuePairBeginStringAndObjectEnd>
                         <key>InputSockets</key>
                         <value>
-                          <Type type="string">Ecng.Serialization.SettingsStorage[], Ecng.Serialization</Type>
-                          <Value type="Ecng.Serialization.SettingsStorage[], Ecng.Serialization">
-                            <SettingsStorage>
-                              <KeyValuePairBeginStringAndObjectEnd>
-                                <key>Id</key>
-                                <value>
-                                  <Type type="string">string</Type>
-                                  <Value type="string">024a892f-f50e-454f-a51c-8f3ad03e15c1</Value>
-                                </value>
-                              </KeyValuePairBeginStringAndObjectEnd>
-                              <KeyValuePairBeginStringAndObjectEnd>
-                                <key>ExternalId</key>
-                                <value>
-                                  <Type type="string">string</Type>
-                                  <Value type="string">024a892f-f50e-454f-a51c-8f3ad03e15c1</Value>
-                                </value>
-                              </KeyValuePairBeginStringAndObjectEnd>
-                              <KeyValuePairBeginStringAndObjectEnd>
-                                <key>Name</key>
-                                <value>
-                                  <Type type="string">string</Type>
-                                  <Value type="string">Вход 1</Value>
-                                </value>
-                              </KeyValuePairBeginStringAndObjectEnd>
-                              <KeyValuePairBeginStringAndObjectEnd>
-                                <key>Type</key>
-                                <value>
-                                  <Type type="string">Ecng.Serialization.SettingsStorage, Ecng.Serialization</Type>
-                                  <Value type="Ecng.Serialization.SettingsStorage, Ecng.Serialization">
-                                    <KeyValuePairBeginStringAndObjectEnd>
-                                      <key>Type</key>
-                                      <value>
-                                        <Type type="string">string</Type>
-                                        <Value type="string">StockSharp.Algo.Candles.CandleSeries, StockSharp.Algo</Value>
-                                      </value>
-                                    </KeyValuePairBeginStringAndObjectEnd>
-                                    <KeyValuePairBeginStringAndObjectEnd>
-                                      <key>Name</key>
-                                      <value>
-                                        <Type type="string">string</Type>
-                                        <Value type="string">Свечи</Value>
-                                      </value>
-                                    </KeyValuePairBeginStringAndObjectEnd>
-                                    <KeyValuePairBeginStringAndObjectEnd>
-                                      <key>Color</key>
-                                      <value>
-                                        <Type type="string">System.Windows.Media.Color, PresentationCore</Type>
-                                        <Value type="int">-47872</Value>
-                                      </value>
-                                    </KeyValuePairBeginStringAndObjectEnd>
-                                  </Value>
-                                </value>
-                              </KeyValuePairBeginStringAndObjectEnd>
-                              <KeyValuePairBeginStringAndObjectEnd>
-                                <key>Directon</key>
-                                <value>
-                                  <Type type="string">StockSharp.Xaml.Diagram.DiagramSocketDirection, StockSharp.Xaml.Diagram</Type>
-                                  <Value type="StockSharp.Xaml.Diagram.DiagramSocketDirection, StockSharp.Xaml.Diagram">In</Value>
-                                </value>
-                              </KeyValuePairBeginStringAndObjectEnd>
-                              <KeyValuePairBeginStringAndObjectEnd>
-                                <key>LinkableMaximum</key>
-                                <value>
-                                  <Type type="string">int</Type>
-                                  <Value type="int">1</Value>
-                                </value>
-                              </KeyValuePairBeginStringAndObjectEnd>
-                            </SettingsStorage>
+                          <Type type="string">System.String[], mscorlib</Type>
+                          <Value type="System.String[], mscorlib">
+                            <String>7f43e8f4-2876-4a7d-bef6-3b6b6438b434</String>
                           </Value>
                         </value>
                       </KeyValuePairBeginStringAndObjectEnd>
                       <KeyValuePairBeginStringAndObjectEnd>
                         <key>OutputSockets</key>
                         <value>
-                          <Type type="string">Ecng.Serialization.SettingsStorage[], Ecng.Serialization</Type>
-                          <Value type="Ecng.Serialization.SettingsStorage[], Ecng.Serialization" />
+                          <Type type="string">System.String[], mscorlib</Type>
+                          <Value type="System.String[], mscorlib" />
                         </value>
                       </KeyValuePairBeginStringAndObjectEnd>
                       <KeyValuePairBeginStringAndObjectEnd>
@@ -593,7 +650,7 @@ Copyright 2010 by StockSharp, LLC
                                     <key>Value</key>
                                     <value>
                                       <Type type="string">string</Type>
-                                      <Value type="string">Панель графика</Value>
+                                      <Value type="string">Chart panel</Value>
                                     </value>
                                   </KeyValuePairBeginStringAndObjectEnd>
                                 </Value>
@@ -841,7 +898,7 @@ Copyright 2010 by StockSharp, LLC
                               </value>
                             </KeyValuePairBeginStringAndObjectEnd>
                             <KeyValuePairBeginStringAndObjectEnd>
-                              <key>Вход 1</key>
+                              <key>Input 1</key>
                               <value>
                                 <Type type="string">Ecng.Serialization.SettingsStorage, Ecng.Serialization</Type>
                                 <Value type="Ecng.Serialization.SettingsStorage, Ecng.Serialization">
@@ -866,7 +923,7 @@ Copyright 2010 by StockSharp, LLC
                                                 <key>Id</key>
                                                 <value>
                                                   <Type type="string">guid</Type>
-                                                  <Value type="guid">e6cdbc1f-1ec8-4626-aed5-8dff14dbbfc9</Value>
+                                                  <Value type="guid">7f43e8f4-2876-4a7d-bef6-3b6b6438b434</Value>
                                                 </value>
                                               </KeyValuePairBeginStringAndObjectEnd>
                                               <KeyValuePairBeginStringAndObjectEnd>
@@ -1057,10 +1114,7 @@ Copyright 2010 by StockSharp, LLC
                                               </KeyValuePairBeginStringAndObjectEnd>
                                               <KeyValuePairBeginStringAndObjectEnd>
                                                 <key>Title</key>
-                                                <value>
-                                                  <Type type="string">string</Type>
-                                                  <Value type="string">Candles</Value>
-                                                </value>
+                                                <value isNull="true" />
                                               </KeyValuePairBeginStringAndObjectEnd>
                                               <KeyValuePairBeginStringAndObjectEnd>
                                                 <key>ShowAxisMarker</key>
@@ -1085,728 +1139,6 @@ Copyright 2010 by StockSharp, LLC
                   </value>
                 </KeyValuePairBeginStringAndObjectEnd>
               </SettingsStorage>
-              <SettingsStorage>
-                <KeyValuePairBeginStringAndObjectEnd>
-                  <key>Key</key>
-                  <value>
-                    <Type type="string">string</Type>
-                    <Value type="string">3</Value>
-                  </value>
-                </KeyValuePairBeginStringAndObjectEnd>
-                <KeyValuePairBeginStringAndObjectEnd>
-                  <key>X</key>
-                  <value>
-                    <Type type="string">double</Type>
-                    <Value type="double">420</Value>
-                  </value>
-                </KeyValuePairBeginStringAndObjectEnd>
-                <KeyValuePairBeginStringAndObjectEnd>
-                  <key>Y</key>
-                  <value>
-                    <Type type="string">double</Type>
-                    <Value type="double">370</Value>
-                  </value>
-                </KeyValuePairBeginStringAndObjectEnd>
-                <KeyValuePairBeginStringAndObjectEnd>
-                  <key>Figure</key>
-                  <value>
-                    <Type type="string">Northwoods.GoXam.NodeFigure, Northwoods.GoWPF</Type>
-                    <Value type="Northwoods.GoXam.NodeFigure, Northwoods.GoWPF">Procedure</Value>
-                  </value>
-                </KeyValuePairBeginStringAndObjectEnd>
-                <KeyValuePairBeginStringAndObjectEnd>
-                  <key>TypeId</key>
-                  <value>
-                    <Type type="string">string</Type>
-                    <Value type="string">3d773273-0cee-4d40-8eef-acded2d07ab8</Value>
-                  </value>
-                </KeyValuePairBeginStringAndObjectEnd>
-                <KeyValuePairBeginStringAndObjectEnd>
-                  <key>Settings</key>
-                  <value>
-                    <Type type="string">Ecng.Serialization.SettingsStorage, Ecng.Serialization</Type>
-                    <Value type="Ecng.Serialization.SettingsStorage, Ecng.Serialization">
-                      <KeyValuePairBeginStringAndObjectEnd>
-                        <key>InputSockets</key>
-                        <value>
-                          <Type type="string">Ecng.Serialization.SettingsStorage[], Ecng.Serialization</Type>
-                          <Value type="Ecng.Serialization.SettingsStorage[], Ecng.Serialization">
-                            <SettingsStorage>
-                              <KeyValuePairBeginStringAndObjectEnd>
-                                <key>Id</key>
-                                <value>
-                                  <Type type="string">string</Type>
-                                  <Value type="string">6109ab54-39df-42fd-91bc-26e0cbb2d500</Value>
-                                </value>
-                              </KeyValuePairBeginStringAndObjectEnd>
-                              <KeyValuePairBeginStringAndObjectEnd>
-                                <key>ExternalId</key>
-                                <value>
-                                  <Type type="string">string</Type>
-                                  <Value type="string">6109ab54-39df-42fd-91bc-26e0cbb2d500</Value>
-                                </value>
-                              </KeyValuePairBeginStringAndObjectEnd>
-                              <KeyValuePairBeginStringAndObjectEnd>
-                                <key>Name</key>
-                                <value>
-                                  <Type type="string">string</Type>
-                                  <Value type="string">Инструмент</Value>
-                                </value>
-                              </KeyValuePairBeginStringAndObjectEnd>
-                              <KeyValuePairBeginStringAndObjectEnd>
-                                <key>Type</key>
-                                <value>
-                                  <Type type="string">Ecng.Serialization.SettingsStorage, Ecng.Serialization</Type>
-                                  <Value type="Ecng.Serialization.SettingsStorage, Ecng.Serialization">
-                                    <KeyValuePairBeginStringAndObjectEnd>
-                                      <key>Type</key>
-                                      <value>
-                                        <Type type="string">string</Type>
-                                        <Value type="string">StockSharp.BusinessEntities.Security, StockSharp.BusinessEntities</Value>
-                                      </value>
-                                    </KeyValuePairBeginStringAndObjectEnd>
-                                    <KeyValuePairBeginStringAndObjectEnd>
-                                      <key>Name</key>
-                                      <value>
-                                        <Type type="string">string</Type>
-                                        <Value type="string">Инструмент</Value>
-                                      </value>
-                                    </KeyValuePairBeginStringAndObjectEnd>
-                                    <KeyValuePairBeginStringAndObjectEnd>
-                                      <key>Color</key>
-                                      <value>
-                                        <Type type="string">System.Windows.Media.Color, PresentationCore</Type>
-                                        <Value type="int">-16751616</Value>
-                                      </value>
-                                    </KeyValuePairBeginStringAndObjectEnd>
-                                  </Value>
-                                </value>
-                              </KeyValuePairBeginStringAndObjectEnd>
-                              <KeyValuePairBeginStringAndObjectEnd>
-                                <key>Directon</key>
-                                <value>
-                                  <Type type="string">StockSharp.Xaml.Diagram.DiagramSocketDirection, StockSharp.Xaml.Diagram</Type>
-                                  <Value type="StockSharp.Xaml.Diagram.DiagramSocketDirection, StockSharp.Xaml.Diagram">In</Value>
-                                </value>
-                              </KeyValuePairBeginStringAndObjectEnd>
-                              <KeyValuePairBeginStringAndObjectEnd>
-                                <key>LinkableMaximum</key>
-                                <value>
-                                  <Type type="string">int</Type>
-                                  <Value type="int">1</Value>
-                                </value>
-                              </KeyValuePairBeginStringAndObjectEnd>
-                            </SettingsStorage>
-                          </Value>
-                        </value>
-                      </KeyValuePairBeginStringAndObjectEnd>
-                      <KeyValuePairBeginStringAndObjectEnd>
-                        <key>OutputSockets</key>
-                        <value>
-                          <Type type="string">Ecng.Serialization.SettingsStorage[], Ecng.Serialization</Type>
-                          <Value type="Ecng.Serialization.SettingsStorage[], Ecng.Serialization">
-                            <SettingsStorage>
-                              <KeyValuePairBeginStringAndObjectEnd>
-                                <key>Id</key>
-                                <value>
-                                  <Type type="string">string</Type>
-                                  <Value type="string">e230c2f6-2cd2-4c89-8dea-296c30fa0221</Value>
-                                </value>
-                              </KeyValuePairBeginStringAndObjectEnd>
-                              <KeyValuePairBeginStringAndObjectEnd>
-                                <key>ExternalId</key>
-                                <value>
-                                  <Type type="string">string</Type>
-                                  <Value type="string">e230c2f6-2cd2-4c89-8dea-296c30fa0221</Value>
-                                </value>
-                              </KeyValuePairBeginStringAndObjectEnd>
-                              <KeyValuePairBeginStringAndObjectEnd>
-                                <key>Name</key>
-                                <value>
-                                  <Type type="string">string</Type>
-                                  <Value type="string">Свечи</Value>
-                                </value>
-                              </KeyValuePairBeginStringAndObjectEnd>
-                              <KeyValuePairBeginStringAndObjectEnd>
-                                <key>Type</key>
-                                <value>
-                                  <Type type="string">Ecng.Serialization.SettingsStorage, Ecng.Serialization</Type>
-                                  <Value type="Ecng.Serialization.SettingsStorage, Ecng.Serialization">
-                                    <KeyValuePairBeginStringAndObjectEnd>
-                                      <key>Type</key>
-                                      <value>
-                                        <Type type="string">string</Type>
-                                        <Value type="string">StockSharp.Algo.Candles.CandleSeries, StockSharp.Algo</Value>
-                                      </value>
-                                    </KeyValuePairBeginStringAndObjectEnd>
-                                    <KeyValuePairBeginStringAndObjectEnd>
-                                      <key>Name</key>
-                                      <value>
-                                        <Type type="string">string</Type>
-                                        <Value type="string">Свечи</Value>
-                                      </value>
-                                    </KeyValuePairBeginStringAndObjectEnd>
-                                    <KeyValuePairBeginStringAndObjectEnd>
-                                      <key>Color</key>
-                                      <value>
-                                        <Type type="string">System.Windows.Media.Color, PresentationCore</Type>
-                                        <Value type="int">-47872</Value>
-                                      </value>
-                                    </KeyValuePairBeginStringAndObjectEnd>
-                                  </Value>
-                                </value>
-                              </KeyValuePairBeginStringAndObjectEnd>
-                              <KeyValuePairBeginStringAndObjectEnd>
-                                <key>Directon</key>
-                                <value>
-                                  <Type type="string">StockSharp.Xaml.Diagram.DiagramSocketDirection, StockSharp.Xaml.Diagram</Type>
-                                  <Value type="StockSharp.Xaml.Diagram.DiagramSocketDirection, StockSharp.Xaml.Diagram">Out</Value>
-                                </value>
-                              </KeyValuePairBeginStringAndObjectEnd>
-                              <KeyValuePairBeginStringAndObjectEnd>
-                                <key>LinkableMaximum</key>
-                                <value>
-                                  <Type type="string">int</Type>
-                                  <Value type="int">2147483647</Value>
-                                </value>
-                              </KeyValuePairBeginStringAndObjectEnd>
-                            </SettingsStorage>
-                          </Value>
-                        </value>
-                      </KeyValuePairBeginStringAndObjectEnd>
-                      <KeyValuePairBeginStringAndObjectEnd>
-                        <key>Parameters</key>
-                        <value>
-                          <Type type="string">Ecng.Serialization.SettingsStorage, Ecng.Serialization</Type>
-                          <Value type="Ecng.Serialization.SettingsStorage, Ecng.Serialization">
-                            <KeyValuePairBeginStringAndObjectEnd>
-                              <key>Name</key>
-                              <value>
-                                <Type type="string">Ecng.Serialization.SettingsStorage, Ecng.Serialization</Type>
-                                <Value type="Ecng.Serialization.SettingsStorage, Ecng.Serialization">
-                                  <KeyValuePairBeginStringAndObjectEnd>
-                                    <key>Value</key>
-                                    <value>
-                                      <Type type="string">string</Type>
-                                      <Value type="string">Candles</Value>
-                                    </value>
-                                  </KeyValuePairBeginStringAndObjectEnd>
-                                </Value>
-                              </value>
-                            </KeyValuePairBeginStringAndObjectEnd>
-                            <KeyValuePairBeginStringAndObjectEnd>
-                              <key>LogLevel</key>
-                              <value>
-                                <Type type="string">Ecng.Serialization.SettingsStorage, Ecng.Serialization</Type>
-                                <Value type="Ecng.Serialization.SettingsStorage, Ecng.Serialization">
-                                  <KeyValuePairBeginStringAndObjectEnd>
-                                    <key>Value</key>
-                                    <value>
-                                      <Type type="string">StockSharp.Logging.LogLevels, StockSharp.Logging</Type>
-                                      <Value type="StockSharp.Logging.LogLevels, StockSharp.Logging">Inherit</Value>
-                                    </value>
-                                  </KeyValuePairBeginStringAndObjectEnd>
-                                </Value>
-                              </value>
-                            </KeyValuePairBeginStringAndObjectEnd>
-                            <KeyValuePairBeginStringAndObjectEnd>
-                              <key>ShowParameters</key>
-                              <value>
-                                <Type type="string">Ecng.Serialization.SettingsStorage, Ecng.Serialization</Type>
-                                <Value type="Ecng.Serialization.SettingsStorage, Ecng.Serialization">
-                                  <KeyValuePairBeginStringAndObjectEnd>
-                                    <key>Value</key>
-                                    <value>
-                                      <Type type="string">bool</Type>
-                                      <Value type="bool">False</Value>
-                                    </value>
-                                  </KeyValuePairBeginStringAndObjectEnd>
-                                </Value>
-                              </value>
-                            </KeyValuePairBeginStringAndObjectEnd>
-                            <KeyValuePairBeginStringAndObjectEnd>
-                              <key>Series</key>
-                              <value>
-                                <Type type="string">Ecng.Serialization.SettingsStorage, Ecng.Serialization</Type>
-                                <Value type="Ecng.Serialization.SettingsStorage, Ecng.Serialization">
-                                  <KeyValuePairBeginStringAndObjectEnd>
-                                    <key>Value</key>
-                                    <value>
-                                      <Type type="string">Ecng.Serialization.SettingsStorage, Ecng.Serialization</Type>
-                                      <Value type="Ecng.Serialization.SettingsStorage, Ecng.Serialization">
-                                        <KeyValuePairBeginStringAndObjectEnd>
-                                          <key>type</key>
-                                          <value>
-                                            <Type type="string">string</Type>
-                                            <Value type="string">StockSharp.Algo.Candles.CandleSeries, StockSharp.Algo</Value>
-                                          </value>
-                                        </KeyValuePairBeginStringAndObjectEnd>
-                                        <KeyValuePairBeginStringAndObjectEnd>
-                                          <key>settings</key>
-                                          <value>
-                                            <Type type="string">Ecng.Serialization.SettingsStorage, Ecng.Serialization</Type>
-                                            <Value type="Ecng.Serialization.SettingsStorage, Ecng.Serialization">
-                                              <KeyValuePairBeginStringAndObjectEnd>
-                                                <key>CandleType</key>
-                                                <value>
-                                                  <Type type="string">string</Type>
-                                                  <Value type="string">StockSharp.Algo.Candles.TimeFrameCandle, StockSharp.Algo</Value>
-                                                </value>
-                                              </KeyValuePairBeginStringAndObjectEnd>
-                                              <KeyValuePairBeginStringAndObjectEnd>
-                                                <key>Arg</key>
-                                                <value>
-                                                  <Type type="string">time</Type>
-                                                  <Value type="time">00:05:00</Value>
-                                                </value>
-                                              </KeyValuePairBeginStringAndObjectEnd>
-                                              <KeyValuePairBeginStringAndObjectEnd>
-                                                <key>From</key>
-                                                <value>
-                                                  <Type type="string">System.DateTimeOffset, mscorlib</Type>
-                                                  <Value type="System.DateTimeOffset, mscorlib">01.01.0001 0:00:00 +00:00</Value>
-                                                </value>
-                                              </KeyValuePairBeginStringAndObjectEnd>
-                                              <KeyValuePairBeginStringAndObjectEnd>
-                                                <key>To</key>
-                                                <value>
-                                                  <Type type="string">System.DateTimeOffset, mscorlib</Type>
-                                                  <Value type="System.DateTimeOffset, mscorlib">9999-12-31T23:59:59.9999999+00:00</Value>
-                                                </value>
-                                              </KeyValuePairBeginStringAndObjectEnd>
-                                              <KeyValuePairBeginStringAndObjectEnd>
-                                                <key>WorkingTime</key>
-                                                <value isNull="true" />
-                                              </KeyValuePairBeginStringAndObjectEnd>
-                                              <KeyValuePairBeginStringAndObjectEnd>
-                                                <key>IsCalcVolumeProfile</key>
-                                                <value>
-                                                  <Type type="string">bool</Type>
-                                                  <Value type="bool">False</Value>
-                                                </value>
-                                              </KeyValuePairBeginStringAndObjectEnd>
-                                            </Value>
-                                          </value>
-                                        </KeyValuePairBeginStringAndObjectEnd>
-                                      </Value>
-                                    </value>
-                                  </KeyValuePairBeginStringAndObjectEnd>
-                                </Value>
-                              </value>
-                            </KeyValuePairBeginStringAndObjectEnd>
-                            <KeyValuePairBeginStringAndObjectEnd>
-                              <key>IsFinal</key>
-                              <value>
-                                <Type type="string">Ecng.Serialization.SettingsStorage, Ecng.Serialization</Type>
-                                <Value type="Ecng.Serialization.SettingsStorage, Ecng.Serialization">
-                                  <KeyValuePairBeginStringAndObjectEnd>
-                                    <key>Value</key>
-                                    <value>
-                                      <Type type="string">bool</Type>
-                                      <Value type="bool">True</Value>
-                                    </value>
-                                  </KeyValuePairBeginStringAndObjectEnd>
-                                </Value>
-                              </value>
-                            </KeyValuePairBeginStringAndObjectEnd>
-                            <KeyValuePairBeginStringAndObjectEnd>
-                              <key>IsCalcVolumeProfile</key>
-                              <value>
-                                <Type type="string">Ecng.Serialization.SettingsStorage, Ecng.Serialization</Type>
-                                <Value type="Ecng.Serialization.SettingsStorage, Ecng.Serialization">
-                                  <KeyValuePairBeginStringAndObjectEnd>
-                                    <key>Value</key>
-                                    <value>
-                                      <Type type="string">bool</Type>
-                                      <Value type="bool">False</Value>
-                                    </value>
-                                  </KeyValuePairBeginStringAndObjectEnd>
-                                </Value>
-                              </value>
-                            </KeyValuePairBeginStringAndObjectEnd>
-                          </Value>
-                        </value>
-                      </KeyValuePairBeginStringAndObjectEnd>
-                    </Value>
-                  </value>
-                </KeyValuePairBeginStringAndObjectEnd>
-              </SettingsStorage>
-              <SettingsStorage>
-                <KeyValuePairBeginStringAndObjectEnd>
-                  <key>Key</key>
-                  <value>
-                    <Type type="string">string</Type>
-                    <Value type="string">5</Value>
-                  </value>
-                </KeyValuePairBeginStringAndObjectEnd>
-                <KeyValuePairBeginStringAndObjectEnd>
-                  <key>X</key>
-                  <value>
-                    <Type type="string">double</Type>
-                    <Value type="double">200</Value>
-                  </value>
-                </KeyValuePairBeginStringAndObjectEnd>
-                <KeyValuePairBeginStringAndObjectEnd>
-                  <key>Y</key>
-                  <value>
-                    <Type type="string">double</Type>
-                    <Value type="double">370</Value>
-                  </value>
-                </KeyValuePairBeginStringAndObjectEnd>
-                <KeyValuePairBeginStringAndObjectEnd>
-                  <key>Figure</key>
-                  <value>
-                    <Type type="string">Northwoods.GoXam.NodeFigure, Northwoods.GoWPF</Type>
-                    <Value type="Northwoods.GoXam.NodeFigure, Northwoods.GoWPF">Procedure</Value>
-                  </value>
-                </KeyValuePairBeginStringAndObjectEnd>
-                <KeyValuePairBeginStringAndObjectEnd>
-                  <key>TypeId</key>
-                  <value>
-                    <Type type="string">string</Type>
-                    <Value type="string">95b3aefe-23fd-4cee-b49e-09764f2ab2e2</Value>
-                  </value>
-                </KeyValuePairBeginStringAndObjectEnd>
-                <KeyValuePairBeginStringAndObjectEnd>
-                  <key>Settings</key>
-                  <value>
-                    <Type type="string">Ecng.Serialization.SettingsStorage, Ecng.Serialization</Type>
-                    <Value type="Ecng.Serialization.SettingsStorage, Ecng.Serialization">
-                      <KeyValuePairBeginStringAndObjectEnd>
-                        <key>InputSockets</key>
-                        <value>
-                          <Type type="string">Ecng.Serialization.SettingsStorage[], Ecng.Serialization</Type>
-                          <Value type="Ecng.Serialization.SettingsStorage[], Ecng.Serialization">
-                            <SettingsStorage>
-                              <KeyValuePairBeginStringAndObjectEnd>
-                                <key>Id</key>
-                                <value>
-                                  <Type type="string">string</Type>
-                                  <Value type="string">82caa3e4-3b1f-42c8-bd82-ccb08af9ba22</Value>
-                                </value>
-                              </KeyValuePairBeginStringAndObjectEnd>
-                              <KeyValuePairBeginStringAndObjectEnd>
-                                <key>ExternalId</key>
-                                <value>
-                                  <Type type="string">string</Type>
-                                  <Value type="string">82caa3e4-3b1f-42c8-bd82-ccb08af9ba22</Value>
-                                </value>
-                              </KeyValuePairBeginStringAndObjectEnd>
-                              <KeyValuePairBeginStringAndObjectEnd>
-                                <key>Name</key>
-                                <value>
-                                  <Type type="string">string</Type>
-                                  <Value type="string">Вход</Value>
-                                </value>
-                              </KeyValuePairBeginStringAndObjectEnd>
-                              <KeyValuePairBeginStringAndObjectEnd>
-                                <key>Type</key>
-                                <value>
-                                  <Type type="string">Ecng.Serialization.SettingsStorage, Ecng.Serialization</Type>
-                                  <Value type="Ecng.Serialization.SettingsStorage, Ecng.Serialization">
-                                    <KeyValuePairBeginStringAndObjectEnd>
-                                      <key>Type</key>
-                                      <value>
-                                        <Type type="string">string</Type>
-                                        <Value type="string">StockSharp.BusinessEntities.Security, StockSharp.BusinessEntities</Value>
-                                      </value>
-                                    </KeyValuePairBeginStringAndObjectEnd>
-                                    <KeyValuePairBeginStringAndObjectEnd>
-                                      <key>Name</key>
-                                      <value>
-                                        <Type type="string">string</Type>
-                                        <Value type="string">Инструмент</Value>
-                                      </value>
-                                    </KeyValuePairBeginStringAndObjectEnd>
-                                    <KeyValuePairBeginStringAndObjectEnd>
-                                      <key>Color</key>
-                                      <value>
-                                        <Type type="string">System.Windows.Media.Color, PresentationCore</Type>
-                                        <Value type="int">-16751616</Value>
-                                      </value>
-                                    </KeyValuePairBeginStringAndObjectEnd>
-                                  </Value>
-                                </value>
-                              </KeyValuePairBeginStringAndObjectEnd>
-                              <KeyValuePairBeginStringAndObjectEnd>
-                                <key>Directon</key>
-                                <value>
-                                  <Type type="string">StockSharp.Xaml.Diagram.DiagramSocketDirection, StockSharp.Xaml.Diagram</Type>
-                                  <Value type="StockSharp.Xaml.Diagram.DiagramSocketDirection, StockSharp.Xaml.Diagram">In</Value>
-                                </value>
-                              </KeyValuePairBeginStringAndObjectEnd>
-                              <KeyValuePairBeginStringAndObjectEnd>
-                                <key>LinkableMaximum</key>
-                                <value>
-                                  <Type type="string">int</Type>
-                                  <Value type="int">1</Value>
-                                </value>
-                              </KeyValuePairBeginStringAndObjectEnd>
-                            </SettingsStorage>
-                            <SettingsStorage>
-                              <KeyValuePairBeginStringAndObjectEnd>
-                                <key>Id</key>
-                                <value>
-                                  <Type type="string">string</Type>
-                                  <Value type="string">22b4c3b0-e765-4c86-993e-2b68ecf827c0</Value>
-                                </value>
-                              </KeyValuePairBeginStringAndObjectEnd>
-                              <KeyValuePairBeginStringAndObjectEnd>
-                                <key>ExternalId</key>
-                                <value>
-                                  <Type type="string">string</Type>
-                                  <Value type="string">22b4c3b0-e765-4c86-993e-2b68ecf827c0</Value>
-                                </value>
-                              </KeyValuePairBeginStringAndObjectEnd>
-                              <KeyValuePairBeginStringAndObjectEnd>
-                                <key>Name</key>
-                                <value>
-                                  <Type type="string">string</Type>
-                                  <Value type="string">Триггер</Value>
-                                </value>
-                              </KeyValuePairBeginStringAndObjectEnd>
-                              <KeyValuePairBeginStringAndObjectEnd>
-                                <key>Type</key>
-                                <value>
-                                  <Type type="string">Ecng.Serialization.SettingsStorage, Ecng.Serialization</Type>
-                                  <Value type="Ecng.Serialization.SettingsStorage, Ecng.Serialization">
-                                    <KeyValuePairBeginStringAndObjectEnd>
-                                      <key>Type</key>
-                                      <value>
-                                        <Type type="string">string</Type>
-                                        <Value type="string">System.Object, mscorlib</Value>
-                                      </value>
-                                    </KeyValuePairBeginStringAndObjectEnd>
-                                    <KeyValuePairBeginStringAndObjectEnd>
-                                      <key>Name</key>
-                                      <value>
-                                        <Type type="string">string</Type>
-                                        <Value type="string">Любые данные</Value>
-                                      </value>
-                                    </KeyValuePairBeginStringAndObjectEnd>
-                                    <KeyValuePairBeginStringAndObjectEnd>
-                                      <key>Color</key>
-                                      <value>
-                                        <Type type="string">System.Windows.Media.Color, PresentationCore</Type>
-                                        <Value type="int">-16777216</Value>
-                                      </value>
-                                    </KeyValuePairBeginStringAndObjectEnd>
-                                  </Value>
-                                </value>
-                              </KeyValuePairBeginStringAndObjectEnd>
-                              <KeyValuePairBeginStringAndObjectEnd>
-                                <key>Directon</key>
-                                <value>
-                                  <Type type="string">StockSharp.Xaml.Diagram.DiagramSocketDirection, StockSharp.Xaml.Diagram</Type>
-                                  <Value type="StockSharp.Xaml.Diagram.DiagramSocketDirection, StockSharp.Xaml.Diagram">In</Value>
-                                </value>
-                              </KeyValuePairBeginStringAndObjectEnd>
-                              <KeyValuePairBeginStringAndObjectEnd>
-                                <key>LinkableMaximum</key>
-                                <value>
-                                  <Type type="string">int</Type>
-                                  <Value type="int">2147483647</Value>
-                                </value>
-                              </KeyValuePairBeginStringAndObjectEnd>
-                            </SettingsStorage>
-                          </Value>
-                        </value>
-                      </KeyValuePairBeginStringAndObjectEnd>
-                      <KeyValuePairBeginStringAndObjectEnd>
-                        <key>OutputSockets</key>
-                        <value>
-                          <Type type="string">Ecng.Serialization.SettingsStorage[], Ecng.Serialization</Type>
-                          <Value type="Ecng.Serialization.SettingsStorage[], Ecng.Serialization">
-                            <SettingsStorage>
-                              <KeyValuePairBeginStringAndObjectEnd>
-                                <key>Id</key>
-                                <value>
-                                  <Type type="string">string</Type>
-                                  <Value type="string">8a714773-7d1c-4e6c-83f8-0f0735940278</Value>
-                                </value>
-                              </KeyValuePairBeginStringAndObjectEnd>
-                              <KeyValuePairBeginStringAndObjectEnd>
-                                <key>ExternalId</key>
-                                <value>
-                                  <Type type="string">string</Type>
-                                  <Value type="string">8a714773-7d1c-4e6c-83f8-0f0735940278</Value>
-                                </value>
-                              </KeyValuePairBeginStringAndObjectEnd>
-                              <KeyValuePairBeginStringAndObjectEnd>
-                                <key>Name</key>
-                                <value>
-                                  <Type type="string">string</Type>
-                                  <Value type="string">Выход</Value>
-                                </value>
-                              </KeyValuePairBeginStringAndObjectEnd>
-                              <KeyValuePairBeginStringAndObjectEnd>
-                                <key>Type</key>
-                                <value>
-                                  <Type type="string">Ecng.Serialization.SettingsStorage, Ecng.Serialization</Type>
-                                  <Value type="Ecng.Serialization.SettingsStorage, Ecng.Serialization">
-                                    <KeyValuePairBeginStringAndObjectEnd>
-                                      <key>Type</key>
-                                      <value>
-                                        <Type type="string">string</Type>
-                                        <Value type="string">StockSharp.BusinessEntities.Security, StockSharp.BusinessEntities</Value>
-                                      </value>
-                                    </KeyValuePairBeginStringAndObjectEnd>
-                                    <KeyValuePairBeginStringAndObjectEnd>
-                                      <key>Name</key>
-                                      <value>
-                                        <Type type="string">string</Type>
-                                        <Value type="string">Инструмент</Value>
-                                      </value>
-                                    </KeyValuePairBeginStringAndObjectEnd>
-                                    <KeyValuePairBeginStringAndObjectEnd>
-                                      <key>Color</key>
-                                      <value>
-                                        <Type type="string">System.Windows.Media.Color, PresentationCore</Type>
-                                        <Value type="int">-16751616</Value>
-                                      </value>
-                                    </KeyValuePairBeginStringAndObjectEnd>
-                                  </Value>
-                                </value>
-                              </KeyValuePairBeginStringAndObjectEnd>
-                              <KeyValuePairBeginStringAndObjectEnd>
-                                <key>Directon</key>
-                                <value>
-                                  <Type type="string">StockSharp.Xaml.Diagram.DiagramSocketDirection, StockSharp.Xaml.Diagram</Type>
-                                  <Value type="StockSharp.Xaml.Diagram.DiagramSocketDirection, StockSharp.Xaml.Diagram">Out</Value>
-                                </value>
-                              </KeyValuePairBeginStringAndObjectEnd>
-                              <KeyValuePairBeginStringAndObjectEnd>
-                                <key>LinkableMaximum</key>
-                                <value>
-                                  <Type type="string">int</Type>
-                                  <Value type="int">2147483647</Value>
-                                </value>
-                              </KeyValuePairBeginStringAndObjectEnd>
-                            </SettingsStorage>
-                          </Value>
-                        </value>
-                      </KeyValuePairBeginStringAndObjectEnd>
-                      <KeyValuePairBeginStringAndObjectEnd>
-                        <key>Parameters</key>
-                        <value>
-                          <Type type="string">Ecng.Serialization.SettingsStorage, Ecng.Serialization</Type>
-                          <Value type="Ecng.Serialization.SettingsStorage, Ecng.Serialization">
-                            <KeyValuePairBeginStringAndObjectEnd>
-                              <key>Name</key>
-                              <value>
-                                <Type type="string">Ecng.Serialization.SettingsStorage, Ecng.Serialization</Type>
-                                <Value type="Ecng.Serialization.SettingsStorage, Ecng.Serialization">
-                                  <KeyValuePairBeginStringAndObjectEnd>
-                                    <key>Value</key>
-                                    <value>
-                                      <Type type="string">string</Type>
-                                      <Value type="string">Security</Value>
-                                    </value>
-                                  </KeyValuePairBeginStringAndObjectEnd>
-                                </Value>
-                              </value>
-                            </KeyValuePairBeginStringAndObjectEnd>
-                            <KeyValuePairBeginStringAndObjectEnd>
-                              <key>LogLevel</key>
-                              <value>
-                                <Type type="string">Ecng.Serialization.SettingsStorage, Ecng.Serialization</Type>
-                                <Value type="Ecng.Serialization.SettingsStorage, Ecng.Serialization">
-                                  <KeyValuePairBeginStringAndObjectEnd>
-                                    <key>Value</key>
-                                    <value>
-                                      <Type type="string">StockSharp.Logging.LogLevels, StockSharp.Logging</Type>
-                                      <Value type="StockSharp.Logging.LogLevels, StockSharp.Logging">Inherit</Value>
-                                    </value>
-                                  </KeyValuePairBeginStringAndObjectEnd>
-                                </Value>
-                              </value>
-                            </KeyValuePairBeginStringAndObjectEnd>
-                            <KeyValuePairBeginStringAndObjectEnd>
-                              <key>ShowParameters</key>
-                              <value>
-                                <Type type="string">Ecng.Serialization.SettingsStorage, Ecng.Serialization</Type>
-                                <Value type="Ecng.Serialization.SettingsStorage, Ecng.Serialization">
-                                  <KeyValuePairBeginStringAndObjectEnd>
-                                    <key>Value</key>
-                                    <value>
-                                      <Type type="string">bool</Type>
-                                      <Value type="bool">True</Value>
-                                    </value>
-                                  </KeyValuePairBeginStringAndObjectEnd>
-                                </Value>
-                              </value>
-                            </KeyValuePairBeginStringAndObjectEnd>
-                            <KeyValuePairBeginStringAndObjectEnd>
-                              <key>Type</key>
-                              <value>
-                                <Type type="string">Ecng.Serialization.SettingsStorage, Ecng.Serialization</Type>
-                                <Value type="Ecng.Serialization.SettingsStorage, Ecng.Serialization">
-                                  <KeyValuePairBeginStringAndObjectEnd>
-                                    <key>Value</key>
-                                    <value>
-                                      <Type type="string">Ecng.Serialization.SettingsStorage, Ecng.Serialization</Type>
-                                      <Value type="Ecng.Serialization.SettingsStorage, Ecng.Serialization">
-                                        <KeyValuePairBeginStringAndObjectEnd>
-                                          <key>type</key>
-                                          <value>
-                                            <Type type="string">string</Type>
-                                            <Value type="string">StockSharp.Xaml.Diagram.DiagramSocketType, StockSharp.Xaml.Diagram</Value>
-                                          </value>
-                                        </KeyValuePairBeginStringAndObjectEnd>
-                                        <KeyValuePairBeginStringAndObjectEnd>
-                                          <key>settings</key>
-                                          <value>
-                                            <Type type="string">Ecng.Serialization.SettingsStorage, Ecng.Serialization</Type>
-                                            <Value type="Ecng.Serialization.SettingsStorage, Ecng.Serialization">
-                                              <KeyValuePairBeginStringAndObjectEnd>
-                                                <key>Type</key>
-                                                <value>
-                                                  <Type type="string">string</Type>
-                                                  <Value type="string">StockSharp.BusinessEntities.Security, StockSharp.BusinessEntities</Value>
-                                                </value>
-                                              </KeyValuePairBeginStringAndObjectEnd>
-                                              <KeyValuePairBeginStringAndObjectEnd>
-                                                <key>Name</key>
-                                                <value>
-                                                  <Type type="string">string</Type>
-                                                  <Value type="string">Инструмент</Value>
-                                                </value>
-                                              </KeyValuePairBeginStringAndObjectEnd>
-                                              <KeyValuePairBeginStringAndObjectEnd>
-                                                <key>Color</key>
-                                                <value>
-                                                  <Type type="string">System.Windows.Media.Color, PresentationCore</Type>
-                                                  <Value type="int">-16751616</Value>
-                                                </value>
-                                              </KeyValuePairBeginStringAndObjectEnd>
-                                            </Value>
-                                          </value>
-                                        </KeyValuePairBeginStringAndObjectEnd>
-                                      </Value>
-                                    </value>
-                                  </KeyValuePairBeginStringAndObjectEnd>
-                                </Value>
-                              </value>
-                            </KeyValuePairBeginStringAndObjectEnd>
-                            <KeyValuePairBeginStringAndObjectEnd>
-                              <key>Value</key>
-                              <value>
-                                <Type type="string">Ecng.Serialization.SettingsStorage, Ecng.Serialization</Type>
-                                <Value type="Ecng.Serialization.SettingsStorage, Ecng.Serialization">
-                                  <KeyValuePairBeginStringAndObjectEnd>
-                                    <key>Value</key>
-                                    <value isNull="true" />
-                                  </KeyValuePairBeginStringAndObjectEnd>
-                                </Value>
-                              </value>
-                            </KeyValuePairBeginStringAndObjectEnd>
-                          </Value>
-                        </value>
-                      </KeyValuePairBeginStringAndObjectEnd>
-                    </Value>
-                  </value>
-                </KeyValuePairBeginStringAndObjectEnd>
-              </SettingsStorage>
             </Value>
           </value>
         </KeyValuePairBeginStringAndObjectEnd>
@@ -1820,6 +1152,36 @@ Copyright 2010 by StockSharp, LLC
                   <key>From</key>
                   <value>
                     <Type type="string">string</Type>
+                    <Value type="string">5</Value>
+                  </value>
+                </KeyValuePairBeginStringAndObjectEnd>
+                <KeyValuePairBeginStringAndObjectEnd>
+                  <key>FromPort</key>
+                  <value>
+                    <Type type="string">string</Type>
+                    <Value type="string">75e8c91e-4ec2-4770-af5d-389e55cb9828</Value>
+                  </value>
+                </KeyValuePairBeginStringAndObjectEnd>
+                <KeyValuePairBeginStringAndObjectEnd>
+                  <key>To</key>
+                  <value>
+                    <Type type="string">string</Type>
+                    <Value type="string">3</Value>
+                  </value>
+                </KeyValuePairBeginStringAndObjectEnd>
+                <KeyValuePairBeginStringAndObjectEnd>
+                  <key>ToPort</key>
+                  <value>
+                    <Type type="string">string</Type>
+                    <Value type="string">e230c2f6-2cd2-4c89-8dea-296c30fa0221</Value>
+                  </value>
+                </KeyValuePairBeginStringAndObjectEnd>
+              </SettingsStorage>
+              <SettingsStorage>
+                <KeyValuePairBeginStringAndObjectEnd>
+                  <key>From</key>
+                  <value>
+                    <Type type="string">string</Type>
                     <Value type="string">3</Value>
                   </value>
                 </KeyValuePairBeginStringAndObjectEnd>
@@ -1827,7 +1189,7 @@ Copyright 2010 by StockSharp, LLC
                   <key>FromPort</key>
                   <value>
                     <Type type="string">string</Type>
-                    <Value type="string">e230c2f6-2cd2-4c89-8dea-296c30fa0221</Value>
+                    <Value type="string">7752dd63-7e59-46d3-96f3-47d8bf71e650</Value>
                   </value>
                 </KeyValuePairBeginStringAndObjectEnd>
                 <KeyValuePairBeginStringAndObjectEnd>
@@ -1841,37 +1203,7 @@ Copyright 2010 by StockSharp, LLC
                   <key>ToPort</key>
                   <value>
                     <Type type="string">string</Type>
-                    <Value type="string">024a892f-f50e-454f-a51c-8f3ad03e15c1</Value>
-                  </value>
-                </KeyValuePairBeginStringAndObjectEnd>
-              </SettingsStorage>
-              <SettingsStorage>
-                <KeyValuePairBeginStringAndObjectEnd>
-                  <key>From</key>
-                  <value>
-                    <Type type="string">string</Type>
-                    <Value type="string">5</Value>
-                  </value>
-                </KeyValuePairBeginStringAndObjectEnd>
-                <KeyValuePairBeginStringAndObjectEnd>
-                  <key>FromPort</key>
-                  <value>
-                    <Type type="string">string</Type>
-                    <Value type="string">8a714773-7d1c-4e6c-83f8-0f0735940278</Value>
-                  </value>
-                </KeyValuePairBeginStringAndObjectEnd>
-                <KeyValuePairBeginStringAndObjectEnd>
-                  <key>To</key>
-                  <value>
-                    <Type type="string">string</Type>
-                    <Value type="string">3</Value>
-                  </value>
-                </KeyValuePairBeginStringAndObjectEnd>
-                <KeyValuePairBeginStringAndObjectEnd>
-                  <key>ToPort</key>
-                  <value>
-                    <Type type="string">string</Type>
-                    <Value type="string">6109ab54-39df-42fd-91bc-26e0cbb2d500</Value>
+                    <Value type="string">7f43e8f4-2876-4a7d-bef6-3b6b6438b434</Value>
                   </value>
                 </KeyValuePairBeginStringAndObjectEnd>
               </SettingsStorage>

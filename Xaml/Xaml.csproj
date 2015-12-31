@@ -136,6 +136,14 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="ExchangeBoardEditor.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="ExchangeEditor.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="ExecutionGrid.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -370,6 +378,8 @@
     <Compile Include="ChangePasswordWindow.xaml.cs">
       <DependentUpon>ChangePasswordWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Code\CodeExtensions.cs" />
+    <Compile Include="Code\CodeReference.cs" />
     <Compile Include="CommissionPanel.xaml.cs">
       <DependentUpon>CommissionPanel.xaml</DependentUpon>
     </Compile>
@@ -378,7 +388,13 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="ConnectorInfo.cs" />
+    <Compile Include="ExchangeBoardEditor.xaml.cs">
+      <DependentUpon>ExchangeBoardEditor.xaml</DependentUpon>
+    </Compile>
     <Compile Include="ExchangeComboBox.cs" />
+    <Compile Include="ExchangeEditor.xaml.cs">
+      <DependentUpon>ExchangeEditor.xaml</DependentUpon>
+    </Compile>
     <Compile Include="ExecutionGrid.xaml.cs">
       <DependentUpon>ExecutionGrid.xaml</DependentUpon>
     </Compile>

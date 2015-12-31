@@ -22,7 +22,7 @@ namespace StockSharp.Studio.Core
 	using Ecng.Serialization;
 
 	using StockSharp.Community;
-	using StockSharp.Xaml.Actipro.Code;
+	using StockSharp.Xaml.Code;
 
 	public interface IPersistableService
 	{

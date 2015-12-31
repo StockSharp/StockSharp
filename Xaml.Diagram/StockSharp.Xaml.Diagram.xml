@@ -110,6 +110,13 @@
             The method is called at re-initialisation of the diagram element state.
             </summary>
     </member>
+    <member name="M:StockSharp.Xaml.Diagram.CompositionDiagramElement.OnProcess(StockSharp.Xaml.Diagram.DiagramElement,StockSharp.Xaml.Diagram.DiagramSocket)">
+      <summary>
+            The method is called at the processing of the new incoming value.
+            </summary>
+      <param name="sender">Sender.</param>
+      <param name="socket">Socket.</param>
+    </member>
     <member name="M:StockSharp.Xaml.Diagram.CompositionDiagramElement.Clone(System.Boolean)">
       <summary>
             Create a copy of <see cref="T:StockSharp.Xaml.Diagram.CompositionDiagramElement" />.
@@ -192,11 +199,16 @@
             The current element.
             </summary>
     </member>
-    <member name="M:StockSharp.Xaml.Diagram.DebuggerSyncObject.#ctor(System.Func{StockSharp.Xaml.Diagram.DiagramElement,System.Boolean},System.Action{StockSharp.Xaml.Diagram.DebuggerSyncObject})">
+    <member name="P:StockSharp.Xaml.Diagram.DebuggerSyncObject.CurrentSocket">
+      <summary>
+            The current socket.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.Diagram.DebuggerSyncObject.#ctor(System.Func{StockSharp.Xaml.Diagram.DiagramSocket,System.Boolean},System.Action{StockSharp.Xaml.Diagram.DebuggerSyncObject})">
       <summary>
             Initializes a new instance of the <see cref="T:StockSharp.Xaml.Diagram.DebuggerSyncObject" />.
             </summary>
-      <param name="isBreak">The handler that returns a stop flag for the element.</param>
+      <param name="isBreak">The handler that returns a stop flag for the socket.</param>
       <param name="breakAction">The action with the element at stop.</param>
     </member>
     <member name="P:StockSharp.Xaml.Diagram.DebuggerSyncObject.IsWaitingOnInput">
@@ -209,22 +221,17 @@
         <see langword="true" />, if the debugger is stopped at the exit of the diagram element. Otherwise, <see langword="false" />.
             </summary>
     </member>
-    <member name="M:StockSharp.Xaml.Diagram.DebuggerSyncObject.IsBreakpointAt(StockSharp.Xaml.Diagram.DiagramElement)">
+    <member name="M:StockSharp.Xaml.Diagram.DebuggerSyncObject.IsBreakpointAt(StockSharp.Xaml.Diagram.DiagramSocket)">
       <summary>
             To check the breakpoint presence in an element.
             </summary>
-      <param name="element">Element.</param>
+      <param name="socket">Socket.</param>
       <returns>
         <see langword="true" />, if there is a breakpoint in the diagram element. Otherwise, <see langword="false" />.</returns>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.DebuggerSyncObject.SetWaitOnNext">
       <summary>
             To set the flag for waiting at the entry of the next diagram element.
-            </summary>
-    </member>
-    <member name="M:StockSharp.Xaml.Diagram.DebuggerSyncObject.SetWaitOnOutput">
-      <summary>
-            To set the flag for waiting at the exit of the current diagram element.
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.DebuggerSyncObject.Continue">
@@ -237,11 +244,6 @@
             To continue and stop at the next element.
             </summary>
     </member>
-    <member name="M:StockSharp.Xaml.Diagram.DebuggerSyncObject.ContinueAndWaitOnOutput">
-      <summary>
-            To continue and stop at the exit of the current diagram element.
-            </summary>
-    </member>
     <member name="T:StockSharp.Xaml.Diagram.DiagramDebugger">
       <summary>
             The debugger of the diagram composite element.
@@ -249,7 +251,7 @@
     </member>
     <member name="P:StockSharp.Xaml.Diagram.DiagramDebugger.Breakpoints">
       <summary>
-            Breakpoints (elements, on which the data transmission will be stopped).
+            Breakpoints (sockets, on which the data transmission will be stopped).
             </summary>
     </member>
     <member name="P:StockSharp.Xaml.Diagram.DiagramDebugger.IsWaitingOnInput">
@@ -303,34 +305,29 @@
             </summary>
       <param name="composition">Composite element.</param>
     </member>
-    <member name="M:StockSharp.Xaml.Diagram.DiagramDebugger.AddBreak(StockSharp.Xaml.Diagram.DiagramElement)">
+    <member name="M:StockSharp.Xaml.Diagram.DiagramDebugger.AddBreak(StockSharp.Xaml.Diagram.DiagramSocket)">
       <summary>
-            To add a breakpoint in the element.
+            To add a breakpoint in the socket.
             </summary>
-      <param name="element">Element.</param>
+      <param name="socket">Socket.</param>
     </member>
-    <member name="M:StockSharp.Xaml.Diagram.DiagramDebugger.RemoveBreak(StockSharp.Xaml.Diagram.DiagramElement)">
+    <member name="M:StockSharp.Xaml.Diagram.DiagramDebugger.RemoveBreak(StockSharp.Xaml.Diagram.DiagramSocket)">
       <summary>
-            To remove the breakpoint from the element.
+            To remove the breakpoint from the socket.
             </summary>
-      <param name="element">Element.</param>
+      <param name="socket">Socket.</param>
     </member>
-    <member name="M:StockSharp.Xaml.Diagram.DiagramDebugger.IsBreak(StockSharp.Xaml.Diagram.DiagramElement)">
+    <member name="M:StockSharp.Xaml.Diagram.DiagramDebugger.IsBreak(StockSharp.Xaml.Diagram.DiagramSocket)">
       <summary>
-            Whether the element is the breakpoint.
+            Whether the socket is the breakpoint.
             </summary>
-      <param name="element">Element.</param>
+      <param name="socket">Socket.</param>
       <returns>
-        <see langword="true" />, if the element is the breakpoint, otherwise, <see langword="false" />.</returns>
+        <see langword="true" />, if the socket is the breakpoint, otherwise, <see langword="false" />.</returns>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.DiagramDebugger.StepNext">
       <summary>
             To go to the next element.
-            </summary>
-    </member>
-    <member name="M:StockSharp.Xaml.Diagram.DiagramDebugger.StepToOutput">
-      <summary>
-            To go to the exit from the diagram element.
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.DiagramDebugger.StepInto">
@@ -477,6 +474,21 @@
             Outgoing connections.
             </summary>
     </member>
+    <member name="P:StockSharp.Xaml.Diagram.DiagramElement.SelectedInputSocket">
+      <summary>
+            Selected input connection.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Diagram.DiagramElement.SelectedOutputSocket">
+      <summary>
+            Selected output connection.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Diagram.DiagramElement.SelectedSocket">
+      <summary>
+            Selected connection.
+            </summary>
+    </member>
     <member name="P:StockSharp.Xaml.Diagram.DiagramElement.Parameters">
       <summary>
             Diagram element settings.
@@ -558,25 +570,22 @@
             </summary>
       <param name="param">Parameter.</param>
     </member>
-    <member name="M:StockSharp.Xaml.Diagram.DiagramElement.AddInput(System.String,StockSharp.Xaml.Diagram.DiagramSocketType,System.Int32,System.String,System.String)">
+    <member name="M:StockSharp.Xaml.Diagram.DiagramElement.AddInput(System.String,StockSharp.Xaml.Diagram.DiagramSocketType,System.Action{StockSharp.Xaml.Diagram.DiagramSocketValue},System.Int32)">
       <summary>
             To add an incoming connection.
             </summary>
       <param name="name">The connection name.</param>
       <param name="type">Connection type.</param>
       <param name="linkableMax">The maximum number of connections.</param>
-      <param name="id">The connection identifier.</param>
-      <param name="externalId">External ID.</param>
+      <param name="process">The action is called at the processing of the new incoming value for socket.</param>
     </member>
-    <member name="M:StockSharp.Xaml.Diagram.DiagramElement.AddOutput(System.String,StockSharp.Xaml.Diagram.DiagramSocketType,System.Int32,System.String,System.String)">
+    <member name="M:StockSharp.Xaml.Diagram.DiagramElement.AddOutput(System.String,StockSharp.Xaml.Diagram.DiagramSocketType,System.Int32)">
       <summary>
             To add an outgoing connection.
             </summary>
       <param name="name">The connection name.</param>
       <param name="type">Connection type.</param>
       <param name="linkableMax">The maximum number of connections.</param>
-      <param name="id">The connection identifier.</param>
-      <param name="externalId">External ID.</param>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.DiagramElement.AddSocket(StockSharp.Xaml.Diagram.DiagramSocket)">
       <summary>
@@ -627,11 +636,12 @@
       <param name="sender">Sender.</param>
       <param name="value">Value.</param>
     </member>
-    <member name="M:StockSharp.Xaml.Diagram.DiagramElement.OnProcess(StockSharp.Xaml.Diagram.DiagramSocketValue)">
+    <member name="M:StockSharp.Xaml.Diagram.DiagramElement.OnProcess(StockSharp.Xaml.Diagram.DiagramElement,StockSharp.Xaml.Diagram.DiagramSocket)">
       <summary>
             The method is called at the processing of the new incoming value.
             </summary>
-      <param name="value">The processed value.</param>
+      <param name="sender">Sender.</param>
+      <param name="socket">Socket.</param>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.DiagramElement.UnInit">
       <summary>
@@ -1137,11 +1147,6 @@
             The connection identifier.
             </summary>
     </member>
-    <member name="P:StockSharp.Xaml.Diagram.DiagramSocket.ExternalId">
-      <summary>
-            The additional connection identifier.
-            </summary>
-    </member>
     <member name="P:StockSharp.Xaml.Diagram.DiagramSocket.Name">
       <summary>
             The connection name.
@@ -1167,6 +1172,16 @@
             The current value.
             </summary>
     </member>
+    <member name="P:StockSharp.Xaml.Diagram.DiagramSocket.Parent">
+      <summary>
+            The socket parent element.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Diagram.DiagramSocket.IsSelected">
+      <summary>
+            Is item selected.
+            </summary>
+    </member>
     <member name="E:StockSharp.Xaml.Diagram.DiagramSocket.Connected">
       <summary>
             The event of the socket connection with another one.
@@ -1176,13 +1191,6 @@
       <summary>
             The socket disconnection event.
             </summary>
-    </member>
-    <member name="M:StockSharp.Xaml.Diagram.DiagramSocket.CanConnect(StockSharp.Xaml.Diagram.DiagramSocket)">
-      <summary>
-            To check the ability to make a connection.
-            </summary>
-      <param name="to">Connection.</param>
-      <returns>The test result.</returns>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.DiagramSocket.GetValue">
       <summary>
@@ -1196,18 +1204,6 @@
             </summary>
       <typeparam name="T">Data type.</typeparam>
       <returns>Value.</returns>
-    </member>
-    <member name="M:StockSharp.Xaml.Diagram.DiagramSocket.Load(Ecng.Serialization.SettingsStorage)">
-      <summary>
-            Load settings.
-            </summary>
-      <param name="storage">Settings storage.</param>
-    </member>
-    <member name="M:StockSharp.Xaml.Diagram.DiagramSocket.Save(Ecng.Serialization.SettingsStorage)">
-      <summary>
-            Save settings.
-            </summary>
-      <param name="storage">Settings storage.</param>
     </member>
     <member name="E:StockSharp.Xaml.Diagram.DiagramSocket.PropertyChanged">
       <summary>
@@ -1226,14 +1222,6 @@
             </summary>
       <returns>Copy.</returns>
     </member>
-    <member name="M:StockSharp.Xaml.Diagram.DiagramSocket.OnEquals(StockSharp.Xaml.Diagram.DiagramSocket)">
-      <summary>
-            Compare <see cref="T:StockSharp.Xaml.Diagram.DiagramSocket" /> on the equivalence.
-            </summary>
-      <param name="other">Another value with which to compare.</param>
-      <returns>
-        <see langword="true" />, if the specified object is equal to the current object, otherwise, <see langword="false" />.</returns>
-    </member>
     <member name="M:StockSharp.Xaml.Diagram.DiagramSocket.ToString">
       <summary>
             Returns a string that represents the current object.
@@ -1243,6 +1231,16 @@
     <member name="T:StockSharp.Xaml.Diagram.DiagramSocketListBox">
       <summary>
             The graphical component to display the diagram element connections list.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Xaml.Diagram.DiagramSocketListBox.CanSelectProperty">
+      <summary>
+        <see cref="T:System.Windows.DependencyProperty" /> for <see cref="P:StockSharp.Xaml.Diagram.DiagramSocketListBox.CanSelect" />.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Diagram.DiagramSocketListBox.CanSelect">
+      <summary>
+            Can select sockets.
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.DiagramSocketListBox.GetContainerForItemOverride">
@@ -1546,12 +1544,6 @@
             The method is called at the stop of the diagram element algorithm.
             </summary>
     </member>
-    <member name="M:StockSharp.Xaml.Diagram.Elements.CandleSourceDiagramElement.OnProcess(StockSharp.Xaml.Diagram.DiagramSocketValue)">
-      <summary>
-            The method is called at the processing of the new incoming value.
-            </summary>
-      <param name="value">The processed value.</param>
-    </member>
     <member name="T:StockSharp.Xaml.Diagram.Elements.ChartDiagramElement">
       <summary>
             Chart panel element (candles display area, indicators, orders and trades).
@@ -1626,12 +1618,6 @@
             The method is called at re-initialisation of the diagram element state.
             </summary>
     </member>
-    <member name="M:StockSharp.Xaml.Diagram.Elements.ChartDiagramElement.OnProcess(StockSharp.Xaml.Diagram.DiagramSocketValue)">
-      <summary>
-            The method is called at the processing of the new incoming value.
-            </summary>
-      <param name="value">The processed value.</param>
-    </member>
     <member name="T:StockSharp.Xaml.Diagram.Elements.CheckWorkingTimeDiagramElement">
       <summary>
             Working time verification element for a specified security.
@@ -1651,12 +1637,6 @@
       <summary>
             Initializes a new instance of the <see cref="T:StockSharp.Xaml.Diagram.Elements.CheckWorkingTimeDiagramElement" />.
             </summary>
-    </member>
-    <member name="M:StockSharp.Xaml.Diagram.Elements.CheckWorkingTimeDiagramElement.OnProcess(StockSharp.Xaml.Diagram.DiagramSocketValue)">
-      <summary>
-            The method is called at the processing of the new incoming value.
-            </summary>
-      <param name="value">The processed value.</param>
     </member>
     <member name="T:StockSharp.Xaml.Diagram.Elements.ComparisonDiagramElement">
       <summary>
@@ -1688,12 +1668,6 @@
             The method is called at the stop of the diagram element algorithm.
             </summary>
     </member>
-    <member name="M:StockSharp.Xaml.Diagram.Elements.ComparisonDiagramElement.OnProcess(StockSharp.Xaml.Diagram.DiagramSocketValue)">
-      <summary>
-            The method is called at the processing of the new incoming value.
-            </summary>
-      <param name="value">The processed value.</param>
-    </member>
     <member name="T:StockSharp.Xaml.Diagram.Elements.IndexerDiagramElement">
       <summary>
             The element of collection or dictionary.
@@ -1713,12 +1687,6 @@
       <summary>
             Initializes a new instance of the <see cref="T:StockSharp.Xaml.Diagram.Elements.IndexerDiagramElement" />.
             </summary>
-    </member>
-    <member name="M:StockSharp.Xaml.Diagram.Elements.IndexerDiagramElement.OnProcess(StockSharp.Xaml.Diagram.DiagramSocketValue)">
-      <summary>
-            The method is called at the processing of the new incoming value.
-            </summary>
-      <param name="value">The processed value.</param>
     </member>
     <member name="T:StockSharp.Xaml.Diagram.Elements.IndicatorDiagramElement">
       <summary>
@@ -1759,12 +1727,6 @@
       <summary>
             The method is called at re-initialisation of the diagram element state.
             </summary>
-    </member>
-    <member name="M:StockSharp.Xaml.Diagram.Elements.IndicatorDiagramElement.OnProcess(StockSharp.Xaml.Diagram.DiagramSocketValue)">
-      <summary>
-            The method is called at the processing of the new incoming value.
-            </summary>
-      <param name="value">The processed value.</param>
     </member>
     <member name="T:StockSharp.Xaml.Diagram.Elements.LogicalConditionDiagramElement">
       <summary>
@@ -1816,12 +1778,6 @@
             The method is called at the stop of the diagram element algorithm.
             </summary>
     </member>
-    <member name="M:StockSharp.Xaml.Diagram.Elements.LogicalConditionDiagramElement.OnProcess(StockSharp.Xaml.Diagram.DiagramSocketValue)">
-      <summary>
-            The method is called at the processing of the new incoming value.
-            </summary>
-      <param name="value">The processed value.</param>
-    </member>
     <member name="T:StockSharp.Xaml.Diagram.Elements.LogicOneParamFunctionDiagramElement">
       <summary>
             Logical function with one argument element.
@@ -1841,12 +1797,6 @@
       <summary>
             Initializes a new instance of the <see cref="T:StockSharp.Xaml.Diagram.Elements.OneParamFunctionDiagramElement" />.
             </summary>
-    </member>
-    <member name="M:StockSharp.Xaml.Diagram.Elements.LogicOneParamFunctionDiagramElement.OnProcess(StockSharp.Xaml.Diagram.DiagramSocketValue)">
-      <summary>
-            The method is called at the processing of the new incoming value.
-            </summary>
-      <param name="value">The processed value.</param>
     </member>
     <member name="T:StockSharp.Xaml.Diagram.Elements.MarketDepthDiagramElement">
       <summary>
@@ -1873,12 +1823,6 @@
             The method is called at the stop of the diagram element algorithm.
             </summary>
     </member>
-    <member name="M:StockSharp.Xaml.Diagram.Elements.MarketDepthDiagramElement.OnProcess(StockSharp.Xaml.Diagram.DiagramSocketValue)">
-      <summary>
-            The method is called at the processing of the new incoming value.
-            </summary>
-      <param name="value">The processed value.</param>
-    </member>
     <member name="T:StockSharp.Xaml.Diagram.Elements.OneParamFunctionDiagramElement">
       <summary>
             Formula with one argument element.
@@ -1898,12 +1842,6 @@
       <summary>
             Initializes a new instance of the <see cref="T:StockSharp.Xaml.Diagram.Elements.OneParamFunctionDiagramElement" />.
             </summary>
-    </member>
-    <member name="M:StockSharp.Xaml.Diagram.Elements.OneParamFunctionDiagramElement.OnProcess(StockSharp.Xaml.Diagram.DiagramSocketValue)">
-      <summary>
-            The method is called at the processing of the new incoming value.
-            </summary>
-      <param name="value">The processed value.</param>
     </member>
     <member name="T:StockSharp.Xaml.Diagram.Elements.TwoParamFunctionDiagramElement">
       <summary>
@@ -1930,12 +1868,6 @@
             The method is called at the start of the diagram element algorithm.
             </summary>
     </member>
-    <member name="M:StockSharp.Xaml.Diagram.Elements.TwoParamFunctionDiagramElement.OnProcess(StockSharp.Xaml.Diagram.DiagramSocketValue)">
-      <summary>
-            The method is called at the processing of the new incoming value.
-            </summary>
-      <param name="value">The processed value.</param>
-    </member>
     <member name="T:StockSharp.Xaml.Diagram.Elements.OpenPositionDiagramElement">
       <summary>
             Position opening element.
@@ -1961,12 +1893,6 @@
             The method is called at the stop of the diagram element algorithm.
             </summary>
     </member>
-    <member name="M:StockSharp.Xaml.Diagram.Elements.OpenPositionDiagramElement.OnProcess(StockSharp.Xaml.Diagram.DiagramSocketValue)">
-      <summary>
-            The method is called at the processing of the new incoming value.
-            </summary>
-      <param name="value">The processed value.</param>
-    </member>
     <member name="T:StockSharp.Xaml.Diagram.Elements.OrderTradesDiagramElement">
       <summary>
             Trades per order element.
@@ -1986,12 +1912,6 @@
       <summary>
             Icon.
             </summary>
-    </member>
-    <member name="M:StockSharp.Xaml.Diagram.Elements.OrderTradesDiagramElement.OnProcess(StockSharp.Xaml.Diagram.DiagramSocketValue)">
-      <summary>
-            The method is called at the processing of the new incoming value.
-            </summary>
-      <param name="value">The processed value.</param>
     </member>
     <member name="T:StockSharp.Xaml.Diagram.Elements.PartDiagramElement">
       <summary>
@@ -2085,12 +2005,6 @@
             The method is called at the stop of the diagram element algorithm.
             </summary>
     </member>
-    <member name="M:StockSharp.Xaml.Diagram.Elements.PositionDiagramElement.OnProcess(StockSharp.Xaml.Diagram.DiagramSocketValue)">
-      <summary>
-            The method is called at the processing of the new incoming value.
-            </summary>
-      <param name="value">The processed value.</param>
-    </member>
     <member name="T:StockSharp.Xaml.Diagram.Elements.PreviousValueDiagramElement">
       <summary>
             Previous value receiving element.
@@ -2115,12 +2029,6 @@
       <summary>
             The method is called at the start of the diagram element algorithm.
             </summary>
-    </member>
-    <member name="M:StockSharp.Xaml.Diagram.Elements.PreviousValueDiagramElement.OnProcess(StockSharp.Xaml.Diagram.DiagramSocketValue)">
-      <summary>
-            The method is called at the processing of the new incoming value.
-            </summary>
-      <param name="value">The processed value.</param>
     </member>
     <member name="T:StockSharp.Xaml.Diagram.Elements.ProtectPositionDiagramElement">
       <summary>
@@ -2147,12 +2055,6 @@
             The method is called at the start of the diagram element algorithm.
             </summary>
     </member>
-    <member name="M:StockSharp.Xaml.Diagram.Elements.ProtectPositionDiagramElement.OnProcess(StockSharp.Xaml.Diagram.DiagramSocketValue)">
-      <summary>
-            The method is called at the processing of the new incoming value.
-            </summary>
-      <param name="value">The processed value.</param>
-    </member>
     <member name="M:StockSharp.Xaml.Diagram.Elements.ProtectPositionDiagramElement.OnStop">
       <summary>
             The method is called at the stop of the diagram element algorithm.
@@ -2177,12 +2079,6 @@
       <summary>
             Initializes a new instance of the <see cref="T:StockSharp.Xaml.Diagram.Elements.SecurityDiagramElement" />.
             </summary>
-    </member>
-    <member name="M:StockSharp.Xaml.Diagram.Elements.SecurityDiagramElement.OnProcess(StockSharp.Xaml.Diagram.DiagramSocketValue)">
-      <summary>
-            The method is called at the processing of the new incoming value.
-            </summary>
-      <param name="value">The processed value.</param>
     </member>
     <member name="T:StockSharp.Xaml.Diagram.Elements.StrategyTradesDiagramElement">
       <summary>
@@ -2209,12 +2105,6 @@
             The method is called at the start of the diagram element algorithm.
             </summary>
     </member>
-    <member name="M:StockSharp.Xaml.Diagram.Elements.StrategyTradesDiagramElement.OnProcess(StockSharp.Xaml.Diagram.DiagramSocketValue)">
-      <summary>
-            The method is called at the processing of the new incoming value.
-            </summary>
-      <param name="value">The processed value.</param>
-    </member>
     <member name="T:StockSharp.Xaml.Diagram.Elements.TypedDiagramElement">
       <summary>
             The diagram element with the changeable data type.
@@ -2240,6 +2130,12 @@
       <summary>
             The method is called when the data type is changed.
             </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.Diagram.Elements.TypedDiagramElement.OnProcess(StockSharp.Xaml.Diagram.DiagramSocketValue)">
+      <summary>
+            The method is called at the processing of the new incoming value.
+            </summary>
+      <param name="value">The processed value.</param>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.Elements.TypedDiagramElement.Load(Ecng.Serialization.SettingsStorage)">
       <summary>
@@ -2302,12 +2198,6 @@
       <summary>
             Icon.
             </summary>
-    </member>
-    <member name="M:StockSharp.Xaml.Diagram.Elements.AlertDiagramElement.OnProcess(StockSharp.Xaml.Diagram.DiagramSocketValue)">
-      <summary>
-            The method is called when an input value is processed.
-            </summary>
-      <param name="value">Value.</param>
     </member>
     <member name="T:StockSharp.Xaml.Diagram.ExportDiagramElement">
       <summary>
