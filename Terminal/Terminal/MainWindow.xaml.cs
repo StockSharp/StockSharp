@@ -24,6 +24,7 @@ using StockSharp.Terminal.Controls;
 using StockSharp.Terminal.Logics;
 using Xceed.Wpf.AvalonDock.Layout;
 using Xceed.Wpf.AvalonDock;
+using System.Windows.Controls;
 
 namespace StockSharp.Terminal
 {
@@ -155,6 +156,16 @@ namespace StockSharp.Terminal
 		private void MainWindow_OnLoaded(object sender, RoutedEventArgs e)
 		{
 
+		}
+
+		private void ComboBox_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+		{
+			if (NewControlComboBox.SelectedIndex != -1)
+			{
+				var workArea = (WorkAreaControl)DockingManager.ActiveContent;
+				workArea.AddControl(((ComboBoxItem)NewControlComboBox.SelectedItem).Content.ToString());
+				NewControlComboBox.SelectedIndex = -1;
+			}
 		}
 	}
 }

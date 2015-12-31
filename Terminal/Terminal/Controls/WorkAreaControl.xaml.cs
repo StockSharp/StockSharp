@@ -46,6 +46,8 @@ using StockSharp.Xaml.Charting;
 using StockSharp.Xaml.Diagram;
 using StockSharp.Terminal.Logics;
 using System.Diagnostics;
+using StockSharp.Studio.Controls;
+using Xceed.Wpf.AvalonDock.Layout;
 
 namespace StockSharp.Terminal.Controls
 {
@@ -114,10 +116,23 @@ namespace StockSharp.Terminal.Controls
 
 		//public ICommand ContinueCommand => DiagramDebuggerControl.ContinueCommand;
 
+		private Dictionary<string, Type> _controls;
+
 		public WorkAreaControl()
 		{
 			InitializeCommands();
             InitializeComponent();
+
+			_controls = new Dictionary<string, Type>()
+			{
+				{ "TradesPanel", typeof(TradesPanel) },
+				{ "OrdersPanel", typeof(OrdersPanel) },
+				{ "SecuritiesPanel", typeof(SecuritiesPanel) },
+				{ "Level2Panel", typeof(Level2Panel) },
+				{ "NewsPanel", typeof(NewsPanel) },
+				{ "PortfoliosPanel", typeof(PortfoliosPanel) },
+				{ "CandleChartPanel", typeof(CandleChartPanel) },
+			};
 
 			//_bufferedChart = new BufferedChart(Chart);
 			_layoutManager = new LayoutManager(DockingManager);
@@ -131,6 +146,27 @@ namespace StockSharp.Terminal.Controls
 			//_commissionCurve = Curve.CreateCurve(LocalizedStrings.Str159, Colors.Red, EquityCurveChartStyles.DashedLine);
 
 			//_posItems = PositionCurve.CreateCurve(LocalizedStrings.Str862, Colors.DarkGreen);
+		}
+
+		public void AddControl(string controlName)
+		{
+			Type controlType = null;
+
+			if (!_controls.TryGetValue(controlName, out controlType))
+				return;
+
+			var control = Activator.CreateInstance(controlType);
+			var anchor = new LayoutAnchorable()
+			{
+				Title = controlName,
+				CanClose = false
+			};
+			var pane = new LayoutAnchorablePane();
+
+			anchor.Content = control;
+			pane.Children.Add(anchor);
+
+			DockingManagerGroup.Children.Add(pane);
 		}
 
 		//private void WorkArea_ChildrenTreeChanged(object sender, Xceed.Wpf.AvalonDock.Layout.ChildrenTreeChangedEventArgs e)
