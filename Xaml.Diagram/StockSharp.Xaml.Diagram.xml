@@ -189,6 +189,13 @@
       <param name="storage">Settings storage.</param>
       <returns>Composite element.</returns>
     </member>
+    <member name="M:StockSharp.Xaml.Diagram.CompositionRegistry.Load(StockSharp.Xaml.Diagram.CompositionDiagramElement,Ecng.Serialization.SettingsStorage)">
+      <summary>
+            Load composite element from settings.
+            </summary>
+      <param name="element">Composite element.</param>
+      <param name="storage">Settings storage.</param>
+    </member>
     <member name="T:StockSharp.Xaml.Diagram.DebuggerSyncObject">
       <summary>
             The synchronization object for the composite elements debugger.
@@ -204,7 +211,7 @@
             The current socket.
             </summary>
     </member>
-    <member name="M:StockSharp.Xaml.Diagram.DebuggerSyncObject.#ctor(System.Func{StockSharp.Xaml.Diagram.DiagramSocket,System.Boolean},System.Action{StockSharp.Xaml.Diagram.DebuggerSyncObject})">
+    <member name="M:StockSharp.Xaml.Diagram.DebuggerSyncObject.#ctor(System.Func{StockSharp.Xaml.Diagram.DiagramSocket,System.Boolean,System.Boolean},System.Action{StockSharp.Xaml.Diagram.DebuggerSyncObject})">
       <summary>
             Initializes a new instance of the <see cref="T:StockSharp.Xaml.Diagram.DebuggerSyncObject" />.
             </summary>
@@ -1177,9 +1184,14 @@
             The socket parent element.
             </summary>
     </member>
-    <member name="P:StockSharp.Xaml.Diagram.DiagramSocket.IsSelected">
+    <member name="P:StockSharp.Xaml.Diagram.DiagramSocket.IsBreak">
       <summary>
-            Is item selected.
+            Is socket has break.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Diagram.DiagramSocket.IsBreakActive">
+      <summary>
+            Is socket break active.
             </summary>
     </member>
     <member name="E:StockSharp.Xaml.Diagram.DiagramSocket.Connected">

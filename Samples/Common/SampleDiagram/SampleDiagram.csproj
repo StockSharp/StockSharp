@@ -103,9 +103,6 @@
     <Compile Include="DiagramDebuggerControl.xaml.cs">
       <DependentUpon>DiagramDebuggerControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="EmulationControl.xaml.cs">
-      <DependentUpon>EmulationControl.xaml</DependentUpon>
-    </Compile>
     <Compile Include="EmulationDiagramStrategy.cs" />
     <Compile Include="Layout\DockingControl.cs" />
     <Compile Include="Layout\LayoutManager.cs" />
@@ -113,15 +110,15 @@
       <DependentUpon>SolutionExplorerControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="StrategiesRegistry.cs" />
+    <Compile Include="StrategyControl.xaml.cs">
+      <DependentUpon>StrategyControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="TitleConverter.cs" />
     <Page Include="DiagramDebuggerControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="DiagramEditorControl.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="EmulationControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -142,6 +139,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="SolutionExplorerControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="StrategyControl.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -251,6 +252,11 @@
     <Resource Include="Images\stop_32x32.png" />
     <Resource Include="Images\terminal_32x32.png" />
     <Resource Include="Images\ToOutput_16x16.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Connect_24x24.png" />
+    <Resource Include="Images\Disconnect_24x24.png" />
+    <Resource Include="Images\Refresh_32x32.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
