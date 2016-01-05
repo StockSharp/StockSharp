@@ -27,9 +27,6 @@ namespace StockSharp.OpenECry
 	using StockSharp.Messages;
 	using StockSharp.Localization;
 
-	/// <summary>
-	/// The messages adapter for OpenECry.
-	/// </summary>
 	public partial class OpenECryMessageAdapter : MessageAdapter
 	{
 		private class InPlaceThreadPolicy : ThreadingPolicy
@@ -114,7 +111,14 @@ namespace StockSharp.OpenECry
 		{
 			this.AddMarketDataSupport();
 			this.AddTransactionalSupport();
+
+			Uuid = DefaultUuid;
 		}
+
+		/// <summary>
+		/// Default unique software ID.
+		/// </summary>
+		public const string DefaultUuid = "d05c09e4-9659-4040-b03b-87719d28dc5b";
 
 		/// <summary>
 		/// Create condition for order type <see cref="OrderTypes.Conditional"/>, that supports the adapter.
@@ -171,26 +175,17 @@ namespace StockSharp.OpenECry
 		/// <summary>
 		/// <see cref="SecurityLookupMessage"/> required to get securities.
 		/// </summary>
-		public override bool SecurityLookupRequired
-		{
-			get { return false; }
-		}
+		public override bool SecurityLookupRequired => false;
 
 		/// <summary>
 		/// Gets a value indicating whether the connector supports position lookup.
 		/// </summary>
-		protected override bool IsSupportNativePortfolioLookup
-		{
-			get { return true; }
-		}
+		protected override bool IsSupportNativePortfolioLookup => true;
 
 		/// <summary>
 		/// Gets a value indicating whether the connector supports security lookup.
 		/// </summary>
-		protected override bool IsSupportNativeSecurityLookup
-		{
-			get { return true; }
-		}
+		protected override bool IsSupportNativeSecurityLookup => true;
 
 		private void DisposeClient()
 		{
