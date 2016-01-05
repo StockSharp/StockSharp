@@ -33,6 +33,7 @@ namespace StockSharp.OpenECry
 	partial class OpenECryMessageAdapter
 	{
 		private readonly SynchronizedPairSet<Tuple<SecurityId, MarketDataTypes, long>, Subscription> _subscriptions = new SynchronizedPairSet<Tuple<SecurityId, MarketDataTypes, long>, Subscription>();
+		private readonly SynchronizedPairSet<OEC.API.SymbolLookupCriteria, long> _lookups = new SynchronizedPairSet<OEC.API.SymbolLookupCriteria, long>();
 
 		private void ProcessMarketDataMessage(MarketDataMessage message)
 		{
@@ -241,26 +242,29 @@ namespace StockSharp.OpenECry
 					throw new ArgumentOutOfRangeException(nameof(message), message.SecurityType, LocalizedStrings.Str2117);
 			}
 
+			if (message.TransactionId != 0)
+				_lookups.Add(criteria, message.TransactionId);
+
 			_client.SymbolLookup(criteria);
 		}
 
 		private void SessionOnSymbolLookupReceived(OEC.API.SymbolLookupCriteria criteria, ContractList contracts)
 		{
+			var transId = _lookups.TryGetValue(criteria);
+
 			foreach (var contract in contracts)
 			{
-				ProcessContract(contract, contract.CurrentPrice, 0);
+				ProcessContract(contract, contract.CurrentPrice, transId);
 			}
 
-			SendOutMessage(new SecurityLookupResultMessage());
+			SendOutMessage(new SecurityLookupResultMessage { OriginalTransactionId = transId });
 		}
 
-		private void ProcessContract(OEC.API.Contract contract, Price currentPrice, long originalTransactionId)
+		private void ProcessContract(OEC.API.Contract contract, long originalTransactionId)
 		{
-			var secId = contract.ToSecurityId();
-			
 			SendOutMessage(new SecurityMessage
 			{
-				SecurityId = secId,
+				SecurityId = contract.ToSecurityId(),
 				Name = contract.Name,
 				UnderlyingSecurityCode = contract.BaseSymbol,
 				Currency = contract.Currency.Name.ToCurrency(),
@@ -272,13 +276,18 @@ namespace StockSharp.OpenECry
 				SecurityType = contract.GetSecurityType(),
 				OriginalTransactionId = originalTransactionId,
 			});
+		}
+
+		private void ProcessContract(OEC.API.Contract contract, Price currentPrice, long originalTransactionId)
+		{
+			ProcessContract(contract, originalTransactionId);
 
 			if (currentPrice == null)
 				return;
 
 			SendOutMessage(new Level1ChangeMessage
 			{
-				SecurityId = secId,
+				SecurityId = contract.ToSecurityId(),
 				ServerTime = currentPrice.LastDateTime.ApplyTimeZone(TimeHelper.Est),
 			}
 			.TryAdd(Level1Fields.LastTradePrice, contract.Cast(currentPrice.LastPrice))
@@ -362,12 +371,12 @@ namespace StockSharp.OpenECry
 
 		private void SessionOnPriceTick(OEC.API.Contract contract, Price price)
 		{
-			ProcessContract(contract, price, 0);
+			ProcessContract(contract, 0);
 		}
 
 		private void SessionOnPriceChanged(OEC.API.Contract contract, Price price)
 		{
-			ProcessContract(contract, price, 0);
+			ProcessContract(contract, 0);
 		}
 
 		private void SessionOnPitGroupsChanged()
@@ -417,23 +426,41 @@ namespace StockSharp.OpenECry
 
 		private void SessionOnDomChanged(OEC.API.Contract contract)
 		{
+			ProcessContract(contract, 0);
+
 			var dom = contract.DOM;
 
 			var bids = new List<QuoteChange>();
 			var asks = new List<QuoteChange>();
 
+			var hasExchange = false;
+
 			for (var i = 0; i < dom.BidExchanges.Length; i++)
-				bids.Add(new QuoteChange(Sides.Buy, contract.Cast(dom.BidLevels[i]) ?? 0, dom.BidSizes[i]) { BoardCode = GetBoardCode(dom.BidExchanges[i], contract, null) });
+			{
+				var boardCode = GetBoardCode(dom.BidExchanges[i], contract, null);
+
+				if (!hasExchange)
+					hasExchange = !boardCode.IsEmpty() && boardCode != contract.Exchange.Name;
+
+				bids.Add(new QuoteChange(Sides.Buy, contract.Cast(dom.BidLevels[i]) ?? 0, dom.BidSizes[i]) { BoardCode = boardCode });
+			}
 
 			for (var i = 0; i < dom.AskExchanges.Length; i++)
-				asks.Add(new QuoteChange(Sides.Sell, contract.Cast(dom.AskLevels[i]) ?? 0, dom.AskSizes[i]) { BoardCode = GetBoardCode(dom.AskExchanges[i], contract, null) });
+			{
+				var boardCode = GetBoardCode(dom.AskExchanges[i], contract, null);
+
+				if (!hasExchange)
+					hasExchange = !boardCode.IsEmpty() && boardCode != contract.Exchange.Name;
+
+				asks.Add(new QuoteChange(Sides.Sell, contract.Cast(dom.AskLevels[i]) ?? 0, dom.AskSizes[i]) { BoardCode = boardCode });
+			}
 
 			SendOutMessage(new QuoteChangeMessage
 			{
 				SecurityId = new SecurityId
 				{
 					SecurityCode = contract.Symbol,
-					BoardCode = AssociatedBoardCode
+					BoardCode = hasExchange ? AssociatedBoardCode : contract.Exchange.Name ?? AssociatedBoardCode
 				},
 				ServerTime = dom.LastUpdate.ApplyTimeZone(TimeHelper.Est),
 				Bids = bids,
@@ -490,6 +517,8 @@ namespace StockSharp.OpenECry
 
 			var contract = subscription.Contract;
 
+			ProcessContract(contract, 0);
+
 			foreach (var bar in bars)
 			{
 				var msg = candleType.CreateInstance<CandleMessage>();
@@ -497,7 +526,7 @@ namespace StockSharp.OpenECry
 				msg.SecurityId = new SecurityId
 				{
 					SecurityCode = contract.Symbol,
-					BoardCode = contract.Exchange.Name,
+					BoardCode = contract.Exchange.Name ?? AssociatedBoardCode,
 				};
 				msg.OpenTime = bar.Timestamp.ApplyTimeZone(TimeHelper.Est);
 				msg.CloseTime = bar.CloseTimestamp.ApplyTimeZone(TimeHelper.Est);
