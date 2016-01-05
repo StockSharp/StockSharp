@@ -30,16 +30,14 @@ namespace StockSharp.OpenECry
 	using StockSharp.Messages;
 	using StockSharp.Localization;
 
-	/// <summary>
-	/// The messages adapter for OpenECry.
-	/// </summary>
 	partial class OpenECryMessageAdapter
 	{
-		private readonly SynchronizedPairSet<Tuple<SecurityId, MarketDataTypes>, Subscription> _subscriptions = new SynchronizedPairSet<Tuple<SecurityId, MarketDataTypes>, Subscription>();
+		private readonly SynchronizedPairSet<Tuple<SecurityId, MarketDataTypes, long>, Subscription> _subscriptions = new SynchronizedPairSet<Tuple<SecurityId, MarketDataTypes, long>, Subscription>();
 
 		private void ProcessMarketDataMessage(MarketDataMessage message)
 		{
-			var key = Tuple.Create(message.SecurityId, message.DataType);
+			var key = Tuple.Create(message.SecurityId, message.DataType, message.TransactionId);
+
 			switch (message.DataType)
 			{
 				case MarketDataTypes.Level1:
@@ -483,28 +481,12 @@ namespace StockSharp.OpenECry
 			ProcessBars(subscription, bars, false);
 		}
 
-		private static Type GetCandleMessageType(MarketDataTypes type)
-		{
-			switch (type)
-			{
-				case MarketDataTypes.CandleTimeFrame:
-					return typeof(TimeFrameCandleMessage);
-				case MarketDataTypes.CandleTick:
-					return typeof(TickCandleMessage);
-				case MarketDataTypes.CandleVolume:
-					return typeof(VolumeCandleMessage);
-				case MarketDataTypes.CandleRange:
-					return typeof(RangeCandleMessage);
-				default:
-					throw new ArgumentOutOfRangeException();
-			}
-		}
-
 		private void ProcessBars(Subscription subscription, OEC.API.Bar[] bars, bool setFinished)
 		{
 			var key = _subscriptions.TryGetKey(subscription);
 
-			var candleType = key == null ? typeof(TimeFrameCandleMessage) : GetCandleMessageType(key.Item2);
+			var candleType = key?.Item2.ToCandleMessage() ?? typeof(TimeFrameCandleMessage);
+			var transId = key?.Item3 ?? 0;
 
 			var contract = subscription.Contract;
 
@@ -529,6 +511,7 @@ namespace StockSharp.OpenECry
 				msg.DownTicks = (int)bar.DownTicks;
 				msg.IsFinished = setFinished && bar == bars.Last();
 				msg.State = CandleStates.Finished;
+				msg.OriginalTransactionId = transId;
 
 				SendOutMessage(msg);
 			}
