@@ -568,14 +568,20 @@ namespace StockSharp.Algo
 
 				if (security == null)
 				{
-					if (!ignoreIfNotExist)
-					{
-						var clone = message.Clone();
-						_suspendedSecurityMessages.SafeAdd(securityId).Add(clone);
-						_messageStat.Add(clone);
-					}
+					if (!isSecurityIdEmpty)
+						security = GetSecurity(securityId);
 
-					return;
+					if (security == null)
+					{
+						if (!ignoreIfNotExist)
+						{
+							var clone = message.Clone();
+							_suspendedSecurityMessages.SafeAdd(securityId).Add(clone);
+							_messageStat.Add(clone);
+						}
+
+						return;
+					}
 				}
 			}
 

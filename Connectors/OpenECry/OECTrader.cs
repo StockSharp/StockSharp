@@ -47,10 +47,7 @@ namespace StockSharp.OpenECry
 			Adapter.InnerAdapters.Add(new OpenECryMessageAdapter(TransactionIdGenerator));
 		}
 
-		private OpenECryMessageAdapter NativeAdapter
-		{
-			get { return Adapter.InnerAdapters.OfType<OpenECryMessageAdapter>().First(); }
-		}
+		private OpenECryMessageAdapter NativeAdapter => Adapter.InnerAdapters.OfType<OpenECryMessageAdapter>().First();
 
 		/// <summary>
 		/// Unique software ID.

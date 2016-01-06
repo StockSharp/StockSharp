@@ -123,7 +123,7 @@ namespace StockSharp.Hydra.OpenECry
 				return;
 
 			_settings.Address = OpenECryAddresses.Api;
-			_settings.Uuid = string.Empty;
+			_settings.Uuid = OpenECryMessageAdapter.DefaultUuid;
 			_settings.Login = string.Empty;
 			_settings.Password = new SecureString();
 			_settings.IsDownloadNews = true;
