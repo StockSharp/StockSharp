@@ -92,16 +92,12 @@ namespace SampleDiagram
 				obj => Debugger.StepNext(),
 				obj => Debugger != null && Debugger.IsWaiting);
 
-			//StepToOutParamCommand = new DelegateCommand(
-			//	obj => Debugger.StepOut(),
-			//	obj => Debugger != null && Debugger.IsWaitingOnInput);
-
 			StepIntoCommand = new DelegateCommand(
 				obj => Debugger.StepInto(),
 				obj => Debugger != null && Debugger.IsWaitingOnInput && Debugger.CanStepInto);
 
 			StepOutCommand = new DelegateCommand(
-				obj => Debugger.StepOut(),
+				obj => Debugger.StepOut(DiagramEditor.Composition),
 				obj => Debugger != null && Debugger.CanStepOut);
 
 			ContinueCommand = new DelegateCommand(
@@ -112,6 +108,16 @@ namespace SampleDiagram
 		private void OnDiagramEditorSelectionChanged(DiagramElement element)
 		{
 			ShowElementProperties(element);
+		}
+
+		private void OnDiagramEditorElementDoubleClicked(DiagramElement element)
+		{
+			var composition = element as CompositionDiagramElement;
+
+			if (composition == null)
+				return;
+
+			Debugger.StepInto(composition);
 		}
 
 		private void OnStrategyPropertyChanged(DiagramStrategy strategy)
@@ -208,6 +214,5 @@ namespace SampleDiagram
 		}
 
 		#endregion
-
 	}
 }

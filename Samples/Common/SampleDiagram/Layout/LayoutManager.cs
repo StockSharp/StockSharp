@@ -294,10 +294,10 @@ namespace SampleDiagram.Layout
 
 					if (!(content.Content is DockingControl))
 					{
-						//var title = titles.TryGetValue(content.ContentId);
+						var title = titles.TryGetValue(content.ContentId);
 
-						//if (!title.IsEmpty())
-						//	content.Title = title;
+						if (!title.IsEmpty())
+							content.Title = title;
 					}
 					else
 						content.SetBindings(LayoutContent.TitleProperty, content.Content, "Title");

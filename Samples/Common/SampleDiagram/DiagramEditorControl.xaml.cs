@@ -118,11 +118,17 @@ namespace SampleDiagram
 			if (compositionElement == null)
 				return;
 
+			var originalComposition = ConfigManager
+				.GetService<StrategiesRegistry>()
+				.DiagramElements
+				.OfType<CompositionDiagramElement>()
+				.First(c => c.TypeId == compositionElement.TypeId);
+
 			ConfigManager
 				.GetService<LayoutManager>()
 				.OpenDocumentWindow(new DiagramEditorControl
 				{
-					Composition = new CompositionItem(CompositionType.Composition, compositionElement)
+					Composition = new CompositionItem(CompositionType.Composition, originalComposition)
 				});
         }
 
