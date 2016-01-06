@@ -24,6 +24,7 @@ namespace SampleDiagram
 	using System.Windows.Input;
 	using System.Windows.Media.Imaging;
 
+	using Ecng.Collections;
 	using Ecng.Common;
 	using Ecng.Configuration;
 	using Ecng.Serialization;
@@ -112,34 +113,33 @@ namespace SampleDiagram
 		{
 			DockingManager
 				.ActiveContent
-				.DoIfElse<DiagramEditorControl>(editor =>
+				.DoIf<object, DiagramEditorControl>(editor =>
 				{
-					RibbonDesignerTab.DataContext = editor.Composition;
+					RibbonEmulationTab.DataContext = null;
+					RibbonLiveTab.DataContext = null;
+                    RibbonDesignerTab.DataContext = editor.Composition;
 					Ribbon.SelectedTabItem = RibbonDesignerTab;
-				}, () => RibbonDesignerTab.DataContext = null);
+				});
 
 			DockingManager
 				.ActiveContent
-				.DoIfElse<EmulationStrategyControl>(editor =>
+				.DoIf<object, EmulationStrategyControl>(editor =>
 				{
-					RibbonEmulationTab.DataContext = editor;
+					RibbonDesignerTab.DataContext = null;
+					RibbonLiveTab.DataContext = null;
+                    RibbonEmulationTab.DataContext = editor;
 					Ribbon.SelectedTabItem = RibbonEmulationTab;
-				}, () => RibbonEmulationTab.DataContext = null);
+				});
 
 			DockingManager
 				.ActiveContent
-				.DoIfElse<LiveStrategyControl>(editor =>
+				.DoIf<object, LiveStrategyControl>(editor =>
 				{
-					RibbonLiveTab.DataContext = editor;
+					RibbonEmulationTab.DataContext = null;
+					RibbonDesignerTab.DataContext = null;
+                    RibbonLiveTab.DataContext = editor;
 					Ribbon.SelectedTabItem = RibbonLiveTab;
-				}, () => RibbonLiveTab.DataContext = null);
-
-			DockingManager
-				.ActiveContent
-				.DoIfElse<SolutionExplorerControl>(editor =>
-				{
-					Ribbon.SelectedTabItem = RibbonCommonTab;
-				}, () => { });
+				});
 		}
 
 		private void ConnectorOnConnectionStateChanged()
@@ -295,25 +295,52 @@ namespace SampleDiagram
 
 		private void ConnectorSettingsCommand_OnCanExecute(object sender, CanExecuteRoutedEventArgs e)
 		{
-			e.CanExecute = true;
+			e.CanExecute = _connector.ConnectionState == ConnectionStates.Disconnected ||
+			               _connector.ConnectionState == ConnectionStates.Failed;
 		}
 
 		private void ConnectorSettingsCommand_OnExecuted(object sender, ExecutedRoutedEventArgs e)
 		{
-			_connector.Configure(this);
-
-			SaveSettings();
+			ConfigureConnector();
 		}
 
 		private void ConnectDisconnectCommand_OnCanExecute(object sender, CanExecuteRoutedEventArgs e)
 		{
-			e.CanExecute = _connector.ConnectionState == ConnectionStates.Connected || _connector.ConnectionState == ConnectionStates.Disconnected;
+			e.CanExecute = _connector.ConnectionState == ConnectionStates.Connected ||
+			               _connector.ConnectionState == ConnectionStates.Disconnected ||
+			               _connector.ConnectionState == ConnectionStates.Failed;
 		}
 
 		private void ConnectDisconnectCommand_OnExecuted(object sender, ExecutedRoutedEventArgs e)
 		{
-			if (_connector.ConnectionState == ConnectionStates.Disconnected)
+			if (_connector.ConnectionState != ConnectionStates.Connected)
 			{
+				var innerAdapters = _connector.Adapter.InnerAdapters;
+
+				if (innerAdapters.IsEmpty())
+				{
+					new MessageBoxBuilder()
+						.Owner(this)
+						.Text(LocalizedStrings.Str3650)
+						.Warning()
+						.Show();
+
+					if (!ConfigureConnector())
+						return;
+				}
+
+				if (innerAdapters.SortedAdapters.IsEmpty())
+				{
+					new MessageBoxBuilder()
+						.Owner(this)
+						.Text(LocalizedStrings.Str3651)
+						.Warning()
+						.Show();
+
+					if (!ConfigureConnector())
+						return;
+				}
+
 				_connector.Connect();
 			}
 			else
@@ -394,6 +421,18 @@ namespace SampleDiagram
 
 					new XmlSerializer<SettingsStorage>().Serialize(settings, _settingsFile);
 				});
+		}
+
+		private bool ConfigureConnector()
+		{
+			var result = _connector.Configure(this);
+
+			if (!result)
+				return false;
+
+			SaveSettings();
+
+			return true;
 		}
 	}
 }

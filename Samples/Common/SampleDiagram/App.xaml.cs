@@ -26,7 +26,7 @@ namespace SampleDiagram
 	{
 		public App()
 		{
-			//LocalizedStrings.ActiveLanguage = Languages.English;
+			LocalizedStrings.ActiveLanguage = Languages.English;
 			GuiDispatcher.GlobalDispatcher.AddPeriodicalAction(CommandManager.InvalidateRequerySuggested);
 		}
 	}

@@ -20,6 +20,7 @@ namespace SampleDiagram
 	using System.Collections.ObjectModel;
 	using System.ComponentModel;
 	using System.Windows;
+	using System.Windows.Controls;
 	using System.Windows.Input;
 
 	using Ecng.Collections;
@@ -82,6 +83,19 @@ namespace SampleDiagram
 		{
 			get { return (CompositionItem)GetValue(SelectedItemProperty); }
 			set { SetValue(SelectedItemProperty, value); }
+		}
+
+		#endregion
+
+		#region NodeContextMenu
+
+		public static readonly DependencyProperty NodeContextMenuProperty = DependencyProperty.Register("NodeContextMenu", typeof(ContextMenu),
+			typeof(SolutionExplorerControl), new PropertyMetadata(null));
+
+		public ContextMenu NodeContextMenu
+		{
+			get { return (ContextMenu)GetValue(NodeContextMenuProperty); }
+			set { SetValue(NodeContextMenuProperty, value); }
 		}
 
 		#endregion

@@ -19,9 +19,11 @@
 
                 <xcad:LayoutAnchorablePaneGroup DockWidth="10*">
                     <xcad:LayoutAnchorablePane>
-                        <xcad:LayoutAnchorable Title="{x:Static localization:LocalizedStrings.Str3181}" CanClose="False">
+                        <xcad:LayoutAnchorable ContentId="DiagramEditor" Title="{x:Static localization:LocalizedStrings.Str3181}" CanClose="False">
                             <Grid>
-                                <diagram:DiagramEditorControl x:Name="DiagramEditor" SelectionChanged="OnDiagramEditorSelectionChanged"/>
+                                <diagram:DiagramEditorControl x:Name="DiagramEditor" 
+															  SelectionChanged="OnDiagramEditorSelectionChanged"
+															  ElementDoubleClicked="OnDiagramEditorElementDoubleClicked"/>
                                 <Label x:Name="NoStrategyLabel" VerticalAlignment="Center" HorizontalAlignment="Center" 
 									   FontSize="25" FontWeight="Bold" Foreground="Gray" Content="{x:Static localization:LocalizedStrings.StrategyNotSelected}"/>
                             </Grid>
@@ -31,7 +33,7 @@
 
                 <xcad:LayoutAnchorablePaneGroup DockWidth="2*">
                     <xcad:LayoutAnchorablePane>
-                        <xcad:LayoutAnchorable Title="{x:Static localization:LocalizedStrings.Str1507}" CanClose="False">
+                        <xcad:LayoutAnchorable ContentId="PropertyGridControl" Title="{x:Static localization:LocalizedStrings.Str1507}" CanClose="False">
                             <diagram:PropertyGridEx x:Name="PropertyGridControl" 
 													ShowAdvancedOptions="False" ShowDescriptionByTooltip="False" ShowPreview="False" ShowSearchBox="False"
 													ShowSortOptions="False" ShowSummary="True" ShowTitle="False"/>

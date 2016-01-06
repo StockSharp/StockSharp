@@ -72,6 +72,9 @@
 								TreeNodeStyle="{StaticResource SimpleFolders}"
 								TreeStyle="{StaticResource SimpleTreeStyle}"
 								NodeSortDescriptions="{StaticResource AscendingNames}"
+								SelectNodesOnRightClick="True"
+								NodeContextMenu="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:SolutionExplorerControl}}, Path=NodeContextMenu}"
+								Tag="{Binding RelativeSource={RelativeSource Self}}"
 								MouseDoubleClick="ExplorerTree_OnMouseDoubleClick"
 								SelectedItemChanged="ExplorerTree_OnSelectedItemChanged"/>
 </UserControl>

@@ -248,19 +248,18 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Images\BreakpointOff_16x16.png" />
-    <Resource Include="Images\BreakpointOn_16x16.png" />
-    <Resource Include="Images\Continue_16x16.png" />
-    <Resource Include="Images\history-testing-icon_24x24.png" />
-    <Resource Include="Images\StepIn_16x16.png" />
-    <Resource Include="Images\Stepout_16x16.png" />
-    <Resource Include="Images\StepOver_16x16.png" />
+    <Resource Include="Images\BreakpointOff_32x32.png" />
+    <Resource Include="Images\BreakpointOn_32x32.png" />
+    <Resource Include="Images\Continue_32x32.png" />
+    <Resource Include="Images\Backtesting_32x32.png" />
+    <Resource Include="Images\StepIn_32x32.png" />
+    <Resource Include="Images\StepOut_32x32.png" />
+    <Resource Include="Images\StepOver_32x32.png" />
     <Resource Include="Images\terminal_32x32.png" />
-    <Resource Include="Images\ToOutput_16x16.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Images\start_32x32.png" />
-    <Resource Include="Images\stop_32x32.png" />
+    <Resource Include="Images\Start_32x32.png" />
+    <Resource Include="Images\Stop_32x32.png" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\FolderClosed.png" />
@@ -273,6 +272,15 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\Refresh_32x32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Save_32x32.png" />
+    <Resource Include="Images\Undo_32x32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Add_32x32.png" />
+    <Resource Include="Images\Open_32x32.png" />
+    <Resource Include="Images\Remove_32x32.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
