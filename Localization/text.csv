@@ -1,3 +1,15 @@
+ErrTimeframePriceStepNotSet;Timeframe and price step were not set;Таймфрейм и шаг цены не были установлены
+BoxChart;Box chart;Боксовый график
+ClusterProfile;Cluster profile;Кластерный профиль
+VolumeSettings;Volume display settings;Свойства отображения объемов
+ClusterLineColor;Cluster base line color;Цвет базовой линии кластера
+ClusterTextColor;Cluster text color;Цвет текста кластера
+ClusterMaxVolumeColor;Cluster max volume color;Цвет максимального объема в кластере
+LocalHorizontalVolumes;Local horizontal volumes;Локальный горизонтальный объем
+ShowHorizontalVolumes;Show horizontal volumes;Показывать горизонтальный объем
+HorizontalVolumeWidthFraction;Horizontal volume size fraction;Ширина горизонтального объема (доля [0;1])
+HorizontalVolumeColor;Horizontal volume color;Цвет горизонтального объема
+HorizontalVolumeFontColor;Horizontal volume font color;Цвет шрифта горизонтального объема
 BoxChartSettings;Box chart settings;Настройки боксового графика
 ClusterProfileSettings;Cluster profile chart settings;Настройки графика кластерного профиля
 PriceStepForChartElement;Price step for this chart element;Шаг цены для данного элемена графика
