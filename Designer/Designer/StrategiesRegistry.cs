@@ -13,12 +13,16 @@ Created: 2015, 11, 11, 2:32 PM
 Copyright 2010 by StockSharp, LLC
 *******************************************************************************************/
 #endregion S# License
-namespace SampleDiagram
+namespace StockSharp.Designer
 {
 	using System;
+	using System.Collections.Generic;
+	using System.Globalization;
 	using System.IO;
+	using System.Linq;
 
 	using Ecng.Collections;
+	using Ecng.Common;
 	using Ecng.Serialization;
 
 	using StockSharp.Localization;
@@ -150,16 +154,36 @@ namespace SampleDiagram
 				Directory.CreateDirectory(_compositionsPath);
 
 			var files = Directory.GetFiles(_compositionsPath, "*.xml");
+			var compositions = GetSchemas("composition_");
 
 			foreach (var file in files)
 			{
 				try
 				{
-					_compositionRegistry.Load(_serializer.Deserialize(file));
+					var settings = _serializer.Deserialize(file);
+					var element = _compositionRegistry.Deserialize(settings);
+
+					_compositionRegistry.DiagramElements.Add(element);
+					compositions.Remove(element.TypeId);
 				}
 				catch (Exception excp)
 				{
 					this.AddErrorLog(LocalizedStrings.Str3046Params, file, excp);
+				}
+			}
+
+			foreach (var pair in compositions)
+			{
+				try
+				{
+					var settings = _serializer.Deserialize(pair.Value.To<Stream>());
+					var element = _compositionRegistry.Deserialize(settings);
+
+					Save(element, true);
+				}
+				catch (Exception excp)
+				{
+					this.AddErrorLog(LocalizedStrings.Str3046Params, pair.Key, excp);
 				}
 			}
 		}
@@ -170,6 +194,7 @@ namespace SampleDiagram
 				Directory.CreateDirectory(_strategiesPath);
 
 			var files = Directory.GetFiles(_strategiesPath, "*.xml");
+			var strategies = GetSchemas("strategy_");
 
 			foreach (var file in files)
 			{
@@ -179,12 +204,39 @@ namespace SampleDiagram
 					var element = _compositionRegistry.Deserialize(settings);
 
 					_strategies.Add(element);
+					strategies.Remove(element.TypeId);
 				}
 				catch (Exception excp)
 				{
 					this.AddErrorLog(LocalizedStrings.Str3627Params, file, excp);
 				}
 			}
+
+			foreach (var pair in strategies)
+			{
+				try
+				{
+					var settings = _serializer.Deserialize(pair.Value.To<Stream>());
+					var element = _compositionRegistry.Deserialize(settings);
+
+					Save(element, false);
+				}
+				catch (Exception excp)
+				{
+					this.AddErrorLog(LocalizedStrings.Str3627Params, pair.Key, excp);
+				}
+			}
+		}
+
+		private static IDictionary<Guid, string> GetSchemas(string prefix)
+		{
+			return Properties
+				.Resources
+				.ResourceManager
+				.GetResourceSet(CultureInfo.CurrentCulture, true, true)
+				.Cast<System.Collections.DictionaryEntry>()
+				.Where(i => i.Key.ToString().StartsWith(prefix))
+				.ToDictionary(pair => ((string)pair.Key).TrimStart(prefix).Replace("_", "-").To<Guid>(), pair => (string)pair.Value);
 		}
 	}
 }

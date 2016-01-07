@@ -13,7 +13,7 @@ Created: 2015, 12, 9, 6:53 PM
 Copyright 2010 by StockSharp, LLC
 *******************************************************************************************/
 #endregion S# License
-namespace SampleDiagram
+namespace StockSharp.Designer
 {
 	using System;
 	using System.ComponentModel;
@@ -109,7 +109,7 @@ namespace SampleDiagram
 
 		public EmulationDiagramStrategy()
 		{
-			DataPath = @"..\..\..\..\Testing\HistoryData\".ToFullPath();
+			DataPath = @"..\..\..\..\Samples\Testing\HistoryData\".ToFullPath();
 			StartDate = new DateTime(2012, 10, 1);
 			StopDate = new DateTime(2012, 10, 25);
 			MarketDataSource = MarketDataSource.Candles;

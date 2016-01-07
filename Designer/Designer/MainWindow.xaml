@@ -1,13 +1,13 @@
-﻿<fluent:RibbonWindow x:Class="SampleDiagram.MainWindow"
+﻿<fluent:RibbonWindow x:Class="StockSharp.Designer.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 		xmlns:xcad="http://schemas.xceed.com/wpf/xaml/avalondock"
-        xmlns:local="clr-namespace:SampleDiagram"
-		xmlns:fluent="clr-namespace:Fluent;assembly=Fluent"
+                     xmlns:fluent="clr-namespace:Fluent;assembly=Fluent"
 		xmlns:xaml="http://schemas.stocksharp.com/xaml"
 		xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 		xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 		xmlns:localization="clr-namespace:StockSharp.Localization;assembly=StockSharp.Localization"
+		xmlns:local="clr-namespace:StockSharp.Designer"
 		mc:Ignorable="d"
 		Title="Sample diagram" Height="768" Width="1024" WindowState="Maximized"
         DontUseDwm="False" WindowStartupLocation="CenterScreen"
@@ -55,22 +55,22 @@
         <ContextMenu x:Key="TreeContextMenu"
 					 DataContext="{Binding Path=PlacementTarget.Header, RelativeSource={RelativeSource Self}}">
             <MenuItem Header="{x:Static localization:LocalizedStrings.Str1509}"
-					  Icon="pack://application:,,,/SampleDiagram;component/Images/Open_32x32.png"
+					  Icon="pack://application:,,,/Designer;component/Images/Open_32x32.png"
 					  Command="{x:Static local:MainWindow.OpenCommand}"
 					  CommandParameter="{Binding Element}"/>
             <MenuItem Header="{x:Static localization:LocalizedStrings.Str2060}"
-					  Icon="pack://application:,,,/SampleDiagram;component/Images/Remove_32x32.png"
+					  Icon="pack://application:,,,/Designer;component/Images/Remove_32x32.png"
 					  Command="{x:Static local:MainWindow.RemoveCommand}"
 					  CommandParameter="{Binding Element}"/>
 			
 			<Separator/>
 
             <MenuItem Header="{x:Static localization:LocalizedStrings.Str1174}"
-					  Icon="pack://application:,,,/SampleDiagram;component/Images/Backtesting_32x32.png" 
+					  Icon="pack://application:,,,/Designer;component/Images/Backtesting_32x32.png" 
 					  Command="{x:Static local:MainWindow.EmulateStrategyCommand}"
 					  CommandParameter="{Binding Element}" />
             <MenuItem Header="{x:Static localization:LocalizedStrings.Str3176}"
-					  Icon="pack://application:,,,/SampleDiagram;component/Images/terminal_32x32.png" 
+					  Icon="pack://application:,,,/Designer;component/Images/terminal_32x32.png" 
 					  Command="{x:Static local:MainWindow.ExecuteStrategyCommand}"
 					  CommandParameter="{Binding Element}" />
         </ContextMenu>
@@ -98,7 +98,7 @@
 								   Size="Small" 
 								   Header="{x:Static localization:LocalizedStrings.Connect}"
 								   ToolTip="{x:Static localization:LocalizedStrings.Connect}"
-								   Icon="pack://application:,,,/SampleDiagram;component/Images/Connect_24x24.png" 
+								   Icon="pack://application:,,,/Designer;component/Images/Connect_24x24.png" 
 								   Command="{x:Static local:MainWindow.ConnectDisconnectCommand}"/>
                 </fluent:QuickAccessMenuItem>
             </fluent:Ribbon.QuickAccessItems>
@@ -124,8 +124,8 @@
                 <fluent:RibbonGroupBox Header="{x:Static localization:LocalizedStrings.CompositionElementsStrategies}">
                     <fluent:SplitButton Header="{x:Static localization:LocalizedStrings.Str3229}" 
 										SizeDefinition="Middle"
-                                        Icon="pack://application:,,,/SampleDiagram;component/Images/Add_32x32.png"
-                                        LargeIcon="pack://application:,,,/SampleDiagram;component/Images/Add_32x32.png">
+                                        Icon="pack://application:,,,/Designer;component/Images/Add_32x32.png"
+                                        LargeIcon="pack://application:,,,/Designer;component/Images/Add_32x32.png">
                         <fluent:MenuItem Header="{x:Static localization:LocalizedStrings.CompositeElement}"
 										 Command="{x:Static local:MainWindow.AddCommand}"
 										 CommandParameter="{x:Static local:CompositionType.Composition}" />
@@ -135,36 +135,36 @@
                     </fluent:SplitButton>
                     <fluent:Button Header="{x:Static localization:LocalizedStrings.Str1509}"
 								   SizeDefinition="Middle"
-								   Icon="pack://application:,,,/SampleDiagram;component/Images/Open_32x32.png"
-								   LargeIcon="pack://application:,,,/SampleDiagram;component/Images/Open_32x32.png"
+								   Icon="pack://application:,,,/Designer;component/Images/Open_32x32.png"
+								   LargeIcon="pack://application:,,,/Designer;component/Images/Open_32x32.png"
 								   
 								   CommandParameter="{Binding ElementName=SolutionExplorer, Path=SelectedItem}" />
                     <fluent:Button Header="{x:Static localization:LocalizedStrings.Str2060}"
 								   SizeDefinition="Middle"
-								   Icon="pack://application:,,,/SampleDiagram;component/Images/Remove_32x32.png"
-								   LargeIcon="pack://application:,,,/SampleDiagram;component/Images/Remove_32x32.png"
+								   Icon="pack://application:,,,/Designer;component/Images/Remove_32x32.png"
+								   LargeIcon="pack://application:,,,/Designer;component/Images/Remove_32x32.png"
 								   Command="{x:Static local:MainWindow.RemoveCommand}"
 								   CommandParameter="{Binding ElementName=SolutionExplorer, Path=SelectedItem}" />
                     <Separator />
 
                     <fluent:Button Header="{x:Static localization:LocalizedStrings.Import}"
 								   SizeDefinition="Middle"
-								   Icon="pack://application:,,,/SampleDiagram;component/Images/Open_32x32.png"
-								   LargeIcon="pack://application:,,,/SampleDiagram;component/Images/Open_32x32.png" />
+								   Icon="pack://application:,,,/Designer;component/Images/Open_32x32.png"
+								   LargeIcon="pack://application:,,,/Designer;component/Images/Open_32x32.png" />
                     <fluent:Button Header="{x:Static localization:LocalizedStrings.Export}"
 								   SizeDefinition="Middle"
-								   Icon="pack://application:,,,/SampleDiagram;component/Images/Save_32x32.png"
-								   LargeIcon="pack://application:,,,/SampleDiagram;component/Images/Save_32x32.png" />
+								   Icon="pack://application:,,,/Designer;component/Images/Save_32x32.png"
+								   LargeIcon="pack://application:,,,/Designer;component/Images/Save_32x32.png" />
                 </fluent:RibbonGroupBox>
                 <fluent:RibbonGroupBox Header="{x:Static localization:LocalizedStrings.Str3606}">
                     <fluent:Button Header="{x:Static localization:LocalizedStrings.Str1174}"
 								   SizeDefinition="Large"
-								   LargeIcon="pack://application:,,,/SampleDiagram;component/Images/Backtesting_32x32.png" 
+								   LargeIcon="pack://application:,,,/Designer;component/Images/Backtesting_32x32.png" 
 								   Command="{x:Static local:MainWindow.EmulateStrategyCommand}"
 								   CommandParameter="{Binding ElementName=SolutionExplorer, Path=SelectedItem}" />
                     <fluent:Button Header="{x:Static localization:LocalizedStrings.Str3176}"
 								   SizeDefinition="Large"
-								   LargeIcon="pack://application:,,,/SampleDiagram;component/Images/terminal_32x32.png" 
+								   LargeIcon="pack://application:,,,/Designer;component/Images/terminal_32x32.png" 
 								   Command="{x:Static local:MainWindow.ExecuteStrategyCommand}"
 								   CommandParameter="{Binding ElementName=SolutionExplorer, Path=SelectedItem}" />
                 </fluent:RibbonGroupBox>
@@ -198,14 +198,14 @@
                                     MaxLength="512"
 									Text="{Binding Element.Description, UpdateSourceTrigger=PropertyChanged}" />
                     <fluent:Button Header="{x:Static localization:LocalizedStrings.Str1519}"
-								   Icon="pack://application:,,,/SampleDiagram;component/Images/Save_32x32.png"
-								   LargeIcon="pack://application:,,,/SampleDiagram;component/Images/Save_32x32.png"
+								   Icon="pack://application:,,,/Designer;component/Images/Save_32x32.png"
+								   LargeIcon="pack://application:,,,/Designer;component/Images/Save_32x32.png"
 								   SizeDefinition="Large" 
 								   Command="{x:Static local:MainWindow.SaveCommand}"
 								   CommandParameter="{Binding}"/>
                     <fluent:Button Header="{x:Static localization:LocalizedStrings.Undo}"
-								   Icon="pack://application:,,,/SampleDiagram;component/Images/Undo_32x32.png"
-								   LargeIcon="pack://application:,,,/SampleDiagram;component/Images/Undo_32x32.png"
+								   Icon="pack://application:,,,/Designer;component/Images/Undo_32x32.png"
+								   LargeIcon="pack://application:,,,/Designer;component/Images/Undo_32x32.png"
 								   SizeDefinition="Large" 
 								   Command="{x:Static local:MainWindow.DiscardCommand}"
 								   CommandParameter="{Binding}"/>
@@ -213,12 +213,12 @@
                 <fluent:RibbonGroupBox Header="{x:Static localization:LocalizedStrings.Str3606}">
                     <fluent:Button Header="{x:Static localization:LocalizedStrings.Str1174}"
 								   SizeDefinition="Large"
-								   LargeIcon="pack://application:,,,/SampleDiagram;component/Images/Backtesting_32x32.png" 
+								   LargeIcon="pack://application:,,,/Designer;component/Images/Backtesting_32x32.png" 
 								   Command="{x:Static local:MainWindow.EmulateStrategyCommand}"
 								   CommandParameter="{Binding}" />
                     <fluent:Button Header="{x:Static localization:LocalizedStrings.Str3176}"
 								   SizeDefinition="Large"
-								   LargeIcon="pack://application:,,,/SampleDiagram;component/Images/terminal_32x32.png" 
+								   LargeIcon="pack://application:,,,/Designer;component/Images/terminal_32x32.png" 
 								   Command="{x:Static local:MainWindow.ExecuteStrategyCommand}"
 								   CommandParameter="{Binding}" />
                 </fluent:RibbonGroupBox>
@@ -238,45 +238,45 @@
                 <fluent:RibbonGroupBox Header="{x:Static localization:LocalizedStrings.Str1559}">
                     <fluent:Button Header="{x:Static localization:LocalizedStrings.RefreshScheme}"
 								   SizeDefinition="Large"
-								   LargeIcon="pack://application:,,,/SampleDiagram;component/Images/Refresh_32x32.png"
+								   LargeIcon="pack://application:,,,/Designer;component/Images/Refresh_32x32.png"
 								   Command="{Binding RefreshCompositionCommand}" />
 					<Separator />
                     <fluent:Button Header="{x:Static localization:LocalizedStrings.Str2421}"
 								   SizeDefinition="Large"
-								   LargeIcon="pack://application:,,,/SampleDiagram;component/Images/start_32x32.png"
+								   LargeIcon="pack://application:,,,/Designer;component/Images/start_32x32.png"
 								   Command="{Binding StartCommand}" />
                     <fluent:Button Header="{x:Static localization:LocalizedStrings.Str242}"
 								   SizeDefinition="Large"
-								   LargeIcon="pack://application:,,,/SampleDiagram;component/Images/stop_32x32.png" 
+								   LargeIcon="pack://application:,,,/Designer;component/Images/stop_32x32.png" 
 								   Command="{Binding StopCommand}" />
                 </fluent:RibbonGroupBox>
                 <fluent:RibbonGroupBox Header="{x:Static localization:LocalizedStrings.Str3230}">
                     <fluent:Button Header="{x:Static localization:LocalizedStrings.XamlStr146}"
 								   SizeDefinition="Large"
-								   LargeIcon="pack://application:,,,/SampleDiagram;component/Images/BreakpointOn_32x32.png"
+								   LargeIcon="pack://application:,,,/Designer;component/Images/BreakpointOn_32x32.png"
 								   Command="{Binding AddBreakpointCommand}" />
                     <fluent:Button Header="{x:Static localization:LocalizedStrings.XamlStr800}"
 								   SizeDefinition="Large"
-								   LargeIcon="pack://application:,,,/SampleDiagram;component/Images/BreakpointOff_32x32.png"
+								   LargeIcon="pack://application:,,,/Designer;component/Images/BreakpointOff_32x32.png"
 								   Command="{Binding RemoveBreakpointCommand}" />
 					
 					<Separator />
 
                     <fluent:Button Header="{x:Static localization:LocalizedStrings.XamlStr230}"
 								   SizeDefinition="Large"
-								   LargeIcon="pack://application:,,,/SampleDiagram;component/Images/StepOver_32x32.png"
+								   LargeIcon="pack://application:,,,/Designer;component/Images/StepOver_32x32.png"
 								   Command="{Binding StepNextCommand}" />
                     <fluent:Button Header="{x:Static localization:LocalizedStrings.ToCompositeElem}"
 								   SizeDefinition="Large"
-								   LargeIcon="pack://application:,,,/SampleDiagram;component/Images/StepIn_32x32.png"
+								   LargeIcon="pack://application:,,,/Designer;component/Images/StepIn_32x32.png"
 								   Command="{Binding StepIntoCommand}" />
                     <fluent:Button Header="{x:Static localization:LocalizedStrings.XamlStr192}"
 								   SizeDefinition="Large"
-								   LargeIcon="pack://application:,,,/SampleDiagram;component/Images/Stepout_32x32.png"
+								   LargeIcon="pack://application:,,,/Designer;component/Images/Stepout_32x32.png"
 								   Command="{Binding StepOutCommand}" />
                     <fluent:Button Header="{x:Static localization:LocalizedStrings.XamlStr584}"
 								   SizeDefinition="Large"
-								   LargeIcon="pack://application:,,,/SampleDiagram;component/Images/Continue_32x32.png"
+								   LargeIcon="pack://application:,,,/Designer;component/Images/Continue_32x32.png"
 								   Command="{Binding ContinueCommand}" />
                 </fluent:RibbonGroupBox>
             </fluent:RibbonTabItem>
@@ -295,15 +295,15 @@
                 <fluent:RibbonGroupBox Header="{x:Static localization:LocalizedStrings.Str1559}">
                     <fluent:Button Header="{x:Static localization:LocalizedStrings.RefreshScheme}"
 								   SizeDefinition="Large"
-								   LargeIcon="pack://application:,,,/SampleDiagram;component/Images/Refresh_32x32.png"
+								   LargeIcon="pack://application:,,,/Designer;component/Images/Refresh_32x32.png"
 								   Command="{Binding RefreshCompositionCommand}" />
                     <Separator />
                     <fluent:Button Header="{x:Static localization:LocalizedStrings.Str2421}"
 								   SizeDefinition="Large"
-								   LargeIcon="pack://application:,,,/SampleDiagram;component/Images/start_32x32.png" />
+								   LargeIcon="pack://application:,,,/Designer;component/Images/start_32x32.png" />
                     <fluent:Button Header="{x:Static localization:LocalizedStrings.Str242}"
 								   SizeDefinition="Large"
-								   LargeIcon="pack://application:,,,/SampleDiagram;component/Images/stop_32x32.png"  />
+								   LargeIcon="pack://application:,,,/Designer;component/Images/stop_32x32.png"  />
                 </fluent:RibbonGroupBox>
             </fluent:RibbonTabItem>
         </fluent:Ribbon>

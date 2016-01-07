@@ -1,4 +1,4 @@
-namespace SampleDiagram
+namespace StockSharp.Designer
 {
 	using System;
 	using System.Globalization;

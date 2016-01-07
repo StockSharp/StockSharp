@@ -1,4 +1,4 @@
-﻿namespace SampleDiagram
+﻿namespace StockSharp.Designer
 {
 	using System;
 	using System.Collections.Generic;
@@ -16,8 +16,6 @@
 
 	using MoreLinq;
 
-	using SampleDiagram.Layout;
-
 	using StockSharp.Algo;
 	using StockSharp.Algo.Candles;
 	using StockSharp.Algo.Candles.Compression;
@@ -26,6 +24,7 @@
 	using StockSharp.Algo.Strategies;
 	using StockSharp.Algo.Testing;
 	using StockSharp.BusinessEntities;
+	using StockSharp.Designer.Layout;
 	using StockSharp.Localization;
 	using StockSharp.Logging;
 	using StockSharp.Messages;

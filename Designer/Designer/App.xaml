@@ -1,4 +1,4 @@
-﻿<xaml:BaseApplication x:Class="SampleDiagram.App"
+﻿<xaml:ExtendedBaseApplication x:Class="StockSharp.Designer.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:xaml="http://schemas.stocksharp.com/xaml"
@@ -14,4 +14,4 @@
         </ResourceDictionary>
     </Application.Resources>
 	
-</xaml:BaseApplication>
+</xaml:ExtendedBaseApplication>

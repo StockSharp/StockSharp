@@ -13,20 +13,19 @@ Created: 2015, 11, 11, 2:32 PM
 Copyright 2010 by StockSharp, LLC
 *******************************************************************************************/
 #endregion S# License
-namespace SampleDiagram
+namespace StockSharp.Designer
 {
 	using System;
 	using System.Linq;
 	using System.Windows;
 
-	using Ecng.Common;
 	using Ecng.Collections;
+	using Ecng.Common;
 	using Ecng.Configuration;
 	using Ecng.Serialization;
 	using Ecng.Xaml;
 
-	using SampleDiagram.Layout;
-
+	using StockSharp.Designer.Layout;
 	using StockSharp.Localization;
 	using StockSharp.Xaml.Diagram;
 

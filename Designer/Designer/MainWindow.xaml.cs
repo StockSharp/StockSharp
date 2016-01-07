@@ -13,10 +13,12 @@ Created: 2015, 11, 11, 2:32 PM
 Copyright 2010 by StockSharp, LLC
 *******************************************************************************************/
 #endregion S# License
-namespace SampleDiagram
+namespace StockSharp.Designer
 {
 	using System;
+	using System.Collections.Generic;
 	using System.ComponentModel;
+	using System.Data.Common;
 	using System.Globalization;
 	using System.IO;
 	using System.Linq;
@@ -27,15 +29,16 @@ namespace SampleDiagram
 	using Ecng.Collections;
 	using Ecng.Common;
 	using Ecng.Configuration;
+	using Ecng.Data;
+	using Ecng.Interop;
 	using Ecng.Serialization;
 	using Ecng.Xaml;
-
-	using SampleDiagram.Layout;
 
 	using StockSharp.Algo;
 	using StockSharp.Algo.Storages;
 	using StockSharp.BusinessEntities;
 	using StockSharp.Configuration;
+	using StockSharp.Designer.Layout;
 	using StockSharp.Localization;
 	using StockSharp.Logging;
 	using StockSharp.Messages;
@@ -54,20 +57,36 @@ namespace SampleDiagram
 		public static RoutedCommand ConnectorSettingsCommand = new RoutedCommand();
 		public static RoutedCommand ConnectDisconnectCommand = new RoutedCommand();
 
-		private readonly string _settingsFile = "settings.xml";
-
-		private readonly StrategiesRegistry _strategiesRegistry = new StrategiesRegistry();
-		private readonly Connector _connector;
+		private readonly string _settingsFile;
+		private readonly StrategiesRegistry _strategiesRegistry;
+        private readonly Connector _connector;
 		private readonly LayoutManager _layoutManager;
 
 		public MainWindow()
 		{
 			InitializeComponent();
+			InitializeDataSource();
+
+			Directory.CreateDirectory(BaseApplication.AppDataPath);
+
+			var compositionsPath = Path.Combine(BaseApplication.AppDataPath, "Compositions");
+			var strategiesPath = Path.Combine(BaseApplication.AppDataPath, "Strategies");
+			var logsPath = Path.Combine(BaseApplication.AppDataPath, "Logs");
+
+			_settingsFile = Path.Combine(BaseApplication.AppDataPath, "settings.xml");
 
 			var logManager = new LogManager();
-			logManager.Listeners.Add(new FileLogListener("sample.log"));
+			logManager.Listeners.Add(new FileLogListener
+			{
+				Append = true,
+				LogDirectory = logsPath,
+				MaxLength = 1024 * 1024 * 100 /* 100mb */,
+				MaxCount = 10,
+				SeparateByDates = SeparateByDateModes.SubDirectories,
+			});
 			logManager.Listeners.Add(new GuiLogListener(Monitor));
 
+			_strategiesRegistry = new StrategiesRegistry(compositionsPath, strategiesPath);
 			logManager.Sources.Add(_strategiesRegistry);
 			_strategiesRegistry.Init();
 
@@ -98,6 +117,36 @@ namespace SampleDiagram
 
 			SolutionExplorer.Compositions = _strategiesRegistry.Compositions;
 			SolutionExplorer.Strategies = _strategiesRegistry.Strategies;
+		}
+
+		private void InitializeDataSource()
+		{
+			var entityRegistry = ConfigManager.GetService<IEntityRegistry>();
+
+			var database = (Database)((EntityRegistry)entityRegistry).Storage;
+
+			if (database == null)
+				return;
+
+			var conStr = new DbConnectionStringBuilder
+			{
+				ConnectionString = database.ConnectionString
+			};
+
+			var dbFile = (string)conStr.Cast<KeyValuePair<string, object>>().ToDictionary(StringComparer.InvariantCultureIgnoreCase).TryGetValue("Data Source");
+
+			if (dbFile == null)
+				return;
+
+			dbFile = dbFile.Replace("%Documents%", Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments));
+
+			conStr["Data Source"] = dbFile;
+			database.ConnectionString = conStr.ToString();
+
+			dbFile.CreateDirIfNotExists();
+
+			if (!File.Exists(dbFile))
+				Properties.Resources.StockSharp.Save(dbFile);
 		}
 
 		#region Event handlers
@@ -157,8 +206,8 @@ namespace SampleDiagram
 			this.GuiAsync(() =>
 			{
 				var uri = _connector.ConnectionState == ConnectionStates.Disconnected
-							  ? "pack://application:,,,/SampleDiagram;component/Images/Connect_24x24.png"
-							  : "pack://application:,,,/SampleDiagram;component/Images/Disconnect_24x24.png";
+							  ? "pack://application:,,,/Designer;component/Images/Connect_24x24.png"
+							  : "pack://application:,,,/Designer;component/Images/Disconnect_24x24.png";
 
 				ConnectButton.Icon = new BitmapImage(new Uri(uri));
 			});

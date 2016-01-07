@@ -13,7 +13,7 @@ Created: 2015, 12, 9, 6:53 PM
 Copyright 2010 by StockSharp, LLC
 *******************************************************************************************/
 #endregion S# License
-namespace SampleDiagram
+namespace StockSharp.Designer
 {
 	using System;
 	using System.Collections.Generic;
