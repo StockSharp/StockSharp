@@ -50,7 +50,7 @@ namespace StockSharp.Quik
 					.SetFirstVolume((int)message.Volume);
 		}
 
-		public static Transaction CreateRegisterTransaction(this OrderRegisterMessage message, string orderAccount, IDictionary<string, RefPair<SecurityTypes, string>> securityClassInfo)
+		public static Transaction CreateRegisterTransaction(this OrderRegisterMessage message, string orderAccount, IDictionary<string, RefPair<SecurityTypes, string>> securityClassInfo, bool singleSlash)
 		{
 			if (securityClassInfo == null)
 				throw new ArgumentNullException(nameof(securityClassInfo));
@@ -82,7 +82,11 @@ namespace StockSharp.Quik
 			if (!message.Comment.IsEmpty())
 			{
 				// http://www.quik.ru/forum/import/24383
-				var splitter = message.PortfolioName.Contains("/") ? "//" : "/";
+				//var splitter = message.PortfolioName.Contains("/") ? "//" : "/";
+
+				// https://forum.quik.ru/forum10/topic1218/
+				var splitter = singleSlash ? "/" : "//";
+
 				clientCode = clientCode.IsEmpty() ? message.Comment : "{0}{1}{2}".Put(clientCode, splitter, message.Comment);
 
 				if (clientCode.Length > 20)
