@@ -7,7 +7,7 @@
     <ProjectGuid>{4DF3DBDF-FA5B-469F-B625-6A255BD05069}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>SampleDiagramPublic</RootNamespace>
+    <RootNamespace>SampleDiagram</RootNamespace>
     <AssemblyName>SampleDiagram</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -224,6 +224,9 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <None Include="StockSharp.db">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="Strategies\d2d7aeb2_ca92_4a88_9f2b_dccb72949af1.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

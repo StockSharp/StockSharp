@@ -14,6 +14,8 @@
 	using Ecng.Serialization;
 	using Ecng.Xaml;
 
+	using MoreLinq;
+
 	using SampleDiagram.Layout;
 
 	using StockSharp.Algo;
@@ -116,6 +118,8 @@
 					.Sources
 					.Remove(oldStrategy);
 
+				oldStrategy.ParametersChanged -= RaiseChanged;
+
 				oldStrategy.OrderRegistering += OnStrategyOrderRegistering;
 				oldStrategy.OrderReRegistering += OnStrategyOrderReRegistering;
 				oldStrategy.OrderRegisterFailed += OnStrategyOrderRegisterFailed;
@@ -136,6 +140,8 @@
 				.GetService<LogManager>()
 				.Sources
 				.Add(newStrategy);
+
+			newStrategy.ParametersChanged += RaiseChanged;
 
 			newStrategy.OrderRegistering += OnStrategyOrderRegistering;
 			newStrategy.OrderReRegistering += OnStrategyOrderReRegistering;
@@ -332,7 +338,25 @@
 		private void InitializeCommands()
 		{
 			StartCommand = new DelegateCommand(
-				obj => StartEmulation(),
+				obj =>
+				{
+					try
+					{
+						StartEmulation();
+					}
+					catch (Exception excp)
+					{
+						StopEmulation();
+
+						new MessageBoxBuilder()
+							.Owner(this)
+							.Caption(Title)
+							.Text(excp.Message)
+							.Icon(MessageBoxImage.Warning)
+							.Button(MessageBoxButton.OK)
+							.Show();
+					}
+				},
 				obj => _connector == null || _connector.State == EmulationStates.Stopped);
 
 			StopCommand = new DelegateCommand(
@@ -369,11 +393,21 @@
 			if (strategy.DataPath.IsEmpty() || !Directory.Exists(strategy.DataPath))
 				throw new InvalidOperationException(LocalizedStrings.Str3014);
 
+			strategy
+				.Composition
+				.Parameters
+				.ForEach(p =>
+				{
+					if (p.Type == typeof(Security) && p.Value == null)
+						throw new InvalidOperationException(LocalizedStrings.Str1380);
+				});
+
 			strategy.Reset();
 			Reset();
 
+			var securityId = "empty@empty";
 			var secGen = new SecurityIdGenerator();
-			var secIdParts = secGen.Split(strategy.SecurityId);
+			var secIdParts = secGen.Split(securityId);
 			var secCode = secIdParts.SecurityCode;
 			var board = ExchangeBoard.GetOrCreateBoard(secIdParts.BoardCode);
 			var timeFrame = strategy.CandlesTimeFrame;
@@ -382,7 +416,7 @@
 			// create test security
 			var security = new Security
 			{
-				Id = strategy.SecurityId, // sec id has the same name as folder with historical data
+				Id = securityId, // sec id has the same name as folder with historical data
 				Code = secCode,
 				Board = board,
 			};
@@ -423,10 +457,10 @@
 				BeginValue = 1000000,
 			};
 
+			var securityProvider = ConfigManager.GetService<ISecurityProvider>();
+
 			// create backtesting connector
-			_connector = new HistoryEmulationConnector(
-				new[] { security },
-				new[] { portfolio })
+			_connector = new HistoryEmulationConnector(securityProvider, new[] { portfolio }, new StorageRegistry())
 			{
 				EmulationAdapter =
 				{
@@ -479,21 +513,12 @@
 
 			_connector.NewSecurities += securities =>
 			{
-				if (securities.All(s => s != security))
-					return;
-
 				// fill level1 values
 				_connector.SendInMessage(level1Info);
 
 				//_connector.RegisterMarketDepth(security);
-				if (!useCandles)
-					_connector.RegisterTrades(security);
-
-				// start strategy before emulation started
-				strategy.Start();
-
-				// start historical data loading when connection established successfully and all data subscribed
-				_connector.Start();
+				//if (!useCandles)
+				//	_connector.RegisterTrades(security);
 			};
 
 			var nextTime = startTime + progressStep;
@@ -542,11 +567,17 @@
 					Value = 0.01m
 				}
 			});
+
+			// start strategy before emulation started
+			strategy.Start();
+
+			// start historical data loading when connection established successfully and all data subscribed
+			_connector.Start();
 		}
 
 		private void StopEmulation()
 		{
-			_connector.Disconnect();
+			_connector?.Disconnect();
 
 			DiagramDebuggerControl.Debugger.IsEnabled = false;
 
@@ -558,40 +589,17 @@
 
 		public override void Load(SettingsStorage storage)
 		{
-			var compositionId = storage.GetValue<Guid>("CompositionId");
-			var registry = ConfigManager.GetService<StrategiesRegistry>();
-			var composition = (CompositionDiagramElement)registry.Strategies.FirstOrDefault(c => c.TypeId == compositionId);
+			var strategy = new EmulationDiagramStrategy();
+			strategy.Load(storage);
 
-			Strategy = new EmulationDiagramStrategy
-			{
-				Id = storage.GetValue<Guid>("StrategyId"),
-				DataPath = storage.GetValue<string>("DataPath"),
-				StartDate = storage.GetValue<DateTime>("StartDate"),
-				StopDate = storage.GetValue<DateTime>("StopDate"),
-				SecurityId = storage.GetValue<string>("SecurityId"),
-				MarketDataSource = storage.GetValue<MarketDataSource>("MarketDataSource"),
-				CandlesTimeFrame = storage.GetValue<TimeSpan>("CandlesTimeFrame"),
-				Composition = registry.Clone(composition)
-			};
+			Strategy = strategy;
 
 			base.Load(storage);
 		}
 
 		public override void Save(SettingsStorage storage)
 		{
-			if (Strategy != null)
-			{
-				var strategy = (EmulationDiagramStrategy)Strategy;
-
-				storage.SetValue("CompositionId", strategy.Composition.TypeId);
-				storage.SetValue("StrategyId", strategy.Id);
-				storage.SetValue("DataPath", strategy.DataPath);
-				storage.SetValue("StartDate", strategy.StartDate);
-				storage.SetValue("StopDate", strategy.StopDate);
-				storage.SetValue("SecurityId", strategy.SecurityId);
-				storage.SetValue("MarketDataSource", strategy.MarketDataSource);
-				storage.SetValue("CandlesTimeFrame", strategy.CandlesTimeFrame);
-			}
+			Strategy?.Save(storage);
 
 			base.Save(storage);
 		}

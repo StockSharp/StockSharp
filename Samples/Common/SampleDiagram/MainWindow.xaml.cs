@@ -33,6 +33,7 @@ namespace SampleDiagram
 	using SampleDiagram.Layout;
 
 	using StockSharp.Algo;
+	using StockSharp.Algo.Storages;
 	using StockSharp.BusinessEntities;
 	using StockSharp.Configuration;
 	using StockSharp.Localization;
@@ -74,7 +75,16 @@ namespace SampleDiagram
 			_layoutManager.Changed += SaveSettings;
 			logManager.Sources.Add(_layoutManager);
 
-			_connector = new Connector();
+			var entityRegistry = ConfigManager.GetService<IEntityRegistry>();
+			var storageRegistry = ConfigManager.GetService<IStorageRegistry>();
+
+			_connector = new Connector(entityRegistry, storageRegistry)
+			{
+				StorageAdapter =
+				{
+					DaysLoad = TimeSpan.Zero
+				}
+			};
 			_connector.Connected += ConnectorOnConnectionStateChanged;
 			_connector.Disconnected += ConnectorOnConnectionStateChanged;
 			_connector.ConnectionError += ConnectorOnConnectionError;
@@ -84,12 +94,10 @@ namespace SampleDiagram
 			ConfigManager.RegisterService(_strategiesRegistry);
 			ConfigManager.RegisterService(_layoutManager);
 			ConfigManager.RegisterService<IConnector>(_connector);
+			ConfigManager.RegisterService<ISecurityProvider>(_connector);
 
 			SolutionExplorer.Compositions = _strategiesRegistry.Compositions;
 			SolutionExplorer.Strategies = _strategiesRegistry.Strategies;
-
-			//DesignerRibbonGroup.Visibility = Visibility.Collapsed;
-			//EmulationRibbonGroup.Visibility = Visibility.Collapsed;
 		}
 
 		#region Event handlers
@@ -97,6 +105,8 @@ namespace SampleDiagram
 		private void MainWindow_OnLoaded(object sender, RoutedEventArgs e)
 		{
 			LoadSettings();
+
+			_connector.StorageAdapter.Load();
 		}
 
 		private void MainWindow_OnClosing(object sender, CancelEventArgs e)

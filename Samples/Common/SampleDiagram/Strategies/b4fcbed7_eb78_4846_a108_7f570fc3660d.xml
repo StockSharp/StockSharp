@@ -31,8 +31,6 @@
               <String>eac06529-6d82-477f-8847-88259064709e</String>
               <String>c44f923b-90ed-4784-a02e-324856386459</String>
               <String>82bb2047-b2e9-4bef-86a4-b3329f62241f</String>
-              <String>7d9a6d0f-c11c-48f2-a01e-266ffca9f802</String>
-              <String>f69ba763-6418-4f6d-9b10-aa3eab346227</String>
             </Value>
           </value>
         </KeyValuePairBeginStringAndObjectEnd>
@@ -43,8 +41,6 @@
             <Value type="System.String[], mscorlib">
               <String>c1a1d246-3010-4089-a1c5-f6ff776ce62a</String>
               <String>c1a1d246-3010-4089-a1c5-f6ff776ce62a</String>
-              <String>b50b9897-5c47-48f6-ac91-a2f4949dffc2</String>
-              <String>001ebb3d-a3ad-4b9f-b470-ccfaa1a20e14</String>
             </Value>
           </value>
         </KeyValuePairBeginStringAndObjectEnd>
@@ -2613,7 +2609,7 @@
                                     <key>Value</key>
                                     <value>
                                       <Type type="string">bool</Type>
-                                      <Value type="bool">True</Value>
+                                      <Value type="bool">False</Value>
                                     </value>
                                   </KeyValuePairBeginStringAndObjectEnd>
                                 </Value>

@@ -17,9 +17,12 @@ namespace SampleDiagram
 {
 	using System;
 	using System.ComponentModel;
+	using System.Linq;
 
+	using Ecng.Collections;
 	using Ecng.Common;
 	using Ecng.ComponentModel;
+	using Ecng.Configuration;
 	using Ecng.Serialization;
 
 	using StockSharp.Localization;
@@ -40,7 +43,6 @@ namespace SampleDiagram
 		private DateTime _stopDate;
 		private MarketDataSource _marketDataSource;
 		private TimeSpan _candlesTimeFrame;
-		private string _securityId;
 
 		[DisplayNameLoc(LocalizedStrings.Str2804Key)]
 		[CategoryLoc(LocalizedStrings.Str1174Key)]
@@ -51,7 +53,7 @@ namespace SampleDiagram
 			set
 			{
 				_dataPath = value;
-				this.Notify("DataPath");
+				RaiseParametersChanged("DataPath");
 			}
 		}
 
@@ -64,7 +66,7 @@ namespace SampleDiagram
 			set
 			{
 				_startDate = value;
-				this.Notify("StartDate");
+				RaiseParametersChanged("StartDate");
 			}
 		}
 
@@ -77,7 +79,7 @@ namespace SampleDiagram
 			set
 			{
 				_stopDate = value;
-				this.Notify("StopDate");
+				RaiseParametersChanged("StopDate");
 			}
 		}
 
@@ -90,7 +92,7 @@ namespace SampleDiagram
 			set
 			{
 				_marketDataSource = value;
-				this.Notify("MarketDataSource");
+				RaiseParametersChanged("MarketDataSource");
 			}
 		}
 
@@ -103,62 +105,48 @@ namespace SampleDiagram
 			set
 			{
 				_candlesTimeFrame = value;
-				this.Notify("CandlesTimeFrame");
-			}
-		}
-
-		[DisplayNameLoc(LocalizedStrings.SecurityIdKey)]
-		[CategoryLoc(LocalizedStrings.Str1174Key)]
-		[PropertyOrder(60)]
-		public string SecurityId
-		{
-			get { return _securityId; }
-			set
-			{
-				_securityId = value;
-				this.Notify("SecurityId");
+				RaiseParametersChanged("CandlesTimeFrame");
 			}
 		}
 
 		public EmulationDiagramStrategy()
 		{
 			DataPath = @"..\..\..\..\Testing\HistoryData\".ToFullPath();
-			SecurityId = @"RIZ2@FORTS";
 			StartDate = new DateTime(2012, 10, 1);
 			StopDate = new DateTime(2012, 10, 25);
 			MarketDataSource = MarketDataSource.Candles;
 			CandlesTimeFrame = TimeSpan.FromMinutes(5);
 		}
 
-		protected override bool NeedShowProperty(PropertyDescriptor pd)
-		{
-			return pd.Category != LocalizedStrings.Str436
-				&& pd.Category != LocalizedStrings.Str1559
-				&& pd.Category != LocalizedStrings.Str3050;
-		}
-
 		public override void Load(SettingsStorage storage)
 		{
-			base.Load(storage);
+			var compositionId = storage.GetValue<Guid>("CompositionId");
+			var registry = ConfigManager.GetService<StrategiesRegistry>();
+			var composition = (CompositionDiagramElement)registry.Strategies.FirstOrDefault(c => c.TypeId == compositionId);
 
+			Composition = registry.Clone(composition);
+
+			Id = storage.GetValue<Guid>("StrategyId");
 			DataPath = storage.GetValue("DataPath", DataPath);
-			SecurityId = storage.GetValue("SecurityId", SecurityId);
 			StartDate = storage.GetValue("StartDate", StartDate);
 			StopDate = storage.GetValue("StopDate", StopDate);
 			MarketDataSource = storage.GetValue("MarketDataSource", MarketDataSource);
 			CandlesTimeFrame = storage.GetValue("CandlesTimeFrame", CandlesTimeFrame);
+
+			base.Load(storage);
 		}
 
 		public override void Save(SettingsStorage storage)
 		{
-			base.Save(storage);
-
+			storage.SetValue("StrategyId", Id);
+			storage.SetValue("CompositionId", Composition.TypeId);
 			storage.SetValue("DataPath", DataPath);
-			storage.SetValue("SecurityId", SecurityId);
 			storage.SetValue("StartDate", StartDate);
 			storage.SetValue("StopDate", StopDate);
 			storage.SetValue("MarketDataSource", MarketDataSource);
 			storage.SetValue("CandlesTimeFrame", CandlesTimeFrame);
+
+			base.Save(storage);
 		}
 	}
 }
