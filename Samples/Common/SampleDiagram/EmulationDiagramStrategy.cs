@@ -19,9 +19,7 @@ namespace SampleDiagram
 	using System.ComponentModel;
 	using System.Linq;
 
-	using Ecng.Collections;
 	using Ecng.Common;
-	using Ecng.ComponentModel;
 	using Ecng.Configuration;
 	using Ecng.Serialization;
 
@@ -116,6 +114,11 @@ namespace SampleDiagram
 			StopDate = new DateTime(2012, 10, 25);
 			MarketDataSource = MarketDataSource.Candles;
 			CandlesTimeFrame = TimeSpan.FromMinutes(5);
+		}
+
+		protected override bool NeedShowProperty(PropertyDescriptor propertyDescriptor)
+		{
+			return propertyDescriptor.DisplayName != LocalizedStrings.Portfolio && base.NeedShowProperty(propertyDescriptor);
 		}
 
 		public override void Load(SettingsStorage storage)
