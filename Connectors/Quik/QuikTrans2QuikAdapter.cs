@@ -183,6 +183,11 @@ namespace StockSharp.Quik
 		}
 
 		/// <summary>
+		/// https://forum.quik.ru/forum10/topic1218/
+		/// </summary>
+		public bool SingleSlash { get; set; } = true;
+
+		/// <summary>
 		/// Проверить введенные параметры на валидность.
 		/// </summary>
 		[Browsable(false)]
@@ -257,7 +262,7 @@ namespace StockSharp.Quik
 
 				case MessageTypes.OrderRegister:
 					var regMsg = (OrderRegisterMessage)message;
-					RegisterTransaction(regMsg.CreateRegisterTransaction(regMsg.GetValue<string>(PositionChangeTypes.DepoName), SecurityClassInfo));
+					RegisterTransaction(regMsg.CreateRegisterTransaction(regMsg.GetValue<string>(PositionChangeTypes.DepoName), SecurityClassInfo, SingleSlash));
 					break;
 
 				case MessageTypes.OrderReplace:
