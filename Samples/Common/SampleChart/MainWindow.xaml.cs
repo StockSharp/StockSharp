@@ -42,10 +42,8 @@ namespace SampleChart
 
 	public partial class MainWindow
 	{
-		private ChartArea _areaComb, _areaBVR1, _areaBVR2;
-		private ChartBoxVolumeElement _bvElement;
-		private ChartClusterProfileElement _cpElement;
-		private ChartCandleElement _candleElement1, _candleElement2;
+		private ChartArea _areaComb;
+		private ChartCandleElement _candleElement1;
 		private TimeFrameCandle _candle;
 		private VolumeProfile _volumeProfile;
 		private readonly DispatcherTimer _chartUpdateTimer = new DispatcherTimer();
@@ -82,10 +80,9 @@ namespace SampleChart
 			InitCharts();
 
 			BoxChart.SubscribeIndicatorElement += (elem, ser, arg) => Chart_OnSubscribeIndicatorElement(elem, ser, arg, BoxChart);
-			ClusterChart.SubscribeIndicatorElement += (elem, ser, arg) => Chart_OnSubscribeIndicatorElement(elem, ser, arg, ClusterChart);
 
 			HistoryPath.Folder = @"..\..\..\..\Testing\HistoryData\".ToFullPath();
-            LoadData();
+			LoadData();
 		}
 
 		private void Chart_OnSubscribeIndicatorElement(ChartIndicatorElement element, CandleSeries series, IIndicator indicator, ChartPanel chart)
@@ -108,11 +105,8 @@ namespace SampleChart
 		private void InitCharts()
 		{
 			BoxChart.ClearAreas();
-			ClusterChart.ClearAreas();
 
 			_areaComb = new ChartArea();
-			_areaBVR1 = new ChartArea();
-			_areaBVR2 = new ChartArea();
 
 			_areaComb.YAxises.Add(new ChartAxis
 			{
@@ -122,18 +116,7 @@ namespace SampleChart
 				AxisAlignment = ChartAxisAlignment.Right,
 			});
 
-			_areaBVR2.YAxises.Add(new ChartAxis
-			{
-				Id = _chartMainYAxis,
-				AutoRange = false,
-				AxisType = ChartAxisType.Numeric,
-				AxisAlignment = ChartAxisAlignment.Right,
-			});
-
 			BoxChart.AddArea(_areaComb);
-
-			ClusterChart.AddArea(_areaBVR1);
-			ClusterChart.AddArea(_areaBVR2);
 
 			_timeframe = int.Parse((string)((ComboBoxItem)Timeframe.SelectedItem).Tag);
 			var step = (decimal)PriceStep.Value.Value;
@@ -143,17 +126,8 @@ namespace SampleChart
 				_security,
 				TimeSpan.FromMinutes(_timeframe));
 
-			_candleElement1 = new ChartCandleElement { FullTitle = "Candles", YAxisId = _chartMainYAxis };
+			_candleElement1 = new ChartCandleElement(_timeframe, step) { FullTitle = "Candles", YAxisId = _chartMainYAxis };
 			BoxChart.AddElement(_areaComb, _candleElement1, series);
-
-			_bvElement = new ChartBoxVolumeElement(_timeframe, step) { FullTitle = "BoxVolume", YAxisId = _chartMainYAxis };
-			BoxChart.AddElement(_areaComb, _bvElement);
-
-			_cpElement = new ChartClusterProfileElement(_timeframe, step) { FullTitle = "Cluster profile" };
-			ClusterChart.AddElement(_areaBVR1, _cpElement);
-
-			_candleElement2 = new ChartCandleElement { FullTitle = "Candles", YAxisId = _chartMainYAxis };
-			ClusterChart.AddElement(_areaBVR2, _candleElement2, series);
 
 			var ns = typeof(IIndicator).Namespace;
 
@@ -182,7 +156,6 @@ namespace SampleChart
 				.ToArray();
 
 			BoxChart.IndicatorTypes.AddRange(indicators);
-			ClusterChart.IndicatorTypes.AddRange(indicators);
 		}
 
 		private void Draw_Click(object sender, RoutedEventArgs e)
@@ -230,7 +203,7 @@ namespace SampleChart
 					{
 						date = tick.ServerTime.Date;
 
-                        this.GuiAsync(() =>
+						this.GuiAsync(() =>
 						{
 							BusyIndicator.BusyContent = date.ToString();
 						});
@@ -282,13 +255,6 @@ namespace SampleChart
 				BoxChart.Draw(c.OpenTime, new Dictionary<IChartElement, object>
 				{
 					{ _candleElement1, c },
-					{ _bvElement, c }
-				});
-
-				ClusterChart.Draw(c.OpenTime, new Dictionary<IChartElement, object>
-				{
-					{ _candleElement2, c },
-					{ _cpElement, c }
 				});
 			});
 		}
@@ -357,7 +323,6 @@ namespace SampleChart
 		{
 			var theme = (string)Theme.SelectedValue;
 			BoxChart.ChartTheme = theme;
-			ClusterChart.ChartTheme = theme;
 		}
 	}
 }
