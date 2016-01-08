@@ -79,13 +79,13 @@ namespace SampleChart
 			Theme.SelectedItem = "Chrome";
 			InitCharts();
 
-			BoxChart.SubscribeIndicatorElement += (elem, ser, arg) => Chart_OnSubscribeIndicatorElement(elem, ser, arg, BoxChart);
+			Chart.SubscribeIndicatorElement += Chart_OnSubscribeIndicatorElement;
 
 			HistoryPath.Folder = @"..\..\..\..\Testing\HistoryData\".ToFullPath();
 			LoadData();
 		}
 
-		private void Chart_OnSubscribeIndicatorElement(ChartIndicatorElement element, CandleSeries series, IIndicator indicator, ChartPanel chart)
+		private void Chart_OnSubscribeIndicatorElement(ChartIndicatorElement element, CandleSeries series, IIndicator indicator)
 		{
 			var values = _allCandles.Cache
 				.Select(candle =>
@@ -99,12 +99,12 @@ namespace SampleChart
 					});
 				});
 
-			chart.Draw(values);
+			Chart.Draw(values);
 		}
 
 		private void InitCharts()
 		{
-			BoxChart.ClearAreas();
+			Chart.ClearAreas();
 
 			_areaComb = new ChartArea();
 
@@ -116,7 +116,7 @@ namespace SampleChart
 				AxisAlignment = ChartAxisAlignment.Right,
 			});
 
-			BoxChart.AddArea(_areaComb);
+			Chart.AddArea(_areaComb);
 
 			_timeframe = int.Parse((string)((ComboBoxItem)Timeframe.SelectedItem).Tag);
 			var step = (decimal)PriceStep.Value.Value;
@@ -127,7 +127,7 @@ namespace SampleChart
 				TimeSpan.FromMinutes(_timeframe));
 
 			_candleElement1 = new ChartCandleElement(_timeframe, step) { FullTitle = "Candles", YAxisId = _chartMainYAxis };
-			BoxChart.AddElement(_areaComb, _candleElement1, series);
+			Chart.AddElement(_areaComb, _candleElement1, series);
 
 			var ns = typeof(IIndicator).Namespace;
 
@@ -155,7 +155,7 @@ namespace SampleChart
 				})
 				.ToArray();
 
-			BoxChart.IndicatorTypes.AddRange(indicators);
+			Chart.IndicatorTypes.AddRange(indicators);
 		}
 
 		private void Draw_Click(object sender, RoutedEventArgs e)
@@ -178,9 +178,7 @@ namespace SampleChart
 				Board = ExchangeBoard.GetBoard(id.BoardCode)
 			};
 
-			// TODO
-			//BoxChart.Reset(new IChartElement[] { _candleElement1, _bvElement });
-			//ClusterChart.Reset(new IChartElement[] { _candleElement2, _cpElement });
+			Chart.Reset(new IChartElement[] { _candleElement1 });
 
 			var storage = new StorageRegistry();
 
@@ -252,7 +250,7 @@ namespace SampleChart
 
 			candlesToUpdate.ForEach(c =>
 			{
-				BoxChart.Draw(c.OpenTime, new Dictionary<IChartElement, object>
+				Chart.Draw(c.OpenTime, new Dictionary<IChartElement, object>
 				{
 					{ _candleElement1, c },
 				});
@@ -322,7 +320,7 @@ namespace SampleChart
 		private void OnThemeSelectionChanged(object sender, SelectionChangedEventArgs e)
 		{
 			var theme = (string)Theme.SelectedValue;
-			BoxChart.ChartTheme = theme;
+			Chart.ChartTheme = theme;
 		}
 	}
 }
