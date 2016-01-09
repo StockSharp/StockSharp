@@ -40,8 +40,8 @@ namespace StockSharp.Designer.Layout
 
 		public Uri Icon
 		{
-			get { return (Uri)GetValue(TitleProperty); }
-			set { SetValue(TitleProperty, value); }
+			get { return (Uri)GetValue(IconProperty); }
+			set { SetValue(IconProperty, value); }
 		}
 
 		public virtual string Key => Guid.NewGuid().ToString();

@@ -19,8 +19,8 @@ using System.Windows;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("SampleDiagram")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyTitle("S#.Designer")]
+[assembly: AssemblyDescription("S#.Designer is a free application for visual design(=programming) algorithmic trading strategies.")]
 
 [assembly: ThemeInfo(
 	ResourceDictionaryLocation.None, //where theme specific resource dictionaries are located

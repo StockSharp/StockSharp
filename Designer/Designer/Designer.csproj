@@ -7,7 +7,7 @@
     <ProjectGuid>{4DF3DBDF-FA5B-469F-B625-6A255BD05069}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Designer</RootNamespace>
+    <RootNamespace>StockSharp.Designer</RootNamespace>
     <AssemblyName>Designer</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -52,6 +52,12 @@
     </Reference>
     <Reference Include="Ecng.Configuration">
       <HintPath>..\..\References\Ecng\Ecng.Configuration.dll</HintPath>
+    </Reference>
+    <Reference Include="Ecng.Data">
+      <HintPath>..\..\References\Ecng\Ecng.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="Ecng.Interop">
+      <HintPath>..\..\References\Ecng\Ecng.Interop.dll</HintPath>
     </Reference>
     <Reference Include="Ecng.Localization">
       <HintPath>..\..\References\Ecng\Ecng.Localization.dll</HintPath>
@@ -238,25 +244,31 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Images\BreakpointOff_16x16.png" />
-    <Resource Include="Images\BreakpointOn_16x16.png" />
-    <Resource Include="Images\Continue_16x16.png" />
     <Resource Include="Images\FolderClosed.png" />
     <Resource Include="Images\FolderOpen.png" />
     <Resource Include="Images\FolderSelected.png" />
-    <Resource Include="Images\history-testing-icon_24x24.png" />
     <Resource Include="Images\start_32x32.png" />
-    <Resource Include="Images\StepIn_16x16.png" />
-    <Resource Include="Images\Stepout_16x16.png" />
-    <Resource Include="Images\StepOver_16x16.png" />
     <Resource Include="Images\stop_32x32.png" />
     <Resource Include="Images\terminal_32x32.png" />
-    <Resource Include="Images\ToOutput_16x16.png" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\Connect_24x24.png" />
     <Resource Include="Images\Disconnect_24x24.png" />
     <Resource Include="Images\Refresh_32x32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Add_32x32.png" />
+    <Resource Include="Images\Backtesting_32x32.png" />
+    <Resource Include="Images\BreakpointOff_32x32.png" />
+    <Resource Include="Images\BreakpointOn_32x32.png" />
+    <Resource Include="Images\Continue_32x32.png" />
+    <Resource Include="Images\Open_32x32.png" />
+    <Resource Include="Images\Remove_32x32.png" />
+    <Resource Include="Images\Save_32x32.png" />
+    <Resource Include="Images\StepIn_32x32.png" />
+    <Resource Include="Images\StepOut_32x32.png" />
+    <Resource Include="Images\StepOver_32x32.png" />
+    <Resource Include="Images\Undo_32x32.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
