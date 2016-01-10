@@ -337,15 +337,17 @@
             To go to the next element.
             </summary>
     </member>
-    <member name="M:StockSharp.Xaml.Diagram.DiagramDebugger.StepInto">
+    <member name="M:StockSharp.Xaml.Diagram.DiagramDebugger.StepInto(StockSharp.Xaml.Diagram.CompositionDiagramElement)">
       <summary>
             To go inside the diagram composite element.
             </summary>
+      <param name="composition">Composite element.</param>
     </member>
-    <member name="M:StockSharp.Xaml.Diagram.DiagramDebugger.StepOut">
+    <member name="M:StockSharp.Xaml.Diagram.DiagramDebugger.StepOut(StockSharp.Xaml.Diagram.CompositionDiagramElement)">
       <summary>
             To exit from the diagram composite element.
             </summary>
+      <param name="composition">Composite element.</param>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.DiagramDebugger.Continue">
       <summary>
@@ -1413,6 +1415,11 @@
     <member name="F:StockSharp.Xaml.Diagram.DiagramSocketType.Comparable">
       <summary>
             Comparable values.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Xaml.Diagram.DiagramSocketType.Portfolio">
+      <summary>
+            Portfolio.
             </summary>
     </member>
     <member name="T:StockSharp.Xaml.Diagram.DiagramSocketValue">
