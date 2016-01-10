@@ -33,9 +33,6 @@ namespace StockSharp.Designer
 
 	using StockSharp.Xaml.Diagram;
 
-	/// <summary>
-	/// Логика взаимодействия для SolutionExplorerControl.xaml
-	/// </summary>
 	public partial class SolutionExplorerControl
 	{
 		#region Compositions

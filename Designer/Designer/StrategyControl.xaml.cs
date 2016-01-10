@@ -31,9 +31,6 @@
 	using StockSharp.Xaml.Charting;
 	using StockSharp.Xaml.Diagram;
 
-	/// <summary>
-	/// Логика взаимодействия для LiveStrategyControl.xaml
-	/// </summary>
 	public partial class StrategyControl
 	{
 		#region DependencyProperty
