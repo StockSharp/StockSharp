@@ -306,22 +306,6 @@
 
 	public class EmulationStrategyControl : StrategyControl
 	{
-		private class TradeCandleBuilderSourceEx : TradeCandleBuilderSource
-		{
-			public TradeCandleBuilderSourceEx(IConnector connector)
-				: base(connector)
-			{
-			}
-
-			protected override void RegisterSecurity(Security security)
-			{
-			}
-
-			protected override void UnRegisterSecurity(Security security)
-			{
-			}
-		}
-
 		private HistoryEmulationConnector _connector;
 
 		public EmulationStrategyControl()
@@ -434,18 +418,6 @@
 			TicksAndDepthsProgress.Value = 0;
 			TicksAndDepthsProgress.Maximum = 100;
 
-			var level1Info = new Level1ChangeMessage
-			{
-				SecurityId = security.ToSecurityId(),
-				ServerTime = startTime,
-			}
-				.TryAdd(Level1Fields.PriceStep, secIdParts.SecurityCode == "RIZ2" ? 10m : 1)
-				.TryAdd(Level1Fields.StepPrice, 6m)
-				.TryAdd(Level1Fields.MinPrice, 10m)
-				.TryAdd(Level1Fields.MaxPrice, 1000000m)
-				.TryAdd(Level1Fields.MarginBuy, 10000m)
-				.TryAdd(Level1Fields.MarginSell, 10000m);
-
 			// test portfolio
 			var portfolio = new Portfolio
 			{
@@ -491,9 +463,7 @@
 
 			ConfigManager.GetService<LogManager>().Sources.Add(_connector);
 
-			var candleManager = !useCandles
-									? new CandleManager(new TradeCandleBuilderSourceEx(_connector))
-									: new CandleManager(_connector);
+			var candleManager = new CandleManager(_connector);
 
 			strategy.Volume = 1;
 			strategy.Portfolio = portfolio;
@@ -507,14 +477,27 @@
 
 			strategy.SetCandleManager(candleManager);
 
-			_connector.NewSecurities += securities =>
+			_connector.NewSecurity += s =>
 			{
+				var level1Info = new Level1ChangeMessage
+				{
+					SecurityId = s.ToSecurityId(),
+					ServerTime = startTime,
+				}
+					.TryAdd(Level1Fields.PriceStep, secIdParts.SecurityCode == "RIZ2" ? 10m : 1)
+					.TryAdd(Level1Fields.StepPrice, 6m)
+					.TryAdd(Level1Fields.MinPrice, 10m)
+					.TryAdd(Level1Fields.MaxPrice, 1000000m)
+					.TryAdd(Level1Fields.MarginBuy, 10000m)
+					.TryAdd(Level1Fields.MarginSell, 10000m);
+
 				// fill level1 values
 				_connector.SendInMessage(level1Info);
 
 				//_connector.RegisterMarketDepth(security);
+
 				//if (!useCandles)
-				//	_connector.RegisterTrades(security);
+				//	_connector.RegisterTrades(s);
 			};
 
 			var nextTime = startTime + progressStep;
@@ -528,6 +511,18 @@
 				var steps = (_connector.CurrentTime - startTime).Ticks / progressStep.Ticks + 1;
 				nextTime = startTime + (steps * progressStep.Ticks).To<TimeSpan>();
 				this.GuiAsync(() => TicksAndDepthsProgress.Value = steps);
+			};
+
+			_connector.LookupSecuritiesResult += (ss) =>
+			{
+				if (strategy.ProcessState != ProcessStates.Stopped)
+					return;
+
+				// start strategy before emulation started
+				strategy.Start();
+
+				// start historical data loading when connection established successfully and all data subscribed
+				_connector.Start();
 			};
 
 			_connector.StateChanged += () =>
@@ -563,12 +558,6 @@
 					Value = 0.01m
 				}
 			});
-
-			// start strategy before emulation started
-			strategy.Start();
-
-			// start historical data loading when connection established successfully and all data subscribed
-			_connector.Start();
 		}
 
 		private void StopEmulation()

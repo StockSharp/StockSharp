@@ -163,7 +163,10 @@ namespace StockSharp.Designer
 
 		private void MainWindow_OnClosing(object sender, CancelEventArgs e)
 		{
-			SaveSettings();
+			foreach (var control in _layoutManager.DockingControls)
+				control.CanClose();
+
+			_layoutManager.Dispose();
 		}
 
 		private void SolutionExplorer_OnOpen(CompositionItem element)

@@ -67,7 +67,6 @@ namespace StockSharp.Designer.Layout
 
 		public virtual void Save(SettingsStorage storage)
 		{
-			storage.SetValue("ControlType", GetType().GetTypeName(false));
 		}
 
 		protected void RaiseChanged()

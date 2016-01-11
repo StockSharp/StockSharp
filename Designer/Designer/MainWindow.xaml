@@ -52,6 +52,8 @@
     </Window.CommandBindings>
 	
 	<Window.Resources>
+        <local:CompositionTypeToVisibilityConverter x:Key="CompositionTypeToVisibilityConverter" Type="Composition"/>
+		
         <ContextMenu x:Key="TreeContextMenu"
 					 DataContext="{Binding Path=PlacementTarget.Header, RelativeSource={RelativeSource Self}}">
             <MenuItem Header="{x:Static localization:LocalizedStrings.Str1509}"
@@ -149,10 +151,12 @@
 
                     <fluent:Button Header="{x:Static localization:LocalizedStrings.Import}"
 								   SizeDefinition="Middle"
+								   IsEnabled="False"
 								   Icon="pack://application:,,,/Designer;component/Images/Open_32x32.png"
 								   LargeIcon="pack://application:,,,/Designer;component/Images/Open_32x32.png" />
                     <fluent:Button Header="{x:Static localization:LocalizedStrings.Export}"
 								   SizeDefinition="Middle"
+								   IsEnabled="False"
 								   Icon="pack://application:,,,/Designer;component/Images/Save_32x32.png"
 								   LargeIcon="pack://application:,,,/Designer;component/Images/Save_32x32.png" />
                 </fluent:RibbonGroupBox>
@@ -191,7 +195,8 @@
 									x:Name="CompositionCategoryTextBox"
 									InputWidth="150"
                                     MaxLength="128"
-									Text="{Binding Element.Category, UpdateSourceTrigger=PropertyChanged}" />
+									Text="{Binding Element.Category, UpdateSourceTrigger=PropertyChanged}" 
+									Visibility="{Binding Type, Converter={StaticResource CompositionTypeToVisibilityConverter}}"/>
                     <fluent:TextBox Header="{x:Static localization:LocalizedStrings.Description}"
 									x:Name="CompositionDescriptionTextBox"
 									InputWidth="150"

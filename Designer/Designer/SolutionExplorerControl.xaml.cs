@@ -147,6 +147,7 @@ namespace StockSharp.Designer
 	{
 		private INotifyList<DiagramElement> _source;
 		private string _name;
+		private string _tooltip;
 
 		public Guid Id { get; }
 
@@ -159,6 +160,16 @@ namespace StockSharp.Designer
 			{
 				_name = value;
 				NotifyChanged("Name");
+			}
+		}
+
+		public string Tooltip
+		{
+			get { return _tooltip; }
+			set
+			{
+				_tooltip = value;
+				NotifyChanged("Tooltip");
 			}
 		}
 
@@ -178,6 +189,7 @@ namespace StockSharp.Designer
 			Id = id;
 			TextId = id.ToString();
 			Name = name;
+			Tooltip = name;
 			Parent = parent;
 			ChildItems = new ObservableCollection<SolutionExplorerItem>();
 		}
@@ -198,6 +210,7 @@ namespace StockSharp.Designer
 				throw new ArgumentNullException(nameof(parent));
 
 			Type = parent.Type;
+			Tooltip = element.Description;
 
 			Element = new CompositionItem(parent.Type, element);
 			Element.Element.PropertyChanged += OnElementPropertyChanged;
@@ -205,8 +218,15 @@ namespace StockSharp.Designer
 
 		private void OnElementPropertyChanged(object sender, PropertyChangedEventArgs e)
 		{
-			if (e.PropertyName == "Name")
-				Name = Element.Element.Name;
+			switch (e.PropertyName)
+			{
+				case "Name":
+					Name = Element.Element.Name;
+					break;
+				case "Description":
+					Tooltip = Element.Element.Description;
+					break;
+			}
 		}
 
 		public void SetSource(INotifyList<DiagramElement> elements)

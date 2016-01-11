@@ -27,16 +27,6 @@
               <String>6cbdbe99-c44e-4bf2-b1fb-9c5beee271c8</String>
               <String>fca8c279-80d6-4982-a564-5c6d3af9d43c</String>
               <String>447a5478-5429-4536-85b6-2bcfda8d74af</String>
-              <String>9a5fde4f-6193-4454-b5e2-c710d26bb4d3</String>
-              <String>14b0fde4-672d-4c1b-a915-5d744047dffd</String>
-              <String>27c32670-92e5-4d3e-ac31-bb13821e6780</String>
-              <String>80c04055-d688-4511-9561-a5fa57deb191</String>
-              <String>6f823c45-0b31-4d45-a695-f3ff3103a028</String>
-              <String>a7cab6b1-4749-491d-b677-f07fad11d889</String>
-              <String>379af6dc-4a7c-42f3-9c4c-bdad0752fe54</String>
-              <String>268b2c30-4c7e-4513-965c-533ae1c784d6</String>
-              <String>d519fc43-5e50-447f-bf49-822e373c09e3</String>
-              <String>bfeb6d36-0f28-413c-b8ba-81ee6a36d488</String>
             </Value>
           </value>
         </KeyValuePairBeginStringAndObjectEnd>
@@ -46,15 +36,6 @@
             <Type type="string">System.String[], mscorlib</Type>
             <Value type="System.String[], mscorlib">
               <String>f9db7c28-d0d8-4be6-86b2-0fc5e09fa57b</String>
-              <String>dd31120d-649c-4f1f-bb73-b5bd6fa7eae3</String>
-              <String>284f154d-31ee-4959-877c-a89532c3cf3e</String>
-              <String>bfd2bd11-ee1e-481f-955c-ac8d60133770</String>
-              <String>a2b1eb39-6506-48f8-8e68-75dcdb816540</String>
-              <String>c7b64184-49fd-4177-9748-c35171e4da5c</String>
-              <String>c49ddbdd-f5e2-4bae-a805-497a611f9743</String>
-              <String>95566cf1-7f97-4bc7-9c84-bcb9b4c882e5</String>
-              <String>997771ea-0bb1-4b19-af42-9314a78cc920</String>
-              <String>541dc037-d94c-42f3-9b54-ab57077d7d49</String>
             </Value>
           </value>
         </KeyValuePairBeginStringAndObjectEnd>

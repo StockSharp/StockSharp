@@ -85,7 +85,7 @@ namespace StockSharp.Designer
 			var res = new MessageBoxBuilder()
 				.Owner(this)
 				.Caption(Title)
-				.Text(LocalizedStrings.Str3676)
+				.Text(LocalizedStrings.Str3676Params.Put(Composition.Element.Name))
 				.Icon(MessageBoxImage.Question)
 				.Button(MessageBoxButton.YesNo)
 				.Show();
