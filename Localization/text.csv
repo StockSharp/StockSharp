@@ -3416,7 +3416,7 @@ Str3672;Completed building updates.;Построение обновлений з
 Str3673;Path to a directory where publication data is stored is not specified.;Не указан путь к директории где хранятся данные для публикации.
 Str3674;WyBuild project file name is not specified.;Не указано имя файла проекта wyBuild.
 Str3675;Path to the assembly of a published project is not specified.;Не указан путь к сборке публикуемого проекта.
-Str3676;Project has changed. Save changes?;Проект был изменен. Сохранить изменения?
+Str3676Params;Scheme {0} has changed. Save changes?;Схема {0} была изменена. Сохранить изменения?
 Str3677;Executable file is not specified.;Не указан файл для запуска.
 Str3678Params;New order for '{0}';Новая заявка на '{0}'
 Str3679;Login for Transaq server.;Логин к серверу Transaq.

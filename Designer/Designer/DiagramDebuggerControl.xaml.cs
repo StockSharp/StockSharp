@@ -92,8 +92,8 @@ namespace StockSharp.Designer
 				obj => Debugger != null && Debugger.IsWaiting);
 
 			StepIntoCommand = new DelegateCommand(
-				obj => Debugger.StepInto(),
-				obj => Debugger != null && Debugger.IsWaitingOnInput && Debugger.CanStepInto);
+				obj => Debugger.StepInto(DiagramEditor?.SelectedElement as CompositionDiagramElement),
+				obj => (Debugger != null && Debugger.IsWaitingOnInput && Debugger.CanStepInto) || DiagramEditor?.SelectedElement is CompositionDiagramElement);
 
 			StepOutCommand = new DelegateCommand(
 				obj => Debugger.StepOut(DiagramEditor.Composition),
@@ -149,7 +149,7 @@ namespace StockSharp.Designer
 
 		private void OnStrategyPropertyChanged(object sender, PropertyChangedEventArgs e)
 		{
-			Changed.SafeInvoke();
+			//Changed.SafeInvoke();
 		}
 
 		private void OnDebuggerBreak(DiagramSocket socket)

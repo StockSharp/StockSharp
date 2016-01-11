@@ -24,7 +24,7 @@ namespace StockSharp.Designer
 		public App()
 		{
 			CheckTargetPlatform = true;
-			GuiDispatcher.GlobalDispatcher.AddPeriodicalAction(CommandManager.InvalidateRequerySuggested);
+			//GuiDispatcher.GlobalDispatcher.AddPeriodicalAction(CommandManager.InvalidateRequerySuggested);
 		}
 	}
 }

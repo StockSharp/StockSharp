@@ -44324,14 +44324,14 @@ namespace StockSharp.Localization
 		/// <summary>
 		/// Project has changed. Save changes?
 		/// </summary>
-		public const string Str3676Key = "Str3676";
+		public const string Str3676ParamsKey = "Str3676Params";
 
 		/// <summary>
 		/// Project has changed. Save changes?
 		/// </summary>
-		public static string Str3676
+		public static string Str3676Params
 		{
-			get { return GetString(Str3676Key); }
+			get { return GetString(Str3676ParamsKey); }
 		}
 
 		/// <summary>

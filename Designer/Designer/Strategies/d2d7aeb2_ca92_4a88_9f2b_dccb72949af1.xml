@@ -32,9 +32,7 @@
           <key>OutputSockets</key>
           <value>
             <Type type="string">System.String[], mscorlib</Type>
-            <Value type="System.String[], mscorlib">
-              <String>7752dd63-7e59-46d3-96f3-47d8bf71e650</String>
-            </Value>
+            <Value type="System.String[], mscorlib" />
           </value>
         </KeyValuePairBeginStringAndObjectEnd>
         <KeyValuePairBeginStringAndObjectEnd>
@@ -301,7 +299,7 @@
                                                 <key>From</key>
                                                 <value>
                                                   <Type type="string">System.DateTimeOffset, mscorlib</Type>
-                                                  <Value type="System.DateTimeOffset, mscorlib">01.01.0001 0:00:00 +00:00</Value>
+                                                  <Value type="System.DateTimeOffset, mscorlib">01/01/0001 00:00:00 +00:00</Value>
                                                 </value>
                                               </KeyValuePairBeginStringAndObjectEnd>
                                               <KeyValuePairBeginStringAndObjectEnd>
@@ -1121,6 +1119,459 @@
                                                 <value>
                                                   <Type type="string">bool</Type>
                                                   <Value type="bool">True</Value>
+                                                </value>
+                                              </KeyValuePairBeginStringAndObjectEnd>
+                                              <KeyValuePairBeginStringAndObjectEnd>
+                                                <key>Cluster</key>
+                                                <value>
+                                                  <Type type="string">Ecng.Serialization.SettingsStorage, Ecng.Serialization</Type>
+                                                  <Value type="Ecng.Serialization.SettingsStorage, Ecng.Serialization">
+                                                    <KeyValuePairBeginStringAndObjectEnd>
+                                                      <key>PriceStep</key>
+                                                      <value>
+                                                        <Type type="string">decimal</Type>
+                                                        <Value type="decimal">0</Value>
+                                                      </value>
+                                                    </KeyValuePairBeginStringAndObjectEnd>
+                                                    <KeyValuePairBeginStringAndObjectEnd>
+                                                      <key>BaseTimeframe</key>
+                                                      <value>
+                                                        <Type type="string">int</Type>
+                                                        <Value type="int">0</Value>
+                                                      </value>
+                                                    </KeyValuePairBeginStringAndObjectEnd>
+                                                    <KeyValuePairBeginStringAndObjectEnd>
+                                                      <key>Timeframe2Multiplier</key>
+                                                      <value>
+                                                        <Type type="string">int</Type>
+                                                        <Value type="int">5</Value>
+                                                      </value>
+                                                    </KeyValuePairBeginStringAndObjectEnd>
+                                                    <KeyValuePairBeginStringAndObjectEnd>
+                                                      <key>Timeframe3Multiplier</key>
+                                                      <value>
+                                                        <Type type="string">int</Type>
+                                                        <Value type="int">15</Value>
+                                                      </value>
+                                                    </KeyValuePairBeginStringAndObjectEnd>
+                                                    <KeyValuePairBeginStringAndObjectEnd>
+                                                      <key>FontColor</key>
+                                                      <value>
+                                                        <Type type="string">Ecng.Serialization.SettingsStorage, Ecng.Serialization</Type>
+                                                        <Value type="Ecng.Serialization.SettingsStorage, Ecng.Serialization">
+                                                          <KeyValuePairBeginStringAndObjectEnd>
+                                                            <key>A</key>
+                                                            <value>
+                                                              <Type type="string">byte</Type>
+                                                              <Value type="byte">255</Value>
+                                                            </value>
+                                                          </KeyValuePairBeginStringAndObjectEnd>
+                                                          <KeyValuePairBeginStringAndObjectEnd>
+                                                            <key>R</key>
+                                                            <value>
+                                                              <Type type="string">byte</Type>
+                                                              <Value type="byte">51</Value>
+                                                            </value>
+                                                          </KeyValuePairBeginStringAndObjectEnd>
+                                                          <KeyValuePairBeginStringAndObjectEnd>
+                                                            <key>G</key>
+                                                            <value>
+                                                              <Type type="string">byte</Type>
+                                                              <Value type="byte">51</Value>
+                                                            </value>
+                                                          </KeyValuePairBeginStringAndObjectEnd>
+                                                          <KeyValuePairBeginStringAndObjectEnd>
+                                                            <key>B</key>
+                                                            <value>
+                                                              <Type type="string">byte</Type>
+                                                              <Value type="byte">51</Value>
+                                                            </value>
+                                                          </KeyValuePairBeginStringAndObjectEnd>
+                                                        </Value>
+                                                      </value>
+                                                    </KeyValuePairBeginStringAndObjectEnd>
+                                                    <KeyValuePairBeginStringAndObjectEnd>
+                                                      <key>Timeframe2Color</key>
+                                                      <value>
+                                                        <Type type="string">Ecng.Serialization.SettingsStorage, Ecng.Serialization</Type>
+                                                        <Value type="Ecng.Serialization.SettingsStorage, Ecng.Serialization">
+                                                          <KeyValuePairBeginStringAndObjectEnd>
+                                                            <key>A</key>
+                                                            <value>
+                                                              <Type type="string">byte</Type>
+                                                              <Value type="byte">255</Value>
+                                                            </value>
+                                                          </KeyValuePairBeginStringAndObjectEnd>
+                                                          <KeyValuePairBeginStringAndObjectEnd>
+                                                            <key>R</key>
+                                                            <value>
+                                                              <Type type="string">byte</Type>
+                                                              <Value type="byte">221</Value>
+                                                            </value>
+                                                          </KeyValuePairBeginStringAndObjectEnd>
+                                                          <KeyValuePairBeginStringAndObjectEnd>
+                                                            <key>G</key>
+                                                            <value>
+                                                              <Type type="string">byte</Type>
+                                                              <Value type="byte">221</Value>
+                                                            </value>
+                                                          </KeyValuePairBeginStringAndObjectEnd>
+                                                          <KeyValuePairBeginStringAndObjectEnd>
+                                                            <key>B</key>
+                                                            <value>
+                                                              <Type type="string">byte</Type>
+                                                              <Value type="byte">221</Value>
+                                                            </value>
+                                                          </KeyValuePairBeginStringAndObjectEnd>
+                                                        </Value>
+                                                      </value>
+                                                    </KeyValuePairBeginStringAndObjectEnd>
+                                                    <KeyValuePairBeginStringAndObjectEnd>
+                                                      <key>Timeframe2FrameColor</key>
+                                                      <value>
+                                                        <Type type="string">Ecng.Serialization.SettingsStorage, Ecng.Serialization</Type>
+                                                        <Value type="Ecng.Serialization.SettingsStorage, Ecng.Serialization">
+                                                          <KeyValuePairBeginStringAndObjectEnd>
+                                                            <key>A</key>
+                                                            <value>
+                                                              <Type type="string">byte</Type>
+                                                              <Value type="byte">255</Value>
+                                                            </value>
+                                                          </KeyValuePairBeginStringAndObjectEnd>
+                                                          <KeyValuePairBeginStringAndObjectEnd>
+                                                            <key>R</key>
+                                                            <value>
+                                                              <Type type="string">byte</Type>
+                                                              <Value type="byte">255</Value>
+                                                            </value>
+                                                          </KeyValuePairBeginStringAndObjectEnd>
+                                                          <KeyValuePairBeginStringAndObjectEnd>
+                                                            <key>G</key>
+                                                            <value>
+                                                              <Type type="string">byte</Type>
+                                                              <Value type="byte">85</Value>
+                                                            </value>
+                                                          </KeyValuePairBeginStringAndObjectEnd>
+                                                          <KeyValuePairBeginStringAndObjectEnd>
+                                                            <key>B</key>
+                                                            <value>
+                                                              <Type type="string">byte</Type>
+                                                              <Value type="byte">85</Value>
+                                                            </value>
+                                                          </KeyValuePairBeginStringAndObjectEnd>
+                                                        </Value>
+                                                      </value>
+                                                    </KeyValuePairBeginStringAndObjectEnd>
+                                                    <KeyValuePairBeginStringAndObjectEnd>
+                                                      <key>Timeframe3Color</key>
+                                                      <value>
+                                                        <Type type="string">Ecng.Serialization.SettingsStorage, Ecng.Serialization</Type>
+                                                        <Value type="Ecng.Serialization.SettingsStorage, Ecng.Serialization">
+                                                          <KeyValuePairBeginStringAndObjectEnd>
+                                                            <key>A</key>
+                                                            <value>
+                                                              <Type type="string">byte</Type>
+                                                              <Value type="byte">255</Value>
+                                                            </value>
+                                                          </KeyValuePairBeginStringAndObjectEnd>
+                                                          <KeyValuePairBeginStringAndObjectEnd>
+                                                            <key>R</key>
+                                                            <value>
+                                                              <Type type="string">byte</Type>
+                                                              <Value type="byte">170</Value>
+                                                            </value>
+                                                          </KeyValuePairBeginStringAndObjectEnd>
+                                                          <KeyValuePairBeginStringAndObjectEnd>
+                                                            <key>G</key>
+                                                            <value>
+                                                              <Type type="string">byte</Type>
+                                                              <Value type="byte">170</Value>
+                                                            </value>
+                                                          </KeyValuePairBeginStringAndObjectEnd>
+                                                          <KeyValuePairBeginStringAndObjectEnd>
+                                                            <key>B</key>
+                                                            <value>
+                                                              <Type type="string">byte</Type>
+                                                              <Value type="byte">170</Value>
+                                                            </value>
+                                                          </KeyValuePairBeginStringAndObjectEnd>
+                                                        </Value>
+                                                      </value>
+                                                    </KeyValuePairBeginStringAndObjectEnd>
+                                                    <KeyValuePairBeginStringAndObjectEnd>
+                                                      <key>MaxVolumeColor</key>
+                                                      <value>
+                                                        <Type type="string">Ecng.Serialization.SettingsStorage, Ecng.Serialization</Type>
+                                                        <Value type="Ecng.Serialization.SettingsStorage, Ecng.Serialization">
+                                                          <KeyValuePairBeginStringAndObjectEnd>
+                                                            <key>A</key>
+                                                            <value>
+                                                              <Type type="string">byte</Type>
+                                                              <Value type="byte">255</Value>
+                                                            </value>
+                                                          </KeyValuePairBeginStringAndObjectEnd>
+                                                          <KeyValuePairBeginStringAndObjectEnd>
+                                                            <key>R</key>
+                                                            <value>
+                                                              <Type type="string">byte</Type>
+                                                              <Value type="byte">255</Value>
+                                                            </value>
+                                                          </KeyValuePairBeginStringAndObjectEnd>
+                                                          <KeyValuePairBeginStringAndObjectEnd>
+                                                            <key>G</key>
+                                                            <value>
+                                                              <Type type="string">byte</Type>
+                                                              <Value type="byte">0</Value>
+                                                            </value>
+                                                          </KeyValuePairBeginStringAndObjectEnd>
+                                                          <KeyValuePairBeginStringAndObjectEnd>
+                                                            <key>B</key>
+                                                            <value>
+                                                              <Type type="string">byte</Type>
+                                                              <Value type="byte">0</Value>
+                                                            </value>
+                                                          </KeyValuePairBeginStringAndObjectEnd>
+                                                        </Value>
+                                                      </value>
+                                                    </KeyValuePairBeginStringAndObjectEnd>
+                                                    <KeyValuePairBeginStringAndObjectEnd>
+                                                      <key>ClusterLineColor</key>
+                                                      <value>
+                                                        <Type type="string">Ecng.Serialization.SettingsStorage, Ecng.Serialization</Type>
+                                                        <Value type="Ecng.Serialization.SettingsStorage, Ecng.Serialization">
+                                                          <KeyValuePairBeginStringAndObjectEnd>
+                                                            <key>A</key>
+                                                            <value>
+                                                              <Type type="string">byte</Type>
+                                                              <Value type="byte">255</Value>
+                                                            </value>
+                                                          </KeyValuePairBeginStringAndObjectEnd>
+                                                          <KeyValuePairBeginStringAndObjectEnd>
+                                                            <key>R</key>
+                                                            <value>
+                                                              <Type type="string">byte</Type>
+                                                              <Value type="byte">170</Value>
+                                                            </value>
+                                                          </KeyValuePairBeginStringAndObjectEnd>
+                                                          <KeyValuePairBeginStringAndObjectEnd>
+                                                            <key>G</key>
+                                                            <value>
+                                                              <Type type="string">byte</Type>
+                                                              <Value type="byte">170</Value>
+                                                            </value>
+                                                          </KeyValuePairBeginStringAndObjectEnd>
+                                                          <KeyValuePairBeginStringAndObjectEnd>
+                                                            <key>B</key>
+                                                            <value>
+                                                              <Type type="string">byte</Type>
+                                                              <Value type="byte">170</Value>
+                                                            </value>
+                                                          </KeyValuePairBeginStringAndObjectEnd>
+                                                        </Value>
+                                                      </value>
+                                                    </KeyValuePairBeginStringAndObjectEnd>
+                                                    <KeyValuePairBeginStringAndObjectEnd>
+                                                      <key>ClusterTextColor</key>
+                                                      <value>
+                                                        <Type type="string">Ecng.Serialization.SettingsStorage, Ecng.Serialization</Type>
+                                                        <Value type="Ecng.Serialization.SettingsStorage, Ecng.Serialization">
+                                                          <KeyValuePairBeginStringAndObjectEnd>
+                                                            <key>A</key>
+                                                            <value>
+                                                              <Type type="string">byte</Type>
+                                                              <Value type="byte">255</Value>
+                                                            </value>
+                                                          </KeyValuePairBeginStringAndObjectEnd>
+                                                          <KeyValuePairBeginStringAndObjectEnd>
+                                                            <key>R</key>
+                                                            <value>
+                                                              <Type type="string">byte</Type>
+                                                              <Value type="byte">51</Value>
+                                                            </value>
+                                                          </KeyValuePairBeginStringAndObjectEnd>
+                                                          <KeyValuePairBeginStringAndObjectEnd>
+                                                            <key>G</key>
+                                                            <value>
+                                                              <Type type="string">byte</Type>
+                                                              <Value type="byte">51</Value>
+                                                            </value>
+                                                          </KeyValuePairBeginStringAndObjectEnd>
+                                                          <KeyValuePairBeginStringAndObjectEnd>
+                                                            <key>B</key>
+                                                            <value>
+                                                              <Type type="string">byte</Type>
+                                                              <Value type="byte">51</Value>
+                                                            </value>
+                                                          </KeyValuePairBeginStringAndObjectEnd>
+                                                        </Value>
+                                                      </value>
+                                                    </KeyValuePairBeginStringAndObjectEnd>
+                                                    <KeyValuePairBeginStringAndObjectEnd>
+                                                      <key>ClusterColor</key>
+                                                      <value>
+                                                        <Type type="string">Ecng.Serialization.SettingsStorage, Ecng.Serialization</Type>
+                                                        <Value type="Ecng.Serialization.SettingsStorage, Ecng.Serialization">
+                                                          <KeyValuePairBeginStringAndObjectEnd>
+                                                            <key>A</key>
+                                                            <value>
+                                                              <Type type="string">byte</Type>
+                                                              <Value type="byte">255</Value>
+                                                            </value>
+                                                          </KeyValuePairBeginStringAndObjectEnd>
+                                                          <KeyValuePairBeginStringAndObjectEnd>
+                                                            <key>R</key>
+                                                            <value>
+                                                              <Type type="string">byte</Type>
+                                                              <Value type="byte">136</Value>
+                                                            </value>
+                                                          </KeyValuePairBeginStringAndObjectEnd>
+                                                          <KeyValuePairBeginStringAndObjectEnd>
+                                                            <key>G</key>
+                                                            <value>
+                                                              <Type type="string">byte</Type>
+                                                              <Value type="byte">136</Value>
+                                                            </value>
+                                                          </KeyValuePairBeginStringAndObjectEnd>
+                                                          <KeyValuePairBeginStringAndObjectEnd>
+                                                            <key>B</key>
+                                                            <value>
+                                                              <Type type="string">byte</Type>
+                                                              <Value type="byte">136</Value>
+                                                            </value>
+                                                          </KeyValuePairBeginStringAndObjectEnd>
+                                                        </Value>
+                                                      </value>
+                                                    </KeyValuePairBeginStringAndObjectEnd>
+                                                    <KeyValuePairBeginStringAndObjectEnd>
+                                                      <key>ClusterMaxColor</key>
+                                                      <value>
+                                                        <Type type="string">Ecng.Serialization.SettingsStorage, Ecng.Serialization</Type>
+                                                        <Value type="Ecng.Serialization.SettingsStorage, Ecng.Serialization">
+                                                          <KeyValuePairBeginStringAndObjectEnd>
+                                                            <key>A</key>
+                                                            <value>
+                                                              <Type type="string">byte</Type>
+                                                              <Value type="byte">255</Value>
+                                                            </value>
+                                                          </KeyValuePairBeginStringAndObjectEnd>
+                                                          <KeyValuePairBeginStringAndObjectEnd>
+                                                            <key>R</key>
+                                                            <value>
+                                                              <Type type="string">byte</Type>
+                                                              <Value type="byte">255</Value>
+                                                            </value>
+                                                          </KeyValuePairBeginStringAndObjectEnd>
+                                                          <KeyValuePairBeginStringAndObjectEnd>
+                                                            <key>G</key>
+                                                            <value>
+                                                              <Type type="string">byte</Type>
+                                                              <Value type="byte">0</Value>
+                                                            </value>
+                                                          </KeyValuePairBeginStringAndObjectEnd>
+                                                          <KeyValuePairBeginStringAndObjectEnd>
+                                                            <key>B</key>
+                                                            <value>
+                                                              <Type type="string">byte</Type>
+                                                              <Value type="byte">0</Value>
+                                                            </value>
+                                                          </KeyValuePairBeginStringAndObjectEnd>
+                                                        </Value>
+                                                      </value>
+                                                    </KeyValuePairBeginStringAndObjectEnd>
+                                                    <KeyValuePairBeginStringAndObjectEnd>
+                                                      <key>ShowHorizontalVolumes</key>
+                                                      <value>
+                                                        <Type type="string">bool</Type>
+                                                        <Value type="bool">True</Value>
+                                                      </value>
+                                                    </KeyValuePairBeginStringAndObjectEnd>
+                                                    <KeyValuePairBeginStringAndObjectEnd>
+                                                      <key>LocalHorizontalVolumes</key>
+                                                      <value>
+                                                        <Type type="string">bool</Type>
+                                                        <Value type="bool">True</Value>
+                                                      </value>
+                                                    </KeyValuePairBeginStringAndObjectEnd>
+                                                    <KeyValuePairBeginStringAndObjectEnd>
+                                                      <key>HorizontalVolumeWidthFraction</key>
+                                                      <value>
+                                                        <Type type="string">double</Type>
+                                                        <Value type="double">0.15</Value>
+                                                      </value>
+                                                    </KeyValuePairBeginStringAndObjectEnd>
+                                                    <KeyValuePairBeginStringAndObjectEnd>
+                                                      <key>HorizontalVolumeColor</key>
+                                                      <value>
+                                                        <Type type="string">Ecng.Serialization.SettingsStorage, Ecng.Serialization</Type>
+                                                        <Value type="Ecng.Serialization.SettingsStorage, Ecng.Serialization">
+                                                          <KeyValuePairBeginStringAndObjectEnd>
+                                                            <key>A</key>
+                                                            <value>
+                                                              <Type type="string">byte</Type>
+                                                              <Value type="byte">128</Value>
+                                                            </value>
+                                                          </KeyValuePairBeginStringAndObjectEnd>
+                                                          <KeyValuePairBeginStringAndObjectEnd>
+                                                            <key>R</key>
+                                                            <value>
+                                                              <Type type="string">byte</Type>
+                                                              <Value type="byte">0</Value>
+                                                            </value>
+                                                          </KeyValuePairBeginStringAndObjectEnd>
+                                                          <KeyValuePairBeginStringAndObjectEnd>
+                                                            <key>G</key>
+                                                            <value>
+                                                              <Type type="string">byte</Type>
+                                                              <Value type="byte">100</Value>
+                                                            </value>
+                                                          </KeyValuePairBeginStringAndObjectEnd>
+                                                          <KeyValuePairBeginStringAndObjectEnd>
+                                                            <key>B</key>
+                                                            <value>
+                                                              <Type type="string">byte</Type>
+                                                              <Value type="byte">0</Value>
+                                                            </value>
+                                                          </KeyValuePairBeginStringAndObjectEnd>
+                                                        </Value>
+                                                      </value>
+                                                    </KeyValuePairBeginStringAndObjectEnd>
+                                                    <KeyValuePairBeginStringAndObjectEnd>
+                                                      <key>HorizontalVolumeFontColor</key>
+                                                      <value>
+                                                        <Type type="string">Ecng.Serialization.SettingsStorage, Ecng.Serialization</Type>
+                                                        <Value type="Ecng.Serialization.SettingsStorage, Ecng.Serialization">
+                                                          <KeyValuePairBeginStringAndObjectEnd>
+                                                            <key>A</key>
+                                                            <value>
+                                                              <Type type="string">byte</Type>
+                                                              <Value type="byte">255</Value>
+                                                            </value>
+                                                          </KeyValuePairBeginStringAndObjectEnd>
+                                                          <KeyValuePairBeginStringAndObjectEnd>
+                                                            <key>R</key>
+                                                            <value>
+                                                              <Type type="string">byte</Type>
+                                                              <Value type="byte">0</Value>
+                                                            </value>
+                                                          </KeyValuePairBeginStringAndObjectEnd>
+                                                          <KeyValuePairBeginStringAndObjectEnd>
+                                                            <key>G</key>
+                                                            <value>
+                                                              <Type type="string">byte</Type>
+                                                              <Value type="byte">100</Value>
+                                                            </value>
+                                                          </KeyValuePairBeginStringAndObjectEnd>
+                                                          <KeyValuePairBeginStringAndObjectEnd>
+                                                            <key>B</key>
+                                                            <value>
+                                                              <Type type="string">byte</Type>
+                                                              <Value type="byte">0</Value>
+                                                            </value>
+                                                          </KeyValuePairBeginStringAndObjectEnd>
+                                                        </Value>
+                                                      </value>
+                                                    </KeyValuePairBeginStringAndObjectEnd>
+                                                  </Value>
                                                 </value>
                                               </KeyValuePairBeginStringAndObjectEnd>
                                             </Value>

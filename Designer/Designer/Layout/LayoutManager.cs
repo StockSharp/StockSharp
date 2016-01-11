@@ -49,6 +49,7 @@ namespace StockSharp.Designer.Layout
 		private Timer _flushTimer;
 		private bool _isFlushing;
 		private bool _isLayoutChanged;
+		private bool _isDisposing;
 		private string _layout;
 
 		private IEnumerable<LayoutDocumentPane> TabGroups => DockingManager.Layout.Descendents().OfType<LayoutDocumentPane>().ToArray();
@@ -103,7 +104,7 @@ namespace StockSharp.Designer.Layout
 			{
 				anchorable = new LayoutAnchorable
 				{
-					ContentId = key.ToString(),
+					ContentId = key,
 					Title = title,
 					Content = content,
 					CanClose = canClose
@@ -329,6 +330,16 @@ namespace StockSharp.Designer.Layout
 			return builder.ToString();
 		}
 
+		protected override void DisposeManaged()
+		{
+			_isDisposing = true;
+
+			Save(DockingControls, true);
+			Changed.SafeInvoke();
+
+			base.DisposeManaged();
+		}
+
 		private void OnDockingManagerLayoutChanged(object sender, EventArgs e)
 		{
 			if (DockingManager.Layout == null)
@@ -394,7 +405,7 @@ namespace StockSharp.Designer.Layout
 
 			lock (_syncRoot)
 			{
-				if (_isFlushing)
+				if (_isFlushing || _isDisposing)
 					return;
 
 				isLayoutChanged = _isLayoutChanged;
@@ -410,14 +421,10 @@ namespace StockSharp.Designer.Layout
 				{
 					GuiDispatcher.GlobalDispatcher.AddSyncAction(() =>
 					{
-						CultureInfo.InvariantCulture.DoInCulture(() =>
-						{
-							foreach (var control in items)
-								_dockingControlSettings[control] = control.Save();
+						if (_isDisposing)
+							return;
 
-							if (isLayoutChanged)
-								_layout = SaveLayout();
-						});
+						Save(items, isLayoutChanged);
 					});
 
 					Changed.SafeInvoke();
@@ -441,8 +448,26 @@ namespace StockSharp.Designer.Layout
 			finally
 			{
 				lock (_syncRoot)
-				_isFlushing = false;
+					_isFlushing = false;
 			}
+		}
+
+		private void Save(IEnumerable<DockingControl> items, bool isLayoutChanged)
+		{
+			CultureInfo.InvariantCulture.DoInCulture(() =>
+			{
+				foreach (var control in items)
+				{
+					var storage = new SettingsStorage();
+					storage.SetValue("ControlType", control.GetType().GetTypeName(false));
+					control.Save(storage);
+
+					_dockingControlSettings[control] = storage;
+				}
+
+				if (isLayoutChanged)
+					_layout = SaveLayout();
+			});
 		}
 
 		private static DockingControl LoadDockingControl(SettingsStorage settings)
