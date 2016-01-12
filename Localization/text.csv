@@ -3780,6 +3780,7 @@ Window;Window;Окно
 XamlStr387;End time;Окончание работы
 OrderLogOf;OL;ОЛ
 OnlineDoc;Online documentation;Онлайн документация
+IsSupportAtomicReRegister;Atomic reregister;Атомарная перерегистрация
 XamlStr391;Description of the source and its data;Описание источника и получаемых данных
 XamlStr392;Task description:;Описание источника:
 XamlStr394;Optimize;Оптимизировать

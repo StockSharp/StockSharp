@@ -54268,5 +54268,18 @@ namespace StockSharp.Localization
 		{
 			get { return GetString(RefreshSchemeKey); }
 		}
+
+		/// <summary>
+		/// Atomic reregister
+		/// </summary>
+		public const string IsSupportAtomicReRegisterKey = "IsSupportAtomicReRegister";
+
+		/// <summary>
+		/// Atomic reregister
+		/// </summary>
+		public static string IsSupportAtomicReRegister
+		{
+			get { return GetString(IsSupportAtomicReRegisterKey); }
+		}
 	}
 }
