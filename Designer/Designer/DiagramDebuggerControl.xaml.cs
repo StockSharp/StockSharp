@@ -24,12 +24,16 @@ namespace StockSharp.Designer
 	using Ecng.Serialization;
 	using Ecng.Xaml;
 
+	using StockSharp.Algo;
+	using StockSharp.Algo.Strategies;
 	using StockSharp.Designer.Layout;
 	using StockSharp.Xaml.Diagram;
 
 	public partial class DiagramDebuggerControl : IPersistable
 	{
 		private readonly LayoutManager _layoutManager;
+
+		#region Strategy
 
 		public static readonly DependencyProperty StrategyProperty = DependencyProperty.Register("Strategy", typeof(DiagramStrategy), typeof(DiagramDebuggerControl),
 			new PropertyMetadata(null, OnStrategyPropertyChanged));
@@ -44,6 +48,8 @@ namespace StockSharp.Designer
 			get { return (DiagramStrategy)GetValue(StrategyProperty); }
 			set { SetValue(StrategyProperty, value); }
 		}
+
+		#endregion
 
 		public DiagramDebugger Debugger { get; private set; }
 
@@ -65,7 +71,7 @@ namespace StockSharp.Designer
 		{
 			InitializeCommands();
             InitializeComponent();
-
+			
 			_layoutManager = new LayoutManager(DockingManager);
 		}
 
@@ -124,6 +130,7 @@ namespace StockSharp.Designer
 			if (strategy != null)
 			{
 				strategy.PropertyChanged += OnStrategyPropertyChanged;
+				strategy.ProcessStateChanged += OnStrategyProcessStateChanged;
 
 				var composition = strategy.Composition;
 
@@ -150,6 +157,15 @@ namespace StockSharp.Designer
 		private void OnStrategyPropertyChanged(object sender, PropertyChangedEventArgs e)
 		{
 			//Changed.SafeInvoke();
+		}
+
+		private void OnStrategyProcessStateChanged(Strategy strategy)
+		{
+			this.GuiAsync(() =>
+			{
+				if (PropertyGridControl.SelectedObject == strategy)
+					PropertyGridControl.IsReadOnly = strategy.ProcessState != ProcessStates.Stopped;
+			});
 		}
 
 		private void OnDebuggerBreak(DiagramSocket socket)
@@ -181,7 +197,7 @@ namespace StockSharp.Designer
 			else
 			{
 				PropertyGridControl.SelectedObject = Strategy;
-				PropertyGridControl.IsReadOnly = false;
+				PropertyGridControl.IsReadOnly = Strategy.ProcessState != ProcessStates.Stopped;
 			}
 		}
 

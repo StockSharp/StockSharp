@@ -34,7 +34,7 @@
                 <xcad:LayoutAnchorablePaneGroup DockWidth="2*">
                     <xcad:LayoutAnchorablePane>
                         <xcad:LayoutAnchorable ContentId="PropertyGridControl" Title="{x:Static localization:LocalizedStrings.Str1507}" CanClose="False">
-                            <diagram:PropertyGridEx x:Name="PropertyGridControl" 
+                            <diagram:PropertyGridEx x:Name="PropertyGridControl"
 													ShowAdvancedOptions="False" ShowDescriptionByTooltip="False" ShowPreview="False" ShowSearchBox="False"
 													ShowSortOptions="False" ShowSummary="True" ShowTitle="False"/>
                         </xcad:LayoutAnchorable>

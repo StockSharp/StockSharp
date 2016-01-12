@@ -63,7 +63,7 @@
 
 		public ICommand StopCommand { get; protected set; }
 
-		public ICommand RefreshCompositionCommand { get; private set; }
+		public ICommand RefreshCompositionCommand { get; protected set; }
 
 		public ICommand AddBreakpointCommand => DiagramDebuggerControl.AddBreakpointCommand;
 
@@ -89,8 +89,6 @@
 			_commissionCurve = Curve.CreateCurve(LocalizedStrings.Str159, Colors.Red, EquityCurveChartStyles.DashedLine);
 
 			_posItems = PositionCurve.CreateCurve(LocalizedStrings.Str862, Colors.DarkGreen);
-
-			RefreshCompositionCommand = new DelegateCommand(obj => Load(this.Save()));
 		}
 
 		protected void Reset()
@@ -239,6 +237,10 @@
 
 		private void InitializeCommands()
 		{
+			RefreshCompositionCommand = new DelegateCommand(
+				obj => Load(this.Save()),
+				obj => Strategy != null && Strategy.ProcessState == ProcessStates.Stopped);
+
 			StartCommand = new DelegateCommand(
 				obj =>
 				{
@@ -316,6 +318,10 @@
 
 		private void InitializeCommands()
 		{
+			RefreshCompositionCommand = new DelegateCommand(
+				obj => Load(this.Save()), 
+				obj => _connector == null || _connector.State == EmulationStates.Stopped);
+
 			StartCommand = new DelegateCommand(
 				obj =>
 				{
