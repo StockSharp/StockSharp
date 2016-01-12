@@ -139,7 +139,7 @@
 								   SizeDefinition="Middle"
 								   Icon="pack://application:,,,/Designer;component/Images/Open_32x32.png"
 								   LargeIcon="pack://application:,,,/Designer;component/Images/Open_32x32.png"
-								   
+								   Command="{x:Static local:MainWindow.OpenCommand}"
 								   CommandParameter="{Binding ElementName=SolutionExplorer, Path=SelectedItem}" />
                     <fluent:Button Header="{x:Static localization:LocalizedStrings.Str2060}"
 								   SizeDefinition="Middle"

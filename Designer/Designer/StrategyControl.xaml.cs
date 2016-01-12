@@ -111,6 +111,8 @@
 					.Sources
 					.Remove(oldStrategy);
 
+				oldStrategy.Composition = null;
+
 				oldStrategy.ParametersChanged -= RaiseChanged;
 
 				oldStrategy.OrderRegistering += OnStrategyOrderRegistering;
@@ -282,11 +284,14 @@
 			var registry = ConfigManager.GetService<StrategiesRegistry>();
 			var composition = (CompositionDiagramElement)registry.Strategies.FirstOrDefault(c => c.TypeId == compositionId);
 
-			Strategy = new DiagramStrategy
+			var strategy = new DiagramStrategy
 			{
 				Id = storage.GetValue<Guid>("StrategyId"),
 				Composition = registry.Clone(composition)
 			};
+			strategy.Load(storage);
+
+			Strategy = strategy;
 
 			base.Load(storage);
 		}
@@ -297,6 +302,8 @@
 			{
 				storage.SetValue("CompositionId", Strategy.Composition.TypeId);
 				storage.SetValue("StrategyId", Strategy.Id);
+
+				Strategy.Save(storage);
 			}
 
 			base.Save(storage);
