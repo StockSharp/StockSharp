@@ -54270,6 +54270,32 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
+		/// Labels format (intraday)
+		/// </summary>
+		public const string LabelsFormatIntradayKey = "LabelsFormatIntraday";
+
+		/// <summary>
+		/// Labels format (intraday)
+		/// </summary>
+		public static string LabelsFormatIntraday
+		{
+			get { return GetString(LabelsFormatIntradayKey); }
+		}
+
+		/// <summary>
+		/// The format of X-axis labels within the day
+		/// </summary>
+		public const string LabelsFormatIntradayDescKey = "LabelsFormatIntradayDesc";
+
+		/// <summary>
+		/// The format of X-axis labels within the day
+		/// </summary>
+		public static string LabelsFormatIntradayDesc
+		{
+			get { return GetString(LabelsFormatIntradayDescKey); }
+		}
+
+		/// <summary>
 		/// Atomic reregister
 		/// </summary>
 		public const string IsSupportAtomicReRegisterKey = "IsSupportAtomicReRegister";

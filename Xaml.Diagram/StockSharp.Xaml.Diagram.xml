@@ -2187,6 +2187,11 @@
             The method is called when the data type is changed.
             </summary>
     </member>
+    <member name="M:StockSharp.Xaml.Diagram.Elements.VariableDiagramElement.OnReseted">
+      <summary>
+            The method is called at re-initialisation of the diagram element state.
+            </summary>
+    </member>
     <member name="M:StockSharp.Xaml.Diagram.Elements.VariableDiagramElement.OnStart">
       <summary>
             The method is called at the start of the diagram element algorithm.
