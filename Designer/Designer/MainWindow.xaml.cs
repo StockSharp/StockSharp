@@ -56,6 +56,7 @@ namespace StockSharp.Designer
 		public static RoutedCommand ExecuteStrategyCommand = new RoutedCommand();
 		public static RoutedCommand ConnectorSettingsCommand = new RoutedCommand();
 		public static RoutedCommand ConnectDisconnectCommand = new RoutedCommand();
+		public static RoutedCommand RefreshCompositionCommand = new RoutedCommand();
 
 		private readonly string _settingsFile;
 		private readonly StrategiesRegistry _strategiesRegistry;
@@ -410,6 +411,22 @@ namespace StockSharp.Designer
 			}
 			else
 				_connector.Disconnect();
+		}
+
+		private void RefreshCompositionCommand_OnCanExecute(object sender, CanExecuteRoutedEventArgs e)
+		{
+			e.CanExecute = true;
+		}
+
+		private void RefreshCompositionCommand_OnExecuted(object sender, ExecutedRoutedEventArgs e)
+		{
+			var diagramEditor = (DiagramEditorControl)DockingManager.ActiveContent;
+			var composition = diagramEditor.Composition;
+
+			_strategiesRegistry.Reload(composition);
+
+			diagramEditor.Composition = null;
+			diagramEditor.Composition = composition;
 		}
 
 		#endregion

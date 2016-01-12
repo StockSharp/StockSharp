@@ -132,7 +132,22 @@ namespace StockSharp.Designer
 
 			var path = isComposition ? _compositionsPath : _strategiesPath;
 			var file = Path.Combine(path, element.GetFileName());
-			var settings = _serializer.Deserialize(file);
+			var settings = CultureInfo.InvariantCulture.DoInCulture(() => _serializer.Deserialize(file));
+
+			_compositionRegistry.Load(element, settings);
+		}
+
+		public void Reload(CompositionItem element)
+		{
+			Reload(element.Element, element.Type == CompositionType.Composition);
+		}
+
+		public void Reload(CompositionDiagramElement element, bool isComposition)
+		{
+			if (element == null)
+				throw new ArgumentNullException(nameof(element));
+
+			var settings = _compositionRegistry.Serialize(element);
 
 			_compositionRegistry.Load(element, settings);
 		}
