@@ -179,18 +179,25 @@ namespace StockSharp.Designer
 
 			if (!layout.IsEmpty())
 				_layoutManager.LoadLayout(layout);
+
+			var diagramEditor = storage.GetValue<SettingsStorage>("DiagramEditor");
+
+			if (diagramEditor != null)
+				DiagramEditor.Load(diagramEditor);
 		}
 
 		public override void Save(SettingsStorage storage)
 		{
 			base.Save(storage);
 
-			if (Composition == null)
-				return;
-
-			storage.SetValue("CompositionType", Composition.Type);
-			storage.SetValue("CompositionId", Composition.Element.TypeId);
+			if (Composition != null)
+			{
+				storage.SetValue("CompositionType", Composition.Type);
+				storage.SetValue("CompositionId", Composition.Element.TypeId);
+			}
+			
 			storage.SetValue("Layout", _layoutManager.SaveLayout());
+			storage.SetValue("DiagramEditor", DiagramEditor.Save());
 		}
 
 		#endregion

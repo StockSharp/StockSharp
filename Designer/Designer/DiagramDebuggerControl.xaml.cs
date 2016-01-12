@@ -203,6 +203,11 @@ namespace StockSharp.Designer
 
 			if (!layout.IsEmpty())
 				_layoutManager.LoadLayout(layout);
+
+			var diagramEditor = storage.GetValue<SettingsStorage>("DiagramEditor");
+
+			if (diagramEditor != null)
+				DiagramEditor.Load(diagramEditor);
 		}
 
 		public void Save(SettingsStorage storage)
@@ -210,6 +215,7 @@ namespace StockSharp.Designer
 			Debugger.Save(storage);
 
 			storage.SetValue("Layout", _layoutManager.SaveLayout());
+			storage.SetValue("DiagramEditor", DiagramEditor.Save());
 		}
 
 		#endregion
