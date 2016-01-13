@@ -53,7 +53,7 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>..\..\References\stocksharp.ico</ApplicationIcon>
+    <ApplicationIcon>Resources\stocksharp.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Ecng.Collections">
@@ -100,6 +100,7 @@
     <Reference Include="System.configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Xaml">
       <RequiredTargetFramework>4.0</RequiredTargetFramework>
     </Reference>
@@ -238,12 +239,10 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="..\..\References\stocksharp.ico">
-      <Link>stocksharp.ico</Link>
-    </Resource>
+    <Folder Include="Images\" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Images\" />
+    <None Include="Resources\stocksharp.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
