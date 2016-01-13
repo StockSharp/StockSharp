@@ -84,9 +84,9 @@
 			_bufferedChart = new BufferedChart(Chart);
 			_layoutManager = new LayoutManager(DockingManager);
 
-			_pnlCurve = Curve.CreateCurve(LocalizedStrings.PnL, Colors.DarkGreen, EquityCurveChartStyles.Area);
-			_unrealizedPnLCurve = Curve.CreateCurve(LocalizedStrings.PnLUnreal, Colors.Black);
-			_commissionCurve = Curve.CreateCurve(LocalizedStrings.Str159, Colors.Red, EquityCurveChartStyles.DashedLine);
+			_pnlCurve = EquityCurve.CreateCurve(LocalizedStrings.PnL, Colors.DarkGreen, EquityCurveChartStyles.Area);
+			_unrealizedPnLCurve = EquityCurve.CreateCurve(LocalizedStrings.PnLUnreal, Colors.Black);
+			_commissionCurve = EquityCurve.CreateCurve(LocalizedStrings.Str159, Colors.Red, EquityCurveChartStyles.DashedLine);
 
 			_posItems = PositionCurve.CreateCurve(LocalizedStrings.Str862, Colors.DarkGreen);
 		}
@@ -106,6 +106,8 @@
 		{
 			if (oldStrategy != null)
 			{
+				StatisticsGrid.StatisticManager = null;
+
 				ConfigManager
 					.GetService<LogManager>()
 					.Sources
@@ -130,6 +132,8 @@
 
 			if (newStrategy == null)
 				return;
+
+			StatisticsGrid.StatisticManager = newStrategy.StatisticManager;
 
 			ConfigManager
 				.GetService<LogManager>()
