@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
-VisualStudioVersion = 12.0.40629.0
+# Visual Studio 14
+VisualStudioVersion = 14.0.24720.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Studio", "Studio", "{94F4AEEF-8A62-4B92-ABBD-0D9DEFD012FB}"
 EndProject
@@ -66,6 +66,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xaml.ActiproPublic", "..\Xaml.Actipro\Xaml.ActiproPublic.csproj", "{D556FA3F-E40E-4F76-B3CA-B18134247FD1}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConfigurationPublic", "..\Configuration\ConfigurationPublic.csproj", "{2CFF1903-4EF5-46F8-AB5D-BB623CA75CE6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rithmic", "..\Connectors\Rithmic\Rithmic.csproj", "{FFBC7740-0D2B-49BA-8F95-59E4FC915D06}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -321,6 +323,18 @@ Global
 		{2CFF1903-4EF5-46F8-AB5D-BB623CA75CE6}.Release|Any CPU.Build.0 = Release|Any CPU
 		{2CFF1903-4EF5-46F8-AB5D-BB623CA75CE6}.Release|x64.ActiveCfg = Release|Any CPU
 		{2CFF1903-4EF5-46F8-AB5D-BB623CA75CE6}.Release|x86.ActiveCfg = Release|Any CPU
+		{FFBC7740-0D2B-49BA-8F95-59E4FC915D06}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FFBC7740-0D2B-49BA-8F95-59E4FC915D06}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FFBC7740-0D2B-49BA-8F95-59E4FC915D06}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{FFBC7740-0D2B-49BA-8F95-59E4FC915D06}.Debug|x64.Build.0 = Debug|Any CPU
+		{FFBC7740-0D2B-49BA-8F95-59E4FC915D06}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{FFBC7740-0D2B-49BA-8F95-59E4FC915D06}.Debug|x86.Build.0 = Debug|Any CPU
+		{FFBC7740-0D2B-49BA-8F95-59E4FC915D06}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FFBC7740-0D2B-49BA-8F95-59E4FC915D06}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FFBC7740-0D2B-49BA-8F95-59E4FC915D06}.Release|x64.ActiveCfg = Release|Any CPU
+		{FFBC7740-0D2B-49BA-8F95-59E4FC915D06}.Release|x64.Build.0 = Release|Any CPU
+		{FFBC7740-0D2B-49BA-8F95-59E4FC915D06}.Release|x86.ActiveCfg = Release|Any CPU
+		{FFBC7740-0D2B-49BA-8F95-59E4FC915D06}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -346,5 +360,6 @@ Global
 		{480539A8-CA30-4B87-B038-6AD854DA0C6A} = {5D489038-83D8-4E66-AF9E-C83B432ABFE5}
 		{F3068408-9764-432E-8FB4-596B308EDB4F} = {5D489038-83D8-4E66-AF9E-C83B432ABFE5}
 		{9188D051-7FAA-4CF7-9D93-6D59E2FAEDD0} = {5D489038-83D8-4E66-AF9E-C83B432ABFE5}
+		{FFBC7740-0D2B-49BA-8F95-59E4FC915D06} = {5D489038-83D8-4E66-AF9E-C83B432ABFE5}
 	EndGlobalSection
 EndGlobal
