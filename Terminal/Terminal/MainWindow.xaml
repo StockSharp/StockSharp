@@ -27,7 +27,7 @@
             
         </fluent:Ribbon>
         <StackPanel Orientation="Horizontal">
-            <Button Click="AddDocument" Width="90" Height="25" Content="Add work area" HorizontalAlignment="Left" Margin="10, 5" />
+            <Button Click="BtnAddDocument_Click" Width="90" Height="25" Content="Add work area" HorizontalAlignment="Left" Margin="10, 5" />
             <ComboBox x:Name="NewControlComboBox" Width="100" Height="25" Text="123" SelectionChanged="ComboBox_SelectionChanged">
                 <ComboBoxItem Content="TradesPanel"/>
                 <ComboBoxItem Content="OrdersPanel"/>
@@ -37,6 +37,10 @@
                 <ComboBoxItem Content="PortfoliosPanel"/>
                 <ComboBoxItem Content="CandleChartPanel"/>
             </ComboBox>
+
+            <Button x:Name="SettingsBtn" Width="80" Height="25" Margin="10,0" Content="{x:Static loc:LocalizedStrings.Settings}" Click="SettingsClick" />
+            <Button x:Name="ConnectBtn" Background="LightPink" Width="100" Height="25" Content="{x:Static loc:LocalizedStrings.Connect}" Click="ConnectClick" />
+
         </StackPanel>
         <xcad:DockingManager Grid.Row="1" x:Name="DockingManager" ActiveContentChanged="DockingManager_OnActiveContentChanged">
             <xcad:LayoutRoot>
