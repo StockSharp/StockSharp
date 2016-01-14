@@ -25,18 +25,32 @@ using StockSharp.Terminal.Logics;
 using Xceed.Wpf.AvalonDock.Layout;
 using Xceed.Wpf.AvalonDock;
 using System.Windows.Controls;
+using StockSharp.Algo;
 
 namespace StockSharp.Terminal
 {
 	public partial class MainWindow
 	{
-		public LayoutManager LayoutManager { get; set; }
-
 		private int _countWorkArea = 2;
+		public LayoutManager LayoutManager { get; set; }
+		
+		private bool _isConnected;
+		public readonly Connector Connector;
+
+		private readonly TradesWindow _tradesWindow = new TradesWindow();
+		private readonly OrdersWindow _ordersWindow = new OrdersWindow();
+		private readonly MyTradesWindow _myTradesWindow = new MyTradesWindow();
+		private readonly StopOrderWindow _stopOrdersWindow = new StopOrderWindow();
+		private readonly SecuritiesWindow _securitiesWindow = new SecuritiesWindow();
+		private readonly PortfoliosWindow _portfoliosWindow = new PortfoliosWindow();
+
+		private const string _settingsFile = "connection.xml";
+		public static MainWindow Instance { get; private set; }
 
 		public MainWindow()
 		{
 			InitializeComponent();
+			Instance = this;
 
 			LayoutManager = new LayoutManager(DockingManager);
 
