@@ -244,7 +244,7 @@ namespace StockSharp.Quik.Lua
 			{
 				case MessageTypes.OrderRegister:
 					var regMsg = (OrderRegisterMessage)message;
-					RegisterTransaction(regMsg.CreateRegisterTransaction(_depoNames.TryGetValue(regMsg.PortfolioName), _securityClassInfo), message.Type, regMsg.TransactionId, regMsg.OrderType);
+					RegisterTransaction(regMsg.CreateRegisterTransaction(_depoNames.TryGetValue(regMsg.PortfolioName), _securityClassInfo, SingleSlash), message.Type, regMsg.TransactionId, regMsg.OrderType);
 					break;
 
 				case MessageTypes.OrderReplace:
@@ -327,6 +327,11 @@ namespace StockSharp.Quik.Lua
 			get { return _fixServer.MarketDataSession.IncrementalDepthUpdates; }
 			set { _fixServer.MarketDataSession.IncrementalDepthUpdates = value; }
 		}
+
+		/// <summary>
+		/// https://forum.quik.ru/forum10/topic1218/
+		/// </summary>
+		public bool SingleSlash { get; set; } = true;
 
 		private FileLogListener _prevFileLogListener;
 		private string _logFile;

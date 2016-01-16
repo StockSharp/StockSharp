@@ -4802,26 +4802,6 @@
             Gets a new value of property that changed
             </summary>
         </member>
-        <member name="T:Ecng.Xaml.Charting.Model.DataSeries.SegmentDataSeries.BoxVolumeDataSeries">
-            <summary>
-            Data series for BoxVolume chart
-            </summary>
-        </member>
-        <member name="M:Ecng.Xaml.Charting.Model.DataSeries.SegmentDataSeries.BoxVolumeDataSeries.#ctor(System.Int32,System.Double,System.Boolean)">
-            <summary>
-            Create box volume data series.
-            </summary>
-        </member>
-        <member name="T:Ecng.Xaml.Charting.Model.DataSeries.SegmentDataSeries.ClusterProfileDataSeries">
-            <summary>
-            Data series for ClusterProfile chart
-            </summary>
-        </member>
-        <member name="M:Ecng.Xaml.Charting.Model.DataSeries.SegmentDataSeries.ClusterProfileDataSeries.#ctor(System.Int32,System.Double,System.Boolean)">
-            <summary>
-            Create box volume data series.
-            </summary>
-        </member>
         <member name="T:Ecng.Xaml.Charting.Model.DataSeries.SegmentDataSeries.TimeframeSegmentDataSeries">
             <summary>
             base class for segmented data series
@@ -4881,16 +4861,6 @@
             Resumes updates on the target, intended to be called by IUpdateSuspender
             </summary>
             <param name="suspender"></param>
-        </member>
-        <member name="T:Ecng.Xaml.Charting.Model.DataSeries.SegmentDataSeries.TimeframeSegmentDataSeries`2">
-            <summary>
-            base class for segmented data series
-            </summary>
-        </member>
-        <member name="M:Ecng.Xaml.Charting.Model.DataSeries.SegmentDataSeries.TimeframeSegmentDataSeries`2.#ctor(System.Int32,System.Double,System.Boolean)">
-            <summary>
-            Create data series.
-            </summary>
         </member>
         <!-- Badly formed XML comment ignored for member "T:Ecng.Xaml.Charting.Model.DataSeries.ListDecimalDataDistributionCalculator" -->
         <member name="P:Ecng.Xaml.Charting.Model.DataSeries.ListDecimalDataDistributionCalculator.IsSortedAscending">
@@ -7102,14 +7072,9 @@
             
             </summary>
         </member>
-        <member name="F:Ecng.Xaml.Charting.Model.DataSeries.DataSeriesType.BoxVolume">
+        <member name="F:Ecng.Xaml.Charting.Model.DataSeries.DataSeriesType.TimeframeSegment">
             <summary>
-            Box volume
-            </summary>
-        </member>
-        <member name="F:Ecng.Xaml.Charting.Model.DataSeries.DataSeriesType.ClusterProfile">
-            <summary>
-            Cluster profile cluster
+            Timeframe segment
             </summary>
         </member>
         <member name="T:Ecng.Xaml.Charting.Model.DataSeries.GenericPoint2D`1">
@@ -18800,9 +18765,6 @@
             <summary>
             Returns all <see cref="T:Ecng.Xaml.Charting.Visuals.RenderableSeries.IStackedRenderableSeries"/> with the same groupId 
             </summary>
-        </member>
-        <member name="M:Ecng.Xaml.Charting.Visuals.RenderableSeries.NoResetObservableCollection`1.ClearItems">
-            <summary>Clears all items in the collection by removing them individually.</summary>
         </member>
         <member name="T:Ecng.Xaml.Charting.Visuals.RenderableSeries.AxisInfo">
             <summary>

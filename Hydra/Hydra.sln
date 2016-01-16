@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
-VisualStudioVersion = 12.0.40629.0
+# Visual Studio 14
+VisualStudioVersion = 14.0.24720.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Algo", "..\Algo\Algo.csproj", "{2A5C6FAD-106C-4A4A-B602-77A6B1034CA2}"
 EndProject
@@ -132,6 +132,10 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xaml.ActiproPublic", "..\Xaml.Actipro\Xaml.ActiproPublic.csproj", "{D556FA3F-E40E-4F76-B3CA-B18134247FD1}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConfigurationPublic", "..\Configuration\ConfigurationPublic.csproj", "{2CFF1903-4EF5-46F8-AB5D-BB623CA75CE6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ETrade", "..\Connectors\ETrade\ETrade.csproj", "{480539A8-CA30-4B87-B038-6AD854DA0C6A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rithmic", "..\Connectors\Rithmic\Rithmic.csproj", "{FFBC7740-0D2B-49BA-8F95-59E4FC915D06}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -387,6 +391,14 @@ Global
 		{2CFF1903-4EF5-46F8-AB5D-BB623CA75CE6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2CFF1903-4EF5-46F8-AB5D-BB623CA75CE6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2CFF1903-4EF5-46F8-AB5D-BB623CA75CE6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{480539A8-CA30-4B87-B038-6AD854DA0C6A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{480539A8-CA30-4B87-B038-6AD854DA0C6A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{480539A8-CA30-4B87-B038-6AD854DA0C6A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{480539A8-CA30-4B87-B038-6AD854DA0C6A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FFBC7740-0D2B-49BA-8F95-59E4FC915D06}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FFBC7740-0D2B-49BA-8F95-59E4FC915D06}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FFBC7740-0D2B-49BA-8F95-59E4FC915D06}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FFBC7740-0D2B-49BA-8F95-59E4FC915D06}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -446,5 +458,7 @@ Global
 		{99610F38-695A-4616-9C5C-28449C27E938} = {B936270D-DB07-4AEA-BBF8-DF5DDE1A9FA6}
 		{B2CA9D8B-DF41-42B9-8A93-4AC90B987297} = {B936270D-DB07-4AEA-BBF8-DF5DDE1A9FA6}
 		{90B93AF4-3168-4415-B916-9E078F192696} = {B063D1FB-E13D-400C-87BD-D5CF6CAE5510}
+		{480539A8-CA30-4B87-B038-6AD854DA0C6A} = {B063D1FB-E13D-400C-87BD-D5CF6CAE5510}
+		{FFBC7740-0D2B-49BA-8F95-59E4FC915D06} = {B063D1FB-E13D-400C-87BD-D5CF6CAE5510}
 	EndGlobalSection
 EndGlobal

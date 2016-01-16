@@ -65,6 +65,7 @@ namespace StockSharp.BarChart
 		public BarChartMessageAdapter(IdGenerator transactionIdGenerator)
 			: base(transactionIdGenerator)
 		{
+			this.AddMarketDataSupport();
 		}
 
 		/// <summary>

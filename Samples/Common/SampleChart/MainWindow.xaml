@@ -6,7 +6,7 @@
 		xmlns:s="http://schemas.ulcsoftware.co.uk/ultrachart"
 		xmlns:loc="clr-namespace:StockSharp.Localization;assembly=StockSharp.Localization"
 		xmlns:xaml="clr-namespace:Ecng.Xaml;assembly=Ecng.Xaml"
-		Title="{x:Static loc:LocalizedStrings.XamlStr540}" Height="400" Width="900">
+		Title="{x:Static loc:LocalizedStrings.XamlStr540}" Height="400" Width="970">
     <xctk:BusyIndicator x:Name="BusyIndicator">
         <Grid>
             <Grid.RowDefinitions>
@@ -54,14 +54,7 @@
                 <CheckBox Content="{x:Static loc:LocalizedStrings.RealTime}" Margin="10,0,0,0" x:Name="IsRealtime" VerticalAlignment="Center"/>
             </StackPanel>
 
-            <TabControl Grid.Row="1">
-                <TabItem Header="Box chart">
-                    <charting:ChartPanel x:Name="BoxChart" IsInteracted="True"/>
-                </TabItem>
-                <TabItem Header="Cluster chart">
-                    <charting:ChartPanel x:Name="ClusterChart" IsInteracted="True"/>
-                </TabItem>
-            </TabControl>
+            <charting:ChartPanel x:Name="Chart" IsInteracted="True" Grid.Row="1"/>
         </Grid>
     </xctk:BusyIndicator>
 </Window>

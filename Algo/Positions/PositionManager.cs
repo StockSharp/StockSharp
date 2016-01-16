@@ -65,7 +65,8 @@ namespace StockSharp.Algo.Positions
 
 				lock (_positions.SyncRoot)
 				{
-					_positions.Clear();
+					_byOrderPositions.Clear();
+                    _positions.Clear();
 					_positions.AddRange(value);
 
 					Position = value.Sum(p => p.Value);

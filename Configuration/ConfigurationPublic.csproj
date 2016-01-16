@@ -153,9 +153,9 @@
       <Project>{17EAE926-C9A9-40C7-8D54-3545077B4AB7}</Project>
       <Name>OpenECry</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Connectors\Quik\Quik.csproj">
+    <ProjectReference Include="..\Connectors\Quik\QuikPublic.csproj">
       <Project>{1B798A4E-2271-46F9-9C2D-4E563114E268}</Project>
-      <Name>Quik</Name>
+      <Name>QuikPublic</Name>
     </ProjectReference>
     <ProjectReference Include="..\Connectors\Rithmic\Rithmic.csproj">
       <Project>{FFBC7740-0D2B-49BA-8F95-59E4FC915D06}</Project>
