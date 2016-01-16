@@ -189,6 +189,13 @@
       <param name="storage">Settings storage.</param>
       <returns>Composite element.</returns>
     </member>
+    <member name="M:StockSharp.Xaml.Diagram.CompositionRegistry.Load(StockSharp.Xaml.Diagram.CompositionDiagramElement,Ecng.Serialization.SettingsStorage)">
+      <summary>
+            Load composite element from settings.
+            </summary>
+      <param name="element">Composite element.</param>
+      <param name="storage">Settings storage.</param>
+    </member>
     <member name="T:StockSharp.Xaml.Diagram.DebuggerSyncObject">
       <summary>
             The synchronization object for the composite elements debugger.
@@ -204,7 +211,7 @@
             The current socket.
             </summary>
     </member>
-    <member name="M:StockSharp.Xaml.Diagram.DebuggerSyncObject.#ctor(System.Func{StockSharp.Xaml.Diagram.DiagramSocket,System.Boolean},System.Action{StockSharp.Xaml.Diagram.DebuggerSyncObject})">
+    <member name="M:StockSharp.Xaml.Diagram.DebuggerSyncObject.#ctor(System.Func{StockSharp.Xaml.Diagram.DiagramSocket,System.Boolean,System.Boolean},System.Action{StockSharp.Xaml.Diagram.DebuggerSyncObject})">
       <summary>
             Initializes a new instance of the <see cref="T:StockSharp.Xaml.Diagram.DebuggerSyncObject" />.
             </summary>
@@ -330,15 +337,17 @@
             To go to the next element.
             </summary>
     </member>
-    <member name="M:StockSharp.Xaml.Diagram.DiagramDebugger.StepInto">
+    <member name="M:StockSharp.Xaml.Diagram.DiagramDebugger.StepInto(StockSharp.Xaml.Diagram.CompositionDiagramElement)">
       <summary>
             To go inside the diagram composite element.
             </summary>
+      <param name="composition">Composite element.</param>
     </member>
-    <member name="M:StockSharp.Xaml.Diagram.DiagramDebugger.StepOut">
+    <member name="M:StockSharp.Xaml.Diagram.DiagramDebugger.StepOut(StockSharp.Xaml.Diagram.CompositionDiagramElement)">
       <summary>
             To exit from the diagram composite element.
             </summary>
+      <param name="composition">Composite element.</param>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.DiagramDebugger.Continue">
       <summary>
@@ -1177,9 +1186,14 @@
             The socket parent element.
             </summary>
     </member>
-    <member name="P:StockSharp.Xaml.Diagram.DiagramSocket.IsSelected">
+    <member name="P:StockSharp.Xaml.Diagram.DiagramSocket.IsBreak">
       <summary>
-            Is item selected.
+            Is socket has break.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Diagram.DiagramSocket.IsBreakActive">
+      <summary>
+            Is socket break active.
             </summary>
     </member>
     <member name="E:StockSharp.Xaml.Diagram.DiagramSocket.Connected">
@@ -1401,6 +1415,11 @@
     <member name="F:StockSharp.Xaml.Diagram.DiagramSocketType.Comparable">
       <summary>
             Comparable values.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Xaml.Diagram.DiagramSocketType.Portfolio">
+      <summary>
+            Portfolio.
             </summary>
     </member>
     <member name="T:StockSharp.Xaml.Diagram.DiagramSocketValue">
@@ -2166,6 +2185,11 @@
     <member name="M:StockSharp.Xaml.Diagram.Elements.VariableDiagramElement.TypeChanged">
       <summary>
             The method is called when the data type is changed.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.Diagram.Elements.VariableDiagramElement.OnReseted">
+      <summary>
+            The method is called at re-initialisation of the diagram element state.
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.Elements.VariableDiagramElement.OnStart">

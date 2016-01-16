@@ -667,67 +667,6 @@
       <param name="name">Property name.</param>
       <param name="value">New value of the property.</param>
     </member>
-    <member name="T:StockSharp.Xaml.Charting.ChartBoxVolumeElement">
-      <summary>
-            The chart element representing a box volume chart.
-            </summary>
-    </member>
-    <member name="M:StockSharp.Xaml.Charting.ChartBoxVolumeElement.#ctor(System.Int32,System.Decimal)">
-      <summary>
-            Initializes a new instance of the <see cref="T:StockSharp.Xaml.Charting.ChartBoxVolumeElement" />.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Xaml.Charting.ChartBoxVolumeElement.PriceStep">
-      <summary>
-            Price step.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Xaml.Charting.ChartBoxVolumeElement.BaseTimeframe">
-      <summary>
-            Timeframe.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Xaml.Charting.ChartBoxVolumeElement.Timeframe2Multiplier">
-      <summary>
-            Timeframe #2 multiplier.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Xaml.Charting.ChartBoxVolumeElement.Timeframe3Multiplier">
-      <summary>
-            Timeframe #3 multiplier.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Xaml.Charting.ChartBoxVolumeElement.FontColor">
-      <summary>
-            Font color.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Xaml.Charting.ChartBoxVolumeElement.Timeframe2Color">
-      <summary>
-            Timeframe #2 color.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Xaml.Charting.ChartBoxVolumeElement.Timeframe2FrameColor">
-      <summary>
-            Timeframe #2 color.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Xaml.Charting.ChartBoxVolumeElement.Timeframe3Color">
-      <summary>
-            Timeframe #3 color.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Xaml.Charting.ChartBoxVolumeElement.MaxVolumeColor">
-      <summary>
-            Max volume color.
-            </summary>
-    </member>
-    <member name="M:StockSharp.Xaml.Charting.ChartBoxVolumeElement.Clone">
-      <summary>
-            Create a copy of <see cref="T:StockSharp.Xaml.Charting.ChartBoxVolumeElement" />.
-            </summary>
-      <returns>Copy.</returns>
-    </member>
     <member name="T:StockSharp.Xaml.Charting.ChartCandleDrawStyles">
       <summary>
             Styles of the candles chart drawing.
@@ -743,12 +682,27 @@
             Bars.
             </summary>
     </member>
+    <member name="F:StockSharp.Xaml.Charting.ChartCandleDrawStyles.BoxVolume">
+      <summary>
+            Box volumes.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Xaml.Charting.ChartCandleDrawStyles.ClusterProfile">
+      <summary>
+            Cluster profile.
+            </summary>
+    </member>
     <member name="T:StockSharp.Xaml.Charting.ChartCandleElement">
       <summary>
             The chart element representing a candle.
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.Charting.ChartCandleElement.#ctor">
+      <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Xaml.Charting.ChartCandleElement" />.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.Charting.ChartCandleElement.#ctor(System.Int32,System.Decimal)">
       <summary>
             Initializes a new instance of the <see cref="T:StockSharp.Xaml.Charting.ChartCandleElement" />.
             </summary>
@@ -803,6 +757,96 @@
             Show Y-axis market.
             </summary>
     </member>
+    <member name="P:StockSharp.Xaml.Charting.ChartCandleElement.PriceStep">
+      <summary>
+            Price step.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Charting.ChartCandleElement.BaseTimeframe">
+      <summary>
+            Timeframe.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Charting.ChartCandleElement.Timeframe2Multiplier">
+      <summary>
+            Timeframe #2 multiplier.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Charting.ChartCandleElement.Timeframe3Multiplier">
+      <summary>
+            Timeframe #3 multiplier.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Charting.ChartCandleElement.FontColor">
+      <summary>
+            Font color.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Charting.ChartCandleElement.Timeframe2Color">
+      <summary>
+            Timeframe #2 color.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Charting.ChartCandleElement.Timeframe2FrameColor">
+      <summary>
+            Timeframe #2 color.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Charting.ChartCandleElement.Timeframe3Color">
+      <summary>
+            Timeframe #3 color.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Charting.ChartCandleElement.MaxVolumeColor">
+      <summary>
+            Max volume color.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Charting.ChartCandleElement.ClusterLineColor">
+      <summary>
+            Cluster profile line color.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Charting.ChartCandleElement.ClusterTextColor">
+      <summary>
+            Cluster text color.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Charting.ChartCandleElement.ClusterColor">
+      <summary>
+            Cluster color.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Charting.ChartCandleElement.ClusterMaxColor">
+      <summary>
+            Cluster max color.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Charting.ChartCandleElement.ShowHorizontalVolumes">
+      <summary>
+            Show horizontal volume.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Charting.ChartCandleElement.LocalHorizontalVolumes">
+      <summary>
+            Local horizontal volume.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Charting.ChartCandleElement.HorizontalVolumeWidthFraction">
+      <summary>
+            Horizontal volume width fraction.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Charting.ChartCandleElement.HorizontalVolumeColor">
+      <summary>
+            Horizontal volume color.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Charting.ChartCandleElement.HorizontalVolumeFontColor">
+      <summary>
+            Horizontal volume font color.
+            </summary>
+    </member>
     <member name="M:StockSharp.Xaml.Charting.ChartCandleElement.Load(Ecng.Serialization.SettingsStorage)">
       <summary>
             Load settings.
@@ -818,52 +862,6 @@
     <member name="M:StockSharp.Xaml.Charting.ChartCandleElement.Clone">
       <summary>
             Create a copy of <see cref="T:StockSharp.Xaml.Charting.ChartCandleElement" />.
-            </summary>
-      <returns>Copy.</returns>
-    </member>
-    <member name="T:StockSharp.Xaml.Charting.ChartClusterProfileElement">
-      <summary>
-            The chart element representing a cluster profile chart.
-            </summary>
-    </member>
-    <member name="M:StockSharp.Xaml.Charting.ChartClusterProfileElement.#ctor(System.Int32,System.Decimal)">
-      <summary>
-            Initializes a new instance of the <see cref="T:StockSharp.Xaml.Charting.ChartClusterProfileElement" />.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Xaml.Charting.ChartClusterProfileElement.PriceStep">
-      <summary>
-            Price step.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Xaml.Charting.ChartClusterProfileElement.BaseTimeframe">
-      <summary>
-            Timeframe.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Xaml.Charting.ChartClusterProfileElement.LineColor">
-      <summary>
-            Font color.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Xaml.Charting.ChartClusterProfileElement.TextColor">
-      <summary>
-            Text color.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Xaml.Charting.ChartClusterProfileElement.ClusterColor">
-      <summary>
-            Cluster color.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Xaml.Charting.ChartClusterProfileElement.ClusterMaxColor">
-      <summary>
-            Cluster max color.
-            </summary>
-    </member>
-    <member name="M:StockSharp.Xaml.Charting.ChartClusterProfileElement.Clone">
-      <summary>
-            Create a copy of <see cref="T:StockSharp.Xaml.Charting.ChartClusterProfileElement" />.
             </summary>
       <returns>Copy.</returns>
     </member>

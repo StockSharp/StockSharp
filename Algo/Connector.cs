@@ -1356,7 +1356,8 @@ namespace StockSharp.Algo
 
 		private string GetBoardCode(string secClass)
 		{
-			return MarketDataAdapter.GetBoardCode(secClass);
+			// MarketDataAdapter can be null then loading infos from StorageAdapter.
+			return MarketDataAdapter != null ? MarketDataAdapter.GetBoardCode(secClass) : secClass;
 		}
 
 		/// <summary>

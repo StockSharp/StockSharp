@@ -1,3 +1,15 @@
+ErrTimeframePriceStepNotSet;Timeframe and price step were not set;Таймфрейм и шаг цены не были установлены
+BoxChart;Box chart;Боксовый график
+ClusterProfile;Cluster profile;Кластерный профиль
+VolumeSettings;Volume display settings;Свойства отображения объемов
+ClusterLineColor;Cluster base line color;Цвет базовой линии кластера
+ClusterTextColor;Cluster text color;Цвет текста кластера
+ClusterMaxVolumeColor;Cluster max volume color;Цвет максимального объема в кластере
+LocalHorizontalVolumes;Local horizontal volumes;Локальный горизонтальный объем
+ShowHorizontalVolumes;Show horizontal volumes;Показывать горизонтальный объем
+HorizontalVolumeWidthFraction;Horizontal volume size fraction;Ширина горизонтального объема (доля [0;1])
+HorizontalVolumeColor;Horizontal volume color;Цвет горизонтального объема
+HorizontalVolumeFontColor;Horizontal volume font color;Цвет шрифта горизонтального объема
 BoxChartSettings;Box chart settings;Настройки боксового графика
 ClusterProfileSettings;Cluster profile chart settings;Настройки графика кластерного профиля
 PriceStepForChartElement;Price step for this chart element;Шаг цены для данного элемена графика
@@ -1091,8 +1103,8 @@ Str1170Params;Board {0} does not allow registration of market orders.;Площа
 Str1171;This session is currently inactive.;Сейчас эта сессия не идет.
 Str1172Params;Price {0} of order {1} is lower than allowed minimum {2}.;Цена {0} заявки {1} меньше минимально допустимой {2}.
 Str1173Params;Price {0} of order {1} is greater than allowed maximum {2}.;Цена {0} заявки {1} больше максимально допустимой {2}.
-Str1174;Emulation;Эмуляция
-Str1175;Emulation (extra);Эмуляция (дополнительно)
+Str1174;Backtesting;Эмуляция
+Str1175;Backtesting (extra);Эмуляция (дополнительно)
 Str1176;Combine on touch;Сводить при касании
 Str1177;When emulating trades combination, combine orders, when trade price touched the order price (equal to order price).;При эмулировании сведения по сделкам, производить сведение заявок, когда цена сделки коснулась цены заявки (равна цене заявки).
 Str1178;Market depth (lifetime);Стакан (время жизни)
@@ -3404,7 +3416,7 @@ Str3672;Completed building updates.;Построение обновлений з
 Str3673;Path to a directory where publication data is stored is not specified.;Не указан путь к директории где хранятся данные для публикации.
 Str3674;WyBuild project file name is not specified.;Не указано имя файла проекта wyBuild.
 Str3675;Path to the assembly of a published project is not specified.;Не указан путь к сборке публикуемого проекта.
-Str3676;Project has changed. Save changes?;Проект был изменен. Сохранить изменения?
+Str3676Params;Scheme {0} has changed. Save changes?;Схема {0} была изменена. Сохранить изменения?
 Str3677;Executable file is not specified.;Не указан файл для запуска.
 Str3678Params;New order for '{0}';Новая заявка на '{0}'
 Str3679;Login for Transaq server.;Логин к серверу Transaq.
@@ -3768,6 +3780,7 @@ Window;Window;Окно
 XamlStr387;End time;Окончание работы
 OrderLogOf;OL;ОЛ
 OnlineDoc;Online documentation;Онлайн документация
+IsSupportAtomicReRegister;Atomic reregister;Атомарная перерегистрация
 XamlStr391;Description of the source and its data;Описание источника и получаемых данных
 XamlStr392;Task description:;Описание источника:
 XamlStr394;Optimize;Оптимизировать
@@ -4188,6 +4201,9 @@ OnlyActiveSecurities;Only active instruments.;Только активные ин
 CandleTimeInterval;Interval (in days), for which the downloaded candles.;Интервал в днях, за который скачиваются свечи.
 StrategyNotSelected;Strategy is not selected;Стратегия не выбрана
 Palette;Palette;Палитра
+RefreshScheme;Refresh scheme;Обновить схему
+LabelsFormatIntraday;Labels format (intraday);Формат надписей (внутри дня)
+LabelsFormatIntradayDesc;The format of X-axis labels within the day;Формат надписей для оси X внутри дня
 DocStr0;Button activation alert settings;Кнопка активации настроек сигнала
 DocStr1;Initializes a new instance of the {0};Создать {0}
 DocStr2;Load settings;Загрузить настройки

@@ -18,6 +18,162 @@ namespace StockSharp.Localization
 	partial class LocalizedStrings
 	{
 		/// <summary>
+		/// Timeframe and price step were not set
+		/// </summary>
+		public const string ErrTimeframePriceStepNotSetKey = "ErrTimeframePriceStepNotSet";
+
+		/// <summary>
+		/// Timeframe and price step were not set
+		/// </summary>
+		public static string ErrTimeframePriceStepNotSet
+		{
+			get { return GetString(ErrTimeframePriceStepNotSetKey); }
+		}
+
+		/// <summary>
+		/// Box chart
+		/// </summary>
+		public const string BoxChartKey = "BoxChart";
+
+		/// <summary>
+		/// Box chart
+		/// </summary>
+		public static string BoxChart
+		{
+			get { return GetString(BoxChartKey); }
+		}
+
+		/// <summary>
+		/// Cluster profile
+		/// </summary>
+		public const string ClusterProfileKey = "ClusterProfile";
+
+		/// <summary>
+		/// Cluster profile
+		/// </summary>
+		public static string ClusterProfile
+		{
+			get { return GetString(ClusterProfileKey); }
+		}
+
+		/// <summary>
+		/// Volume display settings
+		/// </summary>
+		public const string VolumeSettingsKey = "VolumeSettings";
+
+		/// <summary>
+		/// Volume display settings
+		/// </summary>
+		public static string VolumeSettings
+		{
+			get { return GetString(VolumeSettingsKey); }
+		}
+
+		/// <summary>
+		/// Cluster base line color
+		/// </summary>
+		public const string ClusterLineColorKey = "ClusterLineColor";
+
+		/// <summary>
+		/// Cluster base line color
+		/// </summary>
+		public static string ClusterLineColor
+		{
+			get { return GetString(ClusterLineColorKey); }
+		}
+
+		/// <summary>
+		/// Cluster text color
+		/// </summary>
+		public const string ClusterTextColorKey = "ClusterTextColor";
+
+		/// <summary>
+		/// Cluster text color
+		/// </summary>
+		public static string ClusterTextColor
+		{
+			get { return GetString(ClusterTextColorKey); }
+		}
+
+		/// <summary>
+		/// Cluster max volume color
+		/// </summary>
+		public const string ClusterMaxVolumeColorKey = "ClusterMaxVolumeColor";
+
+		/// <summary>
+		/// Cluster max volume color
+		/// </summary>
+		public static string ClusterMaxVolumeColor
+		{
+			get { return GetString(ClusterMaxVolumeColorKey); }
+		}
+
+		/// <summary>
+		/// Local horizontal volumes
+		/// </summary>
+		public const string LocalHorizontalVolumesKey = "LocalHorizontalVolumes";
+
+		/// <summary>
+		/// Local horizontal volumes
+		/// </summary>
+		public static string LocalHorizontalVolumes
+		{
+			get { return GetString(LocalHorizontalVolumesKey); }
+		}
+
+		/// <summary>
+		/// Show horizontal volumes
+		/// </summary>
+		public const string ShowHorizontalVolumesKey = "ShowHorizontalVolumes";
+
+		/// <summary>
+		/// Show horizontal volumes
+		/// </summary>
+		public static string ShowHorizontalVolumes
+		{
+			get { return GetString(ShowHorizontalVolumesKey); }
+		}
+
+		/// <summary>
+		/// Horizontal volume size fraction
+		/// </summary>
+		public const string HorizontalVolumeWidthFractionKey = "HorizontalVolumeWidthFraction";
+
+		/// <summary>
+		/// Horizontal volume size fraction
+		/// </summary>
+		public static string HorizontalVolumeWidthFraction
+		{
+			get { return GetString(HorizontalVolumeWidthFractionKey); }
+		}
+
+		/// <summary>
+		/// Horizontal volume color
+		/// </summary>
+		public const string HorizontalVolumeColorKey = "HorizontalVolumeColor";
+
+		/// <summary>
+		/// Horizontal volume color
+		/// </summary>
+		public static string HorizontalVolumeColor
+		{
+			get { return GetString(HorizontalVolumeColorKey); }
+		}
+
+		/// <summary>
+		/// Horizontal volume font color
+		/// </summary>
+		public const string HorizontalVolumeFontColorKey = "HorizontalVolumeFontColor";
+
+		/// <summary>
+		/// Horizontal volume font color
+		/// </summary>
+		public static string HorizontalVolumeFontColor
+		{
+			get { return GetString(HorizontalVolumeFontColorKey); }
+		}
+
+		/// <summary>
 		/// Box chart settings
 		/// </summary>
 		public const string BoxChartSettingsKey = "BoxChartSettings";
@@ -44168,14 +44324,14 @@ namespace StockSharp.Localization
 		/// <summary>
 		/// Project has changed. Save changes?
 		/// </summary>
-		public const string Str3676Key = "Str3676";
+		public const string Str3676ParamsKey = "Str3676Params";
 
 		/// <summary>
 		/// Project has changed. Save changes?
 		/// </summary>
-		public static string Str3676
+		public static string Str3676Params
 		{
-			get { return GetString(Str3676Key); }
+			get { return GetString(Str3676ParamsKey); }
 		}
 
 		/// <summary>
@@ -54098,6 +54254,58 @@ namespace StockSharp.Localization
 		public static string Palette
 		{
 			get { return GetString(PaletteKey); }
+		}
+
+		/// <summary>
+		/// Refresh scheme
+		/// </summary>
+		public const string RefreshSchemeKey = "RefreshScheme";
+
+		/// <summary>
+		/// Refresh scheme
+		/// </summary>
+		public static string RefreshScheme
+		{
+			get { return GetString(RefreshSchemeKey); }
+		}
+
+		/// <summary>
+		/// Labels format (intraday)
+		/// </summary>
+		public const string LabelsFormatIntradayKey = "LabelsFormatIntraday";
+
+		/// <summary>
+		/// Labels format (intraday)
+		/// </summary>
+		public static string LabelsFormatIntraday
+		{
+			get { return GetString(LabelsFormatIntradayKey); }
+		}
+
+		/// <summary>
+		/// The format of X-axis labels within the day
+		/// </summary>
+		public const string LabelsFormatIntradayDescKey = "LabelsFormatIntradayDesc";
+
+		/// <summary>
+		/// The format of X-axis labels within the day
+		/// </summary>
+		public static string LabelsFormatIntradayDesc
+		{
+			get { return GetString(LabelsFormatIntradayDescKey); }
+		}
+
+		/// <summary>
+		/// Atomic reregister
+		/// </summary>
+		public const string IsSupportAtomicReRegisterKey = "IsSupportAtomicReRegister";
+
+		/// <summary>
+		/// Atomic reregister
+		/// </summary>
+		public static string IsSupportAtomicReRegister
+		{
+			get { return GetString(IsSupportAtomicReRegisterKey); }
 		}
 	}
 }

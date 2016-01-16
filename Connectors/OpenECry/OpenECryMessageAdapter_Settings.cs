@@ -155,10 +155,7 @@ namespace StockSharp.OpenECry
 		/// Available time frames.
 		/// </summary>
 		[Browsable(false)]
-		public static IEnumerable<TimeSpan> TimeFrames
-		{
-			get { return _timeFrames; }
-		}
+		public static IEnumerable<TimeSpan> TimeFrames => _timeFrames;
 
 		/// <summary>
 		/// Save settings.

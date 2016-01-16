@@ -609,10 +609,10 @@ namespace StockSharp.Algo.Testing
 				case MessageTypes.OrderRegister:
 				{
 					var regMsg = (OrderRegisterMessage)message;
-
-					if (_settings.IncreaseDepthVolume && NeedCheckVolume(regMsg.Side, regMsg.Price) && quotesVolume < regMsg.Volume)
+					
+					if (NeedCheckVolume(regMsg, quotesVolume))
 					{
-						foreach (var executionMessage in IncreaseDepthVolume(regMsg.LocalTime, serverTime, regMsg.Side, regMsg.Volume - quotesVolume))
+						foreach (var executionMessage in IncreaseDepthVolume(regMsg, serverTime, quotesVolume))
 							yield return executionMessage;
 					}
 
@@ -636,10 +636,10 @@ namespace StockSharp.Algo.Testing
 				case MessageTypes.OrderReplace:
 				{
 					var replaceMsg = (OrderReplaceMessage)message;
-
-					if (_settings.IncreaseDepthVolume && NeedCheckVolume(replaceMsg.Side, replaceMsg.Price) && quotesVolume < replaceMsg.Volume)
+					
+					if (NeedCheckVolume(replaceMsg, quotesVolume))
 					{
-						foreach (var executionMessage in IncreaseDepthVolume(replaceMsg.LocalTime, serverTime, replaceMsg.Side, replaceMsg.Volume - quotesVolume))
+						foreach (var executionMessage in IncreaseDepthVolume(replaceMsg, serverTime, quotesVolume))
 							yield return executionMessage;
 					}
 
@@ -708,34 +708,36 @@ namespace StockSharp.Algo.Testing
 			}
 		}
 
-		private decimal? GetBestPrice(Sides orderSide)
+		private bool NeedCheckVolume(OrderRegisterMessage message, decimal quotesVolume)
 		{
+			if (!_settings.IncreaseDepthVolume)
+				return false;
+
+			var orderSide = message.Side;
+			var price = message.Price;
+
 			var quotes = orderSide == Sides.Buy ? _asks : _bids;
 
 			var quote = quotes.FirstOrDefault();
 
-			if (quote.Value != null)
-				return quote.Key;
-
-			return null;
-		}
-
-		private bool NeedCheckVolume(Sides orderSide, decimal price)
-		{
-			var bestPrice = GetBestPrice(orderSide);
-
-			if (bestPrice == null)
+			if (quote.Value == null)
 				return false;
 
-			return orderSide == Sides.Buy ? price >= bestPrice.Value : price <= bestPrice.Value;
+			var bestPrice = quote.Key;
+
+			return (orderSide == Sides.Buy ? price >= bestPrice : price <= bestPrice)
+				&& quotesVolume <= message.Volume;
 		}
 
-		private IEnumerable<ExecutionMessage> IncreaseDepthVolume(DateTimeOffset time, DateTimeOffset serverTime, Sides orderSide, decimal leftVolume)
+		private IEnumerable<ExecutionMessage> IncreaseDepthVolume(OrderRegisterMessage message, DateTimeOffset serverTime, decimal quotesVolume)
 		{
+			var leftVolume = (message.Volume - quotesVolume) + 1;
+			var orderSide = message.Side;
+
 			var quotes = orderSide == Sides.Buy ? _asks : _bids;
 			var quote = quotes.LastOrDefault();
 
-			if(quote.Value == null)
+			if (quote.Value == null)
 				yield break;
 
 			var side = orderSide.Invert();
@@ -750,7 +752,7 @@ namespace StockSharp.Algo.Testing
 
 				leftVolume -= lastVolume;
 
-				yield return CreateMessage(time, serverTime, side, lastPrice, lastVolume);
+				yield return CreateMessage(message.LocalTime, serverTime, side, lastPrice, lastVolume);
 			}
 		}
 
