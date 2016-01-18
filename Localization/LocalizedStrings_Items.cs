@@ -11876,14 +11876,14 @@ namespace StockSharp.Localization
 		/// <summary>
 		/// Connection settings
 		/// </summary>
-		public const string Str977Key = "Str977";
+		public const string ConnectionSettingsKey = "ConnectionSettings";
 
 		/// <summary>
 		/// Connection settings
 		/// </summary>
-		public static string Str977
+		public static string ConnectionSettings
 		{
-			get { return GetString(Str977Key); }
+			get { return GetString(ConnectionSettingsKey); }
 		}
 
 		/// <summary>
@@ -11910,19 +11910,6 @@ namespace StockSharp.Localization
 		public static string Settings
 		{
 			get { return GetString(SettingsKey); }
-		}
-
-		/// <summary>
-		/// Connection settings.
-		/// </summary>
-		public const string ConnectionSettingsKey = "ConnectionSettings";
-
-		/// <summary>
-		/// Connection settings.
-		/// </summary>
-		public static string ConnectionSettings
-		{
-			get { return GetString(ConnectionSettingsKey); }
 		}
 
 		/// <summary>
@@ -48638,19 +48625,6 @@ namespace StockSharp.Localization
 		public static string XamlStr332
 		{
 			get { return GetString(XamlStr332Key); }
-		}
-
-		/// <summary>
-		/// Connection settings
-		/// </summary>
-		public const string XamlStr334Key = "XamlStr334";
-
-		/// <summary>
-		/// Connection settings
-		/// </summary>
-		public static string XamlStr334
-		{
-			get { return GetString(XamlStr334Key); }
 		}
 
 		/// <summary>

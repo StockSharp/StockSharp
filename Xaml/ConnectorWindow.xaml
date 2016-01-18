@@ -5,7 +5,7 @@
         xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
         xmlns:converters="clr-namespace:Ecng.Xaml.Converters;assembly=Ecng.Xaml"
         xmlns:propertyGrid="clr-namespace:StockSharp.Xaml.PropertyGrid"
-        Title="{x:Static loc:LocalizedStrings.XamlStr334}" Height="300" Width="550"
+        Title="{x:Static loc:LocalizedStrings.ConnectionSettings}" Height="300" Width="550"
 		WindowStartupLocation="CenterScreen" ShowInTaskbar="False"
 		MinWidth="100" MinHeight="50">
 
