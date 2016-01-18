@@ -49,6 +49,10 @@
         <CommandBinding Command="{x:Static local:MainWindow.ConnectDisconnectCommand}"
 						CanExecute="ConnectDisconnectCommand_OnCanExecute"
 						Executed="ConnectDisconnectCommand_OnExecuted"/>
+
+        <CommandBinding Command="{x:Static local:MainWindow.RefreshCompositionCommand}"
+						CanExecute="RefreshCompositionCommand_OnCanExecute"
+						Executed="RefreshCompositionCommand_OnExecuted"/>
     </Window.CommandBindings>
 	
 	<Window.Resources>
@@ -139,7 +143,7 @@
 								   SizeDefinition="Middle"
 								   Icon="pack://application:,,,/Designer;component/Images/Open_32x32.png"
 								   LargeIcon="pack://application:,,,/Designer;component/Images/Open_32x32.png"
-								   
+								   Command="{x:Static local:MainWindow.OpenCommand}"
 								   CommandParameter="{Binding ElementName=SolutionExplorer, Path=SelectedItem}" />
                     <fluent:Button Header="{x:Static localization:LocalizedStrings.Str2060}"
 								   SizeDefinition="Middle"
@@ -213,6 +217,11 @@
 								   LargeIcon="pack://application:,,,/Designer;component/Images/Undo_32x32.png"
 								   SizeDefinition="Large" 
 								   Command="{x:Static local:MainWindow.DiscardCommand}"
+								   CommandParameter="{Binding}"/>
+                    <fluent:Button Header="{x:Static localization:LocalizedStrings.RefreshScheme}"
+								   SizeDefinition="Large"
+								   LargeIcon="pack://application:,,,/Designer;component/Images/Refresh_32x32.png"
+								   Command="{x:Static local:MainWindow.RefreshCompositionCommand}"
 								   CommandParameter="{Binding}"/>
                 </fluent:RibbonGroupBox>
                 <fluent:RibbonGroupBox Header="{x:Static localization:LocalizedStrings.Str3606}">

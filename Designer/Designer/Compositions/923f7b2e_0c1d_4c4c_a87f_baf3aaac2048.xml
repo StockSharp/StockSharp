@@ -1,5 +1,19 @@
 <SettingsStorage>
   <KeyValuePairBeginStringAndObjectEnd>
+    <key>Category</key>
+    <value>
+      <Type type="string">string</Type>
+      <Value type="string">Composite elements</Value>
+    </value>
+  </KeyValuePairBeginStringAndObjectEnd>
+  <KeyValuePairBeginStringAndObjectEnd>
+    <key>Description</key>
+    <value>
+      <Type type="string">string</Type>
+      <Value type="string">Determines the intersection time of two lines.</Value>
+    </value>
+  </KeyValuePairBeginStringAndObjectEnd>
+  <KeyValuePairBeginStringAndObjectEnd>
     <key>Composition</key>
     <value>
       <Type type="string">Ecng.Serialization.SettingsStorage, Ecng.Serialization</Type>
@@ -82,36 +96,6 @@
                       <value>
                         <Type type="string">bool</Type>
                         <Value type="bool">True</Value>
-                      </value>
-                    </KeyValuePairBeginStringAndObjectEnd>
-                  </Value>
-                </value>
-              </KeyValuePairBeginStringAndObjectEnd>
-              <KeyValuePairBeginStringAndObjectEnd>
-                <key>Category</key>
-                <value>
-                  <Type type="string">Ecng.Serialization.SettingsStorage, Ecng.Serialization</Type>
-                  <Value type="Ecng.Serialization.SettingsStorage, Ecng.Serialization">
-                    <KeyValuePairBeginStringAndObjectEnd>
-                      <key>Value</key>
-                      <value>
-                        <Type type="string">string</Type>
-                        <Value type="string">Compositions</Value>
-                      </value>
-                    </KeyValuePairBeginStringAndObjectEnd>
-                  </Value>
-                </value>
-              </KeyValuePairBeginStringAndObjectEnd>
-              <KeyValuePairBeginStringAndObjectEnd>
-                <key>Description</key>
-                <value>
-                  <Type type="string">Ecng.Serialization.SettingsStorage, Ecng.Serialization</Type>
-                  <Value type="Ecng.Serialization.SettingsStorage, Ecng.Serialization">
-                    <KeyValuePairBeginStringAndObjectEnd>
-                      <key>Value</key>
-                      <value>
-                        <Type type="string">string</Type>
-                        <Value type="string">Determines the intersection time of two lines.</Value>
                       </value>
                     </KeyValuePairBeginStringAndObjectEnd>
                   </Value>

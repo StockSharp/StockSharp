@@ -18,7 +18,6 @@
 
 	using StockSharp.Algo;
 	using StockSharp.Algo.Candles;
-	using StockSharp.Algo.Candles.Compression;
 	using StockSharp.Algo.Commissions;
 	using StockSharp.Algo.Storages;
 	using StockSharp.Algo.Strategies;
@@ -64,7 +63,7 @@
 
 		public ICommand StopCommand { get; protected set; }
 
-		public ICommand RefreshCompositionCommand { get; private set; }
+		public ICommand RefreshCompositionCommand { get; protected set; }
 
 		public ICommand AddBreakpointCommand => DiagramDebuggerControl.AddBreakpointCommand;
 
@@ -85,13 +84,11 @@
 			_bufferedChart = new BufferedChart(Chart);
 			_layoutManager = new LayoutManager(DockingManager);
 
-			_pnlCurve = Curve.CreateCurve(LocalizedStrings.PnL, Colors.DarkGreen, EquityCurveChartStyles.Area);
-			_unrealizedPnLCurve = Curve.CreateCurve(LocalizedStrings.PnLUnreal, Colors.Black);
-			_commissionCurve = Curve.CreateCurve(LocalizedStrings.Str159, Colors.Red, EquityCurveChartStyles.DashedLine);
+			_pnlCurve = EquityCurve.CreateCurve(LocalizedStrings.PnL, Colors.DarkGreen, EquityCurveChartStyles.Area);
+			_unrealizedPnLCurve = EquityCurve.CreateCurve(LocalizedStrings.PnLUnreal, Colors.Black);
+			_commissionCurve = EquityCurve.CreateCurve(LocalizedStrings.Str159, Colors.Red, EquityCurveChartStyles.DashedLine);
 
 			_posItems = PositionCurve.CreateCurve(LocalizedStrings.Str862, Colors.DarkGreen);
-
-			RefreshCompositionCommand = new DelegateCommand(obj => Load(this.Save()));
 		}
 
 		protected void Reset()
@@ -109,10 +106,14 @@
 		{
 			if (oldStrategy != null)
 			{
+				StatisticsGrid.StatisticManager = null;
+
 				ConfigManager
 					.GetService<LogManager>()
 					.Sources
 					.Remove(oldStrategy);
+
+				oldStrategy.Composition = null;
 
 				oldStrategy.ParametersChanged -= RaiseChanged;
 
@@ -131,6 +132,8 @@
 
 			if (newStrategy == null)
 				return;
+
+			StatisticsGrid.StatisticManager = newStrategy.StatisticManager;
 
 			ConfigManager
 				.GetService<LogManager>()
@@ -240,6 +243,10 @@
 
 		private void InitializeCommands()
 		{
+			RefreshCompositionCommand = new DelegateCommand(
+				obj => Load(this.Save()),
+				obj => Strategy != null && Strategy.ProcessState == ProcessStates.Stopped);
+
 			StartCommand = new DelegateCommand(
 				obj =>
 				{
@@ -281,11 +288,14 @@
 			var registry = ConfigManager.GetService<StrategiesRegistry>();
 			var composition = (CompositionDiagramElement)registry.Strategies.FirstOrDefault(c => c.TypeId == compositionId);
 
-			Strategy = new DiagramStrategy
+			var strategy = new DiagramStrategy
 			{
 				Id = storage.GetValue<Guid>("StrategyId"),
 				Composition = registry.Clone(composition)
 			};
+			strategy.Load(storage);
+
+			Strategy = strategy;
 
 			base.Load(storage);
 		}
@@ -296,6 +306,8 @@
 			{
 				storage.SetValue("CompositionId", Strategy.Composition.TypeId);
 				storage.SetValue("StrategyId", Strategy.Id);
+
+				Strategy.Save(storage);
 			}
 
 			base.Save(storage);
@@ -317,6 +329,10 @@
 
 		private void InitializeCommands()
 		{
+			RefreshCompositionCommand = new DelegateCommand(
+				obj => Load(this.Save()), 
+				obj => _connector == null || _connector.State == EmulationStates.Stopped);
+
 			StartCommand = new DelegateCommand(
 				obj =>
 				{
@@ -439,7 +455,9 @@
 							// match order if historical price touched our limit order price. 
 							// It is terned off, and price should go through limit order price level
 							// (more "severe" test mode)
-							MatchOnTouch = false,
+							MatchOnTouch = strategy.MatchOnTouch, 
+							IsSupportAtomicReRegister = strategy.IsSupportAtomicReRegister,
+							Latency = strategy.EmulatoinLatency,
 						}
 					}
 				},
@@ -459,26 +477,25 @@
 				MarketTimeChangedInterval = timeFrame,
 			};
 
-			//((ILogSource)_connector).LogLevel = DebugLogCheckBox.IsChecked == true ? LogLevels.Debug : LogLevels.Info;
+			((ILogSource)_connector).LogLevel = strategy.DebugLog ? LogLevels.Debug : LogLevels.Info;
 
 			ConfigManager.GetService<LogManager>().Sources.Add(_connector);
-
-			var candleManager = new CandleManager(_connector);
 
 			strategy.Volume = 1;
 			strategy.Portfolio = portfolio;
 			strategy.Security = security;
 			strategy.Connector = _connector;
-			//LogLevel = DebugLogCheckBox.IsChecked == true ? LogLevels.Debug : LogLevels.Info,
+			strategy.LogLevel = strategy.DebugLog ? LogLevels.Debug : LogLevels.Info;
 
 			// by default interval is 1 min,
 			// it is excessively for time range with several months
 			strategy.UnrealizedPnLInterval = ((stopTime - startTime).Ticks / 1000).To<TimeSpan>();
 
-			strategy.SetCandleManager(candleManager);
+			strategy.SetCandleManager(new CandleManager(_connector));
 
 			_connector.NewSecurity += s =>
 			{
+				//TODO send real level1 message
 				var level1Info = new Level1ChangeMessage
 				{
 					SecurityId = s.ToSecurityId(),
@@ -494,10 +511,32 @@
 				// fill level1 values
 				_connector.SendInMessage(level1Info);
 
-				//_connector.RegisterMarketDepth(security);
+				if (strategy.UseMarketDepths)
+				{
+					_connector.RegisterMarketDepth(security);
 
-				//if (!useCandles)
-				//	_connector.RegisterTrades(s);
+					if (
+							// if order book will be generated
+							strategy.GenerateDepths ||
+							// of backtesting will be on candles
+							useCandles
+						)
+					{
+						// if no have order book historical data, but strategy is required,
+						// use generator based on last prices
+						_connector.RegisterMarketDepth(new TrendMarketDepthGenerator(_connector.GetSecurityId(s))
+						{
+							Interval = TimeSpan.FromSeconds(1), // order book freq refresh is 1 sec
+							MaxAsksDepth = strategy.MaxDepths,
+							MaxBidsDepth = strategy.MaxDepths,
+							UseTradeVolume = true,
+							MaxVolume = strategy.MaxVolume,
+							MinSpreadStepCount = 2, // min spread generation is 2 pips
+							MaxSpreadStepCount = 5, // max spread generation size (prevent extremely size)
+							MaxPriceStepCount = 3   // pips size,
+						});
+					}
+				}
 			};
 
 			var nextTime = startTime + progressStep;

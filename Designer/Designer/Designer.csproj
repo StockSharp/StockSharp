@@ -187,10 +187,6 @@
       <Project>{E5D21A65-1B77-4B4B-87C7-8AC7EEE4F085}</Project>
       <Name>Xaml.Diagram</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Alerts\Alerts.csproj">
-      <Project>{96725e45-f785-4612-9743-bfb40a9e725d}</Project>
-      <Name>Alerts</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\Algo\Algo.csproj">
       <Project>{2a5c6fad-106c-4a4a-b602-77a6b1034ca2}</Project>
       <Name>Algo</Name>

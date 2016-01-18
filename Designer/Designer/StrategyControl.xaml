@@ -45,7 +45,10 @@
                                 <xaml:EquityCurveChart x:Name="PositionCurve" />
                             </xcad:LayoutAnchorable>
                             <xcad:LayoutAnchorable Title="{x:Static localization:LocalizedStrings.Equity}" CanClose="False">
-                                <xaml:EquityCurveChart x:Name="Curve" />
+                                <xaml:EquityCurveChart x:Name="EquityCurve" />
+                            </xcad:LayoutAnchorable>
+                            <xcad:LayoutAnchorable Title="{x:Static localization:LocalizedStrings.Str436}" CanClose="False">
+                                <xaml:StatisticParameterGrid x:Name="StatisticsGrid" />
                             </xcad:LayoutAnchorable>
                         </xcad:LayoutAnchorablePane>
                     </xcad:LayoutAnchorablePaneGroup>

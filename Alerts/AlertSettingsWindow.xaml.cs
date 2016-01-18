@@ -170,10 +170,7 @@ namespace StockSharp.Alerts
 			TryEnableOk();
 		}
 
-		private AlertRule SelectedRule
-		{
-			get { return (AlertRule)RulesCtrl.SelectedValue; }
-		}
+		private AlertRule SelectedRule => (AlertRule)RulesCtrl.SelectedValue;
 
 		private void RulesCtrl_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
 		{

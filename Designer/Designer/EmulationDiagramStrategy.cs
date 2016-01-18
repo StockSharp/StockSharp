@@ -41,6 +41,14 @@ namespace StockSharp.Designer
 		private DateTime _stopDate;
 		private MarketDataSource _marketDataSource;
 		private TimeSpan _candlesTimeFrame;
+		private bool _generateDepths;
+		private int _maxDepths;
+		private int _maxVolume;
+		private bool _debugLog;
+		private bool _isSupportAtomicReRegister;
+		private bool _matchOnTouch;
+		private TimeSpan _emulatoinLatency;
+		private bool _useMarketDepths;
 
 		[DisplayNameLoc(LocalizedStrings.Str2804Key)]
 		[CategoryLoc(LocalizedStrings.Str1174Key)]
@@ -107,6 +115,110 @@ namespace StockSharp.Designer
 			}
 		}
 
+		[DisplayNameLoc(LocalizedStrings.MarketDepthsKey)]
+		[CategoryLoc(LocalizedStrings.Str1174Key)]
+		[PropertyOrder(60)]
+		public bool UseMarketDepths
+		{
+			get { return _useMarketDepths; }
+			set
+			{
+				_useMarketDepths = value;
+				RaiseParametersChanged("UseMarketDepths");
+			}
+		}
+
+		[DisplayNameLoc(LocalizedStrings.XamlStr97Key)]
+		[CategoryLoc(LocalizedStrings.Str1174Key)]
+		[PropertyOrder(61)]
+		public bool GenerateDepths
+		{
+			get { return _generateDepths; }
+			set
+			{
+				_generateDepths = value;
+				RaiseParametersChanged("GenerateDepths");
+			}
+		}
+
+		[DisplayNameLoc(LocalizedStrings.XamlStr291Key)]
+		[CategoryLoc(LocalizedStrings.Str1174Key)]
+		[PropertyOrder(70)]
+		public int MaxDepths
+		{
+			get { return _maxDepths; }
+			set
+			{
+				_maxDepths = value;
+				RaiseParametersChanged("MaxDepths");
+			}
+		}
+
+		[DisplayNameLoc(LocalizedStrings.XamlStr293Key)]
+		[CategoryLoc(LocalizedStrings.Str1174Key)]
+		[PropertyOrder(80)]
+		public int MaxVolume
+		{
+			get { return _maxVolume; }
+			set
+			{
+				_maxVolume = value;
+				RaiseParametersChanged("MaxVolume");
+			}
+		}
+
+		[DisplayNameLoc(LocalizedStrings.IsSupportAtomicReRegisterKey)]
+		[CategoryLoc(LocalizedStrings.Str1174Key)]
+		[PropertyOrder(90)]
+		public bool IsSupportAtomicReRegister
+		{
+			get { return _isSupportAtomicReRegister; }
+			set
+			{
+				_isSupportAtomicReRegister = value;
+				RaiseParametersChanged("IsSupportAtomicReRegister");
+			}
+		}
+
+		[DisplayNameLoc(LocalizedStrings.Str1176Key)]
+		[CategoryLoc(LocalizedStrings.Str1174Key)]
+		[PropertyOrder(91)]
+		public bool MatchOnTouch
+		{
+			get { return _matchOnTouch; }
+			set
+			{
+				_matchOnTouch = value;
+				RaiseParametersChanged("MatchOnTouch");
+			}
+		}
+
+		[DisplayNameLoc(LocalizedStrings.Str161Key)]
+		[CategoryLoc(LocalizedStrings.Str1174Key)]
+		[PropertyOrder(92)]
+		public TimeSpan EmulatoinLatency
+		{
+			get { return _emulatoinLatency; }
+			set
+			{
+				_emulatoinLatency = value;
+				RaiseParametersChanged("EmulatoinLatency");
+			}
+		}
+
+		[DisplayNameLoc(LocalizedStrings.XamlStr117Key)]
+		[CategoryLoc(LocalizedStrings.Str1174Key)]
+		[PropertyOrder(100)]
+		public bool DebugLog
+		{
+			get { return _debugLog; }
+			set
+			{
+				_debugLog = value;
+				RaiseParametersChanged("DebugLog");
+			}
+		}
+
 		public EmulationDiagramStrategy()
 		{
 			DataPath = @"..\..\..\..\Samples\Testing\HistoryData\".ToFullPath();
@@ -114,7 +226,12 @@ namespace StockSharp.Designer
 			StopDate = new DateTime(2012, 10, 25);
 			MarketDataSource = MarketDataSource.Candles;
 			CandlesTimeFrame = TimeSpan.FromMinutes(5);
-		}
+			MaxDepths = 5;
+			MaxVolume = 100;
+			IsSupportAtomicReRegister = true;
+			MatchOnTouch = false;
+			EmulatoinLatency = TimeSpan.Zero;
+        }
 
 		protected override bool NeedShowProperty(PropertyDescriptor propertyDescriptor)
 		{
@@ -136,6 +253,17 @@ namespace StockSharp.Designer
 			MarketDataSource = storage.GetValue("MarketDataSource", MarketDataSource);
 			CandlesTimeFrame = storage.GetValue("CandlesTimeFrame", CandlesTimeFrame);
 
+			UseMarketDepths = storage.GetValue("UseMarketDepths", UseMarketDepths);
+			GenerateDepths = storage.GetValue("GenerateDepths", GenerateDepths);
+			MaxDepths = storage.GetValue("MaxDepths", MaxDepths);
+			MaxVolume = storage.GetValue("MaxVolume", MaxVolume);
+
+			IsSupportAtomicReRegister = storage.GetValue("IsSupportAtomicReRegister", IsSupportAtomicReRegister);
+			MatchOnTouch = storage.GetValue("MatchOnTouch", MatchOnTouch);
+			EmulatoinLatency = storage.GetValue("EmulatoinLatency", EmulatoinLatency);
+
+			DebugLog = storage.GetValue("DebugLog", DebugLog);
+
 			base.Load(storage);
 		}
 
@@ -148,6 +276,17 @@ namespace StockSharp.Designer
 			storage.SetValue("StopDate", StopDate);
 			storage.SetValue("MarketDataSource", MarketDataSource);
 			storage.SetValue("CandlesTimeFrame", CandlesTimeFrame);
+
+			storage.SetValue("UseMarketDepths", UseMarketDepths);
+			storage.SetValue("GenerateDepths", GenerateDepths);
+			storage.SetValue("MaxDepths", MaxDepths);
+			storage.SetValue("MaxVolume", MaxVolume);
+
+			storage.SetValue("IsSupportAtomicReRegister", IsSupportAtomicReRegister);
+			storage.SetValue("MatchOnTouch", MatchOnTouch);
+			storage.SetValue("EmulatoinLatency", EmulatoinLatency);
+
+			storage.SetValue("DebugLog", DebugLog);
 
 			base.Save(storage);
 		}
