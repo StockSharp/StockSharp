@@ -1,0 +1,58 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="78adcfb5-7c77-4f08-bed0-41c5eb2fd4ce" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <introduction>
+      <para>
+       <legacyBold>BoxChart</legacyBold> - специальный тип графика, предназначенный для отображения объемов в виде сетки цифр.
+       Для использования этого типа графика необходимо задать специальный стиль 
+       <codeEntityReference qualifyHint="true">P:StockSharp.Xaml.Charting.ChartCandleElement.DrawStyle</codeEntityReference> = 
+       <legacyBold>ChartCandleDrawStyles.BoxVolume</legacyBold>.
+       
+       В качестве исходных данных этот график использует информацию из свойства 
+       <codeEntityReference qualifyHint="true">P:StockSharp.Algo.Candles.Candle.VolumeProfileInfo</codeEntityReference>.
+       
+      </para>
+      <para>
+      <legacyBold>Основные свойства</legacyBold>
+      </para>
+<list class="bullet">
+  <listItem>
+  	<para><legacyBold>Timeframe2Multiplier</legacyBold> - множитель, который применяется к основному таймфрейму, заданному в конструкторе, чтобы получить второй таймфрейм. Отображаемые свечи 
+объединяются в группы размером, соответствующим второму таймфрему. Группы рисуются на графике сеткой и рамкой соответствующих цветов. </para>
+  </listItem>
+  <listItem>
+  	<para><legacyBold>Timeframe3Multiplier</legacyBold> - аналогично <legacyBold>Timeframe2Multiplier</legacyBold>, но для третьего таймфрейма. На графике 3й таймфрейм рисуется сеткой соответствующего цвета. </para>
+  </listItem>
+  <listItem>
+  	<para><legacyBold>FontColor</legacyBold> - цвет цифр объемов на графике. </para>
+  </listItem>
+  <listItem>
+  	<para><legacyBold>MaxVolumeColor</legacyBold> - цвет цифр объемов на графике для максимального объема в данной свече.</para>
+  </listItem>
+  <listItem>
+  	<para><legacyBold>Timeframe2Color</legacyBold> - цвет сетки 2го таймфрейма. </para>
+  </listItem>
+  <listItem>
+  	<para><legacyBold>Timeframe2FrameColor</legacyBold> - цвет рамки 2го таймфрейма.</para>
+  </listItem>
+  <listItem>
+  	<para><legacyBold>Timeframe3Color</legacyBold> - цвет сетки 3го таймфрейма.</para>
+  </listItem>
+</list>
+      
+          <mediaLink><image placement="left" xlink:href="Gui_BoxChart"/></mediaLink>
+      
+      <para>
+   Пример использования этого типа графика расположен в Samples/Common/SampleChart. 
+</para>
+
+<alert class="note">
+  <para>Для переключения между типами графиков используйте кнопку настроек (шестерёнка), расположенную в левом верхнем углу графика.</para>
+</alert>
+
+    </introduction>
+
+    
+     
+  </developerConceptualDocument>
+</topic>
