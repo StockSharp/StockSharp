@@ -73,6 +73,9 @@ namespace SampleFix
 			MarketDataSessionSettings.SelectedObject = Trader.MarketDataAdapter;
 			TransactionSessionSettings.SelectedObject = Trader.TransactionAdapter;
 
+			MarketDataSupportedMessages.Adapter = Trader.MarketDataAdapter;
+			TransactionSupportedMessages.Adapter = Trader.TransactionAdapter;
+
 			Instance = this;
 
 			Trader.LogLevel = LogLevels.Debug;

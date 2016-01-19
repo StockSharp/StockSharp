@@ -42,13 +42,6 @@
 			</Setter>
 		</Style>
 
-		<DataTemplate x:Key="ListBoxItemTemplate">
-			<WrapPanel>
-				<CheckBox Focusable="False" IsChecked="{Binding IsSelected}" VerticalAlignment="Center" />
-				<ContentPresenter Content="{Binding Name, Mode=OneTime}" Margin="2,0" />
-			</WrapPanel>
-		</DataTemplate>
-
 		<converters:NullImageConverter x:Key="NullImageConverter"/>
 	</Window.Resources>
 
@@ -187,13 +180,7 @@
 				</ListView.View>
 			</ListView>
 
-			<ListBox x:Name="SupportedMessages" Grid.Column="0" Grid.Row="3" ItemTemplate="{DynamicResource ListBoxItemTemplate}" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
-				<ListBox.ItemsPanel>
-					<ItemsPanelTemplate>
-						<WrapPanel Orientation="Horizontal" />
-					</ItemsPanelTemplate>
-				</ListBox.ItemsPanel>
-			</ListBox>
+			<local:ConnectorSupportedMessagesPanel x:Name="SupportedMessages" Grid.Column="0" Grid.Row="3" SelectedChanged="SupportedMessages_OnSelectedChanged" />
 
 			<GridSplitter Grid.Column="0" Grid.Row="1" Grid.RowSpan="3" Width="5" HorizontalAlignment="Right" VerticalAlignment="Stretch" />
 
