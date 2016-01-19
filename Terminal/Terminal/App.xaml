@@ -1,6 +1,6 @@
-﻿<sx:ActiproBaseApplication x:Class="StockSharp.Terminal.App"
+﻿<xaml:BaseApplication x:Class="StockSharp.Terminal.App"
 			xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
 			xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-			xmlns:sx="http://schemas.stocksharp.com/xaml"
+            xmlns:xaml="http://schemas.stocksharp.com/xaml"
 			StartupUri="MainWindow.xaml">
-</sx:ActiproBaseApplication>
+</xaml:BaseApplication>
