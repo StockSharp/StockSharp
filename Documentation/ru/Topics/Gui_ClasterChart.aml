@@ -9,7 +9,7 @@
        <legacyBold>ChartCandleDrawStyles.ClusterProfile</legacyBold>.
        
        В качестве исходных данных этот график использует информацию из свойства 
-       <codeEntityReference qualifyHint="true">P:StockSharp.Algo.Candles.Candle.VolumeProfileInfo</codeEntityReference>.
+       <codeEntityReference qualifyHint="true">P:StockSharp.Algo.Candles.Candle.PriceLevels</codeEntityReference>.
 
       </para>
       
@@ -18,16 +18,26 @@
       </para>
 <list class="bullet">
   <listItem>
-  	<para><legacyBold>LineColor</legacyBold> - цвет базовой линии кластера. </para>
+  	<para>
+  	<codeEntityReference>P:StockSharp.Xaml.Charting.ChartCandleElement.LineColor</codeEntityReference> - цвет базовой линии кластера.
+  	</para>
   </listItem>
   <listItem>
-  	<para><legacyBold>TextColor</legacyBold> - цвет цифр объемов на графике. </para>
+  	<para>
+  	<codeEntityReference>P:StockSharp.Xaml.Charting.ChartCandleElement.TextColor</codeEntityReference> - цвет цифр объемов на графике.
+  	</para>
   </listItem>
   <listItem>
-  	<para><legacyBold>ClusterColor</legacyBold> - основной цвет баров в гистограммах кластеров. </para>
+  	<para>
+  	<codeEntityReference>P:StockSharp.Xaml.Charting.ChartCandleElement.ClusterColor</codeEntityReference> 
+  	- основной цвет баров в гистограммах кластеров.
+  	</para>
   </listItem>
   <listItem>
-  	<para><legacyBold>ClusterMaxColor</legacyBold> - цвет бара максимального объема в гисторграммах кластеров.</para>
+  	<para>
+  	<codeEntityReference>P:StockSharp.Xaml.Charting.ChartCandleElement.ClusterMaxColor</codeEntityReference> 
+  	- цвет бара максимального объема в гисторграммах кластеров.
+  	</para>
   </listItem>
 </list>
       

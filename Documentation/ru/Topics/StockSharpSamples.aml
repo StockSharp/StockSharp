@@ -131,8 +131,9 @@
 			  	  <entry>OEC</entry>
 				  <entry>SampleOEC</entry>
 				  <entry>
-					  Пример работы с <codeEntityReference qualifyHint="false">T:StockSharp.OEC.OECTrader</codeEntityReference>.
+					  Пример работы с <codeEntityReference qualifyHint="false">T:StockSharp.OpenECry.OECTrader</codeEntityReference>.
 				  </entry>
+				  
 			  </row>
 			  <row>
 			  	  <entry>Interactive Brokers</entry>
@@ -271,7 +272,7 @@
 			  	  <entry>Другие примеры</entry>
 				  <entry>SampleUnit</entry>
 				  <entry>
-					  Арифметические действия с типом данных <codeEntityReference>T:StockSharp.BusinessEntities.Unit</codeEntityReference>.</entry>
+					  Арифметические действия с типом данных <codeEntityReference>T:StockSharp.Messages.Unit</codeEntityReference>.</entry>
 			  </row>
 			  <row>
 			      <entry>Другие примеры</entry>

@@ -94,6 +94,7 @@ public class QuikCandle
 	public int Volume { get; set; }
 }]]></code>
 				  <para>
+				   DdeCustomTableAttribute
 					  Атрибутом <codeEntityReference>T:StockSharp.Quik.DdeCustomTableAttribute</codeEntityReference> задается название
 					  таблицы, из которой будут читаться данные. Дополнительно, через <codeEntityReference qualifyHint="true">T:StockSharp.Quik.DdeCustomColumnAttribute</codeEntityReference>
 					  задаются название колонки в таблице и ее порядковый номер (нумерация идет с 0).

@@ -9,7 +9,7 @@
        <legacyBold>ChartCandleDrawStyles.BoxVolume</legacyBold>.
        
        В качестве исходных данных этот график использует информацию из свойства 
-       <codeEntityReference qualifyHint="true">P:StockSharp.Algo.Candles.Candle.VolumeProfileInfo</codeEntityReference>.
+       <codeEntityReference qualifyHint="true">P:StockSharp.Algo.Candles.Candle.PriceLevels</codeEntityReference>.
        
       </para>
       <para>
@@ -17,26 +17,49 @@
       </para>
 <list class="bullet">
   <listItem>
-  	<para><legacyBold>Timeframe2Multiplier</legacyBold> - множитель, который применяется к основному таймфрейму, заданному в конструкторе, чтобы получить второй таймфрейм. Отображаемые свечи 
-объединяются в группы размером, соответствующим второму таймфрему. Группы рисуются на графике сеткой и рамкой соответствующих цветов. </para>
+  	<para>
+  	<codeEntityReference>P:StockSharp.Xaml.Charting.ChartCandleElement.Timeframe2Multiplier</codeEntityReference>
+  	 - множитель, который применяется к основному таймфрейму, заданному в конструкторе, чтобы получить второй таймфрейм. Отображаемые свечи
+объединяются в группы размером, соответствующим второму таймфрему. Группы рисуются на графике сеткой и рамкой соответствующих цветов. 
+</para>
   </listItem>
   <listItem>
-  	<para><legacyBold>Timeframe3Multiplier</legacyBold> - аналогично <legacyBold>Timeframe2Multiplier</legacyBold>, но для третьего таймфрейма. На графике 3й таймфрейм рисуется сеткой соответствующего цвета. </para>
+  	<para>
+  	<codeEntityReference>P:StockSharp.Xaml.Charting.ChartCandleElement.Timeframe3Multiplier</codeEntityReference>
+  	 - аналогично 
+  	 <codeEntityReference>P:StockSharp.Xaml.Charting.ChartCandleElement.Timeframe2Multiplier</codeEntityReference>, но для третьего таймфрейма. 
+  	 На графике 3-й таймфрейм рисуется сеткой соответствующего цвета.
+  	</para>
   </listItem>
   <listItem>
-  	<para><legacyBold>FontColor</legacyBold> - цвет цифр объемов на графике. </para>
+  	<para>
+  	   <codeEntityReference>P:StockSharp.Xaml.Charting.ChartCandleElement.FontColor</codeEntityReference>
+  		<legacyBold>FontColor</legacyBold> - цвет цифр объемов на графике. 
+  	</para>
   </listItem>
   <listItem>
-  	<para><legacyBold>MaxVolumeColor</legacyBold> - цвет цифр объемов на графике для максимального объема в данной свече.</para>
+  	<para>
+  	<codeEntityReference>P:StockSharp.Xaml.Charting.ChartCandleElement.MaxVolumeColor</codeEntityReference> 
+  	- цвет цифр объемов на графике для максимального объема в данной свече.
+  	</para>
   </listItem>
   <listItem>
-  	<para><legacyBold>Timeframe2Color</legacyBold> - цвет сетки 2го таймфрейма. </para>
+  	<para>
+  	<codeEntityReference>P:StockSharp.Xaml.Charting.ChartCandleElement.Timeframe2Color</codeEntityReference> 
+  	- цвет сетки 2-го таймфрейма.
+  	</para>
   </listItem>
   <listItem>
-  	<para><legacyBold>Timeframe2FrameColor</legacyBold> - цвет рамки 2го таймфрейма.</para>
+  	<para>
+  	<codeEntityReference>P:StockSharp.Xaml.Charting.ChartCandleElement.Timeframe2FrameColor</codeEntityReference> 
+  	- цвет рамки 2го таймфрейма.
+  	</para>
   </listItem>
   <listItem>
-  	<para><legacyBold>Timeframe3Color</legacyBold> - цвет сетки 3го таймфрейма.</para>
+  	<para>
+  	<codeEntityReference>P:StockSharp.Xaml.Charting.ChartCandleElement.Timeframe3Color</codeEntityReference> 
+  	- цвет сетки 3го таймфрейма.
+  	</para>
   </listItem>
 </list>
       
