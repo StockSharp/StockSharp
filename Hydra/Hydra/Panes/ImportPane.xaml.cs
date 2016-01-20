@@ -277,7 +277,6 @@ namespace StockSharp.Hydra.Panes
 			[CategoryLoc(LocalizedStrings.Str1559Key)]
 			[DisplayNameLoc(LocalizedStrings.TimeZoneKey)]
 			[DescriptionLoc(LocalizedStrings.TimeZoneKey, true)]
-			[Editor(typeof(TimeZoneEditor), typeof(TimeZoneEditor))]
 			public TimeZoneInfo TimeZone
 			{
 				get { return _timeZone; }

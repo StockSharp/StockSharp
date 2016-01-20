@@ -107,6 +107,14 @@
 			</xctk:EditorTemplateDefinition.EditingTemplate>
 		</xctk:EditorTemplateDefinition>
 
+		<xctk:EditorTemplateDefinition TargetProperties="{x:Type sys:TimeZoneInfo}">
+			<xctk:EditorTemplateDefinition.EditingTemplate>
+				<DataTemplate>
+					<ex:TimeZoneComboBox SelectedTimeZone="{Binding Value, Mode=TwoWay}" />
+				</DataTemplate>
+			</xctk:EditorTemplateDefinition.EditingTemplate>
+		</xctk:EditorTemplateDefinition>
+
 		<xctk:EditorTemplateDefinition TargetProperties="ExtensionInfo">
 			<xctk:EditorTemplateDefinition.EditingTemplate>
 				<DataTemplate>
