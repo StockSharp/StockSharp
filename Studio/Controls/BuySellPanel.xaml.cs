@@ -209,6 +209,7 @@ namespace StockSharp.Studio.Controls
 			if (!CheckLimitPrice())
 				return;
 
+            //TODO: регистрация команды в IComandService
 			new RegisterOrderCommand(CreateOrder(Sides.Sell, LimitPrice, OrderTypes.Limit)).Process(this);
 		}
 

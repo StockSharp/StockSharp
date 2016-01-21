@@ -104,7 +104,8 @@ namespace StockSharp.Studio.Controls
 					OrderGrid.Orders.Add(cmd.Order);
 			});
 			cmdSvc.Register<ReRegisterOrderCommand>(this, false, cmd => OrderGrid.Orders.Add(cmd.NewOrder));
-			cmdSvc.Register<OrderFailCommand>(this, false, cmd =>
+            //TODO: получение команд из ICommandService
+            cmdSvc.Register<OrderFailCommand>(this, false, cmd =>
 			{
 				if (cmd.Action == OrderActions.Registering)
 					OrderGrid.AddRegistrationFail(cmd.Fail);
