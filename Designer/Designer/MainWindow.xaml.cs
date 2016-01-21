@@ -35,6 +35,7 @@ namespace StockSharp.Designer
 	using Ecng.Xaml;
 
 	using StockSharp.Algo;
+	using StockSharp.Algo.History.Hydra;
 	using StockSharp.Algo.Storages;
 	using StockSharp.BusinessEntities;
 	using StockSharp.Configuration;
@@ -42,11 +43,32 @@ namespace StockSharp.Designer
 	using StockSharp.Localization;
 	using StockSharp.Logging;
 	using StockSharp.Messages;
+	using StockSharp.Studio.Controls;
+	using StockSharp.Studio.Core;
+	using StockSharp.Studio.Core.Commands;
+	using StockSharp.Studio.Services;
 	using StockSharp.Xaml;
 	using StockSharp.Xaml.Diagram;
 
 	public partial class MainWindow
 	{
+		sealed class PersistableService : IPersistableService
+		{
+			public bool ContainsKey(string key)
+			{
+				return false;
+			}
+
+			public TValue GetValue<TValue>(string key, TValue defaultValue = default(TValue))
+			{
+				return defaultValue;
+			}
+
+			public void SetValue(string key, object value)
+			{
+			}
+		}
+
 		public static RoutedCommand AddCommand = new RoutedCommand();
 		public static RoutedCommand OpenCommand = new RoutedCommand();
 		public static RoutedCommand RemoveCommand = new RoutedCommand();
@@ -57,19 +79,27 @@ namespace StockSharp.Designer
 		public static RoutedCommand ConnectorSettingsCommand = new RoutedCommand();
 		public static RoutedCommand ConnectDisconnectCommand = new RoutedCommand();
 		public static RoutedCommand RefreshCompositionCommand = new RoutedCommand();
+		public static RoutedCommand OpenMarketDataSettingsCommand = new RoutedCommand();
 
 		private readonly string _settingsFile;
 		private readonly StrategiesRegistry _strategiesRegistry;
         private readonly Connector _connector;
 		private readonly LayoutManager _layoutManager;
 
+		private MarketDataSettingsCache _marketDataSettingsCache;
+
 		public MainWindow()
 		{
+			ConfigManager.RegisterService<IStudioCommandService>(new StudioCommandService());
+			ConfigManager.RegisterService<IPersistableService>(new PersistableService());
+
 			InitializeComponent();
 
 			Title = TypeHelper.ApplicationNameWithVersion;
 
 			InitializeDataSource();
+			InitializeMarketDataSettingsCache();
+            InitializeCommands();
 
 			Directory.CreateDirectory(BaseApplication.AppDataPath);
 
@@ -118,6 +148,7 @@ namespace StockSharp.Designer
 			ConfigManager.RegisterService(_layoutManager);
 			ConfigManager.RegisterService<IConnector>(_connector);
 			ConfigManager.RegisterService<ISecurityProvider>(_connector);
+			ConfigManager.RegisterService(_marketDataSettingsCache);
 
 			SolutionExplorer.Compositions = _strategiesRegistry.Compositions;
 			SolutionExplorer.Strategies = _strategiesRegistry.Strategies;
@@ -151,6 +182,98 @@ namespace StockSharp.Designer
 
 			if (!File.Exists(dbFile))
 				Properties.Resources.StockSharp.Save(dbFile);
+		}
+
+		private void InitializeCommands()
+		{
+			var cmdSvc = ConfigManager.GetService<IStudioCommandService>();
+
+			cmdSvc.Register<OpenMarketDataSettingsCommand>(this, true, cmd => OpenMarketDataPanel(cmd.Settings));
+
+			cmdSvc.Register<RefreshSecurities>(this, false, cmd => ThreadingHelper
+				.Thread(() =>
+				{
+					var entityRegistry = ConfigManager.GetService<IEntityRegistry>();
+					var count = 0;
+					var progress = 0;
+
+					try
+					{
+						using (var client = new RemoteStorageClient(new Uri(cmd.Settings.Path)))
+						{
+							var credentials = cmd.Settings.Credentials;
+
+							client.Credentials.Login = credentials.Login;
+							client.Credentials.Password = credentials.Password;
+
+							foreach (var secType in cmd.Types.TakeWhile(secType => !cmd.IsCancelled()))
+							{
+								if (secType == SecurityTypes.Future)
+								{
+									var from = DateTime.Today.AddMonths(-4);
+									var to = DateTime.Today.AddMonths(4);
+									var expiryDates = from.GetExpiryDates(to);
+
+									foreach (var expiryDate in expiryDates.TakeWhile(d => !cmd.IsCancelled()))
+									{
+										client.Refresh(entityRegistry.Securities, new Security { Type = secType, ExpiryDate = expiryDate }, s =>
+										{
+											entityRegistry.Securities.Save(s);
+											_connector.SendOutMessage(s.ToMessage());
+											count++;
+										}, cmd.IsCancelled);
+									}
+								}
+								else
+								{
+									// для акций передаем фиктивное значение ExpiryDate, чтобы получить инструменты без даты экспирации
+									var expiryDate = secType == SecurityTypes.Stock ? DateTime.Today : (DateTime?)null;
+
+									client.Refresh(entityRegistry.Securities, new Security { Type = secType, ExpiryDate = expiryDate }, s =>
+									{
+										entityRegistry.Securities.Save(s);
+										_connector.SendOutMessage(s.ToMessage());
+										count++;
+									}, cmd.IsCancelled);
+								}
+
+								cmd.ProgressChanged(++progress);
+							}
+						}
+					}
+					catch (Exception ex)
+					{
+						ex.LogError();
+					}
+
+					if (cmd.IsCancelled())
+						return;
+
+					try
+					{
+						cmd.WhenFinished(count);
+					}
+					catch (Exception ex)
+					{
+						ex.LogError();
+					}
+				})
+				.Launch());
+		}
+
+		private void InitializeMarketDataSettingsCache()
+		{
+			_marketDataSettingsCache = new MarketDataSettingsCache();
+
+			_marketDataSettingsCache.Settings.Add(new MarketDataSettings
+			{
+				Id = Guid.Parse("93B222AB-9196-410F-8998-D44610ECC65B"),
+				Path = @"..\..\..\..\Samples\Testing\HistoryData\".ToFullPath(),
+                UseLocal = true,
+			});
+			_marketDataSettingsCache.Settings.Add(MarketDataSettings.StockSharpSettings);
+
+			_marketDataSettingsCache.Changed += SaveSettings;
 		}
 
 		#region Event handlers
@@ -429,6 +552,16 @@ namespace StockSharp.Designer
 			diagramEditor.Composition = composition;
 		}
 
+		private void OpenMarketDataSettingsCommand_OnCanExecute(object sender, CanExecuteRoutedEventArgs e)
+		{
+			e.CanExecute = true;
+		}
+
+		private void OpenMarketDataSettingsCommand_OnExecuted(object sender, ExecutedRoutedEventArgs e)
+		{
+			OpenMarketDataPanel(_marketDataSettingsCache.Settings.FirstOrDefault(s => s.Id != Guid.Empty));
+		}
+
 		#endregion
 
 		private void OpenComposition(CompositionItem item)
@@ -474,6 +607,16 @@ namespace StockSharp.Designer
 			_layoutManager.OpenDocumentWindow(content);
 		}
 
+		private void OpenMarketDataPanel(MarketDataSettings settings)
+		{
+			var content = new MarketDataPanel
+			{
+				SelectedSettings = settings
+			};
+
+			_layoutManager.OpenDocumentWindow(content);
+		}
+
 		private void LoadSettings()
 		{
 			if (!File.Exists(_settingsFile))
@@ -487,6 +630,7 @@ namespace StockSharp.Designer
 
 					settings.TryLoadSettings<SettingsStorage>("Layout", s => _layoutManager.Load(s));
 					settings.TryLoadSettings<SettingsStorage>("Connector", s => _connector.Load(s));
+					settings.TryLoadSettings<SettingsStorage>("MarketDataSettingsCache", s => _marketDataSettingsCache.Load(s));
 				});
 		}
 
@@ -500,6 +644,7 @@ namespace StockSharp.Designer
 
 					settings.SetValue("Layout", _layoutManager.Save());
 					settings.SetValue("Connector", _connector.Save());
+					settings.SetValue("MarketDataSettingsCache", ((IPersistable)_marketDataSettingsCache).Save());
 
 					new XmlSerializer<SettingsStorage>().Serialize(settings, _settingsFile);
 				});

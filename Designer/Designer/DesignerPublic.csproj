@@ -9,7 +9,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>StockSharp.Designer</RootNamespace>
     <AssemblyName>Designer</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <WarningLevel>4</WarningLevel>
@@ -79,15 +79,15 @@
     <Reference Include="MoreLinq">
       <HintPath>..\..\References\Ecng\MoreLinq.dll</HintPath>
     </Reference>
+    <Reference Include="StockSharp.Algo.History, Version=4.3.14.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Algo.History\StockSharp.Algo.History.dll</HintPath>
+    </Reference>
     <Reference Include="StockSharp.Licensing">
       <HintPath>..\..\References\StockSharp.Licensing.dll</HintPath>
     </Reference>
     <Reference Include="StockSharp.Xaml.Charting">
       <HintPath>..\..\Xaml.Charting\StockSharp.Xaml.Charting.dll</HintPath>
-    </Reference>
-    <Reference Include="StockSharp.Xaml.Diagram, Version=4.3.13.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Xaml.Diagram\StockSharp.Xaml.Diagram.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
@@ -125,8 +125,8 @@
       <DependentUpon>DiagramDebuggerControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="EmulationDiagramStrategy.cs" />
-    <Compile Include="Layout\DockingControl.cs" />
     <Compile Include="Layout\LayoutManager.cs" />
+    <Compile Include="MarketDataSettingsEditor.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -186,7 +186,9 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <None Include="App.config" />
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -225,6 +227,22 @@
     <ProjectReference Include="..\..\Messages\Messages.csproj">
       <Project>{b47f9c23-a4bd-46a9-bf27-54cb3d653503}</Project>
       <Name>Messages</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Studio\Controls\ControlsPublic.csproj">
+      <Project>{6d205f4b-6b2a-4082-b717-f6baaa4e0f3a}</Project>
+      <Name>ControlsPublic</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Studio\Core\CorePublic.csproj">
+      <Project>{23b15ae0-2021-43da-808f-3bf331462976}</Project>
+      <Name>CorePublic</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Studio\Studio\StudioPublic.csproj">
+      <Project>{386aea47-c1a0-4a0d-af84-85604305b18a}</Project>
+      <Name>StudioPublic</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Xaml.Diagram\Xaml.DiagramPublic.csproj">
+      <Project>{e5d21a65-1b77-4b4b-87c7-8ac7eee4f085}</Project>
+      <Name>Xaml.DiagramPublic</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Xaml\Xaml.csproj">
       <Project>{64e4d6f0-36b6-4904-9ba7-fffbe5ff71d8}</Project>
@@ -283,6 +301,9 @@
     <Resource Include="Images\Add_32x32.png" />
     <Resource Include="Images\Open_32x32.png" />
     <Resource Include="Images\Remove_32x32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\storage_32x32.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

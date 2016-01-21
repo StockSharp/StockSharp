@@ -66,6 +66,8 @@ namespace StockSharp.Studio.Controls
 		private bool _isLoading;
 		private StudioStorageRegistry _storageRegistry;
 
+		public override string Key => SelectedSettings.Id.To<string>();
+
 		public MarketDataPanel()
 		{
 			DataContext = this;
@@ -107,13 +109,15 @@ namespace StockSharp.Studio.Controls
 
 		private void SetCredentials(bool isStockSharpStorage, ServerCredentials credentials = null)
 		{
-			SettingsPanel.IsCredentialsEnabled = !isStockSharpStorage;
+			//SettingsPanel.IsCredentialsEnabled = !isStockSharpStorage;
 
-			var serverCredentials = !isStockSharpStorage
-				? (credentials ?? new ServerCredentials())
-				: ConfigManager
-					.GetService<IPersistableService>()
-					.GetCredentials();
+			//var serverCredentials = !isStockSharpStorage
+			//	? (credentials ?? new ServerCredentials())
+			//	: ConfigManager
+			//		.GetService<IPersistableService>()
+			//		.GetCredentials();
+
+			var serverCredentials = credentials ?? new ServerCredentials();
 
 			SettingsPanel.Login = serverCredentials.Login;
 			SettingsPanel.Password = serverCredentials.Password;
@@ -123,8 +127,8 @@ namespace StockSharp.Studio.Controls
 		{
 			var isStockSharpStorage = !SettingsPanel.IsLocal && SettingsPanel.Address.ContainsIgnoreCase("stocksharp.com");
 
-			if (SettingsPanel.IsCredentialsEnabled == !isStockSharpStorage)
-				return;
+			//if (SettingsPanel.IsCredentialsEnabled == !isStockSharpStorage)
+			//	return;
 
 			SetCredentials(isStockSharpStorage);
 		}
@@ -149,6 +153,9 @@ namespace StockSharp.Studio.Controls
 
 		private void RefreshGrid()
 		{
+			if (SelectedSettings == null)
+				return;
+
 			Grid.BeginMakeEntries(_storageRegistry, SecurityPicker.SelectedSecurity, FormatCtrl.SelectedFormat, null);
 		}
 
@@ -206,10 +213,11 @@ namespace StockSharp.Studio.Controls
 
 				if (wnd.ShowModal(this))
 				{
+					_isCancelled = false;
 					BusyIndicator.IsBusy = true;
 
 					var progress = BusyIndicator.FindVisualChild<ProgressBar>();
-					var cancel = (Button)BusyIndicator.FindVisualChild<StackPanel>().Children[2];
+                    var cancel = (Button)BusyIndicator.FindVisualChild<CancelButton>();
 
 					var secTypes = wnd.SecurityTypes.ToArray();
 
@@ -253,6 +261,13 @@ namespace StockSharp.Studio.Controls
 			{
 				((IPersistable)Grid).Load(storage.GetValue<SettingsStorage>("Grid"));
 
+				var selectedSettings = storage.GetValue("SelectedSettings", Guid.Empty);
+				var settings = ConfigManager.GetService<MarketDataSettingsCache>().Settings;
+
+				if (selectedSettings != Guid.Empty)
+					SelectedSettings = settings.FirstOrDefault(s => s.Id == selectedSettings)
+						?? settings.FirstOrDefault(s => s.Id != Guid.Empty);
+
 				if (storage.ContainsKey("Security"))
 					SecurityPicker.SelectedSecurity = ConfigManager.GetService<IEntityRegistry>().Securities.ReadById(storage.GetValue<string>("Security"));
 
@@ -270,9 +285,12 @@ namespace StockSharp.Studio.Controls
 		{
 			storage.SetValue("Grid", Grid.Save());
 
+			if (SelectedSettings != null)
+				storage.SetValue("SelectedSettings", SelectedSettings.Id);
+
 			if (SecurityPicker.SelectedSecurity != null)
 				storage.SetValue("Security", SecurityPicker.SelectedSecurity.Id);
-
+			
 			storage.SetValue("StorageFormat", FormatCtrl.SelectedFormat.To<string>());
 		}
 
@@ -281,5 +299,9 @@ namespace StockSharp.Studio.Controls
 			_isCancelled = true;
 			Grid.CancelMakeEntires();
 		}
+	}
+
+	public class CancelButton : Button
+	{
 	}
 }

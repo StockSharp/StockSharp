@@ -166,7 +166,7 @@ namespace StockSharp.Studio.Controls
 				//if (_keyBindings.ContainsKey(item))
 				//	throw new ArgumentException(@"Действие уже было ранее добавлено.", "item");
 
-				if (item.Key != Key.None)
+				if (item.Key != System.Windows.Input.Key.None)
 				{
 					var binding = new KeyBinding(new Command(_parent, item), item.Key, item.ModifierKey);
 					_keyBindings[Tuple.Create(item.Key, item.ModifierKey)] = binding;
@@ -181,7 +181,7 @@ namespace StockSharp.Studio.Controls
 
 			protected override bool OnRemoving(MarketDepthControlAction item)
 			{
-				if (item.Key != Key.None)
+				if (item.Key != System.Windows.Input.Key.None)
 				{
 					var key = Tuple.Create(item.Key, item.ModifierKey);
 					var binding = _keyBindings.TryGetValue(key);
@@ -261,7 +261,7 @@ namespace StockSharp.Studio.Controls
 							break;
 					}
 				}),
-				new MarketDepthControlAction(Key.Escape, ModifierKeys.None, (c, q) => new CancelAllOrdersCommand().Process(this)),
+				new MarketDepthControlAction(System.Windows.Input.Key.Escape, ModifierKeys.None, (c, q) => new CancelAllOrdersCommand().Process(this)),
 			};
 
 			var cmdSvc = ConfigManager.GetService<IStudioCommandService>();

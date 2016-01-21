@@ -1,14 +1,14 @@
-﻿<layout:DockingControl x:Class="StockSharp.Designer.DiagramEditorControl"
+﻿<controls:BaseStudioControl x:Class="StockSharp.Designer.DiagramEditorControl"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:diagram="http://schemas.stocksharp.com/xaml"
-                       xmlns:xcad="http://schemas.xceed.com/wpf/xaml/avalondock"
+             xmlns:xcad="http://schemas.xceed.com/wpf/xaml/avalondock"
              xmlns:localization="clr-namespace:StockSharp.Localization;assembly=StockSharp.Localization"
-             xmlns:layout="clr-namespace:StockSharp.Designer.Layout"
+             xmlns:controls="clr-namespace:StockSharp.Studio.Controls;assembly=StockSharp.Studio.Controls"
              mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="600" x:Name="Ctrl"
+             d:DesignHeight="300" d:DesignWidth="600"
              Title="{Binding RelativeSource={RelativeSource Self}, Path=Composition.Element.Name}">
 
     <xcad:DockingManager x:Name="DockingManager">
@@ -54,4 +54,4 @@
             </xcad:LayoutPanel>
         </xcad:LayoutRoot>
     </xcad:DockingManager>
-</layout:DockingControl>
+</controls:BaseStudioControl>

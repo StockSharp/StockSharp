@@ -24,6 +24,7 @@ namespace StockSharp.Designer
 	using Ecng.Serialization;
 
 	using StockSharp.Localization;
+	using StockSharp.Studio.Core;
 	using StockSharp.Xaml.Diagram;
 
 	using Xceed.Wpf.Toolkit.PropertyGrid.Attributes;
@@ -36,7 +37,8 @@ namespace StockSharp.Designer
 
 	public class EmulationDiagramStrategy : DiagramStrategy
 	{
-		private string _dataPath;
+		//private string _dataPath;
+		private MarketDataSettings _marketDataSettings;
 		private DateTime _startDate;
 		private DateTime _stopDate;
 		private MarketDataSource _marketDataSource;
@@ -50,16 +52,30 @@ namespace StockSharp.Designer
 		private TimeSpan _emulatoinLatency;
 		private bool _useMarketDepths;
 
-		[DisplayNameLoc(LocalizedStrings.Str2804Key)]
+		//[DisplayNameLoc(LocalizedStrings.Str2804Key)]
+		//[CategoryLoc(LocalizedStrings.Str1174Key)]
+		//[PropertyOrder(10)]
+		//public string DataPath
+		//{
+		//	get { return _dataPath; }
+		//	set
+		//	{
+		//		_dataPath = value;
+		//		RaiseParametersChanged("DataPath");
+		//	}
+		//}
+
+		[DisplayNameLoc(LocalizedStrings.MarketDataKey)]
 		[CategoryLoc(LocalizedStrings.Str1174Key)]
-		[PropertyOrder(10)]
-		public string DataPath
+		[PropertyOrder(11)]
+		[Editor(typeof(MarketDataSettingsEditor), typeof(MarketDataSettingsEditor))]
+		public MarketDataSettings MarketDataSettings
 		{
-			get { return _dataPath; }
+			get { return _marketDataSettings; }
 			set
 			{
-				_dataPath = value;
-				RaiseParametersChanged("DataPath");
+				_marketDataSettings = value;
+				RaiseParametersChanged("MarketDataSettings");
 			}
 		}
 
@@ -221,7 +237,7 @@ namespace StockSharp.Designer
 
 		public EmulationDiagramStrategy()
 		{
-			DataPath = @"..\..\..\..\Samples\Testing\HistoryData\".ToFullPath();
+			//DataPath = @"..\..\..\..\Samples\Testing\HistoryData\".ToFullPath();
 			StartDate = new DateTime(2012, 10, 1);
 			StopDate = new DateTime(2012, 10, 25);
 			MarketDataSource = MarketDataSource.Candles;
@@ -247,7 +263,7 @@ namespace StockSharp.Designer
 			Composition = registry.Clone(composition);
 
 			Id = storage.GetValue<Guid>("StrategyId");
-			DataPath = storage.GetValue("DataPath", DataPath);
+			//DataPath = storage.GetValue("DataPath", DataPath);
 			StartDate = storage.GetValue("StartDate", StartDate);
 			StopDate = storage.GetValue("StopDate", StopDate);
 			MarketDataSource = storage.GetValue("MarketDataSource", MarketDataSource);
@@ -264,6 +280,11 @@ namespace StockSharp.Designer
 
 			DebugLog = storage.GetValue("DebugLog", DebugLog);
 
+			var marketDataSettings = storage.GetValue("MarketDataSettings", Guid.Empty);
+
+			if (marketDataSettings != Guid.Empty)
+				MarketDataSettings = ConfigManager.GetService<MarketDataSettingsCache>().Settings.FirstOrDefault(s => s.Id == marketDataSettings);
+
 			base.Load(storage);
 		}
 
@@ -271,7 +292,7 @@ namespace StockSharp.Designer
 		{
 			storage.SetValue("StrategyId", Id);
 			storage.SetValue("CompositionId", Composition.TypeId);
-			storage.SetValue("DataPath", DataPath);
+			//storage.SetValue("DataPath", DataPath);
 			storage.SetValue("StartDate", StartDate);
 			storage.SetValue("StopDate", StopDate);
 			storage.SetValue("MarketDataSource", MarketDataSource);
@@ -287,6 +308,9 @@ namespace StockSharp.Designer
 			storage.SetValue("EmulatoinLatency", EmulatoinLatency);
 
 			storage.SetValue("DebugLog", DebugLog);
+
+			if (MarketDataSettings != null)
+				storage.SetValue("MarketDataSettings", MarketDataSettings.Id);
 
 			base.Save(storage);
 		}

@@ -118,6 +118,7 @@
     <Compile Include="Commands\RequestLicenseCommand.cs" />
     <Compile Include="Commands\ResetStrategyCommand.cs" />
     <Compile Include="Commands\StrategyCommand.cs" />
+    <Compile Include="Commands\StudioCommandService.cs" />
     <Compile Include="IPersistableService.cs" />
     <Compile Include="IStudioControl.cs" />
     <Compile Include="MarketDataSettings.cs" />
