@@ -128,30 +128,11 @@
     <Compile Include="..\..\StockSharpAssemblyInfo.cs">
       <Link>Properties\StockSharpAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="Controls\MyTradesWindow.xaml.cs">
-      <DependentUpon>MyTradesWindow.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Controls\OrdersWindow.xaml.cs">
-      <DependentUpon>OrdersWindow.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Controls\PortfoliosWindow.xaml.cs">
-      <DependentUpon>PortfoliosWindow.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Controls\QuotesWindow.xaml.cs">
-      <DependentUpon>QuotesWindow.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Controls\SecuritiesWindow.xaml.cs">
-      <DependentUpon>SecuritiesWindow.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Controls\StopOrdersWindow.xaml.cs">
-      <DependentUpon>StopOrdersWindow.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Controls\TradesWindow.xaml.cs">
-      <DependentUpon>TradesWindow.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Fakes\FakeMarketDataProvider.cs" />
     <Compile Include="Fakes\FakeSecurityProvider.cs" />
-    <Compile Include="Fakes\FakeStudioCommandService.cs" />
+    <Compile Include="Interfaces\ITerminalCommandService.cs" />
+    <Compile Include="Services\ConnectorService.cs" />
+    <Compile Include="Services\TerminalCommandService.cs" />
     <Compile Include="Layout\DockingControl.cs" />
     <Compile Include="Layout\LayoutManager.cs" />
     <Compile Include="Logics\CompositionItem.cs" />
@@ -160,34 +141,6 @@
     </Compile>
     <Compile Include="Logics\EmulationDiagramStrategy.cs" />
     <Compile Include="Layout\LayoutKeys.cs" />
-    <Page Include="Controls\MyTradesWindow.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Controls\OrdersWindow.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Controls\PortfoliosWindow.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Controls\QuotesWindow.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Controls\SecuritiesWindow.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Controls\StopOrdersWindow.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Controls\TradesWindow.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
     <Page Include="Controls\WorkAreaControl.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

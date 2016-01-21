@@ -40,6 +40,7 @@ using Ecng.Xaml;
 using StockSharp.BusinessEntities;
 using StockSharp.Localization;
 using StockSharp.Configuration;
+using StockSharp.Terminal.Services;
 
 namespace StockSharp.Terminal
 {
@@ -50,17 +51,7 @@ namespace StockSharp.Terminal
 
 		private int _countWorkArea = 2;
 
-		private bool _isConnected;
-		public readonly Connector Connector;
-
-		private readonly TradesWindow _tradesWindow = new TradesWindow();
-		private readonly OrdersWindow _ordersWindow = new OrdersWindow();
-		private readonly MyTradesWindow _myTradesWindow = new MyTradesWindow();
-		private readonly StopOrderWindow _stopOrdersWindow = new StopOrderWindow();
-		private readonly SecuritiesWindow _securitiesWindow = new SecuritiesWindow();
-		private readonly PortfoliosWindow _portfoliosWindow = new PortfoliosWindow();
-
-		private const string _settingsFile = "connection.xml";
+		private ConnectorService _connectorService;
 
 		//-------------------------------------------------------------------
 		#endregion Fields
@@ -86,30 +77,22 @@ namespace StockSharp.Terminal
 			InitializeComponent();
 			Instance = this;
 
-			LayoutManager = new LayoutManager(DockingManager);			
+			LayoutManager = new LayoutManager(DockingManager);
 			DockingManager.DocumentClosed += DockingManager_DocumentClosed;
 
 			Title = Title.Put("Multi connection");
 
-			_ordersWindow.MakeHideable();
-			_myTradesWindow.MakeHideable();
-			_tradesWindow.MakeHideable();
-			_securitiesWindow.MakeHideable();
-			_stopOrdersWindow.MakeHideable();
-			_portfoliosWindow.MakeHideable();
-
 			var logManager = new LogManager();
+
+			_connectorService = new ConnectorService();
+			logManager.Sources.Add(_connectorService.GetConnector());
 			logManager.Listeners.Add(new FileLogListener("sample.log"));
 
-			var entityRegistry = ConfigManager.GetService<IEntityRegistry>();
-			var storageRegistry = ConfigManager.GetService<IStorageRegistry>();
-
-			Connector = new Connector(entityRegistry, storageRegistry);
-			logManager.Sources.Add(Connector);
-
-			InitConnector();
+			_connectorService.InitConnector();
+			_connectorService.ChangeConnectStatusEvent += ChangeConnectStatusEvent;
+			_connectorService.ErrorEvent += ConnectorServiceErrorEvent;
 		}
-		
+
 		#region Events
 		//-------------------------------------------------------------------
 
@@ -125,7 +108,7 @@ namespace StockSharp.Terminal
 				Title = "Work area #" + ++_countWorkArea,
 				Content = new WorkAreaControl()
 			};
-			
+
 			LayoutDocuments.Children.Add(newWorkArea);
 
 			var offset = LayoutDocuments.Children.Count - 1;
@@ -141,31 +124,10 @@ namespace StockSharp.Terminal
 		{
 			var manager = (DockingManager)sender;
 
-			if (LayoutDocuments.Children.Count == 0 &&
-				manager.FloatingWindows.ToList().Count == 0)
+			if (LayoutDocuments.Children.Count == 0 && manager.FloatingWindows.ToList().Count == 0)
 				_countWorkArea = 0;
 		}
-
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="e"></param>
-		protected override void OnClosed(EventArgs e)
-		{
-			base.OnClosed(e);
-
-		}
-
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="sender"></param>
-		/// <param name="e"></param>
-		private void MainWindow_OnLoaded(object sender, RoutedEventArgs e)
-		{
-
-		}
-
+		
 		/// <summary>
 		/// 
 		/// </summary>
@@ -195,7 +157,7 @@ namespace StockSharp.Terminal
 			}, () =>
 			{
 				var element = (DockingManager)sender;
-
+				new Connector().Configure(this);
 			});
 		}
 
@@ -206,9 +168,8 @@ namespace StockSharp.Terminal
 		/// <param name="e"></param>
 		private void SettingsClick(object sender, RoutedEventArgs e)
 		{
-			Connector.Configure(this);
-
-			new XmlSerializer<SettingsStorage>().Serialize(Connector.Save(), _settingsFile);
+			_connectorService.Configure(this);
+			new XmlSerializer<SettingsStorage>().Serialize(_connectorService.Save(), ConnectorService.SETTINGS_FILE);
 		}
 
 		/// <summary>
@@ -218,40 +179,35 @@ namespace StockSharp.Terminal
 		/// <param name="e"></param>
 		private void ConnectClick(object sender, RoutedEventArgs e)
 		{
-			if (!_isConnected)
-				Connector.Connect();
+			if (!_connectorService.IsConnected)
+				_connectorService.Connect();
 			else
-				Connector.Disconnect();
+				_connectorService.Disconnect();
 		}
 
-		private void ShowSecuritiesClick(object sender, RoutedEventArgs e)
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="isConnected"></param>
+		private void ChangeConnectStatusEvent(bool isConnected)
 		{
-			ShowOrHide(_securitiesWindow);
+			//this.GuiAsync(() =>
+			//{
+				ConnectBtn.Content = isConnected ? LocalizedStrings.Disconnect : LocalizedStrings.Connect;
+			//});
 		}
 
-		private void ShowPortfoliosClick(object sender, RoutedEventArgs e)
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="message"></param>
+		/// <param name="caption"></param>
+		private void ConnectorServiceErrorEvent(string message, string caption)
 		{
-			ShowOrHide(_portfoliosWindow);
-		}
-
-		private void ShowOrdersClick(object sender, RoutedEventArgs e)
-		{
-			ShowOrHide(_ordersWindow);
-		}
-
-		private void ShowStopOrdersClick(object sender, RoutedEventArgs e)
-		{
-			ShowOrHide(_stopOrdersWindow);
-		}
-
-		private void ShowTradesClick(object sender, RoutedEventArgs e)
-		{
-			ShowOrHide(_tradesWindow);
-		}
-
-		private void ShowMyTradesClick(object sender, RoutedEventArgs e)
-		{
-			ShowOrHide(_myTradesWindow);
+			//this.GuiAsync(() =>
+			//{
+				MessageBox.Show(this, message, caption);
+			//});
 		}
 
 		//-------------------------------------------------------------------
@@ -259,96 +215,7 @@ namespace StockSharp.Terminal
 
 		#region Приватные методы
 		//-------------------------------------------------------------------
-
-		/// <summary>
-		/// 
-		/// </summary>
-		private void InitConnector()
-		{
-			// subscribe on connection successfully event
-			Connector.Connected += () =>
-			{
-				this.GuiAsync(() => ChangeConnectStatus(true));
-			};
-
-			// subscribe on connection error event
-			Connector.ConnectionError += error => this.GuiAsync(() =>
-			{
-				ChangeConnectStatus(false);
-				MessageBox.Show(this, error.ToString(), LocalizedStrings.Str2959);
-			});
-
-			Connector.Disconnected += () => this.GuiAsync(() => ChangeConnectStatus(false));
-
-			// subscribe on error event
-			Connector.Error += error =>
-				this.GuiAsync(() => MessageBox.Show(this, error.ToString(), LocalizedStrings.Str2955));
-
-			// subscribe on error of market data subscription event
-			Connector.MarketDataSubscriptionFailed += (security, type, error) =>
-				this.GuiAsync(() => MessageBox.Show(this, error.ToString(), LocalizedStrings.Str2956Params.Put(type, security)));
-
-			Connector.NewSecurities += securities => _securitiesWindow.SecurityPicker.Securities.AddRange(securities);
-			Connector.NewTrades += trades => _tradesWindow.TradeGrid.Trades.AddRange(trades);
-
-			Connector.NewOrders += orders => _ordersWindow.OrderGrid.Orders.AddRange(orders);
-			Connector.NewStopOrders += orders => _stopOrdersWindow.OrderGrid.Orders.AddRange(orders);
-			Connector.NewMyTrades += trades => _myTradesWindow.TradeGrid.Trades.AddRange(trades);
-
-			Connector.NewPortfolios += portfolios => _portfoliosWindow.PortfolioGrid.Portfolios.AddRange(portfolios);
-			Connector.NewPositions += positions => _portfoliosWindow.PortfolioGrid.Positions.AddRange(positions);
-
-			// subscribe on error of order registration event
-			Connector.OrdersRegisterFailed += OrdersFailed;
-			Connector.StopOrdersRegisterFailed += OrdersFailed;
-
-			// subscribe on error of order cancelling event
-			Connector.OrdersCancelFailed += OrdersFailed;
-			Connector.StopOrdersCancelFailed += OrdersFailed;
-
-			// set market data provider
-			_securitiesWindow.SecurityPicker.MarketDataProvider = Connector;
-
-			try
-			{
-				if (File.Exists(_settingsFile))
-					Connector.Load(new XmlSerializer<SettingsStorage>().Deserialize(_settingsFile));
-			}
-			catch
-			{
-
-			}
-
-			if (Connector.StorageAdapter == null)
-				return;
-
-			Connector.StorageAdapter.DaysLoad = TimeSpan.FromDays(3);
-			Connector.StorageAdapter.Load();
-		}
-
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="fails"></param>
-		private void OrdersFailed(IEnumerable<OrderFail> fails)
-		{
-			this.GuiAsync(() =>
-			{
-				foreach (var fail in fails)
-					MessageBox.Show(this, fail.Error.ToString(), LocalizedStrings.Str2960);
-			});
-		}
-
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="isConnected"></param>
-		private void ChangeConnectStatus(bool isConnected)
-		{
-			_isConnected = isConnected;
-			ConnectBtn.Content = isConnected ? LocalizedStrings.Disconnect : LocalizedStrings.Connect;
-		}
-
+		
 		/// <summary>
 		/// 
 		/// </summary>

@@ -19,6 +19,7 @@ using StockSharp.Studio.Core.Commands;
 using StockSharp.Terminal.Fakes;
 using System.Windows;
 using System.Windows.Threading;
+using StockSharp.Terminal.Services;
 
 namespace StockSharp.Terminal
 {
@@ -32,7 +33,7 @@ namespace StockSharp.Terminal
 
 		protected override void OnStartup(StartupEventArgs e)
 		{
-			ConfigManager.RegisterService<IStudioCommandService>(new FakeStudioCommandService());
+			ConfigManager.RegisterService<IStudioCommandService>(new TerminalCommandService());
 			ConfigManager.RegisterService<ISecurityProvider>(new FakeSecurityProvider());
 			ConfigManager.RegisterService<IMarketDataProvider>(new FakeMarketDataProvider());
 

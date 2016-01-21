@@ -98,13 +98,13 @@ namespace StockSharp.Studio.Controls
 
 			var cmdSvc = ConfigManager.GetService<IStudioCommandService>();
 			cmdSvc.Register<ResetedCommand>(this, false, cmd => OrderGrid.Orders.Clear());
+			//TODO: получение команд из ICommandService
 			cmdSvc.Register<OrderCommand>(this, false, cmd =>
 			{
 				if (cmd.Action == OrderActions.Registering && cmd.Order.Type != OrderTypes.Conditional)
 					OrderGrid.Orders.Add(cmd.Order);
 			});
 			cmdSvc.Register<ReRegisterOrderCommand>(this, false, cmd => OrderGrid.Orders.Add(cmd.NewOrder));
-            //TODO: получение команд из ICommandService
             cmdSvc.Register<OrderFailCommand>(this, false, cmd =>
 			{
 				if (cmd.Action == OrderActions.Registering)

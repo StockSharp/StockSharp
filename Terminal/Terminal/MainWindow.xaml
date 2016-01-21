@@ -7,7 +7,7 @@
 		xmlns:fluent="clr-namespace:Fluent;assembly=Fluent"
 		xmlns:loc="clr-namespace:StockSharp.Localization;assembly=StockSharp.Localization"
 		DataContext="{Binding RelativeSource={RelativeSource Self}}"
-		Height="600" Width="800" Title="Trade Terminal (UI test)" Loaded="MainWindow_OnLoaded">
+		Height="600" Width="800" Title="Trade Terminal (UI test)">
 
     <Grid>
         <Grid.RowDefinitions>
