@@ -23,7 +23,7 @@
 						<TextBlock Text="{x:Static loc:LocalizedStrings.Str2834}"/>
 						<ProgressBar Height="15"/>
 					</StackPanel>
-					<Button Content="{x:Static loc:LocalizedStrings.Cancel}" HorizontalAlignment="Center" />
+                    <local:CancelButton Content="{x:Static loc:LocalizedStrings.Cancel}" HorizontalAlignment="Center" />
 				</StackPanel>
 			</DataTemplate>
 		</xctk:BusyIndicator.BusyContentTemplate>

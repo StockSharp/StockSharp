@@ -34,7 +34,7 @@ namespace StockSharp.Studio.Services
 
 	using CommandTuple = System.Tuple<System.Action<Core.Commands.IStudioCommand>, System.Func<Core.Commands.IStudioCommand, bool>, bool>;
 
-	class StudioCommandService : IStudioCommandService
+	public class StudioCommandService : IStudioCommandService
 	{
 		private sealed class Scope : IStudioCommandScope
 		{

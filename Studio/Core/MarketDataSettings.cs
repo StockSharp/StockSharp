@@ -35,8 +35,9 @@ namespace StockSharp.Studio.Core
 			{
 				return _stockSharpSettings ?? (_stockSharpSettings = new MarketDataSettings
 				{
+					Id = Guid.Parse("244BF0F0-2AFB-4516-B8FF-8175ED68EC9E"),
 					UseLocal = false,
-					Path = "net.tcp://{0}:8000".Put(_serverUrl),
+                    Path = "net.tcp://{0}:8000".Put(_serverUrl),
 					//Path = Directory.GetCurrentDirectory(),
 					//IsAlphabetic = true,
 				});

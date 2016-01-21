@@ -31,6 +31,29 @@ namespace StockSharp.Studio.Controls
 	{
 		private Action _loadedAction;
 
+		public static readonly DependencyProperty TitleProperty = DependencyProperty.Register("Title", typeof(string), typeof(BaseStudioControl),
+			new PropertyMetadata(string.Empty));
+
+		public string Title
+		{
+			get { return (string)GetValue(TitleProperty); }
+			set { SetValue(TitleProperty, value); }
+		}
+
+		public static readonly DependencyProperty IconProperty = DependencyProperty.Register("Icon", typeof(Uri), typeof(BaseStudioControl),
+			new PropertyMetadata(null));
+
+		public Uri Icon
+		{
+			get { return (Uri)GetValue(IconProperty); }
+			set { SetValue(IconProperty, value); }
+		}
+
+		public virtual string Key => Guid.NewGuid().ToString();
+
+		// TODO change to ControlChangedCommand
+		public event Action<BaseStudioControl> Changed;
+
 		protected BaseStudioControl()
 		{
 			var type = GetType();
@@ -55,6 +78,11 @@ namespace StockSharp.Studio.Controls
 
 		#endregion
 
+		public virtual bool CanClose()
+		{
+			return true;
+		}
+
 		public virtual void Load(SettingsStorage storage)
 		{
 		}
@@ -67,19 +95,12 @@ namespace StockSharp.Studio.Controls
 		{
 		}
 
-		private string _title;
-
-		public string Title
+		protected void RaiseChanged()
 		{
-			get { return _title; }
-			protected set
-			{
-				_title = value;
-				_propertyChanged.SafeInvoke(this, "Title");
-			}
+			Changed.SafeInvoke(this);
 		}
 
-		public Uri Icon { get; protected set; }
+		#region INotifyPropertyChanged
 
 		private PropertyChangedEventHandler _propertyChanged;
 
@@ -88,5 +109,7 @@ namespace StockSharp.Studio.Controls
 			add { _propertyChanged += value; }
 			remove { _propertyChanged -= value; }
 		}
+
+		#endregion
 	}
 }

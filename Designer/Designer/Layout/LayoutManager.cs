@@ -30,6 +30,7 @@ namespace StockSharp.Designer.Layout
 
 	using StockSharp.Localization;
 	using StockSharp.Logging;
+	using StockSharp.Studio.Controls;
 
 	using Xceed.Wpf.AvalonDock;
 	using Xceed.Wpf.AvalonDock.Layout;
@@ -40,8 +41,8 @@ namespace StockSharp.Designer.Layout
 		private readonly Dictionary<string, LayoutDocument> _documents = new Dictionary<string, LayoutDocument>();
 		private readonly Dictionary<string, LayoutAnchorable> _anchorables = new Dictionary<string, LayoutAnchorable>();
 
-		private readonly SynchronizedDictionary<DockingControl, SettingsStorage> _dockingControlSettings = new SynchronizedDictionary<DockingControl, SettingsStorage>();
-		private readonly SynchronizedSet<DockingControl> _changedControls = new CachedSynchronizedSet<DockingControl>();
+		private readonly SynchronizedDictionary<BaseStudioControl, SettingsStorage> _dockingControlSettings = new SynchronizedDictionary<BaseStudioControl, SettingsStorage>();
+		private readonly SynchronizedSet<BaseStudioControl> _changedControls = new CachedSynchronizedSet<BaseStudioControl>();
 
 		private readonly TimeSpan _period = TimeSpan.FromSeconds(5);
 		private readonly object _syncRoot = new object();
@@ -58,7 +59,7 @@ namespace StockSharp.Designer.Layout
 
 		public DockingManager DockingManager { get; }
 
-		public IEnumerable<DockingControl> DockingControls
+		public IEnumerable<BaseStudioControl> DockingControls
 		{
 			get
 			{
@@ -67,7 +68,7 @@ namespace StockSharp.Designer.Layout
 					.Descendents()
 					.OfType<LayoutContent>()
 					.Select(c => c.Content)
-					.OfType<DockingControl>()
+					.OfType<BaseStudioControl>()
 					.ToArray();
 			}
 		}
@@ -117,7 +118,7 @@ namespace StockSharp.Designer.Layout
 			DockingManager.ActiveContent = anchorable.Content;
 		}
 
-		public void OpenToolWindow(DockingControl content, bool canClose = true)
+		public void OpenToolWindow(BaseStudioControl content, bool canClose = true)
 		{
 			if (content == null)
 				throw new ArgumentNullException(nameof(content));
@@ -126,7 +127,7 @@ namespace StockSharp.Designer.Layout
 
 			if (anchorable == null)
 			{
-				content.Changed += OnDockingControlChanged;
+				content.Changed += OnBaseStudioControlChanged;
 
 				anchorable = new LayoutAnchorable
 				{
@@ -140,7 +141,7 @@ namespace StockSharp.Designer.Layout
 				_anchorables.Add(content.Key, anchorable);
 			
 				RootGroup.Children.Add(new LayoutAnchorablePane(anchorable));
-				OnDockingControlChanged(content);
+				OnBaseStudioControlChanged(content);
 			}
 
 			DockingManager.ActiveContent = anchorable.Content;
@@ -176,7 +177,7 @@ namespace StockSharp.Designer.Layout
 			DockingManager.ActiveContent = document.Content;
 		}
 
-		public void OpenDocumentWindow(DockingControl content, bool canClose = true)
+		public void OpenDocumentWindow(BaseStudioControl content, bool canClose = true)
 		{
 			if (content == null)
 				throw new ArgumentNullException(nameof(content));
@@ -185,7 +186,7 @@ namespace StockSharp.Designer.Layout
 
 			if (document == null)
 			{
-				content.Changed += OnDockingControlChanged;
+				content.Changed += OnBaseStudioControlChanged;
 
 				document = new LayoutDocument
 				{
@@ -199,13 +200,13 @@ namespace StockSharp.Designer.Layout
 				_documents.Add(content.Key, document);
 
 				TabGroups.First().Children.Add(document);
-				OnDockingControlChanged(content);
+				OnBaseStudioControlChanged(content);
 			}
 
 			DockingManager.ActiveContent = document.Content;
 		}
 
-		public void CloseDocumentWindow(DockingControl content)
+		public void CloseDocumentWindow(BaseStudioControl content)
 		{
 			if (content == null)
 				throw new ArgumentNullException(nameof(content));
@@ -234,7 +235,7 @@ namespace StockSharp.Designer.Layout
 			{
 				try
 				{
-					var control = LoadDockingControl(settings);
+					var control = LoadBaseStudioControl(settings);
 
 					_dockingControlSettings.Add(control, settings);
 					OpenDocumentWindow(control);
@@ -289,12 +290,12 @@ namespace StockSharp.Designer.Layout
 					.Descendents()
 					.OfType<LayoutContent>();
 
-				foreach (var content in items.Where(c => c.Content is DockingControl))
+				foreach (var content in items.Where(c => c.Content is BaseStudioControl))
 				{
 					content.DoIfElse<LayoutDocument>(d => _documents[d.ContentId] = d, () => { });
 					content.DoIfElse<LayoutAnchorable>(d => _anchorables[d.ContentId] = d, () => { });
 
-					if (!(content.Content is DockingControl))
+					if (!(content.Content is BaseStudioControl))
 					{
 						var title = titles.TryGetValue(content.ContentId);
 
@@ -356,7 +357,7 @@ namespace StockSharp.Designer.Layout
 
 		private void OnDockingManagerDocumentClosing(object sender, DocumentClosingEventArgs e)
 		{
-			var control = e.Document.Content as DockingControl;
+			var control = e.Document.Content as BaseStudioControl;
 
 			if (control == null)
 				return;
@@ -366,7 +367,7 @@ namespace StockSharp.Designer.Layout
 
 		private void OnDockingManagerDocumentClosed(object sender, DocumentClosedEventArgs e)
 		{
-			var control = e.Document.Content as DockingControl;
+			var control = e.Document.Content as BaseStudioControl;
 
 			if (control == null)
 				return;
@@ -381,7 +382,7 @@ namespace StockSharp.Designer.Layout
 			Flush();
 		}
 
-		private void OnDockingControlChanged(DockingControl control)
+		private void OnBaseStudioControlChanged(BaseStudioControl control)
 		{
 			_changedControls.Add(control);
 			Flush();
@@ -400,7 +401,7 @@ namespace StockSharp.Designer.Layout
 
 		private void OnFlush(object state)
 		{
-			DockingControl[] items;
+			BaseStudioControl[] items;
 			bool isLayoutChanged;
 
 			lock (_syncRoot)
@@ -452,7 +453,7 @@ namespace StockSharp.Designer.Layout
 			}
 		}
 
-		private void Save(IEnumerable<DockingControl> items, bool isLayoutChanged)
+		private void Save(IEnumerable<BaseStudioControl> items, bool isLayoutChanged)
 		{
 			CultureInfo.InvariantCulture.DoInCulture(() =>
 			{
@@ -470,10 +471,10 @@ namespace StockSharp.Designer.Layout
 			});
 		}
 
-		private static DockingControl LoadDockingControl(SettingsStorage settings)
+		private static BaseStudioControl LoadBaseStudioControl(SettingsStorage settings)
 		{
 			var type = settings.GetValue<Type>("ControlType");
-			var control = (DockingControl)Activator.CreateInstance(type);
+			var control = (BaseStudioControl)Activator.CreateInstance(type);
 
 			control.Load(settings);
 
