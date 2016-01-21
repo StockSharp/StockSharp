@@ -63,10 +63,20 @@ namespace StockSharp.Terminal.Properties {
         /// <summary>
         ///   Поиск локализованного ресурса типа System.Drawing.Icon, аналогичного (Значок).
         /// </summary>
-        internal static System.Drawing.Icon stocksharp {
+        internal static System.Drawing.Icon ico {
             get {
-                object obj = ResourceManager.GetObject("stocksharp", resourceCulture);
+                object obj = ResourceManager.GetObject("ico", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Byte[].
+        /// </summary>
+        internal static byte[] StockSharp {
+            get {
+                object obj = ResourceManager.GetObject("StockSharp", resourceCulture);
+                return ((byte[])(obj));
             }
         }
     }

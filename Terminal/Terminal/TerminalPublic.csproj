@@ -132,7 +132,6 @@
     <Compile Include="Fakes\FakeSecurityProvider.cs" />
     <Compile Include="Interfaces\ITerminalCommandService.cs" />
     <Compile Include="Services\ConnectorService.cs" />
-    <Compile Include="Services\TerminalCommandService.cs" />
     <Compile Include="Layout\DockingControl.cs" />
     <Compile Include="Layout\LayoutManager.cs" />
     <Compile Include="Logics\CompositionItem.cs" />
@@ -248,6 +247,7 @@
     <Folder Include="Images\" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Properties\StockSharp.db" />
     <None Include="StockSharp.db">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

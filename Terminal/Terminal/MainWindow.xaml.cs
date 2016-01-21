@@ -44,194 +44,189 @@ using StockSharp.Terminal.Services;
 
 namespace StockSharp.Terminal
 {
-	public partial class MainWindow
-	{
-		#region Fields
-		//-------------------------------------------------------------------
+    public partial class MainWindow
+    {
+        #region Fields
+        //-------------------------------------------------------------------
 
-		private int _countWorkArea = 2;
+        private int _countWorkArea = 2;
 
-		private ConnectorService _connectorService;
+        private ConnectorService _connectorService;
 
-		//-------------------------------------------------------------------
-		#endregion Fields
+        //-------------------------------------------------------------------
+        #endregion Fields
 
-		#region Properties
-		//-------------------------------------------------------------------
+        #region Properties
+        //-------------------------------------------------------------------
 
-		/// <summary>
-		/// 
-		/// </summary>
-		public LayoutManager LayoutManager { get; set; }
+        /// <summary>
+        /// 
+        /// </summary>
+        public LayoutManager LayoutManager { get; set; }
 
-		/// <summary>
-		/// 
-		/// </summary>
-		public static MainWindow Instance { get; private set; }
+        /// <summary>
+        /// 
+        /// </summary>
+        public static MainWindow Instance { get; private set; }
 
-		//-------------------------------------------------------------------
-		#endregion Properties
+        //-------------------------------------------------------------------
+        #endregion Properties
 
-		public MainWindow()
-		{
-			InitializeComponent();
-			Instance = this;
+        public MainWindow()
+        {
+            InitializeComponent();
+            Instance = this;
 
-			LayoutManager = new LayoutManager(DockingManager);
-			DockingManager.DocumentClosed += DockingManager_DocumentClosed;
+            LayoutManager = new LayoutManager(DockingManager);
+            DockingManager.DocumentClosed += DockingManager_DocumentClosed;
 
-			Title = Title.Put("Multi connection");
+            Title = Title.Put("Multi connection");
 
-			var logManager = new LogManager();
+            var logManager = new LogManager();
 
-			_connectorService = new ConnectorService();
-			logManager.Sources.Add(_connectorService.GetConnector());
-			logManager.Listeners.Add(new FileLogListener("sample.log"));
+            _connectorService = new ConnectorService();
+            _connectorService.ChangeConnectStatusEvent += ChangeConnectStatusEvent;
+            _connectorService.ErrorEvent += ConnectorServiceErrorEvent;
 
-			_connectorService.InitConnector();
-			_connectorService.ChangeConnectStatusEvent += ChangeConnectStatusEvent;
-			_connectorService.ErrorEvent += ConnectorServiceErrorEvent;
-		}
+            logManager.Sources.Add(_connectorService.GetConnector());
+            logManager.Listeners.Add(new FileLogListener("sample.log"));
 
-		#region Events
-		//-------------------------------------------------------------------
+            _connectorService.InitConnector();
+        }
 
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="sender"></param>
-		/// <param name="e"></param>
-		private void BtnAddDocument_Click(object sender, RoutedEventArgs e)
-		{
-			var newWorkArea = new LayoutDocument()
-			{
-				Title = "Work area #" + ++_countWorkArea,
-				Content = new WorkAreaControl()
-			};
+        #region Events
+        //-------------------------------------------------------------------
 
-			LayoutDocuments.Children.Add(newWorkArea);
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void BtnAddDocument_Click(object sender, RoutedEventArgs e)
+        {
+            var newWorkArea = new LayoutDocument()
+            {
+                Title = "Work area #" + ++_countWorkArea,
+                Content = new WorkAreaControl()
+            };
 
-			var offset = LayoutDocuments.Children.Count - 1;
-			LayoutDocuments.SelectedContentIndex = (offset < 0) ? 0 : offset;
-		}
+            LayoutDocuments.Children.Add(newWorkArea);
 
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="sender"></param>
-		/// <param name="e"></param>
-		private void DockingManager_DocumentClosed(object sender, DocumentClosedEventArgs e)
-		{
-			var manager = (DockingManager)sender;
+            var offset = LayoutDocuments.Children.Count - 1;
+            LayoutDocuments.SelectedContentIndex = (offset < 0) ? 0 : offset;
+        }
 
-			if (LayoutDocuments.Children.Count == 0 && manager.FloatingWindows.ToList().Count == 0)
-				_countWorkArea = 0;
-		}
-		
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="sender"></param>
-		/// <param name="e"></param>
-		private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
-		{
-			if (NewControlComboBox.SelectedIndex != -1)
-			{
-				var workArea = (WorkAreaControl)DockingManager.ActiveContent;
-				workArea.AddControl(((ComboBoxItem)NewControlComboBox.SelectedItem).Content.ToString());
-				NewControlComboBox.SelectedIndex = -1;
-			}
-		}
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void DockingManager_DocumentClosed(object sender, DocumentClosedEventArgs e)
+        {
+            var manager = (DockingManager)sender;
 
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="sender"></param>
-		/// <param name="e"></param>
-		private void DockingManager_OnActiveContentChanged(object sender, EventArgs e)
-		{
-			DockingManager.ActiveContent.DoIfElse<WorkAreaControl>(editor =>
-			{
-				var element = (DockingManager)sender;
+            if (LayoutDocuments.Children.Count == 0 && manager.FloatingWindows.ToList().Count == 0)
+                _countWorkArea = 0;
+        }
 
-			}, () =>
-			{
-				var element = (DockingManager)sender;
-				new Connector().Configure(this);
-			});
-		}
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (NewControlComboBox.SelectedIndex != -1)
+            {
+                var workArea = (WorkAreaControl)DockingManager.ActiveContent;
+                workArea.AddControl(((ComboBoxItem)NewControlComboBox.SelectedItem).Content.ToString());
+                NewControlComboBox.SelectedIndex = -1;
+            }
+        }
 
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="sender"></param>
-		/// <param name="e"></param>
-		private void SettingsClick(object sender, RoutedEventArgs e)
-		{
-			_connectorService.Configure(this);
-			new XmlSerializer<SettingsStorage>().Serialize(_connectorService.Save(), ConnectorService.SETTINGS_FILE);
-		}
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void DockingManager_OnActiveContentChanged(object sender, EventArgs e)
+        {
+            DockingManager.ActiveContent.DoIfElse<WorkAreaControl>(editor =>
+            {
+                var element = (DockingManager)sender;
 
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="sender"></param>
-		/// <param name="e"></param>
-		private void ConnectClick(object sender, RoutedEventArgs e)
-		{
-			if (!_connectorService.IsConnected)
-				_connectorService.Connect();
-			else
-				_connectorService.Disconnect();
-		}
+            }, () =>
+            {
+                var element = (DockingManager)sender;
+                new Connector().Configure(this);
+            });
+        }
 
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="isConnected"></param>
-		private void ChangeConnectStatusEvent(bool isConnected)
-		{
-			//this.GuiAsync(() =>
-			//{
-				ConnectBtn.Content = isConnected ? LocalizedStrings.Disconnect : LocalizedStrings.Connect;
-			//});
-		}
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void SettingsClick(object sender, RoutedEventArgs e)
+        {
+            _connectorService.Configure(this);
+            new XmlSerializer<SettingsStorage>().Serialize(_connectorService.Save(), ConnectorService.SETTINGS_FILE);
+        }
 
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="message"></param>
-		/// <param name="caption"></param>
-		private void ConnectorServiceErrorEvent(string message, string caption)
-		{
-			//this.GuiAsync(() =>
-			//{
-				MessageBox.Show(this, message, caption);
-			//});
-		}
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void ConnectClick(object sender, RoutedEventArgs e)
+        {
+            if (!_connectorService.IsConnected)
+                _connectorService.Connect();
+            else
+                _connectorService.Disconnect();
+        }
 
-		//-------------------------------------------------------------------
-		#endregion Events
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="isConnected"></param>
+        private void ChangeConnectStatusEvent(bool isConnected)
+        {
+            ConnectBtn.Content = isConnected ? LocalizedStrings.Disconnect : LocalizedStrings.Connect;
+        }
 
-		#region Приватные методы
-		//-------------------------------------------------------------------
-		
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="window"></param>
-		private static void ShowOrHide(Window window)
-		{
-			if (window == null)
-				throw new ArgumentNullException("window");
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="message"></param>
+        /// <param name="caption"></param>
+        private void ConnectorServiceErrorEvent(string message, string caption)
+        {
+            MessageBox.Show(this, message, caption);
+        }
 
-			if (window.Visibility == Visibility.Visible)
-				window.Hide();
-			else
-				window.Show();
-		}
+        //-------------------------------------------------------------------
+        #endregion Events
 
-		//-------------------------------------------------------------------
-		#endregion Приватные методы
-	}
+        #region Приватные методы
+        //-------------------------------------------------------------------
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="window"></param>
+        private static void ShowOrHide(Window window)
+        {
+            if (window == null)
+                throw new ArgumentNullException("window");
+
+            if (window.Visibility == Visibility.Visible)
+                window.Hide();
+            else
+                window.Show();
+        }
+
+        //-------------------------------------------------------------------
+        #endregion Приватные методы
+    }
 }

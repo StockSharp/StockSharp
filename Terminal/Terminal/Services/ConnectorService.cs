@@ -13,7 +13,9 @@ using StockSharp.Algo.Storages;
 using StockSharp.BusinessEntities;
 using StockSharp.Configuration;
 using StockSharp.Localization;
+using StockSharp.Studio.Core.Commands;
 using StockSharp.Terminal.Interfaces;
+using StockSharp.Terminal.Properties;
 
 namespace StockSharp.Terminal.Services
 {
@@ -70,29 +72,17 @@ namespace StockSharp.Terminal.Services
 		//-------------------------------------------------------------------
 		#endregion Fields
 			
-		#region Properties
-		//-------------------------------------------------------------------
-
 		/// <summary>
 		/// 
 		/// </summary>
 		public bool IsConnected { get; set; }
-
-		/// <summary>
-		/// 
-		/// </summary>
-		public ITerminalCommandService TerminalCommandService { get; set; }
-
-		//-------------------------------------------------------------------
-		#endregion Properties
-
+        
 		public ConnectorService()
 		{
 			var entityRegistry = ConfigManager.GetService<IEntityRegistry>();
 			var storageRegistry = ConfigManager.GetService<IStorageRegistry>();
 
 			_connector = new Connector(entityRegistry, storageRegistry);
-			TerminalCommandService = new TerminalCommandService();
         }
 
 		#region Public methods
@@ -138,27 +128,53 @@ namespace StockSharp.Terminal.Services
 			_connector.OrdersCancelFailed += OrdersFailed;
 			_connector.StopOrdersCancelFailed += OrdersFailed;
 
-			//-------------------------------------------------------------------
-			#endregion Subscribe on events
+            //-------------------------------------------------------------------
+            #endregion Subscribe on events
 
-			_connector.NewSecurities += x =>
-			{
+            //TODO: передать объект securities в NewSecuritiesCommand
+            _connector.NewSecurities += securities => new NewSecuritiesCommand().Process(this);
 
-			};
+            //_connector.NewTrades += trades => _tradesWindow.TradeGrid.Trades.AddRange(trades);
+            _connector.NewTrades += trades => new NewTradesCommand(trades).Process(this);
 
-			//_connector.NewTrades += trades => _tradesWindow.TradeGrid.Trades.AddRange(trades);
+            //_connector.NewOrders += orders => _ordersWindow.OrderGrid.Orders.AddRange(orders);
+            _connector.NewOrders += orders =>
+            {
+                foreach (var item in orders)
+                {
+                    new OrderCommand(item, OrderActions.Registering).Process(this);
+                    //new RegisterOrderCommand(item).Process(this);
+                }
+            };
 
-			//_connector.NewOrders += orders => _ordersWindow.OrderGrid.Orders.AddRange(orders);
-			//_connector.NewStopOrders += orders => _stopOrdersWindow.OrderGrid.Orders.AddRange(orders);
-			//_connector.NewMyTrades += trades => _myTradesWindow.TradeGrid.Trades.AddRange(trades);
+            //_connector.NewStopOrders += orders => _stopOrdersWindow.OrderGrid.Orders.AddRange(orders);
+            //_connector.NewStopOrders += orders => new CancelOrderCommand(orders);
 
-			//_connector.NewPortfolios += portfolios => _portfoliosWindow.PortfolioGrid.Portfolios.AddRange(portfolios);
-			//_connector.NewPositions += positions => _portfoliosWindow.PortfolioGrid.Positions.AddRange(positions);
+            //_connector.NewMyTrades += trades => _myTradesWindow.TradeGrid.Trades.AddRange(trades);
+            _connector.NewMyTrades += trades => new NewMyTradesCommand(trades).Process(this);
 
-			// set market data provider
-			//_securitiesWindow.SecurityPicker.MarketDataProvider = Connector;
+            //_connector.NewPortfolios += portfolios => _portfoliosWindow.PortfolioGrid.Portfolios.AddRange(portfolios);
+            _connector.NewPortfolios += portfolios =>
+            {
+                foreach (var item in portfolios)
+                {
+                    new PortfolioCommand(item, true).Process(this);
+                }
+            };
 
-			try
+            //_connector.NewPositions += positions => _portfoliosWindow.PortfolioGrid.Positions.AddRange(positions);
+            _connector.NewPositions += positions =>
+            {
+                foreach (var item in positions)
+                {
+                    //new PositionCommand(item.
+                }
+            };
+
+            // set market data provider
+            //_securitiesWindow.SecurityPicker.MarketDataProvider = Connector;
+
+            try
 			{
 				if (File.Exists(SETTINGS_FILE))
 					_connector.Load(new XmlSerializer<SettingsStorage>().Deserialize(SETTINGS_FILE));
@@ -172,7 +188,10 @@ namespace StockSharp.Terminal.Services
 			if (_connector.StorageAdapter == null)
 				return;
 
-			_connector.StorageAdapter.DaysLoad = TimeSpan.FromDays(3);
+            if (!File.Exists("StockSharp.db"))
+                File.WriteAllBytes("StockSharp.db", Resources.StockSharp);
+
+            _connector.StorageAdapter.DaysLoad = TimeSpan.FromDays(3);
 			_connector.StorageAdapter.Load();
 		}
 

@@ -13,13 +13,12 @@ Created: 2015, 11, 11, 3:22 PM
 Copyright 2010 by StockSharp, LLC
 *******************************************************************************************/
 #endregion S# License
+
 using Ecng.Configuration;
-using StockSharp.BusinessEntities;
-using StockSharp.Studio.Core.Commands;
-using StockSharp.Terminal.Fakes;
 using System.Windows;
 using System.Windows.Threading;
-using StockSharp.Terminal.Services;
+using StockSharp.Studio.Services;
+using StockSharp.Studio.Core.Commands;
 
 namespace StockSharp.Terminal
 {
@@ -33,9 +32,9 @@ namespace StockSharp.Terminal
 
 		protected override void OnStartup(StartupEventArgs e)
 		{
-			ConfigManager.RegisterService<IStudioCommandService>(new TerminalCommandService());
-			ConfigManager.RegisterService<ISecurityProvider>(new FakeSecurityProvider());
-			ConfigManager.RegisterService<IMarketDataProvider>(new FakeMarketDataProvider());
+			ConfigManager.RegisterService<IStudioCommandService>(new StudioCommandService());
+			//ConfigManager.RegisterService<ISecurityProvider>(new FakeSecurityProvider());
+			//ConfigManager.RegisterService<IMarketDataProvider>(new FakeMarketDataProvider());
 
 			base.OnStartup(e);
 		}
