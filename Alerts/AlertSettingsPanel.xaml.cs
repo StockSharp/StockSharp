@@ -24,8 +24,6 @@ namespace StockSharp.Alerts
 	using System.Windows;
 	using System.Windows.Controls;
 
-	using ActiproSoftware.Windows;
-
 	using Ecng.Collections;
 	using Ecng.Common;
 	using Ecng.ComponentModel;
@@ -99,7 +97,7 @@ namespace StockSharp.Alerts
 		}
 
 		/// <summary>
-		/// <see cref="DependencyProperty"/> for <see cref="AlertSettingsPanel.Value"/>.
+		/// <see cref="DependencyProperty"/> for <see cref="Value"/>.
 		/// </summary>
 		public static readonly DependencyProperty ValueProperty =
 			DependencyProperty.Register("Value", typeof(object), typeof(AlertSettingsPanel), new PropertyMetadata(null, ValueChanged));
@@ -114,7 +112,7 @@ namespace StockSharp.Alerts
 			else if (ctrl.TextValue.Visibility == Visibility.Visible)
 				ctrl.TextValue.Text = (string)value;
 			else if (ctrl.TimeValue.Visibility == Visibility.Visible)
-				ctrl.TimeValue.Value = (TimeSpan?)value;
+				ctrl.TimeValue.Value = DateTime.Today + (TimeSpan?)value;
 			else if (ctrl.DateValue.Visibility == Visibility.Visible)
 				ctrl.DateValue.Value = (DateTime?)value;
 			//else if (ctrl.SecurityValue.Visibility == Visibility.Visible)
@@ -291,12 +289,12 @@ namespace StockSharp.Alerts
 		//	Value = SecurityValue.SelectedSecurity;
 		//}
 
-		private void TimeValue_OnValueChanged(object sender, PropertyChangedRoutedEventArgs<TimeSpan?> propertyChangedRoutedEventArgs)
+		private void TimeValue_OnValueChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
 		{
 			Value = TimeValue.Value;
 		}
 
-		private void DateValue_OnValueChanged(object sender, PropertyChangedRoutedEventArgs<DateTime?> propertyChangedRoutedEventArgs)
+		private void DateValue_OnValueChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
 		{
 			Value = DateValue.Value;
 		}

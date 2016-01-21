@@ -31,8 +31,6 @@ namespace StockSharp.Xaml
 	using Ecng.Localization;
 	using Ecng.Xaml;
 
-	using MoreLinq;
-
 	using StockSharp.Algo;
 	using StockSharp.Localization;
 	using StockSharp.Messages;
@@ -42,40 +40,9 @@ namespace StockSharp.Xaml
 	/// </summary>
 	public partial class ConnectorWindow
 	{
-		private class SupportedMessage
-		{
-			private readonly IMessageAdapter _adapter;
-
-			public SupportedMessage(IMessageAdapter adapter, MessageTypes type)
-			{
-				_adapter = adapter;
-				Type = type;
-				Name = type.GetDisplayName();
-			}
-
-			public MessageTypes Type { get; }
-			public string Name { get; private set; }
-
-			public event Action SelectedChanged;
-
-			public bool IsSelected
-			{
-				get { return _adapter.IsMessageSupported(Type); }
-				set
-				{
-					if (value)
-						_adapter.AddSupportedMessage(Type);
-					else
-						_adapter.RemoveSupportedMessage(Type);
-
-					SelectedChanged.SafeInvoke();
-				}
-			}
-		}
-
 		private sealed class GridRow : NotifiableObject
 		{
-			public GridRow(ConnectorInfo info, IMessageAdapter adapter/*, IMessageAdapter innerAdapter*/)
+			public GridRow(ConnectorInfo info, IMessageAdapter adapter)
 			{
 				if (info == null)
 					throw new ArgumentNullException(nameof(info));
@@ -83,25 +50,13 @@ namespace StockSharp.Xaml
 				if (adapter == null)
 					throw new ArgumentNullException(nameof(adapter));
 
-				//if (innerAdapter == null)
-				//	throw new ArgumentNullException("innerAdapter");
-
 				Info = info;
 				Adapter = adapter;
-				//InnerAdapter = innerAdapter;
-				SupportedMessages = adapter.GetType().CreateInstance<IMessageAdapter>(adapter.TransactionIdGenerator).SupportedMessages.Select(m => new SupportedMessage(adapter, m)).ToArray();
-				SupportedMessages.ForEach(m => m.SelectedChanged += () =>
-				{
-					NotifyChanged("IsTransactionEnabled");
-					NotifyChanged("IsMarketDataEnabled");
-				});
-				Icon = adapter.GetType().GetIconUrl();
 			}
 
 			public ConnectorInfo Info { get; private set; }
 
 			public IMessageAdapter Adapter { get; }
-			//public IMessageAdapter InnerAdapter { get; private set; }
 
 			public bool IsTransactionEnabled => Adapter.IsMessageSupported(MessageTypes.OrderRegister);
 
@@ -115,22 +70,18 @@ namespace StockSharp.Xaml
 				set
 				{
 					_isEnabled = value;
-					NotifyChanged("IsEnabled");
+					NotifyChanged(nameof(IsEnabled));
 				}
 			}
 
 			public string Description => Adapter.ToString();
+			public Uri Icon => Adapter.GetType().GetIconUrl();
 
-			public Uri Icon { get; private set; }
-
-			//public void Refresh()
-			//{
-			//	NotifyChanged("Description");
-			//	NotifyChanged("IsTransactionEnabled");
-			//	NotifyChanged("IsMarketDataEnabled");
-			//}
-
-			public SupportedMessage[] SupportedMessages { get; }
+			public void Refresh()
+			{
+				NotifyChanged(nameof(IsTransactionEnabled));
+				NotifyChanged(nameof(IsMarketDataEnabled));
+			}
 		}
 
 		private sealed class ConnectorInfoList : BaseList<ConnectorInfo>
@@ -241,7 +192,6 @@ namespace StockSharp.Xaml
 		public static readonly RoutedCommand EnableCommand = new RoutedCommand();
 
 		private readonly ObservableCollection<GridRow> _connectorRows = new ObservableCollection<GridRow>();
-		private readonly ObservableCollection<SupportedMessage> _supportedMessages = new ObservableCollection<SupportedMessage>();
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="ConnectorWindow"/>.
@@ -251,9 +201,7 @@ namespace StockSharp.Xaml
 			InitializeComponent();
 
 			ConnectorsGrid.ItemsSource = _connectorRows;
-			_connectorsInfo = new ConnectorInfoList(this);
-
-			SupportedMessages.ItemsSource = _supportedMessages;
+			ConnectorsInfo = new ConnectorInfoList(this);
 		}
 
 		/// <summary>
@@ -320,12 +268,10 @@ namespace StockSharp.Xaml
 			return new GridRow(info, adapter/*, innerAdapter*/) { IsEnabled = Adapter.InnerAdapters[adapter] != -1 };
 		}
 
-		private readonly IList<ConnectorInfo> _connectorsInfo;
-
 		/// <summary>
 		/// Visual description of available connections.
 		/// </summary>
-		public IList<ConnectorInfo> ConnectorsInfo => _connectorsInfo;
+		public IList<ConnectorInfo> ConnectorsInfo { get; }
 
 		///// <summary>
 		///// The settings change event.
@@ -337,9 +283,9 @@ namespace StockSharp.Xaml
 		///// </summary>
 		//public event Func<ConnectionStates> CheckConnectionState;
 
-		private GridRow SelectedRow => ConnectorsGrid != null ? (GridRow)ConnectorsGrid.SelectedItem : null;
+		private GridRow SelectedRow => (GridRow)ConnectorsGrid?.SelectedItem;
 
-		private IEnumerable<GridRow> SelectedRows => ConnectorsGrid != null ? ConnectorsGrid.SelectedItems.Cast<GridRow>() : Enumerable.Empty<GridRow>();
+		private IEnumerable<GridRow> SelectedRows => ConnectorsGrid?.SelectedItems.Cast<GridRow>() ?? Enumerable.Empty<GridRow>();
 
 		//private bool CheckConnected(string message)
 		//{
@@ -402,12 +348,11 @@ namespace StockSharp.Xaml
 
 		private void ConnectorsGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
 		{
-			_supportedMessages.Clear();
-
 			var row = SelectedRow;
 
 			if (row == null)
 			{
+				SupportedMessages.Adapter = null;
 				ChangeDisableEnableIcon(false);
 				PropertyGrid.SelectedObject = null;
 				HelpButton.DocUrl = null;
@@ -415,12 +360,11 @@ namespace StockSharp.Xaml
 			}
 			else
 			{
+				SupportedMessages.Adapter = row.Adapter;
 				ChangeDisableEnableIcon(row.IsEnabled);
 				PropertyGrid.SelectedObject = row.Adapter;
 				HelpButton.DocUrl = row.Adapter.GetType().GetDocUrl();
 				AdapterButtons.IsEnabled = true;
-
-				_supportedMessages.AddRange(row.SupportedMessages);
 			}
 		}
 
@@ -572,6 +516,11 @@ namespace StockSharp.Xaml
 				return;
 
 			DialogResult = true;
+		}
+
+		private void SupportedMessages_OnSelectedChanged()
+		{
+			SelectedRow?.Refresh();
 		}
 	}
 }

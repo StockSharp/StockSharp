@@ -30,7 +30,6 @@ namespace StockSharp.Alerts
 		/// </summary>
 		public AlertRule()
 		{
-			
 		}
 
 		/// <summary>

@@ -11,8 +11,15 @@
 		</Grid.RowDefinitions>
 		<xaml:PortfolioGrid x:Name="PortfolioGrid" x:FieldModifier="public" />
 		<StackPanel Grid.Row="1" Orientation="Horizontal">
+			<CheckBox x:Name="LocalOnly" Margin="0,0,5,0" VerticalAlignment="Center">
+				<TextBlock Text="{x:Static loc:LocalizedStrings.Str1441}"/>
+			</CheckBox>
+			
 			<TextBox x:Name="NameLike" Width="100" />
-			<Button Width="100" Margin="5,0,0,0" Click="Lookup_OnClick"><TextBlock Text="{x:Static loc:LocalizedStrings.Find}"/></Button>
+			
+			<Button Width="100" Margin="5,0,0,0" Click="Lookup_OnClick">
+				<TextBlock Text="{x:Static loc:LocalizedStrings.Find}"/>
+			</Button>
 		</StackPanel>
 	</Grid>
 </Window>
