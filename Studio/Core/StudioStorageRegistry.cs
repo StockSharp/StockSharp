@@ -90,9 +90,11 @@ namespace StockSharp.Studio.Core
 					if (_remoteDrive.Client.Address.OriginalString == MarketDataSettings.Path)
 						return _remoteDrive;
 
-					var credentials = MarketDataSettings.IsStockSharpStorage
-						? ConfigManager.GetService<IPersistableService>().GetCredentials()
-						: MarketDataSettings.Credentials;
+					//var credentials = MarketDataSettings.IsStockSharpStorage
+					//	? ConfigManager.GetService<IPersistableService>().GetCredentials()
+					//	: MarketDataSettings.Credentials;
+
+					var credentials = MarketDataSettings.Credentials;
 
 					_remoteDrive.Client = new RemoteStorageClient(new Uri(MarketDataSettings.Path))
 					{

@@ -53,6 +53,10 @@
         <CommandBinding Command="{x:Static local:MainWindow.RefreshCompositionCommand}"
 						CanExecute="RefreshCompositionCommand_OnCanExecute"
 						Executed="RefreshCompositionCommand_OnExecuted"/>
+
+        <CommandBinding Command="{x:Static local:MainWindow.OpenMarketDataSettingsCommand}"
+						CanExecute="OpenMarketDataSettingsCommand_OnCanExecute"
+						Executed="OpenMarketDataSettingsCommand_OnExecuted"/>
     </Window.CommandBindings>
 	
 	<Window.Resources>
@@ -175,6 +179,12 @@
 								   LargeIcon="pack://application:,,,/Designer;component/Images/terminal_32x32.png" 
 								   Command="{x:Static local:MainWindow.ExecuteStrategyCommand}"
 								   CommandParameter="{Binding ElementName=SolutionExplorer, Path=SelectedItem}" />
+                </fluent:RibbonGroupBox>
+                <fluent:RibbonGroupBox Header="{x:Static localization:LocalizedStrings.Str1405}">
+                    <fluent:Button Header="{x:Static localization:LocalizedStrings.MarketData}"
+								   SizeDefinition="Large"
+								   LargeIcon="pack://application:,,,/Designer;component/Images/storage_32x32.png" 
+								   Command="{x:Static local:MainWindow.OpenMarketDataSettingsCommand}" />
                 </fluent:RibbonGroupBox>
             </fluent:RibbonTabItem>
 

@@ -27,6 +27,7 @@
 	using StockSharp.Localization;
 	using StockSharp.Logging;
 	using StockSharp.Messages;
+	using StockSharp.Studio.Core;
 	using StockSharp.Xaml.Charting;
 	using StockSharp.Xaml.Diagram;
 
@@ -386,7 +387,7 @@
 
 			var strategy = (EmulationDiagramStrategy)Strategy;
 
-			if (strategy.DataPath.IsEmpty() || !Directory.Exists(strategy.DataPath))
+			if (strategy.MarketDataSettings == null)
 				throw new InvalidOperationException(LocalizedStrings.Str3014);
 
 			strategy
@@ -418,10 +419,9 @@
 			};
 
 			// storage to historical data
-			var storageRegistry = new StorageRegistry
+			var storageRegistry = new StudioStorageRegistry
 			{
-				// set historical path
-				DefaultDrive = new LocalMarketDataDrive(strategy.DataPath)
+				MarketDataSettings = strategy.MarketDataSettings
 			};
 
 			var startTime = strategy.StartDate.ChangeKind(DateTimeKind.Utc);
