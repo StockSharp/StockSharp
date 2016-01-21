@@ -33,16 +33,6 @@
     <DocumentationFile>bin\Release\StockSharp.Alerts.XML</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="ActiproSoftware.Editors.Wpf, Version=11.2.555.0, Culture=neutral, PublicKeyToken=36ff2196ab5654b9, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\References\Actipro\ActiproSoftware.Editors.Wpf.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="ActiproSoftware.Shared.Wpf, Version=11.2.555.0, Culture=neutral, PublicKeyToken=36ff2196ab5654b9, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\References\Actipro\ActiproSoftware.Shared.Wpf.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="Ecng.Collections">
       <HintPath>..\References\Ecng\Ecng.Collections.dll</HintPath>
     </Reference>

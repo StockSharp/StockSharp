@@ -136,6 +136,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="ConnectorSupportedMessagesPanel.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="ExchangeBoardEditor.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -388,6 +392,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="ConnectorInfo.cs" />
+    <Compile Include="ConnectorSupportedMessagesPanel.xaml.cs">
+      <DependentUpon>ConnectorSupportedMessagesPanel.xaml</DependentUpon>
+    </Compile>
     <Compile Include="ExchangeBoardEditor.xaml.cs">
       <DependentUpon>ExchangeBoardEditor.xaml</DependentUpon>
     </Compile>

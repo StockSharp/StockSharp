@@ -26,7 +26,7 @@ namespace StockSharp.Messages
 	/// <summary>
 	/// Connection tracking settings <see cref="IMessageAdapter"/> with a server.
 	/// </summary>
-	[DisplayNameLoc(LocalizedStrings.Str977Key)]
+	[DisplayNameLoc(LocalizedStrings.Str172Key)]
 	[DescriptionLoc(LocalizedStrings.Str978Key)]
 	[ExpandableObject]
 	public class ReConnectionSettings : IPersistable

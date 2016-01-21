@@ -43,10 +43,7 @@ namespace StockSharp.Alerts
 
 		private static IAlertService _alertService;
 
-		private static IAlertService AlertService
-		{
-			get { return _alertService ?? (_alertService = ConfigManager.GetService<IAlertService>()); }
-		}
+		private static IAlertService AlertService => _alertService ?? (_alertService = ConfigManager.GetService<IAlertService>());
 
 		/// <summary>
 		/// Message type.

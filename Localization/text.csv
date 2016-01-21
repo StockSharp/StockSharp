@@ -915,10 +915,9 @@ Str973;Max short position;Max короткая позиция
 Str974;Maximum short position size.;Максимальный размер короткой позиции.
 Str975;Opposite;Встречная
 Str976;Following;Попутная
-Str977;Connection settings;Настройки подключения
+ConnectionSettings;Connection settings;Настройки подключения
 Str978;Mechanism for tracking connections with the trading system settings.;Настройки механизма отслеживания подключения с торговом системой.
 Settings;Settings;Настройки
-ConnectionSettings;Connection settings.;Настройки для подключения.
 Export;Export;Экспорт
 ExportSettings;Export settings.;Настройки для экспорта.
 Str983;Profitable trades;Прибыльных сделок
@@ -3748,7 +3747,6 @@ XamlStr325;Fin securities:;Найти инструменты:
 CommissionSettings;Commission settings;Настройка комиссий
 RiskSettings;Risk settings;Настройка контроля рисков
 XamlStr332;Mapping configuration for portfolios and connections;Настройка сопоставления портфелей и подключений
-XamlStr334;Connection settings;Настройки подключений
 NetworkSettings;Network settings;Настройки сети
 NotificationSettings;Notification settings;Настройки уведомлений
 StartTime;Start time;Начало работы

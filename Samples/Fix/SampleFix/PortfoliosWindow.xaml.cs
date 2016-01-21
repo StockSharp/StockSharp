@@ -18,6 +18,7 @@ namespace SampleFix
 	using System.Windows;
 
 	using StockSharp.BusinessEntities;
+	using StockSharp.Messages;
 
 	public partial class PortfoliosWindow
 	{
@@ -28,8 +29,10 @@ namespace SampleFix
 
 		private void Lookup_OnClick(object sender, RoutedEventArgs e)
 		{
-			MainWindow.Instance.Trader.LookupPortfolios(new Portfolio { Name = NameLike.Text });
-
+			if (LocalOnly.IsChecked == true)
+				MainWindow.Instance.Trader.SendOutMessage(new PortfolioMessage { PortfolioName = NameLike.Text });
+			else
+				MainWindow.Instance.Trader.LookupPortfolios(new Portfolio { Name = NameLike.Text });
 		}
 	}
 }
