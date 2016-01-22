@@ -34,7 +34,7 @@
   <listItem>
   	<para>
   	   <codeEntityReference>P:StockSharp.Xaml.Charting.ChartCandleElement.FontColor</codeEntityReference>
-  		<legacyBold>FontColor</legacyBold> - цвет цифр объемов на графике. 
+  		- цвет цифр объемов на графике. 
   	</para>
   </listItem>
   <listItem>

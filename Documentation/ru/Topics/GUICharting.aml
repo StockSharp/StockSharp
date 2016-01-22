@@ -86,16 +86,18 @@
   				<para><codeEntityReference>P:StockSharp.Xaml.Charting.Chart.ShowOverview</codeEntityReference> - включить/выключить отображение области предпросмотра <legacyBold>OverView</legacyBold>.</para>
   			</listItem>
   			<listItem>
-  				<para><codeEntityReference>M:StockSharp.Xaml.Charting.Chart.AddArea(StockSharp.Xaml.Charting.ChartArea)</codeEntityReference> - добавить <legacyBold>ChartArea</legacyBold>.</para>
+  				<para><codeEntityReference>M:StockSharp.Xaml.Charting.IChart.AddArea(StockSharp.Xaml.Charting.ChartArea)</codeEntityReference> - добавить <legacyBold>ChartArea</legacyBold>.</para>
   			</listItem>
   			<listItem>
-  				<para><codeEntityReference>M:StockSharp.Xaml.Charting.Chart.AddElement()</codeEntityReference> - добавить элемент серии данных. Имеет несколько перегрузок.</para>
+  				<para><codeEntityReference>Overload:StockSharp.Xaml.Charting.IChart.AddElement</codeEntityReference> - добавить элемент серии данных. Имеет несколько перегрузок.</para>
   			</listItem>
   			<listItem>
-  				<para><codeEntityReference>M:StockSharp.Xaml.Charting.Chart.Reset()</codeEntityReference> - "сбросить" ранее отрисованные значения.</para>
+  				<para><codeEntityReference>M:StockSharp.Xaml.Charting.Chart.Reset(System.Collections.Generic.IEnumerable{StockSharp.Xaml.Charting.IChartElement})</codeEntityReference> - "сбросить" ранее отрисованные значения.</para>
   			</listItem>
   			<listItem>
-  				<para><codeEntityReference>M:StockSharp.Xaml.Charting.Chart.Draw()</codeEntityReference> - отрисовать значение на графике. Имеет несколько перегрузок.</para>
+  				<para>
+  				<codeEntityReference>M:StockSharp.Xaml.Charting.IChart.Draw(System.Collections.Generic.IEnumerable{Ecng.Common.RefPair{System.DateTimeOffset,System.Collections.Generic.IDictionary{StockSharp.Xaml.Charting.IChartElement,System.Object}}})</codeEntityReference> - отрисовать значение на графике.
+  				</para>
   			</listItem>
   			
 		</list>

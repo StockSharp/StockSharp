@@ -279,7 +279,7 @@
 				<listItem>
 					<codeEntityReference qualifyHint="true" autoUpgrade="true">M:StockSharp.Algo.MarketRuleHelper.WhenIntervalElapsed(StockSharp.BusinessEntities.IConnector,System.TimeSpan)</codeEntityReference>
 					- правило на событие изменения 
-					<codeEntityReference qualifyHint="true" autoUpgrade="true">Е:StockSharp.Algo.IConnector.MarketTimeChanged</codeEntityReference> 
+					<codeEntityReference qualifyHint="true" autoUpgrade="true">Е:StockSharp.BusinessEntities.IConnector.MarketTimeChanged</codeEntityReference> 
 					на значение, большее или равно параметру.
 				</listItem>
 				<listItem>

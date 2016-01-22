@@ -19,12 +19,12 @@
 <list class="bullet">
   <listItem>
   	<para>
-  	<codeEntityReference>P:StockSharp.Xaml.Charting.ChartCandleElement.LineColor</codeEntityReference> - цвет базовой линии кластера.
+  	<codeEntityReference>P:StockSharp.Xaml.Charting.ChartCandleElement.ClusterLineColor</codeEntityReference> - цвет базовой линии кластера.
   	</para>
   </listItem>
   <listItem>
   	<para>
-  	<codeEntityReference>P:StockSharp.Xaml.Charting.ChartCandleElement.TextColor</codeEntityReference> - цвет цифр объемов на графике.
+  	<codeEntityReference>P:StockSharp.Xaml.Charting.ChartCandleElement.ClusterTextColor</codeEntityReference> - цвет цифр объемов на графике.
   	</para>
   </listItem>
   <listItem>
