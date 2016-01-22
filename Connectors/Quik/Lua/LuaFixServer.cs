@@ -381,10 +381,7 @@ namespace StockSharp.Quik.Lua
 		/// <summary>
 		/// Получатель логов.
 		/// </summary>
-		public ILogReceiver LogReceiver
-		{
-			get { return _logManager.Application; }
-		}
+		public ILogReceiver LogReceiver => _logManager.Application;
 
 		/// <summary>
 		/// Запустить сервер.

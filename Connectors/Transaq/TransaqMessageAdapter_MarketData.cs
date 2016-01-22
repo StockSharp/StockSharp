@@ -192,10 +192,7 @@ namespace StockSharp.Transaq
 		/// <summary>
 		/// Список доступных периодов свечей.
 		/// </summary>
-		public IEnumerable<TimeSpan> CandleTimeFrames
-		{
-			get { return _candlePeriods.CachedValues; }
-		}
+		public IEnumerable<TimeSpan> CandleTimeFrames => _candlePeriods.CachedValues;
 
 		/// <summary>
 		/// Событие инициализации поля <see cref="CandleTimeFrames"/>.

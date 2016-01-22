@@ -73,10 +73,7 @@ namespace StockSharp.Quik
 		/// <summary>
 		/// Список произвольных таблиц.
 		/// </summary>
-		public IList<DdeCustomTable> CustomTables
-		{
-			get { return _customTableDeserializer.CustomTables; }
-		}
+		public IList<DdeCustomTable> CustomTables => _customTableDeserializer.CustomTables;
 
 		/// <summary>
 		/// Обработать поступающие DDE данные (событие вызывается до всех остальных событий <see cref="QuikTrader"/>).
@@ -542,10 +539,7 @@ namespace StockSharp.Quik
 		/// Проверить введенные параметры на валидность.
 		/// </summary>
 		[Browsable(false)]
-		public override bool IsValid
-		{
-			get { return !DdeServer.IsEmpty(); }
-		}
+		public override bool IsValid => !DdeServer.IsEmpty();
 
 		private DdeTable[] _allTables;
 

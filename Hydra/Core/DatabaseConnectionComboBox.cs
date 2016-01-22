@@ -31,10 +31,7 @@ namespace StockSharp.Hydra.Core
 	{
 		private class NewConnectionPair : DatabaseConnectionPair
 		{
-			public override string Title
-			{
-				get { return LocalizedStrings.Str2209; }
-			}
+			public override string Title => LocalizedStrings.Str2209;
 		}
 
 		private static readonly DatabaseConnectionPair _newConnection = new NewConnectionPair();

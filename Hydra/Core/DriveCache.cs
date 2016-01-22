@@ -66,18 +66,12 @@ namespace StockSharp.Hydra.Core
 		/// <summary>
 		/// Кэш.
 		/// </summary>
-		public static DriveCache Instance
-		{
-			get { return _instance.Value; }
-		}
+		public static DriveCache Instance => _instance.Value;
 
 		/// <summary>
 		/// Список всех хранилищ маркет-данных.
 		/// </summary>
-		public IEnumerable<IMarketDataDrive> AllDrives
-		{
-			get { return _drives.CachedValues; }
-		}
+		public IEnumerable<IMarketDataDrive> AllDrives => _drives.CachedValues;
 
 		/// <summary>
 		/// Хранилище маркет-данных, используемое по-умолчанию.

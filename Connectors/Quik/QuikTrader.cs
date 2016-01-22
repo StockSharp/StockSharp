@@ -61,25 +61,13 @@ namespace StockSharp.Quik
 			IsDde = false;
 		}
 
-		private LuaFixTransactionMessageAdapter FixTransactionAdapter
-		{
-			get { return Adapter.InnerAdapters.OfType<LuaFixTransactionMessageAdapter>().First(); }
-		}
+		private LuaFixTransactionMessageAdapter FixTransactionAdapter => Adapter.InnerAdapters.OfType<LuaFixTransactionMessageAdapter>().First();
 
-		private LuaFixMarketDataMessageAdapter FixMarketDataAdapter
-		{
-			get { return Adapter.InnerAdapters.OfType<LuaFixMarketDataMessageAdapter>().First(); }
-		}
+		private LuaFixMarketDataMessageAdapter FixMarketDataAdapter => Adapter.InnerAdapters.OfType<LuaFixMarketDataMessageAdapter>().First();
 
-		private QuikTrans2QuikAdapter Trans2QuikAdapter
-		{
-			get { return Adapter.InnerAdapters.OfType<QuikTrans2QuikAdapter>().First(); }
-		}
+		private QuikTrans2QuikAdapter Trans2QuikAdapter => Adapter.InnerAdapters.OfType<QuikTrans2QuikAdapter>().First();
 
-		private QuikDdeAdapter DdeAdapter
-		{
-			get { return Adapter.InnerAdapters.OfType<QuikDdeAdapter>().First(); }
-		}
+		private QuikDdeAdapter DdeAdapter => Adapter.InnerAdapters.OfType<QuikDdeAdapter>().First();
 
 		private bool _isDde;
 
@@ -332,71 +320,68 @@ namespace StockSharp.Quik
 		/// <summary>
 		/// Настройки DDE таблицы Инструменты.
 		/// </summary>
-		public DdeTable SecuritiesTable { get { return DdeAdapter.SecuritiesTable; } }
+		public DdeTable SecuritiesTable => DdeAdapter.SecuritiesTable;
 
 		/// <summary>
 		/// Настройки DDE таблицы Инструменты (изменения).
 		/// </summary>
-		public DdeTable SecuritiesChangeTable { get { return DdeAdapter.SecuritiesChangeTable; } }
+		public DdeTable SecuritiesChangeTable => DdeAdapter.SecuritiesChangeTable;
 
 		/// <summary>
 		/// Настройки DDE таблицы Сделки.
 		/// </summary>
-		public DdeTable TradesTable { get { return DdeAdapter.TradesTable; } }
+		public DdeTable TradesTable => DdeAdapter.TradesTable;
 
 		/// <summary>
 		/// Настройки DDE таблицы Мои Сделки.
 		/// </summary>
-		public DdeTable MyTradesTable { get { return DdeAdapter.MyTradesTable; } }
+		public DdeTable MyTradesTable => DdeAdapter.MyTradesTable;
 
 		/// <summary>
 		/// Настройки DDE таблицы Заявки.
 		/// </summary>
-		public DdeTable OrdersTable { get { return DdeAdapter.OrdersTable; } }
+		public DdeTable OrdersTable => DdeAdapter.OrdersTable;
 
 		/// <summary>
 		/// Настройки DDE таблицы Стоп-Заявки.
 		/// </summary>
-		public DdeTable StopOrdersTable { get { return DdeAdapter.StopOrdersTable; } }
+		public DdeTable StopOrdersTable => DdeAdapter.StopOrdersTable;
 
 		/// <summary>
 		/// Настройки DDE таблицы со стаканом.
 		/// </summary>
-		public DdeTable QuotesTable { get { return DdeAdapter.QuotesTable; } }
+		public DdeTable QuotesTable => DdeAdapter.QuotesTable;
 
 		/// <summary>
 		/// Настройки DDE таблицы Портфель по бумагам.
 		/// </summary>
-		public DdeTable EquityPortfoliosTable { get { return DdeAdapter.EquityPortfoliosTable; } }
+		public DdeTable EquityPortfoliosTable => DdeAdapter.EquityPortfoliosTable;
 
 		/// <summary>
 		/// Настройки DDE таблицы Портфель по деривативам.
 		/// </summary>
-		public DdeTable DerivativePortfoliosTable { get { return DdeAdapter.DerivativePortfoliosTable; } }
+		public DdeTable DerivativePortfoliosTable => DdeAdapter.DerivativePortfoliosTable;
 
 		/// <summary>
 		/// Настройки DDE таблицы Позиции по бумагам.
 		/// </summary>
-		public DdeTable EquityPositionsTable { get { return DdeAdapter.EquityPositionsTable; } }
+		public DdeTable EquityPositionsTable => DdeAdapter.EquityPositionsTable;
 
 		/// <summary>
 		/// Настройки DDE таблицы Позиции по деривативам.
 		/// </summary>
-		public DdeTable DerivativePositionsTable { get { return DdeAdapter.DerivativePositionsTable; } }
+		public DdeTable DerivativePositionsTable => DdeAdapter.DerivativePositionsTable;
 
 		/// <summary>
 		/// Настройки DDE таблицы Валюты портфелей.
 		/// </summary>
-		public DdeTable CurrencyPortfoliosTable { get { return DdeAdapter.CurrencyPortfoliosTable; } }
+		public DdeTable CurrencyPortfoliosTable => DdeAdapter.CurrencyPortfoliosTable;
 
 		/// <summary>
 		/// Список произвольных таблиц.
 		/// </summary>
-		public IList<DdeCustomTable> CustomTables
-		{
-			get { return DdeAdapter.CustomTables; }
-		}
-		
+		public IList<DdeCustomTable> CustomTables => DdeAdapter.CustomTables;
+
 		/// <summary>
 		/// Загружать заявки, поданные вручную через Quik.
 		/// </summary>

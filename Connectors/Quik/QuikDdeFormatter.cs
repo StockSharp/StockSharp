@@ -396,10 +396,7 @@ namespace StockSharp.Quik
 
 		private static SynchronizedDictionary<DdeTableColumn, Func<object, KeyValuePair<Level1Fields, object>>> _ddeColumnValueToSecurityChangeConverters;
 
-		public static SynchronizedDictionary<DdeTableColumn, Func<object, KeyValuePair<Level1Fields, object>>> DdeColumnValueToSecurityChangeConverters
-		{
-			get { return _ddeColumnValueToSecurityChangeConverters ?? (_ddeColumnValueToSecurityChangeConverters = CreateDdeColumnValueToSecurityChangeConverters()); }
-		}
+		public static SynchronizedDictionary<DdeTableColumn, Func<object, KeyValuePair<Level1Fields, object>>> DdeColumnValueToSecurityChangeConverters => _ddeColumnValueToSecurityChangeConverters ?? (_ddeColumnValueToSecurityChangeConverters = CreateDdeColumnValueToSecurityChangeConverters());
 
 		private static SynchronizedDictionary<DdeTableColumn, Func<object, KeyValuePair<Level1Fields, object>>> CreateDdeColumnValueToSecurityChangeConverters()
 		{

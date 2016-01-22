@@ -209,10 +209,7 @@ namespace StockSharp.Transaq
 		/// Проверить введенные параметры на валидность.
 		/// </summary>
 		[Browsable(false)]
-		public override bool IsValid
-		{
-			get { return !Login.IsEmpty() && !Password.IsEmpty(); }
-		}
+		public override bool IsValid => !Login.IsEmpty() && !Password.IsEmpty();
 
 		/// <summary>
 		/// Версия коннектора.
