@@ -203,7 +203,7 @@ namespace StockSharp.Hydra.Tools
 		{
 			DataType.Create(typeof(ExecutionMessage), ExecutionTypes.Tick),
 			DataType.Create(typeof(ExecutionMessage), ExecutionTypes.OrderLog),
-			DataType.Create(typeof(ExecutionMessage), ExecutionTypes.Order),
+			DataType.Create(typeof(ExecutionMessage), ExecutionTypes.Transaction),
 			DataType.Create(typeof(NewsMessage), null),
 			DataType.Create(typeof(QuoteChangeMessage), null),
 			DataType.Create(typeof(Level1ChangeMessage), null),
@@ -384,8 +384,7 @@ namespace StockSharp.Hydra.Tools
 				{
 					case ExecutionTypes.Tick:
 						return registry.TemplateTxtTick;
-					case ExecutionTypes.Order:
-					case ExecutionTypes.Trade:
+					case ExecutionTypes.Transaction:
 						return registry.TemplateTxtTransaction;
 					case ExecutionTypes.OrderLog:
 						return registry.TemplateTxtOrderLog;

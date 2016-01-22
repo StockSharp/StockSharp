@@ -390,7 +390,7 @@
 					<MenuItem Header="{x:Static loc:LocalizedStrings.OrderLog}" Command="{x:Static hydra:MainWindow.ImportPaneCommand}" CommandParameter="OrderLog"/>
 					<MenuItem Header="{x:Static loc:LocalizedStrings.Level1}" Command="{x:Static hydra:MainWindow.ImportPaneCommand}" CommandParameter="Level1"/>
 					<MenuItem Header="{x:Static loc:LocalizedStrings.News}" Command="{x:Static hydra:MainWindow.ImportPaneCommand}" CommandParameter="News"/>
-                    <MenuItem Header="{x:Static loc:LocalizedStrings.Transactions}" Command="{x:Static hydra:MainWindow.ImportPaneCommand}" CommandParameter="Execution"/>
+                    <MenuItem Header="{x:Static loc:LocalizedStrings.Transactions}" Command="{x:Static hydra:MainWindow.ImportPaneCommand}" CommandParameter="Transaction"/>
 				</MenuItem>
 
 				<MenuItem Header="{x:Static loc:LocalizedStrings.Export}">
@@ -401,7 +401,7 @@
 					<MenuItem Header="{x:Static loc:LocalizedStrings.OrderLog}" Command="{x:Static hydra:MainWindow.OpenPaneCommand}" CommandParameter="OrderLog"/>
 					<MenuItem Header="Level 1" Command="{x:Static hydra:MainWindow.OpenPaneCommand}" CommandParameter="Level1"/>
 					<MenuItem Header="{x:Static loc:LocalizedStrings.News}" Command="{x:Static hydra:MainWindow.OpenPaneCommand}" CommandParameter="News"/>
-                    <MenuItem Header="{x:Static loc:LocalizedStrings.Transactions}" Command="{x:Static hydra:MainWindow.OpenPaneCommand}" CommandParameter="Execution"/>
+                    <MenuItem Header="{x:Static loc:LocalizedStrings.Transactions}" Command="{x:Static hydra:MainWindow.OpenPaneCommand}" CommandParameter="Transaction"/>
 				</MenuItem>
 
 				<MenuItem Header="{x:Static loc:LocalizedStrings.Securities}">
@@ -488,7 +488,7 @@
 					<Button Content="{x:Static loc:LocalizedStrings.OrderLog}" Width="80" Height="29" Command="{x:Static hydra:MainWindow.OpenPaneCommand}" CommandParameter="OrderLog"/>
 					<Button Content="{x:Static loc:LocalizedStrings.Level1}" Width="80" Height="29" Command="{x:Static hydra:MainWindow.OpenPaneCommand}" CommandParameter="Level1"/>
 					<Button Content="{x:Static loc:LocalizedStrings.News}" Width="80" Height="29" Command="{x:Static hydra:MainWindow.OpenPaneCommand}" CommandParameter="News"/>
-					<Button Content="{x:Static loc:LocalizedStrings.Transactions}" Width="80" Height="29" Command="{x:Static hydra:MainWindow.OpenPaneCommand}" CommandParameter="Execution"/>
+					<Button Content="{x:Static loc:LocalizedStrings.Transactions}" Width="80" Height="29" Command="{x:Static hydra:MainWindow.OpenPaneCommand}" CommandParameter="Transaction"/>
 				</ToolBar>
 
 				<ToolBar ToolBarTray.IsLocked="True">

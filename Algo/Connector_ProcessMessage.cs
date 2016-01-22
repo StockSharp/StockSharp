@@ -1212,10 +1212,10 @@ namespace StockSharp.Algo
 					changes.Add(new KeyValuePair<Level1Fields, object>(Level1Fields.LastTradeId, message.TradeId.Value));
 				}
 
-				if (message.Volume != null)
+				if (message.TradeVolume != null)
 				{
-					values[(int)Level1Fields.Volume] = message.Volume.Value;
-					changes.Add(new KeyValuePair<Level1Fields, object>(Level1Fields.LastTradeVolume, message.Volume.Value));
+					values[(int)Level1Fields.Volume] = message.TradeVolume.Value;
+					changes.Add(new KeyValuePair<Level1Fields, object>(Level1Fields.LastTradeVolume, message.TradeVolume.Value));
 				}
 			}
 
@@ -1395,24 +1395,36 @@ namespace StockSharp.Algo
 					case ExecutionTypes.Tick:
 						ProcessTradeMessage(security, message);
 						break;
-					case ExecutionTypes.Order:
-						ProcessOrderMessage(security, message);
-						break;
-					case ExecutionTypes.Trade:
-						ProcessMyTradeMessage(security, message);
-						break;
 					case ExecutionTypes.OrderLog:
 						ProcessOrderLogMessage(security, message);
 						break;
 					default:
-						throw new ArgumentOutOfRangeException(LocalizedStrings.Str1695Params.Put(message.ExecutionType));
+					{
+						var processed = false;
+
+						if (message.HasOrderInfo())
+						{
+							processed = true;
+							ProcessOrderMessage(security, message);
+						}
+
+						if (message.HasTradeInfo())
+						{
+							processed = true;
+							ProcessMyTradeMessage(security, message);
+						}
+
+						if (!processed)
+							throw new ArgumentOutOfRangeException(LocalizedStrings.Str1695Params.Put(message.ExecutionType));
+
+						break;
+					}
 				}
 			};
 
 			switch (message.ExecutionType)
 			{
-				case ExecutionTypes.Order:
-				case ExecutionTypes.Trade:
+				case ExecutionTypes.Transaction:
 				{
 					if (message.SecurityId.SecurityCode.IsEmpty() && message.SecurityId.Native == null)
 					{

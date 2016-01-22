@@ -107,7 +107,7 @@ namespace StockSharp.Algo.Strategies.Testing
 					{
 						var execMsg = (ExecutionMessage)message;
 
-						if (execMsg.ExecutionType != ExecutionTypes.Order && execMsg.ExecutionType != ExecutionTypes.Trade)
+						if (execMsg.ExecutionType != ExecutionTypes.Transaction)
 						{
 							if (innerAdapter != InnerAdapters.LastOrDefault())
 								return;

@@ -144,7 +144,7 @@ namespace StockSharp.Hydra.HydraServer
 			.Concat(new[]
 			{
 				DataType.Create(typeof(ExecutionMessage), ExecutionTypes.Tick),
-				DataType.Create(typeof(ExecutionMessage), ExecutionTypes.Order),
+				DataType.Create(typeof(ExecutionMessage), ExecutionTypes.Transaction),
 				DataType.Create(typeof(ExecutionMessage), ExecutionTypes.OrderLog),
 				DataType.Create(typeof(QuoteChangeMessage), null),
 				DataType.Create(typeof(Level1ChangeMessage), null),

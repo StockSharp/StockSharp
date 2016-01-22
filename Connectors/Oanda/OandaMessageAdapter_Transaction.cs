@@ -55,17 +55,17 @@ namespace StockSharp.Oanda
 				type,
 				GetExpiryTime(message),
 				message.Price,
-				condition == null ? null : condition.LowerBound,
-				condition == null ? null : condition.UpperBound,
-				condition == null ? null : condition.StopLossOffset,
-				condition == null ? null : condition.TakeProfitOffset,
-				condition == null ? null : condition.TrailingStopLossOffset);
+				condition?.LowerBound,
+				condition?.UpperBound,
+				condition?.StopLossOffset,
+				condition?.TakeProfitOffset,
+				condition?.TrailingStopLossOffset);
 
 			var execMsg = new ExecutionMessage
 			{
 				OriginalTransactionId = message.TransactionId,
 				ServerTime = response.Time.FromOanda(),
-				ExecutionType = ExecutionTypes.Order,
+				ExecutionType = ExecutionTypes.Transaction,
 				PortfolioName = message.PortfolioName,
 			};
 
@@ -89,9 +89,9 @@ namespace StockSharp.Oanda
 				SendOutMessage(new ExecutionMessage
 				{
 					OriginalTransactionId = message.TransactionId,
-					ExecutionType = ExecutionTypes.Trade,
+					ExecutionType = ExecutionTypes.Transaction,
 					TradePrice = (decimal)tradeData.Price,
-					Volume = tradeData.Units,
+					TradeVolume = tradeData.Units,
 					ServerTime = tradeData.Time.FromOanda(),
 					TradeId = tradeData.Id,
 				});
@@ -107,7 +107,7 @@ namespace StockSharp.Oanda
 			
 			SendOutMessage(new ExecutionMessage
 			{
-				ExecutionType = ExecutionTypes.Order,
+				ExecutionType = ExecutionTypes.Transaction,
 				OriginalTransactionId = message.TransactionId,
 				OrderId = message.OrderId,
 				OrderState = OrderStates.Done,
@@ -129,15 +129,15 @@ namespace StockSharp.Oanda
 				(int)message.Volume,
 				GetExpiryTime(message),
 				message.Price,
-				condition == null ? null : condition.LowerBound,
-				condition == null ? null : condition.UpperBound,
-				condition == null ? null : condition.StopLossOffset,
-				condition == null ? null : condition.TakeProfitOffset,
-				condition == null ? null : condition.TrailingStopLossOffset);
+				condition?.LowerBound,
+				condition?.UpperBound,
+				condition?.StopLossOffset,
+				condition?.TakeProfitOffset,
+				condition?.TrailingStopLossOffset);
 
 			SendOutMessage(new ExecutionMessage
 			{
-				ExecutionType = ExecutionTypes.Order,
+				ExecutionType = ExecutionTypes.Transaction,
 				OriginalTransactionId = message.TransactionId,
 				OrderId = message.OldOrderId,
 				OrderState = OrderStates.Done,
@@ -147,7 +147,7 @@ namespace StockSharp.Oanda
 
 			SendOutMessage(new ExecutionMessage
 			{
-				ExecutionType = ExecutionTypes.Order,
+				ExecutionType = ExecutionTypes.Transaction,
 				OriginalTransactionId = message.TransactionId,
 				OrderId = response.Id,
 				OrderState = OrderStates.Active,
@@ -197,14 +197,14 @@ namespace StockSharp.Oanda
 						SendOutMessage(new ExecutionMessage
 						{
 							OrderType = orderType,
-							ExecutionType = ExecutionTypes.Order,
+							ExecutionType = ExecutionTypes.Transaction,
 							OrderId = order.Id,
 							ServerTime = order.Time.FromOanda(),
 							OrderPrice = (decimal)order.Price,
-							Volume = order.Units,
+							OrderVolume = order.Units,
 							Side = order.Side.To<Sides>(),
 							SecurityId = order.Instrument.ToSecurityId(),
-							ExpiryDate = order.Expiry == null ? (DateTimeOffset?)null : order.Expiry.Value.FromOanda(),
+							ExpiryDate = order.Expiry?.FromOanda(),
 							Condition = condition,
 							PortfolioName = GetPortfolioName(accountId),
 						});
@@ -238,13 +238,13 @@ namespace StockSharp.Oanda
 
 						SendOutMessage(new ExecutionMessage
 						{
-							ExecutionType = ExecutionTypes.Order,
+							ExecutionType = ExecutionTypes.Transaction,
 							OrderType = isConditional ? OrderTypes.Conditional : OrderTypes.Limit,
-							OrderId = trade.Id,
+							TradeId = trade.Id,
 							OriginalTransactionId = transId,
 							ServerTime = trade.Time.FromOanda(),
 							OrderPrice = (decimal)trade.Price,
-							Volume = trade.Units,
+							TradeVolume = trade.Units,
 							Balance = 0,
 							Side = trade.Side.To<Sides>(),
 							SecurityId = trade.Instrument.ToSecurityId(),
@@ -262,12 +262,12 @@ namespace StockSharp.Oanda
 						{
 							SendOutMessage(new ExecutionMessage
 							{
-								ExecutionType = ExecutionTypes.Trade,
+								ExecutionType = ExecutionTypes.Transaction,
 								OrderId = trade.Id,
 								OriginalTransactionId = transId,
 								TradeId = trade.Id,
 								TradePrice = (decimal)trade.Price,
-								Volume = trade.Units,
+								TradeVolume = trade.Units,
 								ServerTime = trade.Time.FromOanda(),
 								SecurityId = trade.Instrument.ToSecurityId(),
 								PortfolioName = GetPortfolioName(accountId),
@@ -352,7 +352,7 @@ namespace StockSharp.Oanda
 						{
 							SendOutMessage(new ExecutionMessage
 							{
-								ExecutionType = ExecutionTypes.Order,
+								ExecutionType = ExecutionTypes.Transaction,
 								OrderId = transaction.OrderId,
 								ServerTime = transaction.Time.FromOanda(),
 								SecurityId = transaction.Instrument.ToSecurityId(),
@@ -366,7 +366,7 @@ namespace StockSharp.Oanda
 						{
 							SendOutMessage(new ExecutionMessage
 							{
-								ExecutionType = ExecutionTypes.Order,
+								ExecutionType = ExecutionTypes.Transaction,
 								OrderId = transaction.OrderId,
 								ServerTime = transaction.Time.FromOanda(),
 								SecurityId = transaction.Instrument.ToSecurityId(),
@@ -404,16 +404,17 @@ namespace StockSharp.Oanda
 				case "ORDER_FILLED":
 				{
 					var trade = transaction.TradeOpened ?? transaction.TradeReduced;
-
+					
 					SendOutMessage(new ExecutionMessage
 					{
-						ExecutionType = ExecutionTypes.Trade,
+						ExecutionType = ExecutionTypes.Transaction,
 						OrderId = transaction.OrderId,
+						TradeId = transaction.TradeId,
 						ServerTime = trade.Time.FromOanda(),
 						SecurityId = trade.Instrument.ToSecurityId(),
 						PortfolioName = GetPortfolioName(trade.AccountId),
 						TradePrice = (decimal)trade.Price,
-						Volume = trade.Units,
+						TradeVolume = trade.Units,
 					});
 
 					break;

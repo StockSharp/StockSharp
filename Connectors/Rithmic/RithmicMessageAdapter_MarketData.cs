@@ -46,7 +46,7 @@ namespace StockSharp.Rithmic
 
 			if (secMsg.SecurityType == null || secMsg.SecurityType == SecurityTypes.Option)
 			{
-				var expiration = secMsg.ExpiryDate == null ? null : secMsg.ExpiryDate.Value.ToString("yyyyMM");
+				var expiration = secMsg.ExpiryDate?.ToString("yyyyMM");
 
 				_client.Session.getOptionList(board, secMsg.UnderlyingSecurityCode, expiration, secMsg.TransactionId);
 				_client.Session.getInstrumentByUnderlying(secMsg.UnderlyingSecurityCode, board, expiration, secMsg.TransactionId);
@@ -324,7 +324,7 @@ namespace StockSharp.Rithmic
 				ServerTime = RithmicUtils.ToTime(info.SourceSsboe, info.SourceUsecs),
 				LocalTime = RithmicUtils.ToTime(info.Ssboe, info.Usecs),
 				TradePrice = info.Price.ToDecimal(),
-				Volume = info.Size,
+				TradeVolume = info.Size,
 				OriginSide = RithmicUtils.ToOriginSide(info.AggressorSide)
 			});
 

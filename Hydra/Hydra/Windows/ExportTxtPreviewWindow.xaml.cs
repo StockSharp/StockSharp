@@ -271,7 +271,7 @@ namespace StockSharp.Hydra.Windows
 								ExecutionType = (ExecutionTypes)Arg,
 								TradeId = 21354656,
 								TradePrice = 103.6m,
-								Volume = 45,
+								TradeVolume = 45,
 							},
 							new ExecutionMessage
 							{
@@ -280,36 +280,36 @@ namespace StockSharp.Hydra.Windows
 								ExecutionType = (ExecutionTypes)Arg,
 								TradeId = 21354789,
 								TradePrice = 103.7m,
-								Volume = 3,
+								TradeVolume = 3,
 							},
 						};
 						break;
-					case ExecutionTypes.Order:
+					case ExecutionTypes.Transaction:
 						testValues = new[]
 						{
 							(object)new ExecutionMessage
 							{
 								SecurityId = securityId,
 								ServerTime = serverTime,
-								ExecutionType = ExecutionTypes.Order,
+								ExecutionType = ExecutionTypes.Transaction,
 								PortfolioName = "Account 45-g",
 								OrderId = 5421354656,
 								OrderPrice = 103.6m,
 								Side = Sides.Buy,
 								TradePrice = 103.6m,
-								Volume = 45,
+								OrderVolume = 45,
 							},
 							new ExecutionMessage
 							{
 								SecurityId = securityId,
 								ServerTime = serverTime,
-								ExecutionType = ExecutionTypes.Trade,
+								ExecutionType = ExecutionTypes.Transaction,
 								PortfolioName = "Account 45-g",
 								OrderId = 5421354789,
 								Side = Sides.Sell,
 								TradeId = 21354789,
 								TradePrice = 103.7m,
-								Volume = 3,
+								TradeVolume = 3,
 							},
 						};
 						break;
@@ -325,7 +325,7 @@ namespace StockSharp.Hydra.Windows
 								OrderPrice = 103.6m,
 								Side = Sides.Buy,
 								TradePrice = 103.5m,
-								Volume = 45,
+								OrderVolume = 45,
 							},
 							new ExecutionMessage
 							{
@@ -336,7 +336,7 @@ namespace StockSharp.Hydra.Windows
 								Side = Sides.Sell,
 								TradeId = 21354789,
 								TradePrice = 103.7m,
-								Volume = 3,
+								OrderVolume = 3,
 							},
 						};
 						break;

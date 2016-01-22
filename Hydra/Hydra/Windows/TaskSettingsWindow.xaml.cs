@@ -42,7 +42,7 @@ namespace StockSharp.Hydra.Windows
 			{ DataType.Create(typeof(QuoteChangeMessage), null), LocalizedStrings.MarketDepths },
 			{ DataType.Create(typeof(ExecutionMessage), ExecutionTypes.OrderLog), LocalizedStrings.OrderLog },
 			{ DataType.Create(typeof(Level1ChangeMessage), null), LocalizedStrings.Level1 },
-			{ DataType.Create(typeof(ExecutionMessage), ExecutionTypes.Order), LocalizedStrings.Transactions },
+			{ DataType.Create(typeof(ExecutionMessage), ExecutionTypes.Transaction), LocalizedStrings.Transactions },
 			{ DataType.Create(typeof(NewsMessage), null), LocalizedStrings.News },
 		};
 

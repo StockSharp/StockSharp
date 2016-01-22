@@ -23,7 +23,6 @@ namespace StockSharp.Anywhere
     using System.Runtime.CompilerServices;
     using System.Security;
 
-    using Ecng.Collections;
     using Ecng.Common;
     using Ecng.Xaml;
 
@@ -38,12 +37,9 @@ namespace StockSharp.Anywhere
     {
         public Security Security { set; get; }
 
-        public string SecurityId
-        {
-            get { return Security.Id; }
-        }
+        public string SecurityId => Security.Id;
 
-        public bool Trades { set; get; }
+	    public bool Trades { set; get; }
         public bool MarketDepth { set; get; }
         public bool Level1 { set; get; }
         public bool Orders { set; get; }
@@ -185,27 +181,16 @@ namespace StockSharp.Anywhere
 
                         var execMsg = (ExecutionMessage)message;
 
-                        switch (execMsg.ExecutionType)
-                        {
-                            case ExecutionTypes.Tick:
-                            {
-                                execMsg.WriteTrade();
+		                if (execMsg.ExecutionType == ExecutionTypes.Tick)
+			                execMsg.WriteTrade();
+		                else
+		                {
+							if (execMsg.HasOrderInfo())
+								execMsg.WriteOrder();
 
-                                break;
-                            }
-                            case ExecutionTypes.Trade:
-                            {
-                                execMsg.WriteMyTrade();
-
-                                break;
-                            }
-                            case ExecutionTypes.Order:
-                            {
-                                execMsg.WriteOrder();
-
-                                break;
-                            }
-                        }
+							if (execMsg.HasTradeInfo())
+								execMsg.WriteMyTrade();
+						}
 
                         break;
 

@@ -258,7 +258,7 @@ namespace StockSharp.Rithmic
 			message.OriginalTransactionId = transactionId;
 			message.Comment = report.UserMsg;
 			message.OrderPrice = report.PriceToFill.ToDecimal() ?? 0;
-			message.Volume = report.TotalFilled + report.TotalUnfilled;
+			message.OrderVolume = report.TotalFilled + report.TotalUnfilled;
 			message.OrderType = RithmicUtils.ToOrderType(report.OrderType);
 			message.Side = RithmicUtils.ToSide(report.BuySellType);
 			message.ServerTime = RithmicUtils.ToTime(report.GatewaySsboe, report.GatewayUsecs);
@@ -335,7 +335,7 @@ namespace StockSharp.Rithmic
 		{
 			var message = ProcessOrderReport(report, new ExecutionMessage
 			{
-				ExecutionType = ExecutionTypes.Order
+				ExecutionType = ExecutionTypes.Transaction
 			});
 
 			if (message == null)
@@ -540,8 +540,8 @@ namespace StockSharp.Rithmic
 
 				var message = ProcessOrderReport(report, new ExecutionMessage
 				{
-					ExecutionType = ExecutionTypes.Trade,
-					Volume = report.FillSize,
+					ExecutionType = ExecutionTypes.Transaction,
+					TradeVolume = report.FillSize,
 					TradePrice = report.FillPrice.ToDecimal()
 				});
 

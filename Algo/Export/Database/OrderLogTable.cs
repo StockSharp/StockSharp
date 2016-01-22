@@ -49,8 +49,8 @@ namespace StockSharp.Algo.Export.Database
 			};
 			yield return new ColumnDescription("ServerTime") { DbType = typeof(DateTimeOffset) };
 			yield return new ColumnDescription("LocalTime") { DbType = typeof(DateTime) };
-			yield return new ColumnDescription("OrderPrice") { DbType = typeof(decimal), ValueRestriction = new DecimalRestriction { Scale = security.PriceStep == null ? 1 : security.PriceStep.Value.GetCachedDecimals() } };
-			yield return new ColumnDescription("Volume") { DbType = typeof(decimal), ValueRestriction = new DecimalRestriction { Scale = security.VolumeStep == null ? 1 : security.VolumeStep.Value.GetCachedDecimals() } };
+			yield return new ColumnDescription("OrderPrice") { DbType = typeof(decimal), ValueRestriction = new DecimalRestriction { Scale = security.PriceStep?.GetCachedDecimals() ?? 1 } };
+			yield return new ColumnDescription("OrderVolume") { DbType = typeof(decimal), ValueRestriction = new DecimalRestriction { Scale = security.VolumeStep?.GetCachedDecimals() ?? 1 } };
 			yield return new ColumnDescription("Side") { DbType = typeof(int) };
 			yield return new ColumnDescription("Status") { DbType = typeof(int?) };
 			yield return new ColumnDescription("State") { DbType = typeof(int?) };
@@ -60,8 +60,8 @@ namespace StockSharp.Algo.Export.Database
 				DbType = typeof(string),
 				ValueRestriction = new StringRestriction(32)
 			};
-			yield return new ColumnDescription("TradePrice") { DbType = typeof(decimal?), ValueRestriction = new DecimalRestriction { Scale = security.PriceStep == null ? 1 : security.PriceStep.Value.GetCachedDecimals() } };
-			yield return new ColumnDescription("OpenInterest") { DbType = typeof(decimal?), ValueRestriction = new DecimalRestriction { Scale = security.VolumeStep == null ? 1 : security.VolumeStep.Value.GetCachedDecimals() } };
+			yield return new ColumnDescription("TradePrice") { DbType = typeof(decimal?), ValueRestriction = new DecimalRestriction { Scale = security.PriceStep?.GetCachedDecimals() ?? 1 } };
+			yield return new ColumnDescription("OpenInterest") { DbType = typeof(decimal?), ValueRestriction = new DecimalRestriction { Scale = security.VolumeStep?.GetCachedDecimals() ?? 1 } };
 		}
 
 		protected override IDictionary<string, object> ConvertToParameters(ExecutionMessage value)
@@ -74,7 +74,7 @@ namespace StockSharp.Algo.Export.Database
 				{ "ServerTime", value.ServerTime },
 				{ "LocalTime", value.LocalTime },
 				{ "OrderPrice", value.OrderPrice },
-				{ "Volume", value.Volume },
+				{ "OrderVolume", value.OrderVolume },
 				{ "Side", (int)value.Side },
 				{ "Status", (int?)value.OrderStatus },
 				{ "State", (int?)value.OrderState },

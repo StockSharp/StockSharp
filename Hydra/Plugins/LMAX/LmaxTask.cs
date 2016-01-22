@@ -97,7 +97,7 @@ namespace StockSharp.Hydra.LMAX
 				.Select(tf => DataType.Create(typeof(TimeFrameCandleMessage), tf))
 				.Concat(new[]
 				{
-					DataType.Create(typeof(ExecutionMessage), ExecutionTypes.Order),
+					DataType.Create(typeof(ExecutionMessage), ExecutionTypes.Transaction),
 					DataType.Create(typeof(QuoteChangeMessage), null),
 					DataType.Create(typeof(Level1ChangeMessage), null),
 				})

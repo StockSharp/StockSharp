@@ -546,7 +546,7 @@ namespace StockSharp.InteractiveBrokers
 
 			var execMsg = new ExecutionMessage
 			{
-				ExecutionType = ExecutionTypes.Order,
+				ExecutionType = ExecutionTypes.Transaction,
 				OriginalTransactionId = id,
 				Balance = balance,
 				OrderStatus = status,
@@ -1085,12 +1085,12 @@ namespace StockSharp.InteractiveBrokers
 
 			var orderMsg = new ExecutionMessage
 			{
-				ExecutionType = ExecutionTypes.Order,
+				ExecutionType = ExecutionTypes.Transaction,
 				SecurityId = secId,
 				OriginalTransactionId = transactionId,
 				OrderType = orderType,
 				Side = direction,
-				Volume = volume,
+				OrderVolume = volume,
 				OrderPrice = price,
 				Condition = ibCon,
 				ExpiryDate = orderExpiryDate,
@@ -1098,7 +1098,7 @@ namespace StockSharp.InteractiveBrokers
 				PortfolioName = portfolio,
 				Comment = comment,
 				OrderStatus = status,
-				OrderState = status == null ? (OrderStates?)null : status.Value.ToOrderState(),
+				OrderState = status?.ToOrderState(),
 			};
 
 			if (orderMsg.OrderState == OrderStates.Active || orderMsg.OrderState == OrderStates.Done)
@@ -1222,12 +1222,12 @@ namespace StockSharp.InteractiveBrokers
 
 			var execMsg = new ExecutionMessage
 			{
-				ExecutionType = ExecutionTypes.Trade,
+				ExecutionType = ExecutionTypes.Transaction,
 				OriginalTransactionId = transactionId,
 				TradeStringId = tradeId,
 				OriginSide = side,
 				TradePrice = price,
-				Volume = volume,
+				TradeVolume = volume,
 				PortfolioName = portfolio,
 				ServerTime = time,
 				SecurityId = secId,
@@ -1489,7 +1489,7 @@ namespace StockSharp.InteractiveBrokers
 		{
 			SendOutMessage(new ExecutionMessage
 			{
-				ExecutionType = ExecutionTypes.Order,
+				ExecutionType = ExecutionTypes.Transaction,
 				OriginalTransactionId = transactionId,
 				OrderState = OrderStates.Failed,
 				Error = new InvalidOperationException(errorMsg),

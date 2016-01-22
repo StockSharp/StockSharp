@@ -81,7 +81,7 @@ namespace StockSharp.Algo.Export.Database
 			yield return new ColumnDescription("OpenInterest")
 			{
 				DbType = typeof(decimal?),
-				ValueRestriction = new DecimalRestriction { Scale = security.VolumeStep == null ? 1 : security.VolumeStep.Value.GetCachedDecimals() }
+				ValueRestriction = new DecimalRestriction { Scale = security.VolumeStep?.GetCachedDecimals() ?? 1 }
 			};
 		}
 

@@ -261,8 +261,7 @@ namespace StockSharp.Hydra.Core
 						case ExecutionTypes.Tick:
 							Connector.RegisterTrades(security);
 							break;
-						case ExecutionTypes.Order:
-						case ExecutionTypes.Trade:
+						case ExecutionTypes.Transaction:
 							break;
 						case ExecutionTypes.OrderLog:
 							Connector.RegisterOrderLog(security);

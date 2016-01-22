@@ -41,7 +41,7 @@ namespace StockSharp.BitStamp
 
 			SendOutMessage(new ExecutionMessage
 			{
-				ExecutionType = ExecutionTypes.Order,
+				ExecutionType = ExecutionTypes.Transaction,
 				OrderId = order.Id,
 				ServerTime = order.Time.ApplyTimeZone(TimeZoneInfo.Utc),
 				OriginalTransactionId = regMsg.TransactionId,
@@ -59,7 +59,7 @@ namespace StockSharp.BitStamp
 			SendOutMessage(new ExecutionMessage
 			{
 				ServerTime = CurrentTime.Convert(TimeZoneInfo.Utc),
-				ExecutionType = ExecutionTypes.Order,
+				ExecutionType = ExecutionTypes.Transaction,
 				OriginalTransactionId = cancelMsg.TransactionId,
 				OrderState = isOk ? OrderStates.Done : OrderStates.Failed,
 				Error = isOk ? null : new InvalidOperationException(LocalizedStrings.Str3300),
@@ -90,12 +90,12 @@ namespace StockSharp.BitStamp
 
 			SendOutMessage(new ExecutionMessage
 			{
-				ExecutionType = ExecutionTypes.Order,
+				ExecutionType = ExecutionTypes.Transaction,
 				OrderId = order.Id,
 				OriginalTransactionId = info.First,
 				OrderPrice = (decimal)order.Price,
 				Balance = info.Second,
-				Volume = (decimal)order.Amount,
+				OrderVolume = (decimal)order.Amount,
 				Side = order.Type.ToStockSharp(),
 				SecurityId = _btcUsd,
 				ServerTime = order.Time.ApplyTimeZone(TimeZoneInfo.Utc),
@@ -115,11 +115,11 @@ namespace StockSharp.BitStamp
 
 			SendOutMessage(new ExecutionMessage
 			{
-				ExecutionType = ExecutionTypes.Trade,
+				ExecutionType = ExecutionTypes.Transaction,
 				OrderId = trade.OrderId,
 				TradeId = trade.Id,
 				TradePrice = (decimal)trade.UsdAmount,
-				Volume = (decimal)trade.BtcAmount,
+				TradeVolume = (decimal)trade.BtcAmount,
 				SecurityId = _btcUsd,
 				ServerTime = trade.Time.ApplyTimeZone(TimeZoneInfo.Utc),
 				PortfolioName = GetPortfolioName(),
@@ -137,7 +137,7 @@ namespace StockSharp.BitStamp
 
 			SendOutMessage(new ExecutionMessage
 			{
-				ExecutionType = ExecutionTypes.Order,
+				ExecutionType = ExecutionTypes.Transaction,
 				OrderId = trade.OrderId,
 				Balance = info.Second,
 				OrderState = info.Second > 0 ? OrderStates.Active : OrderStates.Done

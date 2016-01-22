@@ -78,7 +78,7 @@ namespace StockSharp.Hydra.Oanda
 				.Concat(new[]
 				{
 					DataType.Create(typeof(Level1ChangeMessage), null),
-					DataType.Create(typeof(ExecutionMessage), ExecutionTypes.Order),
+					DataType.Create(typeof(ExecutionMessage), ExecutionTypes.Transaction),
 				})
 				.ToArray();
 		}

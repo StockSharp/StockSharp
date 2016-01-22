@@ -306,7 +306,7 @@ namespace StockSharp.BarChart
 												ExecutionType = ExecutionTypes.Tick,
 												ServerTime = columns[0].ToDateTime("yyyy-MM-dd HH:mm:ss.fff"),
 												TradePrice = columns[3].To<decimal>(),
-												Volume = columns[4].To<decimal>(),
+												TradeVolume = columns[4].To<decimal>(),
 											};
 
 											msg.AddValue("IsFinished", ++i == lines.Length);

@@ -231,8 +231,7 @@ namespace StockSharp.Hydra
 							LoadedOrderLog += count;
 							break;
 						}
-						case ExecutionTypes.Order:
-						case ExecutionTypes.Trade:
+						case ExecutionTypes.Transaction:
 						{
 							info = taskSecurity?.TransactionInfo;
 							allInfo = allSecurity?.TransactionInfo;

@@ -73,7 +73,7 @@ namespace StockSharp.Algo.Export.Database
 				{ "Id", value.Id },
 				{ "ServerTime", value.ServerTime },
 				{ "LocalTime", value.LocalTime },
-				{ "SecurityCode", value.SecurityId == null ? null : value.SecurityId.Value.SecurityCode },
+				{ "SecurityCode", value.SecurityId?.SecurityCode },
 				{ "BoardCode", value.BoardCode },
 				{ "Headline", value.Headline },
 				{ "Story", value.Story },

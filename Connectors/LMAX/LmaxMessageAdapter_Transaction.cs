@@ -196,14 +196,14 @@ namespace StockSharp.LMAX
 				OrderType = orderType,
 				OrderPrice = price,
 				Condition = condition,
-				Volume = lmaxOrder.Quantity.Abs(),
+				OrderVolume = lmaxOrder.Quantity.Abs(),
 				Side = lmaxOrder.Quantity > 0 ? Sides.Buy : Sides.Sell,
 				Balance = lmaxOrder.Quantity - lmaxOrder.FilledQuantity,
 				PortfolioName = lmaxOrder.AccountId.To<string>(),
 				TimeInForce = tif,
 				ExpiryDate = expiryDate,
 				OrderStringId = lmaxOrder.OrderId,
-				ExecutionType = ExecutionTypes.Order,
+				ExecutionType = ExecutionTypes.Transaction,
 				Commission = lmaxOrder.Commission,
 				ServerTime = CurrentTime.Convert(TimeZoneInfo.Utc)
 			};
@@ -232,8 +232,8 @@ namespace StockSharp.LMAX
 				OriginalTransactionId = transactionId.Value,
 				TradeId = execution.ExecutionId,
 				TradePrice = execution.Price,
-				Volume = execution.Quantity.Abs(),
-				ExecutionType = ExecutionTypes.Trade,
+				TradeVolume = execution.Quantity.Abs(),
+				ExecutionType = ExecutionTypes.Transaction,
 				Side = execution.Order.Quantity > 0 ? Sides.Buy : Sides.Sell,
 				Commission = execution.Order.Commission,
 				ServerTime = CurrentTime.Convert(TimeZoneInfo.Utc)
@@ -259,7 +259,7 @@ namespace StockSharp.LMAX
 
 			SendOutMessage(new ExecutionMessage
 			{
-				ExecutionType = ExecutionTypes.Order,
+				ExecutionType = ExecutionTypes.Transaction,
 				SecurityId = new SecurityId { Native = evt.InstrumentId },
 				OriginalTransactionId = transactionId.Value,
 				OrderState = OrderStates.Failed,

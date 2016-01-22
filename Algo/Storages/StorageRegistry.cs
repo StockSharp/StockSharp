@@ -439,7 +439,7 @@ namespace StockSharp.Algo.Storages
 			IMarketDataStorageInfo<Order>, IMarketDataStorage<MyTrade>, IMarketDataStorageInfo<MyTrade>
 		{
 			public TransactionStorage(Security security, IMarketDataStorageDrive drive, IMarketDataSerializer<ExecutionMessage> serializer)
-				: base(security, ExecutionTypes.Order, msg => msg.ServerTime, msg => msg.SecurityId, msg => msg.TransactionId, serializer, drive)
+				: base(security, ExecutionTypes.Transaction, msg => msg.ServerTime, msg => msg.SecurityId, msg => msg.TransactionId, serializer, drive)
 			{
 				AppendOnlyNew = false;
 			}
@@ -936,8 +936,7 @@ namespace StockSharp.Algo.Storages
 							return new TradeStorage(security, mdDrive, serializer);
 						}
 					}
-					case ExecutionTypes.Order:
-					case ExecutionTypes.Trade:
+					case ExecutionTypes.Transaction:
 					{
 						IMarketDataSerializer<ExecutionMessage> serializer;
 

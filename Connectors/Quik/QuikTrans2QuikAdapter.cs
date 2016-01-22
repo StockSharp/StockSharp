@@ -598,7 +598,7 @@ namespace StockSharp.Quik
 				SecurityId = replaceMessage.SecurityId,
 				OriginalTransactionId = replaceMessage.OldTransactionId,
 				OrderId = replaceMessage.OldOrderId,
-				ExecutionType = ExecutionTypes.Order,
+				ExecutionType = ExecutionTypes.Transaction,
 				OrderState = OrderStates.Failed,
 				IsCancelled = true,
 				Error = error
@@ -608,7 +608,7 @@ namespace StockSharp.Quik
 			{
 				SecurityId = replaceMessage.SecurityId,
 				OriginalTransactionId = replaceMessage.TransactionId,
-				ExecutionType = ExecutionTypes.Order,
+				ExecutionType = ExecutionTypes.Transaction,
 				OrderState = OrderStates.Failed,
 				Error = error
 			});

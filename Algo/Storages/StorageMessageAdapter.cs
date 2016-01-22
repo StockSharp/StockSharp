@@ -68,7 +68,7 @@ namespace StockSharp.Algo.Storages
 
 				foreach (var pair in GetTransactions())
 				{
-					GetStorage<ExecutionMessage>(pair.Key, ExecutionTypes.Order).Save(pair.Value);
+					GetStorage<ExecutionMessage>(pair.Key, ExecutionTypes.Transaction).Save(pair.Value);
 				}
 
 				foreach (var pair in GetOrderBooks())
@@ -198,7 +198,7 @@ namespace StockSharp.Algo.Storages
 					.Load(DateTimeOffset.Now - DaysLoad, DateTimeOffset.Now)
 					.ForEach(RaiseStorageMessage);
 
-				GetStorage<ExecutionMessage>(secId, ExecutionTypes.Order)
+				GetStorage<ExecutionMessage>(secId, ExecutionTypes.Transaction)
 					.Load(DateTimeOffset.Now - DaysLoad, DateTimeOffset.Now)
 					.ForEach(RaiseStorageMessage);
 

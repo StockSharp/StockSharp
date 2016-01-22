@@ -4556,6 +4556,11 @@
         <see cref="T:StockSharp.Messages.SecurityLookupMessage" /> required to get securities.
             </summary>
     </member>
+    <member name="P:StockSharp.Fix.FixMessageAdapter.PortfolioLookupRequired">
+      <summary>
+        <see cref="T:StockSharp.Messages.PortfolioLookupMessage" /> required to get portfolios and positions.
+            </summary>
+    </member>
     <member name="M:StockSharp.Fix.FixMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)">
       <summary>
             Send message.
@@ -4766,6 +4771,11 @@
             FIX 4.2.
             </summary>
     </member>
+    <member name="F:StockSharp.Fix.FixVersions.Fix42_Otkritie">
+      <summary>
+            FIX 4.2.
+            </summary>
+    </member>
     <member name="F:StockSharp.Fix.FixVersions.Fix43">
       <summary>
             FIX 4.3.
@@ -4845,12 +4855,6 @@
             Change password.
             </summary>
       <param name="newPassword">New password.</param>
-    </member>
-    <member name="M:StockSharp.Fix.FixTrader.OnProcessMessage(StockSharp.Messages.Message)">
-      <summary>
-            Process message.
-            </summary>
-      <param name="message">Message.</param>
     </member>
     <member name="T:StockSharp.Fix.FixStopOrderType">
       <summary>

@@ -423,8 +423,7 @@ namespace StockSharp.Algo.Storages
 		{
 			{ DataType.Create(typeof(ExecutionMessage), ExecutionTypes.Tick), "trades" },
 			{ DataType.Create(typeof(ExecutionMessage), ExecutionTypes.OrderLog), "orderLog" },
-			{ DataType.Create(typeof(ExecutionMessage), ExecutionTypes.Order), "transactions" },
-			//{ DataType.Create(typeof(ExecutionMessage), ExecutionTypes.Trade), "transactions" },
+			{ DataType.Create(typeof(ExecutionMessage), ExecutionTypes.Transaction), "transactions" },
 			{ DataType.Create(typeof(QuoteChangeMessage), null), "quotes" },
 			{ DataType.Create(typeof(Level1ChangeMessage), null), "security" },
 			{ DataType.Create(typeof(NewsMessage), null), "news" },
@@ -467,9 +466,6 @@ namespace StockSharp.Algo.Storages
 				return "candles_{0}_{1}".Put(dataType.Name.Replace("Message", string.Empty), TraderHelper.CandleArgToFolderName(arg));
 			else
 			{
-				if (arg != null && arg.Equals(ExecutionTypes.Trade))
-					arg = ExecutionTypes.Order;
-
 				var fileName = _fileNames.TryGetValue(DataType.Create(dataType, arg));
 
 				if (fileName == null)

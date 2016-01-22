@@ -333,7 +333,7 @@ namespace StockSharp.Algo
 								TradeId = tradeId,
 								TradePrice = currItem.TradePrice,
 								TradeStatus = currItem.TradeStatus,
-								Volume = currItem.Volume,
+								TradeVolume = currItem.TradeVolume,
 								ServerTime = currItem.ServerTime,
 								LocalTime = currItem.LocalTime,
 								OpenInterest = currItem.OpenInterest,

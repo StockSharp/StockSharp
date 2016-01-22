@@ -111,7 +111,7 @@ namespace StockSharp.CQG
 				{
 					// TODO
 					TradePrice = (decimal)tick.Price,
-					Volume = tick.Volume,
+					TradeVolume = tick.Volume,
 					ExecutionType = ExecutionTypes.Tick,
 				});
 			}

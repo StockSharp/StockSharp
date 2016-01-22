@@ -812,7 +812,7 @@ namespace StockSharp.Algo.Risk
 
 			var execMsg = (ExecutionMessage)message;
 
-			if (execMsg.ExecutionType != ExecutionTypes.Trade)
+			if (!execMsg.HasTradeInfo())
 				return false;
 
 			return execMsg.TradePrice >= Price;
@@ -878,10 +878,10 @@ namespace StockSharp.Algo.Risk
 
 			var execMsg = (ExecutionMessage)message;
 
-			if (execMsg.ExecutionType != ExecutionTypes.Trade)
+			if (!execMsg.HasTradeInfo())
 				return false;
 
-			return execMsg.Volume >= Volume;
+			return execMsg.TradeVolume >= Volume;
 		}
 
 		/// <summary>
@@ -976,7 +976,7 @@ namespace StockSharp.Algo.Risk
 
 			var execMsg = (ExecutionMessage)message;
 
-			if (execMsg.ExecutionType != ExecutionTypes.Trade)
+			if (!execMsg.HasTradeInfo())
 				return false;
 
 			if (_endTime == null)

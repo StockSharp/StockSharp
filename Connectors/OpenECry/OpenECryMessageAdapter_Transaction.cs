@@ -309,10 +309,10 @@ namespace StockSharp.OpenECry
 				OriginalTransactionId = trasactionId,
 				OrderId = order.ID,
 				Side = order.Side.ToStockSharp(),
-				ExecutionType = ExecutionTypes.Order,
+				ExecutionType = ExecutionTypes.Transaction,
 				ServerTime = order.States.Current.Timestamp.ApplyTimeZone(TimeHelper.Est),
 				OrderType = order.Type.ToStockSharp(),
-				Volume = order.Quantity,
+				OrderVolume = order.Quantity,
 				PortfolioName = order.Account.Name,
 				SecurityId = new SecurityId
 				{
@@ -479,13 +479,13 @@ namespace StockSharp.OpenECry
 
 			SendOutMessage(new ExecutionMessage
 			{
-				ExecutionType = ExecutionTypes.Trade,
+				ExecutionType = ExecutionTypes.Transaction,
 				OriginalTransactionId = _orderTransactions.TryGetValue2(order) ?? 0,
 				OrderId = order.ID,
 				TradeId = fill.ID,
 				TradePrice = order.Contract.Cast(fill.Price),
 				ServerTime = fill.Timestamp.ApplyTimeZone(TimeHelper.Est),
-				Volume = fill.Quantity,
+				TradeVolume = fill.Quantity,
 				SystemComment = fill.Comments,
 				Commission = fill.Commission.ToDecimal(),
 			});

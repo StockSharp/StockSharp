@@ -68,7 +68,8 @@
 		<DataGridTextColumn Header="{x:Static loc:LocalizedStrings.TimeZone}" Visibility="Collapsed" Width="50" Binding="{Binding Path=ServerTime, StringFormat=zzz}" SortMemberPath="ServerTime.Offset"/>
 		<DataGridTextColumn Header="{x:Static loc:LocalizedStrings.Str514}" Visibility="Collapsed" Width="120" Binding="{Binding Path=LocalTime, Converter={StaticResource ValueConverter}, ConverterParameter='\{0:G\}'}" SortMemberPath="LocalTime"/>
 		<DataGridTextColumn x:Name="OrderPriceColumn" Header="{x:Static loc:LocalizedStrings.Price}" Width="60" Binding="{Binding Path=OrderPrice}" SortMemberPath="OrderPrice"/>
-		<DataGridTextColumn Header="{x:Static loc:LocalizedStrings.Volume}" Width="50" Binding="{Binding Path=Volume}" SortMemberPath="Volume"/>
+		<DataGridTextColumn x:Name="OrderVolumeColumn" Header="{x:Static loc:LocalizedStrings.Volume}" Width="50" Binding="{Binding Path=OrderVolume}" SortMemberPath="OrderVolume"/>
+		<DataGridTextColumn x:Name="TradeVolumeColumn" Header="{x:Static loc:LocalizedStrings.Volume}" Width="50" Binding="{Binding Path=TradeVolume}" SortMemberPath="TradeVolume"/>
 		<DataGridTextColumn Visibility="Collapsed" Header="{x:Static loc:LocalizedStrings.VisibleVolume}" Width="50" Binding="{Binding Path=VisibleVolume}" SortMemberPath="VisibleVolume"/>
 		<DataGridTextColumn Visibility="Collapsed" Header="{x:Static loc:LocalizedStrings.Currency}" Width="40" Binding="{Binding Path=Currency}" SortMemberPath="Currency"/>
 		<DataGridTextColumn x:Name="BalanceColumn" Header="{x:Static loc:LocalizedStrings.Str1325}" Width="50" Binding="{Binding Path=Balance}" SortMemberPath="Balance"/>

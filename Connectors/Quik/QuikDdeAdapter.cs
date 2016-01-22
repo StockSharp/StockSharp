@@ -931,8 +931,8 @@ namespace StockSharp.Quik
 					OrderId = orderId,
 					TradeId = func.Get<long>(DdeMyTradeColumns.Id),
 					TradePrice = func.Get<decimal>(DdeMyTradeColumns.Price),
-					Volume = func.Get<decimal>(DdeMyTradeColumns.Volume),
-					ExecutionType = ExecutionTypes.Trade,
+					TradeVolume = func.Get<decimal>(DdeMyTradeColumns.Volume),
+					ExecutionType = ExecutionTypes.Transaction,
 				};
 
 				ExportExtendedProperties(MyTradesTable, trade, row, func);
@@ -961,7 +961,7 @@ namespace StockSharp.Quik
 					ServerTime = func.GetTime(TradesTable, DdeTradeColumns.Date, DdeTradeColumns.Time, DdeTradeColumns.TimeMcs),
 					TradeId = func.Get<long>(DdeTradeColumns.Id),
 					TradePrice = func.Get<decimal>(DdeTradeColumns.Price),
-					Volume = func.Get<decimal>(DdeTradeColumns.Volume),
+					TradeVolume = func.Get<decimal>(DdeTradeColumns.Volume),
 					ExecutionType = ExecutionTypes.Tick,
 				};
 
@@ -1211,7 +1211,7 @@ namespace StockSharp.Quik
 					ServerTime = func.GetTime(OrdersTable, DdeOrderColumns.Date, DdeOrderColumns.Time, DdeOrderColumns.TimeMcs),
 
 					OrderPrice = func.Get<decimal>(DdeOrderColumns.Price),
-					Volume = func.Get<decimal>(DdeOrderColumns.Volume),
+					OrderVolume = func.Get<decimal>(DdeOrderColumns.Volume),
 					Balance = func.Get<decimal>(DdeOrderColumns.Balance),
 					Side = func(DdeOrderColumns.Direction).ToSide(),
 					PortfolioName = clientCode,
@@ -1223,7 +1223,7 @@ namespace StockSharp.Quik
 					OrderState = OrderStates.Active,
 					ExpiryDate = func.GetExpiryDate(DdeOrderColumns.ExpiryDate),
 
-					ExecutionType = ExecutionTypes.Order,
+					ExecutionType = ExecutionTypes.Transaction,
 
 					DepoName = account
 				};
@@ -1569,7 +1569,7 @@ namespace StockSharp.Quik
 					ServerTime = (func.Get<DateTime>(DdeStopOrderColumns.Date) + func.Get<TimeSpan>(DdeStopOrderColumns.Time)).ApplyTimeZone(TimeHelper.Moscow),
 
 					OrderPrice = func.Get<decimal>(DdeStopOrderColumns.Price),
-					Volume = func.Get<decimal>(DdeStopOrderColumns.Volume),
+					OrderVolume = func.Get<decimal>(DdeStopOrderColumns.Volume),
 					Balance = func.Get<decimal>(DdeStopOrderColumns.Balance),
 					Side = func(DdeStopOrderColumns.Direction).ToSide(),
 
@@ -1581,7 +1581,7 @@ namespace StockSharp.Quik
 					PortfolioName = clientCode,
 
 					Condition = condition,
-					ExecutionType = ExecutionTypes.Order,
+					ExecutionType = ExecutionTypes.Transaction,
 					DepoName = account
 				};
 

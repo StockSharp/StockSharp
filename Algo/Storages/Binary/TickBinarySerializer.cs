@@ -145,7 +145,7 @@ namespace StockSharp.Algo.Storages.Binary
 				// pyhta4og.
 				// http://stocksharp.com/forum/yaf_postsm6450_Oshibka-pri-importie-instrumientov-s-Finama.aspx#post6450
 
-				var volume = msg.Volume;
+				var volume = msg.TradeVolume;
 
 				if (metaInfo.Version < MarketDataVersions.Version53)
 				{
@@ -282,7 +282,7 @@ namespace StockSharp.Algo.Storages.Binary
 				ExecutionType = ExecutionTypes.Tick,
 				SecurityId = SecurityId,
 				TradeId = metaInfo.FirstId,
-				Volume = volume,
+				TradeVolume = volume,
 				OriginSide = orderDirection,
 				TradePrice = price,
 				ServerTime = serverTime,

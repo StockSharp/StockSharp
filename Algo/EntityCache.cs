@@ -47,7 +47,7 @@ namespace StockSharp.Algo
 
 			public static explicit operator Order(OrderInfo info)
 			{
-				return info == null ? null : info.Order;
+				return info?.Order;
 			}
 		}
 
@@ -308,7 +308,7 @@ namespace StockSharp.Algo
 
 				o.Time = message.ServerTime;
 				o.Price = message.OrderPrice;
-				o.Volume = message.Volume ?? 0;
+				o.Volume = message.OrderVolume ?? 0;
 				o.Direction = message.Side;
 				o.Comment = message.Comment;
 				o.ExpiryDate = message.ExpiryDate;
@@ -378,8 +378,8 @@ namespace StockSharp.Algo
 				order.LocalTime = message.LocalTime;
 
 				//нулевой объем может быть при перерегистрации
-				if (order.Volume == 0 && message.Volume != null)
-					order.Volume = message.Volume.Value;
+				if (order.Volume == 0 && message.OrderVolume != null)
+					order.Volume = message.OrderVolume.Value;
 
 				if (message.Commission != null)
 					order.Commission = message.Commission;

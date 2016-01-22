@@ -52,10 +52,10 @@ namespace StockSharp.Algo.Export.Database
 			};
 			yield return new ColumnDescription("ServerTime") { DbType = typeof(DateTimeOffset) };
 			yield return new ColumnDescription("LocalTime") { DbType = typeof(DateTime) };
-			yield return new ColumnDescription("Price") { DbType = typeof(decimal), ValueRestriction = new DecimalRestriction { Scale = security.PriceStep == null ? 1 : security.PriceStep.Value.GetCachedDecimals() } };
-			yield return new ColumnDescription("Volume") { DbType = typeof(decimal), ValueRestriction = new DecimalRestriction { Scale = security.VolumeStep == null ? 1 : security.VolumeStep.Value.GetCachedDecimals() } };
+			yield return new ColumnDescription("Price") { DbType = typeof(decimal), ValueRestriction = new DecimalRestriction { Scale = security.PriceStep?.GetCachedDecimals() ?? 1 } };
+			yield return new ColumnDescription("Volume") { DbType = typeof(decimal), ValueRestriction = new DecimalRestriction { Scale = security.VolumeStep?.GetCachedDecimals() ?? 1 } };
 			yield return new ColumnDescription("OriginSide") { DbType = typeof(int?) };
-			yield return new ColumnDescription("OpenInterest") { DbType = typeof(decimal?), ValueRestriction = new DecimalRestriction { Scale = security.VolumeStep == null ? 1 : security.VolumeStep.Value.GetCachedDecimals() } };
+			yield return new ColumnDescription("OpenInterest") { DbType = typeof(decimal?), ValueRestriction = new DecimalRestriction { Scale = security.VolumeStep?.GetCachedDecimals() ?? 1 } };
 			yield return new ColumnDescription("IsUpTick") { DbType = typeof(bool?) };
 		}
 
@@ -69,7 +69,7 @@ namespace StockSharp.Algo.Export.Database
 				{ "ServerTime", value.ServerTime },
 				{ "LocalTime", value.LocalTime },
 				{ "Price", value.TradePrice },
-				{ "Volume", value.Volume },
+				{ "Volume", value.TradeVolume },
 				{ "OriginSide", (int?)value.OriginSide },
 				{ "OpenInterest", value.OpenInterest },
 				{ "IsUpTick", value.IsUpTick },
