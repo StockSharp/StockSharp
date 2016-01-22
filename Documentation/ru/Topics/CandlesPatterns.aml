@@ -46,9 +46,9 @@
 			написание кода:</para>
 		  
 			<list class="bullet">
-				<listItem>
+				<!--><listItem>
 					<para>Получение времени свечки (время ее создания) через метод 
-					<codeEntityReference>M:StockSharp.Algo.Candles.CandleHelper.GetCandleTime(System.TimeSpan,System.DateTime)</codeEntityReference>:</para>
+					<codeEntityReference>M:StockSharp.Algo.Candles.CandleHelper.GetCandleTime(System.TimeSpan,System.DateTimeOffset)</codeEntityReference>:</para>
 					
 					<code language="C#">
 					<![CDATA[
@@ -58,7 +58,7 @@ var candleTimeFrame = TimeSpan.FromMinutes(10.5);
 Console.WriteLine(candleTimeFrame.GetCandleTime(_trader));
 					]]>
 					</code>
-				</listItem>
+				</listItem>-->
 
 				<listItem>
 					<para>Получение временных рамок свечки через метод <codeEntityReference>Overload:StockSharp.Algo.Candles.CandleHelper.GetCandleBounds</codeEntityReference>.

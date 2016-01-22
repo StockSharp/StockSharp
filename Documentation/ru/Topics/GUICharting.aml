@@ -30,6 +30,11 @@
 	</list>
 	
 	<para>
+	Кроме того в состав <token>stocksharp</token> входят два типа графиков для анализа объемов
+	<link xlink:href="78adcfb5-7c77-4f08-bed0-41c5eb2fd4ce">BoxChart</link> и <link xlink:href="96f4c342-1d2f-4e0d-9352-5452643df5ab">ClasterChart</link>.
+	</para>
+	
+	<para>
 	  На следующем рисунке показаны основные элементы графического компонета.
 	</para>
 	 <mediaLink><image placement="left" xlink:href="Gui_ChartElements" /></mediaLink>
@@ -81,16 +86,18 @@
   				<para><codeEntityReference>P:StockSharp.Xaml.Charting.Chart.ShowOverview</codeEntityReference> - включить/выключить отображение области предпросмотра <legacyBold>OverView</legacyBold>.</para>
   			</listItem>
   			<listItem>
-  				<para><codeEntityReference>M:StockSharp.Xaml.Charting.Chart.AddArea(StockSharp.Xaml.Charting.ChartArea)</codeEntityReference> - добавить <legacyBold>ChartArea</legacyBold>.</para>
+  				<para><codeEntityReference>M:StockSharp.Xaml.Charting.IChart.AddArea(StockSharp.Xaml.Charting.ChartArea)</codeEntityReference> - добавить <legacyBold>ChartArea</legacyBold>.</para>
   			</listItem>
   			<listItem>
-  				<para><codeEntityReference>M:StockSharp.Xaml.Charting.Chart.AddElement</codeEntityReference> - добавить элемент серии данных. Имеет несколько перегрузок.</para>
+  				<para><codeEntityReference>Overload:StockSharp.Xaml.Charting.IChart.AddElement</codeEntityReference> - добавить элемент серии данных. Имеет несколько перегрузок.</para>
   			</listItem>
   			<listItem>
-  				<para><codeEntityReference>M:StockSharp.Xaml.Charting.Chart.Reset</codeEntityReference> - "сбросить" ранее отрисованные значения.</para>
+  				<para><codeEntityReference>M:StockSharp.Xaml.Charting.Chart.Reset(System.Collections.Generic.IEnumerable{StockSharp.Xaml.Charting.IChartElement})</codeEntityReference> - "сбросить" ранее отрисованные значения.</para>
   			</listItem>
   			<listItem>
-  				<para><codeEntityReference>M:StockSharp.Xaml.Charting.Chart.Draw</codeEntityReference> - отрисовать значение на графике. Имеет несколько перегрузок.</para>
+  				<para>
+  				<codeEntityReference>M:StockSharp.Xaml.Charting.IChart.Draw(System.Collections.Generic.IEnumerable{Ecng.Common.RefPair{System.DateTimeOffset,System.Collections.Generic.IDictionary{StockSharp.Xaml.Charting.IChartElement,System.Object}}})</codeEntityReference> - отрисовать значение на графике.
+  				</para>
   			</listItem>
   			
 		</list>
@@ -169,6 +176,8 @@
 		<link xlink:href="bb71ead8-62c4-47f8-a1aa-242d63d631fb">ChartPanel</link>
 		<link xlink:href="d71b5e6e-fc05-429d-9888-7603f6b7c508">BufferedChart</link>
 		<link xlink:href="da275a7f-ff6f-4dc7-8451-bf4fc22624a6">EquityCurveChart</link>
+		<link xlink:href="78adcfb5-7c77-4f08-bed0-41c5eb2fd4ce">BoxChart</link>
+		<link xlink:href="96f4c342-1d2f-4e0d-9352-5452643df5ab">ClasterChart</link>
     </relatedTopics>
   </developerConceptualDocument>
 </topic>

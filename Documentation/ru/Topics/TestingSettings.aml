@@ -6,7 +6,7 @@
 	
 		<list class="bullet">
   			<listItem>
-  				<para><codeEntityReference qualifyHint="true">P:StockSharp.Algo.Testing.EmulationSettings.MarketTimeChangedInterval</codeEntityReference>
+  				<para><codeEntityReference qualifyHint="true">P:StockSharp.Algo.Strategies.Testing.EmulationSettings.MarketTimeChangedInterval</codeEntityReference>
   				- интервал прихода события о смене времени. Если используются генераторы сделок, сделки будут генерироваться с этой периодичностью. По-умолчанию равно 1 минуте.</para>
   			</listItem>
 
