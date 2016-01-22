@@ -128,8 +128,8 @@ namespace StockSharp.Studio.Ribbon
 		{
 		}
 
-		string IStudioControl.Title { get { return null; } }
+		string IStudioControl.Title => null;
 
-		Uri IStudioControl.Icon { get { return null; } }
+		Uri IStudioControl.Icon => null;
 	}
 }

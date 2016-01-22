@@ -87,10 +87,7 @@ namespace StockSharp.Studio.Controls
 
 		private IStudioEntityRegistry _registry;
 
-		public IStudioEntityRegistry Registry
-		{
-			get { return _registry ?? (_registry = ConfigManager.GetService<IStudioEntityRegistry>()); }
-		}
+		public IStudioEntityRegistry Registry => _registry ?? (_registry = ConfigManager.GetService<IStudioEntityRegistry>());
 
 		void IPersistable.Load(SettingsStorage storage)
 		{
@@ -106,20 +103,14 @@ namespace StockSharp.Studio.Controls
 		{
 		}
 
-		string IStudioControl.Title
-		{
-			get { return LocalizedStrings.Sessions; }
-		}
+		string IStudioControl.Title => LocalizedStrings.Sessions;
 
-		Uri IStudioControl.Icon
-		{
-			get { return null; }
-		}
+		Uri IStudioControl.Icon => null;
 
-		private DateTime FromDate { get { return From.Value ?? DateTime.MinValue; } }
-		private DateTime ToDate { get { return To.Value ?? DateTime.MaxValue; } }
-		private decimal ProfitFrom { get { return MinProfit.Value.HasValue ? MinProfit.Value.Value.To<decimal>() : decimal.MinValue; } }
-		private decimal ProfitTo { get { return MaxProfit.Value.HasValue ? MaxProfit.Value.Value.To<decimal>() : decimal.MaxValue; } }
+		private DateTime FromDate => From.Value ?? DateTime.MinValue;
+		private DateTime ToDate => To.Value ?? DateTime.MaxValue;
+		private decimal ProfitFrom => MinProfit.Value.HasValue ? MinProfit.Value.Value.To<decimal>() : decimal.MinValue;
+		private decimal ProfitTo => MaxProfit.Value.HasValue ? MaxProfit.Value.Value.To<decimal>() : decimal.MaxValue;
 
 		private void OnValueChanged(object sender, PropertyChangedRoutedEventArgs<DateTime?> e)
 		{

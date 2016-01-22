@@ -41,10 +41,7 @@ namespace StockSharp.Studio.Core
 	{
 		private readonly Dictionary<Portfolio, decimal> _innerPortfolios = new Dictionary<Portfolio, decimal>();
 
-		public Dictionary<Portfolio, decimal> InnerPortfolios
-		{
-			get { return _innerPortfolios; }
-		}
+		public Dictionary<Portfolio, decimal> InnerPortfolios => _innerPortfolios;
 
 		public override void Load(SettingsStorage storage)
 		{

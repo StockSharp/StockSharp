@@ -51,9 +51,9 @@ namespace StockSharp.Studio.Services
 
 		public StrategyContainer Strategy { get; private set; }
 
-		public EmulationSettings EmulationSettings { get { return _basketEmulation.EmulationSettings; } }
+		public EmulationSettings EmulationSettings => _basketEmulation.EmulationSettings;
 
-		public HistoryEmulationConnector EmulationConnector { get { return _basketEmulation.EmulationConnector; } }
+		public HistoryEmulationConnector EmulationConnector => _basketEmulation.EmulationConnector;
 
 		public IEnumerableEx<Strategy> Strategies { get; set; }
 

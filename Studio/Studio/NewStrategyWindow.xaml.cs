@@ -70,18 +70,15 @@ namespace StockSharp.Studio
 			SetTabsVisibility(types);
 		}
 
-		public StrategyInfo SelectedInfo
-		{
-			get { return CreateFromDll ? (StrategyInfo)StrategyTypeCtrl.SelectedItem : _codeInfo; }
-		}
+		public StrategyInfo SelectedInfo => CreateFromDll ? (StrategyInfo)StrategyTypeCtrl.SelectedItem : _codeInfo;
 
-		public bool CreateFromDll { get { return FromDll.IsSelected; } }
+		public bool CreateFromDll => FromDll.IsSelected;
 
-		public bool CreateFromCode { get { return FromCode.IsSelected; } }
+		public bool CreateFromCode => FromCode.IsSelected;
 
-		public bool CreateFromDiagram { get { return FromDiagram.IsSelected; } }
+		public bool CreateFromDiagram => FromDiagram.IsSelected;
 
-		public bool CreateFromAnalytics { get { return FromAnalytics.IsSelected; } }
+		public bool CreateFromAnalytics => FromAnalytics.IsSelected;
 
 		private void SetTabsVisibility(IEnumerable<StrategyInfoTypes> types)
 		{

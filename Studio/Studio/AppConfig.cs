@@ -33,10 +33,7 @@ namespace StockSharp.Studio
 
 		private static AppConfig _instance;
 
-		public static AppConfig Instance
-		{
-			get { return _instance ?? (_instance = new AppConfig()); }
-		}
+		public static AppConfig Instance => _instance ?? (_instance = new AppConfig());
 
 		private AppConfig()
 		{
@@ -65,14 +62,8 @@ namespace StockSharp.Studio
 
 		public string FixServerAddresss { get; private set; }
 
-		public IEnumerable<Type> ToolControls
-		{
-			get { return _toolControls.Cache; }
-		}
+		public IEnumerable<Type> ToolControls => _toolControls.Cache;
 
-		public IEnumerable<Type> StrategyControls
-		{
-			get { return _strategyControls.Cache; }
-		}
+		public IEnumerable<Type> StrategyControls => _strategyControls.Cache;
 	}
 }

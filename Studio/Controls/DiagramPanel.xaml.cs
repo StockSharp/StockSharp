@@ -81,9 +81,9 @@ namespace StockSharp.Studio.Controls
 			}
 		}
 
-		public DiagramElement PaletteElement { get { return Palette.PaletteElement; } }
+		public DiagramElement PaletteElement => Palette.PaletteElement;
 
-		public IEnumerable<DiagramElement> SelectedElements { get { return DiagramEditor.SelectedElements; } }
+		public IEnumerable<DiagramElement> SelectedElements => DiagramEditor.SelectedElements;
 
 		public event Action<DiagramElement> PaletteSelectionChanged;
 
@@ -191,15 +191,9 @@ namespace StockSharp.Studio.Controls
 				Save();
 		}
 
-		string IStudioControl.Title
-		{
-			get { return LocalizedStrings.Str3181; }
-		}
+		string IStudioControl.Title => LocalizedStrings.Str3181;
 
-		Uri IStudioControl.Icon
-		{
-			get { return null; }
-		}
+		Uri IStudioControl.Icon => null;
 
 		public CompositionDiagramElement GetSelectionCopyElement()
 		{

@@ -29,10 +29,10 @@ namespace StockSharp.Studio
 	using Ecng.Serialization;
 
 	using StockSharp.Logging;
-	using StockSharp.Studio.Core;
 	using StockSharp.Xaml;
 	using StockSharp.Xaml.Diagram;
 	using StockSharp.Localization;
+	using StockSharp.Studio.Core.Services;
 	using StockSharp.Xaml.Code;
 
 	class UserConfig : BaseLogReceiver, IPersistableService
@@ -105,10 +105,7 @@ namespace StockSharp.Studio
 		}
 
 		// после обфускации название типа нечитаемо
-		public override string Name
-		{
-			get { return TypeHelper.ApplicationName; }
-		}
+		public override string Name => TypeHelper.ApplicationName;
 
 		public static UserConfig Instance { get; internal set; }
 

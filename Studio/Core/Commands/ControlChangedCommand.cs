@@ -29,9 +29,6 @@ namespace StockSharp.Studio.Core.Commands
 
 		public IStudioControl Control { get; private set; }
 
-		public override bool CanRouteToGlobalScope
-		{
-			get { return true; }
-		}
+		public override bool CanRouteToGlobalScope => true;
 	}
 }

@@ -155,10 +155,7 @@ namespace StockSharp.Studio.Controls
 
 		public decimal LimitPrice { get; set; }
 
-		public BuySellSettings Settings
-		{
-			get { return _settings; }
-		}
+		public BuySellSettings Settings => _settings;
 
 		public BuySellPanel()
 		{
@@ -282,8 +279,8 @@ namespace StockSharp.Studio.Controls
 		{
 		}
 
-		string IStudioControl.Title { get { return string.Empty; } }
+		string IStudioControl.Title => string.Empty;
 
-		Uri IStudioControl.Icon { get { return null; } }
+		Uri IStudioControl.Icon => null;
 	}
 }

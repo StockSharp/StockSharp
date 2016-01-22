@@ -21,10 +21,7 @@ namespace StockSharp.Studio.Core.Commands
 
 	public class CreateSecurityCommand : BaseStudioCommand
 	{
-		public override bool CanRouteToGlobalScope
-		{
-			get { return true; }
-		}
+		public override bool CanRouteToGlobalScope => true;
 
 		public CreateSecurityCommand(Type securityType)
 		{

@@ -82,14 +82,8 @@ namespace StockSharp.Studio.Controls
 			service.UnRegister<SelectCommand>(this);
 		}
 
-		string IStudioControl.Title
-		{
-			get { return LocalizedStrings.Str1507; }
-		}
+		string IStudioControl.Title => LocalizedStrings.Str1507;
 
-		Uri IStudioControl.Icon
-		{
-			get { return null; }
-		}
+		Uri IStudioControl.Icon => null;
 	}
 }
