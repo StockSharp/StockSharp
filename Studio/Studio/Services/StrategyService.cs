@@ -40,6 +40,7 @@ namespace StockSharp.Studio.Services
 	using StockSharp.Studio.Core;
 	using StockSharp.Studio.Core.Commands;
 	using StockSharp.Localization;
+	using StockSharp.Studio.Core.Services;
 
 	public class StrategyService : IStrategyService
 	{
@@ -449,10 +450,7 @@ namespace StockSharp.Studio.Services
 			}
 		}
 
-		public IStudioConnector Connector
-		{
-			get { return ConfigManager.GetService<IStudioConnector>(); }
-		}
+		public IStudioConnector Connector => ConfigManager.GetService<IStudioConnector>();
 
 		public StrategyService()
 		{

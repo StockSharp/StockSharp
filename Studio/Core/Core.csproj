@@ -114,7 +114,8 @@
     <Compile Include="Commands\RequestLicenseCommand.cs" />
     <Compile Include="Commands\ResetStrategyCommand.cs" />
     <Compile Include="Commands\StrategyCommand.cs" />
-    <Compile Include="IPersistableService.cs" />
+    <Compile Include="Services\StudioCommandService.cs" />
+    <Compile Include="Services\IPersistableService.cs" />
     <Compile Include="IStudioControl.cs" />
     <Compile Include="MarketDataSettings.cs" />
     <Compile Include="MarketDataSettingsCache.cs" />
@@ -168,14 +169,14 @@
     <Compile Include="Commands\ResetedCommand.cs" />
     <Compile Include="Commands\UpdateMarketDepthCommand.cs" />
     <Compile Include="IStrategyContainer.cs" />
-    <Compile Include="Commands\IStudioCommandService.cs" />
+    <Compile Include="Services\IStudioCommandService.cs" />
     <Compile Include="Session.cs" />
     <Compile Include="SessionBaseList.cs" />
     <Compile Include="SessionList.cs" />
     <Compile Include="SessionStrategy.cs" />
     <Compile Include="SessionStrategyList.cs" />
     <Compile Include="Commands\IStudioCommand.cs" />
-    <Compile Include="IStrategyService.cs" />
+    <Compile Include="Services\IStrategyService.cs" />
     <Compile Include="IStudioEntityRegistry.cs" />
     <Compile Include="IStudioConnector.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
