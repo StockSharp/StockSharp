@@ -160,15 +160,9 @@ namespace StockSharp.Studio
 			StrategyInfo = null;
 		}
 
-		string IStudioControl.Title
-		{
-			get { return StrategyInfo == null ? string.Empty : StrategyInfo.Name; }
-		}
+		string IStudioControl.Title => StrategyInfo == null ? string.Empty : StrategyInfo.Name;
 
-		Uri IStudioControl.Icon
-		{
-			get { return null; }
-		}
+		Uri IStudioControl.Icon => null;
 
 		#endregion
 

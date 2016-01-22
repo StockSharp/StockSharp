@@ -29,20 +29,14 @@ namespace StockSharp.Studio.Core
 
 		private static MarketDataSettings _stockSharpSettings;
 
-		public static MarketDataSettings StockSharpSettings
+		public static MarketDataSettings StockSharpSettings => _stockSharpSettings ?? (_stockSharpSettings = new MarketDataSettings
 		{
-			get
-			{
-				return _stockSharpSettings ?? (_stockSharpSettings = new MarketDataSettings
-				{
-					Id = Guid.Parse("244BF0F0-2AFB-4516-B8FF-8175ED68EC9E"),
-					UseLocal = false,
-                    Path = "net.tcp://{0}:8000".Put(_serverUrl),
-					//Path = Directory.GetCurrentDirectory(),
-					//IsAlphabetic = true,
-				});
-			}
-		}
+			Id = Guid.Parse("244BF0F0-2AFB-4516-B8FF-8175ED68EC9E"),
+			UseLocal = false,
+			Path = "net.tcp://{0}:8000".Put(_serverUrl),
+			//Path = Directory.GetCurrentDirectory(),
+			//IsAlphabetic = true,
+		});
 
 		private bool _useLocal;
 		private string _path;
@@ -97,10 +91,7 @@ namespace StockSharp.Studio.Core
 
 		public ServerCredentials Credentials { get; private set; }
 
-		public bool IsStockSharpStorage
-		{
-			get { return !UseLocal && Path.ContainsIgnoreCase(_serverUrl); }
-		}
+		public bool IsStockSharpStorage => !UseLocal && Path.ContainsIgnoreCase(_serverUrl);
 
 		public override MarketDataSettings Clone()
 		{

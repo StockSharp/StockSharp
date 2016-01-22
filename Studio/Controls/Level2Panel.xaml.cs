@@ -46,12 +46,9 @@ namespace StockSharp.Studio.Controls
 
 		private Security[] _securities;
 
-		private static ISecurityProvider SecurityProvider { get { return ConfigManager.GetService<ISecurityProvider>(); } }
+		private static ISecurityProvider SecurityProvider => ConfigManager.GetService<ISecurityProvider>();
 
-		private BuySellSettings Settings
-		{
-			get { return BuySellPanel.Settings; }
-		}
+		private BuySellSettings Settings => BuySellPanel.Settings;
 
 		public Level2Panel()
 		{
@@ -155,14 +152,8 @@ namespace StockSharp.Studio.Controls
 		{
 		}
 
-		string IStudioControl.Title
-		{
-			get { return "Level2"; }
-		}
+		string IStudioControl.Title => "Level2";
 
-		Uri IStudioControl.Icon
-		{
-			get { return null; }
-		}
+		Uri IStudioControl.Icon => null;
 	}
 }

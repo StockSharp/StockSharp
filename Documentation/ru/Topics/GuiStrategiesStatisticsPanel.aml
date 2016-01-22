@@ -20,10 +20,10 @@
   				<para><codeEntityReference>P:StockSharp.Xaml.StrategiesStatisticsPanel.SelectedStrategies</codeEntityReference> - выбранные стратегии.</para>
   			</listItem>
   			<listItem>
-  				<para><codeEntityReference>M:StockSharp.Xaml.StrategiesStatisticsPanel.AddStrategies(System.Collections.Generic.IEnumerable(StockSharp.Algo.Strategies.Strategy))</codeEntityReference> - добавляет стратегии в таблицу.</para>
+  				<para><codeEntityReference>M:StockSharp.Xaml.StrategiesStatisticsPanel.AddStrategies(System.Collections.Generic.IEnumerable{StockSharp.Algo.Strategies.Strategy})</codeEntityReference> - добавляет стратегии в таблицу.</para>
   			</listItem>
   			<listItem>
-  				<para><codeEntityReference>M:StockSharp.Xaml.StrategiesStatisticsPanel.SetColumnVisibility(string,System.Windows.Visibility)</codeEntityReference> - устанавливает видимость колонок в таблице.</para>
+  				<para><codeEntityReference>M:StockSharp.Xaml.StrategiesStatisticsPanel.SetColumnVisibility(System.String,System.Windows.Visibility)</codeEntityReference> - устанавливает видимость колонок в таблице.</para>
   			</listItem>
   			 			
 		</list>

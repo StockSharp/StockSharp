@@ -214,10 +214,7 @@ namespace StockSharp.Studio.Controls
 		private bool _needRequestData;
 		private StrategyContainer _strategy;
 
-		public BuySellSettings Settings
-		{
-			get { return BuySellPanel.Settings; }
-		}
+		public BuySellSettings Settings => BuySellPanel.Settings;
 
 		public ScalpingMarketDepthControl()
 		{

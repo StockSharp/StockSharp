@@ -50,6 +50,7 @@ namespace StockSharp.Studio
 	using StockSharp.Xaml.Actipro;
 	using StockSharp.Xaml.Diagram;
 	using StockSharp.Localization;
+	using StockSharp.Studio.Core.Services;
 	using StockSharp.Xaml.Code;
 
 	using License = StockSharp.Licensing.License;

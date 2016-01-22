@@ -231,7 +231,6 @@
     <Compile Include="Services\EmulationService.cs" />
     <Compile Include="Services\StudioSecurityProvider.cs" />
     <Compile Include="Services\StrategyService.cs" />
-    <Compile Include="Services\StudioCommandService.cs" />
     <Compile Include="StrategyContent.xaml.cs">
       <DependentUpon>StrategyContent.xaml</DependentUpon>
     </Compile>

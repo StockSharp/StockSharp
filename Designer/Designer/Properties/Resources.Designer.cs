@@ -63,17 +63,20 @@ namespace StockSharp.Designer.Properties {
         /// <summary>
         ///   Looks up a localized string similar to &lt;SettingsStorage&gt;
         ///  &lt;KeyValuePairBeginStringAndObjectEnd&gt;
-        ///    &lt;key&gt;Composition&lt;/key&gt;
+        ///    &lt;key&gt;Category&lt;/key&gt;
         ///    &lt;value&gt;
-        ///      &lt;Type type=&quot;string&quot;&gt;Ecng.Serialization.SettingsStorage, Ecng.Serialization&lt;/Type&gt;
-        ///      &lt;Value type=&quot;Ecng.Serialization.SettingsStorage, Ecng.Serialization&quot;&gt;
-        ///        &lt;KeyValuePairBeginStringAndObjectEnd&gt;
-        ///          &lt;key&gt;TypeId&lt;/key&gt;
-        ///          &lt;value&gt;
-        ///            &lt;Type type=&quot;string&quot;&gt;string&lt;/Type&gt;
-        ///            &lt;Value type=&quot;string&quot;&gt;923f7b2e-0c1d-4c4c-a87f-baf3aaac2048&lt;/Value&gt;
-        ///          &lt;/value&gt;
-        ///     [rest of string was truncated]&quot;;.
+        ///      &lt;Type type=&quot;string&quot;&gt;string&lt;/Type&gt;
+        ///      &lt;Value type=&quot;string&quot;&gt;Composite elements&lt;/Value&gt;
+        ///    &lt;/value&gt;
+        ///  &lt;/KeyValuePairBeginStringAndObjectEnd&gt;
+        ///  &lt;KeyValuePairBeginStringAndObjectEnd&gt;
+        ///    &lt;key&gt;Description&lt;/key&gt;
+        ///    &lt;value&gt;
+        ///      &lt;Type type=&quot;string&quot;&gt;string&lt;/Type&gt;
+        ///      &lt;Value type=&quot;string&quot;&gt;Determines the intersection time of two lines.&lt;/Value&gt;
+        ///    &lt;/value&gt;
+        ///  &lt;/KeyValuePairBeginStringAndObjectEnd&gt;
+        /// [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string composition_923f7b2e_0c1d_4c4c_a87f_baf3aaac2048 {
             get {
@@ -84,17 +87,20 @@ namespace StockSharp.Designer.Properties {
         /// <summary>
         ///   Looks up a localized string similar to &lt;SettingsStorage&gt;
         ///  &lt;KeyValuePairBeginStringAndObjectEnd&gt;
-        ///    &lt;key&gt;Composition&lt;/key&gt;
+        ///    &lt;key&gt;Category&lt;/key&gt;
         ///    &lt;value&gt;
-        ///      &lt;Type type=&quot;string&quot;&gt;Ecng.Serialization.SettingsStorage, Ecng.Serialization&lt;/Type&gt;
-        ///      &lt;Value type=&quot;Ecng.Serialization.SettingsStorage, Ecng.Serialization&quot;&gt;
-        ///        &lt;KeyValuePairBeginStringAndObjectEnd&gt;
-        ///          &lt;key&gt;TypeId&lt;/key&gt;
-        ///          &lt;value&gt;
-        ///            &lt;Type type=&quot;string&quot;&gt;string&lt;/Type&gt;
-        ///            &lt;Value type=&quot;string&quot;&gt;bf591486-88ac-41b2-8079-ca0c9eabf349&lt;/Value&gt;
-        ///          &lt;/value&gt;
-        ///     [rest of string was truncated]&quot;;.
+        ///      &lt;Type type=&quot;string&quot;&gt;string&lt;/Type&gt;
+        ///      &lt;Value type=&quot;string&quot;&gt;Composite elements&lt;/Value&gt;
+        ///    &lt;/value&gt;
+        ///  &lt;/KeyValuePairBeginStringAndObjectEnd&gt;
+        ///  &lt;KeyValuePairBeginStringAndObjectEnd&gt;
+        ///    &lt;key&gt;Description&lt;/key&gt;
+        ///    &lt;value&gt;
+        ///      &lt;Type type=&quot;string&quot;&gt;string&lt;/Type&gt;
+        ///      &lt;Value type=&quot;string&quot;&gt;Conditional ternary operator.&lt;/Value&gt;
+        ///    &lt;/value&gt;
+        ///  &lt;/KeyValuePairBeginStringAndObjectEnd&gt;
+        ///  &lt;KeyValuePairBe [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string composition_bf591486_88ac_41b2_8079_ca0c9eabf349 {
             get {
@@ -115,17 +121,20 @@ namespace StockSharp.Designer.Properties {
         /// <summary>
         ///   Looks up a localized string similar to &lt;SettingsStorage&gt;
         ///  &lt;KeyValuePairBeginStringAndObjectEnd&gt;
-        ///    &lt;key&gt;Composition&lt;/key&gt;
+        ///    &lt;key&gt;Category&lt;/key&gt;
         ///    &lt;value&gt;
-        ///      &lt;Type type=&quot;string&quot;&gt;Ecng.Serialization.SettingsStorage, Ecng.Serialization&lt;/Type&gt;
-        ///      &lt;Value type=&quot;Ecng.Serialization.SettingsStorage, Ecng.Serialization&quot;&gt;
-        ///        &lt;KeyValuePairBeginStringAndObjectEnd&gt;
-        ///          &lt;key&gt;TypeId&lt;/key&gt;
-        ///          &lt;value&gt;
-        ///            &lt;Type type=&quot;string&quot;&gt;string&lt;/Type&gt;
-        ///            &lt;Value type=&quot;string&quot;&gt;b4fcbed7-eb78-4846-a108-7f570fc3660d&lt;/Value&gt;
-        ///          &lt;/value&gt;
-        ///     [rest of string was truncated]&quot;;.
+        ///      &lt;Type type=&quot;string&quot;&gt;string&lt;/Type&gt;
+        ///      &lt;Value type=&quot;string&quot;&gt;&lt;/Value&gt;
+        ///    &lt;/value&gt;
+        ///  &lt;/KeyValuePairBeginStringAndObjectEnd&gt;
+        ///  &lt;KeyValuePairBeginStringAndObjectEnd&gt;
+        ///    &lt;key&gt;Description&lt;/key&gt;
+        ///    &lt;value&gt;
+        ///      &lt;Type type=&quot;string&quot;&gt;string&lt;/Type&gt;
+        ///      &lt;Value type=&quot;string&quot;&gt;Strategy based on intersection of simple moving averages.&lt;/Value&gt;
+        ///    &lt;/value&gt;
+        ///  &lt;/KeyValuePairBeginStringAndObjectEnd&gt;
+        ///  &lt;KeyV [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string strategy_b4fcbed7_eb78_4846_a108_7f570fc3660d {
             get {
@@ -136,17 +145,20 @@ namespace StockSharp.Designer.Properties {
         /// <summary>
         ///   Looks up a localized string similar to &lt;SettingsStorage&gt;
         ///  &lt;KeyValuePairBeginStringAndObjectEnd&gt;
-        ///    &lt;key&gt;Composition&lt;/key&gt;
+        ///    &lt;key&gt;Category&lt;/key&gt;
         ///    &lt;value&gt;
-        ///      &lt;Type type=&quot;string&quot;&gt;Ecng.Serialization.SettingsStorage, Ecng.Serialization&lt;/Type&gt;
-        ///      &lt;Value type=&quot;Ecng.Serialization.SettingsStorage, Ecng.Serialization&quot;&gt;
-        ///        &lt;KeyValuePairBeginStringAndObjectEnd&gt;
-        ///          &lt;key&gt;TypeId&lt;/key&gt;
-        ///          &lt;value&gt;
-        ///            &lt;Type type=&quot;string&quot;&gt;string&lt;/Type&gt;
-        ///            &lt;Value type=&quot;string&quot;&gt;d2d7aeb2-ca92-4a88-9f2b-dccb72949af1&lt;/Value&gt;
-        ///          &lt;/value&gt;
-        ///     [rest of string was truncated]&quot;;.
+        ///      &lt;Type type=&quot;string&quot;&gt;string&lt;/Type&gt;
+        ///      &lt;Value type=&quot;string&quot;&gt;&lt;/Value&gt;
+        ///    &lt;/value&gt;
+        ///  &lt;/KeyValuePairBeginStringAndObjectEnd&gt;
+        ///  &lt;KeyValuePairBeginStringAndObjectEnd&gt;
+        ///    &lt;key&gt;Description&lt;/key&gt;
+        ///    &lt;value&gt;
+        ///      &lt;Type type=&quot;string&quot;&gt;string&lt;/Type&gt;
+        ///      &lt;Value type=&quot;string&quot;&gt;Simple strategy for drawing candles.&lt;/Value&gt;
+        ///    &lt;/value&gt;
+        ///  &lt;/KeyValuePairBeginStringAndObjectEnd&gt;
+        ///  &lt;KeyValuePairBeginStringAn [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string strategy_d2d7aeb2_ca92_4a88_9f2b_dccb72949af1 {
             get {

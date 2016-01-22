@@ -179,10 +179,7 @@ namespace StockSharp.Studio.Core
 		
 		[Browsable(false)]
 		[Ignore]
-		public SynchronizedList<StrategyContainer> Strategies
-		{
-			get { return _strategies; }
-		}
+		public SynchronizedList<StrategyContainer> Strategies => _strategies;
 
 		[DisplayNameLoc(LocalizedStrings.Str2804Key)]
 		[DescriptionLoc(LocalizedStrings.Str3191Key)]

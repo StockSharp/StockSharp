@@ -220,10 +220,7 @@ namespace StockSharp.Studio
 			cmdSvc.Register<RequestPositionsCommand>(this, false, cmd => PositionManager.Positions.ForEach(p => new PositionCommand(CurrentTime, p, true).Process(this)));
 		}
 
-		private bool CanProcess
-		{
-			get { return ProcessState == ProcessStates.Started; }
-		}
+		private bool CanProcess => ProcessState == ProcessStates.Started;
 
 		protected override void OnStarted()
 		{

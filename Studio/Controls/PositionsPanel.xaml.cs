@@ -69,15 +69,9 @@ namespace StockSharp.Studio.Controls
 
 		private bool CanEditPosition { get; set; }
 
-		private BasePosition SelectedBasePosition
-		{
-			get { return PortfolioGrid == null ? null : PortfolioGrid.SelectedPosition; }
-		}
+		private BasePosition SelectedBasePosition => PortfolioGrid == null ? null : PortfolioGrid.SelectedPosition;
 
-		private Position SelectedPosition
-		{
-			get { return SelectedBasePosition as Position; }
-		}
+		private Position SelectedPosition => SelectedBasePosition as Position;
 
 		public override void Save(SettingsStorage settings)
 		{

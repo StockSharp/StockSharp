@@ -74,7 +74,7 @@ class FirstStrategy : Strategy
   				
 				<para>У <codeEntityReference qualifyHint="false">T:StockSharp.Algo.IMarketRule</codeEntityReference> есть
 				<codeEntityReference qualifyHint="false">P:StockSharp.Algo.IMarketRule.Token</codeEntityReference> - токен правила, с которым он ассоциирован. Например, для правила 
-				<codeEntityReference qualifyHint="false" autoUpgrade="true">M:StockSharp.Algo.MarketRuleHelper.WhenCanceled(StockSharp.BusinessEntities.Order)</codeEntityReference>
+				<codeEntityReference qualifyHint="false" autoUpgrade="true">M:StockSharp.Algo.MarketRuleHelper.WhenCanceled(StockSharp.BusinessEntities.Order,StockSharp.BusinessEntities.IConnector)</codeEntityReference>
 				токеном будет являться заявка.</para>  				
   				
   				<para>Когда сработало правило успешной отмены заявки, то лучше удалить все остальные правила, связанные с этой заявкой:</para>

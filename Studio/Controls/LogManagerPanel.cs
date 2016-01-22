@@ -53,23 +53,17 @@ namespace StockSharp.Studio.Controls
 
 		void IPersistable.Load(SettingsStorage storage)
 		{
-			((IPersistable)_monitor).Load(storage);
+			_monitor.Load(storage);
 		}
 
 		void IPersistable.Save(SettingsStorage storage)
 		{
-			((IPersistable)_monitor).Save(storage);
+			_monitor.Save(storage);
 		}
 
-		string IStudioControl.Title
-		{
-			get { return LocalizedStrings.Str3237; }
-		}
+		string IStudioControl.Title => LocalizedStrings.Str3237;
 
-		Uri IStudioControl.Icon
-		{
-			get { return null; }
-		}
+		Uri IStudioControl.Icon => null;
 
 		void IDisposable.Dispose()
 		{

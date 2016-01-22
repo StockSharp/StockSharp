@@ -116,10 +116,7 @@ namespace StockSharp.Studio.Controls
 			});
 		}
 
-		private decimal? LastTradePrice
-		{
-			get { return (decimal?)Desk.MarketDataProvider.GetSecurityValue(_currentSecurity, Level1Fields.LastTradePrice); }
-		}
+		private decimal? LastTradePrice => (decimal?)Desk.MarketDataProvider.GetSecurityValue(_currentSecurity, Level1Fields.LastTradePrice);
 
 		private IEnumerable<Security> GetOptions()
 		{

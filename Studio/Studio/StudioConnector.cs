@@ -41,10 +41,7 @@ namespace StockSharp.Studio
 		{
 			private readonly Dictionary<object, SecurityId> _securityIds = new Dictionary<object, SecurityId>();
 
-			protected override bool IsSupportNativeSecurityLookup
-			{
-				get { return true; }
-			}
+			protected override bool IsSupportNativeSecurityLookup => true;
 
 			public StudioMarketDataAdapter(IdGenerator transactionIdGenerator)
 				: base(transactionIdGenerator)

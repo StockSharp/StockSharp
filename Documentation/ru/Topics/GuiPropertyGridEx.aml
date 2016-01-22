@@ -45,7 +45,7 @@
   			</listItem>
   			<listItem>
   				<para>
-  				<codeEntityReference qualifyHint="true">T:StockSharp.StockSharp.Algo.Candles.CandleSeries</codeEntityReference>.
+  				<codeEntityReference qualifyHint="true">T:StockSharp.Algo.Candles.CandleSeries</codeEntityReference>.
   				</para>
   			</listItem>
   			<listItem>
@@ -105,7 +105,7 @@
   			</listItem>
   			<listItem>
   				<para>
-  					<codeEntityReference>P:StockSharp.Xaml.PropertyGrid.PropertyGridEx.SelectedObject</codeEntityReference> - объект, чьи свойства будут отображены в таблице.
+  					<legacyBold>SelectedObject</legacyBold> - объект, чьи свойства будут отображены в таблице.
   				</para>
   			</listItem>
 		</list>

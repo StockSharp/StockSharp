@@ -58,10 +58,7 @@ namespace StockSharp.Studio.Controls
 
 		private readonly object _token;
 
-		private decimal? LastTradePrice
-		{
-			get { return (decimal?)PosChart.MarketDataProvider.GetSecurityValue(_currentSecurity, Level1Fields.LastTradePrice); }
-		}
+		private decimal? LastTradePrice => (decimal?)PosChart.MarketDataProvider.GetSecurityValue(_currentSecurity, Level1Fields.LastTradePrice);
 
 		public OptionPositionChartPanel()
 		{

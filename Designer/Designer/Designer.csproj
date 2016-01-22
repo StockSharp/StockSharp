@@ -9,7 +9,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>StockSharp.Designer</RootNamespace>
     <AssemblyName>Designer</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <WarningLevel>4</WarningLevel>
@@ -110,8 +110,8 @@
       <DependentUpon>DiagramDebuggerControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="EmulationDiagramStrategy.cs" />
-    <Compile Include="Layout\DockingControl.cs" />
     <Compile Include="Layout\LayoutManager.cs" />
+    <Compile Include="MarketDataSettingsEditor.cs" />
     <Compile Include="SolutionExplorerControl.xaml.cs">
       <DependentUpon>SolutionExplorerControl.xaml</DependentUpon>
     </Compile>
@@ -179,6 +179,10 @@
     <AppDesigner Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\StockSharp %28GitLab%29\Algo.History\Algo.History.csproj">
+      <Project>{5814D093-FA6D-44A5-B75B-4CC7E8F11EB0}</Project>
+      <Name>Algo.History</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\StockSharp %28GitLab%29\Xaml.Charting\Xaml.Charting.csproj">
       <Project>{C449D618-DEA4-41C3-BA86-9F827C7421DC}</Project>
       <Name>Xaml.Charting</Name>
@@ -195,6 +199,10 @@
       <Project>{dce69db8-53ca-4b7f-9368-02f175a31074}</Project>
       <Name>BusinessEntities</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\Community\Community.csproj">
+      <Project>{E8E18F8F-97BD-41AE-8888-F54F2411D575}</Project>
+      <Name>Community</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Configuration\Configuration.csproj">
       <Project>{2cff1903-4ef5-46f8-ab5d-bb623ca75ce6}</Project>
       <Name>Configuration</Name>
@@ -210,6 +218,14 @@
     <ProjectReference Include="..\..\Messages\Messages.csproj">
       <Project>{b47f9c23-a4bd-46a9-bf27-54cb3d653503}</Project>
       <Name>Messages</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Studio\Controls\Controls.csproj">
+      <Project>{6d205f4b-6b2a-4082-b717-f6baaa4e0f3a}</Project>
+      <Name>Controls</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Studio\Core\Core.csproj">
+      <Project>{23b15ae0-2021-43da-808f-3bf331462976}</Project>
+      <Name>Core</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Xaml\Xaml.csproj">
       <Project>{64e4d6f0-36b6-4904-9ba7-fffbe5ff71d8}</Project>
@@ -265,6 +281,9 @@
     <Resource Include="Images\StepOut_32x32.png" />
     <Resource Include="Images\StepOver_32x32.png" />
     <Resource Include="Images\Undo_32x32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\storage_32x32.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

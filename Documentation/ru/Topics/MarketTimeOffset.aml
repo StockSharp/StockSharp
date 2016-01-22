@@ -38,11 +38,14 @@
 	
 	
 	</para>
-      <para>Для определения биржевого времени в <token>stocksharp</token> есть метод
-		<codeEntityReference qualifyHint="true" autoUpgrade="true">M:StockSharp.Algo.TraderHelper.GetMarketTime(StockSharp.BusinessEntities.IConnector,StockSharp.BusinessEntities.Security)</codeEntityReference>.
-		Чтобы данный метод возвращал точное время, необходимо синхронизировать локальное время компьютера с атомными часами через вызов метода
-		<legacyBold>TimeHelper.SyncMarketTime</legacyBold>. Разница во времени будет записана в <legacyBold>TimeHelper.NowOffset</legacyBold>.
-		После этого в <legacyBold>TimeHelper.Now</legacyBold> будет хранится синхронизированное локальное время с учетом <legacyBold>TimeHelper.NowOffset</legacyBold>. Класс <legacyBold>TimeHelper</legacyBold> находится
+        <para>Для определения биржевого времени в <token>stocksharp</token> можно использовать стандартные методы <token>csharp</token>: <codeEntityReference qualifyHint="true">P:System.DateTime.Now</codeEntityReference> или
+		<codeEntityReference qualifyHint="true">P:System.DateTimeOffset.Now</codeEntityReference>.
+		Чтобы данные методы возвращали точное время, необходимо синхронизировать локальное время компьютера с атомными часами через вызов метода
+		<codeEntityReference qualifyHint="true">M:Ecng.Common.TimeHelper.SyncMarketTime(System.Int32)</codeEntityReference>. 
+		Разница во времени будет записана в
+		<codeEntityReference qualifyHint="true">P:Ecng.Common.TimeHelper.NowOffset</codeEntityReference>. 
+		После этого в <codeEntityReference qualifyHint="true">P:Ecng.Common.TimeHelper.Now</codeEntityReference>
+		будет хранится синхронизированное локальное время с учетом <codeEntityReference qualifyHint="true">P:Ecng.Common.TimeHelper.NowOffset</codeEntityReference>. Класс <legacyBold>TimeHelper</legacyBold> находится
 		в пространстве имен <legacyBold>Ecng.Common</legacyBold>.
 	  </para>
     </introduction>
@@ -65,25 +68,20 @@
 					// выводим синхронизированное текущее локальное время
 					Console.WriteLine(TimeHelper.Now);
 					
-					// выводим текущее время московской биржи
-					Console.WriteLine(trader.GetMarketTime(security));
 			  </code>
           </content>
         </step>
       </steps>
     </procedure>
     
-     <relatedTopics>
+    <relatedTopics>
      	<externalLink>
 			<linkText>Временные метки хранилища</linkText>
 			<linkAlternateText>Временные метки хранилища</linkAlternateText>
 			<linkUri>http://stocksharp.com/forum/yaf_postst5416_Vriemiennyie-mietki-khranilishcha.aspx</linkUri>
 			<linkTarget>_blank</linkTarget>
 		</externalLink>
-     </relatedTopics>
-     
-    
-    
+     </relatedTopics>   
     
   </developerWalkthroughDocument>
 </topic>

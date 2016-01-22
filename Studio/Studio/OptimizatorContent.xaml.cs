@@ -200,10 +200,7 @@ namespace StockSharp.Studio
 			}
 		}
 
-		public IEnumerable<StrategyContainer> SelectedStrategies
-		{
-			get { return _selectedStrategies; }
-		}
+		public IEnumerable<StrategyContainer> SelectedStrategies => _selectedStrategies;
 
 		public OptimizatorContent()
 		{
@@ -300,15 +297,9 @@ namespace StockSharp.Studio
 		{
 		}
 
-		public string Title
-		{
-			get { return LocalizedStrings.Str3580; }
-		}
+		public string Title => LocalizedStrings.Str3580;
 
-		public Uri Icon
-		{
-			get { return null; }
-		}
+		public Uri Icon => null;
 
 		#endregion
 
