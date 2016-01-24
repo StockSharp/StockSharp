@@ -452,7 +452,7 @@ namespace StockSharp.Hydra.Panes
 							_fields.Add(new FieldMapping(_settings, "OI", LocalizedStrings.Str150, LocalizedStrings.Str151, typeof(decimal), (i, v) => i.OpenInterest = v));
 							break;
 						}
-						case ExecutionTypes.Order:
+						case ExecutionTypes.Transaction:
 						{
 							_title = LocalizedStrings.Transactions;
 

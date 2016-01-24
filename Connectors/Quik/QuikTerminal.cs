@@ -110,10 +110,7 @@ namespace StockSharp.Quik
 		/// <remarks>
 		/// Если терминал не запущен, то <see cref="QuikTerminal"/> был создан лишь по информации об установленной директории.
 		/// </remarks>
-		public bool IsLaunched
-		{
-			get { return _systemProcess != null && !_systemProcess.HasExited; }
-		}
+		public bool IsLaunched => _systemProcess != null && !_systemProcess.HasExited;
 
 		/// <summary>
 		/// Получить физическое расположение на диске к терминалу <see cref="DefaultTerminal"/>.
@@ -129,10 +126,7 @@ namespace StockSharp.Quik
 		/// Информация о первом терминале из <see cref="GetTerminals"/>.
 		/// Если ни одного терминала не запущено, то будет возвращено значение <see langword="null"/>.
 		/// </summary>
-		public static QuikTerminal DefaultTerminal
-		{
-			get { return GetTerminals(false).FirstOrDefault(); }
-		}
+		public static QuikTerminal DefaultTerminal => GetTerminals(false).FirstOrDefault();
 
 		/// <summary>
 		/// Получить список всех доступных адресов серверов Quik.
@@ -546,10 +540,7 @@ namespace StockSharp.Quik
 		/// <summary>
 		/// Подключен ли терминал к торгам.
 		/// </summary>
-		public bool IsConnected
-		{
-			get { return MainWindow.GetMenu().Items[0].Items[1].IsEnabled; }
-		}
+		public bool IsConnected => MainWindow.GetMenu().Items[0].Items[1].IsEnabled;
 
 		/// <summary>
 		/// Использовать для старое подключение DDE + Trans2Quik. По-умолчанию выключено.
@@ -700,10 +691,7 @@ namespace StockSharp.Quik
 
 		#endregion
 
-		internal bool IsExportStarted
-		{
-			get { return _activeDdeExport.Count > 0; }
-		}
+		internal bool IsExportStarted => _activeDdeExport.Count > 0;
 
 		/// <summary>
 		/// Включить возможность настраивать в Quik фильтр таблицы Все Сделки через методы <see cref="RegisterTrades"/> и <see cref="UnRegisterTrades"/>.

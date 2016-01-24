@@ -19,7 +19,6 @@ namespace StockSharp.Anywhere
     using System.IO;
     using System.Text;
 
-    using BusinessEntities;
     using Messages;
 
     /// <summary>
@@ -68,7 +67,7 @@ namespace StockSharp.Anywhere
 
         public static void WriteMarketDepth(this QuoteChangeMessage quotes)
         {
-            MemoryToFile(QuotesToString(quotes), Path.Combine(_outputFolder, string.Format("{0}_depth.txt", quotes.SecurityId.SecurityCode)));
+            MemoryToFile(QuotesToString(quotes), Path.Combine(_outputFolder, $"{quotes.SecurityId.SecurityCode}_depth.txt"));
         }
 
         public static void WriteLevel1(this Level1ChangeMessage level)
@@ -89,81 +88,45 @@ namespace StockSharp.Anywhere
         private static string TradeToString(ExecutionMessage tick)
         {
             //securityId;tradeId;time;price;volume;orderdirection 
-            return string.Format("{0};{1};{2};{3};{4};{5}",
-                tick.SecurityId.SecurityCode,
-                tick.TradeId,
-                tick.ServerTime,
-                tick.TradePrice,
-                tick.Volume,
-                tick.Side);
+            return $"{tick.SecurityId.SecurityCode};{tick.TradeId};{tick.ServerTime};{tick.TradePrice};{tick.TradeVolume};{tick.Side}";
         }
 
         private static string MyTradeToString(ExecutionMessage trade)
         {
-            return string.Format("{0};{1};{2};{3};{4};{5};{6}",
-                trade.SecurityId.SecurityCode,
-                trade.TradeId,
-                trade.ServerTime,
-                trade.TradePrice,
-                trade.Volume,
-                trade.Side,
-                trade.OrderId);
+            return $"{trade.SecurityId.SecurityCode};{trade.TradeId};{trade.ServerTime};{trade.TradePrice};{trade.TradeVolume};{trade.Side};{trade.OrderId}";
         }
 
         private static string OrderToString(ExecutionMessage order)
         {
-            return string.Format("{0};{1};{2};{3};{4};{5};{6};{7};{8};{9};{10};{11};{12}",
-                order.OrderId,
-                order.OriginalTransactionId,
-                order.ServerTime,
-                order.SecurityId.SecurityCode,
-                order.PortfolioName,
-                order.Volume,
-                order.Balance,
-				order.OrderPrice,
-                order.OriginSide,
-                order.OrderType,
-                order.OrderState,
-                order.IsCancelled,
-                order.LocalTime);
+            return $"{order.OrderId};{order.OriginalTransactionId};{order.ServerTime};{order.SecurityId.SecurityCode};{order.PortfolioName};{order.OrderVolume};{order.Balance};{order.OrderPrice};{order.OriginSide};{order.OrderType};{order.OrderState};{order.IsCancelled};{order.LocalTime}";
         }
 
         private static string PositionToString(PositionChangeMessage position)
         {
-            return string.Format("{0};{1};{2};{3};{4}",
-                position.SecurityId.SecurityCode,
-                position.PortfolioName,
-                position.Changes[PositionChangeTypes.BeginValue],
-                position.Changes[PositionChangeTypes.CurrentValue],
-                position.Changes[PositionChangeTypes.AveragePrice]);
+            return $"{position.SecurityId.SecurityCode};{position.PortfolioName};{position.Changes[PositionChangeTypes.BeginValue]};{position.Changes[PositionChangeTypes.CurrentValue]};{position.Changes[PositionChangeTypes.AveragePrice]}";
         }
 
         private static string QuotesToString(QuoteChangeMessage quotes)
         {
             var sb = new StringBuilder();
-            foreach (var quote in quotes.Bids)
-                sb.Append(string.Format("Bid:{0}:{1};", quote.Price, quote.Volume));
-            foreach (var quote in quotes.Asks)
-                sb.Append(string.Format("Ask:{0}:{1};", quote.Price, quote.Volume));
 
-            return string.Format("{0};{1};{2}",
-                quotes.ServerTime,
-                quotes.SecurityId.SecurityCode,
-                sb
-                );
+            foreach (var quote in quotes.Bids)
+                sb.Append($"Bid:{quote.Price}:{quote.Volume};");
+
+            foreach (var quote in quotes.Asks)
+                sb.Append($"Ask:{quote.Price}:{quote.Volume};");
+
+            return $"{quotes.ServerTime};{quotes.SecurityId.SecurityCode};{sb}";
         }
 
         private static string Level1ToString(Level1ChangeMessage level)
         {
             var sb = new StringBuilder();
-            foreach (var kvp in level.Changes)
-                sb.Append(string.Format("{0}:{1};", kvp.Key, kvp.Value));
 
-            return string.Format("{0};{1};{2}",
-                level.ServerTime,
-                level.SecurityId.SecurityCode,
-                sb
-                );
+            foreach (var kvp in level.Changes)
+                sb.Append($"{kvp.Key}:{kvp.Value};");
+
+            return $"{level.ServerTime};{level.SecurityId.SecurityCode};{sb}";
         }
 
         private static void MemoryToFile(string line, string filePath)
@@ -171,7 +134,9 @@ namespace StockSharp.Anywhere
             using (var mem = new MemoryStream(line.Length + 2))
             {
                 var bytes = Encoding.UTF8.GetBytes(line);
+
                 mem.Write(bytes, 0, bytes.Length);
+
                 using (var file = new FileStream(filePath, FileMode.Open, FileAccess.Write, FileShare.ReadWrite))
                     mem.WriteTo(file);
             }

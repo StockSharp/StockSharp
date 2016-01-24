@@ -125,7 +125,7 @@ namespace StockSharp.Studio.Services
 					.Where(s => s != null)
 					.ToArray();
 
-				return securities.Select(s => executionRegistry.GetExecutionStorage(s, ExecutionTypes.Order));
+				return securities.Select(s => executionRegistry.GetExecutionStorage(s, ExecutionTypes.Transaction));
 			}
 
 			private void RealConnectorNewMessage(Message message)

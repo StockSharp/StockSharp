@@ -87,7 +87,7 @@ namespace StockSharp.Algo.Export
 				case ExecutionTypes.OrderLog:
 					Do(messages, () => new OrderLogTable(Security));
 					break;
-				case ExecutionTypes.Order:
+				case ExecutionTypes.Transaction:
 					Do(messages, () => new TransactionTable(Security));
 					break;
 				default:

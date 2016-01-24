@@ -192,10 +192,7 @@ namespace StockSharp.Transaq
 		/// <summary>
 		/// Список доступных периодов свечей.
 		/// </summary>
-		public IEnumerable<TimeSpan> CandleTimeFrames
-		{
-			get { return _candlePeriods.CachedValues; }
-		}
+		public IEnumerable<TimeSpan> CandleTimeFrames => _candlePeriods.CachedValues;
 
 		/// <summary>
 		/// Событие инициализации поля <see cref="CandleTimeFrames"/>.
@@ -217,7 +214,7 @@ namespace StockSharp.Transaq
 					ServerTime = tick.TradeTime.ToDto(),
 					SecurityId = new SecurityId { Native = tick.SecId },
 					TradePrice = tick.Price,
-					Volume = tick.Quantity,
+					TradeVolume = tick.Quantity,
 					OriginSide = tick.BuySell.FromTransaq(),
 					OpenInterest = tick.OpenInterest,
 					ExecutionType = ExecutionTypes.Tick,
@@ -320,9 +317,7 @@ namespace StockSharp.Transaq
 				Headline = response.Title,
 				Id = response.Id.To<string>(),
 				Story = response.Text,
-				ServerTime = response.TimeStamp == null
-					? CurrentTime.Convert(TimeHelper.Moscow)
-					: response.TimeStamp.Value.ToDto(),
+				ServerTime = response.TimeStamp?.ToDto() ?? CurrentTime.Convert(TimeHelper.Moscow),
 			});
 		}
 
@@ -430,8 +425,8 @@ namespace StockSharp.Transaq
 			SendOutMessage(new SecurityMessage
 			{
 				SecurityId = securityId,
-				ExpiryDate = response.MatDate == null ? (DateTimeOffset?)null : response.MatDate.Value.ApplyTimeZone(TimeHelper.Moscow),
-				OptionType = response.PutCall == null ? (OptionTypes?)null : response.PutCall.Value.FromTransaq(),
+				ExpiryDate = response.MatDate?.ApplyTimeZone(TimeHelper.Moscow),
+				OptionType = response.PutCall?.FromTransaq(),
 			});
 
 			var l1Msg = new Level1ChangeMessage
@@ -502,7 +497,7 @@ namespace StockSharp.Transaq
 					ServerTime = tick.TradeTime.ToDto(),
 					SecurityId = new SecurityId { Native = tick.SecId },
 					TradePrice = tick.Price,
-					Volume = tick.Quantity,
+					TradeVolume = tick.Quantity,
 					OriginSide = tick.BuySell.FromTransaq(),
 					OpenInterest = tick.OpenInterest,
 					ExecutionType = ExecutionTypes.Tick,
@@ -552,9 +547,7 @@ namespace StockSharp.Transaq
 					Source = message.From,
 					Headline = message.Text,
 					Story = message.Text,
-					ServerTime = message.Date == null
-						? CurrentTime.Convert(TimeHelper.Moscow)
-						: message.Date.Value.ToDto(),
+					ServerTime = message.Date?.ToDto() ?? CurrentTime.Convert(TimeHelper.Moscow),
 				});
 			}
 		}

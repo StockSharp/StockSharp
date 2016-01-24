@@ -45,7 +45,7 @@ namespace StockSharp.BitStamp
 				SecurityId = _btcUsd,
 				TradeId = trade.Id,
 				TradePrice = (decimal)trade.Price,
-				Volume = (decimal)trade.Amount,
+				TradeVolume = (decimal)trade.Amount,
 				ServerTime = CurrentTime.Convert(TimeZoneInfo.Utc),
 			});
 		}
@@ -105,7 +105,7 @@ namespace StockSharp.BitStamp
 								SecurityId = _btcUsd,
 								TradeId = t.Id,
 								TradePrice = (decimal)t.Price,
-								Volume = (decimal)t.Amount,
+								TradeVolume = (decimal)t.Amount,
 								ServerTime = t.Time.ApplyTimeZone(TimeZoneInfo.Utc)
 							}).ForEach(SendOutMessage);
 						}

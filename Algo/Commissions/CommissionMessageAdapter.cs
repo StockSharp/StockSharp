@@ -68,7 +68,7 @@ namespace StockSharp.Algo.Commissions
 		{
 			var execMsg = message as ExecutionMessage;
 
-			if (execMsg != null && (execMsg.ExecutionType == ExecutionTypes.Order || execMsg.ExecutionType == ExecutionTypes.Trade) && execMsg.Commission == null)
+			if (execMsg != null && execMsg.ExecutionType == ExecutionTypes.Transaction && execMsg.Commission == null)
 				execMsg.Commission = CommissionManager.Process(execMsg);
 
 			base.OnInnerAdapterNewOutMessage(message);

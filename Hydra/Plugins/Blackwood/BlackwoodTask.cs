@@ -107,7 +107,7 @@ namespace StockSharp.Hydra.Blackwood
 				.Concat(new[]
 				{
 					DataType.Create(typeof(ExecutionMessage), ExecutionTypes.Tick),
-					DataType.Create(typeof(ExecutionMessage), ExecutionTypes.Order),
+					DataType.Create(typeof(ExecutionMessage), ExecutionTypes.Transaction),
 					DataType.Create(typeof(Level1ChangeMessage), null),
 				})
 				.ToArray();

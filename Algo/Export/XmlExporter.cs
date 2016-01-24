@@ -62,7 +62,7 @@ namespace StockSharp.Algo.Export
 						writer.WriteAttribute("serverTime", trade.ServerTime.ToString(_timeFormat));
 						writer.WriteAttribute("localTime", trade.LocalTime.ToString(_timeFormat));
 						writer.WriteAttribute("price", trade.TradePrice);
-						writer.WriteAttribute("volume", trade.Volume);
+						writer.WriteAttribute("volume", trade.TradeVolume);
 
 						if (trade.OriginSide != null)
 							writer.WriteAttribute("originSide", trade.OriginSide.Value);
@@ -88,7 +88,7 @@ namespace StockSharp.Algo.Export
 						writer.WriteAttribute("serverTime", item.ServerTime.ToString(_timeFormat));
 						writer.WriteAttribute("localTime", item.LocalTime.ToString(_timeFormat));
 						writer.WriteAttribute("price", item.OrderPrice);
-						writer.WriteAttribute("volume", item.Volume);
+						writer.WriteAttribute("volume", item.OrderVolume);
 						writer.WriteAttribute("side", item.Side);
 						writer.WriteAttribute("state", item.OrderState);
 						writer.WriteAttribute("timeInForce", item.TimeInForce);
@@ -108,8 +108,7 @@ namespace StockSharp.Algo.Export
 
 					break;
 				}
-				case ExecutionTypes.Order:
-				case ExecutionTypes.Trade:
+				case ExecutionTypes.Transaction:
 				{
 					Do(messages, "transactions", (writer, item) =>
 					{
@@ -121,7 +120,7 @@ namespace StockSharp.Algo.Export
 						writer.WriteAttribute("transactionId", item.TransactionId);
 						writer.WriteAttribute("id", item.OrderId == null ? item.OrderStringId : item.OrderId.To<string>());
 						writer.WriteAttribute("orderPrice", item.OrderPrice);
-						writer.WriteAttribute("volume", item.Volume);
+						writer.WriteAttribute("volume", item.OrderVolume);
 						writer.WriteAttribute("balance", item.Balance);
 						writer.WriteAttribute("side", item.Side);
 						writer.WriteAttribute("type", item.OrderType);
@@ -181,7 +180,7 @@ namespace StockSharp.Algo.Export
 				writer.WriteAttribute("localTime", message.LocalTime.ToString(_timeFormat));
 
 				foreach (var pair in message.Changes)
-					writer.WriteAttribute(pair.Key.ToString(), pair.Value is DateTime ? ((DateTime)pair.Value).ToString(_timeFormat) : pair.Value);
+					writer.WriteAttribute(pair.Key.ToString(), (pair.Value as DateTime?)?.ToString(_timeFormat) ?? pair.Value);
 
 				writer.WriteEndElement();
 			});

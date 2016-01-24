@@ -52,7 +52,7 @@ namespace StockSharp.ETrade
 					OrderState = OrderStates.Failed,
 					Error = new InvalidOperationException(LocalizedStrings.Str2258Params.Put(transId, ex)),
 					OrderStatus = OrderStatus.RejectedBySystem,
-					ExecutionType = ExecutionTypes.Order,
+					ExecutionType = ExecutionTypes.Transaction,
 				});
 				return;
 			}
@@ -65,7 +65,7 @@ namespace StockSharp.ETrade
 				OriginalTransactionId = transId,
 				OrderState = OrderStates.Active,
 				OrderId = data.orderNum,
-				ExecutionType = ExecutionTypes.Order,
+				ExecutionType = ExecutionTypes.Transaction,
 				ServerTime = ETradeUtil.ETradeTimestampToUTC(data.orderTime)
 			};
 
@@ -92,13 +92,15 @@ namespace StockSharp.ETrade
 			if (ex != null)
 			{
 				this.AddWarningLog("CancelOrder: {0}", ex);
+
 				SendOutMessage(new ExecutionMessage
 				{
 					OriginalTransactionId = cancelTransId,
-					ExecutionType = ExecutionTypes.Order,
+					ExecutionType = ExecutionTypes.Transaction,
 					OrderState = OrderStates.Failed,
 					Error = new InvalidOperationException(LocalizedStrings.Str3373Params.Put(orderId, ex)),
 				});
+
 				return;
 			}
 
@@ -107,7 +109,7 @@ namespace StockSharp.ETrade
 				OriginalTransactionId = cancelTransId,
 				OrderId = orderId,
 				PortfolioName = data.accountId.To<string>(),
-				ExecutionType = ExecutionTypes.Order,
+				ExecutionType = ExecutionTypes.Transaction,
 				OrderStatus = OrderStatus.SentToCanceled,
 				ServerTime = ETradeUtil.ETradeTimestampToUTC(data.cancelTime)
 			};
@@ -157,11 +159,11 @@ namespace StockSharp.ETrade
 					PortfolioName = portName,
 					Side = leg.orderAction.ETradeActionToSide(),
 					OrderPrice = nativeOrder.limitPrice.To<decimal>(),
-					Volume = leg.orderedQuantity.To<decimal>(),
+					OrderVolume = leg.orderedQuantity.To<decimal>(),
 					Balance = (leg.orderedQuantity - leg.filledQuantity).To<decimal>(),
 					OriginalTransactionId = transId,
 					OrderId = nativeOrder.orderId,
-					ExecutionType = ExecutionTypes.Order,
+					ExecutionType = ExecutionTypes.Transaction,
 					OrderType = nativeOrder.priceType.ETradePriceTypeToOrderType(),
 					ServerTime = ETradeUtil.ETradeTimestampToUTC(nativeOrder.orderExecutedTime > 0 ? nativeOrder.orderExecutedTime : nativeOrder.orderPlacedTime), 
 					OrderState = tuple.Item1, 

@@ -113,19 +113,12 @@ namespace StockSharp.Algo.Testing
 				{
 					var execMsg = (ExecutionMessage)message;
 
-					switch (execMsg.ExecutionType)
-					{
-						case ExecutionTypes.Tick:
-						case ExecutionTypes.Trade:
-							_lastTradePrice = execMsg.TradePrice.Value;
-							break;
-						case ExecutionTypes.OrderLog:
-							if (execMsg.TradePrice != null)
-								_lastTradePrice = execMsg.TradePrice.Value;
-							break;
-						default:
-							return null;
-					}
+					var price = execMsg.TradePrice;
+
+					if (price != null)
+						_lastTradePrice = price.Value;
+					else if (execMsg.ExecutionType != ExecutionTypes.OrderLog)
+						return null;
 
 					time = execMsg.ServerTime;
 
@@ -153,7 +146,7 @@ namespace StockSharp.Algo.Testing
 				ServerTime = time,
 				LocalTime = time,
 				OriginSide = GenerateOriginSide ? RandomGen.GetEnum<Sides>() : (Sides?)null,
-				Volume = Volumes.Next(),
+				TradeVolume = Volumes.Next(),
 				ExecutionType = ExecutionTypes.Tick
 			};
 

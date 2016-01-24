@@ -386,7 +386,7 @@ namespace StockSharp.Algo.Storages.Binary
 				ExecutionType = ExecutionTypes.OrderLog,
 				SecurityId = SecurityId,
 				OrderId = metaInfo.FirstOrderId,
-				Volume = volume,
+				OrderVolume = volume,
 				Side = orderDirection,
 				ServerTime = serverTime,
 				OrderPrice = price,

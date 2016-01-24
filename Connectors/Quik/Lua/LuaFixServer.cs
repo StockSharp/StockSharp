@@ -381,10 +381,7 @@ namespace StockSharp.Quik.Lua
 		/// <summary>
 		/// Получатель логов.
 		/// </summary>
-		public ILogReceiver LogReceiver
-		{
-			get { return _logManager.Application; }
-		}
+		public ILogReceiver LogReceiver => _logManager.Application;
 
 		/// <summary>
 		/// Запустить сервер.
@@ -504,7 +501,7 @@ namespace StockSharp.Quik.Lua
 				{
 					var execMsg = (ExecutionMessage)message;
 
-					if (execMsg.ExecutionType == ExecutionTypes.Order)
+					if (execMsg.HasTradeInfo())
 					{
 						if (execMsg.OrderId != null)
 						{

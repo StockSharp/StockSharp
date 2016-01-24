@@ -47,10 +47,7 @@ namespace StockSharp.Transaq
 			Adapter.InnerAdapters.Add(new TransaqMessageAdapter(TransactionIdGenerator));
 		}
 
-		private TransaqMessageAdapter NativeAdapter
-		{
-			get { return Adapter.InnerAdapters.OfType<TransaqMessageAdapter>().First(); }
-		}
+		private TransaqMessageAdapter NativeAdapter => Adapter.InnerAdapters.OfType<TransaqMessageAdapter>().First();
 
 		/// <summary>
 		/// Пароль.
@@ -145,34 +142,22 @@ namespace StockSharp.Transaq
 		/// <summary>
 		/// Версия коннектора.
 		/// </summary>
-		public string ConnectorVersion
-		{
-			get { return NativeAdapter.ConnectorVersion; }
-		}
+		public string ConnectorVersion => NativeAdapter.ConnectorVersion;
 
 		/// <summary>
 		/// Текущий сервер.
 		/// </summary>
-		public int CurrentServer
-		{
-			get { return NativeAdapter.CurrentServer; }
-		}
+		public int CurrentServer => NativeAdapter.CurrentServer;
 
 		/// <summary>
 		/// Разница между локальным и серверным временем.
 		/// </summary>
-		public TimeSpan? ServerTimeDiff
-		{
-			get { return NativeAdapter.ServerTimeDiff; }
-		}
+		public TimeSpan? ServerTimeDiff => NativeAdapter.ServerTimeDiff;
 
 		/// <summary>
 		/// Список доступных периодов свечей.
 		/// </summary>
-		public IEnumerable<TimeSpan> CandleTimeFrames
-		{
-			get { return NativeAdapter.CandleTimeFrames; }
-		}
+		public IEnumerable<TimeSpan> CandleTimeFrames => NativeAdapter.CandleTimeFrames;
 
 		/// <summary>
 		/// Событие инициализации поля <see cref="CandleTimeFrames"/>.

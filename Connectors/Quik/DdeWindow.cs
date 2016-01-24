@@ -41,9 +41,6 @@ namespace StockSharp.Quik
 		private readonly SystemWindow _columnsCaption;
 		private readonly SystemWindow _formalValues;
 		private readonly SystemWindow _emptyCells;
-		private readonly SystemWindow _beginOutBtn;
-		private readonly SystemWindow _stopOutBtn;
-		private readonly SystemWindow _closeBtn;
 
 		internal DdeWindow(SystemWindow wnd)
 		{
@@ -81,11 +78,11 @@ namespace StockSharp.Quik
 						break;
 
 					case 0x29d2:
-						_beginOutBtn = childWnd;
+						BeginOutBtn = childWnd;
 						break;
 
 					case 0x29d3:
-						_stopOutBtn = childWnd;
+						StopOutBtn = childWnd;
 						break;
 
 					case 0x29d5:
@@ -117,7 +114,7 @@ namespace StockSharp.Quik
 						break;
 
 					case 1:
-						_closeBtn = childWnd;
+						CloseBtn = childWnd;
 						break;
 				}
 			}
@@ -195,20 +192,11 @@ namespace StockSharp.Quik
 			set { _emptyCells.CheckState = value ? CheckState.Checked : CheckState.Unchecked; }
 		}
 
-		internal SystemWindow BeginOutBtn
-		{
-			get { return _beginOutBtn; }
-		}
+		internal SystemWindow BeginOutBtn { get; }
 
-		internal SystemWindow StopOutBtn
-		{
-			get { return _stopOutBtn; }
-		}
+		internal SystemWindow StopOutBtn { get; }
 
-		internal SystemWindow CloseBtn
-		{
-			get { return _closeBtn; }
-		}
+		internal SystemWindow CloseBtn { get; }
 
 		/// <summary>
 		/// Описание окна DDE.

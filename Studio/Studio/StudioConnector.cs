@@ -129,7 +129,7 @@ namespace StockSharp.Studio
 					{
 						var execMsg = (ExecutionMessage)message;
 
-						if (execMsg.ExecutionType == ExecutionTypes.Trade || execMsg.ExecutionType == ExecutionTypes.Order)
+						if (execMsg.ExecutionType == ExecutionTypes.Transaction)
 							return;
 
 						break;
@@ -152,7 +152,7 @@ namespace StockSharp.Studio
 					{
 						var execMsg = (ExecutionMessage)message;
 
-						if (execMsg.ExecutionType != ExecutionTypes.Order && execMsg.ExecutionType != ExecutionTypes.Trade)
+						if (execMsg.ExecutionType != ExecutionTypes.Transaction)
 							return;
 
 						break;

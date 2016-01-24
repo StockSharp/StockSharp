@@ -95,11 +95,11 @@ namespace StockSharp.AlfaDirect
 					PortfolioName = GetPortfolioName(f.AccCode.GetValue(cols), this.GetBoardCode(f.PlaceCode.GetValue(cols))),
 					Side = f.BuySellStr.GetValue(cols),
 					OrderPrice = f.Price.GetValue(cols),
-					Volume = f.Qty.GetValue(cols),
+					OrderVolume = f.Qty.GetValue(cols),
 					Balance = f.Rest.GetValue(cols),
 					OriginalTransactionId = transId,
 					OrderId = orderId,
-					ExecutionType = ExecutionTypes.Order,
+					ExecutionType = ExecutionTypes.Transaction,
 				};
 
 				var orderTime = f.TsTime.GetValue(cols);
@@ -215,7 +215,7 @@ namespace StockSharp.AlfaDirect
 				OrderState = OrderStates.Failed,
 				Error = new InvalidOperationException(LocalizedStrings.Str2258Params.Put(transactionId, message)),
 				OrderStatus = OrderStatus.RejectedBySystem,
-				ExecutionType = ExecutionTypes.Order,
+				ExecutionType = ExecutionTypes.Transaction,
 			});
 		}
 
@@ -308,12 +308,12 @@ namespace StockSharp.AlfaDirect
 				SendOutMessage(new ExecutionMessage
 				{
 					SecurityId = new SecurityId { Native = f.PaperNo.GetValue(cols) },
-					ExecutionType = ExecutionTypes.Trade,
+					ExecutionType = ExecutionTypes.Transaction,
 					OrderId = orderId,
 					TradeId = tradeId,
 					TradePrice = f.Price.GetValue(cols),
 					ServerTime = f.TsTime.GetValue(cols).ApplyTimeZone(TimeHelper.Moscow),
-					Volume = f.Qty.GetValue(cols),
+					TradeVolume = f.Qty.GetValue(cols),
 					OriginSide = f.BuySellStr.GetValue(cols),
 				});
 			}

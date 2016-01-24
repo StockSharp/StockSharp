@@ -164,8 +164,11 @@ namespace StockSharp.Algo.Testing
 									execMsg.ServerTime));
 								break;
 							}
-							case ExecutionTypes.Order:
+							case ExecutionTypes.Transaction:
 							{
+								if (!execMsg.HasOrderInfo())
+											throw new InvalidOperationException();
+
 								if (_parent.Settings.Latency > TimeSpan.Zero)
 								{
 									this.AddInfoLog(LocalizedStrings.Str1145Params, execMsg.IsCancelled ? LocalizedStrings.Str1146 : LocalizedStrings.Str1147, execMsg.TransactionId == 0 ? execMsg.OriginalTransactionId : execMsg.TransactionId);
@@ -176,8 +179,6 @@ namespace StockSharp.Algo.Testing
 
 								break;
 							}
-							case ExecutionTypes.Trade:
-								throw new InvalidOperationException();
 							case ExecutionTypes.OrderLog:
 							{
 								if (execMsg.TradeId == null)
@@ -228,8 +229,8 @@ namespace StockSharp.Algo.Testing
 						{
 							if (oldOrder != null)
 							{
-								if (!execMsg.IsCancelled && execMsg.Volume == 0)
-									execMsg.Volume = oldOrder.Balance;
+								if (!execMsg.IsCancelled && execMsg.OrderVolume == 0)
+									execMsg.OrderVolume = oldOrder.Balance;
 
 								Process(execMsg, result);
 							}
@@ -244,7 +245,7 @@ namespace StockSharp.Algo.Testing
 									LocalTime = orderMsg.LocalTime,
 									OriginalTransactionId = orderMsg.TransactionId,
 									OrderId = execMsg.OrderId,
-									ExecutionType = ExecutionTypes.Order,
+									ExecutionType = ExecutionTypes.Transaction,
 									SecurityId = orderMsg.SecurityId,
 									IsCancelled = true,
 									OrderState = OrderStates.Failed,
@@ -257,7 +258,7 @@ namespace StockSharp.Algo.Testing
 								{
 									LocalTime = orderMsg.LocalTime,
 									OriginalTransactionId = orderMsg.TransactionId,
-									ExecutionType = ExecutionTypes.Order,
+									ExecutionType = ExecutionTypes.Transaction,
 									SecurityId = orderMsg.SecurityId,
 									IsCancelled = false,
 									OrderState = OrderStates.Failed,
@@ -444,9 +445,7 @@ namespace StockSharp.Algo.Testing
 				_lastStripDate = execution.LocalTime.Date;
 
 				var priceOffset = _parent.Settings.PriceLimitOffset;
-				var priceStep = _securityDefinition == null || _securityDefinition.PriceStep == null
-					? 0.01m
-					: _securityDefinition.PriceStep.Value;
+				var priceStep = _securityDefinition?.PriceStep ?? 0.01m;
 
 				var level1Msg =
 					new Level1ChangeMessage
@@ -521,7 +520,7 @@ namespace StockSharp.Algo.Testing
 
 						var replyMsg = CreateReply(execution, time);
 
-						replyMsg.Balance = execution.Volume;
+						replyMsg.Balance = execution.OrderVolume;
 						replyMsg.OrderState = OrderStates.Failed;
 						replyMsg.Error = new InvalidOperationException(LocalizedStrings.Str1154);
 						replyMsg.LocalTime = time;
@@ -584,7 +583,7 @@ namespace StockSharp.Algo.Testing
 						// при восстановлении заявки у нее уже есть номер
 						if (replyMsg.OrderId == null)
 						{
-							replyMsg.Balance = execution.Volume;
+							replyMsg.Balance = execution.OrderVolume;
 							replyMsg.OrderState = OrderStates.Active;
 							replyMsg.OrderId = _parent.OrderIdGenerator.GetNextId();
 						}
@@ -656,8 +655,8 @@ namespace StockSharp.Algo.Testing
 				if (message.TradeId != null)
 					throw new ArgumentException(LocalizedStrings.Str1159, nameof(message));
 
-				if (message.Volume == null || message.Volume <= 0)
-					throw new ArgumentOutOfRangeException(nameof(message), message.Volume, LocalizedStrings.Str1160Params.Put(message.TransactionId));
+				if (message.OrderVolume == null || message.OrderVolume <= 0)
+					throw new ArgumentOutOfRangeException(nameof(message), message.OrderVolume, LocalizedStrings.Str1160Params.Put(message.TransactionId));
 
 				UpdateQuote(message, !message.IsCancelled);
 
@@ -683,15 +682,15 @@ namespace StockSharp.Algo.Testing
 				{
 					UpdateQuote(new ExecutionMessage
 					{
-						ExecutionType = ExecutionTypes.Order,
+						ExecutionType = ExecutionTypes.Transaction,
 						Side = message.Side,
 						OrderPrice = message.OrderPrice,
-						Volume = message.Volume
+						OrderVolume = message.OrderVolume
 					}, false);
 				}
 
 				// для чужих заявок заполняется только объем
-				message.Balance = message.Volume;
+				message.Balance = message.OrderVolume;
 
 				// исполняем чужую заявку как свою. при этом результат выполнения не идет никуда
 				MatchOrder(message.LocalTime, message, null, true);
@@ -879,7 +878,7 @@ namespace StockSharp.Algo.Testing
 						SecurityId = tradeMsg.SecurityId,
 						TradeId = tradeMsg.TradeId,
 						TradePrice = tradeMsg.TradePrice,
-						Volume = tradeMsg.Volume,
+						TradeVolume = tradeMsg.TradeVolume,
 						ExecutionType = ExecutionTypes.Tick,
 						ServerTime = GetServerTime(time),
 					});
@@ -996,8 +995,8 @@ namespace StockSharp.Algo.Testing
 					clone.TransactionId = message.TransactionId;
 					clone.OrderPrice = message.OrderPrice;
 					clone.PortfolioName = message.PortfolioName;
-					clone.Balance = message.Volume;
-					clone.Volume = message.Volume;
+					clone.Balance = message.OrderVolume;
+					clone.OrderVolume = message.OrderVolume;
 
 					AddTotalVolume(message.Side, volume);
 
@@ -1032,7 +1031,7 @@ namespace StockSharp.Algo.Testing
 								clone.OrderPrice = message.OrderPrice;
 								clone.PortfolioName = message.PortfolioName;
 								clone.Balance = leftBalance;
-								clone.Volume = message.Volume;
+								clone.OrderVolume = message.OrderVolume;
 
 								var diff = leftBalance - balance;
 								AddTotalVolume(message.Side, diff);
@@ -1121,7 +1120,7 @@ namespace StockSharp.Algo.Testing
 					Balance = message.Balance,
 					OrderState = message.OrderState,
 					PortfolioName = message.PortfolioName,
-					ExecutionType = ExecutionTypes.Order,
+					ExecutionType = ExecutionTypes.Transaction,
 					ServerTime = GetServerTime(time),
 				};
 			}
@@ -1136,8 +1135,8 @@ namespace StockSharp.Algo.Testing
 					OriginalTransactionId = message.TransactionId,
 					TradeId = _parent.TradeIdGenerator.GetNextId(),
 					TradePrice = price,
-					Volume = volume,
-					ExecutionType = ExecutionTypes.Trade,
+					TradeVolume = volume,
+					ExecutionType = ExecutionTypes.Transaction,
 					ServerTime = GetServerTime(time),
 					Side = message.Side,
 				};
@@ -1171,10 +1170,7 @@ namespace StockSharp.Algo.Testing
 				var quotes = GetQuotes(side.Invert());
 				var pair = quotes.FirstOr();
 
-				if (pair == null)
-					return null;
-
-				return pair.Value.Key;
+				return pair?.Key;
 			}
 		}
 
@@ -1394,7 +1390,7 @@ namespace StockSharp.Algo.Testing
 			{
 				var state = _parent._secStates.TryGetValue(securityId);
 
-				var reqMoney = state == null ? null : (decimal?)state.TryGetValue(side == Sides.Buy ? Level1Fields.MarginBuy : Level1Fields.MarginSell);
+				var reqMoney = (decimal?)state?.TryGetValue(side == Sides.Buy ? Level1Fields.MarginBuy : Level1Fields.MarginSell);
 
 				// отсутствует информация о ГО
 				if (reqMoney == null)

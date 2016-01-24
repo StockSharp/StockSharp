@@ -276,7 +276,7 @@ namespace StockSharp.IQFeed
 				TradeId = lastTradeId.Value,
 				ServerTime = (lastTradeDate.Value + lastTradeTime.Value).ApplyTimeZone(TimeHelper.Est),
 				TradePrice = lastTradePrice.Value,
-				Volume = lastTradeVolume.Value,
+				TradeVolume = lastTradeVolume.Value,
 				ExecutionType = ExecutionTypes.Tick,
 			};
 		}

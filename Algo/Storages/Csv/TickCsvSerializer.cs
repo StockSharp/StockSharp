@@ -55,7 +55,7 @@ namespace StockSharp.Algo.Storages.Csv
 		/// <param name="data">Data.</param>
 		protected override void Write(TextWriter writer, ExecutionMessage data)
 		{
-			writer.Write($"{data.ServerTime.UtcDateTime.ToString(TimeFormat)};{data.ServerTime.ToString("zzz")};{data.TradeId};{data.TradePrice};{data.Volume};{data.OriginSide};{data.OpenInterest};{data.IsSystem}");
+			writer.Write($"{data.ServerTime.UtcDateTime.ToString(TimeFormat)};{data.ServerTime.ToString("zzz")};{data.TradeId};{data.TradePrice};{data.TradeVolume};{data.OriginSide};{data.OpenInterest};{data.IsSystem}");
 		}
 
 		/// <summary>
@@ -73,7 +73,7 @@ namespace StockSharp.Algo.Storages.Csv
 				ServerTime = reader.ReadTime(date),
 				TradeId = reader.ReadNullableLong(),
 				TradePrice = reader.ReadNullableDecimal(),
-				Volume = reader.ReadNullableDecimal(),
+				TradeVolume = reader.ReadNullableDecimal(),
 				OriginSide = reader.ReadNullableEnum<Sides>(),
 				OpenInterest = reader.ReadNullableDecimal(),
 				IsSystem = reader.ReadNullableBool(),

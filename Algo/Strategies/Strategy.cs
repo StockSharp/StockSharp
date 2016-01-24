@@ -2026,16 +2026,8 @@ namespace StockSharp.Algo.Strategies
 				{
 					var execMsg = (ExecutionMessage)message;
 
-					switch (execMsg.ExecutionType)
-					{
-						case ExecutionTypes.Tick:
-						case ExecutionTypes.Trade:
-							PnLManager.ProcessMessage(execMsg);
-							break;
-
-						default:
-							return;
-					}
+					if (execMsg.ExecutionType == ExecutionTypes.Tick || execMsg.HasTradeInfo())
+						PnLManager.ProcessMessage(execMsg);
 
 					msgTime = execMsg.ServerTime;
 					break;

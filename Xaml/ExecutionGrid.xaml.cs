@@ -84,20 +84,23 @@ namespace StockSharp.Xaml
 					OrderTypeColumn.Visibility =
 					OrderSideColumn.Visibility =
 					OrderStateColumn.Visibility =
+					OrderVolumeColumn.Visibility =
 					TransactionColumn.Visibility =
 					PortfolioColumn.Visibility =
 					BalanceColumn.Visibility =
 						Visibility.Collapsed;
+
 					break;
 				}
-				case ExecutionTypes.Order:
-				{
-					TradeIdColumn.Visibility = TradePriceColumn.Visibility = Visibility.Collapsed;
-					break;
-				}
-				case ExecutionTypes.Trade:
-					break;
+				//case ExecutionTypes.Order:
+				//{
+				//	TradeIdColumn.Visibility = TradePriceColumn.Visibility = Visibility.Collapsed;
+				//	break;
+				//}
+				//case ExecutionTypes.Trade:
+				//	break;
 				case ExecutionTypes.OrderLog:
+					TradeVolumeColumn.Visibility = Visibility.Collapsed;
 					break;
 				default:
 					throw new ArgumentOutOfRangeException(nameof(type));

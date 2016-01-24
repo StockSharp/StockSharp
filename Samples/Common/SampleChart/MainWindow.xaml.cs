@@ -234,7 +234,7 @@ namespace SampleChart
 				{
 					ServerTime = _lastTime,
 					TradePrice = price,
-					Volume = RandomGen.GetInt(50) + 1
+					TradeVolume = RandomGen.GetInt(50) + 1
 				});
 				_lastTime += TimeSpan.FromSeconds(10);
 			}
@@ -298,7 +298,7 @@ namespace SampleChart
 
 			_candle.ClosePrice = price;
 
-			_candle.TotalVolume += tick.Volume.Value;
+			_candle.TotalVolume += tick.TradeVolume.Value;
 
 			_volumeProfile.Update(new TickCandleBuilderSourceValue(security, tick));
 		}

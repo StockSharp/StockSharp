@@ -255,7 +255,7 @@ namespace StockSharp.Algo.Testing
 					diff.Add(new ExecutionMessage
 					{
 						Side = quote.Side,
-						Volume = tradeVolume,
+						TradeVolume = tradeVolume,
 						ExecutionType = ExecutionTypes.Tick,
 						SecurityId = SecurityId,
 						LocalTime = time,
@@ -274,22 +274,22 @@ namespace StockSharp.Algo.Testing
 		/// <summary>
 		/// To convert the tick trade.
 		/// </summary>
-		/// <param name="message">Tick trade.</param>
+		/// <param name="tick">Tick trade.</param>
 		/// <returns>Stream <see cref="ExecutionMessage"/>.</returns>
-		public IEnumerable<ExecutionMessage> ToExecutionLog(ExecutionMessage message)
+		public IEnumerable<ExecutionMessage> ToExecutionLog(ExecutionMessage tick)
 		{
-			if (message == null)
-				throw new ArgumentNullException(nameof(message));
+			if (tick == null)
+				throw new ArgumentNullException(nameof(tick));
 
 			if (!_priceStepUpdated)
 			{
-				_securityDefinition.PriceStep = message.GetTradePrice().GetDecimalInfo().EffectiveScale.GetPriceStep();
+				_securityDefinition.PriceStep = tick.GetTradePrice().GetDecimalInfo().EffectiveScale.GetPriceStep();
 				_priceStepUpdated = true;
 			}
 
 			if (!_volumeStepUpdated)
 			{
-				_securityDefinition.VolumeStep = message.SafeGetVolume().GetDecimalInfo().EffectiveScale.GetPriceStep();
+				_securityDefinition.VolumeStep = tick.SafeGetVolume().GetDecimalInfo().EffectiveScale.GetPriceStep();
 				_volumeStepUpdated = true;
 			}
 
@@ -298,38 +298,33 @@ namespace StockSharp.Algo.Testing
 
 			//_lastTradeDate = message.LocalTime.Date;
 
-			return ProcessExecution(message);
-		}
-
-		private IEnumerable<ExecutionMessage> ProcessExecution(ExecutionMessage message)
-		{
 			var retVal = new List<ExecutionMessage>();
 
 			var bestBid = _bids.FirstOrDefault();
 			var bestAsk = _asks.FirstOrDefault();
 
-			var tradePrice = message.GetTradePrice();
-			var volume = message.Volume ?? 1;
-			var time = message.LocalTime;
+			var tradePrice = tick.GetTradePrice();
+			var volume = tick.TradeVolume ?? 1;
+			var time = tick.LocalTime;
 
 			if (bestBid.Value != null && tradePrice <= bestBid.Key)
 			{
 				// тик попал в биды, значит была крупная заявка по рынку на продажу,
 				// которая возможна исполнила наши заявки
 
-				ProcessMarketOrder(retVal, _bids, message.ServerTime, message.LocalTime, Sides.Sell, tradePrice, volume);
+				ProcessMarketOrder(retVal, _bids, tick.ServerTime, tick.LocalTime, Sides.Sell, tradePrice, volume);
 
 				// подтягиваем противоположные котировки и снимаем лишние заявки
-				TryCreateOppositeOrder(retVal, _asks, time, message.ServerTime, tradePrice, volume, Sides.Buy);
+				TryCreateOppositeOrder(retVal, _asks, time, tick.ServerTime, tradePrice, volume, Sides.Buy);
 			}
 			else if (bestAsk.Value != null && tradePrice >= bestAsk.Key)
 			{
 				// тик попал в аски, значит была крупная заявка по рынку на покупку,
 				// которая возможна исполнила наши заявки
 
-				ProcessMarketOrder(retVal, _asks, message.ServerTime, message.LocalTime, Sides.Buy, tradePrice, volume);
+				ProcessMarketOrder(retVal, _asks, tick.ServerTime, tick.LocalTime, Sides.Buy, tradePrice, volume);
 
-				TryCreateOppositeOrder(retVal, _bids, time, message.ServerTime, tradePrice, volume, Sides.Sell);
+				TryCreateOppositeOrder(retVal, _bids, time, tick.ServerTime, tradePrice, volume, Sides.Sell);
 			}
 			else if (bestBid.Value != null && bestAsk.Value != null && bestBid.Key < tradePrice && tradePrice < bestAsk.Key)
 			{
@@ -338,9 +333,9 @@ namespace StockSharp.Algo.Testing
 				// если в эмуляторе есть наша заявка на этом уровне, то она исполниться.
 				// если нет, то эмулятор взаимно исполнит эти заявки друг об друга
 
-				var originSide = GetOrderSide(message);
+				var originSide = GetOrderSide(tick);
 
-				retVal.Add(CreateMessage(time, message.ServerTime, originSide, tradePrice, volume + (_securityDefinition.VolumeStep ?? 1 * _settings.VolumeMultiplier), tif: TimeInForce.MatchOrCancel));
+				retVal.Add(CreateMessage(time, tick.ServerTime, originSide, tradePrice, volume + (_securityDefinition.VolumeStep ?? 1 * _settings.VolumeMultiplier), tif: TimeInForce.MatchOrCancel));
 
 				var spreadStep = _settings.SpreadSize * GetPriceStep();
 
@@ -355,7 +350,7 @@ namespace StockSharp.Algo.Testing
 
 					if (diff > 0)
 					{
-						retVal.Add(CreateMessage(time, message.ServerTime, Sides.Sell, newBestPrice, 0));
+						retVal.Add(CreateMessage(time, tick.ServerTime, Sides.Sell, newBestPrice, 0));
 						newBestPrice += spreadStep * _priceRandom.Next(1, _settings.SpreadSize);
 					}
 					else
@@ -371,14 +366,14 @@ namespace StockSharp.Algo.Testing
 
 					if (diff > 0)
 					{
-						retVal.Add(CreateMessage(time, message.ServerTime, Sides.Buy, newBestPrice, 0));
+						retVal.Add(CreateMessage(time, tick.ServerTime, Sides.Buy, newBestPrice, 0));
 						newBestPrice -= spreadStep * _priceRandom.Next(1, _settings.SpreadSize);
 					}
 					else
 						break;
 				}
 
-				retVal.Add(CreateMessage(time, message.ServerTime, originSide.Invert(), tradePrice, volume, tif: TimeInForce.MatchOrCancel));
+				retVal.Add(CreateMessage(time, tick.ServerTime, originSide.Invert(), tradePrice, volume, tif: TimeInForce.MatchOrCancel));
 			}
 			else
 			{
@@ -397,11 +392,11 @@ namespace StockSharp.Algo.Testing
 					originSide = Sides.Buy;
 				else
 				{
-					originSide = GetOrderSide(message);
+					originSide = GetOrderSide(tick);
 					hasOpposite = false;
 				}
 
-				retVal.Add(CreateMessage(time, message.ServerTime, originSide, tradePrice, volume));
+				retVal.Add(CreateMessage(time, tick.ServerTime, originSide, tradePrice, volume));
 
 				// если стакан был полностью пустой, то формируем сразу уровень с противоположной стороны
 				if (!hasOpposite)
@@ -409,15 +404,15 @@ namespace StockSharp.Algo.Testing
 					var oppositePrice = tradePrice + _settings.SpreadSize * GetPriceStep() * (originSide == Sides.Buy ? 1 : -1);
 
 					if (oppositePrice > 0)
-						retVal.Add(CreateMessage(time, message.ServerTime, originSide.Invert(), oppositePrice, volume));
+						retVal.Add(CreateMessage(time, tick.ServerTime, originSide.Invert(), oppositePrice, volume));
 				}
 			}
 
 			if (!HasDepth(time))
 			{
 				// если стакан слишком разросся, то удаляем его хвосты (не удаляя пользовательские заявки)
-				CancelWorstQuote(retVal, time, message.ServerTime, Sides.Buy, _bids);
-				CancelWorstQuote(retVal, time, message.ServerTime, Sides.Sell, _asks);	
+				CancelWorstQuote(retVal, time, tick.ServerTime, Sides.Buy, _bids);
+				CancelWorstQuote(retVal, time, tick.ServerTime, Sides.Sell, _asks);	
 			}
 
 			_prevTickPrice = tradePrice;
@@ -493,13 +488,13 @@ namespace StockSharp.Algo.Testing
 
 				if (quote.Price * sign > tradePrice * sign)
 				{
-					bigOrder.Volume += quote.Volume;
+					bigOrder.OrderVolume += quote.Volume;
 				}
 				else
 				{
 					if (quote.Price == tradePrice)
 					{
-						bigOrder.Volume += volume;
+						bigOrder.OrderVolume += volume;
 
 						//var diff = tradeMessage.Volume - quote.Volume;
 
@@ -553,7 +548,7 @@ namespace StockSharp.Algo.Testing
 				return;
 
 			var worst = quotes.Last();
-			var volume = worst.Value.First.Where(e => e.PortfolioName == null).Sum(e => e.Volume.Value);
+			var volume = worst.Value.First.Where(e => e.PortfolioName == null).Sum(e => e.OrderVolume.Value);
 
 			if (volume == 0)
 				return;
@@ -576,7 +571,7 @@ namespace StockSharp.Algo.Testing
 			{
 				Side = side,
 				OrderPrice = price,
-				Volume = volume,
+				OrderVolume = volume,
 				ExecutionType = ExecutionTypes.OrderLog,
 				IsCancelled = isCancelling,
 				SecurityId = SecurityId,
@@ -621,10 +616,10 @@ namespace StockSharp.Algo.Testing
 						LocalTime = regMsg.LocalTime,
 						ServerTime = serverTime,
 						SecurityId = regMsg.SecurityId,
-						ExecutionType = ExecutionTypes.Order,
+						ExecutionType = ExecutionTypes.Transaction,
 						TransactionId = regMsg.TransactionId,
 						OrderPrice = regMsg.Price,
-						Volume = regMsg.Volume,
+						OrderVolume = regMsg.Volume,
 						Side = regMsg.Side,
 						PortfolioName = regMsg.PortfolioName,
 						OrderType = regMsg.OrderType,
@@ -648,7 +643,7 @@ namespace StockSharp.Algo.Testing
 						LocalTime = replaceMsg.LocalTime,
 						ServerTime = serverTime,
 						SecurityId = replaceMsg.SecurityId,
-						ExecutionType = ExecutionTypes.Order,
+						ExecutionType = ExecutionTypes.Transaction,
 						IsCancelled = true,
 						OrderId = replaceMsg.OldOrderId,
 						OriginalTransactionId = replaceMsg.OldTransactionId,
@@ -664,10 +659,10 @@ namespace StockSharp.Algo.Testing
 						LocalTime = replaceMsg.LocalTime,
 						ServerTime = serverTime,
 						SecurityId = replaceMsg.SecurityId,
-						ExecutionType = ExecutionTypes.Order,
+						ExecutionType = ExecutionTypes.Transaction,
 						TransactionId = replaceMsg.TransactionId,
 						OrderPrice = replaceMsg.Price,
-						Volume = replaceMsg.Volume,
+						OrderVolume = replaceMsg.Volume,
 						Side = replaceMsg.Side,
 						PortfolioName = replaceMsg.PortfolioName,
 						OrderType = replaceMsg.OrderType,
@@ -682,7 +677,7 @@ namespace StockSharp.Algo.Testing
 
 					yield return new ExecutionMessage
 					{
-						ExecutionType = ExecutionTypes.Order,
+						ExecutionType = ExecutionTypes.Transaction,
 						IsCancelled = true,
 						OrderId = cancelMsg.OrderId,
 						TransactionId = cancelMsg.TransactionId,

@@ -522,10 +522,7 @@ namespace StockSharp.Quik
 		/// <summary>
 		/// Все названия инструкций, добавленные в данный момент.
 		/// </summary>
-		public IEnumerable<string> Names
-		{
-			get { return Keys; }
-		}
+		public IEnumerable<string> Names => Keys;
 
 		/// <summary>
 		/// Получить значение инструкции по имени. Если инструкция не добавлена, то возвращается <see langword="null"/>.

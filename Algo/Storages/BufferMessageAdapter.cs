@@ -215,8 +215,7 @@ namespace StockSharp.Algo.Storages
 						case ExecutionTypes.Tick:
 							buffer = _ticksBuffer;
 							break;
-						case ExecutionTypes.Order:
-						case ExecutionTypes.Trade:
+						case ExecutionTypes.Transaction:
 							buffer = _transactionsBuffer;
 							break;
 						case ExecutionTypes.OrderLog:

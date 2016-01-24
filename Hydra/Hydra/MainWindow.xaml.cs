@@ -808,7 +808,7 @@ namespace StockSharp.Hydra
 
 					break;
 
-				case "execution":
+				case "transaction":
 					pane = new ExecutionsPane { SelectedSecurity = SelectedSecurity };
 					break;
 
@@ -876,9 +876,9 @@ namespace StockSharp.Hydra
 					dataType = typeof(NewsMessage);
 					break;
 
-				case "execution":
+				case "transaction":
 					dataType = typeof(ExecutionMessage);
-					execType = ExecutionTypes.Order;
+					execType = ExecutionTypes.Transaction;
 					break;
 
 				default:

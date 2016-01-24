@@ -126,8 +126,8 @@ namespace StockSharp.Algo.Slippage
 				case MessageTypes.Execution:
 				{
 					var execMsg = (ExecutionMessage)message;
-
-					if (execMsg.ExecutionType == ExecutionTypes.Trade)
+					
+					if (execMsg.HasTradeInfo())
 					{
 						var plannedPrice = _plannedPrices.TryGetValue(execMsg.OriginalTransactionId);
 

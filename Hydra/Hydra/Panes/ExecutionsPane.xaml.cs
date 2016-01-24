@@ -36,7 +36,7 @@ namespace StockSharp.Hydra.Panes
 			Init(ExportBtn, MainGrid, GetExecutions);
 		}
 
-		protected override object Arg => ExecutionTypes.Order;
+		protected override object Arg => ExecutionTypes.Transaction;
 
 		protected override Type DataType => typeof(ExecutionMessage);
 
@@ -51,7 +51,7 @@ namespace StockSharp.Hydra.Panes
 		private IEnumerableEx<ExecutionMessage> GetExecutions()
 		{
 			var executions = StorageRegistry
-				.GetExecutionStorage(SelectedSecurity, ExecutionTypes.Order, Drive, StorageFormat)
+				.GetExecutionStorage(SelectedSecurity, ExecutionTypes.Transaction, Drive, StorageFormat)
 				.Load(From, To + TimeHelper.LessOneDay);
 
 			return executions;

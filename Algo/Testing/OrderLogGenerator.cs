@@ -188,7 +188,7 @@ namespace StockSharp.Algo.Testing
 					SecurityId = SecurityId,
 					ServerTime = time,
 					OrderState = OrderStates.Active,
-					Volume = Volumes.Next(),
+					OrderVolume = Volumes.Next(),
 					Side = RandomGen.GetEnum<Sides>(),
 					OrderPrice = _lastOrderPrice,
 					ExecutionType = ExecutionTypes.OrderLog,
@@ -212,7 +212,7 @@ namespace StockSharp.Algo.Testing
 
 				if (isMatched && trade != null)
 				{
-					item.Volume = RandomGen.GetInt(1, (int)activeOrder.SafeGetVolume());
+					item.OrderVolume = RandomGen.GetInt(1, (int)activeOrder.SafeGetVolume());
 
 					item.TradeId = trade.TradeId;
 					item.TradePrice = trade.TradePrice;
@@ -227,9 +227,9 @@ namespace StockSharp.Algo.Testing
 					//else if (item.Side == Sides.Sell && quote.Trade.Price < quote.Order.Price)
 					//	item.TradePrice = item.Price;
 
-					activeOrder.Volume -= item.Volume;
+					activeOrder.OrderVolume -= item.OrderVolume;
 
-					if (activeOrder.Volume == 0)
+					if (activeOrder.OrderVolume == 0)
 					{
 						item.OrderState = OrderStates.Done;
 						_activeOrders.Dequeue();
