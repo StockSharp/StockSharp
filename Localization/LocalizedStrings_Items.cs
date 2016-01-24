@@ -1038,6 +1038,26 @@ namespace StockSharp.Localization
 		public static string Volume => GetString(VolumeKey);
 
 		/// <summary>
+		/// Volume (order)
+		/// </summary>
+		public const string VolumeOrderKey = "VolumeOrder";
+
+		/// <summary>
+		/// Volume (order)
+		/// </summary>
+		public static string VolumeOrder => GetString(VolumeOrderKey);
+
+		/// <summary>
+		/// Volume (trade)
+		/// </summary>
+		public const string VolumeTradeKey = "VolumeTrade";
+
+		/// <summary>
+		/// Volume (trade)
+		/// </summary>
+		public static string VolumeTrade => GetString(VolumeTradeKey);
+
+		/// <summary>
 		/// Total candle volume.
 		/// </summary>
 		public const string TotalCandleVolumeKey = "TotalCandleVolume";
@@ -4110,7 +4130,7 @@ namespace StockSharp.Localization
 		/// <summary>
 		/// Fill Or Kill
 		/// </summary>
-		public const string FOKKey = "Foc";
+		public const string FOKKey = "FOK";
 
 		/// <summary>
 		/// Fill Or Kill

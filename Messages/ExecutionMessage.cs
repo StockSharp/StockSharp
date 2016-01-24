@@ -205,7 +205,7 @@ namespace StockSharp.Messages
 		/// Number of contracts in an order.
 		/// </summary>
 		[DataMember]
-		[DisplayNameLoc(LocalizedStrings.VolumeKey)]
+		[DisplayNameLoc(LocalizedStrings.VolumeOrderKey)]
 		[DescriptionLoc(LocalizedStrings.OrderVolumeKey)]
 		[MainCategory]
 		[Nullable]
@@ -215,7 +215,7 @@ namespace StockSharp.Messages
 		/// Number of contracts in an trade.
 		/// </summary>
 		[DataMember]
-		[DisplayNameLoc(LocalizedStrings.VolumeKey)]
+		[DisplayNameLoc(LocalizedStrings.VolumeTradeKey)]
 		[DescriptionLoc(LocalizedStrings.TradeVolumeKey)]
 		[MainCategory]
 		[Nullable]

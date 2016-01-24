@@ -100,6 +100,8 @@ Str84;Minimum price of a candle.;Минимальная цена свечи.
 ClosingPrice;Closing price;Цена закрытия
 Str86;Candle closing price.;Цена закрытия свечи.
 Volume;Volume;Объем
+VolumeOrder;Volume (order);Объем (заявка)
+VolumeTrade;Volume (trade);Объем (сделка)
 TotalCandleVolume;Total candle volume.;Суммарный объем свечи.
 OI;OI;ОИ
 OpenInterest;Open interest.;Открытый интерес.
@@ -407,7 +409,7 @@ Str402;Completed;Завершена
 Str403;Buy;Покупка
 Str404;Sell;Продажа
 Str405;Put in queue;Поставить в очередь
-FOC;Fill Or Kill;Немедленно или отклонить
+FOK;Fill Or Kill;Немедленно или отклонить
 IOC;Immediate Or Cancel;Снять остаток
 Str408;Work mode (time, holidays etc.).;Режим работы (время, выходные дни и т.д.).
 Str409;Periods;Периоды
