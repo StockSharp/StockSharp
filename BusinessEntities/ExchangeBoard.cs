@@ -46,15 +46,9 @@ namespace StockSharp.BusinessEntities
 			private readonly CachedSynchronizedDictionary<string, ExchangeBoard> _boards = new CachedSynchronizedDictionary<string, ExchangeBoard>(StringComparer.InvariantCultureIgnoreCase);
 			private readonly CachedSynchronizedDictionary<string, Exchange> _exchanges = new CachedSynchronizedDictionary<string, Exchange>(StringComparer.InvariantCultureIgnoreCase);
 
-			IEnumerable<ExchangeBoard> IExchangeInfoProvider.Boards
-			{
-				get { return _boards.CachedValues; }
-			}
+			IEnumerable<ExchangeBoard> IExchangeInfoProvider.Boards => _boards.CachedValues;
 
-			IEnumerable<Exchange> IExchangeInfoProvider.Exchanges
-			{
-				get { return _exchanges.CachedValues; }
-			}
+			IEnumerable<Exchange> IExchangeInfoProvider.Exchanges => _exchanges.CachedValues;
 
 			ExchangeBoard IExchangeInfoProvider.GetExchangeBoard(string code)
 			{
@@ -512,18 +506,12 @@ namespace StockSharp.BusinessEntities
 		/// <summary>
 		/// Is MICEX board.
 		/// </summary>
-		public bool IsMicex
-		{
-			get { return Exchange == Exchange.Moex && this != Forts; }
-		}
+		public bool IsMicex => Exchange == Exchange.Moex && this != Forts;
 
 		/// <summary>
 		/// Is the UX exchange stock market board.
 		/// </summary>
-		public bool IsUxStock
-		{
-			get { return Exchange == Exchange.Ux && this != Ux; }
-		}
+		public bool IsUxStock => Exchange == Exchange.Ux && this != Ux;
 
 		/// <summary>
 		/// Load settings.

@@ -79,38 +79,26 @@ namespace StockSharp.BusinessEntities
 		/// </summary>
 		[DisplayNameLoc(LocalizedStrings.Str496Key)]
 		[DescriptionLoc(LocalizedStrings.Str497Key)]
-		public decimal? SpreadPrice
-		{
-			get { return _isFull ? Ask.Security.ShrinkPrice(Ask.Price - Bid.Price) : (decimal?)null; }
-		}
+		public decimal? SpreadPrice => _isFull ? Ask.Security.ShrinkPrice(Ask.Price - Bid.Price) : (decimal?)null;
 
 		/// <summary>
 		/// Spread by volume. If negative, it best ask has a greater volume than the best bid. Is <see langword="null" />, if one of the quotes is empty.
 		/// </summary>
 		[DisplayNameLoc(LocalizedStrings.Str498Key)]
 		[DescriptionLoc(LocalizedStrings.Str499Key)]
-		public decimal? SpreadVolume
-		{
-			get { return _isFull ? (Ask.Volume - Bid.Volume).Abs() : (decimal?)null; }
-		}
+		public decimal? SpreadVolume => _isFull ? (Ask.Volume - Bid.Volume).Abs() : (decimal?)null;
 
 		/// <summary>
 		/// The middle of spread. Is <see langword="null" />, if one of the quotes is empty.
 		/// </summary>
 		[DisplayNameLoc(LocalizedStrings.Str500Key)]
 		[DescriptionLoc(LocalizedStrings.Str501Key)]
-		public decimal? MiddlePrice
-		{
-			get { return _isFull ? (Bid.Price + SpreadPrice / 2) : null; }
-		}
+		public decimal? MiddlePrice => _isFull ? (Bid.Price + SpreadPrice / 2) : null;
 
 		/// <summary>
 		/// Quotes pair has <see cref="MarketDepthPair.Bid"/> and <see cref="MarketDepthPair.Ask"/>.
 		/// </summary>
-		public bool IsFull
-		{
-			get { return _isFull; }
-		}
+		public bool IsFull => _isFull;
 
 		/// <summary>
 		/// Returns a string that represents the current object.

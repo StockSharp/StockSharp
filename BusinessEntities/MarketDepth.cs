@@ -192,10 +192,7 @@ namespace StockSharp.BusinessEntities
 		/// <summary>
 		/// The best pair. If the order book is empty, will be returned <see langword="null" />.
 		/// </summary>
-		public MarketDepthPair BestPair
-		{
-			get { return GetPair(0); }
-		}
+		public MarketDepthPair BestPair => GetPair(0);
 
 		/// <summary>
 		/// To get the total price size by bids.
@@ -1138,9 +1135,6 @@ namespace StockSharp.BusinessEntities
 				quote.Security == Security;
 		}
 
-		SyncObject ISynchronizedCollection.SyncRoot
-		{
-			get { return _syncRoot; }
-		}
+		SyncObject ISynchronizedCollection.SyncRoot => _syncRoot;
 	}
 }

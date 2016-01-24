@@ -162,10 +162,7 @@ namespace StockSharp.BusinessEntities
 		/// <summary>
 		/// Portfolio associated with the orders received through the orders log.
 		/// </summary>
-		public static Portfolio AnonymousPortfolio
-		{
-			get { return _anonymousPortfolio; }
-		}
+		public static Portfolio AnonymousPortfolio => _anonymousPortfolio;
 
 		/// <summary>
 		/// Create a copy of <see cref="Portfolio"/>.

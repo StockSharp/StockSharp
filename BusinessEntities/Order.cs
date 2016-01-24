@@ -240,10 +240,7 @@ namespace StockSharp.BusinessEntities
 		[DisplayNameLoc(LocalizedStrings.Str526Key)]
 		[DescriptionLoc(LocalizedStrings.Str527Key)]
 		[MainCategory]
-		public ISynchronizedCollection<string> Messages
-		{
-			get { return _messages.Value; }
-		}
+		public ISynchronizedCollection<string> Messages => _messages.Value;
 
 		private DateTimeOffset _lastChangeTime;
 

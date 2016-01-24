@@ -752,10 +752,7 @@ namespace StockSharp.BusinessEntities
 		/// </summary>
 		[Browsable(false)]
 		//[Obsolete("Необходимо использовать метод IConnector.GetSecurityValue.")]
-		public MarketDepthPair BestPair
-		{
-			get { return new MarketDepthPair(this, BestBid, BestAsk); }
-		}
+		public MarketDepthPair BestPair => new MarketDepthPair(this, BestBid, BestAsk);
 
 		private SecurityStates? _state;
 
