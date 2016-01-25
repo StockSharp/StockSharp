@@ -120,7 +120,7 @@ namespace StockSharp.Xaml
 
 			TimeInForceCtrl.SetDataSource<OrderWindowTif>();
 
-			Order = new Order();
+			Order = new Order { Type = OrderTypes.Limit };
 			DataContext = Data = new SecurityData();
 		}
 
@@ -228,6 +228,7 @@ namespace StockSharp.Xaml
 				switch (value.Type)
 				{
 					case OrderTypes.Limit:
+					case null:
 						IsMarketCtrl.IsChecked = false;
 						break;
 					case OrderTypes.Market:
