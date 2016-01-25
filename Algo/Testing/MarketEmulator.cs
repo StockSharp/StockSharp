@@ -250,7 +250,8 @@ namespace StockSharp.Algo.Testing
 									IsCancelled = true,
 									OrderState = OrderStates.Failed,
 									Error = new InvalidOperationException(error),
-									ServerTime = serverTime
+									ServerTime = serverTime,
+									HasOrderInfo = true,
 								});
 
 								// registration error
@@ -263,7 +264,8 @@ namespace StockSharp.Algo.Testing
 									IsCancelled = false,
 									OrderState = OrderStates.Failed,
 									Error = new InvalidOperationException(error),
-									ServerTime = serverTime
+									ServerTime = serverTime,
+									HasOrderInfo = true,
 								});
 
 								this.AddErrorLog(LocalizedStrings.Str1148Params, orderMsg.OldTransactionId);
@@ -685,7 +687,8 @@ namespace StockSharp.Algo.Testing
 						ExecutionType = ExecutionTypes.Transaction,
 						Side = message.Side,
 						OrderPrice = message.OrderPrice,
-						OrderVolume = message.OrderVolume
+						OrderVolume = message.OrderVolume,
+						HasOrderInfo = true,
 					}, false);
 				}
 
@@ -1121,6 +1124,7 @@ namespace StockSharp.Algo.Testing
 					OrderState = message.OrderState,
 					PortfolioName = message.PortfolioName,
 					ExecutionType = ExecutionTypes.Transaction,
+					HasOrderInfo = true,
 					ServerTime = GetServerTime(time),
 				};
 			}
@@ -1137,6 +1141,7 @@ namespace StockSharp.Algo.Testing
 					TradePrice = price,
 					TradeVolume = volume,
 					ExecutionType = ExecutionTypes.Transaction,
+					HasTradeInfo = true,
 					ServerTime = GetServerTime(time),
 					Side = message.Side,
 				};

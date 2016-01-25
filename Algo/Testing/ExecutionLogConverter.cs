@@ -617,6 +617,7 @@ namespace StockSharp.Algo.Testing
 						ServerTime = serverTime,
 						SecurityId = regMsg.SecurityId,
 						ExecutionType = ExecutionTypes.Transaction,
+						HasOrderInfo = true,
 						TransactionId = regMsg.TransactionId,
 						OrderPrice = regMsg.Price,
 						OrderVolume = regMsg.Volume,
@@ -644,6 +645,7 @@ namespace StockSharp.Algo.Testing
 						ServerTime = serverTime,
 						SecurityId = replaceMsg.SecurityId,
 						ExecutionType = ExecutionTypes.Transaction,
+						HasOrderInfo = true,
 						IsCancelled = true,
 						OrderId = replaceMsg.OldOrderId,
 						OriginalTransactionId = replaceMsg.OldTransactionId,
@@ -660,6 +662,7 @@ namespace StockSharp.Algo.Testing
 						ServerTime = serverTime,
 						SecurityId = replaceMsg.SecurityId,
 						ExecutionType = ExecutionTypes.Transaction,
+						HasOrderInfo = true,
 						TransactionId = replaceMsg.TransactionId,
 						OrderPrice = replaceMsg.Price,
 						OrderVolume = replaceMsg.Volume,
@@ -678,6 +681,7 @@ namespace StockSharp.Algo.Testing
 					yield return new ExecutionMessage
 					{
 						ExecutionType = ExecutionTypes.Transaction,
+						HasOrderInfo = true,
 						IsCancelled = true,
 						OrderId = cancelMsg.OrderId,
 						TransactionId = cancelMsg.TransactionId,
