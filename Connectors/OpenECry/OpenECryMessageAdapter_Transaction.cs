@@ -321,6 +321,7 @@ namespace StockSharp.OpenECry
 				},
 				Comment = order.Comments,
 				OrderPrice = order.Contract.Cast(order.Price) ?? 0,
+				HasOrderInfo = true,
 			};
 
 			var currVersion = order.Versions.Current;
@@ -488,6 +489,7 @@ namespace StockSharp.OpenECry
 				TradeVolume = fill.Quantity,
 				SystemComment = fill.Comments,
 				Commission = fill.Commission.ToDecimal(),
+				HasTradeInfo = true,
 			});
 		}
 

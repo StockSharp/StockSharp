@@ -585,7 +585,8 @@ namespace StockSharp.Quik
 				ExecutionType = ExecutionTypes.Transaction,
 				OrderState = OrderStates.Failed,
 				IsCancelled = true,
-				Error = error
+				Error = error,
+				HasOrderInfo = true,
 			});
 
 			SendOutMessage(new ExecutionMessage
@@ -594,7 +595,8 @@ namespace StockSharp.Quik
 				OriginalTransactionId = replaceMessage.TransactionId,
 				ExecutionType = ExecutionTypes.Transaction,
 				OrderState = OrderStates.Failed,
-				Error = error
+				Error = error,
+				HasOrderInfo = true,
 			});
 		}
 

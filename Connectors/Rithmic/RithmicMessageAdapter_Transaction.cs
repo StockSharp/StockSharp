@@ -335,7 +335,8 @@ namespace StockSharp.Rithmic
 		{
 			var message = ProcessOrderReport(report, new ExecutionMessage
 			{
-				ExecutionType = ExecutionTypes.Transaction
+				ExecutionType = ExecutionTypes.Transaction,
+				HasOrderInfo = true,
 			});
 
 			if (message == null)
@@ -542,7 +543,8 @@ namespace StockSharp.Rithmic
 				{
 					ExecutionType = ExecutionTypes.Transaction,
 					TradeVolume = report.FillSize,
-					TradePrice = report.FillPrice.ToDecimal()
+					TradePrice = report.FillPrice.ToDecimal(),
+					HasTradeInfo = true,
 				});
 
 				if (message == null)

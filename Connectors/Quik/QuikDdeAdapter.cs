@@ -927,6 +927,7 @@ namespace StockSharp.Quik
 					TradePrice = func.Get<decimal>(DdeMyTradeColumns.Price),
 					TradeVolume = func.Get<decimal>(DdeMyTradeColumns.Volume),
 					ExecutionType = ExecutionTypes.Transaction,
+					HasTradeInfo = true,
 				};
 
 				ExportExtendedProperties(MyTradesTable, trade, row, func);
@@ -1218,6 +1219,7 @@ namespace StockSharp.Quik
 					ExpiryDate = func.GetExpiryDate(DdeOrderColumns.ExpiryDate),
 
 					ExecutionType = ExecutionTypes.Transaction,
+					HasOrderInfo = true,
 
 					DepoName = account
 				};
@@ -1576,7 +1578,9 @@ namespace StockSharp.Quik
 
 					Condition = condition,
 					ExecutionType = ExecutionTypes.Transaction,
-					DepoName = account
+					DepoName = account,
+
+					HasOrderInfo = true,
 				};
 
 				var derivedOrderId = func.GetZeroable<long>(DdeStopOrderColumns.DerivedOrderId);

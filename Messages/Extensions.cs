@@ -384,7 +384,7 @@ namespace StockSharp.Messages
 			if (message == null)
 				throw new ArgumentNullException(nameof(message));
 
-			return message.ExecutionType == ExecutionTypes.Transaction && (message.OrderId != null || message.OrderStringId != null);
+			return message.ExecutionType == ExecutionTypes.Transaction && message.HasOrderInfo;
 		}
 
 		/// <summary>
@@ -397,7 +397,7 @@ namespace StockSharp.Messages
 			if (message == null)
 				throw new ArgumentNullException(nameof(message));
 
-			return message.ExecutionType == ExecutionTypes.Transaction && (message.TradeId != null || message.TradeStringId != null);
+			return message.ExecutionType == ExecutionTypes.Transaction && message.HasTradeInfo;
 		}
 	}
 }

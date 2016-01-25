@@ -396,6 +396,9 @@ namespace StockSharp.Algo.Storages.Binary
 				WriteString(writer, metaInfo.Comments, msg.Comment);
 				WriteString(writer, metaInfo.Errors, msg.Error?.Message);
 
+				writer.Write(msg.HasOrderInfo);
+				writer.Write(msg.HasTradeInfo);
+
 				if (metaInfo.Version < MarketDataVersions.Version55)
 					continue;
 
@@ -537,6 +540,9 @@ namespace StockSharp.Algo.Storages.Binary
 				Comment = comment,
 
 				TradeStatus = tradeStatus,
+
+				HasOrderInfo = reader.Read(),
+				HasTradeInfo = reader.Read(),
 			};
 
 			if (orderPrice != null)

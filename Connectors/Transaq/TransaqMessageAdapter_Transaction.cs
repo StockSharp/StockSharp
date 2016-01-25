@@ -350,6 +350,7 @@ namespace StockSharp.Transaq
 					PortfolioName = order.Client,
 					ExpiryDate = order.ExpDate?.ApplyTimeZone(TimeHelper.Moscow),
 					ExecutionType = ExecutionTypes.Transaction,
+					HasOrderInfo = true,
 				};
 
 				var usualOrder = order as TransaqOrder;
@@ -519,6 +520,7 @@ namespace StockSharp.Transaq
 					PortfolioName = trade.Client,
 					ExecutionType = ExecutionTypes.Transaction,
 					Commission = trade.Commission,
+					HasTradeInfo = true,
 				});
 			}
 		}

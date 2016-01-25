@@ -191,7 +191,9 @@ namespace StockSharp.Algo.Export
 								.SetCell(8, index, message.OrderType)
 								.SetCell(9, index, message.OrderState)
 								.SetCell(10, index, message.TradeId == null ? message.TradeStringId : message.TradeId.To<string>())
-								.SetCell(11, index, message.TradePrice);
+								.SetCell(11, index, message.TradePrice)
+								.SetCell(12, index, message.HasOrderInfo)
+								.SetCell(13, index, message.HasTradeInfo);
 
 							index++;
 

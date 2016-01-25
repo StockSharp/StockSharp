@@ -100,6 +100,7 @@ namespace StockSharp.AlfaDirect
 					OriginalTransactionId = transId,
 					OrderId = orderId,
 					ExecutionType = ExecutionTypes.Transaction,
+					HasOrderInfo = true,
 				};
 
 				var orderTime = f.TsTime.GetValue(cols);
@@ -216,6 +217,7 @@ namespace StockSharp.AlfaDirect
 				Error = new InvalidOperationException(LocalizedStrings.Str2258Params.Put(transactionId, message)),
 				OrderStatus = OrderStatus.RejectedBySystem,
 				ExecutionType = ExecutionTypes.Transaction,
+				HasOrderInfo = true,
 			});
 		}
 
@@ -315,6 +317,7 @@ namespace StockSharp.AlfaDirect
 					ServerTime = f.TsTime.GetValue(cols).ApplyTimeZone(TimeHelper.Moscow),
 					TradeVolume = f.Qty.GetValue(cols),
 					OriginSide = f.BuySellStr.GetValue(cols),
+					HasTradeInfo = true,
 				});
 			}
 		}

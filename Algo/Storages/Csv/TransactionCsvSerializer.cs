@@ -45,7 +45,7 @@ namespace StockSharp.Algo.Storages.Csv
 		/// <param name="data">Data.</param>
 		protected override void Write(TextWriter writer, ExecutionMessage data)
 		{
-			writer.Write($"{data.ServerTime.UtcDateTime.ToString(TimeFormat)};{data.ServerTime.ToString("zzz")};{data.TransactionId};{data.OrderId};{data.OrderPrice};{data.OrderVolume};{data.Side};{data.OrderState};{data.TimeInForce};{data.TradeId};{data.TradePrice};{data.TradeVolume};{data.PortfolioName};{data.IsSystem}");
+			writer.Write($"{data.ServerTime.UtcDateTime.ToString(TimeFormat)};{data.ServerTime.ToString("zzz")};{data.TransactionId};{data.OrderId};{data.OrderPrice};{data.OrderVolume};{data.Side};{data.OrderState};{data.TimeInForce};{data.TradeId};{data.TradePrice};{data.TradeVolume};{data.PortfolioName};{data.IsSystem};{data.HasOrderInfo};{data.HasTradeInfo}");
 		}
 
 		/// <summary>
@@ -56,24 +56,58 @@ namespace StockSharp.Algo.Storages.Csv
 		/// <returns>Data.</returns>
 		protected override ExecutionMessage Read(FastCsvReader reader, DateTime date)
 		{
-			return new ExecutionMessage
+			var msg = new ExecutionMessage
 			{
 				SecurityId = SecurityId,
 				ExecutionType = ExecutionTypes.Transaction,
 				ServerTime = reader.ReadTime(date),
 				TransactionId = reader.ReadLong(),
+				OriginalTransactionId = reader.ReadLong(),
 				OrderId = reader.ReadLong(),
+				OrderStringId = reader.ReadString(),
+				OrderBoardId = reader.ReadString(),
+				UserOrderId = reader.ReadString(),
 				OrderPrice = reader.ReadDecimal(),
 				OrderVolume = reader.ReadDecimal(),
+				Balance = reader.ReadNullableDecimal(),
+				VisibleVolume = reader.ReadNullableDecimal(),
 				Side = reader.ReadEnum<Sides>(),
-				OrderState = reader.ReadEnum<OrderStates>(),
-				TimeInForce = reader.ReadEnum<TimeInForce>(),
+				OriginSide = reader.ReadNullableEnum<Sides>(),
+				OrderState = reader.ReadNullableEnum<OrderStates>(),
+				OrderType = reader.ReadNullableEnum<OrderTypes>(),
+				TimeInForce = reader.ReadNullableEnum<TimeInForce>(),
 				TradeId = reader.ReadNullableLong(),
+				TradeStringId = reader.ReadString(),
 				TradePrice = reader.ReadNullableDecimal(),
 				TradeVolume = reader.ReadDecimal(),
 				PortfolioName = reader.ReadString(),
+				ClientCode = reader.ReadString(),
+				DepoName = reader.ReadString(),
 				IsSystem = reader.ReadNullableBool(),
+				HasOrderInfo = reader.ReadBool(),
+				HasTradeInfo = reader.ReadBool(),
+				Commission = reader.ReadNullableDecimal(),
+				Currency = reader.ReadNullableEnum<CurrencyTypes>(),
+				Comment = reader.ReadString(),
+				DerivedOrderId = reader.ReadNullableLong(),
+				DerivedOrderStringId = reader.ReadString(),
+				IsUpTick = reader.ReadNullableBool(),
+				IsCancelled = reader.ReadBool(),
+				OpenInterest = reader.ReadNullableDecimal(),
+				PnL = reader.ReadNullableDecimal(),
+				Position = reader.ReadNullableDecimal(),
+				Slippage = reader.ReadNullableDecimal(),
+				SystemComment = reader.ReadString(),
+				TradeStatus = reader.ReadNullableInt(),
+				OrderStatus = reader.ReadNullableEnum<OrderStatus>(),
 			};
+
+			var error = reader.ReadString();
+
+			if (!error.IsEmpty())
+				msg.Error = new InvalidOperationException(error);
+
+			return msg;
 		}
 	}
 }

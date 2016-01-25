@@ -46,6 +46,7 @@ namespace StockSharp.BitStamp
 				ServerTime = order.Time.ApplyTimeZone(TimeZoneInfo.Utc),
 				OriginalTransactionId = regMsg.TransactionId,
 				OrderState = OrderStates.Active,
+				HasOrderInfo = true,
 			});
 		}
 
@@ -63,6 +64,7 @@ namespace StockSharp.BitStamp
 				OriginalTransactionId = cancelMsg.TransactionId,
 				OrderState = isOk ? OrderStates.Done : OrderStates.Failed,
 				Error = isOk ? null : new InvalidOperationException(LocalizedStrings.Str3300),
+				HasOrderInfo = true,
 			});
 		}
 
@@ -100,7 +102,8 @@ namespace StockSharp.BitStamp
 				SecurityId = _btcUsd,
 				ServerTime = order.Time.ApplyTimeZone(TimeZoneInfo.Utc),
 				PortfolioName = GetPortfolioName(),
-				OrderState = OrderStates.Active
+				OrderState = OrderStates.Active,
+				HasOrderInfo = true,
 			});
 		}
 
@@ -123,6 +126,7 @@ namespace StockSharp.BitStamp
 				SecurityId = _btcUsd,
 				ServerTime = trade.Time.ApplyTimeZone(TimeZoneInfo.Utc),
 				PortfolioName = GetPortfolioName(),
+				HasTradeInfo = true,
 			});
 
 			var info = _orderInfo.TryGetValue(trade.OrderId);
@@ -140,7 +144,8 @@ namespace StockSharp.BitStamp
 				ExecutionType = ExecutionTypes.Transaction,
 				OrderId = trade.OrderId,
 				Balance = info.Second,
-				OrderState = info.Second > 0 ? OrderStates.Active : OrderStates.Done
+				OrderState = info.Second > 0 ? OrderStates.Active : OrderStates.Done,
+				HasOrderInfo = true,
 			});
 		}
 

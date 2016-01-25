@@ -127,6 +127,8 @@ namespace StockSharp.Algo.Export
 						writer.WriteAttribute("state", item.OrderState);
 						writer.WriteAttribute("tradeId", item.TradeId == null ? item.TradeStringId : item.TradeId.To<string>());
 						writer.WriteAttribute("tradePrice", item.TradePrice);
+						writer.WriteAttribute("isOrder", item.HasOrderInfo);
+						writer.WriteAttribute("isTrade", item.HasTradeInfo);
 
 						writer.WriteEndElement();
 					});

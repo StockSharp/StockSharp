@@ -87,7 +87,8 @@ namespace StockSharp.SmartCom
 				ExecutionType = ExecutionTypes.Transaction,
 				OrderStringId = smartOrderId,
 				OrderState = OrderStates.Failed,
-				Error = new InvalidOperationException(LocalizedStrings.Str1869Params.Put(smartOrderId))
+				Error = new InvalidOperationException(LocalizedStrings.Str1869Params.Put(smartOrderId)),
+				HasOrderInfo = true,
 			});
 		}
 
@@ -157,6 +158,7 @@ namespace StockSharp.SmartCom
 				ServerTime = time.ApplyTimeZone(TimeHelper.Moscow),
 				TradeVolume = volume,
 				TradePrice = price,
+				HasTradeInfo = true,
 			});
 		}
 
@@ -168,6 +170,7 @@ namespace StockSharp.SmartCom
 				OriginalTransactionId = transactionId,
 				OrderState = OrderStates.Active,
 				OrderStringId = smartOrderId,
+				HasOrderInfo = true,
 			});
 		}
 
@@ -181,7 +184,8 @@ namespace StockSharp.SmartCom
 				OriginalTransactionId = transactionId,
 				OrderState = OrderStates.Failed,
 				OrderStringId = smartOrderId,
-				Error = new InvalidOperationException(reason ?? LocalizedStrings.Str1870Params.Put(transactionId))
+				Error = new InvalidOperationException(reason ?? LocalizedStrings.Str1870Params.Put(transactionId)),
+				HasOrderInfo = true,
 			});
 		}
 
@@ -195,7 +199,8 @@ namespace StockSharp.SmartCom
 				//OriginalTransactionId = transactionId,
 				OrderStringId = smartOrderId,
 				OrderState = OrderStates.Failed,
-				Error = new InvalidOperationException(LocalizedStrings.Str1871Params.Put(smartOrderId))
+				Error = new InvalidOperationException(LocalizedStrings.Str1871Params.Put(smartOrderId)),
+				HasOrderInfo = true,
 			});
 		}
 
@@ -232,6 +237,7 @@ namespace StockSharp.SmartCom
 						ServerTime = time.ApplyTimeZone(TimeHelper.Moscow),
 						OrderState = OrderStates.Failed,
 						Error = new InvalidOperationException(LocalizedStrings.Str1873Params.Put(transactionId)),
+						HasOrderInfo = true,
 					});
 				}
 				//}
@@ -325,6 +331,7 @@ namespace StockSharp.SmartCom
 				ExpiryDate = isOneDay ? DateTimeOffset.Now.Date.ApplyTimeZone(TimeHelper.Moscow) : (DateTimeOffset?)null,
 				Condition = orderType == OrderTypes.Conditional ? new SmartComOrderCondition { StopPrice = stop } : null,
 				ExecutionType = ExecutionTypes.Transaction,
+				HasOrderInfo = true,
 			});
 		}
 	}

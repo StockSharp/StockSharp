@@ -67,6 +67,8 @@ namespace StockSharp.Algo.Export.Database
 			};
 			yield return new ColumnDescription("TradePrice") { DbType = typeof(decimal?), ValueRestriction = new DecimalRestriction { Scale = security.PriceStep?.GetCachedDecimals() ?? 1 } };
 			yield return new ColumnDescription("TradeVolume") { DbType = typeof(decimal?), ValueRestriction = new DecimalRestriction { Scale = security.VolumeStep?.GetCachedDecimals() ?? 1 } };
+			yield return new ColumnDescription(nameof(ExecutionMessage.HasOrderInfo)) { DbType = typeof(bool) };
+			yield return new ColumnDescription(nameof(ExecutionMessage.HasOrderInfo)) { DbType = typeof(bool) };
 		}
 
 		protected override IDictionary<string, object> ConvertToParameters(ExecutionMessage value)
@@ -88,6 +90,8 @@ namespace StockSharp.Algo.Export.Database
 				{ "TradeId", value.TradeId == null ? value.TradeStringId : value.TradeId.To<string>() },
 				{ "TradePrice", value.TradePrice },
 				{ "TradeVolume", value.TradeVolume },
+				{ nameof(value.HasOrderInfo), value.HasOrderInfo },
+				{ nameof(value.HasTradeInfo), value.HasTradeInfo },
 			};
 			return result;
 		}

@@ -60,7 +60,8 @@ namespace StockSharp.Btce
 				OrderId = reply.Command.OrderId,
 				Balance = (decimal)reply.Command.Remains,
 				OrderState = OrderStates.Active,
-				ExecutionType = ExecutionTypes.Transaction
+				ExecutionType = ExecutionTypes.Transaction,
+				HasOrderInfo = true,
 			});
 
 			ProcessFunds(reply.Command.Funds);
@@ -80,7 +81,8 @@ namespace StockSharp.Btce
 				OriginalTransactionId = cancelMsg.TransactionId,
 				OrderId = cancelMsg.OrderId,
 				OrderState = OrderStates.Done,
-				ExecutionType = ExecutionTypes.Transaction
+				ExecutionType = ExecutionTypes.Transaction,
+				HasOrderInfo = true,
 			});
 
 			ProcessFunds(reply.Command.Funds);
@@ -106,7 +108,8 @@ namespace StockSharp.Btce
 				},
 				ServerTime = order.Timestamp.ApplyTimeZone(TimeHelper.Moscow),
 				PortfolioName = GetPortfolioName(),
-				OrderState = order.Status.ToOrderState()
+				OrderState = order.Status.ToOrderState(),
+				HasOrderInfo = true,
 			});
 		}
 
@@ -137,6 +140,7 @@ namespace StockSharp.Btce
 				},
 				ServerTime = trade.Timestamp.ApplyTimeZone(TimeHelper.Moscow),
 				PortfolioName = GetPortfolioName(),
+				HasTradeInfo = true,
 			});
 
 			var info = _orderInfo.TryGetValue(trade.OrderId);
@@ -154,7 +158,8 @@ namespace StockSharp.Btce
 				ExecutionType = ExecutionTypes.Transaction,
 				OrderId = trade.OrderId,
 				Balance = info.Second,
-				OrderState = info.Second > 0 ? OrderStates.Active : OrderStates.Done
+				OrderState = info.Second > 0 ? OrderStates.Active : OrderStates.Done,
+				HasOrderInfo = true,
 			});
 		}
 

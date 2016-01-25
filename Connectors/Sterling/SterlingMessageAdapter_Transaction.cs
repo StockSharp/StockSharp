@@ -140,7 +140,8 @@ namespace StockSharp.Sterling
 					Comment = order.bstrUser,
 					OrderState = ((STIOrderStatus)order.nOrderStatus).ToOrderStates(),
 					OrderId = order.nOrderRecordId,
-					ServerTime = order.bstrOrderTime.StrToDateTime()
+					ServerTime = order.bstrOrderTime.StrToDateTime(),
+					HasOrderInfo = true,
 				});
 			}
 
@@ -162,6 +163,7 @@ namespace StockSharp.Sterling
 					TradeVolume = trade.nQuantity,
 					Commission = trade.bEcnFee,
 					ServerTime = trade.bstrTradeTime.StrToDateTime(),
+					HasTradeInfo = true,
 				});
 			}
 		}
@@ -181,7 +183,8 @@ namespace StockSharp.Sterling
 				OrderId = msg.OrderRecordID,
 				TradeId = msg.TradeRecordID,
 				ServerTime = msg.TradeTime.StrToDateTime(),
-				LocalTime = msg.UpdateTime.StrToDateTime()
+				LocalTime = msg.UpdateTime.StrToDateTime(),
+				HasTradeInfo = true,
 			});
 		}
 
@@ -200,7 +203,8 @@ namespace StockSharp.Sterling
 				OrderId = msg.OrderRecordID,
 				VisibleVolume = msg.Display,
 				ServerTime = msg.OrderTime.StrToDateTime(),
-				LocalTime = msg.UpdateTime.StrToDateTime()
+				LocalTime = msg.UpdateTime.StrToDateTime(),
+				HasOrderInfo = true,
 			});
 		}
 
@@ -212,6 +216,7 @@ namespace StockSharp.Sterling
 				OrderState = OrderStates.Failed,
 				Error = new InvalidOperationException(),
 				ExecutionType = ExecutionTypes.Transaction,
+				HasOrderInfo = true,
 			});
 		}
 
@@ -222,6 +227,7 @@ namespace StockSharp.Sterling
 				OriginalTransactionId = msg.ClOrderID.To<long>(),
 				OrderState = OrderStates.Active,
 				ExecutionType = ExecutionTypes.Transaction,
+				HasOrderInfo = true,
 			});
 		}
 

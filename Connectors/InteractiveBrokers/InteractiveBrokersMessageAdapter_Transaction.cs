@@ -551,6 +551,7 @@ namespace StockSharp.InteractiveBrokers
 				Balance = balance,
 				OrderStatus = status,
 				OrderState = status.ToOrderState(),
+				HasOrderInfo = true,
 			};
 
 			execMsg.SetAveragePrice(avgPrice);
@@ -1099,6 +1100,7 @@ namespace StockSharp.InteractiveBrokers
 				Comment = comment,
 				OrderStatus = status,
 				OrderState = status?.ToOrderState(),
+				HasOrderInfo = true,
 			};
 
 			if (orderMsg.OrderState == OrderStates.Active || orderMsg.OrderState == OrderStates.Done)
@@ -1231,6 +1233,7 @@ namespace StockSharp.InteractiveBrokers
 				PortfolioName = portfolio,
 				ServerTime = time,
 				SecurityId = secId,
+				HasTradeInfo = true,
 			};
 
 			if (permId != null)
@@ -1493,6 +1496,7 @@ namespace StockSharp.InteractiveBrokers
 				OriginalTransactionId = transactionId,
 				OrderState = OrderStates.Failed,
 				Error = new InvalidOperationException(errorMsg),
+				HasOrderInfo = true,
 			});
 		}
 	}

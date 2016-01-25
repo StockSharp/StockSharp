@@ -193,6 +193,16 @@ namespace StockSharp.Messages
 		public string DerivedOrderStringId { get; set; }
 
 		/// <summary>
+		/// Is the message contains order info.
+		/// </summary>
+		public bool HasOrderInfo { get; set; }
+
+		/// <summary>
+		/// Is the message contains trade info.
+		/// </summary>
+		public bool HasTradeInfo { get; set; }
+
+		/// <summary>
 		/// Order price.
 		/// </summary>
 		[DataMember]
@@ -562,6 +572,9 @@ namespace StockSharp.Messages
 
 				PnL = PnL,
 				Position = Position,
+
+				HasTradeInfo = HasTradeInfo,
+				HasOrderInfo = HasOrderInfo
 			};
 
 			this.CopyExtensionInfo(clone);

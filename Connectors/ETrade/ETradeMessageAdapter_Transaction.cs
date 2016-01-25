@@ -53,6 +53,7 @@ namespace StockSharp.ETrade
 					Error = new InvalidOperationException(LocalizedStrings.Str2258Params.Put(transId, ex)),
 					OrderStatus = OrderStatus.RejectedBySystem,
 					ExecutionType = ExecutionTypes.Transaction,
+					HasOrderInfo = true,
 				});
 				return;
 			}
@@ -66,7 +67,8 @@ namespace StockSharp.ETrade
 				OrderState = OrderStates.Active,
 				OrderId = data.orderNum,
 				ExecutionType = ExecutionTypes.Transaction,
-				ServerTime = ETradeUtil.ETradeTimestampToUTC(data.orderTime)
+				ServerTime = ETradeUtil.ETradeTimestampToUTC(data.orderTime),
+				HasOrderInfo = true,
 			};
 
 			SaveOrder(transId, msg.OrderId ?? 0);
@@ -99,6 +101,7 @@ namespace StockSharp.ETrade
 					ExecutionType = ExecutionTypes.Transaction,
 					OrderState = OrderStates.Failed,
 					Error = new InvalidOperationException(LocalizedStrings.Str3373Params.Put(orderId, ex)),
+					HasOrderInfo = true,
 				});
 
 				return;
@@ -111,7 +114,8 @@ namespace StockSharp.ETrade
 				PortfolioName = data.accountId.To<string>(),
 				ExecutionType = ExecutionTypes.Transaction,
 				OrderStatus = OrderStatus.SentToCanceled,
-				ServerTime = ETradeUtil.ETradeTimestampToUTC(data.cancelTime)
+				ServerTime = ETradeUtil.ETradeTimestampToUTC(data.cancelTime),
+				HasOrderInfo = true,
 			};
 
 			this.AddDebugLog("ord #{0}: {1}", orderId, data.resultMessage);
@@ -170,6 +174,7 @@ namespace StockSharp.ETrade
 					ServerTime = ETradeUtil.ETradeTimestampToUTC(nativeOrder.orderExecutedTime > 0 ? nativeOrder.orderExecutedTime : nativeOrder.orderPlacedTime), 
 					OrderState = tuple.Item1, 
 					OrderStatus = tuple.Item2,
+					HasOrderInfo = true,
 				};
 
 				switch (orderType)

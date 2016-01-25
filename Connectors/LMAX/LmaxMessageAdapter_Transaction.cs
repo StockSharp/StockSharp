@@ -206,7 +206,8 @@ namespace StockSharp.LMAX
 				OrderStringId = lmaxOrder.OrderId,
 				ExecutionType = ExecutionTypes.Transaction,
 				Commission = lmaxOrder.Commission,
-				ServerTime = CurrentTime.Convert(TimeZoneInfo.Utc)
+				ServerTime = CurrentTime.Convert(TimeZoneInfo.Utc),
+				HasOrderInfo = true,
 			};
 
 			msg.OrderState = lmaxOrder.CancelledQuantity > 0
@@ -237,7 +238,8 @@ namespace StockSharp.LMAX
 				ExecutionType = ExecutionTypes.Transaction,
 				Side = execution.Order.Quantity > 0 ? Sides.Buy : Sides.Sell,
 				Commission = execution.Order.Commission,
-				ServerTime = CurrentTime.Convert(TimeZoneInfo.Utc)
+				ServerTime = CurrentTime.Convert(TimeZoneInfo.Utc),
+				HasTradeInfo = true,
 			});
 		}
 
@@ -266,7 +268,8 @@ namespace StockSharp.LMAX
 				OrderState = OrderStates.Failed,
 				Error = new InvalidOperationException(evt.Reason),
 				PortfolioName = evt.AccountId.To<string>(),
-				ServerTime = CurrentTime.Convert(TimeZoneInfo.Utc)
+				ServerTime = CurrentTime.Convert(TimeZoneInfo.Utc),
+				HasOrderInfo = true,
 			});
 		}
 	}

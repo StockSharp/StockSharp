@@ -67,6 +67,7 @@ namespace StockSharp.Oanda
 				ServerTime = response.Time.FromOanda(),
 				ExecutionType = ExecutionTypes.Transaction,
 				PortfolioName = message.PortfolioName,
+				HasOrderInfo = true,
 			};
 
 			var tradeData = response.TradeOpened;
@@ -94,6 +95,7 @@ namespace StockSharp.Oanda
 					TradeVolume = tradeData.Units,
 					ServerTime = tradeData.Time.FromOanda(),
 					TradeId = tradeData.Id,
+					HasTradeInfo = true,
 				});
 			}
 		}
@@ -114,6 +116,7 @@ namespace StockSharp.Oanda
 				Balance = response.Units,
 				ServerTime = response.Time.FromOanda(),
 				PortfolioName = message.PortfolioName,
+				HasOrderInfo = true,
 			});
 		}
 
@@ -143,6 +146,7 @@ namespace StockSharp.Oanda
 				OrderState = OrderStates.Done,
 				ServerTime = response.Time.FromOanda(),
 				PortfolioName = message.PortfolioName,
+				HasOrderInfo = true,
 			});
 
 			SendOutMessage(new ExecutionMessage
@@ -153,6 +157,7 @@ namespace StockSharp.Oanda
 				OrderState = OrderStates.Active,
 				ServerTime = response.Time.FromOanda(),
 				PortfolioName = message.PortfolioName,
+				HasOrderInfo = true,
 			});
 		}
 
@@ -207,6 +212,7 @@ namespace StockSharp.Oanda
 							ExpiryDate = order.Expiry?.FromOanda(),
 							Condition = condition,
 							PortfolioName = GetPortfolioName(accountId),
+							HasOrderInfo = true,
 						});
 					}
 
@@ -256,6 +262,8 @@ namespace StockSharp.Oanda
 								StopLossOffset = stopLoss,
 								TrailingStopLossOffset = tralingStop,
 							} : null,
+							HasOrderInfo = true,
+							HasTradeInfo = true,
 						});
 
 						if (!isConditional)
@@ -358,6 +366,7 @@ namespace StockSharp.Oanda
 								SecurityId = transaction.Instrument.ToSecurityId(),
 								PortfolioName = GetPortfolioName(transaction.AccountId),
 								OrderState = OrderStates.Done,
+								HasOrderInfo = true,
 							});
 
 							break;
@@ -373,6 +382,7 @@ namespace StockSharp.Oanda
 								PortfolioName = GetPortfolioName(transaction.AccountId),
 								OrderState = OrderStates.Done,
 								Balance = 0,
+								HasOrderInfo = true,
 							});
 
 							break;
@@ -415,6 +425,7 @@ namespace StockSharp.Oanda
 						PortfolioName = GetPortfolioName(trade.AccountId),
 						TradePrice = (decimal)trade.Price,
 						TradeVolume = trade.Units,
+						HasTradeInfo = true,
 					});
 
 					break;
