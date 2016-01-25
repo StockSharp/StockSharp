@@ -32,47 +32,47 @@ namespace StockSharp.Algo.Export.Database
 
 		private static IEnumerable<ColumnDescription> CreateColumns(Security security)
 		{
-			yield return new ColumnDescription("Id")
+			yield return new ColumnDescription(nameof(ExecutionMessage.TradeId))
 			{
 				IsPrimaryKey = true,
 				DbType = typeof(string),
 				ValueRestriction = new StringRestriction(32)
 			};
-			yield return new ColumnDescription("SecurityCode")
+			yield return new ColumnDescription(nameof(SecurityId.SecurityCode))
 			{
 				IsPrimaryKey = true,
 				DbType = typeof(string),
 				ValueRestriction = new StringRestriction(256)
 			};
-			yield return new ColumnDescription("BoardCode")
+			yield return new ColumnDescription(nameof(SecurityId.BoardCode))
 			{
 				IsPrimaryKey = true,
 				DbType = typeof(string),
 				ValueRestriction = new StringRestriction(256)
 			};
-			yield return new ColumnDescription("ServerTime") { DbType = typeof(DateTimeOffset) };
-			yield return new ColumnDescription("LocalTime") { DbType = typeof(DateTime) };
-			yield return new ColumnDescription("Price") { DbType = typeof(decimal), ValueRestriction = new DecimalRestriction { Scale = security.PriceStep?.GetCachedDecimals() ?? 1 } };
-			yield return new ColumnDescription("Volume") { DbType = typeof(decimal), ValueRestriction = new DecimalRestriction { Scale = security.VolumeStep?.GetCachedDecimals() ?? 1 } };
-			yield return new ColumnDescription("OriginSide") { DbType = typeof(int?) };
-			yield return new ColumnDescription("OpenInterest") { DbType = typeof(decimal?), ValueRestriction = new DecimalRestriction { Scale = security.VolumeStep?.GetCachedDecimals() ?? 1 } };
-			yield return new ColumnDescription("IsUpTick") { DbType = typeof(bool?) };
+			yield return new ColumnDescription(nameof(ExecutionMessage.ServerTime)) { DbType = typeof(DateTimeOffset) };
+			yield return new ColumnDescription(nameof(ExecutionMessage.LocalTime)) { DbType = typeof(DateTimeOffset) };
+			yield return new ColumnDescription(nameof(ExecutionMessage.TradePrice)) { DbType = typeof(decimal), ValueRestriction = new DecimalRestriction { Scale = security.PriceStep?.GetCachedDecimals() ?? 1 } };
+			yield return new ColumnDescription(nameof(ExecutionMessage.TradeVolume)) { DbType = typeof(decimal), ValueRestriction = new DecimalRestriction { Scale = security.VolumeStep?.GetCachedDecimals() ?? 1 } };
+			yield return new ColumnDescription(nameof(ExecutionMessage.OriginSide)) { DbType = typeof(int?) };
+			yield return new ColumnDescription(nameof(ExecutionMessage.OpenInterest)) { DbType = typeof(decimal?), ValueRestriction = new DecimalRestriction { Scale = security.VolumeStep?.GetCachedDecimals() ?? 1 } };
+			yield return new ColumnDescription(nameof(ExecutionMessage.IsUpTick)) { DbType = typeof(bool?) };
 		}
 
 		protected override IDictionary<string, object> ConvertToParameters(ExecutionMessage value)
 		{
 			var result = new Dictionary<string, object>
 			{
-				{ "Id", value.TradeId == null ? value.TradeStringId : value.TradeId.To<string>() },
-				{ "SecurityCode", value.SecurityId.SecurityCode },
-				{ "BoardCode", value.SecurityId.BoardCode },
-				{ "ServerTime", value.ServerTime },
-				{ "LocalTime", value.LocalTime },
-				{ "Price", value.TradePrice },
-				{ "Volume", value.TradeVolume },
-				{ "OriginSide", (int?)value.OriginSide },
-				{ "OpenInterest", value.OpenInterest },
-				{ "IsUpTick", value.IsUpTick },
+				{ nameof(ExecutionMessage.TradeId), value.TradeId == null ? value.TradeStringId : value.TradeId.To<string>() },
+				{ nameof(SecurityId.SecurityCode), value.SecurityId.SecurityCode },
+				{ nameof(SecurityId.BoardCode), value.SecurityId.BoardCode },
+				{ nameof(ExecutionMessage.ServerTime), value.ServerTime },
+				{ nameof(ExecutionMessage.LocalTime), value.LocalTime },
+				{ nameof(ExecutionMessage.TradePrice), value.TradePrice },
+				{ nameof(ExecutionMessage.TradeVolume), value.TradeVolume },
+				{ nameof(ExecutionMessage.OriginSide), (int?)value.OriginSide },
+				{ nameof(ExecutionMessage.OpenInterest), value.OpenInterest },
+				{ nameof(ExecutionMessage.IsUpTick), value.IsUpTick },
 			};
 			return result;
 		}

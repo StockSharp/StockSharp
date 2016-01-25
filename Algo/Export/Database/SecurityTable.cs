@@ -23,129 +23,129 @@ namespace StockSharp.Algo.Export.Database
 	using StockSharp.BusinessEntities;
 	using StockSharp.Messages;
 
-	class SecuritiesTable : Table<SecurityMessage>
+	class SecurityTable : Table<SecurityMessage>
 	{
-		public SecuritiesTable(Security security)
+		public SecurityTable(Security security)
 			: base("Security", CreateColumns(security))
 		{
 		}
 
 		private static IEnumerable<ColumnDescription> CreateColumns(Security security)
 		{
-			yield return new ColumnDescription("SecurityCode")
+			yield return new ColumnDescription(nameof(SecurityId.SecurityCode))
 			{
 				IsPrimaryKey = true,
 				DbType = typeof(string),
 				ValueRestriction = new StringRestriction(256)
 			};
-			yield return new ColumnDescription("BoardCode")
+			yield return new ColumnDescription(nameof(SecurityId.BoardCode))
 			{
 				IsPrimaryKey = true,
 				DbType = typeof(string),
 				ValueRestriction = new StringRestriction(256)
 			};
-			yield return new ColumnDescription("PriceStep")
+			yield return new ColumnDescription(nameof(SecurityMessage.PriceStep))
 			{
 				DbType = typeof(decimal?),
 				ValueRestriction = new DecimalRestriction { Scale = security.PriceStep?.GetCachedDecimals() ?? 1 }
 			};
-			yield return new ColumnDescription("VolumeStep")
+			yield return new ColumnDescription(nameof(SecurityMessage.VolumeStep))
 			{
 				DbType = typeof(decimal?),
 				ValueRestriction = new DecimalRestriction { Scale = security.VolumeStep?.GetCachedDecimals() ?? 1 }
 			};
-			yield return new ColumnDescription("Multiplier")
+			yield return new ColumnDescription(nameof(SecurityMessage.Multiplier))
 			{
 				DbType = typeof(decimal?),
 				ValueRestriction = new DecimalRestriction { Scale = security.Multiplier?.GetCachedDecimals() ?? 1 }
 			};
-			yield return new ColumnDescription("Decimals")
+			yield return new ColumnDescription(nameof(SecurityMessage.Decimals))
 			{
 				DbType = typeof(int?),
 			};
-			yield return new ColumnDescription("SecurityType")
+			yield return new ColumnDescription(nameof(SecurityMessage.SecurityType))
 			{
 				DbType = typeof(string),
 				ValueRestriction = new StringRestriction(32)
 			};
-			yield return new ColumnDescription("OptionType")
+			yield return new ColumnDescription(nameof(SecurityMessage.OptionType))
 			{
 				DbType = typeof(string),
 				ValueRestriction = new StringRestriction(32)
 			};
-			yield return new ColumnDescription("BinaryOptionType")
+			yield return new ColumnDescription(nameof(SecurityMessage.BinaryOptionType))
 			{
 				DbType = typeof(string),
 				ValueRestriction = new StringRestriction(256)
 			};
-			yield return new ColumnDescription("Strike")
+			yield return new ColumnDescription(nameof(SecurityMessage.Strike))
 			{
 				DbType = typeof(decimal?),
 				ValueRestriction = new DecimalRestriction()
 			};
-			yield return new ColumnDescription("UnderlyingSecurityCode")
+			yield return new ColumnDescription(nameof(SecurityMessage.UnderlyingSecurityCode))
 			{
 				DbType = typeof(string),
 				ValueRestriction = new StringRestriction(256)
 			};
-			yield return new ColumnDescription("ExpiryDate")
+			yield return new ColumnDescription(nameof(SecurityMessage.ExpiryDate))
 			{
 				DbType = typeof(DateTimeOffset?),
 			};
-			yield return new ColumnDescription("Currency")
+			yield return new ColumnDescription(nameof(SecurityMessage.Currency))
 			{
 				DbType = typeof(string),
 				ValueRestriction = new StringRestriction(3)
 			};
-			yield return new ColumnDescription("Name")
+			yield return new ColumnDescription(nameof(SecurityMessage.Name))
 			{
 				DbType = typeof(string),
 				ValueRestriction = new StringRestriction(256)
 			};
-			yield return new ColumnDescription("ShortName")
+			yield return new ColumnDescription(nameof(SecurityMessage.ShortName))
 			{
 				DbType = typeof(string),
 				ValueRestriction = new StringRestriction(64)
 			};
-			yield return new ColumnDescription("SettlementDate")
+			yield return new ColumnDescription(nameof(SecurityMessage.SettlementDate))
 			{
 				DbType = typeof(DateTimeOffset?),
 			};
-			yield return new ColumnDescription("Bloomberg")
+			yield return new ColumnDescription(nameof(SecurityId.Bloomberg))
 			{
 				DbType = typeof(string),
 				ValueRestriction = new StringRestriction(16)
 			};
-			yield return new ColumnDescription("CUSIP")
+			yield return new ColumnDescription(nameof(SecurityId.Cusip))
 			{
 				DbType = typeof(string),
 				ValueRestriction = new StringRestriction(16)
 			};
-			yield return new ColumnDescription("IQFeed")
+			yield return new ColumnDescription(nameof(SecurityId.IQFeed))
 			{
 				DbType = typeof(string),
 				ValueRestriction = new StringRestriction(16)
 			};
-			yield return new ColumnDescription("InteractiveBrokers")
+			yield return new ColumnDescription(nameof(SecurityId.InteractiveBrokers))
 			{
 				DbType = typeof(int?),
 			};
-			yield return new ColumnDescription("ISIN")
+			yield return new ColumnDescription(nameof(SecurityId.Isin))
 			{
 				DbType = typeof(string),
 				ValueRestriction = new StringRestriction(16)
 			};
-			yield return new ColumnDescription("Plaza")
+			yield return new ColumnDescription(nameof(SecurityId.Plaza))
 			{
 				DbType = typeof(string),
 				ValueRestriction = new StringRestriction(16)
 			};
-			yield return new ColumnDescription("Ric")
+			yield return new ColumnDescription(nameof(SecurityId.Ric))
 			{
 				DbType = typeof(string),
 				ValueRestriction = new StringRestriction(16)
 			};
-			yield return new ColumnDescription("SEDOL")
+			yield return new ColumnDescription(nameof(SecurityId.Sedol))
 			{
 				DbType = typeof(string),
 				ValueRestriction = new StringRestriction(16)
@@ -156,30 +156,30 @@ namespace StockSharp.Algo.Export.Database
 		{
 			var result = new Dictionary<string, object>
 			{
-				{ "SecurityCode", value.SecurityId.SecurityCode },
-				{ "BoardCode", value.SecurityId.BoardCode },
-				{ "PriceStep", value.PriceStep },
-				{ "VolumeStep", value.VolumeStep },
-				{ "Multiplier", value.Multiplier },
-				{ "Decimals", value.Decimals },
-				{ "SecurityType", value.SecurityType.ToString() },
-				{ "OptionType", value.OptionType.ToString() },
-				{ "BinaryOptionType", value.BinaryOptionType },
-				{ "Strike", value.Strike },
-				{ "UnderlyingSecurityCode", value.UnderlyingSecurityCode },
-				{ "ExpiryDate", value.ExpiryDate },
-				{ "Currency", value.Currency.ToString() },
-				{ "Name", value.Name },
-				{ "ShortName", value.ShortName },
-				{ "SettlementDate", value.SettlementDate },
-				{ "Bloomberg", value.SecurityId.Bloomberg },
-				{ "CUSIP", value.SecurityId.Cusip },
-				{ "IQFeed", value.SecurityId.IQFeed },
-				{ "InteractiveBrokers", value.SecurityId.InteractiveBrokers },
-				{ "ISIN", value.SecurityId.Isin },
-				{ "Plaza", value.SecurityId.Plaza },
-				{ "RIC", value.SecurityId.Ric },
-				{ "SEDOL", value.SecurityId.Sedol },
+				{ nameof(SecurityId.SecurityCode), value.SecurityId.SecurityCode },
+				{ nameof(SecurityId.BoardCode), value.SecurityId.BoardCode },
+				{ nameof(SecurityMessage.PriceStep), value.PriceStep },
+				{ nameof(SecurityMessage.VolumeStep), value.VolumeStep },
+				{ nameof(SecurityMessage.Multiplier), value.Multiplier },
+				{ nameof(SecurityMessage.Decimals), value.Decimals },
+				{ nameof(SecurityMessage.SecurityType), value.SecurityType.ToString() },
+				{ nameof(SecurityMessage.OptionType), value.OptionType.ToString() },
+				{ nameof(SecurityMessage.BinaryOptionType), value.BinaryOptionType },
+				{ nameof(SecurityMessage.Strike), value.Strike },
+				{ nameof(SecurityMessage.UnderlyingSecurityCode), value.UnderlyingSecurityCode },
+				{ nameof(SecurityMessage.ExpiryDate), value.ExpiryDate },
+				{ nameof(SecurityMessage.Currency), value.Currency.ToString() },
+				{ nameof(SecurityMessage.Name), value.Name },
+				{ nameof(SecurityMessage.ShortName), value.ShortName },
+				{ nameof(SecurityMessage.SettlementDate), value.SettlementDate },
+				{ nameof(SecurityId.Bloomberg), value.SecurityId.Bloomberg },
+				{ nameof(SecurityId.Cusip), value.SecurityId.Cusip },
+				{ nameof(SecurityId.IQFeed), value.SecurityId.IQFeed },
+				{ nameof(SecurityId.InteractiveBrokers), value.SecurityId.InteractiveBrokers },
+				{ nameof(SecurityId.Isin), value.SecurityId.Isin },
+				{ nameof(SecurityId.Plaza), value.SecurityId.Plaza },
+				{ nameof(SecurityId.Ric), value.SecurityId.Ric },
+				{ nameof(SecurityId.Sedol), value.SecurityId.Sedol },
 			};
 			return result;
 		}

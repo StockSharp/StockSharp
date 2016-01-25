@@ -124,6 +124,8 @@
     </Compile>
     <Compile Include="Commissions\CommissionMessageAdapter.cs" />
     <Compile Include="DataType.cs" />
+    <Compile Include="Export\Database\CandleTable.cs" />
+    <Compile Include="Export\Database\SecurityTable.cs" />
     <Compile Include="FilterableSecurityProvider.cs" />
     <Compile Include="Indicators\Correlation.cs" />
     <Compile Include="Indicators\Covariance.cs" />
@@ -189,7 +191,6 @@
     <Compile Include="Export\BaseExporter.cs" />
     <Compile Include="Export\BinExporter.cs" />
     <Compile Include="Export\DatabaseExporter.cs" />
-    <Compile Include="Export\Database\CandlesTable.cs" />
     <Compile Include="Export\Database\DbProviders\BaseDbProvider.cs" />
     <Compile Include="Export\Database\DbProviders\MSSQLDbProvider.cs" />
     <Compile Include="Export\Database\DbProviders\SQLiteDbProvider.cs" />
@@ -198,7 +199,6 @@
     <Compile Include="Export\Database\MarketDepthQuoteTable.cs" />
     <Compile Include="Export\Database\NewsTable.cs" />
     <Compile Include="Export\Database\OrderLogTable.cs" />
-    <Compile Include="Export\Database\SecuritiesTable.cs" />
     <Compile Include="Export\Database\Table.cs" />
     <Compile Include="Export\Database\TradeTable.cs" />
     <Compile Include="Export\ExcelExporter.cs" />

@@ -120,7 +120,7 @@ namespace StockSharp.Algo.Export
 		protected override void Export(IEnumerable<CandleMessage> messages)
 		{
 			// TODO
-			Do(messages, () => new CandlesTable(Security, typeof(TimeFrameCandle), Arg));
+			Do(messages, () => new CandleTable(Security, typeof(TimeFrameCandle), Arg));
 		}
 
 		/// <summary>
@@ -138,7 +138,7 @@ namespace StockSharp.Algo.Export
 		/// <param name="messages">Messages.</param>
 		protected override void Export(IEnumerable<SecurityMessage> messages)
 		{
-			Do(messages, () => new SecuritiesTable(Security));
+			Do(messages, () => new SecurityTable(Security));
 		}
 
 		private void Do<TValue, TTable>(IEnumerable<TValue> values, Func<TTable> getTable)

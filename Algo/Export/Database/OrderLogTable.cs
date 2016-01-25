@@ -32,56 +32,56 @@ namespace StockSharp.Algo.Export.Database
 
 		private static IEnumerable<ColumnDescription> CreateColumns(Security security)
 		{
-			yield return new ColumnDescription("OrderId")
+			yield return new ColumnDescription(nameof(ExecutionMessage.OrderId))
 			{
 				DbType = typeof(string),
 				ValueRestriction = new StringRestriction(32)
 			};
-			yield return new ColumnDescription("SecurityCode")
+			yield return new ColumnDescription(nameof(SecurityId.SecurityCode))
 			{
 				DbType = typeof(string),
 				ValueRestriction = new StringRestriction(256)
 			};
-			yield return new ColumnDescription("BoardCode")
+			yield return new ColumnDescription(nameof(SecurityId.BoardCode))
 			{
 				DbType = typeof(string),
 				ValueRestriction = new StringRestriction(256)
 			};
-			yield return new ColumnDescription("ServerTime") { DbType = typeof(DateTimeOffset) };
-			yield return new ColumnDescription("LocalTime") { DbType = typeof(DateTime) };
-			yield return new ColumnDescription("OrderPrice") { DbType = typeof(decimal), ValueRestriction = new DecimalRestriction { Scale = security.PriceStep?.GetCachedDecimals() ?? 1 } };
-			yield return new ColumnDescription("OrderVolume") { DbType = typeof(decimal), ValueRestriction = new DecimalRestriction { Scale = security.VolumeStep?.GetCachedDecimals() ?? 1 } };
-			yield return new ColumnDescription("Side") { DbType = typeof(int) };
-			yield return new ColumnDescription("Status") { DbType = typeof(int?) };
-			yield return new ColumnDescription("State") { DbType = typeof(int?) };
-			yield return new ColumnDescription("TimeInForce") { DbType = typeof(int?) };
-			yield return new ColumnDescription("TradeId")
+			yield return new ColumnDescription(nameof(ExecutionMessage.ServerTime)) { DbType = typeof(DateTimeOffset) };
+			yield return new ColumnDescription(nameof(ExecutionMessage.LocalTime)) { DbType = typeof(DateTimeOffset) };
+			yield return new ColumnDescription(nameof(ExecutionMessage.OrderPrice)) { DbType = typeof(decimal), ValueRestriction = new DecimalRestriction { Scale = security.PriceStep?.GetCachedDecimals() ?? 1 } };
+			yield return new ColumnDescription(nameof(ExecutionMessage.OrderVolume)) { DbType = typeof(decimal), ValueRestriction = new DecimalRestriction { Scale = security.VolumeStep?.GetCachedDecimals() ?? 1 } };
+			yield return new ColumnDescription(nameof(ExecutionMessage.Side)) { DbType = typeof(int) };
+			yield return new ColumnDescription(nameof(ExecutionMessage.OrderStatus)) { DbType = typeof(int?) };
+			yield return new ColumnDescription(nameof(ExecutionMessage.OrderState)) { DbType = typeof(int?) };
+			yield return new ColumnDescription(nameof(ExecutionMessage.TimeInForce)) { DbType = typeof(int?) };
+			yield return new ColumnDescription(nameof(ExecutionMessage.TradeId))
 			{
 				DbType = typeof(string),
 				ValueRestriction = new StringRestriction(32)
 			};
-			yield return new ColumnDescription("TradePrice") { DbType = typeof(decimal?), ValueRestriction = new DecimalRestriction { Scale = security.PriceStep?.GetCachedDecimals() ?? 1 } };
-			yield return new ColumnDescription("OpenInterest") { DbType = typeof(decimal?), ValueRestriction = new DecimalRestriction { Scale = security.VolumeStep?.GetCachedDecimals() ?? 1 } };
+			yield return new ColumnDescription(nameof(ExecutionMessage.TradePrice)) { DbType = typeof(decimal?), ValueRestriction = new DecimalRestriction { Scale = security.PriceStep?.GetCachedDecimals() ?? 1 } };
+			yield return new ColumnDescription(nameof(ExecutionMessage.OpenInterest)) { DbType = typeof(decimal?), ValueRestriction = new DecimalRestriction { Scale = security.VolumeStep?.GetCachedDecimals() ?? 1 } };
 		}
 
 		protected override IDictionary<string, object> ConvertToParameters(ExecutionMessage value)
 		{
 			var result = new Dictionary<string, object>
 			{
-				{ "OrderId", value.OrderId == null ? value.OrderStringId : value.OrderId.To<string>() },
-				{ "SecurityCode", value.SecurityId.SecurityCode },
-				{ "BoardCode", value.SecurityId.BoardCode },
-				{ "ServerTime", value.ServerTime },
-				{ "LocalTime", value.LocalTime },
-				{ "OrderPrice", value.OrderPrice },
-				{ "OrderVolume", value.OrderVolume },
-				{ "Side", (int)value.Side },
-				{ "Status", (int?)value.OrderStatus },
-				{ "State", (int?)value.OrderState },
-				{ "TimeInForce", (int?)value.TimeInForce },
-				{ "TradeId", value.TradeId == null ? value.TradeStringId : value.TradeId.To<string>() },
-				{ "TradePrice", value.TradePrice },
-				{ "OpenInterest", value.OpenInterest },
+				{ nameof(ExecutionMessage.OrderId), value.OrderId == null ? value.OrderStringId : value.OrderId.To<string>() },
+				{ nameof(SecurityId.SecurityCode), value.SecurityId.SecurityCode },
+				{ nameof(SecurityId.BoardCode), value.SecurityId.BoardCode },
+				{ nameof(ExecutionMessage.ServerTime), value.ServerTime },
+				{ nameof(ExecutionMessage.LocalTime), value.LocalTime },
+				{ nameof(ExecutionMessage.OrderPrice), value.OrderPrice },
+				{ nameof(ExecutionMessage.OrderVolume), value.OrderVolume },
+				{ nameof(ExecutionMessage.Side), (int)value.Side },
+				{ nameof(ExecutionMessage.OrderStatus), (int?)value.OrderStatus },
+				{ nameof(ExecutionMessage.OrderState), (int?)value.OrderState },
+				{ nameof(ExecutionMessage.TimeInForce), (int?)value.TimeInForce },
+				{ nameof(ExecutionMessage.TradeId), value.TradeId == null ? value.TradeStringId : value.TradeId.To<string>() },
+				{ nameof(ExecutionMessage.TradePrice), value.TradePrice },
+				{ nameof(ExecutionMessage.OpenInterest), value.OpenInterest },
 			};
 			return result;
 		}

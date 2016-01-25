@@ -23,12 +23,12 @@ namespace StockSharp.Algo.Export.Database
 	using StockSharp.BusinessEntities;
 	using StockSharp.Messages;
 
-	class CandlesTable : Table<CandleMessage>
+	class CandleTable : Table<CandleMessage>
 	{
 		private readonly Type _candleType;
 		private readonly object _arg;
 
-		public CandlesTable(Security security, Type candleType, object arg)
+		public CandleTable(Security security, Type candleType, object arg)
 			: base("Candle", CreateColumns(security))
 		{
 			if (candleType == null)
@@ -43,13 +43,13 @@ namespace StockSharp.Algo.Export.Database
 
 		private static IEnumerable<ColumnDescription> CreateColumns(Security security)
 		{
-			yield return new ColumnDescription("SecurityCode")
+			yield return new ColumnDescription(nameof(SecurityId.SecurityCode))
 			{
 				IsPrimaryKey = true,
 				DbType = typeof(string),
 				ValueRestriction = new StringRestriction(256)
 			};
-			yield return new ColumnDescription("BoardCode")
+			yield return new ColumnDescription(nameof(SecurityId.BoardCode))
 			{
 				IsPrimaryKey = true,
 				DbType = typeof(string),
@@ -67,18 +67,21 @@ namespace StockSharp.Algo.Export.Database
 				DbType = typeof(string),
 				ValueRestriction = new StringRestriction(100)
 			};
-			yield return new ColumnDescription("OpenTime")
+			yield return new ColumnDescription(nameof(CandleMessage.OpenTime))
 			{
 				IsPrimaryKey = true,
 				DbType = typeof(DateTimeOffset)
 			};
-			yield return new ColumnDescription("CloseTime") { DbType = typeof(DateTimeOffset) };
-			yield return CreateDecimalColumn("OpenPrice", security.PriceStep);
-			yield return CreateDecimalColumn("ClosePrice", security.PriceStep);
-			yield return CreateDecimalColumn("HighPrice", security.PriceStep);
-			yield return CreateDecimalColumn("LowPrice", security.PriceStep);
-			yield return CreateDecimalColumn("TotalVolume", security.VolumeStep);
-			yield return new ColumnDescription("OpenInterest")
+			yield return new ColumnDescription(nameof(CandleMessage.CloseTime))
+			{
+				DbType = typeof(DateTimeOffset)
+			};
+			yield return CreateDecimalColumn(nameof(CandleMessage.OpenPrice), security.PriceStep);
+			yield return CreateDecimalColumn(nameof(CandleMessage.HighPrice), security.PriceStep);
+			yield return CreateDecimalColumn(nameof(CandleMessage.LowPrice), security.PriceStep);
+			yield return CreateDecimalColumn(nameof(CandleMessage.ClosePrice), security.PriceStep);
+			yield return CreateDecimalColumn(nameof(CandleMessage.TotalVolume), security.VolumeStep);
+			yield return new ColumnDescription(nameof(CandleMessage.OpenInterest))
 			{
 				DbType = typeof(decimal?),
 				ValueRestriction = new DecimalRestriction { Scale = security.VolumeStep?.GetCachedDecimals() ?? 1 }
@@ -98,18 +101,18 @@ namespace StockSharp.Algo.Export.Database
 		{
 			var result = new Dictionary<string, object>
 			{
-				{ "SecurityCode", value.SecurityId.SecurityCode },
-				{ "BoardCode", value.SecurityId.BoardCode },
+				{ nameof(SecurityId.SecurityCode), value.SecurityId.SecurityCode },
+				{ nameof(SecurityId.BoardCode), value.SecurityId.BoardCode },
 				{ "CandleType", _candleType.Name },
 				{ "Argument", _arg.To<string>() },
-				{ "OpenTime", value.OpenTime },
-				{ "CloseTime", value.CloseTime },
-				{ "OpenPrice", value.OpenPrice },
-				{ "ClosePrice", value.ClosePrice },
-				{ "HighPrice", value.HighPrice },
-				{ "LowPrice", value.LowPrice },
-				{ "TotalVolume", value.TotalVolume },
-				{ "OpenInterest", value.OpenInterest },
+				{ nameof(CandleMessage.OpenTime), value.OpenTime },
+				{ nameof(CandleMessage.CloseTime), value.CloseTime },
+				{ nameof(CandleMessage.OpenPrice), value.OpenPrice },
+				{ nameof(CandleMessage.HighPrice), value.HighPrice },
+				{ nameof(CandleMessage.LowPrice), value.LowPrice },
+				{ nameof(CandleMessage.ClosePrice), value.ClosePrice },
+				{ nameof(CandleMessage.TotalVolume), value.TotalVolume },
+				{ nameof(CandleMessage.OpenInterest), value.OpenInterest },
 			};
 			return result;
 		}

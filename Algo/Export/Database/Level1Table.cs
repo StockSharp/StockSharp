@@ -60,18 +60,18 @@ namespace StockSharp.Algo.Export.Database
 
 		private static IEnumerable<ColumnDescription> CreateColumns(Security security)
 		{
-			yield return new ColumnDescription("SecurityCode")
+			yield return new ColumnDescription(nameof(SecurityId.SecurityCode))
 			{
 				DbType = typeof(string),
 				ValueRestriction = new StringRestriction(256)
 			};
-			yield return new ColumnDescription("BoardCode")
+			yield return new ColumnDescription(nameof(SecurityId.BoardCode))
 			{
 				DbType = typeof(string),
 				ValueRestriction = new StringRestriction(256)
 			};
-			yield return new ColumnDescription("ServerTime") { DbType = typeof(DateTimeOffset) };
-			yield return new ColumnDescription("LocalTime") { DbType = typeof(DateTime) };
+			yield return new ColumnDescription(nameof(Level1ChangeMessage.ServerTime)) { DbType = typeof(DateTimeOffset) };
+			yield return new ColumnDescription(nameof(Level1ChangeMessage.LocalTime)) { DbType = typeof(DateTimeOffset) };
 
 			foreach (var field in Enumerator.GetValues<Level1Fields>())
 			{
@@ -126,12 +126,12 @@ namespace StockSharp.Algo.Export.Database
 			return values
 				.Select(m =>
 				{
-					var result = new Dictionary<String, object>
+					var result = new Dictionary<string, object>
 					{
-						{ "SecurityCode", m.SecurityId.SecurityCode },
-						{ "BoardCode", m.SecurityId.BoardCode },
-						{ "ServerTime", m.ServerTime },
-						{ "LocalTime", m.LocalTime },
+						{ nameof(SecurityId.SecurityCode), m.SecurityId.SecurityCode },
+						{ nameof(SecurityId.BoardCode), m.SecurityId.BoardCode },
+						{ nameof(Level1ChangeMessage.ServerTime), m.ServerTime },
+						{ nameof(Level1ChangeMessage.LocalTime), m.LocalTime },
 					};
 
 					foreach (var pair in m.Changes)

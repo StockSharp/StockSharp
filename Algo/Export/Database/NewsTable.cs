@@ -31,35 +31,35 @@ namespace StockSharp.Algo.Export.Database
 
 		private static IEnumerable<ColumnDescription> CreateColumns()
 		{
-			yield return new ColumnDescription("No") { DbType = typeof(long) };
-			yield return new ColumnDescription("ServerTime") { DbType = typeof(DateTimeOffset) };
-			yield return new ColumnDescription("LocalTime") { DbType = typeof(DateTime) };
-			yield return new ColumnDescription("SecurityCode")
+			yield return new ColumnDescription(nameof(NewsMessage.Id)) { DbType = typeof(long) };
+			yield return new ColumnDescription(nameof(NewsMessage.ServerTime)) { DbType = typeof(DateTimeOffset) };
+			yield return new ColumnDescription(nameof(NewsMessage.LocalTime)) { DbType = typeof(DateTimeOffset) };
+			yield return new ColumnDescription(nameof(SecurityId.SecurityCode))
 			{
 				DbType = typeof(string),
 				ValueRestriction = new StringRestriction(256)
 			};
-			yield return new ColumnDescription("BoardCode")
+			yield return new ColumnDescription(nameof(NewsMessage.BoardCode))
 			{
 				DbType = typeof(string),
 				ValueRestriction = new StringRestriction(256)
 			};
-			yield return new ColumnDescription("Headline")
+			yield return new ColumnDescription(nameof(NewsMessage.Headline))
 			{
 				DbType = typeof(string),
 				ValueRestriction = new StringRestriction(256)
 			};
-			yield return new ColumnDescription("Story")
+			yield return new ColumnDescription(nameof(NewsMessage.Story))
 			{
 				DbType = typeof(string),
 				ValueRestriction = new StringRestriction(int.MaxValue)
 			};
-			yield return new ColumnDescription("Source")
+			yield return new ColumnDescription(nameof(NewsMessage.Source))
 			{
 				DbType = typeof(string),
 				ValueRestriction = new StringRestriction(256)
 			};
-			yield return new ColumnDescription("Url")
+			yield return new ColumnDescription(nameof(NewsMessage.Url))
 			{
 				DbType = typeof(string),
 				ValueRestriction = new StringRestriction(1024)
@@ -70,15 +70,15 @@ namespace StockSharp.Algo.Export.Database
 		{
 			var result = new Dictionary<string, object>
 			{
-				{ "Id", value.Id },
-				{ "ServerTime", value.ServerTime },
-				{ "LocalTime", value.LocalTime },
-				{ "SecurityCode", value.SecurityId?.SecurityCode },
-				{ "BoardCode", value.BoardCode },
-				{ "Headline", value.Headline },
-				{ "Story", value.Story },
-				{ "Source", value.Source },
-				{ "Url", value.Url.To<string>() },
+				{ nameof(NewsMessage.Id), value.Id },
+				{ nameof(NewsMessage.ServerTime), value.ServerTime },
+				{ nameof(NewsMessage.LocalTime), value.LocalTime },
+				{ nameof(SecurityId.SecurityCode), value.SecurityId?.SecurityCode },
+				{ nameof(NewsMessage.BoardCode), value.BoardCode },
+				{ nameof(NewsMessage.Headline), value.Headline },
+				{ nameof(NewsMessage.Story), value.Story },
+				{ nameof(NewsMessage.Source), value.Source },
+				{ nameof(NewsMessage.Url), value.Url.To<string>() },
 			};
 			return result;
 		}
