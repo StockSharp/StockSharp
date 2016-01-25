@@ -68,7 +68,7 @@ namespace StockSharp.Algo
 		/// <param name="type">Order type.</param>
 		/// <param name="transactionId">The identifier of the order registration transaction.</param>
 		/// <returns>Created order.</returns>
-		Order CreateOrder(Security security, OrderTypes type, long transactionId);
+		Order CreateOrder(Security security, OrderTypes? type, long transactionId);
 
 		/// <summary>
 		/// To create the error description for the order.
@@ -195,7 +195,7 @@ namespace StockSharp.Algo
 		/// <param name="type">Order type.</param>
 		/// <param name="transactionId">The identifier of the order registration transaction.</param>
 		/// <returns>Created order.</returns>
-		public virtual Order CreateOrder(Security security, OrderTypes type, long transactionId)
+		public virtual Order CreateOrder(Security security, OrderTypes? type, long transactionId)
 		{
 			return new Order
 			{

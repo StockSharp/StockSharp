@@ -67,7 +67,7 @@ namespace StockSharp.ETrade.Native
 			set { Api.Sandbox = value; }
 		}
 
-		public bool IsConnected { get { return Connection.IsConnected; }}
+		public bool IsConnected => Connection.IsConnected;
 		public bool IsExportStarted { get; private set; }
 
 		public event Action ConnectionStateChanged;

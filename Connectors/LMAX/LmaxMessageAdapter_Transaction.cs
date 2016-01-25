@@ -81,6 +81,7 @@ namespace StockSharp.LMAX
 				case OrderTypes.ExtRepo:
 				case OrderTypes.Rps:
 				case OrderTypes.Execute:
+				case null:
 					throw new NotSupportedException(LocalizedStrings.Str1849Params.Put(message.OrderType));
 				default:
 					throw new ArgumentOutOfRangeException(nameof(message), message.OrderType, LocalizedStrings.Str1600);

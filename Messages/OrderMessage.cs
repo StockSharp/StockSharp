@@ -43,7 +43,7 @@ namespace StockSharp.Messages
 		[DisplayNameLoc(LocalizedStrings.Str132Key)]
 		[DescriptionLoc(LocalizedStrings.Str133Key)]
 		[MainCategory]
-		public OrderTypes OrderType { get; set; }
+		public OrderTypes? OrderType { get; set; }
 
 		/// <summary>
 		/// User's order ID.

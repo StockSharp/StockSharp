@@ -417,7 +417,7 @@ namespace StockSharp.BusinessEntities
 		[DisplayNameLoc(LocalizedStrings.Str132Key)]
 		[DescriptionLoc(LocalizedStrings.Str133Key)]
 		[MainCategory]
-		public OrderTypes Type { get; set; }
+		public OrderTypes? Type { get; set; }
 
 		private DateTimeOffset? _expiryDate;
 

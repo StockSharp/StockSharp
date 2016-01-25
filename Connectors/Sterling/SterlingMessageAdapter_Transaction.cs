@@ -33,6 +33,7 @@ namespace StockSharp.Sterling
 		private void ProcessOrderRegisterMessage(OrderRegisterMessage regMsg)
 		{
 			var condition = (SterlingOrderCondition)regMsg.Condition;
+			var orderType = regMsg.OrderType.Value;
 
 			var order = new STIOrder
 			{
@@ -44,7 +45,7 @@ namespace StockSharp.Sterling
 				Symbol = regMsg.SecurityId.SecurityCode, 
 				Destination = regMsg.SecurityId.BoardCode, 
 				Tif = regMsg.TimeInForce.ToSterlingTif(regMsg.TillDate), 
-				PriceType = regMsg.OrderType.ToSterlingPriceType(condition), 
+				PriceType = orderType.ToSterlingPriceType(condition), 
 				User = regMsg.Comment, 
 				Side = regMsg.Side.ToSterlingSide()
 			};
@@ -55,7 +56,7 @@ namespace StockSharp.Sterling
 			if (regMsg.Currency != null)
 				order.Currency = regMsg.Currency.ToString();
 
-			if (regMsg.OrderType == OrderTypes.Conditional)
+			if (orderType == OrderTypes.Conditional)
 			{
 				order.Discretion = condition.Discretion.ToDouble();
 				order.ExecInst = condition.ExecutionInstruction.ToSterling();
@@ -105,7 +106,7 @@ namespace StockSharp.Sterling
 				Symbol = replaceMsg.SecurityId.SecurityCode, 
 				Destination = replaceMsg.SecurityId.BoardCode, 
 				Tif = replaceMsg.TimeInForce.ToSterlingTif(replaceMsg.TillDate), 
-				PriceType = replaceMsg.OrderType.ToSterlingPriceType(condition), 
+				PriceType = replaceMsg.OrderType.Value.ToSterlingPriceType(condition), 
 				User = replaceMsg.Comment
 			};
 

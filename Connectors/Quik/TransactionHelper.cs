@@ -130,7 +130,7 @@ namespace StockSharp.Quik
 				case OrderTypes.Limit:
 					transaction
 						.SetSide(message.Side)
-						.SetType(message.OrderType)
+						.SetType(message.OrderType.Value)
 						.SetAction(TransactionActions.NewOrder)
 						.SetPrice(message.Price);
 

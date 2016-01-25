@@ -167,7 +167,7 @@ namespace StockSharp.Algo.Testing
 							case ExecutionTypes.Transaction:
 							{
 								if (!execMsg.HasOrderInfo())
-											throw new InvalidOperationException();
+									throw new InvalidOperationException();
 
 								if (_parent.Settings.Latency > TimeSpan.Zero)
 								{

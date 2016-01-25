@@ -21,7 +21,7 @@ namespace StockSharp.ETrade.Native
 	abstract class ETradeRequest
 	{
 		public bool IsDone {get; protected set;}
-		public virtual bool IsRequestRateLimited {get { return true; }}
+		public virtual bool IsRequestRateLimited => true;
 
 		public ETradeResponse ExecuteNextPart(ETradeClient client)
 		{
@@ -69,7 +69,7 @@ namespace StockSharp.ETrade.Native
 
 		public ETradeRateLimitsRequest(string moduleName) { _moduleName = moduleName; }
 
-		public override bool IsRequestRateLimited {get { return false; }}
+		public override bool IsRequestRateLimited => false;
 
 		protected override ETradeResponse ExecuteNextPartInternal(ETradeApi api)
 		{

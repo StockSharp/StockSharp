@@ -91,10 +91,7 @@ namespace StockSharp.ETrade
 			ReConnectionSettings.AttemptCount = 5;
 		}
 
-		private ETradeMessageAdapter NativeAdapter
-		{
-			get { return Adapter.InnerAdapters.OfType<ETradeMessageAdapter>().First(); }
-		}
+		private ETradeMessageAdapter NativeAdapter => Adapter.InnerAdapters.OfType<ETradeMessageAdapter>().First();
 
 		/// <summary>
 		/// Set own authorization mode (the default is browser uses).

@@ -34,7 +34,7 @@ namespace StockSharp.ETrade.Native
 
 	class ETradeResponse<TResp> : ETradeResponse
 	{
-		new public ETradeRequest<TResp> Request {get {return (ETradeRequest<TResp>)base.Request; }}
+		new public ETradeRequest<TResp> Request => (ETradeRequest<TResp>)base.Request;
 		public TResp Data {get; private set;}
 
 		public ETradeResponse(ETradeRequest<TResp> req, TResp responseData) : base(req)

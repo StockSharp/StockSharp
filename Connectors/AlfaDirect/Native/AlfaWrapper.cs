@@ -263,33 +263,34 @@ namespace StockSharp.AlfaDirect.Native
 			if (placeCode == null)
 				throw new InvalidOperationException(LocalizedStrings.Str2274Params.Put(message.TransactionId));
 
-			if (message.OrderType == OrderTypes.Conditional)
+			switch (message.OrderType)
 			{
-				var condition = (AlfaOrderCondition)message.Condition;
-
-				if (condition.TargetPrice != 0)
-				{
-					id = _ad.CreateStopOrder(account, placeCode, secCode, endDate, comments, currency, buySell, quantity,
-						(double)condition.StopPrice, (double)condition.Slippage, condition.TargetPrice, -1);
-				}
-				else if (condition.Level != 0)
-				{
-					id = _ad.CreateTrailingOrder(account, placeCode, secCode, endDate, comments, currency, buySell, quantity,
-						(double)condition.StopPrice, (double)condition.Level, (double)condition.Slippage, -1);
-				}
-				else
-				{
-					id = _ad.CreateStopOrder(account, placeCode, secCode, endDate, comments, currency, buySell, quantity,
-						(double)condition.StopPrice, (double)condition.Slippage, null, -1);
-				}
-			}
-			else
-			{
-				if (message.OrderType == OrderTypes.Market)
+				case OrderTypes.Limit:
+					id = _ad.CreateLimitOrder(account, placeCode, secCode, endDate, comments, currency, buySell, quantity, (double)price, null, null, null, null, null, "Y", null, null, null, null, null, null, null, null, null, null, -1);
+					break;
+				case OrderTypes.Market:
 					throw new InvalidOperationException(LocalizedStrings.Str2275);
+				case OrderTypes.Conditional:
+				{
+					var condition = (AlfaOrderCondition)message.Condition;
 
-				id = _ad.CreateLimitOrder(account, placeCode, secCode, endDate, comments, currency, buySell, quantity,
-					(double)price, null, null, null, null, null, "Y", null, null, null, null, null, null, null, null, null, null, -1);
+					if (condition.TargetPrice != 0)
+						id = _ad.CreateStopOrder(account, placeCode, secCode, endDate, comments, currency, buySell, quantity, (double)condition.StopPrice, (double)condition.Slippage, condition.TargetPrice, -1);
+					else if (condition.Level != 0)
+						id = _ad.CreateTrailingOrder(account, placeCode, secCode, endDate, comments, currency, buySell, quantity, (double)condition.StopPrice, (double)condition.Level, (double)condition.Slippage, -1);
+					else
+						id = _ad.CreateStopOrder(account, placeCode, secCode, endDate, comments, currency, buySell, quantity, (double)condition.StopPrice, (double)condition.Slippage, null, -1);
+
+					break;
+				}
+				case OrderTypes.Repo:
+				case OrderTypes.ExtRepo:
+				case OrderTypes.Rps:
+				case OrderTypes.Execute:
+				case null:
+					throw new NotSupportedException(LocalizedStrings.Str1601Params.Put(message.OrderType, message.TransactionId));
+				default:
+					throw new ArgumentOutOfRangeException();
 			}
 
 			if (id == 0)
@@ -315,9 +316,7 @@ namespace StockSharp.AlfaDirect.Native
 			var treaty = account.IsEmpty() ? null : account.TreatyFromAccount();
 
 			if (!treaty.IsEmpty())
-			{
 				treaties.Add(treaty);
-			}
 			else
 			{
 				var data = _tableAccounts.GetLocalDbData();
@@ -378,9 +377,7 @@ namespace StockSharp.AlfaDirect.Native
 					DoInSysCulture(() => ProcessOrderConfirmed.SafeInvoke(alfaTransactionId, orderNum));
 				}
 				else
-				{
 					DoInSysCulture(() => ProcessOrderFailed.SafeInvoke(alfaTransactionId, message));
-				}
 			}
 			catch (Exception e)
 			{

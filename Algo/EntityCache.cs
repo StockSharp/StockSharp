@@ -659,7 +659,7 @@ namespace StockSharp.Algo
 			return Tuple.Create(news, isNew);
 		}
 
-		private static Tuple<long, bool, bool> CreateOrderKey(OrderTypes type, long transactionId, bool isCancel)
+		private static Tuple<long, bool, bool> CreateOrderKey(OrderTypes? type, long transactionId, bool isCancel)
 		{
 			if (transactionId <= 0)
 				throw new ArgumentOutOfRangeException(nameof(transactionId), transactionId, LocalizedStrings.Str718);
@@ -694,7 +694,7 @@ namespace StockSharp.Algo
 			return orderStringId == null ? null : data.OrdersByStringId.TryGetValue(orderStringId);
 		}
 
-		private Tuple<Order, bool, bool> GetOrderInfo(SecurityData securityData, OrderTypes type, long transactionId, long? orderId, string orderStringId, Func<long, Order> createOrder, out bool isNew, bool newOrderRaised = false)
+		private Tuple<Order, bool, bool> GetOrderInfo(SecurityData securityData, OrderTypes? type, long transactionId, long? orderId, string orderStringId, Func<long, Order> createOrder, out bool isNew, bool newOrderRaised = false)
 		{
 			if (createOrder == null)
 				throw new ArgumentNullException(nameof(createOrder));

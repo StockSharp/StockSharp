@@ -128,7 +128,7 @@ namespace StockSharp.OpenECry
 			}
 			else
 			{
-				draft.Type = message.OrderType.ToOec();
+				draft.Type = message.OrderType.Value.ToOec();
 			}
 
 			draft.Flags = OrderFlags.None;

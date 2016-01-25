@@ -267,10 +267,13 @@ namespace StockSharp.Quik.Lua
 			}
 		}
 
-		private void RegisterTransaction(Transaction transaction, MessageTypes messageType, long transactionId, OrderTypes type)
+		private void RegisterTransaction(Transaction transaction, MessageTypes messageType, long transactionId, OrderTypes? type)
 		{
 			if (transactionId <= 0 || transactionId > uint.MaxValue)
 				throw new InvalidOperationException(LocalizedStrings.Str1700Params.Put(transactionId));
+
+			if (type == null)
+				throw new ArgumentNullException(nameof(type));
 
 			_transactions.Add(transactionId, transaction);
 
@@ -278,7 +281,7 @@ namespace StockSharp.Quik.Lua
 			{
 				MessageType = messageType,
 				TransactionId = transactionId,
-				OrderType = type,
+				OrderType = type.Value,
 				Value = transaction.SetTransactionId(transactionId).ToLuaString()
 			});
 		}

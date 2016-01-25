@@ -354,7 +354,10 @@ namespace StockSharp.Algo.Storages.Binary
 				metaInfo.LastTime = writer.WriteTime(msg.ServerTime, metaInfo.LastTime, LocalizedStrings.Str930, allowNonOrdered, isUtc, metaInfo.ServerOffset, allowDiffOffsets, ref lastOffset);
 				metaInfo.LastServerOffset = lastOffset;
 
-				writer.WriteInt((int)msg.OrderType);
+				writer.Write(msg.OrderType != null);
+
+				if (msg.OrderType != null)
+					writer.WriteInt((int)msg.OrderType.Value);
 
 				writer.WriteNullableInt(msg.OrderState);
 				writer.WriteNullableInt(msg.OrderStatus);
@@ -480,7 +483,7 @@ namespace StockSharp.Algo.Storages.Binary
 			metaInfo.FirstTime = prevTime;
 			metaInfo.FirstServerOffset = lastOffset;
 
-			var type = reader.ReadInt().To<OrderTypes>();
+			var type = reader.Read() ? reader.ReadInt().To<OrderTypes>() : (OrderTypes?)null;
 
 			var state = reader.ReadNullableInt<OrderStates>();
 			var status = reader.ReadNullableInt<OrderStatus>();

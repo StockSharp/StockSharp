@@ -98,10 +98,7 @@ namespace StockSharp.ETrade
 		/// The parameters validity check.
 		/// </summary>
 		[Browsable(false)]
-		public override bool IsValid
-		{
-			get { return !ConsumerKey.IsEmpty() && !ConsumerSecret.IsEmpty(); }
-		}
+		public override bool IsValid => !ConsumerKey.IsEmpty() && !ConsumerSecret.IsEmpty();
 
 		#endregion
 

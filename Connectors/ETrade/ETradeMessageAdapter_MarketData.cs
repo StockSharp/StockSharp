@@ -31,10 +31,7 @@ namespace StockSharp.ETrade
 		/// <summary>
 		/// Gets a value indicating whether the connector supports security lookup.
 		/// </summary>
-		protected override bool IsSupportNativeSecurityLookup
-		{
-			get { return true; }
-		}
+		protected override bool IsSupportNativeSecurityLookup => true;
 
 		/// <summary>Коллбэк результата поиска инструментов.</summary>
 		/// <param name="lookupTransId">Номер транзакции операции Lookup.</param>

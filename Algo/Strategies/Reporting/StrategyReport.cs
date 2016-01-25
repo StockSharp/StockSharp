@@ -124,7 +124,7 @@ namespace StockSharp.Algo.Strategies.Reporting
 		/// </summary>
 		/// <param name="type">Order type.</param>
 		/// <returns>The formatted string.</returns>
-		protected virtual string Format(OrderTypes type)
+		protected virtual string Format(OrderTypes? type)
 		{
 			switch (type)
 			{
@@ -138,6 +138,8 @@ namespace StockSharp.Algo.Strategies.Reporting
 					return LocalizedStrings.Str1354;
 				case OrderTypes.ExtRepo:
 					return LocalizedStrings.Str244;
+				case null:
+					return string.Empty;
 				default:
 					throw new ArgumentOutOfRangeException(nameof(type));
 			}

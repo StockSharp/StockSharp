@@ -47,9 +47,9 @@ namespace StockSharp.Studio.Controls
 
 			Security prevSecurity = null;
 			Portfolio prevPortfolio = null;
-			var prevType = OrderTypes.Limit;
+			OrderTypes? prevType = null;
 
-			Func<OrderTypes, Order> createOrder = type => new Order
+			Func<OrderTypes?, Order> createOrder = type => new Order
 			{
 				Type = type,
 				Security = prevSecurity,

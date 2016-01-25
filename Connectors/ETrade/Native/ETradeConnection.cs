@@ -41,10 +41,7 @@ namespace StockSharp.ETrade.Native
 
 		bool _reconnecting;
 
-		private ETradeApi Api
-		{
-			get { return _client.Api; }
-		}
+		private ETradeApi Api => _client.Api;
 
 		private OAuthToken _reqToken;
 

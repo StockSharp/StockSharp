@@ -47,10 +47,7 @@ namespace StockSharp.ETrade
 		/// <summary>
 		/// <see cref="SecurityLookupMessage"/> required to get securities.
 		/// </summary>
-		public override bool SecurityLookupRequired
-		{
-			get { return false; }
-		}
+		public override bool SecurityLookupRequired => false;
 
 		/// <summary>
 		/// Create condition for order type <see cref="OrderTypes.Conditional"/>, that supports the adapter.
@@ -172,7 +169,7 @@ namespace StockSharp.ETrade
 						regMsg.TransactionId,
 						regMsg.TimeInForce == TimeInForce.MatchOrCancel,
 						regMsg.TillDate,
-						regMsg.OrderType,
+						regMsg.OrderType.Value,
 						(ETradeOrderCondition)regMsg.Condition);
 
 					break;
@@ -195,7 +192,7 @@ namespace StockSharp.ETrade
 						replaceMsg.TransactionId,
 						replaceMsg.TimeInForce == TimeInForce.MatchOrCancel,
 						replaceMsg.TillDate,
-						replaceMsg.OrderType,
+						replaceMsg.OrderType.Value,
 						(ETradeOrderCondition)replaceMsg.Condition);
 
 					break;

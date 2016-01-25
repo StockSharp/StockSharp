@@ -72,7 +72,7 @@ namespace StockSharp.InteractiveBrokers
 					socket
 						.SendSide(message.Side)
 						.SendQuantity(message.Volume)
-						.SendOrderType(message.OrderType, condition.ExtendedType)
+						.SendOrderType(message.OrderType.Value, condition.ExtendedType)
 						.Send(message.Price)
 						.Send(condition.StopPrice)
 						.SendOrderExpiration(message)

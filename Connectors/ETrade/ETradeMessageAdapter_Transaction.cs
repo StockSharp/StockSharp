@@ -153,6 +153,8 @@ namespace StockSharp.ETrade
 
 				var tuple = _orderStateMap[nativeOrder.orderStatus];
 
+				var orderType = nativeOrder.priceType.ETradePriceTypeToOrderType();
+
 				var msg = new ExecutionMessage
 				{
 					SecurityId = secId,
@@ -164,13 +166,13 @@ namespace StockSharp.ETrade
 					OriginalTransactionId = transId,
 					OrderId = nativeOrder.orderId,
 					ExecutionType = ExecutionTypes.Transaction,
-					OrderType = nativeOrder.priceType.ETradePriceTypeToOrderType(),
+					OrderType = orderType,
 					ServerTime = ETradeUtil.ETradeTimestampToUTC(nativeOrder.orderExecutedTime > 0 ? nativeOrder.orderExecutedTime : nativeOrder.orderPlacedTime), 
 					OrderState = tuple.Item1, 
 					OrderStatus = tuple.Item2,
 				};
 
-				switch (msg.OrderType)
+				switch (orderType)
 				{
 					case OrderTypes.Limit:
 					{

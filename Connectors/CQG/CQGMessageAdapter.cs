@@ -217,11 +217,14 @@ namespace StockSharp.CQG
 					if (account == null)
 						throw new InvalidOperationException(LocalizedStrings.Str3793Params.Put(regMsg.PortfolioName));
 
+					if (regMsg.OrderType == null)
+						throw new InvalidOperationException();
+
 					var stopPrice = regMsg.OrderType == OrderTypes.Conditional
 						? ((CQGOrderCondition)regMsg.Condition).StopPrice
 						: null;
 
-					var order = _session.CreateOrder(regMsg.OrderType.ToCQG(stopPrice), instrument, account, (int)regMsg.Volume, regMsg.Side.ToCQG(), (double)regMsg.Price, (double)(stopPrice ?? 0));
+					var order = _session.CreateOrder(regMsg.OrderType.Value.ToCQG(stopPrice), instrument, account, (int)regMsg.Volume, regMsg.Side.ToCQG(), (double)regMsg.Price, (double)(stopPrice ?? 0));
 					_orders.Add(regMsg.TransactionId, order);
 					order.Place();
 					break;
