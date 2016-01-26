@@ -74,10 +74,7 @@ namespace StockSharp.Quik.Native
 			}
 		}
 
-		public string DllPath
-		{
-			get { return _api.DllPath; }
-		}
+		public string DllPath => _api.DllPath;
 
 		private const int _msgSize = 256;
 
@@ -136,13 +133,7 @@ namespace StockSharp.Quik.Native
 
 		#endregion
 
-		public bool IsConnected
-		{
-			get
-			{
-				return !IsDisposed && IsDllConnected() == Codes.DllConnected && IsQuikConnected() == Codes.QuikConnected;
-			}
-		}
+		public bool IsConnected => !IsDisposed && IsDllConnected() == Codes.DllConnected && IsQuikConnected() == Codes.QuikConnected;
 
 		#region IsDllConnected
 

@@ -37,17 +37,11 @@ namespace StockSharp.Quik
 
 		private readonly SynchronizedSet<DdeTableColumn> _nonMandatoryColumns = new SynchronizedSet<DdeTableColumn>();
 
-		internal ICollection<DdeTableColumn> NonMandatoryColumns
-		{
-			get { return _nonMandatoryColumns; }
-		}
+		internal ICollection<DdeTableColumn> NonMandatoryColumns => _nonMandatoryColumns;
 
 		private readonly SynchronizedSet<DdeTableColumn> _extendedColumns = new SynchronizedSet<DdeTableColumn>();
 
-		internal ICollection<DdeTableColumn> ExtendedColumns
-		{
-			get { return _extendedColumns; }
-		}
+		internal ICollection<DdeTableColumn> ExtendedColumns => _extendedColumns;
 
 		/// <summary>
 		/// Найти колонку по текстовому названию.

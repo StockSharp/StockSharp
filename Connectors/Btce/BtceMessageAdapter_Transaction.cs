@@ -60,7 +60,7 @@ namespace StockSharp.Btce
 				OrderId = reply.Command.OrderId,
 				Balance = (decimal)reply.Command.Remains,
 				OrderState = OrderStates.Active,
-				ExecutionType = ExecutionTypes.Order
+				ExecutionType = ExecutionTypes.Transaction
 			});
 
 			ProcessFunds(reply.Command.Funds);
@@ -80,7 +80,7 @@ namespace StockSharp.Btce
 				OriginalTransactionId = cancelMsg.TransactionId,
 				OrderId = cancelMsg.OrderId,
 				OrderState = OrderStates.Done,
-				ExecutionType = ExecutionTypes.Order
+				ExecutionType = ExecutionTypes.Transaction
 			});
 
 			ProcessFunds(reply.Command.Funds);
@@ -92,12 +92,12 @@ namespace StockSharp.Btce
 
 			SendOutMessage(new ExecutionMessage
 			{
-				ExecutionType = ExecutionTypes.Order,
+				ExecutionType = ExecutionTypes.Transaction,
 				OrderId = order.Id,
 				OriginalTransactionId = info.First,
 				OrderPrice = (decimal)order.Price,
 				Balance = info.Second,
-				Volume = (decimal)order.Volume,
+				OrderVolume = (decimal)order.Volume,
 				Side = order.Side.ToStockSharp(),
 				SecurityId = new SecurityId
 				{
@@ -124,11 +124,11 @@ namespace StockSharp.Btce
 
 			SendOutMessage(new ExecutionMessage
 			{
-				ExecutionType = ExecutionTypes.Trade,
+				ExecutionType = ExecutionTypes.Transaction,
 				OrderId = trade.OrderId,
 				TradeId = trade.Id,
 				TradePrice = (decimal)trade.Price,
-				Volume = (decimal)trade.Volume,
+				TradeVolume = (decimal)trade.Volume,
 				Side = trade.Side.ToStockSharp(),
 				SecurityId = new SecurityId
 				{
@@ -151,7 +151,7 @@ namespace StockSharp.Btce
 
 			SendOutMessage(new ExecutionMessage
 			{
-				ExecutionType = ExecutionTypes.Order,
+				ExecutionType = ExecutionTypes.Transaction,
 				OrderId = trade.OrderId,
 				Balance = info.Second,
 				OrderState = info.Second > 0 ? OrderStates.Active : OrderStates.Done

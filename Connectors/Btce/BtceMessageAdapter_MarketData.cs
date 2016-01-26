@@ -204,7 +204,7 @@ namespace StockSharp.Btce
 							},
 							ExecutionType = ExecutionTypes.Tick,
 							TradePrice = (decimal)trade.Price,
-							Volume = (decimal)trade.Volume,
+							TradeVolume = (decimal)trade.Volume,
 							TradeId = trade.Id,
 							ServerTime = trade.Timestamp.ApplyTimeZone(TimeHelper.Moscow),
 							OriginSide = trade.Side.ToStockSharp()

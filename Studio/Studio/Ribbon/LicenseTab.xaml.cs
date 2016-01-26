@@ -47,10 +47,7 @@ namespace StockSharp.Studio.Ribbon
 		public readonly static RoutedCommand RemoveLicenseCommand = new RoutedCommand();
 		public readonly static RoutedCommand RequestLicenseCommand = new RoutedCommand();
 
-		private LicenseInfo SelectedLicenseInfo
-		{
-			get { return (LicenseInfo)LicensesCtrl.SelectedItem; }
-		}
+		private LicenseInfo SelectedLicenseInfo => (LicenseInfo)LicensesCtrl.SelectedItem;
 
 		private IEnumerable<License> _licenses = Enumerable.Empty<License>();
 
@@ -115,10 +112,7 @@ namespace StockSharp.Studio.Ribbon
 			}
 		}
 
-		private Broker SelectedBroker
-		{
-			get { return (Broker)BrokersComboBox.SelectedItem; }
-		}
+		private Broker SelectedBroker => (Broker)BrokersComboBox.SelectedItem;
 
 		private IEnumerable<string> _features = Enumerable.Empty<string>();
 

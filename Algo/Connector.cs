@@ -122,7 +122,7 @@ namespace StockSharp.Algo
 
 			public void Process(ExecutionMessage message)
 			{
-				if (message.ExecutionType != ExecutionTypes.Order)
+				if (!message.HasOrderInfo())
 					return;
 
 				var key = Tuple.Create(message.Side, message.OrderPrice);

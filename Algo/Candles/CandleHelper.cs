@@ -568,7 +568,7 @@ namespace StockSharp.Algo.Candles
 				ServerTime = candleMsg.OpenTime,
 				//TradeId = _tradeIdGenerator.Next,
 				TradePrice = price,
-				Volume = volume,
+				TradeVolume = volume,
 				Side = side,
 				ExecutionType = ExecutionTypes.Tick,
 				OpenInterest = openInterest

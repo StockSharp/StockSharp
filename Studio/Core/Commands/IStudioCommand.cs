@@ -22,6 +22,6 @@ namespace StockSharp.Studio.Core.Commands
 
 	public abstract class BaseStudioCommand : IStudioCommand
 	{
-		public virtual bool CanRouteToGlobalScope { get { return false; } }
+		public virtual bool CanRouteToGlobalScope => false;
 	}
 }

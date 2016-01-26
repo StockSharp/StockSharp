@@ -85,7 +85,7 @@ namespace StockSharp.Algo.Export
 								.SetCell(0, index, message.TradeId == null ? message.TradeStringId : message.TradeId.To<string>())
 								.SetCell(1, index, message.ServerTime)
 								.SetCell(2, index, message.TradePrice)
-								.SetCell(3, index, message.Volume)
+								.SetCell(3, index, message.TradeVolume)
 								.SetCell(4, index, message.OriginSide)
 								.SetCell(5, index, message.OpenInterest)
 								.SetCell(6, index, message.IsUpTick);
@@ -127,7 +127,7 @@ namespace StockSharp.Algo.Export
 								.SetCell(0, index, message.OrderId == null ? message.OrderStringId : message.OrderId.To<string>())
 								.SetCell(1, index, message.ServerTime)
 								.SetCell(2, index, message.OrderPrice)
-								.SetCell(3, index, message.Volume)
+								.SetCell(3, index, message.OrderVolume)
 								.SetCell(4, index, message.Side)
 								.SetCell(5, index, message.OrderState)
 								.SetCell(6, index, message.TimeInForce)
@@ -150,7 +150,7 @@ namespace StockSharp.Algo.Export
 
 					break;
 				}
-				case ExecutionTypes.Order:
+				case ExecutionTypes.Transaction:
 				{
 					Do(worker =>
 					{
@@ -185,7 +185,7 @@ namespace StockSharp.Algo.Export
 								.SetCell(2, index, message.TransactionId)
 								.SetCell(3, index, message.OrderId == null ? message.OrderStringId : message.OrderId.To<string>())
 								.SetCell(4, index, message.OrderPrice)
-								.SetCell(5, index, message.Volume)
+								.SetCell(5, index, message.OrderVolume)
 								.SetCell(6, index, message.Balance)
 								.SetCell(7, index, message.Side)
 								.SetCell(8, index, message.OrderType)

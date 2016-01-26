@@ -40,7 +40,7 @@
 			  <codeEntityReference>M:StockSharp.Algo.TraderHelper.IsMatchedEmpty(StockSharp.BusinessEntities.Order)</codeEntityReference>,
 			  <codeEntityReference>M:StockSharp.Algo.TraderHelper.IsMatchedPartially(StockSharp.BusinessEntities.Order)</codeEntityReference>,
 			  <codeEntityReference>M:StockSharp.Algo.TraderHelper.IsMatched(StockSharp.BusinessEntities.Order)</codeEntityReference> и
-			  <codeEntityReference>M:StockSharp.Algo.TraderHelper.GetMatchedVolume(StockSharp.BusinessEntities.Order,System.Boolean)</codeEntityReference>:</para>
+			  <codeEntityReference>M:StockSharp.Algo.TraderHelper.GetMatchedVolume(StockSharp.BusinessEntities.Order,StockSharp.BusinessEntities.IConnector,System.Boolean)</codeEntityReference>:</para>
 			  <code language="C#">// любая заявка
 Order order = ....
 

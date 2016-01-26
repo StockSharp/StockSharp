@@ -38,16 +38,17 @@ namespace StockSharp.Messages
 		Tick,
 
 		/// <summary>
-		/// Order log.
+		/// Transaction.
 		/// </summary>
 		[EnumMember]
-		Order,
+		Transaction,
 
 		/// <summary>
-		/// Own trade.
+		/// Obsolete.
 		/// </summary>
 		[EnumMember]
-		Trade,
+		[Obsolete]
+		Obsolete,
 
 		/// <summary>
 		/// Order log.
@@ -208,7 +209,17 @@ namespace StockSharp.Messages
 		[DescriptionLoc(LocalizedStrings.OrderVolumeKey)]
 		[MainCategory]
 		[Nullable]
-		public decimal? Volume { get; set; }
+		public decimal? OrderVolume { get; set; }
+
+		/// <summary>
+		/// Number of contracts in an trade.
+		/// </summary>
+		[DataMember]
+		[DisplayNameLoc(LocalizedStrings.VolumeKey)]
+		[DescriptionLoc(LocalizedStrings.TradeVolumeKey)]
+		[MainCategory]
+		[Nullable]
+		public decimal? TradeVolume { get; set; }
 
 		/// <summary>
 		/// Visible quantity of contracts in order.
@@ -397,7 +408,7 @@ namespace StockSharp.Messages
 		//public bool IsFinished { get; set; }
 
 		/// <summary>
-		/// Is tick uptrend or downtrend in price. Uses only <see cref="ExecutionMessage.ExecutionType"/> for <see cref="ExecutionTypes.Tick"/>.
+		/// Is tick uptrend or downtrend in price. Uses only <see cref="ExecutionType"/> for <see cref="ExecutionTypes.Tick"/>.
 		/// </summary>
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.Str157Key)]
@@ -407,7 +418,7 @@ namespace StockSharp.Messages
 		public bool? IsUpTick { get; set; }
 
 		/// <summary>
-		/// Commission (broker, exchange etc.).  Uses when <see cref="ExecutionMessage.ExecutionType"/> set to <see cref="ExecutionTypes.Order"/> or <see cref="ExecutionTypes.Trade"/>.
+		/// Commission (broker, exchange etc.).  Uses when <see cref="ExecutionType"/> set to <see cref="ExecutionTypes.Transaction"/>.
 		/// </summary>
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.Str159Key)]
@@ -417,7 +428,7 @@ namespace StockSharp.Messages
 		public decimal? Commission { get; set; }
 
 		/// <summary>
-		/// Network latency. Uses when <see cref="ExecutionMessage.ExecutionType"/> set to <see cref="ExecutionTypes.Order"/>.
+		/// Network latency. Uses when <see cref="ExecutionType"/> set to <see cref="ExecutionTypes.Transaction"/>.
 		/// </summary>
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.Str161Key)]
@@ -427,7 +438,7 @@ namespace StockSharp.Messages
 		public TimeSpan? Latency { get; set; }
 
 		/// <summary>
-		/// Slippage in trade price. Uses when <see cref="ExecutionMessage.ExecutionType"/> set to <see cref="ExecutionTypes.Trade"/>.
+		/// Slippage in trade price. Uses when <see cref="ExecutionType"/> set to <see cref="ExecutionTypes.Transaction"/>.
 		/// </summary>
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.Str163Key)]
@@ -437,7 +448,7 @@ namespace StockSharp.Messages
 		public decimal? Slippage { get; set; }
 
 		/// <summary>
-		/// User order id. Uses when <see cref="ExecutionMessage.ExecutionType"/> set to <see cref="ExecutionTypes.Order"/>.
+		/// User order id. Uses when <see cref="ExecutionType"/> set to <see cref="ExecutionTypes.Transaction"/>.
 		/// </summary>
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.Str165Key)]
@@ -489,9 +500,9 @@ namespace StockSharp.Messages
 		/// <returns>A string that represents the current object.</returns>
 		public override string ToString()
 		{
-			return base.ToString() + ",T(S)={0:yyyy/MM/dd HH:mm:ss.fff},({1}),Sec={2},Ord={3}/{4}/{5},Fail={6},Price={7},Vol={8},Bal={9},TId={10},Pf={11},TPrice={12},UId={13},State={14}"
+			return base.ToString() + ",T(S)={0:yyyy/MM/dd HH:mm:ss.fff},({1}),Sec={2},Ord={3}/{4}/{5},Fail={6},Price={7},OrdVol={8},TrVol={9},Bal={10},TId={11},Pf={12},TPrice={13},UId={14},State={15}"
 				.Put(ServerTime, ExecutionType, SecurityId, OrderId, TransactionId, OriginalTransactionId,
-					Error, OrderPrice, Volume, Balance, TradeId, PortfolioName, TradePrice, UserOrderId, OrderState);
+					Error, OrderPrice, OrderVolume, TradeVolume, Balance, TradeId, PortfolioName, TradePrice, UserOrderId, OrderState);
 		}
 
 		/// <summary>
@@ -536,7 +547,8 @@ namespace StockSharp.Messages
 				TradeStatus = TradeStatus,
 				TransactionId = TransactionId,
 				OriginalTransactionId = OriginalTransactionId,
-				Volume = Volume,
+				OrderVolume = OrderVolume,
+				TradeVolume = TradeVolume,
 				//IsFinished = IsFinished,
 				VisibleVolume = VisibleVolume,
 				IsUpTick = IsUpTick,

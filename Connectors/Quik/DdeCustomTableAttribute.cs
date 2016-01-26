@@ -34,9 +34,6 @@ namespace StockSharp.Quik
 		/// <summary>
 		/// Название таблицы, передаваемой через DDE.
 		/// </summary>
-		public string DdeTableName
-		{
-			get { return Name; }
-		}
+		public string DdeTableName => Name;
 	}
 }

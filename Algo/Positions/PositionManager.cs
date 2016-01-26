@@ -112,77 +112,69 @@ namespace StockSharp.Algo.Positions
 					var execMsg = (ExecutionMessage)message;
 					var key = Tuple.Create(execMsg.SecurityId, execMsg.PortfolioName);
 
-					switch (execMsg.ExecutionType)
+					if (ByOrders && execMsg.HasOrderInfo())
 					{
-						case ExecutionTypes.Order:
+						var orderId = execMsg.OriginalTransactionId;
+						var newPosition = execMsg.GetPosition();
+
+						bool isNew;
+						decimal position;
+
+						lock (_positions.SyncRoot)
 						{
-							if (!ByOrders)
-								return 0;
+							decimal prev;
+							isNew = _positions.TryGetValue(key, out prev);
 
-							var orderId = execMsg.OriginalTransactionId;
-							var newPosition = execMsg.GetPosition();
+							Tuple<Sides, decimal> oldPosition;
 
-							bool isNew;
-							decimal position;
-
-							lock (_positions.SyncRoot)
+							if (_byOrderPositions.TryGetValue(orderId, out oldPosition))
 							{
-								decimal prev;
-								isNew = _positions.TryGetValue(key, out prev);
+								if (newPosition != oldPosition.Item2)
+									_byOrderPositions[orderId] = Tuple.Create(execMsg.Side, newPosition);
 
-								Tuple<Sides, decimal> oldPosition;
-
-								if (_byOrderPositions.TryGetValue(orderId, out oldPosition))
-								{
-									if (newPosition != oldPosition.Item2)
-										_byOrderPositions[orderId] = Tuple.Create(execMsg.Side, newPosition);
-
-									position = newPosition - oldPosition.Item2;
-								}
-								else
-								{
-									_byOrderPositions.Add(orderId, Tuple.Create(execMsg.Side, newPosition));
-									position = newPosition;
-								}
-
-								_positions[key] = prev + position;
-								Position += position;
+								position = newPosition - oldPosition.Item2;
+							}
+							else
+							{
+								_byOrderPositions.Add(orderId, Tuple.Create(execMsg.Side, newPosition));
+								position = newPosition;
 							}
 
-							if (isNew)
-								NewPosition.SafeInvoke(new KeyValuePair<Tuple<SecurityId, string>, decimal>(key, Position));
-							else
-								PositionChanged.SafeInvoke(new KeyValuePair<Tuple<SecurityId, string>, decimal>(key, Position));
-
-							return position;
+							_positions[key] = prev + position;
+							Position += position;
 						}
-						case ExecutionTypes.Trade:
+
+						if (isNew)
+							NewPosition.SafeInvoke(new KeyValuePair<Tuple<SecurityId, string>, decimal>(key, Position));
+						else
+							PositionChanged.SafeInvoke(new KeyValuePair<Tuple<SecurityId, string>, decimal>(key, Position));
+
+						return position;
+					}
+
+					if (!ByOrders && execMsg.HasTradeInfo())
+					{
+						var position = execMsg.GetPosition();
+
+						if (position == 0)
+							break;
+
+						bool isNew;
+
+						lock (_positions.SyncRoot)
 						{
-							if (ByOrders)
-								return 0;
-
-							var position = execMsg.GetPosition();
-
-							if (position == 0)
-								break;
-
-							bool isNew;
-
-							lock (_positions.SyncRoot)
-							{
-								decimal prev;
-								isNew = _positions.TryGetValue(key, out prev);
-								_positions[key] = prev + position;
-								Position += position;
-							}
-
-							if (isNew)
-								NewPosition.SafeInvoke(new KeyValuePair<Tuple<SecurityId, string>, decimal>(key, Position));
-							else
-								PositionChanged.SafeInvoke(new KeyValuePair<Tuple<SecurityId, string>, decimal>(key, Position));
-
-							return position;
+							decimal prev;
+							isNew = _positions.TryGetValue(key, out prev);
+							_positions[key] = prev + position;
+							Position += position;
 						}
+
+						if (isNew)
+							NewPosition.SafeInvoke(new KeyValuePair<Tuple<SecurityId, string>, decimal>(key, Position));
+						else
+							PositionChanged.SafeInvoke(new KeyValuePair<Tuple<SecurityId, string>, decimal>(key, Position));
+
+						return position;
 					}
 
 					break;

@@ -28,10 +28,7 @@ namespace StockSharp.Studio.Core
 		{
 		}
 
-		public Session Battle
-		{
-			get { return ReadById(1L); }
-		}
+		public Session Battle => ReadById(1L);
 	}
 
 	public class StrategyInfoSessionList : SessionList

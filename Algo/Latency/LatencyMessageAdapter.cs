@@ -84,7 +84,7 @@ namespace StockSharp.Algo.Latency
 
 			var execMsg = (ExecutionMessage)message;
 
-			if (execMsg.ExecutionType != ExecutionTypes.Order)
+			if (!execMsg.HasOrderInfo())
 				return;
 
 			var latency = LatencyManager.ProcessMessage(execMsg);

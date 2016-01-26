@@ -132,7 +132,7 @@ namespace StockSharp.Messages
 			return new ExecutionMessage
 			{
 				OriginalTransactionId = message.TransactionId,
-				ExecutionType = ExecutionTypes.Order,
+				ExecutionType = ExecutionTypes.Transaction,
 			};
 		}
 
@@ -167,7 +167,7 @@ namespace StockSharp.Messages
 				OrderId = message.OrderId,
 				OrderType = message.OrderType,
 				PortfolioName = message.PortfolioName,
-				ExecutionType = ExecutionTypes.Order,
+				ExecutionType = ExecutionTypes.Transaction,
 				UserOrderId = message.UserOrderId,
 			};
 		}
@@ -185,10 +185,10 @@ namespace StockSharp.Messages
 				OriginalTransactionId = message.TransactionId,
 				OrderType = message.OrderType,
 				OrderPrice = message.Price,
-				Volume = message.Volume,
+				OrderVolume = message.Volume,
 				Side = message.Side,
 				PortfolioName = message.PortfolioName,
-				ExecutionType = ExecutionTypes.Order,
+				ExecutionType = ExecutionTypes.Transaction,
 				Condition = message.Condition,
 				UserOrderId = message.UserOrderId,
 			};
@@ -207,11 +207,11 @@ namespace StockSharp.Messages
 				OriginalTransactionId = message.TransactionId,
 				OrderType = message.OrderType,
 				OrderPrice = message.Price,
-				Volume = message.Volume,
+				OrderVolume = message.Volume,
 				Balance = message.Volume,
 				Side = message.Side,
 				PortfolioName = message.PortfolioName,
-				ExecutionType = ExecutionTypes.Order,
+				ExecutionType = ExecutionTypes.Transaction,
 				Condition = message.Condition,
 				UserOrderId = message.UserOrderId,
 			};
@@ -372,6 +372,32 @@ namespace StockSharp.Messages
 				throw new ArgumentNullException(nameof(messageType));
 
 			return messageType.IsSubclassOf(typeof(CandleMessage));
+		}
+
+		/// <summary>
+		/// Determines whether the specified message contains order information.
+		/// </summary>
+		/// <param name="message">The message.</param>
+		/// <returns><see langword="true"/> if the specified message contains order information, otherwise, <see langword="false"/>.</returns>
+		public static bool HasOrderInfo(this ExecutionMessage message)
+		{
+			if (message == null)
+				throw new ArgumentNullException(nameof(message));
+
+			return message.ExecutionType == ExecutionTypes.Transaction && (message.OrderId != null || message.OrderStringId != null);
+		}
+
+		/// <summary>
+		/// Determines whether the specified message contains trade information.
+		/// </summary>
+		/// <param name="message">The message.</param>
+		/// <returns><see langword="true"/> if the specified message contains trade information, otherwise, <see langword="false"/>.</returns>
+		public static bool HasTradeInfo(this ExecutionMessage message)
+		{
+			if (message == null)
+				throw new ArgumentNullException(nameof(message));
+
+			return message.ExecutionType == ExecutionTypes.Transaction && (message.TradeId != null || message.TradeStringId != null);
 		}
 	}
 }

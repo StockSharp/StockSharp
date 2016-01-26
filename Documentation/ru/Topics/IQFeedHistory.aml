@@ -15,9 +15,11 @@
   	  	<listItem>Месячные данные – 250 месяцев.</listItem>
 	  </list>
 	  <para>Для получения исторических сделок необходимо воспользоваться методом 
-	  <codeEntityReference qualifyHint="true">M:StockSharp.IQFeed.IQFeedTrader.GetTrades(StockSharp.BusinessEntities.Security,System.DateTime,System.DateTime,System.Boolean@)</codeEntityReference>.</para>
+	  <codeEntityReference qualifyHint="true">M:StockSharp.IQFeed.IQFeedTrader.GetHistoricalLevel1(StockSharp.Messages.SecurityId,System.DateTimeOffset,System.DateTimeOffset,System.Boolean@)</codeEntityReference>.</para>
 	  <para>Для получения исторических свечек необходимо воспользоваться методом 
 	  <codeEntityReference qualifyHint="true">M:StockSharp.IQFeed.IQFeedTrader.GetHistoricalCandles(StockSharp.BusinessEntities.Security,System.Type,System.Object,System.Int64,System.Boolean@)</codeEntityReference>.</para>
     </introduction>
   </developerConceptualDocument>
+
+ 
 </topic>

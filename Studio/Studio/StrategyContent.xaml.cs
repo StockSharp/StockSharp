@@ -49,10 +49,7 @@ namespace StockSharp.Studio
 
 			private bool _initialized;
 
-			public bool Initialized
-			{
-				get { return _initialized; }
-			}
+			public bool Initialized => _initialized;
 
 			public event Action Loaded;
 			public event Action SizeChanged;
@@ -560,10 +557,7 @@ namespace StockSharp.Studio
 			}
 		}
 
-		Uri IStudioControl.Icon
-		{
-			get { return null; }
-		}
+		Uri IStudioControl.Icon => null;
 
 		void IPersistable.Load(SettingsStorage settings)
 		{

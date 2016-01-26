@@ -102,7 +102,7 @@ namespace StockSharp.Transaq
 							BuySell = regMsg.Side.ToTransaq(),
 							LinkedOrderNo = cond.LinkedOrderId.To<string>(),
 							ExpDate = expDate,
-							ValidFor = expDate == null ? (DateTime?)null : expDate.Value.ToUniversalTime(),
+							ValidFor = expDate?.ToUniversalTime(),
 						};
 
 						switch (cond.Type)
@@ -348,8 +348,8 @@ namespace StockSharp.Transaq
 					Side = order.BuySell.FromTransaq(),
 					OriginalTransactionId = stockSharpTransactionId,
 					PortfolioName = order.Client,
-					ExpiryDate = order.ExpDate == null ? (DateTimeOffset?)null : order.ExpDate.Value.ApplyTimeZone(TimeHelper.Moscow),
-					ExecutionType = ExecutionTypes.Order,
+					ExpiryDate = order.ExpDate?.ApplyTimeZone(TimeHelper.Moscow),
+					ExecutionType = ExecutionTypes.Transaction,
 				};
 
 				var usualOrder = order as TransaqOrder;
@@ -362,7 +362,7 @@ namespace StockSharp.Transaq
 					execMsg.Comment = usualOrder.BrokerRef;
 					execMsg.SystemComment = usualOrder.Result;
 					execMsg.OrderPrice = usualOrder.Price;
-					execMsg.Volume = usualOrder.Quantity;
+					execMsg.OrderVolume = usualOrder.Quantity;
 					execMsg.OrderType = usualOrder.Price == 0 ? OrderTypes.Market : OrderTypes.Limit;
 					execMsg.Commission = usualOrder.MaxCommission;
 
@@ -386,9 +386,7 @@ namespace StockSharp.Transaq
 
 					execMsg.OrderId = stopOrder.ActiveOrderNo;
 					execMsg.OrderType = OrderTypes.Conditional;
-					execMsg.ServerTime = stopOrder.AcceptTime == null
-						? DateTimeOffset.MinValue
-						: stopOrder.AcceptTime.Value.ToDto();
+					execMsg.ServerTime = stopOrder.AcceptTime?.ToDto() ?? DateTimeOffset.MinValue;
 
 					var stopCond = new TransaqOrderCondition
 					{
@@ -517,9 +515,9 @@ namespace StockSharp.Transaq
 					Side = trade.BuySell.FromTransaq(),
 					ServerTime = trade.Time.ToDto(),
 					Comment = trade.BrokerRef,
-					Volume = trade.Quantity,
+					TradeVolume = trade.Quantity,
 					PortfolioName = trade.Client,
-					ExecutionType = ExecutionTypes.Trade,
+					ExecutionType = ExecutionTypes.Transaction,
 					Commission = trade.Commission,
 				});
 			}

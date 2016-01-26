@@ -195,7 +195,7 @@ namespace StockSharp.Studio.Controls
 
 		public bool HasError { get; private set; }
 
-		public virtual Type SecurityType { get { return typeof(Security); } }
+		public virtual Type SecurityType => typeof(Security);
 
 		private Security _security;
 
@@ -229,7 +229,7 @@ namespace StockSharp.Studio.Controls
 			}
 		}
 
-		protected virtual string DefaultSecurityCode { get { return string.Empty; } }
+		protected virtual string DefaultSecurityCode => string.Empty;
 
 		public CompositeSecurityPanel()
 		{
@@ -885,10 +885,7 @@ namespace StockSharp.Studio.Controls
 		private readonly Regex _securityRegex = new Regex(@"[^\[]*\[([^\]]+)]");
 		private readonly TextBox _editor = new TextBox { AllowDrop = true };
 
-		public override Type SecurityType
-		{
-			get { return typeof(ExpressionIndexSecurity); }
-		}
+		public override Type SecurityType => typeof(ExpressionIndexSecurity);
 
 		public string Expression
 		{
@@ -896,10 +893,7 @@ namespace StockSharp.Studio.Controls
 			set { _editor.Text = value; }
 		}
 
-		protected override string DefaultSecurityCode
-		{
-			get { return "Index"; }
-		}
+		protected override string DefaultSecurityCode => "Index";
 
 		public IndexSecurityPanel()
 		{
@@ -1041,15 +1035,9 @@ namespace StockSharp.Studio.Controls
 	{
 		private readonly SecurityJumpsEditor _editor = new SecurityJumpsEditor();
 
-		public override Type SecurityType
-		{
-			get { return typeof(ContinuousSecurity); }
-		}
+		public override Type SecurityType => typeof(ContinuousSecurity);
 
-		protected override string DefaultSecurityCode
-		{
-			get { return "Continuous"; }
-		}
+		protected override string DefaultSecurityCode => "Continuous";
 
 		public ContinuousSecurityPanel()
 		{

@@ -73,7 +73,7 @@ private MovingAverageConvergenceDivergence _macd;
 			  <content>
 				  <para>
 					  В обработчике события <legacyBold>Click</legacyBold> кнопки <legacyBold>Connect</legacyBold>, наряду с подпиской на события коннектора и вызовом метода
-					   <codeEntityReference>M:StockSharp.Algo.IConnector.Connect</codeEntityReference>, инициализируем кандлменеджер и подписываемся на событие
+					   <codeEntityReference>M:StockSharp.BusinessEntities.IConnector.Connect</codeEntityReference>, инициализируем кандлменеджер и подписываемся на событие
 					   <codeEntityReference qualifyHint="true">E:StockSharp.Algo.Candles.CandleManager.Processing</codeEntityReference>. 
 					   В обработчике этого события при получении новой свечи будет выполнятся отрисовка графика.
 				  </para>
@@ -201,7 +201,8 @@ private void ShowChartClick(object sender, RoutedEventArgs e)
   						<para>Заполняем словарь <legacyBold>elements</legacyBold> парами "объект элемента - значение элемента"</para>
   					</listItem>
   					<listItem>
-  						<para>Для отрисовки графика вызываем метод <codeEntityReference qualifyHint="true">M:StockSharp.Xaml.Charting.Chart.Draw</codeEntityReference>,
+  						<para>Для отрисовки графика вызываем метод 
+  						<codeEntityReference qualifyHint="true">M:StockSharp.Xaml.Charting.Chart.Draw(System.Collections.Generic.IEnumerable{Ecng.Common.RefPair{System.DateTimeOffset,System.Collections.Generic.IDictionary{StockSharp.Xaml.Charting.IChartElement,System.Object}}})</codeEntityReference>,
   						в который передаем время и словарь элементов.</para>
   					</listItem>
 				</list>

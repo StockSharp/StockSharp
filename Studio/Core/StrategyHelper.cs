@@ -34,7 +34,7 @@ namespace StockSharp.Studio.Core
 			if (strategy == null)
 				throw new ArgumentNullException(nameof(strategy));
 
-			return strategy.StrategyInfo.StrategyType != null && strategy.StrategyInfo.StrategyType.GetAttribute<InteractedStrategyAttribute>() != null;
+			return strategy.StrategyInfo.StrategyType?.GetAttribute<InteractedStrategyAttribute>() != null;
 		}
 
 		public static bool GetIsAutoStart(this StrategyContainer strategy)
@@ -42,7 +42,7 @@ namespace StockSharp.Studio.Core
 			if (strategy == null)
 				throw new ArgumentNullException(nameof(strategy));
 
-			return strategy.StrategyInfo.StrategyType != null && strategy.StrategyInfo.StrategyType.GetAttribute<AutoStartAttribute>() != null;
+			return strategy.StrategyInfo.StrategyType?.GetAttribute<AutoStartAttribute>() != null;
 		}
 
 		public static bool GetIsNoEmulation(this StrategyInfo strategyInfo)
@@ -136,7 +136,7 @@ namespace StockSharp.Studio.Core
 		{
 			var container = strategyContainer.Strategy as StrategyContainer;
 
-			return container == null ? strategyContainer.Strategy.Id : container.GetStrategyId();
+			return container?.GetStrategyId() ?? strategyContainer.Strategy.Id;
 		}
 	}
 }

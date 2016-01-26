@@ -147,7 +147,7 @@ namespace StockSharp.Sterling
 					SecurityId = new SecurityId { SecurityCode = structQuoteUpdate.bstrSymbol, BoardCode = structQuoteUpdate.bstrExch },
 					//TradeId = structQuoteSnap.,
 					TradePrice = (decimal)structQuoteUpdate.fLastPrice,
-					Volume = structQuoteUpdate.nLastSize,
+					TradeVolume = structQuoteUpdate.nLastSize,
 					//OriginSide = action.ToSide(),
 					ServerTime = structQuoteUpdate.bstrUpdateTime.StrToTime()
 				};
@@ -207,7 +207,7 @@ namespace StockSharp.Sterling
 					SecurityId = new SecurityId{SecurityCode = structQuoteSnap.bstrSymbol,BoardCode = structQuoteSnap.bstrExch},
 					//TradeId = structQuoteSnap.,
 					TradePrice = (decimal)structQuoteSnap.fLastPrice,
-					Volume = structQuoteSnap.nLastSize,
+					TradeVolume = structQuoteSnap.nLastSize,
 					//OriginSide = action.ToSide(),
 					ServerTime = structQuoteSnap.bstrUpdateTime.StrToTime()
 				};

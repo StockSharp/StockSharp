@@ -55,7 +55,7 @@ namespace StockSharp.Algo.Storages.Csv
 		/// <param name="data">Data.</param>
 		protected override void Write(TextWriter writer, ExecutionMessage data)
 		{
-			writer.Write($"{data.ServerTime.UtcDateTime.ToString(TimeFormat)};{data.ServerTime.ToString("zzz")};{data.TransactionId};{data.OrderId};{data.OrderPrice};{data.Volume};{data.Side};{data.OrderState};{data.TimeInForce};{data.TradeId};{data.TradePrice};{data.PortfolioName};{data.IsSystem}");
+			writer.Write($"{data.ServerTime.UtcDateTime.ToString(TimeFormat)};{data.ServerTime.ToString("zzz")};{data.TransactionId};{data.OrderId};{data.OrderPrice};{data.OrderVolume};{data.Side};{data.OrderState};{data.TimeInForce};{data.TradeId};{data.TradePrice};{data.PortfolioName};{data.IsSystem}");
 		}
 
 		/// <summary>
@@ -74,7 +74,7 @@ namespace StockSharp.Algo.Storages.Csv
 				TransactionId = reader.ReadLong(),
 				OrderId = reader.ReadLong(),
 				OrderPrice = reader.ReadDecimal(),
-				Volume = reader.ReadDecimal(),
+				OrderVolume = reader.ReadDecimal(),
 				Side = reader.ReadEnum<Sides>(),
 				OrderState = reader.ReadEnum<OrderStates>(),
 				TimeInForce = reader.ReadNullableEnum<TimeInForce>(),

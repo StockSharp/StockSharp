@@ -20,7 +20,6 @@ namespace StockSharp.Studio.Core
 	using System.IO;
 
 	using Ecng.Common;
-	using Ecng.Configuration;
 	using Ecng.Serialization;
 
 	using StockSharp.Algo;
@@ -130,10 +129,7 @@ namespace StockSharp.Studio.Core
 
 		private readonly StudioDrive _defaultDrive = new StudioDrive();
 
-		public override IMarketDataDrive DefaultDrive
-		{
-			get { return _defaultDrive; }
-		}
+		public override IMarketDataDrive DefaultDrive => _defaultDrive;
 
 		public MarketDataSettings MarketDataSettings
 		{

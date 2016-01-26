@@ -38,7 +38,7 @@ namespace StockSharp.Hydra.Core
 			TemplateTxtOrderLog = typeof(ExecutionMessage).GetTxtTemplate(ExecutionTypes.OrderLog);
 			TemplateTxtSecurity = typeof(SecurityMessage).GetTxtTemplate();
 			TemplateTxtTick = typeof(ExecutionMessage).GetTxtTemplate(ExecutionTypes.Tick);
-			TemplateTxtTransaction = typeof(ExecutionMessage).GetTxtTemplate(ExecutionTypes.Order);
+			TemplateTxtTransaction = typeof(ExecutionMessage).GetTxtTemplate(ExecutionTypes.Transaction);
 			TemplateTxtNews = typeof(NewsMessage).GetTxtTemplate();
 		}
 

@@ -58,15 +58,10 @@ namespace StockSharp.Hydra.Core
 	/// </summary>
 	public static class Extensions
 	{
-		private static readonly CachedSynchronizedSet<IHydraTask> _tasks = new CachedSynchronizedSet<IHydraTask>();
-
 		/// <summary>
 		/// Все созданные задачи.
 		/// </summary>
-		public static CachedSynchronizedSet<IHydraTask> Tasks
-		{
-			get { return _tasks; }
-		}
+		public static CachedSynchronizedSet<IHydraTask> Tasks { get; } = new CachedSynchronizedSet<IHydraTask>();
 
 		/// <summary>
 		/// Идентификатор инструмента "Все инструменты".
@@ -235,8 +230,8 @@ namespace StockSharp.Hydra.Core
 					case ExecutionTypes.OrderLog:
 						fileName = "orderLog";
 						break;
-					case ExecutionTypes.Order:
-						fileName = "executions";
+					case ExecutionTypes.Transaction:
+						fileName = "transactions";
 						break;
 					default:
 						throw new ArgumentOutOfRangeException(nameof(arg));
@@ -321,8 +316,7 @@ namespace StockSharp.Hydra.Core
 					case ExecutionTypes.Tick:
 						templateName = "txt_export_ticks";
 						break;
-					case ExecutionTypes.Order:
-					case ExecutionTypes.Trade:
+					case ExecutionTypes.Transaction:
 						templateName = "txt_export_transactions";
 						break;
 					case ExecutionTypes.OrderLog:
@@ -377,7 +371,7 @@ namespace StockSharp.Hydra.Core
 				return url;
 
 			var connectorType = taskType.GetGenericType(typeof(ConnectorHydraTask<>));
-			return connectorType == null ? null : connectorType.GenericTypeArguments[0].GetIconUrl();
+			return connectorType?.GenericTypeArguments[0].GetIconUrl();
 		}
 
 		/// <summary>

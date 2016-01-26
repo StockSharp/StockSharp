@@ -54,10 +54,7 @@ namespace StockSharp.Studio.Services
 			return null;
 		}
 
-		int ISecurityProvider.Count
-		{
-			get { return _securities.Count; }
-		}
+		int ISecurityProvider.Count => _securities.Count;
 
 		event Action<IEnumerable<Security>> ISecurityProvider.Added
 		{

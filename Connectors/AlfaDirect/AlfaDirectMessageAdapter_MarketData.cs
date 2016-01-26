@@ -312,7 +312,7 @@ namespace StockSharp.AlfaDirect
 					TradeId = f.TrdNo.GetValue(cols),
 					OriginSide = f.BuySellNum.GetValue(cols),
 					TradePrice = f.Price.GetValue(cols),
-					Volume = f.Qty.GetValue(cols),
+					TradeVolume = f.Qty.GetValue(cols),
 					ServerTime = f.TsTime.GetValue(cols).ApplyTimeZone(TimeHelper.Moscow),
 				});
 			}

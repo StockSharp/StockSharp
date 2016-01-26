@@ -46,7 +46,7 @@ namespace StockSharp.Designer
 	using StockSharp.Studio.Controls;
 	using StockSharp.Studio.Core;
 	using StockSharp.Studio.Core.Commands;
-	using StockSharp.Studio.Services;
+	using StockSharp.Studio.Core.Services;
 	using StockSharp.Xaml;
 	using StockSharp.Xaml.Diagram;
 

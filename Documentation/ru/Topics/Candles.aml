@@ -157,10 +157,9 @@ _candleManager.Start(series);
 				<content>    		
 					<para>Если требуется получать уже сформированные свечки по определенным параметрам, нужно вызывать специальные методы, например, для
 					<codeEntityReference>T:StockSharp.Algo.Candles.TimeFrameCandle</codeEntityReference>,
-					<codeEntityReference qualifyHint="false" autoUpgrade="true">M:StockSharp.Algo.Candles.CandleHelper.GetCandles``1(StockSharp.Algo.Candles.CandleSeries,Ecng.ComponentModel.Range{System.DateTimeOffset})</codeEntityReference>,
+					<codeEntityReference qualifyHint="false" autoUpgrade="true">M:StockSharp.Algo.Candles.CandleHelper.GetCandles``1(StockSharp.Algo.Candles.ICandleManager,StockSharp.Algo.Candles.CandleSeries,Ecng.ComponentModel.Range{System.DateTimeOffset})</codeEntityReference>,
 					или для  <codeEntityReference>T:StockSharp.Algo.Candles.RangeCandle</codeEntityReference>,
-					<codeEntityReference qualifyHint="false" autoUpgrade="true">M:StockSharp.Algo.Candles.CandleHelper.GetCandles``1(StockSharp.Algo.Candles.CandleSeries,System.DateTime)</codeEntityReference>:</para>
-			
+					<codeEntityReference qualifyHint="false" autoUpgrade="true">M:StockSharp.Algo.Candles.CandleHelper.GetCandles``1(StockSharp.Algo.Candles.ICandleManager,StockSharp.Algo.Candles.CandleSeries,System.DateTimeOffset)</codeEntityReference>:</para>
 					<code language="C#">
 					<![CDATA[
 // получить 100 свечек-пятиминуток для Лукойла
@@ -183,7 +182,7 @@ var candles = _series.GetCandles(100);
 			<step>
 				<content>  			
 					<para>Если необходимо обратиться к прошедшим свечкам по номеру (например, получить 5-ую с конца), то можно использовать метод
-					<codeEntityReference qualifyHint="false" autoUpgrade="true">M:StockSharp.Algo.Candles.CandleHelper.GetCandle``1(StockSharp.Algo.Candles.CandleSeries,System.Int32)</codeEntityReference>:</para>
+					<codeEntityReference qualifyHint="false" autoUpgrade="true">M:StockSharp.Algo.Candles.CandleHelper.GetCandle``1(StockSharp.Algo.Candles.ICandleManager,StockSharp.Algo.Candles.CandleSeries,System.Int32)</codeEntityReference>:</para>
 					<code language="C#">
 					<![CDATA[
 // получить 5-ую свечку с конца (нумерация идет от 0, 0 - текущая свечка)

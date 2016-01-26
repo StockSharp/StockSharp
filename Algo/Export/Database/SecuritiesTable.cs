@@ -47,17 +47,17 @@ namespace StockSharp.Algo.Export.Database
 			yield return new ColumnDescription("PriceStep")
 			{
 				DbType = typeof(decimal?),
-				ValueRestriction = new DecimalRestriction { Scale = security.PriceStep == null ? 1 : security.PriceStep.Value.GetCachedDecimals() }
+				ValueRestriction = new DecimalRestriction { Scale = security.PriceStep?.GetCachedDecimals() ?? 1 }
 			};
 			yield return new ColumnDescription("VolumeStep")
 			{
 				DbType = typeof(decimal?),
-				ValueRestriction = new DecimalRestriction { Scale = security.VolumeStep == null ? 1 : security.VolumeStep.Value.GetCachedDecimals() }
+				ValueRestriction = new DecimalRestriction { Scale = security.VolumeStep?.GetCachedDecimals() ?? 1 }
 			};
 			yield return new ColumnDescription("Multiplier")
 			{
 				DbType = typeof(decimal?),
-				ValueRestriction = new DecimalRestriction { Scale = security.Multiplier == null ? 1 : security.Multiplier.Value.GetCachedDecimals() }
+				ValueRestriction = new DecimalRestriction { Scale = security.Multiplier?.GetCachedDecimals() ?? 1 }
 			};
 			yield return new ColumnDescription("Decimals")
 			{

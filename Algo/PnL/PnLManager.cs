@@ -92,25 +92,22 @@ namespace StockSharp.Algo.PnL
 				{
 					var trade = (ExecutionMessage)message;
 
-					switch (trade.ExecutionType)
+					if (trade.HasTradeInfo())
 					{
-						case ExecutionTypes.Trade:
+						// TODO
+						if (trade.PortfolioName.IsEmpty())
+							return null;
+
+						lock (_portfolioManagers.SyncRoot)
 						{
-							// TODO
-							if (trade.PortfolioName.IsEmpty())
-								return null;
+							var manager = _portfolioManagers.SafeAdd(trade.PortfolioName, pf => new PortfolioPnLManager(pf));
 
-							lock (_portfolioManagers.SyncRoot)
-							{
-								var manager = _portfolioManagers.SafeAdd(trade.PortfolioName, pf => new PortfolioPnLManager(pf));
+							PnLInfo info;
 
-								PnLInfo info;
+							if (manager.ProcessMyTrade(trade, out info))
+								_realizedPnL += info.PnL;
 
-								if (manager.ProcessMyTrade(trade, out info))
-									_realizedPnL += info.PnL;
-
-								return info;
-							}
+							return info;
 						}
 					}
 

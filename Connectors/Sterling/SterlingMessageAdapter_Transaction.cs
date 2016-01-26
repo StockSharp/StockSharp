@@ -120,36 +120,15 @@ namespace StockSharp.Sterling
 
 		private void ProcessOrderStatusMessage()
 		{
-			var myTrades = _client.GetMyTrades();
-
-			foreach (var trade in myTrades.Where(t => t.bstrClOrderId != ""))
-			{
-				SendOutMessage(new ExecutionMessage
-				{
-					ExecutionType = ExecutionTypes.Trade,
-					PortfolioName = trade.bstrAccount,
-					Volume = trade.nQuantity,
-					OrderPrice = (decimal)trade.fExecPrice,
-					Side = trade.bstrSide.ToSide(),
-					OriginalTransactionId = trade.bstrClOrderId.To<long>(),
-					SecurityId = new SecurityId { SecurityCode = trade.bstrSymbol, BoardCode = trade.bstrDestination },
-					OrderType = Enum.GetName(typeof(STIPriceTypes), trade.nPriceType).To<STIPriceTypes>().ToPriceTypes(),
-					OrderId = trade.nOrderRecordId,
-					TradeId = trade.nTradeRecordId,
-					Commission = trade.bEcnFee,
-					ServerTime = trade.bstrTradeTime.StrToDateTime(),
-				});
-			}
-
 			var orders = _client.GetOrders();
 
 			foreach (var order in orders.Where(o => o.bstrClOrderId != ""))
 			{
 				SendOutMessage(new ExecutionMessage
 				{
-					ExecutionType = ExecutionTypes.Order,
+					ExecutionType = ExecutionTypes.Transaction,
 					PortfolioName = order.bstrAccount,
-					Volume = order.nQuantity,
+					OrderVolume = order.nQuantity,
 					VisibleVolume = order.nDisplay,
 					OrderPrice = (decimal)order.fLmtPrice,
 					Side = order.bstrSide.ToSide(),
@@ -162,7 +141,28 @@ namespace StockSharp.Sterling
 					OrderId = order.nOrderRecordId,
 					ServerTime = order.bstrOrderTime.StrToDateTime()
 				});
-			}	
+			}
+
+			var myTrades = _client.GetMyTrades();
+
+			foreach (var trade in myTrades.Where(t => t.bstrClOrderId != ""))
+			{
+				SendOutMessage(new ExecutionMessage
+				{
+					ExecutionType = ExecutionTypes.Transaction,
+					PortfolioName = trade.bstrAccount,
+					Side = trade.bstrSide.ToSide(),
+					OriginalTransactionId = trade.bstrClOrderId.To<long>(),
+					SecurityId = new SecurityId { SecurityCode = trade.bstrSymbol, BoardCode = trade.bstrDestination },
+					OrderType = Enum.GetName(typeof(STIPriceTypes), trade.nPriceType).To<STIPriceTypes>().ToPriceTypes(),
+					OrderId = trade.nOrderRecordId,
+					TradeId = trade.nTradeRecordId,
+					TradePrice = (decimal)trade.fExecPrice,
+					TradeVolume = trade.nQuantity,
+					Commission = trade.bEcnFee,
+					ServerTime = trade.bstrTradeTime.StrToDateTime(),
+				});
+			}
 		}
 
 		private void SessionOnStiTradeUpdate(STITradeUpdateMsg msg)
@@ -170,10 +170,10 @@ namespace StockSharp.Sterling
 			SendOutMessage(new ExecutionMessage
 			{
 				OriginalTransactionId = msg.ClOrderID.To<long>(),
-				ExecutionType = ExecutionTypes.Trade,
+				ExecutionType = ExecutionTypes.Transaction,
 				PortfolioName = msg.Account,
-				OrderPrice = (decimal)msg.ExecPrice,
-				Volume = msg.Quantity,
+				TradePrice = (decimal)msg.ExecPrice,
+				TradeVolume = msg.Quantity,
 				Side = msg.Side.ToSide(),
 				SecurityId = new SecurityId { SecurityCode = msg.Symbol, BoardCode = msg.Destination },
 				OrderType = msg.PriceType.ToPriceTypes(),
@@ -189,9 +189,9 @@ namespace StockSharp.Sterling
 			SendOutMessage(new ExecutionMessage
 			{
 				OriginalTransactionId = msg.ClOrderID.To<long>(),
-				ExecutionType = ExecutionTypes.Order,
+				ExecutionType = ExecutionTypes.Transaction,
 				PortfolioName = msg.Account,
-				Volume = msg.Quantity,
+				OrderVolume = msg.Quantity,
 				Side = msg.Side.ToSide(),
 				Balance = msg.LvsQuantity,
 				SecurityId = new SecurityId { SecurityCode = msg.Symbol, BoardCode = msg.Destination },
@@ -210,7 +210,7 @@ namespace StockSharp.Sterling
 				OriginalTransactionId = msg.ClOrderID.To<long>(),
 				OrderState = OrderStates.Failed,
 				Error = new InvalidOperationException(),
-				ExecutionType = ExecutionTypes.Order,
+				ExecutionType = ExecutionTypes.Transaction,
 			});
 		}
 
@@ -220,7 +220,7 @@ namespace StockSharp.Sterling
 			{
 				OriginalTransactionId = msg.ClOrderID.To<long>(),
 				OrderState = OrderStates.Active,
-				ExecutionType = ExecutionTypes.Order,
+				ExecutionType = ExecutionTypes.Transaction,
 			});
 		}
 

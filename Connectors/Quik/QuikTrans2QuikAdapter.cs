@@ -112,7 +112,6 @@ namespace StockSharp.Quik
 		public QuikTrans2QuikAdapter(IdGenerator transactionIdGenerator)
 			: base(transactionIdGenerator)
 		{
-			IsAsyncMode = true;
 			Platform = Platforms.x86;
 			//SessionHolder.TerminalChanged += ResetApi;
 			this.AddTransactionalSupport();
@@ -148,8 +147,6 @@ namespace StockSharp.Quik
 			}
 		}
 
-		private bool _isAsyncMode = true;
-
 		/// <summary>
 		/// Асинхронный режим. Если <see langword="true"/>, то все транзакции, такие как <see cref="OrderRegisterMessage"/>
 		/// или <see cref="OrderCancelMessage"/> будут отправляться в асинхронном режиме.
@@ -161,13 +158,7 @@ namespace StockSharp.Quik
 		[DisplayNameLoc(LocalizedStrings.Str1781Key)]
 		[DescriptionLoc(LocalizedStrings.Str1782Key)]
 		[PropertyOrder(2)]
-		public bool IsAsyncMode
-		{
-			get { return _isAsyncMode; }
-			set { _isAsyncMode = value; }
-		}
-
-		private bool _overrideDll = true;
+		public bool IsAsyncMode { get; set; } = true;
 
 		/// <summary>
 		/// Перезаписать файл библиотеки из ресурсов. По-умолчанию файл будет перезаписан.
@@ -176,11 +167,7 @@ namespace StockSharp.Quik
 		[DisplayNameLoc(LocalizedStrings.OverrideKey)]
 		[DescriptionLoc(LocalizedStrings.OverrideDllKey)]
 		[PropertyOrder(3)]
-		public bool OverrideDll
-		{
-			get { return _overrideDll; }
-			set { _overrideDll = value; }
-		}
+		public bool OverrideDll { get; set; } = true;
 
 		/// <summary>
 		/// https://forum.quik.ru/forum10/topic1218/
@@ -191,10 +178,7 @@ namespace StockSharp.Quik
 		/// Проверить введенные параметры на валидность.
 		/// </summary>
 		[Browsable(false)]
-		public override bool IsValid
-		{
-			get { return !DllName.IsEmpty(); }
-		}
+		public override bool IsValid => !DllName.IsEmpty();
 
 		/// <summary>
 		/// Создать для заявки типа <see cref="OrderTypes.Conditional"/> условие, которое поддерживается подключением.
@@ -348,7 +332,7 @@ namespace StockSharp.Quik
 					var apiEx = ex as ApiException;
 
 					if (isRegistering)
-						ProcessTransactionReply(execution, transaction, 0, apiMessage, apiEx != null ? apiEx.Code : Codes.Failed, ex);
+						ProcessTransactionReply(execution, transaction, 0, apiMessage, apiEx?.Code ?? Codes.Failed, ex);
 					else
 					{
 						execution.OrderState = OrderStates.Failed;
@@ -598,7 +582,7 @@ namespace StockSharp.Quik
 				SecurityId = replaceMessage.SecurityId,
 				OriginalTransactionId = replaceMessage.OldTransactionId,
 				OrderId = replaceMessage.OldOrderId,
-				ExecutionType = ExecutionTypes.Order,
+				ExecutionType = ExecutionTypes.Transaction,
 				OrderState = OrderStates.Failed,
 				IsCancelled = true,
 				Error = error
@@ -608,7 +592,7 @@ namespace StockSharp.Quik
 			{
 				SecurityId = replaceMessage.SecurityId,
 				OriginalTransactionId = replaceMessage.TransactionId,
-				ExecutionType = ExecutionTypes.Order,
+				ExecutionType = ExecutionTypes.Transaction,
 				OrderState = OrderStates.Failed,
 				Error = error
 			});

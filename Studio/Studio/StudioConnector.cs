@@ -41,10 +41,7 @@ namespace StockSharp.Studio
 		{
 			private readonly Dictionary<object, SecurityId> _securityIds = new Dictionary<object, SecurityId>();
 
-			protected override bool IsSupportNativeSecurityLookup
-			{
-				get { return true; }
-			}
+			protected override bool IsSupportNativeSecurityLookup => true;
 
 			public StudioMarketDataAdapter(IdGenerator transactionIdGenerator)
 				: base(transactionIdGenerator)
@@ -132,7 +129,7 @@ namespace StockSharp.Studio
 					{
 						var execMsg = (ExecutionMessage)message;
 
-						if (execMsg.ExecutionType == ExecutionTypes.Trade || execMsg.ExecutionType == ExecutionTypes.Order)
+						if (execMsg.ExecutionType == ExecutionTypes.Transaction)
 							return;
 
 						break;
@@ -155,7 +152,7 @@ namespace StockSharp.Studio
 					{
 						var execMsg = (ExecutionMessage)message;
 
-						if (execMsg.ExecutionType != ExecutionTypes.Order && execMsg.ExecutionType != ExecutionTypes.Trade)
+						if (execMsg.ExecutionType != ExecutionTypes.Transaction)
 							return;
 
 						break;

@@ -42,18 +42,12 @@ namespace StockSharp.Hydra.Core
 		/// <summary>
 		/// Кэш.
 		/// </summary>
-		public static DatabaseConnectionCache Instance
-		{
-			get { return _instance.Value; }
-		}
+		public static DatabaseConnectionCache Instance => _instance.Value;
 
 		/// <summary>
 		/// Список всех подключений.
 		/// </summary>
-		public IEnumerable<DatabaseConnectionPair> AllConnections
-		{
-			get { return _connections.Cache; }
-		}
+		public IEnumerable<DatabaseConnectionPair> AllConnections => _connections.Cache;
 
 		/// <summary>
 		/// Событие создания нового подключения.

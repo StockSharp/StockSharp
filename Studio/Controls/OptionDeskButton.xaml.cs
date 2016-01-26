@@ -47,14 +47,8 @@ namespace StockSharp.Studio.Controls
 		{
 		}
 
-		string IStudioControl.Title
-		{
-			get { return (string)ToolTip; }
-		}
+		string IStudioControl.Title => (string)ToolTip;
 
-		Uri IStudioControl.Icon
-		{
-			get { return null; }
-		}
+		Uri IStudioControl.Icon => null;
 	}
 }

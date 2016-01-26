@@ -169,13 +169,7 @@ namespace StockSharp.Studio.Core
 			}
 		}
 
-		public override ProcessStates ProcessState
-		{
-			get
-			{
-				return Strategy == null ? ProcessStates.Stopped : Strategy.ProcessState;
-			}
-		}
+		public override ProcessStates ProcessState => Strategy == null ? ProcessStates.Stopped : Strategy.ProcessState;
 
 		public override TimeSpan UnrealizedPnLInterval
 		{

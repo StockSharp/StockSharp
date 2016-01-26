@@ -58,35 +58,36 @@ namespace StockSharp.Studio
 	using StockSharp.Xaml.Diagram;
 	using StockSharp.Configuration;
 	using StockSharp.Localization;
+	using StockSharp.Studio.Core.Services;
 	using StockSharp.Xaml.Code;
 
-	using IStrategyService = StockSharp.Studio.Core.IStrategyService;
+	using IStrategyService = StockSharp.Studio.Core.Services.IStrategyService;
 	using RibbonButton = ActiproSoftware.Windows.Controls.Ribbon.Controls.Button;
 	using RibbonPopupButton = ActiproSoftware.Windows.Controls.Ribbon.Controls.PopupButton;
 	using RibbonSeparator = ActiproSoftware.Windows.Controls.Ribbon.Controls.Separator;
 
 	public partial class MainWindow
 	{
-		public readonly static RoutedCommand StockSharpConnectCommand = new RoutedCommand();
-		public readonly static RoutedCommand ConnectCommand = new RoutedCommand();
-		public readonly static RoutedCommand ConnectionSettingsCommand = new RoutedCommand();
-		public readonly static RoutedCommand PortfolioSettingsCommand = new RoutedCommand();
-		public readonly static RoutedCommand ExitCommand = new RoutedCommand();
-		public readonly static RoutedCommand ConnectionsWindowCommand = new RoutedCommand();
-		public readonly static RoutedCommand CheckForUpdatesCommand = new RoutedCommand();
-		public readonly static RoutedCommand AboutCommand = new RoutedCommand();
+		public static readonly RoutedCommand StockSharpConnectCommand = new RoutedCommand();
+		public static readonly RoutedCommand ConnectCommand = new RoutedCommand();
+		public static readonly RoutedCommand ConnectionSettingsCommand = new RoutedCommand();
+		public static readonly RoutedCommand PortfolioSettingsCommand = new RoutedCommand();
+		public static readonly RoutedCommand ExitCommand = new RoutedCommand();
+		public static readonly RoutedCommand ConnectionsWindowCommand = new RoutedCommand();
+		public static readonly RoutedCommand CheckForUpdatesCommand = new RoutedCommand();
+		public static readonly RoutedCommand AboutCommand = new RoutedCommand();
 		
-		public readonly static RoutedCommand DataDirectoryCommand = new RoutedCommand();
-		public readonly static RoutedCommand TargetPlatformCommand = new RoutedCommand();
+		public static readonly RoutedCommand DataDirectoryCommand = new RoutedCommand();
+		public static readonly RoutedCommand TargetPlatformCommand = new RoutedCommand();
 
-		public readonly static RoutedCommand NewPortfolioCommand = new RoutedCommand();
-		public readonly static RoutedCommand NewSecurityCommand = new RoutedCommand();
-		public readonly static RoutedCommand LookupSecurityCommand = new RoutedCommand();
+		public static readonly RoutedCommand NewPortfolioCommand = new RoutedCommand();
+		public static readonly RoutedCommand NewSecurityCommand = new RoutedCommand();
+		public static readonly RoutedCommand LookupSecurityCommand = new RoutedCommand();
 
-		public readonly static RoutedCommand DocumentationCommand = new RoutedCommand();
-		public readonly static RoutedCommand EduCommand = new RoutedCommand();
-		public readonly static RoutedCommand ForumCommand = new RoutedCommand();
-		public readonly static RoutedCommand ChatCommand = new RoutedCommand();
+		public static readonly RoutedCommand DocumentationCommand = new RoutedCommand();
+		public static readonly RoutedCommand EduCommand = new RoutedCommand();
+		public static readonly RoutedCommand ForumCommand = new RoutedCommand();
+		public static readonly RoutedCommand ChatCommand = new RoutedCommand();
 
 		#region DependencyProperty
 
@@ -132,13 +133,7 @@ namespace StockSharp.Studio
 
 		private readonly PairSet<Tuple<string, Type>, IContentWindow> _contents = new PairSet<Tuple<string, Type>, IContentWindow>();
 
-		public string ProductTitle
-		{
-			get
-			{
-				return TypeHelper.ApplicationNameWithVersion.Replace("S#.Studio", "StockSharp");
-			}
-		}
+		public string ProductTitle => TypeHelper.ApplicationNameWithVersion.Replace("S#.Studio", "StockSharp");
 
 		public MainWindow()
 		{

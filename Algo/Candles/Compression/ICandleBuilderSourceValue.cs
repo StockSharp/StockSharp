@@ -113,7 +113,7 @@ namespace StockSharp.Algo.Candles.Compression
 
 		decimal ICandleBuilderSourceValue.Price => Tick.TradePrice ?? 0;
 
-		decimal ICandleBuilderSourceValue.Volume => Tick.Volume ?? 0;
+		decimal ICandleBuilderSourceValue.Volume => Tick.TradeVolume ?? 0;
 
 		Sides? ICandleBuilderSourceValue.OrderDirection => Tick.OriginSide;
 	}

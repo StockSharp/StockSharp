@@ -387,14 +387,14 @@ namespace StockSharp.Algo
 		/// <summary>
 		/// To get the position on My trade.
 		/// </summary>
-		/// <param name="message">My trade, used for position calculation. At buy the trade volume <see cref="ExecutionMessage.Volume"/> is taken with positive sign, at sell - with negative.</param>
+		/// <param name="message">My trade, used for position calculation. At buy the trade volume <see cref="ExecutionMessage.TradeVolume"/> is taken with positive sign, at sell - with negative.</param>
 		/// <returns>Position.</returns>
 		public static decimal GetPosition(this ExecutionMessage message)
 		{
 			if (message == null)
 				throw new ArgumentNullException(nameof(message));
 
-			return (message.Side == Sides.Buy ? message.Volume : -message.Volume) ?? 0;
+			return (message.Side == Sides.Buy ? message.TradeVolume : -message.TradeVolume) ?? 0;
 		}
 
 		/// <summary>
@@ -1374,7 +1374,7 @@ namespace StockSharp.Algo
 			if (order == null)
 				throw new ArgumentNullException(nameof(order));
 
-			return order.Balance > 0 && order.Balance != order.Volume;
+			return order.Balance > 0 && order.Balance != order.OrderVolume;
 		}
 
 		/// <summary>
@@ -1387,7 +1387,7 @@ namespace StockSharp.Algo
 			if (order == null)
 				throw new ArgumentNullException(nameof(order));
 
-			return order.Balance > 0 && order.Balance == order.Volume;
+			return order.Balance > 0 && order.Balance == order.OrderVolume;
 		}
 
 		/// <summary>
@@ -1524,23 +1524,16 @@ namespace StockSharp.Algo
 					if (execMsg == null)
 						return;
 
-					switch (execMsg.ExecutionType)
+					if (execMsg.Error != null)
+						errors.Add(execMsg.Error);
+
+					if (execMsg.HasTradeInfo())
 					{
-						case ExecutionTypes.Order:
-							if (execMsg.Error != null)
-								errors.Add(execMsg.Error);
-
-							break;
-						case ExecutionTypes.Trade:
+						trades.Add(new MyTrade
 						{
-							trades.Add(new MyTrade
-							{
-								Order = order,
-								Trade = execMsg.ToTrade(new Trade { Security = order.Security })
-							});
-
-							break;
-						}
+							Order = order,
+							Trade = execMsg.ToTrade(new Trade { Security = order.Security })
+						});
 					}
 				};
 
@@ -3727,12 +3720,12 @@ namespace StockSharp.Algo
 			if (message == null)
 				throw new ArgumentNullException(nameof(message));
 
-			var volume = message.Volume;
+			var volume = message.OrderVolume ?? message.TradeVolume;
 
 			if (volume != null)
 				return volume.Value;
 
-			var errorMsg = message.ExecutionType == ExecutionTypes.Tick || message.ExecutionType == ExecutionTypes.Trade
+			var errorMsg = message.ExecutionType == ExecutionTypes.Tick || message.HasTradeInfo()
 				? LocalizedStrings.Str1022Params.Put((object)message.TradeId ?? message.TradeStringId)
 				: LocalizedStrings.Str927Params.Put((object)message.OrderId ?? message.OrderStringId);
 
@@ -3858,7 +3851,7 @@ namespace StockSharp.Algo
 				SecurityId = level1.SecurityId,
 				TradeId = (long?)level1.Changes.TryGetValue(Level1Fields.LastTradeId),
 				TradePrice = (decimal?)level1.Changes.TryGetValue(Level1Fields.LastTradePrice),
-				Volume = (decimal?)level1.Changes.TryGetValue(Level1Fields.LastTradeVolume),
+				TradeVolume = (decimal?)level1.Changes.TryGetValue(Level1Fields.LastTradeVolume),
 				OriginSide = (Sides?)level1.Changes.TryGetValue(Level1Fields.LastTradeOrigin),
 				ServerTime = (DateTimeOffset?)level1.Changes.TryGetValue(Level1Fields.LastTradeTime) ?? level1.ServerTime,
 				IsUpTick = (bool?)level1.Changes.TryGetValue(Level1Fields.LastTradeUpDown),

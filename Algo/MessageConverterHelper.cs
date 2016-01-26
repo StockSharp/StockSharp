@@ -245,7 +245,7 @@ namespace StockSharp.Algo
 				TradeId = tick.Id,
 				TradeStringId = tick.StringId,
 				TradePrice = tick.Price,
-				Volume = tick.Volume,
+				TradeVolume = tick.Volume,
 				OriginalTransactionId = order.TransactionId,
 				OrderId = order.Id,
 				OrderStringId = order.StringId,
@@ -254,7 +254,7 @@ namespace StockSharp.Algo
 				OrderPrice = order.Price,
 				SecurityId = order.Security.ToSecurityId(),
 				PortfolioName = order.Portfolio.Name,
-				ExecutionType = ExecutionTypes.Trade,
+				ExecutionType = ExecutionTypes.Transaction,
 				ServerTime = tick.Time,
 				OriginSide = tick.OrderDirection,
 				Currency = tick.Currency,
@@ -279,10 +279,10 @@ namespace StockSharp.Algo
 				OriginalTransactionId = order.TransactionId,
 				SecurityId = order.Security.ToSecurityId(),
 				PortfolioName = order.Portfolio.Name,
-				ExecutionType = ExecutionTypes.Order,
+				ExecutionType = ExecutionTypes.Transaction,
 				OrderPrice = order.Price,
 				OrderType = order.Type,
-				Volume = order.Volume,
+				OrderVolume = order.Volume,
 				Balance = order.Balance,
 				Side = order.Direction,
 				OrderState = order.State,
@@ -321,7 +321,7 @@ namespace StockSharp.Algo
 				SecurityId = fail.Order.Security.ToSecurityId(),
 				PortfolioName = fail.Order.Portfolio.Name,
 				Error = fail.Error,
-				ExecutionType = ExecutionTypes.Order,
+				ExecutionType = ExecutionTypes.Transaction,
 				OrderState = OrderStates.Failed,
 				ServerTime = fail.ServerTime,
 				LocalTime = fail.LocalTime,
@@ -345,7 +345,7 @@ namespace StockSharp.Algo
 				TradeId = trade.Id,
 				ServerTime = trade.Time,
 				TradePrice = trade.Price,
-				Volume = trade.Volume,
+				TradeVolume = trade.Volume,
 				IsSystem = trade.IsSystem,
 				TradeStatus = trade.Status,
 				OpenInterest = trade.OpenInterest,
@@ -378,7 +378,7 @@ namespace StockSharp.Algo
 				OriginalTransactionId = trade == null ? 0 : order.TransactionId,
 				ServerTime = order.Time,
 				OrderPrice = order.Price,
-				Volume = order.Volume,
+				OrderVolume = order.Volume,
 				Balance = order.Balance,
 				Side = order.Direction,
 				IsSystem = order.IsSystem,
@@ -386,11 +386,11 @@ namespace StockSharp.Algo
 				OrderStatus = order.Status,
 				TimeInForce = order.TimeInForce,
 				ExpiryDate = order.ExpiryDate,
-				PortfolioName = order.Portfolio == null ? null : order.Portfolio.Name,
+				PortfolioName = order.Portfolio?.Name,
 				ExecutionType = ExecutionTypes.OrderLog,
 				IsCancelled = (order.State == OrderStates.Done && trade == null),
-				TradeId = trade != null ? trade.Id : (long?)null,
-				TradePrice = trade != null ? trade.Price : (decimal?)null,
+				TradeId = trade?.Id,
+				TradePrice = trade?.Price,
 				Currency = order.Currency,
 			};
 		}
@@ -959,7 +959,7 @@ namespace StockSharp.Algo
 							case ExecutionTypes.OrderLog:
 								return execMsg.ToOrderLog(_security).To<TEntity>();
 
-							case ExecutionTypes.Order:
+							case ExecutionTypes.Transaction:
 								return execMsg.ToOrder(_security).To<TEntity>();
 
 							default:
@@ -1148,7 +1148,7 @@ namespace StockSharp.Algo
 
 			trade.Id = message.TradeId ?? 0;
 			trade.Price = message.TradePrice ?? 0;
-			trade.Volume = message.Volume ?? 0;
+			trade.Volume = message.TradeVolume ?? 0;
 			trade.Status = message.TradeStatus;
 			trade.IsSystem = message.IsSystem;
 			trade.Time = message.ServerTime;
@@ -1192,7 +1192,7 @@ namespace StockSharp.Algo
 			order.Portfolio = new Portfolio { Board = order.Security.Board, Name = message.PortfolioName };
 			order.Direction = message.Side;
 			order.Price = message.OrderPrice;
-			order.Volume = message.Volume ?? 0;
+			order.Volume = message.OrderVolume ?? 0;
 			order.Balance = message.Balance ?? 0;
 			order.VisibleVolume = message.VisibleVolume;
 			order.Type = message.OrderType;
@@ -1321,7 +1321,7 @@ namespace StockSharp.Algo
 			order.StringId = message.OrderStringId;
 			order.TransactionId = message.TransactionId;
 			order.Price = message.OrderPrice;
-			order.Volume = message.Volume ?? 0;
+			order.Volume = message.OrderVolume ?? 0;
 			order.Balance = message.Balance ?? 0;
 			order.Direction = message.Side;
 			order.Time = message.ServerTime;
@@ -1345,7 +1345,7 @@ namespace StockSharp.Algo
 				trade.Id = message.TradeId ?? 0;
 				trade.Price = message.TradePrice ?? 0;
 				trade.Time = message.ServerTime;
-				trade.Volume = message.Volume ?? 0;
+				trade.Volume = message.OrderVolume ?? 0;
 				trade.IsSystem = message.IsSystem;
 				trade.Status = message.TradeStatus;
 			}
@@ -1596,14 +1596,9 @@ namespace StockSharp.Algo
 			}
 			else if (dataType == typeof(MarketDepth))
 				return typeof(QuoteChangeMessage);
-			else if (dataType == typeof(Order))
+			else if (dataType == typeof(Order) || dataType == typeof(MyTrade))
 			{
-				arg = ExecutionTypes.Order;
-				return typeof(ExecutionMessage);
-			}
-			else if (dataType == typeof(MyTrade))
-			{
-				arg = ExecutionTypes.Trade;
+				arg = ExecutionTypes.Transaction;
 				return typeof(ExecutionMessage);
 			}
 			else if (dataType == typeof(OrderLogItem))

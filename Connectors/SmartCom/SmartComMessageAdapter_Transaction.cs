@@ -32,7 +32,7 @@ namespace StockSharp.SmartCom
 		/// <summary>
 		/// Ассоциация площадок и их кодами, для заполнения <see cref="PortfolioMessage.BoardCode"/>.
 		/// </summary>
-		public IDictionary<string, string> PortfolioBoardCodes { get; private set; }
+		public IDictionary<string, string> PortfolioBoardCodes { get; }
 
 		private void ProcessRegisterMessage(OrderRegisterMessage regMsg)
 		{
@@ -84,7 +84,7 @@ namespace StockSharp.SmartCom
 
 			SendOutMessage(new ExecutionMessage
 			{
-				ExecutionType = ExecutionTypes.Order,
+				ExecutionType = ExecutionTypes.Transaction,
 				OrderStringId = smartOrderId,
 				OrderState = OrderStates.Failed,
 				Error = new InvalidOperationException(LocalizedStrings.Str1869Params.Put(smartOrderId))
@@ -150,12 +150,12 @@ namespace StockSharp.SmartCom
 
 			SendOutMessage(new ExecutionMessage
 			{
-				ExecutionType = ExecutionTypes.Trade,
+				ExecutionType = ExecutionTypes.Transaction,
 				SecurityId = new SecurityId { Native = smartId },
 				OrderId = orderId == 0 ? (long?)null : orderId,
 				TradeId = tradeId,
 				ServerTime = time.ApplyTimeZone(TimeHelper.Moscow),
-				Volume = volume,
+				TradeVolume = volume,
 				TradePrice = price,
 			});
 		}
@@ -164,7 +164,7 @@ namespace StockSharp.SmartCom
 		{
 			SendOutMessage(new ExecutionMessage
 			{
-				ExecutionType = ExecutionTypes.Order,
+				ExecutionType = ExecutionTypes.Transaction,
 				OriginalTransactionId = transactionId,
 				OrderState = OrderStates.Active,
 				OrderStringId = smartOrderId,
@@ -177,7 +177,7 @@ namespace StockSharp.SmartCom
 
 			SendOutMessage(new ExecutionMessage
 			{
-				ExecutionType = ExecutionTypes.Order,
+				ExecutionType = ExecutionTypes.Transaction,
 				OriginalTransactionId = transactionId,
 				OrderState = OrderStates.Failed,
 				OrderStringId = smartOrderId,
@@ -191,7 +191,7 @@ namespace StockSharp.SmartCom
 
 			SendOutMessage(new ExecutionMessage
 			{
-				ExecutionType = ExecutionTypes.Order,
+				ExecutionType = ExecutionTypes.Transaction,
 				//OriginalTransactionId = transactionId,
 				OrderStringId = smartOrderId,
 				OrderState = OrderStates.Failed,
@@ -226,7 +226,7 @@ namespace StockSharp.SmartCom
 
 					SendOutMessage(new ExecutionMessage
 					{
-						ExecutionType = ExecutionTypes.Order,
+						ExecutionType = ExecutionTypes.Transaction,
 						OriginalTransactionId = transactionId,
 						OrderStringId = smartOrderId,
 						ServerTime = time.ApplyTimeZone(TimeHelper.Moscow),
@@ -313,7 +313,7 @@ namespace StockSharp.SmartCom
 				PortfolioName = portfolioName,
 				Side = (Sides)side,
 				OrderPrice = price ?? 0,
-				Volume = volume,
+				OrderVolume = volume,
 				ServerTime = time.ApplyTimeZone(TimeHelper.Moscow),
 				Balance = balance,
 				OrderId = orderId == 0 ? (long?)null : orderId,
@@ -324,7 +324,7 @@ namespace StockSharp.SmartCom
 				OrderStringId = smartOrderId,
 				ExpiryDate = isOneDay ? DateTimeOffset.Now.Date.ApplyTimeZone(TimeHelper.Moscow) : (DateTimeOffset?)null,
 				Condition = orderType == OrderTypes.Conditional ? new SmartComOrderCondition { StopPrice = stop } : null,
-				ExecutionType = ExecutionTypes.Order,
+				ExecutionType = ExecutionTypes.Transaction,
 			});
 		}
 	}

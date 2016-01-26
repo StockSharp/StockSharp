@@ -19,7 +19,6 @@ namespace StockSharp.Designer
 	using System.ComponentModel;
 	using System.Linq;
 
-	using Ecng.Common;
 	using Ecng.Configuration;
 	using Ecng.Serialization;
 

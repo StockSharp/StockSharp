@@ -194,7 +194,7 @@ namespace StockSharp.Algo.Storages.Binary
 	class TransactionBinarySerializer : BinaryMarketDataSerializer<ExecutionMessage, TransactionSerializerMetaInfo>
 	{
 		public TransactionBinarySerializer(SecurityId securityId)
-			: base(securityId, 200, MarketDataVersions.Version57)
+			: base(securityId, 200, MarketDataVersions.Version58)
 		{
 		}
 
@@ -220,9 +220,9 @@ namespace StockSharp.Algo.Storages.Binary
 
 			foreach (var msg in messages)
 			{
-				var isTrade = msg.ExecutionType == ExecutionTypes.Trade;
+				//var isTrade = msg.ExecutionType == ExecutionTypes.Trade;
 
-				if (msg.ExecutionType != ExecutionTypes.Order && msg.ExecutionType != ExecutionTypes.Trade)
+				if (msg.ExecutionType != ExecutionTypes.Transaction)
 					throw new ArgumentOutOfRangeException(nameof(messages), msg.ExecutionType, LocalizedStrings.Str1695Params.Put(msg.OrderId ?? msg.TradeId));
 
 				// нулевой номер заявки возможен при сохранении в момент регистрации
@@ -233,15 +233,15 @@ namespace StockSharp.Algo.Storages.Binary
 				if (msg.OrderPrice < 0)
 					throw new ArgumentOutOfRangeException(nameof(messages), msg.OrderPrice, LocalizedStrings.Str926Params.Put(msg.OrderId == null ? msg.OrderStringId : msg.OrderId.To<string>()));
 
-				var volume = msg.Volume;
+				//var volume = msg.Volume;
 
-				if (volume < 0)
-					throw new ArgumentOutOfRangeException(nameof(messages), volume, LocalizedStrings.Str927Params.Put(msg.OrderId == null ? msg.OrderStringId : msg.OrderId.To<string>()));
+				//if (volume < 0)
+				//	throw new ArgumentOutOfRangeException(nameof(messages), volume, LocalizedStrings.Str927Params.Put(msg.OrderId == null ? msg.OrderStringId : msg.OrderId.To<string>()));
 
-				if (isTrade)
+				if (msg.HasTradeInfo())
 				{
-					if ((msg.TradeId == null && msg.TradeStringId.IsEmpty()) || msg.TradeId <= 0)
-						throw new ArgumentOutOfRangeException(nameof(messages), msg.TradeId, LocalizedStrings.Str928Params.Put(msg.TransactionId));
+					//if ((msg.TradeId == null && msg.TradeStringId.IsEmpty()) || msg.TradeId <= 0)
+					//	throw new ArgumentOutOfRangeException(nameof(messages), msg.TradeId, LocalizedStrings.Str928Params.Put(msg.TransactionId));
 
 					if (msg.TradePrice == null || msg.TradePrice <= 0)
 						throw new ArgumentOutOfRangeException(nameof(messages), msg.TradePrice, LocalizedStrings.Str929Params.Put(msg.TradeId, msg.OrderId));
@@ -252,8 +252,10 @@ namespace StockSharp.Algo.Storages.Binary
 				metaInfo.LastTransactionId = writer.SerializeId(msg.TransactionId, metaInfo.LastTransactionId);
 				metaInfo.LastOriginalTransactionId = writer.SerializeId(msg.OriginalTransactionId, metaInfo.LastOriginalTransactionId);
 
-				if (!isTrade)
+				if (msg.HasOrderInfo())
 				{
+					writer.Write(true);
+
 					if (metaInfo.Version < MarketDataVersions.Version50)
 						metaInfo.LastOrderId = writer.SerializeId(msg.OrderId ?? 0, metaInfo.LastOrderId);
 					else
@@ -277,9 +279,16 @@ namespace StockSharp.Algo.Storages.Binary
 						if (!msg.OrderBoardId.IsEmpty())
 							writer.WriteString(msg.OrderBoardId);
 					}
+
+					writer.WritePriceEx(msg.OrderPrice, metaInfo, SecurityId);
 				}
 				else
+					writer.Write(false);
+
+				if (msg.HasTradeInfo())
 				{
+					writer.Write(true);
+
 					if (metaInfo.Version < MarketDataVersions.Version50)
 						metaInfo.LastTradeId = writer.SerializeId(msg.TradeId ?? 0, metaInfo.LastTradeId);
 					else
@@ -298,23 +307,30 @@ namespace StockSharp.Algo.Storages.Binary
 								writer.WriteString(msg.TradeStringId);
 						}
 					}
-				}
 
-				writer.Write(msg.Side == Sides.Buy);
-				writer.WritePriceEx(!isTrade ? msg.OrderPrice : msg.GetTradePrice(), metaInfo, SecurityId);
-
-
-				if (metaInfo.Version < MarketDataVersions.Version57)
-				{
-					writer.WriteVolume(volume ?? 0, metaInfo, SecurityId);
+					writer.WritePriceEx(msg.GetTradePrice(), metaInfo, SecurityId);
 				}
 				else
-				{
-					writer.Write(volume != null);
+					writer.Write(false);
 
-					if (volume != null)
-						writer.WriteVolume(volume.Value, metaInfo, SecurityId);
-				}
+				writer.Write(msg.Side == Sides.Buy);
+
+				//if (metaInfo.Version < MarketDataVersions.Version57)
+				//{
+				//	writer.WriteVolume(msg.OrderVolume ?? msg.TradeVolume ?? 0, metaInfo, SecurityId);
+				//}
+				//else
+				//{
+				writer.Write(msg.OrderVolume != null);
+
+				if (msg.OrderVolume != null)
+					writer.WriteVolume(msg.OrderVolume.Value, metaInfo, SecurityId);
+
+				writer.Write(msg.TradeVolume != null);
+
+				if (msg.TradeVolume != null)
+					writer.WriteVolume(msg.TradeVolume.Value, metaInfo, SecurityId);
+				//}
 
 				if (metaInfo.Version < MarketDataVersions.Version54)
 				{
@@ -368,14 +384,14 @@ namespace StockSharp.Algo.Storages.Binary
 						writer.Write(msg.IsSystem.Value);
 				}
 
-				writer.WriteLong(msg.ExpiryDate != null ? msg.ExpiryDate.Value.Ticks : 0L);
+				writer.WriteLong(msg.ExpiryDate?.Ticks ?? 0L);
 
 				WriteCommission(writer, metaInfo, msg.Commission);
 
 				WriteString(writer, metaInfo.Portfolios, msg.PortfolioName);
 				WriteString(writer, metaInfo.StrategyIds, msg.UserOrderId);
 				WriteString(writer, metaInfo.Comments, msg.Comment);
-				WriteString(writer, metaInfo.Errors, msg.Error != null ? msg.Error.Message : null);
+				WriteString(writer, metaInfo.Errors, msg.Error?.Message);
 
 				if (metaInfo.Version < MarketDataVersions.Version55)
 					continue;
@@ -393,7 +409,7 @@ namespace StockSharp.Algo.Storages.Binary
 			var metaInfo = enumerator.MetaInfo;
 
 			var execType = (ExecutionTypes)reader.ReadInt();
-			var isTrade = execType == ExecutionTypes.Trade;
+			//var isTrade = execType == ExecutionTypes.Trade;
 
 			metaInfo.FirstTransactionId += reader.ReadLong();
 			metaInfo.FirstOriginalTransactionId += reader.ReadLong();
@@ -402,7 +418,10 @@ namespace StockSharp.Algo.Storages.Binary
 			string orderStringId = null;
 			string tradeStringId = null;
 
-			if (!isTrade)
+			decimal? orderPrice = null;
+			decimal? tradePrice = null;
+
+			if (reader.Read())
 			{
 				if (metaInfo.Version < MarketDataVersions.Version50)
 					metaInfo.FirstOrderId += reader.ReadLong();
@@ -419,6 +438,8 @@ namespace StockSharp.Algo.Storages.Binary
 					if (reader.Read())
 						orderBoardId = reader.ReadString();
 				}
+
+				orderPrice = reader.ReadPriceEx(metaInfo);
 			}
 			else
 			{
@@ -434,13 +455,14 @@ namespace StockSharp.Algo.Storages.Binary
 							tradeStringId = reader.ReadString();
 					}
 				}
+
+				tradePrice = reader.ReadPriceEx(metaInfo);
 			}
 
 			var side = reader.Read() ? Sides.Buy : Sides.Sell;
 
-			var price = reader.ReadPriceEx(metaInfo);
-			var volume = (metaInfo.Version < MarketDataVersions.Version57 || reader.Read())
-				? reader.ReadVolume(metaInfo) : (decimal?) null;
+			var orderVolume = reader.Read() ? reader.ReadVolume(metaInfo) : (decimal?)null;
+			var tradeVolume = reader.Read() ? reader.ReadVolume(metaInfo) : (decimal?)null;
 
 			var visibleVolume = (metaInfo.Version < MarketDataVersions.Version54 || reader.Read())
 				? reader.ReadVolume(metaInfo) : (decimal?)null;
@@ -495,7 +517,8 @@ namespace StockSharp.Algo.Storages.Binary
 				OriginalTransactionId = metaInfo.FirstOriginalTransactionId,
 
 				Side = side,
-				Volume = volume,
+				OrderVolume = orderVolume,
+				TradeVolume = tradeVolume,
 				VisibleVolume = visibleVolume,
 				Balance = balance,
 
@@ -513,7 +536,7 @@ namespace StockSharp.Algo.Storages.Binary
 				TradeStatus = tradeStatus,
 			};
 
-			if (!isTrade)
+			if (orderPrice != null)
 			{
 				if (orderStringId == null)
 					msg.OrderId = metaInfo.FirstOrderId;
@@ -521,16 +544,17 @@ namespace StockSharp.Algo.Storages.Binary
 					msg.OrderStringId = orderStringId;
 
 				msg.OrderBoardId = orderBoardId;
-				msg.OrderPrice = price;
+				msg.OrderPrice = orderPrice.Value;
 			}
-			else
+			
+			if (tradePrice != null)
 			{
 				if (tradeStringId == null)
 					msg.TradeId = metaInfo.FirstTradeId;
 				else
 					msg.TradeStringId = tradeStringId;
 
-				msg.TradePrice = price;
+				msg.TradePrice = tradePrice.Value;
 			}
 
 			if (!error.IsEmpty())

@@ -151,8 +151,7 @@ namespace StockSharp.Hydra.Controls
 							case ExecutionTypes.Tick:
 								wnd.TxtTemplate = registry.TemplateTxtTick;
 								break;
-							case ExecutionTypes.Order:
-							case ExecutionTypes.Trade:
+							case ExecutionTypes.Transaction:
 								wnd.TxtTemplate = registry.TemplateTxtTransaction;
 								break;
 							case ExecutionTypes.OrderLog:
@@ -189,8 +188,7 @@ namespace StockSharp.Hydra.Controls
 							case ExecutionTypes.Tick:
 								registry.TemplateTxtTick = wnd.TxtTemplate;
 								break;
-							case ExecutionTypes.Order:
-							case ExecutionTypes.Trade:
+							case ExecutionTypes.Transaction:
 								registry.TemplateTxtTransaction = wnd.TxtTemplate;
 								break;
 							case ExecutionTypes.OrderLog:

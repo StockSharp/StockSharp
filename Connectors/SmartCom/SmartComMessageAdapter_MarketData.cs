@@ -142,7 +142,7 @@ namespace StockSharp.SmartCom
 				SecurityId = new SecurityId { Native = smartId },
 				TradeId = tradeId,
 				TradePrice = price,
-				Volume = volume,
+				TradeVolume = volume,
 				OriginSide = action.ToSide(),
 				ServerTime = time.ApplyTimeZone(TimeHelper.Moscow),
 				ExecutionType = ExecutionTypes.Tick,
@@ -239,7 +239,7 @@ namespace StockSharp.SmartCom
 				Multiplier = lotSize,
 				Name = name,
 				ShortName = name,
-				ExpiryDate = expiryDate == null ? (DateTimeOffset?)null : expiryDate.Value.ApplyTimeZone(TimeHelper.Moscow),
+				ExpiryDate = expiryDate?.ApplyTimeZone(TimeHelper.Moscow),
 				ExtensionInfo = new Dictionary<object, object>
 				{
 					{ "Class", secClass }

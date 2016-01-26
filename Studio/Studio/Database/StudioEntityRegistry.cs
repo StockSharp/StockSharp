@@ -47,6 +47,7 @@ namespace StockSharp.Studio.Database
 	using StockSharp.Studio.Core;
 	using StockSharp.Studio.Properties;
 	using StockSharp.Localization;
+	using StockSharp.Studio.Core.Services;
 
 	class StudioEntityRegistry : EntityRegistry, IStudioEntityRegistry
 	{
@@ -186,15 +187,9 @@ namespace StockSharp.Studio.Database
 				_firstInit = false;
 			}
 
-			public T Current
-			{
-				get { return _currentEnumerator.Current.Current; }
-			}
+			public T Current => _currentEnumerator.Current.Current;
 
-			object IEnumerator.Current
-			{
-				get { return Current; }
-			}
+			object IEnumerator.Current => Current;
 		}
 
 		private sealed class ContinuousSecurityList : BaseList<ContinuousSecurity>, IStorageEntityList<ContinuousSecurity>
@@ -233,7 +228,7 @@ namespace StockSharp.Studio.Database
 			private readonly StudioEntityRegistry _registry;
 			private readonly SyncObject _syncRoot = new SyncObject();
 
-			public SyncObject SyncRoot { get { return _syncRoot; } }
+			public SyncObject SyncRoot => _syncRoot;
 
 			public ContinuousSecurityList(StudioEntityRegistry registry)
 			{
@@ -1014,10 +1009,10 @@ namespace StockSharp.Studio.Database
 			Strategies = new StrategyInfoList(this, session);
 		}
 
-		public override IStorageEntityList<ExchangeBoard> ExchangeBoards { get { return _boards; } }
-		public override IStorageSecurityList Securities { get { return _securities; } }
-		public override IStorageEntityList<Portfolio> Portfolios { get { return _portfolios; } }
-		public override IStorageEntityList<News> News { get { return Sessions.Battle.News; } }
+		public override IStorageEntityList<ExchangeBoard> ExchangeBoards => _boards;
+		public override IStorageSecurityList Securities => _securities;
+		public override IStorageEntityList<Portfolio> Portfolios => _portfolios;
+		public override IStorageEntityList<News> News => Sessions.Battle.News;
 
 		private IndexSecurityList IndexSecurities { get; set; }
 		private ContinuousSecurityList ContinuousSecurities { get; set; }

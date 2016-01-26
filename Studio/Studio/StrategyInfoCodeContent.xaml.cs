@@ -28,6 +28,7 @@ namespace StockSharp.Studio
 	using StockSharp.Studio.Core;
 	using StockSharp.Studio.Core.Commands;
 	using StockSharp.Localization;
+	using StockSharp.Studio.Core.Services;
 
 	public partial class StrategyInfoCodeContent : IStudioControl, IStudioCommandScope
 	{
@@ -88,15 +89,9 @@ namespace StockSharp.Studio
 			_timer.Flush();
 		}
 
-	    public string Title
-		{
-            get { return LocalizedStrings.Code; }
-		}
+	    public string Title => LocalizedStrings.Code;
 
-		Uri IStudioControl.Icon
-		{
-			get { return null; }
-		}
+		Uri IStudioControl.Icon => null;
 
 		private void SaveCode()
 		{

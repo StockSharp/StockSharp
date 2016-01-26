@@ -216,7 +216,7 @@ namespace StockSharp.Hydra.Panes
 			public bool IsLevel1Enabled => GetIsEnabled(typeof(Level1ChangeMessage), null);
 			public bool IsOrderLogEnabled => GetIsEnabled(typeof(ExecutionMessage), ExecutionTypes.OrderLog);
 			public bool IsCandlesEnabled => TaskSecurity.GetCandleSeries().Any();
-			public bool IsTransactionsEnabled => GetIsEnabled(typeof(ExecutionMessage), ExecutionTypes.Order);
+			public bool IsTransactionsEnabled => GetIsEnabled(typeof(ExecutionMessage), ExecutionTypes.Transaction);
 			public bool IsNewsEnabled => GetIsEnabled(typeof(NewsMessage), null);
 
 			public bool IsInvalid => !IsTicksEnabled &&
@@ -251,7 +251,7 @@ namespace StockSharp.Hydra.Panes
 			AddDataType<QuoteChangeMessage>(Depths, null);
 			AddDataType<Level1ChangeMessage>(Level1, null);
 			AddDataType<ExecutionMessage>(OrderLog, ExecutionTypes.OrderLog);
-			AddDataType<ExecutionMessage>(Transactions, ExecutionTypes.Order);
+			AddDataType<ExecutionMessage>(Transactions, ExecutionTypes.Transaction);
 			AddDataType<NewsMessage>(News, null);
 		}
 
