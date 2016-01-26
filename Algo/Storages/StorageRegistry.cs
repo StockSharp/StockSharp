@@ -730,7 +730,7 @@ namespace StockSharp.Algo.Storages
 		/// <returns>The storage of tick trades.</returns>
 		public IMarketDataStorage<ExecutionMessage> GetTickMessageStorage(Security security, IMarketDataDrive drive = null, StorageFormats format = StorageFormats.Binary)
 		{
-			return GetExecutionStorage(security, ExecutionTypes.Tick, drive, format);
+			return GetExecutionMessageStorage(security, ExecutionTypes.Tick, drive, format);
 		}
 
 		/// <summary>
@@ -785,7 +785,19 @@ namespace StockSharp.Algo.Storages
 		/// <returns>The storage of orders log.</returns>
 		public IMarketDataStorage<ExecutionMessage> GetOrderLogMessageStorage(Security security, IMarketDataDrive drive = null, StorageFormats format = StorageFormats.Binary)
 		{
-			return GetExecutionStorage(security, ExecutionTypes.OrderLog, drive, format);
+			return GetExecutionMessageStorage(security, ExecutionTypes.OrderLog, drive, format);
+		}
+
+		/// <summary>
+		/// To get the transactions storage the specified instrument.
+		/// </summary>
+		/// <param name="security">Security.</param>
+		/// <param name="drive">The storage. If a value is <see langword="null" />, <see cref="IStorageRegistry.DefaultDrive"/> will be used.</param>
+		/// <param name="format">The format type. By default <see cref="StorageFormats.Binary"/> is passed.</param>
+		/// <returns>The transactions storage.</returns>
+		public IMarketDataStorage<ExecutionMessage> GetTransactionStorage(Security security, IMarketDataDrive drive = null, StorageFormats format = StorageFormats.Binary)
+		{
+			return GetExecutionMessageStorage(security, ExecutionTypes.Transaction, drive, format);
 		}
 
 		/// <summary>
@@ -888,14 +900,14 @@ namespace StockSharp.Algo.Storages
 		}
 
 		/// <summary>
-		/// To get the execution storage the specified instrument.
+		/// To get the <see cref="ExecutionMessage"/> storage the specified instrument.
 		/// </summary>
 		/// <param name="security">Security.</param>
 		/// <param name="type">Data type, information about which is contained in the <see cref="ExecutionMessage"/>.</param>
 		/// <param name="drive">The storage. If a value is <see langword="null" />, <see cref="IStorageRegistry.DefaultDrive"/> will be used.</param>
 		/// <param name="format">The format type. By default <see cref="StorageFormats.Binary"/> is passed.</param>
-		/// <returns>The transactions storage.</returns>
-		public IMarketDataStorage<ExecutionMessage> GetExecutionStorage(Security security, ExecutionTypes type, IMarketDataDrive drive = null, StorageFormats format = StorageFormats.Binary)
+		/// <returns>The <see cref="ExecutionMessage"/> storage.</returns>
+		public IMarketDataStorage<ExecutionMessage> GetExecutionMessageStorage(Security security, ExecutionTypes type, IMarketDataDrive drive = null, StorageFormats format = StorageFormats.Binary)
 		{
 			if (security == null)
 				throw new ArgumentNullException(nameof(security));
@@ -912,11 +924,11 @@ namespace StockSharp.Algo.Storages
 					case ExecutionTypes.Tick:
 					{
 						if (security is ContinuousSecurity)
-							return new ConvertableContinuousSecurityMarketDataStorage<ExecutionMessage, Trade>((ContinuousSecurity)security, null, t => t.ServerTime, t => ToSecurity(t.SecurityId), t => t.ToMessage(), t => t.Time, (s, d) => GetExecutionStorage(s, type, d, format), mdDrive);
+							return new ConvertableContinuousSecurityMarketDataStorage<ExecutionMessage, Trade>((ContinuousSecurity)security, null, t => t.ServerTime, t => ToSecurity(t.SecurityId), t => t.ToMessage(), t => t.Time, (s, d) => GetExecutionMessageStorage(s, type, d, format), mdDrive);
 						else if (security is IndexSecurity)
-							return new IndexSecurityMarketDataStorage<ExecutionMessage>((IndexSecurity)security, null, d => ToSecurity(d.SecurityId), (s, d) => GetExecutionStorage(s, type, d, format), mdDrive);
+							return new IndexSecurityMarketDataStorage<ExecutionMessage>((IndexSecurity)security, null, d => ToSecurity(d.SecurityId), (s, d) => GetExecutionMessageStorage(s, type, d, format), mdDrive);
 						else if (security.Board == ExchangeBoard.Associated)
-							return new ConvertableAllSecurityMarketDataStorage<ExecutionMessage, Trade>(security, null, t => t.ServerTime, t => ToSecurity(t.SecurityId), t => t.Time, (s, d) => GetExecutionStorage(s, type, d, format), mdDrive);
+							return new ConvertableAllSecurityMarketDataStorage<ExecutionMessage, Trade>(security, null, t => t.ServerTime, t => ToSecurity(t.SecurityId), t => t.Time, (s, d) => GetExecutionMessageStorage(s, type, d, format), mdDrive);
 						else
 						{
 							IMarketDataSerializer<ExecutionMessage> serializer;
@@ -996,7 +1008,7 @@ namespace StockSharp.Algo.Storages
 				dataType = dataType.ToMessageType(ref arg);
 
 			if (dataType == typeof(ExecutionMessage))
-				return GetExecutionStorage(security, (ExecutionTypes)arg, drive, format);
+				return GetExecutionMessageStorage(security, (ExecutionTypes)arg, drive, format);
 			else if (dataType == typeof(Level1ChangeMessage))
 				return GetLevel1MessageStorage(security, drive, format);
 			else if (dataType == typeof(QuoteChangeMessage))

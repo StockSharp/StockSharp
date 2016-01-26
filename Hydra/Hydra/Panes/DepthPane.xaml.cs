@@ -98,7 +98,7 @@ namespace StockSharp.Hydra.Panes
 				case 1:
 				{
 					return StorageRegistry
-						.GetExecutionStorage(SelectedSecurity, ExecutionTypes.OrderLog, Drive, StorageFormat)
+						.GetOrderLogMessageStorage(SelectedSecurity, Drive, StorageFormat)
 						.Load(From + new TimeSpan(18, 45, 0), To + TimeHelper.LessOneDay + new TimeSpan(18, 45, 0))
 						// TODO
 						.ToMarketDepths(OrderLogBuilders.Plaza2.CreateBuilder(SelectedSecurity.ToSecurityId()), interval, maxDepth);	

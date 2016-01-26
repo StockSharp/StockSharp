@@ -67,12 +67,12 @@ namespace StockSharp.Hydra.Panes
 							.Load(from, to);
 				case 1:
 					return StorageRegistry
-							.GetExecutionStorage(SelectedSecurity, ExecutionTypes.Tick, Drive, StorageFormat)
+							.GetTickMessageStorage(SelectedSecurity, Drive, StorageFormat)
 							.Load(from, to)
 							.ToCandles(CandleSeries);
 				case 2:
 					return StorageRegistry
-							.GetExecutionStorage(SelectedSecurity, ExecutionTypes.OrderLog, Drive, StorageFormat)
+							.GetOrderLogMessageStorage(SelectedSecurity, Drive, StorageFormat)
 							.Load(from, to)
 							.ToTicks()
 							.ToCandles(CandleSeries);
@@ -83,7 +83,7 @@ namespace StockSharp.Hydra.Panes
 							.ToCandles(CandleSeries);
 				case 4:
 					return StorageRegistry
-							.GetExecutionStorage(SelectedSecurity, ExecutionTypes.OrderLog, Drive, StorageFormat)
+							.GetOrderLogMessageStorage(SelectedSecurity, Drive, StorageFormat)
 							.Load(from, to)
 							.ToMarketDepths(OrderLogBuilders.Plaza2.CreateBuilder(SelectedSecurity.ToSecurityId()))
 							.ToCandles(CandleSeries);

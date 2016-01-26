@@ -27,13 +27,13 @@ namespace StockSharp.Hydra.Panes
 	using StockSharp.Messages;
 	using StockSharp.Localization;
 
-	public partial class ExecutionsPane
+	public partial class TransactionsPane
 	{
-		public ExecutionsPane()
+		public TransactionsPane()
 		{
 			InitializeComponent();
 
-			Init(ExportBtn, MainGrid, GetExecutions);
+			Init(ExportBtn, MainGrid, GetTransactions);
 		}
 
 		protected override object Arg => ExecutionTypes.Transaction;
@@ -48,10 +48,10 @@ namespace StockSharp.Hydra.Panes
 			set { SelectSecurityBtn.SelectedSecurity = value; }
 		}
 
-		private IEnumerableEx<ExecutionMessage> GetExecutions()
+		private IEnumerableEx<ExecutionMessage> GetTransactions()
 		{
 			var executions = StorageRegistry
-				.GetExecutionStorage(SelectedSecurity, ExecutionTypes.Transaction, Drive, StorageFormat)
+				.GetTransactionStorage(SelectedSecurity, Drive, StorageFormat)
 				.Load(From, To + TimeHelper.LessOneDay);
 
 			return executions;
@@ -67,8 +67,8 @@ namespace StockSharp.Hydra.Panes
 			if (!CheckSecurity())
 				return;
 
-			FindedExecutions.Messages.Clear();
-			Progress.Load(GetExecutions(), FindedExecutions.Messages.AddRange, 10000);
+			FindedTransactions.Messages.Clear();
+			Progress.Load(GetTransactions(), FindedTransactions.Messages.AddRange, 10000);
 		}
 
 		private void SelectSecurityBtn_SecuritySelected()
@@ -88,14 +88,14 @@ namespace StockSharp.Hydra.Panes
 		{
 			base.Load(storage);
 
-			FindedExecutions.Load(storage.GetValue<SettingsStorage>("FindedExecutions"));
+			FindedTransactions.Load(storage.GetValue<SettingsStorage>("FindedTransactions"));
 		}
 
 		public override void Save(SettingsStorage storage)
 		{
 			base.Save(storage);
 
-			storage.SetValue("FindedExecutions", FindedExecutions.Save());
+			storage.SetValue("FindedTransactions", FindedTransactions.Save());
 		}
 	}
 }

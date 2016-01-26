@@ -53,7 +53,7 @@ namespace StockSharp.Hydra.Panes
 		private IEnumerableEx<ExecutionMessage> GetOrderLog()
 		{
 			var orderLog = StorageRegistry
-				.GetExecutionStorage(SelectedSecurity, ExecutionTypes.OrderLog, Drive, StorageFormat)
+				.GetOrderLogMessageStorage(SelectedSecurity, Drive, StorageFormat)
 				.Load(From, To + TimeHelper.LessOneDay);
 
 			if (IsNonSystem.IsChecked == false)

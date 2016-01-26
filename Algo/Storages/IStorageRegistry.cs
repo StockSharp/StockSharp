@@ -127,20 +127,29 @@ namespace StockSharp.Algo.Storages
 		/// <param name="candleType">The candle type.</param>
 		/// <param name="security">Security.</param>
 		/// <param name="arg">Candle arg.</param>
-		/// <param name="drive">The storage. If a value is <see langword="null" />, <see cref="IStorageRegistry.DefaultDrive"/> will be used.</param>
+		/// <param name="drive">The storage. If a value is <see langword="null" />, <see cref="DefaultDrive"/> will be used.</param>
 		/// <param name="format">The format type. By default <see cref="StorageFormats.Binary"/> is passed.</param>
 		/// <returns>The candles storage.</returns>
 		IMarketDataStorage<CandleMessage> GetCandleMessageStorage(Type candleType, Security security, object arg, IMarketDataDrive drive = null, StorageFormats format = StorageFormats.Binary);
 
 		/// <summary>
-		/// To get the transactions storage the specified instrument.
+		/// To get the <see cref="ExecutionMessage"/> storage the specified instrument.
 		/// </summary>
 		/// <param name="security">Security.</param>
 		/// <param name="type">Data type, information about which is contained in the <see cref="ExecutionMessage"/>.</param>
 		/// <param name="drive">The storage. If a value is <see langword="null" />, <see cref="IStorageRegistry.DefaultDrive"/> will be used.</param>
 		/// <param name="format">The format type. By default <see cref="StorageFormats.Binary"/> is passed.</param>
+		/// <returns>The <see cref="ExecutionMessage"/> storage.</returns>
+		IMarketDataStorage<ExecutionMessage> GetExecutionMessageStorage(Security security, ExecutionTypes type, IMarketDataDrive drive = null, StorageFormats format = StorageFormats.Binary);
+
+		/// <summary>
+		/// To get the transactions storage the specified instrument.
+		/// </summary>
+		/// <param name="security">Security.</param>
+		/// <param name="drive">The storage. If a value is <see langword="null" />, <see cref="IStorageRegistry.DefaultDrive"/> will be used.</param>
+		/// <param name="format">The format type. By default <see cref="StorageFormats.Binary"/> is passed.</param>
 		/// <returns>The transactions storage.</returns>
-		IMarketDataStorage<ExecutionMessage> GetExecutionStorage(Security security, ExecutionTypes type, IMarketDataDrive drive = null, StorageFormats format = StorageFormats.Binary);
+		IMarketDataStorage<ExecutionMessage> GetTransactionStorage(Security security, IMarketDataDrive drive = null, StorageFormats format = StorageFormats.Binary);
 
 		/// <summary>
 		/// To get the market-data storage.

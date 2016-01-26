@@ -58,7 +58,7 @@ namespace StockSharp.Hydra.Panes
 				case 0:
 				{
 					var trades = StorageRegistry
-						.GetExecutionStorage(SelectedSecurity, ExecutionTypes.Tick, Drive, StorageFormat)
+						.GetTickMessageStorage(SelectedSecurity, Drive, StorageFormat)
 						.Load(From, To + TimeHelper.LessOneDay);
 
 					if (IsNonSystem.IsChecked == false)
@@ -70,7 +70,7 @@ namespace StockSharp.Hydra.Panes
 				case 1:
 				{
 					var orderLog = StorageRegistry
-						.GetExecutionStorage(SelectedSecurity, ExecutionTypes.OrderLog, Drive, StorageFormat)
+						.GetOrderLogMessageStorage(SelectedSecurity, Drive, StorageFormat)
 						.Load(From, To + TimeHelper.LessOneDay);
 
 					if (IsNonSystem.IsChecked == false)
