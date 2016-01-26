@@ -809,9 +809,9 @@ namespace StockSharp.Hydra
 					break;
 
 				case "transaction":
-					pane = new ExecutionsPane { SelectedSecurity = SelectedSecurity };
+					pane = new TransactionsPane { SelectedSecurity = SelectedSecurity };
 					break;
-
+					
 				case "security":
 					var wnd = DockSite.DocumentWindows.FirstOrDefault(w =>
 					{
