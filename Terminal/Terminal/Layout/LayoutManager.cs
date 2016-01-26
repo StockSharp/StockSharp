@@ -32,7 +32,6 @@ using StockSharp.Logging;
 using Xceed.Wpf.AvalonDock;
 using Xceed.Wpf.AvalonDock.Layout;
 using Xceed.Wpf.AvalonDock.Layout.Serialization;
-using StockSharp.Terminal.Logics;
 
 namespace StockSharp.Terminal.Layout
 {

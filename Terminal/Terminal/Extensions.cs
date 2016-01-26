@@ -13,23 +13,19 @@ Created: 2015, 11, 11, 2:32 PM
 Copyright 2010 by StockSharp, LLC
 *******************************************************************************************/
 #endregion S# License
-
-using System;
-using StockSharp.Xaml.Diagram;
-
-namespace StockSharp.Terminal.Logics
+namespace StockSharp.Terminal
 {
-	public static class Extensions
+	using System;
+
+	using Ecng.Configuration;
+	using Ecng.Serialization;
+
+	using StockSharp.Logging;
+
+	static class Extensions
 	{
-		public static string GetFileName(this CompositionDiagramElement element)
-		{
-			if (element == null)
-				throw new ArgumentNullException(nameof(element));
-
-			return element.TypeId.ToString().Replace("-", "_") + ".xml";
-		}
-
-		public static void DoIfElse<T>(this object value, Action<T> action, Action elseAction) where T : class
+		public static void DoIfElse<T>(this object value, Action<T> action, Action elseAction)
+			where T : class
 		{
 			if (action == null)
 				throw new ArgumentNullException(nameof(action));
@@ -40,9 +36,28 @@ namespace StockSharp.Terminal.Logics
 			var typedValue = value as T;
 
 			if (typedValue != null)
+			{
 				action(typedValue);
+			}
 			else
 				elseAction();
+		}
+
+		public static void TryLoadSettings<T>(this SettingsStorage storage, string name, Action<T> load)
+		{
+			try
+			{
+				var settings = storage.GetValue<T>(name);
+
+				if (settings == null)
+					return;
+
+				load(settings);
+			}
+			catch (Exception excp)
+			{
+				ConfigManager.GetService<LogManager>().Application.AddErrorLog(excp);
+			}
 		}
 	}
 }

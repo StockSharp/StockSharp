@@ -43,8 +43,6 @@ using StockSharp.Localization;
 using StockSharp.Logging;
 using StockSharp.Messages;
 using StockSharp.Xaml.Charting;
-using StockSharp.Xaml.Diagram;
-using StockSharp.Terminal.Logics;
 using System.Diagnostics;
 using StockSharp.Studio.Controls;
 using Xceed.Wpf.AvalonDock.Layout;
@@ -411,78 +409,6 @@ namespace StockSharp.Terminal.Controls
 
 			//if (DiagramDebuggerControl.Debugger.IsWaiting)
 			//	DiagramDebuggerControl.Debugger.Continue();
-		}
-
-		private void OnStrategyChanged(EmulationDiagramStrategy oldStrategy, EmulationDiagramStrategy newStrategy)
-		{
-			//if (oldStrategy != null)
-			//{
-			//	ConfigManager
-			//		.GetService<LogManager>()
-			//		.Sources
-			//		.Remove(oldStrategy);
-
-			//	oldStrategy.OrderRegistering += OnStrategyOrderRegistering;
-			//	oldStrategy.OrderReRegistering += OnStrategyOrderReRegistering;
-			//	oldStrategy.OrderRegisterFailed += OnStrategyOrderRegisterFailed;
-
-			//	oldStrategy.StopOrderRegistering += OnStrategyOrderRegistering;
-			//	oldStrategy.StopOrderReRegistering += OnStrategyOrderReRegistering;
-			//	oldStrategy.StopOrderRegisterFailed += OnStrategyOrderRegisterFailed;
-
-			//	oldStrategy.NewMyTrades += OnStrategyNewMyTrade;
-			//}
-
-			////DiagramDebuggerControl.Strategy = newStrategy;
-
-			//if (newStrategy == null)
-			//	return;
-
-			//ConfigManager
-			//	.GetService<LogManager>()
-			//	.Sources
-			//	.Add(newStrategy);
-
-			//newStrategy.OrderRegistering += OnStrategyOrderRegistering;
-			//newStrategy.OrderReRegistering += OnStrategyOrderReRegistering;
-			//newStrategy.OrderRegisterFailed += OnStrategyOrderRegisterFailed;
-
-			//newStrategy.StopOrderRegistering += OnStrategyOrderRegistering;
-			//newStrategy.StopOrderReRegistering += OnStrategyOrderReRegistering;
-			//newStrategy.StopOrderRegisterFailed += OnStrategyOrderRegisterFailed;
-
-			//newStrategy.NewMyTrades += OnStrategyNewMyTrade;
-
-			//newStrategy.PnLChanged += () =>
-			//{
-			//	var pnl = new EquityData
-			//	{
-			//		Time = newStrategy.CurrentTime,
-			//		Value = newStrategy.PnL - newStrategy.Commission ?? 0
-			//	};
-
-			//	var unrealizedPnL = new EquityData
-			//	{
-			//		Time = newStrategy.CurrentTime,
-			//		Value = newStrategy.PnLManager.UnrealizedPnL
-			//	};
-
-			//	var commission = new EquityData
-			//	{
-			//		Time = newStrategy.CurrentTime,
-			//		Value = newStrategy.Commission ?? 0
-			//	};
-
-			//	_pnlCurve.Add(pnl);
-			//	_unrealizedPnLCurve.Add(unrealizedPnL);
-			//	_commissionCurve.Add(commission);
-			//};
-
-			//newStrategy.PositionChanged += () => _posItems.Add(new EquityData
-			//{
-			//	Time = newStrategy.CurrentTime,
-			//	Value = newStrategy.Position
-			//});
 		}
 
 		private void OnStrategyOrderRegisterFailed(OrderFail fail)
