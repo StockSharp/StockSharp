@@ -94,6 +94,8 @@ namespace StockSharp.Algo.Export.Database.DbProviders
 				return "TEXT";
 			if (t == typeof(DateTimeOffset))
 				return "TEXT";
+			if (t == typeof(TimeSpan))
+				return "TEXT";
 			if (t == typeof(bool))
 				return "boolean";
 

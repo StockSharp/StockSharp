@@ -22,7 +22,7 @@ namespace StockSharp.Algo.Storages.Csv
 	static class CsvHelper
 	{
 		/// <summary>
-		/// <see cref="DateTime"/> format.
+		/// <see cref="TimeSpan"/> format.
 		/// </summary>
 		public const string TimeFormat = "HHmmssfff";
 

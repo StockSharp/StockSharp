@@ -63,7 +63,7 @@ namespace StockSharp.Algo.Storages.Csv
 						var date = (DateTimeOffset?)data.Changes.TryGetValue(field);
 
 						if (date != null)
-							writer.Write($"{date.Value.UtcDateTime.ToString("yyyyMMdd")};{date.Value.UtcDateTime.ToString(TimeFormat)};{date.Value.ToString("zzz")}");
+							writer.Write($"{date.Value.UtcDateTime.ToString(DateFormat)};{date.Value.UtcDateTime.ToString(TimeFormat)};{date.Value.ToString("zzz")}");
 
 						break;
 					default:
@@ -94,7 +94,7 @@ namespace StockSharp.Algo.Storages.Csv
 					case Level1Fields.BestAskTime:
 					case Level1Fields.BestBidTime:
 					case Level1Fields.LastTradeTime:
-                        var dt = reader.ReadNullableDateTime("yyyyMMdd");
+						var dt = reader.ReadNullableDateTime(DateFormat);
 
 						if (dt != null)
 						{
