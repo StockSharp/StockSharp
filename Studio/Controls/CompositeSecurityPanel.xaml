@@ -6,6 +6,7 @@
                             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
                             xmlns:controls="clr-namespace:StockSharp.Studio.Controls"
                             xmlns:docking="http://schemas.actiprosoftware.com/winfx/xaml/docking"
+                            xmlns:xcad="http://schemas.xceed.com/wpf/xaml/avalondock"
                             xmlns:xaml="http://schemas.stocksharp.com/xaml"
                             mc:Ignorable="d"
                             d:DesignHeight="300" d:DesignWidth="300">
@@ -20,7 +21,40 @@
                     CanExecute="CanExecuteDrawSecurityCommand"/>
     </controls:BaseStudioControl.CommandBindings>
 
-    <docking:DockSite x:Name="DockSite">
+    <xcad:DockingManager x:Name="DockingManager">
+        <xcad:LayoutRoot>
+            <xcad:LayoutPanel Orientation="Vertical">
+                <xcad:LayoutPanel>
+                    <xcad:LayoutAnchorablePaneGroup>
+                        <xcad:LayoutAnchorablePane DockWidth="120" DockHeight="50">
+                            <xcad:LayoutAnchorable Title="{x:Static loc:LocalizedStrings.ContinuousSecurity}" x:Name="IndexSecurityWindow" CanClose="False">
+                                <Border x:Name="InputBorder" BorderThickness="2" BorderBrush="{x:Null}">
+                                    <Border.ToolTip>
+                                        <ToolTip>
+                                            <TextBlock Text="" />
+                                        </ToolTip>
+                                    </Border.ToolTip>
+                                </Border>
+                            </xcad:LayoutAnchorable>
+                        </xcad:LayoutAnchorablePane>
+                        <xcad:LayoutAnchorablePane DockWidth="120" DockHeight="50">
+                            <xcad:LayoutAnchorable Title="{x:Static loc:LocalizedStrings.Securities}" x:Name="SecuritiesWindow" CanClose="False">
+                                <xaml:SecurityPicker x:Name="SecurityPicker" SelectionMode="Single" ShowCommonStatColumns="False" 
+                                             SecurityDoubleClick="SecurityPicker_OnSecurityDoubleClick" MouseDown="SecurityPicker_OnMouseDown"/>
+                            </xcad:LayoutAnchorable>
+                        </xcad:LayoutAnchorablePane>
+                    </xcad:LayoutAnchorablePaneGroup>
+                </xcad:LayoutPanel>
+                <xcad:LayoutAnchorablePane DockWidth="120" DockHeight="200">
+                    <xcad:LayoutAnchorable Title="{x:Static loc:LocalizedStrings.Str3200}" x:Name="ChartWindow" CanClose="False">
+                        <xaml:ChartPanel x:Name="ChartPanel" />
+                    </xcad:LayoutAnchorable>
+                </xcad:LayoutAnchorablePane>
+            </xcad:LayoutPanel>
+        </xcad:LayoutRoot>
+    </xcad:DockingManager>
+
+    <!--<docking:DockSite x:Name="DockSite">
         <docking:SplitContainer Orientation="Vertical">
             <docking:SplitContainer  docking:DockSite.ControlSize="60, 50">
                 <docking:ToolWindowContainer docking:DockSite.ControlSize="120, 50">
@@ -51,5 +85,5 @@
                 </docking:ToolWindowContainer>
             </docking:SplitContainer>
         </docking:SplitContainer>
-    </docking:DockSite>
+    </docking:DockSite>-->
 </controls:BaseStudioControl>

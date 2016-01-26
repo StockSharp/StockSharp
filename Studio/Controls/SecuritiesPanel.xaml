@@ -6,7 +6,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 			 xmlns:sx="http://schemas.stocksharp.com/xaml"
              xmlns:controls="clr-namespace:StockSharp.Studio.Controls"
-             xmlns:docking="http://schemas.actiprosoftware.com/winfx/xaml/docking"
+             xmlns:docking="http://schemas.xceed.com/wpf/xaml/avalondock"
              mc:Ignorable="d" d:DesignHeight="300" d:DesignWidth="700"
              DataContext="{Binding RelativeSource={RelativeSource Self}}">
 
@@ -24,36 +24,40 @@
                         CanExecute="CanExecuteCancelSecurityCommand" />
     </controls:BaseStudioControl.CommandBindings>
 
-    <docking:DockSite x:Name="DockSite">
-        <docking:SplitContainer>
+    <docking:DockingManager x:Name="DockSite">
+        <docking:LayoutRoot>
+            <docking:LayoutPanel>
+                <docking:LayoutAnchorablePaneGroup DockWidth="450" DockHeight="150">
+                    <docking:LayoutAnchorablePane>
+                        <docking:LayoutAnchorable Title="{x:Static loc:LocalizedStrings.Securities}" x:Name="SecuritiesWindow">
+                            <sx:SecurityPicker x:Name="SecurityPicker" SelectionMode="Single" SecuritySelected="SecurityPicker_SecuritySelected" />
+                        </docking:LayoutAnchorable>
+                    </docking:LayoutAnchorablePane>
+                </docking:LayoutAnchorablePaneGroup>
 
-            <docking:ToolWindowContainer docking:DockSite.ControlSize="240, 150">
-                <docking:ToolWindow Title="{x:Static loc:LocalizedStrings.Securities}" x:Name="SecuritiesWindow">
-                    <sx:SecurityPicker x:Name="SecurityPicker" SelectionMode="Single" SecuritySelected="SecurityPicker_SecuritySelected" />
-                </docking:ToolWindow>
-            </docking:ToolWindowContainer>
+                <docking:LayoutAnchorablePaneGroup>
+                    <docking:LayoutAnchorablePane>
+                        <docking:LayoutAnchorable Title="{x:Static loc:LocalizedStrings.XamlStr639}" x:Name="ParametersWindow">
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition/>
+                                    <RowDefinition Height="Auto"/>
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
 
-            <docking:ToolWindowContainer docking:DockSite.ControlSize="60, 150">
-                <docking:ToolWindow Title="{x:Static loc:LocalizedStrings.XamlStr639}" x:Name="ParametersWindow">
-                    <Grid>
-                        <Grid.RowDefinitions>
-                            <RowDefinition/>
-                            <RowDefinition Height="Auto"/>
-                        </Grid.RowDefinitions>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition/>
-                            <ColumnDefinition Width="Auto"/>
-                            <ColumnDefinition Width="Auto"/>
-                        </Grid.ColumnDefinitions>
-                        
-                        <sx:PropertyGridEx Grid.ColumnSpan="3" x:Name="PropertyGrid" />
+                                <sx:PropertyGridEx Grid.ColumnSpan="3" x:Name="PropertyGrid" />
 
-                        <Button Grid.Row="1" Grid.Column="1" Margin="2" Content="{x:Static loc:LocalizedStrings.Str1519}" Command="{x:Static controls:SecuritiesPanel.SaveSecurityCommand}" />
-                        <Button Grid.Row="1" Grid.Column="2" Margin="2" Content="{x:Static loc:LocalizedStrings.XamlStr419}" Command="{x:Static controls:SecuritiesPanel.CancelSecurityCommand}" />
-                    </Grid>
-                </docking:ToolWindow>
-            </docking:ToolWindowContainer>
-            
-        </docking:SplitContainer>
-    </docking:DockSite>
+                                <Button Grid.Row="1" Grid.Column="1" Margin="2" Content="{x:Static loc:LocalizedStrings.Str1519}" Command="{x:Static controls:SecuritiesPanel.SaveSecurityCommand}" />
+                                <Button Grid.Row="1" Grid.Column="2" Margin="2" Content="{x:Static loc:LocalizedStrings.XamlStr419}" Command="{x:Static controls:SecuritiesPanel.CancelSecurityCommand}" />
+                            </Grid>
+                        </docking:LayoutAnchorable>
+                    </docking:LayoutAnchorablePane>
+                </docking:LayoutAnchorablePaneGroup>
+            </docking:LayoutPanel>
+        </docking:LayoutRoot>
+    </docking:DockingManager>
 </controls:BaseStudioControl>

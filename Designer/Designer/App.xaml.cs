@@ -17,7 +17,10 @@ namespace StockSharp.Designer
 {
 	using System.Windows.Input;
 
+	using Ecng.Localization;
 	using Ecng.Xaml;
+
+	using StockSharp.Localization;
 
 	public partial class App
 	{

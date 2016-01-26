@@ -47,7 +47,6 @@ namespace StockSharp.Studio.Controls
 	using StockSharp.Xaml;
 	using StockSharp.Xaml.Charting;
 	using StockSharp.Localization;
-	using StockSharp.Xaml.Actipro;
 
 	public partial class CompositeSecurityPanel
 	{
@@ -389,6 +388,7 @@ namespace StockSharp.Studio.Controls
 
 		#region IStudioControl
 
+		//TODO: дописать логику загрузки состояния для DockingManager
 		public override void Load(SettingsStorage storage)
 		{
 			//_suspendChangedEvent = true;
@@ -416,12 +416,14 @@ namespace StockSharp.Studio.Controls
 				SecurityPicker.Load(securityPicker);
 
 			var layout = storage.GetValue<string>("Layout");
-			if (layout != null)
-				DockSite.LoadLayout(layout);
+
+			//if (layout != null)
+			//	DockingManager.LoadLayout(layout);
 
 			//_suspendChangedEvent = false;
 		}
 
+		//TODO: дописать логику сохранения состояния для DockingManager
 		public override void Save(SettingsStorage storage)
 		{
 			//storage.SetValue("Expression", Expression);
@@ -433,7 +435,7 @@ namespace StockSharp.Studio.Controls
 
 			storage.SetValue("ChartPanel", ChartPanel.Save());
 			storage.SetValue("SecurityPicker", SecurityPicker.Save());
-			storage.SetValue("Layout", DockSite.SaveLayout());
+			//storage.SetValue("Layout", DockingManager.SaveLayout());
 		}
 
 		public override void Dispose()
