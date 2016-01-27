@@ -7,7 +7,7 @@
 	Title="{x:Static loc:LocalizedStrings.Find}" ShowInTaskbar="False"
 	WindowStartupLocation="CenterOwner" ResizeMode="NoResize"
 	Height="350" Width="200">
-    <Grid>
+    <Grid Margin="5">
 		<Grid.RowDefinitions>
 			<RowDefinition Height="Auto" />
 			<RowDefinition Height="*" />
