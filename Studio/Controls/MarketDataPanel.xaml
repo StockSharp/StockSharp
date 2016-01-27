@@ -98,7 +98,7 @@
 						</StackPanel>
 						
 						<xctk:BusyIndicator x:Name="BusyIndicator1" Grid.Row="1" DisplayAfter="0" BusyContent="{x:Static loc:LocalizedStrings.XamlStr189}">
-							<sx:MarketDataGrid Margin="2" x:Name="Grid" />
+							<sx:MarketDataGrid Margin="2" x:Name="MarketDataGrid" />
 						</xctk:BusyIndicator>
 					</Grid>
 				</Grid>
