@@ -549,6 +549,12 @@ namespace StockSharp.Algo
 				if (message.Slippage != null)
 					t.Slippage = message.Slippage;
 
+				if (message.PnL != null)
+					t.PnL = message.PnL;
+
+				if (message.Position != null)
+					t.Position = message.Position;
+
 				message.CopyExtensionInfo(t);
 
 				//trades.Add(t);
