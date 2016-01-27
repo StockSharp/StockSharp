@@ -54,6 +54,11 @@ namespace StockSharp.Algo.Export.Database
 				DbType = typeof(string),
 				ValueRestriction = new StringRestriction(32)
 			};
+			yield return new ColumnDescription(nameof(ExecutionMessage.BrokerCode))
+			{
+				DbType = typeof(string),
+				ValueRestriction = new StringRestriction(32)
+			};
 			yield return new ColumnDescription(nameof(ExecutionMessage.DepoName))
 			{
 				DbType = typeof(string),
@@ -128,6 +133,7 @@ namespace StockSharp.Algo.Export.Database
 				{ nameof(ExecutionMessage.LocalTime), value.LocalTime },
 				{ nameof(ExecutionMessage.PortfolioName), value.PortfolioName },
 				{ nameof(ExecutionMessage.ClientCode), value.ClientCode },
+				{ nameof(ExecutionMessage.BrokerCode), value.BrokerCode },
 				{ nameof(ExecutionMessage.DepoName), value.DepoName },
 				{ nameof(ExecutionMessage.TransactionId), value.TransactionId },
 				{ nameof(ExecutionMessage.OriginalTransactionId), value.OriginalTransactionId },

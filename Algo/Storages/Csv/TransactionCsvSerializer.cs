@@ -45,7 +45,7 @@ namespace StockSharp.Algo.Storages.Csv
 		/// <param name="data">Data.</param>
 		protected override void Write(TextWriter writer, ExecutionMessage data)
 		{
-			writer.Write($"{data.ServerTime.UtcDateTime.ToString(TimeFormat)};{data.ServerTime.ToString("zzz")};{data.TransactionId};{data.OriginalTransactionId};{data.OrderId};{data.OrderStringId};{data.OrderBoardId};{data.UserOrderId};{data.OrderPrice};{data.OrderVolume};{data.Balance};{data.VisibleVolume};{data.Side};{data.OriginSide};{data.OrderState};{data.OrderType};{data.TimeInForce};{data.TradeId};{data.TradeStringId};{data.TradePrice};{data.TradeVolume};{data.PortfolioName};{data.ClientCode};{data.DepoName};{data.IsSystem};{data.HasOrderInfo};{data.HasTradeInfo};{data.Commission};{data.Currency};{data.Comment};{data.SystemComment};{data.DerivedOrderId};{data.DerivedOrderStringId};{data.IsUpTick};{data.IsCancelled};{data.OpenInterest};{data.PnL};{data.Position};{data.Slippage};{data.TradeStatus};{data.OrderStatus};{data.Latency?.Ticks};{data.Error?.Message};{data.ExpiryDate?.UtcDateTime.ToString(DateFormat)};{data.ExpiryDate?.UtcDateTime.ToString(TimeFormat)};{data.ExpiryDate?.ToString("zzz")}");
+			writer.Write($"{data.ServerTime.UtcDateTime.ToString(TimeFormat)};{data.ServerTime.ToString("zzz")};{data.TransactionId};{data.OriginalTransactionId};{data.OrderId};{data.OrderStringId};{data.OrderBoardId};{data.UserOrderId};{data.OrderPrice};{data.OrderVolume};{data.Balance};{data.VisibleVolume};{data.Side};{data.OriginSide};{data.OrderState};{data.OrderType};{data.TimeInForce};{data.TradeId};{data.TradeStringId};{data.TradePrice};{data.TradeVolume};{data.PortfolioName};{data.ClientCode};{data.BrokerCode};{data.DepoName};{data.IsSystem};{data.HasOrderInfo};{data.HasTradeInfo};{data.Commission};{data.Currency};{data.Comment};{data.SystemComment};{data.DerivedOrderId};{data.DerivedOrderStringId};{data.IsUpTick};{data.IsCancelled};{data.OpenInterest};{data.PnL};{data.Position};{data.Slippage};{data.TradeStatus};{data.OrderStatus};{data.Latency?.Ticks};{data.Error?.Message};{data.ExpiryDate?.UtcDateTime.ToString(DateFormat)};{data.ExpiryDate?.UtcDateTime.ToString(TimeFormat)};{data.ExpiryDate?.ToString("zzz")}");
         }
 
 		/// <summary>
@@ -82,6 +82,7 @@ namespace StockSharp.Algo.Storages.Csv
 				TradeVolume = reader.ReadNullableDecimal(),
 				PortfolioName = reader.ReadString(),
 				ClientCode = reader.ReadString(),
+				BrokerCode = reader.ReadString(),
 				DepoName = reader.ReadString(),
 				IsSystem = reader.ReadNullableBool(),
 				HasOrderInfo = reader.ReadBool(),

@@ -318,6 +318,7 @@ namespace StockSharp.Algo
 					? _portfolios.FirstOrDefault().Value
 					: ProcessPortfolio(message.PortfolioName).Item1;
 				o.ClientCode = message.ClientCode;
+				o.BrokerCode = message.BrokerCode;
 
 				return o;
 			}, out isNew, true);

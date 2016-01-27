@@ -462,7 +462,7 @@ namespace StockSharp.Hydra.Panes
 							_fields.Add(new FieldMapping(_settings, "Time", LocalizedStrings.Time, timeDescr, typeof(TimeSpan), (i, v) => i.ServerTime += v));
 							_fields.Add(new FieldMapping(_settings, "Portfolio", LocalizedStrings.Portfolio, LocalizedStrings.PortfolioName, typeof(string), (i, v) => i.PortfolioName = v) { IsRequired = true });
 							_fields.Add(new FieldMapping(_settings, "TransactionId", LocalizedStrings.TransactionId, LocalizedStrings.TransactionId, typeof(long), (i, v) => i.TransactionId = v));
-							_fields.Add(new FieldMapping(_settings, "Id", LocalizedStrings.Id, LocalizedStrings.OrderId, typeof(long), (i, v) => i.OrderId = v));
+							_fields.Add(new FieldMapping(_settings, "OrderId", LocalizedStrings.Id, LocalizedStrings.OrderId, typeof(long), (i, v) => i.OrderId = v));
 							_fields.Add(new FieldMapping(_settings, "Price", LocalizedStrings.Price, LocalizedStrings.OrderPrice, typeof(decimal), (i, v) => i.Price = v) { IsRequired = true });
 							_fields.Add(new FieldMapping(_settings, "Volume", LocalizedStrings.Volume, LocalizedStrings.OrderVolume, typeof(decimal), (i, v) => i.Volume = v) { IsRequired = true });
 							_fields.Add(new FieldMapping(_settings, "Balance", LocalizedStrings.Str1325, LocalizedStrings.Str131, typeof(decimal), (i, v) => i.Balance = v) { IsRequired = true });

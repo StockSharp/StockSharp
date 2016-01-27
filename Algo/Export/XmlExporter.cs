@@ -118,6 +118,7 @@ namespace StockSharp.Algo.Export
 						writer.WriteAttribute("localTime", item.LocalTime.ToString(_timeFormat));
 						writer.WriteAttribute("portfolio", item.PortfolioName);
 						writer.WriteAttribute("clientCode", item.ClientCode);
+						writer.WriteAttribute("brokerCode", item.BrokerCode);
 						writer.WriteAttribute("depoName", item.DepoName);
 						writer.WriteAttribute("transactionId", item.TransactionId);
 						writer.WriteAttribute("originalTransactionId", item.OriginalTransactionId);

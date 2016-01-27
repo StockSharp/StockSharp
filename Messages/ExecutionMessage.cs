@@ -92,6 +92,16 @@ namespace StockSharp.Messages
 		public string ClientCode { get; set; }
 
 		/// <summary>
+		/// Broker firm code.
+		/// </summary>
+		[DataMember]
+		[MainCategory]
+		[CategoryLoc(LocalizedStrings.Str2593Key)]
+		[DisplayNameLoc(LocalizedStrings.BrokerKey)]
+		[DescriptionLoc(LocalizedStrings.Str2619Key)]
+		public string BrokerCode { get; set; }
+
+		/// <summary>
 		/// The depositary where the physical security.
 		/// </summary>
 		[DisplayNameLoc(LocalizedStrings.DepoKey)]
@@ -527,6 +537,7 @@ namespace StockSharp.Messages
 				Comment = Comment,
 				Condition = Condition.CloneNullable(),
 				ClientCode = ClientCode,
+				BrokerCode = BrokerCode,
 				Currency = Currency,
 				ServerTime = ServerTime,
 				DepoName = DepoName,
