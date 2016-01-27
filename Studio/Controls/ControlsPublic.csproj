@@ -106,7 +106,14 @@
     <Reference Include="Northwoods.GoWPF">
       <HintPath>..\..\Xaml.Diagram\Northwoods.GoWPF.dll</HintPath>
     </Reference>
-    <Reference Include="Xceed.Wpf.Toolkit">
+    <Reference Include="Xceed.Wpf.AvalonDock">
+      <HintPath>..\..\References\Ecng\Xceed.Wpf.AvalonDock.dll</HintPath>
+    </Reference>
+    <Reference Include="Xceed.Wpf.AvalonDock.Themes.Metro">
+      <HintPath>..\..\References\Ecng\Xceed.Wpf.AvalonDock.Themes.Metro.dll</HintPath>
+    </Reference>
+    <Reference Include="Xceed.Wpf.Toolkit, Version=2.5.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\References\Ecng\Xceed.Wpf.Toolkit.dll</HintPath>
     </Reference>
   </ItemGroup>
@@ -465,10 +472,6 @@
     <ProjectReference Include="..\..\Messages\Messages.csproj">
       <Project>{B47F9C23-A4BD-46A9-BF27-54CB3D653503}</Project>
       <Name>Messages</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Xaml.Actipro\Xaml.ActiproPublic.csproj">
-      <Project>{D556FA3F-E40E-4F76-B3CA-B18134247FD1}</Project>
-      <Name>Xaml.ActiproPublic</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Xaml\Xaml.csproj">
       <Project>{64E4D6F0-36B6-4904-9BA7-FFFBE5FF71D8}</Project>

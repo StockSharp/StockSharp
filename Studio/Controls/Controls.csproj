@@ -52,10 +52,6 @@
       <HintPath>..\..\References\Actipro\ActiproSoftware.Editors.Wpf.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="ActiproSoftware.Navigation.Wpf, Version=11.2.555.0, Culture=neutral, PublicKeyToken=36ff2196ab5654b9, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\References\Actipro\ActiproSoftware.Navigation.Wpf.dll</HintPath>
-    </Reference>
     <Reference Include="ActiproSoftware.Shared.Wpf, Version=11.2.552.0, Culture=neutral, PublicKeyToken=36ff2196ab5654b9, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\References\Actipro\ActiproSoftware.Shared.Wpf.dll</HintPath>
@@ -110,6 +106,9 @@
     <Reference Include="System.Xaml" />
     <Reference Include="System.Xml" />
     <Reference Include="WindowsBase" />
+    <Reference Include="Xceed.Wpf.AvalonDock">
+      <HintPath>..\..\References\Ecng\Xceed.Wpf.AvalonDock.dll</HintPath>
+    </Reference>
     <Reference Include="Xceed.Wpf.Toolkit">
       <HintPath>..\..\References\Ecng\Xceed.Wpf.Toolkit.dll</HintPath>
     </Reference>

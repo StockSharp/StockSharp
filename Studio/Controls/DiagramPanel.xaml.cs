@@ -32,7 +32,6 @@ namespace StockSharp.Studio.Controls
 	using StockSharp.Studio.Core.Commands;
 	using StockSharp.Xaml.Diagram;
 	using StockSharp.Localization;
-	using StockSharp.Xaml.Actipro;
 
 	public partial class DiagramPanel : IStudioControl, IStudioCommandScope
     {
@@ -163,6 +162,7 @@ namespace StockSharp.Studio.Controls
 			}
 		}
 
+		//TODO: дописать логику загрузки состояния для DockSite
 		void IPersistable.Load(SettingsStorage storage)
 		{
 			var diagramEditor = storage.GetValue<SettingsStorage>("DiagramEditor");
@@ -170,14 +170,16 @@ namespace StockSharp.Studio.Controls
 				DiagramEditor.Load(diagramEditor);
 
 			var layout = storage.GetValue<string>("Layout");
-			if (layout != null)
-				DockSite.LoadLayout(layout, true);
+
+			//if (layout != null)
+			//	DockSite.LoadLayout(layout, true);
 		}
 
+		//TODO: дописать логику сохранения состояния для DockSite
 		void IPersistable.Save(SettingsStorage storage)
 		{
 			storage.SetValue("DiagramEditor", DiagramEditor.Save());
-			storage.SetValue("Layout", DockSite.SaveLayout(true));
+			//storage.SetValue("Layout", DockSite.SaveLayout(true));
 		}
 
 		void IDisposable.Dispose()

@@ -13,215 +13,158 @@ Created: 2015, 11, 11, 3:22 PM
 Copyright 2010 by StockSharp, LLC
 *******************************************************************************************/
 #endregion S# License
+
 using System;
 using System.IO;
 using System.Linq;
 using System.Windows;
-using System.Windows.Controls;
 
-using ActiproSoftware.Windows.Controls.Docking;
-using ActiproSoftware.Windows.Controls.Docking.Serialization;
-
-using Ecng.Collections;
-using Ecng.Configuration;
-using Ecng.Serialization;
-using Ecng.Xaml;
-
-using StockSharp.Algo;
-using StockSharp.Algo.Storages;
-using StockSharp.BusinessEntities;
-using StockSharp.Configuration;
-using StockSharp.Localization;
-using StockSharp.Messages;
 using StockSharp.Terminal.Layout;
-using StockSharp.Xaml;
-using StockSharp.Xaml.Charting;
+using StockSharp.Terminal.Controls;
+using Xceed.Wpf.AvalonDock.Layout;
+using Xceed.Wpf.AvalonDock;
+using System.Windows.Controls;
 
 namespace StockSharp.Terminal
 {
 	public partial class MainWindow
 	{
-		private readonly SecuritiesView _secView;
+		public LayoutManager LayoutManager { get; set; }
 
-		public readonly SynchronizedDictionary<Security, MarketDepthControl> Depths =
-			new SynchronizedDictionary<Security, MarketDepthControl>();
-
-		private const string _settingsFolder = "Settings";
-		private readonly string _connectionFile;
+		private int _countWorkArea = 2;
 
 		public MainWindow()
 		{
 			InitializeComponent();
 
-			LayoutManager = new LayoutManager(this, ProgrammaticDockSite) { LayoutFile = Path.Combine(_settingsFolder, "layout.xml") };
+			LayoutManager = new LayoutManager(DockingManager);
 
-			ConnectCommand = new DelegateCommand(Connect, CanConnect);
-			SettingsCommand = new DelegateCommand(Settings, CanSettings);
+			//AddDocumentElement.IsSelectedChanged += AddDocumentElement_IsSelectedChanged;
+			DockingManager.DocumentClosed += DockingManager_DocumentClosed;
+		}
 
-			Directory.CreateDirectory(_settingsFolder);
+		private void DockingManager_DocumentClosed(object sender, DocumentClosedEventArgs e)
+		{
+			var manager = (DockingManager)sender;
 
-			var storageRegistry = new StorageRegistry {DefaultDrive = new LocalMarketDataDrive(_settingsFolder)};
+			if (LayoutDocuments.Children.Count == 0 &&
+				manager.FloatingWindows.ToList().Count == 0)
+				_countWorkArea = 0;
+		}
 
-			Connector = new Connector();
-			var storageAdapter = new StorageMessageAdapter(Connector.Adapter, new EntityRegistry(), storageRegistry);
-			ConfigManager.RegisterService<ISecurityProvider>(new FilterableSecurityProvider(storageRegistry.GetSecurityStorage()));
-			ConfigManager.RegisterService<IConnector>(Connector);
-			ConfigManager.RegisterService<IMarketDataProvider>(Connector);
+		//private void DockingManager_DocumentClosing(object sender, Xceed.Wpf.AvalonDock.DocumentClosingEventArgs e)
+		//{
+		//	var element = e.Document;
+		//	var manager = (Xceed.Wpf.AvalonDock.DockingManager)sender;
 
-			_connectionFile = Path.Combine(_settingsFolder, "connection.xml");
+		//	var item = manager.FloatingWindows.FirstOrDefault(x =>
+		//	{
+		//		var doc = (LayoutDocumentFloatingWindow)x.Model;
+		//		return doc.Children.Contains(element);
+		//	});
 
-			if (File.Exists(_connectionFile))
-				Connector.Adapter.Load(new XmlSerializer<SettingsStorage>().Deserialize(_connectionFile));
+		//	if (item != null)
+		//	{
+		//		manager.FloatingWindows.ToList().Remove(item);
+		//	}
+		//	else
+		//		LayoutDocuments.RemoveChild(element);
 
-			_secView = new SecuritiesView(this) {SecurityGrid = {MarketDataProvider = Connector}};
+		//	if (LayoutDocuments.Children.Count == 0)
+		//		_countWorkArea = 0;
 
-			Connector.MarketDepthsChanged += depths =>
+		//	//if (LayoutDocuments.Children.Count == 2)
+		//	//{
+		//	//	var item = LayoutDocuments.Children.FirstOrDefault(x => x.Title != "+");
+		//	//	item.CanClose = false;
+		//	//	LayoutDocuments.SelectedContentIndex = LayoutDocuments.IndexOfChild(item);
+		//	//}
+		//}
+
+		private void AddDocument(object sender, RoutedEventArgs e)
+		{
+			var newWorkArea = new LayoutDocument()
 			{
-				foreach (var depth in depths)
-				{
-					var ctrl = Depths.TryGetValue(depth.Security);
-
-					if (ctrl != null)
-						ctrl.UpdateDepth(depth);
-				}
+				Title = "Work area #" + ++_countWorkArea,
+				Content = new WorkAreaControl()
 			};
+
+			newWorkArea.Closing += NewWorkArea_Closing;
+
+			LayoutDocuments.Children.Add(newWorkArea);
+			
+			var offset = LayoutDocuments.Children.Count - 1;
+			offset = (offset < 0) ? 0 : offset;
+
+			LayoutDocuments.SelectedContentIndex = offset;
 		}
 
-		public LayoutManager LayoutManager { get; set; }
-
-		public Connector Connector { private set; get; }
-
-		public DelegateCommand ConnectCommand { private set; get; }
-
-		private void Connect(object obj)
+		private void NewWorkArea_Closing(object sender, System.ComponentModel.CancelEventArgs e)
 		{
-			switch (Connector.ConnectionState)
+			
+		}
+
+		//private void AddDocumentElement_IsSelectedChanged(object sender, EventArgs e)
+		//{
+		//	var element = (LayoutDocument)sender;
+
+		//	if (!element.IsSelected || LayoutDocuments.Children.Count == 1)
+		//		return;
+
+		//	LayoutDocument newWorkArea = new LayoutDocument()
+		//	{
+		//		Title = "Рабочая область " + ++_countWorkArea,
+		//		Content = new WorkAreaControl()
+		//	};
+
+		//	var offset = LayoutDocuments.Children.Count - 1;
+
+		//	//if (offset != LayoutDocuments.IndexOfChild(element))
+		//	//	return;
+
+		//	LayoutDocuments.Children.RemoveAt(offset);
+
+		//	LayoutDocuments.Children.Add(newWorkArea);
+		//	LayoutDocuments.Children.Add(element);
+		//	LayoutDocuments.SelectedContentIndex = offset;
+
+		//	//var offset = LayoutDocuments.IndexOfChild(element);
+		//	//LayoutDocuments.InsertChildAt(offset, newWorkArea);
+		//	//LayoutDocuments.SelectedContentIndex = offset;
+		//}
+
+		private void DockingManager_OnActiveContentChanged(object sender, EventArgs e)
+        {
+            DockingManager.ActiveContent.DoIfElse<WorkAreaControl>(editor =>
 			{
-				case ConnectionStates.Failed:
-				case ConnectionStates.Disconnected:
-					Connect();
-					break;
-				case ConnectionStates.Connected:
-					Connector.Disconnect();
-					break;
-			}
-		}
+				var element = (Xceed.Wpf.AvalonDock.DockingManager)sender;
 
-		private bool CanConnect(object obj)
-		{
-			return Connector.Adapter.InnerAdapters.SortedAdapters.Any();
-		}
+			}, () =>
+			{
+				var element = (Xceed.Wpf.AvalonDock.DockingManager)sender;
 
-		public DelegateCommand SettingsCommand { private set; get; }
-
-		private void Settings(object obj)
-		{
-			if (!Connector.Configure(this))
-				return;
-
-			new XmlSerializer<SettingsStorage>().Serialize(Connector.Adapter.Save(), _connectionFile);
-		}
-
-		private bool CanSettings(object obj)
-		{
-			return true;
-		}
-
-		private void Connect()
-		{
-			Connector.Connect();
-		}
-
-		private void DockSite_OnLoaded(object sender, RoutedEventArgs e)
-		{
-			//var dockSite = sender as DockSite;
-			//if (dockSite == null)
-			//	return;
-
-			//CreateToolWindow(LocalizedStrings.Securities, "Securities", _secView);
-			//CreateToolWindow(LocalizedStrings.Str972, "Positions", new PortfolioGrid());
-			//CreateToolWindow(LocalizedStrings.Ticks, "Trades", new TradeGrid());
-			//CreateToolWindow(LocalizedStrings.Orders, "Orders", new OrderGrid());
-			//CreateToolWindow(LocalizedStrings.MyTrades, "MyTrades", new MyTradeGrid());
-			//CreateToolWindow(LocalizedStrings.OrderLog, "OrderLog", new OrderLogGrid());
-			//CreateToolWindow(LocalizedStrings.News, "News", new NewsGrid());
-
-			//_isLoaded = true;
-		}
-
-		private void ProgrammaticDockSite_OnLoaded(object sender, RoutedEventArgs e)
-		{
-			var dockSite = sender as DockSite;
-			if (dockSite == null)
-				return;
-
-			LayoutManager.AddTabbedMdiHost(dockSite);
-
-			var docWindow1 = LayoutManager.CreateDocumentWindow(dockSite, LayoutKey.Window, "Chart title", null, new ChartPanel());
-			docWindow1.Activate(true);
-
-			// Top right
-			var twNews = LayoutManager.CreateToolWindow(LayoutKey.OrderLog, "News", LocalizedStrings.News, new NewsGrid(), true);
-			LayoutManager.DockToolWindowToDockSite(dockSite, twNews, Dock.Right);
-
-			// Bottom left
-			var twSecurities = LayoutManager.CreateToolWindow(LayoutKey.Security, "Securities", LocalizedStrings.Securities,
-				_secView, true);
-			LayoutManager.DockToolWindowToDockSite(dockSite, twSecurities, Dock.Bottom);
-
-			var twMyTrades = LayoutManager.CreateToolWindow(LayoutKey.Trade, "MyTrades", LocalizedStrings.MyTrades,
-				new MyTradeGrid(), true);
-			LayoutManager.DockToolWindowToToolWindow(twSecurities, twMyTrades, Direction.Content);
-
-			// Bottom right
-			var twOrders = LayoutManager.CreateToolWindow(LayoutKey.Order, "Orders", LocalizedStrings.Orders, new OrderGrid(),
-				true);
-			LayoutManager.DockToolWindowToToolWindow(twSecurities, twOrders, Direction.ContentRight);
-
-			var twOrderLog = LayoutManager.CreateToolWindow(LayoutKey.OrderLog, "OrderLog", LocalizedStrings.OrderLog,
-				new OrderLogGrid(), true);
-			LayoutManager.DockToolWindowToToolWindow(twOrders, twOrderLog, Direction.Content);
-
-			// Right bottom
-			var twPositions = LayoutManager.CreateToolWindow(LayoutKey.Portfolio, "Positions", LocalizedStrings.Str972,
-				new PortfolioGrid(), true);
-			LayoutManager.DockToolWindowToToolWindow(twNews, twPositions, Direction.ContentBottom);
-
-			var twTrades = LayoutManager.CreateToolWindow(LayoutKey.Trade, "Trades", LocalizedStrings.Ticks, new TradeGrid(),
-				true);
-			LayoutManager.DockToolWindowToToolWindow(twPositions, twTrades, Direction.Content);
-
-			LayoutManager.IsLoaded = true;
-		}
-
-		private void DockSite_OnWindowClosed(object sender, DockingWindowEventArgs e)
-		{
-			LayoutManager.ToolItems.Remove(e.Window);
-		}
-
+			});
+        }
+		
 		protected override void OnClosed(EventArgs e)
 		{
-			LayoutSerializer.SaveToFile(LayoutManager.LayoutFile, DockSite1);
 			base.OnClosed(e);
-		}
 
-		private static DockSiteLayoutSerializer LayoutSerializer
-		{
-			get
-			{
-				return new DockSiteLayoutSerializer
-				{
-					SerializationBehavior = DockSiteSerializationBehavior.All,
-					DocumentWindowDeserializationBehavior = DockingWindowDeserializationBehavior.AutoCreate,
-					ToolWindowDeserializationBehavior = DockingWindowDeserializationBehavior.LazyLoad
-				};
-			}
 		}
-
+		
 		private void MainWindow_OnLoaded(object sender, RoutedEventArgs e)
 		{
-			if (File.Exists(LayoutManager.LayoutFile))
-				LayoutSerializer.LoadFromFile(LayoutManager.LayoutFile, DockSite1);
+
+		}
+
+		private void ComboBox_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+		{
+			if (NewControlComboBox.SelectedIndex != -1)
+			{
+				var workArea = (WorkAreaControl)DockingManager.ActiveContent;
+				workArea.AddControl(((ComboBoxItem)NewControlComboBox.SelectedItem).Content.ToString());
+				NewControlComboBox.SelectedIndex = -1;
+			}
 		}
 	}
 }

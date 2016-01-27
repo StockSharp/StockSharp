@@ -268,6 +268,11 @@ namespace StockSharp.Algo.Storages.Csv
 		/// <summary>
 		/// <see cref="DateTime"/> format.
 		/// </summary>
+		public const string DateFormat = "yyyyMMdd";
+
+		/// <summary>
+		/// <see cref="TimeSpan"/> format.
+		/// </summary>
 		public const string TimeFormat = CsvHelper.TimeFormat;
 	}
 }

@@ -45,8 +45,8 @@ namespace StockSharp.Algo.Storages.Csv
 		/// <param name="data">Data.</param>
 		protected override void Write(TextWriter writer, ExecutionMessage data)
 		{
-			writer.Write($"{data.ServerTime.UtcDateTime.ToString(TimeFormat)};{data.ServerTime.ToString("zzz")};{data.TransactionId};{data.OrderId};{data.OrderPrice};{data.OrderVolume};{data.Side};{data.OrderState};{data.TimeInForce};{data.TradeId};{data.TradePrice};{data.TradeVolume};{data.PortfolioName};{data.IsSystem};{data.HasOrderInfo};{data.HasTradeInfo}");
-		}
+			writer.Write($"{data.ServerTime.UtcDateTime.ToString(TimeFormat)};{data.ServerTime.ToString("zzz")};{data.TransactionId};{data.OriginalTransactionId};{data.OrderId};{data.OrderStringId};{data.OrderBoardId};{data.UserOrderId};{data.OrderPrice};{data.OrderVolume};{data.Balance};{data.VisibleVolume};{data.Side};{data.OriginSide};{data.OrderState};{data.OrderType};{data.TimeInForce};{data.TradeId};{data.TradeStringId};{data.TradePrice};{data.TradeVolume};{data.PortfolioName};{data.ClientCode};{data.DepoName};{data.IsSystem};{data.HasOrderInfo};{data.HasTradeInfo};{data.Commission};{data.Currency};{data.Comment};{data.SystemComment};{data.DerivedOrderId};{data.DerivedOrderStringId};{data.IsUpTick};{data.IsCancelled};{data.OpenInterest};{data.PnL};{data.Position};{data.Slippage};{data.TradeStatus};{data.OrderStatus};{data.Latency?.Ticks};{data.Error?.Message};{data.ExpiryDate?.UtcDateTime.ToString(DateFormat)};{data.ExpiryDate?.UtcDateTime.ToString(TimeFormat)};{data.ExpiryDate?.ToString("zzz")}");
+        }
 
 		/// <summary>
 		/// Load data from the specified reader.
@@ -63,12 +63,12 @@ namespace StockSharp.Algo.Storages.Csv
 				ServerTime = reader.ReadTime(date),
 				TransactionId = reader.ReadLong(),
 				OriginalTransactionId = reader.ReadLong(),
-				OrderId = reader.ReadLong(),
+				OrderId = reader.ReadNullableLong(),
 				OrderStringId = reader.ReadString(),
 				OrderBoardId = reader.ReadString(),
 				UserOrderId = reader.ReadString(),
 				OrderPrice = reader.ReadDecimal(),
-				OrderVolume = reader.ReadDecimal(),
+				OrderVolume = reader.ReadNullableDecimal(),
 				Balance = reader.ReadNullableDecimal(),
 				VisibleVolume = reader.ReadNullableDecimal(),
 				Side = reader.ReadEnum<Sides>(),
@@ -79,7 +79,7 @@ namespace StockSharp.Algo.Storages.Csv
 				TradeId = reader.ReadNullableLong(),
 				TradeStringId = reader.ReadString(),
 				TradePrice = reader.ReadNullableDecimal(),
-				TradeVolume = reader.ReadDecimal(),
+				TradeVolume = reader.ReadNullableDecimal(),
 				PortfolioName = reader.ReadString(),
 				ClientCode = reader.ReadString(),
 				DepoName = reader.ReadString(),
@@ -89,6 +89,7 @@ namespace StockSharp.Algo.Storages.Csv
 				Commission = reader.ReadNullableDecimal(),
 				Currency = reader.ReadNullableEnum<CurrencyTypes>(),
 				Comment = reader.ReadString(),
+				SystemComment = reader.ReadString(),
 				DerivedOrderId = reader.ReadNullableLong(),
 				DerivedOrderStringId = reader.ReadString(),
 				IsUpTick = reader.ReadNullableBool(),
@@ -97,15 +98,22 @@ namespace StockSharp.Algo.Storages.Csv
 				PnL = reader.ReadNullableDecimal(),
 				Position = reader.ReadNullableDecimal(),
 				Slippage = reader.ReadNullableDecimal(),
-				SystemComment = reader.ReadString(),
 				TradeStatus = reader.ReadNullableInt(),
 				OrderStatus = reader.ReadNullableEnum<OrderStatus>(),
+				Latency = reader.ReadNullableLong().To<TimeSpan?>(),
 			};
 
 			var error = reader.ReadString();
 
 			if (!error.IsEmpty())
 				msg.Error = new InvalidOperationException(error);
+
+			var dt = reader.ReadNullableDateTime(DateFormat);
+
+			if (dt != null)
+			{
+				msg.ExpiryDate = (dt.Value + reader.ReadDateTime(TimeFormat).TimeOfDay).ToDateTimeOffset(TimeSpan.Parse(reader.ReadString().Replace("+", string.Empty)));
+			}
 
 			return msg;
 		}
