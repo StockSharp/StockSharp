@@ -504,7 +504,7 @@ namespace StockSharp.Quik.Lua
 				{
 					var execMsg = (ExecutionMessage)message;
 
-					if (execMsg.HasTradeInfo())
+					if (execMsg.HasOrderInfo())
 					{
 						if (execMsg.OrderId != null)
 						{
