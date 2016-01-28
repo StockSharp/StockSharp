@@ -577,6 +577,8 @@ namespace StockSharp.Algo
 						{
 							var clone = message.Clone();
 							_suspendedSecurityMessages.SafeAdd(securityId).Add(clone);
+
+							this.AddInfoLog("Msg delayed (no sec info): {0}", message);
 							_messageStat.Add(clone);
 						}
 
@@ -1371,6 +1373,8 @@ namespace StockSharp.Algo
 					nonOrderedMyTrades = _nonOrderedByTransactionIdMyTrades.SafeAdd(message.OriginalTransactionId);
 				else
 					nonOrderedMyTrades = _nonOrderedByStringIdMyTrades.SafeAdd(message.OrderStringId);
+
+				this.AddInfoLog("My trade delayed: {0}", message);
 
 				nonOrderedMyTrades.Add((ExecutionMessage)message.Clone());
 
