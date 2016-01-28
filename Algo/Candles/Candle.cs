@@ -44,6 +44,8 @@ namespace StockSharp.Algo.Candles
 		/// Security.
 		/// </summary>
 		[DataMember]
+		[DisplayNameLoc(LocalizedStrings.SecurityKey)]
+		[DescriptionLoc(LocalizedStrings.SecurityKey, true)]
 		public Security Security { get; set; }
 
 		private DateTimeOffset _openTime;
@@ -52,6 +54,8 @@ namespace StockSharp.Algo.Candles
 		/// Open time.
 		/// </summary>
 		[DataMember]
+		[DisplayNameLoc(LocalizedStrings.CandleOpenTimeKey)]
+		[DescriptionLoc(LocalizedStrings.CandleOpenTimeKey, true)]
 		public DateTimeOffset OpenTime
 		{
 			get { return _openTime; }
@@ -68,6 +72,8 @@ namespace StockSharp.Algo.Candles
 		/// Close time.
 		/// </summary>
 		[DataMember]
+		[DisplayNameLoc(LocalizedStrings.CandleCloseTimeKey)]
+		[DescriptionLoc(LocalizedStrings.CandleCloseTimeKey, true)]
 		public DateTimeOffset CloseTime
 		{
 			get { return _closeTime; }
@@ -84,6 +90,8 @@ namespace StockSharp.Algo.Candles
 		/// High time.
 		/// </summary>
 		[DataMember]
+		[DisplayNameLoc(LocalizedStrings.CandleHighTimeKey)]
+		[DescriptionLoc(LocalizedStrings.CandleHighTimeKey, true)]
 		public DateTimeOffset HighTime
 		{
 			get { return _highTime; }
@@ -100,6 +108,8 @@ namespace StockSharp.Algo.Candles
 		/// Low time.
 		/// </summary>
 		[DataMember]
+		[DisplayNameLoc(LocalizedStrings.CandleLowTimeKey)]
+		[DescriptionLoc(LocalizedStrings.CandleLowTimeKey, true)]
 		public DateTimeOffset LowTime
 		{
 			get { return _lowTime; }
@@ -116,6 +126,8 @@ namespace StockSharp.Algo.Candles
 		/// Opening price.
 		/// </summary>
 		[DataMember]
+		[DisplayNameLoc(LocalizedStrings.Str79Key)]
+		[DescriptionLoc(LocalizedStrings.Str80Key)]
 		public decimal OpenPrice
 		{
 			get { return _openPrice; }
@@ -132,6 +144,8 @@ namespace StockSharp.Algo.Candles
 		/// Closing price.
 		/// </summary>
 		[DataMember]
+		[DisplayNameLoc(LocalizedStrings.ClosingPriceKey)]
+		[DescriptionLoc(LocalizedStrings.Str86Key)]
 		public decimal ClosePrice
 		{
 			get { return _closePrice; }
@@ -148,6 +162,8 @@ namespace StockSharp.Algo.Candles
 		/// Maximum price.
 		/// </summary>
 		[DataMember]
+		[DisplayNameLoc(LocalizedStrings.Str81Key)]
+		[DescriptionLoc(LocalizedStrings.Str82Key)]
 		public decimal HighPrice
 		{
 			get { return _highPrice; }
@@ -164,6 +180,8 @@ namespace StockSharp.Algo.Candles
 		/// Minimum price.
 		/// </summary>
 		[DataMember]
+		[DisplayNameLoc(LocalizedStrings.Str83Key)]
+		[DescriptionLoc(LocalizedStrings.Str84Key)]
 		public decimal LowPrice
 		{
 			get { return _lowPrice; }
@@ -260,6 +278,8 @@ namespace StockSharp.Algo.Candles
 		/// Total volume.
 		/// </summary>
 		[DataMember]
+		[DisplayNameLoc(LocalizedStrings.VolumeKey)]
+		[DescriptionLoc(LocalizedStrings.TotalCandleVolumeKey)]
 		public decimal TotalVolume
 		{
 			get { return _totalVolume; }
@@ -321,6 +341,8 @@ namespace StockSharp.Algo.Candles
 		/// Number of ticks.
 		/// </summary>
 		[DataMember]
+		[DisplayNameLoc(LocalizedStrings.TicksKey)]
+		[DescriptionLoc(LocalizedStrings.TickCountKey)]
 		public int? TotalTicks
 		{
 			get { return _totalTicks; }
@@ -337,6 +359,8 @@ namespace StockSharp.Algo.Candles
 		/// Number of uptrending ticks.
 		/// </summary>
 		[DataMember]
+		[DisplayNameLoc(LocalizedStrings.TickUpKey)]
+		[DescriptionLoc(LocalizedStrings.TickUpCountKey)]
 		public int? UpTicks
 		{
 			get { return _upTicks; }
@@ -353,6 +377,8 @@ namespace StockSharp.Algo.Candles
 		/// Number of downtrending ticks.
 		/// </summary>
 		[DataMember]
+		[DisplayNameLoc(LocalizedStrings.TickDownKey)]
+		[DescriptionLoc(LocalizedStrings.TickDownCountKey)]
 		public int? DownTicks
 		{
 			get { return _downTicks; }
@@ -369,6 +395,8 @@ namespace StockSharp.Algo.Candles
 		/// State.
 		/// </summary>
 		[DataMember]
+		[DisplayNameLoc(LocalizedStrings.StateKey)]
+		[DescriptionLoc(LocalizedStrings.CandleStateKey)]
 		public CandleStates State
 		{
 			get { return _state; }
@@ -389,6 +417,8 @@ namespace StockSharp.Algo.Candles
 		/// Open interest.
 		/// </summary>
 		[DataMember]
+		[DisplayNameLoc(LocalizedStrings.OIKey)]
+		[DescriptionLoc(LocalizedStrings.OpenInterestKey)]
 		public decimal? OpenInterest { get; set; }
 
 		/// <summary>
