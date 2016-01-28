@@ -843,10 +843,10 @@ namespace StockSharp.Algo
 
 				if (initOrder)
 				{
-					InitNewOrder(order);
-
 					if (order.Type == null)
 						order.Type = order.Price > 0 ? OrderTypes.Limit : OrderTypes.Market;
+
+					InitNewOrder(order);
 				}
 
 				OnRegisterOrder(order);
