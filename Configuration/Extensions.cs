@@ -284,7 +284,8 @@ namespace StockSharp.Configuration
 		/// <param name="entityRegistry">The storage of trade objects.</param>
 		/// <param name="databaseRaw">Raw bytes of database file.</param>
 		/// <param name="init">Initialization callback.</param>
-		public static void FirstTimeInit(this EntityRegistry entityRegistry, byte[] databaseRaw, Action<Database> init = null)
+		/// <returns>Path to the database file.</returns>
+		public static string FirstTimeInit(this EntityRegistry entityRegistry, byte[] databaseRaw, Action<Database> init = null)
 		{
 			if (entityRegistry == null)
 				throw new ArgumentNullException(nameof(entityRegistry));
@@ -293,7 +294,7 @@ namespace StockSharp.Configuration
 				throw new ArgumentNullException(nameof(databaseRaw));
 
 			var database = entityRegistry.Storage as Database;
-			database?.FirstTimeInit(databaseRaw, init);
+			return database?.FirstTimeInit(databaseRaw, init);
 		}
 
 		/// <summary>
@@ -302,7 +303,8 @@ namespace StockSharp.Configuration
 		/// <param name="database">The database.</param>
 		/// <param name="databaseRaw">Raw bytes of database file.</param>
 		/// <param name="init">Initialization callback.</param>
-		public static void FirstTimeInit(this Database database, byte[] databaseRaw, Action<Database> init = null)
+		/// <returns>Path to the database file.</returns>
+		public static string FirstTimeInit(this Database database, byte[] databaseRaw, Action<Database> init = null)
 		{
 			if (database == null)
 				throw new ArgumentNullException(nameof(database));
@@ -318,7 +320,7 @@ namespace StockSharp.Configuration
 			var dbFile = (string)conStr.Cast<KeyValuePair<string, object>>().ToDictionary(StringComparer.InvariantCultureIgnoreCase).TryGetValue("Data Source");
 
 			if (dbFile == null)
-				return;
+				return null;
 
 			dbFile = dbFile.Replace("%Documents%", Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments));
 
@@ -334,6 +336,8 @@ namespace StockSharp.Configuration
 
 				init?.Invoke(database);
 			}
+
+			return dbFile;
 		}
 
 		private static void UpdateDatabaseWalMode(Database database)

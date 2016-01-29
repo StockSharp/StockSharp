@@ -346,7 +346,7 @@ namespace StockSharp.Hydra
 			_entityRegistry.TasksSettings.Recycle = false;
 			((SecurityList)_entityRegistry.Securities).BulkLoad = true;
 
-			_entityRegistry.FirstTimeInit(Properties.Resources.StockSharp, db => _entityRegistry.Version = HydraEntityRegistry.LatestVersion);
+			_dbFile = _entityRegistry.FirstTimeInit(Properties.Resources.StockSharp, db => _entityRegistry.Version = HydraEntityRegistry.LatestVersion);
 
 			CheckDatabase();
 
