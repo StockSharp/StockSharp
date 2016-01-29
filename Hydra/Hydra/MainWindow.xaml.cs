@@ -48,6 +48,7 @@ namespace StockSharp.Hydra
 	using StockSharp.Algo.Storages;
 	using StockSharp.BusinessEntities;
 	using StockSharp.Community;
+	using StockSharp.Configuration;
 	using StockSharp.Xaml;
 	using StockSharp.Messages;
 
@@ -345,35 +346,7 @@ namespace StockSharp.Hydra
 			_entityRegistry.TasksSettings.Recycle = false;
 			((SecurityList)_entityRegistry.Securities).BulkLoad = true;
 
-			var database = (Database)_entityRegistry.Storage;
-
-			if (database != null)
-			{
-				var conStr = new DbConnectionStringBuilder
-				{
-					ConnectionString = database.ConnectionString
-				};
-
-				_dbFile = (string)conStr.Cast<KeyValuePair<string, object>>().ToDictionary(StringComparer.InvariantCultureIgnoreCase).TryGetValue("Data Source");
-
-				if (_dbFile != null)
-				{
-					_dbFile = _dbFile.Replace("%Documents%", Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments));
-
-					conStr["Data Source"] = _dbFile;
-					database.ConnectionString = conStr.ToString();
-
-					_dbFile.CreateDirIfNotExists();
-
-					if (!File.Exists(_dbFile))
-					{
-						Properties.Resources.StockSharp.Save(_dbFile);
-						_entityRegistry.Version = HydraEntityRegistry.LatestVersion;
-
-						UpdateDatabaseWalMode();
-					}
-				}
-			}
+			_entityRegistry.FirstTimeInit(Properties.Resources.StockSharp, db => _entityRegistry.Version = HydraEntityRegistry.LatestVersion);
 
 			CheckDatabase();
 

@@ -116,7 +116,6 @@
     <Compile Include="Controls\WorkAreaControl.xaml.cs">
       <DependentUpon>WorkAreaControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Extensions.cs" />
     <Compile Include="Fakes\FakeMarketDataProvider.cs" />
     <Compile Include="Fakes\FakeSecurityProvider.cs" />
     <Compile Include="Fakes\FakeStudioCommandService.cs" />

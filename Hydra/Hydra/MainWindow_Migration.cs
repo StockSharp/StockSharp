@@ -33,30 +33,10 @@ namespace StockSharp.Hydra
 	using StockSharp.Hydra.Core;
 	using StockSharp.Logging;
 	using StockSharp.Localization;
+	using StockSharp.Configuration;
 
 	partial class MainWindow
 	{
-		private void Execute(Query query, Schema schema)
-		{
-			var database = (Database)_entityRegistry.Storage;
-			database.Execute(database.GetCommand(query, schema, new FieldList(), new FieldList()), new SerializationItemCollection(), false);
-		}
-
-		private void UpdateDatabaseWalMode()
-		{
-			var database = (Database)_entityRegistry.Storage;
-			var walQuery = Query.Execute("PRAGMA journal_mode=WAL;");
-			var walCmd = database.GetCommand(walQuery, null, new FieldList(), new FieldList(), false);
-			database.Execute(walCmd, new SerializationItemCollection(), false);
-		}
-
-		private void Execute(string query)
-		{
-			((Database)_entityRegistry.Storage)
-				.GetCommand(Query.Execute(query), null, new FieldList(), new FieldList(), false)
-				.ExecuteNonQuery(new SerializationItemCollection());
-		}
-
 		private void CheckDatabase()
 		{
 			if (_entityRegistry.Version.Compare(HydraEntityRegistry.LatestVersion) == 0)
@@ -81,19 +61,19 @@ namespace StockSharp.Hydra
 					.AlterTable(schema)
 					.AddColumn(schema.Fields["BinaryOptionType"]);
 
-				Execute(binaryOptType, schema);
+				database.Execute(binaryOptType, schema);
 
 				var multiplier = Query
 					.AlterTable(schema)
 					.AddColumn(schema.Fields["Multiplier"]);
 
-				Execute(multiplier, schema);
+				database.Execute(multiplier, schema);
 
 				var update = Query
 					.Update(schema)
 					.Set(new SetPart("Multiplier", "VolumeStep"));
 
-				Execute(update, schema);
+				database.Execute(update, schema);
 
 				_entityRegistry.Version = new Version(2, 6);
 			}
@@ -106,20 +86,20 @@ namespace StockSharp.Hydra
 					.AlterTable(schema)
 					.AddColumn(schema.Fields["LocalTime"]);
 
-				Execute(localTime, schema);
+				database.Execute(localTime, schema);
 
 				var serverTime = Query
 					.AlterTable(schema)
 					.AddColumn(schema.Fields["ServerTime"]);
 
-				Execute(serverTime, schema);
+				database.Execute(serverTime, schema);
 
 				_entityRegistry.Version = new Version(2, 7);
 			}
 
 			if (_entityRegistry.Version.Compare(new Version(2, 7)) == 0)
 			{
-				Execute(@"
+				database.Execute(@"
 					update HydraTaskSecurity
 					set
 						[Security] = 'ALL@ALL'
@@ -131,12 +111,12 @@ namespace StockSharp.Hydra
 
 			if (_entityRegistry.Version.Compare(new Version(2, 8)) == 0)
 			{
-				Execute(@"
+				database.Execute(@"
 					update HydraTaskSecurity
 					set
 						[CandleSeries] = replace([CandleSeries], '<From>01/01/0001 00:00:00</From>', '<From>01/01/0001 00:00:00 +00:00</From>')");
 
-				Execute(@"
+				database.Execute(@"
 					update HydraTaskSecurity
 					set
 						[CandleSeries] = replace([CandleSeries], '<To>9999-12-31T23:59:59.9999999</To>', '<To>12/31/9999 23:59:59 +00:00</To>')");
@@ -146,7 +126,7 @@ namespace StockSharp.Hydra
 
 			if (_entityRegistry.Version.Compare(new Version(2, 9)) == 0)
 			{
-				Execute(@"
+				database.Execute(@"
 					update HydraTaskSettings
 					set
 						[ExtensionInfo] = replace([ExtensionInfo], '<From>01/01/0001 00:00:00</From>', '<From>01/01/0001 00:00:00 +00:00</From>')");
@@ -156,7 +136,7 @@ namespace StockSharp.Hydra
 
 			if (_entityRegistry.Version.Compare(new Version(2, 10)) == 0)
 			{
-				Execute(@"
+				database.Execute(@"
 					alter table [Security] RENAME TO tmp;
 					create table [Security] (
 						[Id] varchar NOT NULL, [Name] varchar, [Code] varchar NOT NULL, [Class] varchar, [ShortName] varchar,
@@ -174,14 +154,14 @@ namespace StockSharp.Hydra
 
 			if (_entityRegistry.Version.Compare(new Version(2, 11)) == 0)
 			{
-				UpdateDatabaseWalMode();
+				//UpdateDatabaseWalMode();
 
 				_entityRegistry.Version = new Version(2, 12);
 			}
 
 			if (_entityRegistry.Version.Compare(new Version(2, 12)) == 0)
 			{
-				Execute(@"
+				database.Execute(@"
 						alter table [HydraTaskSecurity] add column ExecutionCount integer;
 						alter table [HydraTaskSecurity] add column ExecutionLastTime time;");
 
@@ -190,15 +170,15 @@ namespace StockSharp.Hydra
 
 			if (_entityRegistry.Version.Compare(new Version(2, 13)) == 0)
 			{
-				Execute("update [HydraTaskSecurity] set ExecutionCount = 0 where ExecutionCount is null");
-				Execute("update [HydraTaskSecurity] set CandleCount = 0 where CandleCount is null");
+				database.Execute("update [HydraTaskSecurity] set ExecutionCount = 0 where ExecutionCount is null");
+				database.Execute("update [HydraTaskSecurity] set CandleCount = 0 where CandleCount is null");
 
 				_entityRegistry.Version = new Version(2, 14);
 			}
 
 			if (_entityRegistry.Version.Compare(new Version(2, 14)) == 0)
 			{
-				Execute(@"
+				database.Execute(@"
 					alter table [Security] RENAME TO tmp;
 					create table [Security] (
 						[Id] varchar NOT NULL, [Name] varchar, [Code] varchar NOT NULL, [Class] varchar, [ShortName] varchar,
@@ -216,7 +196,7 @@ namespace StockSharp.Hydra
 
 			if (_entityRegistry.Version.Compare(new Version(2, 15)) == 0)
 			{
-				Execute(@"
+				database.Execute(@"
 					alter table [ExchangeBoard] add column TimeZone varchar;
 					update [ExchangeBoard]
 					set
@@ -227,7 +207,7 @@ namespace StockSharp.Hydra
 
 			if (_entityRegistry.Version.Compare(new Version(2, 16)) == 0)
 			{
-				Execute(@"
+				database.Execute(@"
 					alter table [HydraTaskSecurity] RENAME TO tmp;
 					CREATE TABLE HydraTaskSecurity (Id integer NOT NULL PRIMARY KEY AUTOINCREMENT,
 						Security varchar NOT NULL,DataTypes varchar NOT NULL,
