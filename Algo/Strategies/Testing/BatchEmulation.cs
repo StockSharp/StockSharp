@@ -177,12 +177,13 @@ namespace StockSharp.Algo.Strategies.Testing
 		private int _totalBatches;
 		private int _currentBatch;
 
-		private IEnumerable<Security> EmulatorSecurities => ((HistoryMessageAdapter)EmulationConnector.MarketDataAdapter).SecurityProvider.LookupAll();
+        //private IEnumerable<Security> EmulatorSecurities => ((HistoryMessageAdapter)EmulationConnector.MarketDataAdapter).SecurityProvider.LookupAll();
+        private IEnumerable<Security> EmulatorSecurities => EmulationConnector.HistoryMessageAdapter.SecurityProvider.LookupAll();
 
-		/// <summary>
-		/// Emulation settings.
-		/// </summary>
-		public EmulationSettings EmulationSettings { get; }
+        /// <summary>
+        /// Emulation settings.
+        /// </summary>
+        public EmulationSettings EmulationSettings { get; }
 
 		/// <summary>
 		/// The emulational connection.
@@ -413,9 +414,12 @@ namespace StockSharp.Algo.Strategies.Testing
 
 				strategy.Connector = EmulationConnector;
 				strategy.Portfolio = portfolio;
-				strategy.Security = EmulationConnector.LookupById(strategy.Security.Id);
-			}
-		}
+
+                //strategy.Security = EmulationConnector.LookupById(strategy.Security.Id);
+                strategy.Security = EmulationConnector.HistoryMessageAdapter.SecurityProvider.LookupById(strategy.Security.Id);
+
+            }
+        }
 
 		private void AddHistoryAdapter(string portfolio)
 		{
