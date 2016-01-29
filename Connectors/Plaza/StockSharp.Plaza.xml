@@ -5811,6 +5811,11 @@
             Идентификатор клиентского ПО. Используется при режиме <see cref="P:StockSharp.Plaza.PlazaMessageAdapter.IsCGate" />.
             </summary>
     </member>
+    <member name="P:StockSharp.Plaza.PlazaMessageAdapter.IsDemo">
+      <summary>
+            Подключаться ли к демо торгам вместо сервера с реальной торговлей.
+            </summary>
+    </member>
     <member name="P:StockSharp.Plaza.PlazaMessageAdapter.Login">
       <summary>
             Логин. Используется в случае авторизованного подключения к роутеру.
@@ -7139,6 +7144,11 @@
     <member name="P:StockSharp.Plaza.PlazaTrader.CGateKey">
       <summary>
             Идентификатор клиентского ПО. Используется при режиме <see cref="P:StockSharp.Plaza.PlazaTrader.IsCGate" />.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Plaza.PlazaTrader.IsDemo">
+      <summary>
+            Подключаться ли к демо торгам вместо сервера с реальной торговлей.
             </summary>
     </member>
     <member name="P:StockSharp.Plaza.PlazaTrader.Login">

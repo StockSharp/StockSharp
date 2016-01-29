@@ -63,7 +63,6 @@ namespace SamplePlaza
 			_portfoliosWindow.MakeHideable();
 
 			AppName.Text = Trader.AppName;
-			CGateKey.Text = Trader.CGateKey;
 
 			Tables.SelectedTables = Trader.Tables.Select(t => t.Id);
 
@@ -102,7 +101,7 @@ namespace SamplePlaza
 				{
 					Trader.Address = Address.Text.To<EndPoint>();
 					Trader.IsCGate = IsCGate.IsChecked == true;
-					Trader.CGateKey = CGateKey.Text;
+					Trader.IsDemo = IsDemo.IsChecked == true;
 					Trader.AppName = AppName.Text;
 					Trader.TableRegistry.StreamRegistry.IsFastRepl = IsFastRepl.IsChecked == true;
 

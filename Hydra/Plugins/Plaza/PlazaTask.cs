@@ -111,9 +111,9 @@ namespace StockSharp.Hydra.Plaza
 			[DisplayNameLoc(LocalizedStrings.CGateIdKey)]
 			[DescriptionLoc(LocalizedStrings.Str2799Key)]
 			[PropertyOrder(5)]
-			public string CGateKey
+			public SecureString CGateKey
 			{
-				get { return (string)ExtensionInfo["CGateKey"]; }
+				get { return ExtensionInfo["CGateKey"].To<SecureString>(); }
 				set { ExtensionInfo["CGateKey"] = value; }
 			}
 
@@ -206,8 +206,8 @@ namespace StockSharp.Hydra.Plaza
 				_settings.Address = connector.Address;
 				_settings.Login = string.Empty;
 				_settings.Password = new SecureString();
+				_settings.CGateKey = new SecureString();
 				_settings.IsCGate = false;
-				_settings.CGateKey = PlazaMessageAdapter.DemoCGateKey;
 				_settings.OnlySystemTrades = true;
 				_settings.IsFastRepl = false;
 				_settings.OverrideDll = true;
