@@ -90,10 +90,10 @@ namespace SampleMultiConnection
 
 			var window = _quotesWindows.SafeAdd(SecurityPicker.SelectedSecurity, security =>
 			{
-				// начинаем получать котировки стакана
+				// subscribe on order book flow
 				connector.RegisterMarketDepth(security);
 
-				// создаем окно со стаканом
+				// create order book window
 				var wnd = new QuotesWindow { Title = security.Id + " " + LocalizedStrings.MarketDepth };
 				wnd.MakeHideable();
 				return wnd;
@@ -131,6 +131,11 @@ namespace SampleMultiConnection
 				if (wnd != null)
 					wnd.DepthCtrl.UpdateDepth(depth);
 			}
+		}
+
+		private void FindClick(object sender, RoutedEventArgs e)
+		{
+			new FindSecurityWindow().ShowModal(this);
 		}
 	}
 }
