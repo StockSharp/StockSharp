@@ -82,10 +82,7 @@ namespace StockSharp.LMAX
 		/// The parameters validity check.
 		/// </summary>
 		[Browsable(false)]
-		public override bool IsValid
-		{
-			get { return !Login.IsEmpty() && !Password.IsEmpty(); }
-		}
+		public override bool IsValid => !Login.IsEmpty() && !Password.IsEmpty();
 
 		private static readonly HashSet<TimeSpan> _timeFrames = new HashSet<TimeSpan>(new[]
 		{
@@ -98,10 +95,7 @@ namespace StockSharp.LMAX
 		/// Available time frames.
 		/// </summary>
 		[Browsable(false)]
-		public static IEnumerable<TimeSpan> TimeFrames
-		{
-			get { return _timeFrames; }
-		}
+		public static IEnumerable<TimeSpan> TimeFrames => _timeFrames;
 
 		/// <summary>
 		/// Save settings.

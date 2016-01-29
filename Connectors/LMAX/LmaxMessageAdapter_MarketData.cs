@@ -59,10 +59,7 @@ namespace StockSharp.LMAX
 		/// <summary>
 		/// Gets a value indicating whether the connector supports security lookup.
 		/// </summary>
-		protected override bool IsSupportNativeSecurityLookup
-		{
-			get { return true; }
-		}
+		protected override bool IsSupportNativeSecurityLookup => true;
 
 		private void ProcessSecurityLookupMessage(SecurityLookupMessage lookupMsg)
 		{

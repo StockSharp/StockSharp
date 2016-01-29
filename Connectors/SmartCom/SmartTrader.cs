@@ -53,10 +53,7 @@ namespace StockSharp.SmartCom
 			Adapter.InnerAdapters.Add(new SmartComMessageAdapter(TransactionIdGenerator));
 		}
 
-		private SmartComMessageAdapter NativeAdapter
-		{
-			get { return Adapter.InnerAdapters.OfType<SmartComMessageAdapter>().First(); }
-		}
+		private SmartComMessageAdapter NativeAdapter => Adapter.InnerAdapters.OfType<SmartComMessageAdapter>().First();
 
 		/// <summary>
 		/// Обработать сообщение.
@@ -133,53 +130,28 @@ namespace StockSharp.SmartCom
 			set { NativeAdapter.ServerSettings = value; }
 		}
 
-		private TimeSpan _realTimeCandleOffset = TimeSpan.FromSeconds(5);
-
 		/// <summary>
 		/// Временной отступ для нового запроса получение новой свечи. По-умолчанию равен 5 секундам.
 		/// </summary>
 		/// <remarks>Необходим для того, чтобы сервер успел сформировать данные в своем хранилище свечек.</remarks>
-		public TimeSpan RealTimeCandleOffset
-		{
-			get { return _realTimeCandleOffset; }
-			set { _realTimeCandleOffset = value; }
-		}
+		public TimeSpan RealTimeCandleOffset { get; set; } = TimeSpan.FromSeconds(5);
 
 		/// <summary>
 		/// Поддерживается ли перерегистрация заявок через метод <see cref="IConnector.ReRegisterOrder(StockSharp.BusinessEntities.Order,StockSharp.BusinessEntities.Order)"/>
 		/// в виде одной транзакции. По-умолчанию включено.
 		/// </summary>
-		public override bool IsSupportAtomicReRegister
-		{
-			get
-			{
-				// http://stocksharp.com/forum/yaf_postsm20807_MarketQuotingStrategy---obiem-nie-mozhiet-byt--nulievym.aspx
-				return false;
-			}
-		}
-
-		private bool _restartService = true;
+		public override bool IsSupportAtomicReRegister => false;
 
 		/// <summary>
 		/// Перезапускать службу SmartCOM при подключении.
 		/// </summary>
-		public bool RestartService
-		{
-			get { return _restartService; }
-			set { _restartService = value; }
-		}
-
-		private TimeSpan _serviceRestartTimeOut = TimeSpan.FromSeconds(5);
+		public bool RestartService { get; set; } = true;
 
 		/// <summary>
 		/// Ограничение по времени для перезапуска службы SmartCOM.
 		/// Для отключения ограничения по времени необходимо указать <see cref="TimeSpan.Zero"/>.
 		/// </summary>
-		public TimeSpan RestartServiceTimeOut
-		{
-			get { return _serviceRestartTimeOut; }
-			set { _serviceRestartTimeOut = value; }
-		}
+		public TimeSpan RestartServiceTimeOut { get; set; } = TimeSpan.FromSeconds(5);
 
 		/// <summary>
 		/// Получить временные диапазоны, для которых у данного источника для передаваемой серии свечек есть данные.

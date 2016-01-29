@@ -90,10 +90,7 @@ namespace StockSharp.SmartCom
 		/// <summary>
 		/// Поддерживается ли торговой системой поиск портфелей.
 		/// </summary>
-		protected override bool IsSupportNativePortfolioLookup
-		{
-			get { return true; }
-		}
+		protected override bool IsSupportNativePortfolioLookup => true;
 
 		/// <summary>
 		/// Отправить сообщение.

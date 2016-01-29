@@ -46,19 +46,13 @@ namespace StockSharp.LMAX
 			Adapter.InnerAdapters.Add(new LmaxMessageAdapter(TransactionIdGenerator));
 		}
 
-		private LmaxMessageAdapter NativeAdapter
-		{
-			get { return Adapter.InnerAdapters.OfType<LmaxMessageAdapter>().First(); }
-		}
+		private LmaxMessageAdapter NativeAdapter => Adapter.InnerAdapters.OfType<LmaxMessageAdapter>().First();
 
 		/// <summary>
 		/// Gets a value indicating whether the re-registration orders via the method <see cref="IConnector.ReRegisterOrder(StockSharp.BusinessEntities.Order,StockSharp.BusinessEntities.Order)"/>
 		/// as a single transaction. The default is enabled.
 		/// </summary>
-		public override bool IsSupportAtomicReRegister
-		{
-			get { return false; }
-		}
+		public override bool IsSupportAtomicReRegister => false;
 
 		/// <summary>
 		/// Login.

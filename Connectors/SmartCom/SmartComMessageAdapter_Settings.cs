@@ -125,10 +125,7 @@ namespace StockSharp.SmartCom
 		/// Проверить введенные параметры на валидность.
 		/// </summary>
 		[Browsable(false)]
-		public override bool IsValid
-		{
-			get { return !Login.IsEmpty() && !Password.IsEmpty() && Address != null; }
-		}
+		public override bool IsValid => !Login.IsEmpty() && !Password.IsEmpty() && Address != null;
 
 		/// <summary>
 		/// Сохранить настройки.

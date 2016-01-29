@@ -52,10 +52,10 @@ namespace StockSharp.OpenECry
 		/// <summary>
 		/// Unique software ID.
 		/// </summary>
-		public SecureString Uuid
+		public string Uuid
 		{
-			get { return NativeAdapter.Uuid; }
-			set { NativeAdapter.Uuid = value; }
+			get { return NativeAdapter.Uuid.To<string>(); }
+			set { NativeAdapter.Uuid = value.To<SecureString>(); }
 		}
 
 		/// <summary>

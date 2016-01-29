@@ -45,10 +45,7 @@ namespace StockSharp.SmartCom
 		/// <summary>
 		/// Поддерживается ли торговой системой поиск инструментов.
 		/// </summary>
-		protected override bool IsSupportNativeSecurityLookup
-		{
-			get { return true; }
-		}
+		protected override bool IsSupportNativeSecurityLookup => true;
 
 		private void ProcessMarketDataMessage(MarketDataMessage mdMsg)
 		{

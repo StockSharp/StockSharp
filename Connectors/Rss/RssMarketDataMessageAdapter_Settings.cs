@@ -79,10 +79,7 @@ namespace StockSharp.Rss
 		/// The parameters validity check.
 		/// </summary>
 		[Browsable(false)]
-		public override bool IsValid
-		{
-			get { return Address != null; }
-		}
+		public override bool IsValid => Address != null;
 
 		/// <summary>
 		/// Load settings.

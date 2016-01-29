@@ -221,7 +221,7 @@ namespace StockSharp.Transaq
 				EndPoint = Address.To<EndPoint>(),
 				Proxy = Proxy,
 				MicexRegisters = MicexRegisters,
-				RqDelay = MarketDataInterval == null ? (int?)null : (int)MarketDataInterval.Value.TotalMilliseconds,
+				RqDelay = MarketDataInterval == null ? (int?)null : ((int)MarketDataInterval.Value.TotalMilliseconds).Max(100),
 				Milliseconds = true,
 				Utc = true,
 			}, false);

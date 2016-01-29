@@ -47,18 +47,12 @@ namespace StockSharp.SmartCom.Native
 		/// <summary>
 		/// Поддерживается ли отмена всех заявок.
 		/// </summary>
-		public override bool IsSupportCancelAllOrders
-		{
-			get { return false; }
-		}
+		public override bool IsSupportCancelAllOrders => false;
 
 		/// <summary>
 		/// Версия обертки.
 		/// </summary>
-		public override SmartComVersions Version
-		{
-			get { return SmartComVersions.V3; }
-		}
+		public override SmartComVersions Version => SmartComVersions.V3;
 
 		/// <summary>
 		/// Подключиться к SmartCOM.
