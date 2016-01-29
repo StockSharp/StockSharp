@@ -169,6 +169,7 @@ namespace SampleHistoryTestingParallel
 					Interval = TimeSpan.FromSeconds(1),
 				});
 
+                // register trades
                 connector.RegisterTrades(security);
              
                 connector.Start();

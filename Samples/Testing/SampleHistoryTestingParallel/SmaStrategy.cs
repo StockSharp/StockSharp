@@ -45,7 +45,8 @@ namespace SampleHistoryTestingParallel
 
         public SmaStrategy(CandleSeries series, SimpleMovingAverage longSma, SimpleMovingAverage shortSma)
 		{
-			_series = series;
+
+            _series = series;
 			LongSma = longSma;
 			ShortSma = shortSma;
 
@@ -59,6 +60,7 @@ namespace SampleHistoryTestingParallel
 		protected override void OnStarted()
 		{
 
+            // get CandleManager
             _candleManager = this.GetCandleManager();
 
             _candleManager
