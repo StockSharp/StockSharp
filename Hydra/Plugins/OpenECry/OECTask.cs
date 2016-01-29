@@ -86,9 +86,9 @@ namespace StockSharp.Hydra.OpenECry
 			[DisplayName("UUID")]
 			[DescriptionLoc(LocalizedStrings.Str2565Key)]
 			[PropertyOrder(3)]
-			public string Uuid
+			public SecureString Uuid
 			{
-				get { return (string)ExtensionInfo.TryGetValue("Uuid"); }
+				get { return ExtensionInfo.TryGetValue("Uuid").To<SecureString>(); }
 				set { ExtensionInfo["Uuid"] = value; }
 			}
 
