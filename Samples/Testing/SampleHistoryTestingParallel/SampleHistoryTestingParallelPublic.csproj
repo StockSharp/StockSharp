@@ -41,6 +41,13 @@
     <ApplicationIcon>..\..\..\References\stocksharp.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="StockSharp.Licensing">
+      <HintPath>..\..\..\References\StockSharp.Licensing.dll</HintPath>
+    </Reference>
+    <Reference Include="StockSharp.Xaml, Version=4.3.14.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Xaml\bin\Debug\StockSharp.Xaml.dll</HintPath>
+    </Reference>
     <Reference Include="StockSharp.Xaml.Charting">
       <HintPath>..\..\..\Xaml.Charting\StockSharp.Xaml.Charting.dll</HintPath>
     </Reference>

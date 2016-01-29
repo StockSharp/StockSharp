@@ -66,9 +66,10 @@ namespace SampleHistoryTestingParallel
 			var logManager = new LogManager();
 			var fileLogListener = new FileLogListener("sample.log");
 			logManager.Listeners.Add(fileLogListener);
+            logManager.Listeners.Add(new DebugLogListener());
 
-			// SMA periods
-			var periods = new[]
+            // SMA periods
+            var periods = new[]
 			{
 				new Tuple<int, int, Color>(80, 10, Colors.DarkGreen),
 				new Tuple<int, int, Color>(70, 8, Colors.Red),
@@ -129,8 +130,8 @@ namespace SampleHistoryTestingParallel
 				}
 			};
 
-			// handle historical time for update ProgressBar
-			batchEmulation.ProgressChanged += (curr, total) => this.GuiAsync(() => TestingProcess.Value = total);
+            // handle historical time for update ProgressBar
+            batchEmulation.ProgressChanged += (curr, total) => this.GuiAsync(() => TestingProcess.Value = total);
 
 			batchEmulation.StateChanged += (oldState, newState) =>
 			{
@@ -167,6 +168,11 @@ namespace SampleHistoryTestingParallel
 					// order book freq refresh is 1 sec
 					Interval = TimeSpan.FromSeconds(1),
 				});
+
+                connector.RegisterTrades(security);
+             
+                connector.Start();
+
 			};
 
 			TestingProcess.Maximum = 100;
@@ -181,7 +187,7 @@ namespace SampleHistoryTestingParallel
                     var series = new CandleSeries(typeof(TimeFrameCandle), security, timeFrame);
 
 					// create strategy based SMA
-					var strategy = new SmaStrategy(candleManager, series, new SimpleMovingAverage { Length = period.Item1 }, new SimpleMovingAverage { Length = period.Item2 })
+					var strategy = new SmaStrategy(series, new SimpleMovingAverage { Length = period.Item1 }, new SimpleMovingAverage { Length = period.Item2 })
 					{
 						Volume = 1,
 						Security = security,
@@ -195,19 +201,19 @@ namespace SampleHistoryTestingParallel
 
 					strategy.SetCandleManager(candleManager);
 
-					var curveItems = Curve.CreateCurve(LocalizedStrings.Str3026Params.Put(period.Item1, period.Item2), period.Item3);
-					strategy.PnLChanged += () =>
-					{
-						var data = new EquityData
-						{
-							Time = strategy.CurrentTime,
-							Value = strategy.PnL,
-						};
+                    var curveItems = Curve.CreateCurve(LocalizedStrings.Str3026Params.Put(period.Item1, period.Item2), period.Item3);
+                    strategy.PnLChanged += () =>
+                    {
+                        var data = new EquityData
+                        {
+                            Time = strategy.CurrentTime,
+                            Value = strategy.PnL,
+                        };
 
-						this.GuiAsync(() => curveItems.Add(data));
-					};
+                        this.GuiAsync(() => curveItems.Add(data));
+                    };
 
-					Stat.AddStrategies(new[] { strategy });
+                    Stat.AddStrategies(new[] { strategy });
 
 					return strategy;
 				})

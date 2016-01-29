@@ -25,7 +25,7 @@ namespace SampleHistoryTestingParallel
 
 	class SmaStrategy : Strategy
 	{
-		private readonly ICandleManager _candleManager;
+		private ICandleManager _candleManager;
 		private readonly CandleSeries _series;
 		private bool _isShortLessThenLong;
 
@@ -43,11 +43,9 @@ namespace SampleHistoryTestingParallel
 			get { return _shortSmaPeriod.Value; }
 		}
 
-		public SmaStrategy(ICandleManager candleManager, CandleSeries series, SimpleMovingAverage longSma, SimpleMovingAverage shortSma)
+        public SmaStrategy(CandleSeries series, SimpleMovingAverage longSma, SimpleMovingAverage shortSma)
 		{
-			_candleManager = candleManager;
 			_series = series;
-
 			LongSma = longSma;
 			ShortSma = shortSma;
 
@@ -60,14 +58,15 @@ namespace SampleHistoryTestingParallel
 
 		protected override void OnStarted()
 		{
-			_candleManager
+
+            _candleManager = this.GetCandleManager();
+
+            _candleManager
 				.WhenCandlesFinished(_series)
 				.Do(ProcessCandle)
 				.Apply(this);
 
-			this
-				.GetCandleManager()
-				.Start(_series);
+            _candleManager.Start(_series);
 
 			// store current values for short and long
 			_isShortLessThenLong = ShortSma.GetCurrentValue() < LongSma.GetCurrentValue();
