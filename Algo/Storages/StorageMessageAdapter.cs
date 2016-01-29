@@ -192,18 +192,23 @@ namespace StockSharp.Algo.Storages
 			if (DaysLoad == TimeSpan.Zero)
 				return;
 
+			var today = DateTime.Today;
+
+			var from = (DateTimeOffset)(today - DaysLoad);
+			var to = (DateTimeOffset)(today + TimeHelper.LessOneDay);
+
 			foreach (var secId in requiredSecurities)
 			{
 				GetStorage<ExecutionMessage>(secId, ExecutionTypes.Tick)
-					.Load(DateTimeOffset.Now - DaysLoad, DateTimeOffset.Now)
+					.Load(from, to)
 					.ForEach(RaiseStorageMessage);
 
 				GetStorage<ExecutionMessage>(secId, ExecutionTypes.Transaction)
-					.Load(DateTimeOffset.Now - DaysLoad, DateTimeOffset.Now)
+					.Load(from, to)
 					.ForEach(RaiseStorageMessage);
 
 				GetStorage<ExecutionMessage>(secId, ExecutionTypes.OrderLog)
-					.Load(DateTimeOffset.Now - DaysLoad, DateTimeOffset.Now)
+					.Load(from, to)
 					.ForEach(RaiseStorageMessage);
 			}
 
