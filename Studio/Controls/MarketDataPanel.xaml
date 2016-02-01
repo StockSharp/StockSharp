@@ -12,7 +12,9 @@
 	
 	<UserControl.CommandBindings>
 		<CommandBinding Command="{x:Static local:MarketDataPanel.ApplyCommand}" Executed="ApplyCommandExecuted" CanExecute="ApplyCommandCanExecute" />
-	</UserControl.CommandBindings>
+        <CommandBinding Command="{x:Static local:MarketDataPanel.AddCommand}" Executed="AddCommandExecuted" CanExecute="AddCommandCanExecute" />
+        <CommandBinding Command="{x:Static local:MarketDataPanel.DeleteCommand}" Executed="DeleteCommandExecuted" CanExecute="DeleteCommandCanExecute" />
+    </UserControl.CommandBindings>
 
 	<xctk:BusyIndicator x:Name="BusyIndicator">
 		<xctk:BusyIndicator.BusyContentTemplate>
@@ -50,13 +52,26 @@
 				<Grid.ColumnDefinitions>
 					<ColumnDefinition Width="Auto"/>
 					<ColumnDefinition Width="*"/>
-				</Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
 
 				<TextBlock Grid.Column="0" Margin="1">
 					<Run Text="{x:Static loc:LocalizedStrings.Str1405}" /><Run Text=":" />
 				</TextBlock>
 				<local:MarketDataSettingsComboBox Grid.Column="1" Margin="1" SelectedSettings="{Binding SelectedSettings}" />
-			</Grid>
+
+                <Button Grid.Column="2" Margin="1" 
+						ToolTip="{x:Static loc:LocalizedStrings.Str3229}"
+						Command="{x:Static local:MarketDataPanel.AddCommand}">
+                    <Image Source="pack://application:,,,/StockSharp.Xaml;component/Images/add_16x16.png"/>
+				</Button>
+                <Button Grid.Column="3" Margin="1" 
+						ToolTip="{x:Static loc:LocalizedStrings.Str2060}"
+						Command="{x:Static local:MarketDataPanel.DeleteCommand}">
+                    <Image Source="pack://application:,,,/StockSharp.Xaml;component/Images/remove_16x16.png"/>
+                </Button>
+            </Grid>
 
 			<GroupBox Grid.Row="1" Margin="5" Header="{x:Static loc:LocalizedStrings.StorageParameters}">
 				<Grid>

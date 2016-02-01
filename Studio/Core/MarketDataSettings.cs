@@ -91,7 +91,7 @@ namespace StockSharp.Studio.Core
 
 		public ServerCredentials Credentials { get; private set; }
 
-		public bool IsStockSharpStorage => !UseLocal && Path.ContainsIgnoreCase(_serverUrl);
+		public bool IsStockSharpStorage => !UseLocal && !Path.IsEmpty() && Path.ContainsIgnoreCase(_serverUrl);
 
 		public override MarketDataSettings Clone()
 		{

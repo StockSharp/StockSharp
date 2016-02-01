@@ -608,9 +608,9 @@ namespace StockSharp.Designer
 				{
 					var settings = new XmlSerializer<SettingsStorage>().Deserialize(_settingsFile);
 
+					settings.TryLoadSettings<SettingsStorage>("MarketDataSettingsCache", s => _marketDataSettingsCache.Load(s));
 					settings.TryLoadSettings<SettingsStorage>("Layout", s => _layoutManager.Load(s));
 					settings.TryLoadSettings<SettingsStorage>("Connector", s => _connector.Load(s));
-					settings.TryLoadSettings<SettingsStorage>("MarketDataSettingsCache", s => _marketDataSettingsCache.Load(s));
 				});
 		}
 

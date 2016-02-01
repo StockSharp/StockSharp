@@ -25,25 +25,15 @@ namespace StockSharp.Studio.Core
 	using Ecng.Common;
 	using Ecng.Serialization;
 
-	using StockSharp.Localization;
-
 	public class MarketDataSettingsCache : IPersistable
 	{
-		public ObservableCollection<MarketDataSettings> Settings { get; private set; }
-
-		public MarketDataSettings NewSettingsItem { get; private set; }
+		public ObservableCollection<MarketDataSettings> Settings { get; }
 
 		public event Action Changed;
 
 		public MarketDataSettingsCache()
 		{
-			NewSettingsItem = new MarketDataSettings
-			{
-				Id = Guid.Empty,
-				Path = LocalizedStrings.Str3229 + "..."
-			};
-
-			Settings = new ObservableCollection<MarketDataSettings> { NewSettingsItem };
+			Settings = new ObservableCollection<MarketDataSettings>();
 			Settings.CollectionChanged += OnSettingsCollectionChanged;
 		}
 
@@ -64,13 +54,12 @@ namespace StockSharp.Studio.Core
 				.Select(s => s.Load<MarketDataSettings>());
 
 			Settings.Clear();
-			Settings.Add(NewSettingsItem);
 			Settings.AddRange(settings);
 		}
 
 		public void Save(SettingsStorage storage)
 		{
-			storage.SetValue("Settings", Settings.Where(i => i != NewSettingsItem).Select(s => s.Save()).ToArray());
+			storage.SetValue("Settings", Settings.Select(s => s.Save()).ToArray());
 		}
 	}
 }

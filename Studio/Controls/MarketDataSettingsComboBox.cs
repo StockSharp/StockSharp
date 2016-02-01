@@ -23,7 +23,6 @@ namespace StockSharp.Studio.Controls
 	using Ecng.Xaml;
 
 	using StockSharp.Studio.Core;
-	using StockSharp.Studio.Core.Commands;
 
 	public class MarketDataSettingsComboBox : ComboBox
 	{
@@ -71,25 +70,7 @@ namespace StockSharp.Studio.Controls
 
 		private void MarketDataSettingsComboBoxSelectionChanged(object sender, SelectionChangedEventArgs e)
 		{
-			var item = (MarketDataSettings)SelectedItem;
-
-			var isNew = item == _cache.NewSettingsItem;
-			var selection = !isNew
-				? item
-				: new MarketDataSettings
-				{
-					UseLocal = true,
-					//IsAlphabetic = true,
-					Path = Environment.CurrentDirectory
-				};
-
-			SelectedSettings = selection;
-
-			if (!isNew)
-				return;
-
-			_cache.Settings.Add(selection);
-			new OpenMarketDataSettingsCommand(selection).Process(this);
+			SelectedSettings = (MarketDataSettings)SelectedItem;
 		}
 
 		private void SettingsChanged(MarketDataSettings settings)

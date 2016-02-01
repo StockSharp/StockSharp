@@ -44,6 +44,8 @@ namespace StockSharp.Studio.Controls
 	public partial class MarketDataPanel
 	{
 		public static RoutedCommand ApplyCommand = new RoutedCommand();
+		public static RoutedCommand AddCommand = new RoutedCommand();
+		public static RoutedCommand DeleteCommand = new RoutedCommand();
 
 		public static readonly DependencyProperty SelectedSettingsProperty = DependencyProperty.Register("SelectedSettings", typeof(MarketDataSettings), typeof(MarketDataPanel),
 			new PropertyMetadata(null, SelectedSettingsPropertyChangedCallback));
@@ -66,14 +68,16 @@ namespace StockSharp.Studio.Controls
 		private bool _isLoading;
 		private StudioStorageRegistry _storageRegistry;
 
-		public override string Key => SelectedSettings.Id.To<string>();
+		public override string Key { get; }
 
 		public MarketDataPanel()
 		{
 			DataContext = this;
 			InitializeComponent();
 
-			SelectedSettings = ConfigManager.GetService<MarketDataSettingsCache>().Settings.FirstOrDefault(s => s.Id != Guid.Empty);
+			Key = GetType().GUID.To<string>();
+
+			SelectedSettings = ConfigManager.GetService<MarketDataSettingsCache>().Settings.FirstOrDefault();
 			SecurityPicker.SecurityProvider = ConfigManager.GetService<ISecurityProvider>();
 
 			MarketDataGrid.PropertyChanged += (s, e) => RaiseChangedCommand();
@@ -83,6 +87,10 @@ namespace StockSharp.Studio.Controls
 
 		private void SettingsChanged(MarketDataSettings settings)
 		{
+			SettingsPanel.Path = string.Empty;
+			SettingsPanel.Address = string.Empty;
+			SetCredentials(false);
+
 			if (settings == null)
 			{
 				SettingsPanel.IsEnabled = false;
@@ -253,6 +261,38 @@ namespace StockSharp.Studio.Controls
 			e.CanExecute = SelectedSettings != null && !(SettingsPanel.IsLocal ? SettingsPanel.Path : SettingsPanel.Address).IsEmpty();
 		}
 
+		private void AddCommandExecuted(object sender, ExecutedRoutedEventArgs e)
+		{
+			var settings = new MarketDataSettings
+			{
+				UseLocal = true,
+				Path = Environment.CurrentDirectory
+			};
+			var cache = ConfigManager.GetService<MarketDataSettingsCache>();
+
+			cache.Settings.Add(settings);
+			SelectedSettings = settings;
+		}
+
+		private void AddCommandCanExecute(object sender, CanExecuteRoutedEventArgs e)
+		{
+			e.CanExecute = true;
+		}
+
+		private void DeleteCommandExecuted(object sender, ExecutedRoutedEventArgs e)
+		{
+			var selectedSettings = SelectedSettings;
+			var cache = ConfigManager.GetService<MarketDataSettingsCache>();
+
+			cache.Settings.Remove(selectedSettings);
+			SelectedSettings = null;
+		}
+
+		private void DeleteCommandCanExecute(object sender, CanExecuteRoutedEventArgs e)
+		{
+			e.CanExecute = SelectedSettings != null;
+		}
+
 		public override void Load(SettingsStorage storage)
 		{
 			_isLoading = true;
@@ -266,7 +306,7 @@ namespace StockSharp.Studio.Controls
 
 				if (selectedSettings != Guid.Empty)
 					SelectedSettings = settings.FirstOrDefault(s => s.Id == selectedSettings)
-						?? settings.FirstOrDefault(s => s.Id != Guid.Empty);
+						?? settings.FirstOrDefault();
 
 				if (storage.ContainsKey("Security"))
 					SecurityPicker.SelectedSecurity = ConfigManager.GetService<IEntityRegistry>().Securities.ReadById(storage.GetValue<string>("Security"));
