@@ -73,7 +73,9 @@ namespace StockSharp.Designer
 
 			_layoutManager = new LayoutManager(DockingManager);
 
-			DiagramEditor.IndicatorTypes.AddRange(StockSharp.Configuration.Extensions.GetIndicatorTypes());
+			if (DiagramEditor.IndicatorTypes.IsEmpty())
+				DiagramEditor.IndicatorTypes.AddRange(Configuration.Extensions.GetIndicatorTypes());
+
 			PaletteElements = ConfigManager.GetService<StrategiesRegistry>().DiagramElements;
 		}
 
