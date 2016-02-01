@@ -341,8 +341,8 @@ namespace StockSharp.Designer
 
 			if (item != null)
 			{
-				var solutionExplorerItem = (SolutionExplorerItem)item.Header;
-				e.CanExecute = solutionExplorerItem.Parent == null;
+				var solutionExplorerItem = item.Header as SolutionExplorerItem;
+				e.CanExecute = solutionExplorerItem?.Parent == null;
 			}
 			else
 				e.CanExecute = true;
