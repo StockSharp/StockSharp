@@ -18,12 +18,17 @@ namespace StockSharp.Configuration
 	using System;
 	using System.Collections;
 	using System.Collections.Generic;
+	using System.Data.Common;
+	using System.IO;
 	using System.Linq;
 	using System.Windows;
 
 	using Ecng.Collections;
 	using Ecng.Common;
 	using Ecng.Configuration;
+	using Ecng.Data;
+	using Ecng.Data.Sql;
+	using Ecng.Interop;
 	using Ecng.Serialization;
 	using Ecng.Xaml;
 
@@ -31,6 +36,7 @@ namespace StockSharp.Configuration
 	using StockSharp.Algo;
 	using StockSharp.Algo.Candles;
 	using StockSharp.Algo.Indicators;
+	using StockSharp.Algo.Storages;
 	using StockSharp.BarChart;
 	using StockSharp.BitStamp;
 	using StockSharp.Blackwood;
@@ -270,6 +276,99 @@ namespace StockSharp.Configuration
 				.Where(t => !t.IsAbstract && t.IsCandle())
 				.Concat(_customCandles)
 				.ToArray());
+		}
+
+		/// <summary>
+		/// First time database initialization.
+		/// </summary>
+		/// <param name="entityRegistry">The storage of trade objects.</param>
+		/// <param name="databaseRaw">Raw bytes of database file.</param>
+		/// <param name="init">Initialization callback.</param>
+		/// <returns>Path to the database file.</returns>
+		public static string FirstTimeInit(this EntityRegistry entityRegistry, byte[] databaseRaw, Action<Database> init = null)
+		{
+			if (entityRegistry == null)
+				throw new ArgumentNullException(nameof(entityRegistry));
+
+			if (databaseRaw == null)
+				throw new ArgumentNullException(nameof(databaseRaw));
+
+			var database = entityRegistry.Storage as Database;
+			return database?.FirstTimeInit(databaseRaw, init);
+		}
+
+		/// <summary>
+		/// First time database initialization.
+		/// </summary>
+		/// <param name="database">The database.</param>
+		/// <param name="databaseRaw">Raw bytes of database file.</param>
+		/// <param name="init">Initialization callback.</param>
+		/// <returns>Path to the database file.</returns>
+		public static string FirstTimeInit(this Database database, byte[] databaseRaw, Action<Database> init = null)
+		{
+			if (database == null)
+				throw new ArgumentNullException(nameof(database));
+
+			if (databaseRaw == null)
+				throw new ArgumentNullException(nameof(databaseRaw));
+
+			var conStr = new DbConnectionStringBuilder
+			{
+				ConnectionString = database.ConnectionString
+			};
+
+			var dbFile = (string)conStr.Cast<KeyValuePair<string, object>>().ToDictionary(StringComparer.InvariantCultureIgnoreCase).TryGetValue("Data Source");
+
+			if (dbFile == null)
+				return null;
+
+			dbFile = dbFile.Replace("%Documents%", Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments));
+
+			conStr["Data Source"] = dbFile;
+			database.ConnectionString = conStr.ToString();
+
+			dbFile.CreateDirIfNotExists();
+
+			if (!File.Exists(dbFile))
+			{
+				databaseRaw.Save(dbFile);
+				UpdateDatabaseWalMode(database);
+
+				init?.Invoke(database);
+			}
+
+			return dbFile;
+		}
+
+		private static void UpdateDatabaseWalMode(Database database)
+		{
+			var walQuery = Query.Execute("PRAGMA journal_mode=WAL;");
+			var walCmd = database.GetCommand(walQuery, null, new FieldList(), new FieldList(), false);
+			database.Execute(walCmd, new SerializationItemCollection(), false);
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <typeparam name="T"></typeparam>
+		/// <param name="storage"></param>
+		/// <param name="name"></param>
+		/// <param name="load"></param>
+		public static void TryLoadSettings<T>(this SettingsStorage storage, string name, Action<T> load)
+		{
+			try
+			{
+				var settings = storage.GetValue<T>(name);
+
+				if (settings == null)
+					return;
+
+				load(settings);
+			}
+			catch (Exception excp)
+			{
+				ConfigManager.GetService<LogManager>().Application.AddErrorLog(excp);
+			}
 		}
 	}
 }

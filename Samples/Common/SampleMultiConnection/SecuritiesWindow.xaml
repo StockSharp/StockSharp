@@ -12,20 +12,26 @@
 
 		<sx:SecurityPicker x:Name="SecurityPicker" x:FieldModifier="public" SecuritySelected="SecurityPicker_OnSecuritySelected" ShowCommonStatColumns="True" />
 
-		<Grid Grid.Row="1" HorizontalAlignment="Right">
+		<Grid Grid.Row="1">
 			<Grid.ColumnDefinitions>
 				<ColumnDefinition Width="Auto" />
-				<ColumnDefinition Width="Auto" />
+				<ColumnDefinition Width="*" />
 				<ColumnDefinition Width="Auto" />
 			</Grid.ColumnDefinitions>
 
-			<Button x:Name="Quotes" Grid.Column="0" Content="{x:Static loc:LocalizedStrings.XamlStr40}" Width="100" IsEnabled="False" Click="QuotesClick" />
-			<Button x:Name="Depth" Grid.Column="1" Width="100" IsEnabled="False" Click="DepthClick">
-				<TextBlock><Run Text="{x:Static loc:LocalizedStrings.MarketDepth}" />...</TextBlock>
+			<Button x:Name="Find" Width="100" Click="FindClick">
+				<TextBlock><Run Text="{x:Static loc:LocalizedStrings.Find}" />...</TextBlock>
 			</Button>
-			<Button x:Name="NewOrder" Grid.Column="2" Width="100" IsEnabled="False" Click="NewOrderClick">
-				<TextBlock><Run Text="{x:Static loc:LocalizedStrings.NewOrder}" />...</TextBlock>
-			</Button>
+
+			<StackPanel Grid.Column="2" Orientation="Horizontal">
+				<Button x:Name="Quotes" Content="{x:Static loc:LocalizedStrings.XamlStr40}" Width="100" IsEnabled="False" Click="QuotesClick" />
+				<Button x:Name="Depth" Width="100" IsEnabled="False" Click="DepthClick">
+					<TextBlock><Run Text="{x:Static loc:LocalizedStrings.MarketDepth}" />...</TextBlock>
+				</Button>
+				<Button x:Name="NewOrder" Width="100" IsEnabled="False" Click="NewOrderClick">
+					<TextBlock><Run Text="{x:Static loc:LocalizedStrings.NewOrder}" />...</TextBlock>
+				</Button>
+			</StackPanel>
 		</Grid>
 	</Grid>
 </Window>

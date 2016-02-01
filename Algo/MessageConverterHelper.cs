@@ -260,6 +260,10 @@ namespace StockSharp.Algo
 				ServerTime = tick.Time,
 				OriginSide = tick.OrderDirection,
 				Currency = tick.Currency,
+				Position = trade.Position,
+				PnL = trade.PnL,
+				Slippage = trade.Slippage,
+				Commission = trade.Commission,
 			};
 		}
 

@@ -66,10 +66,7 @@ namespace StockSharp.SmartCom
 		/// <summary>
 		/// Возможные тайм-фреймы.
 		/// </summary>
-		public static IEnumerable<TimeSpan> AllTimeFrames
-		{
-			get { return _values.CachedKeys; }
-		}
+		public static IEnumerable<TimeSpan> AllTimeFrames => _values.CachedKeys;
 
 		internal static SmartComTimeFrames GetTimeFrame(SmartBarInterval interval)
 		{

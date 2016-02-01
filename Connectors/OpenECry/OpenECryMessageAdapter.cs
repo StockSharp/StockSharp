@@ -16,6 +16,7 @@ Copyright 2010 by StockSharp, LLC
 namespace StockSharp.OpenECry
 {
 	using System;
+	using System.Security;
 
 	using Ecng.Common;
 
@@ -118,7 +119,7 @@ namespace StockSharp.OpenECry
 		/// <summary>
 		/// Default unique software ID.
 		/// </summary>
-		public const string DefaultUuid = "d05c09e4-9659-4040-b03b-87719d28dc5b";
+		public static readonly SecureString DefaultUuid = "d05c09e4-9659-4040-b03b-87719d28dc5b".To<SecureString>();
 
 		/// <summary>
 		/// Create condition for order type <see cref="OrderTypes.Conditional"/>, that supports the adapter.
@@ -287,7 +288,7 @@ namespace StockSharp.OpenECry
 						case OpenECryRemoting.Primary:
 							_client = new OECClient(new InPlaceThreadPolicy())
 							{
-								UUID = Uuid,
+								UUID = Uuid.To<string>(),
 								EventBatchInterval = 0,
 								RemoteHostingEnabled = Remoting == OpenECryRemoting.Primary,
 								//PriceHost = "",

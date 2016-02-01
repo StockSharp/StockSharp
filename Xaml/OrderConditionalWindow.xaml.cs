@@ -135,7 +135,7 @@ namespace StockSharp.Xaml
 				if (basketAdapter != null)
 					adapter = basketAdapter.Portfolios.TryGetValue(Portfolio.Name);
 
-				Condition.SelectedObject = adapter == null ? null : adapter.CreateOrderCondition();
+				Condition.SelectedObject = adapter?.CreateOrderCondition();
 			}
 		}
 

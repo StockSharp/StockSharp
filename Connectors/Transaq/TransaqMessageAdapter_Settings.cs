@@ -92,8 +92,6 @@ namespace StockSharp.Transaq
 		[PropertyOrder(4)]
 		public Proxy Proxy { get; set; }
 
-		private ApiLogLevels _apiLogLevel = ApiLogLevels.Standard;
-
 		/// <summary>
 		/// Уровень логирования коннектора. По умолчанию <see cref="ApiLogLevels.Standard"/>.
 		/// </summary>
@@ -101,14 +99,7 @@ namespace StockSharp.Transaq
 		[DisplayNameLoc(LocalizedStrings.Str9Key)]
 		[DescriptionLoc(LocalizedStrings.Str3541Key)]
 		[PropertyOrder(2)]
-		public ApiLogLevels ApiLogLevel
-		{
-			get { return _apiLogLevel; }
-			set
-			{
-				_apiLogLevel = value;
-			}
-		}
+		public ApiLogLevels ApiLogLevel { get; set; } = ApiLogLevels.Standard;
 
 		private string _dllPath = "txmlconnector.dll";
 
@@ -141,8 +132,6 @@ namespace StockSharp.Transaq
 		//[PropertyOrder(4)]
 		//public bool ShowChangePasswordWindowOnConnect { get; set; }
 
-		private bool _micexRegisters = true;
-
 		/// <summary>
 		/// Передавать ли данные для фондового рынка.
 		/// </summary>
@@ -150,11 +139,7 @@ namespace StockSharp.Transaq
 		[DisplayNameLoc(LocalizedStrings.Str3543Key)]
 		[DescriptionLoc(LocalizedStrings.Str3544Key)]
 		[PropertyOrder(3)]
-		public bool MicexRegisters
-		{
-			get { return _micexRegisters; }
-			set { _micexRegisters = value; }
-		}
+		public bool MicexRegisters { get; set; } = true;
 
 		/// <summary>
 		/// Подключаться ли к HFT серверу Финам.
@@ -174,8 +159,6 @@ namespace StockSharp.Transaq
 		[PropertyOrder(4)]
 		public TimeSpan? MarketDataInterval { get; set; }
 
-		private string _apiLogsPath = Path.Combine(Directory.GetCurrentDirectory(), "StockSharp.Transaq", "Logs");
-
 		/// <summary>
 		/// Путь к логам коннектора.
 		/// </summary>
@@ -184,13 +167,7 @@ namespace StockSharp.Transaq
 		[DescriptionLoc(LocalizedStrings.Str3548Key)]
 		[PropertyOrder(7)]
 		[Editor(typeof(FolderBrowserEditor), typeof(FolderBrowserEditor))]
-		public string ApiLogsPath
-		{
-			get { return _apiLogsPath; }
-			set { _apiLogsPath = value; }
-		}
-
-		private bool _overrideDll = true;
+		public string ApiLogsPath { get; set; } = Path.Combine(Directory.GetCurrentDirectory(), "StockSharp.Transaq", "Logs");
 
 		/// <summary>
 		/// Перезаписать файл библиотеки из ресурсов. По-умолчанию файл будет перезаписан.
@@ -199,11 +176,7 @@ namespace StockSharp.Transaq
 		[DisplayNameLoc(LocalizedStrings.OverrideKey)]
 		[DescriptionLoc(LocalizedStrings.OverrideDllKey)]
 		[PropertyOrder(8)]
-		public bool OverrideDll
-		{
-			get { return _overrideDll; }
-			set { _overrideDll = value; }
-		}
+		public bool OverrideDll { get; set; } = true;
 
 		/// <summary>
 		/// Проверить введенные параметры на валидность.

@@ -94,6 +94,7 @@
     <Compile Include="Extensions.cs" />
     <Compile Include="OECTrader.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Xaml\OpenECryEndPointEditor.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Algo\Algo.csproj">

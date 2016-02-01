@@ -105,7 +105,7 @@ namespace SampleOEC
 				SecurityProvider = MainWindow.Instance.Trader,
 				MarketDataProvider = MainWindow.Instance.Trader,
 				Portfolios = new PortfolioDataSource(MainWindow.Instance.Trader),
-				Adapter = MainWindow.Instance.Trader.Adapter
+				Adapter = MainWindow.Instance.Trader.TransactionAdapter
 			};
 
 			if (newOrder.ShowModal(this))

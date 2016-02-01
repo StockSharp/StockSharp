@@ -16,9 +16,7 @@ Copyright 2010 by StockSharp, LLC
 namespace StockSharp.Designer
 {
 	using System;
-	using System.Collections.Generic;
 	using System.ComponentModel;
-	using System.Data.Common;
 	using System.Globalization;
 	using System.IO;
 	using System.Linq;
@@ -29,8 +27,6 @@ namespace StockSharp.Designer
 	using Ecng.Collections;
 	using Ecng.Common;
 	using Ecng.Configuration;
-	using Ecng.Data;
-	using Ecng.Interop;
 	using Ecng.Serialization;
 	using Ecng.Xaml;
 
@@ -154,34 +150,9 @@ namespace StockSharp.Designer
 			SolutionExplorer.Strategies = _strategiesRegistry.Strategies;
 		}
 
-		private void InitializeDataSource()
+		private static void InitializeDataSource()
 		{
-			var entityRegistry = ConfigManager.GetService<IEntityRegistry>();
-
-			var database = (Database)((EntityRegistry)entityRegistry).Storage;
-
-			if (database == null)
-				return;
-
-			var conStr = new DbConnectionStringBuilder
-			{
-				ConnectionString = database.ConnectionString
-			};
-
-			var dbFile = (string)conStr.Cast<KeyValuePair<string, object>>().ToDictionary(StringComparer.InvariantCultureIgnoreCase).TryGetValue("Data Source");
-
-			if (dbFile == null)
-				return;
-
-			dbFile = dbFile.Replace("%Documents%", Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments));
-
-			conStr["Data Source"] = dbFile;
-			database.ConnectionString = conStr.ToString();
-
-			dbFile.CreateDirIfNotExists();
-
-			if (!File.Exists(dbFile))
-				Properties.Resources.StockSharp.Save(dbFile);
+			((EntityRegistry)ConfigManager.GetService<IEntityRegistry>()).FirstTimeInit(Properties.Resources.StockSharp);
 		}
 
 		private void InitializeCommands()

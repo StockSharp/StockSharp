@@ -17,12 +17,8 @@
       <code language="C#"><![CDATA[// включаем режим CGate
 plazaTrader.IsCGate = true;
 
-// ключ-идентификатор программного обеспечения
-plazaTrader.CGateKey = "XXXXXXXXXX";]]></code>
-		<para>
-			Через свойство <codeEntityReference qualifyHint="true">P:StockSharp.Plaza.PlazaTrader.CGateKey</codeEntityReference> устанавливается идентификатор
-			программного обеспечения. Вы можете получить этот идентификатор в компании StockSharp, для чего нужно обратится в наш контактный центр <token>stocksharpcontacts</token>.
-		</para>
+// подключение будет идти к реальным торгам
+plazaTrader.IsDemo = false;]]></code>
 	  <alert class="caution"><codeEntityReference qualifyHint="true">P:StockSharp.Plaza.PlazaTrader.Login</codeEntityReference> для режима CGate не работает.</alert>
 	  <para>Дополнительный модификаций в торговом роботе при использовании CGate делать не требуется.</para>
     </introduction>

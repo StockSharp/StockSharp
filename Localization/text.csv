@@ -3745,7 +3745,7 @@ XamlStr317;Name (short);Название (короткое)
 XamlStr320;Highest bid;Наивысшый бид
 XamlStr323;Lowest ask;Наименьший оффер
 XamlStr324;Find security;Найти инструмент
-XamlStr325;Fin securities:;Найти инструменты:
+XamlStr325;Find securities:;Найти инструменты:
 CommissionSettings;Commission settings;Настройка комиссий
 RiskSettings;Risk settings;Настройка контроля рисков
 XamlStr332;Mapping configuration for portfolios and connections;Настройка сопоставления портфелей и подключений

@@ -2,7 +2,6 @@
 {
 	using System;
 	using System.Collections.Generic;
-	using System.IO;
 	using System.Linq;
 	using System.Windows;
 	using System.Windows.Data;
@@ -23,6 +22,7 @@
 	using StockSharp.Algo.Strategies;
 	using StockSharp.Algo.Testing;
 	using StockSharp.BusinessEntities;
+	using StockSharp.Configuration;
 	using StockSharp.Designer.Layout;
 	using StockSharp.Localization;
 	using StockSharp.Logging;

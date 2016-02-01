@@ -29,9 +29,7 @@ namespace StockSharp.Studio.Database
 	using Ecng.Collections;
 	using Ecng.Configuration;
 	using Ecng.Data;
-	using Ecng.Data.Providers;
 	using Ecng.Data.Sql;
-	using Ecng.Interop;
 	using Ecng.Serialization;
 	using Ecng.Common;
 	using Ecng.Xaml;
@@ -42,6 +40,7 @@ namespace StockSharp.Studio.Database
 	using StockSharp.Algo.Storages;
 	using StockSharp.Algo.Strategies;
 	using StockSharp.BusinessEntities;
+	using StockSharp.Configuration;
 	using StockSharp.Logging;
 	using StockSharp.Messages;
 	using StockSharp.Studio.Core;
@@ -1014,11 +1013,11 @@ namespace StockSharp.Studio.Database
 		public override IStorageEntityList<Portfolio> Portfolios => _portfolios;
 		public override IStorageEntityList<News> News => Sessions.Battle.News;
 
-		private IndexSecurityList IndexSecurities { get; set; }
-		private ContinuousSecurityList ContinuousSecurities { get; set; }
+		private IndexSecurityList IndexSecurities { get; }
+		private ContinuousSecurityList ContinuousSecurities { get; }
 
-		public IStrategyInfoList Strategies { get; private set; }
-		public SessionList Sessions { get; private set; }
+		public IStrategyInfoList Strategies { get; }
+		public SessionList Sessions { get; }
 
 		public static readonly Version LatestVersion = new Version(4, 2, 27);
 
@@ -1026,41 +1025,18 @@ namespace StockSharp.Studio.Database
 		{
 			var database = Storage as Database;
 
-			if (database == null || !(database.Provider is SQLiteDatabaseProvider))
+			if (database == null)
 				return;
 
-			var conStr = new DbConnectionStringBuilder { ConnectionString = database.ConnectionString };
+			database.FirstTimeInit(Resources.StockSharp, UpdateDatabaseVersion);
 
-			var file = (string)conStr["Data Source"];
-
-			file = file.Replace("%Documents%", Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments));
-
-			file.CreateDirIfNotExists();
-
-			var isNew = false;
-
-			if (!File.Exists(file))
-			{
-				Resources.StockSharp.Save(file);
-				isNew = true;
-			}
-
-			conStr["Data Source"] = file;
-			database.ConnectionString = conStr.ToString();
-
-			if (isNew)
-			{
-				UpdateDatabaseVersion();
-				UpdateDatabaseWalMode();
-			}
-			else
-				TryUpdateDatabaseVersion();
+			TryUpdateDatabaseVersion(database);
 		}
 
-		private void TryUpdateDatabaseVersion()
+		private void TryUpdateDatabaseVersion(Database database)
 		{
 			var versionField = new VoidField<string>("Version");
-			var getVersionCmd = ((Database)Storage).GetCommand(Query.Select(versionField).From("Settings"), null, new FieldList(), new FieldList());
+			var getVersionCmd = database.GetCommand(Query.Select(versionField).From("Settings"), null, new FieldList(), new FieldList());
 
 			var dbVersion = getVersionCmd.ExecuteScalar<Version>(new SerializationItemCollection());
 
@@ -1072,7 +1048,6 @@ namespace StockSharp.Studio.Database
 				.Application
 				.AddInfoLog(LocalizedStrings.Str3628Params.Put(dbVersion, TypeHelper.ApplicationName, LatestVersion));
 
-			var database = (Database)Storage;
 			var conStrBuilder = new DbConnectionStringBuilder { ConnectionString = database.ConnectionString };
 
 			try
@@ -1090,7 +1065,7 @@ namespace StockSharp.Studio.Database
 				File.Move(path, targetPath);
 				Resources.StockSharp.Save(path);
 
-				UpdateDatabaseVersion();
+				UpdateDatabaseVersion(database);
 			}
 			catch (Exception ex)
 			{
@@ -1108,21 +1083,21 @@ namespace StockSharp.Studio.Database
 			}
 		}
 
-		private void UpdateDatabaseVersion()
+		private void UpdateDatabaseVersion(Database database)
 		{
 			var versionField = new VoidField<string>("Version");
-			var updateVersionCmd = ((Database)Storage).GetCommand(Query.Update("Settings").Set(versionField), null, new FieldList(), new FieldList(versionField));
+			var updateVersionCmd = database.GetCommand(Query.Update("Settings").Set(versionField), null, new FieldList(), new FieldList(versionField));
 
 			updateVersionCmd.ExecuteNonQuery(new SerializationItemCollection(new[] { new SerializationItem(versionField, LatestVersion.ToString()) }));
 		}
 
-		private void UpdateDatabaseWalMode()
-		{
-			var walQuery = Query.Execute("PRAGMA journal_mode=WAL;");
-			var walCmd = ((Database)Storage).GetCommand(walQuery, null, new FieldList(), new FieldList());
+		//private void UpdateDatabaseWalMode()
+		//{
+		//	var walQuery = Query.Execute("PRAGMA journal_mode=WAL;");
+		//	var walCmd = ((Database)Storage).GetCommand(walQuery, null, new FieldList(), new FieldList());
 
-			((Database)Storage).Execute(walCmd, new SerializationItemCollection(), false);
-		}
+		//	((Database)Storage).Execute(walCmd, new SerializationItemCollection(), false);
+		//}
 
 		private void CreateCommonData()
 		{

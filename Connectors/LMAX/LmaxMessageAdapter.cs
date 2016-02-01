@@ -162,10 +162,7 @@ namespace StockSharp.LMAX
 		/// <summary>
 		/// <see cref="SecurityLookupMessage"/> required to get securities.
 		/// </summary>
-		public override bool SecurityLookupRequired
-		{
-			get { return false; }
-		}
+		public override bool SecurityLookupRequired => false;
 
 		/// <summary>
 		/// Convert the instruction code to numeric transaction id.

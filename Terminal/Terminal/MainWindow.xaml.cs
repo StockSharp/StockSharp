@@ -27,6 +27,8 @@ using System.Windows.Controls;
 
 namespace StockSharp.Terminal
 {
+	using Ecng.Common;
+
 	public partial class MainWindow
 	{
 		public LayoutManager LayoutManager { get; set; }

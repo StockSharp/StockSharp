@@ -35,7 +35,7 @@ namespace SampleETrade
 			NewStopOrder.IsEnabled = NewOrder.IsEnabled = security != null;
 		}
 
-		void NewOrderClick(object sender, RoutedEventArgs e)
+		private void NewOrderClick(object sender, RoutedEventArgs e)
 		{
 			var newOrder = new OrderWindow
 			{
@@ -49,7 +49,7 @@ namespace SampleETrade
 				MainWindow.Instance.Trader.RegisterOrder(newOrder.Order);
 		}
 
-		void NewStopOrderClick(object sender, RoutedEventArgs e)
+		private void NewStopOrderClick(object sender, RoutedEventArgs e)
 		{
 			var newOrder = new OrderConditionalWindow
 			{
@@ -61,7 +61,7 @@ namespace SampleETrade
 				SecurityProvider = MainWindow.Instance.Trader,
 				MarketDataProvider = MainWindow.Instance.Trader,
 				Portfolios = new PortfolioDataSource(MainWindow.Instance.Trader),
-				Adapter = MainWindow.Instance.Trader.Adapter
+				Adapter = MainWindow.Instance.Trader.TransactionAdapter
 			};
 
 			if (newOrder.ShowModal(this))

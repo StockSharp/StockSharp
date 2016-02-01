@@ -189,6 +189,11 @@
             To use automatic range for the X-axis. The default is off.
             </summary>
     </member>
+    <member name="P:StockSharp.Xaml.Charting.Chart.AutoRangeInterval">
+      <summary>
+            Chart range/scroll interval. Default is 200ms.
+            </summary>
+    </member>
     <member name="M:StockSharp.Xaml.Charting.Chart.AddArea(StockSharp.Xaml.Charting.ChartArea)">
       <summary>
             To add an area to the chart.

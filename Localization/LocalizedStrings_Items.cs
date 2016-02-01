@@ -37388,12 +37388,12 @@ namespace StockSharp.Localization
 		public static string XamlStr324 => GetString(XamlStr324Key);
 
 		/// <summary>
-		/// Fin securities:
+		/// Find securities:
 		/// </summary>
 		public const string XamlStr325Key = "XamlStr325";
 
 		/// <summary>
-		/// Fin securities:
+		/// Find securities:
 		/// </summary>
 		public static string XamlStr325 => GetString(XamlStr325Key);
 

@@ -53,7 +53,7 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>Resources\stocksharp.ico</ApplicationIcon>
+    <ApplicationIcon>..\..\References\stocksharp.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Ecng.Collections">
@@ -133,11 +133,9 @@
     <Compile Include="Fakes\FakeStudioCommandService.cs" />
     <Compile Include="Layout\DockingControl.cs" />
     <Compile Include="Layout\LayoutManager.cs" />
-    <Compile Include="Logics\CompositionItem.cs" />
     <Compile Include="Controls\WorkAreaControl.xaml.cs">
       <DependentUpon>WorkAreaControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Logics\EmulationDiagramStrategy.cs" />
     <Compile Include="Layout\LayoutKeys.cs" />
     <Page Include="Controls\WorkAreaControl.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -151,7 +149,6 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Logics\Extensions.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -239,10 +236,9 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Images\" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\stocksharp.ico" />
+    <Resource Include="..\..\References\stocksharp.ico">
+      <Link>Properties\stocksharp.ico</Link>
+    </Resource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

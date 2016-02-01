@@ -233,6 +233,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="StockSharp.db" />
     <None Include="Strategies\d2d7aeb2_ca92_4a88_9f2b_dccb72949af1.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

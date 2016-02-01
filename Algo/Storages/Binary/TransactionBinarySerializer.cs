@@ -39,6 +39,7 @@ namespace StockSharp.Algo.Storages.Binary
 
 			Portfolios = new List<string>();
 			ClientCodes = new List<string>();
+			BrokerCodes = new List<string>();
 			DepoNames = new List<string>();
 			UserOrderIds = new List<string>();
 			Comments = new List<string>();
@@ -74,6 +75,7 @@ namespace StockSharp.Algo.Storages.Binary
 
 		public IList<string> Portfolios { get; }
 		public IList<string> ClientCodes { get; }
+		public IList<string> BrokerCodes { get; }
 		public IList<string> DepoNames { get; }
 
 		public IList<string> UserOrderIds { get; }
@@ -108,6 +110,7 @@ namespace StockSharp.Algo.Storages.Binary
 
 			WriteList(stream, Portfolios);
 			WriteList(stream, ClientCodes);
+			WriteList(stream, BrokerCodes);
 			WriteList(stream, DepoNames);
 			WriteList(stream, UserOrderIds);
 			WriteList(stream, Comments);
@@ -171,6 +174,7 @@ namespace StockSharp.Algo.Storages.Binary
 
 			ReadList(stream, Portfolios);
 			ReadList(stream, ClientCodes);
+			ReadList(stream, BrokerCodes);
 			ReadList(stream, DepoNames);
 			ReadList(stream, UserOrderIds);
 			ReadList(stream, Comments);
@@ -221,6 +225,9 @@ namespace StockSharp.Algo.Storages.Binary
 
 			ClientCodes.Clear();
 			ClientCodes.AddRange(src.ClientCodes);
+
+			BrokerCodes.Clear();
+			BrokerCodes.AddRange(src.BrokerCodes);
 
 			DepoNames.Clear();
 			DepoNames.AddRange(src.DepoNames);
@@ -456,6 +463,7 @@ namespace StockSharp.Algo.Storages.Binary
 
 				WriteString(writer, metaInfo.Portfolios, msg.PortfolioName);
 				WriteString(writer, metaInfo.ClientCodes, msg.ClientCode);
+				WriteString(writer, metaInfo.BrokerCodes, msg.BrokerCode);
 				WriteString(writer, metaInfo.DepoNames, msg.DepoName);
 				WriteString(writer, metaInfo.UserOrderIds, msg.UserOrderId);
 				WriteString(writer, metaInfo.Comments, msg.Comment);
@@ -594,6 +602,7 @@ namespace StockSharp.Algo.Storages.Binary
 
 			var portfolio = ReadString(reader, metaInfo.Portfolios);
 			var clientCode = ReadString(reader, metaInfo.ClientCodes);
+			var brokerCode = ReadString(reader, metaInfo.BrokerCodes);
 			var depoName = ReadString(reader, metaInfo.DepoNames);
 			var userOrderId = ReadString(reader, metaInfo.UserOrderIds);
 			var comment = ReadString(reader, metaInfo.Comments);
@@ -627,6 +636,7 @@ namespace StockSharp.Algo.Storages.Binary
 				Slippage = slippage,
 				PortfolioName = portfolio,
 				ClientCode = clientCode,
+				BrokerCode = brokerCode,
 				DepoName = depoName,
 				UserOrderId = userOrderId,
 				Comment = comment,

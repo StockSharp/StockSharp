@@ -37,10 +37,7 @@ namespace StockSharp.Rss
 			Adapter.InnerAdapters.Add(new RssMarketDataMessageAdapter(TransactionIdGenerator));
 		}
 
-		private RssMarketDataMessageAdapter NativeAdapter
-		{
-			get { return Adapter.InnerAdapters.OfType<RssMarketDataMessageAdapter>().First(); }
-		}
+		private RssMarketDataMessageAdapter NativeAdapter => Adapter.InnerAdapters.OfType<RssMarketDataMessageAdapter>().First();
 
 		/// <summary>
 		/// RSS feed address.

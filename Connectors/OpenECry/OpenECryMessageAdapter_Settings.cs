@@ -26,6 +26,7 @@ namespace StockSharp.OpenECry
 	using Ecng.Serialization;
 
 	using StockSharp.Localization;
+	using StockSharp.OpenECry.Xaml;
 
 	using Xceed.Wpf.Toolkit.PropertyGrid.Attributes;
 
@@ -75,6 +76,7 @@ namespace StockSharp.OpenECry
 		[DisplayNameLoc(LocalizedStrings.AddressKey)]
 		[DescriptionLoc(LocalizedStrings.Str2562Key)]
 		[PropertyOrder(0)]
+		[Editor(typeof(OpenECryEndPointEditor), typeof(OpenECryEndPointEditor))]
 		public EndPoint Address
 		{
 			get { return _address; }
@@ -100,7 +102,7 @@ namespace StockSharp.OpenECry
 		/// OpenECry password.
 		/// </summary>
 		[CategoryLoc(LocalizedStrings.Str174Key)]
-		[DisplayNameLoc(LocalizedStrings.LoginKey)]
+		[DisplayNameLoc(LocalizedStrings.PasswordKey)]
 		[DescriptionLoc(LocalizedStrings.Str2564Key)]
 		[PropertyOrder(2)]
 		public SecureString Password { get; set; }
@@ -112,7 +114,7 @@ namespace StockSharp.OpenECry
 		[DisplayName("UUID")]
 		[DescriptionLoc(LocalizedStrings.Str2565Key)]
 		[PropertyOrder(3)]
-		public string Uuid { get; set; }
+		public SecureString Uuid { get; set; }
 
 		/// <summary>
 		/// The required mode of connection to the terminal. The default is <see cref="OpenECryRemoting.None"/>.
@@ -182,7 +184,7 @@ namespace StockSharp.OpenECry
 		{
 			base.Load(storage);
 
-			Uuid = storage.GetValue<string>("Uuid");
+			Uuid = storage.GetValue<SecureString>("Uuid");
 			Address = storage.GetValue<EndPoint>("Address");
 			Login = storage.GetValue<string>("Login");
 			Password = storage.GetValue<SecureString>("Password");

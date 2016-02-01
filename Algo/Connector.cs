@@ -842,7 +842,12 @@ namespace StockSharp.Algo
 				}
 
 				if (initOrder)
+				{
+					if (order.Type == null)
+						order.Type = order.Price > 0 ? OrderTypes.Limit : OrderTypes.Market;
+
 					InitNewOrder(order);
+				}
 
 				OnRegisterOrder(order);
 			}

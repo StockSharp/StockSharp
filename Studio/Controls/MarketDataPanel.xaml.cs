@@ -75,10 +75,10 @@ namespace StockSharp.Studio.Controls
 
 			SelectedSettings = ConfigManager.GetService<MarketDataSettingsCache>().Settings.FirstOrDefault(s => s.Id != Guid.Empty);
 			SecurityPicker.SecurityProvider = ConfigManager.GetService<ISecurityProvider>();
-			
-			Grid.PropertyChanged += (s, e) => RaiseChangedCommand();
-			Grid.DataLoading += () => BusyIndicator1.IsBusy = true;
-			Grid.DataLoaded += () => BusyIndicator1.IsBusy = false;
+
+			MarketDataGrid.PropertyChanged += (s, e) => RaiseChangedCommand();
+			MarketDataGrid.DataLoading += () => BusyIndicator1.IsBusy = true;
+			MarketDataGrid.DataLoaded += () => BusyIndicator1.IsBusy = false;
 		}
 
 		private void SettingsChanged(MarketDataSettings settings)
@@ -86,12 +86,12 @@ namespace StockSharp.Studio.Controls
 			if (settings == null)
 			{
 				SettingsPanel.IsEnabled = false;
-				Grid.IsEnabled = false;
+				MarketDataGrid.IsEnabled = false;
 				return;
 			}
 
 			SettingsPanel.IsEnabled = true;
-			Grid.IsEnabled = true;
+			MarketDataGrid.IsEnabled = true;
 
 			SettingsPanel.IsLocal = settings.UseLocal;
 			//SettingsPanel.IsAlphabetic = settings.IsAlphabetic;
@@ -156,7 +156,7 @@ namespace StockSharp.Studio.Controls
 			if (SelectedSettings == null)
 				return;
 
-			Grid.BeginMakeEntries(_storageRegistry, SecurityPicker.SelectedSecurity, FormatCtrl.SelectedFormat, null);
+			MarketDataGrid.BeginMakeEntries(_storageRegistry, SecurityPicker.SelectedSecurity, FormatCtrl.SelectedFormat, null);
 		}
 
 		private void RaiseChangedCommand()
@@ -250,7 +250,7 @@ namespace StockSharp.Studio.Controls
 
 		private void ApplyCommandCanExecute(object sender, CanExecuteRoutedEventArgs e)
 		{
-			e.CanExecute = !(SettingsPanel.IsLocal ? SettingsPanel.Path : SettingsPanel.Address).IsEmpty();
+			e.CanExecute = SelectedSettings != null && !(SettingsPanel.IsLocal ? SettingsPanel.Path : SettingsPanel.Address).IsEmpty();
 		}
 
 		public override void Load(SettingsStorage storage)
@@ -259,7 +259,7 @@ namespace StockSharp.Studio.Controls
 
 			try
 			{
-				((IPersistable)Grid).Load(storage.GetValue<SettingsStorage>("Grid"));
+				((IPersistable)MarketDataGrid).Load(storage.GetValue<SettingsStorage>("MarketDataGrid") ?? storage.GetValue<SettingsStorage>("Grid"));
 
 				var selectedSettings = storage.GetValue("SelectedSettings", Guid.Empty);
 				var settings = ConfigManager.GetService<MarketDataSettingsCache>().Settings;
@@ -283,7 +283,7 @@ namespace StockSharp.Studio.Controls
 
 		public override void Save(SettingsStorage storage)
 		{
-			storage.SetValue("Grid", Grid.Save());
+			storage.SetValue("MarketDataGrid", MarketDataGrid.Save());
 
 			if (SelectedSettings != null)
 				storage.SetValue("SelectedSettings", SelectedSettings.Id);
@@ -297,7 +297,7 @@ namespace StockSharp.Studio.Controls
 		public override void Dispose()
 		{
 			_isCancelled = true;
-			Grid.CancelMakeEntires();
+			MarketDataGrid.CancelMakeEntires();
 		}
 	}
 
