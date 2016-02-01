@@ -21,6 +21,7 @@ namespace StockSharp.Designer
 	using System.IO;
 	using System.Linq;
 	using System.Windows;
+	using System.Windows.Controls;
 	using System.Windows.Input;
 	using System.Windows.Media.Imaging;
 
@@ -336,7 +337,15 @@ namespace StockSharp.Designer
 
 		private void AddCommand_OnCanExecute(object sender, CanExecuteRoutedEventArgs e)
 		{
-			e.CanExecute = true;
+			var item = e.OriginalSource as TreeViewItem;
+
+			if (item != null)
+			{
+				var solutionExplorerItem = (SolutionExplorerItem)item.Header;
+				e.CanExecute = solutionExplorerItem.Parent == null;
+			}
+			else
+				e.CanExecute = true;
 		}
 
 		private void AddCommand_OnExecuted(object sender, ExecutedRoutedEventArgs e)

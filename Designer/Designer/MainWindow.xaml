@@ -64,6 +64,11 @@
 		
         <ContextMenu x:Key="TreeContextMenu"
 					 DataContext="{Binding Path=PlacementTarget.Header, RelativeSource={RelativeSource Self}}">
+            <MenuItem Header="{x:Static localization:LocalizedStrings.Str3229}"
+					  Icon="pack://application:,,,/Designer;component/Images/Add_32x32.png"
+					  Command="{x:Static local:MainWindow.AddCommand}"
+					  CommandParameter="{Binding Type}"/>
+			
             <MenuItem Header="{x:Static localization:LocalizedStrings.Str1509}"
 					  Icon="pack://application:,,,/Designer;component/Images/Open_32x32.png"
 					  Command="{x:Static local:MainWindow.OpenCommand}"
