@@ -31,7 +31,7 @@
                     </xcad:LayoutAnchorablePane>
                 </xcad:LayoutAnchorablePaneGroup>
 
-                <xcad:LayoutAnchorablePaneGroup DockWidth="2*">
+                <xcad:LayoutAnchorablePaneGroup DockWidth="5*">
                     <xcad:LayoutAnchorablePane>
                         <xcad:LayoutAnchorable ContentId="PropertyGridControl" Title="{x:Static localization:LocalizedStrings.Str1507}" CanClose="False">
                             <diagram:PropertyGridEx x:Name="PropertyGridControl"

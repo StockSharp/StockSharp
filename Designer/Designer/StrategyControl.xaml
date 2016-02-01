@@ -26,12 +26,14 @@
 
             <xcad:LayoutRoot>
                 <xcad:LayoutPanel>
-                    <xcad:LayoutAnchorablePaneGroup>
+                    <xcad:LayoutAnchorablePaneGroup Orientation="Horizontal">
                         <xcad:LayoutAnchorablePane>
                             <xcad:LayoutAnchorable Title="{x:Static localization:LocalizedStrings.Strategy}" CanClose="False">
-                                <designer:DiagramDebuggerControl x:Name="DiagramDebuggerControl" 
-																	  Changed="OnDiagramDebuggerControlChanged"/>
+                                <designer:DiagramDebuggerControl x:Name="DiagramDebuggerControl" Changed="OnDiagramDebuggerControlChanged"/>
                             </xcad:LayoutAnchorable>
+                        </xcad:LayoutAnchorablePane>
+
+                        <xcad:LayoutAnchorablePane>
                             <xcad:LayoutAnchorable Title="{x:Static localization:LocalizedStrings.Str3200}" CanClose="False">
                                 <xaml:Chart x:Name="Chart" />
                             </xcad:LayoutAnchorable>
