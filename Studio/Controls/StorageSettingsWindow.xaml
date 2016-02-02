@@ -10,26 +10,26 @@
              ShowInTaskbar="False" WindowStartupLocation="CenterOwner" ResizeMode="CanResize"
              mc:Ignorable="d" Width="500" Height="Auto" SizeToContent="Height">
 
-    <Window.CommandBindings>
-        <CommandBinding Command="{x:Static local:StorageSettingsWindow.OkCommand}" Executed="OkCommandExecuted" CanExecute="OkCommandCanExecute" />
-    </Window.CommandBindings>
-	
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition/>
-        </Grid.RowDefinitions>
+	<Window.CommandBindings>
+		<CommandBinding Command="{x:Static local:StorageSettingsWindow.OkCommand}" Executed="OkCommandExecuted" CanExecute="OkCommandCanExecute" />
+	</Window.CommandBindings>
+
+	<Grid>
+		<Grid.RowDefinitions>
+			<RowDefinition Height="Auto"/>
+			<RowDefinition Height="Auto"/>
+			<RowDefinition/>
+		</Grid.RowDefinitions>
 		<Grid.ColumnDefinitions>
 			<ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="70"/>
-            <ColumnDefinition Width="70"/>
-        </Grid.ColumnDefinitions>
+			<ColumnDefinition Width="70"/>
+			<ColumnDefinition Width="70"/>
+		</Grid.ColumnDefinitions>
 
-        <xaml:StorageSettingsPanel Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="3" Margin="3" x:Name="SettingsPanel"
+		<xaml:StorageSettingsPanel Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="3" Margin="3" x:Name="SettingsPanel"
 								   RemotePathChanged="SettingsPanel_OnRemotePathChanged"/>
 
-        <Button Grid.Row="1" Grid.Column="1" Margin="3" Content="{x:Static loc:LocalizedStrings.OK}" IsDefault="True" Command="{x:Static local:StorageSettingsWindow.OkCommand}"/>
-        <Button Grid.Row="1" Grid.Column="2" Margin="3" Content="{x:Static loc:LocalizedStrings.Cancel}" IsCancel="True"/>
-    </Grid>
+		<Button Grid.Row="1" Grid.Column="1" Margin="3" Content="{x:Static loc:LocalizedStrings.OK}" IsDefault="True" Command="{x:Static local:StorageSettingsWindow.OkCommand}"/>
+		<Button Grid.Row="1" Grid.Column="2" Margin="3" Content="{x:Static loc:LocalizedStrings.Cancel}" IsCancel="True"/>
+	</Grid>
 </Window>

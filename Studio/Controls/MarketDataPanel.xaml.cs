@@ -16,7 +16,6 @@ Copyright 2010 by StockSharp, LLC
 namespace StockSharp.Studio.Controls
 {
 	using System;
-	using System.IO;
 	using System.Linq;
 	using System.Windows;
 	using System.Windows.Controls;
@@ -31,7 +30,6 @@ namespace StockSharp.Studio.Controls
 
 	using StockSharp.Algo.Storages;
 	using StockSharp.BusinessEntities;
-	using StockSharp.Community;
 	using StockSharp.Messages;
 	using StockSharp.Studio.Core;
 	using StockSharp.Studio.Core.Commands;

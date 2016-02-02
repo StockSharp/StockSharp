@@ -1,9 +1,7 @@
 ﻿namespace StockSharp.Studio.Controls
 {
 	using System.IO;
-	using System.Linq;
 	using System.Windows;
-	using System.Windows.Controls;
 	using System.Windows.Input;
 
 	using Ecng.Common;
@@ -13,9 +11,6 @@
 	using StockSharp.Localization;
 	using StockSharp.Studio.Core;
 
-	/// <summary>
-	/// Логика взаимодействия для StorageSettingsWindow.xaml
-	/// </summary>
 	public partial class StorageSettingsWindow
 	{
 		public static RoutedCommand OkCommand = new RoutedCommand();
