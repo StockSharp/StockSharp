@@ -99,7 +99,11 @@
 						</Grid.RowDefinitions>
 
 						<StackPanel Orientation="Horizontal">
-							<Label Content="{x:Static loc:LocalizedStrings.StorageFormat}" />
+                            <Label>
+                                <TextBlock>
+									<Run Text="{x:Static loc:LocalizedStrings.StorageFormat}"/><Run Text=":"/>
+								</TextBlock>
+							</Label>
 							<sx:StorageFormatComboBox x:Name="FormatCtrl" VerticalAlignment="Center" SelectionChanged="FormatCtrl_OnSelectionChanged" />
 						</StackPanel>
 						

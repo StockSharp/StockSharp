@@ -4065,7 +4065,7 @@ XamlStr810;Exact expiration filter for options;Фильтр по точной э
 Filter;Filter;Фильтр
 Forex;Forex;Форекс
 XamlStr814;Text value format. Used only for dates and times.;Формат текстового значения. Используется только для дат и времени.
-StorageFormat;Storage format:;Формат хранилища:
+StorageFormat;Storage format;Формат хранилища
 Features;Features;Функциональность
 MarketDataStorage;Market data storage;Хранилище данных
 LineColor;Line color;Цвет линии

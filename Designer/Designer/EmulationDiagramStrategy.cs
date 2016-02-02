@@ -22,6 +22,7 @@ namespace StockSharp.Designer
 	using Ecng.Configuration;
 	using Ecng.Serialization;
 
+	using StockSharp.Algo.Storages;
 	using StockSharp.Localization;
 	using StockSharp.Studio.Core;
 	using StockSharp.Xaml.Diagram;
@@ -50,6 +51,7 @@ namespace StockSharp.Designer
 		private bool _matchOnTouch;
 		private TimeSpan _emulatoinLatency;
 		private bool _useMarketDepths;
+		private StorageFormats _storageFormat;
 
 		//[DisplayNameLoc(LocalizedStrings.Str2804Key)]
 		//[CategoryLoc(LocalizedStrings.Str1174Key)]
@@ -66,6 +68,7 @@ namespace StockSharp.Designer
 
 		[DisplayNameLoc(LocalizedStrings.MarketDataKey)]
 		[CategoryLoc(LocalizedStrings.Str1174Key)]
+		[DescriptionLoc(LocalizedStrings.MarketDataStorageKey)]
 		[PropertyOrder(11)]
 		[Editor(typeof(MarketDataSettingsEditor), typeof(MarketDataSettingsEditor))]
 		public MarketDataSettings MarketDataSettings
@@ -75,6 +78,19 @@ namespace StockSharp.Designer
 			{
 				_marketDataSettings = value;
 				RaiseParametersChanged("MarketDataSettings");
+			}
+		}
+
+		[DisplayNameLoc(LocalizedStrings.StorageFormatKey)]
+		[CategoryLoc(LocalizedStrings.Str1174Key)]
+		[PropertyOrder(12)]
+		public StorageFormats StorageFormat
+		{
+			get { return _storageFormat; }
+			set
+			{
+				_storageFormat = value;
+				RaiseParametersChanged("StorageFormat");
 			}
 		}
 
@@ -119,6 +135,7 @@ namespace StockSharp.Designer
 
 		[DisplayNameLoc(LocalizedStrings.Str1242Key)]
 		[CategoryLoc(LocalizedStrings.Str1174Key)]
+		[DescriptionLoc(LocalizedStrings.Str1188Key)]
 		[PropertyOrder(50)]
 		public TimeSpan CandlesTimeFrame
 		{
@@ -156,8 +173,9 @@ namespace StockSharp.Designer
 			}
 		}
 
-		[DisplayNameLoc(LocalizedStrings.XamlStr291Key)]
+		[DisplayNameLoc(LocalizedStrings.Str1197Key)]
 		[CategoryLoc(LocalizedStrings.Str1174Key)]
+		[DescriptionLoc(LocalizedStrings.Str1198Key)]
 		[PropertyOrder(70)]
 		public int MaxDepths
 		{
@@ -182,8 +200,9 @@ namespace StockSharp.Designer
 			}
 		}
 
-		[DisplayNameLoc(LocalizedStrings.IsSupportAtomicReRegisterKey)]
+		[DisplayName(@"MOVE")]
 		[CategoryLoc(LocalizedStrings.Str1174Key)]
+		[DescriptionLoc(LocalizedStrings.Str60Key)]
 		[PropertyOrder(90)]
 		public bool IsSupportAtomicReRegister
 		{
@@ -197,6 +216,7 @@ namespace StockSharp.Designer
 
 		[DisplayNameLoc(LocalizedStrings.Str1176Key)]
 		[CategoryLoc(LocalizedStrings.Str1174Key)]
+		[DescriptionLoc(LocalizedStrings.Str1177Key)]
 		[PropertyOrder(91)]
 		public bool MatchOnTouch
 		{
@@ -210,6 +230,7 @@ namespace StockSharp.Designer
 
 		[DisplayNameLoc(LocalizedStrings.Str161Key)]
 		[CategoryLoc(LocalizedStrings.Str1174Key)]
+		[DescriptionLoc(LocalizedStrings.Str1184Key)]
 		[PropertyOrder(92)]
 		public TimeSpan EmulatoinLatency
 		{
@@ -246,7 +267,8 @@ namespace StockSharp.Designer
 			IsSupportAtomicReRegister = true;
 			MatchOnTouch = false;
 			EmulatoinLatency = TimeSpan.Zero;
-        }
+			StorageFormat = StorageFormats.Binary;
+		}
 
 		protected override bool NeedShowProperty(PropertyDescriptor propertyDescriptor)
 		{
@@ -284,6 +306,8 @@ namespace StockSharp.Designer
 			if (marketDataSettings != Guid.Empty)
 				MarketDataSettings = ConfigManager.GetService<MarketDataSettingsCache>().Settings.FirstOrDefault(s => s.Id == marketDataSettings);
 
+			StorageFormat = storage.GetValue("StorageFormat", StorageFormat);
+
 			base.Load(storage);
 		}
 
@@ -310,6 +334,8 @@ namespace StockSharp.Designer
 
 			if (MarketDataSettings != null)
 				storage.SetValue("MarketDataSettings", MarketDataSettings.Id);
+
+			storage.SetValue("StorageFormat", StorageFormat);
 
 			base.Save(storage);
 		}

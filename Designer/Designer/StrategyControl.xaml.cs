@@ -467,6 +467,7 @@
 				HistoryMessageAdapter =
 				{
 					StorageRegistry = storageRegistry,
+					StorageFormat = strategy.StorageFormat,
 
 					// set history range
 					StartDate = startTime,
