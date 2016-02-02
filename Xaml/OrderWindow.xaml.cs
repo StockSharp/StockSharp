@@ -66,7 +66,7 @@ namespace StockSharp.Xaml
 				set
 				{
 					_bestBidPrice = value;
-					NotifyChanged("BestBidPrice");
+					NotifyChanged(nameof(BestBidPrice));
 				}
 			}
 
@@ -76,7 +76,7 @@ namespace StockSharp.Xaml
 				set
 				{
 					_bestAskPrice = value;
-					NotifyChanged("BestAskPrice");
+					NotifyChanged(nameof(BestAskPrice));
 				}
 			}
 
@@ -86,7 +86,7 @@ namespace StockSharp.Xaml
 				set
 				{
 					_lastTradePrice = value;
-					NotifyChanged("LastTradePrice");
+					NotifyChanged(nameof(LastTradePrice));
 				}
 			}
 
@@ -96,7 +96,7 @@ namespace StockSharp.Xaml
 				set
 				{
 					_minPrice = value;
-					NotifyChanged("MinPrice");
+					NotifyChanged(nameof(MinPrice));
 				}
 			}
 
@@ -106,7 +106,7 @@ namespace StockSharp.Xaml
 				set
 				{
 					_maxPrice = value;
-					NotifyChanged("MaxPrice");
+					NotifyChanged(nameof(MaxPrice));
 				}
 			}
 		}

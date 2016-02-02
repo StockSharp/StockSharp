@@ -141,7 +141,7 @@ namespace StockSharp.Xaml
 					return;
 
 				_isBest = value;
-				NotifyChanged("IsBest");
+				NotifyChanged(nameof(IsBest));
 			}
 		}
 
@@ -156,7 +156,7 @@ namespace StockSharp.Xaml
 					return;
 
 				_buy = value;
-				NotifyChanged("Buy");
+				NotifyChanged(nameof(Buy));
 			}
 		}
 
@@ -171,7 +171,7 @@ namespace StockSharp.Xaml
 					return;
 
 				_sell = value;
-				NotifyChanged("Sell");
+				NotifyChanged(nameof(Sell));
 			}
 		}
 
@@ -186,7 +186,7 @@ namespace StockSharp.Xaml
 					return;
 
 				_price = value;
-				NotifyChanged("Price");
+				NotifyChanged(nameof(Price));
 			}
 		}
 
@@ -201,7 +201,7 @@ namespace StockSharp.Xaml
 					return;
 
 				_ownBuy = value;
-				NotifyChanged("OwnBuy");
+				NotifyChanged(nameof(OwnBuy));
 			}
 		}
 
@@ -216,7 +216,7 @@ namespace StockSharp.Xaml
 					return;
 
 				_ownSell = value;
-				NotifyChanged("OwnSell");
+				NotifyChanged(nameof(OwnSell));
 			}
 		}
 
@@ -239,11 +239,11 @@ namespace StockSharp.Xaml
 
 				Price = quote.Price.ToString(_depthControl.PriceTextFormat);
 
-				var buyPosition = orders != null ? orders.TotalBuyBalance : 0;
-				var stopBuyPosition = stopOrders != null ? stopOrders.TotalBuyBalance : 0;
+				var buyPosition = orders?.TotalBuyBalance ?? 0;
+				var stopBuyPosition = stopOrders?.TotalBuyBalance ?? 0;
 
-				var sellPosition = orders != null ? orders.TotalSellBalance : 0;
-				var stopSellPosition = stopOrders != null ? stopOrders.TotalSellBalance : 0;
+				var sellPosition = orders?.TotalSellBalance ?? 0;
+				var stopSellPosition = stopOrders?.TotalSellBalance ?? 0;
 
 				var ownBuy = buyPosition + stopBuyPosition;
 				var ownSell = sellPosition + stopSellPosition;

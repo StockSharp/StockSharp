@@ -58,7 +58,7 @@ namespace StockSharp.Xaml
 						return;
 
 					_progress = value;
-					NotifyChanged("Progress");
+					NotifyChanged(nameof(Progress));
 				}
 			}
 
@@ -94,7 +94,7 @@ namespace StockSharp.Xaml
 			get
 			{
 				var item = (StrategyItem)ResultsGrid.SelectedItem;
-				return item == null ? null : item.Strategy;
+				return item?.Strategy;
 			}
 		}
 

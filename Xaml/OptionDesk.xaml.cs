@@ -437,7 +437,7 @@ namespace StockSharp.Xaml
 		{
 			base.Save(storage);
 
-			storage.SetValue("UseBlackModel", UseBlackModel);
+			storage.SetValue(nameof(UseBlackModel), UseBlackModel);
 		}
 
 		/// <summary>
@@ -448,7 +448,7 @@ namespace StockSharp.Xaml
 		{
 			base.Load(storage);
 
-			UseBlackModel = storage.GetValue<bool>("UseBlackModel");
+			UseBlackModel = storage.GetValue<bool>(nameof(UseBlackModel));
 		}
 	}
 

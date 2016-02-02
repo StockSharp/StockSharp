@@ -75,7 +75,7 @@ namespace StockSharp.Xaml
 				set
 				{
 					_isDepth = value;
-					NotifyChanged("IsDepth");
+					NotifyChanged(nameof(IsDepth));
 				}
 			}
 
@@ -85,7 +85,7 @@ namespace StockSharp.Xaml
 				set
 				{
 					_isTick = value;
-					NotifyChanged("IsTick");
+					NotifyChanged(nameof(IsTick));
 				}
 			}
 
@@ -95,7 +95,7 @@ namespace StockSharp.Xaml
 				set
 				{
 					_isOrderLog = value;
-					NotifyChanged("IsOrderLog");
+					NotifyChanged(nameof(IsOrderLog));
 				}
 			}
 
@@ -105,7 +105,7 @@ namespace StockSharp.Xaml
 				set
 				{
 					_isLevel1 = value;
-					NotifyChanged("IsLevel1");
+					NotifyChanged(nameof(IsLevel1));
 				}
 			}
 

@@ -62,7 +62,7 @@ namespace StockSharp.BusinessEntities
 					return;
 
 				_name = value;
-				NotifyChanged("Name");
+				NotifyChanged(nameof(Name));
 			}
 		}
 
@@ -84,7 +84,7 @@ namespace StockSharp.BusinessEntities
 					return;
 
 				_leverage = value;
-				NotifyChanged("Leverage");
+				NotifyChanged(nameof(Leverage));
 			}
 		}
 
@@ -104,7 +104,7 @@ namespace StockSharp.BusinessEntities
 			set
 			{
 				_currency = value;
-				NotifyChanged("Currency");
+				NotifyChanged(nameof(Currency));
 			}
 		}
 
@@ -153,7 +153,7 @@ namespace StockSharp.BusinessEntities
 					return;
 
 				_state = value;
-				NotifyChanged("State");
+				NotifyChanged(nameof(State));
 			}
 		}
 

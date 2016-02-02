@@ -82,7 +82,7 @@ namespace StockSharp.Hydra.Panes
 				set
 				{
 					_security = value;
-					NotifyChanged("Security");
+					NotifyChanged(nameof(Security));
 				}
 			}
 
@@ -96,7 +96,7 @@ namespace StockSharp.Hydra.Panes
 				set
 				{
 					_from = value;
-					NotifyChanged("From");
+					NotifyChanged(nameof(From));
 				}
 			}
 
@@ -110,7 +110,7 @@ namespace StockSharp.Hydra.Panes
 				set
 				{
 					_to = value;
-					NotifyChanged("To");
+					NotifyChanged(nameof(To));
 				}
 			}
 
@@ -125,7 +125,7 @@ namespace StockSharp.Hydra.Panes
 				set
 				{
 					_drive = value;
-					NotifyChanged("Drive");
+					NotifyChanged(nameof(Drive));
 				}
 			}
 
@@ -139,36 +139,36 @@ namespace StockSharp.Hydra.Panes
 				set
 				{
 					_storageFormat = value;
-					NotifyChanged("StorageFormat");
+					NotifyChanged(nameof(StorageFormat));
 				}
 			}
 
 			public void Load(SettingsStorage storage)
 			{
-				if (storage.ContainsKey("Security"))
+				if (storage.ContainsKey(nameof(Security)))
 					Security = ConfigManager.GetService<IEntityRegistry>().Securities.ReadById(storage.GetValue<string>("Security"));
 
-				From = storage.GetValue<DateTime>("From");
-				To = storage.GetValue<DateTime>("To");
+				From = storage.GetValue<DateTime>(nameof(From));
+				To = storage.GetValue<DateTime>(nameof(To));
 
-				if (storage.ContainsKey("Drive"))
-					Drive = DriveCache.Instance.GetDrive(storage.GetValue<string>("Drive"));
+				if (storage.ContainsKey(nameof(Drive)))
+					Drive = DriveCache.Instance.GetDrive(storage.GetValue<string>(nameof(Drive)));
 
-				StorageFormat = storage.GetValue<StorageFormats>("StorageFormat");
+				StorageFormat = storage.GetValue<StorageFormats>(nameof(StorageFormat));
 			}
 
 			public void Save(SettingsStorage storage)
 			{
 				if (Security != null)
-					storage.SetValue("Security", Security.Id);
+					storage.SetValue(nameof(Security), Security.Id);
 
-				storage.SetValue("From", From);
-				storage.SetValue("To", To);
+				storage.SetValue(nameof(From), From);
+				storage.SetValue(nameof(To), To);
 
 				if (Drive != null)
-					storage.SetValue("Drive", Drive.Path);
+					storage.SetValue(nameof(Drive), Drive.Path);
 
-				storage.SetValue("StorageFormat", StorageFormat.To<string>());
+				storage.SetValue(nameof(StorageFormat), StorageFormat.To<string>());
 			}
 		}
 

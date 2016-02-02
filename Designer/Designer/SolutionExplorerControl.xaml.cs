@@ -159,7 +159,7 @@ namespace StockSharp.Designer
 			set
 			{
 				_name = value;
-				NotifyChanged("Name");
+				NotifyChanged(nameof(Name));
 			}
 		}
 
@@ -169,7 +169,7 @@ namespace StockSharp.Designer
 			set
 			{
 				_tooltip = value;
-				NotifyChanged("Tooltip");
+				NotifyChanged(nameof(Tooltip));
 			}
 		}
 

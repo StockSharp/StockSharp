@@ -153,7 +153,7 @@ namespace StockSharp.Algo.Candles
 			CurrentSource.Stopped += OnStopped;
 
 			var next = _sources.Count > 0 ? _sources.Peek() : null;
-			_nextSourceBegin = next == null ? (DateTimeOffset?)null : next.Range.Min;
+			_nextSourceBegin = next?.Range.Min;
 
 			CurrentSource.Start(_series, info.Range.Min, info.Range.Max);
 		}

@@ -79,7 +79,7 @@ namespace StockSharp.Xaml
 					if (_order != null)
 						_order.PropertyChanged += OrderOnPropertyChanged;
 
-					NotifyChanged("Order");
+					NotifyChanged(nameof(Order));
 				}
 			}
 
@@ -91,7 +91,7 @@ namespace StockSharp.Xaml
 				set
 				{
 					_comment = value;
-					NotifyChanged("Comment");
+					NotifyChanged(nameof(Comment));
 				}
 			}
 
@@ -103,7 +103,7 @@ namespace StockSharp.Xaml
 				set
 				{
 					_condition = value;
-					NotifyChanged("Condition");
+					NotifyChanged(nameof(Condition));
 				}
 			}
 
@@ -163,7 +163,7 @@ namespace StockSharp.Xaml
 					{
 						case null:
 						case TimeInForce.PutInQueue:
-							return expiryDate == null ? long.MaxValue : expiryDate.Value.Ticks;
+							return expiryDate?.Ticks ?? long.MaxValue;
 						case TimeInForce.MatchOrCancel:
 							return 0;
 						case TimeInForce.CancelBalance:
@@ -176,14 +176,14 @@ namespace StockSharp.Xaml
 
 			private void OrderOnPropertyChanged(object sender, PropertyChangedEventArgs e)
 			{
-				if (e.PropertyName == "Id" || e.PropertyName == "StringId")
-					NotifyChanged("OrderId");
+				if (e.PropertyName == nameof(Order.Id) || e.PropertyName == nameof(Order.StringId))
+					NotifyChanged(nameof(OrderId));
 
-				if (e.PropertyName == "Balance" || e.PropertyName == "State")
-					NotifyChanged("OrderState");
+				if (e.PropertyName == nameof(Order.Balance) || e.PropertyName == nameof(Order.State))
+					NotifyChanged(nameof(OrderState));
 
-				if (e.PropertyName == "TimeInForce" || e.PropertyName == "ExpiryDate")
-					NotifyChanged("OrderTif");
+				if (e.PropertyName == nameof(Order.TimeInForce) || e.PropertyName == nameof(Order.ExpiryDate))
+					NotifyChanged(nameof(OrderTif));
 			}
 		}
 

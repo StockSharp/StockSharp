@@ -88,15 +88,15 @@ namespace StockSharp.Hydra.Panes
 			public int Number { get; set; }
 
 			public string Name { get; private set; }
-			public string DisplayName { get; private set; }
+			public string DisplayName { get; }
 			public string Description { get; private set; }
 
 			public string Format { get; set; }
 
-			public Type Type { get; private set; }
+			public Type Type { get; }
 			public bool IsRequired { get; set; }
 
-			public ObservableCollection<ImportEnumMappingWindow.MappingValue> Values { get; private set; }
+			public ObservableCollection<ImportEnumMappingWindow.MappingValue> Values { get; }
 
 			public object DefaultValue { get; set; }
 
