@@ -116,14 +116,7 @@ namespace StockSharp.Designer
 				SeparateByDates = SeparateByDateModes.SubDirectories,
 			});
 			logManager.Listeners.Add(new GuiLogListener(Monitor));
-
-			_strategiesRegistry = new StrategiesRegistry(compositionsPath, strategiesPath);
-			logManager.Sources.Add(_strategiesRegistry);
-			_strategiesRegistry.Init();
-
-			_layoutManager = new LayoutManager(DockingManager);
-			_layoutManager.Changed += SaveSettings;
-			logManager.Sources.Add(_layoutManager);
+			ConfigManager.RegisterService(logManager);
 
 			var entityRegistry = ConfigManager.GetService<IEntityRegistry>();
 			var storageRegistry = ConfigManager.GetService<IStorageRegistry>();
@@ -139,12 +132,19 @@ namespace StockSharp.Designer
 			_connector.Disconnected += ConnectorOnConnectionStateChanged;
 			_connector.ConnectionError += ConnectorOnConnectionError;
 			logManager.Sources.Add(_connector);
-
-			ConfigManager.RegisterService(logManager);
-			ConfigManager.RegisterService(_strategiesRegistry);
-			ConfigManager.RegisterService(_layoutManager);
 			ConfigManager.RegisterService<IConnector>(_connector);
 			ConfigManager.RegisterService<ISecurityProvider>(_connector);
+
+			_strategiesRegistry = new StrategiesRegistry(compositionsPath, strategiesPath);
+			logManager.Sources.Add(_strategiesRegistry);
+			_strategiesRegistry.Init();
+			ConfigManager.RegisterService(_strategiesRegistry);
+
+			_layoutManager = new LayoutManager(DockingManager);
+			_layoutManager.Changed += SaveSettings;
+			logManager.Sources.Add(_layoutManager);
+			ConfigManager.RegisterService(_layoutManager);
+
 			ConfigManager.RegisterService(_marketDataSettingsCache);
 
 			SolutionExplorer.Compositions = _strategiesRegistry.Compositions;
