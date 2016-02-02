@@ -151,7 +151,7 @@ namespace StockSharp.Xaml
 			GroupingColumns.Add(Columns[0]);
 			GroupingColumns.Add(Columns[1]);
 
-			_serializableColumns = Columns.ToArray();
+			SerializableColumns = Columns.ToArray();
 		}
 
 		//private void ApplyFormatRules(DataGridColumn column)
@@ -171,12 +171,10 @@ namespace StockSharp.Xaml
 		//	});
 		//}
 
-		private readonly IList<DataGridColumn> _serializableColumns;
-
 		/// <summary>
 		/// Saved columns.
 		/// </summary>
-		protected override IList<DataGridColumn> SerializableColumns => _serializableColumns;
+		protected override IList<DataGridColumn> SerializableColumns { get; }
 
 		/// <summary>
 		/// To refresh the table. It is carried out asynchronously.
@@ -288,7 +286,7 @@ namespace StockSharp.Xaml
 
 			foreach (var tuple in drive.GetAvailableDataTypes(security.ToSecurityId(), format))
 			{
-				if (tuple.MessageType.IsCandleMessage())
+				if (!tuple.MessageType.IsCandleMessage())
 					continue;
 
 				var key = tuple.MessageType.Name.Replace("CandleMessage", string.Empty) + " " + tuple.Arg;
