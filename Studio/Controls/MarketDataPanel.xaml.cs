@@ -43,7 +43,7 @@ namespace StockSharp.Studio.Controls
 	[Guid("8B702CF0-2D2E-4A6E-8C2E-63CEF1B75D84")]
 	public partial class MarketDataPanel
 	{
-		public static RoutedCommand ApplyCommand = new RoutedCommand();
+		public static RoutedCommand EditCommand = new RoutedCommand();
 		public static RoutedCommand AddCommand = new RoutedCommand();
 		public static RoutedCommand DeleteCommand = new RoutedCommand();
 
@@ -87,58 +87,19 @@ namespace StockSharp.Studio.Controls
 
 		private void SettingsChanged(MarketDataSettings settings)
 		{
-			SettingsPanel.Path = string.Empty;
-			SettingsPanel.Address = string.Empty;
-			SetCredentials(false);
-
-			if (settings == null)
+			if (settings != null)
 			{
-				SettingsPanel.IsEnabled = false;
-				MarketDataGrid.IsEnabled = false;
-				return;
+				MarketDataGrid.IsEnabled = true;
+				SecurityPicker.SelectedSecurity = null;
+
+				_storageRegistry = new StudioStorageRegistry
+				{
+					MarketDataSettings = settings
+				};
+				RefreshGrid();
 			}
-
-			SettingsPanel.IsEnabled = true;
-			MarketDataGrid.IsEnabled = true;
-
-			SettingsPanel.IsLocal = settings.UseLocal;
-			//SettingsPanel.IsAlphabetic = settings.IsAlphabetic;
-
-			if (settings.UseLocal)
-				SettingsPanel.Path = settings.Path;
 			else
-				SettingsPanel.Address = settings.Path;
-
-			SetCredentials(settings.IsStockSharpStorage, settings.Credentials);
-
-			_storageRegistry = new StudioStorageRegistry { MarketDataSettings = settings };
-			RefreshGrid();
-		}
-
-		private void SetCredentials(bool isStockSharpStorage, ServerCredentials credentials = null)
-		{
-			//SettingsPanel.IsCredentialsEnabled = !isStockSharpStorage;
-
-			//var serverCredentials = !isStockSharpStorage
-			//	? (credentials ?? new ServerCredentials())
-			//	: ConfigManager
-			//		.GetService<IPersistableService>()
-			//		.GetCredentials();
-
-			var serverCredentials = credentials ?? new ServerCredentials();
-
-			SettingsPanel.Login = serverCredentials.Login;
-			SettingsPanel.Password = serverCredentials.Password;
-		}
-
-		private void SettingsPanel_OnRemotePathChanged()
-		{
-			var isStockSharpStorage = !SettingsPanel.IsLocal && SettingsPanel.Address.ContainsIgnoreCase("stocksharp.com");
-
-			//if (SettingsPanel.IsCredentialsEnabled == !isStockSharpStorage)
-			//	return;
-
-			SetCredentials(isStockSharpStorage);
+				MarketDataGrid.IsEnabled = false;
 		}
 
 		private void SecurityPicker_OnSecuritySelected(Security obj)
@@ -172,41 +133,19 @@ namespace StockSharp.Studio.Controls
 			new ControlChangedCommand(this).Process(this);
 		}
 
-		private void ApplyCommandExecuted(object sender, ExecutedRoutedEventArgs e)
+		private void EditCommandExecuted(object sender, ExecutedRoutedEventArgs e)
 		{
 			var settings = SelectedSettings;
 
-			if (SettingsPanel.IsLocal == settings.UseLocal &&
-				//SettingsPanel.IsAlphabetic == settings.IsAlphabetic &&
-				(SettingsPanel.IsLocal ? SettingsPanel.Path : SettingsPanel.Address) == settings.Path &&
-			    SettingsPanel.Login == settings.Credentials.Login &&
-			    SettingsPanel.Password == settings.Credentials.Password)
+			var settingsWnd = new StorageSettingsWindow
 			{
+				Settings = settings
+			};
+
+			if (!settingsWnd.ShowModal(this))
 				return;
-			}
 
-			settings.UseLocal = SettingsPanel.IsLocal;
-			//settings.IsAlphabetic = SettingsPanel.IsAlphabetic;
-			settings.Path = SettingsPanel.IsLocal ? SettingsPanel.Path : SettingsPanel.Address;
-			settings.Credentials.Login = SettingsPanel.Login;
-			settings.Credentials.Password = SettingsPanel.Password;
-
-			if (SettingsPanel.IsLocal)
-			{
-				if (!Directory.Exists(settings.Path))
-				{
-					var res = new MessageBoxBuilder()
-						.Owner(this)
-						.Text(LocalizedStrings.Str3263)
-						.Warning()
-						.YesNo()
-						.Show();
-
-					if (res != MessageBoxResult.Yes)
-						return;
-				}
-			}
-			else
+			if (!settings.UseLocal)
 			{
 				var wnd = new MarketDataConfirmWindow
 				{
@@ -225,7 +164,7 @@ namespace StockSharp.Studio.Controls
 					BusyIndicator.IsBusy = true;
 
 					var progress = BusyIndicator.FindVisualChild<ProgressBar>();
-                    var cancel = (Button)BusyIndicator.FindVisualChild<CancelButton>();
+					var cancel = (Button)BusyIndicator.FindVisualChild<CancelButton>();
 
 					var secTypes = wnd.SecurityTypes.ToArray();
 
@@ -256,9 +195,9 @@ namespace StockSharp.Studio.Controls
 			ConfigManager.GetService<MarketDataSettingsCache>().Save();
 		}
 
-		private void ApplyCommandCanExecute(object sender, CanExecuteRoutedEventArgs e)
+		private void EditCommandCanExecute(object sender, CanExecuteRoutedEventArgs e)
 		{
-			e.CanExecute = SelectedSettings != null && !(SettingsPanel.IsLocal ? SettingsPanel.Path : SettingsPanel.Address).IsEmpty();
+			e.CanExecute = SelectedSettings != null;
 		}
 
 		private void AddCommandExecuted(object sender, ExecutedRoutedEventArgs e)
@@ -266,8 +205,17 @@ namespace StockSharp.Studio.Controls
 			var settings = new MarketDataSettings
 			{
 				UseLocal = true,
-				Path = Environment.CurrentDirectory
+				//Path = Environment.CurrentDirectory
 			};
+
+			var settingsWnd = new StorageSettingsWindow
+			{
+				Settings = settings
+			};
+
+			if (!settingsWnd.ShowModal(this))
+				return;
+
 			var cache = ConfigManager.GetService<MarketDataSettingsCache>();
 
 			cache.Settings.Add(settings);

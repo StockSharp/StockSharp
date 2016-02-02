@@ -7,11 +7,12 @@
              xmlns:sx="clr-namespace:StockSharp.Xaml;assembly=StockSharp.Xaml"
              xmlns:local="clr-namespace:StockSharp.Studio.Controls"
              xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+             xmlns:xaml="clr-namespace:Ecng.Xaml;assembly=Ecng.Xaml"
              mc:Ignorable="d" d:DesignHeight="600" d:DesignWidth="600"
              DataContext="{Binding RelativeSource={RelativeSource Self}}">
 	
 	<UserControl.CommandBindings>
-		<CommandBinding Command="{x:Static local:MarketDataPanel.ApplyCommand}" Executed="ApplyCommandExecuted" CanExecute="ApplyCommandCanExecute" />
+        <CommandBinding Command="{x:Static local:MarketDataPanel.EditCommand}" Executed="EditCommandExecuted" CanExecute="EditCommandCanExecute" />
         <CommandBinding Command="{x:Static local:MarketDataPanel.AddCommand}" Executed="AddCommandExecuted" CanExecute="AddCommandCanExecute" />
         <CommandBinding Command="{x:Static local:MarketDataPanel.DeleteCommand}" Executed="DeleteCommandExecuted" CanExecute="DeleteCommandCanExecute" />
     </UserControl.CommandBindings>
@@ -43,15 +44,14 @@
 		<Grid>
 			<Grid.RowDefinitions>
 				<RowDefinition Height="Auto"/>
-				<RowDefinition Height="Auto"/>
-				<RowDefinition Height="1" />
-				<RowDefinition Height="*"/>
+				<RowDefinition Height="*" />
 			</Grid.RowDefinitions>
 
 			<Grid>
 				<Grid.ColumnDefinitions>
 					<ColumnDefinition Width="Auto"/>
 					<ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
@@ -64,30 +64,21 @@
                 <Button Grid.Column="2" Margin="1" 
 						ToolTip="{x:Static loc:LocalizedStrings.Str3229}"
 						Command="{x:Static local:MarketDataPanel.AddCommand}">
-                    <Image Source="pack://application:,,,/StockSharp.Xaml;component/Images/add_16x16.png"/>
+                    <xaml:BmpImage Source="pack://application:,,,/StockSharp.Xaml;component/Images/add_16x16.png"/>
 				</Button>
                 <Button Grid.Column="3" Margin="1" 
+						ToolTip="{x:Static loc:LocalizedStrings.XamlStr607}"
+						Command="{x:Static local:MarketDataPanel.EditCommand}">
+                    <xaml:BmpImage Source="pack://application:,,,/StockSharp.Xaml;component/Images/edit_16x16.png"/>
+                </Button>
+                <Button Grid.Column="4" Margin="1" 
 						ToolTip="{x:Static loc:LocalizedStrings.Str2060}"
 						Command="{x:Static local:MarketDataPanel.DeleteCommand}">
-                    <Image Source="pack://application:,,,/StockSharp.Xaml;component/Images/remove_16x16.png"/>
+                    <xaml:BmpImage Source="pack://application:,,,/StockSharp.Xaml;component/Images/remove_16x16.png"/>
                 </Button>
             </Grid>
 
-			<GroupBox Grid.Row="1" Margin="5" Header="{x:Static loc:LocalizedStrings.StorageParameters}">
-				<Grid>
-					<Grid.RowDefinitions>
-						<RowDefinition Height="*" MaxHeight="160" />
-						<RowDefinition Height="5" />
-						<RowDefinition Height="25" />
-					</Grid.RowDefinitions>
-
-					<sx:StorageSettingsPanel x:Name="SettingsPanel" RemotePathChanged="SettingsPanel_OnRemotePathChanged"/>
-
-					<Button Grid.Row="2" Grid.ColumnSpan="2" Width="100" IsDefault="True" Command="{x:Static local:MarketDataPanel.ApplyCommand}"><TextBlock Text="{x:Static loc:LocalizedStrings.XamlStr537}"/></Button>
-				</Grid>
-			</GroupBox>
-
-			<GroupBox Grid.Row="3" Margin="5" Header="{x:Static loc:LocalizedStrings.XamlStr587}">
+			<GroupBox Grid.Row="1" Margin="5" Header="{x:Static loc:LocalizedStrings.XamlStr587}">
 				<Grid>
 					<Grid.ColumnDefinitions>
 						<ColumnDefinition Width="260" />
@@ -118,8 +109,6 @@
 					</Grid>
 				</Grid>
 			</GroupBox>
-
-			<!--<Button Grid.Row="4" Grid.ColumnSpan="2" Width="100" Command="{x:Static studio:StorageSettingsPane.CloseCommand}">Закрыть</Button>-->
 		</Grid>
 	</xctk:BusyIndicator>
 </local:BaseStudioControl>
