@@ -2754,7 +2754,7 @@ Str2949;Continue?;Продолжить?
 Str2950;Autostart of quotes downloading was successful.;Автостарт скачивания котировок произведен успешно.
 Str2951;No task was launched. Detailed information is available in the log.;Ни одна из задач не была запущена. Детальная информация доступна в логе.
 Str2952Params;You must restart {0} to apply these changes. Restart now?;Для работы в выбранном режиме необходимо перезапустить {0}. Перезапустить сейчас?
-Str2954;S#.Data settings will be reset. This operation is irreversible. Are you sure you want to continue?;Настройки S#.Data будут сброшены. Данная операция не обратима. Вы уверены, что хотите продолжить?
+Str2954Params;{0} settings will be reset. This operation is irreversible. Are you sure you want to continue?;Настройки {0} будут сброшены. Данная операция не обратима. Вы уверены, что хотите продолжить?
 Str2955;Data processing error;Ошибка обработки данных
 Str2956Params;Error subscribing to {0} for {1};Ошибка подписки на {0} для {1}
 Str2958;Connection restored.;Подключение восстановлено.

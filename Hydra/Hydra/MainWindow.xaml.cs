@@ -882,7 +882,7 @@ namespace StockSharp.Hydra
 		private void ResetSettings_Click(object sender, RoutedEventArgs e)
 		{
 			var res = new MessageBoxBuilder()
-						.Text(LocalizedStrings.Str2954)
+						.Text(LocalizedStrings.Str2954Params.Put(TypeHelper.ApplicationName))
 						.Warning()
 						.Owner(this)
 						.YesNo()

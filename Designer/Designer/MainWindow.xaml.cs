@@ -17,6 +17,7 @@ namespace StockSharp.Designer
 {
 	using System;
 	using System.ComponentModel;
+	using System.Diagnostics;
 	using System.Globalization;
 	using System.IO;
 	using System.Linq;
@@ -28,6 +29,7 @@ namespace StockSharp.Designer
 	using Ecng.Collections;
 	using Ecng.Common;
 	using Ecng.Configuration;
+	using Ecng.Interop;
 	using Ecng.Serialization;
 	using Ecng.Xaml;
 
@@ -77,6 +79,10 @@ namespace StockSharp.Designer
 		public static RoutedCommand ConnectDisconnectCommand = new RoutedCommand();
 		public static RoutedCommand RefreshCompositionCommand = new RoutedCommand();
 		public static RoutedCommand OpenMarketDataSettingsCommand = new RoutedCommand();
+		public static RoutedCommand HelpCommand = new RoutedCommand();
+		public static RoutedCommand AboutCommand = new RoutedCommand();
+		public static RoutedCommand TargetPlatformCommand = new RoutedCommand();
+		public static RoutedCommand ResetSettingsCommand = new RoutedCommand();
 
 		private readonly string _settingsFile;
 		private readonly StrategiesRegistry _strategiesRegistry;
@@ -84,6 +90,7 @@ namespace StockSharp.Designer
 		private readonly LayoutManager _layoutManager;
 
 		private MarketDataSettingsCache _marketDataSettingsCache;
+		private bool _isReseting;
 
 		public MainWindow()
 		{
@@ -542,6 +549,65 @@ namespace StockSharp.Designer
 			OpenMarketDataPanel(_marketDataSettingsCache.Settings.FirstOrDefault(s => s.Id != Guid.Empty));
 		}
 
+		private void HelpCommand_OnExecuted(object sender, ExecutedRoutedEventArgs e)
+		{
+			"http://stocksharp.com/forum/yaf_postst5874_S--Designer---coming-soon.aspx".To<Uri>().OpenLinkInBrowser();
+		}
+
+		private void AboutCommand_OnExecuted(object sender, ExecutedRoutedEventArgs e)
+		{
+			var wnd = new AboutWindow(this);
+			wnd.ShowModal(this);
+		}
+
+		private void TargetPlatformCommand_OnExecuted(object sender, ExecutedRoutedEventArgs e)
+		{
+			var language = LocalizedStrings.ActiveLanguage;
+			var platform = Environment.Is64BitProcess ? Platforms.x64 : Platforms.x86;
+
+			var window = new TargetPlatformWindow();
+
+			if (!window.ShowModal(this))
+				return;
+
+			if (window.SelectedLanguage == language && window.SelectedPlatform == platform)
+				return;
+
+			// temporarily set prev lang for display the followed message
+			// and leave all text as is if user will not restart the app
+			LocalizedStrings.ActiveLanguage = language;
+
+			var result = new MessageBoxBuilder()
+				.Text(LocalizedStrings.Str2952Params.Put(TypeHelper.ApplicationName))
+				.Owner(this)
+				.Info()
+				.YesNo()
+				.Show();
+
+			if (result == MessageBoxResult.Yes)
+				Application.Current.Restart();
+		}
+
+		private void ResetSettingsCommand_OnExecuted(object sender, ExecutedRoutedEventArgs e)
+		{
+			var res = new MessageBoxBuilder()
+						.Text(LocalizedStrings.Str2954Params.Put(TypeHelper.ApplicationName))
+						.Warning()
+						.Owner(this)
+						.YesNo()
+						.Show();
+
+			if (res != MessageBoxResult.Yes)
+				return;
+
+			_isReseting = true;
+
+			ConfigManager.GetService<LogManager>().Dispose();
+			Directory.Delete(BaseApplication.AppDataPath, true);
+
+			Application.Current.Restart();
+		}
+
 		#endregion
 
 		private void OpenComposition(CompositionItem item)
@@ -616,6 +682,9 @@ namespace StockSharp.Designer
 
 		private void SaveSettings()
 		{
+			if (_isReseting)
+				return;
+
 			CultureInfo
 				.InvariantCulture
 				.DoInCulture(() =>

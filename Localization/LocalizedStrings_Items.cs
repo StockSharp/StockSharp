@@ -27508,14 +27508,14 @@ namespace StockSharp.Localization
 		public static string Str2952Params => GetString(Str2952ParamsKey);
 
 		/// <summary>
-		/// S#.Data settings will be reset. This operation is irreversible. Are you sure you want to continue?
+		/// App settings will be reset. This operation is irreversible. Are you sure you want to continue?
 		/// </summary>
-		public const string Str2954Key = "Str2954";
+		public const string Str2954ParamsKey = "Str2954Params";
 
 		/// <summary>
-		/// S#.Data settings will be reset. This operation is irreversible. Are you sure you want to continue?
+		/// App settings will be reset. This operation is irreversible. Are you sure you want to continue?
 		/// </summary>
-		public static string Str2954 => GetString(Str2954Key);
+		public static string Str2954Params => GetString(Str2954ParamsKey);
 
 		/// <summary>
 		/// Data processing error
