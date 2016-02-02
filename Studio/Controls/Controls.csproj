@@ -213,6 +213,9 @@
     <Compile Include="SecuritiesPanel.xaml.cs">
       <DependentUpon>SecuritiesPanel.xaml</DependentUpon>
     </Compile>
+    <Compile Include="StorageSettingsWindow.xaml.cs">
+      <DependentUpon>StorageSettingsWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="StrategySecuritiesPanel.xaml.cs">
       <DependentUpon>StrategySecuritiesPanel.xaml</DependentUpon>
     </Compile>
@@ -334,6 +337,10 @@
     <Page Include="SecuritiesPanel.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="StorageSettingsWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="StrategySecuritiesPanel.xaml">
       <SubType>Designer</SubType>
