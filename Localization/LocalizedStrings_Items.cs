@@ -4638,12 +4638,12 @@ namespace StockSharp.Localization
 		public static string Str497 => GetString(Str497Key);
 
 		/// <summary>
-		/// Volume spread.
+		/// Volume spread
 		/// </summary>
 		public const string Str498Key = "Str498";
 
 		/// <summary>
-		/// Volume spread.
+		/// Volume spread
 		/// </summary>
 		public static string Str498 => GetString(Str498Key);
 
@@ -41776,5 +41776,15 @@ namespace StockSharp.Localization
 		/// Atomic reregister
 		/// </summary>
 		public static string IsSupportAtomicReRegister => GetString(IsSupportAtomicReRegisterKey);
+
+		/// <summary>
+		/// Best pair quotes
+		/// </summary>
+		public const string BestPairKey = "BestPair";
+
+		/// <summary>
+		/// Best pair quotes
+		/// </summary>
+		public static string BestPair => GetString(BestPairKey);
 	}
 }

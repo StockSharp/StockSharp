@@ -460,7 +460,7 @@ Str494;Quote to buy.;Котировка на покупку.
 Str495;Quote to sell.;Котировка на продажу.
 Str496;Price spread;Спред по цене
 Str497;Size of price spread.;Размер спреда по цене.
-Str498;Volume spread.;Спреда по объему.
+Str498;Volume spread;Спреда по объему
 Str499;Size of volume spread. If value is negative, then best ask has a larger volume than best bid.;Размер спреда по объему. Если значение отрицательное, значит лучший оффер имеет больший объем, чем лучший бид.
 Str500;Spread;Спред
 Str501;Spread middle.;Середина спреда.
@@ -2959,7 +2959,7 @@ Str3172;Days of history data;Дней истории
 Str3173;Number of history days for strategy initialization.;Количество дней истории для инициализации стратегии.
 Str3174;Strategy not compiled.;Стратегия не скомпилирована.
 Str3175Params;Error initializing strategy diagram: {0};Ошибка инициализации схемы стратегии: {0}
-Str3176;Live;Реал
+Str3176;Live;Торговля
 Str3177;Optimization;Оптимизация
 Str3178;Stopped;Остановлена
 Str3179;Running;Выполняется
@@ -4204,6 +4204,7 @@ Palette;Palette;Палитра
 RefreshScheme;Refresh scheme;Обновить схему
 LabelsFormatIntraday;Labels format (intraday);Формат надписей (внутри дня)
 LabelsFormatIntradayDesc;The format of X-axis labels within the day;Формат надписей для оси X внутри дня
+BestPair;Best pair quotes;Лучшая пара котировок
 DocStr0;Button activation alert settings;Кнопка активации настроек сигнала
 DocStr1;Initializes a new instance of the {0};Создать {0}
 DocStr2;Load settings;Загрузить настройки

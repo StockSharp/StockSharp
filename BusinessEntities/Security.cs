@@ -752,6 +752,8 @@ namespace StockSharp.BusinessEntities
 		/// </summary>
 		[Browsable(false)]
 		//[Obsolete("Необходимо использовать метод IConnector.GetSecurityValue.")]
+		[DisplayNameLoc(LocalizedStrings.BestPairKey)]
+		[DescriptionLoc(LocalizedStrings.BestPairKey, true)]
 		public MarketDepthPair BestPair => new MarketDepthPair(this, BestBid, BestAsk);
 
 		private SecurityStates? _state;
