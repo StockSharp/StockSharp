@@ -83,6 +83,7 @@ namespace StockSharp.Designer
 		public static RoutedCommand AboutCommand = new RoutedCommand();
 		public static RoutedCommand TargetPlatformCommand = new RoutedCommand();
 		public static RoutedCommand ResetSettingsCommand = new RoutedCommand();
+		public static RoutedCommand AddNewSecurityCommand = new RoutedCommand();
 
 		private readonly string _settingsFile;
 		private readonly StrategiesRegistry _strategiesRegistry;
@@ -238,6 +239,33 @@ namespace StockSharp.Designer
 					}
 				})
 				.Launch());
+
+			cmdSvc.Register<CreateSecurityCommand>(this, true, cmd =>
+			{
+				var entityRegistry = ConfigManager.GetService<IEntityRegistry>();
+
+				ISecurityWindow wnd;
+
+				if (cmd.SecurityType == typeof(Security))
+					wnd = new SecurityCreateWindow();
+				else
+					throw new InvalidOperationException(LocalizedStrings.Str2140Params.Put(cmd.SecurityType));
+
+				wnd.ValidateId = id =>
+				{
+					if (entityRegistry.Securities.ReadById(id) != null)
+						return LocalizedStrings.Str3275Params.Put(id);
+
+					return null;
+				};
+
+				if (!((Window)wnd).ShowModal(Application.Current.GetActiveOrMainWindow()))
+					return;
+
+				entityRegistry.Securities.Save(wnd.Security);
+				_connector.SendOutMessage(wnd.Security.ToMessage());
+				cmd.Security = wnd.Security;
+			});
 		}
 
 		private void InitializeMarketDataSettingsCache()
@@ -606,6 +634,11 @@ namespace StockSharp.Designer
 			Directory.Delete(BaseApplication.AppDataPath, true);
 
 			Application.Current.Restart();
+		}
+
+		private void AddNewSecurityCommand_OnExecuted(object sender, ExecutedRoutedEventArgs e)
+		{
+			new CreateSecurityCommand((Type)e.Parameter).Process(this, true);
 		}
 
 		#endregion

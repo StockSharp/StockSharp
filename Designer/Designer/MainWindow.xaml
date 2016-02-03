@@ -8,6 +8,7 @@
 		xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 		xmlns:localization="clr-namespace:StockSharp.Localization;assembly=StockSharp.Localization"
 		xmlns:local="clr-namespace:StockSharp.Designer"
+		xmlns:businessEntities="clr-namespace:StockSharp.BusinessEntities;assembly=StockSharp.BusinessEntities"
 		mc:Ignorable="d"
 		Height="768" Width="1024" WindowState="Maximized"
         DontUseDwm="False" WindowStartupLocation="CenterScreen"
@@ -69,6 +70,9 @@
 
         <CommandBinding Command="{x:Static local:MainWindow.ResetSettingsCommand}"
 						Executed="ResetSettingsCommand_OnExecuted"/>
+
+        <CommandBinding Command="{x:Static local:MainWindow.AddNewSecurityCommand}"
+						Executed="AddNewSecurityCommand_OnExecuted"/>
     </Window.CommandBindings>
 	
 	<Window.Resources>
@@ -229,6 +233,11 @@
 								   SizeDefinition="Large"
 								   LargeIcon="pack://application:,,,/Designer;component/Images/storage_32x32.png" 
 								   Command="{x:Static local:MainWindow.OpenMarketDataSettingsCommand}" />
+                    <fluent:Button Header="{x:Static localization:LocalizedStrings.XamlStr137}"
+								   SizeDefinition="Large"
+								   LargeIcon="pack://application:,,,/Designer;component/Images/Security_32x32.png" 
+								   Command="{x:Static local:MainWindow.AddNewSecurityCommand}"
+								   CommandParameter="{x:Type businessEntities:Security}" />
                 </fluent:RibbonGroupBox>
             </fluent:RibbonTabItem>
 
