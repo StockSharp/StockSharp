@@ -75,7 +75,7 @@ namespace StockSharp.Xaml
 			}
 		}
 
-		private Row SelectedItem => PortfoliosCtrl != null ? (Row)PortfoliosCtrl.SelectedItem : null;
+		private Row SelectedItem => (Row)PortfoliosCtrl?.SelectedItem;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="PortfolioMessageAdaptersWindow"/>.

@@ -102,20 +102,20 @@ namespace StockSharp.Hydra.Panes
 
 			public void Load(SettingsStorage storage)
 			{
-				Name = storage.GetValue<string>("Name");
-				Number = storage.GetValue<int>("Number");
-				Values.AddRange(storage.GetValue<SettingsStorage[]>("Values").Select(s => s.Load<ImportEnumMappingWindow.MappingValue>()));
-				DefaultValue = storage.GetValue<object>("DefaultValue");
-				Format = storage.GetValue<string>("Format");
+				Name = storage.GetValue<string>(nameof(Name));
+				Number = storage.GetValue<int>(nameof(Number));
+				Values.AddRange(storage.GetValue<SettingsStorage[]>(nameof(Values)).Select(s => s.Load<ImportEnumMappingWindow.MappingValue>()));
+				DefaultValue = storage.GetValue<object>(nameof(DefaultValue));
+				Format = storage.GetValue<string>(nameof(Format));
 			}
 
 			void IPersistable.Save(SettingsStorage storage)
 			{
-				storage.SetValue("Name", Name);
-				storage.SetValue("Number", Number);
-				storage.SetValue("Values", Values.Select(v => v.Save()).ToArray());
-				storage.SetValue("DefaultValue", DefaultValue);
-				storage.SetValue("Format", Format);
+				storage.SetValue(nameof(Name), Name);
+				storage.SetValue(nameof(Number), Number);
+				storage.SetValue(nameof(Values), Values.Select(v => v.Save()).ToArray());
+				storage.SetValue(nameof(DefaultValue), DefaultValue);
+				storage.SetValue(nameof(Format), Format);
 			}
 
 			public void ApplyFileValue(object instance, string value)
@@ -214,7 +214,7 @@ namespace StockSharp.Hydra.Panes
 				set
 				{
 					_path = value;
-					NotifyChanged("Path");
+					NotifyChanged(nameof(Path));
 				}
 			}
 
@@ -229,7 +229,7 @@ namespace StockSharp.Hydra.Panes
 				set
 				{
 					_columnSeparator = value;
-					NotifyChanged("ColumnSeparator");
+					NotifyChanged(nameof(ColumnSeparator));
 				}
 			}
 
@@ -248,7 +248,7 @@ namespace StockSharp.Hydra.Panes
 				set
 				{
 					_skipFromHeader = value;
-					NotifyChanged("SkipFromHeader");
+					NotifyChanged(nameof(SkipFromHeader));
 				}
 			}
 
@@ -268,7 +268,7 @@ namespace StockSharp.Hydra.Panes
 				set
 				{
 					_drive = value;
-					NotifyChanged("Drive");
+					NotifyChanged(nameof(Drive));
 				}
 			}
 
@@ -286,7 +286,7 @@ namespace StockSharp.Hydra.Panes
 						throw new ArgumentNullException(nameof(value));
 
 					_timeZone = value;
-					NotifyChanged("TimeZone");
+					NotifyChanged(nameof(TimeZone));
 				}
 			}
 
@@ -307,41 +307,41 @@ namespace StockSharp.Hydra.Panes
 				set
 				{
 					_candleSettings = value;
-					NotifyChanged("CandleSettings");
+					NotifyChanged(nameof(CandleSettings));
 				}
 			}
 
 			public void Load(SettingsStorage storage)
 			{
-				Path = storage.GetValue<string>("Path");
-				ColumnSeparator = storage.GetValue<string>("ColumnSeparator");
-				//RowSeparator = storage.GetValue<string>("RowSeparator");
-				SkipFromHeader = storage.GetValue<int>("SkipFromHeader");
-				//SkipFromFooter = storage.GetValue<int>("SkipFromFooter");
-				Format = storage.GetValue<StorageFormats>("Format");
+				Path = storage.GetValue<string>(nameof(Path));
+				ColumnSeparator = storage.GetValue<string>(nameof(ColumnSeparator));
+				//RowSeparator = storage.GetValue<string>(nameof(RowSeparator));
+				SkipFromHeader = storage.GetValue<int>(nameof(SkipFromHeader));
+				//SkipFromFooter = storage.GetValue<int>(nameof(SkipFromFooter));
+				Format = storage.GetValue<StorageFormats>(nameof(Format));
 
 				if (storage.ContainsKey("Drive"))
-					Drive = DriveCache.Instance.GetDrive(storage.GetValue<string>("Drive"));
+					Drive = DriveCache.Instance.GetDrive(storage.GetValue<string>(nameof(Drive)));
 
-				TimeZone = TimeZoneInfo.FindSystemTimeZoneById(storage.GetValue<string>("TimeZone"));
+				TimeZone = TimeZoneInfo.FindSystemTimeZoneById(storage.GetValue<string>(nameof(TimeZone)));
 
-				CandleSettings = storage.GetValue("CandleSettings", CandleSettings);
+				CandleSettings = storage.GetValue(nameof(CandleSettings), CandleSettings);
 			}
 
 			void IPersistable.Save(SettingsStorage storage)
 			{
-				storage.SetValue("Path", Path);
-				storage.SetValue("ColumnSeparator", ColumnSeparator);
-				//storage.SetValue("RowSeparator", RowSeparator);
-				storage.SetValue("SkipFromHeader", SkipFromHeader);
-				//storage.SetValue("SkipFromFooter", SkipFromFooter);
-				storage.SetValue("Format", Format.To<string>());
+				storage.SetValue(nameof(Path), Path);
+				storage.SetValue(nameof(ColumnSeparator), ColumnSeparator);
+				//storage.SetValue(nameof(RowSeparator), RowSeparator);
+				storage.SetValue(nameof(SkipFromHeader), SkipFromHeader);
+				//storage.SetValue(nameof(SkipFromFooter), SkipFromFooter);
+				storage.SetValue(nameof(Format), Format.To<string>());
 
 				if (Drive != null)
-					storage.SetValue("Drive", Drive.Path);
+					storage.SetValue(nameof(Drive), Drive.Path);
 
-				storage.SetValue("TimeZone", TimeZone.Id);
-				storage.SetValue("CandleSettings", CandleSettings);
+				storage.SetValue(nameof(TimeZone), TimeZone.Id);
+				storage.SetValue(nameof(CandleSettings), CandleSettings);
 			}
 		}
 

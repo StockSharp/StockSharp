@@ -199,18 +199,7 @@ namespace StockSharp.Xaml
 		[DisplayNameLoc(LocalizedStrings.Str293Key)]
 		[DescriptionLoc(LocalizedStrings.Str1531Key)]
 		[CategoryLoc(LocalizedStrings.Str1529Key)]
-		public decimal? ImpliedVolatility
-		{
-			get
-			{
-				var provider = _desk.MarketDataProvider;
-
-				if (provider == null)
-					return null;
-
-				return (decimal?)provider.GetSecurityValue((Call ?? Put).Option, Level1Fields.ImpliedVolatility);
-			}
-		}
+		public decimal? ImpliedVolatility => (decimal?)_desk.MarketDataProvider?.GetSecurityValue((Call ?? Put).Option, Level1Fields.ImpliedVolatility);
 
 		/// <summary>
 		/// Option volatility (historic).
@@ -218,18 +207,7 @@ namespace StockSharp.Xaml
 		[DisplayNameLoc(LocalizedStrings.Str299Key)]
 		[DescriptionLoc(LocalizedStrings.Str1532Key)]
 		[CategoryLoc(LocalizedStrings.Str1529Key)]
-		public decimal? HistoricalVolatility
-		{
-			get
-			{
-				var provider = _desk.MarketDataProvider;
-
-				if (provider == null)
-					return null;
-
-				return (decimal?)provider.GetSecurityValue((Call ?? Put).Option, Level1Fields.HistoricalVolatility);
-			}
-		}
+		public decimal? HistoricalVolatility => (decimal?)_desk.MarketDataProvider?.GetSecurityValue((Call ?? Put).Option, Level1Fields.HistoricalVolatility);
 
 		/// <summary>
 		/// Profitability of an option contract.

@@ -154,12 +154,12 @@ namespace StockSharp.Xaml
 		/// <param name="storage">Settings storage.</param>
 		public void Save(SettingsStorage storage)
 		{
-			storage.SetValue("Login", Login);
-			storage.SetValue("Password", Password);
-			storage.SetValue("Address", Address.To<string>());
-			storage.SetValue("ByPassOnLocal", ByPassOnLocal);
-			storage.SetValue("UseCredentails", UseCredentials);
-			storage.SetValue("UseProxy", UseProxy);
+			storage.SetValue(nameof(Login), Login);
+			storage.SetValue(nameof(Password), Password);
+			storage.SetValue(nameof(Address), Address.To<string>());
+			storage.SetValue(nameof(ByPassOnLocal), ByPassOnLocal);
+			storage.SetValue(nameof(UseCredentials), UseCredentials);
+			storage.SetValue(nameof(UseProxy), UseProxy);
 		}
 
 		/// <summary>
@@ -168,12 +168,12 @@ namespace StockSharp.Xaml
 		/// <param name="storage">Settings storage.</param>
 		public void Load(SettingsStorage storage)
 		{
-			Login = storage.GetValue<string>("Login");
-			Password = storage.GetValue<SecureString>("Password");
-			Address = storage.GetValue("Address", Address);
-			ByPassOnLocal = storage.GetValue<bool>("ByPassOnLocal");
-			UseCredentials = storage.GetValue<bool>("UseCredentails");
-			UseProxy = storage.GetValue<bool>("UseProxy");
+			Login = storage.GetValue<string>(nameof(Login));
+			Password = storage.GetValue<SecureString>(nameof(Password));
+			Address = storage.GetValue(nameof(Address), Address);
+			ByPassOnLocal = storage.GetValue<bool>(nameof(ByPassOnLocal));
+			UseCredentials = storage.GetValue<bool>(nameof(UseCredentials));
+			UseProxy = storage.GetValue<bool>(nameof(UseProxy));
 		}
 
 		/// <summary>

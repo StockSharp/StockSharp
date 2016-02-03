@@ -208,7 +208,7 @@ namespace StockSharp.Hydra.Panes
 			public void SetIsEnabled(string name)
 			{
 				NotifyChanged("Is{0}Enabled".Put(name));
-				NotifyChanged("IsInvalid");
+				NotifyChanged(nameof(IsInvalid));
 			}
 
 			public bool IsTicksEnabled => GetIsEnabled(typeof(ExecutionMessage), ExecutionTypes.Tick);
@@ -359,7 +359,7 @@ namespace StockSharp.Hydra.Panes
 				set
 				{
 					_isSelected = value;
-					NotifyChanged("IsSelected");
+					NotifyChanged(nameof(IsSelected));
 				}
 			}
 
@@ -371,7 +371,7 @@ namespace StockSharp.Hydra.Panes
 				set
 				{
 					_isThreeState = value;
-					NotifyChanged("IsThreeState");
+					NotifyChanged(nameof(IsThreeState));
 				}
 			}
 		}

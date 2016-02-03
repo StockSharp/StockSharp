@@ -36,7 +36,7 @@ namespace StockSharp.Studio.Controls
 
 	using Xceed.Wpf.Toolkit.PropertyGrid.Attributes;
 
-	public class BuySellSettings : NotifiableObject
+	public class BuySellSettings : NotifiableObject, IPersistable
 	{
 		private decimal _volume = 1;
 		private bool _showLimitOrderPanel = true;
@@ -63,7 +63,7 @@ namespace StockSharp.Studio.Controls
 				_security = value;
 
 				SecurityChanged.SafeInvoke(oldValue, value);
-				NotifyChanged("Security");
+				NotifyChanged(nameof(Security));
 			}
 		}
 
@@ -79,7 +79,7 @@ namespace StockSharp.Studio.Controls
 					return;
 
 				_portfolio = value;
-				NotifyChanged("Portfolio");
+				NotifyChanged(nameof(Portfolio));
 			}
 		}
 
@@ -92,7 +92,7 @@ namespace StockSharp.Studio.Controls
 			set
 			{
 				_volume = value;
-				NotifyChanged("Volume");
+				NotifyChanged(nameof(Volume));
 			}
 		}
 
@@ -105,7 +105,7 @@ namespace StockSharp.Studio.Controls
 			set
 			{
 				_depth = value;
-				NotifyChanged("Depth");
+				NotifyChanged(nameof(Depth));
 			}
 		}
 
@@ -118,7 +118,7 @@ namespace StockSharp.Studio.Controls
 			set
 			{
 				_showCancelAll = value;
-				NotifyChanged("ShowCancelAll");
+				NotifyChanged(nameof(ShowCancelAll));
 			}
 		}
 
@@ -131,7 +131,7 @@ namespace StockSharp.Studio.Controls
 			set
 			{
 				_showLimitOrderPanel = value;
-				NotifyChanged("ShowLimitOrderPanel");
+				NotifyChanged(nameof(ShowLimitOrderPanel));
 			}
 		}
 
@@ -144,8 +144,49 @@ namespace StockSharp.Studio.Controls
 			set
 			{
 				_showMarketOrderPanel = value;
-				NotifyChanged("ShowMarketOrderPanel");
+				NotifyChanged(nameof(ShowMarketOrderPanel));
 			}
+		}
+
+		public void Load(SettingsStorage storage)
+		{
+			Volume = storage.GetValue(nameof(Volume), 1);
+			ShowLimitOrderPanel = storage.GetValue(nameof(ShowLimitOrderPanel), true);
+			ShowMarketOrderPanel = storage.GetValue(nameof(ShowMarketOrderPanel), true);
+			ShowCancelAll = storage.GetValue(nameof(ShowCancelAll), true);
+			Depth = storage.GetValue(nameof(Depth), MarketDepthControl.DefaultDepth);
+
+			var connector = ConfigManager.GetService<IConnector>();
+
+			var securityId = storage.GetValue<string>(nameof(Security));
+			if (!securityId.IsEmpty())
+			{
+				if (securityId.CompareIgnoreCase("DEPTHSEC@FORTS"))
+				{
+					Security = "RI"
+						.GetFortsJumps(DateTime.Today.AddMonths(3), DateTime.Today.AddMonths(6), code => connector.LookupById(code + "@" + ExchangeBoard.Forts.Code))
+						.LastOrDefault();
+				}
+				else
+					Security = connector.LookupById(securityId);
+			}
+
+			var portfolioName = storage.GetValue<string>(nameof(Portfolio));
+			if (!portfolioName.IsEmpty())
+				Portfolio = connector.Portfolios.FirstOrDefault(s => s.Name == portfolioName);
+		}
+
+		public void Save(SettingsStorage storage)
+		{
+			storage.SetValue(nameof(Volume), Volume);
+			storage.SetValue(nameof(ShowLimitOrderPanel), ShowLimitOrderPanel);
+			storage.SetValue(nameof(ShowMarketOrderPanel), ShowMarketOrderPanel);
+			storage.SetValue(nameof(ShowCancelAll), ShowCancelAll);
+			storage.SetValue(nameof(Depth), Depth);
+			//storage.SetValue(nameof(CreateOrderAtClick), CreateOrderAtClick);
+
+			storage.SetValue(nameof(Security), Security?.Id);
+			storage.SetValue(nameof(Portfolio), Portfolio?.Name);
 		}
 	}
 
@@ -234,45 +275,14 @@ namespace StockSharp.Studio.Controls
 			new CancelAllOrdersCommand().Process(this);
 		}
 
-		public void Save(SettingsStorage settings)
+		public void Save(SettingsStorage storage)
 		{
-			settings.SetValue("Volume", _settings.Volume);
-			settings.SetValue("ShowLimitOrderPanel", _settings.ShowLimitOrderPanel);
-			settings.SetValue("ShowMarketOrderPanel", _settings.ShowMarketOrderPanel);
-			settings.SetValue("ShowCancelAll", _settings.ShowCancelAll);
-			settings.SetValue("Depth", _settings.Depth);
-			//settings.SetValue("CreateOrderAtClick", _settings.CreateOrderAtClick);
-
-			settings.SetValue("Security", _settings.Security != null ? _settings.Security.Id : null);
-			settings.SetValue("Portfolio", _settings.Portfolio != null ? _settings.Portfolio.Name : null);
+			_settings.Save(storage);
 		}
 
-		public void Load(SettingsStorage settings)
+		public void Load(SettingsStorage storage)
 		{
-			_settings.Volume = settings.GetValue("Volume", 1);
-			_settings.ShowLimitOrderPanel = settings.GetValue("ShowLimitOrderPanel", true);
-			_settings.ShowMarketOrderPanel = settings.GetValue("ShowMarketOrderPanel", true);
-			_settings.ShowCancelAll = settings.GetValue("ShowCancelAll", true);
-			_settings.Depth = settings.GetValue("Depth", MarketDepthControl.DefaultDepth);
-
-			var connector = ConfigManager.GetService<IConnector>();
-
-			var securityId = settings.GetValue<string>("Security");
-			if (!securityId.IsEmpty())
-			{
-				if (securityId.CompareIgnoreCase("DEPTHSEC@FORTS"))
-				{
-					_settings.Security = "RI"
-						.GetFortsJumps(DateTime.Today.AddMonths(3), DateTime.Today.AddMonths(6), code => connector.LookupById(code + "@" + ExchangeBoard.Forts.Code))
-						.LastOrDefault();
-				}
-				else
-					_settings.Security = connector.LookupById(securityId);
-			}
-
-			var portfolioName = settings.GetValue<string>("Portfolio");
-			if (!portfolioName.IsEmpty())
-				_settings.Portfolio = connector.Portfolios.FirstOrDefault(s => s.Name == portfolioName);
+			_settings.Load(storage);
 		}
 
 		void IDisposable.Dispose()

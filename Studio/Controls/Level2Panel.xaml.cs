@@ -140,7 +140,7 @@ namespace StockSharp.Studio.Controls
 
 		void IPersistable.Save(SettingsStorage storage)
 		{
-			storage.SetValue("SecurityId", SecurityPicker.SelectedSecurity != null ? SecurityPicker.SelectedSecurity.Id : null);
+			storage.SetValue("SecurityId", SecurityPicker.SelectedSecurity?.Id);
 
 			storage.SetValue("SecurityAsksGrid", SecurityAsksGrid.Save());
 			storage.SetValue("SecurityBidsGrid", SecurityBidsGrid.Save());

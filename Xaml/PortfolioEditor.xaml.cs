@@ -32,7 +32,7 @@ namespace StockSharp.Xaml
 		/// <summary>
 		/// The command to delete the selected instrument.
 		/// </summary>
-		public readonly static RoutedCommand ClearCommand = new RoutedCommand();
+		public static readonly RoutedCommand ClearCommand = new RoutedCommand();
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="PortfolioEditor"/>.
@@ -56,7 +56,7 @@ namespace StockSharp.Xaml
 		private void UpdatePortfolios(ThreadSafeObservableCollection<Portfolio> portfolios)
 		{
 			_portfolios = portfolios;
-			PortfolioComboBox.ItemsSource = _portfolios == null ? null : _portfolios.Items;
+			PortfolioComboBox.ItemsSource = _portfolios?.Items;
 		}
 
 		private ThreadSafeObservableCollection<Portfolio> _portfolios;

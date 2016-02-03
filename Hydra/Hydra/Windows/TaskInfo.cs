@@ -50,7 +50,8 @@ namespace StockSharp.Hydra.Windows
 			set
 			{
 				_isSelected = value;
-				NotifyChanged("IsSelected");
+				NotifyChanged(nameof(IsSelected));
+
 				Selected.SafeInvoke();
 			}
 		}
@@ -63,7 +64,7 @@ namespace StockSharp.Hydra.Windows
 			set
 			{
 				_isVisible = value;
-				NotifyChanged("IsVisible");
+				NotifyChanged(nameof(IsVisible));
 			}
 		}
 	}

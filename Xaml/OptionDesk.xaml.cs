@@ -228,11 +228,8 @@ namespace StockSharp.Xaml
 
 				((OptionDeskRow[])ItemsSource).ForEach(r =>
 				{
-					if (r.Call != null)
-						r.Call.ApplyModel();
-
-					if (r.Put != null)
-						r.Put.ApplyModel();
+					r.Call?.ApplyModel();
+					r.Put?.ApplyModel();
 				});
 			}
 		}
