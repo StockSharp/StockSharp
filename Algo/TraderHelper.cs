@@ -704,7 +704,13 @@ namespace StockSharp.Algo
 				Security = oldOrder.Security,
 				Type = oldOrder.Type,
 				Price = newPrice ?? oldOrder.Price,
-				Volume = newVolume ?? oldOrder.Volume
+				Volume = newVolume ?? oldOrder.Volume,
+				ExpiryDate = oldOrder.ExpiryDate,
+				VisibleVolume = oldOrder.VisibleVolume,
+				BrokerCode = oldOrder.BrokerCode,
+				ClientCode = oldOrder.ClientCode,
+				RepoInfo = oldOrder.RepoInfo?.Clone(),
+				RpsInfo = oldOrder.RpsInfo?.Clone(),
 			};
 		}
 
