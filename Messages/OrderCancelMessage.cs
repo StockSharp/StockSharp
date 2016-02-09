@@ -72,6 +72,15 @@ namespace StockSharp.Messages
 		}
 
 		/// <summary>
+		/// Initialize <see cref="OrderCancelMessage"/>.
+		/// </summary>
+		/// <param name="type">Message type.</param>
+		protected OrderCancelMessage(MessageTypes type)
+			: base(type)
+		{
+		}
+
+		/// <summary>
 		/// Create a copy of <see cref="OrderCancelMessage"/>.
 		/// </summary>
 		/// <returns>Copy.</returns>
