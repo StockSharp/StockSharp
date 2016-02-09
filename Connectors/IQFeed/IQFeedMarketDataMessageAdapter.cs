@@ -994,7 +994,7 @@ namespace StockSharp.IQFeed
 				}
 
 				case MessageTypes.Error:
-					yield return new ErrorMessage { Error = new InvalidOperationException(str) };
+					yield return str.ToErrorMessage();
 					break;
 
 				default:

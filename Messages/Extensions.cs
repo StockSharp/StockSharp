@@ -399,5 +399,15 @@ namespace StockSharp.Messages
 
 			return message.ExecutionType == ExecutionTypes.Transaction && message.HasTradeInfo;
 		}
+
+		/// <summary>
+		/// Convert error test message to <see cref="ErrorMessage"/> instance.
+		/// </summary>
+		/// <param name="description">Error test message.</param>
+		/// <returns><see cref="ErrorMessage"/> instance.</returns>
+		public static ErrorMessage ToErrorMessage(this string description)
+		{
+			return new ErrorMessage { Error = new InvalidOperationException(description) };
+		}
 	}
 }

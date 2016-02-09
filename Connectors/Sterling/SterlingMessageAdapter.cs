@@ -52,19 +52,13 @@ namespace StockSharp.Sterling
 
 		private void SessionOnOnStiShutdown()
 		{
-			SendOutMessage(new ErrorMessage
-			{
-				Error = new Exception("Sterling is shutdown.")
-			});
+			SendOutError("Sterling is shutdown.");
 		}
 
 		/// <summary>
 		/// Gets a value indicating whether the connector supports position lookup.
 		/// </summary>
-		protected override bool IsSupportNativePortfolioLookup
-		{
-			get { return true; }
-		}
+		protected override bool IsSupportNativePortfolioLookup => true;
 
 		private void DisposeClient()
 		{
