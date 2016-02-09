@@ -18,6 +18,7 @@ namespace StockSharp.Algo
 	using System;
 	using System.Collections.Generic;
 	using System.Linq;
+	using System.Security;
 	using System.Threading;
 
 	using Ecng.Collections;
@@ -1199,6 +1200,21 @@ namespace StockSharp.Algo
 		{
 			var cancelMsg = MessageConverterHelper.CreateGroupCancelMessage(transactionId, isStopOrder, portfolio, direction, board, security == null ? default(SecurityId) : GetSecurityId(security), security);
 			SendInMessage(cancelMsg);
+		}
+
+		/// <summary>
+		/// Change password.
+		/// </summary>
+		/// <param name="newPassword">New password.</param>
+		public void ChangePassword(string newPassword)
+		{
+			var msg = new ChangePasswordMessage
+			{
+				NewPassword = newPassword.To<SecureString>(),
+				TransactionId = TransactionIdGenerator.GetNextId()
+			};
+
+			SendInMessage(msg);
 		}
 
 		private DateTimeOffset _prevTime;

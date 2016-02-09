@@ -258,20 +258,5 @@ namespace StockSharp.Transaq
 			if (candleMsg.IsFinished)
 				Stopped.SafeInvoke(series);
 		}
-
-		/// <summary>
-		/// Сменить пароль.
-		/// </summary>
-		/// <param name="newPassword">Новый пароль.</param>
-		public void ChangePassword(string newPassword)
-		{
-			var msg = new ChangePasswordMessage
-			{
-				NewPassword = newPassword.To<SecureString>(),
-				TransactionId = TransactionIdGenerator.GetNextId()
-			};
-
-			SendInMessage(msg);
-		}
 	}
 }

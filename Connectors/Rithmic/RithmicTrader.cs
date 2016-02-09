@@ -94,21 +94,6 @@ namespace StockSharp.Rithmic
 		}
 
 		/// <summary>
-		/// Change password.
-		/// </summary>
-		/// <param name="newPassword">New password.</param>
-		public void ChangePassword(string newPassword)
-		{
-			var msg = new ChangePasswordMessage
-			{
-				NewPassword = newPassword.To<SecureString>(),
-				TransactionId = TransactionIdGenerator.GetNextId()
-			};
-
-			SendInMessage(msg);
-		}
-
-		/// <summary>
 		/// To get time ranges for which this source of passed candles series has data.
 		/// </summary>
 		/// <param name="series">Candles series.</param>
