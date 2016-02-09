@@ -198,6 +198,7 @@ namespace StockSharp.Algo
 			}
 
 			_timeMessage.IsBack = true;
+			_timeMessage.TransactionId = InnerAdapter.TransactionIdGenerator.GetNextId();
 			InnerAdapter.SendInMessage(_timeMessage);
 		}
 

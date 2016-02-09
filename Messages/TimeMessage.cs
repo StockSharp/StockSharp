@@ -39,7 +39,7 @@ namespace StockSharp.Messages
 		/// Request identifier.
 		/// </summary>
 		[DataMember]
-		public string TransactionId { get; set; }
+		public long TransactionId { get; set; }
 
 		/// <summary>
 		/// ID of the original message <see cref="TimeMessage.TransactionId"/> for which this message is a response.
