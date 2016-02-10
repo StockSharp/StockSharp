@@ -660,9 +660,9 @@ namespace StockSharp.Studio
 				Address = serverAddress.To<EndPoint>(),
 				TargetCompId = "StockSharpMD",
 				SenderCompId = login,
-				MarketData = FixMarketData.MarketData,
-				ExchangeBoard = ExchangeBoard.Forts,
-				Version = FixVersions.Fix44
+				//MarketData = FixMarketData.MarketData,
+				//ExchangeBoard = ExchangeBoard.Forts,
+				//Version = FixVersions.Fix44
 			});
 
 			tsAdapter.InnerAdapters.Add(new FixMessageAdapter(connector.TransactionIdGenerator)
@@ -672,9 +672,9 @@ namespace StockSharp.Studio
 				Address = serverAddress.To<EndPoint>(),
 				TargetCompId = "StockSharpTS",
 				SenderCompId = login,
-				MarketData = FixMarketData.None,
-				ExchangeBoard = ExchangeBoard.Forts,
-				Version = FixVersions.Fix44,
+				//MarketData = FixMarketData.None,
+				//ExchangeBoard = ExchangeBoard.Forts,
+				//Version = FixVersions.Fix44,
 				RequestAllPortfolios = true
 			});
 		}

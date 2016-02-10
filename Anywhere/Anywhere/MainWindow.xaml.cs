@@ -83,24 +83,18 @@ namespace StockSharp.Anywhere
                 Address = QuikTrader.DefaultLuaAddress,
                 TargetCompId = "StockSharpTS",
                 SenderCompId = "quik",
-                ExchangeBoard = ExchangeBoard.Forts,
-                Version = FixVersions.Fix44_Lua,
                 RequestAllPortfolios = true,
-                MarketData = FixMarketData.None
             };
 
-            _messAdapter = new FixMessageAdapter(new MillisecondIncrementalIdGenerator())
+            _messAdapter = new LuaFixMarketDataMessageAdapter(new MillisecondIncrementalIdGenerator())
             {
                 Login = "quik",
                 Password = "quik".To<SecureString>(),
                 Address = QuikTrader.DefaultLuaAddress,
                 TargetCompId = "StockSharpMD",
                 SenderCompId = "quik",
-                ExchangeBoard = ExchangeBoard.Forts,
-                Version = FixVersions.Fix44_Lua,
                 RequestAllSecurities = true,
                 RequestAllPortfolios = false,
-                MarketData = FixMarketData.MarketData
             };
 
             _messAdapter.AddSupportedMessage(MessageTypes.Connect);

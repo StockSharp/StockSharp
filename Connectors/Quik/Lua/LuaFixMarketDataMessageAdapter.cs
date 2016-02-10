@@ -15,6 +15,8 @@ Copyright 2010 by StockSharp, LLC
 #endregion S# License
 namespace StockSharp.Quik.Lua
 {
+	using System;
+	using System.IO;
 	using System.Security;
 
 	using Ecng.Common;
@@ -22,6 +24,7 @@ namespace StockSharp.Quik.Lua
 	using Ecng.Localization;
 
 	using StockSharp.Fix;
+	using StockSharp.Fix.Dialects;
 	using StockSharp.Localization;
 	using StockSharp.Messages;
 
@@ -50,10 +53,21 @@ namespace StockSharp.Quik.Lua
 			TargetCompId = "StockSharpMD";
 			SenderCompId = "quik";
 			//ExchangeBoard = ExchangeBoard.Forts;
-			Version = FixVersions.Fix44_Lua;
+			//Version = FixVersions.Fix44_Lua;
 			RequestAllSecurities = true;
-			MarketData = FixMarketData.MarketData;
-			TimeZone = TimeHelper.Moscow;
+			//MarketData = FixMarketData.MarketData;
+			//TimeZone = TimeHelper.Moscow;
+		}
+
+		/// <summary>
+		/// Create FIX protocol dialect.
+		/// </summary>
+		/// <param name="stream">Stream.</param>
+		/// <param name="idGenerator">Sequence id generator.</param>
+		/// <returns>The dialect.</returns>
+		protected override IFixDialect CreateDialect(Stream stream, IncrementalIdGenerator idGenerator)
+		{
+			return new QuikLuaDialect(SenderCompId, TargetCompId, stream, Encoding, idGenerator, HeartbeatInterval, IsResetCounter, Login, Password, () => { throw new NotSupportedException(); });
 		}
 	}
 }

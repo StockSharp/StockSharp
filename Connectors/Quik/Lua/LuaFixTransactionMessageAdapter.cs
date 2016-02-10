@@ -15,7 +15,7 @@ Copyright 2010 by StockSharp, LLC
 #endregion S# License
 namespace StockSharp.Quik.Lua
 {
-	using System;
+	using System.IO;
 	using System.Security;
 
 	using Ecng.Common;
@@ -23,7 +23,7 @@ namespace StockSharp.Quik.Lua
 	using Ecng.Localization;
 
 	using StockSharp.Fix;
-	using StockSharp.Fix.Native;
+	using StockSharp.Fix.Dialects;
 	using StockSharp.Localization;
 	using StockSharp.Messages;
 
@@ -52,10 +52,7 @@ namespace StockSharp.Quik.Lua
 			TargetCompId = "StockSharpTS";
 			SenderCompId = "quik";
 			//ExchangeBoard = ExchangeBoard.Forts;
-			Version = FixVersions.Fix44_Lua;
 			RequestAllPortfolios = true;
-			MarketData = FixMarketData.None;
-			TimeZone = TimeHelper.Moscow;
 		}
 
 		/// <summary>
@@ -68,34 +65,14 @@ namespace StockSharp.Quik.Lua
 		}
 
 		/// <summary>
-		/// Финальная инициализация условия заявки.
+		/// Create FIX protocol dialect.
 		/// </summary>
-		/// <param name="ordType">Тип заявки.</param>
-		/// <param name="condition">Условие заявки.</param>
-		protected override void PostInitCondition(char ordType, OrderCondition condition)
+		/// <param name="stream">Stream.</param>
+		/// <param name="idGenerator">Sequence id generator.</param>
+		/// <returns>The dialect.</returns>
+		protected override IFixDialect CreateDialect(Stream stream, IncrementalIdGenerator idGenerator)
 		{
-		}
-
-		/// <summary>
-		/// Записать данные по условию заявки.
-		/// </summary>
-		/// <param name="writer">Писатель FIX данных.</param>
-		/// <param name="regMsg">Сообщение, содержащее информацию для регистрации заявки.</param>
-		protected override void WriteOrderCondition(IFixWriter writer, OrderRegisterMessage regMsg)
-		{
-			writer.WriteOrderCondition((QuikOrderCondition)regMsg.Condition, DateTimeFormat);
-		}
-
-		/// <summary>
-		/// Прочитать условие регистрации заявки <see cref="OrderRegisterMessage.Condition"/>.
-		/// </summary>
-		/// <param name="reader">Читатель данных.</param>
-		/// <param name="tag">Тэг.</param>
-		/// <param name="getCondition">Функция, возвращающая условие заявки.</param>
-		/// <returns>Успешно ли обработаны данные.</returns>
-		protected override bool ReadOrderCondition(IFixReader reader, FixTags tag, Func<OrderCondition> getCondition)
-		{
-			return reader.ReadOrderCondition(tag, TimeZone, DateTimeFormat, () => (QuikOrderCondition)getCondition());
+			return new QuikLuaDialect(SenderCompId, TargetCompId, stream, Encoding, idGenerator, HeartbeatInterval, IsResetCounter, Login, Password, CreateOrderCondition);
 		}
 	}
 }
