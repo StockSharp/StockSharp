@@ -15700,22 +15700,42 @@ namespace StockSharp.Localization
 		/// <summary>
 		/// Version
 		/// </summary>
-		public const string Str1662Key = "Str1662";
+		public const string VersionKey = "Version";
 
 		/// <summary>
 		/// Version
 		/// </summary>
-		public static string Str1662 => GetString(Str1662Key);
+		public static string Version => GetString(VersionKey);
+
+		/// <summary>
+		/// Dialect
+		/// </summary>
+		public const string DialectKey = "Dialect";
+
+		/// <summary>
+		/// Dialect
+		/// </summary>
+		public static string Dialect => GetString(DialectKey);
 
 		/// <summary>
 		/// Version FIX protocol.
 		/// </summary>
-		public const string Str1663Key = "Str1663";
+		public const string FixVersionProtocolKey = "FixVersionProtocol";
 
 		/// <summary>
 		/// Version FIX protocol.
 		/// </summary>
-		public static string Str1663 => GetString(Str1663Key);
+		public static string FixVersionProtocol => GetString(FixVersionProtocolKey);
+
+		/// <summary>
+		/// Dialect FIX protocol.
+		/// </summary>
+		public static string FixDialectProtocol => GetString(FixDialectProtocolKey);
+
+		/// <summary>
+		/// Dialect FIX protocol.
+		/// </summary>
+		public const string FixDialectProtocolKey = "FixDialectProtocol";
 
 		/// <summary>
 		/// FIX protocol format.

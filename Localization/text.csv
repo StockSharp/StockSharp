@@ -1570,8 +1570,10 @@ Str1657Params;For message with transaction ID {0} the original transaction ID wa
 Str1658;None;Отсутствует
 Str1659;Quotes;Котировки
 Str1660;Depth;Глубина
-Str1662;Version;Версия
-Str1663;Version FIX protocol.;Версия FIX протокола.
+Version;Version;Версия
+Dialect;Dialect;Диалект
+FixVersionProtocol;Version FIX protocol.;Версия FIX протокола.
+FixDialectProtocol;Dialect FIX protocol.;Диалект FIX протокола.
 FixFormat;FIX protocol format.;Формат FIX протокола.
 Str1664;Sender;Отправитель
 Str1665;Sender ID.;Идентификатор отправителя.
