@@ -21,6 +21,7 @@ namespace StockSharp.Sterling
 
 	using SterlingLib;
 
+	using StockSharp.Algo;
 	using StockSharp.Messages;
 	using StockSharp.Localization;
 
@@ -124,11 +125,11 @@ namespace StockSharp.Sterling
 				case TimeInForce.PutInQueue:
 				case null:
 				{
-					if (expiryDate == null || expiryDate == DateTimeOffset.MaxValue)
+					if (expiryDate == null || expiryDate.Value.IsGtc())
 						return "G";	// GTC
-					else if (expiryDate.Value.DateTime == DateTime.Today)
+					else if (expiryDate.Value.IsToday())
 						return "D";	// DAY
-					else if (expiryDate.Value.TimeOfDay == TimeSpan.Zero)
+					else if (expiryDate.Value.TimeOfDay == TimeHelper.LessOneDay)
 						return "O"; // OPG
 					else
 						return "N";	// NOW

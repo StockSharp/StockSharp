@@ -29,6 +29,7 @@ namespace StockSharp.ETrade.Native
 	using RestSharp.Authenticators;
 	using RestSharp.Contrib;
 
+	using StockSharp.Algo;
 	using StockSharp.Logging;
 	using StockSharp.Messages;
 	using StockSharp.Localization;
@@ -460,9 +461,9 @@ namespace StockSharp.ETrade.Native
 			request.allOrNone = order.TimeInForce == TimeInForce.MatchOrCancel;
 			request.quantity = (int)order.Volume;
 
-			if (order.ExpiryDate == null || order.ExpiryDate == DateTimeOffset.MaxValue)
+			if (order.ExpiryDate == null || order.ExpiryDate.Value.IsGtc())
 				request.orderTerm = "GOOD_UNTIL_CANCEL";
-			else if (order.ExpiryDate.Value.DateTime == DateTime.Today)
+			else if (order.ExpiryDate.Value.IsToday())
 				request.orderTerm = "GOOD_FOR_DAY";
 			else
 				throw new InvalidOperationException(LocalizedStrings.Str3354);

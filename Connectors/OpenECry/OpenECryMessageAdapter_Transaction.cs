@@ -142,7 +142,7 @@ namespace StockSharp.OpenECry
 				{
 					draft.Flags = OrderFlags.GTC;
 
-					if (message.ExpiryDate != null && message.ExpiryDate.Value.DateTime != DateTime.Today)
+					if (message.ExpiryDate != null && !message.ExpiryDate.Value.IsToday())
 						draft.End = message.ExpiryDate.Value.UtcDateTime;
 
 					break;

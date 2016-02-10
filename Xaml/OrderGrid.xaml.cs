@@ -360,9 +360,9 @@ namespace StockSharp.Xaml
 				case null:
 				case TimeInForce.PutInQueue:
 				{
-					if (expiryDate == null || expiryDate == DateTimeOffset.MaxValue)
+					if (expiryDate == null || expiryDate.Value.IsGtc())
 						return "GTC";
-					else if (expiryDate.Value.DateTime == DateTime.Today)
+					else if (expiryDate.Value.IsToday())
 						return "GTD";
 					else
 						return expiryDate.Value.LocalDateTime.ToString("d");

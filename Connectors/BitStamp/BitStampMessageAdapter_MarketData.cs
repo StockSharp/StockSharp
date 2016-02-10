@@ -97,7 +97,7 @@ namespace StockSharp.BitStamp
 				{
 					if (mdMsg.IsSubscribe)
 					{
-						if (mdMsg.From != null && mdMsg.From.Value.DateTime == DateTime.Today)
+						if (mdMsg.From != null && mdMsg.From.Value.IsToday())
 						{
 							_httpClient.RequestTransactions().Select(t => new ExecutionMessage
 							{

@@ -3981,5 +3981,25 @@ namespace StockSharp.Algo
 
 			return level1.Changes.ContainsKey(Level1Fields.BestBidPrice) || level1.Changes.ContainsKey(Level1Fields.BestAskPrice);
 		}
+
+		/// <summary>
+		/// To check the specified date is today.
+		/// </summary>
+		/// <param name="date">The specified date.</param>
+		/// <returns><see langword="true"/> if the specified date is today, otherwise, <see langword="false"/>.</returns>
+		public static bool IsToday(this DateTimeOffset date)
+		{
+			return date.DateTime == DateTime.Today;
+		}
+
+		/// <summary>
+		/// To check the specified date is GTC.
+		/// </summary>
+		/// <param name="date">The specified date.</param>
+		/// <returns><see langword="true"/> if the specified date is GTC, otherwise, <see langword="false"/>.</returns>
+		public static bool IsGtc(this DateTimeOffset date)
+		{
+			return date == DateTimeOffset.MaxValue;
+		}
 	}
 }
