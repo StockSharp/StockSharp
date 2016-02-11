@@ -83,7 +83,6 @@ namespace StockSharp.Anywhere
                 Address = QuikTrader.DefaultLuaAddress,
                 TargetCompId = "StockSharpTS",
                 SenderCompId = "quik",
-                RequestAllPortfolios = true,
             };
 
             _messAdapter = new LuaFixMarketDataMessageAdapter(new MillisecondIncrementalIdGenerator())
@@ -93,8 +92,6 @@ namespace StockSharp.Anywhere
                 Address = QuikTrader.DefaultLuaAddress,
                 TargetCompId = "StockSharpMD",
                 SenderCompId = "quik",
-                RequestAllSecurities = true,
-                RequestAllPortfolios = false,
             };
 
             _messAdapter.AddSupportedMessage(MessageTypes.Connect);

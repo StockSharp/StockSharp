@@ -72,7 +72,7 @@ namespace StockSharp.Quik.Lua
 		/// <returns>The dialect.</returns>
 		protected override IFixDialect CreateDialect(Stream stream, IncrementalIdGenerator idGenerator)
 		{
-			return new QuikLuaDialect(SenderCompId, TargetCompId, stream, Encoding, idGenerator, HeartbeatInterval, IsResetCounter, Login, Password, CreateOrderCondition);
+			return new QuikLuaDialect(SenderCompId, TargetCompId, stream, idGenerator, HeartbeatInterval, IsResetCounter, Login, Password, CreateOrderCondition);
 		}
 	}
 }
