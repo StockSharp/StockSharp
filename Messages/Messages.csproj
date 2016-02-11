@@ -80,7 +80,6 @@
     <Compile Include="CandlePriceLevel.cs" />
     <Compile Include="ChangePasswordMessage.cs" />
     <Compile Include="ChannelMessageAdapter.cs" />
-    <Compile Include="ClearQueueMessage.cs" />
     <Compile Include="ConnectionStates.cs" />
     <Compile Include="ConnectMessage.cs" />
     <Compile Include="Currency.cs" />

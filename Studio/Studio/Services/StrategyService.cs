@@ -104,7 +104,7 @@ namespace StockSharp.Studio.Services
 				// при инициализации по свечкам, время меняется быстрее и таймаут должен быть больше 30с.
 				ReConnectionSettings.TimeOutInterval = TimeSpan.MaxValue;
 
-				_historyMessageAdapter.BasketStorage.InnerStorages.AddRange(GetExecutionStorages());
+				//_historyMessageAdapter.BasketStorage.InnerStorages.AddRange(GetExecutionStorages());
 
 				this.LookupById(strategy.Security.Id);
 
