@@ -51,41 +51,6 @@ namespace StockSharp.Messages
 			{
 				return InnerCollection.Peek();
 			}
-
-			public void Clear(ClearQueueMessage message)
-			{
-				lock (SyncRoot)
-				{
-					switch (message.ClearMessageType)
-					{
-						case MessageTypes.Execution:
-							InnerCollection
-								.RemoveWhere(m =>
-								{
-									if (m.Value.Type != MessageTypes.Execution)
-										return false;
-
-									var execMsg = (ExecutionMessage)m.Value;
-
-									return (message.SecurityId == null || execMsg.SecurityId == message.SecurityId) && (message.Arg == null || message.Arg.Compare(execMsg.ExecutionType) == 0);
-								});
-
-							break;
-
-						case MessageTypes.QuoteChange:
-							InnerCollection.RemoveWhere(m => m.Value.Type == MessageTypes.QuoteChange && (message.SecurityId == null || ((QuoteChangeMessage)m.Value).SecurityId == message.SecurityId));
-							break;
-
-						case MessageTypes.Level1Change:
-							InnerCollection.RemoveWhere(m => m.Value.Type == MessageTypes.Level1Change && (message.SecurityId == null || ((Level1ChangeMessage)m.Value).SecurityId == message.SecurityId));
-							break;
-
-						case null:
-							InnerCollection.Clear();
-							break;
-					}
-				}
-			}
 		}
 
 		private static readonly MemoryStatisticsValue<Message> _msgStat = new MemoryStatisticsValue<Message>(LocalizedStrings.Messages);
@@ -206,20 +171,11 @@ namespace StockSharp.Messages
 			if (!IsOpened)
 				throw new InvalidOperationException();
 
-			var clearMsg = message as ClearQueueMessage;
+			//if (!(message is TimeMessage) && message.GetType().Name != "BasketMessage")
+			//	Console.WriteLine(">> ({0}) {1}", System.Threading.Thread.CurrentThread.Name, message);
 
-			if (clearMsg != null)
-			{
-				_messageQueue.Clear(clearMsg);
-			}
-			else
-			{
-				//if (!(message is TimeMessage) && message.GetType().Name != "BasketMessage")
-				//	Console.WriteLine(">> ({0}) {1}", System.Threading.Thread.CurrentThread.Name, message);
-
-				_msgStat.Add(message);
-				_messageQueue.Enqueue(new KeyValuePair<DateTimeOffset, Message>(message.LocalTime, message));	
-			}
+			_msgStat.Add(message);
+			_messageQueue.Enqueue(new KeyValuePair<DateTimeOffset, Message>(message.LocalTime, message));
 		}
 
 		/// <summary>

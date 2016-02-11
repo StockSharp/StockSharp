@@ -17,6 +17,7 @@ namespace StockSharp.Algo.Testing
 {
 	using System;
 	using System.Collections.Generic;
+	using System.Globalization;
 	using System.Linq;
 
 	using Ecng.Collections;
@@ -72,12 +73,115 @@ namespace StockSharp.Algo.Testing
 			public override DateTimeOffset CurrentTime => _parent.CurrentTime;
 		}
 
+		private sealed class HistoryEmulationMessageChannel : Cloneable<IMessageChannel>, IMessageChannel
+		{
+			private class BlockingPriorityQueue : BaseBlockingQueue<KeyValuePair<DateTimeOffset, Message>, OrderedPriorityQueue<DateTimeOffset, Message>>
+			{
+				public BlockingPriorityQueue()
+					: base(new OrderedPriorityQueue<DateTimeOffset, Message>())
+				{
+				}
+
+				protected override void OnEnqueue(KeyValuePair<DateTimeOffset, Message> item, bool force)
+				{
+					InnerCollection.Enqueue(item.Key, item.Value);
+				}
+
+				protected override KeyValuePair<DateTimeOffset, Message> OnDequeue()
+				{
+					return InnerCollection.Dequeue();
+				}
+
+				protected override KeyValuePair<DateTimeOffset, Message> OnPeek()
+				{
+					return InnerCollection.Peek();
+				}
+			}
+
+			private readonly BlockingPriorityQueue _messageQueue = new BlockingPriorityQueue();
+
+			private readonly HistoryMessageAdapter _historyMessageAdapter;
+			private readonly Action<Exception> _errorHandler;
+
+			public HistoryEmulationMessageChannel(HistoryMessageAdapter historyMessageAdapter, Action<Exception> errorHandler)
+			{
+				if (historyMessageAdapter == null)
+					throw new ArgumentNullException(nameof(historyMessageAdapter));
+
+				if (errorHandler == null)
+					throw new ArgumentNullException(nameof(errorHandler));
+
+				_historyMessageAdapter = historyMessageAdapter;
+				_errorHandler = errorHandler;
+
+				_messageQueue.Close();
+			}
+
+			public event Action<Message> NewOutMessage;
+
+			public bool IsOpened => !_messageQueue.IsClosed;
+
+			public void Open()
+			{
+				_messageQueue.Open();
+
+				ThreadingHelper
+					.Thread(() => CultureInfo.InvariantCulture.DoInCulture(() =>
+					{
+						while (!_messageQueue.IsClosed)
+						{
+							try
+							{
+								var sended = _historyMessageAdapter.SendOutMessage();
+
+								KeyValuePair<DateTimeOffset, Message> pair;
+
+								if (!_messageQueue.TryDequeue(out pair, true, !sended))
+								{
+									if (!sended)
+										break;
+								}
+								else
+									NewOutMessage.SafeInvoke(pair.Value);
+							}
+							catch (Exception ex)
+							{
+								_errorHandler(ex);
+							}
+						}
+					}))
+					.Name("History emulation channel thread.")
+					.Launch();
+			}
+
+			public void Close()
+			{
+				_messageQueue.Close();
+			}
+
+			public void SendInMessage(Message message)
+			{
+				if (!IsOpened)
+					Open();
+
+				_messageQueue.Enqueue(new KeyValuePair<DateTimeOffset, Message>(message.LocalTime, message));
+			}
+
+			void IDisposable.Dispose()
+			{
+				Close();
+			}
+
+			public override IMessageChannel Clone()
+			{
+				return new HistoryEmulationMessageChannel(_historyMessageAdapter, _errorHandler);
+			}
+		}
+
 		private readonly CachedSynchronizedDictionary<Tuple<SecurityId, MarketDataTypes, object>, int> _subscribedCandles = new CachedSynchronizedDictionary<Tuple<SecurityId, MarketDataTypes, object>, int>();
 		private readonly CachedSynchronizedDictionary<Tuple<SecurityId, MarketDataTypes, object>, int> _historySourceSubscriptions = new CachedSynchronizedDictionary<Tuple<SecurityId, MarketDataTypes, object>, int>();
 		private readonly SynchronizedDictionary<Tuple<SecurityId, MarketDataTypes, object>, CandleSeries> _series = new SynchronizedDictionary<Tuple<SecurityId, MarketDataTypes, object>, CandleSeries>();
 		
-		private readonly InMemoryMessageChannel _historyChannel;
-
 		/// <summary>
 		/// Initializes a new instance of the <see cref="HistoryEmulationConnector"/>.
 		/// </summary>
@@ -122,9 +226,6 @@ namespace StockSharp.Algo.Testing
 			_initialMoney = portfolios.ToDictionary(pf => pf, pf => pf.BeginValue);
 			EntityFactory = new EmulationEntityFactory(securityProvider, _initialMoney.Keys);
 
-			InMessageChannel = new PassThroughMessageChannel();
-			OutMessageChannel = new PassThroughMessageChannel();
-
 			LatencyManager = null;
 			RiskManager = null;
 			CommissionManager = null;
@@ -132,16 +233,17 @@ namespace StockSharp.Algo.Testing
 			SlippageManager = null;
 
 			HistoryMessageAdapter = new HistoryMessageAdapter(TransactionIdGenerator, securityProvider) { StorageRegistry = storageRegistry };
-			_historyChannel = new InMemoryMessageChannel("History Out", SendOutError);
+			InMessageChannel = new HistoryEmulationMessageChannel(HistoryMessageAdapter, SendOutError);
+			OutMessageChannel = new PassThroughMessageChannel();
 
 			Adapter = new HistoryBasketMessageAdapter(this);
 			Adapter.InnerAdapters.Add(EmulationAdapter);
-			Adapter.InnerAdapters.Add(new ChannelMessageAdapter(HistoryMessageAdapter, new InMemoryMessageChannel("History In", SendOutError), _historyChannel));
+			Adapter.InnerAdapters.Add(HistoryMessageAdapter);
 
 			// при тестировании по свечкам, время меняется быстрее и таймаут должен быть больше 30с.
 			ReConnectionSettings.TimeOutInterval = TimeSpan.MaxValue;
 
-			MaxMessageCount = 1000;
+			//MaxMessageCount = 1000;
 
 			TradesKeepCount = 0;
 		}
@@ -156,8 +258,8 @@ namespace StockSharp.Algo.Testing
 		/// </summary>
 		public int MaxMessageCount
 		{
-			get { return _historyChannel.MaxMessageCount; }
-			set { _historyChannel.MaxMessageCount = value; }
+			get { return HistoryMessageAdapter.MaxMessageCount; }
+			set { HistoryMessageAdapter.MaxMessageCount = value; }
 		}
 
 		private readonly Dictionary<Portfolio, decimal> _initialMoney;

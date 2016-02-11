@@ -36,9 +36,7 @@ namespace StockSharp.Algo.Testing
 		/// <summary>
 		/// The adapter, executing messages in <see cref="IMarketEmulator"/>.
 		/// </summary>
-		public EmulationMessageAdapter EmulationAdapter
-		{
-			get; }
+		public EmulationMessageAdapter EmulationAdapter { get; }
 
 		/// <summary>
 		/// Gets a value indicating whether the re-registration orders via the method <see cref="IConnector.ReRegisterOrder(StockSharp.BusinessEntities.Order,StockSharp.BusinessEntities.Order)"/> as a single transaction.
