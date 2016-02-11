@@ -1460,13 +1460,9 @@ Str1542Params;For portfolio {0} adapter is already specified.;Для портф�
 Str1543;Money;Деньги
 Str1544;Selected: ;Выбрано: 
 Str1545Params;Editing {0};Редактирование {0}
-Str1546;Minimum price step is not specified.;Минимальный шаг цены не указан.
-Str1547;Trading board is not specified.;Торговая площадка не указана.
 Str1548Params;Security {0} is missing in the collection.;Инструмент {0} отсутствует в коллекции.
 Str1549Params;{0} is an invalid identifier. Symbols '{1}' are not allowed.;'{0}' является недопустимым идентификатором. Символы '{1}' являются недопустимыми.
 Str1550;Symbol @ is met several times.;Символ @ встречается несколько раз.
-Str1551;Security code is not specified.;Код инструмента не указан.
-Str1552;Exchange board not specified.;Биржевая площадка не указана.
 Str1553Params;Description of connection {0} not found.;Описание для подключения {0} не найдено.
 Str1554;Working connection can not be deleted.;Нельзя удалить подключенное соединение.
 Str1555;Working connection can not be edited.;Нельзя редактировать подключенное соединение.
@@ -3053,7 +3049,6 @@ Str3271;Panel for viewing own trades data.;Панель для просмотр�
 Str3272;Market depth with quotes, showing the depth of market.;Стакан с котировками, показывающий глубину рынка.
 Str3273;Incorrect limit order price.;Неверно указана цена для лимитной заявки.
 Str3274;Securities.;Торговые инструменты.
-Str3275Params;Security with ID {0} already exists.;Инструмент с идентификатором {0} уже существует.
 Str3276;New securities in storage;Новые инструменты в хранилище
 Str3277;Open market depth;Открыть стакан
 Str3278;Trades feed;Лента сделок

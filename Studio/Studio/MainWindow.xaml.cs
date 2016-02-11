@@ -555,7 +555,7 @@ namespace StockSharp.Studio
 				{
 					if (_entityRegistry.Securities.ReadById(id) != null)
 					{
-						return LocalizedStrings.Str3275Params.Put(id);
+						return LocalizedStrings.Str2927Params.Put(id);
 					}
 
 					return null;

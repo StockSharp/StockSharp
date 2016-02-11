@@ -523,7 +523,7 @@ namespace StockSharp.Messages
 						var step = getTypeValue(UnitTypes.Step);
 
 						if (step == null || step == 0)
-							throw new InvalidOperationException(LocalizedStrings.Str1546);
+							throw new InvalidOperationException(LocalizedStrings.Str2925);
 
 						value /= step.Value;
 						break;

@@ -94,15 +94,21 @@ namespace StockSharp.Xaml
 						.Owner(this)
 						.Error();
 
-			if (security.PriceStep == null)
+			if (security.PriceStep == null || security.PriceStep == 0)
 			{
-				mbBuilder.Text(LocalizedStrings.Str1546).Show();
+				mbBuilder.Text(LocalizedStrings.Str2925).Show();
+				return;
+			}
+
+			if (security.VolumeStep == null || security.VolumeStep == 0)
+			{
+				mbBuilder.Text(LocalizedStrings.Str2924).Show();
 				return;
 			}
 
 			if (security.Board == null)
 			{
-				mbBuilder.Text(LocalizedStrings.Str1547).Show();
+				mbBuilder.Text(LocalizedStrings.Str2926).Show();
 				return;
 			}
 

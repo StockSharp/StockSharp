@@ -553,6 +553,16 @@
             The diagram element name change event.
             </summary>
     </member>
+    <member name="E:StockSharp.Xaml.Diagram.DiagramElement.SocketAdded">
+      <summary>
+            The diagram element connection added event.
+            </summary>
+    </member>
+    <member name="E:StockSharp.Xaml.Diagram.DiagramElement.SocketRemoved">
+      <summary>
+            The diagram element connection removed event.
+            </summary>
+    </member>
     <member name="M:StockSharp.Xaml.Diagram.DiagramElement.#ctor">
       <summary>
             Initializes a new instance of the <see cref="T:StockSharp.Xaml.Diagram.DiagramElement" />.
@@ -2254,17 +2264,6 @@
             Save settings.
             </summary>
       <param name="storage">Settings storage.</param>
-    </member>
-    <member name="T:StockSharp.Xaml.Diagram.IndicatorTypeItemsSource">
-      <summary>
-            The graphical component for the indicator type choosing.
-            </summary>
-    </member>
-    <member name="M:StockSharp.Xaml.Diagram.IndicatorTypeItemsSource.GetValues">
-      <summary>
-            To get a list of available indicators types.
-            </summary>
-      <returns>The indicators types list.</returns>
     </member>
     <member name="T:StockSharp.Xaml.Diagram.SocketTypesSource">
       <summary>

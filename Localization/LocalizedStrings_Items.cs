@@ -14598,26 +14598,6 @@ namespace StockSharp.Localization
 		public static string Str1545Params => GetString(Str1545ParamsKey);
 
 		/// <summary>
-		/// Minimum price step is not specified.
-		/// </summary>
-		public const string Str1546Key = "Str1546";
-
-		/// <summary>
-		/// Minimum price step is not specified.
-		/// </summary>
-		public static string Str1546 => GetString(Str1546Key);
-
-		/// <summary>
-		/// Trading board is not specified.
-		/// </summary>
-		public const string Str1547Key = "Str1547";
-
-		/// <summary>
-		/// Trading board is not specified.
-		/// </summary>
-		public static string Str1547 => GetString(Str1547Key);
-
-		/// <summary>
 		/// Security {0} is missing in the collection.
 		/// </summary>
 		public const string Str1548ParamsKey = "Str1548Params";
@@ -14646,26 +14626,6 @@ namespace StockSharp.Localization
 		/// Symbol @ is met several times.
 		/// </summary>
 		public static string Str1550 => GetString(Str1550Key);
-
-		/// <summary>
-		/// Security code is not specified.
-		/// </summary>
-		public const string Str1551Key = "Str1551";
-
-		/// <summary>
-		/// Security code is not specified.
-		/// </summary>
-		public static string Str1551 => GetString(Str1551Key);
-
-		/// <summary>
-		/// Stock exchange board not specified.
-		/// </summary>
-		public const string Str1552Key = "Str1552";
-
-		/// <summary>
-		/// Stock exchange board not specified.
-		/// </summary>
-		public static string Str1552 => GetString(Str1552Key);
 
 		/// <summary>
 		/// Description of connection {0} not found.
@@ -30476,16 +30436,6 @@ namespace StockSharp.Localization
 		/// Securities.
 		/// </summary>
 		public static string Str3274 => GetString(Str3274Key);
-
-		/// <summary>
-		/// Security with ID {0} already exists.
-		/// </summary>
-		public const string Str3275ParamsKey = "Str3275Params";
-
-		/// <summary>
-		/// Security with ID {0} already exists.
-		/// </summary>
-		public static string Str3275Params => GetString(Str3275ParamsKey);
 
 		/// <summary>
 		/// New securities in storage

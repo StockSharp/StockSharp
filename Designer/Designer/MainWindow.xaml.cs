@@ -17,7 +17,6 @@ namespace StockSharp.Designer
 {
 	using System;
 	using System.ComponentModel;
-	using System.Diagnostics;
 	using System.Globalization;
 	using System.IO;
 	using System.Linq;
@@ -254,7 +253,7 @@ namespace StockSharp.Designer
 				wnd.ValidateId = id =>
 				{
 					if (entityRegistry.Securities.ReadById(id) != null)
-						return LocalizedStrings.Str3275Params.Put(id);
+						return LocalizedStrings.Str2927Params.Put(id);
 
 					return null;
 				};

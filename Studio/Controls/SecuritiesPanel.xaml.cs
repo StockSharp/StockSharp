@@ -202,19 +202,25 @@ namespace StockSharp.Studio.Controls
 
 				if (security.Code.IsEmpty())
 				{
-					mbBuilder.Text(LocalizedStrings.Str1551).Show();
+					mbBuilder.Text(LocalizedStrings.Str2923).Show();
 					return;
 				}
 
 				if (security.Board == null)
 				{
-					mbBuilder.Text(LocalizedStrings.Str1547).Show();
+					mbBuilder.Text(LocalizedStrings.Str2926).Show();
 					return;
 				}
 
-				if (security.PriceStep == null)
+				if (security.PriceStep == null || security.PriceStep == 0)
 				{
-					mbBuilder.Text(LocalizedStrings.Str1546).Show();
+					mbBuilder.Text(LocalizedStrings.Str2925).Show();
+					return;
+				}
+
+				if (security.VolumeStep == null || security.VolumeStep == 0)
+				{
+					mbBuilder.Text(LocalizedStrings.Str2924).Show();
 					return;
 				}
 
@@ -222,7 +228,7 @@ namespace StockSharp.Studio.Controls
 
 				if (entityRegistry.Securities.ReadById(id) != null)
 				{
-					mbBuilder.Text(LocalizedStrings.Str3275Params.Put(id)).Show();
+					mbBuilder.Text(LocalizedStrings.Str2927Params.Put(id)).Show();
 					return;
 				}
 
