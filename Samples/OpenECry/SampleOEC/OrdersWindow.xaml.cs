@@ -16,6 +16,7 @@ Copyright 2010 by StockSharp, LLC
 namespace SampleOEC
 {
 	using System.Collections.Generic;
+	using System.Windows;
 
 	using Ecng.Common;
 	using Ecng.Xaml;
@@ -54,6 +55,11 @@ namespace SampleOEC
 			{
 				MainWindow.Instance.Trader.ReRegisterOrder(order, window.Order);
 			}
+		}
+
+		private void CancelAll_OnClick(object sender, RoutedEventArgs e)
+		{
+			MainWindow.Instance.Trader.CancelOrders();
 		}
 	}
 }
