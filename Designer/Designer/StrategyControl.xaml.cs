@@ -583,6 +583,11 @@
 				}
 			};
 
+			_connector.Disconnected += () =>
+			{
+				this.GuiAsync(() => _connector.Dispose());
+			};
+
 			TicksAndDepthsProgress.Value = 0;
 
 			DiagramDebuggerControl.Debugger.IsEnabled = true;

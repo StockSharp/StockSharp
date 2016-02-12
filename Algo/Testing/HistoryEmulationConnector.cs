@@ -373,6 +373,16 @@ namespace StockSharp.Algo.Testing
 		}
 
 		/// <summary>
+		/// To release allocated resources. In particular, to disconnect from the trading system via <see cref="Connector.Disconnect"/>.
+		/// </summary>
+		protected override void DisposeManaged()
+		{
+			base.DisposeManaged();
+
+			HistoryMessageAdapter.Dispose();
+		}
+
+		/// <summary>
 		/// To start the emulation.
 		/// </summary>
 		public void Start()
