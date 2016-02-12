@@ -31,6 +31,7 @@ namespace StockSharp.Algo.Candles.Compression
 	public abstract class RealTimeCandleBuilderSource<T> : ConvertableCandleBuilderSource<T>
 	{
 		private readonly SynchronizedDictionary<Security, CachedSynchronizedList<CandleSeries>> _registeredSeries = new SynchronizedDictionary<Security, CachedSynchronizedList<CandleSeries>>();
+		private readonly OrderedPriorityQueue<DateTimeOffset, CandleSeries> _seriesByDates = new OrderedPriorityQueue<DateTimeOffset, CandleSeries>();
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="RealTimeCandleBuilderSource{T}"/>.
@@ -42,6 +43,7 @@ namespace StockSharp.Algo.Candles.Compression
 				throw new ArgumentNullException(nameof(connector));
 
 			Connector = connector;
+			Connector.MarketTimeChanged += OnConnectorMarketTimeChanged;
 		}
 
 		/// <summary>
@@ -69,9 +71,11 @@ namespace StockSharp.Algo.Candles.Compression
 
 			series.IsNew = true;
 			_registeredSeries.SafeAdd(series.Security, out registerSecurity).Add(series);
-
+			
 			if (registerSecurity)
 				RegisterSecurity(series.Security);
+
+			_seriesByDates.Add(new KeyValuePair<DateTimeOffset, CandleSeries>(to, series));
 		}
 
 		/// <summary>
@@ -95,6 +99,8 @@ namespace StockSharp.Algo.Candles.Compression
 				UnRegisterSecurity(series.Security);
 				_registeredSeries.Remove(series.Security);
 			}
+
+			_seriesByDates.RemoveWhere(i => i.Value == series);
 
 			RaiseStopped(series);
 		}
@@ -152,6 +158,25 @@ namespace StockSharp.Algo.Candles.Compression
 						RaiseProcessing(series, securityValues);
 					}
 				}
+			}
+		}
+
+		private void OnConnectorMarketTimeChanged(TimeSpan value)
+		{
+			if (_seriesByDates.Count == 0)
+				return;
+
+			var pair = _seriesByDates.Peek();
+
+			while (pair.Key <= Connector.CurrentTime)
+			{
+				RaiseStopped(pair.Value);
+				_seriesByDates.Dequeue();
+
+				if (_seriesByDates.Count == 0)
+					break;
+
+				pair = _seriesByDates.Peek();
 			}
 		}
 	}
