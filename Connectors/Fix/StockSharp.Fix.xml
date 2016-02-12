@@ -2439,6 +2439,54 @@
       <summary>
       </summary>
     </member>
+    <member name="T:StockSharp.Fix.Native.MassCancelResponse">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.MassCancelResponse.CancelRequestRejected">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.MassCancelResponse.CancelOrdersForASecurity">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.MassCancelResponse.CancelOrdersForAnUnderlyingSecurity">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.MassCancelResponse.CancelOrdersForAProduct">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.MassCancelResponse.CancelOrdersForACficode">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.MassCancelResponse.CancelOrdersForASecuritytype">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.MassCancelResponse.CancelOrdersForATradingSession">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.MassCancelResponse.CancelAllOrders">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.MassCancelResponse.CancelOrdersForAMarket">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.MassCancelResponse.CancelOrdersForAMarketSegment">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.MassCancelResponse.CancelOrdersForASecurityGroup">
+      <summary>
+      </summary>
+    </member>
     <member name="T:StockSharp.Fix.Native.PosReqType">
       <summary>
       </summary>
@@ -3355,6 +3403,34 @@
       <summary>
       </summary>
     </member>
+    <member name="T:StockSharp.Fix.Native.TrdRegTimestampType">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.TrdRegTimestampType.ExecutionTime">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.TrdRegTimestampType.TimeIn">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.TrdRegTimestampType.TimeOut">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.TrdRegTimestampType.BrokerReceipt">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.TrdRegTimestampType.BrokerExecution">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.TrdRegTimestampType.DeskReceipt">
+      <summary>
+      </summary>
+    </member>
     <member name="T:StockSharp.Fix.Native.ExecutionReport">
       <summary>
             Execution report.
@@ -3382,11 +3458,28 @@
     </member>
     <member name="F:StockSharp.Fix.Native.ExecutionReport.OrderQty">
       <summary>
-      </summary>
+            Quantity ordered. This represents the number of shares for equities or par, face or nominal value for FI instruments.
+            </summary>
     </member>
     <member name="F:StockSharp.Fix.Native.ExecutionReport.LeavesQty">
       <summary>
-      </summary>
+            Quantity open for further execution.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.Native.ExecutionReport.CumQty">
+      <summary>
+            Total quantity (e.g. number of shares) filled.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.Native.ExecutionReport.TrdRegTimestamp">
+      <summary>
+            Traded / Regulatory timestamp value.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.Native.ExecutionReport.TrdRegTimestampType">
+      <summary>
+            Traded / Regulatory timestamp type.
+            </summary>
     </member>
     <member name="F:StockSharp.Fix.Native.ExecutionReport.Price">
       <summary>
@@ -3463,6 +3556,10 @@
       <summary>
             Date of order expiration (last day the order can trade), always expressed in terms of the local market date.
             </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.ExecutionReport.ExpireTime">
+      <summary>
+      </summary>
     </member>
     <member name="F:StockSharp.Fix.Native.ExecutionReport.LastPx">
       <summary>
@@ -4219,6 +4316,18 @@
       </summary>
     </member>
     <member name="F:StockSharp.Fix.Native.FixTags.NoPosAmt">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.FixTags.NoTrdRegTimestamps">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.FixTags.TrdRegTimestamp">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.FixTags.TrdRegTimestampType">
       <summary>
       </summary>
     </member>

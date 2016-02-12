@@ -927,17 +927,6 @@
       <param name="param">Parameter.</param>
       <returns>Object <typeparamref name="T" />.</returns>
     </member>
-    <member name="E:StockSharp.Xaml.Diagram.DiagramElementParam`1.PropertyChanged">
-      <summary>
-            The connection properties value change event.
-            </summary>
-    </member>
-    <member name="M:StockSharp.Xaml.Diagram.DiagramElementParam`1.OnPropertyChanged(System.String)">
-      <summary>
-            To call the connection property value change event.
-            </summary>
-      <param name="propertyName">Property name.</param>
-    </member>
     <member name="M:StockSharp.Xaml.Diagram.DiagramElementParam`1.Load(Ecng.Serialization.SettingsStorage)">
       <summary>
             Load settings.
