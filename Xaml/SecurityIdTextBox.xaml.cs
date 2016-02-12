@@ -108,7 +108,7 @@ namespace StockSharp.Xaml
 
 		private void RefreshId()
 		{
-			Text = Security.Code + "@" + Security.Board;
+			Text = Security.Code + "@" + Security.Board.Code;
 		}
 
 		/// <summary>
