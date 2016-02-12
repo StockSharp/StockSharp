@@ -552,7 +552,7 @@ namespace StockSharp.Designer
 
 		private void RefreshCompositionCommand_OnCanExecute(object sender, CanExecuteRoutedEventArgs e)
 		{
-			e.CanExecute = true;
+			e.CanExecute = DockingManager.ActiveContent is DiagramEditorControl;
 		}
 
 		private void RefreshCompositionCommand_OnExecuted(object sender, ExecutedRoutedEventArgs e)
