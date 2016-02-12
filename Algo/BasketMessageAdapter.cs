@@ -390,7 +390,7 @@ namespace StockSharp.Algo
 
 		private void ProcessPortfolioMessage(string portfolioName, Message message)
 		{
-			var adapter = Portfolios.TryGetValue(portfolioName);
+			var adapter = portfolioName.IsEmpty() ? null : Portfolios.TryGetValue(portfolioName);
 
 			if (adapter == null)
 			{
