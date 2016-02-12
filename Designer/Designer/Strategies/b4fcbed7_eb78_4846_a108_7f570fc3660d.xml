@@ -131,7 +131,7 @@
                       <key>Value</key>
                       <value>
                         <Type type="string">int</Type>
-                        <Value type="int">5</Value>
+                        <Value type="int">10</Value>
                       </value>
                     </KeyValuePairBeginStringAndObjectEnd>
                   </Value>
@@ -146,7 +146,7 @@
                       <key>Value</key>
                       <value>
                         <Type type="string">int</Type>
-                        <Value type="int">20</Value>
+                        <Value type="int">80</Value>
                       </value>
                     </KeyValuePairBeginStringAndObjectEnd>
                   </Value>
@@ -2210,7 +2210,7 @@
                                     <key>Value</key>
                                     <value>
                                       <Type type="string">int</Type>
-                                      <Value type="int">5</Value>
+                                      <Value type="int">10</Value>
                                     </value>
                                   </KeyValuePairBeginStringAndObjectEnd>
                                 </Value>
@@ -2386,7 +2386,7 @@
                                     <key>Value</key>
                                     <value>
                                       <Type type="string">int</Type>
-                                      <Value type="int">20</Value>
+                                      <Value type="int">80</Value>
                                     </value>
                                   </KeyValuePairBeginStringAndObjectEnd>
                                 </Value>
@@ -2532,7 +2532,7 @@
                                     <key>Value</key>
                                     <value>
                                       <Type type="string">Ecng.ComponentModel.ComparisonOperator, Ecng.ComponentModel</Type>
-                                      <Value type="Ecng.ComponentModel.ComparisonOperator, Ecng.ComponentModel">GreaterOrEqual</Value>
+                                      <Value type="Ecng.ComponentModel.ComparisonOperator, Ecng.ComponentModel">Greater</Value>
                                     </value>
                                   </KeyValuePairBeginStringAndObjectEnd>
                                 </Value>
@@ -2547,7 +2547,7 @@
                                     <key>Value</key>
                                     <value>
                                       <Type type="string">Ecng.ComponentModel.ComparisonOperator, Ecng.ComponentModel</Type>
-                                      <Value type="Ecng.ComponentModel.ComparisonOperator, Ecng.ComponentModel">Less</Value>
+                                      <Value type="Ecng.ComponentModel.ComparisonOperator, Ecng.ComponentModel">LessOrEqual</Value>
                                     </value>
                                   </KeyValuePairBeginStringAndObjectEnd>
                                 </Value>
@@ -2693,7 +2693,7 @@
                                     <key>Value</key>
                                     <value>
                                       <Type type="string">Ecng.ComponentModel.ComparisonOperator, Ecng.ComponentModel</Type>
-                                      <Value type="Ecng.ComponentModel.ComparisonOperator, Ecng.ComponentModel">LessOrEqual</Value>
+                                      <Value type="Ecng.ComponentModel.ComparisonOperator, Ecng.ComponentModel">Less</Value>
                                     </value>
                                   </KeyValuePairBeginStringAndObjectEnd>
                                 </Value>
@@ -2708,7 +2708,7 @@
                                     <key>Value</key>
                                     <value>
                                       <Type type="string">Ecng.ComponentModel.ComparisonOperator, Ecng.ComponentModel</Type>
-                                      <Value type="Ecng.ComponentModel.ComparisonOperator, Ecng.ComponentModel">Greater</Value>
+                                      <Value type="Ecng.ComponentModel.ComparisonOperator, Ecng.ComponentModel">GreaterOrEqual</Value>
                                     </value>
                                   </KeyValuePairBeginStringAndObjectEnd>
                                 </Value>
