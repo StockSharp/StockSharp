@@ -79,23 +79,26 @@ namespace StockSharp.Quik
 			//20-ти символьное составное поле, может содержать код клиента и текстовый комментарий с тем же разделителем, что и при вводе заявки вручную.
 			//для ртс код клиента не обязателен
 			var clientCode = needDepoAccount ? message.PortfolioName : string.Empty;
+			
+			// http://www.quik.ru/forum/import/24383
+			//var splitter = message.PortfolioName.Contains("/") ? "//" : "/";
+			
+			// https://forum.quik.ru/forum10/topic1218/
+			var splitter = singleSlash ? "/" : "//";
+			const string prefix = "ss";
+			
+			clientCode = clientCode.IsEmpty() ? prefix : "{0}{1}{2}".Put(clientCode, splitter, prefix);
+			
 			if (!message.Comment.IsEmpty())
 			{
-				// http://www.quik.ru/forum/import/24383
-				//var splitter = message.PortfolioName.Contains("/") ? "//" : "/";
-
-				// https://forum.quik.ru/forum10/topic1218/
-				var splitter = singleSlash ? "/" : "//";
-
-				clientCode = clientCode.IsEmpty() ? message.Comment : "{0}{1}{2}".Put(clientCode, splitter, message.Comment);
-
-				if (clientCode.Length > 20)
-					clientCode = clientCode.Remove(20);
+				clientCode = "{0}_{1}".Put(clientCode, message.Comment);
 			}
 
-			if (!clientCode.IsEmpty())
-				transaction.SetClientCode(clientCode);
-
+			if (clientCode.Length > 20)
+				clientCode = clientCode.Remove(20);
+            
+			transaction.SetClientCode(clientCode);
+			
 			transaction.SetExpiryDate(message.TillDate);
 
 			if (message.VisibleVolume != null && message.VisibleVolume != message.Volume)
