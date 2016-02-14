@@ -1183,15 +1183,26 @@ namespace StockSharp.Quik
 				//var securityId = CreateSecurityId(func, DdeOrderColumns.SecurityCode, DdeOrderColumns.SecurityClass);
 				var account = func.Get<string>(DdeOrderColumns.Account);
 				var clientCode = func.Get<string>(DdeOrderColumns.ClientCode);
+				var comment = func.Get<string>(DdeOrderColumns.Comment);
 
 				var transactionId = func.Get<long>(DdeOrderColumns.TransactionId);
 
 				if (transactionId == 0)
 				{
 					if (SupportManualOrders)
+					{
+						if (comment.StartsWith("ss"))
+							return;
+							
 						transactionId = TransactionIdGenerator.GetNextId();
+					}
 					else
 						return;
+				}
+				
+				if (comment.StartsWith("ss"))
+				{
+					comment = comment.Remove(0, 2);
 				}
 
 				var order = new ExecutionMessage
@@ -1213,7 +1224,7 @@ namespace StockSharp.Quik
 
 					OrderType = func.GetOrderType(),
 					TimeInForce = func.GetTimeInForce(),
-					Comment = func.Get<string>(DdeOrderColumns.Comment),
+					Comment = comment,
 					OriginalTransactionId = transactionId,
 					OrderState = OrderStates.Active,
 					ExpiryDate = func.GetExpiryDate(DdeOrderColumns.ExpiryDate),
