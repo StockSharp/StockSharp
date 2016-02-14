@@ -91,7 +91,7 @@ namespace StockSharp.Quik
 			
 			if (!message.Comment.IsEmpty())
 			{
-				clientCode = "{0}_{1}".Put(clientCode, message.Comment);
+				clientCode = "{0}{1}".Put(clientCode, message.Comment);
 			}
 
 			if (clientCode.Length > 20)
