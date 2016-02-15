@@ -33,8 +33,10 @@ namespace StockSharp.Designer
 	{
 		private readonly LayoutManager _layoutManager;
 
-		public static readonly DependencyProperty CompositionProperty = DependencyProperty.Register("Composition", typeof (CompositionItem), typeof (DiagramEditorControl), 
-			new PropertyMetadata(null, CompositionPropertyChanged));
+		#region Composition property
+
+		public static readonly DependencyProperty CompositionProperty = DependencyProperty.Register("Composition", typeof(CompositionItem), typeof(DiagramEditorControl),
+		                                                                                            new PropertyMetadata(null, CompositionPropertyChanged));
 
 		private static void CompositionPropertyChanged(DependencyObject sender, DependencyPropertyChangedEventArgs args)
 		{
@@ -50,16 +52,11 @@ namespace StockSharp.Designer
 			set { SetValue(CompositionProperty, value); }
 		}
 
-		public static readonly DependencyProperty IsChangedProperty = DependencyProperty.Register("IsChanged", typeof(bool), typeof(DiagramEditorControl),
-			new PropertyMetadata(false));
+		#endregion
 
 		public override string Key => Composition.Key;
 
-		public bool IsChanged
-		{
-			get { return (bool)GetValue(IsChangedProperty); }
-			set { SetValue(IsChangedProperty, value); }
-		}
+		public bool IsChanged { get; set; }
 
 		public INotifyList<DiagramElement> PaletteElements
 		{
