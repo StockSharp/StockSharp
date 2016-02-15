@@ -234,9 +234,7 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="StockSharp.db" />
-    <None Include="Strategies\d2d7aeb2_ca92_4a88_9f2b_dccb72949af1.xml">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
+    <None Include="Strategies\d2d7aeb2_ca92_4a88_9f2b_dccb72949af1.xml" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="..\..\References\stocksharp.ico">
@@ -244,17 +242,11 @@
     </Resource>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Strategies\b4fcbed7_eb78_4846_a108_7f570fc3660d.xml">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
+    <None Include="Strategies\b4fcbed7_eb78_4846_a108_7f570fc3660d.xml" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Compositions\923f7b2e_0c1d_4c4c_a87f_baf3aaac2048.xml">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="Compositions\bf591486_88ac_41b2_8079_ca0c9eabf349.xml">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
+    <None Include="Compositions\923f7b2e_0c1d_4c4c_a87f_baf3aaac2048.xml" />
+    <None Include="Compositions\bf591486_88ac_41b2_8079_ca0c9eabf349.xml" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\FolderClosed.png" />
