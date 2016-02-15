@@ -580,24 +580,26 @@ namespace StockSharp.Quik
 			SendOutMessage(new ExecutionMessage
 			{
 				SecurityId = replaceMessage.SecurityId,
-				OriginalTransactionId = replaceMessage.OldTransactionId,
-				OrderId = replaceMessage.OldOrderId,
+				OriginalTransactionId = replaceMessage.TransactionId,
+				//OrderId = replaceMessage.OldOrderId,
 				ExecutionType = ExecutionTypes.Transaction,
 				OrderState = OrderStates.Failed,
-				IsCancelled = true,
+				//IsCancelled = true,
 				Error = error,
 				HasOrderInfo = true,
+				ServerTime = CurrentTime,
 			});
 
-			SendOutMessage(new ExecutionMessage
-			{
-				SecurityId = replaceMessage.SecurityId,
-				OriginalTransactionId = replaceMessage.TransactionId,
-				ExecutionType = ExecutionTypes.Transaction,
-				OrderState = OrderStates.Failed,
-				Error = error,
-				HasOrderInfo = true,
-			});
+			//SendOutMessage(new ExecutionMessage
+			//{
+			//	SecurityId = replaceMessage.SecurityId,
+			//	OriginalTransactionId = replaceMessage.TransactionId,
+			//	ExecutionType = ExecutionTypes.Transaction,
+			//	OrderState = OrderStates.Failed,
+			//	Error = error,
+			//	HasOrderInfo = true,
+			//	ServerTime = CurrentTime,
+			//});
 		}
 
 		/// <summary>

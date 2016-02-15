@@ -149,7 +149,7 @@ namespace StockSharp.Algo
 					case OrderStates.Active:
 					{
 						if (message.Balance != null)
-							_executions.SafeAdd(key, k => new Dictionary<long, decimal>())[message.OriginalTransactionId] = message.Balance.Value;
+							_executions.SafeAdd(key)[message.OriginalTransactionId] = message.Balance.Value;
 
 						break;
 					}
@@ -883,7 +883,7 @@ namespace StockSharp.Algo
 		/// </summary>
 		/// <param name="oldOrder">Cancelling order.</param>
 		/// <param name="newOrder">New order to register.</param>
-		public virtual void ReRegisterOrder(Order oldOrder, Order newOrder)
+		public void ReRegisterOrder(Order oldOrder, Order newOrder)
 		{
 			if (oldOrder == null)
 				throw new ArgumentNullException(nameof(oldOrder));
