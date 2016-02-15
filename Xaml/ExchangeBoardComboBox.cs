@@ -64,6 +64,7 @@ namespace StockSharp.Xaml
 		private void UpdateProvider(IExchangeInfoProvider provider)
 		{
 			_boards.Clear();
+			_boards.Add(_emptyBoard);
 
 			if (_exchangeInfoProvider != null)
 				_exchangeInfoProvider.BoardAdded -= _boards.Add;
@@ -107,14 +108,8 @@ namespace StockSharp.Xaml
 		/// </summary>
 		public ExchangeBoard SelectedBoard
 		{
-			get
-			{
-				return _selectedBoard == _emptyBoard ? null : _selectedBoard;
-			}
-			set
-			{
-				SetValue(SelectedBoardProperty, value ?? _emptyBoard);
-			}
+			get { return _selectedBoard == _emptyBoard ? null : _selectedBoard; }
+			set { SetValue(SelectedBoardProperty, value); }
 		}
 
 		private static void OnSelectedBoardPropertyChanged(DependencyObject source, DependencyPropertyChangedEventArgs e)
@@ -122,8 +117,8 @@ namespace StockSharp.Xaml
 			var board = (ExchangeBoard)e.NewValue;
 			var combo = (ExchangeBoardComboBox)source;
 
-			combo.SelectedItem = board;
 			combo._selectedBoard = board;
+			combo.SelectedItem = board ?? _emptyBoard;
 		}
 
 		/// <summary>
@@ -133,7 +128,9 @@ namespace StockSharp.Xaml
 		protected override void OnSelectionChanged(SelectionChangedEventArgs e)
 		{
 			base.OnSelectionChanged(e);
-			SelectedBoard = (ExchangeBoard)SelectedItem;
+
+			var board = (ExchangeBoard)SelectedItem;
+			SelectedBoard = board != _emptyBoard ? board : null;
 		}
 	}
 }

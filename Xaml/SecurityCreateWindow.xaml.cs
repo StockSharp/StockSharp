@@ -74,6 +74,7 @@ namespace StockSharp.Xaml
 					throw new ArgumentNullException(nameof(value));
 
 				SecurityId.Security = value;
+				SecurityId.IsReadOnly = true;
 				PropertyGrid.SelectedObject = value;
 
 				if (!SecurityId.Text.IsEmpty())
