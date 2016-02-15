@@ -328,7 +328,7 @@ namespace StockSharp.Algo
 
 			var order = orderInfo.Item1;
 			var isCancelled = orderInfo.Item2;
-			//var isReReregisterCancelled = orderInfo.Item3;
+			//var isReRegisterCancelled = orderInfo.Item3;
 			var raiseNewOrder = orderInfo.Item3;
 
 			var isPending = order.State == OrderStates.Pending;
@@ -355,7 +355,7 @@ namespace StockSharp.Algo
 
 				//// некоторые коннекторы не транслируют при отмене отмененный объем
 				//// esper. при перерегистрации заявок необходимо обновлять баланс
-				//if (message.Balance > 0 || !isCancelled || isReReregisterCancelled)
+				//if (message.Balance > 0 || !isCancelled || isReRegisterCancelled)
 				//{
 				//	// BTCE коннектор не транслирует баланс заявки
 				//	if (!(message.OrderState == OrderStates.Active && message.Balance == 0))
@@ -436,7 +436,7 @@ namespace StockSharp.Algo
 			return Tuple.Create(order, raiseNewOrder, isChanged);
 		}
 
-		public Tuple<OrderFail, bool> ProcessOrderFailMessage(Security security, ExecutionMessage message)
+		public IEnumerable<Tuple<OrderFail, bool>> ProcessOrderFailMessage(Security security, ExecutionMessage message)
 		{
 			if (security == null)
 				throw new ArgumentNullException(nameof(security));
@@ -446,62 +446,76 @@ namespace StockSharp.Algo
 
 			var data = GetData(security);
 
-			Order order = null;
+			var orders = new List<Tuple<Order, bool>>();
 
-			if (!message.OrderStringId.IsEmpty())
-				order = data.OrdersByStringId.TryGetValue(message.OrderStringId);
+			if (message.OriginalTransactionId == 0)
+				throw new ArgumentOutOfRangeException(nameof(message), message.OriginalTransactionId, LocalizedStrings.Str715);
 
-			bool isCancelled;
+			var o = (Order)data.Orders.TryGetValue(CreateOrderKey(message.OrderType, message.OriginalTransactionId, true));
 
-			if (order == null)
+			if (o != null /*&& order.Id == message.OrderId*/)
 			{
-				if (message.OriginalTransactionId == 0)
-					throw new ArgumentOutOfRangeException(nameof(message), message.OriginalTransactionId, LocalizedStrings.Str715);
+				orders.Add(Tuple.Create(o, true));
 
-				var orders = data.Orders;
+				// if replace
+				var replaced = (Order)data.Orders.TryGetValue(CreateOrderKey(message.OrderType, message.OriginalTransactionId, false));
 
-				order = (Order)orders.TryGetValue(CreateOrderKey(message.OrderType, message.OriginalTransactionId, true));
-
-				if (order != null && order.Id == message.OrderId)
-					isCancelled = true;
-				else
-				{
-					order = (Order)orders.TryGetValue(CreateOrderKey(message.OrderType, message.OriginalTransactionId, false));
-					isCancelled = false;
-				}
-
-				if (order == null)
-					return null;
+				if (replaced != null)
+					orders.Add(Tuple.Create(replaced, false));
 			}
 			else
 			{
-				var pair = data.Orders.LastOrDefault(p => p.Value.Order == order);
-				isCancelled = pair.Key.Item3;
+				o = (Order)data.Orders.TryGetValue(CreateOrderKey(message.OrderType, message.OriginalTransactionId, false));
+				orders.Add(Tuple.Create(o, false));
 			}
 
-			// ServerTime для заявки - это время регистрации
-			order.LastChangeTime = message.LocalTime;
-			order.LocalTime = message.LocalTime;
+			if (o == null)
+			{
+				if (!message.OrderStringId.IsEmpty())
+				{
+					o = data.OrdersByStringId.TryGetValue(message.OrderStringId);
 
-			if (message.OrderStatus != null)
-				order.Status = message.OrderStatus;
+					if (o != null)
+					{
+						var pair = data.Orders.LastOrDefault(p => p.Value.Order == o);
 
-			//для ошибок снятия не надо менять состояние заявки
-			if (!isCancelled)
-				order.State = OrderStates.Failed;
+						if (pair.Key != null)
+							orders.Add(Tuple.Create(pair.Value.Order, pair.Key.Item3));
+					}
+				}
+			}
 
-			if (message.Commission != null)
-				order.Commission = message.Commission;
+			if (orders.Count == 0)
+				return Enumerable.Empty<Tuple<OrderFail, bool>>();
 
-			message.CopyExtensionInfo(order);
+			return orders.Select(t =>
+			{
+				var order = t.Item1;
+				var isCancelled = t.Item2;
 
-			var error = message.Error ?? new InvalidOperationException(
-				isCancelled ? LocalizedStrings.Str716 : LocalizedStrings.Str717);
+				order.LastChangeTime = message.ServerTime;
+				order.LocalTime = message.LocalTime;
 
-			var fail = EntityFactory.CreateOrderFail(order, error);
-			fail.ServerTime = message.ServerTime;
-			fail.LocalTime = message.LocalTime;
-			return Tuple.Create(fail, isCancelled);
+				if (message.OrderStatus != null)
+					order.Status = message.OrderStatus;
+
+				//для ошибок снятия не надо менять состояние заявки
+				if (!isCancelled)
+					order.State = OrderStates.Failed;
+
+				if (message.Commission != null)
+					order.Commission = message.Commission;
+
+				message.CopyExtensionInfo(order);
+
+				var error = message.Error ?? new InvalidOperationException(
+					isCancelled ? LocalizedStrings.Str716 : LocalizedStrings.Str717);
+
+				var fail = EntityFactory.CreateOrderFail(order, error);
+				fail.ServerTime = message.ServerTime;
+				fail.LocalTime = message.LocalTime;
+				return Tuple.Create(fail, isCancelled);
+			});
 		}
 
 		public Tuple<MyTrade, bool> ProcessMyTradeMessage(Security security, ExecutionMessage message)

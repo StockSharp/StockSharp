@@ -89,6 +89,7 @@ namespace StockSharp.SmartCom
 				OrderState = OrderStates.Failed,
 				Error = new InvalidOperationException(LocalizedStrings.Str1869Params.Put(smartOrderId)),
 				HasOrderInfo = true,
+				ServerTime = CurrentTime,
 			});
 		}
 
@@ -186,6 +187,7 @@ namespace StockSharp.SmartCom
 				OrderStringId = smartOrderId,
 				Error = new InvalidOperationException(reason ?? LocalizedStrings.Str1870Params.Put(transactionId)),
 				HasOrderInfo = true,
+				ServerTime = CurrentTime,
 			});
 		}
 
@@ -201,6 +203,7 @@ namespace StockSharp.SmartCom
 				OrderState = OrderStates.Failed,
 				Error = new InvalidOperationException(LocalizedStrings.Str1871Params.Put(smartOrderId)),
 				HasOrderInfo = true,
+				ServerTime = CurrentTime,
 			});
 		}
 

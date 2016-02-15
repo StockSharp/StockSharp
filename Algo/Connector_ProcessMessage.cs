@@ -1291,39 +1291,38 @@ namespace StockSharp.Algo
 			}
 			else
 			{
-				var tuple = _entityCache.ProcessOrderFailMessage(security, message);
-
-				if (tuple == null)
-					return;
-
-				var fail = tuple.Item1;
-
-				TryProcessFilteredMarketDepth(security, message);
-
-				var isRegisterFail = (fail.Order.Id == null && fail.Order.StringId.IsEmpty()) || fail.Order.Status == OrderStatus.RejectedBySystem;
-
-				this.AddErrorLog(() => (isRegisterFail ? "OrderFailed" : "OrderCancelFailed")
-					+ Environment.NewLine + fail.Order + Environment.NewLine + fail.Error);
-
-				var isStop = fail.Order.Type == OrderTypes.Conditional;
-
-				if (isRegisterFail)
+				foreach (var tuple in _entityCache.ProcessOrderFailMessage(security, message))
 				{
-					_entityCache.AddRegisterFail(fail);
+					var fail = tuple.Item1;
 
-					if (isStop)
-						RaiseStopOrdersRegisterFailed(new[] { fail });
-					else
-						RaiseOrderRegisterFailed(fail);
-				}
-				else
-				{
-					_entityCache.AddCancelFail(fail);
+					TryProcessFilteredMarketDepth(security, message);
 
-					if (isStop)
-						RaiseStopOrdersCancelFailed(new[] { fail });
+					//var isRegisterFail = (fail.Order.Id == null && fail.Order.StringId.IsEmpty()) || fail.Order.Status == OrderStatus.RejectedBySystem;
+					var isRegisterFail = tuple.Item2;
+
+					this.AddErrorLog(() => (isRegisterFail ? "OrderFailed" : "OrderCancelFailed")
+						+ Environment.NewLine + fail.Order + Environment.NewLine + fail.Error);
+
+					var isStop = fail.Order.Type == OrderTypes.Conditional;
+
+					if (isRegisterFail)
+					{
+						_entityCache.AddRegisterFail(fail);
+
+						if (isStop)
+							RaiseStopOrdersRegisterFailed(new[] { fail });
+						else
+							RaiseOrderRegisterFailed(fail);
+					}
 					else
-						RaiseOrderCancelFailed(fail);
+					{
+						_entityCache.AddCancelFail(fail);
+
+						if (isStop)
+							RaiseStopOrdersCancelFailed(new[] { fail });
+						else
+							RaiseOrderCancelFailed(fail);
+					}
 				}
 			}
 		}
@@ -1331,9 +1330,7 @@ namespace StockSharp.Algo
 		private void TryProcessFilteredMarketDepth(Security security, ExecutionMessage order)
 		{
 			var info = _filteredMarketDepths.TryGetValue(security);
-
-			if (info != null)
-				info.Process(order);
+			info?.Process(order);
 		}
 
 		private void ProcessConditionOrders(Order order)

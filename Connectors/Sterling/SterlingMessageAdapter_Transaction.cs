@@ -217,6 +217,7 @@ namespace StockSharp.Sterling
 				Error = new InvalidOperationException(),
 				ExecutionType = ExecutionTypes.Transaction,
 				HasOrderInfo = true,
+				ServerTime = CurrentTime,
 			});
 		}
 
@@ -228,6 +229,7 @@ namespace StockSharp.Sterling
 				OrderState = OrderStates.Active,
 				ExecutionType = ExecutionTypes.Transaction,
 				HasOrderInfo = true,
+				ServerTime = CurrentTime,
 			});
 		}
 
