@@ -34,22 +34,22 @@
                         </xcad:LayoutAnchorablePane>
 
                         <xcad:LayoutAnchorablePane>
-                            <xcad:LayoutAnchorable Title="{x:Static localization:LocalizedStrings.Str3200}" CanClose="False">
+                            <xcad:LayoutAnchorable Title="{x:Static localization:LocalizedStrings.Str3200}" CanClose="False" CanHide="False">
                                 <xaml:Chart x:Name="Chart" />
                             </xcad:LayoutAnchorable>
-                            <xcad:LayoutAnchorable Title="{x:Static localization:LocalizedStrings.Orders}" CanClose="False">
+                            <xcad:LayoutAnchorable Title="{x:Static localization:LocalizedStrings.Orders}" CanClose="False" CanHide="False">
                                 <xaml:OrderGrid x:Name="OrderGrid"/>
                             </xcad:LayoutAnchorable>
-                            <xcad:LayoutAnchorable Title="{x:Static localization:LocalizedStrings.Str985}" CanClose="False">
+                            <xcad:LayoutAnchorable Title="{x:Static localization:LocalizedStrings.Str985}" CanClose="False" CanHide="False">
                                 <xaml:MyTradeGrid x:Name="MyTradeGrid"/>
                             </xcad:LayoutAnchorable>
-                            <xcad:LayoutAnchorable Title="{x:Static localization:LocalizedStrings.Str862}" CanClose="False">
+                            <xcad:LayoutAnchorable Title="{x:Static localization:LocalizedStrings.Str862}" CanClose="False" CanHide="False">
                                 <xaml:EquityCurveChart x:Name="PositionCurve" />
                             </xcad:LayoutAnchorable>
-                            <xcad:LayoutAnchorable Title="{x:Static localization:LocalizedStrings.Equity}" CanClose="False">
+                            <xcad:LayoutAnchorable Title="{x:Static localization:LocalizedStrings.Equity}" CanClose="False" CanHide="False">
                                 <xaml:EquityCurveChart x:Name="EquityCurve" />
                             </xcad:LayoutAnchorable>
-                            <xcad:LayoutAnchorable Title="{x:Static localization:LocalizedStrings.Str436}" CanClose="False">
+                            <xcad:LayoutAnchorable Title="{x:Static localization:LocalizedStrings.Str436}" CanClose="False" CanHide="False">
                                 <xaml:StatisticParameterGrid x:Name="StatisticsGrid" />
                             </xcad:LayoutAnchorable>
                         </xcad:LayoutAnchorablePane>

@@ -23,11 +23,13 @@
 	using StockSharp.Algo.Testing;
 	using StockSharp.BusinessEntities;
 	using StockSharp.Configuration;
+	using StockSharp.Designer.Commands;
 	using StockSharp.Designer.Layout;
 	using StockSharp.Localization;
 	using StockSharp.Logging;
 	using StockSharp.Messages;
 	using StockSharp.Studio.Core;
+	using StockSharp.Studio.Core.Commands;
 	using StockSharp.Xaml.Charting;
 	using StockSharp.Xaml.Diagram;
 
@@ -386,9 +388,12 @@
 				throw new InvalidOperationException("Strategy not selected.");
 
 			var strategy = (EmulationDiagramStrategy)Strategy;
+			var settings = strategy.EmulationSettings;
 
-			if (strategy.MarketDataSettings == null)
+			if (settings.MarketDataSettings == null)
 				throw new InvalidOperationException(LocalizedStrings.Str3014);
+
+			new SetDefaultEmulationSettingsCommand(settings).Process(this);
 
 			strategy
 				.Composition
@@ -407,8 +412,8 @@
 			var secIdParts = secGen.Split(securityId);
 			var secCode = secIdParts.SecurityCode;
 			var board = ExchangeBoard.GetOrCreateBoard(secIdParts.BoardCode);
-			var timeFrame = strategy.CandlesTimeFrame;
-			var useCandles = strategy.MarketDataSource == MarketDataSource.Candles;
+			var timeFrame = settings.CandlesTimeFrame;
+			var useCandles = settings.MarketDataSource == MarketDataSource.Candles;
 
 			// create test security
 			var security = new Security
@@ -421,11 +426,11 @@
 			// storage to historical data
 			var storageRegistry = new StudioStorageRegistry
 			{
-				MarketDataSettings = strategy.MarketDataSettings
+				MarketDataSettings = settings.MarketDataSettings
 			};
 
-			var startTime = strategy.StartDate.ChangeKind(DateTimeKind.Utc);
-			var stopTime = strategy.StopDate.ChangeKind(DateTimeKind.Utc);
+			var startTime = settings.StartDate.ChangeKind(DateTimeKind.Utc);
+			var stopTime = settings.StopDate.ChangeKind(DateTimeKind.Utc);
 
 			// ProgressBar refresh step
 			var progressStep = ((stopTime - startTime).Ticks / 100).To<TimeSpan>();
@@ -455,9 +460,9 @@
 							// match order if historical price touched our limit order price. 
 							// It is terned off, and price should go through limit order price level
 							// (more "severe" test mode)
-							MatchOnTouch = strategy.MatchOnTouch, 
-							IsSupportAtomicReRegister = strategy.IsSupportAtomicReRegister,
-							Latency = strategy.EmulatoinLatency,
+							MatchOnTouch = settings.MatchOnTouch, 
+							IsSupportAtomicReRegister = settings.IsSupportAtomicReRegister,
+							Latency = settings.EmulatoinLatency,
 						}
 					}
 				},
@@ -467,7 +472,7 @@
 				HistoryMessageAdapter =
 				{
 					StorageRegistry = storageRegistry,
-					StorageFormat = strategy.StorageFormat,
+					StorageFormat = settings.StorageFormat,
 
 					// set history range
 					StartDate = startTime,
@@ -478,7 +483,7 @@
 				MarketTimeChangedInterval = timeFrame,
 			};
 
-			((ILogSource)_connector).LogLevel = strategy.DebugLog ? LogLevels.Debug : LogLevels.Info;
+			((ILogSource)_connector).LogLevel = settings.DebugLog ? LogLevels.Debug : LogLevels.Info;
 
 			ConfigManager.GetService<LogManager>().Sources.Add(_connector);
 
@@ -486,7 +491,7 @@
 			strategy.Portfolio = portfolio;
 			strategy.Security = security;
 			strategy.Connector = _connector;
-			strategy.LogLevel = strategy.DebugLog ? LogLevels.Debug : LogLevels.Info;
+			strategy.LogLevel = settings.DebugLog ? LogLevels.Debug : LogLevels.Info;
 
 			// by default interval is 1 min,
 			// it is excessively for time range with several months
@@ -512,13 +517,13 @@
 				// fill level1 values
 				_connector.SendInMessage(level1Info);
 
-				if (strategy.UseMarketDepths)
+				if (settings.UseMarketDepths)
 				{
 					_connector.RegisterMarketDepth(security);
 
 					if (
 							// if order book will be generated
-							strategy.GenerateDepths ||
+							settings.GenerateDepths ||
 							// of backtesting will be on candles
 							useCandles
 						)
@@ -528,10 +533,10 @@
 						_connector.RegisterMarketDepth(new TrendMarketDepthGenerator(_connector.GetSecurityId(s))
 						{
 							Interval = TimeSpan.FromSeconds(1), // order book freq refresh is 1 sec
-							MaxAsksDepth = strategy.MaxDepths,
-							MaxBidsDepth = strategy.MaxDepths,
+							MaxAsksDepth = settings.MaxDepths,
+							MaxBidsDepth = settings.MaxDepths,
 							UseTradeVolume = true,
-							MaxVolume = strategy.MaxVolume,
+							MaxVolume = settings.MaxVolume,
 							MinSpreadStepCount = 2, // min spread generation is 2 pips
 							MaxSpreadStepCount = 5, // max spread generation size (prevent extremely size)
 							MaxPriceStepCount = 3   // pips size,

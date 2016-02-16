@@ -22,9 +22,7 @@ namespace StockSharp.Designer
 	using Ecng.Configuration;
 	using Ecng.Serialization;
 
-	using StockSharp.Algo.Storages;
 	using StockSharp.Localization;
-	using StockSharp.Studio.Core;
 	using StockSharp.Xaml.Diagram;
 
 	using Xceed.Wpf.Toolkit.PropertyGrid.Attributes;
@@ -37,237 +35,40 @@ namespace StockSharp.Designer
 
 	public class EmulationDiagramStrategy : DiagramStrategy
 	{
-		//private string _dataPath;
-		private MarketDataSettings _marketDataSettings;
-		private DateTime _startDate;
-		private DateTime _stopDate;
-		private MarketDataSource _marketDataSource;
-		private TimeSpan _candlesTimeFrame;
-		private bool _generateDepths;
-		private int _maxDepths;
-		private int _maxVolume;
-		private bool _debugLog;
-		private bool _isSupportAtomicReRegister;
-		private bool _matchOnTouch;
-		private TimeSpan _emulatoinLatency;
-		private bool _useMarketDepths;
-		private StorageFormats _storageFormat;
+		private EmulationSettings _emulationSettings;
 
-		//[DisplayNameLoc(LocalizedStrings.Str2804Key)]
-		//[CategoryLoc(LocalizedStrings.Str1174Key)]
-		//[PropertyOrder(10)]
-		//public string DataPath
-		//{
-		//	get { return _dataPath; }
-		//	set
-		//	{
-		//		_dataPath = value;
-		//		RaiseParametersChanged("DataPath");
-		//	}
-		//}
-
-		[DisplayNameLoc(LocalizedStrings.MarketDataKey)]
+		[DisplayNameLoc(LocalizedStrings.SettingsKey)]
 		[CategoryLoc(LocalizedStrings.Str1174Key)]
-		[DescriptionLoc(LocalizedStrings.MarketDataStorageKey)]
-		[PropertyOrder(11)]
-		[Editor(typeof(MarketDataSettingsEditor), typeof(MarketDataSettingsEditor))]
-		public MarketDataSettings MarketDataSettings
+		[DescriptionLoc(LocalizedStrings.Str1408Key)]
+		[PropertyOrder(1)]
+		public EmulationSettings EmulationSettings
 		{
-			get { return _marketDataSettings; }
+			get { return _emulationSettings; }
 			set
 			{
-				_marketDataSettings = value;
-				RaiseParametersChanged("MarketDataSettings");
-			}
-		}
+				if (_emulationSettings == value)
+					return;
 
-		[DisplayNameLoc(LocalizedStrings.StorageFormatKey)]
-		[CategoryLoc(LocalizedStrings.Str1174Key)]
-		[PropertyOrder(12)]
-		public StorageFormats StorageFormat
-		{
-			get { return _storageFormat; }
-			set
-			{
-				_storageFormat = value;
-				RaiseParametersChanged("StorageFormat");
-			}
-		}
+				if (_emulationSettings != null)
+					_emulationSettings.PropertyChanged -= OnEmulationSettingsPropertyChanged;
 
-		[DisplayNameLoc(LocalizedStrings.Str343Key)]
-		[CategoryLoc(LocalizedStrings.Str1174Key)]
-		[PropertyOrder(20)]
-		public DateTime StartDate
-		{
-			get { return _startDate; }
-			set
-			{
-				_startDate = value;
-				RaiseParametersChanged("StartDate");
-			}
-		}
+				_emulationSettings = value;
 
-		[DisplayNameLoc(LocalizedStrings.Str345Key)]
-		[CategoryLoc(LocalizedStrings.Str1174Key)]
-		[PropertyOrder(30)]
-		public DateTime StopDate
-		{
-			get { return _stopDate; }
-			set
-			{
-				_stopDate = value;
-				RaiseParametersChanged("StopDate");
-			}
-		}
+				if (_emulationSettings == null)
+					return;
 
-		[DisplayNameLoc(LocalizedStrings.DataTypeKey)]
-		[CategoryLoc(LocalizedStrings.Str1174Key)]
-		[PropertyOrder(40)]
-		public MarketDataSource MarketDataSource
-		{
-			get { return _marketDataSource; }
-			set
-			{
-				_marketDataSource = value;
-				RaiseParametersChanged("MarketDataSource");
-			}
-		}
-
-		[DisplayNameLoc(LocalizedStrings.Str1242Key)]
-		[CategoryLoc(LocalizedStrings.Str1174Key)]
-		[DescriptionLoc(LocalizedStrings.Str1188Key)]
-		[PropertyOrder(50)]
-		public TimeSpan CandlesTimeFrame
-		{
-			get { return _candlesTimeFrame; }
-			set
-			{
-				_candlesTimeFrame = value;
-				RaiseParametersChanged("CandlesTimeFrame");
-			}
-		}
-
-		[DisplayNameLoc(LocalizedStrings.MarketDepthsKey)]
-		[CategoryLoc(LocalizedStrings.Str1174Key)]
-		[PropertyOrder(60)]
-		public bool UseMarketDepths
-		{
-			get { return _useMarketDepths; }
-			set
-			{
-				_useMarketDepths = value;
-				RaiseParametersChanged("UseMarketDepths");
-			}
-		}
-
-		[DisplayNameLoc(LocalizedStrings.XamlStr97Key)]
-		[CategoryLoc(LocalizedStrings.Str1174Key)]
-		[PropertyOrder(61)]
-		public bool GenerateDepths
-		{
-			get { return _generateDepths; }
-			set
-			{
-				_generateDepths = value;
-				RaiseParametersChanged("GenerateDepths");
-			}
-		}
-
-		[DisplayNameLoc(LocalizedStrings.Str1197Key)]
-		[CategoryLoc(LocalizedStrings.Str1174Key)]
-		[DescriptionLoc(LocalizedStrings.Str1198Key)]
-		[PropertyOrder(70)]
-		public int MaxDepths
-		{
-			get { return _maxDepths; }
-			set
-			{
-				_maxDepths = value;
-				RaiseParametersChanged("MaxDepths");
-			}
-		}
-
-		[DisplayNameLoc(LocalizedStrings.XamlStr293Key)]
-		[CategoryLoc(LocalizedStrings.Str1174Key)]
-		[PropertyOrder(80)]
-		public int MaxVolume
-		{
-			get { return _maxVolume; }
-			set
-			{
-				_maxVolume = value;
-				RaiseParametersChanged("MaxVolume");
-			}
-		}
-
-		[DisplayName(@"MOVE")]
-		[CategoryLoc(LocalizedStrings.Str1174Key)]
-		[DescriptionLoc(LocalizedStrings.Str60Key)]
-		[PropertyOrder(90)]
-		public bool IsSupportAtomicReRegister
-		{
-			get { return _isSupportAtomicReRegister; }
-			set
-			{
-				_isSupportAtomicReRegister = value;
-				RaiseParametersChanged("IsSupportAtomicReRegister");
-			}
-		}
-
-		[DisplayNameLoc(LocalizedStrings.Str1176Key)]
-		[CategoryLoc(LocalizedStrings.Str1174Key)]
-		[DescriptionLoc(LocalizedStrings.Str1177Key)]
-		[PropertyOrder(91)]
-		public bool MatchOnTouch
-		{
-			get { return _matchOnTouch; }
-			set
-			{
-				_matchOnTouch = value;
-				RaiseParametersChanged("MatchOnTouch");
-			}
-		}
-
-		[DisplayNameLoc(LocalizedStrings.Str161Key)]
-		[CategoryLoc(LocalizedStrings.Str1174Key)]
-		[DescriptionLoc(LocalizedStrings.Str1184Key)]
-		[PropertyOrder(92)]
-		public TimeSpan EmulatoinLatency
-		{
-			get { return _emulatoinLatency; }
-			set
-			{
-				_emulatoinLatency = value;
-				RaiseParametersChanged("EmulatoinLatency");
-			}
-		}
-
-		[DisplayNameLoc(LocalizedStrings.XamlStr117Key)]
-		[CategoryLoc(LocalizedStrings.Str1174Key)]
-		[PropertyOrder(100)]
-		public bool DebugLog
-		{
-			get { return _debugLog; }
-			set
-			{
-				_debugLog = value;
-				RaiseParametersChanged("DebugLog");
+				_emulationSettings.PropertyChanged += OnEmulationSettingsPropertyChanged;
 			}
 		}
 
 		public EmulationDiagramStrategy()
 		{
-			//DataPath = @"..\..\..\..\Samples\Testing\HistoryData\".ToFullPath();
-			StartDate = new DateTime(2012, 10, 1);
-			StopDate = new DateTime(2012, 10, 25);
-			MarketDataSource = MarketDataSource.Candles;
-			CandlesTimeFrame = TimeSpan.FromMinutes(5);
-			MaxDepths = 5;
-			MaxVolume = 100;
-			IsSupportAtomicReRegister = true;
-			MatchOnTouch = false;
-			EmulatoinLatency = TimeSpan.Zero;
-			StorageFormat = StorageFormats.Binary;
+			EmulationSettings = new EmulationSettings();
+		}
+
+		private void OnEmulationSettingsPropertyChanged(object sender, PropertyChangedEventArgs e)
+		{
+			RaiseParametersChanged(e.PropertyName);
 		}
 
 		protected override bool NeedShowProperty(PropertyDescriptor propertyDescriptor)
@@ -282,31 +83,12 @@ namespace StockSharp.Designer
 			var composition = (CompositionDiagramElement)registry.Strategies.FirstOrDefault(c => c.TypeId == compositionId);
 
 			Composition = registry.Clone(composition);
-
 			Id = storage.GetValue<Guid>("StrategyId");
-			//DataPath = storage.GetValue("DataPath", DataPath);
-			StartDate = storage.GetValue("StartDate", StartDate);
-			StopDate = storage.GetValue("StopDate", StopDate);
-			MarketDataSource = storage.GetValue("MarketDataSource", MarketDataSource);
-			CandlesTimeFrame = storage.GetValue("CandlesTimeFrame", CandlesTimeFrame);
 
-			UseMarketDepths = storage.GetValue("UseMarketDepths", UseMarketDepths);
-			GenerateDepths = storage.GetValue("GenerateDepths", GenerateDepths);
-			MaxDepths = storage.GetValue("MaxDepths", MaxDepths);
-			MaxVolume = storage.GetValue("MaxVolume", MaxVolume);
+			var emulationSettings = storage.GetValue<SettingsStorage>("EmulationSettings");
 
-			IsSupportAtomicReRegister = storage.GetValue("IsSupportAtomicReRegister", IsSupportAtomicReRegister);
-			MatchOnTouch = storage.GetValue("MatchOnTouch", MatchOnTouch);
-			EmulatoinLatency = storage.GetValue("EmulatoinLatency", EmulatoinLatency);
-
-			DebugLog = storage.GetValue("DebugLog", DebugLog);
-
-			var marketDataSettings = storage.GetValue("MarketDataSettings", Guid.Empty);
-
-			if (marketDataSettings != Guid.Empty)
-				MarketDataSettings = ConfigManager.GetService<MarketDataSettingsCache>().Settings.FirstOrDefault(s => s.Id == marketDataSettings);
-
-			StorageFormat = storage.GetValue("StorageFormat", StorageFormat);
+			if (emulationSettings != null)
+				EmulationSettings.Load(emulationSettings);
 
 			base.Load(storage);
 		}
@@ -315,27 +97,8 @@ namespace StockSharp.Designer
 		{
 			storage.SetValue("StrategyId", Id);
 			storage.SetValue("CompositionId", Composition.TypeId);
-			//storage.SetValue("DataPath", DataPath);
-			storage.SetValue("StartDate", StartDate);
-			storage.SetValue("StopDate", StopDate);
-			storage.SetValue("MarketDataSource", MarketDataSource);
-			storage.SetValue("CandlesTimeFrame", CandlesTimeFrame);
 
-			storage.SetValue("UseMarketDepths", UseMarketDepths);
-			storage.SetValue("GenerateDepths", GenerateDepths);
-			storage.SetValue("MaxDepths", MaxDepths);
-			storage.SetValue("MaxVolume", MaxVolume);
-
-			storage.SetValue("IsSupportAtomicReRegister", IsSupportAtomicReRegister);
-			storage.SetValue("MatchOnTouch", MatchOnTouch);
-			storage.SetValue("EmulatoinLatency", EmulatoinLatency);
-
-			storage.SetValue("DebugLog", DebugLog);
-
-			if (MarketDataSettings != null)
-				storage.SetValue("MarketDataSettings", MarketDataSettings.Id);
-
-			storage.SetValue("StorageFormat", StorageFormat);
+			storage.SetValue("EmulationSettings", EmulationSettings.Save());
 
 			base.Save(storage);
 		}
