@@ -375,6 +375,17 @@ namespace StockSharp.Algo
 					break;
 				}
 
+				case MessageTypes.ChangePassword:
+				{
+					var adapter = GetSortedAdapters().FirstOrDefault(a => a.SupportedMessages.Contains(MessageTypes.ChangePassword));
+
+					if (adapter == null)
+						throw new InvalidOperationException(LocalizedStrings.Str629Params.Put(message.Type));
+
+					adapter.SendInMessage(message);
+					break;
+				}
+
 				default:
 				{
 					var adapters = _connectedAdapters.TryGetValue(message.Type);

@@ -80,6 +80,7 @@ namespace StockSharp.Transaq
 			this.RemoveSupportedMessage(MessageTypes.SecurityLookup);
 			this.RemoveSupportedMessage(MessageTypes.OrderStatus);
 			this.RemoveSupportedMessage(MessageTypes.PortfolioLookup);
+			this.AddSupportedMessage(MessageTypes.ChangePassword);
 		}
 
 		/// <summary>

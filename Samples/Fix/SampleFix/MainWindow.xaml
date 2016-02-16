@@ -40,14 +40,16 @@
 							<RowDefinition />
 							<RowDefinition Height="100" />
 						</Grid.RowDefinitions>
-						
+
 						<xaml:PropertyGridEx x:Name="MarketDataSessionSettings" />
 						<xaml:ConnectorSupportedMessagesPanel x:Name="MarketDataSupportedMessages" Grid.Row="1" />
 					</Grid>
 				</xctk:DropDownButton.DropDownContent>
 			</xctk:DropDownButton>
+			<TextBlock VerticalAlignment="Center"><Run Text="{x:Static loc:LocalizedStrings.XamlStr360}" />:</TextBlock>
+			<PasswordBox x:Name="NewPassword" Width="150" />
 		</StackPanel>
-		
+
 		<Button x:Name="ConnectBtn" Background="LightPink" Grid.Column="0" Grid.Row="1" Grid.RowSpan="2" Content="{x:Static loc:LocalizedStrings.Connect}" Click="ConnectClick" />
 		<Button x:Name="ShowSecurities" Grid.Column="1" Grid.Row="1" IsEnabled="False" Content="{x:Static loc:LocalizedStrings.Securities}" Click="ShowSecuritiesClick" />
 		<Button x:Name="ShowPortfolios" Grid.Column="2" Grid.Row="1" IsEnabled="False" Content="{x:Static loc:LocalizedStrings.Portfolios}" Click="ShowPortfoliosClick" />

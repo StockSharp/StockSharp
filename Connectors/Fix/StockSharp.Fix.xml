@@ -4932,6 +4932,11 @@
       <param name="idGenerator">Sequence id generator.</param>
       <returns>The dialect.</returns>
     </member>
+    <member name="P:StockSharp.Fix.FixMessageAdapter.Address">
+      <summary>
+            Server address.
+            </summary>
+    </member>
     <member name="P:StockSharp.Fix.FixMessageAdapter.Dialect">
       <summary>
             The FIX dialect. The default is <see cref="F:StockSharp.Fix.FixDialects.Default" />.
@@ -4955,11 +4960,6 @@
     <member name="P:StockSharp.Fix.FixMessageAdapter.Password">
       <summary>
             Password.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Fix.FixMessageAdapter.Address">
-      <summary>
-            Server address.
             </summary>
     </member>
     <member name="P:StockSharp.Fix.FixMessageAdapter.RequestAllPortfolios">

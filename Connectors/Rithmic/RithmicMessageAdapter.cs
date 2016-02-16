@@ -45,6 +45,7 @@ namespace StockSharp.Rithmic
 		{
 			this.AddMarketDataSupport();
 			this.AddTransactionalSupport();
+			this.AddSupportedMessage(MessageTypes.ChangePassword);
 		}
 
 		/// <summary>
