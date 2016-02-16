@@ -124,11 +124,13 @@
     <Compile Include="..\..\StockSharpAssemblyInfo.cs">
       <Link>Properties\StockSharpAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="Commands\SetDefaultEmulationSettingsCommand.cs" />
     <Compile Include="CompositionItem.cs" />
     <Compile Include="DiagramDebuggerControl.xaml.cs">
       <DependentUpon>DiagramDebuggerControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="EmulationDiagramStrategy.cs" />
+    <Compile Include="EmulationSettings.cs" />
     <Compile Include="Layout\LayoutManager.cs" />
     <Compile Include="MarketDataSettingsEditor.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
@@ -300,6 +302,15 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\storage_32x32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Help_16x16.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Settings_24x24.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Security_32x32.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
