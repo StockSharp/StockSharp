@@ -454,7 +454,8 @@
                     
 					<xcad:LayoutAnchorablePaneGroup DockHeight="200">
                         <xcad:LayoutAnchorablePane>
-                            <xcad:LayoutAnchorable Title="{x:Static localization:LocalizedStrings.Str3237}" ContentId="Logs" CanClose="False" CanHide="False" AutoHideHeight="200">
+                            <xcad:LayoutAnchorable x:Name="LogsAnchorable" Title="{x:Static localization:LocalizedStrings.Str3237}" 
+												   ContentId="Logs" CanClose="False" CanHide="False" AutoHideHeight="200">
                                 <xaml:Monitor x:Name="Monitor"/>
                             </xcad:LayoutAnchorable>
                         </xcad:LayoutAnchorablePane>

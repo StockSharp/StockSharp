@@ -23,6 +23,7 @@ namespace StockSharp.Designer
 	using System.Windows;
 	using System.Windows.Controls;
 	using System.Windows.Input;
+	using System.Windows.Media;
 	using System.Windows.Media.Imaging;
 
 	using Ecng.Collections;
@@ -93,7 +94,10 @@ namespace StockSharp.Designer
 		private MarketDataSettingsCache _marketDataSettingsCache;
 		private EmulationSettings _emulationSettings;
 
+		private bool _isDefaultLayout = true;
+
 		private bool _isReseting;
+		private bool _isLoaded;
 
 		public MainWindow()
 		{
@@ -314,6 +318,21 @@ namespace StockSharp.Designer
 			ConfigManager.GetService<LogManager>().Sources.Add(_strategiesRegistry);
 			_strategiesRegistry.Init();
 			ConfigManager.RegisterService(_strategiesRegistry);
+		}
+
+		protected override void OnRender(DrawingContext drawingContext)
+		{
+			base.OnRender(drawingContext);
+
+			if (_isLoaded)
+				return;
+
+			_isLoaded = true;
+
+			if (!_isDefaultLayout)
+				return;
+
+			LogsAnchorable.ToggleAutoHide();
 		}
 
 		#region Event handlers
@@ -743,7 +762,11 @@ namespace StockSharp.Designer
 
 					settings.TryLoadSettings<SettingsStorage>("MarketDataSettingsCache", s => _marketDataSettingsCache.Load(s));
 					settings.TryLoadSettings<SettingsStorage>("EmulationSettings", s => _emulationSettings.Load(s));
-					settings.TryLoadSettings<SettingsStorage>("Layout", s => _layoutManager.Load(s));
+					settings.TryLoadSettings<SettingsStorage>("Layout", s =>
+					{
+						_isDefaultLayout = false;
+						_layoutManager.Load(s);
+					});
 					settings.TryLoadSettings<SettingsStorage>("Connector", s => _connector.Load(s));
 				});
 		}
