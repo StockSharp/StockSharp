@@ -2157,7 +2157,7 @@
                                     <key>Value</key>
                                     <value>
                                       <Type type="string">bool</Type>
-                                      <Value type="bool">True</Value>
+                                      <Value type="bool">False</Value>
                                     </value>
                                   </KeyValuePairBeginStringAndObjectEnd>
                                 </Value>
@@ -2333,7 +2333,7 @@
                                     <key>Value</key>
                                     <value>
                                       <Type type="string">bool</Type>
-                                      <Value type="bool">True</Value>
+                                      <Value type="bool">False</Value>
                                     </value>
                                   </KeyValuePairBeginStringAndObjectEnd>
                                 </Value>
