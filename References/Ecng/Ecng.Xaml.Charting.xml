@@ -5226,7 +5226,7 @@
             </summary>
             <returns></returns>
         </member>
-        <member name="M:Ecng.Xaml.Charting.Model.DataSeries.BoxPlotDataSeries`2.ToPointSeries(Ecng.Xaml.Charting.Numerics.ResamplingMode,Ecng.Xaml.Charting.IndexRange,System.Int32,System.Boolean,System.Nullable{System.Boolean},Ecng.Xaml.Charting.IRange,Ecng.Xaml.Charting.Numerics.PointResamplers.IPointResamplerFactory)">
+        <member name="M:Ecng.Xaml.Charting.Model.DataSeries.BoxPlotDataSeries`2.ToPointSeries(Ecng.Xaml.Charting.Numerics.ResamplingMode,Ecng.Xaml.Charting.IndexRange,System.Int32,System.Boolean,System.Nullable{System.Boolean},Ecng.Xaml.Charting.IRange,Ecng.Xaml.Charting.Numerics.PointResamplers.IPointResamplerFactory,System.Object)">
             <summary>
             Converts the default <see cref="P:Ecng.Xaml.Charting.Model.DataSeries.IDataSeries.YValues"/> to an <see cref="T:Ecng.Xaml.Charting.Model.DataSeries.IPointSeries"/> which is used to render XY series
             </summary>
@@ -5588,7 +5588,7 @@
             </summary>
             <returns></returns>
         </member>
-        <member name="M:Ecng.Xaml.Charting.Model.DataSeries.HlcDataSeries`2.ToPointSeries(Ecng.Xaml.Charting.Numerics.ResamplingMode,Ecng.Xaml.Charting.IndexRange,System.Int32,System.Boolean,System.Nullable{System.Boolean},Ecng.Xaml.Charting.IRange,Ecng.Xaml.Charting.Numerics.PointResamplers.IPointResamplerFactory)">
+        <member name="M:Ecng.Xaml.Charting.Model.DataSeries.HlcDataSeries`2.ToPointSeries(Ecng.Xaml.Charting.Numerics.ResamplingMode,Ecng.Xaml.Charting.IndexRange,System.Int32,System.Boolean,System.Nullable{System.Boolean},Ecng.Xaml.Charting.IRange,Ecng.Xaml.Charting.Numerics.PointResamplers.IPointResamplerFactory,System.Object)">
             <summary>
             Converts the default <see cref="P:Ecng.Xaml.Charting.Model.DataSeries.IDataSeries.YValues"/> to an <see cref="T:Ecng.Xaml.Charting.Model.DataSeries.IPointSeries"/> which is used to render XY series
             </summary>
@@ -6064,7 +6064,7 @@
             <param name="existingYMax">The existing maximum</param>
             <returns>The new YMax, which is the Min(existingYMax, currentMax)</returns>
         </member>
-        <member name="M:Ecng.Xaml.Charting.Model.DataSeries.XyzDataSeries`3.ToPointSeries(Ecng.Xaml.Charting.Numerics.ResamplingMode,Ecng.Xaml.Charting.IndexRange,System.Int32,System.Boolean,System.Nullable{System.Boolean},Ecng.Xaml.Charting.IRange,Ecng.Xaml.Charting.Numerics.PointResamplers.IPointResamplerFactory)">
+        <member name="M:Ecng.Xaml.Charting.Model.DataSeries.XyzDataSeries`3.ToPointSeries(Ecng.Xaml.Charting.Numerics.ResamplingMode,Ecng.Xaml.Charting.IndexRange,System.Int32,System.Boolean,System.Nullable{System.Boolean},Ecng.Xaml.Charting.IRange,Ecng.Xaml.Charting.Numerics.PointResamplers.IPointResamplerFactory,System.Object)">
             <summary>
             Converts the default <see cref="P:Ecng.Xaml.Charting.Model.DataSeries.IDataSeries.YValues"/> to an <see cref="T:Ecng.Xaml.Charting.Model.DataSeries.IPointSeries"/> which is used to render XY series
             </summary>
@@ -6782,7 +6782,7 @@
             </returns>
             <example>If the input X-data is 0...99 in steps of 1, the VisibleRange is 10, 30 then the Indices Range will be 10, 30</example>
         </member>
-        <member name="M:Ecng.Xaml.Charting.Model.DataSeries.DataSeries`2.ToPointSeries(Ecng.Xaml.Charting.Numerics.ResamplingMode,Ecng.Xaml.Charting.IndexRange,System.Int32,System.Boolean,System.Nullable{System.Boolean},Ecng.Xaml.Charting.IRange,Ecng.Xaml.Charting.Numerics.PointResamplers.IPointResamplerFactory)">
+        <member name="M:Ecng.Xaml.Charting.Model.DataSeries.DataSeries`2.ToPointSeries(Ecng.Xaml.Charting.Numerics.ResamplingMode,Ecng.Xaml.Charting.IndexRange,System.Int32,System.Boolean,System.Nullable{System.Boolean},Ecng.Xaml.Charting.IRange,Ecng.Xaml.Charting.Numerics.PointResamplers.IPointResamplerFactory,System.Object)">
             <summary>
             Converts the default <see cref="P:Ecng.Xaml.Charting.Model.DataSeries.IDataSeries.YValues" /> to an <see cref="T:Ecng.Xaml.Charting.Model.DataSeries.IPointSeries" /> which is used to render XY series
             </summary>
@@ -7282,7 +7282,7 @@
             <param name="visibleRange">The VisibleRange to get the indices range</param>
             <returns>The indices to the X-Data that are currently in range</returns>
         </member>
-        <member name="M:Ecng.Xaml.Charting.Model.DataSeries.IDataSeries.ToPointSeries(Ecng.Xaml.Charting.Numerics.ResamplingMode,Ecng.Xaml.Charting.IndexRange,System.Int32,System.Boolean,System.Nullable{System.Boolean},Ecng.Xaml.Charting.IRange,Ecng.Xaml.Charting.Numerics.PointResamplers.IPointResamplerFactory)">
+        <member name="M:Ecng.Xaml.Charting.Model.DataSeries.IDataSeries.ToPointSeries(Ecng.Xaml.Charting.Numerics.ResamplingMode,Ecng.Xaml.Charting.IndexRange,System.Int32,System.Boolean,System.Nullable{System.Boolean},Ecng.Xaml.Charting.IRange,Ecng.Xaml.Charting.Numerics.PointResamplers.IPointResamplerFactory,System.Object)">
             <summary>
             Converts the default <see cref="P:Ecng.Xaml.Charting.Model.DataSeries.IDataSeries.YValues"/> to an <see cref="T:Ecng.Xaml.Charting.Model.DataSeries.IPointSeries"/> which is used to render XY series
             </summary>
@@ -7831,7 +7831,7 @@
             </summary>
             <returns></returns>
         </member>
-        <member name="M:Ecng.Xaml.Charting.Model.DataSeries.OhlcDataSeries`2.ToPointSeries(Ecng.Xaml.Charting.Numerics.ResamplingMode,Ecng.Xaml.Charting.IndexRange,System.Int32,System.Boolean,System.Nullable{System.Boolean},Ecng.Xaml.Charting.IRange,Ecng.Xaml.Charting.Numerics.PointResamplers.IPointResamplerFactory)">
+        <member name="M:Ecng.Xaml.Charting.Model.DataSeries.OhlcDataSeries`2.ToPointSeries(Ecng.Xaml.Charting.Numerics.ResamplingMode,Ecng.Xaml.Charting.IndexRange,System.Int32,System.Boolean,System.Nullable{System.Boolean},Ecng.Xaml.Charting.IRange,Ecng.Xaml.Charting.Numerics.PointResamplers.IPointResamplerFactory,System.Object)">
             <summary>
             Converts the default <see cref="P:Ecng.Xaml.Charting.Model.DataSeries.IDataSeries.YValues"/> to an <see cref="T:Ecng.Xaml.Charting.Model.DataSeries.IPointSeries"/> which is used to render XY series
             </summary>
@@ -8165,7 +8165,7 @@
             </summary>
             <remarks></remarks>
         </member>
-        <member name="M:Ecng.Xaml.Charting.Model.DataSeries.XyDataSeries`2.ToPointSeries(Ecng.Xaml.Charting.Numerics.ResamplingMode,Ecng.Xaml.Charting.IndexRange,System.Int32,System.Boolean,System.Nullable{System.Boolean},Ecng.Xaml.Charting.IRange,Ecng.Xaml.Charting.Numerics.PointResamplers.IPointResamplerFactory)">
+        <member name="M:Ecng.Xaml.Charting.Model.DataSeries.XyDataSeries`2.ToPointSeries(Ecng.Xaml.Charting.Numerics.ResamplingMode,Ecng.Xaml.Charting.IndexRange,System.Int32,System.Boolean,System.Nullable{System.Boolean},Ecng.Xaml.Charting.IRange,Ecng.Xaml.Charting.Numerics.PointResamplers.IPointResamplerFactory,System.Object)">
             <summary>
             Converts the default <see cref="P:Ecng.Xaml.Charting.Model.DataSeries.IDataSeries.YValues"/> to an <see cref="T:Ecng.Xaml.Charting.Model.DataSeries.IPointSeries"/> which is used to render XY series
             </summary>
@@ -8372,7 +8372,7 @@
             <param name="existingYMax">The existing maximum</param>
             <returns>The new YMax, which is the Min(existingYMax, currentMax)</returns>
         </member>
-        <member name="M:Ecng.Xaml.Charting.Model.DataSeries.XyyDataSeries`2.ToPointSeries(Ecng.Xaml.Charting.Numerics.ResamplingMode,Ecng.Xaml.Charting.IndexRange,System.Int32,System.Boolean,System.Nullable{System.Boolean},Ecng.Xaml.Charting.IRange,Ecng.Xaml.Charting.Numerics.PointResamplers.IPointResamplerFactory)">
+        <member name="M:Ecng.Xaml.Charting.Model.DataSeries.XyyDataSeries`2.ToPointSeries(Ecng.Xaml.Charting.Numerics.ResamplingMode,Ecng.Xaml.Charting.IndexRange,System.Int32,System.Boolean,System.Nullable{System.Boolean},Ecng.Xaml.Charting.IRange,Ecng.Xaml.Charting.Numerics.PointResamplers.IPointResamplerFactory,System.Object)">
             <summary>
             Converts the default <see cref="P:Ecng.Xaml.Charting.Model.DataSeries.IDataSeries.YValues"/> to an <see cref="T:Ecng.Xaml.Charting.Model.DataSeries.IPointSeries"/> which is used to render XY series
             </summary>
@@ -19676,6 +19676,11 @@
             double.NaN gaps are rendered as gaps
             </summary>
         </member>
+        <member name="T:Ecng.Xaml.Charting.Visuals.RenderableSeries.OhlcLineDrawMode">
+            <summary>
+            Enumeration constants to define how <see cref="!:OhlcDataSeries"/> is drawn.
+            </summary>
+        </member>
         <member name="T:Ecng.Xaml.Charting.Visuals.RenderableSeries.FastLineRenderableSeries">
             <summary>
             Defines a Line renderable series, supporting solid, stroked (thickness 1+) lines, dashed lines <seealso cref="P:Ecng.Xaml.Charting.Visuals.RenderableSeries.FastLineRenderableSeries.StrokeDashArray"/> and
@@ -19713,6 +19718,11 @@
             Defines the StrokeDashArray DependencyProperty
             </summary>
         </member>
+        <member name="F:Ecng.Xaml.Charting.Visuals.RenderableSeries.FastLineRenderableSeries.OhlcDrawModeProperty">
+            <summary>
+            Defines the OhlcDrawMode DependencyProperty
+            </summary>
+        </member>
         <member name="M:Ecng.Xaml.Charting.Visuals.RenderableSeries.FastLineRenderableSeries.#ctor">
             <summary>
             Initializes a new instance of the <seealso cref="T:Ecng.Xaml.Charting.Visuals.RenderableSeries.FastLineRenderableSeries"/> class.
@@ -19728,6 +19738,11 @@
             <summary>
             Gets or sets a StrokeDashArray property, used to define a dashed line. See the MSDN Documentation for 
             <see cref="P:System.Windows.Shapes.Shape.StrokeDashArray"/> as this property attempts to mimic the same behaviour
+            </summary>
+        </member>
+        <member name="P:Ecng.Xaml.Charting.Visuals.RenderableSeries.FastLineRenderableSeries.OhlcDrawMode">
+            <summary>
+            OHLC line draw mode.
             </summary>
         </member>
         <member name="M:Ecng.Xaml.Charting.Visuals.RenderableSeries.FastLineRenderableSeries.OnSeriesColorChanged">
@@ -20160,6 +20175,11 @@
                 </item>
             </list>
             </remarks>
+        </member>
+        <member name="P:Ecng.Xaml.Charting.Visuals.RenderableSeries.IRenderableSeries.PointSeriesArg">
+            <summary>
+            ToPointSeries argument.
+            </summary>        
         </member>
         <member name="P:Ecng.Xaml.Charting.Visuals.RenderableSeries.IRenderableSeries.DataSeries">
             <summary>
@@ -27467,7 +27487,7 @@
         </member>
         <member name="M:System.Windows.Media.Imaging.WriteableBitmapExtensions.ComputeBezierPoints(System.Int32,System.Int32,System.Int32,System.Int32,System.Int32,System.Int32,System.Int32,System.Int32,System.Int32,System.Windows.Media.Imaging.BitmapContext,System.Int32,System.Int32)">
             <summary>
-            Draws a filled, cubic Beziér spline defined by start, end and two control points.
+            Draws a filled, cubic Beziйr spline defined by start, end and two control points.
             </summary>
             <param name="x1">The x-coordinate of the start point.</param>
             <param name="y1">The y-coordinate of the start point.</param>
@@ -27484,7 +27504,7 @@
         </member>
         <member name="M:System.Windows.Media.Imaging.WriteableBitmapExtensions.FillBeziers(System.Windows.Media.Imaging.WriteableBitmap,System.Int32[],System.Windows.Media.Color)">
             <summary>
-            Draws a series of filled, cubic Beziér splines each defined by start, end and two control points. 
+            Draws a series of filled, cubic Beziйr splines each defined by start, end and two control points. 
             The ending point of the previous curve is used as starting point for the next. 
             Therfore the inital curve needs four points and the subsequent 3 (2 control and 1 end point).
             </summary>
@@ -27494,7 +27514,7 @@
         </member>
         <member name="M:System.Windows.Media.Imaging.WriteableBitmapExtensions.FillBeziers(System.Windows.Media.Imaging.WriteableBitmap,System.Int32[],System.Int32)">
             <summary>
-            Draws a series of filled, cubic Beziér splines each defined by start, end and two control points. 
+            Draws a series of filled, cubic Beziйr splines each defined by start, end and two control points. 
             The ending point of the previous curve is used as starting point for the next. 
             Therfore the inital curve needs four points and the subsequent 3 (2 control and 1 end point).
             </summary>
@@ -28615,7 +28635,7 @@
         </member>
         <member name="M:MatterHackers.Agg.VertexSource.PathStorage.curve3(System.Double,System.Double,System.Double,System.Double)">
             <summary>
-            Draws a quadratic Bézier curve from the current point to (x,y) using (xControl,yControl) as the control point.
+            Draws a quadratic Bйzier curve from the current point to (x,y) using (xControl,yControl) as the control point.
             </summary>
             <param name="xControl"></param>
             <param name="yControl"></param>
@@ -28624,12 +28644,12 @@
         </member>
         <member name="M:MatterHackers.Agg.VertexSource.PathStorage.curve3_rel(System.Double,System.Double,System.Double,System.Double)">
             <summary>
-            Draws a quadratic Bézier curve from the current point to (x,y) using (xControl,yControl) as the control point.
+            Draws a quadratic Bйzier curve from the current point to (x,y) using (xControl,yControl) as the control point.
             </summary>
         </member>
         <member name="M:MatterHackers.Agg.VertexSource.PathStorage.curve3(System.Double,System.Double)">
             <summary>
-            <para>Draws a quadratic Bézier curve from the current point to (x,y).</para>
+            <para>Draws a quadratic Bйzier curve from the current point to (x,y).</para>
             <para>The control point is assumed to be the reflection of the control point on the previous command relative to the current point.</para>
             <para>(If there is no previous command or if the previous command was not a curve, assume the control point is coincident with the current point.)</para>
             </summary>
@@ -28638,7 +28658,7 @@
         </member>
         <member name="M:MatterHackers.Agg.VertexSource.PathStorage.curve3_rel(System.Double,System.Double)">
             <summary>
-            <para>Draws a quadratic Bézier curve from the current point to (x,y).</para>
+            <para>Draws a quadratic Bйzier curve from the current point to (x,y).</para>
             <para>The control point is assumed to be the reflection of the control point on the previous command relative to the current point.</para>
             <para>(If there is no previous command or if the previous command was not a curve, assume the control point is coincident with the current point.)</para>
             </summary>

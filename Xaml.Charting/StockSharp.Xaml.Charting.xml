@@ -463,6 +463,11 @@
             Chart area name.
             </summary>
     </member>
+    <member name="P:StockSharp.Xaml.Charting.ChartArea.ShowPerfStats">
+      <summary>
+            Show FPS.
+            </summary>
+    </member>
     <member name="P:StockSharp.Xaml.Charting.ChartArea.Height">
       <summary>
             The height of the area.
@@ -687,6 +692,26 @@
             Bars.
             </summary>
     </member>
+    <member name="F:StockSharp.Xaml.Charting.ChartCandleDrawStyles.LineOpen">
+      <summary>
+            Line (open).
+            </summary>
+    </member>
+    <member name="F:StockSharp.Xaml.Charting.ChartCandleDrawStyles.LineHigh">
+      <summary>
+            Line (high).
+            </summary>
+    </member>
+    <member name="F:StockSharp.Xaml.Charting.ChartCandleDrawStyles.LineLow">
+      <summary>
+            Line (low).
+            </summary>
+    </member>
+    <member name="F:StockSharp.Xaml.Charting.ChartCandleDrawStyles.LineClose">
+      <summary>
+            Line (close).
+            </summary>
+    </member>
     <member name="F:StockSharp.Xaml.Charting.ChartCandleDrawStyles.BoxVolume">
       <summary>
             Box volumes.
@@ -755,6 +780,11 @@
     <member name="P:StockSharp.Xaml.Charting.ChartCandleElement.Antialiasing">
       <summary>
             Candles rendering smothing (enabled by default).
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Charting.ChartCandleElement.LineColor">
+      <summary>
+            Line color for DrawStyle Line*.
             </summary>
     </member>
     <member name="P:StockSharp.Xaml.Charting.ChartCandleElement.ShowAxisMarker">
