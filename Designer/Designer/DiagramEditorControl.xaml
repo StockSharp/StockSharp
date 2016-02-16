@@ -21,7 +21,7 @@
 
                 <xcad:LayoutAnchorablePaneGroup DockWidth="2*">
                     <xcad:LayoutAnchorablePane>
-                        <xcad:LayoutAnchorable ContentId="PaletteControl" Title="{x:Static localization:LocalizedStrings.Palette}" CanClose="False">
+                        <xcad:LayoutAnchorable ContentId="PaletteControl" Title="{x:Static localization:LocalizedStrings.Palette}" CanClose="False" CanHide="False">
                             <diagram:DiagramPaletteControl x:Name="PaletteControl"/>
                         </xcad:LayoutAnchorable>
                     </xcad:LayoutAnchorablePane>
@@ -29,7 +29,7 @@
 
                 <xcad:LayoutAnchorablePaneGroup DockWidth="10*">
                     <xcad:LayoutAnchorablePane>
-                        <xcad:LayoutAnchorable ContentId="DiagramEditor" Title="{x:Static localization:LocalizedStrings.Str3181}" CanClose="False">
+                        <xcad:LayoutAnchorable ContentId="DiagramEditor" Title="{x:Static localization:LocalizedStrings.Str3181}" CanClose="False" CanHide="False">
                             <Grid>
                                 <diagram:DiagramEditorControl x:Name="DiagramEditor" 
 															  SelectionChanged="DiagramEditor_OnSelectionChanged"
@@ -43,7 +43,7 @@
 
                 <xcad:LayoutAnchorablePaneGroup DockWidth="2*">
                     <xcad:LayoutAnchorablePane>
-                        <xcad:LayoutAnchorable ContentId="PropertyGridControl" Title="{x:Static localization:LocalizedStrings.Str1507}" CanClose="False">
+                        <xcad:LayoutAnchorable ContentId="PropertyGridControl" Title="{x:Static localization:LocalizedStrings.Str1507}" CanClose="False" CanHide="False">
                             <diagram:PropertyGridEx x:Name="PropertyGridControl" 
 													ShowAdvancedOptions="False" ShowDescriptionByTooltip="False" ShowPreview="False" ShowSearchBox="False"
 													ShowSortOptions="False" ShowSummary="True" ShowTitle="False"/>
