@@ -156,6 +156,7 @@ namespace StockSharp.Designer
 
 			SolutionExplorer.Compositions = _strategiesRegistry.Compositions;
 			SolutionExplorer.Strategies = _strategiesRegistry.Strategies;
+			//EmulationSecurityEditor.SecurityProvider = _connector;
 		}
 
 		private static void InitializeDataSource()

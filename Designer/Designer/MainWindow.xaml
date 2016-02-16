@@ -9,6 +9,8 @@
 		xmlns:localization="clr-namespace:StockSharp.Localization;assembly=StockSharp.Localization"
 		xmlns:local="clr-namespace:StockSharp.Designer"
 		xmlns:businessEntities="clr-namespace:StockSharp.BusinessEntities;assembly=StockSharp.BusinessEntities"
+		xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+		xmlns:controls="clr-namespace:StockSharp.Studio.Controls;assembly=StockSharp.Studio.Controls"
 		mc:Ignorable="d"
 		Height="768" Width="1024" WindowState="Maximized"
         DontUseDwm="False" WindowStartupLocation="CenterScreen"
@@ -203,7 +205,8 @@
 								   LargeIcon="pack://application:,,,/Designer;component/Images/Remove_32x32.png"
 								   Command="{x:Static local:MainWindow.RemoveCommand}"
 								   CommandParameter="{Binding ElementName=SolutionExplorer, Path=SelectedItem}" />
-                    <Separator />
+                    
+					<Separator />
 
                     <fluent:Button Header="{x:Static localization:LocalizedStrings.Import}"
 								   SizeDefinition="Middle"
@@ -317,8 +320,37 @@
 								   SizeDefinition="Large"
 								   LargeIcon="pack://application:,,,/Designer;component/Images/Refresh_32x32.png"
 								   Command="{Binding RefreshCompositionCommand}" />
+					
 					<Separator />
-                    <fluent:Button Header="{x:Static localization:LocalizedStrings.Str2421}"
+
+                    <Grid>
+						<Grid.RowDefinitions>
+							<RowDefinition/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+
+                        <Label Grid.Row="0" Grid.Column="0" Content="{x:Static localization:LocalizedStrings.Str343}"/>
+                        <xctk:DateTimePicker Grid.Row="0" Grid.Column="1" Width="150" Value="{Binding Strategy.StartDate}"/>
+
+                        <Label Grid.Row="1" Grid.Column="0" Content="{x:Static localization:LocalizedStrings.Str345}"/>
+                        <xctk:DateTimePicker Grid.Row="1" Grid.Column="1" Width="150" Value="{Binding Strategy.StopDate}"/>
+
+                        <!--<Label Grid.Row="0" Grid.Column="2" Content="{x:Static localization:LocalizedStrings.Security}"/>
+                        <xaml:SecurityEditor Grid.Row="0" Grid.Column="3" x:Name="EmulationSecurityEditor" Width="150" SelectedSecurity="{Binding Strategy.Security}"/>-->
+
+                        <Label Grid.Row="0" Grid.Column="2" Content="{x:Static localization:LocalizedStrings.MarketData}"/>
+						<controls:MarketDataSettingsComboBox Grid.Row="0" Grid.Column="3" Width="150" SelectedSettings="{Binding Strategy.MarketDataSettings}"/>
+                    </Grid>
+
+                    <Separator />
+                    
+					<fluent:Button Header="{x:Static localization:LocalizedStrings.Str2421}"
 								   SizeDefinition="Large"
 								   LargeIcon="pack://application:,,,/Designer;component/Images/start_32x32.png"
 								   Command="{Binding StartCommand}" />
@@ -398,7 +430,7 @@
                         <xcad:LayoutAnchorablePaneGroup DockWidth="200">
                             <xcad:LayoutAnchorablePane>
                                 <xcad:LayoutAnchorable Title="{x:Static localization:LocalizedStrings.Schemas}" 
-													   ContentId="SolutionExplorer" CanClose="False" AutoHideWidth="200">
+													   ContentId="SolutionExplorer" CanClose="False" CanHide="False" AutoHideWidth="200">
                                     <local:SolutionExplorerControl x:Name="SolutionExplorer" 
 																   NodeContextMenu="{StaticResource TreeContextMenu}"
 																   Open="SolutionExplorer_OnOpen"/>
@@ -413,7 +445,7 @@
                     
 					<xcad:LayoutAnchorablePaneGroup DockHeight="200">
                         <xcad:LayoutAnchorablePane>
-                            <xcad:LayoutAnchorable Title="{x:Static localization:LocalizedStrings.Str3237}" ContentId="Logs" CanClose="False" AutoHideHeight="200">
+                            <xcad:LayoutAnchorable Title="{x:Static localization:LocalizedStrings.Str3237}" ContentId="Logs" CanClose="False" CanHide="False" AutoHideHeight="200">
                                 <xaml:Monitor x:Name="Monitor"/>
                             </xcad:LayoutAnchorable>
                         </xcad:LayoutAnchorablePane>

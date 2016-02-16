@@ -6,7 +6,7 @@
              xmlns:diagram="http://schemas.stocksharp.com/xaml"
              xmlns:xcad="http://schemas.xceed.com/wpf/xaml/avalondock"
              xmlns:localization="clr-namespace:StockSharp.Localization;assembly=StockSharp.Localization"
-             mc:Ignorable="d" 
+             mc:Ignorable="d"
              d:DesignHeight="300" d:DesignWidth="600">
 
     <xcad:DockingManager x:Name="DockingManager">
@@ -33,7 +33,9 @@
 
                 <xcad:LayoutAnchorablePaneGroup DockWidth="5*">
                     <xcad:LayoutAnchorablePane>
-                        <xcad:LayoutAnchorable ContentId="PropertyGridControl" Title="{x:Static localization:LocalizedStrings.Str1507}" CanClose="False" CanHide="False">
+                        <xcad:LayoutAnchorable x:Name="PropertyGridControlAnchorable" ContentId="PropertyGridControl" 
+											   AutoHideWidth="300" CanClose="False" CanHide="False"
+											   Title="{x:Static localization:LocalizedStrings.Str1507}">
                             <diagram:PropertyGridEx x:Name="PropertyGridControl"
 													ShowAdvancedOptions="False" ShowDescriptionByTooltip="False" ShowPreview="False" ShowSearchBox="False"
 													ShowSortOptions="False" ShowSummary="True" ShowTitle="False"/>

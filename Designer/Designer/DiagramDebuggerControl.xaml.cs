@@ -19,6 +19,7 @@ namespace StockSharp.Designer
 	using System.ComponentModel;
 	using System.Windows;
 	using System.Windows.Input;
+	using System.Windows.Media;
 
 	using Ecng.Common;
 	using Ecng.Serialization;
@@ -32,6 +33,9 @@ namespace StockSharp.Designer
 	public partial class DiagramDebuggerControl : IPersistable
 	{
 		private readonly LayoutManager _layoutManager;
+
+		private bool _isDefaultLayout = true;
+		private bool _isLoaded;
 
 		#region Strategy
 
@@ -73,6 +77,21 @@ namespace StockSharp.Designer
             InitializeComponent();
 			
 			_layoutManager = new LayoutManager(DockingManager);
+		}
+
+		protected override void OnRender(DrawingContext drawingContext)
+		{
+			base.OnRender(drawingContext);
+
+			if (_isLoaded)
+				return;
+
+			_isLoaded = true;
+
+			if (!_isDefaultLayout)
+				return;
+
+			PropertyGridControlAnchorable.ToggleAutoHide();
 		}
 
 		private void InitializeCommands()
@@ -218,7 +237,10 @@ namespace StockSharp.Designer
 			var layout = storage.GetValue<string>("Layout");
 
 			if (!layout.IsEmpty())
+			{
+				_isDefaultLayout = false;
 				_layoutManager.LoadLayout(layout);
+			}
 
 			var diagramEditor = storage.GetValue<SettingsStorage>("DiagramEditor");
 
