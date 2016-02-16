@@ -324,6 +324,15 @@
 					<Separator />
 
                     <Grid>
+						<Grid.Style>
+                            <Style TargetType="{x:Type Grid}">
+                                <Style.Triggers>
+                                    <Trigger Property="DataContext" Value="{x:Null}">
+                                        <Setter Property="IsEnabled" Value="False" />
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+						</Grid.Style>
 						<Grid.RowDefinitions>
 							<RowDefinition/>
                             <RowDefinition/>
@@ -336,10 +345,10 @@
                         </Grid.ColumnDefinitions>
 
                         <Label Grid.Row="0" Grid.Column="0" Content="{x:Static localization:LocalizedStrings.Str343}"/>
-                        <xctk:DateTimePicker Grid.Row="0" Grid.Column="1" Width="150" Value="{Binding Strategy.EmulationSettings.StartDate}"/>
+                        <xctk:DateTimePicker Grid.Row="0" Grid.Column="1" Width="150" Format="ShortDate" Value="{Binding Strategy.EmulationSettings.StartDate}"/>
 
                         <Label Grid.Row="1" Grid.Column="0" Content="{x:Static localization:LocalizedStrings.Str345}"/>
-                        <xctk:DateTimePicker Grid.Row="1" Grid.Column="1" Width="150" Value="{Binding Strategy.EmulationSettings.StopDate}"/>
+                        <xctk:DateTimePicker Grid.Row="1" Grid.Column="1" Width="150" Format="ShortDate" Value="{Binding Strategy.EmulationSettings.StopDate}"/>
 
                         <!--<Label Grid.Row="0" Grid.Column="2" Content="{x:Static localization:LocalizedStrings.Security}"/>
                         <xaml:SecurityEditor Grid.Row="0" Grid.Column="3" x:Name="EmulationSecurityEditor" Width="150" SelectedSecurity="{Binding Strategy.Security}"/>-->
