@@ -79,7 +79,7 @@ namespace StockSharp.Studio.Services
 				Id = strategy.Id;
 				Name = strategy.Name + " Connector";
 
-				_realConnector = (StudioConnector)ConfigManager.GetService<IStudioConnector>();
+				_realConnector = (StudioConnector)ConfigManager.GetService<IConnector>();
 				_realConnector.NewMessage += RealConnectorNewMessage;
 
 				_securityProvider = new StudioSecurityProvider();

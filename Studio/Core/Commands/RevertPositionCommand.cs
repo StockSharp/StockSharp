@@ -21,10 +21,12 @@ namespace StockSharp.Studio.Core.Commands
 
 	public class RevertPositionCommand : BaseStudioCommand
 	{
-		public Position Position { get; private set; }
+		public Position Position {get;}
+		public Security Security {get;}
 
-		public RevertPositionCommand()
+		public RevertPositionCommand(Security security)
 		{
+			Security = security;
 		}
 
 		public RevertPositionCommand(Position position)

@@ -974,7 +974,7 @@ namespace StockSharp.Studio
 			ConfigManager.RegisterService<ISecurityProvider>(new FilterableSecurityProvider(_connector));
 			_connector.Connect();
 
-			ConfigManager.RegisterService<IStudioConnector>(_connector);
+			ConfigManager.RegisterService<IConnector>(_connector);
 			ConfigManager.RegisterService<IStrategyService>(strategyService);
 
 			InitializeAutomaticUpdater();

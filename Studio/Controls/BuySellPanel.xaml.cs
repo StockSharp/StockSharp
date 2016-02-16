@@ -13,13 +13,12 @@ Created: 2015, 11, 11, 2:32 PM
 Copyright 2010 by StockSharp, LLC
 *******************************************************************************************/
 #endregion S# License
+
 namespace StockSharp.Studio.Controls
 {
 	using System;
 	using System.Linq;
 	using System.Windows;
-
-	using ActiproSoftware.Windows.Controls.Editors;
 
 	using Ecng.Common;
 	using Ecng.ComponentModel;
@@ -205,20 +204,7 @@ namespace StockSharp.Studio.Controls
 			_settings.PropertyChanged += (arg1, arg2) => new ControlChangedCommand(this).Process(this);
 
 			SettingsPropertyGrid.SelectedObject = _settings;
-			LimitPriceCtrl.Text = string.Empty;
-		}
-
-		private bool CheckLimitPrice()
-		{
-			var expression = LimitPriceCtrl.GetBindingExpression(MaskedTextBox.TextProperty);
-			if (expression != null)
-			{
-				expression.UpdateSource();
-
-				return !expression.HasError;
-			}
-
-			return false;
+			LimitPriceCtrl.Value = 0;
 		}
 
 		private Order CreateOrder(Sides direction, decimal price = 0, OrderTypes type = OrderTypes.Market)
@@ -236,18 +222,20 @@ namespace StockSharp.Studio.Controls
 
 		private void BuyAtLimit_Click(object sender, RoutedEventArgs e)
 		{
-			if (!CheckLimitPrice())
+			var price = LimitPriceCtrl.Value;
+			if(price == null || price <= 0)
 				return;
 
-			new RegisterOrderCommand(CreateOrder(Sides.Buy, LimitPrice, OrderTypes.Limit)).Process(this);
+			new RegisterOrderCommand(CreateOrder(Sides.Buy, price.Value, OrderTypes.Limit)).Process(this);
 		}
 
 		private void SellAtLimit_Click(object sender, RoutedEventArgs e)
 		{
-			if (!CheckLimitPrice())
+			var price = LimitPriceCtrl.Value;
+			if(price == null || price <= 0)
 				return;
 
-			new RegisterOrderCommand(CreateOrder(Sides.Sell, LimitPrice, OrderTypes.Limit)).Process(this);
+			new RegisterOrderCommand(CreateOrder(Sides.Sell, price.Value, OrderTypes.Limit)).Process(this);
 		}
 
 		private void BuyAtMarket_Click(object sender, RoutedEventArgs e)
@@ -262,12 +250,12 @@ namespace StockSharp.Studio.Controls
 
 		private void ClosePosition_Click(object sender, RoutedEventArgs e)
 		{
-			new ClosePositionCommand().Process(this);
+			new ClosePositionCommand(Settings.Security).Process(this);
 		}
 
 		private void RevertPosition_Click(object sender, RoutedEventArgs e)
 		{
-			new RevertPositionCommand().Process(this);
+			new RevertPositionCommand(Settings.Security).Process(this);
 		}
 
 		private void CancelAll_Click(object sender, RoutedEventArgs e)

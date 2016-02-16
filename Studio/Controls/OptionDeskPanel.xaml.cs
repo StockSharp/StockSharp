@@ -82,7 +82,7 @@ namespace StockSharp.Studio.Controls
 			var connector = ConfigManager.GetService<IConnector>();
 			connector.NewSecurities += OnNewSecurities;
 
-			var studioConnector = ConfigManager.GetService<IStudioConnector>();
+			var studioConnector = ConfigManager.GetService<IConnector>();
 			studioConnector.SecuritiesChanged += OnSecuritiesChanged;
 
 			Desk.MarketDataProvider = studioConnector;

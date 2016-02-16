@@ -25,7 +25,6 @@ namespace StockSharp.Terminal.Layout
 		public const string OrderLog = "OrderLog";
 		public const string Portfolio = "Portfolio";
 		public const string Security = "Security";
-		public const string Strategy = "Strategy";
 		public const string Trade = "Trade";
 		public const string Window = "Window";
 	}

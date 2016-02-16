@@ -13,6 +13,7 @@ Created: 2015, 11, 11, 2:32 PM
 Copyright 2010 by StockSharp, LLC
 *******************************************************************************************/
 #endregion S# License
+
 namespace StockSharp.Studio.Controls
 {
 	using System;
@@ -31,8 +32,8 @@ namespace StockSharp.Studio.Controls
 	using MoreLinq;
 
 	using StockSharp.Algo;
+	using StockSharp.Algo.Storages;
 	using StockSharp.BusinessEntities;
-	using StockSharp.Studio.Core;
 	using StockSharp.Studio.Core.Commands;
 	using StockSharp.Localization;
 
@@ -77,7 +78,7 @@ namespace StockSharp.Studio.Controls
 
 			SecurityPicker.GridChanged += RaiseChangedCommand;
 
-			GotFocus += (s, e) => RaiseSelectedCommand();
+			//GotFocus += (s, e) => RaiseSelectedCommand();
 
 			var cmdSvc = ConfigManager.GetService<IStudioCommandService>();
 			//cmdSvc.Register<ResetedCommand>(this, false, cmd =>
@@ -128,6 +129,8 @@ namespace StockSharp.Studio.Controls
 		//TODO: дописать логику сохранения состояния для DockSite
 		public override void Save(SettingsStorage storage)
 		{
+			base.Save(storage);
+
 			storage.SetValue("SecurityPicker", SecurityPicker.Save());
 			//storage.SetValue("Layout", DockSite.SaveLayout());
 			storage.SetValue("Securities", _securityIds.ToArray());
@@ -136,6 +139,8 @@ namespace StockSharp.Studio.Controls
 		//TODO: дописать логику загрузки состояния для DockSite
 		public override void Load(SettingsStorage storage)
 		{
+			base.Load(storage);
+
 			var gridSettings = storage.GetValue<SettingsStorage>("SecurityPicker");
 
 			if (gridSettings != null)
@@ -168,6 +173,8 @@ namespace StockSharp.Studio.Controls
 
 			_changed = false;
 			PropertyGrid.SelectedObject = newSecurity;
+
+			RaiseSelectedCommand();
 		}
 
 		private void SecurityPropertyChanged(object sender, PropertyChangedEventArgs e)
@@ -191,7 +198,7 @@ namespace StockSharp.Studio.Controls
 
 		private void ExecutedSaveSecurityCommand(object sender, ExecutedRoutedEventArgs e)
 		{
-			var entityRegistry = ConfigManager.GetService<IStudioEntityRegistry>();
+			var entityRegistry = ConfigManager.GetService<IEntityRegistry>();
 			var security = (Security)PropertyGrid.SelectedObject;
 
 			if (_isNew)

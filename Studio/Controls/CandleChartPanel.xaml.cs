@@ -13,9 +13,9 @@ Created: 2015, 11, 11, 2:32 PM
 Copyright 2010 by StockSharp, LLC
 *******************************************************************************************/
 #endregion S# License
+
 namespace StockSharp.Studio.Controls
 {
-	using System;
 	using System.Linq;
 	using System.Threading;
 
@@ -30,20 +30,14 @@ namespace StockSharp.Studio.Controls
 	using StockSharp.BusinessEntities;
 	using StockSharp.Configuration;
 	using StockSharp.Localization;
-	using StockSharp.Studio.Core;
 	using StockSharp.Studio.Core.Commands;
 	using StockSharp.Xaml.Charting;
-	using StockSharp.Xaml.Charting.IndicatorPainters;
 
 	[DisplayNameLoc(LocalizedStrings.Str3200Key)]
 	[DescriptionLoc(LocalizedStrings.Str3201Key)]
 	[Icon("images/chart_24x24.png")]
 	public partial class CandleChartPanel
 	{
-		private readonly BufferedChart _bufferedChart;
-
-		private SettingsStorage _settingsStorage;
-		private StrategyContainer _strategy;
 		private Timer _timer;
 
 		public CandleChartPanel()
@@ -51,35 +45,33 @@ namespace StockSharp.Studio.Controls
 			InitializeComponent();
 
 			var cmdSvc = ConfigManager.GetService<IStudioCommandService>();
-			cmdSvc.Register<ChartDrawCommand>(this, false, cmd => _bufferedChart.Draw(cmd.Values));
-			cmdSvc.Register<ChartAddAreaCommand>(this, false, cmd => _bufferedChart.AddArea(cmd.Area));
-			cmdSvc.Register<ChartRemoveAreaCommand>(this, false, cmd => _bufferedChart.RemoveArea(cmd.Area));
-			cmdSvc.Register<ChartAddElementCommand>(this, false, cmd => _bufferedChart.AddElement(cmd.Area, cmd.Element));
-			cmdSvc.Register<ChartRemoveElementCommand>(this, false, cmd => _bufferedChart.RemoveElement(cmd.Area, cmd.Element));
-			cmdSvc.Register<ChartClearAreasCommand>(this, false, cmd => _bufferedChart.ClearAreas());
-			cmdSvc.Register<ChartResetElementsCommand>(this, false, cmd => _bufferedChart.Reset(cmd.Elements));
-			cmdSvc.Register<ChartAutoRangeCommand>(this, false, cmd => _bufferedChart.IsAutoRange = cmd.AutoRange);
-			cmdSvc.Register<ResetedCommand>(this, true, cmd => OnReseted());
-			cmdSvc.Register<BindStrategyCommand>(this, true, cmd =>
+			cmdSvc.Register<ChartDrawCommand>(this, true, cmd => ChartPanel.Draw(cmd.Values));
+			cmdSvc.Register<ChartAddAreaCommand>(this, true, cmd => ChartPanel.AddArea(cmd.Area));
+			cmdSvc.Register<ChartRemoveAreaCommand>(this, true, cmd => ChartPanel.RemoveArea(cmd.Area));
+			cmdSvc.Register<ChartAddElementCommand>(this, true, cmd =>
 			{
-				if (!cmd.CheckControl(this))
-					return;
+				var celem = cmd.Element as ChartCandleElement;
 
-				if (_strategy == cmd.Source)
-					return;
-
-				_strategy = cmd.Source;
-
-				SetChart(true);
-
-				ChartPanel.IsInteracted = _strategy != null && _strategy.GetIsInteracted();
-
-				if (_settingsStorage != null)
-					ChartPanel.Load(_settingsStorage);
-
-				TryCreateDefaultSeries();
+				if (celem != null && cmd.Series != null)
+				{
+					ChartPanel.AddElement(cmd.Area, celem, cmd.Series);
+					OnChartPanelSubscribeCandleElement(celem, cmd.Series);
+				}
+				else
+					ChartPanel.AddElement(cmd.Area, cmd.Element);
 			});
+			cmdSvc.Register<ChartRemoveElementCommand>(this, true, cmd =>
+			{
+				ChartPanel.RemoveElement(cmd.Area, cmd.Element);
+				OnChartPanelUnSubscribeElement(cmd.Element);
+			});
+
+			cmdSvc.Register<ChartClearAreasCommand>(this, true, cmd => ChartPanel.ClearAreas());
+			cmdSvc.Register<ChartResetElementsCommand>(this, true, cmd => ChartPanel.Reset(cmd.Elements));
+			cmdSvc.Register<ChartAutoRangeCommand>(this, true, cmd => ChartPanel.IsAutoRange = cmd.AutoRange);
+			cmdSvc.Register<ResetedCommand>(this, true, cmd => OnReseted());
 			
+			//ChartPanel.IsInteracted = true;
 			ChartPanel.SettingsChanged += () => new ControlChangedCommand(this).Process(this);
 			ChartPanel.RegisterOrder += order => new RegisterOrderCommand(order).Process(this);
 			ChartPanel.SubscribeCandleElement += OnChartPanelSubscribeCandleElement;
@@ -91,16 +83,11 @@ namespace StockSharp.Studio.Controls
 			ChartPanel.MinimumRange = 200;
 			ChartPanel.FillIndicators();
 
-			_bufferedChart = new BufferedChart(ChartPanel);
-
 			WhenLoaded(() => new RequestBindSource(this).SyncProcess(this));
 		}
 
 		public override void Dispose()
 		{
-			if (_strategy != null)
-				SetChart(false);
-
 			if (_timer != null)
 			{
 				_timer.Dispose();
@@ -117,21 +104,17 @@ namespace StockSharp.Studio.Controls
 			cmdSvc.UnRegister<ChartResetElementsCommand>(this);
 			cmdSvc.UnRegister<ChartAutoRangeCommand>(this);
 			cmdSvc.UnRegister<ResetedCommand>(this);
-			cmdSvc.UnRegister<BindStrategyCommand>(this);
+			cmdSvc.UnRegister<SelectCommand>(this);
 		}
 
 		private void OnReseted()
 		{
-			// если у элемента нет "источника" созданного руками значит это творчество стратегии
 			foreach (var area in ChartPanel.Areas.ToArray())
 			{
-				if (_strategy != null && _strategy.GetIsInteracted())
+				foreach (var e in area.Elements.ToArray())
 				{
-					foreach (var e in area.Elements.ToArray())
-					{
-						if (ChartPanel.Elements.All(el => el != e))
-							area.Elements.Remove(e);
-					}
+					if (ChartPanel.Elements.All(el => el != e))
+						area.Elements.Remove(e);
 				}
 				
 				if (area.Elements.IsEmpty())
@@ -142,29 +125,6 @@ namespace StockSharp.Studio.Controls
 			ChartPanel.ReSubscribeElements();
 
 			//TryCreateDefaultSeries();
-		}
-
-		private void TryCreateDefaultSeries()
-		{
-			if (_strategy == null || _strategy.Security == null || !_strategy.GetIsInteracted() || ChartPanel.Areas.Count != 0)
-				return;
-
-			var series = _strategy.Security.TimeFrame(TimeSpan.FromMinutes(5));
-
-			var area = new ChartArea { Title = LocalizedStrings.Panel + " 1" };
-			ChartPanel.AddArea(area);
-			ChartPanel.AddElement(area, new ChartCandleElement(), series);
-			ChartPanel.AddElement(area, new ChartIndicatorElement(), series, new SimpleMovingAverage { Length = 50 });
-			ChartPanel.AddElement(area, new ChartOrderElement(), _strategy.Security);
-			ChartPanel.AddElement(area, new ChartTradeElement(), _strategy.Security);
-
-			var adxArea = new ChartArea { Title = LocalizedStrings.Panel + " 2" };
-			ChartPanel.AddArea(adxArea);
-			ChartPanel.AddElement(adxArea, new ChartIndicatorElement { IndicatorPainter = new AverageDirectionalIndexPainter() }, series, new AverageDirectionalIndex());
-
-			var volumeArea = new ChartArea { Title = LocalizedStrings.Panel + " 3" };
-			ChartPanel.AddArea(volumeArea);
-			ChartPanel.AddElement(volumeArea, new ChartIndicatorElement { IndicatorPainter = new VolumePainter() }, series, new VolumeIndicator());
 		}
 
 		private void OnChartPanelSubscribeCandleElement(ChartCandleElement element, CandleSeries candleSeries)
@@ -195,22 +155,24 @@ namespace StockSharp.Studio.Controls
 			element.DoIf<IChartElement, ChartTradeElement>(e => new UnSubscribeTradeElementCommand(e).Process(this));
 		}
 
-		private void SetChart(bool valid)
-		{
-			_strategy.SetChart(valid ? _bufferedChart : null);
-		}
-
 		public override void Load(SettingsStorage storage)
 		{
-			_settingsStorage = storage;
+			base.Load(storage);
+
+//			var savedPanel = storage.GetValue<SettingsStorage>("ChartPanel");
+//
+//			if(savedPanel != null)
+//				ChartPanel.Load(savedPanel);
 		}
 
 		public override void Save(SettingsStorage storage)
 		{
-			if (_strategy != null)
-				ChartPanel.Save(storage);
-			else
-				storage.AddRange(_settingsStorage);
+			base.Save(storage);
+
+//			var s = new SettingsStorage();
+//			ChartPanel.Save(s);
+//
+//			storage.SetValue("ChartPanel", s);
 		}
 	}
 }

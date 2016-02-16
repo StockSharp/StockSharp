@@ -16,157 +16,158 @@ Copyright 2010 by StockSharp, LLC
 
 using System;
 using System.IO;
-using System.Linq;
 using System.Windows;
-
-using StockSharp.Terminal.Layout;
-using StockSharp.Terminal.Controls;
-using Xceed.Wpf.AvalonDock.Layout;
-using Xceed.Wpf.AvalonDock;
 using System.Windows.Controls;
+using System.Windows.Input;
+using StockSharp.Logging;
+using Ecng.Configuration;
+using Ecng.Serialization;
+using Ecng.Common;
+using Ecng.ComponentModel;
+using Ecng.Localization;
+using Ecng.Xaml;
+using MoreLinq;
+using StockSharp.BusinessEntities;
+using StockSharp.Localization;
+using StockSharp.Studio.Controls;
+using StockSharp.Studio.Core.Commands;
+using StockSharp.Terminal.Services;
 
 namespace StockSharp.Terminal
 {
-	using Ecng.Common;
-
 	public partial class MainWindow
 	{
-		public LayoutManager LayoutManager { get; set; }
+		public const string LayoutFile = "layout.xml";
+		private readonly ConnectorService _connectorService;
 
-		private int _countWorkArea = 2;
+		public static MainWindow Instance { get; private set; }
+
+		public static readonly DependencyProperty IsConnectedProperty = DependencyProperty.Register("IsConnected", typeof(bool), typeof(MainWindow), new PropertyMetadata(false));
+
+		public bool IsConnected
+		{
+			get { return (bool)GetValue(IsConnectedProperty); }
+			set { SetValue(IsConnectedProperty, value); }
+		}
+
+		public static readonly Type[] ControlTypes = {
+			typeof(TradesPanel),
+			typeof(MyTradesTable),
+			typeof(OrdersPanel),
+			typeof(SecuritiesPanel),
+			typeof(ScalpingMarketDepthControl),
+			typeof(NewsPanel),
+			typeof(PortfoliosPanel),
+			typeof(CandleChartPanel),
+		};
 
 		public MainWindow()
 		{
+			LocalizedStrings.ActiveLanguage = Languages.English;
+			ConfigManager.RegisterService<IStudioCommandService>(new TerminalCommandService());
+
 			InitializeComponent();
+			Instance = this;
 
-			LayoutManager = new LayoutManager(DockingManager);
+			Title = Title.Put("S# Terminal");
 
-			//AddDocumentElement.IsSelectedChanged += AddDocumentElement_IsSelectedChanged;
-			DockingManager.DocumentClosed += DockingManager_DocumentClosed;
-		}
+			_connectorService = new ConnectorService();
+			_connectorService.ChangeConnectStatusEvent += ChangeConnectStatusEvent;
+			_connectorService.ErrorEvent += OnError;
 
-		private void DockingManager_DocumentClosed(object sender, DocumentClosedEventArgs e)
-		{
-			var manager = (DockingManager)sender;
+			var logManager = ConfigManager.GetService<LogManager>();
+			logManager.Application.LogLevel = LogLevels.Debug;
 
-			if (LayoutDocuments.Children.Count == 0 &&
-				manager.FloatingWindows.ToList().Count == 0)
-				_countWorkArea = 0;
-		}
+			logManager.Listeners.Add(new FileLogListener("Terminal.log"));
 
-		//private void DockingManager_DocumentClosing(object sender, Xceed.Wpf.AvalonDock.DocumentClosingEventArgs e)
-		//{
-		//	var element = e.Document;
-		//	var manager = (Xceed.Wpf.AvalonDock.DockingManager)sender;
+			var cmdSvc = ConfigManager.GetService<IStudioCommandService>();
 
-		//	var item = manager.FloatingWindows.FirstOrDefault(x =>
-		//	{
-		//		var doc = (LayoutDocumentFloatingWindow)x.Model;
-		//		return doc.Children.Contains(element);
-		//	});
-
-		//	if (item != null)
-		//	{
-		//		manager.FloatingWindows.ToList().Remove(item);
-		//	}
-		//	else
-		//		LayoutDocuments.RemoveChild(element);
-
-		//	if (LayoutDocuments.Children.Count == 0)
-		//		_countWorkArea = 0;
-
-		//	//if (LayoutDocuments.Children.Count == 2)
-		//	//{
-		//	//	var item = LayoutDocuments.Children.FirstOrDefault(x => x.Title != "+");
-		//	//	item.CanClose = false;
-		//	//	LayoutDocuments.SelectedContentIndex = LayoutDocuments.IndexOfChild(item);
-		//	//}
-		//}
-
-		private void AddDocument(object sender, RoutedEventArgs e)
-		{
-			var newWorkArea = new LayoutDocument()
+			Loaded += (sender, args) =>
 			{
-				Title = "Work area #" + ++_countWorkArea,
-				Content = new WorkAreaControl()
+				cmdSvc.Register<RequestBindSource>(this, true, cmd => new BindConnectorCommand(ConfigManager.GetService<IConnector>(), cmd.Control).SyncProcess(this));
+				_connectorService.InitConnector();
 			};
 
-			newWorkArea.Closing += NewWorkArea_Closing;
-
-			LayoutDocuments.Children.Add(newWorkArea);
-			
-			var offset = LayoutDocuments.Children.Count - 1;
-			offset = (offset < 0) ? 0 : offset;
-
-			LayoutDocuments.SelectedContentIndex = offset;
-		}
-
-		private void NewWorkArea_Closing(object sender, System.ComponentModel.CancelEventArgs e)
-		{
-			
-		}
-
-		//private void AddDocumentElement_IsSelectedChanged(object sender, EventArgs e)
-		//{
-		//	var element = (LayoutDocument)sender;
-
-		//	if (!element.IsSelected || LayoutDocuments.Children.Count == 1)
-		//		return;
-
-		//	LayoutDocument newWorkArea = new LayoutDocument()
-		//	{
-		//		Title = "Рабочая область " + ++_countWorkArea,
-		//		Content = new WorkAreaControl()
-		//	};
-
-		//	var offset = LayoutDocuments.Children.Count - 1;
-
-		//	//if (offset != LayoutDocuments.IndexOfChild(element))
-		//	//	return;
-
-		//	LayoutDocuments.Children.RemoveAt(offset);
-
-		//	LayoutDocuments.Children.Add(newWorkArea);
-		//	LayoutDocuments.Children.Add(element);
-		//	LayoutDocuments.SelectedContentIndex = offset;
-
-		//	//var offset = LayoutDocuments.IndexOfChild(element);
-		//	//LayoutDocuments.InsertChildAt(offset, newWorkArea);
-		//	//LayoutDocuments.SelectedContentIndex = offset;
-		//}
-
-		private void DockingManager_OnActiveContentChanged(object sender, EventArgs e)
-        {
-            DockingManager.ActiveContent.DoIfElse<WorkAreaControl>(editor =>
+			Closing += (sender, args) =>
 			{
-				var element = (Xceed.Wpf.AvalonDock.DockingManager)sender;
+				new XmlSerializer<SettingsStorage>().Serialize(_workAreaControl.Save(), LayoutFile);
+			};
 
-			}, () =>
+			ControlTypes.ForEach(t => NewControlComboBox.Items.Add(new ComboBoxItem
 			{
-				var element = (Xceed.Wpf.AvalonDock.DockingManager)sender;
+				Content = t.GetDisplayName(),
+				Tag = t
+			}));
 
-			});
-        }
-		
-		protected override void OnClosed(EventArgs e)
-		{
-			base.OnClosed(e);
+			WindowState = WindowState.Maximized;
 
-		}
-		
-		private void MainWindow_OnLoaded(object sender, RoutedEventArgs e)
-		{
-
-		}
-
-		private void ComboBox_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
-		{
-			if (NewControlComboBox.SelectedIndex != -1)
+			try
 			{
-				var workArea = (WorkAreaControl)DockingManager.ActiveContent;
-				workArea.AddControl(((ComboBoxItem)NewControlComboBox.SelectedItem).Content.ToString());
-				NewControlComboBox.SelectedIndex = -1;
+				if (File.Exists(LayoutFile))
+					_workAreaControl.Load(new XmlSerializer<SettingsStorage>().Deserialize(LayoutFile));
 			}
+			catch (Exception ex)
+			{
+				OnError(ex.ToString(), $"Ошибка при чтении файла {LayoutFile}");
+			}
+		}
+
+		private void SettingsClick(object sender, RoutedEventArgs e)
+		{
+			_connectorService.Configure(this);
+			new XmlSerializer<SettingsStorage>().Serialize(_connectorService.Save(), ConnectorService.SETTINGS_FILE);
+		}
+
+		private void ConnectClick(object sender, RoutedEventArgs e)
+		{
+			if (!_connectorService.IsConnected)
+				_connectorService.Connect();
+			else
+				_connectorService.Disconnect();
+		}
+
+		private void ChangeConnectStatusEvent(bool isConnected)
+		{
+			this.GuiAsync(() => IsConnected = isConnected);
+		}
+
+		private void OnError(string message, string caption)
+		{
+			this.GuiAsync(() => MessageBox.Show(this, message, caption));
+		}
+
+		private void LookupCode_OnKeyDown(object sender, KeyEventArgs e)
+		{
+			if(e.Key == Key.Enter)
+				LookupSecurities();
+		}
+
+		private void LookupButton_OnClick(object sender, RoutedEventArgs e)
+		{
+			LookupSecurities();
+		}
+
+		private void LookupSecurities()
+		{
+			new LookupSecuritiesCommand(new Security
+			{
+				Code = LookupCode.Text.Trim(),
+				Type = LookupType.SelectedType,
+			}).Process(this);
+		}
+
+		private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+		{
+			if(NewControlComboBox.SelectedIndex == -1)
+				return;
+
+			var controlType = ((ComboBoxItem) NewControlComboBox.SelectedItem).Tag as Type;
+			if(controlType == null)
+				return;
+
+			_workAreaControl.HandleNewPanelSelection(controlType);
+
+			NewControlComboBox.SelectedIndex = -1;
 		}
 	}
 }

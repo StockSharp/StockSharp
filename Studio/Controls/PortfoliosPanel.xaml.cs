@@ -54,10 +54,10 @@ namespace StockSharp.Studio.Controls
 			var cmdSvc = ConfigManager.GetService<IStudioCommandService>();
 			cmdSvc.Register<PositionCommand>(this, true, cmd => AlertBtn.Process(new PositionChangeMessage
 			{
-				SecurityId = cmd.Position.Key.Item1,
-				PortfolioName = cmd.Position.Key.Item2,
+				SecurityId = cmd.Position.Security.ToSecurityId(),
+				PortfolioName = cmd.Position.Portfolio.Name,
 				ServerTime = TimeHelper.NowWithOffset,
-			}.Add(PositionChangeTypes.CurrentValue, cmd.Position.Value)));
+			}.Add(PositionChangeTypes.CurrentValue, cmd.Position.CurrentValue)));
 			cmdSvc.Register<BindConnectorCommand>(this, true, cmd =>
 			{
 				if (!cmd.CheckControl(this))
@@ -76,12 +76,16 @@ namespace StockSharp.Studio.Controls
 
 		public override void Save(SettingsStorage storage)
 		{
+			base.Save(storage);
+
 			storage.SetValue("PositionsPanel", PositionsPanel.Save());
 			storage.SetValue("AlertSettings", AlertBtn.Save());
 		}
 
 		public override void Load(SettingsStorage storage)
 		{
+			base.Load(storage);
+
 			var panelSettings = storage.GetValue<SettingsStorage>("PositionsPanel");
 			if (panelSettings != null)
 				((IPersistable)PositionsPanel).Load(panelSettings);

@@ -10,18 +10,13 @@
 			mc:Ignorable="d" d:DesignHeight="300" d:DesignWidth="245">
 
     <Grid>
-		<Grid.ColumnDefinitions>
-			<ColumnDefinition Width="Auto" />
-			<ColumnDefinition Width="*" />
-		</Grid.ColumnDefinitions>
 		<Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
 			<RowDefinition Height="Auto" />
 		</Grid.RowDefinitions>
 
-        <sx:MarketDepthControl x:Name="MdControl" Grid.Column="1" Grid.Row="1" MaxDepth="{Binding ElementName=BuySellPanel, Path=Settings.Depth}" />
+        <sx:MarketDepthControl x:Name="MdControl" Grid.Row="0" MaxDepth="{Binding ElementName=BuySellPanel, Path=Settings.Depth}" />
 
-        <local:BuySellPanel x:Name="BuySellPanel" Grid.Row="3" Grid.ColumnSpan="2"/>
+		<local:BuySellPanel x:Name="BuySellPanel" Grid.Row="1" Grid.ColumnSpan="2"/>
 	</Grid>
 </local:BaseStudioControl>

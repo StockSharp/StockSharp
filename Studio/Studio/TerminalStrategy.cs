@@ -217,7 +217,7 @@ namespace StockSharp.Studio
 			cmdSvc.Register<RequestTradesCommand>(this, false, cmd => new NewTradesCommand(SafeGetConnector().Trades).Process(this));
 
 			cmdSvc.Register<RequestPortfoliosCommand>(this, false, cmd => new PortfolioCommand(Portfolio, true).Process(this));
-			cmdSvc.Register<RequestPositionsCommand>(this, false, cmd => PositionManager.Positions.ForEach(p => new PositionCommand(CurrentTime, p, true).Process(this)));
+			//cmdSvc.Register<RequestPositionsCommand>(this, false, cmd => PositionManager.Positions.ForEach(p => new PositionCommand(CurrentTime, p, true).Process(this)));
 		}
 
 		private bool CanProcess => ProcessState == ProcessStates.Started;

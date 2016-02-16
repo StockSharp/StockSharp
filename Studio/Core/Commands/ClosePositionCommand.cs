@@ -22,9 +22,11 @@ namespace StockSharp.Studio.Core.Commands
 	public class ClosePositionCommand : BaseStudioCommand
 	{
 		public Position Position { get; private set; }
+		public Security Security {get;}
 
-		public ClosePositionCommand()
+		public ClosePositionCommand(Security sec)
 		{
+			Security = sec;
 		}
 
 		public ClosePositionCommand(Position position)

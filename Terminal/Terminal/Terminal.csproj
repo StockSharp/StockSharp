@@ -90,6 +90,7 @@
     <Reference Include="System.configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Xaml">
       <RequiredTargetFramework>4.0</RequiredTargetFramework>
     </Reference>
@@ -116,12 +117,13 @@
     <Compile Include="Controls\WorkAreaControl.xaml.cs">
       <DependentUpon>WorkAreaControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Fakes\FakeMarketDataProvider.cs" />
-    <Compile Include="Fakes\FakeSecurityProvider.cs" />
-    <Compile Include="Fakes\FakeStudioCommandService.cs" />
+    <Compile Include="Interfaces\ITerminalCommandService.cs" />
     <Compile Include="Layout\DockingControl.cs" />
     <Compile Include="Layout\LayoutKeys.cs" />
     <Compile Include="Layout\LayoutManager.cs" />
+    <Compile Include="Services\ConnectorService.cs" />
+    <Compile Include="Services\TerminalCommandService.cs" />
+    <Compile Include="Services\TerminalConnector.cs" />
     <Page Include="Controls\WorkAreaControl.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -233,8 +235,14 @@
       <Link>stocksharp.ico</Link>
     </Resource>
   </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
-    <Folder Include="Images\" />
+    <Resource Include="img\Connect_24x24.png" />
+    <Resource Include="img\Disconnect_24x24.png" />
+    <Resource Include="img\Settings_24x24.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="layout.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

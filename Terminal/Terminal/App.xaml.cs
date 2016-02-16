@@ -13,23 +13,18 @@ Created: 2015, 11, 11, 3:22 PM
 Copyright 2010 by StockSharp, LLC
 *******************************************************************************************/
 #endregion S# License
-using Ecng.Configuration;
-using StockSharp.BusinessEntities;
-using StockSharp.Studio.Core.Commands;
-using StockSharp.Terminal.Fakes;
+
 using System.Windows;
+using System.Windows.Threading;
 
 namespace StockSharp.Terminal
 {
 	public partial class App
 	{
-		protected override void OnStartup(StartupEventArgs e)
+		private void ApplicationDispatcherUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)
 		{
-			ConfigManager.RegisterService<IStudioCommandService>(new FakeStudioCommandService());
-			ConfigManager.RegisterService<ISecurityProvider>(new FakeSecurityProvider());
-			ConfigManager.RegisterService<IMarketDataProvider>(new FakeMarketDataProvider());
-
-			base.OnStartup(e);
+			MessageBox.Show(MainWindow, e.Exception.ToString(), "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+			e.Handled = true;
 		}
 	}
 }

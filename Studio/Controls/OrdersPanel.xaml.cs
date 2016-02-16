@@ -98,15 +98,22 @@ namespace StockSharp.Studio.Controls
 
 			var cmdSvc = ConfigManager.GetService<IStudioCommandService>();
 			cmdSvc.Register<ResetedCommand>(this, false, cmd => OrderGrid.Orders.Clear());
+
+			//TODO: получение команд из ICommandService
 			cmdSvc.Register<OrderCommand>(this, false, cmd =>
 			{
-				if (cmd.Action == OrderActions.Registering && cmd.Order.Type != OrderTypes.Conditional)
+				if (cmd.Order.Type != OrderTypes.Conditional && !OrderGrid.Orders.Contains(cmd.Order))
 					OrderGrid.Orders.Add(cmd.Order);
 			});
 			cmdSvc.Register<ReRegisterOrderCommand>(this, false, cmd => OrderGrid.Orders.Add(cmd.NewOrder));
 			cmdSvc.Register<OrderFailCommand>(this, false, cmd =>
 			{
-				if (cmd.Action == OrderActions.Registering)
+				if(cmd.Fail.Order.Type == OrderTypes.Conditional)
+					return;
+
+				if(!OrderGrid.Orders.Contains(cmd.Fail.Order))
+					OrderGrid.Orders.Add(cmd.Fail.Order);
+				else if(cmd.Action == OrderActions.Registering)
 					OrderGrid.AddRegistrationFail(cmd.Fail);
 			});
 			cmdSvc.Register<BindStrategyCommand>(this, false, cmd =>
@@ -129,11 +136,15 @@ namespace StockSharp.Studio.Controls
 
 		public override void Save(SettingsStorage settings)
 		{
+			base.Save(settings);
+
 			settings.SetValue("OrderGrid", OrderGrid.Save());
 		}
 
 		public override void Load(SettingsStorage settings)
 		{
+			base.Load(settings);
+
 			OrderGrid.Load(settings.GetValue<SettingsStorage>("OrderGrid"));
 		}
 	}

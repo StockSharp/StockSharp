@@ -50,6 +50,8 @@ namespace StockSharp.Studio.Core.Commands
 
 	public class SelectCommand<T> : SelectCommand
 	{
+		public new T Instance => (T) base.Instance;
+
 		public SelectCommand(object instance, bool canEdit)
 			: base(typeof(T), instance, canEdit)
 		{

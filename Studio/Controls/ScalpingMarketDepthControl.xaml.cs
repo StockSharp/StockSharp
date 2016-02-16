@@ -13,6 +13,7 @@ Created: 2015, 11, 11, 2:32 PM
 Copyright 2010 by StockSharp, LLC
 *******************************************************************************************/
 #endregion S# License
+
 namespace StockSharp.Studio.Controls
 {
 	using System;
@@ -29,7 +30,6 @@ namespace StockSharp.Studio.Controls
 
 	using StockSharp.BusinessEntities;
 	using StockSharp.Messages;
-	using StockSharp.Studio.Core;
 	using StockSharp.Studio.Core.Commands;
 	using StockSharp.Xaml;
 	using StockSharp.Localization;
@@ -212,7 +212,6 @@ namespace StockSharp.Studio.Controls
 		private readonly MarketDepthControlActionList _actions;
 		private bool _isLoaded;
 		private bool _needRequestData;
-		private StrategyContainer _strategy;
 
 		public BuySellSettings Settings => BuySellPanel.Settings;
 
@@ -220,14 +219,17 @@ namespace StockSharp.Studio.Controls
 		{
 			InitializeComponent();
 
-			Settings.SecurityChanged += (arg1, arg2) =>
+			Settings.SecurityChanged += (oldSec, newSec) =>
 			{
 				if (!_isLoaded)
 					_needRequestData = true;
 
-				new RefuseMarketDataCommand(arg1, MarketDataTypes.MarketDepth).Process(this);
-				new ClearMarketDepthCommand(arg2).Process(this);
-				new RequestMarketDataCommand(arg2, MarketDataTypes.MarketDepth).Process(this);
+				if(oldSec != null)
+					new RefuseMarketDataCommand(oldSec, MarketDataTypes.MarketDepth).Process(this);
+
+				MdControl.Clear();
+
+				new RequestMarketDataCommand(newSec, MarketDataTypes.MarketDepth).Process(this);
 
 				UpdateTitle();
 			};
@@ -261,6 +263,13 @@ namespace StockSharp.Studio.Controls
 				new MarketDepthControlAction(System.Windows.Input.Key.Escape, ModifierKeys.None, (c, q) => new CancelAllOrdersCommand().Process(this)),
 			};
 
+			MdControl.SelectedCellsChanged += (sender, args) =>
+			{
+				var q = MdControl.SelectedQuote;
+				if(q != null)
+					BuySellPanel.LimitPriceCtrl.Value = q.Price;
+			};
+
 			var cmdSvc = ConfigManager.GetService<IStudioCommandService>();
 			//cmdSvc.Register<SubscribeMarketDepthKeyActionCommand>(this, cmd => _actions.Add(new MarketDepthControlAction(cmd.Key, cmd.ModifierKey)));
 			//cmdSvc.Register<SubscribeMarketDepthMouseActionCommand>(this, cmd => _actions.Add(new MarketDepthControlAction(cmd.MouseAction, cmd.ModifierKey)));
@@ -272,10 +281,14 @@ namespace StockSharp.Studio.Controls
 				if (Settings.Security == null || cmd.Depth.Security == Settings.Security)
 					MdControl.UpdateDepth(cmd.Depth);
 			});
-			cmdSvc.Register<ClearMarketDepthCommand>(this, false, cmd =>
+			cmdSvc.Register<ClearMarketDepthCommand>(this, true, cmd =>
 			{
-				if (Settings.Security == null || cmd.Security == Settings.Security)
-					MdControl.Clear();
+				MdControl.Clear();
+
+				if(cmd.Security == null || cmd.Security == Settings.Security)
+					return;
+
+				Settings.Security = cmd.Security;
 			});
 			cmdSvc.Register<OrderCommand>(this, false, cmd =>
 			{
@@ -294,11 +307,6 @@ namespace StockSharp.Studio.Controls
 				}
 			});
 			cmdSvc.Register<ResetedCommand>(this, false, cmd => new RequestMarketDataCommand(Settings.Security, MarketDataTypes.MarketDepth).Process(this));
-			cmdSvc.Register<BindStrategyCommand>(this, false, cmd =>
-			{
-				_strategy = cmd.Source;
-				UpdateTitle();
-			});
 
 			WhenLoaded(() =>
 			{
@@ -313,16 +321,7 @@ namespace StockSharp.Studio.Controls
 
 		private void UpdateTitle()
 		{
-			if (Settings.Security != null)
-			{
-				Title = Settings.Security.Id;
-			}
-			else if (_strategy != null && _strategy.Security != null)
-			{
-				Title = _strategy.Security.Id;
-			}
-			else
-				Title = LocalizedStrings.MarketDepth;
+			Title = Settings.Security != null ? Settings.Security.Id : LocalizedStrings.MarketDepth;
 		}
 
 		private bool OnQuotesCanDrag(DataGridCell cell)
@@ -402,26 +401,25 @@ namespace StockSharp.Studio.Controls
 			cmdSvc.UnRegister<ClearMarketDepthCommand>(this);
 			cmdSvc.UnRegister<OrderCommand>(this);
 			cmdSvc.UnRegister<ResetedCommand>(this);
-			cmdSvc.UnRegister<BindStrategyCommand>(this);
 		}
 
 		public override void Save(SettingsStorage settings)
 		{
+			base.Save(settings);
+
 			settings.SetValue("GridSettings", MdControl.Save());
 			settings.SetValue("BuySellSettings", BuySellPanel.Save());
-
-			base.Save(settings);
 		}
 
 		public override void Load(SettingsStorage settings)
 		{
+			base.Load(settings);
+
 			MdControl.Load(settings.GetValue<SettingsStorage>("GridSettings"));
 
 			var buySellSettings = settings.GetValue<SettingsStorage>("BuySellSettings");
 			if (buySellSettings != null)
 				BuySellPanel.Load(buySellSettings);
-
-			base.Load(settings);
 		}
 	}
 
@@ -510,12 +508,12 @@ namespace StockSharp.Studio.Controls
 			var error = LocalizedStrings.Str3273;
 			decimal price;
 
-			if(value == null)
+			if(!(value is decimal))
 				return new ValidationResult(false, error);
 
-			return decimal.TryParse(value.ToString(), NumberStyles.Any, CultureInfo.InvariantCulture, out price) && price > 0
-				? ValidationResult.ValidResult 
-				: new ValidationResult(false, error);
+			return (decimal)value <= 0 ? 
+				new ValidationResult(false, error) : 
+				ValidationResult.ValidResult;
 		}
 	}
 }

@@ -1,66 +1,81 @@
 ﻿<Window x:Class="StockSharp.Terminal.MainWindow"
 		xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
 		xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-		xmlns:xaml="http://schemas.stocksharp.com/xaml"
-		xmlns:xcad="http://schemas.xceed.com/wpf/xaml/avalondock"
-        xmlns:local="clr-namespace:StockSharp.Terminal.Controls"
-		xmlns:fluent="clr-namespace:Fluent;assembly=Fluent"
+		xmlns:local="clr-namespace:StockSharp.Terminal.Controls"
 		xmlns:loc="clr-namespace:StockSharp.Localization;assembly=StockSharp.Localization"
+		xmlns:xaml="http://schemas.stocksharp.com/xaml"
+		xmlns:terminal="clr-namespace:StockSharp.Terminal"
 		DataContext="{Binding RelativeSource={RelativeSource Self}}"
-		Height="600" Width="800" Title="Trade Terminal (UI test)" Loaded="MainWindow_OnLoaded">
+		Height="600" Width="800" Title="Trade Terminal (UI test)">
 
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="*" />
-        </Grid.RowDefinitions>
+	<Grid>
+		<Grid.RowDefinitions>
+			<RowDefinition Height="Auto" />
+			<RowDefinition Height="Auto" />
+			<RowDefinition Height="*" />
+		</Grid.RowDefinitions>
 
-        <ToolBar Visibility="Collapsed">
-            <Button x:Name="ConnectButton" 
-					Content="{x:Static loc:LocalizedStrings.Connect}"
-					Command="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.ConnectCommand}" />
-            <Button Command="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.SettingsCommand}" 
-                    Content="{x:Static loc:LocalizedStrings.Settings}">
-            </Button>
-        </ToolBar>
-        <fluent:Ribbon Grid.Row="0" x:Name="Ribbon" AutomaticStateManagement="True">
-            
-        </fluent:Ribbon>
-        <StackPanel Orientation="Horizontal">
-            <Button Click="AddDocument" Width="90" Height="25" Content="Add work area" HorizontalAlignment="Left" Margin="10, 5" />
-            <ComboBox x:Name="NewControlComboBox" Width="100" Height="25" Text="123" SelectionChanged="ComboBox_SelectionChanged">
-                <ComboBoxItem Content="TradesPanel"/>
-                <ComboBoxItem Content="OrdersPanel"/>
-                <ComboBoxItem Content="SecuritiesPanel"/>
-                <ComboBoxItem Content="Level2Panel"/>
-                <ComboBoxItem Content="NewsPanel"/>
-                <ComboBoxItem Content="PortfoliosPanel"/>
-                <ComboBoxItem Content="CandleChartPanel"/>
-            </ComboBox>
-        </StackPanel>
-        <xcad:DockingManager Grid.Row="1" x:Name="DockingManager" ActiveContentChanged="DockingManager_OnActiveContentChanged">
-            <xcad:LayoutRoot>
-                <xcad:LayoutPanel>                    
-                    <xcad:LayoutAnchorablePaneGroup>
-                        <xcad:LayoutAnchorablePane>
-                            
-                        </xcad:LayoutAnchorablePane>
-                    </xcad:LayoutAnchorablePaneGroup>
-                    <xcad:LayoutDocumentPaneGroup>
-                        <xcad:LayoutDocumentPane x:Name="LayoutDocuments">
-                            <xcad:LayoutDocument Title="Work area #1">
-                                <local:WorkAreaControl />
-                            </xcad:LayoutDocument>
-                            <xcad:LayoutDocument Title="Work area #2">
-                                <local:WorkAreaControl />
-                            </xcad:LayoutDocument>
-                            <!--<xcad:LayoutDocument Title="+" x:Name="AddDocumentElement" CanFloat="False" CanClose="False">
-                                <Grid Background="Gray" />
-                            </xcad:LayoutDocument>-->
-                        </xcad:LayoutDocumentPane>
-                    </xcad:LayoutDocumentPaneGroup>
-                </xcad:LayoutPanel>
-            </xcad:LayoutRoot>
-        </xcad:DockingManager>
-    </Grid>
+		<Grid HorizontalAlignment="Stretch">
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition Width="*"/>
+				<ColumnDefinition Width="Auto"/>
+				<ColumnDefinition Width="Auto"/>
+			</Grid.ColumnDefinitions>
+
+			<StackPanel Orientation="Horizontal">
+				<Button Width="100" Height="35" Margin="10,0" Click="SettingsClick" VerticalContentAlignment="Center">
+					<Button.Content>
+						<StackPanel Orientation="Horizontal" Margin="3">
+							<Image Source="pack://application:,,,/img/Settings_24x24.png" Width="24" Height="24"/>
+							<TextBlock Text="{x:Static loc:LocalizedStrings.Settings}" Margin="5,0,0,0" VerticalAlignment="Center"/>
+						</StackPanel>
+					</Button.Content>
+				</Button>
+
+				<Button Width="150" Background="LightPink" Height="35" Margin="10,0" Click="ConnectClick" VerticalContentAlignment="Center" >
+					<Button.Style>
+						<Style TargetType="{x:Type Button}">
+							<Setter Property="Content">
+								<Setter.Value>
+									<StackPanel Orientation="Horizontal" Margin="3">
+										<Image Source="pack://application:,,,/img/Connect_24x24.png" Width="24" Height="24"/>
+										<TextBlock Text="{x:Static loc:LocalizedStrings.Connect}" Margin="5,0,0,0" VerticalAlignment="Center"/>
+									</StackPanel>
+								</Setter.Value>
+							</Setter>
+							<Style.Triggers>
+								<DataTrigger Binding="{Binding IsConnected, Mode=OneWay, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type terminal:MainWindow}}}" Value="True">
+									<Setter Property="Content">
+										<Setter.Value>
+											<StackPanel Orientation="Horizontal" Margin="3">
+												<Image Source="pack://application:,,,/img/Disconnect_24x24.png" Width="24" Height="24"/>
+												<TextBlock Text="{x:Static loc:LocalizedStrings.Disconnect}" Margin="5,0,0,0" VerticalAlignment="Center"/>
+											</StackPanel>
+										</Setter.Value>
+									</Setter>
+								</DataTrigger>
+							</Style.Triggers>
+						</Style>
+					</Button.Style>
+				</Button>
+			</StackPanel>
+
+			<StackPanel Orientation="Horizontal" Margin="10,3" Grid.Column="1">
+				<TextBlock VerticalAlignment="Center" Text="Add panel: "/>
+				<ComboBox x:Name="NewControlComboBox" Width="120" SelectionChanged="ComboBox_SelectionChanged"/>
+			</StackPanel>
+
+			<GroupBox Grid.Column="2" Header="Lookup securities" Margin="20,0,50,0" HorizontalAlignment="Right">
+				<StackPanel Orientation="Horizontal">
+					<TextBlock Text="Search: " VerticalAlignment="Center"/>
+					<TextBox x:Name="LookupCode" KeyDown="LookupCode_OnKeyDown" Width="150"/>
+					<xaml:SecurityTypeComboBox x:Name="LookupType" Width="70"/>
+					<Button Content="Lookup" Click="LookupButton_OnClick" Margin="10,0"/>
+				</StackPanel>
+			</GroupBox>
+		</Grid>
+		
+		
+		<local:WorkAreaControl Grid.Row="2" x:Name="_workAreaControl"/>
+	</Grid>
 </Window>

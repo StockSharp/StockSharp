@@ -13,19 +13,22 @@ Created: 2015, 11, 11, 2:32 PM
 Copyright 2010 by StockSharp, LLC
 *******************************************************************************************/
 #endregion S# License
+
 namespace StockSharp.Studio.Core.Commands
 {
 	using System;
-
 	using StockSharp.Xaml.Charting;
+	using StockSharp.Algo.Candles;
 
 	public class ChartAddElementCommand : BaseStudioCommand
 	{
-		public ChartArea Area { get; private set; }
+		public ChartArea Area { get; }
 
-		public IChartElement Element { get; set; }
+		public IChartElement Element { get; }
 
-		public ChartAddElementCommand(ChartArea area, IChartElement element)
+		public CandleSeries Series {get;}
+
+		public ChartAddElementCommand(ChartArea area, IChartElement element, CandleSeries series = null)
 		{
 			if (area == null)
 				throw new ArgumentNullException(nameof(area));
@@ -35,6 +38,7 @@ namespace StockSharp.Studio.Core.Commands
 
 			Area = area;
 			Element = element;
+			Series = series;
 		}
 	}
 }

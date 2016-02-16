@@ -14,50 +14,40 @@ Copyright 2010 by StockSharp, LLC
 *******************************************************************************************/
 #endregion S# License
 
-using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading;
-
-using Ecng.Collections;
-using Ecng.Common;
-using Ecng.Serialization;
-using Ecng.Xaml;
-using StockSharp.Localization;
-using StockSharp.Logging;
-
-using Xceed.Wpf.AvalonDock;
-using Xceed.Wpf.AvalonDock.Layout;
-using Xceed.Wpf.AvalonDock.Layout.Serialization;
-
 namespace StockSharp.Terminal.Layout
 {
+	using System;
+	using System.Collections.Generic;
+	using System.Globalization;
+	using System.IO;
+	using System.Linq;
+	using System.Text;
+
+	using Ecng.Collections;
+	using Ecng.Common;
+	using Ecng.Serialization;
+	using Ecng.Xaml;
+
+	using StockSharp.Localization;
+	using StockSharp.Logging;
+	using StockSharp.Studio.Controls;
+
+	using Xceed.Wpf.AvalonDock;
+	using Xceed.Wpf.AvalonDock.Layout;
+	using Xceed.Wpf.AvalonDock.Layout.Serialization;
+
 	public sealed class LayoutManager : BaseLogReceiver
 	{
-		private readonly Dictionary<string, LayoutDocument> _documents = new Dictionary<string, LayoutDocument>();
-		private readonly Dictionary<string, LayoutAnchorable> _anchorables = new Dictionary<string, LayoutAnchorable>();
+		private readonly Dictionary<string, LayoutContent> _anchorables = new Dictionary<string, LayoutContent>();
+		private readonly SynchronizedDictionary<string, BaseStudioControl> _controlsDict = new SynchronizedDictionary<string, BaseStudioControl>();
 
-		private readonly SynchronizedDictionary<DockingControl, SettingsStorage> _dockingControlSettings = new SynchronizedDictionary<DockingControl, SettingsStorage>();
-		private readonly SynchronizedSet<DockingControl> _changedControls = new CachedSynchronizedSet<DockingControl>();
-
-		private readonly TimeSpan _period = TimeSpan.FromSeconds(5);
 		private readonly object _syncRoot = new object();
-
-		private Timer _flushTimer;
-		private bool _isFlushing;
-		private bool _isLayoutChanged;
-		private string _layout;
-
-		private IEnumerable<LayoutDocumentPane> TabGroups => DockingManager.Layout.Descendents().OfType<LayoutDocumentPane>().ToArray();
 
 		private LayoutPanel RootGroup => DockingManager.Layout.RootPanel;
 
-		public DockingManager DockingManager { get; }
+		private DockingManager DockingManager { get; }
 
-		public IEnumerable<DockingControl> DockingControls
+		public IEnumerable<BaseStudioControl> DockingControls
 		{
 			get
 			{
@@ -66,7 +56,7 @@ namespace StockSharp.Terminal.Layout
 					.Descendents()
 					.OfType<LayoutContent>()
 					.Select(c => c.Content)
-					.OfType<DockingControl>()
+					.OfType<BaseStudioControl>()
 					.ToArray();
 			}
 		}
@@ -79,44 +69,9 @@ namespace StockSharp.Terminal.Layout
 				throw new ArgumentNullException(nameof(dockingManager));
 
 			DockingManager = dockingManager;
-			DockingManager.LayoutChanged += OnDockingManagerLayoutChanged;
-			DockingManager.DocumentClosing += OnDockingManagerDocumentClosing;
-			DockingManager.DocumentClosed += OnDockingManagerDocumentClosed;
-
-			OnDockingManagerLayoutChanged(null, null);
 		}
 
-		public void OpenToolWindow(string key, string title, object content, bool canClose = true)
-		{
-			if (key == null)
-				throw new ArgumentNullException(nameof(key));
-
-			if (title == null)
-				throw new ArgumentNullException(nameof(title));
-
-			if (content == null)
-				throw new ArgumentNullException(nameof(content));
-
-			var anchorable = _anchorables.TryGetValue(key);
-
-			if (anchorable == null)
-			{
-				anchorable = new LayoutAnchorable
-				{
-					ContentId = key.ToString(),
-					Title = title,
-					Content = content,
-					CanClose = canClose
-				};
-
-				_anchorables.Add(key, anchorable);
-				RootGroup.Children.Add(new LayoutAnchorablePane(anchorable));
-			}
-
-			DockingManager.ActiveContent = anchorable.Content;
-		}
-
-		public void OpenToolWindow(DockingControl content, bool canClose = true)
+		public void OpenToolWindow(BaseStudioControl content, bool canClose = true)
 		{
 			if (content == null)
 				throw new ArgumentNullException(nameof(content));
@@ -125,83 +80,33 @@ namespace StockSharp.Terminal.Layout
 
 			if (anchorable == null)
 			{
-				content.Changed += OnDockingControlChanged;
-
-				anchorable = new LayoutAnchorable
-				{
-					ContentId = content.Key,
-					Content = content,
-					CanClose = canClose
-				};
-
+				anchorable = CreateAnchorable(content.Key, string.Empty, content, canClose);
 				anchorable.SetBindings(LayoutContent.TitleProperty, content, "Title");
 
 				_anchorables.Add(content.Key, anchorable);
+				_controlsDict[content.Key] = content;
 			
-				RootGroup.Children.Add(new LayoutAnchorablePane(anchorable));
-				OnDockingControlChanged(content);
+				RootGroup.Children.Add(new LayoutAnchorablePane((LayoutAnchorable) anchorable));
+
+				anchorable.Float();
 			}
 
 			DockingManager.ActiveContent = anchorable.Content;
 		}
 
-		public void OpenDocumentWindow(string key, string title, object content, bool canClose = true)
+		private LayoutAnchorable CreateAnchorable(string key, string title, object content, bool canClose = true)
 		{
-			if (key == null)
-				throw new ArgumentNullException(nameof(key));
-
-			if (title == null)
-				throw new ArgumentNullException(nameof(title));
-
-			if (content == null)
-				throw new ArgumentNullException(nameof(content));
-
-			var document = _documents.TryGetValue(key);
-
-			if (document == null)
+			return new LayoutAnchorable
 			{
-				document = new LayoutDocument
-				{
-					ContentId = key.ToString(),
-					Title = title,
-					Content = content,
-					CanClose = canClose
-				};
-
-				_documents.Add(key, document);
-				TabGroups.First().Children.Add(document);
-			}
-
-			DockingManager.ActiveContent = document.Content;
-		}
-
-		public void OpenDocumentWindow(DockingControl content, bool canClose = true)
-		{
-			if (content == null)
-				throw new ArgumentNullException(nameof(content));
-
-			var document = _documents.TryGetValue(content.Key);
-
-			if (document == null)
-			{
-				content.Changed += OnDockingControlChanged;
-
-				document = new LayoutDocument
-				{
-					ContentId = content.Key,
-					Content = content,
-					CanClose = canClose
-				};
-
-				document.SetBindings(LayoutContent.TitleProperty, content, "Title");
-
-				_documents.Add(content.Key, document);
-
-				TabGroups.First().Children.Add(document);
-				OnDockingControlChanged(content);
-			}
-
-			DockingManager.ActiveContent = document.Content;
+				ContentId = key,
+				Title = title,
+				FloatingTop = 100,
+				FloatingLeft = 100,
+				FloatingWidth = 500,
+				FloatingHeight = 350,
+				Content = content,
+				CanClose = canClose
+			};
 		}
 
 		public override void Load(SettingsStorage storage)
@@ -209,35 +114,28 @@ namespace StockSharp.Terminal.Layout
 			if (storage == null)
 				throw new ArgumentNullException(nameof(storage));
 
-			_documents.Clear();
 			_anchorables.Clear();
-			_changedControls.Clear();
-			_dockingControlSettings.Clear();
+			_controlsDict.Clear();
 
-			CultureInfo.InvariantCulture.DoInCulture(() =>
+			var controls = storage.GetValue<SettingsStorage[]>("Controls");
+
+			foreach (var settings in controls)
 			{
-				var controls = storage.GetValue<SettingsStorage[]>("Controls");
-
-				foreach (var settings in controls)
+				try
 				{
-					try
-					{
-						var control = LoadDockingControl(settings);
-
-						_dockingControlSettings.Add(control, settings);
-						OpenDocumentWindow(control);
-					}
-					catch (Exception excp)
-					{
-						this.AddErrorLog(excp);
-					}
+					var control = LoadBaseStudioControl(settings);
+					_controlsDict.Add(control.Key, control);
 				}
+				catch (Exception excp)
+				{
+					this.AddErrorLog(excp);
+				}
+			}
 
-				_layout = storage.GetValue<string>("Layout");
-
-				if (!_layout.IsEmpty())
-					LoadLayout(_layout);
-			});
+			var layout = Encoding.UTF8.GetString(storage.GetValue<string>("Layout").Base64());
+				
+			if (!layout.IsEmpty())
+				LoadLayout(layout);
 		}
 
 		public override void Save(SettingsStorage storage)
@@ -245,53 +143,39 @@ namespace StockSharp.Terminal.Layout
 			if (storage == null)
 				throw new ArgumentNullException(nameof(storage));
 
-			storage.SetValue("Controls", _dockingControlSettings.SyncGet(c => c.Select(p => p.Value).ToArray()));
-			storage.SetValue("Layout", _layout);
+			storage.SetValue("Controls", _controlsDict.Values.Select(SaveControl).ToArray());
+
+			var layout = Encoding.UTF8.GetBytes(SaveLayout()).Base64();
+			storage.SetValue("Layout", layout);
 		}
 
-		public void LoadLayout(string settings)
+		private void LoadLayout(string settings)
 		{
 			if (settings == null)
 				throw new ArgumentNullException(nameof(settings));
 
 			try
 			{
-				var titles = DockingManager
-					.Layout
-					.Descendents()
-					.OfType<LayoutContent>()
-					.ToDictionary(c => c.ContentId, c => c.Title);
+				_anchorables.Clear();
 
 				using (var reader = new StringReader(settings))
 				{
 					var layoutSerializer = new XmlLayoutSerializer(DockingManager);
 					layoutSerializer.LayoutSerializationCallback += (s, e) =>
 					{
-						if (e.Content == null)
+						var control = _controlsDict.TryGetValue(e.Model.ContentId);
+						if (control == null)
+						{
 							e.Model.Close();
+							return;
+						}
+
+						e.Content = control;
+						e.Model.SetBindings(LayoutContent.TitleProperty, control, "Title");
+						_anchorables[control.Key] = e.Model;
 					};
+
 					layoutSerializer.Deserialize(reader);
-				}
-
-				var items = DockingManager
-					.Layout
-					.Descendents()
-					.OfType<LayoutContent>();
-
-				foreach (var content in items.Where(c => c.Content is DockingControl))
-				{
-					content.DoIfElse<LayoutDocument>(d => _documents[d.ContentId] = d, () => { });
-					content.DoIfElse<LayoutAnchorable>(d => _anchorables[d.ContentId] = d, () => { });
-
-					if (!(content.Content is DockingControl))
-					{
-						//var title = titles.TryGetValue(content.ContentId);
-
-						//if (!title.IsEmpty())
-						//	content.Title = title;
-					}
-					else
-						content.SetBindings(LayoutContent.TitleProperty, content.Content, "Title");
 				}
 			}
 			catch (Exception excp)
@@ -319,126 +203,23 @@ namespace StockSharp.Terminal.Layout
 			return builder.ToString();
 		}
 
-		private void OnDockingManagerLayoutChanged(object sender, EventArgs e)
+		private SettingsStorage SaveControl(BaseStudioControl control)
 		{
-			if (DockingManager.Layout == null)
-				return;
+			var storage = new SettingsStorage();
 
-			DockingManager.Layout.Updated += OnLayoutUpdated;
-		}
-
-		private void OnLayoutUpdated(object sender, EventArgs e)
-		{
-			_isLayoutChanged = true;
-			Flush();
-		}
-
-		private void OnDockingManagerDocumentClosing(object sender, DocumentClosingEventArgs e)
-		{
-			var control = e.Document.Content as DockingControl;
-
-			if (control == null)
-				return;
-
-			e.Cancel = !control.CanClose();
-		}
-
-		private void OnDockingManagerDocumentClosed(object sender, DocumentClosedEventArgs e)
-		{
-			var control = e.Document.Content as DockingControl;
-
-			if (control == null)
-				return;
-
-			_documents.RemoveWhere(p => Equals(p.Value, e.Document));
-
-			_isLayoutChanged = true;
-
-			_changedControls.Remove(control);
-			_dockingControlSettings.Remove(control);
-
-			Flush();
-		}
-
-		private void OnDockingControlChanged(DockingControl control)
-		{
-			_changedControls.Add(control);
-			Flush();
-		}
-
-		private void Flush()
-		{
-			lock (_syncRoot)
+			CultureInfo.InvariantCulture.DoInCulture(() =>
 			{
-				if (_isFlushing || _flushTimer != null)
-					return;
+				storage.SetValue("ControlType", control.GetType().GetTypeName(false));
+				control.Save(storage);
+			});
 
-				_flushTimer = new Timer(OnFlush, null, _period, _period);
-			}
+			return storage;
 		}
 
-		private void OnFlush(object state)
-		{
-			DockingControl[] items;
-			bool isLayoutChanged;
-
-			lock (_syncRoot)
-			{
-				if (_isFlushing)
-					return;
-
-				isLayoutChanged = _isLayoutChanged;
-				items = _changedControls.CopyAndClear();
-
-				_isFlushing = true;
-				_isLayoutChanged = false;
-			}
-
-			try
-			{
-				if (items.Length > 0 || isLayoutChanged)
-				{
-					GuiDispatcher.GlobalDispatcher.AddSyncAction(() =>
-					{
-						CultureInfo.InvariantCulture.DoInCulture(() =>
-						{
-							foreach (var control in items)
-								_dockingControlSettings[control] = control.Save();
-
-							if (isLayoutChanged)
-								_layout = SaveLayout();
-						});
-					});
-
-					Changed.SafeInvoke();
-				}
-				else
-				{
-					lock (_syncRoot)
-					{
-						if (_flushTimer == null)
-							return;
-
-						_flushTimer.Dispose();
-						_flushTimer = null;
-					}
-				}
-			}
-			catch (Exception excp)
-			{
-				this.AddErrorLog(excp, "Flush layout changed error.");
-			}
-			finally
-			{
-				lock (_syncRoot)
-				_isFlushing = false;
-			}
-		}
-
-		private static DockingControl LoadDockingControl(SettingsStorage settings)
+		private static BaseStudioControl LoadBaseStudioControl(SettingsStorage settings)
 		{
 			var type = settings.GetValue<Type>("ControlType");
-			var control = (DockingControl)Activator.CreateInstance(type);
+			var control = (BaseStudioControl)Activator.CreateInstance(type);
 
 			control.Load(settings);
 

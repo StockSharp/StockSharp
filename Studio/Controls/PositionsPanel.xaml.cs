@@ -13,6 +13,9 @@ Created: 2015, 11, 11, 2:32 PM
 Copyright 2010 by StockSharp, LLC
 *******************************************************************************************/
 #endregion S# License
+
+using Ecng.Collections;
+
 namespace StockSharp.Studio.Controls
 {
 	using System.Windows.Input;
@@ -50,13 +53,23 @@ namespace StockSharp.Studio.Controls
 			var cmdSvc = ConfigManager.GetService<IStudioCommandService>();
 			cmdSvc.Register<PortfolioCommand>(this, false, cmd =>
 			{
-				if (cmd.IsNew)
-					PortfolioGrid.Positions.Add(cmd.Portfolio);
+				PortfolioGrid.Positions.RemoveWhere(p =>
+				{
+					var port = p as Portfolio;
+					return port != null && port.Name == cmd.Portfolio.Name;
+				});
+
+				PortfolioGrid.Positions.Add(cmd.Portfolio);
 			});
 			cmdSvc.Register<PositionCommand>(this, false, cmd =>
 			{
-				//if (cmd.IsNew)
-				//	PortfolioGrid.Positions.Add(cmd.Position);
+				PortfolioGrid.Positions.RemoveWhere(p =>
+				{
+					var pos = p as Position;
+					return pos != null && pos.Security.Id == cmd.Position.Security.Id;
+				});
+
+				PortfolioGrid.Positions.Add(cmd.Position);
 			});
 			cmdSvc.Register<ResetedCommand>(this, false, cmd => PortfolioGrid.Positions.Clear());
 

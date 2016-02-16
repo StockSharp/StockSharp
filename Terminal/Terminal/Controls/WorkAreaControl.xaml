@@ -1,94 +1,26 @@
-﻿<layout:DockingControl x:Class="StockSharp.Terminal.Controls.WorkAreaControl"
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:local="clr-namespace:StockSharp.Terminal.Controls"
-             xmlns:controls="clr-namespace:StockSharp.Studio.Controls;assembly=StockSharp.Studio.Controls"
-             xmlns:xaml="http://schemas.stocksharp.com/xaml"
-             xmlns:xcad="http://schemas.xceed.com/wpf/xaml/avalondock"
-             xmlns:layout="clr-namespace:StockSharp.Terminal.Layout"
-             xmlns:localization="clr-namespace:StockSharp.Localization;assembly=StockSharp.Localization"
-             mc:Ignorable="d" d:DesignHeight="300" d:DesignWidth="600">
-
-    <layout:DockingControl.Title>
-        <Binding RelativeSource="{RelativeSource Self}" Path="Strategy.Composition.Name">
-            <Binding.Converter>
-                <local:EmulationTitleConverter />
-            </Binding.Converter>
-        </Binding>
-    </layout:DockingControl.Title>
+﻿<controls:BaseStudioControl x:Class="StockSharp.Terminal.Controls.WorkAreaControl"
+			 xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+			 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+			 xmlns:controls="clr-namespace:StockSharp.Studio.Controls;assembly=StockSharp.Studio.Controls"
+			 xmlns:xcad="http://schemas.xceed.com/wpf/xaml/avalondock"
+			 xmlns:loc="clr-namespace:StockSharp.Localization;assembly=StockSharp.Localization"
+			DataContext="{Binding RelativeSource={RelativeSource Self}}"
+			 mc:Ignorable="d" d:DesignHeight="300" d:DesignWidth="600">
 
 	<Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
-        </Grid.RowDefinitions>
+		<Grid.RowDefinitions>
+			<RowDefinition Height="Auto"/>
+			<RowDefinition Height="*"/>
+		</Grid.RowDefinitions>
 
-        <!--<ProgressBar Grid.Row="0" Height="5" x:Name="TicksAndDepthsProgress" />-->
-		
-        <xcad:DockingManager Grid.Row="1" x:Name="DockingManager">
-            <xcad:LayoutRoot>
-                <xcad:LayoutPanel>
-                    <xcad:LayoutAnchorablePaneGroup x:Name="DockingManagerGroup">
-                        <xcad:LayoutAnchorablePane>
-                            <xcad:LayoutAnchorable Title="TradePanel" CanClose="False">
-                                <controls:TradesPanel>
-
-                                </controls:TradesPanel>
-                            </xcad:LayoutAnchorable>
-                        </xcad:LayoutAnchorablePane>
-
-                        <!--<xcad:LayoutAnchorablePane>
-                            <xcad:LayoutAnchorable Title="OrdersPanel" CanClose="False">
-                                <controls:OrdersPanel>
-
-                                </controls:OrdersPanel>
-                            </xcad:LayoutAnchorable>
-                        </xcad:LayoutAnchorablePane>
-
-                        <xcad:LayoutAnchorablePane>
-                            <xcad:LayoutAnchorable Title="SecuritiesPanel" CanClose="False">
-                                <controls:SecuritiesPanel>
-
-                                </controls:SecuritiesPanel>
-                            </xcad:LayoutAnchorable>
-                        </xcad:LayoutAnchorablePane>
-
-                        <xcad:LayoutAnchorablePane>
-                            <xcad:LayoutAnchorable Title="Level2Panel" CanClose="False">
-                                <controls:Level2Panel>
-
-                                </controls:Level2Panel>
-                            </xcad:LayoutAnchorable>
-                        </xcad:LayoutAnchorablePane>
-
-                        <xcad:LayoutAnchorablePane>
-                            <xcad:LayoutAnchorable Title="NewsPanel" CanClose="False">
-                                <controls:NewsPanel>
-
-                                </controls:NewsPanel>
-                            </xcad:LayoutAnchorable>
-                        </xcad:LayoutAnchorablePane>
-
-                        <xcad:LayoutAnchorablePane>
-                            <xcad:LayoutAnchorable Title="PortfoliosPanel" CanClose="False">
-                                <controls:PortfoliosPanel>
-
-                                </controls:PortfoliosPanel>
-                            </xcad:LayoutAnchorable>
-                        </xcad:LayoutAnchorablePane>
-
-                        <xcad:LayoutAnchorablePane>
-                            <xcad:LayoutAnchorable Title="CandleChartPanel" CanClose="False">
-                                <controls:CandleChartPanel>
-
-                                </controls:CandleChartPanel>
-                            </xcad:LayoutAnchorable>
-                        </xcad:LayoutAnchorablePane>-->
-                    </xcad:LayoutAnchorablePaneGroup>
-                </xcad:LayoutPanel>
-            </xcad:LayoutRoot>
-        </xcad:DockingManager>
+		<xcad:DockingManager Grid.Row="1" x:Name="DockingManager">
+			<xcad:LayoutRoot>
+				<xcad:LayoutPanel>
+					<xcad:LayoutAnchorablePaneGroup x:Name="DockingManagerGroup"/>
+				</xcad:LayoutPanel>
+			</xcad:LayoutRoot>
+		</xcad:DockingManager>
 	</Grid>
-</layout:DockingControl>
+</controls:BaseStudioControl>

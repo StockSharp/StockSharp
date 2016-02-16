@@ -13,6 +13,9 @@ Created: 2015, 11, 11, 2:32 PM
 Copyright 2010 by StockSharp, LLC
 *******************************************************************************************/
 #endregion S# License
+
+using System.Collections.Generic;
+
 namespace StockSharp.Studio.Controls
 {
 	using System;
@@ -49,7 +52,7 @@ namespace StockSharp.Studio.Controls
 			set { SetValue(IconProperty, value); }
 		}
 
-		public virtual string Key => Guid.NewGuid().ToString();
+		public virtual string Key {get; set;} = Guid.NewGuid().ToString();
 
 		// TODO change to ControlChangedCommand
 		public event Action<BaseStudioControl> Changed;
@@ -85,10 +88,16 @@ namespace StockSharp.Studio.Controls
 
 		public virtual void Load(SettingsStorage storage)
 		{
+			Title = storage.GetValue<string>(nameof(Title));
+			//Icon = storage.GetValue<Uri>(nameof(Icon));
+			Key = storage.GetValue<string>(nameof(Key));
 		}
 
 		public virtual void Save(SettingsStorage storage)
 		{
+			storage.SetValue(nameof(Title), Title);
+			//storage.SetValue(nameof(Icon), Icon);
+			storage.SetValue(nameof(Key), Key);
 		}
 
 		public virtual void Dispose()
@@ -102,12 +111,37 @@ namespace StockSharp.Studio.Controls
 
 		#region INotifyPropertyChanged
 
-		private PropertyChangedEventHandler _propertyChanged;
+		/// <summary>
+		/// Property value change event.
+		/// </summary>
+		public event PropertyChangedEventHandler PropertyChanged;
 
-		event PropertyChangedEventHandler INotifyPropertyChanged.PropertyChanged
+		/// <summary>
+		/// To call the event <see cref="PropertyChanged"/>.
+		/// </summary>
+		/// <param name="name">Property name.</param>
+		protected void RaisePropertyChanged(string name)
 		{
-			add { _propertyChanged += value; }
-			remove { _propertyChanged -= value; }
+			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
+		}
+
+		/// <summary>
+		/// Update field value and raise PropertyChanged event.
+		/// </summary>
+		/// <param name="field">Field to update.</param>
+		/// <param name="value">New value.</param>
+		/// <param name="name">Name of the field to update.</param>
+		/// <typeparam name="T">The field type.</typeparam>
+		/// <returns>True if the field was updated. False otherwise.</returns>
+		protected bool SetField<T>(ref T field, T value, string name) {
+			if(EqualityComparer<T>.Default.Equals(field, value))
+				return false;
+			
+			field = value;
+
+			RaisePropertyChanged(name);
+
+			return true;
 		}
 
 		#endregion

@@ -44,6 +44,8 @@ namespace StockSharp.Studio.Controls
 		private decimal? _volumeFilter;
 		private readonly SynchronizedSet<string> _securityIds = new SynchronizedSet<string>(StringComparer.InvariantCultureIgnoreCase);
 
+		private Security _security;
+
 		private Security[] Securities
 		{
 			get
@@ -75,21 +77,39 @@ namespace StockSharp.Studio.Controls
 				Securities.ForEach(s => new RequestMarketDataCommand(s, MarketDataTypes.Trades).Process(this));
 			});
 			cmdSvc.Register<NewTradesCommand>(this, false, cmd => AddTrades(cmd.Trades));
-			cmdSvc.Register<BindStrategyCommand>(this, false, cmd =>
+
+//			cmdSvc.Register<BindStrategyCommand>(this, false, cmd =>
+//			{
+//				var selectedSecurities = Securities;
+//
+//				if (!selectedSecurities.Any())
+//					return;
+//
+//				selectedSecurities.ForEach(s => new RequestMarketDataCommand(s, MarketDataTypes.Trades).Process(this));
+//				new RequestTradesCommand().Process(this);
+//			});
+
+			cmdSvc.Register<SelectCommand>(this, false, cmd =>
 			{
-				if (!cmd.CheckControl(this))
+				var sec = cmd.Instance as Security;
+				if(sec == null)
 					return;
 
-				var selectedSecurities = Securities;
+				if (_security != null)
+				{
+					new RefuseMarketDataCommand(_security, MarketDataTypes.Trades).Process(this);
+					_security = null;
+				}
 
-				if (!selectedSecurities.Any())
-					return;
+				_security = sec;
 
-				selectedSecurities.ForEach(s => new RequestMarketDataCommand(s, MarketDataTypes.Trades).Process(this));
-				new RequestTradesCommand().Process(this);
+				new RequestMarketDataCommand(_security, MarketDataTypes.Trades).Process(this);
 			});
 
-			WhenLoaded(() => new RequestBindSource(this).SyncProcess(this));
+			WhenLoaded(() =>
+			{
+				
+			});
 		}
 
 		private void RaiseChangedCommand()
@@ -104,6 +124,8 @@ namespace StockSharp.Studio.Controls
 
 		public override void Save(SettingsStorage storage)
 		{
+			base.Save(storage);
+
 			storage.SetValue("GridSettings", TradesGrid.Save());
 			storage.SetValue("Securities", _securityIds.ToArray());
 			storage.SetValue("AlertSettings", AlertBtn.Save());
@@ -112,6 +134,8 @@ namespace StockSharp.Studio.Controls
 
 		public override void Load(SettingsStorage storage)
 		{
+			base.Load(storage);
+
 			TradesGrid.Load(storage.GetValue<SettingsStorage>("GridSettings"));
 
 			_securityIds.SyncDo(list =>

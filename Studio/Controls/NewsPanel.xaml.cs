@@ -41,9 +41,9 @@ namespace StockSharp.Studio.Controls
 			var ctrl = (NewsPanel)sender;
 
 			if ((bool)args.NewValue) 
-				ConfigManager.GetService<IStudioConnector>().RegisterNews();
+				ConfigManager.GetService<IConnector>().RegisterNews();
 			else
-				ConfigManager.GetService<IStudioConnector>().UnRegisterNews();
+				ConfigManager.GetService<IConnector>().UnRegisterNews();
 
 			new ControlChangedCommand(ctrl).Process(ctrl);
 		}

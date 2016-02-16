@@ -266,12 +266,14 @@ namespace StockSharp.Studio
 
 			private void RaiseNewPositionCommand(KeyValuePair<Tuple<SecurityId, string>, decimal> position)
 			{
-				new PositionCommand(_strategy.CurrentTime, position, true).Process(_strategy);
+				// todo fix
+				//new PositionCommand(_strategy.CurrentTime, position, true).Process(_strategy);
 			}
 
 			private void RaisePositionChangedCommand(KeyValuePair<Tuple<SecurityId, string>, decimal> position)
 			{
-				new PositionCommand(_strategy.CurrentTime, position, false).Process(_strategy);
+				// todo fix
+				// new PositionCommand(_strategy.CurrentTime, position, false).Process(_strategy);
 			}
 
 			private void RaisePnLChangedCommand()

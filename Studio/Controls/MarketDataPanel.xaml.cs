@@ -66,7 +66,7 @@ namespace StockSharp.Studio.Controls
 		private bool _isLoading;
 		private StudioStorageRegistry _storageRegistry;
 
-		public override string Key { get; }
+		public override string Key { get; set; }
 
 		public MarketDataPanel()
 		{

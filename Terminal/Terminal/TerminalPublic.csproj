@@ -80,9 +80,6 @@
     <Reference Include="Ecng.Xaml">
       <HintPath>..\..\References\Ecng\Ecng.Xaml.dll</HintPath>
     </Reference>
-    <Reference Include="Fluent">
-      <HintPath>..\..\References\Fluent.Ribbon\Fluent.dll</HintPath>
-    </Reference>
     <Reference Include="MoreLinq">
       <HintPath>..\..\References\Ecng\MoreLinq.dll</HintPath>
     </Reference>
@@ -112,9 +109,6 @@
     <Reference Include="Xceed.Wpf.AvalonDock">
       <HintPath>..\..\References\Ecng\Xceed.Wpf.AvalonDock.dll</HintPath>
     </Reference>
-    <Reference Include="Xceed.Wpf.AvalonDock.Themes.Metro">
-      <HintPath>..\..\References\Ecng\Xceed.Wpf.AvalonDock.Themes.Metro.dll</HintPath>
-    </Reference>
     <Reference Include="Xceed.Wpf.Toolkit, Version=2.5.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\References\Ecng\Xceed.Wpf.Toolkit.dll</HintPath>
@@ -128,15 +122,15 @@
     <Compile Include="..\..\StockSharpAssemblyInfo.cs">
       <Link>Properties\StockSharpAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="Fakes\FakeMarketDataProvider.cs" />
-    <Compile Include="Fakes\FakeSecurityProvider.cs" />
-    <Compile Include="Fakes\FakeStudioCommandService.cs" />
-    <Compile Include="Layout\DockingControl.cs" />
+    <Compile Include="Interfaces\ITerminalCommandService.cs" />
+    <Compile Include="Services\ConnectorService.cs" />
     <Compile Include="Layout\LayoutManager.cs" />
     <Compile Include="Controls\WorkAreaControl.xaml.cs">
       <DependentUpon>WorkAreaControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Layout\LayoutKeys.cs" />
+    <Compile Include="Services\TerminalCommandService.cs" />
+    <Compile Include="Services\TerminalConnector.cs" />
     <Page Include="Controls\WorkAreaControl.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -171,6 +165,7 @@
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -179,7 +174,9 @@
     <AppDesigner Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.5.1">
@@ -230,6 +227,10 @@
       <Project>{23b15ae0-2021-43da-808f-3bf331462976}</Project>
       <Name>CorePublic</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\Studio\Studio\StudioPublic.csproj">
+      <Project>{386aea47-c1a0-4a0d-af84-85604305b18a}</Project>
+      <Name>StudioPublic</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Xaml\Xaml.csproj">
       <Project>{64E4D6F0-36B6-4904-9BA7-FFFBE5FF71D8}</Project>
       <Name>Xaml</Name>
@@ -239,6 +240,24 @@
     <Resource Include="..\..\References\stocksharp.ico">
       <Link>Properties\stocksharp.ico</Link>
     </Resource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Properties\StockSharp.db" />
+    <None Include="Resources\StockSharp.db" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="layout.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="img\Connect_24x24.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="img\Disconnect_24x24.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="img\Settings_24x24.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
