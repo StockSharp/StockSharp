@@ -336,16 +336,16 @@
                         </Grid.ColumnDefinitions>
 
                         <Label Grid.Row="0" Grid.Column="0" Content="{x:Static localization:LocalizedStrings.Str343}"/>
-                        <xctk:DateTimePicker Grid.Row="0" Grid.Column="1" Width="150" Value="{Binding Strategy.StartDate}"/>
+                        <xctk:DateTimePicker Grid.Row="0" Grid.Column="1" Width="150" Value="{Binding Strategy.EmulationSettings.StartDate}"/>
 
                         <Label Grid.Row="1" Grid.Column="0" Content="{x:Static localization:LocalizedStrings.Str345}"/>
-                        <xctk:DateTimePicker Grid.Row="1" Grid.Column="1" Width="150" Value="{Binding Strategy.StopDate}"/>
+                        <xctk:DateTimePicker Grid.Row="1" Grid.Column="1" Width="150" Value="{Binding Strategy.EmulationSettings.StopDate}"/>
 
                         <!--<Label Grid.Row="0" Grid.Column="2" Content="{x:Static localization:LocalizedStrings.Security}"/>
                         <xaml:SecurityEditor Grid.Row="0" Grid.Column="3" x:Name="EmulationSecurityEditor" Width="150" SelectedSecurity="{Binding Strategy.Security}"/>-->
 
                         <Label Grid.Row="0" Grid.Column="2" Content="{x:Static localization:LocalizedStrings.MarketData}"/>
-						<controls:MarketDataSettingsComboBox Grid.Row="0" Grid.Column="3" Width="150" SelectedSettings="{Binding Strategy.MarketDataSettings}"/>
+                        <controls:MarketDataSettingsComboBox Grid.Row="0" Grid.Column="3" Width="150" SelectedSettings="{Binding Strategy.EmulationSettings.MarketDataSettings}"/>
                     </Grid>
 
                     <Separator />

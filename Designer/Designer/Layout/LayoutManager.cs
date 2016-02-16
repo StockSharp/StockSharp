@@ -51,6 +51,7 @@ namespace StockSharp.Designer.Layout
 		private bool _isFlushing;
 		private bool _isLayoutChanged;
 		private bool _isDisposing;
+		private bool _isSettingsChanged;
 		private string _layout;
 
 		private IEnumerable<LayoutDocumentPane> TabGroups => DockingManager.Layout.Descendents().OfType<LayoutDocumentPane>().ToArray();
@@ -331,6 +332,12 @@ namespace StockSharp.Designer.Layout
 			return builder.ToString();
 		}
 
+		public void FlushSettings()
+		{
+			_isSettingsChanged = true;
+			Flush();
+		}
+
 		protected override void DisposeManaged()
 		{
 			_isDisposing = true;
@@ -403,6 +410,7 @@ namespace StockSharp.Designer.Layout
 		{
 			BaseStudioControl[] items;
 			bool isLayoutChanged;
+			bool isSettingsChanged;
 
 			lock (_syncRoot)
 			{
@@ -410,23 +418,30 @@ namespace StockSharp.Designer.Layout
 					return;
 
 				isLayoutChanged = _isLayoutChanged;
+				isSettingsChanged = _isSettingsChanged;
 				items = _changedControls.CopyAndClear();
 
 				_isFlushing = true;
 				_isLayoutChanged = false;
+				_isSettingsChanged = false;
 			}
 
 			try
 			{
-				if (items.Length > 0 || isLayoutChanged)
-				{
-					GuiDispatcher.GlobalDispatcher.AddSyncAction(() =>
-					{
-						if (_isDisposing)
-							return;
+				var needSave = items.Length > 0 || isLayoutChanged;
 
-						Save(items, isLayoutChanged);
-					});
+                if (needSave || isSettingsChanged)
+				{
+					if (needSave)
+					{
+						GuiDispatcher.GlobalDispatcher.AddSyncAction(() =>
+						{
+							if (_isDisposing)
+								return;
+
+							Save(items, isLayoutChanged);
+						});
+					}
 
 					Changed.SafeInvoke();
 				}

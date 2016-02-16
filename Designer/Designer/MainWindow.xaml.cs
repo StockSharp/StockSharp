@@ -37,6 +37,7 @@ namespace StockSharp.Designer
 	using StockSharp.Algo.Storages;
 	using StockSharp.BusinessEntities;
 	using StockSharp.Configuration;
+	using StockSharp.Designer.Commands;
 	using StockSharp.Designer.Layout;
 	using StockSharp.Localization;
 	using StockSharp.Logging;
@@ -85,11 +86,13 @@ namespace StockSharp.Designer
 		public static RoutedCommand AddNewSecurityCommand = new RoutedCommand();
 
 		private readonly string _settingsFile;
-		private readonly StrategiesRegistry _strategiesRegistry;
-        private readonly Connector _connector;
-		private readonly LayoutManager _layoutManager;
 
+		private StrategiesRegistry _strategiesRegistry;
+		private Connector _connector;
+		private LayoutManager _layoutManager;
 		private MarketDataSettingsCache _marketDataSettingsCache;
+		private EmulationSettings _emulationSettings;
+
 		private bool _isReseting;
 
 		public MainWindow()
@@ -98,61 +101,19 @@ namespace StockSharp.Designer
 			ConfigManager.RegisterService<IPersistableService>(new PersistableService());
 
 			InitializeComponent();
-
 			Title = TypeHelper.ApplicationNameWithVersion;
 
-			InitializeDataSource();
-			InitializeMarketDataSettingsCache();
-            InitializeCommands();
-
 			Directory.CreateDirectory(BaseApplication.AppDataPath);
-
-			var compositionsPath = Path.Combine(BaseApplication.AppDataPath, "Compositions");
-			var strategiesPath = Path.Combine(BaseApplication.AppDataPath, "Strategies");
-			var logsPath = Path.Combine(BaseApplication.AppDataPath, "Logs");
-
 			_settingsFile = Path.Combine(BaseApplication.AppDataPath, "settings.xml");
 
-			var logManager = new LogManager();
-			logManager.Listeners.Add(new FileLogListener
-			{
-				Append = true,
-				LogDirectory = logsPath,
-				MaxLength = 1024 * 1024 * 100 /* 100mb */,
-				MaxCount = 10,
-				SeparateByDates = SeparateByDateModes.SubDirectories,
-			});
-			logManager.Listeners.Add(new GuiLogListener(Monitor));
-			ConfigManager.RegisterService(logManager);
-
-			var entityRegistry = ConfigManager.GetService<IEntityRegistry>();
-			var storageRegistry = ConfigManager.GetService<IStorageRegistry>();
-
-			_connector = new Connector(entityRegistry, storageRegistry)
-			{
-				StorageAdapter =
-				{
-					DaysLoad = TimeSpan.Zero
-				}
-			};
-			_connector.Connected += ConnectorOnConnectionStateChanged;
-			_connector.Disconnected += ConnectorOnConnectionStateChanged;
-			_connector.ConnectionError += ConnectorOnConnectionError;
-			logManager.Sources.Add(_connector);
-			ConfigManager.RegisterService<IConnector>(_connector);
-			ConfigManager.RegisterService<ISecurityProvider>(_connector);
-
-			_strategiesRegistry = new StrategiesRegistry(compositionsPath, strategiesPath);
-			logManager.Sources.Add(_strategiesRegistry);
-			_strategiesRegistry.Init();
-			ConfigManager.RegisterService(_strategiesRegistry);
-
-			_layoutManager = new LayoutManager(DockingManager);
-			_layoutManager.Changed += SaveSettings;
-			logManager.Sources.Add(_layoutManager);
-			ConfigManager.RegisterService(_layoutManager);
-
-			ConfigManager.RegisterService(_marketDataSettingsCache);
+			InitializeLogManager();
+			InitializeLayoutManager();
+			InitializeDataSource();
+			InitializeMarketDataSettingsCache();
+			InitializeEmulationSettings();
+			InitializeCommands();
+			InitializeConnector();
+			InitializeStrategiesRegistry();
 
 			SolutionExplorer.Compositions = _strategiesRegistry.Compositions;
 			SolutionExplorer.Strategies = _strategiesRegistry.Strategies;
@@ -266,6 +227,12 @@ namespace StockSharp.Designer
 				_connector.SendOutMessage(wnd.Security.ToMessage());
 				cmd.Security = wnd.Security;
 			});
+
+			cmdSvc.Register<SetDefaultEmulationSettingsCommand>(this, false, cmd =>
+			{
+				_emulationSettings.Load(cmd.Settings.Save());
+				_layoutManager.FlushSettings();
+			});
 		}
 
 		private void InitializeMarketDataSettingsCache()
@@ -280,7 +247,73 @@ namespace StockSharp.Designer
 			});
 			_marketDataSettingsCache.Settings.Add(MarketDataSettings.StockSharpSettings);
 
-			_marketDataSettingsCache.Changed += SaveSettings;
+			_marketDataSettingsCache.Changed += _layoutManager.FlushSettings;
+
+			ConfigManager.RegisterService(_marketDataSettingsCache);
+		}
+
+		private void InitializeEmulationSettings()
+		{
+			_emulationSettings = new EmulationSettings
+			{
+				MarketDataSettings = _marketDataSettingsCache.Settings.FirstOrDefault()
+			};
+		}
+
+		private void InitializeLogManager()
+		{
+			var logsPath = Path.Combine(BaseApplication.AppDataPath, "Logs");
+			var logManager = new LogManager();
+
+			logManager.Listeners.Add(new FileLogListener
+			{
+				Append = true,
+				LogDirectory = logsPath,
+				MaxLength = 1024 * 1024 * 100 /* 100mb */,
+				MaxCount = 10,
+				SeparateByDates = SeparateByDateModes.SubDirectories,
+			});
+			logManager.Listeners.Add(new GuiLogListener(Monitor));
+			ConfigManager.RegisterService(logManager);
+		}
+
+		private void InitializeConnector()
+		{
+			var entityRegistry = ConfigManager.GetService<IEntityRegistry>();
+			var storageRegistry = ConfigManager.GetService<IStorageRegistry>();
+
+			_connector = new Connector(entityRegistry, storageRegistry)
+			{
+				StorageAdapter =
+				{
+					DaysLoad = TimeSpan.Zero
+				}
+			};
+			_connector.Connected += ConnectorOnConnectionStateChanged;
+			_connector.Disconnected += ConnectorOnConnectionStateChanged;
+			_connector.ConnectionError += ConnectorOnConnectionError;
+			ConfigManager.GetService<LogManager>().Sources.Add(_connector);
+			ConfigManager.RegisterService<IConnector>(_connector);
+			ConfigManager.RegisterService<ISecurityProvider>(_connector);
+		}
+
+		private void InitializeLayoutManager()
+		{
+			_layoutManager = new LayoutManager(DockingManager);
+			_layoutManager.Changed += SaveSettings;
+			ConfigManager.GetService<LogManager>().Sources.Add(_layoutManager);
+			ConfigManager.RegisterService(_layoutManager);
+		}
+
+		private void InitializeStrategiesRegistry()
+		{
+			var compositionsPath = Path.Combine(BaseApplication.AppDataPath, "Compositions");
+			var strategiesPath = Path.Combine(BaseApplication.AppDataPath, "Strategies");
+
+			_strategiesRegistry = new StrategiesRegistry(compositionsPath, strategiesPath);
+			ConfigManager.GetService<LogManager>().Sources.Add(_strategiesRegistry);
+			_strategiesRegistry.Init();
+			ConfigManager.RegisterService(_strategiesRegistry);
 		}
 
 		#region Event handlers
@@ -660,7 +693,8 @@ namespace StockSharp.Designer
 		{
 			var strategy = new EmulationDiagramStrategy
 			{
-				Composition = _strategiesRegistry.Clone(item.Element)
+				Composition = _strategiesRegistry.Clone(item.Element),
+				EmulationSettings = _emulationSettings.Clone()
 			};
 
 			var content = new EmulationStrategyControl
@@ -708,6 +742,7 @@ namespace StockSharp.Designer
 					var settings = new XmlSerializer<SettingsStorage>().Deserialize(_settingsFile);
 
 					settings.TryLoadSettings<SettingsStorage>("MarketDataSettingsCache", s => _marketDataSettingsCache.Load(s));
+					settings.TryLoadSettings<SettingsStorage>("EmulationSettings", s => _emulationSettings.Load(s));
 					settings.TryLoadSettings<SettingsStorage>("Layout", s => _layoutManager.Load(s));
 					settings.TryLoadSettings<SettingsStorage>("Connector", s => _connector.Load(s));
 				});
@@ -724,9 +759,10 @@ namespace StockSharp.Designer
 				{
 					var settings = new SettingsStorage();
 
+					settings.SetValue("MarketDataSettingsCache", ((IPersistable)_marketDataSettingsCache).Save());
+					settings.SetValue("EmulationSettings", _emulationSettings.Save());
 					settings.SetValue("Layout", _layoutManager.Save());
 					settings.SetValue("Connector", _connector.Save());
-					settings.SetValue("MarketDataSettingsCache", ((IPersistable)_marketDataSettingsCache).Save());
 
 					new XmlSerializer<SettingsStorage>().Serialize(settings, _settingsFile);
 				});
@@ -739,7 +775,7 @@ namespace StockSharp.Designer
 			if (!result)
 				return false;
 
-			SaveSettings();
+			_layoutManager.FlushSettings();
 
 			return true;
 		}
