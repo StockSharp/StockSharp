@@ -27,6 +27,7 @@ namespace StockSharp.AlfaDirect.Native
 
 	using MoreLinq;
 
+	using StockSharp.Algo;
 	using StockSharp.Logging;
 	using StockSharp.Messages;
 
@@ -344,7 +345,7 @@ namespace StockSharp.AlfaDirect.Native
 
 		public readonly Field<SecurityStates> TradingStatus= new FieldSecurityState("status", "trading_status");
 
-		public readonly Field<CurrencyTypes> CurrCode      = new FieldCurrency("curr_code");
+		public readonly Field<CurrencyTypes?> CurrCode     = new FieldCurrency("curr_code");
 
 		public readonly Field<Sides> BuySellNum            = new FieldBuySell("b_s", true, "b_s_num");
 		public readonly Field<Sides> BuySellStr            = new FieldBuySell("b_s", false, "b_s_str");
@@ -468,13 +469,13 @@ namespace StockSharp.AlfaDirect.Native
 			}
 		}
 
-		class FieldCurrency : Field<CurrencyTypes>
+		class FieldCurrency : Field<CurrencyTypes?>
 		{
 			public FieldCurrency(string name, string uniqueName = null) : base(name, uniqueName) {}
 
-			protected override CurrencyTypes GetValueInternal(string str)
+			protected override CurrencyTypes? GetValueInternal(string str)
 			{
-				return str.CompareIgnoreCase("RUR") ? CurrencyTypes.RUB : str.To<CurrencyTypes>();
+				return str.FromMicexCurrencyName();
 			}
 		}
 
