@@ -105,11 +105,13 @@
     <Compile Include="..\..\StockSharpAssemblyInfo.cs">
       <Link>Properties\StockSharpAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="Commands\SetDefaultEmulationSettingsCommand.cs" />
     <Compile Include="CompositionItem.cs" />
     <Compile Include="DiagramDebuggerControl.xaml.cs">
       <DependentUpon>DiagramDebuggerControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="EmulationDiagramStrategy.cs" />
+    <Compile Include="EmulationSettings.cs" />
     <Compile Include="Layout\LayoutManager.cs" />
     <Compile Include="MarketDataSettingsEditor.cs" />
     <Compile Include="SolutionExplorerControl.xaml.cs">
