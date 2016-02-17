@@ -90,12 +90,13 @@
     <Compile Include="..\..\StockSharpAssemblyInfo.cs">
       <Link>Properties\StockSharpAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="Lua\LuaFixExtensions.cs" />
     <Compile Include="Lua\LuaFixMarketDataMessageAdapter.cs" />
     <Compile Include="Lua\LuaFixServer.cs" />
     <Compile Include="Lua\LuaFixTransactionMessageAdapter.cs" />
     <Compile Include="Lua\LuaRequest.cs" />
-    <Compile Include="Lua\QuikFixTags.cs" />
-    <Compile Include="Lua\QuikLuaDialect.cs" />
+    <Compile Include="Lua\LuaFixTags.cs" />
+    <Compile Include="Lua\LuaDialect.cs" />
     <Compile Include="Native\Api.cs" />
     <Compile Include="Native\Codes.cs" />
     <Compile Include="Native\ApiException.cs" />

@@ -10,14 +10,15 @@ namespace StockSharp.Quik.Lua
 	using StockSharp.Fix.Native;
 	using StockSharp.Messages;
 
-	class QuikLuaDialect : DefaultDialect
+	class LuaDialect : DefaultDialect
 	{
-		public QuikLuaDialect(string senderCompId, string targetCompId, Stream stream, IncrementalIdGenerator idGenerator, TimeSpan heartbeatInterval, bool isResetCounter, string login, SecureString password, Func<OrderCondition> createOrderCondition)
+		public LuaDialect(string senderCompId, string targetCompId, Stream stream, IncrementalIdGenerator idGenerator, TimeSpan heartbeatInterval, bool isResetCounter, string login, SecureString password, Func<OrderCondition> createOrderCondition)
 			: base(senderCompId, targetCompId, stream, idGenerator, heartbeatInterval, isResetCounter, login, password, TimeHelper.Moscow, createOrderCondition)
 		{
 			SecurityLookup = true;
 			PortfolioLookup = true;
 			OrderLookup = true;
+			SecuritiesSinglePacket = true;
 		}
 
 		/// <summary>
