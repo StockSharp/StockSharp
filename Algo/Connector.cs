@@ -1168,7 +1168,7 @@ namespace StockSharp.Algo
 		/// <param name="transactionId">Order cancellation transaction id.</param>
 		protected virtual void OnCancelOrder(Order order, long transactionId)
 		{
-			var cancelMsg = order.CreateCancelMessage(GetSecurityId(order.Security), transactionId);
+			var cancelMsg = order.CreateCancelMessage(GetSecurityId(order.Security), transactionId, TransactionAdapter.OrderCancelVolumeRequired ? order.Balance : (decimal?)null);
 			SendInMessage(cancelMsg);
 		}
 

@@ -74,6 +74,11 @@ namespace StockSharp.Messages
 		bool OrderStatusRequired { get; }
 
 		/// <summary>
+		/// <see cref="OrderCancelMessage.Volume"/> required to cancel orders.
+		/// </summary>
+		bool OrderCancelVolumeRequired { get; }
+
+		/// <summary>
 		/// Board code for combined security.
 		/// </summary>
 		string AssociatedBoardCode { get; }

@@ -180,6 +180,11 @@ namespace StockSharp.Messages
 		public virtual bool OrderStatusRequired => this.IsMessageSupported(MessageTypes.OrderStatus);
 
 		/// <summary>
+		/// <see cref="OrderCancelMessage.Volume"/> required to cancel orders.
+		/// </summary>
+		public virtual bool OrderCancelVolumeRequired { get; } = false;
+
+		/// <summary>
 		/// Gets a value indicating whether the connector supports security lookup.
 		/// </summary>
 		protected virtual bool IsSupportNativeSecurityLookup => false;
@@ -325,51 +330,31 @@ namespace StockSharp.Messages
 
 					case MessageTypes.OrderRegister:
 					{
-						var execMsg = ((OrderRegisterMessage)message).ToExecutionMessage();
-						execMsg.Error = ex;
-						execMsg.OrderState = OrderStates.Failed;
-						SendOutMessage(execMsg);
-
+						SendOutErrorExecution(((OrderRegisterMessage)message).ToExecutionMessage(), ex);
 						return;
 					}
 
 					case MessageTypes.OrderReplace:
 					{
-						var execMsg = ((OrderReplaceMessage)message).ToExecutionMessage();
-						execMsg.Error = ex;
-						execMsg.OrderState = OrderStates.Failed;
-						SendOutMessage(execMsg);
-
+						SendOutErrorExecution(((OrderReplaceMessage)message).ToExecutionMessage(), ex);
 						return;
 					}
 
 					case MessageTypes.OrderPairReplace:
 					{
-						var execMsg = ((OrderPairReplaceMessage)message).ToExecutionMessage();
-						execMsg.Error = ex;
-						execMsg.OrderState = OrderStates.Failed;
-						SendOutMessage(execMsg);
-
+						SendOutErrorExecution(((OrderPairReplaceMessage)message).ToExecutionMessage(), ex);
 						return;
 					}
 
 					case MessageTypes.OrderCancel:
 					{
-						var execMsg = ((OrderCancelMessage)message).ToExecutionMessage();
-						execMsg.Error = ex;
-						execMsg.OrderState = OrderStates.Failed;
-						SendOutMessage(execMsg);
-
+						SendOutErrorExecution(((OrderCancelMessage)message).ToExecutionMessage(), ex);
 						return;
 					}
 
 					case MessageTypes.OrderGroupCancel:
 					{
-						var execMsg = ((OrderGroupCancelMessage)message).ToExecutionMessage();
-						execMsg.Error = ex;
-						execMsg.OrderState = OrderStates.Failed;
-						SendOutMessage(execMsg);
-
+						SendOutErrorExecution(((OrderGroupCancelMessage)message).ToExecutionMessage(), ex);
 						return;
 					}
 
@@ -426,6 +411,14 @@ namespace StockSharp.Messages
 				// time msg should be return back
 				SendOutMessage(message);
 			}
+		}
+
+		private void SendOutErrorExecution(ExecutionMessage execMsg, Exception ex)
+		{
+			execMsg.ServerTime = CurrentTime;
+			execMsg.Error = ex;
+			execMsg.OrderState = OrderStates.Failed;
+			SendOutMessage(execMsg);
 		}
 
 		/// <summary>
