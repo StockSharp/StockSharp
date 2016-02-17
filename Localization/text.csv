@@ -4202,6 +4202,10 @@ RefreshScheme;Refresh scheme;Обновить схему
 LabelsFormatIntraday;Labels format (intraday);Формат надписей (внутри дня)
 LabelsFormatIntradayDesc;The format of X-axis labels within the day;Формат надписей для оси X внутри дня
 BestPair;Best pair quotes;Лучшая пара котировок
+ReadTimeOut;Timeout (get);Время ожидания (получение)
+WriteTimeOut;Timeout (send);Время ожидания (отправка)
+ReadTimeOutDesc;The timeout of getting data from the server.;Время ожидания получения данных от сервера.
+WriteTimeOutDesc;The timeout of sending data to the server.;Время ожидания отправки данных на сервер.
 DocStr0;Button activation alert settings;Кнопка активации настроек сигнала
 DocStr1;Initializes a new instance of the {0};Создать {0}
 DocStr2;Load settings;Загрузить настройки

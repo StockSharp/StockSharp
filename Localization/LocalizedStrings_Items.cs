@@ -41756,5 +41756,45 @@ namespace StockSharp.Localization
 		/// Best pair quotes
 		/// </summary>
 		public static string BestPair => GetString(BestPairKey);
+
+		/// <summary>
+		/// Timeout (get)
+		/// </summary>
+		public const string ReadTimeOutKey = "ReadTimeOut";
+
+		/// <summary>
+		/// Timeout (get)
+		/// </summary>
+		public static string ReadTimeOut => GetString(ReadTimeOutKey);
+
+		/// <summary>
+		/// Timeout (send)
+		/// </summary>
+		public const string WriteTimeOutKey = "WriteTimeOut";
+
+		/// <summary>
+		/// Timeout (send)
+		/// </summary>
+		public static string WriteTimeOut => GetString(WriteTimeOutKey);
+
+		/// <summary>
+		/// The timeout of getting data from the server.
+		/// </summary>
+		public const string ReadTimeOutDescKey = "ReadTimeOutDesc";
+
+		/// <summary>
+		/// The timeout of getting data from the server.
+		/// </summary>
+		public static string ReadTimeOutDesc => GetString(ReadTimeOutDescKey);
+
+		/// <summary>
+		/// The timeout of sending data to the server.
+		/// </summary>
+		public const string WriteTimeOutDescKey = "WriteTimeOutDesc";
+
+		/// <summary>
+		/// The timeout of sending data to the server.
+		/// </summary>
+		public static string WriteTimeOutDesc => GetString(WriteTimeOutDescKey);
 	}
 }
