@@ -1590,7 +1590,7 @@
       <param name="field">Field to update.</param>
       <param name="value">New value.</param>
       <param name="name">Name of the field to update.</param>
-      <typeparam name="TFLD">The field type.</typeparam>
+      <typeparam name="TField">The field type.</typeparam>
       <returns>True if the field was updated. False otherwise.</returns>
     </member>
     <member name="T:StockSharp.Xaml.Charting.ChartTradeElement">

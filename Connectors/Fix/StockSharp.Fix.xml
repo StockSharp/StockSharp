@@ -70,6 +70,11 @@
             Supports <see cref="T:StockSharp.Messages.OrderStatusMessage" /> for mass orders.
             </summary>
     </member>
+    <member name="P:StockSharp.Fix.Dialects.BaseDialect.OrderCancelVolumeRequired">
+      <summary>
+        <see cref="P:StockSharp.Messages.OrderCancelMessage.Volume" /> required to cancel orders.
+            </summary>
+    </member>
     <member name="M:StockSharp.Fix.Dialects.BaseDialect.OnRead(StockSharp.Fix.Native.IFixReader,System.String,Ecng.Common.AllocationArray{StockSharp.Messages.Message})">
       <summary>
             Read next message from FIX protocol.
@@ -143,6 +148,16 @@
       <param name="timeMsg">Heartbeat message.</param>
       <returns>
         <see cref="T:StockSharp.Fix.Native.FixMessages" /> value.</returns>
+    </member>
+    <member name="M:StockSharp.Fix.Dialects.BaseDialect.DisposeManaged">
+      <summary>
+            Release resources.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.BaseDialect.SecuritiesSinglePacket">
+      <summary>
+            Security message contain information for all requested securities.
+            </summary>
     </member>
     <member name="M:StockSharp.Fix.Dialects.BaseDialect.ReadExecutionReport(StockSharp.Fix.Native.IFixReader,StockSharp.Fix.Native.ExecutionReport,System.String,System.Func{StockSharp.Fix.Native.FixTags,System.Boolean})">
       <summary>
@@ -251,6 +266,11 @@
     <member name="P:StockSharp.Fix.Dialects.IFixDialect.OrderLookup">
       <summary>
             Supports <see cref="T:StockSharp.Messages.OrderStatusMessage" /> for mass orders.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.IFixDialect.OrderCancelVolumeRequired">
+      <summary>
+        <see cref="P:StockSharp.Messages.OrderCancelMessage.Volume" /> required to cancel orders.
             </summary>
     </member>
     <member name="M:StockSharp.Fix.Dialects.IFixDialect.Write(StockSharp.Messages.Message)">
@@ -507,12 +527,12 @@
     </member>
     <member name="P:StockSharp.Fix.FixSession.ReadTimeout">
       <summary>
-            The timeout of getting data from the server. The default value is <see cref="F:Ecng.Common.SyncObject.InfiniteTimeSpan" />.
+            The timeout of getting data from the server. The default value is <see cref="F:System.TimeSpan.Zero" />.
             </summary>
     </member>
     <member name="P:StockSharp.Fix.FixSession.WriteTimeout">
       <summary>
-            The timeout of sending data to the server. The default value is <see cref="F:Ecng.Common.SyncObject.InfiniteTimeSpan" />.
+            The timeout of sending data to the server. The default value is <see cref="F:System.TimeSpan.Zero" />.
             </summary>
     </member>
     <member name="M:StockSharp.Fix.FixSession.Load(Ecng.Serialization.SettingsStorage)">
@@ -4918,6 +4938,11 @@
         <see cref="T:StockSharp.Messages.PortfolioLookupMessage" /> required to get portfolios and positions.
             </summary>
     </member>
+    <member name="P:StockSharp.Fix.FixMessageAdapter.OrderCancelVolumeRequired">
+      <summary>
+        <see cref="P:StockSharp.Messages.OrderCancelMessage.Volume" /> required to cancel orders.
+            </summary>
+    </member>
     <member name="M:StockSharp.Fix.FixMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)">
       <summary>
             Send message.
@@ -4979,12 +5004,12 @@
     </member>
     <member name="P:StockSharp.Fix.FixMessageAdapter.ReadTimeout">
       <summary>
-            The timeout of getting data from the server. The default value is <see cref="F:Ecng.Common.SyncObject.InfiniteTimeSpan" />.
+            The timeout of getting data from the server. The default value is <see cref="F:System.TimeSpan.Zero" />.
             </summary>
     </member>
     <member name="P:StockSharp.Fix.FixMessageAdapter.WriteTimeout">
       <summary>
-            The timeout of sending data to the server. The default value is <see cref="F:Ecng.Common.SyncObject.InfiniteTimeSpan" />.
+            The timeout of sending data to the server. The default value is <see cref="F:System.TimeSpan.Zero" />.
             </summary>
     </member>
     <member name="P:StockSharp.Fix.FixMessageAdapter.IsValid">
