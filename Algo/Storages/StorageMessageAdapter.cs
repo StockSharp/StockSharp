@@ -358,7 +358,7 @@ namespace StockSharp.Algo.Storages
 
 			var security = new Security
 			{
-				Id = securityId.SecurityCode + "@" + securityId.BoardCode,
+				Id = securityId.ToStringId(),
 				Code = securityId.SecurityCode,
 				Board = ExchangeBoard.GetOrCreateBoard(securityId.BoardCode),
 				ExtensionInfo = new Dictionary<object, object>()
