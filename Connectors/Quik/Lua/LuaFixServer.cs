@@ -210,6 +210,7 @@ namespace StockSharp.Quik.Lua
 			};
 
 			_fixServer.TransactionSession.TimeZone = TimeHelper.Moscow;
+			_fixServer.MarketDataSession.TimeZone = TimeHelper.Moscow;
 
 			_logManager.Application = new QuikNativeApp();
 
