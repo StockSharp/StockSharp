@@ -4,46 +4,35 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:diagram="http://schemas.stocksharp.com/xaml"
-             xmlns:xcad="http://schemas.xceed.com/wpf/xaml/avalondock"
              xmlns:localization="clr-namespace:StockSharp.Localization;assembly=StockSharp.Localization"
+             xmlns:dxdo="http://schemas.devexpress.com/winfx/2008/xaml/docking"
              mc:Ignorable="d"
              d:DesignHeight="300" d:DesignWidth="600">
 
-    <xcad:DockingManager x:Name="DockingManager">
-        <!--<xcad:DockingManager.Theme>
-                <xcad:MetroTheme />
-            </xcad:DockingManager.Theme>-->
+    <dxdo:DockLayoutManager x:Name="DockingManager" FloatingMode="Desktop" DockingStyle="VS2010"
+							FloatingDocumentContainer="DocumentHost">
+        <dxdo:LayoutGroup Name="Root">
+            <dxdo:LayoutGroup Orientation="Horizontal" ItemHeight="*">
+                <dxdo:LayoutPanel Caption="{x:Static localization:LocalizedStrings.Str3181}">
+                    <Grid>
+                        <diagram:DiagramEditorControl x:Name="DiagramEditor" 
+														  SelectionChanged="OnDiagramEditorSelectionChanged"
+														  ElementDoubleClicked="OnDiagramEditorElementDoubleClicked"/>
+                        <Label x:Name="NoStrategyLabel" VerticalAlignment="Center" HorizontalAlignment="Center" 
+								   FontSize="25" FontWeight="Bold" Foreground="Gray" Content="{x:Static localization:LocalizedStrings.StrategyNotSelected}"/>
+                    </Grid>
+                </dxdo:LayoutPanel>
+            </dxdo:LayoutGroup>
+        </dxdo:LayoutGroup>
 
-        <xcad:LayoutRoot>
-            <xcad:LayoutPanel>
-
-                <xcad:LayoutAnchorablePaneGroup DockWidth="10*">
-                    <xcad:LayoutAnchorablePane>
-                        <xcad:LayoutAnchorable ContentId="DiagramEditor" Title="{x:Static localization:LocalizedStrings.Str3181}" CanClose="False" CanHide="False">
-                            <Grid>
-                                <diagram:DiagramEditorControl x:Name="DiagramEditor" 
-															  SelectionChanged="OnDiagramEditorSelectionChanged"
-															  ElementDoubleClicked="OnDiagramEditorElementDoubleClicked"/>
-                                <Label x:Name="NoStrategyLabel" VerticalAlignment="Center" HorizontalAlignment="Center" 
-									   FontSize="25" FontWeight="Bold" Foreground="Gray" Content="{x:Static localization:LocalizedStrings.StrategyNotSelected}"/>
-                            </Grid>
-                        </xcad:LayoutAnchorable>
-                    </xcad:LayoutAnchorablePane>
-                </xcad:LayoutAnchorablePaneGroup>
-
-                <xcad:LayoutAnchorablePaneGroup DockWidth="5*">
-                    <xcad:LayoutAnchorablePane>
-                        <xcad:LayoutAnchorable x:Name="PropertyGridControlAnchorable" ContentId="PropertyGridControl" 
-											   AutoHideWidth="300" CanClose="False" CanHide="False"
-											   Title="{x:Static localization:LocalizedStrings.Str1507}">
-                            <diagram:PropertyGridEx x:Name="PropertyGridControl"
-													ShowAdvancedOptions="False" ShowDescriptionByTooltip="False" ShowPreview="False" ShowSearchBox="False"
-													ShowSortOptions="False" ShowSummary="True" ShowTitle="False"/>
-                        </xcad:LayoutAnchorable>
-                    </xcad:LayoutAnchorablePane>
-                </xcad:LayoutAnchorablePaneGroup>
-
-            </xcad:LayoutPanel>
-        </xcad:LayoutRoot>
-    </xcad:DockingManager>
+        <dxdo:DockLayoutManager.AutoHideGroups>
+            <dxdo:AutoHideGroup DockType="Right">
+                <dxdo:LayoutPanel Caption="{x:Static localization:LocalizedStrings.Str1507}">
+                    <diagram:PropertyGridEx x:Name="PropertyGridControl"
+												ShowAdvancedOptions="False" ShowDescriptionByTooltip="False" ShowPreview="False" ShowSearchBox="False"
+												ShowSortOptions="False" ShowSummary="True" ShowTitle="False"/>
+                </dxdo:LayoutPanel>
+            </dxdo:AutoHideGroup>
+        </dxdo:DockLayoutManager.AutoHideGroups>
+    </dxdo:DockLayoutManager>
 </UserControl>
