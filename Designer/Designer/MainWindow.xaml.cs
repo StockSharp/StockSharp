@@ -122,7 +122,7 @@ namespace StockSharp.Designer
 			SolutionExplorer.Compositions = _strategiesRegistry.Compositions;
 			SolutionExplorer.Strategies = _strategiesRegistry.Strategies;
 			//EmulationSecurityEditor.SecurityProvider = _connector;
-		}
+        }
 
 		private static void InitializeDataSource()
 		{
@@ -366,7 +366,7 @@ namespace StockSharp.Designer
 					RibbonEmulationTab.DataContext = null;
 					RibbonLiveTab.DataContext = null;
                     RibbonDesignerTab.DataContext = editor.Composition;
-					Ribbon.SelectedTabItem = RibbonDesignerTab;
+					Ribbon.SelectedPage = RibbonDesignerTab;
 				});
 
 			DockingManager
@@ -376,7 +376,7 @@ namespace StockSharp.Designer
 					RibbonDesignerTab.DataContext = null;
 					RibbonLiveTab.DataContext = null;
                     RibbonEmulationTab.DataContext = editor;
-					Ribbon.SelectedTabItem = RibbonEmulationTab;
+					Ribbon.SelectedPage = RibbonEmulationTab;
 				});
 
 			DockingManager
@@ -386,7 +386,7 @@ namespace StockSharp.Designer
 					RibbonEmulationTab.DataContext = null;
 					RibbonDesignerTab.DataContext = null;
                     RibbonLiveTab.DataContext = editor;
-					Ribbon.SelectedTabItem = RibbonLiveTab;
+					Ribbon.SelectedPage = RibbonLiveTab;
 				});
 		}
 
@@ -398,7 +398,7 @@ namespace StockSharp.Designer
 							  ? "pack://application:,,,/Designer;component/Images/Connect_24x24.png"
 							  : "pack://application:,,,/Designer;component/Images/Disconnect_24x24.png";
 
-				ConnectButton.Icon = new BitmapImage(new Uri(uri));
+				ConnectButton.Glyph = new BitmapImage(new Uri(uri));
 			});
 		}
 

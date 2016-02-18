@@ -4,14 +4,4 @@
              xmlns:xaml="http://schemas.stocksharp.com/xaml"
              StartupUri="MainWindow.xaml" ShutdownMode="OnExplicitShutdown">
 
-    <Application.Resources>
-        <ResourceDictionary>
-            <ResourceDictionary.MergedDictionaries>
-                <!--<ResourceDictionary Source="pack://application:,,,/Fluent;Component/Themes/Generic.xaml" />-->
-                <!--<ResourceDictionary Source="pack://application:,,,/Fluent;Component/Themes/Office2013/Generic.xaml" />-->
-                <ResourceDictionary Source="pack://application:,,,/Fluent;Component/Themes/Windows8/Generic.xaml" />
-            </ResourceDictionary.MergedDictionaries>
-        </ResourceDictionary>
-    </Application.Resources>
-	
 </xaml:ExtendedBaseApplication>

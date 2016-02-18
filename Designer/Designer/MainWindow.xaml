@@ -1,9 +1,8 @@
-﻿<fluent:RibbonWindow x:Class="StockSharp.Designer.MainWindow"
+﻿<dxr:DXRibbonWindow x:Class="StockSharp.Designer.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 		xmlns:xcad="http://schemas.xceed.com/wpf/xaml/avalondock"
-        xmlns:fluent="clr-namespace:Fluent;assembly=Fluent"
-		xmlns:xaml="http://schemas.stocksharp.com/xaml"
+        xmlns:xaml="http://schemas.stocksharp.com/xaml"
 		xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 		xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 		xmlns:localization="clr-namespace:StockSharp.Localization;assembly=StockSharp.Localization"
@@ -11,10 +10,15 @@
 		xmlns:businessEntities="clr-namespace:StockSharp.BusinessEntities;assembly=StockSharp.BusinessEntities"
 		xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
 		xmlns:controls="clr-namespace:StockSharp.Studio.Controls;assembly=StockSharp.Studio.Controls"
+		xmlns:dxr="http://schemas.devexpress.com/winfx/2008/xaml/ribbon"
+		xmlns:dxb="http://schemas.devexpress.com/winfx/2008/xaml/bars"
+		xmlns:dxmvvm="http://schemas.devexpress.com/winfx/2008/xaml/mvvm"
+		xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors"
 		mc:Ignorable="d"
 		Height="768" Width="1024" WindowState="Maximized"
-        DontUseDwm="False" WindowStartupLocation="CenterScreen"
-        Closing="MainWindow_OnClosing" Loaded="MainWindow_OnLoaded">
+        WindowStartupLocation="CenterScreen"
+        Closing="MainWindow_OnClosing" Loaded="MainWindow_OnLoaded"
+					UseLayoutRounding="True" DisplayShowModeSelector="True">
 
     <Window.CommandBindings>
         <CommandBinding Command="{x:Static local:MainWindow.AddCommand}"
@@ -108,360 +112,370 @@
 					  CommandParameter="{Binding Element}" />
         </ContextMenu>
 	</Window.Resources>
-	
-    <Grid Margin="3">
-        <Grid.RowDefinitions>
-			<RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
-        </Grid.RowDefinitions>
 
-        <fluent:Ribbon Grid.Row="0" AutomaticStateManagement="False"
-                       x:Name="Ribbon">
+    <dxb:BarManager>
+        <!--<dxb:BarManager.Items>
+            <dxb:BarButtonItem x:Name="ConnectionSettingsButton" Content="{x:Static localization:LocalizedStrings.Settings}"
+							   ToolTip="{x:Static localization:LocalizedStrings.ConnectionSettings}"
+							   Glyph="pack://application:,,,/StockSharp.Xaml;component/Images/connection-settings-icon_24x24.png" 
+							   Command="{x:Static local:MainWindow.ConnectorSettingsCommand}"/>
 
-            <fluent:Ribbon.QuickAccessItems>
-                <fluent:QuickAccessMenuItem IsChecked="true">
-                    <fluent:Button Size="Small" 
-								   Header="{x:Static localization:LocalizedStrings.Settings}"
-								   ToolTip="{x:Static localization:LocalizedStrings.ConnectionSettings}"
-								   Icon="pack://application:,,,/StockSharp.Xaml;component/Images/connection-settings-icon_24x24.png" 
-								   Command="{x:Static local:MainWindow.ConnectorSettingsCommand}"/>
-                </fluent:QuickAccessMenuItem>
-                <fluent:QuickAccessMenuItem IsChecked="true">
-                    <fluent:Button x:Name="ConnectButton"
-								   Size="Small" 
-								   Header="{x:Static localization:LocalizedStrings.Connect}"
-								   ToolTip="{x:Static localization:LocalizedStrings.Connect}"
-								   Icon="pack://application:,,,/Designer;component/Images/Connect_24x24.png" 
-								   Command="{x:Static local:MainWindow.ConnectDisconnectCommand}"/>
-                </fluent:QuickAccessMenuItem>
-                <fluent:QuickAccessMenuItem IsChecked="true">
-                    <fluent:DropDownButton Size="Small" 
-										   Header="{x:Static localization:LocalizedStrings.Settings}"
-										   ToolTip="{x:Static localization:LocalizedStrings.Settings}"
-										   Icon="pack://application:,,,/Designer;component/Images/Settings_24x24.png" >
-                        <fluent:MenuItem Header="{x:Static localization:LocalizedStrings.XamlStr610}"
-										 Command="{x:Static local:MainWindow.TargetPlatformCommand}" />
-                        <fluent:MenuItem Header="{x:Static localization:LocalizedStrings.Str1520}"
-										 Command="{x:Static local:MainWindow.ResetSettingsCommand}" />
-                    </fluent:DropDownButton>
-                </fluent:QuickAccessMenuItem>
-            </fluent:Ribbon.QuickAccessItems>
-			
-			<fluent:Ribbon.ToolBarItems>
-                <fluent:DropDownButton Size="Small" 
-									   ToolTip="{x:Static localization:LocalizedStrings.Help}"
-									   Icon="pack://application:,,,/StockSharp.Xaml;component/Images/help_16x16.png">
-                    <fluent:MenuItem Header="{x:Static localization:LocalizedStrings.Help}"
-									 Command="{x:Static local:MainWindow.HelpCommand}" />
-                    <fluent:MenuItem Command="{x:Static local:MainWindow.AboutCommand}" >
-                        <fluent:MenuItem.Header>
-                            <TextBlock>
-								<Run Text="{x:Static localization:LocalizedStrings.About}" />...
-                            </TextBlock>
-                        </fluent:MenuItem.Header>
-                    </fluent:MenuItem>
-                </fluent:DropDownButton>
-            </fluent:Ribbon.ToolBarItems>
-			
-            <!--<fluent:Ribbon.ContextualGroups>
-                <fluent:RibbonContextualTabGroup x:Name="DesignerRibbonGroup"
-                                                 BorderBrush="DodgerBlue"
-                                                 Background="DodgerBlue"
-                                                 Foreground="Black"
-                                                 Header="CUSTOM"
-                                                 Visibility="Visible" />
+            <dxb:BarButtonItem x:Name="ConnectButton"
+							   Content="{x:Static localization:LocalizedStrings.Connect}"
+							   ToolTip="{x:Static localization:LocalizedStrings.Connect}"
+							   Glyph="pack://application:,,,/Designer;component/Images/Connect_24x24.png" 
+							   Command="{x:Static local:MainWindow.ConnectDisconnectCommand}"/>
 
-                <fluent:RibbonContextualTabGroup x:Name="EmulationRibbonGroup"
-                                                 BorderBrush="DodgerBlue"
-                                                 Background="DodgerBlue"
-                                                 Foreground="Black"
-                                                 Header="CUSTOM"
-                                                 Visibility="Visible" />
-            </fluent:Ribbon.ContextualGroups>-->
+            <dxb:BarSplitButtonItem x:Name="SettingsButton" Content="{x:Static localization:LocalizedStrings.Settings}"
+									ToolTip="{x:Static localization:LocalizedStrings.Settings}"
+									Glyph="pack://application:,,,/Designer;component/Images/Settings_24x24.png" >  
+				<dxb:PopupMenu>
+                    <dxb:BarButtonItem Content="{x:Static localization:LocalizedStrings.XamlStr610}"
+									   Command="{x:Static local:MainWindow.TargetPlatformCommand}" />
+                    <dxb:BarButtonItem Content="{x:Static localization:LocalizedStrings.Str1520}"
+									   Command="{x:Static local:MainWindow.ResetSettingsCommand}" />
+                </dxb:PopupMenu>
+            </dxb:BarSplitButtonItem>
+        </dxb:BarManager.Items>-->
+		
+        <Grid Margin="3">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
 
-            <fluent:RibbonTabItem Header="{x:Static localization:LocalizedStrings.Schemas}"
-								  x:Name="RibbonCommonTab">
-                <fluent:RibbonGroupBox Header="{x:Static localization:LocalizedStrings.CompositionElementsStrategies}">
-                    <fluent:DropDownButton Header="{x:Static localization:LocalizedStrings.Str3229}" 
-										   SizeDefinition="Middle"
-										   Icon="pack://application:,,,/Designer;component/Images/Add_32x32.png"
-										   LargeIcon="pack://application:,,,/Designer;component/Images/Add_32x32.png">
-                        <fluent:MenuItem Header="{x:Static localization:LocalizedStrings.CompositeElement}"
-										 Command="{x:Static local:MainWindow.AddCommand}"
-										 CommandParameter="{x:Static local:CompositionType.Composition}" />
-                        <fluent:MenuItem Header="{x:Static localization:LocalizedStrings.Strategy}"
-										 Command="{x:Static local:MainWindow.AddCommand}"
-										 CommandParameter="{x:Static local:CompositionType.Strategy}" />
-                    </fluent:DropDownButton>
-                    <fluent:Button Header="{x:Static localization:LocalizedStrings.Str1509}"
-								   SizeDefinition="Middle"
-								   Icon="pack://application:,,,/Designer;component/Images/Open_32x32.png"
-								   LargeIcon="pack://application:,,,/Designer;component/Images/Open_32x32.png"
-								   Command="{x:Static local:MainWindow.OpenCommand}"
-								   CommandParameter="{Binding ElementName=SolutionExplorer, Path=SelectedItem}" />
-                    <fluent:Button Header="{x:Static localization:LocalizedStrings.Str2060}"
-								   SizeDefinition="Middle"
-								   Icon="pack://application:,,,/Designer;component/Images/Remove_32x32.png"
-								   LargeIcon="pack://application:,,,/Designer;component/Images/Remove_32x32.png"
-								   Command="{x:Static local:MainWindow.RemoveCommand}"
-								   CommandParameter="{Binding ElementName=SolutionExplorer, Path=SelectedItem}" />
-                    
-					<Separator />
+            <dxr:RibbonControl x:Name="Ribbon" RibbonStyle="Office2010" ToolbarShowMode="ShowAbove"  ApplicationMenu="{x:Null}">
+                <!--<dxr:RibbonControl.ToolbarItemLinks>
+                    <dxb:BarButtonItemLink BarItemName="ConnectionSettingsButton"/>
+                    <dxb:BarButtonItemLink BarItemName="ConnectButton"/>
+                    <dxb:BarButtonItemLink BarItemName="SettingsButton"/>
+                </dxr:RibbonControl.ToolbarItemLinks>-->
+				
+				<dxr:RibbonControl.ToolbarItems>
+                    <dxb:BarButtonItem x:Name="ConnectionSettingsButton" Content="{x:Static localization:LocalizedStrings.Settings}"
+							   ToolTip="{x:Static localization:LocalizedStrings.ConnectionSettings}"
+							   Glyph="pack://application:,,,/StockSharp.Xaml;component/Images/connection-settings-icon_24x24.png" 
+							   Command="{x:Static local:MainWindow.ConnectorSettingsCommand}"/>
 
-                    <fluent:Button Header="{x:Static localization:LocalizedStrings.Import}"
-								   SizeDefinition="Middle"
-								   IsEnabled="False"
-								   Icon="pack://application:,,,/Designer;component/Images/Open_32x32.png"
-								   LargeIcon="pack://application:,,,/Designer;component/Images/Open_32x32.png" />
-                    <fluent:Button Header="{x:Static localization:LocalizedStrings.Export}"
-								   SizeDefinition="Middle"
-								   IsEnabled="False"
-								   Icon="pack://application:,,,/Designer;component/Images/Save_32x32.png"
-								   LargeIcon="pack://application:,,,/Designer;component/Images/Save_32x32.png" />
-                </fluent:RibbonGroupBox>
-                <fluent:RibbonGroupBox Header="{x:Static localization:LocalizedStrings.Str3606}">
-                    <fluent:Button Header="{x:Static localization:LocalizedStrings.Str1174}"
-								   SizeDefinition="Large"
-								   LargeIcon="pack://application:,,,/Designer;component/Images/Backtesting_32x32.png" 
-								   Command="{x:Static local:MainWindow.EmulateStrategyCommand}"
-								   CommandParameter="{Binding ElementName=SolutionExplorer, Path=SelectedItem}" />
-                    <fluent:Button Header="{x:Static localization:LocalizedStrings.Str3176}"
-								   SizeDefinition="Large"
-								   LargeIcon="pack://application:,,,/Designer;component/Images/terminal_32x32.png" 
-								   Command="{x:Static local:MainWindow.ExecuteStrategyCommand}"
-								   CommandParameter="{Binding ElementName=SolutionExplorer, Path=SelectedItem}" />
-                </fluent:RibbonGroupBox>
-                <fluent:RibbonGroupBox Header="{x:Static localization:LocalizedStrings.Str1405}">
-                    <fluent:Button Header="{x:Static localization:LocalizedStrings.MarketData}"
-								   SizeDefinition="Large"
-								   LargeIcon="pack://application:,,,/Designer;component/Images/storage_32x32.png" 
-								   Command="{x:Static local:MainWindow.OpenMarketDataSettingsCommand}" />
-                    <fluent:Button Header="{x:Static localization:LocalizedStrings.XamlStr137}"
-								   SizeDefinition="Large"
-								   LargeIcon="pack://application:,,,/Designer;component/Images/Security_32x32.png" 
-								   Command="{x:Static local:MainWindow.AddNewSecurityCommand}"
-								   CommandParameter="{x:Type businessEntities:Security}" />
-                </fluent:RibbonGroupBox>
-            </fluent:RibbonTabItem>
+                    <dxb:BarButtonItem x:Name="ConnectButton"
+							   Content="{x:Static localization:LocalizedStrings.Connect}"
+							   ToolTip="{x:Static localization:LocalizedStrings.Connect}"
+							   Glyph="pack://application:,,,/Designer;component/Images/Connect_24x24.png" 
+							   Command="{x:Static local:MainWindow.ConnectDisconnectCommand}"/>
 
-            <fluent:RibbonTabItem Header="{x:Static localization:LocalizedStrings.Str3181}" 
-								  x:Name="RibbonDesignerTab">
-                <fluent:RibbonTabItem.Resources>
-                    <Style TargetType="{x:Type fluent:TextBox}">
-                        <Style.Triggers>
-                            <Trigger Property="DataContext" Value="{x:Null}">
-                                <Setter Property="IsEnabled" Value="False" />
-                            </Trigger>
-                        </Style.Triggers>
-                    </Style>
-                </fluent:RibbonTabItem.Resources>
-                <fluent:RibbonGroupBox Header="{x:Static localization:LocalizedStrings.Str1559}">
-                    <fluent:TextBox Header="{x:Static localization:LocalizedStrings.Name}"
-									x:Name="CompositionNameTextBox"
-									InputWidth="150"
-                                    MaxLength="128"
-									Text="{Binding Element.Name, UpdateSourceTrigger=PropertyChanged}" />
-                    <fluent:TextBox Header="{x:Static localization:LocalizedStrings.XamlStr233}"
-									x:Name="CompositionCategoryTextBox"
-									InputWidth="150"
-                                    MaxLength="128"
-									Text="{Binding Element.Category, UpdateSourceTrigger=PropertyChanged}" 
-									Visibility="{Binding Type, Converter={StaticResource CompositionTypeToVisibilityConverter}}"/>
-                    <fluent:TextBox Header="{x:Static localization:LocalizedStrings.Description}"
-									x:Name="CompositionDescriptionTextBox"
-									InputWidth="150"
-                                    MaxLength="512"
-									Text="{Binding Element.Description, UpdateSourceTrigger=PropertyChanged}" />
-                    <fluent:Button Header="{x:Static localization:LocalizedStrings.Str1519}"
-								   Icon="pack://application:,,,/Designer;component/Images/Save_32x32.png"
-								   LargeIcon="pack://application:,,,/Designer;component/Images/Save_32x32.png"
-								   SizeDefinition="Large" 
-								   Command="{x:Static local:MainWindow.SaveCommand}"
-								   CommandParameter="{Binding}"/>
-                    <fluent:Button Header="{x:Static localization:LocalizedStrings.Undo}"
-								   Icon="pack://application:,,,/Designer;component/Images/Undo_32x32.png"
-								   LargeIcon="pack://application:,,,/Designer;component/Images/Undo_32x32.png"
-								   SizeDefinition="Large" 
-								   Command="{x:Static local:MainWindow.DiscardCommand}"
-								   CommandParameter="{Binding}"/>
-                    <fluent:Button Header="{x:Static localization:LocalizedStrings.RefreshScheme}"
-								   SizeDefinition="Large"
-								   LargeIcon="pack://application:,,,/Designer;component/Images/Refresh_32x32.png"
-								   Command="{x:Static local:MainWindow.RefreshCompositionCommand}"
-								   CommandParameter="{Binding}"/>
-                </fluent:RibbonGroupBox>
-                <fluent:RibbonGroupBox Header="{x:Static localization:LocalizedStrings.Str3606}">
-                    <fluent:Button Header="{x:Static localization:LocalizedStrings.Str1174}"
-								   SizeDefinition="Large"
-								   LargeIcon="pack://application:,,,/Designer;component/Images/Backtesting_32x32.png" 
-								   Command="{x:Static local:MainWindow.EmulateStrategyCommand}"
-								   CommandParameter="{Binding}" />
-                    <fluent:Button Header="{x:Static localization:LocalizedStrings.Str3176}"
-								   SizeDefinition="Large"
-								   LargeIcon="pack://application:,,,/Designer;component/Images/terminal_32x32.png" 
-								   Command="{x:Static local:MainWindow.ExecuteStrategyCommand}"
-								   CommandParameter="{Binding}" />
-                </fluent:RibbonGroupBox>
-            </fluent:RibbonTabItem>
+                    <dxb:BarSplitButtonItem x:Name="SettingsButton" Content="{x:Static localization:LocalizedStrings.Settings}"
+									ToolTip="{x:Static localization:LocalizedStrings.Settings}"
+									Glyph="pack://application:,,,/Designer;component/Images/Settings_24x24.png" >
+                        <dxb:PopupMenu>
+                            <dxb:BarButtonItem Content="{x:Static localization:LocalizedStrings.XamlStr610}"
+									   Command="{x:Static local:MainWindow.TargetPlatformCommand}" />
+                            <dxb:BarButtonItem Content="{x:Static localization:LocalizedStrings.Str1520}"
+									   Command="{x:Static local:MainWindow.ResetSettingsCommand}" />
+                        </dxb:PopupMenu>
+                    </dxb:BarSplitButtonItem>
 
-            <fluent:RibbonTabItem Header="{x:Static localization:LocalizedStrings.Str1174}"
-								  x:Name="RibbonEmulationTab">
-                <fluent:RibbonTabItem.Resources>
-                    <Style TargetType="{x:Type fluent:Button}">
-                        <Style.Triggers>
-                            <Trigger Property="Command" Value="{x:Null}">
-                                <Setter Property="IsEnabled" Value="False" />
-                            </Trigger>
-                        </Style.Triggers>
-                    </Style>
-                </fluent:RibbonTabItem.Resources>
-                <fluent:RibbonGroupBox Header="{x:Static localization:LocalizedStrings.Str1559}">
-                    <fluent:Button Header="{x:Static localization:LocalizedStrings.RefreshScheme}"
-								   SizeDefinition="Large"
-								   LargeIcon="pack://application:,,,/Designer;component/Images/Refresh_32x32.png"
-								   Command="{Binding RefreshCompositionCommand}" />
-					
-					<Separator />
+                    <dxb:BarSplitButtonItem ToolTip="{x:Static localization:LocalizedStrings.Help}"
+											Glyph="pack://application:,,,/StockSharp.Xaml;component/Images/help_16x16.png">
+                        <dxb:PopupMenu>
+                            <dxb:BarButtonItem Content="{x:Static localization:LocalizedStrings.Help}"
+											   Command="{x:Static local:MainWindow.HelpCommand}" />
+                            <dxb:BarButtonItem Content="{x:Static localization:LocalizedStrings.About}"
+											   Command="{x:Static local:MainWindow.AboutCommand}" />
+                        </dxb:PopupMenu>
+                    </dxb:BarSplitButtonItem>
+                </dxr:RibbonControl.ToolbarItems>
+				
+                <dxr:RibbonDefaultPageCategory>
+                    <dxr:RibbonPage x:Name="RibbonCommonTab" Caption="{x:Static localization:LocalizedStrings.Schemas}">
+                        <dxr:RibbonPageGroup Caption="{x:Static localization:LocalizedStrings.CompositionElementsStrategies}">
+                            <dxb:BarSplitButtonItem Content="{x:Static localization:LocalizedStrings.Str3229}"
+													Glyph="pack://application:,,,/Designer;component/Images/Add_32x32.png">
+                                <dxb:PopupMenu>
+                                    <dxb:BarButtonItem Content="{x:Static localization:LocalizedStrings.CompositeElement}"
+												   Command="{x:Static local:MainWindow.AddCommand}"
+												   CommandParameter="{x:Static local:CompositionType.Composition}" />
+                                    <dxb:BarButtonItem Content="{x:Static localization:LocalizedStrings.Strategy}"
+												   Command="{x:Static local:MainWindow.AddCommand}"
+												   CommandParameter="{x:Static local:CompositionType.Strategy}" />
+                                </dxb:PopupMenu>
+                            </dxb:BarSplitButtonItem>
 
-                    <Grid>
-						<Grid.Style>
-                            <Style TargetType="{x:Type Grid}">
+                            <dxb:BarButtonItem Content="{x:Static localization:LocalizedStrings.Str1509}"
+											   Glyph="pack://application:,,,/Designer;component/Images/Open_32x32.png"
+											   Command="{x:Static local:MainWindow.OpenCommand}"
+											   CommandParameter="{Binding ElementName=SolutionExplorer, Path=SelectedItem}"/>
+                            <dxb:BarButtonItem Content="{x:Static localization:LocalizedStrings.Str2060}"
+											   Glyph="pack://application:,,,/Designer;component/Images/Open_32x32.png"
+											   Command="{x:Static local:MainWindow.RemoveCommand}"
+											   CommandParameter="{Binding ElementName=SolutionExplorer, Path=SelectedItem}"/>
+
+                            <dxb:BarItemLinkSeparator/>
+
+                            <dxb:BarButtonItem Content="{x:Static localization:LocalizedStrings.Import}"
+											   Glyph="pack://application:,,,/Designer;component/Images/Open_32x32.png" />
+                            <dxb:BarButtonItem Content="{x:Static localization:LocalizedStrings.Export}"
+											   Glyph="pack://application:,,,/Designer;component/Images/Save_32x32.png" />
+
+                        </dxr:RibbonPageGroup>
+
+                        <dxr:RibbonPageGroup Caption="{x:Static localization:LocalizedStrings.Str3606}">
+                            <dxb:BarButtonItem Content="{x:Static localization:LocalizedStrings.Str1174}"
+										   LargeGlyph="pack://application:,,,/Designer;component/Images/Backtesting_32x32.png" 
+										   Command="{x:Static local:MainWindow.EmulateStrategyCommand}"
+										   CommandParameter="{Binding ElementName=SolutionExplorer, Path=SelectedItem}" />
+                            <dxb:BarButtonItem Content="{x:Static localization:LocalizedStrings.Str3176}"
+										   LargeGlyph="pack://application:,,,/Designer;component/Images/terminal_32x32.png" 
+										   Command="{x:Static local:MainWindow.ExecuteStrategyCommand}"
+										   CommandParameter="{Binding ElementName=SolutionExplorer, Path=SelectedItem}" />
+                        </dxr:RibbonPageGroup>
+
+                        <dxr:RibbonPageGroup Caption="{x:Static localization:LocalizedStrings.Str1405}">
+                            <dxb:BarButtonItem Content="{x:Static localization:LocalizedStrings.MarketData}"
+										   LargeGlyph="pack://application:,,,/Designer;component/Images/storage_32x32.png" 
+										   Command="{x:Static local:MainWindow.OpenMarketDataSettingsCommand}" />
+                            <dxb:BarButtonItem Content="{x:Static localization:LocalizedStrings.XamlStr137}"
+										   LargeGlyph="pack://application:,,,/Designer;component/Images/Security_32x32.png" 
+										   Command="{x:Static local:MainWindow.AddNewSecurityCommand}"
+										   CommandParameter="{x:Type businessEntities:Security}" />
+                        </dxr:RibbonPageGroup>
+
+                        <dxr:RibbonPageGroup Caption="Themes">
+                            <dxr:RibbonGalleryBarItem Content="Theme" >
+                                <dxmvvm:Interaction.Behaviors>
+                                    <dxr:RibbonGalleryItemThemeSelectorBehavior/>
+                                </dxmvvm:Interaction.Behaviors>
+                            </dxr:RibbonGalleryBarItem>
+                        </dxr:RibbonPageGroup>
+                    </dxr:RibbonPage>
+
+                    <dxr:RibbonPage Caption="{x:Static localization:LocalizedStrings.Str3181}" 
+									x:Name="RibbonDesignerTab">
+                        <dxr:RibbonPage.Resources>
+                            <Style TargetType="{x:Type dxb:BarEditItem}">
                                 <Style.Triggers>
                                     <Trigger Property="DataContext" Value="{x:Null}">
                                         <Setter Property="IsEnabled" Value="False" />
                                     </Trigger>
                                 </Style.Triggers>
                             </Style>
-						</Grid.Style>
-						<Grid.RowDefinitions>
-							<RowDefinition/>
-                            <RowDefinition/>
-                        </Grid.RowDefinitions>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto"/>
-                            <ColumnDefinition/>
-                            <ColumnDefinition Width="Auto"/>
-                            <ColumnDefinition/>
-                        </Grid.ColumnDefinitions>
+                        </dxr:RibbonPage.Resources>
+						
+                        <dxr:RibbonPageGroup Caption="{x:Static localization:LocalizedStrings.Str1559}">
+                            <dxb:BarEditItem Content="{x:Static localization:LocalizedStrings.Name}" 
+											 EditValue="{Binding Element.Name, UpdateSourceTrigger=PropertyChanged}"
+											 EditWidth="150">
+								<dxb:BarEditItem.EditSettings>
+                                    <dxe:TextEditSettings />
+                                </dxb:BarEditItem.EditSettings>
+							</dxb:BarEditItem>
+                            <dxb:BarEditItem Content="{x:Static localization:LocalizedStrings.XamlStr233}" 
+											 EditValue="{Binding Element.Category, UpdateSourceTrigger=PropertyChanged}"
+											 IsVisible="{Binding Type, Converter={StaticResource CompositionTypeToVisibilityConverter}}"
+											 EditWidth="150">
+                                <dxb:BarEditItem.EditSettings>
+                                    <dxe:TextEditSettings />
+                                </dxb:BarEditItem.EditSettings>
+                            </dxb:BarEditItem>
+                            <dxb:BarEditItem Content="{x:Static localization:LocalizedStrings.Description}" 
+											 EditValue="{Binding Element.Description, UpdateSourceTrigger=PropertyChanged}"
+											 EditWidth="150">
+                                <dxb:BarEditItem.EditSettings>
+                                    <dxe:TextEditSettings />
+                                </dxb:BarEditItem.EditSettings>
+                            </dxb:BarEditItem>
+                            
+                            <dxb:BarButtonItem Content="{x:Static localization:LocalizedStrings.Str1519}"
+										   LargeGlyph="pack://application:,,,/Designer;component/Images/Save_32x32.png"
+										   Command="{x:Static local:MainWindow.SaveCommand}"
+										   CommandParameter="{Binding}"/>
+                            <dxb:BarButtonItem Content="{x:Static localization:LocalizedStrings.Undo}"
+										   LargeGlyph="pack://application:,,,/Designer;component/Images/Undo_32x32.png"
+										   Command="{x:Static local:MainWindow.DiscardCommand}"
+										   CommandParameter="{Binding}"/>
+                            <dxb:BarButtonItem Content="{x:Static localization:LocalizedStrings.RefreshScheme}"
+										   LargeGlyph="pack://application:,,,/Designer;component/Images/Refresh_32x32.png"
+										   Command="{x:Static local:MainWindow.RefreshCompositionCommand}"
+										   CommandParameter="{Binding}"/>
+                        </dxr:RibbonPageGroup>
 
-                        <Label Grid.Row="0" Grid.Column="0" Content="{x:Static localization:LocalizedStrings.Str343}"/>
-                        <xctk:DateTimePicker Grid.Row="0" Grid.Column="1" Width="150" Format="ShortDate" Value="{Binding Strategy.EmulationSettings.StartDate}"/>
+                        <dxr:RibbonPageGroup Caption="{x:Static localization:LocalizedStrings.Str3606}">
+                            <dxb:BarButtonItem Content="{x:Static localization:LocalizedStrings.Str1174}"
+										   LargeGlyph="pack://application:,,,/Designer;component/Images/Backtesting_32x32.png" 
+										   Command="{x:Static local:MainWindow.EmulateStrategyCommand}"
+										   CommandParameter="{Binding}" />
+                            <dxb:BarButtonItem Content="{x:Static localization:LocalizedStrings.Str3176}"
+										   LargeGlyph="pack://application:,,,/Designer;component/Images/terminal_32x32.png" 
+										   Command="{x:Static local:MainWindow.ExecuteStrategyCommand}"
+										   CommandParameter="{Binding}" />
+                        </dxr:RibbonPageGroup>
+                    </dxr:RibbonPage>
 
-                        <Label Grid.Row="1" Grid.Column="0" Content="{x:Static localization:LocalizedStrings.Str345}"/>
-                        <xctk:DateTimePicker Grid.Row="1" Grid.Column="1" Width="150" Format="ShortDate" Value="{Binding Strategy.EmulationSettings.StopDate}"/>
+                    <dxr:RibbonPage Caption="{x:Static localization:LocalizedStrings.Str1174}"
+								x:Name="RibbonEmulationTab">
+                        <dxr:RibbonPage.Resources>
+                            <Style TargetType="{x:Type dxb:BarButtonItem}">
+                                <Style.Triggers>
+                                    <Trigger Property="Command" Value="{x:Null}">
+                                        <Setter Property="IsEnabled" Value="False" />
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                            <Style TargetType="{x:Type dxb:BarEditItem}">
+                                <Style.Triggers>
+                                    <Trigger Property="DataContext" Value="{x:Null}">
+                                        <Setter Property="IsEnabled" Value="False" />
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                            <Style TargetType="{x:Type dxb:BarStaticItem}">
+                                <Style.Triggers>
+                                    <Trigger Property="DataContext" Value="{x:Null}">
+                                        <Setter Property="IsEnabled" Value="False" />
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </dxr:RibbonPage.Resources>
+                        <dxr:RibbonPageGroup Caption="{x:Static localization:LocalizedStrings.Str1559}">
+                            <dxb:BarButtonItem Content="{x:Static localization:LocalizedStrings.RefreshScheme}"
+										   LargeGlyph="pack://application:,,,/Designer;component/Images/Refresh_32x32.png"
+										   Command="{Binding RefreshCompositionCommand}" />
 
-                        <!--<Label Grid.Row="0" Grid.Column="2" Content="{x:Static localization:LocalizedStrings.Security}"/>
-                        <xaml:SecurityEditor Grid.Row="0" Grid.Column="3" x:Name="EmulationSecurityEditor" Width="150" SelectedSecurity="{Binding Strategy.Security}"/>-->
+                            <dxb:BarItemLinkSeparator/>
 
-                        <Label Grid.Row="0" Grid.Column="2" Content="{x:Static localization:LocalizedStrings.MarketData}"/>
-                        <controls:MarketDataSettingsComboBox Grid.Row="0" Grid.Column="3" Width="150" SelectedSettings="{Binding Strategy.EmulationSettings.MarketDataSettings}"/>
-                    </Grid>
+                            <dxb:BarEditItem Content="{x:Static localization:LocalizedStrings.Str343}" 
+											 EditValue="{Binding Strategy.EmulationSettings.StartDate}"
+											 EditWidth="150">
+                                <dxb:BarEditItem.EditSettings>
+                                    <dxe:DateEditSettings />
+                                </dxb:BarEditItem.EditSettings>
+                            </dxb:BarEditItem>
 
-                    <Separator />
-                    
-					<fluent:Button Header="{x:Static localization:LocalizedStrings.Str2421}"
-								   SizeDefinition="Large"
-								   LargeIcon="pack://application:,,,/Designer;component/Images/start_32x32.png"
-								   Command="{Binding StartCommand}" />
-                    <fluent:Button Header="{x:Static localization:LocalizedStrings.Str242}"
-								   SizeDefinition="Large"
-								   LargeIcon="pack://application:,,,/Designer;component/Images/stop_32x32.png" 
-								   Command="{Binding StopCommand}" />
-                </fluent:RibbonGroupBox>
-                <fluent:RibbonGroupBox Header="{x:Static localization:LocalizedStrings.Str3230}">
-                    <fluent:Button Header="{x:Static localization:LocalizedStrings.XamlStr146}"
-								   SizeDefinition="Large"
-								   LargeIcon="pack://application:,,,/Designer;component/Images/BreakpointOn_32x32.png"
-								   Command="{Binding AddBreakpointCommand}" />
-                    <fluent:Button Header="{x:Static localization:LocalizedStrings.XamlStr800}"
-								   SizeDefinition="Large"
-								   LargeIcon="pack://application:,,,/Designer;component/Images/BreakpointOff_32x32.png"
-								   Command="{Binding RemoveBreakpointCommand}" />
-					
-					<Separator />
+                            <dxb:BarEditItem Content="{x:Static localization:LocalizedStrings.Str345}" 
+											 EditValue="{Binding Strategy.EmulationSettings.StopDate}"
+											 EditWidth="150">
+                                <dxb:BarEditItem.EditSettings>
+                                    <dxe:DateEditSettings />
+                                </dxb:BarEditItem.EditSettings>
+                            </dxb:BarEditItem>
 
-                    <fluent:Button Header="{x:Static localization:LocalizedStrings.XamlStr230}"
-								   SizeDefinition="Large"
-								   LargeIcon="pack://application:,,,/Designer;component/Images/StepOver_32x32.png"
-								   Command="{Binding StepNextCommand}" />
-                    <fluent:Button Header="{x:Static localization:LocalizedStrings.ToCompositeElem}"
-								   SizeDefinition="Large"
-								   LargeIcon="pack://application:,,,/Designer;component/Images/StepIn_32x32.png"
-								   Command="{Binding StepIntoCommand}" />
-                    <fluent:Button Header="{x:Static localization:LocalizedStrings.XamlStr192}"
-								   SizeDefinition="Large"
-								   LargeIcon="pack://application:,,,/Designer;component/Images/Stepout_32x32.png"
-								   Command="{Binding StepOutCommand}" />
-                    <fluent:Button Header="{x:Static localization:LocalizedStrings.XamlStr584}"
-								   SizeDefinition="Large"
-								   LargeIcon="pack://application:,,,/Designer;component/Images/Continue_32x32.png"
-								   Command="{Binding ContinueCommand}" />
-                </fluent:RibbonGroupBox>
-            </fluent:RibbonTabItem>
+                            <!--<dxb:BarEditItem Content="{x:Static localization:LocalizedStrings.Str345}" 
+											 EditValue="{Binding Strategy.EmulationSettings.StopDate}"
+											 EditWidth="150">
+                                <dxb:BarEditItem.EditSettings>
+                                    <dxe:
+                                </dxb:BarEditItem.EditSettings>
+                            </dxb:BarEditItem>-->
 
-            <fluent:RibbonTabItem Header="{x:Static localization:LocalizedStrings.Str3176}"
-								  x:Name="RibbonLiveTab">
-                <fluent:RibbonTabItem.Resources>
-                    <Style TargetType="{x:Type fluent:Button}">
-                        <Style.Triggers>
-                            <Trigger Property="Command" Value="{x:Null}">
-                                <Setter Property="IsEnabled" Value="False" />
-                            </Trigger>
-                        </Style.Triggers>
-                    </Style>
-                </fluent:RibbonTabItem.Resources>
-                <fluent:RibbonGroupBox Header="{x:Static localization:LocalizedStrings.Str1559}">
-                    <fluent:Button Header="{x:Static localization:LocalizedStrings.RefreshScheme}"
-								   SizeDefinition="Large"
-								   LargeIcon="pack://application:,,,/Designer;component/Images/Refresh_32x32.png"
-								   Command="{Binding RefreshCompositionCommand}" />
-                    <Separator />
-                    <fluent:Button Header="{x:Static localization:LocalizedStrings.Str2421}"
-								   SizeDefinition="Large"
-								   LargeIcon="pack://application:,,,/Designer;component/Images/start_32x32.png" />
-                    <fluent:Button Header="{x:Static localization:LocalizedStrings.Str242}"
-								   SizeDefinition="Large"
-								   LargeIcon="pack://application:,,,/Designer;component/Images/stop_32x32.png"  />
-                </fluent:RibbonGroupBox>
-            </fluent:RibbonTabItem>
-        </fluent:Ribbon>
-		
-        <xcad:DockingManager Grid.Row="1" 
+                            <dxb:BarStaticItem>
+								<dxb:BarStaticItem.ContentTemplate>
+									<DataTemplate>
+										<StackPanel Orientation="Horizontal">
+                                            <TextBlock Text="{x:Static localization:LocalizedStrings.MarketData}"/>
+                                            <controls:MarketDataSettingsComboBox Width="150" SelectedSettings="{Binding Strategy.EmulationSettings.MarketDataSettings}"/>
+                                        </StackPanel>
+                                    </DataTemplate>
+								</dxb:BarStaticItem.ContentTemplate>
+							</dxb:BarStaticItem>
+
+                            <dxb:BarItemLinkSeparator/>
+
+                            <dxb:BarButtonItem Content="{x:Static localization:LocalizedStrings.Str2421}"
+										   LargeGlyph="pack://application:,,,/Designer;component/Images/start_32x32.png"
+										   Command="{Binding StartCommand}" />
+                            <dxb:BarButtonItem Content="{x:Static localization:LocalizedStrings.Str242}"
+										   LargeGlyph="pack://application:,,,/Designer;component/Images/stop_32x32.png" 
+										   Command="{Binding StopCommand}" />
+                        </dxr:RibbonPageGroup>
+                        <dxr:RibbonPageGroup Caption="{x:Static localization:LocalizedStrings.Str3230}">
+                            <dxb:BarButtonItem Content="{x:Static localization:LocalizedStrings.XamlStr146}"
+										   LargeGlyph="pack://application:,,,/Designer;component/Images/BreakpointOn_32x32.png"
+										   Command="{Binding AddBreakpointCommand}" />
+                            <dxb:BarButtonItem Content="{x:Static localization:LocalizedStrings.XamlStr800}"
+										   LargeGlyph="pack://application:,,,/Designer;component/Images/BreakpointOff_32x32.png"
+										   Command="{Binding RemoveBreakpointCommand}" />
+
+                            <dxb:BarItemLinkSeparator/>
+
+                            <dxb:BarButtonItem Content="{x:Static localization:LocalizedStrings.XamlStr230}"
+										   LargeGlyph="pack://application:,,,/Designer;component/Images/StepOver_32x32.png"
+										   Command="{Binding StepNextCommand}" />
+                            <dxb:BarButtonItem Content="{x:Static localization:LocalizedStrings.ToCompositeElem}"
+										   LargeGlyph="pack://application:,,,/Designer;component/Images/StepIn_32x32.png"
+										   Command="{Binding StepIntoCommand}" />
+                            <dxb:BarButtonItem Content="{x:Static localization:LocalizedStrings.XamlStr192}"
+										   LargeGlyph="pack://application:,,,/Designer;component/Images/Stepout_32x32.png"
+										   Command="{Binding StepOutCommand}" />
+                            <dxb:BarButtonItem Content="{x:Static localization:LocalizedStrings.XamlStr584}"
+										   LargeGlyph="pack://application:,,,/Designer;component/Images/Continue_32x32.png"
+										   Command="{Binding ContinueCommand}" />
+                        </dxr:RibbonPageGroup>
+                    </dxr:RibbonPage>
+
+                    <dxr:RibbonPage Caption="{x:Static localization:LocalizedStrings.Str3176}"
+								x:Name="RibbonLiveTab">
+                        <dxr:RibbonPage.Resources>
+                            <Style TargetType="{x:Type dxb:BarButtonItem}">
+                                <Style.Triggers>
+                                    <Trigger Property="Command" Value="{x:Null}">
+                                        <Setter Property="IsEnabled" Value="False" />
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </dxr:RibbonPage.Resources>
+                        <dxr:RibbonPageGroup Caption="{x:Static localization:LocalizedStrings.Str1559}">
+                            <dxb:BarButtonItem Content="{x:Static localization:LocalizedStrings.RefreshScheme}"
+										   LargeGlyph="pack://application:,,,/Designer;component/Images/Refresh_32x32.png"
+										   Command="{Binding RefreshCompositionCommand}" />
+
+                            <dxb:BarItemLinkSeparator/>
+
+                            <dxb:BarButtonItem Content="{x:Static localization:LocalizedStrings.Str2421}"
+										   LargeGlyph="pack://application:,,,/Designer;component/Images/start_32x32.png" />
+                            <dxb:BarButtonItem Content="{x:Static localization:LocalizedStrings.Str242}"
+										   LargeGlyph="pack://application:,,,/Designer;component/Images/stop_32x32.png"  />
+                        </dxr:RibbonPageGroup>
+                    </dxr:RibbonPage>
+                </dxr:RibbonDefaultPageCategory>
+            </dxr:RibbonControl>
+
+            <xcad:DockingManager Grid.Row="1" 
 							 x:Name="DockingManager" 
 							 ActiveContentChanged="DockingManager_OnActiveContentChanged">
-            <!--<xcad:DockingManager.Theme>
+                <!--<xcad:DockingManager.Theme>
                 <xcad:MetroTheme />
             </xcad:DockingManager.Theme>-->
 
-            <xcad:LayoutRoot>
-                <xcad:LayoutPanel Orientation="Vertical">
-                    <xcad:LayoutPanel Orientation="Horizontal">
-                        <xcad:LayoutAnchorablePaneGroup DockWidth="200">
-                            <xcad:LayoutAnchorablePane>
-                                <xcad:LayoutAnchorable Title="{x:Static localization:LocalizedStrings.Schemas}" 
+                <xcad:LayoutRoot>
+                    <xcad:LayoutPanel Orientation="Vertical">
+                        <xcad:LayoutPanel Orientation="Horizontal">
+                            <xcad:LayoutAnchorablePaneGroup DockWidth="200">
+                                <xcad:LayoutAnchorablePane>
+                                    <xcad:LayoutAnchorable Title="{x:Static localization:LocalizedStrings.Schemas}" 
 													   ContentId="SolutionExplorer" CanClose="False" CanHide="False" AutoHideWidth="200">
-                                    <local:SolutionExplorerControl x:Name="SolutionExplorer" 
+                                        <local:SolutionExplorerControl x:Name="SolutionExplorer" 
 																   NodeContextMenu="{StaticResource TreeContextMenu}"
 																   Open="SolutionExplorer_OnOpen"/>
+                                    </xcad:LayoutAnchorable>
+                                </xcad:LayoutAnchorablePane>
+                            </xcad:LayoutAnchorablePaneGroup>
+
+                            <xcad:LayoutDocumentPaneGroup>
+                                <xcad:LayoutDocumentPane />
+                            </xcad:LayoutDocumentPaneGroup>
+                        </xcad:LayoutPanel>
+
+                        <xcad:LayoutAnchorablePaneGroup DockHeight="200">
+                            <xcad:LayoutAnchorablePane>
+                                <xcad:LayoutAnchorable x:Name="LogsAnchorable" Title="{x:Static localization:LocalizedStrings.Str3237}" 
+												   ContentId="Logs" CanClose="False" CanHide="False" AutoHideHeight="200">
+                                    <xaml:Monitor x:Name="Monitor"/>
                                 </xcad:LayoutAnchorable>
                             </xcad:LayoutAnchorablePane>
                         </xcad:LayoutAnchorablePaneGroup>
-						
-                        <xcad:LayoutDocumentPaneGroup>
-                            <xcad:LayoutDocumentPane />
-                        </xcad:LayoutDocumentPaneGroup>
                     </xcad:LayoutPanel>
-                    
-					<xcad:LayoutAnchorablePaneGroup DockHeight="200">
-                        <xcad:LayoutAnchorablePane>
-                            <xcad:LayoutAnchorable x:Name="LogsAnchorable" Title="{x:Static localization:LocalizedStrings.Str3237}" 
-												   ContentId="Logs" CanClose="False" CanHide="False" AutoHideHeight="200">
-                                <xaml:Monitor x:Name="Monitor"/>
-                            </xcad:LayoutAnchorable>
-                        </xcad:LayoutAnchorablePane>
-                    </xcad:LayoutAnchorablePaneGroup>
-                </xcad:LayoutPanel>
-            </xcad:LayoutRoot>
-        </xcad:DockingManager>
-    </Grid>
-</fluent:RibbonWindow>
+                </xcad:LayoutRoot>
+            </xcad:DockingManager>
+        </Grid>
+    </dxb:BarManager>
+    
+</dxr:DXRibbonWindow>

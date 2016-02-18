@@ -34,7 +34,7 @@ namespace StockSharp.Designer
 
 		public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
 		{
-			return (CompositionType)value == Type ? Visibility.Visible : Visibility.Collapsed;
+			return (CompositionType)value == Type;
 		}
 
 		public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
