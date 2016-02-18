@@ -30,9 +30,9 @@ namespace StockSharp.Studio.Controls
 	using MoreLinq;
 
 	using StockSharp.Algo;
+	using StockSharp.Algo.Storages;
 	using StockSharp.BusinessEntities;
 	using StockSharp.Messages;
-	using StockSharp.Studio.Core;
 	using StockSharp.Studio.Core.Commands;
 	using StockSharp.Localization;
 
@@ -50,7 +50,7 @@ namespace StockSharp.Studio.Controls
 		{
 			get
 			{
-				var entityRegistry = ConfigManager.GetService<IStudioEntityRegistry>();
+				var entityRegistry = ConfigManager.GetService<IEntityRegistry>();
 
 				return _securityIds
 					.Select(id => entityRegistry.Securities.ReadById(id))

@@ -14,6 +14,8 @@ Copyright 2010 by StockSharp, LLC
 *******************************************************************************************/
 #endregion S# License
 
+using System.Windows;
+
 namespace StockSharp.Terminal.Layout
 {
 	using System;
@@ -32,43 +34,39 @@ namespace StockSharp.Terminal.Layout
 	using StockSharp.Logging;
 	using StockSharp.Studio.Controls;
 
-	using Xceed.Wpf.AvalonDock;
-	using Xceed.Wpf.AvalonDock.Layout;
-	using Xceed.Wpf.AvalonDock.Layout.Serialization;
+	using DevExpress.Xpf.Docking;
 
 	public sealed class LayoutManager : BaseLogReceiver
 	{
-		private readonly Dictionary<string, LayoutContent> _anchorables = new Dictionary<string, LayoutContent>();
+		private readonly Dictionary<string, LayoutPanel> _panels = new Dictionary<string, LayoutPanel>();
 		private readonly SynchronizedDictionary<string, BaseStudioControl> _controlsDict = new SynchronizedDictionary<string, BaseStudioControl>();
 
 		private readonly object _syncRoot = new object();
 
-		private LayoutPanel RootGroup => DockingManager.Layout.RootPanel;
+		//private LayoutPanel RootGroup => DockCtl.LayoutRoot;
 
-		private DockingManager DockingManager { get; }
+		private DockLayoutManager DockCtl { get; }
 
-		public IEnumerable<BaseStudioControl> DockingControls
+//		public IEnumerable<BaseStudioControl> DockingControls
+//		{
+//			get
+//			{
+//				return DockCtl
+//					.Layout
+//					.Descendents()
+//					.OfType<LayoutContent>()
+//					.Select(c => c.Content)
+//					.OfType<BaseStudioControl>()
+//					.ToArray();
+//			}
+//		}
+
+		public LayoutManager(DockLayoutManager dockCtl)
 		{
-			get
-			{
-				return DockingManager
-					.Layout
-					.Descendents()
-					.OfType<LayoutContent>()
-					.Select(c => c.Content)
-					.OfType<BaseStudioControl>()
-					.ToArray();
-			}
-		}
+			if (dockCtl == null)
+				throw new ArgumentNullException(nameof(dockCtl));
 
-		public event Action Changed; 
-
-		public LayoutManager(DockingManager dockingManager)
-		{
-			if (dockingManager == null)
-				throw new ArgumentNullException(nameof(dockingManager));
-
-			DockingManager = dockingManager;
+			DockCtl = dockCtl;
 		}
 
 		public void OpenToolWindow(BaseStudioControl content, bool canClose = true)
@@ -76,37 +74,32 @@ namespace StockSharp.Terminal.Layout
 			if (content == null)
 				throw new ArgumentNullException(nameof(content));
 
-			var anchorable = _anchorables.TryGetValue(content.Key);
+			var item = _panels.TryGetValue(content.Key);
 
-			if (anchorable == null)
+			if (item == null)
 			{
-				anchorable = CreateAnchorable(content.Key, string.Empty, content, canClose);
-				anchorable.SetBindings(LayoutContent.TitleProperty, content, "Title");
+				item = CreatePanel(content.Key, string.Empty, content, canClose);
+				item.SetBindings(BaseLayoutItem.CaptionProperty, content, "Title");
 
-				_anchorables.Add(content.Key, anchorable);
+				_panels.Add(content.Key, item);
 				_controlsDict[content.Key] = content;
-			
-				RootGroup.Children.Add(new LayoutAnchorablePane((LayoutAnchorable) anchorable));
 
-				anchorable.Float();
+				//DockCtl.LayoutRoot.Add(item);
 			}
 
-			DockingManager.ActiveContent = anchorable.Content;
+			DockCtl.ActiveLayoutItem = item;
 		}
 
-		private LayoutAnchorable CreateAnchorable(string key, string title, object content, bool canClose = true)
+		private LayoutPanel CreatePanel(string key, string title, object content, bool canClose = true)
 		{
-			return new LayoutAnchorable
-			{
-				ContentId = key,
-				Title = title,
-				FloatingTop = 100,
-				FloatingLeft = 100,
-				FloatingWidth = 500,
-				FloatingHeight = 350,
-				Content = content,
-				CanClose = canClose
-			};
+			var panel = DockCtl.DockController.AddPanel(new Point(100, 100), new Size(400, 300));
+
+			panel.Name = key;
+			panel.Caption = title;
+			panel.Content = content;
+			panel.AllowClose = canClose;
+
+			return panel;
 		}
 
 		public override void Load(SettingsStorage storage)
@@ -114,7 +107,7 @@ namespace StockSharp.Terminal.Layout
 			if (storage == null)
 				throw new ArgumentNullException(nameof(storage));
 
-			_anchorables.Clear();
+			_panels.Clear();
 			_controlsDict.Clear();
 
 			var controls = storage.GetValue<SettingsStorage[]>("Controls");
@@ -132,7 +125,7 @@ namespace StockSharp.Terminal.Layout
 				}
 			}
 
-			var layout = Encoding.UTF8.GetString(storage.GetValue<string>("Layout").Base64());
+			var layout = storage.GetValue<string>("Layout");
 				
 			if (!layout.IsEmpty())
 				LoadLayout(layout);
@@ -145,7 +138,7 @@ namespace StockSharp.Terminal.Layout
 
 			storage.SetValue("Controls", _controlsDict.Values.Select(SaveControl).ToArray());
 
-			var layout = Encoding.UTF8.GetBytes(SaveLayout()).Base64();
+			var layout = SaveLayout();
 			storage.SetValue("Layout", layout);
 		}
 
@@ -156,27 +149,32 @@ namespace StockSharp.Terminal.Layout
 
 			try
 			{
-				_anchorables.Clear();
+				_panels.Clear();
 
-				using (var reader = new StringReader(settings))
-				{
-					var layoutSerializer = new XmlLayoutSerializer(DockingManager);
-					layoutSerializer.LayoutSerializationCallback += (s, e) =>
-					{
-						var control = _controlsDict.TryGetValue(e.Model.ContentId);
-						if (control == null)
-						{
-							e.Model.Close();
-							return;
-						}
+				DockCtl.RestoreLayoutFromXml("docklayout.xml");
 
-						e.Content = control;
-						e.Model.SetBindings(LayoutContent.TitleProperty, control, "Title");
-						_anchorables[control.Key] = e.Model;
-					};
+				//using(var stream = new MemoryStream(settings.Base64()))
+				//	DockCtl.RestoreLayoutFromStream(stream);
 
-					layoutSerializer.Deserialize(reader);
-				}
+//				using (var reader = new StringReader(settings))
+//				{
+//					var layoutSerializer = new XmlLayoutSerializer(DockCtl);
+//					layoutSerializer.LayoutSerializationCallback += (s, e) =>
+//					{
+//						var control = _controlsDict.TryGetValue(e.Model.ContentId);
+//						if (control == null)
+//						{
+//							e.Model.Close();
+//							return;
+//						}
+//
+//						e.Content = control;
+//						e.Model.SetBindings(LayoutContent.TitleProperty, control, "Title");
+//						_panels[control.Key] = e.Model;
+//					};
+//
+//					layoutSerializer.Deserialize(reader);
+//				}
 			}
 			catch (Exception excp)
 			{
@@ -186,21 +184,17 @@ namespace StockSharp.Terminal.Layout
 
 		public string SaveLayout()
 		{
-			var builder = new StringBuilder();
+			DockCtl.SaveLayoutToXml("docklayout.xml");
 
-			try
-			{
-				using (var writer = new StringWriter(builder))
-				{
-					new XmlLayoutSerializer(DockingManager).Serialize(writer);
-				}
-			}
-			catch (Exception excp)
-			{
-				this.AddErrorLog(excp, LocalizedStrings.Str3649);
-			}
+			return string.Empty;
 
-			return builder.ToString();
+//			using (var stream = new MemoryStream())
+//			{
+//				DockCtl.SaveLayoutToStream(stream);
+//				stream.Position = 0;
+//
+//				return stream.ReadBuffer().Base64();
+//			}
 		}
 
 		private SettingsStorage SaveControl(BaseStudioControl control)

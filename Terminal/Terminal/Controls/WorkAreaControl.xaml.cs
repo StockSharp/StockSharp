@@ -15,20 +15,13 @@ Copyright 2010 by StockSharp, LLC
 #endregion S# License
 
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using Ecng.Common;
 using Ecng.ComponentModel;
 using Ecng.Configuration;
 using Ecng.Serialization;
-using MoreLinq;
-using StockSharp.Algo.Candles;
 using StockSharp.Terminal.Layout;
 using StockSharp.BusinessEntities;
 using StockSharp.Studio.Controls;
 using StockSharp.Studio.Core.Commands;
-using StockSharp.Terminal.Services;
-using StockSharp.Xaml.Charting;
 
 namespace StockSharp.Terminal.Controls
 {
@@ -36,16 +29,13 @@ namespace StockSharp.Terminal.Controls
 	{
 		private readonly LayoutManager _layoutManager;
 		private Security _lastSelectedSecurity;
-		ChartCandleElement _candleElement;
-		ChartArea _chartArea;
-		CandleSeries _series;
 
 		public WorkAreaControl()
 		{
 			InitializeCommands();
 			InitializeComponent();
 
-			_layoutManager = new LayoutManager(DockingManager);
+			_layoutManager = new LayoutManager(DockManager);
 		}
 
 		private void InitializeCommands()
@@ -58,32 +48,7 @@ namespace StockSharp.Terminal.Controls
 				if(sec == null)
 					return;
 
-				var oldSec = _lastSelectedSecurity;
 				_lastSelectedSecurity = sec;
-
-				OnSelectedSecurityChanged(oldSec);
-			});
-
-			cmdSvc.Register<NewCandlesCommand>(this, true, cmd =>
-			{
-				if(_lastSelectedSecurity == null || _candleElement == null)
-					return;
-
-				var candles = cmd.Candles.Where(c => c.Security.Id == _lastSelectedSecurity.Id).ToArray();
-
-				if(candles.Length == 0)
-					return;
-
-				var values = new List<RefPair<DateTimeOffset, IDictionary<IChartElement, object>>>();
-				candles.ForEach(c =>
-				{
-					values.Add(new RefPair<DateTimeOffset, IDictionary<IChartElement, object>>(c.OpenTime, new Dictionary<IChartElement, object>
-					{
-						{_candleElement, c}
-					}));
-				});
-
-				new ChartDrawCommand(values).Process(this);
 			});
 		}
 
@@ -101,50 +66,6 @@ namespace StockSharp.Terminal.Controls
 			control.Title = control.GetType().GetDisplayName();
 
 			_layoutManager.OpenToolWindow(control);
-		}
-
-		void OnSelectedSecurityChanged(Security oldSec)
-		{
-			ResetChart();
-			ResetMarketDepth();
-
-			if(_lastSelectedSecurity == null)
-				return;
-
-			if (_chartArea == null)
-			{
-				_chartArea = new ChartArea { Title = "Candles chart" };
-				_chartArea.YAxises.First().AutoRange = true;
-
-				new ChartAddAreaCommand(_chartArea).Process(this);
-			}
-
-			var today = DateTimeOffset.Now.Date;
-			_candleElement = new ChartCandleElement();
-			_series = new CandleSeries(typeof(TimeFrameCandle), _lastSelectedSecurity, TimeSpan.FromMinutes(5))
-			{
-				From = today - TimeSpan.FromDays(5),
-				To = today + TimeSpan.FromDays(1),
-			};
-
-			new ChartAddElementCommand(_chartArea, _candleElement, _series).Process(this);
-		}
-
-		void ResetChart()
-		{
-			if (_chartArea != null)
-			{
-				if (_candleElement != null)
-					new ChartRemoveElementCommand(_chartArea, _candleElement).Process(this);
-
-				new ChartRemoveAreaCommand(_chartArea).Process(this);
-				_chartArea = null;
-			}
-		}
-
-		void ResetMarketDepth()
-		{
-			new ClearMarketDepthCommand(_lastSelectedSecurity).Process(this);
 		}
 
 		#region IPersistable

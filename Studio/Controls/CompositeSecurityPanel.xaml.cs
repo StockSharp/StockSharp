@@ -39,6 +39,7 @@ namespace StockSharp.Studio.Controls
 	using StockSharp.Algo;
 	using StockSharp.Algo.Candles;
 	using StockSharp.Algo.Indicators;
+	using StockSharp.Algo.Storages;
 	using StockSharp.BusinessEntities;
 	using StockSharp.Configuration;
 	using StockSharp.Logging;
@@ -634,7 +635,7 @@ namespace StockSharp.Studio.Controls
 			}
 
 			var id = _idGenerator.GenerateId(SecurityCode, Board);
-			var registry = ConfigManager.GetService<IStudioEntityRegistry>();
+			var registry = ConfigManager.GetService<IEntityRegistry>();
 			var security = registry.Securities.ReadById(id);
 
 			if (security != null && security.GetType() != SecurityType)
@@ -985,7 +986,7 @@ namespace StockSharp.Studio.Controls
 			if (security != null)
 				return security;
 
-			security = ConfigManager.GetService<IStudioEntityRegistry>().Securities.ReadById(id);
+			security = ConfigManager.GetService<IEntityRegistry>().Securities.ReadById(id);
 
 			if (security != null)
 				_securities.Add(id, security);
@@ -1047,7 +1048,7 @@ namespace StockSharp.Studio.Controls
 			_editor.Changed += SecurityChanged;
 			_editor.Drop += EditorOnDrop;
 
-			var registry = ConfigManager.GetService<IStudioEntityRegistry>();
+			var registry = ConfigManager.GetService<IEntityRegistry>();
 
 			var securities = "RI"
 				.GetFortsJumps(DateTime.Today.AddMonths(-4), DateTime.Today.AddMonths(6), code => registry.Securities.ReadById(code + "@" + ExchangeBoard.Forts.Code));

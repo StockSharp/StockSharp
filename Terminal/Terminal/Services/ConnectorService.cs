@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Windows;
-using Ecng.Collections;
 using Ecng.Common;
 using Ecng.Configuration;
 using Ecng.Serialization;
@@ -18,9 +17,7 @@ using StockSharp.Messages;
 using StockSharp.Studio.Core.Commands;
 using StockSharp.Terminal.Properties;
 using MoreLinq;
-using StockSharp.Algo.Candles;
 using StockSharp.Xaml;
-using StockSharp.Xaml.Charting;
 
 namespace StockSharp.Terminal.Services
 {
@@ -28,19 +25,17 @@ namespace StockSharp.Terminal.Services
 	{
 		private readonly TerminalConnector _connector;
 		public const string SETTINGS_FILE = "connection.xml";
-
 		private readonly PortfolioDataSource _portfolioDataSource;
-		private readonly SynchronizedDictionary<IChartElement, CandleSeries> _seriesDict = new CachedSynchronizedDictionary<IChartElement, CandleSeries>(); 
 
 		public event Action<bool> ChangeConnectStatusEvent;
-		public event Action<string, string> ErrorEvent;
 
-		private void OnChangeConnectStatusEvent(bool isConnected) => ChangeConnectStatusEvent?.Invoke(IsConnected = isConnected);
-		private void OnErrorEvent(string message, string caption) => ErrorEvent?.Invoke(message, caption);
+		private void OnErrorEvent(string message)
+		{
+			new ErrorCommand(message).Process(this);
+		}
 
 		public bool IsConnected { get; set; }
 
-		
 		public ConnectorService()
 		{
 			var entityRegistry = ConfigManager.GetService<IEntityRegistry>();
@@ -75,7 +70,7 @@ namespace StockSharp.Terminal.Services
 			}
 			catch (Exception ex)
 			{
-				OnErrorEvent(ex.ToString(), "Ошибка при чтении файла " + SETTINGS_FILE);
+				OnErrorEvent($"Ошибка при чтении файла {SETTINGS_FILE}\n{ex}");
 				return;
 			}
 
@@ -100,13 +95,13 @@ namespace StockSharp.Terminal.Services
 
 				if (order.Security == null)
 				{
-					OnErrorEvent("Security is not set!", "Order error");
+					OnErrorEvent("Security is not set!");
 					return;
 				}
 
 				if (order.Portfolio == null)
 				{
-					OnErrorEvent("Portfolio is not set!", "Order error");
+					OnErrorEvent("Portfolio is not set!");
 					return;
 				}
 
@@ -117,7 +112,7 @@ namespace StockSharp.Terminal.Services
 
 					if (order.Price == 0)
 					{
-						OnErrorEvent("Unable to determine market price!", "Error");
+						OnErrorEvent("Unable to determine market price!");
 						return;
 					}
 				}
@@ -175,19 +170,8 @@ namespace StockSharp.Terminal.Services
 
 			cmdSvc.Register<CancelAllOrdersCommand>(this, false, cmd => _connector.Orders.Where(o => o.State == OrderStates.Active).ForEach(o => _connector.CancelOrder(o)));
 
-			cmdSvc.Register<SubscribeCandleElementCommand>(this, false, cmd =>
-			{
-				_seriesDict[cmd.Element] = cmd.CandleSeries;
-				_connector.SubscribeCandles(cmd.CandleSeries);
-			});
-
-			cmdSvc.Register<UnSubscribeCandleElementCommand>(this, false, cmd =>
-			{
-				var series = _seriesDict.TryGetValue(cmd.Element);
-
-				if(series != null)
-					_connector.UnsubscribeCandles(series);
-			});
+			cmdSvc.Register<SubscribeCandleChartCommand>(this, false, cmd => _connector.SubscribeCandles(cmd.Series));
+			cmdSvc.Register<UnsubscribeCandleChartCommand>(this, false, cmd => _connector.UnsubscribeCandles(cmd.Series));
 
 //			cmdSvc.Register<SubscribeTradeElementCommand>(this, false, cmd => Subscribe(_tradeElements, cmd.Security, cmd.Element));
 //			cmdSvc.Register<UnSubscribeTradeElementCommand>(this, false, cmd => UnSubscribe(_tradeElements, cmd.Element));
@@ -225,7 +209,7 @@ namespace StockSharp.Terminal.Services
 
 				if (order.Price == 0)
 				{
-					OnErrorEvent("Unable to determine market price!", "Error");
+					OnErrorEvent("Unable to determine market price!");
 					return;
 				}
 			}
@@ -294,18 +278,18 @@ namespace StockSharp.Terminal.Services
 
 		private void SubscribeConnector()
 		{
-			_connector.Connected += () => OnChangeConnectStatusEvent(true);
-			_connector.Disconnected += () => OnChangeConnectStatusEvent(false);
-			_connector.Error += error => OnErrorEvent(error.ToString(), LocalizedStrings.Str2955);
+			_connector.Connected += () => OnConnectionChanged(true);
+			_connector.Disconnected += () => OnConnectionChanged(false);
+			_connector.Error += error => OnErrorEvent($"{LocalizedStrings.Str2955}\n{error.ToString()}");
 
 			_connector.ConnectionError += error =>
 			{
-				OnChangeConnectStatusEvent(false);
-				OnErrorEvent(error.ToString(), LocalizedStrings.Str2959);
+				OnConnectionChanged(false);
+				OnErrorEvent($"{LocalizedStrings.Str2959}\n{error.ToString()}");
 			};
 
 			_connector.MarketDataSubscriptionFailed += 
-				(security, type, error) => OnErrorEvent(error.ToString(), LocalizedStrings.Str2956Params.Put(type, security));
+				(security, type, error) => OnErrorEvent($"{LocalizedStrings.Str2956Params.Put(type, security)}\n{error.ToString()}");
 
 			_connector.OrdersRegisterFailed += fail => OrdersFailed(fail, true);
 			_connector.StopOrdersRegisterFailed += fail => OrdersFailed(fail, true);
@@ -338,10 +322,18 @@ namespace StockSharp.Terminal.Services
 				new UpdateMarketDepthCommand(depth).Process(this);
 			};
 
-			_connector.Candle += candle =>
+			_connector.Candles += (series, candles) =>
 			{
-				new NewCandlesCommand(new [] {candle}).Process(this);
+				new CandleDataCommand(series, candles).Process(this);
 			};
+		}
+
+		private void OnConnectionChanged(bool isConnected)
+		{
+			if (isConnected)
+				new CandleChartResetCommand().Process(this);
+
+			ChangeConnectStatusEvent?.Invoke(IsConnected = isConnected);
 		}
 
 		private void LookupSecurities(LookupSecuritiesCommand cmd)
@@ -364,18 +356,5 @@ namespace StockSharp.Terminal.Services
 		{
 			return o.Security != null && o.Portfolio != null;
 		}
-	}
-
-	public class NewCandlesCommand : BaseStudioCommand
-	{
-		public NewCandlesCommand(IEnumerable<TimeFrameCandle> candles)
-		{
-			if (candles == null)
-				throw new ArgumentNullException(nameof(candles));
-
-			Candles = candles;
-		}
-
-		public IEnumerable<TimeFrameCandle> Candles { get; }
 	}
 }

@@ -103,6 +103,7 @@
     <Compile Include="Commands\ControlOpenedCommand.cs" />
     <Compile Include="Commands\DebugDiagramStrategyCommand.cs" />
     <Compile Include="Commands\EditReferencesCommand.cs" />
+    <Compile Include="Commands\ErrorCommand.cs" />
     <Compile Include="Commands\IStudioCommandScope.cs" />
     <Compile Include="Commands\LoadLayoutCommand.cs" />
     <Compile Include="Commands\NewSecuritiesCommand.cs" />
@@ -118,6 +119,7 @@
     <Compile Include="Commands\RequestLicenseCommand.cs" />
     <Compile Include="Commands\ResetStrategyCommand.cs" />
     <Compile Include="Commands\StrategyCommand.cs" />
+    <Compile Include="Commands\CandleChartCommands.cs" />
     <Compile Include="IStudioControl.cs" />
     <Compile Include="MarketDataSettings.cs" />
     <Compile Include="MarketDataSettingsCache.cs" />

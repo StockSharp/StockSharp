@@ -56,6 +56,14 @@
     <ApplicationIcon>..\..\References\stocksharp.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="DevExpress.Xpf.Core.v15.2, Version=15.2.5.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\References\DevExpress\DevExpress.Xpf.Core.v15.2.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.Xpf.Docking.v15.2, Version=15.2.5.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\References\DevExpress\DevExpress.Xpf.Docking.v15.2.dll</HintPath>
+    </Reference>
     <Reference Include="Ecng.Collections">
       <HintPath>..\..\References\Ecng\Ecng.Collections.dll</HintPath>
     </Reference>
@@ -99,9 +107,6 @@
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
-    <Reference Include="Xceed.Wpf.AvalonDock">
-      <HintPath>..\..\References\Ecng\Xceed.Wpf.AvalonDock.dll</HintPath>
-    </Reference>
     <Reference Include="Xceed.Wpf.Toolkit">
       <HintPath>..\..\References\Ecng\Xceed.Wpf.Toolkit.dll</HintPath>
     </Reference>
@@ -118,10 +123,10 @@
       <DependentUpon>WorkAreaControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Interfaces\ITerminalCommandService.cs" />
-    <Compile Include="Layout\DockingControl.cs" />
     <Compile Include="Layout\LayoutKeys.cs" />
     <Compile Include="Layout\LayoutManager.cs" />
     <Compile Include="Services\ConnectorService.cs" />
+    <Compile Include="Services\TerminalCandleBuilder.cs" />
     <Compile Include="Services\TerminalCommandService.cs" />
     <Compile Include="Services\TerminalConnector.cs" />
     <Page Include="Controls\WorkAreaControl.xaml">
