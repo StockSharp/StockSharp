@@ -324,24 +324,13 @@
                                 </dxb:BarEditItem.EditSettings>
                             </dxb:BarEditItem>
 
-                            <!--<dxb:BarEditItem Content="{x:Static localization:LocalizedStrings.Str345}" 
-											 EditValue="{Binding Strategy.EmulationSettings.StopDate}"
+                            <dxb:BarEditItem Content="{x:Static localization:LocalizedStrings.MarketData}" 
+											 EditValue="{Binding Strategy.EmulationSettings.MarketDataSettings}"
 											 EditWidth="150">
                                 <dxb:BarEditItem.EditSettings>
-                                    <dxe:
+                                    <local:MarketDataSettingsEditSettings />
                                 </dxb:BarEditItem.EditSettings>
-                            </dxb:BarEditItem>-->
-
-                            <dxb:BarStaticItem >
-								<dxb:BarStaticItem.ContentTemplate>
-									<DataTemplate>
-										<StackPanel Orientation="Horizontal">
-                                            <TextBlock Text="{x:Static localization:LocalizedStrings.MarketData}"/>
-                                            <controls:MarketDataSettingsComboBox Width="150" SelectedSettings="{Binding DataContext.Strategy.EmulationSettings.MarketDataSettings}"/>
-                                        </StackPanel>
-                                    </DataTemplate>
-								</dxb:BarStaticItem.ContentTemplate>
-							</dxb:BarStaticItem>
+                            </dxb:BarEditItem>
 
                             <dxb:BarItemLinkSeparator/>
 
