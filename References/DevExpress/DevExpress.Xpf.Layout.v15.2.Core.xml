@@ -1,0 +1,200 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>DevExpress.Xpf.Layout.v15.2.Core</name>
+    </assembly>
+    <members>
+        <member name="T:DevExpress.Xpf.Layout.Core.TabHeaderLayoutType">
+
+            <summary>
+                <para>Contains values that specify how tabs within a tabbed group are arranged.
+</para>
+            </summary>
+
+        </member>
+        <member name="F:DevExpress.Xpf.Layout.Core.TabHeaderLayoutType.Default">
+            <summary>
+                <para>The same as the <see cref="F:DevExpress.Xpf.Layout.Core.TabHeaderLayoutType.Scroll"/> option.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.Layout.Core.TabHeaderLayoutType.MultiLine">
+            <summary>
+                <para>Tab headers are displayed in multiple rows.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.Layout.Core.TabHeaderLayoutType.Scroll">
+            <summary>
+                <para>Tab headers are displayed in a single row. Scroll buttons are enabled to scroll through the tabs, if necessary.
+<para>
+Scroll buttons are not supported for <see cref="T:DevExpress.Xpf.Docking.TabbedGroup"/> objects.
+</para>
+</para>
+            </summary>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.Layout.Core.TabHeaderLayoutType.Trim">
+            <summary>
+                <para>Tab headers are displayed in a single row. Tab header text is trimmed, if required, to fit all the tabs in the row.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="T:DevExpress.Xpf.Layout.Core.DockType">
+
+            <summary>
+                <para>Contains values that specify how a panel can be docked to another panel.
+
+</para>
+            </summary>
+
+        </member>
+        <member name="F:DevExpress.Xpf.Layout.Core.DockType.Bottom">
+            <summary>
+                <para>A panel is docked at the bottom of another panel.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.Layout.Core.DockType.Fill">
+            <summary>
+                <para>A panel is docked to another panel, forming a tabbed group.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.Layout.Core.DockType.Left">
+            <summary>
+                <para>A panel is docked at the left side of another panel.
+
+</para>
+            </summary>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.Layout.Core.DockType.None">
+            <summary>
+                <para>A panel will not be docked.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.Layout.Core.DockType.Right">
+            <summary>
+                <para>A panel is docked at the right side of another panel.
+
+</para>
+            </summary>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.Layout.Core.DockType.Top">
+            <summary>
+                <para>A panel is docked at the top of another panel.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="T:DevExpress.Xpf.Layout.Core.SelectionMode">
+
+            <summary>
+                <para>Specifies the single/multiple element selection option (when in Customization Mode.)
+
+</para>
+            </summary>
+
+        </member>
+        <member name="F:DevExpress.Xpf.Layout.Core.SelectionMode.ItemRange">
+            <summary>
+                <para>Selects in Customization Mode all items in the range between the last selected item and an item specified as a parameter in the <see cref="M:DevExpress.Xpf.Docking.DockLayoutManager.SelectItem"/> method.
+
+</para>
+            </summary>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.Layout.Core.SelectionMode.MultipleItems">
+            <summary>
+                <para>Selects in Customization Mode multiple items specified via all the <see cref="M:DevExpress.Xpf.Docking.DockLayoutManager.SelectItem"/> methods called.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.Layout.Core.SelectionMode.SingleItem">
+            <summary>
+                <para>Selects in Customization Mode the only item specified via the <see cref="M:DevExpress.Xpf.Docking.DockLayoutManager.SelectItem"/> method. If multiple <see cref="M:DevExpress.Xpf.Docking.DockLayoutManager.SelectItem"/> methods were called, the last one's item will be selected.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="T:DevExpress.Xpf.Layout.Core.MoveType">
+
+            <summary>
+                <para>Provides members that specify the position of an element related to other UI elements.
+</para>
+            </summary>
+
+        </member>
+        <member name="F:DevExpress.Xpf.Layout.Core.MoveType.Bottom">
+            <summary>
+                <para>Moves an item below another item.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.Layout.Core.MoveType.InsideGroup">
+            <summary>
+                <para>Moves an item inside another container item.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.Layout.Core.MoveType.Left">
+            <summary>
+                <para>Moves an item to the left of another item.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.Layout.Core.MoveType.None">
+            <summary>
+                <para>Prevents an item from being moved.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.Layout.Core.MoveType.Right">
+            <summary>
+                <para>Moves an item to the right of another item.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.Layout.Core.MoveType.Top">
+            <summary>
+                <para>Moves an item above another item.
+</para>
+            </summary>
+
+
+        </member>
+    </members>
+</doc>

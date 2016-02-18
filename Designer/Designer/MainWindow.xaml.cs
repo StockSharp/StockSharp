@@ -26,6 +26,9 @@ namespace StockSharp.Designer
 	using System.Windows.Media;
 	using System.Windows.Media.Imaging;
 
+	using DevExpress.Xpf.Docking;
+	using DevExpress.Xpf.Docking.Base;
+
 	using Ecng.Collections;
 	using Ecng.Common;
 	using Ecng.Configuration;
@@ -94,10 +97,11 @@ namespace StockSharp.Designer
 		private MarketDataSettingsCache _marketDataSettingsCache;
 		private EmulationSettings _emulationSettings;
 
-		private bool _isDefaultLayout = true;
-
 		private bool _isReseting;
-		private bool _isLoaded;
+
+		private object ActiveLayoutContent => (DockingManager.ActiveLayoutItem as DocumentPanel)?.Content;
+
+		private object ActiveDockContent => (DockingManager.ActiveDockItem as DocumentPanel)?.Content;
 
 		public MainWindow()
 		{
@@ -303,7 +307,7 @@ namespace StockSharp.Designer
 
 		private void InitializeLayoutManager()
 		{
-			_layoutManager = new LayoutManager(DockingManager);
+			_layoutManager = new LayoutManager(DockingManager, DocumentHost);
 			_layoutManager.Changed += SaveSettings;
 			ConfigManager.GetService<LogManager>().Sources.Add(_layoutManager);
 			ConfigManager.RegisterService(_layoutManager);
@@ -318,21 +322,6 @@ namespace StockSharp.Designer
 			ConfigManager.GetService<LogManager>().Sources.Add(_strategiesRegistry);
 			_strategiesRegistry.Init();
 			ConfigManager.RegisterService(_strategiesRegistry);
-		}
-
-		protected override void OnRender(DrawingContext drawingContext)
-		{
-			base.OnRender(drawingContext);
-
-			if (_isLoaded)
-				return;
-
-			_isLoaded = true;
-
-			if (!_isDefaultLayout)
-				return;
-
-			LogsAnchorable.ToggleAutoHide();
 		}
 
 		#region Event handlers
@@ -357,37 +346,14 @@ namespace StockSharp.Designer
 			OpenComposition(element);
 		}
 
-		private void DockingManager_OnActiveContentChanged(object sender, EventArgs e)
+		private void DockingManager_OnLayoutItemActivated(object sender, LayoutItemActivatedEventArgs ea)
 		{
-			DockingManager
-				.ActiveContent
-				.DoIf<object, DiagramEditorControl>(editor =>
-				{
-					RibbonEmulationTab.DataContext = null;
-					RibbonLiveTab.DataContext = null;
-                    RibbonDesignerTab.DataContext = editor.Composition;
-					Ribbon.SelectedPage = RibbonDesignerTab;
-				});
+			DockItemActivated(ActiveLayoutContent);
+		}
 
-			DockingManager
-				.ActiveContent
-				.DoIf<object, EmulationStrategyControl>(editor =>
-				{
-					RibbonDesignerTab.DataContext = null;
-					RibbonLiveTab.DataContext = null;
-                    RibbonEmulationTab.DataContext = editor;
-					Ribbon.SelectedPage = RibbonEmulationTab;
-				});
-
-			DockingManager
-				.ActiveContent
-				.DoIf<object, LiveStrategyControl>(editor =>
-				{
-					RibbonEmulationTab.DataContext = null;
-					RibbonDesignerTab.DataContext = null;
-                    RibbonLiveTab.DataContext = editor;
-					Ribbon.SelectedPage = RibbonLiveTab;
-				});
+		private void DockingManager_OnDockItemActivated(object sender, DockItemActivatedEventArgs ea)
+		{
+			DockItemActivated(ActiveDockContent);
 		}
 
 		private void ConnectorOnConnectionStateChanged()
@@ -496,13 +462,13 @@ namespace StockSharp.Designer
 
 		private void SaveCommand_OnCanExecute(object sender, CanExecuteRoutedEventArgs e)
 		{
-			var diagramEditor = DockingManager.ActiveContent as DiagramEditorControl;
+			var diagramEditor = ActiveDockContent as DiagramEditorControl;
 			e.CanExecute = diagramEditor != null && diagramEditor.IsChanged;
 		}
 
 		private void SaveCommand_OnExecuted(object sender, ExecutedRoutedEventArgs e)
 		{
-			var diagramEditor = (DiagramEditorControl)DockingManager.ActiveContent;
+			var diagramEditor = (DiagramEditorControl)ActiveDockContent;
 			var item = diagramEditor.Composition;
 
 			_strategiesRegistry.Save(item);
@@ -512,13 +478,13 @@ namespace StockSharp.Designer
 
 		private void DiscardCommand_OnCanExecute(object sender, CanExecuteRoutedEventArgs e)
 		{
-			var diagramEditor = DockingManager.ActiveContent as DiagramEditorControl;
+			var diagramEditor = ActiveDockContent as DiagramEditorControl;
 			e.CanExecute = diagramEditor != null && diagramEditor.IsChanged;
 		}
 
 		private void DiscardCommand_OnExecuted(object sender, ExecutedRoutedEventArgs e)
 		{
-			var diagramEditor = (DiagramEditorControl)DockingManager.ActiveContent;
+			var diagramEditor = (DiagramEditorControl)ActiveDockContent;
 			var composition = diagramEditor.Composition;
 
 			_strategiesRegistry.Discard(composition);
@@ -605,12 +571,12 @@ namespace StockSharp.Designer
 
 		private void RefreshCompositionCommand_OnCanExecute(object sender, CanExecuteRoutedEventArgs e)
 		{
-			e.CanExecute = DockingManager.ActiveContent is DiagramEditorControl;
+			e.CanExecute = ActiveDockContent is DiagramEditorControl;
 		}
 
 		private void RefreshCompositionCommand_OnExecuted(object sender, ExecutedRoutedEventArgs e)
 		{
-			var diagramEditor = (DiagramEditorControl)DockingManager.ActiveContent;
+			var diagramEditor = (DiagramEditorControl)ActiveDockContent;
 			var composition = diagramEditor.Composition;
 
 			_strategiesRegistry.Reload(composition);
@@ -762,11 +728,7 @@ namespace StockSharp.Designer
 
 					settings.TryLoadSettings<SettingsStorage>("MarketDataSettingsCache", s => _marketDataSettingsCache.Load(s));
 					settings.TryLoadSettings<SettingsStorage>("EmulationSettings", s => _emulationSettings.Load(s));
-					settings.TryLoadSettings<SettingsStorage>("Layout", s =>
-					{
-						_isDefaultLayout = false;
-						_layoutManager.Load(s);
-					});
+					settings.TryLoadSettings<SettingsStorage>("Layout", s => _layoutManager.Load(s));
 					settings.TryLoadSettings<SettingsStorage>("Connector", s => _connector.Load(s));
 				});
 		}
@@ -801,6 +763,36 @@ namespace StockSharp.Designer
 			_layoutManager.FlushSettings();
 
 			return true;
+		}
+
+		private void DockItemActivated(object control)
+		{
+			control
+				.DoIf<object, DiagramEditorControl>(editor =>
+				{
+					RibbonEmulationTab.DataContext = null;
+					RibbonLiveTab.DataContext = null;
+					RibbonDesignerTab.DataContext = editor.Composition;
+					Ribbon.SelectedPage = RibbonDesignerTab;
+				});
+
+			control
+				.DoIf<object, EmulationStrategyControl>(editor =>
+				{
+					RibbonDesignerTab.DataContext = null;
+					RibbonLiveTab.DataContext = null;
+					RibbonEmulationTab.DataContext = editor;
+					Ribbon.SelectedPage = RibbonEmulationTab;
+				});
+
+			control
+				.DoIf<object, LiveStrategyControl>(editor =>
+				{
+					RibbonEmulationTab.DataContext = null;
+					RibbonDesignerTab.DataContext = null;
+					RibbonLiveTab.DataContext = editor;
+					Ribbon.SelectedPage = RibbonLiveTab;
+				});
 		}
 	}
 }

@@ -14,6 +14,7 @@
 		xmlns:dxb="http://schemas.devexpress.com/winfx/2008/xaml/bars"
 		xmlns:dxmvvm="http://schemas.devexpress.com/winfx/2008/xaml/mvvm"
 		xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors"
+		xmlns:dxdo="http://schemas.devexpress.com/winfx/2008/xaml/docking"
 		mc:Ignorable="d"
 		Height="768" Width="1024" WindowState="Maximized"
         WindowStartupLocation="CenterScreen"
@@ -114,30 +115,6 @@
 	</Window.Resources>
 
     <dxb:BarManager>
-        <!--<dxb:BarManager.Items>
-            <dxb:BarButtonItem x:Name="ConnectionSettingsButton" Content="{x:Static localization:LocalizedStrings.Settings}"
-							   ToolTip="{x:Static localization:LocalizedStrings.ConnectionSettings}"
-							   Glyph="pack://application:,,,/StockSharp.Xaml;component/Images/connection-settings-icon_24x24.png" 
-							   Command="{x:Static local:MainWindow.ConnectorSettingsCommand}"/>
-
-            <dxb:BarButtonItem x:Name="ConnectButton"
-							   Content="{x:Static localization:LocalizedStrings.Connect}"
-							   ToolTip="{x:Static localization:LocalizedStrings.Connect}"
-							   Glyph="pack://application:,,,/Designer;component/Images/Connect_24x24.png" 
-							   Command="{x:Static local:MainWindow.ConnectDisconnectCommand}"/>
-
-            <dxb:BarSplitButtonItem x:Name="SettingsButton" Content="{x:Static localization:LocalizedStrings.Settings}"
-									ToolTip="{x:Static localization:LocalizedStrings.Settings}"
-									Glyph="pack://application:,,,/Designer;component/Images/Settings_24x24.png" >  
-				<dxb:PopupMenu>
-                    <dxb:BarButtonItem Content="{x:Static localization:LocalizedStrings.XamlStr610}"
-									   Command="{x:Static local:MainWindow.TargetPlatformCommand}" />
-                    <dxb:BarButtonItem Content="{x:Static localization:LocalizedStrings.Str1520}"
-									   Command="{x:Static local:MainWindow.ResetSettingsCommand}" />
-                </dxb:PopupMenu>
-            </dxb:BarSplitButtonItem>
-        </dxb:BarManager.Items>-->
-		
         <Grid Margin="3">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
@@ -145,12 +122,7 @@
             </Grid.RowDefinitions>
 
             <dxr:RibbonControl x:Name="Ribbon" RibbonStyle="Office2010" ToolbarShowMode="ShowAbove"  ApplicationMenu="{x:Null}">
-                <!--<dxr:RibbonControl.ToolbarItemLinks>
-                    <dxb:BarButtonItemLink BarItemName="ConnectionSettingsButton"/>
-                    <dxb:BarButtonItemLink BarItemName="ConnectButton"/>
-                    <dxb:BarButtonItemLink BarItemName="SettingsButton"/>
-                </dxr:RibbonControl.ToolbarItemLinks>-->
-				
+
 				<dxr:RibbonControl.ToolbarItems>
                     <dxb:BarButtonItem x:Name="ConnectionSettingsButton" Content="{x:Static localization:LocalizedStrings.Settings}"
 							   ToolTip="{x:Static localization:LocalizedStrings.ConnectionSettings}"
@@ -163,49 +135,43 @@
 							   Glyph="pack://application:,,,/Designer;component/Images/Connect_24x24.png" 
 							   Command="{x:Static local:MainWindow.ConnectDisconnectCommand}"/>
 
-                    <dxb:BarSplitButtonItem x:Name="SettingsButton" Content="{x:Static localization:LocalizedStrings.Settings}"
+                    <dxb:BarSubItem x:Name="SettingsButton" Content="{x:Static localization:LocalizedStrings.Settings}"
 									ToolTip="{x:Static localization:LocalizedStrings.Settings}"
 									Glyph="pack://application:,,,/Designer;component/Images/Settings_24x24.png" >
-                        <dxb:PopupMenu>
-                            <dxb:BarButtonItem Content="{x:Static localization:LocalizedStrings.XamlStr610}"
-									   Command="{x:Static local:MainWindow.TargetPlatformCommand}" />
-                            <dxb:BarButtonItem Content="{x:Static localization:LocalizedStrings.Str1520}"
-									   Command="{x:Static local:MainWindow.ResetSettingsCommand}" />
-                        </dxb:PopupMenu>
-                    </dxb:BarSplitButtonItem>
+                        <dxb:BarButtonItem Content="{x:Static localization:LocalizedStrings.XamlStr610}"
+										   Command="{x:Static local:MainWindow.TargetPlatformCommand}" />
+                        <dxb:BarButtonItem Content="{x:Static localization:LocalizedStrings.Str1520}"
+										   Command="{x:Static local:MainWindow.ResetSettingsCommand}" />
+                    </dxb:BarSubItem>
 
-                    <dxb:BarSplitButtonItem ToolTip="{x:Static localization:LocalizedStrings.Help}"
-											Glyph="pack://application:,,,/StockSharp.Xaml;component/Images/help_16x16.png">
-                        <dxb:PopupMenu>
-                            <dxb:BarButtonItem Content="{x:Static localization:LocalizedStrings.Help}"
-											   Command="{x:Static local:MainWindow.HelpCommand}" />
-                            <dxb:BarButtonItem Content="{x:Static localization:LocalizedStrings.About}"
-											   Command="{x:Static local:MainWindow.AboutCommand}" />
-                        </dxb:PopupMenu>
-                    </dxb:BarSplitButtonItem>
+                    <dxb:BarSubItem ToolTip="{x:Static localization:LocalizedStrings.Help}"
+									Glyph="pack://application:,,,/StockSharp.Xaml;component/Images/help_16x16.png">
+                        <dxb:BarButtonItem Content="{x:Static localization:LocalizedStrings.Help}"
+										   Command="{x:Static local:MainWindow.HelpCommand}" />
+                        <dxb:BarButtonItem Content="{x:Static localization:LocalizedStrings.About}"
+										   Command="{x:Static local:MainWindow.AboutCommand}" />
+                    </dxb:BarSubItem>
                 </dxr:RibbonControl.ToolbarItems>
 				
                 <dxr:RibbonDefaultPageCategory>
                     <dxr:RibbonPage x:Name="RibbonCommonTab" Caption="{x:Static localization:LocalizedStrings.Schemas}">
                         <dxr:RibbonPageGroup Caption="{x:Static localization:LocalizedStrings.CompositionElementsStrategies}">
-                            <dxb:BarSplitButtonItem Content="{x:Static localization:LocalizedStrings.Str3229}"
+                            <dxb:BarSubItem Content="{x:Static localization:LocalizedStrings.Str3229}"
 													Glyph="pack://application:,,,/Designer;component/Images/Add_32x32.png">
-                                <dxb:PopupMenu>
-                                    <dxb:BarButtonItem Content="{x:Static localization:LocalizedStrings.CompositeElement}"
+                                <dxb:BarButtonItem Content="{x:Static localization:LocalizedStrings.CompositeElement}"
 												   Command="{x:Static local:MainWindow.AddCommand}"
 												   CommandParameter="{x:Static local:CompositionType.Composition}" />
-                                    <dxb:BarButtonItem Content="{x:Static localization:LocalizedStrings.Strategy}"
+                                <dxb:BarButtonItem Content="{x:Static localization:LocalizedStrings.Strategy}"
 												   Command="{x:Static local:MainWindow.AddCommand}"
 												   CommandParameter="{x:Static local:CompositionType.Strategy}" />
-                                </dxb:PopupMenu>
-                            </dxb:BarSplitButtonItem>
+                            </dxb:BarSubItem>
 
                             <dxb:BarButtonItem Content="{x:Static localization:LocalizedStrings.Str1509}"
 											   Glyph="pack://application:,,,/Designer;component/Images/Open_32x32.png"
 											   Command="{x:Static local:MainWindow.OpenCommand}"
 											   CommandParameter="{Binding ElementName=SolutionExplorer, Path=SelectedItem}"/>
                             <dxb:BarButtonItem Content="{x:Static localization:LocalizedStrings.Str2060}"
-											   Glyph="pack://application:,,,/Designer;component/Images/Open_32x32.png"
+											   Glyph="pack://application:,,,/Designer;component/Images/Remove_32x32.png"
 											   Command="{x:Static local:MainWindow.RemoveCommand}"
 											   CommandParameter="{Binding ElementName=SolutionExplorer, Path=SelectedItem}"/>
 
@@ -366,12 +332,12 @@
                                 </dxb:BarEditItem.EditSettings>
                             </dxb:BarEditItem>-->
 
-                            <dxb:BarStaticItem>
+                            <dxb:BarStaticItem >
 								<dxb:BarStaticItem.ContentTemplate>
 									<DataTemplate>
 										<StackPanel Orientation="Horizontal">
                                             <TextBlock Text="{x:Static localization:LocalizedStrings.MarketData}"/>
-                                            <controls:MarketDataSettingsComboBox Width="150" SelectedSettings="{Binding Strategy.EmulationSettings.MarketDataSettings}"/>
+                                            <controls:MarketDataSettingsComboBox Width="150" SelectedSettings="{Binding DataContext.Strategy.EmulationSettings.MarketDataSettings}"/>
                                         </StackPanel>
                                     </DataTemplate>
 								</dxb:BarStaticItem.ContentTemplate>
@@ -438,43 +404,40 @@
                 </dxr:RibbonDefaultPageCategory>
             </dxr:RibbonControl>
 
-            <xcad:DockingManager Grid.Row="1" 
-							 x:Name="DockingManager" 
-							 ActiveContentChanged="DockingManager_OnActiveContentChanged">
-                <!--<xcad:DockingManager.Theme>
-                <xcad:MetroTheme />
-            </xcad:DockingManager.Theme>-->
-
-                <xcad:LayoutRoot>
-                    <xcad:LayoutPanel Orientation="Vertical">
-                        <xcad:LayoutPanel Orientation="Horizontal">
-                            <xcad:LayoutAnchorablePaneGroup DockWidth="200">
-                                <xcad:LayoutAnchorablePane>
-                                    <xcad:LayoutAnchorable Title="{x:Static localization:LocalizedStrings.Schemas}" 
-													   ContentId="SolutionExplorer" CanClose="False" CanHide="False" AutoHideWidth="200">
-                                        <local:SolutionExplorerControl x:Name="SolutionExplorer" 
+            <dxdo:DockLayoutManager x:Name="DockingManager" Grid.Row="1" FloatingMode="Desktop" DockingStyle="VS2010"
+									LayoutItemActivated="DockingManager_OnLayoutItemActivated"
+									DockItemActivated="DockingManager_OnDockItemActivated"
+									FloatingDocumentContainer="DocumentHost">
+				
+                <dxdo:LayoutGroup Name="Root">
+                    <dxdo:LayoutGroup Orientation="Vertical" ItemWidth="3*">
+                        <dxdo:LayoutGroup Orientation="Horizontal" ItemHeight="3*">
+                            <dxdo:LayoutGroup DestroyOnClosingChildren="False" ItemWidth="200">
+                                <dxdo:LayoutPanel Caption="{x:Static localization:LocalizedStrings.Schemas}">
+                                    <local:SolutionExplorerControl x:Name="SolutionExplorer" 
 																   NodeContextMenu="{StaticResource TreeContextMenu}"
 																   Open="SolutionExplorer_OnOpen"/>
-                                    </xcad:LayoutAnchorable>
-                                </xcad:LayoutAnchorablePane>
-                            </xcad:LayoutAnchorablePaneGroup>
+                                </dxdo:LayoutPanel>
+                            </dxdo:LayoutGroup>
+                            <dxdo:LayoutGroup ItemWidth="3*" DestroyOnClosingChildren="False">
+                                <dxdo:LayoutGroup >
+                                    <dxdo:DocumentGroup Name="DocumentHost" DestroyOnClosingChildren="False" >
 
-                            <xcad:LayoutDocumentPaneGroup>
-                                <xcad:LayoutDocumentPane />
-                            </xcad:LayoutDocumentPaneGroup>
-                        </xcad:LayoutPanel>
-
-                        <xcad:LayoutAnchorablePaneGroup DockHeight="200">
-                            <xcad:LayoutAnchorablePane>
-                                <xcad:LayoutAnchorable x:Name="LogsAnchorable" Title="{x:Static localization:LocalizedStrings.Str3237}" 
-												   ContentId="Logs" CanClose="False" CanHide="False" AutoHideHeight="200">
-                                    <xaml:Monitor x:Name="Monitor"/>
-                                </xcad:LayoutAnchorable>
-                            </xcad:LayoutAnchorablePane>
-                        </xcad:LayoutAnchorablePaneGroup>
-                    </xcad:LayoutPanel>
-                </xcad:LayoutRoot>
-            </xcad:DockingManager>
+                                    </dxdo:DocumentGroup>
+                                </dxdo:LayoutGroup>
+                            </dxdo:LayoutGroup>
+                        </dxdo:LayoutGroup>
+                    </dxdo:LayoutGroup>
+                </dxdo:LayoutGroup>
+				
+                <dxdo:DockLayoutManager.AutoHideGroups>
+                    <dxdo:AutoHideGroup DockType="Bottom">
+                        <dxdo:LayoutPanel Caption="{x:Static localization:LocalizedStrings.Str3237}">
+                            <xaml:Monitor x:Name="Monitor"/>
+                        </dxdo:LayoutPanel>
+                    </dxdo:AutoHideGroup>
+                </dxdo:DockLayoutManager.AutoHideGroups>
+            </dxdo:DockLayoutManager>
         </Grid>
     </dxb:BarManager>
     

@@ -91,7 +91,7 @@ namespace StockSharp.Designer
 			if (!_isDefaultLayout)
 				return;
 
-			PropertyGridControlAnchorable.ToggleAutoHide();
+			//PropertyGridControlAnchorable.ToggleAutoHide();
 		}
 
 		private void InitializeCommands()

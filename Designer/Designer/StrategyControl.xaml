@@ -3,11 +3,11 @@
 							xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 							xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
 							xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-							xmlns:xcad="http://schemas.xceed.com/wpf/xaml/avalondock"
 							xmlns:localization="clr-namespace:StockSharp.Localization;assembly=StockSharp.Localization"
 							xmlns:xaml="http://schemas.stocksharp.com/xaml"
 							xmlns:designer="clr-namespace:StockSharp.Designer"
 							xmlns:controls="clr-namespace:StockSharp.Studio.Controls;assembly=StockSharp.Studio.Controls"
+							xmlns:dxdo="http://schemas.devexpress.com/winfx/2008/xaml/docking"
 							mc:Ignorable="d" 
 							d:DesignHeight="300" d:DesignWidth="300">
 	
@@ -19,43 +19,54 @@
 
         <ProgressBar Grid.Row="0" Height="5" x:Name="TicksAndDepthsProgress" />
 
-        <xcad:DockingManager Grid.Row="1" x:Name="DockingManager">
-            <!--<xcad:DockingManager.Theme>
-                <xcad:MetroTheme />
-            </xcad:DockingManager.Theme>-->
-
-            <xcad:LayoutRoot>
-                <xcad:LayoutPanel>
-                    <xcad:LayoutAnchorablePaneGroup Orientation="Horizontal">
-                        <xcad:LayoutAnchorablePane>
-                            <xcad:LayoutAnchorable Title="{x:Static localization:LocalizedStrings.Strategy}" CanClose="False">
-                                <designer:DiagramDebuggerControl x:Name="DiagramDebuggerControl" Changed="OnDiagramDebuggerControlChanged"/>
-                            </xcad:LayoutAnchorable>
-                        </xcad:LayoutAnchorablePane>
-
-                        <xcad:LayoutAnchorablePane>
-                            <xcad:LayoutAnchorable Title="{x:Static localization:LocalizedStrings.Str3200}" CanClose="False" CanHide="False">
-                                <xaml:Chart x:Name="Chart" />
-                            </xcad:LayoutAnchorable>
-                            <xcad:LayoutAnchorable Title="{x:Static localization:LocalizedStrings.Orders}" CanClose="False" CanHide="False">
-                                <xaml:OrderGrid x:Name="OrderGrid"/>
-                            </xcad:LayoutAnchorable>
-                            <xcad:LayoutAnchorable Title="{x:Static localization:LocalizedStrings.Str985}" CanClose="False" CanHide="False">
-                                <xaml:MyTradeGrid x:Name="MyTradeGrid"/>
-                            </xcad:LayoutAnchorable>
-                            <xcad:LayoutAnchorable Title="{x:Static localization:LocalizedStrings.Str862}" CanClose="False" CanHide="False">
-                                <xaml:EquityCurveChart x:Name="PositionCurve" />
-                            </xcad:LayoutAnchorable>
-                            <xcad:LayoutAnchorable Title="{x:Static localization:LocalizedStrings.Equity}" CanClose="False" CanHide="False">
-                                <xaml:EquityCurveChart x:Name="EquityCurve" />
-                            </xcad:LayoutAnchorable>
-                            <xcad:LayoutAnchorable Title="{x:Static localization:LocalizedStrings.Str436}" CanClose="False" CanHide="False">
-                                <xaml:StatisticParameterGrid x:Name="StatisticsGrid" />
-                            </xcad:LayoutAnchorable>
-                        </xcad:LayoutAnchorablePane>
-                    </xcad:LayoutAnchorablePaneGroup>
-                </xcad:LayoutPanel>
-            </xcad:LayoutRoot>
-        </xcad:DockingManager>
+        <dxdo:DockLayoutManager x:Name="DockingManager" Grid.Row="1" FloatingMode="Desktop" DockingStyle="VS2010"
+								FloatingDocumentContainer="DocumentHost">
+            <dxdo:LayoutGroup Name="Root">
+                <dxdo:LayoutGroup Orientation="Vertical" ItemWidth="3*">
+                    <dxdo:LayoutGroup Orientation="Horizontal" ItemHeight="3*">
+                        
+						<dxdo:LayoutGroup DestroyOnClosingChildren="False" ItemWidth="*">
+                            <dxdo:LayoutGroup ItemWidth="3*" DestroyOnClosingChildren="False">
+                                <dxdo:LayoutGroup >
+                                    <dxdo:DocumentGroup DestroyOnClosingChildren="False" >
+                                        <dxdo:DocumentPanel Caption="{x:Static localization:LocalizedStrings.Strategy}">
+                                            <designer:DiagramDebuggerControl x:Name="DiagramDebuggerControl" Changed="OnDiagramDebuggerControlChanged"/>
+                                        </dxdo:DocumentPanel>
+                                    </dxdo:DocumentGroup>
+                                </dxdo:LayoutGroup>
+                            </dxdo:LayoutGroup>
+                        </dxdo:LayoutGroup>
+						
+                        <dxdo:LayoutGroup DestroyOnClosingChildren="False" ItemWidth="*">
+                            <dxdo:LayoutGroup ItemWidth="3*" DestroyOnClosingChildren="False">
+                                <dxdo:LayoutGroup >
+                                    <dxdo:DocumentGroup DestroyOnClosingChildren="False" >
+                                        <dxdo:DocumentPanel Caption="{x:Static localization:LocalizedStrings.Str3200}">
+                                            <xaml:Chart x:Name="Chart" />
+                                        </dxdo:DocumentPanel>
+                                        <dxdo:DocumentPanel Caption="{x:Static localization:LocalizedStrings.Orders}">
+                                            <xaml:OrderGrid x:Name="OrderGrid"/>
+                                        </dxdo:DocumentPanel>
+                                        <dxdo:DocumentPanel Caption="{x:Static localization:LocalizedStrings.Str985}">
+                                            <xaml:MyTradeGrid x:Name="MyTradeGrid"/>
+                                        </dxdo:DocumentPanel>
+                                        <dxdo:DocumentPanel Caption="{x:Static localization:LocalizedStrings.Str862}">
+                                            <xaml:EquityCurveChart x:Name="PositionCurve" />
+                                        </dxdo:DocumentPanel>
+                                        <dxdo:DocumentPanel Caption="{x:Static localization:LocalizedStrings.Equity}">
+                                            <xaml:EquityCurveChart x:Name="EquityCurve" />
+                                        </dxdo:DocumentPanel>
+                                        <dxdo:DocumentPanel Caption="{x:Static localization:LocalizedStrings.Str436}">
+                                            <xaml:StatisticParameterGrid x:Name="StatisticsGrid" />
+                                        </dxdo:DocumentPanel>
+                                    </dxdo:DocumentGroup>
+                                </dxdo:LayoutGroup>
+                            </dxdo:LayoutGroup>
+                        </dxdo:LayoutGroup>
+						
+                    </dxdo:LayoutGroup>
+                </dxdo:LayoutGroup>
+            </dxdo:LayoutGroup>
+        </dxdo:DockLayoutManager>
     </Grid>
 </controls:BaseStudioControl>
