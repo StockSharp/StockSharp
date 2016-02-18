@@ -1,26 +1,26 @@
-﻿<controls:BaseStudioControl x:Class="StockSharp.Terminal.Controls.WorkAreaControl"
-			 xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-			 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-			 xmlns:controls="clr-namespace:StockSharp.Studio.Controls;assembly=StockSharp.Studio.Controls"
-			 xmlns:xcad="http://schemas.xceed.com/wpf/xaml/avalondock"
-			 xmlns:loc="clr-namespace:StockSharp.Localization;assembly=StockSharp.Localization"
+﻿<controls:BaseStudioControl
+			xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+			xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+			xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+			xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+			xmlns:controls="clr-namespace:StockSharp.Studio.Controls;assembly=StockSharp.Studio.Controls"
+			xmlns:dxdo="http://schemas.devexpress.com/winfx/2008/xaml/docking"
+			x:Class="StockSharp.Terminal.Controls.WorkAreaControl"
 			DataContext="{Binding RelativeSource={RelativeSource Self}}"
-			 mc:Ignorable="d" d:DesignHeight="300" d:DesignWidth="600">
+			mc:Ignorable="d" d:DesignHeight="300" d:DesignWidth="600">
 
 	<Grid>
-		<Grid.RowDefinitions>
-			<RowDefinition Height="Auto"/>
-			<RowDefinition Height="*"/>
-		</Grid.RowDefinitions>
+		<!--
+								dxdo:RestoreLayoutOptions.AddNewLayoutControlItems="True"
+								dxdo:RestoreLayoutOptions.AddNewLayoutGroups="True"
+								dxdo:RestoreLayoutOptions.AddNewPanels="True"
+								dxdo:RestoreLayoutOptions.RemoveOldLayoutControlItems="False"
+								dxdo:RestoreLayoutOptions.RemoveOldPanels="False"
+								dxdo:RestoreLayoutOptions.RemoveOldLayoutGroups="False">
+		-->
+		<dxdo:DockLayoutManager x:Name="DockManager" dxdo:RestoreLayoutOptions.RemoveOldPanels="False">
 
-		<xcad:DockingManager Grid.Row="1" x:Name="DockingManager">
-			<xcad:LayoutRoot>
-				<xcad:LayoutPanel>
-					<xcad:LayoutAnchorablePaneGroup x:Name="DockingManagerGroup"/>
-				</xcad:LayoutPanel>
-			</xcad:LayoutRoot>
-		</xcad:DockingManager>
+			<dxdo:LayoutGroup x:Name="Root" dxdo:RestoreLayoutOptions.RemoveOldPanels="False"/>
+		</dxdo:DockLayoutManager>
 	</Grid>
 </controls:BaseStudioControl>

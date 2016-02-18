@@ -71,16 +71,16 @@ namespace StockSharp.Terminal
 
 			Title = Title.Put("S# Terminal");
 
-			_connectorService = new ConnectorService();
-			_connectorService.ChangeConnectStatusEvent += ChangeConnectStatusEvent;
-			_connectorService.ErrorEvent += OnError;
-
 			var logManager = ConfigManager.GetService<LogManager>();
 			logManager.Application.LogLevel = LogLevels.Debug;
 
 			logManager.Listeners.Add(new FileLogListener("Terminal.log"));
 
+			_connectorService = new ConnectorService();
+			_connectorService.ChangeConnectStatusEvent += ChangeConnectStatusEvent;
+
 			var cmdSvc = ConfigManager.GetService<IStudioCommandService>();
+			cmdSvc.Register<ErrorCommand>(this, true, cmd => OnError(cmd.ToString(), "Error"));
 
 			Loaded += (sender, args) =>
 			{

@@ -52,7 +52,7 @@ namespace StockSharp.Studio.Controls
 			set { SetValue(IconProperty, value); }
 		}
 
-		public virtual string Key {get; set;} = Guid.NewGuid().ToString();
+		public virtual string Key {get; set;} = $"_{Guid.NewGuid().ToString("N")}";
 
 		// TODO change to ControlChangedCommand
 		public event Action<BaseStudioControl> Changed;

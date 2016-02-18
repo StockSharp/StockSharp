@@ -12,7 +12,7 @@ StockSharp.chm
 *.sln.docstates
 
 # licx files
-*.licx
+# *.licx
 
 # Build results
 [Dd]ebug/

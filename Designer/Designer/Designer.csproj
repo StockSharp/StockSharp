@@ -41,6 +41,18 @@
     <ApplicationIcon>..\..\References\stocksharp.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="DevExpress.Xpf.Core.v15.2, Version=15.2.5.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\References\DevExpress\DevExpress.Xpf.Core.v15.2.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.Xpf.Ribbon.v15.2, Version=15.2.5.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\References\DevExpress\DevExpress.Xpf.Ribbon.v15.2.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.Xpf.Themes.VS2010.v15.2, Version=15.2.5.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\References\DevExpress\DevExpress.Xpf.Themes.VS2010.v15.2.dll</HintPath>
+    </Reference>
     <Reference Include="Ecng.Collections">
       <HintPath>..\..\References\Ecng\Ecng.Collections.dll</HintPath>
     </Reference>
@@ -67,9 +79,6 @@
     </Reference>
     <Reference Include="Ecng.Xaml">
       <HintPath>..\..\References\Ecng\Ecng.Xaml.dll</HintPath>
-    </Reference>
-    <Reference Include="Fluent">
-      <HintPath>..\..\References\Fluent.Ribbon\Fluent.dll</HintPath>
     </Reference>
     <Reference Include="MoreLinq">
       <HintPath>..\..\References\Ecng\MoreLinq.dll</HintPath>

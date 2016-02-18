@@ -92,6 +92,7 @@
     </Compile>
     <Compile Include="Commands\AddLogListenerCommand.cs" />
     <Compile Include="Commands\BindCommand.cs" />
+    <Compile Include="Commands\CandleChartCommands.cs" />
     <Compile Include="Commands\ChartAutoRangeCommand.cs" />
     <Compile Include="Commands\ChartDrawCommand.cs" />
     <Compile Include="Commands\CloseWindowCommand.cs" />
@@ -99,6 +100,7 @@
     <Compile Include="Commands\ControlOpenedCommand.cs" />
     <Compile Include="Commands\DebugDiagramStrategyCommand.cs" />
     <Compile Include="Commands\EditReferencesCommand.cs" />
+    <Compile Include="Commands\ErrorCommand.cs" />
     <Compile Include="Commands\IStudioCommandScope.cs" />
     <Compile Include="Commands\LoadLayoutCommand.cs" />
     <Compile Include="Commands\NewSecuritiesCommand.cs" />
