@@ -411,6 +411,14 @@
       <param name="transactionId">Transaction ID.</param>
       <returns>Request identifier.</returns>
     </member>
+    <member name="M:StockSharp.Fix.FixServer.GetTransactionId(StockSharp.Fix.FixSession,System.String)">
+      <summary>
+            Get the transaction ID.
+            </summary>
+      <param name="session">The session.</param>
+      <param name="requestId">The request identifier.</param>
+      <returns>Transaction ID.</returns>
+    </member>
     <member name="M:StockSharp.Fix.FixServer.CreateTransactionId(StockSharp.Fix.FixSession,System.String)">
       <summary>
             Generate a new request identifier.
