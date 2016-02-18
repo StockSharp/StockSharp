@@ -43,20 +43,25 @@ namespace StockSharp.Quik.Lua
 		[DisplayName("FixServer")]
 		private sealed class FixServerEx : FixServer
 		{
-			private readonly SynchronizedSet<long> _transactionIds = new SynchronizedSet<long>(); 
+			//private readonly SynchronizedSet<long> _transactionIds = new SynchronizedSet<long>(); 
 
 			public FixServerEx(Func<string, string, Tuple<TimeSpan, FixClientRoles>> authorize)
 				: base(authorize)
 			{
 			}
 
-			public void AddTransactionId(long transactionId)
-			{
-				if (transactionId == 0)
-					throw new ArgumentNullException(nameof(transactionId));
+			//public void AddTransactionId(long transactionId)
+			//{
+			//	if (transactionId == 0)
+			//		throw new ArgumentNullException(nameof(transactionId));
 
-				this.AddInfoLog("Added trans id {0} mapping.", transactionId);
-				_transactionIds.Add(transactionId);
+			//	this.AddInfoLog("Added trans id {0} mapping.", transactionId);
+			//	_transactionIds.Add(transactionId);
+			//}
+
+			protected override long GetTransactionId(FixSession session, string requestId)
+			{
+				return requestId.To<long>();
 			}
 
 			protected override long OnCreateTransactionId(FixSession session, string requestId)
@@ -66,10 +71,13 @@ namespace StockSharp.Quik.Lua
 
 			protected override string TryGetRequestId(long transactionId)
 			{
-				if (_transactionIds.Contains(transactionId))
-					return transactionId.To<string>();
+				if (transactionId == 0)
+					throw new ArgumentNullException(nameof(transactionId));
 
-				return base.TryGetRequestId(transactionId);
+				//if (_transactionIds.Contains(transactionId))
+				return transactionId.To<string>();
+
+				//return base.TryGetRequestId(transactionId);
 			}
 
 			protected override OrderCondition CreateCondition()
@@ -268,13 +276,13 @@ namespace StockSharp.Quik.Lua
 			}
 		}
 
-		private void RegisterTransaction(Transaction transaction, MessageTypes messageType, long transactionId, OrderTypes? type)
+		private void RegisterTransaction(Transaction transaction, MessageTypes messageType, long transactionId, OrderTypes? orderType)
 		{
 			if (transactionId <= 0 || transactionId > uint.MaxValue)
 				throw new InvalidOperationException(LocalizedStrings.Str1700Params.Put(transactionId));
 
-			if (type == null)
-				throw new ArgumentNullException(nameof(type));
+			//if (type == null)
+			//	throw new ArgumentNullException(nameof(type));
 
 			_transactions.Add(transactionId, transaction);
 
@@ -282,7 +290,7 @@ namespace StockSharp.Quik.Lua
 			{
 				MessageType = messageType,
 				TransactionId = transactionId,
-				OrderType = type.Value,
+				OrderType = orderType,
 				Value = transaction.SetTransactionId(transactionId).ToLuaString()
 			});
 		}
@@ -509,20 +517,20 @@ namespace StockSharp.Quik.Lua
 					{
 						if (execMsg.OrderId != null)
 						{
-							if (execMsg.TransactionId == 0)
-							{
-								// TODO
+							//if (execMsg.TransactionId == 0)
+							//{
+							//	// TODO
 
-								// автоинкремент проставляется для ручных заявок, но возникает баг,
-								// что и для заявок робота может приходить нулевой идентификатор
-								// https://forum.quik.ru/forum10/topic870/
-								//
-								//	execMsg.TransactionId = GetNextTransactionId();
-							}
-							else
-								_fixServer.AddTransactionId(execMsg.TransactionId);
+							//	// автоинкремент проставляется для ручных заявок, но возникает баг,
+							//	// что и для заявок робота может приходить нулевой идентификатор
+							//	// https://forum.quik.ru/forum10/topic870/
+							//	//
+							//	//	execMsg.TransactionId = GetNextTransactionId();
+							//}
+							//else
+							//	_fixServer.AddTransactionId(execMsg.TransactionId);
 
-							_fixServer.AddTransactionId(execMsg.OriginalTransactionId);
+							//_fixServer.AddTransactionId(execMsg.OriginalTransactionId);
 						}
 
 						var transaction = _transactions.TryGetValue(execMsg.OriginalTransactionId);

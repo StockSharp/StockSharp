@@ -31,16 +31,16 @@ namespace StockSharp.Quik.Lua
 		{
 			var msgType = base.OnWrite(writer, message);
 
-			if (message.Type == MessageTypes.OrderCancel)
-			{
-				var type = ((OrderCancelMessage)message).OrderType;
+			var cancelMsg = message as OrderCancelMessage;
 
-				if (type != null)
-				{
-					writer.Write(FixTags.Text);
-					writer.Write(type.Value.To<string>());
-				}
-			}
+			if (cancelMsg == null)
+				return msgType;
+
+			if (cancelMsg.OrderType == null)
+				return msgType;
+
+			writer.Write(FixTags.Text);
+			writer.Write(cancelMsg.OrderType.Value.To<string>());
 
 			return msgType;
 		}
