@@ -260,7 +260,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Properties\StockSharp.db" />
-    <None Include="Resources\StockSharp.db" />
   </ItemGroup>
   <ItemGroup>
     <None Include="layout.xml">
