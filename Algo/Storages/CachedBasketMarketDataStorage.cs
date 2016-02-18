@@ -47,36 +47,10 @@ namespace StockSharp.Algo.Storages
 			}
 		}
 
-		private sealed class LockObject
-		{
-			private readonly object _sync = new object();
-			private bool _processed;
-
-			public void Wait()
-			{
-				lock (_sync)
-				{
-					if (!_processed)
-						Monitor.Wait(_sync);
-
-					_processed = false;
-				}
-			}
-
-			public void Pulse()
-			{
-				lock (_sync)
-				{
-					_processed = true;
-					Monitor.Pulse(_sync);
-				}
-			}
-		}
-
 		private readonly BlockingPriorityQueue _messageQueue = new BlockingPriorityQueue();
 		private readonly List<Tuple<IMarketDataStorage, bool>> _actions = new List<Tuple<IMarketDataStorage, bool>>();
-		private readonly LockObject _moveNextSyncRoot  = new LockObject();
-		private readonly LockObject _syncRoot = new LockObject();
+		private readonly SyncObject _moveNextSyncRoot  = new SyncObject();
+		private readonly SyncObject _syncRoot = new SyncObject();
 
 		private readonly BasketMarketDataStorage<T> _basketStorage;
 		private readonly CancellationTokenSource _cancellationToken;
@@ -202,7 +176,7 @@ namespace StockSharp.Algo.Storages
 
 			_isChanged = true;
 			_actions.Add(Tuple.Create(storage, true));
-			_syncRoot.Pulse();
+			_syncRoot.PulseSignal();
 		}
 
 		/// <summary>
@@ -225,7 +199,7 @@ namespace StockSharp.Algo.Storages
 
 			_isChanged = true;
 			_actions.Add(Tuple.Create((IMarketDataStorage)storage, false));
-			_syncRoot.Pulse();
+			_syncRoot.PulseSignal();
 		}
 
 		#region IEnumerator<T>
@@ -240,7 +214,7 @@ namespace StockSharp.Algo.Storages
 				return false;
 
 			if (_isChanged)
-				_moveNextSyncRoot.Wait();
+				_moveNextSyncRoot.WaitSignal();
 
 			var pair = _messageQueue.Dequeue();
 			var message = pair.Value;
@@ -279,7 +253,7 @@ namespace StockSharp.Algo.Storages
 		protected override void DisposeManaged()
 		{
 			_cancellationToken.Cancel();
-			_syncRoot.Pulse();
+			_syncRoot.PulseSignal();
 
 			base.DisposeManaged();
 		}
@@ -293,13 +267,13 @@ namespace StockSharp.Algo.Storages
 
 				while (!token.IsCancellationRequested)
 				{
-					_syncRoot.Wait();
+					_syncRoot.WaitSignal();
 					_messageQueue.Clear();
 
 					_isInitialized = true;
 					_isChanged = false;
 
-					_moveNextSyncRoot.Pulse();
+					_moveNextSyncRoot.PulseSignal();
 
 					foreach (var action in _actions.CopyAndClear())
 					{
