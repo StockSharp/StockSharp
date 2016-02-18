@@ -84,7 +84,28 @@ namespace StockSharp.Logging
 			}
 		}
 
-		private static readonly LogMessage _disposeMessage = new LogMessage(new ApplicationReceiver(), DateTimeOffset.MinValue, LogLevels.Off, string.Empty) { IsDispose = true };
+		private sealed class DisposeLogMessage : LogMessage
+		{
+			private readonly SyncObject _syncRoot = new SyncObject();
+
+			public DisposeLogMessage()
+				: base(new ApplicationReceiver(), DateTimeOffset.MinValue, LogLevels.Off, string.Empty)
+			{
+				IsDispose = true;
+			}
+
+			public void Wait()
+			{
+				_syncRoot.WaitSignal();
+			}
+
+			public void Pulse()
+			{
+				_syncRoot.PulseSignal();
+			}
+		}
+
+		private static readonly DisposeLogMessage _disposeMessage = new DisposeLogMessage();
 
 		private readonly object _syncRoot = new object();
 		private readonly List<LogMessage> _pendingMessages = new List<LogMessage>();
@@ -132,6 +153,7 @@ namespace StockSharp.Logging
 			{
 				var messages = new List<LogMessage>();
 
+				DisposeLogMessage disposeMessage = null;
 				ILogSource prevSource = null;
 				var level = default(LogLevels);
 
@@ -148,10 +170,15 @@ namespace StockSharp.Logging
 
 					if (level <= message.Level)
 						messages.Add(message);
+
+					if (message.IsDispose)
+						disposeMessage = (DisposeLogMessage)message;
 				}
 
 				if (messages.Count > 0)
 					_listeners.Cache.ForEach(l => l.WriteMessages(messages));
+
+				disposeMessage?.Pulse();
 			}
 			catch (Exception ex)
 			{
@@ -279,6 +306,8 @@ namespace StockSharp.Logging
 
 			// сбрасываем в логи то, что еще не сбросилось и выключаем таймер
 			ImmediateFlush();
+
+			_disposeMessage.Wait();
 			_flushTimer.Dispose();
 
 			base.DisposeManaged();
