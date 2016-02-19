@@ -161,7 +161,7 @@ namespace StockSharp.Designer
 
 		public override void Load(SettingsStorage storage)
 		{
-			base.Load(storage);
+			//base.Load(storage);
 
 			var compositionType = storage.GetValue<CompositionType>("CompositionType");
 			var compositionId = storage.GetValue<Guid>("CompositionId");
@@ -187,7 +187,7 @@ namespace StockSharp.Designer
 
 		public override void Save(SettingsStorage storage)
 		{
-			base.Save(storage);
+			//base.Save(storage);
 
 			if (Composition != null)
 			{

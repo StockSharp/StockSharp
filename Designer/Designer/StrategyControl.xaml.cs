@@ -218,7 +218,7 @@
 
 		public override void Load(SettingsStorage storage)
 		{
-			base.Load(storage);
+			//base.Load(storage);
 
 			storage.TryLoadSettings<SettingsStorage>("DebuggerControl", s => DiagramDebuggerControl.Load(s));
 			storage.TryLoadSettings<string>("Layout", s => _layoutManager.LoadLayout(s));
@@ -226,7 +226,7 @@
 
 		public override void Save(SettingsStorage storage)
 		{
-			base.Save(storage);
+			//base.Save(storage);
 
 			storage.SetValue("DebuggerControl", DiagramDebuggerControl.Save());
 			storage.SetValue("Layout", _layoutManager.SaveLayout());

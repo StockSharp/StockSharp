@@ -408,14 +408,16 @@
                     <dxdo:LayoutGroup Orientation="Vertical" ItemWidth="3*">
                         <dxdo:LayoutGroup Orientation="Horizontal" ItemHeight="3*">
                             <dxdo:LayoutGroup DestroyOnClosingChildren="False" ItemWidth="200">
-                                <dxdo:LayoutPanel Caption="{x:Static localization:LocalizedStrings.Schemas}" AllowClose="False">
+                                <dxdo:LayoutPanel x:Name="SolutionExplorerPanel" 
+												  Caption="{x:Static localization:LocalizedStrings.Schemas}" 
+												  AllowClose="False">
                                     <local:SolutionExplorerControl x:Name="SolutionExplorer" 
 																   NodeContextMenu="{StaticResource TreeContextMenu}"
 																   Open="SolutionExplorer_OnOpen"/>
                                 </dxdo:LayoutPanel>
                             </dxdo:LayoutGroup>
                             <dxdo:LayoutGroup ItemWidth="3*" DestroyOnClosingChildren="False">
-                                <dxdo:LayoutGroup >
+                                <dxdo:LayoutGroup>
                                     <dxdo:DocumentGroup Name="DocumentHost" DestroyOnClosingChildren="False" >
 
                                     </dxdo:DocumentGroup>
@@ -427,7 +429,9 @@
 				
                 <dxdo:DockLayoutManager.AutoHideGroups>
                     <dxdo:AutoHideGroup DockType="Bottom">
-                        <dxdo:LayoutPanel Caption="{x:Static localization:LocalizedStrings.Str3237}" AllowClose="False">
+                        <dxdo:LayoutPanel x:Name="MonitorPanel" 
+										  Caption="{x:Static localization:LocalizedStrings.Str3237}" 
+										  AllowClose="False">
                             <xaml:Monitor x:Name="Monitor"/>
                         </dxdo:LayoutPanel>
                     </dxdo:AutoHideGroup>

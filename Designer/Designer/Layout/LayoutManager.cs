@@ -23,6 +23,7 @@ namespace StockSharp.Designer.Layout
 	using System.Text;
 	using System.Threading;
 
+	using DevExpress.Xpf.Core.Serialization;
 	using DevExpress.Xpf.Docking;
 	using DevExpress.Xpf.Docking.Base;
 
@@ -69,6 +70,11 @@ namespace StockSharp.Designer.Layout
 			_documentGroup = documentGroup;
 
 			DockingManager = dockingManager;
+			DXSerializer.AddAllowPropertyHandler(DockingManager, (s, e) =>
+			{
+				if (e.DependencyProperty == BaseLayoutItem.CaptionProperty)
+					e.Allow = false;
+			});
 
 			DockingManager.DockItemClosing += OnDockingManagerDockItemClosing;
 			DockingManager.DockItemClosed += OnDockingManagerDockItemClosed;
@@ -199,10 +205,37 @@ namespace StockSharp.Designer.Layout
 
 			try
 			{
+				var titles = DockingManager
+					.GetItems()
+					.OfType<LayoutPanel>()
+					.Where(c => !c.Name.IsEmpty())
+					.ToDictionary(c => c.Name, c => (string)c.Caption);
+
 				var data = Encoding.UTF8.GetBytes(settings);
 
                 using (var stream = new MemoryStream(data))
 					DockingManager.RestoreLayoutFromStream(stream);
+
+				var items = DockingManager
+					.GetItems()
+					.OfType<LayoutPanel>()
+					.ToArray();
+
+				foreach (var content in items)
+				{
+					content.DoIf<LayoutPanel, DocumentPanel>(d => _documents[d.Name] = d);
+					//content.DoIf<ContentItem, DocumentPanel>(d => _anchorables[d.ContentId] = d);
+
+					if (!(content.Content is BaseStudioControl))
+					{
+						var title = titles.TryGetValue(content.Name);
+
+						if (!title.IsEmpty())
+							content.Caption = title;
+					}
+					else
+						content.SetBindings(BaseLayoutItem.CaptionProperty, content.Content, "Title");
+				}
 			}
 			catch (Exception excp)
 			{
