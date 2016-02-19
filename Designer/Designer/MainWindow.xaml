@@ -121,7 +121,8 @@
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
 
-            <dxr:RibbonControl x:Name="Ribbon" RibbonStyle="Office2010" ToolbarShowMode="ShowAbove"  ApplicationMenu="{x:Null}">
+            <dxr:RibbonControl x:Name="Ribbon" RibbonStyle="Office2010" ToolbarShowMode="ShowAbove" 
+							   ShowApplicationButton="False">
 
 				<dxr:RibbonControl.ToolbarItems>
                     <dxb:BarButtonItem x:Name="ConnectionSettingsButton" Content="{x:Static localization:LocalizedStrings.Settings}"
@@ -178,13 +179,14 @@
                             <dxb:BarItemLinkSeparator/>
 
                             <dxb:BarButtonItem Content="{x:Static localization:LocalizedStrings.Import}"
+											   IsEnabled="False"
 											   Glyph="pack://application:,,,/Designer;component/Images/Open_32x32.png" />
                             <dxb:BarButtonItem Content="{x:Static localization:LocalizedStrings.Export}"
+											   IsEnabled="False"
 											   Glyph="pack://application:,,,/Designer;component/Images/Save_32x32.png" />
 
-                        </dxr:RibbonPageGroup>
-
-                        <dxr:RibbonPageGroup Caption="{x:Static localization:LocalizedStrings.Str3606}">
+                            <dxb:BarItemLinkSeparator/>
+							
                             <dxb:BarButtonItem Content="{x:Static localization:LocalizedStrings.Str1174}"
 										   LargeGlyph="pack://application:,,,/Designer;component/Images/Backtesting_32x32.png" 
 										   Command="{x:Static local:MainWindow.EmulateStrategyCommand}"
@@ -194,6 +196,9 @@
 										   Command="{x:Static local:MainWindow.ExecuteStrategyCommand}"
 										   CommandParameter="{Binding ElementName=SolutionExplorer, Path=SelectedItem}" />
                         </dxr:RibbonPageGroup>
+
+                        <!--<dxr:RibbonPageGroup Caption="{x:Static localization:LocalizedStrings.Str3606}">
+                        </dxr:RibbonPageGroup>-->
 
                         <dxr:RibbonPageGroup Caption="{x:Static localization:LocalizedStrings.Str1405}">
                             <dxb:BarButtonItem Content="{x:Static localization:LocalizedStrings.MarketData}"
@@ -205,7 +210,7 @@
 										   CommandParameter="{x:Type businessEntities:Security}" />
                         </dxr:RibbonPageGroup>
 
-                        <dxr:RibbonPageGroup Caption="Themes">
+                        <dxr:RibbonPageGroup Caption="{x:Static localization:LocalizedStrings.Themes}">
                             <dxr:RibbonGalleryBarItem Content="Theme" >
                                 <dxmvvm:Interaction.Behaviors>
                                     <dxr:RibbonGalleryItemThemeSelectorBehavior/>
@@ -396,13 +401,14 @@
             <dxdo:DockLayoutManager x:Name="DockingManager" Grid.Row="1" FloatingMode="Desktop" DockingStyle="VS2010"
 									LayoutItemActivated="DockingManager_OnLayoutItemActivated"
 									DockItemActivated="DockingManager_OnDockItemActivated"
+									DockItemClosed="DockingManager_OnDockItemClosed"
 									FloatingDocumentContainer="DocumentHost">
 				
                 <dxdo:LayoutGroup Name="Root">
                     <dxdo:LayoutGroup Orientation="Vertical" ItemWidth="3*">
                         <dxdo:LayoutGroup Orientation="Horizontal" ItemHeight="3*">
                             <dxdo:LayoutGroup DestroyOnClosingChildren="False" ItemWidth="200">
-                                <dxdo:LayoutPanel Caption="{x:Static localization:LocalizedStrings.Schemas}">
+                                <dxdo:LayoutPanel Caption="{x:Static localization:LocalizedStrings.Schemas}" AllowClose="False">
                                     <local:SolutionExplorerControl x:Name="SolutionExplorer" 
 																   NodeContextMenu="{StaticResource TreeContextMenu}"
 																   Open="SolutionExplorer_OnOpen"/>
@@ -421,7 +427,7 @@
 				
                 <dxdo:DockLayoutManager.AutoHideGroups>
                     <dxdo:AutoHideGroup DockType="Bottom">
-                        <dxdo:LayoutPanel Caption="{x:Static localization:LocalizedStrings.Str3237}">
+                        <dxdo:LayoutPanel Caption="{x:Static localization:LocalizedStrings.Str3237}" AllowClose="False">
                             <xaml:Monitor x:Name="Monitor"/>
                         </dxdo:LayoutPanel>
                     </dxdo:AutoHideGroup>

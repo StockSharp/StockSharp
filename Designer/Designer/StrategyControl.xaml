@@ -29,7 +29,7 @@
                             <dxdo:LayoutGroup ItemWidth="3*" DestroyOnClosingChildren="False">
                                 <dxdo:LayoutGroup >
                                     <dxdo:DocumentGroup DestroyOnClosingChildren="False" >
-                                        <dxdo:DocumentPanel Caption="{x:Static localization:LocalizedStrings.Strategy}">
+                                        <dxdo:DocumentPanel Caption="{x:Static localization:LocalizedStrings.Strategy}" AllowClose="False">
                                             <designer:DiagramDebuggerControl x:Name="DiagramDebuggerControl" Changed="OnDiagramDebuggerControlChanged"/>
                                         </dxdo:DocumentPanel>
                                     </dxdo:DocumentGroup>
@@ -41,22 +41,22 @@
                             <dxdo:LayoutGroup ItemWidth="3*" DestroyOnClosingChildren="False">
                                 <dxdo:LayoutGroup >
                                     <dxdo:DocumentGroup DestroyOnClosingChildren="False" >
-                                        <dxdo:DocumentPanel Caption="{x:Static localization:LocalizedStrings.Str3200}">
+                                        <dxdo:DocumentPanel Caption="{x:Static localization:LocalizedStrings.Str3200}" AllowClose="False">
                                             <xaml:Chart x:Name="Chart" />
                                         </dxdo:DocumentPanel>
-                                        <dxdo:DocumentPanel Caption="{x:Static localization:LocalizedStrings.Orders}">
+                                        <dxdo:DocumentPanel Caption="{x:Static localization:LocalizedStrings.Orders}" AllowClose="False">
                                             <xaml:OrderGrid x:Name="OrderGrid"/>
                                         </dxdo:DocumentPanel>
-                                        <dxdo:DocumentPanel Caption="{x:Static localization:LocalizedStrings.Str985}">
+                                        <dxdo:DocumentPanel Caption="{x:Static localization:LocalizedStrings.Str985}" AllowClose="False">
                                             <xaml:MyTradeGrid x:Name="MyTradeGrid"/>
                                         </dxdo:DocumentPanel>
-                                        <dxdo:DocumentPanel Caption="{x:Static localization:LocalizedStrings.Str862}">
+                                        <dxdo:DocumentPanel Caption="{x:Static localization:LocalizedStrings.Str862}" AllowClose="False">
                                             <xaml:EquityCurveChart x:Name="PositionCurve" />
                                         </dxdo:DocumentPanel>
-                                        <dxdo:DocumentPanel Caption="{x:Static localization:LocalizedStrings.Equity}">
+                                        <dxdo:DocumentPanel Caption="{x:Static localization:LocalizedStrings.Equity}" AllowClose="False">
                                             <xaml:EquityCurveChart x:Name="EquityCurve" />
                                         </dxdo:DocumentPanel>
-                                        <dxdo:DocumentPanel Caption="{x:Static localization:LocalizedStrings.Str436}">
+                                        <dxdo:DocumentPanel Caption="{x:Static localization:LocalizedStrings.Str436}" AllowClose="False">
                                             <xaml:StatisticParameterGrid x:Name="StatisticsGrid" />
                                         </dxdo:DocumentPanel>
                                     </dxdo:DocumentGroup>

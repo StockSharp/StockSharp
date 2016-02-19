@@ -41796,5 +41796,15 @@ namespace StockSharp.Localization
 		/// The timeout of sending data to the server.
 		/// </summary>
 		public static string WriteTimeOutDesc => GetString(WriteTimeOutDescKey);
+
+		/// <summary>
+		/// Themes.
+		/// </summary>
+		public const string ThemesKey = "Themes";
+
+		/// <summary>
+		/// Themes.
+		/// </summary>
+		public static string Themes => GetString(ThemesKey);
 	}
 }

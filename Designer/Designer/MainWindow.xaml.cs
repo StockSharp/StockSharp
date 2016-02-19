@@ -25,6 +25,7 @@ namespace StockSharp.Designer
 	using System.Windows.Input;
 	using System.Windows.Media.Imaging;
 
+	using DevExpress.Xpf.Core;
 	using DevExpress.Xpf.Docking;
 	using DevExpress.Xpf.Docking.Base;
 	using DevExpress.Xpf.Editors.Helpers;
@@ -355,6 +356,11 @@ namespace StockSharp.Designer
 		}
 
 		private void DockingManager_OnDockItemActivated(object sender, DockItemActivatedEventArgs ea)
+		{
+			DockItemActivated(ActiveDockContent);
+		}
+
+		private void DockingManager_OnDockItemClosed(object sender, DockItemClosedEventArgs e)
 		{
 			DockItemActivated(ActiveDockContent);
 		}
@@ -733,6 +739,7 @@ namespace StockSharp.Designer
 					settings.TryLoadSettings<SettingsStorage>("EmulationSettings", s => _emulationSettings.Load(s));
 					settings.TryLoadSettings<SettingsStorage>("Layout", s => _layoutManager.Load(s));
 					settings.TryLoadSettings<SettingsStorage>("Connector", s => _connector.Load(s));
+					settings.TryLoadSettings<string>("ThemeName", s => ThemeManager.ApplicationThemeName = s);
 				});
 		}
 
@@ -751,6 +758,7 @@ namespace StockSharp.Designer
 					settings.SetValue("EmulationSettings", _emulationSettings.Save());
 					settings.SetValue("Layout", _layoutManager.Save());
 					settings.SetValue("Connector", _connector.Save());
+					settings.SetValue("ThemeName", ThemeManager.ApplicationThemeName);
 
 					new XmlSerializer<SettingsStorage>().Serialize(settings, _settingsFile);
 				});
@@ -770,6 +778,16 @@ namespace StockSharp.Designer
 
 		private void DockItemActivated(object control)
 		{
+			if (control == null)
+			{
+				RibbonEmulationTab.DataContext = null;
+				RibbonLiveTab.DataContext = null;
+				RibbonDesignerTab.DataContext = null;
+				Ribbon.SelectedPage = RibbonCommonTab;
+
+				return;
+			}
+
 			control
 				.DoIf<object, DiagramEditorControl>(editor =>
 				{

@@ -13,7 +13,7 @@
 							FloatingDocumentContainer="DocumentHost">
         <dxdo:LayoutGroup Name="Root">
             <dxdo:LayoutGroup Orientation="Horizontal" ItemHeight="*">
-                <dxdo:LayoutPanel Caption="{x:Static localization:LocalizedStrings.Str3181}">
+                <dxdo:LayoutPanel Caption="{x:Static localization:LocalizedStrings.Str3181}" AllowClose="False">
                     <Grid>
                         <diagram:DiagramEditorControl x:Name="DiagramEditor" 
 														  SelectionChanged="OnDiagramEditorSelectionChanged"
@@ -27,7 +27,7 @@
 
         <dxdo:DockLayoutManager.AutoHideGroups>
             <dxdo:AutoHideGroup DockType="Right">
-                <dxdo:LayoutPanel Caption="{x:Static localization:LocalizedStrings.Str1507}">
+                <dxdo:LayoutPanel Caption="{x:Static localization:LocalizedStrings.Str1507}" AllowClose="False">
                     <diagram:PropertyGridEx x:Name="PropertyGridControl"
 												ShowAdvancedOptions="False" ShowDescriptionByTooltip="False" ShowPreview="False" ShowSearchBox="False"
 												ShowSortOptions="False" ShowSummary="True" ShowTitle="False"/>

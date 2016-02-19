@@ -17,13 +17,13 @@
             <dxdo:LayoutGroup Orientation="Horizontal" ItemHeight="3*">
 
                 <dxdo:LayoutGroup DestroyOnClosingChildren="False" ItemWidth="2*">
-                    <dxdo:LayoutPanel Caption="{x:Static localization:LocalizedStrings.Palette}">
+                    <dxdo:LayoutPanel Caption="{x:Static localization:LocalizedStrings.Palette}" AllowClose="False">
                         <diagram:DiagramPaletteControl x:Name="PaletteControl"/>
                     </dxdo:LayoutPanel>
                 </dxdo:LayoutGroup>
 
                 <dxdo:LayoutGroup DestroyOnClosingChildren="False" ItemWidth="10*">
-                    <dxdo:LayoutPanel Caption="{x:Static localization:LocalizedStrings.Str3181}">
+                    <dxdo:LayoutPanel Caption="{x:Static localization:LocalizedStrings.Str3181}" AllowClose="False">
                         <Grid>
                             <diagram:DiagramEditorControl x:Name="DiagramEditor" 
 														  SelectionChanged="DiagramEditor_OnSelectionChanged"
@@ -35,7 +35,7 @@
                 </dxdo:LayoutGroup>
 
                 <dxdo:LayoutGroup DestroyOnClosingChildren="False" ItemWidth="2*">
-                    <dxdo:LayoutPanel Caption="{x:Static localization:LocalizedStrings.Str1507}">
+                    <dxdo:LayoutPanel Caption="{x:Static localization:LocalizedStrings.Str1507}" AllowClose="False">
                         <diagram:PropertyGridEx x:Name="PropertyGridControl" 
 												ShowAdvancedOptions="False" ShowDescriptionByTooltip="False" ShowPreview="False" ShowSearchBox="False"
 												ShowSortOptions="False" ShowSummary="True" ShowTitle="False"/>
