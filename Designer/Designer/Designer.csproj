@@ -126,6 +126,7 @@
     <Compile Include="EmulationDiagramStrategy.cs" />
     <Compile Include="EmulationSettings.cs" />
     <Compile Include="Layout\LayoutManager.cs" />
+    <Compile Include="MarketDataSettingsEdit.cs" />
     <Compile Include="MarketDataSettingsEditor.cs" />
     <Compile Include="SolutionExplorerControl.xaml.cs">
       <DependentUpon>SolutionExplorerControl.xaml</DependentUpon>

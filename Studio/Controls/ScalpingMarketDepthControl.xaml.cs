@@ -506,9 +506,8 @@ namespace StockSharp.Studio.Controls
 		public override ValidationResult Validate(object value, CultureInfo cultureInfo)
 		{
 			var error = LocalizedStrings.Str3273;
-			decimal price;
 
-			if(!(value is decimal))
+			if (!(value is decimal))
 				return new ValidationResult(false, error);
 
 			return (decimal)value <= 0 ? 
