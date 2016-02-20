@@ -284,14 +284,15 @@ namespace StockSharp.Xaml
 		/// <summary>
 		/// To edit the proxy settings.
 		/// </summary>
-		public static void EditProxySettigs()
+		/// <param name="owner">Parent window.</param>
+		public static void EditProxySettings(Window owner)
 		{
 			var wnd = new ProxyEditorWindow
 			{
 				ProxySettings = ProxySettings.Clone()
 			};
 
-			if (!wnd.ShowModal())
+			if (!wnd.ShowModal(owner))
 				return;
 
 			ProxySettings.Load(wnd.ProxySettings.Save());

@@ -105,7 +105,7 @@ namespace StockSharp.Xaml
 
 		private void Proxy_OnClick(object sender, RoutedEventArgs e)
 		{
-			BaseApplication.EditProxySettigs();
+			BaseApplication.EditProxySettings(this);
 		}
 	}
 }

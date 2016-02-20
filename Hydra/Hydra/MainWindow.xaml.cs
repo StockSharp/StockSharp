@@ -1081,7 +1081,7 @@ namespace StockSharp.Hydra
 
 		private void ProxySettings_Click(object sender, RoutedEventArgs e)
 		{
-			BaseApplication.EditProxySettigs();
+			BaseApplication.EditProxySettings(this);
 		}
 
 		void IDisposable.Dispose()
