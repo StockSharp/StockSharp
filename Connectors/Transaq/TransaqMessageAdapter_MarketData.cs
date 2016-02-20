@@ -18,6 +18,7 @@ namespace StockSharp.Transaq
 	using System;
 	using System.Collections.Generic;
 	using System.Linq;
+	using System.ComponentModel;
 
 	using Ecng.Collections;
 	using Ecng.Common;
@@ -192,6 +193,7 @@ namespace StockSharp.Transaq
 		/// <summary>
 		/// Список доступных периодов свечей.
 		/// </summary>
+		[Browsable(false)]
 		public IEnumerable<TimeSpan> CandleTimeFrames => _candlePeriods.CachedValues;
 
 		/// <summary>

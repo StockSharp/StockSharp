@@ -90,9 +90,9 @@ namespace StockSharp.BitStamp
 		{
 			base.Save(storage);
 
-			storage.SetValue("Key", Key);
-			storage.SetValue("Secret", Secret);
-			storage.SetValue("ClientId", ClientId);
+			storage.SetValue(nameof(Key), Key);
+			storage.SetValue(nameof(Secret), Secret);
+			storage.SetValue(nameof(ClientId), ClientId);
 		}
 
 		/// <summary>
@@ -103,9 +103,9 @@ namespace StockSharp.BitStamp
 		{
 			base.Load(storage);
 
-			Key = storage.GetValue<SecureString>("Key");
-			Secret = storage.GetValue<SecureString>("Secret");
-			ClientId = storage.GetValue<int>("ClientId");
+			Key = storage.GetValue<SecureString>(nameof(Key));
+			Secret = storage.GetValue<SecureString>(nameof(Secret));
+			ClientId = storage.GetValue<int>(nameof(ClientId));
 		}
 
 		/// <summary>

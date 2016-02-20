@@ -105,10 +105,10 @@ namespace StockSharp.LMAX
 		{
 			base.Save(storage);
 
-			storage.SetValue("Login", Login);
-			storage.SetValue("Password", Password);
-			storage.SetValue("IsDemo", IsDemo);
-			storage.SetValue("IsDownloadSecurityFromSite", IsDownloadSecurityFromSite);
+			storage.SetValue(nameof(Login), Login);
+			storage.SetValue(nameof(Password), Password);
+			storage.SetValue(nameof(IsDemo), IsDemo);
+			storage.SetValue(nameof(IsDownloadSecurityFromSite), IsDownloadSecurityFromSite);
 		}
 
 		/// <summary>
@@ -119,10 +119,10 @@ namespace StockSharp.LMAX
 		{
 			base.Load(storage);
 
-			Login = storage.GetValue<string>("Login");
-			Password = storage.GetValue<SecureString>("Password");
-			IsDemo = storage.GetValue<bool>("IsDemo");
-			IsDownloadSecurityFromSite = storage.GetValue<bool>("IsDownloadSecurityFromSite");
+			Login = storage.GetValue<string>(nameof(Login));
+			Password = storage.GetValue<SecureString>(nameof(Password));
+			IsDemo = storage.GetValue<bool>(nameof(IsDemo));
+			IsDownloadSecurityFromSite = storage.GetValue<bool>(nameof(IsDownloadSecurityFromSite));
 		}
 
 		/// <summary>

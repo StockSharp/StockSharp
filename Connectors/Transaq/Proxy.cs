@@ -15,16 +15,18 @@ Copyright 2010 by StockSharp, LLC
 #endregion S# License
 namespace StockSharp.Transaq
 {
+	using System;
 	using System.Net;
 	using System.Security;
 
 	using Ecng.Common;
 	using Ecng.ComponentModel;
+	using Ecng.Serialization;
 
 	/// <summary>
 	/// Прокси.
 	/// </summary>
-	public class Proxy
+	public class Proxy : IPersistable
 	{
 		/// <summary>
 		/// Тип протокола, который использует прокси.
@@ -50,6 +52,22 @@ namespace StockSharp.Transaq
 		{
 			get { return _password.To<string>(); }
 			set { _password = value.To<SecureString>(); }
+		}
+
+		void IPersistable.Load(SettingsStorage storage)
+		{
+			Address = storage.GetValue<EndPoint>(nameof(Address));
+			Login = storage.GetValue<string>(nameof(Login));
+			Password = storage.GetValue<string>(nameof(Password));
+			Type = storage.GetValue<ProxyTypes>(nameof(Type));
+		}
+
+		void IPersistable.Save(SettingsStorage storage)
+		{
+			storage.SetValue(nameof(Address), Address.To<string>());
+			storage.SetValue(nameof(Login), Login);
+			storage.SetValue(nameof(Password), Password);
+			storage.SetValue(nameof(Type), Type.To<string>());
 		}
 	}
 

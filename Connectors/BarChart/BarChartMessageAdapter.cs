@@ -500,8 +500,8 @@ namespace StockSharp.BarChart
 		{
 			base.Save(storage);
 
-			storage.SetValue("Login", Login);
-			storage.SetValue("Password", Password);
+			storage.SetValue(nameof(Login), Login);
+			storage.SetValue(nameof(Password), Password);
 		}
 
 		/// <summary>
@@ -512,8 +512,8 @@ namespace StockSharp.BarChart
 		{
 			base.Load(storage);
 
-			Login = storage.GetValue<string>("Login");
-			Password = storage.GetValue<SecureString>("Password");
+			Login = storage.GetValue<string>(nameof(Login));
+			Password = storage.GetValue<SecureString>(nameof(Password));
 		}
 	}
 }

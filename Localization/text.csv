@@ -1675,8 +1675,8 @@ Str1771;General (Quik);Общие (Quik)
 Str1772;Use for old DDE + Trans2Quik connection.;Использовать для старое подключение DDE + Trans2Quik.
 Str1773;Path to Quik;Путь к Quik
 Str1774;Path to directory, where Quik is installed (or path to info.exe file).;Путь к директории, где установлен Quik (или путь к файлу info.exe).
-Str1775;Load orders placed by hand;Загружать ручные заявки
-Str1776;Load orders sent to Quik by hand.;Загружать заявки, поданные вручную через Quik.
+Str1775;Load orders placed manually;Загружать ручные заявки
+Str1776;Load orders sent to Quik manually.;Загружать заявки, поданные вручную через Quik.
 Str1777;Dll file;Имя dll-файла
 Str1778;Dll file, containing Quik API.;Имя dll-файла, содержащее Quik API.
 Str1779;DDE server;DDE сервер
@@ -4135,7 +4135,7 @@ AllDepths;All depths;Все стаканы
 RequestAllDepths;Request depths for all securities.;Запрашиваемое стаканы по всем инструментам.
 ExportSchema;Export schema to container;Экспортировать схему в контейнер
 IsControlConnectionLost;Control connection lost.;Контролировать потерю соединения с роутером.
-Override;Override.;Перезаписать.
+Override;Override;Перезаписать
 OverrideDll;Override dll file from resources. Turned on by default.;Перезаписать файл библиотеки из ресурсов. По-умолчанию файл будет перезаписан.
 WrongTimeOffset;Time {0} has wrong offset. Expected {1}.;Время {0} имеет неправильное смещение. Ожидается {1}.
 TimeOffset;Time offset;Смещение времени

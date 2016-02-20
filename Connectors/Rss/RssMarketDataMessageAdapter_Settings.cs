@@ -89,8 +89,8 @@ namespace StockSharp.Rss
 		{
 			base.Load(storage);
 
-			Address = storage.GetValue<Uri>("Address");
-			CustomDateFormat = storage.GetValue<string>("CustomDateFormat");
+			Address = storage.GetValue<Uri>(nameof(Address));
+			CustomDateFormat = storage.GetValue<string>(nameof(CustomDateFormat));
 		}
 
 		/// <summary>
@@ -101,8 +101,8 @@ namespace StockSharp.Rss
 		{
 			base.Save(storage);
 
-			storage.SetValue("Address", Address.To<string>());
-			storage.SetValue("CustomDateFormat", CustomDateFormat);
+			storage.SetValue(nameof(Address), Address.To<string>());
+			storage.SetValue(nameof(CustomDateFormat), CustomDateFormat);
 		}
 
 		/// <summary>

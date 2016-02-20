@@ -208,30 +208,25 @@ namespace StockSharp.Transaq
 		/// <param name="storage">Хранилище настроек.</param>
 		public override void Save(SettingsStorage storage)
 		{
-			storage.SetValue("Login", Login);
-			storage.SetValue("Password", Password);
-			storage.SetValue("Address", Address.To<string>());
-			storage.SetValue("DllPath", DllPath);
-			storage.SetValue("ApiLogsPath", ApiLogsPath);
-			storage.SetValue("ApiLogLevel", ApiLogLevel.To<string>());
-			storage.SetValue("IsHFT", IsHFT);
-			storage.SetValue("MarketDataInterval", MarketDataInterval);
-
-			storage.SetValue("HasProxy", Proxy != null);
+			storage.SetValue(nameof(Login), Login);
+			storage.SetValue(nameof(Password), Password);
+			storage.SetValue(nameof(Address), Address.To<string>());
+			storage.SetValue(nameof(DllPath), DllPath);
+			storage.SetValue(nameof(ApiLogsPath), ApiLogsPath);
+			storage.SetValue(nameof(ApiLogLevel), ApiLogLevel.To<string>());
+			storage.SetValue(nameof(IsHFT), IsHFT);
+			storage.SetValue(nameof(MarketDataInterval), MarketDataInterval);
 
 			if (Proxy != null)
 			{
-				storage.SetValue("ProxyAddress", Proxy.Address.To<string>());
-				storage.SetValue("ProxyLogin", Proxy.Login);
-				storage.SetValue("ProxyPassword", Proxy.Password);
-				storage.SetValue("ProxyType", Proxy.Type.To<string>());
+				storage.SetValue(nameof(Proxy), Proxy.Save());
 			}
 
 			// не нужно сохранять это свойство, так как иначе окно смены пароля будет показывать каждый раз
 			//storage.SetValue("ChangePasswordOnConnect", ShowChangePasswordWindowOnConnect);
 
-			storage.SetValue("MicexRegisters", MicexRegisters);
-			storage.SetValue("OverrideDll", OverrideDll);
+			storage.SetValue(nameof(MicexRegisters), MicexRegisters);
+			storage.SetValue(nameof(OverrideDll), OverrideDll);
 
 			base.Save(storage);
 		}
@@ -242,30 +237,26 @@ namespace StockSharp.Transaq
 		/// <param name="storage">Хранилище настроек.</param>
 		public override void Load(SettingsStorage storage)
 		{
-			Login = storage.GetValue<string>("Login");
-			Password = storage.GetValue<SecureString>("Password");
-			Address = storage.GetValue<EndPoint>("Address");
-			DllPath = storage.GetValue<string>("DllPath");
-			ApiLogsPath = storage.GetValue<string>("ApiLogsPath");
-			ApiLogLevel = storage.GetValue<ApiLogLevels>("ApiLogLevel");
-			IsHFT = storage.GetValue<bool>("IsHFT");
-			MarketDataInterval = storage.GetValue<TimeSpan?>("MarketDataInterval");
+			Login = storage.GetValue<string>(nameof(Login));
+			Password = storage.GetValue<SecureString>(nameof(Password));
+			Address = storage.GetValue<EndPoint>(nameof(Address));
+			DllPath = storage.GetValue<string>(nameof(DllPath));
+			ApiLogsPath = storage.GetValue<string>(nameof(ApiLogsPath));
+			ApiLogLevel = storage.GetValue<ApiLogLevels>(nameof(ApiLogLevel));
+			IsHFT = storage.GetValue<bool>(nameof(IsHFT));
+			MarketDataInterval = storage.GetValue<TimeSpan?>(nameof(MarketDataInterval));
 
-			if (storage.GetValue<bool>("HasProxy"))
+			var proxy = storage.GetValue<SettingsStorage>("Proxy");
+			if (proxy != null)
 			{
-				Proxy = new Proxy
-				{
-					Address = storage.GetValue<EndPoint>("ProxyAddress"),
-					Login = storage.GetValue<string>("ProxyLogin"),
-					Password = storage.GetValue<string>("ProxyPassword"),
-					Type = storage.GetValue<ProxyTypes>("ProxyType"),
-				};
+				Proxy = new Proxy();
+				((IPersistable)Proxy).Load(proxy);
 			}
 
 			//ShowChangePasswordWindowOnConnect = storage.GetValue<bool>("ChangePasswordOnConnect");
 
-			MicexRegisters = storage.GetValue("MicexRegisters", true);
-			OverrideDll = storage.GetValue<bool>("OverrideDll");
+			MicexRegisters = storage.GetValue(nameof(MicexRegisters), true);
+			OverrideDll = storage.GetValue<bool>(nameof(OverrideDll));
 
 			base.Load(storage);
 		}

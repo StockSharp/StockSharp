@@ -27,6 +27,7 @@ namespace StockSharp.IQFeed
 
 	using StockSharp.Messages;
 	using StockSharp.Localization;
+	using StockSharp.Xaml.PropertyGrid;
 
 	using Xceed.Wpf.Toolkit.PropertyGrid.Attributes;
 
@@ -183,6 +184,7 @@ namespace StockSharp.IQFeed
 		[DisplayNameLoc(LocalizedStrings.Str2133Key)]
 		[DescriptionLoc(LocalizedStrings.Str2134Key)]
 		[PropertyOrder(1)]
+		[Editor(typeof(SecurityTypesComboBoxEditor), typeof(SecurityTypesComboBoxEditor))]
 		public IEnumerable<SecurityTypes> SecurityTypesFilter
 		{
 			get { return _securityTypesFilter; }
@@ -258,23 +260,23 @@ namespace StockSharp.IQFeed
 		{
 			base.Load(storage);
 
-			Level1Address = storage.GetValue<EndPoint>("Level1Address");
-			Level2Address = storage.GetValue<EndPoint>("Level2Address");
-			LookupAddress = storage.GetValue<EndPoint>("LookupAddress");
-			AdminAddress = storage.GetValue<EndPoint>("AdminAddress");
-			DerivativeAddress = storage.GetValue<EndPoint>("DerivativeAddress");
+			Level1Address = storage.GetValue<EndPoint>(nameof(Level1Address));
+			Level2Address = storage.GetValue<EndPoint>(nameof(Level2Address));
+			LookupAddress = storage.GetValue<EndPoint>(nameof(LookupAddress));
+			AdminAddress = storage.GetValue<EndPoint>(nameof(AdminAddress));
+			DerivativeAddress = storage.GetValue<EndPoint>(nameof(DerivativeAddress));
 
-			IsDownloadSecurityFromSite = storage.GetValue<bool>("IsDownloadSecurityFromSite");
-			SecuritiesFile = storage.GetValue<string>("SecuritiesFile");
+			IsDownloadSecurityFromSite = storage.GetValue<bool>(nameof(IsDownloadSecurityFromSite));
+			SecuritiesFile = storage.GetValue<string>(nameof(SecuritiesFile));
 
 			SecurityTypesFilter = storage
-									.GetValue<string>("SecurityTypesFilter")
+									.GetValue<string>(nameof(SecurityTypesFilter))
 									.Split(",")
 									.Select(name => name.To<SecurityTypes>())
 									.ToArray();
 
 			Level1Columns = storage
-								.GetValue<string>("Level1Columns")
+								.GetValue<string>(nameof(Level1Columns))
 								.Split(",")
 								.Select(name => Level1ColumnRegistry[name])
 								.ToArray();
@@ -288,17 +290,17 @@ namespace StockSharp.IQFeed
 		{
 			base.Save(storage);
 
-			storage.SetValue("Level1Address", Level1Address.To<string>());
-			storage.SetValue("Level2Address", Level2Address.To<string>());
-			storage.SetValue("LookupAddress", LookupAddress.To<string>());
-			storage.SetValue("AdminAddress", AdminAddress.To<string>());
-			storage.SetValue("DerivativeAddress", DerivativeAddress.To<string>());
+			storage.SetValue(nameof(Level1Address), Level1Address.To<string>());
+			storage.SetValue(nameof(Level2Address), Level2Address.To<string>());
+			storage.SetValue(nameof(LookupAddress), LookupAddress.To<string>());
+			storage.SetValue(nameof(AdminAddress), AdminAddress.To<string>());
+			storage.SetValue(nameof(DerivativeAddress), DerivativeAddress.To<string>());
 
-			storage.SetValue("IsDownloadSecurityFromSite", IsDownloadSecurityFromSite);
-			storage.SetValue("SecuritiesFile", SecuritiesFile);
+			storage.SetValue(nameof(IsDownloadSecurityFromSite), IsDownloadSecurityFromSite);
+			storage.SetValue(nameof(SecuritiesFile), SecuritiesFile);
 
-			storage.SetValue("SecurityTypesFilter", SecurityTypesFilter.Select(t => t.To<string>()).Join(","));
-			storage.SetValue("Level1Columns", Level1Columns.Select(c => c.Name).Join(","));
+			storage.SetValue(nameof(SecurityTypesFilter), SecurityTypesFilter.Select(t => t.To<string>()).Join(","));
+			storage.SetValue(nameof(Level1Columns), Level1Columns.Select(c => c.Name).Join(","));
 		}
 
 		/// <summary>

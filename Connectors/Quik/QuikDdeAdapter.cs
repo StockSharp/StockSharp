@@ -1764,23 +1764,23 @@ namespace StockSharp.Quik
 		/// <param name="storage">Хранилище настроек.</param>
 		public override void Save(SettingsStorage storage)
 		{
-			storage.SetValue("SecuritiesTable", SecuritiesTable);
-			storage.SetValue("TradesTable", TradesTable);
-			storage.SetValue("OrdersTable", OrdersTable);
-			storage.SetValue("StopOrdersTable", StopOrdersTable);
-			storage.SetValue("MyTradesTable", MyTradesTable);
-			storage.SetValue("QuotesTable", QuotesTable);
-			storage.SetValue("EquityPortfoliosTable", EquityPortfoliosTable);
-			storage.SetValue("EquityPositionsTable", EquityPositionsTable);
-			storage.SetValue("DerivativePortfoliosTable", DerivativePortfoliosTable);
-			storage.SetValue("DerivativePositionsTable", DerivativePositionsTable);
-			storage.SetValue("CurrencyPortfoliosTable", CurrencyPortfoliosTable);
+			storage.SetValue(nameof(SecuritiesTable), SecuritiesTable);
+			storage.SetValue(nameof(TradesTable), TradesTable);
+			storage.SetValue(nameof(OrdersTable), OrdersTable);
+			storage.SetValue(nameof(StopOrdersTable), StopOrdersTable);
+			storage.SetValue(nameof(MyTradesTable), MyTradesTable);
+			storage.SetValue(nameof(QuotesTable), QuotesTable);
+			storage.SetValue(nameof(EquityPortfoliosTable), EquityPortfoliosTable);
+			storage.SetValue(nameof(EquityPositionsTable), EquityPositionsTable);
+			storage.SetValue(nameof(DerivativePortfoliosTable), DerivativePortfoliosTable);
+			storage.SetValue(nameof(DerivativePositionsTable), DerivativePositionsTable);
+			storage.SetValue(nameof(CurrencyPortfoliosTable), CurrencyPortfoliosTable);
 
-			storage.SetValue("UseCurrencyPortfolios", UseCurrencyPortfolios);
-			storage.SetValue("UseSecuritiesChange", UseSecuritiesChange);
+			storage.SetValue(nameof(UseCurrencyPortfolios), UseCurrencyPortfolios);
+			storage.SetValue(nameof(UseSecuritiesChange), UseSecuritiesChange);
 
-			storage.SetValue("DdeServer", DdeServer);
-			storage.SetValue("SupportManualOrders", SupportManualOrders);
+			storage.SetValue(nameof(DdeServer), DdeServer);
+			storage.SetValue(nameof(SupportManualOrders), SupportManualOrders);
 
 			base.Save(storage);
 		}
@@ -1791,23 +1791,23 @@ namespace StockSharp.Quik
 		/// <param name="storage">Хранилище настроек.</param>
 		public override void Load(SettingsStorage storage)
 		{
-			SecuritiesTable = storage.GetValue<DdeTable>("SecuritiesTable");
-			TradesTable = storage.GetValue<DdeTable>("TradesTable");
-			OrdersTable = storage.GetValue<DdeTable>("OrdersTable");
-			StopOrdersTable = storage.GetValue<DdeTable>("StopOrdersTable");
-			MyTradesTable = storage.GetValue<DdeTable>("MyTradesTable");
-			QuotesTable = storage.GetValue<DdeTable>("QuotesTable");
-			EquityPortfoliosTable = storage.GetValue<DdeTable>("EquityPortfoliosTable");
-			EquityPositionsTable = storage.GetValue<DdeTable>("EquityPositionsTable");
-			DerivativePortfoliosTable = storage.GetValue<DdeTable>("DerivativePortfoliosTable");
-			DerivativePositionsTable = storage.GetValue<DdeTable>("DerivativePositionsTable");
-			CurrencyPortfoliosTable = storage.GetValue<DdeTable>("CurrencyPortfoliosTable");
+			SecuritiesTable = storage.GetValue<DdeTable>(nameof(SecuritiesTable));
+			TradesTable = storage.GetValue<DdeTable>(nameof(TradesTable));
+			OrdersTable = storage.GetValue<DdeTable>(nameof(OrdersTable));
+			StopOrdersTable = storage.GetValue<DdeTable>(nameof(StopOrdersTable));
+			MyTradesTable = storage.GetValue<DdeTable>(nameof(MyTradesTable));
+			QuotesTable = storage.GetValue<DdeTable>(nameof(QuotesTable));
+			EquityPortfoliosTable = storage.GetValue<DdeTable>(nameof(EquityPortfoliosTable));
+			EquityPositionsTable = storage.GetValue<DdeTable>(nameof(EquityPositionsTable));
+			DerivativePortfoliosTable = storage.GetValue<DdeTable>(nameof(DerivativePortfoliosTable));
+			DerivativePositionsTable = storage.GetValue<DdeTable>(nameof(DerivativePositionsTable));
+			CurrencyPortfoliosTable = storage.GetValue<DdeTable>(nameof(CurrencyPortfoliosTable));
 
-			UseCurrencyPortfolios = storage.GetValue<bool>("UseCurrencyPortfolios");
-			UseSecuritiesChange = storage.GetValue<bool>("UseSecuritiesChange");
+			UseCurrencyPortfolios = storage.GetValue<bool>(nameof(UseCurrencyPortfolios));
+			UseSecuritiesChange = storage.GetValue<bool>(nameof(UseSecuritiesChange));
 
-			DdeServer = storage.GetValue<string>("DdeServer");
-			SupportManualOrders = storage.GetValue<bool>("SupportManualOrders");
+			DdeServer = storage.GetValue<string>(nameof(DdeServer));
+			SupportManualOrders = storage.GetValue<bool>(nameof(SupportManualOrders));
 
 			base.Load(storage);
 		}

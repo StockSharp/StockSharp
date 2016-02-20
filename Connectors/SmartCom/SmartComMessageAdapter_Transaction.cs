@@ -17,6 +17,7 @@ namespace StockSharp.SmartCom
 {
 	using System;
 	using System.Collections.Generic;
+	using System.ComponentModel;
 
 	using Ecng.Collections;
 	using Ecng.Common;
@@ -26,12 +27,13 @@ namespace StockSharp.SmartCom
 	using StockSharp.Messages;
 	using StockSharp.SmartCom.Native;
 	using StockSharp.Localization;
-
+	
 	partial class SmartComMessageAdapter
 	{
 		/// <summary>
 		/// Ассоциация площадок и их кодами, для заполнения <see cref="PortfolioMessage.BoardCode"/>.
 		/// </summary>
+		[Browsable(false)]
 		public IDictionary<string, string> PortfolioBoardCodes { get; }
 
 		private void ProcessRegisterMessage(OrderRegisterMessage regMsg)

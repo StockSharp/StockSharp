@@ -110,9 +110,9 @@ namespace StockSharp.ETrade
 		{
 			base.Load(storage);
 
-			ConsumerKey = storage.GetValue<string>("ConsumerKey");
-			ConsumerSecret = storage.GetValue<SecureString>("ConsumerSecret");
-			Sandbox = storage.GetValue<bool>("Sandbox");
+			ConsumerKey = storage.GetValue<string>(nameof(ConsumerKey));
+			ConsumerSecret = storage.GetValue<SecureString>(nameof(ConsumerSecret));
+			Sandbox = storage.GetValue<bool>(nameof(Sandbox));
 		}
 
 		/// <summary>
@@ -123,9 +123,9 @@ namespace StockSharp.ETrade
 		{
 			base.Save(storage);
 
-			storage.SetValue("ConsumerKey", ConsumerKey);
-			storage.SetValue("ConsumerSecret", ConsumerSecret);
-			storage.SetValue("Sandbox", Sandbox);
+			storage.SetValue(nameof(ConsumerKey), ConsumerKey);
+			storage.SetValue(nameof(ConsumerSecret), ConsumerSecret);
+			storage.SetValue(nameof(Sandbox), Sandbox);
 		}
 
 		/// <summary>

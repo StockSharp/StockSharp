@@ -23,13 +23,12 @@ namespace StockSharp.Xaml
 	using Ecng.ComponentModel;
 
 	using StockSharp.Messages;
+	using StockSharp.Localization;
 
 	using Xceed.Wpf.Toolkit;
 	using Xceed.Wpf.Toolkit.Primitives;
 
 	using ComboItem = System.Collections.Generic.KeyValuePair<StockSharp.Messages.SecurityTypes, string>;
-
-	using StockSharp.Localization;
 
 	/// <summary>
 	/// The drop-down list to select the instrument types.

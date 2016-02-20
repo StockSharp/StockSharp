@@ -182,6 +182,7 @@ namespace StockSharp.Messages
 		/// <summary>
 		/// <see cref="OrderCancelMessage.Volume"/> required to cancel orders.
 		/// </summary>
+		[Browsable(false)]
 		public virtual bool OrderCancelVolumeRequired { get; } = false;
 
 		/// <summary>
@@ -212,6 +213,7 @@ namespace StockSharp.Messages
 		/// <summary>
 		/// Connection tracking settings <see cref="IMessageAdapter"/> with a server.
 		/// </summary>
+		[CategoryLoc(LocalizedStrings.Str174Key)]
 		public ReConnectionSettings ReConnectionSettings { get; } = new ReConnectionSettings();
 
 		private IdGenerator _transactionIdGenerator;
@@ -252,6 +254,7 @@ namespace StockSharp.Messages
 		/// <summary>
 		/// Associated board code. The default is ALL.
 		/// </summary>
+		[CategoryLoc(LocalizedStrings.Str186Key)]
 		[DisplayNameLoc(LocalizedStrings.AssociatedSecurityBoardKey)]
 		[DescriptionLoc(LocalizedStrings.Str199Key)]
 		public string AssociatedBoardCode { get; set; } = "ALL";

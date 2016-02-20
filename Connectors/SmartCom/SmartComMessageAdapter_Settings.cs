@@ -135,12 +135,12 @@ namespace StockSharp.SmartCom
 		{
 			base.Save(storage);
 
-			storage.SetValue("Login", Login);
-			storage.SetValue("Password", Password);
-			storage.SetValue("Address", Address.To<string>());
-			storage.SetValue("Version", (int)Version);
-			storage.SetValue("ClientSettings", ClientSettings);
-			storage.SetValue("ServerSettings", ClientSettings);
+			storage.SetValue(nameof(Login), Login);
+			storage.SetValue(nameof(Password), Password);
+			storage.SetValue(nameof(Address), Address.To<string>());
+			storage.SetValue(nameof(Version), (int)Version);
+			storage.SetValue(nameof(ClientSettings), ClientSettings);
+			storage.SetValue(nameof(ServerSettings), ClientSettings);
 		}
 
 		/// <summary>
@@ -151,12 +151,12 @@ namespace StockSharp.SmartCom
 		{
 			base.Load(storage);
 
-			Login = storage.GetValue<string>("Login");
-			Password = storage.GetValue<SecureString>("Password");
-			Address = storage.GetValue<EndPoint>("Address");
-			Version = (SmartComVersions)storage.GetValue("Version", 2);
-			ClientSettings = storage.GetValue<string>("ClientSettings");
-			ServerSettings = storage.GetValue<string>("ServerSettings");
+			Login = storage.GetValue<string>(nameof(Login));
+			Password = storage.GetValue<SecureString>(nameof(Password));
+			Address = storage.GetValue<EndPoint>(nameof(Address));
+			Version = (SmartComVersions)storage.GetValue(nameof(Version), 2);
+			ClientSettings = storage.GetValue<string>(nameof(ClientSettings));
+			ServerSettings = storage.GetValue<string>(nameof(ServerSettings));
 		}
 
 		/// <summary>

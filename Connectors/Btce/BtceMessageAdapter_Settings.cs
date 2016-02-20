@@ -81,8 +81,8 @@ namespace StockSharp.Btce
 		{
 			base.Save(storage);
 
-			storage.SetValue("Key", Key);
-			storage.SetValue("Secret", Secret);
+			storage.SetValue(nameof(Key), Key);
+			storage.SetValue(nameof(Secret), Secret);
 		}
 
 		/// <summary>
@@ -93,8 +93,8 @@ namespace StockSharp.Btce
 		{
 			base.Load(storage);
 
-			Key = storage.GetValue<SecureString>("Key");
-			Secret = storage.GetValue<SecureString>("Secret");
+			Key = storage.GetValue<SecureString>(nameof(Key));
+			Secret = storage.GetValue<SecureString>(nameof(Secret));
 		}
 
 		/// <summary>

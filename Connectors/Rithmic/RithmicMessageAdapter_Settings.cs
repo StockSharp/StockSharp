@@ -417,22 +417,22 @@ namespace StockSharp.Rithmic
 		{
 			base.Load(storage);
 
-			UserName = storage.GetValue<string>("UserName");
-			Password = storage.GetValue<SecureString>("Password");
-			TransactionalUserName = storage.GetValue<string>("TransactionalUserName");
-			TransactionalPassword = storage.GetValue<SecureString>("TransactionalPassword");
-			AdminConnectionPoint = storage.GetValue<string>("AdminConnectionPoint");
-			MarketDataConnectionPoint = storage.GetValue<string>("MarketDataConnectionPoint");
-			TransactionConnectionPoint = storage.GetValue<string>("TransactionConnectionPoint");
-			PositionConnectionPoint = storage.GetValue<string>("PositionConnectionPoint");
-			HistoricalConnectionPoint = storage.GetValue<string>("HistoricalConnectionPoint");
-			CertFile = storage.GetValue<string>("CertFile");
-			DomainServerAddress = storage.GetValue<string>("DomainServerAddress");
-			DomainName = storage.GetValue<string>("DomainName");
-			LicenseServerAddress = storage.GetValue<string>("LicenseServerAddress");
-			LocalBrokerAddress = storage.GetValue<string>("LocalBrokerAddress");
-			LoggerAddress = storage.GetValue<string>("LoggerAddress");
-			LogFileName = storage.GetValue<string>("LogFileName");
+			UserName = storage.GetValue<string>(nameof(UserName));
+			Password = storage.GetValue<SecureString>(nameof(Password));
+			TransactionalUserName = storage.GetValue<string>(nameof(TransactionalUserName));
+			TransactionalPassword = storage.GetValue<SecureString>(nameof(TransactionalPassword));
+			AdminConnectionPoint = storage.GetValue<string>(nameof(AdminConnectionPoint));
+			MarketDataConnectionPoint = storage.GetValue<string>(nameof(MarketDataConnectionPoint));
+			TransactionConnectionPoint = storage.GetValue<string>(nameof(TransactionConnectionPoint));
+			PositionConnectionPoint = storage.GetValue<string>(nameof(PositionConnectionPoint));
+			HistoricalConnectionPoint = storage.GetValue<string>(nameof(HistoricalConnectionPoint));
+			CertFile = storage.GetValue<string>(nameof(CertFile));
+			DomainServerAddress = storage.GetValue<string>(nameof(DomainServerAddress));
+			DomainName = storage.GetValue<string>(nameof(DomainName));
+			LicenseServerAddress = storage.GetValue<string>(nameof(LicenseServerAddress));
+			LocalBrokerAddress = storage.GetValue<string>(nameof(LocalBrokerAddress));
+			LoggerAddress = storage.GetValue<string>(nameof(LoggerAddress));
+			LogFileName = storage.GetValue<string>(nameof(LogFileName));
 		}
 
 		/// <summary>
@@ -443,22 +443,22 @@ namespace StockSharp.Rithmic
 		{
 			base.Save(storage);
 
-			storage.SetValue("UserName", UserName);
-			storage.SetValue("Password", Password);
-			storage.SetValue("TransactionalUserName", TransactionalUserName);
-			storage.SetValue("TransactionalPassword", TransactionalPassword);
-			storage.SetValue("AdminConnectionPoint", AdminConnectionPoint);
-			storage.SetValue("MarketDataConnectionPoint", MarketDataConnectionPoint);
-			storage.SetValue("TransactionConnectionPoint", TransactionConnectionPoint);
-			storage.SetValue("PositionConnectionPoint", PositionConnectionPoint);
-			storage.SetValue("HistoricalConnectionPoint", HistoricalConnectionPoint);
-			storage.SetValue("CertFile", CertFile);
-			storage.SetValue("DomainServerAddress", DomainServerAddress);
-			storage.SetValue("DomainName", DomainName);
-			storage.SetValue("LicenseServerAddress", LicenseServerAddress);
-			storage.SetValue("LocalBrokerAddress", LocalBrokerAddress);
-			storage.SetValue("LoggerAddress", LoggerAddress);
-			storage.SetValue("LogFileName", LogFileName);
+			storage.SetValue(nameof(UserName), UserName);
+			storage.SetValue(nameof(Password), Password);
+			storage.SetValue(nameof(TransactionalUserName), TransactionalUserName);
+			storage.SetValue(nameof(TransactionalPassword), TransactionalPassword);
+			storage.SetValue(nameof(AdminConnectionPoint), AdminConnectionPoint);
+			storage.SetValue(nameof(MarketDataConnectionPoint), MarketDataConnectionPoint);
+			storage.SetValue(nameof(TransactionConnectionPoint), TransactionConnectionPoint);
+			storage.SetValue(nameof(PositionConnectionPoint), PositionConnectionPoint);
+			storage.SetValue(nameof(HistoricalConnectionPoint), HistoricalConnectionPoint);
+			storage.SetValue(nameof(CertFile), CertFile);
+			storage.SetValue(nameof(DomainServerAddress), DomainServerAddress);
+			storage.SetValue(nameof(DomainName), DomainName);
+			storage.SetValue(nameof(LicenseServerAddress), LicenseServerAddress);
+			storage.SetValue(nameof(LocalBrokerAddress), LocalBrokerAddress);
+			storage.SetValue(nameof(LoggerAddress), LoggerAddress);
+			storage.SetValue(nameof(LogFileName), LogFileName);
 		}
 
 		/// <summary>
