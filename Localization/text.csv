@@ -4207,6 +4207,13 @@ WriteTimeOut;Timeout (send);Время ожидания (отправка)
 ReadTimeOutDesc;The timeout of getting data from the server.;Время ожидания получения данных от сервера.
 WriteTimeOutDesc;The timeout of sending data to the server.;Время ожидания отправки данных на сервер.
 Themes;Themes;Темы
+Equal;Equal;Равно
+NotEqual;Not equal;Не равно
+Greater;Greater;Больше
+GreaterOrEqual;Greater or equal;Больше или равно
+Less;Less;Меньше
+LessOrEqual;Less or equal;Меньше или равно
+Any;Any;Любое
 DocStr0;Button activation alert settings;Кнопка активации настроек сигнала
 DocStr1;Initializes a new instance of the {0};Создать {0}
 DocStr2;Load settings;Загрузить настройки
