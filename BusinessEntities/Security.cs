@@ -902,28 +902,28 @@ namespace StockSharp.BusinessEntities
 			}
 		}
 
-		[field: NonSerialized]
-		private IConnector _connector;
+		//[field: NonSerialized]
+		//private IConnector _connector;
 
-		/// <summary>
-		/// Connection to the trading system, through which this instrument has been downloaded.
-		/// </summary>
-		[Ignore]
-		[XmlIgnore]
-		[Browsable(false)]
-		[Obsolete("The property Connector was obsoleted and is always null.")]
-		public IConnector Connector
-		{
-			get { return _connector; }
-			set
-			{
-				if (_connector == value)
-					return;
+		///// <summary>
+		///// Connection to the trading system, through which this instrument has been downloaded.
+		///// </summary>
+		//[Ignore]
+		//[XmlIgnore]
+		//[Browsable(false)]
+		//[Obsolete("The property Connector was obsoleted and is always null.")]
+		//public IConnector Connector
+		//{
+		//	get { return _connector; }
+		//	set
+		//	{
+		//		if (_connector == value)
+		//			return;
 
-				_connector = value;
-				Notify("Trader");
-			}
-		}
+		//		_connector = value;
+		//		Notify("Trader");
+		//	}
+		//}
 
 		private decimal? _impliedVolatility;
 

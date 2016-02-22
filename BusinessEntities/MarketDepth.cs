@@ -19,11 +19,9 @@ namespace StockSharp.BusinessEntities
 	using System.Collections;
 	using System.Collections.Generic;
 	using System.Linq;
-	using System.Xml.Serialization;
 
 	using Ecng.Collections;
 	using Ecng.Common;
-	using Ecng.Serialization;
 
 	using MoreLinq;
 
@@ -80,20 +78,20 @@ namespace StockSharp.BusinessEntities
 		/// </summary>
 		public Security Security { get; }
 
-		[field: NonSerialized]
-		private IConnector _connector;
+		//[field: NonSerialized]
+		//private IConnector _connector;
 
-		/// <summary>
-		/// Connection to the trading system.
-		/// </summary>
-		[Ignore]
-		[XmlIgnore]
-		[Obsolete("The property Connector was obsoleted and is always null.")]
-		public IConnector Connector
-		{
-			get { return _connector; }
-			set { _connector = value; }
-		}
+		///// <summary>
+		///// Connection to the trading system.
+		///// </summary>
+		//[Ignore]
+		//[XmlIgnore]
+		//[Obsolete("The property Connector was obsoleted and is always null.")]
+		//public IConnector Connector
+		//{
+		//	get { return _connector; }
+		//	set { _connector = value; }
+		//}
 
 		/// <summary>
 		/// Automatically check for quotes by <see cref="Verify()"/>.
