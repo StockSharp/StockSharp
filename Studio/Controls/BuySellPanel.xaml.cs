@@ -155,7 +155,7 @@ namespace StockSharp.Studio.Controls
 			ShowCancelAll = storage.GetValue(nameof(ShowCancelAll), true);
 			Depth = storage.GetValue(nameof(Depth), MarketDepthControl.DefaultDepth);
 
-			var connector = ConfigManager.GetService<IConnector>();
+			var secProvider = ConfigManager.GetService<ISecurityProvider>();
 
 			var securityId = storage.GetValue<string>(nameof(Security));
 			if (!securityId.IsEmpty())
@@ -163,16 +163,18 @@ namespace StockSharp.Studio.Controls
 				if (securityId.CompareIgnoreCase("DEPTHSEC@FORTS"))
 				{
 					Security = "RI"
-						.GetFortsJumps(DateTime.Today.AddMonths(3), DateTime.Today.AddMonths(6), code => connector.LookupById(code + "@" + ExchangeBoard.Forts.Code))
+						.GetFortsJumps(DateTime.Today.AddMonths(3), DateTime.Today.AddMonths(6), code => secProvider.LookupById(code + "@" + ExchangeBoard.Forts.Code))
 						.LastOrDefault();
 				}
 				else
-					Security = connector.LookupById(securityId);
+					Security = secProvider.LookupById(securityId);
 			}
+
+			var pfProvider = ConfigManager.GetService<IPortfolioProvider>();
 
 			var portfolioName = storage.GetValue<string>(nameof(Portfolio));
 			if (!portfolioName.IsEmpty())
-				Portfolio = connector.Portfolios.FirstOrDefault(s => s.Name == portfolioName);
+				Portfolio = pfProvider.Portfolios.FirstOrDefault(s => s.Name == portfolioName);
 		}
 
 		public void Save(SettingsStorage storage)
