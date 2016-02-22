@@ -1052,6 +1052,11 @@
             ETC (товарные инструменты).
             </summary>
     </member>
+    <member name="F:StockSharp.Micex.Native.SecTypes.U">
+      <summary>
+            Клиринговые сертификаты участия.
+            </summary>
+    </member>
     <member name="T:StockSharp.Micex.Native.SentRecvs">
       <summary>
             Направленность заявок.
@@ -1317,6 +1322,16 @@
             Перевести остаток не больше указанного.
             </summary>
     </member>
+    <member name="F:StockSharp.Micex.Native.TransferTypes.U">
+      <summary>
+            Перевод без проверки ЕЛ.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Micex.Native.TransferTypes.C">
+      <summary>
+            Безусловный перевод.
+            </summary>
+    </member>
     <member name="T:StockSharp.Micex.Native.TrdAccTypes">
       <summary>
             Тип торгового счета.
@@ -1522,16 +1537,6 @@
             Мягко.
             </summary>
     </member>
-    <member name="T:StockSharp.Micex.Native.UserClasses">
-      <summary>
-            Класс пользователя.
-            </summary>
-    </member>
-    <member name="F:StockSharp.Micex.Native.UserClasses.F">
-      <summary>
-            пользователь FIX.
-            </summary>
-    </member>
     <member name="T:StockSharp.Micex.Native.Compensations">
       <summary>
             Направленность отступного.
@@ -1544,7 +1549,17 @@
     </member>
     <member name="F:StockSharp.Micex.Native.Compensations.S">
       <summary>
-            Получить отступной.
+            Получить оступной.
+            </summary>
+    </member>
+    <member name="T:StockSharp.Micex.Native.UserClasses">
+      <summary>
+            Класс пользователя.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Micex.Native.UserClasses.F">
+      <summary>
+            пользователь FIX.
             </summary>
     </member>
     <member name="T:StockSharp.Micex.Native.BankAccTypes">
@@ -1670,6 +1685,31 @@
     <member name="F:StockSharp.Micex.Native.PosnGroups.P">
       <summary>
             Позиции по валютам.
+            </summary>
+    </member>
+    <member name="T:StockSharp.Micex.Native.TrdAccStatuses">
+      <summary>
+            Статус торгового счета.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Micex.Native.TrdAccStatuses.A">
+      <summary>
+            Операции разрешены.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Micex.Native.TrdAccStatuses.S">
+      <summary>
+            Операции запрещены.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Micex.Native.TrdAccStatuses.N">
+      <summary>
+            Заблокировано для торгов.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Micex.Native.TrdAccStatuses.X">
+      <summary>
+            На стадии закрытия.
             </summary>
     </member>
     <member name="T:StockSharp.Micex.Native.EntryTypes">
@@ -1812,6 +1852,21 @@
             Признак валютного актива.
             </summary>
     </member>
+    <member name="P:StockSharp.Micex.Native.Tables.Assets.Fullcoveredflag">
+      <summary>
+            Запрет необеспеченных торгов.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Micex.Native.Tables.Assets.Discountl0">
+      <summary>
+            Ставка риска падения цены "нулевого лимита концентрации", %.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Micex.Native.Tables.Assets.Discounth0">
+      <summary>
+            Ставка риска роста цены "нулевого лимита концентрации", %.
+            </summary>
+    </member>
     <member name="P:StockSharp.Micex.Native.Tables.Assets.Prevrc">
       <summary>
             Центральный курс предыдущего дня.
@@ -1888,6 +1943,11 @@
     <member name="M:StockSharp.Micex.Native.Tables.ExtMmstats.#ctor">
       <summary>
             Создать <see cref="T:StockSharp.Micex.Native.Tables.ExtMmstats" />.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Micex.Native.Tables.ExtMmstats.Firmid">
+      <summary>
+            Идентификатор фирмы.
             </summary>
     </member>
     <member name="P:StockSharp.Micex.Native.Tables.ExtMmstats.Secboard">
@@ -2120,11 +2180,6 @@
             Обязательства исполнены.
             </summary>
     </member>
-    <member name="P:StockSharp.Micex.Native.Tables.ExtMmstats.Firmid">
-      <summary>
-            Идентификатор фирмы.
-            </summary>
-    </member>
     <member name="P:StockSharp.Micex.Native.Tables.ExtMmstats.Indicator1">
       <summary>
             Фикс. ставка РЕПО ЦБ ON, %.
@@ -2163,6 +2218,56 @@
     <member name="P:StockSharp.Micex.Native.Tables.ExtMmstats.Keepspreadvariant">
       <summary>
             Тип поддерживаемого спрэда.
+            </summary>
+    </member>
+    <member name="T:StockSharp.Micex.Native.Tables.Gcpool">
+      <summary>
+            Справочник пулов.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Micex.Native.Tables.Gcpool.#ctor">
+      <summary>
+            Создать <see cref="T:StockSharp.Micex.Native.Tables.Gcpool" />.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Micex.Native.Tables.Gcpool.Gcpoolid">
+      <summary>
+            Идентификатор пула.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Micex.Native.Tables.Gcpool.Gcpname">
+      <summary>
+            Описание пула.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Micex.Native.Tables.Gcpool.Gcpshortname">
+      <summary>
+            Краткое наименование пула.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Micex.Native.Tables.Gcpool.Seccode">
+      <summary>
+            Выдаваемые КСУ.
+            </summary>
+    </member>
+    <member name="T:StockSharp.Micex.Native.Tables.Gcpoolasset">
+      <summary>
+            Состав пула.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Micex.Native.Tables.Gcpoolasset.#ctor">
+      <summary>
+            Создать <see cref="T:StockSharp.Micex.Native.Tables.Gcpoolasset" />.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Micex.Native.Tables.Gcpoolasset.Gcpoolid">
+      <summary>
+            Идентификатор пула.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Micex.Native.Tables.Gcpoolasset.Asset">
+      <summary>
+            Актив.
             </summary>
     </member>
     <member name="T:StockSharp.Micex.Native.Tables.Instrs">
@@ -2309,6 +2414,16 @@
             Плановая Т+.
             </summary>
     </member>
+    <member name="P:StockSharp.Micex.Native.Tables.RmHold.Debitbalance">
+      <summary>
+            Обязательства на начало дня.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Micex.Native.Tables.RmHold.Creditbalance">
+      <summary>
+            Требования на начало дня.
+            </summary>
+    </member>
     <member name="P:StockSharp.Micex.Native.Tables.RmHold.Margincall">
       <summary>
             Сумма возврата гарантийных переводов.
@@ -2418,6 +2533,26 @@
     <member name="P:StockSharp.Micex.Native.Tables.RmHoldDetl.Asset2valuedebit">
       <summary>
             Обязательства (актив2).
+            </summary>
+    </member>
+    <member name="P:StockSharp.Micex.Native.Tables.RmHoldDetl.Asset1creditbalance">
+      <summary>
+            Требования на начало дня по активу1.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Micex.Native.Tables.RmHoldDetl.Asset1debitbalance">
+      <summary>
+            Обязательства на начало дня по активу1.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Micex.Native.Tables.RmHoldDetl.Asset2creditbalance">
+      <summary>
+            Требования на начало дня по активу2.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Micex.Native.Tables.RmHoldDetl.Asset2debitbalance">
+      <summary>
+            Обязательства на начало дня для актива2.
             </summary>
     </member>
     <member name="T:StockSharp.Micex.Native.Tables.RmIndicative">
@@ -2593,6 +2728,16 @@
     <member name="P:StockSharp.Micex.Native.Tables.RmPosn.Valuedebit">
       <summary>
             Обязательства.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Micex.Native.Tables.RmPosn.Creditbalance">
+      <summary>
+            Требования на начало дня.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Micex.Native.Tables.RmPosn.Debitbalance">
+      <summary>
+            Обязательства на начало дня.
             </summary>
     </member>
     <member name="T:StockSharp.Micex.Native.Tables.RmPricerange">
@@ -3380,6 +3525,11 @@
     <member name="P:StockSharp.Micex.Native.Tables.Bankacc.Bankacctype">
       <summary>
             Тип.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Micex.Native.Tables.Bankacc.Gcpoolid">
+      <summary>
+            Идентификатор пула.
             </summary>
     </member>
     <member name="P:StockSharp.Micex.Native.Tables.Bankacc.Realaccount">
@@ -4356,6 +4506,11 @@
     <member name="P:StockSharp.Micex.Native.Tables.Indexes.Max">
       <summary>
             Максимальное значение индекса.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Micex.Native.Tables.Indexes.Indexcrossrate">
+      <summary>
+            Курс валюты индекса.
             </summary>
     </member>
     <member name="T:StockSharp.Micex.Native.Tables.Instruments">
@@ -5424,7 +5579,12 @@
     </member>
     <member name="P:StockSharp.Micex.Native.Tables.Oneorder.Intorderno">
       <summary>
-            Идентификационный номер заявки в Торговой Системе.
+            Внутренний идентификационный номер заявки в Торговой Системе, присваиваемый заявке в момент постановки в очередь. Используется для идентификации собственной заявки в анонимном потоке FAST market data.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Micex.Native.Tables.Oneorder.Asp">
+      <summary>
+            Аналог собственноручной подписи.
             </summary>
     </member>
     <member name="T:StockSharp.Micex.Native.Tables.Orders">
@@ -5673,6 +5833,11 @@
     <member name="P:StockSharp.Micex.Native.Tables.Orders.Upduserid">
       <summary>
             Идентификатор участника торгов, изменившего заявку последним.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Micex.Native.Tables.Orders.Asp">
+      <summary>
+            Аналог собственноручной подписи.
             </summary>
     </member>
     <member name="T:StockSharp.Micex.Native.Tables.Positions">
@@ -6477,6 +6642,11 @@
     <member name="P:StockSharp.Micex.Native.Tables.Sectransfers.Clientcode">
       <summary>
             Код клиента, присвоенный брокером.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Micex.Native.Tables.Sectransfers.Traninfo">
+      <summary>
+            Информация об операции.
             </summary>
     </member>
     <member name="T:StockSharp.Micex.Native.Tables.Securities">
@@ -7355,6 +7525,16 @@
             Активная/Пассивная.
             </summary>
     </member>
+    <member name="P:StockSharp.Micex.Native.Tables.Trades.Cporderno">
+      <summary>
+            Идентификационный номер встречной заявки в Торговой Системе (только для сделок в адресном режиме).
+            </summary>
+    </member>
+    <member name="P:StockSharp.Micex.Native.Tables.Trades.Traninfo">
+      <summary>
+            Информация о переводе.
+            </summary>
+    </member>
     <member name="T:StockSharp.Micex.Native.Tables.Tradetime">
       <summary>
             Расписание торгов.
@@ -7484,6 +7664,21 @@
             Раздел счета Депо.
             </summary>
     </member>
+    <member name="P:StockSharp.Micex.Native.Tables.Trdacc.Gcplinktrdaccid">
+      <summary>
+            Номер торгового счета.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Micex.Native.Tables.Trdacc.Extuid">
+      <summary>
+            Единый уникальный идентификатор раздела, используемый в НРД.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Micex.Native.Tables.Trdacc.Extsecrequest">
+      <summary>
+            Разрешение на подбор ценных бумаг на раздел.
+            </summary>
+    </member>
     <member name="T:StockSharp.Micex.Native.Tables.Trdtimetypes">
       <summary>
             Типы событий расписания торгов.
@@ -7580,6 +7775,31 @@
     <member name="P:StockSharp.Micex.Native.Tables.Users.Codmode">
       <summary>
             Индикатор работы в COD-режиме (Сancel on Disconnect).
+            </summary>
+    </member>
+    <member name="P:StockSharp.Micex.Native.Tables.Users.Clientcode">
+      <summary>
+            Код клиента, присвоенный брокером и привязанный к данному идентификатору пользователя.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Micex.Native.Tables.Users.Masteruser1">
+      <summary>
+            Первый Мастер User ID для SMA-доступа.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Micex.Native.Tables.Users.Masteruser2">
+      <summary>
+            Второй Мастер User ID для SMA-доступа.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Micex.Native.Tables.Users.CodmodeDc">
+      <summary>
+            Индикатор работы в COD-режиме (Сancel on Drop-Copy  Disconnect).
+            </summary>
+    </member>
+    <member name="P:StockSharp.Micex.Native.Tables.Users.Masteruserflag">
+      <summary>
+            Идентификатор является контролирующим Мастер Идентификатором (SMA-доступ).
             </summary>
     </member>
     <member name="T:StockSharp.Micex.Native.Tables.UserTrdacc">
@@ -11778,6 +11998,46 @@
       <param name="tableHandle">Идентификатор таблицы.</param>
       <param name="handler">Обработчик, куда будут переданы данные после пакетной обработки.</param>
     </member>
+    <member name="M:StockSharp.Micex.Native.MicexClient.OpenGcpoolTable">
+      <summary>
+            Открыть таблицу 'Справочник пулов'.
+            </summary>
+      <returns>Указатель на таблицу 'Справочник пулов'.</returns>
+    </member>
+    <member name="M:StockSharp.Micex.Native.MicexClient.ReadGcpoolTable(StockSharp.Micex.Native.MicexPtrReader)">
+      <summary>
+            Справочник пулов.
+            </summary>
+      <param name="tablePtr">Указатель на таблицу.</param>
+      <returns>Список объектов 'Справочник пулов'.</returns>
+    </member>
+    <member name="M:StockSharp.Micex.Native.MicexClient.AddGcpoolTable(System.Int32,System.Action{System.Collections.Generic.IEnumerable{StockSharp.Micex.Native.Tables.Gcpool}})">
+      <summary>
+            Добавить таблицу 'Справочник пулов' в пакетную обработку.
+            </summary>
+      <param name="tableHandle">Идентификатор таблицы.</param>
+      <param name="handler">Обработчик, куда будут переданы данные после пакетной обработки.</param>
+    </member>
+    <member name="M:StockSharp.Micex.Native.MicexClient.OpenGcpoolassetTable">
+      <summary>
+            Открыть таблицу 'Состав пула'.
+            </summary>
+      <returns>Указатель на таблицу 'Состав пула'.</returns>
+    </member>
+    <member name="M:StockSharp.Micex.Native.MicexClient.ReadGcpoolassetTable(StockSharp.Micex.Native.MicexPtrReader)">
+      <summary>
+            Состав пула.
+            </summary>
+      <param name="tablePtr">Указатель на таблицу.</param>
+      <returns>Список объектов 'Состав пула'.</returns>
+    </member>
+    <member name="M:StockSharp.Micex.Native.MicexClient.AddGcpoolassetTable(System.Int32,System.Action{System.Collections.Generic.IEnumerable{StockSharp.Micex.Native.Tables.Gcpoolasset}})">
+      <summary>
+            Добавить таблицу 'Состав пула' в пакетную обработку.
+            </summary>
+      <param name="tableHandle">Идентификатор таблицы.</param>
+      <param name="handler">Обработчик, куда будут переданы данные после пакетной обработки.</param>
+    </member>
     <member name="M:StockSharp.Micex.Native.MicexClient.OpenCurrTable">
       <summary>
             Открыть таблицу 'Справочник валют'.
@@ -12310,6 +12570,11 @@
     <member name="F:StockSharp.Micex.MicexInterfaces.Stock25">
       <summary>
             Брокерский фондовый интерфейс IFCBroker_25.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Micex.MicexInterfaces.Stock26">
+      <summary>
+            Брокерский фондовый интерфейс IFCBroker_26.
             </summary>
     </member>
     <member name="F:StockSharp.Micex.MicexInterfaces.Currency18">
