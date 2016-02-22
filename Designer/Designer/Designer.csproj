@@ -108,12 +108,6 @@
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
-    <Reference Include="Xceed.Wpf.AvalonDock">
-      <HintPath>..\..\References\Ecng\Xceed.Wpf.AvalonDock.dll</HintPath>
-    </Reference>
-    <Reference Include="Xceed.Wpf.AvalonDock.Themes.Metro">
-      <HintPath>..\..\References\Ecng\Xceed.Wpf.AvalonDock.Themes.Metro.dll</HintPath>
-    </Reference>
     <Reference Include="Xceed.Wpf.Toolkit">
       <HintPath>..\..\References\Ecng\Xceed.Wpf.Toolkit.dll</HintPath>
     </Reference>
