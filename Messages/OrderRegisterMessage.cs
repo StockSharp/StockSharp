@@ -31,15 +31,6 @@ namespace StockSharp.Messages
 	public class OrderRegisterMessage : OrderMessage
 	{
 		/// <summary>
-		/// Transaction ID.
-		/// </summary>
-		[DataMember]
-		[DisplayNameLoc(LocalizedStrings.TransactionKey)]
-		[DescriptionLoc(LocalizedStrings.TransactionIdKey, true)]
-		[MainCategory]
-		public long TransactionId { get; set; }
-
-		/// <summary>
 		/// Order price.
 		/// </summary>
 		[DataMember]

@@ -28,6 +28,15 @@ namespace StockSharp.Messages
 	public abstract class OrderMessage : SecurityMessage
 	{
 		/// <summary>
+		/// Transaction ID.
+		/// </summary>
+		[DataMember]
+		[DisplayNameLoc(LocalizedStrings.TransactionKey)]
+		[DescriptionLoc(LocalizedStrings.TransactionIdKey, true)]
+		[MainCategory]
+		public long TransactionId { get; set; }
+
+		/// <summary>
 		/// Portfolio name, for which an order must be placed/cancelled.
 		/// </summary>
 		[DataMember]

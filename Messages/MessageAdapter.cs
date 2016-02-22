@@ -332,32 +332,18 @@ namespace StockSharp.Messages
 						return;
 
 					case MessageTypes.OrderRegister:
-					{
-						SendOutErrorExecution(((OrderRegisterMessage)message).ToExecutionMessage(), ex);
-						return;
-					}
-
 					case MessageTypes.OrderReplace:
-					{
-						SendOutErrorExecution(((OrderReplaceMessage)message).ToExecutionMessage(), ex);
-						return;
-					}
-
-					case MessageTypes.OrderPairReplace:
-					{
-						SendOutErrorExecution(((OrderPairReplaceMessage)message).ToExecutionMessage(), ex);
-						return;
-					}
-
 					case MessageTypes.OrderCancel:
-					{
-						SendOutErrorExecution(((OrderCancelMessage)message).ToExecutionMessage(), ex);
-						return;
-					}
-
 					case MessageTypes.OrderGroupCancel:
 					{
-						SendOutErrorExecution(((OrderGroupCancelMessage)message).ToExecutionMessage(), ex);
+						var replyMsg = ((OrderMessage)message).CreateReply();
+						SendOutErrorExecution(replyMsg, ex);
+						return;
+					}
+					case MessageTypes.OrderPairReplace:
+					{
+						var replyMsg = ((OrderPairReplaceMessage)message).Message1.CreateReply();
+						SendOutErrorExecution(replyMsg, ex);
 						return;
 					}
 

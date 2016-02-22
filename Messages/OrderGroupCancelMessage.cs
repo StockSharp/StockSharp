@@ -39,12 +39,6 @@ namespace StockSharp.Messages
 		//public SecurityTypes? SecurityType { get; set; }
 
 		/// <summary>
-		/// Order cancellation transaction id.
-		/// </summary>
-		[DataMember]
-		public long TransactionId { get; set; }
-
-		/// <summary>
 		/// <see langword="true" />, if cancel only a stop orders, <see langword="false" /> - if regular orders, <see langword="null" /> - both.
 		/// </summary>
 		[DataMember]

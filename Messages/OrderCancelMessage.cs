@@ -40,12 +40,6 @@ namespace StockSharp.Messages
 		public string OrderStringId { get; set; }
 
 		/// <summary>
-		/// Order cancellation transaction id.
-		/// </summary>
-		[DataMember]
-		public long TransactionId { get; set; }
-
-		/// <summary>
 		/// Transaction ID cancellation order.
 		/// </summary>
 		[DataMember]
