@@ -5,76 +5,60 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:componentModel="clr-namespace:System.ComponentModel;assembly=WindowsBase"
              xmlns:local="clr-namespace:StockSharp.Designer"
-             mc:Ignorable="d" 
+			 xmlns:dxg="http://schemas.devexpress.com/winfx/2008/xaml/grid"
+			 xmlns:localization="clr-namespace:StockSharp.Localization;assembly=StockSharp.Localization"
+			 xmlns:dxb="http://schemas.devexpress.com/winfx/2008/xaml/bars"
+			 mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
 
     <UserControl.Resources>
-        <!-- A default style for treeview controls. This one will automatically be applied as the custom tree's 'TreeStyle' property is not set. -->
-        <Style x:Key="SimpleTreeStyle" TargetType="{x:Type TreeView}">
-            <Setter Property="Background">
-                <Setter.Value>
-                    <LinearGradientBrush EndPoint="0,1" StartPoint="0,0">
-                        <GradientStop Color="#FFF" Offset="0.0" />
-                        <GradientStop Color="#AAA" Offset="1.0" />
-                    </LinearGradientBrush>
-                </Setter.Value>
-            </Setter>
-            <Setter Property="BorderThickness" Value="4" />
-            <Setter Property="BorderBrush" Value="#FFA6AAAB" />
-        </Style>
 
-        <!-- a data template for bound ShopCategory instances -->
-        <DataTemplate x:Key="CategoryTemplate" DataType="{x:Type local:SolutionExplorerItem}">
-            <StackPanel x:Name="GroupPanel" Orientation="Horizontal" Margin="0,2,0,2" ToolTip="{Binding Tooltip}">
-                <Image x:Name="Folder" Source="/Images/FolderClosed.png" />
-                <TextBlock x:Name="CategoryName" Margin="2,0,0,0" Text="{Binding Path=Name}" />
-            </StackPanel>
-
-            <DataTemplate.Triggers>
-                <DataTrigger Binding="{Binding Path=IsExpanded, RelativeSource={RelativeSource TemplatedParent}}" Value="True">
-                    <Setter Property="Source" TargetName="Folder" Value="/Images/FolderOpen.png" />
-                </DataTrigger>
-
-                <DataTrigger Binding="{Binding Path=IsSelected, RelativeSource={RelativeSource TemplatedParent}}" Value="True">
-                    <Setter Property="Foreground" TargetName="CategoryName" Value="Black" />
-                    <Setter Property="Source" TargetName="Folder" Value="/Images/FolderSelected.png" />
-                    <Setter Property="BitmapEffect">
-                        <Setter.Value>
-                            <OuterGlowBitmapEffect GlowColor="Black" />
-                        </Setter.Value>
-                    </Setter>
-                </DataTrigger>
-            </DataTemplate.Triggers>
-        </DataTemplate>
-
-        <!-- this is the style that is applied to the tree -->
-        <Style x:Key="SimpleFolders" TargetType="{x:Type TreeViewItem}">
-            <Style.Resources>
-                <!-- override default brushes that show bad background colors -->
-                <Brush x:Key="{x:Static SystemColors.HighlightBrushKey}">Transparent</Brush>
-                <Brush x:Key="{x:Static SystemColors.ControlBrushKey}">Transparent</Brush>
-            </Style.Resources>
-            <Setter Property="HeaderTemplate" Value="{StaticResource CategoryTemplate}" />
-        </Style>
-
-        <!-- sorts categories by names in ascending order -->
-        <componentModel:SortDescriptionCollection x:Key="AscendingNames">
-            <componentModel:SortDescription PropertyName="Name" Direction="Ascending" />
-        </componentModel:SortDescriptionCollection>
-
-        <!-- default text style -->
-        <Style TargetType="TextBlock">
-            <Setter Property="TextWrapping" Value="Wrap" />
-        </Style>
     </UserControl.Resources>
 
-    <local:SolutionExplorerTree x:Name="ExplorerTree"
-								TreeNodeStyle="{StaticResource SimpleFolders}"
-								TreeStyle="{StaticResource SimpleTreeStyle}"
-								NodeSortDescriptions="{StaticResource AscendingNames}"
-								SelectNodesOnRightClick="True"
-								NodeContextMenu="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:SolutionExplorerControl}}, Path=NodeContextMenu}"
-								Tag="{Binding RelativeSource={RelativeSource Self}}"
-								MouseDoubleClick="ExplorerTree_OnMouseDoubleClick"
-								SelectedItemChanged="ExplorerTree_OnSelectedItemChanged"/>
+    <dxg:TreeListControl x:Name="ExplorerTree" SelectedItemChanged="ExplorerTree_OnSelectedItemChanged" MouseDoubleClick="ExplorerTree_OnMouseDoubleClick">
+        <dxg:TreeListControl.View>
+            <dxg:TreeListView TreeDerivationMode="HierarchicalDataTemplate" NavigationStyle="Row"
+							  AutoWidth="False" AllowPerPixelScrolling="True" AutoExpandAllNodes="True" AllowScrollAnimation="True"
+							  ShowNodeImages="False" ShowIndicator="False" ShowVerticalLines="False"
+							  ContextMenu="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:SolutionExplorerControl}}, Path=NodeContextMenu}">
+				<dxg:TreeListView.DataRowTemplate>
+                    <HierarchicalDataTemplate DataType="{x:Type local:SolutionExplorerItem}" ItemsSource="{Binding ChildItems}">
+                        <ContentPresenter Content="{Binding}" ContentTemplate="{Binding View.DefaultDataRowTemplate}" />
+                    </HierarchicalDataTemplate>
+                </dxg:TreeListView.DataRowTemplate>
+
+                <dxg:TreeListView.RowCellMenuCustomizations>
+                    <dxb:BarButtonItem Content="{x:Static localization:LocalizedStrings.Str3229}"
+									   Glyph="pack://application:,,,/Designer;component/Images/Add_32x32.png"
+									   Command="{x:Static local:MainWindow.AddCommand}"
+									   CommandParameter="{Binding Path=(dxg:GridPopupMenu.GridMenuInfo).View.FocusedRow.Type, RelativeSource={RelativeSource Self}}"/>
+                    <dxb:BarButtonItem Content="{x:Static localization:LocalizedStrings.Str1509}"
+									   Glyph="pack://application:,,,/Designer;component/Images/Open_32x32.png"
+									   Command="{x:Static local:MainWindow.OpenCommand}"
+									   CommandParameter="{Binding Path=(dxg:GridPopupMenu.GridMenuInfo).View.FocusedRow.Element, RelativeSource={RelativeSource Self}}"/>
+                    <dxb:BarButtonItem Content="{x:Static localization:LocalizedStrings.Str2060}"
+									   Glyph="pack://application:,,,/Designer;component/Images/Remove_32x32.png"
+									   Command="{x:Static local:MainWindow.RemoveCommand}"
+									   CommandParameter="{Binding Path=(dxg:GridPopupMenu.GridMenuInfo).View.FocusedRow.Element, RelativeSource={RelativeSource Self}}"/>
+
+                    <dxb:BarItemSeparator />
+
+                    <dxb:BarButtonItem Content="{x:Static localization:LocalizedStrings.Str1174}"
+									   Glyph="pack://application:,,,/Designer;component/Images/Backtesting_32x32.png" 
+									   Command="{x:Static local:MainWindow.EmulateStrategyCommand}"
+									   CommandParameter="{Binding Path=(dxg:GridPopupMenu.GridMenuInfo).View.FocusedRow.Element, RelativeSource={RelativeSource Self}}" />
+                    <dxb:BarButtonItem Content="{x:Static localization:LocalizedStrings.Str3176}"
+									   Glyph="pack://application:,,,/Designer;component/Images/terminal_32x32.png" 
+									   Command="{x:Static local:MainWindow.ExecuteStrategyCommand}"
+									   CommandParameter="{Binding Path=(dxg:GridPopupMenu.GridMenuInfo).View.FocusedRow.Element, RelativeSource={RelativeSource Self}}" />
+                </dxg:TreeListView.RowCellMenuCustomizations>
+            </dxg:TreeListView>
+        </dxg:TreeListControl.View>
+		
+        <dxg:TreeListControl.Columns>
+            <dxg:TreeListColumn Header="{x:Static localization:LocalizedStrings.Name}" FieldName="Name" ReadOnly="True"/>
+            <dxg:TreeListColumn Header="{x:Static localization:LocalizedStrings.Description}" FieldName="Tooltip" ReadOnly="True"/>
+            <dxg:TreeListColumn Header="{x:Static localization:LocalizedStrings.Id}" FieldName="Id" ReadOnly="True"/>
+        </dxg:TreeListControl.Columns>
+    </dxg:TreeListControl>
 </UserControl>
