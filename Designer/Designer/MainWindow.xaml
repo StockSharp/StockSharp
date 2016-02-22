@@ -1,16 +1,13 @@
 ﻿<dxr:DXRibbonWindow x:Class="StockSharp.Designer.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-		xmlns:xcad="http://schemas.xceed.com/wpf/xaml/avalondock"
         xmlns:xaml="http://schemas.stocksharp.com/xaml"
 		xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 		xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 		xmlns:localization="clr-namespace:StockSharp.Localization;assembly=StockSharp.Localization"
 		xmlns:local="clr-namespace:StockSharp.Designer"
 		xmlns:businessEntities="clr-namespace:StockSharp.BusinessEntities;assembly=StockSharp.BusinessEntities"
-		xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
-		xmlns:controls="clr-namespace:StockSharp.Studio.Controls;assembly=StockSharp.Studio.Controls"
-		xmlns:dxr="http://schemas.devexpress.com/winfx/2008/xaml/ribbon"
+        xmlns:dxr="http://schemas.devexpress.com/winfx/2008/xaml/ribbon"
 		xmlns:dxb="http://schemas.devexpress.com/winfx/2008/xaml/bars"
 		xmlns:dxmvvm="http://schemas.devexpress.com/winfx/2008/xaml/mvvm"
 		xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors"
@@ -19,7 +16,7 @@
 		Height="768" Width="1024" WindowState="Maximized"
         WindowStartupLocation="CenterScreen"
         Closing="MainWindow_OnClosing" Loaded="MainWindow_OnLoaded"
-					UseLayoutRounding="True" DisplayShowModeSelector="True">
+        UseLayoutRounding="True" DisplayShowModeSelector="True">
 
     <Window.CommandBindings>
         <CommandBinding Command="{x:Static local:MainWindow.AddCommand}"
@@ -84,34 +81,6 @@
 	
 	<Window.Resources>
         <local:CompositionTypeToVisibilityConverter x:Key="CompositionTypeToVisibilityConverter" Type="Composition"/>
-		
-        <ContextMenu x:Key="TreeContextMenu"
-					 DataContext="{Binding Path=PlacementTarget.Header, RelativeSource={RelativeSource Self}}">
-            <MenuItem Header="{x:Static localization:LocalizedStrings.Str3229}"
-					  Icon="pack://application:,,,/Designer;component/Images/Add_32x32.png"
-					  Command="{x:Static local:MainWindow.AddCommand}"
-					  CommandParameter="{Binding Type}"/>
-			
-            <MenuItem Header="{x:Static localization:LocalizedStrings.Str1509}"
-					  Icon="pack://application:,,,/Designer;component/Images/Open_32x32.png"
-					  Command="{x:Static local:MainWindow.OpenCommand}"
-					  CommandParameter="{Binding Element}"/>
-            <MenuItem Header="{x:Static localization:LocalizedStrings.Str2060}"
-					  Icon="pack://application:,,,/Designer;component/Images/Remove_32x32.png"
-					  Command="{x:Static local:MainWindow.RemoveCommand}"
-					  CommandParameter="{Binding Element}"/>
-			
-			<Separator/>
-
-            <MenuItem Header="{x:Static localization:LocalizedStrings.Str1174}"
-					  Icon="pack://application:,,,/Designer;component/Images/Backtesting_32x32.png" 
-					  Command="{x:Static local:MainWindow.EmulateStrategyCommand}"
-					  CommandParameter="{Binding Element}" />
-            <MenuItem Header="{x:Static localization:LocalizedStrings.Str3176}"
-					  Icon="pack://application:,,,/Designer;component/Images/terminal_32x32.png" 
-					  Command="{x:Static local:MainWindow.ExecuteStrategyCommand}"
-					  CommandParameter="{Binding Element}" />
-        </ContextMenu>
 	</Window.Resources>
 
     <dxb:BarManager>
@@ -412,7 +381,6 @@
 												  Caption="{x:Static localization:LocalizedStrings.Schemas}" 
 												  AllowClose="False">
                                     <local:SolutionExplorerControl x:Name="SolutionExplorer" 
-																   NodeContextMenu="{StaticResource TreeContextMenu}"
 																   Open="SolutionExplorer_OnOpen"/>
                                 </dxdo:LayoutPanel>
                             </dxdo:LayoutGroup>
