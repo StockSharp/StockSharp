@@ -58,6 +58,11 @@ namespace StockSharp.Messages
 		public IMessageAdapter InnerAdapter { get; }
 
 		/// <summary>
+		/// Control <see cref="InnerAdapter"/> lifetime.
+		/// </summary>
+		public bool OwnInnerAdaper { get; set; }
+
+		/// <summary>
 		/// Process <see cref="InnerAdapter"/> output message.
 		/// </summary>
 		/// <param name="message">The message.</param>
@@ -193,7 +198,9 @@ namespace StockSharp.Messages
 		public virtual void Dispose()
 		{
 			InnerAdapter.NewOutMessage -= OnInnerAdapterNewOutMessage;
-			//InnerAdapter.Dispose();
+
+			if (OwnInnerAdaper)
+				InnerAdapter.Dispose();
 		}
 	}
 }

@@ -219,6 +219,31 @@ namespace StockSharp.Algo
 		/// Initializes a new instance of the <see cref="Connector"/>.
 		/// </summary>
 		public Connector()
+			: this(true)
+		{
+		}
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="Connector"/>.
+		/// </summary>
+		/// <param name="entityRegistry">The storage of trade objects.</param>
+		/// <param name="storageRegistry">The storage of market data.</param>
+		public Connector(IEntityRegistry entityRegistry, IStorageRegistry storageRegistry)
+			: this(false)
+		{
+			if (entityRegistry == null)
+				throw new ArgumentNullException(nameof(entityRegistry));
+
+			if (storageRegistry == null)
+				throw new ArgumentNullException(nameof(storageRegistry));
+
+			_entityRegistry = entityRegistry;
+			_storageRegistry = storageRegistry;
+
+			InitAdapter();
+		}
+
+		private Connector(bool initAdapter)
 		{
 			ReConnectionSettings = new ReConnectionSettings();
 
@@ -239,26 +264,12 @@ namespace StockSharp.Algo
 			InMessageChannel = new InMemoryMessageChannel("Connector In", RaiseError);
 			OutMessageChannel = new InMemoryMessageChannel("Connector Out", RaiseError);
 
-			Adapter = new BasketMessageAdapter(new MillisecondIncrementalIdGenerator());
+			if (initAdapter)
+				InitAdapter();
 		}
 
-		/// <summary>
-		/// Initializes a new instance of the <see cref="Connector"/>.
-		/// </summary>
-		/// <param name="entityRegistry">The storage of trade objects.</param>
-		/// <param name="storageRegistry">The storage of market data.</param>
-		public Connector(IEntityRegistry entityRegistry, IStorageRegistry storageRegistry)
-			: this()
+		private void InitAdapter()
 		{
-			if (entityRegistry == null)
-				throw new ArgumentNullException(nameof(entityRegistry));
-
-			if (storageRegistry == null)
-				throw new ArgumentNullException(nameof(storageRegistry));
-
-			_entityRegistry = entityRegistry;
-			_storageRegistry = storageRegistry;
-
 			Adapter = new BasketMessageAdapter(new MillisecondIncrementalIdGenerator());
 		}
 
@@ -537,14 +548,6 @@ namespace StockSharp.Algo
 
 				_marketTimeChangedInterval = value;
 			}
-		}
-
-		private void TryOpenChannel()
-		{
-			if (OutMessageChannel.IsOpened)
-				return;
-
-			OutMessageChannel.Open();
 		}
 
 		/// <summary>
@@ -1548,6 +1551,8 @@ namespace StockSharp.Algo
 			//	MarketDataAdapter = null;
 
 			Adapter = null;
+			InMessageChannel = null;
+			OutMessageChannel = null;
 		}
 
 		/// <summary>
