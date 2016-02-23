@@ -56,7 +56,7 @@ namespace StockSharp.Quik.Lua
 		}
 
 		/// <summary>
-		/// Прочитать условие регистрации заявки <see cref="OrderRegisterMessage.Condition"/>.
+		/// Прочитать условие заявки <see cref="OrderCondition"/>.
 		/// </summary>
 		/// <param name="reader">Читатель данных.</param>
 		/// <param name="tag">Тэг.</param>

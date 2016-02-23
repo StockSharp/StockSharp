@@ -89,14 +89,6 @@ namespace StockSharp.Messages
 		public DateTimeOffset? TillDate { get; set; }
 
 		/// <summary>
-		/// Order condition (e.g., stop- and algo- orders parameters).
-		/// </summary>
-		[DisplayNameLoc(LocalizedStrings.Str154Key)]
-		[DescriptionLoc(LocalizedStrings.Str155Key)]
-		[CategoryLoc(LocalizedStrings.Str156Key)]
-		public OrderCondition Condition { get; set; }
-
-		/// <summary>
 		/// Limit order time in force.
 		/// </summary>
 		[DisplayNameLoc(LocalizedStrings.TimeInForceKey)]

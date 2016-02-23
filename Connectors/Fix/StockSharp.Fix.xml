@@ -129,7 +129,7 @@
       <returns>
         <see cref="T:StockSharp.Fix.Native.FixMessages" /> value.</returns>
     </member>
-    <member name="M:StockSharp.Fix.Dialects.BaseDialect.WriteChangePasswordRequest(StockSharp.Fix.Native.IFixWriter,StockSharp.Messages.ChangePasswordMessage,System.String,System.String)">
+    <member name="M:StockSharp.Fix.Dialects.BaseDialect.WriteUserRequestChangePassword(StockSharp.Fix.Native.IFixWriter,StockSharp.Messages.ChangePasswordMessage,System.String,System.String)">
       <summary>
             To record the <see cref="F:StockSharp.Fix.Native.FixMessages.UserRequest" /> message.
             </summary>
@@ -221,7 +221,7 @@
     </member>
     <member name="M:StockSharp.Fix.Dialects.DefaultDialect.ReadOrderCondition(StockSharp.Fix.Native.IFixReader,StockSharp.Fix.Native.FixTags,System.Func{StockSharp.Messages.OrderCondition})">
       <summary>
-            To read the order registration condition <see cref="P:StockSharp.Messages.OrderRegisterMessage.Condition" />.
+            To read the order condition <see cref="T:StockSharp.Messages.OrderCondition" />.
             </summary>
       <param name="reader">Data reader.</param>
       <param name="tag">Tag.</param>
@@ -314,7 +314,7 @@
     </member>
     <member name="M:StockSharp.Fix.FixServer.ReadOrderCondition(StockSharp.Fix.Native.IFixReader,StockSharp.Fix.Native.FixTags,System.Func{StockSharp.Messages.OrderCondition})">
       <summary>
-            To read the order registration condition <see cref="P:StockSharp.Messages.OrderRegisterMessage.Condition" />.
+            To read the order condition <see cref="T:StockSharp.Messages.OrderCondition" />.
             </summary>
       <param name="reader">Data reader.</param>
       <param name="tag">Tag.</param>
@@ -3459,6 +3459,98 @@
       <summary>
       </summary>
     </member>
+    <member name="T:StockSharp.Fix.Native.SecurityIDSource">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.SecurityIDSource.Cusip">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.SecurityIDSource.Sedol">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.SecurityIDSource.Quik">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.SecurityIDSource.IsinNumber">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.SecurityIDSource.RicCode">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.SecurityIDSource.IsoCurrencyCode">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.SecurityIDSource.IsoCountryCode">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.SecurityIDSource.ExchangeSymbol">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.SecurityIDSource.ConsolidatedTapeAssociation">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.SecurityIDSource.BloombergSymbol">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.SecurityIDSource.Wertpapier">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.SecurityIDSource.Dutch">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.SecurityIDSource.Valoren">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.SecurityIDSource.Sicovam">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.SecurityIDSource.Belgian">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.SecurityIDSource.Common">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.SecurityIDSource.ClearingHouse">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.SecurityIDSource.IsdaFpmlProductSpecification">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.SecurityIDSource.OptionPriceReportingAuthority">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.SecurityIDSource.LetterOfCredit">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.SecurityIDSource.IsdaFpmlProductUrl">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.SecurityIDSource.MarketplaceAssignedIdentifier">
+      <summary>
+      </summary>
+    </member>
     <member name="T:StockSharp.Fix.Native.ExecutionReport">
       <summary>
             Execution report.
@@ -5086,6 +5178,11 @@
     <member name="F:StockSharp.Fix.FixDialects.Otkritie">
       <summary>
             Otkritie.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Fix.FixDialects.QuikServer">
+      <summary>
+            Quik (server).
             </summary>
     </member>
     <member name="T:StockSharp.Fix.FixTrader">

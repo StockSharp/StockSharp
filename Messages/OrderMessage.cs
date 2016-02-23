@@ -80,6 +80,14 @@ namespace StockSharp.Messages
 		public string ClientCode { get; set; }
 
 		/// <summary>
+		/// Order condition (e.g., stop- and algo- orders parameters).
+		/// </summary>
+		[DisplayNameLoc(LocalizedStrings.Str154Key)]
+		[DescriptionLoc(LocalizedStrings.Str155Key)]
+		[CategoryLoc(LocalizedStrings.Str156Key)]
+		public OrderCondition Condition { get; set; }
+
+		/// <summary>
 		/// Initialize <see cref="OrderMessage"/>.
 		/// </summary>
 		/// <param name="type">Message type.</param>
