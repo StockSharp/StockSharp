@@ -68,7 +68,7 @@ namespace StockSharp.Hydra.Windows
 				TaskSettings.SelectedObject = _clonnedSettings;
 
 				DescriptionCtrl.Text = _task.GetDescription();
-				AbilitiesCtrl.Text = _task.SupportedDataTypes.Select(t => _dataTypes[t]).Join(", ");
+				AbilitiesCtrl.Text = _task.SupportedDataTypes.Select(t => t.MessageType.IsCandleMessage() ? LocalizedStrings.Candles : _dataTypes[t]).Distinct().Join(", ");
 
 				if (_task.SupportedDataTypes.Any(t => t.MessageType.IsCandleMessage()))
 					AbilitiesCtrl.Text = AbilitiesCtrl.Text.IsEmpty() ? string.Empty : ", " + LocalizedStrings.Candles;
