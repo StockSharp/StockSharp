@@ -76,8 +76,8 @@ namespace StockSharp.Algo.Strategies.Analytics
 		/// </summary>
 		protected BaseAnalyticsStrategy()
 		{
-			_from = this.Param<DateTime>("From");
-			_to = this.Param("To", DateTime.MaxValue);
+			_from = this.Param<DateTime>(nameof(From));
+			_to = this.Param(nameof(To), DateTime.MaxValue);
 		}
 
 		/// <summary>
@@ -96,17 +96,17 @@ namespace StockSharp.Algo.Strategies.Analytics
 		/// Chart.
 		/// </summary>
 		[CLSCompliant(false)]
-		protected UltrachartSurface Chart => Environment.GetValue<UltrachartSurface>("Chart");
+		protected UltrachartSurface Chart => Environment.GetValue<UltrachartSurface>(nameof(Chart));
 
 		/// <summary>
 		/// Table.
 		/// </summary>
-		protected UniversalGrid Grid => Environment.GetValue<UniversalGrid>("Grid");
+		protected UniversalGrid Grid => Environment.GetValue<UniversalGrid>(nameof(Grid));
 
 		/// <summary>
 		/// Data format.
 		/// </summary>
-		protected StorageFormats StorageFormat => Environment.GetValue<StorageFormats>("StorageFormat");
+		protected StorageFormats StorageFormat => Environment.GetValue<StorageFormats>(nameof(StorageFormat));
 
 		/// <summary>
 		/// The method is called when the <see cref="Strategy.Start"/> method has been called and the <see cref="Strategy.ProcessState"/> state has been taken the <see cref="ProcessStates.Started"/> value.

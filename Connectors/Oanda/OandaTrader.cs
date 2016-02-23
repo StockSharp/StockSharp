@@ -46,10 +46,7 @@ namespace StockSharp.Oanda
 			Adapter.InnerAdapters.Add(new OandaMessageAdapter(TransactionIdGenerator));
 		}
 
-		private OandaMessageAdapter NativeAdapter
-		{
-			get { return Adapter.InnerAdapters.OfType<OandaMessageAdapter>().First(); }
-		}
+		private OandaMessageAdapter NativeAdapter => Adapter.InnerAdapters.OfType<OandaMessageAdapter>().First();
 
 		/// <summary>
 		/// Server.

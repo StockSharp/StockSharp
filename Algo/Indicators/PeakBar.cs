@@ -110,8 +110,7 @@ namespace StockSharp.Algo.Indicators
 		{
 			base.Load(settings);
 
-			ReversalAmount.Type = settings.GetValue<UnitTypes>("ReversalAmountType");
-			ReversalAmount.Value = settings.GetValue<decimal>("ReversalAmountValue");
+			ReversalAmount.Load(settings.GetValue<SettingsStorage>(nameof(ReversalAmount)));
 		}
 
 		/// <summary>
@@ -122,8 +121,7 @@ namespace StockSharp.Algo.Indicators
 		{
 			base.Save(settings);
 
-			settings.SetValue("ReversalAmountType", ReversalAmount.Type);
-			settings.SetValue("ReversalAmountValue", ReversalAmount.Value);
+			settings.SetValue(nameof(ReversalAmount), ReversalAmount.Save());
 		}
 	}
 }

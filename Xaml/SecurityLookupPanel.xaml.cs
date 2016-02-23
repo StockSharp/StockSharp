@@ -101,8 +101,8 @@ namespace StockSharp.Xaml
 		/// <param name="storage">Settings storage.</param>
 		public void Load(SettingsStorage storage)
 		{
-			SecurityCodeLike.Text = storage.GetValue<string>("SecurityCodeLike");
-			Filter = storage.GetValue<Security>("Filter");
+			SecurityCodeLike.Text = storage.GetValue<string>(nameof(SecurityCodeLike));
+			Filter = storage.GetValue<Security>(nameof(Filter));
 		}
 
 		/// <summary>
@@ -111,8 +111,8 @@ namespace StockSharp.Xaml
 		/// <param name="storage">Settings storage.</param>
 		public void Save(SettingsStorage storage)
 		{
-			storage.SetValue("SecurityCodeLike", SecurityCodeLike.Text);
-			storage.SetValue("Filter", Filter.Clone());
+			storage.SetValue(nameof(SecurityCodeLike), SecurityCodeLike.Text);
+			storage.SetValue(nameof(Filter), Filter.Clone());
 		}
 	}
 }

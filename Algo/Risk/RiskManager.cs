@@ -75,7 +75,7 @@ namespace StockSharp.Algo.Risk
 		/// <param name="storage">Storage.</param>
 		public void Load(SettingsStorage storage)
 		{
-			Rules.AddRange(storage.GetValue<SettingsStorage[]>("Rules").Select(s => s.LoadEntire<IRiskRule>()));
+			Rules.AddRange(storage.GetValue<SettingsStorage[]>(nameof(Rules)).Select(s => s.LoadEntire<IRiskRule>()));
 		}
 
 		/// <summary>
@@ -84,7 +84,7 @@ namespace StockSharp.Algo.Risk
 		/// <param name="storage">Storage.</param>
 		public void Save(SettingsStorage storage)
 		{
-			storage.SetValue("Rules", Rules.Select(r => r.SaveEntire(false)).ToArray());
+			storage.SetValue(nameof(Rules), Rules.Select(r => r.SaveEntire(false)).ToArray());
 		}
 
 		RiskActions IRiskRule.Action

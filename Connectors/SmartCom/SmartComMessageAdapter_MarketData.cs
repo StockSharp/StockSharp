@@ -344,7 +344,7 @@ namespace StockSharp.SmartCom
 			{
 				message.Add(Level1Fields.BestBidPrice, bid.Price);
 
-				if (prevQuotes != null && prevQuotes.First != null && prevQuotes.First.Item1 == bid.Price)
+				if (prevQuotes?.First != null && prevQuotes.First.Item1 == bid.Price)
 					message.Add(Level1Fields.BestBidVolume, prevQuotes.First.Item2);
 			}
 
@@ -352,7 +352,7 @@ namespace StockSharp.SmartCom
 			{
 				message.Add(Level1Fields.BestAskPrice, ask.Price);
 
-				if (prevQuotes != null && prevQuotes.Second != null && prevQuotes.Second.Item1 == ask.Price)
+				if (prevQuotes?.Second != null && prevQuotes.Second.Item1 == ask.Price)
 					message.Add(Level1Fields.BestAskVolume, prevQuotes.Second.Item2);
 			}
 

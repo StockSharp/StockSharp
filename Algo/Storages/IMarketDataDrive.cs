@@ -180,7 +180,7 @@ namespace StockSharp.Algo.Storages
 		/// <param name="storage">Settings storage.</param>
 		public virtual void Load(SettingsStorage storage)
 		{
-			Path = storage.GetValue<string>("Path");
+			Path = storage.GetValue<string>(nameof(Path));
 		}
 
 		/// <summary>
@@ -189,7 +189,7 @@ namespace StockSharp.Algo.Storages
 		/// <param name="storage">Settings storage.</param>
 		public virtual void Save(SettingsStorage storage)
 		{
-			storage.SetValue("Path", Path);
+			storage.SetValue(nameof(Path), Path);
 		}
 
 		/// <summary>

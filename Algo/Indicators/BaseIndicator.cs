@@ -79,8 +79,8 @@ namespace StockSharp.Algo.Indicators
 		/// <param name="storage">Settings storage.</param>
 		public virtual void Save(SettingsStorage storage)
 		{
-			storage.SetValue("Id", Id);
-			storage.SetValue("Name", Name);
+			storage.SetValue(nameof(Id), Id);
+			storage.SetValue(nameof(Name), Name);
 		}
 
 		/// <summary>
@@ -89,8 +89,8 @@ namespace StockSharp.Algo.Indicators
 		/// <param name="storage">Settings storage.</param>
 		public virtual void Load(SettingsStorage storage)
 		{
-			Id = storage.GetValue<Guid>("Id");
-			Name = storage.GetValue<string>("Name");
+			Id = storage.GetValue<Guid>(nameof(Id));
+			Name = storage.GetValue<string>(nameof(Name));
 		}
 
 		/// <summary>

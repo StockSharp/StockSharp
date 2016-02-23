@@ -526,8 +526,8 @@ namespace StockSharp.Xaml
 			if (gridSettings != null)
 				SecuritiesCtrl.Load(gridSettings);
 
-			SecurityFilter = storage.GetValue<string>("SecurityFilter");
-			SelectedType = storage.GetValue<string>("SecurityType").To<SecurityTypes?>();
+			SecurityFilter = storage.GetValue<string>(nameof(SecurityFilter));
+			SelectedType = (storage.GetValue<string>(nameof(SelectedType)) ?? storage.GetValue<string>("SecurityType")).To<SecurityTypes?>();
 		}
 
 		/// <summary>
@@ -537,8 +537,8 @@ namespace StockSharp.Xaml
 		public void Save(SettingsStorage storage)
 		{
 			storage.SetValue("GridSettings", SecuritiesCtrl.Save());
-			storage.SetValue("SecurityFilter", SecurityFilter);
-			storage.SetValue("SecurityType", SelectedType.To<string>());
+			storage.SetValue(nameof(SecurityFilter), SecurityFilter);
+			storage.SetValue(nameof(SelectedType), SelectedType.To<string>());
 		}
 	}
 }

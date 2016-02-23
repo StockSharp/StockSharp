@@ -49,10 +49,10 @@ namespace StockSharp.Xaml
 		#region Dependency properties
 
 		/// <summary>
-		/// <see cref="DependencyProperty"/> for <see cref="LogControl.AutoScroll"/>.
+		/// <see cref="DependencyProperty"/> for <see cref="AutoScroll"/>.
 		/// </summary>
 		public static readonly DependencyProperty AutoScrollProperty =
-			DependencyProperty.Register("AutoScroll", typeof(bool), typeof(LogControl), new PropertyMetadata(false, AutoScrollChanged));
+			DependencyProperty.Register(nameof(AutoScroll), typeof(bool), typeof(LogControl), new PropertyMetadata(false, AutoScrollChanged));
 
 		private static void AutoScrollChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
 		{
@@ -74,10 +74,10 @@ namespace StockSharp.Xaml
 		}
 
 		/// <summary>
-		/// <see cref="DependencyProperty"/> for <see cref="LogControl.AutoResize"/>.
+		/// <see cref="DependencyProperty"/> for <see cref="AutoResize"/>.
 		/// </summary>
 		public static readonly DependencyProperty AutoResizeProperty =
-			DependencyProperty.Register("AutoResize", typeof(bool), typeof(LogControl), new PropertyMetadata(false, AutoResizeChanged));
+			DependencyProperty.Register(nameof(AutoResize), typeof(bool), typeof(LogControl), new PropertyMetadata(false, AutoResizeChanged));
 
 		private static void AutoResizeChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
 		{
@@ -97,10 +97,10 @@ namespace StockSharp.Xaml
 		}
 
 		/// <summary>
-		/// <see cref="DependencyProperty"/> for <see cref="LogControl.MaxItemsCount"/>.
+		/// <see cref="DependencyProperty"/> for <see cref="MaxItemsCount"/>.
 		/// </summary>
 		public static readonly DependencyProperty MaxItemsCountProperty =
-			DependencyProperty.Register("MaxItemsCount", typeof(int), typeof(LogControl),
+			DependencyProperty.Register(nameof(MaxItemsCount), typeof(int), typeof(LogControl),
 				new PropertyMetadata(LogMessageCollection.DefaultMaxItemsCount, MaxItemsCountChanged));
 
 		private static void MaxItemsCountChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
@@ -118,10 +118,10 @@ namespace StockSharp.Xaml
 		}
 
 		/// <summary>
-		/// <see cref="DependencyProperty"/> for <see cref="LogControl.ShowSourceNameColumn"/>.
+		/// <see cref="DependencyProperty"/> for <see cref="ShowSourceNameColumn"/>.
 		/// </summary>
 		public static readonly DependencyProperty ShowSourceNameColumnProperty =
-			DependencyProperty.Register("ShowSourceNameColumn", typeof(bool), typeof(LogControl), new PropertyMetadata(true, ShowSourceNameColumnChanged));
+			DependencyProperty.Register(nameof(ShowSourceNameColumn), typeof(bool), typeof(LogControl), new PropertyMetadata(true, ShowSourceNameColumnChanged));
 
 		private static void ShowSourceNameColumnChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
 		{
@@ -143,7 +143,7 @@ namespace StockSharp.Xaml
 		/// <see cref="DependencyProperty"/> for <see cref="LogControl.TimeFormat"/>.
 		/// </summary>
 		public static readonly DependencyProperty TimeFormatProperty =
-			DependencyProperty.Register("TimeFormat", typeof(string), typeof(LogControl), new PropertyMetadata(_defaultTimeFormat, TimeFormatChanged));
+			DependencyProperty.Register(nameof(TimeFormat), typeof(string), typeof(LogControl), new PropertyMetadata(_defaultTimeFormat, TimeFormatChanged));
 
 		private static void TimeFormatChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
 		{
@@ -171,7 +171,7 @@ namespace StockSharp.Xaml
 		/// <see cref="DependencyProperty"/> for <see cref="LogControl.ShowError"/>.
 		/// </summary>
 		public static readonly DependencyProperty ShowErrorProperty =
-			DependencyProperty.Register("ShowError", typeof(bool), typeof(LogControl), new PropertyMetadata(true, ShowChanged));
+			DependencyProperty.Register(nameof(ShowError), typeof(bool), typeof(LogControl), new PropertyMetadata(true, ShowChanged));
 
 		private bool _showError = true;
 
@@ -188,7 +188,7 @@ namespace StockSharp.Xaml
 		/// <see cref="DependencyProperty"/> for <see cref="LogControl.ShowWarning"/>.
 		/// </summary>
 		public static readonly DependencyProperty ShowWarningProperty =
-			DependencyProperty.Register("ShowWarning", typeof(bool), typeof(LogControl), new PropertyMetadata(true, ShowChanged));
+			DependencyProperty.Register(nameof(ShowWarning), typeof(bool), typeof(LogControl), new PropertyMetadata(true, ShowChanged));
 
 		private bool _showWarning = true;
 
@@ -205,7 +205,7 @@ namespace StockSharp.Xaml
 		/// <see cref="DependencyProperty"/> for <see cref="LogControl.ShowInfo"/>.
 		/// </summary>
 		public static readonly DependencyProperty ShowInfoProperty =
-			DependencyProperty.Register("ShowInfo", typeof(bool), typeof(LogControl), new PropertyMetadata(true, ShowChanged));
+			DependencyProperty.Register(nameof(ShowInfo), typeof(bool), typeof(LogControl), new PropertyMetadata(true, ShowChanged));
 
 		private bool _showInfo = true;
 
@@ -222,7 +222,7 @@ namespace StockSharp.Xaml
 		/// <see cref="DependencyProperty"/> for <see cref="LogControl.ShowDebug"/>.
 		/// </summary>
 		public static readonly DependencyProperty ShowDebugProperty =
-			DependencyProperty.Register("ShowDebug", typeof(bool), typeof(LogControl), new PropertyMetadata(true, ShowChanged));
+			DependencyProperty.Register(nameof(ShowDebug), typeof(bool), typeof(LogControl), new PropertyMetadata(true, ShowChanged));
 
 		private bool _showDebug = true;
 
@@ -249,15 +249,14 @@ namespace StockSharp.Xaml
 			else if (e.Property == ShowWarningProperty)
 				ctrl._showWarning = newValue;
 
-			if (ctrl._view != null)
-				ctrl._view.Refresh();
+			ctrl._view?.Refresh();
 		}
 
 		/// <summary>
-		/// <see cref="DependencyProperty"/> for <see cref="LogControl.Messages"/>.
+		/// <see cref="DependencyProperty"/> for <see cref="Messages"/>.
 		/// </summary>
 		public static readonly DependencyProperty MessagesProperty =
-			DependencyProperty.Register("Messages", typeof(LogMessageCollection), typeof(LogControl), new PropertyMetadata(null, MessagesChanged));
+			DependencyProperty.Register(nameof(Messages), typeof(LogMessageCollection), typeof(LogControl), new PropertyMetadata(null, MessagesChanged));
 
 		/// <summary>
 		/// The log entries collection.
@@ -281,104 +280,104 @@ namespace StockSharp.Xaml
 		#region Attached properties
 
 		/// <summary>
-		/// <see cref="DependencyProperty"/> for <see cref="LogControl.AutoScroll"/>.
+		/// <see cref="DependencyProperty"/> for <see cref="AutoScroll"/>.
 		/// </summary>
 		public static readonly DependencyProperty LogAutoScrollProperty = 
-			DependencyProperty.RegisterAttached("LogAutoScroll", typeof(bool),  typeof(LogControl), new PropertyMetadata(false, AutoScrollChanged));
+			DependencyProperty.RegisterAttached("Log" + nameof(AutoScroll), typeof(bool),  typeof(LogControl), new PropertyMetadata(false, AutoScrollChanged));
 
 		/// <summary>
-		/// To set the value for <see cref="LogControl.AutoScroll"/>.
+		/// To set the value for <see cref="AutoScroll"/>.
 		/// </summary>
 		/// <param name="element">Object <see cref="LogControl"/>.</param>
-		/// <param name="value">New value for <see cref="LogControl.AutoScroll"/>.</param>
+		/// <param name="value">New value for <see cref="AutoScroll"/>.</param>
 		public static void SetLogAutoScroll(UIElement element, bool value)
 		{
 			element.SetValue(LogAutoScrollProperty, value);
 		}
 
 		/// <summary>
-		/// To get the value for <see cref="LogControl.AutoScroll"/>.
+		/// To get the value for <see cref="AutoScroll"/>.
 		/// </summary>
 		/// <param name="element">Object <see cref="LogControl"/>.</param>
-		/// <returns>The value of <see cref="LogControl.AutoScroll"/>.</returns>
+		/// <returns>The value of <see cref="AutoScroll"/>.</returns>
 		public static bool GetLogAutoScroll(UIElement element)
 		{
 			return (bool)element.GetValue(LogAutoScrollProperty);
 		}
 
 		/// <summary>
-		/// <see cref="DependencyProperty"/> for <see cref="LogControl.AutoResize"/>.
+		/// <see cref="DependencyProperty"/> for <see cref="AutoResize"/>.
 		/// </summary>
 		public static readonly DependencyProperty LogAutoResizeProperty =
-			DependencyProperty.Register("LogAutoResize", typeof(bool), typeof(LogControl), new PropertyMetadata(false, AutoResizeChanged));
+			DependencyProperty.Register("Log" + nameof(AutoResize), typeof(bool), typeof(LogControl), new PropertyMetadata(false, AutoResizeChanged));
 
 		/// <summary>
-		/// To set the value for <see cref="LogControl.AutoResize"/>.
+		/// To set the value for <see cref="AutoResize"/>.
 		/// </summary>
 		/// <param name="element">Object <see cref="LogControl"/>.</param>
-		/// <param name="value">New value for <see cref="LogControl.AutoResize"/>.</param>
+		/// <param name="value">New value for <see cref="AutoResize"/>.</param>
 		public static void SetLogAutoResize(UIElement element, bool value)
 		{
 			element.SetValue(LogAutoResizeProperty, value);
 		}
 
 		/// <summary>
-		/// To get the value for <see cref="LogControl.AutoResize"/>.
+		/// To get the value for <see cref="AutoResize"/>.
 		/// </summary>
 		/// <param name="element">Object <see cref="LogControl"/>.</param>
-		/// <returns>The value of <see cref="LogControl.AutoResize"/>.</returns>
+		/// <returns>The value of <see cref="AutoResize"/>.</returns>
 		public static bool GetLogAutoResize(UIElement element)
 		{
 			return (bool)element.GetValue(LogAutoResizeProperty);
 		}
 
 		/// <summary>
-		/// <see cref="DependencyProperty"/> for <see cref="LogControl.MaxItemsCount"/>.
+		/// <see cref="DependencyProperty"/> for <see cref="MaxItemsCount"/>.
 		/// </summary>
 		public static readonly DependencyProperty LogMaxItemsCountProperty =
-			DependencyProperty.RegisterAttached("LogMaxItemsCount", typeof(int), typeof(LogControl), new PropertyMetadata(LogMessageCollection.DefaultMaxItemsCount, MaxItemsCountChanged));
+			DependencyProperty.RegisterAttached("Log" + nameof(MaxItemsCount), typeof(int), typeof(LogControl), new PropertyMetadata(LogMessageCollection.DefaultMaxItemsCount, MaxItemsCountChanged));
 
 		/// <summary>
-		/// To set the value for <see cref="LogControl.MaxItemsCount"/>.
+		/// To set the value for <see cref="MaxItemsCount"/>.
 		/// </summary>
 		/// <param name="element">Object <see cref="LogControl"/>.</param>
-		/// <param name="value">New value for <see cref="LogControl.MaxItemsCount"/>.</param>
+		/// <param name="value">New value for <see cref="MaxItemsCount"/>.</param>
 		public static void SetLogMaxItemsCount(UIElement element, int value)
 		{
 			element.SetValue(LogMaxItemsCountProperty, value);
 		}
 
 		/// <summary>
-		/// To get the value for <see cref="LogControl.MaxItemsCount"/>.
+		/// To get the value for <see cref="MaxItemsCount"/>.
 		/// </summary>
 		/// <param name="element">Object <see cref="LogControl"/>.</param>
-		/// <returns>The value of <see cref="LogControl.MaxItemsCount"/>.</returns>
+		/// <returns>The value of <see cref="MaxItemsCount"/>.</returns>
 		public static int GetLogMaxItemsCount(UIElement element)
 		{
 			return (int)element.GetValue(LogMaxItemsCountProperty);
 		}
 
 		/// <summary>
-		/// <see cref="DependencyProperty"/> for <see cref="LogControl.ShowSourceNameColumn"/>.
+		/// <see cref="DependencyProperty"/> for <see cref="ShowSourceNameColumn"/>.
 		/// </summary>
 		public static readonly DependencyProperty LogShowSourceNameColumnProperty =
-			DependencyProperty.RegisterAttached("LogShowSourceNameColumn", typeof(bool), typeof(LogControl), new PropertyMetadata(ShowSourceNameColumnChanged));
+			DependencyProperty.RegisterAttached("Log" + nameof(ShowSourceNameColumn), typeof(bool), typeof(LogControl), new PropertyMetadata(ShowSourceNameColumnChanged));
 
 		/// <summary>
-		/// To set the value for <see cref="LogControl.ShowSourceNameColumn"/>.
+		/// To set the value for <see cref="ShowSourceNameColumn"/>.
 		/// </summary>
 		/// <param name="element">Object <see cref="LogControl"/>.</param>
-		/// <param name="value">New value for <see cref="LogControl.ShowSourceNameColumn"/>.</param>
+		/// <param name="value">New value for <see cref="ShowSourceNameColumn"/>.</param>
 		public static void SetLogShowSourceNameColumn(UIElement element, bool value)
 		{
 			element.SetValue(LogShowSourceNameColumnProperty, value);
 		}
 
 		/// <summary>
-		/// To get the value for <see cref="LogControl.ShowSourceNameColumn"/>.
+		/// To get the value for <see cref="ShowSourceNameColumn"/>.
 		/// </summary>
 		/// <param name="element">Object <see cref="LogControl"/>.</param>
-		/// <returns>The value of <see cref="LogControl.ShowSourceNameColumn"/>.</returns>
+		/// <returns>The value of <see cref="ShowSourceNameColumn"/>.</returns>
 		public static bool GetLogShowSourceNameColumn(UIElement element)
 		{
 			return (bool)element.GetValue(LogShowSourceNameColumnProperty);
@@ -454,8 +453,7 @@ namespace StockSharp.Xaml
 				return;
 
 			var scroll = MessageGrid.FindVisualChild<ScrollViewer>();
-			if (scroll != null)
-				scroll.ScrollToEnd();
+			scroll?.ScrollToEnd();
 		}
 
 		void ILogListener.WriteMessages(IEnumerable<LogMessage> messages)
@@ -474,15 +472,15 @@ namespace StockSharp.Xaml
 		/// <param name="storage">Settings storage.</param>
 		public void Load(SettingsStorage storage)
 		{
-			AutoScroll = storage.GetValue("AutoScroll", false);
-			AutoResize = storage.GetValue("AutoResize", false);
-			ShowSourceNameColumn = storage.GetValue("ShowSourceNameColumn", true);
-			MaxItemsCount = storage.GetValue("MaxItemsCount", LogMessageCollection.DefaultMaxItemsCount);
-			TimeFormat = storage.GetValue("TimeFormat", _defaultTimeFormat);
-			ShowInfo = storage.GetValue("ShowInfo", true);
-			ShowError = storage.GetValue("ShowError", true);
-			ShowWarning = storage.GetValue("ShowWarning", true);
-			ShowDebug = storage.GetValue("ShowDebug", true);
+			AutoScroll = storage.GetValue(nameof(AutoScroll), false);
+			AutoResize = storage.GetValue(nameof(AutoResize), false);
+			ShowSourceNameColumn = storage.GetValue(nameof(ShowSourceNameColumn), true);
+			MaxItemsCount = storage.GetValue(nameof(MaxItemsCount), LogMessageCollection.DefaultMaxItemsCount);
+			TimeFormat = storage.GetValue(nameof(TimeFormat), _defaultTimeFormat);
+			ShowInfo = storage.GetValue(nameof(ShowInfo), true);
+			ShowError = storage.GetValue(nameof(ShowError), true);
+			ShowWarning = storage.GetValue(nameof(ShowWarning), true);
+			ShowDebug = storage.GetValue(nameof(ShowDebug), true);
 		}
 
 		/// <summary>
@@ -491,15 +489,15 @@ namespace StockSharp.Xaml
 		/// <param name="storage">Settings storage.</param>
 		public void Save(SettingsStorage storage)
 		{
-			storage.SetValue("AutoScroll", AutoScroll);
-			storage.SetValue("AutoResize", AutoResize);
-			storage.SetValue("ShowSourceNameColumn", ShowSourceNameColumn);
-			storage.SetValue("MaxItemsCount", MaxItemsCount);
-			storage.SetValue("TimeFormat", TimeFormat);
-			storage.SetValue("ShowInfo", ShowInfo);
-			storage.SetValue("ShowError", ShowError);
-			storage.SetValue("ShowWarning", ShowWarning);
-			storage.SetValue("ShowDebug", ShowDebug);
+			storage.SetValue(nameof(AutoScroll), AutoScroll);
+			storage.SetValue(nameof(AutoResize), AutoResize);
+			storage.SetValue(nameof(ShowSourceNameColumn), ShowSourceNameColumn);
+			storage.SetValue(nameof(MaxItemsCount), MaxItemsCount);
+			storage.SetValue(nameof(TimeFormat), TimeFormat);
+			storage.SetValue(nameof(ShowInfo), ShowInfo);
+			storage.SetValue(nameof(ShowError), ShowError);
+			storage.SetValue(nameof(ShowWarning), ShowWarning);
+			storage.SetValue(nameof(ShowDebug), ShowDebug);
 		}
 
 		#endregion

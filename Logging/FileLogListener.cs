@@ -500,16 +500,16 @@ namespace StockSharp.Logging
 		{
 			base.Load(storage);
 
-			FileName = storage.GetValue<string>("FileName");
-			MaxLength = storage.GetValue<long>("MaxLength");
-			MaxCount = storage.GetValue<int>("MaxCount");
-			Append = storage.GetValue<bool>("Append");
-			LogDirectory = storage.GetValue<string>("LogDirectory");
-			WriteChildDataToRootFile = storage.GetValue<bool>("WriteChildDataToRootFile");
-			Extension = storage.GetValue<string>("Extension");
-			WriteSourceId = storage.GetValue<bool>("WriteSourceId");
-			DirectoryDateFormat = storage.GetValue<string>("DirectoryDateFormat");
-			SeparateByDates = storage.GetValue<SeparateByDateModes>("SeparateByDates");
+			FileName = storage.GetValue<string>(nameof(FileName));
+			MaxLength = storage.GetValue<long>(nameof(MaxLength));
+			MaxCount = storage.GetValue<int>(nameof(MaxCount));
+			Append = storage.GetValue<bool>(nameof(Append));
+			LogDirectory = storage.GetValue<string>(nameof(LogDirectory));
+			WriteChildDataToRootFile = storage.GetValue<bool>(nameof(WriteChildDataToRootFile));
+			Extension = storage.GetValue<string>(nameof(Extension));
+			WriteSourceId = storage.GetValue<bool>(nameof(WriteSourceId));
+			DirectoryDateFormat = storage.GetValue<string>(nameof(DirectoryDateFormat));
+			SeparateByDates = storage.GetValue<SeparateByDateModes>(nameof(SeparateByDates));
 		}
 
 		/// <summary>
@@ -520,16 +520,16 @@ namespace StockSharp.Logging
 		{
 			base.Save(storage);
 
-			storage.SetValue("FileName", FileName);
-			storage.SetValue("MaxLength", MaxLength);
-			storage.SetValue("MaxCount", MaxCount);
-			storage.SetValue("Append", Append);
-			storage.SetValue("LogDirectory", LogDirectory);
-			storage.SetValue("WriteChildDataToRootFile", WriteChildDataToRootFile);
-			storage.SetValue("Extension", Extension);
-			storage.SetValue("WriteSourceId", WriteSourceId);
-			storage.SetValue("DirectoryDateFormat", DirectoryDateFormat);
-			storage.SetValue("SeparateByDates", SeparateByDates.To<string>());
+			storage.SetValue(nameof(FileName), FileName);
+			storage.SetValue(nameof(MaxLength), MaxLength);
+			storage.SetValue(nameof(MaxCount), MaxCount);
+			storage.SetValue(nameof(Append), Append);
+			storage.SetValue(nameof(LogDirectory), LogDirectory);
+			storage.SetValue(nameof(WriteChildDataToRootFile), WriteChildDataToRootFile);
+			storage.SetValue(nameof(Extension), Extension);
+			storage.SetValue(nameof(WriteSourceId), WriteSourceId);
+			storage.SetValue(nameof(DirectoryDateFormat), DirectoryDateFormat);
+			storage.SetValue(nameof(SeparateByDates), SeparateByDates.To<string>());
 		}
 
 		/// <summary>

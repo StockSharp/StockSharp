@@ -120,7 +120,7 @@ namespace StockSharp.Algo.Commissions
 		/// <param name="storage">Storage.</param>
 		public virtual void Load(SettingsStorage storage)
 		{
-			Value = storage.GetValue<Unit>("Value");
+			Value = storage.GetValue<Unit>(nameof(Value));
 		}
 
 		/// <summary>
@@ -129,7 +129,7 @@ namespace StockSharp.Algo.Commissions
 		/// <param name="storage">Storage.</param>
 		public virtual void Save(SettingsStorage storage)
 		{
-			storage.SetValue("Value", Value);
+			storage.SetValue(nameof(Value), Value);
 		}
 	}
 
@@ -277,7 +277,7 @@ namespace StockSharp.Algo.Commissions
 		{
 			base.Save(storage);
 
-			storage.SetValue("Count", Count);
+			storage.SetValue(nameof(Count), Count);
 		}
 
 		/// <summary>
@@ -288,7 +288,7 @@ namespace StockSharp.Algo.Commissions
 		{
 			base.Load(storage);
 
-			Count = storage.GetValue<int>("Count");
+			Count = storage.GetValue<int>(nameof(Count));
 		}
 	}
 
@@ -352,7 +352,7 @@ namespace StockSharp.Algo.Commissions
 		{
 			base.Save(storage);
 
-			storage.SetValue("Count", Count);
+			storage.SetValue(nameof(Count), Count);
 		}
 
 		/// <summary>
@@ -363,7 +363,7 @@ namespace StockSharp.Algo.Commissions
 		{
 			base.Load(storage);
 
-			Count = storage.GetValue<int>("Count");
+			Count = storage.GetValue<int>(nameof(Count));
 		}
 	}
 
@@ -434,7 +434,7 @@ namespace StockSharp.Algo.Commissions
 		{
 			base.Save(storage);
 
-			storage.SetValue("SecurityId", SecurityId);
+			storage.SetValue(nameof(SecurityId), SecurityId);
 		}
 
 		/// <summary>
@@ -445,7 +445,7 @@ namespace StockSharp.Algo.Commissions
 		{
 			base.Load(storage);
 
-			SecurityId = storage.GetValue<SecurityId>("SecurityId");
+			SecurityId = storage.GetValue<SecurityId>(nameof(SecurityId));
 		}
 	}
 
@@ -503,7 +503,7 @@ namespace StockSharp.Algo.Commissions
 		{
 			base.Save(storage);
 
-			storage.SetValue("SecurityType", SecurityType);
+			storage.SetValue(nameof(SecurityType), SecurityType);
 		}
 
 		/// <summary>
@@ -514,7 +514,7 @@ namespace StockSharp.Algo.Commissions
 		{
 			base.Load(storage);
 
-			SecurityType = storage.GetValue<SecurityTypes>("SecurityType");
+			SecurityType = storage.GetValue<SecurityTypes>(nameof(SecurityType));
 		}
 	}
 
@@ -564,7 +564,7 @@ namespace StockSharp.Algo.Commissions
 		{
 			base.Save(storage);
 
-			storage.SetValue("BoardCode", BoardCode);
+			storage.SetValue(nameof(BoardCode), BoardCode);
 		}
 
 		/// <summary>
@@ -575,7 +575,7 @@ namespace StockSharp.Algo.Commissions
 		{
 			base.Load(storage);
 
-			BoardCode = storage.GetValue<string>("BoardCode");
+			BoardCode = storage.GetValue<string>(nameof(BoardCode));
 		}
 	}
 
@@ -640,7 +640,7 @@ namespace StockSharp.Algo.Commissions
 		{
 			base.Save(storage);
 
-			storage.SetValue("TurnOver", TurnOver);
+			storage.SetValue(nameof(TurnOver), TurnOver);
 		}
 
 		/// <summary>
@@ -651,7 +651,7 @@ namespace StockSharp.Algo.Commissions
 		{
 			base.Load(storage);
 
-			TurnOver = storage.GetValue<decimal>("TurnOver");
+			TurnOver = storage.GetValue<decimal>(nameof(TurnOver));
 		}
 	}
 }

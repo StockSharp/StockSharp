@@ -148,18 +148,18 @@ namespace StockSharp.Algo.Candles
 			var secProvider = ConfigManager.TryGetService<ISecurityProvider>();
 			if (secProvider != null)
 			{
-				var securityId = storage.GetValue<string>("SecurityId");
+				var securityId = storage.GetValue<string>(nameof(SecurityId));
 
 				if (!securityId.IsEmpty())
 					Security = secProvider.LookupById(securityId);
 			}
 
-			CandleType = storage.GetValue("CandleType", CandleType);
-			Arg = storage.GetValue("Arg", Arg);
-			From = storage.GetValue("From", From);
-			To = storage.GetValue("To", To);
-			WorkingTime = storage.GetValue("WorkingTime", WorkingTime);
-			IsCalcVolumeProfile = storage.GetValue("IsCalcVolumeProfile", IsCalcVolumeProfile);
+			CandleType = storage.GetValue(nameof(CandleType), CandleType);
+			Arg = storage.GetValue(nameof(Arg), Arg);
+			From = storage.GetValue(nameof(From), From);
+			To = storage.GetValue(nameof(To), To);
+			WorkingTime = storage.GetValue(nameof(WorkingTime), WorkingTime);
+			IsCalcVolumeProfile = storage.GetValue(nameof(IsCalcVolumeProfile), IsCalcVolumeProfile);
 		}
 
 		/// <summary>
@@ -169,21 +169,21 @@ namespace StockSharp.Algo.Candles
 		public void Save(SettingsStorage storage)
 		{
 			if (Security != null)
-				storage.SetValue("SecurityId", Security.Id);
+				storage.SetValue(nameof(SecurityId), Security.Id);
 
 			if (CandleType != null)
-				storage.SetValue("CandleType", CandleType.GetTypeName(false));
+				storage.SetValue(nameof(CandleType), CandleType.GetTypeName(false));
 
 			if (Arg != null)
-				storage.SetValue("Arg", Arg);
+				storage.SetValue(nameof(Arg), Arg);
 
-			storage.SetValue("From", From);
-			storage.SetValue("To", To);
+			storage.SetValue(nameof(From), From);
+			storage.SetValue(nameof(To), To);
 
 			if (WorkingTime != null)
-				storage.SetValue("WorkingTime", WorkingTime);
+				storage.SetValue(nameof(WorkingTime), WorkingTime);
 
-			storage.SetValue("IsCalcVolumeProfile", IsCalcVolumeProfile);
+			storage.SetValue(nameof(IsCalcVolumeProfile), IsCalcVolumeProfile);
 		}
 	}
 }

@@ -21,7 +21,6 @@ namespace StockSharp.Messages
 	using System.Runtime.Serialization;
 
 	using Ecng.Common;
-	using Ecng.ComponentModel;
 	using Ecng.Serialization;
 
 	using Xceed.Wpf.Toolkit.PropertyGrid.Attributes;
@@ -139,24 +138,9 @@ namespace StockSharp.Messages
 		/// <param name="storage">Settings storage.</param>
 		public void Load(SettingsStorage storage)
 		{
-			if (storage.ContainsKey("Times"))
-			{
-				// TODO Удалить через несколько версий
-	
-				Periods = new[]
-				{
-					new WorkingTimePeriod
-					{
-						Till = DateTime.MaxValue,
-						Times = storage.GetValue<Range<TimeSpan>[]>("Times")
-					}
-				};
-			}
-			else
-				Periods = storage.GetValue<IEnumerable<SettingsStorage>>("Periods").Select(s => s.Load<WorkingTimePeriod>()).ToArray();
-			
-			SpecialWorkingDays = storage.GetValue<DateTime[]>("SpecialWorkingDays");
-			SpecialHolidays = storage.GetValue<DateTime[]>("SpecialHolidays");
+			Periods = storage.GetValue<IEnumerable<SettingsStorage>>(nameof(Periods)).Select(s => s.Load<WorkingTimePeriod>()).ToArray();
+			SpecialWorkingDays = storage.GetValue<DateTime[]>(nameof(SpecialWorkingDays));
+			SpecialHolidays = storage.GetValue<DateTime[]>(nameof(SpecialHolidays));
 		}
 
 		/// <summary>
@@ -165,9 +149,9 @@ namespace StockSharp.Messages
 		/// <param name="storage">Settings storage.</param>
 		public void Save(SettingsStorage storage)
 		{
-			storage.SetValue("Periods", Periods.Select(p => p.Save()).ToArray());
-			storage.SetValue("SpecialWorkingDays", SpecialWorkingDays);
-			storage.SetValue("SpecialHolidays", SpecialHolidays);
+			storage.SetValue(nameof(Periods), Periods.Select(p => p.Save()).ToArray());
+			storage.SetValue(nameof(SpecialWorkingDays), SpecialWorkingDays);
+			storage.SetValue(nameof(SpecialHolidays), SpecialHolidays);
 		}
 	}
 }

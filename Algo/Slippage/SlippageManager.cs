@@ -158,7 +158,7 @@ namespace StockSharp.Algo.Slippage
 		/// <param name="storage">Storage.</param>
 		public void Load(SettingsStorage storage)
 		{
-			CalculateNegative = storage.GetValue<bool>("CalculateNegative");
+			CalculateNegative = storage.GetValue<bool>(nameof(CalculateNegative));
 		}
 
 		/// <summary>
@@ -167,7 +167,7 @@ namespace StockSharp.Algo.Slippage
 		/// <param name="storage">Storage.</param>
 		public void Save(SettingsStorage storage)
 		{
-			storage.SetValue("CalculateNegative", CalculateNegative);
+			storage.SetValue(nameof(CalculateNegative), CalculateNegative);
 		}
 	}
 }

@@ -50,7 +50,7 @@ namespace StockSharp.Alerts
 		/// </summary>
 		public Type MessageType
 		{
-			get { return _alertSchema == null ? null : _alertSchema.MessageType; }
+			get { return _alertSchema?.MessageType; }
 			set
 			{
 				_alertSchema = value == null ? null : new AlertSchema(value);
@@ -72,7 +72,7 @@ namespace StockSharp.Alerts
 			if (_alertSchema == null)
 				return;
 
-			var alertSettings = storage.GetValue<SettingsStorage>("AlertSchema");
+			var alertSettings = storage.GetValue<SettingsStorage>(nameof(AlertSchema));
 			if (alertSettings != null)
 				_alertSchema.Load(alertSettings);
 
@@ -89,7 +89,7 @@ namespace StockSharp.Alerts
 			if (_alertSchema == null)
 				return;
 
-			storage.SetValue("AlertSchema", _alertSchema.Save());
+			storage.SetValue(nameof(AlertSchema), _alertSchema.Save());
 		}
 
 		private void AlertButton_OnClick(object sender, RoutedEventArgs e)
@@ -120,10 +120,7 @@ namespace StockSharp.Alerts
 			if (messages == null)
 				throw new ArgumentNullException(nameof(messages));
 
-			if (_alertSchema == null)
-				return;
-
-			if (_alertSchema.AlertType == null)
+			if (_alertSchema?.AlertType == null)
 				return;
 
 			foreach (var message in messages)
@@ -141,10 +138,7 @@ namespace StockSharp.Alerts
 			if (message == null)
 				throw new ArgumentNullException(nameof(message));
 
-			if (_alertSchema == null)
-				return;
-
-			if (_alertSchema.AlertType == null)
+			if (_alertSchema?.AlertType == null)
 				return;
 
 			AlertService.Process(message);

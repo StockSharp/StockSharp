@@ -33,15 +33,15 @@ namespace StockSharp.AlfaDirect.Native
 	{
 		private readonly AlfaTable _tableDepth, _tableSecurities, _tableLevel1, _tableTrades, _tableOrders, _tablePositions, _tableMyTrades, _tableNews, _tableAccounts;
 
-		public FieldList FieldsDepth      {get {return _tableDepth.Fields;}}
-		public FieldList FieldsSecurities {get {return _tableSecurities.Fields;}}
-		public FieldList FieldsLevel1     {get {return _tableLevel1.Fields;}}
-		public FieldList FieldsTrades     {get {return _tableTrades.Fields;}}
-		public FieldList FieldsOrders     {get {return _tableOrders.Fields;}}
-		public FieldList FieldsPositions  {get {return _tablePositions.Fields;}}
-		public FieldList FieldsMyTrades   {get {return _tableMyTrades.Fields;}}
-		public FieldList FieldsNews       {get {return _tableNews.Fields;}}
-		public FieldList FieldsAccounts   {get {return _tableAccounts.Fields;}}
+		public FieldList FieldsDepth => _tableDepth.Fields;
+		public FieldList FieldsSecurities => _tableSecurities.Fields;
+		public FieldList FieldsLevel1 => _tableLevel1.Fields;
+		public FieldList FieldsTrades => _tableTrades.Fields;
+		public FieldList FieldsOrders => _tableOrders.Fields;
+		public FieldList FieldsPositions => _tablePositions.Fields;
+		public FieldList FieldsMyTrades => _tableMyTrades.Fields;
+		public FieldList FieldsNews => _tableNews.Fields;
+		public FieldList FieldsAccounts => _tableAccounts.Fields;
 
 		//private readonly PairSet<string, string> _securityCurrencies = new PairSet<string, string>();
 
@@ -51,15 +51,9 @@ namespace StockSharp.AlfaDirect.Native
 
 		private ConnectionStates _connState;
 
-		public bool IsConnected
-		{
-			get { return _ad.Connected; }
-		}
+		public bool IsConnected => _ad.Connected;
 
-		public bool IsConnecting
-		{
-			get { return _connState == ConnectionStates.Connecting; }
-		}
+		public bool IsConnecting => _connState == ConnectionStates.Connecting;
 
 		public AlfaWrapper(AlfaDirectMessageAdapter adapter)
 		{

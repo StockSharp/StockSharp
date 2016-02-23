@@ -50,7 +50,7 @@ namespace StockSharp.Algo.Indicators
 		[DisplayNameLoc(LocalizedStrings.Str806Key)]
 		[DescriptionLoc(LocalizedStrings.Str807Key)]
 		[CategoryLoc(LocalizedStrings.GeneralKey)]
-		public decimal Мultiple
+		public decimal Multiple
 		{
 			get { return _multiple * 1000; }
 			set
@@ -93,7 +93,7 @@ namespace StockSharp.Algo.Indicators
 		/// </summary>
 		public NickRypockTrailingReverse()
 		{
-			Мultiple = 100;
+			Multiple = 100;
 			Length = 50;
 		}
 
@@ -199,7 +199,7 @@ namespace StockSharp.Algo.Indicators
 		{
 			base.Load(settings);
 
-			Мultiple = settings.GetValue<decimal>("Multiple");
+			Multiple = settings.GetValue<decimal>(nameof(Multiple));
 		}
 
 		/// <summary>
@@ -210,7 +210,7 @@ namespace StockSharp.Algo.Indicators
 		{
 			base.Save(settings);
 
-			settings.SetValue("Multiple", Мultiple);
+			settings.SetValue(nameof(Multiple), Multiple);
 		}
 	}
 }

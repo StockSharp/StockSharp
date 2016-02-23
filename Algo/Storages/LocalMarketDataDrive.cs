@@ -484,7 +484,7 @@ namespace StockSharp.Algo.Storages
 		{
 			base.Load(storage);
 
-			UseAlphabeticPath = storage.GetValue<bool>("UseAlphabeticPath");
+			UseAlphabeticPath = storage.GetValue<bool>(nameof(UseAlphabeticPath));
 		}
 
 		/// <summary>
@@ -495,7 +495,7 @@ namespace StockSharp.Algo.Storages
 		{
 			base.Save(storage);
 
-			storage.SetValue("UseAlphabeticPath", UseAlphabeticPath);
+			storage.SetValue(nameof(UseAlphabeticPath), UseAlphabeticPath);
 		}
 
 		/// <summary>

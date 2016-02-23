@@ -78,17 +78,11 @@ namespace StockSharp.Logging
 			_name = GetType().GetDisplayName();
 		}
 
-		private Guid _id = Guid.NewGuid();
-
 		/// <summary>
 		/// The unique identifier of the source.
 		/// </summary>
 		[Browsable(false)]
-		public virtual Guid Id
-		{
-			get { return _id; }
-			set { _id = value; }
-		}
+		public virtual Guid Id { get; set; } = Guid.NewGuid();
 
 		private string _name;
 
@@ -132,19 +126,13 @@ namespace StockSharp.Logging
 			}
 		}
 
-		private LogLevels _logLevel = LogLevels.Inherit;
-
 		/// <summary>
 		/// The logging level. The default is set to <see cref="LogLevels.Inherit"/>.
 		/// </summary>
 		[CategoryLoc(LocalizedStrings.LoggingKey)]
 		[DisplayNameLoc(LocalizedStrings.Str9Key)]
 		[DescriptionLoc(LocalizedStrings.Str9Key, true)]
-		public virtual LogLevels LogLevel
-		{
-			get { return _logLevel; }
-			set { _logLevel = value; }
-		}
+		public virtual LogLevels LogLevel { get; set; } = LogLevels.Inherit;
 
 		/// <summary>
 		/// Current time, which will be passed to the <see cref="LogMessage.Time"/>.
@@ -188,8 +176,7 @@ namespace StockSharp.Logging
 
 			var parent = Parent as ILogReceiver;
 
-			if (parent != null)
-				parent.AddLog(message);
+			parent?.AddLog(message);
 		}
 
 		/// <summary>
@@ -207,7 +194,7 @@ namespace StockSharp.Logging
 		/// <param name="storage">Settings storage.</param>
 		public virtual void Load(SettingsStorage storage)
 		{
-			LogLevel = storage.GetValue("LogLevel", LogLevels.Inherit);
+			LogLevel = storage.GetValue(nameof(LogLevel), LogLevels.Inherit);
 		}
 
 		/// <summary>
@@ -216,7 +203,7 @@ namespace StockSharp.Logging
 		/// <param name="storage">Settings storage.</param>
 		public virtual void Save(SettingsStorage storage)
 		{
-			storage.SetValue("LogLevel", LogLevel.To<string>());
+			storage.SetValue(nameof(LogLevel), LogLevel.To<string>());
 		}
 	}
 }

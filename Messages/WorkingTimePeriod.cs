@@ -83,8 +83,8 @@ namespace StockSharp.Messages
 		/// <param name="storage">Settings storage.</param>
 		public void Load(SettingsStorage storage)
 		{
-			Times = storage.GetValue<Range<TimeSpan>[]>("Times");
-			Till = storage.GetValue<DateTime>("Till");
+			Times = storage.GetValue<Range<TimeSpan>[]>(nameof(Times));
+			Till = storage.GetValue<DateTime>(nameof(Till));
 		}
 
 		/// <summary>
@@ -93,8 +93,8 @@ namespace StockSharp.Messages
 		/// <param name="storage">Settings storage.</param>
 		public void Save(SettingsStorage storage)
 		{
-			storage.SetValue("Times", Times);
-			storage.SetValue("Till", Till);
+			storage.SetValue(nameof(Times), Times);
+			storage.SetValue(nameof(Till), Till);
 		}
 	}
 }

@@ -253,9 +253,9 @@ namespace StockSharp.Algo.Indicators
 		{
 			base.Load(settings);
 
-			Acceleration = settings.GetValue("Acceleration", 0.02M);
-			AccelerationMax = settings.GetValue("AccelerationMax", 0.2M);
-			AccelerationStep = settings.GetValue("AccelerationStep", 0.02M);
+			Acceleration = settings.GetValue(nameof(Acceleration), 0.02M);
+			AccelerationMax = settings.GetValue(nameof(AccelerationMax), 0.2M);
+			AccelerationStep = settings.GetValue(nameof(AccelerationStep), 0.02M);
 		}
 
 		/// <summary>
@@ -266,9 +266,9 @@ namespace StockSharp.Algo.Indicators
 		{
 			base.Save(settings);
 
-			settings.SetValue("Acceleration", Acceleration);
-			settings.SetValue("AccelerationMax", AccelerationMax);
-			settings.SetValue("AccelerationStep", AccelerationStep);
+			settings.SetValue(nameof(Acceleration), Acceleration);
+			settings.SetValue(nameof(AccelerationMax), AccelerationMax);
+			settings.SetValue(nameof(AccelerationStep), AccelerationStep);
 		}
 	}
 }

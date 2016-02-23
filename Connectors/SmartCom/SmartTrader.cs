@@ -372,9 +372,9 @@ namespace StockSharp.SmartCom
 		{
 			base.Save(storage);
 
-			storage.SetValue("RestartService", RestartService);
-			storage.SetValue("RestartServiceTimeOut", RestartServiceTimeOut);
-			storage.SetValue("RealTimeCandleOffset", RealTimeCandleOffset);
+			storage.SetValue(nameof(RestartService), RestartService);
+			storage.SetValue(nameof(RestartServiceTimeOut), RestartServiceTimeOut);
+			storage.SetValue(nameof(RealTimeCandleOffset), RealTimeCandleOffset);
 		}
 
 		/// <summary>
@@ -385,9 +385,9 @@ namespace StockSharp.SmartCom
 		{
 			base.Load(storage);
 
-			RestartService = storage.GetValue("RestartService", true);
-			RestartServiceTimeOut = storage.GetValue("RestartServiceTimeOut", TimeSpan.FromSeconds(5));
-			RealTimeCandleOffset = storage.GetValue("RealTimeCandleOffset", TimeSpan.FromSeconds(5));
+			RestartService = storage.GetValue(nameof(RestartService), true);
+			RestartServiceTimeOut = storage.GetValue(nameof(RestartServiceTimeOut), TimeSpan.FromSeconds(5));
+			RealTimeCandleOffset = storage.GetValue(nameof(RealTimeCandleOffset), TimeSpan.FromSeconds(5));
 		}
 	}
 }

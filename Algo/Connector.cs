@@ -1559,35 +1559,35 @@ namespace StockSharp.Algo
 			if (storage == null)
 				throw new ArgumentNullException(nameof(storage));
 
-			TradesKeepCount = storage.GetValue("TradesKeepCount", TradesKeepCount);
-			OrdersKeepCount = storage.GetValue("OrdersKeepCount", OrdersKeepCount);
-			UpdateSecurityLastQuotes = storage.GetValue("UpdateSecurityLastQuotes", true);
-			UpdateSecurityByLevel1 = storage.GetValue("UpdateSecurityByLevel1", true);
-			ReConnectionSettings.Load(storage.GetValue<SettingsStorage>("ReConnectionSettings"));
+			TradesKeepCount = storage.GetValue(nameof(TradesKeepCount), TradesKeepCount);
+			OrdersKeepCount = storage.GetValue(nameof(OrdersKeepCount), OrdersKeepCount);
+			UpdateSecurityLastQuotes = storage.GetValue(nameof(UpdateSecurityLastQuotes), true);
+			UpdateSecurityByLevel1 = storage.GetValue(nameof(UpdateSecurityByLevel1), true);
+			ReConnectionSettings.Load(storage.GetValue<SettingsStorage>(nameof(ReConnectionSettings)));
 
-			if (storage.ContainsKey("LatencyManager"))
-				LatencyManager = storage.GetValue<SettingsStorage>("LatencyManager").LoadEntire<ILatencyManager>();
+			if (storage.ContainsKey(nameof(LatencyManager)))
+				LatencyManager = storage.GetValue<SettingsStorage>(nameof(LatencyManager)).LoadEntire<ILatencyManager>();
 
-			if (storage.ContainsKey("CommissionManager"))
-				CommissionManager = storage.GetValue<SettingsStorage>("CommissionManager").LoadEntire<ICommissionManager>();
+			if (storage.ContainsKey(nameof(CommissionManager)))
+				CommissionManager = storage.GetValue<SettingsStorage>(nameof(CommissionManager)).LoadEntire<ICommissionManager>();
 
-			if (storage.ContainsKey("PnLManager"))
-				PnLManager = storage.GetValue<SettingsStorage>("PnLManager").LoadEntire<IPnLManager>();
+			if (storage.ContainsKey(nameof(PnLManager)))
+				PnLManager = storage.GetValue<SettingsStorage>(nameof(PnLManager)).LoadEntire<IPnLManager>();
 
-			if (storage.ContainsKey("SlippageManager"))
-				SlippageManager = storage.GetValue<SettingsStorage>("SlippageManager").LoadEntire<ISlippageManager>();
+			if (storage.ContainsKey(nameof(SlippageManager)))
+				SlippageManager = storage.GetValue<SettingsStorage>(nameof(SlippageManager)).LoadEntire<ISlippageManager>();
 
-			if (storage.ContainsKey("RiskManager"))
-				RiskManager = storage.GetValue<SettingsStorage>("RiskManager").LoadEntire<IRiskManager>();
+			if (storage.ContainsKey(nameof(RiskManager)))
+				RiskManager = storage.GetValue<SettingsStorage>(nameof(RiskManager)).LoadEntire<IRiskManager>();
 
-			Adapter.Load(storage.GetValue<SettingsStorage>("Adapter"));
+			Adapter.Load(storage.GetValue<SettingsStorage>(nameof(Adapter)));
 
-			CreateDepthFromOrdersLog = storage.GetValue<bool>("CreateDepthFromOrdersLog");
-			CreateTradesFromOrdersLog = storage.GetValue<bool>("CreateTradesFromOrdersLog");
-			CreateDepthFromLevel1 = storage.GetValue("CreateDepthFromLevel1", CreateDepthFromLevel1);
+			CreateDepthFromOrdersLog = storage.GetValue<bool>(nameof(CreateDepthFromOrdersLog));
+			CreateTradesFromOrdersLog = storage.GetValue<bool>(nameof(CreateTradesFromOrdersLog));
+			CreateDepthFromLevel1 = storage.GetValue(nameof(CreateDepthFromLevel1), CreateDepthFromLevel1);
 
-			MarketTimeChangedInterval = storage.GetValue<TimeSpan>("MarketTimeChangedInterval");
-			CreateAssociatedSecurity = storage.GetValue("CreateAssociatedSecurity", CreateAssociatedSecurity);
+			MarketTimeChangedInterval = storage.GetValue<TimeSpan>(nameof(MarketTimeChangedInterval));
+			CreateAssociatedSecurity = storage.GetValue(nameof(CreateAssociatedSecurity), CreateAssociatedSecurity);
 
 			base.Load(storage);
 		}
@@ -1601,35 +1601,35 @@ namespace StockSharp.Algo
 			if (storage == null)
 				throw new ArgumentNullException(nameof(storage));
 
-			storage.SetValue("TradesKeepCount", TradesKeepCount);
-			storage.SetValue("OrdersKeepCount", OrdersKeepCount);
-			storage.SetValue("UpdateSecurityLastQuotes", UpdateSecurityLastQuotes);
-			storage.SetValue("UpdateSecurityByLevel1", UpdateSecurityByLevel1);
-			storage.SetValue("ReConnectionSettings", ReConnectionSettings.Save());
+			storage.SetValue(nameof(TradesKeepCount), TradesKeepCount);
+			storage.SetValue(nameof(OrdersKeepCount), OrdersKeepCount);
+			storage.SetValue(nameof(UpdateSecurityLastQuotes), UpdateSecurityLastQuotes);
+			storage.SetValue(nameof(UpdateSecurityByLevel1), UpdateSecurityByLevel1);
+			storage.SetValue(nameof(ReConnectionSettings), ReConnectionSettings.Save());
 
 			if (LatencyManager != null)
-				storage.SetValue("LatencyManager", LatencyManager.SaveEntire(false));
+				storage.SetValue(nameof(LatencyManager), LatencyManager.SaveEntire(false));
 
 			if (CommissionManager != null)
-				storage.SetValue("CommissionManager", CommissionManager.SaveEntire(false));
+				storage.SetValue(nameof(CommissionManager), CommissionManager.SaveEntire(false));
 
 			if (PnLManager != null)
-				storage.SetValue("PnLManager", PnLManager.SaveEntire(false));
+				storage.SetValue(nameof(PnLManager), PnLManager.SaveEntire(false));
 
 			if (SlippageManager != null)
-				storage.SetValue("SlippageManager", SlippageManager.SaveEntire(false));
+				storage.SetValue(nameof(SlippageManager), SlippageManager.SaveEntire(false));
 
 			if (RiskManager != null)
-				storage.SetValue("RiskManager", RiskManager.SaveEntire(false));
+				storage.SetValue(nameof(RiskManager), RiskManager.SaveEntire(false));
 
-			storage.SetValue("Adapter", Adapter.Save());
+			storage.SetValue(nameof(Adapter), Adapter.Save());
 
-			storage.SetValue("CreateDepthFromOrdersLog", CreateDepthFromOrdersLog);
-			storage.SetValue("CreateTradesFromOrdersLog", CreateTradesFromOrdersLog);
-			storage.SetValue("CreateDepthFromLevel1", CreateDepthFromLevel1);
+			storage.SetValue(nameof(CreateDepthFromOrdersLog), CreateDepthFromOrdersLog);
+			storage.SetValue(nameof(CreateTradesFromOrdersLog), CreateTradesFromOrdersLog);
+			storage.SetValue(nameof(CreateDepthFromLevel1), CreateDepthFromLevel1);
 
-			storage.SetValue("MarketTimeChangedInterval", MarketTimeChangedInterval);
-			storage.SetValue("CreateAssociatedSecurity", CreateAssociatedSecurity);
+			storage.SetValue(nameof(MarketTimeChangedInterval), MarketTimeChangedInterval);
+			storage.SetValue(nameof(CreateAssociatedSecurity), CreateAssociatedSecurity);
 
 			base.Save(storage);
 		}

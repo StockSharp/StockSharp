@@ -66,7 +66,7 @@ namespace StockSharp.Logging
 				throw new ArgumentNullException(nameof(name));
 
 			//if (parent == null)
-			//	throw new ArgumentNullException("parent");
+			//	throw new ArgumentNullException(nameof(parent));
 
 			Name = name;
 			//_parent = parent;
@@ -230,9 +230,9 @@ namespace StockSharp.Logging
 		/// <param name="storage">Settings storage.</param>
 		public void Load(SettingsStorage storage)
 		{
-			IsObjectTracking = storage.GetValue<bool>("IsObjectTracking");
-			ThrowOnRemoveDeleted = storage.GetValue<bool>("ThrowOnRemoveDeleted");
-			IsTraceObjects = storage.GetValue<bool>("IsTraceObjects");
+			IsObjectTracking = storage.GetValue<bool>(nameof(IsObjectTracking));
+			ThrowOnRemoveDeleted = storage.GetValue<bool>(nameof(ThrowOnRemoveDeleted));
+			IsTraceObjects = storage.GetValue<bool>(nameof(IsTraceObjects));
 		}
 
 		/// <summary>
@@ -241,9 +241,9 @@ namespace StockSharp.Logging
 		/// <param name="storage">Settings storage.</param>
 		public void Save(SettingsStorage storage)
 		{
-			storage.SetValue("IsObjectTracking", IsObjectTracking);
-			storage.SetValue("ThrowOnRemoveDeleted", ThrowOnRemoveDeleted);
-			storage.SetValue("IsTraceObjects", IsTraceObjects);
+			storage.SetValue(nameof(IsObjectTracking), IsObjectTracking);
+			storage.SetValue(nameof(ThrowOnRemoveDeleted), ThrowOnRemoveDeleted);
+			storage.SetValue(nameof(IsTraceObjects), IsTraceObjects);
 		}
 	}
 }

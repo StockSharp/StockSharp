@@ -171,7 +171,7 @@ namespace StockSharp.LMAX
 					VolumeStep = instrument.OrderBook.QuantityIncrement,
 					Multiplier = instrument.Contract.ContractSize,
 					Currency = instrument.Contract.Currency.To<CurrencyTypes>(),
-					ExpiryDate = instrument.Calendar.ExpiryTime == null ? (DateTimeOffset?)null : instrument.Calendar.ExpiryTime.Value.ApplyTimeZone(TimeZoneInfo.Utc),
+					ExpiryDate = instrument.Calendar.ExpiryTime?.ApplyTimeZone(TimeZoneInfo.Utc),
 					SecurityType = type,
 					OriginalTransactionId = transactionId,
 				});

@@ -319,9 +319,9 @@ namespace StockSharp.Logging
 		/// <param name="storage">Settings storage.</param>
 		public virtual void Load(SettingsStorage storage)
 		{
-			FlushInterval = storage.GetValue<TimeSpan>("FlushInterval");
-			//MaxMessageCount = storage.GetValue<int>("MaxMessageCount");
-			Listeners.AddRange(storage.GetValue<IEnumerable<SettingsStorage>>("Listeners").Select(s => s.LoadEntire<ILogListener>()));
+			FlushInterval = storage.GetValue<TimeSpan>(nameof(FlushInterval));
+			//MaxMessageCount = storage.GetValue<int>(nameof(MaxMessageCount));
+			Listeners.AddRange(storage.GetValue<IEnumerable<SettingsStorage>>(nameof(Listeners)).Select(s => s.LoadEntire<ILogListener>()));
 		}
 
 		/// <summary>
@@ -330,9 +330,9 @@ namespace StockSharp.Logging
 		/// <param name="storage">Settings storage.</param>
 		public virtual void Save(SettingsStorage storage)
 		{
-			storage.SetValue("FlushInterval", FlushInterval);
-			//storage.SetValue("MaxMessageCount", MaxMessageCount);
-			storage.SetValue("Listeners", Listeners.Select(l => l.SaveEntire(false)).ToArray());
+			storage.SetValue(nameof(FlushInterval), FlushInterval);
+			//storage.SetValue(nameof(MaxMessageCount), MaxMessageCount);
+			storage.SetValue(nameof(Listeners), Listeners.Select(l => l.SaveEntire(false)).ToArray());
 		}
 	}
 }

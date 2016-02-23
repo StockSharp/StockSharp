@@ -172,10 +172,7 @@ namespace StockSharp.Alerts
 
 			var schema = _schemas.TryGetValue(message.GetType());
 
-			if (schema == null)
-				return;
-
-			var type = schema.AlertType;
+			var type = schema?.AlertType;
 
 			if (type == null)
 				return;

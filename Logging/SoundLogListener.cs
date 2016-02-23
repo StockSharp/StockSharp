@@ -61,7 +61,7 @@ namespace StockSharp.Logging
 		{
 			base.Load(storage);
 
-			FileName = storage.GetValue<string>("FileName");
+			FileName = storage.GetValue<string>(nameof(FileName));
 		}
 
 		/// <summary>
@@ -72,7 +72,7 @@ namespace StockSharp.Logging
 		{
 			base.Save(storage);
 
-			storage.SetValue("FileName", FileName);
+			storage.SetValue(nameof(FileName), FileName);
 		}
 	}
 }

@@ -84,7 +84,7 @@ namespace StockSharp.Algo.Risk
 		/// <param name="storage">Storage.</param>
 		public virtual void Load(SettingsStorage storage)
 		{
-			Action = storage.GetValue<RiskActions>("Action");
+			Action = storage.GetValue<RiskActions>(nameof(Action));
 		}
 
 		/// <summary>
@@ -93,7 +93,7 @@ namespace StockSharp.Algo.Risk
 		/// <param name="storage">Storage.</param>
 		public virtual void Save(SettingsStorage storage)
 		{
-			storage.SetValue("Action", Action.To<string>());
+			storage.SetValue(nameof(Action), Action.To<string>());
 		}
 	}
 
@@ -152,7 +152,7 @@ namespace StockSharp.Algo.Risk
 		{
 			base.Save(storage);
 
-			storage.SetValue("PnL", PnL);
+			storage.SetValue(nameof(PnL), PnL);
 		}
 
 		/// <summary>
@@ -163,7 +163,7 @@ namespace StockSharp.Algo.Risk
 		{
 			base.Load(storage);
 
-			PnL = storage.GetValue<decimal>("PnL");
+			PnL = storage.GetValue<decimal>(nameof(PnL));
 		}
 	}
 
@@ -222,7 +222,7 @@ namespace StockSharp.Algo.Risk
 		{
 			base.Save(storage);
 
-			storage.SetValue("Position", Position);
+			storage.SetValue(nameof(Position), Position);
 		}
 
 		/// <summary>
@@ -233,7 +233,7 @@ namespace StockSharp.Algo.Risk
 		{
 			base.Load(storage);
 
-			Position = storage.GetValue<decimal>("Position");
+			Position = storage.GetValue<decimal>(nameof(Position));
 		}
 	}
 
@@ -349,7 +349,7 @@ namespace StockSharp.Algo.Risk
 		{
 			base.Save(storage);
 
-			storage.SetValue("Time", Time);
+			storage.SetValue(nameof(Time), Time);
 		}
 
 		/// <summary>
@@ -360,7 +360,7 @@ namespace StockSharp.Algo.Risk
 		{
 			base.Load(storage);
 
-			Time = storage.GetValue<TimeSpan>("Time");
+			Time = storage.GetValue<TimeSpan>(nameof(Time));
 		}
 	}
 
@@ -416,7 +416,7 @@ namespace StockSharp.Algo.Risk
 		{
 			base.Save(storage);
 
-			storage.SetValue("Commission", Commission);
+			storage.SetValue(nameof(Commission), Commission);
 		}
 
 		/// <summary>
@@ -427,7 +427,7 @@ namespace StockSharp.Algo.Risk
 		{
 			base.Load(storage);
 
-			Commission = storage.GetValue<decimal>("Commission");
+			Commission = storage.GetValue<decimal>(nameof(Commission));
 		}
 	}
 
@@ -486,7 +486,7 @@ namespace StockSharp.Algo.Risk
 		{
 			base.Save(storage);
 
-			storage.SetValue("Slippage", Slippage);
+			storage.SetValue(nameof(Slippage), Slippage);
 		}
 
 		/// <summary>
@@ -497,7 +497,7 @@ namespace StockSharp.Algo.Risk
 		{
 			base.Load(storage);
 
-			Slippage = storage.GetValue<decimal>("Slippage");
+			Slippage = storage.GetValue<decimal>(nameof(Slippage));
 		}
 	}
 
@@ -560,7 +560,7 @@ namespace StockSharp.Algo.Risk
 		{
 			base.Save(storage);
 
-			storage.SetValue("Price", Price);
+			storage.SetValue(nameof(Price), Price);
 		}
 
 		/// <summary>
@@ -571,7 +571,7 @@ namespace StockSharp.Algo.Risk
 		{
 			base.Load(storage);
 
-			Price = storage.GetValue<decimal>("Price");
+			Price = storage.GetValue<decimal>(nameof(Price));
 		}
 	}
 
@@ -634,7 +634,7 @@ namespace StockSharp.Algo.Risk
 		{
 			base.Save(storage);
 
-			storage.SetValue("Volume", Volume);
+			storage.SetValue(nameof(Volume), Volume);
 		}
 
 		/// <summary>
@@ -645,7 +645,7 @@ namespace StockSharp.Algo.Risk
 		{
 			base.Load(storage);
 
-			Volume = storage.GetValue<decimal>("Volume");
+			Volume = storage.GetValue<decimal>(nameof(Volume));
 		}
 	}
 
@@ -758,8 +758,8 @@ namespace StockSharp.Algo.Risk
 		{
 			base.Save(storage);
 
-			storage.SetValue("Count", Count);
-			storage.SetValue("Interval", Interval);
+			storage.SetValue(nameof(Count), Count);
+			storage.SetValue(nameof(Interval), Interval);
 		}
 
 		/// <summary>
@@ -770,8 +770,8 @@ namespace StockSharp.Algo.Risk
 		{
 			base.Load(storage);
 
-			Count = storage.GetValue<int>("Count");
-			Interval = storage.GetValue<TimeSpan>("Interval");
+			Count = storage.GetValue<int>(nameof(Count));
+			Interval = storage.GetValue<TimeSpan>(nameof(Interval));
 		}
 	}
 
@@ -826,7 +826,7 @@ namespace StockSharp.Algo.Risk
 		{
 			base.Save(storage);
 
-			storage.SetValue("Price", Price);
+			storage.SetValue(nameof(Price), Price);
 		}
 
 		/// <summary>
@@ -837,7 +837,7 @@ namespace StockSharp.Algo.Risk
 		{
 			base.Load(storage);
 
-			Price = storage.GetValue<decimal>("Price");
+			Price = storage.GetValue<decimal>(nameof(Price));
 		}
 	}
 
@@ -892,7 +892,7 @@ namespace StockSharp.Algo.Risk
 		{
 			base.Save(storage);
 
-			storage.SetValue("Volume", Volume);
+			storage.SetValue(nameof(Volume), Volume);
 		}
 
 		/// <summary>
@@ -903,7 +903,7 @@ namespace StockSharp.Algo.Risk
 		{
 			base.Load(storage);
 
-			Volume = storage.GetValue<decimal>("Volume");
+			Volume = storage.GetValue<decimal>(nameof(Volume));
 		}
 	}
 
@@ -1013,8 +1013,8 @@ namespace StockSharp.Algo.Risk
 		{
 			base.Save(storage);
 
-			storage.SetValue("Count", Count);
-			storage.SetValue("Interval", Interval);
+			storage.SetValue(nameof(Count), Count);
+			storage.SetValue(nameof(Interval), Interval);
 		}
 
 		/// <summary>
@@ -1025,8 +1025,8 @@ namespace StockSharp.Algo.Risk
 		{
 			base.Load(storage);
 
-			Count = storage.GetValue<int>("Count");
-			Interval = storage.GetValue<TimeSpan>("Interval");
+			Count = storage.GetValue<int>(nameof(Count));
+			Interval = storage.GetValue<TimeSpan>(nameof(Interval));
 		}
 	}
 }
