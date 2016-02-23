@@ -50,11 +50,15 @@ namespace StockSharp.Studio.Controls
 
 		public override void Save(SettingsStorage settings)
 		{
+			base.Save(settings);
+
 			settings.SetValue("TradesGrid", TradesGrid.Save());
 		}
 
 		public override void Load(SettingsStorage settings)
 		{
+			base.Load(settings);
+
 			TradesGrid.Load(settings.GetValue<SettingsStorage>("TradesGrid"));
 		}
 
