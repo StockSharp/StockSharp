@@ -122,9 +122,11 @@ namespace StockSharp.Hydra.Core
 		{
 			storage.SetValue("Connections", AllConnections.Select(pair =>
 			{
-				var conStorage = new SettingsStorage();
-				conStorage["Provider"] = pair.Provider.Name;
-				conStorage["ConnectionString"] = pair.ConnectionString;
+				var conStorage = new SettingsStorage
+				{
+					["Provider"] = pair.Provider.Name,
+					["ConnectionString"] = pair.ConnectionString
+				};
 				return conStorage;
 			}).ToArray());
 		}

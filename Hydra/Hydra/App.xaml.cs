@@ -45,6 +45,7 @@ namespace StockSharp.Hydra
 			new TargetPlatformFeature("Yahoo"),
 			new TargetPlatformFeature("Google"),
 			new TargetPlatformFeature("FinViz"),
+			new TargetPlatformFeature("Quandl"),
 			new TargetPlatformFeature("S#.Data server")
 		};
 

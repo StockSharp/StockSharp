@@ -15,8 +15,8 @@ Copyright 2010 by StockSharp, LLC
 #endregion S# License
 namespace StockSharp.Hydra.Transaq
 {
-	using System;
-	
+	using Ecng.Common;
+
 	using Xceed.Wpf.Toolkit.PropertyGrid.Attributes;
 
 	using StockSharp.Transaq;
@@ -27,10 +27,8 @@ namespace StockSharp.Hydra.Transaq
 		{
 			var items = new ItemCollection();
 
-			foreach (var s in Enum.GetNames(typeof (ProxyTypes)))
-			{
+			foreach (var s in Enumerator.GetNames<ProxyTypes>())
 				items.Add(s);
-			}
 
 			return items;
 		}

@@ -17,7 +17,6 @@ namespace StockSharp.Hydra.Btce
 {
 	using System.Security;
 
-	using Ecng.Collections;
 	using Ecng.Common;
 	using Ecng.ComponentModel;
 
@@ -45,13 +44,8 @@ namespace StockSharp.Hydra.Btce
 			public BtceSettings(HydraTaskSettings settings)
 				: base(settings)
 			{
-				ExtensionInfo.TryAdd("Key", new SecureString());
-				ExtensionInfo.TryAdd("Secret", new SecureString());
 			}
 
-			/// <summary>
-			/// Ключ.
-			/// </summary>
 			[CategoryLoc(_sourceName)]
 			[DisplayNameLoc(LocalizedStrings.Str3304Key)]
 			[DescriptionLoc(LocalizedStrings.Str3304Key, true)]
@@ -62,9 +56,6 @@ namespace StockSharp.Hydra.Btce
 				set { ExtensionInfo["Key"] = value; }
 			}
 
-			/// <summary>
-			/// Секрет.
-			/// </summary>
 			[CategoryLoc(_sourceName)]
 			[DisplayNameLoc(LocalizedStrings.Str3306Key)]
 			[DescriptionLoc(LocalizedStrings.Str3307Key)]

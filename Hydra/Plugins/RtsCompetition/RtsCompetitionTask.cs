@@ -19,7 +19,6 @@ namespace StockSharp.Hydra.RtsCompetition
 	using System.Collections.Generic;
 	using System.Linq;
 
-	using Ecng.Collections;
 	using Ecng.Common;
 	using Ecng.ComponentModel;
 	using Ecng.Localization;
@@ -52,7 +51,6 @@ namespace StockSharp.Hydra.RtsCompetition
 			public RtsCompetitionSettings(HydraTaskSettings settings)
 				: base(settings)
 			{
-				ExtensionInfo.TryAdd("IgnoreWeekends", true);
 			}
 
 			[CategoryLoc(_sourceName)]

@@ -181,7 +181,7 @@ namespace StockSharp.Hydra.Core
 		public virtual IMarketDataDrive Drive
 		{
 			get { return DriveCache.Instance.GetDrive((string)ExtensionInfo.TryGetValue("Drive") ?? string.Empty); }
-			set { ExtensionInfo["Drive"] = value == null ? null : value.Path; }
+			set { ExtensionInfo["Drive"] = value?.Path; }
 		}
 
 		/// <summary>

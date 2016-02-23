@@ -92,10 +92,7 @@ namespace StockSharp.Hydra.Fix
 
 		private FixSettings _settings;
 
-		public override HydraTaskSettings Settings
-		{
-			get { return _settings; }
-		}
+		public override HydraTaskSettings Settings => _settings;
 
 		protected override void ApplySettings(HydraTaskSettings settings)
 		{

@@ -59,7 +59,6 @@ namespace StockSharp.Hydra.Tools
 			public ExportSettings(HydraTaskSettings settings)
 				: base(settings)
 			{
-				ExtensionInfo.TryAdd("Header", string.Empty);
 			}
 
 			[CategoryLoc(LocalizedStrings.Str3754Key)]

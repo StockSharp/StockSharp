@@ -82,8 +82,6 @@ namespace StockSharp.Hydra.Tools
 			public ConvertTaskSettings(HydraTaskSettings settings)
 				: base(settings)
 			{
-				ExtensionInfo.TryAdd("DestinationStorageFormat", StorageFormats.Binary.To<string>());
-				ExtensionInfo.TryAdd("MarketDepthBuilder", OrderLogBuilders.Plaza2.To<string>());
 			}
 
 			[CategoryLoc(_sourceName)]
