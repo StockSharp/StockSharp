@@ -233,6 +233,7 @@ namespace StockSharp.Algo.Testing
 			SlippageManager = null;
 
 			HistoryMessageAdapter = new HistoryMessageAdapter(TransactionIdGenerator, securityProvider) { StorageRegistry = storageRegistry };
+
 			InMessageChannel = new HistoryEmulationMessageChannel(HistoryMessageAdapter, SendOutError);
 			OutMessageChannel = new PassThroughMessageChannel();
 

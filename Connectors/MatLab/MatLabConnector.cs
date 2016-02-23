@@ -81,7 +81,7 @@ namespace StockSharp.MatLab
 		/// <summary>
 		/// The connection for market-data and transactions.
 		/// </summary>
-		public IConnector RealConnector { get; private set; }
+		public IConnector RealConnector { get; }
 
 		/// <summary>
 		/// Connected.

@@ -68,10 +68,10 @@ namespace StockSharp.Alerts
 		/// <param name="storage">Settings storage.</param>
 		public void Load(SettingsStorage storage)
 		{
-			Rules.AddRange(storage.GetValue<IList<AlertRule>>("Rules"));
-			AlertType = storage.GetValue<string>("AlertType").To<AlertTypes?>();
-			Caption = storage.GetValue<string>("Caption");
-			Message = storage.GetValue<string>("Message");
+			Rules.AddRange(storage.GetValue<IList<AlertRule>>(nameof(Rules)));
+			AlertType = storage.GetValue<string>(nameof(AlertType)).To<AlertTypes?>();
+			Caption = storage.GetValue<string>(nameof(Caption));
+			Message = storage.GetValue<string>(nameof(Message));
 		}
 
 		/// <summary>
@@ -80,10 +80,10 @@ namespace StockSharp.Alerts
 		/// <param name="storage">Settings storage.</param>
 		public void Save(SettingsStorage storage)
 		{
-			storage.SetValue("Rules", Rules);
-			storage.SetValue("AlertType", AlertType.To<string>());
-			storage.SetValue("Caption", Caption);
-			storage.SetValue("Message", Message);
+			storage.SetValue(nameof(Rules), Rules);
+			storage.SetValue(nameof(AlertType), AlertType.To<string>());
+			storage.SetValue(nameof(Caption), Caption);
+			storage.SetValue(nameof(Message), Message);
 		}
 	}
 }

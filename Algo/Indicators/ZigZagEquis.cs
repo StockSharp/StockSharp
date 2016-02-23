@@ -229,7 +229,8 @@ namespace StockSharp.Algo.Indicators
 		public override void Load(SettingsStorage settings)
 		{
 			base.Load(settings);
-			Deviation = settings.GetValue<decimal>("Deviation");
+
+			Deviation = settings.GetValue<decimal>(nameof(Deviation));
 		}
 
 		/// <summary>
@@ -239,7 +240,8 @@ namespace StockSharp.Algo.Indicators
 		public override void Save(SettingsStorage settings)
 		{
 			base.Save(settings);
-			settings.SetValue("Deviation", Deviation);
+
+			settings.SetValue(nameof(Deviation), Deviation);
 		}
 	}
 }

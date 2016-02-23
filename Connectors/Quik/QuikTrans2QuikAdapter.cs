@@ -296,7 +296,7 @@ namespace StockSharp.Quik
 
 				// http://stocksharp.com/forum/yaf_postst2247_Oshibka-pri-kotirovanii--sinkhronnyie-tranzaktsii.aspx
 
-				var execution = transaction.Message.ToExecutionMessage();
+				var execution = transaction.Message.CreateReply();
 
 				if (execution == null)
 					throw new ArgumentException(LocalizedStrings.Str1835, nameof(transaction));
@@ -344,8 +344,7 @@ namespace StockSharp.Quik
 					error = ex;
 				}
 
-				if (error != null)
-					error.Throw();
+				error?.Throw();
 			}
 		}
 
@@ -473,7 +472,7 @@ namespace StockSharp.Quik
 				if (extendedCode != Codes.Success)
 					exception = new ApiException(extendedCode, message);
 
-				var orderMessage = builder.Message.ToExecutionMessage();
+				var orderMessage = builder.Message.CreateReply();
 
 				orderMessage.SystemComment = message;
 

@@ -130,8 +130,8 @@ namespace StockSharp.Logging
 		/// <param name="storage">Settings storage.</param>
 		public virtual void Load(SettingsStorage storage)
 		{
-			DateFormat = storage.GetValue<string>("DateFormat");
-			TimeFormat = storage.GetValue<string>("TimeFormat");
+			DateFormat = storage.GetValue<string>(nameof(DateFormat));
+			TimeFormat = storage.GetValue<string>(nameof(TimeFormat));
 		}
 
 		/// <summary>
@@ -140,8 +140,8 @@ namespace StockSharp.Logging
 		/// <param name="storage">Settings storage.</param>
 		public virtual void Save(SettingsStorage storage)
 		{
-			storage.SetValue("DateFormat", DateFormat);
-			storage.SetValue("TimeFormat", TimeFormat);
+			storage.SetValue(nameof(DateFormat), DateFormat);
+			storage.SetValue(nameof(TimeFormat), TimeFormat);
 		}
 	}
 }

@@ -108,7 +108,7 @@ namespace StockSharp.Logging
 		{
 			base.Save(storage);
 
-			storage.SetValue("Interval", Interval);
+			storage.SetValue(nameof(Interval), Interval);
 		}
 
 		/// <summary>
@@ -119,7 +119,7 @@ namespace StockSharp.Logging
 		{
 			base.Load(storage);
 
-			Interval = storage.GetValue<TimeSpan>("Interval");
+			Interval = storage.GetValue<TimeSpan>(nameof(Interval));
 		}
 
 		/// <summary>

@@ -284,7 +284,7 @@ namespace StockSharp.Xaml
 		/// <param name="storage">Settings storage.</param>
 		public void Load(SettingsStorage storage)
 		{
-			var settings = storage.GetValue<SettingsStorage>("LogControl");
+			var settings = storage.GetValue<SettingsStorage>(nameof(LogControl));
 
 			if (settings != null)
 				LogCtrl.Load(settings);
@@ -296,7 +296,7 @@ namespace StockSharp.Xaml
 		/// <param name="storage">Settings storage.</param>
 		public void Save(SettingsStorage storage)
 		{
-			storage.SetValue("LogControl", LogCtrl.Save());
+			storage.SetValue(nameof(LogControl), LogCtrl.Save());
 		}
 
 		#endregion

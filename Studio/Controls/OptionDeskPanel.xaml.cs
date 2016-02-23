@@ -35,7 +35,6 @@ namespace StockSharp.Studio.Controls
 	using StockSharp.Algo.Storages;
 	using StockSharp.BusinessEntities;
 	using StockSharp.Messages;
-	using StockSharp.Studio.Core;
 	using StockSharp.Studio.Core.Commands;
 	using StockSharp.Localization;
 

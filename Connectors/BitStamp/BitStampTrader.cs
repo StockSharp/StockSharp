@@ -38,19 +38,13 @@ namespace StockSharp.BitStamp
 			Adapter.InnerAdapters.Add(new BitStampMessageAdapter(TransactionIdGenerator));
 		}
 
-		private BitStampMessageAdapter NativeAdapter
-		{
-			get { return Adapter.InnerAdapters.OfType<BitStampMessageAdapter>().First(); }
-		}
+		private BitStampMessageAdapter NativeAdapter => Adapter.InnerAdapters.OfType<BitStampMessageAdapter>().First();
 
 		/// <summary>
 		/// Gets a value indicating whether the re-registration orders via the method <see cref="IConnector.ReRegisterOrder(StockSharp.BusinessEntities.Order,StockSharp.BusinessEntities.Order)"/>
 		/// as a single transaction. The default is enabled.
 		/// </summary>
-		public override bool IsSupportAtomicReRegister
-		{
-			get { return false; }
-		}
+		public override bool IsSupportAtomicReRegister => false;
 
 		/// <summary>
 		/// Key.

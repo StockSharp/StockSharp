@@ -24,12 +24,12 @@ namespace StockSharp.BitStamp.Native
 		[JsonProperty(PropertyName = "bids")]
 		readonly List<double[]> _bids = new List<double[]>();
 		[JsonIgnore]
-		public IList<double[]> Bids { get { return _bids; } }
+		public IList<double[]> Bids => _bids;
 
 		[JsonProperty(PropertyName = "asks")]
 		readonly List<double[]> _asks = new List<double[]>();
 		[JsonIgnore]
-		public IList<double[]> Asks { get { return _asks; } }
+		public IList<double[]> Asks => _asks;
 
 		//[JsonIgnore]
 		//public int Count { get { return Math.Min(_asks.Count, _bids.Count); } }

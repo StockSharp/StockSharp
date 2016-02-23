@@ -95,7 +95,7 @@ namespace StockSharp.Algo.Commissions
 		/// <param name="storage">Storage.</param>
 		public void Load(SettingsStorage storage)
 		{
-			Rules.AddRange(storage.GetValue<SettingsStorage[]>("Rules").Select(s => s.LoadEntire<ICommissionRule>()));
+			Rules.AddRange(storage.GetValue<SettingsStorage[]>(nameof(Rules)).Select(s => s.LoadEntire<ICommissionRule>()));
 		}
 
 		/// <summary>
@@ -104,7 +104,7 @@ namespace StockSharp.Algo.Commissions
 		/// <param name="storage">Storage.</param>
 		public void Save(SettingsStorage storage)
 		{
-			storage.SetValue("Rules", Rules.Select(r => r.SaveEntire(false)).ToArray());
+			storage.SetValue(nameof(Rules), Rules.Select(r => r.SaveEntire(false)).ToArray());
 		}
 
 		string ICommissionRule.Title

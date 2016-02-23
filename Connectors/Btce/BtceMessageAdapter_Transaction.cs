@@ -252,7 +252,7 @@ namespace StockSharp.Btce
 			{
 				PortfolioName = GetPortfolioName(),
 				State = reply.State.Rights.CanTrade ? PortfolioStates.Active : PortfolioStates.Blocked,
-				OriginalTransactionId = message == null ? 0 : message.TransactionId
+				OriginalTransactionId = message?.TransactionId ?? 0
 			});
 
 			if (message != null)

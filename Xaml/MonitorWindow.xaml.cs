@@ -61,13 +61,13 @@ namespace StockSharp.Xaml
 		void IPersistable.Load(SettingsStorage storage)
 		{
 			_monitor.Load(storage);
-			BringToFrontOnError = storage.GetValue<bool>("BringToFrontOnError");
+			BringToFrontOnError = storage.GetValue<bool>(nameof(BringToFrontOnError));
 		}
 
 		void IPersistable.Save(SettingsStorage storage)
 		{
 			_monitor.Save(storage);
-			storage.SetValue("BringToFrontOnError", BringToFrontOnError);
+			storage.SetValue(nameof(BringToFrontOnError), BringToFrontOnError);
 		}
 
 		void IDisposable.Dispose()

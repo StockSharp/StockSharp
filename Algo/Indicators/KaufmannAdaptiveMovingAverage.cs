@@ -145,8 +145,8 @@ namespace StockSharp.Algo.Indicators
 		public override void Load(SettingsStorage settings)
 		{
 			base.Load(settings);
-			FastSCPeriod = settings.GetValue<int>("FastSCPeriod");
-			FastSCPeriod = settings.GetValue<int>("FastSCPeriod");
+			FastSCPeriod = settings.GetValue<int>(nameof(FastSCPeriod));
+			FastSCPeriod = settings.GetValue<int>(nameof(FastSCPeriod));
 		}
 
 		/// <summary>
@@ -156,8 +156,8 @@ namespace StockSharp.Algo.Indicators
 		public override void Save(SettingsStorage settings)
 		{
 			base.Save(settings);
-			settings.SetValue("FastSCPeriod", FastSCPeriod);
-			settings.SetValue("SlowSCPeriod", SlowSCPeriod);
+			settings.SetValue(nameof(FastSCPeriod), FastSCPeriod);
+			settings.SetValue(nameof(SlowSCPeriod), SlowSCPeriod);
 		}
 	}
 }

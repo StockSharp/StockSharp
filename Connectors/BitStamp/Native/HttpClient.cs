@@ -53,10 +53,7 @@ namespace StockSharp.BitStamp.Native
 		}
 
 		// после обфускации название типа нечитаемо
-		public override string Name
-		{
-			get { return "BitstampClient"; }
-		}
+		public override string Name => "BitstampClient";
 
 		public Ticker RequestBtcUsd()
 		{

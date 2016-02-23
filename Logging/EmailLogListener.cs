@@ -137,8 +137,8 @@ namespace StockSharp.Logging
 		{
 			base.Load(storage);
 
-			From = storage.GetValue<string>("From");
-			To = storage.GetValue<string>("To");
+			From = storage.GetValue<string>(nameof(From));
+			To = storage.GetValue<string>(nameof(To));
 		}
 
 		/// <summary>
@@ -149,8 +149,8 @@ namespace StockSharp.Logging
 		{
 			base.Save(storage);
 
-			storage.SetValue("From", From);
-			storage.SetValue("To", To);
+			storage.SetValue(nameof(From), From);
+			storage.SetValue(nameof(To), To);
 		}
 
 		/// <summary>

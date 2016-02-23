@@ -60,7 +60,7 @@ namespace StockSharp.Algo.Testing
 					return;
 
 				_matchOnTouch = value;
-				NotifyChanged("MatchOnTouch");
+				NotifyChanged(nameof(MatchOnTouch));
 			}
 		}
 
@@ -82,7 +82,7 @@ namespace StockSharp.Algo.Testing
 					return;
 
 				_depthExpirationTime = value;
-				NotifyChanged("DepthExpirationTime");
+				NotifyChanged(nameof(DepthExpirationTime));
 			}
 		}
 
@@ -107,7 +107,7 @@ namespace StockSharp.Algo.Testing
 					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.Str1183);
 
 				_failing = value;
-				NotifyChanged("Failing");
+				NotifyChanged(nameof(Failing));
 			}
 		}
 
@@ -129,7 +129,7 @@ namespace StockSharp.Algo.Testing
 					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.Str1185);
 
 				_latency = value;
-				NotifyChanged("Latency");
+				NotifyChanged(nameof(Latency));
 			}
 		}
 
@@ -148,7 +148,7 @@ namespace StockSharp.Algo.Testing
 			set
 			{
 				_isSupportAtomicReRegister = value;
-				NotifyChanged("_isSupportAtomicReRegister");
+				NotifyChanged(nameof(_isSupportAtomicReRegister));
 			}
 		}
 
@@ -170,7 +170,7 @@ namespace StockSharp.Algo.Testing
 					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.Str940);
 
 				_bufferTime = value;
-				NotifyChanged("BufferTime");
+				NotifyChanged(nameof(BufferTime));
 			}
 		}
 
@@ -191,10 +191,10 @@ namespace StockSharp.Algo.Testing
 		//	set
 		//	{
 		//		if (value <= TimeSpan.Zero)
-		//			throw new ArgumentOutOfRangeException("value", value, LocalizedStrings.Str1189);
+		//			throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.Str1189);
 
 		//		_useCandlesTimeFrame = value;
-		//		NotifyChanged("UseCandlesTimeFrame");
+		//		NotifyChanged(nameof(UseCandlesTimeFrame));
 		//	}
 		//}
 
@@ -213,7 +213,7 @@ namespace StockSharp.Algo.Testing
 			set
 			{
 				_initialOrderId = value;
-				NotifyChanged("InitialOrderId");
+				NotifyChanged(nameof(InitialOrderId));
 			}
 		}
 
@@ -232,7 +232,7 @@ namespace StockSharp.Algo.Testing
 			set
 			{
 				_initialTradeId = value;
-				NotifyChanged("InitialTradeId");
+				NotifyChanged(nameof(InitialTradeId));
 			}
 		}
 
@@ -251,7 +251,7 @@ namespace StockSharp.Algo.Testing
 			set
 			{
 				_initialTransactionId = value;
-				NotifyChanged("InitialTransactionId");
+				NotifyChanged(nameof(InitialTransactionId));
 			}
 		}
 
@@ -273,7 +273,7 @@ namespace StockSharp.Algo.Testing
 					throw new ArgumentOutOfRangeException();
 
 				_spreadSize = value;
-				NotifyChanged("SpreadSize");
+				NotifyChanged(nameof(SpreadSize));
 			}
 		}
 
@@ -295,7 +295,7 @@ namespace StockSharp.Algo.Testing
 					throw new ArgumentOutOfRangeException();
 
 				_maxDepth = value;
-				NotifyChanged("MaxDepth");
+				NotifyChanged(nameof(MaxDepth));
 			}
 		}
 
@@ -317,7 +317,7 @@ namespace StockSharp.Algo.Testing
 					throw new ArgumentOutOfRangeException();
 
 				_volumeMultiplier = value;
-				NotifyChanged("VolumeMultiplier");
+				NotifyChanged(nameof(VolumeMultiplier));
 			}
 		}
 
@@ -339,7 +339,7 @@ namespace StockSharp.Algo.Testing
 					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.Str940);
 
 				_portfolioRecalcInterval = value;
-				NotifyChanged("PortfolioRecalcInterval");
+				NotifyChanged(nameof(PortfolioRecalcInterval));
 			}
 		}
 
@@ -358,7 +358,7 @@ namespace StockSharp.Algo.Testing
 			set
 			{
 				_convertTime = value;
-				NotifyChanged("ConvertTime");
+				NotifyChanged(nameof(ConvertTime));
 			}
 		}
 
@@ -377,7 +377,7 @@ namespace StockSharp.Algo.Testing
 			set
 			{
 				_timeZone = value;
-				NotifyChanged("TimeZone");
+				NotifyChanged(nameof(TimeZone));
 			}
 		}
 
@@ -417,7 +417,7 @@ namespace StockSharp.Algo.Testing
 			set
 			{
 				_increaseDepthVolume = value;
-				NotifyChanged("IncreaseDepthVolume");
+				NotifyChanged(nameof(IncreaseDepthVolume));
 			}
 		}
 
@@ -427,26 +427,26 @@ namespace StockSharp.Algo.Testing
 		/// <param name="storage">Storage.</param>
 		public virtual void Save(SettingsStorage storage)
 		{
-			storage.SetValue("DepthExpirationTime", DepthExpirationTime);
-			storage.SetValue("MatchOnTouch", MatchOnTouch);
-			storage.SetValue("Failing", Failing);
-			storage.SetValue("Latency", Latency);
-			storage.SetValue("IsSupportAtomicReRegister", IsSupportAtomicReRegister);
-			storage.SetValue("BufferTime", BufferTime);
-			//storage.SetValue("UseCandlesTimeFrame", UseCandlesTimeFrame);
-			storage.SetValue("InitialOrderId", InitialOrderId);
-			storage.SetValue("InitialTradeId", InitialTradeId);
-			storage.SetValue("InitialTransactionId", InitialTransactionId);
-			storage.SetValue("SpreadSize", SpreadSize);
-			storage.SetValue("MaxDepth", MaxDepth);
-			storage.SetValue("VolumeMultiplier", VolumeMultiplier);
-			storage.SetValue("PortfolioRecalcInterval", PortfolioRecalcInterval);
-			storage.SetValue("ConvertTime", ConvertTime);
-			storage.SetValue("PriceLimitOffset", PriceLimitOffset);
-			storage.SetValue("IncreaseDepthVolume", IncreaseDepthVolume);
+			storage.SetValue(nameof(DepthExpirationTime), DepthExpirationTime);
+			storage.SetValue(nameof(MatchOnTouch), MatchOnTouch);
+			storage.SetValue(nameof(Failing), Failing);
+			storage.SetValue(nameof(Latency), Latency);
+			storage.SetValue(nameof(IsSupportAtomicReRegister), IsSupportAtomicReRegister);
+			storage.SetValue(nameof(BufferTime), BufferTime);
+			//storage.SetValue(nameof(UseCandlesTimeFrame), UseCandlesTimeFrame);
+			storage.SetValue(nameof(InitialOrderId), InitialOrderId);
+			storage.SetValue(nameof(InitialTradeId), InitialTradeId);
+			storage.SetValue(nameof(InitialTransactionId), InitialTransactionId);
+			storage.SetValue(nameof(SpreadSize), SpreadSize);
+			storage.SetValue(nameof(MaxDepth), MaxDepth);
+			storage.SetValue(nameof(VolumeMultiplier), VolumeMultiplier);
+			storage.SetValue(nameof(PortfolioRecalcInterval), PortfolioRecalcInterval);
+			storage.SetValue(nameof(ConvertTime), ConvertTime);
+			storage.SetValue(nameof(PriceLimitOffset), PriceLimitOffset);
+			storage.SetValue(nameof(IncreaseDepthVolume), IncreaseDepthVolume);
 
 			if (TimeZone != null)
-				storage.SetValue("TimeZone", TimeZone.ToSerializedString());
+				storage.SetValue(nameof(TimeZone), TimeZone.ToSerializedString());
 		}
 
 		/// <summary>
@@ -455,26 +455,26 @@ namespace StockSharp.Algo.Testing
 		/// <param name="storage">Storage.</param>
 		public virtual void Load(SettingsStorage storage)
 		{
-			DepthExpirationTime = storage.GetValue("DepthExpirationTime", DepthExpirationTime);
-			MatchOnTouch = storage.GetValue("MatchOnTouch", MatchOnTouch);
-			Failing = storage.GetValue("Failing", Failing);
-			Latency = storage.GetValue("Latency", Latency);
-			IsSupportAtomicReRegister = storage.GetValue("IsSupportAtomicReRegister", IsSupportAtomicReRegister);
-			BufferTime = storage.GetValue("BufferTime", BufferTime);
-			//UseCandlesTimeFrame = storage.GetValue("UseCandlesTimeFrame", UseCandlesTimeFrame);
-			InitialOrderId = storage.GetValue("InitialOrderId", InitialOrderId);
-			InitialTradeId = storage.GetValue("InitialTradeId", InitialTradeId);
-			InitialTransactionId = storage.GetValue("InitialTransactionId", InitialTransactionId);
-			SpreadSize = storage.GetValue("SpreadSize", SpreadSize);
-			MaxDepth = storage.GetValue("MaxDepth", MaxDepth);
-			VolumeMultiplier = storage.GetValue("VolumeMultiplier", VolumeMultiplier);
-			PortfolioRecalcInterval = storage.GetValue("PortfolioRecalcInterval", PortfolioRecalcInterval);
-			ConvertTime = storage.GetValue("ConvertTime", ConvertTime);
-			PriceLimitOffset = storage.GetValue("PriceLimitOffset", PriceLimitOffset);
-			IncreaseDepthVolume = storage.GetValue("IncreaseDepthVolume", IncreaseDepthVolume);
+			DepthExpirationTime = storage.GetValue(nameof(DepthExpirationTime), DepthExpirationTime);
+			MatchOnTouch = storage.GetValue(nameof(MatchOnTouch), MatchOnTouch);
+			Failing = storage.GetValue(nameof(Failing), Failing);
+			Latency = storage.GetValue(nameof(Latency), Latency);
+			IsSupportAtomicReRegister = storage.GetValue(nameof(IsSupportAtomicReRegister), IsSupportAtomicReRegister);
+			BufferTime = storage.GetValue(nameof(BufferTime), BufferTime);
+			//UseCandlesTimeFrame = storage.GetValue(nameof(UseCandlesTimeFrame), UseCandlesTimeFrame);
+			InitialOrderId = storage.GetValue(nameof(InitialOrderId), InitialOrderId);
+			InitialTradeId = storage.GetValue(nameof(InitialTradeId), InitialTradeId);
+			InitialTransactionId = storage.GetValue(nameof(InitialTransactionId), InitialTransactionId);
+			SpreadSize = storage.GetValue(nameof(SpreadSize), SpreadSize);
+			MaxDepth = storage.GetValue(nameof(MaxDepth), MaxDepth);
+			VolumeMultiplier = storage.GetValue(nameof(VolumeMultiplier), VolumeMultiplier);
+			PortfolioRecalcInterval = storage.GetValue(nameof(PortfolioRecalcInterval), PortfolioRecalcInterval);
+			ConvertTime = storage.GetValue(nameof(ConvertTime), ConvertTime);
+			PriceLimitOffset = storage.GetValue(nameof(PriceLimitOffset), PriceLimitOffset);
+			IncreaseDepthVolume = storage.GetValue(nameof(IncreaseDepthVolume), IncreaseDepthVolume);
 
-			if (storage.Contains("TimeZone"))
-				TimeZone = TimeZoneInfo.FromSerializedString(storage.GetValue<string>("TimeZone"));
+			if (storage.Contains(nameof(TimeZone)))
+				TimeZone = TimeZoneInfo.FromSerializedString(storage.GetValue<string>(nameof(TimeZone)));
 		}
 	}
 }

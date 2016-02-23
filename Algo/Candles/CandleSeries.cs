@@ -113,52 +113,12 @@ namespace StockSharp.Algo.Candles
 		/// </summary>
 		public WorkingTime WorkingTime { get; set; }
 
-		//private ICandleManager _candleManager;
-
-		///// <summary>
-		///// The candle manager, which has registered given series.
-		///// </summary>
-		//public ICandleManager CandleManager
-		//{
-		//	get { return _candleManager; }
-		//	set
-		//	{
-		//		if (value != _candleManager)
-		//		{
-		//			if (_candleManager != null)
-		//			{
-		//				_candleManager.Processing -= CandleManagerProcessing;
-		//				_candleManager.Stopped -= CandleManagerStopped;
-		//			}
-
-		//			_candleManager = value;
-
-		//			if (_candleManager != null)
-		//			{
-		//				_candleManager.Processing += CandleManagerProcessing;
-		//				_candleManager.Stopped += CandleManagerStopped;
-		//			}
-		//		}
-		//	}
-		//}
-
 		/// <summary>
 		/// To perform the calculation <see cref="Candle.PriceLevels"/>. By default, it is disabled.
 		/// </summary>
 		public bool IsCalcVolumeProfile { get; set; }
 
-		// uses by RealTimeCandleBuilderSource
 		internal bool IsNew { get; set; }
-
-		///// <summary>
-		///// The candle processing event.
-		///// </summary>
-		//public event Action<Candle> ProcessCandle;
-
-		///// <summary>
-		///// The series processing end event.
-		///// </summary>
-		//public event Action Stopped;
 
 		/// <summary>
 		/// The initial date from which you need to get data.
@@ -170,39 +130,14 @@ namespace StockSharp.Algo.Candles
 		/// </summary>
 		public DateTimeOffset To { get; set; } = DateTimeOffset.MaxValue;
 
-		//private void CandleManagerStopped(CandleSeries series)
-		//{
-		//	if (series == this)
-		//		Stopped.SafeInvoke();
-		//}
-
-		//private void CandleManagerProcessing(CandleSeries series, Candle candle)
-		//{
-		//	if (series == this)
-		//		ProcessCandle.SafeInvoke(candle);
-		//}
-
-		///// <summary>
-		///// Release resources.
-		///// </summary>
-		//protected override void DisposeManaged()
-		//{
-		//	base.DisposeManaged();
-
-		//	if (CandleManager != null)
-		//		CandleManager.Stop(this);
-		//}
-
 		/// <summary>
 		/// Returns a string that represents the current object.
 		/// </summary>
 		/// <returns>A string that represents the current object.</returns>
 		public override string ToString()
 		{
-			return CandleType.Name + "_" + Security + "_" + TraderHelper.CandleArgToFolderName(Arg);
+			return CandleType?.Name + "_" + Security + "_" + TraderHelper.CandleArgToFolderName(Arg);
 		}
-
-		#region IPersistable
 
 		/// <summary>
 		/// Load settings.
@@ -210,23 +145,21 @@ namespace StockSharp.Algo.Candles
 		/// <param name="storage">Settings storage.</param>
 		public void Load(SettingsStorage storage)
 		{
-			var connector = ConfigManager.TryGetService<IConnector>();
-			if (connector != null)
+			var secProvider = ConfigManager.TryGetService<ISecurityProvider>();
+			if (secProvider != null)
 			{
-				var securityId = storage.GetValue<string>("SecurityId");
+				var securityId = storage.GetValue<string>(nameof(SecurityId));
 
 				if (!securityId.IsEmpty())
-					Security = connector.LookupById(securityId);
+					Security = secProvider.LookupById(securityId);
 			}
 
-			CandleType = storage.GetValue<Type>("CandleType");
-			Arg = storage.GetValue<object>("Arg");
-
-			From = storage.GetValue<DateTimeOffset>("From");
-			To = storage.GetValue<DateTimeOffset>("To");
-			WorkingTime = storage.GetValue<WorkingTime>("WorkingTime");
-
-			IsCalcVolumeProfile = storage.GetValue<bool>("IsCalcVolumeProfile");
+			CandleType = storage.GetValue(nameof(CandleType), CandleType);
+			Arg = storage.GetValue(nameof(Arg), Arg);
+			From = storage.GetValue(nameof(From), From);
+			To = storage.GetValue(nameof(To), To);
+			WorkingTime = storage.GetValue(nameof(WorkingTime), WorkingTime);
+			IsCalcVolumeProfile = storage.GetValue(nameof(IsCalcVolumeProfile), IsCalcVolumeProfile);
 		}
 
 		/// <summary>
@@ -236,18 +169,21 @@ namespace StockSharp.Algo.Candles
 		public void Save(SettingsStorage storage)
 		{
 			if (Security != null)
-				storage.SetValue("SecurityId", Security.Id);
+				storage.SetValue(nameof(SecurityId), Security.Id);
 
-			storage.SetValue("CandleType", CandleType.GetTypeName(false));
-			storage.SetValue("Arg", Arg);
+			if (CandleType != null)
+				storage.SetValue(nameof(CandleType), CandleType.GetTypeName(false));
 
-			storage.SetValue("From", From);
-			storage.SetValue("To", To);
-			storage.SetValue("WorkingTime", WorkingTime);
+			if (Arg != null)
+				storage.SetValue(nameof(Arg), Arg);
 
-			storage.SetValue("IsCalcVolumeProfile", IsCalcVolumeProfile);
+			storage.SetValue(nameof(From), From);
+			storage.SetValue(nameof(To), To);
+
+			if (WorkingTime != null)
+				storage.SetValue(nameof(WorkingTime), WorkingTime);
+
+			storage.SetValue(nameof(IsCalcVolumeProfile), IsCalcVolumeProfile);
 		}
-
-		#endregion
 	}
 }

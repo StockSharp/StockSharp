@@ -307,6 +307,7 @@ namespace StockSharp.Designer
 			ConfigManager.GetService<LogManager>().Sources.Add(_connector);
 			ConfigManager.RegisterService<IConnector>(_connector);
 			ConfigManager.RegisterService<ISecurityProvider>(_connector);
+			ConfigManager.RegisterService<IPortfolioProvider>(_connector);
 		}
 
 		private void InitializeLayoutManager()

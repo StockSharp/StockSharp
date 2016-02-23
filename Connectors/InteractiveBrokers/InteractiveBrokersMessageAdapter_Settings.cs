@@ -135,13 +135,13 @@ namespace StockSharp.InteractiveBrokers
 		{
 			base.Load(storage);
 
-			Address = storage.GetValue<EndPoint>("Address");
-			ClientId = storage.GetValue<int>("ClientId");
-			IsRealTimeMarketData = storage.GetValue<bool>("IsRealTimeMarketData");
-			ServerLogLevel = storage.GetValue<ServerLogLevels>("ServerLogLevel");
-			Fields = storage.GetValue<string>("Fields").Split(",").Select(n => n.To<GenericFieldTypes>()).ToArray();
-			ExtraAuth = storage.GetValue<bool>("ExtraAuth");
-			OptionalCapabilities = storage.GetValue<string>("OptionalCapabilities");
+			Address = storage.GetValue<EndPoint>(nameof(Address));
+			ClientId = storage.GetValue<int>(nameof(ClientId));
+			IsRealTimeMarketData = storage.GetValue<bool>(nameof(IsRealTimeMarketData));
+			ServerLogLevel = storage.GetValue<ServerLogLevels>(nameof(ServerLogLevel));
+			Fields = storage.GetValue<string>(nameof(Fields)).Split(",").Select(n => n.To<GenericFieldTypes>()).ToArray();
+			ExtraAuth = storage.GetValue<bool>(nameof(ExtraAuth));
+			OptionalCapabilities = storage.GetValue<string>(nameof(OptionalCapabilities));
 		}
 
 		/// <summary>
@@ -152,13 +152,13 @@ namespace StockSharp.InteractiveBrokers
 		{
 			base.Save(storage);
 
-			storage.SetValue("Address", Address.To<string>());
-			storage.SetValue("ClientId", ClientId);
-			storage.SetValue("IsRealTimeMarketData", IsRealTimeMarketData);
-			storage.SetValue("ServerLogLevel", ServerLogLevel.To<string>());
-			storage.SetValue("Fields", Fields.Select(t => t.To<string>()).Join(","));
-			storage.SetValue("ExtraAuth", ExtraAuth);
-			storage.SetValue("OptionalCapabilities", OptionalCapabilities);
+			storage.SetValue(nameof(Address), Address.To<string>());
+			storage.SetValue(nameof(ClientId), ClientId);
+			storage.SetValue(nameof(IsRealTimeMarketData), IsRealTimeMarketData);
+			storage.SetValue(nameof(ServerLogLevel), ServerLogLevel.To<string>());
+			storage.SetValue(nameof(Fields), Fields.Select(t => t.To<string>()).Join(","));
+			storage.SetValue(nameof(ExtraAuth), ExtraAuth);
+			storage.SetValue(nameof(OptionalCapabilities), OptionalCapabilities);
 		}
 
 		/// <summary>

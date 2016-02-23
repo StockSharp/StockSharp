@@ -31,13 +31,13 @@ namespace StockSharp.Xaml
 	public partial class StorageSettingsPanel : IPersistable
 	{
 		/// <summary>
-		/// <see cref="DependencyProperty"/> for <see cref="StorageSettingsPanel.IsCredentialsEnabled"/>.
+		/// <see cref="DependencyProperty"/> for <see cref="IsCredentialsEnabled"/>.
 		/// </summary>
-		public static readonly DependencyProperty IsCredentialsEnabledProperty = DependencyProperty.Register("IsCredentialsEnabled", typeof(bool), typeof(StorageSettingsPanel), 
+		public static readonly DependencyProperty IsCredentialsEnabledProperty = DependencyProperty.Register(nameof(IsCredentialsEnabled), typeof(bool), typeof(StorageSettingsPanel), 
 			new FrameworkPropertyMetadata(true, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
 
 		/// <summary>
-		/// <see cref="StorageSettingsPanel.Login"/> and <see cref="StorageSettingsPanel.Password"/> are only available for editing. The default value is <see langword="true" />.
+		/// <see cref="Login"/> and <see cref="Password"/> are only available for editing. The default value is <see langword="true" />.
 		/// </summary>
 		public bool IsCredentialsEnabled
 		{
@@ -68,15 +68,6 @@ namespace StockSharp.Xaml
 			get { return IsLocalCtrl.IsChecked == true; }
 			set { (value ? IsLocalCtrl : IsRemoteCtrl).IsChecked = true; }
 		}
-
-		///// <summary>
-		///// Использовать ли алфавитный путь к данным.
-		///// </summary>
-		//public bool IsAlphabetic
-		//{
-		//	get { return IsAlphabeticCtrl.IsChecked == true; }
-		//	set { IsAlphabeticCtrl.IsChecked = value; }
-		//}
 
 		/// <summary>
 		/// The path to local data.
@@ -126,22 +117,22 @@ namespace StockSharp.Xaml
 
 		void IPersistable.Load(SettingsStorage storage)
 		{
-			IsLocal = storage.GetValue<bool>("IsLocal");
-			Path = storage.GetValue<string>("Path");
-			//IsAlphabetic = storage.GetValue<bool>("IsAlphabetic");
-			Address = storage.GetValue<string>("Address");
-			Login = storage.GetValue<string>("Login");
-			Password = storage.GetValue<SecureString>("Password");
+			IsLocal = storage.GetValue<bool>(nameof(IsLocal));
+			Path = storage.GetValue<string>(nameof(Path));
+			//IsAlphabetic = storage.GetValue<bool>(nameof(IsAlphabetic));
+			Address = storage.GetValue<string>(nameof(Address));
+			Login = storage.GetValue<string>(nameof(Login));
+			Password = storage.GetValue<SecureString>(nameof(Password));
 		}
 
 		void IPersistable.Save(SettingsStorage storage)
 		{
-			storage.SetValue("IsLocal", IsLocal);
-			storage.SetValue("Path", Path);
-			//storage.SetValue("IsAlphabetic", IsAlphabetic);
-			storage.SetValue("Address", Address);
-			storage.SetValue("Login", Login);
-			storage.SetValue("Password", Password);
+			storage.SetValue(nameof(IsLocal), IsLocal);
+			storage.SetValue(nameof(Path), Path);
+			//storage.SetValue(nameof(IsAlphabetic), IsAlphabetic);
+			storage.SetValue(nameof(Address), Address);
+			storage.SetValue(nameof(Login), Login);
+			storage.SetValue(nameof(Password), Password);
 		}
 	}
 }

@@ -144,13 +144,13 @@ namespace StockSharp.Messages
 		/// <param name="storage">Settings storage.</param>
 		public void Load(SettingsStorage storage)
 		{
-			if (storage.ContainsKey("WorkingTime"))
-				WorkingTime.Load(storage.GetValue<SettingsStorage>("WorkingTime"));
+			if (storage.ContainsKey(nameof(WorkingTime)))
+				WorkingTime.Load(storage.GetValue<SettingsStorage>(nameof(WorkingTime)));
 
-			Interval = storage.GetValue<TimeSpan>("Interval");
-			AttemptCount = storage.GetValue<int>("AttemptCount");
-			ReAttemptCount = storage.GetValue<int>("ReAttemptCount");
-			TimeOutInterval = storage.GetValue<TimeSpan>("TimeOutInterval");
+			Interval = storage.GetValue<TimeSpan>(nameof(Interval));
+			AttemptCount = storage.GetValue<int>(nameof(AttemptCount));
+			ReAttemptCount = storage.GetValue<int>(nameof(ReAttemptCount));
+			TimeOutInterval = storage.GetValue<TimeSpan>(nameof(TimeOutInterval));
 		}
 
 		/// <summary>
@@ -159,11 +159,11 @@ namespace StockSharp.Messages
 		/// <param name="storage">Settings storage.</param>
 		public void Save(SettingsStorage storage)
 		{
-			storage.SetValue("WorkingTime", WorkingTime.Save());
-			storage.SetValue("Interval", Interval);
-			storage.SetValue("AttemptCount", AttemptCount);
-			storage.SetValue("ReAttemptCount", ReAttemptCount);
-			storage.SetValue("TimeOutInterval", TimeOutInterval);
+			storage.SetValue(nameof(WorkingTime), WorkingTime.Save());
+			storage.SetValue(nameof(Interval), Interval);
+			storage.SetValue(nameof(AttemptCount), AttemptCount);
+			storage.SetValue(nameof(ReAttemptCount), ReAttemptCount);
+			storage.SetValue(nameof(TimeOutInterval), TimeOutInterval);
 		}
 	}
 }

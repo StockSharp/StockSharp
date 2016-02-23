@@ -63,7 +63,7 @@ namespace StockSharp.BusinessEntities
 					return;
 
 				_name = value;
-				Notify("Name");
+				Notify(nameof(Name));
 			}
 		}
 
@@ -82,7 +82,7 @@ namespace StockSharp.BusinessEntities
 					return;
 
 				_rusName = value;
-				Notify("RusName");
+				Notify(nameof(RusName));
 			}
 		}
 
@@ -101,7 +101,7 @@ namespace StockSharp.BusinessEntities
 					return;
 
 				_engName = value;
-				Notify("EngName");
+				Notify(nameof(EngName));
 			}
 		}
 
@@ -121,7 +121,7 @@ namespace StockSharp.BusinessEntities
 					return;
 
 				_countryCode = value;
-				Notify("CountryCode");
+				Notify(nameof(CountryCode));
 			}
 		}
 
@@ -146,7 +146,7 @@ namespace StockSharp.BusinessEntities
 					throw new ArgumentNullException(nameof(value));
 
 				_extensionInfo = value;
-				Notify("ExtensionInfo");
+				Notify(nameof(ExtensionInfo));
 			}
 		}
 
@@ -220,10 +220,10 @@ namespace StockSharp.BusinessEntities
 		/// <param name="storage">Settings storage.</param>
 		public void Load(SettingsStorage storage)
 		{
-			Name = storage.GetValue<string>("Name");
-			RusName = storage.GetValue<string>("RusName");
-			EngName = storage.GetValue<string>("EngName");
-			CountryCode = storage.GetValue<CountryCodes?>("CountryCode");
+			Name = storage.GetValue<string>(nameof(Name));
+			RusName = storage.GetValue<string>(nameof(RusName));
+			EngName = storage.GetValue<string>(nameof(EngName));
+			CountryCode = storage.GetValue<CountryCodes?>(nameof(CountryCode));
 		}
 
 		/// <summary>
@@ -232,10 +232,10 @@ namespace StockSharp.BusinessEntities
 		/// <param name="storage">Settings storage.</param>
 		public void Save(SettingsStorage storage)
 		{
-			storage.SetValue("Name", Name);
-			storage.SetValue("RusName", RusName);
-			storage.SetValue("EngName", EngName);
-			storage.SetValue("CountryCode", CountryCode.To<string>());
+			storage.SetValue(nameof(Name), Name);
+			storage.SetValue(nameof(RusName), RusName);
+			storage.SetValue(nameof(EngName), EngName);
+			storage.SetValue(nameof(CountryCode), CountryCode.To<string>());
 		}
 	}
 }

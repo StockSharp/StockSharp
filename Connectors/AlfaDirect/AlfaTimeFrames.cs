@@ -56,10 +56,7 @@ namespace StockSharp.AlfaDirect
 		/// <summary>
 		/// Возможные тайм-фреймы.
 		/// </summary>
-		public static IEnumerable<TimeSpan> AllTimeFrames
-		{
-			get { return _values.CachedKeys; }
-		}
+		public static IEnumerable<TimeSpan> AllTimeFrames => _values.CachedKeys;
 
 		/// <summary>
 		/// Минутный тайм-фрейм.

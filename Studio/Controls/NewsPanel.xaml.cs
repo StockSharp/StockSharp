@@ -23,7 +23,6 @@ namespace StockSharp.Studio.Controls
 
 	using StockSharp.Algo;
 	using StockSharp.BusinessEntities;
-	using StockSharp.Studio.Core;
 	using StockSharp.Studio.Core.Commands;
 	using StockSharp.Localization;
 

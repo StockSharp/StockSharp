@@ -555,8 +555,8 @@ namespace StockSharp.Quik
 		/// <param name="storage">Хранилище настроек.</param>
 		public override void Save(SettingsStorage storage)
 		{
-			storage.SetValue("IsDde", IsDde);
-			storage.SetValue("Path", Path);
+			storage.SetValue(nameof(IsDde), IsDde);
+			storage.SetValue(nameof(Path), Path);
 
 			base.Save(storage);
 		}
@@ -567,8 +567,8 @@ namespace StockSharp.Quik
 		/// <param name="storage">Хранилище настроек.</param>
 		public override void Load(SettingsStorage storage)
 		{
-			IsDde = storage.GetValue<bool>("IsDde");
-			Path = storage.GetValue<string>("Path");
+			IsDde = storage.GetValue<bool>(nameof(IsDde));
+			Path = storage.GetValue<string>(nameof(Path));
 
 			base.Load(storage);
 		}

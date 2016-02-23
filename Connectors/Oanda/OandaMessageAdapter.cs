@@ -56,18 +56,12 @@ namespace StockSharp.Oanda
 		/// <summary>
 		/// Gets a value indicating whether the connector supports security lookup.
 		/// </summary>
-		protected override bool IsSupportNativeSecurityLookup
-		{
-			get { return true; }
-		}
+		protected override bool IsSupportNativeSecurityLookup => true;
 
 		/// <summary>
 		/// Gets a value indicating whether the connector supports position lookup.
 		/// </summary>
-		protected override bool IsSupportNativePortfolioLookup
-		{
-			get { return true; }
-		}
+		protected override bool IsSupportNativePortfolioLookup => true;
 
 		private void StreamingClientDispose()
 		{

@@ -69,7 +69,7 @@ namespace StockSharp.Messages
 	/// </summary>
 	[Serializable]
 	[System.Runtime.Serialization.DataContract]
-	public class Unit : Equatable<Unit>, IOperable<Unit>
+	public class Unit : Equatable<Unit>, IOperable<Unit>, IPersistable
 	{
 		/// <summary>
 		/// Create unit.
@@ -636,6 +636,26 @@ namespace StockSharp.Messages
 		Unit IOperable<Unit>.Divide(Unit other)
 		{
 			return this / other;
+		}
+
+		/// <summary>
+		/// Load settings.
+		/// </summary>
+		/// <param name="storage">Settings storage.</param>
+		public void Load(SettingsStorage storage)
+		{
+			Type = storage.GetValue<UnitTypes>("Type");
+			Value = storage.GetValue<decimal>("Value");
+		}
+
+		/// <summary>
+		/// Save settings.
+		/// </summary>
+		/// <param name="storage">Settings storage.</param>
+		public void Save(SettingsStorage storage)
+		{
+			storage.SetValue("Type", Type.To<string>());
+			storage.SetValue("Value", Value);
 		}
 	}
 

@@ -28,6 +28,15 @@ namespace StockSharp.Messages
 	public abstract class OrderMessage : SecurityMessage
 	{
 		/// <summary>
+		/// Transaction ID.
+		/// </summary>
+		[DataMember]
+		[DisplayNameLoc(LocalizedStrings.TransactionKey)]
+		[DescriptionLoc(LocalizedStrings.TransactionIdKey, true)]
+		[MainCategory]
+		public long TransactionId { get; set; }
+
+		/// <summary>
 		/// Portfolio name, for which an order must be placed/cancelled.
 		/// </summary>
 		[DataMember]
@@ -69,6 +78,14 @@ namespace StockSharp.Messages
 		[DisplayNameLoc(LocalizedStrings.ClientCodeKey)]
 		[DescriptionLoc(LocalizedStrings.ClientCodeDescKey)]
 		public string ClientCode { get; set; }
+
+		/// <summary>
+		/// Order condition (e.g., stop- and algo- orders parameters).
+		/// </summary>
+		[DisplayNameLoc(LocalizedStrings.Str154Key)]
+		[DescriptionLoc(LocalizedStrings.Str155Key)]
+		[CategoryLoc(LocalizedStrings.Str156Key)]
+		public OrderCondition Condition { get; set; }
 
 		/// <summary>
 		/// Initialize <see cref="OrderMessage"/>.

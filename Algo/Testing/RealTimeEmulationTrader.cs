@@ -57,14 +57,6 @@ namespace StockSharp.Algo.Testing
 		private readonly Portfolio _portfolio;
 		private readonly bool _ownAdapter;
 
-		///// <summary>
-		///// Создать <see cref="RealTimeEmulationTrader{TUnderlyingMarketDataAdapter}"/>.
-		///// </summary>
-		//public RealTimeEmulationTrader()
-		//	: this(Activator.CreateInstance<TUnderlyingMarketDataAdapter>())
-		//{
-		//}
-
 		/// <summary>
 		/// Initializes a new instance of the <see cref="RealTimeEmulationTrader{T}"/>.
 		/// </summary>
@@ -118,28 +110,6 @@ namespace StockSharp.Algo.Testing
 		/// </summary>
 		public TUnderlyingMarketDataAdapter UnderlyngMarketDataAdapter { get; }
 
-		///// <summary>
-		///// Подключиться к торговой системе.
-		///// </summary>
-		//protected override void OnConnect()
-		//{
-		//	base.OnConnect();
-
-		//	if (_ownAdapter)
-		//		UnderlyingConnector.Connect();
-		//}
-
-		///// <summary>
-		///// Отключиться от торговой системы.
-		///// </summary>
-		//protected override void OnDisconnect()
-		//{
-		//	base.OnDisconnect();
-
-		//	if (_ownAdapter)
-		//		UnderlyingConnector.Disconnect();
-		//}
-
 		/// <summary>
 		/// To process the message, containing market data.
 		/// </summary>
@@ -173,49 +143,6 @@ namespace StockSharp.Algo.Testing
 			base.OnProcessMessage(message);
 		}
 
-		///// <summary>
-		///// Найти инструменты, соответствующие фильтру <paramref name="criteria"/>.
-		///// Найденные инструменты будут переданы через событие <see cref="IConnector.LookupSecuritiesResult"/>.
-		///// </summary>
-		///// <param name="criteria">Критерий, поля которого будут использоваться в качестве фильтра.</param>
-		//public override void LookupSecurities(SecurityLookupMessage criteria)
-		//{
-		//	MarketDataAdapter.LookupSecurities(criteria);
-		//}
-
-		///// <summary>
-		///// Найти портфели, соответствующие фильтру <paramref name="criteria"/>.
-		///// Найденные портфели будут переданы через событие <see cref="IConnector.LookupPortfoliosResult"/>.
-		///// </summary>
-		///// <param name="criteria">Портфель, поля которого будут использоваться в качестве фильтра.</param>
-		//public override void LookupPortfolios(Portfolio criteria)
-		//{
-		//	if (_ownTrader)
-		//		UnderlyingConnector.LookupPortfolios(criteria);
-		//}
-
-		///// <summary>
-		///// Подписаться на получение рыночных данных по инструменту.
-		///// </summary>
-		///// <param name="security">Инструмент, по которому необходимо начать получать новую информацию.</param>
-		///// <param name="type">Тип рыночных данных.</param>
-		//public override void SubscribeMarketData(Security security, MarketDataTypes type)
-		//{
-		//	if (_ownTrader)
-		//		UnderlyingConnector.SubscribeMarketData(security, type);
-		//}
-
-		///// <summary>
-		///// Отписаться от получения рыночных данных по инструменту.
-		///// </summary>
-		///// <param name="security">Инструмент, по которому необходимо начать получать новую информацию.</param>
-		///// <param name="type">Тип рыночных данных.</param>
-		//public override void UnSubscribeMarketData(Security security, MarketDataTypes type)
-		//{
-		//	if (_ownTrader)
-		//		UnderlyingConnector.UnSubscribeMarketData(security, type);
-		//}
-
 		/// <summary>
 		/// Load settings.
 		/// </summary>
@@ -223,9 +150,9 @@ namespace StockSharp.Algo.Testing
 		public override void Load(SettingsStorage storage)
 		{
 			if (_ownAdapter)
-				UnderlyngMarketDataAdapter.Load(storage.GetValue<SettingsStorage>("UnderlyngMarketDataAdapter"));
+				UnderlyngMarketDataAdapter.Load(storage.GetValue<SettingsStorage>(nameof(UnderlyngMarketDataAdapter)));
 
-			//LagTimeout = storage.GetValue<TimeSpan>("LagTimeout");
+			//LagTimeout = storage.GetValue<TimeSpan>(nameof(LagTimeout));
 
 			base.Load(storage);
 		}
@@ -237,9 +164,9 @@ namespace StockSharp.Algo.Testing
 		public override void Save(SettingsStorage storage)
 		{
 			if (_ownAdapter)
-				storage.SetValue("UnderlyngMarketDataAdapter", UnderlyngMarketDataAdapter.Save());
+				storage.SetValue(nameof(UnderlyngMarketDataAdapter), UnderlyngMarketDataAdapter.Save());
 
-			//storage.SetValue("LagTimeout", LagTimeout);
+			//storage.SetValue(nameof(LagTimeout), LagTimeout);
 
 			base.Save(storage);
 		}
@@ -259,54 +186,5 @@ namespace StockSharp.Algo.Testing
 
 			base.DisposeManaged();
 		}
-
-		//private void NewMessageHandler(Message message, MessageDirections direction)
-		//{
-		//	// пропускаем из UnderlyingTrader сообщения о его реальных заявках, сделках, подключении к торговой системе
-		//	switch (message.Type)
-		//	{
-		//		case MessageTypes.OrderRegister:
-		//		case MessageTypes.OrderReplace:
-		//		case MessageTypes.OrderPairReplace:
-		//		case MessageTypes.OrderCancel:
-		//		case MessageTypes.OrderGroupCancel:
-		//		case MessageTypes.OrderError:
-		//		case MessageTypes.Portfolio:
-		//		case MessageTypes.PortfolioChange:
-		//		case MessageTypes.Position:
-		//		case MessageTypes.PositionChange:
-		//		case MessageTypes.MarketData:
-		//			return;
-		//		case MessageTypes.Execution:
-		//		{
-		//			var execMsg = (ExecutionMessage)message;
-		//			if (execMsg.OrderId != 0 || execMsg.OriginalTransactionId != 0)
-		//				return;
-
-		//			break;
-		//		}
-		//		case MessageTypes.Connect:
-		//		case MessageTypes.Disconnect:
-		//			return;
-		//	}
-
-		//	MarketDataAdapter.SendMessage(message);
-		//}
 	}
-
-	///// <summary>
-	///// Симуляционное подключение, предназначенный для тестирования стратегии c реальном подключения к торговой системе,
-	///// но без реального выставления заявок на бирже. Исполнение заявок и их сделки эмулируются подключением, используя информацию по стаканам, приходящих от реального подключения.
-	///// </summary>
-	//public class RealTimeEmulationTrader : RealTimeEmulationTrader<Connector>
-	//{
-	//	/// <summary>
-	//	/// Создать <see cref="RealTimeEmulationTrader"/>.
-	//	/// </summary>
-	//	/// <param name="underlyingConnector">Реальное подключение к торговой системе.</param>
-	//	public RealTimeEmulationTrader(Connector underlyingConnector)
-	//		: base(underlyingConnector)
-	//	{
-	//	}
-	//}
 }

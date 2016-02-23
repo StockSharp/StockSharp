@@ -332,32 +332,18 @@ namespace StockSharp.Messages
 						return;
 
 					case MessageTypes.OrderRegister:
-					{
-						SendOutErrorExecution(((OrderRegisterMessage)message).ToExecutionMessage(), ex);
-						return;
-					}
-
 					case MessageTypes.OrderReplace:
-					{
-						SendOutErrorExecution(((OrderReplaceMessage)message).ToExecutionMessage(), ex);
-						return;
-					}
-
-					case MessageTypes.OrderPairReplace:
-					{
-						SendOutErrorExecution(((OrderPairReplaceMessage)message).ToExecutionMessage(), ex);
-						return;
-					}
-
 					case MessageTypes.OrderCancel:
-					{
-						SendOutErrorExecution(((OrderCancelMessage)message).ToExecutionMessage(), ex);
-						return;
-					}
-
 					case MessageTypes.OrderGroupCancel:
 					{
-						SendOutErrorExecution(((OrderGroupCancelMessage)message).ToExecutionMessage(), ex);
+						var replyMsg = ((OrderMessage)message).CreateReply();
+						SendOutErrorExecution(replyMsg, ex);
+						return;
+					}
+					case MessageTypes.OrderPairReplace:
+					{
+						var replyMsg = ((OrderPairReplaceMessage)message).Message1.CreateReply();
+						SendOutErrorExecution(replyMsg, ex);
 						return;
 					}
 
@@ -526,9 +512,9 @@ namespace StockSharp.Messages
 		/// <param name="storage">Settings storage.</param>
 		public override void Load(SettingsStorage storage)
 		{
-			HeartbeatInterval = storage.GetValue<TimeSpan>("HeartbeatInterval");
-			SupportedMessages = storage.GetValue<string[]>("SupportedMessages").Select(i => i.To<MessageTypes>()).ToArray();
-			AssociatedBoardCode = storage.GetValue("AssociatedBoardCode", AssociatedBoardCode);
+			HeartbeatInterval = storage.GetValue<TimeSpan>(nameof(HeartbeatInterval));
+			SupportedMessages = storage.GetValue<string[]>(nameof(SupportedMessages)).Select(i => i.To<MessageTypes>()).ToArray();
+			AssociatedBoardCode = storage.GetValue(nameof(AssociatedBoardCode), AssociatedBoardCode);
 
 			base.Load(storage);
 		}
@@ -539,9 +525,9 @@ namespace StockSharp.Messages
 		/// <param name="storage">Settings storage.</param>
 		public override void Save(SettingsStorage storage)
 		{
-			storage.SetValue("HeartbeatInterval", HeartbeatInterval);
-			storage.SetValue("SupportedMessages", SupportedMessages.Select(t => t.To<string>()).ToArray());
-			storage.SetValue("AssociatedBoardCode", AssociatedBoardCode);
+			storage.SetValue(nameof(HeartbeatInterval), HeartbeatInterval);
+			storage.SetValue(nameof(SupportedMessages), SupportedMessages.Select(t => t.To<string>()).ToArray());
+			storage.SetValue(nameof(AssociatedBoardCode), AssociatedBoardCode);
 
 			base.Save(storage);
 		}

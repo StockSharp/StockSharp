@@ -50,19 +50,13 @@ namespace StockSharp.AlfaDirect
 			Adapter.InnerAdapters.Add(new AlfaDirectMessageAdapter(TransactionIdGenerator));
 		}
 
-		private AlfaDirectMessageAdapter NativeAdapter
-		{
-			get { return Adapter.InnerAdapters.OfType<AlfaDirectMessageAdapter>().First(); }
-		}
+		private AlfaDirectMessageAdapter NativeAdapter => Adapter.InnerAdapters.OfType<AlfaDirectMessageAdapter>().First();
 
 		/// <summary>
-		/// Поддерживается ли перерегистрация заявок через метод <see cref="IConnector.ReRegisterOrder(StockSharp.BusinessEntities.Order,StockSharp.BusinessEntities.Order)"/>
+		/// Поддерживается ли перерегистрация заявок через метод <see cref="IConnector.ReRegisterOrder(Order,Order)"/>
 		/// в виде одной транзакции. По-умолчанию включено.
 		/// </summary>
-		public override bool IsSupportAtomicReRegister
-		{
-			get { return false; }
-		}
+		public override bool IsSupportAtomicReRegister => false;
 
 		/// <summary>
 		/// Имя пользователя в терминале Альфа-Директ.
@@ -82,17 +76,11 @@ namespace StockSharp.AlfaDirect
 			set { NativeAdapter.Password = value.To<SecureString>(); }
 		}
 
-		private TimeSpan _realTimeCandleOffset = TimeSpan.FromSeconds(5);
-
 		/// <summary>
 		/// Временной отступ для нового запроса получение новой свечи. По-умолчанию равен 5 секундам.
 		/// </summary>
 		/// <remarks>Необходим для того, чтобы сервер успел сформировать данные в своем хранилище свечек.</remarks>
-		public TimeSpan RealTimeCandleOffset
-		{
-			get { return _realTimeCandleOffset; }
-			set { _realTimeCandleOffset = value; }
-		}
+		public TimeSpan RealTimeCandleOffset { get; set; } = TimeSpan.FromSeconds(5);
 
 		/// <summary>
 		/// Обработать сообщение.
@@ -227,7 +215,7 @@ namespace StockSharp.AlfaDirect
 		{
 			base.Load(storage);
 
-			RealTimeCandleOffset = storage.GetValue<TimeSpan>("RealTimeCandleOffset");
+			RealTimeCandleOffset = storage.GetValue<TimeSpan>(nameof(RealTimeCandleOffset));
 		}
 
 		/// <summary>
@@ -238,7 +226,7 @@ namespace StockSharp.AlfaDirect
 		{
 			base.Save(storage);
 
-			storage.SetValue("RealTimeCandleOffset", RealTimeCandleOffset);
+			storage.SetValue(nameof(RealTimeCandleOffset), RealTimeCandleOffset);
 		}
 	}
 }

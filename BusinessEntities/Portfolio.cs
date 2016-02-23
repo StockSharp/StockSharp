@@ -16,9 +16,7 @@ Copyright 2010 by StockSharp, LLC
 namespace StockSharp.BusinessEntities
 {
 	using System;
-	using System.ComponentModel;
 	using System.Runtime.Serialization;
-	using System.Xml.Serialization;
 
 	using Ecng.Serialization;
 
@@ -108,21 +106,21 @@ namespace StockSharp.BusinessEntities
 			}
 		}
 
-		[field: NonSerialized]
-		private IConnector _connector;
+		//[field: NonSerialized]
+		//private IConnector _connector;
 
-		/// <summary>
-		/// Connection to the trading system, through which this portfolio has been loaded.
-		/// </summary>
-		[Ignore]
-		[XmlIgnore]
-		[Browsable(false)]
-		[Obsolete("The property Connector was obsoleted and is always null.")]
-		public IConnector Connector
-		{
-			get { return _connector; }
-			set { _connector = value; }
-		}
+		///// <summary>
+		///// Connection to the trading system, through which this portfolio has been loaded.
+		///// </summary>
+		//[Ignore]
+		//[XmlIgnore]
+		//[Browsable(false)]
+		//[Obsolete("The property Connector was obsoleted and is always null.")]
+		//public IConnector Connector
+		//{
+		//	get { return _connector; }
+		//	set { _connector = value; }
+		//}
 
 		/// <summary>
 		/// Exchange board, for which the current portfolio is active.

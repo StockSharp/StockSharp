@@ -66,7 +66,7 @@ namespace StockSharp.Logging
 		{
 			base.Load(storage);
 
-			Volume = storage.GetValue<int>("Volume");
+			Volume = storage.GetValue<int>(nameof(Volume));
 		}
 
 		/// <summary>
@@ -77,7 +77,7 @@ namespace StockSharp.Logging
 		{
 			base.Save(storage);
 
-			storage.SetValue("Volume", Volume);
+			storage.SetValue(nameof(Volume), Volume);
 		}
 	}
 }
