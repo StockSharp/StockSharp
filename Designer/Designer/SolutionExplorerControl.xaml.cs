@@ -21,8 +21,11 @@ namespace StockSharp.Designer
 	using System.ComponentModel;
 	using System.Windows;
 	using System.Windows.Input;
+	using System.Windows.Media;
+	using System.Windows.Media.Imaging;
 
 	using DevExpress.Xpf.Grid;
+	using DevExpress.Xpf.Grid.TreeList;
 
 	using Ecng.Collections;
 	using Ecng.Common;
@@ -260,5 +263,24 @@ namespace StockSharp.Designer
 		{
 			ChildItems.Clear();
         }
+	}
+
+	public class TreeNodeImageSelector : TreeListNodeImageSelector
+	{
+		public ImageSource Folder { get; set; }
+
+		public ImageSource Composition { get; set; }
+
+		public ImageSource Strategy { get; set; }
+
+		public override ImageSource Select(TreeListRowData rowData)
+		{
+			var item = (SolutionExplorerItem)rowData.View.DataControl.GetRow(rowData.RowHandle.Value);
+
+			if (item.Parent == null)
+				return Folder;
+
+			return item.Element.Type == CompositionType.Composition ? Composition : Strategy;
+		}
 	}
 }

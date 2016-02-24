@@ -85,7 +85,7 @@ namespace StockSharp.Hydra.AlfaDirect
 			SupportedDataTypes = base.SupportedDataTypes.Concat(
 				AlfaTimeFrames
 					.AllTimeFrames
-					.Select(tf => DataType.Create(typeof(TimeFrameCandleMessage), (object)tf)))
+					.Select(tf => DataType.Create(typeof(TimeFrameCandleMessage), tf)))
 				.ToArray();
 		}
 

@@ -267,9 +267,6 @@
     <None Include="Compositions\bf591486_88ac_41b2_8079_ca0c9eabf349.xml" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Images\FolderClosed.png" />
-    <Resource Include="Images\FolderOpen.png" />
-    <Resource Include="Images\FolderSelected.png" />
     <Resource Include="Images\start_32x32.png" />
     <Resource Include="Images\stop_32x32.png" />
     <Resource Include="Images\terminal_32x32.png" />
@@ -302,6 +299,11 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\Security_32x32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\TreeComposition_32x32.png" />
+    <Resource Include="Images\TreeFolder_32x32.png" />
+    <Resource Include="Images\TreeStrategy_32x32.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

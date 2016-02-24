@@ -57,7 +57,6 @@ namespace StockSharp.Hydra.Rts
 			public RtsSettings(HydraTaskSettings settings)
 				: base(settings)
 			{
-				ExtensionInfo.TryAdd("UseTemporaryFiles", TempFiles.UseAndDelete.To<string>());
 			}
 
 			[CategoryLoc(_sourceName)]

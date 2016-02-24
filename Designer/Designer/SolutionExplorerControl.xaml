@@ -3,7 +3,6 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:componentModel="clr-namespace:System.ComponentModel;assembly=WindowsBase"
              xmlns:local="clr-namespace:StockSharp.Designer"
 			 xmlns:dxg="http://schemas.devexpress.com/winfx/2008/xaml/grid"
 			 xmlns:localization="clr-namespace:StockSharp.Localization;assembly=StockSharp.Localization"
@@ -12,14 +11,18 @@
              d:DesignHeight="300" d:DesignWidth="300">
 
     <UserControl.Resources>
-
+        <local:TreeNodeImageSelector x:Key="TreeNodeImageSelector"
+									 Folder="pack://application:,,,/Designer;component/Images/TreeFolder_32x32.png"
+									 Composition="pack://application:,,,/Designer;component/Images/TreeComposition_32x32.png"
+									 Strategy="pack://application:,,,/Designer;component/Images/TreeStrategy_32x32.png"/>
     </UserControl.Resources>
 
     <dxg:TreeListControl x:Name="ExplorerTree" SelectedItemChanged="ExplorerTree_OnSelectedItemChanged" MouseDoubleClick="ExplorerTree_OnMouseDoubleClick">
         <dxg:TreeListControl.View>
             <dxg:TreeListView TreeDerivationMode="HierarchicalDataTemplate" NavigationStyle="Row"
 							  AutoWidth="False" AllowPerPixelScrolling="True" AutoExpandAllNodes="True" AllowScrollAnimation="True"
-							  ShowNodeImages="False" ShowIndicator="False" ShowVerticalLines="False"
+							  ShowNodeImages="True" ShowIndicator="False" ShowVerticalLines="False"
+							  NodeImageSelector="{StaticResource TreeNodeImageSelector}"
 							  ContextMenu="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:SolutionExplorerControl}}, Path=NodeContextMenu}">
 				<dxg:TreeListView.DataRowTemplate>
                     <HierarchicalDataTemplate DataType="{x:Type local:SolutionExplorerItem}" ItemsSource="{Binding ChildItems}">

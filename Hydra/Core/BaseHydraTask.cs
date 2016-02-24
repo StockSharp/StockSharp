@@ -73,7 +73,7 @@ namespace StockSharp.Hydra.Core
 		/// <summary>
 		/// Уровень логирования для источника.
 		/// </summary>
-		public override LogLevels LogLevel => Settings == null ? base.LogLevel : Settings.LogLevel;
+		public override LogLevels LogLevel => Settings?.LogLevel ?? base.LogLevel;
 
 		/// <summary>
 		/// Адрес иконки, для визуального обозначения.

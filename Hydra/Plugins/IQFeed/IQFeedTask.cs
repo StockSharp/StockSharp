@@ -54,7 +54,6 @@ namespace StockSharp.Hydra.IQFeed
 			public IQFeedSettings(HydraTaskSettings settings)
 				: base(settings)
 			{
-				CollectionHelper.TryAdd(ExtensionInfo, "CandleDayStep", 30);
 			}
 
 			[Category(_category)]
@@ -88,9 +87,8 @@ namespace StockSharp.Hydra.IQFeed
 				{
 					var types = ExtensionInfo.TryGetValue("Types");
 
-					return types == null
-						? Enumerable.Empty<SecurityTypes>()
-						: ((IEnumerable<string>)types).Select(t => t.To<SecurityTypes>()).ToArray();
+					return ((IEnumerable<string>)types)?.Select(t => t.To<SecurityTypes>()).ToArray()
+						?? Enumerable.Empty<SecurityTypes>();
 				}
 				set
 				{

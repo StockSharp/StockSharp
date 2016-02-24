@@ -264,9 +264,6 @@ namespace StockSharp.Hydra.Plaza
 			return adapter;
 		}
 
-		public override HydraTaskSettings Settings
-		{
-			get { return _settings; }
-		}
+		public override HydraTaskSettings Settings => _settings;
 	}
 }

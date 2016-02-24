@@ -22,7 +22,6 @@ namespace StockSharp.Hydra.Quik
 	using System.Net;
 	using System.Security;
 
-	using Ecng.Collections;
 	using Ecng.Common;
 	using Ecng.Localization;
 	using Ecng.ComponentModel;
@@ -62,14 +61,14 @@ namespace StockSharp.Hydra.Quik
 				/// <summary>
 				/// Название свойства, от которого будет зависить видимость  
 				/// </summary>
-				public string PropertyName { get; private set; }
+				public string PropertyName { get; }
 
 				/// <summary>
 				/// Значения свойства от которого зависит видимость 
 				/// (через запятую, если несколько), при котором свойство, к
 				/// которому применен атрибут, будет видимо. 
 				/// </summary>
-				public object ShowOn { get; private set; }
+				public object ShowOn { get; }
 
 				/// <summary>
 				/// Конструктор  
@@ -93,9 +92,6 @@ namespace StockSharp.Hydra.Quik
 			public QuikSettings(HydraTaskSettings settings)
 				: base(settings)
 			{
-				ExtensionInfo.TryAdd("LuaAddress", QuikTrader.DefaultLuaAddress.To<string>());
-				ExtensionInfo.TryAdd("LuaLogin", string.Empty);
-				ExtensionInfo.TryAdd("LuaPassword", new SecureString());
 			}
 
 			[CategoryLoc(_sourceName)]
@@ -304,10 +300,7 @@ namespace StockSharp.Hydra.Quik
 
 		private QuikSettings _settings;
 
-		public override HydraTaskSettings Settings
-		{
-			get { return _settings; }
-		}
+		public override HydraTaskSettings Settings => _settings;
 
 		protected override void ApplySettings(HydraTaskSettings settings)
 		{

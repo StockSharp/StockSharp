@@ -53,7 +53,6 @@ namespace StockSharp.Hydra.AlorHistory
 			public AlorHistorySettings(HydraTaskSettings settings)
 				: base(settings)
 			{
-				CollectionHelper.TryAdd(ExtensionInfo, "CandleDayStep", 30);
 			}
 
 			[CategoryLoc(_sourceName)]
