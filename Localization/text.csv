@@ -4214,6 +4214,7 @@ GreaterOrEqual;Greater or equal;Больше или равно
 Less;Less;Меньше
 LessOrEqual;Less or equal;Меньше или равно
 Any;Any;Любое
+LoadingVariableErrorParams;Loading variable parameter error: {0}.;Ошибка загрузки параметра переменной {0}.
 DocStr0;Button activation alert settings;Кнопка активации настроек сигнала
 DocStr1;Initializes a new instance of the {0};Создать {0}
 DocStr2;Load settings;Загрузить настройки
