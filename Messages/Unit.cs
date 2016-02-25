@@ -105,12 +105,12 @@ namespace StockSharp.Messages
 		/// <param name="getTypeValue">The handler returns a value associated with <see cref="Unit.Type"/> (price or volume steps).</param>
 		public Unit(decimal value, UnitTypes type, Func<UnitTypes, decimal?> getTypeValue)
 		{
-			// mika Äàííóþ ïðîâåðêó ëó÷øå äåëàòü ïðè àðèôìåòè÷åñêèõ äåéñòâèÿõ
+			// mika current check should be do while arithmetics operations
 			//
 			//if (type == UnitTypes.Point || type == UnitTypes.Step)
 			//{
 			//    if (security == null)
-			//        throw new ArgumentException("Åäèíèöà èçìåðåíèÿ íå ìîæåò áûòü '{0}' òàê êàê íå ïåðåäàíà èíôîðìàöèÿ îá èíñòðóìåíòå.".Put(type), "type");
+			//        throw new ArgumentException("Type has invalid value '{0}' while security is not set.".Put(type), "type");
 			//}
 
 			Value = value;
@@ -244,7 +244,7 @@ namespace StockSharp.Messages
 			var func = GetTypeValue ?? getTypeValue;
 
 			if (func == null)
-				throw new InvalidOperationException("Îáðàáîò÷èê ïîëó÷åíèÿ çíà÷åíèÿ íå óñòàíîâëåí.");
+				throw new InvalidOperationException("The handler is not set.");
 
 			var value = func(Type);
 
@@ -264,7 +264,7 @@ namespace StockSharp.Messages
 
 		private static Unit CreateResult(Unit u1, Unit u2, Func<decimal, decimal, decimal> operation, Func<decimal, decimal, decimal> percentOperation)
 		{
-			//  ïðåäîâðàòèòü âûçîâ ïåðåîïðåäåëåííîãî îïåðàòîðà
+			//  prevent operator '==' call
 			//if (u1 == null)
 			if (u1.IsNull())
 				throw new ArgumentNullException(nameof(u1));
@@ -283,7 +283,7 @@ namespace StockSharp.Messages
 				throw new ArgumentNullException(nameof(percentOperation));
 
 			//if (u1.CheckGetTypeValue(false) != u2.CheckGetTypeValue(false))
-			//	throw new ArgumentException("Ó îäíîé èç âåëè÷èí íå óñòàíîâëåíî ïîëó÷åíèå çíà÷åíèÿ.");
+			//	throw new ArgumentException("One of the values has uninitialized value handler.");
 
 			//if (u1.GetTypeValue != null && u2.GetTypeValue != null && u1.GetTypeValue != u2.GetTypeValue)
 			//	throw new ArgumentException(LocalizedStrings.Str614Params.Put(u1.Security.Id, u2.Security.Id));
@@ -548,10 +548,10 @@ namespace StockSharp.Messages
 				throw new ArgumentNullException(nameof(u2));
 
 			//if (u1.Type == UnitTypes.Limit || u2.Type == UnitTypes.Limit)
-			//	throw new ArgumentException("Ëèìèòèðîâàííîå çíà÷åíèå íå ìîæåò ó÷àñòâîâàòü â àðèôìåòè÷åñêèõ îïåðàöèÿõ.");
+			//	throw new ArgumentException("Limit value cannot be modified while arithmetics operations.");
 
 			//if (u1.CheckGetTypeValue(false) != u2.CheckGetTypeValue(false))
-			//	throw new ArgumentException("Ó îäíîé èç âåëè÷èí íå óñòàíîâëåíî ïîëó÷åíèå çíà÷åíèÿ.");
+			//	throw new ArgumentException("One of the values has uninitialized value handler.");
 
 			if (u1.Type != u2.Type)
 			{
