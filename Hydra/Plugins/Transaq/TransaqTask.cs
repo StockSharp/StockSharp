@@ -62,8 +62,8 @@ namespace StockSharp.Hydra.Transaq
 			[PropertyOrder(0)]
 			public string Login
 			{
-				get { return (string)ExtensionInfo["Login"]; }
-				set { ExtensionInfo["Login"] = value; }
+				get { return (string)ExtensionInfo[nameof(Login)]; }
+				set { ExtensionInfo[nameof(Login)] = value; }
 			}
 
 			[CategoryLoc(_sourceName)]
@@ -72,8 +72,8 @@ namespace StockSharp.Hydra.Transaq
 			[PropertyOrder(1)]
 			public SecureString Password
 			{
-				get { return ExtensionInfo["Password"].To<SecureString>(); }
-				set { ExtensionInfo["Password"] = value; }
+				get { return ExtensionInfo[nameof(Password)].To<SecureString>(); }
+				set { ExtensionInfo[nameof(Password)] = value; }
 			}
 
 			[CategoryLoc(_sourceName)]
@@ -82,8 +82,8 @@ namespace StockSharp.Hydra.Transaq
 			[PropertyOrder(2)]
 			public EndPoint Address
 			{
-				get { return ExtensionInfo["Address"].To<EndPoint>(); }
-				set { ExtensionInfo["Address"] = value.To<string>(); }
+				get { return ExtensionInfo[nameof(Address)].To<EndPoint>(); }
+				set { ExtensionInfo[nameof(Address)] = value.To<string>(); }
 			}
 
 			[CategoryLoc(LocalizedStrings.Str3539Key)]
@@ -92,8 +92,8 @@ namespace StockSharp.Hydra.Transaq
 			[PropertyOrder(3)]
 			public bool UseProxy
 			{
-				get { return (bool)ExtensionInfo["UseProxy"]; }
-				set { ExtensionInfo["UseProxy"] = value; }
+				get { return (bool)ExtensionInfo[nameof(UseProxy)]; }
+				set { ExtensionInfo[nameof(UseProxy)] = value; }
 			}
 
 			[CategoryLoc(LocalizedStrings.Str3539Key)]
@@ -103,8 +103,8 @@ namespace StockSharp.Hydra.Transaq
 			[ItemsSource(typeof(ProxyItemsSource))]
 			public string ProxyType
 			{
-				get { return (string)ExtensionInfo["ProxyType"]; }
-				set { ExtensionInfo["ProxyType"] = value; }
+				get { return (string)ExtensionInfo[nameof(ProxyType)]; }
+				set { ExtensionInfo[nameof(ProxyType)] = value; }
 			}
 
 			[CategoryLoc(LocalizedStrings.Str3539Key)]
@@ -113,8 +113,8 @@ namespace StockSharp.Hydra.Transaq
 			[PropertyOrder(5)]
 			public string ProxyLogin
 			{
-				get { return (string)ExtensionInfo["ProxyLogin"]; }
-				set { ExtensionInfo["ProxyLogin"] = value; }
+				get { return (string)ExtensionInfo[nameof(ProxyLogin)]; }
+				set { ExtensionInfo[nameof(ProxyLogin)] = value; }
 			}
 
 			[CategoryLoc(LocalizedStrings.Str3539Key)]
@@ -123,8 +123,8 @@ namespace StockSharp.Hydra.Transaq
 			[PropertyOrder(6)]
 			public SecureString ProxyPassword
 			{
-				get { return ExtensionInfo["ProxyPassword"].To<SecureString>(); }
-				set { ExtensionInfo["ProxyPassword"] = value; }
+				get { return ExtensionInfo[nameof(ProxyPassword)].To<SecureString>(); }
+				set { ExtensionInfo[nameof(ProxyPassword)] = value; }
 			}
 
 			[CategoryLoc(LocalizedStrings.Str3539Key)]
@@ -133,8 +133,8 @@ namespace StockSharp.Hydra.Transaq
 			[PropertyOrder(7)]
 			public EndPoint ProxyAddress
 			{
-				get { return ExtensionInfo["ProxyAddress"].To<EndPoint>(); }
-				set { ExtensionInfo["ProxyAddress"] = value.To<string>(); }
+				get { return ExtensionInfo[nameof(ProxyAddress)].To<EndPoint>(); }
+				set { ExtensionInfo[nameof(ProxyAddress)] = value.To<string>(); }
 			}
 
 			[CategoryLoc(_sourceName)]
@@ -143,8 +143,8 @@ namespace StockSharp.Hydra.Transaq
 			[PropertyOrder(8)]
 			public bool IsHFT
 			{
-				get { return (bool)ExtensionInfo["IsHFT"]; }
-				set { ExtensionInfo["IsHFT"] = value; }
+				get { return (bool)ExtensionInfo[nameof(IsHFT)]; }
+				set { ExtensionInfo[nameof(IsHFT)] = value; }
 			}
 
 			[CategoryLoc(_sourceName)]
@@ -153,8 +153,8 @@ namespace StockSharp.Hydra.Transaq
 			[PropertyOrder(9)]
 			public TimeSpan? MarketDataInterval
 			{
-				get { return (TimeSpan?)ExtensionInfo["MarketDataInterval"]; }
-				set { ExtensionInfo["MarketDataInterval"] = value; }
+				get { return (TimeSpan?)ExtensionInfo[nameof(MarketDataInterval)]; }
+				set { ExtensionInfo[nameof(MarketDataInterval)] = value; }
 			}
 
 			[CategoryLoc(_sourceName)]
@@ -163,8 +163,8 @@ namespace StockSharp.Hydra.Transaq
 			[PropertyOrder(10)]
 			public bool OverrideDll
 			{
-				get { return (bool)ExtensionInfo["OverrideDll"]; }
-				set { ExtensionInfo["OverrideDll"] = value; }
+				get { return (bool)ExtensionInfo[nameof(OverrideDll)]; }
+				set { ExtensionInfo[nameof(OverrideDll)] = value; }
 			}
 
 			[Browsable(true)]

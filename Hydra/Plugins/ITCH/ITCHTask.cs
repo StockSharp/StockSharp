@@ -60,8 +60,8 @@ namespace StockSharp.Hydra.ITCH
 			[ExpandableObject]
 			public MulticastSourceAddress PrimaryMulticast
 			{
-				get { return (MulticastSourceAddress)ExtensionInfo["PrimaryMulticast"]; }
-				set { ExtensionInfo["PrimaryMulticast"] = value; }
+				get { return (MulticastSourceAddress)ExtensionInfo[nameof(PrimaryMulticast)]; }
+				set { ExtensionInfo[nameof(PrimaryMulticast)] = value; }
 			}
 
 			[CategoryLoc(_sourceName)]
@@ -71,8 +71,8 @@ namespace StockSharp.Hydra.ITCH
 			[ExpandableObject]
 			public MulticastSourceAddress DuplicateMulticast
 			{
-				get { return (MulticastSourceAddress)ExtensionInfo["DuplicateMulticast"]; }
-				set { ExtensionInfo["DuplicateMulticast"] = value; }
+				get { return (MulticastSourceAddress)ExtensionInfo[nameof(DuplicateMulticast)]; }
+				set { ExtensionInfo[nameof(DuplicateMulticast)] = value; }
 			}
 
 			[CategoryLoc(_sourceName)]
@@ -81,8 +81,8 @@ namespace StockSharp.Hydra.ITCH
 			[PropertyOrder(2)]
 			public EndPoint RecoveryAddress
 			{
-				get { return ExtensionInfo["RecoveryAddress"].To<EndPoint>(); }
-				set { ExtensionInfo["RecoveryAddress"] = value.To<string>(); }
+				get { return ExtensionInfo[nameof(RecoveryAddress)].To<EndPoint>(); }
+				set { ExtensionInfo[nameof(RecoveryAddress)] = value.To<string>(); }
 			}
 
 			[CategoryLoc(_sourceName)]
@@ -91,8 +91,8 @@ namespace StockSharp.Hydra.ITCH
 			[PropertyOrder(2)]
 			public EndPoint ReplayAddress
 			{
-				get { return ExtensionInfo["ReplayAddress"].To<EndPoint>(); }
-				set { ExtensionInfo["ReplayAddress"] = value.To<string>(); }
+				get { return ExtensionInfo[nameof(ReplayAddress)].To<EndPoint>(); }
+				set { ExtensionInfo[nameof(ReplayAddress)] = value.To<string>(); }
 			}
 
 			[CategoryLoc(_sourceName)]
@@ -101,8 +101,8 @@ namespace StockSharp.Hydra.ITCH
 			[PropertyOrder(3)]
 			public string Login
 			{
-				get { return (string)ExtensionInfo["Login"]; }
-				set { ExtensionInfo["Login"] = value; }
+				get { return (string)ExtensionInfo[nameof(Login)]; }
+				set { ExtensionInfo[nameof(Login)] = value; }
 			}
 
 			[CategoryLoc(_sourceName)]
@@ -111,8 +111,8 @@ namespace StockSharp.Hydra.ITCH
 			[PropertyOrder(4)]
 			public SecureString Password
 			{
-				get { return ExtensionInfo["Password"].To<SecureString>(); }
-				set { ExtensionInfo["Password"] = value; }
+				get { return ExtensionInfo[nameof(Password)].To<SecureString>(); }
+				set { ExtensionInfo[nameof(Password)] = value; }
 			}
 
 			[CategoryLoc(_sourceName)]
@@ -122,8 +122,8 @@ namespace StockSharp.Hydra.ITCH
 			[Editor(typeof(FileBrowserEditor), typeof(FileBrowserEditor))]
 			public string SecurityCsvFile
 			{
-				get { return (string)ExtensionInfo["SecurityCsvFile"]; }
-				set { ExtensionInfo["SecurityCsvFile"] = value; }
+				get { return (string)ExtensionInfo[nameof(SecurityCsvFile)]; }
+				set { ExtensionInfo[nameof(SecurityCsvFile)] = value; }
 			}
 
 			[CategoryLoc(_sourceName)]
@@ -132,8 +132,8 @@ namespace StockSharp.Hydra.ITCH
 			[PropertyOrder(6)]
 			public bool OnlyActiveSecurities
 			{
-				get { return (bool)ExtensionInfo["OnlyActiveSecurities"]; }
-				set { ExtensionInfo["OnlyActiveSecurities"] = value; }
+				get { return (bool)ExtensionInfo[nameof(OnlyActiveSecurities)]; }
+				set { ExtensionInfo[nameof(OnlyActiveSecurities)] = value; }
 			}
 
 			[CategoryLoc(_sourceName)]
@@ -142,8 +142,8 @@ namespace StockSharp.Hydra.ITCH
 			[PropertyOrder(7)]
 			public char GroupId
 			{
-				get { return (char)ExtensionInfo["GroupId"]; }
-				set { ExtensionInfo["GroupId"] = value; }
+				get { return (char)ExtensionInfo[nameof(GroupId)]; }
+				set { ExtensionInfo[nameof(GroupId)] = value; }
 			}
 
 			public override HydraTaskSettings Clone()

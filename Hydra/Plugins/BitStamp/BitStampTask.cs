@@ -52,8 +52,8 @@ namespace StockSharp.Hydra.BitStamp
 			[PropertyOrder(1)]
 			public SecureString Key
 			{
-				get { return (SecureString)ExtensionInfo["Key"]; }
-				set { ExtensionInfo["Key"] = value; }
+				get { return (SecureString)ExtensionInfo[nameof(Key)]; }
+				set { ExtensionInfo[nameof(Key)] = value; }
 			}
 
 			[CategoryLoc(_sourceName)]
@@ -62,8 +62,8 @@ namespace StockSharp.Hydra.BitStamp
 			[PropertyOrder(2)]
 			public SecureString Secret
 			{
-				get { return (SecureString)ExtensionInfo["Secret"]; }
-				set { ExtensionInfo["Secret"] = value; }
+				get { return (SecureString)ExtensionInfo[nameof(Secret)]; }
+				set { ExtensionInfo[nameof(Secret)] = value; }
 			}
 		}
 

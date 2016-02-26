@@ -61,8 +61,8 @@ namespace StockSharp.Hydra.GainCapital
 			[PropertyOrder(0)]
 			public DateTime StartFrom
 			{
-				get { return ExtensionInfo["StartFrom"].To<DateTime>(); }
-				set { ExtensionInfo["StartFrom"] = value.Ticks; }
+				get { return ExtensionInfo[nameof(StartFrom)].To<DateTime>(); }
+				set { ExtensionInfo[nameof(StartFrom)] = value.Ticks; }
 			}
 
 			[CategoryLoc(_sourceName)]
@@ -71,8 +71,8 @@ namespace StockSharp.Hydra.GainCapital
 			[PropertyOrder(1)]
 			public int DayOffset
 			{
-				get { return ExtensionInfo["DayOffset"].To<int>(); }
-				set { ExtensionInfo["DayOffset"] = value; }
+				get { return ExtensionInfo[nameof(DayOffset)].To<int>(); }
+				set { ExtensionInfo[nameof(DayOffset)] = value; }
 			}
 
 			[CategoryLoc(_sourceName)]
@@ -81,8 +81,8 @@ namespace StockSharp.Hydra.GainCapital
 			[PropertyOrder(3)]
 			public TempFiles UseTemporaryFiles
 			{
-				get { return ExtensionInfo["UseTemporaryFiles"].To<TempFiles>(); }
-				set { ExtensionInfo["UseTemporaryFiles"] = value.To<string>(); }
+				get { return ExtensionInfo[nameof(UseTemporaryFiles)].To<TempFiles>(); }
+				set { ExtensionInfo[nameof(UseTemporaryFiles)] = value.To<string>(); }
 			}
 		}
 

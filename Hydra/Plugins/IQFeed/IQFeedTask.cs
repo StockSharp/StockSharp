@@ -62,8 +62,8 @@ namespace StockSharp.Hydra.IQFeed
 			[PropertyOrder(0)]
 			public bool IsRealTime
 			{
-				get { return ExtensionInfo["IsRealTime"].To<bool>(); }
-				set { ExtensionInfo["IsRealTime"] = value; }
+				get { return ExtensionInfo[nameof(IsRealTime)].To<bool>(); }
+				set { ExtensionInfo[nameof(IsRealTime)] = value; }
 			}
 
 			[Category(_category)]
@@ -72,8 +72,8 @@ namespace StockSharp.Hydra.IQFeed
 			[PropertyOrder(1)]
 			public bool IsDownloadSecurityFromSite
 			{
-				get { return ExtensionInfo["IsDownloadSecurityFromSite"].To<bool>(); }
-				set { ExtensionInfo["IsDownloadSecurityFromSite"] = value; }
+				get { return ExtensionInfo[nameof(IsDownloadSecurityFromSite)].To<bool>(); }
+				set { ExtensionInfo[nameof(IsDownloadSecurityFromSite)] = value; }
 			}
 
 			[Category(_category)]
@@ -85,14 +85,14 @@ namespace StockSharp.Hydra.IQFeed
 			{
 				get
 				{
-					var types = ExtensionInfo.TryGetValue("Types");
+					var types = ExtensionInfo.TryGetValue(nameof(Types));
 
 					return ((IEnumerable<string>)types)?.Select(t => t.To<SecurityTypes>()).ToArray()
 						?? Enumerable.Empty<SecurityTypes>();
 				}
 				set
 				{
-					ExtensionInfo["Types"] = value.Select(s => s.To<string>()).ToArray();
+					ExtensionInfo[nameof(Types)] = value.Select(s => s.To<string>()).ToArray();
 				}
 			}
 
@@ -102,8 +102,8 @@ namespace StockSharp.Hydra.IQFeed
 			[PropertyOrder(0)]
 			public EndPoint Level1Address
 			{
-				get { return ExtensionInfo["Level1Address"].To<EndPoint>(); }
-				set { ExtensionInfo["Level1Address"] = value.To<string>(); }
+				get { return ExtensionInfo[nameof(Level1Address)].To<EndPoint>(); }
+				set { ExtensionInfo[nameof(Level1Address)] = value.To<string>(); }
 			}
 
 			[CategoryLoc(LocalizedStrings.Str174Key)]
@@ -112,8 +112,8 @@ namespace StockSharp.Hydra.IQFeed
 			[PropertyOrder(1)]
 			public EndPoint Level2Address
 			{
-				get { return ExtensionInfo["Level2Address"].To<EndPoint>(); }
-				set { ExtensionInfo["Level2Address"] = value.To<string>(); }
+				get { return ExtensionInfo[nameof(Level2Address)].To<EndPoint>(); }
+				set { ExtensionInfo[nameof(Level2Address)] = value.To<string>(); }
 			}
 
 			[CategoryLoc(LocalizedStrings.Str174Key)]
@@ -122,8 +122,8 @@ namespace StockSharp.Hydra.IQFeed
 			[PropertyOrder(2)]
 			public EndPoint LookupAddress
 			{
-				get { return ExtensionInfo["LookupAddress"].To<EndPoint>(); }
-				set { ExtensionInfo["LookupAddress"] = value.To<string>(); }
+				get { return ExtensionInfo[nameof(LookupAddress)].To<EndPoint>(); }
+				set { ExtensionInfo[nameof(LookupAddress)] = value.To<string>(); }
 			}
 
 			[CategoryLoc(LocalizedStrings.Str174Key)]
@@ -132,8 +132,8 @@ namespace StockSharp.Hydra.IQFeed
 			[PropertyOrder(3)]
 			public EndPoint AdminAddress
 			{
-				get { return ExtensionInfo["AdminAddress"].To<EndPoint>(); }
-				set { ExtensionInfo["AdminAddress"] = value.To<string>(); }
+				get { return ExtensionInfo[nameof(AdminAddress)].To<EndPoint>(); }
+				set { ExtensionInfo[nameof(AdminAddress)] = value.To<string>(); }
 			}
 
 			[CategoryLoc(LocalizedStrings.HistoryKey)]
@@ -142,18 +142,18 @@ namespace StockSharp.Hydra.IQFeed
 			[PropertyOrder(0)]
 			public DateTime StartFrom
 			{
-				get { return ExtensionInfo["StartFrom"].To<DateTime>(); }
-				set { ExtensionInfo["StartFrom"] = value; }
+				get { return ExtensionInfo[nameof(StartFrom)].To<DateTime>(); }
+				set { ExtensionInfo[nameof(StartFrom)] = value; }
 			}
 
 			[CategoryLoc(LocalizedStrings.HistoryKey)]
 			[DisplayNameLoc(LocalizedStrings.Str2284Key)]
 			[DescriptionLoc(LocalizedStrings.Str2285Key)]
 			[PropertyOrder(1)]
-			public int Offset
+			public int DayOffset
 			{
-				get { return ExtensionInfo["Offset"].To<int>(); }
-				set { ExtensionInfo["Offset"] = value; }
+				get { return ExtensionInfo[nameof(DayOffset)].To<int>(); }
+				set { ExtensionInfo[nameof(DayOffset)] = value; }
 			}
 
 			[CategoryLoc(LocalizedStrings.HistoryKey)]
@@ -162,8 +162,8 @@ namespace StockSharp.Hydra.IQFeed
 			[PropertyOrder(2)]
 			public bool IgnoreWeekends
 			{
-				get { return (bool)ExtensionInfo["IgnoreWeekends"]; }
-				set { ExtensionInfo["IgnoreWeekends"] = value; }
+				get { return (bool)ExtensionInfo[nameof(IgnoreWeekends)]; }
+				set { ExtensionInfo[nameof(IgnoreWeekends)] = value; }
 			}
 
 			[CategoryLoc(LocalizedStrings.HistoryKey)]
@@ -172,13 +172,13 @@ namespace StockSharp.Hydra.IQFeed
 			[PropertyOrder(4)]
 			public int CandleDayStep
 			{
-				get { return ExtensionInfo["CandleDayStep"].To<int>(); }
+				get { return ExtensionInfo[nameof(CandleDayStep)].To<int>(); }
 				set
 				{
 					if (value < 1)
 						throw new ArgumentOutOfRangeException();
 
-					ExtensionInfo["CandleDayStep"] = value;
+					ExtensionInfo[nameof(CandleDayStep)] = value;
 				}
 			}
 
@@ -221,7 +221,7 @@ namespace StockSharp.Hydra.IQFeed
 			_settings.Level2Address = IQFeedAddresses.DefaultLevel2Address;
 			_settings.LookupAddress = IQFeedAddresses.DefaultLookupAddress;
 			_settings.AdminAddress = IQFeedAddresses.DefaultAdminAddress;
-			_settings.Offset = 0;
+			_settings.DayOffset = 0;
 			_settings.StartFrom = DateTime.Today.Subtract(TimeSpan.FromDays(30));
 			_settings.IsDownloadSecurityFromSite = false;
 			_settings.IsDownloadNews = true;
@@ -258,7 +258,7 @@ namespace StockSharp.Hydra.IQFeed
 				return base.OnProcess();
 			
 			var startDate = _settings.StartFrom;
-			var endDate = DateTime.Today - TimeSpan.FromDays(_settings.Offset);
+			var endDate = DateTime.Today - TimeSpan.FromDays(_settings.DayOffset);
 
 			var allDates = startDate.Range(endDate, TimeSpan.FromDays(1)).ToArray();
 

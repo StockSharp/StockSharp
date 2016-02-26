@@ -60,8 +60,8 @@ namespace StockSharp.Hydra.Micex
 			[PropertyOrder(0)]
 			public EndPoint Address
 			{
-				get { return ExtensionInfo["Address"].To<EndPoint>(); }
-				set { ExtensionInfo["Address"] = value.To<string>(); }
+				get { return ExtensionInfo[nameof(Address)].To<EndPoint>(); }
+				set { ExtensionInfo[nameof(Address)] = value.To<string>(); }
 			}
 
 			[CategoryLoc(_sourceName)]
@@ -70,8 +70,8 @@ namespace StockSharp.Hydra.Micex
 			[PropertyOrder(1)]
 			public string Login
 			{
-				get { return (string)ExtensionInfo["Login"]; }
-				set { ExtensionInfo["Login"] = value; }
+				get { return (string)ExtensionInfo[nameof(Login)]; }
+				set { ExtensionInfo[nameof(Login)] = value; }
 			}
 
 			[CategoryLoc(_sourceName)]
@@ -80,8 +80,8 @@ namespace StockSharp.Hydra.Micex
 			[PropertyOrder(2)]
 			public SecureString Password
 			{
-				get { return ExtensionInfo["Password"].To<SecureString>(); }
-				set { ExtensionInfo["Password"] = value; }
+				get { return ExtensionInfo[nameof(Password)].To<SecureString>(); }
+				set { ExtensionInfo[nameof(Password)] = value; }
 			}
 
 			[CategoryLoc(_sourceName)]
@@ -90,8 +90,8 @@ namespace StockSharp.Hydra.Micex
 			[PropertyOrder(3)]
 			public string Interface
 			{
-				get { return (string)ExtensionInfo["Interface"]; }
-				set { ExtensionInfo["Interface"] = value; }
+				get { return (string)ExtensionInfo[nameof(Interface)]; }
+				set { ExtensionInfo[nameof(Interface)] = value; }
 			}
 
 			[CategoryLoc(_sourceName)]
@@ -100,8 +100,8 @@ namespace StockSharp.Hydra.Micex
 			[PropertyOrder(4)]
 			public string Server
 			{
-				get { return (string)ExtensionInfo["Server"]; }
-				set { ExtensionInfo["Server"] = value; }
+				get { return (string)ExtensionInfo[nameof(Server)]; }
+				set { ExtensionInfo[nameof(Server)] = value; }
 			}
 
 			[CategoryLoc(_sourceName)]
@@ -110,8 +110,8 @@ namespace StockSharp.Hydra.Micex
 			[PropertyOrder(5)]
 			public int? OrderBookDepth
 			{
-				get { return (int?)ExtensionInfo["OrderBookDepth"]; }
-				set { ExtensionInfo["OrderBookDepth"] = value; }
+				get { return (int?)ExtensionInfo[nameof(OrderBookDepth)]; }
+				set { ExtensionInfo[nameof(OrderBookDepth)] = value; }
 			}
 
 			[CategoryLoc(_sourceName)]
@@ -120,8 +120,8 @@ namespace StockSharp.Hydra.Micex
 			[PropertyOrder(6)]
 			public bool RequestAllDepths
 			{
-				get { return (bool)ExtensionInfo["RequestAllDepths"]; }
-				set { ExtensionInfo["RequestAllDepths"] = value; }
+				get { return (bool)ExtensionInfo[nameof(RequestAllDepths)]; }
+				set { ExtensionInfo[nameof(RequestAllDepths)] = value; }
 			}
 
 			[CategoryLoc(_sourceName)]
@@ -130,8 +130,8 @@ namespace StockSharp.Hydra.Micex
 			[PropertyOrder(7)]
 			public string MicexLogLevel
 			{
-				get { return (string)ExtensionInfo["MicexLogLevel"]; }
-				set { ExtensionInfo["MicexLogLevel"] = value; }
+				get { return (string)ExtensionInfo[nameof(MicexLogLevel)]; }
+				set { ExtensionInfo[nameof(MicexLogLevel)] = value; }
 			}
 
 			[CategoryLoc(_sourceName)]
@@ -140,8 +140,8 @@ namespace StockSharp.Hydra.Micex
 			[PropertyOrder(8)]
 			public bool OverrideDll
 			{
-				get { return (bool)ExtensionInfo["OverrideDll"]; }
-				set { ExtensionInfo["OverrideDll"] = value; }
+				get { return (bool)ExtensionInfo[nameof(OverrideDll)]; }
+				set { ExtensionInfo[nameof(OverrideDll)] = value; }
 			}
 
 			[CategoryLoc(LocalizedStrings.GeneralKey)]
@@ -150,8 +150,8 @@ namespace StockSharp.Hydra.Micex
 			[PropertyOrder(16)]
 			public string ExtraSettings
 			{
-				get { return (string)ExtensionInfo.TryGetValue("ExtraSettings"); }
-				set { ExtensionInfo["ExtraSettings"] = value; }
+				get { return (string)ExtensionInfo.TryGetValue(nameof(ExtraSettings)); }
+				set { ExtensionInfo[nameof(ExtraSettings)] = value; }
 			}
 		}
 

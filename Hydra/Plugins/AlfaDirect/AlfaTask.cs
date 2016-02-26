@@ -58,8 +58,8 @@ namespace StockSharp.Hydra.AlfaDirect
 			[PropertyOrder(0)]
 			public string Login
 			{
-				get { return (string)ExtensionInfo["Login"]; }
-				set { ExtensionInfo["Login"] = value; }
+				get { return (string)ExtensionInfo[nameof(Login)]; }
+				set { ExtensionInfo[nameof(Login)] = value; }
 			}
 
 			[CategoryLoc(_sourceName)]
@@ -68,8 +68,8 @@ namespace StockSharp.Hydra.AlfaDirect
 			[PropertyOrder(1)]
 			public SecureString Password
 			{
-				get { return ExtensionInfo["Password"].To<SecureString>(); }
-				set { ExtensionInfo["Password"] = value; }
+				get { return ExtensionInfo[nameof(Password)].To<SecureString>(); }
+				set { ExtensionInfo[nameof(Password)] = value; }
 			}
 
 			[Browsable(true)]

@@ -59,8 +59,8 @@ namespace StockSharp.Hydra.Oanda
 			[PropertyOrder(0)]
 			public DateTime StartFrom
 			{
-				get { return ExtensionInfo["StartFrom"].To<DateTime>(); }
-				set { ExtensionInfo["StartFrom"] = value.Ticks; }
+				get { return ExtensionInfo[nameof(StartFrom)].To<DateTime>(); }
+				set { ExtensionInfo[nameof(StartFrom)] = value.Ticks; }
 			}
 
 			[CategoryLoc(_sourceName)]
@@ -69,8 +69,8 @@ namespace StockSharp.Hydra.Oanda
 			[PropertyOrder(1)]
 			public int Offset
 			{
-				get { return ExtensionInfo["Offset"].To<int>(); }
-				set { ExtensionInfo["Offset"] = value; }
+				get { return ExtensionInfo[nameof(Offset)].To<int>(); }
+				set { ExtensionInfo[nameof(Offset)] = value; }
 			}
 		}
 

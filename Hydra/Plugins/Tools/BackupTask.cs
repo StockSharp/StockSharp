@@ -66,8 +66,8 @@ namespace StockSharp.Hydra.Tools
 			[PropertyOrder(0)]
 			public BackupServices Service
 			{
-				get { return ExtensionInfo["Service"].To<BackupServices>(); }
-				set { ExtensionInfo["Service"] = value.To<string>(); }
+				get { return ExtensionInfo[nameof(Service)].To<BackupServices>(); }
+				set { ExtensionInfo[nameof(Service)] = value.To<string>(); }
 			}
 
 			[CategoryLoc(_sourceName)]
@@ -76,8 +76,8 @@ namespace StockSharp.Hydra.Tools
 			[PropertyOrder(1)]
 			public string Address
 			{
-				get { return (string)ExtensionInfo["Address"]; }
-				set { ExtensionInfo["Address"] = value; }
+				get { return (string)ExtensionInfo[nameof(Address)]; }
+				set { ExtensionInfo[nameof(Address)] = value; }
 			}
 
 			[CategoryLoc(_sourceName)]
@@ -86,8 +86,8 @@ namespace StockSharp.Hydra.Tools
 			[PropertyOrder(2)]
 			public string ServiceRepo
 			{
-				get { return (string)ExtensionInfo["ServiceRepo"]; }
-				set { ExtensionInfo["ServiceRepo"] = value; }
+				get { return (string)ExtensionInfo[nameof(ServiceRepo)]; }
+				set { ExtensionInfo[nameof(ServiceRepo)] = value; }
 			}
 
 			[CategoryLoc(_sourceName)]
@@ -96,8 +96,8 @@ namespace StockSharp.Hydra.Tools
 			[PropertyOrder(3)]
 			public string Login
 			{
-				get { return (string)ExtensionInfo["Login"]; }
-				set { ExtensionInfo["Login"] = value; }
+				get { return (string)ExtensionInfo[nameof(Login)]; }
+				set { ExtensionInfo[nameof(Login)] = value; }
 			}
 
 			[CategoryLoc(_sourceName)]
@@ -106,8 +106,8 @@ namespace StockSharp.Hydra.Tools
 			[PropertyOrder(4)]
 			public SecureString Password
 			{
-				get { return ExtensionInfo["Password"].To<SecureString>(); }
-				set { ExtensionInfo["Password"] = value; }
+				get { return ExtensionInfo[nameof(Password)].To<SecureString>(); }
+				set { ExtensionInfo[nameof(Password)] = value; }
 			}
 
 			[CategoryLoc(_sourceName)]
@@ -116,8 +116,8 @@ namespace StockSharp.Hydra.Tools
 			[PropertyOrder(5)]
 			public DateTime StartFrom
 			{
-				get { return ExtensionInfo["StartFrom"].To<DateTime>(); }
-				set { ExtensionInfo["StartFrom"] = value.Ticks; }
+				get { return ExtensionInfo[nameof(StartFrom)].To<DateTime>(); }
+				set { ExtensionInfo[nameof(StartFrom)] = value.Ticks; }
 			}
 
 			[CategoryLoc(_sourceName)]
@@ -126,8 +126,8 @@ namespace StockSharp.Hydra.Tools
 			[PropertyOrder(6)]
 			public int Offset
 			{
-				get { return ExtensionInfo["Offset"].To<int>(); }
-				set { ExtensionInfo["Offset"] = value; }
+				get { return ExtensionInfo[nameof(Offset)].To<int>(); }
+				set { ExtensionInfo[nameof(Offset)] = value; }
 			}
 		}
 

@@ -55,8 +55,8 @@ namespace StockSharp.Hydra.Oanda
 			[PropertyOrder(0)]
 			public OandaServers Server
 			{
-				get { return ExtensionInfo["Server"].To<OandaServers>(); }
-				set { ExtensionInfo["Server"] = value.To<string>(); }
+				get { return ExtensionInfo[nameof(Server)].To<OandaServers>(); }
+				set { ExtensionInfo[nameof(Server)] = value.To<string>(); }
 			}
 
 			[CategoryLoc(_sourceName)]
@@ -65,8 +65,8 @@ namespace StockSharp.Hydra.Oanda
 			[PropertyOrder(1)]
 			public SecureString Token
 			{
-				get { return ExtensionInfo["Token"].To<SecureString>(); }
-				set { ExtensionInfo["Token"] = value; }
+				get { return ExtensionInfo[nameof(Token)].To<SecureString>(); }
+				set { ExtensionInfo[nameof(Token)] = value; }
 			}
 		}
 

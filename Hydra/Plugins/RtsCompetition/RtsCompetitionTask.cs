@@ -59,18 +59,18 @@ namespace StockSharp.Hydra.RtsCompetition
 			[PropertyOrder(0)]
 			public DateTime StartFrom
 			{
-				get { return ExtensionInfo["StartFrom"].To<DateTime>(); }
-				set { ExtensionInfo["StartFrom"] = value.Ticks; }
+				get { return ExtensionInfo[nameof(StartFrom)].To<DateTime>(); }
+				set { ExtensionInfo[nameof(StartFrom)] = value.Ticks; }
 			}
 
 			[CategoryLoc(_sourceName)]
 			[DisplayNameLoc(LocalizedStrings.Str2284Key)]
 			[DescriptionLoc(LocalizedStrings.Str2285Key)]
 			[PropertyOrder(1)]
-			public int Offset
+			public int DayOffset
 			{
-				get { return ExtensionInfo["RtsOffset"].To<int>(); }
-				set { ExtensionInfo["RtsOffset"] = value; }
+				get { return ExtensionInfo[nameof(DayOffset)].To<int>(); }
+				set { ExtensionInfo[nameof(DayOffset)] = value; }
 			}
 
 			[CategoryLoc(_sourceName)]
@@ -79,8 +79,8 @@ namespace StockSharp.Hydra.RtsCompetition
 			[PropertyOrder(2)]
 			public bool IgnoreWeekends
 			{
-				get { return (bool)ExtensionInfo["IgnoreWeekends"]; }
-				set { ExtensionInfo["IgnoreWeekends"] = value; }
+				get { return (bool)ExtensionInfo[nameof(IgnoreWeekends)]; }
+				set { ExtensionInfo[nameof(IgnoreWeekends)] = value; }
 			}
 		}
 
@@ -96,7 +96,7 @@ namespace StockSharp.Hydra.RtsCompetition
 			{
 				_settings.StartFrom = new DateTime(2006, 09, 15);
 				_settings.Interval = TimeSpan.FromDays(1);
-				_settings.Offset = 1;
+				_settings.DayOffset = 1;
 				_settings.IgnoreWeekends = true;
 			}
 		}
@@ -110,7 +110,7 @@ namespace StockSharp.Hydra.RtsCompetition
 		{
 			var competition = new Competition();
 
-			var offset = TimeSpan.FromDays(_settings.Offset);
+			var offset = TimeSpan.FromDays(_settings.DayOffset);
 
 			if (Competition.AllYears.Any(y => y.Year == _settings.StartFrom.Year) && (_settings.StartFrom + offset) < DateTime.Today)
 			{

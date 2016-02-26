@@ -65,8 +65,8 @@ namespace StockSharp.Hydra.Rts
 			[PropertyOrder(0)]
 			public DateTime StartFrom
 			{
-				get { return ExtensionInfo["StartFrom"].To<DateTime>(); }
-				set { ExtensionInfo["StartFrom"] = value.Ticks; }
+				get { return ExtensionInfo[nameof(StartFrom)].To<DateTime>(); }
+				set { ExtensionInfo[nameof(StartFrom)] = value.Ticks; }
 			}
 
 			[CategoryLoc(_sourceName)]
@@ -75,8 +75,8 @@ namespace StockSharp.Hydra.Rts
 			[PropertyOrder(1)]
 			public int DayOffset
 			{
-				get { return ExtensionInfo["DayOffset"].To<int>(); }
-				set { ExtensionInfo["DayOffset"] = value; }
+				get { return ExtensionInfo[nameof(DayOffset)].To<int>(); }
+				set { ExtensionInfo[nameof(DayOffset)] = value; }
 			}
 
 			[CategoryLoc(_sourceName)]
@@ -85,8 +85,8 @@ namespace StockSharp.Hydra.Rts
 			[PropertyOrder(3)]
 			public bool IsSystemOnly
 			{
-				get { return (bool)ExtensionInfo["IsSystemOnly"]; }
-				set { ExtensionInfo["IsSystemOnly"] = value; }
+				get { return (bool)ExtensionInfo[nameof(IsSystemOnly)]; }
+				set { ExtensionInfo[nameof(IsSystemOnly)] = value; }
 			}
 
 			[CategoryLoc(_sourceName)]
@@ -95,8 +95,8 @@ namespace StockSharp.Hydra.Rts
 			[PropertyOrder(4)]
 			public bool LoadEveningSession
 			{
-				get { return (bool)ExtensionInfo["LoadEveningSession"]; }
-				set { ExtensionInfo["LoadEveningSession"] = value; }
+				get { return (bool)ExtensionInfo[nameof(LoadEveningSession)]; }
+				set { ExtensionInfo[nameof(LoadEveningSession)] = value; }
 			}
 
 			[CategoryLoc(_sourceName)]
@@ -105,8 +105,8 @@ namespace StockSharp.Hydra.Rts
 			[PropertyOrder(5)]
 			public bool IgnoreWeekends
 			{
-				get { return (bool)ExtensionInfo["IgnoreWeekends"]; }
-				set { ExtensionInfo["IgnoreWeekends"] = value; }
+				get { return (bool)ExtensionInfo[nameof(IgnoreWeekends)]; }
+				set { ExtensionInfo[nameof(IgnoreWeekends)] = value; }
 			}
 
 			[CategoryLoc(_sourceName)]
@@ -115,8 +115,8 @@ namespace StockSharp.Hydra.Rts
 			[PropertyOrder(6)]
 			public TempFiles UseTemporaryFiles
 			{
-				get { return ExtensionInfo["UseTemporaryFiles"].To<TempFiles>(); }
-				set { ExtensionInfo["UseTemporaryFiles"] = value.To<string>(); }
+				get { return ExtensionInfo[nameof(UseTemporaryFiles)].To<TempFiles>(); }
+				set { ExtensionInfo[nameof(UseTemporaryFiles)] = value.To<string>(); }
 			}
 
 			[Category(_usdRur)]
@@ -125,8 +125,8 @@ namespace StockSharp.Hydra.Rts
 			[PropertyOrder(0)]
 			public bool IsDownloadUsdRate
 			{
-				get { return (bool)ExtensionInfo["IsDownloadUsdRate"]; }
-				set { ExtensionInfo["IsDownloadUsdRate"] = value; }
+				get { return (bool)ExtensionInfo[nameof(IsDownloadUsdRate)]; }
+				set { ExtensionInfo[nameof(IsDownloadUsdRate)] = value; }
 			}
 
 			[Category(_usdRur)]
@@ -135,8 +135,8 @@ namespace StockSharp.Hydra.Rts
 			[PropertyOrder(1)]
 			public DateTime UsdRurStartFrom
 			{
-				get { return (DateTime)ExtensionInfo["UsdRurStartFrom"]; }
-				set { ExtensionInfo["UsdRurStartFrom"] = value; }
+				get { return (DateTime)ExtensionInfo[nameof(UsdRurStartFrom)]; }
+				set { ExtensionInfo[nameof(UsdRurStartFrom)] = value; }
 			}
 
 			[Category(_rtsStndard)]
@@ -145,8 +145,8 @@ namespace StockSharp.Hydra.Rts
 			[PropertyOrder(5)]
 			public bool SaveRtsStdTrades
 			{
-				get { return (bool)ExtensionInfo["SaveRtsStdTrades"]; }
-				set { ExtensionInfo["SaveRtsStdTrades"] = value; }
+				get { return (bool)ExtensionInfo[nameof(SaveRtsStdTrades)]; }
+				set { ExtensionInfo[nameof(SaveRtsStdTrades)] = value; }
 			}
 
 			[Category(_rtsStndard)]
@@ -155,8 +155,8 @@ namespace StockSharp.Hydra.Rts
 			[PropertyOrder(5)]
 			public bool SaveRtsStdCombinedOnly
 			{
-				get { return (bool)ExtensionInfo["SaveRtsStdCombinedOnly"]; }
-				set { ExtensionInfo["SaveRtsStdCombinedOnly"] = value; }
+				get { return (bool)ExtensionInfo[nameof(SaveRtsStdCombinedOnly)]; }
+				set { ExtensionInfo[nameof(SaveRtsStdCombinedOnly)] = value; }
 			}
 		}
 

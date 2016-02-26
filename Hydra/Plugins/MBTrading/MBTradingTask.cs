@@ -63,8 +63,8 @@ namespace StockSharp.Hydra.MBTrading
 			[PropertyOrder(0)]
 			public DateTime StartFrom
 			{
-				get { return ExtensionInfo["StartFrom"].To<DateTime>(); }
-				set { ExtensionInfo["StartFrom"] = value.Ticks; }
+				get { return ExtensionInfo[nameof(StartFrom)].To<DateTime>(); }
+				set { ExtensionInfo[nameof(StartFrom)] = value.Ticks; }
 			}
 
 			[CategoryLoc(_sourceName)]
@@ -73,8 +73,8 @@ namespace StockSharp.Hydra.MBTrading
 			[PropertyOrder(1)]
 			public string Login
 			{
-				get { return (string)ExtensionInfo["Login"]; }
-				set { ExtensionInfo["Login"] = value; }
+				get { return (string)ExtensionInfo[nameof(Login)]; }
+				set { ExtensionInfo[nameof(Login)] = value; }
 			}
 
 			[CategoryLoc(_sourceName)]
@@ -83,8 +83,8 @@ namespace StockSharp.Hydra.MBTrading
 			[PropertyOrder(2)]
 			public SecureString Password
 			{
-				get { return ExtensionInfo["Password"].To<SecureString>(); }
-				set { ExtensionInfo["Password"] = value; }
+				get { return ExtensionInfo[nameof(Password)].To<SecureString>(); }
+				set { ExtensionInfo[nameof(Password)] = value; }
 			}
 
 			[CategoryLoc(_sourceName)]
@@ -93,8 +93,8 @@ namespace StockSharp.Hydra.MBTrading
 			[PropertyOrder(3)]
 			public SecureString Pin
 			{
-				get { return ExtensionInfo["Pin"].To<SecureString>(); }
-				set { ExtensionInfo["Pin"] = value; }
+				get { return ExtensionInfo[nameof(Pin)].To<SecureString>(); }
+				set { ExtensionInfo[nameof(Pin)] = value; }
 			}
 
 			[CategoryLoc(_sourceName)]
@@ -103,8 +103,8 @@ namespace StockSharp.Hydra.MBTrading
 			[PropertyOrder(4)]
 			public int DayOffset
 			{
-				get { return ExtensionInfo["DayOffset"].To<int>(); }
-				set { ExtensionInfo["DayOffset"] = value; }
+				get { return ExtensionInfo[nameof(DayOffset)].To<int>(); }
+				set { ExtensionInfo[nameof(DayOffset)] = value; }
 			}
 
 			[CategoryLoc(_sourceName)]
@@ -113,8 +113,8 @@ namespace StockSharp.Hydra.MBTrading
 			[PropertyOrder(5)]
 			public TempFiles UseTemporaryFiles
 			{
-				get { return ExtensionInfo["UseTemporaryFiles"].To<TempFiles>(); }
-				set { ExtensionInfo["UseTemporaryFiles"] = value.To<string>(); }
+				get { return ExtensionInfo[nameof(UseTemporaryFiles)].To<TempFiles>(); }
+				set { ExtensionInfo[nameof(UseTemporaryFiles)] = value.To<string>(); }
 			}
 		}
 

@@ -61,7 +61,7 @@ namespace StockSharp.Hydra.Fix
 					if (_marketDataSession == null)
 						_marketDataSession = new FixMessageAdapter(new IncrementalIdGenerator());
 
-					_marketDataSession.Load((SettingsStorage)ExtensionInfo["MarketDataSession"]);
+					_marketDataSession.Load((SettingsStorage)ExtensionInfo[nameof(MarketDataSession)]);
 
 					return _marketDataSession;
 				}
@@ -70,7 +70,7 @@ namespace StockSharp.Hydra.Fix
 					if (value == null)
 						throw new ArgumentNullException(nameof(value));
 
-					ExtensionInfo["MarketDataSession"] = value.Save();
+					ExtensionInfo[nameof(MarketDataSession)] = value.Save();
 					_marketDataSession = value;
 				}
 			}

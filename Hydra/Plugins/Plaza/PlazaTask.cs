@@ -63,8 +63,8 @@ namespace StockSharp.Hydra.Plaza
 			[PropertyOrder(0)]
 			public string Login
 			{
-				get { return (string)ExtensionInfo["Login"]; }
-				set { ExtensionInfo["Login"] = value; }
+				get { return (string)ExtensionInfo[nameof(Login)]; }
+				set { ExtensionInfo[nameof(Login)] = value; }
 			}
 
 			[CategoryLoc(_sourceName)]
@@ -73,8 +73,8 @@ namespace StockSharp.Hydra.Plaza
 			[PropertyOrder(1)]
 			public SecureString Password
 			{
-				get { return ExtensionInfo["Password"].To<SecureString>(); }
-				set { ExtensionInfo["Password"] = value; }
+				get { return ExtensionInfo[nameof(Password)].To<SecureString>(); }
+				set { ExtensionInfo[nameof(Password)] = value; }
 			}
 
 			[CategoryLoc(_sourceName)]
@@ -83,8 +83,8 @@ namespace StockSharp.Hydra.Plaza
 			[PropertyOrder(2)]
 			public EndPoint Address
 			{
-				get { return ExtensionInfo["Address"].To<EndPoint>(); }
-				set { ExtensionInfo["Address"] = value.To<string>(); }
+				get { return ExtensionInfo[nameof(Address)].To<EndPoint>(); }
+				set { ExtensionInfo[nameof(Address)] = value.To<string>(); }
 			}
 
 			[CategoryLoc(_sourceName)]
@@ -93,8 +93,8 @@ namespace StockSharp.Hydra.Plaza
 			[PropertyOrder(3)]
 			public string AppName
 			{
-				get { return (string)ExtensionInfo["AppName"]; }
-				set { ExtensionInfo["AppName"] = value; }
+				get { return (string)ExtensionInfo[nameof(AppName)]; }
+				set { ExtensionInfo[nameof(AppName)] = value; }
 			}
 
 			[CategoryLoc(_sourceName)]
@@ -103,8 +103,8 @@ namespace StockSharp.Hydra.Plaza
 			[PropertyOrder(4)]
 			public bool IsCGate
 			{
-				get { return (bool)ExtensionInfo["IsCGate"]; }
-				set { ExtensionInfo["IsCGate"] = value; }
+				get { return (bool)ExtensionInfo[nameof(IsCGate)]; }
+				set { ExtensionInfo[nameof(IsCGate)] = value; }
 			}
 
 			[CategoryLoc(_sourceName)]
@@ -113,8 +113,8 @@ namespace StockSharp.Hydra.Plaza
 			[PropertyOrder(5)]
 			public SecureString CGateKey
 			{
-				get { return ExtensionInfo["CGateKey"].To<SecureString>(); }
-				set { ExtensionInfo["CGateKey"] = value; }
+				get { return ExtensionInfo[nameof(CGateKey)].To<SecureString>(); }
+				set { ExtensionInfo[nameof(CGateKey)] = value; }
 			}
 
 			[CategoryLoc(_sourceName)]
@@ -124,8 +124,8 @@ namespace StockSharp.Hydra.Plaza
 			[Editor(typeof(PlazaTableListComboBoxEditor), typeof(PlazaTableListComboBoxEditor))]
 			public IEnumerable<string> Tables
 			{
-				get { return (IEnumerable<string>)ExtensionInfo["Tables"]; }
-				set { ExtensionInfo["Tables"] = value.ToArray(); }
+				get { return (IEnumerable<string>)ExtensionInfo[nameof(Tables)]; }
+				set { ExtensionInfo[nameof(Tables)] = value.ToArray(); }
 			}
 
 			[CategoryLoc(_sourceName)]
@@ -134,8 +134,8 @@ namespace StockSharp.Hydra.Plaza
 			[PropertyOrder(7)]
 			public bool OnlySystemTrades
 			{
-				get { return (bool)ExtensionInfo["OnlySystemTrades"]; }
-				set { ExtensionInfo["OnlySystemTrades"] = value; }
+				get { return (bool)ExtensionInfo[nameof(OnlySystemTrades)]; }
+				set { ExtensionInfo[nameof(OnlySystemTrades)] = value; }
 			}
 
 			[CategoryLoc(_sourceName)]
@@ -144,8 +144,8 @@ namespace StockSharp.Hydra.Plaza
 			[PropertyOrder(8)]
 			public bool IsFastRepl
 			{
-				get { return (bool)ExtensionInfo["IsFastRepl"]; }
-				set { ExtensionInfo["IsFastRepl"] = value; }
+				get { return (bool)ExtensionInfo[nameof(IsFastRepl)]; }
+				set { ExtensionInfo[nameof(IsFastRepl)] = value; }
 			}
 
 			[CategoryLoc(_sourceName)]
@@ -154,8 +154,8 @@ namespace StockSharp.Hydra.Plaza
 			[PropertyOrder(9)]
 			public bool OverrideDll
 			{
-				get { return (bool)ExtensionInfo["OverrideDll"]; }
-				set { ExtensionInfo["OverrideDll"] = value; }
+				get { return (bool)ExtensionInfo[nameof(OverrideDll)]; }
+				set { ExtensionInfo[nameof(OverrideDll)] = value; }
 			}
 		}
 

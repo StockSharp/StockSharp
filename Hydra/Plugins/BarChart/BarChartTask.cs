@@ -62,8 +62,8 @@ namespace StockSharp.Hydra.BarChart
 			[PropertyOrder(0)]
 			public bool IsRealTime
 			{
-				get { return ExtensionInfo["IsRealTime"].To<bool>(); }
-				set { ExtensionInfo["IsRealTime"] = value; }
+				get { return ExtensionInfo[nameof(IsRealTime)].To<bool>(); }
+				set { ExtensionInfo[nameof(IsRealTime)] = value; }
 			}
 
 			[CategoryLoc(_sourceName)]
@@ -72,8 +72,8 @@ namespace StockSharp.Hydra.BarChart
 			[PropertyOrder(1)]
 			public string Login
 			{
-				get { return (string)ExtensionInfo["Login"]; }
-				set { ExtensionInfo["Login"] = value; }
+				get { return (string)ExtensionInfo[nameof(Login)]; }
+				set { ExtensionInfo[nameof(Login)] = value; }
 			}
 
 			[CategoryLoc(_sourceName)]
@@ -82,8 +82,8 @@ namespace StockSharp.Hydra.BarChart
 			[PropertyOrder(2)]
 			public SecureString Password
 			{
-				get { return ExtensionInfo["Password"].To<SecureString>(); }
-				set { ExtensionInfo["Password"] = value; }
+				get { return ExtensionInfo[nameof(Password)].To<SecureString>(); }
+				set { ExtensionInfo[nameof(Password)] = value; }
 			}
 
 			[CategoryLoc(LocalizedStrings.HistoryKey)]
@@ -92,8 +92,8 @@ namespace StockSharp.Hydra.BarChart
 			[PropertyOrder(0)]
 			public DateTime StartFrom
 			{
-				get { return ExtensionInfo["StartFrom"].To<DateTime>(); }
-				set { ExtensionInfo["StartFrom"] = value; }
+				get { return ExtensionInfo[nameof(StartFrom)].To<DateTime>(); }
+				set { ExtensionInfo[nameof(StartFrom)] = value; }
 			}
 
 			[CategoryLoc(LocalizedStrings.HistoryKey)]
@@ -102,8 +102,8 @@ namespace StockSharp.Hydra.BarChart
 			[PropertyOrder(1)]
 			public int Offset
 			{
-				get { return ExtensionInfo["Offset"].To<int>(); }
-				set { ExtensionInfo["Offset"] = value; }
+				get { return ExtensionInfo[nameof(Offset)].To<int>(); }
+				set { ExtensionInfo[nameof(Offset)] = value; }
 			}
 
 			[CategoryLoc(LocalizedStrings.HistoryKey)]
@@ -112,8 +112,8 @@ namespace StockSharp.Hydra.BarChart
 			[PropertyOrder(2)]
 			public bool IgnoreWeekends
 			{
-				get { return (bool)ExtensionInfo["IgnoreWeekends"]; }
-				set { ExtensionInfo["IgnoreWeekends"] = value; }
+				get { return (bool)ExtensionInfo[nameof(IgnoreWeekends)]; }
+				set { ExtensionInfo[nameof(IgnoreWeekends)] = value; }
 			}
 
 			[CategoryLoc(LocalizedStrings.HistoryKey)]
@@ -122,13 +122,13 @@ namespace StockSharp.Hydra.BarChart
 			[PropertyOrder(4)]
 			public int CandleDayStep
 			{
-				get { return ExtensionInfo["CandleDayStep"].To<int>(); }
+				get { return ExtensionInfo[nameof(CandleDayStep)].To<int>(); }
 				set
 				{
 					if (value < 1)
 						throw new ArgumentOutOfRangeException();
 
-					ExtensionInfo["CandleDayStep"] = value;
+					ExtensionInfo[nameof(CandleDayStep)] = value;
 				}
 			}
 

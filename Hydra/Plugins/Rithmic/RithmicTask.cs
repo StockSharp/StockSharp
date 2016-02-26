@@ -57,8 +57,8 @@ namespace StockSharp.Hydra.Rithmic
 			[PropertyOrder(0)]
 			public string UserName
 			{
-				get { return (string)ExtensionInfo["UserName"]; }
-				set { ExtensionInfo["UserName"] = value; }
+				get { return (string)ExtensionInfo[nameof(UserName)]; }
+				set { ExtensionInfo[nameof(UserName)] = value; }
 			}
 
 			[CategoryLoc(_sourceName)]
@@ -67,8 +67,8 @@ namespace StockSharp.Hydra.Rithmic
 			[PropertyOrder(1)]
 			public SecureString Password
 			{
-				get { return ExtensionInfo["Password"].To<SecureString>(); }
-				set { ExtensionInfo["Password"] = value; }
+				get { return ExtensionInfo[nameof(Password)].To<SecureString>(); }
+				set { ExtensionInfo[nameof(Password)] = value; }
 			}
 
 			[CategoryLoc(_sourceName)]
@@ -78,8 +78,8 @@ namespace StockSharp.Hydra.Rithmic
 			[Editor(typeof(FileBrowserEditor), typeof(FileBrowserEditor))]
 			public string CertFile
 			{
-				get { return (string)ExtensionInfo["CertFile"]; }
-				set { ExtensionInfo["CertFile"] = value; }
+				get { return (string)ExtensionInfo[nameof(CertFile)]; }
+				set { ExtensionInfo[nameof(CertFile)] = value; }
 			}
 
 			[CategoryLoc(_sourceName)]
@@ -88,8 +88,8 @@ namespace StockSharp.Hydra.Rithmic
 			[PropertyOrder(3)]
 			public RithmicServers Server
 			{
-				get { return ExtensionInfo["Server"].To<RithmicServers>(); }
-				set { ExtensionInfo["Server"] = value.To<string>(); }
+				get { return ExtensionInfo[nameof(Server)].To<RithmicServers>(); }
+				set { ExtensionInfo[nameof(Server)] = value.To<string>(); }
 			}
 
 			[CategoryLoc(_sourceName)]
@@ -99,8 +99,8 @@ namespace StockSharp.Hydra.Rithmic
 			[Editor(typeof(FileBrowserEditor), typeof(FileBrowserEditor))]
 			public string LogFileName
 			{
-				get { return (string)ExtensionInfo["LogFileName"]; }
-				set { ExtensionInfo["LogFileName"] = value; }
+				get { return (string)ExtensionInfo[nameof(LogFileName)]; }
+				set { ExtensionInfo[nameof(LogFileName)] = value; }
 			}
 		}
 

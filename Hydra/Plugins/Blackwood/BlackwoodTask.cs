@@ -57,8 +57,8 @@ namespace StockSharp.Hydra.Blackwood
 			[PropertyOrder(0)]
 			public string Login
 			{
-				get { return (string)ExtensionInfo["Login"]; }
-				set { ExtensionInfo["Login"] = value; }
+				get { return (string)ExtensionInfo[nameof(Login)]; }
+				set { ExtensionInfo[nameof(Login)] = value; }
 			}
 
 			[CategoryLoc(_sourceName)]
@@ -67,8 +67,8 @@ namespace StockSharp.Hydra.Blackwood
 			[PropertyOrder(1)]
 			public SecureString Password
 			{
-				get { return ExtensionInfo["Password"].To<SecureString>(); }
-				set { ExtensionInfo["Password"] = value; }
+				get { return ExtensionInfo[nameof(Password)].To<SecureString>(); }
+				set { ExtensionInfo[nameof(Password)] = value; }
 			}
 
 			[CategoryLoc(_sourceName)]
@@ -77,8 +77,8 @@ namespace StockSharp.Hydra.Blackwood
 			[PropertyOrder(2)]
 			public EndPoint HistoricalDataAddress
 			{
-				get { return ExtensionInfo["HistoricalDataAddress"].To<EndPoint>(); }
-				set { ExtensionInfo["HistoricalDataAddress"] = value.To<string>(); }
+				get { return ExtensionInfo[nameof(HistoricalDataAddress)].To<EndPoint>(); }
+				set { ExtensionInfo[nameof(HistoricalDataAddress)] = value.To<string>(); }
 			}
 
 			[CategoryLoc(_sourceName)]
@@ -87,8 +87,8 @@ namespace StockSharp.Hydra.Blackwood
 			[PropertyOrder(3)]
 			public EndPoint MarketDataAddress
 			{
-				get { return ExtensionInfo["MarketDataAddress"].To<EndPoint>(); }
-				set { ExtensionInfo["MarketDataAddress"] = value.To<string>(); }
+				get { return ExtensionInfo[nameof(MarketDataAddress)].To<EndPoint>(); }
+				set { ExtensionInfo[nameof(MarketDataAddress)] = value.To<string>(); }
 			}
 
 			[Browsable(true)]

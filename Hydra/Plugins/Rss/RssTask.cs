@@ -56,8 +56,8 @@ namespace StockSharp.Hydra.Rss
 			[PropertyOrder(0)]
 			public Uri Address
 			{
-				get { return ExtensionInfo["Address"].To<Uri>(); }
-				set { ExtensionInfo["Address"] = value.To<string>(); }
+				get { return ExtensionInfo[nameof(Address)].To<Uri>(); }
+				set { ExtensionInfo[nameof(Address)] = value.To<string>(); }
 			}
 
 			[DisplayNameLoc(LocalizedStrings.Str3506Key)]
@@ -66,8 +66,8 @@ namespace StockSharp.Hydra.Rss
 			[PropertyOrder(1)]
 			public string CustomDateFormat
 			{
-				get { return (string)ExtensionInfo["CustomDateFormat"]; }
-				set { ExtensionInfo["CustomDateFormat"] = value.To<string>(); }
+				get { return (string)ExtensionInfo[nameof(CustomDateFormat)]; }
+				set { ExtensionInfo[nameof(CustomDateFormat)] = value.To<string>(); }
 			}
 
 			[Browsable(true)]

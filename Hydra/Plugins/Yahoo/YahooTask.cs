@@ -51,7 +51,6 @@ namespace StockSharp.Hydra.Yahoo
 			public YahooSettings(HydraTaskSettings settings)
 				: base(settings)
 			{
-				CollectionHelper.TryAdd(ExtensionInfo, "CandleDayStep", 30);
 			}
 
 			[CategoryLoc(_sourceName)]
@@ -60,8 +59,8 @@ namespace StockSharp.Hydra.Yahoo
 			[PropertyOrder(0)]
 			public DateTime StartFrom
 			{
-				get { return ExtensionInfo["StartFrom"].To<DateTime>(); }
-				set { ExtensionInfo["StartFrom"] = value.Ticks; }
+				get { return ExtensionInfo[nameof(StartFrom)].To<DateTime>(); }
+				set { ExtensionInfo[nameof(StartFrom)] = value.Ticks; }
 			}
 
 			[CategoryLoc(_sourceName)]
@@ -70,8 +69,8 @@ namespace StockSharp.Hydra.Yahoo
 			[PropertyOrder(1)]
 			public int DayOffset
 			{
-				get { return ExtensionInfo["DayOffset"].To<int>(); }
-				set { ExtensionInfo["DayOffset"] = value; }
+				get { return ExtensionInfo[nameof(DayOffset)].To<int>(); }
+				set { ExtensionInfo[nameof(DayOffset)] = value; }
 			}
 
 			[CategoryLoc(_sourceName)]
@@ -80,8 +79,8 @@ namespace StockSharp.Hydra.Yahoo
 			[PropertyOrder(2)]
 			public bool IgnoreWeekends
 			{
-				get { return (bool)ExtensionInfo["IgnoreWeekends"]; }
-				set { ExtensionInfo["IgnoreWeekends"] = value; }
+				get { return (bool)ExtensionInfo[nameof(IgnoreWeekends)]; }
+				set { ExtensionInfo[nameof(IgnoreWeekends)] = value; }
 			}
 
 			[CategoryLoc(_sourceName)]
@@ -90,13 +89,13 @@ namespace StockSharp.Hydra.Yahoo
 			[PropertyOrder(4)]
 			public int CandleDayStep
 			{
-				get { return ExtensionInfo["CandleDayStep"].To<int>(); }
+				get { return ExtensionInfo[nameof(CandleDayStep)].To<int>(); }
 				set
 				{
 					if (value < 1)
 						throw new ArgumentOutOfRangeException();
 
-					ExtensionInfo["CandleDayStep"] = value;
+					ExtensionInfo[nameof(CandleDayStep)] = value;
 				}
 			}
 		}

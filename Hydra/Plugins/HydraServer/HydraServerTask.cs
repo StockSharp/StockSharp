@@ -57,7 +57,8 @@ namespace StockSharp.Hydra.HydraServer
 			public HydraServerSettings(HydraTaskSettings settings)
 				: base(settings)
 			{
-				ExtensionInfo.TryAdd("IgnoreWeekends", true);
+				ExtensionInfo.TryAdd(nameof(IgnoreWeekends), true);
+				CollectionHelper.TryAdd(ExtensionInfo, nameof(DayOffset), 1);
 			}
 
 			[CategoryLoc(_sourceName)]
@@ -66,8 +67,8 @@ namespace StockSharp.Hydra.HydraServer
 			[PropertyOrder(0)]
 			public Uri Address
 			{
-				get { return ExtensionInfo["Address"].To<Uri>(); }
-				set { ExtensionInfo["Address"] = value.ToString(); }
+				get { return ExtensionInfo[nameof(Address)].To<Uri>(); }
+				set { ExtensionInfo[nameof(Address)] = value.ToString(); }
 			}
 
 			[CategoryLoc(_sourceName)]
@@ -76,8 +77,8 @@ namespace StockSharp.Hydra.HydraServer
 			[PropertyOrder(1)]
 			public string Login
 			{
-				get { return (string)ExtensionInfo["Login"]; }
-				set { ExtensionInfo["Login"] = value; }
+				get { return (string)ExtensionInfo[nameof(Login)]; }
+				set { ExtensionInfo[nameof(Login)] = value; }
 			}
 
 			[CategoryLoc(_sourceName)]
@@ -86,8 +87,8 @@ namespace StockSharp.Hydra.HydraServer
 			[PropertyOrder(2)]
 			public SecureString Password
 			{
-				get { return ExtensionInfo["Password"].To<SecureString>(); }
-				set { ExtensionInfo["Password"] = value; }
+				get { return ExtensionInfo[nameof(Password)].To<SecureString>(); }
+				set { ExtensionInfo[nameof(Password)] = value; }
 			}
 
 			[CategoryLoc(_sourceName)]
@@ -96,18 +97,18 @@ namespace StockSharp.Hydra.HydraServer
 			[PropertyOrder(3)]
 			public DateTime StartFrom
 			{
-				get { return ExtensionInfo["StartFrom"].To<DateTime>(); }
-				set { ExtensionInfo["StartFrom"] = value.Ticks; }
+				get { return ExtensionInfo[nameof(StartFrom)].To<DateTime>(); }
+				set { ExtensionInfo[nameof(StartFrom)] = value.Ticks; }
 			}
 
 			[CategoryLoc(_sourceName)]
 			[DisplayNameLoc(LocalizedStrings.Str2284Key)]
 			[DescriptionLoc(LocalizedStrings.Str2285Key)]
 			[PropertyOrder(4)]
-			public int Offset
+			public int DayOffset
 			{
-				get { return ExtensionInfo["HydraOffset"].To<int>(); }
-				set { ExtensionInfo["HydraOffset"] = value; }
+				get { return ExtensionInfo[nameof(DayOffset)].To<int>(); }
+				set { ExtensionInfo[nameof(DayOffset)] = value; }
 			}
 
 			[CategoryLoc(_sourceName)]
@@ -116,8 +117,8 @@ namespace StockSharp.Hydra.HydraServer
 			[PropertyOrder(5)]
 			public bool IgnoreWeekends
 			{
-				get { return (bool)ExtensionInfo["IgnoreWeekends"]; }
-				set { ExtensionInfo["IgnoreWeekends"] = value; }
+				get { return (bool)ExtensionInfo[nameof(IgnoreWeekends)]; }
+				set { ExtensionInfo[nameof(IgnoreWeekends)] = value; }
 			}
 
 			[Browsable(false)]
@@ -159,7 +160,7 @@ namespace StockSharp.Hydra.HydraServer
 
 			if (settings.IsDefault)
 			{
-				_settings.Offset = 1;
+				_settings.DayOffset = 1;
 				_settings.StartFrom = new DateTime(2000,1,1);
 				_settings.Address = "net.tcp://localhost:8000".To<Uri>();
 				_settings.Login = string.Empty;
@@ -233,7 +234,7 @@ namespace StockSharp.Hydra.HydraServer
 
 			var remoteStorage = client.GetRemoteStorage(security.Security.ToSecurityId(), dataType, arg, _settings.StorageFormat);
 
-			var endDate = DateTime.Today - TimeSpan.FromDays(_settings.Offset);
+			var endDate = DateTime.Today - TimeSpan.FromDays(_settings.DayOffset);
 			var dates = remoteStorage.Dates.Where(date => date >= _settings.StartFrom && date <= endDate).Except(localStorage.Dates).ToArray();
 
 			if (dates.IsEmpty())

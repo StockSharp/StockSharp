@@ -55,8 +55,8 @@ namespace StockSharp.Hydra.LMAX
 			[PropertyOrder(0)]
 			public string Login
 			{
-				get { return (string)ExtensionInfo["Login"]; }
-				set { ExtensionInfo["Login"] = value; }
+				get { return (string)ExtensionInfo[nameof(Login)]; }
+				set { ExtensionInfo[nameof(Login)] = value; }
 			}
 
 			[CategoryLoc(_sourceName)]
@@ -65,8 +65,8 @@ namespace StockSharp.Hydra.LMAX
 			[PropertyOrder(1)]
 			public SecureString Password
 			{
-				get { return ExtensionInfo["Password"].To<SecureString>(); }
-				set { ExtensionInfo["Password"] = value; }
+				get { return ExtensionInfo[nameof(Password)].To<SecureString>(); }
+				set { ExtensionInfo[nameof(Password)] = value; }
 			}
 
 			[CategoryLoc(_sourceName)]
@@ -75,8 +75,8 @@ namespace StockSharp.Hydra.LMAX
 			[PropertyOrder(2)]
 			public bool IsDemo
 			{
-				get { return ExtensionInfo["IsDemo"].To<bool>(); }
-				set { ExtensionInfo["IsDemo"] = value; }
+				get { return ExtensionInfo[nameof(IsDemo)].To<bool>(); }
+				set { ExtensionInfo[nameof(IsDemo)] = value; }
 			}
 
 			[CategoryLoc(_sourceName)]
@@ -85,8 +85,8 @@ namespace StockSharp.Hydra.LMAX
 			[PropertyOrder(3)]
 			public bool IsDownloadSecurityFromSite
 			{
-				get { return ExtensionInfo["IsDownloadSecurityFromSite"].To<bool>(); }
-				set { ExtensionInfo["IsDownloadSecurityFromSite"] = value; }
+				get { return ExtensionInfo[nameof(IsDownloadSecurityFromSite)].To<bool>(); }
+				set { ExtensionInfo[nameof(IsDownloadSecurityFromSite)] = value; }
 			}
 		}
 

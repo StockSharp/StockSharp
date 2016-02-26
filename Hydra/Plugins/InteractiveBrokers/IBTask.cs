@@ -58,8 +58,8 @@ namespace StockSharp.Hydra.InteractiveBrokers
 			[PropertyOrder(0)]
 			public EndPoint Address
 			{
-				get { return ExtensionInfo["Address"].To<EndPoint>(); }
-				set { ExtensionInfo["Address"] = value.To<string>(); }
+				get { return ExtensionInfo[nameof(Address)].To<EndPoint>(); }
+				set { ExtensionInfo[nameof(Address)] = value.To<string>(); }
 			}
 
 			[Category(_category)]
@@ -68,8 +68,8 @@ namespace StockSharp.Hydra.InteractiveBrokers
 			[PropertyOrder(1)]
 			public int ClientId
 			{
-				get { return ExtensionInfo["ClientId"].To<int>(); }
-				set { ExtensionInfo["ClientId"] = value.To<int>(); }
+				get { return ExtensionInfo[nameof(ClientId)].To<int>(); }
+				set { ExtensionInfo[nameof(ClientId)] = value.To<int>(); }
 			}
 
 			[Category(_category)]
@@ -78,8 +78,8 @@ namespace StockSharp.Hydra.InteractiveBrokers
 			[PropertyOrder(2)]
 			public ServerLogLevels ServerLogLevel
 			{
-				get { return ExtensionInfo["ServerLogLevel"].To<ServerLogLevels>(); }
-				set { ExtensionInfo["ServerLogLevel"] = value.To<string>(); }
+				get { return ExtensionInfo[nameof(ServerLogLevel)].To<ServerLogLevels>(); }
+				set { ExtensionInfo[nameof(ServerLogLevel)] = value.To<string>(); }
 			}
 
 			[Browsable(true)]
