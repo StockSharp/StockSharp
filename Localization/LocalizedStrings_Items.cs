@@ -41806,5 +41806,15 @@ namespace StockSharp.Localization
 		/// Themes.
 		/// </summary>
 		public static string Themes => GetString(ThemesKey);
+
+		/// <summary>
+		/// Loading variable parameter error.
+		/// </summary>
+		public const string LoadingVariableErrorParamsKey = "LoadingVariableErrorParams";
+
+		/// <summary>
+		/// Loading variable parameter error.
+		/// </summary>
+		public static string LoadingVariableErrorParams => GetString(LoadingVariableErrorParamsKey);
 	}
 }

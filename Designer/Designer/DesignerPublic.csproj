@@ -220,6 +220,9 @@
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
     <AppDesigner Include="Properties\" />
+    <Resource Include="Images\TreeComposition_32x32.png" />
+    <Resource Include="Images\TreeFolder_32x32.png" />
+    <Resource Include="Images\TreeStrategy_32x32.png" />
     <Content Include="Themes.WPF.targets" />
   </ItemGroup>
   <ItemGroup>
@@ -299,11 +302,6 @@
   <ItemGroup>
     <Resource Include="Images\Start_32x32.png" />
     <Resource Include="Images\Stop_32x32.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Images\FolderClosed.png" />
-    <Resource Include="Images\FolderOpen.png" />
-    <Resource Include="Images\FolderSelected.png" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\Connect_24x24.png" />
