@@ -116,11 +116,11 @@ namespace StockSharp.Hydra.Core
 		[Ignore]
 		public bool IsEnabled
 		{
-			get { return (bool?)ExtensionInfo.TryGetValue("IsEnabled") ?? false; }
+			get { return (bool?)ExtensionInfo.TryGetValue(nameof(IsEnabled)) ?? false; }
 			set
 			{
-				ExtensionInfo["IsEnabled"] = value;
-				NotifyPropertyChanged("IsEnabled");
+				ExtensionInfo[nameof(IsEnabled)] = value;
+				NotifyPropertyChanged(nameof(IsEnabled));
 			}
 		}
 
@@ -135,8 +135,8 @@ namespace StockSharp.Hydra.Core
 		[PropertyOrder(1)]
 		public TimeSpan WorkingFrom
 		{
-			get { return (TimeSpan?)ExtensionInfo.TryGetValue("WorkingFrom") ?? TimeSpan.Zero; }
-			set { ExtensionInfo["WorkingFrom"] = value; }
+			get { return (TimeSpan?)ExtensionInfo.TryGetValue(nameof(WorkingFrom)) ?? TimeSpan.Zero; }
+			set { ExtensionInfo[nameof(WorkingFrom)] = value; }
 		}
 
 		/// <summary>
@@ -150,8 +150,8 @@ namespace StockSharp.Hydra.Core
 		[PropertyOrder(2)]
 		public TimeSpan WorkingTo
 		{
-			get { return (TimeSpan?)ExtensionInfo.TryGetValue("WorkingTo") ?? TimeSpan.Zero; }
-			set { ExtensionInfo["WorkingTo"] = value; }
+			get { return (TimeSpan?)ExtensionInfo.TryGetValue(nameof(WorkingTo)) ?? TimeSpan.Zero; }
+			set { ExtensionInfo[nameof(WorkingTo)] = value; }
 		}
 
 		/// <summary>
@@ -165,8 +165,8 @@ namespace StockSharp.Hydra.Core
 		[PropertyOrder(3)]
 		public TimeSpan Interval
 		{
-			get { return (TimeSpan?)ExtensionInfo.TryGetValue("Interval") ?? TimeSpan.FromSeconds(1); }
-			set { ExtensionInfo["Interval"] = value; }
+			get { return (TimeSpan?)ExtensionInfo.TryGetValue(nameof(Interval)) ?? TimeSpan.FromSeconds(1); }
+			set { ExtensionInfo[nameof(Interval)] = value; }
 		}
 
 		/// <summary>
@@ -180,8 +180,8 @@ namespace StockSharp.Hydra.Core
 		[Editor(typeof(DriveComboBoxEditor), typeof(DriveComboBoxEditor))]
 		public virtual IMarketDataDrive Drive
 		{
-			get { return DriveCache.Instance.GetDrive((string)ExtensionInfo.TryGetValue("Drive") ?? string.Empty); }
-			set { ExtensionInfo["Drive"] = value?.Path; }
+			get { return DriveCache.Instance.GetDrive((string)ExtensionInfo.TryGetValue(nameof(Drive)) ?? string.Empty); }
+			set { ExtensionInfo[nameof(Drive)] = value?.Path; }
 		}
 
 		/// <summary>
@@ -194,11 +194,11 @@ namespace StockSharp.Hydra.Core
 		[Ignore]
 		public StorageFormats StorageFormat
 		{
-			get { return ExtensionInfo.TryGetValue("StorageFormat").To<StorageFormats?>() ?? StorageFormats.Binary; }
+			get { return ExtensionInfo.TryGetValue(nameof(StorageFormat)).To<StorageFormats?>() ?? StorageFormats.Binary; }
 			set
 			{
-				ExtensionInfo["StorageFormat"] = value.To<string>();
-				NotifyPropertyChanged("StorageFormat");
+				ExtensionInfo[nameof(StorageFormat)] = value.To<string>();
+				NotifyPropertyChanged(nameof(StorageFormat));
 			}
 		}
 
@@ -215,13 +215,13 @@ namespace StockSharp.Hydra.Core
 		{
 			get
 			{
-				var id = ExtensionInfo.TryGetValue("DependFrom").To<Guid?>();
+				var id = ExtensionInfo.TryGetValue(nameof(DependFrom)).To<Guid?>();
 				return id == null ? null : Extensions.Tasks.Cache.FirstOrDefault(t => t.Id == id);
 			}
 			set
 			{
 				if (value == null)
-					ExtensionInfo["DependFrom"] = null;
+					ExtensionInfo[nameof(DependFrom)] = null;
 				else
 				{
 					//if (value.Id == Id)
@@ -238,10 +238,10 @@ namespace StockSharp.Hydra.Core
 					}
 					while (currTask != null);
 
-					ExtensionInfo["DependFrom"] = value.Id;
+					ExtensionInfo[nameof(DependFrom)] = value.Id;
 				}
 				
-				NotifyPropertyChanged("DependFrom");
+				NotifyPropertyChanged(nameof(DependFrom));
 			}
 		}
 
@@ -256,13 +256,13 @@ namespace StockSharp.Hydra.Core
 		[PropertyOrder(6)]
 		public int MaxErrorCount
 		{
-			get { return (int?)ExtensionInfo.TryGetValue("MaxErrorCount") ?? 0; }
+			get { return (int?)ExtensionInfo.TryGetValue(nameof(MaxErrorCount)) ?? 0; }
 			set
 			{
 				if (value < 0)
 					throw new ArgumentOutOfRangeException(nameof(value));
 
-				ExtensionInfo["MaxErrorCount"] = value;
+				ExtensionInfo[nameof(MaxErrorCount)] = value;
 			}
 		}
 
@@ -284,8 +284,7 @@ namespace StockSharp.Hydra.Core
 			{
 				if (!_fieldsInitialized)
 				{
-					var types = ExtensionInfo.TryGetValue("SupportedLevel1Fields")
-						?? ExtensionInfo.TryGetValue("SupportedSecurityChangeTypes");
+					var types = ExtensionInfo.TryGetValue(nameof(SupportedLevel1Fields));
 
 					_supportedLevel1Fields.AddRange(types == null
 						? Level1FieldsComboBox.DefaultFields
@@ -301,7 +300,7 @@ namespace StockSharp.Hydra.Core
 				_supportedLevel1Fields.Clear();
 				_supportedLevel1Fields.AddRange(value);
 
-				ExtensionInfo["SupportedLevel1Fields"] = value.Select(s => s.To<string>()).ToArray();
+				ExtensionInfo[nameof(SupportedLevel1Fields)] = value.Select(s => s.To<string>()).ToArray();
 			}
 		}
 
@@ -312,8 +311,8 @@ namespace StockSharp.Hydra.Core
 		[Browsable(false)]
 		public bool IsDefault
 		{
-			get { return (bool?)ExtensionInfo.TryGetValue("IsDefault") ?? true; }
-			set { ExtensionInfo["IsDefault"] = value; }
+			get { return (bool?)ExtensionInfo.TryGetValue(nameof(IsDefault)) ?? true; }
+			set { ExtensionInfo[nameof(IsDefault)] = value; }
 		}
 
 		/// <summary>
@@ -326,11 +325,11 @@ namespace StockSharp.Hydra.Core
 		[PropertyOrder(0)]
 		public string Title
 		{
-			get { return (string)ExtensionInfo.TryGetValue("Title") ?? string.Empty; }
+			get { return (string)ExtensionInfo.TryGetValue(nameof(Title)) ?? string.Empty; }
 			set
 			{
-				ExtensionInfo["Title"] = value;
-				NotifyPropertyChanged("Title");
+				ExtensionInfo[nameof(Title)] = value;
+				NotifyPropertyChanged(nameof(Title));
 			}
 		}
 
@@ -346,13 +345,13 @@ namespace StockSharp.Hydra.Core
 		{
 			get
 			{
-				var str = ExtensionInfo.TryGetValue("LogLevel");
-				return str == null ? LogLevels.Inherit : str.To<LogLevels>();
+				var str = ExtensionInfo.TryGetValue(nameof(LogLevel));
+				return str?.To<LogLevels>() ?? LogLevels.Inherit;
 			}
 			set
 			{
-				ExtensionInfo["LogLevel"] = value.To<string>();
-				NotifyPropertyChanged("LogLevel");
+				ExtensionInfo[nameof(LogLevel)] = value.To<string>();
+				NotifyPropertyChanged(nameof(LogLevel));
 			}
 		}
 
@@ -486,12 +485,12 @@ namespace StockSharp.Hydra.Core
 
 				_reConnectionSettings = new ReConnectionSettings();
 					
-				var settings = (SettingsStorage)ExtensionInfo.TryGetValue("ReConnectionSettings");
+				var settings = (SettingsStorage)ExtensionInfo.TryGetValue(nameof(ReConnectionSettings));
 
 				if (settings != null)
 					_reConnectionSettings.Load(settings);
 				else
-					ExtensionInfo.Add("ReConnectionSettings", _reConnectionSettings.Save());
+					ExtensionInfo.Add(nameof(ReConnectionSettings), _reConnectionSettings.Save());
 
 				return _reConnectionSettings;
 			}
@@ -510,13 +509,13 @@ namespace StockSharp.Hydra.Core
 		{
 			get
 			{
-				var str = ExtensionInfo.TryGetValue("IsDownloadNews");
+				var str = ExtensionInfo.TryGetValue(nameof(IsDownloadNews));
 				return str != null && str.To<bool>();
 			}
 			set
 			{
-				ExtensionInfo["IsDownloadNews"] = value;
-				NotifyPropertyChanged("IsDownloadNews");
+				ExtensionInfo[nameof(IsDownloadNews)] = value;
+				NotifyPropertyChanged(nameof(IsDownloadNews));
 			}
 		}
 
@@ -529,7 +528,7 @@ namespace StockSharp.Hydra.Core
 			var settings = ((ConnectorHydraTaskSettings)settingsCopy)._reConnectionSettings;
 
 			if (settings != null)
-				settingsCopy.ExtensionInfo["ReConnectionSettings"] = settings.Save();
+				settingsCopy.ExtensionInfo[nameof(ReConnectionSettings)] = settings.Save();
 
 			base.ApplyChanges(settingsCopy);
 		}

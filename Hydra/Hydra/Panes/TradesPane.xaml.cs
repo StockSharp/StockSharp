@@ -126,18 +126,18 @@ namespace StockSharp.Hydra.Panes
 		{
 			base.Load(storage);
 
-			FindedTrades.Load(storage.GetValue<SettingsStorage>("FindedTrades"));
-			BuildFrom.SelectedIndex = storage.GetValue<int>("BuildFrom");
-			IsNonSystem.IsChecked = storage.GetValue<bool>("IsNonSystem");
+			FindedTrades.Load(storage.GetValue<SettingsStorage>(nameof(FindedTrades)));
+			BuildFrom.SelectedIndex = storage.GetValue<int>(nameof(BuildFrom));
+			IsNonSystem.IsChecked = storage.GetValue<bool>(nameof(IsNonSystem));
 		}
 
 		public override void Save(SettingsStorage storage)
 		{
 			base.Save(storage);
 
-			storage.SetValue("FindedTrades", FindedTrades.Save());
-			storage.SetValue("BuildFrom", BuildFrom.SelectedIndex);
-			storage.SetValue("IsNonSystem", IsNonSystem.IsChecked == true);
+			storage.SetValue(nameof(FindedTrades), FindedTrades.Save());
+			storage.SetValue(nameof(BuildFrom), BuildFrom.SelectedIndex);
+			storage.SetValue(nameof(IsNonSystem), IsNonSystem.IsChecked == true);
 		}
 	}
 }

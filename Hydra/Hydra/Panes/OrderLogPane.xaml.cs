@@ -99,16 +99,16 @@ namespace StockSharp.Hydra.Panes
 		{
 			base.Load(storage);
 
-			FindedOrderLog.Load(storage.GetValue<SettingsStorage>("FindedOrderLog"));
-			IsNonSystem.IsChecked = storage.GetValue<bool>("IsNonSystem");
+			FindedOrderLog.Load(storage.GetValue<SettingsStorage>(nameof(FindedOrderLog)));
+			IsNonSystem.IsChecked = storage.GetValue<bool>(nameof(IsNonSystem));
 		}
 
 		public override void Save(SettingsStorage storage)
 		{
 			base.Save(storage);
 
-			storage.SetValue("FindedOrderLog", FindedOrderLog.Save());
-			storage.SetValue("IsNonSystem", IsNonSystem.IsChecked == true);
+			storage.SetValue(nameof(FindedOrderLog), FindedOrderLog.Save());
+			storage.SetValue(nameof(IsNonSystem), IsNonSystem.IsChecked == true);
 		}
 	}
 }

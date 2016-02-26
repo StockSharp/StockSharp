@@ -164,9 +164,9 @@ namespace StockSharp.Hydra.Panes
 
 			DrivePanel.StorageFormat = storage.GetValue<StorageFormats>("StorageFormat");
 
-			MarketData.Load(storage.GetValue<SettingsStorage>("MarketData"));
-			SecurityPicker.Load(storage.GetValue<SettingsStorage>("SecurityPicker"));
-			LookupPanel.Load(storage.GetValue<SettingsStorage>("LookupPanel"));
+			MarketData.Load(storage.GetValue<SettingsStorage>(nameof(MarketData)));
+			SecurityPicker.Load(storage.GetValue<SettingsStorage>(nameof(SecurityPicker)));
+			LookupPanel.Load(storage.GetValue<SettingsStorage>(nameof(LookupPanel)));
 		}
 
 		void IPersistable.Save(SettingsStorage storage)
@@ -176,9 +176,9 @@ namespace StockSharp.Hydra.Panes
 
 			storage.SetValue("StorageFormat", DrivePanel.StorageFormat.To<string>());
 
-			storage.SetValue("MarketData", MarketData.Save());
-			storage.SetValue("SecurityPicker", SecurityPicker.Save());
-			storage.SetValue("LookupPanel", LookupPanel.Save());
+			storage.SetValue(nameof(MarketData), MarketData.Save());
+			storage.SetValue(nameof(SecurityPicker), SecurityPicker.Save());
+			storage.SetValue(nameof(LookupPanel), LookupPanel.Save());
 		}
 
 		void IDisposable.Dispose()

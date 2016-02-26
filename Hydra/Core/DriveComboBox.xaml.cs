@@ -115,7 +115,7 @@ namespace StockSharp.Hydra.Core
 			if (this.IsDesignMode())
 				return;
 
-			Drives = DriveCache.Instance.AllDrives;
+			Drives = DriveCache.Instance.Drives;
 
 			if (!Items.Contains(_selectPath))
 				Items.Add(_selectPath);
@@ -143,7 +143,7 @@ namespace StockSharp.Hydra.Core
 		/// <see cref="DependencyProperty"/> для <see cref="Drives"/>.
 		/// </summary>
 		public static DependencyProperty DrivesProperty =
-			DependencyProperty.Register("Drives", typeof(IEnumerable<IMarketDataDrive>),
+			DependencyProperty.Register(nameof(Drives), typeof(IEnumerable<IMarketDataDrive>),
 									typeof(DriveComboBox), new PropertyMetadata(null, DrivesPropertyChanged));
 
 		/// <summary>
@@ -168,7 +168,7 @@ namespace StockSharp.Hydra.Core
 		/// <see cref="DependencyProperty"/> для <see cref="SelectedDrive"/>.
 		/// </summary>
 		public static DependencyProperty SelectedDriveProperty =
-			DependencyProperty.Register("SelectedDrive", typeof(IMarketDataDrive),
+			DependencyProperty.Register(nameof(SelectedDrive), typeof(IMarketDataDrive),
 									typeof(DriveComboBox), new PropertyMetadata(null, SelectedDrivePropertyChanged));
 
 		private static void SelectedDrivePropertyChanged(DependencyObject sender, DependencyPropertyChangedEventArgs args)
@@ -194,16 +194,14 @@ namespace StockSharp.Hydra.Core
 		/// <see cref="DependencyProperty"/> для <see cref="ShowAllDrive"/>.
 		/// </summary>
 		public static DependencyProperty ShowAllDriveProperty =
-			DependencyProperty.Register("ShowAllDrive", typeof(bool),
+			DependencyProperty.Register(nameof(ShowAllDrive), typeof(bool),
 									typeof(DriveComboBox), new PropertyMetadata(false, ShowAllDriveChanged));
 
 		private static void ShowAllDriveChanged(DependencyObject sender, DependencyPropertyChangedEventArgs args)
 		{
 			var comboBox = sender as DriveComboBox;
-			if (comboBox == null)
-				return;
 
-			if (comboBox.Drives == null)
+			if (comboBox?.Drives == null)
 				return;
 
 			if ((bool)args.NewValue)

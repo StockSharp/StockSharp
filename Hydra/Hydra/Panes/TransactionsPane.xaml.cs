@@ -88,14 +88,14 @@ namespace StockSharp.Hydra.Panes
 		{
 			base.Load(storage);
 
-			FindedTransactions.Load(storage.GetValue<SettingsStorage>("FindedTransactions"));
+			FindedTransactions.Load(storage.GetValue<SettingsStorage>(nameof(FindedTransactions)));
 		}
 
 		public override void Save(SettingsStorage storage)
 		{
 			base.Save(storage);
 
-			storage.SetValue("FindedTransactions", FindedTransactions.Save());
+			storage.SetValue(nameof(FindedTransactions), FindedTransactions.Save());
 		}
 	}
 }

@@ -44,7 +44,7 @@ namespace StockSharp.Hydra.Server
 
 		protected override IEnumerable<IMarketDataDrive> GetDrives()
 		{
-			return DriveCache.Instance.AllDrives.OfType<LocalMarketDataDrive>();
+			return DriveCache.Instance.Drives.OfType<LocalMarketDataDrive>();
 		}
 	}
 }

@@ -17,6 +17,7 @@ namespace StockSharp.Hydra.Panes
 {
 	using System;
 	using System.ComponentModel;
+	using System.Linq;
 	using System.Windows.Controls;
 
 	using Ecng.Collections;
@@ -47,7 +48,7 @@ namespace StockSharp.Hydra.Panes
 
 		protected void UpdateTitle()
 		{
-			_propertyChanged.SafeInvoke(this, "Title");
+			_propertyChanged.SafeInvoke(this, nameof(Title));
 		}
 
 		Uri IPane.Icon => null;
@@ -61,7 +62,7 @@ namespace StockSharp.Hydra.Panes
 			get
 			{
 				var value = _from.Value;
-				return value == null ? (DateTime?)null : value.Value.ChangeKind(DateTimeKind.Utc);
+				return value?.ChangeKind(DateTimeKind.Utc);
 			}
 			set { _from.Value = value; }
 		}
@@ -71,7 +72,7 @@ namespace StockSharp.Hydra.Panes
 			get
 			{
 				var value = _to.Value;
-				return value == null ? (DateTime?)null : value.Value.ChangeKind(DateTimeKind.Utc);
+				return value?.ChangeKind(DateTimeKind.Utc);
 			}
 			set { _to.Value = value; }
 		}
@@ -146,7 +147,7 @@ namespace StockSharp.Hydra.Panes
 			if (!CheckSecurity())
 				return;
 
-			if (_getItems().Count == 0)
+			if (!_getItems().Cast<object>().Any())
 			{
 				Progress.DoesntExist();
 				return;
@@ -181,33 +182,33 @@ namespace StockSharp.Hydra.Panes
 
 		public virtual void Load(SettingsStorage storage)
 		{
-			if (storage.ContainsKey("SelectedSecurity"))
+			if (storage.ContainsKey(nameof(SelectedSecurity)))
 				SelectedSecurity = ConfigManager.GetService<IEntityRegistry>().Securities.ReadById(storage.GetValue<string>("SelectedSecurity"));
 
-			From = storage.GetValue<DateTime?>("From");
-			To = storage.GetValue<DateTime?>("To");
+			From = storage.GetValue<DateTime?>(nameof(From));
+			To = storage.GetValue<DateTime?>(nameof(To));
 
-			if (storage.ContainsKey("Drive"))
-				Drive = DriveCache.Instance.GetDrive(storage.GetValue<string>("Drive"));
+			if (storage.ContainsKey(nameof(Drive)))
+				Drive = DriveCache.Instance.GetDrive(storage.GetValue<string>(nameof(Drive)));
 
-			StorageFormat = storage.GetValue<StorageFormats>("StorageFormat");
+			StorageFormat = storage.GetValue<StorageFormats>(nameof(StorageFormat));
 		}
 
 		public virtual void Save(SettingsStorage storage)
 		{
 			if (SelectedSecurity != null)
-				storage.SetValue("SelectedSecurity", SelectedSecurity.Id);
+				storage.SetValue(nameof(SelectedSecurity), SelectedSecurity.Id);
 
 			if (From != null)
-				storage.SetValue("From", (DateTime)From);
+				storage.SetValue(nameof(From), (DateTime)From);
 
 			if (To != null)
-				storage.SetValue("To", (DateTime)To);
+				storage.SetValue(nameof(To), (DateTime)To);
 
 			if (Drive != null)
-				storage.SetValue("Drive", Drive.Path);
+				storage.SetValue(nameof(Drive), Drive.Path);
 
-			storage.SetValue("StorageFormat", StorageFormat);
+			storage.SetValue(nameof(StorageFormat), StorageFormat);
 		}
 
 		private PropertyChangedEventHandler _propertyChanged;

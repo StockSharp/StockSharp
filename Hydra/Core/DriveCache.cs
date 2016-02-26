@@ -71,7 +71,7 @@ namespace StockSharp.Hydra.Core
 		/// <summary>
 		/// Список всех хранилищ маркет-данных.
 		/// </summary>
-		public IEnumerable<IMarketDataDrive> AllDrives => _drives.CachedValues;
+		public IEnumerable<IMarketDataDrive> Drives => _drives.CachedValues;
 
 		/// <summary>
 		/// Хранилище маркет-данных, используемое по-умолчанию.
@@ -120,7 +120,7 @@ namespace StockSharp.Hydra.Core
 		public void Load(SettingsStorage storage)
 		{
 			var drives = storage
-				.GetValue<IEnumerable<SettingsStorage>>("Drives")
+				.GetValue<IEnumerable<SettingsStorage>>(nameof(Drives))
 				.Select(s => s.LoadEntire<IMarketDataDrive>())
 				.ToArray();
 
@@ -130,8 +130,8 @@ namespace StockSharp.Hydra.Core
 					_drives.TryAdd(drive.Path, drive);	
 			}
 
-			if (storage.ContainsKey("DefaultDrive"))
-				DefaultDrive = _drives[storage.GetValue<string>("DefaultDrive")];
+			if (storage.ContainsKey(nameof(DefaultDrive)))
+				DefaultDrive = _drives[storage.GetValue<string>(nameof(DefaultDrive))];
 		}
 
 		/// <summary>
@@ -140,10 +140,10 @@ namespace StockSharp.Hydra.Core
 		/// <param name="storage">Хранилище настроек.</param>
 		public void Save(SettingsStorage storage)
 		{
-			storage.SetValue("Drives", AllDrives.Select(s => s.SaveEntire(false)).ToArray());
+			storage.SetValue(nameof(Drives), Drives.Select(s => s.SaveEntire(false)).ToArray());
 
 			if (DefaultDrive != null)
-				storage.SetValue("DefaultDrive", DefaultDrive.Path);
+				storage.SetValue(nameof(DefaultDrive), DefaultDrive.Path);
 		}
 
 		/// <summary>
@@ -151,7 +151,7 @@ namespace StockSharp.Hydra.Core
 		/// </summary>
 		protected override void DisposeManaged()
 		{
-			AllDrives.ForEach(d => d.Dispose());
+			Drives.ForEach(d => d.Dispose());
 			base.DisposeManaged();
 		}
 	}

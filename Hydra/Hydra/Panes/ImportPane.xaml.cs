@@ -618,16 +618,15 @@ namespace StockSharp.Hydra.Panes
 
 		void IPersistable.Load(SettingsStorage storage)
 		{
-			DataType = storage.GetValue<Type>("DataType");
-			ExecutionType = storage.GetValue<ExecutionTypes?>("ExecutionType");
+			DataType = storage.GetValue<Type>(nameof(DataType));
+			ExecutionType = storage.GetValue<ExecutionTypes?>(nameof(ExecutionType));
 
 			foreach (var fieldSettings in storage.GetValue<SettingsStorage[]>("Fields"))
 			{
 				var fieldName = fieldSettings.GetValue<string>("Name");
 				var field = _fields.FirstOrDefault(f => f.Name.CompareIgnoreCase(fieldName));
 
-				if (field != null)
-					field.Load(fieldSettings);
+				field?.Load(fieldSettings);
 			}
 
 			_settings.Load(storage.GetValue<SettingsStorage>("Settings"));
@@ -635,8 +634,8 @@ namespace StockSharp.Hydra.Panes
 
 		void IPersistable.Save(SettingsStorage storage)
 		{
-			storage.SetValue("DataType", DataType.GetTypeName(false));
-			storage.SetValue("ExecutionType", ExecutionType.To<string>());
+			storage.SetValue(nameof(DataType), DataType.GetTypeName(false));
+			storage.SetValue(nameof(ExecutionType), ExecutionType.To<string>());
 			storage.SetValue("Fields", _fields.Select(f => f.Save()).ToArray());
 			storage.SetValue("Settings", _settings.Save());
 		}

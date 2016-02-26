@@ -190,15 +190,15 @@ namespace StockSharp.Hydra.Core
 		/// <param name="storage">Хранилище настроек.</param>
 		public void Load(SettingsStorage storage)
 		{
-			AutoStart = storage.GetValue<bool>("AutoStart");
-			MinimizeToTray = storage.GetValue("MinimizeToTray", false);
-			IsServer = storage.GetValue<bool>("IsServer");
-			MaxSecurityCount = storage.GetValue("MaxSecurityCount", MaxSecurityCount);
-			Authorization = storage.GetValue<AuthorizationModes>("Authorization");
-			AutoStop = storage.GetValue<bool>("AutoStop");
-			StopTime = storage.GetValue("StopTime", 0L).To<TimeSpan>();
-			EmailErrorCount = storage.GetValue<int>("EmailErrorCount");
-			EmailErrorAddress = storage.GetValue<string>("EmailErrorAddress");
+			AutoStart = storage.GetValue<bool>(nameof(AutoStart));
+			MinimizeToTray = storage.GetValue(nameof(MinimizeToTray), false);
+			IsServer = storage.GetValue<bool>(nameof(IsServer));
+			MaxSecurityCount = storage.GetValue(nameof(MaxSecurityCount), MaxSecurityCount);
+			Authorization = storage.GetValue<AuthorizationModes>(nameof(Authorization));
+			AutoStop = storage.GetValue<bool>(nameof(AutoStop));
+			StopTime = storage.GetValue(nameof(StopTime), 0L).To<TimeSpan>();
+			EmailErrorCount = storage.GetValue<int>(nameof(EmailErrorCount));
+			EmailErrorAddress = storage.GetValue<string>(nameof(EmailErrorAddress));
 			
 			TemplateTxtRegistry.Load(storage);
 		}
@@ -209,15 +209,15 @@ namespace StockSharp.Hydra.Core
 		/// <param name="storage">Хранилище настроек.</param>
 		public void Save(SettingsStorage storage)
 		{
-			storage.SetValue("AutoStart", AutoStart);
-			storage.SetValue("MinimizeToTray", MinimizeToTray);
-			storage.SetValue("IsServer", IsServer);
-			storage.SetValue("MaxSecurityCount", MaxSecurityCount);
-			storage.SetValue("Authorization", Authorization.To<string>());
-			storage.SetValue("AutoStop", AutoStop);
-			storage.SetValue("StopTime", StopTime.To<long>());
-			storage.SetValue("EmailErrorCount", EmailErrorCount);
-			storage.SetValue("EmailErrorAddress", EmailErrorAddress);
+			storage.SetValue(nameof(AutoStart), AutoStart);
+			storage.SetValue(nameof(MinimizeToTray), MinimizeToTray);
+			storage.SetValue(nameof(IsServer), IsServer);
+			storage.SetValue(nameof(MaxSecurityCount), MaxSecurityCount);
+			storage.SetValue(nameof(Authorization), Authorization.To<string>());
+			storage.SetValue(nameof(AutoStop), AutoStop);
+			storage.SetValue(nameof(StopTime), StopTime.To<long>());
+			storage.SetValue(nameof(EmailErrorCount), EmailErrorCount);
+			storage.SetValue(nameof(EmailErrorAddress), EmailErrorAddress);
 			
 			TemplateTxtRegistry.Save(storage);
 		}

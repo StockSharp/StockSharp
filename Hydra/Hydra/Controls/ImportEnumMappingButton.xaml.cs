@@ -35,7 +35,7 @@ namespace StockSharp.Hydra.Controls
 			InitializeComponent();
 		}
 
-		public static DependencyProperty EnumTypeProperty = DependencyProperty.Register("EnumType", typeof(Type), typeof(ImportEnumMappingButton), new PropertyMetadata((s, e) =>
+		public static DependencyProperty EnumTypeProperty = DependencyProperty.Register(nameof(EnumType), typeof(Type), typeof(ImportEnumMappingButton), new PropertyMetadata((s, e) =>
 		{
 			var ctrl = s as ImportEnumMappingButton;
 			
@@ -51,7 +51,7 @@ namespace StockSharp.Hydra.Controls
 			set { SetValue(EnumTypeProperty, value); }
 		}
 
-		public static DependencyProperty ValuesProperty = DependencyProperty.Register("Values", typeof(ObservableCollection<ImportEnumMappingWindow.MappingValue>), typeof(ImportEnumMappingButton), new PropertyMetadata((s, e) =>
+		public static DependencyProperty ValuesProperty = DependencyProperty.Register(nameof(Values), typeof(ObservableCollection<ImportEnumMappingWindow.MappingValue>), typeof(ImportEnumMappingButton), new PropertyMetadata((s, e) =>
 		{
 			var ctrl = s as ImportEnumMappingButton;
 
@@ -73,7 +73,7 @@ namespace StockSharp.Hydra.Controls
 			set { SetValue(ValuesProperty, value); }
 		}
 
-		public static DependencyProperty FieldNameProperty = DependencyProperty.Register("FieldName", typeof(string), typeof(ImportEnumMappingButton));
+		public static DependencyProperty FieldNameProperty = DependencyProperty.Register(nameof(FieldName), typeof(string), typeof(ImportEnumMappingButton));
 
 		public string FieldName
 		{

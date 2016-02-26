@@ -177,7 +177,7 @@ namespace StockSharp.Hydra.Panes
 					.ToArray();
 			}
 
-			FindedChanges.Load(storage.GetValue<SettingsStorage>("FindedChanges"));
+			FindedChanges.Load(storage.GetValue<SettingsStorage>(nameof(FindedChanges)));
 
 			var selectedFields = Level1FieldsCtrl.SelectedFields.ToArray();
 
@@ -192,7 +192,7 @@ namespace StockSharp.Hydra.Panes
 			base.Save(storage);
 
 			storage.SetValue("SelectedLevel1Fields", Level1FieldsCtrl.SelectedFields.Select(f => f.ToString()).Join(","));
-			storage.SetValue("FindedChanges", FindedChanges.Save());
+			storage.SetValue(nameof(FindedChanges), FindedChanges.Save());
 		}
 	}
 }

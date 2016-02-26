@@ -162,7 +162,7 @@ namespace StockSharp.Hydra.Windows
 			_token = new CancellationTokenSource();
 
 			var drives = Drive.IsAllDrive
-					? DriveCache.Instance.AllDrives.ToArray()
+					? DriveCache.Instance.Drives.ToArray()
 					: new[] { Drive.SelectedDrive };
 
 			if (to != DateTime.MaxValue && to.TimeOfDay == TimeSpan.Zero)

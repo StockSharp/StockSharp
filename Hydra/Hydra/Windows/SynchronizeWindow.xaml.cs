@@ -97,7 +97,7 @@ namespace StockSharp.Hydra.Windows
 			{
 				var securityPaths = new List<string>();
 
-				foreach (var dir in DriveCache.Instance.AllDrives
+				foreach (var dir in DriveCache.Instance.Drives
 					.OfType<LocalMarketDataDrive>()
 					.Select(drive => drive.Path)
 					.Distinct())
@@ -124,7 +124,7 @@ namespace StockSharp.Hydra.Windows
 
 				var iterCount = 
 					securityPaths.Count + // кол-во проходов по директории для создания инструмента
-					DriveCache.Instance.AllDrives.Count() * (((IList<Security>)EntityRegistry.Securities).Count + securityPaths.Count); // кол-во сбросов кэша дат
+					DriveCache.Instance.Drives.Count() * (((IList<Security>)EntityRegistry.Securities).Count + securityPaths.Count); // кол-во сбросов кэша дат
 
 				this.GuiSync(() => Progress.Maximum = iterCount);
 
@@ -216,7 +216,7 @@ namespace StockSharp.Hydra.Windows
 
 				var formats = Enumerator.GetValues<StorageFormats>().ToArray();
 
-				foreach (var drive in DriveCache.Instance.AllDrives)
+				foreach (var drive in DriveCache.Instance.Drives)
 				{
 					foreach (var secId in drive.AvailableSecurities)
 					{

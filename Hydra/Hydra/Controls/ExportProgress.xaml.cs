@@ -317,10 +317,7 @@ namespace StockSharp.Hydra.Controls
 
 		public void Stop()
 		{
-			var w = _worker;
-
-			if (w != null)
-				w.CancelAsync();
+			_worker?.CancelAsync();
 		}
 
 		private int _totalCount;
@@ -423,8 +420,7 @@ namespace StockSharp.Hydra.Controls
 
 						UpdateCount(count);
 
-						if (itemLoaded != null)
-							itemLoaded(value);
+						itemLoaded?.Invoke(value);
 
 						if (count > maxValueCount)
 						{

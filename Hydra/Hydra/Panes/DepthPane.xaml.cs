@@ -193,26 +193,26 @@ namespace StockSharp.Hydra.Panes
 		{
 			base.Load(storage);
 
-			DepthGrid.Load(storage.GetValue<SettingsStorage>("DepthGrid"));
-			Depth.SelectedIndex = storage.GetValue<int>("Depth");
+			DepthGrid.Load(storage.GetValue<SettingsStorage>(nameof(DepthGrid)));
+			Depth.SelectedIndex = storage.GetValue<int>(nameof(Depth));
 
-			if (storage.ContainsKey("DepthGenerationInterval"))
-				DepthGenerationInterval.Value = storage.GetValue<int>("DepthGenerationInterval");
+			if (storage.ContainsKey(nameof(DepthGenerationInterval)))
+				DepthGenerationInterval.Value = storage.GetValue<int>(nameof(DepthGenerationInterval));
 
-			BuildFrom.SelectedIndex = storage.GetValue<int>("BuildFrom");
+			BuildFrom.SelectedIndex = storage.GetValue<int>(nameof(BuildFrom));
 		}
 
 		public override void Save(SettingsStorage storage)
 		{
 			base.Save(storage);
 
-			storage.SetValue("DepthGrid", DepthGrid.Save());
-			storage.SetValue("Depth", Depth.SelectedIndex);
+			storage.SetValue(nameof(DepthGrid), DepthGrid.Save());
+			storage.SetValue(nameof(Depth), Depth.SelectedIndex);
 
 			if (DepthGenerationInterval.Value != null)
-				storage.SetValue("DepthGenerationInterval", (int)DepthGenerationInterval.Value);
+				storage.SetValue(nameof(DepthGenerationInterval), (int)DepthGenerationInterval.Value);
 
-			storage.SetValue("BuildFrom", BuildFrom.SelectedIndex);
+			storage.SetValue(nameof(BuildFrom), BuildFrom.SelectedIndex);
 		}
 	}
 }

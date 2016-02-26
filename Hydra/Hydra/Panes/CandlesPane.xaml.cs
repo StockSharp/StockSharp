@@ -167,11 +167,11 @@ namespace StockSharp.Hydra.Panes
 		{
 			base.Load(storage);
 
-			BuildedCandles.Load(storage.GetValue<SettingsStorage>("BuildedCandles"));
-			BuildFrom.SelectedIndex = storage.GetValue<int>("BuildFrom");
+			BuildedCandles.Load(storage.GetValue<SettingsStorage>(nameof(BuildedCandles)));
+			BuildFrom.SelectedIndex = storage.GetValue<int>(nameof(BuildFrom));
 
 			var settings = new CandleSeries();
-			settings.Load(storage.GetValue<SettingsStorage>("CandleSettings"));
+			settings.Load(storage.GetValue<SettingsStorage>(nameof(CandleSettings)));
 			CandleSettings.Settings = settings;
 		}
 
@@ -179,9 +179,9 @@ namespace StockSharp.Hydra.Panes
 		{
 			base.Save(storage);
 
-			storage.SetValue("BuildedCandles", BuildedCandles.Save());
-			storage.SetValue("BuildFrom", BuildFrom.SelectedIndex);
-			storage.SetValue("CandleSettings", CandleSettings.Settings.Save());
+			storage.SetValue(nameof(BuildedCandles), BuildedCandles.Save());
+			storage.SetValue(nameof(BuildFrom), BuildFrom.SelectedIndex);
+			storage.SetValue(nameof(CandleSettings), CandleSettings.Settings.Save());
 		}
 	}
 }

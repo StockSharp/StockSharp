@@ -43,7 +43,7 @@ namespace StockSharp.Hydra.Core
 		/// </summary>
 		public DatabaseConnectionComboBox()
 		{
-			DisplayMemberPath = "Title";
+			DisplayMemberPath = nameof(DatabaseConnectionPair.Title);
 			ItemsSource = _connections;
 
 			_connections.AddRange(DatabaseConnectionCache.Instance.AllConnections);
@@ -88,7 +88,7 @@ namespace StockSharp.Hydra.Core
 		/// <see cref="DependencyProperty"/> для <see cref="SelectedConnection"/>.
 		/// </summary>
 		public static readonly DependencyProperty SelectedConnectionProperty =
-			DependencyProperty.Register("SelectedConnection", typeof(DatabaseConnectionPair), typeof(DatabaseConnectionComboBox), new PropertyMetadata(SelectedConnectionPropertyChanged));
+			DependencyProperty.Register(nameof(SelectedConnection), typeof(DatabaseConnectionPair), typeof(DatabaseConnectionComboBox), new PropertyMetadata(SelectedConnectionPropertyChanged));
 
 		private static void SelectedConnectionPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
 		{

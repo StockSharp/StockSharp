@@ -46,7 +46,7 @@ namespace StockSharp.Hydra.Core
 				set
 				{
 					_count = value;
-					NotifyPropertyChanged("Count");
+					NotifyPropertyChanged(nameof(Count));
 				}
 			}
 
@@ -62,7 +62,7 @@ namespace StockSharp.Hydra.Core
 				set
 				{
 					_lastTime = value;
-					NotifyPropertyChanged("LastTime");
+					NotifyPropertyChanged(nameof(LastTime));
 				}
 			}
 		}

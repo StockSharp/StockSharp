@@ -69,8 +69,8 @@ namespace StockSharp.Hydra.Core
 		/// </summary>
 		public Version Version
 		{
-			get { return GetValue("Version", new Version(1, 0, 0, 1)); }
-			set { SetValue("Version", value); }
+			get { return GetValue(nameof(Version), new Version(1, 0, 0, 1)); }
+			set { SetValue(nameof(Version), value); }
 		}
 
 		private HydraSettingsRegistry _settings;

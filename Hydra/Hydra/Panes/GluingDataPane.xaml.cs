@@ -259,9 +259,9 @@ namespace StockSharp.Hydra.Panes
 
 			DrivePanel.StorageFormat = storage.GetValue<StorageFormats>("StorageFormat");
 
-			MarketData.Load(storage.GetValue<SettingsStorage>("MarketData"));
-			SecurityPicker.Load(storage.GetValue<SettingsStorage>("SecurityPicker"));
-			DataTypeComboBox.SelectedIndex = storage.GetValue<int>("DataTypeComboBox");
+			MarketData.Load(storage.GetValue<SettingsStorage>(nameof(MarketData)));
+			SecurityPicker.Load(storage.GetValue<SettingsStorage>(nameof(SecurityPicker)));
+			DataTypeComboBox.SelectedIndex = storage.GetValue<int>(nameof(DataTypeComboBox));
 		}
 
 		void IPersistable.Save(SettingsStorage storage)
@@ -271,18 +271,14 @@ namespace StockSharp.Hydra.Panes
 
 			storage.SetValue("StorageFormat", DrivePanel.StorageFormat.To<string>());
 
-			storage.SetValue("MarketData", MarketData.Save());
-			storage.SetValue("SecurityPicker", SecurityPicker.Save());
-			storage.SetValue("DataTypeComboBox", DataTypeComboBox.SelectedIndex);
+			storage.SetValue(nameof(MarketData), MarketData.Save());
+			storage.SetValue(nameof(SecurityPicker), SecurityPicker.Save());
+			storage.SetValue(nameof(DataTypeComboBox), DataTypeComboBox.SelectedIndex);
 		}
 
 		void IDisposable.Dispose()
 		{
-			var t = _token;
-
-			if (t != null)
-				t.Cancel();
-
+			_token?.Cancel();
 			MarketData.CancelMakeEntires();
 		}
 	}

@@ -112,14 +112,14 @@ namespace StockSharp.Hydra.Core
 		/// <param name="storage">Хранилище настроек.</param>
 		public void Load(SettingsStorage storage)
 		{
-			TemplateTxtDepth = storage.GetValue("TemplateTxtDepth", TemplateTxtDepth);
-			TemplateTxtTick = storage.GetValue("TemplateTxtTick", TemplateTxtTick);
-			TemplateTxtCandle = storage.GetValue("TemplateTxtCandle", TemplateTxtCandle);
-			TemplateTxtLevel1 = storage.GetValue("TemplateTxtLevel1", TemplateTxtLevel1);
-			TemplateTxtOrderLog = storage.GetValue("TemplateTxtOrderLog", TemplateTxtOrderLog);
-			TemplateTxtTransaction = storage.GetValue("TemplateTxtTransaction", TemplateTxtTransaction);
-			TemplateTxtSecurity = storage.GetValue("TemplateTxtSecurity", TemplateTxtSecurity);
-			TemplateTxtNews = storage.GetValue("TemplateTxtNews", TemplateTxtNews);
+			TemplateTxtDepth = storage.GetValue(nameof(TemplateTxtDepth), TemplateTxtDepth);
+			TemplateTxtTick = storage.GetValue(nameof(TemplateTxtTick), TemplateTxtTick);
+			TemplateTxtCandle = storage.GetValue(nameof(TemplateTxtCandle), TemplateTxtCandle);
+			TemplateTxtLevel1 = storage.GetValue(nameof(TemplateTxtLevel1), TemplateTxtLevel1);
+			TemplateTxtOrderLog = storage.GetValue(nameof(TemplateTxtOrderLog), TemplateTxtOrderLog);
+			TemplateTxtTransaction = storage.GetValue(nameof(TemplateTxtTransaction), TemplateTxtTransaction);
+			TemplateTxtSecurity = storage.GetValue(nameof(TemplateTxtSecurity), TemplateTxtSecurity);
+			TemplateTxtNews = storage.GetValue(nameof(TemplateTxtNews), TemplateTxtNews);
 		}
 
 		/// <summary>
@@ -128,14 +128,14 @@ namespace StockSharp.Hydra.Core
 		/// <param name="storage">Хранилище настроек.</param>
 		public void Save(SettingsStorage storage)
 		{
-			storage.SetValue("TemplateTxtDepth", TemplateTxtDepth);
-			storage.SetValue("TemplateTxtTick", TemplateTxtTick);
-			storage.SetValue("TemplateTxtCandle", TemplateTxtCandle);
-			storage.SetValue("TemplateTxtLevel1", TemplateTxtLevel1);
-			storage.SetValue("TemplateTxtOrderLog", TemplateTxtOrderLog);
-			storage.SetValue("TemplateTxtTransaction", TemplateTxtTransaction);
-			storage.SetValue("TemplateTxtSecurity", TemplateTxtSecurity);
-			storage.SetValue("TemplateTxtNews", TemplateTxtNews);
+			storage.SetValue(nameof(TemplateTxtDepth), TemplateTxtDepth);
+			storage.SetValue(nameof(TemplateTxtTick), TemplateTxtTick);
+			storage.SetValue(nameof(TemplateTxtCandle), TemplateTxtCandle);
+			storage.SetValue(nameof(TemplateTxtLevel1), TemplateTxtLevel1);
+			storage.SetValue(nameof(TemplateTxtOrderLog), TemplateTxtOrderLog);
+			storage.SetValue(nameof(TemplateTxtTransaction), TemplateTxtTransaction);
+			storage.SetValue(nameof(TemplateTxtSecurity), TemplateTxtSecurity);
+			storage.SetValue(nameof(TemplateTxtNews), TemplateTxtNews);
 		}
 	}
 }
