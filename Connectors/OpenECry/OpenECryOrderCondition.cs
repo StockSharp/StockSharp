@@ -23,7 +23,7 @@ namespace StockSharp.OpenECry
 	using StockSharp.Localization;
 
 	/// <summary>
-	/// The type of the conditional order OEC.
+	/// The type of the conditional order OpenECry.
 	/// </summary>
 	public enum OpenECryStopType
 	{
@@ -52,10 +52,29 @@ namespace StockSharp.OpenECry
 		TrailingStopLimit
 	}
 
-	// OEC trailing stop description: 
-	// http://www.openecry.com/cfbb/index.cfm?page=topic&topicID=532
-	// http://www.openecry.com/cfbb/index.cfm?page=topic&topicID=225
+	/// <summary>
+	/// Asset types.
+	/// </summary>
+	public enum OpenECryStopAssetTypes
+	{
+		/// <summary>
+		/// All.
+		/// </summary>
+		[EnumDisplayNameLoc(LocalizedStrings.Str1569Key)]
+		All,
 
+		/// <summary>
+		/// Equity.
+		/// </summary>
+		[EnumDisplayNameLoc(LocalizedStrings.StockKey)]
+		Equity,
+
+		/// <summary>
+		/// Future.
+		/// </summary>
+		[EnumDisplayNameLoc(LocalizedStrings.FutureContractKey)]
+		Future
+	}
 
 	/// <summary>
 	/// <see cref="OpenECry"/> order condition.
@@ -63,12 +82,9 @@ namespace StockSharp.OpenECry
 	[DisplayNameLoc(LocalizedStrings.Str2264Key, "OpenECry")]
 	public class OpenECryOrderCondition : OrderCondition
 	{
-		internal enum AssetTypeEnum
-		{
-			All,
-			Equity,
-			Future
-		}
+		// OEC trailing stop description: 
+		// http://www.openecry.com/cfbb/index.cfm?page=topic&topicID=532
+		// http://www.openecry.com/cfbb/index.cfm?page=topic&topicID=225
 
 		private const string _keyStopType = "StopType";
 		private const string _keyStopPrice = "StopPrice";
@@ -157,9 +173,15 @@ namespace StockSharp.OpenECry
 			set { Parameters[_keyReferencePrice] = value; }
 		}
 
-		internal AssetTypeEnum? AssetType
+		/// <summary>
+		/// Asset type.
+		/// </summary>
+		[CategoryLoc(LocalizedStrings.Str225Key)]
+		[DisplayNameLoc(LocalizedStrings.UnderlyingAssetKey)]
+		[DescriptionLoc(LocalizedStrings.UnderlyingAssetCodeKey)]
+		public OpenECryStopAssetTypes? AssetType
 		{
-			get { return (AssetTypeEnum?)Parameters.TryGetValue(_keyAssetType); }
+			get { return (OpenECryStopAssetTypes?)Parameters.TryGetValue(_keyAssetType); }
 			set { Parameters[_keyAssetType] = value; }
 		}
 	}

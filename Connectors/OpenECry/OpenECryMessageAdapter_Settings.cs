@@ -167,13 +167,13 @@ namespace StockSharp.OpenECry
 		{
 			base.Save(storage);
 
-			storage.SetValue(nameof(Uuid), Uuid);
-			storage.SetValue(nameof(Address), Address.To<string>());
-			storage.SetValue(nameof(Login), Login);
-			storage.SetValue(nameof(Password), Password);
-			storage.SetValue(nameof(Remoting), Remoting.To<string>());
-			storage.SetValue(nameof(UseNativeReconnect), UseNativeReconnect);
-			storage.SetValue(nameof(EnableOECLogging), EnableOECLogging);
+			storage.SetValue("Uuid", Uuid);
+			storage.SetValue("Address", Address.To<string>());
+			storage.SetValue("Login", Login);
+			storage.SetValue("Password", Password);
+			storage.SetValue("Remoting", Remoting.To<string>());
+			storage.SetValue("UseNativeReconnect", UseNativeReconnect);
+			storage.SetValue("EnableOECLogging", EnableOECLogging);
 		}
 
 		/// <summary>
@@ -184,13 +184,13 @@ namespace StockSharp.OpenECry
 		{
 			base.Load(storage);
 
-			Uuid = storage.GetValue<SecureString>(nameof(Uuid));
-			Address = storage.GetValue<EndPoint>(nameof(Address));
-			Login = storage.GetValue<string>(nameof(Login));
-			Password = storage.GetValue<SecureString>(nameof(Password));
-			Remoting = storage.GetValue<OpenECryRemoting>(nameof(Remoting));
-			UseNativeReconnect = storage.GetValue<bool>(nameof(UseNativeReconnect));
-			EnableOECLogging = storage.GetValue<bool>(nameof(EnableOECLogging));
+			Uuid = storage.GetValue<SecureString>("Uuid");
+			Address = storage.GetValue<EndPoint>("Address");
+			Login = storage.GetValue<string>("Login");
+			Password = storage.GetValue<SecureString>("Password");
+			Remoting = storage.GetValue<OpenECryRemoting>("Remoting");
+			UseNativeReconnect = storage.GetValue<bool>("UseNativeReconnect");
+			EnableOECLogging = storage.GetValue<bool>("EnableOECLogging");
 		}
 	}
 }

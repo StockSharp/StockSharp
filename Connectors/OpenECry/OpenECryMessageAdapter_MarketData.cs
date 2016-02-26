@@ -25,6 +25,7 @@ namespace StockSharp.OpenECry
 	using OEC.API;
 	using OEC.API.OSM.Info;
 	using OEC.Data;
+	using APIContract = OEC.API.Contract;
 
 	using StockSharp.Algo;
 	using StockSharp.Messages;
@@ -32,19 +33,55 @@ namespace StockSharp.OpenECry
 
 	partial class OpenECryMessageAdapter
 	{
-		private readonly SynchronizedPairSet<Tuple<SecurityId, MarketDataTypes, long>, Subscription> _subscriptions = new SynchronizedPairSet<Tuple<SecurityId, MarketDataTypes, long>, Subscription>();
-		private readonly SynchronizedPairSet<OEC.API.SymbolLookupCriteria, long> _lookups = new SynchronizedPairSet<OEC.API.SymbolLookupCriteria, long>();
+		private readonly SynchronizedDictionary<int, Tuple<SecurityId, MarketDataTypes, long>> _subscriptionDataBySid = new SynchronizedDictionary<int, Tuple<SecurityId, MarketDataTypes, long>>();
+		private readonly SynchronizedDictionary<Tuple<SecurityId, MarketDataTypes, object>, Subscription> _subscriptionsByKey = new SynchronizedDictionary<Tuple<SecurityId, MarketDataTypes, object>, Subscription>();
+		private readonly SynchronizedSet<SecurityId> _processedSecurities = new SynchronizedSet<SecurityId>();
+		private readonly SynchronizedPairSet<int, Action<ContractList>> _lookups = new SynchronizedPairSet<int, Action<ContractList>>();
+
+		private APIContract LookupContract(SecurityId id, Message message)
+		{
+			var contract = _client.Contracts[id.SecurityCode];
+
+			if (contract != null)
+			{
+				return contract;
+			}
+
+			// the message already back and we are prevent infinitive loop
+			if (message.IsBack)
+				throw new InvalidOperationException(LocalizedStrings.Str704Params.Put(id.SecurityCode));
+
+			var criteria = GetLookupCriteriaFromSecId(id);
+			var clone = message.Clone();
+
+			_lookups.Add(criteria.ID, clist =>
+			{
+				clone.IsBack = true;
+				SendOutMessage(clone);
+			});
+
+			_client.SymbolLookup(criteria);
+			return null;
+		}
 
 		private void ProcessMarketDataMessage(MarketDataMessage message)
 		{
-			var key = Tuple.Create(message.SecurityId, message.DataType, message.TransactionId);
+			var key = Tuple.Create(message.SecurityId, message.DataType, message.Arg);
+
+			APIContract contract = null;
+
+			if (message.DataType != MarketDataTypes.News)
+			{
+				contract = LookupContract(message.SecurityId, message);
+
+				if (contract == null)
+					return;
+			}
 
 			switch (message.DataType)
 			{
 				case MarketDataTypes.Level1:
 				{
-					var contract = _client.Contracts[message.SecurityId.SecurityCode];
-
 					if (message.IsSubscribe)
 						_client.Subscribe(contract);
 					else
@@ -54,8 +91,6 @@ namespace StockSharp.OpenECry
 				}
 				case MarketDataTypes.MarketDepth:
 				{
-					var contract = _client.Contracts[message.SecurityId.SecurityCode];
-
 					if (message.IsSubscribe)
 						_client.SubscribeDOM(contract);
 					else
@@ -65,15 +100,15 @@ namespace StockSharp.OpenECry
 				}
 				case MarketDataTypes.Trades:
 				{
-					var contract = _client.Contracts[message.SecurityId.SecurityCode];
-
 					if (message.IsSubscribe)
 					{
 						var subscription = _client.SubscribeTicks(contract, (message.From ?? DateTimeOffset.MinValue).UtcDateTime);
-						_subscriptions.Add(key, subscription);
+
+						_subscriptionDataBySid.Add(subscription.ID, Tuple.Create(message.SecurityId, message.DataType, message.TransactionId));
+						_subscriptionsByKey.Add(key, subscription);
 					}
 					else
-						_client.CancelSubscription(_subscriptions[key]);
+						CancelSubscription(key);
 
 					break;
 				}
@@ -86,8 +121,6 @@ namespace StockSharp.OpenECry
 				case MarketDataTypes.CandleVolume:
 				case MarketDataTypes.CandleRange:
 				{
-					var contract = _client.Contracts[message.SecurityId.SecurityCode];
-
 					if (message.IsSubscribe)
 					{
 						SubscriptionType subscriptionType;
@@ -150,13 +183,14 @@ namespace StockSharp.OpenECry
 						}
 
 						var subscription = message.Count == null
-							? _client.SubscribeBars(contract, (message.From ?? DateTimeOffset.MinValue).UtcDateTime, subscriptionType, interval)
+							? _client.SubscribeBars(contract, (message.From ?? DateTimeOffset.MinValue).UtcDateTime, subscriptionType, interval, false)
 							: _client.SubscribeBars(contract, (int)message.Count.Value, subscriptionType, interval, false);
 
-						_subscriptions.Add(key, subscription);
+						_subscriptionDataBySid.Add(subscription.ID, Tuple.Create(message.SecurityId, message.DataType, message.TransactionId));
+						_subscriptionsByKey.Add(key, subscription);
 					}
 					else
-						_client.CancelSubscription(_subscriptions[key]);
+						CancelSubscription(key);
 
 					break;
 				}
@@ -165,6 +199,19 @@ namespace StockSharp.OpenECry
 			}
 
 			SendOutMessage(new MarketDataMessage { OriginalTransactionId = message.TransactionId });
+		}
+
+		private void CancelSubscription(Tuple<SecurityId, MarketDataTypes, object> key)
+		{
+			var s = _subscriptionsByKey.TryGetValue(key);
+
+			if (s != null)
+			{
+				_client.CancelSubscription(s);
+				_subscriptionsByKey.Remove(key);
+			}
+			else
+				throw new InvalidOperationException($"Subscription not found: {key}.");
 		}
 
 		private void ProcessSecurityLookup(SecurityLookupMessage message)
@@ -243,28 +290,55 @@ namespace StockSharp.OpenECry
 			}
 
 			if (message.TransactionId != 0)
-				_lookups.Add(criteria, message.TransactionId);
+				_lookups.Add(criteria.ID, clist => DefaultLookupHandler(clist, message.TransactionId));
 
 			_client.SymbolLookup(criteria);
 		}
 
+		private OEC.API.SymbolLookupCriteria GetLookupCriteriaFromSecId(SecurityId id)
+		{
+			var criteria = new OEC.API.SymbolLookupCriteria
+			{
+				SearchText = id.SecurityCode,
+				ContractType = ContractType.Electronic,
+				Mode = SymbolLookupMode.ExactMatch,
+				DesiredResultCount = 1
+			};
+
+			if (!id.BoardCode.IsEmpty())
+			{
+				var exchange = _client.Exchanges[id.BoardCode];
+
+				if (exchange != null)
+					criteria.Exchange = exchange;
+			}
+
+			return criteria;
+		}
+
 		private void SessionOnSymbolLookupReceived(OEC.API.SymbolLookupCriteria criteria, ContractList contracts)
 		{
-			var transId = _lookups.TryGetValue(criteria);
+			_lookups.TryGetValue(criteria.ID)?.Invoke(contracts);
+		}
 
+		private void DefaultLookupHandler(ContractList contracts, long transId)
+		{
 			foreach (var contract in contracts)
-			{
 				ProcessContract(contract, contract.CurrentPrice, transId);
-			}
 
 			SendOutMessage(new SecurityLookupResultMessage { OriginalTransactionId = transId });
 		}
 
-		private void ProcessContract(OEC.API.Contract contract, long originalTransactionId)
+		private void ProcessContract(APIContract contract, long originalTransactionId)
 		{
+			var id = contract.ToSecurityId();
+
+			if (!_processedSecurities.TryAdd(id))
+				return;
+
 			SendOutMessage(new SecurityMessage
 			{
-				SecurityId = contract.ToSecurityId(),
+				SecurityId = id,
 				Name = contract.Name,
 				UnderlyingSecurityCode = contract.BaseSymbol,
 				Currency = contract.Currency.Name.ToCurrency(),
@@ -278,7 +352,7 @@ namespace StockSharp.OpenECry
 			});
 		}
 
-		private void ProcessContract(OEC.API.Contract contract, Price currentPrice, long originalTransactionId)
+		private void ProcessContract(APIContract contract, Price currentPrice, long originalTransactionId)
 		{
 			ProcessContract(contract, originalTransactionId);
 
@@ -313,6 +387,22 @@ namespace StockSharp.OpenECry
 
 			for (var i = 0; i < ticks.Exchanges.Length; i++)
 			{
+				//var id = Interlocked.Increment(ref _tradeId);
+
+				//SendOutMessage(new ExecutionMessage
+				//{
+				//	SecurityId = new SecurityId
+				//	{
+				//		SecurityCode = contract.Symbol,
+				//		BoardCode = GetBoardCode(ticks.Exchanges[i], contract, AssociatedBoardCode),
+				//	},
+				//	ExecutionType = ExecutionTypes.Tick,
+				//	ServerTime = ticks.Timestamps[i].ApplyTimeZone(TimeHelper.Est),
+				//	TradePrice = contract.Cast(ticks.Prices[i]),
+				//	TradeVolume = ticks.Volumes32[i],
+				//	TradeId = id,
+				//});
+
 				SendOutMessage(new Level1ChangeMessage
 				{
 					SecurityId = new SecurityId
@@ -325,7 +415,7 @@ namespace StockSharp.OpenECry
 				.TryAdd(Level1Fields.LastTradePrice, contract.Cast(ticks.Prices[i]))
 				.TryAdd(Level1Fields.LastTradeVolume, (decimal)ticks.Volumes32[i])
 				.TryAdd(Level1Fields.BestBidPrice, contract.Cast(ticks.BidPrices[i]))
-				.TryAdd(Level1Fields.BestAskPrice, contract.Cast(ticks.AskPrices[i])));	
+				.TryAdd(Level1Fields.BestAskPrice, contract.Cast(ticks.AskPrices[i])));
 			}
 		}
 
@@ -359,7 +449,7 @@ namespace StockSharp.OpenECry
 
 		}
 
-		private void SessionOnQuoteDetailsChanged(OEC.API.Contract contract)
+		private void SessionOnQuoteDetailsChanged(APIContract contract)
 		{
 
 		}
@@ -369,12 +459,12 @@ namespace StockSharp.OpenECry
 
 		}
 
-		private void SessionOnPriceTick(OEC.API.Contract contract, Price price)
+		private void SessionOnPriceTick(APIContract contract, Price price)
 		{
 			ProcessContract(contract, 0);
 		}
 
-		private void SessionOnPriceChanged(OEC.API.Contract contract, Price price)
+		private void SessionOnPriceChanged(APIContract contract, Price price)
 		{
 			ProcessContract(contract, 0);
 		}
@@ -404,7 +494,7 @@ namespace StockSharp.OpenECry
 			});
 		}
 
-		private void SessionOnIndexComponentsReceived(OEC.API.Contract contract)
+		private void SessionOnIndexComponentsReceived(APIContract contract)
 		{
 			ProcessContract(contract, contract.CurrentPrice, 0);
 		}
@@ -424,7 +514,7 @@ namespace StockSharp.OpenECry
 
 		}
 
-		private void SessionOnDomChanged(OEC.API.Contract contract)
+		private void SessionOnDomChanged(APIContract contract)
 		{
 			ProcessContract(contract, 0);
 
@@ -468,7 +558,7 @@ namespace StockSharp.OpenECry
 			});
 		}
 
-		private static string GetBoardCode(string exchange, OEC.API.Contract contract, string defaultBoardCode)
+		private static string GetBoardCode(string exchange, APIContract contract, string defaultBoardCode)
 		{
 			return exchange ?? contract.Exchange.Name ?? defaultBoardCode;
 		}
@@ -483,17 +573,17 @@ namespace StockSharp.OpenECry
 
 		}
 
-		private void SessionOnContractRiskLimitChanged(OEC.API.Contract contract)
+		private void SessionOnContractRiskLimitChanged(APIContract contract)
 		{
 
 		}
 
-		private void SessionOnContractCreated(int requestId, OEC.API.Contract contract)
+		private void SessionOnContractCreated(int requestId, APIContract contract)
 		{
 
 		}
 
-		private void SessionOnContractChanged(OEC.API.Contract contract)
+		private void SessionOnContractChanged(APIContract contract)
 		{
 
 		}
@@ -510,14 +600,16 @@ namespace StockSharp.OpenECry
 
 		private void ProcessBars(Subscription subscription, OEC.API.Bar[] bars, bool setFinished)
 		{
-			var key = _subscriptions.TryGetKey(subscription);
+			var tuple = _subscriptionDataBySid.TryGetValue(subscription.ID);
 
-			var candleType = key?.Item2.ToCandleMessage() ?? typeof(TimeFrameCandleMessage);
-			var transId = key?.Item3 ?? 0;
+			var candleType = tuple?.Item2.ToCandleMessage() ?? typeof(TimeFrameCandleMessage);
+			var transId = tuple?.Item3 ?? 0;
 
 			var contract = subscription.Contract;
 
 			ProcessContract(contract, 0);
+
+			var i = 0;
 
 			foreach (var bar in bars)
 			{
@@ -539,8 +631,9 @@ namespace StockSharp.OpenECry
 				msg.UpTicks = (int)bar.UpTicks;
 				msg.DownTicks = (int)bar.DownTicks;
 				msg.IsFinished = setFinished && bar == bars.Last();
-				msg.State = CandleStates.Finished;
+				msg.State = ++i == bars.Length ? CandleStates.Active : CandleStates.Finished;
 				msg.OriginalTransactionId = transId;
+				msg.Arg = TimeSpan.FromMinutes(subscription.IntInterval);
 
 				SendOutMessage(msg);
 			}
