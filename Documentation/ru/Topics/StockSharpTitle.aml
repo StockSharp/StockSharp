@@ -21,7 +21,7 @@
      	<link xlink:href="8a531942-a16c-4348-a4d0-dd4ae999d8f9">Sterling</link>, <link xlink:href="c7ff5937-e230-4db3-857f-4cd68583ebfc">IQFeed</link>, 
      	<link xlink:href="84d6a0fb-607f-4d87-be8a-e2b58006493e">E*Trade</link>, <link xlink:href="5d162089-902a-4a4e-885f-f38ff94fbe58">BTCE</link>, 
      	<link xlink:href="345fa341-661d-4992-a9a6-9c89af399feb">BitStamp</link>, <link xlink:href="aac980b1-ac5b-415b-811c-a8d128942391">CQG</link>, 
-     	<link xlink:href="c2162c96-d12f-4107-ac96-0238b793f466">OANDA</link> дают возможность использовать <token>stocksharp</token> на всех международных и российских
+     	<link xlink:href="c2162c96-d12f-4107-ac96-0238b793f466">OANDA</link>, <token>itch</token> дают возможность использовать <token>stocksharp</token> на всех международных и российских
       	торговых площадках.
       </para>
       <para>

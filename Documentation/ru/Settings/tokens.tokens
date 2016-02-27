@@ -21,10 +21,6 @@
 		  <ddue:linkUri>http://ru.wikipedia.org/wiki/Модель_Блэка_—_Шоулза</ddue:linkUri>
 		</ddue:externalLink></item>
   <item id="btce"><ddue:link xlink:href="5d162089-902a-4a4e-885f-f38ff94fbe58" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">BTC-E</ddue:link></item>
-  <item id="moex"><ddue:externalLink xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">
-    <ddue:linkText>MOEX</ddue:linkText>
-    <ddue:linkUri>http://moex.com</ddue:linkUri>
-  </ddue:externalLink></item>
   <item id="calendar"><ddue:externalLink xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">
 		  <ddue:linkText>Настройка Google Calendar</ddue:linkText>
 		  <ddue:linkUri>http://google.com/support/calendar/bin/answer.py?hl=ru&amp;answer=45351</ddue:linkUri>
@@ -130,6 +126,10 @@
   <item id="micexbridge_external"><ddue:externalLink xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">
     <ddue:linkText>Micex Bridge</ddue:linkText>
     <ddue:linkUri>http://micex.ru/services/technicalaccess/bridge</ddue:linkUri>
+  </ddue:externalLink></item>
+  <item id="moex"><ddue:externalLink xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">
+    <ddue:linkText>MOEX</ddue:linkText>
+    <ddue:linkUri>http://moex.com</ddue:linkUri>
   </ddue:externalLink></item>
   <item id="net"><ddue:externalLink xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">
 		  <ddue:linkText>NetInvestor</ddue:linkText>
@@ -297,4 +297,6 @@
 		  <ddue:linkText>Xslt</ddue:linkText>
 		  <ddue:linkUri>http://ru.wikipedia.org/wiki/XSLT</ddue:linkUri>
 		</ddue:externalLink></item>
+  <item id="itch"><ddue:link xlink:href="62dc0f78-2b9a-4f88-b6bc-68361bd0d8fe" 
+xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">ITCH</ddue:link></item>
 </content>

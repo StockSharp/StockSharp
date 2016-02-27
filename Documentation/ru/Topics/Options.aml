@@ -10,36 +10,6 @@
 			Для работы с опционами <token>stocksharp</token> предоставляет специальные методы расчетов "греков", синтетических позиций,
 			стратегию котирования опционов по заданной волатильности и хеджирование по дельте.
 		</para>
-		<para>
-			Если торговля осуществляется через терминал <token>quik</token>, то он должен быть предварительно настроен. Для этого необходимо добавить
-			опционные колонки в таблицу Инструменты как это показано на рисунке:
-		</para>
-		<mediaLink>
-			<image placement="center" xlink:href="security_options" />
-		</mediaLink>
-		<alert class="note">
-			В дистрибутиве идет файл info_options.wnd, который уже содержит настройки таблицы Инструменты.
-		</alert>
-		<para>
-			После этого необходимо добавить колонки в коде робота (подробнее, в разделе <link xlink:href="4261879e-9bb3-482c-9fc5-27ecb07bdf5e">Экспорт дополнительных колонок</link>):
-		</para>
-		<code language="C#">// создаем шлюз
-_trader = new QuikTrader(this.Path.Text);
-
-// изменяем метаданные так, чтобы начали обрабатывать дополнительные колонки опционов
-var columns = _trader.SecuritiesTable.Columns;
-columns.Add(DdeSecurityColumns.Strike);
-columns.Add(DdeSecurityColumns.Volatility);
-columns.Add(DdeSecurityColumns.UnderlyingSecurity);
-columns.Add(DdeSecurityColumns.TheorPrice);
-columns.Add(DdeSecurityColumns.OptionType);
-columns.Add(DdeSecurityColumns.ExpiryDate);</code>
-		<!--<para>
-			Если торговля осуществляется через <token>smartcom</token>, то поля
-			<codeEntityReference qualifyHint="true">P:StockSharp.BusinessEntities.Security.TheorPrice</codeEntityReference> и
-			<codeEntityReference qualifyHint="true">P:StockSharp.BusinessEntities.Security.Volatility</codeEntityReference> не будут заполняться, так как
-			<token>smartcom</token> не транслирует эти данные.
-		</para>-->
     </introduction>
 
 
