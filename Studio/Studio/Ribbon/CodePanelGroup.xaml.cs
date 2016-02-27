@@ -23,7 +23,7 @@ namespace StockSharp.Studio.Ribbon
 
 	public partial class CodePanelGroup
 	{
-		public readonly static RoutedCommand EditReferencesCommand = new RoutedCommand();
+		public static readonly RoutedCommand EditReferencesCommand = new RoutedCommand();
 
 		public static readonly DependencyProperty SelectedStrategyInfoProperty = DependencyProperty.Register("SelectedStrategyInfo", typeof(StrategyInfo), typeof(CodePanelGroup));
 

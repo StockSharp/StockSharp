@@ -84,15 +84,15 @@ namespace StockSharp.Hydra
 			}
 		}
 
-		public readonly static RoutedCommand TaskEnabledChangedCommand = new RoutedCommand();
-		public readonly static RoutedCommand RemoveTaskCommand = new RoutedCommand();
-		public readonly static RoutedCommand EditTaskSettingsCommand = new RoutedCommand();
-		public readonly static RoutedCommand AddSourcesCommand = new RoutedCommand();
-		public readonly static RoutedCommand AddToolsCommand = new RoutedCommand();
+		public static readonly RoutedCommand TaskEnabledChangedCommand = new RoutedCommand();
+		public static readonly RoutedCommand RemoveTaskCommand = new RoutedCommand();
+		public static readonly RoutedCommand EditTaskSettingsCommand = new RoutedCommand();
+		public static readonly RoutedCommand AddSourcesCommand = new RoutedCommand();
+		public static readonly RoutedCommand AddToolsCommand = new RoutedCommand();
 
 		private readonly List<Type> _availableTasks = new List<Type>();
 
-		public static readonly DependencyProperty TasksProperty = DependencyProperty.Register("Tasks", typeof(IList<IHydraTask>), typeof(MainWindow), new PropertyMetadata(new ObservableCollection<IHydraTask>()));
+		public static readonly DependencyProperty TasksProperty = DependencyProperty.Register(nameof(Tasks), typeof(IList<IHydraTask>), typeof(MainWindow), new PropertyMetadata(new ObservableCollection<IHydraTask>()));
 
 		public IList<IHydraTask> Tasks
 		{

@@ -42,10 +42,10 @@ namespace StockSharp.Studio.Ribbon
 
 	public partial class LicenseTab
 	{
-		public readonly static RoutedCommand RenewLicenseCommand = new RoutedCommand();
-		public readonly static RoutedCommand OpenLicenseCommand = new RoutedCommand();
-		public readonly static RoutedCommand RemoveLicenseCommand = new RoutedCommand();
-		public readonly static RoutedCommand RequestLicenseCommand = new RoutedCommand();
+		public static readonly RoutedCommand RenewLicenseCommand = new RoutedCommand();
+		public static readonly RoutedCommand OpenLicenseCommand = new RoutedCommand();
+		public static readonly RoutedCommand RemoveLicenseCommand = new RoutedCommand();
+		public static readonly RoutedCommand RequestLicenseCommand = new RoutedCommand();
 
 		private LicenseInfo SelectedLicenseInfo => (LicenseInfo)LicensesCtrl.SelectedItem;
 

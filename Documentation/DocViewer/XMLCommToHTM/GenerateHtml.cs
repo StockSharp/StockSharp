@@ -33,7 +33,7 @@ namespace XMLCommToHTM
 		static XElement xx(string tagNeme, string innerXml) { return XMLUtils.NewXElement(tagNeme, innerXml); }
 		static XAttribute a(XName name, object content) { return new XAttribute(name, content); }
 		
-		private readonly static Strings Names=new Strings();
+		private static readonly Strings Names=new Strings();
 
 		public static bool IsRussian
 		{

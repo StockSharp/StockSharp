@@ -37,7 +37,7 @@ namespace StockSharp.Studio.StrategyRunner
 		private readonly ICollection<EquityData> _unrealizedPnL;
 		private readonly ICollection<EquityData> _commission;
 
-		public static readonly DependencyProperty StrategyProperty = DependencyProperty.Register("Strategy", typeof(DiagramStrategy), typeof(StrategyContent),
+		public static readonly DependencyProperty StrategyProperty = DependencyProperty.Register(nameof(Strategy), typeof(DiagramStrategy), typeof(StrategyContent),
 			new PropertyMetadata(StrategyChanged));
 
 		private static void StrategyChanged(DependencyObject sender, DependencyPropertyChangedEventArgs args)
