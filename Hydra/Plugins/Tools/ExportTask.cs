@@ -314,8 +314,8 @@ namespace StockSharp.Hydra.Tools
 							case ExportTypes.Txt:
 								exporter = new TextExporter(security.Security, arg, isCancelled, fileName, GetTxtTemplate(dataType, arg), _settings.Header);
 								break;
-							case ExportTypes.Bin:
-								exporter = new BinExporter(security.Security, arg, isCancelled, DriveCache.Instance.GetDrive(path));
+							case ExportTypes.StockSharp:
+								exporter = new StockSharpExporter(security.Security, arg, isCancelled, DriveCache.Instance.GetDrive(path), _settings.StorageFormat);
 								break;
 							default:
 								throw new ArgumentOutOfRangeException();

@@ -43,6 +43,6 @@ namespace StockSharp.Hydra.Core
 		/// <summary>
 		/// В формат StockSharp.
 		/// </summary>
-		Bin
+		StockSharp
 	}
 }

@@ -189,7 +189,7 @@
     <Compile Include="Derivatives\Synthetic.cs" />
     <Compile Include="EntityCache.cs" />
     <Compile Include="Export\BaseExporter.cs" />
-    <Compile Include="Export\BinExporter.cs" />
+    <Compile Include="Export\StockSharpExporter.cs" />
     <Compile Include="Export\DatabaseExporter.cs" />
     <Compile Include="Export\Database\DbProviders\BaseDbProvider.cs" />
     <Compile Include="Export\Database\DbProviders\MSSQLDbProvider.cs" />

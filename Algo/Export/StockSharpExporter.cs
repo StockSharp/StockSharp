@@ -28,26 +28,29 @@ namespace StockSharp.Algo.Export
 	using StockSharp.Messages;
 
 	/// <summary>
-	/// The export into the StockSharp binary format.
+	/// The export into the StockSharp format.
 	/// </summary>
-	public class BinExporter : BaseExporter
+	public class StockSharpExporter : BaseExporter
 	{
 		private readonly IMarketDataDrive _drive;
+		private readonly StorageFormats _format;
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="BinExporter"/>.
+		/// Initializes a new instance of the <see cref="StockSharpExporter"/>.
 		/// </summary>
 		/// <param name="security">Security.</param>
 		/// <param name="arg">The data parameter.</param>
 		/// <param name="isCancelled">The processor, returning export interruption sign.</param>
 		/// <param name="drive">Storage.</param>
-		public BinExporter(Security security, object arg, Func<int, bool> isCancelled, IMarketDataDrive drive)
+		/// <param name="format">Format type.</param>
+		public StockSharpExporter(Security security, object arg, Func<int, bool> isCancelled, IMarketDataDrive drive, StorageFormats format)
 			: base(security, arg, isCancelled, drive.Path)
 		{
 			if (drive == null)
 				throw new ArgumentNullException(nameof(drive));
 
 			_drive = drive;
+			_format = format;
 		}
 
 		private int _batchSize = 50;
@@ -123,7 +126,7 @@ namespace StockSharp.Algo.Export
 			{
 				var storage = ConfigManager
 					.GetService<IStorageRegistry>()
-					.GetCandleMessageStorage(group.Key, Security, Arg, _drive);
+					.GetCandleMessageStorage(group.Key, Security, Arg, _drive, _format);
 
 				foreach (var candleMessages in group.Batch(BatchSize).Select(b => b.ToArray()))
 				{
@@ -142,7 +145,7 @@ namespace StockSharp.Algo.Export
 		/// <param name="messages">Messages.</param>
 		protected override void Export(IEnumerable<NewsMessage> messages)
 		{
-			throw new NotSupportedException();
+			Export(messages);
 		}
 
 		/// <summary>

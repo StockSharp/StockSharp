@@ -259,7 +259,7 @@ namespace StockSharp.Hydra.Core
 					break;
 				case ExportTypes.Sql:
 					break;
-				case ExportTypes.Bin:
+				case ExportTypes.StockSharp:
 					fileName += ".bin";
 					break;
 				default:
