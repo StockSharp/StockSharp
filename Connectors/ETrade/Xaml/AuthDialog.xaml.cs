@@ -35,7 +35,7 @@ namespace StockSharp.ETrade.Xaml
 		/// <see cref="DependencyProperty"/> for <see cref="VerificationCode"/>.
 		/// </summary>
 		public static readonly DependencyProperty VerificationCodeProperty
-			= DependencyProperty.Register("VerificationCode", typeof(string), typeof(AuthDialog), new PropertyMetadata(default(string)));
+			= DependencyProperty.Register(nameof(VerificationCode), typeof(string), typeof(AuthDialog), new PropertyMetadata(default(string)));
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="AuthDialog"/>.

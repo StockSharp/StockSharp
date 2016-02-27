@@ -26,7 +26,7 @@ namespace StockSharp.Studio.StrategyRunner
 			set { PasswordCtrl.Secret = value; }
 		}
 
-		public static readonly DependencyProperty SaveSecretProperty = DependencyProperty.Register("SaveSecret", typeof(bool), typeof(SecretWindow),
+		public static readonly DependencyProperty SaveSecretProperty = DependencyProperty.Register(nameof(SaveSecret), typeof(bool), typeof(SecretWindow),
 			new PropertyMetadata(false));
 
 		public bool SaveSecret

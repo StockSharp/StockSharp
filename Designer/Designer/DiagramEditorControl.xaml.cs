@@ -35,8 +35,8 @@ namespace StockSharp.Designer
 
 		#region Composition property
 
-		public static readonly DependencyProperty CompositionProperty = DependencyProperty.Register("Composition", typeof(CompositionItem), typeof(DiagramEditorControl),
-		                                                                                            new PropertyMetadata(null, CompositionPropertyChanged));
+		public static readonly DependencyProperty CompositionProperty = DependencyProperty.Register(nameof(Composition),
+			typeof(CompositionItem), typeof(DiagramEditorControl), new PropertyMetadata(null, CompositionPropertyChanged));
 
 		private static void CompositionPropertyChanged(DependencyObject sender, DependencyPropertyChangedEventArgs args)
 		{

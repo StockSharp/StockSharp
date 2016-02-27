@@ -36,7 +36,7 @@ namespace StockSharp.Quik
 	[ValueConversion(typeof(TimeSpan), typeof(string))]
 	public class ExtensionInfoConverter : IValueConverter
 	{
-		private readonly static Dictionary<Type, IDictionary<string, DdeTableColumn>> _columns = new Dictionary<Type, IDictionary<string, DdeTableColumn>>();
+		private static readonly Dictionary<Type, IDictionary<string, DdeTableColumn>> _columns = new Dictionary<Type, IDictionary<string, DdeTableColumn>>();
 
 		static ExtensionInfoConverter()
 		{

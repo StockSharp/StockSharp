@@ -61,7 +61,7 @@ namespace StockSharp.Alerts
 		/// <see cref="DependencyProperty"/> for <see cref="AlertSettingsPanel.MessageType"/>.
 		/// </summary>
 		public static readonly DependencyProperty MessageTypeProperty =
-			DependencyProperty.Register("MessageType", typeof(Type), typeof(AlertSettingsPanel), new PropertyMetadata(null, MessageTypeChanged));
+			DependencyProperty.Register(nameof(MessageType), typeof(Type), typeof(AlertSettingsPanel), new PropertyMetadata(null, MessageTypeChanged));
 
 		private static void MessageTypeChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
 		{
@@ -72,7 +72,7 @@ namespace StockSharp.Alerts
 		/// <see cref="DependencyProperty"/> for <see cref="AlertSettingsPanel.Property"/>.
 		/// </summary>
 		public static readonly DependencyProperty PropertyProperty =
-			DependencyProperty.Register("Property", typeof(PropertyInfo), typeof(AlertSettingsPanel), new PropertyMetadata(null, PropertyChanged));
+			DependencyProperty.Register(nameof(Property), typeof(PropertyInfo), typeof(AlertSettingsPanel), new PropertyMetadata(null, PropertyChanged));
 
 		private static void PropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
 		{
@@ -89,7 +89,7 @@ namespace StockSharp.Alerts
 		/// <see cref="DependencyProperty"/> for <see cref="AlertSettingsPanel.Operator"/>.
 		/// </summary>
 		public static readonly DependencyProperty OperatorProperty =
-			DependencyProperty.Register("Operator", typeof(ComparisonOperator?), typeof(AlertSettingsPanel), new PropertyMetadata(null, OperatorChanged));
+			DependencyProperty.Register(nameof(Operator), typeof(ComparisonOperator?), typeof(AlertSettingsPanel), new PropertyMetadata(null, OperatorChanged));
 
 		private static void OperatorChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
 		{
@@ -100,7 +100,7 @@ namespace StockSharp.Alerts
 		/// <see cref="DependencyProperty"/> for <see cref="Value"/>.
 		/// </summary>
 		public static readonly DependencyProperty ValueProperty =
-			DependencyProperty.Register("Value", typeof(object), typeof(AlertSettingsPanel), new PropertyMetadata(null, ValueChanged));
+			DependencyProperty.Register(nameof(Value), typeof(object), typeof(AlertSettingsPanel), new PropertyMetadata(null, ValueChanged));
 
 		private static void ValueChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
 		{

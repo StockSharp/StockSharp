@@ -34,7 +34,7 @@ namespace StockSharp.Quik.Xaml
 		/// DependencyProperty для <see cref="SelectedColumns"/>.
 		/// </summary>
 		public static readonly DependencyProperty SelectedColumnsProperty =
-			DependencyProperty.Register("SelectedColumns", typeof(List<string>), typeof(DdeSecurityColumnsEditor), new PropertyMetadata(new List<string>()));
+			DependencyProperty.Register(nameof(SelectedColumns), typeof(List<string>), typeof(DdeSecurityColumnsEditor), new PropertyMetadata(new List<string>()));
 
 		/// <summary>
 		/// Список выбранных столбцов.
@@ -73,7 +73,7 @@ namespace StockSharp.Quik.Xaml
 		FrameworkElement ITypeEditor.ResolveEditor(PropertyItem propertyItem)
 		{
 			SetBinding(SelectedColumnsProperty, new Binding("Value") { Source = propertyItem, Mode = BindingMode.TwoWay });
-			ColumnsPicker.SetBinding(DdeColumnsPicker.SelectedColumnsProperty, new Binding("SelectedColumns") { Source = this, Mode = BindingMode.TwoWay });
+			ColumnsPicker.SetBinding(DdeColumnsPicker.SelectedColumnsProperty, new Binding(nameof(SelectedColumns)) { Source = this, Mode = BindingMode.TwoWay });
 
 			return this;
 		}

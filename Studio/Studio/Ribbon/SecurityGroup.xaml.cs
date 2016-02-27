@@ -24,8 +24,8 @@ namespace StockSharp.Studio.Ribbon
 
 	public partial class SecurityGroup
 	{
-		public readonly static RoutedCommand FindCommand = new RoutedCommand();
-		public readonly static RoutedCommand ClearCommand = new RoutedCommand();
+		public static readonly RoutedCommand FindCommand = new RoutedCommand();
+		public static readonly RoutedCommand ClearCommand = new RoutedCommand();
 
 		private Security Filter
 		{

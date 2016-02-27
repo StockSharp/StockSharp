@@ -56,7 +56,7 @@ namespace StockSharp.Quik.Xaml
 		/// DependencyProperty для <see cref="SelectedColumns"/>.
 		/// </summary>
 		public static readonly DependencyProperty SelectedColumnsProperty =
-			DependencyProperty.Register("SelectedColumns", typeof(ICollection<DdeTableColumn>), typeof(DdeTableColumnsPicker), new PropertyMetadata(new List<DdeTableColumn>(), PropertyChangedCallback));
+			DependencyProperty.Register(nameof(SelectedColumns), typeof(ICollection<DdeTableColumn>), typeof(DdeTableColumnsPicker), new PropertyMetadata(new List<DdeTableColumn>(), PropertyChangedCallback));
 
 		/// <summary>
 		/// Список выбранных столбцов.

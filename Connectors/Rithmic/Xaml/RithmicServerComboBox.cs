@@ -37,7 +37,7 @@ namespace StockSharp.Rithmic.Xaml
 		/// <see cref="DependencyProperty"/> for <see cref="RithmicServerComboBox.SelectedServer"/>.
 		/// </summary>
 		public static readonly DependencyProperty SelectedServerProperty = DependencyProperty
-			.Register("SelectedServer", typeof(RithmicServers?), typeof(RithmicServerComboBox),
+			.Register(nameof(SelectedServer), typeof(RithmicServers?), typeof(RithmicServerComboBox),
 			new PropertyMetadata((o, args) =>
 			{
 				var cb = (RithmicServerComboBox)o;

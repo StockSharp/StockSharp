@@ -45,7 +45,7 @@ namespace StockSharp.Xaml
 		/// <summary>
 		/// <see cref="DependencyProperty"/> for <see cref="AutoCompletePopUp.MatchText"/>.
 		/// </summary>
-		public static readonly DependencyProperty MatchTextProperty = DependencyProperty.Register("MatchText", typeof(string), typeof(AutoCompletePopUp));
+		public static readonly DependencyProperty MatchTextProperty = DependencyProperty.Register(nameof(MatchText), typeof(string), typeof(AutoCompletePopUp));
 
 		/// <summary>
 		/// Text for backlight in the instrument identifier <see cref="Security.Id"/>.

@@ -34,12 +34,12 @@ namespace StockSharp.Studio.Ribbon
 
 	public partial class AnalyticsTab
 	{
-		public readonly static RoutedCommand AddAnalyticsInfoCommand = new RoutedCommand();
-		public readonly static RoutedCommand OpenAnalyticsInfoCommand = new RoutedCommand();
-		public readonly static RoutedCommand RemoveAnalyticsInfoCommand = new RoutedCommand();
-		public readonly static RoutedCommand AddAnalyticsCommand = new RoutedCommand();
-		public readonly static RoutedCommand OpenAnalyticsCommand = new RoutedCommand();
-		public readonly static RoutedCommand RemoveAnalyticsCommand = new RoutedCommand();
+		public static readonly RoutedCommand AddAnalyticsInfoCommand = new RoutedCommand();
+		public static readonly RoutedCommand OpenAnalyticsInfoCommand = new RoutedCommand();
+		public static readonly RoutedCommand RemoveAnalyticsInfoCommand = new RoutedCommand();
+		public static readonly RoutedCommand AddAnalyticsCommand = new RoutedCommand();
+		public static readonly RoutedCommand OpenAnalyticsCommand = new RoutedCommand();
+		public static readonly RoutedCommand RemoveAnalyticsCommand = new RoutedCommand();
 
 		public static readonly RoutedCommand StartAnalyticsCommand = new RoutedCommand();
 		public static readonly RoutedCommand StopAnalyticsCommand = new RoutedCommand();

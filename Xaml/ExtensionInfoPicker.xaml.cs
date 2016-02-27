@@ -37,7 +37,7 @@ namespace StockSharp.Xaml
 		/// <see cref="DependencyProperty"/> for <see cref="ExtensionInfoPicker.SelectedExtensionInfo"/>.
 		/// </summary>
 		public static readonly DependencyProperty SelectedExtensionInfoProperty =
-			 DependencyProperty.Register("SelectedExtensionInfo", typeof(IDictionary<object, object>), typeof(ExtensionInfoPicker),
+			 DependencyProperty.Register(nameof(SelectedExtensionInfo), typeof(IDictionary<object, object>), typeof(ExtensionInfoPicker),
 				new FrameworkPropertyMetadata(null, OnSelectedExtensionInfoPropertyChanged));
 
 		/// <summary>

@@ -37,7 +37,7 @@ namespace StockSharp.Xaml
 		/// <see cref="DependencyProperty"/> for <see cref="HelpButton.DocUrl"/>.
 		/// </summary>
 		public static readonly DependencyProperty DocUrlProperty =
-			DependencyProperty.Register("DocUrl", typeof(string), typeof(HelpButton), new PropertyMetadata(null, (o, args) =>
+			DependencyProperty.Register(nameof(DocUrl), typeof(string), typeof(HelpButton), new PropertyMetadata(null, (o, args) =>
 			{
 				var btn = (HelpButton)o;
 				btn.IsEnabled = !((string)args.NewValue).IsEmpty();
@@ -56,7 +56,7 @@ namespace StockSharp.Xaml
 		/// <see cref="DependencyProperty"/> for <see cref="HelpButton.ShowText"/>.
 		/// </summary>
 		public static readonly DependencyProperty ShowTextProperty =
-			DependencyProperty.Register("ShowText", typeof(bool), typeof(HelpButton), new PropertyMetadata(false, (o, args) =>
+			DependencyProperty.Register(nameof(ShowText), typeof(bool), typeof(HelpButton), new PropertyMetadata(false, (o, args) =>
 			{
 				var btn = (HelpButton)o;
 				var showText = (bool)args.NewValue;

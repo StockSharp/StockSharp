@@ -39,7 +39,7 @@ namespace StockSharp.Designer
 
 		#region Strategy
 
-		public static readonly DependencyProperty StrategyProperty = DependencyProperty.Register("Strategy", typeof(DiagramStrategy), typeof(DiagramDebuggerControl),
+		public static readonly DependencyProperty StrategyProperty = DependencyProperty.Register(nameof(Strategy), typeof(DiagramStrategy), typeof(DiagramDebuggerControl),
 			new PropertyMetadata(null, OnStrategyPropertyChanged));
 
 		private static void OnStrategyPropertyChanged(DependencyObject sender, DependencyPropertyChangedEventArgs args)

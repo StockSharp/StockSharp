@@ -34,7 +34,7 @@ namespace StockSharp.Studio.Ribbon
 
 	public partial class SecurityPopupButton
 	{
-		public readonly static RoutedCommand OpenCommand = new RoutedCommand();
+		public static readonly RoutedCommand OpenCommand = new RoutedCommand();
 
 		private readonly Type _securityType;
 		private readonly Func<IEnumerable<Security>> _getSecurities;

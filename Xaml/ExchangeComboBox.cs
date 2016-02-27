@@ -44,7 +44,7 @@ namespace StockSharp.Xaml
 
 			//_exchanges.AddRange(Exchange.EnumerateExchanges().OrderBy(b => b.Name));
 
-			DisplayMemberPath = "Name";
+			DisplayMemberPath = nameof(Exchange.Name);
 
 			Exchanges = _exchanges;
 			ItemsSource = Exchanges;
@@ -55,7 +55,7 @@ namespace StockSharp.Xaml
 		/// <summary>
 		/// <see cref="DependencyProperty"/> for <see cref="ExchangeInfoProvider"/>.
 		/// </summary>
-		public static readonly DependencyProperty ExchangeInfoProviderProperty = DependencyProperty.Register("ExchangeInfoProvider", typeof(IExchangeInfoProvider), typeof(ExchangeComboBox), new PropertyMetadata(null, (o, args) =>
+		public static readonly DependencyProperty ExchangeInfoProviderProperty = DependencyProperty.Register(nameof(ExchangeInfoProvider), typeof(IExchangeInfoProvider), typeof(ExchangeComboBox), new PropertyMetadata(null, (o, args) =>
 		{
 			var cb = (ExchangeComboBox)o;
 			cb.UpdateProvider((IExchangeInfoProvider)args.NewValue);
@@ -97,7 +97,7 @@ namespace StockSharp.Xaml
 		/// <see cref="DependencyProperty"/> for <see cref="SelectedExchange"/>.
 		/// </summary>
 		public static readonly DependencyProperty SelectedExchangeProperty =
-			DependencyProperty.Register("SelectedExchange", typeof(Exchange), typeof(ExchangeComboBox),
+			DependencyProperty.Register(nameof(SelectedExchange), typeof(Exchange), typeof(ExchangeComboBox),
 				new FrameworkPropertyMetadata(null, OnSelectedExchangePropertyChanged));
 
 		private Exchange _selectedExchange;

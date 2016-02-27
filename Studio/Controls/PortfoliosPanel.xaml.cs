@@ -34,7 +34,7 @@ namespace StockSharp.Studio.Controls
 	[Icon("images/portfolio_32x32.png")]
 	public partial class PortfoliosPanel
 	{
-		public static readonly DependencyProperty ShowToolBarProperty = DependencyProperty.Register("ShowToolBar", typeof(bool), typeof(PortfoliosPanel), new PropertyMetadata(true));
+		public static readonly DependencyProperty ShowToolBarProperty = DependencyProperty.Register(nameof(ShowToolBar), typeof(bool), typeof(PortfoliosPanel), new PropertyMetadata(true));
 
 		public bool ShowToolBar
 		{

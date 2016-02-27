@@ -36,7 +36,7 @@ namespace StockSharp.Xaml
 		/// <summary>
 		/// The command to delete the selected instrument.
 		/// </summary>
-		public readonly static RoutedCommand ClearCommand = new RoutedCommand();
+		public static readonly RoutedCommand ClearCommand = new RoutedCommand();
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="SecurityEditor"/>.
@@ -83,7 +83,7 @@ namespace StockSharp.Xaml
 		/// <summary>
 		/// <see cref="DependencyProperty"/> for <see cref="SecurityProvider"/>.
 		/// </summary>
-		public static readonly DependencyProperty SecurityProviderProperty = DependencyProperty.Register("SecurityProvider", typeof(ISecurityProvider), typeof(SecurityEditor), new PropertyMetadata(null, (o, args) =>
+		public static readonly DependencyProperty SecurityProviderProperty = DependencyProperty.Register(nameof(SecurityProvider), typeof(ISecurityProvider), typeof(SecurityEditor), new PropertyMetadata(null, (o, args) =>
 		{
 			var editor = (SecurityEditor)o;
 			editor.UpdateProvider((ISecurityProvider)args.NewValue);
@@ -119,7 +119,7 @@ namespace StockSharp.Xaml
 		/// <see cref="DependencyProperty"/> for <see cref="SecurityEditor.SelectedSecurity"/>.
 		/// </summary>
 		public static readonly DependencyProperty SelectedSecurityProperty =
-			 DependencyProperty.Register("SelectedSecurity", typeof(Security), typeof(SecurityEditor),
+			 DependencyProperty.Register(nameof(SelectedSecurity), typeof(Security), typeof(SecurityEditor),
 				new FrameworkPropertyMetadata(null, OnSelectedSecurityPropertyChanged));
 
 		private Security _selectedSecurity;

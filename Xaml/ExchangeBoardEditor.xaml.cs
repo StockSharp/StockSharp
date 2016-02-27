@@ -48,7 +48,7 @@ namespace StockSharp.Xaml
 		/// <summary>
 		/// The message about data saving error.
 		/// </summary>
-		public static readonly DependencyProperty SaveErrorMessageProperty = DependencyProperty.Register("SaveErrorMessage", typeof(string), typeof(ExchangeBoardEditor), new PropertyMetadata(default(string)));
+		public static readonly DependencyProperty SaveErrorMessageProperty = DependencyProperty.Register(nameof(SaveErrorMessage), typeof(string), typeof(ExchangeBoardEditor), new PropertyMetadata(default(string)));
 
 		private IExchangeInfoProvider Provider { get; }
 

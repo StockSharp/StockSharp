@@ -37,20 +37,20 @@ namespace StockSharp.Studio.Ribbon
 
 	public partial class StrategyTab
 	{
-		public readonly static RoutedCommand AddStrategyInfoCommand = new RoutedCommand();
-		public readonly static RoutedCommand OpenStrategyInfoCommand = new RoutedCommand();
-		public readonly static RoutedCommand RemoveStrategyInfoCommand = new RoutedCommand();
-		public readonly static RoutedCommand AddStrategyCommand = new RoutedCommand();
-		public readonly static RoutedCommand OpenStrategyCommand = new RoutedCommand();
+		public static readonly RoutedCommand AddStrategyInfoCommand = new RoutedCommand();
+		public static readonly RoutedCommand OpenStrategyInfoCommand = new RoutedCommand();
+		public static readonly RoutedCommand RemoveStrategyInfoCommand = new RoutedCommand();
+		public static readonly RoutedCommand AddStrategyCommand = new RoutedCommand();
+		public static readonly RoutedCommand OpenStrategyCommand = new RoutedCommand();
 		//public readonly static RoutedCommand CopyStrategyCommand = new RoutedCommand();
-		public readonly static RoutedCommand RemoveStrategyCommand = new RoutedCommand();
+		public static readonly RoutedCommand RemoveStrategyCommand = new RoutedCommand();
 
 		public static readonly RoutedCommand StartStrategyCommand = new RoutedCommand();
 		public static readonly RoutedCommand StopStrategyCommand = new RoutedCommand();
 
-		public readonly static RoutedCommand AddEmulationCommand = new RoutedCommand();
-		public readonly static RoutedCommand AddOptimizationCommand = new RoutedCommand();
-		public readonly static RoutedCommand RemoveEmulationCommand = new RoutedCommand();
+		public static readonly RoutedCommand AddEmulationCommand = new RoutedCommand();
+		public static readonly RoutedCommand AddOptimizationCommand = new RoutedCommand();
+		public static readonly RoutedCommand RemoveEmulationCommand = new RoutedCommand();
 
 		public static readonly DependencyProperty SelectedStrategyProperty = DependencyProperty.Register("SelectedStrategy", typeof(StrategyContainer), typeof(StrategyTab),
 			new PropertyMetadata(StrategyChanged));

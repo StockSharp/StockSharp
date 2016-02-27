@@ -24,7 +24,7 @@ namespace StockSharp.ETrade.Native
 
 		protected ETradeResponse(ETradeRequest req) { Request = req; } 
 
-		abstract public void Process();
+		public abstract void Process();
 
 		public static ETradeResponse<TResp> Create<TResp>(ETradeRequest<TResp> req, TResp responseData, Exception exception)
 		{
@@ -34,7 +34,7 @@ namespace StockSharp.ETrade.Native
 
 	class ETradeResponse<TResp> : ETradeResponse
 	{
-		new public ETradeRequest<TResp> Request => (ETradeRequest<TResp>)base.Request;
+		public new ETradeRequest<TResp> Request => (ETradeRequest<TResp>)base.Request;
 		public TResp Data {get; private set;}
 
 		public ETradeResponse(ETradeRequest<TResp> req, TResp responseData) : base(req)

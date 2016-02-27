@@ -130,7 +130,7 @@ namespace StockSharp.Xaml
 		/// <see cref="DependencyProperty"/> for <see cref="MarketDepthControl.MaxDepth"/>.
 		/// </summary>
 		public static readonly DependencyProperty MaxDepthProperty =
-			DependencyProperty.Register("MaxDepth", typeof(int), typeof(MarketDepthControl), new PropertyMetadata(
+			DependencyProperty.Register(nameof(MaxDepth), typeof(int), typeof(MarketDepthControl), new PropertyMetadata(
 				(o, args) =>
 				{
 					var md = (MarketDepthControl)o;

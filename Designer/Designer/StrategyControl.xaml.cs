@@ -37,7 +37,7 @@
 	{
 		#region DependencyProperty
 
-		public static readonly DependencyProperty StrategyProperty = DependencyProperty.Register("Strategy", typeof(DiagramStrategy),
+		public static readonly DependencyProperty StrategyProperty = DependencyProperty.Register(nameof(Strategy), typeof(DiagramStrategy),
 			typeof(StrategyControl), new PropertyMetadata(null, OnStrategyPropertyChanged));
 
 		private static void OnStrategyPropertyChanged(DependencyObject s, DependencyPropertyChangedEventArgs e)

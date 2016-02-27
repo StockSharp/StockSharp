@@ -32,14 +32,14 @@ namespace StockSharp.Xaml
 		/// </summary>
 		public PortfolioComboBox()
 		{
-			DisplayMemberPath = "Name";
+			DisplayMemberPath = nameof(Portfolio.Name);
 			//Portfolios = new ThreadSafeObservableCollection<Portfolio>(new ObservableCollectionEx<Portfolio>());
 		}
 
 		/// <summary>
 		/// <see cref="DependencyProperty"/> for <see cref="Portfolios"/>.
 		/// </summary>
-		public static readonly DependencyProperty PortfoliosProperty = DependencyProperty.Register("Portfolios", typeof(ThreadSafeObservableCollection<Portfolio>), typeof(PortfolioComboBox), new PropertyMetadata(null, (o, args) =>
+		public static readonly DependencyProperty PortfoliosProperty = DependencyProperty.Register(nameof(Portfolios), typeof(ThreadSafeObservableCollection<Portfolio>), typeof(PortfolioComboBox), new PropertyMetadata(null, (o, args) =>
 		{
 			var cb = (PortfolioComboBox)o;
 			cb.UpdatePortfolios((ThreadSafeObservableCollection<Portfolio>)args.NewValue);
@@ -48,7 +48,7 @@ namespace StockSharp.Xaml
 		private void UpdatePortfolios(ThreadSafeObservableCollection<Portfolio> portfolios)
 		{
 			_portfolios = portfolios;
-			ItemsSource = _portfolios == null ? null : _portfolios.Items;
+			ItemsSource = _portfolios?.Items;
 		}
 
 		private ThreadSafeObservableCollection<Portfolio> _portfolios;
@@ -66,7 +66,7 @@ namespace StockSharp.Xaml
 		/// <see cref="DependencyProperty"/> for <see cref="PortfolioComboBox.SelectedPortfolio"/>.
 		/// </summary>
 		public static readonly DependencyProperty SelectedPortfolioProperty =
-			 DependencyProperty.Register("SelectedPortfolio", typeof(Portfolio), typeof(PortfolioComboBox),
+			 DependencyProperty.Register(nameof(SelectedPortfolio), typeof(Portfolio), typeof(PortfolioComboBox),
 				new FrameworkPropertyMetadata(null, OnSelectedPortfolioPropertyChanged));
 
 		/// <summary>

@@ -34,13 +34,13 @@ namespace StockSharp.Studio.Controls
 	[Icon("images/bug_24x24.png")]
 	public partial class DiagramDebuggerPanel
 	{
-		public readonly static RoutedCommand AddBreakpointCommand = new RoutedCommand();
-		public readonly static RoutedCommand RemoveBreakpointCommand = new RoutedCommand();
-		public readonly static RoutedCommand StepToOutParamCommand = new RoutedCommand();
-		public readonly static RoutedCommand StepNextCommand = new RoutedCommand();
-		public readonly static RoutedCommand StepIntoCommand = new RoutedCommand();
-		public readonly static RoutedCommand StepOverCommand = new RoutedCommand();
-		public readonly static RoutedCommand ContinueCommand = new RoutedCommand();
+		public static readonly RoutedCommand AddBreakpointCommand = new RoutedCommand();
+		public static readonly RoutedCommand RemoveBreakpointCommand = new RoutedCommand();
+		public static readonly RoutedCommand StepToOutParamCommand = new RoutedCommand();
+		public static readonly RoutedCommand StepNextCommand = new RoutedCommand();
+		public static readonly RoutedCommand StepIntoCommand = new RoutedCommand();
+		public static readonly RoutedCommand StepOverCommand = new RoutedCommand();
+		public static readonly RoutedCommand ContinueCommand = new RoutedCommand();
 
 		private SettingsStorage _debuggerSettings = new SettingsStorage();
 		private DiagramDebugger _debugger;

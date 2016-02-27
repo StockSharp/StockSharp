@@ -77,7 +77,7 @@ namespace StockSharp.Studio.Controls
 
 		#region DependencyProperty
 
-		public static readonly DependencyProperty MarketDataSettingsProperty = DependencyProperty.Register("MarketDataSettings", typeof(MarketDataSettings), typeof(CompositeSecurityPanel),
+		public static readonly DependencyProperty MarketDataSettingsProperty = DependencyProperty.Register(nameof(MarketDataSettings), typeof(MarketDataSettings), typeof(CompositeSecurityPanel),
 			new PropertyMetadata(OnMarketDataSettingsChanged));
 
 		private static void OnMarketDataSettingsChanged(DependencyObject sender, DependencyPropertyChangedEventArgs args)
@@ -94,7 +94,7 @@ namespace StockSharp.Studio.Controls
 			set { SetValue(MarketDataSettingsProperty, value); }
 		}
 
-		public static readonly DependencyProperty DateFromProperty = DependencyProperty.Register("DateFrom", typeof(DateTime), typeof(CompositeSecurityPanel),
+		public static readonly DependencyProperty DateFromProperty = DependencyProperty.Register(nameof(DateFrom), typeof(DateTime), typeof(CompositeSecurityPanel),
 			new PropertyMetadata(OnPropertyChanged));
 
 		public DateTime DateFrom
@@ -103,7 +103,7 @@ namespace StockSharp.Studio.Controls
 			set { SetValue(DateFromProperty, value); }
 		}
 
-		public static readonly DependencyProperty DateToProperty = DependencyProperty.Register("DateTo", typeof(DateTime), typeof(CompositeSecurityPanel),
+		public static readonly DependencyProperty DateToProperty = DependencyProperty.Register(nameof(DateTo), typeof(DateTime), typeof(CompositeSecurityPanel),
 			new PropertyMetadata(OnPropertyChanged));
 
 		public DateTime DateTo
@@ -112,7 +112,7 @@ namespace StockSharp.Studio.Controls
 			set { SetValue(DateToProperty, value); }
 		}
 
-		public static readonly DependencyProperty SecurityCodeProperty = DependencyProperty.Register("SecurityCode", typeof(string), typeof(CompositeSecurityPanel),
+		public static readonly DependencyProperty SecurityCodeProperty = DependencyProperty.Register(nameof(SecurityCode), typeof(string), typeof(CompositeSecurityPanel),
 			new PropertyMetadata(string.Empty));
 
 		public string SecurityCode
@@ -121,7 +121,7 @@ namespace StockSharp.Studio.Controls
 			set { SetValue(SecurityCodeProperty, value); }
 		}
 
-		public static readonly DependencyProperty BoardProperty = DependencyProperty.Register("Board", typeof(ExchangeBoard), typeof(CompositeSecurityPanel),
+		public static readonly DependencyProperty BoardProperty = DependencyProperty.Register(nameof(Board), typeof(ExchangeBoard), typeof(CompositeSecurityPanel),
 			new PropertyMetadata(ExchangeBoard.Associated));
 
 		public ExchangeBoard Board
@@ -130,7 +130,7 @@ namespace StockSharp.Studio.Controls
 			set { SetValue(BoardProperty, value); }
 		}
 
-		public static readonly DependencyProperty CanEditProperty = DependencyProperty.Register("CanEdit", typeof(bool), typeof(CompositeSecurityPanel),
+		public static readonly DependencyProperty CanEditProperty = DependencyProperty.Register(nameof(CanEdit), typeof(bool), typeof(CompositeSecurityPanel),
 			new PropertyMetadata(true));
 
 		public bool CanEdit
@@ -139,7 +139,7 @@ namespace StockSharp.Studio.Controls
 			set { SetValue(CanEditProperty, value); }
 		}
 
-		public static readonly DependencyProperty IsStartedProperty = DependencyProperty.Register("IsStarted", typeof(bool), typeof(CompositeSecurityPanel),
+		public static readonly DependencyProperty IsStartedProperty = DependencyProperty.Register(nameof(IsStarted), typeof(bool), typeof(CompositeSecurityPanel),
 			new PropertyMetadata(false, IsStartedPropertyChanged));
 
 		private static void IsStartedPropertyChanged(DependencyObject sender, DependencyPropertyChangedEventArgs args)
@@ -158,7 +158,7 @@ namespace StockSharp.Studio.Controls
 			((CompositeSecurityPanel)sender).RaiseChangedCommand();
 		}
 
-		public static readonly DependencyProperty DrawSourcesProperty = DependencyProperty.Register("DrawSources", typeof(bool), typeof(CompositeSecurityPanel),
+		public static readonly DependencyProperty DrawSourcesProperty = DependencyProperty.Register(nameof(DrawSources), typeof(bool), typeof(CompositeSecurityPanel),
 			new PropertyMetadata(true));
 
 		public bool DrawSources

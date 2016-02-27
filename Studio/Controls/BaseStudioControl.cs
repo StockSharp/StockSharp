@@ -34,7 +34,7 @@ namespace StockSharp.Studio.Controls
 	{
 		private Action _loadedAction;
 
-		public static readonly DependencyProperty TitleProperty = DependencyProperty.Register("Title", typeof(string), typeof(BaseStudioControl),
+		public static readonly DependencyProperty TitleProperty = DependencyProperty.Register(nameof(Title), typeof(string), typeof(BaseStudioControl),
 			new PropertyMetadata(string.Empty));
 
 		public string Title
@@ -43,7 +43,7 @@ namespace StockSharp.Studio.Controls
 			set { SetValue(TitleProperty, value); }
 		}
 
-		public static readonly DependencyProperty IconProperty = DependencyProperty.Register("Icon", typeof(Uri), typeof(BaseStudioControl),
+		public static readonly DependencyProperty IconProperty = DependencyProperty.Register(nameof(Icon), typeof(Uri), typeof(BaseStudioControl),
 			new PropertyMetadata(null));
 
 		public Uri Icon

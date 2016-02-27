@@ -29,11 +29,11 @@ namespace SampleFewQuiks
 
 	class Program
 	{
-		private volatile static Portfolio _portfolio1;
-		private volatile static Portfolio _portfolio2;
+		private static volatile Portfolio _portfolio1;
+		private static volatile Portfolio _portfolio2;
 
-		private volatile static Security _lkoh;
-		private volatile static Security _riz0;
+		private static volatile Security _lkoh;
+		private static volatile Security _riz0;
 
 		static void Main()
 		{

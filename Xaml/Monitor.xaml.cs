@@ -75,7 +75,7 @@ namespace StockSharp.Xaml
 		/// <see cref="DependencyProperty"/> for <see cref="Monitor.ShowStrategies"/>.
 		/// </summary>
 		public static readonly DependencyProperty ShowStrategiesProperty =
-			DependencyProperty.Register("ShowStrategies", typeof(bool), typeof(Monitor), new PropertyMetadata(true, ShowStrategiesPropertyChanged));
+			DependencyProperty.Register(nameof(ShowStrategies), typeof(bool), typeof(Monitor), new PropertyMetadata(true, ShowStrategiesPropertyChanged));
 
 		private static void ShowStrategiesPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
 		{
@@ -108,7 +108,7 @@ namespace StockSharp.Xaml
 		/// <summary>
 		/// <see cref="DependencyProperty"/> for <see cref="Monitor.MaxItemsCount"/>.
 		/// </summary>
-		public static readonly DependencyProperty MaxItemsCountProperty = DependencyProperty.Register("MaxItemsCount", typeof(int), typeof(Monitor),
+		public static readonly DependencyProperty MaxItemsCountProperty = DependencyProperty.Register(nameof(MaxItemsCount), typeof(int), typeof(Monitor),
 				new PropertyMetadata(LogMessageCollection.DefaultMaxItemsCount, MaxItemsCountChanged));
 
 		private static void MaxItemsCountChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)

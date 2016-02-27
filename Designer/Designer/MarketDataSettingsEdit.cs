@@ -13,7 +13,7 @@ namespace StockSharp.Designer
 
 	public class MarketDataSettingsEdit : ComboBoxEdit
 	{
-		public static readonly DependencyProperty IsDefaultEditorProperty = DependencyProperty.Register("IsDefaultEditor", typeof(bool), typeof(MarketDataSettingsEdit));
+		public static readonly DependencyProperty IsDefaultEditorProperty = DependencyProperty.Register(nameof(IsDefaultEditor), typeof(bool), typeof(MarketDataSettingsEdit));
 
 		public bool IsDefaultEditor
 		{
@@ -29,7 +29,7 @@ namespace StockSharp.Designer
 
 	public class MarketDataSettingsEditSettings : ComboBoxEditSettings
 	{
-		public static readonly DependencyProperty IsDefaultEditorProperty = DependencyProperty.Register("IsDefaultEditor", typeof(bool), typeof(MarketDataSettingsEditSettings));
+		public static readonly DependencyProperty IsDefaultEditorProperty = DependencyProperty.Register(nameof(IsDefaultEditor), typeof(bool), typeof(MarketDataSettingsEditSettings));
 
 		public bool IsDefaultEditor
 		{

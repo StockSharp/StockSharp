@@ -62,7 +62,7 @@ namespace StockSharp.Xaml
 				Level1Fields.BestAskVolume
 			}).ToArray();
 
-			SelectedFieldsProperty = DependencyProperty.Register("SelectedFields", typeof(IEnumerable<Level1Fields>), typeof(Level1FieldsComboBox), new UIPropertyMetadata(DefaultFields, (s, e) =>
+			SelectedFieldsProperty = DependencyProperty.Register(nameof(SelectedFields), typeof(IEnumerable<Level1Fields>), typeof(Level1FieldsComboBox), new UIPropertyMetadata(DefaultFields, (s, e) =>
 			{
 				var comboBox = s as Level1FieldsComboBox;
 

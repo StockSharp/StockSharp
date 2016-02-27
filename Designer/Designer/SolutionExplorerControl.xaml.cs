@@ -22,7 +22,6 @@ namespace StockSharp.Designer
 	using System.Windows;
 	using System.Windows.Input;
 	using System.Windows.Media;
-	using System.Windows.Media.Imaging;
 
 	using DevExpress.Xpf.Grid;
 	using DevExpress.Xpf.Grid.TreeList;
@@ -39,7 +38,7 @@ namespace StockSharp.Designer
 	{
 		#region Compositions
 
-		public static readonly DependencyProperty CompositionsProperty = DependencyProperty.Register("Compositions", typeof(INotifyList<DiagramElement>),
+		public static readonly DependencyProperty CompositionsProperty = DependencyProperty.Register(nameof(Compositions), typeof(INotifyList<DiagramElement>),
 			typeof(SolutionExplorerControl), new PropertyMetadata(null, CompositionsPropertyChanged));
 
 		private static void CompositionsPropertyChanged(DependencyObject sender, DependencyPropertyChangedEventArgs args)
@@ -57,7 +56,7 @@ namespace StockSharp.Designer
 
 		#region Strategies
 
-		public static readonly DependencyProperty StrategiesProperty = DependencyProperty.Register("Strategies", typeof(INotifyList<DiagramElement>),
+		public static readonly DependencyProperty StrategiesProperty = DependencyProperty.Register(nameof(Strategies), typeof(INotifyList<DiagramElement>),
 			typeof(SolutionExplorerControl), new PropertyMetadata(null, StrategiesPropertyChanged));
 
 		private static void StrategiesPropertyChanged(DependencyObject sender, DependencyPropertyChangedEventArgs args)
@@ -75,7 +74,7 @@ namespace StockSharp.Designer
 
 		#region SelectedItem
 
-		public static readonly DependencyProperty SelectedItemProperty = DependencyProperty.Register("SelectedItem", typeof(CompositionItem),
+		public static readonly DependencyProperty SelectedItemProperty = DependencyProperty.Register(nameof(SelectedItem), typeof(CompositionItem),
 			typeof(SolutionExplorerControl), new PropertyMetadata(null));
 
 		public CompositionItem SelectedItem

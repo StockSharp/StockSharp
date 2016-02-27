@@ -33,11 +33,11 @@ namespace StockSharp.Studio.Ribbon
 
 	public partial class TerminalTab
 	{
-		public readonly static RoutedCommand OpenStrategyInfoCommand = new RoutedCommand();
+		public static readonly RoutedCommand OpenStrategyInfoCommand = new RoutedCommand();
 
-		public readonly static RoutedCommand AddStrategyCommand = new RoutedCommand();
-		public readonly static RoutedCommand OpenStrategyCommand = new RoutedCommand();
-		public readonly static RoutedCommand RemoveStrategyCommand = new RoutedCommand();
+		public static readonly RoutedCommand AddStrategyCommand = new RoutedCommand();
+		public static readonly RoutedCommand OpenStrategyCommand = new RoutedCommand();
+		public static readonly RoutedCommand RemoveStrategyCommand = new RoutedCommand();
 
 		public static readonly DependencyProperty SelectedStrategyProperty = DependencyProperty.Register("SelectedStrategy", typeof(StrategyContainer), typeof(TerminalTab));
 

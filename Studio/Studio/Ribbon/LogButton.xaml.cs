@@ -33,9 +33,9 @@ namespace StockSharp.Studio.Ribbon
 
 	public partial class LogButton : ILogListener, IStudioControl
 	{
-		public readonly static RoutedCommand OpenMonitorCommand = new RoutedCommand();
-		public readonly static RoutedCommand OpenLogDirectoryCommand = new RoutedCommand();
-		public readonly static RoutedCommand MemoryStatisticsCommand = new RoutedCommand();
+		public static readonly RoutedCommand OpenMonitorCommand = new RoutedCommand();
+		public static readonly RoutedCommand OpenLogDirectoryCommand = new RoutedCommand();
+		public static readonly RoutedCommand MemoryStatisticsCommand = new RoutedCommand();
 
 		public static readonly DependencyProperty HasErrorsProperty = DependencyProperty.Register("HasErrors", typeof(bool), typeof(LogButton), new PropertyMetadata(false));
 

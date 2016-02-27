@@ -39,7 +39,7 @@ namespace StockSharp.Xaml
 		/// <see cref="DependencyProperty"/> for <see cref="UnitEditor.Value"/>.
 		/// </summary>
 		public static readonly DependencyProperty ValueProperty =
-			 DependencyProperty.Register("Value", typeof(Unit), typeof(UnitEditor), new FrameworkPropertyMetadata(null, OnValuePropertyChanged));
+			 DependencyProperty.Register(nameof(Value), typeof(Unit), typeof(UnitEditor), new FrameworkPropertyMetadata(null, OnValuePropertyChanged));
 
 		/// <summary>
 		/// The value that should be edited visually.

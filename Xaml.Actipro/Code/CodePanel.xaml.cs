@@ -78,7 +78,7 @@ namespace StockSharp.Xaml.Actipro.Code
 		/// <summary>
 		/// <see cref="DependencyProperty"/> for <see cref="CodePanel.ShowToolBar"/>.
 		/// </summary>
-		public static readonly DependencyProperty ShowToolBarProperty = DependencyProperty.Register("ShowToolBar", typeof(bool), typeof(CodePanel), new PropertyMetadata(true));
+		public static readonly DependencyProperty ShowToolBarProperty = DependencyProperty.Register(nameof(ShowToolBar), typeof(bool), typeof(CodePanel), new PropertyMetadata(true));
 
 		/// <summary>
 		/// To show the review panel.
@@ -101,7 +101,7 @@ namespace StockSharp.Xaml.Actipro.Code
 		{
 			InitializeComponent();
 
-			_projectAssembly = new CSharpProjectAssembly("StudioStrategy");
+			_projectAssembly = new CSharpProjectAssembly("StockSharpStrategyCode");
 			_projectAssembly.AssemblyReferences.AddMsCorLib();
 
 			var language = new CSharpSyntaxLanguage();

@@ -71,7 +71,7 @@ namespace StockSharp.Xaml
 		/// <summary>
 		/// <see cref="DependencyProperty"/> for <see cref="TargetPlatformWindow.AppName"/>.
 		/// </summary>
-		public static readonly DependencyProperty AppNameProperty = DependencyProperty.Register("AppName", typeof(string), typeof(TargetPlatformWindow), new PropertyMetadata(TypeHelper.ApplicationName));
+		public static readonly DependencyProperty AppNameProperty = DependencyProperty.Register(nameof(AppName), typeof(string), typeof(TargetPlatformWindow), new PropertyMetadata(TypeHelper.ApplicationName));
 
 		/// <summary>
 		/// The application name.
@@ -85,7 +85,7 @@ namespace StockSharp.Xaml
 		/// <summary>
 		/// <see cref="DependencyProperty"/> for <see cref="TargetPlatformWindow.AppIcon"/>.
 		/// </summary>
-		public static readonly DependencyProperty AppIconProperty = DependencyProperty.Register("AppIcon", typeof(string), typeof(TargetPlatformWindow));
+		public static readonly DependencyProperty AppIconProperty = DependencyProperty.Register(nameof(AppIcon), typeof(string), typeof(TargetPlatformWindow));
 
 		/// <summary>
 		/// The application icon.
@@ -99,7 +99,7 @@ namespace StockSharp.Xaml
 		/// <summary>
 		/// <see cref="DependencyProperty"/> for <see cref="TargetPlatformWindow.AutoStart"/>.
 		/// </summary>
-		public static readonly DependencyProperty AutoStartProperty = DependencyProperty.Register("AutoStart", typeof(bool), typeof(TargetPlatformWindow));
+		public static readonly DependencyProperty AutoStartProperty = DependencyProperty.Register(nameof(AutoStart), typeof(bool), typeof(TargetPlatformWindow));
 
 		/// <summary>
 		/// Autostart of the selected configuration.

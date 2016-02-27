@@ -25,7 +25,7 @@ namespace StockSharp.Xaml
 		/// <summary>
 		/// <see cref="DependencyProperty"/> for <see cref="ProxySettingsEditor.ProxySettings"/>.
 		/// </summary>
-		public static readonly DependencyProperty ProxySettingsProperty = DependencyProperty.Register("ProxySettings", typeof(ProxySettings), typeof(ProxySettingsEditor));
+		public static readonly DependencyProperty ProxySettingsProperty = DependencyProperty.Register(nameof(ProxySettings), typeof(ProxySettings), typeof(ProxySettingsEditor));
 
 		/// <summary>
 		/// Proxy-server settings.

@@ -88,7 +88,7 @@ namespace StockSharp.Xaml.PropertyGrid
 		/// <see cref="DependencyProperty"/> for <see cref="CandleSettingsEditor.Settings"/>.
 		/// </summary>
 		public static readonly DependencyProperty SettingsProperty =
-			DependencyProperty.Register("Settings", typeof(CandleSeries),
+			DependencyProperty.Register(nameof(Settings), typeof(CandleSeries),
 			typeof(CandleSettingsEditor), new UIPropertyMetadata(new CandleSeries { CandleType = typeof(TimeFrameCandle), Arg = TimeSpan.FromMinutes(1) }, OnSettingsChanged));
 
 		private static void OnSettingsChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)

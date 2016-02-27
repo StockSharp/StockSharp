@@ -32,10 +32,10 @@ namespace StockSharp.Studio.Ribbon
 
 	public partial class StrategyAdditionalGroup
 	{
-		public readonly static RoutedCommand RiskManagerCommand = new RoutedCommand();
-		public readonly static RoutedCommand ComissionManagerCommand = new RoutedCommand();
-		public readonly static RoutedCommand ReportCommand = new RoutedCommand();
-		public readonly static RoutedCommand OpenReportCommand = new RoutedCommand();
+		public static readonly RoutedCommand RiskManagerCommand = new RoutedCommand();
+		public static readonly RoutedCommand ComissionManagerCommand = new RoutedCommand();
+		public static readonly RoutedCommand ReportCommand = new RoutedCommand();
+		public static readonly RoutedCommand OpenReportCommand = new RoutedCommand();
 
 		public static readonly DependencyProperty SelectedStrategyProperty = DependencyProperty.Register("SelectedStrategy", typeof(StrategyContainer), typeof(StrategyAdditionalGroup));
 

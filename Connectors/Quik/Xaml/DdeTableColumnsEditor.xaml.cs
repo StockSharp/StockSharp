@@ -25,6 +25,7 @@ namespace StockSharp.Quik.Xaml
 
 	using Xceed.Wpf.Toolkit.PropertyGrid;
 	using Xceed.Wpf.Toolkit.PropertyGrid.Editors;
+
 	using StockSharp.Localization;
 
 	/// <summary>
@@ -36,7 +37,7 @@ namespace StockSharp.Quik.Xaml
 		/// DependencyProperty для <see cref="SelectedColumns"/>.
 		/// </summary>
 		public static readonly DependencyProperty SelectedColumnsProperty =
-			DependencyProperty.Register("SelectedColumns", typeof(ICollection<DdeTableColumn>), typeof(DdeTableColumnsEditor), new PropertyMetadata(new List<DdeTableColumn>()));
+			DependencyProperty.Register(nameof(SelectedColumns), typeof(ICollection<DdeTableColumn>), typeof(DdeTableColumnsEditor), new PropertyMetadata(new List<DdeTableColumn>()));
 
 		/// <summary>
 		/// Список выбранных столбцов.

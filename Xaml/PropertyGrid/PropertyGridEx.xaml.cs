@@ -41,7 +41,7 @@ namespace StockSharp.Xaml.PropertyGrid
 	class EnumComboBoxEx : ComboBox
 	{
 		public static readonly DependencyProperty SelectedEnumItemProperty =
-			DependencyProperty.Register("SelectedEnumItem", typeof(object), typeof(EnumComboBoxEx),
+			DependencyProperty.Register(nameof(SelectedEnumItem), typeof(object), typeof(EnumComboBoxEx),
 			new PropertyMetadata((s, e) =>
 			{
 				var ctrl = s as EnumComboBoxEx;
@@ -102,7 +102,7 @@ namespace StockSharp.Xaml.PropertyGrid
 		/// <summary>
 		/// <see cref="DependencyProperty"/> for <see cref="SecurityProvider"/>.
 		/// </summary>
-		public static readonly DependencyProperty SecurityProviderProperty = DependencyProperty.Register("SecurityProvider", typeof(ISecurityProvider), typeof(PropertyGridEx));
+		public static readonly DependencyProperty SecurityProviderProperty = DependencyProperty.Register(nameof(SecurityProvider), typeof(ISecurityProvider), typeof(PropertyGridEx));
 
 		/// <summary>
 		/// The provider of information about instruments.
@@ -116,7 +116,7 @@ namespace StockSharp.Xaml.PropertyGrid
 		/// <summary>
 		/// <see cref="DependencyProperty"/> for <see cref="ExchangeInfoProvider"/>.
 		/// </summary>
-		public static readonly DependencyProperty ExchangeInfoProviderProperty = DependencyProperty.Register("ExchangeInfoProvider", typeof(IExchangeInfoProvider), typeof(PropertyGridEx));
+		public static readonly DependencyProperty ExchangeInfoProviderProperty = DependencyProperty.Register(nameof(ExchangeInfoProvider), typeof(IExchangeInfoProvider), typeof(PropertyGridEx));
 
 		/// <summary>
 		/// The exchange boards provider.
@@ -130,7 +130,7 @@ namespace StockSharp.Xaml.PropertyGrid
 		/// <summary>
 		/// <see cref="DependencyProperty"/> for <see cref="Portfolios"/>.
 		/// </summary>
-		public static readonly DependencyProperty PortfoliosProperty = DependencyProperty.Register("Portfolios", typeof(ThreadSafeObservableCollection<Portfolio>), typeof(PropertyGridEx));
+		public static readonly DependencyProperty PortfoliosProperty = DependencyProperty.Register(nameof(Portfolios), typeof(ThreadSafeObservableCollection<Portfolio>), typeof(PropertyGridEx));
 
 		/// <summary>
 		/// Available portfolios.

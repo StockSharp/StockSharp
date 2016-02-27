@@ -47,7 +47,7 @@ namespace StockSharp.Xaml
 		/// <summary>
 		/// <see cref="DependencyProperty"/> for <see cref="Portfolios"/>.
 		/// </summary>
-		public static readonly DependencyProperty PortfoliosProperty = DependencyProperty.Register("Portfolios", typeof(ThreadSafeObservableCollection<Portfolio>), typeof(PortfolioEditor), new PropertyMetadata(null, (o, args) =>
+		public static readonly DependencyProperty PortfoliosProperty = DependencyProperty.Register(nameof(Portfolios), typeof(ThreadSafeObservableCollection<Portfolio>), typeof(PortfolioEditor), new PropertyMetadata(null, (o, args) =>
 		{
 			var editor = (PortfolioEditor)o;
 			editor.UpdatePortfolios((ThreadSafeObservableCollection<Portfolio>)args.NewValue);
@@ -73,7 +73,7 @@ namespace StockSharp.Xaml
 		/// <summary>
 		/// <see cref="DependencyProperty"/> for <see cref="PortfolioEditor.SelectedPortfolio"/>.
 		/// </summary>
-		public static readonly DependencyProperty SelectedPortfolioProperty = DependencyProperty.Register("SelectedPortfolio", typeof(Portfolio), typeof(PortfolioEditor),
+		public static readonly DependencyProperty SelectedPortfolioProperty = DependencyProperty.Register(nameof(SelectedPortfolio), typeof(Portfolio), typeof(PortfolioEditor),
 				new FrameworkPropertyMetadata(null, OnSelectedPortfolioPropertyChanged));
 
 		/// <summary>

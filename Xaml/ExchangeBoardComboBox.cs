@@ -44,7 +44,7 @@ namespace StockSharp.Xaml
 
 			//_boards.AddRange(ExchangeBoard.EnumerateExchangeBoards().OrderBy(b => b.Code));
 
-			DisplayMemberPath = "Code";
+			DisplayMemberPath = nameof(ExchangeBoard.Code);
 
 			Boards = _boards;
 			ItemsSource = Boards;
@@ -55,7 +55,7 @@ namespace StockSharp.Xaml
 		/// <summary>
 		/// <see cref="DependencyProperty"/> for <see cref="ExchangeInfoProvider"/>.
 		/// </summary>
-		public static readonly DependencyProperty ExchangeInfoProviderProperty = DependencyProperty.Register("ExchangeInfoProvider", typeof(IExchangeInfoProvider), typeof(ExchangeBoardComboBox), new PropertyMetadata(null, (o, args) =>
+		public static readonly DependencyProperty ExchangeInfoProviderProperty = DependencyProperty.Register(nameof(ExchangeInfoProvider), typeof(IExchangeInfoProvider), typeof(ExchangeBoardComboBox), new PropertyMetadata(null, (o, args) =>
 		{
 			var cb = (ExchangeBoardComboBox)o;
 			cb.UpdateProvider((IExchangeInfoProvider)args.NewValue);
@@ -98,7 +98,7 @@ namespace StockSharp.Xaml
 		/// <see cref="DependencyProperty"/> for <see cref="SelectedBoard"/>.
 		/// </summary>
 		public static readonly DependencyProperty SelectedBoardProperty =
-			 DependencyProperty.Register("SelectedBoard", typeof(ExchangeBoard), typeof(ExchangeBoardComboBox),
+			 DependencyProperty.Register(nameof(SelectedBoard), typeof(ExchangeBoard), typeof(ExchangeBoardComboBox),
 				new FrameworkPropertyMetadata(null, OnSelectedBoardPropertyChanged));
 
 		private ExchangeBoard _selectedBoard;

@@ -33,7 +33,7 @@ namespace StockSharp.Studio.Controls
 	{
 		#region Dependency properties
 
-		public static readonly DependencyProperty SubscribeNewsProperty = DependencyProperty.Register("SubscribeNews", typeof(bool), typeof(NewsPanel), new PropertyMetadata(SubscribeNewsChanged));
+		public static readonly DependencyProperty SubscribeNewsProperty = DependencyProperty.Register(nameof(SubscribeNews), typeof(bool), typeof(NewsPanel), new PropertyMetadata(SubscribeNewsChanged));
 
 		private static void SubscribeNewsChanged(DependencyObject sender, DependencyPropertyChangedEventArgs args)
 		{

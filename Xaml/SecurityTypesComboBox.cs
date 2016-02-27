@@ -60,7 +60,7 @@ namespace StockSharp.Xaml
 		/// <summary>
 		/// <see cref="DependencyProperty"/> for <see cref="SecurityTypesComboBox.SelectedTypes"/>.
 		/// </summary>
-		public static readonly DependencyProperty SelectedTypesProperty = DependencyProperty.Register("SelectedTypes",
+		public static readonly DependencyProperty SelectedTypesProperty = DependencyProperty.Register(nameof(SelectedTypes),
 			typeof(IEnumerable<SecurityTypes>), typeof(SecurityTypesComboBox), new UIPropertyMetadata((s, e) =>
 			{
 				var comboBox = s as SecurityTypesComboBox;

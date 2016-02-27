@@ -46,7 +46,7 @@ namespace StockSharp.Xaml
 		/// <summary>
 		/// <see cref="DependencyProperty"/> for <see cref="SelectionMode"/>.
 		/// </summary>
-		public static readonly DependencyProperty SelectionModeProperty = DependencyProperty.Register("SelectionMode", typeof(DataGridSelectionMode), typeof(SecurityPicker), new PropertyMetadata(_defaultSelectionMode, OnSelectionModePropertyChanged));
+		public static readonly DependencyProperty SelectionModeProperty = DependencyProperty.Register(nameof(SelectionMode), typeof(DataGridSelectionMode), typeof(SecurityPicker), new PropertyMetadata(_defaultSelectionMode, OnSelectionModePropertyChanged));
 
 		private static void OnSelectionModePropertyChanged(DependencyObject s, DependencyPropertyChangedEventArgs e)
 		{
@@ -77,7 +77,7 @@ namespace StockSharp.Xaml
 		/// <summary>
 		/// <see cref="DependencyProperty"/> for <see cref="ShowCommonStatColumns"/>.
 		/// </summary>
-		public static readonly DependencyProperty ShowCommonStatColumnsProperty = DependencyProperty.Register("ShowCommonStatColumns", typeof(bool), typeof(SecurityPicker), new PropertyMetadata(false, ShowCommonStatColumnsPropertyChanged));
+		public static readonly DependencyProperty ShowCommonStatColumnsProperty = DependencyProperty.Register(nameof(ShowCommonStatColumns), typeof(bool), typeof(SecurityPicker), new PropertyMetadata(false, ShowCommonStatColumnsPropertyChanged));
 
 		private static readonly HashSet<string> _commonStatColumns = new HashSet<string>
 		{
@@ -105,13 +105,15 @@ namespace StockSharp.Xaml
 		/// <summary>
 		/// <see cref="DependencyProperty"/> for <see cref="ShowCommonOptionColumns"/>.
 		/// </summary>
-		public static readonly DependencyProperty ShowCommonOptionColumnsProperty = DependencyProperty.Register("ShowCommonOptionColumns", typeof(bool), typeof(SecurityPicker), new PropertyMetadata(false, ShowCommonOptionColumnsPropertyChanged));
+		public static readonly DependencyProperty ShowCommonOptionColumnsProperty = DependencyProperty.Register(nameof(ShowCommonOptionColumns), typeof(bool), typeof(SecurityPicker), new PropertyMetadata(false, ShowCommonOptionColumnsPropertyChanged));
 
 		private static readonly HashSet<string> _commonOptionColumns = new HashSet<string>
 		{
-			"Strike", "OptionType",
-			"TheorPrice", "ImpliedVolatility",
-			"HistoricalVolatility"
+			nameof(Security.Strike),
+			nameof(Security.OptionType),
+			nameof(Security.TheorPrice),
+			nameof(Security.ImpliedVolatility),
+			nameof(Security.HistoricalVolatility)
 		};
 
 		private static void ShowCommonOptionColumnsPropertyChanged(DependencyObject s, DependencyPropertyChangedEventArgs e)
@@ -236,7 +238,7 @@ namespace StockSharp.Xaml
 		/// <summary>
 		/// <see cref="DependencyProperty"/> for <see cref="Title"/>.
 		/// </summary>
-		public static readonly DependencyProperty TitleProperty = DependencyProperty.Register("Title", typeof(string), typeof(SecurityPicker),
+		public static readonly DependencyProperty TitleProperty = DependencyProperty.Register(nameof(Title), typeof(string), typeof(SecurityPicker),
 			new PropertyMetadata(string.Empty, (d, e) =>
 			{
 				var ctrl = d.FindLogicalChild<SecurityPicker>();

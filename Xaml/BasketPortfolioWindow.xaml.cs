@@ -32,17 +32,17 @@ namespace StockSharp.Xaml
 		/// <summary>
 		/// The command for the portfolio basket saving.
 		/// </summary>
-		public readonly static RoutedCommand OkCommand = new RoutedCommand();
+		public static readonly RoutedCommand OkCommand = new RoutedCommand();
 
 		/// <summary>
 		/// The command for adding portfolio to a basket.
 		/// </summary>
-		public readonly static RoutedCommand AddCommand = new RoutedCommand();
+		public static readonly RoutedCommand AddCommand = new RoutedCommand();
 
 		/// <summary>
 		/// The command for removal of portfolio from the basket.
 		/// </summary>
-		public readonly static RoutedCommand RemoveCommand = new RoutedCommand();
+		public static readonly RoutedCommand RemoveCommand = new RoutedCommand();
 
 		/// <summary>
 		/// All available portfolios.
