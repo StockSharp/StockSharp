@@ -205,6 +205,7 @@ namespace StockSharp.Hydra.Finam
 			var endDate = DateTime.Today - TimeSpan.FromDays(_settings.DayOffset);
 
 			var allDates = startDate.Range(endDate, TimeSpan.FromDays(1)).ToArray();
+			var anyData = false;
 
 			foreach (var security in selectedSecurities)
 			{
@@ -214,6 +215,8 @@ namespace StockSharp.Hydra.Finam
 				#region LoadTrades
 				if ((allSecurity ?? security).IsTicksEnabled())
 				{
+					anyData = true;
+
 					var storage = StorageRegistry.GetTradeStorage(security.Security, _settings.Drive, _settings.StorageFormat);
 					var emptyDates = allDates.Except(storage.Dates).ToArray();
 
@@ -266,6 +269,8 @@ namespace StockSharp.Hydra.Finam
 				#region LoadCandles
 				foreach (var pair in (allSecurity ?? security).GetCandleSeries())
 				{
+					anyData = true;
+
 					if (!CanProcess())
 						break;
 
@@ -330,10 +335,15 @@ namespace StockSharp.Hydra.Finam
 
 			if (CanProcess())
 			{
-				this.AddInfoLog(LocalizedStrings.Str2300);
+				if (anyData)
+				{
+					this.AddInfoLog(LocalizedStrings.Str2300);
 
-				_settings.StartFrom = endDate;
-				SaveSettings();
+					_settings.StartFrom = endDate;
+					SaveSettings();
+				}
+				else
+					this.AddWarningLog(LocalizedStrings.Str2913);
 			}
 
 			return base.OnProcess();

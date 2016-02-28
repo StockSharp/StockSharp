@@ -160,7 +160,7 @@ namespace StockSharp.Algo.Storages.Csv
 			Serialize(stream, data.Cast<TData>(), metaInfo);
 		}
 
-		IEnumerableEx IMarketDataSerializer.Deserialize(Stream stream, IMarketDataMetaInfo metaInfo)
+		IEnumerable IMarketDataSerializer.Deserialize(Stream stream, IMarketDataMetaInfo metaInfo)
 		{
 			return Deserialize(stream, metaInfo);
 		}
@@ -239,7 +239,7 @@ namespace StockSharp.Algo.Storages.Csv
 		/// <param name="stream">The stream.</param>
 		/// <param name="metaInfo">Meta-information on data for one day.</param>
 		/// <returns>Data.</returns>
-		public virtual IEnumerableEx<TData> Deserialize(Stream stream, IMarketDataMetaInfo metaInfo)
+		public virtual IEnumerable<TData> Deserialize(Stream stream, IMarketDataMetaInfo metaInfo)
 		{
 			// TODO (переделать в будущем)
 			var copy = new MemoryStream();
@@ -252,9 +252,7 @@ namespace StockSharp.Algo.Storages.Csv
 			//	new CsvReader(copy, _encoding, SecurityId, metaInfo.Date.Date, _executionType, _candleArg, _members))
 			//	.ToEx(metaInfo.Count);
 
-			return new SimpleEnumerable<TData>(() =>
-				new CsvEnumerator(this, new FastCsvReader(copy, Encoding), metaInfo))
-				.ToEx(metaInfo.Count);
+			return new SimpleEnumerable<TData>(() => new CsvEnumerator(this, new FastCsvReader(copy, Encoding), metaInfo));
 		}
 
 		/// <summary>

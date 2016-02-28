@@ -20,8 +20,6 @@ namespace StockSharp.Algo.Storages
 	using System.Collections.Generic;
 	using System.IO;
 
-	using Ecng.Collections;
-
 	/// <summary>
 	/// The serializer.
 	/// </summary>
@@ -48,7 +46,7 @@ namespace StockSharp.Algo.Storages
 		/// <param name="stream">Data stream.</param>
 		/// <param name="metaInfo">Meta-information on data for one day.</param>
 		/// <returns>Data.</returns>
-		IEnumerableEx Deserialize(Stream stream, IMarketDataMetaInfo metaInfo);
+		IEnumerable Deserialize(Stream stream, IMarketDataMetaInfo metaInfo);
 	}
 
 	/// <summary>
@@ -71,6 +69,6 @@ namespace StockSharp.Algo.Storages
 		/// <param name="stream">The stream.</param>
 		/// <param name="metaInfo">Meta-information on data for one day.</param>
 		/// <returns>Data.</returns>
-		new IEnumerableEx<TData> Deserialize(Stream stream, IMarketDataMetaInfo metaInfo);
+		new IEnumerable<TData> Deserialize(Stream stream, IMarketDataMetaInfo metaInfo);
 	}
 }

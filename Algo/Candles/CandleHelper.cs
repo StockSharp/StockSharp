@@ -271,7 +271,7 @@ namespace StockSharp.Algo.Candles
 			return manager;
 		}
 
-		private sealed class CandleEnumerable<TValue> : SimpleEnumerable<Candle>, IEnumerableEx<Candle>
+		private sealed class CandleEnumerable<TValue> : SimpleEnumerable<Candle>//, IEnumerableEx<Candle>
 		{
 			private sealed class CandleEnumerator : SimpleEnumerator<Candle>
 			{
@@ -324,12 +324,6 @@ namespace StockSharp.Algo.Candles
 
 				public CandleEnumerator(CandleSeries series, IEnumerable<TValue> values)
 				{
-					if (series == null)
-						throw new ArgumentNullException(nameof(series));
-
-					if (values == null)
-						throw new ArgumentNullException(nameof(values));
-
 					_series = series;
 
 					_valuesEnumerator = values.GetEnumerator();
@@ -397,15 +391,20 @@ namespace StockSharp.Algo.Candles
 				}
 			}
 
-			private readonly IEnumerableEx<TValue> _values;
+			//private readonly IEnumerableEx<TValue> _values;
 
-			public CandleEnumerable(CandleSeries series, IEnumerableEx<TValue> values)
+			public CandleEnumerable(CandleSeries series, IEnumerable<TValue> values)
 				: base(() => new CandleEnumerator(series, values))
 			{
-				_values = values;
+				if (series == null)
+					throw new ArgumentNullException(nameof(series));
+
+				if (values == null)
+					throw new ArgumentNullException(nameof(values));
+				//_values = values;
 			}
 
-			int IEnumerableEx.Count => _values.Count;
+			//int IEnumerableEx.Count => _values.Count;
 		}
 
 		/// <summary>
@@ -415,7 +414,7 @@ namespace StockSharp.Algo.Candles
 		/// <param name="trades">Tick trades.</param>
 		/// <param name="arg">Candle arg.</param>
 		/// <returns>Candles.</returns>
-		public static IEnumerable<TCandle> ToCandles<TCandle>(this IEnumerableEx<Trade> trades, object arg)
+		public static IEnumerable<TCandle> ToCandles<TCandle>(this IEnumerable<Trade> trades, object arg)
 			where TCandle : Candle
 		{
 			var firstTrade = trades.FirstOrDefault();
@@ -432,7 +431,7 @@ namespace StockSharp.Algo.Candles
 		/// <param name="trades">Tick trades.</param>
 		/// <param name="series">Candles series.</param>
 		/// <returns>Candles.</returns>
-		public static IEnumerableEx<Candle> ToCandles(this IEnumerableEx<Trade> trades, CandleSeries series)
+		public static IEnumerable<Candle> ToCandles(this IEnumerable<Trade> trades, CandleSeries series)
 		{
 			return new CandleEnumerable<Trade>(series, trades);
 		}
@@ -443,7 +442,7 @@ namespace StockSharp.Algo.Candles
 		/// <param name="trades">Tick trades.</param>
 		/// <param name="series">Candles series.</param>
 		/// <returns>Candles.</returns>
-		public static IEnumerableEx<CandleMessage> ToCandles(this IEnumerableEx<ExecutionMessage> trades, CandleSeries series)
+		public static IEnumerable<CandleMessage> ToCandles(this IEnumerable<ExecutionMessage> trades, CandleSeries series)
 		{
 			return trades
 				.ToEntities<ExecutionMessage, Trade>(series.Security)
@@ -457,7 +456,7 @@ namespace StockSharp.Algo.Candles
 		/// <param name="depths">Market depths.</param>
 		/// <param name="series">Candles series.</param>
 		/// <returns>Candles.</returns>
-		public static IEnumerableEx<Candle> ToCandles(this IEnumerableEx<MarketDepth> depths, CandleSeries series)
+		public static IEnumerable<Candle> ToCandles(this IEnumerable<MarketDepth> depths, CandleSeries series)
 		{
 			return new CandleEnumerable<MarketDepth>(series, depths);
 		}
@@ -468,7 +467,7 @@ namespace StockSharp.Algo.Candles
 		/// <param name="depths">Market depths.</param>
 		/// <param name="series">Candles series.</param>
 		/// <returns>Candles.</returns>
-		public static IEnumerableEx<CandleMessage> ToCandles(this IEnumerableEx<QuoteChangeMessage> depths, CandleSeries series)
+		public static IEnumerable<CandleMessage> ToCandles(this IEnumerable<QuoteChangeMessage> depths, CandleSeries series)
 		{
 			return depths
 				.ToEntities<QuoteChangeMessage, MarketDepth>(series.Security)
@@ -481,12 +480,12 @@ namespace StockSharp.Algo.Candles
 		/// </summary>
 		/// <param name="candles">Candles.</param>
 		/// <returns>Trades.</returns>
-		public static IEnumerableEx<Trade> ToTrades(this IEnumerableEx<Candle> candles)
+		public static IEnumerable<Trade> ToTrades(this IEnumerable<Candle> candles)
 		{
 			var candle = candles.FirstOrDefault();
 
 			if (candle == null)
-				return Enumerable.Empty<Trade>().ToEx();
+				return Enumerable.Empty<Trade>();
 
 			return candles
 				.ToMessages<Candle, CandleMessage>()
@@ -500,7 +499,7 @@ namespace StockSharp.Algo.Candles
 		/// <param name="candles">Candles.</param>
 		/// <param name="volumeStep">Volume step.</param>
 		/// <returns>Tick trades.</returns>
-		public static IEnumerableEx<ExecutionMessage> ToTrades(this IEnumerableEx<CandleMessage> candles, decimal volumeStep)
+		public static IEnumerable<ExecutionMessage> ToTrades(this IEnumerable<CandleMessage> candles, decimal volumeStep)
 		{
 			return new TradeEnumerable(candles, volumeStep);
 		}
@@ -575,7 +574,7 @@ namespace StockSharp.Algo.Candles
 			};
 		}
 		
-		private sealed class TradeEnumerable : SimpleEnumerable<ExecutionMessage>, IEnumerableEx<ExecutionMessage>
+		private sealed class TradeEnumerable : SimpleEnumerable<ExecutionMessage>//, IEnumerableEx<ExecutionMessage>
 		{
 			private sealed class TradeEnumerator : IEnumerator<ExecutionMessage>
 			{
@@ -649,18 +648,18 @@ namespace StockSharp.Algo.Candles
 				object IEnumerator.Current => Current;
 			}
 
-			public TradeEnumerable(IEnumerableEx<CandleMessage> candles, decimal volumeStep)
+			public TradeEnumerable(IEnumerable<CandleMessage> candles, decimal volumeStep)
 				: base(() => new TradeEnumerator(candles, volumeStep))
 			{
 				if (candles == null)
 					throw new ArgumentNullException(nameof(candles));
 
-				_values = candles;
+				//_values = candles;
 			}
 
-			private readonly IEnumerableEx<CandleMessage> _values;
+			//private readonly IEnumerableEx<CandleMessage> _values;
 
-			public int Count => _values.Count * 4;
+			//public int Count => _values.Count * 4;
 		}
 
 		/// <summary>

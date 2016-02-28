@@ -16,9 +16,9 @@ Copyright 2010 by StockSharp, LLC
 namespace StockSharp.Hydra.Panes
 {
 	using System;
+	using System.Collections.Generic;
 	using System.Windows;
 
-	using Ecng.Collections;
 	using Ecng.Common;
 	using Ecng.Configuration;
 
@@ -51,7 +51,7 @@ namespace StockSharp.Hydra.Panes
 			Progress.ClearStatus();
 		}
 
-		private IEnumerableEx<NewsMessage> GetNews()
+		private IEnumerable<NewsMessage> GetNews()
 		{
 			return ConfigManager
 				.GetService<IStorageRegistry>()

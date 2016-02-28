@@ -114,7 +114,7 @@ namespace StockSharp.Algo.Storages
 		/// To save market data in storage.
 		/// </summary>
 		/// <param name="data">Market data.</param>
-		public void Save(IEnumerable<T> data)
+		public int Save(IEnumerable<T> data)
 		{
 			throw new NotSupportedException();
 		}
@@ -138,7 +138,7 @@ namespace StockSharp.Algo.Storages
 			throw new NotSupportedException();
 		}
 
-		void IMarketDataStorage.Save(IEnumerable data)
+		int IMarketDataStorage.Save(IEnumerable data)
 		{
 			throw new NotSupportedException();
 		}
@@ -158,9 +158,9 @@ namespace StockSharp.Algo.Storages
 		/// </summary>
 		/// <param name="date">Date, for which data shall be loaded.</param>
 		/// <returns>Data. If there is no data, the empty set will be returned.</returns>
-		public IEnumerableEx<T> Load(DateTime date)
+		public IEnumerable<T> Load(DateTime date)
 		{
-			return new BasketEnumerable(() => _basket.Load(date)).ToEx();
+			return new BasketEnumerable(() => _basket.Load(date));
 		}
 
 		private readonly Func<T, DateTimeOffset> _getTime;
@@ -198,7 +198,7 @@ namespace StockSharp.Algo.Storages
 			_getEntityTime = getEntityTime;
 		}
 
-		void IMarketDataStorage<TEntity>.Save(IEnumerable<TEntity> data)
+		int IMarketDataStorage<TEntity>.Save(IEnumerable<TEntity> data)
 		{
 			throw new NotSupportedException();
 		}
@@ -208,7 +208,7 @@ namespace StockSharp.Algo.Storages
 			throw new NotSupportedException();
 		}
 
-		IEnumerableEx<TEntity> IMarketDataStorage<TEntity>.Load(DateTime date)
+		IEnumerable<TEntity> IMarketDataStorage<TEntity>.Load(DateTime date)
 		{
 			if (typeof(TEntity) != typeof(Candle))
 				return Load(date).ToEntities<TMessage, TEntity>(_security);
@@ -217,9 +217,7 @@ namespace StockSharp.Algo.Storages
 
 			return messages
 				.Cast<CandleMessage>()
-				.ToEx(messages.Count)
-				.ToCandles<TEntity>(_security)
-				.ToEx(messages.Count);
+				.ToCandles<TEntity>(_security);
 		}
 
 		IMarketDataSerializer<TEntity> IMarketDataStorage<TEntity>.Serializer

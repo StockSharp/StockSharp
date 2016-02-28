@@ -361,7 +361,7 @@ namespace StockSharp.Algo.Storages.Binary
 			Serialize(stream, data.Cast<TData>(), metaInfo);
 		}
 
-		IEnumerableEx IMarketDataSerializer.Deserialize(Stream stream, IMarketDataMetaInfo metaInfo)
+		IEnumerable IMarketDataSerializer.Deserialize(Stream stream, IMarketDataMetaInfo metaInfo)
 		{
 			return Deserialize(stream, metaInfo);
 		}
@@ -376,14 +376,13 @@ namespace StockSharp.Algo.Storages.Binary
 			//return stream.To<byte[]>();
 		}
 
-		public IEnumerableEx<TData> Deserialize(Stream stream, IMarketDataMetaInfo metaInfo)
+		public IEnumerable<TData> Deserialize(Stream stream, IMarketDataMetaInfo metaInfo)
 		{
 			var data = new MemoryStream();
 			stream.CopyTo(data);
 			stream.Dispose();
 
-			return new SimpleEnumerable<TData>(() => new MarketDataEnumerator(this, new BitArrayReader(data), (TMetaInfo)metaInfo))
-				.ToEx(metaInfo.Count);
+			return new SimpleEnumerable<TData>(() => new MarketDataEnumerator(this, new BitArrayReader(data), (TMetaInfo)metaInfo));
 		}
 
 		protected abstract void OnSave(BitArrayWriter writer, IEnumerable<TData> data, TMetaInfo metaInfo);

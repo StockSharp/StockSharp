@@ -16,10 +16,10 @@ Copyright 2010 by StockSharp, LLC
 namespace StockSharp.Hydra.Panes
 {
 	using System;
+	using System.Collections.Generic;
 	using System.Linq;
 	using System.Windows;
 
-	using Ecng.Collections;
 	using Ecng.Common;
 	using Ecng.Serialization;
 
@@ -50,14 +50,14 @@ namespace StockSharp.Hydra.Panes
 			set { SelectSecurityBtn.SelectedSecurity = value; }
 		}
 
-		private IEnumerableEx<ExecutionMessage> GetOrderLog()
+		private IEnumerable<ExecutionMessage> GetOrderLog()
 		{
-			var orderLog = StorageRegistry
+			IEnumerable<ExecutionMessage> orderLog = StorageRegistry
 				.GetOrderLogMessageStorage(SelectedSecurity, Drive, StorageFormat)
 				.Load(From, To + TimeHelper.LessOneDay);
 
 			if (IsNonSystem.IsChecked == false)
-				orderLog = orderLog.Where(o => o.IsSystem != false).ToEx(orderLog.Count);
+				orderLog = orderLog.Where(o => o.IsSystem != false);
 
 			return orderLog;
 		}

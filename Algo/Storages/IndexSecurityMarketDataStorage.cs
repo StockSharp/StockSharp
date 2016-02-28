@@ -145,12 +145,16 @@ namespace StockSharp.Algo.Storages
 			get { throw new NotSupportedException(); }
 		}
 
-		public void Save(IEnumerable<T> data)
+		public int Save(IEnumerable<T> data)
 		{
+			var count = 0;
+
 			foreach (var group in data.GroupBy(_getSecurity))
 			{
-				_getStorage(GetParent(group.Key), Drive.Drive).Save(group);
+				count += _getStorage(GetParent(group.Key), Drive.Drive).Save(group);
 			}
+
+			return count;
 		}
 
 		public void Delete(IEnumerable<T> data)
@@ -171,9 +175,9 @@ namespace StockSharp.Algo.Storages
 			_security.InnerSecurities.ForEach(s => _getStorage(s, Drive.Drive).Delete(date));
 		}
 
-		void IMarketDataStorage.Save(IEnumerable data)
+		int IMarketDataStorage.Save(IEnumerable data)
 		{
-			Save((IEnumerable<T>)data);
+			return Save((IEnumerable<T>)data);
 		}
 
 		IEnumerable IMarketDataStorage.Load(DateTime date)
@@ -186,7 +190,7 @@ namespace StockSharp.Algo.Storages
 			throw new NotSupportedException();
 		}
 
-		public IEnumerableEx<T> Load(DateTime date)
+		public IEnumerable<T> Load(DateTime date)
 		{
 			//return new IndexMarketDataEnumerator(_security.InnerSecurities.Select(s => _getStorage(s).Read(date).GetEnumerator()));
 			throw new NotImplementedException();

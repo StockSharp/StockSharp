@@ -20,7 +20,6 @@ namespace StockSharp.Algo.Storages
 	using System.Collections.Generic;
 	using System.Linq;
 
-	using Ecng.Collections;
 	using Ecng.Common;
 
 	using MoreLinq;
@@ -120,12 +119,17 @@ namespace StockSharp.Algo.Storages
 		/// To save market data in storage.
 		/// </summary>
 		/// <param name="data">Market data.</param>
-		public void Save(IEnumerable<T> data)
+		/// <returns>Count of saved data.</returns>
+		public int Save(IEnumerable<T> data)
 		{
+			var count = 0;
+			
 			foreach (var group in data.GroupBy(_getSecurity))
 			{
-				_getStorage(group.Key, Drive.Drive).Save(group);
+				count += _getStorage(group.Key, Drive.Drive).Save(group);
 			}
+
+			return count;
 		}
 
 		/// <summary>
@@ -150,9 +154,9 @@ namespace StockSharp.Algo.Storages
 			GetStorage(date).Delete(date);
 		}
 
-		void IMarketDataStorage.Save(IEnumerable data)
+		int IMarketDataStorage.Save(IEnumerable data)
 		{
-			Save((IEnumerable<T>)data);
+			return Save((IEnumerable<T>)data);
 		}
 
 		IEnumerable IMarketDataStorage.Load(DateTime date)
@@ -170,7 +174,7 @@ namespace StockSharp.Algo.Storages
 		/// </summary>
 		/// <param name="date">Date, for which data shall be loaded.</param>
 		/// <returns>Data. If there is no data, the empty set will be returned.</returns>
-		public IEnumerableEx<T> Load(DateTime date)
+		public IEnumerable<T> Load(DateTime date)
 		{
 			return GetStorage(date).Load(date);
 		}
@@ -224,9 +228,9 @@ namespace StockSharp.Algo.Storages
 			_getEntityTime = getEntityTime;
 		}
 
-		void IMarketDataStorage<TEntity>.Save(IEnumerable<TEntity> data)
+		int IMarketDataStorage<TEntity>.Save(IEnumerable<TEntity> data)
 		{
-			Save(data.Select(_toMessage));
+			return Save(data.Select(_toMessage));
 		}
 
 		void IMarketDataStorage<TEntity>.Delete(IEnumerable<TEntity> data)
@@ -234,7 +238,7 @@ namespace StockSharp.Algo.Storages
 			Delete(data.Select(_toMessage));
 		}
 
-		IEnumerableEx<TEntity> IMarketDataStorage<TEntity>.Load(DateTime date)
+		IEnumerable<TEntity> IMarketDataStorage<TEntity>.Load(DateTime date)
 		{
 			var security = _security.GetSecurity(date.ApplyTimeZone(TimeZoneInfo.Utc));
 
@@ -244,9 +248,7 @@ namespace StockSharp.Algo.Storages
 
 				return messages
 					.Cast<CandleMessage>()
-					.ToEx(messages.Count)
-					.ToCandles<TEntity>(security)
-					.ToEx(messages.Count);
+					.ToCandles<TEntity>(security);
 			}
 			else
 				return Load(date).ToEntities<TMessage, TEntity>(security);
@@ -280,9 +282,9 @@ namespace StockSharp.Algo.Storages
 			_arg = arg;
 		}
 
-		void IMarketDataStorage<Candle>.Save(IEnumerable<Candle> data)
+		int IMarketDataStorage<Candle>.Save(IEnumerable<Candle> data)
 		{
-			Save(data.Select(c => c.ToMessage()));
+			return Save(data.Select(c => c.ToMessage()));
 		}
 
 		void IMarketDataStorage<Candle>.Delete(IEnumerable<Candle> data)
@@ -290,14 +292,13 @@ namespace StockSharp.Algo.Storages
 			Delete(data.Select(c => c.ToMessage()));
 		}
 
-		IEnumerableEx<Candle> IMarketDataStorage<Candle>.Load(DateTime date)
+		IEnumerable<Candle> IMarketDataStorage<Candle>.Load(DateTime date)
 		{
 			var messages = Load(date);
 
 			return messages
 				.ToCandles<TCandle>(_security.GetSecurity(date.ApplyTimeZone(TimeZoneInfo.Utc)))
-				.Cast<Candle>()
-				.ToEx(messages.Count);
+				.Cast<Candle>();
 		}
 
 		IMarketDataSerializer<Candle> IMarketDataStorage<Candle>.Serializer

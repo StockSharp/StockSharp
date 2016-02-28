@@ -164,7 +164,7 @@ namespace StockSharp.Algo
 			return item.ToMessage().GetOrderLogCancelReason();
 		}
 
-		private sealed class DepthEnumerable : SimpleEnumerable<QuoteChangeMessage>, IEnumerableEx<QuoteChangeMessage>
+		private sealed class DepthEnumerable : SimpleEnumerable<QuoteChangeMessage>//, IEnumerableEx<QuoteChangeMessage>
 		{
 			private sealed class DepthEnumerator : IEnumerator<QuoteChangeMessage>
 			{
@@ -238,9 +238,9 @@ namespace StockSharp.Algo
 				}
 			}
 
-			private readonly IEnumerableEx<ExecutionMessage> _items;
+			//private readonly IEnumerableEx<ExecutionMessage> _items;
 
-			public DepthEnumerable(IEnumerableEx<ExecutionMessage> items, IOrderLogMarketDepthBuilder builder, TimeSpan interval, int maxDepth)
+			public DepthEnumerable(IEnumerable<ExecutionMessage> items, IOrderLogMarketDepthBuilder builder, TimeSpan interval, int maxDepth)
 				: base(() => new DepthEnumerator(items, builder, interval, maxDepth))
 			{
 				if (items == null)
@@ -249,10 +249,10 @@ namespace StockSharp.Algo
 				if (interval < TimeSpan.Zero)
 					throw new ArgumentOutOfRangeException(nameof(interval), interval, LocalizedStrings.Str940);
 
-				_items = items;
+				//_items = items;
 			}
 
-			int IEnumerableEx.Count => _items.Count;
+			//int IEnumerableEx.Count => _items.Count;
 		}
 
 		/// <summary>
@@ -263,12 +263,12 @@ namespace StockSharp.Algo
 		/// <param name="interval">The interval of the order book generation. The default is <see cref="TimeSpan.Zero"/>, which means order books generation at each new string of orders log.</param>
 		/// <param name="maxDepth">The maximal depth of order book. The default is <see cref="Int32.MaxValue"/>, which means endless depth.</param>
 		/// <returns>Market depths.</returns>
-		public static IEnumerableEx<MarketDepth> ToMarketDepths(this IEnumerableEx<OrderLogItem> items, IOrderLogMarketDepthBuilder builder, TimeSpan interval = default(TimeSpan), int maxDepth = int.MaxValue)
+		public static IEnumerable<MarketDepth> ToMarketDepths(this IEnumerable<OrderLogItem> items, IOrderLogMarketDepthBuilder builder, TimeSpan interval = default(TimeSpan), int maxDepth = int.MaxValue)
 		{
 			var first = items.FirstOrDefault();
 
 			if (first == null)
-				return Enumerable.Empty<MarketDepth>().ToEx();
+				return Enumerable.Empty<MarketDepth>();
 
 			return items.ToMessages<OrderLogItem, ExecutionMessage>()
 				.ToMarketDepths(builder, interval)
@@ -283,12 +283,12 @@ namespace StockSharp.Algo
 		/// <param name="interval">The interval of the order book generation. The default is <see cref="TimeSpan.Zero"/>, which means order books generation at each new string of orders log.</param>
 		/// <param name="maxDepth">The maximal depth of order book. The default is <see cref="Int32.MaxValue"/>, which means endless depth.</param>
 		/// <returns>Market depths.</returns>
-		public static IEnumerableEx<QuoteChangeMessage> ToMarketDepths(this IEnumerableEx<ExecutionMessage> items, IOrderLogMarketDepthBuilder builder, TimeSpan interval = default(TimeSpan), int maxDepth = int.MaxValue)
+		public static IEnumerable<QuoteChangeMessage> ToMarketDepths(this IEnumerable<ExecutionMessage> items, IOrderLogMarketDepthBuilder builder, TimeSpan interval = default(TimeSpan), int maxDepth = int.MaxValue)
 		{
 			return new DepthEnumerable(items, builder, interval, maxDepth);
 		}
 
-		private sealed class OrderLogTickEnumerable : SimpleEnumerable<ExecutionMessage>, IEnumerableEx<ExecutionMessage>
+		private sealed class OrderLogTickEnumerable : SimpleEnumerable<ExecutionMessage>//, IEnumerableEx<ExecutionMessage>
 		{
 			private sealed class OrderLogTickEnumerator : IEnumerator<ExecutionMessage>
 			{
@@ -364,18 +364,18 @@ namespace StockSharp.Algo
 				}
 			}
 
-			private readonly IEnumerableEx<ExecutionMessage> _items;
+			//private readonly IEnumerable<ExecutionMessage> _items;
 
-			public OrderLogTickEnumerable(IEnumerableEx<ExecutionMessage> items)
+			public OrderLogTickEnumerable(IEnumerable<ExecutionMessage> items)
 				: base(() => new OrderLogTickEnumerator(items))
 			{
 				if (items == null)
 					throw new ArgumentNullException(nameof(items));
 
-				_items = items;
+				//_items = items;
 			}
 
-			int IEnumerableEx.Count => _items.Count;
+			//int IEnumerableEx.Count => _items.Count;
 		}
 
 		/// <summary>
@@ -383,19 +383,18 @@ namespace StockSharp.Algo
 		/// </summary>
 		/// <param name="items">Orders log lines.</param>
 		/// <returns>Tick trades.</returns>
-		public static IEnumerableEx<Trade> ToTrades(this IEnumerableEx<OrderLogItem> items)
+		public static IEnumerable<Trade> ToTrades(this IEnumerable<OrderLogItem> items)
 		{
 			var first = items.FirstOrDefault();
 
 			if (first == null)
-				return Enumerable.Empty<Trade>().ToEx(0);
+				return Enumerable.Empty<Trade>();
 
 			var ticks = items
 				.Select(i => i.ToMessage())
-				.ToEx(items.Count)
 				.ToTicks();
 
-			return ticks.Select(m => m.ToTrade(first.Order.Security)).ToEx(ticks.Count);
+			return ticks.Select(m => m.ToTrade(first.Order.Security));
 		}
 
 		/// <summary>
@@ -403,7 +402,7 @@ namespace StockSharp.Algo
 		/// </summary>
 		/// <param name="items">Orders log lines.</param>
 		/// <returns>Tick trades.</returns>
-		public static IEnumerableEx<ExecutionMessage> ToTicks(this IEnumerableEx<ExecutionMessage> items)
+		public static IEnumerable<ExecutionMessage> ToTicks(this IEnumerable<ExecutionMessage> items)
 		{
 			return new OrderLogTickEnumerable(items);
 		}

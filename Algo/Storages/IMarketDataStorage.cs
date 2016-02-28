@@ -19,8 +19,6 @@ namespace StockSharp.Algo.Storages
 	using System.Collections;
 	using System.Collections.Generic;
 
-	using Ecng.Collections;
-
 	using StockSharp.Algo.Candles;
 	using StockSharp.BusinessEntities;
 
@@ -63,7 +61,8 @@ namespace StockSharp.Algo.Storages
 		/// To save market data in storage.
 		/// </summary>
 		/// <param name="data">Market data.</param>
-		void Save(IEnumerable data);
+		/// <returns>Count of saved data.</returns>
+		int Save(IEnumerable data);
 
 		/// <summary>
 		/// To delete market data from storage.
@@ -107,7 +106,8 @@ namespace StockSharp.Algo.Storages
 		/// To save market data in storage.
 		/// </summary>
 		/// <param name="data">Market data.</param>
-		void Save(IEnumerable<TData> data);
+		/// <returns>Count of saved data.</returns>
+		int Save(IEnumerable<TData> data);
 
 		/// <summary>
 		/// To delete market data from storage.
@@ -120,7 +120,7 @@ namespace StockSharp.Algo.Storages
 		/// </summary>
 		/// <param name="date">Date, for which data shall be loaded.</param>
 		/// <returns>Data. If there is no data, the empty set will be returned.</returns>
-		new IEnumerableEx<TData> Load(DateTime date);
+		new IEnumerable<TData> Load(DateTime date);
 
 		/// <summary>
 		/// The serializer.

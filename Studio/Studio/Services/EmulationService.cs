@@ -27,7 +27,6 @@ namespace StockSharp.Studio.Services
 
 	using MoreLinq;
 
-	using StockSharp.Algo;
 	using StockSharp.Algo.Candles;
 	using StockSharp.Algo.Strategies;
 	using StockSharp.Algo.Strategies.Testing;
@@ -49,13 +48,13 @@ namespace StockSharp.Studio.Services
 		private DateTimeOffset _prevEmulTime;
 		private TimeSpan _emulDuration;
 
-		public StrategyContainer Strategy { get; private set; }
+		public StrategyContainer Strategy { get; }
 
 		public EmulationSettings EmulationSettings => _basketEmulation.EmulationSettings;
 
 		public HistoryEmulationConnector EmulationConnector => _basketEmulation.EmulationConnector;
 
-		public IEnumerableEx<Strategy> Strategies { get; set; }
+		public IEnumerable<Strategy> Strategies { get; set; }
 
 		public bool CanStart { get; private set; }
 
@@ -145,7 +144,7 @@ namespace StockSharp.Studio.Services
 				throw new ArgumentNullException(nameof(strategy));
 
 			Strategy = strategy;
-			Strategies = new[] { strategy }.ToEx(1);
+			Strategies = new[] { strategy };
 
 			var storageRegistry = new StudioStorageRegistry { MarketDataSettings = Strategy.MarketDataSettings };
 
@@ -184,7 +183,7 @@ namespace StockSharp.Studio.Services
 
 				CreateEmulationSession();
 
-				_basketEmulation.Start(GetStrategies().ToEx(Strategies.Count));
+				_basketEmulation.Start(GetStrategies());
 			}
 		}
 

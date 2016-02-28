@@ -70,7 +70,7 @@ namespace StockSharp.Hydra.Panes
 			set { SelectSecurityBtn.SelectedSecurity = value; }
 		}
 
-		private IEnumerableEx<Level1ChangeMessage> GetMessages()
+		private IEnumerable<Level1ChangeMessage> GetMessages()
 		{
 			var excludedTypes = Enumerator
 				.GetValues<Level1Fields>()
@@ -87,13 +87,12 @@ namespace StockSharp.Hydra.Panes
 					excludedTypes.ForEach(t => m.Changes.Remove(t));
 					return m;
 				})
-				.Where(m => m.Changes.Any())
-				.ToEx(messages.Count);
+				.Where(m => m.Changes.Any());
 		}
 
 		private bool CheckExportTypes()
 		{
-			if (Level1FieldsCtrl.SelectedFields.Any() || ExportBtn.ExportType == ExportTypes.Bin)
+			if (Level1FieldsCtrl.SelectedFields.Any() || ExportBtn.ExportType == ExportTypes.StockSharp)
 				return true;
 
 			new MessageBoxBuilder()

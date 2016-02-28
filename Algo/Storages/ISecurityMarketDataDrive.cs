@@ -242,9 +242,9 @@ namespace StockSharp.Algo.Storages
 				_quoteSerializer.Serialize(stream, list, metaInfo);
 			}
 
-			public override IEnumerableEx<QuoteChangeMessage> Deserialize(Stream stream, IMarketDataMetaInfo metaInfo)
+			public override IEnumerable<QuoteChangeMessage> Deserialize(Stream stream, IMarketDataMetaInfo metaInfo)
 			{
-				return new QuoteEnumerable(_quoteSerializer.Deserialize(stream, metaInfo), SecurityId).ToEx(metaInfo.Count);
+				return new QuoteEnumerable(_quoteSerializer.Deserialize(stream, metaInfo), SecurityId);
 			}
 
 			protected override void Write(TextWriter writer, QuoteChangeMessage data)
@@ -271,9 +271,9 @@ namespace StockSharp.Algo.Storages
 				get { throw new NotSupportedException(); }
 			}
 
-			void IMarketDataStorage<TEntity>.Save(IEnumerable<TEntity> data)
+			int IMarketDataStorage<TEntity>.Save(IEnumerable<TEntity> data)
 			{
-				Save(data.Select(ToMessage));
+				return Save(data.Select(ToMessage));
 			}
 
 			void IMarketDataStorage<TEntity>.Delete(IEnumerable<TEntity> data)
@@ -281,7 +281,7 @@ namespace StockSharp.Algo.Storages
 				Delete(data.Select(ToMessage));
 			}
 
-			IEnumerableEx<TEntity> IMarketDataStorage<TEntity>.Load(DateTime date)
+			IEnumerable<TEntity> IMarketDataStorage<TEntity>.Load(DateTime date)
 			{
 				return Load(date).ToEntities<TMessage, TEntity>(Security);
 			}
@@ -379,7 +379,7 @@ namespace StockSharp.Algo.Storages
 			{
 			}
 
-			IEnumerableEx<CandleMessage> IMarketDataStorage<CandleMessage>.Load(DateTime date)
+			IEnumerable<CandleMessage> IMarketDataStorage<CandleMessage>.Load(DateTime date)
 			{
 				return Load(date);
 			}
@@ -389,9 +389,9 @@ namespace StockSharp.Algo.Storages
 				get { throw new NotSupportedException(); }
 			}
 
-			void IMarketDataStorage<CandleMessage>.Save(IEnumerable<CandleMessage> data)
+			int IMarketDataStorage<CandleMessage>.Save(IEnumerable<CandleMessage> data)
 			{
-				Save(data.Cast<TCandleMessage>());
+				return Save(data.Cast<TCandleMessage>());
 			}
 
 			void IMarketDataStorage<CandleMessage>.Delete(IEnumerable<CandleMessage> data)
@@ -417,9 +417,9 @@ namespace StockSharp.Algo.Storages
 			{
 			}
 
-			void IMarketDataStorage<TCandle>.Save(IEnumerable<TCandle> data)
+			int IMarketDataStorage<TCandle>.Save(IEnumerable<TCandle> data)
 			{
-				Save(data.Select(Convert));
+				return Save(data.Select(Convert));
 			}
 
 			void IMarketDataStorage<TCandle>.Delete(IEnumerable<TCandle> data)
@@ -427,13 +427,11 @@ namespace StockSharp.Algo.Storages
 				Delete(data.Select(Convert));
 			}
 
-			IEnumerableEx<TCandle> IMarketDataStorage<TCandle>.Load(DateTime date)
+			IEnumerable<TCandle> IMarketDataStorage<TCandle>.Load(DateTime date)
 			{
 				var messages = Load(date);
 
-				return messages
-					.ToCandles<TCandle>(Security)
-					.ToEx(messages.Count);
+				return messages.ToCandles<TCandle>(Security);
 			}
 
 			IMarketDataSerializer<TCandle> IMarketDataStorage<TCandle>.Serializer
@@ -470,9 +468,9 @@ namespace StockSharp.Algo.Storages
 				get { throw new NotSupportedException(); }
 			}
 
-			void IMarketDataStorage<Candle>.Save(IEnumerable<Candle> data)
+			int IMarketDataStorage<Candle>.Save(IEnumerable<Candle> data)
 			{
-				Save(data.Select(c => Convert((TCandle)c)));
+				return Save(data.Select(c => Convert((TCandle)c)));
 			}
 
 			void IMarketDataStorage<Candle>.Delete(IEnumerable<Candle> data)
@@ -480,13 +478,12 @@ namespace StockSharp.Algo.Storages
 				Delete(data.Select(c => Convert((TCandle)c)));
 			}
 
-			IEnumerableEx<Candle> IMarketDataStorage<Candle>.Load(DateTime date)
+			IEnumerable<Candle> IMarketDataStorage<Candle>.Load(DateTime date)
 			{
 				var messages = Load(date);
 
 				return messages
-					.ToCandles<Candle>(Security, typeof(TCandleMessage).ToCandleType())
-					.ToEx(messages.Count);
+					.ToCandles<Candle>(Security, typeof(TCandleMessage).ToCandleType());
 			}
 
 			DateTimeOffset IMarketDataStorageInfo<Candle>.GetTime(Candle data)
@@ -519,9 +516,9 @@ namespace StockSharp.Algo.Storages
 				get { throw new NotSupportedException(); }
 			}
 
-			void IMarketDataStorage<Order>.Save(IEnumerable<Order> data)
+			int IMarketDataStorage<Order>.Save(IEnumerable<Order> data)
 			{
-				Save(data.Select(t => t.ToMessage()));
+				return Save(data.Select(t => t.ToMessage()));
 			}
 
 			void IMarketDataStorage<Order>.Delete(IEnumerable<Order> data)
@@ -529,7 +526,7 @@ namespace StockSharp.Algo.Storages
 				throw new NotSupportedException();
 			}
 
-			IEnumerableEx<Order> IMarketDataStorage<Order>.Load(DateTime date)
+			IEnumerable<Order> IMarketDataStorage<Order>.Load(DateTime date)
 			{
 				throw new NotSupportedException();
 			}
@@ -548,9 +545,9 @@ namespace StockSharp.Algo.Storages
 				get { throw new NotSupportedException(); }
 			}
 
-			void IMarketDataStorage<MyTrade>.Save(IEnumerable<MyTrade> data)
+			int IMarketDataStorage<MyTrade>.Save(IEnumerable<MyTrade> data)
 			{
-				Save(data.Select(t => t.ToMessage()));
+				return Save(data.Select(t => t.ToMessage()));
 			}
 
 			void IMarketDataStorage<MyTrade>.Delete(IEnumerable<MyTrade> data)
@@ -558,7 +555,7 @@ namespace StockSharp.Algo.Storages
 				throw new NotSupportedException();
 			}
 
-			IEnumerableEx<MyTrade> IMarketDataStorage<MyTrade>.Load(DateTime date)
+			IEnumerable<MyTrade> IMarketDataStorage<MyTrade>.Load(DateTime date)
 			{
 				throw new NotSupportedException();
 			}

@@ -251,7 +251,7 @@ namespace StockSharp.Studio
 
 					Task.Factory.StartNew(() =>
 					{
-						EmulationService.Strategies = CreateStrategies().ToEx(GetIterationCount());
+						EmulationService.Strategies = CreateStrategies();
 						EmulationService.StartEmulation();
 
 						isInitialization = false;

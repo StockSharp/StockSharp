@@ -35,7 +35,7 @@ namespace StockSharp.Hydra.Controls
 			InitializeComponent();
 		}
 
-		public void EnableType(ExportTypes type, bool isEnabled)
+		public void SetTypeEnabled(ExportTypes type, bool isEnabled)
 		{
 			((ListBoxItem)ExportTypeCtrl.Items[(int)type]).IsEnabled = isEnabled;
 		}

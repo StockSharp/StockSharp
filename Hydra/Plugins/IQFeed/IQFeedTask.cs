@@ -261,6 +261,7 @@ namespace StockSharp.Hydra.IQFeed
 			var endDate = DateTime.Today - TimeSpan.FromDays(_settings.DayOffset);
 
 			var allDates = startDate.Range(endDate, TimeSpan.FromDays(1)).ToArray();
+			var anyData = false;
 
 			var hasSecurities = false;
 
@@ -273,6 +274,8 @@ namespace StockSharp.Hydra.IQFeed
 
 				if (security.IsLevel1Enabled())
 				{
+					anyData = true;
+
 					var tradeStorage = StorageRegistry.GetTickMessageStorage(security.Security, _settings.Drive, _settings.StorageFormat);
 
 					foreach (var date in allDates.Except(tradeStorage.Dates))
@@ -307,6 +310,8 @@ namespace StockSharp.Hydra.IQFeed
 
 				foreach (var series in security.GetCandleSeries())
 				{
+					anyData = true;
+
 					if (!CanProcess())
 						break;
 
@@ -371,10 +376,15 @@ namespace StockSharp.Hydra.IQFeed
 
 			if (CanProcess())
 			{
-				this.AddInfoLog(LocalizedStrings.Str2300);
+				if (anyData)
+				{
+					this.AddInfoLog(LocalizedStrings.Str2300);
 
-				_settings.StartFrom = endDate;
-				SaveSettings();
+					_settings.StartFrom = endDate;
+					SaveSettings();
+				}
+				else
+					this.AddWarningLog(LocalizedStrings.Str2913);
 			}
 
 			return _settings.Interval;

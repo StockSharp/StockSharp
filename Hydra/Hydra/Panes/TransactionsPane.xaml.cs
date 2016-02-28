@@ -16,9 +16,9 @@ Copyright 2010 by StockSharp, LLC
 namespace StockSharp.Hydra.Panes
 {
 	using System;
+	using System.Collections.Generic;
 	using System.Windows;
 
-	using Ecng.Collections;
 	using Ecng.Common;
 	using Ecng.Serialization;
 
@@ -48,7 +48,7 @@ namespace StockSharp.Hydra.Panes
 			set { SelectSecurityBtn.SelectedSecurity = value; }
 		}
 
-		private IEnumerableEx<ExecutionMessage> GetTransactions()
+		private IEnumerable<ExecutionMessage> GetTransactions()
 		{
 			var executions = StorageRegistry
 				.GetTransactionStorage(SelectedSecurity, Drive, StorageFormat)

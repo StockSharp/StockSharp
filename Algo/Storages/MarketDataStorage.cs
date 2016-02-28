@@ -126,10 +126,12 @@ namespace StockSharp.Algo.Storages
 			return Drive.LoadStream(date);
 		}
 
-		public void Save(IEnumerable<TData> data)
+		public int Save(IEnumerable<TData> data)
 		{
 			if (data == null)
 				throw new ArgumentNullException(nameof(data));
+
+			var count = 0;
 
 			foreach (var group in data.GroupBy(d =>
 			{
@@ -163,7 +165,7 @@ namespace StockSharp.Algo.Storages
 							metaInfo = Serializer.CreateMetaInfo(date);
 						}
 
-						Save(stream, metaInfo, newItems, false);
+						count += Save(stream, metaInfo, newItems, false);
 
 						if (!(stream is MemoryStream))
 							continue;
@@ -177,9 +179,11 @@ namespace StockSharp.Algo.Storages
 					}
 				}
 			}
+
+			return count;
 		}
 
-		private void Save(Stream stream, IMarketDataMetaInfo metaInfo, TData[] data, bool isOverride)
+		private int Save(Stream stream, IMarketDataMetaInfo metaInfo, TData[] data, bool isOverride)
 		{
 			if (stream == null)
 				throw new ArgumentNullException(nameof(stream));
@@ -209,7 +213,7 @@ namespace StockSharp.Algo.Storages
 					data = FilterNewData(data, metaInfo).ToArray();
 
 					if (data.IsEmpty())
-						return;
+						return 0;
 				}
 			}
 
@@ -232,6 +236,8 @@ namespace StockSharp.Algo.Storages
 
 			newDayData.Position = 0;
 			stream.WriteRaw(newDayData.To<byte[]>());
+
+			return data.Length;
 		}
 
 		protected virtual IEnumerable<TData> FilterNewData(IEnumerable<TData> data, IMarketDataMetaInfo metaInfo)
@@ -240,9 +246,9 @@ namespace StockSharp.Algo.Storages
 			return data.Where(i => GetTruncatedTime(i) >= lastTime);
 		}
 
-		void IMarketDataStorage.Save(IEnumerable data)
+		int IMarketDataStorage.Save(IEnumerable data)
 		{
-			Save(data.Cast<TData>());
+			return Save(data.Cast<TData>());
 		}
 
 		void IMarketDataStorage.Delete(IEnumerable data)
@@ -322,16 +328,14 @@ namespace StockSharp.Algo.Storages
 					}
 					catch
 					{
-						if (stream != null)
-							stream.Dispose();
-
+						stream?.Dispose();
 						throw;
 					}
 				}
 			}
 		}
 
-		public IEnumerableEx<TData> Load(DateTime date)
+		public IEnumerable<TData> Load(DateTime date)
 		{
 			lock (GetSync(date))
 			{
@@ -342,7 +346,7 @@ namespace StockSharp.Algo.Storages
 					var metaInfo = GetInfo(stream, date);
 
 					if (metaInfo == null)
-						return Enumerable.Empty<TData>().ToEx();
+						return Enumerable.Empty<TData>();
 
 					// нельзя закрывать поток, так как из него будут читаться данные через энумератор
 					//using (stream)

@@ -192,7 +192,7 @@ namespace StockSharp.Algo.Strategies.Testing
 		/// <summary>
 		/// The startegy for testing.
 		/// </summary>
-		public IEnumerableEx<Strategy> Strategies { get; set; }
+		public IEnumerable<Strategy> Strategies { get; set; }
 
 		/// <summary>
 		/// Has the emulator ended its operation due to end of data, or it was interrupted through the <see cref="BatchEmulation.Stop"/>method.
@@ -287,7 +287,7 @@ namespace StockSharp.Algo.Strategies.Testing
 			if (storageRegistry == null)
 				throw new ArgumentNullException(nameof(storageRegistry));
 
-			Strategies = Enumerable.Empty<Strategy>().ToEx();
+			Strategies = Enumerable.Empty<Strategy>();
 
 			EmulationSettings = new EmulationSettings();
 			EmulationConnector = new HistoryEmulationConnector(securityProvider, portfolios, storageRegistry)
@@ -350,9 +350,10 @@ namespace StockSharp.Algo.Strategies.Testing
 		}
 
 		/// <summary>
-		/// To start paper trading.
+		/// Start emulation.
 		/// </summary>
-		public void Start(IEnumerableEx<Strategy> strategies)
+		/// <param name="strategies">The strategies.</param>
+		public void Start(IEnumerable<Strategy> strategies)
 		{
 			if (strategies == null)
 				throw new ArgumentNullException(nameof(strategies));
@@ -360,7 +361,7 @@ namespace StockSharp.Algo.Strategies.Testing
 			_progressStep = ((EmulationSettings.StopTime - EmulationSettings.StartTime).Ticks / 100).To<TimeSpan>();
 			
 			_cancelEmulation = false;
-			_totalBatches = (int)((decimal)strategies.Count / EmulationSettings.BatchSize).Ceiling();
+			_totalBatches = (int)((decimal)strategies.Count() / EmulationSettings.BatchSize).Ceiling();
 			_currentBatch = -1;
 
 			CurrentProgress = 0;

@@ -1692,7 +1692,7 @@ namespace StockSharp.Algo
 				throw new ArgumentNullException(nameof(security));
 
 			var basket = security as BasketSecurity;
-			return basket == null ? orders.Where(o => o.Security == security) : basket.InnerSecurities.SelectMany(s => Filter(orders, s));
+			return basket?.InnerSecurities.SelectMany(s => Filter(orders, s)) ?? orders.Where(o => o.Security == security);
 		}
 
 		/// <summary>
@@ -1755,7 +1755,7 @@ namespace StockSharp.Algo
 				throw new ArgumentNullException(nameof(security));
 
 			var basket = security as BasketSecurity;
-			return basket == null ? trades.Where(t => t.Security == security) : basket.InnerSecurities.SelectMany(s => Filter(trades, s));
+			return basket?.InnerSecurities.SelectMany(s => Filter(trades, s)) ?? trades.Where(t => t.Security == security);
 		}
 
 		/// <summary>
@@ -1788,7 +1788,7 @@ namespace StockSharp.Algo
 				throw new ArgumentNullException(nameof(security));
 
 			var basket = security as BasketSecurity;
-			return basket == null ? positions.Where(p => p.Security == security) : basket.InnerSecurities.SelectMany(s => Filter(positions, s));
+			return basket?.InnerSecurities.SelectMany(s => Filter(positions, s)) ?? positions.Where(p => p.Security == security);
 		}
 
 		/// <summary>
@@ -3261,7 +3261,7 @@ namespace StockSharp.Algo
 		public static Tuple<SecurityTypes?, string> GetSecurityClassInfo(this IDictionary<string, RefPair<SecurityTypes, string>> securityClassInfo, string secClass)
 		{
 			var pair = securityClassInfo.TryGetValue(secClass);
-			return Tuple.Create(pair == null ? (SecurityTypes?)null : pair.First, pair == null ? secClass : pair.Second);
+			return Tuple.Create(pair?.First, pair == null ? secClass : pair.Second);
 		}
 
 		/// <summary>
@@ -3366,7 +3366,7 @@ namespace StockSharp.Algo
 		/// <returns>Directory name.</returns>
 		public static string CandleArgToFolderName(object arg)
 		{
-			return arg == null ? string.Empty : arg.ToString().Replace(":", "-");
+			return arg?.ToString().Replace(":", "-") ?? string.Empty;
 		}
 
 		/// <summary>
@@ -3756,7 +3756,7 @@ namespace StockSharp.Algo
 			throw new ArgumentOutOfRangeException(nameof(message), null, LocalizedStrings.Str925);
 		}
 
-		private class TickEnumerable : SimpleEnumerable<ExecutionMessage>, IEnumerableEx<ExecutionMessage>
+		private class TickEnumerable : SimpleEnumerable<ExecutionMessage>//, IEnumerableEx<ExecutionMessage>
 		{
 			private class TickEnumerator : IEnumerator<ExecutionMessage>
 			{
@@ -3804,18 +3804,18 @@ namespace StockSharp.Algo
 				}
 			}
 
-			private readonly IEnumerableEx<Level1ChangeMessage> _level1;
+			//private readonly IEnumerable<Level1ChangeMessage> _level1;
 
-			public TickEnumerable(IEnumerableEx<Level1ChangeMessage> level1)
+			public TickEnumerable(IEnumerable<Level1ChangeMessage> level1)
 				: base(() => new TickEnumerator(level1.GetEnumerator()))
 			{
 				if (level1 == null)
 					throw new ArgumentNullException(nameof(level1));
 
-				_level1 = level1;
+				//_level1 = level1;
 			}
 
-			int IEnumerableEx.Count => _level1.Count;
+			//int IEnumerableEx.Count => _level1.Count;
 		}
 
 		/// <summary>
@@ -3823,7 +3823,7 @@ namespace StockSharp.Algo
 		/// </summary>
 		/// <param name="level1">Level1 data.</param>
 		/// <returns>Tick data.</returns>
-		public static IEnumerableEx<ExecutionMessage> ToTicks(this IEnumerableEx<Level1ChangeMessage> level1)
+		public static IEnumerable<ExecutionMessage> ToTicks(this IEnumerable<Level1ChangeMessage> level1)
 		{
 			return new TickEnumerable(level1);
 		}
@@ -3865,7 +3865,7 @@ namespace StockSharp.Algo
 			};
 		}
 
-		private class OrderBookEnumerable : SimpleEnumerable<QuoteChangeMessage>, IEnumerableEx<QuoteChangeMessage>
+		private class OrderBookEnumerable : SimpleEnumerable<QuoteChangeMessage>//, IEnumerableEx<QuoteChangeMessage>
 		{
 			private class OrderBookEnumerator : IEnumerator<QuoteChangeMessage>
 			{
@@ -3945,18 +3945,18 @@ namespace StockSharp.Algo
 				}
 			}
 
-			private readonly IEnumerableEx<Level1ChangeMessage> _level1;
+			//private readonly IEnumerable<Level1ChangeMessage> _level1;
 
-			public OrderBookEnumerable(IEnumerableEx<Level1ChangeMessage> level1)
+			public OrderBookEnumerable(IEnumerable<Level1ChangeMessage> level1)
 				: base(() => new OrderBookEnumerator(level1.GetEnumerator()))
 			{
 				if (level1 == null)
 					throw new ArgumentNullException(nameof(level1));
 
-				_level1 = level1;
+				//_level1 = level1;
 			}
 
-			int IEnumerableEx.Count => _level1.Count;
+			//int IEnumerableEx.Count => _level1.Count;
 		}
 
 		/// <summary>
@@ -3964,7 +3964,7 @@ namespace StockSharp.Algo
 		/// </summary>
 		/// <param name="level1">Level1 data.</param>
 		/// <returns>Market depths.</returns>
-		public static IEnumerableEx<QuoteChangeMessage> ToOrderBooks(this IEnumerableEx<Level1ChangeMessage> level1)
+		public static IEnumerable<QuoteChangeMessage> ToOrderBooks(this IEnumerable<Level1ChangeMessage> level1)
 		{
 			return new OrderBookEnumerable(level1);
 		}

@@ -21,7 +21,6 @@ namespace SampleHistoryTestingParallel
 	using System.Windows;
 	using System.Windows.Media;
 
-	using Ecng.Collections;
 	using Ecng.Xaml;
 	using Ecng.Common;
 
@@ -210,8 +209,7 @@ namespace SampleHistoryTestingParallel
 					Stat.AddStrategies(new[] { strategy });
 
 					return strategy;
-				})
-				.ToEx(periods.Length);
+				});
 
 			// start emulation
 			batchEmulation.Start(strategies);

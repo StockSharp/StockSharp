@@ -51,7 +51,7 @@ namespace StockSharp.Hydra.Panes
 			SecurityPicker.SecurityProvider = ConfigManager.GetService<ISecurityProvider>();
 			SecurityPicker.ExcludeAllSecurity();
 
-			ExportBtn.EnableType(ExportTypes.Bin, false);
+			ExportBtn.SetTypeEnabled(ExportTypes.StockSharp, false);
 
 			MarketData.DataLoading += () => MarketDataBusyIndicator.IsBusy = true;
 			MarketData.DataLoaded += () => MarketDataBusyIndicator.IsBusy = false;
@@ -203,7 +203,7 @@ namespace StockSharp.Hydra.Panes
 			if (path == null)
 				return;
 
-			Progress.Start(null, typeof(SecurityMessage), null, securities.Select(s => s.ToMessage()).ToEx(securities.Count), path);
+			Progress.Start(null, typeof(SecurityMessage), null, securities.Select(s => s.ToMessage()), securities.Count, path, StorageFormats.Csv);
 		}
 	}
 }

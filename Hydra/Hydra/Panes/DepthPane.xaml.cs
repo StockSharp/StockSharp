@@ -64,7 +64,7 @@ namespace StockSharp.Hydra.Panes
 			}
 		}
 
-		private IEnumerableEx<QuoteChangeMessage> GetDepths()
+		private IEnumerable<QuoteChangeMessage> GetDepths()
 		{
 			int maxDepth;
 
@@ -91,8 +91,7 @@ namespace StockSharp.Hydra.Panes
 							md.Asks = md.Asks.Take(maxDepth).ToArray();
 							return md;
 						})
-						.WhereWithPrevious((prev, curr) => (curr.ServerTime - prev.ServerTime) >= interval)
-						.ToEx(retVal.Count);
+						.WhereWithPrevious((prev, curr) => (curr.ServerTime - prev.ServerTime) >= interval);
 				}
 
 				case 1:
@@ -167,7 +166,7 @@ namespace StockSharp.Hydra.Panes
 			DepthDate.Text = depth.ServerTime.ToString("yyyy.MM.dd HH:mm:ss.fff");
 		}
 
-		protected override bool CanDirectBinExport => base.CanDirectBinExport && BuildFrom.SelectedIndex == 0;
+		protected override bool CanDirectExport => base.CanDirectExport && BuildFrom.SelectedIndex == 0;
 
 		//protected override void OnClosed(EventArgs e)
 		//{

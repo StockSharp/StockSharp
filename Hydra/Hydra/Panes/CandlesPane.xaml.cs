@@ -16,6 +16,7 @@ Copyright 2010 by StockSharp, LLC
 namespace StockSharp.Hydra.Panes
 {
 	using System;
+	using System.Collections.Generic;
 	using System.Collections.ObjectModel;
 	using System.Windows;
 
@@ -54,7 +55,7 @@ namespace StockSharp.Hydra.Panes
 
 		private CandleSeries CandleSeries => new CandleSeries(CandleSettings.Settings.CandleType, SelectedSecurity, Arg);
 
-		private IEnumerableEx<CandleMessage> GetCandles()
+		private IEnumerable<CandleMessage> GetCandles()
 		{
 			var from = From.Value;
 			var to = To.Value.EndOfDay();
@@ -105,7 +106,7 @@ namespace StockSharp.Hydra.Panes
 			}
 		}
 
-		protected override bool CanDirectBinExport => base.CanDirectBinExport && BuildFrom.SelectedIndex == 0;
+		protected override bool CanDirectExport => base.CanDirectExport && BuildFrom.SelectedIndex == 0;
 
 		private void FindClick(object sender, RoutedEventArgs e)
 		{

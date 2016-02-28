@@ -51,7 +51,7 @@ namespace StockSharp.Hydra.Panes
 
 		private static IEntityRegistry EntityRegistry => ConfigManager.GetService<IEntityRegistry>();
 
-		public static readonly DependencyProperty TaskProperty = DependencyProperty.Register("Task", typeof(IHydraTask), typeof(TaskPane), new PropertyMetadata(null,
+		public static readonly DependencyProperty TaskProperty = DependencyProperty.Register(nameof(Task), typeof(IHydraTask), typeof(TaskPane), new PropertyMetadata(null,
 			(o, args) =>
 			{
 				var pane = (TaskPane)o;
@@ -667,7 +667,7 @@ namespace StockSharp.Hydra.Panes
 
 	sealed class CandleSeriesCheckBox : CheckBox
 	{
-		public static readonly DependencyProperty SeriesProperty = DependencyProperty.Register("Series", typeof(DataType), typeof(CandleSeriesCheckBox));
+		public static readonly DependencyProperty SeriesProperty = DependencyProperty.Register(nameof(Series), typeof(DataType), typeof(CandleSeriesCheckBox));
 
 		public DataType Series
 		{

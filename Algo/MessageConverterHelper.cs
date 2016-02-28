@@ -861,11 +861,11 @@ namespace StockSharp.Algo
 			return board;
 		}
 
-		private class ToMessagesEnumerableEx<TEntity, TMessage> : IEnumerableEx<TMessage>
+		private class ToMessagesEnumerable<TEntity, TMessage> : IEnumerable<TMessage>
 		{
-			private readonly IEnumerableEx<TEntity> _entities;
+			private readonly IEnumerable<TEntity> _entities;
 
-			public ToMessagesEnumerableEx(IEnumerableEx<TEntity> entities)
+			public ToMessagesEnumerable(IEnumerable<TEntity> entities)
 			{
 				if (entities == null)
 					throw new ArgumentNullException(nameof(entities));
@@ -883,7 +883,7 @@ namespace StockSharp.Algo
 				return GetEnumerator();
 			}
 
-			int IEnumerableEx.Count => _entities.Count;
+			//int IEnumerableEx.Count => _entities.Count;
 
 			private static TMessage Convert(TEntity value)
 			{
@@ -907,20 +907,20 @@ namespace StockSharp.Algo
 		/// <typeparam name="TMessage">Message type.</typeparam>
 		/// <param name="entities">Trading objects.</param>
 		/// <returns>Messages.</returns>
-		public static IEnumerableEx<TMessage> ToMessages<TEntity, TMessage>(this IEnumerableEx<TEntity> entities)
+		public static IEnumerable<TMessage> ToMessages<TEntity, TMessage>(this IEnumerable<TEntity> entities)
 		{
-			return new ToMessagesEnumerableEx<TEntity, TMessage>(entities);
+			return new ToMessagesEnumerable<TEntity, TMessage>(entities);
 		}
 
-		private class ToEntitiesEnumerableEx<TMessage, TEntity> : IEnumerableEx<TEntity>
+		private class ToEntitiesEnumerable<TMessage, TEntity> : IEnumerable<TEntity>
 			where TMessage : Message
 		{
-			private readonly IEnumerableEx<TMessage> _messages;
+			private readonly IEnumerable<TMessage> _messages;
 			private readonly Security _security;
 			//private readonly object _candleArg;
 			private readonly Type _candleType;
 
-			public ToEntitiesEnumerableEx(IEnumerableEx<TMessage> messages, Security security)
+			public ToEntitiesEnumerable(IEnumerable<TMessage> messages, Security security)
 			{
 				if (messages == null)
 					throw new ArgumentNullException(nameof(messages));
@@ -932,7 +932,7 @@ namespace StockSharp.Algo
 				_security = security;
 			}
 			
-			public ToEntitiesEnumerableEx(IEnumerableEx<TMessage> messages, Security security, Type candleType)
+			public ToEntitiesEnumerable(IEnumerable<TMessage> messages, Security security, Type candleType)
 				: this (messages, security)
 			{
 				_candleType = candleType;
@@ -949,7 +949,7 @@ namespace StockSharp.Algo
 				return GetEnumerator();
 			}
 
-			int IEnumerableEx.Count => _messages.Count;
+			//int IEnumerableEx.Count => _messages.Count;
 
 			private TEntity Convert(TMessage message)
 			{
@@ -1002,10 +1002,10 @@ namespace StockSharp.Algo
 		/// <param name="messages">Messages.</param>
 		/// <param name="security">Security.</param>
 		/// <returns>Trading objects.</returns>
-		public static IEnumerableEx<TEntity> ToEntities<TMessage, TEntity>(this IEnumerableEx<TMessage> messages, Security security)
+		public static IEnumerable<TEntity> ToEntities<TMessage, TEntity>(this IEnumerable<TMessage> messages, Security security)
 			where TMessage : Message
 		{
-			return new ToEntitiesEnumerableEx<TMessage, TEntity>(messages, security);
+			return new ToEntitiesEnumerable<TMessage, TEntity>(messages, security);
 		}
 
 		/// <summary>
@@ -1016,9 +1016,9 @@ namespace StockSharp.Algo
 		/// <param name="security">Security.</param>
 		/// <param name="candleType">The type of the candle. It is used, if <typeparamref name="TCandle" /> equals to <see cref="Candle"/>.</param>
 		/// <returns>Trading objects.</returns>
-		public static IEnumerableEx<TCandle> ToCandles<TCandle>(this IEnumerableEx<CandleMessage> messages, Security security, Type candleType = null)
+		public static IEnumerable<TCandle> ToCandles<TCandle>(this IEnumerable<CandleMessage> messages, Security security, Type candleType = null)
 		{
-			return new ToEntitiesEnumerableEx<CandleMessage, TCandle>(messages, security, candleType ?? typeof(TCandle));
+			return new ToEntitiesEnumerable<CandleMessage, TCandle>(messages, security, candleType ?? typeof(TCandle));
 		}
 
 		/// <summary>

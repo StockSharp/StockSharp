@@ -301,8 +301,7 @@ namespace StockSharp.Hydra.Tools
 									.Load(date)
 									.ToTicks();
 
-								toStorage.Save(ticks);
-								RaiseDataLoaded(security, typeof(ExecutionMessage), ExecutionTypes.Tick, date, ticks.Count);
+								RaiseDataLoaded(security, typeof(ExecutionMessage), ExecutionTypes.Tick, date, toStorage.Save(ticks));
 								break;
 							}
 							case ConvertModes.OrderLogToOrderBooks:
@@ -311,8 +310,7 @@ namespace StockSharp.Hydra.Tools
 									.Load(date)
 									.ToMarketDepths(_settings.MarketDepthBuilder.CreateBuilder(security.ToSecurityId()), _settings.MarketDepthInterval, _settings.MarketDepthMaxDepth);
 
-								toStorage.Save(depths);
-								RaiseDataLoaded(security, typeof(QuoteChangeMessage), null, date, depths.Count);
+								RaiseDataLoaded(security, typeof(QuoteChangeMessage), null, date, toStorage.Save(depths));
 								break;
 							}
 							case ConvertModes.OrderLogToCandles:
@@ -322,8 +320,7 @@ namespace StockSharp.Hydra.Tools
 									.ToTicks()
 									.ToCandles(new CandleSeries(_settings.CandleSettings.CandleType, security, _settings.CandleSettings.Arg));
 
-								toStorage.Save(candles);
-								RaiseDataLoaded(security, _settings.CandleSettings.CandleType, _settings.CandleSettings.Arg, date, candles.Count);
+								RaiseDataLoaded(security, _settings.CandleSettings.CandleType, _settings.CandleSettings.Arg, date, toStorage.Save(candles));
 								break;
 							}
 							case ConvertModes.TicksToCandles:
@@ -332,8 +329,7 @@ namespace StockSharp.Hydra.Tools
 									.Load(date)
 									.ToCandles(new CandleSeries(_settings.CandleSettings.CandleType, security, _settings.CandleSettings.Arg));
 
-								toStorage.Save(candles);
-								RaiseDataLoaded(security, _settings.CandleSettings.CandleType, _settings.CandleSettings.Arg, date, candles.Count);
+								RaiseDataLoaded(security, _settings.CandleSettings.CandleType, _settings.CandleSettings.Arg, date, toStorage.Save(candles));
 								break;
 							}
 							case ConvertModes.OrderBooksToCandles:
@@ -342,8 +338,7 @@ namespace StockSharp.Hydra.Tools
 									.Load(date)
 									.ToCandles(new CandleSeries(_settings.CandleSettings.CandleType, security, _settings.CandleSettings.Arg));
 
-								toStorage.Save(candles);
-								RaiseDataLoaded(security, _settings.CandleSettings.CandleType, _settings.CandleSettings.Arg, date, candles.Count);
+								RaiseDataLoaded(security, _settings.CandleSettings.CandleType, _settings.CandleSettings.Arg, date, toStorage.Save(candles));
 								break;
 							}
 							case ConvertModes.Level1ToTicks:
@@ -352,8 +347,7 @@ namespace StockSharp.Hydra.Tools
 									.Load(date)
 									.ToTicks();
 
-								toStorage.Save(ticks);
-								RaiseDataLoaded(security, typeof(ExecutionMessage), ExecutionTypes.Tick, date, ticks.Count);
+								RaiseDataLoaded(security, typeof(ExecutionMessage), ExecutionTypes.Tick, date, toStorage.Save(ticks));
 								break;
 							}
 							case ConvertModes.Level1ToCandles:
@@ -363,8 +357,7 @@ namespace StockSharp.Hydra.Tools
 									.ToTicks()
 									.ToCandles(new CandleSeries(_settings.CandleSettings.CandleType, security, _settings.CandleSettings.Arg));
 
-								toStorage.Save(candles);
-								RaiseDataLoaded(security, _settings.CandleSettings.CandleType, _settings.CandleSettings.Arg, date, candles.Count);
+								RaiseDataLoaded(security, _settings.CandleSettings.CandleType, _settings.CandleSettings.Arg, date, toStorage.Save(candles));
 								break;
 							}
 							case ConvertModes.Level1ToOrderBooks:
@@ -373,8 +366,7 @@ namespace StockSharp.Hydra.Tools
 									.Load(date)
 									.ToOrderBooks();
 
-								toStorage.Save(orderBooks);
-								RaiseDataLoaded(security, typeof(QuoteChangeMessage), null, date, orderBooks.Count);
+								RaiseDataLoaded(security, typeof(QuoteChangeMessage), null, date, toStorage.Save(orderBooks));
 								break;
 							}
 							default:

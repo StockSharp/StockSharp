@@ -35,7 +35,7 @@ namespace StockSharp.Algo.Storages
 	/// </summary>
 	public static class StorageHelper
 	{
-		private sealed class RangeEnumerable<TData> : SimpleEnumerable<TData>, IEnumerableEx<TData>
+		private sealed class RangeEnumerable<TData> : SimpleEnumerable<TData>//, IEnumerableEx<TData>
 		{
 			[DebuggerDisplay("From {_from} Cur {_currDate} To {_to}")]
 			private sealed class RangeEnumerator : IEnumerator<TData>
@@ -52,15 +52,6 @@ namespace StockSharp.Algo.Storages
 
 				public RangeEnumerator(IMarketDataStorage<TData> storage, DateTimeOffset from, DateTimeOffset to, Func<TData, DateTimeOffset> getTime)
 				{
-					if (storage == null)
-						throw new ArgumentNullException(nameof(storage));
-
-					if (getTime == null)
-						throw new ArgumentNullException(nameof(getTime));
-
-					if (from > to)
-						throw new ArgumentOutOfRangeException(nameof(@from));
-
 					_storage = storage;
 					_from = from.UtcDateTime;
 					_to = to.UtcDateTime;
@@ -145,41 +136,50 @@ namespace StockSharp.Algo.Storages
 				object IEnumerator.Current => Current;
 			}
 
-			private readonly IMarketDataStorage<TData> _storage;
-			private readonly DateTimeOffset _from;
-			private readonly DateTimeOffset _to;
+			//private readonly IMarketDataStorage<TData> _storage;
+			//private readonly DateTimeOffset _from;
+			//private readonly DateTimeOffset _to;
 
 			public RangeEnumerable(IMarketDataStorage<TData> storage, DateTimeOffset from, DateTimeOffset to, Func<TData, DateTimeOffset> getTime)
 				: base(() => new RangeEnumerator(storage, from, to, getTime))
 			{
-				_storage = storage;
-				_from = from;
-				_to = to;
+				if (storage == null)
+					throw new ArgumentNullException(nameof(storage));
+
+				if (getTime == null)
+					throw new ArgumentNullException(nameof(getTime));
+
+				if (from > to)
+					throw new ArgumentOutOfRangeException(nameof(@from));
+
+				//_storage = storage;
+				//_from = from;
+				//_to = to;
 			}
 
-			private int? _count;
+			//private int? _count;
 
-			int IEnumerableEx.Count
-			{
-				get
-				{
-					if (_count == null)
-					{
-						// TODO
-						//if (_from.TimeOfDay != TimeSpan.Zero || _to.TimeOfDay != TimeSpan.Zero)
-						//	throw new InvalidOperationException("Невозможно вычислить количество элементов для диапазона со временем. Можно использовать только диапазон по датами.");
+			//int IEnumerableEx.Count
+			//{
+			//	get
+			//	{
+			//		if (_count == null)
+			//		{
+			//			// TODO
+			//			//if (_from.TimeOfDay != TimeSpan.Zero || _to.TimeOfDay != TimeSpan.Zero)
+			//			//	throw new InvalidOperationException("Невозможно вычислить количество элементов для диапазона со временем. Можно использовать только диапазон по датами.");
 
-						var count = 0;
+			//			var count = 0;
 
-						for (var i = _from; i <= _to; i += TimeSpan.FromDays(1))
-							count += _storage.Load(i.UtcDateTime).Count;
+			//			for (var i = _from; i <= _to; i += TimeSpan.FromDays(1))
+			//				count += _storage.Load(i.UtcDateTime).Count;
 
-						_count = count;
-					}
+			//			_count = count;
+			//		}
 
-					return (int)_count;
-				}
-			}
+			//		return (int)_count;
+			//	}
+			//}
 		}
 
 		/// <summary>
@@ -244,12 +244,12 @@ namespace StockSharp.Algo.Storages
 		/// <param name="from">The start time for data loading. If the value is not specified, data will be loaded from the starting time <see cref="GetFromDate"/>.</param>
 		/// <param name="to">The end time for data loading. If the value is not specified, data will be loaded up to the <see cref="GetToDate"/> date, inclusive.</param>
 		/// <returns>The iterative loader of market data.</returns>
-		public static IEnumerableEx<TData> Load<TData>(this IMarketDataStorage<TData> storage, DateTimeOffset? from = null, DateTimeOffset? to = null)
+		public static IEnumerable<TData> Load<TData>(this IMarketDataStorage<TData> storage, DateTimeOffset? from = null, DateTimeOffset? to = null)
 		{
 			var range = GetRange(storage, from, to);
 
 			return range == null
-				? Enumerable.Empty<TData>().ToEx()
+				? Enumerable.Empty<TData>()
 				: new RangeEnumerable<TData>(storage, range.Min, range.Max, ((IMarketDataStorageInfo<TData>)storage).GetTime);
 		}
 

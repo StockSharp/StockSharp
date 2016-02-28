@@ -20,8 +20,6 @@ namespace StockSharp.Algo.Storages
 	using System.Collections.Generic;
 	using System.Linq;
 
-	using Ecng.Collections;
-
 	using StockSharp.Algo.Candles;
 	using StockSharp.BusinessEntities;
 	using StockSharp.Messages;
@@ -105,9 +103,9 @@ namespace StockSharp.Algo.Storages
 		/// </summary>
 		/// <param name="date">Date, for which data shall be loaded.</param>
 		/// <returns>Data. If there is no data, the empty set will be returned.</returns>
-		public IEnumerableEx<T> Load(DateTime date)
+		public IEnumerable<T> Load(DateTime date)
 		{
-			return _getData(date).ToEx();
+			return _getData(date);
 		}
 
 		IEnumerable IMarketDataStorage.Load(DateTime date)
@@ -120,7 +118,7 @@ namespace StockSharp.Algo.Storages
 			throw new NotSupportedException();
 		}
 
-		void IMarketDataStorage.Save(IEnumerable data)
+		int IMarketDataStorage.Save(IEnumerable data)
 		{
 			throw new NotSupportedException();
 		}
@@ -135,7 +133,7 @@ namespace StockSharp.Algo.Storages
 			throw new NotSupportedException();
 		}
 
-		void IMarketDataStorage<T>.Save(IEnumerable<T> data)
+		int IMarketDataStorage<T>.Save(IEnumerable<T> data)
 		{
 			throw new NotSupportedException();
 		}

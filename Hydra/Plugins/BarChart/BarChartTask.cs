@@ -203,6 +203,7 @@ namespace StockSharp.Hydra.BarChart
 			var endDate = DateTime.Today - TimeSpan.FromDays(_settings.Offset);
 
 			var allDates = startDate.Range(endDate, TimeSpan.FromDays(1)).ToArray();
+			var anyData = false;
 
 			var hasSecurities = false;
 
@@ -215,6 +216,8 @@ namespace StockSharp.Hydra.BarChart
 
 				if (security.IsLevel1Enabled())
 				{
+					anyData = true;
+
 					var tradeStorage = StorageRegistry.GetTickMessageStorage(security.Security, _settings.Drive, _settings.StorageFormat);
 
 					foreach (var date in allDates.Except(tradeStorage.Dates))
@@ -249,6 +252,8 @@ namespace StockSharp.Hydra.BarChart
 
 				foreach (var pair in security.GetCandleSeries())
 				{
+					anyData = true;
+
 					if (!CanProcess())
 						break;
 
@@ -313,10 +318,15 @@ namespace StockSharp.Hydra.BarChart
 
 			if (CanProcess())
 			{
-				this.AddInfoLog(LocalizedStrings.Str2300);
+				if (anyData)
+				{
+					this.AddInfoLog(LocalizedStrings.Str2300);
 
-				_settings.StartFrom = endDate;
-				SaveSettings();
+					_settings.StartFrom = endDate;
+					SaveSettings();
+				}
+				else
+					this.AddWarningLog(LocalizedStrings.Str2913);
 			}
 
 			return _settings.Interval;

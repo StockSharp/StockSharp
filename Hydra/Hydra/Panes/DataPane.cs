@@ -16,11 +16,11 @@ Copyright 2010 by StockSharp, LLC
 namespace StockSharp.Hydra.Panes
 {
 	using System;
+	using System.Collections;
 	using System.ComponentModel;
 	using System.Linq;
 	using System.Windows.Controls;
 
-	using Ecng.Collections;
 	using Ecng.Common;
 	using Ecng.Configuration;
 	using Ecng.Serialization;
@@ -92,12 +92,12 @@ namespace StockSharp.Hydra.Panes
 		private ExportProgress Progress => ((dynamic)this).Progress;
 
 		private ExportButton _exportBtn;
-		private Func<IEnumerableEx> _getItems;
+		private Func<IEnumerable> _getItems;
 		private DateTimePicker _from;
 		private DateTimePicker _to;
 		private DrivePanel _drivePanel;
 
-		protected void Init(ExportButton exportBtn, Grid mainGrid, Func<IEnumerableEx> getItems)
+		protected void Init(ExportButton exportBtn, Grid mainGrid, Func<IEnumerable> getItems)
 		{
 			if (exportBtn == null)
 				throw new ArgumentNullException(nameof(exportBtn));
@@ -131,7 +131,6 @@ namespace StockSharp.Hydra.Panes
 				return true;
 
 			new MessageBoxBuilder()
-				.Caption(Title)
 				.Text(LocalizedStrings.Str2875)
 				.Info()
 				.Owner(this)
@@ -140,7 +139,7 @@ namespace StockSharp.Hydra.Panes
 			return false;
 		}
 
-		protected virtual bool CanDirectBinExport => _exportBtn.ExportType == ExportTypes.Bin;
+		protected virtual bool CanDirectExport => _exportBtn.ExportType == ExportTypes.StockSharp;
 
 		protected virtual void ExportBtnOnExportStarted()
 		{
@@ -158,14 +157,13 @@ namespace StockSharp.Hydra.Panes
 			if (path == null)
 				return;
 
-			if (CanDirectBinExport)
+			if (CanDirectExport)
 			{
 				var destDrive = (IMarketDataDrive)path;
 
 				if (destDrive.Path.ComparePaths(Drive.Path))
 				{
 					new MessageBoxBuilder()
-						.Caption("S#.Data")
 						.Text(LocalizedStrings.Str2876)
 						.Error()
 						.Owner(this)
@@ -177,13 +175,13 @@ namespace StockSharp.Hydra.Panes
 				Progress.Start(destDrive, From, To, SelectedSecurity, Drive, StorageFormat, DataType, Arg);
 			}
 			else
-				Progress.Start(SelectedSecurity, DataType, Arg, _getItems(), path);
+				Progress.Start(SelectedSecurity, DataType, Arg, _getItems(), int.MaxValue /* TODO */, path, StorageFormat);
 		}
 
 		public virtual void Load(SettingsStorage storage)
 		{
 			if (storage.ContainsKey(nameof(SelectedSecurity)))
-				SelectedSecurity = ConfigManager.GetService<IEntityRegistry>().Securities.ReadById(storage.GetValue<string>("SelectedSecurity"));
+				SelectedSecurity = ConfigManager.GetService<IEntityRegistry>().Securities.ReadById(storage.GetValue<string>(nameof(SelectedSecurity)));
 
 			From = storage.GetValue<DateTime?>(nameof(From));
 			To = storage.GetValue<DateTime?>(nameof(To));
