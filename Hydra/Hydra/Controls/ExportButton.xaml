@@ -40,7 +40,13 @@
 			<ListBoxItem>
 				<StackPanel Orientation="Horizontal">
 					<ex:BmpImage Source="../Images/logo.png" Height="16" Width="16" VerticalAlignment="Center" />
-					<Label>Bin</Label>
+					<Label>S# (bin)</Label>
+				</StackPanel>
+			</ListBoxItem>
+			<ListBoxItem>
+				<StackPanel Orientation="Horizontal">
+					<ex:BmpImage Source="../Images/logo.png" Height="16" Width="16" VerticalAlignment="Center" />
+					<Label>S# (csv)</Label>
 				</StackPanel>
 			</ListBoxItem>
 		</ListBox>

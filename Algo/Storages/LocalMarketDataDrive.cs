@@ -47,7 +47,6 @@ namespace StockSharp.Algo.Storages
 			private readonly SyncObject _cacheSync = new SyncObject();
 
 			//private static readonly Version _dateVersion = new Version(1, 0);
-			private const string _dateFormat = "yyyy_MM_dd";
 
 			public LocalMarketDataStorageDrive(string fileName, string path, StorageFormats format, IMarketDataDrive drive)
 			{
@@ -79,7 +78,7 @@ namespace StockSharp.Algo.Storages
 						var dates = InteropHelper
 							.GetDirectories(_path)
 							.Where(dir => File.Exists(IOPath.Combine(dir, _fileNameWithExtension)))
-							.Select(dir => IOPath.GetFileName(dir).ToDateTime(_dateFormat).ChangeKind(DateTimeKind.Utc));
+							.Select(dir => GetDate(IOPath.GetFileName(dir)));
 
 						foreach (var date in dates)
 							retVal.Add(date, date);
@@ -187,7 +186,7 @@ namespace StockSharp.Algo.Storages
 								if (line == null)
 									break;
 
-								dates.Add(line.ToDateTime(_dateFormat).ChangeKind(DateTimeKind.Utc));
+								dates.Add(GetDate(line));
 							}
 
 							//for (var i = 0; i < count; i++)
@@ -229,7 +228,7 @@ namespace StockSharp.Algo.Storages
 
 						foreach (var date in dates)
 						{
-							writer.WriteLine(date.ToString(_dateFormat));
+							writer.WriteLine(GetDirName(date));
 							//stream.Write(date);
 						}
 					});
@@ -248,7 +247,7 @@ namespace StockSharp.Algo.Storages
 
 			private string GetDataPath(DateTime date)
 			{
-				return IOPath.Combine(_path, date.ToString(_dateFormat));
+				return IOPath.Combine(_path, GetDirName(date));
 			}
 
 			private string GetPath(DateTime date, bool isLoad)
@@ -315,24 +314,24 @@ namespace StockSharp.Algo.Storages
 			}
 		}
 
-		private bool _useAlphabeticPath = true;
+		//private bool _useAlphabeticPath = true;
 
-		/// <summary>
-		/// Whether to use the alphabetical path to data. The default is enabled.
-		/// </summary>
-		[Obsolete]
-		public bool UseAlphabeticPath
-		{
-			get { return _useAlphabeticPath; }
-			set
-			{
-				if (value == UseAlphabeticPath)
-					return;
+		///// <summary>
+		///// Whether to use the alphabetical path to data. The default is enabled.
+		///// </summary>
+		//[Obsolete]
+		//public bool UseAlphabeticPath
+		//{
+		//	get { return _useAlphabeticPath; }
+		//	set
+		//	{
+		//		if (value == UseAlphabeticPath)
+		//			return;
 
-				_useAlphabeticPath = value;
-				ResetDrives();
-			}
-		}
+		//		_useAlphabeticPath = value;
+		//		ResetDrives();
+		//	}
+		//}
 
 		private void ResetDrives()
 		{
@@ -456,47 +455,75 @@ namespace StockSharp.Algo.Storages
 		/// </summary>
 		/// <param name="dataType">Data type.</param>
 		/// <param name="arg">The parameter associated with the <paramref name="dataType" /> type. For example, <see cref="CandleMessage.Arg"/>.</param>
+		/// <param name="format">Storage format. If set an extension will be added to the file name.</param>
 		/// <returns>The file name.</returns>
-		public static string GetFileName(Type dataType, object arg)
+		public static string GetFileName(Type dataType, object arg, StorageFormats? format = null)
 		{
 			if (dataType == null)
 				throw new ArgumentNullException(nameof(dataType));
 
+			string fileName;
+
 			if (dataType.IsCandleMessage())
-				return "candles_{0}_{1}".Put(dataType.Name.Replace("Message", string.Empty), TraderHelper.CandleArgToFolderName(arg));
+				fileName = "candles_{0}_{1}".Put(dataType.Name.Replace("Message", string.Empty), TraderHelper.CandleArgToFolderName(arg));
 			else
 			{
-				var fileName = _fileNames.TryGetValue(DataType.Create(dataType, arg));
+				fileName = _fileNames.TryGetValue(DataType.Create(dataType, arg));
 
 				if (fileName == null)
 					throw new NotSupportedException(LocalizedStrings.Str2872Params.Put(dataType.FullName));
-
-				return fileName;
 			}
+
+			if (format != null)
+				fileName += GetExtension(format.Value);
+
+			return fileName;
 		}
 
-#pragma warning disable 612
-		/// <summary>
-		/// Load settings.
-		/// </summary>
-		/// <param name="storage">Settings storage.</param>
-		public override void Load(SettingsStorage storage)
-		{
-			base.Load(storage);
-
-			UseAlphabeticPath = storage.GetValue<bool>(nameof(UseAlphabeticPath));
-		}
+		private const string _dateFormat = "yyyy_MM_dd";
 
 		/// <summary>
-		/// Save settings.
+		/// Convert directory name to the date.
 		/// </summary>
-		/// <param name="storage">Settings storage.</param>
-		public override void Save(SettingsStorage storage)
+		/// <param name="dirName">Directory name.</param>
+		/// <returns>The date.</returns>
+		public static DateTime GetDate(string dirName)
 		{
-			base.Save(storage);
-
-			storage.SetValue(nameof(UseAlphabeticPath), UseAlphabeticPath);
+			return dirName.ToDateTime(_dateFormat).ChangeKind(DateTimeKind.Utc);
 		}
+
+		/// <summary>
+		/// Convert the date to directory name.
+		/// </summary>
+		/// <param name="date">The date.</param>
+		/// <returns>Directory name.</returns>
+		public static string GetDirName(DateTime date)
+		{
+			return date.ToString(_dateFormat);
+		}
+
+//#pragma warning disable 612
+		///// <summary>
+		///// Load settings.
+		///// </summary>
+		///// <param name="storage">Settings storage.</param>
+		//public override void Load(SettingsStorage storage)
+		//{
+		//	base.Load(storage);
+
+		//	UseAlphabeticPath = storage.GetValue<bool>(nameof(UseAlphabeticPath));
+		//}
+
+		///// <summary>
+		///// Save settings.
+		///// </summary>
+		///// <param name="storage">Settings storage.</param>
+		//public override void Save(SettingsStorage storage)
+		//{
+		//	base.Save(storage);
+
+		//	storage.SetValue(nameof(UseAlphabeticPath), UseAlphabeticPath);
+		//}
 
 		/// <summary>
 		/// To get the path to the folder with market data for the instrument.
@@ -512,10 +539,10 @@ namespace StockSharp.Algo.Storages
 
 			var folderName = id.SecurityIdToFolderName();
 
-			return UseAlphabeticPath
-				? IOPath.Combine(Path, id.Substring(0, 1), folderName)
-				: IOPath.Combine(Path, folderName);
+			return //UseAlphabeticPath
+				IOPath.Combine(Path, id.Substring(0, 1), folderName);
+			//: IOPath.Combine(Path, folderName);
 		}
-#pragma warning restore 612
+//#pragma warning restore 612
 	}
 }

@@ -102,7 +102,7 @@ namespace StockSharp.Hydra.Panes
 			Progress.Load(GetTrades(), FindedTrades.Messages.AddRange, 10000);
 		}
 
-		protected override bool CanDirectExport => base.CanDirectExport && BuildFrom.SelectedIndex == 0;
+		protected override bool CanDirectExport => BuildFrom.SelectedIndex == 0;
 
 		private void OnDateValueChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
 		{

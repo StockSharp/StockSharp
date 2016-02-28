@@ -259,8 +259,11 @@ namespace StockSharp.Hydra.Core
 					break;
 				case ExportTypes.Sql:
 					break;
-				case ExportTypes.StockSharp:
+				case ExportTypes.StockSharpBin:
 					fileName += ".bin";
+					break;
+				case ExportTypes.StockSharpCsv:
+					fileName += ".csv";
 					break;
 				default:
 					throw new ArgumentOutOfRangeException(nameof(type));

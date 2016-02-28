@@ -93,7 +93,8 @@ namespace StockSharp.Hydra.Controls
 
 					return null;
 				}
-				case ExportTypes.StockSharp:
+				case ExportTypes.StockSharpBin:
+				case ExportTypes.StockSharpCsv:
 				{
 					var wndFolder = new VistaFolderBrowserDialog();
 

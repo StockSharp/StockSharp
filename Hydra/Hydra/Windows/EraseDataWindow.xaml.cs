@@ -168,60 +168,76 @@ namespace StockSharp.Hydra.Windows
 			if (to != DateTime.MaxValue && to.TimeOfDay == TimeSpan.Zero)
 				to = to.EndOfDay();
 
+			var time = TimeSpan.Zero;
+
 			Task.Factory.StartNew(() =>
 			{
-				var formats = Enumerator.GetValues<StorageFormats>().ToArray();
-
-				var iterCount = drives.Length * (securities?.Length ?? ((IStorageEntityList<Security>)EntityRegistry.Securities).Count) * 5 /* message types count */ * formats.Length;
-
-				this.GuiSync(() => Progress.Maximum = iterCount);
-
-				foreach (var drive in drives)
+				time = Watch.Do(() =>
 				{
-					if (_token.IsCancellationRequested)
-						break;
+					var formats = Enumerator.GetValues<StorageFormats>().ToArray();
 
-					foreach (var securityId in drive.AvailableSecurities)
+					var iterCount = drives.Length * (securities?.Length ?? ((IStorageEntityList<Security>)EntityRegistry.Securities).Count) * 5 /* message types count */ * formats.Length;
+
+					this.GuiSync(() => Progress.Maximum = iterCount);
+
+					foreach (var drive in drives)
 					{
 						if (_token.IsCancellationRequested)
 							break;
 
-						var id = securityId.ToStringId();
-
-						var security = securities == null
-							? EntityRegistry.Securities.ReadById(id)
-							: securities.FirstOrDefault(s => s.Id.CompareIgnoreCase(id));
-
-						if (security == null)
-						{
-							continue;
-						}
-
-						foreach (var format in formats)
+						foreach (var securityId in drive.AvailableSecurities)
 						{
 							if (_token.IsCancellationRequested)
 								break;
-							
-							foreach (var dataType in drive.GetAvailableDataTypes(securityId, format))
+
+							var id = securityId.ToStringId();
+
+							var security = securities == null
+								? EntityRegistry.Securities.ReadById(id)
+								: securities.FirstOrDefault(s => s.Id.CompareIgnoreCase(id));
+
+							if (security == null)
+							{
+								continue;
+							}
+
+							foreach (var format in formats)
 							{
 								if (_token.IsCancellationRequested)
 									break;
 
-								StorageRegistry
-										.GetStorage(security, dataType.MessageType, dataType.Arg, drive, format)
-										.Delete(from, to);
-
-								this.GuiSync(() =>
+								foreach (var dataType in drive.GetAvailableDataTypes(securityId, format))
 								{
-									Progress.Value++;
-								});
+									if (_token.IsCancellationRequested)
+										break;
+
+									StorageRegistry
+											.GetStorage(security, dataType.MessageType, dataType.Arg, drive, format)
+											.Delete(from, to);
+
+									this.GuiSync(() =>
+									{
+										Progress.Value++;
+									});
+								}
 							}
 						}
 					}
-				}
+				});
 			}, _token.Token)
 			.ContinueWithExceptionHandling(this, res =>
 			{
+				if (res)
+				{
+					new MessageBoxBuilder()
+						.Caption(LocalizedStrings.Str2879)
+						.Text(LocalizedStrings.Str3024.Put(time))
+						.Warning()
+						.YesNo()
+						.Owner(this)
+						.Show();
+				}
+
 				Erase.Content = LocalizedStrings.Str2060;
 				Erase.IsEnabled = true;
 

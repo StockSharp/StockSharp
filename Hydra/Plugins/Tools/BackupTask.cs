@@ -194,7 +194,7 @@ namespace StockSharp.Hydra.Tools
 
 					var dateEntry = new BackupEntry
 					{
-						Name = date.ToString("yyyy_MM_dd"),
+						Name = LocalMarketDataDrive.GetDirName(date),
 						Parent = new BackupEntry
 						{
 							Parent = new BackupEntry
@@ -221,7 +221,7 @@ namespace StockSharp.Hydra.Tools
 
 						var entry = new BackupEntry
 						{
-							Name = LocalMarketDataDrive.GetFileName(dataType.MessageType, dataType.Arg) + LocalMarketDataDrive.GetExtension(StorageFormats.Binary),
+							Name = LocalMarketDataDrive.GetFileName(dataType.MessageType, dataType.Arg, _settings.StorageFormat),// + LocalMarketDataDrive.GetExtension(StorageFormats.Binary),
 							Parent = dateEntry,
 						};
 

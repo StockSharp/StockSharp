@@ -21,18 +21,16 @@ namespace StockSharp.Hydra.Controls
 	using System.ComponentModel;
 	using System.Diagnostics;
 	using System.IO;
-	using System.Linq;
 	using System.Threading;
 	using System.Windows;
 	using System.Windows.Controls;
+	using System.Windows.Threading;
 
-	using Ecng.Collections;
 	using Ecng.Common;
 	using Ecng.Configuration;
 	using Ecng.Xaml;
 	using Ecng.Xaml.Database;
 
-	using StockSharp.Algo;
 	using StockSharp.Algo.Export;
 	using StockSharp.Algo.Storages;
 	using StockSharp.BusinessEntities;
@@ -68,7 +66,7 @@ namespace StockSharp.Hydra.Controls
 			_mainGrid = mainGrid;
 		}
 
-		public void Start(Security security, Type dataType, object arg, IEnumerable values, int valuesCount, object path, StorageFormats storageFormat)
+		public void Start(Security security, Type dataType, object arg, IEnumerable values, int valuesCount, object path)
 		{
 			if (dataType == null)
 				throw new ArgumentNullException(nameof(dataType));
@@ -82,9 +80,22 @@ namespace StockSharp.Hydra.Controls
 			var currProgress = 5;
 
 			var valuesPerPercent = (valuesCount / (100 - currProgress)).Max(1);
-			var valuesPerCount = (valuesPerPercent / 10).Max(1);
-			var currCount = 0;
+			//var valuesPerCount = (valuesPerPercent / 10).Max(1);
+			//var currCount = 0;
 			var valuesProcessed = 0;
+			var prevValuesProcessed = 0;
+
+			var timer = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(500) };
+			timer.Tick += (sender, args) =>
+			{
+				var v = valuesProcessed;
+
+				if (prevValuesProcessed >= v)
+					return;
+
+				UpdateCount(v);
+				prevValuesProcessed = v;
+			};
 
 			Func<int, bool> isCancelled = count =>
 			{
@@ -100,11 +111,11 @@ namespace StockSharp.Hydra.Controls
 						_worker.ReportProgress(currProgress);
 					}
 
-					if (valuesProcessed > currCount)
-					{
-						currCount = valuesProcessed + valuesPerCount;
-						this.GuiAsync(() => UpdateCount(valuesProcessed));
-					}
+					//if (valuesProcessed > currCount)
+					//{
+					//	currCount = valuesProcessed + valuesPerCount;
+					//	this.GuiAsync(() => UpdateCount(valuesProcessed));
+					//}
 				}
 
 				return isCancelling;
@@ -209,10 +220,11 @@ namespace StockSharp.Hydra.Controls
 					fileName = null;
 					exporter = new DatabaseExporter(security, arg, isCancelled, (DatabaseConnectionPair)path) { CheckUnique = false };
 					break;
-				case ExportTypes.StockSharp:
+				case ExportTypes.StockSharpBin:
+				case ExportTypes.StockSharpCsv:
 					var drive = (IMarketDataDrive)path;
 					fileName = drive is LocalMarketDataDrive ? drive.Path : null;
-					exporter = new StockSharpExporter(security, arg, isCancelled, drive, storageFormat);
+					exporter = new StockSharpExporter(security, arg, isCancelled, drive, _button.ExportType == ExportTypes.StockSharpBin ? StorageFormats.Binary : StorageFormats.Csv);
 					break;
 				default:
 					throw new ArgumentOutOfRangeException();
@@ -224,7 +236,16 @@ namespace StockSharp.Hydra.Controls
 			{
 				_worker.ReportProgress(currProgress);
 
-				exporter.Export(dataType, values);
+				timer.Start();
+
+				try
+				{
+					exporter.Export(dataType, values);
+				}
+				finally
+				{
+					timer.Stop();
+				}
 
 				_worker.ReportProgress(100);
 				Thread.Sleep(500);
@@ -234,23 +255,24 @@ namespace StockSharp.Hydra.Controls
 			_worker.RunWorkerAsync();
 		}
 
-		public void Start(IMarketDataDrive destDrive, DateTime? startDate, DateTime? endDate, Security security, IMarketDataDrive sourceDrive, StorageFormats format, Type dataType, object arg)
+		public void Start(SecurityId securityId, DateTime[] datesToExport, LocalMarketDataDrive sourceDrive, LocalMarketDataDrive destDrive, string fileName)
 		{
-			var storageRegistry = ConfigManager.GetService<IStorageRegistry>();
-			var storage = storageRegistry.GetStorage(security, dataType, arg, sourceDrive, format);
+			if (securityId.IsDefault())
+				throw new ArgumentNullException(nameof(securityId));
 
-			var dates = storage.Dates.ToArray();
+			if (datesToExport == null)
+				throw new ArgumentNullException(nameof(datesToExport));
 
-			if (dates.IsEmpty())
-				return;
+			if (sourceDrive == null)
+				throw new ArgumentNullException(nameof(sourceDrive));
 
-			var allDates = (startDate ?? dates.First()).Range(endDate ?? dates.Last(), TimeSpan.FromDays(1));
+			if (destDrive == null)
+				throw new ArgumentNullException(nameof(destDrive));
 
-			var datesToExport = storage.Dates
-						.Intersect(allDates)
-						.ToArray();
+			if (fileName.IsEmpty())
+				throw new ArgumentNullException(nameof(fileName));
 
-			CreateWorker(datesToExport.Length, null);
+			CreateWorker(datesToExport.Length, destDrive.Path);
 
 			_worker.DoWork += (s, e) =>
 			{
@@ -264,20 +286,24 @@ namespace StockSharp.Hydra.Controls
 					if (!Directory.Exists(destDrive.Path))
 						Directory.CreateDirectory(destDrive.Path);
 
-					var dataPath = ((LocalMarketDataDrive)sourceDrive).GetSecurityPath(security.ToSecurityId());
-					var fileName = LocalMarketDataDrive.GetFileName(dataType, arg) + LocalMarketDataDrive.GetExtension(StorageFormats.Binary);
+					var sourceSecPath = sourceDrive.GetSecurityPath(securityId);
+					var destSecPath = destDrive.GetSecurityPath(securityId);
 
 					foreach (var date in datesToExport)
 					{
-						var dateStr = date.ToString("yyyy_MM_dd");
-						var file = Path.Combine(dataPath, dateStr, fileName);
+						var dateStr = LocalMarketDataDrive.GetDirName(date);
 
-						if (File.Exists(file))
+						var sourceFile = Path.Combine(sourceSecPath, dateStr, fileName);
+
+						if (File.Exists(sourceFile))
 						{
-							if (!Directory.Exists(Path.Combine(destDrive.Path, dateStr)))
-								Directory.CreateDirectory(Path.Combine(destDrive.Path, dateStr));
+							var destPath = Path.Combine(destSecPath, dateStr);
+							var destFile = Path.Combine(destPath, fileName);
 
-							File.Copy(file, Path.Combine(destDrive.Path, dateStr, Path.GetFileName(file)), true);
+							if (!Directory.Exists(destPath))
+								Directory.CreateDirectory(destPath);
+
+							File.Copy(sourceFile, destFile, true);
 						}
 
 						//if (date.Item2 == 0)

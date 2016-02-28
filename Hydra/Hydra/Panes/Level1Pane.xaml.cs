@@ -31,7 +31,6 @@ namespace StockSharp.Hydra.Panes
 
 	using StockSharp.Algo.Storages;
 	using StockSharp.BusinessEntities;
-	using StockSharp.Hydra.Core;
 	using StockSharp.Messages;
 	using StockSharp.Localization;
 
@@ -92,7 +91,7 @@ namespace StockSharp.Hydra.Panes
 
 		private bool CheckExportTypes()
 		{
-			if (Level1FieldsCtrl.SelectedFields.Any() || ExportBtn.ExportType == ExportTypes.StockSharp)
+			if (Level1FieldsCtrl.SelectedFields.Any() || CanDirectExport)
 				return true;
 
 			new MessageBoxBuilder()

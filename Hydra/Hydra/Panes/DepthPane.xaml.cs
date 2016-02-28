@@ -166,7 +166,7 @@ namespace StockSharp.Hydra.Panes
 			DepthDate.Text = depth.ServerTime.ToString("yyyy.MM.dd HH:mm:ss.fff");
 		}
 
-		protected override bool CanDirectExport => base.CanDirectExport && BuildFrom.SelectedIndex == 0;
+		protected override bool CanDirectExport => BuildFrom.SelectedIndex == 0;
 
 		//protected override void OnClosed(EventArgs e)
 		//{

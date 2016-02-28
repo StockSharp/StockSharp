@@ -21,11 +21,13 @@ namespace StockSharp.Hydra.Panes
 	using System.Linq;
 	using System.Windows.Controls;
 
+	using Ecng.Collections;
 	using Ecng.Common;
 	using Ecng.Configuration;
 	using Ecng.Serialization;
 	using Ecng.Xaml;
 
+	using StockSharp.Algo;
 	using StockSharp.Algo.Storages;
 	using StockSharp.BusinessEntities;
 	using StockSharp.Hydra.Controls;
@@ -139,7 +141,7 @@ namespace StockSharp.Hydra.Panes
 			return false;
 		}
 
-		protected virtual bool CanDirectExport => _exportBtn.ExportType == ExportTypes.StockSharp;
+		protected virtual bool CanDirectExport => true;
 
 		protected virtual void ExportBtnOnExportStarted()
 		{
@@ -157,7 +159,13 @@ namespace StockSharp.Hydra.Panes
 			if (path == null)
 				return;
 
-			if (CanDirectExport)
+			if	(	CanDirectExport &&
+					(
+						(_exportBtn.ExportType == ExportTypes.StockSharpBin && StorageFormat == StorageFormats.Binary) ||
+						(_exportBtn.ExportType == ExportTypes.StockSharpCsv && StorageFormat == StorageFormats.Csv)
+					) &&
+					path is LocalMarketDataDrive && Drive is LocalMarketDataDrive
+				)
 			{
 				var destDrive = (IMarketDataDrive)path;
 
@@ -172,10 +180,25 @@ namespace StockSharp.Hydra.Panes
 					return;
 				}
 
-				Progress.Start(destDrive, From, To, SelectedSecurity, Drive, StorageFormat, DataType, Arg);
+				var storage = ConfigManager.GetService<IStorageRegistry>().GetStorage(SelectedSecurity, DataType, Arg, Drive, StorageFormat);
+
+				var dates = storage.Dates.ToArray();
+
+				if (dates.IsEmpty())
+					return;
+
+				var allDates = (From ?? dates.First()).Range(To ?? dates.Last(), TimeSpan.FromDays(1));
+
+				var datesToExport = storage.Dates
+							.Intersect(allDates)
+							.ToArray();
+
+				var fileName = LocalMarketDataDrive.GetFileName(DataType, Arg, _exportBtn.ExportType == ExportTypes.StockSharpBin ? StorageFormats.Binary : StorageFormats.Csv);// + LocalMarketDataDrive.GetExtension(StorageFormats.Binary);
+
+				Progress.Start(SelectedSecurity.ToSecurityId(), datesToExport, (LocalMarketDataDrive)Drive, (LocalMarketDataDrive)destDrive, fileName);
 			}
 			else
-				Progress.Start(SelectedSecurity, DataType, Arg, _getItems(), int.MaxValue /* TODO */, path, StorageFormat);
+				Progress.Start(SelectedSecurity, DataType, Arg, _getItems(), int.MaxValue /* TODO */, path);
 		}
 
 		public virtual void Load(SettingsStorage storage)

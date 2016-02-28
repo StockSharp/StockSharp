@@ -106,7 +106,7 @@ namespace StockSharp.Hydra.Panes
 			}
 		}
 
-		protected override bool CanDirectExport => base.CanDirectExport && BuildFrom.SelectedIndex == 0;
+		protected override bool CanDirectExport => BuildFrom.SelectedIndex == 0;
 
 		private void FindClick(object sender, RoutedEventArgs e)
 		{
