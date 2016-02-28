@@ -43,5 +43,11 @@ namespace StockSharp.Community
 		/// </summary>
 		[EnumMember]
 		Designer,
+
+		/// <summary>
+		/// S#.Designer.
+		/// </summary>
+		[EnumMember]
+		Terminal,
 	}
 }
