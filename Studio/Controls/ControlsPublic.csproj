@@ -109,9 +109,6 @@
     <Reference Include="Xceed.Wpf.AvalonDock">
       <HintPath>..\..\References\Ecng\Xceed.Wpf.AvalonDock.dll</HintPath>
     </Reference>
-    <Reference Include="Xceed.Wpf.AvalonDock.Themes.Metro">
-      <HintPath>..\..\References\Ecng\Xceed.Wpf.AvalonDock.Themes.Metro.dll</HintPath>
-    </Reference>
     <Reference Include="Xceed.Wpf.Toolkit, Version=2.5.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\References\Ecng\Xceed.Wpf.Toolkit.dll</HintPath>
