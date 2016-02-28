@@ -135,6 +135,8 @@ namespace StockSharp.Hydra
 
 		private DispatcherTimer _updateStatusTimer;
 
+		private readonly SessionClient _sessionClient = new SessionClient();
+
 		private TrayIcon _trayIcon;
 
 		public long LoadedTrades { get; private set; }
@@ -232,6 +234,8 @@ namespace StockSharp.Hydra
 
 		private void MainWindowLoaded(object sender, RoutedEventArgs e)
 		{
+			_sessionClient.CreateSession(Products.Hydra);
+
 			BusyIndicator.BusyContent = LocalizedStrings.Str2941;
 			BusyIndicator.IsBusy = true;
 
@@ -384,6 +388,8 @@ namespace StockSharp.Hydra
 					return;
 				}
 			}
+
+			_sessionClient.CloseSession();
 
 			if (!_isReseting)
 			{

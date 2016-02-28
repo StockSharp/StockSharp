@@ -44,6 +44,7 @@ namespace StockSharp.Designer
 	using StockSharp.Algo.History.Hydra;
 	using StockSharp.Algo.Storages;
 	using StockSharp.BusinessEntities;
+	using StockSharp.Community;
 	using StockSharp.Configuration;
 	using StockSharp.Designer.Commands;
 	using StockSharp.Designer.Layout;
@@ -104,8 +105,9 @@ namespace StockSharp.Designer
 		private bool _isReseting;
 
 		private object ActiveLayoutContent => (DockingManager.ActiveLayoutItem as DocumentPanel)?.Content;
-
 		private object ActiveDockContent => (DockingManager.ActiveDockItem as DocumentPanel)?.Content;
+
+		private readonly SessionClient _sessionClient = new SessionClient();
 
 		public MainWindow()
 		{
@@ -333,6 +335,8 @@ namespace StockSharp.Designer
 
 		private void MainWindow_OnLoaded(object sender, RoutedEventArgs e)
 		{
+			_sessionClient.CreateSession(Products.Designer);
+
 			LoadSettings();
 
 			_connector.StorageAdapter.Load();
@@ -344,6 +348,8 @@ namespace StockSharp.Designer
 				control.CanClose();
 
 			_layoutManager.Dispose();
+
+			_sessionClient.CloseSession();
 		}
 
 		private void SolutionExplorer_OnOpen(CompositionItem element)

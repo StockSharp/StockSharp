@@ -131,6 +131,8 @@ namespace StockSharp.Studio
 		private bool _isInitialized;
 		private readonly IPersistableService _persistableService;
 
+		private readonly SessionClient _sessionClient = new SessionClient();
+
 		private readonly PairSet<Tuple<string, Type>, IContentWindow> _contents = new PairSet<Tuple<string, Type>, IContentWindow>();
 
 		public string ProductTitle => TypeHelper.ApplicationNameWithVersion.Replace("S#.Studio", "StockSharp");
@@ -986,10 +988,14 @@ namespace StockSharp.Studio
 			InitializeToolBar();
 
 			LicenseHelper.LicenseChanged += () => new LicenseChangedCommand().Process(this);
+
+			_sessionClient.CreateSession(Products.Studio);
 		}
 
 		private void DockSite_OnLoaded(object sender, RoutedEventArgs e)
 		{
+			_sessionClient.CloseSession();
+
 			UserConfig.Instance.ResumeChangesMonitor();
 
 			new LogInCommand().Process(this);
