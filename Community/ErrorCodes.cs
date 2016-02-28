@@ -17,36 +17,36 @@ namespace StockSharp.Community
 {
 	enum ErrorCodes : byte
 	{
-		Ok = 0,
-		UnknownServerError = 1,
+		Ok,
+		UnknownServerError,
 
 		// auth service
-		InvalidCredentials = 1,
-		TimeOut = 4,
-		Locked = 8,
-		SessionNotExist = 10,
-		ClientNotExist = 11,
+		InvalidCredentials,
+		TimeOut,
+		Locked,
+		SessionNotExist,
+		ClientNotExist,
 
 		// notification service
-		SmsNotEnought = 12,
-		EmailNotEnought = 13,
-		PhoneNotExist = 14,
+		SmsNotEnought,
+		EmailNotEnought,
+		PhoneNotExist,
 
 		// license service
-		LicenseRejected = 6,
-		ClientNotApproved = 9,
-		TooMuchFrequency = 12,
-		LicenseMaxRenew = 7,
+		LicenseRejected,
+		ClientNotApproved,
+		TooMuchFrequency,
+		LicenseMaxRenew,
 
 		// reg error codes
-		InvalidEmail = 2,
-		InvalidPhone = 3,
-		InvalidLogin = 4,
-		InvalidPassword = 5,
-		DuplicateEmail = 6,
-		DuplicatePhone = 7,
-		DuplicateLogin = 8,
-		InvalidEmailCode = 9,
-		InvalidSmsCode = 12,
+		InvalidEmail,
+		InvalidPhone,
+		InvalidLogin,
+		InvalidPassword,
+		DuplicateEmail,
+		DuplicatePhone,
+		DuplicateLogin,
+		InvalidEmailCode,
+		InvalidSmsCode,
 	}
 }

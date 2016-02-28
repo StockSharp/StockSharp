@@ -93,6 +93,10 @@
     <Compile Include="StrategyClient.cs" />
     <Compile Include="StrategyData.cs" />
     <Compile Include="User.cs" />
+    <Compile Include="Products.cs" />
+    <Compile Include="ISessionService.cs" />
+    <Compile Include="SessionClient.cs" />
+    <Compile Include="Extensions.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Localization\Localization.csproj">

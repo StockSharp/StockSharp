@@ -55,15 +55,12 @@ namespace StockSharp.Community
 		/// <summary>
 		/// The common authorization client for the whole application.
 		/// </summary>
-		public static AuthenticationClient Instance
-		{
-			get { return _instance.Value; }
-		}
+		public static AuthenticationClient Instance => _instance.Value;
 
 		/// <summary>
 		/// Information about the login and password for access to the StockSharp.
 		/// </summary>
-		public ServerCredentials Credentials { get; private set; }
+		public ServerCredentials Credentials { get; }
 
 		/// <summary>
 		/// Has the client successfully authenticated.
@@ -83,25 +80,6 @@ namespace StockSharp.Community
 					Login();
 
 				return _sessionId;
-			}
-		}
-
-		private static void RaiseException(ErrorCodes errorCode)
-		{
-			switch (errorCode)
-			{
-				case ErrorCodes.InvalidCredentials:
-					throw new InvalidOperationException(LocalizedStrings.WrongLoginOrPassword);
-				case ErrorCodes.TimeOut:
-					throw new InvalidOperationException(LocalizedStrings.Str24);
-				case ErrorCodes.Locked:
-					throw new InvalidOperationException(LocalizedStrings.UserBlocked);
-				case ErrorCodes.SessionNotExist:
-					throw new InvalidOperationException(LocalizedStrings.SessionExpired);
-				case ErrorCodes.ClientNotExist:
-					throw new InvalidOperationException(LocalizedStrings.AccountNotFound);
-				default:
-					throw new InvalidOperationException(LocalizedStrings.UnknownServerErrorCode.Put(errorCode));
 			}
 		}
 
@@ -133,7 +111,7 @@ namespace StockSharp.Community
 
 			var bytes = sessionId.ToByteArray();
 			if (bytes.Take(14).All(b => b == 0))
-				RaiseException((ErrorCodes)bytes[15]);
+				((ErrorCodes)bytes[15]).ThrowIfError();
 
 			_sessionId = sessionId;
 			IsLoggedIn = true;

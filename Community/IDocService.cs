@@ -16,45 +16,7 @@ Copyright 2010 by StockSharp, LLC
 namespace StockSharp.Community
 {
 	using System;
-	using System.Runtime.Serialization;
 	using System.ServiceModel;
-
-	/// <summary>
-	/// Products.
-	/// </summary>
-	[DataContract]
-	public enum Products
-	{
-		/// <summary>
-		/// S#.API.
-		/// </summary>
-		[EnumMember]
-		Api,
-
-		/// <summary>
-		/// S#.Data.
-		/// </summary>
-		[EnumMember]
-		Hydra,
-
-		/// <summary>
-		/// S#.Studio.
-		/// </summary>
-		[EnumMember]
-		Studio,
-
-		/// <summary>
-		/// S#.Server.
-		/// </summary>
-		[EnumMember]
-		Server,
-
-		/// <summary>
-		/// S#.StrategyRunner.
-		/// </summary>
-		[EnumMember]
-		StrategyRunner
-	}
 
 	/// <summary>
 	/// The interface describing the documentation service.

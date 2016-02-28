@@ -38,17 +38,11 @@ namespace StockSharp.Community
 		/// <summary>
 		/// The session identifier received from <see cref="IAuthenticationService.Login"/>.
 		/// </summary>
-		protected virtual Guid SessionId
-		{
-			get { return AuthenticationClient.Instance.SessionId; }
-		}
+		protected virtual Guid SessionId => AuthenticationClient.Instance.SessionId;
 
 		/// <summary>
 		/// The user identifier for <see cref="SessionId"/>.
 		/// </summary>
-		public long UserId
-		{
-			get { return AuthenticationClient.Instance.GetId(SessionId); }
-		}
+		public long UserId => AuthenticationClient.Instance.GetId(SessionId);
 	}
 }

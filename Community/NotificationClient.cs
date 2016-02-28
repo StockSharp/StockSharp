@@ -20,7 +20,6 @@ namespace StockSharp.Community
 
 	using Ecng.Common;
 
-	using StockSharp.Localization;
 	using StockSharp.Logging;
 
 	/// <summary>
@@ -112,8 +111,7 @@ namespace StockSharp.Community
 		/// </summary>
 		public void UnSubscribeNews()
 		{
-			if (_newsTimer != null)
-				_newsTimer.Dispose();
+			_newsTimer?.Dispose();
 		}
 
 		private void RequestNews()
@@ -149,23 +147,7 @@ namespace StockSharp.Community
 
 		private static void ValidateError(byte errorCode)
 		{
-			switch ((ErrorCodes)errorCode)
-			{
-				case ErrorCodes.Ok:
-					return;
-				case ErrorCodes.UnknownServerError:
-					throw new InvalidOperationException(LocalizedStrings.UnknownServerError);
-
-				// notify error codes
-				case ErrorCodes.SmsNotEnought:
-					throw new InvalidOperationException(LocalizedStrings.SmsNotEnough);
-				case ErrorCodes.EmailNotEnought:
-					throw new InvalidOperationException(LocalizedStrings.EmailNotEnough);
-				case ErrorCodes.PhoneNotExist:
-					throw new InvalidOperationException(LocalizedStrings.PhoneNotSpecified);
-				default:
-					throw new InvalidOperationException(LocalizedStrings.UnknownServerErrorCode.Put(errorCode));
-			}
+			((ErrorCodes)errorCode).ThrowIfError();
 		}
 	}
 }

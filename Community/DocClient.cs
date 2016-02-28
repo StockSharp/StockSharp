@@ -35,7 +35,7 @@ namespace StockSharp.Community
 		/// </summary>
 		/// <param name="address">Server address.</param>
 		public DocClient(Uri address)
-			: base(address, "doc", true)
+			: base(address, "doc")
 		{
 		}
 
