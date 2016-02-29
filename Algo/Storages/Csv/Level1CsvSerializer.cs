@@ -16,7 +16,7 @@ Copyright 2010 by StockSharp, LLC
 namespace StockSharp.Algo.Storages.Csv
 {
 	using System;
-	using System.IO;
+	using System.Collections.Generic;
 	using System.Linq;
 	using System.Text;
 
@@ -47,30 +47,29 @@ namespace StockSharp.Algo.Storages.Csv
 		/// </summary>
 		/// <param name="writer">CSV writer.</param>
 		/// <param name="data">Data.</param>
-		protected override void Write(TextWriter writer, Level1ChangeMessage data)
+		protected override void Write(CsvFileWriter writer, Level1ChangeMessage data)
 		{
-			writer.Write($"{data.ServerTime.UtcDateTime.ToString(TimeFormat)};{data.ServerTime.ToString("zzz")}");
+			var row = new List<string>();
+
+			row.AddRange(new[] { data.ServerTime.UtcDateTime.ToString(TimeFormat), data.ServerTime.ToString("zzz") });
 
 			foreach (var field in _level1Fields)
 			{
-				writer.Write(";");
-
 				switch (field)
 				{
 					case Level1Fields.BestAskTime:
 					case Level1Fields.BestBidTime:
 					case Level1Fields.LastTradeTime:
 						var date = (DateTimeOffset?)data.Changes.TryGetValue(field);
-
-						if (date != null)
-							writer.Write($"{date.Value.UtcDateTime.ToString(DateFormat)};{date.Value.UtcDateTime.ToString(TimeFormat)};{date.Value.ToString("zzz")}");
-
+						row.AddRange(new[] { date?.UtcDateTime.ToString(DateFormat), date?.UtcDateTime.ToString(TimeFormat), date?.ToString("zzz") });
 						break;
 					default:
-						writer.Write(data.Changes.TryGetValue(field));
+						row.Add(data.Changes.TryGetValue(field)?.ToString());
 						break;
                 }
 			}
+
+			writer.WriteRow(row);
 		}
 
 		/// <summary>
@@ -99,6 +98,10 @@ namespace StockSharp.Algo.Storages.Csv
 						if (dt != null)
 						{
 							level1.Changes.Add(field, (dt.Value + reader.ReadDateTime(TimeFormat).TimeOfDay).ToDateTimeOffset(TimeSpan.Parse(reader.ReadString().Replace("+", string.Empty))));
+						}
+						else
+						{
+							reader.Skip(2);
 						}
 
                         break;

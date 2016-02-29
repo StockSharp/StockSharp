@@ -247,7 +247,7 @@ namespace StockSharp.Algo.Storages
 				return new QuoteEnumerable(_quoteSerializer.Deserialize(stream, metaInfo), SecurityId);
 			}
 
-			protected override void Write(TextWriter writer, QuoteChangeMessage data)
+			protected override void Write(CsvFileWriter writer, QuoteChangeMessage data)
 			{
 				throw new NotSupportedException();
 			}

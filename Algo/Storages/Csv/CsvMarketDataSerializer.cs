@@ -175,21 +175,19 @@ namespace StockSharp.Algo.Storages.Csv
 		{
 			CultureInfo.InvariantCulture.DoInCulture(() =>
 			{
-				var writer = new StreamWriter(stream, Encoding);
+				var writer = new CsvFileWriter(stream, Encoding);
 
-				var appendLine = metaInfo.Count > 0;
-
-				foreach (var item in data)
+				try
 				{
-					if (appendLine)
-						writer.WriteLine();
-					else
-						appendLine = true;
-
-					Write(writer, item);
+					foreach (var item in data)
+					{
+						Write(writer, item);
+					}
 				}
-
-				writer.Flush();
+				finally
+				{
+					writer.Writer.Flush();
+				}
 			});
 		}
 
@@ -198,7 +196,7 @@ namespace StockSharp.Algo.Storages.Csv
 		/// </summary>
 		/// <param name="writer">CSV writer.</param>
 		/// <param name="data">Data.</param>
-		protected abstract void Write(TextWriter writer, TData data);
+		protected abstract void Write(CsvFileWriter writer, TData data);
 
 		private class CsvEnumerator : SimpleEnumerator<TData>
 		{

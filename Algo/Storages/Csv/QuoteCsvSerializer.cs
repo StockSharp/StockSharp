@@ -16,7 +16,6 @@ Copyright 2010 by StockSharp, LLC
 namespace StockSharp.Algo.Storages.Csv
 {
 	using System;
-	using System.IO;
 	using System.Text;
 
 	using Ecng.Common;
@@ -43,9 +42,16 @@ namespace StockSharp.Algo.Storages.Csv
 		/// </summary>
 		/// <param name="writer">CSV writer.</param>
 		/// <param name="data">Data.</param>
-		protected override void Write(TextWriter writer, TimeQuoteChange data)
+		protected override void Write(CsvFileWriter writer, TimeQuoteChange data)
 		{
-			writer.Write($"{data.ServerTime.UtcDateTime.ToString(TimeFormat)};{data.ServerTime.ToString("zzz")};{data.Price};{data.Volume};{data.Side}");
+			writer.WriteRow(new[]
+			{
+				data.ServerTime.UtcDateTime.ToString(TimeFormat),
+				data.ServerTime.ToString("zzz"),
+				data.Price.ToString(),
+				data.Volume.ToString(),
+				data.Side.ToString()
+			});
 		}
 
 		/// <summary>

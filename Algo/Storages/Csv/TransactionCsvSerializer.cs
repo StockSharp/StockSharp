@@ -16,7 +16,6 @@ Copyright 2010 by StockSharp, LLC
 namespace StockSharp.Algo.Storages.Csv
 {
 	using System;
-	using System.IO;
 	using System.Text;
 
 	using Ecng.Common;
@@ -43,9 +42,59 @@ namespace StockSharp.Algo.Storages.Csv
 		/// </summary>
 		/// <param name="writer">CSV writer.</param>
 		/// <param name="data">Data.</param>
-		protected override void Write(TextWriter writer, ExecutionMessage data)
+		protected override void Write(CsvFileWriter writer, ExecutionMessage data)
 		{
-			writer.Write($"{data.ServerTime.UtcDateTime.ToString(TimeFormat)};{data.ServerTime.ToString("zzz")};{data.TransactionId};{data.OriginalTransactionId};{data.OrderId};{data.OrderStringId};{data.OrderBoardId};{data.UserOrderId};{data.OrderPrice};{data.OrderVolume};{data.Balance};{data.VisibleVolume};{data.Side};{data.OriginSide};{data.OrderState};{data.OrderType};{data.TimeInForce};{data.TradeId};{data.TradeStringId};{data.TradePrice};{data.TradeVolume};{data.PortfolioName};{data.ClientCode};{data.BrokerCode};{data.DepoName};{data.IsSystem};{data.HasOrderInfo};{data.HasTradeInfo};{data.Commission};{data.Currency};{data.Comment};{data.SystemComment};{data.DerivedOrderId};{data.DerivedOrderStringId};{data.IsUpTick};{data.IsCancelled};{data.OpenInterest};{data.PnL};{data.Position};{data.Slippage};{data.TradeStatus};{data.OrderStatus};{data.Latency?.Ticks};{data.Error?.Message};{data.ExpiryDate?.UtcDateTime.ToString(DateFormat)};{data.ExpiryDate?.UtcDateTime.ToString(TimeFormat)};{data.ExpiryDate?.ToString("zzz")}");
+			var row = new[]
+			{
+				data.ServerTime.UtcDateTime.ToString(TimeFormat),
+				data.ServerTime.ToString("zzz"),
+				data.TransactionId.ToString(),
+				data.OriginalTransactionId.ToString(),
+				data.OrderId.ToString(),
+				data.OrderStringId,
+				data.OrderBoardId,
+				data.UserOrderId,
+				data.OrderPrice.ToString(),
+				data.OrderVolume.ToString(),
+				data.Balance.ToString(),
+				data.VisibleVolume.ToString(),
+				data.Side.ToString(),
+				data.OriginSide.ToString(),
+				data.OrderState.ToString(),
+				data.OrderType.ToString(),
+				data.TimeInForce.ToString(),
+				data.TradeId.ToString(),
+				data.TradeStringId,
+				data.TradePrice.ToString(),
+				data.TradeVolume.ToString(),
+				data.PortfolioName,
+				data.ClientCode,
+				data.BrokerCode,
+				data.DepoName,
+				data.IsSystem.ToString(),
+				data.HasOrderInfo.ToString(),
+				data.HasTradeInfo.ToString(),
+				data.Commission.ToString(),
+				data.Currency.ToString(),
+				data.Comment,
+				data.SystemComment,
+				data.DerivedOrderId.ToString(),
+				data.DerivedOrderStringId,
+				data.IsUpTick.ToString(),
+				data.IsCancelled.ToString(),
+				data.OpenInterest.ToString(),
+				data.PnL.ToString(),
+				data.Position.ToString(),
+				data.Slippage.ToString(),
+				data.TradeStatus.ToString(),
+				data.OrderStatus.ToString(),
+				data.Latency?.Ticks.ToString(),
+				data.Error?.Message,
+				data.ExpiryDate?.UtcDateTime.ToString(DateFormat),
+				data.ExpiryDate?.UtcDateTime.ToString(TimeFormat),
+				data.ExpiryDate?.ToString("zzz")
+			};
+			writer.WriteRow(row);
         }
 
 		/// <summary>
@@ -115,6 +164,8 @@ namespace StockSharp.Algo.Storages.Csv
 			{
 				msg.ExpiryDate = (dt.Value + reader.ReadDateTime(TimeFormat).TimeOfDay).ToDateTimeOffset(TimeSpan.Parse(reader.ReadString().Replace("+", string.Empty)));
 			}
+			else
+				reader.Skip(2);
 
 			return msg;
 		}
