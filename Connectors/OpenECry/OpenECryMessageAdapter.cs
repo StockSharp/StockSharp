@@ -423,7 +423,7 @@ namespace StockSharp.OpenECry
 						case OpenECryRemoting.Primary:
 							_threadPolicy = new InPlaceThreadPolicy(this);
 							
-							_client = new OECClient
+							_client = new OECClient(_threadPolicy)
 							{
 								UUID = Uuid.To<string>(),
 								EventBatchInterval = 0,
@@ -467,6 +467,7 @@ namespace StockSharp.OpenECry
 						throw new InvalidOperationException(LocalizedStrings.Str1856);
 
 					_client.Disconnect();
+					SendOutMessage(new TimeMessage { IsBack = true });
 					break;
 				}
 
