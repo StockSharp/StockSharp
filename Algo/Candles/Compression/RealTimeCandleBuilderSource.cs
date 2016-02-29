@@ -170,8 +170,8 @@ namespace StockSharp.Algo.Candles.Compression
 
 			while (pair.Key <= Connector.CurrentTime)
 			{
-				RaiseStopped(pair.Value);
 				_seriesByDates.Dequeue();
+				Stop(pair.Value);
 
 				if (_seriesByDates.Count == 0)
 					break;
