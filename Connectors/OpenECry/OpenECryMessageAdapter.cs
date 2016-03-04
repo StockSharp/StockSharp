@@ -95,7 +95,7 @@ namespace StockSharp.OpenECry
 				if (_threadOwner == Thread.CurrentThread.ManagedThreadId)
 					action();
 				else
-					_adapter.SendOutMessage(new MarshallingMessage(action) { IsBack = true });
+					_adapter.SendOutMessage(new MarshallingMessage(action) { IsBack = true, Adapter = _adapter });
 			}
 		}
 
@@ -156,6 +156,7 @@ namespace StockSharp.OpenECry
 		{
 			this.AddMarketDataSupport();
 			this.AddTransactionalSupport();
+			this.AddSupportedMessage(MarshallingMessage.Marshalling);
 
 			Uuid = DefaultUuid;
 

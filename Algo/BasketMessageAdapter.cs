@@ -269,17 +269,6 @@ namespace StockSharp.Algo
 					break;
 				}
 
-				case MessageTypes.Time:
-				{
-					var adapter = message.Adapter;
-
-					if (adapter == null)
-						throw new InvalidOperationException(LocalizedStrings.Str629Params.Put(message.Type));
-
-					adapter.SendInMessage(message);
-					break;
-				}
-
 				case MessageTypes.Portfolio:
 				{
 					var pfMsg = (PortfolioMessage)message;
@@ -404,6 +393,12 @@ namespace StockSharp.Algo
 
 				default:
 				{
+					if (message.Adapter != null)
+					{
+						message.Adapter.SendInMessage(message);
+						break;
+					}
+
 					var adapters = _connectedAdapters.TryGetValue(message.Type);
 
 					if (adapters == null)
