@@ -10,7 +10,7 @@
       </para>
     </introduction>
     
-    <mediaLink><image placement="left" xlink:href="sampleemulationtest"/></mediaLink>
+    <mediaLink><image placement="left" xlink:href="Gui_EquityCurveChart"/></mediaLink>
     
       <procedure>
       <title>Пример построения графика EquityCurveChart</title>

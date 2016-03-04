@@ -6,7 +6,7 @@
        <legacyBold>BoxChart</legacyBold> - специальный тип графика, предназначенный для отображения объемов в виде сетки цифр.
        Для использования этого типа графика необходимо задать специальный стиль 
        <codeEntityReference qualifyHint="true">P:StockSharp.Xaml.Charting.ChartCandleElement.DrawStyle</codeEntityReference> = 
-       <legacyBold>ChartCandleDrawStyles.BoxVolume</legacyBold>.
+       <codeEntityReference qualifyHint="true">F:StockSharp.Xaml.Charting.ChartCandleDrawStyles.BoxVolume</codeEntityReference>
        
        В качестве исходных данных этот график использует информацию из свойства 
        <codeEntityReference qualifyHint="true">P:StockSharp.Algo.Candles.Candle.PriceLevels</codeEntityReference>.

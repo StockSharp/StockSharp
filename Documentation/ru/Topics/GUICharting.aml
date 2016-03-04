@@ -25,6 +25,12 @@
   			<para><codeEntityReference>T:StockSharp.Xaml.Charting.EquityCurveChart</codeEntityReference> - графический компонент для отображения кривой доходности.</para>
   		</listItem>
   		<listItem>
+  			<para><legacyBold>BoxChart</legacyBold> - график, представляющий объемы в виде сетки цифр.</para>
+  		</listItem>
+  		<listItem>
+  			<para><legacyBold>ClusterChart</legacyBold> - график, отображающий объемы в виде кластеров с гистограммами.</para>
+  		</listItem>
+  		<listItem>
   			<para><codeEntityReference>T:StockSharp.Xaml.Charting.OptionPositionChart</codeEntityReference> - графический компонент, показывающий позиции и "греки" опционов относительно подлежащего инструмента. См. <link xlink:href="5d9f8c0d-d05c-4a39-9fad-7148df4411ad">OptionPositionChart</link>.</para>
   		</listItem>
 	</list>

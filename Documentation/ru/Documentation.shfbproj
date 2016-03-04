@@ -1665,6 +1665,14 @@
       <ImageId>ITCHSettings</ImageId>
       <AlternateText>ITCHSettings</AlternateText>
     </Image>
+    <Image Include="Art\Gui_EquityCurveChart.png">
+      <ImageId>Gui_EquityCurveChart</ImageId>
+      <AlternateText>Gui Equity Curve Chart</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_settings_itch.png">
+      <ImageId>hydra_settings_itch</ImageId>
+      <AlternateText>hydra settings itch</AlternateText>
+    </Image>
   </ItemGroup>
   <ItemGroup>
     <None Include="Art\sample_options_calc.png">
