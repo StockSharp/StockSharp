@@ -19,7 +19,6 @@ namespace StockSharp.Algo
 	using System.Collections.Generic;
 	using System.Linq;
 	using System.Security;
-	using System.Threading;
 
 	using Ecng.Collections;
 	using Ecng.Common;
@@ -207,11 +206,6 @@ namespace StockSharp.Algo
 
 		private readonly IEntityRegistry _entityRegistry;
 		private readonly IStorageRegistry _storageRegistry;
-
-		private readonly SyncObject _marketTimerSync = new SyncObject();
-		private Timer _marketTimer;
-		private readonly TimeMessage _marketTimeMessage = new TimeMessage();
-		private bool _isMarketTimeHandled;
 
 		private bool _isDisposing;
 
@@ -551,6 +545,11 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
+		/// Increment periodically <see cref="MarketTimeChangedInterval"/> value of <see cref="CurrentTime"/>.
+		/// </summary>
+		public bool TimeChange { get; set; } = true;
+
+		/// <summary>
 		/// Connect to trading system.
 		/// </summary>
 		public void Connect()
@@ -572,7 +571,6 @@ namespace StockSharp.Algo
 					_adapterStates[adapter] = ConnectionStates.Connecting;
 				}
 
-				StartMarketTimer();
 				OnConnect();
 			}
 			catch (Exception ex)
@@ -1224,11 +1222,7 @@ namespace StockSharp.Algo
 
 		private void ProcessTimeInterval(Message message)
 		{
-			if (message == _marketTimeMessage)
-			{
-				lock (_marketTimerSync)
-					_isMarketTimeHandled = true;
-			}
+			_timeAdapter?.HandleTimeMessage(message);
 
 			// output messages from adapters goes asynchronously
 			if (_currentTime > message.LocalTime)
@@ -1407,7 +1401,7 @@ namespace StockSharp.Algo
 				throw new ArgumentNullException(nameof(security));
 
 			var values = _securityValues.TryGetValue(security);
-			return values == null ? null : values[(int)field];
+			return values?[(int)field];
 		}
 
 		/// <summary>
@@ -1477,48 +1471,6 @@ namespace StockSharp.Algo
 			SendInMessage(new ResetMessage());
 
 			_cleared.SafeInvoke();
-		}
-
-		/// <summary>
-		/// To start the messages generating timer <see cref="TimeMessage"/> with the <see cref="Connector.MarketTimeChangedInterval"/> interval.
-		/// </summary>
-		protected virtual void StartMarketTimer()
-		{
-			if (null != _marketTimer)
-				return;
-
-			_isMarketTimeHandled = true;
-
-			_marketTimer = ThreadingHelper
-				.Timer(() =>
-				{
-					// TimeMsg required for notify invoke MarketTimeChanged event (and active time based IMarketRule-s)
-					// No need to put _marketTimeMessage again, if it still in queue.
-
-					lock (_marketTimerSync)
-					{
-						if (!_isMarketTimeHandled)
-							return;
-
-						_isMarketTimeHandled = false;
-					}
-
-					_marketTimeMessage.LocalTime = TimeHelper.Now;
-					SendOutMessage(_marketTimeMessage);
-				})
-				.Interval(MarketTimeChangedInterval);
-		}
-
-		/// <summary>
-		/// To stop the timer started earlier via <see cref="Connector.StartMarketTimer"/>.
-		/// </summary>
-		protected void StopMarketTimer()
-		{
-			if (null == _marketTimer)
-				return;
-
-			_marketTimer.Dispose();
-			_marketTimer = null;
 		}
 
 		/// <summary>

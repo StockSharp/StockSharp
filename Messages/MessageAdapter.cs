@@ -392,14 +392,6 @@ namespace StockSharp.Messages
 
 				SendOutError(ex);
 			}
-
-			if (message.IsBack)
-			{
-				message.IsBack = false;
-
-				// time msg should be return back
-				SendOutMessage(message);
-			}
 		}
 
 		private void SendOutErrorExecution(ExecutionMessage execMsg, Exception ex)
@@ -466,7 +458,7 @@ namespace StockSharp.Messages
 		/// <param name="error">Error detais.</param>
 		protected void SendOutError(Exception error)
 		{
-			SendOutMessage(new ErrorMessage { Error = error });
+			SendOutMessage(error.ToErrorMessage());
 		}
 
 		/// <summary>

@@ -61,6 +61,7 @@ namespace StockSharp.Algo
 			: base(innerAdapter)
 		{
 			_reConnectionSettings = InnerAdapter.ReConnectionSettings;
+			_timeMessage.Adapter = this;
 		}
 
 		/// <summary>
@@ -111,19 +112,6 @@ namespace StockSharp.Algo
 					
 					break;
 				}
-
-				case MessageTypes.Time:
-				{
-					if (message == _timeMessage)
-					{
-						lock (_timeSync)
-							_canSendTime = true;
-
-						return;
-					}
-
-					break;
-				}
 			}
 
 			base.OnInnerAdapterNewOutMessage(message);
@@ -144,18 +132,18 @@ namespace StockSharp.Algo
 					else
 						base.SendInMessage(new ResetMessage());
 
-				//	lock (_timeSync)
-				//	{
-				//		_currState = ConnectionStates.Connecting;
-				//	}
+					//	lock (_timeSync)
+					//	{
+					//		_currState = ConnectionStates.Connecting;
+					//	}
 
-				//	if (_prevState == _none)
-				//	{
-				//		_connectionTimeOut = _reConnectionSettings.TimeOutInterval;
-				//		_connectingAttemptCount = _reConnectionSettings.AttemptCount;
-				//	}
-				//	else
-				//		_connectionTimeOut = _reConnectionSettings.Interval;
+					//	if (_prevState == _none)
+					//	{
+					//		_connectionTimeOut = _reConnectionSettings.TimeOutInterval;
+					//		_connectingAttemptCount = _reConnectionSettings.AttemptCount;
+					//	}
+					//	else
+					//		_connectionTimeOut = _reConnectionSettings.Interval;
 
 					break;
 				}
@@ -182,6 +170,12 @@ namespace StockSharp.Algo
 			}
 
 			base.SendInMessage(message);
+
+			if (message == _timeMessage)
+			{
+				lock (_timeSync)
+					_canSendTime = true;
+			}
 		}
 
 		private void OnHeartbeatTimer()
@@ -199,7 +193,9 @@ namespace StockSharp.Algo
 
 			_timeMessage.IsBack = true;
 			_timeMessage.TransactionId = InnerAdapter.TransactionIdGenerator.GetNextId();
-			InnerAdapter.SendInMessage(_timeMessage);
+
+			RaiseNewOutMessage(_timeMessage);
+			//InnerAdapter.SendInMessage(_timeMessage);
 		}
 
 		//private void ProcessReconnection(TimeSpan diff)

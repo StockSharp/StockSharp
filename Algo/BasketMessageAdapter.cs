@@ -237,6 +237,7 @@ namespace StockSharp.Algo
 					break;
 
 				case MessageTypes.Connect:
+				{
 					if (_isFirstConnect)
 						_isFirstConnect = false;
 					else
@@ -246,7 +247,7 @@ namespace StockSharp.Algo
 					{
 						var hearbeatAdapter = (IMessageAdapter)new HeartbeatAdapter(a);
 						hearbeatAdapter.Parent = this;
-						hearbeatAdapter.NewOutMessage += m => OnInnerAdapterNewMessage(a, m);
+						hearbeatAdapter.NewOutMessage += m => OnInnerAdapterNewOutMessage(a, m);
 						return hearbeatAdapter;
 					}));
 
@@ -255,14 +256,29 @@ namespace StockSharp.Algo
 
 					_hearbeatAdapters.Values.ForEach(a => a.SendInMessage(message));
 					break;
+				}
 
 				case MessageTypes.Disconnect:
+				{
 					_connectedAdapters
 						.CachedValues
 						.SelectMany(c => c.Cache)
 						.Distinct()
 						.ForEach(a => a.SendInMessage(message));
+
 					break;
+				}
+
+				case MessageTypes.Time:
+				{
+					var adapter = message.Adapter;
+
+					if (adapter == null)
+						throw new InvalidOperationException(LocalizedStrings.Str629Params.Put(message.Type));
+
+					adapter.SendInMessage(message);
+					break;
+				}
 
 				case MessageTypes.Portfolio:
 				{
@@ -423,30 +439,26 @@ namespace StockSharp.Algo
 		/// </summary>
 		/// <param name="innerAdapter">The embedded adapter.</param>
 		/// <param name="message">Message.</param>
-		protected virtual void OnInnerAdapterNewMessage(IMessageAdapter innerAdapter, Message message)
+		protected virtual void OnInnerAdapterNewOutMessage(IMessageAdapter innerAdapter, Message message)
 		{
-			if (message.IsBack)
+			if (!message.IsBack)
 			{
-				message.IsBack = false;
-				innerAdapter.SendInMessage(message);
-				return;
-			}
+				message.Adapter = innerAdapter;
 
-			message.Adapter = innerAdapter;
+				switch (message.Type)
+				{
+					case MessageTypes.Connect:
+						ProcessConnectMessage(innerAdapter, (ConnectMessage)message);
+						return;
 
-			switch (message.Type)
-			{
-				case MessageTypes.Connect:
-					ProcessConnectMessage(innerAdapter, (ConnectMessage)message);
-					return;
+					case MessageTypes.Disconnect:
+						ProcessDisconnectMessage(innerAdapter, (DisconnectMessage)message);
+						return;
 
-				case MessageTypes.Disconnect:
-					ProcessDisconnectMessage(innerAdapter, (DisconnectMessage)message);
-					return;
-
-				case MessageTypes.MarketData:
-					ProcessMarketDataMessage(innerAdapter, (MarketDataMessage)message);
-					return;
+					case MessageTypes.MarketData:
+						ProcessMarketDataMessage(innerAdapter, (MarketDataMessage)message);
+						return;
+				}
 			}
 
 			SendOutMessage(message);
@@ -598,7 +610,7 @@ namespace StockSharp.Algo
 		{
 			lock (InnerAdapters.SyncRoot)
 			{
-				storage.SetValue("InnerAdapters", InnerAdapters.Select(a =>
+				storage.SetValue(nameof(InnerAdapters), InnerAdapters.Select(a =>
 				{
 					var s = new SettingsStorage();
 
@@ -623,7 +635,7 @@ namespace StockSharp.Algo
 			{
 				InnerAdapters.Clear();
 
-				foreach (var s in storage.GetValue<IEnumerable<SettingsStorage>>("InnerAdapters"))
+				foreach (var s in storage.GetValue<IEnumerable<SettingsStorage>>(nameof(InnerAdapters)))
 				{
 					var adapter = s.GetValue<Type>("AdapterType").CreateInstance<IMessageAdapter>(TransactionIdGenerator);
 					adapter.Load(s.GetValue<SettingsStorage>("AdapterSettings"));
@@ -635,7 +647,7 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Освободить занятые ресурсы.
+		/// To release allocated resources.
 		/// </summary>
 		protected override void DisposeManaged()
 		{

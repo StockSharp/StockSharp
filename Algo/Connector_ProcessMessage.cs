@@ -18,6 +18,7 @@ namespace StockSharp.Algo
 	using System;
 	using System.Collections.Generic;
 	using System.Linq;
+	using System.Threading;
 
 	using Ecng.Collections;
 	using Ecng.Common;
@@ -106,6 +107,130 @@ namespace StockSharp.Algo
 			}
 		}
 
+		private class TimeAdapter : MessageAdapterWrapper
+		{
+			private readonly Connector _parent;
+			private readonly SyncObject _marketTimerSync = new SyncObject();
+			private Timer _marketTimer;
+			private readonly TimeMessage _marketTimeMessage = new TimeMessage();
+			private bool _isMarketTimeHandled;
+
+			public TimeAdapter(Connector parent, IMessageAdapter innerAdapter)
+				: base(innerAdapter)
+			{
+				if (parent == null)
+					throw new ArgumentNullException(nameof(parent));
+
+				_parent = parent;
+			}
+
+			private void CloseTimer()
+			{
+				lock (_marketTimerSync)
+				{
+					if (_marketTimer != null)
+					{
+						_marketTimer.Dispose();
+						_marketTimer = null;
+					}
+
+					_isMarketTimeHandled = false;
+				}
+			}
+
+			public override void SendInMessage(Message message)
+			{
+				switch (message.Type)
+				{
+					case MessageTypes.Reset:
+					{
+						CloseTimer();
+						break;
+					}
+
+					case MessageTypes.Connect:
+					{
+						if (_marketTimer != null)
+							throw new InvalidOperationException(LocalizedStrings.Str1619);
+
+						lock (_marketTimerSync)
+						{
+							_isMarketTimeHandled = true;
+
+							_marketTimer = ThreadingHelper
+								.Timer(() =>
+								{
+									// TimeMsg required for notify invoke MarketTimeChanged event (and active time based IMarketRule-s)
+									// No need to put _marketTimeMessage again, if it still in queue.
+
+									lock (_marketTimerSync)
+									{
+										if (_marketTimer == null || !_isMarketTimeHandled)
+											return;
+
+										_isMarketTimeHandled = false;
+									}
+
+									_marketTimeMessage.LocalTime = TimeHelper.Now;
+									RaiseNewOutMessage(_marketTimeMessage);
+								})
+								.Interval(_parent.MarketTimeChangedInterval);
+						}
+						break;
+					}
+
+					case MessageTypes.Disconnect:
+					{
+						if (_marketTimer == null)
+							throw new InvalidOperationException(LocalizedStrings.Str1856);
+
+						CloseTimer();
+						break;
+					}
+				}
+
+				base.SendInMessage(message);
+			}
+
+			protected override void OnInnerAdapterNewOutMessage(Message message)
+			{
+				switch (message.Type)
+				{
+					case MessageTypes.Connect:
+					{
+						var connectMsg = (ConnectMessage)message;
+
+						if (connectMsg.Error != null)
+							CloseTimer();
+
+						break;
+					}
+
+					case MessageTypes.Disconnect:
+					{
+						CloseTimer();
+						break;
+					}
+				}
+
+				base.OnInnerAdapterNewOutMessage(message);
+			}
+
+			public override IMessageChannel Clone()
+			{
+				return new TimeAdapter(_parent, (IMessageAdapter)InnerAdapter.Clone());
+			}
+
+			public void HandleTimeMessage(Message message)
+			{
+				if (message != _marketTimeMessage)
+					return;
+
+				lock (_marketTimerSync)
+					_isMarketTimeHandled = true;
+			}
+		}
+
 		private readonly Dictionary<Security, IOrderLogMarketDepthBuilder> _olBuilders = new Dictionary<Security, IOrderLogMarketDepthBuilder>();
 		private readonly CachedSynchronizedDictionary<IMessageAdapter, ConnectionStates> _adapterStates = new CachedSynchronizedDictionary<IMessageAdapter, ConnectionStates>();
 		private readonly SynchronizedDictionary<SecurityId, Level1DepthBuilder> _level1DepthBuilders = new SynchronizedDictionary<SecurityId, Level1DepthBuilder>();
@@ -156,31 +281,19 @@ namespace StockSharp.Algo
 
 		private void AdapterOnNewOutMessage(Message message)
 		{
-			OnProcessMessage(message);
+			if (message.IsBack)
+			{
+				message.IsBack = false;
+				SendInMessage(message);
+			}
+			else
+				SendOutMessage(message);
 		}
 
 		/// <summary>
 		/// To call the <see cref="Connector.Connected"/> event when the first adapter connects to <see cref="Connector.Adapter"/>.
 		/// </summary>
 		protected virtual bool RaiseConnectedOnFirstAdapter => true;
-
-		private IMessageChannel _outMessageChannel;
-
-		/// <summary>
-		/// Outgoing message channel.
-		/// </summary>
-		public IMessageChannel OutMessageChannel
-		{
-			get { return _outMessageChannel; }
-			protected set
-			{
-				if (value == _outMessageChannel)
-					return;
-
-				_outMessageChannel?.Dispose();
-				_outMessageChannel = value;
-			}
-		}
 
 		private IMessageChannel _inMessageChannel;
 
@@ -195,13 +308,58 @@ namespace StockSharp.Algo
 				if (value == _inMessageChannel)
 					return;
 
-				_inMessageChannel?.Dispose();
+				if (_inMessageChannel != null)
+				{
+					_inMessageChannel.NewOutMessage -= InMessageChannelOnNewOutMessage;
+					_inMessageChannel?.Dispose();
+				}
+
 				_inMessageChannel = value;
+
+				if (_inMessageChannel != null)
+					_inMessageChannel.NewOutMessage += InMessageChannelOnNewOutMessage;
 			}
+		}
+
+		private IMessageChannel _outMessageChannel;
+
+		/// <summary>
+		/// Outgoing message channel.
+		/// </summary>
+		public IMessageChannel OutMessageChannel
+		{
+			get { return _outMessageChannel; }
+			protected set
+			{
+				if (value == _outMessageChannel)
+					return;
+
+				if (_outMessageChannel != null)
+				{
+					_outMessageChannel.NewOutMessage -= OutMessageChannelOnNewOutMessage;
+					_outMessageChannel?.Dispose();
+				}
+
+				_outMessageChannel = value;
+
+				if (_outMessageChannel != null)
+					_outMessageChannel.NewOutMessage += OutMessageChannelOnNewOutMessage;
+			}
+		}
+
+		private void InMessageChannelOnNewOutMessage(Message message)
+		{
+			_inAdapter?.SendInMessage(message);
+		}
+
+		private void OutMessageChannelOnNewOutMessage(Message message)
+		{
+			OnProcessMessage(message);
 		}
 
 		private IMessageAdapter _inAdapter;
 		private BasketMessageAdapter _adapter;
+		private TimeAdapter _timeAdapter;
 
 		/// <summary>
 		/// Message adapter.
@@ -234,6 +392,7 @@ namespace StockSharp.Algo
 
 				_adapter = value;
 				_inAdapter = _adapter;
+				_timeAdapter = null;
 
 				if (_adapter != null)
 				{
@@ -243,11 +402,16 @@ namespace StockSharp.Algo
 
 					_adapter.Parent = this;
 
-					_inAdapter = new ChannelMessageAdapter(_inAdapter, InMessageChannel, OutMessageChannel)
+					//_inAdapter = new ChannelMessageAdapter(_inAdapter, InMessageChannel, OutMessageChannel)
+					//{
+					//	//OwnOutputChannel = true,
+					//	OwnInnerAdaper = true
+					//};
+
+					if (TimeChange)
 					{
-						//OwnOutputChannel = true,
-						OwnInnerAdaper = true
-					};
+						_inAdapter = _timeAdapter = new TimeAdapter(this, _inAdapter) { OwnInnerAdaper = true };
+					}
 
 					if (LatencyManager != null)
 						_inAdapter = new LatencyMessageAdapter(_inAdapter) { LatencyManager = LatencyManager, OwnInnerAdaper = true };
@@ -270,36 +434,6 @@ namespace StockSharp.Algo
 					_inAdapter.NewOutMessage += AdapterOnNewOutMessage;
 				}
 			}
-		}
-
-		/// <summary>
-		/// Send outgoing message.
-		/// </summary>
-		/// <param name="message">Message.</param>
-		public void SendOutMessage(Message message)
-		{
-			if (message.LocalTime.IsDefault())
-				message.LocalTime = CurrentTime;
-
-			AdapterOnNewOutMessage(message);
-		}
-
-		/// <summary>
-		/// Send error message.
-		/// </summary>
-		/// <param name="error">Error detais.</param>
-		public void SendOutError(Exception error)
-		{
-			SendOutMessage(new ErrorMessage { Error = error });
-		}
-
-		/// <summary>
-		/// Send message.
-		/// </summary>
-		/// <param name="message">Message.</param>
-		public void SendInMessage(Message message)
-		{
-			_inAdapter.SendInMessage(message);
 		}
 
 		private void InnerAdaptersOnAdded(IMessageAdapter adapter)
@@ -342,6 +476,42 @@ namespace StockSharp.Algo
 		/// Storage adapter.
 		/// </summary>
 		public StorageMessageAdapter StorageAdapter { get; private set; }
+
+		/// <summary>
+		/// Send message.
+		/// </summary>
+		/// <param name="message">Message.</param>
+		public void SendInMessage(Message message)
+		{
+			if (!InMessageChannel.IsOpened)
+				InMessageChannel.Open();
+
+			InMessageChannel.SendInMessage(message);
+		}
+
+		/// <summary>
+		/// Send outgoing message.
+		/// </summary>
+		/// <param name="message">Message.</param>
+		public void SendOutMessage(Message message)
+		{
+			if (message.LocalTime.IsDefault())
+				message.LocalTime = CurrentTime;
+
+			if (!OutMessageChannel.IsOpened)
+				OutMessageChannel.Open();
+
+			OutMessageChannel.SendInMessage(message);
+		}
+
+		/// <summary>
+		/// Send error message.
+		/// </summary>
+		/// <param name="error">Error detais.</param>
+		public void SendOutError(Exception error)
+		{
+			SendOutMessage(error.ToErrorMessage());
+		}
 
 		/// <summary>
 		/// Process message.
@@ -719,7 +889,7 @@ namespace StockSharp.Algo
 				case ConnectionStates.Disconnected:
 				case ConnectionStates.Failed:
 				{
-					StopMarketTimer();
+					//StopMarketTimer();
 					break;
 				}
 				default:

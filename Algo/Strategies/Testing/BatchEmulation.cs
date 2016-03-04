@@ -94,13 +94,13 @@ namespace StockSharp.Algo.Strategies.Testing
 				}
 			}
 
-			protected override void OnInnerAdapterNewMessage(IMessageAdapter innerAdapter, Message message)
+			protected override void OnInnerAdapterNewOutMessage(IMessageAdapter innerAdapter, Message message)
 			{
 				switch (message.Type)
 				{
 					case MessageTypes.Connect:
 					case MessageTypes.Disconnect:
-						base.OnInnerAdapterNewMessage(innerAdapter, message);
+						base.OnInnerAdapterNewOutMessage(innerAdapter, message);
 						break;
 
 					case MessageTypes.Execution:
@@ -113,7 +113,7 @@ namespace StockSharp.Algo.Strategies.Testing
 								return;
 						}
 
-						base.OnInnerAdapterNewMessage(innerAdapter, message);
+						base.OnInnerAdapterNewOutMessage(innerAdapter, message);
 						break;
 					}
 
@@ -123,7 +123,7 @@ namespace StockSharp.Algo.Strategies.Testing
 						if (innerAdapter != InnerAdapters.LastOrDefault())
 							return;
 
-						base.OnInnerAdapterNewMessage(innerAdapter, message);
+						base.OnInnerAdapterNewOutMessage(innerAdapter, message);
 						break;
 					}
 				}
