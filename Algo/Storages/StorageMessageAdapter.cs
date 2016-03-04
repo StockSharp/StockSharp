@@ -192,7 +192,7 @@ namespace StockSharp.Algo.Storages
 			if (DaysLoad == TimeSpan.Zero)
 				return;
 
-			var today = DateTime.Today;
+			var today = DateTime.UtcNow.Date;
 
 			var from = (DateTimeOffset)(today - DaysLoad);
 			var to = (DateTimeOffset)(today + TimeHelper.LessOneDay);
