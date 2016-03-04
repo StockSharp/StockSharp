@@ -56,7 +56,7 @@ namespace StockSharp.Transaq
 						Quantity = regMsg.Volume.To<int>(),
 						Unfilled = regMsg.TimeInForce.ToTransaq(),
 						BuySell = regMsg.Side.ToTransaq(),
-						Price = regMsg.Price,
+						Price = regMsg.OrderType == OrderTypes.Market ? 0 : regMsg.Price,
 						SecId = (int)regMsg.SecurityId.Native,
 						ExpDate = expDate,
 						BrokerRef = regMsg.Comment,

@@ -185,7 +185,7 @@ namespace StockSharp.Xaml
 				_order.Security = Security;
 				_order.Portfolio = Portfolio;
 				_order.ClientCode = ClientCodeCtrl.Text;
-				_order.Price = PriceCtrl.Value ?? 0;
+				_order.Price = IsMarketCtrl.IsChecked == true ? 0 : PriceCtrl.Value ?? 0;
 				_order.Volume = VolumeCtrl.Value ?? 0;
 				_order.VisibleVolume = VisibleVolumeCtrl.Value;
 				_order.Direction = IsBuyCtrl.IsChecked == true ? Sides.Buy : Sides.Sell;

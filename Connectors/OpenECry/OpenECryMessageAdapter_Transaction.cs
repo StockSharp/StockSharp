@@ -72,7 +72,10 @@ namespace StockSharp.OpenECry
 			draft.Quantity = (int)message.Volume;
 
 			draft.ClearExtData();
-			draft.Price = (double)message.Price;
+
+			if (message.OrderType != OrderTypes.Market)
+				draft.Price = (double)message.Price;
+
 			draft.Price2 = 0;
 
 			if (message.OrderType == OrderTypes.Conditional)

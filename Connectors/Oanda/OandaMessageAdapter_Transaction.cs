@@ -46,7 +46,7 @@ namespace StockSharp.Oanda
 			string type;
 
 			if (condition == null)
-				type = message.Price == 0 ? "market" : "limit";
+				type = message.OrderType == OrderTypes.Market ? "market" : "limit";
 			else
 				type = condition.IsMarket ? _orderImit : "stop";
 

@@ -54,7 +54,7 @@ namespace StockSharp.Algo
 		private class SecurityData
 		{
 			public readonly CachedSynchronizedDictionary<Tuple<long, long>, MyTrade> MyTrades = new CachedSynchronizedDictionary<Tuple<long, long>, MyTrade>();
-			public readonly CachedSynchronizedDictionary<Tuple<long, OrderTypes, bool>, OrderInfo> Orders = new CachedSynchronizedDictionary<Tuple<long, OrderTypes, bool>, OrderInfo>();
+			public readonly CachedSynchronizedDictionary<Tuple<long, bool, bool>, OrderInfo> Orders = new CachedSynchronizedDictionary<Tuple<long, bool, bool>, OrderInfo>();
 
 			public readonly SynchronizedDictionary<long, Trade> TradesById = new SynchronizedDictionary<long, Trade>();
 			public readonly SynchronizedDictionary<string, Trade> TradesByStringId = new SynchronizedDictionary<string, Trade>(StringComparer.InvariantCultureIgnoreCase);
@@ -682,12 +682,12 @@ namespace StockSharp.Algo
 			return Tuple.Create(news, isNew);
 		}
 
-		private static Tuple<long, OrderTypes, bool> CreateOrderKey(OrderTypes? type, long transactionId, bool isCancel)
+		private static Tuple<long, bool, bool> CreateOrderKey(OrderTypes? type, long transactionId, bool isCancel)
 		{
 			if (transactionId <= 0)
 				throw new ArgumentOutOfRangeException(nameof(transactionId), transactionId, LocalizedStrings.Str718);
 
-			return Tuple.Create(transactionId, type ?? OrderTypes.Limit, isCancel);
+			return Tuple.Create(transactionId, type == OrderTypes.Conditional, isCancel);
 		}
 
 		public Order GetOrder(Security security, long transactionId, long? orderId, string orderStringId, OrderTypes orderType = OrderTypes.Limit, bool isCancel = false)
