@@ -1464,14 +1464,14 @@ namespace StockSharp.Algo
 					TryProcessFilteredMarketDepth(security, message);
 
 					//var isRegisterFail = (fail.Order.Id == null && fail.Order.StringId.IsEmpty()) || fail.Order.Status == OrderStatus.RejectedBySystem;
-					var isRegisterFail = tuple.Item2;
+					var isCancelTransaction = tuple.Item2;
 
-					this.AddErrorLog(() => (isRegisterFail ? "OrderFailed" : "OrderCancelFailed")
+					this.AddErrorLog(() => (isCancelTransaction ? "OrderCancelFailed" : "OrderRegisterFailed")
 						+ Environment.NewLine + fail.Order + Environment.NewLine + fail.Error);
 
 					var isStop = fail.Order.Type == OrderTypes.Conditional;
 
-					if (isRegisterFail)
+					if (!isCancelTransaction)
 					{
 						_entityCache.AddRegisterFail(fail);
 

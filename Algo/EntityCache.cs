@@ -493,7 +493,7 @@ namespace StockSharp.Algo
 			return orders.Select(t =>
 			{
 				var order = t.Item1;
-				var isCancelled = t.Item2;
+				var isCancelTransaction = t.Item2;
 
 				order.LastChangeTime = message.ServerTime;
 				order.LocalTime = message.LocalTime;
@@ -502,7 +502,7 @@ namespace StockSharp.Algo
 					order.Status = message.OrderStatus;
 
 				//для ошибок снятия не надо менять состояние заявки
-				if (!isCancelled)
+				if (!isCancelTransaction)
 					order.State = OrderStates.Failed;
 
 				if (message.Commission != null)
@@ -511,12 +511,12 @@ namespace StockSharp.Algo
 				message.CopyExtensionInfo(order);
 
 				var error = message.Error ?? new InvalidOperationException(
-					isCancelled ? LocalizedStrings.Str716 : LocalizedStrings.Str717);
+					isCancelTransaction ? LocalizedStrings.Str716 : LocalizedStrings.Str717);
 
 				var fail = EntityFactory.CreateOrderFail(order, error);
 				fail.ServerTime = message.ServerTime;
 				fail.LocalTime = message.LocalTime;
-				return Tuple.Create(fail, isCancelled);
+				return Tuple.Create(fail, isCancelTransaction);
 			});
 		}
 
