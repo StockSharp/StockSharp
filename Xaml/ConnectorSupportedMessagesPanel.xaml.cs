@@ -8,6 +8,8 @@
 	using Ecng.Common;
 	using Ecng.ComponentModel;
 
+	using MoreLinq;
+
 	using StockSharp.Messages;
 
 	/// <summary>
@@ -77,9 +79,12 @@
 				if (_adapter == null)
 					return;
 
+				var types = Enumerator.GetValues<MessageTypes>().ToHashSet();
+
 				var message = _adapter.GetType()
 					.CreateInstance<IMessageAdapter>(_adapter.TransactionIdGenerator)
 					.SupportedMessages
+					.Where(m => types.Contains(m))
 					.Select(m => new SupportedMessage(this, _adapter, m))
 					.ToArray();
 
