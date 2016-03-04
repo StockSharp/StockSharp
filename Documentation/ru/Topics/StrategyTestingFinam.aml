@@ -81,12 +81,12 @@ finamHistorySource.Refresh(finamSecurityStorage, security, s => {}, () => false)
 				<para>
 					Теперь нужно зарегистрировать в <codeEntityReference>T:StockSharp.Algo.Testing.HistoryEmulationConnector</codeEntityReference> новый источник данных. Это делается при помощи
 					метода 
-					<codeEntityReference qualifyHint="true">M:StockSharp.Algo.Testing.HistoryEmulationConnector.RegisterHistorySource(StockSharp.BusinessEntities.Security,StockSharp.Messages.MarketDataTypes,System.Object,System.Func{System.DateTimeOffset})</codeEntityReference>.
+					<codeEntityReference qualifyHint="true">M:StockSharp.Algo.Testing.HistoryEmulationConnector.RegisterHistorySource(StockSharp.BusinessEntities.Security,StockSharp.Messages.MarketDataTypes,System.Object,System.Func{System.DateTimeOffset,System.Collections.Generic.IEnumerable{StockSharp.Messages.Message}})</codeEntityReference>.
 					Первый аргумент метода - это инструмент. Далее указывается тип данных источника. В нашем случае - это 
 					обычные свечи <codeEntityReference>F:StockSharp.Messages.MarketDataTypes.CandleTimeFrame</codeEntityReference>. Третий аргумент - параметр, связанный с типом рыночных данных. Для обычных свечей - это таймфрейм свечи.  
-				</para>
+				</para>			
 				<para>
-				В последнем аргументе нужно указать функцию, которая возвращает рыночные данные. Причем функция должна возвращать значение должно иметь тип <legacyBold>IEnumerable&lt;Message&gt;&gt;</legacyBold> и принимать параметр типа
+				В последнем аргументе нужно указать функцию, которая возвращает рыночные данные. Причем функция должна возвращать значение типа <legacyBold>IEnumerable&lt;Message&gt;</legacyBold> и принимать параметр типа
 				<codeEntityReference>T:System.DateTimeOffset</codeEntityReference>. В нашем случае используется метод, который
 				запрашивает свечи с Финама - 
 				<codeEntityReference qualifyHint="true">M:StockSharp.Algo.History.Russian.Finam.FinamHistorySource.GetCandles(StockSharp.BusinessEntities.Security,System.TimeSpan,System.DateTime,System.DateTime)</codeEntityReference>
