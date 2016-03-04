@@ -313,9 +313,9 @@ namespace StockSharp.Algo.Storages
 					_isInitialized = false;
 				}
 			}
-			catch (Exception excp)
+			catch (Exception ex)
 			{
-				EnqueueMessage(new ErrorMessage { Error = excp });
+				EnqueueMessage(ex.ToErrorMessage());
 				EnqueueMessage(new LastMessage { IsError = true });
 			}
 		}

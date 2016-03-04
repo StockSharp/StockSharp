@@ -402,7 +402,20 @@ namespace StockSharp.Messages
 		/// <returns><see cref="ErrorMessage"/> instance.</returns>
 		public static ErrorMessage ToErrorMessage(this string description)
 		{
-			return new ErrorMessage { Error = new InvalidOperationException(description) };
+			return  new InvalidOperationException(description).ToErrorMessage();
+		}
+
+		/// <summary>
+		/// Convert error info into <see cref="ErrorMessage"/>.
+		/// </summary>
+		/// <param name="error">Error info.</param>
+		/// <returns>Error message.</returns>
+		public static ErrorMessage ToErrorMessage(this Exception error)
+		{
+			if (error == null)
+				throw new ArgumentNullException(nameof(error));
+
+			return new ErrorMessage { Error = error };
 		}
 	}
 }

@@ -547,7 +547,7 @@ namespace StockSharp.IQFeed
 				{
 					ex = new InvalidOperationException(LocalizedStrings.Str2141Params.Put(line), ex);
 					this.AddErrorLog(ex);
-					messages = new[] { new ErrorMessage { Error = ex } };
+					messages = new[] { ex.ToErrorMessage() };
 				}
 
 				foreach (var message in messages)
