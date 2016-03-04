@@ -1502,9 +1502,7 @@ namespace StockSharp.Algo
 			//if (ExportState == ConnectionStates.Disconnected || ExportState == ConnectionStates.Failed)
 			//	MarketDataAdapter = null;
 
-			Adapter = null;
-			InMessageChannel = null;
-			OutMessageChannel = null;
+			SendInMessage(_disposeMessage);
 		}
 
 		/// <summary>

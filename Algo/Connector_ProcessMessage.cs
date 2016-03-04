@@ -235,6 +235,7 @@ namespace StockSharp.Algo
 		private readonly CachedSynchronizedDictionary<IMessageAdapter, ConnectionStates> _adapterStates = new CachedSynchronizedDictionary<IMessageAdapter, ConnectionStates>();
 		private readonly SynchronizedDictionary<SecurityId, Level1DepthBuilder> _level1DepthBuilders = new SynchronizedDictionary<SecurityId, Level1DepthBuilder>();
 		private readonly SynchronizedDictionary<string, QuoteChangeDepthBuilder> _quoteChangeDepthBuilders = new SynchronizedDictionary<string, QuoteChangeDepthBuilder>(StringComparer.InvariantCultureIgnoreCase);
+		private readonly ResetMessage _disposeMessage = new ResetMessage();
 
 		private string AssociatedBoardCode => Adapter.AssociatedBoardCode;
 
@@ -350,6 +351,13 @@ namespace StockSharp.Algo
 		private void InMessageChannelOnNewOutMessage(Message message)
 		{
 			_inAdapter?.SendInMessage(message);
+
+			if (message != _disposeMessage)
+				return;
+
+			InMessageChannel = null;
+			Adapter = null;
+			OutMessageChannel = null;
 		}
 
 		private void OutMessageChannelOnNewOutMessage(Message message)
