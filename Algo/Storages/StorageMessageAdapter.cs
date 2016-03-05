@@ -143,10 +143,7 @@ namespace StockSharp.Algo.Storages
 
 		private IMarketDataStorage GetStorage(SecurityId securityId, Type messageType, object arg)
 		{
-			var security = _entityRegistry.Securities.ReadBySecurityId(securityId);
-
-			if (security == null)
-				security = TryCreateSecurity(securityId);
+			var security = _entityRegistry.Securities.ReadBySecurityId(securityId) ?? TryCreateSecurity(securityId);
 
 			if (security == null)
 				throw new InvalidOperationException(Localization.LocalizedStrings.Str704Params.Put(securityId));
@@ -195,7 +192,7 @@ namespace StockSharp.Algo.Storages
 			var today = DateTime.UtcNow.Date;
 
 			var from = (DateTimeOffset)(today - DaysLoad);
-			var to = (DateTimeOffset)(today + TimeHelper.LessOneDay);
+			var to = DateTimeOffset.Now;
 
 			foreach (var secId in requiredSecurities)
 			{

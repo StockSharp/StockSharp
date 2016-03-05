@@ -73,6 +73,7 @@ namespace StockSharp.Quik
 		/// <summary>
 		/// Список произвольных таблиц.
 		/// </summary>
+		[Browsable(false)]
 		public IList<DdeCustomTable> CustomTables => _customTableDeserializer.CustomTables;
 
 		/// <summary>
