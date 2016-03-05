@@ -4215,6 +4215,8 @@ Less;Less;Меньше
 LessOrEqual;Less or equal;Меньше или равно
 Any;Any;Любое
 LoadingVariableErrorParams;Loading variable parameter error: {0}.;Ошибка загрузки параметра переменной {0}.
+CancelOnDisconnect;Cancel On Disconnect;Cancel On Disconnect
+CancelOnDisconnectDesc;Heartbeat interval. Uses in Cancel On Disconnect mode.;Интервал оповещения сервера об активности. Используется в режиме Cancel On Disconnect.
 DocStr0;Button activation alert settings;Кнопка активации настроек сигнала
 DocStr1;Initializes a new instance of the {0};Создать {0}
 DocStr2;Load settings;Загрузить настройки

@@ -41816,5 +41816,25 @@ namespace StockSharp.Localization
 		/// Loading variable parameter error.
 		/// </summary>
 		public static string LoadingVariableErrorParams => GetString(LoadingVariableErrorParamsKey);
+
+		/// <summary>
+		/// Cancel On Disconnect
+		/// </summary>
+		public const string CancelOnDisconnectKey = "CancelOnDisconnect";
+
+		/// <summary>
+		/// Cancel On Disconnect
+		/// </summary>
+		public static string CancelOnDisconnect => GetString(CancelOnDisconnectKey);
+
+		/// <summary>
+		/// Heartbeat interval. Uses in Cancel On Disconnect mode.
+		/// </summary>
+		public const string CancelOnDisconnectDescKey = "CancelOnDisconnectDesc";
+
+		/// <summary>
+		/// Heartbeat interval. Uses in Cancel On Disconnect mode.
+		/// </summary>
+		public static string CancelOnDisconnectDesc => GetString(CancelOnDisconnectDescKey);
 	}
 }

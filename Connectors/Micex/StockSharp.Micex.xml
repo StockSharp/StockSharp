@@ -4,6 +4,21 @@
     <name>StockSharp.Micex</name>
   </assembly>
   <members>
+    <member name="T:StockSharp.Micex.MicexStructureMessage">
+      <summary>
+            Сообщение запроса структуры данных <see cref="T:StockSharp.Micex.Schema.InterfaceDesc" />.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Micex.MicexStructureMessage.#ctor">
+      <summary>
+            Initialize <see cref="T:StockSharp.Micex.MicexStructureMessage" />.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Micex.MicexStructureMessage.Structure">
+      <summary>
+            Структура данных.
+            </summary>
+    </member>
     <member name="T:StockSharp.Micex.MicexOrderCondition">
       <summary>
             Условие заявок, специфичных для <see cref="N:StockSharp.Micex" />.
@@ -161,6 +176,11 @@
     <member name="P:StockSharp.Micex.MicexMessageAdapter.ExtraSettings">
       <summary>
             Дополнительные настройки.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Micex.MicexMessageAdapter.CancelOnDisconnectHeartbeatInterval">
+      <summary>
+            Интервал оповещения сервера об активности. Используется в режиме Cancel On Disconnect.
             </summary>
     </member>
     <member name="P:StockSharp.Micex.MicexMessageAdapter.IsValid">
@@ -10540,7 +10560,7 @@
     </member>
     <member name="T:StockSharp.Micex.Native.MicexPtrReader">
       <summary>
-            Читательн данных из указателя на неуправляемую память.
+            Читатель данных из указателя на неуправляемую память.
             </summary>
     </member>
     <member name="M:StockSharp.Micex.Native.MicexPtrReader.#ctor(System.IntPtr)">
@@ -10699,11 +10719,6 @@
             Версия библиотеки.
             </summary>
     </member>
-    <member name="P:StockSharp.Micex.Native.MicexClient.Structure">
-      <summary>
-            Структура данных.
-            </summary>
-    </member>
     <member name="M:StockSharp.Micex.Native.MicexClient.ExecuteTransaction(StockSharp.Micex.Native.Transactions.BaseTransaction,System.Int32)">
       <summary>
             Выполнить транзакцию.
@@ -10726,6 +10741,12 @@
       <summary>
             Отключиться.
             </summary>
+    </member>
+    <member name="M:StockSharp.Micex.Native.MicexClient.GetStructure">
+      <summary>
+            Получить стуктуру данных.
+            </summary>
+      <returns>Стуктура данных.</returns>
     </member>
     <member name="M:StockSharp.Micex.Native.MicexClient.CloseTable(System.Int32)">
       <summary>

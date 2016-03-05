@@ -6840,6 +6840,13 @@
             </summary>
       <returns>Транзакция.</returns>
     </member>
+    <member name="M:StockSharp.Plaza.TransactionFactory.CreateHeartbeat(StockSharp.Messages.TimeMessage)">
+      <summary>
+            Создать транзакцию оповещения сервера.
+            </summary>
+      <param name="timeMessage">Сообщение оповещения сервера.</param>
+      <returns>Транзакция.</returns>
+    </member>
     <member name="M:StockSharp.Plaza.TransactionFactory.CreateTransaction(System.String,System.Nullable{System.Int64},StockSharp.Messages.Message,System.String)">
       <summary>
             Создать транзакцию.
