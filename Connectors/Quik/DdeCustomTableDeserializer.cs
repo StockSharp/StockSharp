@@ -89,7 +89,7 @@ namespace StockSharp.Quik
 		public event Action<Type, IEnumerable<object>> NewCustomTables;
 		public event Action<Type, IEnumerable<object>> CustomTablesChanged;
 
-		public DdeCustomTableList CustomTables { get; private set; }
+		public DdeCustomTableList CustomTables { get; }
 
 		public bool TryDeserialize(string category, IList<IList<object>> rows)
 		{

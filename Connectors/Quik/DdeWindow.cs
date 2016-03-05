@@ -201,7 +201,7 @@ namespace StockSharp.Quik
 		/// <summary>
 		/// Описание окна DDE.
 		/// </summary>
-		internal SystemWindow Window { get; private set; }
+		internal SystemWindow Window { get; }
 
 		public override DdeWindow Clone()
 		{

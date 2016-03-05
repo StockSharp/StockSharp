@@ -56,13 +56,13 @@ namespace StockSharp.Quik
 		/// <summary>
 		/// »м€ колонки.
 		/// </summary>
-		public string Name { get; private set; }
+		public string Name { get; }
 
 		/// <summary>
 		/// “ип данных в колонке.
 		/// </summary>
 		[Member]
-		public Type DataType { get; private set; }
+		public Type DataType { get; }
 
 		/// <summary>
 		/// явл€етс€ ли колонка об€зательной.
