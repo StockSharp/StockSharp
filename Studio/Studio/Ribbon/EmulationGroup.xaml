@@ -55,7 +55,7 @@
 				<TextBlock Grid.Row="0" Grid.Column="2">
 					<Run Text="{x:Static loc:LocalizedStrings.XamlStr739}"/><Run Text=" "/>
 				</TextBlock>
-                <TextBlock Grid.Row="0" Grid.Column="3" Text="{Binding EmulationService.MarketTime, StringFormat={}{0:dd.MM.yyyy HH:mm:ss}}"/>
+                <TextBlock Grid.Row="0" Grid.Column="3" Text="{Binding EmulationService.MarketTime, StringFormat={}{0:G}}"/>
 
 				<TextBlock Grid.Row="1" Grid.Column="2">
 					<Run Text="{x:Static loc:LocalizedStrings.XamlStr443}"/><Run Text=": "/>

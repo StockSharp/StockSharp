@@ -43,7 +43,7 @@ namespace StockSharp.BitStamp.Native
 
 		public override string ToString()
 		{
-			return string.Format("[Ticker: Bid={0}, Ask={1}, Last={2}, High={3}, Low={4}, Volume={5}]", Bid, Ask, Last, High, Low, Volume);
+			return $"[Ticker: Bid={Bid}, Ask={Ask}, Last={Last}, High={High}, Low={Low}, Volume={Volume}]";
 		}
 	}
 }
