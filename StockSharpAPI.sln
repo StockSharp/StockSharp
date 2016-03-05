@@ -53,7 +53,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SampleOptionQuotingPublic",
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SamplePlazaPublic", "Samples\Plaza\SamplePlaza\SamplePlazaPublic.csproj", "{627B4D03-2DDB-49C1-B294-8DE7791F5708}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SamplePublic", "Samples\Quik\Sample\SamplePublic.csproj", "{3F5FBB7C-49CD-4802-8752-A94244C133BE}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SampleQuikPublic", "Samples\Quik\SampleQuik\SampleQuikPublic.csproj", "{3F5FBB7C-49CD-4802-8752-A94244C133BE}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SampleAsyncTransactionsPublic", "Samples\Quik\DDE\SampleAsyncTransactions\SampleAsyncTransactionsPublic.csproj", "{A2A93F71-27CA-4BD6-AE1E-2B3C669E112C}"
 EndProject
@@ -190,7 +190,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InteractiveBrokers", "Conne
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QuikPublic", "Connectors\Quik\QuikPublic.csproj", "{1B798A4E-2271-46F9-9C2D-4E563114E268}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SampleCandlesPublic", "Samples\Quik\SampleCandles\SampleCandlesPublic.csproj", "{335F0A92-14A7-4C16-88C6-E4D6CBA39B80}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SampleQuikCandlesPublic", "Samples\Quik\SampleQuikCandles\SampleQuikCandlesPublic.csproj", "{335F0A92-14A7-4C16-88C6-E4D6CBA39B80}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xaml", "Xaml\Xaml.csproj", "{64E4D6F0-36B6-4904-9BA7-FFFBE5FF71D8}"
 EndProject

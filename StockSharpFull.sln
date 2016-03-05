@@ -105,7 +105,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SampleOptionQuotingPublic",
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SamplePlazaPublic", "Samples\Plaza\SamplePlaza\SamplePlazaPublic.csproj", "{627B4D03-2DDB-49C1-B294-8DE7791F5708}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SamplePublic", "Samples\Quik\Sample\SamplePublic.csproj", "{3F5FBB7C-49CD-4802-8752-A94244C133BE}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SampleQuikPublic", "Samples\Quik\SampleQuik\SampleQuikPublic.csproj", "{3F5FBB7C-49CD-4802-8752-A94244C133BE}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SampleAsyncTransactionsPublic", "Samples\Quik\DDE\SampleAsyncTransactions\SampleAsyncTransactionsPublic.csproj", "{A2A93F71-27CA-4BD6-AE1E-2B3C669E112C}"
 EndProject
@@ -299,7 +299,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QuikPublic", "Connectors\Qu
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QuandlPublic", "Hydra\Plugins\Quandl\QuandlPublic.csproj", "{28E907AE-AECD-40A8-A679-3699A9E67974}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SampleCandlesPublic", "Samples\Quik\SampleCandles\SampleCandlesPublic.csproj", "{335F0A92-14A7-4C16-88C6-E4D6CBA39B80}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SampleQuikCandlesPublic", "Samples\Quik\SampleQuikCandles\SampleQuikCandlesPublic.csproj", "{335F0A92-14A7-4C16-88C6-E4D6CBA39B80}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SterlingPublic", "Hydra\Plugins\Sterling\SterlingPublic.csproj", "{1A4D3507-00D3-45F3-AC2B-0B44F899D3F2}"
 EndProject
