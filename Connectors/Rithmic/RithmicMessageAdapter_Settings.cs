@@ -215,7 +215,7 @@ namespace StockSharp.Rithmic
 			set
 			{
 				_adminConnectionPoint = value;
-				RaisePropertyChanged("AdminConnectionPoint");
+				RaisePropertyChanged(nameof(AdminConnectionPoint));
 			}
 		}
 
@@ -234,7 +234,7 @@ namespace StockSharp.Rithmic
 			set
 			{
 				_marketDataConnectionPoint = value;
-				RaisePropertyChanged("MarketDataConnectionPoint");
+				RaisePropertyChanged(nameof(MarketDataConnectionPoint));
 			}
 		}
 
@@ -253,7 +253,7 @@ namespace StockSharp.Rithmic
 			set
 			{
 				_transactionConnectionPoint = value;
-				RaisePropertyChanged("TransactionConnectionPoint");
+				RaisePropertyChanged(nameof(TransactionConnectionPoint));
 			}
 		}
 
@@ -272,7 +272,7 @@ namespace StockSharp.Rithmic
 			set
 			{
 				_positionConnectionPoint = value;
-				RaisePropertyChanged("PositionConnectionPoint");
+				RaisePropertyChanged(nameof(PositionConnectionPoint));
 			}
 		}
 
@@ -291,7 +291,7 @@ namespace StockSharp.Rithmic
 			set
 			{
 				_historicalConnectionPoint = value;
-				RaisePropertyChanged("HistoricalConnectionPoint");
+				RaisePropertyChanged(nameof(HistoricalConnectionPoint));
 			}
 		}
 
@@ -310,7 +310,7 @@ namespace StockSharp.Rithmic
 			set
 			{
 				_domainServerAddress = value;
-				RaisePropertyChanged("DomainServerAddress");
+				RaisePropertyChanged(nameof(DomainServerAddress));
 			}
 		}
 
@@ -329,7 +329,7 @@ namespace StockSharp.Rithmic
 			set
 			{
 				_domainName = value;
-				RaisePropertyChanged("DomainName");
+				RaisePropertyChanged(nameof(DomainName));
 			}
 		}
 
@@ -348,7 +348,7 @@ namespace StockSharp.Rithmic
 			set
 			{
 				_licenseServerAddress = value;
-				RaisePropertyChanged("LicenseServerAddress");
+				RaisePropertyChanged(nameof(LicenseServerAddress));
 			}
 		}
 
@@ -367,7 +367,7 @@ namespace StockSharp.Rithmic
 			set
 			{
 				_localBrokerAddress = value;
-				RaisePropertyChanged("LocalBrokerAddress");
+				RaisePropertyChanged(nameof(LocalBrokerAddress));
 			}
 		}
 
@@ -386,7 +386,7 @@ namespace StockSharp.Rithmic
 			set
 			{
 				_loggerAddress = value;
-				RaisePropertyChanged("LoggerAddress");
+				RaisePropertyChanged(nameof(LoggerAddress));
 			}
 		}
 
