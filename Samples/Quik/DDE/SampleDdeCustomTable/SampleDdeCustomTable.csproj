@@ -193,7 +193,7 @@
       <Project>{c4476add-a3d5-41bb-9d43-55d865863b78}</Project>
       <Name>Logging</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\..\Xaml\Xaml.csproj">
+    <ProjectReference Include="..\..\..\..\..\StockSharpApps\Xaml\Xaml.csproj">
       <Project>{64e4d6f0-36b6-4904-9ba7-fffbe5ff71d8}</Project>
       <Name>Xaml</Name>
     </ProjectReference>

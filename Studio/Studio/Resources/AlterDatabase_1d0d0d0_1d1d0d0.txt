@@ -1,1 +1,0 @@
-CREATE TABLE ContinuousSecurityJump (ContinuousSecurity text NOT NULL,JumpSecurity text NOT NULL,JumpDate date NOT NULL)

@@ -1,7 +1,0 @@
-﻿<controls:BaseStudioControl x:Class="StockSharp.Studio.Controls.OrdersConditionalPanel"
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:xaml="http://schemas.stocksharp.com/xaml"
-             xmlns:controls="clr-namespace:StockSharp.Studio.Controls">
-    <xaml:OrderConditionalGrid x:Name="OrderGrid" />
-</controls:BaseStudioControl>

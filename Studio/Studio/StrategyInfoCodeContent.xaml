@@ -1,7 +1,0 @@
-﻿<UserControl
-				x:Class="StockSharp.Studio.StrategyInfoCodeContent"
-				xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-				xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-				xmlns:code1="http://schemas.stocksharp.com/xaml">
-	<code1:CodePanel x:Name="CodePanel" ShowToolBar="False"/>
-</UserControl>

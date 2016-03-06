@@ -1,10 +1,0 @@
-<UserControl x:Class="StockSharp.Hydra.Panes.ChartPane"
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"             xmlns:loc="clr-namespace:StockSharp.Localization;assembly=StockSharp.Localization"
-             xmlns:sx="http://schemas.stocksharp.com/xaml">
-    
-    <Grid>
-        <sx:ChartPanel x:Name="ChartPanel" />
-        <Button x:Name="CancelButton" Content="{x:Static loc:LocalizedStrings.XamlStr425}" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,35,0,0" Click="Cancel_OnClick" Visibility="Collapsed" />
-    </Grid>
-</UserControl>

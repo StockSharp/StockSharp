@@ -42,6 +42,10 @@
     <ApplicationIcon>..\..\..\References\stocksharp.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="StockSharp.Xaml, Version=4.3.14.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Xaml\StockSharp.Xaml.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xaml" />
@@ -147,10 +151,6 @@
     <ProjectReference Include="..\..\..\Logging\Logging.csproj">
       <Project>{c4476add-a3d5-41bb-9d43-55d865863b78}</Project>
       <Name>Logging</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\Xaml\Xaml.csproj">
-      <Project>{64E4D6F0-36B6-4904-9BA7-FFFBE5FF71D8}</Project>
-      <Name>Xaml</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

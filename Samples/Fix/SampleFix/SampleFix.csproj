@@ -266,11 +266,11 @@
       <Project>{B47F9C23-A4BD-46A9-BF27-54CB3D653503}</Project>
       <Name>Messages</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\..\StockSharp %28GitLab%29\Xaml.Charting\Xaml.Charting.csproj">
+    <ProjectReference Include="..\..\..\..\StockSharpApps\Xaml.Charting\Xaml.Charting.csproj">
       <Project>{c449d618-dea4-41c3-ba86-9f827c7421dc}</Project>
       <Name>Xaml.Charting</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\Xaml\Xaml.csproj">
+    <ProjectReference Include="..\..\..\..\StockSharpApps\Xaml\Xaml.csproj">
       <Project>{64E4D6F0-36B6-4904-9BA7-FFFBE5FF71D8}</Project>
       <Name>Xaml</Name>
     </ProjectReference>

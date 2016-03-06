@@ -192,8 +192,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QuikPublic", "Connectors\Qu
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SampleQuikCandlesPublic", "Samples\Quik\SampleQuikCandles\SampleQuikCandlesPublic.csproj", "{335F0A92-14A7-4C16-88C6-E4D6CBA39B80}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xaml", "Xaml\Xaml.csproj", "{64E4D6F0-36B6-4904-9BA7-FFFBE5FF71D8}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BitStamp", "Connectors\BitStamp\BitStamp.csproj", "{90B93AF4-3168-4415-B916-9E078F192696}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ETrade", "Connectors\ETrade\ETrade.csproj", "{480539A8-CA30-4B87-B038-6AD854DA0C6A}"
@@ -478,10 +476,6 @@ Global
 		{335F0A92-14A7-4C16-88C6-E4D6CBA39B80}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{335F0A92-14A7-4C16-88C6-E4D6CBA39B80}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{335F0A92-14A7-4C16-88C6-E4D6CBA39B80}.Release|Any CPU.Build.0 = Release|Any CPU
-		{64E4D6F0-36B6-4904-9BA7-FFFBE5FF71D8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{64E4D6F0-36B6-4904-9BA7-FFFBE5FF71D8}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{64E4D6F0-36B6-4904-9BA7-FFFBE5FF71D8}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{64E4D6F0-36B6-4904-9BA7-FFFBE5FF71D8}.Release|Any CPU.Build.0 = Release|Any CPU
 		{90B93AF4-3168-4415-B916-9E078F192696}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{90B93AF4-3168-4415-B916-9E078F192696}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{90B93AF4-3168-4415-B916-9E078F192696}.Release|Any CPU.ActiveCfg = Release|Any CPU

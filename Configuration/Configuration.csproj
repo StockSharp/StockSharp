@@ -109,11 +109,11 @@
       <Project>{7EABA894-FC98-4F5E-A212-C40550260886}</Project>
       <Name>Plaza</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Xaml.Charting\Xaml.Charting.csproj">
+    <ProjectReference Include="..\..\StockSharpApps\Xaml.Charting\Xaml.Charting.csproj">
       <Project>{c449d618-dea4-41c3-ba86-9f827c7421dc}</Project>
       <Name>Xaml.Charting</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Xaml.Diagram\Xaml.Diagram.csproj">
+    <ProjectReference Include="..\..\StockSharpApps\Xaml.Diagram\Xaml.Diagram.csproj">
       <Project>{e5d21a65-1b77-4b4b-87c7-8ac7eee4f085}</Project>
       <Name>Xaml.Diagram</Name>
     </ProjectReference>
@@ -205,7 +205,7 @@
       <Project>{b47f9c23-a4bd-46a9-bf27-54cb3d653503}</Project>
       <Name>Messages</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Xaml\Xaml.csproj">
+    <ProjectReference Include="..\..\StockSharpApps\Xaml\Xaml.csproj">
       <Project>{64E4D6F0-36B6-4904-9BA7-FFFBE5FF71D8}</Project>
       <Name>Xaml</Name>
     </ProjectReference>

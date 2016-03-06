@@ -1,5 +1,0 @@
-<Button x:Class="StockSharp.Hydra.Controls.SecurityPickerButton"
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"             xmlns:loc="clr-namespace:StockSharp.Localization;assembly=StockSharp.Localization"
-             Content="{x:Static loc:LocalizedStrings.XamlStr79}" MinWidth="150">
-</Button>

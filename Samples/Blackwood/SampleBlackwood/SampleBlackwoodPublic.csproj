@@ -63,6 +63,10 @@
     <Reference Include="StockSharp.Blackwood">
       <HintPath>..\..\..\Connectors\Blackwood\StockSharp.Blackwood.dll</HintPath>
     </Reference>
+    <Reference Include="StockSharp.Xaml, Version=4.3.14.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Xaml\StockSharp.Xaml.dll</HintPath>
+    </Reference>
     <Reference Include="StockSharp.Xaml.Charting">
       <HintPath>..\..\..\Xaml.Charting\StockSharp.Xaml.Charting.dll</HintPath>
     </Reference>
@@ -277,10 +281,6 @@
     <ProjectReference Include="..\..\..\Messages\Messages.csproj">
       <Project>{B47F9C23-A4BD-46A9-BF27-54CB3D653503}</Project>
       <Name>Messages</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\Xaml\Xaml.csproj">
-      <Project>{64E4D6F0-36B6-4904-9BA7-FFFBE5FF71D8}</Project>
-      <Name>Xaml</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

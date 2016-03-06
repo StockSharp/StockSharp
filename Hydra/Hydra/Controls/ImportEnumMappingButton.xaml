@@ -1,7 +1,0 @@
-﻿<Button 
-		x:Class="StockSharp.Hydra.Controls.ImportEnumMappingButton"
-		xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-		xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-		IsEnabled="False">
-	...
-</Button>

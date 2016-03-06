@@ -1,9 +1,0 @@
-﻿<UserControl x:Class="StockSharp.Studio.Controls.PropertiesPanel"
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:pg="http://schemas.stocksharp.com/xaml">
-    <Grid>
-        <pg:PropertyGridEx x:Name="PropertyGrid" />
-        <TextBlock x:Name="WatermarkTextBlock" TextAlignment="Center" VerticalAlignment="Center" HorizontalAlignment="Center" TextWrapping="WrapWithOverflow"/>
-    </Grid>
-</UserControl>
