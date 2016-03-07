@@ -72,7 +72,8 @@ namespace StockSharp.Quik.Lua
 			protected override string TryGetRequestId(long transactionId)
 			{
 				if (transactionId == 0)
-					throw new ArgumentNullException(nameof(transactionId));
+					return null;
+					//throw new ArgumentNullException(nameof(transactionId));
 
 				//if (_transactionIds.Contains(transactionId))
 				return transactionId.To<string>();
