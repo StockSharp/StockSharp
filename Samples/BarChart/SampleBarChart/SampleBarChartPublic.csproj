@@ -63,6 +63,10 @@
     <Reference Include="MoreLinq">
       <HintPath>..\..\..\References\Ecng\MoreLinq.dll</HintPath>
     </Reference>
+    <Reference Include="StockSharp.BarChart, Version=4.3.14.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Connectors\BarChart\StockSharp.BarChart.dll</HintPath>
+    </Reference>
     <Reference Include="StockSharp.Xaml, Version=4.3.14.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\Xaml\StockSharp.Xaml.dll</HintPath>
@@ -222,10 +226,6 @@
     <ProjectReference Include="..\..\..\BusinessEntities\BusinessEntities.csproj">
       <Project>{DCE69DB8-53CA-4B7F-9368-02F175A31074}</Project>
       <Name>BusinessEntities</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\Connectors\BarChart\BarChart.csproj">
-      <Project>{99b84e0c-d035-4bd9-8a42-8232ed6ba3f4}</Project>
-      <Name>BarChart</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\Localization\Localization.csproj">
       <Project>{A98A81CE-75A1-4FAB-9C02-E6EEF4B51F4F}</Project>

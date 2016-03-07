@@ -259,10 +259,6 @@
       <Project>{1B798A4E-2271-46F9-9C2D-4E563114E268}</Project>
       <Name>QuikPublic</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\Connectors\SmartCom\SmartCom.csproj">
-      <Project>{3EBEC334-3476-4F65-81C4-BC9D217550C1}</Project>
-      <Name>SmartCom</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\..\Localization\Localization.csproj">
       <Project>{A98A81CE-75A1-4FAB-9C02-E6EEF4B51F4F}</Project>
       <Name>Localization</Name>

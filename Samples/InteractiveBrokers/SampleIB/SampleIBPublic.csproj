@@ -44,6 +44,10 @@
     <Reference Include="MoreLinq">
       <HintPath>..\..\..\References\Ecng\MoreLinq.dll</HintPath>
     </Reference>
+    <Reference Include="StockSharp.InteractiveBrokers, Version=4.3.14.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Connectors\InteractiveBrokers\StockSharp.InteractiveBrokers.dll</HintPath>
+    </Reference>
     <Reference Include="StockSharp.Xaml, Version=4.3.14.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\Xaml\StockSharp.Xaml.dll</HintPath>
@@ -208,10 +212,6 @@
     <ProjectReference Include="..\..\..\BusinessEntities\BusinessEntities.csproj">
       <Project>{DCE69DB8-53CA-4B7F-9368-02F175A31074}</Project>
       <Name>BusinessEntities</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\Connectors\InteractiveBrokers\InteractiveBrokers.csproj">
-      <Project>{F17D780E-6F82-40FD-84E1-C4EB09853BBD}</Project>
-      <Name>InteractiveBrokers</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\Localization\Localization.csproj">
       <Project>{A98A81CE-75A1-4FAB-9C02-E6EEF4B51F4F}</Project>
