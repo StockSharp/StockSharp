@@ -120,7 +120,7 @@
       <Project>{dce69db8-53ca-4b7f-9368-02f175a31074}</Project>
       <Name>BusinessEntities</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\Connectors\SmartCom\SmartCom.csproj">
+    <ProjectReference Include="..\..\..\..\StockSharp %28GitLab%29\Connectors\SmartCom\SmartCom.csproj">
       <Project>{3EBEC334-3476-4F65-81C4-BC9D217550C1}</Project>
       <Name>SmartCom</Name>
     </ProjectReference>

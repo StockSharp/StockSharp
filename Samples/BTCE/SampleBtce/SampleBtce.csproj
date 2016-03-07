@@ -228,7 +228,7 @@
       <Project>{DCE69DB8-53CA-4B7F-9368-02F175A31074}</Project>
       <Name>BusinessEntities</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\Connectors\Btce\Btce.csproj">
+    <ProjectReference Include="..\..\..\..\StockSharp %28GitLab%29\Connectors\Btce\Btce.csproj">
       <Project>{af225452-1cf1-48a2-b381-c02bebe643d7}</Project>
       <Name>Btce</Name>
     </ProjectReference>

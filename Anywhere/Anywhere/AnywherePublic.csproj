@@ -171,7 +171,7 @@
       <Project>{b47f9c23-a4bd-46a9-bf27-54cb3d653503}</Project>
       <Name>Messages</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\StockSharpApps\Xaml.Actipro\Xaml.ActiproPublic.csproj">
+    <ProjectReference Include="..\..\..\StockSharpApps\Xaml.Actipro\Xaml.Actipro.csproj">
       <Project>{D556FA3F-E40E-4F76-B3CA-B18134247FD1}</Project>
       <Name>Xaml.ActiproPublic</Name>
     </ProjectReference>

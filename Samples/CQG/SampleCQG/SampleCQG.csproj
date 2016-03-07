@@ -168,7 +168,7 @@
       <Project>{DCE69DB8-53CA-4B7F-9368-02F175A31074}</Project>
       <Name>BusinessEntities</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\Connectors\CQG\CQG.csproj">
+    <ProjectReference Include="..\..\..\..\StockSharp %28GitLab%29\Connectors\CQG\CQG.csproj">
       <Project>{34984b57-9200-47b9-ac78-0d93fdfa437a}</Project>
       <Name>CQG</Name>
     </ProjectReference>

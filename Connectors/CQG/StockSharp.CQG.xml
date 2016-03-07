@@ -1,0 +1,71 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>StockSharp.CQG</name>
+    </assembly>
+    <members>
+        <member name="T:StockSharp.CQG.CQGMessageAdapter">
+            <summary>
+            CQG message adapter.
+            </summary>
+            <summary>
+            CQG message adapter.
+            </summary>
+            <summary>
+            CQG message adapter.
+            </summary>
+            <summary>
+            CQG message adapter.
+            </summary>
+        </member>
+        <member name="M:StockSharp.CQG.CQGMessageAdapter.#ctor(Ecng.Common.IdGenerator)">
+            <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.CQG.CQGMessageAdapter"/>.
+            </summary>
+            <param name="transactionIdGenerator">Transaction id generator.</param>
+        </member>
+        <member name="M:StockSharp.CQG.CQGMessageAdapter.CreateOrderCondition">
+            <summary>
+            Create condition for order type <see cref="F:StockSharp.Messages.OrderTypes.Conditional"/>, that supports the adapter.
+            </summary>
+            <returns>Order condition. If the connection does not support the order type <see cref="F:StockSharp.Messages.OrderTypes.Conditional"/>, it will be returned <see langword="null" />.</returns>
+        </member>
+        <member name="M:StockSharp.CQG.CQGMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)">
+            <summary>
+            Send message.
+            </summary>
+            <param name="message">Message.</param>
+        </member>
+        <member name="M:StockSharp.CQG.CQGMessageAdapter.ToString">
+            <summary>
+            Returns a string that represents the current object.
+            </summary>
+            <returns>A string that represents the current object.</returns>
+        </member>
+        <member name="T:StockSharp.CQG.CQGOrderCondition">
+            <summary>
+            <see cref="N:StockSharp.CQG"/> order condition.
+            </summary>
+        </member>
+        <member name="M:StockSharp.CQG.CQGOrderCondition.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.CQG.CQGOrderCondition"/>.
+            </summary>
+        </member>
+        <member name="P:StockSharp.CQG.CQGOrderCondition.StopPrice">
+            <summary>
+            Activation price, when reached an order will be placed.
+            </summary>
+        </member>
+        <member name="T:StockSharp.CQG.CQGTrader">
+            <summary>
+            The interface <see cref="T:StockSharp.BusinessEntities.IConnector"/> implementation which provides a connection to the CQG.
+            </summary>
+        </member>
+        <member name="M:StockSharp.CQG.CQGTrader.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.CQG.CQGTrader"/>.
+            </summary>
+        </member>
+    </members>
+</doc>
