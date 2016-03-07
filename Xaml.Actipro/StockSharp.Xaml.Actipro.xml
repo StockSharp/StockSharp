@@ -1,0 +1,189 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>StockSharp.Xaml.Actipro</name>
+    </assembly>
+    <members>
+        <member name="T:StockSharp.Xaml.Actipro.ActiproBaseApplication">
+            <summary>
+            The class for Actipro based applications.
+            </summary>
+        </member>
+        <member name="M:StockSharp.Xaml.Actipro.ActiproBaseApplication.OnStartup(System.Windows.StartupEventArgs)">
+            <summary>
+            Processing the application start.
+            </summary>
+            <param name="e">Argument.</param>
+        </member>
+        <member name="T:StockSharp.Xaml.Actipro.Code.CodePanel">
+            <summary>
+            The visual panel for code editing and compiling.
+            </summary>
+            <summary>
+            CodePanel
+            </summary>
+        </member>
+        <member name="F:StockSharp.Xaml.Actipro.Code.CodePanel.CompileCommand">
+            <summary>
+            The command for the code compilation.
+            </summary>
+        </member>
+        <member name="F:StockSharp.Xaml.Actipro.Code.CodePanel.SaveCommand">
+            <summary>
+            The command for the code saving.
+            </summary>
+        </member>
+        <member name="F:StockSharp.Xaml.Actipro.Code.CodePanel.ReferencesCommand">
+            <summary>
+            The command for the references modification.
+            </summary>
+        </member>
+        <member name="F:StockSharp.Xaml.Actipro.Code.CodePanel.UndoCommand">
+            <summary>
+            The command for undo the changes.
+            </summary>
+        </member>
+        <member name="F:StockSharp.Xaml.Actipro.Code.CodePanel.RedoCommand">
+            <summary>
+            The command for return the changes.
+            </summary>
+        </member>
+        <member name="F:StockSharp.Xaml.Actipro.Code.CodePanel.ShowToolBarProperty">
+            <summary>
+            <see cref="T:System.Windows.DependencyProperty"/> for <see cref="P:StockSharp.Xaml.Actipro.Code.CodePanel.ShowToolBar"/>.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Xaml.Actipro.Code.CodePanel.ShowToolBar">
+            <summary>
+            To show the review panel.
+            </summary>
+        </member>
+        <member name="M:StockSharp.Xaml.Actipro.Code.CodePanel.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Xaml.Actipro.Code.CodePanel"/>.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Xaml.Actipro.Code.CodePanel.Code">
+            <summary>
+            Code.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Xaml.Actipro.Code.CodePanel.References">
+            <summary>
+            References.
+            </summary>
+        </member>
+        <member name="E:StockSharp.Xaml.Actipro.Code.CodePanel.ReferencesUpdated">
+            <summary>
+            The links update event.
+            </summary>
+        </member>
+        <member name="E:StockSharp.Xaml.Actipro.Code.CodePanel.CompilingCode">
+            <summary>
+            The code compilation event.
+            </summary>
+        </member>
+        <member name="E:StockSharp.Xaml.Actipro.Code.CodePanel.SavingCode">
+            <summary>
+            The code saving event.
+            </summary>
+        </member>
+        <member name="E:StockSharp.Xaml.Actipro.Code.CodePanel.CodeChanged">
+            <summary>
+            The code change event.
+            </summary>
+        </member>
+        <member name="E:StockSharp.Xaml.Actipro.Code.CodePanel.CanCompile">
+            <summary>
+            The compilation possibility check event.
+            </summary>
+        </member>
+        <member name="M:StockSharp.Xaml.Actipro.Code.CodePanel.ShowCompilationResult(Ecng.Common.CompilationResult,System.Boolean)">
+            <summary>
+            To show the result of the compilation.
+            </summary>
+            <param name="result">The result of the compilation.</param>
+            <param name="isRunning">Whether the previously compiled code launched in the current moment.</param>
+        </member>
+        <member name="M:StockSharp.Xaml.Actipro.Code.CodePanel.EditReferences">
+            <summary>
+            To edit links.
+            </summary>
+        </member>
+        <member name="M:StockSharp.Xaml.Actipro.Code.CodePanel.Load(Ecng.Serialization.SettingsStorage)">
+            <summary>
+            Load settings.
+            </summary>
+            <param name="storage">Settings storage.</param>
+        </member>
+        <member name="M:StockSharp.Xaml.Actipro.Code.CodePanel.Save(Ecng.Serialization.SettingsStorage)">
+            <summary>
+            Save settings.
+            </summary>
+            <param name="storage">Settings storage.</param>
+        </member>
+        <member name="M:StockSharp.Xaml.Actipro.Code.CodePanel.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
+        <member name="T:StockSharp.Xaml.Actipro.Code.CodeReferencesWindow">
+            <summary>
+            The window for editing the list of references to the .NET builds.
+            </summary>
+            <summary>
+            CodeReferencesWindow
+            </summary>
+        </member>
+        <member name="M:StockSharp.Xaml.Actipro.Code.CodeReferencesWindow.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Xaml.Actipro.Code.CodeReferencesWindow"/>.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Xaml.Actipro.Code.CodeReferencesWindow.References">
+            <summary>
+            References.
+            </summary>
+        </member>
+        <member name="M:StockSharp.Xaml.Actipro.Code.CodeReferencesWindow.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
+        <member name="T:StockSharp.Xaml.Actipro.Extensions">
+            <summary>
+            Extension class.
+            </summary>
+        </member>
+        <member name="M:StockSharp.Xaml.Actipro.Extensions.SaveLayout(ActiproSoftware.Windows.Controls.Docking.DockSite,System.Boolean)">
+            <summary>
+            To save the Docking panel layout.
+            </summary>
+            <param name="dockSite">Docking panel.</param>
+            <param name="toolWindowOnly">To save windows only.</param>
+            <returns>Layout encoded as a string.</returns>
+        </member>
+        <member name="M:StockSharp.Xaml.Actipro.Extensions.LoadLayout(ActiproSoftware.Windows.Controls.Docking.DockSite,System.String,System.Boolean)">
+            <summary>
+            To download layout for the Docking panel.
+            </summary>
+            <param name="dockSite">Docking panel.</param>
+            <param name="toolWindowOnly">To download windows only.</param>
+            <param name="layout">Layout encoded as a string.</param>
+        </member>
+        <member name="M:StockSharp.Xaml.Actipro.Extensions.SaveLayout(ActiproSoftware.Windows.Controls.Navigation.NavigationBar)">
+            <summary>
+            To save the NavigationBar panel layout.
+            </summary>
+            <param name="navigationBar">NavigationBar panel.</param>
+            <returns>Layout encoded as a string.</returns>
+        </member>
+        <member name="M:StockSharp.Xaml.Actipro.Extensions.LoadLayout(ActiproSoftware.Windows.Controls.Navigation.NavigationBar,System.String)">
+            <summary>
+            To download the NavigationBar panel layout.
+            </summary>
+            <param name="navigationBar">NavigationBar panel.</param>
+            <param name="layout">Layout encoded as a string.</param>
+        </member>
+    </members>
+</doc>
