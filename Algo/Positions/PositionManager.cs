@@ -145,9 +145,9 @@ namespace StockSharp.Algo.Positions
 						}
 
 						if (isNew)
-							NewPosition.SafeInvoke(new KeyValuePair<Tuple<SecurityId, string>, decimal>(key, Position));
+							NewPosition?.Invoke(new KeyValuePair<Tuple<SecurityId, string>, decimal>(key, Position));
 						else
-							PositionChanged.SafeInvoke(new KeyValuePair<Tuple<SecurityId, string>, decimal>(key, Position));
+							PositionChanged?.Invoke(new KeyValuePair<Tuple<SecurityId, string>, decimal>(key, Position));
 
 						return position;
 					}
@@ -170,9 +170,9 @@ namespace StockSharp.Algo.Positions
 						}
 
 						if (isNew)
-							NewPosition.SafeInvoke(new KeyValuePair<Tuple<SecurityId, string>, decimal>(key, Position));
+							NewPosition?.Invoke(new KeyValuePair<Tuple<SecurityId, string>, decimal>(key, Position));
 						else
-							PositionChanged.SafeInvoke(new KeyValuePair<Tuple<SecurityId, string>, decimal>(key, Position));
+							PositionChanged?.Invoke(new KeyValuePair<Tuple<SecurityId, string>, decimal>(key, Position));
 
 						return position;
 					}

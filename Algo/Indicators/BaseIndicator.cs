@@ -70,7 +70,7 @@ namespace StockSharp.Algo.Indicators
 		{
 			IsFormed = false;
 			Container.ClearValues();
-			Reseted.SafeInvoke();
+			Reseted?.Invoke();
 		}
 
 		/// <summary>
@@ -159,7 +159,7 @@ namespace StockSharp.Algo.Indicators
 			if (result == null)
 				throw new ArgumentNullException(nameof(result));
 
-			Changed.SafeInvoke(input, result);
+			Changed?.Invoke(input, result);
 		}
 
 		/// <summary>

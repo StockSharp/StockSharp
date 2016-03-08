@@ -430,7 +430,7 @@ namespace StockSharp.Messages
 			}
 
 			_prevTime = message.LocalTime;
-			NewOutMessage.SafeInvoke(message);
+			NewOutMessage?.Invoke(message);
 		}
 
 		/// <summary>

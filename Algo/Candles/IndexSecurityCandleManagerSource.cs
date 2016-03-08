@@ -171,9 +171,9 @@ namespace StockSharp.Algo.Candles
 					//}
 
 					CandleManager.Container.AddCandle(series, c);
-					Processing.SafeInvoke(series, c);
+					Processing?.Invoke(series, c);
 				},
-				() => Stopped.SafeInvoke(series));
+				() => Stopped?.Invoke(series));
 
 			_info.Add(series, basketInfo);
 

@@ -121,7 +121,7 @@ namespace StockSharp.Quik.Xaml
 			SelectedColumns.AddRange(_columnsSelected.Where(c => !c.IsMandatory));
 
 			if (invoke)
-				SelectedColumnsCountChange.SafeInvoke();
+				SelectedColumnsCountChange?.Invoke();
 		}
 
 		private void Add_OnExecuted(object sender, ExecutedRoutedEventArgs e)

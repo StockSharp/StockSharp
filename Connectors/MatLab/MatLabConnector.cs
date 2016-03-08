@@ -205,122 +205,122 @@ namespace StockSharp.MatLab
 
 		private void RealTraderOnNewMyTrades(IEnumerable<MyTrade> trades)
 		{
-			NewMyTrades.SafeInvoke(this, new MyTradesEventArgs(trades));
+			NewMyTrades?.Invoke(this, new MyTradesEventArgs(trades));
 		}
 
 		private void RealTraderOnError(Exception exception)
 		{
-			Error.SafeInvoke(this, new ErrorEventArgs(exception));
+			Error?.Invoke(this, new ErrorEventArgs(exception));
 		}
 
 		private void RealTraderOnStopOrdersCancelFailed(IEnumerable<OrderFail> fails)
 		{
-			StopOrdersCancelFailed.SafeInvoke(this, new OrderFailsEventArgs(fails));
+			StopOrdersCancelFailed?.Invoke(this, new OrderFailsEventArgs(fails));
 		}
 
 		private void RealTraderOnStopOrdersRegisterFailed(IEnumerable<OrderFail> fails)
 		{
-			StopOrdersRegisterFailed.SafeInvoke(this, new OrderFailsEventArgs(fails));
+			StopOrdersRegisterFailed?.Invoke(this, new OrderFailsEventArgs(fails));
 		}
 
 		private void RealTraderOnStopOrdersChanged(IEnumerable<Order> orders)
 		{
-			StopOrdersChanged.SafeInvoke(this, new OrdersEventArgs(orders));
+			StopOrdersChanged?.Invoke(this, new OrdersEventArgs(orders));
 		}
 
 		private void RealTraderOnNewStopOrders(IEnumerable<Order> orders)
 		{
-			NewStopOrders.SafeInvoke(this, new OrdersEventArgs(orders));
+			NewStopOrders?.Invoke(this, new OrdersEventArgs(orders));
 		}
 
 		private void RealTraderOnOrdersCancelFailed(IEnumerable<OrderFail> fails)
 		{
-			OrdersCancelFailed.SafeInvoke(this, new OrderFailsEventArgs(fails));
+			OrdersCancelFailed?.Invoke(this, new OrderFailsEventArgs(fails));
 		}
 
 		private void RealTraderOnOrdersRegisterFailed(IEnumerable<OrderFail> fails)
 		{
-			OrdersRegisterFailed.SafeInvoke(this, new OrderFailsEventArgs(fails));
+			OrdersRegisterFailed?.Invoke(this, new OrderFailsEventArgs(fails));
 		}
 
 		private void RealTraderOnOrdersChanged(IEnumerable<Order> orders)
 		{
-			OrdersChanged.SafeInvoke(this, new OrdersEventArgs(orders));
+			OrdersChanged?.Invoke(this, new OrdersEventArgs(orders));
 		}
 
 		private void RealTraderOnNewOrders(IEnumerable<Order> orders)
 		{
-			NewOrders.SafeInvoke(this, new OrdersEventArgs(orders));
+			NewOrders?.Invoke(this, new OrdersEventArgs(orders));
 		}
 
 		private void RealTraderOnNewMarketDepths(IEnumerable<MarketDepth> depths)
 		{
-			NewMarketDepths.SafeInvoke(this, new MarketDepthsEventArgs(depths));
+			NewMarketDepths?.Invoke(this, new MarketDepthsEventArgs(depths));
 		}
 
 		private void RealTraderOnMarketDepthsChanged(IEnumerable<MarketDepth> depths)
 		{
-			MarketDepthsChanged.SafeInvoke(this, new MarketDepthsEventArgs(depths));
+			MarketDepthsChanged?.Invoke(this, new MarketDepthsEventArgs(depths));
 		}
 
 		private void RealTraderOnNewTrades(IEnumerable<Trade> trades)
 		{
-			NewTrades.SafeInvoke(this, new TradesEventArgs(trades));
+			NewTrades?.Invoke(this, new TradesEventArgs(trades));
 		}
 
 		private void RealTraderOnPositionsChanged(IEnumerable<Position> positions)
 		{
-			PositionsChanged.SafeInvoke(this, new PositionsEventArgs(positions));
+			PositionsChanged?.Invoke(this, new PositionsEventArgs(positions));
 		}
 
 		private void RealTraderOnNewPositions(IEnumerable<Position> positions)
 		{
-			NewPositions.SafeInvoke(this, new PositionsEventArgs(positions));
+			NewPositions?.Invoke(this, new PositionsEventArgs(positions));
 		}
 
 		private void RealTraderOnPortfoliosChanged(IEnumerable<Portfolio> portfolios)
 		{
-			PortfoliosChanged.SafeInvoke(this, new PortfoliosEventArgs(portfolios));
+			PortfoliosChanged?.Invoke(this, new PortfoliosEventArgs(portfolios));
 		}
 
 		private void RealTraderOnNewPortfolios(IEnumerable<Portfolio> portfolios)
 		{
-			NewPortfolios.SafeInvoke(this, new PortfoliosEventArgs(portfolios));
+			NewPortfolios?.Invoke(this, new PortfoliosEventArgs(portfolios));
 		}
 
 		private void RealTraderOnSecuritiesChanged(IEnumerable<Security> securities)
 		{
-			SecuritiesChanged.SafeInvoke(this, new SecuritiesEventArgs(securities));
+			SecuritiesChanged?.Invoke(this, new SecuritiesEventArgs(securities));
 		}
 
 		private void RealTraderOnNewSecurities(IEnumerable<Security> securities)
 		{
-			NewSecurities.SafeInvoke(this, new SecuritiesEventArgs(securities));
+			NewSecurities?.Invoke(this, new SecuritiesEventArgs(securities));
 		}
 
 		private void RealTraderOnNewOrderLogItems(IEnumerable<OrderLogItem> items)
 		{
-			NewOrderLogItems.SafeInvoke(this, new OrderLogItemsEventArg(items));
+			NewOrderLogItems?.Invoke(this, new OrderLogItemsEventArg(items));
 		}
 
 		private void RealTraderOnMarketTimeChanged(TimeSpan diff)
 		{
-			MarketTimeChanged.Cast().SafeInvoke(this);
+			MarketTimeChanged?.Invoke(this, EventArgs.Empty);
 		}
 
 		private void RealTraderOnDisconnected()
 		{
-			Disconnected.Cast().SafeInvoke(this);
+			Disconnected?.Invoke(this, EventArgs.Empty);
 		}
 
 		private void RealTraderOnConnectionError(Exception exception)
 		{
-			ConnectionError.SafeInvoke(this, new ErrorEventArgs(exception));
+			ConnectionError?.Invoke(this, new ErrorEventArgs(exception));
 		}
 
 		private void RealTraderOnConnected()
 		{
-			Connected.Cast().SafeInvoke(this);
+			Connected?.Invoke(this, EventArgs.Empty);
 		}
 
 		/// <summary>

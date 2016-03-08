@@ -284,7 +284,7 @@ namespace StockSharp.Quik
 			if (transactionId <= 0 || transactionId > uint.MaxValue)
 				throw new InvalidOperationException(LocalizedStrings.Str1700Params.Put(transactionId));
 
-			FormatTransaction.SafeInvoke(transaction.SetTransactionId(transactionId));
+			FormatTransaction?.Invoke(transaction.SetTransactionId(transactionId));
 
 			_transactions.Add(transactionId, transaction);
 

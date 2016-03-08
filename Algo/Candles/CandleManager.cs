@@ -178,16 +178,16 @@ namespace StockSharp.Algo.Candles
 					var candle = c.Clone();
 
 					candle.State = CandleStates.Active;
-					Processing.SafeInvoke(series, candle);
+					Processing?.Invoke(series, candle);
 
 					candle.State = CandleStates.Finished;
-					Processing.SafeInvoke(series, candle);
+					Processing?.Invoke(series, candle);
 				}
 			}
 
 			private void OnStopped(CandleSeries series)
 			{
-				Stopped.SafeInvoke(series);
+				Stopped?.Invoke(series);
 			}
 
 			/// <summary>
@@ -359,14 +359,14 @@ namespace StockSharp.Algo.Candles
 					series.Security is IndexSecurity ? (IEnumerable<ICandleManagerSource>)new[] { new IndexSecurityCandleManagerSource(this, from, to) } : Sources,
 					c =>
 					{
-						Processing.SafeInvoke(series, c);
+						Processing?.Invoke(series, c);
 						return c.OpenTime;
 					},
 					() =>
 					{
 						//Stop(series);
 						_series.Remove(series);
-						Stopped.SafeInvoke(series);
+						Stopped?.Invoke(series);
 					});
 
 				_series.Add(series, enumerator);
@@ -404,7 +404,7 @@ namespace StockSharp.Algo.Candles
 		/// <param name="error">Error info.</param>
 		protected virtual void RaiseError(Exception error)
 		{
-			Error.SafeInvoke(error);
+			Error?.Invoke(error);
 			this.AddErrorLog(error);
 		}
 

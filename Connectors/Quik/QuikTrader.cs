@@ -241,7 +241,7 @@ namespace StockSharp.Quik
 					_terminal.Adapter = DdeAdapter;
 				}
 
-				//TerminalChanged.SafeInvoke();
+				//TerminalChanged?.Invoke();
 			}
 		}
 
@@ -418,7 +418,7 @@ namespace StockSharp.Quik
 						break;
 
 					// TODO
-					NewSecurityChanges.SafeInvoke(null, hist);
+					NewSecurityChanges?.Invoke(null, hist);
 					return;
 				}
 			}

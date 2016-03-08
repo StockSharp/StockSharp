@@ -273,7 +273,7 @@ namespace StockSharp.Algo.Candles.Compression
 		private void OnStopped(CandleSeries series)
 		{
 			_info.Remove(series);
-			Stopped.SafeInvoke(series);
+			Stopped?.Invoke(series);
 		}
 
 		/// <summary>
@@ -513,7 +513,7 @@ namespace StockSharp.Algo.Candles.Compression
 			// нашел багу эспер
 			try
 			{
-				Processing.SafeInvoke(series, candle);
+				Processing?.Invoke(series, candle);
 			}
 			catch (Exception ex)
 			{
@@ -527,7 +527,7 @@ namespace StockSharp.Algo.Candles.Compression
 		/// <param name="error">Error info.</param>
 		protected virtual void RaiseError(Exception error)
 		{
-			Error.SafeInvoke(error);
+			Error?.Invoke(error);
 			this.AddErrorLog(error);
 		}
 

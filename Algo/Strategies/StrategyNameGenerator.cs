@@ -163,7 +163,7 @@ namespace StockSharp.Algo.Strategies
 					//throw new InvalidOperationException("Используется автоматическая генерация имени стратегии. Ручное изменение не допускается.");
 
 				_value = value;
-				Changed.SafeInvoke(_value);
+				Changed?.Invoke(_value);
 			}
 		}
 
@@ -173,7 +173,7 @@ namespace StockSharp.Algo.Strategies
 				return;
 
 			_value = _formatter.Format(Pattern, _strategy);
-			Changed.SafeInvoke(_value);
+			Changed?.Invoke(_value);
 		}
 	}
 }

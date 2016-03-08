@@ -168,7 +168,7 @@ namespace StockSharp.BusinessEntities
 
 		private void Notify(string info)
 		{
-			_propertyChanged.SafeInvoke(this, info);
+			_propertyChanged?.Invoke(this, info);
 		}
 
 		/// <summary>

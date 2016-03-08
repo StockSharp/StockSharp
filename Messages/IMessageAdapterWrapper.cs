@@ -77,7 +77,7 @@ namespace StockSharp.Messages
 		/// <param name="message">The message.</param>
 		protected void RaiseNewOutMessage(Message message)
 		{
-			NewOutMessage.SafeInvoke(message);
+			NewOutMessage?.Invoke(message);
 		}
 
 		bool IMessageChannel.IsOpened => InnerAdapter.IsOpened;

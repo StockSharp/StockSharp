@@ -92,7 +92,7 @@ namespace StockSharp.Quik.Native
 			}
 			catch (Exception ex)
 			{
-				ConnectionChanged.SafeInvoke(Codes.Failed, ex, LocalizedStrings.Str1721);
+				ConnectionChanged?.Invoke(Codes.Failed, ex, LocalizedStrings.Str1721);
 			}
 
 			var msg = new StringBuilder(_msgSize);
@@ -218,7 +218,7 @@ namespace StockSharp.Quik.Native
 			if (errorCode != Codes.Success)
 				error = new ApiException(errorCode, infoMessage);
 
-			ConnectionChanged.SafeInvoke((Codes)connectionEvent, error, infoMessage);
+			ConnectionChanged?.Invoke((Codes)connectionEvent, error, infoMessage);
 		}
 
 		#endregion
@@ -229,7 +229,7 @@ namespace StockSharp.Quik.Native
 
 		private void OnTransactionReplyCallback(int transactionResult, int transactionExtendedErrorCode, int transactionReplyCode, uint transId, double orderNum, string transactionReplyMessage)
 		{
-			TransactionReply.SafeInvoke(transId, transactionResult.ToCode(), transactionExtendedErrorCode.ToCode(),
+			TransactionReply?.Invoke(transId, transactionResult.ToCode(), transactionExtendedErrorCode.ToCode(),
 				(OrderStatus)transactionReplyCode, (long)orderNum, transactionReplyMessage);
 		}
 
@@ -241,7 +241,7 @@ namespace StockSharp.Quik.Native
 
 		private void OnStartOrders(int mode, uint transId, double orderNum, string classCode, string secCode, double price, int balance, double volume, int direction, int status, int orderDescriptor)
 		{
-			OrderReply.SafeInvoke((Modes)mode, transId, (long)orderNum, classCode, secCode, price, balance, (int)volume, (Sides)direction, (OrderStates)status);
+			OrderReply?.Invoke((Modes)mode, transId, (long)orderNum, classCode, secCode, price, balance, (int)volume, (Sides)direction, (OrderStates)status);
 		}
 
 		#endregion
@@ -252,7 +252,7 @@ namespace StockSharp.Quik.Native
 
 		private void OnStartTrades(int mode, double tradeNum, double orderNum, string classCode, string secCode, double price, int balance, double volume, int direction, int tradeDescriptor)
 		{
-			TradeReply.SafeInvoke((Modes)mode, (long)tradeNum, (long)orderNum, classCode, secCode, price, balance, (int)volume, (Sides)direction);
+			TradeReply?.Invoke((Modes)mode, (long)tradeNum, (long)orderNum, classCode, secCode, price, balance, (int)volume, (Sides)direction);
 		}
 
 		#endregion

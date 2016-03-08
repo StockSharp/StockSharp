@@ -84,8 +84,8 @@ namespace StockSharp.Algo
 
 			AddRange(securities);
 
-			AddedRange += s => _added.SafeInvoke(s);
-			RemovedRange += s => _removed.SafeInvoke(s);
+			AddedRange += s => _added?.Invoke(s);
+			RemovedRange += s => _removed?.Invoke(s);
 		}
 
 		private Action<IEnumerable<Security>> _added;

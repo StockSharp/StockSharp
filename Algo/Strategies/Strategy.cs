@@ -378,7 +378,7 @@ namespace StockSharp.Algo.Strategies
 					}
 				});
 
-				ConnectorChanged.SafeInvoke();
+				ConnectorChanged?.Invoke();
 			}
 		}
 
@@ -425,7 +425,7 @@ namespace StockSharp.Algo.Strategies
 				});
 
 				RaiseParametersChanged("Portfolio");
-				PortfolioChanged.SafeInvoke();
+				PortfolioChanged?.Invoke();
 			}
 		}
 
@@ -458,7 +458,7 @@ namespace StockSharp.Algo.Strategies
 				});
 				
 				RaiseParametersChanged("Security");
-				SecurityChanged.SafeInvoke();
+				SecurityChanged?.Invoke();
 			}
 		}
 
@@ -635,7 +635,7 @@ namespace StockSharp.Algo.Strategies
 		/// <param name="name">Parameter name.</param>
 		protected internal void RaiseParametersChanged(string name)
 		{
-			ParametersChanged.SafeInvoke();
+			ParametersChanged?.Invoke();
 			this.Notify(name);
 		}
 
@@ -815,7 +815,7 @@ namespace StockSharp.Algo.Strategies
 			if (strategy == null)
 				throw new ArgumentNullException(nameof(strategy));
 
-			ProcessStateChanged.SafeInvoke(strategy);
+			ProcessStateChanged?.Invoke(strategy);
 		}
 
 		private readonly StrategyParam<bool> _cancelOrdersWhenStopping;
@@ -1649,7 +1649,7 @@ namespace StockSharp.Algo.Strategies
 		/// </summary>
 		private void RaiseReseted()
 		{
-			Reseted.SafeInvoke();
+			Reseted?.Invoke();
 		}
 
 		/// <summary>
@@ -1811,7 +1811,7 @@ namespace StockSharp.Algo.Strategies
 		/// <param name="positions">The strategy positions change.</param>
 		protected virtual void OnPositionsChanged(IEnumerable<Position> positions)
 		{
-			PositionsChanged.SafeInvoke(positions);
+			PositionsChanged?.Invoke(positions);
 		}
 
 		/// <summary>
@@ -1820,7 +1820,7 @@ namespace StockSharp.Algo.Strategies
 		/// <param name="trades">New trades of a strategy.</param>
 		protected virtual void OnNewMyTrades(IEnumerable<MyTrade> trades)
 		{
-			NewMyTrades.SafeInvoke(trades);
+			NewMyTrades?.Invoke(trades);
 		}
 
 		/// <summary>
@@ -1831,7 +1831,7 @@ namespace StockSharp.Algo.Strategies
 		{
 			TryAddChildOrder(order);
 
-			OrderRegistering.SafeInvoke(order);
+			OrderRegistering?.Invoke(order);
 			//SlippageManager.Registering(order);
 		}
 
@@ -1841,7 +1841,7 @@ namespace StockSharp.Algo.Strategies
 		/// <param name="order">Order.</param>
 		protected virtual void OnOrderRegistered(Order order)
 		{
-			OrderRegistered.SafeInvoke(order);
+			OrderRegistered?.Invoke(order);
 		}
 
 		/// <summary>
@@ -1850,7 +1850,7 @@ namespace StockSharp.Algo.Strategies
 		/// <param name="order">The stop order.</param>
 		protected virtual void OnStopOrderRegistering(Order order)
 		{
-			StopOrderRegistering.SafeInvoke(order);
+			StopOrderRegistering?.Invoke(order);
 			//SlippageManager.Registering(order);
 		}
 
@@ -1860,7 +1860,7 @@ namespace StockSharp.Algo.Strategies
 		/// <param name="order">The stop order.</param>
 		protected virtual void OnStopOrderRegistered(Order order)
 		{
-			StopOrderRegistered.SafeInvoke(order);
+			StopOrderRegistered?.Invoke(order);
 		}
 
 		/// <summary>
@@ -1869,7 +1869,7 @@ namespace StockSharp.Algo.Strategies
 		/// <param name="order">The stop order.</param>
 		protected virtual void OnStopOrderCanceling(Order order)
 		{
-			StopOrderCanceling.SafeInvoke(order);
+			StopOrderCanceling?.Invoke(order);
 		}
 
 		/// <summary>
@@ -1878,7 +1878,7 @@ namespace StockSharp.Algo.Strategies
 		/// <param name="order">Order.</param>
 		protected virtual void OnOrderCanceling(Order order)
 		{
-			OrderCanceling.SafeInvoke(order);
+			OrderCanceling?.Invoke(order);
 		}
 
 		/// <summary>
@@ -1888,7 +1888,7 @@ namespace StockSharp.Algo.Strategies
 		/// <param name="newOrder">New stop order to be registered.</param>
 		protected virtual void OnStopOrderReRegistering(Order oldOrder, Order newOrder)
 		{
-			StopOrderReRegistering.SafeInvoke(oldOrder, newOrder);
+			StopOrderReRegistering?.Invoke(oldOrder, newOrder);
 		}
 
 		/// <summary>
@@ -1900,7 +1900,7 @@ namespace StockSharp.Algo.Strategies
 		{
 			TryAddChildOrder(newOrder);
 			
-			OrderReRegistering.SafeInvoke(oldOrder, newOrder);
+			OrderReRegistering?.Invoke(oldOrder, newOrder);
 		}
 
 		/// <summary>
@@ -1909,7 +1909,7 @@ namespace StockSharp.Algo.Strategies
 		/// <param name="order">The changed order.</param>
 		protected virtual void OnOrderChanged(Order order)
 		{
-			OrderChanged.SafeInvoke(order);
+			OrderChanged?.Invoke(order);
 
 			if (order.LatencyCancellation != null)
 			{
@@ -1924,7 +1924,7 @@ namespace StockSharp.Algo.Strategies
 		/// <param name="order">The changed stop order.</param>
 		protected virtual void OnStopOrderChanged(Order order)
 		{
-			StopOrderChanged.SafeInvoke(order);
+			StopOrderChanged?.Invoke(order);
 			StatisticManager.AddChangedOrder(order);
 		}
 
@@ -1964,7 +1964,7 @@ namespace StockSharp.Algo.Strategies
 		/// <param name="fail">Error registering order.</param>
 		protected virtual void OnOrderRegisterFailed(OrderFail fail)
 		{
-			OrderRegisterFailed.SafeInvoke(fail);
+			OrderRegisterFailed?.Invoke(fail);
 			StatisticManager.AddRegisterFailedOrder(fail);
 		}
 
@@ -1974,7 +1974,7 @@ namespace StockSharp.Algo.Strategies
 		/// <param name="fail">The stop order registration error.</param>
 		protected virtual void OnStopOrderRegisterFailed(OrderFail fail)
 		{
-			StopOrderRegisterFailed.SafeInvoke(fail);
+			StopOrderRegisterFailed?.Invoke(fail);
 			StatisticManager.AddRegisterFailedOrder(fail);
 		}
 
@@ -2158,7 +2158,7 @@ namespace StockSharp.Algo.Strategies
 
 		private void OnConnectorValuesChanged(Security security, IEnumerable<KeyValuePair<Level1Fields, object>> changes, DateTimeOffset serverTime, DateTimeOffset localTime)
 		{
-			ValuesChanged.SafeInvoke(security, changes, serverTime, localTime);
+			ValuesChanged?.Invoke(security, changes, serverTime, localTime);
 		}
 
 		private void UpdatePnLManager(Security security)
@@ -2258,7 +2258,7 @@ namespace StockSharp.Algo.Strategies
 		private void RaiseSlippageChanged()
 		{
 			this.Notify("Slippage");
-			SlippageChanged.SafeInvoke();
+			SlippageChanged?.Invoke();
 		}
 
 		private void RaisePositionChanged()
@@ -2266,7 +2266,7 @@ namespace StockSharp.Algo.Strategies
 			this.AddInfoLog(LocalizedStrings.Str1399Params, PositionManager.Positions.Select(pos => pos.Key + "=" + pos.Value).Join(", "));
 
 			this.Notify("Position");
-			PositionChanged.SafeInvoke();
+			PositionChanged?.Invoke();
 
 			StatisticManager.AddPosition(CurrentTime, Position);
 		}
@@ -2274,13 +2274,13 @@ namespace StockSharp.Algo.Strategies
 		private void RaiseCommissionChanged()
 		{
 			this.Notify("Commission");
-			CommissionChanged.SafeInvoke();
+			CommissionChanged?.Invoke();
 		}
 
 		private void RaisePnLChanged()
 		{
 			this.Notify("PnL");
-			PnLChanged.SafeInvoke();
+			PnLChanged?.Invoke();
 
 			StatisticManager.AddPnL(_lastPnlRefreshTime, PnL);
 		}
@@ -2288,7 +2288,7 @@ namespace StockSharp.Algo.Strategies
 		private void RaiseLatencyChanged()
 		{
 			this.Notify("Latency");
-			LatencyChanged.SafeInvoke();
+			LatencyChanged?.Invoke();
 		}
 
 		/// <summary>
@@ -2342,7 +2342,7 @@ namespace StockSharp.Algo.Strategies
 
 		void INotifyPropertyChangedEx.NotifyPropertyChanged(string info)
 		{
-			PropertyChanged.SafeInvoke(this, info);
+			PropertyChanged?.Invoke(this, info);
 		}
 
 		/// <summary>
@@ -2393,29 +2393,29 @@ namespace StockSharp.Algo.Strategies
 
 		private void OnChildStopOrderChanged(Order order)
 		{
-			TryInvoke(() => StopOrderChanged.SafeInvoke(order));
+			TryInvoke(() => StopOrderChanged?.Invoke(order));
 		}
 
 		private void OnChildOrderRegisterFailed(OrderFail fail)
 		{
 			//SlippageManager.RegisterFailed(fail);
-			TryInvoke(() => OrderRegisterFailed.SafeInvoke(fail));
+			TryInvoke(() => OrderRegisterFailed?.Invoke(fail));
 		}
 
 		private void OnChildStopOrderRegisterFailed(OrderFail fail)
 		{
 			//SlippageManager.RegisterFailed(fail);
-			TryInvoke(() => StopOrderRegisterFailed.SafeInvoke(fail));
+			TryInvoke(() => StopOrderRegisterFailed?.Invoke(fail));
 		}
 
 		private void OnChildOrderCancelFailed(OrderFail fail)
 		{
-			TryInvoke(() => OrderCancelFailed.SafeInvoke(fail));
+			TryInvoke(() => OrderCancelFailed?.Invoke(fail));
 		}
 
 		private void OnChildStopOrderCancelFailed(OrderFail fail)
 		{
-			TryInvoke(() => StopOrderCancelFailed.SafeInvoke(fail));
+			TryInvoke(() => StopOrderCancelFailed?.Invoke(fail));
 		}
 
 		private void ProcessCancelOrderFails(IEnumerable<OrderFail> fails)
@@ -2437,9 +2437,9 @@ namespace StockSharp.Algo.Strategies
 				this.AddErrorLog(LocalizedStrings.Str1402Params, order.GetTraceId(), fail.Error);
 
 				if (order.Type == OrderTypes.Conditional)
-					StopOrderCancelFailed.SafeInvoke(fail);
+					StopOrderCancelFailed?.Invoke(fail);
 				else
-					OrderCancelFailed.SafeInvoke(fail);
+					OrderCancelFailed?.Invoke(fail);
 
 				StatisticManager.AddFailedOrderCancel(fail);
 			}
@@ -2479,7 +2479,7 @@ namespace StockSharp.Algo.Strategies
 		protected virtual void OnError(Exception error)
 		{
 			ErrorCount++;
-			Error.SafeInvoke(error);
+			Error?.Invoke(error);
 
 			this.AddErrorLog(error.ToString());
 

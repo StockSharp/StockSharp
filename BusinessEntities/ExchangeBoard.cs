@@ -71,7 +71,7 @@ namespace StockSharp.BusinessEntities
 						return;
 				}
 
-				BoardAdded.SafeInvoke(board);
+				BoardAdded?.Invoke(board);
 			}
 
 			void IExchangeInfoProvider.Save(Exchange exchange)
@@ -85,7 +85,7 @@ namespace StockSharp.BusinessEntities
 						return;
 				}
 
-				ExchangeAdded.SafeInvoke(exchange);
+				ExchangeAdded?.Invoke(exchange);
 			}
 
 			public event Action<ExchangeBoard> BoardAdded;
@@ -449,7 +449,7 @@ namespace StockSharp.BusinessEntities
 
 		private void Notify(string info)
 		{
-			_propertyChanged.SafeInvoke(this, info);
+			_propertyChanged?.Invoke(this, info);
 		}
 
 		/// <summary>

@@ -101,7 +101,7 @@ namespace StockSharp.Alerts
 			{
 				TryRegisterAlertSchema();
 				IsChecked = _alertSchema.AlertType != null;
-				SchemaChanged.SafeInvoke();
+				SchemaChanged?.Invoke();
 			}
 		}
 

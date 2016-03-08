@@ -139,7 +139,7 @@ namespace StockSharp.Messages
 							//	Console.WriteLine("<< ({0}) {1}", System.Threading.Thread.CurrentThread.Name, message);
 
 							_msgStat.Remove(pair.Value);
-							NewOutMessage.SafeInvoke(pair.Value);
+							NewOutMessage?.Invoke(pair.Value);
 						}
 						catch (Exception ex)
 						{
@@ -147,7 +147,7 @@ namespace StockSharp.Messages
 						}
 					}
 
-					Closed.SafeInvoke();
+					Closed?.Invoke();
 				}))
 				.Name("{0} channel thread.".Put(Name))
 				//.Culture(CultureInfo.InvariantCulture)

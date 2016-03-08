@@ -138,7 +138,7 @@ namespace StockSharp.Quik.Xaml
 			SelectedColumns.AddRange(_columnsSelected.Select(i => i.First));
 
 			if (invoke)
-				SelectedColumnsCountChange.SafeInvoke();
+				SelectedColumnsCountChange?.Invoke();
 		}
 
 		private void btnAdd_Click(object sender, RoutedEventArgs e)

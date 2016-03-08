@@ -139,8 +139,8 @@ namespace StockSharp.Algo.Storages
 				_readAllByType = database.GetCommand(readAllByType, Schema, new FieldList(Schema.Fields["Type"]), new FieldList());
 			}
 
-			((ICollectionEx<Security>)this).AddedRange += s => _added.SafeInvoke(s);
-			((ICollectionEx<Security>)this).RemovedRange += s => _removed.SafeInvoke(s);
+			((ICollectionEx<Security>)this).AddedRange += s => _added?.Invoke(s);
+			((ICollectionEx<Security>)this).RemovedRange += s => _removed?.Invoke(s);
 		}
 
 		private Action<IEnumerable<Security>> _added;

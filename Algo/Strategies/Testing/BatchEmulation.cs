@@ -216,7 +216,7 @@ namespace StockSharp.Algo.Strategies.Testing
 
 				TotalProgress = (int)((100m / _totalBatches) * (_currentBatch + _progress / 100m));
 
-				ProgressChanged.SafeInvoke(_progress, TotalProgress);
+				ProgressChanged?.Invoke(_progress, TotalProgress);
 			}
 		}
 
@@ -240,7 +240,7 @@ namespace StockSharp.Algo.Strategies.Testing
 
 				var oldState = _state;
 				_state = value;
-				StateChanged.SafeInvoke(oldState, _state);
+				StateChanged?.Invoke(oldState, _state);
 			}
 		}
 

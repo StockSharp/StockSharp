@@ -79,7 +79,7 @@ namespace StockSharp.Messages
 
 		void IMessageChannel.SendInMessage(Message message)
 		{
-			_newMessage.SafeInvoke(message);
+			_newMessage?.Invoke(message);
 		}
 
 		private Action<Message> _newMessage;

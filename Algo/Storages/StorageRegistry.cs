@@ -1151,7 +1151,7 @@ namespace StockSharp.Algo.Storages
 						file.WriteLine(_format.PutEx(security));
 				});
 
-				Added.SafeInvoke(new[] { security });
+				Added?.Invoke(new[] { security });
 			}
 
 			void ISecurityStorage.Delete(Security security)
@@ -1160,7 +1160,7 @@ namespace StockSharp.Algo.Storages
 					return;
 
 				Save();
-				Removed.SafeInvoke(new[] { security });
+				Removed?.Invoke(new[] { security });
 			}
 
 			void ISecurityStorage.DeleteBy(Security criteria)
@@ -1173,7 +1173,7 @@ namespace StockSharp.Algo.Storages
 						removed.Add(security);
 				}
 
-				Removed.SafeInvoke(removed);
+				Removed?.Invoke(removed);
 				
 				Save();
 			}

@@ -109,7 +109,7 @@ namespace StockSharp.Algo.Storages
 					return;
 			}
 
-			BoardAdded.SafeInvoke(board);
+			BoardAdded?.Invoke(board);
 		}
 
 		/// <summary>
@@ -129,7 +129,7 @@ namespace StockSharp.Algo.Storages
 					return;
 			}
 
-			ExchangeAdded.SafeInvoke(exchange);
+			ExchangeAdded?.Invoke(exchange);
 		}
 
 		/// <summary>

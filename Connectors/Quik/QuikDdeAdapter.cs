@@ -829,7 +829,7 @@ namespace StockSharp.Quik
 
 			try
 			{
-				PreProcessDdeData.SafeInvoke(category, rows);
+				PreProcessDdeData?.Invoke(category, rows);
 			}
 			catch (Exception ex)
 			{
@@ -892,7 +892,7 @@ namespace StockSharp.Quik
 			if (isWellKnown)
 			{
 				if (wellKnownDdeData.Count > 0)
-					ProcessWellKnownDdeData.SafeInvoke(category, wellKnownDdeData);
+					ProcessWellKnownDdeData?.Invoke(category, wellKnownDdeData);
 			}
 			else
 			{

@@ -108,19 +108,19 @@ namespace StockSharp.Algo
 		private void AddSecurities(IEnumerable<Security> securities)
 		{
 			securities.ForEach(_trie.Add);
-            Added.SafeInvoke(securities);
+            Added?.Invoke(securities);
 		}
 
 		private void RemoveSecurities(IEnumerable<Security> securities)
 		{
 			_trie.RemoveRange(securities);
-            Removed.SafeInvoke(securities);
+            Removed?.Invoke(securities);
 		}
 
 		private void ClearSecurities()
 		{
 			_trie.Clear();
-			Cleared.SafeInvoke();
+			Cleared?.Invoke();
 		}
 
 		/// <summary>

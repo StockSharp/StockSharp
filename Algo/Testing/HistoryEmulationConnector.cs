@@ -142,7 +142,7 @@ namespace StockSharp.Algo.Testing
 										break;
 								}
 								else
-									NewOutMessage.SafeInvoke(pair.Value);
+									NewOutMessage?.Invoke(pair.Value);
 							}
 							catch (Exception ex)
 							{
@@ -327,7 +327,7 @@ namespace StockSharp.Algo.Testing
 
 				try
 				{
-					StateChanged.SafeInvoke();
+					StateChanged?.Invoke();
 				}
 				catch (Exception ex)
 				{
@@ -481,10 +481,10 @@ namespace StockSharp.Algo.Testing
 
 								if (series != null)
 								{
-									_newCandles.SafeInvoke(series, new[] { candleMsg.ToCandle(series) });
+									_newCandles?.Invoke(series, new[] { candleMsg.ToCandle(series) });
 
 									if (candleMsg.IsFinished)
-										_stopped.SafeInvoke(series);
+										_stopped?.Invoke(series);
 								}
 
 								break;

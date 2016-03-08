@@ -134,11 +134,11 @@ namespace StockSharp.Quik
 						newEntities.ForEach(e => table.Cache.SafeAdd(schema.Identity.Accessor.GetValue(e), key => e));
 					}
 
-					NewCustomTables.SafeInvoke(schema.EntityType, newEntities);
+					NewCustomTables?.Invoke(schema.EntityType, newEntities);
 				}
 
 				if (changedEntities.Count > 0)
-					CustomTablesChanged.SafeInvoke(schema.EntityType, changedEntities);
+					CustomTablesChanged?.Invoke(schema.EntityType, changedEntities);
 
 				return true;
 			}

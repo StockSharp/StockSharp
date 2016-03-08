@@ -1647,7 +1647,7 @@ namespace StockSharp.Algo.Testing
 
 		private void RaiseNewOutMessage(Message message)
 		{
-			NewOutMessage.SafeInvoke(message);
+			NewOutMessage?.Invoke(message);
 		}
 
 		private SecurityMarketEmulator GetEmulator(SecurityId securityId)

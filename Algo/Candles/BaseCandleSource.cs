@@ -82,7 +82,7 @@ namespace StockSharp.Algo.Candles
 		/// <param name="values">New data.</param>
 		protected virtual void RaiseProcessing(CandleSeries series, TValue values)
 		{
-			Processing.SafeInvoke(series, values);
+			Processing?.Invoke(series, values);
 		}
 
 		/// <summary>
@@ -91,7 +91,7 @@ namespace StockSharp.Algo.Candles
 		/// <param name="error">Error detais.</param>
 		protected void RaiseError(Exception error)
 		{
-			Error.SafeInvoke(error);
+			Error?.Invoke(error);
 		}
 
 		/// <summary>
@@ -100,7 +100,7 @@ namespace StockSharp.Algo.Candles
 		/// <param name="series">Candles series.</param>
 		protected void RaiseStopped(CandleSeries series)
 		{
-			Stopped.SafeInvoke(series);
+			Stopped?.Invoke(series);
 		}
 	}
 }

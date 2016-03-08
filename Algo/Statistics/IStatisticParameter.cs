@@ -186,7 +186,7 @@ namespace StockSharp.Algo.Statistics
 		/// </summary>
 		private void RaiseValueChanged()
 		{
-			ValueChanged.SafeInvoke();
+			ValueChanged?.Invoke();
 			this.Notify("Value");
 		}
 

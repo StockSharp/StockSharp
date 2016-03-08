@@ -290,7 +290,7 @@ namespace StockSharp.BusinessEntities
 					return;
 
 				_depth = value;
-				DepthChanged.SafeInvoke();
+				DepthChanged?.Invoke();
 			}
 		}
 
@@ -742,7 +742,7 @@ namespace StockSharp.BusinessEntities
 			RaiseQuotesChanged();
 
 			if (outOfDepthQuote != null)
-				QuoteOutOfDepth.SafeInvoke(outOfDepthQuote);
+				QuoteOutOfDepth?.Invoke(outOfDepthQuote);
 		}
 
 		#region IEnumerable<Quote>
@@ -1026,7 +1026,7 @@ namespace StockSharp.BusinessEntities
 
 		private void RaiseQuotesChanged()
 		{
-			QuotesChanged.SafeInvoke();
+			QuotesChanged?.Invoke();
 		}
 
 		/// <summary>

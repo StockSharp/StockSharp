@@ -1594,7 +1594,7 @@ namespace StockSharp.BusinessEntities
 		/// <param name="propName">Property name.</param>
 		protected void Notify(string propName)
 		{
-			_propertyChanged.SafeInvoke(this, propName);
+			_propertyChanged?.Invoke(this, propName);
 		}
 	}
 }
