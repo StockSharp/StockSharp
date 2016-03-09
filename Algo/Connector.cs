@@ -73,15 +73,12 @@ namespace StockSharp.Algo
 				_depth = depth;
 			}
 
-			public void Init(MarketDepth source, IEnumerable<Order> currentOrders)
+			public void Init(MarketDepth source, IEnumerable<ExecutionMessage> orders)
 			{
 				if (source == null)
 					throw new ArgumentNullException(nameof(source));
 
-				if (currentOrders == null)
-					throw new ArgumentNullException(nameof(currentOrders));
-
-				currentOrders.Select(o => o.ToMessage()).ForEach(Process);
+				orders.ForEach(Process);
 
 				_depth.Update(Filter(source.Bids), Filter(source.Asks), true, source.LastChangeTime);
 			}
@@ -123,7 +120,7 @@ namespace StockSharp.Algo
 			public void Process(ExecutionMessage message)
 			{
 				if (!message.HasOrderInfo())
-					return;
+					throw new ArgumentException("message");
 
 				var key = Tuple.Create(message.Side, message.OrderPrice);
 
@@ -187,9 +184,9 @@ namespace StockSharp.Algo
 
 		private readonly SynchronizedDictionary<Security, MarketDepthInfo> _marketDepths = new SynchronizedDictionary<Security, MarketDepthInfo>();
 		private readonly SynchronizedDictionary<Security, FilteredMarketDepthInfo> _filteredMarketDepths = new SynchronizedDictionary<Security, FilteredMarketDepthInfo>();
-		private readonly Dictionary<long, List<ExecutionMessage>> _nonOrderedByIdMyTrades = new Dictionary<long, List<ExecutionMessage>>();
-		private readonly Dictionary<long, List<ExecutionMessage>> _nonOrderedByTransactionIdMyTrades = new Dictionary<long, List<ExecutionMessage>>();
-		private readonly Dictionary<string, List<ExecutionMessage>> _nonOrderedByStringIdMyTrades = new Dictionary<string, List<ExecutionMessage>>();
+		private readonly Dictionary<long, List<ExecutionMessage>> _nonAssociatedByIdMyTrades = new Dictionary<long, List<ExecutionMessage>>();
+		private readonly Dictionary<long, List<ExecutionMessage>> _nonAssociatedByTransactionIdMyTrades = new Dictionary<long, List<ExecutionMessage>>();
+		private readonly Dictionary<string, List<ExecutionMessage>> _nonAssociatedByStringIdMyTrades = new Dictionary<string, List<ExecutionMessage>>();
 		private readonly MultiDictionary<Tuple<long?, string>, RefPair<Order, Action<Order, Order>>> _orderStopOrderAssociations = new MultiDictionary<Tuple<long?, string>, RefPair<Order, Action<Order, Order>>>(false);
 
 		private readonly Dictionary<SecurityId, List<Message>> _suspendedSecurityMessages = new Dictionary<SecurityId, List<Message>>();
@@ -911,7 +908,7 @@ namespace StockSharp.Algo
 						oldOrder.Comment = newOrder.Comment;
 
 					InitNewOrder(newOrder);
-					_entityCache.AddOrderByCancelTransaction(newOrder.TransactionId, oldOrder);
+					_entityCache.AddOrderByCancelationId(newOrder.TransactionId, oldOrder);
 
 					OnReRegisterOrder(oldOrder, newOrder);
 				}
@@ -977,8 +974,8 @@ namespace StockSharp.Algo
 					InitNewOrder(newOrder1);
 					InitNewOrder(newOrder2);
 
-					_entityCache.AddOrderByCancelTransaction(newOrder1.TransactionId, oldOrder1);
-					_entityCache.AddOrderByCancelTransaction(newOrder2.TransactionId, oldOrder2);
+					_entityCache.AddOrderByCancelationId(newOrder1.TransactionId, oldOrder1);
+					_entityCache.AddOrderByCancelationId(newOrder2.TransactionId, oldOrder2);
 
 					OnReRegisterOrderPair(oldOrder1, newOrder1, oldOrder2, newOrder2);
 				}
@@ -1006,9 +1003,8 @@ namespace StockSharp.Algo
 				CheckOnOld(order);
 
 				var transactionId = TransactionIdGenerator.GetNextId();
-				_entityCache.AddOrderByCancelTransaction(transactionId, order);
+				_entityCache.AddOrderByCancelationId(transactionId, order);
 
-				//order.InitLatencyMonitoring(false);
 				OnCancelOrder(order, transactionId);
 			}
 			catch (Exception ex)
@@ -1093,7 +1089,6 @@ namespace StockSharp.Algo
 			if (order.ExtensionInfo == null)
 				order.ExtensionInfo = new Dictionary<object, object>();
 
-			//order.InitializationTime = trader.MarketTime;
 			if (order.TransactionId == 0)
 				order.TransactionId = TransactionIdGenerator.GetNextId();
 
@@ -1103,12 +1098,10 @@ namespace StockSharp.Algo
 				order.Security = ((ContinuousSecurity)order.Security).GetSecurity(CurrentTime);
 
 			order.LocalTime = CurrentTime;
-			order.State = OrderStates.Pending;
+			order.State = order.State.CheckModification(OrderStates.Pending);
 
-			if (!_entityCache.TryAddOrder(order))
-				throw new ArgumentException(LocalizedStrings.Str1101Params.Put(order.TransactionId));
+			_entityCache.AddOrderByRegistrationId(order);
 
-			//RaiseNewOrder(order);
 			SendOutMessage(order.ToMessage());
 		}
 
@@ -1184,7 +1177,7 @@ namespace StockSharp.Algo
 		public void CancelOrders(bool? isStopOrder = null, Portfolio portfolio = null, Sides? direction = null, ExchangeBoard board = null, Security security = null)
 		{
 			var transactionId = TransactionIdGenerator.GetNextId();
-			_entityCache.AddOrderByCancelTransaction(transactionId, null);
+			//_entityCache.AddOrderByCancelationId(transactionId, );
 			OnCancelOrders(transactionId, isStopOrder, portfolio, direction, board, security);
 		}
 
@@ -1224,7 +1217,7 @@ namespace StockSharp.Algo
 		{
 			_timeAdapter?.HandleTimeMessage(message);
 
-			// output messages from adapters goes asynchronously
+			// output messages from adapters goes non ordered
 			if (_currentTime > message.LocalTime)
 				return;
 
@@ -1311,67 +1304,6 @@ namespace StockSharp.Algo
 			return secId;
 		}
 
-		private void ProcessMyTrades<T>(Order order, T id, Dictionary<T, List<ExecutionMessage>> nonOrderedMyTrades)
-		{
-			var value = nonOrderedMyTrades.TryGetValue(id);
-
-			if (value == null)
-				return;
-
-			var retVal = new List<ExecutionMessage>();
-
-			foreach (var message in value.ToArray())
-			{
-				// проверяем совпадение по дате, исключая ситуация сопоставления сделки с заявкой, имеющая неуникальный идентификатор
-				if (message.ServerTime.Date != order.Time.Date)
-					continue;
-
-				retVal.Add(message);
-				value.Remove(message);
-			}
-
-			if (value.IsEmpty())
-				nonOrderedMyTrades.Remove(id);
-
-			var trades = retVal
-				.Select(t => _entityCache.ProcessMyTradeMessage(order.Security, t))
-				.Where(t => t != null && t.Item2)
-				.Select(t => t.Item1);
-
-			foreach (var trade in trades)
-			{
-				RaiseNewMyTrade(trade);
-			}
-		}
-
-		/// <summary>
-		/// To get the portfolio by the name. If the portfolio is not registered, it is created via <see cref="IEntityFactory.CreatePortfolio"/>.
-		/// </summary>
-		/// <param name="name">Portfolio name.</param>
-		/// <param name="changePortfolio">Portfolio handler.</param>
-		/// <returns>Portfolio.</returns>
-		private Portfolio GetPortfolio(string name, Func<Portfolio, bool> changePortfolio = null)
-		{
-			if (name.IsEmpty())
-				throw new ArgumentNullException(nameof(name));
-
-			var result = _entityCache.ProcessPortfolio(name, changePortfolio);
-
-			var portfolio = result.Item1;
-			var isNew = result.Item2;
-			var isChanged = result.Item3;
-
-			if (isNew)
-			{
-				this.AddInfoLog(LocalizedStrings.Str1105Params, portfolio.Name);
-				RaiseNewPortfolio(portfolio);
-			}
-			else if (isChanged)
-				RaisePortfolioChanged(portfolio);
-
-			return portfolio;
-		}
-
 		private string GetBoardCode(string secClass)
 		{
 			// MarketDataAdapter can be null then loading infos from StorageAdapter.
@@ -1451,9 +1383,9 @@ namespace StockSharp.Algo
 
 			_marketDepths.Clear();
 
-			_nonOrderedByIdMyTrades.Clear();
-			_nonOrderedByStringIdMyTrades.Clear();
-			_nonOrderedByTransactionIdMyTrades.Clear();
+			_nonAssociatedByIdMyTrades.Clear();
+			_nonAssociatedByStringIdMyTrades.Clear();
+			_nonAssociatedByTransactionIdMyTrades.Clear();
 
 			ConnectionState = ConnectionStates.Disconnected;
 
@@ -1470,7 +1402,7 @@ namespace StockSharp.Algo
 
 			SendInMessage(new ResetMessage());
 
-			_cleared.SafeInvoke();
+			_cleared?.Invoke();
 		}
 
 		/// <summary>

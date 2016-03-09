@@ -616,7 +616,7 @@ namespace StockSharp.Algo
 							{
 								if (m.DataType == _filteredMarketDepth)
 								{
-									GetFilteredMarketDepthInfo(s).Init(GetMarketDepth(s), _entityCache.GetOrders(s, OrderStates.Active));
+									GetFilteredMarketDepthInfo(s).Init(GetMarketDepth(s), _entityCache.GetOrders(s, OrderStates.Active).Select(o => o.ToMessage()));
 									return;
 								}
 
@@ -660,7 +660,7 @@ namespace StockSharp.Algo
 						ProcessSessionMessage((SessionMessage)message);
 						break;
 
-					// если адаптеры передают созданиют специфичные сообщения
+					// если адаптеры передают специфичные сообщения
 					//default:
 					//	throw new ArgumentOutOfRangeException("Тип сообщения {0} не поддерживается.".Put(message.Type));
 				}
@@ -669,9 +669,6 @@ namespace StockSharp.Algo
 			{
 				RaiseError(new InvalidOperationException(LocalizedStrings.Str681Params.Put(message), ex));
 			}
-
-			//if (message.Type != MessageTypes.Time && direction == MessageDirections.Out && adapter == MarketDataAdapter)
-			//	RaiseNewDataExported();
 		}
 
 		private void ProcessSecurityAction<TMessage>(TMessage message, Func<TMessage, SecurityId> getId, Action<Security, TMessage> action, bool ignoreIfNotExist = false)
@@ -912,7 +909,7 @@ namespace StockSharp.Algo
 		{
 			var board = ExchangeBoard.GetOrCreateBoard(message.BoardCode);
 			_sessionStates[board] = message.State;
-			SessionStateChanged.SafeInvoke(board, message.State);
+			SessionStateChanged?.Invoke(board, message.State);
 		}
 
 		private void ProcessBoardMessage(BoardMessage message)
@@ -1079,6 +1076,37 @@ namespace StockSharp.Algo
 		private Level1DepthBuilder GetBuilder(SecurityId securityId)
 		{
 			return _level1DepthBuilders.SafeAdd(securityId, c => new Level1DepthBuilder(c));
+		}
+
+		/// <summary>
+		/// To get the portfolio by the name. If the portfolio is not registered, it is created via <see cref="IEntityFactory.CreatePortfolio"/>.
+		/// </summary>
+		/// <param name="name">Portfolio name.</param>
+		/// <param name="changePortfolio">Portfolio handler.</param>
+		/// <returns>Portfolio.</returns>
+		private Portfolio GetPortfolio(string name, Func<Portfolio, bool> changePortfolio = null)
+		{
+			if (name.IsEmpty())
+				throw new ArgumentNullException(nameof(name));
+
+			var result = _entityCache.ProcessPortfolio(name, changePortfolio);
+			ProcessPortfolio(result);
+			return result.Item1;
+		}
+
+		private void ProcessPortfolio(Tuple<Portfolio, bool, bool> info)
+		{
+			var portfolio = info.Item1;
+			var isNew = info.Item2;
+			var isChanged = info.Item3;
+
+			if (isNew)
+			{
+				this.AddInfoLog(LocalizedStrings.Str1105Params, portfolio.Name);
+				RaiseNewPortfolio(portfolio);
+			}
+			else if (isChanged)
+				RaisePortfolioChanged(portfolio);
 		}
 
 		private void ProcessPortfolioMessage(PortfolioMessage message)
@@ -1398,62 +1426,106 @@ namespace StockSharp.Algo
 			RaiseSecurityChanged(security);
 		}
 
+		private void ProcessMyTrades<T>(Order order, T id, Dictionary<T, List<ExecutionMessage>> nonOrderedMyTrades)
+		{
+			var value = nonOrderedMyTrades.TryGetValue(id);
+
+			if (value == null)
+				return;
+
+			var retVal = new List<ExecutionMessage>();
+
+			foreach (var message in value.ToArray())
+			{
+				// проверяем совпадение по дате, исключая ситуация сопоставления сделки с заявкой, имеющая неуникальный идентификатор
+				if (message.ServerTime.Date != order.Time.Date)
+					continue;
+
+				retVal.Add(message);
+				value.Remove(message);
+			}
+
+			if (value.IsEmpty())
+				nonOrderedMyTrades.Remove(id);
+
+			var trades = retVal
+				.Select(t => _entityCache.ProcessMyTradeMessage(order.Security, t))
+				.Where(t => t != null && t.Item2)
+				.Select(t => t.Item1);
+
+			foreach (var trade in trades)
+			{
+				RaiseNewMyTrade(trade);
+			}
+		}
+
 		private void ProcessOrderMessage(Security security, ExecutionMessage message)
 		{
 			if (message.OrderState != OrderStates.Failed)
 			{
-				var tuple = _entityCache.ProcessOrderMessage(security, message);
+				Tuple<Portfolio, bool, bool> pfInfo;
+				var tuples = _entityCache.ProcessOrderMessage(security, message, out pfInfo);
 
-				if (tuple == null)
+				if (tuples == null)
 				{
 					this.AddWarningLog(LocalizedStrings.Str1156Params, message.OrderId.To<string>() ?? message.OrderStringId);
 					return;
 				}
 
-				var order = tuple.Item1;
-				var isNew = tuple.Item2;
-				var isChanged = tuple.Item3;
+				if (pfInfo != null)
+					ProcessPortfolio(pfInfo);
 
-				if (message.OrderType == OrderTypes.Conditional && (message.DerivedOrderId != null || !message.DerivedOrderStringId.IsEmpty()))
+				foreach (var tuple in tuples)
 				{
-					var derivedOrder = _entityCache.GetOrder(security, 0L, message.DerivedOrderId ?? 0, message.DerivedOrderStringId);
+					var order = tuple.Item1;
+					var isNew = tuple.Item2;
+					var isChanged = tuple.Item3;
 
-					if (derivedOrder == null)
-						_orderStopOrderAssociations.Add(Tuple.Create(message.DerivedOrderId, message.DerivedOrderStringId), new RefPair<Order, Action<Order, Order>>(order, (s, o) => s.DerivedOrder = o));
-					else
-						order.DerivedOrder = derivedOrder;
+					if (message.OrderType == OrderTypes.Conditional && (message.DerivedOrderId != null || !message.DerivedOrderStringId.IsEmpty()))
+					{
+						var derivedOrder = _entityCache.GetOrder(order.Security, 0L, message.DerivedOrderId ?? 0, message.DerivedOrderStringId);
+
+						if (derivedOrder == null)
+							_orderStopOrderAssociations.Add(Tuple.Create(message.DerivedOrderId, message.DerivedOrderStringId), new RefPair<Order, Action<Order, Order>>(order, (s, o) => s.DerivedOrder = o));
+						else
+							order.DerivedOrder = derivedOrder;
+					}
+
+					if (message.OrderState == OrderStates.Active || message.OrderState == OrderStates.Done)
+					{
+						var info = _filteredMarketDepths.TryGetValue(security);
+						info?.Process(message);
+					}
+
+					if (isNew)
+					{
+						this.AddOrderInfoLog(order, "New order");
+
+						if (order.Type == OrderTypes.Conditional)
+							RaiseNewStopOrders(new[] { order });
+						else
+							RaiseNewOrder(order);
+					}
+					else if (isChanged)
+					{
+						this.AddOrderInfoLog(order, "Order changed");
+
+						if (order.Type == OrderTypes.Conditional)
+							RaiseStopOrdersChanged(new[] { order });
+						else
+							RaiseOrderChanged(order);
+					}
+
+					if (order.Id != null)
+						ProcessMyTrades(order, order.Id.Value, _nonAssociatedByIdMyTrades);
+
+					ProcessMyTrades(order, order.TransactionId, _nonAssociatedByTransactionIdMyTrades);
+
+					if (!order.StringId.IsEmpty())
+						ProcessMyTrades(order, order.StringId, _nonAssociatedByStringIdMyTrades);
+
+					ProcessConditionOrders(order);
 				}
-
-				TryProcessFilteredMarketDepth(security, message);
-
-				if (isNew)
-				{
-					this.AddOrderInfoLog(order, "New order");
-
-					if (order.Type == OrderTypes.Conditional)
-						RaiseNewStopOrders(new[] { order });
-					else
-						RaiseNewOrder(order);
-				}
-				else if (isChanged)
-				{
-					this.AddOrderInfoLog(order, "Order changed");
-
-					if (order.Type == OrderTypes.Conditional)
-						RaiseStopOrdersChanged(new[] { order });
-					else
-						RaiseOrderChanged(order);
-				}
-
-				if (order.Id != null)
-					ProcessMyTrades(order, order.Id.Value, _nonOrderedByIdMyTrades);
-
-				ProcessMyTrades(order, order.TransactionId, _nonOrderedByTransactionIdMyTrades);
-
-				if (!order.StringId.IsEmpty())
-					ProcessMyTrades(order, order.StringId, _nonOrderedByStringIdMyTrades);
-
-				ProcessConditionOrders(order);
 			}
 			else
 			{
@@ -1461,7 +1533,7 @@ namespace StockSharp.Algo
 				{
 					var fail = tuple.Item1;
 
-					TryProcessFilteredMarketDepth(security, message);
+					//TryProcessFilteredMarketDepth(fail.Order.Security, message);
 
 					//var isRegisterFail = (fail.Order.Id == null && fail.Order.StringId.IsEmpty()) || fail.Order.Status == OrderStatus.RejectedBySystem;
 					var isCancelTransaction = tuple.Item2;
@@ -1491,12 +1563,6 @@ namespace StockSharp.Algo
 					}
 				}
 			}
-		}
-
-		private void TryProcessFilteredMarketDepth(Security security, ExecutionMessage order)
-		{
-			var info = _filteredMarketDepths.TryGetValue(security);
-			info?.Process(order);
 		}
 
 		private void ProcessConditionOrders(Order order)
@@ -1531,11 +1597,11 @@ namespace StockSharp.Algo
 				List<ExecutionMessage> nonOrderedMyTrades;
 
 				if (message.OrderId != null)
-					nonOrderedMyTrades = _nonOrderedByIdMyTrades.SafeAdd(message.OrderId.Value);
+					nonOrderedMyTrades = _nonAssociatedByIdMyTrades.SafeAdd(message.OrderId.Value);
 				else if (message.OriginalTransactionId != 0)
-					nonOrderedMyTrades = _nonOrderedByTransactionIdMyTrades.SafeAdd(message.OriginalTransactionId);
+					nonOrderedMyTrades = _nonAssociatedByTransactionIdMyTrades.SafeAdd(message.OriginalTransactionId);
 				else
-					nonOrderedMyTrades = _nonOrderedByStringIdMyTrades.SafeAdd(message.OrderStringId);
+					nonOrderedMyTrades = _nonAssociatedByStringIdMyTrades.SafeAdd(message.OrderStringId);
 
 				this.AddInfoLog("My trade delayed: {0}", message);
 
@@ -1594,18 +1660,7 @@ namespace StockSharp.Algo
 				case ExecutionTypes.Transaction:
 				{
 					if (message.SecurityId.SecurityCode.IsEmpty() && message.SecurityId.Native == null)
-					{
-						var order = (
-							_entityCache.GetOrderByTransactionId(message.OriginalTransactionId, false)
-							??
-							_entityCache.GetOrderByTransactionId(message.OriginalTransactionId, true)
-						            ?? _entityCache.GetOrderById(message.OrderId ?? 0));
-
-						if (order == null)
-							throw new InvalidOperationException(LocalizedStrings.Str689Params.Put(message.OrderId, message.OriginalTransactionId));
-
-						handler(order.Security);
-					}
+						handler(null);
 					else
 						ProcessSecurityAction(message, m => m.SecurityId, (s, m) => handler(s));
 
@@ -1629,7 +1684,7 @@ namespace StockSharp.Algo
 				}
 				
 				default:
-				throw new ArgumentOutOfRangeException(LocalizedStrings.Str1695Params.Put(message.ExecutionType));
+					throw new ArgumentOutOfRangeException(LocalizedStrings.Str1695Params.Put(message.ExecutionType));
 			}
 		}
 
