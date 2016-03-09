@@ -131,6 +131,60 @@ namespace StockSharp.Algo
 	/// </summary>
 	public static class TraderHelper
 	{
+		private static readonly bool[][] _stateChangePossibilities;
+
+		static TraderHelper()
+		{
+			_stateChangePossibilities = new bool[5][];
+
+			for (var i = 0; i < _stateChangePossibilities.Length; i++)
+				_stateChangePossibilities[i] = new bool[_stateChangePossibilities.Length];
+
+			_stateChangePossibilities[(int)OrderStates.None][(int)OrderStates.None] = true;
+			_stateChangePossibilities[(int)OrderStates.None][(int)OrderStates.Pending] = true;
+			_stateChangePossibilities[(int)OrderStates.None][(int)OrderStates.Active] = true;
+			_stateChangePossibilities[(int)OrderStates.None][(int)OrderStates.Done] = true;
+			_stateChangePossibilities[(int)OrderStates.None][(int)OrderStates.Failed] = true;
+
+			_stateChangePossibilities[(int)OrderStates.Pending][(int)OrderStates.None] = false;
+			_stateChangePossibilities[(int)OrderStates.Pending][(int)OrderStates.Pending] = true;
+			_stateChangePossibilities[(int)OrderStates.Pending][(int)OrderStates.Active] = true;
+			_stateChangePossibilities[(int)OrderStates.Pending][(int)OrderStates.Done] = true;
+			_stateChangePossibilities[(int)OrderStates.Pending][(int)OrderStates.Failed] = true;
+
+			_stateChangePossibilities[(int)OrderStates.Active][(int)OrderStates.None] = false;
+			_stateChangePossibilities[(int)OrderStates.Active][(int)OrderStates.Pending] = false;
+			_stateChangePossibilities[(int)OrderStates.Active][(int)OrderStates.Active] = true;
+			_stateChangePossibilities[(int)OrderStates.Active][(int)OrderStates.Done] = true;
+			_stateChangePossibilities[(int)OrderStates.Active][(int)OrderStates.Failed] = false;
+
+			_stateChangePossibilities[(int)OrderStates.Done][(int)OrderStates.None] = false;
+			_stateChangePossibilities[(int)OrderStates.Done][(int)OrderStates.Pending] = false;
+			_stateChangePossibilities[(int)OrderStates.Done][(int)OrderStates.Active] = false;
+			_stateChangePossibilities[(int)OrderStates.Done][(int)OrderStates.Done] = true;
+			_stateChangePossibilities[(int)OrderStates.Done][(int)OrderStates.Failed] = false;
+
+			_stateChangePossibilities[(int)OrderStates.Failed][(int)OrderStates.None] = false;
+			_stateChangePossibilities[(int)OrderStates.Failed][(int)OrderStates.Pending] = false;
+			_stateChangePossibilities[(int)OrderStates.Failed][(int)OrderStates.Active] = false;
+			_stateChangePossibilities[(int)OrderStates.Failed][(int)OrderStates.Done] = false;
+			_stateChangePossibilities[(int)OrderStates.Failed][(int)OrderStates.Failed] = true;
+		}
+
+		/// <summary>
+		/// Chech the possibility order's state change.
+		/// </summary>
+		/// <param name="prev">Previous order's state.</param>
+		/// <param name="curr">Current order's state.</param>
+		/// <returns>The current order's state.</returns>
+		public static OrderStates CheckModification(this OrderStates prev, OrderStates curr)
+		{
+			if (!_stateChangePossibilities[(int)prev][(int)curr])
+				throw new ArgumentException("message");
+
+			return curr;
+		}
+
 		/// <summary>
 		/// To filter the order book from own orders.
 		/// </summary>
@@ -265,7 +319,7 @@ namespace StockSharp.Algo
 			}
 
 			var pair = depth.BestPair;
-			return pair == null ? null : pair.GetCurrentPrice(side, priceType);
+			return pair?.GetCurrentPrice(side, priceType);
 		}
 
 		/// <summary>
@@ -290,13 +344,13 @@ namespace StockSharp.Algo
 				case MarketPriceTypes.Opposite:
 				{
 					var quote = (side == Sides.Buy ? bestPair.Ask : bestPair.Bid);
-					currentPrice = quote == null ? (decimal?)null : quote.Price;
+					currentPrice = quote?.Price;
 					break;
 				}
 				case MarketPriceTypes.Following:
 				{
 					var quote = (side == Sides.Buy ? bestPair.Bid : bestPair.Ask);
-					currentPrice = quote == null ? (decimal?)null : quote.Price;
+					currentPrice = quote?.Price;
 					break;
 				}
 				case MarketPriceTypes.Middle:

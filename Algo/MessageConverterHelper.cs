@@ -1217,7 +1217,7 @@ namespace StockSharp.Algo
 			order.Currency = message.Currency;
 
 			if (message.OrderState != null)
-				order.State = (OrderStates)message.OrderState;
+				order.State = order.State.CheckModification((OrderStates)message.OrderState);
 
 			return order;
 		}
@@ -1342,9 +1342,9 @@ namespace StockSharp.Algo
 			order.Currency = message.Currency;
 
 			if (message.OrderState != null)
-				order.State = message.OrderState.Value;
+				order.State = order.State.CheckModification(message.OrderState.Value);
 			else
-				order.State = message.IsCancelled || message.TradeId != null ? OrderStates.Done : OrderStates.Active;
+				order.State = order.State.CheckModification(message.IsCancelled || message.TradeId != null ? OrderStates.Done : OrderStates.Active);
 
 			if (message.TradeId != null)
 			{

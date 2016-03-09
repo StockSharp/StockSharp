@@ -1297,7 +1297,7 @@ namespace StockSharp.Algo.Strategies
 			{
 				Rules.RemoveRulesByToken(nOrder, null);
 
-				nOrder.State = OrderStates.Failed;
+				nOrder.State = nOrder.State.CheckModification(OrderStates.Failed);
 
 				var fails = new[] { new OrderFail { Order = nOrder, Error = excp, ServerTime = CurrentTime } };
 
