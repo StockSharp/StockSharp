@@ -146,7 +146,8 @@ namespace StockSharp.Messages
 		/// <returns>A string that represents the current object.</returns>
 		public override string ToString()
 		{
-			return "{0} {1} {2}".Put(Side == Sides.Buy ? LocalizedStrings.Bid : LocalizedStrings.Ask, Price, Volume);
+			var side = Side == Sides.Buy ? LocalizedStrings.Bid : LocalizedStrings.Ask;
+			return $"{side} {Price} {Volume}";
 		}
 	}
 }

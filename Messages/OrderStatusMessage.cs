@@ -18,8 +18,6 @@ namespace StockSharp.Messages
 	using System;
 	using System.Runtime.Serialization;
 
-	using Ecng.Common;
-
 	/// <summary>
 	/// A message requesting current registered orders and trades.
 	/// </summary>
@@ -65,7 +63,7 @@ namespace StockSharp.Messages
 		/// <returns>A string that represents the current object.</returns>
 		public override string ToString()
 		{
-			return base.ToString() + ",TransId={0}".Put(TransactionId);
+			return base.ToString() + $",TransId={TransactionId}";
 		}
 	}
 }

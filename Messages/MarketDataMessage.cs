@@ -19,8 +19,6 @@ namespace StockSharp.Messages
 	using System.ComponentModel;
 	using System.Runtime.Serialization;
 
-	using Ecng.Common;
-
 	using StockSharp.Localization;
 
 	/// <summary>
@@ -234,7 +232,7 @@ namespace StockSharp.Messages
 		/// <returns>A string that represents the current object.</returns>
 		public override string ToString()
 		{
-			return base.ToString() + ",Sec={0},Types={1},IsSubscribe={2},TransId={3},OrigId={4}".Put(SecurityId, DataType, IsSubscribe, TransactionId, OriginalTransactionId);
+			return base.ToString() + $",Sec={SecurityId},Types={DataType},IsSubscribe={IsSubscribe},TransId={TransactionId},OrigId={OriginalTransactionId}";
 		}
 	}
 }

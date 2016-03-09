@@ -18,8 +18,6 @@ namespace StockSharp.Messages
 	using System;
 	using System.Runtime.Serialization;
 
-	using Ecng.Common;
-
 	/// <summary>
 	/// Portfolio lookup result message.
 	/// </summary>
@@ -67,7 +65,7 @@ namespace StockSharp.Messages
 		/// <returns>A string that represents the current object.</returns>
 		public override string ToString()
 		{
-			return base.ToString() + ",Orig={0}".Put(OriginalTransactionId);
+			return base.ToString() + $",Orig={OriginalTransactionId}";
 		}
 	}
 }

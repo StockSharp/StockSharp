@@ -163,9 +163,7 @@ namespace StockSharp.Messages
 		{
 			if (_hashCode == 0)
 			{
-				_hashCode = _native != null
-					? _native.GetHashCode()
-					: (_securityCode + _boardCode).ToLowerInvariant().GetHashCode();
+				_hashCode = _native?.GetHashCode() ?? (_securityCode + _boardCode).ToLowerInvariant().GetHashCode();
 			}
 
 			return _hashCode;
@@ -225,7 +223,7 @@ namespace StockSharp.Messages
 		/// <returns>A string that represents the current object.</returns>
 		public override string ToString()
 		{
-			return "S#:{0}@{1}, Native:{2},Type:{3}".Put(SecurityCode, BoardCode, Native, SecurityType);
+			return $"S#:{SecurityCode}@{BoardCode}, Native:{Native},Type:{SecurityType}";
 		}
 	}
 }

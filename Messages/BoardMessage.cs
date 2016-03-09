@@ -18,8 +18,6 @@ namespace StockSharp.Messages
 	using System;
 	using System.Runtime.Serialization;
 
-	using Ecng.Common;
-
 	using StockSharp.Localization;
 
 	/// <summary>
@@ -155,7 +153,7 @@ namespace StockSharp.Messages
 		/// <returns>A string that represents the current object.</returns>
 		public override string ToString()
 		{
-			return base.ToString() + ",Code={0},Ex={1}".Put(Code, ExchangeCode);
+			return base.ToString() + $",Code={Code},Ex={ExchangeCode}";
 		}
 	}
 }

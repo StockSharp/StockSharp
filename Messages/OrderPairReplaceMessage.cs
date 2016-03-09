@@ -71,7 +71,7 @@ namespace StockSharp.Messages
 		/// <returns>A string that represents the current object.</returns>
 		public override string ToString()
 		{
-			return base.ToString() + ",{0},{1}".Put(Message1, Message2);
+			return base.ToString() + $",{Message1},{Message2}";
 		}
 	}
 }

@@ -300,7 +300,7 @@ namespace StockSharp.Messages
 		/// <returns>A string that represents the current object.</returns>
 		public override string ToString()
 		{
-			return "{0},T={1:yyyy/MM/dd HH:mm:ss.fff},O={2},H={3},L={4},C={5},V={6}".Put(Type, OpenTime, OpenPrice, HighPrice, LowPrice, ClosePrice, TotalVolume);
+			return $"{Type},T={OpenTime:yyyy/MM/dd HH:mm:ss.fff},O={OpenPrice},H={HighPrice},L={LowPrice},C={ClosePrice},V={TotalVolume}";
 		}
 	}
 
@@ -533,7 +533,7 @@ namespace StockSharp.Messages
 		/// <returns>A string that represents the current object.</returns>
 		public override string ToString()
 		{
-			return "Box = {0} RA = {1}".Put(BoxSize, ReversalAmount);
+			return $"Box = {BoxSize} RA = {ReversalAmount}";
 		}
 
 		/// <summary>

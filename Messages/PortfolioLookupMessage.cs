@@ -18,8 +18,6 @@ namespace StockSharp.Messages
 	using System;
 	using System.Runtime.Serialization;
 
-	using Ecng.Common;
-
 	/// <summary>
 	/// Message security lookup for specified criteria.
 	/// </summary>
@@ -50,7 +48,7 @@ namespace StockSharp.Messages
 		/// <returns>A string that represents the current object.</returns>
 		public override string ToString()
 		{
-			return base.ToString() + ",TransId={0},Curr={1},Board={2},IsSubscribe={3}".Put(TransactionId, Currency, BoardCode, IsSubscribe);
+			return base.ToString() + $",TransId={TransactionId},Curr={Currency},Board={BoardCode},IsSubscribe={IsSubscribe}";
 		}
 	}
 }

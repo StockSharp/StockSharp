@@ -149,7 +149,7 @@ namespace StockSharp.Messages
 
 					Closed?.Invoke();
 				}))
-				.Name("{0} channel thread.".Put(Name))
+				.Name($"{Name} channel thread.")
 				//.Culture(CultureInfo.InvariantCulture)
 				.Launch();
 		}

@@ -18,8 +18,6 @@ namespace StockSharp.Messages
 	using System;
 	using System.Runtime.Serialization;
 
-	using Ecng.Common;
-
 	/// <summary>
 	/// A message containing the data for the cancellation of the order.
 	/// </summary>
@@ -104,7 +102,7 @@ namespace StockSharp.Messages
 		/// <returns>A string that represents the current object.</returns>
 		public override string ToString()
 		{
-			return base.ToString() + ",OriginTransId={0},TransId={1},OrderId={2}".Put(OrderTransactionId, TransactionId, OrderId);
+			return base.ToString() + $",OriginTransId={OrderTransactionId},TransId={TransactionId},OrderId={OrderId}";
 		}
 	}
 }

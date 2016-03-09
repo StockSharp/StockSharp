@@ -94,7 +94,7 @@ namespace StockSharp.Messages
 		/// <returns>A string that represents the current object.</returns>
 		public override string ToString()
 		{
-			return Type + ",T(L)={0:yyyy/MM/dd HH:mm:ss.fff}".Put(LocalTime);
+			return Type + $",T(L)={LocalTime:yyyy/MM/dd HH:mm:ss.fff}";
 		}
 
 		/// <summary>

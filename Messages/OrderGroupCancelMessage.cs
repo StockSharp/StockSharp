@@ -18,8 +18,6 @@ namespace StockSharp.Messages
 	using System;
 	using System.Runtime.Serialization;
 
-	using Ecng.Common;
-
 	using StockSharp.Localization;
 
 	/// <summary>
@@ -29,15 +27,6 @@ namespace StockSharp.Messages
 	[Serializable]
 	public class OrderGroupCancelMessage : OrderMessage
 	{
-		///// <summary>
-		///// Тип инструмента. Если значение <see langword="null"/>, то отмена идет по всем типам инструментов.
-		///// </summary>
-		//[DataMember]
-		//[DisplayName("Тип")]
-		//[Description("Тип инструмента.")]
-		//[MainCategory]
-		//public SecurityTypes? SecurityType { get; set; }
-
 		/// <summary>
 		/// <see langword="true" />, if cancel only a stop orders, <see langword="false" /> - if regular orders, <see langword="null" /> - both.
 		/// </summary>
@@ -70,7 +59,7 @@ namespace StockSharp.Messages
 		/// <returns>A string that represents the current object.</returns>
 		public override string ToString()
 		{
-			return base.ToString() + ",IsStop={0},Side={1},SecType={2}".Put(IsStop, Side, SecurityType);
+			return base.ToString() + $",IsStop={IsStop},Side={Side},SecType={SecurityType}";
 		}
 
 		/// <summary>
