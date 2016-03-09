@@ -30,7 +30,6 @@ namespace SampleMultiConnection
 	using StockSharp.Algo.Storages;
 	using StockSharp.BusinessEntities;
 	using StockSharp.Logging;
-	
 	using StockSharp.Configuration;
 	using StockSharp.Localization;
 
@@ -68,6 +67,8 @@ namespace SampleMultiConnection
 
 			var entityRegistry = ConfigManager.GetService<IEntityRegistry>();
 			var storageRegistry = ConfigManager.GetService<IStorageRegistry>();
+
+			SerializationContext.DelayAction = entityRegistry.DelayAction = new DelayAction(entityRegistry.Storage, ex => ex.LogError());
 
 			Connector = new Connector(entityRegistry, storageRegistry);
 			logManager.Sources.Add(Connector);
@@ -157,6 +158,8 @@ namespace SampleMultiConnection
 			_portfoliosWindow.Close();
 
 			Connector.Dispose();
+
+			ConfigManager.GetService<IEntityRegistry>().DelayAction.WaitFlush();
 
 			base.OnClosing(e);
 		}
