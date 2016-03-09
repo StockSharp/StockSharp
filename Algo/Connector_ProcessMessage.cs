@@ -389,7 +389,7 @@ namespace StockSharp.Algo
 					_adapter.InnerAdapters.Removed -= InnerAdaptersOnRemoved;
 					_adapter.InnerAdapters.Cleared -= InnerAdaptersOnCleared;
 
-					SendInMessage(new ResetMessage());
+					//SendInMessage(new ResetMessage());
 
 					_inAdapter.NewOutMessage -= AdapterOnNewOutMessage;
 					_inAdapter.Dispose();
