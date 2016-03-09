@@ -285,7 +285,7 @@ namespace StockSharp.Configuration
 		/// <param name="databaseRaw">Raw bytes of database file.</param>
 		/// <param name="init">Initialization callback.</param>
 		/// <returns>Path to the database file.</returns>
-		public static string FirstTimeInit(this EntityRegistry entityRegistry, byte[] databaseRaw, Action<Database> init = null)
+		public static string FirstTimeInit(this IEntityRegistry entityRegistry, byte[] databaseRaw, Action<Database> init = null)
 		{
 			if (entityRegistry == null)
 				throw new ArgumentNullException(nameof(entityRegistry));

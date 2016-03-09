@@ -15,6 +15,8 @@ Copyright 2010 by StockSharp, LLC
 #endregion S# License
 namespace StockSharp.Algo.Storages
 {
+	using Ecng.Serialization;
+
 	using StockSharp.BusinessEntities;
 
 	/// <summary>
@@ -22,6 +24,16 @@ namespace StockSharp.Algo.Storages
 	/// </summary>
 	public interface IEntityRegistry
 	{
+		/// <summary>
+		/// The special interface for direct access to the storage.
+		/// </summary>
+		IStorage Storage { get; }
+
+		/// <summary>
+		/// The time delayed action.
+		/// </summary>
+		DelayAction DelayAction { get; set; }
+
 		/// <summary>
 		/// List of exchanges.
 		/// </summary>

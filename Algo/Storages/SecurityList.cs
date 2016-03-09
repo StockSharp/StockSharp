@@ -35,7 +35,7 @@ namespace StockSharp.Algo.Storages
 	/// </summary>
 	public class SecurityList : BaseStorageEntityList<Security>, IStorageSecurityList
 	{
-		private readonly EntityRegistry _registry;
+		private readonly IEntityRegistry _registry;
 		private readonly DatabaseCommand _readAllByCodeAndType;
 		private readonly DatabaseCommand _readAllByCodeAndTypeAndExpiryDate;
 		private readonly DatabaseCommand _readAllByType;
@@ -47,7 +47,7 @@ namespace StockSharp.Algo.Storages
 		/// Initializes a new instance of the <see cref="SecurityList"/>.
 		/// </summary>
 		/// <param name="registry">The storage of trade objects.</param>
-		public SecurityList(EntityRegistry registry)
+		public SecurityList(IEntityRegistry registry)
 			: base(registry.Storage)
 		{
 			_registry = registry;
