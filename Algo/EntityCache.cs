@@ -502,8 +502,15 @@ namespace StockSharp.Algo
 
 		public IEnumerable<Tuple<OrderFail, bool>> ProcessOrderFailMessage(Security security, ExecutionMessage message)
 		{
+			//if (security == null)
+			//	throw new ArgumentNullException(nameof(security));
+
 			if (security == null)
-				throw new ArgumentNullException(nameof(security));
+			{
+				// TODO
+				//var order = GetOrder(message);
+				security = GetOrder(message).Security;
+			}
 
 			if (message == null)
 				throw new ArgumentNullException(nameof(message));
