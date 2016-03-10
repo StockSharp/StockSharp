@@ -13,6 +13,7 @@
 			<listItem><codeEntityReference>T:StockSharp.CQG.CQGTrader</codeEntityReference> для <token>cqg</token></listItem>
 			<!--<listItem><codeEntityReference>T:StockSharp.Fix.FixTrader</codeEntityReference> для <token>fix</token></listItem>-->
 			<listItem><codeEntityReference>T:StockSharp.Rithmic.RithmicTrader</codeEntityReference> для <token>rithmic</token></listItem>
+			<listItem><codeEntityReference>T:StockSharp.ITCH.ITCHTrader</codeEntityReference> для <token>itch</token></listItem>
 		</list>
 	</introduction>
 	</developerWalkthroughDocument>
