@@ -178,7 +178,7 @@
     </Resource>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\..\StockSharp %28GitLab%29\Algo.Strategies\Algo.Strategies.csproj">
+    <ProjectReference Include="..\..\..\..\..\StockSharpApps\Algo.Strategies\Algo.Strategies.csproj">
       <Project>{FCB47C52-E1EA-4020-B88C-E750924F5716}</Project>
       <Name>Algo.Strategies</Name>
     </ProjectReference>
