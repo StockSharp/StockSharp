@@ -224,6 +224,21 @@ namespace StockSharp.BusinessEntities
 		event Action<Exception> ConnectionError;
 
 		/// <summary>
+		/// Connected.
+		/// </summary>
+		event Action<IMessageAdapter> ConnectedEx;
+
+		/// <summary>
+		/// Disconnected.
+		/// </summary>
+		event Action<IMessageAdapter> DisconnectedEx;
+
+		/// <summary>
+		/// Connection error (for example, the connection was aborted by server).
+		/// </summary>
+		event Action<IMessageAdapter, Exception> ConnectionErrorEx;
+
+		/// <summary>
 		/// Dats process error.
 		/// </summary>
 		event Action<Exception> Error;

@@ -233,6 +233,21 @@ namespace StockSharp.Algo
 		public event Action<Exception> ConnectionError;
 
 		/// <summary>
+		/// Connected.
+		/// </summary>
+		public event Action<IMessageAdapter> ConnectedEx;
+
+		/// <summary>
+		/// Disconnected.
+		/// </summary>
+		public event Action<IMessageAdapter> DisconnectedEx;
+
+		/// <summary>
+		/// Connection error (for example, the connection was aborted by server).
+		/// </summary>
+		public event Action<IMessageAdapter, Exception> ConnectionErrorEx;
+
+		/// <summary>
 		/// Dats process error.
 		/// </summary>
 		public event Action<Exception> Error;
@@ -439,7 +454,7 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// To call the event <see cref="Connector.Connected"/>.
+		/// To call the event <see cref="Connected"/>.
 		/// </summary>
 		private void RaiseConnected()
 		{
@@ -448,20 +463,34 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// To call the event <see cref="Connector.Disconnected"/>.
+		/// To call the event <see cref="ConnectedEx"/>.
+		/// </summary>
+		/// <param name="adapter">Adapter, initiated event.</param>
+		private void RaiseConnectedEx(IMessageAdapter adapter)
+		{
+			ConnectedEx?.Invoke(adapter);
+		}
+
+		/// <summary>
+		/// To call the event <see cref="Disconnected"/>.
 		/// </summary>
 		private void RaiseDisconnected()
 		{
-			// адаптеры маркет-данных сами должны оповещать коннектор
-			//if (!IsMarketDataIndependent)
-			//	RaiseExportStopped();
-
 			ConnectionState = ConnectionStates.Disconnected;
 			Disconnected?.Invoke();
 		}
 
 		/// <summary>
-		/// To call the event <see cref="Connector.ConnectionError"/>.
+		/// To call the event <see cref="DisconnectedEx"/>.
+		/// </summary>
+		/// <param name="adapter">Adapter, initiated event.</param>
+		private void RaiseDisconnectedEx(IMessageAdapter adapter)
+		{
+			DisconnectedEx?.Invoke(adapter);
+		}
+
+		/// <summary>
+		/// To call the event <see cref="ConnectionError"/>.
 		/// </summary>
 		/// <param name="exception">Error connection.</param>
 		private void RaiseConnectionError(Exception exception)
@@ -469,14 +498,23 @@ namespace StockSharp.Algo
 			if (exception == null)
 				throw new ArgumentNullException(nameof(exception));
 
-			// адаптеры маркет-данных сами должны оповещать коннектор
-			//if (!IsMarketDataIndependent)
-			//	RaiseExportError(exception);
-
 			ConnectionState = ConnectionStates.Failed;
 			ConnectionError?.Invoke(exception);
 
 			this.AddErrorLog(exception);
+		}
+
+		/// <summary>
+		/// To call the event <see cref="ConnectionErrorEx"/>.
+		/// </summary>
+		/// <param name="adapter">Adapter, initiated event.</param>
+		/// <param name="exception">Error connection.</param>
+		private void RaiseConnectionErrorEx(IMessageAdapter adapter, Exception exception)
+		{
+			if (exception == null)
+				throw new ArgumentNullException(nameof(exception));
+
+			ConnectionErrorEx?.Invoke(adapter, exception);
 		}
 
 		/// <summary>
