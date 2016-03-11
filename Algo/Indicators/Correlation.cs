@@ -51,7 +51,11 @@ namespace StockSharp.Algo.Indicators
 		{
 			base.Reset();
 
-			_source.Length = _other.Length = Length;
+			if (_source != null)
+				_source.Length = Length;
+
+			if (_other != null)
+				_other.Length = Length;
 		}
 
 		/// <summary>
