@@ -908,7 +908,7 @@ namespace StockSharp.Algo
 						oldOrder.Comment = newOrder.Comment;
 
 					InitNewOrder(newOrder);
-					_entityCache.AddOrderByCancelationId(newOrder.TransactionId, oldOrder);
+					_entityCache.AddOrderByCancelationId(oldOrder, newOrder.TransactionId);
 
 					OnReRegisterOrder(oldOrder, newOrder);
 				}
@@ -974,8 +974,8 @@ namespace StockSharp.Algo
 					InitNewOrder(newOrder1);
 					InitNewOrder(newOrder2);
 
-					_entityCache.AddOrderByCancelationId(newOrder1.TransactionId, oldOrder1);
-					_entityCache.AddOrderByCancelationId(newOrder2.TransactionId, oldOrder2);
+					_entityCache.AddOrderByCancelationId(oldOrder1, newOrder1.TransactionId);
+					_entityCache.AddOrderByCancelationId(oldOrder2, newOrder2.TransactionId);
 
 					OnReRegisterOrderPair(oldOrder1, newOrder1, oldOrder2, newOrder2);
 				}
@@ -1003,7 +1003,7 @@ namespace StockSharp.Algo
 				CheckOnOld(order);
 
 				var transactionId = TransactionIdGenerator.GetNextId();
-				_entityCache.AddOrderByCancelationId(transactionId, order);
+				_entityCache.AddOrderByCancelationId(order, transactionId);
 
 				OnCancelOrder(order, transactionId);
 			}
