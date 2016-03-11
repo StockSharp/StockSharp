@@ -41836,5 +41836,15 @@ namespace StockSharp.Localization
 		/// Heartbeat interval. Uses in Cancel On Disconnect mode.
 		/// </summary>
 		public static string CancelOnDisconnectDesc => GetString(CancelOnDisconnectDescKey);
+
+		/// <summary>
+		/// Open the window to get historical data from Finam website.
+		/// </summary>
+		public const string LoadHistoryDataQuestionKey = "LoadHistoryDataQuestion";
+
+		/// <summary>
+		/// Open the window to get historical data from Finam website.
+		/// </summary>
+		public static string LoadHistoryDataQuestion => GetString(LoadHistoryDataQuestionKey);
 	}
 }
