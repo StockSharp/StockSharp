@@ -319,6 +319,7 @@
         <Topic id="f43591c9-c215-4dee-b297-4b9ed34fd465" visible="True" title="Sterling" />
         <Topic id="c60b2dd2-518c-49e5-8ba4-edabbda04222" visible="True" title="Yahoo Finance" />
         <Topic id="1e3811a4-60e6-4f6c-bb55-0d3b3c2e246f" visible="True" title="ITCH" />
+        <Topic id="1ee210ee-a004-4277-b8f4-91cb08d651db" visible="True" isSelected="true" title="TWIME" />
       </Topic>
       <Topic id="cff9ed02-959b-4281-9e17-100eae3578f0" visible="True" noFile="true" title="Форекс" tocTitle="Форекс">
         <Topic id="bba0059b-526b-406c-ba6e-a80d6c9e4ae0" visible="True" title="Dukascopy" />
@@ -341,7 +342,7 @@
       <Topic id="01a85a46-7510-4385-b81c-348ffb3dfc46" visible="True" title="Параметры подключения" />
     </Topic>
     <Topic id="b5641d6c-cc5c-4692-a5c8-87742590a0a9" visible="True" title="Список инструментов" />
-    <Topic id="fdba9886-25e8-4462-86e6-79ad5f40d9a9" visible="True" isSelected="true" title="Просмотр и экспорт">
+    <Topic id="fdba9886-25e8-4462-86e6-79ad5f40d9a9" visible="True" title="Просмотр и экспорт">
       <Topic id="3a20fcda-25ba-4794-ac91-dfa227380530" visible="True" title="Сделки" />
       <Topic id="6126cb15-de8b-4bcc-8b81-7354e8894239" visible="True" title="Стаканы" />
       <Topic id="0adb23fa-a295-43e0-9e75-9060b1d03388" visible="True" title="Свечи" />
