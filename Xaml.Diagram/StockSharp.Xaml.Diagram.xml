@@ -1765,6 +1765,18 @@
             The method is called at re-initialisation of the diagram element state.
             </summary>
     </member>
+    <member name="M:StockSharp.Xaml.Diagram.Elements.IndicatorDiagramElement.Load(Ecng.Serialization.SettingsStorage)">
+      <summary>
+            Load settings.
+            </summary>
+      <param name="storage">Settings storage.</param>
+    </member>
+    <member name="M:StockSharp.Xaml.Diagram.Elements.IndicatorDiagramElement.Save(Ecng.Serialization.SettingsStorage)">
+      <summary>
+            Save settings.
+            </summary>
+      <param name="storage">Settings storage.</param>
+    </member>
     <member name="T:StockSharp.Xaml.Diagram.Elements.LogicalConditionDiagramElement">
       <summary>
             Logical condition element.

@@ -2604,6 +2604,21 @@
             Connection error (for example, the connection was aborted by server).
             </summary>
     </member>
+    <member name="E:StockSharp.Xaml.GuiConnector`1.ConnectedEx">
+      <summary>
+            Connected.
+            </summary>
+    </member>
+    <member name="E:StockSharp.Xaml.GuiConnector`1.DisconnectedEx">
+      <summary>
+            Disconnected.
+            </summary>
+    </member>
+    <member name="E:StockSharp.Xaml.GuiConnector`1.ConnectionErrorEx">
+      <summary>
+            Connection error (for example, the connection was aborted by server).
+            </summary>
+    </member>
     <member name="E:StockSharp.Xaml.GuiConnector`1.Error">
       <summary>
             Dats process error.
