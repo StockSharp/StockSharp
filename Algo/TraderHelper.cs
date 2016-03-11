@@ -3616,14 +3616,14 @@ namespace StockSharp.Algo
 		/// </summary>
 		/// <param name="security">Security.</param>
 		/// <returns>Type in ISO 10962 standard.</returns>
-		public static string GetIso10962(this Security security)
+		public static string Iso10962(this SecurityMessage security)
 		{
 			if (security == null)
 				throw new ArgumentNullException(nameof(security));
 
 			// https://en.wikipedia.org/wiki/ISO_10962
 
-			switch (security.Type)
+			switch (security.SecurityType)
 			{
 				case SecurityTypes.Stock:
 					return "ESXXXX";
@@ -3679,17 +3679,17 @@ namespace StockSharp.Algo
 		/// <summary>
 		/// To convert the type in the ISO 10962 standard into <see cref="SecurityTypes"/>.
 		/// </summary>
-		/// <param name="type">Type in ISO 10962 standard.</param>
+		/// <param name="cfi">Type in ISO 10962 standard.</param>
 		/// <returns>Security type.</returns>
-		public static SecurityTypes? FromIso10962(string type)
+		public static SecurityTypes? Iso10962ToSecurityType(this string cfi)
 		{
-			if (type.IsEmpty())
-				throw new ArgumentNullException(nameof(type));
+			if (cfi.IsEmpty())
+				throw new ArgumentNullException(nameof(cfi));
 
-			if (type.Length != 6)
-				throw new ArgumentOutOfRangeException(nameof(type), type, LocalizedStrings.Str2117);
+			if (cfi.Length != 6)
+				throw new ArgumentOutOfRangeException(nameof(cfi), cfi, LocalizedStrings.Str2117);
 
-			switch (type[0])
+			switch (cfi[0])
 			{
 				case 'E':
 					return SecurityTypes.Stock;
@@ -3705,7 +3705,7 @@ namespace StockSharp.Algo
 
 				case 'F':
 				{
-					switch (type[2])
+					switch (cfi[2])
 					{
 						case 'W':
 							return SecurityTypes.Swap;
@@ -3720,11 +3720,11 @@ namespace StockSharp.Algo
 
 				case 'M':
 				{
-					switch (type[1])
+					switch (cfi[1])
 					{
 						case 'R':
 						{
-							switch (type[2])
+							switch (cfi[2])
 							{
 								case 'I':
 									return SecurityTypes.Index;
@@ -3741,7 +3741,7 @@ namespace StockSharp.Algo
 
 						case 'M':
 						{
-							switch (type[2])
+							switch (cfi[2])
 							{
 								case 'B':
 									return SecurityTypes.CryptoCurrency;
@@ -3768,6 +3768,35 @@ namespace StockSharp.Algo
 			}
 
 			return null;
+		}
+
+		/// <summary>
+		/// To convert the type in the ISO 10962 standard into <see cref="OptionTypes"/>.
+		/// </summary>
+		/// <param name="cfi">Type in ISO 10962 standard.</param>
+		/// <returns>Option type.</returns>
+		public static OptionTypes? Iso10962ToOptionType(this string cfi)
+		{
+			if (cfi.IsEmpty())
+				throw new ArgumentNullException(nameof(cfi));
+
+			if (cfi[0] != 'O')
+				throw new ArgumentOutOfRangeException(nameof(cfi), LocalizedStrings.Str1604Params.Put(cfi));
+
+			if (cfi.Length < 2)
+				throw new ArgumentOutOfRangeException(nameof(cfi), LocalizedStrings.Str1605Params.Put(cfi));
+
+			switch (cfi[1])
+			{
+				case 'C':
+					return OptionTypes.Call;
+				case 'P':
+					return OptionTypes.Put;
+				case ' ':
+					return null;
+				default:
+					throw new ArgumentOutOfRangeException(nameof(cfi), LocalizedStrings.Str1606Params.Put(cfi));
+			}
 		}
 
 		/// <summary>

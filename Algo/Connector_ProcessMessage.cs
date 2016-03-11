@@ -292,7 +292,7 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// To call the <see cref="Connector.Connected"/> event when the first adapter connects to <see cref="Connector.Adapter"/>.
+		/// To call the <see cref="Connected"/> event when the first adapter connects to <see cref="Adapter"/>.
 		/// </summary>
 		protected virtual bool RaiseConnectedOnFirstAdapter => true;
 
@@ -795,6 +795,8 @@ namespace StockSharp.Algo
 								}
 							}
 
+							RaiseConnectedEx(adapter);
+
 							if (adapter.PortfolioLookupRequired)
 								SendInMessage(new PortfolioLookupMessage { TransactionId = TransactionIdGenerator.GetNextId() });
 
@@ -825,6 +827,8 @@ namespace StockSharp.Algo
 							}
 							else
 								RaiseError(message.Error);
+
+							RaiseConnectionErrorEx(adapter, message.Error);
 						}
 					}
 					else
@@ -836,6 +840,8 @@ namespace StockSharp.Algo
 							RaiseConnectionError(new InvalidOperationException(LocalizedStrings.Str683, message.Error));
 						else
 							RaiseError(message.Error);
+
+						RaiseConnectionErrorEx(adapter, message.Error);
 					}
 
 					return;
@@ -853,6 +859,8 @@ namespace StockSharp.Algo
 							RaiseConnectionError(error);
 						else
 							RaiseError(error);
+
+						RaiseConnectionErrorEx(adapter, message.Error);
 					}
 					else
 					{
@@ -865,6 +873,8 @@ namespace StockSharp.Algo
 							// raise Disconnected only one time for the last adapter
 							if (isLast)
 								RaiseDisconnected();
+
+							RaiseDisconnectedEx(adapter);
 						}
 						else
 						{
@@ -875,6 +885,8 @@ namespace StockSharp.Algo
 								RaiseConnectionError(message.Error);
 							else
 								RaiseError(message.Error);
+
+							RaiseConnectionErrorEx(adapter, message.Error);
 						}
 					}
 
@@ -885,7 +897,9 @@ namespace StockSharp.Algo
 					if (isConnect && message.Error != null)
 					{
 						_adapterStates[adapter] = ConnectionStates.Failed;
-						RaiseConnectionError(new InvalidOperationException(LocalizedStrings.Str683, message.Error));
+						var error = new InvalidOperationException(LocalizedStrings.Str683, message.Error);
+						RaiseConnectionError(error);
+						RaiseConnectionErrorEx(adapter, error);
 						return;
 					}
 
@@ -902,7 +916,9 @@ namespace StockSharp.Algo
 			}
 
 			// так как соединение установлено, то выдаем ошибку через Error, чтобы не сбрасывать состояние
-			RaiseError(new InvalidOperationException(LocalizedStrings.Str685Params.Put(state, message.GetType().Name), message.Error));
+			var error2 = new InvalidOperationException(LocalizedStrings.Str685Params.Put(state, message.GetType().Name), message.Error);
+			RaiseError(error2);
+			RaiseConnectionErrorEx(adapter, error2);
 		}
 
 		private void ProcessSessionMessage(SessionMessage message)
