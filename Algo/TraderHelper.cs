@@ -4084,5 +4084,32 @@ namespace StockSharp.Algo
 		{
 			return date == DateTimeOffset.MaxValue;
 		}
+
+		/// <summary>
+		/// Extract <see cref="TimeInForce"/> from bits flag.
+		/// </summary>
+		/// <param name="status">Bits flag.</param>
+		/// <returns><see cref="TimeInForce"/>.</returns>
+		public static TimeInForce? GetPlazaTimeInForce(this long status)
+		{
+			if (status.HasBits(0x01))
+				return TimeInForce.PutInQueue;
+			else if (status.HasBits(0x02))
+				return TimeInForce.CancelBalance;
+			else if (status.HasBits(0x00080000))
+				return TimeInForce.MatchOrCancel;
+
+			return null;
+		}
+
+		/// <summary>
+		/// Extract system attribute from the bits flag.
+		/// </summary>
+		/// <param name="status">Bits flag.</param>
+		/// <returns><see langword="true"/> if an order is system, otherwise, <see langword="false"/>.</returns>
+		public static bool IsSystem(this long status)
+		{
+			return !status.HasBits(0x04);
+		}
 	}
 }
