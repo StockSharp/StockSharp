@@ -109,6 +109,10 @@
       <Project>{7EABA894-FC98-4F5E-A212-C40550260886}</Project>
       <Name>Plaza</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\Twime\Twime.csproj">
+      <Project>{2C3ADA93-249E-4EEB-A1B7-CE5DA8DC4E33}</Project>
+      <Name>Twime</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\StockSharpApps\Xaml.Charting\Xaml.Charting.csproj">
       <Project>{c449d618-dea4-41c3-ba86-9f827c7421dc}</Project>
       <Name>Xaml.Charting</Name>

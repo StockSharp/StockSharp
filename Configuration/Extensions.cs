@@ -60,6 +60,7 @@ namespace StockSharp.Configuration
 	using StockSharp.SmartCom;
 	using StockSharp.Sterling;
 	using StockSharp.Transaq;
+	using StockSharp.Twime;
 	using StockSharp.Xaml;
 	using StockSharp.Xaml.Charting;
 	using StockSharp.Xaml.Charting.IndicatorPainters;
@@ -176,6 +177,7 @@ namespace StockSharp.Configuration
 			AddConnectorInfo(wnd, typeof(SmartComMessageAdapter));
 			AddConnectorInfo(wnd, typeof(SterlingMessageAdapter));
 			AddConnectorInfo(wnd, typeof(TransaqMessageAdapter));
+			AddConnectorInfo(wnd, typeof(TwimeMessageAdapter));
 
 			wnd.Adapter = (BasketMessageAdapter)adapter.Clone();
 			wnd.AutoConnect = autoConnect;

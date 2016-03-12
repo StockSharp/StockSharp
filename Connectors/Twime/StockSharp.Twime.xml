@@ -1,0 +1,62 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>StockSharp.Twime</name>
+    </assembly>
+    <members>
+        <member name="T:StockSharp.Twime.TwimeMessageAdapter">
+            <summary>
+            The messages adapter for TWIME protocol.
+            </summary>
+        </member>
+        <member name="M:StockSharp.Twime.TwimeMessageAdapter.#ctor(Ecng.Common.IdGenerator)">
+            <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Twime.TwimeMessageAdapter"/>.
+            </summary>
+            <param name="transactionIdGenerator">Transaction id generator.</param>
+        </member>
+        <member name="P:StockSharp.Twime.TwimeMessageAdapter.TransactionAddress">
+            <summary>
+            Адрес транзакционного сервера. По-умолчанию значение равно адресу локального компьютера 91.208.232.244:9000.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Twime.TwimeMessageAdapter.RecoveryAddress">
+            <summary>
+            Адрес сервера восстановления. По-умолчанию значение равно адресу локального компьютера 91.208.232.244:9001.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Twime.TwimeMessageAdapter.Login">
+            <summary>
+            Login.
+            </summary>
+        </member>
+        <member name="M:StockSharp.Twime.TwimeMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)">
+            <summary>
+            Send message.
+            </summary>
+            <param name="message">Message.</param>
+        </member>
+        <member name="M:StockSharp.Twime.TwimeMessageAdapter.Save(Ecng.Serialization.SettingsStorage)">
+            <summary>
+            Save settings.
+            </summary>
+            <param name="storage">Settings storage.</param>
+        </member>
+        <member name="M:StockSharp.Twime.TwimeMessageAdapter.Load(Ecng.Serialization.SettingsStorage)">
+            <summary>
+            Load settings.
+            </summary>
+            <param name="storage">Settings storage.</param>
+        </member>
+        <member name="T:StockSharp.Twime.TwimeTrader">
+            <summary>
+            The interface <see cref="T:StockSharp.BusinessEntities.IConnector"/> implementation which provides a connection to the MOEX via TWIME protocol.
+            </summary>
+        </member>
+        <member name="M:StockSharp.Twime.TwimeTrader.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Twime.TwimeTrader"/>.
+            </summary>
+        </member>
+    </members>
+</doc>

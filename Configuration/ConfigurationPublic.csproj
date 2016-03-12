@@ -142,6 +142,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Connectors\Transaq\StockSharp.Transaq.dll</HintPath>
     </Reference>
+    <Reference Include="StockSharp.Twime, Version=4.3.14.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Connectors\Twime\StockSharp.Twime.dll</HintPath>
+    </Reference>
     <Reference Include="StockSharp.Xaml, Version=4.3.14.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Xaml\StockSharp.Xaml.dll</HintPath>
