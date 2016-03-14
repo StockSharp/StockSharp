@@ -858,7 +858,7 @@ namespace StockSharp.Algo.Testing
 					var reply = CreateReply(order, time);
 
 					reply.OrderState = OrderStates.Failed;
-					reply.OrderStatus = OrderStatus.RejectedBySystem;
+					reply.OrderStatus = (long?)OrderStatus.RejectedBySystem;
 					reply.Error = new InvalidOperationException(matchError);
 
 					result.Add(reply);

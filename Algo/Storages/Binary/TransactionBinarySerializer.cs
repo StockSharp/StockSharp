@@ -374,7 +374,7 @@ namespace StockSharp.Algo.Storages.Binary
 
 				writer.WriteNullableInt(msg.OrderType);
 				writer.WriteNullableInt(msg.OrderState);
-				writer.WriteNullableInt(msg.OrderStatus);
+				writer.WriteNullableLong(msg.OrderStatus);
 				writer.WriteNullableInt(msg.TradeStatus);
 				writer.WriteNullableInt(msg.TimeInForce);
 
@@ -487,7 +487,7 @@ namespace StockSharp.Algo.Storages.Binary
 
 			var type = reader.ReadNullableInt<OrderTypes>();
 			var state = reader.ReadNullableInt<OrderStates>();
-			var status = reader.ReadNullableInt<OrderStatus>();
+			var status = reader.ReadNullableLong();
 			var tradeStatus = reader.ReadNullableInt<int>();
 			var timeInForce = reader.ReadNullableInt<TimeInForce>();
 

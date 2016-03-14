@@ -417,5 +417,24 @@ namespace StockSharp.Algo.Storages.Binary
 
 			return reader.ReadInt().To<T?>();
 		}
+
+		public static void WriteNullableLong(this BitArrayWriter writer, long? value)
+		{
+			if (value == null)
+				writer.Write(false);
+			else
+			{
+				writer.Write(true);
+				writer.WriteLong(value.Value);
+			}
+		}
+
+		public static long? ReadNullableLong(this BitArrayReader reader)
+		{
+			if (!reader.Read())
+				return null;
+
+			return reader.ReadLong();
+		}
 	}
 }

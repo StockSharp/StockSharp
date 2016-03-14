@@ -149,7 +149,7 @@ namespace StockSharp.Algo.Storages.Csv
 				Position = reader.ReadNullableDecimal(),
 				Slippage = reader.ReadNullableDecimal(),
 				TradeStatus = reader.ReadNullableInt(),
-				OrderStatus = reader.ReadNullableEnum<OrderStatus>(),
+				OrderStatus = reader.ReadNullableLong(),
 				Latency = reader.ReadNullableLong().To<TimeSpan?>(),
 			};
 

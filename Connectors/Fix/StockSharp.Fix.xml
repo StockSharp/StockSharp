@@ -4495,10 +4495,6 @@
       <summary>
       </summary>
     </member>
-    <member name="F:StockSharp.Fix.Native.FixTags.MarketSegmentID">
-      <summary>
-      </summary>
-    </member>
     <member name="F:StockSharp.Fix.Native.FixTags.MDOtherValue">
       <summary>
       </summary>

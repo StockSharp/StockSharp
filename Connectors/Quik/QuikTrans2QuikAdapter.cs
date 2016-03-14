@@ -322,7 +322,7 @@ namespace StockSharp.Quik
 					if ((!isMatchOrCancel && status != OrderStatus.Accepted) || (isMatchOrCancel && !TransactionHelper.IfFOKCancelMessage(apiMessage) && orderId == 0))
 						throw new InvalidOperationException(LocalizedStrings.Str1836Params.Put(transactionTxt, apiMessage));
 
-					execution.OrderStatus = status;
+					execution.OrderStatus = (long)status;
 					execution.SystemComment = apiMessage;
 
 					if (isRegistering)
@@ -477,7 +477,7 @@ namespace StockSharp.Quik
 				orderMessage.SystemComment = message;
 
 				if (!isCancelFailed)
-					orderMessage.OrderStatus = status;
+					orderMessage.OrderStatus = (long)status;
 
 				ProcessTransactionReply(orderMessage, builder, orderId, message, replyCode, exception);
 			}
