@@ -15,6 +15,12 @@
             </summary>
             <param name="transactionIdGenerator">Transaction id generator.</param>
         </member>
+        <member name="M:StockSharp.Twime.TwimeMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)">
+            <summary>
+            Send message.
+            </summary>
+            <param name="message">Message.</param>
+        </member>
         <member name="P:StockSharp.Twime.TwimeMessageAdapter.TransactionAddress">
             <summary>
             Адрес транзакционного сервера. По-умолчанию значение равно адресу локального компьютера 91.208.232.244:9000.
@@ -29,12 +35,6 @@
             <summary>
             Login.
             </summary>
-        </member>
-        <member name="M:StockSharp.Twime.TwimeMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)">
-            <summary>
-            Send message.
-            </summary>
-            <param name="message">Message.</param>
         </member>
         <member name="M:StockSharp.Twime.TwimeMessageAdapter.Save(Ecng.Serialization.SettingsStorage)">
             <summary>
@@ -56,6 +56,21 @@
         <member name="M:StockSharp.Twime.TwimeTrader.#ctor">
             <summary>
             Initializes a new instance of the <see cref="T:StockSharp.Twime.TwimeTrader"/>.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Twime.TwimeTrader.TransactionAddress">
+            <summary>
+            Адрес транзакционного сервера. По-умолчанию значение равно адресу локального компьютера 91.208.232.244:9000.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Twime.TwimeTrader.RecoveryAddress">
+            <summary>
+            Адрес сервера восстановления. По-умолчанию значение равно адресу локального компьютера 91.208.232.244:9001.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Twime.TwimeTrader.Login">
+            <summary>
+            Login.
             </summary>
         </member>
     </members>
