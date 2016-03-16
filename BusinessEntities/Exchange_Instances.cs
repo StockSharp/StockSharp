@@ -36,6 +36,14 @@ namespace StockSharp.BusinessEntities
 				CountryCode = CountryCodes.RU,
 			};
 
+			Spb = new Exchange
+			{
+				Name = "SPB",
+				RusName = "Санкт-Петербургская биржа",
+				EngName = "Saint-Petersburg Exchange",
+				CountryCode = CountryCodes.RU,
+			};
+
 			Ux = new Exchange
 			{
 				Name = "UX",
@@ -406,6 +414,11 @@ namespace StockSharp.BusinessEntities
 		/// Information about MOEX (Moscow Exchange).
 		/// </summary>
 		public static Exchange Moex { get; private set; }
+
+		/// <summary>
+		/// Saint-Petersburg Exchange (SPB).
+		/// </summary>
+		public static Exchange Spb { get; private set; }
 
 		/// <summary>
 		/// Information about UX.
