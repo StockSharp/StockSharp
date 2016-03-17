@@ -37,7 +37,7 @@
 	
 	<para>
 	Кроме того в состав <token>stocksharp</token> входят два типа графиков для анализа объемов
-	<link xlink:href="78adcfb5-7c77-4f08-bed0-41c5eb2fd4ce">BoxChart</link> и <link xlink:href="96f4c342-1d2f-4e0d-9352-5452643df5ab">ClasterChart</link>.
+	<link xlink:href="78adcfb5-7c77-4f08-bed0-41c5eb2fd4ce">BoxChart</link> и <link xlink:href="96f4c342-1d2f-4e0d-9352-5452643df5ab">ClusterChart</link>.
 	</para>
 	
 	<para>
@@ -65,7 +65,7 @@
 		
 		<list class="bullet">
   			<listItem>
-  				<para><codeEntityReference>P:StockSharp.Xaml.Charting.Chart.Areas</codeEntityReference> - список областей <legacyBold>ChartArea</legacyBold>.</para>
+  				<para><codeEntityReference>P:StockSharp.Xaml.Charting.Chart.Areas</codeEntityReference> - список областей <codeEntityReference>T:StockSharp.Xaml.Charting.ChartArea</codeEntityReference>.</para>
   			</listItem>
   			<listItem>
   				<para><codeEntityReference>P:StockSharp.Xaml.Charting.Chart.ChartTheme</codeEntityReference> - тема компонента.</para>
@@ -89,10 +89,10 @@
   				<para><codeEntityReference>P:StockSharp.Xaml.Charting.Chart.ShowLegend</codeEntityReference> - включить/выключить отображение легенды.</para>
   			</listItem>
   			<listItem>
-  				<para><codeEntityReference>P:StockSharp.Xaml.Charting.Chart.ShowOverview</codeEntityReference> - включить/выключить отображение области предпросмотра <legacyBold>OverView</legacyBold>.</para>
+  				<para><codeEntityReference>P:StockSharp.Xaml.Charting.Chart.ShowOverview</codeEntityReference> - включить/выключить отображение области предпросмотра <legacyItalic>OverView</legacyItalic>.</para>
   			</listItem>
   			<listItem>
-  				<para><codeEntityReference>M:StockSharp.Xaml.Charting.IChart.AddArea(StockSharp.Xaml.Charting.ChartArea)</codeEntityReference> - добавить <legacyBold>ChartArea</legacyBold>.</para>
+  				<para><codeEntityReference>M:StockSharp.Xaml.Charting.IChart.AddArea(StockSharp.Xaml.Charting.ChartArea)</codeEntityReference> - добавить <codeEntityReference>T:StockSharp.Xaml.Charting.ChartArea</codeEntityReference>.</para>
   			</listItem>
   			<listItem>
   				<para><codeEntityReference>Overload:StockSharp.Xaml.Charting.IChart.AddElement</codeEntityReference> - добавить элемент серии данных. Имеет несколько перегрузок.</para>

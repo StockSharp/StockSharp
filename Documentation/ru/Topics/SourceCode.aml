@@ -19,14 +19,44 @@
   			<para>Продукты сторонних разработчиков с ограничениями лицензии выложены без исходных кодов.</para>
   		</listItem>
   		<listItem>
-  			<para>Платные компоненты (коннекторы  <link xlink:href="7eda6d74-d3b8-4fe5-b6a3-fab60e441daf">Plaza</link>, <link xlink:href="61692ace-225e-4ecc-845a-504021d59a8f">Micex</link>, <link xlink:href="29dfad18-ac49-4cf4-993c-c32d62101fff">FIX</link> и др.) - доступны по <link xlink:href="ba149b22-2024-4479-aaf3-8dd271a681f5">корпоративной лицензии</link>.</para>
+  			<para><legacyBold>Платные компоненты (исходные коды)</legacyBold></para>
+			<list class="bullet">
+  				<listItem>
+  					<para><legacyBold>Plaza 2 CGate</legacyBold> - коннектор для прямого подключения к торгам к секции Срочного рынка на Московской бирже по протоколу Plaza2 Cgate.</para>
+  				</listItem>
+  				<listItem>
+  					<para><legacyBold>Micex TEAP</legacyBold> - коннектор для прямого подключения к торгам к секции Фондового рынка на Московской бирже по протоколу TEAP.</para>
+  				</listItem>
+  				<listItem>
+  					<para><legacyBold>ITCH</legacyBold> - коннектор для прямого подключения к торгам на биржах LSE и/или NASDAQ по протоколу ITCH.</para>
+  				</listItem>
+  				<listItem>
+  					<para><legacyBold>FIX/FAST</legacyBold> - коннектор для прямого подключения к торгам на Московской бирже по протоколу FIX/FAST.</para>
+  				</listItem>
+  				<listItem>
+  					<para><legacyBold>TWIME</legacyBold> - .........</para>
+  				</listItem>
+  				<listItem>
+  					<para><legacyBold>S#.Shell</legacyBold> - готовый каркас торгового робота.</para>
+  				</listItem>
+  				<listItem>
+  					<para><legacyBold>S#.Data</legacyBold> - программа автоматической загрузки и хранения маркет-данных.</para>
+  				</listItem>
+  				<listItem>
+  					<para><legacyBold>S#.Designer</legacyBold> - визуальный дизайнер торговых стратегий.</para>
+  				</listItem>
+			</list>
  		</listItem>
 	</list>
-
+  			<para>Платные компоненты доступны по <link xlink:href="ba149b22-2024-4479-aaf3-8dd271a681f5">корпоративной лицензии</link>.
+  			Подробную информацию о стоимости продуктов StockSharp см. <externalLink>
+			<linkText>Стоимость лицензий StockSharp</linkText>
+			<linkAlternateText>Стоимость лицензий</linkAlternateText>
+			<linkUri>http://stocksharp.ru/products/pricing/</linkUri>
+			<linkTarget>_blank</linkTarget>
+			</externalLink>.
+  			</para>
    </introduction>
-    
-    
-    
     
     <relatedTopics>
      	<externalLink>

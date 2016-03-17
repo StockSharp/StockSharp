@@ -3,7 +3,7 @@
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     <introduction>
       <para>
-       <legacyBold>BoxChart</legacyBold> - специальный тип графика, предназначенный для отображения объемов в виде сетки цифр.
+       BoxChart - специальный тип графика, предназначенный для отображения объемов в виде сетки цифр.
        Для использования этого типа графика необходимо задать специальный стиль 
        <codeEntityReference qualifyHint="true">P:StockSharp.Xaml.Charting.ChartCandleElement.DrawStyle</codeEntityReference> = 
        <codeEntityReference qualifyHint="true">F:StockSharp.Xaml.Charting.ChartCandleDrawStyles.BoxVolume</codeEntityReference>

@@ -25,13 +25,13 @@
 </alert>
 <para>
 	В <token>stocksharp</token> для работы с <token>itch</token> необходимо использовать 
-			<codeEntityReference>T:StockSharp.ITCH.ITCHTrader</codeEntityReference>.
+			<codeEntityReference>T:StockSharp.ITCH.ItchTrader</codeEntityReference>.
 
 </para>
       
     </introduction>
      <relatedTopics>
-    	<link xlink:href="ca67819a-60b8-42f0-a512-ad0792d544f2">Пример работы с ITCHTrader</link>
+    	<link xlink:href="ca67819a-60b8-42f0-a512-ad0792d544f2">Пример работы с ItchTrader</link>
     </relatedTopics>
   </developerConceptualDocument>
 </topic>
