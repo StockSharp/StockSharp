@@ -1894,10 +1894,6 @@
       <ImageId>strategylogging</ImageId>
       <AlternateText>Логирование стратегий.</AlternateText>
     </Image>
-    <Image Include="Art\strategy_monitor.png">
-      <ImageId>strategymonitor</ImageId>
-      <AlternateText>Мониторинг стратегий.</AlternateText>
-    </Image>
     <Image Include="Art\platform_independency.png">
       <ImageId>platformindep</ImageId>
       <AlternateText>Макет платформо-независимого робота.</AlternateText>

@@ -44,13 +44,7 @@
 		<para>По этому пути будут созданы папки с названиями, равные
 		<link xlink:href="34a9c518-60ca-45c0-a118-5e2e42165efa">идентификаторам инструментов</link>
 		(для каждого инструмента отдельная папка).</para>
-
-		<alert class="note">
-  			<para>Если у <codeEntityReference qualifyHint="false">T:StockSharp.Algo.Storages.LocalMarketDataDrive</codeEntityReference> свойство 
-			<codeEntityReference qualifyHint="true">P:StockSharp.Algo.Storages.LocalMarketDataDrive.UseAlphabeticPath</codeEntityReference> = <legacyBold>true</legacyBold>,
-			то папки с названиями инструментов будут создаваться внутри алфавитной папки, имя которой берется из первой буквы инструмента.</para>
-		</alert>
-		
+				
 		<para>Внутри каждой такой папки будут созданы подпапки, обозначающие даты маркет-данных. Например, если сохранять
 		тиковые сделки за период 3 дня, то для них будут созданы 3 отдельные папки с датами. Формат названия папки всегда фиксирован и равен yyyy_MM_dd. </para>
 		
@@ -59,9 +53,6 @@
 		<link xlink:href="cd52cfcf-938c-4fce-9a56-4e9a001f0792">свечки</link>
 		разных типов (название файла указывает на тип и параметр свечек) и файлы <legacyItalic>orderLog.bin</legacyItalic> в которых хранится ордер лог.</para>
 		
-		<para>
-		<codeEntityReference qualifyHint="true">P:StockSharp.Algo.Storages.LocalMarketDataDrive.UseAlphabeticPath</codeEntityReference>
-		</para>
 	</introduction>
 
 	<procedure>
