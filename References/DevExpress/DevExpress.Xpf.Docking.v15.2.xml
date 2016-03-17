@@ -3261,7 +3261,8 @@ This is a dependency property.
         </member>
         <member name="F:DevExpress.Xpf.Docking.LayoutPanel.IsCollapseButtonVisibleProperty">
             <summary>
-                <para> </para>
+                <para>For internal use.
+</para>
             </summary>
             <returns> </returns>
 
@@ -3269,7 +3270,8 @@ This is a dependency property.
         </member>
         <member name="F:DevExpress.Xpf.Docking.LayoutPanel.IsExpandButtonVisibleProperty">
             <summary>
-                <para> </para>
+                <para>For internal use.
+</para>
             </summary>
             <returns> </returns>
 
@@ -3277,7 +3279,8 @@ This is a dependency property.
         </member>
         <member name="F:DevExpress.Xpf.Docking.LayoutPanel.IsHideButtonVisibleProperty">
             <summary>
-                <para> </para>
+                <para>For internal use.
+</para>
             </summary>
             <returns> </returns>
 
@@ -4017,12 +4020,15 @@ This is a dependency property.
         </member>
         <member name="M:DevExpress.Xpf.Docking.FloatGroup.GetSizeToContent(System.Windows.DependencyObject)">
             <summary>
-                <para> </para>
+                <para>Returns the <see cref="P:DevExpress.Xpf.Docking.FloatGroup.SizeToContent"/> property value for a specific object.
+</para>
             </summary>
             <param name="target">
-		 
+		A <b>DependencyObject</b> whose <see cref="P:DevExpress.Xpf.Docking.FloatGroup.SizeToContent"/> property value should be returned. 
+
             </param>
-            <returns> </returns>
+            <returns>An <b>Object</b> representing the <see cref="P:DevExpress.Xpf.Docking.FloatGroup.SizeToContent"/> property value assigned to the specified <b>DependencyObject</b>. <b>null</b> (<b>Nothing</b> in VB) if no value is assigned. 
+</returns>
 
 
         </member>
@@ -4088,13 +4094,16 @@ This is a dependency property.
         </member>
         <member name="M:DevExpress.Xpf.Docking.FloatGroup.SetSizeToContent(System.Windows.DependencyObject,System.Windows.SizeToContent)">
             <summary>
-                <para> </para>
+                <para>Sets the value of the <see cref="P:DevExpress.Xpf.Docking.FloatGroup.SizeToContent"/> attached property for a specific object.
+</para>
             </summary>
             <param name="target">
-		 
+		A <b>DependencyObject</b> whose <see cref="P:DevExpress.Xpf.Docking.FloatGroup.SizeToContent"/> attached property is to be set.
+
             </param>
             <param name="value">
-		 
+		A new value of the <see cref="P:DevExpress.Xpf.Docking.FloatGroup.SizeToContent"/> attached property for the specified object.
+
             </param>
 
 
@@ -4111,15 +4120,18 @@ This is a dependency property.
         </member>
         <member name="P:DevExpress.Xpf.Docking.FloatGroup.SizeToContent">
             <summary>
-                <para> </para>
+                <para>Gets or sets whether a panel will automatically size itself to fit the size of its content. This is an attached property.
+</para>
             </summary>
-            <value> </value>
+            <value>A <see cref="T:System.Windows.SizeToContent"/> enumeration value that specifies whether a panel will automatically size itself to fit the size of its content.
+</value>
 
 
         </member>
         <member name="F:DevExpress.Xpf.Docking.FloatGroup.SizeToContentProperty">
             <summary>
-                <para> </para>
+                <para>Identifies the  attached property.
+</para>
             </summary>
             <returns> </returns>
 
@@ -6458,36 +6470,43 @@ This is a dependency property.
         </member>
         <member name="M:DevExpress.Xpf.Docking.DocumentGroup.GetPinLocation(System.Windows.DependencyObject)">
             <summary>
-                <para> </para>
+                <para>Returns a value indicating where the pinned tabbed <see cref="T:DevExpress.Xpf.Docking.DocumentPanel"/> is located.
+</para>
             </summary>
             <param name="obj">
-		 
+		An object for which the <b>PinLocation</b> attached property's value must be returned.
+
             </param>
-            <returns> </returns>
+            <returns>A value that specifies where the pinned tabbed DocumentPanel is located. 
+</returns>
 
 
         </member>
         <member name="M:DevExpress.Xpf.Docking.DocumentGroup.GetPinned(System.Windows.DependencyObject)">
             <summary>
-                <para>Returns a value indicating whether or not the DocumentGroup window is pinned.
+                <para>Returns a value indicating whether or not the tabbed <see cref="T:DevExpress.Xpf.Docking.DocumentPanel"/> is pinned.
 </para>
             </summary>
             <param name="obj">
-		 
+		An object for which the <b>Pinned</b> attached property's value must be returned.
+
             </param>
-            <returns><b>true</b> if the DocumentGroup window is pinned; otherwise, <b>false</b>.
+            <returns><b>true</b>, if the tabbed <see cref="T:DevExpress.Xpf.Docking.DocumentPanel"/> is pinned; otherwise, <b>false</b>.
 </returns>
 
 
         </member>
         <member name="M:DevExpress.Xpf.Docking.DocumentGroup.GetShowPinButton(System.Windows.DependencyObject)">
             <summary>
-                <para> </para>
+                <para>Returns a value indicating whether or not the Pin button on the tabbed <see cref="T:DevExpress.Xpf.Docking.DocumentPanel"/> is visible.
+</para>
             </summary>
             <param name="obj">
-		 
+		An object for which the <b>ShowPinButton</b> attached property's value must be returned.
+
             </param>
-            <returns> </returns>
+            <returns><b>true</b>, if the tabbed <see cref="T:DevExpress.Xpf.Docking.DocumentPanel"/> is pinned; otherwise, <b>false</b>.
+</returns>
 
 
         </member>
@@ -6544,10 +6563,11 @@ This is a dependency property.
         </member>
         <member name="P:DevExpress.Xpf.Docking.DocumentGroup.PinLocation(System.Windows.DependencyObject)">
             <summary>
-                <para>This is an attached and a dependency property.
+                <para>Specifies where the pinned tabbed <see cref="T:DevExpress.Xpf.Docking.DocumentPanel"/> is located. This is an attached and a dependency property.
 </para>
             </summary>
-            <value> </value>
+            <value>A <see cref="TabHeaderPinLocation"/> object that specifies where the pinned tabbed <see cref="T:DevExpress.Xpf.Docking.DocumentPanel"/> is located.
+</value>
 
 
         </member>
@@ -6565,9 +6585,10 @@ This is a dependency property.
             <summary>
                 <para>Gets or sets whether or not the tabbed <see cref="T:DevExpress.Xpf.Docking.DocumentPanel"/> is currently pinned.
 This is an attached and a dependency property.
+
 </para>
             </summary>
-            <value><b>true</b> if the tabbed <see cref="T:DevExpress.Xpf.Docking.DocumentPanel"/> is currently pinned; otherwise, <b>false</b>.
+            <value><b>true</b>, if the tabbed <see cref="T:DevExpress.Xpf.Docking.DocumentPanel"/> is currently pinned; otherwise, <b>false</b>.
 </value>
 
 
@@ -6584,27 +6605,31 @@ This is an attached and a dependency property.
         </member>
         <member name="M:DevExpress.Xpf.Docking.DocumentGroup.SetPinLocation(System.Windows.DependencyObject,DevExpress.Xpf.Layout.Core.TabHeaderPinLocation)">
             <summary>
-                <para> </para>
+                <para>Set a value indicating where the pinned tabbed <see cref="T:DevExpress.Xpf.Docking.DocumentPanel"/> is located.
+</para>
             </summary>
             <param name="obj">
-		 
+		An object for which the <b>PinLocation</b> attached property's value is set.
+
             </param>
             <param name="value">
-		 
+		A value that specifies where the pinned tabbed <see cref="T:DevExpress.Xpf.Docking.DocumentPanel"/> is located.
+
             </param>
 
 
         </member>
         <member name="M:DevExpress.Xpf.Docking.DocumentGroup.SetPinned(System.Windows.DependencyObject,System.Boolean)">
             <summary>
-                <para>Set the value indicating whether or not the DocumentGroup window is pinned. 
+                <para>Set a value indicating whether or not the tabbed <see cref="T:DevExpress.Xpf.Docking.DocumentPanel"/> is pinned. 
 </para>
             </summary>
             <param name="obj">
-		 
+		An object for which the <b>Pinned</b> attached property's value is set.
+
             </param>
             <param name="value">
-		<b>true</b> if the DocumentGroup window is pinned; otherwise, <b>false</b>.
+		<b>true</b>, if the tabbed <see cref="T:DevExpress.Xpf.Docking.DocumentPanel"/> is pinned; otherwise, <b>false</b>.
 
             </param>
 
@@ -6612,13 +6637,17 @@ This is an attached and a dependency property.
         </member>
         <member name="M:DevExpress.Xpf.Docking.DocumentGroup.SetShowPinButton(System.Windows.DependencyObject,System.Boolean)">
             <summary>
-                <para> </para>
+                <para>Set a value indicating whether or not the Pin button on the tabbed <see cref="T:DevExpress.Xpf.Docking.DocumentPanel"/> is visible.
+</para>
             </summary>
             <param name="obj">
-		 
+		An object for which the <b>ShowPinButton</b> attached property's value is set.
+
+
             </param>
             <param name="value">
-		 
+		<b>true</b>, if the Pin button on the tabbed <see cref="T:DevExpress.Xpf.Docking.DocumentPanel"/> is visible; otherwise, <b>false</b>.
+
             </param>
 
 
@@ -6635,11 +6664,12 @@ This is an attached and a dependency property.
         </member>
         <member name="P:DevExpress.Xpf.Docking.DocumentGroup.ShowPinButton(System.Windows.DependencyObject)">
             <summary>
-                <para>Gets or sets whether or not the Pin button is visible.
+                <para>Gets or sets whether or not the Pin button on the tabbed <see cref="T:DevExpress.Xpf.Docking.DocumentPanel"/> is visible.
 This is an attached and a dependency property.
 </para>
             </summary>
-            <value><b>true</b> if the Pin button ix visible; otherwise, <b>false</b>.
+            <value><b>true</b>, if the Pin button on the tabbed <see cref="T:DevExpress.Xpf.Docking.DocumentPanel"/> is visible; otherwise, <b>false</b>.
+
 </value>
 
 
@@ -8302,15 +8332,20 @@ This is a dependency property.
         </member>
         <member name="P:DevExpress.Xpf.Docking.BaseLayoutItem.AllowDockToCurrentItem">
             <summary>
-                <para> </para>
+                <para>Gets or sets whether a panel can be merged as a tab into the current item. This is a dependency property.
+
+</para>
             </summary>
-            <value> </value>
+            <value><b>true</b>, if a panel can be merged as a tab into the current item; otherwise, <b>false</b>. The default is <b>true</b>.
+
+</value>
 
 
         </member>
         <member name="F:DevExpress.Xpf.Docking.BaseLayoutItem.AllowDockToCurrentItemProperty">
             <summary>
-                <para> </para>
+                <para>Identifies the  dependency property.
+</para>
             </summary>
             <returns> </returns>
 
@@ -9540,7 +9575,8 @@ This is a dependency property.
 
 </para>
             </summary>
-            <value>A <see cref="GridLength"/> object, which is the height for the specified BaseLayoutItem object.
+            <value>A <see cref="GridLength"/> object, which is the height of the specified BaseLayoutItem object.
+
 
 </value>
 
@@ -9572,7 +9608,8 @@ This is a dependency property.
 
 </para>
             </summary>
-            <value>A <see cref="GridLength"/> object, that is the width for the specified BaseLayoutItem object.
+            <value>A <see cref="GridLength"/> object, that is the width of the specified BaseLayoutItem object.
+
 
 </value>
 
@@ -9609,9 +9646,11 @@ This is a dependency property.
         </member>
         <member name="P:DevExpress.Xpf.Docking.BaseLayoutItem.LogicalParent">
             <summary>
-                <para> </para>
+                <para>Gets the logical parent element of this element.
+</para>
             </summary>
-            <value> </value>
+            <value>This element's logical parent.
+</value>
 
 
         </member>
