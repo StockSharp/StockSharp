@@ -1383,6 +1383,15 @@ namespace StockSharp.BusinessEntities
 				TimeZone = moscowTime,
 			};
 
+			Spb = new ExchangeBoard
+			{
+				Code = "SPB",
+				IsSupportMarketOrders = false,
+				IsSupportAtomicReRegister = false,
+				Exchange = Exchange.Spb,
+				TimeZone = moscowTime,
+			};
+
 			Ux = new ExchangeBoard
 			{
 				Code = "UX",
@@ -2681,6 +2690,11 @@ namespace StockSharp.BusinessEntities
 		/// Information about QJSIM of <see cref="BusinessEntities.Exchange.Moex"/> exchange.
 		/// </summary>
 		public static ExchangeBoard MicexJunior { get; private set; }
+
+		/// <summary>
+		/// Information about SPB of <see cref="BusinessEntities.Exchange.Spb"/> exchange.
+		/// </summary>
+		public static ExchangeBoard Spb { get; private set; }
 
 		/// <summary>
 		/// Information about derivatives market of <see cref="BusinessEntities.Exchange.Ux"/> exchange.
