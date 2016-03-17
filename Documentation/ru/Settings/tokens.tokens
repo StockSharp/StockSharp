@@ -96,6 +96,7 @@
     <ddue:linkText>IQFeed</ddue:linkText>
     <ddue:linkUri>http://iqfeed.net</ddue:linkUri>
   </ddue:externalLink></item>
+  <item id="itch"><ddue:link xlink:href="62dc0f78-2b9a-4f88-b6bc-68361bd0d8fe" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">ITCH</ddue:link></item>
   <item id="IV"><ddue:externalLink xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">
 		  <ddue:linkText>IV</ddue:linkText>
 		  <ddue:linkUri>http://en.wikipedia.org/wiki/Implied_volatility</ddue:linkUri>
@@ -297,6 +298,8 @@
 		  <ddue:linkText>Xslt</ddue:linkText>
 		  <ddue:linkUri>http://ru.wikipedia.org/wiki/XSLT</ddue:linkUri>
 		</ddue:externalLink></item>
-  <item id="itch"><ddue:link xlink:href="62dc0f78-2b9a-4f88-b6bc-68361bd0d8fe" 
-xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">ITCH</ddue:link></item>
+  <item id="barchart"><ddue:link xlink:href="8a531942-a16c-4348-a4d0-dd4ae999d8f9" 
+xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">BarChart</ddue:link></item>
+  <item id="twime"><ddue:link xlink:href="1ee210ee-a004-4277-b8f4-91cb08d651db" 
+xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">TWIME</ddue:link></item>
 </content>
