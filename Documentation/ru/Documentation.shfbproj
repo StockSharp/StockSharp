@@ -1675,6 +1675,10 @@
       <ImageId>hydra_settings_itch</ImageId>
       <AlternateText>hydra settings itch</AlternateText>
     </Image>
+    <Image Include="Art\TwimeSample.png">
+      <ImageId>TwimeSample</ImageId>
+      <AlternateText>Twime Sample</AlternateText>
+    </Image>
   </ItemGroup>
   <ItemGroup>
     <None Include="Art\sample_options_calc.png">
