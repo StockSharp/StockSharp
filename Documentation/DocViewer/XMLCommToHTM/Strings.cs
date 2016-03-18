@@ -22,10 +22,7 @@ namespace XMLCommToHTM
 		public bool IsRussian=true;
 		
 
-		public string this[string nameId]
-		{
-			get { return CurrentNames[nameId]; }
-		}
+		public string this[string nameId] => CurrentNames[nameId];
 
 		public const string
 			NestedTypes="NestedTypes", 
@@ -84,10 +81,7 @@ namespace XMLCommToHTM
 			OverloadList = "OverloadList"
 			;
 
-		private Dictionary<string, string> CurrentNames
-		{
-			get { return IsRussian ? RussianNames : EnglishNames; }
-		}
+		private Dictionary<string, string> CurrentNames => IsRussian ? RussianNames : EnglishNames;
 
 		private Dictionary<string, string> EnglishNames = new Dictionary<string, string>()
 			{ { NestedTypes, "Nested types" },

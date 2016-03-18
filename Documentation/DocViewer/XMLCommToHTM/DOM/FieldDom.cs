@@ -25,13 +25,10 @@ namespace XMLCommToHTM.DOM
 		{
 			_fi = fi;
 		}
-		public override bool IsPublic { get { return _fi.IsPublic; } }
-		public override bool IsPrivateOrInternal { get { return _fi.IsPrivate || _fi.IsAssembly; } }
-		public override bool IsStatic { get { return _fi.IsStatic; } }
+		public override bool IsPublic => _fi.IsPublic;
+		public override bool IsPrivateOrInternal => _fi.IsPrivate || _fi.IsAssembly;
+		public override bool IsStatic => _fi.IsStatic;
 
-		public override System.Type MemberType
-		{
-			get { return _fi.FieldType; }
-		}
+		public override System.Type MemberType => _fi.FieldType;
 	}
 }

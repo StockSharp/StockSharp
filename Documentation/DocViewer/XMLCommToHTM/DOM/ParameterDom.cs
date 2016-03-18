@@ -32,7 +32,7 @@ namespace XMLCommToHTM.DOM
 
 	public class ParameterDictionary
 	{
-		private Tuple<string, XElement>[] _params;
+		private readonly Tuple<string, XElement>[] _params;
 		public ParameterDictionary(XElement doc, string tagName)
 		{
 			_params=doc    //Dictionary создавать не имеет смысла, т.к. параметров мало.
@@ -59,11 +59,11 @@ namespace XMLCommToHTM.DOM
 		{
 			Parameter = parameterInfo;
 		}
-		
-		ParameterInfo Parameter;
 
-		public override string Name { get { return Parameter.Name; } }
-		public override Type Type { get { return Parameter.ParameterType; } }
+		readonly ParameterInfo Parameter;
+
+		public override string Name => Parameter.Name;
+		public override Type Type => Parameter.ParameterType;
 
 		//public string TypeName
 		//{
@@ -91,14 +91,9 @@ namespace XMLCommToHTM.DOM
 		{
 			_name = name;
 		}
-		public override string Name
-		{
-			get { return _name; }
-		}
-		public override Type Type
-		{
-			get { return null; }
-		}
+		public override string Name => _name;
+
+		public override Type Type => null;
 
 		public static GenericParameterDom[] BuildTypeGenericParameters(Type type, XElement typeDoc)
 		{

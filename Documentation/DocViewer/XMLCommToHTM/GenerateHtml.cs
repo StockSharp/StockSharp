@@ -45,7 +45,8 @@ namespace XMLCommToHTM
 
 		public static bool IsHtmlAsDiv { get; set; }
 
-		public static string NestedTypesName { get { return Names[Strings.NestedTypes]; } }
+		public static string NestedTypesName => Names[Strings.NestedTypes];
+
 		public static string GetSectionName(MemberTypeSection section)
 		{
 			return Names[section.ToString()];
@@ -69,7 +70,7 @@ namespace XMLCommToHTM
 				throw new NotSupportedException();
 		}
 
-		static string Nbsp = "" + (char)0x00a0;
+		static readonly string Nbsp = "" + (char)0x00a0;
 
 		static XDocument GetDoc(out XElement body)
 		{

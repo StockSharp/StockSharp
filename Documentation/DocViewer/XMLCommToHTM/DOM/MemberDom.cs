@@ -51,14 +51,10 @@ namespace XMLCommToHTM.DOM
 		}
 		//public XElement DocInfo2 { get { return _docInfo; } }
 
-		public virtual string Name
-		{
-			get { return _memberInfo.Name; }
-		}
-		public virtual string ShortSignature
-		{
-			get { return _memberInfo.Name; }
-		}
+		public virtual string Name => _memberInfo.Name;
+
+		public virtual string ShortSignature => _memberInfo.Name;
+
 		public virtual string SimpleName
 		{
 			get
@@ -79,7 +75,7 @@ namespace XMLCommToHTM.DOM
 				return null; //not inherited
 			return _memberInfo.DeclaringType;
 		}
-		public Type DeclaringType { get { return _memberInfo.DeclaringType; } }
+		public Type DeclaringType => _memberInfo.DeclaringType;
 
 		public virtual MemberDom GetOverrides()
 		{
@@ -97,7 +93,7 @@ namespace XMLCommToHTM.DOM
 
 		public abstract Type MemberType { get; }
 
-		public virtual GenericParameterDom[] GenericArguments { get { return null; } }
+		public virtual GenericParameterDom[] GenericArguments => null;
 
 		public virtual XElement GetParametersLongSignature()
 		{

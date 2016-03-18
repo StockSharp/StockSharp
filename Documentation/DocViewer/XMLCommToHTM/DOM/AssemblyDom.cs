@@ -39,10 +39,7 @@ namespace XMLCommToHTM.DOM
 
 		private string _name;
 
-		public string Name
-		{
-			get { return _name; }
-		}
+		public string Name => _name;
 
 		/// <summary>
 		/// Все типы во всех namespace'ах. А также nested классы. В виде плоского списка. 
@@ -54,14 +51,9 @@ namespace XMLCommToHTM.DOM
 		public MemberDoc[] ErrorUnboundMembers;    //Массив members из XML документации, которые не смогли привязаться к данным из Reflection
 		public TypeDoc[] ErrorUnboundTypes;         //Массив типов из XML документации, которые не смогли привязаться к данным из Reflection
 
-		public string RuntimeVersion
-		{
-			get { return ReflectionAssembly.ImageRuntimeVersion; }
-		}
-		public string Version
-		{
-			get { return ReflectionAssembly.GetName().Version.ToString(); }
-		}
+		public string RuntimeVersion => ReflectionAssembly.ImageRuntimeVersion;
+
+		public string Version => ReflectionAssembly.GetName().Version.ToString();
 		//public string FileName
 		//{
 		//	get { return Path.GetFileName(ReflectionAssembly.Location); }

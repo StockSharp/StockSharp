@@ -20,7 +20,6 @@ namespace StockSharp.Algo.Strategies
 	using System.Linq;
 
 	using Ecng.Collections;
-	using Ecng.Common;
 
 	using SmartFormat;
 	using SmartFormat.Core.Extensions;
@@ -52,10 +51,7 @@ namespace StockSharp.Algo.Strategies
 
 			bool ISource.TryEvaluateSelector(ISelectorInfo selectorInfo)
 			{
-				if (_values == null)
-					return false;
-
-				var value = _values.TryGetValue(selectorInfo.Selector.Text);
+				var value = _values?.TryGetValue(selectorInfo.Selector.Text);
 
 				if (value == null)
 					return false;

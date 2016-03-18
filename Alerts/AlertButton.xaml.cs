@@ -19,7 +19,6 @@ namespace StockSharp.Alerts
 	using System.Collections.Generic;
 	using System.Windows;
 
-	using Ecng.Common;
 	using Ecng.Configuration;
 	using Ecng.Serialization;
 	using Ecng.Xaml;

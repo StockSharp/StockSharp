@@ -16,8 +16,6 @@ Copyright 2010 by StockSharp, LLC
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace XMLCommToHTM.DOM.Internal
 {
