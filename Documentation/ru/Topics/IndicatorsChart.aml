@@ -11,6 +11,7 @@ private Security _security;
 
 private CandleManager _candleManager;
 private CandleSeries _candleSeries;
+private SimpleMovingAverage _sma; { Length = 80 }
 
 readonly TimeSpan _timeFrame = TimeSpan.FromMinutes(1);
 
@@ -32,13 +33,12 @@ _area.Elements.Add(_candlesElem);
 // Создание элемента графика представляющего индикатор
 _longMaElem = new ChartIndicatorElement
 {
-	Title = "Длинная",
-	Indicator = new SimpleMovingAverage{ Length = 80 }
+	Title = "Длинная"
 };
 _area.Elements.Add(_longMaElem);
 ...
 
-
+_sma = new SimpleMovingAverage() { Length = 80 };
 _candleManager = new CandleManager(_trader);
 _candleManager.Processing += Draw;
 
@@ -51,7 +51,10 @@ _candleManager.Start(_candleSeries);
 
 private void Draw(CandleSeries series, Candle candle)
 {
-	var longValue = candle.State == CandleStates.Finished ? new ChartIndicatorValue(_longMaElem.Indicator, _longMaElem.Indicator.Process(candle)) : null;
+   if (candle.State != CandleStates.Finished)
+       return;
+
+	var longValue = _sma.Process(candle));
 
 	this.GuiAsync(() => _chart.Draw(candle.OpenTime, new Dictionary<IChartElement, object>
 	{
