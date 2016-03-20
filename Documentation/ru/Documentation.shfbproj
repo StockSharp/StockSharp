@@ -98,6 +98,8 @@
       <DocumentationSource sourceFile="..\..\..\References\ru\StockSharp.Xaml.Diagram.xml" />
       <DocumentationSource sourceFile="..\..\..\References\ru\StockSharp.Xaml.dll" />
       <DocumentationSource sourceFile="..\..\..\References\ru\StockSharp.Xaml.xml" />
+      <DocumentationSource sourceFile="..\..\..\References\ru\StockSharp.Twime.dll" />
+      <DocumentationSource sourceFile="..\..\..\References\ru\StockSharp.Twime.xml" />
     </DocumentationSources>
     <CopyrightHref>http://stocksharp.com</CopyrightHref>
     <CopyrightText>&amp;#169%3b 2015 - StockSharp LLC</CopyrightText>

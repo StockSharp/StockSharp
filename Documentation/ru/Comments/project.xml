@@ -497,6 +497,11 @@
 				<p>Графические компоненты для <see cref="N:StockSharp.Rss"/>.</p>
 			</summary>
 		</member>
+		<member name="N:StockSharp.Twime">
+			<summary>
+				<p>Коннектор прямого доступа на срочный рынок Московской биржи.</p>
+			</summary>
+		</member>
 		<member name="N:StockSharp.Messages">
 			<summary>
 				<p>Торговые сообщения.</p>

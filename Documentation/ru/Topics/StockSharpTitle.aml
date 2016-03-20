@@ -64,9 +64,9 @@
   		<listItem>
   			<link xlink:href="e3f889a5-ddcd-4c77-a174-2f24385386a0">S#.MatLab</link> - интеграция MatLab с торговыми системами. Торговля из скриптов MatLab.
   		</listItem>
-  		<listItem>
+  		<!--<listItem>
   			<link xlink:href="b65b25d8-871b-4d37-bfd4-c85e02996f99">S#.WealthLab</link> - интеграция WealthLab с торговыми системами.
-  		</listItem>
+  		</listItem>-->
   		<listItem>
   			<externalLink>
 				<linkText>S#.Shell</linkText>
