@@ -11,7 +11,7 @@ private Security _security;
 
 private CandleManager _candleManager;
 private CandleSeries _candleSeries;
-private SimpleMovingAverage _sma; { Length = 80 }
+private SimpleMovingAverage _sma;
 
 readonly TimeSpan _timeFrame = TimeSpan.FromMinutes(1);
 
