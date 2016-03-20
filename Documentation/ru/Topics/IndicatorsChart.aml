@@ -54,7 +54,7 @@ private void Draw(CandleSeries series, Candle candle)
    if (candle.State != CandleStates.Finished)
        return;
 
-	var longValue = _sma.Process(candle));
+	var longValue = _sma.Process(candle);
 
 	this.GuiAsync(() => _chart.Draw(candle.OpenTime, new Dictionary<IChartElement, object>
 	{
