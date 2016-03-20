@@ -3,7 +3,7 @@
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     <introduction>
       <para>
-      	Пример работы с <codeEntityReference>T:StockSharp.ITCH.ITCHTrader</codeEntityReference> демонстрирует приложение SampleITCH, показанное на рисунке ниже.
+      	Пример работы с <codeEntityReference>T:StockSharp.ITCH.ItchTrader</codeEntityReference> демонстрирует приложение SampleITCH, показанное на рисунке ниже.
       	Исходные коды примера лежат в дистрибутиве в папке <legacyItalic>Samples/ITCH</legacyItalic>.
       </para>
       <mediaLink><image placement="center" xlink:href="ITCHSettings"/></mediaLink>
@@ -14,7 +14,7 @@
 				<content>
 					<para>В конструкторе главного окна: 1) создаем экземпляр коннектора и, чтобы получать стаканы, устанавливаем
 					для свойства
-					<codeEntityReference qualifyHint="false">P:StockSharp.ITCH.ITCHTrader.CreateDepthFromOrdersLog</codeEntityReference>
+					<codeEntityReference qualifyHint="false">P:StockSharp.ITCH.ItchTrader.CreateDepthFromOrdersLog</codeEntityReference>
 					значение true, 2) передаем в элемент Settings (PropertyGridEx) адаптер рыночных данных коннектора. 
 					Настройка свойств адаптера проводится в графическом интерфейсе см. рисунок выше.
 					</para>

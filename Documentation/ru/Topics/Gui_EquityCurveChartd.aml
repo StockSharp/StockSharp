@@ -80,7 +80,7 @@
 		  <step>
 			  <content>
 				  <para>
-					  В коде главного окна создаем источник данных для отрисовки графика при помощи метода <codeEntityReference>O:StockSharp.Xaml.Charting.EquityCurveChart.CreateCurve</codeEntityReference> .
+					  В коде главного окна создаем источник данных для отрисовки графика при помощи метода <codeEntityReference>Overload:StockSharp.Xaml.Charting.EquityCurveChart.CreateCurve</codeEntityReference>.
 				  </para>
 				   <code title="C#" language="C#">
               		<![CDATA[

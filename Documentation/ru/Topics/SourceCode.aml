@@ -51,7 +51,7 @@
   					<para><token>hydra</token> - программа автоматической загрузки и хранения маркет-данных.</para>
   				</listItem>
   				<listItem>
-  					<para><legacyBold>S#.Designer</legacyBold> - визуальный дизайнер торговых стратегий.</para>
+  					<para><token>designer</token> - визуальный дизайнер торговых стратегий.</para>
   				</listItem>
 			</list>
  		</listItem>

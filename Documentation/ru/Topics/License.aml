@@ -86,7 +86,13 @@
 
 		<para><legacyBold>Корпоративная плюс</legacyBold></para>
 		<para>Включает в себя исходные коды любого из наших готовых программных решений 
-		(<token>hydra</token>, S#.Designer, S#.Shell), а также исходные коды самой платформы: S#.API.</para>
+		(<token>hydra</token>, <token>designer</token>,   			<externalLink>
+				<linkText>S#.Shell</linkText>
+				<linkAlternateText>Каркас для торговых стратегий</linkAlternateText>
+				<linkUri>http://stocksharp.com/products/shell/</linkUri>
+				<linkTarget>_blank</linkTarget>
+			</externalLink>),
+		а также исходные коды самой платформы: S#.API.</para>
 
 		<para>
   			Подробную информацию о лицензиях см. <externalLink>

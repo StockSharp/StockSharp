@@ -9,8 +9,8 @@
 			</para>
 			<para>
 				S#.API является основой всех наших продуктов. 
-				На базе библиотеки созданы такие решения как <token>stocksharpstudio</token>, <token>hydra</token> и т.д. 
-				А также наши адаптеры <token>wealthlab</token>, <token>matlab</token>.
+				На базе библиотеки созданы такие решения как <token>designer</token>, <token>hydra</token> и т.д., 
+				а также наш адаптер <token>matlab</token>.
 			</para>
 			<para>
 				В S#.API используется механизм <link xlink:href="5794f4b0-c536-4713-ad08-955a4a01b196">сообщений</link>, что дает возможность унифицировать разработку адаптеров, а также позволяет создавать 
