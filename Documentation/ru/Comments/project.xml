@@ -459,7 +459,7 @@
 		</member>
 		<member name="N:StockSharp.ITCH">
 			<summary>
-				<p>еализация шлюза для ITCH протокола.</p>
+				<p>Реализация шлюза для ITCH протокола.</p>
 			</summary>
 		</member>
 		<member name="N:StockSharp.Fix">

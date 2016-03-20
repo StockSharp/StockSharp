@@ -26,10 +26,10 @@
 			</step>
 			<step>
 				<content>
-					<para>В конструкторе главного окна создаем экземпляр адаптера 
-					<codeEntityReference qualifyHint="false">T:StockSharp.Messages.PassThroughMessageAdapter</codeEntityReference>.   
-					Этот специальннй адаптер, который ретранслирует все входящие сообщения в выходящие сообщения. И добаляем этом адаптер
-					к коннектору.
+					<para>
+					Для корректной работы коннектор должен содержать адаптер рыночных данных, которые отсутствуют в протоколе <token>twime</token>. Поэтому в
+					в конструкторе главного окна создается экземпляр <legacyItalic>пустого</legacyItalic> адаптера
+					<codeEntityReference qualifyHint="false">T:StockSharp.Messages.PassThroughMessageAdapter</codeEntityReference> и добавляется к коннектору.
 					</para>
             		<code language="C#">
             				<![CDATA[
