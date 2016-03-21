@@ -4712,6 +4712,11 @@
             Defines the OneHundredPercentStackedSeriesTemplate DependencyProperty
             </summary>
         </member>
+        <member name="F:Ecng.Xaml.Charting.SeriesInfoTemplateSelector.TimeframeSegmentSeriesTemplateProperty">
+            <summary>
+            Defines the TimeframeSegmentSeriesTemplate DependencyProperty
+            </summary>
+        </member>
         <member name="M:Ecng.Xaml.Charting.SeriesInfoTemplateSelector.#ctor">
             <summary>
             Initializes a new instance of the <seealso cref="T:Ecng.Xaml.Charting.SeriesInfoTemplateSelector"/> class.
@@ -4750,6 +4755,11 @@
         <member name="P:Ecng.Xaml.Charting.SeriesInfoTemplateSelector.OneHundredPercentStackedSeriesTemplate">
             <summary>
             Gets or sets the DataTemplate for <see cref="T:Ecng.Xaml.Charting.OneHundredPercentStackedSeriesInfo" />
+            </summary>
+        </member>
+        <member name="P:Ecng.Xaml.Charting.SeriesInfoTemplateSelector.TimeframeSegmentSeriesTemplate">
+            <summary>
+            Gets or sets the DataTemplate for <see cref="T:Ecng.Xaml.Charting.TimeframeSegmentSeriesInfo" />
             </summary>
         </member>
         <member name="M:Ecng.Xaml.Charting.SeriesInfoTemplateSelector.SelectTemplate(System.Object,System.Windows.DependencyObject)">
@@ -10065,6 +10075,18 @@
             <summary>
             Gets or sets the DataSeriesIndex a the hit-test site
             </summary>
+        </member>
+        <member name="T:Ecng.Xaml.Charting.TimeframeSegmentSeriesInfo">
+            <summary>
+            Provides a ViewModel containing info about BoxVolume series
+            </summary>
+        </member>
+        <member name="M:Ecng.Xaml.Charting.TimeframeSegmentSeriesInfo.#ctor(Ecng.Xaml.Charting.Visuals.RenderableSeries.IRenderableSeries,Ecng.Xaml.Charting.Visuals.RenderableSeries.HitTestInfo)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Ecng.Xaml.Charting.TimeframeSegmentSeriesInfo" /> class.
+            </summary>
+            <param name="rSeries">The <see cref="T:Ecng.Xaml.Charting.Visuals.RenderableSeries.IRenderableSeries"/>.</param>
+            <param name="hitTestInfo"> </param>
         </member>
         <member name="T:Ecng.Xaml.Charting.SeriesInfo">
             <summary>
@@ -20021,6 +20043,11 @@
         <member name="P:Ecng.Xaml.Charting.Visuals.RenderableSeries.HitTestInfo.Persentage">
             <summary>
             
+            </summary>
+        </member>
+        <member name="P:Ecng.Xaml.Charting.Visuals.RenderableSeries.HitTestInfo.Volume">
+            <summary>
+            Volume value for TimeframeSegmentDataSeries.
             </summary>
         </member>
         <member name="M:Ecng.Xaml.Charting.Visuals.RenderableSeries.HitTestInfo.IsEmpty">

@@ -186,6 +186,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConfigurationPublic", "Conf
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SampleChartPublic", "Samples\Common\SampleChart\SampleChartPublic.csproj", "{8B430A27-B392-4129-9AA2-731A52427E40}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SampleVolumeChart", "Samples\Common\SampleVolumeChart\SampleVolumeChart.csproj", "{81A84C3B-EC88-4746-AA4D-247DD1F66EB6}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -424,6 +426,10 @@ Global
 		{8B430A27-B392-4129-9AA2-731A52427E40}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8B430A27-B392-4129-9AA2-731A52427E40}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8B430A27-B392-4129-9AA2-731A52427E40}.Release|Any CPU.Build.0 = Release|Any CPU
+		{81A84C3B-EC88-4746-AA4D-247DD1F66EB6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{81A84C3B-EC88-4746-AA4D-247DD1F66EB6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{81A84C3B-EC88-4746-AA4D-247DD1F66EB6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{81A84C3B-EC88-4746-AA4D-247DD1F66EB6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -507,6 +513,7 @@ Global
 		{7A2867F3-4D22-4F81-A0AA-09246B9B1E34} = {D4F0E771-46F8-41B6-BB9D-AC00C87F09E5}
 		{D6540BA6-8719-4E27-8182-C32026C08B7E} = {7A2867F3-4D22-4F81-A0AA-09246B9B1E34}
 		{8B430A27-B392-4129-9AA2-731A52427E40} = {1B4765C2-0B77-4D68-9860-25F7FCA17D94}
+		{81A84C3B-EC88-4746-AA4D-247DD1F66EB6} = {1B4765C2-0B77-4D68-9860-25F7FCA17D94}
 	EndGlobalSection
 	GlobalSection(TestCaseManagementSettings) = postSolution
 		CategoryFile = Trading.vsmdi
