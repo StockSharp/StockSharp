@@ -41238,12 +41238,12 @@ namespace StockSharp.Localization
 		public static string TF => GetString(TFKey);
 
 		/// <summary>
-		/// Network connection returned '{0}' bytes.
+		/// Stream returned '{0}' bytes.
 		/// </summary>
 		public const string NetworkConnectionErrorKey = "NetworkConnectionError";
 
 		/// <summary>
-		/// Network connection returned '{0}' bytes.
+		/// Stream returned '{0}' bytes.
 		/// </summary>
 		public static string NetworkConnectionError => GetString(NetworkConnectionErrorKey);
 
