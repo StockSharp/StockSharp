@@ -68,40 +68,26 @@ namespace XMLCommToHTM.DOM
 			}
 		}
 
-		public string FullName
-		{
-			get { return Type.FullName; }
-		}
-		public string Namespace { get { return Type.Namespace??""; } }
-		public string SimpleName { get { return TypeUtils.SimpleName(Type); } }
+		public string FullName => Type.FullName;
+		public string Namespace => Type.Namespace??"";
+		public string SimpleName => TypeUtils.SimpleName(Type);
 		//public string SimpleNameWithNestedGen { get { return TypeUtils.ToDisplayString(Type,false,"(",")"); } } 
 		public string GetDisplayName(bool includeNamespace, string brOpen="<", string brClose=">")
 		{
 			return TypeUtils.ToDisplayString(Type, includeNamespace, brOpen, brClose);
 		}
 
-		public Type[] BaseTypes
-		{
-			get
-			{
-				return Type.GetBaseTypes()
-					//.Select(_ => TypeUtils.ToDisplayString(_, true))
-					.Reverse()
-					.ToArray();
-			}
-		}
+		public Type[] BaseTypes => Type.GetBaseTypes()
+			//.Select(_ => TypeUtils.ToDisplayString(_, true))
+			.Reverse()
+			.ToArray();
+
 		//public string[] GetDistinctMethodsNames()
 		//{
 		//	return Methods.Select(_ => _.Name).Distinct().ToArray();
 		//}
 
-		public Type[] DerivedTypes
-		{
-			get
-			{
-				return AssemblyUtils.GetAllDerivedTypes(Assembly.ReflectionAssembly, Type).ToArray();
-			}
-		}
+		public Type[] DerivedTypes => AssemblyUtils.GetAllDerivedTypes(Assembly.ReflectionAssembly, Type).ToArray();
 
 		public static TypeDom Build(TypeDoc doc, AssemblyDom asm, Func<MemberDom, bool> filterMembers)
 		{
@@ -143,10 +129,7 @@ namespace XMLCommToHTM.DOM
 			return ret;
 		}
 
-		public string Name
-		{
-			get { return Type.Name; }
-		}
+		public string Name => Type.Name;
 
 		public void FillOverrideIndex()
 		{

@@ -17,7 +17,6 @@ namespace StockSharp.Algo.Statistics
 {
 	using System;
 
-	using Ecng.Common;
 	using Ecng.ComponentModel;
 	using Ecng.Serialization;
 

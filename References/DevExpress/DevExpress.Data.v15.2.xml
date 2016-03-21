@@ -377,7 +377,7 @@
         <member name="T:DevExpress.Xpo.DB.DataCacheNodeLocal">
 
             <summary>
-                <para>The Node element that is used to connect to a cached data store's Root or Node element located on the same computer.
+                <para>The Node element that is used to connect to a cached data store's Root or Node element located on the local host.
 </para>
             </summary>
 
@@ -3245,6 +3245,38 @@ To create the <b>logical OR</b> operator using the <see cref="M:DevExpress.Data.
 
 
         </member>
+        <member name="T:DevExpress.Data.SubstituteFilterEventArgs">
+
+            <summary>
+                <para> </para>
+            </summary>
+
+        </member>
+        <member name="M:DevExpress.Data.SubstituteFilterEventArgs.#ctor">
+            <summary>
+                <para> </para>
+            </summary>
+
+
+        </member>
+        <member name="M:DevExpress.Data.SubstituteFilterEventArgs.#ctor(DevExpress.Data.Filtering.CriteriaOperator)">
+            <summary>
+                <para> </para>
+            </summary>
+            <param name="filter">
+		 
+            </param>
+
+
+        </member>
+        <member name="P:DevExpress.Data.SubstituteFilterEventArgs.Filter">
+            <summary>
+                <para> </para>
+            </summary>
+            <value> </value>
+
+
+        </member>
         <member name="T:DevExpress.XtraSpellChecker.IIgnoreList">
 
             <summary>
@@ -5079,10 +5111,10 @@ To create the <b>logical OR</b> operator using the <see cref="M:DevExpress.Data.
 
             </param>
             <param name="operands">
-		An array of <a href="https://msdn.microsoft.com/en-us/library/system.linq.expressions.expression(v=vs.110).aspx">Expression</a> objects specifying function operands (parameters).
+		An array of <a href="https://msdn.microsoft.com/en-us/library/system.linq.expressions.expression.aspx">Expression</a> objects specifying function operands (parameters).
 
             </param>
-            <returns>An <a href="https://msdn.microsoft.com/en-us/library/system.linq.expressions.expression(v=vs.110).aspx">Expression</a> object that specifies a <a href="https://msdn.microsoft.com/en-us/library/bb397926.aspx">LINQ</a> expression.
+            <returns>An <a href="https://msdn.microsoft.com/en-us/library/system.linq.expressions.expression.aspx">Expression</a> object that specifies a <a href="https://msdn.microsoft.com/en-us/library/bb397926.aspx">LINQ</a> expression.
 </returns>
 
 
@@ -5106,10 +5138,10 @@ To create the <b>logical OR</b> operator using the <see cref="M:DevExpress.Data.
 
             </param>
             <param name="operands">
-		An array of <a href="https://msdn.microsoft.com/en-us/library/system.linq.expressions.expression(v=vs.110).aspx">Expression</a> objects specifying function operands (parameters).
+		An array of <a href="https://msdn.microsoft.com/en-us/library/system.linq.expressions.expression.aspx">Expression</a> objects specifying function operands (parameters).
 
             </param>
-            <returns>An <a href="https://msdn.microsoft.com/en-us/library/system.linq.expressions.expression(v=vs.110).aspx">Expression</a> object that specifies the LINQ expression. 
+            <returns>An <a href="https://msdn.microsoft.com/en-us/library/system.linq.expressions.expression.aspx">Expression</a> object that specifies the LINQ expression. 
 </returns>
 
 
@@ -5129,10 +5161,10 @@ To create the <b>logical OR</b> operator using the <see cref="M:DevExpress.Data.
 </para>
             </summary>
             <param name="operands">
-		An array of <a href="https://msdn.microsoft.com/en-us/library/system.linq.expressions.expression(v=vs.110).aspx">Expression</a> objects specifying function operands (parameters).
+		An array of <a href="https://msdn.microsoft.com/en-us/library/system.linq.expressions.expression.aspx">Expression</a> objects specifying function operands (parameters).
 
             </param>
-            <returns>An <a href="https://msdn.microsoft.com/en-us/library/system.linq.expressions.expression(v=vs.110).aspx">Expression</a> object that specifies the LINQ expression. 
+            <returns>An <a href="https://msdn.microsoft.com/en-us/library/system.linq.expressions.expression.aspx">Expression</a> object that specifies the LINQ expression. 
 </returns>
 
 
@@ -6716,13 +6748,16 @@ To create the <b>logical OR</b> operator using the <see cref="M:DevExpress.Data.
                 <para> </para>
             </summary>
             <param name="dataSource">
-		 
+		A <see cref="T:System.Object"/> value, specifying the data source.
+
             </param>
             <param name="dataMember">
-		 
+		A <see cref="T:System.String"/> value, specifying the data member.
+
             </param>
             <param name="result">
-		 
+		A <see cref="T:System.String"/> value, specifying the result.
+
             </param>
             <returns> </returns>
 
@@ -7637,7 +7672,7 @@ To create the <b>logical OR</b> operator using the <see cref="M:DevExpress.Data.
                 <para>Specifies the data source from which the RealTimeSource component retrieves its data.
 </para>
             </summary>
-            <value>An <a href="http://msdn.microsoft.com/en-us/library/system.collections.ilist.aspx">IList</a> or <a href="http://msdn.microsoft.com/en-us/library/system.componentmodel.ilistsource(v=vs.110).aspx">IListSource</a> object that represents the data source from which the RealTimeSource component retrieves its data.
+            <value>An <a href="http://msdn.microsoft.com/en-us/library/system.collections.ilist.aspx">IList</a> or <a href="http://msdn.microsoft.com/en-us/library/system.componentmodel.ilistsource.aspx">IListSource</a> object that represents the data source from which the RealTimeSource component retrieves its data.
 </value>
 
 
@@ -7669,7 +7704,7 @@ To create the <b>logical OR</b> operator using the <see cref="M:DevExpress.Data.
         </member>
         <member name="M:DevExpress.Data.RealTimeSource.GetList">
             <summary>
-                <para>Returns the list of data source records. Introduced to support <a href="http://msdn.microsoft.com/en-us/library/system.componentmodel.ilistsource(v=vs.110).aspx">IListSource</a> in RealTimeSource.
+                <para>Returns the list of data source records. Introduced to support <a href="http://msdn.microsoft.com/en-us/library/system.componentmodel.ilistsource.aspx">IListSource</a> in RealTimeSource.
 
 </para>
             </summary>
@@ -7692,7 +7727,7 @@ To create the <b>logical OR</b> operator using the <see cref="M:DevExpress.Data.
         </member>
         <member name="P:DevExpress.Data.RealTimeSource.IgnoreItemEvents">
             <summary>
-                <para>Specifies whether to ignore <a href="http://msdn.microsoft.com/en-us/library/vstudio/system.componentmodel.inotifypropertychanged.propertychanged(v=vs.110).aspx">INotifyPropertyChanged.PropertyChanged</a> events of the data source items.
+                <para>Specifies whether to ignore <a href="http://msdn.microsoft.com/en-us/library/vstudio/system.componentmodel.inotifypropertychanged.propertychanged.aspx">INotifyPropertyChanged.PropertyChanged</a> events of the data source items.
 
 </para>
             </summary>
@@ -7731,7 +7766,7 @@ To create the <b>logical OR</b> operator using the <see cref="M:DevExpress.Data.
         </member>
         <member name="P:DevExpress.Data.RealTimeSource.UseWeakEventHandler">
             <summary>
-                <para>Specifies whether or not the <a href="http://msdn.microsoft.com/en-us/library/system.weakreference(v=vs.110).aspx">WeakReference</a> is used to handle the data source's <a href="http://msdn.microsoft.com/en-us/library/system.componentmodel.ibindinglist.listchanged(v=vs.110).aspx">IBindingList.ListChanged</a> event.
+                <para>Specifies whether or not the <a href="http://msdn.microsoft.com/en-us/library/system.weakreference.aspx">WeakReference</a> is used to handle the data source's <a href="http://msdn.microsoft.com/en-us/library/system.componentmodel.ibindinglist.listchanged.aspx">IBindingList.ListChanged</a> event.
 </para>
             </summary>
             <value><b>true</b>, if the weak reference is used; otherwise, <b>false</b>. 
@@ -8051,9 +8086,11 @@ To create the <b>logical OR</b> operator using the <see cref="M:DevExpress.Data.
         </member>
         <member name="P:DevExpress.Data.XtraReports.Wizard.PaperKindViewInfo.SizeText">
             <summary>
-                <para> </para>
+                <para>Specifies the paper kind size text.
+</para>
             </summary>
-            <value> </value>
+            <value>A string value that specifies the text size of a paper kind.
+</value>
 
 
         </member>
@@ -8079,12 +8116,15 @@ To create the <b>logical OR</b> operator using the <see cref="M:DevExpress.Data.
         </member>
         <member name="M:DevExpress.Data.XtraReports.Labels.XDocumentLabelProductRepository.GetPaperKindData(System.Int32)">
             <summary>
-                <para> </para>
+                <para>Provides information about a specified paper kind.
+</para>
             </summary>
             <param name="id">
-		 
+		An integer value, identifying the paper kind.
+
             </param>
-            <returns> </returns>
+            <returns>A <see cref="PaperKindData"/> value.
+</returns>
 
 
         </member>
@@ -8150,9 +8190,12 @@ To create the <b>logical OR</b> operator using the <see cref="M:DevExpress.Data.
         </member>
         <member name="P:DevExpress.Data.XtraReports.Labels.PaperKindData.Height">
             <summary>
-                <para> </para>
+                <para>Specifies the height of a paper kind.
+</para>
             </summary>
-            <value> </value>
+            <value>A string value that specifies the paper kind height.
+
+</value>
 
 
         </member>
@@ -8168,9 +8211,12 @@ To create the <b>logical OR</b> operator using the <see cref="M:DevExpress.Data.
         </member>
         <member name="P:DevExpress.Data.XtraReports.Labels.PaperKindData.IsRollPaper">
             <summary>
-                <para> </para>
+                <para>Specifies whether a paper kind is supposed to be printed as a single uninterrupted page. 
+</para>
             </summary>
-            <value> </value>
+            <value><b>true</b>, to provide a continuous document layout suited for roll paper printing; otherwise, <b>false</b>. 
+
+</value>
 
 
         </member>
@@ -8187,17 +8233,23 @@ To create the <b>logical OR</b> operator using the <see cref="M:DevExpress.Data.
         </member>
         <member name="P:DevExpress.Data.XtraReports.Labels.PaperKindData.Unit">
             <summary>
-                <para> </para>
+                <para>Specifies the unit of measure of a paper kind.
+
+</para>
             </summary>
-            <value> </value>
+            <value>A value that specifies the unit of measure of the paper kind.
+
+</value>
 
 
         </member>
         <member name="P:DevExpress.Data.XtraReports.Labels.PaperKindData.Width">
             <summary>
-                <para> </para>
+                <para>Specifies the width of a paper kind.
+</para>
             </summary>
-            <value> </value>
+            <value>A string value that specifies the paper kind width.
+</value>
 
 
         </member>
@@ -8311,9 +8363,11 @@ To create the <b>logical OR</b> operator using the <see cref="M:DevExpress.Data.
         </member>
         <member name="P:DevExpress.Data.XtraReports.Labels.LabelDetails.LeftMargin">
             <summary>
-                <para> </para>
+                <para>Specifies the left margin of a label.
+</para>
             </summary>
-            <value> </value>
+            <value>A value that specifies the label's left margin.
+</value>
 
 
         </member>
@@ -8329,9 +8383,11 @@ To create the <b>logical OR</b> operator using the <see cref="M:DevExpress.Data.
         </member>
         <member name="P:DevExpress.Data.XtraReports.Labels.LabelDetails.PaperKindId">
             <summary>
-                <para> </para>
+                <para>Specifies the paper kind ID of a label.
+</para>
             </summary>
-            <value> </value>
+            <value>A value that specifies the label's paper kind ID.
+</value>
 
 
         </member>
@@ -8347,17 +8403,21 @@ To create the <b>logical OR</b> operator using the <see cref="M:DevExpress.Data.
         </member>
         <member name="P:DevExpress.Data.XtraReports.Labels.LabelDetails.TopMargin">
             <summary>
-                <para> </para>
+                <para>Specifies the top margin of a label.
+</para>
             </summary>
-            <value> </value>
+            <value>A value that specifies the label's top margin.
+</value>
 
 
         </member>
         <member name="P:DevExpress.Data.XtraReports.Labels.LabelDetails.Unit">
             <summary>
-                <para> </para>
+                <para>Specifies a unit of measure of a label.
+</para>
             </summary>
-            <value> </value>
+            <value>A value that specifies the label's unit of measure.
+</value>
 
 
         </member>
@@ -8391,12 +8451,15 @@ To create the <b>logical OR</b> operator using the <see cref="M:DevExpress.Data.
         </member>
         <member name="M:DevExpress.Data.XtraReports.Labels.ILabelProductRepository.GetPaperKindData(System.Int32)">
             <summary>
-                <para> </para>
+                <para>Provides information about a specified paper kind.
+</para>
             </summary>
             <param name="paperKindId">
-		 
+		An integer value, identifying the paper kind.
+
             </param>
-            <returns> </returns>
+            <returns>A <see cref="PaperKindData"/> value.
+</returns>
 
 
         </member>
@@ -8471,9 +8534,12 @@ To create the <b>logical OR</b> operator using the <see cref="M:DevExpress.Data.
         </member>
         <member name="P:DevExpress.Data.XtraReports.Wizard.Views.ISelectLabelTypePageView.CurrentPaperKindData">
             <summary>
-                <para> </para>
+                <para>If implemented, specifies the settings of the current paper kind. 
+
+</para>
             </summary>
-            <value> </value>
+            <value>A <see cref="T:DevExpress.Data.XtraReports.Labels.PaperKindData"/> value.
+</value>
 
 
         </member>
@@ -8539,7 +8605,7 @@ To create the <b>logical OR</b> operator using the <see cref="M:DevExpress.Data.
         </member>
         <member name="M:DevExpress.Data.XtraReports.Wizard.Views.ISelectLabelTypePageView.UpdateLabelInformation">
             <summary>
-                <para>If implemented, updates the data displayed in the <b>Label Information</b> group box.
+                <para>If implemented, updates label information displayed in the dedicated editors.
 </para>
             </summary>
 
@@ -8992,22 +9058,26 @@ To create the <b>logical OR</b> operator using the <see cref="M:DevExpress.Data.
         </member>
         <member name="E:DevExpress.Data.XtraReports.Wizard.Views.ICustomizeLabelPageView.LabelInformationChanged">
             <summary>
-                <para> </para>
+                <para>Occurs when label information displayed in the dedicated editors is changed.
+</para>
             </summary>
 
 
         </member>
         <member name="P:DevExpress.Data.XtraReports.Wizard.Views.ICustomizeLabelPageView.LeftMargin">
             <summary>
-                <para> </para>
+                <para>If implemented, specifies the value of the <b>Left Margin</b> editor.
+</para>
             </summary>
-            <value> </value>
+            <value>A <see cref="T:System.Single"/> value.
+</value>
 
 
         </member>
         <member name="E:DevExpress.Data.XtraReports.Wizard.Views.ICustomizeLabelPageView.SelectedPaperKindChanged">
             <summary>
-                <para> </para>
+                <para>Occurs when the entry selected in the <b>Page Size</b> drop-down list is changed.
+</para>
             </summary>
 
 
@@ -9025,23 +9095,28 @@ An integer value.
         </member>
         <member name="P:DevExpress.Data.XtraReports.Wizard.Views.ICustomizeLabelPageView.TopMargin">
             <summary>
-                <para> </para>
+                <para>If implemented, specifies the value of the <b>Top Margin</b> editor.
+</para>
             </summary>
-            <value> </value>
+            <value>A <see cref="T:System.Single"/> value.
+</value>
 
 
         </member>
         <member name="P:DevExpress.Data.XtraReports.Wizard.Views.ICustomizeLabelPageView.Unit">
             <summary>
-                <para> </para>
+                <para>If implemented, specifies the state of the <b>Inch</b> and <b>Millimeter</b> radio buttons.
+</para>
             </summary>
-            <value> </value>
+            <value>A value that specifies the state of the <b>Inch</b> and <b>Millimeter</b> radio buttons.
+</value>
 
 
         </member>
         <member name="E:DevExpress.Data.XtraReports.Wizard.Views.ICustomizeLabelPageView.UnitChanged">
             <summary>
-                <para> </para>
+                <para>Occurs when the state of the <b>Inch</b> and <b>Millimeter</b> radio buttons is changed.
+</para>
             </summary>
 
 
@@ -19350,7 +19425,8 @@ This is supported only by the DXPrinting for WPF library.
         </member>
         <member name="F:DevExpress.XtraPrinting.PrintingSystemCommand.Thumbnails">
             <summary>
-                <para> </para>
+                <para>Toggles the <b>Thumbnails</b> panel visibility.
+</para>
             </summary>
 
 
@@ -21466,9 +21542,11 @@ Otherwise, the closest matching image side (height or width) will be sized to th
         </member>
         <member name="P:DevExpress.Data.XtraReports.Wizard.CustomLabelInformation.LeftMargin">
             <summary>
-                <para> </para>
+                <para>Specifies the left margin of a custom label.
+</para>
             </summary>
-            <value> </value>
+            <value>A structure that specifies the custom label's left margin.
+</value>
 
 
         </member>
@@ -21484,17 +21562,21 @@ Otherwise, the closest matching image side (height or width) will be sized to th
         </member>
         <member name="P:DevExpress.Data.XtraReports.Wizard.CustomLabelInformation.TopMargin">
             <summary>
-                <para> </para>
+                <para>Specifies the top margin of a custom label.
+</para>
             </summary>
-            <value> </value>
+            <value>A structure that specifies the custom label's top label.
+</value>
 
 
         </member>
         <member name="P:DevExpress.Data.XtraReports.Wizard.CustomLabelInformation.Unit">
             <summary>
-                <para> </para>
+                <para>Specifies the unit of measurement of a custom label.
+</para>
             </summary>
-            <value> </value>
+            <value>A structure that specifies the custom label's unit of measurement.
+</value>
 
 
         </member>
@@ -30595,21 +30677,27 @@ based on the specified <b>Hashtable</b> object.
         </member>
         <member name="M:DevExpress.XtraPrinting.BrickStringFormat.Create(DevExpress.XtraPrinting.TextAlignment,System.Boolean,System.Drawing.StringTrimming,System.Boolean)">
             <summary>
-                <para> </para>
+                <para>Creates a BrickStringFormat instance with the specified settings.
+</para>
             </summary>
             <param name="textAlignment">
-		 
+		A <see cref="T:DevExpress.XtraPrinting.TextAlignment"/> enumeration value.
+
             </param>
             <param name="wordWrap">
-		 
+		<b>true</b>, to use the word wrap feature; otherwise <b>false</b>.
+
             </param>
             <param name="trimming">
-		 
+		A <see cref="T:System.Drawing.StringTrimming"/> enumeration value.
+
             </param>
             <param name="rightToLeft">
-		 
+		<b>true</b>, to use the right-to-left text orientation; otherwise <b>false</b>.
+
             </param>
-            <returns> </returns>
+            <returns>A <see cref="T:DevExpress.XtraPrinting.BrickStringFormat"/> value.
+</returns>
 
 
         </member>
@@ -30689,9 +30777,11 @@ based on the specified <b>Hashtable</b> object.
         </member>
         <member name="P:DevExpress.XtraPrinting.BrickStringFormat.RightToLeft">
             <summary>
-                <para> </para>
+                <para>Gets a value indicating whether or not the right-to-left orientation is used.
+</para>
             </summary>
-            <value> </value>
+            <value><b>true</b>, if the text orientation is right-to-left; otherwise <b>false</b>.
+</value>
 
 
         </member>

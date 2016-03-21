@@ -156,33 +156,41 @@ This is a dependency property.
         </member>
         <member name="P:DevExpress.Xpf.LayoutControl.DataLayoutItem.ApplySettingsForCustomContent">
             <summary>
-                <para> </para>
+                <para>This member supports the internal infrastructure, and is not intended to be used directly from your code. This is a dependency property.
+</para>
             </summary>
-            <value> </value>
+            <value> 
+</value>
 
 
         </member>
         <member name="F:DevExpress.Xpf.LayoutControl.DataLayoutItem.ApplySettingsForCustomContentProperty">
             <summary>
-                <para> </para>
+                <para>Identifies the  dependency property.
+</para>
             </summary>
-            <returns> </returns>
+            <returns> 
+</returns>
 
 
         </member>
         <member name="P:DevExpress.Xpf.LayoutControl.DataLayoutItem.AttributeSettings(System.Windows.DependencyObject)">
             <summary>
-                <para> </para>
+                <para>This member supports the internal infrastructure, and is not intended to be used directly from your code. This is an attached and a dependency property.
+</para>
             </summary>
-            <value> </value>
+            <value> 
+</value>
 
 
         </member>
         <member name="F:DevExpress.Xpf.LayoutControl.DataLayoutItem.AttributeSettingsProperty">
             <summary>
-                <para> </para>
+                <para>Identifies the  dependency property.
+</para>
             </summary>
-            <returns> </returns>
+            <returns> 
+</returns>
 
 
         </member>
@@ -198,31 +206,41 @@ This is a dependency property.
         </member>
         <member name="P:DevExpress.Xpf.LayoutControl.DataLayoutItem.CurrencyValueAlignment">
             <summary>
-                <para> </para>
+                <para>Gets or sets the horizontal alignment for the layout item editor's value, if this value is formatted as currency.
+</para>
             </summary>
-            <value> </value>
+            <value>A <see cref="HorizontalAlignment"/> enumerator value that specifies the horizontal alignment for the layout item editor's value.
+</value>
 
 
         </member>
         <member name="M:DevExpress.Xpf.LayoutControl.DataLayoutItem.GetAttributeSettings(System.Windows.DependencyObject)">
             <summary>
-                <para> </para>
+                <para>This member supports the internal infrastructure, and is not intended to be used directly from your code.
+</para>
             </summary>
             <param name="obj">
 		 
+
             </param>
-            <returns> </returns>
+            <returns> 
+</returns>
 
 
         </member>
         <member name="M:DevExpress.Xpf.LayoutControl.DataLayoutItem.GetUnderlyingObject(System.Windows.DependencyObject)">
             <summary>
-                <para> </para>
+                <para>Returns the current value of a property to which the specific DataLayoutItem is bound.
+
+</para>
             </summary>
             <param name="obj">
-		 
+		A DataLayoutItem for which the current property value is to be returned.
+
             </param>
-            <returns> </returns>
+            <returns>An Object that is the current value of a property to which the specific DataLayoutItem is bound.
+
+</returns>
 
 
         </member>
@@ -258,33 +276,42 @@ This is a dependency property.
         </member>
         <member name="P:DevExpress.Xpf.LayoutControl.DataLayoutItem.MultilineTextMinHeight">
             <summary>
-                <para> </para>
+                <para>Gets or sets the minimum height of the layout item editor, if this editor displays multiline text.
+</para>
             </summary>
-            <value> </value>
+            <value>A Double value that specifies the minimum height of the the layout item editor.
+</value>
 
 
         </member>
         <member name="P:DevExpress.Xpf.LayoutControl.DataLayoutItem.PhoneNumberMask">
             <summary>
-                <para> </para>
+                <para>Gets or sets the mask for editing this DataLayoutItem's value, if this value is formatted as a phone number.
+</para>
             </summary>
-            <value> </value>
+            <value>A String value that is the edit mask for this DataLayoutItem.
+</value>
 
 
         </member>
         <member name="P:DevExpress.Xpf.LayoutControl.DataLayoutItem.UnderlyingObject(System.Windows.DependencyObject)">
             <summary>
-                <para> </para>
+                <para>Gets the current value of a property, to which this DataLayoutItem is bound.
+
+</para>
             </summary>
-            <value> </value>
+            <value>An Object that is the current property value.
+</value>
 
 
         </member>
         <member name="F:DevExpress.Xpf.LayoutControl.DataLayoutItem.UnderlyingObjectProperty">
             <summary>
-                <para> </para>
+                <para>Identifies the  dependency property.
+</para>
             </summary>
-            <returns> </returns>
+            <returns> 
+</returns>
 
 
         </member>
@@ -362,17 +389,21 @@ This is a dependency property.
         </member>
         <member name="P:DevExpress.Xpf.LayoutControl.DataLayoutControl.AutoGenerateItems">
             <summary>
-                <para> </para>
+                <para>Gets or sets whether or not the <see cref="T:DevExpress.Xpf.LayoutControl.DataLayoutControl"/> should generate layout items automatically. This is a dependency property.
+</para>
             </summary>
-            <value> </value>
+            <value><b>true</b>, if the <see cref="T:DevExpress.Xpf.LayoutControl.DataLayoutControl"/> should generate layout items automatically; otherwise, <b>false</b>.
+</value>
 
 
         </member>
         <member name="F:DevExpress.Xpf.LayoutControl.DataLayoutControl.AutoGenerateItemsProperty">
             <summary>
-                <para> </para>
+                <para>Identifies the  dependency property.
+</para>
             </summary>
-            <returns> </returns>
+            <returns> 
+</returns>
 
 
         </member>
@@ -542,6 +573,40 @@ This is a dependency property.
             </summary>
             <value>A Char value that indicates that children within the current DataLayoutControl group will be arranged vertically.
 </value>
+
+
+        </member>
+        <member name="T:DevExpress.Xpf.LayoutControl.GroupBoxDisplayMode">
+
+            <summary>
+                <para>Contains values that specify the display mode for the <see cref="T:DevExpress.Xpf.LayoutControl.LayoutGroup"/> and <see cref="T:DevExpress.Xpf.LayoutControl.GroupBox"/> headers.
+
+</para>
+            </summary>
+
+        </member>
+        <member name="F:DevExpress.Xpf.LayoutControl.GroupBoxDisplayMode.Default">
+            <summary>
+                <para>Equal to the <see cref="F:DevExpress.Xpf.LayoutControl.GroupBoxDisplayMode.Normal"/> value.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.LayoutControl.GroupBoxDisplayMode.Light">
+            <summary>
+                <para>Container headers should be painted more lightly.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.LayoutControl.GroupBoxDisplayMode.Normal">
+            <summary>
+                <para>Container headers should be painted by default.
+
+</para>
+            </summary>
 
 
         </member>
@@ -1046,7 +1111,7 @@ This is a dependency property.
         <member name="T:DevExpress.Xpf.LayoutControl.LayoutGroup">
 
             <summary>
-                <para>Represents a container that arranges its items side by side (in a single row or column) or as tabs. The LayoutGroup cannot be used outside a <see cref="T:DevExpress.Xpf.LayoutControl.LayoutControl"/>.
+                <para>Represents a container that arranges its items side by side (in a single row or column) or as tabs. The LayoutGroup cannot be used outside a <see cref="T:DevExpress.Xpf.LayoutControl.LayoutControl"/> or <see cref="T:DevExpress.Xpf.LayoutControl.DataLayoutControl"/>.
 </para>
             </summary>
 
@@ -1061,17 +1126,24 @@ This is a dependency property.
         </member>
         <member name="P:DevExpress.Xpf.LayoutControl.LayoutGroup.ActualGroupBoxDisplayMode">
             <summary>
-                <para> </para>
+                <para>Returns the value of currently used display mode for the LayoutGroup header, when this group is displayed as a group box.
+This is an dependency property.
+
+
+</para>
             </summary>
-            <value> </value>
+            <value>A <see cref="GroupBoxDisplayMode"/> object that specifies the display mode of the current LayoutGroup header, when this group is displayed as a group box.
+</value>
 
 
         </member>
         <member name="F:DevExpress.Xpf.LayoutControl.LayoutGroup.ActualGroupBoxDisplayModeProperty">
             <summary>
-                <para> </para>
+                <para>Identifies the  dependency property.
+</para>
             </summary>
-            <returns> </returns>
+            <returns> 
+</returns>
 
 
         </member>
@@ -1184,17 +1256,24 @@ This is a dependency property.
         </member>
         <member name="P:DevExpress.Xpf.LayoutControl.LayoutGroup.GroupBoxDisplayMode">
             <summary>
-                <para> </para>
+                <para>Gets or sets the display mode of the current LayoutGroup header when this group is displayed as a group box.
+This is a dependency property.
+
+</para>
             </summary>
-            <value> </value>
+            <value>A <see cref="GroupBoxDisplayMode"/> enumerator value that specifies the display mode of the current LayoutGroup header.
+
+</value>
 
 
         </member>
         <member name="F:DevExpress.Xpf.LayoutControl.LayoutGroup.GroupBoxDisplayModeProperty">
             <summary>
-                <para> </para>
+                <para>Identifies the  dependency property.
+</para>
             </summary>
-            <returns> </returns>
+            <returns> 
+</returns>
 
 
         </member>
@@ -1718,33 +1797,49 @@ This is a dependency property.
         </member>
         <member name="P:DevExpress.Xpf.LayoutControl.GroupBox.DisplayMode">
             <summary>
-                <para> </para>
+                <para>Gets or sets the display mode of the current GroupBox header.
+This is a dependency property.
+
+
+</para>
             </summary>
-            <value> </value>
+            <value>A <see cref="GroupBoxDisplayMode"/> enumerator value that specifies the display mode of the current GroupBox header.
+
+
+</value>
 
 
         </member>
         <member name="F:DevExpress.Xpf.LayoutControl.GroupBox.DisplayModeProperty">
             <summary>
-                <para> </para>
+                <para>Identifies the  dependency property.
+</para>
             </summary>
-            <returns> </returns>
+            <returns> 
+</returns>
 
 
         </member>
         <member name="P:DevExpress.Xpf.LayoutControl.GroupBox.LightTemplate">
             <summary>
-                <para> </para>
+                <para>Gets or sets the template applied to the current GroupBox header, when this group uses light display mode.
+This is a dependency property.
+
+
+</para>
             </summary>
-            <value> </value>
+            <value>A <see cref="ControlTemplate"/> object that specifies the template of the current GroupBox header.
+</value>
 
 
         </member>
         <member name="F:DevExpress.Xpf.LayoutControl.GroupBox.LightTemplateProperty">
             <summary>
-                <para> </para>
+                <para>Identifies the  dependency property.
+</para>
             </summary>
-            <returns> </returns>
+            <returns> 
+</returns>
 
 
         </member>
@@ -1811,17 +1906,25 @@ This is a dependency property.
         </member>
         <member name="P:DevExpress.Xpf.LayoutControl.GroupBox.NormalTemplate">
             <summary>
-                <para> </para>
+                <para>Gets or sets the template applied to the current GroupBox header, when this group uses the light display mode.
+This is a dependency property.
+
+
+</para>
             </summary>
-            <value> </value>
+            <value>A <see cref="ControlTemplate"/> object that specifies the template of the current GroupBox header.
+
+</value>
 
 
         </member>
         <member name="F:DevExpress.Xpf.LayoutControl.GroupBox.NormalTemplateProperty">
             <summary>
-                <para> </para>
+                <para>Identifies the  dependency property.
+</para>
             </summary>
-            <returns> </returns>
+            <returns> 
+</returns>
 
 
         </member>
@@ -3119,9 +3222,11 @@ This is a dependency property.
         </member>
         <member name="P:DevExpress.Xpf.LayoutControl.LayoutControl.Items">
             <summary>
-                <para> </para>
+                <para>Gets the collection of items within the LayoutControl control.
+</para>
             </summary>
-            <value> </value>
+            <value>A <see cref="SerializableItemCollection"/> object which represents the collection of <see cref="T:DevExpress.Xpf.LayoutControl.LayoutItem"/>s.
+</value>
 
 
         </member>

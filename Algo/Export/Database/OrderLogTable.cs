@@ -52,7 +52,7 @@ namespace StockSharp.Algo.Export.Database
 			yield return new ColumnDescription(nameof(ExecutionMessage.OrderPrice)) { DbType = typeof(decimal), ValueRestriction = new DecimalRestriction { Scale = security.PriceStep?.GetCachedDecimals() ?? 1 } };
 			yield return new ColumnDescription(nameof(ExecutionMessage.OrderVolume)) { DbType = typeof(decimal), ValueRestriction = new DecimalRestriction { Scale = security.VolumeStep?.GetCachedDecimals() ?? 1 } };
 			yield return new ColumnDescription(nameof(ExecutionMessage.Side)) { DbType = typeof(int) };
-			yield return new ColumnDescription(nameof(ExecutionMessage.OrderStatus)) { DbType = typeof(int?) };
+			yield return new ColumnDescription(nameof(ExecutionMessage.OrderStatus)) { DbType = typeof(long?) };
 			yield return new ColumnDescription(nameof(ExecutionMessage.OrderState)) { DbType = typeof(int?) };
 			yield return new ColumnDescription(nameof(ExecutionMessage.TimeInForce)) { DbType = typeof(int?) };
 			yield return new ColumnDescription(nameof(ExecutionMessage.TradeId))
@@ -76,7 +76,7 @@ namespace StockSharp.Algo.Export.Database
 				{ nameof(ExecutionMessage.OrderPrice), value.OrderPrice },
 				{ nameof(ExecutionMessage.OrderVolume), value.OrderVolume },
 				{ nameof(ExecutionMessage.Side), (int)value.Side },
-				{ nameof(ExecutionMessage.OrderStatus), (int?)value.OrderStatus },
+				{ nameof(ExecutionMessage.OrderStatus), value.OrderStatus },
 				{ nameof(ExecutionMessage.OrderState), (int?)value.OrderState },
 				{ nameof(ExecutionMessage.TimeInForce), (int?)value.TimeInForce },
 				{ nameof(ExecutionMessage.TradeId), value.TradeId == null ? value.TradeStringId : value.TradeId.To<string>() },

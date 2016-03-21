@@ -13,7 +13,6 @@ Created: 2015, 11, 11, 2:32 PM
 Copyright 2010 by StockSharp, LLC
 *******************************************************************************************/
 #endregion S# License
-
 namespace SampleHistoryTesting
 {
 	using System;
@@ -45,8 +44,6 @@ namespace SampleHistoryTesting
 	using StockSharp.Xaml.Charting;
 	using StockSharp.Localization;
 	using StockSharp.Plaza;
-
-	using MoreLinq;
 
 	public partial class MainWindow
 	{
@@ -679,7 +676,6 @@ namespace SampleHistoryTesting
 				}
 
 				_bufferedChart.IsAutoRange = started;
-				_area.YAxises.ForEach(axis => axis.AutoRange = started);
 			});
 		}
 	}

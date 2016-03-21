@@ -51,7 +51,7 @@ namespace SampleIB
 		public MainWindow()
 		{
 			InitializeComponent();
-			MainWindow.Instance = this;
+			Instance = this;
 
 			Title = Title.Put("Interactive Brokers");
 

@@ -119,7 +119,7 @@ namespace StockSharp.Quik
 		public static string GetDefaultPath()
 		{
 			var defProcess = DefaultTerminal;
-			return defProcess == null ? null : defProcess.FileName;
+			return defProcess?.FileName;
 		}
 
 		/// <summary>
@@ -1121,7 +1121,7 @@ namespace StockSharp.Quik
 				const int sortMenuItemId = 850;
 				window.SendMessage(WM.COMMAND, sortMenuItemId, 0);
 
-				return ThreadingHelper.InvokeAsSTA(() => Clipboard.GetText());
+				return ThreadingHelper.InvokeAsSTA(Clipboard.GetText);
 			}
 		}
 
@@ -1183,7 +1183,7 @@ namespace StockSharp.Quik
 				}
 
 				if (index == -1)
-					throw new ArgumentException(LocalizedStrings.Str1821Params.Put(securityIdStr, table.Caption), "securityId");
+					throw new ArgumentException(LocalizedStrings.Str1821Params.Put(securityIdStr, table.Caption), nameof(securityId));
 
 				for (var i = 0; i < (index - 1); i++)
 					window.PressKeyButton(VirtualKeys.Down);
@@ -1202,7 +1202,7 @@ namespace StockSharp.Quik
 				var newQuoteWindow = currentTables.FirstOrDefault(w => !prevTables.Contains(w));
 
 				if (newQuoteWindow == null)
-					throw new ArgumentException(LocalizedStrings.Str1822Params.Put(securityIdStr), "securityId");
+					throw new ArgumentException(LocalizedStrings.Str1822Params.Put(securityIdStr), nameof(securityId));
 
 				var editWindow = OpenEditWindow(newQuoteWindow);
 				editWindow.AllChildWindows.First(e => e.DialogID == 0x3072).SetText(securityIdStr);
@@ -1277,7 +1277,7 @@ namespace StockSharp.Quik
 		private IEnumerable<DdeSettingsResult> GetLuaTableSettings(params DdeTable[] tables)
 		{
 			if (tables == null)
-				throw new ArgumentNullException("tables");
+				throw new ArgumentNullException(nameof(tables));
 
 			if (tables.Length == 0)
 				tables = Adapter.Tables.ToArray();
@@ -1303,7 +1303,7 @@ namespace StockSharp.Quik
 		private IEnumerable<DdeSettingsResult> GetDdeTableSettings(params DdeTable[] tables)
 		{
 			if (tables == null)
-				throw new ArgumentNullException("tables");
+				throw new ArgumentNullException(nameof(tables));
 
 			if (tables.Length == 0)
 				tables = Adapter.Tables.Concat(Adapter.QuotesTable).ToArray();
@@ -1342,10 +1342,10 @@ namespace StockSharp.Quik
 		private IEnumerable<DdeSettingsResult> GetTableSettings(DdeTable table, SystemWindow window)
 		{
 			if (table == null)
-				throw new ArgumentNullException("table");
+				throw new ArgumentNullException(nameof(table));
 
 			if (window == null)
-				throw new ArgumentNullException("window");
+				throw new ArgumentNullException(nameof(window));
 
 			var editWnd = OpenEditWindow(window);
 
@@ -1440,7 +1440,7 @@ namespace StockSharp.Quik
 		private SystemWindow GetTableWindow(string caption, bool throwException = true)
 		{
 			if (caption.IsEmpty())
-				throw new ArgumentNullException("caption");
+				throw new ArgumentNullException(nameof(caption));
 
 			foreach (var window in MdiWindow.AllChildWindows)
 			{
@@ -1449,7 +1449,7 @@ namespace StockSharp.Quik
 			}
 
 			if (throwException)
-				throw new ArgumentException(LocalizedStrings.Str1829Params.Put(caption), "caption");
+				throw new ArgumentException(LocalizedStrings.Str1829Params.Put(caption), nameof(caption));
 			else
 				return null;
 		}
@@ -1457,14 +1457,14 @@ namespace StockSharp.Quik
 		private SystemWindow GetTableWindowByClass(string className, bool throwException = true)
 		{
 			if (className.IsEmpty())
-				throw new ArgumentNullException("className");
+				throw new ArgumentNullException(nameof(className));
 
 			var window = MdiWindow
 				.FilterDescendantWindows(false, w => w.ClassName.CompareIgnoreCase(className))
 				.FirstOrDefault();
 
 			if (window == null && throwException)
-				throw new ArgumentException(LocalizedStrings.Str1830Params.Put(className), "className");
+				throw new ArgumentException(LocalizedStrings.Str1830Params.Put(className), nameof(className));
 
 			return window;
 		}
@@ -1478,10 +1478,10 @@ namespace StockSharp.Quik
 		private static SystemWindow GetQuikMainWindow(SystemWindow wnd)
 		{
 			if (wnd == null)
-				throw new ArgumentNullException("wnd");
+				throw new ArgumentNullException(nameof(wnd));
 
 			if (wnd.HWnd == IntPtr.Zero)
-				throw new ArgumentException(LocalizedStrings.Str1832, "wnd");
+				throw new ArgumentException(LocalizedStrings.Str1832, nameof(wnd));
 
 			return IsQuikMainWindow(wnd) ? wnd : GetQuikMainWindow(wnd.Parent);
 		}
@@ -1489,7 +1489,7 @@ namespace StockSharp.Quik
 		private static bool IsQuikMainWindow(SystemWindow window)
 		{
 			if (window == null)
-				throw new ArgumentNullException("window");
+				throw new ArgumentNullException(nameof(window));
 
 			return window.ClassName == "InfoClass";
 		}

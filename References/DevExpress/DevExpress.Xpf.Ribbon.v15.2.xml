@@ -4,202 +4,6 @@
         <name>DevExpress.Xpf.Ribbon.v15.2</name>
     </assembly>
     <members>
-        <member name="T:DevExpress.Xpf.Ribbon.ApplicationMenuInfo">
-
-            <summary>
-                <para>This class is obsolete. Use the <see cref="T:DevExpress.Xpf.Ribbon.ApplicationMenu"/> class instead.
-</para>
-            </summary>
-
-        </member>
-        <member name="M:DevExpress.Xpf.Ribbon.ApplicationMenuInfo.#ctor">
-            <summary>
-                <para>Initializes a new instance of the ApplicationMenuInfo class.
-</para>
-            </summary>
-
-
-        </member>
-        <member name="P:DevExpress.Xpf.Ribbon.ApplicationMenuInfo.BottomPane">
-            <summary>
-                <para>Gets or sets the control displayed along the bottom edge of the ApplicationMenu. 
-This is a dependency property.
-</para>
-            </summary>
-            <value>The control displayed along the bottom edge of the ApplicationMenu. 
-</value>
-
-
-        </member>
-        <member name="F:DevExpress.Xpf.Ribbon.ApplicationMenuInfo.BottomPaneProperty">
-            <summary>
-                <para>Identifies the  dependency property.
-</para>
-            </summary>
-            <returns> </returns>
-
-
-        </member>
-        <member name="P:DevExpress.Xpf.Ribbon.ApplicationMenuInfo.ItemLinks">
-            <summary>
-                <para>Gets the collection of item links displayed in the Application Menu's left pane.
-</para>
-            </summary>
-            <value>The collection of item links displayed in the Application Menu's left pane.
-</value>
-
-
-        </member>
-        <member name="P:DevExpress.Xpf.Ribbon.ApplicationMenuInfo.ItemLinksSource">
-            <summary>
-                <para>Gets or sets a collection of objects providing information to generate and initialize bar item links for the current ApplicationMenuInfo container.
-This is a dependency property. 
-</para>
-            </summary>
-            <value>A source of objects to be visualized as bar items.
-</value>
-
-
-        </member>
-        <member name="F:DevExpress.Xpf.Ribbon.ApplicationMenuInfo.ItemLinksSourceProperty">
-            <summary>
-                <para>Identifies the  dependency property.
-</para>
-            </summary>
-            <returns> </returns>
-
-
-        </member>
-        <member name="P:DevExpress.Xpf.Ribbon.ApplicationMenuInfo.ItemStyle">
-            <summary>
-                <para>Gets or sets the style applied to a <see cref="T:DevExpress.Xpf.Bars.BarItem"/> object defined as the ItemTemplate content.
-This is a dependency property. 
-</para>
-            </summary>
-            <value>A Style object providing corresponding style settings.
-</value>
-
-
-        </member>
-        <member name="F:DevExpress.Xpf.Ribbon.ApplicationMenuInfo.ItemStyleProperty">
-            <summary>
-                <para>Identifies the  dependency property.
-</para>
-            </summary>
-            <returns> </returns>
-
-
-        </member>
-        <member name="P:DevExpress.Xpf.Ribbon.ApplicationMenuInfo.ItemTemplate">
-            <summary>
-                <para>Gets or sets the template used to visualize objects stored as elements in the ItemLinksSource collection.
-This is a dependency property. 
-</para>
-            </summary>
-            <value>A DataTemplate object that specifies the corresponding template.
-</value>
-
-
-        </member>
-        <member name="F:DevExpress.Xpf.Ribbon.ApplicationMenuInfo.ItemTemplateProperty">
-            <summary>
-                <para>Identifies the  dependency property.
-</para>
-            </summary>
-            <returns> </returns>
-
-
-        </member>
-        <member name="P:DevExpress.Xpf.Ribbon.ApplicationMenuInfo.ItemTemplateSelector">
-            <summary>
-                <para>Gets or sets an object that chooses a template used to visualize objects stored as elements in the ItemLinksSource collection.
- This is a dependency property. 
-</para>
-            </summary>
-            <value>A System.Windows.Controls.DataTemplateSelector descendant that applies a template based on custom logic.
-</value>
-
-
-        </member>
-        <member name="F:DevExpress.Xpf.Ribbon.ApplicationMenuInfo.ItemTemplateSelectorProperty">
-            <summary>
-                <para>Identifies the  dependency property.
-</para>
-            </summary>
-            <returns> </returns>
-
-
-        </member>
-        <member name="P:DevExpress.Xpf.Ribbon.ApplicationMenuInfo.Ribbon">
-            <summary>
-                <para>Gets or sets the <see cref="T:DevExpress.Xpf.Ribbon.RibbonControl"/> to which the ApplicationMenu object belongs.
-</para>
-            </summary>
-            <value>A <see cref="T:DevExpress.Xpf.Ribbon.RibbonControl"/> object to which the ApplicationMenu object belongs.
-</value>
-
-
-        </member>
-        <member name="P:DevExpress.Xpf.Ribbon.ApplicationMenuInfo.RightPane">
-            <summary>
-                <para>Gets or sets the control displayed within the ApplicationMenu's right pane.
-This is a dependency property.
-</para>
-            </summary>
-            <value>The control displayed within the ApplicationMenu's right pane.
-</value>
-
-
-        </member>
-        <member name="F:DevExpress.Xpf.Ribbon.ApplicationMenuInfo.RightPaneProperty">
-            <summary>
-                <para>Identifies the  dependency property.
-</para>
-            </summary>
-            <returns> </returns>
-
-
-        </member>
-        <member name="P:DevExpress.Xpf.Ribbon.ApplicationMenuInfo.RightPaneWidth">
-            <summary>
-                <para>Gets or sets the right pane's width. 
-This is a dependency property.
-</para>
-            </summary>
-            <value>An integer value which specifies the right pane's width, in pixels. 
-</value>
-
-
-        </member>
-        <member name="F:DevExpress.Xpf.Ribbon.ApplicationMenuInfo.RightPaneWidthProperty">
-            <summary>
-                <para>Identifies the  dependency property.
-</para>
-            </summary>
-            <returns> </returns>
-
-
-        </member>
-        <member name="P:DevExpress.Xpf.Ribbon.ApplicationMenuInfo.ShowRightPane">
-            <summary>
-                <para>Gets or sets whether the ApplicationMenu's right pane is visible.
-This is a dependency property.
-</para>
-            </summary>
-            <value><b>true</b> if the ApplicationMenu's right pane is visible; otherwise, <b>false</b>.
-</value>
-
-
-        </member>
-        <member name="F:DevExpress.Xpf.Ribbon.ApplicationMenuInfo.ShowRightPaneProperty">
-            <summary>
-                <para>Identifies the  dependency property.
-</para>
-            </summary>
-            <returns> </returns>
-
-
-        </member>
         <member name="T:DevExpress.Xpf.Ribbon.RibbonGalleryBarItem">
 
             <summary>
@@ -464,6 +268,102 @@ This is a dependency property.
 
 
         </member>
+        <member name="T:DevExpress.Xpf.Ribbon.ApplicationMenuInfo">
+
+            <summary>
+                <para>This class is obsolete. Use the <see cref="T:DevExpress.Xpf.Ribbon.ApplicationMenu"/> class instead.
+</para>
+            </summary>
+
+        </member>
+        <member name="M:DevExpress.Xpf.Ribbon.ApplicationMenuInfo.#ctor">
+            <summary>
+                <para>Initializes a new instance of the ApplicationMenuInfo class.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.Ribbon.ApplicationMenuInfo.BottomPane">
+            <summary>
+                <para>Gets or sets the control displayed along the bottom edge of the ApplicationMenu. 
+This is a dependency property.
+</para>
+            </summary>
+            <value>The control displayed along the bottom edge of the ApplicationMenu. 
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.Ribbon.ApplicationMenuInfo.BottomPaneProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.Ribbon.ApplicationMenuInfo.RightPane">
+            <summary>
+                <para>Gets or sets the control displayed within the ApplicationMenu's right pane.
+This is a dependency property.
+</para>
+            </summary>
+            <value>The control displayed within the ApplicationMenu's right pane.
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.Ribbon.ApplicationMenuInfo.RightPaneProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.Ribbon.ApplicationMenuInfo.RightPaneWidth">
+            <summary>
+                <para>Gets or sets the right pane's width. 
+This is a dependency property.
+</para>
+            </summary>
+            <value>An integer value which specifies the right pane's width, in pixels. 
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.Ribbon.ApplicationMenuInfo.RightPaneWidthProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.Ribbon.ApplicationMenuInfo.ShowRightPane">
+            <summary>
+                <para>Gets or sets whether the ApplicationMenu's right pane is visible.
+This is a dependency property.
+</para>
+            </summary>
+            <value><b>true</b> if the ApplicationMenu's right pane is visible; otherwise, <b>false</b>.
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.Ribbon.ApplicationMenuInfo.ShowRightPaneProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
         <member name="T:DevExpress.Xpf.Ribbon.RibbonPageCategoryBase">
 
             <summary>
@@ -645,15 +545,9 @@ This is a dependency property.
         </member>
         <member name="P:DevExpress.Xpf.Ribbon.RibbonPageCategoryBase.MergeOrder">
             <summary>
-                <para>Gets or sets a merge order for the page category among all the categories after a merging operation.
-This is a dependency property.
-
-</para>
+                <para> </para>
             </summary>
-            <value>A non-negative integer value that specifies a merge order for the current category.
-
-
-</value>
+            <value> </value>
 
 
         </member>
@@ -1800,13 +1694,9 @@ This is a dependency property.
         </member>
         <member name="P:DevExpress.Xpf.Ribbon.RibbonPageGroup.MergeOrder">
             <summary>
-                <para>Gets or sets a merge order for the current page group among all the groups after a merge operation.
-This is a dependency property.
-</para>
+                <para> </para>
             </summary>
-            <value>A non-negative integer value that specifies a merge order for the current page group.
-
-</value>
+            <value> </value>
 
 
         </member>
@@ -2289,14 +2179,9 @@ This is a dependency property.
         </member>
         <member name="P:DevExpress.Xpf.Ribbon.RibbonPage.MergeOrder">
             <summary>
-                <para>Gets or sets a merge order for the current page among all the pages after a merge operation.
-This is a dependency property.
-
-</para>
+                <para> </para>
             </summary>
-            <value>A non-negative integer value that specifies a merge order for the current page.
-
-</value>
+            <value> </value>
 
 
         </member>
@@ -3820,7 +3705,7 @@ This is a dependency property.
         </member>
         <member name="P:DevExpress.Xpf.Ribbon.RibbonControl.ApplicationButtonSmallIcon">
             <summary>
-                <para>Gets or sets the image displayed within the Application Button in the Office2010 paint style.
+                <para>Gets or sets the image displayed within the Application Button in the Office2010 and OfficeSlim paint styles.
 This is a dependency property.
 </para>
             </summary>
@@ -3878,11 +3763,12 @@ This is a dependency property.
         </member>
         <member name="P:DevExpress.Xpf.Ribbon.RibbonControl.ApplicationButtonText">
             <summary>
-                <para>Gets or sets the text displayed within the Application Button in the Office2010 paint style.
+                <para>Gets or sets the text displayed within the Application Button in the Office2010 and OfficeSlim paint styles.
 This is a dependency property.
 </para>
             </summary>
-            <value>A string that specifies text displayed within the Application Button in the Office2010 paint style.
+            <value>A string that specifies text displayed within the Application Button in the Office2010  and OfficeSlim paint styles.
+
 </value>
 
 
@@ -3908,7 +3794,8 @@ This is a dependency property.
         </member>
         <member name="E:DevExpress.Xpf.Ribbon.RibbonControl.ApplicationMenuChanged">
             <summary>
-                <para> </para>
+                <para>Fires when the value of the <see cref="P:DevExpress.Xpf.Ribbon.RibbonControl.ApplicationMenu"/> property changes. 
+</para>
             </summary>
 
 
@@ -6580,10 +6467,10 @@ This is a dependency property.
         </member>
         <member name="P:DevExpress.Xpf.Ribbon.BackstageViewControl.EnableWindowTitleShrink">
             <summary>
-                <para>Gets or sets whether the <see cref="T:DevExpress.Xpf.Ribbon.DXRibbonWindow"/>'s title is shrunk while the BackstageViewControl is displayed in the full-screen mode. This is a dependency property. 
+                <para>Gets or sets whether the <see cref="T:DevExpress.Xpf.Ribbon.DXRibbonWindow"/>'s title bar is overlapped by the content area of the BackstageViewControl displayed in full-screen mode. This is a dependency property. 
 </para>
             </summary>
-            <value><b>true</b>, if the <see cref="T:DevExpress.Xpf.Ribbon.DXRibbonWindow"/>'s title is shrunk while the BackstageViewControl is displayed in the full-screen mode; otherwise, <b>false</b>. The default is <b>false</b>.
+            <value><b>true</b>, if the <see cref="T:DevExpress.Xpf.Ribbon.DXRibbonWindow"/>'s title bar is overlapped by the content area of the BackstageViewControl displayed in full-screen mode; otherwise, <b>false</b>.
 </value>
 
 
@@ -6650,7 +6537,7 @@ This is a dependency property.
                 <para>Gets or sets whether the BackstageViewControl occupies the entire client area of the application window. This is a dependency property.
 </para>
             </summary>
-            <value><b>true</b>, if the BackstageViewControl occupies the entire client area of the application window; otherwise, <b>false</b>. The default is <b>false</b>.
+            <value><b>true</b>, if the BackstageViewControl occupies the entire client area of the application window; otherwise, <b>false</b>.
 </value>
 
 

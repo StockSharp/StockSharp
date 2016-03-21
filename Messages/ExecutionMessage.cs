@@ -285,7 +285,7 @@ namespace StockSharp.Messages
 		[DataMember]
 		[Browsable(false)]
 		[Nullable]
-		public OrderStatus? OrderStatus { get; set; }
+		public long? OrderStatus { get; set; }
 
 		/// <summary>
 		/// Order state.

@@ -140,7 +140,7 @@ namespace StockSharp.Algo
 			if (item.OrderStatus == null)
 				throw new ArgumentException(LocalizedStrings.Str938, nameof(item));
 
-			var status = (int)item.OrderStatus;
+			var status = item.OrderStatus.Value;
 
 			if (status.HasBits(0x100000))
 				return OrderLogCancelReasons.ReRegistered;

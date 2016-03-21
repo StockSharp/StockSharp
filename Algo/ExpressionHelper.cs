@@ -50,7 +50,7 @@ namespace StockSharp.Algo
 		/// <returns>The screened text.</returns>
 		public static string Encode(string expression)
 		{
-			foreach (var secId in ExpressionHelper.GetSecurityIds(expression).Distinct(StringComparer.CurrentCultureIgnoreCase))
+			foreach (var secId in GetSecurityIds(expression).Distinct(StringComparer.CurrentCultureIgnoreCase))
 			{
 				expression = expression.Replace(secId, "[{0}]".Put(secId));
 			}

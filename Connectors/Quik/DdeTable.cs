@@ -20,7 +20,6 @@ namespace StockSharp.Quik
 	using System.Collections.Generic;
 	using System.Reflection;
 
-	using Ecng.Collections;
 	using Ecng.Common;
 	using Ecng.Serialization;
 

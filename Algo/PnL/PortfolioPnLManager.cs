@@ -106,9 +106,7 @@ namespace StockSharp.Algo.PnL
 						break;
 
 					var queue = _securityPnLs.TryGetValue(execMsg.SecurityId);
-
-					if (queue != null)
-						queue.ProcessExecution(execMsg);
+					queue?.ProcessExecution(execMsg);
 
 					break;
 				}
@@ -116,10 +114,9 @@ namespace StockSharp.Algo.PnL
 				case MessageTypes.Level1Change:
 				{
 					var levelMsg = (Level1ChangeMessage)message;
-					var queue = _securityPnLs.TryGetValue(levelMsg.SecurityId);
 
-					if (queue != null)
-						queue.ProcessLevel1(levelMsg);
+					var queue = _securityPnLs.TryGetValue(levelMsg.SecurityId);
+					queue?.ProcessLevel1(levelMsg);
 
 					break;
 				}
@@ -127,10 +124,9 @@ namespace StockSharp.Algo.PnL
 				case MessageTypes.QuoteChange:
 				{
 					var quoteMsg = (QuoteChangeMessage)message;
-					var queue = _securityPnLs.TryGetValue(quoteMsg.SecurityId);
 
-					if (queue != null)
-						queue.ProcessQuotes(quoteMsg);
+					var queue = _securityPnLs.TryGetValue(quoteMsg.SecurityId);
+					queue?.ProcessQuotes(quoteMsg);
 
 					break;
 				}

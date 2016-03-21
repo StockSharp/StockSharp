@@ -19,7 +19,7 @@
     <HtmlHelpName>StockSharp</HtmlHelpName>
     <Language>ru-RU</Language>
     <HelpTitle>StockSharp - платформа для торговых роботов</HelpTitle>
-    <HelpFileFormat>HtmlHelp1</HelpFileFormat>
+    <HelpFileFormat>HtmlHelp1, Website</HelpFileFormat>
     <NamingMethod>MemberName</NamingMethod>
     <PresentationStyle>VS2013</PresentationStyle>
     <DocumentationSources>
@@ -178,6 +178,7 @@
       <ImageId>candle_qpile</ImageId>
       <AlternateText>candle qpile</AlternateText>
     </None>
+    <None Include="Topics\TWIME.aml" />
     <None Include="Topics\ITCHSample.aml" />
     <None Include="Topics\HydraSettingsITCH.aml" />
     <None Include="Topics\Gui_BoxChart.aml" />
@@ -1892,10 +1893,6 @@
     <Image Include="Art\strategy_logging.png">
       <ImageId>strategylogging</ImageId>
       <AlternateText>Логирование стратегий.</AlternateText>
-    </Image>
-    <Image Include="Art\strategy_monitor.png">
-      <ImageId>strategymonitor</ImageId>
-      <AlternateText>Мониторинг стратегий.</AlternateText>
     </Image>
     <Image Include="Art\platform_independency.png">
       <ImageId>platformindep</ImageId>

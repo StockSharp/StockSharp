@@ -35,7 +35,8 @@ namespace XMLCommToHTM.DOM
 			Params = ParameterDom.BuildParameters(mi.GetParameters(), doc);
 			_genericArguments = GenericParameterDom.BuildMethodGenericParameters(_mi, doc);
 		}
-		public override GenericParameterDom[] GenericArguments { get { return _genericArguments; } } 
+		public override GenericParameterDom[] GenericArguments => _genericArguments;
+
 		public override string Name
 		{
 			get
@@ -47,14 +48,10 @@ namespace XMLCommToHTM.DOM
 			}
 		}
 
-		public bool IsOperator
-		{
-			get { return _mi.IsSpecialName && _mi.Name.StartsWith("op_"); }
-		}
-		public override string ShortSignature
-		{
-			get { return GetShortSignature(false); }
-		}
+		public bool IsOperator => _mi.IsSpecialName && _mi.Name.StartsWith("op_");
+
+		public override string ShortSignature => GetShortSignature(false);
+
 		public string GetShortSignature(bool asExtention)
 		{
 			var ret = base.ShortSignature;
@@ -72,17 +69,12 @@ namespace XMLCommToHTM.DOM
 		{
 			return MemberUtils.GetParametersLongSignature(_mi.GetParameters());
 		}
-		public bool IsExtention
-		{
-			get { return _mi.IsStatic && _mi.IsDefined(typeof (ExtensionAttribute), false) && _mi.GetParameters().Length > 0; }
-		}
-		public override bool IsPublic { get { return _mi.IsPublic; } }
-		public override bool IsPrivateOrInternal { get { return _mi.IsPrivate || _mi.IsAssembly; } }
-		public override bool IsStatic { get { return _mi.IsStatic; } }
-		public Type FirtParameterType
-		{
-			get { return _mi.GetParameters()[0].ParameterType; }
-		}
+		public bool IsExtention => _mi.IsStatic && _mi.IsDefined(typeof (ExtensionAttribute), false) && _mi.GetParameters().Length > 0;
+		public override bool IsPublic => _mi.IsPublic;
+		public override bool IsPrivateOrInternal => _mi.IsPrivate || _mi.IsAssembly;
+		public override bool IsStatic => _mi.IsStatic;
+
+		public Type FirtParameterType => _mi.GetParameters()[0].ParameterType;
 
 		public override MemberDom GetOverrides()
 		{
@@ -106,10 +98,6 @@ namespace XMLCommToHTM.DOM
 			};
 		}
 
-		public override Type MemberType
-		{
-			get { return _mi.ReturnType; }
-		}
-		
+		public override Type MemberType => _mi.ReturnType;
 	}
 }

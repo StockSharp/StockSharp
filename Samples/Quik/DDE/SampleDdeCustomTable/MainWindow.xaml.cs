@@ -39,7 +39,7 @@ namespace SampleDdeCustomTable
 		public MainWindow()
 		{
 			InitializeComponent();
-			MainWindow.Instance = this;
+			Instance = this;
 
 			_candlesWindow.MakeHideable();
 

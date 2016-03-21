@@ -6,11 +6,9 @@
       ClusterChart - специальный тип графика для отображения объемов в виде кластеров с гистограммами.
       Для использования этого типа графика необходимо задать специальный стиль 
        <codeEntityReference qualifyHint="true">P:StockSharp.Xaml.Charting.ChartCandleElement.DrawStyle</codeEntityReference> = 
-       <legacyBold>ChartCandleDrawStyles.ClusterProfile</legacyBold>.
-       
+       <codeEntityReference qualifyHint="true">F:StockSharp.Xaml.Charting.ChartCandleDrawStyles.ClusterProfile</codeEntityReference>.
        В качестве исходных данных этот график использует информацию из свойства 
        <codeEntityReference qualifyHint="true">P:StockSharp.Algo.Candles.Candle.PriceLevels</codeEntityReference>.
-
       </para>
       
             <para>

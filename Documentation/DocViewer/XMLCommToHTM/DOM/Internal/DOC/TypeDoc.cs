@@ -37,11 +37,12 @@ namespace XMLCommToHTM.DOM.Internal.DOC
 				};
 			return ret;
 		}
-		
+
 		/// <summary>
 		/// Привязывает members к данным из Reflection
 		/// </summary>
 		/// <param name="onlyDocumentedMembers">true - добавлять члены из Reflection, которых нет в XML документации</param>
+		/// <param name="privateMembers"></param>
 		/// <returns>members которые не привязались к данным из Reflection</returns>
 		public MemberDoc[] MergeMembersWithReflection(bool onlyDocumentedMembers, bool privateMembers)
 		{
@@ -203,7 +204,7 @@ namespace XMLCommToHTM.DOM.Internal.DOC
 			return null;
 		}
 		
-		static string[] EmptyStr=new string[0];
+		static readonly string[] EmptyStr=new string[0];
 		static bool DoMethodsMatch(MethodBase mi, MemberDoc mDoc)
 		{
 			string miName = TypeUtils.ReplacePlus(mi.Name);

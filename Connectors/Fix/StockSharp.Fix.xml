@@ -647,11 +647,13 @@
       <param name="value">
         <see cref="T:System.Byte" /> value.</param>
     </member>
-    <member name="M:StockSharp.Fix.Native.BaseFixWriter.WriteBytes(System.Byte[])">
+    <member name="M:StockSharp.Fix.Native.BaseFixWriter.WriteBytes(System.Byte[],System.Int32,System.Int32)">
       <summary>
             To record an array of bytes.
             </summary>
-      <param name="bytes">Bytes array.</param>
+      <param name="buffer">Bytes array.</param>
+      <param name="offset">The zero-based byte offset in <paramref name="buffer" /> at which to begin copying bytes to the current stream.</param>
+      <param name="count">The number of bytes to be written to the current stream.</param>
     </member>
     <member name="T:StockSharp.Fix.Native.BinaryFixReader">
       <summary>
@@ -4495,10 +4497,6 @@
       <summary>
       </summary>
     </member>
-    <member name="F:StockSharp.Fix.Native.FixTags.MarketSegmentID">
-      <summary>
-      </summary>
-    </member>
     <member name="F:StockSharp.Fix.Native.FixTags.MDOtherValue">
       <summary>
       </summary>
@@ -4550,12 +4548,6 @@
             Add to the data log a new byte.
             </summary>
       <param name="value">New byte.</param>
-    </member>
-    <member name="M:StockSharp.Fix.Native.FixBase.Dump(System.Byte[])">
-      <summary>
-            Add to the data log a new bytes.
-            </summary>
-      <param name="values">New bytes.</param>
     </member>
     <member name="M:StockSharp.Fix.Native.FixBase.FlushDump">
       <summary>
@@ -4663,11 +4655,13 @@
       <param name="value">
         <see cref="T:System.Char" /> value.</param>
     </member>
-    <member name="M:StockSharp.Fix.Native.IFixWriter.WriteBytes(System.Byte[])">
+    <member name="M:StockSharp.Fix.Native.IFixWriter.WriteBytes(System.Byte[],System.Int32,System.Int32)">
       <summary>
             To record an array of bytes.
             </summary>
-      <param name="bytes">Bytes array.</param>
+      <param name="buffer">Bytes array.</param>
+      <param name="offset">The zero-based byte offset in <paramref name="buffer" /> at which to begin copying bytes to the current stream.</param>
+      <param name="count">The number of bytes to be written to the current stream.</param>
     </member>
     <member name="T:StockSharp.Fix.Native.MDEntry">
       <summary>

@@ -24,7 +24,6 @@ namespace StockSharp.Quik.Xaml
 	using System.Windows.Input;
 
 	using Ecng.Collections;
-	using Ecng.Common;
 
 	/// <summary>
 	/// Визуальный компонент выбора набора столбцов DDE таблицы.

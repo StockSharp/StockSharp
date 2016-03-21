@@ -51,7 +51,8 @@ namespace XMLCommToHTM
 		//private SolutionDom _slnDom;
 		public string UrlPrefix;
 		public string MsdnUrlPrefix = "http://msdn.microsoft.com/{0}-{0}/library/";
-		Dictionary<MemberIconsEnum, string> MemberIcons = new Dictionary<MemberIconsEnum, string>
+
+		readonly Dictionary<MemberIconsEnum, string> MemberIcons = new Dictionary<MemberIconsEnum, string>
 			{
 				{MemberIconsEnum.Static,"doc_static"},
 				{MemberIconsEnum.EventPub, "doc_event_public"},

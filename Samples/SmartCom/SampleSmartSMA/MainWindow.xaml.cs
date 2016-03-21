@@ -75,8 +75,7 @@ namespace SampleSmartSMA
 
 		protected override void OnClosing(CancelEventArgs e)
 		{
-			if (_trader != null)
-				_trader.Dispose();
+			_trader?.Dispose();
 
 			base.OnClosing(e);
 		}

@@ -356,7 +356,7 @@ namespace StockSharp.BusinessEntities
 			}
 		}
 
-		private OrderStatus? _status;
+		private long? _status;
 
 		/// <summary>
 		/// System order status.
@@ -364,7 +364,7 @@ namespace StockSharp.BusinessEntities
 		[DataMember]
 		[Nullable]
 		[Browsable(false)]
-		public OrderStatus? Status
+		public long? Status
 		{
 			get { return _status; }
 			set

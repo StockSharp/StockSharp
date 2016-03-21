@@ -411,16 +411,11 @@ namespace StockSharp.Algo.Storages.Binary
 
 			if (metaInfo.Version >= MarketDataVersions.Version31)
 			{
-				execMsg.OrderStatus = reader.ReadNullableInt<OrderStatus>();
+				execMsg.OrderStatus = reader.ReadNullableInt<long>();
 
 				if (execMsg.OrderStatus != null)
 				{
-					var status = (int)execMsg.OrderStatus.Value;
-
-					if (status.HasBits(0x01))
-						execMsg.TimeInForce = TimeInForce.PutInQueue;
-					else if (status.HasBits(0x02))
-						execMsg.TimeInForce = TimeInForce.CancelBalance;
+					execMsg.TimeInForce = execMsg.OrderStatus.Value.GetPlazaTimeInForce();
 				}
 
 				// Лучше ExecCond писать отдельным полем так как возможно только Плаза пишет это в статус
@@ -444,7 +439,7 @@ namespace StockSharp.Algo.Storages.Binary
 				else
 				{
 					if (execMsg.OrderStatus != null)
-						execMsg.IsSystem = !((int)execMsg.OrderStatus).HasBits(0x04);
+						execMsg.IsSystem = execMsg.OrderStatus.Value.IsSystem();
 				}
 			}
 

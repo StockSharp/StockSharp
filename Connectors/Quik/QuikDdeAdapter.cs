@@ -1389,7 +1389,7 @@ namespace StockSharp.Quik
 				changes.Add(PositionChangeTypes.CurrentValue, func.Get<decimal>(DdeDerivativePositionColumns.CurrentPosition));
 				changes.Add(PositionChangeTypes.BlockedValue, func.Get<decimal>(DdeDerivativePositionColumns.CurrentBidsVolume) + func.Get<decimal>(DdeDerivativePositionColumns.CurrentAsksVolume));
 
-				if (this.DerivativePositionsTable.Columns.Contains(DdeDerivativePositionColumns.EffectivePrice))
+				if (DerivativePositionsTable.Columns.Contains(DdeDerivativePositionColumns.EffectivePrice))
 					changes.Add(PositionChangeTypes.AveragePrice, func.Get<decimal>(DdeDerivativePositionColumns.EffectivePrice));
 
 				SendOutMessage(msg);

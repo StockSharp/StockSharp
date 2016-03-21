@@ -15,7 +15,6 @@ Copyright 2010 by StockSharp, LLC
 #endregion S# License
 using System.Windows;
 using System.Windows.Threading;
-using DevExpress.Xpf.Core;
 
 namespace SampleChart
 {
@@ -25,11 +24,6 @@ namespace SampleChart
 		{
 			MessageBox.Show(MainWindow, e.Exception.ToString());
 			e.Handled = true;
-		}
-
-		private void App_OnStartup(object sender, StartupEventArgs e)
-		{
-			ThemeManager.ApplicationThemeName = Theme.Office2016BlackName;
 		}
 	}
 }

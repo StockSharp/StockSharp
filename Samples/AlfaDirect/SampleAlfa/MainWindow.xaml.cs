@@ -50,7 +50,7 @@ namespace SampleAlfa
 		public MainWindow()
 		{
 			InitializeComponent();
-			MainWindow.Instance = this;
+			Instance = this;
 
 			_ordersWindow.MakeHideable();
 			_myTradesWindow.MakeHideable();

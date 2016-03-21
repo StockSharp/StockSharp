@@ -31,9 +31,6 @@ namespace XMLCommToHTM.DOM
 			_name = name;
 		}
 
-		public string Name
-		{
-			get { return _name; }
-		}
+		public string Name => _name;
 	}
 }

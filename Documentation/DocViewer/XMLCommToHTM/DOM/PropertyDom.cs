@@ -31,46 +31,20 @@ namespace XMLCommToHTM.DOM
 			_pi = pi;
 			Params = ParameterDom.BuildParameters(pi.GetIndexParameters(), doc);
 		}
-		public override string ShortSignature
-		{
-			get
-			{
-				return base.ShortSignature + GetParametersShortSignature();
-			}
-		}
+		public override string ShortSignature => base.ShortSignature + GetParametersShortSignature();
+
 		public override string GetParametersShortSignature()
 		{
 			return MemberUtils.GetParametersShortSignature(_pi.GetIndexParameters());
 		}
-		public override bool IsPublic
-		{
-			get
-			{
-				return (_pi.GetMethod != null && _pi.GetMethod.IsPublic) || (_pi.SetMethod!=null && _pi.SetMethod.IsPublic);
-			}
-		}
-		public override bool IsPrivateOrInternal
-		{
-			get
-			{
+		public override bool IsPublic => (_pi.GetMethod != null && _pi.GetMethod.IsPublic) || (_pi.SetMethod!=null && _pi.SetMethod.IsPublic);
 
-				return (_pi.GetMethod == null || _pi.GetMethod.IsPrivate || _pi.GetMethod.IsAssembly) &&
-						(_pi.SetMethod == null || _pi.SetMethod.IsPrivate || _pi.SetMethod.IsAssembly);
-			}
-		}
+		public override bool IsPrivateOrInternal => (_pi.GetMethod == null || _pi.GetMethod.IsPrivate || _pi.GetMethod.IsAssembly) &&
+		                                            (_pi.SetMethod == null || _pi.SetMethod.IsPrivate || _pi.SetMethod.IsAssembly);
 
+		public override bool IsStatic => (_pi.GetMethod != null && _pi.GetMethod.IsStatic) || (_pi.SetMethod != null && _pi.SetMethod.IsStatic);
 
-		public override bool IsStatic
-		{
-			get
-			{
-				return (_pi.GetMethod != null && _pi.GetMethod.IsStatic) || (_pi.SetMethod != null && _pi.SetMethod.IsStatic);
-			}
-		}
-		public override Type MemberType
-		{
-			get { return _pi.PropertyType; }
-		}
+		public override Type MemberType => _pi.PropertyType;
 
 		public override MemberDom GetOverrides()
 		{

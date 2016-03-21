@@ -809,15 +809,18 @@
         </member>
         <member name="P:DevExpress.Xpf.Grid.DataControlBase.FixedFilter">
             <summary>
-                <para> </para>
+                <para>Specifies the filter criteria that is always applied to the grid data and cannot be modified by the end-user. This is a dependency property.
+</para>
             </summary>
-            <value> </value>
+            <value>A <see cref="T:DevExpress.Data.Filtering.CriteriaOperator"/> object which represents filter criteria.
+</value>
 
 
         </member>
         <member name="F:DevExpress.Xpf.Grid.DataControlBase.FixedFilterProperty">
             <summary>
-                <para> </para>
+                <para>Identifies the  dependency property.
+</para>
             </summary>
             <returns> </returns>
 
@@ -1407,9 +1410,11 @@
         </member>
         <member name="P:DevExpress.Xpf.Grid.DataControlBase.SelectionRectangle">
             <summary>
-                <para> </para>
+                <para>Provides access to the marquee selection rectangle.
+</para>
             </summary>
-            <value> </value>
+            <value>A System.Windows.Controls.Border object that is the selection rectangle.
+</value>
 
 
         </member>
@@ -2693,7 +2698,7 @@ This is a dependency property.
         </member>
         <member name="P:DevExpress.Xpf.Grid.DataViewBase.DataControl">
             <summary>
-                <para>Gets the data-aware control which owns the current View.
+                <para>Gets the data-aware control (e.g., <see cref="T:DevExpress.Xpf.Grid.GridControl"/>, <see cref="T:DevExpress.Xpf.Grid.TreeListControl"/>) which owns the current View.
 </para>
             </summary>
             <value>A <see cref="T:DevExpress.Xpf.Grid.DataControlBase"/> descendant (e.g., <see cref="T:DevExpress.Xpf.Grid.GridControl"/>, <see cref="T:DevExpress.Xpf.Grid.TreeListControl"/>) that represents the data-aware control to which the current View belongs.
@@ -3002,184 +3007,224 @@ This is a dependency property.
         </member>
         <member name="M:DevExpress.Xpf.Grid.DataViewBase.ExportToPdf(System.String,DevExpress.XtraPrinting.PdfExportOptions)">
             <summary>
-                <para> </para>
+                <para>Exports a grid to the specified file path in PDF format, using the specified PDF-specific options.
+</para>
             </summary>
             <param name="filePath">
-		 
+		A <see cref="T:System.String"/> which specifies the file name (including the full path) for the created PDF file.
+
             </param>
             <param name="options">
-		 
+		A <see cref="T:DevExpress.XtraPrinting.PdfExportOptions"/> object which specifies the PDF export options to be applied when a grid is exported.
+
             </param>
 
 
         </member>
         <member name="M:DevExpress.Xpf.Grid.DataViewBase.ExportToPdf(System.String)">
             <summary>
-                <para> </para>
+                <para>Exports a grid to the specified file path in PDF format.
+</para>
             </summary>
             <param name="filePath">
-		 
+		A <see cref="T:System.String"/> which specifies the file name (including the full path) for the created PDF file.
+
             </param>
 
 
         </member>
         <member name="M:DevExpress.Xpf.Grid.DataViewBase.ExportToPdf(System.IO.Stream,DevExpress.XtraPrinting.PdfExportOptions)">
             <summary>
-                <para> </para>
+                <para>Exports a grid to the specified stream in PDF format, using the specified PDF-specific options.
+</para>
             </summary>
             <param name="stream">
-		 
+		A <see cref="T:System.IO.Stream"/> object to which the created PDF file should be sent.
+
             </param>
             <param name="options">
-		 
+		A <see cref="T:DevExpress.XtraPrinting.PdfExportOptions"/> object which specifies the PDF export options to be applied when a grid is exported.
+
             </param>
 
 
         </member>
         <member name="M:DevExpress.Xpf.Grid.DataViewBase.ExportToPdf(System.IO.Stream)">
             <summary>
-                <para> </para>
+                <para>Exports a grid to the specified stream in PDF format.
+</para>
             </summary>
             <param name="stream">
-		 
+		A <see cref="T:System.IO.Stream"/> object to which the created PDF file should be sent.
+
             </param>
 
 
         </member>
         <member name="M:DevExpress.Xpf.Grid.DataViewBase.ExportToRtf(System.IO.Stream)">
             <summary>
-                <para> </para>
+                <para>Exports a grid to the specified stream in RTF format.
+</para>
             </summary>
             <param name="stream">
-		 
+		A <see cref="T:System.IO.Stream"/> object to which the created RTF file should be sent.
+
             </param>
 
 
         </member>
         <member name="M:DevExpress.Xpf.Grid.DataViewBase.ExportToRtf(System.IO.Stream,DevExpress.XtraPrinting.RtfExportOptions)">
             <summary>
-                <para> </para>
+                <para>Exports a grid to the specified stream in RTF format, using the specified RTF-specific options.
+</para>
             </summary>
             <param name="stream">
-		 
+		A <see cref="T:System.IO.Stream"/> object to which the created RTF file should be sent.
+
             </param>
             <param name="options">
-		 
+		A <see cref="T:DevExpress.XtraPrinting.RtfExportOptions"/> object which specifies the RTF export options to be applied when a grid is exported.
+
             </param>
 
 
         </member>
         <member name="M:DevExpress.Xpf.Grid.DataViewBase.ExportToRtf(System.String)">
             <summary>
-                <para> </para>
+                <para>Exports a grid to the specified file path in RTF format.
+</para>
             </summary>
             <param name="filePath">
-		 
+		A <see cref="T:System.String"/> which specifies the file name (including the full path) for the created RTF file.
+
             </param>
 
 
         </member>
         <member name="M:DevExpress.Xpf.Grid.DataViewBase.ExportToRtf(System.String,DevExpress.XtraPrinting.RtfExportOptions)">
             <summary>
-                <para> </para>
+                <para>Exports a grid to the specified file path in RTF format, using the specified RTF-specific options.
+</para>
             </summary>
             <param name="filePath">
-		 
+		A <see cref="T:System.String"/> which specifies the file name (including the full path) for the created RTF file.
+
             </param>
             <param name="options">
-		 
+		A <see cref="T:DevExpress.XtraPrinting.RtfExportOptions"/> object which specifies the RTF export options to be applied when a grid is exported.
+
             </param>
 
 
         </member>
         <member name="M:DevExpress.Xpf.Grid.DataViewBase.ExportToText(System.IO.Stream)">
             <summary>
-                <para> </para>
+                <para>Exports a grid to the specified stream in text format.
+</para>
             </summary>
             <param name="stream">
-		 
+		A <see cref="T:System.IO.Stream"/> object to which the created text file should be sent.
+
             </param>
 
 
         </member>
         <member name="M:DevExpress.Xpf.Grid.DataViewBase.ExportToText(System.IO.Stream,DevExpress.XtraPrinting.TextExportOptions)">
             <summary>
-                <para> </para>
+                <para>Exports a grid to the specified stream in text format, using the specified text-specific options.
+</para>
             </summary>
             <param name="stream">
-		 
+		A <see cref="T:System.IO.Stream"/> object to which the created text file should be sent.
+
             </param>
             <param name="options">
-		 
+		A <see cref="T:DevExpress.XtraPrinting.CsvExportOptions"/> object which specifies the text export options to be applied when a grid is exported.
+
             </param>
 
 
         </member>
         <member name="M:DevExpress.Xpf.Grid.DataViewBase.ExportToText(System.String)">
             <summary>
-                <para> </para>
+                <para>Exports a grid to the specified file path in text format.
+</para>
             </summary>
             <param name="filePath">
-		 
+		A <see cref="T:System.String"/> which specifies the file name (including the full path) for the created text file.
+
             </param>
 
 
         </member>
         <member name="M:DevExpress.Xpf.Grid.DataViewBase.ExportToText(System.String,DevExpress.XtraPrinting.TextExportOptions)">
             <summary>
-                <para> </para>
+                <para>Exports a grid to the specified file path in text format, using the specified text-specific options.
+</para>
             </summary>
             <param name="filePath">
-		 
+		A <see cref="T:System.String"/> which specifies the file name (including the full path) for the created text file.
+
             </param>
             <param name="options">
-		 
+		A <see cref="T:DevExpress.XtraPrinting.TextExportOptions"/> object which specifies the text export options to be applied when a grid is exported.
+
             </param>
 
 
         </member>
         <member name="M:DevExpress.Xpf.Grid.DataViewBase.ExportToXps(System.IO.Stream)">
             <summary>
-                <para> </para>
+                <para>Exports a grid to the specified stream in XPS format.
+</para>
             </summary>
             <param name="stream">
-		 
+		A <see cref="T:System.IO.Stream"/> object to which the created XPS file should be sent.
+
             </param>
 
 
         </member>
         <member name="M:DevExpress.Xpf.Grid.DataViewBase.ExportToXps(System.IO.Stream,DevExpress.XtraPrinting.XpsExportOptions)">
             <summary>
-                <para> </para>
+                <para>Exports a grid to the specified stream in XPS format, using the specified XPS-specific options.
+</para>
             </summary>
             <param name="stream">
-		 
+		A <see cref="T:System.IO.Stream"/> object to which the created XPS file should be sent.
+
             </param>
             <param name="options">
-		 
+		A <see cref="T:DevExpress.XtraPrinting.XpsExportOptions"/> object which specifies the XPS export options to be applied when a grid is exported.
+
             </param>
 
 
         </member>
         <member name="M:DevExpress.Xpf.Grid.DataViewBase.ExportToXps(System.String)">
             <summary>
-                <para> </para>
+                <para>Exports a grid to the specified file path in XPS format.
+</para>
             </summary>
             <param name="filePath">
-		 
+		A <see cref="T:System.String"/> which specifies the file name (including the full path) for the created XPS file.
+
             </param>
 
 
         </member>
         <member name="M:DevExpress.Xpf.Grid.DataViewBase.ExportToXps(System.String,DevExpress.XtraPrinting.XpsExportOptions)">
             <summary>
-                <para> </para>
+                <para>Exports a grid to the specified file path in XPS format using the specified XPS-specific options.
+</para>
             </summary>
             <param name="filePath">
-		 
+		A <see cref="T:System.String"/> which specifies the file name (including the full path) for the created XPS file.
+
             </param>
             <param name="options">
-		 
+		A <see cref="T:DevExpress.XtraPrinting.XpsExportOptions"/> object which specifies the XPS export options to be applied when a grid is exported.
+
             </param>
 
 
@@ -3921,6 +3966,14 @@ This is a dependency property.
 
 
         </member>
+        <member name="P:DevExpress.Xpf.Grid.DataViewBase.IsEditFormVisible">
+            <summary>
+                <para> </para>
+            </summary>
+            <value> </value>
+
+
+        </member>
         <member name="P:DevExpress.Xpf.Grid.DataViewBase.IsEditing">
             <summary>
                 <para>Gets whether the focused cell is currently being edited. This is a dependency property.
@@ -4369,7 +4422,8 @@ This is a dependency property.
         </member>
         <member name="M:DevExpress.Xpf.Grid.DataViewBase.Print">
             <summary>
-                <para> </para>
+                <para>Invokes the <b>Print</b> dialog and prints the grid.
+</para>
             </summary>
 
 
@@ -4395,17 +4449,20 @@ This is a dependency property.
         </member>
         <member name="M:DevExpress.Xpf.Grid.DataViewBase.PrintDirect(System.Printing.PrintQueue)">
             <summary>
-                <para> </para>
+                <para>Prints the grid using the printer specified by the print queue.
+</para>
             </summary>
             <param name="queue">
-		 
+		A <see cref="T:System.Printing.PrintQueue"/> object specifying the print queue.
+
             </param>
 
 
         </member>
         <member name="M:DevExpress.Xpf.Grid.DataViewBase.PrintDirect">
             <summary>
-                <para> </para>
+                <para>Prints the grid using the default printer.
+</para>
             </summary>
 
 
@@ -5078,15 +5135,18 @@ This is a dependency property.
         </member>
         <member name="P:DevExpress.Xpf.Grid.DataViewBase.SelectionRectangleStyle">
             <summary>
-                <para> </para>
+                <para>Gets or sets a style of the marquee selection rectangle. This is a dependency property.
+</para>
             </summary>
-            <value> </value>
+            <value>A <see cref="T:System.Windows.Style"/> object that represents a style to be applied to the marquee selection rectangle.
+</value>
 
 
         </member>
         <member name="F:DevExpress.Xpf.Grid.DataViewBase.SelectionRectangleStyleProperty">
             <summary>
-                <para> </para>
+                <para>Identifies the  dependency property.
+</para>
             </summary>
             <returns> </returns>
 
@@ -5423,117 +5483,144 @@ This is a dependency property.
         </member>
         <member name="M:DevExpress.Xpf.Grid.DataViewBase.ShowPrintPreview(System.Windows.FrameworkElement,System.String)">
             <summary>
-                <para> </para>
+                <para>Creates the print document from the DataViewBase and displays the <b>Print Preview</b> of the document using the specified owner and document name. This method is intended to be used in XBAP applications.
+</para>
             </summary>
             <param name="owner">
-		 
+		A <see cref="T:System.Windows.FrameworkElement"/> instance specifying the owner of the <b>Print Preview</b>.
+
             </param>
             <param name="documentName">
-		 
+		A <see cref="T:System.String"/> value specifying what name should be used for the document to be displayed in the <b>Print Preview</b>.
+
             </param>
 
 
         </member>
         <member name="M:DevExpress.Xpf.Grid.DataViewBase.ShowPrintPreview(System.Windows.Window,System.String,System.String)">
             <summary>
-                <para> </para>
+                <para>Creates the print document from the DataViewBase and displays the <b>Print Preview</b> of the document using the specified owner, document name and <b>Print Preview</b>'s title. This method can't be used in XBAP applications.
+</para>
             </summary>
             <param name="owner">
-		 
+		A <see cref="T:System.Windows.Window"/> instance specifying the owner of the <b>Print Preview</b>.
+
             </param>
             <param name="documentName">
-		 
+		A <see cref="T:System.String"/> value specifying what name should be used for the document to be displayed in the <b>Print Preview</b>.
+
             </param>
             <param name="title">
-		 
+		A <see cref="T:System.String"/> value specifying the title of the <b>Print Preview</b>.
+
             </param>
 
 
         </member>
         <member name="M:DevExpress.Xpf.Grid.DataViewBase.ShowPrintPreview(System.Windows.Window,System.String)">
             <summary>
-                <para> </para>
+                <para>Creates the print document from the DataViewBase and displays the <b>Print Preview</b> of the document using the specified owner and document name. This method can't be used in XBAP applications.
+</para>
             </summary>
             <param name="owner">
-		 
+		A <see cref="T:System.Windows.Window"/> instance specifying the owner of the <b>Print Preview</b>.
+
             </param>
             <param name="documentName">
-		 
+		A <see cref="T:System.String"/> value specifying what name should be used for the document to be displayed in the <b>Print Preview</b>.
+
             </param>
 
 
         </member>
         <member name="M:DevExpress.Xpf.Grid.DataViewBase.ShowPrintPreview(System.Windows.Window)">
             <summary>
-                <para> </para>
+                <para>Creates the print document from the DataViewBase and displays the <b>Print Preview</b> of the document using the specified owner. This method can't be used in XBAP applications.
+</para>
             </summary>
             <param name="owner">
-		 
+		A <see cref="T:System.Windows.Window"/> instance specifying the owner of the <b>Print Preview</b>.
+
             </param>
 
 
         </member>
         <member name="M:DevExpress.Xpf.Grid.DataViewBase.ShowPrintPreview(System.Windows.FrameworkElement,System.String,System.String)">
             <summary>
-                <para> </para>
+                <para>Creates the print document from the DataViewBase and displays the <b>Print Preview</b> of the document using the specified owner, document name and <b>Print Preview</b>'s title. This method is intended to be used in XBAP applications.
+</para>
             </summary>
             <param name="owner">
-		 
+		A <see cref="T:System.Windows.FrameworkElement"/> instance specifying the owner of the <b>Print Preview</b>.
+
             </param>
             <param name="documentName">
-		 
+		A <see cref="T:System.String"/> value specifying what name should be used for the document to be displayed in the <b>Print Preview</b>.
+
             </param>
             <param name="title">
-		 
+		A <see cref="T:System.String"/> value specifying the title of the <b>Print Preview</b>.
+
             </param>
 
 
         </member>
         <member name="M:DevExpress.Xpf.Grid.DataViewBase.ShowPrintPreview(System.Windows.FrameworkElement)">
             <summary>
-                <para> </para>
+                <para>Creates the print document from the DataViewBase and displays the <b>Print Preview</b> of the document using the specified owner. This method is intended to be used in XBAP applications.
+</para>
             </summary>
             <param name="owner">
-		 
+		A <see cref="T:System.Windows.FrameworkElement"/> instance specifying the owner of the <b>Print Preview</b>.
+
             </param>
 
 
         </member>
         <member name="M:DevExpress.Xpf.Grid.DataViewBase.ShowPrintPreviewDialog(System.Windows.Window)">
             <summary>
-                <para> </para>
+                <para>Creates the print document from the DataViewBase and displays the modal <b>Print Preview</b> of the document using the specified owner. This method can't be used in XBAP applications.
+</para>
             </summary>
             <param name="owner">
-		 
+		A <see cref="T:System.Windows.Window"/> instance specifying the owner of the <b>Print Preview</b>.
+
             </param>
 
 
         </member>
         <member name="M:DevExpress.Xpf.Grid.DataViewBase.ShowPrintPreviewDialog(System.Windows.Window,System.String,System.String)">
             <summary>
-                <para> </para>
+                <para>Creates the print document from the DataViewBase and displays the modal <b>Print Preview</b> of the document using the specified owner, document name and <b>Print Preview</b>'s title. This method can't be used in XBAP applications.
+</para>
             </summary>
             <param name="owner">
-		 
+		A <see cref="T:System.Windows.Window"/> instance specifying the owner of the <b>Print Preview</b>.
+
             </param>
             <param name="documentName">
-		 
+		A <see cref="T:System.String"/> value specifying what name should be used for the document to be displayed in the <b>Print Preview</b>.
+
             </param>
             <param name="title">
-		 
+		A <see cref="T:System.String"/> value specifying the title of the <b>Print Preview</b>.
+
             </param>
 
 
         </member>
         <member name="M:DevExpress.Xpf.Grid.DataViewBase.ShowPrintPreviewDialog(System.Windows.Window,System.String)">
             <summary>
-                <para> </para>
+                <para>Creates the print document from the DataViewBase and displays the modal <b>Print Preview</b> of the document using the specified owner and document name. This method can't be used in XBAP applications.
+</para>
             </summary>
             <param name="owner">
-		 
+		A <see cref="T:System.Windows.Window"/> instance specifying the owner of the <b>Print Preview</b>.
+
             </param>
             <param name="documentName">
-		 
+		A <see cref="T:System.String"/> value specifying what name should be used for the document to be displayed in the <b>Print Preview</b>.
+
             </param>
 
 
@@ -5628,15 +5715,18 @@ This is a dependency property.
         </member>
         <member name="P:DevExpress.Xpf.Grid.DataViewBase.ShowSelectionRectangle">
             <summary>
-                <para> </para>
+                <para>Specifies whether to enable the marquee selection feature. This is a dependency property.
+</para>
             </summary>
-            <value> </value>
+            <value><b>true</b> to enable the marquee selection feature; otherwise, <b>false</b>.
+</value>
 
 
         </member>
         <member name="F:DevExpress.Xpf.Grid.DataViewBase.ShowSelectionRectangleProperty">
             <summary>
-                <para> </para>
+                <para>Identifies the  dependency property.
+</para>
             </summary>
             <returns> </returns>
 
@@ -8004,6 +8094,198 @@ This is a dependency property.
         <member name="F:DevExpress.Xpf.Grid.SelectionState.Selected">
             <summary>
                 <para>A cell (or row) is selected.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="T:DevExpress.Xpf.Grid.ClipboardCopyOptions">
+
+            <summary>
+                <para> </para>
+            </summary>
+
+        </member>
+        <member name="F:DevExpress.Xpf.Grid.ClipboardCopyOptions.All">
+            <summary>
+                <para>Data is copied to the clipboard, compatible with the RTF, HTML, XLS (Biff8), CSV, UnicodeText and Text formats.
+
+</para>
+            </summary>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.Grid.ClipboardCopyOptions.Csv">
+            <summary>
+                <para>Data is copied to the clipboard compatible with the Csv format.
+
+</para>
+            </summary>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.Grid.ClipboardCopyOptions.Excel">
+            <summary>
+                <para>Data is copied to the clipboard compatible with the Excel format (XLS/XLSX).
+
+</para>
+            </summary>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.Grid.ClipboardCopyOptions.Html">
+            <summary>
+                <para>Data is copied to the clipboard compatible with the Html format.
+
+</para>
+            </summary>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.Grid.ClipboardCopyOptions.None">
+            <summary>
+                <para>Data is copied to the clipboard as a simple plain text.
+
+</para>
+            </summary>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.Grid.ClipboardCopyOptions.Rtf">
+            <summary>
+                <para>Data is copied to the clipboard compatible with the Rtf format
+
+</para>
+            </summary>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.Grid.ClipboardCopyOptions.Txt">
+            <summary>
+                <para>Data is copied to the clipboard compatible with the TXT format
+
+</para>
+            </summary>
+
+
+        </member>
+        <member name="T:DevExpress.Xpf.Grid.ClipboardMode">
+
+            <summary>
+                <para> </para>
+            </summary>
+
+        </member>
+        <member name="F:DevExpress.Xpf.Grid.ClipboardMode.Formatted">
+            <summary>
+                <para>Data is copied to the clipboard together with its format settings.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.Grid.ClipboardMode.PlainText">
+            <summary>
+                <para>Copied data is stored in clipboard as simple plain text.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="T:DevExpress.Xpf.Grid.PostConfirmationMode">
+
+            <summary>
+                <para>Lists values that specify the response to an end-user's attempt to move the focus from the Inline Edit Form while it contains unsaved changes.
+
+</para>
+            </summary>
+
+        </member>
+        <member name="F:DevExpress.Xpf.Grid.PostConfirmationMode.None">
+            <summary>
+                <para>The dialog window is not shown and the Inline Edit Form can only be closed by clicking either the <b>Update</b> or <b>Cancel</b> button within it.
+
+</para>
+            </summary>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.Grid.PostConfirmationMode.YesNo">
+            <summary>
+                <para>The dialog window shows the <b>Yes</b> (post changes to the grid) and <b>No</b> (discard changes) buttons.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.Grid.PostConfirmationMode.YesNoCancel">
+            <summary>
+                <para>The dialog window shows the <b>Yes</b> (post changes to the grid), <b>No</b> (discard changes) and <b>Cancel</b> (close the dialog window and continue editing via the Inline Edit Form) buttons.
+
+</para>
+            </summary>
+
+
+        </member>
+        <member name="T:DevExpress.Xpf.Grid.EditFormShowMode">
+
+            <summary>
+                <para>Lists values that specify the Inline Edit Form's show mode.
+</para>
+            </summary>
+
+        </member>
+        <member name="F:DevExpress.Xpf.Grid.EditFormShowMode.Dialog">
+            <summary>
+                <para>The Inline Edit Form is shown as a popup dialog window.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.Grid.EditFormShowMode.Inline">
+            <summary>
+                <para>The Inline Edit Form is shown below the row that is being edited.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.Grid.EditFormShowMode.InlineHideRow">
+            <summary>
+                <para>The Inline Edit Form replaces the row that is being edited.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.Grid.EditFormShowMode.None">
+            <summary>
+                <para>The Inline Edit Form is disabled.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="T:DevExpress.Xpf.Grid.EditFormPostMode">
+
+            <summary>
+                <para>Lists values that specify whether changes made to a row in the Inline Edit Form are immediately shown within the grid.
+</para>
+            </summary>
+
+        </member>
+        <member name="F:DevExpress.Xpf.Grid.EditFormPostMode.Cached">
+            <summary>
+                <para>Changes made to a row in the Edit Form are only shown within the grid after posting them to the data source. 
+</para>
+            </summary>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.Grid.EditFormPostMode.Immediate">
+            <summary>
+                <para>Changes made to a row in the Edit Form are immediately shown within the grid.
 </para>
             </summary>
 
@@ -16472,17 +16754,21 @@ This class supports the internal infrastructure and is not intended to be used d
         </member>
         <member name="P:DevExpress.Xpf.Grid.DataViewCommandsBase.ShowPrintPreview">
             <summary>
-                <para> </para>
+                <para>Invokes the Print Preview.
+</para>
             </summary>
-            <value> </value>
+            <value>A command implementing the <see cref="T:System.Windows.Input.ICommand"/>.
+</value>
 
 
         </member>
         <member name="P:DevExpress.Xpf.Grid.DataViewCommandsBase.ShowPrintPreviewDialog">
             <summary>
-                <para> </para>
+                <para>Invokes the modal Print Preview.
+</para>
             </summary>
-            <value> </value>
+            <value>A command implementing the <see cref="T:System.Windows.Input.ICommand"/>.
+</value>
 
 
         </member>
