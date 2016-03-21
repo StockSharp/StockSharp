@@ -268,33 +268,28 @@ namespace StockSharp.Algo.Testing
 				{
 					var lookupMsg = (SecurityLookupMessage)message;
 
-					//ThreadingHelper.Thread(() =>
-					//{
-					//	try
-					//	{
-							SecurityProvider.LookupAll().ForEach(security =>
-							{
-								SendOutMessage(security.Board.ToMessage());
+					var securities = lookupMsg.SecurityId.IsDefault() 
+							? SecurityProvider.LookupAll() 
+							: SecurityProvider.Lookup(lookupMsg.ToSecurity());
 
-								var secMsg = security.ToMessage();
-								secMsg.OriginalTransactionId = lookupMsg.TransactionId;
-								SendOutMessage(secMsg);
+					securities.ForEach(security =>
+					{
+						SendOutMessage(security.Board.ToMessage());
 
-								//SendOutMessage(new Level1ChangeMessage { SecurityId = security.ToSecurityId() }
-								//	.Add(Level1Fields.StepPrice, security.StepPrice)
-								//	.Add(Level1Fields.MinPrice, security.MinPrice)
-								//	.Add(Level1Fields.MaxPrice, security.MaxPrice)
-								//	.Add(Level1Fields.MarginBuy, security.MarginBuy)
-								//	.Add(Level1Fields.MarginSell, security.MarginSell));
-							});
+						var secMsg = security.ToMessage();
+						secMsg.OriginalTransactionId = lookupMsg.TransactionId;
+						SendOutMessage(secMsg);
 
-							SendOutMessage(new SecurityLookupResultMessage { OriginalTransactionId = lookupMsg.TransactionId });
-					//	}
-					//	catch (Exception ex)
-					//	{
-					//		SendOutError(ex);
-					//	}
-					//}).Name("History sec lookup").Start();
+						//SendOutMessage(new Level1ChangeMessage { SecurityId = security.ToSecurityId() }
+						//	.Add(Level1Fields.StepPrice, security.StepPrice)
+						//	.Add(Level1Fields.MinPrice, security.MinPrice)
+						//	.Add(Level1Fields.MaxPrice, security.MaxPrice)
+						//	.Add(Level1Fields.MarginBuy, security.MarginBuy)
+						//	.Add(Level1Fields.MarginSell, security.MarginSell));
+					});
+
+					SendOutMessage(new SecurityLookupResultMessage { OriginalTransactionId = lookupMsg.TransactionId });
+
 					return;
 				}
 
