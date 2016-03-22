@@ -13,6 +13,7 @@
 </ddue:externalLink></item>
   <item id="alor"><ddue:link xlink:href="df84be76-8798-4b96-94ea-a1b106266ad5" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">Алор Трейд</ddue:link></item>
   <item id="alortrader">Add token content here</item>
+  <item id="barchart"><ddue:link xlink:href="8a531942-a16c-4348-a4d0-dd4ae999d8f9" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">BarChart</ddue:link></item>
   <item id="bitstamp"><ddue:link xlink:href="345fa341-661d-4992-a9a6-9c89af399feb" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">BitStamp</ddue:link></item>
   <item id="blackwood"><ddue:link xlink:href="89c3f13d-2602-446a-8c3d-5615b6f901b9" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">Blackwood</ddue:link></item>
   <item id="blackwood_external"><ddue:link xlink:href="89c3f13d-2602-446a-8c3d-5615b6f901b9" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">Blackwood</ddue:link></item>
@@ -55,6 +56,7 @@
 		  <ddue:linkText>DDE</ddue:linkText>
 		  <ddue:linkUri>http://ru.wikipedia.org/wiki/DDE</ddue:linkUri>
 		</ddue:externalLink></item>
+  <item id="designer"><ddue:link xlink:href="76470d21-d624-46d1-a8c6-b52f7fabdeb4" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">S#.Designer</ddue:link></item>
   <item id="dotnet"><ddue:externalLink xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">
 		  <ddue:linkText>.NET</ddue:linkText>
 		  <ddue:linkUri>http://ru.wikipedia.org/wiki/.NET_Framework</ddue:linkUri>
@@ -269,6 +271,7 @@
     <ddue:linkText>Transaq</ddue:linkText>
     <ddue:linkUri>http://transaq.ru/</ddue:linkUri>
   </ddue:externalLink></item>
+  <item id="twime"><ddue:link xlink:href="1ee210ee-a004-4277-b8f4-91cb08d651db" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">TWIME</ddue:link></item>
   <item id="ux"><ddue:externalLink xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">
 		  <ddue:linkText>УркБиржа</ddue:linkText>
 		  <ddue:linkUri>http://ux.ua</ddue:linkUri>
@@ -298,8 +301,4 @@
 		  <ddue:linkText>Xslt</ddue:linkText>
 		  <ddue:linkUri>http://ru.wikipedia.org/wiki/XSLT</ddue:linkUri>
 		</ddue:externalLink></item>
-  <item id="barchart"><ddue:link xlink:href="8a531942-a16c-4348-a4d0-dd4ae999d8f9" 
-xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">BarChart</ddue:link></item>
-  <item id="twime"><ddue:link xlink:href="1ee210ee-a004-4277-b8f4-91cb08d651db" 
-xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">TWIME</ddue:link></item>
 </content>

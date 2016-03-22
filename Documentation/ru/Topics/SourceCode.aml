@@ -22,28 +22,36 @@
   			<para><legacyBold>Платные компоненты (исходные коды)</legacyBold></para>
 			<list class="bullet">
   				<listItem>
-  					<para><legacyBold>Plaza 2 CGate</legacyBold> - коннектор для прямого подключения к торгам к секции Срочного рынка на Московской бирже по протоколу Plaza2 Cgate.</para>
+  					<para><link xlink:href="7eda6d74-d3b8-4fe5-b6a3-fab60e441daf">Plaza 2 CGate</link> - коннектор для прямого подключения к торгам к секции Срочного рынка на Московской бирже по протоколу Plaza2 Cgate.</para>
   				</listItem>
   				<listItem>
-  					<para><legacyBold>Micex TEAP</legacyBold> - коннектор для прямого подключения к торгам к секции Фондового рынка на Московской бирже по протоколу TEAP.</para>
+  					<para><link xlink:href="61692ace-225e-4ecc-845a-504021d59a8f">Micex TEAP</link> - коннектор для прямого подключения к торгам к секции Фондового рынка на Московской бирже по протоколу TEAP.</para>
   				</listItem>
   				<listItem>
-  					<para><legacyBold>ITCH</legacyBold> - коннектор для прямого подключения к торгам на биржах LSE и/или NASDAQ по протоколу ITCH.</para>
+  					<para><link xlink:href="62dc0f78-2b9a-4f88-b6bc-68361bd0d8fe">ITCH</link> - коннектор для прямого подключения к торгам на биржах LSE и/или NASDAQ по протоколу ITCH.</para>
   				</listItem>
   				<listItem>
-  					<para><legacyBold>FIX/FAST</legacyBold> - коннектор для прямого подключения к торгам на Московской бирже по протоколу FIX/FAST.</para>
+  					<para><link xlink:href="b0198d6a-0667-45d4-b172-698afd3ca310">FIX/FAST</link> - коннектор для прямого подключения к торгам на Московской бирже по протоколу FIX/FAST.</para>
   				</listItem>
   				<listItem>
-  					<para><legacyBold>TWIME</legacyBold> - .........</para>
+  					<para><link xlink:href="1ee210ee-a004-4277-b8f4-91cb08d651db">TWIME</link> - коннектор для управления заявками на срочном рынке Московской Биржи.</para>
   				</listItem>
   				<listItem>
-  					<para><legacyBold>S#.Shell</legacyBold> - готовый каркас торгового робота.</para>
+  					<para>
+  				<externalLink>
+					<linkText>S#.Shell</linkText>
+					<linkAlternateText>Каркас для торговых стратегий</linkAlternateText>
+					<linkUri>http://stocksharp.com/products/shell/</linkUri>
+					<linkTarget>_blank</linkTarget>
+				</externalLink> 			- готовый каркас для торговых стратегий.
+ 			</para>
+  					
   				</listItem>
   				<listItem>
-  					<para><legacyBold>S#.Data</legacyBold> - программа автоматической загрузки и хранения маркет-данных.</para>
+  					<para><token>hydra</token> - программа автоматической загрузки и хранения маркет-данных.</para>
   				</listItem>
   				<listItem>
-  					<para><legacyBold>S#.Designer</legacyBold> - визуальный дизайнер торговых стратегий.</para>
+  					<para><token>designer</token> - визуальный дизайнер торговых стратегий.</para>
   				</listItem>
 			</list>
  		</listItem>

@@ -98,6 +98,8 @@
       <DocumentationSource sourceFile="..\..\..\References\ru\StockSharp.Xaml.Diagram.xml" />
       <DocumentationSource sourceFile="..\..\..\References\ru\StockSharp.Xaml.dll" />
       <DocumentationSource sourceFile="..\..\..\References\ru\StockSharp.Xaml.xml" />
+      <DocumentationSource sourceFile="..\..\..\References\ru\StockSharp.Twime.dll" />
+      <DocumentationSource sourceFile="..\..\..\References\ru\StockSharp.Twime.xml" />
     </DocumentationSources>
     <CopyrightHref>http://stocksharp.com</CopyrightHref>
     <CopyrightText>&amp;#169%3b 2015 - StockSharp LLC</CopyrightText>
@@ -178,6 +180,8 @@
       <ImageId>candle_qpile</ImageId>
       <AlternateText>candle qpile</AlternateText>
     </None>
+    <None Include="Topics\Designer.aml" />
+    <None Include="Topics\TwimeSample.aml" />
     <None Include="Topics\TWIME.aml" />
     <None Include="Topics\ITCHSample.aml" />
     <None Include="Topics\HydraSettingsITCH.aml" />
@@ -1673,6 +1677,10 @@
     <Image Include="Art\hydra_settings_itch.png">
       <ImageId>hydra_settings_itch</ImageId>
       <AlternateText>hydra settings itch</AlternateText>
+    </Image>
+    <Image Include="Art\TwimeSample.png">
+      <ImageId>TwimeSample</ImageId>
+      <AlternateText>Twime Sample</AlternateText>
     </Image>
   </ItemGroup>
   <ItemGroup>
