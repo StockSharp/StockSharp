@@ -641,25 +641,6 @@ namespace StockSharp.Algo
 			return currentPrice * position.CurrentValue * security.StepPrice / security.PriceStep ?? 1;
 		}
 
-		///// <summary>
-		///// Получить текущее время с учетом часового пояса торговой площадки инструмента.
-		///// </summary>
-		///// <param name="connector">Подключение к торговой системе.</param>
-		///// <param name="security">Инструмент.</param>
-		///// <returns>Текущее время.</returns>
-		//public static DateTime GetMarketTime(this IConnector connector, Security security)
-		//{
-		//	if (connector == null)
-		//		throw new ArgumentNullException("connector");
-
-		//	if (security == null)
-		//		throw new ArgumentNullException("security");
-
-		//	var localTime = connector.CurrentTime;
-
-		//	return security.ToExchangeTime(localTime);
-		//}
-
 		/// <summary>
 		/// To check, whether the time is traded (has the session started, ended, is there a clearing).
 		/// </summary>
@@ -1149,7 +1130,7 @@ namespace StockSharp.Algo
 				throw new ArgumentNullException(nameof(priceRange));
 
 			//if (priceRange.Value < double.Epsilon)
-			//	throw new ArgumentOutOfRangeException("priceRange", priceRange, "Размер группировки меньше допустимого.");
+			//	throw new ArgumentOutOfRangeException(nameof(priceRange), priceRange, "Размер группировки меньше допустимого.");
 
 			//if (quotes.Count() < 2)
 			//	return Enumerable.Empty<AggregatedQuote>();
@@ -1264,10 +1245,10 @@ namespace StockSharp.Algo
 				throw new ArgumentNullException(nameof(delta));
 
 			if (!from.IsSorted)
-				throw new ArgumentException("from");
+				throw new ArgumentException(nameof(from));
 
 			if (!delta.IsSorted)
-				throw new ArgumentException("delta");
+				throw new ArgumentException(nameof(delta));
 
 			return new QuoteChangeMessage
 			{
@@ -2142,94 +2123,6 @@ namespace StockSharp.Algo
 
 			return date;
 		}
-
-		///// <summary>
-		///// Перевести локальное время в биржевое.
-		///// </summary>
-		///// <param name="exchange">Информация о бирже.</param>
-		///// <param name="time">Локальное время.</param>
-		///// <returns>Время с биржевым сдвигом.</returns>
-		//public static DateTimeOffset ToExchangeTime(this Exchange exchange, DateTime time)
-		//{
-		//	if (exchange == null)
-		//		throw new ArgumentNullException("exchange");
-
-		//	return time.ToLocalTime(exchange.TimeZoneInfo).ApplyTimeZone(exchange.TimeZoneInfo);
-		//}
-
-		///// <summary>
-		///// Перевести локальное время в биржевое.
-		///// </summary>
-		///// <param name="exchange">Информация о бирже.</param>
-		///// <param name="time">Локальное время.</param>
-		///// <param name="sourceZone">Времемнная зона, в которой записано значение <paramref name="time"/>.</param>
-		///// <returns>Время с биржевым сдвигом.</returns>
-		//public static DateTime ToExchangeTime(this Exchange exchange, DateTime time, TimeZoneInfo sourceZone)
-		//{
-		//	if (exchange == null)
-		//		throw new ArgumentNullException("exchange");
-
-		//	return time.To(sourceZone, exchange.TimeZoneInfo);
-		//}
-
-		///// <summary>
-		///// Перевести локальное время в биржевое.
-		///// </summary>
-		///// <param name="security">Информация о инструменте.</param>
-		///// <param name="localTime">Локальное время.</param>
-		///// <returns>Время с биржевым сдвигом.</returns>
-		//public static DateTimeOffset ToExchangeTime(this Security security, DateTimeOffset localTime)
-		//{
-		//	if (security == null) 
-		//		throw new ArgumentNullException("security");
-
-		//	if (security.Board == null)
-		//		throw new ArgumentException(LocalizedStrings.Str903Params.Put(security.Id), "security");
-
-		//	if (security.Board.Exchange == null)
-		//		throw new ArgumentException(LocalizedStrings.Str1216Params.Put(security.Id), "security");
-
-		//	return security.Board.Exchange.ToExchangeTime(localTime);
-		//}
-
-		///// <summary>
-		///// Перевести биржевое время в локальное.
-		///// </summary>
-		///// <param name="exchange">Информация о бирже, из которой будет использоваться <see cref="Exchange.TimeZoneInfo"/>.</param>
-		///// <param name="exchangeTime">Биржевое время.</param>
-		///// <returns>Локальное время.</returns>
-		//public static DateTime ToLocalTime(this Exchange exchange, DateTimeOffset exchangeTime)
-		//{
-		//	if (exchange == null)
-		//		throw new ArgumentNullException("exchange");
-
-		//	return exchangeTime.ToLocalTime(exchange.TimeZoneInfo);
-
-		//	//if (exchangeTime.Kind == DateTimeKind.Local)
-		//	//	return exchangeTime;
-
-		//	//if (exchange.TimeZoneInfo.Id == TimeZoneInfo.Local.Id)
-		//	//	return exchangeTime;
-
-		//	//// http://stackoverflow.com/questions/11872980/converting-datetime-now-to-a-different-time-zone
-		//	//exchangeTime = exchangeTime.To(destination: exchange.TimeZoneInfo);
-
-		//	//return exchangeTime.To(exchange.TimeZoneInfo, TimeZoneInfo.Local);
-		//}
-
-		///// <summary>
-		///// Перевести биржевое время в UTC.
-		///// </summary>
-		///// <param name="exchange">Информация о бирже, из которой будет использоваться <see cref="Exchange.TimeZoneInfo"/>.</param>
-		///// <param name="exchangeTime">Биржевое время.</param>
-		///// <returns>Биржевое время в UTC.</returns>
-		//public static DateTime ToUtc(this Exchange exchange, DateTime exchangeTime)
-		//{
-		//	if (exchange == null)
-		//		throw new ArgumentNullException("exchange");
-
-		//	return TimeZoneInfo.ConvertTimeToUtc(exchangeTime, exchange.TimeZoneInfo);
-		//}
 
 		/// <summary>
 		/// To calculate delay based on difference between the server and local time.
@@ -3557,7 +3450,7 @@ namespace StockSharp.Algo
 		//	where T : class, IMessageAdapter
 		//{
 		//	if (adapter == null)
-		//		throw new ArgumentNullException("adapter");
+		//		throw new ArgumentNullException(nameof(adapter));
 
 		//	var outAdapter = adapter as T;
 

@@ -778,7 +778,7 @@ namespace StockSharp.Algo.Derivatives
 		{
 			if (deviation == 0)
 				return 0;
-			//throw new ArgumentOutOfRangeException("deviation", deviation, "Стандартное отклонение имеет недопустимое значение.");
+			//throw new ArgumentOutOfRangeException(nameof(deviation), deviation, "Стандартное отклонение имеет недопустимое значение.");
 
 			if (assetPrice == 0)
 				return 0;

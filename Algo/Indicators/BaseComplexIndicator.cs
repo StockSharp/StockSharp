@@ -55,7 +55,7 @@ namespace StockSharp.Algo.Indicators
 				throw new ArgumentNullException(nameof(innerIndicators));
 
 			if (innerIndicators.Any(i => i == null))
-				throw new ArgumentException("innerIndicators");
+				throw new ArgumentException(nameof(innerIndicators));
 
 			InnerIndicators = new List<IIndicator>(innerIndicators);
 

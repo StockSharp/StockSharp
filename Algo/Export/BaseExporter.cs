@@ -45,7 +45,7 @@ namespace StockSharp.Algo.Export
 		protected BaseExporter(Security security, object arg, Func<int, bool> isCancelled, string path)
 		{
 			//if (security == null)
-			//	throw new ArgumentNullException("security");
+			//	throw new ArgumentNullException(nameof(security));
 
 			if (isCancelled == null)
 				throw new ArgumentNullException(nameof(isCancelled));

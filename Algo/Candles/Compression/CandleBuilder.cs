@@ -587,13 +587,13 @@ namespace StockSharp.Algo.Candles.Compression
 		//	public TimeoutInfo(CandleSeries series, TimeFrameCandleBuilder builder)
 		//	{
 		//		if (series == null)
-		//			throw new ArgumentNullException("series");
+		//			throw new ArgumentNullException(nameof(series));
 
 		//		if (series.Security.Connector == null)
 		//			throw new ArgumentException("Инструмент {0} не имеет информации о подключении.".Put(series.Security), "series");
 
 		//		if (builder == null)
-		//			throw new ArgumentNullException("builder");
+		//			throw new ArgumentNullException(nameof(builder));
 
 		//		_timeFrame = (TimeSpan)series.Arg;
 		//		_offset = TimeSpan.FromTicks((long)((decimal)((decimal)_timeFrame.Ticks + builder.Timeout)));

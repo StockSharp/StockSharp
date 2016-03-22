@@ -57,7 +57,7 @@ namespace StockSharp.Messages
 			public void StartTimeOut(long key)
 			{
 				//if (key == 0)
-				//	throw new ArgumentNullException("key");
+				//	throw new ArgumentNullException(nameof(key));
 
 				_registeredKeys.SafeAdd(key, s => TimeOut);
 			}

@@ -120,7 +120,7 @@ namespace StockSharp.Algo
 			public void Process(ExecutionMessage message)
 			{
 				if (!message.HasOrderInfo())
-					throw new ArgumentException("message");
+					throw new ArgumentException(nameof(message));
 
 				var key = Tuple.Create(message.Side, message.OrderPrice);
 

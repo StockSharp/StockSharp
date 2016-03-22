@@ -1090,7 +1090,7 @@ namespace StockSharp.Algo
 				throw new ArgumentNullException(nameof(type));
 
 			//if (arg == null)
-			//	throw new ArgumentNullException("arg");
+			//	throw new ArgumentNullException(nameof(arg));
 
 			var candle = type.CreateInstance<Candle>();
 
@@ -1379,7 +1379,7 @@ namespace StockSharp.Algo
 				Story = news.Story,
 				Source = news.Source,
 				Headline = news.Headline,
-				SecurityId = news.Security == null ? (SecurityId?)null : news.Security.ToSecurityId(),
+				SecurityId = news.Security?.ToSecurityId(),
 				BoardCode = news.Board == null ? string.Empty : news.Board.Code,
 				Url = news.Url,
 			};

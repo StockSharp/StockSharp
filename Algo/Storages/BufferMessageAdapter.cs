@@ -86,7 +86,7 @@ namespace StockSharp.Algo.Storages
 			//public IEnumerable<TMarketData> Get(TKey key)
 			//{
 			//	if (key.IsDefault())
-			//		throw new ArgumentNullException("key");
+			//		throw new ArgumentNullException(nameof(key));
 
 			//	return _data.SyncGet(d =>
 			//	{

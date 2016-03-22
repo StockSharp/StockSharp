@@ -380,10 +380,10 @@ namespace StockSharp.Quik
 				throw new ArgumentNullException(nameof(message));
 
 			if (message.PortfolioName.IsEmpty())
-				throw new ArgumentException("message");
+				throw new ArgumentException(nameof(message));
 
 			if (message.SecurityId.SecurityCode.IsEmpty())
-				throw new ArgumentException("message");
+				throw new ArgumentException(nameof(message));
 
 			var underlyingSecurityCode = message.GetValue<string>("UnderlyingSecurityCode");
 
@@ -416,7 +416,7 @@ namespace StockSharp.Quik
 		
 			var orderRegisterMessage = transaction.Message as OrderRegisterMessage;
 
-			return orderRegisterMessage != null ? orderRegisterMessage.TransactionId : 0;
+			return orderRegisterMessage?.TransactionId ?? 0;
 		}
 
 		private static Transaction SetSecurity(this Transaction transaction, OrderMessage message, IDictionary<string, RefPair<SecurityTypes, string>> securityClassInfo)

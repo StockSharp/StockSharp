@@ -1043,7 +1043,7 @@ namespace StockSharp.Algo.Candles
 		//	var series = candle.Series;
 
 		//	if (series == null)
-		//		throw new ArgumentException("candle");
+		//		throw new ArgumentException(nameof(candle));
 
 		//	return series;
 		//}

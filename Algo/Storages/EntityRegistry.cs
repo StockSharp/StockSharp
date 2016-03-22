@@ -139,35 +139,5 @@ namespace StockSharp.Algo.Storages
 				News.DelayAction = _delayAction;
 			}
 		}
-
-		///// <summary>
-		///// Äîáàâèòü èíñòðóìåíò â î÷åðåäü ñîõðàíåíèÿ.
-		///// </summary>
-		///// <param name="security">Èíñòðóìåíò.</param>
-		//public void EnqueueSecurity(Security security)
-		//{
-		//	if (security == null)
-		//		throw new ArgumentNullException("security");
-
-		//	SaveExchangeBoard(security.Board);
-
-		//	Securities.Save(security);
-		//}
-
-		///// <summary>
-		///// Ñîõðàíèòü áèðæåâóþ ïëîùàäêó. Ó÷èòûâàåòñÿ ñîõðàíåíèå êàê ñàìîé ïëîùàäêè, òàê è áèðæó <see cref="ExchangeBoard.Exchange"/>.
-		///// </summary>
-		///// <param name="board">Áèðæåâàÿ ïëîùàäêà.</param>
-		//public void SaveExchangeBoard(ExchangeBoard board)
-		//{
-		//	if (board == null)
-		//		throw new ArgumentNullException("board");
-
-		//	if (board.ExtensionInfo == null || board.Exchange.ExtensionInfo == null)
-		//		throw new InvalidOperationException();
-
-		//	Exchanges.Save(board.Exchange);
-		//	ExchangeBoards.Save(board);
-		//}
 	}
 }

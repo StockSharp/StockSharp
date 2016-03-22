@@ -723,7 +723,7 @@ namespace StockSharp.Quik
 		//public Transaction SetSecurity(Security security)
 		//{
 		//	if (security == null)
-		//		throw new ArgumentNullException("security");
+		//		throw new ArgumentNullException(nameof(security));
 
 		//	return 
 		//		SetClassCode(security.Class).

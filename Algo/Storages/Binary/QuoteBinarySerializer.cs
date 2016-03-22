@@ -281,7 +281,7 @@ namespace StockSharp.Algo.Storages.Binary
 			{
 				// quotes for spreads may be a zero cost or less than zero
 				//if (quote.Price <= 0)
-				//	throw new ArgumentOutOfRangeException("quotes", quote.Price, LocalizedStrings.Str935);
+				//	throw new ArgumentOutOfRangeException(nameof(quotes), quote.Price, LocalizedStrings.Str935);
 
 				// some forex connectors do not translate volume
 				//

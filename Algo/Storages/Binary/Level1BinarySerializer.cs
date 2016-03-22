@@ -1265,7 +1265,7 @@ namespace StockSharp.Algo.Storages.Binary
 			// execution ticks (like option execution) may be a zero cost
 			// ticks for spreads may be a zero cost or less than zero
 			//if (price == 0)
-			//	throw new ArgumentOutOfRangeException("price");
+			//	throw new ArgumentOutOfRangeException(nameof(price));
 
 			var pair = metaInfo.Price;
 

@@ -87,7 +87,7 @@ namespace StockSharp.Algo.Strategies.Reporting
 		//	: this(strategy, fileName, template)
 		//{
 		//	if (sheetName.IsEmpty())
-		//		throw new ArgumentNullException("sheetName");
+		//		throw new ArgumentNullException(nameof(sheetName));
 
 		//	SheetName = sheetName;
 		//}

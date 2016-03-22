@@ -138,7 +138,7 @@ namespace StockSharp.Algo.Storages.Binary
 				// execution ticks (like option execution) may be a zero cost
 				// ticks for spreads may be a zero cost or less than zero
 				//if (msg.TradePrice < 0)
-				//	throw new ArgumentOutOfRangeException("messages", msg.TradePrice, LocalizedStrings.Str1021Params.Put(msg.TradeId));
+				//	throw new ArgumentOutOfRangeException(nameof(messages), msg.TradePrice, LocalizedStrings.Str1021Params.Put(msg.TradeId));
 
 				metaInfo.PrevId = writer.SerializeId(tradeId, metaInfo.PrevId);
 

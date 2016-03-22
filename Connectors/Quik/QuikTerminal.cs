@@ -1497,7 +1497,7 @@ namespace StockSharp.Quik
 		private static IEnumerable<SystemWindow> GetQuikWindows(Process process)
 		{
 			if (process == null)
-				throw new ArgumentException("process");
+				throw new ArgumentException(nameof(process));
 
 			//http://stocksharp.com/forum/yaf_postsm9060_Podkliuchieniie-k-Quik-i-zapusk-DDE.aspx#post9060
 			return SystemWindow.FilterToplevelWindows(wnd => wnd.GetProcessId() == process.Id);
@@ -1508,20 +1508,11 @@ namespace StockSharp.Quik
 			return quikWindows.Where(q => _loginWndTitles.Any(t => q.Title.ContainsIgnoreCase(t))).ToArray();
 		}
 
-		private IEnumerable<SystemWindow> QuikWindows
-		{
-			get { return GetQuikWindows(SystemProcess); }
-		}
+		private IEnumerable<SystemWindow> QuikWindows => GetQuikWindows(SystemProcess);
 
-		private SystemWindow LoginWindow
-		{
-			get { return LoginWindows.FirstOrDefault(); }
-		}
+		private SystemWindow LoginWindow => LoginWindows.FirstOrDefault();
 
-		private IEnumerable<SystemWindow> LoginWindows
-		{
-			get { return GetLoginWindows(QuikWindows); }
-		}
+		private IEnumerable<SystemWindow> LoginWindows => GetLoginWindows(QuikWindows);
 
 		private IEnumerable<SystemWindow> DialogWindows
 		{

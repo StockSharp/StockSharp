@@ -218,7 +218,7 @@ namespace StockSharp.Algo.Storages.Backup
 			var key = entry.Name;
 
 			if (key.IsEmpty())
-				throw new ArgumentException("entry");
+				throw new ArgumentException(nameof(entry));
 
 			if (entry.Parent != null)
 				key = GetKey(entry.Parent) + "/" + key;
