@@ -54,6 +54,9 @@ namespace StockSharp.Alerts
 			{
 				_alertSchema = value == null ? null : new AlertSchema(value);
 				IsEnabled = value != null;
+
+				if (_alertSchema != null)
+					AlertService.Register(_alertSchema);
 			}
 		}
 
