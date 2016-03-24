@@ -109,7 +109,7 @@ namespace StockSharp.Algo.Storages.Csv
 			{
 				SecurityId = SecurityId,
 				ExecutionType = ExecutionTypes.Transaction,
-				ServerTime = reader.ReadTime(date),
+				ServerTime = ReadTime(reader, date),
 				TransactionId = reader.ReadLong(),
 				OriginalTransactionId = reader.ReadLong(),
 				OrderId = reader.ReadNullableLong(),
@@ -158,11 +158,11 @@ namespace StockSharp.Algo.Storages.Csv
 			if (!error.IsEmpty())
 				msg.Error = new InvalidOperationException(error);
 
-			var dt = reader.ReadNullableDateTime(DateFormat);
+			var dtStr = reader.ReadString();
 
-			if (dt != null)
+			if (dtStr != null)
 			{
-				msg.ExpiryDate = (dt.Value + reader.ReadDateTime(TimeFormat).TimeOfDay).ToDateTimeOffset(TimeSpan.Parse(reader.ReadString().Replace("+", string.Empty)));
+				msg.ExpiryDate = (DateParser.Parse(dtStr) + TimeParser.Parse(reader.ReadString())).ToDateTimeOffset(TimeSpan.Parse(reader.ReadString().Replace("+", string.Empty)));
 			}
 			else
 				reader.Skip(2);

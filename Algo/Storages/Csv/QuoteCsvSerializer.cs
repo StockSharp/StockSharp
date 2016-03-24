@@ -64,7 +64,7 @@ namespace StockSharp.Algo.Storages.Csv
 		{
 			return new TimeQuoteChange
 			{
-				ServerTime = reader.ReadTime(date),
+				ServerTime = ReadTime(reader, date),
 				Price = reader.ReadDecimal(),
 				Volume = reader.ReadDecimal(),
 				Side = reader.ReadEnum<Sides>()

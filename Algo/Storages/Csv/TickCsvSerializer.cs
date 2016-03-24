@@ -79,7 +79,7 @@ namespace StockSharp.Algo.Storages.Csv
 			{
 				SecurityId = SecurityId,
 				ExecutionType = ExecutionTypes.Tick,
-				ServerTime = reader.ReadTime(date),
+				ServerTime = ReadTime(reader, date),
 				TradeId = reader.ReadNullableLong(),
 				TradePrice = reader.ReadNullableDecimal(),
 				TradeVolume = reader.ReadNullableDecimal(),

@@ -79,7 +79,7 @@ namespace StockSharp.Algo.Storages.Csv
 			{
 				SecurityId = SecurityId,
 				Arg = Arg,
-				OpenTime = reader.ReadTime(date),
+				OpenTime = ReadTime(reader, date),
 				OpenPrice = reader.ReadDecimal(),
 				HighPrice = reader.ReadDecimal(),
 				LowPrice = reader.ReadDecimal(),

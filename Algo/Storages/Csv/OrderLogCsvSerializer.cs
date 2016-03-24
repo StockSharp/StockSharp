@@ -84,7 +84,7 @@ namespace StockSharp.Algo.Storages.Csv
 			{
 				SecurityId = SecurityId,
 				ExecutionType = ExecutionTypes.OrderLog,
-				ServerTime = reader.ReadTime(date),
+				ServerTime = ReadTime(reader, date),
 				TransactionId = reader.ReadLong(),
 				OrderId = reader.ReadLong(),
 				OrderPrice = reader.ReadDecimal(),

@@ -83,7 +83,7 @@ namespace StockSharp.Algo.Storages.Csv
 			var level1 = new Level1ChangeMessage
 			{
 				SecurityId = SecurityId,
-				ServerTime = reader.ReadTime(date),
+				ServerTime = ReadTime(reader, date),
 			};
 
 			foreach (var field in _level1Fields)
@@ -93,11 +93,11 @@ namespace StockSharp.Algo.Storages.Csv
 					case Level1Fields.BestAskTime:
 					case Level1Fields.BestBidTime:
 					case Level1Fields.LastTradeTime:
-						var dt = reader.ReadNullableDateTime(DateFormat);
+						var dtStr = reader.ReadString();
 
-						if (dt != null)
+						if (dtStr != null)
 						{
-							level1.Changes.Add(field, (dt.Value + reader.ReadDateTime(TimeFormat).TimeOfDay).ToDateTimeOffset(TimeSpan.Parse(reader.ReadString().Replace("+", string.Empty))));
+							level1.Changes.Add(field, (DateParser.Parse(dtStr) + TimeParser.Parse(reader.ReadString())).ToDateTimeOffset(TimeSpan.Parse(reader.ReadString().Replace("+", string.Empty))));
 						}
 						else
 						{

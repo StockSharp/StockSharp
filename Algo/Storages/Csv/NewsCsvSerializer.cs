@@ -56,7 +56,7 @@ namespace StockSharp.Algo.Storages.Csv
 		{
 			var news = new NewsMessage
 			{
-				ServerTime = reader.ReadTime(date),
+				ServerTime = ReadTime(reader, date),
 				Headline = reader.ReadString(),
 				Source = reader.ReadString(),
 				Url = reader.ReadString().To<Uri>(),
