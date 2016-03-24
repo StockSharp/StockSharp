@@ -27,6 +27,12 @@ namespace StockSharp.Messages
 	[Serializable]
 	public class Currency : Equatable<Currency>
 	{
+		static Currency()
+		{
+			Converter.AddTypedConverter<Currency, decimal>(input => (decimal)input);
+			Converter.AddTypedConverter<decimal, Currency>(input => input);
+		}
+
 		/// <summary>
 		/// Initializes a new instance of the <see cref="Currency"/>.
 		/// </summary>

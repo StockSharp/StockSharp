@@ -71,6 +71,15 @@ namespace StockSharp.Messages
 	[System.Runtime.Serialization.DataContract]
 	public class Unit : Equatable<Unit>, IOperable<Unit>, IPersistable
 	{
+		static Unit()
+		{
+			Converter.AddTypedConverter<Unit, decimal>(input => (decimal)input);
+			Converter.AddTypedConverter<Unit, double>(input => (double)input);
+			Converter.AddTypedConverter<decimal, Unit>(input => input);
+			Converter.AddTypedConverter<int, Unit>(input => input);
+			Converter.AddTypedConverter<double, Unit>(input => input);
+		}
+
 		/// <summary>
 		/// Create unit.
 		/// </summary>
