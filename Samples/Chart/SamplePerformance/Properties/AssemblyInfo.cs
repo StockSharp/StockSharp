@@ -6,7 +6,7 @@ Viewing or use of this code requires your acceptance of the license
 agreement found at https://github.com/StockSharp/StockSharp/blob/master/LICENSE
 Removal of this comment is a violation of the license agreement.
 
-Project: %Namespace%.SampleChartPublic
+Project: %Namespace%.SamplePerformancePublic
 File: AssemblyInfo.cs
 Created: 2015, 12, 2, 8:18 PM
 
@@ -19,7 +19,7 @@ using System.Windows;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("SampleChart")]
+[assembly: AssemblyTitle("SamplePerformance")]
 [assembly: AssemblyDescription("")]
 
 //In order to begin building localizable applications, set 

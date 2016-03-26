@@ -57,8 +57,6 @@ namespace SampleChart
 			Board = ExchangeBoard.Forts
 		};
 
-		private const string _chartMainYAxis = "MainYAxis";
-
 		private int _timeframe;
 
 		public MainWindow()
@@ -69,7 +67,7 @@ namespace SampleChart
 
 			Loaded += OnLoaded;
 
-			_chartUpdateTimer.Interval = TimeSpan.FromMilliseconds(200);
+			_chartUpdateTimer.Interval = TimeSpan.FromMilliseconds(100);
 			_chartUpdateTimer.Tick += ChartUpdateTimerOnTick;
 			_chartUpdateTimer.Start();
 		}
@@ -108,13 +106,11 @@ namespace SampleChart
 
 			_areaComb = new ChartArea();
 
-			_areaComb.YAxises.Add(new ChartAxis
-			{
-				Id = _chartMainYAxis,
-				AutoRange = false,
-				AxisType = ChartAxisType.Numeric,
-				AxisAlignment = ChartAxisAlignment.Right,
-			});
+			var yAxis = _areaComb.YAxises.First();
+
+			yAxis.AutoRange = true;
+			Chart.IsAutoRange = true;
+			Chart.IsAutoScroll = true;
 
 			Chart.AddArea(_areaComb);
 
@@ -126,7 +122,7 @@ namespace SampleChart
 				_security,
 				TimeSpan.FromMinutes(_timeframe));
 
-			_candleElement1 = new ChartCandleElement(_timeframe, step) { FullTitle = "Candles", YAxisId = _chartMainYAxis };
+			_candleElement1 = new ChartCandleElement(_timeframe, step) { FullTitle = "Candles" };
 			Chart.AddElement(_areaComb, _candleElement1, series);
 
 			var ns = typeof(IIndicator).Namespace;
@@ -160,6 +156,7 @@ namespace SampleChart
 
 		private void Draw_Click(object sender, RoutedEventArgs e)
 		{
+            InitCharts();
 			LoadData();
 		}
 
@@ -218,7 +215,13 @@ namespace SampleChart
 				if (t.Exception != null)
 					Error(t.Exception.Message);
 
-				BusyIndicator.IsBusy = false;
+				this.GuiAsync(() =>
+				{
+					BusyIndicator.IsBusy = false;
+					Chart.IsAutoRange = false;
+					_areaComb.YAxises.First().AutoRange = false;
+				});
+
 			}, TaskScheduler.FromCurrentSynchronizationContext());
 		}
 
@@ -234,7 +237,8 @@ namespace SampleChart
 				{
 					ServerTime = _lastTime,
 					TradePrice = price,
-					TradeVolume = RandomGen.GetInt(50) + 1
+					TradeVolume = RandomGen.GetInt(50) + 1,
+                    OriginSide = Sides.Buy,
 				});
 				_lastTime += TimeSpan.FromSeconds(10);
 			}
@@ -246,7 +250,8 @@ namespace SampleChart
 				_updatedCandles.Clear();
 			}
 
-			_allCandles.AddRange(candlesToUpdate);
+            var lastCandle = _allCandles.LastOrDefault();
+			_allCandles.AddRange(candlesToUpdate.Where(c => lastCandle == null || c.OpenTime != lastCandle.OpenTime));
 
 			candlesToUpdate.ForEach(c =>
 			{
@@ -266,9 +271,10 @@ namespace SampleChart
 			{
 				if (_candle != null)
 				{
-					var candle = (TimeFrameCandle)_candle.Clone();
-					_updatedCandles[candle.OpenTime] = candle;
-					_lastPrice = candle.ClosePrice;
+					_candle.State = CandleStates.Finished;
+					lock(_updatedCandles.SyncRoot)
+						_updatedCandles[_candle.OpenTime] = _candle;
+					_lastPrice = _candle.ClosePrice;
 				}
 
 				//var t = TimeframeSegmentDataSeries.GetTimeframePeriod(time.DateTime, _timeframe);
@@ -284,7 +290,6 @@ namespace SampleChart
 				_candle.PriceLevels = _volumeProfile.PriceLevels;
 
 				_candle.OpenPrice = _candle.HighPrice = _candle.LowPrice = _candle.ClosePrice = price;
-				_volumeProfile.Update(new TickCandleBuilderSourceValue(security, tick));
 			}
 
 			if (time < _candle.OpenTime)
@@ -301,7 +306,10 @@ namespace SampleChart
 			_candle.TotalVolume += tick.TradeVolume.Value;
 
 			_volumeProfile.Update(new TickCandleBuilderSourceValue(security, tick));
-		}
+
+			lock(_updatedCandles.SyncRoot)
+				_updatedCandles[_candle.OpenTime] = _candle;
+        }
 
 		public static decimal Round(decimal value, decimal nearest)
 		{

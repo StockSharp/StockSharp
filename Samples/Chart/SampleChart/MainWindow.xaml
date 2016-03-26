@@ -19,11 +19,11 @@
                     <StackPanel Orientation="Horizontal">
                         <TextBlock Text="{x:Static loc:LocalizedStrings.Str1242}" VerticalAlignment="Center"/>
                         <ComboBox x:Name="Timeframe" Width="80" Margin="3,0" IsEditable="False" IsReadOnly="True">
-                            <ComboBoxItem Content="1 minute" Tag="1"/>
+                            <ComboBoxItem Content="1 minute" IsSelected="True" Tag="1"/>
                             <ComboBoxItem Content="2 minute" Tag="2"/>
                             <ComboBoxItem Content="3 minute" Tag="3"/>
                             <ComboBoxItem Content="4 minute" Tag="4"/>
-                            <ComboBoxItem Content="5 minute" IsSelected="True" Tag="5"/>
+                            <ComboBoxItem Content="5 minute" Tag="5"/>
                             <ComboBoxItem Content="6 minute" Tag="6"/>
                             <ComboBoxItem Content="9 minute" Tag="9"/>
                             <ComboBoxItem Content="10 minute" Tag="10"/>

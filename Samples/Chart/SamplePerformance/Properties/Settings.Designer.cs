@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace SampleChart.Properties {
+namespace SamplePerformance.Properties {
     
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
