@@ -18,6 +18,46 @@ namespace StockSharp.Localization
 	partial class LocalizedStrings
 	{
 		/// <summary>
+		/// Line (open)
+		/// </summary>
+		public const string LineOpenKey = "LineOpen";
+
+		/// <summary>
+		/// Line (open)
+		/// </summary>
+		public static string LineOpen => GetString(LineOpenKey);
+
+		/// <summary>
+		/// Line (high)
+		/// </summary>
+		public const string LineHighKey = "LineHigh";
+
+		/// <summary>
+		/// Line (high)
+		/// </summary>
+		public static string LineHigh => GetString(LineHighKey);
+
+		/// <summary>
+		/// Line (low)
+		/// </summary>
+		public const string LineLowKey = "LineLow";
+
+		/// <summary>
+		/// Line (low)
+		/// </summary>
+		public static string LineLow => GetString(LineLowKey);
+
+		/// <summary>
+		/// Line (close)
+		/// </summary>
+		public const string LineCloseKey = "LineClose";
+
+		/// <summary>
+		/// Line (close)
+		/// </summary>
+		public static string LineClose => GetString(LineCloseKey);
+		
+		/// <summary>
 		/// Timeframe and price step were not set
 		/// </summary>
 		public const string ErrTimeframePriceStepNotSetKey = "ErrTimeframePriceStepNotSet";

@@ -1,3 +1,7 @@
+LineOpen;Line (open);Линия (открытие)
+LineHigh;Line (high);Линия (максимум)
+LineLow;Line (low);Линия (минимум)
+LineClose;Line (close);Линия (закрытие)
 ErrTimeframePriceStepNotSet;Timeframe and price step were not set;Таймфрейм и шаг цены не были установлены
 BoxChart;Box chart;Боксовый график
 ClusterProfile;Cluster profile;Кластерный профиль
