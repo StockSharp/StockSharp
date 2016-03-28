@@ -37,9 +37,6 @@
                             <ComboBoxItem Content="week" Tag="10080"/>
                         </ComboBox>
 
-                        <TextBlock Text="{x:Static loc:LocalizedStrings.PriceStep}" Margin="10,0,5,0" VerticalAlignment="Center"/>
-                        <xctk:DoubleUpDown x:Name="PriceStep" VerticalAlignment="Center" Minimum="0" Value="10"/>
-
                         <xaml:FolderBrowserPicker x:Name="HistoryPath" Width="250" Margin="10,0,10,0" />
 						
 						<TextBox x:Name="SecurityId" Text="RIZ2@FORTS" Width="100" />

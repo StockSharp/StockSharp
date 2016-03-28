@@ -23,15 +23,12 @@ namespace SamplePerformance
 	using System.Windows;
 	using System.Windows.Controls;
 	using System.Windows.Media;
-	using System.Reflection;
 	using System.Windows.Threading;
 
 	using Ecng.Collections;
 	using Ecng.Common;
 	using Ecng.Xaml;
 	using Ecng.Serialization;
-	using Ecng.Xaml.Charting;
-	using Ecng.Xaml.Charting.Visuals;
 
 	using StockSharp.Algo;
 	using StockSharp.Algo.Candles;
@@ -67,8 +64,6 @@ namespace SamplePerformance
 		MyMovingAverage _indicator;
 		readonly MyMovingAverage _fpsAverage;
 
-		UltrachartSurface _surface;
-
 		volatile int _curCandleNum;
 
 		private Security _security = new Security
@@ -101,15 +96,6 @@ namespace SamplePerformance
 		{
 			Theme.SelectedItem = "Chrome";
 			InitCharts();
-
-			var property = typeof(UltrachartGroup)
-				.GetProperties(BindingFlags.NonPublic | BindingFlags.Instance)
-				.FirstOrDefault(p => p.Name == "Panes");
-
-			var panes = (List<ItemPane>)property.GetValue(Chart.FindVisualChild<UltrachartGroup>(), null);
-
-			_surface = panes[0].PaneElement.FindVisualChild<UltrachartSurface>();
-
 			LoadData();
 		}
 
@@ -134,7 +120,7 @@ namespace SamplePerformance
 
 			_indicatorElement = null;
 
-			_candleElement = new ChartCandleElement(Timeframe, PriceStep) {FullTitle = "Candles", YAxisId = yAxis.Id};
+			_candleElement = new ChartCandleElement {FullTitle = "Candles", YAxisId = yAxis.Id};
 			Chart.AddElement(_area, _candleElement, series);
 
 			if (AddIndicator)

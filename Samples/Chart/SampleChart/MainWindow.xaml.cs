@@ -50,10 +50,11 @@ namespace SampleChart
 		private readonly SynchronizedDictionary<DateTimeOffset, TimeFrameCandle> _updatedCandles = new SynchronizedDictionary<DateTimeOffset, TimeFrameCandle>();
 		private readonly CachedSynchronizedList<TimeFrameCandle> _allCandles = new CachedSynchronizedList<TimeFrameCandle>();
 		private decimal _lastPrice;
+		const decimal PriceStep = 10m;
 		private Security _security = new Security
 		{
 			Id = "RIZ2@FORTS",
-			PriceStep = 5,
+			PriceStep = PriceStep,
 			Board = ExchangeBoard.Forts
 		};
 
@@ -115,14 +116,13 @@ namespace SampleChart
 			Chart.AddArea(_areaComb);
 
 			_timeframe = int.Parse((string)((ComboBoxItem)Timeframe.SelectedItem).Tag);
-			var step = (decimal)PriceStep.Value.Value;
 
 			var series = new CandleSeries(
 				typeof(TimeFrameCandle),
 				_security,
 				TimeSpan.FromMinutes(_timeframe));
 
-			_candleElement1 = new ChartCandleElement(_timeframe, step) { FullTitle = "Candles" };
+			_candleElement1 = new ChartCandleElement() { FullTitle = "Candles" };
 			Chart.AddElement(_areaComb, _candleElement1, series);
 
 			var ns = typeof(IIndicator).Namespace;
@@ -156,7 +156,7 @@ namespace SampleChart
 
 		private void Draw_Click(object sender, RoutedEventArgs e)
 		{
-            InitCharts();
+			InitCharts();
 			LoadData();
 		}
 
@@ -171,7 +171,7 @@ namespace SampleChart
 			_security = new Security
 			{
 				Id = SecurityId.Text,
-				PriceStep = 5,
+				PriceStep = PriceStep,
 				Board = ExchangeBoard.GetBoard(id.BoardCode)
 			};
 
@@ -231,14 +231,14 @@ namespace SampleChart
 		{
 			if (IsRealtime.IsChecked == true && _lastPrice != 0m)
 			{
-				var step = PriceStep.Value ?? 10;
-				var price = Round(_lastPrice + (decimal)((RandomGen.GetDouble() - 0.5) * 5 * step), (decimal)step);
+				var step = PriceStep;
+				var price = Round(_lastPrice + (decimal)((RandomGen.GetDouble() - 0.5) * 5 * (double) step), step);
 				AppendTick(_security, new ExecutionMessage
 				{
 					ServerTime = _lastTime,
 					TradePrice = price,
 					TradeVolume = RandomGen.GetInt(50) + 1,
-                    OriginSide = Sides.Buy,
+					OriginSide = Sides.Buy,
 				});
 				_lastTime += TimeSpan.FromSeconds(10);
 			}
@@ -250,7 +250,7 @@ namespace SampleChart
 				_updatedCandles.Clear();
 			}
 
-            var lastCandle = _allCandles.LastOrDefault();
+			var lastCandle = _allCandles.LastOrDefault();
 			_allCandles.AddRange(candlesToUpdate.Where(c => lastCandle == null || c.OpenTime != lastCandle.OpenTime));
 
 			candlesToUpdate.ForEach(c =>
@@ -285,6 +285,7 @@ namespace SampleChart
 					TimeFrame = tf,
 					OpenTime = bounds.Min,
 					CloseTime = bounds.Max,
+					Security = security,
 				};
 				_volumeProfile = new VolumeProfile();
 				_candle.PriceLevels = _volumeProfile.PriceLevels;
@@ -309,7 +310,7 @@ namespace SampleChart
 
 			lock(_updatedCandles.SyncRoot)
 				_updatedCandles[_candle.OpenTime] = _candle;
-        }
+		}
 
 		public static decimal Round(decimal value, decimal nearest)
 		{
