@@ -39,7 +39,6 @@ namespace SampleChart
 	using StockSharp.Localization;
 	using StockSharp.Messages;
 	using StockSharp.Xaml.Charting;
-	using StockSharp.Xaml.Charting.IndicatorPainters;
 
 	public partial class MainWindow
 	{
@@ -72,12 +71,12 @@ namespace SampleChart
 			_chartUpdateTimer.Interval = TimeSpan.FromMilliseconds(100);
 			_chartUpdateTimer.Tick += ChartUpdateTimerOnTick;
 			_chartUpdateTimer.Start();
+
+			Theme.SelectedIndex = 1;
 		}
 
 		private void OnLoaded(object sender, RoutedEventArgs routedEventArgs)
 		{
-			Theme.SelectedItem = "Chrome";
-
 			Chart.FillIndicators();
 			InitCharts();
 
@@ -86,6 +85,29 @@ namespace SampleChart
 			HistoryPath.Folder = @"..\..\..\..\Testing\HistoryData\".ToFullPath();
 			LoadData();
 		}
+
+		private void OnThemeSelectionChanged(object sender, SelectionChangedEventArgs e)
+		{
+			var theme = (string)((ComboBoxItem)Theme.SelectedValue).Content;
+			if(theme.IsEmpty())
+				return;
+
+			DevExpress.Xpf.Core.ThemeManager.ApplicationThemeName = theme;
+
+			switch (theme)
+			{
+				case DevExpress.Xpf.Core.Theme.Office2016BlackName:
+				case DevExpress.Xpf.Core.Theme.MetropolisDarkName:
+					Chart.ChartTheme = "ExpressionDark";
+					break;
+				case DevExpress.Xpf.Core.Theme.Office2016WhiteName:
+				case DevExpress.Xpf.Core.Theme.MetropolisLightName:
+					Chart.ChartTheme = "Chrome";
+					break;
+			}
+		}
+
+
 
 		private void Chart_OnSubscribeIndicatorElement(ChartIndicatorElement element, CandleSeries series, IIndicator indicator)
 		{
@@ -299,12 +321,6 @@ namespace SampleChart
 				.Error()
 				.Text(msg)
 				.Show();
-		}
-
-		private void OnThemeSelectionChanged(object sender, SelectionChangedEventArgs e)
-		{
-			var theme = (string)Theme.SelectedValue;
-			Chart.ChartTheme = theme;
 		}
 	}
 }

@@ -6,6 +6,7 @@
 		xmlns:s="http://schemas.ulcsoftware.co.uk/ultrachart"
 		xmlns:loc="clr-namespace:StockSharp.Localization;assembly=StockSharp.Localization"
 		xmlns:xaml="clr-namespace:Ecng.Xaml;assembly=Ecng.Xaml"
+		xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core"
 		Title="{x:Static loc:LocalizedStrings.XamlStr540}" Height="400" Width="970">
     <xctk:BusyIndicator x:Name="BusyIndicator">
         <Grid>
@@ -45,8 +46,12 @@
                     </StackPanel>
                 </GroupBox>
 
-                <ComboBox Margin="10,0,0,0" x:Name="Theme" ItemsSource="{Binding Source={x:Static s:ThemeManager.AllThemes}}"
-					  SelectionChanged="OnThemeSelectionChanged" VerticalAlignment="Center" Width="150"/>
+                <ComboBox Margin="10,0,0,0" x:Name="Theme" SelectionChanged="OnThemeSelectionChanged" VerticalAlignment="Center" Width="150">
+					<ComboBoxItem Content="{x:Static dx:Theme.Office2016BlackName}"/>
+					<ComboBoxItem Content="{x:Static dx:Theme.Office2016WhiteName}"/>
+					<ComboBoxItem Content="{x:Static dx:Theme.MetropolisDarkName}"/>
+					<ComboBoxItem Content="{x:Static dx:Theme.MetropolisLightName}"/>
+				</ComboBox>
 
                 <CheckBox Content="{x:Static loc:LocalizedStrings.RealTime}" Margin="10,0,0,0" x:Name="IsRealtime" VerticalAlignment="Center"/>
             </StackPanel>
