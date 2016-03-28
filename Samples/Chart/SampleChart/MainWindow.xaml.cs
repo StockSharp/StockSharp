@@ -35,6 +35,7 @@ namespace SampleChart
 	using StockSharp.Algo.Indicators;
 	using StockSharp.Algo.Storages;
 	using StockSharp.BusinessEntities;
+	using StockSharp.Configuration;
 	using StockSharp.Localization;
 	using StockSharp.Messages;
 	using StockSharp.Xaml.Charting;
@@ -75,6 +76,8 @@ namespace SampleChart
 		private void OnLoaded(object sender, RoutedEventArgs routedEventArgs)
 		{
 			Theme.SelectedItem = "Chrome";
+
+			Chart.FillIndicators();
 			InitCharts();
 
 			Chart.SubscribeIndicatorElement += Chart_OnSubscribeIndicatorElement;
@@ -124,34 +127,6 @@ namespace SampleChart
 
 			_candleElement1 = new ChartCandleElement(_timeframe, step) { FullTitle = "Candles" };
 			Chart.AddElement(_areaComb, _candleElement1, series);
-
-			var ns = typeof(IIndicator).Namespace;
-
-			var rendererTypes = typeof(Chart).Assembly
-				.GetTypes()
-				.Where(t => !t.IsAbstract && typeof(BaseChartIndicatorPainter).IsAssignableFrom(t))
-				.ToDictionary(t => t.Name);
-
-			var indicators = typeof(IIndicator).Assembly
-				.GetTypes()
-				.Where(t => t.Namespace == ns && !t.IsAbstract && typeof(IIndicator).IsAssignableFrom(t))
-				.Select(t =>
-				{
-					var name = t.Name;
-					var p = rendererTypes.TryGetValue(name + "Painter");
-					if (p == null)
-					{
-						if (t.Name.EndsWith("Indicator"))
-							name = name.Substring(0, name.Length - "Indicator".Length);
-
-						p = rendererTypes.TryGetValue(name + "Painter");
-					}
-
-					return new IndicatorType(t, p);
-				})
-				.ToArray();
-
-			Chart.IndicatorTypes.AddRange(indicators);
 		}
 
 		private void Draw_Click(object sender, RoutedEventArgs e)
