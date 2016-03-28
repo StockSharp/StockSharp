@@ -184,9 +184,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SampleITCHPublic", "Samples
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConfigurationPublic", "Configuration\ConfigurationPublic.csproj", "{2CFF1903-4EF5-46F8-AB5D-BB623CA75CE6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SampleChart", "Samples\Chart\SampleChart\SampleChart.csproj", "{8B430A27-B392-4129-9AA2-731A52427E40}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SampleChartPublic", "Samples\Chart\SampleChart\SampleChartPublic.csproj", "{8B430A27-B392-4129-9AA2-731A52427E40}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SamplePerformance", "Samples\Chart\SamplePerformance\SamplePerformance.csproj", "{81A84C3B-EC88-4746-AA4D-247DD1F66EB6}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SamplePerformancePublic", "Samples\Chart\SamplePerformance\SamplePerformancePublic.csproj", "{81A84C3B-EC88-4746-AA4D-247DD1F66EB6}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Chart", "Chart", "{6755B1AB-855F-43C1-837F-8E7023ED8236}"
 EndProject
