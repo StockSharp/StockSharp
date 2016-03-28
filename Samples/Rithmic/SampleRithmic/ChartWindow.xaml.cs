@@ -47,7 +47,7 @@ namespace SampleRithmic
 
 			_candleElem = new ChartCandleElement
 			{
-				Antialiasing = false, 
+				AntiAliasing = false, 
 				UpFillColor = Colors.White,
 				UpBorderColor = Colors.Black,
 				DownFillColor = Colors.Black,

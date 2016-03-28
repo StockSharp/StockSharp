@@ -133,7 +133,7 @@ namespace SamplePerformance
 				_indicatorElement = new ChartIndicatorElement
 				{
 					DrawStyle = ChartIndicatorDrawStyles.Line,
-					Antialiasing = true,
+					AntiAliasing = true,
 					StrokeThickness = 1,
 					Color = Colors.Blue,
 					YAxisId = yAxis.Id,
