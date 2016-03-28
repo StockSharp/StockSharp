@@ -18,16 +18,13 @@ namespace StockSharp.Algo.Testing
 	using System;
 	using System.Collections.Generic;
 	using System.Linq;
-	using System.Threading;
 
 	using Ecng.Common;
-	using Ecng.ComponentModel;
 
 	using MoreLinq;
 
 	using StockSharp.Algo.Storages;
 	using StockSharp.BusinessEntities;
-	using StockSharp.Logging;
 	using StockSharp.Messages;
 	using StockSharp.Localization;
 
@@ -392,10 +389,9 @@ namespace StockSharp.Algo.Testing
 				{
 					if (message.IsSubscribe)
 					{
-						if (history == null)
-							BasketStorage.AddStorage((IMarketDataStorage<QuoteChangeMessage>)StorageRegistry.GetMarketDepthStorage(security, Drive, StorageFormat));
-						else
-							BasketStorage.AddStorage(new InMemoryMarketDataStorage<QuoteChangeMessage>(security, null, history.GetMessages));
+						BasketStorage.AddStorage(history == null
+							? StorageRegistry.GetQuoteMessageStorage(security, Drive, StorageFormat)
+							: new InMemoryMarketDataStorage<QuoteChangeMessage>(security, null, history.GetMessages));
 					}
 					else
 						BasketStorage.RemoveStorage<IMarketDataStorage<QuoteChangeMessage>>(security, MessageTypes.QuoteChange, null);
@@ -407,10 +403,9 @@ namespace StockSharp.Algo.Testing
 				{
 					if (message.IsSubscribe)
 					{
-						if (history == null)
-							BasketStorage.AddStorage((IMarketDataStorage<ExecutionMessage>)StorageRegistry.GetTradeStorage(security, Drive, StorageFormat));
-						else
-							BasketStorage.AddStorage(new InMemoryMarketDataStorage<ExecutionMessage>(security, null, history.GetMessages));
+						BasketStorage.AddStorage(history == null
+							? StorageRegistry.GetTickMessageStorage(security, Drive, StorageFormat)
+							: new InMemoryMarketDataStorage<ExecutionMessage>(security, null, history.GetMessages));
 					}
 					else
 						BasketStorage.RemoveStorage<IMarketDataStorage<ExecutionMessage>>(security, MessageTypes.Execution, ExecutionTypes.Tick);
@@ -422,10 +417,9 @@ namespace StockSharp.Algo.Testing
 				{
 					if (message.IsSubscribe)
 					{
-						if (history == null)
-							BasketStorage.AddStorage((IMarketDataStorage<ExecutionMessage>)StorageRegistry.GetOrderLogStorage(security, Drive, StorageFormat));
-						else
-							BasketStorage.AddStorage(new InMemoryMarketDataStorage<ExecutionMessage>(security, null, history.GetMessages));
+						BasketStorage.AddStorage(history == null
+							? StorageRegistry.GetOrderLogMessageStorage(security, Drive, StorageFormat)
+							: new InMemoryMarketDataStorage<ExecutionMessage>(security, null, history.GetMessages));
 					}
 					else
 						BasketStorage.RemoveStorage<IMarketDataStorage<ExecutionMessage>>(security, MessageTypes.Execution, ExecutionTypes.OrderLog);
@@ -446,10 +440,9 @@ namespace StockSharp.Algo.Testing
 					{
 						var candleType = message.DataType.ToCandleMessage();
 
-						if (history == null)
-							BasketStorage.AddStorage(StorageRegistry.GetCandleMessageStorage(candleType, security, message.Arg, Drive, StorageFormat));
-						else
-							BasketStorage.AddStorage(new InMemoryMarketDataStorage<CandleMessage>(security, message.Arg, history.GetMessages, candleType));
+						BasketStorage.AddStorage(history == null
+							? StorageRegistry.GetCandleMessageStorage(candleType, security, message.Arg, Drive, StorageFormat)
+							: new InMemoryMarketDataStorage<CandleMessage>(security, message.Arg, history.GetMessages, candleType));
 					}
 					else
 						BasketStorage.RemoveStorage<IMarketDataStorage<CandleMessage>>(security, msgType, message.Arg);

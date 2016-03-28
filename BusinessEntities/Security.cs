@@ -70,7 +70,7 @@ namespace StockSharp.BusinessEntities
 					return;
 
 				_id = value;
-				Notify("Id");
+				Notify(nameof(Id));
 			}
 		}
 
@@ -93,7 +93,7 @@ namespace StockSharp.BusinessEntities
 					return;
 
 				_name = value;
-				Notify("Name");
+				Notify(nameof(Name));
 			}
 		}
 
@@ -115,7 +115,7 @@ namespace StockSharp.BusinessEntities
 					return;
 
 				_shortName = value;
-				Notify("ShortName");
+				Notify(nameof(ShortName));
 			}
 		}
 
@@ -138,7 +138,7 @@ namespace StockSharp.BusinessEntities
 					return;
 
 				_code = value;
-				Notify("Code");
+				Notify(nameof(Code));
 			}
 		}
 
@@ -160,7 +160,7 @@ namespace StockSharp.BusinessEntities
 					return;
 
 				_class = value;
-				Notify("Class");
+				Notify(nameof(Class));
 			}
 		}
 
@@ -187,7 +187,7 @@ namespace StockSharp.BusinessEntities
 					throw new ArgumentOutOfRangeException(nameof(value));
 
 				_priceStep = value;
-				Notify("PriceStep");
+				Notify(nameof(PriceStep));
 			}
 		}
 
@@ -214,7 +214,7 @@ namespace StockSharp.BusinessEntities
 					throw new ArgumentOutOfRangeException(nameof(value));
 
 				_volumeStep = value;
-				Notify("VolumeStep");
+				Notify(nameof(VolumeStep));
 			}
 		}
 
@@ -241,7 +241,7 @@ namespace StockSharp.BusinessEntities
 					throw new ArgumentOutOfRangeException(nameof(value));
 
 				_multiplier = value;
-				Notify("Multiplier");
+				Notify(nameof(Multiplier));
 			}
 		}
 
@@ -269,7 +269,7 @@ namespace StockSharp.BusinessEntities
 					throw new ArgumentOutOfRangeException(nameof(value));
 
 				_decimals = value;
-				Notify("Decimals");
+				Notify(nameof(Decimals));
 			}
 		}
 
@@ -293,7 +293,7 @@ namespace StockSharp.BusinessEntities
 					return;
 
 				_type = value;
-				Notify("Type");
+				Notify(nameof(Type));
 			}
 		}
 
@@ -316,7 +316,7 @@ namespace StockSharp.BusinessEntities
 					return;
 
 				_expiryDate = value;
-				Notify("ExpiryDate");
+				Notify(nameof(ExpiryDate));
 			}
 		}
 
@@ -339,7 +339,7 @@ namespace StockSharp.BusinessEntities
 					return;
 
 				_settlementDate = value;
-				Notify("SettlementDate");
+				Notify(nameof(SettlementDate));
 			}
 		}
 
@@ -363,7 +363,7 @@ namespace StockSharp.BusinessEntities
 					return;
 
 				_board = value;
-				Notify("Board");
+				Notify(nameof(Board));
 			}
 		}
 
@@ -386,7 +386,7 @@ namespace StockSharp.BusinessEntities
 					return;
 
 				_underlyingSecurityId = value;
-				Notify("UnderlyingSecurityCode");
+				Notify(nameof(UnderlyingSecurityId));
 			}
 		}
 
@@ -410,7 +410,7 @@ namespace StockSharp.BusinessEntities
 					return;
 
 				_optionType = value;
-				Notify("OptionType");
+				Notify(nameof(OptionType));
 			}
 		}
 
@@ -437,7 +437,7 @@ namespace StockSharp.BusinessEntities
 					throw new ArgumentOutOfRangeException(nameof(value));
 
 				_strike = value;
-				Notify("Strike");
+				Notify(nameof(Strike));
 			}
 		}
 
@@ -457,7 +457,7 @@ namespace StockSharp.BusinessEntities
 			set
 			{
 				_currency = value;
-				Notify("Currency");
+				Notify(nameof(Currency));
 			}
 		}
 
@@ -480,7 +480,7 @@ namespace StockSharp.BusinessEntities
 					return;
 
 				_binaryOptionType = value;
-				Notify("BinaryOptionType");
+				Notify(nameof(BinaryOptionType));
 			}
 		}
 
@@ -501,7 +501,7 @@ namespace StockSharp.BusinessEntities
 			set
 			{
 				_externalId = value;
-				Notify("ExternalId");
+				Notify(nameof(ExternalId));
 			}
 		}
 
@@ -525,7 +525,7 @@ namespace StockSharp.BusinessEntities
 			set
 			{
 				_extensionInfo = value.Sync();
-				Notify("ExtensionInfo");
+				Notify(nameof(ExtensionInfo));
 			}
 		}
 
@@ -555,7 +555,7 @@ namespace StockSharp.BusinessEntities
 					return;
 
 				_stepPrice = value;
-				Notify("StepPrice");
+				Notify(nameof(StepPrice));
 			}
 		}
 
@@ -583,7 +583,7 @@ namespace StockSharp.BusinessEntities
 					return;
 
 				_lastTrade = value;
-				Notify("LastTrade");
+				Notify(nameof(LastTrade));
 
 			    if (value == null)
 			        return;
@@ -616,7 +616,7 @@ namespace StockSharp.BusinessEntities
 					return;
 
 				_openPrice = value;
-				Notify("OpenPrice");
+				Notify(nameof(OpenPrice));
 			}
 		}
 
@@ -643,7 +643,7 @@ namespace StockSharp.BusinessEntities
 					return;
 
 				_closePrice = value;
-				Notify("ClosePrice");
+				Notify(nameof(ClosePrice));
 			}
 		}
 
@@ -670,7 +670,7 @@ namespace StockSharp.BusinessEntities
 					return;
 
 				_lowPrice = value;
-				Notify("LowPrice");
+				Notify(nameof(LowPrice));
 			}
 		}
 
@@ -697,7 +697,7 @@ namespace StockSharp.BusinessEntities
 					return;
 
 				_highPrice = value;
-				Notify("HighPrice");
+				Notify(nameof(HighPrice));
 			}
 		}
 
@@ -727,7 +727,7 @@ namespace StockSharp.BusinessEntities
 				//	return;
 
 				_bestBid = value;
-				Notify("BestBid");
+				Notify(nameof(BestBid));
 			}
 		}
 
@@ -754,7 +754,7 @@ namespace StockSharp.BusinessEntities
 				//	return;
 
 				_bestAsk = value;
-				Notify("BestAsk");
+				Notify(nameof(BestAsk));
 			}
 		}
 
@@ -794,7 +794,7 @@ namespace StockSharp.BusinessEntities
 					return;
 
 				_state = value;
-				Notify("State");
+				Notify(nameof(State));
 			}
 		}
 
@@ -820,7 +820,7 @@ namespace StockSharp.BusinessEntities
 					return;
 
 				_minPrice = value;
-				Notify("MinPrice");
+				Notify(nameof(MinPrice));
 			}
 		}
 
@@ -846,7 +846,7 @@ namespace StockSharp.BusinessEntities
 					return;
 
 				_maxPrice = value;
-				Notify("MaxPrice");
+				Notify(nameof(MaxPrice));
 			}
 		}
 
@@ -872,7 +872,7 @@ namespace StockSharp.BusinessEntities
 					return;
 
 				_marginBuy = value;
-				Notify("MarginBuy");
+				Notify(nameof(MarginBuy));
 			}
 		}
 
@@ -898,7 +898,7 @@ namespace StockSharp.BusinessEntities
 					return;
 
 				_marginSell = value;
-				Notify("MarginSell");
+				Notify(nameof(MarginSell));
 			}
 		}
 
@@ -921,7 +921,7 @@ namespace StockSharp.BusinessEntities
 		//			return;
 
 		//		_connector = value;
-		//		Notify("Trader");
+		//		Notify(nameof(Trader));
 		//	}
 		//}
 
@@ -948,7 +948,7 @@ namespace StockSharp.BusinessEntities
 					return;
 
 				_impliedVolatility = value;
-				Notify("ImpliedVolatility");
+				Notify(nameof(ImpliedVolatility));
 			}
 		}
 
@@ -975,7 +975,7 @@ namespace StockSharp.BusinessEntities
 					return;
 
 				_historicalVolatility = value;
-				Notify("HistoricalVolatility");
+				Notify(nameof(HistoricalVolatility));
 			}
 		}
 
@@ -1002,7 +1002,7 @@ namespace StockSharp.BusinessEntities
 					return;
 
 				_theorPrice = value;
-				Notify("TheorPrice");
+				Notify(nameof(TheorPrice));
 			}
 		}
 
@@ -1029,7 +1029,7 @@ namespace StockSharp.BusinessEntities
 					return;
 
 				_delta = value;
-				Notify("Delta");
+				Notify(nameof(Delta));
 			}
 		}
 
@@ -1056,7 +1056,7 @@ namespace StockSharp.BusinessEntities
 					return;
 
 				_gamma = value;
-				Notify("Gamma");
+				Notify(nameof(Gamma));
 			}
 		}
 
@@ -1083,7 +1083,7 @@ namespace StockSharp.BusinessEntities
 					return;
 
 				_vega = value;
-				Notify("Vega");
+				Notify(nameof(Vega));
 			}
 		}
 
@@ -1110,7 +1110,7 @@ namespace StockSharp.BusinessEntities
 					return;
 
 				_theta = value;
-				Notify("Theta");
+				Notify(nameof(Theta));
 			}
 		}
 
@@ -1137,7 +1137,7 @@ namespace StockSharp.BusinessEntities
 					return;
 
 				_rho = value;
-				Notify("Rho");
+				Notify(nameof(Rho));
 			}
 		}
 
@@ -1163,7 +1163,7 @@ namespace StockSharp.BusinessEntities
 					return;
 
 				_openInterest = value;
-				Notify("OpenInterest");
+				Notify(nameof(OpenInterest));
 			}
 		}
 
@@ -1181,7 +1181,7 @@ namespace StockSharp.BusinessEntities
 			set
 			{
 				_localTime = value;
-				Notify("LocalTime");
+				Notify(nameof(LocalTime));
 			}
 		}
 
@@ -1203,7 +1203,7 @@ namespace StockSharp.BusinessEntities
 			set
 			{
 				_lastChangeTime = value;
-				Notify("LastChangeTime");
+				Notify(nameof(LastChangeTime));
 			}
 		}
 
@@ -1227,7 +1227,7 @@ namespace StockSharp.BusinessEntities
 			set
 			{
 				_bidsVolume = value;
-				Notify("BidsVolume");
+				Notify(nameof(BidsVolume));
 			}
 		}
 
@@ -1251,7 +1251,7 @@ namespace StockSharp.BusinessEntities
 			set
 			{
 				_bidsCount = value;
-				Notify("BidsCount");
+				Notify(nameof(BidsCount));
 			}
 		}
 
@@ -1275,7 +1275,7 @@ namespace StockSharp.BusinessEntities
 			set
 			{
 				_asksVolume = value;
-				Notify("AsksVolume");
+				Notify(nameof(AsksVolume));
 			}
 		}
 
@@ -1299,7 +1299,7 @@ namespace StockSharp.BusinessEntities
 			set
 			{
 				_asksCount = value;
-				Notify("AsksCount");
+				Notify(nameof(AsksCount));
 			}
 		}
 
@@ -1323,7 +1323,7 @@ namespace StockSharp.BusinessEntities
 			set
 			{
 				_tradesCount = value;
-				Notify("TradesCount");
+				Notify(nameof(TradesCount));
 			}
 		}
 
@@ -1347,7 +1347,7 @@ namespace StockSharp.BusinessEntities
 			set
 			{
 				_highBidPrice = value;
-				Notify("HighBidPrice");
+				Notify(nameof(HighBidPrice));
 			}
 		}
 
@@ -1371,7 +1371,7 @@ namespace StockSharp.BusinessEntities
 			set
 			{
 				_lowAskPrice = value;
-				Notify("LowAskPrice");
+				Notify(nameof(LowAskPrice));
 			}
 		}
 
@@ -1394,7 +1394,7 @@ namespace StockSharp.BusinessEntities
 			set
 			{
 				_yield = value;
-				Notify("Yield");
+				Notify(nameof(Yield));
 			}
 		}
 
@@ -1417,7 +1417,7 @@ namespace StockSharp.BusinessEntities
 			set
 			{
 				_vwap = value;
-				Notify("VWAP");
+				Notify(nameof(VWAP));
 			}
 		}
 
@@ -1440,7 +1440,7 @@ namespace StockSharp.BusinessEntities
 			set
 			{
 				_settlementPrice = value;
-				Notify("SettlementPrice");
+				Notify(nameof(SettlementPrice));
 			}
 		}
 
@@ -1463,7 +1463,7 @@ namespace StockSharp.BusinessEntities
 			set
 			{
 				_averagePrice = value;
-				Notify("AveragePrice");
+				Notify(nameof(AveragePrice));
 			}
 		}
 
@@ -1486,7 +1486,7 @@ namespace StockSharp.BusinessEntities
 			set
 			{
 				_volume = value;
-				Notify("Volume");
+				Notify(nameof(Volume));
 			}
 		}
 
