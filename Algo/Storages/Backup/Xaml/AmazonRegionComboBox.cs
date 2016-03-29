@@ -17,6 +17,8 @@ namespace StockSharp.Algo.Storages.Backup.Xaml
 {
 	using System.Windows.Controls;
 
+	using Amazon;
+
 	/// <summary>
 	/// The drop-down list to select the AWS region.
 	/// </summary>
@@ -27,7 +29,7 @@ namespace StockSharp.Algo.Storages.Backup.Xaml
 		/// </summary>
 		public AmazonRegionComboBox()
 		{
-			DisplayMemberPath = "DisplayName";
+			DisplayMemberPath = nameof(RegionEndpoint.DisplayName);
 			ItemsSource = AmazonExtensions.Endpoints;
 		}
 	}
