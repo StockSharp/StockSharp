@@ -135,11 +135,6 @@
     <Compile Include="Risk\RiskMessageAdapter.cs" />
     <Compile Include="SecurityTrie.cs" />
     <Compile Include="Slippage\SlippageMessageAdapter.cs" />
-    <Compile Include="Storages\Backup\AmazonExtensions.cs" />
-    <Compile Include="Storages\Backup\AmazonGlacierService.cs" />
-    <Compile Include="Storages\Backup\AmazonS3Service.cs" />
-    <Compile Include="Storages\Backup\BackupEntry.cs" />
-    <Compile Include="Storages\Backup\IBackupService.cs" />
     <Compile Include="BasketMessageAdapter.cs" />
     <Compile Include="BasketPortfolio.cs" />
     <Compile Include="BasketPosition.cs" />
@@ -303,8 +298,6 @@
     </Compile>
     <Compile Include="AuthorizationModes.cs" />
     <Compile Include="Storages\AllSecurityMarketDataStorage.cs" />
-    <Compile Include="Storages\Backup\Xaml\AmazonRegionComboBox.cs" />
-    <Compile Include="Storages\Backup\Xaml\AmazonRegionEditor.cs" />
     <Compile Include="Storages\Binary\BinaryMarketDataSerializer.cs" />
     <Compile Include="Storages\BufferMessageAdapter.cs" />
     <Compile Include="Storages\CacheableMarketDataDrive.cs" />
