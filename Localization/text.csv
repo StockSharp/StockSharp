@@ -4637,11 +4637,11 @@ DocStr419;Element;Элемент
 DocStr420;File list;Список файлов
 DocStr421;Delete file from the service;Удалить файл из сервиса
 DocStr422;Save file;Сохранить файл
-DocStr423;The thread of the open file that will be saved to the service;Поток открытого файла, который будет сохранен в сервисе
+DocStr423;The stream of the open file that will be saved to the service;Поток открытого файла, который будет сохранен в сервисе
 DocStr424;Progress notification;Оповещение о прогрессе
 DocStr425;Cancellation token;Токен отмены
 DocStr426;Upload file;Загрузить файл
-DocStr427;The thread of the open file into which data from the service will be downloaded;Поток открытого файла, в который будет скачены данные из сервиса
+DocStr427;The stream of the open file into which data from the service will be downloaded;Поток открытого файла, в который будет скачены данные из сервиса
 DocStr428;Region address;Адрес региона
 DocStr429;Storage name;Имя хранилища
 DocStr430;The data storage service based on Amazon S3 http://aws.amazon.com/s3/;Сервис хранения данных, основанный на Amazon S3 http://aws.amazon.com/s3/
