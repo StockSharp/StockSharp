@@ -66,7 +66,7 @@ namespace SampleSync
 			else
 			{
 				// создаем подключение к Quik-у и синхронизуем его
-				_connector = new QuikTrader(QuikPath.Folder).GuiSyncTrader();
+				_connector = new GuiConnector<QuikTrader>(new QuikTrader(QuikPath.Folder));
 
 				// или напрямую через конструктор GuiTrader
 				// (пред. нужно закомментировать, это - раскомментировать)
