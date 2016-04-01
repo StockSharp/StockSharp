@@ -649,7 +649,20 @@ namespace StockSharp.Algo
 		/// <returns><see langword="true" />, if time is traded, otherwise, not traded.</returns>
 		public static bool IsTradeTime(this ExchangeBoard board, DateTimeOffset time)
 		{
-			return board.ToMessage().IsTradeTime(time);
+			WorkingTimePeriod period;
+            return board.ToMessage().IsTradeTime(time, out period);
+		}
+
+		/// <summary>
+		/// To check, whether the time is traded (has the session started, ended, is there a clearing).
+		/// </summary>
+		/// <param name="board">Board info.</param>
+		/// <param name="time">The passed time to be checked.</param>
+		/// <param name="period">Current working time period.</param>
+		/// <returns><see langword="true" />, if time is traded, otherwise, not traded.</returns>
+		public static bool IsTradeTime(this ExchangeBoard board, DateTimeOffset time, out WorkingTimePeriod period)
+		{
+			return board.ToMessage().IsTradeTime(time, out period);
 		}
 
 		/// <summary>
@@ -660,6 +673,19 @@ namespace StockSharp.Algo
 		/// <returns><see langword="true" />, if time is traded, otherwise, not traded.</returns>
 		public static bool IsTradeTime(this BoardMessage board, DateTimeOffset time)
 		{
+			WorkingTimePeriod period;
+			return board.IsTradeTime(time, out period);
+		}
+
+		/// <summary>
+		/// To check, whether the time is traded (has the session started, ended, is there a clearing).
+		/// </summary>
+		/// <param name="board">Board info.</param>
+		/// <param name="time">The passed time to be checked.</param>
+		/// <param name="period">Current working time period.</param>
+		/// <returns><see langword="true" />, if time is traded, otherwise, not traded.</returns>
+		public static bool IsTradeTime(this BoardMessage board, DateTimeOffset time, out WorkingTimePeriod period)
+		{
 			if (board == null)
 				throw new ArgumentNullException(nameof(board));
 
@@ -669,9 +695,12 @@ namespace StockSharp.Algo
 			var isWorkingDay = board.IsTradeDate(time);
 
 			if (!isWorkingDay)
-				return false;
+			{
+				period = null;
+                return false;
+			}
 
-			var period = workingTime.GetPeriod(exchangeTime);
+			period = workingTime.GetPeriod(exchangeTime);
 
 			var tod = exchangeTime.TimeOfDay;
 			return period == null || period.Times.IsEmpty() || period.Times.Any(r => r.Contains(tod));

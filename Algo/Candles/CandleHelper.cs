@@ -1053,7 +1053,7 @@ namespace StockSharp.Algo.Candles
 			if (series == null)
 				throw new ArgumentNullException(nameof(series));
 
-			return series.Security.Board.IsTradeTime(time) && time >= series.From && time < series.To;
+			return time >= series.From && time < series.To && series.Security.Board.IsTradeTime(time);
 		}
 
 		/// <summary>

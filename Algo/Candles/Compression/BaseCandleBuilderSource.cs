@@ -15,14 +15,22 @@ Copyright 2010 by StockSharp, LLC
 #endregion S# License
 namespace StockSharp.Algo.Candles.Compression
 {
+	using System;
 	using System.Collections.Generic;
 	using System.Linq;
+
+	using Ecng.Common;
+	using Ecng.Collections;
+
+	using StockSharp.Messages;
 
 	/// <summary>
 	/// The base data source for <see cref="ICandleBuilder"/>.
 	/// </summary>
 	public abstract class BaseCandleBuilderSource : BaseCandleSource<IEnumerable<ICandleBuilderSourceValue>>, ICandleBuilderSource
 	{
+		private readonly Dictionary<CandleSeries, Tuple<DateTimeOffset, WorkingTimePeriod>> _currentPeriods = new Dictionary<CandleSeries, Tuple<DateTimeOffset, WorkingTimePeriod>>();
+
 		/// <summary>
 		/// Initialize <see cref="BaseCandleBuilderSource"/>.
 		/// </summary>
@@ -37,7 +45,41 @@ namespace StockSharp.Algo.Candles.Compression
 		/// <param name="values">New data.</param>
 		protected override void RaiseProcessing(CandleSeries series, IEnumerable<ICandleBuilderSourceValue> values)
 		{
-			base.RaiseProcessing(series, values.Where(v => series.CheckTime(v.Time)));
+			var tuple = _currentPeriods.TryGetValue(series);
+
+			var filteredValues = values.Where(v =>
+			{
+				var time = v.Time;
+
+				if (!(time >= series.From && time < series.To))
+					return false;
+
+				if (tuple == null || tuple.Item1.Date.Date != time.Date.Date)
+					return CheckTime(series, time, out tuple);
+
+				var exchangeTime = time.ToLocalTime(series.Security.Board.TimeZone);
+				var tod = exchangeTime.TimeOfDay;
+				var period = tuple.Item2;
+
+				var res = period == null || period.Times.IsEmpty() || period.Times.Any(r => r.Contains(tod));
+
+				if (res)
+					return true;
+
+				return CheckTime(series, time, out tuple);
+			});
+
+			base.RaiseProcessing(series, filteredValues);
+		}
+
+		private bool CheckTime(CandleSeries series, DateTimeOffset time, out Tuple<DateTimeOffset, WorkingTimePeriod> tuple)
+		{
+			WorkingTimePeriod period;
+
+			var res = series.Security.Board.IsTradeTime(time, out period);
+			_currentPeriods[series] = tuple = Tuple.Create(time, period);
+
+			return res;
 		}
 	}
 }
