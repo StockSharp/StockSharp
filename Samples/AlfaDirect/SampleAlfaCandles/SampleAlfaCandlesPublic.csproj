@@ -60,9 +60,8 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="StockSharp.AlfaDirect, Version=4.3.14.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\Connectors\AlfaDirect\StockSharp.AlfaDirect.dll</HintPath>
+    <Reference Include="StockSharp.AlfaDirect">
+      <HintPath>..\..\..\References\StockSharp.AlfaDirect.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.configuration" />

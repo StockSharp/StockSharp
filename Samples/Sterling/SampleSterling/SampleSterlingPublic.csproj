@@ -69,9 +69,8 @@
     <Reference Include="MoreLinq">
       <HintPath>..\..\..\References\Ecng\MoreLinq.dll</HintPath>
     </Reference>
-    <Reference Include="StockSharp.Sterling, Version=4.3.14.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\Connectors\Sterling\StockSharp.Sterling.dll</HintPath>
+    <Reference Include="StockSharp.Sterling">
+      <HintPath>..\..\..\References\StockSharp.Sterling.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />

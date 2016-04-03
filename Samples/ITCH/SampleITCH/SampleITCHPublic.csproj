@@ -67,7 +67,7 @@
       <HintPath>..\..\..\References\Ecng\MoreLinq.dll</HintPath>
     </Reference>
     <Reference Include="StockSharp.ITCH">
-      <HintPath>..\..\..\Connectors\ITCH\StockSharp.ITCH.dll</HintPath>
+      <HintPath>..\..\..\References\StockSharp.ITCH.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.configuration" />

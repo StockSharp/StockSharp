@@ -44,9 +44,8 @@
     <Reference Include="MoreLinq">
       <HintPath>..\..\..\References\Ecng\MoreLinq.dll</HintPath>
     </Reference>
-    <Reference Include="StockSharp.InteractiveBrokers, Version=4.3.14.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\Connectors\InteractiveBrokers\StockSharp.InteractiveBrokers.dll</HintPath>
+    <Reference Include="StockSharp.InteractiveBrokers">
+      <HintPath>..\..\..\References\StockSharp.InteractiveBrokers.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />

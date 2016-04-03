@@ -60,9 +60,8 @@
   <ItemGroup>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
-    <Reference Include="StockSharp.SmartCom, Version=4.3.14.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\Connectors\SmartCom\StockSharp.SmartCom.dll</HintPath>
+    <Reference Include="StockSharp.SmartCom">
+      <HintPath>..\..\..\References\StockSharp.SmartCom.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />

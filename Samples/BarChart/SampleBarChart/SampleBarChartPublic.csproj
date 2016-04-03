@@ -63,9 +63,8 @@
     <Reference Include="MoreLinq">
       <HintPath>..\..\..\References\Ecng\MoreLinq.dll</HintPath>
     </Reference>
-    <Reference Include="StockSharp.BarChart, Version=4.3.14.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\Connectors\BarChart\StockSharp.BarChart.dll</HintPath>
+    <Reference Include="StockSharp.BarChart">
+      <HintPath>..\..\..\References\StockSharp.BarChart.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.configuration" />

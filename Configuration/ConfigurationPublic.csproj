@@ -47,12 +47,10 @@
     <Reference Include="Ecng.Configuration">
       <HintPath>..\References\Ecng\Ecng.Configuration.dll</HintPath>
     </Reference>
-    <Reference Include="Ecng.Data, Version=1.0.0.0, Culture=neutral, PublicKeyToken=b10e79ed0227b515, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="Ecng.Data">
       <HintPath>..\References\Ecng\Ecng.Data.dll</HintPath>
     </Reference>
-    <Reference Include="Ecng.Interop, Version=1.0.0.0, Culture=neutral, PublicKeyToken=b10e79ed0227b515, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="Ecng.Interop">
       <HintPath>..\References\Ecng\Ecng.Interop.dll</HintPath>
     </Reference>
     <Reference Include="Ecng.Serialization">
@@ -63,98 +61,80 @@
     </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
-    <Reference Include="StockSharp.AlfaDirect, Version=4.3.14.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Connectors\AlfaDirect\StockSharp.AlfaDirect.dll</HintPath>
+    <Reference Include="StockSharp.AlfaDirect">
+      <HintPath>..\References\StockSharp.AlfaDirect.dll</HintPath>
     </Reference>
-    <Reference Include="StockSharp.BarChart, Version=4.3.14.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Connectors\BarChart\StockSharp.BarChart.dll</HintPath>
+    <Reference Include="StockSharp.BarChart">
+      <HintPath>..\References\StockSharp.BarChart.dll</HintPath>
     </Reference>
-    <Reference Include="StockSharp.BitStamp, Version=4.3.14.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Connectors\BitStamp\StockSharp.BitStamp.dll</HintPath>
+    <Reference Include="StockSharp.BitStamp">
+      <HintPath>..\References\StockSharp.BitStamp.dll</HintPath>
     </Reference>
     <Reference Include="StockSharp.Blackwood">
-      <HintPath>..\Connectors\Blackwood\StockSharp.Blackwood.dll</HintPath>
+      <HintPath>..\References\StockSharp.Blackwood.dll</HintPath>
     </Reference>
-    <Reference Include="StockSharp.Btce, Version=4.3.14.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Connectors\Btce\StockSharp.Btce.dll</HintPath>
+    <Reference Include="StockSharp.Btce">
+      <HintPath>..\References\StockSharp.Btce.dll</HintPath>
     </Reference>
-    <Reference Include="StockSharp.CQG, Version=4.3.14.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Connectors\CQG\StockSharp.CQG.dll</HintPath>
+    <Reference Include="StockSharp.CQG">
+      <HintPath>..\References\StockSharp.CQG.dll</HintPath>
     </Reference>
-    <Reference Include="StockSharp.ETrade, Version=4.3.14.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Connectors\ETrade\StockSharp.ETrade.dll</HintPath>
+    <Reference Include="StockSharp.ETrade">
+      <HintPath>..\References\StockSharp.ETrade.dll</HintPath>
     </Reference>
     <Reference Include="StockSharp.Fix">
-      <HintPath>..\Connectors\Fix\StockSharp.Fix.dll</HintPath>
+      <HintPath>..\References\StockSharp.Fix.dll</HintPath>
     </Reference>
-    <Reference Include="StockSharp.InteractiveBrokers, Version=4.3.14.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Connectors\InteractiveBrokers\StockSharp.InteractiveBrokers.dll</HintPath>
+    <Reference Include="StockSharp.InteractiveBrokers">
+      <HintPath>..\References\StockSharp.InteractiveBrokers.dll</HintPath>
     </Reference>
-    <Reference Include="StockSharp.IQFeed, Version=4.3.14.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Connectors\IQFeed\StockSharp.IQFeed.dll</HintPath>
+    <Reference Include="StockSharp.IQFeed">
+      <HintPath>..\References\StockSharp.IQFeed.dll</HintPath>
     </Reference>
     <Reference Include="StockSharp.ITCH">
-      <HintPath>..\Connectors\ITCH\StockSharp.ITCH.dll</HintPath>
+      <HintPath>..\References\StockSharp.ITCH.dll</HintPath>
     </Reference>
-    <Reference Include="StockSharp.LMAX, Version=4.3.14.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Connectors\LMAX\StockSharp.LMAX.dll</HintPath>
+    <Reference Include="StockSharp.LMAX">
+      <HintPath>..\References\StockSharp.LMAX.dll</HintPath>
     </Reference>
     <Reference Include="StockSharp.Micex">
-      <HintPath>..\Connectors\Micex\StockSharp.Micex.dll</HintPath>
+      <HintPath>..\References\StockSharp.Micex.dll</HintPath>
     </Reference>
-    <Reference Include="StockSharp.Oanda, Version=4.3.14.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Connectors\Oanda\StockSharp.Oanda.dll</HintPath>
+    <Reference Include="StockSharp.Oanda">
+      <HintPath>..\References\StockSharp.Oanda.dll</HintPath>
     </Reference>
-    <Reference Include="StockSharp.OpenECry, Version=4.3.14.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Connectors\OpenECry\StockSharp.OpenECry.dll</HintPath>
+    <Reference Include="StockSharp.OpenECry">
+      <HintPath>..\References\StockSharp.OpenECry.dll</HintPath>
     </Reference>
     <Reference Include="StockSharp.Plaza">
-      <HintPath>..\Connectors\Plaza\StockSharp.Plaza.dll</HintPath>
+      <HintPath>..\References\StockSharp.Plaza.dll</HintPath>
     </Reference>
-    <Reference Include="StockSharp.Rithmic, Version=4.3.14.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Connectors\Rithmic\StockSharp.Rithmic.dll</HintPath>
+    <Reference Include="StockSharp.Rithmic">
+      <HintPath>..\References\StockSharp.Rithmic.dll</HintPath>
     </Reference>
-    <Reference Include="StockSharp.Rss, Version=4.3.14.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Connectors\Rss\StockSharp.Rss.dll</HintPath>
+    <Reference Include="StockSharp.Rss">
+      <HintPath>..\References\StockSharp.Rss.dll</HintPath>
     </Reference>
-    <Reference Include="StockSharp.SmartCom, Version=4.3.14.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Connectors\SmartCom\StockSharp.SmartCom.dll</HintPath>
+    <Reference Include="StockSharp.SmartCom">
+      <HintPath>..\References\StockSharp.SmartCom.dll</HintPath>
     </Reference>
-    <Reference Include="StockSharp.Sterling, Version=4.3.14.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Connectors\Sterling\StockSharp.Sterling.dll</HintPath>
+    <Reference Include="StockSharp.Sterling">
+      <HintPath>..\References\StockSharp.Sterling.dll</HintPath>
     </Reference>
-    <Reference Include="StockSharp.Transaq, Version=4.3.14.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Connectors\Transaq\StockSharp.Transaq.dll</HintPath>
+    <Reference Include="StockSharp.Transaq">
+      <HintPath>..\References\StockSharp.Transaq.dll</HintPath>
     </Reference>
-    <Reference Include="StockSharp.Twime, Version=4.3.14.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Connectors\Twime\StockSharp.Twime.dll</HintPath>
+    <Reference Include="StockSharp.Twime">
+      <HintPath>..\References\StockSharp.Twime.dll</HintPath>
     </Reference>
-    <Reference Include="StockSharp.Xaml, Version=4.3.14.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Xaml\StockSharp.Xaml.dll</HintPath>
+    <Reference Include="StockSharp.Xaml">
+      <HintPath>..\References\StockSharp.Xaml.dll</HintPath>
     </Reference>
     <Reference Include="StockSharp.Xaml.Charting">
-      <HintPath>..\Xaml.Charting\StockSharp.Xaml.Charting.dll</HintPath>
+      <HintPath>..\References\StockSharp.Xaml.Charting.dll</HintPath>
     </Reference>
     <Reference Include="StockSharp.Xaml.Diagram">
-      <HintPath>..\Xaml.Diagram\StockSharp.Xaml.Diagram.dll</HintPath>
+      <HintPath>..\References\StockSharp.Xaml.Diagram.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />

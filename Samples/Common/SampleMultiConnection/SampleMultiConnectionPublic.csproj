@@ -68,9 +68,6 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\References\Ecng\MoreLinq.dll</HintPath>
     </Reference>
-    <Reference Include="StockSharp.Fix">
-      <HintPath>..\..\..\Connectors\Fix\StockSharp.Fix.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.configuration" />
     <Reference Include="System.Core" />
@@ -251,10 +248,6 @@
     <ProjectReference Include="..\..\..\Configuration\ConfigurationPublic.csproj">
       <Project>{2CFF1903-4EF5-46F8-AB5D-BB623CA75CE6}</Project>
       <Name>ConfigurationPublic</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\Connectors\Quik\QuikPublic.csproj">
-      <Project>{1B798A4E-2271-46F9-9C2D-4E563114E268}</Project>
-      <Name>QuikPublic</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\Localization\Localization.csproj">
       <Project>{A98A81CE-75A1-4FAB-9C02-E6EEF4B51F4F}</Project>

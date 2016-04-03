@@ -43,9 +43,8 @@
     <Reference Include="MoreLinq">
       <HintPath>..\..\..\References\Ecng\MoreLinq.dll</HintPath>
     </Reference>
-    <Reference Include="StockSharp.ETrade, Version=4.3.14.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\Connectors\ETrade\StockSharp.ETrade.dll</HintPath>
+    <Reference Include="StockSharp.ETrade">
+      <HintPath>..\..\..\References\StockSharp.ETrade.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />

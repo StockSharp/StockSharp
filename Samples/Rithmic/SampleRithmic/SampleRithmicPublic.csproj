@@ -43,9 +43,8 @@
     <Reference Include="MoreLinq">
       <HintPath>..\..\..\References\Ecng\MoreLinq.dll</HintPath>
     </Reference>
-    <Reference Include="StockSharp.Rithmic, Version=4.3.14.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\Connectors\Rithmic\StockSharp.Rithmic.dll</HintPath>
+    <Reference Include="StockSharp.Rithmic">
+      <HintPath>..\..\..\References\StockSharp.Rithmic.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />

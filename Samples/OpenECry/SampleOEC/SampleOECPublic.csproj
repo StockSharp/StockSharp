@@ -63,9 +63,8 @@
     <Reference Include="MoreLinq">
       <HintPath>..\..\..\References\Ecng\MoreLinq.dll</HintPath>
     </Reference>
-    <Reference Include="StockSharp.OpenECry, Version=4.3.14.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\Connectors\OpenECry\StockSharp.OpenECry.dll</HintPath>
+    <Reference Include="StockSharp.OpenECry">
+      <HintPath>..\..\..\References\StockSharp.OpenECry.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />

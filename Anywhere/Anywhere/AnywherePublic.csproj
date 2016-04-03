@@ -64,13 +64,11 @@
     <Reference Include="MoreLinq">
       <HintPath>..\..\References\Ecng\MoreLinq.dll</HintPath>
     </Reference>
-    <Reference Include="StockSharp.Fix, Version=4.3.10.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Connectors\Fix\StockSharp.Fix.dll</HintPath>
+    <Reference Include="StockSharp.Fix">
+      <HintPath>..\..\References\StockSharp.Fix.dll</HintPath>
     </Reference>
-    <Reference Include="StockSharp.Xaml.Charting, Version=4.3.10.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Xaml.Charting\StockSharp.Xaml.Charting.dll</HintPath>
+    <Reference Include="StockSharp.Xaml.Charting">
+      <HintPath>..\..\References\StockSharp.Xaml.Charting.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />

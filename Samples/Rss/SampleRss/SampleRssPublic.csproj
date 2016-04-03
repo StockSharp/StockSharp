@@ -40,9 +40,8 @@
     <ApplicationIcon>..\..\..\References\stocksharp.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="StockSharp.Rss, Version=4.3.14.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\Connectors\Rss\StockSharp.Rss.dll</HintPath>
+    <Reference Include="StockSharp.Rss">
+      <HintPath>..\..\..\References\StockSharp.Rss.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />

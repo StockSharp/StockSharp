@@ -48,7 +48,7 @@
       <HintPath>..\..\..\References\Ecng\MoreLinq.dll</HintPath>
     </Reference>
     <Reference Include="StockSharp.Micex">
-      <HintPath>..\..\..\Connectors\Micex\StockSharp.Micex.dll</HintPath>
+      <HintPath>..\..\..\References\StockSharp.Micex.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />

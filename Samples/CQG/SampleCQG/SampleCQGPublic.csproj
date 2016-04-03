@@ -69,9 +69,8 @@
     <Reference Include="MoreLinq">
       <HintPath>..\..\..\References\Ecng\MoreLinq.dll</HintPath>
     </Reference>
-    <Reference Include="StockSharp.CQG, Version=4.3.14.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\Connectors\CQG\StockSharp.CQG.dll</HintPath>
+    <Reference Include="StockSharp.CQG">
+      <HintPath>..\..\..\References\StockSharp.CQG.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />

@@ -61,7 +61,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="StockSharp.Blackwood">
-      <HintPath>..\..\..\Connectors\Blackwood\StockSharp.Blackwood.dll</HintPath>
+      <HintPath>..\..\..\References\StockSharp.Blackwood.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />

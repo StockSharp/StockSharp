@@ -64,7 +64,7 @@
       <HintPath>..\..\..\References\Ecng\MoreLinq.dll</HintPath>
     </Reference>
     <Reference Include="StockSharp.Twime">
-      <HintPath>..\..\..\Connectors\Twime\StockSharp.Twime.dll</HintPath>
+      <HintPath>..\..\..\References\StockSharp.Twime.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
