@@ -60,7 +60,10 @@ namespace StockSharp.Alerts
 						var fileName = Path.Combine(dumpDir, "alert.mp3");
 
 						if (!File.Exists(fileName))
+						{
+							Directory.CreateDirectory(dumpDir);
 							Properties.Resources.Alert.Save(fileName);
+						}
 
 						player.Open(new Uri(fileName, UriKind.RelativeOrAbsolute));
 
