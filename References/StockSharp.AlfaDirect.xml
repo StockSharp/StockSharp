@@ -1,0 +1,310 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>StockSharp.AlfaDirect</name>
+    </assembly>
+    <members>
+        <member name="T:StockSharp.AlfaDirect.AlfaDirectMessageAdapter">
+            <summary>
+            Адаптер сообщений для AlfaDirect.
+            </summary>
+        </member>
+        <member name="M:StockSharp.AlfaDirect.AlfaDirectMessageAdapter.#ctor(Ecng.Common.IdGenerator)">
+            <summary>
+            Создать <see cref="T:StockSharp.AlfaDirect.AlfaDirectMessageAdapter"/>.
+            </summary>
+            <param name="transactionIdGenerator">Генератор идентификаторов транзакций.</param>
+        </member>
+        <member name="M:StockSharp.AlfaDirect.AlfaDirectMessageAdapter.CreateOrderCondition">
+            <summary>
+            Создать для заявки типа <see cref="F:StockSharp.Messages.OrderTypes.Conditional"/> условие, которое поддерживается подключением.
+            </summary>
+            <returns>Условие для заявки. Если подключение не поддерживает заявки типа <see cref="F:StockSharp.Messages.OrderTypes.Conditional"/>, то будет возвращено <see langword="null"/>.</returns>
+        </member>
+        <member name="P:StockSharp.AlfaDirect.AlfaDirectMessageAdapter.IsSupportNativePortfolioLookup">
+            <summary>
+            Поддерживается ли торговой системой поиск портфелей.
+            </summary>
+        </member>
+        <member name="P:StockSharp.AlfaDirect.AlfaDirectMessageAdapter.IsSupportNativeSecurityLookup">
+            <summary>
+            Поддерживается ли торговой системой поиск инструментов.
+            </summary>
+        </member>
+        <member name="M:StockSharp.AlfaDirect.AlfaDirectMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)">
+            <summary>
+            Отправить сообщение.
+            </summary>
+            <param name="message">Сообщение.</param>
+        </member>
+        <member name="P:StockSharp.AlfaDirect.AlfaDirectMessageAdapter.Login">
+            <summary>
+            Имя пользователя в терминале Альфа-Директ.
+            </summary>
+        </member>
+        <member name="P:StockSharp.AlfaDirect.AlfaDirectMessageAdapter.Password">
+            <summary>
+            Пароль для входа в терминал.
+            </summary>
+        </member>
+        <member name="P:StockSharp.AlfaDirect.AlfaDirectMessageAdapter.IsValid">
+            <summary>
+            Проверить введенные параметры на валидность.
+            </summary>
+        </member>
+        <member name="M:StockSharp.AlfaDirect.AlfaDirectMessageAdapter.Load(Ecng.Serialization.SettingsStorage)">
+            <summary>
+            Загрузить настройки.
+            </summary>
+            <param name="storage">Хранилище настроек.</param>
+        </member>
+        <member name="M:StockSharp.AlfaDirect.AlfaDirectMessageAdapter.Save(Ecng.Serialization.SettingsStorage)">
+            <summary>
+            Сохранить настройки.
+            </summary>
+            <param name="storage">Хранилище настроек.</param>
+        </member>
+        <member name="M:StockSharp.AlfaDirect.AlfaDirectMessageAdapter.ToString">
+            <summary>
+            Получить строковое представление.
+            </summary>
+            <returns>Строковое представление.</returns>
+        </member>
+        <member name="T:StockSharp.AlfaDirect.AlfaExceptionCodes">
+            <summary>
+            Коды ошибок.
+            </summary>
+        </member>
+        <member name="F:StockSharp.AlfaDirect.AlfaExceptionCodes.CriticalClientError">
+            <summary>
+            Критическая ошибка клиента.
+            </summary>
+        </member>
+        <member name="F:StockSharp.AlfaDirect.AlfaExceptionCodes.ClientError">
+            <summary>
+            Ошибка клиента.
+            </summary>
+        </member>
+        <member name="F:StockSharp.AlfaDirect.AlfaExceptionCodes.NotConnected">
+            <summary>
+            Нет соединения.
+            </summary>
+        </member>
+        <member name="F:StockSharp.AlfaDirect.AlfaExceptionCodes.ServerError">
+            <summary>
+            Ошибка сервера.
+            </summary>
+        </member>
+        <member name="F:StockSharp.AlfaDirect.AlfaExceptionCodes.Timeout">
+            <summary>
+            Тайм-аут.
+            </summary>
+        </member>
+        <member name="F:StockSharp.AlfaDirect.AlfaExceptionCodes.Warning">
+            <summary>
+            Предупреждение.
+            </summary>
+        </member>
+        <member name="T:StockSharp.AlfaDirect.AlfaException">
+            <summary>
+            Исключение, содержащее код и текст ошибки.
+            </summary>
+        </member>
+        <member name="P:StockSharp.AlfaDirect.AlfaException.Code">
+            <summary>
+            Код ошибки.
+            </summary>
+        </member>
+        <member name="T:StockSharp.AlfaDirect.AlfaOrderCondition">
+            <summary>
+            Условие заявок, специфичных для <see cref="N:StockSharp.AlfaDirect"/>.
+            </summary>
+        </member>
+        <member name="M:StockSharp.AlfaDirect.AlfaOrderCondition.#ctor">
+            <summary>
+            Создать <see cref="T:StockSharp.AlfaDirect.AlfaOrderCondition"/>.
+            </summary>
+        </member>
+        <member name="P:StockSharp.AlfaDirect.AlfaOrderCondition.StopPrice">
+            <summary>
+            Стоп-цена.
+            </summary>
+        </member>
+        <member name="P:StockSharp.AlfaDirect.AlfaOrderCondition.Slippage">
+            <summary>
+            Проскальзывание.
+            </summary>
+        </member>
+        <member name="P:StockSharp.AlfaDirect.AlfaOrderCondition.TargetPrice">
+            <summary>
+            Цена фиксирования прибыли. Используется для заявок Stop+TargetProfit.
+            </summary>
+        </member>
+        <member name="P:StockSharp.AlfaDirect.AlfaOrderCondition.Level">
+            <summary>
+            Максимальное отклонение в противоположную сторону. Используется для заявок TrailingStop.
+            </summary>
+        </member>
+        <member name="T:StockSharp.AlfaDirect.AlfaTimeFrames">
+            <summary>
+            Тайм-фреймы для исторических свечек Альфа-Директ.
+            </summary>
+        </member>
+        <member name="P:StockSharp.AlfaDirect.AlfaTimeFrames.AllTimeFrames">
+            <summary>
+            Возможные тайм-фреймы.
+            </summary>
+        </member>
+        <member name="P:StockSharp.AlfaDirect.AlfaTimeFrames.Minute1">
+            <summary>
+            Минутный тайм-фрейм.
+            </summary>
+        </member>
+        <member name="P:StockSharp.AlfaDirect.AlfaTimeFrames.Minute5">
+            <summary>
+            Пяти минутный тайм-фрейм.
+            </summary>
+        </member>
+        <member name="P:StockSharp.AlfaDirect.AlfaTimeFrames.Minute10">
+            <summary>
+            Десяти минутный тайм-фрейм.
+            </summary>
+        </member>
+        <member name="P:StockSharp.AlfaDirect.AlfaTimeFrames.Minute15">
+            <summary>
+            Пятнадцати минутный тайм-фрейм.
+            </summary>
+        </member>
+        <member name="P:StockSharp.AlfaDirect.AlfaTimeFrames.Minute30">
+            <summary>
+            Тридцати минутный тайм-фрейм.
+            </summary>
+        </member>
+        <member name="P:StockSharp.AlfaDirect.AlfaTimeFrames.Hour">
+            <summary>
+            Часовой тайм-фрейм.
+            </summary>
+        </member>
+        <member name="P:StockSharp.AlfaDirect.AlfaTimeFrames.Day">
+            <summary>
+            Дневной тайм-фрейм.
+            </summary>
+        </member>
+        <member name="P:StockSharp.AlfaDirect.AlfaTimeFrames.Week">
+            <summary>
+            Недельный тайм-фрейм.
+            </summary>
+        </member>
+        <member name="P:StockSharp.AlfaDirect.AlfaTimeFrames.Month">
+            <summary>
+            Месячный тайм-фрейм.
+            </summary>
+        </member>
+        <member name="P:StockSharp.AlfaDirect.AlfaTimeFrames.Year">
+            <summary>
+            Годовой тайм-фрейм.
+            </summary>
+        </member>
+        <member name="M:StockSharp.AlfaDirect.AlfaTimeFrames.op_Implicit(System.TimeSpan)~StockSharp.AlfaDirect.AlfaTimeFrames">
+            <summary>
+            Привести <see cref="T:System.TimeSpan"/> значение к объекту <see cref="T:StockSharp.AlfaDirect.AlfaTimeFrames"/>.
+            </summary>
+            <param name="value"><see cref="T:System.TimeSpan"/> значение.</param>
+            <returns>Объект <see cref="T:StockSharp.AlfaDirect.AlfaTimeFrames"/>.</returns>
+        </member>
+        <member name="M:StockSharp.AlfaDirect.AlfaTimeFrames.op_Explicit(StockSharp.AlfaDirect.AlfaTimeFrames)~System.TimeSpan">
+            <summary>
+            Привести объект <see cref="T:StockSharp.AlfaDirect.AlfaTimeFrames"/> к <see cref="T:System.TimeSpan"/> значению.
+            </summary>
+            <param name="timeFrame">Объект <see cref="T:StockSharp.AlfaDirect.AlfaTimeFrames"/>.</param>
+            <returns><see cref="T:System.TimeSpan"/> значение.</returns>
+        </member>
+        <member name="M:StockSharp.AlfaDirect.AlfaTimeFrames.ToString">
+            <summary>
+            Привести объект <see cref="T:StockSharp.AlfaDirect.AlfaTimeFrames"/> к <see cref="T:System.String"/> значению.
+            </summary>
+            <returns><see cref="T:System.String"/> значение.</returns>
+        </member>
+        <member name="T:StockSharp.AlfaDirect.AlfaTrader">
+            <summary>
+            Реализация интерфейса <see cref="T:StockSharp.BusinessEntities.IConnector"/>, предоставляющая подключение к брокеру AlfaDirect.
+            </summary>
+        </member>
+        <member name="M:StockSharp.AlfaDirect.AlfaTrader.#ctor">
+            <summary>
+            Создать <see cref="T:StockSharp.AlfaDirect.AlfaTrader"/>.
+            </summary>
+        </member>
+        <member name="P:StockSharp.AlfaDirect.AlfaTrader.IsSupportAtomicReRegister">
+            <summary>
+            Поддерживается ли перерегистрация заявок через метод <see cref="M:StockSharp.BusinessEntities.IConnector.ReRegisterOrder(StockSharp.BusinessEntities.Order,StockSharp.BusinessEntities.Order)"/>
+            в виде одной транзакции. По-умолчанию включено.
+            </summary>
+        </member>
+        <member name="P:StockSharp.AlfaDirect.AlfaTrader.Login">
+            <summary>
+            Имя пользователя в терминале Альфа-Директ.
+            </summary>
+        </member>
+        <member name="P:StockSharp.AlfaDirect.AlfaTrader.Password">
+            <summary>
+            Пароль для входа в терминал.
+            </summary>
+        </member>
+        <member name="P:StockSharp.AlfaDirect.AlfaTrader.RealTimeCandleOffset">
+            <summary>
+            Временной отступ для нового запроса получение новой свечи. По-умолчанию равен 5 секундам.
+            </summary>
+            <remarks>Необходим для того, чтобы сервер успел сформировать данные в своем хранилище свечек.</remarks>
+        </member>
+        <member name="M:StockSharp.AlfaDirect.AlfaTrader.OnProcessMessage(StockSharp.Messages.Message)">
+            <summary>
+            Обработать сообщение.
+            </summary>
+            <param name="message">Сообщение.</param>
+        </member>
+        <member name="M:StockSharp.AlfaDirect.AlfaTrader.GetSupportedRanges(StockSharp.Algo.Candles.CandleSeries)">
+            <summary>
+            Получить временные диапазоны, для которых у данного источника для передаваемой серии свечек есть данные.
+            </summary>
+            <param name="series">Серия свечек.</param>
+            <returns>Временные диапазоны.</returns>
+        </member>
+        <member name="M:StockSharp.AlfaDirect.AlfaTrader.SubscribeCandles(StockSharp.Algo.Candles.CandleSeries,System.DateTimeOffset,System.DateTimeOffset)">
+            <summary>
+            Подписаться на получение свечек.
+            </summary>
+            <param name="series">Серия свечек.</param>
+            <param name="from">Начальная дата, с которой необходимо получать данные.</param>
+            <param name="to">Конечная дата, до которой необходимо получать данные.</param>
+        </member>
+        <member name="M:StockSharp.AlfaDirect.AlfaTrader.UnSubscribeCandles(StockSharp.Algo.Candles.CandleSeries)">
+            <summary>
+            Остановить подписку получения свечек, ранее созданную через <see cref="M:StockSharp.AlfaDirect.AlfaTrader.SubscribeCandles(StockSharp.Algo.Candles.CandleSeries,System.DateTimeOffset,System.DateTimeOffset)"/>.
+            </summary>
+            <param name="series">Серия свечек.</param>
+        </member>
+        <member name="E:StockSharp.AlfaDirect.AlfaTrader.NewCandles">
+            <summary>
+            Событие появления новых свечек, полученных после подписки через <see cref="M:StockSharp.AlfaDirect.AlfaTrader.SubscribeCandles(StockSharp.Algo.Candles.CandleSeries,System.DateTimeOffset,System.DateTimeOffset)"/>.
+            </summary>
+        </member>
+        <member name="E:StockSharp.AlfaDirect.AlfaTrader.Stopped">
+            <summary>
+            Событие окончания обработки серии.
+            </summary>
+        </member>
+        <member name="M:StockSharp.AlfaDirect.AlfaTrader.Load(Ecng.Serialization.SettingsStorage)">
+            <summary>
+            Загрузить настройки.
+            </summary>
+            <param name="storage">Хранилище настроек.</param>
+        </member>
+        <member name="M:StockSharp.AlfaDirect.AlfaTrader.Save(Ecng.Serialization.SettingsStorage)">
+            <summary>
+            Сохранить настройки.
+            </summary>
+            <param name="storage">Хранилище настроек.</param>
+        </member>
+    </members>
+</doc>

@@ -1,0 +1,209 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>StockSharp.ITCH</name>
+    </assembly>
+    <members>
+        <member name="T:StockSharp.ITCH.ItchMessageAdapter">
+            <summary>
+            ITCH market-data message adapter.
+            </summary>
+        </member>
+        <member name="M:StockSharp.ITCH.ItchMessageAdapter.#ctor(Ecng.Common.IdGenerator)">
+            <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.ITCH.ItchMessageAdapter"/>.
+            </summary>
+            <param name="transactionIdGenerator">Transaction id generator.</param>
+        </member>
+        <member name="P:StockSharp.ITCH.ItchMessageAdapter.SecurityLookupRequired">
+            <summary>
+            <see cref="T:StockSharp.Messages.SecurityLookupMessage"/> required to get securities.
+            </summary>
+        </member>
+        <member name="M:StockSharp.ITCH.ItchMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)">
+            <summary>
+            Send message.
+            </summary>
+            <param name="message">Message.</param>
+        </member>
+        <member name="M:StockSharp.ITCH.ItchMessageAdapter.CreateOrderLogMarketDepthBuilder(StockSharp.Messages.SecurityId)">
+            <summary>
+            Create market depth builder.
+            </summary>
+            <param name="securityId">Security ID.</param>
+            <returns>Order log to market depth builder.</returns>
+        </member>
+        <member name="P:StockSharp.ITCH.ItchMessageAdapter.PrimaryMulticast">
+            <summary>
+            The main UDP group.
+            </summary>
+        </member>
+        <member name="P:StockSharp.ITCH.ItchMessageAdapter.DuplicateMulticast">
+            <summary>
+            Duplicate UDP group.
+            </summary>
+        </member>
+        <member name="P:StockSharp.ITCH.ItchMessageAdapter.RecoveryAddress">
+            <summary>
+            Restore state server address.
+            </summary>
+        </member>
+        <member name="P:StockSharp.ITCH.ItchMessageAdapter.ReplayAddress">
+            <summary>
+            Replay state server address.
+            </summary>
+        </member>
+        <member name="P:StockSharp.ITCH.ItchMessageAdapter.Login">
+            <summary>
+            Login.
+            </summary>
+        </member>
+        <member name="P:StockSharp.ITCH.ItchMessageAdapter.Password">
+            <summary>
+            Password.
+            </summary>
+        </member>
+        <member name="P:StockSharp.ITCH.ItchMessageAdapter.SecurityCsvFile">
+            <summary>
+            File with securities.
+            </summary>
+        </member>
+        <member name="P:StockSharp.ITCH.ItchMessageAdapter.SecurityDelayLoad">
+            <summary>
+            Delay load instruments from <see cref="P:StockSharp.ITCH.ItchMessageAdapter.SecurityCsvFile"/>.
+            </summary>
+        </member>
+        <member name="P:StockSharp.ITCH.ItchMessageAdapter.OnlyActiveSecurities">
+            <summary>
+            Download from <see cref="P:StockSharp.ITCH.ItchMessageAdapter.SecurityCsvFile"/> only active instruments.
+            </summary>
+        </member>
+        <member name="P:StockSharp.ITCH.ItchMessageAdapter.GroupId">
+            <summary>
+            Group ID.
+            </summary>
+        </member>
+        <member name="P:StockSharp.ITCH.ItchMessageAdapter.TimeZone">
+            <summary>
+            Information about the time zone where the exchange is located.
+            </summary>
+        </member>
+        <member name="P:StockSharp.ITCH.ItchMessageAdapter.IsValid">
+            <summary>
+            The parameters validity check.
+            </summary>
+        </member>
+        <member name="M:StockSharp.ITCH.ItchMessageAdapter.Save(Ecng.Serialization.SettingsStorage)">
+            <summary>
+            Save settings.
+            </summary>
+            <param name="storage">Settings storage.</param>
+        </member>
+        <member name="M:StockSharp.ITCH.ItchMessageAdapter.Load(Ecng.Serialization.SettingsStorage)">
+            <summary>
+            Load settings.
+            </summary>
+            <param name="storage">Settings storage.</param>
+        </member>
+        <member name="M:StockSharp.ITCH.ItchMessageAdapter.ToString">
+            <summary>
+            Returns a string that represents the current object.
+            </summary>
+            <returns>A string that represents the current object.</returns>
+        </member>
+        <member name="T:StockSharp.ITCH.ItchOrderLogMarketDepthBuilder">
+            <summary>
+            Order log to order book builder for ITCH data.
+            </summary>
+        </member>
+        <member name="M:StockSharp.ITCH.ItchOrderLogMarketDepthBuilder.#ctor(StockSharp.Messages.SecurityId)">
+            <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.ITCH.ItchOrderLogMarketDepthBuilder"/>.
+            </summary>
+            <param name="securityId">Security ID.</param>
+        </member>
+        <member name="M:StockSharp.ITCH.ItchOrderLogMarketDepthBuilder.#ctor(StockSharp.Messages.QuoteChangeMessage)">
+            <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.ITCH.ItchOrderLogMarketDepthBuilder"/>.
+            </summary>
+            <param name="depth">Market depth.</param>
+        </member>
+        <member name="P:StockSharp.ITCH.ItchOrderLogMarketDepthBuilder.Depth">
+            <summary>
+            Market depth.
+            </summary>
+        </member>
+        <member name="M:StockSharp.ITCH.ItchOrderLogMarketDepthBuilder.Update(StockSharp.Messages.ExecutionMessage)">
+            <summary>
+            Process order log item.
+            </summary>
+            <param name="item">Order log item.</param>
+            <returns>Order book was changed.</returns>
+        </member>
+        <member name="T:StockSharp.ITCH.ItchTrader">
+            <summary>
+            The interface <see cref="T:StockSharp.BusinessEntities.IConnector"/> implementation which provides a connection to the ITCH (LSE or NASDAQ).
+            </summary>
+        </member>
+        <member name="M:StockSharp.ITCH.ItchTrader.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.ITCH.ItchTrader"/>.
+            </summary>
+        </member>
+        <member name="P:StockSharp.ITCH.ItchTrader.Login">
+            <summary>
+            Login.
+            </summary>
+        </member>
+        <member name="P:StockSharp.ITCH.ItchTrader.Password">
+            <summary>
+            Password.
+            </summary>
+        </member>
+        <member name="P:StockSharp.ITCH.ItchTrader.PrimaryMulticast">
+            <summary>
+            The main UDP group.
+            </summary>
+        </member>
+        <member name="P:StockSharp.ITCH.ItchTrader.DuplicateMulticast">
+            <summary>
+            Duplicate UDP group.
+            </summary>
+        </member>
+        <member name="P:StockSharp.ITCH.ItchTrader.RecoveryAddress">
+            <summary>
+            Restore state server address.
+            </summary>
+        </member>
+        <member name="P:StockSharp.ITCH.ItchTrader.ReplayAddress">
+            <summary>
+            Replay state server address.
+            </summary>
+        </member>
+        <member name="P:StockSharp.ITCH.ItchTrader.SecurityCsvFile">
+            <summary>
+            File with securities.
+            </summary>
+        </member>
+        <member name="P:StockSharp.ITCH.ItchTrader.SecurityDelayLoad">
+            <summary>
+            Delay load instruments from <see cref="P:StockSharp.ITCH.ItchTrader.SecurityCsvFile"/>.
+            </summary>
+        </member>
+        <member name="P:StockSharp.ITCH.ItchTrader.OnlyActiveSecurities">
+            <summary>
+            Download from <see cref="P:StockSharp.ITCH.ItchTrader.SecurityCsvFile"/> only active instruments.
+            </summary>
+        </member>
+        <member name="P:StockSharp.ITCH.ItchTrader.GroupId">
+            <summary>
+            Group ID.
+            </summary>
+        </member>
+        <member name="P:StockSharp.ITCH.ItchTrader.TimeZone">
+            <summary>
+            Information about the time zone where the exchange is located.
+            </summary>
+        </member>
+    </members>
+</doc>

@@ -1,0 +1,1913 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>LmaxClientLibrary</name>
+    </assembly>
+    <members>
+        <member name="T:Com.Lmax.Api.Account.AccountDetails">
+            <summary>
+            Contains all of the information about a users account that is received in
+            in response to a login request.
+            </summary>
+        </member>
+        <member name="M:Com.Lmax.Api.Account.AccountDetails.#ctor(System.Int64,System.String,System.String,System.String,System.String,System.Boolean)">
+            <summary>
+             Create a new object representing the user's account
+            </summary>
+            <param name="accountId">The unique ID of the account</param>
+            <param name="username">The username</param>
+            <param name="currency">The base currency of the account</param>
+            <param name="legalEntity">The legal entity the account is based in, e.g. UK, Germany etc</param>
+            <param name="displayLocale">The Locale used for displaying information (i.e. language)</param>
+            <param name="fundingAllowed">True if the account is enabled for funding</param>
+        </member>
+        <member name="P:Com.Lmax.Api.Account.AccountDetails.AccountId">
+            <summary>
+            Readonly, the numeric system accountId. 
+            </summary>
+        </member>
+        <member name="P:Com.Lmax.Api.Account.AccountDetails.Username">
+            <summary>
+            The username used to login to the LMAX Trader platform. 
+            </summary>
+        </member>
+        <member name="P:Com.Lmax.Api.Account.AccountDetails.Currency">
+            <summary>
+            The user's base currency. 
+            </summary>
+        </member>
+        <member name="P:Com.Lmax.Api.Account.AccountDetails.LegalEntity">
+            <summary>
+            The legal entity where the user is located, e.g. UK. 
+            </summary>
+        </member>
+        <member name="P:Com.Lmax.Api.Account.AccountDetails.DisplayLocale">
+            <summary>
+            The locale used to display text, mainly used by the UI to handle
+            internationalisation.
+            </summary>
+        </member>
+        <member name="P:Com.Lmax.Api.Account.AccountDetails.FundingAllowed">
+            <summary>
+            If funding is enabled for the account. 
+            </summary>
+        </member>
+        <member name="T:Com.Lmax.Api.Account.AccountStateEvent">
+            <summary>
+            A event that contains all of the top level information about an account's
+            current state.
+            </summary>
+        </member>
+        <member name="M:Com.Lmax.Api.Account.AccountStateEvent.#ctor(System.Int64,System.Decimal,System.Decimal,System.Decimal,System.Decimal,System.Decimal,System.Collections.Generic.Dictionary{System.String,System.Decimal})">
+            <summary>
+            Construct an AccountStateEvent, visible for testing
+            </summary>
+        </member>
+        <member name="P:Com.Lmax.Api.Account.AccountStateEvent.AccountId">
+            <summary>
+            Get the account id that this event pertains to.
+            </summary>
+        </member>
+        <member name="P:Com.Lmax.Api.Account.AccountStateEvent.Balance">
+            <summary>
+            Get the accounts current balance.
+            </summary>
+        </member>
+        <member name="P:Com.Lmax.Api.Account.AccountStateEvent.AvailableFunds">
+            <summary>
+            Get the account's available funds.
+            </summary>
+        </member>
+        <member name="P:Com.Lmax.Api.Account.AccountStateEvent.AvailableToWithdraw">
+            <summary>
+            Get the amount that this account is available to withdraw.
+            </summary>
+        </member>
+        <member name="P:Com.Lmax.Api.Account.AccountStateEvent.UnrealisedProfitAndLoss">
+            <summary>
+            Get a signed amount that is the account's unrealised profit (or loss)
+            </summary>
+        </member>
+        <member name="P:Com.Lmax.Api.Account.AccountStateEvent.Margin">
+            <summary>
+            Get the account's total margin.
+            </summary>
+        </member>
+        <member name="P:Com.Lmax.Api.Account.AccountStateEvent.Wallets">
+            <summary>
+            Get the account's balances by currency.  The Dictionary is keyed by
+            3 letter currency symbol, e.g. GBP.
+            </summary>
+        </member>
+        <member name="T:Com.Lmax.Api.Account.AccountStateRequest">
+            <summary>
+            A request for the current account state
+            </summary>
+        </member>
+        <member name="T:Com.Lmax.Api.IRequest">
+            <summary>
+            Common base type for all requests. 
+            </summary>
+        </member>
+        <member name="M:Com.Lmax.Api.IRequest.WriteTo(Com.Lmax.Api.Internal.Xml.IStructuredWriter)">
+            <summary>
+            Internal: Output this request.
+            </summary>
+            <param name="writer">The destination for the request content</param>
+        </member>
+        <member name="P:Com.Lmax.Api.IRequest.Uri">
+            <summary>
+            Readonly property containing the URI for the request. 
+            </summary>
+        </member>
+        <member name="M:Com.Lmax.Api.Account.AccountStateRequest.WriteTo(Com.Lmax.Api.Internal.Xml.IStructuredWriter)">
+            <summary>
+            Internal: Output this request.
+            </summary>
+            <param name="writer">The destination for the content of this request</param>
+        </member>
+        <member name="T:Com.Lmax.Api.Account.AccountSubscriptionRequest">
+            <summary>
+            Subscribe to all requests for account information.
+            </summary>
+        </member>
+        <member name="T:Com.Lmax.Api.SubscriptionRequest">
+            <summary>
+            Base subscription request.
+            </summary>
+        </member>
+        <member name="T:Com.Lmax.Api.ISubscriptionRequest">
+            <summary>
+            Base interface for all subscription requests.
+            </summary>
+        </member>
+        <member name="M:Com.Lmax.Api.SubscriptionRequest.WriteTo(Com.Lmax.Api.Internal.Xml.IStructuredWriter)">
+            <summary>
+            Internal: Output this request.
+            </summary>
+            <param name="writer">The destination for the request content</param>
+        </member>
+        <member name="P:Com.Lmax.Api.SubscriptionRequest.Uri">
+            <summary>
+            Readonly property containing the URI for the request. 
+            </summary>
+        </member>
+        <member name="T:Com.Lmax.Api.Account.HeartbeatRequest">
+            <summary>
+             Request a heartbeat event be returned from the server.
+            </summary>
+        </member>
+        <member name="M:Com.Lmax.Api.Account.HeartbeatRequest.#ctor(System.String)">
+            <summary>
+             Creates a new Heartbeat request
+            </summary>
+        </member>
+        <member name="M:Com.Lmax.Api.Account.HeartbeatRequest.WriteTo(Com.Lmax.Api.Internal.Xml.IStructuredWriter)">
+            <summary>
+            Internal: Output this request.
+            </summary>
+            <param name="writer">The destination for the content of this request</param>
+        </member>
+        <member name="T:Com.Lmax.Api.Account.HeartbeatSubscriptionRequest">
+            <summary>
+             Subscribe to all requests for heartbeats.
+            </summary>
+        </member>
+        <member name="M:Com.Lmax.Api.LmaxApiOptions.#ctor">
+            <summary>
+             Constructs an LmaxApiOptions object with default values of:
+             DefaultConnectionLimit = 5
+             ClientIdentifier = ""
+            </summary>
+        </member>
+        <member name="M:Com.Lmax.Api.LmaxApiOptions.#ctor(System.String)">
+            <summary>
+             Constructs an LmaxApiOptions object with default values of:
+             DefaultConnectionLimit = 5
+            </summary>
+            <param name="clientIdentifier">Identifies the client in HTTP requests for diagnostic purposes (25 characters permitted).</param>
+        </member>
+        <member name="P:Com.Lmax.Api.LmaxApiOptions.ClientIdentifier">
+            <summary>
+            Gets or sets the ClientIdentifier, used to identify the client in HTTP requests for diagnostic purposes (25 characters permitted).
+            </summary>
+        </member>
+        <member name="P:Com.Lmax.Api.LmaxApiOptions.DefaultConnectionLimit">
+            <summary>
+            Gets or sets the maximum number of concurrent connections allowed by a System.Net.ServicePoint object per login.
+            
+            Note: the larger the value, the more resources used by the API (more sockets openened, threads created, etc.)
+            </summary>
+        </member>
+        <member name="T:Com.Lmax.Api.LogoutRequest">
+            <summary>
+            Contains a of the necessary credential information and product type required
+            connect to the LMAX Trader platform.
+            </summary>
+        </member>
+        <member name="M:Com.Lmax.Api.LogoutRequest.WriteTo(Com.Lmax.Api.Internal.Xml.IStructuredWriter)">
+            <summary>
+            Internal: Output this request.
+            </summary>
+            <param name="writer">The destination for the content of this request</param>
+        </member>
+        <member name="P:Com.Lmax.Api.LogoutRequest.Uri">
+            <summary>
+            The URI for the login request. 
+            </summary>
+        </member>
+        <member name="T:Com.Lmax.Api.FailureResponse">
+            <summary>
+            Generalised failure response that is produced whenever a request to the API
+            is made.  Indicates the failure response and a descriptive message along with
+            a flag to indicate if this is a system failure (e.g. connection error) or an
+            application failure (e.g. invalid price).
+            </summary>
+        </member>
+        <member name="M:Com.Lmax.Api.FailureResponse.#ctor(System.Boolean,System.String,System.String,System.Exception)">
+            <summary>
+             Constructs a failure response object with all values.
+            </summary>
+            <param name="isSystemFailure">True if the problem is with the system, e.g. a network problem</param>
+            <param name="message">Short message of the failure</param>
+            <param name="description">Readable description of the problem</param>
+            <param name="exception">The captured Exception</param>
+        </member>
+        <member name="M:Com.Lmax.Api.FailureResponse.#ctor(System.Boolean,System.String)">
+            <summary>
+             Constructs a failure response object
+            </summary>
+            <param name="isSystemFailure">True if the problem is with the system, e.g. a network problem</param>
+            <param name="message">Short message of the failure</param>
+        </member>
+        <member name="M:Com.Lmax.Api.FailureResponse.#ctor(System.Exception,System.String)">
+            <summary>
+             Constructs a failure response object 
+            </summary>
+            <param name="description">Readable description of the problem</param>
+            <param name="exception">The captured Exception</param>
+        </member>
+        <member name="P:Com.Lmax.Api.FailureResponse.IsSystemFailure">
+            <summary>
+            A readonly property that indicates that this failure was caused 
+            by some sort of system failure, most likely a connection error.
+            </summary>
+        </member>
+        <member name="P:Com.Lmax.Api.FailureResponse.Message">
+            <summary>
+            A readonly property that contains the error message that occured.
+            </summary>
+        </member>
+        <member name="P:Com.Lmax.Api.FailureResponse.Description">
+            <summary>
+            A readonly property that a more user friendly description of the error, may be
+            an empty string.
+            </summary> 
+        </member>
+        <member name="P:Com.Lmax.Api.FailureResponse.Exception">
+            <summary>
+            A readonly property that holds an exception, if this failiure was caused by
+            an exception.  Will be null otherwise.
+            </summary> 
+        </member>
+        <member name="T:Com.Lmax.Api.ISession">
+            <summary>
+            The main interface for interacting with the Lmax Trader platform.  This interface
+            can be shared across multiple threads.
+            </summary>
+        </member>
+        <member name="M:Com.Lmax.Api.ISession.Subscribe(Com.Lmax.Api.ISubscriptionRequest,Com.Lmax.Api.OnSuccess,Com.Lmax.Api.OnFailure)">
+            <summary>
+            Subscribe to the events from an OrderBook.  This includes Market Data, i.e. changes
+            to the current best prices and the depth
+            </summary>
+            <param name="subscriptionRequest">
+            An <see cref="T:Com.Lmax.Api.ISubscriptionRequest"/> indicating the types of events to subscribe to.
+            </param>
+            <param name="successCallback">
+            An <see cref="T:Com.Lmax.Api.OnSuccess"/> that will be called if the subscription request is
+            successful.
+            </param>
+            <param name="failureCallback">
+            An <see cref="T:Com.Lmax.Api.OnFailure"/> that will be called if the request fails, a <see cref="T:Com.Lmax.Api.FailureResponse"/>
+            will be provided containing the details of the failure.
+            </param>
+        </member>
+        <member name="M:Com.Lmax.Api.ISession.PlaceMarketOrder(Com.Lmax.Api.Order.MarketOrderSpecification,Com.Lmax.Api.OnInstructionResponse,Com.Lmax.Api.OnFailure)">
+            <summary>
+            Place a market order onto the Lmax Trader platform.  This will response with an instruction id that can
+            be used to trace the state of an order.  The response to this call will be return before the
+            order is actually placed on the exchange.  The execution reports and order responses will
+            come back through an asynchronous event.
+            </summary>
+            <param name="marketOrderSpecification">The specification of the market order to be placed
+            contains instrumentId, quantity etc.</param>
+            <param name="instructionCallback">A <see cref="T:Com.Lmax.Api.OnInstructionResponse"/> called when an order has
+            been validated and passed onto the broker.</param>
+            <param name="failureCallback">A <see cref="T:Com.Lmax.Api.OnFailure"/> called if the call to place
+            the order has failed.</param>
+        </member>
+        <member name="M:Com.Lmax.Api.ISession.PlaceLimitOrder(Com.Lmax.Api.Order.LimitOrderSpecification,Com.Lmax.Api.OnInstructionResponse,Com.Lmax.Api.OnFailure)">
+            <summary>
+            Place a limit order onto the Lmax Trader platform.  This will respond with an instruction id that can
+            be used to trace the state of an order.  The response to this call will occur before the
+            order is actually placed on the exchange.  The execution reports and order responses will
+            come back through an asynchronous event.
+            </summary>
+            <param name="limitOrderSpecification">The specification of the market order to be placed
+            contains instrumentId, quantity etc.</param>
+            <param name="instructionCallback">A <see cref="T:Com.Lmax.Api.OnInstructionResponse"/> called when an order has
+            been validated and passed onto the broker.</param>
+            <param name="failureCallback">A <see cref="T:Com.Lmax.Api.OnFailure"/> called if the call to place
+            the order has failed.</param>
+        </member>
+        <member name="M:Com.Lmax.Api.ISession.PlaceClosingOrder(Com.Lmax.Api.Order.ClosingOrderSpecification,Com.Lmax.Api.OnInstructionResponse,Com.Lmax.Api.OnFailure)">
+            <summary>
+            Close the specified quantity on an instrument position. The response to this call will occur before the
+            order is actually placed on the exchange. The execution reports and order responses will come back
+            through an asynchronous event.
+            </summary>
+            <param name="closingOrderSpecification">The specification containing the details of which position to close and for what quantity</param>
+            <param name="instructionCallback">A <see cref="T:Com.Lmax.Api.OnInstructionResponse"/> called when an order has
+            been validated and passed onto the broker.</param>
+            <param name="failureCallback">A <see cref="T:Com.Lmax.Api.OnFailure"/> called if the call to close the order has failed.</param>
+        </member>
+        <member name="M:Com.Lmax.Api.ISession.PlaceStopOrder(Com.Lmax.Api.Order.StopOrderSpecification,Com.Lmax.Api.OnInstructionResponse,Com.Lmax.Api.OnFailure)">
+            <summary>
+            Place a stop order onto the Lmax Trader platform.  This will response with an instruction id that can
+            be used to trace the state of an order.  The response to this call will be return before the
+            order is actually placed on the exchange.  The execution reports and order responses will
+            come back through an asynchronous event.
+            </summary>
+            <param name="stopOrderSpecification">The specification of the stop order to be placed
+            contains instrumentId, quantity etc.</param>
+            <param name="instructionCallback">A <see cref="T:Com.Lmax.Api.OnInstructionResponse"/> called when an order has
+            been validated and passed onto the broker.</param>
+            <param name="failureCallback">A <see cref="T:Com.Lmax.Api.OnFailure"/> called if the call to place
+            the order has failed.</param>
+        </member>
+        <member name="M:Com.Lmax.Api.ISession.CancelOrder(Com.Lmax.Api.Order.CancelOrderRequest,Com.Lmax.Api.OnInstructionResponse,Com.Lmax.Api.OnFailure)">
+            <summary>
+            Cancel an order that has already be placed in the exchange.  This will need the instruction id of
+            the original order.  This request will also have its own instruction id which can be used to
+            trace an rejections of the cancellation.
+            </summary>
+            <param name="cancelOrderRequest">An order cancellation request containing the original orders
+            instruction id</param>
+            <param name="instructionCallback">A <see cref="T:Com.Lmax.Api.OnInstructionResponse"/> called when an order has
+            been validated and passed onto the broker.</param>
+            <param name="failureCallback">A <see cref="T:Com.Lmax.Api.OnFailure"/> called if the call to place
+            the order has failed.</param>
+        </member>
+        <member name="M:Com.Lmax.Api.ISession.AmendStops(Com.Lmax.Api.Order.AmendStopLossProfitRequest,Com.Lmax.Api.OnInstructionResponse,Com.Lmax.Api.OnFailure)">
+            <summary>
+            Amend the stop loss and/or profit on an existing order.
+            </summary>
+            <param name="amendStopLossProfitRequest">An amend order request containing a reference
+            to the original order and the new stop loss/profit offsets</param>
+            <param name="instructionCallback">A <see cref="T:Com.Lmax.Api.OnInstructionResponse"/> called when the amendment has
+            been validated and passed onto the broker.</param>
+            <param name="failureCallback">Will be called when the attempt to amend order fails. For further details <see cref="T:Com.Lmax.Api.OnFailure"/> </param>
+        </member>
+        <member name="M:Com.Lmax.Api.ISession.RequestAccountState(Com.Lmax.Api.Account.AccountStateRequest,Com.Lmax.Api.OnSuccess,Com.Lmax.Api.OnFailure)">
+            <summary>
+            Request an update of the account state.  This will get the Lmax Trader platform to push an update
+            of the account state back down the stream event channel.  It will not be returned directly.
+            Use the AccountStateUpdated event to receive the update.
+            </summary>
+            <param name="accountStateRequest">The request for account state</param>
+            <param name="successCallback"></param>
+            <param name="failureCallback">A <see cref="T:Com.Lmax.Api.OnFailure"/> called if the call to 
+              request the account state has failed.</param>
+        </member>
+        <member name="M:Com.Lmax.Api.ISession.RequestHistoricMarketData(Com.Lmax.Api.MarketData.IHistoricMarketDataRequest,Com.Lmax.Api.OnSuccess,Com.Lmax.Api.OnFailure)">
+            <summary>
+            Get the historic market data for a specific instrument.  Will return a list of URLs that point to
+            to CSV files that include the months that were requested.
+            </summary>
+            <param name="historicMarketDataRequest">The request for historic market data, will contain an instrument id
+              and a date range</param>
+            <param name="successCallback">A <see cref="T:Com.Lmax.Api.OnSuccess"/> called if the request is accepted and is being processed.</param>
+            <param name="failureCallback">A <see cref="T:Com.Lmax.Api.OnFailure"/> called if the call to 
+              request the historic market data has failed.</param>
+        </member>
+        <member name="M:Com.Lmax.Api.ISession.RequestHeartbeat(Com.Lmax.Api.Account.HeartbeatRequest,Com.Lmax.Api.OnSuccess,Com.Lmax.Api.OnFailure)">
+            <summary>
+             Request that the server sends back a heartbeat event with the specified token.
+            </summary>
+            <param name="heartbeatRequest">The request for a heartbeat.</param>
+            <param name="successCallback">A <see cref="T:Com.Lmax.Api.OnSuccess"/> called if the request is accepted and is being processed.</param>
+            <param name="failureCallback">A <see cref="T:Com.Lmax.Api.OnFailure"/> called if the call to 
+               request the heartbeat has failed.</param>
+        </member>
+        <member name="M:Com.Lmax.Api.ISession.SearchInstruments(Com.Lmax.Api.OrderBook.SearchRequest,Com.Lmax.Api.OnSearchResponse,Com.Lmax.Api.OnFailure)">
+            <summary>
+            Request the instruments.  The instruments will not returned in this call, but will
+            cause the system to generate an asynchronous event(s) containing the information.
+            Instrument information is paged, on the callback will be a boolean value indicating
+            if there are any more values to be received.  The last instrumentId should be used
+            as the offsetInstrumentId on the subsequent request.  The results will be returned
+            ordered by instrument name.
+            </summary>
+            <param name="searchRequest">The request for instruments</param>
+            <param name="searchCallback">Will be called if the request succeeds.</param>
+            <param name="onFailure">A <see cref="T:Com.Lmax.Api.OnFailure"/> called if the call to 
+            request the instruments has failed.</param>
+        </member>
+        <member name="M:Com.Lmax.Api.ISession.OpenUri(System.Uri,Com.Lmax.Api.OnUriResponse,Com.Lmax.Api.OnFailure)">
+            <summary>
+            Open a data url from the Lmax Trader platform.
+            </summary>
+            <param name="uri">The uri of the file to open</param>
+            <param name="uriCallback">Will be called if the request succeeds.</param>
+            <param name="onFailure">A <see cref="T:Com.Lmax.Api.OnFailure"/> called if the call fails.</param>
+        </member>
+        <member name="M:Com.Lmax.Api.ISession.Start">
+            <summary>
+            Starts the event processing loop.  This method blocks while it is reading events from
+            asynchronous stream interface.  This method should be the very last action from within
+            the <see cref="T:Com.Lmax.Api.OnLogin"/> callback.  The implementation will prevent this method from
+            being called more than once.  It is not vaild to call this method multiple times from
+            different threads.
+            </summary>
+        </member>
+        <member name="M:Com.Lmax.Api.ISession.Stop">
+            <summary>
+            Stops the event processing loop.
+            </summary>
+        </member>
+        <member name="M:Com.Lmax.Api.ISession.Logout(Com.Lmax.Api.OnSuccess,Com.Lmax.Api.OnFailure)">
+             <summary>
+             Logout from the exchange.
+             You should stop listening to events first.
+            
+             <param name="successCallback">Will be called when the logout request suceeds.</param> 
+             <param name="onFailure">Will be called when the logout request fails.</param> 
+             </summary>
+        </member>
+        <member name="P:Com.Lmax.Api.ISession.AccountDetails">
+            <summary>
+            Readonly property contain the details of the users Account, id, locale etc. 
+            </summary>
+        </member>
+        <member name="P:Com.Lmax.Api.ISession.Id">
+            <summary>
+            Readonly property containing the web session id assigned to this session. 
+            </summary>
+        </member>
+        <member name="E:Com.Lmax.Api.ISession.MarketDataChanged">
+            <summary>
+            Fired whenever an order book event that represents a change in the market data
+            occurs.  Orderbooks need to be subscribed to before events will be fired.
+            A market data change includes changes to the best price and the depth.
+            </summary>
+        </member>
+        <member name="E:Com.Lmax.Api.ISession.OrderBookStatusChanged">
+            <summary>
+            Fired whenever an order book event that represents a change in the order book
+            status occurs. Use an OrderBookStatusSubscriptionRequest to subscribe to these
+            events.
+            </summary>
+        </member>
+        <member name="E:Com.Lmax.Api.ISession.EventStreamFailed">
+            <summary>
+            Fired whenever an Exception occurs while reading from the event stream. This could
+            occur, for example, due to the connection being dropped.
+            </summary>
+        </member>
+        <member name="E:Com.Lmax.Api.ISession.EventStreamSessionDisconnected">
+            <summary>
+            Fired whenever the session was disconnected on the server and the event stream closed.
+            The session can no longer be used. In order to continue, a new session must be created by logging in again. 
+            </summary>
+        </member>
+        <member name="E:Com.Lmax.Api.ISession.PositionChanged">
+            <summary>
+            Fired whenever a position changes, normally the result of a new order, fill
+            cancel etc.
+            </summary>
+        </member>
+        <member name="E:Com.Lmax.Api.ISession.OrderExecuted">
+            <summary>
+            Fired when a execution occurs as the result of an action that occurs on
+            an order, e.g. order filling.
+            </summary>
+        </member>
+        <member name="E:Com.Lmax.Api.ISession.OrderChanged">
+            <summary>
+            Fired when there is a change to the state of an order
+            </summary>
+        </member>
+        <member name="E:Com.Lmax.Api.ISession.InstructionRejected">
+            <summary>
+            Fired when an instruction id rejected.
+            </summary>
+        </member>
+        <member name="E:Com.Lmax.Api.ISession.AccountStateUpdated">
+            <summary>
+            Fired when an account state event is received.  May be the result of
+            a request.  Use an AccountSubscriptionRequest to subscribe to AccountStateEvents.
+            </summary>
+        </member>
+        <member name="E:Com.Lmax.Api.ISession.HistoricMarketDataReceived">
+            <summary>
+             Fired when the requested historic market data is received.
+             Use RequestHistoricMarketData to request historic market data.
+            </summary>
+        </member>
+        <member name="E:Com.Lmax.Api.ISession.HeartbeatReceived">
+            <summary>
+             Fired when a heartbeat is received.
+             Use RequestHeartbeat to request a heartbeat be sent.
+            </summary>
+        </member>
+        <member name="M:Com.Lmax.Api.Internal.Session.Logout(Com.Lmax.Api.OnSuccess,Com.Lmax.Api.OnFailure)">
+             <summary>
+             logout from the exchange.
+             You should stop listening to events first.
+            
+             <param name="successCallback">Will be called when the logout request suceeds.</param> 
+             <param name="onFailure">Will be called when the logout request fails.</param> 
+             </summary>
+        </member>
+        <member name="M:Com.Lmax.Api.Internal.Session.StreamRequest.WriteTo(Com.Lmax.Api.Internal.Xml.IStructuredWriter)">
+            <summary>
+            Internal: Output this request.
+            </summary>
+            <param name="writer">The destination for the content of this request</param>
+        </member>
+        <member name="T:Com.Lmax.Api.OnSuccess">
+            <summary>
+             Simple delegate for successful asynchronous call.
+            </summary>
+        </member>
+        <member name="T:Com.Lmax.Api.OnFailure">
+            <summary>
+             Standard failure delegate for asynchronous calls.
+            </summary>
+            <param name="failureResponse">Contains the details of the failure</param>
+        </member>
+        <member name="T:Com.Lmax.Api.OnLogin">
+            <summary>
+             Delegate for a successful login to the LMAX API.  Implementations can then use the session to interact with the API.
+            </summary>
+            <param name="session">The session to use when interacting with the API</param>
+        </member>
+        <member name="T:Com.Lmax.Api.OnOrderBookEvent">
+            <summary>
+             Delagate for processing OrderBookEvents.  Events for all order books that have been subscribed to will be delivered to this delegate.
+            </summary>
+            <param name="onOrderBookEvent">Details of the order book event fired</param>
+        </member>
+        <member name="T:Com.Lmax.Api.OnOrderBookStatusEvent">
+            <summary>
+             Delagate for processing order book status events. Events for status changes of all order books that have been subscribed to will be delivered to this delegate.
+            </summary>
+            <param name="onOrderBookStatusEvent">Details of the order book status event fired</param>
+        </member>
+        <member name="T:Com.Lmax.Api.OnException">
+            <summary>
+             Delegate to handle Exceptions
+            </summary>
+            <param name="exception">The exception that occurred</param>
+        </member>
+        <member name="T:Com.Lmax.Api.OnSessionDisconnected">
+            <summary>
+             Delegate for session disconnected.  The session can no longer be used. In order to continue, a new session must be created by logging in again.  
+            </summary>
+        </member>
+        <member name="T:Com.Lmax.Api.OnInstructionResponse">
+            <summary>
+             Delegate to handle a response containing an instructionId - most usually in response to place/cancel/amend order requests
+            </summary>
+            <param name="instructionId">The instructionId returned by the LMAX API</param>
+        </member>
+        <member name="T:Com.Lmax.Api.OnPositionEvent">
+            <summary>
+             Delegate for processing events on all positions that have been subscribed to
+            </summary>
+            <param name="position">Contains details of the updated position</param>
+        </member>
+        <member name="T:Com.Lmax.Api.OnExecutionEvent">
+            <summary>
+             Delegate to deal with executions - for example, if an order has filled
+            </summary>
+            <param name="execution">The information about the execution that occurred</param>
+        </member>
+        <member name="T:Com.Lmax.Api.OnOrderEvent">
+            <summary>
+             Delegate to process changes in an order.
+            </summary>
+            <param name="order">The updated Order</param>
+        </member>
+        <member name="T:Com.Lmax.Api.OnRejectionEvent">
+            <summary>
+             If an instruction (for example, placing an order) is rejected, this delegate will be called.  
+             An OnRejectionEvent delegate must be registered for the client to process rejections.
+            </summary>
+            <param name="instructionRejectedEvent">Details of why the instruction was rejected</param>
+        </member>
+        <member name="T:Com.Lmax.Api.OnAccountStateEvent">
+            <summary>
+             Delegate for dealing with updates to the user's account, for example if the account balance changes.
+            </summary>
+            <param name="accountState">The updated account state</param>
+        </member>
+        <member name="T:Com.Lmax.Api.OnHistoricMarketDataEvent">
+            <summary>
+             Delegate that is called when historic market data events are received asynchronously.
+             Note that the provided URIs require a valid authentication token which can be retrieved
+             from <see cref="P:Com.Lmax.Api.Internal.Session.Id"/>.
+            </summary>
+            <param name="instructionId">the ID of the instruction that requested this data.</param>
+            <param name="uris">the URIs to the historic market data covering the requested date range.
+             Empty if there is no data available for the requested date range.</param>
+        </member>
+        <member name="T:Com.Lmax.Api.OnMarketDataEvent">
+            <summary>
+             Delegate that is called market data asynchronous request is returned.
+             Note that the provided URIs require a valid authentication token which can be retrieved
+             from <see cref="P:Com.Lmax.Api.Internal.Session.Id"/>.
+            </summary>
+            <param name="instructionId">the ID of the instruction that requested this data.</param>
+            <param name="uris">the URIs to the market data covering the requested date range for the requested criteria.
+             Empty if there is no data available for the requested date range.</param>
+        </member>
+        <member name="T:Com.Lmax.Api.OnHeartbeatReceivedEvent">
+            <summary>
+             Delegate that is called when an asynchronous heartbeat event is received.
+            </summary>
+            <param name="token">the heartbeat token from the request that caused this heartbeat to be sent.</param>
+        </member>
+        <member name="T:Com.Lmax.Api.OnSearchResponse">
+            <summary>
+            Delegate called when the search for instruments returns.  This returns a batch of instruments, 
+            if the full number of search results is bigger than the batch size, the returned list will only 
+            contain a subset of the results, and hasMoreResults will be true.
+            </summary>
+            <param name="instruments">A batch of search results.  If the full list of results is longer than the 
+            batch size, this will be a partial set of results.</param>
+            <param name="hasMoreResults">Set to true if there are more results to retrieve</param>
+        </member>
+        <member name="T:Com.Lmax.Api.OnUriResponse">
+            <summary>
+            Delegate called when the open uri request returns. 
+            </summary>
+            <param name="uri">The uri requested</param>
+            <param name="reader">The response content</param>
+        </member>
+        <member name="T:Com.Lmax.Api.TimeInForce">
+            <summary>
+            The time in force policy applicable to orders.
+            </summary>
+        </member>
+        <member name="F:Com.Lmax.Api.TimeInForce.FillOrKill">
+            <summary>
+            An order with this value must fill completely, or it will be cancelled.
+            </summary>
+        </member>
+        <member name="F:Com.Lmax.Api.TimeInForce.ImmediateOrCancel">
+            <summary>
+            An order with this value must fill, but it can partially fill
+            </summary>
+        </member>
+        <member name="F:Com.Lmax.Api.TimeInForce.GoodForDay">
+            <summary>
+            Represents a limit order, which can be completely unmatched and will not be cancelled until the end of the day
+            </summary>
+        </member>
+        <member name="F:Com.Lmax.Api.TimeInForce.GoodTilCancelled">
+            <summary>
+            Represents a limit order, which can be completely unmatched and will not be cancelled until manually cancelled
+            </summary>
+        </member>
+        <member name="F:Com.Lmax.Api.TimeInForce.Unknown">
+            <summary>
+            Represent an unknown time in force value. This is a safety value which will be returned if a new time in force
+            is added to the underlying protocol which the .NET API does not understand.
+            </summary>
+        </member>
+        <member name="T:Com.Lmax.Api.LmaxApi">
+            <summary>
+            The Top-Level interface for the Lmax API.  Provides the Login entry point, most
+            of the heavy lifting occurs within Session, so most of the interations with
+            the Lmax Trader platform happen through the <see cref="T:Com.Lmax.Api.ISession"/>.
+            </summary>
+        </member>
+        <member name="M:Com.Lmax.Api.LmaxApi.#ctor(System.String,Com.Lmax.Api.Internal.IHttpInvoker,Com.Lmax.Api.Internal.IXmlParser)">
+            <summary>
+            Internal: Exposed for testing, use LmaxApi(string urlBase) instead.
+            </summary>
+        </member>
+        <member name="M:Com.Lmax.Api.LmaxApi.#ctor(System.String)">
+            <summary>
+            Construct an LmaxApi with the specific Lmax Trader platform to connect to.
+            For testing: 'https://testapi.lmaxtrader.com' and production: 'https://api.lmaxtrader.com'.
+            </summary>
+            <param name="urlBase">
+            A <see cref="T:System.String"/> that contains the url of the system to connect to.
+            </param>
+        </member>
+        <member name="M:Com.Lmax.Api.LmaxApi.#ctor(System.String,System.String)">
+            <summary>
+            Construct an LmaxApi with the specific Lmax Trader platform to connect to.
+            For testing: 'https://testapi.lmaxtrader.com' and production: 'https://api.lmaxtrader.com'.
+            </summary>
+            <param name="urlBase">
+            A <see cref="T:System.String"/> that contains the url of the system to connect to.
+            </param>
+            <param name="clientIdentifier">Identifies the client in HTTP requests for diagnostic purposes (25 characters permitted).</param>
+        </member>
+        <member name="M:Com.Lmax.Api.LmaxApi.#ctor(System.String,Com.Lmax.Api.LmaxApiOptions)">
+            <summary>
+            Construct an LmaxApi with the specific Lmax Trader platform to connect to.
+            For testing: 'https://testapi.lmaxtrader.com' and production: 'https://api.lmaxtrader.com'.
+            </summary>
+            <param name="urlBase">
+            A <see cref="T:System.String"/> that contains the url of the system to connect to.
+            </param>
+            <param name="apiOptions">Allows for configuration of the LmaxApi.</param>
+        </member>
+        <member name="M:Com.Lmax.Api.LmaxApi.Login(Com.Lmax.Api.LoginRequest,Com.Lmax.Api.OnLogin,Com.Lmax.Api.OnFailure)">
+            <summary>
+            Login to the Lmax Trader platform.  The appropriate handler will be called back
+            on success or failure.  The loginCallback should be the main entry point into
+            your trading application.  From that point you should add listeners to the
+            session, subscribe to resources that you're interested in, e.g. OrderBooks
+            and call Start on the <see cref="T:Com.Lmax.Api.ISession"/>.
+            </summary>
+            <param name="loginRequest">
+            A <see cref="T:Com.Lmax.Api.LoginRequest"/> that contains your login credentials.
+            </param>
+            <param name="loginCallback">
+            A <see cref="T:Com.Lmax.Api.OnLogin"/> callback, fired when you are successfully logged in.
+            </param>
+            <param name="failureCallback">
+            A <see cref="T:Com.Lmax.Api.OnFailure"/> callback, fired when there is a login failure.
+            </param>
+        </member>
+        <member name="T:Com.Lmax.Api.LoginRequest">
+            <summary>
+            Contains the necessary credential information and product type required
+            connect to the LMAX Trader platform.
+            </summary>
+        </member>
+        <member name="M:Com.Lmax.Api.LoginRequest.#ctor(System.String,System.String,Com.Lmax.Api.ProductType,System.Boolean)">
+            <summary>
+            Construct a login request with the appropriate credential, product type and choose whether or not check the protocol version.
+            </summary>
+            <param name="username">
+            A <see cref="T:System.String"/> contains the username.
+            </param>
+            <param name="password">
+            A <see cref="T:System.String"/> contains the password.
+            </param>
+            <param name="productType">
+            A <see cref="T:Com.Lmax.Api.ProductType"/> either CFD_DEMO for testapi and CFD_LIVE for
+            production.
+            </param>
+            <param name="checkProtocolVersion">
+            A <see cref="T:System.Boolean"/> to ensure that the protocol version used by the client and server are the same.
+            Setting this to <para><b>false</b></para> may cause errors or incorrect behaviour due to protocol changes.
+            </param>
+        </member>
+        <member name="M:Com.Lmax.Api.LoginRequest.#ctor(System.String,System.String,Com.Lmax.Api.ProductType)">
+            <summary>
+            Construct a login request with the appropriate credential and product type. 
+            </summary>
+            <param name="username">
+            A <see cref="T:System.String"/> contains the username.
+            </param>
+            <param name="password">
+            A <see cref="T:System.String"/> contains the password.
+            </param>
+            <param name="productType">
+            A <see cref="T:Com.Lmax.Api.ProductType"/> either CFD_DEMO for testapi and CFD_LIVE for
+            production.
+            </param>
+        </member>
+        <member name="M:Com.Lmax.Api.LoginRequest.#ctor(System.String,System.String)">
+            <summary>
+            Construct a login request with the appropriate credential.  
+            Product type will default to CFD_LIVE.
+            </summary>
+            <param name="username">
+            A <see cref="T:System.String"/> contains the username.
+            </param>
+            <param name="password">
+            A <see cref="T:System.String"/> contains the password.
+            </param>
+        </member>
+        <member name="M:Com.Lmax.Api.LoginRequest.WriteTo(Com.Lmax.Api.Internal.Xml.IStructuredWriter)">
+            <summary>
+            Internal: Output this request.
+            </summary>
+            <param name="writer">The destination for the content of this request</param>
+        </member>
+        <member name="P:Com.Lmax.Api.LoginRequest.Uri">
+            <summary>
+            The URI for the login request. 
+            </summary>
+        </member>
+        <member name="T:Com.Lmax.Api.ProductType">
+            <summary>
+            The product type used to connect to the LMAX Trader platform. 
+            </summary>
+        </member>
+        <member name="F:Com.Lmax.Api.ProductType.CFD_LIVE">
+            <summary>
+             Selected if connecting to the production environment
+            </summary>
+        </member>
+        <member name="F:Com.Lmax.Api.ProductType.CFD_DEMO">
+            <summary>
+             Selected if connecting to the test environment
+            </summary>
+        </member>
+        <member name="T:Com.Lmax.Api.MarketData.AggregateHistoricMarketDataRequest">
+            <summary>
+             A request for market data.
+            </summary>
+        </member>
+        <member name="T:Com.Lmax.Api.MarketData.IHistoricMarketDataRequest">
+            <summary>
+             Marker interface for the different types of requests for historic market data.
+            </summary>
+        </member>
+        <member name="M:Com.Lmax.Api.MarketData.AggregateHistoricMarketDataRequest.#ctor(System.Int64,System.Int64,System.DateTime,System.DateTime,Com.Lmax.Api.MarketData.Resolution,Com.Lmax.Api.MarketData.Format,Com.Lmax.Api.MarketData.Option[])">
+            <summary>
+             Request market data for a given instrument, for a given date range and in a given format.  The data returned will be for at least the requested date range. 
+             For example, if the user asks for 10 days of data they might get a response containing a whole month, but those 10 days will be contained in the month.
+            </summary>
+            <param name="instructionId">A unique ID to identify this request</param>
+            <param name="instrumentId">The ID of the instrument to return the market data for</param>
+            <param name="from">The date and time of the start of the range</param>
+            <param name="to">The date and time for the end of the range</param>        
+            <param name="resolution">Granularity - e.g. tick/minute/day</param>
+            <param name="format">Protocol - e.g CSV, ITCH</param>
+            <param name="options">The type of prices to be returned</param>
+        </member>
+        <member name="M:Com.Lmax.Api.MarketData.AggregateHistoricMarketDataRequest.WriteTo(Com.Lmax.Api.Internal.Xml.IStructuredWriter)">
+            <summary>
+            Internal: Output this request.
+            </summary>
+            <param name="writer">The destination for the content of this request</param>
+        </member>
+        <member name="T:Com.Lmax.Api.MarketData.Option">
+            <summary>
+            Defines the different types of data that can be returned.
+            </summary>
+        </member>
+        <member name="F:Com.Lmax.Api.MarketData.Option.Bid">
+            <summary>
+             Bid Prices
+            </summary>
+        </member>
+        <member name="F:Com.Lmax.Api.MarketData.Option.Ask">
+            <summary>
+             Ask Prices
+            </summary>
+        </member>
+        <member name="T:Com.Lmax.Api.MarketData.Format">
+            <summary>
+             The format the historic market data is returned in.
+            </summary>
+        </member>
+        <member name="F:Com.Lmax.Api.MarketData.Format.Csv">
+            <summary>
+             Comma Separated Values, not a fixed format, the columns will be different according to the different types of data returned.
+            </summary>
+        </member>
+        <member name="T:Com.Lmax.Api.MarketData.Resolution">
+            <summary>
+             The time period the data will be aggregated over.
+            </summary>
+        </member>
+        <member name="T:Com.Lmax.Api.MarketData.TopOfBookHistoricMarketDataRequest">
+            <summary>
+             Request historic order book prices and quantities
+            </summary>
+        </member>
+        <member name="M:Com.Lmax.Api.MarketData.TopOfBookHistoricMarketDataRequest.#ctor(System.Int64,System.Int64,System.DateTime,System.DateTime,Com.Lmax.Api.MarketData.Format)">
+            <summary>
+             Request historic prices and quantities for the given order book
+            </summary>
+            <param name="instructionId">Unique ID for this request</param>
+            <param name="instrumentId">The ID of the instrument to return the data for</param>
+            <param name="from">The date and time of the start of the range</param>
+            <param name="to">The date and time for the end of the range</param>
+            <param name="format">Protocol - e.g CSV, ITCH</param>
+        </member>
+        <member name="M:Com.Lmax.Api.MarketData.TopOfBookHistoricMarketDataRequest.WriteTo(Com.Lmax.Api.Internal.Xml.IStructuredWriter)">
+            <summary>
+            Internal: Output this request.
+            </summary>
+            <param name="writer">The destination for the content of this request</param>
+        </member>
+        <member name="T:Com.Lmax.Api.OrderBook.OrderBookStatusSubscriptionRequest">
+            <summary>
+            Used when subscribing to the order book status events.
+            </summary>
+        </member>
+        <member name="M:Com.Lmax.Api.OrderBook.OrderBookStatusSubscriptionRequest.#ctor(System.Int64)">
+            <summary>
+            Construct the OrderBookStatusSubscriptionRequest. 
+            </summary>
+            <param name="instrumentId">
+            A <see cref="T:System.Int64"/> that is the instrument id of the 
+            order book that you are intrested in seeing status events for.
+            </param>
+        </member>
+        <member name="T:Com.Lmax.Api.OrderBook.OrderBookStatusEvent">
+            <summary>
+            The contents of the event raised whenever there is a change to the
+            status of a given order book.
+            </summary>
+        </member>
+        <member name="P:Com.Lmax.Api.OrderBook.OrderBookStatusEvent.InstrumentId">
+            <summary>
+            Instrument id of the OrderBook. Same as the value used in subscribing.
+            </summary>
+        </member>
+        <member name="P:Com.Lmax.Api.OrderBook.OrderBookStatusEvent.Status">
+            <summary>
+            Current status of the order book.
+            </summary>
+        </member>
+        <member name="T:Com.Lmax.Api.OrderBook.OrderBookStatus">
+            <summary>
+            The product type used to connect to the LMAX Trader platform. 
+            </summary>
+        </member>
+        <member name="F:Com.Lmax.Api.OrderBook.OrderBookStatus.New">
+            <summary>
+             The order book has been newly created.
+            </summary>
+        </member>
+        <member name="F:Com.Lmax.Api.OrderBook.OrderBookStatus.Opened">
+            <summary>
+             The order book is accepting orders. 
+            </summary>
+        </member>
+        <member name="F:Com.Lmax.Api.OrderBook.OrderBookStatus.Suspended">
+            <summary>
+             The order book is temporarily not accepting orders. 
+            </summary>
+        </member>
+        <member name="F:Com.Lmax.Api.OrderBook.OrderBookStatus.Closed">
+            <summary>
+             The order book is closed and waiting to be opened. 
+            </summary>
+        </member>
+        <member name="F:Com.Lmax.Api.OrderBook.OrderBookStatus.Settled">
+            <summary>
+             The trades on the order book have been settled. 
+            </summary>
+        </member>
+        <member name="F:Com.Lmax.Api.OrderBook.OrderBookStatus.Withdrawn">
+            <summary>
+             The order book is no longer trading. 
+            </summary>
+        </member>
+        <member name="T:Com.Lmax.Api.OrderBook.HistoricContentType">
+            <summary>
+             Types of historical data that can be requested.
+            </summary>
+        </member>
+        <member name="F:Com.Lmax.Api.OrderBook.HistoricContentType.MarketDepth">
+            <summary>
+             HistoricContentType for requesting historical market depth.
+            </summary>
+        </member>
+        <member name="T:Com.Lmax.Api.MarketData.HistoricMarketDataSubscriptionRequest">
+            <summary>
+             Used when subscribing to the events containing historic market data responses.
+            </summary>
+        </member>
+        <member name="M:Com.Lmax.Api.MarketData.HistoricMarketDataSubscriptionRequest.WriteTo(Com.Lmax.Api.Internal.Xml.IStructuredWriter)">
+            <summary>
+            Internal: Output this request.  Can't use the Abstract Subscription Request because it needs to append two separate subscriptions.
+            </summary>
+            <param name="writer">The destination for the request content</param>
+        </member>
+        <member name="P:Com.Lmax.Api.MarketData.HistoricMarketDataSubscriptionRequest.Uri">
+            <summary>
+            Readonly property containing the URI for the request. 
+            </summary>
+        </member>
+        <member name="T:Com.Lmax.Api.OrderBook.Instrument">
+            <summary>
+            Contains the meta-data for an instrument (Security Definition)
+            </summary>
+        </member>
+        <member name="M:Com.Lmax.Api.OrderBook.Instrument.#ctor(System.Int64,System.String,Com.Lmax.Api.OrderBook.UnderlyingInfo,Com.Lmax.Api.OrderBook.CalendarInfo,Com.Lmax.Api.OrderBook.RiskInfo,Com.Lmax.Api.OrderBook.OrderBookInfo,Com.Lmax.Api.OrderBook.ContractInfo,Com.Lmax.Api.OrderBook.CommercialInfo)">
+            <summary>
+             Create a new instrument (e.g. security definition)
+            </summary>
+            <param name="id">The unique identifier of the instrument</param>
+            <param name="name">The readable name of the instrument</param>
+            <param name="underlying">The information about the underlying instrument</param>
+            <param name="calendar">Contains information about trading dates and times</param>
+            <param name="risk">Details on how to calculate risk for this instrument</param>
+            <param name="orderBook">Information relating to the order book</param>
+            <param name="contract">The contract information about this instrument</param>
+            <param name="commercial">Data to calculate the commercials for this instrument</param>
+        </member>
+        <member name="M:Com.Lmax.Api.OrderBook.Instrument.Equals(Com.Lmax.Api.OrderBook.Instrument)">
+            <summary>
+             Determines if this instrument is the same as another one.
+            </summary>
+            <param name="other">An instrument to compare this instance to</param>
+            <returns>true if the given instrument is the same as this instrument</returns>
+        </member>
+        <member name="P:Com.Lmax.Api.OrderBook.Instrument.Id">
+            <summary>
+            Get the id of the instrument, also used a key for the order book on
+            order requests, etc.
+            </summary>
+        </member>
+        <member name="P:Com.Lmax.Api.OrderBook.Instrument.Name">
+            <summary>
+            Get the name of the instrument, this is same value that is displayed
+            on the Lmax Trader UI.
+            </summary>
+        </member>
+        <member name="P:Com.Lmax.Api.OrderBook.Instrument.Underlying">
+            <summary>
+            Get information about the underlying instrument.
+            </summary>
+        </member>
+        <member name="P:Com.Lmax.Api.OrderBook.Instrument.Calendar">
+            <summary>
+            Get all date and time related information for the instrument.
+            </summary>
+        </member>
+        <member name="P:Com.Lmax.Api.OrderBook.Instrument.Risk">
+            <summary>
+            Get all of the information relating to risk for this instrument.
+            </summary>
+        </member>
+        <member name="P:Com.Lmax.Api.OrderBook.Instrument.OrderBook">
+            <summary>
+            Get information relating the behaviour of the order book.
+            </summary>
+        </member>
+        <member name="P:Com.Lmax.Api.OrderBook.Instrument.Contract">
+            <summary>
+            Get information relating to the contract for this instrument.
+            </summary>
+        </member>
+        <member name="P:Com.Lmax.Api.OrderBook.Instrument.Commercial">
+            <summary>
+            Get information relating to the commerical aggrements for this instrument.
+            </summary>
+        </member>
+        <member name="T:Com.Lmax.Api.OrderBook.UnderlyingInfo">
+            <summary>
+            The underlying asset of the traded instrument, contain information
+            such as symbol, asset class etc.
+            </summary>
+        </member>
+        <member name="P:Com.Lmax.Api.OrderBook.UnderlyingInfo.Symbol">
+            <summary>
+            Get the text symbol used for the instrument.
+            </summary>
+        </member>
+        <member name="P:Com.Lmax.Api.OrderBook.UnderlyingInfo.Isin">
+            <summary>
+            Get the ISIN of the underlying instrument.
+            </summary>
+        </member>
+        <member name="P:Com.Lmax.Api.OrderBook.UnderlyingInfo.AssetClass">
+            <summary>
+            Get the asset class of the underlying.
+            </summary>
+        </member>
+        <member name="T:Com.Lmax.Api.OrderBook.CalendarInfo">
+            <summary>
+            Contains all of the information relating to dates and times during
+            which the instrument is tradeable.
+            </summary>
+        </member>
+        <member name="P:Com.Lmax.Api.OrderBook.CalendarInfo.StartTime">
+            <summary>
+            Get the start time of the instrument, this is the time that the instrument
+            will first be available to trade.
+            </summary>
+        </member>
+        <member name="P:Com.Lmax.Api.OrderBook.CalendarInfo.ExpiryTime">
+            <summary>
+            Get the DateTime the instrument will expire, mostly relevant for instruments
+            like futures that only exist for a limited time.
+            </summary>
+        </member>
+        <member name="P:Com.Lmax.Api.OrderBook.CalendarInfo.Open">
+            <summary>
+            Get the time of day that the market will open (in time zone specified)
+            by this object.  
+            </summary> 
+        </member>
+        <member name="P:Com.Lmax.Api.OrderBook.CalendarInfo.Close">
+            <summary>
+            Get the time of day that the market will close (in time zone specified)
+            by this object.
+            </summary>
+        </member>
+        <member name="P:Com.Lmax.Api.OrderBook.CalendarInfo.TimeZone">
+            <summary>
+            Get the timezone in which this calendar operates.
+            </summary>
+        </member>
+        <member name="P:Com.Lmax.Api.OrderBook.CalendarInfo.TradingDays">
+            <summary>
+            Get the days of week that the market is open.
+            </summary>
+        </member>
+        <member name="T:Com.Lmax.Api.OrderBook.RiskInfo">
+            <summary>
+            Holds the Risk elements for the instrument.
+            </summary>
+        </member>
+        <member name="P:Com.Lmax.Api.OrderBook.RiskInfo.MarginRate">
+            <summary>
+            Get the margin rate as a percentage for this instrument.
+            </summary>
+        </member>
+        <member name="P:Com.Lmax.Api.OrderBook.RiskInfo.MaximumPosition">
+            <summary>
+            Get the maxium position that can be held by a retail user on
+            this instrument.
+            </summary>
+        </member>
+        <member name="T:Com.Lmax.Api.OrderBook.OrderBookInfo">
+            <summary>
+            Holds information related to the behaviour of the order book.
+            </summary>
+        </member>
+        <member name="P:Com.Lmax.Api.OrderBook.OrderBookInfo.PriceIncrement">
+            <summary>
+            Get the price increment in which orders can be placed, i.e. the
+            tick size.
+            </summary>
+        </member>
+        <member name="P:Com.Lmax.Api.OrderBook.OrderBookInfo.QuantityIncrement">
+            <summary>
+            Get the quantity increment in which orders can be placed.
+            </summary>
+        </member>
+        <member name="P:Com.Lmax.Api.OrderBook.OrderBookInfo.VolatilityBandPercentage">
+            <summary>
+            Get the retail volatility band for the order book, this limits how
+            far from the spread an order can be placed.
+            </summary>
+        </member>
+        <member name="T:Com.Lmax.Api.OrderBook.ContractInfo">
+            <summary>
+            Holds the information about the contract for this instrument.
+            </summary>
+        </member>
+        <member name="P:Com.Lmax.Api.OrderBook.ContractInfo.Currency">
+            <summary>
+            Get the currency this instrument is traded in.
+            </summary>
+        </member>
+        <member name="P:Com.Lmax.Api.OrderBook.ContractInfo.UnitPrice">
+            <summary>
+            Get the price for a single contract unit.
+            </summary>
+        </member>
+        <member name="P:Com.Lmax.Api.OrderBook.ContractInfo.UnitOfMeasure">
+            <summary>
+            Get the name of the units being traded, e.g. barrels of oil, US dollars
+            </summary>
+        </member>
+        <member name="P:Com.Lmax.Api.OrderBook.ContractInfo.ContractSize">
+            <summary>
+            Get the contract size.
+            </summary>
+        </member>
+        <member name="T:Com.Lmax.Api.OrderBook.CommercialInfo">
+            <summary>
+            Hold information pertaining to the commerical detail of this instrument.
+            </summary>
+        </member>
+        <member name="P:Com.Lmax.Api.OrderBook.CommercialInfo.MinimumCommission">
+            <summary>
+            Get the minimum commision applied for a trade on this instrument.
+            </summary>
+        </member>
+        <member name="P:Com.Lmax.Api.OrderBook.CommercialInfo.AggressiveCommissionRate">
+            <summary>
+            Get the aggressive commission rate, may be null if commission is
+            charged per contract.  The commission charge when the order is
+            on the aggressive side of the trade.
+            </summary>
+        </member>
+        <member name="P:Com.Lmax.Api.OrderBook.CommercialInfo.PassiveCommissionRate">
+            <summary>
+            Get the passive commission rate, may be null if commission is
+            charged per contract.  The commission charge when the order is
+            on the passive side of the trade.
+            </summary>
+        </member>
+        <member name="P:Com.Lmax.Api.OrderBook.CommercialInfo.AggressiveCommissionPerContract">
+            <summary>
+            Get the aggressive commission per contract, may be null if commission is
+            charged using a rate.  The commission charge when the order is
+            on the aggressive side of the trade.
+            </summary>
+        </member>
+        <member name="P:Com.Lmax.Api.OrderBook.CommercialInfo.PassiveCommissionPerContract">
+            <summary>
+            Get the passive commission per contract, may be null if commission is
+            charged using a rate.  The commission charge when the order is
+            on the passive side of the trade.
+            </summary>
+        </member>
+        <member name="P:Com.Lmax.Api.OrderBook.CommercialInfo.FundingBaseRate">
+            <summary>
+            Get the base rate used for funding this instrument.
+            </summary>
+        </member>
+        <member name="P:Com.Lmax.Api.OrderBook.CommercialInfo.DailyInterestRateBasis">
+            <summary>
+            Get the number of days per year used to calculate the daily
+            interest charged for funding.
+            </summary>
+        </member>
+        <member name="P:Com.Lmax.Api.OrderBook.CommercialInfo.FundingRate">
+            <summary>
+            Get the rate used for overnight funding.
+            </summary>
+        </member>
+        <member name="P:Com.Lmax.Api.OrderBook.CommercialInfo.FundingPremiumPercentage">
+            <summary>
+            Get the percentage premium added to the funding base rate for overnight funding of long positions on non-FX instruments.
+            </summary>
+        </member>
+        <member name="P:Com.Lmax.Api.OrderBook.CommercialInfo.FundingReductionPercentage">
+            <summary>
+            Get the percentage reduction applied to the funding base rate for overnight funding of short positions on non-FX instruments.
+            </summary>
+        </member>
+        <member name="P:Com.Lmax.Api.OrderBook.CommercialInfo.LongSwapPoints">
+            <summary>
+            Get the swap points used to calculate overnight interest swap charges for long positions on FX instruments.
+            </summary>
+        </member>
+        <member name="P:Com.Lmax.Api.OrderBook.CommercialInfo.ShortSwapPoints">
+            <summary>
+            Get the swap points used to calculate overnight interest swap charges for short positions on FX instruments.
+            </summary>
+        </member>
+        <member name="T:Com.Lmax.Api.OrderBook.OrderBookEvent">
+            <summary>
+            The contents of the event raised whenever there is a change to the
+            market data for a given order book.
+            </summary>
+        </member>
+        <member name="P:Com.Lmax.Api.OrderBook.OrderBookEvent.HasValuationBidPrice">
+            <summary>
+            Readonly property to determine if this OrderBook has a valuation bid price.
+            This will only be set if the particalur instrument has been traded.
+            </summary>
+        </member>
+        <member name="P:Com.Lmax.Api.OrderBook.OrderBookEvent.HasValuationAskPrice">
+            <summary>
+            Readonly property to determine if this OrderBook has a valuation ask price.
+            This will only be set if the particalur instrument has been traded.
+            </summary>
+        </member>
+        <member name="P:Com.Lmax.Api.OrderBook.OrderBookEvent.ValuationBidPrice">
+            <summary>
+            Readonly value of the valuation bid price for the OrderBook 
+            </summary>
+        </member>
+        <member name="P:Com.Lmax.Api.OrderBook.OrderBookEvent.ValuationAskPrice">
+            <summary>
+            Readonly value of the valuation ask price for the OrderBook 
+            </summary>
+        </member>
+        <member name="P:Com.Lmax.Api.OrderBook.OrderBookEvent.Timestamp">
+            <summary>
+            The timestamp as number of milliseconds since unix time epoch (1st January 1970) when the market data was updated
+            inside of the exchange.
+            </summary>
+        </member>
+        <member name="P:Com.Lmax.Api.OrderBook.OrderBookEvent.BidPrices">
+            <summary>
+            List of all of the bid prices for an order book.  The best price
+            will be at index 0.  If there is no liquidity in the market this
+            list will be empty.
+            </summary>
+        </member>
+        <member name="P:Com.Lmax.Api.OrderBook.OrderBookEvent.AskPrices">
+            <summary>
+            List of all of the bid prices for an order book.  The best price
+            will be at index 0.  If there is no liquidity in the market this
+            list will be empty.
+            </summary>
+        </member>
+        <member name="P:Com.Lmax.Api.OrderBook.OrderBookEvent.InstrumentId">
+            <summary>
+            Instrument Id of the OrderBook, same as the value used in subscribing
+            </summary>
+        </member>
+        <member name="P:Com.Lmax.Api.OrderBook.OrderBookEvent.HasMarketClosePrice">
+            <summary>
+            Indicate if a Last Market Close Price is available
+            </summary>
+        </member>
+        <member name="P:Com.Lmax.Api.OrderBook.OrderBookEvent.MktClosePrice">
+            <summary>
+            The Market Close Price for the previous trading session.
+            </summary>
+        </member>
+        <member name="P:Com.Lmax.Api.OrderBook.OrderBookEvent.MktClosePriceTimestamp">
+            <summary>
+            Timestamp as number of milliseconds since unix time epoch (1st January 1970) of the market close of the previous trading session.
+            </summary>
+        </member>
+        <member name="P:Com.Lmax.Api.OrderBook.OrderBookEvent.HasLastTradedPrice">
+            <summary>
+            Indicate if a last traded price is available.
+            </summary>
+        </member>
+        <member name="P:Com.Lmax.Api.OrderBook.OrderBookEvent.LastTradedPrice">
+            <summary>
+            The price of the last trade that occured on this OrderBook.
+            </summary>
+        </member>
+        <member name="P:Com.Lmax.Api.OrderBook.OrderBookEvent.HasDailyHighestTradedPrice">
+            <summary>
+            Indicate if a Highest Daily Traded Price is available, could be false
+            if there have be no trades in the current session.
+            </summary>
+        </member>
+        <member name="P:Com.Lmax.Api.OrderBook.OrderBookEvent.DailyHighestTradedPrice">
+            <summary>
+            The highest price at which a trade occured in this trading session.
+            </summary>
+        </member>
+        <member name="P:Com.Lmax.Api.OrderBook.OrderBookEvent.HasDailyLowestTradedPrice">
+            <summary>
+            Indicate if a Lowest Daily Traded Price is available, could be false
+            if there have be no trades in the current session.
+            </summary>
+        </member>
+        <member name="P:Com.Lmax.Api.OrderBook.OrderBookEvent.DailyLowestTradedPrice">
+            <summary>
+            The lowest price at which a trade occured in this trading session.
+            </summary>
+        </member>
+        <member name="T:Com.Lmax.Api.OrderBook.OrderBookSubscriptionRequest">
+            <summary>
+            Used when subscribing to the events for an OrderBook 
+            </summary>
+        </member>
+        <member name="M:Com.Lmax.Api.OrderBook.OrderBookSubscriptionRequest.#ctor(System.Int64)">
+            <summary>
+            Construct the OrderBookSubscriptionRequest. 
+            </summary>
+            <param name="instrumentId">
+            A <see cref="T:System.Int64"/> that is the instrumentId of the 
+            OrderBook that you are intrested in seeing events for.
+            </param>
+        </member>
+        <member name="T:Com.Lmax.Api.OrderBook.PricePoint">
+            <summary>
+            Representation of that quantity at a particular price.  Used in
+            the <see cref="T:Com.Lmax.Api.OrderBook.OrderBookEvent"/> to represent market data.
+            </summary>
+        </member>
+        <member name="M:Com.Lmax.Api.OrderBook.PricePoint.#ctor(System.Decimal,System.Decimal)">
+            <summary>
+             Creates a new PricePoint
+            </summary>
+            <param name="quantity">The quantity</param>
+            <param name="price">The price</param>
+        </member>
+        <member name="M:Com.Lmax.Api.OrderBook.PricePoint.Equals(Com.Lmax.Api.OrderBook.PricePoint)">
+            <summary>
+             Compares this PricePoint to another one
+            </summary>
+            <param name="other">The PricePoint to compare this to</param>
+            <returns>True if this PricePoint is equal to the second</returns>
+        </member>
+        <member name="P:Com.Lmax.Api.OrderBook.PricePoint.Price">
+            <summary>
+            Readonly price. 
+            </summary>
+        </member>
+        <member name="P:Com.Lmax.Api.OrderBook.PricePoint.Quantity">
+            <summary>
+            Readonly quantity. 
+            </summary>
+        </member>
+        <member name="T:Com.Lmax.Api.OrderBook.SearchRequest">
+            <summary>
+            A request to get the system to push out a group of security definitions.
+            </summary>
+        </member>
+        <member name="M:Com.Lmax.Api.OrderBook.SearchRequest.#ctor(System.String)">
+            <summary>
+            Construct a request for a security definition.  Uses a query string that
+            provides flexible query mechanism.  There are 2 main forms of the query string
+            to find a specific instrument the "id: (instrumentId)" form can be used.
+            To do a general search, use a term such as "CURRENCY", which will find
+            all of the currency instruments.  A search term like "UK" will find all
+            of the instruments that have "UK" in the name.
+            </summary>
+            <param name="queryString"></param>
+        </member>
+        <member name="M:Com.Lmax.Api.OrderBook.SearchRequest.#ctor(System.String,System.Int64)">
+            <summary>
+            Construct a request for a security definition.  Uses a query string that
+            provides flexible query mechanism.  There are 2 main forms of the query string
+            to find a specific instrument the "id: (instrumentId)" form can be used.
+            To do a general search, use a term such as "CURRENCY", which will find
+            all of the currency instruments.  A search term like "UK" will find all
+            of the instruments that have "UK" in the name.
+            </summary>
+            <param name="queryString"></param>
+            <param name="offsetInstrumentId"></param>
+        </member>
+        <member name="M:Com.Lmax.Api.OrderBook.SearchRequest.WriteTo(Com.Lmax.Api.Internal.Xml.IStructuredWriter)">
+            <summary>
+            Internal: Output this request.
+            </summary>
+            <param name="writer">The destination for the content of this request</param>
+        </member>
+        <member name="T:Com.Lmax.Api.Order.AmendStopLossProfitRequest">
+            <summary>
+            Request to amend stop loss/profit on an existing order.
+            </summary>
+        </member>
+        <member name="M:Com.Lmax.Api.Order.AmendStopLossProfitRequest.#ctor(System.Int64,System.String,System.String,System.Nullable{System.Decimal},System.Nullable{System.Decimal})">
+            <summary>
+            Construct an AmendStopLossProfitRequest using the instrument id and the instruction id
+            of the original order.
+            </summary>
+            <param name="instrumentId">The instrument id that the original order was placed on.</param>
+            <param name="instructionId">The instruction id used to correlate requests with responses.</param>
+            <param name="originalInstructionId">The instruction id of the original order we want to amend.</param>
+            <param name="stopLossOffset">The new stop loss offset, use null to
+            indicate the value should be removed.</param>
+            <param name="stopProfitOffset">The new stop profit offset, use null to
+            indicate the value should be removed.</param>
+        </member>
+        <member name="M:Com.Lmax.Api.Order.AmendStopLossProfitRequest.WriteTo(Com.Lmax.Api.Internal.Xml.IStructuredWriter)">
+            <summary>
+            Internal: Output this request.
+            </summary>
+            <param name="writer">The destination for the content of this request</param>
+        </member>
+        <member name="T:Com.Lmax.Api.Order.CancelOrderRequest">
+            <summary>
+            Request to cancel an order.
+            </summary>
+        </member>
+        <member name="M:Com.Lmax.Api.Order.CancelOrderRequest.#ctor(System.String,System.Int64,System.String)">
+            <summary>
+            Construction and request to cancel an order.
+            </summary>
+            <param name="instructionId">The instruction id used to correlate requests with responses</param>
+            <param name="instrumentId">The instrument id of the OrderBook that received the original order.</param>
+            <param name="originalInstructionId">The instruction id of the original order.</param>
+        </member>
+        <member name="M:Com.Lmax.Api.Order.CancelOrderRequest.WriteTo(Com.Lmax.Api.Internal.Xml.IStructuredWriter)">
+            <summary>
+            Internal: Output this request.
+            </summary>
+            <param name="writer">The destination for the content of this request</param>
+        </member>
+        <member name="T:Com.Lmax.Api.Order.ClosingOrderSpecification">
+            <summary>
+             Closing Order Specification.  Allows you to place an order which closes out a given quantity,
+             either against an instrument position, or against a specific order.
+            </summary>
+        </member>
+        <member name="M:Com.Lmax.Api.Order.ClosingOrderSpecification.#ctor(System.String,System.Int64,System.Nullable{System.Decimal})">
+            <summary>
+             Construct a ClosingOrderSpecification. This allows you to close a quantity of your position on a given instrument by
+             placing a market order in the opposite direction of your existing position.
+            </summary>
+            <param name="instructionId">The user-defined correlation id</param>
+            <param name="instrumentId">The id of the instrument for the order book to close position on</param>
+            <param name="quantity">The quantity to close.  A signed value, where the sign indicates the side of the
+                                   market that order is placed.  Positive implies a buy order, where as negative is a sell</param>
+        </member>
+        <member name="M:Com.Lmax.Api.Order.ClosingOrderSpecification.#ctor(System.String,System.Int64,System.String,System.Nullable{System.Decimal})">
+            <summary>
+             Construct a ClosingOrderSpecification. This allows you to close a quantity of your position on a given instrument by
+             placing a market order in the opposite direction of your existing position.
+            </summary>
+            <param name="instructionId">The user-defined correlation id</param>
+            <param name="instrumentId">The id of the instrument for the order book to close position on</param>
+            <param name="originalInstructionId">the instruction ID of the original order to close</param>
+            <param name="quantity">The quantity to close.  A signed value, where the sign indicates the side of the
+                                   market that order is placed.  Positive implies a buy order, where as negative is a sell</param>
+        </member>
+        <member name="M:Com.Lmax.Api.Order.ClosingOrderSpecification.WriteTo(Com.Lmax.Api.Internal.Xml.IStructuredWriter)">
+            <summary>
+            Internal: Output this request.
+            </summary>
+            <param name="writer">The destination for the content of this request</param>
+        </member>
+        <member name="P:Com.Lmax.Api.Order.ClosingOrderSpecification.InstructionId">
+            <summary>
+            Get/Set the instruction id use for tracking the order.
+            </summary>
+        </member>
+        <member name="P:Com.Lmax.Api.Order.ClosingOrderSpecification.InstrumentId">
+            <summary>
+            Get/Set the instrument id that the order should be placed on.
+            </summary>
+        </member>
+        <member name="P:Com.Lmax.Api.Order.ClosingOrderSpecification.Quantity">
+            <summary>
+            Get/Set the of the order, the sign infers the side of the order.
+            A positive value is a buy, negative indicates sell.
+            </summary>
+        </member>
+        <member name="P:Com.Lmax.Api.Order.ClosingOrderSpecification.OriginalInstructionId">
+            <summary>
+             Get/Set the original instrument id that this specification refers to
+            </summary>
+        </member>
+        <member name="T:Com.Lmax.Api.Order.Execution">
+            <summary>
+            Results of a action on the exchange the affects an order.
+            </summary>
+        </member>
+        <member name="M:Com.Lmax.Api.Order.Execution.#ctor(System.Int64,System.Decimal,System.Decimal,Com.Lmax.Api.Order.Order,System.Decimal)">
+            <summary>
+            Exposed for testing
+            </summary>
+        </member>
+        <member name="P:Com.Lmax.Api.Order.Execution.ExecutionId">
+            <summary>
+            Get the execution id, which is the key for this execution.  It is 
+            unique within an order book.
+            </summary>
+        </member>
+        <member name="P:Com.Lmax.Api.Order.Execution.Price">
+            <summary>
+            Get the price at which the execution took place.
+            </summary>
+        </member>
+        <member name="P:Com.Lmax.Api.Order.Execution.Quantity">
+            <summary>
+            Get the size of the execution.
+            </summary>
+        </member>
+        <member name="P:Com.Lmax.Api.Order.Execution.Order">
+            <summary>
+            Get the order that this execution affected.
+            </summary>
+        </member>
+        <member name="P:Com.Lmax.Api.Order.Execution.CancelledQuantity">
+            <summary>
+            Get quantity of the order that was cancelled in this execution.
+            </summary>
+        </member>
+        <member name="T:Com.Lmax.Api.Order.ExecutionSubscriptionRequest">
+            <summary>
+            Request to subscribe to execution events.
+            </summary>
+        </member>
+        <member name="T:Com.Lmax.Api.Order.LimitOrderSpecification">
+            <summary>
+             Limit order request.  Can be reused, but the instructionID needs to be reset every time it is submitted.
+            </summary>
+        </member>
+        <member name="T:Com.Lmax.Api.Order.OrderSpecification">
+            <summary>
+            Base class for all order specifications.
+            </summary>
+        </member>
+        <member name="M:Com.Lmax.Api.Order.OrderSpecification.WriteTo(Com.Lmax.Api.Internal.Xml.IStructuredWriter)">
+            <summary>
+            Internal: Output this request.
+            </summary>
+            <param name="writer">The destination for the content of this request</param>
+        </member>
+        <member name="P:Com.Lmax.Api.Order.OrderSpecification.InstructionId">
+            <summary>
+            Get/Set the instruction id use for tracking the order.
+            </summary>
+        </member>
+        <member name="P:Com.Lmax.Api.Order.OrderSpecification.InstrumentId">
+            <summary>
+            Get/Set the instrument id that the order should be placed on.
+            </summary>
+        </member>
+        <member name="P:Com.Lmax.Api.Order.OrderSpecification.Quantity">
+            <summary>
+            Get/Set the of the order, the sign infers the side of the order.
+            A positive value is a buy, negative indicates sell.
+            </summary>
+        </member>
+        <member name="P:Com.Lmax.Api.Order.OrderSpecification.StopLossPriceOffset">
+            <summary>
+            Get/Set the stop loss offset for the order, null to indicates that
+            the order does not have a stop less.
+            </summary>
+        </member>
+        <member name="P:Com.Lmax.Api.Order.OrderSpecification.StopProfitPriceOffset">
+            <summary>
+            Get/Set the stop profit offset for the order, null to indicates that
+            the order does not have a stop profit.
+            </summary>
+        </member>
+        <member name="P:Com.Lmax.Api.Order.OrderSpecification.TimeInForce">
+            <summary>
+            Get/Set the <see cref="T:Com.Lmax.Api.TimeInForce"/> for the order.
+            </summary>
+        </member>
+        <member name="M:Com.Lmax.Api.Order.LimitOrderSpecification.#ctor(System.String,System.Int64,System.Decimal,System.Decimal,Com.Lmax.Api.TimeInForce,System.Nullable{System.Decimal},System.Nullable{System.Decimal})">
+            <summary>
+            Construct a Limit Order that contains a stop loss and/or stop profit price offset.
+            </summary>
+            <param name="instructionId">The client specified instruction id, should be unique for an account.</param>
+            <param name="instrumentId">The instrument id of the OrderBook to place the order on.</param>
+            <param name="price">The price for the order to be placed into the book if not aggressively filled.</param>
+            <param name="quantity">The size of the limit order.  The side of the order is inferred
+            from the sign of the quantity.  A positive value is a buy, negative is sell.</param>
+            <param name="timeInForce">A <see cref="T:Com.Lmax.Api.TimeInForce"/> that describes the behaviour of the order
+            if not fully filled</param>
+            <param name="stopLossPriceOffset">The stop loss offset, set this to null to not specify a stop loss.</param>
+            <param name="stopProfitPriceOffset">The stop profit offset, set this to null to not specify a stop profit.</param>
+        </member>
+        <member name="M:Com.Lmax.Api.Order.LimitOrderSpecification.#ctor(System.String,System.Int64,System.Decimal,System.Decimal,Com.Lmax.Api.TimeInForce)">
+            <summary>
+            Construct a Limit Order that  does not contains a stop loss and/or stop profit price offset.
+            </summary>
+            <param name="instructionId">The client specified instruction id, should be unique for an account.</param>
+            <param name="instrumentId">The instrument id of the OrderBook to place the order on.</param>
+            <param name="price">The price for the order to be placed into the book if not aggressively filled.</param>
+            <param name="quantity">The size of the limit order.  The side of the order is inferred
+            from the sign of the quantity.  A positive value is a buy, negative is sell.</param>
+            <param name="timeInForce">A <see cref="T:Com.Lmax.Api.TimeInForce"/> that describes the behaviour of the order
+            if not fully filled</param>
+        </member>
+        <member name="P:Com.Lmax.Api.Order.LimitOrderSpecification.Price">
+            <summary>
+            Get/Set the price of the order, allows order instance to be reused.
+            </summary>
+        </member>
+        <member name="T:Com.Lmax.Api.Order.MarketOrderSpecification">
+            <summary>
+             Market order request.  Can be reused, but the instructionID needs to be reset every time it is submitted.
+            </summary>
+        </member>
+        <member name="M:Com.Lmax.Api.Order.MarketOrderSpecification.#ctor(System.String,System.Int64,System.Decimal,Com.Lmax.Api.TimeInForce,System.Nullable{System.Decimal},System.Nullable{System.Decimal})">
+            <summary>
+            Construct a Market Order that contains a stop profit and/or stop loss offset.
+            </summary>
+            <param name="instructionId">The client specified instruction id, should be unique for an account.</param>
+            <param name="instrumentId">The instrument id of the OrderBook to place the order on.</param>
+            <param name="quantity">The size of the market order.  The side of the order is inferred
+            from the sign of the quantity.  A positive value is a buy, negative is sell.</param>
+            <param name="timeInForce">A <see cref="T:Com.Lmax.Api.TimeInForce"/> that describes the behaviour of the order
+            if not fully filled</param>
+            <param name="stopLossPriceOffset">The stop loss offset, set this to null to not specify a stop loss.</param>
+            <param name="stopProfitPriceOffset">The stop profit offset, set this to null to not specify a stop profit.</param>
+        </member>
+        <member name="M:Com.Lmax.Api.Order.MarketOrderSpecification.#ctor(System.String,System.Int64,System.Decimal,Com.Lmax.Api.TimeInForce)">
+            <summary>
+            Construct and Market Order Specification that does not contain a stop profit or stop loss offset.
+            </summary>
+            <param name="instructionId">The client specified instruction id, should be unique for an account.</param>
+            <param name="instrumentId">The instrument id of the OrderBook to place the order on.</param>
+            <param name="quantity">The size of the market order.  The side of the order is inferred
+            from the sign of the quantity.  A positive value is a buy, negative is sell.</param>
+            <param name="timeInForce">A <see cref="T:Com.Lmax.Api.TimeInForce"/> that describes the behaviour of the order
+            if not fully filled</param>
+        </member>
+        <member name="T:Com.Lmax.Api.Order.Order">
+            <summary>
+            The order as represented on the exchange
+            </summary>
+        </member>
+        <member name="P:Com.Lmax.Api.Order.Order.InstructionId">
+            <summary>
+            Get the id of the instruction that placed the order.  Can be used to
+            correlate with the original request.
+            </summary>
+        </member>
+        <member name="P:Com.Lmax.Api.Order.Order.OrderId">
+            <summary>
+            Get the id of the order.
+            </summary>
+        </member>
+        <member name="P:Com.Lmax.Api.Order.Order.InstrumentId">
+            <summary>
+            Get the id of the instrument on which the order was placed.
+            </summary>
+        </member>
+        <member name="P:Com.Lmax.Api.Order.Order.AccountId">
+            <summary>
+            Get the id of the account that placed the order.
+            </summary>
+        </member>
+        <member name="P:Com.Lmax.Api.Order.Order.OrderType">
+            <summary>
+            Get the type of the order.
+            </summary>
+        </member>
+        <member name="P:Com.Lmax.Api.Order.Order.Quantity">
+            <summary>
+            Get the quantity of the order.
+            </summary>
+        </member>
+        <member name="P:Com.Lmax.Api.Order.Order.FilledQuantity">
+            <summary>
+            Get the quantity of this order that has filled.
+            </summary>
+        </member>
+        <member name="P:Com.Lmax.Api.Order.Order.LimitPrice">
+            <summary>
+            Get the limit price for this order, will be null if this is not
+            a limit order.
+            </summary>
+        </member>
+        <member name="P:Com.Lmax.Api.Order.Order.StopPrice">
+            <summary>
+            Get the stop price for this order, will be null if this is not
+            a stop order.
+            </summary>
+        </member>
+        <member name="P:Com.Lmax.Api.Order.Order.CancelledQuantity">
+            <summary>
+            Get the quantity of this order that has been cancelled.
+            </summary>
+        </member>
+        <member name="P:Com.Lmax.Api.Order.Order.StopLossOffset">
+            <summary>
+            Get the distance from the <code>StopReferencePrice</code> at which the stop loss order trigger will be placed.
+            Will be null if no stop loss requested for this order.
+            </summary>
+        </member>
+        <member name="P:Com.Lmax.Api.Order.Order.StopProfitOffset">
+            <summary>
+            Get the distance from the <code>StopReferencePrice</code> at which the stop profit order will be placed.
+            Will be null if no stop profit requested for this order.
+            </summary>
+        </member>
+        <member name="P:Com.Lmax.Api.Order.Order.StopReferencePrice">
+            <summary>
+            The price relative to which stop loss and stop profit prices will be calculated.
+            Will be null for unmatched market orders.
+            </summary>
+        </member>
+        <member name="P:Com.Lmax.Api.Order.Order.Commission">
+            <summary>
+            The commulative commssion that you have aleady been charged for this order.
+            </summary>
+        </member>
+        <member name="P:Com.Lmax.Api.Order.Order.TimeInForce">
+            <summary>
+            The time in force for this order
+            </summary>
+        </member>
+        <member name="T:Com.Lmax.Api.Order.OrderSubscriptionRequest">
+            <summary>
+              Request to subscribe to order events.
+            </summary>
+        </member>
+        <member name="T:Com.Lmax.Api.Order.StopOrderSpecification">
+            <summary>
+             Stop order request.  Can be reused, but the instructionID needs to be reset every time it is submitted.
+            </summary>
+        </member>
+        <member name="M:Com.Lmax.Api.Order.StopOrderSpecification.#ctor(System.String,System.Int64,System.Decimal,System.Decimal,Com.Lmax.Api.TimeInForce,System.Nullable{System.Decimal},System.Nullable{System.Decimal})">
+            <summary>
+            Construct a Stop order that contains a stop loss and/or stop profit price offset.
+            </summary>
+            <param name="instructionId">The client specified instruction id, should be unique for an account.</param>
+            <param name="instrumentId">The instrument id of the OrderBook to place the order on.</param>
+            <param name="stopPrice">The trigger price which will cause the market order to be placed.</param>
+            <param name="quantity">The size of the Market order.  The side of the order is inferred
+            from the sign of the quantity.  A positive value is a buy, negative is sell.</param>
+            <param name="timeInForce">A <see cref="T:Com.Lmax.Api.TimeInForce"/> that describes the time the stop will remain
+            valid options, GoodForDay and GoodTilCancelled </param>
+            <param name="stopLossPriceOffset">The stop loss offset, set this to null to not specify a stop loss.</param>
+            <param name="stopProfitPriceOffset">The stop profit offset, set this to null to not specify a stop profit.</param>
+        </member>
+        <member name="M:Com.Lmax.Api.Order.StopOrderSpecification.#ctor(System.String,System.Int64,System.Decimal,System.Decimal,Com.Lmax.Api.TimeInForce)">
+            <summary>
+            Construct a Stop order that contains a stop loss and/or stop profit price offset.
+            </summary>
+            <param name="instructionId">The client specified instruction id, should be unique for an account.</param>
+            <param name="instrumentId">The instrument id of the OrderBook to place the order on.</param>
+            <param name="stopPrice">The trigger price which will cause the market order to be placed.</param>
+            <param name="quantity">The size of the Market order.  The side of the order is inferred
+            from the sign of the quantity.  A positive value is a buy, negative is sell.</param>
+            <param name="timeInForce">A <see cref="T:Com.Lmax.Api.TimeInForce"/> that describes the time the stop will remain
+            valid options, GoodForDay and GoodTilCancelled </param>
+        </member>
+        <member name="M:Com.Lmax.Api.Order.StopOrderSpecification.WriteTo(Com.Lmax.Api.Internal.Xml.IStructuredWriter)">
+            <summary>
+            Internal: Output this request.
+            </summary>
+            <param name="writer">The destination for the content of this request</param>
+        </member>
+        <member name="T:Com.Lmax.Api.Position.PositionEvent">
+            <summary>
+            Represents a position on a instrument, held by the account. A number of
+            fields refer to the term 'cost'.  Cost is price x quantity.  A position is
+            an aggregate view of all of the open and unfilled orders 
+            </summary>
+        </member>
+        <member name="M:Com.Lmax.Api.Position.PositionEvent.#ctor(System.Int64,System.Int64,System.Decimal,System.Decimal,System.Decimal,System.Decimal,System.Decimal)">
+            <summary>
+             Create an object that contains the details of the changes that occurred to a position.
+            </summary>
+            <param name="accountId">The ID of the account that holds the position</param>
+            <param name="instrumentId">The instrument the position is on</param>
+            <param name="shortUnfilledCost">The cost of the unfilled sell positions against this instrument</param>
+            <param name="longUnfilledCost">The cost of the unfilled buy positions against this instrument</param>
+            <param name="openQuantity">The filled quantity of this position, signed, e.g. sell is a negative value</param>
+            <param name="cumulativeCost">The cost accumulated so far for holiding this position</param>
+            <param name="openCost">The cost of opening this position</param>
+        </member>
+        <member name="P:Com.Lmax.Api.Position.PositionEvent.AccountId">
+            <summary>
+            Get the id for the account that the position belongs to.
+            </summary>
+        </member>
+        <member name="P:Com.Lmax.Api.Position.PositionEvent.InstrumentId">
+            <summary>
+            Get the id for the instrument that the position pertains to.
+            </summary>
+        </member>
+        <member name="P:Com.Lmax.Api.Position.PositionEvent.ShortUnfilledCost">
+            <summary>
+            Get the short unfilled cost for this position.  I.e. the cost of sell
+            orders that have not filled.
+            </summary>
+        </member>
+        <member name="P:Com.Lmax.Api.Position.PositionEvent.LongUnfilledCost">
+            <summary>
+            Get the long unfilled cost for this position.  I.e. the cost of buy
+            orders that have not filled.
+            </summary>
+        </member>
+        <member name="P:Com.Lmax.Api.Position.PositionEvent.OpenQuantity">
+            <summary>
+            Get the net open quantity for this position.
+            </summary>        
+        </member>
+        <member name="P:Com.Lmax.Api.Position.PositionEvent.CumulativeCost">
+            <summary>
+            The total cost incurred over the lifetime of the position.
+            </summary>
+        </member>
+        <member name="P:Com.Lmax.Api.Position.PositionEvent.OpenCost">
+            <summary>
+            The cost to establish the current open position.
+            </summary>
+        </member>
+        <member name="T:Com.Lmax.Api.Position.PositionSubscriptionRequest">
+            <summary>
+            Request to subscribe to position events.
+            </summary>
+        </member>
+        <member name="T:Com.Lmax.Api.Reject.InstructionRejectedEvent">
+            <summary>
+            An event that contains the detail of the rejection of an instruction.
+            E.g. INSUFFICIENT_LIQUIDITY.
+            </summary>
+        </member>
+        <member name="M:Com.Lmax.Api.Reject.InstructionRejectedEvent.#ctor(System.String,System.Int64,System.Int64,System.String)">
+            <summary>
+             Constructs an event containing the details of why an instruction was rejected
+            </summary>
+            <param name="instructionId">The ID of the instruction that was rejected</param>
+            <param name="accountId">The ID of the account that sent the instruction</param>
+            <param name="instrumentId">The ID of the instrument the instruction related to</param>
+            <param name="reason">The description of why the instruction was rejected</param>
+        </member>
+        <member name="P:Com.Lmax.Api.Reject.InstructionRejectedEvent.InstructionId">
+            <summary>
+            Get the id of the instruction that was rejected.
+            </summary>
+        </member>
+        <member name="P:Com.Lmax.Api.Reject.InstructionRejectedEvent.AccountId">
+            <summary>
+            Get the id of the account that placed the instruction.
+            </summary>
+        </member>
+        <member name="P:Com.Lmax.Api.Reject.InstructionRejectedEvent.InstrumentId">
+            <summary>
+            Get the id of the instrument that the instruction was placed on.
+            </summary>
+        </member>
+        <member name="P:Com.Lmax.Api.Reject.InstructionRejectedEvent.Reason">
+            <summary>
+            Get the reason for the rejection, e.g. INSUFFICIENT_LIQUIDITY
+            </summary>
+        </member>
+    </members>
+</doc>

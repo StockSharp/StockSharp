@@ -1,0 +1,3426 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>CommLib</name>
+    </assembly>
+    <members>
+        <member name="T:OEC.Data.SplicingRuleType">
+            <summary>
+            </summary>
+        </member>
+        <member name="F:OEC.Data.SplicingRuleType.SpotMonth">
+            <summary>Begin show the next contract N days before expiration</summary>
+        </member>
+        <member name="F:OEC.Data.SplicingRuleType.Schedule">
+            <summary>Show contracts by a schedule</summary>
+        </member>
+        <member name="F:OEC.Data.SplicingRuleType.Volume">
+            <exclude />
+        </member>
+        <member name="T:OEC.Data.SplicingRulePriceAdjustment">
+            <summary>Specify how to adjust prices in a series</summary>
+        </member>
+        <member name="F:OEC.Data.SplicingRulePriceAdjustment.None">
+            <summary>Don't adjust</summary>
+        </member>
+        <member name="F:OEC.Data.SplicingRulePriceAdjustment.Backward">
+            <summary>adjust foregoing contracts</summary>
+        </member>
+        <member name="F:OEC.Data.SplicingRulePriceAdjustment.Forward">
+            <summary>adjust following contracts</summary>
+        </member>
+        <member name="T:OEC.Data.ContinuousContractRule">
+            <summary>
+            </summary>
+            <exclude />
+        </member>
+        <member name="T:OEC.Data.IDEntity">
+            <summary>
+            </summary>
+            <exclude/>
+        </member>
+        <member name="T:OEC.Data.Continuous.Offset">
+            <summary>Represents offset for next\previous <see cref="T:OEC.Data.ContractMonth"/></summary>
+            <exclude/>
+        </member>
+        <member name="F:OEC.Data.Continuous.Offset.Delta">
+            <summary>Value for a next; prevStop - nextStart</summary>
+        </member>
+        <member name="T:OEC.Data.Continuous.Slicers.ScheduleSlicer">
+            <summary/>
+            <exclude/>
+        </member>
+        <member name="T:OEC.Data.Continuous.Slicers.Slicer">
+            <summary>Slices a set of contracts by certain rule
+            Contains dates in UTC</summary>
+            <exclude/>
+        </member>
+        <member name="M:OEC.Data.Continuous.Slicers.Slicer.GetIndex(System.DateTime)">
+            <summary>Date should be in UTC</summary>
+            <param name="date"></param>
+            <returns></returns>
+        </member>
+        <member name="T:OEC.Data.Continuous.Slicers.TimeSlicer">
+            <summary/>
+            <exclude/>
+        </member>
+        <member name="T:OEC.Data.Continuous.Slicers.VolumeSlicer">
+            <summary/>
+            <exclude/>
+        </member>
+        <member name="T:OEC.Data.GtxOrderExtData">
+            <summary>
+            </summary>
+            <exclude />
+        </member>
+        <member name="T:OEC.Data.ExtendedData">
+            <summary>
+            </summary>
+            <exclude/>
+        </member>
+        <member name="T:OEC.Data.PegScope">
+            <summary>
+            </summary>
+            <exclude />
+        </member>
+        <member name="T:OEC.Data.TriggerPriceType">
+            <summary>
+            </summary>
+            <exclude />
+        </member>
+        <member name="T:OEC.Data.AvgPxLimitType">
+            <summary>
+            </summary>
+            <exclude />
+        </member>
+        <member name="T:OEC.Data.Monitoring.Level">
+            <summary>
+            </summary>
+            <exclude />
+        </member>
+        <member name="T:OEC.Data.Monitoring.Scope">
+            <summary>
+            </summary>
+            <exclude />
+        </member>
+        <member name="T:OEC.Data.Monitoring.ExitMethod">
+            <summary>
+            </summary>
+            <exclude />
+        </member>
+        <member name="T:OEC.Data.Monitoring.SignalStatus">
+            <summary>
+            </summary>
+            <exclude />
+        </member>
+        <member name="T:OEC.Data.Monitoring.Rule">
+            <summary>
+            </summary>
+            <exclude />
+        </member>
+        <member name="T:OEC.Data.Monitoring.Signal">
+            <summary>
+            </summary>
+            <exclude />
+        </member>
+        <member name="T:OEC.Data.Monitoring.FailedOperation">
+            <summary>
+            </summary>
+            <exclude />
+        </member>
+        <member name="T:OEC.Data.Monitoring.SignalStatusChange">
+            <summary>
+            </summary>
+            <exclude />
+        </member>
+        <member name="T:OEC.Data.Pairer.Transaction">
+            <summary>
+            </summary>
+            <exclude />
+        </member>
+        <member name="T:OEC.Data.ExternalAccount">
+            <exclude/>
+            <summary>
+            </summary>
+        </member>
+        <member name="T:OEC.Data.PostAllocationPair">
+            <exclude/>
+            <summary>
+            </summary>
+        </member>
+        <member name="T:OEC.Data.PostAllocationRequest">
+            <exclude/>
+            <summary>
+            </summary>
+        </member>
+        <member name="T:OEC.Data.PostAllocationBlock">
+            <exclude/>
+            <summary>
+            </summary>
+        </member>
+        <member name="T:OEC.Data.PostAllocationInstruction">
+            <exclude/>
+            <summary>
+            </summary>
+        </member>
+        <member name="T:OEC.Data.PostAllocationInstructions">
+            <exclude/>
+            <summary>
+            </summary>
+        </member>
+        <member name="T:OEC.Data.PostAllocationCheckResult">
+            <summary>
+            </summary>
+        </member>
+        <member name="T:OEC.Data.PostAllocationState">
+            <summary>
+            </summary>
+        </member>
+        <member name="T:OEC.Data.ProviderContractMap">
+            <summary>
+            </summary>
+            <exclude />
+        </member>
+        <member name="T:OEC.Data.IDEntityEx`1">
+            <summary>
+            </summary>
+            <exclude/>
+        </member>
+        <member name="T:OEC.Data.ProviderContractMapKey">
+            <summary>
+            </summary>
+            <exclude />
+        </member>
+        <member name="T:OEC.Scheduler">
+            <summary />
+            <exclude/>
+        </member>
+        <member name="T:OEC.ScheduledTask">
+            <exclude />
+        </member>
+        <member name="T:OEC.SortedTree`1">
+            <summary>
+            </summary>
+            <typeparam name="T"></typeparam>
+            <exclude />
+        </member>
+        <member name="T:OEC.BidirectionalMap`2">
+            <summary>
+            </summary>
+            <exclude/>
+        </member>
+        <member name="T:OEC.Data.ICacheGetter`1">
+            <summary>
+            </summary>
+            <exclude/>
+        </member>
+        <member name="T:OEC.Data.CacheGetter`1">
+            <summary>
+            </summary>
+            <exclude/>
+        </member>
+        <member name="T:OEC.Data.LocalCache`1">
+            <summary>
+            </summary>
+            <exclude/>
+        </member>
+        <member name="T:OEC.Data.Cache">
+            <summary>
+            </summary>
+            <exclude/>
+        </member>
+        <member name="T:OEC.Data.Cache`2">
+            <summary>
+            </summary>
+            <exclude/>
+        </member>
+        <member name="T:OEC.Data.ChildCache`2">
+            <summary>
+            </summary>
+            <exclude/>
+        </member>
+        <member name="T:OEC.Data.ChildCacheEx`2">
+            <summary>
+            </summary>
+            <exclude/>
+        </member>
+        <member name="T:OEC.Data.CacheException">
+            <summary>
+            </summary>
+            <exclude/>
+        </member>
+        <member name="T:OEC.Data.IDEntityEx">
+            <summary>
+            </summary>
+            <exclude/>
+        </member>
+        <member name="T:OEC.Data.INameKey">
+            <summary>
+            </summary>
+            <exclude/>
+        </member>
+        <member name="T:OEC.Data.NamedEntity">
+            <summary>
+            </summary>
+            <exclude/>
+        </member>
+        <member name="T:OEC.Data.NamedEntityEx">
+            <summary>
+            </summary>
+            <exclude/>
+        </member>
+        <member name="T:OEC.Data.IParentKey`1">
+            <summary>
+            </summary>
+            <exclude/>
+        </member>
+        <member name="T:OEC.Data.ChildEntity`1">
+            <summary>
+            </summary>
+            <exclude/>
+        </member>
+        <member name="T:OEC.Data.ChildEntityEx`1">
+            <summary>
+            </summary>
+            <exclude/>
+        </member>
+        <member name="T:OEC.Data.IDChildEntity">
+            <summary>
+            </summary>
+            <exclude/>
+        </member>
+        <member name="T:OEC.Data.IDChildEntityEx">
+            <summary>
+            </summary>
+            <exclude/>
+        </member>
+        <member name="T:OEC.Data.NameChildEntity">
+            <summary>
+            </summary>
+            <exclude/>
+        </member>
+        <member name="T:OEC.HashTools.Certificate">
+            <summary>
+            </summary>
+            <exclude/>
+        </member>
+        <member name="T:OEC.Data.AccountClearer">
+            <summary>
+            </summary>
+            <exclude/>
+        </member>
+        <member name="T:OEC.Data.Account">
+            <summary>
+            </summary>
+            <exclude/>
+        </member>
+        <member name="T:OEC.Data.AccountType">
+            <summary>
+            Account type
+            </summary>
+        </member>
+        <member name="F:OEC.Data.AccountType.Customer">
+            <summary>
+            Customer account
+            </summary>
+        </member>
+        <member name="F:OEC.Data.AccountType.House">
+            <summary>
+            House account
+            </summary>
+        </member>
+        <member name="F:OEC.Data.AccountType.CME106R">
+            <summary>
+            CME106R account
+            </summary>
+        </member>
+        <member name="F:OEC.Data.AccountType.Wash">
+            <summary>
+            Wash account
+            </summary>
+        </member>
+        <member name="F:OEC.Data.AccountType.Giveup">
+            <summary>
+            Give-up account
+            </summary>
+        </member>
+        <member name="F:OEC.Data.AccountType.StandardFX">
+            <summary>
+            Standard FX account
+            </summary>
+        </member>
+        <member name="F:OEC.Data.AccountType.MiniFX">
+            <summary>
+            Mini FX account
+            </summary>
+        </member>
+        <member name="F:OEC.Data.AccountType.Equity">
+            <summary>
+            Equity account
+            </summary>
+            <exclude />
+        </member>
+        <member name="F:OEC.Data.AccountType.Universal">
+            <summary>
+            Universal account
+            </summary>
+            <exclude/>
+        </member>
+        <member name="T:OEC.Data.PostAllocationPermission">
+            <exclude/>
+        </member>
+        <member name="T:OEC.Data.Position">
+            <exclude/>
+            <summary>
+            Open position
+            </summary>
+        </member>
+        <member name="T:OEC.Data.CashChangeReason">
+            <summary>
+            </summary>
+            <exclude />
+        </member>
+        <member name="T:OEC.Data.Balance">
+            <exclude/>
+            <summary>
+            Cash balance
+            </summary>
+        </member>
+        <member name="T:OEC.Data.EquityBalance">
+            <exclude/>
+            <summary>
+            Equity-related balance
+            </summary>
+        </member>
+        <member name="T:OEC.Data.Trader">
+            <exclude/>
+            <summary>
+            </summary>
+        </member>
+        <member name="T:OEC.Data.ExternalAccountCredentials">
+            <exclude/>
+            <summary>
+            </summary>
+        </member>
+        <member name="F:OEC.Data.AllocationRule.LowestLowest">
+            <summary>
+            lowest price- lowest acc (for backward compatibility)
+            </summary>
+        </member>
+        <member name="F:OEC.Data.AllocationRule.LowestHighest">
+            <summary>
+            lowest price-highest acc (for backward compatibility)
+            </summary>
+        </member>
+        <member name="F:OEC.Data.AllocationRule.LowAcctLowPrice">
+            <summary>
+            lowest price- lowest acc
+            </summary>
+        </member>
+        <member name="F:OEC.Data.AllocationRule.LowAcctHighPrice">
+            <summary>
+            lowest price-highest acc
+            </summary>
+        </member>
+        <member name="F:OEC.Data.AllocationRule.HighAcctLowPrice">
+            <summary>
+            highest price- lowest acc
+            </summary>
+        </member>
+        <member name="F:OEC.Data.AllocationRule.HighAcctHighPrice">
+            <summary>
+            highest price-highest acc
+            </summary>
+        </member>
+        <member name="F:OEC.Data.AllocationRule.APS">
+            <summary>
+            Average price system
+            </summary>
+        </member>
+        <member name="F:OEC.Data.AllocationRule.PostAllocation">
+            <exclude />
+        </member>
+        <member name="F:OEC.Data.AllocationRule.PostAllocationAPS">
+            <exclude />
+        </member>
+        <member name="T:OEC.Data.AllocationPair">
+            <exclude/>
+            <summary>
+            </summary>
+        </member>
+        <member name="T:OEC.Data.AllocationBlock">
+            <exclude/>
+            <summary>
+            </summary>
+        </member>
+        <member name="T:OEC.Data.RootABOrder">
+            <exclude/>
+            <summary>
+            </summary>
+        </member>
+        <member name="T:OEC.Data.ChildABOrder">
+            <exclude/>
+            <summary>
+            </summary>
+        </member>
+        <member name="T:OEC.Data.AllocationBlockItemDesc">
+            <exclude/>
+            <summary>
+            </summary>
+        </member>
+        <member name="T:OEC.Data.AllocationBlockDesc">
+            <exclude/>
+            <summary>
+            </summary>
+        </member>
+        <member name="T:OEC.Data.UserAllocationBlockList">
+            <exclude />
+            <summary>
+            </summary>
+        </member>
+        <member name="T:OEC.Data.CommissionType">
+            <summary>
+            Contract type for given commission
+            </summary>
+        </member>
+        <member name="F:OEC.Data.CommissionType.Electronic">
+            <summary>
+            Commission for electronically executed order
+            </summary>
+        </member>
+        <member name="F:OEC.Data.CommissionType.Pit">
+            <summary>
+            Commission for order in the pit
+            </summary>
+        </member>
+        <member name="T:OEC.Data.CommissionRecord">
+            <exclude/>
+            <summary>
+            </summary>
+        </member>
+        <member name="T:OEC.Data.UserFeeRecord">
+            <exclude/>
+            <summary>
+            </summary>
+        </member>
+        <member name="T:OEC.Data.SoftwareFeeRecord">
+            <exclude/>
+            <summary>
+            </summary>
+        </member>
+        <member name="T:OEC.Data.CompoundPositionGroup">
+            <exclude/>
+            <summary>
+            </summary>
+        </member>
+        <member name="T:OEC.Data.CompoundLegPosition">
+            <exclude/>
+            <summary>
+            </summary>
+        </member>
+        <member name="T:OEC.Data.ContractFee">
+            <summary>
+            </summary>
+            <exclude/>
+        </member>
+        <member name="T:OEC.Data.FeeType">
+            <summary>
+            </summary>
+            <exclude/>
+        </member>
+        <member name="T:OEC.Data.ExchangeInterfaceType">
+            <summary>
+            </summary>
+            <exclude/>
+        </member>
+        <member name="T:OEC.Data.ExchangeInterfaceState">
+            <summary>
+            </summary>
+            <exclude/>
+        </member>
+        <member name="T:OEC.Data.ExchangeInterface">
+            <summary>
+            </summary>
+            <exclude/>
+        </member>
+        <member name="T:OEC.Data.ExchangeInterface.Key">
+            <summary>
+            </summary>
+            <exclude/>
+        </member>
+        <member name="T:OEC.Data.ExchangeNotificationState">
+            <summary>
+            </summary>
+            <exclude/>
+        </member>
+        <member name="T:OEC.Data.ExchangeNotification">
+            <summary>
+            </summary>
+            <exclude/>
+        </member>
+        <member name="T:OEC.Data.Order">
+            <summary>
+            </summary>
+            <exclude/>
+        </member>
+        <member name="T:OEC.Data.OrderChild">
+            <summary>
+            base class for order items, such as state, command, version and fill
+            </summary>
+            <exclude/>
+        </member>
+        <member name="T:OEC.Data.Fill">
+            <summary>
+            </summary>
+            <exclude/>
+        </member>
+        <member name="T:OEC.Data.FillType">
+            <summary>
+            Fill type
+            </summary>
+            <remarks>
+            Describes how to use fill in calculations
+            </remarks>
+        </member>
+        <member name="F:OEC.Data.FillType.General">
+            <summary>
+            Fill of ordinary order
+            </summary>
+        </member>
+        <member name="F:OEC.Data.FillType.SameSide">
+            <summary>
+            Fill of positive leg of compound order
+            </summary>
+        </member>
+        <member name="F:OEC.Data.FillType.Opposite">
+            <summary>
+            Fill of negative leg of compound order
+            </summary>
+        </member>
+        <member name="F:OEC.Data.FillType.SpreadMain">
+            <summary>
+            Fill of positive leg of spread
+            </summary>
+        </member>
+        <member name="F:OEC.Data.FillType.SpreadPair">
+            <summary>
+            Fill of negative leg of spread
+            </summary>
+        </member>
+        <member name="T:OEC.Data.State">
+            <summary>
+            </summary>
+            <exclude/>
+        </member>
+        <member name="T:OEC.Data.ExtOrderState">
+            <summary>
+            </summary>
+            <exclude/>
+        </member>
+        <member name="T:OEC.Data.OrderVersion">
+            <summary>
+            </summary>
+            <exclude/>
+        </member>
+        <member name="T:OEC.Data.PegPriceType">
+            <summary>
+            </summary>
+            <exclude />
+        </member>
+        <member name="T:OEC.Data.PegOffsetType">
+            <summary>
+            </summary>
+            <exclude />
+        </member>
+        <member name="T:OEC.Data.PegRoundDirection">
+            <summary>
+            </summary>
+            <exclude />
+        </member>
+        <member name="T:OEC.Data.OrderCommand">
+            <summary>
+            </summary>
+            <exclude/>
+        </member>
+        <member name="T:OEC.Data.OrderSide">
+            <summary>
+            Side of an order
+            </summary>
+        </member>
+        <member name="F:OEC.Data.OrderSide.None">
+            <summary>
+            No side
+            </summary>
+        </member>
+        <member name="F:OEC.Data.OrderSide.Buy">
+            <summary>
+            order to buy 
+            </summary>
+        </member>
+        <member name="F:OEC.Data.OrderSide.Sell">
+            <summary>
+            order to sell 
+            </summary>
+        </member>
+        <member name="F:OEC.Data.OrderSide.BuyToCover">
+            <summary>
+            buy to cover
+            </summary>
+            <exclude />
+        </member>
+        <member name="F:OEC.Data.OrderSide.SellShort">
+            <summary>
+            short sell
+            </summary>
+            <exclude />
+        </member>
+        <member name="T:OEC.Data.OrderType">
+            <summary>
+            Type of order
+            </summary>
+            <remarks>
+            MarketOnPitOpen = MarketOnOpen, but uses pit session opening time<br/>
+            StopLimit order requires two prices.<br/>
+            Some contracts/exchanges do not support some of order types.
+            </remarks>
+        </member>
+        <member name="F:OEC.Data.OrderType.Market">
+            <summary>
+            Market order - filled by current bid/offer
+            </summary>
+        </member>
+        <member name="F:OEC.Data.OrderType.Limit">
+            <summary>
+            Limit order - filled by limit price or better
+            </summary>
+        </member>
+        <member name="F:OEC.Data.OrderType.Stop">
+            <summary>
+            Stop order (Stop loss order) - when trade price reaches the stop price, filled as market order
+            </summary>
+        </member>
+        <member name="F:OEC.Data.OrderType.StopLimit">
+            <summary>
+            Stop limit order - when trade price reaches the stop price, filled as limit order
+            </summary>
+        </member>
+        <member name="F:OEC.Data.OrderType.MarketIfTouched">
+            <summary>
+            Market if touched when trade price crosses order price, filled as market order
+            </summary>
+        </member>
+        <member name="F:OEC.Data.OrderType.MarketToLimit">
+            <summary>
+            When partially filled, remaining part filled as limit order by partial fill price
+            </summary>
+        </member>
+        <member name="F:OEC.Data.OrderType.MarketOnOpen">
+            <summary>
+            Market order, released on session open
+            </summary>
+        </member>
+        <member name="F:OEC.Data.OrderType.MarketOnClose">
+            <summary>
+            Market open, released before session closes
+            </summary>
+        </member>
+        <member name="F:OEC.Data.OrderType.MarketOnPitOpen">
+            <summary>
+            Market order, released on pit session open (when applicable)
+            </summary>
+        </member>
+        <member name="F:OEC.Data.OrderType.MarketOnPitClose">
+            <summary>
+            Market order, released before pit session closes (when applicable)
+            </summary>
+        </member>
+        <member name="F:OEC.Data.OrderType.TrailingStopLoss">
+            <summary>
+            Stop order, adjusted to market price.
+            </summary>
+        </member>
+        <member name="F:OEC.Data.OrderType.TrailingStopLimit">
+            <summary>
+            Stop/Limit order, adjusted to market price.
+            </summary>
+        </member>
+        <member name="F:OEC.Data.OrderType.Iceberg">
+            <summary>
+            Iceberg - Limit order showing less qty.
+            </summary>
+        </member>
+        <member name="T:OEC.Data.OrderState">
+            <summary>
+            State of order. 
+            </summary>
+            <remarks>
+            Basic state diagram for order lifetime.
+            <pre>
+            Sent -> [Held] -> [Accepted] -> Working -> Completed.<br/>
+                \-> Rejected &lt;-/      \-> Cancelled.
+            </pre>
+            </remarks>
+        </member>
+        <member name="F:OEC.Data.OrderState.None">
+            <summary>
+            Order was not sent
+            </summary>
+        </member>
+        <member name="F:OEC.Data.OrderState.Sent">
+            <summary>
+            Order sent to server, awaiting confirmation
+            </summary>
+        </member>
+        <member name="F:OEC.Data.OrderState.Accepted">
+            <summary>
+            Order accepted by risk system. Optional.
+            </summary>
+        </member>
+        <member name="F:OEC.Data.OrderState.Held">
+            <summary>
+            Order is waiting to be accepted or released
+            </summary>
+        </member>
+        <member name="F:OEC.Data.OrderState.Working">
+            <summary>
+            Order is active
+            </summary>
+        </member>
+        <member name="F:OEC.Data.OrderState.Completed">
+            <summary>
+            Order is (partially) filled and completed 
+            </summary>
+        </member>
+        <member name="F:OEC.Data.OrderState.Cancelled">
+            <summary>
+            Order was canceled
+            </summary>
+        </member>
+        <member name="F:OEC.Data.OrderState.Rejected">
+            <summary>
+            Order was rejected
+            </summary>
+        </member>
+        <member name="F:OEC.Data.OrderState.Unknown">
+            <summary>
+            Order state unknown - error occurred
+            </summary>
+        </member>
+        <member name="F:OEC.Data.OrderState.Suspended">
+            <exclude />
+        </member>
+        <member name="T:OEC.Data.CommandType">
+            <summary>
+            Type of order command
+            </summary>
+        </member>
+        <member name="F:OEC.Data.CommandType.Create">
+            <summary>
+            Create command - first command of order
+            </summary>
+        </member>
+        <member name="F:OEC.Data.CommandType.Modify">
+            <summary>
+            Modification request
+            </summary>
+        </member>
+        <member name="F:OEC.Data.CommandType.Cancel">
+            <summary>
+            Cancellation request
+            </summary>
+        </member>
+        <member name="T:OEC.Data.CommandState">
+            <summary>
+            Order command state
+            </summary>
+            <remarks>
+            New commands have 'Sent' state, then it is changed to Executed and Failed state.
+            </remarks>
+        </member>
+        <member name="F:OEC.Data.CommandState.Sent">
+            <summary>
+            Awaiting completion
+            </summary>
+        </member>
+        <member name="F:OEC.Data.CommandState.Executed">
+            <summary>
+            Command executed successfully
+            </summary>
+        </member>
+        <member name="F:OEC.Data.CommandState.Failed">
+            <summary>
+            Command failed
+            </summary>
+        </member>
+        <member name="T:OEC.Data.OrderFlags">
+            <summary>
+            Order execution flags
+            </summary>
+        </member>
+        <member name="F:OEC.Data.OrderFlags.None">
+            <summary>
+            Normal order
+            </summary>
+        </member>
+        <member name="F:OEC.Data.OrderFlags.GTC">
+            <summary>
+            Good till cancelled
+            </summary>
+        </member>
+        <member name="F:OEC.Data.OrderFlags.FOK">
+            <summary>
+            Fill or Kill
+            </summary>
+        </member>
+        <member name="F:OEC.Data.OrderFlags.IOC">
+            <summary>
+            Immediate or cancel
+            </summary>
+        </member>
+        <member name="F:OEC.Data.OrderFlags.AON">
+            <summary>
+            All or nothing
+            See <see>OEC.Data.ExecInst.AON</see>
+            </summary>
+        </member>
+        <member name="F:OEC.Data.ExecInst.None">
+            <summary>
+            Normal order
+            </summary>
+        </member>
+        <member name="F:OEC.Data.ExecInst.AON">
+            <summary>
+            All or nothing
+            </summary>
+        </member>
+        <member name="T:OEC.Data.TradingSession">
+            <exclude />
+        </member>
+        <member name="T:OEC.Data.NamespaceDoc">
+            <summary>
+            This namespace contains some enumerations and constants for OEC API.<br/>
+            See OEC.API.OECClient class for API overview 
+            </summary>
+        </member>
+        <member name="T:OEC.Data.TrailingStopData">
+            <summary>
+            </summary>
+            <exclude/>
+        </member>
+        <member name="T:OEC.Data.TriggerType">
+            <summary>
+            </summary>
+            <exclude/>
+        </member>
+        <member name="T:OEC.Data.VolumeBasedStopData">
+            <summary>
+            </summary>
+            <exclude/>
+        </member>
+        <member name="T:OEC.Data.IcebergData">
+            <summary>
+            </summary>
+            <exclude/>
+        </member>
+        <member name="T:OEC.Data.DummyExtendedData">
+            <summary>
+            </summary>
+            <exclude/>
+        </member>
+        <member name="T:OEC.Data.FillExtendedData">
+            <summary>
+            </summary>
+            <exclude/>
+        </member>
+        <member name="P:OEC.Data.FillExtendedData.ParentKey">
+            <summary>
+            </summary>
+        </member>
+        <member name="T:OEC.Data.OrderExtendedData">
+            <summary>
+            </summary>
+            <exclude/>
+        </member>
+        <member name="M:OEC.Data.OrderExtendedData.Clone">
+            <summary>
+            </summary>
+        </member>
+        <member name="P:OEC.Data.OrderExtendedData.ParentKey">
+            <summary>
+            </summary>
+        </member>
+        <member name="T:OEC.Data.OrderLink">
+            <summary>
+            </summary>
+            <exclude/>
+        </member>
+        <member name="T:OEC.Data.OCOOrderLink">
+            <summary>
+            </summary>
+            <exclude/>
+        </member>
+        <member name="T:OEC.Data.OsmOrderLink">
+            <summary>
+            </summary>
+            <exclude/>
+        </member>
+        <member name="T:OEC.Data.RoutedChildOrderLink">
+            <summary>
+            </summary>
+            <exclude/>
+        </member>
+        <member name="T:OEC.Data.OsmRootOrder">
+            <summary>
+            </summary>
+            <exclude/>
+        </member>
+        <member name="F:OEC.Data.OsmRootOrder.AlgoParams">
+            <summary>
+            </summary>
+        </member>
+        <member name="M:OEC.Data.OsmRootOrder.AddParam(System.String,System.String)">
+            <summary>
+            </summary>
+        </member>
+        <member name="M:OEC.Data.OsmRootOrder.Clone">
+            <summary>
+            </summary>
+        </member>
+        <member name="T:OEC.Data.OsmRootOrder.AlgoParam">
+            <summary>
+            </summary>
+            <exclude/>
+        </member>
+        <member name="F:OEC.Data.OsmRootOrder.AlgoParam.Name">
+            <summary>
+            </summary>
+        </member>
+        <member name="F:OEC.Data.OsmRootOrder.AlgoParam.Value">
+            <summary>
+            </summary>
+        </member>
+        <member name="M:OEC.Data.OsmRootOrder.AlgoParam.#ctor(System.String,System.String)">
+            <summary>
+            </summary>
+        </member>
+        <member name="M:OEC.Data.OsmRootOrder.AlgoParam.#ctor">
+            <summary>
+            </summary>
+        </member>
+        <member name="T:OEC.Data.OsmChildOrder">
+            <summary>
+            </summary>
+            <exclude/>
+        </member>
+        <member name="T:OEC.Data.OsmParamDataType">
+            <summary>
+            Data type for data domain of OSM algo parameter. 
+            </summary>
+            <exclude/>
+        </member>
+        <member name="F:OEC.Data.OsmParamDataType.Integer">
+            <summary>
+            Signed 32-bit integer value
+            </summary>
+        </member>
+        <member name="F:OEC.Data.OsmParamDataType.Long">
+            <summary>
+            Signed 64-bit integer value
+            </summary>
+        </member>
+        <member name="F:OEC.Data.OsmParamDataType.Double">
+            <summary>
+            64-bit floating-point value
+            </summary>
+        </member>
+        <member name="F:OEC.Data.OsmParamDataType.Bool">
+            <summary>
+            Boolean value
+            </summary>
+        </member>
+        <member name="F:OEC.Data.OsmParamDataType.String">
+            <summary>
+            String value
+            </summary>
+        </member>
+        <member name="F:OEC.Data.OsmParamDataType.DateTime">
+            <summary>
+            Date/time value
+            </summary>
+        </member>
+        <member name="F:OEC.Data.OsmParamDataType.Enum">
+            <summary>
+            Enumeration of fixed string values
+            </summary>
+        </member>
+        <member name="T:OEC.Data.OsmAlgoInfo">
+            <summary>
+            </summary>
+            <exclude/>
+        </member>
+        <member name="F:OEC.Data.OsmAlgoInfo.Name">
+            <summary>
+            </summary>
+        </member>
+        <member name="F:OEC.Data.OsmAlgoInfo.Params">
+            <summary>
+            </summary>
+        </member>
+        <member name="F:OEC.Data.OsmAlgoInfo.OrderTypes">
+            <summary>
+            </summary>
+        </member>
+        <member name="F:OEC.Data.OsmAlgoInfo.OrderFlags">
+            <summary>
+            </summary>
+        </member>
+        <member name="F:OEC.Data.OsmAlgoInfo.OtherDetails">
+            <summary>
+            </summary>
+            <exclude></exclude>
+        </member>
+        <member name="M:OEC.Data.OsmAlgoInfo.#ctor">
+            <summary>
+            </summary>
+        </member>
+        <member name="M:OEC.Data.OsmAlgoInfo.#ctor(System.String)">
+            <summary>
+            </summary>
+        </member>
+        <member name="M:OEC.Data.OsmAlgoInfo.AddParam(OEC.Data.OsmAlgoInfo.Param)">
+            <summary>
+            </summary>
+        </member>
+        <member name="M:OEC.Data.OsmAlgoInfo.Clone">
+            <summary>
+            </summary>
+        </member>
+        <member name="T:OEC.Data.OsmAlgoInfo.Param">
+            <summary>
+            </summary>
+            <exclude/>
+        </member>
+        <member name="F:OEC.Data.OsmAlgoInfo.Param.Name">
+            <summary>
+            </summary>
+        </member>
+        <member name="F:OEC.Data.OsmAlgoInfo.Param.Modifiable">
+            <summary>
+            </summary>
+        </member>
+        <member name="F:OEC.Data.OsmAlgoInfo.Param.Enabled">
+            <summary>
+            </summary>
+        </member>
+        <member name="F:OEC.Data.OsmAlgoInfo.Param.Description">
+            <summary>
+            </summary>
+        </member>
+        <member name="F:OEC.Data.OsmAlgoInfo.Param.DataType">
+            <summary>
+            </summary>
+        </member>
+        <member name="F:OEC.Data.OsmAlgoInfo.Param.Units">
+            <summary>
+            </summary>
+        </member>
+        <member name="F:OEC.Data.OsmAlgoInfo.Param.DefaultValue">
+            <summary>
+            </summary>
+        </member>
+        <member name="F:OEC.Data.OsmAlgoInfo.Param.Others">
+            <summary>
+            </summary>
+        </member>
+        <member name="F:OEC.Data.OsmAlgoInfo.Param.DomainValues">
+            <summary>
+            </summary>
+        </member>
+        <member name="M:OEC.Data.OsmAlgoInfo.Param.#ctor">
+            <summary>
+            </summary>
+        </member>
+        <member name="M:OEC.Data.OsmAlgoInfo.Param.#ctor(System.String,System.Boolean,System.String,OEC.Data.OsmParamDataType,System.String,System.Object[],System.Boolean,System.String,System.Xml.XmlElement[])">
+            <summary>
+            </summary>
+        </member>
+        <member name="M:OEC.Data.OsmAlgoInfo.Param.Clone">
+            <summary>
+            </summary>
+        </member>
+        <member name="T:OEC.Data.OsmAlgoInfoList">
+            <summary>
+            </summary>
+            <exclude/>
+        </member>
+        <member name="F:OEC.Data.OsmAlgoInfoList.List">
+            <summary>
+            </summary>
+        </member>
+        <member name="M:OEC.Data.OsmAlgoInfoList.AddAlgo(OEC.Data.OsmAlgoInfo)">
+            <summary>
+            </summary>
+        </member>
+        <member name="M:OEC.Data.OsmAlgoInfoList.#ctor">
+            <summary>
+            </summary>
+        </member>
+        <member name="M:OEC.Data.OsmAlgoInfoList.SerializeToXml">
+            <summary>
+            </summary>
+        </member>
+        <member name="M:OEC.Data.OsmAlgoInfoList.DeserializeFromXml(System.String)">
+            <summary>
+            </summary>
+        </member>
+        <member name="M:OEC.Data.OsmAlgoInfoList.Clone">
+            <summary>
+            </summary>
+        </member>
+        <member name="T:OEC.Data.OsmAlgoList">
+            <summary>
+            </summary>
+            <exclude/>
+        </member>
+        <member name="T:OEC.Data.PitRoute">
+            <summary>
+            </summary>
+            <exclude/>
+        </member>
+        <member name="T:OEC.Data.PitRoute.Key">
+            <summary>
+            </summary>
+            <exclude/>
+        </member>
+        <member name="T:OEC.Data.Tick">
+            <summary>
+            </summary>
+            <exclude/>
+        </member>
+        <member name="F:OEC.Data.Tick.Timestamp">
+            <summary>
+            UTC timestamp
+            </summary>
+        </member>
+        <member name="F:OEC.Data.Tick.Price">
+            <summary>
+            Trade price
+            </summary>
+        </member>
+        <member name="F:OEC.Data.Tick.Volume">
+            <summary>
+            Trade volume
+            </summary>
+        </member>
+        <member name="F:OEC.Data.Tick.Type">
+            <summary>
+            Reserved
+            </summary>
+        </member>
+        <member name="F:OEC.Data.Tick.Deleted">
+            <summary>
+            Deleted by badtick filter
+            </summary>
+        </member>
+        <member name="F:OEC.Data.Tick.Volume32">
+            <summary>
+            32-bit value for volume
+            </summary>
+        </member>
+        <member name="T:OEC.Data.Ticks">
+            <summary>
+            </summary>
+            <exclude/>
+        </member>
+        <member name="T:OEC.Data.Bar">
+            <summary>
+            </summary>
+            <exclude/>
+        </member>
+        <member name="F:OEC.Data.Bar.Markdown">
+            <summary>
+            True means that price is descending, false - price is growing.
+            This field used by PriceServer to calc UpTicks/DownTicks properly
+            </summary>
+        </member>
+        <member name="T:OEC.Data.Bars">
+            <summary>
+            </summary>
+            <exclude/>
+        </member>
+        <member name="T:OEC.Data.Histogram">
+            <summary>
+            </summary>
+            <exclude/>
+        </member>
+        <member name="T:OEC.Data.DOM">
+            <summary>
+            </summary>
+            <exclude/>
+        </member>
+        <member name="T:OEC.Data.DOM.PriceLevelComparer">
+            <summary>
+            </summary>
+            <exclude/>
+        </member>
+        <member name="T:OEC.Data.PriceLevel">
+            <summary>
+            </summary>
+            <exclude/>
+        </member>
+        <member name="T:OEC.Data.Quote">
+            <summary>
+            Current price values
+            </summary>
+            <exclude/> 
+        </member>
+        <member name="T:OEC.Data.CurrencyRate">
+            <summary>
+            </summary>
+            <exclude/>
+        </member>
+        <member name="T:OEC.Data.PriceFields">
+            <summary>
+            Obsolete.
+            Enumerating fields in price record
+            </summary>
+        </member>
+        <member name="F:OEC.Data.PriceFields.LastPrice">
+            <summary></summary>
+        </member>
+        <member name="F:OEC.Data.PriceFields.LastVol">
+            <summary></summary>
+        </member>
+        <member name="F:OEC.Data.PriceFields.LastDateTime">
+            <summary></summary>
+        </member>
+        <member name="F:OEC.Data.PriceFields.TotalVol">
+            <summary></summary>
+        </member>
+        <member name="F:OEC.Data.PriceFields.AskPrice">
+            <summary></summary>
+        </member>
+        <member name="F:OEC.Data.PriceFields.AskVol">
+            <summary></summary>
+        </member>
+        <member name="F:OEC.Data.PriceFields.BidPrice">
+            <summary></summary>
+        </member>
+        <member name="F:OEC.Data.PriceFields.BidVol">
+            <summary></summary>
+        </member>
+        <member name="F:OEC.Data.PriceFields.OpenPrice">
+            <summary></summary>
+        </member>
+        <member name="F:OEC.Data.PriceFields.HighPrice">
+            <summary></summary>
+        </member>
+        <member name="F:OEC.Data.PriceFields.LowPrice">
+            <summary></summary>
+        </member>
+        <member name="F:OEC.Data.PriceFields.OldPrice">
+            <summary></summary>
+        </member>
+        <member name="F:OEC.Data.PriceFields.Change">
+            <summary></summary>
+        </member>
+        <member name="F:OEC.Data.PriceFields.ChangePercent">
+            <summary></summary>
+        </member>
+        <member name="F:OEC.Data.PriceFields.Settlement">
+            <summary></summary>
+        </member>
+        <member name="F:OEC.Data.PriceFields.OpenInterest">
+            <summary></summary>
+        </member>
+        <member name="F:OEC.Data.PriceFields.Vega">
+            <summary></summary>
+            <exclude />
+        </member>
+        <member name="F:OEC.Data.PriceFields.Theta">
+            <summary></summary>
+            <exclude />
+        </member>
+        <member name="F:OEC.Data.PriceFields.Gamma">
+            <summary></summary>
+            <exclude />
+        </member>
+        <member name="F:OEC.Data.PriceFields.Delta">
+            <summary></summary>
+            <exclude />
+        </member>
+        <member name="F:OEC.Data.PriceFields.ImpliedVolatility">
+            <summary></summary>
+            <exclude />
+        </member>
+        <member name="F:OEC.Data.PriceFields.CumLastVol">
+            <summary></summary>
+        </member>
+        <member name="F:OEC.Data.PriceFields.All">
+            <summary></summary>
+        </member>
+        <member name="T:OEC.Data.SubscriptionType">
+            <summary>
+            Subscription type
+            </summary>
+        </member>
+        <member name="F:OEC.Data.SubscriptionType.Price">
+            <summary>
+            Last price and stats
+            </summary>
+        </member>
+        <member name="F:OEC.Data.SubscriptionType.DOM">
+            <summary>
+            Depth of market
+            </summary>
+        </member>
+        <member name="F:OEC.Data.SubscriptionType.Tick">
+            <summary>
+            Ticks
+            </summary>
+        </member>
+        <member name="F:OEC.Data.SubscriptionType.Bar">
+            <summary>
+            Intraday bar, of time interval in minutes
+            </summary>
+        </member>
+        <member name="F:OEC.Data.SubscriptionType.Histogram">
+            <summary>
+            Histogram of session
+            </summary>
+        </member>
+        <member name="F:OEC.Data.SubscriptionType.TickBar">
+            <summary>
+            Bars of N ticks
+            </summary>
+        </member>
+        <member name="F:OEC.Data.SubscriptionType.VolumeBar">
+            <summary>
+            Bars of N total volume
+            </summary>
+        </member>
+        <member name="F:OEC.Data.SubscriptionType.RangeBar">
+            <summary>
+            Bars of N tick size range
+            </summary>
+        </member>
+        <member name="F:OEC.Data.SubscriptionType.SecondBar">
+            <summary>
+            Bars of N seconds
+            </summary>
+        </member>
+        <member name="F:OEC.Data.SubscriptionType.DayBar">
+            <summary>
+            Bars of N days
+            </summary>
+        </member>
+        <member name="F:OEC.Data.SubscriptionType.WeeklyBar">
+            <summary>
+            Bars of N weeks
+            </summary>
+        </member>
+        <member name="F:OEC.Data.SubscriptionType.MonthlyBar">
+            <summary>
+            Bars of N months
+            </summary>
+        </member>
+        <member name="F:OEC.Data.SubscriptionType.MomentumBar">
+            <summary>
+            Momentum Bars
+            </summary>
+        </member>
+        <member name="F:OEC.Data.SubscriptionType.DealQuote">
+            <summary>
+            </summary>
+            <exclude />
+        </member>
+        <member name="F:OEC.Data.SubscriptionType.NLineBreakBar">
+            <summary>Price break bars</summary>
+        </member>
+        <member name="T:OEC.Data.DealQuote">
+            <summary>
+            </summary>
+            <exclude />
+        </member>
+        <member name="T:OEC.Data.DealQuoteBody">
+            <summary>
+            </summary>
+            <exclude />
+        </member>
+        <member name="T:OEC.Data.DealQuoteState">
+            <summary>
+            </summary>
+            <exclude />
+        </member>
+        <member name="T:OEC.Data.ExchangeDailyStats">
+            <summary>
+            </summary>
+            <exclude/>
+        </member>
+        <member name="T:OEC.Data.IRestraint`1">
+            <summary>
+            </summary>
+            <exclude />
+        </member>
+        <member name="T:OEC.Data.IPriceRestraint">
+            <summary>
+            </summary>
+            <exclude />
+        </member>
+        <member name="T:OEC.Data.RestraintType">
+            <summary>
+            </summary>
+            <exclude />
+        </member>
+        <member name="T:OEC.Data.GroupType">
+            <summary>
+            </summary>
+            <exclude />
+        </member>
+        <member name="T:OEC.Data.PriceRestraintRec">
+            <summary>
+            </summary>
+            <exclude />
+        </member>
+        <member name="T:OEC.Data.PriceRestraint">
+            <summary>
+            </summary>
+            <exclude />
+        </member>
+        <member name="T:OEC.Data.TypedPriceRestraint">
+            <summary>
+            </summary>
+            <exclude />
+        </member>
+        <member name="T:OEC.Data.PriceRestraints`1">
+            <summary>
+            </summary>
+            <exclude />
+        </member>
+        <member name="T:OEC.Data.StartEndRestraint">
+            <summary>
+            </summary>
+            <exclude />
+        </member>
+        <member name="T:OEC.Data.StartInFutureRestraint">
+            <summary>
+            </summary>
+            <exclude />
+        </member>
+        <member name="T:OEC.Data.LimitType">
+            <summary>
+            </summary>
+            <exclude />
+        </member>
+        <member name="T:OEC.Data.RiskLimitsType">
+            <summary>
+            Risk limitation type
+            </summary>
+        </member>
+        <member name="F:OEC.Data.RiskLimitsType.None">
+            <summary>
+            No risk limit specified
+            </summary>
+        </member>
+        <member name="F:OEC.Data.RiskLimitsType.Locked">
+            <summary>
+            Locked type, not trades are possible
+            </summary>
+        </member>
+        <member name="F:OEC.Data.RiskLimitsType.LiqOnly">
+            <summary>
+            Liquidation only type, only decreasing of position is possible
+            </summary>
+        </member>
+        <member name="F:OEC.Data.RiskLimitsType.Special">
+            <summary>
+            Some special risk limits is specified
+            </summary>
+        </member>
+        <member name="T:OEC.Data.PortfolioMargin">
+            <summary>
+            </summary>
+            <exclude />
+        </member>
+        <member name="T:OEC.Data.MarginCalculator">
+            <summary>
+            </summary>
+            <exclude />
+        </member>
+        <member name="T:OEC.Data.HypoOrder">
+            <summary>
+            </summary>
+            <exclude />
+        </member>
+        <member name="T:OEC.Data.HypoPosition">
+            <summary>
+            </summary>
+            <exclude />
+        </member>
+        <member name="T:OEC.Data.ServerStrategyState">
+            <summary>
+            Specifies the state of ServerStrategy. 
+            </summary>
+            <exclude />
+        </member>
+        <member name="F:OEC.Data.ServerStrategyState.Initiated">
+            <summary>
+            ServerStrategy is created and sent to server, but not confirmed by the server. 
+            </summary>
+        </member>
+        <member name="F:OEC.Data.ServerStrategyState.Confirmed">
+            <summary>
+            ServerStrategy is confirmed by the server, global ID is assigned, but the strategy is not strated yet. 
+            After Confirmed state, both <seealso cref="F:OEC.Data.ServerStrategyState.Started"/> or <seealso cref="F:OEC.Data.ServerStrategyState.Stopped"/> states are possible. 
+            </summary>
+        </member>
+        <member name="F:OEC.Data.ServerStrategyState.Started">
+            <summary>
+            ServerStrategy is accepted by server and is running. 
+            </summary>
+        </member>
+        <member name="F:OEC.Data.ServerStrategyState.Stopping">
+            <summary>
+            Stopping ServerStrategy is initiated by a client and the stop request sent to server. 
+            </summary>
+        </member>
+        <member name="F:OEC.Data.ServerStrategyState.Stopped">
+            <summary>
+            ServerStrategy is stopped or not accepted by server. 
+            No further processing is performed. 
+            </summary>
+        </member>
+        <member name="F:OEC.Data.ServerStrategyState.Held">
+            <summary>
+            ServerStrategy is being held by server, i.e. it doesn't send any further orders 
+            until it started again or stopped finally
+            </summary>
+        </member>
+        <member name="T:OEC.Data.ServerStrategyStopReason">
+            <summary>
+            Specifies the reason of stopping ServerStrategy. 
+            </summary>
+            <exclude />
+        </member>
+        <member name="T:OEC.Data.ServerStrategyParamType">
+            <summary>
+            Specifies a data type of ServerStrategyParam. 
+            </summary>
+            <exclude />
+        </member>
+        <member name="F:OEC.Data.ServerStrategyParamType.Integer">
+            <summary>
+            Signed 32-bit integer value. 
+            </summary>
+        </member>
+        <member name="F:OEC.Data.ServerStrategyParamType.Long">
+            <summary>
+            Signed 64-bit integer value. 
+            </summary>
+        </member>
+        <member name="F:OEC.Data.ServerStrategyParamType.Double">
+            <summary>
+            64-bit floating-point value. 
+            </summary>
+        </member>
+        <member name="F:OEC.Data.ServerStrategyParamType.Bool">
+            <summary>
+            Boolean value. 
+            </summary>
+        </member>
+        <member name="F:OEC.Data.ServerStrategyParamType.String">
+            <summary>
+            String value. 
+            </summary>
+        </member>
+        <member name="F:OEC.Data.ServerStrategyParamType.DateTime">
+            <summary>
+            Date/Time value. 
+            </summary>
+        </member>
+        <member name="F:OEC.Data.ServerStrategyParamType.Enum">
+            <summary>
+            Enumeration of fixed string values. 
+            </summary>
+        </member>
+        <member name="F:OEC.Data.ServerStrategyParamType.Container">
+            <summary>
+            Param is a container for other params. 
+            </summary>
+        </member>
+        <member name="T:OEC.Data.ServerStrategyLink">
+            <exclude />
+        </member>
+        <member name="T:OEC.Data.ServerStrategyChild">
+            <exclude />
+        </member>
+        <member name="T:OEC.Data.ServerStrategyStateVar">
+            <exclude />
+        </member>
+        <member name="T:OEC.Data.ServerStrategy">
+            <exclude />
+        </member>
+        <member name="T:OEC.Data.ServerStrategyParam">
+            <exclude />
+        </member>
+        <member name="F:OEC.Data.ServerStrategyParam.ID">
+            <summary>
+            Used for storing to/retrieving from DB. 
+            </summary>
+        </member>
+        <member name="T:OEC.Data.ServerStrategyParams">
+            <exclude />
+        </member>
+        <member name="T:OEC.Data.ServerStrategyParamInfo">
+            <exclude />
+        </member>
+        <member name="T:OEC.Data.ServerStrategyInfo">
+            <exclude />
+        </member>
+        <member name="T:OEC.Data.Session">
+            <summary>
+            </summary>
+            <exclude/>
+        </member>
+        <member name="T:OEC.Data.SessionEnd">
+            <summary>
+            </summary>
+            <exclude/>
+        </member>
+        <member name="T:OEC.Data.RemotingSession">
+            <summary>
+            </summary>
+            <exclude />
+        </member>
+        <member name="T:OEC.Data.CommandSessionRec">
+            <summary>
+            </summary>
+            <exclude/>
+        </member>
+        <member name="T:OEC.Data.SubscriptionRec">
+            <summary>
+            </summary>
+            <exclude/>
+        </member>
+        <member name="T:OEC.Data.ChatMessage">
+            <summary>
+            </summary>
+            <exclude/>
+        </member>
+        <member name="T:OEC.Data.Dashboard">
+            <exclude/>
+        </member>
+        <member name="T:OEC.Data.DashboardMessage">
+            <exclude/>
+        </member>
+        <member name="T:OEC.Data.NewsMessage">
+            <summary>
+            </summary>
+            <exclude/>
+        </member>
+        <member name="T:OEC.Data.UserType">
+            <summary>
+            </summary>
+            <exclude/>
+        </member>
+        <member name="F:OEC.Data.UserType.Admin">
+            <summary>
+            Unlimited access
+            </summary>
+        </member>
+        <member name="F:OEC.Data.UserType.Trader">
+            <summary>
+            Common trader
+            </summary>
+        </member>
+        <member name="F:OEC.Data.UserType.Research">
+            <summary>
+            Research brokers - chat only, no orders/contracts
+            </summary>
+        </member>
+        <member name="F:OEC.Data.UserType.PitBroker">
+            <summary>
+            manual and FIX brokers - custom execution
+            </summary>
+        </member>
+        <member name="F:OEC.Data.UserType.TraderManager">
+            <summary>
+            Multiple Traders + allocation block functionality.
+            </summary>
+        </member>
+        <member name="F:OEC.Data.UserType.UserAdmin">
+            <summary>
+            TraderManager + some admin functionality
+            </summary>
+        </member>
+        <member name="T:OEC.Data.User">
+            <summary>
+            </summary>
+            <exclude/>
+        </member>
+        <member name="T:OEC.Data.ClientKey">
+            <summary>
+            </summary>
+            <exclude/>
+        </member>
+        <member name="T:OEC.Data.ClientDescription">
+            <summary>
+            </summary>
+            <exclude />
+        </member>
+        <member name="T:OEC.Data.LoggedUserSession">
+            <summary>
+            </summary>
+            <exclude />
+        </member>
+        <member name="T:OEC.Data.LoggedUserSessionCommand">
+            <summary>
+            </summary>
+            <exclude />
+        </member>
+        <member name="T:OEC.Data.ChannelAccess">
+            <summary>
+            </summary>
+            <exclude/>
+        </member>
+        <member name="T:OEC.Data.UserChannel">
+            <summary>
+            </summary>
+            <exclude/>
+        </member>
+        <member name="T:OEC.Data.UserRelation">
+            <summary>
+            </summary>
+            <exclude/>
+        </member>
+        <member name="T:OEC.Data.UserStatus">
+            <summary>
+            </summary>
+            <exclude/>
+        </member>
+        <member name="T:OEC.Data.UserProperty">
+            <summary>
+            </summary>
+            <exclude/>
+        </member>
+        <member name="T:OEC.Data.UserPitGroup">
+            <summary>
+            </summary>
+            <exclude/>
+        </member>
+        <member name="T:OEC.Data.UserContractGroup">
+            <summary>
+            </summary>
+            <exclude/>
+        </member>
+        <member name="T:OEC.Data.UserExchange">
+            <summary>
+            </summary>
+            <exclude/>
+        </member>
+        <member name="T:OEC.Data.UserSoftware">
+            <summary>
+            </summary>
+            <exclude/>
+        </member>
+        <member name="F:OEC.Data.FailReason.InvalidUserOrPassword">
+            <summary>
+            Invalid user name or password
+            </summary>
+        </member>
+        <member name="F:OEC.Data.FailReason.UserAlreadyConnected">
+            <summary>
+            User with same name already connected
+            </summary>
+        </member>
+        <member name="F:OEC.Data.FailReason.InvalidClientVersion">
+            <summary>
+            Invalid client version - upgrade required
+            </summary>
+        </member>
+        <member name="F:OEC.Data.FailReason.DataError">
+            <summary>
+            Wrong data is received
+            </summary>
+        </member>
+        <member name="F:OEC.Data.FailReason.Expired">
+            <summary>
+            User account is expired
+            </summary>
+        </member>
+        <member name="F:OEC.Data.FailReason.Disabled">
+            <summary>
+            User disabled
+            </summary>
+        </member>
+        <member name="F:OEC.Data.FailReason.Locked">
+            <summary>
+            User temporarily locked out
+            </summary>
+        </member>
+        <member name="F:OEC.Data.FailReason.SoftwareNotPermitted">
+            <summary>
+            User software is not allowed to connect
+            </summary>
+        </member>
+        <member name="F:OEC.Data.FailReason.DisconnectedByOwner">
+            <summary>
+            Session is disconnected by owner
+            </summary>
+        </member>
+        <member name="F:OEC.Data.FailReason.PasswordExpired">
+            <summary>
+            Password has been expired
+            </summary>
+        </member>
+        <member name="T:OEC.Data.UUID">
+            <summary>
+            </summary>
+            <exclude />
+        </member>
+        <member name="T:OEC.FieldCache`1">
+            <summary>
+            </summary>
+            <exclude/>
+        </member>
+        <member name="T:OEC.CreatorDelegate`1">
+            <summary>
+            </summary>
+            <exclude/>
+        </member>
+        <member name="T:OEC.SetterDelegate`1">
+            <summary>
+            </summary>
+            <exclude/>
+        </member>
+        <member name="T:OEC.GetterDelegate`1">
+            <summary>
+            </summary>
+            <exclude/>
+        </member>
+        <member name="T:OEC.FieldList`1">
+            <summary>
+            Map of field name/field information
+            </summary>
+            <exclude/>
+        </member>
+        <member name="T:OEC.Field`1">
+            <summary>
+            </summary>
+            <exclude/>
+        </member>
+        <member name="T:OEC.CommLib.InvokeControl">
+            <summary>
+            WinForms Control wrapper with windows message queue overload protection
+            </summary>
+            <exclude />
+        </member>
+        <member name="M:OEC.CommLib.InvokeControl.#ctor">
+            <summary>
+            </summary>
+            <exclude/>
+        </member>
+        <member name="M:OEC.CommLib.InvokeControl.BeginInvoke``1(``0,System.Object[])">
+            <summary>
+            WinForms control begininvoke generic wrapper with windows message queue overload protection
+            </summary>
+        </member>
+        <member name="M:OEC.CommLib.InvokeControl.Invoke``1(``0,System.Object[])">
+            <summary>
+            Generic wrapper for WinForms control invoke.
+            </summary>
+        </member>
+        <member name="P:OEC.CommLib.InvokeControl.InvokeRequired">
+            <summary>
+            Indicates if caller is different than control creator thread
+            </summary>
+        </member>
+        <member name="T:OEC.MathExt">
+            <summary>
+            </summary>
+            <exclude />
+        </member>
+        <member name="M:OEC.MathExt.GCD(System.Int32,System.Int32)">
+            <summary>
+            </summary>
+            <exclude />
+        </member>
+        <member name="M:OEC.MathExt.GCD(System.Int32[])">
+            <summary>
+            </summary>
+            <exclude />
+        </member>
+        <member name="T:OEC.CommLib.ProtoClient`2">
+            <summary>
+            </summary>
+            <exclude />
+        </member>
+        <member name="M:OEC.CommLib.ProtoClient`2.WriteSync(`1)">
+            <summary>
+                Synchronous write - blocks
+            </summary>
+            <param name="item"></param>
+        </member>
+        <member name="M:OEC.CommLib.ProtoClient`2.WriteAsync(`1)">
+            <summary>
+                Async write and forget, no notification
+            </summary>
+            <param name="item"></param>
+        </member>
+        <member name="M:OEC.CommLib.ProtoClient`2.EndWrite(System.IAsyncResult)">
+            <summary>
+                Async Write closing
+            </summary>
+            <param name="ar"></param>
+        </member>
+        <member name="M:OEC.CommLib.ProtoClient`2.WriteKeepAliveSync">
+            <summary>
+                Async write empty msg
+            </summary>
+        </member>
+        <member name="M:OEC.CommLib.ProtoClient`2.WriteKeepAlive">
+            <summary>
+                Async write empty msg
+            </summary>
+        </member>
+        <member name="M:OEC.CommLib.ProtoClient`2.Trace(System.Int32,System.String,System.Object[])">
+            <summary>
+                Traces network activity
+            </summary>
+            <param name="level"> 1 write, 2 read, 4 pair(begin/end), 8 keepalive, 16 misc</param>
+            <param name="format"></param>
+            <param name="args"></param>
+        </member>
+        <member name="T:OEC.CommLib.ProtoClient`2.NetFilter">
+            <summary>
+            </summary>
+            <exclude />
+        </member>
+        <member name="T:OEC.SafeQue`1">
+            <summary>
+            Thread-safe queue
+            </summary>
+            <typeparam name="T"></typeparam>
+            <exclude/>
+        </member>
+        <member name="T:OEC.SafeList`1">
+            <summary>
+            Thread-safe list
+            </summary>
+            <typeparam name="T"></typeparam>
+            <exclude/>
+        </member>
+        <member name="M:OEC.SafeList`1.Clear">
+            <summary>
+            Clears the list.
+            </summary>
+            <returns>Old contents of list</returns>
+        </member>
+        <member name="T:OEC.IBaseDictionary`2">
+            <summary>
+            Simple base interface for dictionaries which doesn't include ICollection and IEnumerable interfaces
+            </summary>
+            <typeparam name="TKey"></typeparam>
+            <typeparam name="TValue"></typeparam>
+            <exclude/>
+        </member>
+        <member name="T:OEC.BaseDictionary`2">
+            <summary>
+            Simple dictionary with basic methods
+            </summary>
+            <typeparam name="TKey"></typeparam>
+            <typeparam name="TValue"></typeparam>
+            <exclude/>
+        </member>
+        <member name="T:OEC.SafeBaseDictionary`2">
+            <summary>
+            Thread-safe version of simple dictionary
+            </summary>
+            <typeparam name="TKey"></typeparam>
+            <typeparam name="TValue"></typeparam>
+            <exclude/>
+        </member>
+        <member name="T:OEC.SafeDictionary`3">
+            <summary>
+            Thread-safe wrapper for any dictionary with rwl locks.
+            </summary>
+            <typeparam name="TKey">Key type</typeparam>
+            <typeparam name="TValue">Value type</typeparam>
+            <typeparam name="Container">Containter type : IDictionary</typeparam>
+            <exclude/>
+        </member>
+        <member name="M:OEC.SafeDictionary`3.Extract(`0,`1)">
+            <summary>
+            Extracts a value from list, or returns a provided value if key does not present
+            </summary>
+            <param name="key">Key</param>
+            <param name="notfound">Default value</param>
+            <returns>Value</returns>
+        </member>
+        <member name="M:OEC.SafeDictionary`3.ReplaceIf(`0,System.Predicate{`1},`1,System.Boolean)">
+            <summary>
+            Compare and Replace
+            </summary>
+            <param name="key">Key</param>
+            <param name="pred">Predicate</param>
+            <param name="newvalue">New value</param>
+            <param name="notfound">Add value if key is not found</param>
+            <returns></returns>
+        </member>
+        <member name="M:OEC.SafeDictionary`3.ClearValues">
+            <summary>
+            Thread-safe - returns a copy of list and clears list
+            </summary>
+        </member>
+        <member name="M:OEC.SafeDictionary`3.ClearDictionary">
+            <summary>
+            Thread-safe - returns a copy of list and clears list
+            </summary>
+        </member>
+        <member name="M:OEC.SafeDictionary`3.CopyDictionary">
+            <summary>
+            Thread-safe - returns a copy of list
+            </summary>
+        </member>
+        <member name="P:OEC.SafeDictionary`3.List">
+            <summary>
+            must use ReaderLock
+            </summary>
+        </member>
+        <member name="P:OEC.SafeDictionary`3.CopyValues">
+            <summary>
+            Thread-safe - returns a copy of list
+            </summary>
+        </member>
+        <member name="P:OEC.SafeDictionary`3.Keys">
+            <summary>
+            Thread-safe - returns a copy of list
+            </summary>
+        </member>
+        <member name="T:OEC.SafeDictionary`2">
+            <summary>
+            Thread-Safe Dictionary
+            </summary>
+            <typeparam name="TKey"></typeparam>
+            <typeparam name="TValue"></typeparam>
+            <exclude/>
+        </member>
+        <member name="T:OEC.SafeSortedList`2">
+            <summary>
+            Thread-safe sorted list
+            </summary>
+            <typeparam name="TKey">Key type</typeparam>
+            <typeparam name="TValue">Value type</typeparam>
+            <exclude/>
+        </member>
+        <member name="M:OEC.SafeSortedList`2.Pred(`0)">
+            <summary>
+            Predecessor 
+            </summary>
+            <param name="key"></param>
+            <returns>Value or default</returns>
+        </member>
+        <member name="P:OEC.SafeSortedList`2.Last">
+            <summary>
+            Last value in the list (by key order)
+            </summary>
+        </member>
+        <member name="T:OEC.SafeDefaultDictionary`2">
+            <summary>
+            Thread-safe dictionary with default value for not-found keys
+            </summary>
+            <remarks>
+            Does not throw an exception if key is not found.
+            </remarks>
+            <typeparam name="TKey"></typeparam>
+            <typeparam name="T"></typeparam>
+            <exclude/>
+        </member>
+        <member name="T:OEC.CreatingSafeDictionary`2">
+            <exclude/>
+            <summary>
+            Thread-safe version of CreatingDictionary
+            </summary>
+            <typeparam name="TKey"></typeparam>
+            <typeparam name="TValue"></typeparam>
+        </member>
+        <member name="T:OEC.DefaultCreatingSortedList`2">
+            <exclude/>
+            <summary>
+            SortedList creating a new value for not-found keys
+            </summary>
+            <remarks>
+            Does not throw an exception if key is not found.
+            </remarks>
+            <typeparam name="TKey"></typeparam>
+            <typeparam name="T"></typeparam>
+        </member>
+        <member name="T:OEC.CreatingSortedList`2">
+            <exclude/>
+            <summary>
+            SortedList creating a new value for not-found keys using given creator
+            </summary>
+            <typeparam name="TKey"></typeparam>
+            <typeparam name="T"></typeparam>
+        </member>
+        <member name="T:OEC.CreatingDictionary`2">
+            <exclude/>
+            <summary>
+            Dictionary creating a new value for not-found keys using given creator
+            </summary>
+            <remarks>
+            Does not throw an exception if key is not found.
+            </remarks>
+            <typeparam name="TKey"></typeparam>
+            <typeparam name="T"></typeparam>
+        </member>
+        <member name="M:OEC.CreatingDictionary`2.#ctor">
+            <summary>
+            must ininitialize creator later
+            </summary>
+        </member>
+        <member name="T:OEC.DummyDictionary`2">
+            <exclude/>
+            <summary>
+            Dictionary creating a new value for not-found keys using given creator
+            </summary>
+            <remarks>
+            Does not throw an exception if key is not found.
+            </remarks>
+            <typeparam name="TKey"></typeparam>
+            <typeparam name="T"></typeparam>
+        </member>
+        <member name="T:OEC.CreatingSafeSortedList`2">
+            <exclude/>
+            <summary>
+            Thread-safe version of CreatingSortedList
+            </summary>
+        </member>
+        <member name="T:OEC.DefaultCreatingDictionary`2">
+            <exclude/>
+            <summary>
+            Dictionary creating a new value for not-found keys
+            </summary>
+            <remarks>
+            Does not throw an exception if key is not found.
+            </remarks>
+            <typeparam name="TKey"></typeparam>
+            <typeparam name="T"></typeparam>
+        </member>
+        <member name="T:OEC.NullDictionary`2">
+            <exclude/>
+            <summary>
+            Dictionary returning null (or default value) for not found keys
+            </summary>
+            <typeparam name="TKey"></typeparam>
+            <typeparam name="T"></typeparam>
+        </member>
+        <member name="T:OEC.NullSortedList`2">
+            <exclude/>
+            <summary>
+            SortedList returning null (or default value) for not found keys
+            </summary>
+            <typeparam name="TKey"></typeparam>
+            <typeparam name="TValue"></typeparam>
+        </member>
+        <member name="T:OEC.OrderedList`1">
+            <exclude/>
+            <summary>
+            List maintaining given order.
+            </summary>
+            <remarks>
+            Override Compare to provide custom order
+            </remarks>
+            <typeparam name="T"></typeparam>
+        </member>
+        <member name="M:OEC.OrderedList`1.Add(`0)">
+            <summary>
+            Inserts an item to a position by order
+            </summary>
+            <param name="item"></param>
+            <returns></returns>
+        </member>
+        <member name="T:OEC.RangeMap`1">
+            <exclude/>
+            <summary>
+            </summary>
+        </member>
+        <member name="T:OEC.SafeSet`2">
+            <exclude/>
+            <summary>
+            </summary>
+            <typeparam name="T"></typeparam>
+            <typeparam name="Container"></typeparam>
+        </member>
+        <member name="T:OEC.SafeSet`1">
+            <exclude/>
+            <summary>
+            </summary>
+        </member>
+        <member name="T:OEC.SafeBitArray">
+            <exclude />
+        </member>
+        <member name="T:OEC.Severity">
+            <summary>
+            Log message severity
+            </summary>
+        </member>
+        <member name="F:OEC.Severity.N_A">
+            <summary>
+            Not specified
+            </summary>
+        </member>
+        <member name="F:OEC.Severity.Prf">
+            <summary>
+            Performance messages
+            </summary>
+        </member>
+        <member name="F:OEC.Severity.Dbg">
+            <summary>
+            Debug tracing messages
+            </summary>
+        </member>
+        <member name="F:OEC.Severity.Inf">
+            <summary>
+            Information messages
+            </summary>
+        </member>
+        <member name="F:OEC.Severity.Wrn">
+            <summary>
+            Warning messages
+            </summary>
+        </member>
+        <member name="F:OEC.Severity.Err">
+            <summary>
+            Error messages
+            </summary>
+        </member>
+        <member name="F:OEC.Severity.Crt">
+            <summary>
+            Critical error messages
+            </summary>
+        </member>
+        <member name="T:OEC.Log">
+            <summary>
+            OEC Log
+            </summary>
+            <remarks>
+            Default implementation creates a separate file for each day. It can be replaced by custom implementation
+            </remarks>
+        </member>
+        <member name="F:OEC.Log.CurrentLogicalThread">
+            <summary>
+            Custom logical thead name used for log output
+            </summary>
+            <exclude/>
+        </member>
+        <member name="F:OEC.Log.ConsoleOutput">
+            <summary>
+            Gets or sets whether to output non-DBG entries to console for internal logger
+            </summary>
+        </member>
+        <member name="M:OEC.Log.Initialize(OEC.ILogImpl)">
+            <summary>
+            Logger can be changed to own implementation
+            </summary>
+            <param name="logImpl">Custom log implementation</param>
+        </member>
+        <member name="M:OEC.Log.Start">
+            <summary>
+            Starts logger at default path
+            </summary>
+        </member>
+        <member name="M:OEC.Log.Start(System.String)">
+            <summary>
+            Starts logger at cpecified path
+            </summary>
+            <param name="path"></param>
+        </member>
+        <member name="M:OEC.Log.Stop">
+            <summary>
+            Stops logger
+            </summary>
+        </member>
+        <member name="M:OEC.Log.WriteLine(System.String,System.Object[])">
+            <summary>
+            Logs formatted text with Dbg severity
+            </summary>
+        </member>
+        <member name="F:OEC.Log.WritePerformanceInfo">
+            <summary>
+            </summary>
+            <exclude />
+        </member>
+        <member name="M:OEC.Log.WriteLine(OEC.Severity,System.String,System.Object[])">
+            <summary>
+            Logs formatted text with specified severity
+            </summary>
+        </member>
+        <member name="P:OEC.Log.ThreadContext">
+            <summary>
+            User defined loging thread context, can be used to pass user defined parameters from application to log implementation. Different threads have different contexts
+            </summary>
+        </member>
+        <member name="T:OEC.Log.Context">
+            <summary>
+            Implementation for log contexts
+            </summary>
+        </member>
+        <member name="F:OEC.Log.Context.Stacks">
+            <summary>
+            Properties container for log context in form of property name -> stack collection
+            </summary>
+        </member>
+        <member name="M:OEC.Log.Context.Current``1">
+            <summary>
+            Returns typed current Stacks object
+            </summary>
+            <typeparam name="T">Type used to return</typeparam>
+            <returns>Top logging stack object of type T</returns>
+        </member>
+        <member name="M:OEC.Log.Context.Current(System.String)">
+            <summary>
+            Returns current Stacks object
+            </summary>
+        </member>
+        <member name="T:OEC.Log.LogStack">
+            <summary>
+            Stack of user-defined objects
+            </summary>
+        </member>
+        <member name="M:OEC.Log.LogStack.Push(System.Object)">
+            <summary>
+            Stack push
+            </summary>
+        </member>
+        <member name="M:OEC.Log.LogStack.Pop">
+            <summary>
+            Stack pop
+            </summary>
+        </member>
+        <member name="M:OEC.Log.LogStack.Peek">
+            <summary>
+            Access to top object
+            </summary>
+        </member>
+        <member name="M:OEC.Log.LogStack.ToString">
+            <summary>
+            String representation of stack top object
+            </summary>
+        </member>
+        <member name="T:OEC.ILogImpl">
+            <summary>
+            Custom log implementation.
+            </summary>
+        </member>
+        <member name="M:OEC.ILogImpl.Start(System.String)">
+            <summary>
+            Signal that logging has started. Can be used to place starting code for logging, like starting log thread for example
+            </summary>
+            <param name="path">Path on which log file is intended to be created. Can be ignored by custom application in favor of own path</param>
+        </member>
+        <member name="M:OEC.ILogImpl.Stop">
+            <summary>
+            Signal that logging has stopped.
+            </summary>
+        </member>
+        <member name="M:OEC.ILogImpl.WriteLine(OEC.Severity,System.String,System.Object[])">
+            <summary>
+            Called for log message output. 
+            </summary>
+            <param name="severity">Severity of the message</param>
+            <param name="format">Message format like in string.Format</param>
+            <param name="args">Arguments for message formatting like in string.Format</param>
+        </member>
+        <member name="T:OEC.Log.InternalLogImpl.LogItem">
+            <summary>
+            Log record.
+            </summary>
+        </member>
+        <member name="T:OEC.ExactTime">
+            <summary>
+            </summary>
+            <exclude />
+        </member>
+        <member name="T:OEC.CommLib.PacketSocket">
+            <summary>
+            </summary>
+            <exclude/>
+        </member>
+        <member name="T:OEC.CommLib.ProtoSocket">
+            <summary>
+            </summary>
+            <exclude/>
+        </member>
+        <member name="T:OEC.Data.Currency">
+            <exclude/>
+            <summary>
+            </summary>
+        </member>
+        <member name="T:OEC.Data.Exchange">
+            <exclude/>
+            <summary>
+            </summary>
+        </member>
+        <member name="T:OEC.Data.ContractGroup">
+            <exclude/>
+            <summary>
+            </summary>
+        </member>
+        <member name="T:OEC.Data.Channel">
+            <exclude/>
+            <summary>
+            </summary>
+        </member>
+        <member name="T:OEC.Data.PitGroup">
+            <exclude/>
+            <summary>
+            </summary>
+        </member>
+        <member name="T:OEC.Data.ClearingHouse">
+            <exclude/>
+            <summary>
+            </summary>
+        </member>
+        <member name="T:OEC.Data.Category">
+            <exclude/>
+            <summary>
+            </summary>
+        </member>
+        <member name="T:OEC.Data.Route">
+            <exclude/>
+            <summary>
+            </summary>
+        </member>
+        <member name="T:OEC.Data.DataFeedEntitlement">
+            <exclude/>
+        </member>
+        <member name="T:OEC.Data.DataFeedEntitlementSubscriptionType">
+            <exclude/>
+        </member>
+        <member name="T:OEC.Data.DataFeedEntitlementType">
+            <summary>
+            Type of data feed entitlement
+            </summary>
+        </member>
+        <member name="T:OEC.Data.BaseContract">
+            <summary>
+            </summary>
+            <exclude/>
+        </member>
+        <member name="F:OEC.Data.BaseContract.FirstContract">
+            <summary>
+            to be used by bizRules.getFirstContract only
+            </summary>
+        </member>
+        <member name="T:OEC.Data.ContractMonth">
+            <summary>ContractMonth provides expiration dates for <see cref="T:OEC.Data.Contract"/></summary>
+            <remarks>Usually it is used when a <see cref="T:OEC.Data.Contract"/> is not available</remarks>
+            <exclude/>
+        </member>
+        <member name="T:OEC.Data.Contract">
+            <summary>
+            Contract 
+            </summary>
+            <exclude/>
+        </member>
+        <member name="F:OEC.Data.Contract.Compound">
+            <summary>for API using only</summary>
+        </member>
+        <member name="F:OEC.Data.Contract.BaseContractID">
+            <summary>for API using only. See BaseSymbol</summary>
+        </member>
+        <member name="F:OEC.Data.Contract.ExpirationTime">
+            <summary>Date and Time</summary>
+        </member>
+        <member name="T:OEC.Data.Compound">
+            <summary>
+            </summary>
+            <exclude/>
+        </member>
+        <member name="T:OEC.Data.Compound.CommonLegDeclaration">
+            <summary>
+            </summary>
+            <exclude/>
+        </member>
+        <member name="T:OEC.Data.CompoundLeg">
+            <summary>
+            </summary>
+            <exclude/>
+        </member>
+        <member name="F:OEC.Data.ContractType.Electronic">
+            <summary>
+            Contract is traded electronically
+            </summary>
+        </member>
+        <member name="F:OEC.Data.ContractType.Pit">
+            <summary>
+            Contract is traded manually in the pit
+            </summary>
+        </member>
+        <member name="F:OEC.Data.ContractType.Routed">
+            <summary>
+            Contract is routed to third-party execution (public)
+            </summary>
+        </member>
+        <member name="F:OEC.Data.ContractType.SideBySide">
+            <summary>
+            Contract can be traded electronically or in the pit (public)
+            </summary>
+        </member>
+        <member name="F:OEC.Data.ContractKind.Equity">
+            <exclude />
+        </member>
+        <member name="F:OEC.Data.ContractKind.EquityOption">
+            <exclude />
+        </member>
+        <member name="F:OEC.Data.ContractKind.EquityIndex">
+            <exclude />
+        </member>
+        <member name="F:OEC.Data.ContractKind.MutualFund">
+            <exclude />
+        </member>
+        <member name="F:OEC.Data.ContractKind.Bond">
+            <exclude />
+        </member>
+        <member name="F:OEC.Data.ContractKind.ForexForward">
+            <summary>
+            </summary>
+            <exclude/>
+        </member>
+        <member name="T:OEC.Data.ExpirationType">
+            <exclude />
+        </member>
+        <member name="T:OEC.Data.EquityOptionsType">
+            <exclude />
+        </member>
+        <member name="T:OEC.Data.Tenor">
+            <summary>
+            </summary>
+            <exclude />
+        </member>
+        <member name="T:OEC.Data.Margin">
+            <summary>
+            </summary>
+            <exclude/>
+        </member>
+        <member name="T:OEC.Data.ContractMargin">
+            <summary>
+            </summary>
+            <exclude/>
+        </member>
+        <member name="T:OEC.Data.ContractKey">
+            <summary>
+            </summary>
+            <exclude/>
+        </member>
+        <member name="T:OEC.Data.SymbolLookupMode">
+            <summary>
+            Symbol lookup mode
+            </summary>
+        </member>
+        <member name="F:OEC.Data.SymbolLookupMode.AnyInclusion">
+            <summary>
+            A request "GE" returns all contracts that include GE in symbol or description
+            </summary>
+        </member>
+        <member name="F:OEC.Data.SymbolLookupMode.SymbolStartsWith">
+            <summary>
+            A request "GE" returns all contracts that start with GE: GE, GEM9, etc
+            </summary>
+        </member>
+        <member name="F:OEC.Data.SymbolLookupMode.DescriptionStartsWith">
+            <summary>
+            A request "GE" returns all contracts with description that start with GE: GENERAL ELECTRIC, GENESIS
+            </summary>
+        </member>
+        <member name="F:OEC.Data.SymbolLookupMode.AnyStartsWith">
+            <summary>
+            A request "GE" returns all contracts with description or symbol that start with GE: GENERAL ELECTRIC, GENESIS, GE
+            </summary>
+        </member>
+        <member name="F:OEC.Data.SymbolLookupMode.ExactMatch">
+            <summary>
+            A request "GE" returns only one contract - GENERAL ELECTRIC
+            </summary>
+        </member>
+        <member name="T:OEC.Data.SymbolLookupCriteriaOptionType">
+            <summary>
+            Symbol lookup, filter by options type
+            </summary>
+        </member>
+        <member name="T:OEC.Data.SymbolLookupCriteriaLockingType">
+            <summary>
+            </summary>
+            <exclude />
+        </member>
+        <member name="T:OEC.Data.SymbolLookupCriteria">
+            <summary>
+            </summary>
+            <exclude />
+        </member>
+        <member name="T:OEC.Data.SymbolLookupExpression">
+            <summary>
+            </summary>
+            <exclude/>
+        </member>
+        <member name="T:OEC.Data.QuoteDetailsProperty">
+            <summary>
+            </summary>
+            <exclude />
+        </member>
+        <member name="T:OEC.Data.QuoteDetails">
+            <summary>
+            </summary>
+            <exclude />
+        </member>
+        <member name="T:OEC.Data.IndexInfo">
+            <summary>
+            </summary>
+            <exclude />
+        </member>
+        <member name="T:OEC.Data.BaseContractExtendedParameter">
+            <exclude />
+        </member>
+        <member name="T:OEC.Data.SecuredMode">
+            <summary>
+            http://www.cftc.gov/opa/press00/opa4441-00.htm
+            </summary>
+            <exclude />
+        </member>
+        <member name="T:OEC.Protocol.AccountRequest">
+            <summary>
+            </summary>
+            <exclude/>
+        </member>
+        <member name="T:OEC.Protocol.AccountOperation">
+            <summary>
+            </summary>
+            <exclude/>
+        </member>
+        <member name="T:OEC.Protocol.BalanceSheet">
+            <summary>
+            <exclude/>
+            </summary>
+        </member>
+        <member name="T:OEC.Protocol.PositionBalanceUpdate">
+            <summary>
+            <exclude/>
+            </summary>
+        </member>
+        <member name="T:OEC.Protocol.AccountData">
+            <summary>
+            <exclude/>
+            </summary>
+        </member>
+        <member name="T:OEC.Protocol.AuditData">
+            <summary>
+            <exclude/>
+            </summary>
+        </member>
+        <member name="T:OEC.Protocol.BalanceAuditData">
+            <summary>
+            <exclude/>
+            </summary>
+        </member>
+        <member name="T:OEC.Protocol.AllocationBlocksRequest">
+            <summary>
+            </summary>
+            <exclude/>
+        </member>
+        <member name="T:OEC.Protocol.ClientRequest">
+            <summary>
+            <exclude/>
+            </summary>
+        </member>
+        <member name="T:OEC.Protocol.ClientResponse">
+            <summary>
+            <exclude/>
+            </summary>
+        </member>
+        <member name="T:OEC.Protocol.ContractResponse">
+            <summary>
+            <exclude/>
+            </summary>
+        </member>
+        <member name="T:OEC.Protocol.AuthResponse">
+            <summary>
+            <exclude/>
+            </summary>
+        </member>
+        <member name="T:OEC.Protocol.AuthChallenge">
+            <summary>
+            <exclude/>
+            </summary>
+        </member>
+        <member name="T:OEC.Protocol.LogonRequest">
+            <summary>
+            <exclude/>
+            </summary>
+        </member>
+        <member name="T:OEC.Protocol.APIFeatures">
+            <summary>
+            </summary>
+            <exclude/>
+        </member>
+        <member name="T:OEC.Protocol.Error">
+            <summary>
+            <exclude/>
+            </summary>
+        </member>
+        <member name="T:OEC.Protocol.APIData">
+            <summary>
+            <exclude/>
+            </summary>
+        </member>
+        <member name="T:OEC.Protocol.ContractRequest">
+            <summary>
+            <exclude/>
+            </summary>
+        </member>
+        <member name="T:OEC.Protocol.OsmAlgoListRequest">
+            <summary>
+            </summary>
+            <exclude/>
+        </member>
+        <member name="T:OEC.Protocol.InfoRequestType">
+            <summary>
+            </summary>
+            <exclude/>
+        </member>
+        <member name="T:OEC.Protocol.InfoRequest">
+            <summary>
+            <exclude/>
+            </summary>
+        </member>
+        <member name="T:OEC.Protocol.InfoResponse">
+            <summary>
+            <exclude/>
+            </summary>
+        </member>
+        <member name="T:OEC.Protocol.UpdateContinuousContractRuleRequest">
+            <summary>
+            <exclude />
+            </summary>
+        </member>
+        <member name="T:OEC.Protocol.ProductCalendarInfo">
+            <summary>
+            <exclude />
+            </summary>
+        </member>
+        <member name="T:OEC.Protocol.UpdateContinuousContractRuleResponse">
+            <summary>
+            </summary>
+            <exclude />
+        </member>
+        <member name="T:OEC.Protocol.ClientSyncRequest">
+            <summary>
+            Used for communication/syncronization between API servers
+            <exclude />
+            </summary>
+        </member>
+        <member name="T:OEC.Protocol.ConfigData">
+            <summary>
+            </summary>
+            <exclude/>
+        </member>
+        <member name="T:OEC.Protocol.RestraintRequest">
+            <summary>
+            </summary>
+            <exclude/>
+        </member>
+        <member name="T:OEC.Protocol.OsmAlgoRequest">
+            <summary>
+            </summary>
+            <exclude/>
+        </member>
+        <member name="T:OEC.Protocol.ContractMessage">
+            <summary>
+            </summary>
+            <exclude/>
+        </member>
+        <member name="T:OEC.Protocol.ContractMessage.ContractData">
+            <summary />
+            <exclude/>
+        </member>
+        <member name="T:OEC.Protocol.ContractMessage.ValidateCustomCompound">
+            <summary />
+            <exclude/>
+        </member>
+        <member name="T:OEC.Protocol.ContractMessage.AcceptedCustomCompound">
+            <summary />
+            <exclude/>
+        </member>
+        <member name="T:OEC.Protocol.ContractMessage.CreateContractRequest">
+            <summary/>
+            <exclude />
+        </member>
+        <member name="T:OEC.Protocol.ContractMessage.CreateContractResponse">
+            <summary/>
+            <exclude />
+        </member>
+        <member name="T:OEC.Protocol.ContractMessage.SymbolLookup">
+            <summary/>
+            <exclude />
+        </member>
+        <member name="T:OEC.Protocol.ContractMessage.SymbolLookupResponse">
+            <summary/>
+            <exclude/>
+        </member>
+        <member name="T:OEC.Protocol.ProviderContractMapping">
+            <summary>
+            </summary>
+            <exclude/>
+        </member>
+        <member name="T:OEC.Protocol.MessageRequest">
+            <summary>
+            </summary>
+            <exclude/>
+        </member>
+        <member name="T:OEC.Protocol.OrderRequest">
+            <summary>
+            </summary>
+            <exclude/>
+        </member>
+        <member name="F:OEC.Protocol.OrderRequest.OrderData">
+            <summary>
+            for bulk load
+            </summary>
+        </member>
+        <member name="T:OEC.Protocol.ExtOrderType">
+            <summary>
+            </summary>
+            <exclude/>
+        </member>
+        <member name="T:OEC.Protocol.ProviderLoadingState">
+            <summary>
+            </summary>
+            <exclude/>
+        </member>
+        <member name="T:OEC.Protocol.OrderData">
+            <summary>
+            </summary>
+            <exclude/>
+        </member>
+        <member name="T:OEC.Protocol.SubscribeType">
+            <summary>
+            </summary>
+            <exclude/>
+        </member>
+        <member name="T:OEC.Protocol.PriceRequest">
+            <summary>
+            </summary>
+            <exclude/>
+        </member>
+        <member name="T:OEC.Protocol.PriceResponse">
+            <summary>
+            </summary>
+            <exclude/>
+        </member>
+        <member name="T:OEC.Protocol.DealQuoteRequest">
+            <summary>
+            </summary>
+            <exclude/>
+        </member>
+        <member name="T:OEC.Protocol.RiskMessage">
+            <summary/>
+            <exclude />
+        </member>
+        <member name="T:OEC.Protocol.RiskMessage.ProviderRequest">
+            <summary/>
+            <exclude />
+        </member>
+        <member name="T:OEC.Protocol.RiskMessage.AdminRequest">
+            <summary/>
+            <exclude />
+        </member>
+        <member name="T:OEC.Protocol.RiskMessage.DetailRequest">
+            <summary/>
+            <exclude />
+        </member>
+        <member name="T:OEC.Protocol.RiskMessage.MonitoringData">
+            <summary/>
+            <exclude />
+        </member>
+        <member name="T:OEC.Protocol.RiskMessage.FrozenRiskAccountList">
+            <summary/>
+            <exclude />
+        </member>
+        <member name="T:OEC.Protocol.RiskMessage.DataSnapshot">
+            <summary/>
+            <exclude />
+        </member>
+        <member name="T:OEC.Protocol.RiskRequest">
+            <summary/>
+            <exclude />
+        </member>
+        <member name="T:OEC.Protocol.RiskResponse">
+            <summary/>
+            <exclude />
+        </member>
+        <member name="T:OEC.Protocol.RiskDetailRequestType">
+            <summary>
+            <exclude />
+            </summary>
+        </member>
+        <member name="T:OEC.Protocol.RiskLimitKey">
+            <summary>
+            <exclude />
+            </summary>
+        </member>
+        <member name="T:OEC.Protocol.RiskLimitDetail">
+            <summary>
+            <exclude />
+            </summary>
+        </member>
+        <member name="T:OEC.Protocol.Serializer">
+            <summary>
+            </summary>
+            <exclude/>
+        </member>
+        <member name="T:OEC.Protocol.ServerStrategyMessage">
+            <exclude/>
+        </member>
+        <member name="T:OEC.Protocol.ServerStrategyMessage.StrategyRequest">
+            <exclude/>
+        </member>
+        <member name="T:OEC.Protocol.ServerStrategyMessage.StrategyResponse">
+            <exclude/>
+        </member>
+        <member name="T:OEC.Protocol.ServerStrategyRequestAction">
+            <exclude/>
+        </member>
+        <member name="T:OEC.Protocol.ServerStrategyResponseAction">
+            <exclude/>
+        </member>
+        <member name="T:OEC.Protocol.ServerStrategyData">
+            <summary>
+            </summary>
+            <exclude/>
+        </member>
+        <member name="T:OEC.Protocol.UserDataResponse">
+            <summary>
+            </summary>
+            <exclude/>
+        </member>
+        <member name="T:OEC.Protocol.ChangeType">
+            <summary>
+            </summary>
+            <exclude/>
+        </member>
+        <member name="T:OEC.Protocol.UserConfigDetailType">
+            <summary>
+            </summary>
+            <exclude/>
+        </member>
+        <member name="T:OEC.CommLib.ProtoStream">
+            <summary>
+            Serializes objects using ProtoBuf protocol
+            </summary>
+            <exclude/>
+        </member>
+        <member name="T:OEC.CommLib.PacketStream">
+            <summary>
+            Serializes length of packet as int32, then packet contents
+            </summary>
+            <exclude/>
+        </member>
+        <member name="T:OEC.Range">
+            <summary>
+            Time range
+            </summary>
+            <exclude/>
+        </member>
+        <member name="M:OEC.Range.In(System.DateTime)">
+            <summary>
+            Checks whether amoment belongs to range
+            </summary>
+            <param name="moment"></param>
+            <returns></returns>
+        </member>
+        <member name="M:OEC.Range.EndIn(System.DateTime)">
+            <summary>
+            Checks whether a moment belongs to range inclusive
+            </summary>
+            <param name="moment"></param>
+            <returns></returns>
+        </member>
+        <member name="M:OEC.Range.In(OEC.Range)">
+            <summary>
+            Checks whether a range lies within.
+            </summary>
+            <param name="range"></param>
+            <returns></returns>
+        </member>
+        <member name="M:OEC.Range.Intersects(OEC.Range)">
+            <summary>
+            Checks whether a range intersects with this range.
+            </summary>
+            <param name="range"></param>
+            <returns></returns>
+        </member>
+        <member name="M:OEC.Range.IntersectsOrAdjacent(OEC.Range)">
+            <summary>
+            Checks whether a range intersects with or touches this range.
+            </summary>
+            <param name="range"></param>
+            <returns></returns>
+        </member>
+        <member name="M:OEC.Range.Adjacent(OEC.Range)">
+            <summary>
+            Checks whether a range touches this range.
+            </summary>
+        </member>
+        <member name="M:OEC.Range.Intersect(OEC.Range)">
+            <summary>
+            Calculates an intersection of ranges
+            </summary>
+            <param name="range"></param>
+            <returns></returns>
+        </member>
+        <member name="M:OEC.Range.Combine(OEC.Range)">
+            <summary>
+            Calculates superset of ranges
+            </summary>
+            <param name="range"></param>
+            <returns></returns>
+        </member>
+        <member name="P:OEC.Range.Max">
+            <summary>
+            Maximum time range
+            </summary>
+        </member>
+        <member name="P:OEC.Range.Ages">
+            <summary>
+            A large time range, which does not include minvalue and maxvalue
+            </summary>
+        </member>
+        <member name="P:OEC.Range.BackDays">
+            <summary>
+            Generates days from range, starting from EndDate backwards.
+            </summary>
+        </member>
+        <member name="P:OEC.Range.Days">
+            <summary>
+            Generates days from range
+            </summary>
+        </member>
+        <member name="P:OEC.Range.Holidays">
+            <summary>
+            Returns number of holidays within range
+            </summary>
+        </member>
+        <member name="P:OEC.Range.Valid">
+            <summary>
+            Validate range
+            </summary>
+        </member>
+        <member name="T:OEC.ContinuousContracts.SplicingRule">
+            <summary>
+            </summary>
+        </member>
+        <member name="T:OEC.ContinuousContracts.SpotMonthSplicingRule">
+            <summary>
+            </summary>
+        </member>
+        <member name="T:OEC.ContinuousContracts.ScheduleSplicingRule">
+            <summary>
+            </summary>
+        </member>
+        <member name="T:OEC.ContinuousContracts.ScheduleRuleItem">
+            <summary>
+            </summary>
+        </member>
+        <member name="T:OEC.ContinuousContracts.VolumeSplicingRule">
+            <summary>
+            </summary>
+            <exclude/>
+        </member>
+        <member name="T:OEC.SyncQueue`1">
+            <summary>
+            Thread-safe waitable queue
+            </summary>
+            <exclude/>
+        </member>
+        <member name="M:OEC.SyncQueue`1.#ctor">
+            <summary>
+            Intializes a new queue object
+            </summary>
+        </member>
+        <member name="M:OEC.SyncQueue`1.Enqueue(`0)">
+            <summary>
+            Writes object in the queue
+            </summary>
+            <param name="item">object to write</param>
+        </member>
+        <member name="M:OEC.SyncQueue`1.Dequeue(System.Int32)">
+            <summary>
+            waits for data available and extract first item
+            </summary>
+            <param name="TimeoutMs"></param>
+            <returns>null if no data in the queue and timeout expired</returns>
+        </member>
+        <member name="M:OEC.SyncQueue`1.DequeueNoWait">
+            <summary>
+            extracts first available item returns immediatelly. 
+            </summary>
+            <returns>null if no data in the queue</returns>
+        </member>
+        <member name="P:OEC.SyncQueue`1.Count">
+            <summary>
+            number of items in the queue
+            </summary>
+        </member>
+        <member name="T:OEC.MyFunc`2">
+            <summary>
+            </summary>
+            <exclude/>
+        </member>
+        <member name="T:OEC.MyFunc`1">
+            <summary>
+            </summary>
+            <exclude/>
+        </member>
+        <member name="T:OEC.MyFunc`3">
+            <summary>
+            </summary>
+            <exclude/>
+        </member>
+        <member name="T:OEC.MyProc">
+            <summary>
+            </summary>
+            <exclude/>
+        </member>
+        <member name="T:OEC.Tools">
+            <exclude/>
+            <summary>
+            This class contains collection features which are not available in .NET 2.0
+            </summary>
+        </member>
+        <member name="M:OEC.Tools.Concat``1(System.Collections.Generic.IEnumerable{``0},System.Collections.Generic.IEnumerable{``0})">
+            <summary>
+            Concatenates two enumerators to one
+            </summary>
+            <typeparam name="T">element type</typeparam>
+            <param name="first">first enumerator</param>
+            <param name="second">second enumerator</param>
+            <returns>combined enumerator</returns>
+        </member>
+        <member name="M:OEC.Tools.Concat``1(System.Collections.Generic.IEnumerable{``0},``0)">
+            <summary>
+            Adds an item to enumeration, if it is not empty
+            </summary>
+            <typeparam name="T">element type</typeparam>
+            <param name="first">enumerator</param>
+            <param name="last">item</param>
+            <returns>combined enumerator</returns>
+        </member>
+        <member name="M:OEC.Tools.Concat``1(System.Collections.Generic.IEnumerable{``0}[])">
+            <summary>
+            Combines arbitrary number of enumerators
+            </summary>
+            <typeparam name="T">element type</typeparam>
+            <param name="lists">enumerators</param>
+            <returns>combined enumerator</returns>
+        </member>
+        <member name="M:OEC.Tools.Concat``1(System.Collections.Generic.IEnumerable{System.Collections.Generic.IEnumerable{``0}})">
+            <summary>
+            Combines arbitrary number of enumerators
+            </summary>
+            <typeparam name="T">element type</typeparam>
+            <param name="lists">enumerators</param>
+            <returns>combined enumerator</returns>
+        </member>
+        <member name="M:OEC.Tools.GroupByCount``1(System.Collections.Generic.IEnumerable{``0},System.Int32)">
+            <summary>
+            Groups elements in a list by count
+            </summary>
+            <typeparam name="T">element type</typeparam>
+            <param name="srclist">List</param>
+            <param name="count">Count of items per group</param>
+            <returns>List of group lists</returns>
+        </member>
+        <member name="M:OEC.Tools.Head``1(System.Collections.Generic.IEnumerable{``0},System.Int32)">
+            <summary>
+            Returns first N elements of a list
+            </summary>
+            <typeparam name="T">element type</typeparam>
+            <param name="srclist">list</param>
+            <param name="count">N</param>
+            <returns>list</returns>
+        </member>
+        <member name="M:OEC.Tools.Tail``1(System.Collections.Generic.IEnumerable{``0})">
+            <summary>
+            Returns tail of the list
+            </summary>
+            <typeparam name="T">element type</typeparam>
+            <param name="srclist">list</param>
+            <returns>list</returns>
+        </member>
+        <member name="M:OEC.Tools.Empty``1">
+            <summary>
+            returns an empty enumeration
+            </summary>
+            <typeparam name="T">Element type</typeparam>
+            <returns>list</returns>
+        </member>
+        <member name="M:OEC.Tools.Filter``1(System.Collections.Generic.IEnumerable{``0},System.Predicate{``0})">
+            <summary>
+            Returns an enumeration containing only filtered items
+            </summary>
+            <typeparam name="T">element type</typeparam>
+            <param name="source">list</param>
+            <param name="predicate">filter</param>
+            <returns>filtered list</returns>
+        </member>
+        <member name="M:OEC.Tools.Extract``1(System.Collections.Generic.List{``0},System.Predicate{``0})">
+            <summary>
+            Returns an enumeration containing only filtered items and extract them from original source
+            </summary>
+            <typeparam name="T">element type</typeparam>
+            <param name="source">list</param>
+            <param name="predicate">filter</param>
+            <returns>filtered list</returns>
+        </member>
+        <member name="M:OEC.Tools.MapToString``2(System.Collections.Generic.IEnumerable{System.Collections.Generic.KeyValuePair{``0,``1}})">
+            <summary>
+            Creates a verbose list of map elements
+            </summary>
+            <typeparam name="TKey">Key type</typeparam>
+            <typeparam name="TValue">Value type</typeparam>
+            <param name="col">Collection</param>
+            <returns>string</returns>
+        </member>
+        <member name="M:OEC.Tools.EqualDouble(System.Double,System.Double)">
+            <summary>
+            Compares doubles with precision of 1e-6. 
+            </summary>
+        </member>
+        <member name="M:OEC.Tools.GroupBy``2(System.Collections.Generic.List{``1},System.Converter{``1,``0})">
+            <summary>
+            Groups elements in a list by key function
+            </summary>
+            <typeparam name="K">Key type</typeparam>
+            <typeparam name="T">Element type</typeparam>
+            <param name="list">List</param>
+            <param name="getKey">Grouping key (should implement IComparable)</param>
+            <returns>List of group lists</returns>
+        </member>
+        <member name="M:OEC.Tools.GetRange``1(System.Collections.Generic.List{``0},System.Int32,System.Int32)">
+            <summary>
+            Returns a list containing a subrange of a source list.
+            </summary>
+            <typeparam name="T">Element type</typeparam>
+            <param name="list">List</param>
+            <param name="begin">Stard index</param>
+            <param name="end">End index (not inclusive)</param>
+            <returns>subrange list</returns>
+        </member>
+        <member name="M:OEC.Tools.Intersect``1(System.Collections.Generic.IEnumerable{``0}[])">
+            <summary>
+            Union arbitrary number of enumerators
+            </summary>
+            <typeparam name="T">element type</typeparam>
+            <param name="lists">enumerators</param>
+            <returns>combined enumerator</returns>
+        </member>
+        <member name="T:OEC.Tools.ListSegment`1">
+            <summary>
+            Virtual list based on a subrange of an existing lists
+            </summary>
+            <remarks>
+            Read-only.
+            </remarks>
+            <typeparam name="T">Element type</typeparam>
+            <exclude/>
+        </member>
+        <member name="T:OEC.Enum`1">
+            <exclude/>
+        </member>
+        <member name="T:OEC.Pair`2">
+            <summary>
+            Comparable pair of items
+            </summary>
+            <typeparam name="T"></typeparam>
+            <typeparam name="U"></typeparam>
+            <exclude/>
+        </member>
+        <member name="T:OEC.intPair">
+            <exclude/>
+        </member>
+        <member name="T:OEC.LazyValueTypeTrait`1">
+            <exclude/>
+        </member>
+        <member name="T:OEC.LazyValue`2">
+            <exclude/>
+        </member>
+        <member name="T:OEC.LazyValueDoubleTrait">
+            <exclude/>
+        </member>
+        <member name="T:OEC.LazyValueDouble">
+            <exclude/>
+        </member>
+        <member name="T:OEC.LazyValueNoNanTrait`1">
+            <exclude/>
+        </member>
+        <member name="T:OEC.LazyValue`1">
+            <exclude/>
+        </member>
+        <member name="T:OEC.LazyValueInt">
+            <exclude/>
+        </member>
+        <member name="T:OEC.Func`1">
+            <summary>
+            </summary>
+            <typeparam name="TResult"></typeparam>
+            <param name="arg"></param>
+            <returns></returns>
+            <exclude />
+        </member>
+        <member name="T:OEC.Func`2">
+            <summary>
+            </summary>
+            <typeparam name="T"></typeparam>
+            <typeparam name="TResult"></typeparam>
+            <param name="arg"></param>
+            <returns></returns>
+            <exclude />
+        </member>
+        <member name="T:OEC.Func`3">
+            <summary>
+            </summary>
+            <typeparam name="T1"></typeparam>
+            <typeparam name="T2"></typeparam>
+            <typeparam name="TResult"></typeparam>
+            <param name="arg1"></param>
+            <param name="arg2"></param>
+            <returns></returns>
+            <exclude />
+        </member>
+        <member name="T:OEC.Func`4">
+            <summary>
+            </summary>
+            <typeparam name="T1"></typeparam>
+            <typeparam name="T2"></typeparam>
+            <typeparam name="T3"></typeparam>
+            <typeparam name="TResult"></typeparam>
+            <param name="arg1"></param>
+            <param name="arg2"></param>
+            <param name="arg3"></param>
+            <returns></returns>
+            <exclude />
+        </member>
+        <member name="T:OEC.EqualityComparer`1">
+            <summary>
+            </summary>
+            <typeparam name="T"></typeparam>
+            <exclude />
+        </member>
+        <member name="T:OEC.EqualityByComparer`2">
+            <exclude />
+        </member>
+        <member name="T:OEC.ExtDateTime">
+            <exclude />
+        </member>
+    </members>
+</doc>

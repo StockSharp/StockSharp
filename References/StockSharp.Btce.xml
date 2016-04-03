@@ -1,0 +1,103 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>StockSharp.Btce</name>
+    </assembly>
+    <members>
+        <member name="T:StockSharp.Btce.BtceMessageAdapter">
+            <summary>
+            The messages adapter for BTC-e.
+            </summary>
+            <summary>
+            The messages adapter for BTC-e.
+            </summary>
+            <summary>
+            The messages adapter for BTC-e.
+            </summary>
+            <summary>
+            The messages adapter for BTC-e.
+            </summary>
+        </member>
+        <member name="M:StockSharp.Btce.BtceMessageAdapter.#ctor(Ecng.Common.IdGenerator)">
+            <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Btce.BtceMessageAdapter"/>.
+            </summary>
+            <param name="transactionIdGenerator">Transaction id generator.</param>
+        </member>
+        <member name="P:StockSharp.Btce.BtceMessageAdapter.IsSupportNativeSecurityLookup">
+            <summary>
+            Gets a value indicating whether the connector supports security lookup.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Btce.BtceMessageAdapter.IsSupportNativePortfolioLookup">
+            <summary>
+            Gets a value indicating whether the connector supports position lookup.
+            </summary>
+        </member>
+        <member name="M:StockSharp.Btce.BtceMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)">
+            <summary>
+            Send message.
+            </summary>
+            <param name="message">Message.</param>
+        </member>
+        <member name="P:StockSharp.Btce.BtceMessageAdapter.Key">
+            <summary>
+            Key.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Btce.BtceMessageAdapter.Secret">
+            <summary>
+            Secret.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Btce.BtceMessageAdapter.IsValid">
+            <summary>
+            The parameters validity check.
+            </summary>
+        </member>
+        <member name="M:StockSharp.Btce.BtceMessageAdapter.Save(Ecng.Serialization.SettingsStorage)">
+            <summary>
+            Save settings.
+            </summary>
+            <param name="storage">Settings storage.</param>
+        </member>
+        <member name="M:StockSharp.Btce.BtceMessageAdapter.Load(Ecng.Serialization.SettingsStorage)">
+            <summary>
+            Load settings.
+            </summary>
+            <param name="storage">Settings storage.</param>
+        </member>
+        <member name="M:StockSharp.Btce.BtceMessageAdapter.ToString">
+            <summary>
+            Returns a string that represents the current object.
+            </summary>
+            <returns>A string that represents the current object.</returns>
+        </member>
+        <member name="T:StockSharp.Btce.BtceTrader">
+            <summary>
+            The interface <see cref="T:StockSharp.BusinessEntities.IConnector"/> implementation which provides a connection to the BTC-e.
+            </summary>
+        </member>
+        <member name="M:StockSharp.Btce.BtceTrader.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Btce.BtceTrader"/>.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Btce.BtceTrader.IsSupportAtomicReRegister">
+            <summary>
+            Gets a value indicating whether the re-registration orders via the method <see cref="M:StockSharp.BusinessEntities.IConnector.ReRegisterOrder(StockSharp.BusinessEntities.Order,StockSharp.BusinessEntities.Order)"/>
+            as a single transaction. The default is enabled.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Btce.BtceTrader.Key">
+            <summary>
+            Key.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Btce.BtceTrader.Secret">
+            <summary>
+            Secret.
+            </summary>
+        </member>
+    </members>
+</doc>

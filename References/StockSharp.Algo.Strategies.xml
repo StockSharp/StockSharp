@@ -1,0 +1,899 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>StockSharp.Algo.Strategies</name>
+    </assembly>
+    <members>
+        <member name="T:StockSharp.Algo.Strategies.Protective.AutoProtectiveStrategy">
+            <summary>
+            The strategy of the automatic position protection.
+            </summary>
+            <remarks>
+            New trades come in strategy via <see cref="M:StockSharp.Algo.Strategies.Protective.AutoProtectiveStrategy.ProcessNewMyTrades(System.Collections.Generic.IEnumerable{StockSharp.BusinessEntities.MyTrade})"/>. They are automatically protected by <see cref="T:StockSharp.Algo.Strategies.Protective.TakeProfitStopLossStrategy"/>. Also, <see cref="T:StockSharp.Algo.Strategies.Protective.AutoProtectiveStrategy"/> turns over stops in case of position flipping.
+            </remarks>
+        </member>
+        <member name="M:StockSharp.Algo.Strategies.Protective.AutoProtectiveStrategy.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Algo.Strategies.Protective.AutoProtectiveStrategy"/>.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Algo.Strategies.Protective.AutoProtectiveStrategy.TakeProfitLevel">
+            <summary>
+            The protective level for the take profit. The default level is 0, which means the disabled.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Algo.Strategies.Protective.AutoProtectiveStrategy.StopLossLevel">
+            <summary>
+            The protective level for the stop loss. The default level is 0, which means the disabled.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Algo.Strategies.Protective.AutoProtectiveStrategy.IsTrailingStopLoss">
+            <summary>
+            Whether to use a trailing technique for <see cref="T:StockSharp.Algo.Strategies.Protective.StopLossStrategy"/>. The default is off.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Algo.Strategies.Protective.AutoProtectiveStrategy.IsTrailingTakeProfit">
+            <summary>
+            Whether to use a trailing technique for <see cref="T:StockSharp.Algo.Strategies.Protective.TakeProfitStrategy"/>. The default is off.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Algo.Strategies.Protective.AutoProtectiveStrategy.StopLossTimeOut">
+            <summary>
+            Time limit for <see cref="T:StockSharp.Algo.Strategies.Protective.StopLossStrategy"/>. If protection has not worked by this time, the position will be closed on the market. The default is off.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Algo.Strategies.Protective.AutoProtectiveStrategy.TakeProfitTimeOut">
+            <summary>
+            Time limit for <see cref="T:StockSharp.Algo.Strategies.Protective.TakeProfitStrategy"/>. If protection has not worked by this time, the position will be closed on the market. The default is off.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Algo.Strategies.Protective.AutoProtectiveStrategy.Item(StockSharp.BusinessEntities.Security)">
+            <summary>
+            To get or set the initial position for the instrument.
+            </summary>
+            <param name="security">Security.</param>
+            <returns>Position.</returns>
+        </member>
+        <member name="P:StockSharp.Algo.Strategies.Protective.AutoProtectiveStrategy.MyTradesStrategy">
+            <summary>
+            The strategy which new trades are automatically passed to <see cref="M:StockSharp.Algo.Strategies.Protective.AutoProtectiveStrategy.ProcessNewMyTrades(System.Collections.Generic.IEnumerable{StockSharp.BusinessEntities.MyTrade})"/>.
+            </summary>
+        </member>
+        <member name="M:StockSharp.Algo.Strategies.Protective.AutoProtectiveStrategy.OnStarted">
+            <summary>
+            The method is called when the <see cref="M:StockSharp.Algo.Strategies.Strategy.Start"/> method has been called and the <see cref="P:StockSharp.Algo.Strategies.Strategy.ProcessState"/> state has been taken the <see cref="F:StockSharp.Algo.ProcessStates.Started"/> value.
+            </summary>
+        </member>
+        <member name="M:StockSharp.Algo.Strategies.Protective.AutoProtectiveStrategy.Protect(System.Decimal)">
+            <summary>
+            To protect the position that has been updated via <see cref="P:StockSharp.Algo.Strategies.Protective.AutoProtectiveStrategy.Item(StockSharp.BusinessEntities.Security)"/>.
+            </summary>
+            <param name="position">Position.</param>
+            <returns>The protective strategy. If <see langword="null" /> will be returned then the position protection is ignored.</returns>
+        </member>
+        <member name="M:StockSharp.Algo.Strategies.Protective.AutoProtectiveStrategy.Protect(System.Collections.Generic.IDictionary{StockSharp.BusinessEntities.MyTrade,System.Decimal})">
+            <summary>
+            Protect trades.
+            </summary>
+            <param name="trades">Trades. The protected trade is specified by the key, volume to be protected is specified by the value.</param>
+            <returns>Protective strategies.</returns>
+        </member>
+        <member name="M:StockSharp.Algo.Strategies.Protective.AutoProtectiveStrategy.Sort(System.Collections.Generic.IEnumerable{System.Linq.IGrouping{System.Tuple{StockSharp.Messages.Sides,System.Decimal},StockSharp.Algo.Strategies.Protective.IProtectiveStrategy}})">
+            <summary>
+            To sort protective strategies to define the worst and the best ones by market prices (when position is partially closed the worst ones are cancelled firstly).
+            </summary>
+            <param name="strategies">Protective strategies in unsorted order.</param>
+            <returns>Protective strategies in sorted order.</returns>
+        </member>
+        <member name="M:StockSharp.Algo.Strategies.Protective.AutoProtectiveStrategy.GetProtectiveTrades(System.Collections.Generic.IEnumerable{StockSharp.BusinessEntities.MyTrade},System.Decimal)">
+            <summary>
+            To get from all trades those that must be protected.
+            </summary>
+            <param name="trades">New trades.</param>
+            <param name="maxVolume">The maximum volume that must be protected.</param>
+            <returns>Trades that must be protected.</returns>
+        </member>
+        <member name="M:StockSharp.Algo.Strategies.Protective.AutoProtectiveStrategy.ProcessNewMyTrades(System.Collections.Generic.IEnumerable{StockSharp.BusinessEntities.MyTrade})">
+            <summary>
+            To process trades to correct the protective strategies volume.
+            </summary>
+            <param name="trades">Trades.</param>
+        </member>
+        <member name="T:StockSharp.Algo.Strategies.Protective.IProtectiveStrategy">
+            <summary>
+            Protective strategy base interface.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Algo.Strategies.Protective.IProtectiveStrategy.ProtectiveVolume">
+            <summary>
+            Protected volume.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Algo.Strategies.Protective.IProtectiveStrategy.ProtectivePrice">
+            <summary>
+            Protected position price.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Algo.Strategies.Protective.IProtectiveStrategy.ProtectiveSide">
+            <summary>
+            Protected position side.
+            </summary>
+        </member>
+        <member name="E:StockSharp.Algo.Strategies.Protective.IProtectiveStrategy.ProtectiveVolumeChanged">
+            <summary>
+            The protected volume change event.
+            </summary>
+        </member>
+        <member name="T:StockSharp.Algo.Strategies.Protective.ProtectiveStrategy">
+            <summary>
+            The base strategy of the position protection.
+            </summary>
+        </member>
+        <member name="M:StockSharp.Algo.Strategies.Protective.ProtectiveStrategy.#ctor(StockSharp.Messages.Sides,System.Decimal,System.Decimal,StockSharp.Messages.Unit,System.Boolean)">
+            <summary>
+            Initialize <see cref="T:StockSharp.Algo.Strategies.Protective.ProtectiveStrategy"/>.
+            </summary>
+            <param name="protectiveSide">Protected position side.</param>
+            <param name="protectivePrice">Protected position price.</param>
+            <param name="protectiveVolume">The protected position volume.</param>
+            <param name="protectiveLevel">The protective level. If the <see cref="P:StockSharp.Messages.Unit.Type"/> type is equal to <see cref="F:StockSharp.Messages.UnitTypes.Limit"/>, then the given price is specified. Otherwise, the shift value from <paramref name="protectivePrice" /> is specified.</param>
+            <param name="isUpTrend">To track price increase or falling.</param>
+        </member>
+        <member name="P:StockSharp.Algo.Strategies.Protective.ProtectiveStrategy.ProtectivePrice">
+            <summary>
+            Protected position price.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Algo.Strategies.Protective.ProtectiveStrategy.ProtectiveSide">
+            <summary>
+            Protected position side.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Algo.Strategies.Protective.ProtectiveStrategy.ProtectiveVolume">
+            <summary>
+            Protected volume.
+            </summary>
+        </member>
+        <member name="E:StockSharp.Algo.Strategies.Protective.ProtectiveStrategy.ProtectiveVolumeChanged">
+            <summary>
+            The protected volume change event.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Algo.Strategies.Protective.ProtectiveStrategy.ProtectiveLevel">
+            <summary>
+            The protective level. If the <see cref="P:StockSharp.Messages.Unit.Type"/> type is equal to <see cref="F:StockSharp.Messages.UnitTypes.Limit"/>, then the given price is specified. Otherwise, the shift value from the protected trade <see cref="T:StockSharp.BusinessEntities.Trade"/> is specified.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Algo.Strategies.Protective.ProtectiveStrategy.IsTrailing">
+            <summary>
+            Whether to use a trailing technique. For the <see cref="T:StockSharp.Algo.Strategies.Protective.TakeProfitStrategy"/> with profit increasing the level of profit taking is automatically increased. For the <see cref="T:StockSharp.Algo.Strategies.Protective.StopLossStrategy"/> with profit increasing the level of loss protection is automatically increased. The default is disabled.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Algo.Strategies.Protective.ProtectiveStrategy.ActivationPrice">
+            <summary>
+            The absolute value of the price when the one is reached the protective strategy is activated. If the price is equal to <see langword="null" /> then the activation is not required.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Algo.Strategies.Protective.ProtectiveStrategy.IsActivated">
+            <summary>
+            Whether the protective strategy is activated.
+            </summary>
+        </member>
+        <member name="E:StockSharp.Algo.Strategies.Protective.ProtectiveStrategy.Activated">
+            <summary>
+            The protective strategy activation event.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Algo.Strategies.Protective.ProtectiveStrategy.UseQuoting">
+            <summary>
+            Whether to quote the registered order by the market price. The default mode is disabled.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Algo.Strategies.Protective.ProtectiveStrategy.UseMarketOrders">
+            <summary>
+            Whether to use <see cref="F:StockSharp.Messages.OrderTypes.Market"/> for protection. By default, orders <see cref="F:StockSharp.Messages.OrderTypes.Limit"/> are used.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Algo.Strategies.Protective.ProtectiveStrategy.BestPriceOffset">
+            <summary>
+            The shift from the best price, on which the quoted order can be changed.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Algo.Strategies.Protective.ProtectiveStrategy.PriceOffset">
+            <summary>
+            The price shift for the registering order. It determines the amount of shift from the best quote (for the buy it is added to the price, for the sell it is subtracted).
+            </summary>
+        </member>
+        <member name="P:StockSharp.Algo.Strategies.Protective.ProtectiveStrategy.QuotingVolume">
+            <summary>
+            Total quoting volume.
+            </summary>
+        </member>
+        <member name="M:StockSharp.Algo.Strategies.Protective.ProtectiveStrategy.GetNotificationRules">
+            <summary>
+            To get a list of rules on which the quoting will respond.
+            </summary>
+            <returns>Rule list.</returns>
+        </member>
+        <member name="M:StockSharp.Algo.Strategies.Protective.ProtectiveStrategy.OnStarted">
+            <summary>
+            The method is called when the <see cref="M:StockSharp.Algo.Strategies.Strategy.Start"/> method has been called and the <see cref="P:StockSharp.Algo.Strategies.Strategy.ProcessState"/> state has been taken the <see cref="F:StockSharp.Algo.ProcessStates.Started"/> value.
+            </summary>
+        </member>
+        <member name="M:StockSharp.Algo.Strategies.Protective.ProtectiveStrategy.OnStopping">
+            <summary>
+            The method is called when the <see cref="P:StockSharp.Algo.Strategies.Strategy.ProcessState"/> process state has been taken the <see cref="F:StockSharp.Algo.ProcessStates.Stopping"/> value.
+            </summary>
+        </member>
+        <member name="M:StockSharp.Algo.Strategies.Protective.ProtectiveStrategy.OnReseted">
+            <summary>
+            It is called from the <see cref="M:StockSharp.Algo.Strategies.Strategy.Reset"/> method.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Algo.Strategies.Protective.ProtectiveStrategy.ClosePositionPrice">
+            <summary>
+            The market price of position closing. If there is no information about the current price, then the <see langword="null" /> will be returned.
+            </summary>
+        </member>
+        <member name="M:StockSharp.Algo.Strategies.Protective.ProtectiveStrategy.ProcessTimeOut">
+            <summary>
+            The <see cref="P:StockSharp.Algo.Strategies.Quoting.QuotingStrategy.TimeOut"/> occurrence event handler.
+            </summary>
+        </member>
+        <member name="M:StockSharp.Algo.Strategies.Protective.ProtectiveStrategy.RegisterQuotingOrder(StockSharp.BusinessEntities.Order)">
+            <summary>
+            To register the quoted order.
+            </summary>
+            <param name="order">The quoted order.</param>
+        </member>
+        <member name="M:StockSharp.Algo.Strategies.Protective.ProtectiveStrategy.NeedQuoting(System.Nullable{System.Decimal},System.Nullable{System.Decimal},System.Decimal)">
+            <summary>
+            Should the order be quoted.
+            </summary>
+            <param name="currentPrice">The current price. If the value is equal to <see langword="null" /> then the order is not registered yet.</param>
+            <param name="currentVolume">The current volume. If the value is equal to <see langword="null" /> then the order is not registered yet.</param>
+            <param name="newVolume">New volume.</param>
+            <returns>The price at which the order will be registered. If the value is equal to <see langword="null" /> then the quoting is not required.</returns>
+        </member>
+        <member name="M:StockSharp.Algo.Strategies.Protective.ProtectiveStrategy.ProcessQuoting">
+            <summary>
+            To initiate the quoting.
+            </summary>
+        </member>
+        <member name="M:StockSharp.Algo.Strategies.Protective.ProtectiveStrategy.CreateQuoting">
+            <summary>
+            To create a quoting strategy for the protective order (its fulfilment is guaranteed).
+            </summary>
+            <returns>The strategy of quoting.</returns>
+        </member>
+        <member name="T:StockSharp.Algo.Strategies.Protective.StopLossStrategy">
+            <summary>
+            The loss protection strategy.
+            </summary>
+        </member>
+        <member name="M:StockSharp.Algo.Strategies.Protective.StopLossStrategy.#ctor(StockSharp.BusinessEntities.MyTrade,StockSharp.Messages.Unit)">
+            <summary>
+            To create a strategy <see cref="T:StockSharp.Algo.Strategies.Protective.StopLossStrategy"/>.
+            </summary>
+            <param name="trade">Protected position.</param>
+            <param name="protectiveLevel">The protective level. If the <see cref="P:StockSharp.Messages.Unit.Type"/> type is equal to <see cref="F:StockSharp.Messages.UnitTypes.Limit"/>, then the given price is specified. Otherwise, the shift value from the protected trade <paramref name="trade" /> is specified.</param>
+        </member>
+        <member name="M:StockSharp.Algo.Strategies.Protective.StopLossStrategy.#ctor(StockSharp.Messages.Sides,System.Decimal,System.Decimal,StockSharp.Messages.Unit)">
+            <summary>
+            To create a strategy <see cref="T:StockSharp.Algo.Strategies.Protective.StopLossStrategy"/>.
+            </summary>
+            <param name="protectiveSide">Protected position side.</param>
+            <param name="protectivePrice">Protected position price.</param>
+            <param name="protectiveVolume">The protected position volume.</param>
+            <param name="protectiveLevel">The protective level. If the <see cref="P:StockSharp.Messages.Unit.Type"/> type is equal to <see cref="F:StockSharp.Messages.UnitTypes.Limit"/>, then the given price is specified. Otherwise, the shift value from <paramref name="protectivePrice" /> is specified.</param>
+        </member>
+        <member name="T:StockSharp.Algo.Strategies.Protective.TakeProfitStopLossStrategy">
+            <summary>
+            The strategy protecting trades together by strategies <see cref="T:StockSharp.Algo.Strategies.Protective.TakeProfitStrategy"/> and <see cref="T:StockSharp.Algo.Strategies.Protective.StopLossStrategy"/>.
+            </summary>
+        </member>
+        <member name="M:StockSharp.Algo.Strategies.Protective.TakeProfitStopLossStrategy.#ctor(StockSharp.Algo.Strategies.Protective.TakeProfitStrategy,StockSharp.Algo.Strategies.Protective.StopLossStrategy)">
+            <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Algo.Strategies.Protective.TakeProfitStopLossStrategy"/>.
+            </summary>
+            <param name="takeProfit">Profit protection strategy.</param>
+            <param name="stopLoss">The loss protection strategy.</param>
+        </member>
+        <member name="P:StockSharp.Algo.Strategies.Protective.TakeProfitStopLossStrategy.ProtectiveVolume">
+            <summary>
+            Protected volume.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Algo.Strategies.Protective.TakeProfitStopLossStrategy.ProtectivePrice">
+            <summary>
+            Protected position price.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Algo.Strategies.Protective.TakeProfitStopLossStrategy.ProtectiveSide">
+            <summary>
+            Protected position side.
+            </summary>
+        </member>
+        <member name="E:StockSharp.Algo.Strategies.Protective.TakeProfitStopLossStrategy.ProtectiveVolumeChanged">
+            <summary>
+            The protected volume change event.
+            </summary>
+        </member>
+        <member name="T:StockSharp.Algo.Strategies.Protective.TakeProfitStrategy">
+            <summary>
+            Profit protection strategy.
+            </summary>
+        </member>
+        <member name="M:StockSharp.Algo.Strategies.Protective.TakeProfitStrategy.#ctor(StockSharp.BusinessEntities.MyTrade,StockSharp.Messages.Unit)">
+            <summary>
+            To create a strategy <see cref="T:StockSharp.Algo.Strategies.Protective.TakeProfitStrategy"/>.
+            </summary>
+            <param name="trade">Protected position.</param>
+            <param name="protectiveLevel">The protective level. If the <see cref="P:StockSharp.Messages.Unit.Type"/> type is equal to <see cref="F:StockSharp.Messages.UnitTypes.Limit"/>, then the given price is specified. Otherwise, the shift value from the protected trade <paramref name="trade" /> is specified.</param>
+        </member>
+        <member name="M:StockSharp.Algo.Strategies.Protective.TakeProfitStrategy.#ctor(StockSharp.Messages.Sides,System.Decimal,System.Decimal,StockSharp.Messages.Unit)">
+            <summary>
+            To create a strategy <see cref="T:StockSharp.Algo.Strategies.Protective.TakeProfitStrategy"/>.
+            </summary>
+            <param name="protectiveSide">Protected position side.</param>
+            <param name="protectivePrice">Protected position price.</param>
+            <param name="protectiveVolume">The protected position volume.</param>
+            <param name="protectiveLevel">The protective level. If the <see cref="P:StockSharp.Messages.Unit.Type"/> type is equal to <see cref="F:StockSharp.Messages.UnitTypes.Limit"/>, then the given price is specified. Otherwise, the shift value from <paramref name="protectivePrice" /> is specified.</param>
+        </member>
+        <member name="T:StockSharp.Algo.Strategies.Quoting.BestByPriceQuotingStrategy">
+            <summary>
+            The quoting by the best price. For this quoting the shift from the best price <see cref="P:StockSharp.Algo.Strategies.Quoting.BestByPriceQuotingStrategy.BestPriceOffset"/> is specified, on which quoted order can be changed.
+            </summary>
+        </member>
+        <member name="M:StockSharp.Algo.Strategies.Quoting.BestByPriceQuotingStrategy.#ctor(StockSharp.Messages.Sides,System.Decimal)">
+            <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Algo.Strategies.Quoting.BestByPriceQuotingStrategy"/>.
+            </summary>
+            <param name="quotingDirection">Quoting direction.</param>
+            <param name="quotingVolume">Total quoting volume.</param>
+        </member>
+        <member name="M:StockSharp.Algo.Strategies.Quoting.BestByPriceQuotingStrategy.#ctor(StockSharp.BusinessEntities.Order,StockSharp.Messages.Unit)">
+            <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Algo.Strategies.Quoting.BestByPriceQuotingStrategy"/>.
+            </summary>
+            <param name="order">Quoting order.</param>
+            <param name="bestPriceOffset">The shift from the best price, on which quoted order can be changed.</param>
+        </member>
+        <member name="P:StockSharp.Algo.Strategies.Quoting.BestByPriceQuotingStrategy.BestPriceOffset">
+            <summary>
+            The shift from the best price, on which quoted order can be changed.
+            </summary>
+        </member>
+        <member name="M:StockSharp.Algo.Strategies.Quoting.BestByPriceQuotingStrategy.NeedQuoting(System.Nullable{System.Decimal},System.Nullable{System.Decimal},System.Decimal)">
+            <summary>
+            Should the order be quoted.
+            </summary>
+            <param name="currentPrice">The current price. If the value is equal to <see langword="null" /> then the order is not registered yet.</param>
+            <param name="currentVolume">The current volume. If the value is equal to <see langword="null" /> then the order is not registered yet.</param>
+            <param name="newVolume">New volume.</param>
+            <returns>The price at which the order will be registered. If the value is equal to <see langword="null" /> then the quoting is not required.</returns>
+        </member>
+        <member name="T:StockSharp.Algo.Strategies.Quoting.BestByVolumeQuotingStrategy">
+            <summary>
+            The quoting according to the Best By Volume rule. For this quoting the volume delta <see cref="P:StockSharp.Algo.Strategies.Quoting.BestByVolumeQuotingStrategy.VolumeExchange"/> is specified, which can stand in front of the quoted order.
+            </summary>
+        </member>
+        <member name="M:StockSharp.Algo.Strategies.Quoting.BestByVolumeQuotingStrategy.#ctor(StockSharp.Messages.Sides,System.Decimal)">
+            <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Algo.Strategies.Quoting.BestByVolumeQuotingStrategy"/>.
+            </summary>
+            <param name="quotingDirection">Quoting direction.</param>
+            <param name="quotingVolume">Total quoting volume.</param>
+        </member>
+        <member name="M:StockSharp.Algo.Strategies.Quoting.BestByVolumeQuotingStrategy.#ctor(StockSharp.BusinessEntities.Order,StockSharp.Messages.Unit)">
+            <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Algo.Strategies.Quoting.BestByVolumeQuotingStrategy"/>.
+            </summary>
+            <param name="order">Quoting order.</param>
+            <param name="volumeExchange">The volume delta that can stand in front of the quoted order.</param>
+            <returns>Strategy.</returns>
+        </member>
+        <member name="P:StockSharp.Algo.Strategies.Quoting.BestByVolumeQuotingStrategy.VolumeExchange">
+            <summary>
+            The volume delta that can stand in front of the quoted order.
+            </summary>
+        </member>
+        <member name="M:StockSharp.Algo.Strategies.Quoting.BestByVolumeQuotingStrategy.NeedQuoting(System.Nullable{System.Decimal},System.Nullable{System.Decimal},System.Decimal)">
+            <summary>
+            Should the order be quoted.
+            </summary>
+            <param name="currentPrice">The current price. If the value is equal to <see langword="null" /> then the order is not registered yet.</param>
+            <param name="currentVolume">The current volume. If the value is equal to <see langword="null" /> then the order is not registered yet.</param>
+            <param name="newVolume">New volume.</param>
+            <returns>The price at which the order will be registered. If the value is equal to <see langword="null" /> then the quoting is not required.</returns>
+        </member>
+        <member name="T:StockSharp.Algo.Strategies.Quoting.LastTradeQuotingStrategy">
+            <summary>
+            The quoting by the last trade price.
+            </summary>
+        </member>
+        <member name="M:StockSharp.Algo.Strategies.Quoting.LastTradeQuotingStrategy.#ctor(StockSharp.Messages.Sides,System.Decimal)">
+            <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Algo.Strategies.Quoting.LastTradeQuotingStrategy"/>.
+            </summary>
+            <param name="quotingDirection">Quoting direction.</param>
+            <param name="quotingVolume">Total quoting volume.</param>
+        </member>
+        <member name="M:StockSharp.Algo.Strategies.Quoting.LastTradeQuotingStrategy.#ctor(StockSharp.BusinessEntities.Order,StockSharp.Messages.Unit)">
+            <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Algo.Strategies.Quoting.LastTradeQuotingStrategy"/>.
+            </summary>
+            <param name="order">Quoting order.</param>
+            <param name="bestPriceOffset">The shift from the best price, on which the quoted order can be changed.</param>
+            <returns>Strategy.</returns>
+        </member>
+        <member name="P:StockSharp.Algo.Strategies.Quoting.LastTradeQuotingStrategy.BestPrice">
+            <summary>
+            To get the best price. If it is impossible to calculate the best price at the moment, then <see langword="null" /> will be returned.
+            </summary>
+        </member>
+        <member name="T:StockSharp.Algo.Strategies.Quoting.LevelQuotingStrategy">
+            <summary>
+            The quoting by specified level in the order book.
+            </summary>
+        </member>
+        <member name="M:StockSharp.Algo.Strategies.Quoting.LevelQuotingStrategy.#ctor(StockSharp.Messages.Sides,System.Decimal)">
+            <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Algo.Strategies.Quoting.LevelQuotingStrategy"/>.
+            </summary>
+            <param name="quotingDirection">Quoting direction.</param>
+            <param name="quotingVolume">Total quoting volume.</param>
+        </member>
+        <member name="P:StockSharp.Algo.Strategies.Quoting.LevelQuotingStrategy.Level">
+            <summary>
+            The level in the order book. It specifies the number of quotes to the deep from the best one. By default, it is equal to {0:0} which means quoting by the best quote.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Algo.Strategies.Quoting.LevelQuotingStrategy.OwnLevel">
+            <summary>
+            To create your own price level in the order book, if there is no quote with necessary price yet. The default is disabled.
+            </summary>
+        </member>
+        <member name="M:StockSharp.Algo.Strategies.Quoting.LevelQuotingStrategy.NeedQuoting(System.Nullable{System.Decimal},System.Nullable{System.Decimal},System.Decimal)">
+            <summary>
+            Should the order be quoted.
+            </summary>
+            <param name="currentPrice">The current price. If the value is equal to <see langword="null" /> then the order is not registered yet.</param>
+            <param name="currentVolume">The current volume. If the value is equal to <see langword="null" /> then the order is not registered yet.</param>
+            <param name="newVolume">New volume.</param>
+            <returns>The price at which the order will be registered. If the value is equal to <see langword="null" /> then the quoting is not required.</returns>
+        </member>
+        <member name="T:StockSharp.Algo.Strategies.Quoting.LimitQuotingStrategy">
+            <summary>
+            The strategy realizing volume quoting algorithm by the limited price.
+            </summary>
+        </member>
+        <member name="M:StockSharp.Algo.Strategies.Quoting.LimitQuotingStrategy.#ctor(StockSharp.Messages.Sides,System.Decimal,System.Decimal)">
+            <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Algo.Strategies.Quoting.LimitQuotingStrategy"/>.
+            </summary>
+            <param name="quotingDirection">Quoting direction.</param>
+            <param name="quotingVolume">Total quoting volume.</param>
+            <param name="limitPrice">The limited price for quoted orders.</param>
+        </member>
+        <member name="P:StockSharp.Algo.Strategies.Quoting.LimitQuotingStrategy.LimitPrice">
+            <summary>
+            The limited price for quoted orders.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Algo.Strategies.Quoting.LimitQuotingStrategy.BestPrice">
+            <summary>
+            To get the best price. If it is impossible to calculate the best price at the moment, then <see langword="null" /> will be returned.
+            </summary>
+        </member>
+        <member name="T:StockSharp.Algo.Strategies.Quoting.MarketQuotingStrategy">
+            <summary>
+            The quoting by the market price.
+            </summary>
+        </member>
+        <member name="M:StockSharp.Algo.Strategies.Quoting.MarketQuotingStrategy.#ctor(StockSharp.Messages.Sides,System.Decimal)">
+            <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Algo.Strategies.Quoting.MarketQuotingStrategy"/>.
+            </summary>
+            <param name="quotingDirection">Quoting direction.</param>
+            <param name="quotingVolume">Total quoting volume.</param>
+        </member>
+        <member name="M:StockSharp.Algo.Strategies.Quoting.MarketQuotingStrategy.#ctor(StockSharp.BusinessEntities.Order,StockSharp.Messages.Unit,StockSharp.Messages.Unit)">
+            <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Algo.Strategies.Quoting.MarketQuotingStrategy"/>.
+            </summary>
+            <param name="order">Quoting order.</param>
+            <param name="bestPriceOffset">The shift from the best price, on which the quoted order can be changed.</param>
+            <param name="priceOffset">The price shift for the registering order. It determines the amount of shift from the best quote (for the buy it is added to the price, for the sell it is subtracted).</param>
+            <returns>Strategy.</returns>
+        </member>
+        <member name="P:StockSharp.Algo.Strategies.Quoting.MarketQuotingStrategy.PriceType">
+            <summary>
+            The market price type. The default value is <see cref="F:StockSharp.Algo.MarketPriceTypes.Following"/>.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Algo.Strategies.Quoting.MarketQuotingStrategy.PriceOffset">
+            <summary>
+            The price shift for the registering order. It determines the amount of shift from the best quote (for the buy it is added to the price, for the sell it is subtracted).
+            </summary>
+        </member>
+        <member name="P:StockSharp.Algo.Strategies.Quoting.MarketQuotingStrategy.BestPrice">
+            <summary>
+            To get the best price. If it is impossible to calculate the best price at the moment, then <see langword="null" /> will be returned.
+            </summary>
+        </member>
+        <member name="T:StockSharp.Algo.Strategies.Quoting.QuotingStrategy">
+            <summary>
+            Base quoting strategy class.
+            </summary>
+        </member>
+        <member name="M:StockSharp.Algo.Strategies.Quoting.QuotingStrategy.#ctor(StockSharp.Messages.Sides,System.Decimal)">
+            <summary>
+            Initialize <see cref="T:StockSharp.Algo.Strategies.Quoting.QuotingStrategy"/>.
+            </summary>
+            <param name="quotingDirection">Quoting direction.</param>
+            <param name="quotingVolume">Total quoting volume.</param>
+        </member>
+        <member name="M:StockSharp.Algo.Strategies.Quoting.QuotingStrategy.#ctor(StockSharp.BusinessEntities.Order)">
+            <summary>
+            Initialize <see cref="T:StockSharp.Algo.Strategies.Quoting.QuotingStrategy"/>.
+            </summary>
+            <param name="order">Quoting order.</param>
+        </member>
+        <member name="P:StockSharp.Algo.Strategies.Quoting.QuotingStrategy.IsSupportAtomicReRegister">
+            <summary>
+            Gets a value indicating whether the re-registration orders via the method <see cref="M:StockSharp.BusinessEntities.IConnector.ReRegisterOrder(StockSharp.BusinessEntities.Order,StockSharp.BusinessEntities.Order)"/> as a single transaction. The default is enabled.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Algo.Strategies.Quoting.QuotingStrategy.UseLastTradePrice">
+            <summary>
+            To use the last trade price, if the information in the order book is missed. The default is enabled.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Algo.Strategies.Quoting.QuotingStrategy.QuotingDirection">
+            <summary>
+            Quoting direction.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Algo.Strategies.Quoting.QuotingStrategy.QuotingVolume">
+            <summary>
+            Total quoting volume.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Algo.Strategies.Quoting.QuotingStrategy.Order">
+            <summary>
+            The order with which the quoting strategy is currently operating.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Algo.Strategies.Quoting.QuotingStrategy.MaxReRegisterCount">
+            <summary>
+            The maximum number of order changes above which the algorithm will be stopped.
+            </summary>
+            <remarks>
+            The default value is <see cref="F:System.Int32.MaxValue"/>.
+            </remarks>
+        </member>
+        <member name="P:StockSharp.Algo.Strategies.Quoting.QuotingStrategy.CurrentReRegisterCount">
+            <summary>
+            Current number of order changes.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Algo.Strategies.Quoting.QuotingStrategy.MaxRegisterFailCount">
+            <summary>
+            The maximum number of order registration errors above which the algorithm will be stopped.
+            </summary>
+            <remarks>
+            The default value is 100.
+            </remarks>
+        </member>
+        <member name="P:StockSharp.Algo.Strategies.Quoting.QuotingStrategy.CurrentRegisterFailCount">
+            <summary>
+            Current number of order registration errors.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Algo.Strategies.Quoting.QuotingStrategy.LeftVolume">
+            <summary>
+            The volume which is left to fulfill before the quoting end.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Algo.Strategies.Quoting.QuotingStrategy.TimeOut">
+            <summary>
+            The time limit during which the quoting should be fulfilled. If the total volume of <see cref="P:StockSharp.Algo.Strategies.Quoting.QuotingStrategy.QuotingVolume"/> will not be fulfilled by this time, the strategy will stop operating.
+            </summary>
+            <remarks>
+            By default, the limit is disabled and it is equal to <see cref="F:System.TimeSpan.Zero"/>.
+            </remarks>
+        </member>
+        <member name="P:StockSharp.Algo.Strategies.Quoting.QuotingStrategy.IsTimeOut">
+            <summary>
+            Is the <see cref="P:StockSharp.Algo.Strategies.Quoting.QuotingStrategy.TimeOut"/> occured.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Algo.Strategies.Quoting.QuotingStrategy.RegisterInterval">
+            <summary>
+            The order reregistration interval above which the new order would not be registered.
+            </summary>
+            <remarks>
+            By default, the interval is disabled and it is equal to <see cref="F:System.TimeSpan.Zero"/>.
+            </remarks>
+        </member>
+        <member name="M:StockSharp.Algo.Strategies.Quoting.QuotingStrategy.NeedFinish">
+            <summary>
+            Whether the quoting can be stopped.
+            </summary>
+            <returns><see langword="true" /> it is possible, otherwise, <see langword="false" />.</returns>
+            <remarks>
+            By default, the quoting is stopped when all contracts are fulfilled and <see cref="P:StockSharp.Algo.Strategies.Quoting.QuotingStrategy.LeftVolume"/> is equal to 0.
+            </remarks>
+        </member>
+        <member name="M:StockSharp.Algo.Strategies.Quoting.QuotingStrategy.NeedQuoting(System.Nullable{System.Decimal},System.Nullable{System.Decimal},System.Decimal)">
+            <summary>
+            Should the order be quoted.
+            </summary>
+            <param name="currentPrice">The current price. If the value is equal to <see langword="null" /> then the order is not registered yet.</param>
+            <param name="currentVolume">The current volume. If the value is equal to <see langword="null" /> then the order is not registered yet.</param>
+            <param name="newVolume">New volume.</param>
+            <returns>The price at which the order will be registered. If the value is equal to <see langword="null" /> then the quoting is not required.</returns>
+        </member>
+        <member name="P:StockSharp.Algo.Strategies.Quoting.QuotingStrategy.BestPrice">
+            <summary>
+            To get the best price. If it is impossible to calculate the best price at the moment, then <see langword="null" /> will be returned.
+            </summary>
+        </member>
+        <member name="M:StockSharp.Algo.Strategies.Quoting.QuotingStrategy.GetNewVolume">
+            <summary>
+            To get a new volume for an order.
+            </summary>
+            <returns>The new volume for an order.</returns>
+        </member>
+        <member name="M:StockSharp.Algo.Strategies.Quoting.QuotingStrategy.GetFilteredQuotes(StockSharp.Messages.Sides)">
+            <summary>
+            To get the order book filtered with <see cref="M:StockSharp.BusinessEntities.IConnector.GetFilteredMarketDepth(StockSharp.BusinessEntities.Security)"/>.
+            </summary>
+            <param name="side">The order book side (bids or offers).</param>
+            <returns>The filtered order book.</returns>
+        </member>
+        <member name="M:StockSharp.Algo.Strategies.Quoting.QuotingStrategy.GetNotificationRules">
+            <summary>
+            To get a list of rules on which the quoting will respond.
+            </summary>
+            <returns>Rule list.</returns>
+        </member>
+        <member name="M:StockSharp.Algo.Strategies.Quoting.QuotingStrategy.OnStopped">
+            <summary>
+            The method is called when the <see cref="P:StockSharp.Algo.Strategies.Strategy.ProcessState"/> process state has been taken the <see cref="F:StockSharp.Algo.ProcessStates.Stopped"/> value.
+            </summary>
+        </member>
+        <member name="M:StockSharp.Algo.Strategies.Quoting.QuotingStrategy.OnStarted">
+            <summary>
+            The method is called when the <see cref="M:StockSharp.Algo.Strategies.Strategy.Start"/> method has been called and the <see cref="P:StockSharp.Algo.Strategies.Strategy.ProcessState"/> state has been taken the <see cref="F:StockSharp.Algo.ProcessStates.Started"/> value.
+            </summary>
+        </member>
+        <member name="M:StockSharp.Algo.Strategies.Quoting.QuotingStrategy.ProcessTimeOut">
+            <summary>
+            The <see cref="P:StockSharp.Algo.Strategies.Quoting.QuotingStrategy.TimeOut"/> occurrence event handler.
+            </summary>
+        </member>
+        <member name="M:StockSharp.Algo.Strategies.Quoting.QuotingStrategy.OnStopping">
+            <summary>
+            The method is called when the <see cref="P:StockSharp.Algo.Strategies.Strategy.ProcessState"/> process state has been taken the <see cref="F:StockSharp.Algo.ProcessStates.Stopping"/> value.
+            </summary>
+        </member>
+        <member name="M:StockSharp.Algo.Strategies.Quoting.QuotingStrategy.NeedStop(StockSharp.BusinessEntities.OrderFail)">
+            <summary>
+            Whether the quoting should be stopped because of new order registration error.
+            </summary>
+            <param name="fail">Error detais.</param>
+            <returns>The <see langword="true" /> if the quoting should be stopped. Otherwise, <see langword="false" />.</returns>
+        </member>
+        <member name="M:StockSharp.Algo.Strategies.Quoting.QuotingStrategy.RegisterQuotingOrder(StockSharp.BusinessEntities.Order)">
+            <summary>
+            To register the quoted order.
+            </summary>
+            <param name="order">The quoted order.</param>
+        </member>
+        <member name="M:StockSharp.Algo.Strategies.Quoting.QuotingStrategy.ProcessQuoting">
+            <summary>
+            To initiate the quoting.
+            </summary>
+        </member>
+        <member name="T:StockSharp.Algo.Strategies.Derivatives.DeltaHedgeStrategy">
+            <summary>
+            The options delta hedging strategy .
+            </summary>
+        </member>
+        <member name="M:StockSharp.Algo.Strategies.Derivatives.DeltaHedgeStrategy.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Algo.Strategies.Derivatives.DeltaHedgeStrategy"/>.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Algo.Strategies.Derivatives.DeltaHedgeStrategy.PositionOffset">
+            <summary>
+            Shift in position for underlying asset, allowing not to hedge part of the options position.
+            </summary>
+        </member>
+        <member name="M:StockSharp.Algo.Strategies.Derivatives.DeltaHedgeStrategy.GetReHedgeOrders">
+            <summary>
+            To get a list of orders rehedging the option position.
+            </summary>
+            <returns>Rehedging orders.</returns>
+        </member>
+        <member name="T:StockSharp.Algo.Strategies.Derivatives.HedgeStrategy">
+            <summary>
+            The base strategy of hedging.
+            </summary>
+        </member>
+        <member name="M:StockSharp.Algo.Strategies.Derivatives.HedgeStrategy.#ctor">
+            <summary>
+            Initialize <see cref="T:StockSharp.Algo.Strategies.Derivatives.HedgeStrategy"/>.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Algo.Strategies.Derivatives.HedgeStrategy.BlackScholes">
+            <summary>
+            Portfolio model for calculating the values of Greeks by the Black-Scholes formula.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Algo.Strategies.Derivatives.HedgeStrategy.UseQuoting">
+            <summary>
+            Whether to quote the registered order by the market price. The default mode is disabled.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Algo.Strategies.Derivatives.HedgeStrategy.PriceOffset">
+            <summary>
+            The price shift for the registering order. It determines the amount of shift from the best quote (for the buy it is added to the price, for the sell it is subtracted).
+            </summary>
+        </member>
+        <member name="M:StockSharp.Algo.Strategies.Derivatives.HedgeStrategy.GetNotificationRules">
+            <summary>
+            To get a list of rules on which the rehedging will respond.
+            </summary>
+            <returns>Rule list.</returns>
+        </member>
+        <member name="M:StockSharp.Algo.Strategies.Derivatives.HedgeStrategy.OnStarted">
+            <summary>
+            The method is called when the <see cref="M:StockSharp.Algo.Strategies.Strategy.Start"/> method has been called and the <see cref="P:StockSharp.Algo.Strategies.Strategy.ProcessState"/> state has been taken the <see cref="F:StockSharp.Algo.ProcessStates.Started"/> value.
+            </summary>
+        </member>
+        <member name="M:StockSharp.Algo.Strategies.Derivatives.HedgeStrategy.GetReHedgeOrders">
+            <summary>
+            To get a list of orders rehedging the option position.
+            </summary>
+            <returns>Rehedging orders.</returns>
+        </member>
+        <member name="M:StockSharp.Algo.Strategies.Derivatives.HedgeStrategy.AddReHedgeQuoting(StockSharp.Algo.Strategies.Strategy,StockSharp.BusinessEntities.Order)">
+            <summary>
+            To add the rehedging strategy.
+            </summary>
+            <param name="parentStrategy">The parent strategy (by the strike or the underlying asset).</param>
+            <param name="order">The rehedging order.</param>
+        </member>
+        <member name="M:StockSharp.Algo.Strategies.Derivatives.HedgeStrategy.AddReHedgeOrder(StockSharp.Algo.Strategies.Strategy,StockSharp.BusinessEntities.Order)">
+            <summary>
+            To add the rehedging order.
+            </summary>
+            <param name="parentStrategy">The parent strategy (by the strike or the underlying asset).</param>
+            <param name="order">The rehedging order.</param>
+        </member>
+        <member name="M:StockSharp.Algo.Strategies.Derivatives.HedgeStrategy.ReHedge(System.Collections.Generic.IEnumerable{StockSharp.BusinessEntities.Order})">
+            <summary>
+            To start rehedging.
+            </summary>
+            <param name="orders">Rehedging orders.</param>
+        </member>
+        <member name="M:StockSharp.Algo.Strategies.Derivatives.HedgeStrategy.IsSuspended">
+            <summary>
+            Whether the rehedging is paused.
+            </summary>
+            <returns><see langword="true" /> if paused, otherwise, <see langword="false" />.</returns>
+        </member>
+        <member name="M:StockSharp.Algo.Strategies.Derivatives.HedgeStrategy.CreateQuoting(StockSharp.BusinessEntities.Order)">
+            <summary>
+            To create a quoting strategy to change the position.
+            </summary>
+            <param name="order">Quoting order.</param>
+            <returns>The strategy of quoting.</returns>
+        </member>
+        <member name="T:StockSharp.Algo.Strategies.Derivatives.TheorPriceQuotingStrategy">
+            <summary>
+            Option theoretical price quoting.
+            </summary>
+        </member>
+        <member name="M:StockSharp.Algo.Strategies.Derivatives.TheorPriceQuotingStrategy.#ctor(StockSharp.Messages.Sides,System.Decimal,Ecng.ComponentModel.Range{StockSharp.Messages.Unit})">
+            <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Algo.Strategies.Derivatives.TheorPriceQuotingStrategy"/>.
+            </summary>
+            <param name="quotingDirection">Quoting direction.</param>
+            <param name="quotingVolume">Total quoting volume.</param>
+            <param name="theorPriceOffset">Theoretical price offset.</param>
+        </member>
+        <member name="P:StockSharp.Algo.Strategies.Derivatives.TheorPriceQuotingStrategy.TheorPriceOffset">
+            <summary>
+            Theoretical price offset.
+            </summary>
+        </member>
+        <member name="M:StockSharp.Algo.Strategies.Derivatives.TheorPriceQuotingStrategy.NeedQuoting(System.Nullable{System.Decimal},System.Nullable{System.Decimal},System.Decimal)">
+            <summary>
+            Should the order be quoted.
+            </summary>
+            <param name="currentPrice">The current price. If the value is equal to <see langword="null" /> then the order is not registered yet.</param>
+            <param name="currentVolume">The current volume. If the value is equal to <see langword="null" /> then the order is not registered yet.</param>
+            <param name="newVolume">New volume.</param>
+            <returns>The price at which the order will be registered. If the value is equal to <see langword="null" /> then the quoting is not required.</returns>
+        </member>
+        <member name="T:StockSharp.Algo.Strategies.Derivatives.VolatilityQuotingStrategy">
+            <summary>
+            Option volatility quoting.
+            </summary>
+        </member>
+        <member name="M:StockSharp.Algo.Strategies.Derivatives.VolatilityQuotingStrategy.#ctor(StockSharp.Messages.Sides,System.Decimal,Ecng.ComponentModel.Range{System.Decimal})">
+            <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Algo.Strategies.Derivatives.VolatilityQuotingStrategy"/>.
+            </summary>
+            <param name="quotingDirection">Quoting direction.</param>
+            <param name="quotingVolume">Total quoting volume.</param>
+            <param name="ivRange">Volatility range.</param>
+        </member>
+        <member name="P:StockSharp.Algo.Strategies.Derivatives.VolatilityQuotingStrategy.IVRange">
+            <summary>
+            Volatility range.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Algo.Strategies.Derivatives.VolatilityQuotingStrategy.Security">
+            <summary>
+            Security.
+            </summary>
+        </member>
+        <member name="M:StockSharp.Algo.Strategies.Derivatives.VolatilityQuotingStrategy.NeedQuoting(System.Nullable{System.Decimal},System.Nullable{System.Decimal},System.Decimal)">
+            <summary>
+            Should the order be quoted.
+            </summary>
+            <param name="currentPrice">The current price. If the value is equal to <see langword="null" /> then the order is not registered yet.</param>
+            <param name="currentVolume">The current volume. If the value is equal to <see langword="null" /> then the order is not registered yet.</param>
+            <param name="newVolume">New volume.</param>
+            <returns>The price at which the order will be registered. If the value is equal to <see langword="null" /> then the quoting is not required.</returns>
+        </member>
+        <member name="T:StockSharp.Algo.Strategies.Extensions">
+            <summary>
+            Extension class for <see cref="T:StockSharp.Algo.Strategies.Strategy"/>.
+            </summary>
+        </member>
+        <member name="M:StockSharp.Algo.Strategies.Extensions.OpenPositionByQuoting(StockSharp.Algo.Strategies.Strategy,System.Decimal)">
+            <summary>
+            To open the position via quoting.
+            </summary>
+            <param name="strategy">Strategy.</param>
+            <param name="finishPosition">The position value that should be reached. A negative value means the short position.</param>
+        </member>
+        <member name="M:StockSharp.Algo.Strategies.Extensions.ClosePositionByQuoting(StockSharp.Algo.Strategies.Strategy)">
+            <summary>
+            To close the open position via quoting.
+            </summary>
+            <param name="strategy">Strategy.</param>
+        </member>
+        <member name="M:StockSharp.Algo.Strategies.Extensions.Protect(StockSharp.Algo.MarketRule{StockSharp.BusinessEntities.Order,System.Collections.Generic.IEnumerable{StockSharp.BusinessEntities.MyTrade}},StockSharp.Messages.Unit,StockSharp.Messages.Unit)">
+            <summary>
+            To create the action protecting orders by strategies <see cref="T:StockSharp.Algo.Strategies.Protective.TakeProfitStrategy"/> and <see cref="T:StockSharp.Algo.Strategies.Protective.StopLossStrategy"/>.
+            </summary>
+            <param name="rule">The rule for new orders.</param>
+            <param name="takePriceDelta">The delta from the price of the protected order, by which the protective take profit order is to be registered.</param>
+            <param name="stopPriceDelta">The delta from the price of the protected order, by which the protective stop loss order is to be registered.</param>
+            <returns>Rule.</returns>
+        </member>
+        <member name="M:StockSharp.Algo.Strategies.Extensions.Protect(StockSharp.Algo.MarketRule{StockSharp.BusinessEntities.Order,System.Collections.Generic.IEnumerable{StockSharp.BusinessEntities.MyTrade}},System.Func{StockSharp.BusinessEntities.MyTrade,StockSharp.Algo.Strategies.Protective.TakeProfitStrategy},System.Func{StockSharp.BusinessEntities.MyTrade,StockSharp.Algo.Strategies.Protective.StopLossStrategy})">
+            <summary>
+            To create the action protecting orders by strategies <see cref="T:StockSharp.Algo.Strategies.Protective.TakeProfitStrategy"/> and <see cref="T:StockSharp.Algo.Strategies.Protective.StopLossStrategy"/>.
+            </summary>
+            <param name="rule">The rule for new orders.</param>
+            <param name="takeProfit">The function that creates the strategy <see cref="T:StockSharp.Algo.Strategies.Protective.TakeProfitStrategy"/> by the order.</param>
+            <param name="stopLoss">The function that creates the strategy <see cref="T:StockSharp.Algo.Strategies.Protective.StopLossStrategy"/> by the order.</param>
+            <returns>Rule.</returns>
+        </member>
+        <member name="M:StockSharp.Algo.Strategies.Extensions.WhenActivated(StockSharp.Algo.Strategies.Protective.ProtectiveStrategy)">
+            <summary>
+            To create the rule for the event <see cref="E:StockSharp.Algo.Strategies.Protective.ProtectiveStrategy.Activated"/>.
+            </summary>
+            <param name="strategy">The strategy, by which the event will be monitored.</param>
+            <returns>Rule.</returns>
+        </member>
+    </members>
+</doc>

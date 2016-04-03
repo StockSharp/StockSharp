@@ -1,0 +1,88 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>StockSharp.Twime</name>
+    </assembly>
+    <members>
+        <member name="T:StockSharp.Twime.TwimeMessageAdapter">
+            <summary>
+            Адаптер сообщений для TWIME протокола.
+            </summary>
+        </member>
+        <member name="M:StockSharp.Twime.TwimeMessageAdapter.#ctor(Ecng.Common.IdGenerator)">
+            <summary>
+            Создать <see cref="T:StockSharp.Twime.TwimeMessageAdapter"/>.
+            </summary>
+            <param name="transactionIdGenerator">Генератор идентификаторов транзакций.</param>
+        </member>
+        <member name="M:StockSharp.Twime.TwimeMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)">
+            <summary>
+            Отправить сообщение.
+            </summary>
+            <param name="message">Сообщение.</param>
+        </member>
+        <member name="P:StockSharp.Twime.TwimeMessageAdapter.TransactionAddress">
+            <summary>
+            Адрес транзакционного сервера. По-умолчанию значение равно адресу локального компьютера 91.208.232.244:9000.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Twime.TwimeMessageAdapter.RecoveryAddress">
+            <summary>
+            Адрес сервера восстановления. По-умолчанию значение равно адресу локального компьютера 91.208.232.244:9001.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Twime.TwimeMessageAdapter.Login">
+            <summary>
+            Логин.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Twime.TwimeMessageAdapter.IsValid">
+            <summary>
+            Проверить введенные параметры на валидность.
+            </summary>
+        </member>
+        <member name="M:StockSharp.Twime.TwimeMessageAdapter.Save(Ecng.Serialization.SettingsStorage)">
+            <summary>
+            Сохранить настройки.
+            </summary>
+            <param name="storage">Хранилище настроек.</param>
+        </member>
+        <member name="M:StockSharp.Twime.TwimeMessageAdapter.Load(Ecng.Serialization.SettingsStorage)">
+            <summary>
+            Загрузить настройки.
+            </summary>
+            <param name="storage">Хранилище настроек.</param>
+        </member>
+        <member name="M:StockSharp.Twime.TwimeMessageAdapter.ToString">
+            <summary>
+            Получить строковое представление.
+            </summary>
+            <returns>Строковое представление.</returns>
+        </member>
+        <member name="T:StockSharp.Twime.TwimeTrader">
+            <summary>
+            Реализация интерфейса <see cref="T:StockSharp.BusinessEntities.IConnector"/>, предоставляющая подключение к MOEX через TWIME протокол.
+            </summary>
+        </member>
+        <member name="M:StockSharp.Twime.TwimeTrader.#ctor">
+            <summary>
+            Создать <see cref="T:StockSharp.Twime.TwimeTrader"/>.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Twime.TwimeTrader.TransactionAddress">
+            <summary>
+            Адрес транзакционного сервера. По-умолчанию значение равно адресу локального компьютера 91.208.232.244:9000.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Twime.TwimeTrader.RecoveryAddress">
+            <summary>
+            Адрес сервера восстановления. По-умолчанию значение равно адресу локального компьютера 91.208.232.244:9001.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Twime.TwimeTrader.Login">
+            <summary>
+            Логин.
+            </summary>
+        </member>
+    </members>
+</doc>

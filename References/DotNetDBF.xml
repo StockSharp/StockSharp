@@ -1,0 +1,100 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>DotNetDBF</name>
+    </assembly>
+    <members>
+        <member name="M:DotNetDBF.DBFWriter.#ctor">
+            Creates an empty Object.
+        </member>
+        <member name="M:DotNetDBF.DBFWriter.#ctor(System.String)">
+            Creates a DBFWriter which can append to records to an existing DBF file.
+            @param dbfFile. The file passed in shouls be a valid DBF file.
+            @exception Throws DBFException if the passed in file does exist but not a valid DBF file, or if an IO error occurs.
+        </member>
+        <member name="M:DotNetDBF.DBFWriter.Dispose">
+            <summary>Performs application-defined tasks associated with freeing, releasing,
+            or resetting unmanaged resources.</summary>
+            <filterpriority>2</filterpriority>
+        </member>
+        <member name="M:DotNetDBF.DBFWriter.WriteRecord(System.Object[])">
+            		 Add a record.
+        </member>
+        <member name="M:DotNetDBF.DBFWriter.Write(System.IO.Stream)">
+            Writes the set data to the OutputStream.
+        </member>
+        <member name="P:DotNetDBF.DBFWriter.Fields">
+            Sets fields.
+        </member>
+        <member name="M:DotNetDBF.DBFReader.SetSelectFields(System.String[])">
+            		 Initializes a DBFReader object.
+            		 
+            		 When this constructor returns the object
+            		 will have completed reading the hader (meta date) and
+            		 header information can be quried there on. And it will
+            		 be ready to return the first row.
+            		 
+            		 @param InputStream where the data is read from.
+        </member>
+        <member name="M:DotNetDBF.DBFReader.Dispose">
+            <summary>Performs application-defined tasks associated with freeing, releasing,
+            or resetting unmanaged resources.</summary>
+            <filterpriority>2</filterpriority>
+        </member>
+        <member name="M:DotNetDBF.DBFReader.NextRecord">
+            		 Reads the returns the next row in the DBF stream.
+            		 @returns The next row as an Object array. Types of the elements
+            		 these arrays follow the convention mentioned in the class description.
+        </member>
+        <member name="P:DotNetDBF.DBFReader.RecordCount">
+            		 Returns the number of records in the DBF.
+        </member>
+        <member name="P:DotNetDBF.DBFReader.Fields">
+            		 Returns the asked Field. In case of an invalid index,
+            		 it returns a ArrayIndexOutofboundsException.
+            		 
+            		 @param index. Index of the field. Index of the first field is zero.
+        </member>
+        <member name="M:DotNetDBF.DBFField.Write(System.IO.BinaryWriter)">
+                     Writes the content of DBFField object into the stream as per
+                     DBF format specifications.
+                     
+                     @param os OutputStream
+                     @throws IOException if any stream related issues occur.
+        </member>
+        <member name="M:DotNetDBF.DBFField.CreateField(System.IO.BinaryReader)">
+                     Creates a DBFField object from the data read from the given DataInputStream.
+                     
+                     The data in the DataInputStream object is supposed to be organised correctly
+                     and the stream "pointer" is supposed to be positioned properly.
+                     
+                     @param in DataInputStream
+                     @return Returns the created DBFField object.
+                     @throws IOException If any stream reading problems occures.
+        </member>
+        <member name="P:DotNetDBF.DBFField.Name">
+                     Returns the name of the field.
+                     
+                     @return Name of the field as String.
+        </member>
+        <member name="P:DotNetDBF.DBFField.Type">
+                     Returns the data type of the field.
+                     
+                     @return Data type as byte.
+        </member>
+        <member name="P:DotNetDBF.DBFField.FieldLength">
+                     Returns field length.
+                     
+                     @return field length as int.
+        </member>
+        <member name="P:DotNetDBF.DBFField.DecimalCount">
+                     Returns the decimal part. This is applicable
+                     only if the field type if of numeric in nature.
+                     
+                     If the field is specified to hold integral values
+                     the value returned by this method will be zero.
+                     
+                     @return decimal field size as int.
+        </member>
+    </members>
+</doc>

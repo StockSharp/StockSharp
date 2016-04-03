@@ -1,0 +1,200 @@
+<?xml version="1.0"?>
+<doc>
+  <assembly>
+    <name>StockSharp.Algo.Expressions</name>
+  </assembly>
+  <members>
+    <member name="T:StockSharp.Algo.Expressions.ExpressionFormula">
+      <summary>
+            Compiled mathematical formula.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Algo.Expressions.ExpressionFormula.Calculate(System.Decimal[])">
+      <summary>
+            To calculate the basket value.
+            </summary>
+      <param name="prices">Prices of basket composite instruments <see cref="P:StockSharp.BusinessEntities.BasketSecurity.InnerSecurities" />.</param>
+      <returns>The basket value.</returns>
+    </member>
+    <member name="P:StockSharp.Algo.Expressions.ExpressionFormula.Expression">
+      <summary>
+            The mathematic formula.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Algo.Expressions.ExpressionFormula.Error">
+      <summary>
+            Compilation error.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Algo.Expressions.ExpressionFormula.SecurityIds">
+      <summary>
+            IDs securities.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Algo.Expressions.ExpressionFormula.Compile(System.String)">
+      <summary>
+            Compile mathematical formula.
+            </summary>
+      <param name="expression">Text expression.</param>
+      <returns>Compiled mathematical formula.</returns>
+    </member>
+    <member name="T:StockSharp.Algo.Expressions.ExpressionHelper">
+      <summary>
+            Extension class for <see cref="T:StockSharp.Algo.Expressions.ExpressionIndexSecurity" />.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Algo.Expressions.ExpressionHelper.GetSecurityIds(System.String)">
+      <summary>
+            To get all <see cref="P:StockSharp.BusinessEntities.Security.Id" /> from mathematic formula.
+            </summary>
+      <param name="expression">Mathematical formula.</param>
+      <returns>IDs securities.</returns>
+    </member>
+    <member name="M:StockSharp.Algo.Expressions.ExpressionHelper.Encode(System.String)">
+      <summary>
+            To screen off mathematic formula from instruments identifiers <see cref="P:StockSharp.BusinessEntities.Security.Id" />.
+            </summary>
+      <param name="expression">The source text.</param>
+      <returns>The screened text.</returns>
+    </member>
+    <member name="M:StockSharp.Algo.Expressions.ExpressionHelper.Decode(System.String)">
+      <summary>
+            To screen on mathematic formula with instruments identifiers <see cref="P:StockSharp.BusinessEntities.Security.Id" />.
+            </summary>
+      <param name="expression">The source text.</param>
+      <returns>The unscreened text.</returns>
+    </member>
+    <member name="T:StockSharp.Algo.Expressions.ExpressionIndexSecurity">
+      <summary>
+            The index, built of combination of several instruments through mathematic formula <see cref="P:StockSharp.Algo.Expressions.ExpressionIndexSecurity.Expression" />.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Algo.Expressions.ExpressionIndexSecurity.#ctor">
+      <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Algo.Expressions.ExpressionIndexSecurity" />.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Algo.Expressions.ExpressionIndexSecurity.Expression">
+      <summary>
+            The mathematic formula of index.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Algo.Expressions.ExpressionIndexSecurity.InnerSecurities">
+      <summary>
+            Instruments, from which this basket is created.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Algo.Expressions.ExpressionIndexSecurity.Calculate(System.Decimal[])">
+      <summary>
+            To calculate the basket value.
+            </summary>
+      <param name="prices">Prices of basket composite instruments <see cref="P:StockSharp.BusinessEntities.BasketSecurity.InnerSecurities" />.</param>
+      <returns>The basket value.</returns>
+    </member>
+    <member name="M:StockSharp.Algo.Expressions.ExpressionIndexSecurity.Clone">
+      <summary>
+            Create a copy of <see cref="T:StockSharp.BusinessEntities.Security" />.
+            </summary>
+      <returns>Copy.</returns>
+    </member>
+    <member name="T:StockSharp.Algo.Expressions.Xaml.IndexEditor">
+      <summary>
+            The graphic control for editing <see cref="T:StockSharp.Algo.Expressions.ExpressionIndexSecurity" />.
+            </summary>
+      <summary>
+            IndexEditor
+            </summary>
+    </member>
+    <member name="M:StockSharp.Algo.Expressions.Xaml.IndexEditor.#ctor">
+      <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Algo.Expressions.Xaml.IndexEditor" />.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Algo.Expressions.Xaml.IndexEditor.Securities">
+      <summary>
+            All available instruments.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Algo.Expressions.Xaml.IndexEditor.Formula">
+      <summary>
+            Mathematical formula.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Algo.Expressions.Xaml.IndexEditor.Text">
+      <summary>
+            Text.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Algo.Expressions.Xaml.IndexEditor.HasError">
+      <summary>
+            The expression contains an error.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Algo.Expressions.Xaml.IndexEditor.HighligthFunctions">
+      <summary>
+            The list of highlighted features.
+            </summary>
+      <remarks>
+            By default, it includes: abs, acos, asin, atan, ceiling, cos, exp, floor, ieeeremainder, log, log10, max, min, pow, round, sign, sin, sqrt, tan, truncate.
+            </remarks>
+    </member>
+    <member name="P:StockSharp.Algo.Expressions.Xaml.IndexEditor.HighligthForeColor">
+      <summary>
+            The functions font color. The default value is <see cref="P:System.Windows.Media.Brushes.Red" />.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Algo.Expressions.Xaml.IndexEditor.HighligthBackColor">
+      <summary>
+            The functions background color. The default value is <see cref="P:System.Windows.Media.Brushes.White" />.
+            </summary>
+    </member>
+    <member name="E:StockSharp.Algo.Expressions.Xaml.IndexEditor.SecurityClicked">
+      <summary>
+            The event of click on the instrument.
+            </summary>
+    </member>
+    <member name="E:StockSharp.Algo.Expressions.Xaml.IndexEditor.TextChanged">
+      <summary>
+            The change event <see cref="P:StockSharp.Algo.Expressions.Xaml.IndexEditor.Text" />.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Algo.Expressions.Xaml.IndexEditor.InitializeComponent">
+      <summary>
+            InitializeComponent
+            </summary>
+    </member>
+    <member name="T:StockSharp.Algo.Expressions.Xaml.IndexSecurityWindow">
+      <summary>
+            The window for editing <see cref="T:StockSharp.Algo.Expressions.ExpressionIndexSecurity" />.
+            </summary>
+      <summary>
+            IndexSecurityWindow
+            </summary>
+    </member>
+    <member name="M:StockSharp.Algo.Expressions.Xaml.IndexSecurityWindow.#ctor">
+      <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Algo.Expressions.Xaml.IndexSecurityWindow" />.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Algo.Expressions.Xaml.IndexSecurityWindow.ValidateId">
+      <summary>
+            The handler checking the entered identifier availability for <see cref="T:StockSharp.BusinessEntities.Security" />.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Algo.Expressions.Xaml.IndexSecurityWindow.Securities">
+      <summary>
+            All available instruments.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Algo.Expressions.Xaml.IndexSecurityWindow.IndexSecurity">
+      <summary>
+            Index.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Algo.Expressions.Xaml.IndexSecurityWindow.InitializeComponent">
+      <summary>
+            InitializeComponent
+            </summary>
+    </member>
+  </members>
+</doc>

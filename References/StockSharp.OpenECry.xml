@@ -1,0 +1,335 @@
+<?xml version="1.0"?>
+<doc>
+  <assembly>
+    <name>StockSharp.OpenECry</name>
+  </assembly>
+  <members>
+    <member name="T:StockSharp.OpenECry.OpenECryMessageAdapter">
+      <summary>
+            The messages adapter for OpenECry.
+            </summary>
+    </member>
+    <member name="M:StockSharp.OpenECry.OpenECryMessageAdapter.#ctor(Ecng.Common.IdGenerator)">
+      <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.OpenECry.OpenECryMessageAdapter" />.
+            </summary>
+      <param name="transactionIdGenerator">Transaction id generator.</param>
+    </member>
+    <member name="F:StockSharp.OpenECry.OpenECryMessageAdapter.DefaultUuid">
+      <summary>
+            Default unique software ID.
+            </summary>
+    </member>
+    <member name="M:StockSharp.OpenECry.OpenECryMessageAdapter.CreateOrderCondition">
+      <summary>
+            Create condition for order type <see cref="F:StockSharp.Messages.OrderTypes.Conditional" />, that supports the adapter.
+            </summary>
+      <returns>Order condition. If the connection does not support the order type <see cref="F:StockSharp.Messages.OrderTypes.Conditional" />, it will be returned <see langword="null" />.</returns>
+    </member>
+    <member name="P:StockSharp.OpenECry.OpenECryMessageAdapter.SecurityLookupRequired">
+      <summary>
+        <see cref="T:StockSharp.Messages.SecurityLookupMessage" /> required to get securities.
+            </summary>
+    </member>
+    <member name="P:StockSharp.OpenECry.OpenECryMessageAdapter.IsSupportNativePortfolioLookup">
+      <summary>
+            Gets a value indicating whether the connector supports position lookup.
+            </summary>
+    </member>
+    <member name="P:StockSharp.OpenECry.OpenECryMessageAdapter.IsSupportNativeSecurityLookup">
+      <summary>
+            Gets a value indicating whether the connector supports security lookup.
+            </summary>
+    </member>
+    <member name="M:StockSharp.OpenECry.OpenECryMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)">
+      <summary>
+            Send message.
+            </summary>
+      <param name="message">Message.</param>
+    </member>
+    <member name="P:StockSharp.OpenECry.OpenECryMessageAdapter.Address">
+      <summary>
+            The OpenECry server API address. The default is <see cref="F:StockSharp.OpenECry.OpenECryAddresses.Api" />.
+            </summary>
+    </member>
+    <member name="P:StockSharp.OpenECry.OpenECryMessageAdapter.Login">
+      <summary>
+            OpenECry login.
+            </summary>
+    </member>
+    <member name="P:StockSharp.OpenECry.OpenECryMessageAdapter.Password">
+      <summary>
+            OpenECry password.
+            </summary>
+    </member>
+    <member name="P:StockSharp.OpenECry.OpenECryMessageAdapter.Uuid">
+      <summary>
+            Unique software ID.
+            </summary>
+    </member>
+    <member name="P:StockSharp.OpenECry.OpenECryMessageAdapter.Remoting">
+      <summary>
+            The required mode of connection to the terminal. The default is <see cref="F:StockSharp.OpenECry.OpenECryRemoting.None" />.
+            </summary>
+    </member>
+    <member name="P:StockSharp.OpenECry.OpenECryMessageAdapter.UseNativeReconnect">
+      <summary>
+            To use the 'native' reconnection process. Enabled by default.
+            </summary>
+    </member>
+    <member name="P:StockSharp.OpenECry.OpenECryMessageAdapter.EnableOECLogging">
+      <summary>
+            Use OpenECry API logging.
+            </summary>
+    </member>
+    <member name="P:StockSharp.OpenECry.OpenECryMessageAdapter.TimeFrames">
+      <summary>
+            Available time frames.
+            </summary>
+    </member>
+    <member name="M:StockSharp.OpenECry.OpenECryMessageAdapter.Save(Ecng.Serialization.SettingsStorage)">
+      <summary>
+            Save settings.
+            </summary>
+      <param name="storage">Settings storage.</param>
+    </member>
+    <member name="M:StockSharp.OpenECry.OpenECryMessageAdapter.Load(Ecng.Serialization.SettingsStorage)">
+      <summary>
+            Load settings.
+            </summary>
+      <param name="storage">Settings storage.</param>
+    </member>
+    <member name="T:StockSharp.OpenECry.OpenECryRemoting">
+      <summary>
+            Connection to the terminal modes. Description of functionality http://www.openecry.com/api/OECAPIRemoting.pdf.
+            </summary>
+    </member>
+    <member name="F:StockSharp.OpenECry.OpenECryRemoting.None">
+      <summary>
+            Disabled.
+            </summary>
+    </member>
+    <member name="F:StockSharp.OpenECry.OpenECryRemoting.Primary">
+      <summary>
+            If there is another connection with the same Login/Password, it can be diconnected.
+            </summary>
+    </member>
+    <member name="F:StockSharp.OpenECry.OpenECryRemoting.Secondary">
+      <summary>
+            An attempt to activate the mode <see cref="F:StockSharp.OpenECry.OpenECryRemoting.Secondary" />, in case of failure the mode <see cref="F:StockSharp.OpenECry.OpenECryRemoting.None" /> is activated.
+            </summary>
+    </member>
+    <member name="T:StockSharp.OpenECry.Xaml.OpenECryAddressComboBox">
+      <summary>
+            The drop-down list to select the OpenECry server address.
+            </summary>
+    </member>
+    <member name="M:StockSharp.OpenECry.Xaml.OpenECryAddressComboBox.#ctor">
+      <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.OpenECry.Xaml.OpenECryAddressComboBox" />.
+            </summary>
+    </member>
+    <member name="T:StockSharp.OpenECry.Xaml.OpenECryEndPointEditor">
+      <summary>
+            The drop-down list to select the OpenECry server address.
+            </summary>
+    </member>
+    <member name="T:StockSharp.OpenECry.OpenECryAddresses">
+      <summary>
+            Addresses of OpenECry system servers.
+            </summary>
+    </member>
+    <member name="F:StockSharp.OpenECry.OpenECryAddresses.DefaultPort">
+      <summary>
+            The server port default value is 9200.
+            </summary>
+    </member>
+    <member name="F:StockSharp.OpenECry.OpenECryAddresses.Api">
+      <summary>
+            The main server. Address is api.openecry.com, port 9200.
+            </summary>
+    </member>
+    <member name="F:StockSharp.OpenECry.OpenECryAddresses.Sim">
+      <summary>
+            Demo server. Address is sim.openecry.com, port 9200.
+            </summary>
+    </member>
+    <member name="T:StockSharp.OpenECry.OpenECryStopType">
+      <summary>
+            The type of the conditional order OpenECry.
+            </summary>
+    </member>
+    <member name="F:StockSharp.OpenECry.OpenECryStopType.StopMarket">
+      <summary>
+            The market order is automatically registered after reaching the stop price.
+            </summary>
+    </member>
+    <member name="F:StockSharp.OpenECry.OpenECryStopType.StopLimit">
+      <summary>
+            The limit order is automatically registered after reaching the stop price.
+            </summary>
+    </member>
+    <member name="F:StockSharp.OpenECry.OpenECryStopType.TrailingStopMarket">
+      <summary>
+            Stop price automatically follows the market, but only in a profitable direction for position, staying on specified in advance interval from market price. If the market reaches the stop price, the market order is automatically registered.
+            </summary>
+    </member>
+    <member name="F:StockSharp.OpenECry.OpenECryStopType.TrailingStopLimit">
+      <summary>
+            As <see cref="F:StockSharp.OpenECry.OpenECryStopType.TrailingStopMarket" />, but when it reaches the stop price the limit order is registered.
+            </summary>
+    </member>
+    <member name="T:StockSharp.OpenECry.OpenECryStopAssetTypes">
+      <summary>
+            Asset types.
+            </summary>
+    </member>
+    <member name="F:StockSharp.OpenECry.OpenECryStopAssetTypes.All">
+      <summary>
+            All.
+            </summary>
+    </member>
+    <member name="F:StockSharp.OpenECry.OpenECryStopAssetTypes.Equity">
+      <summary>
+            Equity.
+            </summary>
+    </member>
+    <member name="F:StockSharp.OpenECry.OpenECryStopAssetTypes.Future">
+      <summary>
+            Future.
+            </summary>
+    </member>
+    <member name="T:StockSharp.OpenECry.OpenECryOrderCondition">
+      <summary>
+        <see cref="N:StockSharp.OpenECry" /> order condition.
+            </summary>
+    </member>
+    <member name="M:StockSharp.OpenECry.OpenECryOrderCondition.#ctor">
+      <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.OpenECry.OpenECryOrderCondition" />.
+            </summary>
+    </member>
+    <member name="P:StockSharp.OpenECry.OpenECryOrderCondition.StopType">
+      <summary>
+            Stop type.
+            </summary>
+    </member>
+    <member name="P:StockSharp.OpenECry.OpenECryOrderCondition.StopPrice">
+      <summary>
+            Stop-price.
+            </summary>
+    </member>
+    <member name="P:StockSharp.OpenECry.OpenECryOrderCondition.Delta">
+      <summary>
+            Trailing stop follows the market if price change is larger than Delta.
+            </summary>
+    </member>
+    <member name="P:StockSharp.OpenECry.OpenECryOrderCondition.IsPercentDelta">
+      <summary>
+        <see langword="true" />, if <see cref="P:StockSharp.OpenECry.OpenECryOrderCondition.Delta" /> expressed in percentage.
+            </summary>
+    </member>
+    <member name="P:StockSharp.OpenECry.OpenECryOrderCondition.TriggerType">
+      <summary>
+            Trigger field.
+            </summary>
+    </member>
+    <member name="P:StockSharp.OpenECry.OpenECryOrderCondition.ReferencePrice">
+      <summary>
+            Trailing stop begins tracking once the price reaches ReferencePrice.
+            </summary>
+    </member>
+    <member name="P:StockSharp.OpenECry.OpenECryOrderCondition.AssetType">
+      <summary>
+            Asset type.
+            </summary>
+    </member>
+    <member name="T:StockSharp.OpenECry.OpenECryException">
+      <summary>
+            The exception generated by the implementation of <see cref="T:StockSharp.OpenECry.OECTrader" /> in case of errors.
+            </summary>
+    </member>
+    <member name="T:StockSharp.OpenECry.OECTrader">
+      <summary>
+            The interface <see cref="T:StockSharp.BusinessEntities.IConnector" /> implementation which provides a connection to the OEC broker.
+            </summary>
+    </member>
+    <member name="M:StockSharp.OpenECry.OECTrader.#ctor">
+      <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.OpenECry.OECTrader" />.
+            </summary>
+    </member>
+    <member name="P:StockSharp.OpenECry.OECTrader.Uuid">
+      <summary>
+            Unique software ID.
+            </summary>
+    </member>
+    <member name="P:StockSharp.OpenECry.OECTrader.Login">
+      <summary>
+            OpenECry login.
+            </summary>
+    </member>
+    <member name="P:StockSharp.OpenECry.OECTrader.Password">
+      <summary>
+            OpenECry password.
+            </summary>
+    </member>
+    <member name="P:StockSharp.OpenECry.OECTrader.RemotingRequired">
+      <summary>
+            The required mode of connection to the terminal. The default is <see cref="F:StockSharp.OpenECry.OpenECryRemoting.None" />.
+            </summary>
+    </member>
+    <member name="P:StockSharp.OpenECry.OECTrader.UseNativeReconnect">
+      <summary>
+            To use the 'native' reconnection process. Enabled by default.
+            </summary>
+    </member>
+    <member name="P:StockSharp.OpenECry.OECTrader.Address">
+      <summary>
+            The OpenECry server API address. The default is <see cref="F:StockSharp.OpenECry.OpenECryAddresses.Api" />.
+            </summary>
+    </member>
+    <member name="P:StockSharp.OpenECry.OECTrader.EnableOECLogging">
+      <summary>
+            To use the OEC library logging.
+            </summary>
+    </member>
+    <member name="M:StockSharp.OpenECry.OECTrader.SendMessage(System.String,System.String)">
+      <summary>
+            To send a message to another user.
+            </summary>
+      <param name="userName">The recipient name.</param>
+      <param name="text">Message text.</param>
+    </member>
+    <member name="E:StockSharp.OpenECry.OECTrader.NewCandles">
+      <summary>
+            Event of new candles occurring, that are received after the subscription by <see cref="M:StockSharp.OpenECry.OECTrader.SubscribeCandles(StockSharp.Algo.Candles.CandleSeries,System.DateTimeOffset,System.DateTimeOffset)" />.
+            </summary>
+    </member>
+    <member name="E:StockSharp.OpenECry.OECTrader.Stopped">
+      <summary>
+            The series processing end event.
+            </summary>
+    </member>
+    <member name="M:StockSharp.OpenECry.OECTrader.SubscribeCandles(StockSharp.Algo.Candles.CandleSeries,System.DateTimeOffset,System.DateTimeOffset)">
+      <summary>
+            Subscribe to receive new candles.
+            </summary>
+      <param name="series">Candles series.</param>
+      <param name="from">The initial date from which you need to get data.</param>
+      <param name="to">The final date by which you need to get data.</param>
+    </member>
+    <member name="M:StockSharp.OpenECry.OECTrader.UnSubscribeCandles(StockSharp.Algo.Candles.CandleSeries)">
+      <summary>
+            To stop the candles receiving subscription, previously created by <see cref="M:StockSharp.OpenECry.OECTrader.SubscribeCandles(StockSharp.Algo.Candles.CandleSeries,System.DateTimeOffset,System.DateTimeOffset)" />.
+            </summary>
+      <param name="series">Candles series.</param>
+    </member>
+    <member name="M:StockSharp.OpenECry.OECTrader.OnProcessMessage(StockSharp.Messages.Message)">
+      <summary>
+            Process message.
+            </summary>
+      <param name="message">Message.</param>
+    </member>
+  </members>
+</doc>

@@ -1,0 +1,187 @@
+<?xml version="1.0"?>
+<doc>
+  <assembly>
+    <name>StockSharp.Oanda</name>
+  </assembly>
+  <members>
+    <member name="T:StockSharp.Oanda.OandaMessageAdapter">
+      <summary>
+            The messages adapter for OANDA (REST protocol).
+            </summary>
+      <summary>
+            The messages adapter for OANDA (REST protocol).
+            </summary>
+      <summary>
+            The messages adapter for OANDA (REST protocol).
+            </summary>
+      <summary>
+            The messages adapter for OANDA (REST protocol).
+            </summary>
+    </member>
+    <member name="M:StockSharp.Oanda.OandaMessageAdapter.#ctor(Ecng.Common.IdGenerator)">
+      <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Oanda.OandaMessageAdapter" />.
+            </summary>
+      <param name="transactionIdGenerator">Transaction id generator.</param>
+    </member>
+    <member name="M:StockSharp.Oanda.OandaMessageAdapter.CreateOrderCondition">
+      <summary>
+            Create condition for order type <see cref="F:StockSharp.Messages.OrderTypes.Conditional" />, that supports the adapter.
+            </summary>
+      <returns>Order condition. If the connection does not support the order type <see cref="F:StockSharp.Messages.OrderTypes.Conditional" />, it will be returned <see langword="null" />.</returns>
+    </member>
+    <member name="P:StockSharp.Oanda.OandaMessageAdapter.IsSupportNativeSecurityLookup">
+      <summary>
+            Gets a value indicating whether the connector supports security lookup.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Oanda.OandaMessageAdapter.IsSupportNativePortfolioLookup">
+      <summary>
+            Gets a value indicating whether the connector supports position lookup.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Oanda.OandaMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)">
+      <summary>
+            Send message.
+            </summary>
+      <param name="message">Message.</param>
+    </member>
+    <member name="P:StockSharp.Oanda.OandaMessageAdapter.Server">
+      <summary>
+            Server.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Oanda.OandaMessageAdapter.Token">
+      <summary>
+            Token.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Oanda.OandaMessageAdapter.TimeFrames">
+      <summary>
+            Available time frames.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Oanda.OandaMessageAdapter.Save(Ecng.Serialization.SettingsStorage)">
+      <summary>
+            Save settings.
+            </summary>
+      <param name="storage">Settings storage.</param>
+    </member>
+    <member name="M:StockSharp.Oanda.OandaMessageAdapter.Load(Ecng.Serialization.SettingsStorage)">
+      <summary>
+            Load settings.
+            </summary>
+      <param name="storage">Settings storage.</param>
+    </member>
+    <member name="T:StockSharp.Oanda.OandaOrderCondition">
+      <summary>
+        <see cref="N:StockSharp.Oanda" /> order condition.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Oanda.OandaOrderCondition.#ctor">
+      <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Oanda.OandaOrderCondition" />.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Oanda.OandaOrderCondition.IsMarket">
+      <summary>
+            If Market If Touched mode.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Oanda.OandaOrderCondition.LowerBound">
+      <summary>
+            Minimum execution price.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Oanda.OandaOrderCondition.UpperBound">
+      <summary>
+            Maximum execution price.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Oanda.OandaOrderCondition.StopLossOffset">
+      <summary>
+            Stop-loss offset.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Oanda.OandaOrderCondition.TakeProfitOffset">
+      <summary>
+            Take-profit offset.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Oanda.OandaOrderCondition.TrailingStopLossOffset">
+      <summary>
+            Offset of a trailing stop-loss.
+            </summary>
+    </member>
+    <member name="T:StockSharp.Oanda.OandaServers">
+      <summary>
+            Servers types.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Oanda.OandaServers.Sandbox">
+      <summary>
+            Demo.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Oanda.OandaServers.Practice">
+      <summary>
+            Simulator.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Oanda.OandaServers.Real">
+      <summary>
+            Real.
+            </summary>
+    </member>
+    <member name="T:StockSharp.Oanda.OandaTrader">
+      <summary>
+            The interface <see cref="T:StockSharp.BusinessEntities.IConnector" /> implementation which provides a connection to the OANDA.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Oanda.OandaTrader.#ctor">
+      <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Oanda.OandaTrader" />.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Oanda.OandaTrader.Server">
+      <summary>
+            Server.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Oanda.OandaTrader.Token">
+      <summary>
+            Token.
+            </summary>
+    </member>
+    <member name="E:StockSharp.Oanda.OandaTrader.NewCandles">
+      <summary>
+            Event of new candles occurring, that are received after the subscription by <see cref="M:StockSharp.Oanda.OandaTrader.SubscribeCandles(StockSharp.Algo.Candles.CandleSeries,System.DateTimeOffset,System.DateTimeOffset)" />.
+            </summary>
+    </member>
+    <member name="E:StockSharp.Oanda.OandaTrader.Stopped">
+      <summary>
+            The series processing end event.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Oanda.OandaTrader.SubscribeCandles(StockSharp.Algo.Candles.CandleSeries,System.DateTimeOffset,System.DateTimeOffset)">
+      <summary>
+            Subscribe to receive new candles.
+            </summary>
+      <param name="series">Candles series.</param>
+      <param name="from">The initial date from which you need to get data.</param>
+      <param name="to">The final date by which you need to get data.</param>
+    </member>
+    <member name="M:StockSharp.Oanda.OandaTrader.UnSubscribeCandles(StockSharp.Algo.Candles.CandleSeries)">
+      <summary>
+            To stop the candles receiving subscription, previously created by <see cref="M:StockSharp.Oanda.OandaTrader.SubscribeCandles(StockSharp.Algo.Candles.CandleSeries,System.DateTimeOffset,System.DateTimeOffset)" />.
+            </summary>
+      <param name="series">Candles series.</param>
+    </member>
+    <member name="M:StockSharp.Oanda.OandaTrader.OnProcessMessage(StockSharp.Messages.Message)">
+      <summary>
+            Process message.
+            </summary>
+      <param name="message">Message.</param>
+    </member>
+  </members>
+</doc>
