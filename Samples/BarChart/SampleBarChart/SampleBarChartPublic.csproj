@@ -67,13 +67,6 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\Connectors\BarChart\StockSharp.BarChart.dll</HintPath>
     </Reference>
-    <Reference Include="StockSharp.Xaml, Version=4.3.14.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\Xaml\StockSharp.Xaml.dll</HintPath>
-    </Reference>
-    <Reference Include="StockSharp.Xaml.Charting">
-      <HintPath>..\..\..\Xaml.Charting\StockSharp.Xaml.Charting.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.configuration" />
     <Reference Include="System.Core" />
@@ -219,6 +212,14 @@
     </Resource>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\..\StockSharpApps\Xaml.Charting\Xaml.ChartingPublic.csproj">
+      <Project>{C449D618-DEA4-41C3-BA86-9F827C7421DC}</Project>
+      <Name>Xaml.ChartingPublic</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\StockSharpApps\Xaml\Xaml.csproj">
+      <Project>{64e4d6f0-36b6-4904-9ba7-fffbe5ff71d8}</Project>
+      <Name>Xaml</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\Algo\Algo.csproj">
       <Project>{2a5c6fad-106c-4a4a-b602-77a6b1034ca2}</Project>
       <Name>Algo</Name>

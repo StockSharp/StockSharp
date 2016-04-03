@@ -41,21 +41,8 @@
     <ApplicationIcon>..\..\..\References\stocksharp.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="StockSharp.Algo.Strategies">
-      <HintPath>..\..\..\Algo.Strategies\StockSharp.Algo.Strategies.dll</HintPath>
-    </Reference>
-    <Reference Include="StockSharp.Licensing">
-      <HintPath>..\..\..\References\StockSharp.Licensing.dll</HintPath>
-    </Reference>
     <Reference Include="StockSharp.Plaza">
       <HintPath>..\..\..\Connectors\Plaza\StockSharp.Plaza.dll</HintPath>
-    </Reference>
-    <Reference Include="StockSharp.Xaml, Version=4.3.14.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\Xaml\StockSharp.Xaml.dll</HintPath>
-    </Reference>
-    <Reference Include="StockSharp.Xaml.Charting">
-      <HintPath>..\..\..\Xaml.Charting\StockSharp.Xaml.Charting.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.configuration" />
@@ -145,6 +132,18 @@
     </Resource>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\..\StockSharpApps\Algo.Strategies\Algo.StrategiesPublic.csproj">
+      <Project>{FCB47C52-E1EA-4020-B88C-E750924F5716}</Project>
+      <Name>Algo.StrategiesPublic</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\StockSharpApps\Xaml.Charting\Xaml.ChartingPublic.csproj">
+      <Project>{c449d618-dea4-41c3-ba86-9f827c7421dc}</Project>
+      <Name>Xaml.ChartingPublic</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\StockSharpApps\Xaml\Xaml.csproj">
+      <Project>{64e4d6f0-36b6-4904-9ba7-fffbe5ff71d8}</Project>
+      <Name>Xaml</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\Algo\Algo.csproj">
       <Project>{2a5c6fad-106c-4a4a-b602-77a6b1034ca2}</Project>
       <Name>Algo</Name>

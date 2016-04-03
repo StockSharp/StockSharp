@@ -34,29 +34,20 @@ namespace SampleOptionQuoting
 	using StockSharp.Algo.Derivatives;
 	using StockSharp.Algo.Strategies.Derivatives;
 	using StockSharp.Messages;
-	using StockSharp.Localization;
 	using StockSharp.Xaml;
 
 	public partial class MainWindow
 	{
 		private class FakeConnector : Connector, IMarketDataProvider
 		{
-			private readonly IEnumerable<Security> _securities;
-
 			public FakeConnector(IEnumerable<Security> securities)
 			{
-				_securities = securities;
+				Securities = securities;
 			}
 
-			public override IEnumerable<Security> Securities
-			{
-				get { return _securities; }
-			}
+			public override IEnumerable<Security> Securities { get; }
 
-			public override DateTimeOffset CurrentTime
-			{
-				get { return DateTime.Now; }
-			}
+			public override DateTimeOffset CurrentTime => DateTime.Now;
 
 			object IMarketDataProvider.GetSecurityValue(Security security, Level1Fields field)
 			{
@@ -91,9 +82,6 @@ namespace SampleOptionQuoting
 			_assets = new ThreadSafeObservableCollection<Security>(assetsSource);
 			_options = new ThreadSafeObservableCollection<Security>(optionsSource);
 
-			// попробовать сразу найти месторасположение Quik по запущенному процессу
-			QuikPath.Folder = QuikTerminal.GetDefaultPath();
-
 			var timer = new DispatcherTimer { Interval = TimeSpan.FromSeconds(5) };
 			timer.Tick += (sender, args) =>
 			{
@@ -106,7 +94,7 @@ namespace SampleOptionQuoting
 			timer.Start();
 
 			//
-			// добавляем тестовый данные для отображения графика
+			// draw test data on the chart
 
 			var asset = new Security { Id = "RIM4@FORTS" };
 
@@ -143,24 +131,13 @@ namespace SampleOptionQuoting
 
 		protected override void OnClosing(CancelEventArgs e)
 		{
-			if (Connector != null)
-			{
-				Connector.Dispose();
-			}
+			Connector?.Dispose();
 
 			base.OnClosing(e);
 		}
 
 		private void ConnectClick(object sender, RoutedEventArgs e)
 		{
-			var isDde = IsDde.IsChecked == true;
-
-			if (isDde && QuikPath.Folder.IsEmpty())
-			{
-				MessageBox.Show(this, LocalizedStrings.Str2969);
-				return;
-			}
-
 			if (Connector != null && !(Connector is FakeConnector))
 				return;
 
@@ -168,23 +145,8 @@ namespace SampleOptionQuoting
 			PosChart.AssetPosition = null;
 			PosChart.Refresh(1, 1, default(DateTimeOffset), default(DateTimeOffset));
 
-			// создаем подключение
-			Connector = new QuikTrader(QuikPath.Folder)
-			{
-				IsDde = isDde
-			};
-
-			if (isDde)
-			{
-				// изменяем метаданные так, чтобы начали обрабатывать дополнительные колонки опционов
-				var columns = ((QuikTrader)Connector).SecuritiesTable.Columns;
-				columns.Add(DdeSecurityColumns.Strike);
-				columns.Add(DdeSecurityColumns.ImpliedVolatility);
-				columns.Add(DdeSecurityColumns.UnderlyingSecurity);
-				columns.Add(DdeSecurityColumns.TheorPrice);
-				columns.Add(DdeSecurityColumns.OptionType);
-				columns.Add(DdeSecurityColumns.ExpiryDate);
-			}
+			// create connection
+			Connector = new QuikTrader();
 
 			//_trader = new PlazaTrader { IsCGate = true };
 			//_trader.Tables.Add(_trader.TableRegistry.Volatility);
@@ -194,7 +156,7 @@ namespace SampleOptionQuoting
 			PosChart.MarketDataProvider = Connector;
 			PosChart.SecurityProvider = Connector;
 
-			// добавляем базовые активы в список
+			// fill underlying asset's list
 			Connector.NewSecurities += securities =>
 				_assets.AddRange(securities.Where(s => s.Type == SecurityTypes.Future));
 
@@ -204,7 +166,7 @@ namespace SampleOptionQuoting
 					_isDirty = true;
 			};
 
-			// подписываемся на событие новых сделок чтобы обновить текущую цену фьючерса
+			// subscribing on tick prices and updating asset price
 			Connector.NewTrades += trades =>
 			{
 				var assetPos = PosChart.AssetPosition;
@@ -252,15 +214,9 @@ namespace SampleOptionQuoting
 				PosChart.Refresh(trade.Price, asset.PriceStep ?? 1m, TimeHelper.NowWithOffset, asset.ExpiryDate ?? DateTimeOffset.Now.Date + TimeSpan.FromDays(1));
 		}
 
-		private Security SelectedOption
-		{
-			get { return (Security)Options.SelectedItem; }
-		}
+		private Security SelectedOption => (Security)Options.SelectedItem;
 
-		private Security SelectedAsset
-		{
-			get { return (Security)Assets.SelectedItem; }
-		}
+		private Security SelectedAsset => (Security)Assets.SelectedItem;
 
 		private void Assets_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
 		{
@@ -309,11 +265,11 @@ namespace SampleOptionQuoting
 		{
 			var option = SelectedOption;
 
-			// создаем окно для отображения стакана
+			// create DOM window
 			var wnd = new QuotesWindow { Title = option.Name };
 			wnd.Init(option);
 
-			// создаем дельта-хеджирование, передав в него опционные стратегии для отслеживания их позиции
+			// create delta hedge strategy
 			var hedge = new DeltaHedgeStrategy
 			{
 				Security = option.GetUnderlyingAsset(Connector),
@@ -321,30 +277,30 @@ namespace SampleOptionQuoting
 				Connector = Connector,
 			};
 
-			// создаем котирование на покупку 20-ти контрактов
+			// create option quoting for 20 contracts
 			var quoting = new VolatilityQuotingStrategy(Sides.Buy, 20,
 					new Range<decimal>(ImpliedVolatilityMin.Value ?? 0, ImpliedVolatilityMax.Value ?? 100))
 			{
-				// указываем, что котирование работает с объемом в 1 контракт
+				// working size is 1 contract
 				Volume = 1,
 				Security = option,
 				Portfolio = Portfolio.SelectedPortfolio,
 				Connector = Connector,
 			};
 
-			// добавляем стратегию, которую необходимо хеджировать
+			// link quoting and hending
 			hedge.ChildStrategies.Add(quoting);
 
-			// запускаем дельта-хеджирование
+			// start henging
 			hedge.Start();
 
 			wnd.Closed += (s1, e1) =>
 			{
-				// принудительная остановка стратегии при закрытие окна со стаканом
+				// force close all strategies while the DOM was closed
 				hedge.Stop();
 			};
 
-			// показываем окно
+			// show DOM
 			wnd.Show();
 		}
 	}

@@ -29,10 +29,7 @@ namespace SampleOptionQuoting
 			InitializeComponent();
 		}
 
-		private static IConnector Connector
-		{
-			get { return MainWindow.Instance.Connector; }
-		}
+		private static IConnector Connector => MainWindow.Instance.Connector;
 
 		public void Init(Security security)
 		{

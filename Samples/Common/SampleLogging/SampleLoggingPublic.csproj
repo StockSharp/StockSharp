@@ -45,10 +45,6 @@
     <Reference Include="Ecng.Serialization">
       <HintPath>..\..\..\References\Ecng\Ecng.Serialization.dll</HintPath>
     </Reference>
-    <Reference Include="StockSharp.Xaml, Version=4.3.14.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\Xaml\StockSharp.Xaml.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xaml">
@@ -104,6 +100,10 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\..\StockSharpApps\Xaml\Xaml.csproj">
+      <Project>{64e4d6f0-36b6-4904-9ba7-fffbe5ff71d8}</Project>
+      <Name>Xaml</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\BusinessEntities\BusinessEntities.csproj">
       <Project>{dce69db8-53ca-4b7f-9368-02f175a31074}</Project>
       <Name>BusinessEntities</Name>
