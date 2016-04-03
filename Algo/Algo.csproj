@@ -40,18 +40,6 @@
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Antlr3.Runtime">
-      <HintPath>..\References\Antlr3.Runtime.dll</HintPath>
-    </Reference>
-    <Reference Include="AWSSDK.Core">
-      <HintPath>..\References\Amazon\AWSSDK.Core.dll</HintPath>
-    </Reference>
-    <Reference Include="AWSSDK.Glacier">
-      <HintPath>..\References\Amazon\AWSSDK.Glacier.dll</HintPath>
-    </Reference>
-    <Reference Include="AWSSDK.S3">
-      <HintPath>..\References\Amazon\AWSSDK.S3.dll</HintPath>
-    </Reference>
     <Reference Include="Ecng.Collections">
       <HintPath>..\References\Ecng\Ecng.Collections.dll</HintPath>
     </Reference>
@@ -94,9 +82,6 @@
     </Reference>
     <Reference Include="MoreLinq">
       <HintPath>..\References\Ecng\MoreLinq.dll</HintPath>
-    </Reference>
-    <Reference Include="NCalc">
-      <HintPath>..\References\NCalc.dll</HintPath>
     </Reference>
     <Reference Include="PresentationCore">
       <RequiredTargetFramework>3.0</RequiredTargetFramework>
@@ -161,7 +146,7 @@
     <Compile Include="Candles\ICandleSource.cs" />
     <Compile Include="Candles\IExternalCandleSource.cs" />
     <Compile Include="Candles\IndexSecurityCandleManagerSource.cs" />
-    <Compile Include="Candles\IndexSeriesBuilder.cs" />
+    <Compile Include="Candles\IndexCandleBuilder.cs" />
     <Compile Include="Candles\IStorageCandleSource.cs" />
     <Compile Include="Candles\StorageCandleSource.cs" />
     <Compile Include="Candles\Compression\VolumeProfileHelper.cs" />
@@ -199,8 +184,6 @@
     <Compile Include="Export\ExcelExporter.cs" />
     <Compile Include="Export\TextExporter.cs" />
     <Compile Include="Export\XmlExporter.cs" />
-    <Compile Include="ExpressionHelper.cs" />
-    <Compile Include="ExpressionIndexSecurity.cs" />
     <Compile Include="Indicators\StochasticOscillator.cs" />
     <Compile Include="Indicators\VolumeProfileIndicator.cs" />
     <Compile Include="Indicators\ChaikinVolatility.cs" />

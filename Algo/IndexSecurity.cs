@@ -36,6 +36,7 @@ namespace StockSharp.Algo
 		protected IndexSecurity()
 		{
 			Type = SecurityTypes.Index;
+			Board = ExchangeBoard.Associated;
 		}
 
 		/// <summary>
@@ -43,7 +44,7 @@ namespace StockSharp.Algo
 		/// </summary>
 		/// <param name="prices">Prices of basket composite instruments <see cref="BasketSecurity.InnerSecurities"/>.</param>
 		/// <returns>The basket value.</returns>
-		public abstract decimal? Calculate(IDictionary<Security, decimal> prices);
+		public abstract decimal Calculate(decimal[] prices);
 	}
 
 	/// <summary>
@@ -124,15 +125,20 @@ namespace StockSharp.Algo
 		/// </summary>
 		/// <param name="prices">Prices of basket composite instruments <see cref="BasketSecurity.InnerSecurities"/>.</param>
 		/// <returns>The basket value.</returns>
-		public override decimal? Calculate(IDictionary<Security, decimal> prices)
+		public override decimal Calculate(decimal[] prices)
 		{
 			if (prices == null)
 				throw new ArgumentNullException(nameof(prices));
 
-			if (prices.Count != _weights.Count || !InnerSecurities.All(prices.ContainsKey))
-				return null;
+			if (prices.Length != _weights.Count)// || !InnerSecurities.All(prices.ContainsKey))
+				throw new ArgumentOutOfRangeException(nameof(prices));
 
-			return prices.Sum(pair => _weights[pair.Key] * pair.Value);
+			decimal retVal = 0;
+
+			for (var i = 0; i < prices.Length; i++)
+				retVal += _weights.CachedValues[i] * prices[i];
+
+			return retVal;
 		}
 
 		/// <summary>
@@ -142,7 +148,7 @@ namespace StockSharp.Algo
 		public override Security Clone()
 		{
 			var clone = new WeightedIndexSecurity();
-			clone.Weights.AddRange(Weights.SyncGet(d => d.ToArray()));
+			clone.Weights.AddRange(_weights.CachedPairs);
 			CopyTo(clone);
 			return clone;
 		}

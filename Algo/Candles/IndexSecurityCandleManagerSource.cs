@@ -25,9 +25,6 @@ namespace StockSharp.Algo.Candles
 
 	using MoreLinq;
 
-	using StockSharp.BusinessEntities;
-	using StockSharp.Messages;
-
 	class IndexSecurityCandleManagerSource : Disposable, ICandleManagerSource
 	{
 		private sealed class IndexSeriesInfo : Disposable
@@ -42,7 +39,7 @@ namespace StockSharp.Algo.Candles
 			//private readonly object _lock = new object();
 			private readonly IndexCandleBuilder _builder;
 
-			public IndexSeriesInfo(ICandleManager candleManager, IEnumerable<CandleSeries> innerSeries, DateTimeOffset from, DateTimeOffset to, IndexSecurity security, Action<Candle> processing, Action stopped)
+			public IndexSeriesInfo(ICandleManager candleManager, Type candleType, IEnumerable<CandleSeries> innerSeries, DateTimeOffset from, DateTimeOffset to, IndexSecurity security, Action<Candle> processing, Action stopped)
 			{
 				if (candleManager == null)
 					throw new ArgumentNullException(nameof(candleManager));
@@ -66,7 +63,7 @@ namespace StockSharp.Algo.Candles
 				//_processing = processing;
 				//_stopped = stopped;
 
-				_builder = new IndexCandleBuilder(security);
+				_builder = new IndexCandleBuilder(security, candleType);
 
 				//_innerSeries.ForEach(s =>
 				//{
@@ -155,12 +152,14 @@ namespace StockSharp.Algo.Candles
 			var indexSecurity = (IndexSecurity)series.Security;
 
 			var basketInfo = new IndexSeriesInfo(CandleManager,
+				series.CandleType,
 				indexSecurity
 					.InnerSecurities
-					.Select(sec => new CandleSeries(series.CandleType, sec, CloneArg(series.Arg, sec))
+					.Select(sec => new CandleSeries(series.CandleType, sec, IndexCandleBuilder.CloneArg(series.Arg, sec))
 					{
 						WorkingTime = series.WorkingTime.Clone(),
-					}).ToArray(),
+					})
+					.ToArray(),
 				from, to, indexSecurity,
 				c =>
 				{
@@ -195,18 +194,18 @@ namespace StockSharp.Algo.Candles
 			}
 		}
 
-		private static object CloneArg(object arg, Security security)
-		{
-			if (arg == null)
-				throw new ArgumentNullException(nameof(arg));
+		//private static object CloneArg(object arg, Security security)
+		//{
+		//	if (arg == null)
+		//		throw new ArgumentNullException(nameof(arg));
 
-			if (security == null)
-				throw new ArgumentNullException(nameof(security));
+		//	if (security == null)
+		//		throw new ArgumentNullException(nameof(security));
 
-			var clone = arg;
-			clone.DoIf<object, ICloneable>(c => clone = c.Clone());
-			clone.DoIf<object, Unit>(u => u.SetSecurity(security));
-			return clone;
-		}
+		//	var clone = arg;
+		//	clone.DoIf<object, ICloneable>(c => clone = c.Clone());
+		//	clone.DoIf<object, Unit>(u => u.SetSecurity(security));
+		//	return clone;
+		//}
 	}
 }
