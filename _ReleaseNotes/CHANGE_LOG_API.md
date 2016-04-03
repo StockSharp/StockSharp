@@ -1,7 +1,74 @@
 StockSharp API Change log
 ========================
-###current:
+###v4.3.14:
+* (feature) BaseCandleBuilderSource.RaiseProcessing perf fixes.
+* (feature) Ecng.Backup
+* (feature) Ecng.Roslyn
+* (feature) GuiObjectHelper removed.
+* (bug) Fix https://github.com/StockSharp/StockSharp/issues/20
+* (feature) Chart themes.
+* (feature) Csv storage perf boost.
+* (feature) Quik lua. Tick OI.
+* (feature) Twime connector.
+* (feature) SPB exchange.
+* (feature) Order.Status. Nullable long.
+* (feature) TraderHelper. Plaza extensions.
+* (feature) IConnector. ConnectedEx, DisconnectedEx, ConnectionErrorEx.
+* (feature) Plaza. Cancel On Disconnect support.
+* (bug) OpenECry. Connect/disconnect fixes.
+* (feature) BinExporter -> StockSharpExporter.
+* (feature) WpfToolkit v.2.6.0.
+* (feature) OrderMessage.TransactionId
+* (bug) LogManager. Wait for disposing
+* (bug) TransactionBinarySerializer fix.
+* (bug) QuoteBinarySerializer. Fix empty depths handling.
+* (feature) IMessageAdapter.OrderCancelVolumeRequired
+* (feature) Samples. Group order cancel.
+* (bug) SecurityIdTextBox small fix.
+* (bug) RealTimeCandleBuilderSource. Raise Stopped event.
+* (feature) TraderHelper. IsGtc, IsToday
+* (feature) FIX connector. Dialects.
+* (feature) Transaq. v2.20.5
+* (feature) TimeMessage.TransactionId. String -> Long
+* (feature) Connector.ChangePassword
+* (bug) MarketDataGrid. Fix candle values.
+* (feature) Plaza.IsDemo
+* (feature) OpenECry. Uuid as SecureString.
+* (bug) Order.Type nullable fix.
+* (feature) Chart performance improved.
+* (feature) ExecutionMessage.BrokerCode
+* (feature) IStorageRegistry.GetTransactionStorage
+* (feature) ExecMsg. HasOrderInfo, HasTradeInfo.
+* (feature) ExecTypes. Order -> Transaction. Trade -> Obsolete.
+* (feature) ExecMsg. Volume -> OrderVolume + TradeVolume.
+* (bug) ProgGrid. TimeZoneInfo edit fix.
+* (feature) ConnectorSupportedMessagesPanel
+* (feature) Alerts. Removed Actipro dependency.
+* (bug) FIX connector. SUR currency fix.
+* (bug) Equity chart fix.
+* (feature) Message.LocalTime. DateTime -> DateTimeOffset
+* (bug) CandleHelper.GetCandleBounds fix.
+* (feature) ISecurityProvider. Performance improve.
+* (feature) Ecng. Strong names.
+* (feature) CandleSerializer. CandlePriceLevel serialization support.
+* (feature) StorageMessageAdapter.
+* (feature) Blackwood. v3.2.0
+* (feature) SecurityExternalId is struct.
+* (bug) SecurityEditor. Autocomplete fix.
+* (feature) ExcelExporter update.
+* (feature) Micex. ExtraSettings
+* (bug) CodeReferencesWindow. Fix loading non .NET assemblies.
+* (feature) ExchangeComboBox.
+* (feature) IConnector. Single value events.
+* (feature) ExecMsg. Price -> OrderPrice
+* (feature) ChartPanel.SecurityProvider
+* (feature) Plaza. OverrideDll
+* (feature) SecurityGrid performance improve.
+* (bug) OrderLog process fix.
+* (bug) AdvertisePanel fix.
 * (feature) FortsDownloader
+* (feature) C# 6.0 features.
+* (feature) Chart cluster and box.
 * (bug) Fix http://stocksharp.com/forum/yaf_postsm35888_LChI-Viewer.aspx#post35888
 * (bug) FilterableSecurityProvider. Moved to Algo.
 * (bug) ISecurityStorage.NewSecurity event.

@@ -1,6 +1,13 @@
 StockSharp Data (Hydra) Change log
 ========================
 ###current
+* (feature) Hydra. ExportTypes. Bin -> StockSharpBin + StockSharpCsv.
+* (feature) Csv storage perf boost.
+* (feature) Data type refactoring.
+* (feature) Erase data for all drives.
+* (feature) Candle day interval.
+* (feature) Connector's tasks refactoring.
+* (bug) Advertise fix.
 * (bug) Hydra. Export task fix.
 * (feature) Hydra. Show news counter.
 
