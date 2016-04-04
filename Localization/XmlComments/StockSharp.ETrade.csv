@@ -89,7 +89,7 @@ P:StockSharp.ETrade.ETradeTrader.AccessToken/summary;DocStr3136
 P:StockSharp.ETrade.ETradeTrader.VerificationCode/summary;Str3371
 P:StockSharp.ETrade.ETradeTrader.Sandbox/summary;DocStr3141
 T:StockSharp.ETrade.Native.OAuthToken/summary;DocStr3142
-M:StockSharp.ETrade.Native.OAuthToken.#ctor(System.String,System.String,System.String)/summary;DocStr3143
+M:StockSharp.ETrade.Native.OAuthToken.#ctor(System.String,System.String,System.String)/summary;DocStr1
 M:StockSharp.ETrade.Native.OAuthToken.#ctor(System.String,System.String,System.String)/param/consumerKey;DocStr3144
 M:StockSharp.ETrade.Native.OAuthToken.#ctor(System.String,System.String,System.String)/param/token;DocStr3145
 M:StockSharp.ETrade.Native.OAuthToken.#ctor(System.String,System.String,System.String)/param/secret;DocStr3146
