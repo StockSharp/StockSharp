@@ -13,11 +13,11 @@ Created: 2015, 12, 2, 8:18 PM
 Copyright 2010 by StockSharp, LLC
 *******************************************************************************************/
 #endregion S# License
-using System.Windows;
-using System.Windows.Threading;
-
 namespace SamplePerformance
 {
+	using System.Windows;
+	using System.Windows.Threading;
+
 	public partial class App
 	{
 		private void ApplicationDispatcherUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)
