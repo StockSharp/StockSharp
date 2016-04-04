@@ -88,10 +88,10 @@ namespace StockSharp.Algo
 		};
 
 		/// <summary>
-		/// Преобразовать тип свечек <see cref="MarketDataTypes"/> в тип сообщения <see cref="CandleMessage"/>.
+		/// Cast candle type <see cref="MarketDataTypes"/> to the message <see cref="CandleMessage"/>.
 		/// </summary>
-		/// <param name="type">Тип свечек.</param>
-		/// <returns>Тип сообщения <see cref="CandleMessage"/>.</returns>
+		/// <param name="type">Candle type.</param>
+		/// <returns>Message type <see cref="CandleMessage"/>.</returns>
 		public static Type ToCandleMessage(this MarketDataTypes type)
 		{
 			var messageType = _candleMarketDataTypes.TryGetKey(type);

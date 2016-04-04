@@ -609,23 +609,23 @@ namespace StockSharp.Algo.Testing
 		}
 
 		/// <summary>
-		/// Зарегистрировать исторические данные.
+		/// Register historical data.
 		/// </summary>
-		/// <param name="security">Инструмент.</param>
-		/// <param name="dataType">Тип данных.</param>
-		/// <param name="arg">Параметр, ассоциированный с типом <paramref name="dataType"/>. Например, <see cref="Candle.Arg"/>.</param>
-		/// <param name="getMessages">Функция получения исторических данных.</param>
+		/// <param name="security">Instrument.</param>
+		/// <param name="dataType">Data type.</param>
+		/// <param name="arg">The parameter associated with the <paramref name="dataType"/>type. For example, <see cref="Candle.Arg"/>.</param>
+		/// <param name="getMessages">Historical data source.</param>
 		public void RegisterHistorySource(Security security, MarketDataTypes dataType, object arg, Func<DateTimeOffset, IEnumerable<Message>> getMessages)
 		{
 			SendInHistorySourceMessage(security, dataType, arg, getMessages);
 		}
-		
+
 		/// <summary>
-		/// Удалить регистрацию, ранее осуществленную через <see cref="RegisterHistorySource"/>.
+		/// Unregister the subsbription, previously made by <see cref="RegisterHistorySource"/>.
 		/// </summary>
-		/// <param name="security">Инструмент.</param>
-		/// <param name="dataType">Тип данных.</param>
-		/// <param name="arg">Параметр, ассоциированный с типом <paramref name="dataType"/>. Например, <see cref="Candle.Arg"/>.</param>
+		/// <param name="security">Instrument.</param>
+		/// <param name="dataType">Data type.</param>
+		/// <param name="arg">The parameter associated with the <paramref name="dataType"/>type. For example, <see cref="Candle.Arg"/>.</param>
 		public void UnRegisterHistorySource(Security security, MarketDataTypes dataType, object arg)
 		{
 			SendInHistorySourceMessage(security, dataType, arg, null);

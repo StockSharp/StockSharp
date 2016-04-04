@@ -411,7 +411,7 @@ namespace StockSharp.Algo.Storages
 		/// </summary>
 		/// <param name="securities">Instrument storage collection.</param>
 		/// <param name="securityId">Identifier.</param>
-		/// <returns>Insturment.</returns>
+		/// <returns>Instrument.</returns>
 		public static Security ReadBySecurityId(this IStorageEntityList<Security> securities, SecurityId securityId)
 		{
 			if (securities == null)

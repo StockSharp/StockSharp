@@ -460,14 +460,14 @@ namespace StockSharp.BusinessEntities
 		/// <summary>
 		/// To sign up to get market data by the instrument.
 		/// </summary>
-		/// <param name="security">The instrument by which new information getting should be started .</param>
+		/// <param name="security">The instrument by which new information getting should be started.</param>
 		/// <param name="type">Market data type.</param>
 		void SubscribeMarketData(Security security, MarketDataTypes type);
 
 		/// <summary>
 		/// To unsubscribe from getting market data by the instrument.
 		/// </summary>
-		/// <param name="security">The instrument by which new information getting should be started .</param>
+		/// <param name="security">The instrument by which new information getting should be started.</param>
 		/// <param name="type">Market data type.</param>
 		void UnSubscribeMarketData(Security security, MarketDataTypes type);
 
@@ -510,7 +510,7 @@ namespace StockSharp.BusinessEntities
 		/// <summary>
 		/// To start getting new information (for example, <see cref="Security.LastTrade"/> or <see cref="Security.BestBid"/>) by the instrument.
 		/// </summary>
-		/// <param name="security">The instrument by which new information getting should be started .</param>
+		/// <param name="security">The instrument by which new information getting should be started.</param>
 		void RegisterSecurity(Security security);
 
 		/// <summary>
