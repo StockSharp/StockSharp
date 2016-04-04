@@ -167,6 +167,11 @@
             Path to directory, where BWOrders.log file will be created.
             </summary>
     </member>
+    <member name="P:StockSharp.Blackwood.BlackwoodMessageAdapter.OverrideDll">
+      <summary>
+            Override dll file from resources. Turned on by default.
+            </summary>
+    </member>
     <member name="P:StockSharp.Blackwood.BlackwoodMessageAdapter.IsValid">
       <summary>
             The parameters validity check.
@@ -408,6 +413,11 @@
     <member name="P:StockSharp.Blackwood.BlackwoodTrader.LogPath">
       <summary>
             Path to directory, where BWOrders.log file will be created.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Blackwood.BlackwoodTrader.OverrideDll">
+      <summary>
+            Override dll file from resources. Turned on by default.
             </summary>
     </member>
     <member name="E:StockSharp.Blackwood.BlackwoodTrader.NewCrossLock">
