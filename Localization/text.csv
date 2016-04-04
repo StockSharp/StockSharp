@@ -8431,7 +8431,7 @@ DocStr4282;The types of data that contain information in {0};Типы данны
 DocStr4283;The message contains information about the execution;Сообщение, содержащее информацию об исполнении
 DocStr4284;If the value is equal {0} or {1}, order will be GTC (good til cancel). Or uses exact date;Если значение равно {0} или {1}, то заявка выставляется до отмены (GTC). Иначе, указывается конкретный срок
 DocStr4285;Is tick uptrend or downtrend in price. Uses only {0} for {1};Является ли тик восходящим или нисходящим в цене. Заполняется только для {0} равным {1}
-DocStr4286;Commission (broker, exchange etc.).  Uses when {0} set to {1} or {2};Комиссия (брокерская, биржевая и т.д.).  Заполняется при {0} равном {1} или {2}
+DocStr4286;Commission (broker, exchange etc.). Uses when {0} set to {1} or {2};Комиссия (брокерская, биржевая и т.д.). Заполняется при {0} равном {1} или {2}
 DocStr4287;Network latency. Uses when {0} set to {1};Сетевая задержка. Заполняется при {0} равном {1}
 DocStr4288;Slippage in trade price. Uses when {0} set to {1};Проскальзывание в цене сделки. Заполняется при {0} равном {1}
 DocStr4289;User order id. Uses when {0} set to {1};Пользовательский идентификатор заявки. Заполняется при {0} равном {1}
@@ -12835,47 +12835,47 @@ DocStr8738;Custom message adapters;Дополнительные адаптеры
 DocStr8739;Custom candles;Дополнительные свечи
 DocStr8740;Custom indicators;Дополнительные индикаторы
 DocStr8741;Custom diagram elements;Дополнительные элементы диаграммы
-DocStr8742;Base class describing the dialect of the FIX protocol;Base class describing the dialect of the FIX protocol
-DocStr8743;Stream;Stream
-DocStr8744;Sequence id generator;Sequence id generator
-DocStr8745;FIX version;FIX version
-DocStr8746;Heartbeat interval;Heartbeat interval
-DocStr8747;UTC time stamp format;UTC time stamp format
-DocStr8748;UTC time format;UTC time format
-DocStr8749;UTC date format;UTC date format
-DocStr8750;Supports {0};Supports {0}
-DocStr8751;Supports {0} for mass orders;Supports {0} for mass orders
-DocStr8752;{0} required to cancel orders;{0} required to cancel orders
-DocStr8753;Read next message from FIX protocol;Read next message from FIX protocol
-DocStr8754;The allocation array;The allocation array
-DocStr8755;{0}, if the messages was read successfully, otherwise, {1};{0}, if the messages was read successfully, otherwise, {1}
-DocStr8756;Write the specified message into FIX protocol;Write the specified message into FIX protocol
-DocStr8757;The recorder of data in the FIX protocol format;The recorder of data in the FIX protocol format
-DocStr8758;The text of reason;The text of reason
-DocStr8759;To record the {0} message;To record the {0} message
-DocStr8760;Password change message;Password change message
-DocStr8761;Current user name;Current user name
-DocStr8762;To record the {0} or {1} message;To record the {0} or {1} message
-DocStr8763;Heartbeat message;Heartbeat message
-DocStr8764;Security message contain information for all requested securities;Security message contain information for all requested securities
-DocStr8765;Read the {0} message;Read the {0} message
-DocStr8766;{0} instance;{0} instance
-DocStr8767;Format for {0} field;Format for {0} field
-DocStr8768;Process {0} instance;Process {0} instance
-DocStr8769;Post handle an {0} instance;Post handle an {0} instance
-DocStr8770;The default implementation of {0};The default implementation of {0}
-DocStr8771;Order condition creating handler;Order condition creating handler
-DocStr8772;To read the order condition {0};To read the order condition {0}
-DocStr8773;The interface describing the dialect of the FIX protocol;The interface describing the dialect of the FIX protocol
-DocStr8774;{0} if the specified message was processed successfully, otherwise, {1};{0} if the specified message was processed successfully, otherwise, {1}
-DocStr8775;Read next messages from FIX protocol;Read next messages from FIX protocol
-DocStr8776;The messages;The messages
-DocStr8777;Get the transaction ID;Get the transaction ID
-DocStr8778;The session;The session
-DocStr8779;The request identifier;The request identifier
-DocStr8780;The zero-based byte offset in {0} at which to begin copying bytes to the current stream;The zero-based byte offset in {0} at which to begin copying bytes to the current stream
-DocStr8781;The number of bytes to be written to the current stream;The number of bytes to be written to the current stream
-DocStr8782;Execution report;Execution report
+DocStr8742;Base class describing the dialect of the FIX protocol;Базовый класс диалекта FIX протокола
+DocStr8743;Stream;Поток
+DocStr8744;Sequence id generator;Генератор цепочки идентификаторов
+DocStr8745;FIX version;FIX версия
+DocStr8746;Heartbeat interval;Heartbeat интервал
+DocStr8747;UTC time stamp format;UTC формат штампа времени
+DocStr8748;UTC time format;UTC формат времени
+DocStr8749;UTC date format;UTC формат даты
+DocStr8750;Supports {0};Поддерживается {0}
+DocStr8751;Supports {0} for mass orders;Поддерживается {0} для массовой отмены заявок
+DocStr8752;{0} required to cancel orders;{0} требуется для отмены заявок
+DocStr8753;Read next message from FIX protocol;Прочитать следующее сообщение FIX протокола
+DocStr8754;The allocation array;Прединициализированный массив
+DocStr8755;{0}, if the messages was read successfully, otherwise, {1};{0}, если сообщение было прочитано успешно, иначе, {1}
+DocStr8756;Write the specified message into FIX protocol;Записать сообщение в формат FIX протокола
+DocStr8757;The recorder of data in the FIX protocol format;Писатель FIX протокола
+DocStr8758;The text of reason;Причина
+DocStr8759;To record the {0} message;Записать сообщение {0}
+DocStr8760;Password change message;Сообщение изменения пароля
+DocStr8761;Current user name;Текущий логин
+DocStr8762;To record the {0} or {1} message;Записать сообщение {0} или {1}
+DocStr8763;Heartbeat message;Heartbeat сообщение
+DocStr8764;Security message contain information for all requested securities;Сообщение для запроса информации обо всех инструментах
+DocStr8765;Read the {0} message;Прочитать сообщение {0}
+DocStr8766;{0} instance;Объект {0}
+DocStr8767;Format for {0} field;Формат для поля {0}
+DocStr8768;Process {0} instance;Обработать {0}
+DocStr8769;Post handle an {0} instance;Пост-обработка {0}
+DocStr8770;The default implementation of {0};Реализация по-умолчанию {0}
+DocStr8771;Order condition creating handler;Обработчик создания условия заявки
+DocStr8772;To read the order condition {0};Прочитать условие заявки {0}
+DocStr8773;The interface describing the dialect of the FIX protocol;Интерфейс, описывающий диалект FIX протокола
+DocStr8774;{0} if the specified message was processed successfully, otherwise, {1};{0} если переданное сообщение было обработано успешно, иначе, {1}
+DocStr8775;Read next messages from FIX protocol;Прочитать следующие сообщения FIX протокола
+DocStr8776;The messages;Сообщения
+DocStr8777;Get the transaction ID;Получить идентификатор транзакции
+DocStr8778;The session;Сессия
+DocStr8779;The request identifier;Идентификатор запроса
+DocStr8780;The zero-based byte offset in {0} at which to begin copying bytes to the current stream;Сдвиг от нуля в массиве байтов {0}, начиная с которого необходимо записать данные в поток
+DocStr8781;The number of bytes to be written to the current stream;Количество байтов, которое необходимо записать в поток
+DocStr8782;Execution report;Отчет исполнения
 DocStr8783;Describes the purpose of the execution report {0};Describes the purpose of the execution report {0}
 DocStr8784;Used to identify the previous order in cancel and cancel/replace requests;Used to identify the previous order in cancel and cancel/replace requests
 DocStr8785;Unique identifier for Order as assigned by sell-side (broker, exchange, ECN);Unique identifier for Order as assigned by sell-side (broker, exchange, ECN)
@@ -12888,22 +12888,137 @@ DocStr8791;Traded / Regulatory timestamp type;Traded / Regulatory timestamp type
 DocStr8792;Price per unit of quantity (e.g. per share);Price per unit of quantity (e.g. per share)
 DocStr8793;"Ticker symbol. Common, ""human understood"" representation of the security";"Ticker symbol. Common, ""human understood"" representation of the security"
 DocStr8794;Market used to help identify a security;Market used to help identify a security
-DocStr8795;Identifier for Trading Session;Identifier for Trading Session
-DocStr8796;Order type {0};Order type {0}
-DocStr8797;Side of order {0};Side of order {0}
+DocStr8795;Identifier for Trading Session;Идентификатор торговой сессии
+DocStr8796;Order type {0};Тип заявки {0}
+DocStr8797;Side of order {0};Сторона заявки {0}
 DocStr8798;Specifies how long the order remains in effect. Absence of this field is interpreted as DAY. NOTE not applicable to CIV Orders;Specifies how long the order remains in effect. Absence of this field is interpreted as DAY. NOTE not applicable to CIV Orders
 DocStr8799;Date of order expiration (last day the order can trade), always expressed in terms of the local market date;Date of order expiration (last day the order can trade), always expressed in terms of the local market date
-DocStr8800;Price of this (last) fill;Price of this (last) fill
-DocStr8801;Quantity (e.g. shares) bought/sold on this (last) fill;Quantity (e.g. shares) bought/sold on this (last) fill
-DocStr8802;Free format text string;Free format text string
-DocStr8803;Unique identifier of execution message as assigned by sell-side (broker, exchange, ECN);Unique identifier of execution message as assigned by sell-side (broker, exchange, ECN)
-DocStr8804;Create FIX protocol dialect;Create FIX protocol dialect
-DocStr8805;The dialect;The dialect
-DocStr8806;The FIX dialect. The default is {0};The FIX dialect. The default is {0}
-DocStr8807;Dialects of the FIX protocol;Dialects of the FIX protocol
-DocStr8808;Default;Default
+DocStr8800;Price of this (last) fill;Цена данного (последнего) исполнения
+DocStr8801;Quantity (e.g. shares) bought/sold on this (last) fill;Количество (например, акций) купленных/проданных данным (последним) исполнением
+DocStr8802;Free format text string;Строка в свободном формате
+DocStr8803;Unique identifier of execution message as assigned by sell-side (broker, exchange, ECN);Уникальные идентификатор, присвоенный sell-side (брокер, биржа, ECN)
+DocStr8804;Create FIX protocol dialect;Создать диалект FIX протокола
+DocStr8805;The dialect;Диалект
+DocStr8806;The FIX dialect. The default is {0};Диалект FIX протокола. По-умолчанию равно {0}
+DocStr8807;Dialects of the FIX protocol;Диалекты FIX протокола
+DocStr8808;Default;По-умолчанию
 DocStr8809;CFH;CFH
 DocStr8810;ASTS;ASTS
 DocStr8811;Spectra;Spectra
-DocStr8812;Otkritie;Otkritie
-DocStr8813;Quik (server);Quik (server)
+DocStr8812;Otkritie;Открытие
+DocStr8813;Quik (server);Quik (сервер)
+DocStr8814;Exchange id;Идентификатор рынка
+DocStr8815;The market identifier of the most frequent trade;Идентификатор рынка для большинства сделок
+DocStr8816;Delay load instruments from {0};Отложенная загрузка инструментов из {0}
+DocStr8817;Action when the license expired;Действие, когда лицензия истекла
+DocStr8818;Actions when a license expired;Действия, когда лицензия истекла
+DocStr8819;Prevent work;Прекратить работу
+DocStr8820;Prevent upgrade;Прекратить обновление
+DocStr8821;Component;Компонента
+DocStr8822;Get {0} for the source. If the value is equal to {1}, then parental source level is taken;Получить {0} для источника. Если значение равно {1}, тогда берется уровень логов родителя
+DocStr8823;The all application level logs recipient;Получатель всех логов приложения
+DocStr8824;The volumes collection of bids;Объемы бидов
+DocStr8825;The volumes collection of asks;Объемы оферов
+DocStr8826;Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources;Освободить занятые ресурсы
+DocStr8827;Obsolete;Устаревшее
+DocStr8828;Is the message contains order info;Если сообщение содержит информацию о заявке
+DocStr8829;Is the message contains trade info;Если сообщение содержит информацию о сделке
+DocStr8830;Number of contracts in an trade;Количество контрактов в сделке
+DocStr8832;The position, generated by order or trade;Позиция, сгенерированная заявкой или сделкой
+DocStr8833;Determines whether the specified message type is supported by the adapter;Определить, поддерживается ли тип сообщения адаптером
+DocStr8834;{0} if the specified message type is supported, otherwise, {1};{0} если тип сообщения поддерживается, иначе, {1}
+DocStr8835;Determines whether the specified message type is derived from {0};Определить, что тип сообщения наследуется от {0}
+DocStr8836;The message type;Тип сообщения
+DocStr8837;{0} if the specified message type is derived from {1}, otherwise, {2};{0} если тип сообщения наследуется от {1}, иначе, {2}
+DocStr8838;Determines whether the specified message contains order information;Определить, содержит ли сообщение информацию о заявке
+DocStr8839;{0} if the specified message contains order information, otherwise, {1};{0} если сообщение содержит информацию о заявке, иначе, {1}
+DocStr8840;Determines whether the specified message contains trade information;Определить, содержит ли сообщение информацию о сделке
+DocStr8841;{0} if the specified message contains trade information, otherwise, {1};{0} если сообщение содержит информацию о сделке, иначе, {1}
+DocStr8842;Convert error text message to {0} instance;Преобразовать текст ошибки в {0}
+DocStr8843;Error text message;Текст ошибки
+DocStr8844;Convert error info into {0};Преобразовать информация об ошибке к {0}
+DocStr8845;Wrapping based adapter;Базовый адаптер
+DocStr8846;Base implementation of {0};Базовая реализация {0}
+DocStr8847;Control {0} lifetime;Контролировать время жизни {0}
+DocStr8848;Commission (broker, exchange etc.). Uses when {0} set to {1};Комиссия (брокерская, биржевая и т.д.). Заполняется при {0} установленном в {1}
+DocStr8849;Default unique software ID;Идентификатор ПО
+DocStr8850;The type of the conditional order OpenECry;Тип условия заявки OpenECry
+DocStr8851;Asset types;Типы акций
+DocStr8852;Future;Фьючерс
+DocStr8853;The interface {0} implementation which provides a connection to RSS feed;Реализация интерфейса {0}, предоставлящая подключение к RSS фиду
+DocStr8854;Chart range/scroll interval. Default is 200ms;Интервал скроллирования графика. По-умолчанию равно 200 млс
+DocStr8855;Local time zone for all {0} values convertion;Локальная временная зона для всех {0} значений конвертации
+DocStr8856;Show FPS;Показывать FPS
+DocStr8857;Box volumes;Боксовые объемы
+DocStr8858;Line color for {0} Line*;Цвет линии для стиля {0} Line*
+DocStr8859;Timeframe #2 multiplier;Множитель таймфрейма #2
+DocStr8860;Timeframe #3 multiplier;Множитель таймфрейма #3
+DocStr8861;Timeframe #2 color;Цвет таймфрейма #2
+DocStr8862;Timeframe #3 color;Цвет таймфрейма #3
+DocStr8863;Cluster profile line color;Цвет линии кластерного профиля
+DocStr8864;Cluster max color;Цвек максимума у кластера
+DocStr8865;Show horizontal volume;Показывать горизонтальный объем
+DocStr8866;Local horizontal volume;Локальный горизонтальный объем
+DocStr8867;Horizontal volume width fraction;Ширина доли горизонтального объема
+DocStr8868;The content of image;Изображение
+DocStr8869;Chart order registering settings;Настройки регистрации заявок
+DocStr8870;Chart share (upload image to web) settings;Настройки публикации изображени в облако
+DocStr8871;The security;Инструмент
+DocStr8872;The portfolio;Портфель
+DocStr8873;Is sharing enable;Доступна ли публикация в облако
+DocStr8874;Incremental period to refresh prev upload image;Период обновления изображения в облаке
+DocStr8875;Name of uploaded image;Имя загруженного изображения
+DocStr8876;Is published;Опубликовано ли
+DocStr8877;Update field value and raise {0} event;Обновить значение поля и вызвать событие {0}
+DocStr8878;Field to update;Поле для обновления
+DocStr8879;New value;Новое значение
+DocStr8880;Name of the field to update;Имя поля для обновления
+DocStr8881;The field type;Тип поля
+DocStr8882;{0} if the field was updated. {1} otherwise;{0} если поле было обновлено. {1} иначе
+DocStr8883;Socket;Сокет
+DocStr8884;Load composite element from settings;Загрузить составной элемент из настроек
+DocStr8885;The current socket;Текущий сокет
+DocStr8886;The handler that returns a stop flag for the socket;Обработчик, возвращающий стоп-флаг для сокета
+DocStr8887;Breakpoints (sockets, on which the data transmission will be stopped);Точки-останова (сокеты, на которых будет остановлена передача данных)
+DocStr8888;To add a breakpoint in the socket;Добавить в сокет точку останова
+DocStr8889;To remove the breakpoint from the socket;Удалить из сокет точку останова
+DocStr8890;Whether the socket is the breakpoint;Является ли сокет точкой останова
+DocStr8891;{0}, if the socket is the breakpoint, otherwise, {1};{0}, если сокет является точкой останова, иначе, {1}
+DocStr8892;The content of file;Содержимое файла
+DocStr8893;Selected input connection;Выбранные входящие соединения
+DocStr8894;Selected output connection;Выбранные исходящие соединения
+DocStr8895;Selected connection;Выбранные соединения
+DocStr8896;The diagram element connection added event;Событие добавление соединения у элемента
+DocStr8897;The diagram element connection removed event;Событие удаления соединения у элемента
+DocStr8898;The action is called at the processing of the new incoming value for socket;Событие вызывается при обработке нового входящего значения для сокета
+DocStr8899;The event of the diagram element selection in the Toolbox;Событие выбора элемента в Тулбоксе
+DocStr8900;The event of the double click on the element in the Toolbox;Событие двойного клика на элемент в Тулбоксе
+DocStr8901;The socket parent element;Родительский элемент сокета
+DocStr8902;Is socket has break;Имеет ли сокет точку останова
+DocStr8903;Is socket break active;Активна ли точка останова на сокете
+DocStr8904;Can select sockets;Можно ли выбрать сокеты
+DocStr8905;The strategy diagram change event;Событие изменения стратегии диаграммы
+DocStr8906;Type of element;Тип элемента
+DocStr8907;Parent window;Родительское окно
+DocStr8908;Chat panel;Чат панель
+DocStr8909;The type of adapter;Тип адаптера
+DocStr8910;The type of transaction or market data adapter;Тип транзакционного или маркет-дата адаптера
+DocStr8911;The panel for modifing {0};Панель для редактирования {0}
+DocStr8912;The message adapter;Адаптер сообщений
+DocStr8913;The drop-down list for exchange selection;Выпадающий список для выбора биржи
+DocStr8914;The exchange info provider;Провайдер информации о бирже
+DocStr8915;Selected exchange;Выбранная биржа
+DocStr8916;The selected exchange change event;Событие выбора биржи
+DocStr8917;Cast value to specified type;Преобразовать значение в переданный тип данных
+DocStr8918;Return type;Возвращаемое значение
+DocStr8919;Source value;Исходное значение
+DocStr8920;Casted value;Преобразованное значение
+DocStr8921;The provider of information about news;Провайдер информации о новостях
+DocStr8922;Data source for portfolio based controls;Источник данных для контролов, работающих с портфелями
+DocStr8923;The own amount of bid (+ stop amount to buy);Собственный объем бида (+ стоп-объем для покупки)
+DocStr8924;The amount of bid;Объем бида
+DocStr8925;The amount of ask;Объем офера
+DocStr8926;The own amount of ask (+ stop amount to sale);Собственный объем офера (+ стоп-объем для продажи)
+DocStr8927;The exchange boards provider;Провайдер биржевых блощадок
+DocStr8928;Gets or sets the text of the currently selected item;Получить или установить текст выбранного элемента
+DocStr8929;Portfolio received;Портфель получен

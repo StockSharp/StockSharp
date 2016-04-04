@@ -396,9 +396,9 @@ namespace StockSharp.Messages
 		}
 
 		/// <summary>
-		/// Convert error test message to <see cref="ErrorMessage"/> instance.
+		/// Convert error text message to <see cref="ErrorMessage"/> instance.
 		/// </summary>
-		/// <param name="description">Error test message.</param>
+		/// <param name="description">Error text message.</param>
 		/// <returns><see cref="ErrorMessage"/> instance.</returns>
 		public static ErrorMessage ToErrorMessage(this string description)
 		{
