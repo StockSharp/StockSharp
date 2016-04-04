@@ -1,5 +1,10 @@
 StockSharp API Change log
 ========================
+###v4.3.14.1:
+* (bug) Transaq. double <-> decimal conversation fix.
+* (feature) Blackwood. Embed zlib into resources.
+* (bug) Nuget fixed.
+
 ###v4.3.14:
 * (feature) BaseCandleBuilderSource.RaiseProcessing perf fixes.
 * (feature) Ecng.Backup
