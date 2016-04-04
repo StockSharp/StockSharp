@@ -2726,14 +2726,14 @@
       <summary>
             To sign up to get market data by the instrument.
             </summary>
-      <param name="security">The instrument by which new information getting should be started .</param>
+      <param name="security">The instrument by which new information getting should be started.</param>
       <param name="type">Market data type.</param>
     </member>
     <member name="M:StockSharp.Xaml.GuiConnector`1.UnSubscribeMarketData(StockSharp.BusinessEntities.Security,StockSharp.Messages.MarketDataTypes)">
       <summary>
             To unsubscribe from getting market data by the instrument.
             </summary>
-      <param name="security">The instrument by which new information getting should be started .</param>
+      <param name="security">The instrument by which new information getting should be started.</param>
       <param name="type">Market data type.</param>
     </member>
     <member name="M:StockSharp.Xaml.GuiConnector`1.RegisterMarketDepth(StockSharp.BusinessEntities.Security)">
@@ -2816,7 +2816,7 @@
       <summary>
             To start getting new information (for example, <see cref="P:StockSharp.BusinessEntities.Security.LastTrade" /> or <see cref="P:StockSharp.BusinessEntities.Security.BestBid" />) by the instrument.
             </summary>
-      <param name="security">The instrument by which new information getting should be started .</param>
+      <param name="security">The instrument by which new information getting should be started.</param>
     </member>
     <member name="M:StockSharp.Xaml.GuiConnector`1.UnRegisterSecurity(StockSharp.BusinessEntities.Security)">
       <summary>
