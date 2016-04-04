@@ -34,7 +34,7 @@ namespace StockSharp.Community
 		}
 
 		/// <summary>
-		/// TCreate a new activity session.
+		/// Create a new activity session.
 		/// </summary>
 		/// <param name="product">Product type.</param>
 		public void CreateSession(Products product)
