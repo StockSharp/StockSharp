@@ -1,3 +1,10 @@
+ActiveOrders;Active orders;Активные заявки
+BuyPendingColor;Buy pending color;Цвет неактивного Buy ордера
+BuyColor;Buy color;Цвет Buy ордера
+SellPendingColor;Sell pending color;Цвет неактивного Sell ордера
+SellColor;Sell color;Цвет Sell ордера
+CancelButtonColor;Cancel button color;Цвет кнопки отмены
+CancelButtonBgColor;Cancel button background color;Цвет фона кнопки отмены
 LineOpen;Line (open);Линия (открытие)
 LineHigh;Line (high);Линия (максимум)
 LineLow;Line (low);Линия (минимум)

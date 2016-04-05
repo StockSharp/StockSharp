@@ -18,6 +18,76 @@ namespace StockSharp.Localization
 	partial class LocalizedStrings
 	{
 		/// <summary>
+		/// Active orders
+		/// </summary>
+		public const string ActiveOrdersKey = "ActiveOrders";
+
+		/// <summary>
+		/// Active orders
+		/// </summary>
+		public static string ActiveOrders => GetString(ActiveOrdersKey);
+
+		/// <summary>
+		/// Buy pending color
+		/// </summary>
+		public const string BuyPendingColorKey = "BuyPendingColor";
+
+		/// <summary>
+		/// Buy pending color
+		/// </summary>
+		public static string BuyPendingColor => GetString(BuyPendingColorKey);
+
+		/// <summary>
+		/// Buy color
+		/// </summary>
+		public const string BuyColorKey = "BuyColor";
+
+		/// <summary>
+		/// Buy color
+		/// </summary>
+		public static string BuyColor => GetString(BuyColorKey);
+
+		/// <summary>
+		/// Sell pending color
+		/// </summary>
+		public const string SellPendingColorKey = "SellPendingColor";
+
+		/// <summary>
+		/// Sell pending color
+		/// </summary>
+		public static string SellPendingColor => GetString(SellPendingColorKey);
+
+		/// <summary>
+		/// Sell color
+		/// </summary>
+		public const string SellColorKey = "SellColor";
+
+		/// <summary>
+		/// Sell color
+		/// </summary>
+		public static string SellColor => GetString(SellColorKey);
+
+		/// <summary>
+		/// Cancel button color
+		/// </summary>
+		public const string CancelButtonColorKey = "CancelButtonColor";
+
+		/// <summary>
+		/// Cancel button color
+		/// </summary>
+		public static string CancelButtonColor => GetString(CancelButtonColorKey);
+
+		/// <summary>
+		/// Cancel button background color
+		/// </summary>
+		public const string CancelButtonBgColorKey = "CancelButtonBgColor";
+
+		/// <summary>
+		/// Cancel button background color
+		/// </summary>
+		public static string CancelButtonBgColor => GetString(CancelButtonBgColorKey);
+
+		/// <summary>
 		/// Line (open)
 		/// </summary>
 		public const string LineOpenKey = "LineOpen";
