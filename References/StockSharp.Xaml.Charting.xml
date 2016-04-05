@@ -354,6 +354,16 @@
             The new order creation event.
             </summary>
     </member>
+    <member name="E:StockSharp.Xaml.Charting.Chart.MoveOrder">
+      <summary>
+            Move order event.
+            </summary>
+    </member>
+    <member name="E:StockSharp.Xaml.Charting.Chart.CancelOrder">
+      <summary>
+            Cancel order event.
+            </summary>
+    </member>
     <member name="M:StockSharp.Xaml.Charting.Chart.Reset(System.Collections.Generic.IEnumerable{StockSharp.Xaml.Charting.IChartElement})">
       <summary>
             To reset the chart elements values drawn previously.
@@ -385,6 +395,64 @@
       <summary>
             InitializeComponent
             </summary>
+    </member>
+    <member name="T:StockSharp.Xaml.Charting.ChartActiveOrdersElement">
+      <summary>
+            The chart element representing active orders.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.Charting.ChartActiveOrdersElement.#ctor">
+      <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Xaml.Charting.ChartActiveOrdersElement" />.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Charting.ChartActiveOrdersElement.Title">
+      <summary>
+            Header that will be shown on chart.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Charting.ChartActiveOrdersElement.BuyColor">
+      <summary>
+            Color of "buy" annotation.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Charting.ChartActiveOrdersElement.SellColor">
+      <summary>
+            Color of "sell" annotation.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Charting.ChartActiveOrdersElement.CancelButtonColor">
+      <summary>
+            Line color.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Charting.ChartActiveOrdersElement.CancelButtonBackground">
+      <summary>
+            Line color.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Charting.ChartActiveOrdersElement.ForegroundColor">
+      <summary>
+            Font color.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.Charting.ChartActiveOrdersElement.Load(Ecng.Serialization.SettingsStorage)">
+      <summary>
+            Load settings.
+            </summary>
+      <param name="storage">Settings storage.</param>
+    </member>
+    <member name="M:StockSharp.Xaml.Charting.ChartActiveOrdersElement.Save(Ecng.Serialization.SettingsStorage)">
+      <summary>
+            Save settings.
+            </summary>
+      <param name="storage">Settings storage.</param>
+    </member>
+    <member name="M:StockSharp.Xaml.Charting.ChartActiveOrdersElement.Clone">
+      <summary>
+            Create a copy of <see cref="T:StockSharp.Xaml.Charting.ChartActiveOrdersElement" />.
+            </summary>
+      <returns>Copy.</returns>
     </member>
     <member name="T:StockSharp.Xaml.Charting.ChartAnnotationTypes">
       <summary>
@@ -1289,6 +1357,16 @@
     <member name="E:StockSharp.Xaml.Charting.ChartPanel.RegisterOrder">
       <summary>
             The event of the order registration from the chart.
+            </summary>
+    </member>
+    <member name="E:StockSharp.Xaml.Charting.ChartPanel.MoveOrder">
+      <summary>
+            The event of the order re-registration from the chart.
+            </summary>
+    </member>
+    <member name="E:StockSharp.Xaml.Charting.ChartPanel.CancelOrder">
+      <summary>
+            The event of the order cancelation from the chart.
             </summary>
     </member>
     <member name="E:StockSharp.Xaml.Charting.ChartPanel.SubscribeCandleElement">
