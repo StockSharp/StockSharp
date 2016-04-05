@@ -124,7 +124,7 @@
         </member>
         <member name="P:StockSharp.Rithmic.RithmicMessageAdapter.IsValid">
             <summary>
-            Проверить введенные параметры на валидность.
+            The parameters validity check.
             </summary>
         </member>
         <member name="P:StockSharp.Rithmic.RithmicMessageAdapter.TimeFrames">

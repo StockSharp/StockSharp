@@ -61,7 +61,7 @@ public void SendInMessage(Message message)
   					<codeEntityReference qualifyHint="true">M:StockSharp.Messages.MessageAdapter.OnSendInMessage(StockSharp.Messages.Message)</codeEntityReference> (см.ниже).
   					Если сгенерирована ошибка, то создается создается
   					новое входящее сообщение аналогичного типа, в свойство 
-  					<codeEntityReference>P:StockSharp.Messages.ConnectMessage.Error</codeEntityReference>
+  					<codeEntityReference>P:StockSharp.Messages.BaseConnectionMessage.Error</codeEntityReference>
   					сообщения передается объект исключения. Это новое сообщение передается в метод 
   					<codeEntityReference>M:StockSharp.Messages.MessageAdapter.SendOutMessage(StockSharp.Messages.Message)</codeEntityReference>,
   					в котором будет сгенерировано событие появления нового входящего сообщения 

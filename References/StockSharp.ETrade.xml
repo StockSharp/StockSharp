@@ -126,7 +126,7 @@
     </member>
     <member name="M:StockSharp.ETrade.Native.OAuthToken.#ctor(System.String,System.String,System.String)">
       <summary>
-            Initializes a new instance of the <see cref="T:StockSharp.ETrade.Native.OAuthToken" /> class.
+            Initializes a new instance of the <see cref="T:StockSharp.ETrade.Native.OAuthToken" />.
             </summary>
       <param name="consumerKey">Consumer key.</param>
       <param name="token">Token.</param>

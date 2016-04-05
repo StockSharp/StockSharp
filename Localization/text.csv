@@ -4414,8 +4414,8 @@ DocStr191;To get the historical rate of the currency pair;Получить ис�
 DocStr192;Currency pair;Валютная пара
 DocStr193;Historical rate;Исторический курс
 DocStr194;The market data source from Quandl;Источник маркет-данных от Quandl
-DocStr195;The key by which the source Quandl identifier will be present in {0} ;Ключ, по которому в {0} будет присутствовать Quandl-идентификатор источника
-DocStr196;The key by which the instrument Quandl identifier will be present in {0} ;Ключ, по которому в {0} будет присутствовать Quandl-идентификатор инструмента
+DocStr195;The key by which the source Quandl identifier will be present in {0};Ключ, по которому в {0} будет присутствовать Quandl-идентификатор источника
+DocStr196;The key by which the instrument Quandl identifier will be present in {0};Ключ, по которому в {0} будет присутствовать Quandl-идентификатор инструмента
 DocStr197;The registered user identifier;Идентификатор зарегистрированного пользователя
 DocStr198;The source for downloading historical data from Alor;Источник для скачивания исторических сделок с Alor
 DocStr199;The history server address. The default is http://history.alor.ru;Адрес сервера истории. По-умолчанию равен http://history.alor.ru
@@ -4425,8 +4425,8 @@ DocStr204;The maximum number of candles you need to get (at least 1 and not more
 DocStr205;Downloaded candles;Загруженные свечи
 DocStr206;Possible time-frames;Возможные тайм-фреймы
 DocStr207;The source for download of historical trades from Finam;Источник для скачивания исторических сделок с Finam
-DocStr208;The key by which the market Finam identifier will be present in {0} ;Ключ, по которому в {0} будет присутствовать Finam-идентификатор рынка
-DocStr209;The key by which the instrument Finam identifier will be present in {0} ;Ключ, по которому в {0} будет присутствовать Finam-идентификатор инструмента
+DocStr208;The key by which the market Finam identifier will be present in {0};Ключ, по которому в {0} будет присутствовать Finam-идентификатор рынка
+DocStr209;The key by which the instrument Finam identifier will be present in {0};Ключ, по которому в {0} будет присутствовать Finam-идентификатор инструмента
 DocStr210;To download information about instruments;Загрузить информацию об инструментах
 DocStr211;Information about securities;Информация об инструментах
 DocStr213;The instrument for which you need to get all trades;Инструмент, для которого необходимо получить все сделки
@@ -4436,12 +4436,12 @@ DocStr216;Finam market id;Идентификатор рынка на сайте 
 DocStr217;Security name;Имя инструмента
 DocStr218;Number of decimal places;Количество знаков после запятой
 DocStr219;The source for downloading historical data from Mdf.ru;Источник для скачивания исторических сделок с Mdf.ru
-DocStr220;The key by which the market Mfd identifier will be present in {0} ;Ключ, по которому в {0} будет присутствовать Mfd-идентификатор рынка
-DocStr221;The key by which the instrument Mfd identifier will be present in {0} ;Ключ, по которому в {0} будет присутствовать Mfd-идентификатор инструмента
+DocStr220;The key by which the market Mfd identifier will be present in {0};Ключ, по которому в {0} будет присутствовать Mfd-идентификатор рынка
+DocStr221;The key by which the instrument Mfd identifier will be present in {0};Ключ, по которому в {0} будет присутствовать Mfd-идентификатор инструмента
 DocStr222;To download tick trades;Загрузить тиковые сделки
 DocStr223;The instrument for which you need to get trades;Инструмент, для которого необходимо получить сделки
 DocStr224;Loaded ticks;Загруженные сделки
-DocStr225;The helper class that filling fields in {0} and {1} based on information from the site http://www.micex.ru;Вспомогательный класс, заполняющий поля {0} и {1} на основе информации с сайта http://www.micex.ru
+DocStr225;The helper class that filling fields in {0} and {1} based on information from the site http://moex.com/ru/derivatives/contracts.aspx?p=act;Вспомогательный класс, заполняющий поля {0} и {1} на основе информации с сайта http://moex.com/ru/derivatives/contracts.aspx?p=act
 DocStr226;To update information for the instrument;Обновить информацию по инструменту
 DocStr227;Whether to download information from the site, if it is not found locally;Скачивать ли информацию с сайта, если она не была найдена локально
 DocStr228;{0}, if the instrument has been updated successfully. Otherwise, {1};{0}, если инструмент был успешно обновлен. Иначе, {1}
@@ -4563,7 +4563,7 @@ DocStr344;To get the best price. If it is impossible to calculate the best price
 DocStr345;The shift from the best price, on which quoted order can be changed;Отступ от лучшей цены, на который может уйти котируемая заявка
 DocStr346;The quoting according to the Best By Volume rule. For this quoting the volume delta {0} is specified, which can stand in front of the quoted order;"Котирование по принципу ""Лучшая по объему"". Для данного котирования указывается дельта объема {0}, который может стоять перед котируемой заявкой"
 DocStr347;The volume delta that can stand in front of the quoted order;Дельта объема, который может стоять перед котируемой заявкой
-DocStr348;The options delta hedging strategy ;Стратегия дельта хеджирования опционов
+DocStr348;The options delta hedging strategy;Стратегия дельта хеджирования опционов
 DocStr349;The base strategy of hedging;Базовая стратегия хеджирования
 DocStr350;To get a list of rules on which the rehedging will respond;Получить список правил, на которые будет реагировать рехеджирование
 DocStr351;To get a list of orders rehedging the option position;Получить список заявок, рехеджирующих опционную позицию
@@ -4986,7 +4986,7 @@ DocStr769;Found instruments;Найденные инструменты
 DocStr770;Found portfolios;Найденные портфели
 DocStr771;A new message;Новое сообщение
 DocStr772;To sign up to get market data by the instrument;Подписаться на получение рыночных данных по инструменту
-DocStr773;The instrument by which new information getting should be started ;Инструмент, по которому необходимо начать получать новую информацию
+DocStr773;The instrument by which new information getting should be started;Инструмент, по которому необходимо начать получать новую информацию
 DocStr774;Market data type;Тип рыночных данных
 DocStr775;To unsubscribe from getting market data by the instrument;Отписаться от получения рыночных данных по инструменту
 DocStr776;To start getting new information (for example, {0} or {1}) by the instrument;Начать получать новую информацию (например, {0} или {1}) по инструменту
@@ -7343,7 +7343,6 @@ DocStr3139;The limit order is automatically registered after reaching the stop p
 DocStr3140;The interface {0} implementation which provides a connection to the ETrade;Реализация интерфейса {0} для взаимодействия с системой ETrade
 DocStr3141;Sandbox mode;Режим sandbox
 DocStr3142;Token. Uses in OAuth 1.0a;Token. Используется в процедуре авторизации OAuth 1.0a
-DocStr3143;Initializes a new instance of the {0} class;Initializes a new instance of the {0} class
 DocStr3144;Consumer key;Consumer key
 DocStr3145;Token;Token
 DocStr3146;Secret;Secret
@@ -8432,7 +8431,7 @@ DocStr4282;The types of data that contain information in {0};Типы данны
 DocStr4283;The message contains information about the execution;Сообщение, содержащее информацию об исполнении
 DocStr4284;If the value is equal {0} or {1}, order will be GTC (good til cancel). Or uses exact date;Если значение равно {0} или {1}, то заявка выставляется до отмены (GTC). Иначе, указывается конкретный срок
 DocStr4285;Is tick uptrend or downtrend in price. Uses only {0} for {1};Является ли тик восходящим или нисходящим в цене. Заполняется только для {0} равным {1}
-DocStr4286;Commission (broker, exchange etc.).  Uses when {0} set to {1} or {2};Комиссия (брокерская, биржевая и т.д.).  Заполняется при {0} равном {1} или {2}
+DocStr4286;Commission (broker, exchange etc.). Uses when {0} set to {1} or {2};Комиссия (брокерская, биржевая и т.д.). Заполняется при {0} равном {1} или {2}
 DocStr4287;Network latency. Uses when {0} set to {1};Сетевая задержка. Заполняется при {0} равном {1}
 DocStr4288;Slippage in trade price. Uses when {0} set to {1};Проскальзывание в цене сделки. Заполняется при {0} равном {1}
 DocStr4289;User order id. Uses when {0} set to {1};Пользовательский идентификатор заявки. Заполняется при {0} равном {1}
@@ -12581,6 +12580,445 @@ DocStr8469;The criterion;Критерий
 DocStr8470;To get the instruments storage;Получить хранилище инструментов
 DocStr8471;The instruments storage;Хранилище инструментов
 DocStr8472;To delete all instruments;Удалить все инструменты
-DocStr8473;Online doc url attribute;Online doc url attribute
-DocStr8474;Initializes a new instance of the {0};Initializes a new instance of the {0}
-DocStr8475;Online doc url;Online doc url
+DocStr8473;Online doc url attribute;Атрибут установления страницы документации
+DocStr8475;Online doc url;Страница документации
+DocStr8476;Compiled mathematical formula;Скомпилированная математическая формула
+DocStr8477;The mathematic formula;Математическая формула
+DocStr8478;Compilation error;Ошибка компиляции
+DocStr8479;Compile mathematical formula;Скомпилировать математическую формулу
+DocStr8480;Text expression;Текстовое выражение
+DocStr8481;To screen on mathematic formula with instruments identifiers {0};Экранировать выражение от идентификаторов инструментов {0}
+DocStr8482;The unscreened text;Дэ-экранировать выражение
+DocStr8483;Data types;Типы данных
+DocStr8484;Get all available data types;Получить все доступные типы данных
+DocStr8485;Instrument identifier;Идентификатор инструмента
+DocStr8486;The helper class that filling fields in {0} and {1} based on information from the site http://www.micex.ru;Вспомогательный класс, заполняющий поля {0} и {1} на основе информации с сайта http://www.micex.ru
+DocStr8487;The message adapter, automatically calculating commission;Адаптер сообщений, автоматически считающий комиссию.
+DocStr8488;Process {0} output message;Обработать {0} исходящее сообщение
+DocStr8489;The message;Сообщение
+DocStr8490;Data type info;Тип данных
+DocStr8491;The additional argument, associated with data. For example, candle argument;Дополнительный аргумент, ассоциированный с типом данных. Например, параметр свечи.
+DocStr8492;Serves as a hash function for a particular type;Получить хэш-код.
+DocStr8493;A hash code for the current {0};Хэш-код {0}
+DocStr8494;Returns a {0} that represents the current {1};Вернуть {0}, которое представляет текущий {1}
+DocStr8495;A {0} that represents the current {1};{0}, которое представляет текущий {1}
+DocStr8496;The export into the StockSharp format;Экспорт в StockSharp формат
+DocStr8497;Security meta info provider;Провайдер мета информация об инструментах
+DocStr8498;"{0} to leave the {1} open after the {2} object is disposed; otherwise, {3}";"{0} оставить открытым {1} после уничтожения объекта {2}; иначе, {3}"
+DocStr8499;Gets the number of instruments contained in the {0};Получить количество инструментов, хранящееся в {0}
+DocStr8500;New instruments added;Новые инструменты были добавлены
+DocStr8501;Instruments removed;Инструменты были удалены
+DocStr8502;The storage was cleared;Хранилище было очищено
+DocStr8503;Initializes a new instance of the {0} using a specified length;Инициализировать объект {0} использую длину
+DocStr8504;The message adapter, automatically calculating profit-loss;Адаптер сообщений, рассчитывающий прибыль-убыток
+DocStr8505;To process the message, containing market data or trade. If the trade was already processed earlier, previous information returns;Обработать сообщение, содержащее маркет-данные или сделку. Если сделка была ранее обработана, будет возвращена предыдущая информация
+DocStr8506;The message, containing market data or trade;Сообщение, содержащее маркет-данные или сделку
+DocStr8507;The message adapter, automatically calculating position;Адаптер сообщений, рассчитывающий позицию
+DocStr8508;To calculate position;Рассчитать позицию
+DocStr8509;The position by order or trade;Позиция по заявке или сделке
+DocStr8510;The message adapter, automatically controlling risk rules;Адаптер сообщений, контролирующий риск-правила
+DocStr8511;Risk control manager;Риск менеджер
+DocStr8512;Security trie collection;Дерево поиска инструментов
+DocStr8513;Gets a value indicating whether the {0} is read-only;Является ли значение {0} только на чтение
+DocStr8514;"{0} if the {1} is read-only; otherwise, {2}";"{0} если значение {1} только на чтение; иначе {2}"
+DocStr8515;Add new instrument;Новый инструмент была добавлен
+DocStr8516;New instrument;Новые инструмент
+DocStr8517;Find all instrument by filter;Найти все инструменты по фильтру
+DocStr8518;Founded instruments;Найденные инструменты
+DocStr8519;Copies the elements of the {0} to an {1}, starting at a particular {2} index;Скопировать элементы {0} в {1}, начиная с индекса {2}
+DocStr8520;Destination array;Целевой массив
+DocStr8521;Start index;Начальный индекс
+DocStr8522;Remove the instrument;Удалить инструмент
+DocStr8523;The instrument;Инструмент
+DocStr8524;"{0} if {1} was successfully removed from the {2}; otherwise, {3}";"{0} если {1} был успешно удалено из {2}; иначе, {3}"
+DocStr8525;Remove the instruments;Удалить инструменты
+DocStr8526;The instruments;Инструменты
+DocStr8527;Remove all instruments;Удалить все инструменты
+DocStr8528;Determines whether the {0} contains a specific value;Определить, содержится ли в {0} значение
+DocStr8529;"{0} if {1} is found in the {2}; otherwise, {3}";"{0} если {1} содержится в {2}; иначе, {3}"
+DocStr8530;The object to locate in the {0};Значение, которое необходимо найти в {0}
+DocStr8531;Returns an enumerator that iterates through the collection;Вернуть перечислитель
+DocStr8532;A {0} that can be used to iterate through the collection;{0} перечислитель
+DocStr8533;Returns an enumerator that iterates through a collection;Вернуть перечислитель
+DocStr8534;An {0} object that can be used to iterate through the collection;{0} перечислитель
+DocStr8535;The message adapter, automatically calculating slippage;Адаптер сообщений, рассчитывающий проскальзывание
+DocStr8536;Slippage manager;Менеджер проскальзывания
+DocStr8537;To release allocated resources;Освободить занятые ресурсы
+DocStr8538;The candles builder. It connects to the {0} event through the {1} source and creates candles on the basis of the data received by specified criteria;Построитель свечей. Подключается к событию {0} источника {1} и создает свечи основываясь на получаемых данных
+DocStr8539;Point of control;Точка контроля
+DocStr8540;Determines whether the specified type is derived from {0};Определить, наследуется ли тип от {0}
+DocStr8541;{0} if the specified type is derived from {1}, otherwise, {2};{0} если тип наследуется от {1}, иначе, {2}
+DocStr8542;To calculate the area for the candles group;Рассчитать область по группе свечей
+DocStr8543;The area;Область
+DocStr8544;Input message channel;Канал входящих сообщений
+DocStr8545;Storage adapter;Адаптер-хранилище
+DocStr8546;Own trade received;Собственная сделка была получена
+DocStr8547;Tick trade received;Тиковая сделка была получена
+DocStr8548;Order received;Заявка была получена
+DocStr8549;Order changed (cancelled, matched);Заявка изменена (отменена, исполнена)
+DocStr8550;Order registration error event;Событие ошибки регистрации заявки
+DocStr8551;Order cancellation error event;Событие ошибки отмены заявки
+DocStr8552;Security received;Инструмент получен
+DocStr8553;New portfolio received;Портфель получен
+DocStr8554;Portfolio changed;Портфель изменен
+DocStr8555;Position received;Позиция получена
+DocStr8556;Position changed;Позиция изменена
+DocStr8557;Order book received;Стакан получен
+DocStr8558;Order book changed;Стакан изменен
+DocStr8559;Adapter, initiated event;Адаптер, инициирующий события
+DocStr8561;The storage of market data;Хранилище маркет-данных
+DocStr8562;Increment periodically {0} value of {1};Увеличивать периодически {0} значение {1}
+DocStr8563;Underlying adapter;Адаптер
+DocStr8564;The message adapter, automatically calculating network delays;Адаптер сообщений, рассчитывающий сетевые задержки
+DocStr8565;Buffered message adapter;Буферизирующию адаптер сообщений
+DocStr8566;Get accumulated ticks;Получить накопленные тики
+DocStr8567;Get accumulated order log;Получить накопленный лог заявок
+DocStr8568;Get accumulated transactions;Получить накопленные транзакции
+DocStr8569;Get accumulated candles;Получить накопленные свечи
+DocStr8570;Get accumulated level1;Получить накопленные level1
+DocStr8571;Level1;Level1
+DocStr8572;Get accumulated order books;Получить накопленные стаканы
+DocStr8573;Order books;Стаканы
+DocStr8574;Get accumulated news;Получить накопленные новости
+DocStr8575;The cached aggregator-storage, allowing to load data simultaneously from several market data storages;Агрегатор, позволяющий последовательно загружать маркет-данных из нескольких хранилищ
+DocStr8576;List of all exchange boards, for which instruments are loaded;Список всех площадок, для которых были загружены инструменты
+DocStr8577;Add inner market data storage;Добавить хранилище маркет-данных
+DocStr8578;Remove inner market data storage;Удалить хранилище маркет-данных
+DocStr8579;Advances the enumerator to the next element of the collection;К следующему элементу
+DocStr8580;"{0} if the enumerator was successfully advanced to the next element; {1} if the enumerator has passed the end of the collection";"{0} если перечислитель успешно перешел к следующему элементу; {1} если перечислитель дошел до конца коллекции"
+DocStr8581;Sets the enumerator to its initial position, which is before the first element in the collection;Установить перечислитель в начальное положение
+DocStr8582;Gets the current element in the collection;Получить текущий элемент
+DocStr8583;The candle serializer in the CSV format;Сериализатор свечек в CSV формате
+DocStr8584;Write data to the specified writer;Записать данные
+DocStr8585;CSV writer;CSV писатель
+DocStr8586;Read data from the specified reader;Считать данные
+DocStr8587;CSV reader;CSV читатель
+DocStr8588;CSV helper class;CSV расширение
+DocStr8589;{0} format;{0} формат
+DocStr8590;{0} parser;{0} парсер
+DocStr8591;Read {0};Считать {0}
+DocStr8592;The level 1 serializer in the CSV format;Сериализатор level1 в CSV формате
+DocStr8593;The news serializer in the CSV format;Сериализатор новостей в CSV формате
+DocStr8594;The order log serializer in the CSV format;Сериализатор лога заявок в CSV формате
+DocStr8595;Load data from the specified reader;Загрузить данные из читателя
+DocStr8596;The quote serializer in the CSV format;Сериализатор котировок в CSV формате
+DocStr8597;The tick serializer in the CSV format;Сериализатор тиков в CSV формате
+DocStr8598;The transaction serializer in the CSV format;Сериализатор транзакций в CSV формате
+DocStr8599;Handler for retrieving in-memory data;Обработчик, возвращающий данные из памяти
+DocStr8600;The interface for access to the position storage;Интерфейс доступа к хранилищу позиций
+DocStr8601;The storage of information on instruments using native id;Сохранить инструмент использую системный идентификатор
+DocStr8602;Native id type;Тип системного идентификатора
+DocStr8603;{0} comparer;{0} сравнитель
+DocStr8604;All available securities;Все доступные инструменты
+DocStr8605;Storage based entity factory;Фарбика сущностей, использующая хранилище
+DocStr8606;Count of saved data;Количество сохраненных данных
+DocStr8607;Get data type and parameter for the specified file name;Получить тип данных и параметр из переданного имени файла
+DocStr8608;Data type and parameter associated with the type. For example, {0};Тип данных и параметр, ассоциированный с типом. Например, {0}
+DocStr8609;Storage format. If set an extension will be added to the file name;Формат хранилища. Если установлено, то к имени файла будет добавлено расширение
+DocStr8610;Convert directory name to the date;Преобразовать имя директории в дату
+DocStr8611;The date;Дата
+DocStr8612;Convert the date to directory name;Преобразовать дату в имя директории
+DocStr8613;Storage based message adapter;Адаптер сообщений, использующий хранилище
+DocStr8614;Total days to load stored data;Общее количество сохраненных дней
+DocStr8615;Load save data from storage;Загрузить сохраненные данные из хранилища
+DocStr8616;Read instrument by indentifier;Загрузить инструмен по идентификатору
+DocStr8617;Instrument storage collection;Хранилище коллекции инструментов
+DocStr8619;To get the {0} storage the specified instrument;Получить хранилище {0} для переданного инструмента
+DocStr8620;The {0} storage;Хранилище {0}
+DocStr8621;The aggregator-storage enumerator;Перечислитель агрегатора
+DocStr8622;Available message types;Доступные тип сообщений
+DocStr8623;Total number of trades;Общее количество сделок
+DocStr8624;To create exchange;Создать биржу
+DocStr8625;Return {0} in case of {1} is invalid value;Вернуть {0} в случае неправильного значения {1}
+DocStr8626;To create the initialized order object of sell order at market price;Создать инициализированный объект заявки для продажи по рынку
+DocStr8627;Start emulation;Запустить эмуляцию
+DocStr8628;The strategies;Стратегии
+DocStr8629;Market-data message with historical source;Сообщение с источником исторических маркет-данных
+DocStr8630;Callback to retrieve historical data for the specified date;Колбэк получения исторических данных
+DocStr8631;Order book builders;Построитель стаканов
+DocStr8632;Send next outgoing message;Отправить следующее исходящее сообщение
+DocStr8633;{0}, if message was sent, otherwise, {1};{0}, если сообщение было отправлено, иначе, {1}
+DocStr8643;Convert {0} criteria to {1};Преобразовать фильтр {0} в {1}
+DocStr8644;Convert {0} to {1} value;Преобразовать {0} в {1}
+DocStr8645;The instrument identifiers generator {0}. Can be {1};Генератор идентификаторов инструментов {0}. Может быть {1}
+DocStr8646;To convert the message into exchange;Преобразовать сообщение в биржу
+DocStr8647;To convert the message into board;Преобразовать сообщение в площадку
+DocStr8648;Chech the possibility order's state change;Проверить на возможность изменения состояния заявки
+DocStr8649;Previous order's state;Предыдущее состояние заявки
+DocStr8650;Current order's state;Текущее состояние заявки
+DocStr8651;The current order's state;Текущее состояние заявки
+DocStr8652;Current working time period;Текущий рабочий период
+DocStr8653;Meta info;Мета информация
+DocStr8654;The delimiter, replacing '/' in path for instruments with id like USD/EUR. Is equal to '__';Символ, заменяющий '/' в идентификаторе инструмента, как USD/EUR. Равен '__'
+DocStr8655;The delimiter, replacing '*' in the path for instruments with id like C.BPO-*@CANADIAN. Is equal to '##STAR##';Символ, заменяющий '*' в идентификаторе инструмента, как C.BPO-*@CANADIAN. Равен '##STAR##'
+DocStr8656;The delimiter, replacing ':' in the path for instruments with id like AA-CA:SPB@SPBEX. Is equal to '##COLON##';Символ, заменяющий ':' в идентификаторе инструмента, как AA-CA:SPB@SPBEX. Равен '##COLON##'
+DocStr8657;Lookup all securities predefined criteria;Найти все инструменты по фильтру
+DocStr8658;Determine the {0} contains lookup all filter;Определить, что {0} является фильтром ВСЕ
+DocStr8659;Check result;Результат проверки
+DocStr8660;To check the specified date is today;Проверить, что дата является текущим днем
+DocStr8661;The specified date;Дата
+DocStr8662;{0} if the specified date is today, otherwise, {1};{0} если дата является текущим днем, иначе, {1}
+DocStr8663;To check the specified date is GTC;Проверить, является ли дата GTC
+DocStr8664;{0} if the specified date is GTC, otherwise, {1};{0} если дата GTC, иначе, {1}
+DocStr8665;Extract {0} from bits flag;Получить {0} из битового флага
+DocStr8666;Bits flag;Битовый флаг
+DocStr8667;Extract system attribute from the bits flag;Получить системные атрибуты из флага
+DocStr8668;{0} if an order is system, otherwise, {1};{0} если заявка системная, иначе, {1}
+DocStr8669;Instrument;Инструмент
+DocStr8670;Register historical data;Подписаться на исторические данные
+DocStr8672;Historical data source;Источник исторических данных
+DocStr8673;Unregister the subscription, previously made by {0};Удалить подписку, сделанную ранее через {0}
+DocStr8674;Candle type;Тип свечи
+DocStr8675;Message type {0};Тип сообщения {0}
+DocStr8677;The candle message type;Тип сообщения свечи
+DocStr8678;Required if additional information associated with the exchange is stored in the program.;Требуется, если дополнительная информация, ассоциированная с биржей, сохраняется в программе.
+DocStr8679;Saint-Petersburg Exchange (SPB);Санкт-петербургская биржа (SPB)
+DocStr8680;Information about SPB of {0} exchange;Информация о SPB бирже {0}
+DocStr8681;Stop orders state change event;Состояние стоп-заявок изменилось
+DocStr8682;The interface for access to provider of information about news;Интерфейс доступа к провайдеру новостей
+DocStr8683;The portfolio provider interface;Интерфейс провайдера портфелей
+DocStr8684;The profit, realized by trade;Прибыль, реализованная сделкой
+DocStr8685;The position, generated by trade;Позиция, созданная сделкой
+DocStr8686;Last order change local time (Cancellation, Fill);Локальное время последнего изменения заявки (отмена, исполнение)
+DocStr8687;The portfolio, in which fields should be copied;Портфель, в который необходимо скопировать значения полей
+DocStr8688;Creates a new object that is a copy of the current instance;Создать копию текущего объекта
+DocStr8689;A new object that is a copy of this instance;Копия текущего объекта
+DocStr8690;The instrument from which information about the price increment is taken;Инструмент, из которого будет получаться шаг цены
+DocStr8691;The instrument from which information about the price increment cost is taken;Инструмент, из которого будет получаться стоимость шага цены
+DocStr8692;The attribute of child pages presence;Атрибут дочерних страниц
+DocStr8693;To upload the file to the site;Загрузить файл на сервер
+DocStr8694;Is the mail-out enabled;Активна ли подписка на рассылку
+DocStr8695;To add the strategy to the store;Добавить стратегию в магазин
+DocStr8696;S#.Designer;S#.Designer
+DocStr8697;Create a new activity session;Создать новую сессию
+DocStr8698;The product;Продукт
+DocStr8699;Session ID (authentication);Идентификатор сессии (авторизация)
+DocStr8700;Session ID (activity);Идентификатор сессии
+DocStr8701;Track the session is alive;Оповестить, что сессия активна
+DocStr8702;Close the session;Закрыть сессию
+DocStr8703;Represents the custom candle;Секция свечи
+DocStr8704;Custom candle;Дополнительная свеча
+DocStr8705;Represents the custom candles section in a configuration file;Секция свечей в конфигурационном файле
+DocStr8706;When overridden in a derived class, creates a new {0};В перегруженном методе создает {0}
+DocStr8707;A newly created {0};Созданный {0}
+DocStr8708;Gets the element key for a specified configuration element when overridden in a derived class;Получить ключ элемента для секции
+DocStr8709;An {0} that acts as the key for the specified {1};{0} для переданного ключа {1}
+DocStr8710;The {0} to return the key for;Секция {0} для получения ключа
+DocStr8711;Represents the custom message adapter;Секция адаптера сообщений
+DocStr8712;Custom message adapter;Дополнительный адаптер сообщений
+DocStr8713;Represents the custom message adapters section in a configuration file;Секция адаптеров сообщений в конфигурационном файле
+DocStr8714;Represents the custom diagram element;Секция элемента диаграммы
+DocStr8715;Custom diagram element;Дополнительный элемент диаграммы
+DocStr8716;Represents the custom diagram elements section in a configuration file;Секция элементов диаграммы в конфигурационном файле
+DocStr8717;Configure connection using {0};Настроить подключение, используя {0}
+DocStr8718;The connection;Подключение
+DocStr8719;UI thread owner;Владелец графического потока
+DocStr8720;{0} if the specified connection was configured, otherwise, {1};{0} если подключение было настроено, иначе, {1}
+DocStr8721;Get all indicator types;Получить все индикаторы
+DocStr8722;All indicator types;Все индикаторы
+DocStr8723;Fill {0} using {1};Заполнить {0}, используя {1}
+DocStr8724;Get all diagram elements;Получить все элементы диаграммы
+DocStr8725;All diagram elements;Все элементы диаграммы
+DocStr8726;Get all candles;Получить все свечи
+DocStr8727;All candles;Все свечи
+DocStr8728;First time database initialization;Инициализировать файл базы данных
+DocStr8729;Raw bytes of database file;Файл базы данных
+DocStr8730;Initialization callback;Колбэк инициализации
+DocStr8731;Path to the database file;Путь к файлу базы данных
+DocStr8732;The database;База данных
+DocStr8733;Represents the custom indicator;Секция индикатора
+DocStr8734;Custom indicator;Дополнительный индикатор
+DocStr8735;Custom indicator painter;Дополнительный отрисовщик индикатора
+DocStr8736;Represents the custom indicators section in a configuration file;Секция индикаторов в конфигурационном файле
+DocStr8737;Represents the root StockSharp section in a configuration file;Корневая секция StockSharp в конфигурационном файле
+DocStr8738;Custom message adapters;Дополнительные адаптеры сообщений
+DocStr8739;Custom candles;Дополнительные свечи
+DocStr8740;Custom indicators;Дополнительные индикаторы
+DocStr8741;Custom diagram elements;Дополнительные элементы диаграммы
+DocStr8742;Base class describing the dialect of the FIX protocol;Базовый класс диалекта FIX протокола
+DocStr8743;Stream;Поток
+DocStr8744;Sequence id generator;Генератор цепочки идентификаторов
+DocStr8745;FIX version;FIX версия
+DocStr8746;Heartbeat interval;Heartbeat интервал
+DocStr8747;UTC time stamp format;UTC формат штампа времени
+DocStr8748;UTC time format;UTC формат времени
+DocStr8749;UTC date format;UTC формат даты
+DocStr8750;Supports {0};Поддерживается {0}
+DocStr8751;Supports {0} for mass orders;Поддерживается {0} для массовой отмены заявок
+DocStr8752;{0} required to cancel orders;{0} требуется для отмены заявок
+DocStr8753;Read next message from FIX protocol;Прочитать следующее сообщение FIX протокола
+DocStr8754;The allocation array;Прединициализированный массив
+DocStr8755;{0}, if the messages was read successfully, otherwise, {1};{0}, если сообщение было прочитано успешно, иначе, {1}
+DocStr8756;Write the specified message into FIX protocol;Записать сообщение в формат FIX протокола
+DocStr8757;The recorder of data in the FIX protocol format;Писатель FIX протокола
+DocStr8758;The text of reason;Причина
+DocStr8759;To record the {0} message;Записать сообщение {0}
+DocStr8760;Password change message;Сообщение изменения пароля
+DocStr8761;Current user name;Текущий логин
+DocStr8762;To record the {0} or {1} message;Записать сообщение {0} или {1}
+DocStr8763;Heartbeat message;Heartbeat сообщение
+DocStr8764;Security message contain information for all requested securities;Сообщение для запроса информации обо всех инструментах
+DocStr8765;Read the {0} message;Прочитать сообщение {0}
+DocStr8766;{0} instance;Объект {0}
+DocStr8767;Format for {0} field;Формат для поля {0}
+DocStr8768;Process {0} instance;Обработать {0}
+DocStr8769;Post handle an {0} instance;Пост-обработка {0}
+DocStr8770;The default implementation of {0};Реализация по-умолчанию {0}
+DocStr8771;Order condition creating handler;Обработчик создания условия заявки
+DocStr8772;To read the order condition {0};Прочитать условие заявки {0}
+DocStr8773;The interface describing the dialect of the FIX protocol;Интерфейс, описывающий диалект FIX протокола
+DocStr8774;{0} if the specified message was processed successfully, otherwise, {1};{0} если переданное сообщение было обработано успешно, иначе, {1}
+DocStr8775;Read next messages from FIX protocol;Прочитать следующие сообщения FIX протокола
+DocStr8776;The messages;Сообщения
+DocStr8777;Get the transaction ID;Получить идентификатор транзакции
+DocStr8778;The session;Сессия
+DocStr8779;The request identifier;Идентификатор запроса
+DocStr8780;The zero-based byte offset in {0} at which to begin copying bytes to the current stream;Сдвиг от нуля в массиве байтов {0}, начиная с которого необходимо записать данные в поток
+DocStr8781;The number of bytes to be written to the current stream;Количество байтов, которое необходимо записать в поток
+DocStr8782;Execution report;Отчет исполнения
+DocStr8783;Describes the purpose of the execution report {0};Describes the purpose of the execution report {0}
+DocStr8784;Used to identify the previous order in cancel and cancel/replace requests;Used to identify the previous order in cancel and cancel/replace requests
+DocStr8785;Unique identifier for Order as assigned by sell-side (broker, exchange, ECN);Unique identifier for Order as assigned by sell-side (broker, exchange, ECN)
+DocStr8786;Unique identifier for Order as assigned by the buy-side (institution, broker, intermediary etc.);Unique identifier for Order as assigned by the buy-side (institution, broker, intermediary etc.)
+DocStr8787;Quantity ordered. This represents the number of shares for equities or par, face or nominal value for FI instruments;Quantity ordered. This represents the number of shares for equities or par, face or nominal value for FI instruments
+DocStr8788;Quantity open for further execution;Quantity open for further execution
+DocStr8789;Total quantity (e.g. number of shares) filled;Total quantity (e.g. number of shares) filled
+DocStr8790;Traded / Regulatory timestamp value;Traded / Regulatory timestamp value
+DocStr8791;Traded / Regulatory timestamp type;Traded / Regulatory timestamp type
+DocStr8792;Price per unit of quantity (e.g. per share);Price per unit of quantity (e.g. per share)
+DocStr8793;"Ticker symbol. Common, ""human understood"" representation of the security";"Ticker symbol. Common, ""human understood"" representation of the security"
+DocStr8794;Market used to help identify a security;Market used to help identify a security
+DocStr8795;Identifier for Trading Session;Идентификатор торговой сессии
+DocStr8796;Order type {0};Тип заявки {0}
+DocStr8797;Side of order {0};Сторона заявки {0}
+DocStr8798;Specifies how long the order remains in effect. Absence of this field is interpreted as DAY. NOTE not applicable to CIV Orders;Specifies how long the order remains in effect. Absence of this field is interpreted as DAY. NOTE not applicable to CIV Orders
+DocStr8799;Date of order expiration (last day the order can trade), always expressed in terms of the local market date;Date of order expiration (last day the order can trade), always expressed in terms of the local market date
+DocStr8800;Price of this (last) fill;Цена данного (последнего) исполнения
+DocStr8801;Quantity (e.g. shares) bought/sold on this (last) fill;Количество (например, акций) купленных/проданных данным (последним) исполнением
+DocStr8802;Free format text string;Строка в свободном формате
+DocStr8803;Unique identifier of execution message as assigned by sell-side (broker, exchange, ECN);Уникальные идентификатор, присвоенный sell-side (брокер, биржа, ECN)
+DocStr8804;Create FIX protocol dialect;Создать диалект FIX протокола
+DocStr8805;The dialect;Диалект
+DocStr8806;The FIX dialect. The default is {0};Диалект FIX протокола. По-умолчанию равно {0}
+DocStr8807;Dialects of the FIX protocol;Диалекты FIX протокола
+DocStr8808;Default;По-умолчанию
+DocStr8809;CFH;CFH
+DocStr8810;ASTS;ASTS
+DocStr8811;Spectra;Spectra
+DocStr8812;Otkritie;Открытие
+DocStr8813;Quik (server);Quik (сервер)
+DocStr8814;Exchange id;Идентификатор рынка
+DocStr8815;The market identifier of the most frequent trade;Идентификатор рынка для большинства сделок
+DocStr8816;Delay load instruments from {0};Отложенная загрузка инструментов из {0}
+DocStr8817;Action when the license expired;Действие, когда лицензия истекла
+DocStr8818;Actions when a license expired;Действия, когда лицензия истекла
+DocStr8819;Prevent work;Прекратить работу
+DocStr8820;Prevent upgrade;Прекратить обновление
+DocStr8821;Component;Компонента
+DocStr8822;Get {0} for the source. If the value is equal to {1}, then parental source level is taken;Получить {0} для источника. Если значение равно {1}, тогда берется уровень логов родителя
+DocStr8823;The all application level logs recipient;Получатель всех логов приложения
+DocStr8824;The volumes collection of bids;Объемы бидов
+DocStr8825;The volumes collection of asks;Объемы оферов
+DocStr8826;Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources;Освободить занятые ресурсы
+DocStr8827;Obsolete;Устаревшее
+DocStr8828;Is the message contains order info;Если сообщение содержит информацию о заявке
+DocStr8829;Is the message contains trade info;Если сообщение содержит информацию о сделке
+DocStr8830;Number of contracts in an trade;Количество контрактов в сделке
+DocStr8832;The position, generated by order or trade;Позиция, сгенерированная заявкой или сделкой
+DocStr8833;Determines whether the specified message type is supported by the adapter;Определить, поддерживается ли тип сообщения адаптером
+DocStr8834;{0} if the specified message type is supported, otherwise, {1};{0} если тип сообщения поддерживается, иначе, {1}
+DocStr8835;Determines whether the specified message type is derived from {0};Определить, что тип сообщения наследуется от {0}
+DocStr8836;The message type;Тип сообщения
+DocStr8837;{0} if the specified message type is derived from {1}, otherwise, {2};{0} если тип сообщения наследуется от {1}, иначе, {2}
+DocStr8838;Determines whether the specified message contains order information;Определить, содержит ли сообщение информацию о заявке
+DocStr8839;{0} if the specified message contains order information, otherwise, {1};{0} если сообщение содержит информацию о заявке, иначе, {1}
+DocStr8840;Determines whether the specified message contains trade information;Определить, содержит ли сообщение информацию о сделке
+DocStr8841;{0} if the specified message contains trade information, otherwise, {1};{0} если сообщение содержит информацию о сделке, иначе, {1}
+DocStr8842;Convert error text message to {0} instance;Преобразовать текст ошибки в {0}
+DocStr8843;Error text message;Текст ошибки
+DocStr8844;Convert error info into {0};Преобразовать информация об ошибке к {0}
+DocStr8845;Wrapping based adapter;Базовый адаптер
+DocStr8846;Base implementation of {0};Базовая реализация {0}
+DocStr8847;Control {0} lifetime;Контролировать время жизни {0}
+DocStr8848;Commission (broker, exchange etc.). Uses when {0} set to {1};Комиссия (брокерская, биржевая и т.д.). Заполняется при {0} установленном в {1}
+DocStr8849;Default unique software ID;Идентификатор ПО
+DocStr8850;The type of the conditional order OpenECry;Тип условия заявки OpenECry
+DocStr8851;Asset types;Типы акций
+DocStr8852;Future;Фьючерс
+DocStr8853;The interface {0} implementation which provides a connection to RSS feed;Реализация интерфейса {0}, предоставлящая подключение к RSS фиду
+DocStr8854;Chart range/scroll interval. Default is 200ms;Интервал скроллирования графика. По-умолчанию равно 200 млс
+DocStr8855;Local time zone for all {0} values convertion;Локальная временная зона для всех {0} значений конвертации
+DocStr8856;Show FPS;Показывать FPS
+DocStr8857;Box volumes;Боксовые объемы
+DocStr8858;Line color for {0} Line*;Цвет линии для стиля {0} Line*
+DocStr8859;Timeframe #2 multiplier;Множитель таймфрейма #2
+DocStr8860;Timeframe #3 multiplier;Множитель таймфрейма #3
+DocStr8861;Timeframe #2 color;Цвет таймфрейма #2
+DocStr8862;Timeframe #3 color;Цвет таймфрейма #3
+DocStr8863;Cluster profile line color;Цвет линии кластерного профиля
+DocStr8864;Cluster max color;Цвек максимума у кластера
+DocStr8865;Show horizontal volume;Показывать горизонтальный объем
+DocStr8866;Local horizontal volume;Локальный горизонтальный объем
+DocStr8867;Horizontal volume width fraction;Ширина доли горизонтального объема
+DocStr8868;The content of image;Изображение
+DocStr8869;Chart order registering settings;Настройки регистрации заявок
+DocStr8870;Chart share (upload image to web) settings;Настройки публикации изображени в облако
+DocStr8871;The security;Инструмент
+DocStr8872;The portfolio;Портфель
+DocStr8873;Is sharing enable;Доступна ли публикация в облако
+DocStr8874;Incremental period to refresh prev upload image;Период обновления изображения в облаке
+DocStr8875;Name of uploaded image;Имя загруженного изображения
+DocStr8876;Is published;Опубликовано ли
+DocStr8877;Update field value and raise {0} event;Обновить значение поля и вызвать событие {0}
+DocStr8878;Field to update;Поле для обновления
+DocStr8879;New value;Новое значение
+DocStr8880;Name of the field to update;Имя поля для обновления
+DocStr8881;The field type;Тип поля
+DocStr8882;{0} if the field was updated. {1} otherwise;{0} если поле было обновлено. {1} иначе
+DocStr8883;Socket;Сокет
+DocStr8884;Load composite element from settings;Загрузить составной элемент из настроек
+DocStr8885;The current socket;Текущий сокет
+DocStr8886;The handler that returns a stop flag for the socket;Обработчик, возвращающий стоп-флаг для сокета
+DocStr8887;Breakpoints (sockets, on which the data transmission will be stopped);Точки-останова (сокеты, на которых будет остановлена передача данных)
+DocStr8888;To add a breakpoint in the socket;Добавить в сокет точку останова
+DocStr8889;To remove the breakpoint from the socket;Удалить из сокет точку останова
+DocStr8890;Whether the socket is the breakpoint;Является ли сокет точкой останова
+DocStr8891;{0}, if the socket is the breakpoint, otherwise, {1};{0}, если сокет является точкой останова, иначе, {1}
+DocStr8892;The content of file;Содержимое файла
+DocStr8893;Selected input connection;Выбранные входящие соединения
+DocStr8894;Selected output connection;Выбранные исходящие соединения
+DocStr8895;Selected connection;Выбранные соединения
+DocStr8896;The diagram element connection added event;Событие добавление соединения у элемента
+DocStr8897;The diagram element connection removed event;Событие удаления соединения у элемента
+DocStr8898;The action is called at the processing of the new incoming value for socket;Событие вызывается при обработке нового входящего значения для сокета
+DocStr8899;The event of the diagram element selection in the Toolbox;Событие выбора элемента в Тулбоксе
+DocStr8900;The event of the double click on the element in the Toolbox;Событие двойного клика на элемент в Тулбоксе
+DocStr8901;The socket parent element;Родительский элемент сокета
+DocStr8902;Is socket has break;Имеет ли сокет точку останова
+DocStr8903;Is socket break active;Активна ли точка останова на сокете
+DocStr8904;Can select sockets;Можно ли выбрать сокеты
+DocStr8905;The strategy diagram change event;Событие изменения стратегии диаграммы
+DocStr8906;Type of element;Тип элемента
+DocStr8907;Parent window;Родительское окно
+DocStr8908;Chat panel;Чат панель
+DocStr8909;The type of adapter;Тип адаптера
+DocStr8910;The type of transaction or market data adapter;Тип транзакционного или маркет-дата адаптера
+DocStr8911;The panel for modifing {0};Панель для редактирования {0}
+DocStr8912;The message adapter;Адаптер сообщений
+DocStr8913;The drop-down list for exchange selection;Выпадающий список для выбора биржи
+DocStr8914;The exchange info provider;Провайдер информации о бирже
+DocStr8915;Selected exchange;Выбранная биржа
+DocStr8916;The selected exchange change event;Событие выбора биржи
+DocStr8917;Cast value to specified type;Преобразовать значение в переданный тип данных
+DocStr8918;Return type;Возвращаемое значение
+DocStr8919;Source value;Исходное значение
+DocStr8920;Casted value;Преобразованное значение
+DocStr8921;The provider of information about news;Провайдер информации о новостях
+DocStr8922;Data source for portfolio based controls;Источник данных для контролов, работающих с портфелями
+DocStr8923;The own amount of bid (+ stop amount to buy);Собственный объем бида (+ стоп-объем для покупки)
+DocStr8924;The amount of bid;Объем бида
+DocStr8925;The amount of ask;Объем офера
+DocStr8926;The own amount of ask (+ stop amount to sale);Собственный объем офера (+ стоп-объем для продажи)
+DocStr8927;The exchange boards provider;Провайдер биржевых блощадок
+DocStr8928;Gets or sets the text of the currently selected item;Получить или установить текст выбранного элемента
+DocStr8929;Portfolio received;Портфель получен

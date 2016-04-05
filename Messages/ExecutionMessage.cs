@@ -438,7 +438,7 @@ namespace StockSharp.Messages
 		public bool? IsUpTick { get; set; }
 
 		/// <summary>
-		/// Commission (broker, exchange etc.).  Uses when <see cref="ExecutionType"/> set to <see cref="ExecutionTypes.Transaction"/>.
+		/// Commission (broker, exchange etc.). Uses when <see cref="ExecutionType"/> set to <see cref="ExecutionTypes.Transaction"/>.
 		/// </summary>
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.Str159Key)]
