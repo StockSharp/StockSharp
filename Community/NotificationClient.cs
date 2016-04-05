@@ -92,7 +92,6 @@ namespace StockSharp.Community
 		/// </summary>
 		public void SubscribeNews()
 		{
-			RequestNews();
 			_newsTimer = ThreadingHelper.Timer(() =>
 			{
 				try
@@ -103,7 +102,7 @@ namespace StockSharp.Community
 				{
 					ex.LogError();
 				}
-			}).Interval(TimeSpan.FromDays(1));
+			}).Interval(TimeSpan.Zero, TimeSpan.FromDays(1));
 		}
 
 		/// <summary>

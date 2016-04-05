@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -210,7 +210,7 @@
       <Project>{dce69db8-53ca-4b7f-9368-02f175a31074}</Project>
       <Name>BusinessEntities</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\..\StockSharp %28GitLab%29\Connectors\InteractiveBrokers\InteractiveBrokers.csproj">
+    <ProjectReference Include="..\..\..\..\StockSharpApps\Connectors\InteractiveBrokers\InteractiveBrokers.csproj">
       <Project>{F17D780E-6F82-40FD-84E1-C4EB09853BBD}</Project>
       <Name>InteractiveBrokers</Name>
     </ProjectReference>

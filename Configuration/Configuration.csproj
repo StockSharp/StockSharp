@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
@@ -87,7 +87,7 @@
     <Compile Include="StockSharpSection.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\Blackwood\Blackwood.csproj">
+    <ProjectReference Include="..\..\StockSharpApps\Connectors\Blackwood\Blackwood.csproj">
       <Project>{C0D530DD-1E5A-4BE4-9AC6-FF11E5FC9B26}</Project>
       <Name>Blackwood</Name>
     </ProjectReference>
@@ -127,47 +127,47 @@
       <Project>{DCE69DB8-53CA-4B7F-9368-02F175A31074}</Project>
       <Name>BusinessEntities</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\AlfaDirect\AlfaDirect.csproj">
+    <ProjectReference Include="..\..\StockSharpApps\Connectors\AlfaDirect\AlfaDirect.csproj">
       <Project>{AAA445E0-AA85-4B49-AD45-EDD1B4839137}</Project>
       <Name>AlfaDirect</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\BarChart\BarChart.csproj">
+    <ProjectReference Include="..\..\StockSharpApps\Connectors\BarChart\BarChart.csproj">
       <Project>{99B84E0C-D035-4BD9-8A42-8232ED6BA3F4}</Project>
       <Name>BarChart</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\BitStamp\BitStamp.csproj">
+    <ProjectReference Include="..\..\StockSharpApps\Connectors\BitStamp\BitStamp.csproj">
       <Project>{90b93af4-3168-4415-b916-9e078f192696}</Project>
       <Name>BitStamp</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\Btce\Btce.csproj">
+    <ProjectReference Include="..\..\StockSharpApps\Connectors\Btce\Btce.csproj">
       <Project>{AF225452-1CF1-48A2-B381-C02BEBE643D7}</Project>
       <Name>Btce</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\CQG\CQG.csproj">
+    <ProjectReference Include="..\..\StockSharpApps\Connectors\CQG\CQG.csproj">
       <Project>{34984B57-9200-47B9-AC78-0D93FDFA437A}</Project>
       <Name>CQG</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\ETrade\ETrade.csproj">
+    <ProjectReference Include="..\..\StockSharpApps\Connectors\ETrade\ETrade.csproj">
       <Project>{480539A8-CA30-4B87-B038-6AD854DA0C6A}</Project>
       <Name>ETrade</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\InteractiveBrokers\InteractiveBrokers.csproj">
+    <ProjectReference Include="..\..\StockSharpApps\Connectors\InteractiveBrokers\InteractiveBrokers.csproj">
       <Project>{F17D780E-6F82-40FD-84E1-C4EB09853BBD}</Project>
       <Name>InteractiveBrokers</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\IQFeed\IQFeed.csproj">
+    <ProjectReference Include="..\..\StockSharpApps\Connectors\IQFeed\IQFeed.csproj">
       <Project>{f3068408-9764-432e-8fb4-596b308edb4f}</Project>
       <Name>IQFeed</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\LMAX\LMAX.csproj">
+    <ProjectReference Include="..\..\StockSharpApps\Connectors\LMAX\LMAX.csproj">
       <Project>{4B37342E-9A01-499B-9E32-2E9948A6D0C4}</Project>
       <Name>LMAX</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\Oanda\Oanda.csproj">
+    <ProjectReference Include="..\..\StockSharpApps\Connectors\Oanda\Oanda.csproj">
       <Project>{9188D051-7FAA-4CF7-9D93-6D59E2FAEDD0}</Project>
       <Name>Oanda</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\OpenECry\OpenECry.csproj">
+    <ProjectReference Include="..\..\StockSharpApps\Connectors\OpenECry\OpenECry.csproj">
       <Project>{17EAE926-C9A9-40C7-8D54-3545077B4AB7}</Project>
       <Name>OpenECry</Name>
     </ProjectReference>
@@ -175,23 +175,23 @@
       <Project>{1B798A4E-2271-46F9-9C2D-4E563114E268}</Project>
       <Name>Quik</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\Rithmic\Rithmic.csproj">
+    <ProjectReference Include="..\..\StockSharpApps\Connectors\Rithmic\Rithmic.csproj">
       <Project>{FFBC7740-0D2B-49BA-8F95-59E4FC915D06}</Project>
       <Name>Rithmic</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\Rss\Rss.csproj">
+    <ProjectReference Include="..\..\StockSharpApps\Connectors\Rss\Rss.csproj">
       <Project>{FBC5BE61-E6D9-47DF-9515-900184DDEBA0}</Project>
       <Name>Rss</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\SmartCom\SmartCom.csproj">
+    <ProjectReference Include="..\..\StockSharpApps\Connectors\SmartCom\SmartCom.csproj">
       <Project>{3EBEC334-3476-4F65-81C4-BC9D217550C1}</Project>
       <Name>SmartCom</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\Sterling\Sterling.csproj">
+    <ProjectReference Include="..\..\StockSharpApps\Connectors\Sterling\Sterling.csproj">
       <Project>{9ADD140B-1C43-4077-B32E-0EBA81648C4D}</Project>
       <Name>Sterling</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Connectors\Transaq\Transaq.csproj">
+    <ProjectReference Include="..\..\StockSharpApps\Connectors\Transaq\Transaq.csproj">
       <Project>{A00E5A4B-CB24-474A-8F2B-06A2E370C4F6}</Project>
       <Name>Transaq</Name>
     </ProjectReference>

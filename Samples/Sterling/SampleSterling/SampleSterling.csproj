@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
@@ -196,7 +196,7 @@
       <Project>{DCE69DB8-53CA-4B7F-9368-02F175A31074}</Project>
       <Name>BusinessEntities</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\..\StockSharp %28GitLab%29\Connectors\Sterling\Sterling.csproj">
+    <ProjectReference Include="..\..\..\..\StockSharpApps\Connectors\Sterling\Sterling.csproj">
       <Project>{9add140b-1c43-4077-b32e-0eba81648c4d}</Project>
       <Name>Sterling</Name>
     </ProjectReference>
