@@ -24,12 +24,19 @@
 
 			<Grid Grid.Row="2">
 				<Grid.ColumnDefinitions>
+					<ColumnDefinition Width="150"/>
 					<ColumnDefinition Width="*"/>
 					<ColumnDefinition Width="Auto"/>
 					<ColumnDefinition Width="*"/>
 				</Grid.ColumnDefinitions>
 
-				<DockPanel LastChildFill="True" Grid.Column="0">
+				<StackPanel Orientation="Vertical" Grid.Column="0">
+					<CheckBox x:Name="_chkDelay" Content="Delay transactions" IsChecked="True"/>
+					<CheckBox x:Name="_chkFail" Content="Fail transactions"/>
+					<CheckBox x:Name="_chkConfirm" Content="Confirm transactions" IsChecked="True"/>
+				</StackPanel>
+
+				<DockPanel LastChildFill="True" Grid.Column="1">
 					<StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,5">
 						<Button Content="Fill" Click="Fill_Click" Margin="5,0" Width="60"/>
 						<Button Content="Remove" Click="Remove_Click" Margin="5,0" Width="60"/>
@@ -37,9 +44,9 @@
 					<ListBox DockPanel.Dock="Bottom" x:Name="_ordersListBox" ItemsSource="{Binding Orders}" SelectionMode="Single" HorizontalAlignment="Stretch"/>
 				</DockPanel>
 
-				<GridSplitter Grid.Column="1" Width="2" HorizontalAlignment="Center" VerticalAlignment="Stretch" Background="Gray"/>
+				<GridSplitter Grid.Column="2" Width="2" HorizontalAlignment="Center" VerticalAlignment="Stretch" Background="Gray"/>
 
-				<TextBox x:Name="_logBox" Grid.Column="2" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" IsReadOnly="True" AcceptsReturn="True"
+				<TextBox x:Name="_logBox" Grid.Column="3" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" IsReadOnly="True" AcceptsReturn="True"
 						 HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
 			</Grid>
 		</Grid>

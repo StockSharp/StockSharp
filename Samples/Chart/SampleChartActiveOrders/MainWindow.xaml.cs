@@ -34,6 +34,12 @@
 		const decimal PriceStep = 10m;
 		const int Timeframe = 1;
 
+		bool NeedToDelay => _chkDelay.IsChecked == true;
+		bool NeedToFail => _chkFail.IsChecked == true;
+		bool NeedToConfirm => _chkConfirm.IsChecked == true;
+
+		static readonly TimeSpan _delay = TimeSpan.FromSeconds(2);
+
 		private readonly Security _security = new Security
 		{
 			Id = "RIZ2@FORTS",
@@ -258,13 +264,117 @@
 
 		private void Chart_OnRegisterOrder(Order order)
 		{
+			if(NeedToConfirm && !Confirm("Register order?"))
+				return;
+
 			order.Price = Math.Round(order.Price/PriceStep)*PriceStep;
 			order.TransactionId = ++_transId;
 			order.Balance = order.Volume;
+			order.State = OrderStates.Pending;
+			InitExtensionInfo(order);
 
 			Log($"RegisterOrder: {order}");
-
 			AddOrder(order);
+
+			Action regAction = () =>
+			{
+				if (NeedToFail)
+				{
+					order.State = OrderStates.Failed;
+					Log($"Order failed: {order}");
+					RemoveOrder(order);
+				}
+				else
+				{
+					order.State = OrderStates.Active;
+					Log($"Order registered: {order}");
+				}
+			};
+
+			if (NeedToDelay)
+				DelayedAction(regAction, _delay, "register");
+			else
+				regAction();
+		}
+
+		private void Chart_OnMoveOrder(Order order, decimal newPrice)
+		{
+			if (!RemoveOrder(order))
+			{
+				Log($"error: order not found: {order}");
+				return;
+			}
+
+			if (NeedToConfirm && !Confirm($"Move order to price={newPrice}?"))
+			{
+				AddOrder(order);
+				return;
+			}
+
+			Log($"MoveOrder to {newPrice}: {order}");
+			if (IsInFinalState(order))
+			{
+				Log("invalid state for re-register");
+				return;
+			}
+
+			var newOrder = new Order
+			{
+				TransactionId = ++_transId,
+				Type = OrderTypes.Limit,
+				State = OrderStates.Pending,
+				Price = newPrice,
+				Volume = order.Balance,
+				Direction = order.Direction,
+				Balance = order.Balance,
+				Security = order.Security,
+				Portfolio = order.Portfolio,
+			};
+			InitExtensionInfo(newOrder);
+			newOrder.ExtensionInfo[ChartActiveOrdersElement.OldOrderKey] = order;
+
+			AddOrder(newOrder);
+
+			Action moveAction = () =>
+			{
+				if (NeedToFail)
+				{
+					Log("Move failed");
+					RemoveOrder(newOrder);
+					AddOrder(order);
+				}
+				else
+				{
+					newOrder.State = OrderStates.Active;
+					Log($"Order moved to new: {newOrder}");
+				}
+			};
+
+			if(NeedToDelay)
+				DelayedAction(moveAction, _delay, "move");
+			else
+				moveAction();
+		}
+
+		private void Chart_OnCancelOrder(Order order)
+		{
+			if (NeedToConfirm && !Confirm("Cancel order?"))
+				return;
+
+			Log($"CancelOrder: {order}");
+
+			Action cancelAction = () =>
+			{
+				if (NeedToFail)
+					Log("Cancel failed");
+				else
+					RemoveOrder(order);
+			};
+
+			if(NeedToDelay)
+				DelayedAction(cancelAction, _delay, "cancel");
+			else
+				cancelAction();
 		}
 
 		bool AddOrder(Order o)
@@ -286,40 +396,6 @@
 			return res;
 		}
 
-		private void Chart_OnMoveOrder(Order order, decimal newPrice)
-		{
-			Log($"MoveOrder: {order}");
-
-			if(!RemoveOrder(order))
-				return;
-
-			if (IsInFinalState(order))
-			{
-				Log("invalid state for re-register");
-				return;
-			}
-
-			var newOrder = new Order
-			{
-				TransactionId = ++_transId,
-				Type = OrderTypes.Limit,
-				Price = newPrice,
-				Volume = order.Balance,
-				Direction = order.Direction,
-				Balance = order.Balance,
-				Security = order.Security,
-				Portfolio = order.Portfolio,
-			};
-
-			AddOrder(newOrder);
-		}
-
-		private void Chart_OnCancelOrder(Order order)
-		{
-			Log($"CancelOrder: {order}");
-			RemoveOrder(order);
-		}
-
 		private void Log(string msg)
 		{
 			_logBox.AppendText($"{DateTime.Now:HH:mm:ss.fff}: {msg}\n");
@@ -329,6 +405,23 @@
 		bool IsInFinalState(Order o)
 		{
 			return o.State == OrderStates.Done || o.State == OrderStates.Failed || o.Balance == 0;
+		}
+
+		bool Confirm(string question)
+		{
+			return MessageBox.Show(question, "Confirmation", MessageBoxButton.YesNo) == MessageBoxResult.Yes;
+		}
+
+		void InitExtensionInfo(Order order)
+		{
+			if (order.ExtensionInfo == null)
+				order.ExtensionInfo = new SynchronizedDictionary<object, object>();
+		}
+
+		void DelayedAction(Action action, TimeSpan delay, string actionName)
+		{
+			Log($"Action '{actionName}' is delayed for {delay.TotalSeconds:0.##}sec");
+			Task.Delay(delay).ContinueWith(t => Dispatcher.GuiAsync(action));
 		}
 	}
 }
