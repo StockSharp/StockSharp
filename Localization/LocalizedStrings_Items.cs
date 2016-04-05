@@ -18,6 +18,16 @@ namespace StockSharp.Localization
 	partial class LocalizedStrings
 	{
 		/// <summary>
+		/// Show FPS stats
+		/// </summary>
+		public const string ShowFPSKey = "ShowFPS";
+
+		/// <summary>
+		/// Show FPS stats
+		/// </summary>
+		public static string ShowFPS => GetString(ShowFPSKey);
+		
+		/// <summary>
 		/// Active orders
 		/// </summary>
 		public const string ActiveOrdersKey = "ActiveOrders";
