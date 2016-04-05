@@ -7,12 +7,14 @@
 	using System.Windows;
 	using System.Collections.ObjectModel;
 	using System.Windows.Threading;
+
 	using Ecng.Collections;
 	using Ecng.Common;
 	using Ecng.Xaml;
 	using Ecng.Configuration;
 
 	using MoreLinq;
+
 	using StockSharp.Algo.Candles;
 	using StockSharp.Algo.Storages;
 	using StockSharp.BusinessEntities;
@@ -21,29 +23,34 @@
 
 	public partial class MainWindow
 	{
-		public ObservableCollection<Order> Orders {get;}
+		public ObservableCollection<Order> Orders { get; }
 
 		private ChartArea _area;
 		private ChartCandleElement _candleElement;
 		private ChartActiveOrdersElement _activeOrdersElement;
 		private TimeFrameCandle _candle;
+
 		private readonly DispatcherTimer _chartUpdateTimer = new DispatcherTimer();
 		private readonly SynchronizedDictionary<DateTimeOffset, TimeFrameCandle> _updatedCandles = new SynchronizedDictionary<DateTimeOffset, TimeFrameCandle>();
 		private readonly CachedSynchronizedList<TimeFrameCandle> _allCandles = new CachedSynchronizedList<TimeFrameCandle>();
-		private readonly CachedSynchronizedSet<Order> _chartOrders = new CachedSynchronizedSet<Order>(); 
-		const decimal PriceStep = 10m;
-		const int Timeframe = 1;
+		private readonly CachedSynchronizedSet<Order> _chartOrders = new CachedSynchronizedSet<Order>();
+
+		private const decimal _priceStep = 10m;
+		private const int _timeframe = 1;
 
 		private readonly Security _security = new Security
 		{
 			Id = "RIZ2@FORTS",
-			PriceStep = PriceStep,
+			PriceStep = _priceStep,
 			Board = ExchangeBoard.Forts
 		};
 
 		private readonly ThreadSafeObservableCollection<Portfolio> _portfolios = new ThreadSafeObservableCollection<Portfolio>(new ObservableCollectionEx<Portfolio>
 		{
-			new Portfolio {Name = "Test portfolio"}
+			new Portfolio
+			{
+				Name = "Test portfolio"
+			}
 		});
 
 		public MainWindow()
@@ -86,12 +93,18 @@
 			var series = new CandleSeries(
 				typeof(TimeFrameCandle),
 				_security,
-				TimeSpan.FromMinutes(Timeframe));
+				TimeSpan.FromMinutes(_timeframe));
 
-			_candleElement = new ChartCandleElement { FullTitle = "Candles" };
+			_candleElement = new ChartCandleElement
+			{
+				FullTitle = "Candles"
+			};
 			Chart.AddElement(_area, _candleElement, series);
 
-			_activeOrdersElement = new ChartActiveOrdersElement {FullTitle = "Active orders"};
+			_activeOrdersElement = new ChartActiveOrdersElement
+			{
+				FullTitle = "Active orders"
+			};
 			Chart.AddElement(_area, _activeOrdersElement);
 		}
 
@@ -182,11 +195,11 @@
 				if (_candle != null)
 				{
 					_candle.State = CandleStates.Finished;
-					lock(_updatedCandles.SyncRoot)
+					lock (_updatedCandles.SyncRoot)
 						_updatedCandles[_candle.OpenTime] = _candle;
 				}
 
-				var tf = TimeSpan.FromMinutes(Timeframe);
+				var tf = TimeSpan.FromMinutes(_timeframe);
 				var bounds = tf.GetCandleBounds(time, _security.Board);
 				_candle = new TimeFrameCandle
 				{
@@ -212,7 +225,7 @@
 
 			_candle.TotalVolume += tick.TradeVolume.Value;
 
-			lock(_updatedCandles.SyncRoot)
+			lock (_updatedCandles.SyncRoot)
 				_updatedCandles[_candle.OpenTime] = _candle;
 		}
 
@@ -230,12 +243,12 @@
 		private void Fill_Click(object sender, RoutedEventArgs e)
 		{
 			var order = _ordersListBox.SelectedItem as Order;
-			if(order == null)
+			if (order == null)
 				return;
 
 			Log($"Fill order: {order}");
 
-			if(order.Balance == 0)
+			if (order.Balance == 0)
 				RemoveOrder(order);
 
 			order.Balance -= 1;
@@ -258,7 +271,7 @@
 
 		private void Chart_OnRegisterOrder(Order order)
 		{
-			order.Price = Math.Round(order.Price/PriceStep)*PriceStep;
+			order.Price = Math.Round(order.Price / _priceStep) * _priceStep;
 			order.TransactionId = ++_transId;
 			order.Balance = order.Volume;
 
@@ -267,9 +280,9 @@
 			AddOrder(order);
 		}
 
-		bool AddOrder(Order o)
+		private bool AddOrder(Order o)
 		{
-			if(_chartOrders.Contains(o))
+			if (_chartOrders.Contains(o))
 				return false;
 
 			_chartOrders.Add(o);
@@ -278,7 +291,7 @@
 			return true;
 		}
 
-		bool RemoveOrder(Order o)
+		private bool RemoveOrder(Order o)
 		{
 			var res = _chartOrders.Remove(o);
 			Orders.Remove(o);
@@ -290,7 +303,7 @@
 		{
 			Log($"MoveOrder: {order}");
 
-			if(!RemoveOrder(order))
+			if (!RemoveOrder(order))
 				return;
 
 			if (IsInFinalState(order))
@@ -326,7 +339,7 @@
 			_logBox.ScrollToEnd();
 		}
 
-		bool IsInFinalState(Order o)
+		private static bool IsInFinalState(Order o)
 		{
 			return o.State == OrderStates.Done || o.State == OrderStates.Failed || o.Balance == 0;
 		}
