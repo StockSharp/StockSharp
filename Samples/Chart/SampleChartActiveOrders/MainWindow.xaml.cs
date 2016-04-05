@@ -38,11 +38,11 @@
 		private const decimal _priceStep = 10m;
 		private const int _timeframe = 1;
 
-		bool NeedToDelay => _chkDelay.IsChecked == true;
-		bool NeedToFail => _chkFail.IsChecked == true;
-		bool NeedToConfirm => _chkConfirm.IsChecked == true;
+		private bool NeedToDelay => _chkDelay.IsChecked == true;
+		private bool NeedToFail => _chkFail.IsChecked == true;
+		private bool NeedToConfirm => _chkConfirm.IsChecked == true;
 
-		static readonly TimeSpan _delay = TimeSpan.FromSeconds(2);
+		private static readonly TimeSpan _delay = TimeSpan.FromSeconds(2);
 
 		private readonly Security _security = new Security
 		{
@@ -273,7 +273,7 @@
 			RemoveOrder(order);
 		}
 
-		long _transId;
+		private long _transId;
 
 		private void Chart_OnRegisterOrder(Order order)
 		{
@@ -420,12 +420,12 @@
 			return o.State == OrderStates.Done || o.State == OrderStates.Failed || o.Balance == 0;
 		}
 
-		private bool Confirm(string question)
+		private static bool Confirm(string question)
 		{
 			return MessageBox.Show(question, "Confirmation", MessageBoxButton.YesNo) == MessageBoxResult.Yes;
 		}
 
-		private void InitExtensionInfo(Order order)
+		private static void InitExtensionInfo(Order order)
 		{
 			if (order.ExtensionInfo == null)
 				order.ExtensionInfo = new SynchronizedDictionary<object, object>();
