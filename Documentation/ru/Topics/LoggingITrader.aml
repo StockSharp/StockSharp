@@ -56,7 +56,7 @@
 				  <para>
 					  В итоге программа после запуска будет выводить сообщения, как показано ниже:
 				  </para>
-				  <code language="Output"><![CDATA[18:43:15 | Info  | AlfaTrader      | AlfaDirect v.3.5.2.6
+				  <code><![CDATA[18:43:15 | Info  | AlfaTrader      | AlfaDirect v.3.5.2.6
 18:43:15 | Debug | AlfaTrader      | StartExport()
 18:43:15 | Debug | AlfaWrapper     | ReadPortfolios()
 18:43:15 | Debug | AlfaTrader      | OnProcessPortfolios()

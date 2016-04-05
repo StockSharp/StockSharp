@@ -502,7 +502,6 @@
     <None Include="Topics\SecurityId.aml" />
     <None Include="Topics\Slippage.aml" />
     <None Include="Topics\Smart.aml" />
-    <None Include="Topics\SmartComWrapper.aml" />
     <None Include="Topics\SmartFirstStrategy.aml" />
     <None Include="Topics\SmartHistory.aml" />
     <None Include="Topics\SmartStopOrders.aml" />

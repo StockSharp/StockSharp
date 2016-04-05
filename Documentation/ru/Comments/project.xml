@@ -162,14 +162,14 @@
 				<p>Механизмы сохранения и загрузки маркет данных.</p>
 			</summary>
 		</member>
-		<member name="N:StockSharp.Algo.Storages.Backup">
+		<member name="N:StockSharp.Algo.Expressions">
 			<summary>
-				<p>Классы для бэкапа данных хранилища.</p>
+				<p>Математические формулы.</p>
 			</summary>
 		</member>
-		<member name="N:StockSharp.Algo.Storages.Backup.Xaml">
+		<member name="N:StockSharp.Algo.Expressions.Xaml">
 			<summary>
-				<p>Графические компоненты бэкапа данных хранилища.</p>
+				<p>Графические компоненты для математических формул.</p>
 			</summary>
 		</member>
 		<member name="N:StockSharp.Algo.Storages.Csv">
