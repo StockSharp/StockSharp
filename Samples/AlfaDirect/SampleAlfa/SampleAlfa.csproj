@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -191,7 +191,7 @@
       <Project>{dce69db8-53ca-4b7f-9368-02f175a31074}</Project>
       <Name>BusinessEntities</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\..\StockSharp %28GitLab%29\Connectors\AlfaDirect\AlfaDirect.csproj">
+    <ProjectReference Include="..\..\..\..\StockSharpApps\Connectors\AlfaDirect\AlfaDirect.csproj">
       <Project>{AAA445E0-AA85-4B49-AD45-EDD1B4839137}</Project>
       <Name>AlfaDirect</Name>
     </ProjectReference>

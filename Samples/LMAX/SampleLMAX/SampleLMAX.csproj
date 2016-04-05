@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -251,7 +251,7 @@
       <Project>{DCE69DB8-53CA-4B7F-9368-02F175A31074}</Project>
       <Name>BusinessEntities</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\..\StockSharp %28GitLab%29\Connectors\LMAX\LMAX.csproj">
+    <ProjectReference Include="..\..\..\..\StockSharpApps\Connectors\LMAX\LMAX.csproj">
       <Project>{4B37342E-9A01-499B-9E32-2E9948A6D0C4}</Project>
       <Name>LMAX</Name>
     </ProjectReference>

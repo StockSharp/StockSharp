@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -220,7 +220,7 @@
       <Project>{DCE69DB8-53CA-4B7F-9368-02F175A31074}</Project>
       <Name>BusinessEntities</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\..\StockSharp %28GitLab%29\Connectors\BarChart\BarChart.csproj">
+    <ProjectReference Include="..\..\..\..\StockSharpApps\Connectors\BarChart\BarChart.csproj">
       <Project>{99b84e0c-d035-4bd9-8a42-8232ed6ba3f4}</Project>
       <Name>BarChart</Name>
     </ProjectReference>
