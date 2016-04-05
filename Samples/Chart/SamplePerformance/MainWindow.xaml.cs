@@ -106,7 +106,7 @@ namespace SamplePerformance
 		{
 			Chart.ClearAreas();
 
-			_area = new ChartArea {ShowPerfStats = true};
+			_area = new ChartArea();
 
 			var yAxis = _area.YAxises.First();
 
