@@ -205,7 +205,7 @@ private sealed class RtsSettings : HydraTaskSettings
 					<para>
 					  Завершающим этапом необходимо реализовать метод <codeEntityReference qualifyHint="true">M:StockSharp.Hydra.Core.BaseHydraTask.OnProcess</codeEntityReference>,
 					  в котором реализуется логика скачивания маркет-данных. В случае с RtsTask, вся логика находится в самом <token>stocksharp</token>
-					  и используется класс <codeEntityReference>T:StockSharp.Algo.History.Rts.RtsHistorySource</codeEntityReference>:
+					  и используется класс <codeEntityReference>T:StockSharp.Algo.History.Russian.Rts.RtsHistorySource</codeEntityReference>:
 					</para>
 					<code language="C#">
 <![CDATA[
