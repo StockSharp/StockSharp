@@ -190,6 +190,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SamplePerformancePublic", "
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Chart", "Chart", "{6755B1AB-855F-43C1-837F-8E7023ED8236}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SampleChartActiveOrders", "Samples\Chart\SampleChartActiveOrders\SampleChartActiveOrders.csproj", "{B50ADCF8-CD33-46BE-902D-359A4EDFECA7}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -432,6 +434,10 @@ Global
 		{81A84C3B-EC88-4746-AA4D-247DD1F66EB6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{81A84C3B-EC88-4746-AA4D-247DD1F66EB6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{81A84C3B-EC88-4746-AA4D-247DD1F66EB6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B50ADCF8-CD33-46BE-902D-359A4EDFECA7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B50ADCF8-CD33-46BE-902D-359A4EDFECA7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B50ADCF8-CD33-46BE-902D-359A4EDFECA7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B50ADCF8-CD33-46BE-902D-359A4EDFECA7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -517,6 +523,7 @@ Global
 		{8B430A27-B392-4129-9AA2-731A52427E40} = {6755B1AB-855F-43C1-837F-8E7023ED8236}
 		{81A84C3B-EC88-4746-AA4D-247DD1F66EB6} = {6755B1AB-855F-43C1-837F-8E7023ED8236}
 		{6755B1AB-855F-43C1-837F-8E7023ED8236} = {D4F0E771-46F8-41B6-BB9D-AC00C87F09E5}
+		{B50ADCF8-CD33-46BE-902D-359A4EDFECA7} = {6755B1AB-855F-43C1-837F-8E7023ED8236}
 	EndGlobalSection
 	GlobalSection(TestCaseManagementSettings) = postSolution
 		CategoryFile = Trading.vsmdi
