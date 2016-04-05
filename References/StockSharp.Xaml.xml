@@ -542,26 +542,6 @@
             InitializeComponent
             </summary>
     </member>
-    <member name="T:StockSharp.Xaml.Extensions">
-      <summary>
-            Extension class.
-            </summary>
-    </member>
-    <member name="M:StockSharp.Xaml.Extensions.Translate(wyDay.Controls.AutomaticUpdater)">
-      <summary>
-            To localize <see cref="T:wyDay.Controls.AutomaticUpdater" />.
-            </summary>
-      <param name="automaticUpdater">
-        <see cref="T:wyDay.Controls.AutomaticUpdater" />.</param>
-    </member>
-    <member name="M:StockSharp.Xaml.Extensions.WpfCast``1(System.Object)">
-      <summary>
-            Cast value to specified type.
-            </summary>
-      <typeparam name="T">Return type.</typeparam>
-      <param name="value">Source value.</param>
-      <returns>Casted value.</returns>
-    </member>
     <member name="T:StockSharp.Xaml.HelpButton">
       <summary>
             Help button.
@@ -721,7 +701,7 @@
     </member>
     <member name="T:StockSharp.Xaml.PortfolioDataSource">
       <summary>
-            Data source for portfolio based controls/
+            Data source for portfolio based controls.
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.PortfolioDataSource.#ctor(StockSharp.BusinessEntities.IPortfolioProvider)">
@@ -1392,7 +1372,7 @@
     </member>
     <member name="F:StockSharp.Xaml.MarketDepthColumns.OwnSell">
       <summary>
-            The net amount of ask (+ stop amount to sale).
+            The own amount of ask (+ stop amount to sale).
             </summary>
     </member>
     <member name="T:StockSharp.Xaml.MarketDepthControl">

@@ -767,7 +767,7 @@
     </member>
     <member name="P:StockSharp.Xaml.Charting.ChartCandleElement.LineColor">
       <summary>
-            Line color for DrawStyle Line*.
+            Line color for <see cref="P:StockSharp.Xaml.Charting.ChartCandleElement.DrawStyle" /> Line*.
             </summary>
     </member>
     <member name="P:StockSharp.Xaml.Charting.ChartCandleElement.ShowAxisMarker">
@@ -1631,13 +1631,14 @@
     </member>
     <member name="M:StockSharp.Xaml.Charting.ChartPart`1.SetField``1(``0@,``0,System.String)">
       <summary>
-            Update field value and raise PropertyChanged event.
+            Update field value and raise <see cref="E:StockSharp.Xaml.Charting.ChartPart`1.PropertyChanged" /> event.
             </summary>
       <param name="field">Field to update.</param>
       <param name="value">New value.</param>
       <param name="name">Name of the field to update.</param>
       <typeparam name="TField">The field type.</typeparam>
-      <returns>True if the field was updated. False otherwise.</returns>
+      <returns>
+        <see langword="true" /> if the field was updated. <see langword="false" /> otherwise.</returns>
     </member>
     <member name="T:StockSharp.Xaml.Charting.ChartTradeElement">
       <summary>

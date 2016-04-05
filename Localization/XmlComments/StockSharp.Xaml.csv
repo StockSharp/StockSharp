@@ -107,13 +107,6 @@ P:StockSharp.Xaml.ExecutionGrid.SelectedMessages/summary;DocStr8139
 M:StockSharp.Xaml.ExecutionGrid.HideColumns(StockSharp.Messages.ExecutionTypes)/summary;DocStr8134
 M:StockSharp.Xaml.ExecutionGrid.HideColumns(StockSharp.Messages.ExecutionTypes)/param/type;DocStr8135
 M:StockSharp.Xaml.ExecutionGrid.InitializeComponent/summary;DocStr8
-T:StockSharp.Xaml.Extensions/summary;DocStr4290
-M:StockSharp.Xaml.Extensions.Translate(wyDay.Controls.AutomaticUpdater)/summary;DocStr8189
-M:StockSharp.Xaml.Extensions.Translate(wyDay.Controls.AutomaticUpdater)/param/automaticUpdater;DocStr608
-M:StockSharp.Xaml.Extensions.WpfCast``1(System.Object)/summary;DocStr8917
-M:StockSharp.Xaml.Extensions.WpfCast``1(System.Object)/typeparam/T;DocStr8918
-M:StockSharp.Xaml.Extensions.WpfCast``1(System.Object)/param/value;DocStr8919
-M:StockSharp.Xaml.Extensions.WpfCast``1(System.Object)/returns;DocStr8920
 T:StockSharp.Xaml.HelpButton/summary;DocStr8140
 M:StockSharp.Xaml.HelpButton.#ctor/summary;DocStr1
 F:StockSharp.Xaml.HelpButton.DocUrlProperty/summary;DocStr29
