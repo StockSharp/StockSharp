@@ -406,34 +406,44 @@
             Initializes a new instance of the <see cref="T:StockSharp.Xaml.Charting.ChartActiveOrdersElement" />.
             </summary>
     </member>
-    <member name="P:StockSharp.Xaml.Charting.ChartActiveOrdersElement.Title">
+    <member name="P:StockSharp.Xaml.Charting.ChartActiveOrdersElement.IsVisible">
       <summary>
-            Header that will be shown on chart.
+            Show chart element.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Charting.ChartActiveOrdersElement.BuyPendingColor">
+      <summary>
+            Color of Buy order in non-active state.
             </summary>
     </member>
     <member name="P:StockSharp.Xaml.Charting.ChartActiveOrdersElement.BuyColor">
       <summary>
-            Color of "buy" annotation.
+            Color of Buy order in active state.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Charting.ChartActiveOrdersElement.SellPendingColor">
+      <summary>
+            Color of Sell order in non-active state.
             </summary>
     </member>
     <member name="P:StockSharp.Xaml.Charting.ChartActiveOrdersElement.SellColor">
       <summary>
-            Color of "sell" annotation.
+            Color of Sell order in active state.
             </summary>
     </member>
     <member name="P:StockSharp.Xaml.Charting.ChartActiveOrdersElement.CancelButtonColor">
       <summary>
-            Line color.
+            Cancel order button color.
             </summary>
     </member>
     <member name="P:StockSharp.Xaml.Charting.ChartActiveOrdersElement.CancelButtonBackground">
       <summary>
-            Line color.
+            Cancel order button background color.
             </summary>
     </member>
     <member name="P:StockSharp.Xaml.Charting.ChartActiveOrdersElement.ForegroundColor">
       <summary>
-            Font color.
+            Text color.
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.Charting.ChartActiveOrdersElement.Load(Ecng.Serialization.SettingsStorage)">
