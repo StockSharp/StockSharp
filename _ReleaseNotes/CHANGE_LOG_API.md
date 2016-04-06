@@ -1,9 +1,10 @@
 StockSharp API Change log
 ========================
-###current:
+###v4.3.14.2:
 * (feature) Chart. Active orders.
 * (bug) https://github.com/StockSharp/StockSharp/issues/222
 * (feature) IBTrader -> InteractiveBrokersTrader, OECTrader -> OpenECryTrader
+* (bug) TargetPlatformWindow fix.
 
 ###v4.3.14.1:
 * (bug) Transaq. double <-> decimal conversation fix.

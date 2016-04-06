@@ -284,6 +284,11 @@
             To show the preview area.
             </summary>
     </member>
+    <member name="P:StockSharp.Xaml.Charting.Chart.ShowPerfStats">
+      <summary>
+            Show FPS.
+            </summary>
+    </member>
     <member name="P:StockSharp.Xaml.Charting.Chart.IsInteracted">
       <summary>
             The interactive mode. The default is off.
@@ -527,11 +532,6 @@
     <member name="P:StockSharp.Xaml.Charting.ChartArea.Title">
       <summary>
             Chart area name.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Xaml.Charting.ChartArea.ShowPerfStats">
-      <summary>
-            Show FPS.
             </summary>
     </member>
     <member name="P:StockSharp.Xaml.Charting.ChartArea.Height">
