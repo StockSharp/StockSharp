@@ -209,17 +209,17 @@
             MonitorTickTag.
             </summary>
     </member>
-    <member name="T:StockSharp.InteractiveBrokers.IBOrderCondition">
+    <member name="T:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition">
       <summary>
         <see cref="N:StockSharp.InteractiveBrokers" /> order condition.
             </summary>
     </member>
-    <member name="T:StockSharp.InteractiveBrokers.IBOrderCondition.BaseCondition">
+    <member name="T:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.BaseCondition">
       <summary>
             Base condition.
             </summary>
     </member>
-    <member name="M:StockSharp.InteractiveBrokers.IBOrderCondition.BaseCondition.GetValue``1(System.String)">
+    <member name="M:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.BaseCondition.GetValue``1(System.String)">
       <summary>
             Get parameter value.
             </summary>
@@ -227,7 +227,7 @@
       <param name="name">Parameter name.</param>
       <returns>The parameter value.</returns>
     </member>
-    <member name="M:StockSharp.InteractiveBrokers.IBOrderCondition.BaseCondition.TryGetValue``1(System.String)">
+    <member name="M:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.BaseCondition.TryGetValue``1(System.String)">
       <summary>
             To get the parameter value. If the value does not exist the <see langword="null" /> will be returned.
             </summary>
@@ -235,7 +235,7 @@
       <param name="name">Parameter name.</param>
       <returns>The parameter value.</returns>
     </member>
-    <member name="M:StockSharp.InteractiveBrokers.IBOrderCondition.BaseCondition.SetValue``1(System.String,``0)">
+    <member name="M:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.BaseCondition.SetValue``1(System.String,``0)">
       <summary>
             To set a new parameter value.
             </summary>
@@ -243,12 +243,12 @@
       <param name="name">Parameter name.</param>
       <param name="value">The parameter value.</param>
     </member>
-    <member name="T:StockSharp.InteractiveBrokers.IBOrderCondition.ExtendedOrderTypes">
+    <member name="T:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.ExtendedOrderTypes">
       <summary>
-            Extended orders types which are specific to <see cref="T:StockSharp.InteractiveBrokers.IBTrader" />.
+            Extended orders types which are specific to <see cref="T:StockSharp.InteractiveBrokers.InteractiveBrokersTrader" />.
             </summary>
     </member>
-    <member name="F:StockSharp.InteractiveBrokers.IBOrderCondition.ExtendedOrderTypes.MarketOnClose">
+    <member name="F:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.ExtendedOrderTypes.MarketOnClose">
       <summary>
             To match at the market price, if the closing price is higher than the expected price.
             </summary>
@@ -256,7 +256,7 @@
             Not valid for US <see cref="F:StockSharp.Messages.SecurityTypes.Future" />, US <see cref="F:StockSharp.Messages.SecurityTypes.Option" />, <see cref="F:StockSharp.Messages.SecurityTypes.Stock" />.
             </remarks>
     </member>
-    <member name="F:StockSharp.InteractiveBrokers.IBOrderCondition.ExtendedOrderTypes.LimitOnClose">
+    <member name="F:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.ExtendedOrderTypes.LimitOnClose">
       <summary>
             To match at the specified price, if the closing price is higher than the expected price.
             </summary>
@@ -264,7 +264,7 @@
             Not valid for US <see cref="F:StockSharp.Messages.SecurityTypes.Future" />, <see cref="F:StockSharp.Messages.SecurityTypes.Stock" />.
             </remarks>
     </member>
-    <member name="F:StockSharp.InteractiveBrokers.IBOrderCondition.ExtendedOrderTypes.PeggedToMarket">
+    <member name="F:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.ExtendedOrderTypes.PeggedToMarket">
       <summary>
             At best price.
             </summary>
@@ -272,7 +272,7 @@
             Valid until <see cref="F:StockSharp.Messages.SecurityTypes.Stock" />.
             </remarks>
     </member>
-    <member name="F:StockSharp.InteractiveBrokers.IBOrderCondition.ExtendedOrderTypes.Stop">
+    <member name="F:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.ExtendedOrderTypes.Stop">
       <summary>
             The stop with the market activation price.
             </summary>
@@ -280,7 +280,7 @@
             Valid for <see cref="F:StockSharp.Messages.SecurityTypes.Currency" />, <see cref="F:StockSharp.Messages.SecurityTypes.Future" />, <see cref="F:StockSharp.Messages.SecurityTypes.Option" />, <see cref="F:StockSharp.Messages.SecurityTypes.Stock" />, <see cref="F:StockSharp.Messages.SecurityTypes.Warrant" />.
             </remarks>
     </member>
-    <member name="F:StockSharp.InteractiveBrokers.IBOrderCondition.ExtendedOrderTypes.StopLimit">
+    <member name="F:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.ExtendedOrderTypes.StopLimit">
       <summary>
             Stop with the specified activation price.
             </summary>
@@ -288,7 +288,7 @@
             Valid for <see cref="F:StockSharp.Messages.SecurityTypes.Currency" />, <see cref="F:StockSharp.Messages.SecurityTypes.Future" />, <see cref="F:StockSharp.Messages.SecurityTypes.Option" />, <see cref="F:StockSharp.Messages.SecurityTypes.Stock" />.
             </remarks>
     </member>
-    <member name="F:StockSharp.InteractiveBrokers.IBOrderCondition.ExtendedOrderTypes.TrailingStop">
+    <member name="F:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.ExtendedOrderTypes.TrailingStop">
       <summary>
             Trailing stop-loss.
             </summary>
@@ -296,7 +296,7 @@
             Valid for <see cref="F:StockSharp.Messages.SecurityTypes.Currency" />, <see cref="F:StockSharp.Messages.SecurityTypes.Future" />, <see cref="F:StockSharp.Messages.SecurityTypes.Option" />, <see cref="F:StockSharp.Messages.SecurityTypes.Stock" />, <see cref="F:StockSharp.Messages.SecurityTypes.Warrant" />.
             </remarks>
     </member>
-    <member name="F:StockSharp.InteractiveBrokers.IBOrderCondition.ExtendedOrderTypes.Relative">
+    <member name="F:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.ExtendedOrderTypes.Relative">
       <summary>
             With offset.
             </summary>
@@ -304,7 +304,7 @@
             Valid for <see cref="F:StockSharp.Messages.SecurityTypes.Option" />, <see cref="F:StockSharp.Messages.SecurityTypes.Stock" />.
             </remarks>
     </member>
-    <member name="F:StockSharp.InteractiveBrokers.IBOrderCondition.ExtendedOrderTypes.VolumeWeightedAveragePrice">
+    <member name="F:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.ExtendedOrderTypes.VolumeWeightedAveragePrice">
       <summary>
             VWAP.
             </summary>
@@ -312,7 +312,7 @@
             Valid until <see cref="F:StockSharp.Messages.SecurityTypes.Stock" />.
             </remarks>
     </member>
-    <member name="F:StockSharp.InteractiveBrokers.IBOrderCondition.ExtendedOrderTypes.TrailingStopLimit">
+    <member name="F:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.ExtendedOrderTypes.TrailingStopLimit">
       <summary>
             Limit trailing stop.
             </summary>
@@ -320,434 +320,434 @@
             Valid for <see cref="F:StockSharp.Messages.SecurityTypes.Currency" />, <see cref="F:StockSharp.Messages.SecurityTypes.Future" />, <see cref="F:StockSharp.Messages.SecurityTypes.Option" />, <see cref="F:StockSharp.Messages.SecurityTypes.Stock" />, <see cref="F:StockSharp.Messages.SecurityTypes.Warrant" />.
             </remarks>
     </member>
-    <member name="F:StockSharp.InteractiveBrokers.IBOrderCondition.ExtendedOrderTypes.Volatility">
+    <member name="F:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.ExtendedOrderTypes.Volatility">
       <summary>
             Volatility.
             </summary>
     </member>
-    <member name="F:StockSharp.InteractiveBrokers.IBOrderCondition.ExtendedOrderTypes.Empty">
+    <member name="F:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.ExtendedOrderTypes.Empty">
       <summary>
             It used for delta orders.
             </summary>
     </member>
-    <member name="F:StockSharp.InteractiveBrokers.IBOrderCondition.ExtendedOrderTypes.Default">
+    <member name="F:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.ExtendedOrderTypes.Default">
       <summary>
             It used for delta neutral orders types.
             </summary>
     </member>
-    <member name="F:StockSharp.InteractiveBrokers.IBOrderCondition.ExtendedOrderTypes.Scale">
+    <member name="F:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.ExtendedOrderTypes.Scale">
       <summary>
             To be changed on price increment.
             </summary>
     </member>
-    <member name="F:StockSharp.InteractiveBrokers.IBOrderCondition.ExtendedOrderTypes.MarketIfTouched">
+    <member name="F:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.ExtendedOrderTypes.MarketIfTouched">
       <summary>
             With the market price when the condition is fulfilled.
             </summary>
     </member>
-    <member name="F:StockSharp.InteractiveBrokers.IBOrderCondition.ExtendedOrderTypes.LimitIfTouched">
+    <member name="F:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.ExtendedOrderTypes.LimitIfTouched">
       <summary>
             With the specified price when the condition is fulfilled.
             </summary>
     </member>
-    <member name="T:StockSharp.InteractiveBrokers.IBOrderCondition.OcaTypes">
+    <member name="T:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.OcaTypes">
       <summary>
             Orders modes such as OCA (One-Cancels All).
             </summary>
     </member>
-    <member name="F:StockSharp.InteractiveBrokers.IBOrderCondition.OcaTypes.CancelAll">
+    <member name="F:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.OcaTypes.CancelAll">
       <summary>
             To cancel all remaining blocks.
             </summary>
     </member>
-    <member name="F:StockSharp.InteractiveBrokers.IBOrderCondition.OcaTypes.ReduceWithBlock">
+    <member name="F:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.OcaTypes.ReduceWithBlock">
       <summary>
             The remaining orders proportionally to decrease by the size of the block.
             </summary>
     </member>
-    <member name="F:StockSharp.InteractiveBrokers.IBOrderCondition.OcaTypes.ReduceWithNoBlock">
+    <member name="F:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.OcaTypes.ReduceWithNoBlock">
       <summary>
             The remaining orders proportionally to decrease by the size out of the block.
             </summary>
     </member>
-    <member name="T:StockSharp.InteractiveBrokers.IBOrderCondition.OcaCondition">
+    <member name="T:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.OcaCondition">
       <summary>
             OCA (One-Cancels All) settings.
             </summary>
     </member>
-    <member name="P:StockSharp.InteractiveBrokers.IBOrderCondition.OcaCondition.Group">
+    <member name="P:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.OcaCondition.Group">
       <summary>
             Group ID.
             </summary>
     </member>
-    <member name="P:StockSharp.InteractiveBrokers.IBOrderCondition.OcaCondition.Type">
+    <member name="P:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.OcaCondition.Type">
       <summary>
             Group type.
             </summary>
     </member>
-    <member name="T:StockSharp.InteractiveBrokers.IBOrderCondition.TriggerMethods">
+    <member name="T:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.TriggerMethods">
       <summary>
             Conditions for stop orders activation.
             </summary>
     </member>
-    <member name="F:StockSharp.InteractiveBrokers.IBOrderCondition.TriggerMethods.Default">
+    <member name="F:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.TriggerMethods.Default">
       <summary>
-            For NASDAQ <see cref="F:StockSharp.Messages.SecurityTypes.Stock" /> and US <see cref="F:StockSharp.Messages.SecurityTypes.Option" /> the <see cref="F:StockSharp.InteractiveBrokers.IBOrderCondition.TriggerMethods.DoubleBidAsk" /> condition is used. Otherwise, the <see cref="F:StockSharp.InteractiveBrokers.IBOrderCondition.TriggerMethods.BidAsk" /> condition is used.
+            For NASDAQ <see cref="F:StockSharp.Messages.SecurityTypes.Stock" /> and US <see cref="F:StockSharp.Messages.SecurityTypes.Option" /> the <see cref="F:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.TriggerMethods.DoubleBidAsk" /> condition is used. Otherwise, the <see cref="F:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.TriggerMethods.BidAsk" /> condition is used.
             </summary>
     </member>
-    <member name="F:StockSharp.InteractiveBrokers.IBOrderCondition.TriggerMethods.DoubleBidAsk">
+    <member name="F:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.TriggerMethods.DoubleBidAsk">
       <summary>
             Double increase or decrease of the current best price before the stop price.
             </summary>
     </member>
-    <member name="F:StockSharp.InteractiveBrokers.IBOrderCondition.TriggerMethods.Last">
+    <member name="F:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.TriggerMethods.Last">
       <summary>
             Increase or decrease of the last trade price before the stop price.
             </summary>
     </member>
-    <member name="F:StockSharp.InteractiveBrokers.IBOrderCondition.TriggerMethods.DoubleLast">
+    <member name="F:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.TriggerMethods.DoubleLast">
       <summary>
             Double increase or decrease of the last trade price before the stop price.
             </summary>
     </member>
-    <member name="F:StockSharp.InteractiveBrokers.IBOrderCondition.TriggerMethods.BidAsk">
+    <member name="F:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.TriggerMethods.BidAsk">
       <summary>
             Increase or decrease of the current best price before the stop price.
             </summary>
     </member>
-    <member name="F:StockSharp.InteractiveBrokers.IBOrderCondition.TriggerMethods.LastOrBidAsk">
+    <member name="F:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.TriggerMethods.LastOrBidAsk">
       <summary>
             Increase or decrease of the current best price or the last trade price before the stop price.
             </summary>
     </member>
-    <member name="F:StockSharp.InteractiveBrokers.IBOrderCondition.TriggerMethods.MidpointMethod">
+    <member name="F:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.TriggerMethods.MidpointMethod">
       <summary>
             Increase or decrease of the mid-spread before the stop price.
             </summary>
     </member>
-    <member name="T:StockSharp.InteractiveBrokers.IBOrderCondition.AgentDescriptions">
+    <member name="T:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.AgentDescriptions">
       <summary>
             Descriptions of trader type by the 80A rule.
             </summary>
     </member>
-    <member name="F:StockSharp.InteractiveBrokers.IBOrderCondition.AgentDescriptions.Individual">
+    <member name="F:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.AgentDescriptions.Individual">
       <summary>
             Private trader.
             </summary>
     </member>
-    <member name="F:StockSharp.InteractiveBrokers.IBOrderCondition.AgentDescriptions.Agency">
+    <member name="F:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.AgentDescriptions.Agency">
       <summary>
             Agency.
             </summary>
     </member>
-    <member name="F:StockSharp.InteractiveBrokers.IBOrderCondition.AgentDescriptions.AgentOtherMember">
+    <member name="F:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.AgentDescriptions.AgentOtherMember">
       <summary>
             Agency of other type.
             </summary>
     </member>
-    <member name="F:StockSharp.InteractiveBrokers.IBOrderCondition.AgentDescriptions.IndividualPTIA">
+    <member name="F:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.AgentDescriptions.IndividualPTIA">
       <summary>
             Individual PTIA.
             </summary>
     </member>
-    <member name="F:StockSharp.InteractiveBrokers.IBOrderCondition.AgentDescriptions.AgencyPTIA">
+    <member name="F:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.AgentDescriptions.AgencyPTIA">
       <summary>
             Agency PTIA.
             </summary>
     </member>
-    <member name="F:StockSharp.InteractiveBrokers.IBOrderCondition.AgentDescriptions.AgentOtherMemberPTIA">
+    <member name="F:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.AgentDescriptions.AgentOtherMemberPTIA">
       <summary>
             Agency of other type PTIA.
             </summary>
     </member>
-    <member name="F:StockSharp.InteractiveBrokers.IBOrderCondition.AgentDescriptions.IndividualPT">
+    <member name="F:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.AgentDescriptions.IndividualPT">
       <summary>
             Individual PT.
             </summary>
     </member>
-    <member name="F:StockSharp.InteractiveBrokers.IBOrderCondition.AgentDescriptions.AgencyPT">
+    <member name="F:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.AgentDescriptions.AgencyPT">
       <summary>
             Agency PT.
             </summary>
     </member>
-    <member name="F:StockSharp.InteractiveBrokers.IBOrderCondition.AgentDescriptions.AgentOtherMemberPT">
+    <member name="F:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.AgentDescriptions.AgentOtherMemberPT">
       <summary>
             Agency of other type PT.
             </summary>
     </member>
-    <member name="T:StockSharp.InteractiveBrokers.IBOrderCondition.FinancialAdvisorAllocations">
+    <member name="T:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.FinancialAdvisorAllocations">
       <summary>
             Methods for volumes automatic calculation for the accounts group.
             </summary>
     </member>
-    <member name="F:StockSharp.InteractiveBrokers.IBOrderCondition.FinancialAdvisorAllocations.PercentChange">
+    <member name="F:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.FinancialAdvisorAllocations.PercentChange">
       <summary>
             Percentage change.
             </summary>
     </member>
-    <member name="F:StockSharp.InteractiveBrokers.IBOrderCondition.FinancialAdvisorAllocations.AvailableEquity">
+    <member name="F:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.FinancialAdvisorAllocations.AvailableEquity">
       <summary>
             Using free cash plus borrowed.
             </summary>
     </member>
-    <member name="F:StockSharp.InteractiveBrokers.IBOrderCondition.FinancialAdvisorAllocations.NetLiquidity">
+    <member name="F:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.FinancialAdvisorAllocations.NetLiquidity">
       <summary>
             Using free cash.
             </summary>
     </member>
-    <member name="F:StockSharp.InteractiveBrokers.IBOrderCondition.FinancialAdvisorAllocations.EqualQuantity">
+    <member name="F:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.FinancialAdvisorAllocations.EqualQuantity">
       <summary>
             An equal volume.
             </summary>
     </member>
-    <member name="T:StockSharp.InteractiveBrokers.IBOrderCondition.FinancialAdvisorCondition">
+    <member name="T:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.FinancialAdvisorCondition">
       <summary>
             Settings for automatic order volume calculation.
             </summary>
     </member>
-    <member name="P:StockSharp.InteractiveBrokers.IBOrderCondition.FinancialAdvisorCondition.Group">
+    <member name="P:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.FinancialAdvisorCondition.Group">
       <summary>
             Group.
             </summary>
     </member>
-    <member name="P:StockSharp.InteractiveBrokers.IBOrderCondition.FinancialAdvisorCondition.Profile">
+    <member name="P:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.FinancialAdvisorCondition.Profile">
       <summary>
             Profile.
             </summary>
     </member>
-    <member name="P:StockSharp.InteractiveBrokers.IBOrderCondition.FinancialAdvisorCondition.Allocation">
+    <member name="P:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.FinancialAdvisorCondition.Allocation">
       <summary>
             Calculation method.
             </summary>
     </member>
-    <member name="P:StockSharp.InteractiveBrokers.IBOrderCondition.FinancialAdvisorCondition.Percentage">
+    <member name="P:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.FinancialAdvisorCondition.Percentage">
       <summary>
             Ration percentage to filled volume.
             </summary>
     </member>
-    <member name="T:StockSharp.InteractiveBrokers.IBOrderCondition.OrderOrigins">
+    <member name="T:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.OrderOrigins">
       <summary>
             Senders.
             </summary>
     </member>
-    <member name="F:StockSharp.InteractiveBrokers.IBOrderCondition.OrderOrigins.Customer">
+    <member name="F:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.OrderOrigins.Customer">
       <summary>
             Client.
             </summary>
     </member>
-    <member name="F:StockSharp.InteractiveBrokers.IBOrderCondition.OrderOrigins.Firm">
+    <member name="F:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.OrderOrigins.Firm">
       <summary>
             Firm.
             </summary>
     </member>
-    <member name="T:StockSharp.InteractiveBrokers.IBOrderCondition.AuctionStrategies">
+    <member name="T:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.AuctionStrategies">
       <summary>
             Trading.
             </summary>
     </member>
-    <member name="F:StockSharp.InteractiveBrokers.IBOrderCondition.AuctionStrategies.AuctionMatch">
+    <member name="F:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.AuctionStrategies.AuctionMatch">
       <summary>
             Match.
             </summary>
     </member>
-    <member name="F:StockSharp.InteractiveBrokers.IBOrderCondition.AuctionStrategies.AuctionImprovement">
+    <member name="F:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.AuctionStrategies.AuctionImprovement">
       <summary>
             Better.
             </summary>
     </member>
-    <member name="F:StockSharp.InteractiveBrokers.IBOrderCondition.AuctionStrategies.AuctionTransparent">
+    <member name="F:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.AuctionStrategies.AuctionTransparent">
       <summary>
             Transparent.
             </summary>
     </member>
-    <member name="T:StockSharp.InteractiveBrokers.IBOrderCondition.VolatilityTimeFrames">
+    <member name="T:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.VolatilityTimeFrames">
       <summary>
             Volatility timeframes.
             </summary>
     </member>
-    <member name="F:StockSharp.InteractiveBrokers.IBOrderCondition.VolatilityTimeFrames.Daily">
+    <member name="F:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.VolatilityTimeFrames.Daily">
       <summary>
             Daily.
             </summary>
     </member>
-    <member name="F:StockSharp.InteractiveBrokers.IBOrderCondition.VolatilityTimeFrames.Annual">
+    <member name="F:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.VolatilityTimeFrames.Annual">
       <summary>
             Average annual.
             </summary>
     </member>
-    <member name="T:StockSharp.InteractiveBrokers.IBOrderCondition.VolatilityCondition">
+    <member name="T:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.VolatilityCondition">
       <summary>
-            The settings for the orders type <see cref="F:StockSharp.InteractiveBrokers.IBOrderCondition.ExtendedOrderTypes.Volatility" />.
+            The settings for the orders type <see cref="F:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.ExtendedOrderTypes.Volatility" />.
             </summary>
     </member>
-    <member name="P:StockSharp.InteractiveBrokers.IBOrderCondition.VolatilityCondition.ContinuousUpdate">
+    <member name="P:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.VolatilityCondition.ContinuousUpdate">
       <summary>
             Refresh limit price if underlying asset price has changed.
             </summary>
     </member>
-    <member name="P:StockSharp.InteractiveBrokers.IBOrderCondition.VolatilityCondition.IsAverageBestPrice">
+    <member name="P:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.VolatilityCondition.IsAverageBestPrice">
       <summary>
             Average best price or best price.
             </summary>
     </member>
-    <member name="P:StockSharp.InteractiveBrokers.IBOrderCondition.VolatilityCondition.Volatility">
+    <member name="P:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.VolatilityCondition.Volatility">
       <summary>
             Volatility.
             </summary>
     </member>
-    <member name="P:StockSharp.InteractiveBrokers.IBOrderCondition.VolatilityCondition.VolatilityTimeFrame">
+    <member name="P:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.VolatilityCondition.VolatilityTimeFrame">
       <summary>
             Volatility time-frame.
             </summary>
     </member>
-    <member name="P:StockSharp.InteractiveBrokers.IBOrderCondition.VolatilityCondition.OrderType">
+    <member name="P:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.VolatilityCondition.OrderType">
       <summary>
             Order type.
             </summary>
     </member>
-    <member name="P:StockSharp.InteractiveBrokers.IBOrderCondition.VolatilityCondition.ExtendedOrderType">
+    <member name="P:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.VolatilityCondition.ExtendedOrderType">
       <summary>
             Extended type of order.
             </summary>
     </member>
-    <member name="P:StockSharp.InteractiveBrokers.IBOrderCondition.VolatilityCondition.StopPrice">
+    <member name="P:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.VolatilityCondition.StopPrice">
       <summary>
             Stop-price.
             </summary>
     </member>
-    <member name="P:StockSharp.InteractiveBrokers.IBOrderCondition.VolatilityCondition.ConId">
+    <member name="P:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.VolatilityCondition.ConId">
       <summary>
       </summary>
     </member>
-    <member name="P:StockSharp.InteractiveBrokers.IBOrderCondition.VolatilityCondition.SettlingFirm">
+    <member name="P:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.VolatilityCondition.SettlingFirm">
       <summary>
             Firm.
             </summary>
     </member>
-    <member name="P:StockSharp.InteractiveBrokers.IBOrderCondition.VolatilityCondition.ClearingPortfolio">
+    <member name="P:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.VolatilityCondition.ClearingPortfolio">
       <summary>
             Clearing account.
             </summary>
     </member>
-    <member name="P:StockSharp.InteractiveBrokers.IBOrderCondition.VolatilityCondition.ClearingIntent">
+    <member name="P:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.VolatilityCondition.ClearingIntent">
       <summary>
             Clearing chain.
             </summary>
     </member>
-    <member name="P:StockSharp.InteractiveBrokers.IBOrderCondition.VolatilityCondition.IsShortSale">
+    <member name="P:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.VolatilityCondition.IsShortSale">
       <summary>
             Is the order a short sell.
             </summary>
     </member>
-    <member name="P:StockSharp.InteractiveBrokers.IBOrderCondition.VolatilityCondition.ShortSale">
+    <member name="P:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.VolatilityCondition.ShortSale">
       <summary>
             Condition for short sales of combined legs.
             </summary>
     </member>
-    <member name="T:StockSharp.InteractiveBrokers.IBOrderCondition.ShortSaleSlots">
+    <member name="T:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.ShortSaleSlots">
       <summary>
             Short sales types of combined legs.
             </summary>
     </member>
-    <member name="F:StockSharp.InteractiveBrokers.IBOrderCondition.ShortSaleSlots.Unapplicable">
+    <member name="F:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.ShortSaleSlots.Unapplicable">
       <summary>
             Private trader or not short leg.
             </summary>
     </member>
-    <member name="F:StockSharp.InteractiveBrokers.IBOrderCondition.ShortSaleSlots.ClearingBroker">
+    <member name="F:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.ShortSaleSlots.ClearingBroker">
       <summary>
             Clearing broker.
             </summary>
     </member>
-    <member name="F:StockSharp.InteractiveBrokers.IBOrderCondition.ShortSaleSlots.ThirdParty">
+    <member name="F:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.ShortSaleSlots.ThirdParty">
       <summary>
             Other.
             </summary>
     </member>
-    <member name="T:StockSharp.InteractiveBrokers.IBOrderCondition.ShortSaleCondition">
+    <member name="T:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.ShortSaleCondition">
       <summary>
             Condition for short sales of combined legs.
             </summary>
     </member>
-    <member name="P:StockSharp.InteractiveBrokers.IBOrderCondition.ShortSaleCondition.Slot">
+    <member name="P:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.ShortSaleCondition.Slot">
       <summary>
             Short sale type of combined legs.
             </summary>
     </member>
-    <member name="P:StockSharp.InteractiveBrokers.IBOrderCondition.ShortSaleCondition.Location">
+    <member name="P:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.ShortSaleCondition.Location">
       <summary>
             Clarification of the short sale type of combined legs.
             </summary>
       <remarks>
-            Used when <see cref="P:StockSharp.InteractiveBrokers.IBOrderCondition.ShortSaleCondition.Slot" /> equals to <see cref="F:StockSharp.InteractiveBrokers.IBOrderCondition.ShortSaleSlots.ThirdParty" />.
+            Used when <see cref="P:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.ShortSaleCondition.Slot" /> equals to <see cref="F:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.ShortSaleSlots.ThirdParty" />.
             </remarks>
     </member>
-    <member name="P:StockSharp.InteractiveBrokers.IBOrderCondition.ShortSaleCondition.ExemptCode">
+    <member name="P:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.ShortSaleCondition.ExemptCode">
       <summary>
             Exempt Code for Short Sale Exemption Orders.
             </summary>
     </member>
-    <member name="P:StockSharp.InteractiveBrokers.IBOrderCondition.ShortSaleCondition.IsOpenOrClose">
+    <member name="P:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.ShortSaleCondition.IsOpenOrClose">
       <summary>
             Is the order opening or closing.
             </summary>
     </member>
-    <member name="T:StockSharp.InteractiveBrokers.IBOrderCondition.ComboCondition">
+    <member name="T:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.ComboCondition">
       <summary>
             EFP orders settings.
             </summary>
     </member>
-    <member name="P:StockSharp.InteractiveBrokers.IBOrderCondition.ComboCondition.BasisPoints">
+    <member name="P:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.ComboCondition.BasisPoints">
       <summary>
             Basic points.
             </summary>
     </member>
-    <member name="P:StockSharp.InteractiveBrokers.IBOrderCondition.ComboCondition.BasisPointsType">
+    <member name="P:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.ComboCondition.BasisPointsType">
       <summary>
             Base points type.
             </summary>
     </member>
-    <member name="P:StockSharp.InteractiveBrokers.IBOrderCondition.ComboCondition.LegsDescription">
+    <member name="P:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.ComboCondition.LegsDescription">
       <summary>
             Legs description.
             </summary>
     </member>
-    <member name="P:StockSharp.InteractiveBrokers.IBOrderCondition.ComboCondition.Legs">
+    <member name="P:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.ComboCondition.Legs">
       <summary>
             Legs prices.
             </summary>
     </member>
-    <member name="P:StockSharp.InteractiveBrokers.IBOrderCondition.ComboCondition.ShortSales">
+    <member name="P:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.ComboCondition.ShortSales">
       <summary>
             Condition for short sales.
             </summary>
     </member>
-    <member name="T:StockSharp.InteractiveBrokers.IBOrderCondition.SmartRoutingCondition">
+    <member name="T:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.SmartRoutingCondition">
       <summary>
             Settings for orders that are sent to the Smart exchange.
             </summary>
     </member>
-    <member name="P:StockSharp.InteractiveBrokers.IBOrderCondition.SmartRoutingCondition.DiscretionaryAmount">
+    <member name="P:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.SmartRoutingCondition.DiscretionaryAmount">
       <summary>
             Order price shift range.
             </summary>
     </member>
-    <member name="P:StockSharp.InteractiveBrokers.IBOrderCondition.SmartRoutingCondition.ETradeOnly">
+    <member name="P:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.SmartRoutingCondition.ETradeOnly">
       <summary>
             Electronic trading.
             </summary>
     </member>
-    <member name="P:StockSharp.InteractiveBrokers.IBOrderCondition.SmartRoutingCondition.FirmQuoteOnly">
+    <member name="P:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.SmartRoutingCondition.FirmQuoteOnly">
       <summary>
             Company quotes.
             </summary>
     </member>
-    <member name="P:StockSharp.InteractiveBrokers.IBOrderCondition.SmartRoutingCondition.NbboPriceCap">
+    <member name="P:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.SmartRoutingCondition.NbboPriceCap">
       <summary>
             Maximum offset from best pairs.
             </summary>
     </member>
-    <member name="P:StockSharp.InteractiveBrokers.IBOrderCondition.SmartRoutingCondition.NotHeld">
+    <member name="P:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.SmartRoutingCondition.NotHeld">
       <summary>
             Keep in market depth.
             </summary>
@@ -755,144 +755,144 @@
             Only for the IBDARK exchange.
             </remarks>
     </member>
-    <member name="P:StockSharp.InteractiveBrokers.IBOrderCondition.SmartRoutingCondition.OptOutSmartRouting">
+    <member name="P:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.SmartRoutingCondition.OptOutSmartRouting">
       <summary>
             Direct sending of ASX orders.
             </summary>
     </member>
-    <member name="P:StockSharp.InteractiveBrokers.IBOrderCondition.SmartRoutingCondition.ComboParams">
+    <member name="P:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.SmartRoutingCondition.ComboParams">
       <summary>
             Parameters.
             </summary>
     </member>
-    <member name="T:StockSharp.InteractiveBrokers.IBOrderCondition.ScaleCondition">
+    <member name="T:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.ScaleCondition">
       <summary>
             Condition for order being changed.
             </summary>
     </member>
-    <member name="P:StockSharp.InteractiveBrokers.IBOrderCondition.ScaleCondition.InitLevelSize">
+    <member name="P:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.ScaleCondition.InitLevelSize">
       <summary>
             split order into X buckets.
             </summary>
     </member>
-    <member name="P:StockSharp.InteractiveBrokers.IBOrderCondition.ScaleCondition.SubsLevelSize">
+    <member name="P:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.ScaleCondition.SubsLevelSize">
       <summary>
             split order so each bucket is of the size X.
             </summary>
     </member>
-    <member name="P:StockSharp.InteractiveBrokers.IBOrderCondition.ScaleCondition.PriceIncrement">
+    <member name="P:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.ScaleCondition.PriceIncrement">
       <summary>
             price increment per bucket.
             </summary>
     </member>
-    <member name="P:StockSharp.InteractiveBrokers.IBOrderCondition.ScaleCondition.PriceAdjustValue">
+    <member name="P:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.ScaleCondition.PriceAdjustValue">
       <summary>
       </summary>
     </member>
-    <member name="P:StockSharp.InteractiveBrokers.IBOrderCondition.ScaleCondition.PriceAdjustInterval">
+    <member name="P:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.ScaleCondition.PriceAdjustInterval">
       <summary>
       </summary>
     </member>
-    <member name="P:StockSharp.InteractiveBrokers.IBOrderCondition.ScaleCondition.ProfitOffset">
+    <member name="P:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.ScaleCondition.ProfitOffset">
       <summary>
       </summary>
     </member>
-    <member name="P:StockSharp.InteractiveBrokers.IBOrderCondition.ScaleCondition.AutoReset">
+    <member name="P:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.ScaleCondition.AutoReset">
       <summary>
       </summary>
     </member>
-    <member name="P:StockSharp.InteractiveBrokers.IBOrderCondition.ScaleCondition.InitPosition">
+    <member name="P:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.ScaleCondition.InitPosition">
       <summary>
       </summary>
     </member>
-    <member name="P:StockSharp.InteractiveBrokers.IBOrderCondition.ScaleCondition.InitFillQty">
+    <member name="P:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.ScaleCondition.InitFillQty">
       <summary>
       </summary>
     </member>
-    <member name="P:StockSharp.InteractiveBrokers.IBOrderCondition.ScaleCondition.RandomPercent">
+    <member name="P:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.ScaleCondition.RandomPercent">
       <summary>
       </summary>
     </member>
-    <member name="P:StockSharp.InteractiveBrokers.IBOrderCondition.ScaleCondition.Table">
+    <member name="P:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.ScaleCondition.Table">
       <summary>
       </summary>
     </member>
-    <member name="T:StockSharp.InteractiveBrokers.IBOrderCondition.HedgeTypes">
+    <member name="T:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.HedgeTypes">
       <summary>
             Parameters types for hedging.
             </summary>
     </member>
-    <member name="F:StockSharp.InteractiveBrokers.IBOrderCondition.HedgeTypes.Delta">
+    <member name="F:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.HedgeTypes.Delta">
       <summary>
             Delta.
             </summary>
     </member>
-    <member name="F:StockSharp.InteractiveBrokers.IBOrderCondition.HedgeTypes.Beta">
+    <member name="F:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.HedgeTypes.Beta">
       <summary>
             Beta.
             </summary>
     </member>
-    <member name="F:StockSharp.InteractiveBrokers.IBOrderCondition.HedgeTypes.FX">
+    <member name="F:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.HedgeTypes.FX">
       <summary>
             Currency.
             </summary>
     </member>
-    <member name="F:StockSharp.InteractiveBrokers.IBOrderCondition.HedgeTypes.Pair">
+    <member name="F:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.HedgeTypes.Pair">
       <summary>
             Pair.
             </summary>
     </member>
-    <member name="T:StockSharp.InteractiveBrokers.IBOrderCondition.HedgeCondition">
+    <member name="T:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.HedgeCondition">
       <summary>
             Condition for hedge-orders.
             </summary>
     </member>
-    <member name="P:StockSharp.InteractiveBrokers.IBOrderCondition.HedgeCondition.Type">
+    <member name="P:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.HedgeCondition.Type">
       <summary>
             Parameter type for hedging.
             </summary>
     </member>
-    <member name="P:StockSharp.InteractiveBrokers.IBOrderCondition.HedgeCondition.Param">
+    <member name="P:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.HedgeCondition.Param">
       <summary>
             Parameter.
             </summary>
     </member>
-    <member name="T:StockSharp.InteractiveBrokers.IBOrderCondition.AlgoCondition">
+    <member name="T:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.AlgoCondition">
       <summary>
             Condition for algo-orders.
             </summary>
     </member>
-    <member name="P:StockSharp.InteractiveBrokers.IBOrderCondition.AlgoCondition.Strategy">
+    <member name="P:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.AlgoCondition.Strategy">
       <summary>
             Strategy.
             </summary>
     </member>
-    <member name="P:StockSharp.InteractiveBrokers.IBOrderCondition.AlgoCondition.Params">
+    <member name="P:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.AlgoCondition.Params">
       <summary>
             Parameters.
             </summary>
     </member>
-    <member name="T:StockSharp.InteractiveBrokers.IBOrderCondition.ClearingIntents">
+    <member name="T:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.ClearingIntents">
       <summary>
             Clearing objectives.
             </summary>
     </member>
-    <member name="F:StockSharp.InteractiveBrokers.IBOrderCondition.ClearingIntents.Broker">
+    <member name="F:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.ClearingIntents.Broker">
       <summary>
             Broker.
             </summary>
     </member>
-    <member name="F:StockSharp.InteractiveBrokers.IBOrderCondition.ClearingIntents.Away">
+    <member name="F:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.ClearingIntents.Away">
       <summary>
             Other.
             </summary>
     </member>
-    <member name="F:StockSharp.InteractiveBrokers.IBOrderCondition.ClearingIntents.PostTradeAllocation">
+    <member name="F:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.ClearingIntents.PostTradeAllocation">
       <summary>
             Post-trading placement.
             </summary>
     </member>
-    <member name="T:StockSharp.InteractiveBrokers.IBOrderCondition.ClearingCondition">
+    <member name="T:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.ClearingCondition">
       <summary>
             Condition for clearing information.
             </summary>
@@ -900,112 +900,112 @@
             Only for institutional clients.
             </remarks>
     </member>
-    <member name="P:StockSharp.InteractiveBrokers.IBOrderCondition.ClearingCondition.Portfolio">
+    <member name="P:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.ClearingCondition.Portfolio">
       <summary>
             Account.
             </summary>
     </member>
-    <member name="P:StockSharp.InteractiveBrokers.IBOrderCondition.ClearingCondition.SettlingFirm">
+    <member name="P:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.ClearingCondition.SettlingFirm">
       <summary>
             Firm.
             </summary>
     </member>
-    <member name="P:StockSharp.InteractiveBrokers.IBOrderCondition.ClearingCondition.ClearingPortfolio">
+    <member name="P:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.ClearingCondition.ClearingPortfolio">
       <summary>
             Clearing account.
             </summary>
     </member>
-    <member name="P:StockSharp.InteractiveBrokers.IBOrderCondition.ClearingCondition.Intent">
+    <member name="P:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.ClearingCondition.Intent">
       <summary>
             Aim of clearing.
             </summary>
     </member>
-    <member name="T:StockSharp.InteractiveBrokers.IBOrderCondition.OptionExerciseCondition">
+    <member name="T:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.OptionExerciseCondition">
       <summary>
             Order condition <see cref="F:StockSharp.Messages.OrderTypes.Execute" />.
             </summary>
     </member>
-    <member name="P:StockSharp.InteractiveBrokers.IBOrderCondition.OptionExerciseCondition.IsExercise">
+    <member name="P:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.OptionExerciseCondition.IsExercise">
       <summary>
             Exercise the option.
             </summary>
     </member>
-    <member name="P:StockSharp.InteractiveBrokers.IBOrderCondition.OptionExerciseCondition.IsOverride">
+    <member name="P:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.OptionExerciseCondition.IsOverride">
       <summary>
             Replace action.
             </summary>
     </member>
-    <member name="T:StockSharp.InteractiveBrokers.IBOrderCondition.ActiveCondition">
+    <member name="T:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.ActiveCondition">
       <summary>
             The condition for GTC orders.
             </summary>
     </member>
-    <member name="P:StockSharp.InteractiveBrokers.IBOrderCondition.ActiveCondition.Start">
+    <member name="P:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.ActiveCondition.Start">
       <summary>
             Start time.
             </summary>
     </member>
-    <member name="P:StockSharp.InteractiveBrokers.IBOrderCondition.ActiveCondition.Stop">
+    <member name="P:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.ActiveCondition.Stop">
       <summary>
             Ending time.
             </summary>
     </member>
-    <member name="M:StockSharp.InteractiveBrokers.IBOrderCondition.#ctor">
+    <member name="M:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.#ctor">
       <summary>
-            Initializes a new instance of the <see cref="T:StockSharp.InteractiveBrokers.IBOrderCondition" />.
+            Initializes a new instance of the <see cref="T:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition" />.
             </summary>
     </member>
-    <member name="P:StockSharp.InteractiveBrokers.IBOrderCondition.ExtendedType">
+    <member name="P:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.ExtendedType">
       <summary>
             Extended condition.
             </summary>
     </member>
-    <member name="P:StockSharp.InteractiveBrokers.IBOrderCondition.StopPrice">
+    <member name="P:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.StopPrice">
       <summary>
             Stop-price.
             </summary>
     </member>
-    <member name="P:StockSharp.InteractiveBrokers.IBOrderCondition.IsMarketOnOpen">
+    <member name="P:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.IsMarketOnOpen">
       <summary>
             At trading opening.
             </summary>
     </member>
-    <member name="P:StockSharp.InteractiveBrokers.IBOrderCondition.Oca">
+    <member name="P:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.Oca">
       <summary>
             OCA (One-Cancels All) settings.
             </summary>
     </member>
-    <member name="P:StockSharp.InteractiveBrokers.IBOrderCondition.Transmit">
+    <member name="P:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.Transmit">
       <summary>
             Send order in TWS.
             </summary>
     </member>
-    <member name="P:StockSharp.InteractiveBrokers.IBOrderCondition.ParentId">
+    <member name="P:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.ParentId">
       <summary>
             Parent order ID.
             </summary>
     </member>
-    <member name="P:StockSharp.InteractiveBrokers.IBOrderCondition.BlockOrder">
+    <member name="P:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.BlockOrder">
       <summary>
             Split order volume.
             </summary>
     </member>
-    <member name="P:StockSharp.InteractiveBrokers.IBOrderCondition.SweepToFill">
+    <member name="P:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.SweepToFill">
       <summary>
             At best price.
             </summary>
     </member>
-    <member name="P:StockSharp.InteractiveBrokers.IBOrderCondition.TriggerMethod">
+    <member name="P:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.TriggerMethod">
       <summary>
             Stop-order activation condition.
             </summary>
     </member>
-    <member name="P:StockSharp.InteractiveBrokers.IBOrderCondition.OutsideRth">
+    <member name="P:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.OutsideRth">
       <summary>
             Allow to activate a stop-order outside of trading time.
             </summary>
     </member>
-    <member name="P:StockSharp.InteractiveBrokers.IBOrderCondition.Hidden">
+    <member name="P:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.Hidden">
       <summary>
             Hide order in market depth.
             </summary>
@@ -1013,52 +1013,52 @@
             It is possible only when the order is sending to the ISLAND exchange.
             </remarks>
     </member>
-    <member name="P:StockSharp.InteractiveBrokers.IBOrderCondition.GoodAfterTime">
+    <member name="P:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.GoodAfterTime">
       <summary>
             Activate after given time.
             </summary>
     </member>
-    <member name="P:StockSharp.InteractiveBrokers.IBOrderCondition.OverridePercentageConstraints">
+    <member name="P:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.OverridePercentageConstraints">
       <summary>
             Cancel orders with wrong price.
             </summary>
     </member>
-    <member name="P:StockSharp.InteractiveBrokers.IBOrderCondition.Agent">
+    <member name="P:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.Agent">
       <summary>
             Trader ID.
             </summary>
     </member>
-    <member name="P:StockSharp.InteractiveBrokers.IBOrderCondition.AllOrNone">
+    <member name="P:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.AllOrNone">
       <summary>
             Wait for required volume to appear.
             </summary>
     </member>
-    <member name="P:StockSharp.InteractiveBrokers.IBOrderCondition.MinVolume">
+    <member name="P:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.MinVolume">
       <summary>
             Minimum order volume.
             </summary>
     </member>
-    <member name="P:StockSharp.InteractiveBrokers.IBOrderCondition.PercentOffset">
+    <member name="P:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.PercentOffset">
       <summary>
-            The shift in the price for the order type <see cref="F:StockSharp.InteractiveBrokers.IBOrderCondition.ExtendedOrderTypes.Relative" />.
+            The shift in the price for the order type <see cref="F:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.ExtendedOrderTypes.Relative" />.
             </summary>
     </member>
-    <member name="P:StockSharp.InteractiveBrokers.IBOrderCondition.TrailStopPrice">
+    <member name="P:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.TrailStopPrice">
       <summary>
             Moving stop activation price.
             </summary>
     </member>
-    <member name="P:StockSharp.InteractiveBrokers.IBOrderCondition.TrailStopVolumePercentage">
+    <member name="P:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.TrailStopVolumePercentage">
       <summary>
             Trailing stop volume вas percentage.
             </summary>
     </member>
-    <member name="P:StockSharp.InteractiveBrokers.IBOrderCondition.FinancialAdvisor">
+    <member name="P:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.FinancialAdvisor">
       <summary>
             Settings for automatic order volume calculation.
             </summary>
     </member>
-    <member name="P:StockSharp.InteractiveBrokers.IBOrderCondition.IsOpenOrClose">
+    <member name="P:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.IsOpenOrClose">
       <summary>
             Is the order opening or closing.
             </summary>
@@ -1066,7 +1066,7 @@
             Only for institutional clients.
             </remarks>
     </member>
-    <member name="P:StockSharp.InteractiveBrokers.IBOrderCondition.Origin">
+    <member name="P:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.Origin">
       <summary>
             Sender.
             </summary>
@@ -1074,12 +1074,12 @@
             Only for institutional clients.
             </remarks>
     </member>
-    <member name="P:StockSharp.InteractiveBrokers.IBOrderCondition.ShortSale">
+    <member name="P:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.ShortSale">
       <summary>
             Condition for short sales of combined legs.
             </summary>
     </member>
-    <member name="P:StockSharp.InteractiveBrokers.IBOrderCondition.AuctionStrategy">
+    <member name="P:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.AuctionStrategy">
       <summary>
             Trading.
             </summary>
@@ -1087,7 +1087,7 @@
             Only BOX board.
             </remarks>
     </member>
-    <member name="P:StockSharp.InteractiveBrokers.IBOrderCondition.StartingPrice">
+    <member name="P:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.StartingPrice">
       <summary>
             Starting price.
             </summary>
@@ -1095,12 +1095,12 @@
             Only BOX board.
             </remarks>
     </member>
-    <member name="P:StockSharp.InteractiveBrokers.IBOrderCondition.StockRefPrice">
+    <member name="P:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.StockRefPrice">
       <summary>
             Underlying asset price.
             </summary>
     </member>
-    <member name="P:StockSharp.InteractiveBrokers.IBOrderCondition.Delta">
+    <member name="P:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.Delta">
       <summary>
             Underlying asset delta.
             </summary>
@@ -1108,87 +1108,87 @@
             Only BOX board.
             </remarks>
     </member>
-    <member name="P:StockSharp.InteractiveBrokers.IBOrderCondition.StockRangeLower">
+    <member name="P:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.StockRangeLower">
       <summary>
             Minimum price of underlying asset.
             </summary>
     </member>
-    <member name="P:StockSharp.InteractiveBrokers.IBOrderCondition.StockRangeUpper">
+    <member name="P:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.StockRangeUpper">
       <summary>
             Maximum price of underlying asset.
             </summary>
     </member>
-    <member name="P:StockSharp.InteractiveBrokers.IBOrderCondition.Volatility">
+    <member name="P:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.Volatility">
       <summary>
-            The settings for the orders type <see cref="F:StockSharp.InteractiveBrokers.IBOrderCondition.ExtendedOrderTypes.Volatility" />.
+            The settings for the orders type <see cref="F:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.ExtendedOrderTypes.Volatility" />.
             </summary>
     </member>
-    <member name="P:StockSharp.InteractiveBrokers.IBOrderCondition.SmartRouting">
+    <member name="P:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.SmartRouting">
       <summary>
             Settings for orders that are sent to the Smart exchange.
             </summary>
     </member>
-    <member name="P:StockSharp.InteractiveBrokers.IBOrderCondition.Combo">
+    <member name="P:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.Combo">
       <summary>
             EFP orders settings.
             </summary>
     </member>
-    <member name="P:StockSharp.InteractiveBrokers.IBOrderCondition.Scale">
+    <member name="P:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.Scale">
       <summary>
             Condition for order being changed.
             </summary>
     </member>
-    <member name="P:StockSharp.InteractiveBrokers.IBOrderCondition.Clearing">
+    <member name="P:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.Clearing">
       <summary>
             Condition for clearing information.
             </summary>
     </member>
-    <member name="P:StockSharp.InteractiveBrokers.IBOrderCondition.Algo">
+    <member name="P:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.Algo">
       <summary>
             Condition for algo-orders.
             </summary>
     </member>
-    <member name="P:StockSharp.InteractiveBrokers.IBOrderCondition.WhatIf">
+    <member name="P:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.WhatIf">
       <summary>
             For order return information about commission and margin.
             </summary>
     </member>
-    <member name="P:StockSharp.InteractiveBrokers.IBOrderCondition.AlgoId">
+    <member name="P:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.AlgoId">
       <summary>
             Algorithm ID.
             </summary>
     </member>
-    <member name="P:StockSharp.InteractiveBrokers.IBOrderCondition.MiscOptions">
+    <member name="P:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.MiscOptions">
       <summary>
             Additional parameters.
             </summary>
     </member>
-    <member name="P:StockSharp.InteractiveBrokers.IBOrderCondition.Solicited">
+    <member name="P:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.Solicited">
       <summary>
             Solicited.
             </summary>
     </member>
-    <member name="P:StockSharp.InteractiveBrokers.IBOrderCondition.RandomizeSize">
+    <member name="P:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.RandomizeSize">
       <summary>
             Randomize size.
             </summary>
     </member>
-    <member name="P:StockSharp.InteractiveBrokers.IBOrderCondition.RandomizePrice">
+    <member name="P:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.RandomizePrice">
       <summary>
             Randomize price books.
             </summary>
     </member>
-    <member name="P:StockSharp.InteractiveBrokers.IBOrderCondition.Hedge">
+    <member name="P:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.Hedge">
       <summary>
             Condition for hedge-orders.
             </summary>
     </member>
-    <member name="P:StockSharp.InteractiveBrokers.IBOrderCondition.OptionExercise">
+    <member name="P:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.OptionExercise">
       <summary>
             Order condition <see cref="F:StockSharp.Messages.OrderTypes.Execute" />.
             </summary>
     </member>
-    <member name="P:StockSharp.InteractiveBrokers.IBOrderCondition.Active">
+    <member name="P:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.Active">
       <summary>
             Condition for GTC orders.
             </summary>
@@ -1486,7 +1486,7 @@
     </member>
     <member name="T:StockSharp.InteractiveBrokers.ScannerMarketDataMessage">
       <summary>
-            The message about start of the instruments scanner based on specified parameters. The results will come through the <see cref="E:StockSharp.InteractiveBrokers.IBTrader.NewScannerResults" /> event.
+            The message about start of the instruments scanner based on specified parameters. The results will come through the <see cref="E:StockSharp.InteractiveBrokers.InteractiveBrokersTrader.NewScannerResults" /> event.
             </summary>
     </member>
     <member name="P:StockSharp.InteractiveBrokers.ScannerMarketDataMessage.Filter">
@@ -1557,7 +1557,7 @@
     </member>
     <member name="T:StockSharp.InteractiveBrokers.FundamentalReportMarketDataMessage">
       <summary>
-            The message to receive market reports for the specified instrument. The results will come through the <see cref="E:StockSharp.InteractiveBrokers.IBTrader.NewFundamentalReport" /> event.
+            The message to receive market reports for the specified instrument. The results will come through the <see cref="E:StockSharp.InteractiveBrokers.InteractiveBrokersTrader.NewFundamentalReport" /> event.
             </summary>
     </member>
     <member name="P:StockSharp.InteractiveBrokers.FundamentalReportMarketDataMessage.Report">
@@ -1619,67 +1619,67 @@
             Underlying asset price.
             </summary>
     </member>
-    <member name="T:StockSharp.InteractiveBrokers.IBTrader">
+    <member name="T:StockSharp.InteractiveBrokers.InteractiveBrokersTrader">
       <summary>
             The implementation of the <see cref="T:StockSharp.BusinessEntities.IConnector" /> interface which provides a connection to Interactive Brokers via the IB Gateway.
             </summary>
     </member>
-    <member name="M:StockSharp.InteractiveBrokers.IBTrader.#ctor">
+    <member name="M:StockSharp.InteractiveBrokers.InteractiveBrokersTrader.#ctor">
       <summary>
-            Initializes a new instance of the <see cref="T:StockSharp.InteractiveBrokers.IBTrader" />.
+            Initializes a new instance of the <see cref="T:StockSharp.InteractiveBrokers.InteractiveBrokersTrader" />.
             </summary>
     </member>
-    <member name="P:StockSharp.InteractiveBrokers.IBTrader.Address">
+    <member name="P:StockSharp.InteractiveBrokers.InteractiveBrokersTrader.Address">
       <summary>
             Address.
             </summary>
     </member>
-    <member name="P:StockSharp.InteractiveBrokers.IBTrader.ClientId">
+    <member name="P:StockSharp.InteractiveBrokers.InteractiveBrokersTrader.ClientId">
       <summary>
             Unique ID. Used when several clients are connected to one terminal or gateway.
             </summary>
     </member>
-    <member name="P:StockSharp.InteractiveBrokers.IBTrader.ServerLogLevel">
+    <member name="P:StockSharp.InteractiveBrokers.InteractiveBrokersTrader.ServerLogLevel">
       <summary>
             The server messages logging level. The default is <see cref="F:StockSharp.InteractiveBrokers.ServerLogLevels.Detail" />.
             </summary>
     </member>
-    <member name="P:StockSharp.InteractiveBrokers.IBTrader.IsRealTimeMarketData">
+    <member name="P:StockSharp.InteractiveBrokers.InteractiveBrokersTrader.IsRealTimeMarketData">
       <summary>
             Whether to use real-time data or 'frozen' on the broker server. By default, the 'frozen' data is used.
             </summary>
     </member>
-    <member name="E:StockSharp.InteractiveBrokers.IBTrader.NewScannerResults">
+    <member name="E:StockSharp.InteractiveBrokers.InteractiveBrokersTrader.NewScannerResults">
       <summary>
-            The new results occurring event of the scanner started previously via <see cref="M:StockSharp.InteractiveBrokers.IBTrader.SubscribeScanner(StockSharp.InteractiveBrokers.ScannerFilter,System.Boolean)" />.
+            The new results occurring event of the scanner started previously via <see cref="M:StockSharp.InteractiveBrokers.InteractiveBrokersTrader.SubscribeScanner(StockSharp.InteractiveBrokers.ScannerFilter,System.Boolean)" />.
             </summary>
     </member>
-    <member name="E:StockSharp.InteractiveBrokers.IBTrader.NewCandles">
+    <member name="E:StockSharp.InteractiveBrokers.InteractiveBrokersTrader.NewCandles">
       <summary>
-            Event of new candles occurring, that are received after the subscription by <see cref="M:StockSharp.InteractiveBrokers.IBTrader.SubscribeCandles(StockSharp.Algo.Candles.CandleSeries,System.DateTimeOffset,System.DateTimeOffset)" />.
+            Event of new candles occurring, that are received after the subscription by <see cref="M:StockSharp.InteractiveBrokers.InteractiveBrokersTrader.SubscribeCandles(StockSharp.Algo.Candles.CandleSeries,System.DateTimeOffset,System.DateTimeOffset)" />.
             </summary>
     </member>
-    <member name="E:StockSharp.InteractiveBrokers.IBTrader.Stopped">
+    <member name="E:StockSharp.InteractiveBrokers.InteractiveBrokersTrader.Stopped">
       <summary>
             The series processing end event.
             </summary>
     </member>
-    <member name="E:StockSharp.InteractiveBrokers.IBTrader.NewFundamentalReport">
+    <member name="E:StockSharp.InteractiveBrokers.InteractiveBrokersTrader.NewFundamentalReport">
       <summary>
-            The new report occurring event obtained by subscription <see cref="M:StockSharp.InteractiveBrokers.IBTrader.SubscribeFundamentalReport(StockSharp.BusinessEntities.Security,StockSharp.InteractiveBrokers.FundamentalReports,System.Boolean)" />.
+            The new report occurring event obtained by subscription <see cref="M:StockSharp.InteractiveBrokers.InteractiveBrokersTrader.SubscribeFundamentalReport(StockSharp.BusinessEntities.Security,StockSharp.InteractiveBrokers.FundamentalReports,System.Boolean)" />.
             </summary>
     </member>
-    <member name="E:StockSharp.InteractiveBrokers.IBTrader.NewScannerParameters">
+    <member name="E:StockSharp.InteractiveBrokers.InteractiveBrokersTrader.NewScannerParameters">
       <summary>
             The event of occurring of new scanner parameters which are applied via <see cref="T:StockSharp.InteractiveBrokers.ScannerFilter" />. Parameters are passed in the xml format.
             </summary>
     </member>
-    <member name="E:StockSharp.InteractiveBrokers.IBTrader.NewFinancialAdvise">
+    <member name="E:StockSharp.InteractiveBrokers.InteractiveBrokersTrader.NewFinancialAdvise">
       <summary>
             The new financial advice occurring event. Parameters are passed in the xml format.
             </summary>
     </member>
-    <member name="M:StockSharp.InteractiveBrokers.IBTrader.OnCancelOrders(System.Int64,System.Nullable{System.Boolean},StockSharp.BusinessEntities.Portfolio,System.Nullable{StockSharp.Messages.Sides},StockSharp.BusinessEntities.ExchangeBoard,StockSharp.BusinessEntities.Security)">
+    <member name="M:StockSharp.InteractiveBrokers.InteractiveBrokersTrader.OnCancelOrders(System.Int64,System.Nullable{System.Boolean},StockSharp.BusinessEntities.Portfolio,System.Nullable{StockSharp.Messages.Sides},StockSharp.BusinessEntities.ExchangeBoard,StockSharp.BusinessEntities.Security)">
       <summary>
             Cancel orders by filter.
             </summary>
@@ -1691,24 +1691,24 @@
       <param name="board">Trading board. If the value is equal to <see langword="null" />, then the board does not match the orders cancel filter.</param>
       <param name="security">Instrument. If the value is equal to <see langword="null" />, then the instrument does not match the orders cancel filter.</param>
     </member>
-    <member name="M:StockSharp.InteractiveBrokers.IBTrader.SubscribeScanner(StockSharp.InteractiveBrokers.ScannerFilter,System.Boolean)">
+    <member name="M:StockSharp.InteractiveBrokers.InteractiveBrokersTrader.SubscribeScanner(StockSharp.InteractiveBrokers.ScannerFilter,System.Boolean)">
       <summary>
-            To start or stop the instruments scanner based on specified parameters. The results will come through the <see cref="E:StockSharp.InteractiveBrokers.IBTrader.NewScannerResults" /> event.
+            To start or stop the instruments scanner based on specified parameters. The results will come through the <see cref="E:StockSharp.InteractiveBrokers.InteractiveBrokersTrader.NewScannerResults" /> event.
             </summary>
       <param name="filter">Filter.</param>
       <param name="isSubscribe">
         <see langword="true" /> if you need to subscribe, otherwise <see langword="false" />.</param>
     </member>
-    <member name="M:StockSharp.InteractiveBrokers.IBTrader.SubscribeFundamentalReport(StockSharp.BusinessEntities.Security,StockSharp.InteractiveBrokers.FundamentalReports,System.Boolean)">
+    <member name="M:StockSharp.InteractiveBrokers.InteractiveBrokersTrader.SubscribeFundamentalReport(StockSharp.BusinessEntities.Security,StockSharp.InteractiveBrokers.FundamentalReports,System.Boolean)">
       <summary>
-            To subscribe or unsubscribe to receive market reports for the specified instrument. The results will come through the <see cref="E:StockSharp.InteractiveBrokers.IBTrader.NewFundamentalReport" /> event.
+            To subscribe or unsubscribe to receive market reports for the specified instrument. The results will come through the <see cref="E:StockSharp.InteractiveBrokers.InteractiveBrokersTrader.NewFundamentalReport" /> event.
             </summary>
       <param name="security">Security.</param>
       <param name="report">The report type.</param>
       <param name="isSubscribe">
         <see langword="true" /> if you need to subscribe, otherwise <see langword="false" />.</param>
     </member>
-    <member name="M:StockSharp.InteractiveBrokers.IBTrader.SubscribeOptionCalc(StockSharp.BusinessEntities.Security,System.Decimal,System.Decimal,System.Decimal,System.Boolean)">
+    <member name="M:StockSharp.InteractiveBrokers.InteractiveBrokersTrader.SubscribeOptionCalc(StockSharp.BusinessEntities.Security,System.Decimal,System.Decimal,System.Decimal,System.Boolean)">
       <summary>
             To subscribe or unsubscribe to receive the estimated option values. The results will come through the <see cref="E:StockSharp.BusinessEntities.IConnector.SecuritiesChanged" /> event.
             </summary>
@@ -1719,14 +1719,14 @@
       <param name="isSubscribe">
         <see langword="true" /> if you need to subscribe, otherwise <see langword="false" />.</param>
     </member>
-    <member name="M:StockSharp.InteractiveBrokers.IBTrader.GetSupportedRanges(StockSharp.Algo.Candles.CandleSeries)">
+    <member name="M:StockSharp.InteractiveBrokers.InteractiveBrokersTrader.GetSupportedRanges(StockSharp.Algo.Candles.CandleSeries)">
       <summary>
             To get time ranges for which this source of passed candles series has data.
             </summary>
       <param name="series">Candles series.</param>
       <returns>Time ranges.</returns>
     </member>
-    <member name="M:StockSharp.InteractiveBrokers.IBTrader.SubscribeCandles(StockSharp.Algo.Candles.CandleSeries,System.DateTimeOffset,System.DateTimeOffset)">
+    <member name="M:StockSharp.InteractiveBrokers.InteractiveBrokersTrader.SubscribeCandles(StockSharp.Algo.Candles.CandleSeries,System.DateTimeOffset,System.DateTimeOffset)">
       <summary>
             Subscribe to receive new candles.
             </summary>
@@ -1734,13 +1734,13 @@
       <param name="from">The initial date from which you need to get data.</param>
       <param name="to">The final date by which you need to get data.</param>
     </member>
-    <member name="M:StockSharp.InteractiveBrokers.IBTrader.UnSubscribeCandles(StockSharp.Algo.Candles.CandleSeries)">
+    <member name="M:StockSharp.InteractiveBrokers.InteractiveBrokersTrader.UnSubscribeCandles(StockSharp.Algo.Candles.CandleSeries)">
       <summary>
-            To stop the candles receiving subscription, previously created by <see cref="M:StockSharp.InteractiveBrokers.IBTrader.SubscribeCandles(StockSharp.Algo.Candles.CandleSeries,System.DateTimeOffset,System.DateTimeOffset)" />.
+            To stop the candles receiving subscription, previously created by <see cref="M:StockSharp.InteractiveBrokers.InteractiveBrokersTrader.SubscribeCandles(StockSharp.Algo.Candles.CandleSeries,System.DateTimeOffset,System.DateTimeOffset)" />.
             </summary>
       <param name="series">Candles series.</param>
     </member>
-    <member name="M:StockSharp.InteractiveBrokers.IBTrader.OnProcessMessage(StockSharp.Messages.Message)">
+    <member name="M:StockSharp.InteractiveBrokers.InteractiveBrokersTrader.OnProcessMessage(StockSharp.Messages.Message)">
       <summary>
             Process message.
             </summary>
@@ -1748,7 +1748,7 @@
     </member>
     <member name="T:StockSharp.InteractiveBrokers.ScannerResult">
       <summary>
-            The filter result of scanner starting via <see cref="M:StockSharp.InteractiveBrokers.IBTrader.SubscribeScanner(StockSharp.InteractiveBrokers.ScannerFilter,System.Boolean)" />.
+            The filter result of scanner starting via <see cref="M:StockSharp.InteractiveBrokers.InteractiveBrokersTrader.SubscribeScanner(StockSharp.InteractiveBrokers.ScannerFilter,System.Boolean)" />.
             </summary>
     </member>
     <member name="P:StockSharp.InteractiveBrokers.ScannerResult.SecurityId">
@@ -1833,7 +1833,7 @@
     </member>
     <member name="T:StockSharp.InteractiveBrokers.ScannerFilter">
       <summary>
-            Filter settings of the scanner starting via <see cref="M:StockSharp.InteractiveBrokers.IBTrader.SubscribeScanner(StockSharp.InteractiveBrokers.ScannerFilter,System.Boolean)" />.
+            Filter settings of the scanner starting via <see cref="M:StockSharp.InteractiveBrokers.InteractiveBrokersTrader.SubscribeScanner(StockSharp.InteractiveBrokers.ScannerFilter,System.Boolean)" />.
             </summary>
     </member>
     <member name="M:StockSharp.InteractiveBrokers.ScannerFilter.#ctor">
@@ -1945,103 +1945,103 @@
             The shares exclusions type.
             </summary>
     </member>
-    <member name="T:StockSharp.InteractiveBrokers.IBTimeFrames">
+    <member name="T:StockSharp.InteractiveBrokers.InteractiveBrokersTimeFrames">
       <summary>
             Time frames for InteractiveBrokers historical candles.
             </summary>
     </member>
-    <member name="P:StockSharp.InteractiveBrokers.IBTimeFrames.AllTimeFrames">
+    <member name="P:StockSharp.InteractiveBrokers.InteractiveBrokersTimeFrames.AllTimeFrames">
       <summary>
             Possible time-frames.
             </summary>
     </member>
-    <member name="M:StockSharp.InteractiveBrokers.IBTimeFrames.op_Implicit(System.TimeSpan)~StockSharp.InteractiveBrokers.IBTimeFrames">
+    <member name="M:StockSharp.InteractiveBrokers.InteractiveBrokersTimeFrames.op_Implicit(System.TimeSpan)~StockSharp.InteractiveBrokers.InteractiveBrokersTimeFrames">
       <summary>
-            Cast <see cref="T:System.TimeSpan" /> object to the type <see cref="T:StockSharp.InteractiveBrokers.IBTimeFrames" />.
+            Cast <see cref="T:System.TimeSpan" /> object to the type <see cref="T:StockSharp.InteractiveBrokers.InteractiveBrokersTimeFrames" />.
             </summary>
       <param name="value">
         <see cref="T:System.TimeSpan" /> value.</param>
-      <returns>Object <see cref="T:StockSharp.InteractiveBrokers.IBTimeFrames" />.</returns>
+      <returns>Object <see cref="T:StockSharp.InteractiveBrokers.InteractiveBrokersTimeFrames" />.</returns>
     </member>
-    <member name="M:StockSharp.InteractiveBrokers.IBTimeFrames.op_Explicit(StockSharp.InteractiveBrokers.IBTimeFrames)~System.TimeSpan">
+    <member name="M:StockSharp.InteractiveBrokers.InteractiveBrokersTimeFrames.op_Explicit(StockSharp.InteractiveBrokers.InteractiveBrokersTimeFrames)~System.TimeSpan">
       <summary>
-            Cast object from <see cref="T:StockSharp.InteractiveBrokers.IBTimeFrames" /> to <see cref="T:System.TimeSpan" />.
+            Cast object from <see cref="T:StockSharp.InteractiveBrokers.InteractiveBrokersTimeFrames" /> to <see cref="T:System.TimeSpan" />.
             </summary>
-      <param name="timeFrame">Object <see cref="T:StockSharp.InteractiveBrokers.IBTimeFrames" />.</param>
+      <param name="timeFrame">Object <see cref="T:StockSharp.InteractiveBrokers.InteractiveBrokersTimeFrames" />.</param>
       <returns>
         <see cref="T:System.TimeSpan" /> value.</returns>
     </member>
-    <member name="P:StockSharp.InteractiveBrokers.IBTimeFrames.Second1">
+    <member name="P:StockSharp.InteractiveBrokers.InteractiveBrokersTimeFrames.Second1">
       <summary>
             One second time frame.
             </summary>
     </member>
-    <member name="P:StockSharp.InteractiveBrokers.IBTimeFrames.Second5">
+    <member name="P:StockSharp.InteractiveBrokers.InteractiveBrokersTimeFrames.Second5">
       <summary>
             Five second time frame.
             </summary>
     </member>
-    <member name="P:StockSharp.InteractiveBrokers.IBTimeFrames.Second15">
+    <member name="P:StockSharp.InteractiveBrokers.InteractiveBrokersTimeFrames.Second15">
       <summary>
             Fifteen second time frame.
             </summary>
     </member>
-    <member name="P:StockSharp.InteractiveBrokers.IBTimeFrames.Second30">
+    <member name="P:StockSharp.InteractiveBrokers.InteractiveBrokersTimeFrames.Second30">
       <summary>
             Thirty second time frame.
             </summary>
     </member>
-    <member name="P:StockSharp.InteractiveBrokers.IBTimeFrames.Minute1">
+    <member name="P:StockSharp.InteractiveBrokers.InteractiveBrokersTimeFrames.Minute1">
       <summary>
             1 min time-frame.
             </summary>
     </member>
-    <member name="P:StockSharp.InteractiveBrokers.IBTimeFrames.Minute2">
+    <member name="P:StockSharp.InteractiveBrokers.InteractiveBrokersTimeFrames.Minute2">
       <summary>
             Two minute time frame.
             </summary>
     </member>
-    <member name="P:StockSharp.InteractiveBrokers.IBTimeFrames.Minute3">
+    <member name="P:StockSharp.InteractiveBrokers.InteractiveBrokersTimeFrames.Minute3">
       <summary>
             Three minute time frame.
             </summary>
     </member>
-    <member name="P:StockSharp.InteractiveBrokers.IBTimeFrames.Minute5">
+    <member name="P:StockSharp.InteractiveBrokers.InteractiveBrokersTimeFrames.Minute5">
       <summary>
             5 min time-frame.
             </summary>
     </member>
-    <member name="P:StockSharp.InteractiveBrokers.IBTimeFrames.Minute15">
+    <member name="P:StockSharp.InteractiveBrokers.InteractiveBrokersTimeFrames.Minute15">
       <summary>
             15 min time-frame.
             </summary>
     </member>
-    <member name="P:StockSharp.InteractiveBrokers.IBTimeFrames.Minute30">
+    <member name="P:StockSharp.InteractiveBrokers.InteractiveBrokersTimeFrames.Minute30">
       <summary>
             30 min time-frame.
             </summary>
     </member>
-    <member name="P:StockSharp.InteractiveBrokers.IBTimeFrames.Hour">
+    <member name="P:StockSharp.InteractiveBrokers.InteractiveBrokersTimeFrames.Hour">
       <summary>
             Hour time frame.
             </summary>
     </member>
-    <member name="P:StockSharp.InteractiveBrokers.IBTimeFrames.Day">
+    <member name="P:StockSharp.InteractiveBrokers.InteractiveBrokersTimeFrames.Day">
       <summary>
             Day time frame.
             </summary>
     </member>
-    <member name="P:StockSharp.InteractiveBrokers.IBTimeFrames.Week">
+    <member name="P:StockSharp.InteractiveBrokers.InteractiveBrokersTimeFrames.Week">
       <summary>
             Weekly time frame.
             </summary>
     </member>
-    <member name="P:StockSharp.InteractiveBrokers.IBTimeFrames.Month">
+    <member name="P:StockSharp.InteractiveBrokers.InteractiveBrokersTimeFrames.Month">
       <summary>
             Monthly time frame.
             </summary>
     </member>
-    <member name="P:StockSharp.InteractiveBrokers.IBTimeFrames.Year">
+    <member name="P:StockSharp.InteractiveBrokers.InteractiveBrokersTimeFrames.Year">
       <summary>
             Annual time frame.
             </summary>

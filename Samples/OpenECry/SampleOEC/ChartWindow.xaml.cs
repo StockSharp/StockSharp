@@ -26,7 +26,7 @@ namespace SampleOEC
 
 	partial class ChartWindow
 	{
-		private readonly OECTrader _trader;
+		private readonly OpenECryTrader _trader;
 		private readonly CandleSeries _candleSeries;
 		private readonly ChartCandleElement _candleElem;
 

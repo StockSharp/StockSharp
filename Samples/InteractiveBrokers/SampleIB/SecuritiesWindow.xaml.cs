@@ -42,8 +42,8 @@ namespace SampleIB
 		{
 			InitializeComponent();
 
-			CandlesPeriods.ItemsSource = IBTimeFrames.AllTimeFrames;
-			CandlesPeriods.SelectedItem = IBTimeFrames.Hour;
+			CandlesPeriods.ItemsSource = InteractiveBrokersTimeFrames.AllTimeFrames;
+			CandlesPeriods.SelectedItem = InteractiveBrokersTimeFrames.Hour;
 		}
 
 		private void NewOrderClick(object sender, RoutedEventArgs e)
@@ -60,15 +60,9 @@ namespace SampleIB
 				MainWindow.Instance.Trader.RegisterOrder(newOrder.Order);
 		}
 
-		private Security SelectedSecurity
-		{
-			get { return SecurityPicker.SelectedSecurity; }
-		}
+		private Security SelectedSecurity => SecurityPicker.SelectedSecurity;
 
-		private static IBTrader Trader
-		{
-			get { return MainWindow.Instance.Trader; }
-		}
+		private static InteractiveBrokersTrader Trader => MainWindow.Instance.Trader;
 
 		private void SecurityPicker_OnSecuritySelected(Security security)
 		{
@@ -152,7 +146,7 @@ namespace SampleIB
 
 		private void RealTimeCandlesClick(object sender, RoutedEventArgs e)
 		{
-			var series = new CandleSeries(typeof(TimeFrameCandle), SelectedSecurity, IBTimeFrames.Second5);
+			var series = new CandleSeries(typeof(TimeFrameCandle), SelectedSecurity, InteractiveBrokersTimeFrames.Second5);
 
 			if (RealTimeCandles.IsChecked == true)
 			{

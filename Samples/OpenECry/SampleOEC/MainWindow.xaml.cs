@@ -33,7 +33,7 @@ namespace SampleOEC
 	{
 		private bool _isConnected;
 
-		public OECTrader Trader;
+		public OpenECryTrader Trader;
 
 		private readonly SecuritiesWindow _securitiesWindow = new SecuritiesWindow();
 		private readonly TradesWindow _tradesWindow = new TradesWindow();
@@ -104,7 +104,7 @@ namespace SampleOEC
 				if (Trader == null)
 				{
 					// create connector
-					Trader = new OECTrader
+					Trader = new OpenECryTrader
 					{
 						//UseNativeReconnect = false,
 						EnableOECLogging = true

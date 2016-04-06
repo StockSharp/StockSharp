@@ -32,7 +32,7 @@ private void Send_Click(object sender, RoutedEventArgs e)
 		]]>
 		</code>		
 
-		<para>Для работы с условиями стоп-заявок адаптер <codeEntityReference qualifyHint="false">T:StockSharp.OpenECry.OECTrader</codeEntityReference> предоставляет специальный класс 
+		<para>Для работы с условиями стоп-заявок адаптер <codeEntityReference qualifyHint="false">T:StockSharp.OpenECry.OpenECryTrader</codeEntityReference> предоставляет специальный класс 
 		<codeEntityReference qualifyHint="false">T:StockSharp.OpenECry.OpenECryOrderCondition</codeEntityReference>. Данным классом поддерживаются следующие типы стоп-заявок:</para>
 
 		<list class="bullet">

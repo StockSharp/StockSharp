@@ -35,7 +35,7 @@ namespace SampleIB
 	{
 		private bool _isConnected;
 
-		public readonly IBTrader Trader = new IBTrader();
+		public readonly InteractiveBrokersTrader Trader = new InteractiveBrokersTrader();
 		private bool _initialized;
 
 		private readonly SecuritiesWindow _securitiesWindow = new SecuritiesWindow();

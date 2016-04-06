@@ -2,7 +2,7 @@
 <topic id="7c23b480-d472-43df-aabf-f743ad09fded" revisionNumber="1">
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     <introduction>
-      <para>Пример работы с <codeEntityReference qualifyHint="false">T:StockSharp.InteractiveBrokers.IBTrader</codeEntityReference> демонстрирует приложение SampleIB,
+      <para>Пример работы с <codeEntityReference qualifyHint="false">T:StockSharp.InteractiveBrokers.InteractiveBrokersTrader</codeEntityReference> демонстрирует приложение SampleIB,
         показанное на рисунке ниже. Исходные коды примера лежат в дистрибутиве в папке <legacyItalic>Samples/InteractiveBrokers</legacyItalic>.</para>
 		
 		<mediaLink><image placement="center" xlink:href="ib_main_window"/></mediaLink>
@@ -11,10 +11,10 @@
 				<steps class="ordered">
 					<step>
 						<content>
-							<para>В самом начале необходимо создать экземпляр класса шлюза <codeEntityReference qualifyHint="false">T:StockSharp.InteractiveBrokers.IBTrader</codeEntityReference>:</para>
+							<para>В самом начале необходимо создать экземпляр класса шлюза <codeEntityReference qualifyHint="false">T:StockSharp.InteractiveBrokers.InteractiveBrokersTrader</codeEntityReference>:</para>
             				<code language="C#">
             				<![CDATA[
-Trader = new IBTrader {
+Trader = new InteractiveBrokersTrader {
 	Address = Address.Text.To<IPEndPoint>(),
 };
 							]]>

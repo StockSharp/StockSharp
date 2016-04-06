@@ -131,7 +131,7 @@
 			  	  <entry>OEC</entry>
 				  <entry>SampleOEC</entry>
 				  <entry>
-					  Пример работы с <codeEntityReference qualifyHint="false">T:StockSharp.OpenECry.OECTrader</codeEntityReference>.
+					  Пример работы с <codeEntityReference qualifyHint="false">T:StockSharp.OpenECry.OpenECryTrader</codeEntityReference>.
 				  </entry>
 				  
 			  </row>
@@ -139,7 +139,7 @@
 			  	  <entry>Interactive Brokers</entry>
 				  <entry>SampleIB</entry>
 				  <entry>
-					  Пример работы с <codeEntityReference qualifyHint="false">T:StockSharp.InteractiveBrokers.IBTrader</codeEntityReference>.
+					  Пример работы с <codeEntityReference qualifyHint="false">T:StockSharp.InteractiveBrokers.InteractiveBrokersTrader</codeEntityReference>.
 				  </entry>
 			  </row>
 			  <row>
@@ -449,7 +449,7 @@
 			  <row>
 				  <entry>SampleOEC</entry>
 				  <entry>
-					  Пример работы с <codeEntityReference qualifyHint="false">T:StockSharp.OEC.OECTrader</codeEntityReference>.
+					  Пример работы с <codeEntityReference qualifyHint="false">T:StockSharp.OEC.OpenECryTrader</codeEntityReference>.
 				  </entry>
 			  </row>
 		  </table> 
@@ -467,7 +467,7 @@
 			  <row>
 				  <entry>SampleIB</entry>
 				  <entry>
-					  Пример работы с <codeEntityReference qualifyHint="false">T:StockSharp.InteractiveBrokers.IBTrader</codeEntityReference>.
+					  Пример работы с <codeEntityReference qualifyHint="false">T:StockSharp.InteractiveBrokers.InteractiveBrokersTrader</codeEntityReference>.
 				  </entry>
 			  </row>
 		  </table> 

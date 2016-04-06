@@ -4,8 +4,8 @@
 	<introduction>
 		<para>На текущий момент <token>stocksharp</token> поддерживает следующие западные коннекторы:</para>
 		<list class="ordered">
-			<listItem><codeEntityReference>T:StockSharp.OpenECry.OECTrader</codeEntityReference> для <token>OpenECry</token></listItem>
-			<listItem><codeEntityReference>T:StockSharp.InteractiveBrokers.IBTrader</codeEntityReference> для <token>IB</token></listItem>
+			<listItem><codeEntityReference>T:StockSharp.OpenECry.OpenECryTrader</codeEntityReference> для <token>OpenECry</token></listItem>
+			<listItem><codeEntityReference>T:StockSharp.InteractiveBrokers.InteractiveBrokersTrader</codeEntityReference> для <token>IB</token></listItem>
 			<listItem><codeEntityReference>T:StockSharp.Blackwood.BlackwoodTrader</codeEntityReference> для <token>blackwood</token></listItem>
 			<listItem><codeEntityReference>T:StockSharp.ETrade.ETradeTrader</codeEntityReference> для <token>etrade</token></listItem>
 			<listItem><codeEntityReference>T:StockSharp.IQFeed.IQFeedTrader</codeEntityReference> для <token>iqfeed</token></listItem>

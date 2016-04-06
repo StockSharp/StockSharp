@@ -1,5 +1,10 @@
 StockSharp API Change log
 ========================
+###current:
+* (feature) Chart. Active orders.
+* (bug) https://github.com/StockSharp/StockSharp/issues/222
+* (feature) IBTrader -> InteractiveBrokersTrader, OECTrader -> OpenECryTrader
+
 ###v4.3.14.1:
 * (bug) Transaq. double <-> decimal conversation fix.
 * (feature) Blackwood. Embed zlib into resources.

@@ -28,10 +28,7 @@ namespace SampleIB
 			InitializeComponent();
 		}
 
-		private Order SelectedOrder
-		{
-			get { return OrderGrid.SelectedOrder; }
-		}
+		private Order SelectedOrder => OrderGrid.SelectedOrder;
 
 		private void CancelOrderClick(object sender, RoutedEventArgs e)
 		{
