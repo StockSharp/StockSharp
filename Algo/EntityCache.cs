@@ -501,40 +501,54 @@ namespace StockSharp.Algo
 			if (message.OriginalTransactionId == 0)
 				throw new ArgumentOutOfRangeException(nameof(message), message.OriginalTransactionId, LocalizedStrings.Str715);
 
-			order = data.Orders.TryGetValue(CreateOrderKey(message.OrderType, message.OriginalTransactionId, true))?.Order;
-
-			if (order != null /*&& order.Id == message.OrderId*/)
-			{
-				orders.Add(Tuple.Create(order, true));
-
-				// if replace
-				var replaced = data.Orders.TryGetValue(CreateOrderKey(message.OrderType, message.OriginalTransactionId, false))?.Order;
-
-				if (replaced != null)
-					orders.Add(Tuple.Create(replaced, false));
-			}
-			else
-			{
-				order = data.Orders.TryGetValue(CreateOrderKey(message.OrderType, message.OriginalTransactionId, false))?.Order;
-
-				if (order != null)
-					orders.Add(Tuple.Create(order, false));
-			}
+			var orderType = message.OrderType;
 
 			if (order == null)
 			{
-				if (!message.OrderStringId.IsEmpty())
+				var cancelledOrder = data.Orders.TryGetValue(CreateOrderKey(orderType, message.OriginalTransactionId, true))?.Order;
+
+				if (cancelledOrder == null && orderType == null)
 				{
-					order = data.OrdersByStringId.TryGetValue(message.OrderStringId);
+					cancelledOrder = data.Orders.TryGetValue(CreateOrderKey(OrderTypes.Conditional, message.OriginalTransactionId, true))?.Order;
 
-					if (order != null)
+					if (cancelledOrder != null)
+						orderType = OrderTypes.Conditional;
+				}
+
+				if (cancelledOrder != null /*&& order.Id == message.OrderId*/)
+					orders.Add(Tuple.Create(cancelledOrder, true));
+
+				var registeredOrder = data.Orders.TryGetValue(CreateOrderKey(orderType, message.OriginalTransactionId, false))?.Order;
+
+				if (registeredOrder == null && orderType == null)
+					registeredOrder = data.Orders.TryGetValue(CreateOrderKey(OrderTypes.Conditional, message.OriginalTransactionId, false))?.Order;
+
+				if (registeredOrder != null)
+					orders.Add(Tuple.Create(registeredOrder, false));
+
+				if (cancelledOrder == null && registeredOrder == null)
+				{
+					if (!message.OrderStringId.IsEmpty())
 					{
-						var pair = data.Orders.LastOrDefault(p => p.Value.Order == order);
+						order = data.OrdersByStringId.TryGetValue(message.OrderStringId);
 
-						if (pair.Key != null)
-							orders.Add(Tuple.Create(pair.Value.Order, pair.Key.Item3));
+						if (order != null)
+						{
+							var pair = data.Orders.LastOrDefault(p => p.Value.Order == order);
+
+							if (pair.Key != null)
+								orders.Add(Tuple.Create(pair.Value.Order, pair.Key.Item3));
+						}
 					}
 				}
+			}
+			else
+			{
+				if (data.Orders.ContainsKey(CreateOrderKey(order.Type, message.OriginalTransactionId, true)))
+					orders.Add(Tuple.Create(order, true));
+
+				if (data.Orders.ContainsKey(CreateOrderKey(order.Type, message.OriginalTransactionId, false)))
+					orders.Add(Tuple.Create(order, false));
 			}
 
 			if (orders.Count == 0)
