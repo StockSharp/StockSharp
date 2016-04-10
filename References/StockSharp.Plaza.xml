@@ -174,6 +174,62 @@
             Оставшееся количество в заявке.
             </summary>
     </member>
+    <member name="T:StockSharp.Plaza.Metadata.PlazaClearingMoneySaColumns">
+      <summary>
+            Поток FORTS_CLR_REPL - Клиринговая информация.
+            Таблица money_clearing_sa - Клиентские деньги в клиринге (НКЦ).
+            </summary>
+    </member>
+    <member name="F:StockSharp.Plaza.Metadata.PlazaClearingMoneySaColumns.SettlementAccount">
+      <summary>
+            Расчетный Код НКЦ.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Plaza.Metadata.PlazaClearingMoneySaColumns.BegAmount">
+      <summary>
+            Денег на начало дня.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Plaza.Metadata.PlazaClearingMoneySaColumns.VM">
+      <summary>
+            Вариационная маржа, включая вариационную маржу по маржируемым опционам.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Plaza.Metadata.PlazaClearingMoneySaColumns.Premium">
+      <summary>
+            Опционная премия.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Plaza.Metadata.PlazaClearingMoneySaColumns.Pay">
+      <summary>
+            Движение по счету.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Plaza.Metadata.PlazaClearingMoneySaColumns.FutFee">
+      <summary>
+            Фьючерсный биржевой сбор.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Plaza.Metadata.PlazaClearingMoneySaColumns.OptFee">
+      <summary>
+            Опционный биржевой сбор.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Plaza.Metadata.PlazaClearingMoneySaColumns.GO">
+      <summary>
+            Суммарное ГО по фьючерсам и опционам.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Plaza.Metadata.PlazaClearingMoneySaColumns.EndAmount">
+      <summary>
+            На конец дня.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Plaza.Metadata.PlazaClearingMoneySaColumns.Free">
+      <summary>
+            Свободно средств.
+            </summary>
+    </member>
     <member name="T:StockSharp.Plaza.Metadata.PlazaClearingPositionDerivativeColumns">
       <summary>
             Колонки таблицы, содержащей позиционное состояние на момент вечернего клиринга.
@@ -240,6 +296,72 @@
             </summary>
     </member>
     <member name="F:StockSharp.Plaza.Metadata.PlazaClearingPositionDerivativeColumns.VatClearing">
+      <summary>
+            НДС в составе клирингового сбора.
+            </summary>
+    </member>
+    <member name="T:StockSharp.Plaza.Metadata.PlazaClearingPositionDerivativeSaColumns">
+      <summary>
+            Поток FORTS_CLR_REPL - Клиринговая информация.
+            Таблица fut_pos_sa/opt_pos_sa - Позиции (НКЦ).
+            </summary>
+    </member>
+    <member name="F:StockSharp.Plaza.Metadata.PlazaClearingPositionDerivativeSaColumns.Isin">
+      <summary>
+            Идентификатор инструмента.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Plaza.Metadata.PlazaClearingPositionDerivativeSaColumns.IsinId">
+      <summary>
+            Уникальный числовой идентификатор инструмента.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Plaza.Metadata.PlazaClearingPositionDerivativeSaColumns.SessionId">
+      <summary>
+            Идентификатор торговой сессии.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Plaza.Metadata.PlazaClearingPositionDerivativeSaColumns.SettlementAccount">
+      <summary>
+            Расчетный Код НКЦ.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Plaza.Metadata.PlazaClearingPositionDerivativeSaColumns.PosBegin">
+      <summary>
+            Позиция на начало дня.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Plaza.Metadata.PlazaClearingPositionDerivativeSaColumns.PosEnd">
+      <summary>
+            Позиция на конец дня.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Plaza.Metadata.PlazaClearingPositionDerivativeSaColumns.VM">
+      <summary>
+            Вариационная маржа, включая вариационную маржу по маржируемым опционам.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Plaza.Metadata.PlazaClearingPositionDerivativeSaColumns.Fee">
+      <summary>
+            Суммарный сбор для клиента/фирмы и инструмента.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Plaza.Metadata.PlazaClearingPositionDerivativeSaColumns.FeeExchange">
+      <summary>
+            Биржевой сбор.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Plaza.Metadata.PlazaClearingPositionDerivativeSaColumns.VatExchange">
+      <summary>
+            НДС в составе биржевого сбора.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Plaza.Metadata.PlazaClearingPositionDerivativeSaColumns.FeeClearing">
+      <summary>
+            Клиринговый сбор.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Plaza.Metadata.PlazaClearingPositionDerivativeSaColumns.VatClearing">
       <summary>
             НДС в составе клирингового сбора.
             </summary>
@@ -477,6 +599,53 @@
     <member name="F:StockSharp.Plaza.Metadata.PlazaFutInstrumentsColumns.IsLimitOpt">
       <summary>
             Рассчитывать ли лимиты по опционам на этот базовый фьючерс.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Plaza.Metadata.PlazaFutInstrumentsColumns.ExecName">
+      <summary>
+            Признак срочности опциона. D-daily, W-weekly, M-monthly.
+            </summary>
+    </member>
+    <member name="T:StockSharp.Plaza.Metadata.PlazaFutMarginTypeColumns">
+      <summary>
+            FORTS_FUTINFO_REPL - Фьючерсы: справочная и сессионная информация.
+            Таблица fut_settlement_account: Справочник счетов НКЦ.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Plaza.Metadata.PlazaFutMarginTypeColumns.Code">
+      <summary>
+            Расчетный Код НКЦ или Код Брокерской Фирмы.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Plaza.Metadata.PlazaFutMarginTypeColumns.Type">
+      <summary>
+            Признак РК/БФ (0 - РК, 1 - БФ).
+            </summary>
+    </member>
+    <member name="F:StockSharp.Plaza.Metadata.PlazaFutMarginTypeColumns.MarginType">
+      <summary>
+            Тип маржирования: 2 – полунеттинг БФ, 3 – Полунеттинг РК.
+            </summary>
+    </member>
+    <member name="T:StockSharp.Plaza.Metadata.PlazaFutSettlementAccountColumns">
+      <summary>
+            FORTS_FUTINFO_REPL - Фьючерсы: справочная и сессионная информация.
+            Таблица fut_settlement_account: Справочник счетов НКЦ.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Plaza.Metadata.PlazaFutSettlementAccountColumns.Code">
+      <summary>
+            Код Брокерской Фирмы или Клиентский Код.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Plaza.Metadata.PlazaFutSettlementAccountColumns.Type">
+      <summary>
+            Признак БФ/Клиент (1 - БФ, 2 - Клиент).
+            </summary>
+    </member>
+    <member name="F:StockSharp.Plaza.Metadata.PlazaFutSettlementAccountColumns.SettlementAccount">
+      <summary>
+            Расчетный Код НКЦ.
             </summary>
     </member>
     <member name="T:StockSharp.Plaza.Metadata.PlazaInvestorColumns">
@@ -2052,6 +2221,42 @@
             Количество некорректных транзакций.
             </summary>
     </member>
+    <member name="T:StockSharp.Plaza.Metadata.PlazaPortfolioSaColumns">
+      <summary>
+            Поток FORTS_PART_REPL - Информация о средствах и лимитах.
+            Таблица part_sa - Залоговые средства.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Plaza.Metadata.PlazaPortfolioSaColumns.SettlementAccount">
+      <summary>
+            Расчетный Код НКЦ.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Plaza.Metadata.PlazaPortfolioSaColumns.MoneyAmount">
+      <summary>
+            Всего денег.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Plaza.Metadata.PlazaPortfolioSaColumns.MoneyFree">
+      <summary>
+            Свободно денег.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Plaza.Metadata.PlazaPortfolioSaColumns.MoneyPledgeAmount">
+      <summary>
+            Суммарная оценочная стоимость залогов полного обеспечения.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Plaza.Metadata.PlazaPortfolioSaColumns.PledgeAmount">
+      <summary>
+            Всего залогов.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Plaza.Metadata.PlazaPortfolioSaColumns.LiquidityRatio">
+      <summary>
+            Коэффициент приема залогов в обеспечение.
+            </summary>
+    </member>
     <member name="T:StockSharp.Plaza.Metadata.PlazaSessionSettlementFutureColumns">
       <summary>
             Колонки таблицы, содержащей результаты клиринга: расчетные цены фьючерсов.
@@ -2404,12 +2609,6 @@
             Минимальный шаг изменения цены.
             </summary>
     </member>
-    <member name="T:StockSharp.Plaza.Metadata.PlazaIndexLogColumns">
-      <summary>
-            Поток RTS_INDEXLOG_REPL - История значений индексов.
-            Таблица rts_index_log - Журнал значений индексов.
-            </summary>
-    </member>
     <member name="T:StockSharp.Plaza.Metadata.PlazaOptionsParamsColumns">
       <summary>
             Поток FORTS_INFO_REPL - Дополнительная справочная информация.
@@ -2602,6 +2801,16 @@
             Колонки справочника инструментов.
             </summary>
     </member>
+    <member name="F:StockSharp.Plaza.Metadata.PlazaColumnRegistry.FutMarginTypes">
+      <summary>
+            Колонки Справочник счетов НКЦ.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Plaza.Metadata.PlazaColumnRegistry.FutSettlementAccounts">
+      <summary>
+            Колонки Справочник счетов НКЦ.
+            </summary>
+    </member>
     <member name="F:StockSharp.Plaza.Metadata.PlazaColumnRegistry.CommonOption">
       <summary>
             Колонки справочника базовых контрактов для инструментов.
@@ -2645,11 +2854,6 @@
     <member name="F:StockSharp.Plaza.Metadata.PlazaColumnRegistry.Index">
       <summary>
             Колонки таблицы индексов.
-            </summary>
-    </member>
-    <member name="F:StockSharp.Plaza.Metadata.PlazaColumnRegistry.IndexLog">
-      <summary>
-            Колонки таблицы с историей значений индексов.
             </summary>
     </member>
     <member name="F:StockSharp.Plaza.Metadata.PlazaColumnRegistry.InterClearingInfoFuture">
@@ -2740,6 +2944,11 @@
     <member name="F:StockSharp.Plaza.Metadata.PlazaColumnRegistry.Portfolios">
       <summary>
             Колонки таблицы средств и лимитов клиентов.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Plaza.Metadata.PlazaColumnRegistry.PortfolioSa">
+      <summary>
+            Колонки таблицы Залоговые средства.
             </summary>
     </member>
     <member name="F:StockSharp.Plaza.Metadata.PlazaColumnRegistry.RejectedOrdersFuture">
@@ -2845,6 +3054,21 @@
     <member name="F:StockSharp.Plaza.Metadata.PlazaColumnRegistry.ClearingOptionPosition">
       <summary>
             Колонки таблицы с позиционным состоянием на момент вечернего клиринга по опционам.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Plaza.Metadata.PlazaColumnRegistry.ClearingFuturePositionSa">
+      <summary>
+            Колонки таблицы Позиции фьючерсов (НКЦ).
+            </summary>
+    </member>
+    <member name="F:StockSharp.Plaza.Metadata.PlazaColumnRegistry.ClearingOptionPositionSa">
+      <summary>
+            Колонки таблицы Позиции опционов (НКЦ).
+            </summary>
+    </member>
+    <member name="F:StockSharp.Plaza.Metadata.PlazaColumnRegistry.ClearingMoneySa">
+      <summary>
+            Колонки таблицы Клиентские деньги в клиринге (НКЦ).
             </summary>
     </member>
     <member name="F:StockSharp.Plaza.Metadata.PlazaColumnRegistry.BaseContractsParams">
@@ -3853,6 +4077,11 @@
             Средства и лимиты клиентов.
             </summary>
     </member>
+    <member name="F:StockSharp.Plaza.Metadata.PlazaTableRegistry.PortfolioSa">
+      <summary>
+            Залоговые средства.
+            </summary>
+    </member>
     <member name="F:StockSharp.Plaza.Metadata.PlazaTableRegistry.PortfoliosSysEvents">
       <summary>
             Таблица событий потока <see cref="F:StockSharp.Plaza.PlazaStreamRegistry.Portfolios" />.
@@ -3883,11 +4112,6 @@
             Индексы.
             </summary>
     </member>
-    <member name="F:StockSharp.Plaza.Metadata.PlazaTableRegistry.IndexLog">
-      <summary>
-            История значений индексов.
-            </summary>
-    </member>
     <member name="F:StockSharp.Plaza.Metadata.PlazaTableRegistry.SessionContentsFuture">
       <summary>
             Фьючерсы: справочник торгуемых инструментов.
@@ -3896,6 +4120,16 @@
     <member name="F:StockSharp.Plaza.Metadata.PlazaTableRegistry.FutInstruments">
       <summary>
             Справочник инструментов.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Plaza.Metadata.PlazaTableRegistry.FutMarginTypes">
+      <summary>
+            Справочник счетов НКЦ.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Plaza.Metadata.PlazaTableRegistry.FutSettlementAccounts">
+      <summary>
+            Справочник счетов НКЦ.
             </summary>
     </member>
     <member name="F:StockSharp.Plaza.Metadata.PlazaTableRegistry.SessionContentsOption">
@@ -4001,6 +4235,21 @@
     <member name="F:StockSharp.Plaza.Metadata.PlazaTableRegistry.ClearingSysEvents">
       <summary>
             Таблица событий потока <see cref="F:StockSharp.Plaza.PlazaStreamRegistry.Clearing" />.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Plaza.Metadata.PlazaTableRegistry.ClearingMoneySa">
+      <summary>
+            Клиентские деньги в клиринге (НКЦ).
+            </summary>
+    </member>
+    <member name="F:StockSharp.Plaza.Metadata.PlazaTableRegistry.ClearingFuturePositionSa">
+      <summary>
+            Позиции фьючерсов (НКЦ).
+            </summary>
+    </member>
+    <member name="F:StockSharp.Plaza.Metadata.PlazaTableRegistry.ClearingOptionPositionSa">
+      <summary>
+            Позиции опционов (НКЦ).
             </summary>
     </member>
     <member name="F:StockSharp.Plaza.Metadata.PlazaTableRegistry.BaseContractsParams">
@@ -5496,6 +5745,26 @@
             Резерв премии под заявки.
             </summary>
     </member>
+    <member name="F:StockSharp.Plaza.Metadata.PlazaPortfolioColumns.BalanceMoney">
+      <summary>
+            Сальдо денежных торговых переводов за текущую сессию.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Plaza.Metadata.PlazaPortfolioColumns.VmOrderReserve">
+      <summary>
+            Сумма, зарезервированная под отрицательную ВМ по заявкам.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Plaza.Metadata.PlazaPortfolioColumns.MoneyPledgeAmount">
+      <summary>
+            Суммарная оценочная стоимость залогов полного обеспечения.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Plaza.Metadata.PlazaPortfolioColumns.NumClr2Delivery">
+      <summary>
+            Количество клирингов, за которое включаются сценарии экспирации для расчета рисков по ближней неквартальной серии опционов для данного раздела.
+            </summary>
+    </member>
     <member name="T:StockSharp.Plaza.Metadata.PlazaPositionColumns">
       <summary>
             Поток FORTS_POS_REPL - Информация о позициях.
@@ -6209,11 +6478,6 @@
     <member name="F:StockSharp.Plaza.PlazaStreamRegistry.Index">
       <summary>
             Индексы.
-            </summary>
-    </member>
-    <member name="F:StockSharp.Plaza.PlazaStreamRegistry.IndexLog">
-      <summary>
-            История значений индексо.
             </summary>
     </member>
     <member name="F:StockSharp.Plaza.PlazaStreamRegistry.VarMargin">

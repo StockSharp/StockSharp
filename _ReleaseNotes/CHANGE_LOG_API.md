@@ -1,5 +1,8 @@
 StockSharp API Change log
 ========================
+###current
+* (feature) Plaza. Spectra 5.0
+
 ###v4.3.14.2:
 * (feature) Chart. Active orders.
 * (bug) https://github.com/StockSharp/StockSharp/issues/222
