@@ -230,7 +230,7 @@
     <None Include="Topics\GuiCreateSecurityWindow.aml" />
     <None Include="Topics\GuiSecurityEditor.aml" />
     <None Include="Topics\GuiSecurityPickerWindow.aml" />
-    <None Include="Topics\GuiSecuritypicker.aml" />
+    <None Include="Topics\GuiSecurityPicker.aml" />
     <None Include="Topics\HydraTasksBackup.aml" />
     <None Include="Topics\HydraBackup_recovery.aml" />
     <None Include="Topics\HydraBackup_task.aml" />

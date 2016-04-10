@@ -34,10 +34,10 @@
     </introduction>
     
      <relatedTopics>
-      	<link xlink:href="bacfd0de-8a09-4ef8-a302-5dc010e36dc9">PortfolioComboBox</link>
-      	<link xlink:href="528beb23-24fd-4d30-a9ff-4a3602b34fc2">PortfolioEditor</link>
-       	<link xlink:href="059d6abd-2ef6-459f-bc1a-69c72213689b">PortfolioPickerWindow</link>
-       	<link xlink:href="275f3825-828e-4d3b-a032-7d4ff0f6717f">PortfolioGrid</link>
+      	<link xlink:href="bacfd0de-8a09-4ef8-a302-5dc010e36dc9">Выпадающий список портфелей</link>
+      	<link xlink:href="528beb23-24fd-4d30-a9ff-4a3602b34fc2">Выбор портфеля</link>
+       	<link xlink:href="059d6abd-2ef6-459f-bc1a-69c72213689b">Окно выбора портфелей</link>
+       	<link xlink:href="275f3825-828e-4d3b-a032-7d4ff0f6717f">Таблица портфелей</link>
     </relatedTopics>
     
   </developerConceptualDocument>

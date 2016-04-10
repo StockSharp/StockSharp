@@ -42,8 +42,8 @@ Trace.TraceError("Error test message");
               </content>
           </section>
      </sections>
-      <relatedTopics>
+      <!--<relatedTopics>
        <link xlink:href="3fc605a8-3011-404f-b31d-3ff6d459eddf">LogWindow</link>
-    </relatedTopics>
+    </relatedTopics>-->
   </developerConceptualDocument>
 </topic>

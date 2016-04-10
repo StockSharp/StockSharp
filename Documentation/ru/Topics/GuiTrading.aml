@@ -9,10 +9,10 @@
     </introduction>
     
     <relatedTopics>
-       <link xlink:href="5bb4f6f0-9057-4a88-b968-a5fd60641d4d">OrderGrid</link>
-       <link xlink:href="cfc729e7-65e7-4ec3-b215-57031be290c7">OrderWindow</link>
-       <link xlink:href="94e71651-8964-41fc-866d-3ff65f513440">OrderConditionalWindow</link>
-       <link xlink:href="7ffeb2d8-55f3-447b-beb7-9b8017f5e7f4">MyTradeGrid</link>
+       <link xlink:href="5bb4f6f0-9057-4a88-b968-a5fd60641d4d">Заявки</link>
+       <link xlink:href="cfc729e7-65e7-4ec3-b215-57031be290c7">Ввод заявки</link>
+       <link xlink:href="94e71651-8964-41fc-866d-3ff65f513440">Ввод стоп-заявки</link>
+       <link xlink:href="7ffeb2d8-55f3-447b-beb7-9b8017f5e7f4">Собственные сделки</link>
     </relatedTopics>
     
   </developerConceptualDocument>

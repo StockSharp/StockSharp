@@ -19,9 +19,9 @@
         <Topic id="a82865dd-98ed-4579-8f48-dd8f806c39e7" visible="True" title="Стоп-заявки" />
         <Topic id="52cb16e3-0ff0-4e82-8ad5-73a2e6e918a1" visible="True" title="Включение и выключение Quik" />
         <Topic id="d92dd6c6-b8d6-4065-b441-091df3425e65" visible="True" title="РЕПО и РПС заявки" />
-        <Topic id="32bb7203-202c-44f7-a6c4-79791c690a3a" visible="True" title="Verifier" />
         <Topic id="c338d4b4-ba54-4671-9206-976c07ef655e" visible="True" title="Quik DDE (старое подключение)">
           <Topic id="5c13da7b-b6e4-4fd4-958a-66c93c58b941" visible="True" title="Настройка Quik" />
+          <Topic id="32bb7203-202c-44f7-a6c4-79791c690a3a" visible="True" title="Verifier" />
           <Topic id="b6fea084-f43c-4eb7-ab63-ad3031d748a5" visible="True" title="Создание первого робота" />
           <Topic id="65485c7c-0697-4e00-ac3f-bfaf4f81cc9e" visible="True" title="Портфели в Quik" />
           <Topic id="ad145f75-a2d4-4766-af60-79489b84846c" visible="True" title="Экспорт стакана" />
@@ -143,7 +143,7 @@
       </Topic>
     </Topic>
     <Topic id="b0198d6a-0667-45d4-b172-698afd3ca310" visible="True" title="Коннекторы FIX/FAST">
-      <Topic id="29dfad18-ac49-4cf4-993c-c32d62101fff" visible="True" isExpanded="true" title="FIX">
+      <Topic id="29dfad18-ac49-4cf4-993c-c32d62101fff" visible="True" title="FIX">
         <Topic id="4d00c89b-59d8-4e69-9ea2-db92f6d08a43" visible="True" title="Пример работы с FixTrader" />
         <Topic id="55f27fed-449d-486d-b662-8ddde39ae852" visible="True" title="Стоп-заявки" />
         <Topic id="9e6e40df-f41d-4429-bdc7-d5864dd2c1e3" visible="True" title="Новости" />
@@ -231,57 +231,51 @@
     <Topic id="16070956-6e63-4cef-b6a8-6eb42372c424" visible="True" title="Биржевое время" />
     <Topic id="a8486498-a2d8-4924-b009-8b93138b268a" visible="True" title="Арифметические операции" />
     <Topic id="a0a4c8df-2bba-4e1e-8ba9-e1fa98728f92" visible="True" isExpanded="true" title="Пользовательский интерфейс (GUI)">
-      <Topic id="88a40124-43a6-4be9-b04b-a245000fca70" visible="True" title="UniversalGrid" />
-      <Topic id="c4aa5add-198d-432b-93fa-6ce60d0b7856" visible="True" title="PropertyGridEx" />
+      <Topic id="956b3163-c537-4e1d-af29-cf80b633db3c" visible="True" title="Графики">
+        <Topic id="a76a0a9c-bb95-4596-9464-9903379b3096" visible="True" title="Свечной график" />
+        <Topic id="bb71ead8-62c4-47f8-a1aa-242d63d631fb" visible="True" title="График-панель" />
+        <Topic id="da275a7f-ff6f-4dc7-8451-bf4fc22624a6" visible="True" title="График эквити" />
+        <Topic id="78adcfb5-7c77-4f08-bed0-41c5eb2fd4ce" visible="True" title="Графики box chart" />
+        <Topic id="96f4c342-1d2f-4e0d-9352-5452643df5ab" visible="True" title="Кластеры" />
+      </Topic>
       <Topic id="4cd2b7f9-fe8d-404a-bec6-227783410beb" visible="True" title="Логирование">
-        <Topic id="a206d470-20f1-42ed-b066-6e322d55d436" visible="True" title="LogControl" />
-        <Topic id="3fc605a8-3011-404f-b31d-3ff6d459eddf" visible="True" title="LogWindow" />
-        <Topic id="dc573dca-b2ea-44c4-884d-b7d0ba8b212d" visible="True" title="Monitor" />
-        <Topic id="da7fa5ab-4d4e-4205-a5ad-c41c24e88661" visible="True" title="MonitorWindow" />
+        <Topic id="a206d470-20f1-42ed-b066-6e322d55d436" visible="True" title="Панель логов" />
+        <Topic id="dc573dca-b2ea-44c4-884d-b7d0ba8b212d" visible="True" title="Расширенная панель логов" />
       </Topic>
       <Topic id="11b48b20-9502-4f7c-9d14-e9dd8b09d889" visible="True" title="Портфели">
-        <Topic id="bacfd0de-8a09-4ef8-a302-5dc010e36dc9" visible="True" title="PortfolioComboBox" />
-        <Topic id="528beb23-24fd-4d30-a9ff-4a3602b34fc2" visible="True" title="PortfolioEditor" />
-        <Topic id="059d6abd-2ef6-459f-bc1a-69c72213689b" visible="True" title="PortfolioPickerWindow" />
-        <Topic id="275f3825-828e-4d3b-a032-7d4ff0f6717f" visible="True" title="PortfolioGrid" />
+        <Topic id="bacfd0de-8a09-4ef8-a302-5dc010e36dc9" visible="True" title="Выпадающий список портфелей" />
+        <Topic id="528beb23-24fd-4d30-a9ff-4a3602b34fc2" visible="True" title="Выбор портфеля" />
+        <Topic id="059d6abd-2ef6-459f-bc1a-69c72213689b" visible="True" title="Окно выбора портфелей" />
+        <Topic id="275f3825-828e-4d3b-a032-7d4ff0f6717f" visible="True" title="Таблица портфелей" />
       </Topic>
       <Topic id="c4bfe1be-0e21-4480-814b-abaa13536f1f" visible="True" title="Инструменты">
-        <Topic id="3d7de2e9-079d-40f5-9800-8cd81456f477" visible="True" title="SecurityCreateWindow" />
-        <Topic id="de52af78-ec80-45b4-9820-0052f8add762" visible="True" title="SecurityGrid" />
-        <Topic id="f4e84944-41ad-42f2-9d2a-2854a8665152" visible="True" title="SecurityPicker" />
-        <Topic id="3dc4f866-ab4e-4c74-a627-13727abdb966" visible="True" title="SecurityPickerWindow" />
-        <Topic id="04856acb-88f2-4b39-8880-c9ce8e655801" visible="True" title="SecurityEditor" />
-        <Topic id="43ce1f81-83aa-4e83-816f-7362de518f9e" visible="True" title="ContinuousSecurityWindow" />
-        <Topic id="c3ee456c-31a9-4bc9-b296-c5f805bafb9e" visible="True" title="IndexSecurityWindow" />
+        <Topic id="3d7de2e9-079d-40f5-9800-8cd81456f477" visible="True" title="Создание инструмента" />
+        <Topic id="de52af78-ec80-45b4-9820-0052f8add762" visible="True" title="Инструменты" />
+        <Topic id="f4e84944-41ad-42f2-9d2a-2854a8665152" visible="True" title="Выбор инструмента" />
+        <Topic id="43ce1f81-83aa-4e83-816f-7362de518f9e" visible="True" title="Непрерывный фьючерс" />
+        <Topic id="c3ee456c-31a9-4bc9-b296-c5f805bafb9e" visible="True" title="Индекс" />
       </Topic>
       <Topic id="af144c31-4138-4d15-8097-fd0137370830" visible="True" title="Рыночные данные">
-        <Topic id="8ec4f4b6-e7c8-4bf0-b05e-1d98960ca45f" visible="True" title="TradeGrid" />
-        <Topic id="3a23bf32-fcbd-409b-99b3-2ff1b953c85a" visible="True" title="MarketDepthControl" />
-        <Topic id="583c9ad6-8798-4167-a6a1-667e9929fe2d" visible="True" title="OrderLogGrid" />
-        <Topic id="f9005237-fc93-4086-9300-6b081056a0fa" visible="True" title="NewsGrid" />
-        <Topic id="00026219-17a5-4749-82ab-ec018aa1ab0b" visible="True" title="NewsPanel" />
+        <Topic id="8ec4f4b6-e7c8-4bf0-b05e-1d98960ca45f" visible="True" title="Тиковые сделки" />
+        <Topic id="3a23bf32-fcbd-409b-99b3-2ff1b953c85a" visible="True" title="Стакан" />
+        <Topic id="583c9ad6-8798-4167-a6a1-667e9929fe2d" visible="True" title="Лог заявок" />
+        <Topic id="f9005237-fc93-4086-9300-6b081056a0fa" visible="True" title="Новости" />
       </Topic>
       <Topic id="20b858de-424e-43ee-89ab-00002d344f89" visible="True" title="Торговля">
-        <Topic id="5bb4f6f0-9057-4a88-b968-a5fd60641d4d" visible="True" title="OrderGrid" />
-        <Topic id="cfc729e7-65e7-4ec3-b215-57031be290c7" visible="True" title="OrderWindow" />
-        <Topic id="7ffeb2d8-55f3-447b-beb7-9b8017f5e7f4" visible="True" title="MyTradeGrid" />
-        <Topic id="94e71651-8964-41fc-866d-3ff65f513440" visible="True" title="OrderConditionalWindow" />
+        <Topic id="5bb4f6f0-9057-4a88-b968-a5fd60641d4d" visible="True" title="Заявки" />
+        <Topic id="7ffeb2d8-55f3-447b-beb7-9b8017f5e7f4" visible="True" title="Собственные сделки" />
+        <Topic id="cfc729e7-65e7-4ec3-b215-57031be290c7" visible="True" title="Ввод новой заявки" />
+        <Topic id="94e71651-8964-41fc-866d-3ff65f513440" visible="True" title="Ввод стоп-заявки" />
       </Topic>
       <Topic id="36095948-4925-4809-b621-e3188d80b739" visible="True" title="Стратегии">
-        <Topic id="2a080612-818f-4757-affd-538af4e044ef" visible="True" title="StrategiesStatisticsPanel" />
+        <Topic id="2a080612-818f-4757-affd-538af4e044ef" visible="True" title="Статистика" />
       </Topic>
       <Topic id="b69ea6e5-d4e9-4889-b2aa-18c60a736805" visible="True" title="Опционы">
-        <Topic id="0bcd3950-6fc9-463a-b473-6b0c6587f7f1" visible="True" title="OptionDesk" />
-        <Topic id="5d9f8c0d-d05c-4a39-9fad-7148df4411ad" visible="True" title="OptionPositionChart" />
+        <Topic id="0bcd3950-6fc9-463a-b473-6b0c6587f7f1" visible="True" title="Доска опционов" />
+        <Topic id="5d9f8c0d-d05c-4a39-9fad-7148df4411ad" visible="True" title="График позиции" />
       </Topic>
-      <Topic id="956b3163-c537-4e1d-af29-cf80b633db3c" visible="True" title="Графики">
-        <Topic id="a76a0a9c-bb95-4596-9464-9903379b3096" visible="True" title="Chart" />
-        <Topic id="bb71ead8-62c4-47f8-a1aa-242d63d631fb" visible="True" title="ChartPanel" />
-        <Topic id="d71b5e6e-fc05-429d-9888-7603f6b7c508" visible="True" title="BufferedChart" />
-        <Topic id="da275a7f-ff6f-4dc7-8451-bf4fc22624a6" visible="True" title="EquityCurveChart" />
-        <Topic id="78adcfb5-7c77-4f08-bed0-41c5eb2fd4ce" visible="True" title="BoxChart" />
-        <Topic id="96f4c342-1d2f-4e0d-9352-5452643df5ab" visible="True" title="ClusterChart" />
-      </Topic>
+      <Topic id="c4aa5add-198d-432b-93fa-6ce60d0b7856" visible="True" title="PropertyGridEx" />
+      <Topic id="88a40124-43a6-4be9-b04b-a245000fca70" visible="True" title="UniversalGrid" />
     </Topic>
     <Topic id="5794f4b0-c536-4713-ad08-955a4a01b196" visible="True" title="Сообщения">
       <Topic id="fcd2df04-2463-4f85-aa0c-9b7a8f95a56a" visible="True" title="Описание" />
@@ -389,6 +383,6 @@
       <Topic id="52833a55-a1df-449b-8468-55bd2aa00c58" visible="True" title="Восстановление данных" />
     </Topic>
   </Topic>
-  <Topic id="76470d21-d624-46d1-a8c6-b52f7fabdeb4" visible="True" isSelected="true" title="S#.Designer" />
+  <Topic id="76470d21-d624-46d1-a8c6-b52f7fabdeb4" visible="True" title="S#.Designer" />
   <Topic id="e3f889a5-ddcd-4c77-a174-2f24385386a0" visible="True" title="S#.MatLab" />
 </Topics>

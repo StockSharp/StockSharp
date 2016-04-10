@@ -178,12 +178,11 @@
 
     </introduction>
      <relatedTopics>
-		<link xlink:href="a76a0a9c-bb95-4596-9464-9903379b3096">Chart</link>
-		<link xlink:href="bb71ead8-62c4-47f8-a1aa-242d63d631fb">ChartPanel</link>
-		<link xlink:href="d71b5e6e-fc05-429d-9888-7603f6b7c508">BufferedChart</link>
-		<link xlink:href="da275a7f-ff6f-4dc7-8451-bf4fc22624a6">EquityCurveChart</link>
-		<link xlink:href="78adcfb5-7c77-4f08-bed0-41c5eb2fd4ce">BoxChart</link>
-		<link xlink:href="96f4c342-1d2f-4e0d-9352-5452643df5ab">ClasterChart</link>
+		<link xlink:href="a76a0a9c-bb95-4596-9464-9903379b3096">Свечной график</link>
+		<link xlink:href="bb71ead8-62c4-47f8-a1aa-242d63d631fb">График-панель</link>
+		<link xlink:href="da275a7f-ff6f-4dc7-8451-bf4fc22624a6">График эквити</link>
+		<link xlink:href="78adcfb5-7c77-4f08-bed0-41c5eb2fd4ce">Графики box chart</link>
+		<link xlink:href="96f4c342-1d2f-4e0d-9352-5452643df5ab">Кластеры</link>
     </relatedTopics>
   </developerConceptualDocument>
 </topic>

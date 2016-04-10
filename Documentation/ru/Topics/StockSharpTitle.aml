@@ -53,7 +53,7 @@
 	
 	<list class="bullet">
   		<listItem>
-  			<link xlink:href="e0f9d08e-5dba-4d5d-9248-4d37eba61b22">S#.Api</link> - библиотека для профессиональной разработки торговых роботов на языке C#.
+  			<link xlink:href="e0f9d08e-5dba-4d5d-9248-4d37eba61b22">S#.API</link> - библиотека для профессиональной разработки торговых роботов на языке C#.
   		</listItem>
   		<listItem>
   			<link xlink:href="a720a275-440a-44ce-86e2-bcec2e0bc55f">S#.Data</link> - программа для автоматической загрузки исторических и реал-тайм маркет-данных.

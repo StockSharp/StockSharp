@@ -32,13 +32,11 @@
     </introduction>
     
       <relatedTopics>
-      	<link xlink:href="3d7de2e9-079d-40f5-9800-8cd81456f477">CreateSecurityWindow</link>
-      	<link xlink:href="de52af78-ec80-45b4-9820-0052f8add762">SecurityGrid</link>
-       	<link xlink:href="f4e84944-41ad-42f2-9d2a-2854a8665152">SecurityPicker</link>
-       	<link xlink:href="3dc4f866-ab4e-4c74-a627-13727abdb966">SecurityPickerWindow</link>
-       	<link xlink:href="04856acb-88f2-4b39-8880-c9ce8e655801">SecurityEditor</link>
-       	<link xlink:href="43ce1f81-83aa-4e83-816f-7362de518f9e">ContinuousSecurityWindow</link>
-       	<link xlink:href="c3ee456c-31a9-4bc9-b296-c5f805bafb9e">IndexSecurityWindow</link>
+      	<link xlink:href="3d7de2e9-079d-40f5-9800-8cd81456f477">Создание инструмента</link>
+      	<link xlink:href="de52af78-ec80-45b4-9820-0052f8add762">Инструменты</link>
+       	<link xlink:href="f4e84944-41ad-42f2-9d2a-2854a8665152">Выбор инструмента</link>
+       	<link xlink:href="43ce1f81-83aa-4e83-816f-7362de518f9e">Непрерывный фьючерс</link>
+       	<link xlink:href="c3ee456c-31a9-4bc9-b296-c5f805bafb9e">Индекс</link>
     </relatedTopics>
     
   </developerConceptualDocument>
