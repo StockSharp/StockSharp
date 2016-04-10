@@ -2517,6 +2517,66 @@
       <summary>
       </summary>
     </member>
+    <member name="T:StockSharp.Fix.Native.MassCancelRejectReason">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.MassCancelRejectReason.MassCancelNotSupported">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.MassCancelRejectReason.InvalidOrUnknownSecurity">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.MassCancelRejectReason.InvalidOrUnkownUnderlyingSecurity">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.MassCancelRejectReason.InvalidOrUnknownProduct">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.MassCancelRejectReason.InvalidOrUnknownCficode">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.MassCancelRejectReason.InvalidOrUnknownSecurityType">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.MassCancelRejectReason.InvalidOrUnknownTradingSession">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.MassCancelRejectReason.Other">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.MassCancelRejectReason.InvalidOrUnknownMarket">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.MassCancelRejectReason.InvalidOrUnkownMarketSegment">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.MassCancelRejectReason.InvalidOrUnknownSecurityGroup">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.MassCancelRejectReason.InvalidOrUnknownSecurityIssuer">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.MassCancelRejectReason.InvalidOrUnknownIssuerOfUnderlyingSecurity">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.MassCancelRejectReason.InvalidOrUnknownUnderlying">
+      <summary>
+      </summary>
+    </member>
     <member name="T:StockSharp.Fix.Native.PosReqType">
       <summary>
       </summary>
