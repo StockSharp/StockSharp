@@ -142,6 +142,23 @@
             </summary>
       <param name="owner">Parent window.</param>
     </member>
+    <member name="T:StockSharp.Xaml.BaseGridControl">
+      <summary>
+            The grid control.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.BaseGridControl.Load(Ecng.Serialization.SettingsStorage)">
+      <summary>
+            Load settings.
+            </summary>
+      <param name="storage">Settings storage.</param>
+    </member>
+    <member name="M:StockSharp.Xaml.BaseGridControl.Save(Ecng.Serialization.SettingsStorage)">
+      <summary>
+            Save settings.
+            </summary>
+      <param name="storage">Settings storage.</param>
+    </member>
     <member name="T:StockSharp.Xaml.BasketPortfolioWindow">
       <summary>
             The window for portfolios basket editing.
@@ -669,11 +686,6 @@
     <member name="T:StockSharp.Xaml.OrderConditionalGrid">
       <summary>
             A table showing conditional orders (<see cref="T:StockSharp.BusinessEntities.Order" />).
-            </summary>
-    </member>
-    <member name="P:StockSharp.Xaml.OrderConditionalGrid.SerializableColumns">
-      <summary>
-            Saved columns.
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.OrderConditionalGrid.#ctor">
@@ -3351,7 +3363,7 @@
     </member>
     <member name="P:StockSharp.Xaml.SecurityPicker.SelectionMode">
       <summary>
-            The list items selection mode. The default is <see cref="F:System.Windows.Controls.DataGridSelectionMode.Extended" />.
+            The list items selection mode. The default is <see cref="F:DevExpress.Xpf.Grid.MultiSelectMode.Row" />.
             </summary>
     </member>
     <member name="F:StockSharp.Xaml.SecurityPicker.ShowCommonStatColumnsProperty">
@@ -3494,7 +3506,7 @@
     </member>
     <member name="P:StockSharp.Xaml.SecurityPickerWindow.SelectionMode">
       <summary>
-            The list items selection mode. The default is <see cref="F:System.Windows.Controls.DataGridSelectionMode.Extended" />.
+            The list items selection mode. The default is <see cref="F:DevExpress.Xpf.Grid.MultiSelectMode.Row" />.
             </summary>
     </member>
     <member name="P:StockSharp.Xaml.SecurityPickerWindow.SelectedSecurity">
