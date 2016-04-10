@@ -3,6 +3,7 @@ StockSharp API Change log
 ###current
 * (feature) Plaza. Spectra 5.0
 * (feature) Grid controls (SecurityGrid, OrderGrid etc.) now based on DevExpress.
+* (feature) Quik lua. Averate price for positions.
 
 ###v4.3.14.2:
 * (feature) Chart. Active orders.
