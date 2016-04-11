@@ -33108,12 +33108,12 @@ namespace StockSharp.Localization
 		public static string Str3557 => GetString(Str3557Key);
 
 		/// <summary>
-		/// Valid until condition.
+		/// Valid until condition
 		/// </summary>
 		public const string Str3558Key = "Str3558";
 
 		/// <summary>
-		/// Valid until condition.
+		/// Valid until condition
 		/// </summary>
 		public static string Str3558 => GetString(Str3558Key);
 
