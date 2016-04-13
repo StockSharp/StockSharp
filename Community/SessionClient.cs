@@ -43,7 +43,11 @@ namespace StockSharp.Community
 				throw new InvalidOperationException();
 
 			var authClient = AuthenticationClient.Instance;
+#if DEBUG
+			_sessionId = DateTime.Now.Ticks + (authClient.IsLoggedIn ? authClient.SessionId : Guid.Empty).GetHashCode();
+#else
 			_sessionId = Invoke(f => f.CreateSession(product, authClient.IsLoggedIn ? authClient.SessionId : Guid.Empty));
+#endif
 
 			_pingTimer = ThreadingHelper.Timer(() =>
 			{
@@ -51,10 +55,12 @@ namespace StockSharp.Community
 				{
 					lock (_pingSync)
 					{
+#if !DEBUG
 						if (_sessionId == 0)
 							return;
 
 						Invoke(f => f.Ping(_sessionId));
+#endif
 					}
 				}
 				catch (Exception ex)
@@ -76,7 +82,9 @@ namespace StockSharp.Community
 
 			lock (_pingSync)
 			{
+#if !DEBUG
 				Invoke(f => f.CloseSession(_sessionId));
+#endif
 				_sessionId = 0;
 			}
 		}
