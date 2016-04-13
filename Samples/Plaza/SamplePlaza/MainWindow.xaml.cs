@@ -122,7 +122,7 @@ namespace SamplePlaza
 
 						var revisionManager = Trader.StreamManager.RevisionManager;
 
-						revisionManager.Tables.Add(Trader.TableRegistry.IndexLog);
+						//revisionManager.Tables.Add(Trader.TableRegistry.IndexLog);
 						revisionManager.Tables.Add(Trader.TableRegistry.TradeFuture);
 						revisionManager.Tables.Add(Trader.TableRegistry.TradeOption);
 
