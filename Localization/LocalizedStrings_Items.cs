@@ -18,6 +18,56 @@ namespace StockSharp.Localization
 	partial class LocalizedStrings
 	{
 		/// <summary>
+		/// Buy blink color
+		/// </summary>
+		public const string BuyBlinkColorKey = "BuyBlinkColor";
+
+		/// <summary>
+		/// Buy blink color
+		/// </summary>
+		public static string BuyBlinkColor => GetString(BuyBlinkColorKey);
+
+		/// <summary>
+		/// Sell blink color
+		/// </summary>
+		public const string SellBlinkColorKey = "SellBlinkColor";
+
+		/// <summary>
+		/// Sell blink color
+		/// </summary>
+		public static string SellBlinkColor => GetString(SellBlinkColorKey);
+
+		/// <summary>
+		/// Blinking color of partially filled Buy order
+		/// </summary>
+		public const string BuyBlinkColorDescrKey = "BuyBlinkColorDescr";
+
+		/// <summary>
+		/// Blinking color of partially filled Buy order
+		/// </summary>
+		public static string BuyBlinkColorDescr => GetString(BuyBlinkColorDescrKey);
+
+		/// <summary>
+		/// Blinking color of partially filled Sell order
+		/// </summary>
+		public const string SellBlinkColorDescrKey = "SellBlinkColorDescr";
+
+		/// <summary>
+		/// Blinking color of partially filled Sell order
+		/// </summary>
+		public static string SellBlinkColorDescr => GetString(SellBlinkColorDescrKey);
+
+		/// <summary>
+		/// Animation
+		/// </summary>
+		public const string AnimationKey = "Animation";
+
+		/// <summary>
+		/// Animation
+		/// </summary>
+		public static string Animation => GetString(AnimationKey);
+
+		/// <summary>
 		/// Show FPS stats
 		/// </summary>
 		public const string ShowFPSKey = "ShowFPS";
