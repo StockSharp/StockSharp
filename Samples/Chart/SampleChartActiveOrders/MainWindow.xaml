@@ -33,7 +33,7 @@
 				<StackPanel Orientation="Vertical" Grid.Column="0">
 					<CheckBox x:Name="_chkDelay" Content="Delay transactions" IsChecked="True"/>
 					<CheckBox x:Name="_chkFail" Content="Fail transactions"/>
-					<CheckBox x:Name="_chkConfirm" Content="Confirm transactions" IsChecked="True"/>
+					<CheckBox x:Name="_chkConfirm" Content="Confirm transactions"/>
 				</StackPanel>
 
 				<DockPanel LastChildFill="True" Grid.Column="1">
@@ -41,7 +41,7 @@
 						<Button Content="Fill" Click="Fill_Click" Margin="5,0" Width="60"/>
 						<Button Content="Remove" Click="Remove_Click" Margin="5,0" Width="60"/>
 					</StackPanel>
-					<ListBox DockPanel.Dock="Bottom" x:Name="_ordersListBox" ItemsSource="{Binding Orders}" SelectionMode="Single" HorizontalAlignment="Stretch"/>
+					<ListBox DockPanel.Dock="Bottom" x:Name="_ordersListBox" ItemsSource="{Binding Orders}" DisplayMemberPath="Description" SelectionMode="Single" HorizontalAlignment="Stretch"/>
 				</DockPanel>
 
 				<GridSplitter Grid.Column="2" Width="2" HorizontalAlignment="Center" VerticalAlignment="Stretch" Background="Gray"/>

@@ -12,6 +12,7 @@
 	using Ecng.Common;
 	using Ecng.Xaml;
 	using Ecng.Configuration;
+	using Ecng.ComponentModel;
 
 	using MoreLinq;
 
@@ -33,7 +34,7 @@
 		private readonly DispatcherTimer _chartUpdateTimer = new DispatcherTimer();
 		private readonly SynchronizedDictionary<DateTimeOffset, TimeFrameCandle> _updatedCandles = new SynchronizedDictionary<DateTimeOffset, TimeFrameCandle>();
 		private readonly CachedSynchronizedList<TimeFrameCandle> _allCandles = new CachedSynchronizedList<TimeFrameCandle>();
-		private readonly CachedSynchronizedSet<Order> _chartOrders = new CachedSynchronizedSet<Order>();
+		private readonly Dictionary<Order, ChartActiveOrderInfo> _chartOrderInfos = new Dictionary<Order, ChartActiveOrderInfo>();
 
 		private const decimal _priceStep = 10m;
 		private const int _timeframe = 1;
@@ -85,6 +86,7 @@
 		private void InitCharts()
 		{
 			Chart.ClearAreas();
+			Chart.OrderCreationMode = true;
 
 			_area = new ChartArea();
 
@@ -161,8 +163,6 @@
 					BusyIndicator.IsBusy = false;
 					Chart.IsAutoRange = false;
 					_area.YAxises.First().AutoRange = false;
-
-					Chart.Draw(DateTimeOffset.MinValue, _activeOrdersElement, _chartOrders);
 
 					Log($"Loaded {_allCandles.Count} candles");
 				});
@@ -252,15 +252,22 @@
 			if (order == null)
 				return;
 
-			Log($"Fill order: {order}");
+			if (IsInFinalState(order))
+			{
+				Log($"Unable to fill order in state {order.State}");
+				return;
+			}
 
-			if (order.Balance == 0)
-				RemoveOrder(order);
+			var oi = GetOrderInfo(order);
+
+			Log($"Fill order: {order}");
 
 			order.Balance -= 1;
 
 			if (order.Balance == 0)
 				order.State = OrderStates.Done;
+
+			oi.UpdateOrderState(order);
 		}
 
 		private void Remove_Click(object sender, RoutedEventArgs e)
@@ -275,31 +282,41 @@
 
 		private long _transId;
 
-		private void Chart_OnRegisterOrder(Order order)
+		private void Chart_OnRegisterOrder(Order orderDraft)
 		{
 			if (NeedToConfirm && !Confirm("Register order?"))
 				return;
 
-			order.Price = Math.Round(order.Price / _priceStep) * _priceStep;
-			order.TransactionId = ++_transId;
-			order.Balance = order.Volume;
-			order.State = OrderStates.Pending;
-			InitExtensionInfo(order);
+			var order = new OrderEx
+			{
+				TransactionId = ++_transId,
+				Type = OrderTypes.Limit,
+				State = OrderStates.Pending,
+				Volume = orderDraft.Volume,
+				Balance = orderDraft.Volume,
+				Direction = orderDraft.Direction,
+				Security = orderDraft.Security,
+				Portfolio = orderDraft.Portfolio,
+				Price = Math.Round(orderDraft.Price / _priceStep) * _priceStep,
+			};
 
 			Log($"RegisterOrder: {order}");
-			AddOrder(order);
+			var oi = GetOrderInfo(order);
+
+			oi.IsFrozen = true;
 
 			Action regAction = () =>
 			{
 				if (NeedToFail)
 				{
 					order.State = OrderStates.Failed;
+					oi.UpdateOrderState(order, true);
 					Log($"Order failed: {order}");
-					RemoveOrder(order);
 				}
 				else
 				{
 					order.State = OrderStates.Active;
+					oi.UpdateOrderState(order);
 					Log($"Order registered: {order}");
 				}
 			};
@@ -310,55 +327,59 @@
 				regAction();
 		}
 
-		private void Chart_OnMoveOrder(Order order, decimal newPrice)
+		private void Chart_OnMoveOrder(Order oldOrder, decimal newPrice)
 		{
-			if (!RemoveOrder(order))
-			{
-				Log($"error: order not found: {order}");
-				return;
-			}
+			var oiOld = GetOrderInfo(oldOrder);
 
 			if (NeedToConfirm && !Confirm($"Move order to price={newPrice}?"))
 			{
-				AddOrder(order);
+				oiOld.UpdateOrderState(oldOrder);
 				return;
 			}
 
-			Log($"MoveOrder to {newPrice}: {order}");
-			if (IsInFinalState(order))
+			Log($"MoveOrder to {newPrice}: {oldOrder}");
+			if (IsInFinalState(oldOrder))
 			{
 				Log("invalid state for re-register");
 				return;
 			}
 
-			var newOrder = new Order
+			var newOrder = new OrderEx
 			{
 				TransactionId = ++_transId,
 				Type = OrderTypes.Limit,
 				State = OrderStates.Pending,
 				Price = newPrice,
-				Volume = order.Balance,
-				Direction = order.Direction,
-				Balance = order.Balance,
-				Security = order.Security,
-				Portfolio = order.Portfolio,
+				Volume = oldOrder.Balance,
+				Direction = oldOrder.Direction,
+				Balance = oldOrder.Balance,
+				Security = oldOrder.Security,
+				Portfolio = oldOrder.Portfolio,
 			};
-			InitExtensionInfo(newOrder);
-			newOrder.ExtensionInfo[ChartActiveOrdersElement.OldOrderKey] = order;
 
-			AddOrder(newOrder);
+			var oiNew = GetOrderInfo(newOrder, oiOld);
+
+			oiOld.UpdateOrderState(oldOrder);
+
+			oiOld.IsFrozen = oiNew.IsFrozen = true;
 
 			Action moveAction = () =>
 			{
 				if (NeedToFail)
 				{
 					Log("Move failed");
-					RemoveOrder(newOrder);
-					AddOrder(order);
+					oiOld.UpdateOrderState(oldOrder, true);
+
+					newOrder.State = OrderStates.Failed;
+					oiNew.UpdateOrderState(newOrder, true);
 				}
 				else
 				{
+					oldOrder.State = OrderStates.Done;
+					oiOld.UpdateOrderState(oldOrder);
+
 					newOrder.State = OrderStates.Active;
+					oiNew.UpdateOrderState(newOrder);
 					Log($"Order moved to new: {newOrder}");
 				}
 			};
@@ -376,12 +397,22 @@
 
 			Log($"CancelOrder: {order}");
 
+			var oi = GetOrderInfo(order);
+
+			oi.IsFrozen = true;
+
 			Action cancelAction = () =>
 			{
 				if (NeedToFail)
+				{
 					Log("Cancel failed");
+					oi.UpdateOrderState(order, true);
+				}
 				else
-					RemoveOrder(order);
+				{
+					order.State = OrderStates.Done;
+					oi.UpdateOrderState(order);
+				}
 			};
 
 			if(NeedToDelay)
@@ -390,23 +421,34 @@
 				cancelAction();
 		}
 
-		private bool AddOrder(Order o)
+		private ChartActiveOrderInfo GetOrderInfo(Order order, ChartActiveOrderInfo initFrom = null)
 		{
-			if (_chartOrders.Contains(o))
-				return false;
+			bool isNew;
 
-			_chartOrders.Add(o);
-			Orders.Add(o);
+			var oi = _chartOrderInfos.SafeAdd(order, o => new ChartActiveOrderInfo(initFrom), out isNew);
 
-			return true;
+			if (isNew)
+			{
+				oi.UpdateOrderState(order);
+				_activeOrdersElement.Orders.Add(oi);
+				Orders.Add(order);
+			}
+
+			return oi;
 		}
 
 		private bool RemoveOrder(Order o)
 		{
-			var res = _chartOrders.Remove(o);
+			ChartActiveOrderInfo oi;
+
+			if (!_chartOrderInfos.TryGetValue(o, out oi))
+				return false;
+
+			_activeOrdersElement.Orders.Remove(oi);
+			_chartOrderInfos.Remove(o);
 			Orders.Remove(o);
 
-			return res;
+			return true;
 		}
 
 		private void Log(string msg)
@@ -425,16 +467,24 @@
 			return MessageBox.Show(question, "Confirmation", MessageBoxButton.YesNo) == MessageBoxResult.Yes;
 		}
 
-		private static void InitExtensionInfo(Order order)
-		{
-			if (order.ExtensionInfo == null)
-				order.ExtensionInfo = new SynchronizedDictionary<object, object>();
-		}
-
 		private void DelayedAction(Action action, TimeSpan delay, string actionName)
 		{
 			Log($"Action '{actionName}' is delayed for {delay.TotalSeconds:0.##}sec");
 			Task.Delay(delay).ContinueWith(t => Dispatcher.GuiAsync(action));
+		}
+
+		class OrderEx : Order
+		{
+			public OrderEx()
+			{
+				PropertyChanged += (sender, args) =>
+				{
+					if(args.PropertyName != nameof(Description))
+						((INotifyPropertyChangedEx)this).NotifyPropertyChanged(nameof(Description));
+				};
+			}
+
+			public string Description => ToString();
 		}
 	}
 }
