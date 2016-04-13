@@ -303,6 +303,8 @@
 			Log($"RegisterOrder: {order}");
 			var oi = GetOrderInfo(order);
 
+			oi.IsFrozen = true;
+
 			Action regAction = () =>
 			{
 				if (NeedToFail)
@@ -359,6 +361,8 @@
 
 			oiOld.UpdateOrderState(oldOrder);
 
+			oiOld.IsFrozen = oiNew.IsFrozen = true;
+
 			Action moveAction = () =>
 			{
 				if (NeedToFail)
@@ -394,6 +398,8 @@
 			Log($"CancelOrder: {order}");
 
 			var oi = GetOrderInfo(order);
+
+			oi.IsFrozen = true;
 
 			Action cancelAction = () =>
 			{
