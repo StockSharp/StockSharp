@@ -16,7 +16,8 @@ Copyright 2010 by StockSharp, LLC
 namespace SampleIB
 {
 	using System.Windows;
-	using System.Windows.Controls;
+
+	using DevExpress.Xpf.Grid;
 
 	using StockSharp.BusinessEntities;
 	using StockSharp.Messages;
@@ -35,7 +36,7 @@ namespace SampleIB
 			MainWindow.Instance.Trader.CancelOrder(SelectedOrder);
 		}
 
-		private void OrdersDetailsSelectionChanged(object sender, SelectionChangedEventArgs e)
+		private void OrdersDetailsSelectionChanged(object sender, GridSelectionChangedEventArgs e)
 		{
 			var order = SelectedOrder;
 			CancelOrder.IsEnabled = order != null && order.State == OrderStates.Active;
