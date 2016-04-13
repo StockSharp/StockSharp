@@ -38,12 +38,12 @@ namespace StockSharp.Algo.Positions
 		/// <summary>
 		/// The event of new position occurrence in <see cref="IPositionManager.Positions"/>.
 		/// </summary>
-		event Action<KeyValuePair<Tuple<SecurityId, string>, decimal>> NewPosition;
+		event Action<Tuple<SecurityId, string>, decimal> NewPosition;
 
 		/// <summary>
 		/// The event of position change in <see cref="IPositionManager.Positions"/>.
 		/// </summary>
-		event Action<KeyValuePair<Tuple<SecurityId, string>, decimal>> PositionChanged;
+		event Action<Tuple<SecurityId, string>, decimal> PositionChanged;
 
 		/// <summary>
 		/// To null position.

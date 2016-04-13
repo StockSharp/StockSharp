@@ -2257,7 +2257,7 @@ namespace StockSharp.Algo.Strategies
 
 		private void RaiseSlippageChanged()
 		{
-			this.Notify("Slippage");
+			this.Notify(nameof(Slippage));
 			SlippageChanged?.Invoke();
 		}
 
@@ -2265,7 +2265,7 @@ namespace StockSharp.Algo.Strategies
 		{
 			this.AddInfoLog(LocalizedStrings.Str1399Params, PositionManager.Positions.Select(pos => pos.Key + "=" + pos.Value).Join(", "));
 
-			this.Notify("Position");
+			this.Notify(nameof(Position));
 			PositionChanged?.Invoke();
 
 			StatisticManager.AddPosition(CurrentTime, Position);
@@ -2273,13 +2273,13 @@ namespace StockSharp.Algo.Strategies
 
 		private void RaiseCommissionChanged()
 		{
-			this.Notify("Commission");
+			this.Notify(nameof(Commission));
 			CommissionChanged?.Invoke();
 		}
 
 		private void RaisePnLChanged()
 		{
-			this.Notify("PnL");
+			this.Notify(nameof(PnL));
 			PnLChanged?.Invoke();
 
 			StatisticManager.AddPnL(_lastPnlRefreshTime, PnL);
@@ -2287,7 +2287,7 @@ namespace StockSharp.Algo.Strategies
 
 		private void RaiseLatencyChanged()
 		{
-			this.Notify("Latency");
+			this.Notify(nameof(Latency));
 			LatencyChanged?.Invoke();
 		}
 
@@ -2307,7 +2307,7 @@ namespace StockSharp.Algo.Strategies
 		/// <param name="storage">Settings storage.</param>
 		public override void Load(SettingsStorage storage)
 		{
-			var parameters = storage.GetValue<SettingsStorage[]>("Parameters");
+			var parameters = storage.GetValue<SettingsStorage[]>(nameof(Parameters));
 
 			if (parameters == null)
 				return;
@@ -2319,10 +2319,7 @@ namespace StockSharp.Algo.Strategies
 			{
 				var param = dict.TryGetValue(s.GetValue<string>("Name"));
 
-				if (param == null)
-					continue;
-
-				param.Load(s);
+				param?.Load(s);
 			}
 		}
 
@@ -2332,7 +2329,7 @@ namespace StockSharp.Algo.Strategies
 		/// <param name="storage">Settings storage.</param>
 		public override void Save(SettingsStorage storage)
 		{
-			storage.SetValue("Parameters", Parameters.SyncGet(c => c.Select(p => p.Save()).ToArray()));
+			storage.SetValue(nameof(Parameters), Parameters.SyncGet(c => c.Select(p => p.Save()).ToArray()));
 		}
 
 		/// <summary>

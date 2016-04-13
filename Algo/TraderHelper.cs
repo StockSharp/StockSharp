@@ -2428,13 +2428,13 @@ namespace StockSharp.Algo
 				set { throw new NotSupportedException(); }
 			}
 
-			event Action<KeyValuePair<Tuple<SecurityId, string>, decimal>> IPositionManager.NewPosition
+			event Action<Tuple<SecurityId, string>, decimal> IPositionManager.NewPosition
 			{
 				add { }
 				remove { }
 			}
 
-			event Action<KeyValuePair<Tuple<SecurityId, string>, decimal>> IPositionManager.PositionChanged
+			event Action<Tuple<SecurityId, string>, decimal> IPositionManager.PositionChanged
 			{
 				add { }
 				remove { }

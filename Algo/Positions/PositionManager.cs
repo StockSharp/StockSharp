@@ -76,12 +76,12 @@ namespace StockSharp.Algo.Positions
 		/// <summary>
 		/// The event of new position occurrence in <see cref="IPositionManager.Positions"/>.
 		/// </summary>
-		public event Action<KeyValuePair<Tuple<SecurityId, string>, decimal>> NewPosition;
+		public event Action<Tuple<SecurityId, string>, decimal> NewPosition;
 
 		/// <summary>
 		/// The event of position change in <see cref="IPositionManager.Positions"/>.
 		/// </summary>
-		public event Action<KeyValuePair<Tuple<SecurityId, string>, decimal>> PositionChanged;
+		public event Action<Tuple<SecurityId, string>, decimal> PositionChanged;
 
 		/// <summary>
 		/// To null position.
@@ -144,9 +144,9 @@ namespace StockSharp.Algo.Positions
 						}
 
 						if (isNew)
-							NewPosition?.Invoke(new KeyValuePair<Tuple<SecurityId, string>, decimal>(key, Position));
+							NewPosition?.Invoke(key, Position);
 						else
-							PositionChanged?.Invoke(new KeyValuePair<Tuple<SecurityId, string>, decimal>(key, Position));
+							PositionChanged?.Invoke(key, Position);
 
 						return position;
 					}
@@ -169,9 +169,9 @@ namespace StockSharp.Algo.Positions
 						}
 
 						if (isNew)
-							NewPosition?.Invoke(new KeyValuePair<Tuple<SecurityId, string>, decimal>(key, Position));
+							NewPosition?.Invoke(key, Position);
 						else
-							PositionChanged?.Invoke(new KeyValuePair<Tuple<SecurityId, string>, decimal>(key, Position));
+							PositionChanged?.Invoke(key, Position);
 
 						return position;
 					}
