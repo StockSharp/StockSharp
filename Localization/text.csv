@@ -1,3 +1,8 @@
+BuyBlinkColor;Buy blink color;Цвет мерцания Buy
+SellBlinkColor;Sell blink color;Цвет мерцания Sell
+BuyBlinkColorDescr;Blinking color of partially filled Buy order;Цвет мерцания частично исполненной Buy заявки
+SellBlinkColorDescr;Blinking color of partially filled Sell order;Цвет мерцания частично исполненной Sell заявки
+Animation;Animation;Анимация
 ShowFPS;Show FPS stats;Показывать статистику FPS
 ActiveOrders;Active orders;Активные заявки
 BuyPendingColor;Buy pending color;Цвет неактивного Buy ордера
