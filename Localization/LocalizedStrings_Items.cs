@@ -42016,5 +42016,65 @@ namespace StockSharp.Localization
 		/// Open the window to get historical data from Finam website.
 		/// </summary>
 		public static string LoadHistoryDataQuestion => GetString(LoadHistoryDataQuestionKey);
+		
+		/// <summary>
+		/// Clipboard (as csv).
+		/// </summary>
+		public const string ClipboardCsvKey = "ClipboardCsv";
+
+		/// <summary>
+		/// Clipboard (as csv).
+		/// </summary>
+		public static string ClipboardCsv => GetString(ClipboardCsvKey);
+
+		/// <summary>
+		/// Clipboard (as image).
+		/// </summary>
+		public const string ClipboardImageKey = "ClipboardImage";
+
+		/// <summary>
+		/// Clipboard (as image).
+		/// </summary>
+		public static string ClipboardImage => GetString(ClipboardImageKey);
+
+		/// <summary>
+		/// CSV file.
+		/// </summary>
+		public const string CsvFileKey = "CsvFile";
+
+		/// <summary>
+		/// CSV file.
+		/// </summary>
+		public static string CsvFile => GetString(CsvFileKey);
+
+		/// <summary>
+		/// Excel file.
+		/// </summary>
+		public const string ExcelFileKey = "ExcelFile";
+
+		/// <summary>
+		/// Excel file.
+		/// </summary>
+		public static string ExcelFile => GetString(ExcelFileKey);
+
+		/// <summary>
+		/// PNG file.
+		/// </summary>
+		public const string PngFileKey = "PngFile";
+
+		/// <summary>
+		/// PNG file.
+		/// </summary>
+		public static string PngFile => GetString(PngFileKey);
+
+		/// <summary>
+		/// Custom format.
+		/// </summary>
+		public const string CustomExportFormatKey = "CustomExportFormat";
+
+		/// <summary>
+		/// Custom format.
+		/// </summary>
+		public static string CustomExportFormat => GetString(CustomExportFormatKey);
 	}
 }
