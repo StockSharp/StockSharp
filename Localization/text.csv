@@ -4235,7 +4235,7 @@ LoadingVariableErrorParams;Loading variable parameter error: {0}.;Ошибка �
 CancelOnDisconnect;Cancel On Disconnect;Cancel On Disconnect
 CancelOnDisconnectDesc;Heartbeat interval. Uses in Cancel On Disconnect mode.;Интервал оповещения сервера об активности. Используется в режиме Cancel On Disconnect.
 LoadHistoryDataQuestion;Open the window to get historical data from Finam website?;Открыть окно для скачивания исторических данных с сайта Finam-а?
-TimeFrameCandle;Timeframe candle;Таймфре́йм свечи
+TimeFrameCandle;Timeframe candle;Таймфрейм свечи
 TickCandle;Tick candle;Тиковые свечи
 VolumeCandle;Volume candle;Объемные свечи
 RangeCandle;Range candle;Рейндж свечи
@@ -12381,7 +12381,7 @@ DocStr8244;The maximum depth by default which is equal to 20;Максималь�
 DocStr8245;To update {0} and {1};Обновить {0} и {1}
 DocStr8246;To handle a new order;Обработать новую заявку
 DocStr8247;To handle the changed order;Обработать изменившуюсю заявку
-DocStr8248;To upfate the order book;Обновить стакан
+DocStr8248;To update the order book;Обновить стакан
 DocStr8249;To clear the order book;Очистить стакан
 DocStr8250;To get the column type by cell;Получить тип колонки по ячейке
 DocStr8251;Cell;Ячейка
@@ -13041,3 +13041,4 @@ DocStr8926;The own amount of ask (+ stop amount to sale);Собственный 
 DocStr8927;The exchange boards provider;Провайдер биржевых блощадок
 DocStr8928;Gets or sets the text of the currently selected item;Получить или установить текст выбранного элемента
 DocStr8929;Portfolio received;Портфель получен
+
