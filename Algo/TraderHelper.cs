@@ -3514,20 +3514,20 @@ namespace StockSharp.Algo
 		private const double _maxValue = (double)decimal.MaxValue;
 
 		/// <summary>
-		/// To convert <see cref="Double"/> into <see cref="Decimal"/>. If the initial value is <see cref="double.NaN"/> or <see cref="double.IsInfinity"/>, <see langword="null" /> is returned.
+		/// To convert <see cref="double"/> into <see cref="decimal"/>. If the initial value is <see cref="double.NaN"/> or <see cref="double.IsInfinity"/>, <see langword="null" /> is returned.
 		/// </summary>
-		/// <param name="value"><see cref="Double"/> value.</param>
-		/// <returns><see cref="Decimal"/> value.</returns>
+		/// <param name="value"><see cref="double"/> value.</param>
+		/// <returns><see cref="decimal"/> value.</returns>
 		public static decimal? ToDecimal(this double value)
 		{
 			return value.IsInfinity() || value.IsNaN() || value < _minValue || value > _maxValue ? (decimal?)null : (decimal)value;
 		}
 
 		/// <summary>
-		/// To convert <see cref="Single"/> into <see cref="Decimal"/>. If the initial value is <see cref="float.NaN"/> or <see cref="float.IsInfinity"/>, <see langword="null" /> is returned.
+		/// To convert <see cref="float"/> into <see cref="decimal"/>. If the initial value is <see cref="float.NaN"/> or <see cref="float.IsInfinity"/>, <see langword="null" /> is returned.
 		/// </summary>
-		/// <param name="value"><see cref="Single"/> value.</param>
-		/// <returns><see cref="Decimal"/> value.</returns>
+		/// <param name="value"><see cref="float"/> value.</param>
+		/// <returns><see cref="decimal"/> value.</returns>
 		public static decimal? ToDecimal(this float value)
 		{
 			return value.IsInfinity() || value.IsNaN() || value < _minValue || value > _maxValue ? (decimal?)null : (decimal)value;

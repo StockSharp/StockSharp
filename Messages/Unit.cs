@@ -183,9 +183,9 @@ namespace StockSharp.Messages
 		}
 
 		/// <summary>
-		/// Cast <see cref="Decimal"/> object to the type <see cref="Unit"/>.
+		/// Cast <see cref="decimal"/> object to the type <see cref="Unit"/>.
 		/// </summary>
-		/// <param name="value"><see cref="Decimal"/> value.</param>
+		/// <param name="value"><see cref="decimal"/> value.</param>
 		/// <returns>Object <see cref="Unit"/>.</returns>
 		public static implicit operator Unit(decimal value)
 		{
@@ -193,9 +193,9 @@ namespace StockSharp.Messages
 		}
 
 		/// <summary>
-		/// Cast <see cref="Int32"/> object to the type <see cref="Unit"/>.
+		/// Cast <see cref="int"/> object to the type <see cref="Unit"/>.
 		/// </summary>
-		/// <param name="value"><see cref="Int32"/> value.</param>
+		/// <param name="value"><see cref="int"/> value.</param>
 		/// <returns>Object <see cref="Unit"/>.</returns>
 		public static implicit operator Unit(int value)
 		{
@@ -203,10 +203,10 @@ namespace StockSharp.Messages
 		}
 
 		/// <summary>
-		/// Cast object from <see cref="Unit"/> to <see cref="Decimal"/>.
+		/// Cast object from <see cref="Unit"/> to <see cref="decimal"/>.
 		/// </summary>
 		/// <param name="unit">Object <see cref="Unit"/>.</param>
-		/// <returns><see cref="Decimal"/> value.</returns>
+		/// <returns><see cref="decimal"/> value.</returns>
 		public static explicit operator decimal(Unit unit)
 		{
 			if (unit == null)
@@ -229,9 +229,9 @@ namespace StockSharp.Messages
 		}
 
 		/// <summary>
-		/// Cast <see cref="Double"/> object to the type <see cref="Unit"/>.
+		/// Cast <see cref="double"/> object to the type <see cref="Unit"/>.
 		/// </summary>
-		/// <param name="value"><see cref="Double"/> value.</param>
+		/// <param name="value"><see cref="double"/> value.</param>
 		/// <returns>Object <see cref="Unit"/>.</returns>
 		public static implicit operator Unit(double value)
 		{
@@ -239,10 +239,10 @@ namespace StockSharp.Messages
 		}
 
 		/// <summary>
-		/// Cast object from <see cref="Unit"/> to <see cref="Double"/>.
+		/// Cast object from <see cref="Unit"/> to <see cref="double"/>.
 		/// </summary>
 		/// <param name="unit">Object <see cref="Unit"/>.</param>
-		/// <returns><see cref="Double"/> value.</returns>
+		/// <returns><see cref="double"/> value.</returns>
 		public static explicit operator double(Unit unit)
 		{
 			return (double)(decimal)unit;
@@ -674,9 +674,9 @@ namespace StockSharp.Messages
 	public static class UnitHelper
 	{
 		/// <summary>
-		/// Convert the <see cref="Int32"/> to percents.
+		/// Convert the <see cref="int"/> to percents.
 		/// </summary>
-		/// <param name="value"><see cref="Int32"/> value.</param>
+		/// <param name="value"><see cref="int"/> value.</param>
 		/// <returns>Percents.</returns>
 		public static Unit Percents(this int value)
 		{
@@ -684,9 +684,9 @@ namespace StockSharp.Messages
 		}
 
 		/// <summary>
-		/// Convert the <see cref="Double"/> to percents.
+		/// Convert the <see cref="double"/> to percents.
 		/// </summary>
-		/// <param name="value"><see cref="Double"/> value.</param>
+		/// <param name="value"><see cref="double"/> value.</param>
 		/// <returns>Percents.</returns>
 		public static Unit Percents(this double value)
 		{
@@ -694,9 +694,9 @@ namespace StockSharp.Messages
 		}
 
 		/// <summary>
-		/// Convert the <see cref="Decimal"/> to percents.
+		/// Convert the <see cref="decimal"/> to percents.
 		/// </summary>
-		/// <param name="value"><see cref="Decimal"/> value.</param>
+		/// <param name="value"><see cref="decimal"/> value.</param>
 		/// <returns>Percents.</returns>
 		public static Unit Percents(this decimal value)
 		{

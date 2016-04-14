@@ -30,7 +30,7 @@ namespace StockSharp.Algo.Indicators
 	public abstract class BaseIndicator : Cloneable<IIndicator>, IIndicator
 	{
 		/// <summary>
-		/// To initialize <see cref="BaseIndicator"/> which works with the <see cref="Decimal"/> data type.
+		/// To initialize <see cref="BaseIndicator"/>.
 		/// </summary>
 		protected BaseIndicator()
 		{

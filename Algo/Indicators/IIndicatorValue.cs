@@ -277,7 +277,7 @@ namespace StockSharp.Algo.Indicators
 	}
 
 	/// <summary>
-	/// The indicator value, operating with data type <see cref="Decimal"/>.
+	/// The indicator value, operating with data type <see cref="decimal"/>.
 	/// </summary>
 	public class DecimalIndicatorValue : SingleIndicatorValue<decimal>
 	{
