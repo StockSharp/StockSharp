@@ -181,15 +181,13 @@
 			                   SecuritySelected="SecurityPicker_OnSecuritySelected" />
 
 			<sx:MyTradeGrid x:Name="TradeGrid"
-			                Grid.Row="2" Grid.Column="0"
-			                HorizontalScrollBarVisibility="Auto" />
+			                Grid.Row="2" Grid.Column="0" />
 
 			<GridSplitter Grid.Column="1" Grid.Row="2" Width="3"
 			              Background="LightSteelBlue"
 			              VerticalAlignment="Stretch" HorizontalAlignment="Center" />
 
 			<sx:OrderGrid x:Name="OrderGrid" Grid.Row="2" Grid.Column="2"
-			              HorizontalScrollBarVisibility="Auto"
 			              OrderRegistering="OrderGrid_OrderRegistering" OrderCanceling="OrderGrid_OnOrderCanceling"
 			              OrderReRegistering="OrderGrid_OnOrderReRegistering" />
 

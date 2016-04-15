@@ -26,6 +26,8 @@ namespace SampleSMA
 	using System.Windows.Controls;
 	using System.Windows.Media;
 
+	using DevExpress.Xpf.Grid;
+
 	using MoreLinq;
 
 	using Ookii.Dialogs.Wpf;
@@ -71,7 +73,7 @@ namespace SampleSMA
 			Path.Text = QuikTerminal.GetDefaultPath();
 		}
 
-		private void OrdersOrderSelected(object sender, SelectionChangedEventArgs e)
+		private void OrdersOrderSelected(object sender, GridSelectionChangedEventArgs gridSelectionChangedEventArgs)
 		{
 			CancelOrders.IsEnabled = !Orders.SelectedOrders.IsEmpty();
 		}
