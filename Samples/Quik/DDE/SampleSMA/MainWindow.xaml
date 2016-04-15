@@ -87,7 +87,7 @@
 			</Grid.ColumnDefinitions>
 
 			<xaml:MyTradeGrid x:Name="Trades" Grid.Column="0" />
-			<xaml:OrderGrid x:Name="Orders" Grid.Column="1" SelectionChanged="OrdersOrderSelected" />
+			<xaml:OrderGrid x:Name="Orders" Grid.Column="1" SelectedOrderChanged="OrdersOrderSelected" />
 		</Grid>
     </Grid>
 </Window>

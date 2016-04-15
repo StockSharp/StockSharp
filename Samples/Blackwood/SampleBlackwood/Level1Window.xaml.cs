@@ -26,13 +26,14 @@ namespace SampleBlackwood
 		{
 			InitializeComponent();
 
-			Level1Grid.Columns[0].Visible = true;
-			Level1Grid.Columns[1].Visible = true;
+			Level1Grid.ColumnVisibility[0] = true;
+			Level1Grid.ColumnVisibility[1] = true;
 
-			Level1Grid.Columns[3].Visible = false;
-			Level1Grid.Columns[4].Visible = false;
+			Level1Grid.ColumnVisibility[3] = false;
+			Level1Grid.ColumnVisibility[4] = false;
 
-			Level1Grid.Columns.Skip(11).ForEach(c => c.Visible = false);
+			for (int i = 11; i < Level1Grid.ColumnVisibility.Count; i++)
+				Level1Grid.ColumnVisibility[i] = false;
 		}
 	}
 }

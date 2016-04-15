@@ -135,7 +135,8 @@ namespace SampleTwime
 			{
 				var wnd = _quotesWindows.TryGetValue(depth.Security);
 
-				wnd?.DepthCtrl.UpdateDepth(depth);
+				if (wnd != null)
+					wnd.DepthCtrl.UpdateDepthProperty = depth;
 			}
 		}
 	}

@@ -23,8 +23,6 @@ namespace SampleSmartSMA
 	using System.Windows;
 	using System.Windows.Media;
 
-	using DevExpress.Xpf.Grid;
-
 	using MoreLinq;
 
 	using Ecng.Collections;
@@ -69,7 +67,7 @@ namespace SampleSmartSMA
 			_chart.Areas.Add(_area);
 		}
 
-		private void OrdersOrderSelected(object sender, GridSelectionChangedEventArgs e)
+		private void OrdersOrderSelected()
 		{
 			CancelOrders.IsEnabled = !_orders.SelectedOrders.IsEmpty();
 		}

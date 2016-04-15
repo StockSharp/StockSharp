@@ -97,7 +97,7 @@
             </Grid.RowDefinitions>
 
 			<sx:MyTradeGrid x:Name="_trades" Grid.Column="0" />
-			<sx:OrderGrid x:Name="_orders" Grid.Column="1" SelectionChanged="OrdersOrderSelected" />
+			<sx:OrderGrid x:Name="_orders" Grid.Column="1" SelectedOrderChanged="OrdersOrderSelected" />
             
             <sx:LogControl x:Name="LogControl" Grid.Row="1" Grid.ColumnSpan="2"/>
 		</Grid>

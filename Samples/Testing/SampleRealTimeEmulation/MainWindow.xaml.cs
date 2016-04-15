@@ -206,7 +206,7 @@ namespace SampleRealTimeEmulation
 			if (depth == null)
 				return;
 
-			DepthControl.UpdateDepth(depth);
+			DepthControl.UpdateDepthProperty = depth;
 		}
 
 		private void OrdersFailed(IEnumerable<OrderFail> fails)

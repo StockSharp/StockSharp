@@ -10,7 +10,7 @@
 			<RowDefinition Height="Auto" />
 		</Grid.RowDefinitions>
 
-        <xaml:OrderConditionalGrid x:Name="OrderGrid" x:FieldModifier="public" SelectionChanged="OrdersDetailsSelectionChanged"/>
+        <xaml:OrderConditionalGrid x:Name="OrderGrid" x:FieldModifier="public" SelectedOrderChanged="OrdersDetailsSelectionChanged"/>
         
         <Button x:Name="CancelOrder" Grid.Row="1" Content="{x:Static loc:LocalizedStrings.XamlStr423}" Width="100" HorizontalAlignment="Right" IsEnabled="False" Click="CancelOrderClick" />
 	</Grid>
