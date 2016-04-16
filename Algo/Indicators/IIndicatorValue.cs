@@ -27,7 +27,7 @@ namespace StockSharp.Algo.Indicators
 	using StockSharp.Localization;
 
 	/// <summary>
-	/// The indicator input value, based on which it will renew its value, as well as value, containing result of indicator calculation.
+	/// The indicator value, based on which it will renew its value, as well as value, containing result of indicator calculation.
 	/// </summary>
 	public interface IIndicatorValue : IComparable<IIndicatorValue>, IComparable
 	{
