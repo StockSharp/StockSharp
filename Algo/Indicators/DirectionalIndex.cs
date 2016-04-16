@@ -121,7 +121,9 @@ namespace StockSharp.Algo.Indicators
 			var diSum = plus + minus;
 			var diDiff = Math.Abs(plus - minus);
 
-			return value.SetValue(this, diSum != 0m ? (100 * diDiff / diSum) : 0m);
+			value.InnerValues.Add(this, value.SetValue(this, diSum != 0m ? (100 * diDiff / diSum) : 0m));
+
+			return value;
 		}
 
 		/// <summary>
