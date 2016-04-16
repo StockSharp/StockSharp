@@ -28,8 +28,8 @@ namespace StockSharp.Algo.Indicators
 	/// <remarks>
 	/// http://ta.mql4.com/indicators/oscillators/ichimoku.
 	/// </remarks>
-	[DisplayName("Ichimoku")]
-	[DescriptionLoc(LocalizedStrings.Str763Key)]
+	[DisplayNameLoc(LocalizedStrings.Str763Key)]
+	[DescriptionLoc(LocalizedStrings.Str763Key, true)]
 	public class Ichimoku : BaseComplexIndicator
 	{
 		/// <summary>
@@ -65,7 +65,7 @@ namespace StockSharp.Algo.Indicators
 		/// </summary>
 		[ExpandableObject]
 		[DisplayName("Tenkan")]
-		[DescriptionLoc(LocalizedStrings.Str764Key)]
+		[DescriptionLoc(LocalizedStrings.Str764Key, true)]
 		[CategoryLoc(LocalizedStrings.GeneralKey)]
 		public IchimokuLine Tenkan { get; }
 
@@ -74,7 +74,7 @@ namespace StockSharp.Algo.Indicators
 		/// </summary>
 		[ExpandableObject]
 		[DisplayName("Kijun")]
-		[DescriptionLoc(LocalizedStrings.Str765Key)]
+		[DescriptionLoc(LocalizedStrings.Str765Key, true)]
 		[CategoryLoc(LocalizedStrings.GeneralKey)]
 		public IchimokuLine Kijun { get; }
 
@@ -83,7 +83,7 @@ namespace StockSharp.Algo.Indicators
 		/// </summary>
 		[ExpandableObject]
 		[DisplayName("SenkouA")]
-		[DescriptionLoc(LocalizedStrings.Str766Key)]
+		[DescriptionLoc(LocalizedStrings.Str766Key, true)]
 		[CategoryLoc(LocalizedStrings.GeneralKey)]
 		public IchimokuSenkouALine SenkouA { get; private set; }
 
@@ -92,7 +92,7 @@ namespace StockSharp.Algo.Indicators
 		/// </summary>
 		[ExpandableObject]
 		[DisplayName("SenkouB")]
-		[DescriptionLoc(LocalizedStrings.Str767Key)]
+		[DescriptionLoc(LocalizedStrings.Str767Key, true)]
 		[CategoryLoc(LocalizedStrings.GeneralKey)]
 		public IchimokuSenkouBLine SenkouB { get; private set; }
 
@@ -101,7 +101,7 @@ namespace StockSharp.Algo.Indicators
 		/// </summary>
 		[ExpandableObject]
 		[DisplayName("Chinkou")]
-		[DescriptionLoc(LocalizedStrings.Str768Key)]
+		[DescriptionLoc(LocalizedStrings.Str768Key, true)]
 		[CategoryLoc(LocalizedStrings.GeneralKey)]
 		public IchimokuChinkouLine Chinkou { get; private set; }
 	}

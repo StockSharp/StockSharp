@@ -7208,62 +7208,62 @@ namespace StockSharp.Localization
 		public static string Str762 => GetString(Str762Key);
 
 		/// <summary>
-		/// Ichimoku.
+		/// Ichimoku
 		/// </summary>
 		public const string Str763Key = "Str763";
 
 		/// <summary>
-		/// Ichimoku.
+		/// Ichimoku
 		/// </summary>
 		public static string Str763 => GetString(Str763Key);
 
 		/// <summary>
-		/// Tenkan line.
+		/// Tenkan line
 		/// </summary>
 		public const string Str764Key = "Str764";
 
 		/// <summary>
-		/// Tenkan line.
+		/// Tenkan line
 		/// </summary>
 		public static string Str764 => GetString(Str764Key);
 
 		/// <summary>
-		/// Kijun line.
+		/// Kijun line
 		/// </summary>
 		public const string Str765Key = "Str765";
 
 		/// <summary>
-		/// Kijun line.
+		/// Kijun line
 		/// </summary>
 		public static string Str765 => GetString(Str765Key);
 
 		/// <summary>
-		/// Senkou Span A line.
+		/// Senkou Span A line
 		/// </summary>
 		public const string Str766Key = "Str766";
 
 		/// <summary>
-		/// Senkou Span A line.
+		/// Senkou Span A line
 		/// </summary>
 		public static string Str766 => GetString(Str766Key);
 
 		/// <summary>
-		/// Senkou Span B line.
+		/// Senkou Span B line
 		/// </summary>
 		public const string Str767Key = "Str767";
 
 		/// <summary>
-		/// Senkou Span B line.
+		/// Senkou Span B line
 		/// </summary>
 		public static string Str767 => GetString(Str767Key);
 
 		/// <summary>
-		/// Chinkou line.
+		/// Chinkou line
 		/// </summary>
 		public const string Str768Key = "Str768";
 
 		/// <summary>
-		/// Chinkou line.
+		/// Chinkou line
 		/// </summary>
 		public static string Str768 => GetString(Str768Key);
 
@@ -7948,42 +7948,42 @@ namespace StockSharp.Localization
 		public static string Str836 => GetString(Str836Key);
 
 		/// <summary>
-		/// Alligator.
+		/// Alligator
 		/// </summary>
 		public const string Str837Key = "Str837";
 
 		/// <summary>
-		/// Alligator.
+		/// Alligator
 		/// </summary>
 		public static string Str837 => GetString(Str837Key);
 
 		/// <summary>
-		/// Jaw.
+		/// Jaw
 		/// </summary>
 		public const string Str838Key = "Str838";
 
 		/// <summary>
-		/// Jaw.
+		/// Jaw
 		/// </summary>
 		public static string Str838 => GetString(Str838Key);
 
 		/// <summary>
-		/// Teeth.
+		/// Teeth
 		/// </summary>
 		public const string Str839Key = "Str839";
 
 		/// <summary>
-		/// Teeth.
+		/// Teeth
 		/// </summary>
 		public static string Str839 => GetString(Str839Key);
 
 		/// <summary>
-		/// Lips.
+		/// Lips
 		/// </summary>
 		public const string Str840Key = "Str840";
 
 		/// <summary>
-		/// Lips.
+		/// Lips
 		/// </summary>
 		public static string Str840 => GetString(Str840Key);
 
@@ -8038,44 +8038,24 @@ namespace StockSharp.Localization
 		public static string Str845 => GetString(Str845Key);
 
 		/// <summary>
-		/// Up fractal
+		/// Fractal up
 		/// </summary>
 		public const string Str846Key = "Str846";
 
 		/// <summary>
-		/// Up fractal
+		/// Fractal up
 		/// </summary>
 		public static string Str846 => GetString(Str846Key);
 
 		/// <summary>
-		/// Up fractal.
-		/// </summary>
-		public const string Str847Key = "Str847";
-
-		/// <summary>
-		/// Up fractal.
-		/// </summary>
-		public static string Str847 => GetString(Str847Key);
-
-		/// <summary>
-		/// Down fractal
+		/// Fractal down
 		/// </summary>
 		public const string Str848Key = "Str848";
 
 		/// <summary>
-		/// Down fractal
+		/// Fractal down
 		/// </summary>
 		public static string Str848 => GetString(Str848Key);
-
-		/// <summary>
-		/// Down fractal.
-		/// </summary>
-		public const string Str849Key = "Str849";
-
-		/// <summary>
-		/// Down fractal.
-		/// </summary>
-		public static string Str849 => GetString(Str849Key);
 
 		/// <summary>
 		/// Gator oscillator.

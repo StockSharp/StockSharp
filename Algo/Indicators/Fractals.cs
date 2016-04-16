@@ -102,7 +102,7 @@ namespace StockSharp.Algo.Indicators
 		/// </summary>
 		[ExpandableObject]
 		[DisplayNameLoc(LocalizedStrings.Str846Key)]
-		[DescriptionLoc(LocalizedStrings.Str847Key)]
+		[DescriptionLoc(LocalizedStrings.Str846Key, true)]
 		[CategoryLoc(LocalizedStrings.GeneralKey)]
 		public FractalPart Up { get; }
 
@@ -111,7 +111,7 @@ namespace StockSharp.Algo.Indicators
 		/// </summary>
 		[ExpandableObject]
 		[DisplayNameLoc(LocalizedStrings.Str848Key)]
-		[DescriptionLoc(LocalizedStrings.Str849Key)]
+		[DescriptionLoc(LocalizedStrings.Str848Key, true)]
 		[CategoryLoc(LocalizedStrings.GeneralKey)]
 		public FractalPart Down { get; }
 

@@ -1,4 +1,4 @@
-BuyBlinkColor;Buy blink color;Цвет мерцания Buy
+﻿BuyBlinkColor;Buy blink color;Цвет мерцания Buy
 SellBlinkColor;Sell blink color;Цвет мерцания Sell
 BuyBlinkColorDescr;Blinking color of partially filled Buy order;Цвет мерцания частично исполненной Buy заявки
 SellBlinkColorDescr;Blinking color of partially filled Sell order;Цвет мерцания частично исполненной Sell заявки
@@ -722,12 +722,12 @@ Str759;Chande Momentum Oscillator.;Осциллятор ценовых мом�
 Str760;Commodity Channel Index.;Индекс товарного канала.
 Str761;Price oscillator without trend.;Бестрендовый ценовой осциллятор.
 Str762;Welles Wilder Directional Movement Index.;Индекса направленного движения Welles Wilder.
-Str763;Ichimoku.;Ишимоку.
-Str764;Tenkan line.;Линия Tenkan.
-Str765;Kijun line.;Линия Kijun.
-Str766;Senkou Span A line.;Линия Senkou Span A.
-Str767;Senkou Span B line.;Линия Senkou Span B.
-Str768;Chinkou line.;Линия Chinkou.
+Str763;Ichimoku;Ишимоку
+Str764;Tenkan line;Линия Tenkan
+Str765;Kijun line;Линия Kijun
+Str766;Senkou (A) line;Линия Senkou (A)
+Str767;Senkou (B) line;Линия Senkou (B)
+Str768;Chinkou line;Линия Chinkou
 Str769;Momentum.;Моментум.
 MoneyFlowIndex;Money Flow Index.;Индекс денежных потоков.
 Str770;Relative Strength Index.;Индекс относительной силы.
@@ -796,19 +796,17 @@ Str833;Percentage change;Процент изменения
 Str834;Percentage change. Specified in 0 to 1 range.;Процент изменения. Указывается в диапазоне от 0 до 1.
 Str835;Acceleration / Decelration Indicator.;Индикатор Замедления / Ускорения.
 Str836;Awesome Oscillator.;Чудесный осцилятор.
-Str837;Alligator.;Аллигатор.
-Str838;Jaw.;Челюсть.
-Str839;Teeth.;Зубы.
-Str840;Lips.;Губы.
+Str837;Alligator;Аллигатор
+Str838;Jaw;Челюсть
+Str839;Teeth;Зубы
+Str840;Lips;Губы
 Str841;Shift;Сдвиг
 Str842;Shift to the future.;Сдвиг в будущее.
 Str843;Median price;Медианная цена
 Str844;Fractals.;Фракталы.
 Str845;Indicator length must be an odd number.;Длина индикатора должна быть нечетным числом.
-Str846;Up fractal;Фрактал вверх
-Str847;Up fractal.;Фрактал вверх.
-Str848;Down fractal;Фрактал вниз
-Str849;Down fractal.;Фрактал вниз.
+Str846;Fractal up;Фрактал вверх
+Str848;Fractal down;Фрактал вниз
 Str850;Gator oscillator.;Gator осцилятор.
 Str851;Top histogram.;Верхняя гистограмма.
 Str852;Lower histogram.;Нижняя гистограмма.
