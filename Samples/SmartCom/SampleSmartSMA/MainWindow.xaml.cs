@@ -16,7 +16,6 @@ Copyright 2010 by StockSharp, LLC
 namespace SampleSmartSMA
 {
 	using System;
-	using System.Collections.Generic;
 	using System.ComponentModel;
 	using System.Diagnostics;
 	using System.Linq;
@@ -315,12 +314,15 @@ namespace SampleSmartSMA
 			var longValue = candle.State == CandleStates.Finished ? _strategy.LongSma.Process(candle) : null;
 			var shortValue = candle.State == CandleStates.Finished ? _strategy.ShortSma.Process(candle) : null;
 
-			_chart.Draw(candle.OpenTime, new Dictionary<IChartElement, object>
-			{
-				{ _candlesElem, candle },
-				{ _longMaElem, longValue },
-				{ _shortMaElem, shortValue },
-			});
+			var chartData = new ChartDrawData();
+
+			chartData
+				.Group(candle.OpenTime)
+					.Add(_candlesElem, candle)
+					.Add(_longMaElem, longValue)
+					.Add(_shortMaElem, shortValue);
+
+			_chart.Draw(chartData);
 		}
 
 		private void ReportClick(object sender, RoutedEventArgs e)

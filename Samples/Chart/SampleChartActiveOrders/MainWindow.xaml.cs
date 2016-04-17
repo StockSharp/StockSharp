@@ -14,8 +14,6 @@
 	using Ecng.Configuration;
 	using Ecng.ComponentModel;
 
-	using MoreLinq;
-
 	using StockSharp.Algo.Candles;
 	using StockSharp.Algo.Storages;
 	using StockSharp.BusinessEntities;
@@ -173,6 +171,7 @@
 		private void ChartUpdateTimerOnTick(object sender, EventArgs eventArgs)
 		{
 			TimeFrameCandle[] candlesToUpdate;
+
 			lock (_updatedCandles.SyncRoot)
 			{
 				candlesToUpdate = _updatedCandles.OrderBy(p => p.Key).Select(p => p.Value).ToArray();
@@ -182,13 +181,14 @@
 			var lastCandle = _allCandles.LastOrDefault();
 			_allCandles.AddRange(candlesToUpdate.Where(c => lastCandle == null || c.OpenTime != lastCandle.OpenTime));
 
-			candlesToUpdate.ForEach(c =>
+			var data = new ChartDrawData();
+
+			foreach (var candle in candlesToUpdate)
 			{
-				Chart.Draw(c.OpenTime, new Dictionary<IChartElement, object>
-				{
-					{ _candleElement, c },
-				});
-			});
+				data.Group(candle.OpenTime).Add(_candleElement, candle);
+			}
+
+			Chart.Draw(data);
 		}
 
 		private void AppendTick(Security security, ExecutionMessage tick)
@@ -479,8 +479,8 @@
 			{
 				PropertyChanged += (sender, args) =>
 				{
-					if(args.PropertyName != nameof(Description))
-						((INotifyPropertyChangedEx)this).NotifyPropertyChanged(nameof(Description));
+					if (args.PropertyName != nameof(Description))
+						NotifyPropertyChanged(nameof(Description));
 				};
 			}
 

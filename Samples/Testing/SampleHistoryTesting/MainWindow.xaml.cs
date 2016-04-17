@@ -106,7 +106,6 @@ namespace SampleHistoryTesting
 		private readonly List<ProgressBar> _progressBars = new List<ProgressBar>();
 		private readonly List<CheckBox> _checkBoxes = new List<CheckBox>();
 		private readonly List<HistoryEmulationConnector> _connectors = new List<HistoryEmulationConnector>();
-		private readonly BufferedChart _bufferedChart;
 		
 		private DateTime _startEmulationTime;
 		private ChartCandleElement _candlesElem;
@@ -122,8 +121,6 @@ namespace SampleHistoryTesting
 		public MainWindow()
 		{
 			InitializeComponent();
-
-			_bufferedChart = new BufferedChart(Chart);
 
 			HistoryPath.Folder = @"..\..\..\HistoryData\".ToFullPath();
 
@@ -409,7 +406,7 @@ namespace SampleHistoryTesting
 					ShowAxisMarker = false,
 					FullTitle = _shortMa.ToString()
 				};
-				_bufferedChart.AddElement(_area, _shortElem);
+				Chart.AddElement(_area, _shortElem);
 
 				_longMa = new SimpleMovingAverage { Length = 80 };
 				_longElem = new ChartIndicatorElement
@@ -417,10 +414,10 @@ namespace SampleHistoryTesting
 					ShowAxisMarker = false,
 					FullTitle = _longMa.ToString()
 				};
-				_bufferedChart.AddElement(_area, _longElem);
+				Chart.AddElement(_area, _longElem);
 
 				// create strategy based on 80 5-min и 10 5-min
-				var strategy = new SmaStrategy(_bufferedChart, _candlesElem, _tradesElem, _shortMa, _shortElem, _longMa, _longElem, candleManager, series)
+				var strategy = new SmaStrategy(Chart, _candlesElem, _tradesElem, _shortMa, _shortElem, _longMa, _longElem, candleManager, series)
 				{
 					Volume = 1,
 					Portfolio = portfolio,
@@ -649,18 +646,18 @@ namespace SampleHistoryTesting
 
 		private void InitChart()
 		{
-			_bufferedChart.ClearAreas();
+			Chart.ClearAreas();
 			Curve.Clear();
 			PositionCurve.Clear();
 
 			_area = new ChartArea();
-			_bufferedChart.AddArea(_area);
+			Chart.AddArea(_area);
 
 			_candlesElem = new ChartCandleElement { ShowAxisMarker = false };
-			_bufferedChart.AddElement(_area, _candlesElem);
+			Chart.AddElement(_area, _candlesElem);
 
 			_tradesElem = new ChartTradeElement { FullTitle = LocalizedStrings.Str985 };
-			_bufferedChart.AddElement(_area, _tradesElem);
+			Chart.AddElement(_area, _tradesElem);
 		}
 
 		private void SetIsEnabled(bool started)
@@ -675,7 +672,7 @@ namespace SampleHistoryTesting
 					checkBox.IsEnabled = !started;
 				}
 
-				_bufferedChart.IsAutoRange = started;
+				Chart.IsAutoRange = started;
 			});
 		}
 	}

@@ -16,7 +16,6 @@ Copyright 2010 by StockSharp, LLC
 namespace SampleChart
 {
 	using System;
-	using System.Collections.Generic;
 	using System.Linq;
 	using System.Threading.Tasks;
 	using System.Windows;
@@ -26,8 +25,6 @@ namespace SampleChart
 	using Ecng.Collections;
 	using Ecng.Common;
 	using Ecng.Xaml;
-
-	using MoreLinq;
 
 	using StockSharp.Algo;
 	using StockSharp.Algo.Candles;
@@ -50,11 +47,11 @@ namespace SampleChart
 		private readonly SynchronizedDictionary<DateTimeOffset, TimeFrameCandle> _updatedCandles = new SynchronizedDictionary<DateTimeOffset, TimeFrameCandle>();
 		private readonly CachedSynchronizedList<TimeFrameCandle> _allCandles = new CachedSynchronizedList<TimeFrameCandle>();
 		private decimal _lastPrice;
-		const decimal PriceStep = 10m;
+		private const decimal _priceStep = 10m;
 		private Security _security = new Security
 		{
 			Id = "RIZ2@FORTS",
-			PriceStep = PriceStep,
+			PriceStep = _priceStep,
 			Board = ExchangeBoard.Forts
 		};
 
@@ -111,19 +108,17 @@ namespace SampleChart
 
 		private void Chart_OnSubscribeIndicatorElement(ChartIndicatorElement element, CandleSeries series, IIndicator indicator)
 		{
-			var values = _allCandles.Cache
-				.Select(candle =>
-				{
-					if (candle.State != CandleStates.Finished)
-						candle.State = CandleStates.Finished;
+			var chartData = new ChartDrawData();
 
-					return new RefPair<DateTimeOffset, IDictionary<IChartElement, object>>(candle.OpenTime, new Dictionary<IChartElement, object>
-					{
-						{ element, indicator.Process(candle) }
-					});
-				});
+			foreach (var candle in _allCandles.Cache)
+			{
+				if (candle.State != CandleStates.Finished)
+					candle.State = CandleStates.Finished;
 
-			Chart.Draw(values);
+				chartData.Group(candle.OpenTime).Add(element, indicator.Process(candle));
+			}
+
+			Chart.Draw(chartData);
 		}
 
 		private void InitCharts()
@@ -168,7 +163,7 @@ namespace SampleChart
 			_security = new Security
 			{
 				Id = SecurityId.Text,
-				PriceStep = PriceStep,
+				PriceStep = _priceStep,
 				Board = ExchangeBoard.GetBoard(id.BoardCode)
 			};
 
@@ -228,7 +223,7 @@ namespace SampleChart
 		{
 			if (IsRealtime.IsChecked == true && _lastPrice != 0m)
 			{
-				var step = PriceStep;
+				var step = _priceStep;
 				var price = Round(_lastPrice + (decimal)((RandomGen.GetDouble() - 0.5) * 5 * (double) step), step);
 				AppendTick(_security, new ExecutionMessage
 				{
@@ -250,13 +245,14 @@ namespace SampleChart
 			var lastCandle = _allCandles.LastOrDefault();
 			_allCandles.AddRange(candlesToUpdate.Where(c => lastCandle == null || c.OpenTime != lastCandle.OpenTime));
 
-			candlesToUpdate.ForEach(c =>
+			var chartData = new ChartDrawData();
+
+			foreach (var candle in candlesToUpdate)
 			{
-				Chart.Draw(c.OpenTime, new Dictionary<IChartElement, object>
-				{
-					{ _candleElement1, c },
-				});
-			});
+				chartData.Group(candle.OpenTime).Add(_candleElement1, candle);
+			}
+
+			Chart.Draw(chartData);
 		}
 
 		private void AppendTick(Security security, ExecutionMessage tick)

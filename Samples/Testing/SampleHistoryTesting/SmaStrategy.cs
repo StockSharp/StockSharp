@@ -136,15 +136,16 @@ namespace SampleHistoryTesting
 			var trade = _myTrades.FirstOrDefault();
 			_myTrades.Clear();
 
-			var dict = new Dictionary<IChartElement, object>
-			{
-				{ _candlesElem, candle },
-				{ _shortElem, shortValue },
-				{ _longElem, longValue },
-				{ _tradesElem, trade }
-			};
+			var data = new ChartDrawData();
 
-			_chart.Draw(candle.OpenTime, dict);
+			data
+				.Group(candle.OpenTime)
+					.Add(_candlesElem, candle)
+					.Add(_shortElem, shortValue)
+					.Add(_longElem, longValue)
+					.Add(_tradesElem, trade);
+
+			_chart.Draw(data);
 		}
 	}
 }

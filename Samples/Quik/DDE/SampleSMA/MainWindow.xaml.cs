@@ -299,12 +299,15 @@ namespace SampleSMA
 			var longValue = candle.State == CandleStates.Finished ? _strategy.LongSma.Process(candle) : null;
 			var shortValue = candle.State == CandleStates.Finished ? _strategy.ShortSma.Process(candle) : null;
 
-			Chart.Draw(candle.OpenTime, new Dictionary<IChartElement, object>
-			{
-				{ _candlesElem, candle },
-				{ _longMaElem, longValue },
-				{ _shortMaElem, shortValue },
-			});
+			var chartData = new ChartDrawData();
+
+			chartData
+				.Group(candle.OpenTime)
+					.Add(_candlesElem, candle)
+					.Add(_longMaElem, longValue)
+					.Add(_shortMaElem, shortValue);
+
+			Chart.Draw(chartData);
 		}
 
 		private void ReportClick(object sender, RoutedEventArgs e)

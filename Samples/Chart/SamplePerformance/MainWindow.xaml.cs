@@ -39,7 +39,6 @@ namespace SamplePerformance
 	using StockSharp.Localization;
 	using StockSharp.Messages;
 	using StockSharp.Xaml.Charting;
-	using StockSharp.Xaml.Charting.IndicatorPainters;
 
 	public partial class MainWindow
 	{
@@ -194,22 +193,23 @@ namespace SamplePerformance
 
 				for (var i = 0; i < _candles.Count; i += CandlesPacketSize)
 				{
+					var data = new ChartDrawData();
+
 					var candles = _candles.GetRange(i, Math.Min(CandlesPacketSize, _candles.Count - i)).Select(c => c.ToCandle(TFSpan));
 
-					Chart.Draw(candles.Select(c =>
+					foreach (var candle in candles)
 					{
-						c.State = CandleStates.Finished;
+						candle.State = CandleStates.Finished;
 
-						var dict = (IDictionary<IChartElement, object>)new Dictionary<IChartElement, object>
-						{
-							{ _candleElement, c}
-						};
+						var group = data.Group(candle.OpenTime);
 
-						if(_indicatorElement != null)
-							dict.Add(_indicatorElement, _indicator.Process((double) c.ClosePrice));
+						group.Add(_candleElement, candle);
 
-						return RefTuple.Create(c.OpenTime, dict);
-					}).ToArray());
+						if (_indicatorElement != null)
+							group.Add(_indicatorElement, _indicator.Process((double)candle.ClosePrice));
+					}
+
+					Chart.Draw(data);
 				}
 			})
 			.ContinueWith(t =>
@@ -270,16 +270,15 @@ namespace SamplePerformance
 
 		private void DrawCandle(TimeFrameCandle candle)
 		{
-			var dict = new Dictionary<IChartElement, object>
-			{
-				{ _candleElement, candle },
-			};
+			var data = new ChartDrawData();
+			var group = data.Group(candle.OpenTime);
 
-			if(_indicatorElement != null)
-				dict.Add(_indicatorElement, _indicator.Process((double) candle.ClosePrice));
+			group.Add(_candleElement, candle);
 
+			if (_indicatorElement != null)
+				group.Add(_indicatorElement, _indicator.Process((double)candle.ClosePrice));
 
-			Chart.Draw(candle.OpenTime, dict);
+			Chart.Draw(data);
 		}
 
 		private void AppendTick(ExecutionMessage tick)
