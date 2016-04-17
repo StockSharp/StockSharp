@@ -60,8 +60,8 @@ namespace StockSharp.Algo.Indicators
 		/// Initializes a new instance of the <see cref="Fractals"/>.
 		/// </summary>
 		/// <param name="length">Period length.</param>
-		/// <param name="up">Up fractal.</param>
-		/// <param name="down">Down fractal.</param>
+		/// <param name="up">Fractal up.</param>
+		/// <param name="down">Fractal down.</param>
 		public Fractals(int length, FractalPart up, FractalPart down)
 			: base(up, down)
 		{
@@ -98,7 +98,7 @@ namespace StockSharp.Algo.Indicators
 		public override bool IsFormed => _buffer.Count >= Length && base.IsFormed;
 
 		/// <summary>
-		/// Up fractal.
+		/// Fractal up.
 		/// </summary>
 		[ExpandableObject]
 		[DisplayNameLoc(LocalizedStrings.Str846Key)]
@@ -107,7 +107,7 @@ namespace StockSharp.Algo.Indicators
 		public FractalPart Up { get; }
 
 		/// <summary>
-		/// Down fractal.
+		/// Fractal down.
 		/// </summary>
 		[ExpandableObject]
 		[DisplayNameLoc(LocalizedStrings.Str848Key)]

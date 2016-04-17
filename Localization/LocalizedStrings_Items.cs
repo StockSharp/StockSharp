@@ -7238,22 +7238,22 @@ namespace StockSharp.Localization
 		public static string Str765 => GetString(Str765Key);
 
 		/// <summary>
-		/// Senkou Span A line
+		/// Senkou (A) line
 		/// </summary>
 		public const string Str766Key = "Str766";
 
 		/// <summary>
-		/// Senkou Span A line
+		/// Senkou (A) line
 		/// </summary>
 		public static string Str766 => GetString(Str766Key);
 
 		/// <summary>
-		/// Senkou Span B line
+		/// Senkou (B) line
 		/// </summary>
 		public const string Str767Key = "Str767";
 
 		/// <summary>
-		/// Senkou Span B line
+		/// Senkou (B) line
 		/// </summary>
 		public static string Str767 => GetString(Str767Key);
 

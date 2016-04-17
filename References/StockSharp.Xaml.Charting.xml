@@ -271,12 +271,12 @@
     </member>
     <member name="P:StockSharp.Xaml.Charting.ChartActiveOrderInfo.State">
       <summary>
-            Order to show on chart.
+            Order state.
             </summary>
     </member>
     <member name="P:StockSharp.Xaml.Charting.ChartActiveOrderInfo.Direction">
       <summary>
-            Order direction.
+            Order side.
             </summary>
     </member>
     <member name="P:StockSharp.Xaml.Charting.ChartActiveOrderInfo.Volume">
@@ -325,7 +325,7 @@
             </summary>
       <param name="order">The order.</param>
       <param name="isError">Whether an order operation has failed.</param>
-      <param name="freeze">Do not allow user to edit order from chart.</param>
+      <param name="freeze">Do not allow user to edit the order from chart.</param>
     </member>
     <member name="M:StockSharp.Xaml.Charting.ChartActiveOrderInfo.Load(Ecng.Serialization.SettingsStorage)">
       <summary>
@@ -1059,7 +1059,7 @@
     </member>
     <member name="M:StockSharp.Xaml.Charting.ChartDrawData.Group(System.DateTimeOffset)">
       <summary>
-            Create <see cref="T:StockSharp.Xaml.Charting.ChartDrawData.ChartDrawDataItem" />.
+            Initializes a new instance of the <see cref="T:StockSharp.Xaml.Charting.ChartDrawData.ChartDrawDataItem" />.
             </summary>
       <param name="offset">The time stamp of the new data generation.</param>
       <returns>

@@ -164,7 +164,7 @@
     </member>
     <member name="M:StockSharp.Xaml.GridControl.BaseGridControl.ColumnVisibilityHolder.#ctor(DevExpress.Xpf.Grid.GridColumnCollection)">
       <summary>
-            Create <see cref="P:StockSharp.Xaml.GridControl.BaseGridControl.ColumnVisibility" />.
+            Initializes a new instance of the <see cref="P:StockSharp.Xaml.GridControl.BaseGridControl.ColumnVisibility" />.
             </summary>
       <param name="columns">
       </param>
@@ -186,7 +186,7 @@
     </member>
     <member name="M:StockSharp.Xaml.GridControl.BaseGridControl.#ctor">
       <summary>
-            Create <see cref="T:StockSharp.Xaml.GridControl.BaseGridControl" />.
+            Initializes a new instance of the <see cref="T:StockSharp.Xaml.GridControl.BaseGridControl" />.
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.GridControl.BaseGridControl.OnItemsSourceChanged(System.Object,System.Object)">
@@ -1497,17 +1497,17 @@
     </member>
     <member name="P:StockSharp.Xaml.MarketDepthControl.UpdatingDepth">
       <summary>
-            Upate the order book.
+            Update the order book.
             </summary>
     </member>
     <member name="P:StockSharp.Xaml.MarketDepthControl.UpdatingQuotes">
       <summary>
-            Upate the order book.
+            Update the order book.
             </summary>
     </member>
     <member name="P:StockSharp.Xaml.MarketDepthControl.UpdatingFormat">
       <summary>
-            Upate <see cref="P:StockSharp.Xaml.MarketDepthControl.PriceTextFormat" /> and <see cref="P:StockSharp.Xaml.MarketDepthControl.VolumeTextFormat" />.
+            Update <see cref="P:StockSharp.Xaml.MarketDepthControl.PriceTextFormat" /> and <see cref="P:StockSharp.Xaml.MarketDepthControl.VolumeTextFormat" />.
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.MarketDepthControl.UpdateFormat(StockSharp.BusinessEntities.Security)">
@@ -3368,7 +3368,7 @@
     </member>
     <member name="M:StockSharp.Xaml.OrderGrid.RaiseSelectionChanged(DevExpress.Xpf.Grid.GridSelectionChangedEventArgs)">
       <summary>
-            Raise SelectionChanged event.
+            Raise <see cref="E:StockSharp.Xaml.OrderGrid.SelectedOrderChanged" /> event.
             </summary>
       <param name="e">
       </param>

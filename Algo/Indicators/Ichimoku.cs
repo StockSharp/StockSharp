@@ -79,7 +79,7 @@ namespace StockSharp.Algo.Indicators
 		public IchimokuLine Kijun { get; }
 
 		/// <summary>
-		/// Senkou Span A line.
+		/// Senkou (A) line.
 		/// </summary>
 		[ExpandableObject]
 		[DisplayName("SenkouA")]
@@ -88,7 +88,7 @@ namespace StockSharp.Algo.Indicators
 		public IchimokuSenkouALine SenkouA { get; private set; }
 
 		/// <summary>
-		/// Senkou Span B line.
+		/// Senkou (B) line.
 		/// </summary>
 		[ExpandableObject]
 		[DisplayName("SenkouB")]

@@ -803,14 +803,14 @@
             Read bytes array.
             </summary>
       <param name="bytes">Bytes array.</param>
-      <returns>Count of read bytes.</returns>
+      <returns>The number of bytes read.</returns>
     </member>
     <member name="M:StockSharp.Fix.Native.BinaryFixReader.ReadByteVector(System.Byte*)">
       <summary>
             Read bytes array.
             </summary>
       <param name="bytes">Bytes array.</param>
-      <returns>Count of read bytes.</returns>
+      <returns>The number of bytes read.</returns>
     </member>
     <member name="T:StockSharp.Fix.Native.BinaryFixWriter">
       <summary>

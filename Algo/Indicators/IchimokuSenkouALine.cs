@@ -19,7 +19,7 @@ namespace StockSharp.Algo.Indicators
 	using System.ComponentModel;
 
 	/// <summary>
-	/// Senkou Span A line.
+	/// Senkou (A) line.
 	/// </summary>
 	public class IchimokuSenkouALine : LengthIndicator<decimal>
 	{

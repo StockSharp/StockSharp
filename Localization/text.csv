@@ -5376,7 +5376,7 @@ DocStr1143;The indicator value {0}, derived in result of calculation;Значе�
 DocStr1144;The base value of the indicator, operating with one data type;Базовое значение индикатора, работающее с один типом данных
 DocStr1145;Value type;Тип значения
 DocStr1146;The base class for the indicator value;Базовый класс для значения индикатора
-DocStr1147;The indicator input value, based on which it will renew its value, as well as value, containing result of indicator calculation;Входное значение индикатора, на основе которого он обновит свое значение, а так значение, хранящее результат вычисления индикатора
+DocStr1147;The indicator value, based on which it will renew its value, as well as value, containing result of indicator calculation;Значение индикатора, на основе которого он обновит свое значение, а так значение, хранящее результат вычисления индикатора
 DocStr1148;Does value support data type, required for the indicator;Поддерживает ли значение необходимый для индикатора тип данных
 DocStr1149;The data type, operated by indicator;Тип данных, которым оперирует индикатор
 DocStr1150;{0}, if data type is supported, otherwise, {1};{0}, если тип данных поддерживается, иначе, {1}
@@ -13040,4 +13040,69 @@ DocStr8926;The own amount of ask (+ stop amount to sale);Собственный 
 DocStr8927;The exchange boards provider;Провайдер биржевых блощадок
 DocStr8928;Gets or sets the text of the currently selected item;Получить или установить текст выбранного элемента
 DocStr8929;Portfolio received;Портфель получен
-
+DocStr8936;The storage of securities;Хранилище инструментов
+DocStr8938;FAST Presence Map;Карта присутствия FAST
+DocStr8939;Add new byte;Добавить новый байт
+DocStr8940;Check the current bit is set;Проверить, установлен ли текущий бит
+DocStr8941;"{0} if the current bit is set; {1} if the current bit isn't set";"{0} если текущий бит установлен; {1} если текущий бит не установлен"
+DocStr8942;Move order event;Событие изменения заявки
+DocStr8943;Cancel order event;Событие отмены заявки
+DocStr8944;Chart element which shows information about single order;Элемент графика отображения одной заявки
+DocStr8945;Order state was changed;Состояние заявки было изменено
+DocStr8946;Order to be displayed on chart;Заявка, которую необходимо отобразить на графике
+DocStr8949;Chart X value for this element [0..1]. Default is 0.8;Значение X для данного элемента в диапазоне [0..1]. По-умолчанию равно 0.8
+DocStr8950;Auto remove this order from chart when its state is final ({0}, {1});Авто удаление заявки при ее финальном состоянии ({0}, {1})
+DocStr8951;Do not allow user to edit the order from chart;Не позволять редактировать заявку на графике
+DocStr8952;Updates state of the order on a chart or replaces the order with the new one;Обновить состояние заявки или заменить новой
+DocStr8953;Whether an order operation has failed;Является ли операция с заявкой ошибкой
+DocStr8955;The chart element representing active orders;Элемент графика отображения активных заявок
+DocStr8956;Show chart element;Показать элемент графика
+DocStr8957;Color of Buy order in non-active state;Цвет заявки на покупку в неактивном состоянии
+DocStr8958;Color of Buy order in active state;Цвет заявки на покупку в активном состоянии
+DocStr8959;Color of blinking in partially filled state (Buy);Цвет моргания при частичном исполнении (Покупка)
+DocStr8960;Color of Sell order in non-active state;Цвет заявки на продажу в неактивном состоянии
+DocStr8961;Color of Sell order in active state;Цвет заявки на продажу в активном состоянии
+DocStr8962;Color of blinking in partially filled state (Sell);Цвет моргания при частичном исполнении (Продажа)
+DocStr8963;Cancel order button color;Цвет кнопки отмены
+DocStr8964;Cancel order button background color;Цвет фона кнопки отмены
+DocStr8965;Text color;Цвет текста
+DocStr8966;Orders to display on chart;Заявки для отображения на графике
+DocStr8967;Chart drawing data;Данные отрисовки графика
+DocStr8968;Chart drawing data item;Элемент данных отрисовки графика
+DocStr8969;Put the candle data;Добавить данные свечи
+DocStr8970;The candle data;Данные свечи
+DocStr8971;Put the indicator data;Добавить данные индикатора
+DocStr8972;The indicator value;Значение индикатора
+DocStr8973;Put the order data;Добавить данные заявки
+DocStr8974;The order value;Данные заявки
+DocStr8975;Put the trade data;Добавить данные сделки
+DocStr8976;The trade value;Данные сделки
+DocStr8977;Put the active order data;Добавить данные активной заявки
+DocStr8978;The active order value;Данные активной заявки
+DocStr8979;Put the chart data;Добавить данные графика
+DocStr8980;The chart value;Данные графика
+DocStr8982;The event of the order re-registration from the chart;Событие изменения заявки на графике
+DocStr8983;The event of the order cancelation from the chart;Событие отмена заявки на графике
+DocStr8984;Select data template by item type;Выбрать шаблон данных по типу элемента
+DocStr8985;Template for {0} item type;Шаблог {0} для типа элемента
+DocStr8986;When overridden in a derived class, returns a {0} based on custom logic;When overridden in a derived class, returns a {0} based on custom logic
+DocStr8987;Returns a {0} or null. The default value is null;Вернуть {0} или null. По-умолчанию равно null
+DocStr8988;The data object for which to select the template;Объект который был выбран для шаблона
+DocStr8989;The data-bound object;Объект привязки к данным
+DocStr8990;The grid control;Табличный контрол
+DocStr8991;Holds columns visibility;Видимость для колонки
+DocStr8992;Get columns count;Получить количество колонок
+DocStr8993;Get or set column visibility by index;Получить или установить видимость для колонки
+DocStr8994;DDE export error handler;Обработчик ошибок DDE экспорта
+DocStr8995;Layout changed event;Событие изменения разметки
+DocStr8996;Called when the ItemsSource property changes;Вызывается когда свойство ItemsSource было изменено
+DocStr8997;Old value of the ItemsSource property;Предыдущее значение свойства ItemsSource
+DocStr8998;New value of the ItemsSource property;Новое значение свойства ItemsSource
+DocStr8999;Update the order book;Обновить стакан
+DocStr9000;Update {0} and {1};Обновить {0} и {1}
+DocStr9001;Column;Колонка
+DocStr9002;Invoked when an unhandled {0} routed event reaches an element in its route that is derived from this class. Implement this method to add class handling for this event;Invoked when an unhandled {0} routed event reaches an element in its route that is derived from this class. Implement this method to add class handling for this event
+DocStr9003;The {0} that contains the event data. The event data reports that the left mouse button was released;The {0} that contains the event data. The event data reports that the left mouse button was released
+DocStr9004;The {0} that contains the event data. The event data reports that the right mouse button was released;The {0} that contains the event data. The event data reports that the right mouse button was released
+DocStr9005;Selected order changed;Событие изменения заявки
+DocStr9006;Raise {0} event;Вызвать событие {0}

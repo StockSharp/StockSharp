@@ -1050,7 +1050,7 @@ M:StockSharp.Algo.Indicators.BaseComplexIndicator.Save(Ecng.Serialization.Settin
 M:StockSharp.Algo.Indicators.BaseComplexIndicator.Load(Ecng.Serialization.SettingsStorage)/summary;DocStr2
 M:StockSharp.Algo.Indicators.BaseComplexIndicator.Load(Ecng.Serialization.SettingsStorage)/param/settings;DocStr3
 T:StockSharp.Algo.Indicators.BaseIndicator/summary;DocStr1120
-M:StockSharp.Algo.Indicators.BaseIndicator.#ctor/summary;DocStr1130
+M:StockSharp.Algo.Indicators.BaseIndicator.#ctor/summary;DocStr93
 P:StockSharp.Algo.Indicators.BaseIndicator.Id/summary;Str1917
 P:StockSharp.Algo.Indicators.BaseIndicator.Name/summary;Str908
 M:StockSharp.Algo.Indicators.BaseIndicator.Reset/summary;DocStr1125
@@ -3701,9 +3701,9 @@ M:StockSharp.Algo.Storages.IStoragePositionList.ReadBySecurityAndPortfolio(Stock
 T:StockSharp.Algo.Storages.IStorageSecurityList/summary;DocStr1432
 T:StockSharp.Algo.Storages.NativeIdSecurityStorage`1/summary;DocStr8601
 T:StockSharp.Algo.Storages.NativeIdSecurityStorage`1/typeparam/TNativeId;DocStr8602
-M:StockSharp.Algo.Storages.NativeIdSecurityStorage`1.#ctor(StockSharp.Algo.Storages.IEntityRegistry,System.Collections.Generic.IEqualityComparer{`0})/summary;DocStr1
-M:StockSharp.Algo.Storages.NativeIdSecurityStorage`1.#ctor(StockSharp.Algo.Storages.IEntityRegistry,System.Collections.Generic.IEqualityComparer{`0})/param/entityRegistry;DocStr1309
-M:StockSharp.Algo.Storages.NativeIdSecurityStorage`1.#ctor(StockSharp.Algo.Storages.IEntityRegistry,System.Collections.Generic.IEqualityComparer{`0})/param/comparer;DocStr8603
+M:StockSharp.Algo.Storages.NativeIdSecurityStorage`1.#ctor(StockSharp.Algo.Storages.IStorageSecurityList,System.Collections.Generic.IEqualityComparer{`0})/summary;DocStr1
+M:StockSharp.Algo.Storages.NativeIdSecurityStorage`1.#ctor(StockSharp.Algo.Storages.IStorageSecurityList,System.Collections.Generic.IEqualityComparer{`0})/param/storageSecurityList;DocStr8936
+M:StockSharp.Algo.Storages.NativeIdSecurityStorage`1.#ctor(StockSharp.Algo.Storages.IStorageSecurityList,System.Collections.Generic.IEqualityComparer{`0})/param/comparer;DocStr8603
 P:StockSharp.Algo.Storages.NativeIdSecurityStorage`1.Securities/summary;DocStr8604
 M:StockSharp.Algo.Storages.NativeIdSecurityStorage`1.CreateNativeId(StockSharp.BusinessEntities.Security)/summary;DocStr801
 M:StockSharp.Algo.Storages.NativeIdSecurityStorage`1.CreateNativeId(StockSharp.BusinessEntities.Security)/param/security;DocStr2831
