@@ -2,78 +2,246 @@
 <topic id="fcd2df04-2463-4f85-aa0c-9b7a8f95a56a" revisionNumber="1">
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     <introduction>
-    	<para>
-       	Механизм сообщений включает три ключевых элемента. Это само сообщение <codeEntityReference>T:StockSharp.Messages.Message</codeEntityReference>,
-       	адаптер сообщений <codeEntityReference>T:StockSharp.Messages.MessageAdapter</codeEntityReference> и транспортный канал 
-       	<codeEntityReference>T:StockSharp.Messages.IMessageChannel</codeEntityReference>.
-       </para>
-       
-		<list class="bullet">
-  			<listItem>
-  			       <para>
-           				<legacyBold>Сообщение</legacyBold> выполняет роль агента, передающего информацию. Сообшения имеют свой тип <codeEntityReference>T:StockSharp.Messages.MessageTypes</codeEntityReference>.
-           				Каждому типу сообщения соответсвует определенный класс. В свою очередь все классы сообщений наследуют от абстрактного класса <codeEntityReference>T:StockSharp.Messages.Message</codeEntityReference>, который
-           				наделяет потомков такими свойствами, как тип сообщения <codeEntityReference>P:StockSharp.Messages.Message.Type</codeEntityReference> и 
-           				<codeEntityReference>P:StockSharp.Messages.Message.LocalTime</codeEntityReference> - локальное время создания/получения сообщения.
-           			</para>
-           			<para>
-           				Сообщения могут быть <legacyItalic>исходящими</legacyItalic> и <legacyItalic>входящими</legacyItalic>.
-           			</para>
-           			
-					<list class="bullet">
-  						<listItem>
-  							<para>
-  								<legacyItalic>Исходящие сообщения</legacyItalic> - сообщения, которые посылаются во внешнюю систему. Обычно это команды, которые генерирует программа, например, сообщение
-           						<codeEntityReference>T:StockSharp.Messages.ConnectMessage</codeEntityReference> - команда, запрашивающая соединение с сервером.
-  							</para>
-  						</listItem>
-  						<listItem>
-  							<para>
-  								<legacyItalic>Входящие</legacyItalic> сообщения - сообщения поступающие из внешней системы. Это сообщения передающие
-           						информацию о рыночных данных, транзакциях, портфелях, событиях соединения и т.п. Например, сообщение 
-           						<codeEntityReference>T:StockSharp.Messages.QuoteChangeMessage</codeEntityReference> - передает информацию об изменении <legacyItalic>стакана</legacyItalic>.
-  							</para>
-  						</listItem>
-					</list>
+		<para>
+           Сообщение несет информацию о рыночных данных, транзакциях или команде. Ниже приведен список основных сообщений, которые используются в <token>stocksharpapi</token>.
+		</para>
+	<table>
+  		<tableHeader>
+    	<row>
+      		<entry><para>Сообщение</para></entry>
+      		<entry><para>Описание</para></entry>
+    	</row>
+  		</tableHeader>
+  		<row>
+    	<entry>
+    	<para><codeEntityReference>T:StockSharp.Messages.Message</codeEntityReference></para>
+   		</entry>
+    	<entry>
+    		<para>Абстрактный класс сообщения, от которого наследуют классы других сообщений. Содержит информацию о времени, типе <codeEntityReference>T:StockSharp.Messages.MessageTypes</codeEntityReference> и адаптере, который создал сообщение.</para>
+    	</entry>
+  		</row>
+		<row>
+    	<entry>
+    		<para><codeEntityReference>T:StockSharp.Messages.BoardMessage</codeEntityReference></para>
+   		</entry>
+    	<entry>
+    		<para> Содержит информацию об электронной торговой площадке.</para>
+    	</entry>
+  		</row>
+  		  		<row>
+    	<entry>
+    		<para><codeEntityReference>T:StockSharp.Messages.CandleMessage</codeEntityReference></para>
+   		</entry>
+    	<entry>
+    		<para>Абстрактный класс сообщения, который содержит общую информацию о свече. От этого класса наследуют классы сообщений для конкретных типов
+    		свечей: <codeEntityReference>T:StockSharp.Messages.TimeFrameCandleMessage</codeEntityReference>, 
+    		<codeEntityReference>T:StockSharp.Messages.TickCandleMessage</codeEntityReference>, 
+    		<codeEntityReference>T:StockSharp.Messages.VolumeCandleMessage</codeEntityReference>, 
+    		<codeEntityReference>T:StockSharp.Messages.RangeCandleMessage</codeEntityReference>, 
+    		<codeEntityReference>T:StockSharp.Messages.PnFCandleMessage</codeEntityReference> и 
+    		<codeEntityReference>T:StockSharp.Messages.RenkoCandleMessage</codeEntityReference>.
+    		</para>
+    	</entry>
+  		</row>
+  				<row>
+    	<entry>
+    		<para><codeEntityReference>T:StockSharp.Messages.ConnectMessage</codeEntityReference></para>
+   		</entry>
+    	<entry>
+    		<para>Используется в качестве команды установления соединения, а также для входящего сообщения об удачном соединении или ошибке соединения.</para>
+    	</entry>
+  		</row>
+  		<row>
+    	<entry>
+    		<para><codeEntityReference>T:StockSharp.Messages.DisconnectMessage</codeEntityReference></para>
+   		</entry>
+    	<entry>
+    		<para>Используется в качестве команды разрыва соединения, а также для входящего сообщения о разрыве соединения.</para>
+    	</entry>
+  		</row>
+  		<row>
+    	<entry>
+    		<para><codeEntityReference>T:StockSharp.Messages.ErrorMessage</codeEntityReference></para>
+   		</entry>
+    	<entry>
+    		<para>Сообщение об ошибке.</para>
+    	</entry>
+  		</row>
+  		<row>
+    	<entry>
+    		<para><codeEntityReference>T:StockSharp.Messages.ExecutionMessage</codeEntityReference></para>
+   		</entry>
+    	<entry>
+    		<para>Описание см. ниже.</para>
+    	</entry>
+  		</row>
+  		<row>
+    	<entry>
+    		<para><codeEntityReference>T:StockSharp.Messages.Level1ChangeMessage</codeEntityReference></para>
+   		</entry>
+    	<entry>
+    		<para>Сообщение содержит информацию о значении поля Level1 определенного типа. Доступные типы полей определены в перечислении <codeEntityReference>T:StockSharp.Messages.Level1Fields</codeEntityReference>.</para>
+    	</entry>
+  		</row>
+  		<row>
+    	<entry>
+    		<para><codeEntityReference>T:StockSharp.Messages.NewsMessage</codeEntityReference></para>
+   		</entry>
+    	<entry>
+    		<para>Сообщение содержит информацию о новости.</para>
+    	</entry>
+  		</row>
+  		
+  		<row>
+    	<entry>
+    		<para><codeEntityReference>T:StockSharp.Messages.OrderCancelMessage</codeEntityReference></para>
+   		</entry>
+    	<entry>
+    		<para>Сообщение содержит информацию для отмены заявки. Также существует сообщение 
+    		<codeEntityReference>T:StockSharp.Messages.OrderGroupCancelMessage</codeEntityReference>, которое содержит информацию для отмены группы заявок по фильтру.</para>
+    	</entry>
+  		</row>
+  		<row>
+    	<entry>
+    		<para><codeEntityReference>T:StockSharp.Messages.OrderRegisterMessage</codeEntityReference></para>
+   		</entry>
+    	<entry>
+    		<para>Сообщение содержит информацию для регистрации заявки.</para>
+    	</entry>
+  		</row>
+  		<row>
+    	<entry>
+    		<para><codeEntityReference>T:StockSharp.Messages.OrderStatusMessage</codeEntityReference></para>
+   		</entry>
+    	<entry>
+    		<para>Сообщение запрашивает информацию о текущих зарегистрированных заявках и сделках.</para>
+    	</entry>
+  		</row>
+  		
+  		<row>
+    	<entry>
+    		<para><codeEntityReference>T:StockSharp.Messages.OrderReplaceMessage</codeEntityReference></para>
+   		</entry>
+    	<entry>
+    		<para>Сообщение содержит информацию для замены заявки.</para>
+    	</entry>
+  		</row>
+  		
+  		<row>
+    	<entry>
+    		<para><codeEntityReference>T:StockSharp.Messages.PortfolioMessage</codeEntityReference></para>
+   		</entry>
+    	<entry>
+    		<para>Содержит информацию о портфеле. Также существует сообщение <codeEntityReference>T:StockSharp.Messages.PortfolioChangeMessage</codeEntityReference> - информация об изменениях портфеля.</para>
+    	</entry>
+  		</row>
+  		
+  		<row>
+    	<entry>
+    		<para><codeEntityReference>T:StockSharp.Messages.PortfolioLookupMessage</codeEntityReference></para>
+   		</entry>
+    	<entry>
+    		<para>Запращивает информацию о портфелях по заданному критерию. Результат запроса возвращается при помощи сообщения <codeEntityReference>T:StockSharp.Messages.PortfolioLookupResultMessage</codeEntityReference>.</para>
+    	</entry>
+  		</row>
+  		
+  		<row>
+    	<entry>
+    		<para><codeEntityReference>T:StockSharp.Messages.PositionMessage</codeEntityReference></para>
+   		</entry>
+    	<entry>
+    		<para>Содержит информацию о позиции. Также существует сообщение <codeEntityReference>T:StockSharp.Messages.PositionChangeMessage</codeEntityReference>,
+    		которое содержит информацию об изменении определенного свойства позиции. Тип свойства определяется в перечислении <codeEntityReference>T:StockSharp.Messages.PositionChangeTypes</codeEntityReference>.</para>
+    	</entry>
+  		</row>
 
-           		<!--	<para>
-           				<legacyItalic>Исходящие сообщения</legacyItalic> - сообщения, которые посылаются во внешнюю систему. Обычно это команды, которые генерирует программа, например, сообщение
-           				<codeEntityReference>T:StockSharp.Messages.ConnectMessage</codeEntityReference> - команда, запрашивающая соединение с сервером. <legacyItalic>Входящие</legacyItalic> сообщения - это сообщения передающие
-           				информацию о рыночных данных, транзакциях, событиях соединения (установлено, разорвано) и т.п. Например, сообщение 
-           				<codeEntityReference>T:StockSharp.Messages.QuoteChangeMessage</codeEntityReference> - передает информацию об изменении <legacyItalic>стакана</legacyItalic>.
-        			</para> -->
-  			</listItem>
-  			<listItem>
-  				    <para>
-           				<legacyBold>Адаптер сообщений</legacyBold> играет роль <legacyItalic>посредника</legacyItalic> между торговой системой и программой. 
-           				Для каждого типа коннектора имеется свой класс(ы) адаптера, который наследуется
-           				от абстрактного класса <codeEntityReference>T:StockSharp.Messages.MessageAdapter</codeEntityReference>. 
-       				</para>
-			        <para>
-      					Адаптер выполняет две основные функции:
-      				</para>
-					<list class="ordered">
-  					<listItem>
-  					<para>Преобразует исходящие сообщения в команды конкретной торговой системы.</para>
-  					</listItem>
-  					<listItem>
-  						<para>Преобразует информацию, поступающую от торговой системы (соединение, рыночные данные, транзакции и т.п.) во входящие сообщения.</para>
-  					</listItem>
-				</list>
-  			</listItem>
-  			<listItem>
-  				    <para>
-           				<legacyBold>Транспортный канал</legacyBold> - обеспечивает синхронизацию входящих и исходящих сообщений.
-       				</para>
-  			</listItem>
-		</list>
+  		<row>
+    	<entry>
+    		<para><codeEntityReference>T:StockSharp.Messages.QuoteChangeMessage</codeEntityReference></para>
+   		</entry>
+    	<entry>
+    		<para>Содержит информацию о котировках стакана.</para>
+    	</entry>
+  		</row>
 
-       
-       
-
-
-		
-		
+  		<row>
+    	<entry>
+    		<para><codeEntityReference>T:StockSharp.Messages.ResetMessage</codeEntityReference></para>
+   		</entry>
+    	<entry>
+    		<para>Сброс состояния.</para>
+    	</entry>
+  		</row>
+  		
+  		<row>
+    	<entry>
+    		<para><codeEntityReference>T:StockSharp.Messages.SecurityMessage</codeEntityReference></para>
+   		</entry>
+    	<entry>
+    		<para>Содержит информацию об инструменте.</para>
+    	</entry>
+  		</row>
+  		
+  		<row>
+    	<entry>
+    		<para><codeEntityReference>T:StockSharp.Messages.SecurityLookupMessage</codeEntityReference></para>
+   		</entry>
+    	<entry>
+    		<para>Запращивает список инструментов по заданному критерию. Результат запроса будет возвращен при помощи сообщения
+    		<codeEntityReference>T:StockSharp.Messages.SecurityLookupResultMessage</codeEntityReference>.</para>
+    	</entry>
+  		</row>
+  		
+  		<row>
+    	<entry>
+    		<para><codeEntityReference>T:StockSharp.Messages.SessionMessage</codeEntityReference></para>
+   		</entry>
+    	<entry>
+    		<para>Содержит информацию об изменении состояния торговой сессии. Доступные значения состояния сессии определены в перечислении
+    		<codeEntityReference>T:StockSharp.Messages.SessionStates</codeEntityReference>.</para>
+    	</entry>
+  		</row>
+  		
+  		<row>
+    	<entry>
+    		<para><codeEntityReference>T:StockSharp.Messages.TimeMessage</codeEntityReference></para>
+   		</entry>
+    	<entry>
+    		<para>Содержит информацию о текущем времени.</para>
+    	</entry>
+  		</row>
+	</table>
+	
+	<para>Сообщение <codeEntityReference>T:StockSharp.Messages.ExecutionMessage</codeEntityReference> является универсальным сообщением, которое позволяет 
+	передавать различную биржевую информацию, связанную с заявками и сделками: тиковые сделки, ордерлоги, собственные заявки и сделки.</para>
+	<para>
+		Тип информации в сообщении определяется значением свойства <codeEntityReference>P:StockSharp.Messages.ExecutionType</codeEntityReference>:
+	</para>
+	
+	<list class="bullet">
+  		<listItem>
+  			<para><codeEntityReference>F:StockSharp.Messages.ExecutionTypes.Tick</codeEntityReference> - тиковая сделка.</para>
+  		</listItem>
+  		<listItem>
+  			<para><codeEntityReference>F:StockSharp.Messages.ExecutionTypes.Transaction</codeEntityReference> - транзакция (информация о собственной сделке или заявке).</para>
+  		</listItem>
+  		<listItem>
+  			<para><codeEntityReference>F:StockSharp.Messages.ExecutionTypes.OrderLog</codeEntityReference> - лог заявкок.</para>
+  		</listItem>
+	</list>
+	<para>
+		Если используется тип <codeEntityReference>F:StockSharp.Messages.ExecutionTypes.Transaction</codeEntityReference>, то речь идет о собственных заявках или сделках. 
+		При этом, если сообщение содержит информацию о заявке то, свойство <codeEntityReference>T:StockSharp.Messages.ExecutionMessage.HasOrderInfo</codeEntityReference> = true, 
+		если есть информация о сделке то, свойство <codeEntityReference>T:StockSharp.Messages.ExecutionMessage.HasTradeInfo</codeEntityReference> = true. Обратите внимание, что
+		<legacyItalic>собственная сделка</legacyItalic> содержит информацию как о самой сделке, так и о заявке, связанной с этой сделкой. Поэтому в этом случае вышеприведенные
+		свойства имеют значение true. Эти свойства позволяют дифференцировать сообщения с собственными сделками и заявками.
+	</para>
+	
+	
     </introduction>
   </developerConceptualDocument>
 </topic>
+
+
+
+
