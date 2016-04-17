@@ -142,18 +142,75 @@
             </summary>
       <param name="owner">Parent window.</param>
     </member>
-    <member name="T:StockSharp.Xaml.BaseGridControl">
+    <member name="T:StockSharp.Xaml.GridControl.BaseGridControl">
       <summary>
             The grid control.
             </summary>
     </member>
-    <member name="M:StockSharp.Xaml.BaseGridControl.Load(Ecng.Serialization.SettingsStorage)">
+    <member name="T:StockSharp.Xaml.GridControl.BaseGridControl.ColumnVisibilityHolder">
+      <summary>
+            Holds columns visibility.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.GridControl.BaseGridControl.ColumnVisibilityHolder.Count">
+      <summary>
+            Get columns count.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.GridControl.BaseGridControl.ColumnVisibilityHolder.Item(System.Int32)">
+      <summary>
+            Get or set column visibility by index.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.GridControl.BaseGridControl.ColumnVisibilityHolder.#ctor(DevExpress.Xpf.Grid.GridColumnCollection)">
+      <summary>
+            Create <see cref="P:StockSharp.Xaml.GridControl.BaseGridControl.ColumnVisibility" />.
+            </summary>
+      <param name="columns">
+      </param>
+    </member>
+    <member name="P:StockSharp.Xaml.GridControl.BaseGridControl.ColumnVisibility">
+      <summary>
+            Get or set column visibility by index.
+            </summary>
+    </member>
+    <member name="E:StockSharp.Xaml.GridControl.BaseGridControl.DdeErrorHandler">
+      <summary>
+            DDE export error handler.
+            </summary>
+    </member>
+    <member name="E:StockSharp.Xaml.GridControl.BaseGridControl.LayoutChanged">
+      <summary>
+            Layout changed event.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.GridControl.BaseGridControl.#ctor">
+      <summary>
+            Create <see cref="T:StockSharp.Xaml.GridControl.BaseGridControl" />.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.GridControl.BaseGridControl.OnItemsSourceChanged(System.Object,System.Object)">
+      <summary>
+            Called when the ItemsSource property changes.
+            </summary>
+      <param name="oldValue">Old value of the ItemsSource property.</param>
+      <param name="newValue">New value of the ItemsSource property.</param>
+    </member>
+    <member name="M:StockSharp.Xaml.GridControl.BaseGridControl.OnLoaded(System.Object,System.Windows.RoutedEventArgs)">
+      <summary>
+      </summary>
+      <param name="sender">
+      </param>
+      <param name="e">
+      </param>
+    </member>
+    <member name="M:StockSharp.Xaml.GridControl.BaseGridControl.Load(Ecng.Serialization.SettingsStorage)">
       <summary>
             Load settings.
             </summary>
       <param name="storage">Settings storage.</param>
     </member>
-    <member name="M:StockSharp.Xaml.BaseGridControl.Save(Ecng.Serialization.SettingsStorage)">
+    <member name="M:StockSharp.Xaml.GridControl.BaseGridControl.Save(Ecng.Serialization.SettingsStorage)">
       <summary>
             Save settings.
             </summary>
@@ -1333,11 +1390,6 @@
             Initializes a new instance of the <see cref="T:StockSharp.Xaml.MarketDataGrid" />.
             </summary>
     </member>
-    <member name="P:StockSharp.Xaml.MarketDataGrid.SerializableColumns">
-      <summary>
-            Saved columns.
-            </summary>
-    </member>
     <member name="M:StockSharp.Xaml.MarketDataGrid.BeginMakeEntries(StockSharp.Algo.Storages.IStorageRegistry,StockSharp.BusinessEntities.Security,StockSharp.Algo.Storages.StorageFormats,StockSharp.Algo.Storages.IMarketDataDrive)">
       <summary>
             To refresh the table. It is carried out asynchronously.
@@ -1395,6 +1447,14 @@
             MarketDepthControl
             </summary>
     </member>
+    <member name="F:StockSharp.Xaml.MarketDepthControl.CellMouseLeftButtonUp">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Xaml.MarketDepthControl.CellMouseRightButtonUp">
+      <summary>
+      </summary>
+    </member>
     <member name="M:StockSharp.Xaml.MarketDepthControl.#ctor">
       <summary>
             Initializes a new instance of the <see cref="T:StockSharp.Xaml.MarketDepthControl" />.
@@ -1435,6 +1495,21 @@
             The amount format. The default value is "0".
             </summary>
     </member>
+    <member name="P:StockSharp.Xaml.MarketDepthControl.UpdatingDepth">
+      <summary>
+            Upate the order book.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.MarketDepthControl.UpdatingQuotes">
+      <summary>
+            Upate the order book.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.MarketDepthControl.UpdatingFormat">
+      <summary>
+            Upate <see cref="P:StockSharp.Xaml.MarketDepthControl.PriceTextFormat" /> and <see cref="P:StockSharp.Xaml.MarketDepthControl.VolumeTextFormat" />.
+            </summary>
+    </member>
     <member name="M:StockSharp.Xaml.MarketDepthControl.UpdateFormat(StockSharp.BusinessEntities.Security)">
       <summary>
             To update <see cref="P:StockSharp.Xaml.MarketDepthControl.PriceTextFormat" /> and <see cref="P:StockSharp.Xaml.MarketDepthControl.VolumeTextFormat" />.
@@ -1455,13 +1530,13 @@
     </member>
     <member name="M:StockSharp.Xaml.MarketDepthControl.UpdateDepth(StockSharp.BusinessEntities.MarketDepth)">
       <summary>
-            To upfate the order book.
+            To update the order book.
             </summary>
       <param name="depth">Market depth.</param>
     </member>
     <member name="M:StockSharp.Xaml.MarketDepthControl.UpdateDepth(StockSharp.Messages.QuoteChangeMessage)">
       <summary>
-            To upfate the order book.
+            To update the order book.
             </summary>
       <param name="message">Market depth.</param>
     </member>
@@ -1470,12 +1545,24 @@
             To clear the order book.
             </summary>
     </member>
-    <member name="M:StockSharp.Xaml.MarketDepthControl.GetColumnIndex(System.Windows.Controls.DataGridCell)">
+    <member name="M:StockSharp.Xaml.MarketDepthControl.GetColumnIndex(DevExpress.Xpf.Grid.GridColumn)">
       <summary>
             To get the column type by cell.
             </summary>
-      <param name="cell">Cell.</param>
+      <param name="column">Column.</param>
       <returns>The column type.</returns>
+    </member>
+    <member name="M:StockSharp.Xaml.MarketDepthControl.OnPreviewMouseLeftButtonUp(System.Windows.Input.MouseButtonEventArgs)">
+      <summary>
+            Invoked when an unhandled <see cref="E:System.Windows.UIElement.PreviewMouseLeftButtonUp" /> routed event reaches an element in its route that is derived from this class. Implement this method to add class handling for this event.
+            </summary>
+      <param name="e">The <see cref="T:System.Windows.Input.MouseButtonEventArgs" /> that contains the event data. The event data reports that the left mouse button was released.</param>
+    </member>
+    <member name="M:StockSharp.Xaml.MarketDepthControl.OnPreviewMouseRightButtonUp(System.Windows.Input.MouseButtonEventArgs)">
+      <summary>
+            Invoked when an unhandled <see cref="E:System.Windows.UIElement.PreviewMouseRightButtonUp" /> routed event reaches an element in its route that is derived from this class. Implement this method to add class handling for this event.
+            </summary>
+      <param name="e">The <see cref="T:System.Windows.Input.MouseButtonEventArgs" /> that contains the event data. The event data reports that the right mouse button was released.</param>
     </member>
     <member name="M:StockSharp.Xaml.MarketDepthControl.InitializeComponent">
       <summary>
@@ -3253,6 +3340,11 @@
             Selected orders.
             </summary>
     </member>
+    <member name="E:StockSharp.Xaml.OrderGrid.SelectedOrderChanged">
+      <summary>
+            Selected order changed.
+            </summary>
+    </member>
     <member name="E:StockSharp.Xaml.OrderGrid.OrderRegistering">
       <summary>
             The order registration event.
@@ -3273,6 +3365,13 @@
             The method is called when a new order added.
             </summary>
       <param name="order">Order.</param>
+    </member>
+    <member name="M:StockSharp.Xaml.OrderGrid.RaiseSelectionChanged(DevExpress.Xpf.Grid.GridSelectionChangedEventArgs)">
+      <summary>
+            Raise SelectionChanged event.
+            </summary>
+      <param name="e">
+      </param>
     </member>
     <member name="M:StockSharp.Xaml.OrderGrid.InitializeComponent">
       <summary>

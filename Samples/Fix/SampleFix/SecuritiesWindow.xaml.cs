@@ -158,7 +158,7 @@ namespace SampleFix
 				var wnd = _quotesWindows.TryGetValue(depth.Security);
 
 				if (wnd != null)
-					wnd.DepthCtrl.UpdateDepthProperty = depth;
+					wnd.DepthCtrl.UpdatingDepth = depth;
 			}
 		}
 

@@ -594,14 +594,14 @@ namespace SampleHistoryTesting
 
 				if (ShowDepth.IsChecked == true)
 				{
-					MarketDepth.UpdateFormatProperty = security;
+					MarketDepth.UpdatingFormat = security;
 
 					connector.NewMessage += message =>
 					{
 						var quoteMsg = message as QuoteChangeMessage;
 
 						if (quoteMsg != null)
-							MarketDepth.UpdateDepthFromMessageProperty = quoteMsg;
+							MarketDepth.UpdatingQuotes = quoteMsg;
 					};
 				}
 

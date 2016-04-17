@@ -40,7 +40,7 @@ namespace SampleOptionQuoting
 
 		private void OnQuotesChanged()
 		{
-			DepthCtrl.UpdateDepthProperty = _depth.ImpliedVolatility(Connector, Connector, Connector.CurrentTime);
+			DepthCtrl.UpdatingDepth = _depth.ImpliedVolatility(Connector, Connector, Connector.CurrentTime);
 		}
 
 		protected override void OnClosing(CancelEventArgs e)
