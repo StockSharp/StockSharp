@@ -1552,6 +1552,25 @@ namespace StockSharp.Algo
 			}
 		}
 
+		private sealed class CandleStartedRule : CandleSeriesRule<Candle>
+		{
+			private Candle _currCandle;
+
+			public CandleStartedRule(ICandleManager candleManager, CandleSeries series)
+				: base(candleManager, series)
+			{
+			}
+
+			protected override void OnProcessCandle(Candle candle)
+			{
+				if (_currCandle != null && _currCandle == candle)
+					return;
+
+				_currCandle = candle;
+				Activate(candle);
+			}
+		}
+
 		private sealed class CandleChangedSeriesRule : CandleSeriesRule<Candle>
 		{
 			private readonly Func<Candle, bool> _condition;
@@ -1791,7 +1810,7 @@ namespace StockSharp.Algo
 		/// <returns>Rule.</returns>
 		public static MarketRule<CandleSeries, Candle> WhenCandlesStarted(this ICandleManager candleManager, CandleSeries series)
 		{
-			return new CandleStateSeriesRule(candleManager, series, CandleStates.Active) { Name = LocalizedStrings.Str1072 + " " + series };
+			return new CandleStartedRule(candleManager, series) { Name = LocalizedStrings.Str1072 + " " + series };
 		}
 
 		/// <summary>
