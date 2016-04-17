@@ -995,6 +995,15 @@
       <returns>
         <see cref="T:StockSharp.Xaml.Charting.ChartDrawData.ChartDrawDataItem" /> instance.</returns>
     </member>
+    <member name="M:StockSharp.Xaml.Charting.ChartDrawData.ChartDrawDataItem.Add(StockSharp.Xaml.Charting.ChartOrderElement,System.Tuple{System.Int64,StockSharp.Messages.Sides,System.Decimal,System.Decimal})">
+      <summary>
+            Put the order data.
+            </summary>
+      <param name="element">The chart element representing orders.</param>
+      <param name="order">The order value.</param>
+      <returns>
+        <see cref="T:StockSharp.Xaml.Charting.ChartDrawData.ChartDrawDataItem" /> instance.</returns>
+    </member>
     <member name="M:StockSharp.Xaml.Charting.ChartDrawData.ChartDrawDataItem.Add(StockSharp.Xaml.Charting.ChartTradeElement,StockSharp.BusinessEntities.MyTrade)">
       <summary>
             Put the order data.
@@ -1013,6 +1022,15 @@
       <param name="side">Order side (buy or sell).</param>
       <param name="price">Trade price.</param>
       <param name="volume">Number of contracts in a trade.</param>
+      <returns>
+        <see cref="T:StockSharp.Xaml.Charting.ChartDrawData.ChartDrawDataItem" /> instance.</returns>
+    </member>
+    <member name="M:StockSharp.Xaml.Charting.ChartDrawData.ChartDrawDataItem.Add(StockSharp.Xaml.Charting.ChartTradeElement,System.Tuple{System.Int64,StockSharp.Messages.Sides,System.Decimal,System.Decimal})">
+      <summary>
+            Put the order data.
+            </summary>
+      <param name="element">The chart element representing trades.</param>
+      <param name="trade">The trade value.</param>
       <returns>
         <see cref="T:StockSharp.Xaml.Charting.ChartDrawData.ChartDrawDataItem" /> instance.</returns>
     </member>

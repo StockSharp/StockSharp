@@ -689,12 +689,47 @@
       <returns>
         <see cref="T:System.TimeSpan" /> value.</returns>
     </member>
+    <member name="M:StockSharp.Fix.Native.BinaryFixReader.ReadUInt">
+      <summary>
+            Read <see cref="T:System.UInt32" /> value.
+            </summary>
+      <returns>
+        <see cref="T:System.UInt32" /> value.</returns>
+    </member>
+    <member name="M:StockSharp.Fix.Native.BinaryFixReader.ReadUIntNullable">
+      <summary>
+            Read <see cref="T:System.Nullable`1" /> value.
+            </summary>
+      <returns>
+        <see cref="T:System.Nullable`1" /> value.</returns>
+    </member>
     <member name="M:StockSharp.Fix.Native.BinaryFixReader.ReadInt">
       <summary>
             Read <see cref="T:System.Int32" /> value.
             </summary>
       <returns>
         <see cref="T:System.Int32" /> value.</returns>
+    </member>
+    <member name="M:StockSharp.Fix.Native.BinaryFixReader.ReadIntNullable">
+      <summary>
+            Read <see cref="T:System.Nullable`1" /> value.
+            </summary>
+      <returns>
+        <see cref="T:System.Nullable`1" /> value.</returns>
+    </member>
+    <member name="M:StockSharp.Fix.Native.BinaryFixReader.ReadULong">
+      <summary>
+            Read <see cref="T:System.UInt64" /> value.
+            </summary>
+      <returns>
+        <see cref="T:System.UInt64" /> value.</returns>
+    </member>
+    <member name="M:StockSharp.Fix.Native.BinaryFixReader.ReadULongNullable">
+      <summary>
+            Read <see cref="T:System.Nullable`1" /> value.
+            </summary>
+      <returns>
+        <see cref="T:System.Nullable`1" /> value.</returns>
     </member>
     <member name="M:StockSharp.Fix.Native.BinaryFixReader.ReadLong">
       <summary>
@@ -703,6 +738,13 @@
       <returns>
         <see cref="T:System.Int64" /> value.</returns>
     </member>
+    <member name="M:StockSharp.Fix.Native.BinaryFixReader.ReadLongNullable">
+      <summary>
+            Read <see cref="T:System.Nullable`1" /> value.
+            </summary>
+      <returns>
+        <see cref="T:System.Nullable`1" /> value.</returns>
+    </member>
     <member name="M:StockSharp.Fix.Native.BinaryFixReader.ReadDecimal">
       <summary>
             Read <see cref="T:System.Decimal" /> value.
@@ -710,12 +752,26 @@
       <returns>
         <see cref="T:System.Decimal" /> value.</returns>
     </member>
+    <member name="M:StockSharp.Fix.Native.BinaryFixReader.ReadDecimalNullable">
+      <summary>
+            Read <see cref="T:System.Nullable`1" /> value.
+            </summary>
+      <returns>
+        <see cref="T:System.Nullable`1" /> value.</returns>
+    </member>
     <member name="M:StockSharp.Fix.Native.BinaryFixReader.ReadChar">
       <summary>
             Read <see cref="T:System.Char" /> value.
             </summary>
       <returns>
         <see cref="T:System.Char" /> value.</returns>
+    </member>
+    <member name="M:StockSharp.Fix.Native.BinaryFixReader.ReadString(System.Char*)">
+      <summary>
+            Read <see cref="T:System.String" /> value.
+            </summary>
+      <param name="buffer">
+        <see cref="T:System.String" /> value.</param>
     </member>
     <member name="M:StockSharp.Fix.Native.BinaryFixReader.ReadString">
       <summary>
@@ -736,17 +792,25 @@
             Skip value.
             </summary>
     </member>
-    <member name="M:StockSharp.Fix.Native.BinaryFixReader.ReadFastPresenceMap(System.Int32)">
+    <member name="M:StockSharp.Fix.Native.BinaryFixReader.ReadFastPresenceMap(StockSharp.Fix.Native.FastPMap)">
       <summary>
             Read Presence Map.
             </summary>
-      <returns>Presence Map.</returns>
+      <param name="pmap">Presence Map.</param>
     </member>
-    <member name="M:StockSharp.Fix.Native.BinaryFixReader.ReadByteVector">
+    <member name="M:StockSharp.Fix.Native.BinaryFixReader.ReadByteVectorNullable(System.Byte*)">
       <summary>
             Read bytes array.
             </summary>
-      <returns>Bytes array.</returns>
+      <param name="bytes">Bytes array.</param>
+      <returns>Count of read bytes.</returns>
+    </member>
+    <member name="M:StockSharp.Fix.Native.BinaryFixReader.ReadByteVector(System.Byte*)">
+      <summary>
+            Read bytes array.
+            </summary>
+      <param name="bytes">Bytes array.</param>
+      <returns>Count of read bytes.</returns>
     </member>
     <member name="T:StockSharp.Fix.Native.BinaryFixWriter">
       <summary>
@@ -3767,6 +3831,34 @@
       <summary>
             Unique identifier of execution message as assigned by sell-side (broker, exchange, ECN).
             </summary>
+    </member>
+    <member name="T:StockSharp.Fix.Native.FastPMap">
+      <summary>
+            FAST Presence Map.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Fix.Native.FastPMap.#ctor">
+      <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Fix.Native.FastPMap" />.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Fix.Native.FastPMap.Reset">
+      <summary>
+            Reset state.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Fix.Native.FastPMap.AddByte(System.Byte)">
+      <summary>
+            Add new byte.
+            </summary>
+      <param name="b">New byte.</param>
+    </member>
+    <member name="M:StockSharp.Fix.Native.FastPMap.IsCurrentBitSet">
+      <summary>
+            Check the current bit is set.
+            </summary>
+      <returns>
+        <see langword="true" /> if the current bit is set; <see langword="false" /> if the current bit isn't set.</returns>
     </member>
     <member name="T:StockSharp.Fix.Native.FixMessages">
       <summary>
