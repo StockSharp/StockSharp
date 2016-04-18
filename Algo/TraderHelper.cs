@@ -435,20 +435,30 @@ namespace StockSharp.Algo
 			if (trade == null)
 				throw new ArgumentNullException(nameof(trade));
 
-			return trade.Order.Direction == Sides.Buy ? trade.Trade.Volume : -trade.Trade.Volume;
+			return trade.ToMessage().GetPosition(false);
 		}
 
 		/// <summary>
 		/// To get the position on My trade.
 		/// </summary>
 		/// <param name="message">My trade, used for position calculation. At buy the trade volume <see cref="ExecutionMessage.TradeVolume"/> is taken with positive sign, at sell - with negative.</param>
+		/// <param name="byOrder">To check implemented volume by order balance (<see cref="ExecutionMessage.Balance"/>) or by received trades. The default is checked by the order.</param>
 		/// <returns>Position.</returns>
-		public static decimal GetPosition(this ExecutionMessage message)
+		public static decimal GetPosition(this ExecutionMessage message, bool byOrder)
 		{
 			if (message == null)
 				throw new ArgumentNullException(nameof(message));
 
-			return (message.Side == Sides.Buy ? message.TradeVolume : -message.TradeVolume) ?? 0;
+			var sign = message.Side == Sides.Buy ? 1 : -1;
+
+			decimal? position;
+
+			if (byOrder)
+				position = message.OrderVolume - message.Balance;
+			else
+				position = message.TradeVolume;
+
+			return position * sign ?? 0;
 		}
 
 		/// <summary>

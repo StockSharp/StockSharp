@@ -114,7 +114,7 @@ namespace StockSharp.Algo.Positions
 					if (ByOrders && execMsg.HasOrderInfo())
 					{
 						var orderId = execMsg.OriginalTransactionId;
-						var newPosition = execMsg.GetPosition();
+						var newPosition = execMsg.GetPosition(true);
 
 						bool isNew;
 						decimal position;
@@ -153,7 +153,7 @@ namespace StockSharp.Algo.Positions
 
 					if (!ByOrders && execMsg.HasTradeInfo())
 					{
-						var position = execMsg.GetPosition();
+						var position = execMsg.GetPosition(false);
 
 						if (position == 0)
 							break;

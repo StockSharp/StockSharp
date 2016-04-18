@@ -1283,7 +1283,7 @@ namespace StockSharp.Algo.Testing
 				var pos = _positions.SafeAdd(tradeMsg.SecurityId, k => RefTuple.Create(0m, 0m), out isNew);
 
 				var totalPos = pos.First + pos.Second;
-				var positionChange = tradeMsg.GetPosition();
+				var positionChange = tradeMsg.GetPosition(false);
 				var reqMoney = GetRequiredMoney(tradeMsg.SecurityId, tradeMsg.Side);
 				
 				pos.First += positionChange;
