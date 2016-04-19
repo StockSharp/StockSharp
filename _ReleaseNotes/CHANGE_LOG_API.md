@@ -2,11 +2,13 @@ StockSharp API Change log
 ========================
 ###current
 * (feature) Charting. ChartDrawData.
-* (feature) Plaza. Spectra 5.0
+* (feature) Plaza. Spectra 5.0 + performance refactoring.
 * (feature) Grid controls (SecurityGrid, OrderGrid etc.) now based on DevExpress.
 * (feature) Quik lua. Averate price for positions.
 * (feature) FIX server. Handle transaction errors.
 * (bug) ADX, Fractals indicator fixes.
+* (bug) Position manager fix.
+* (bug) SecurityPicker. Show common columns fix.
 
 ###v4.3.14.2:
 * (feature) Chart. Active orders.

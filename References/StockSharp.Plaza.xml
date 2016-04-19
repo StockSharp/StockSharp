@@ -7188,98 +7188,6 @@
             Код ошибки, которую прислала Plaza.
             </summary>
     </member>
-    <member name="T:StockSharp.Plaza.PlazaRecord">
-      <summary>
-            Запись в потоке репликации.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Plaza.PlazaRecord.ReplId">
-      <summary>
-            Уникальный идентификатор записи в таблице.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Plaza.PlazaRecord.ReplRevision">
-      <summary>
-            Уникальный номер изменения в таблице.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Plaza.PlazaRecord.ReplDeleted">
-      <summary>
-            Признак того, что запись удалена.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Plaza.PlazaRecord.Table">
-      <summary>
-            Таблица с метаданными, описывающая данные этой записи.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Plaza.PlazaRecord.Count">
-      <summary>
-            Количество колонок в записи.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Plaza.PlazaRecord.Values">
-      <summary>
-            Перечислитель, содержащий значения колонок записи.
-            </summary>
-    </member>
-    <member name="M:StockSharp.Plaza.PlazaRecord.GetInt(StockSharp.Plaza.Metadata.PlazaColumn)">
-      <summary>
-            Получить значение типа <see cref="T:System.Int32" />.
-            </summary>
-      <param name="column">Колонка.</param>
-      <returns>Значение типа <see cref="T:System.Int32" />.</returns>
-    </member>
-    <member name="M:StockSharp.Plaza.PlazaRecord.GetLong(StockSharp.Plaza.Metadata.PlazaColumn)">
-      <summary>
-            Получить значение типа <see cref="T:System.Int64" />.
-            </summary>
-      <param name="column">Колонка.</param>
-      <returns>Значение типа <see cref="T:System.Int64" />.</returns>
-    </member>
-    <member name="M:StockSharp.Plaza.PlazaRecord.GetBool(StockSharp.Plaza.Metadata.PlazaColumn)">
-      <summary>
-            Получить значение типа <see cref="T:System.Boolean" />.
-            </summary>
-      <param name="column">Колонка.</param>
-      <returns>Значение типа <see cref="T:System.Boolean" />.</returns>
-    </member>
-    <member name="M:StockSharp.Plaza.PlazaRecord.GetByte(StockSharp.Plaza.Metadata.PlazaColumn)">
-      <summary>
-            Получить значение типа <see cref="T:System.Byte" />.
-            </summary>
-      <param name="column">Колонка.</param>
-      <returns>Значение типа <see cref="T:System.Byte" />.</returns>
-    </member>
-    <member name="M:StockSharp.Plaza.PlazaRecord.GetString(StockSharp.Plaza.Metadata.PlazaColumn)">
-      <summary>
-            Получить значение типа <see cref="T:System.String" />.
-            </summary>
-      <param name="column">Колонка.</param>
-      <returns>Значение типа <see cref="T:System.String" />.</returns>
-    </member>
-    <member name="M:StockSharp.Plaza.PlazaRecord.GetDateTime(StockSharp.Plaza.Metadata.PlazaColumn)">
-      <summary>
-            Получить значение типа <see cref="T:System.DateTime" />.
-            </summary>
-      <param name="column">Колонка.</param>
-      <returns>Значение типа <see cref="T:System.DateTime" />.</returns>
-    </member>
-    <member name="M:StockSharp.Plaza.PlazaRecord.GetDecimal(StockSharp.Plaza.Metadata.PlazaColumn)">
-      <summary>
-            Получить значение типа <see cref="T:System.Decimal" />.
-            </summary>
-      <param name="column">Колонка.</param>
-      <returns>Значение типа <see cref="T:System.Decimal" />.</returns>
-    </member>
-    <member name="M:StockSharp.Plaza.PlazaRecord.Get``1(StockSharp.Plaza.Metadata.PlazaColumn)">
-      <summary>
-            Получить значение.
-            </summary>
-      <typeparam name="T">Тип возвращаемого значения.</typeparam>
-      <param name="column">Колонка.</param>
-      <returns>Значение типа <typeparamref name="T" />.</returns>
-    </member>
     <member name="T:StockSharp.Plaza.PlazaStreamReplicationTypes">
       <summary>
             Тип потока репликации.
@@ -7932,6 +7840,53 @@
       <summary>
             Внутренний класс для обработки Plaza сообщений.
             </summary>
+    </member>
+    <member name="T:StockSharp.Plaza.IPlazaRecord">
+      <summary>
+            Запись в потоке репликации.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Plaza.IPlazaRecord.GetLong(StockSharp.Plaza.Metadata.PlazaColumn)">
+      <summary>
+            Получить значение типа <see cref="T:System.Int64" />.
+            </summary>
+      <param name="column">Колонка.</param>
+      <returns>Значение типа <see cref="T:System.Int64" />.</returns>
+    </member>
+    <member name="M:StockSharp.Plaza.IPlazaRecord.GetInt(StockSharp.Plaza.Metadata.PlazaColumn)">
+      <summary>
+            Получить значение типа <see cref="T:System.Int32" />.
+            </summary>
+      <param name="column">Колонка.</param>
+      <returns>Значение типа <see cref="T:System.Int32" />.</returns>
+    </member>
+    <member name="M:StockSharp.Plaza.IPlazaRecord.GetString(StockSharp.Plaza.Metadata.PlazaColumn)">
+      <summary>
+            Получить значение типа <see cref="T:System.String" />.
+            </summary>
+      <param name="column">Колонка.</param>
+      <returns>Значение типа <see cref="T:System.String" />.</returns>
+    </member>
+    <member name="M:StockSharp.Plaza.IPlazaRecord.GetDateTime(StockSharp.Plaza.Metadata.PlazaColumn)">
+      <summary>
+            Получить значение типа <see cref="T:System.DateTime" />.
+            </summary>
+      <param name="column">Колонка.</param>
+      <returns>Значение типа <see cref="T:System.DateTime" />.</returns>
+    </member>
+    <member name="M:StockSharp.Plaza.IPlazaRecord.GetByte(StockSharp.Plaza.Metadata.PlazaColumn)">
+      <summary>
+            Получить значение типа <see cref="T:System.Byte" />.
+            </summary>
+      <param name="column">Колонка.</param>
+      <returns>Значение типа <see cref="T:System.Byte" />.</returns>
+    </member>
+    <member name="M:StockSharp.Plaza.IPlazaRecord.GetDecimal(StockSharp.Plaza.Metadata.PlazaColumn)">
+      <summary>
+            Получить значение типа <see cref="T:System.Decimal" />.
+            </summary>
+      <param name="column">Колонка.</param>
+      <returns>Значение типа <see cref="T:System.Decimal" />.</returns>
     </member>
     <member name="T:StockSharp.Plaza.Xaml.PlazaTableListComboBox">
       <summary>
