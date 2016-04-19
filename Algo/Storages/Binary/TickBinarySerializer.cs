@@ -181,7 +181,7 @@ namespace StockSharp.Algo.Storages.Binary
 					continue;
 
 				if (metaInfo.Version < MarketDataVersions.Version47)
-					writer.WriteLong(SecurityId.GetLatency(msg.ServerTime, msg.LocalTime).Ticks);
+					writer.WriteLong((msg.LocalTime - msg.ServerTime).Ticks);
 				else
 				{
 					var hasLocalTime = true;

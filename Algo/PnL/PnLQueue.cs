@@ -115,7 +115,7 @@ namespace StockSharp.Algo.PnL
 						if (price == 0)
 							price = TradePrice;
 
-						return TraderHelper.GetPnL(t.First, t.Second, _openedPosSide, price);
+						return GetPnL(t.First, t.Second, _openedPosSide, price);
 					}));
 
 				v = _unrealizedPnL = sum * _multiplier;
@@ -161,7 +161,7 @@ namespace StockSharp.Algo.PnL
 							var diff = currTrade.Second.Min(volume);
 							closedVolume += diff;
 
-							pnl += TraderHelper.GetPnL(currTrade.First, diff, _openedPosSide, price);
+							pnl += GetPnL(currTrade.First, diff, _openedPosSide, price);
 
 							volume -= diff;
 							currTrade.Second -= diff;
@@ -265,6 +265,11 @@ namespace StockSharp.Algo.PnL
 			_multiplier = StepPrice == 0 || PriceStep == 0 
 				? 1 
 				: StepPrice / PriceStep;
+		}
+
+		private static decimal GetPnL(decimal price, decimal volume, Sides side, decimal marketPrice)
+		{
+			return (price - marketPrice) * volume * (side == Sides.Sell ? 1 : -1);
 		}
 	}
 }
