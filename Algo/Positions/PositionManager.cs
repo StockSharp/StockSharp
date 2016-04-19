@@ -116,6 +116,9 @@ namespace StockSharp.Algo.Positions
 						var orderId = execMsg.OriginalTransactionId;
 						var newPosition = execMsg.GetPosition(true);
 
+						if (newPosition == null)
+							break;
+
 						bool isNew;
 						decimal position;
 
@@ -128,15 +131,15 @@ namespace StockSharp.Algo.Positions
 
 							if (_byOrderPositions.TryGetValue(orderId, out oldPosition))
 							{
-								if (newPosition != oldPosition.Item2)
-									_byOrderPositions[orderId] = Tuple.Create(execMsg.Side, newPosition);
+								if (newPosition.Value != oldPosition.Item2)
+									_byOrderPositions[orderId] = Tuple.Create(execMsg.Side, newPosition.Value);
 
-								position = newPosition - oldPosition.Item2;
+								position = newPosition.Value - oldPosition.Item2;
 							}
 							else
 							{
-								_byOrderPositions.Add(orderId, Tuple.Create(execMsg.Side, newPosition));
-								position = newPosition;
+								_byOrderPositions.Add(orderId, Tuple.Create(execMsg.Side, newPosition.Value));
+								position = newPosition.Value;
 							}
 
 							_positions[key] = prev + position;
@@ -155,7 +158,7 @@ namespace StockSharp.Algo.Positions
 					{
 						var position = execMsg.GetPosition(false);
 
-						if (position == 0)
+						if (position == null || position == 0)
 							break;
 
 						bool isNew;
@@ -164,8 +167,8 @@ namespace StockSharp.Algo.Positions
 						{
 							decimal prev;
 							isNew = _positions.TryGetValue(key, out prev);
-							_positions[key] = prev + position;
-							Position += position;
+							_positions[key] = prev + position.Value;
+							Position += position.Value;
 						}
 
 						if (isNew)

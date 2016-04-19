@@ -430,7 +430,7 @@ namespace StockSharp.Algo
 		/// </summary>
 		/// <param name="trade">My trade, used for position calculation. At buy the trade volume <see cref="Trade.Volume"/> is taken with positive sign, at sell - with negative.</param>
 		/// <returns>Position.</returns>
-		public static decimal GetPosition(this MyTrade trade)
+		public static decimal? GetPosition(this MyTrade trade)
 		{
 			if (trade == null)
 				throw new ArgumentNullException(nameof(trade));
@@ -444,7 +444,7 @@ namespace StockSharp.Algo
 		/// <param name="message">My trade, used for position calculation. At buy the trade volume <see cref="ExecutionMessage.TradeVolume"/> is taken with positive sign, at sell - with negative.</param>
 		/// <param name="byOrder">To check implemented volume by order balance (<see cref="ExecutionMessage.Balance"/>) or by received trades. The default is checked by the order.</param>
 		/// <returns>Position.</returns>
-		public static decimal GetPosition(this ExecutionMessage message, bool byOrder)
+		public static decimal? GetPosition(this ExecutionMessage message, bool byOrder)
 		{
 			if (message == null)
 				throw new ArgumentNullException(nameof(message));
@@ -458,7 +458,7 @@ namespace StockSharp.Algo
 			else
 				position = message.TradeVolume;
 
-			return position * sign ?? 0;
+			return position * sign;
 		}
 
 		/// <summary>
@@ -491,15 +491,15 @@ namespace StockSharp.Algo
 			return connector.Positions.Filter(portfolio).Sum(p => p.CurrentValue);
 		}
 
-		/// <summary>
-		/// To get the position by My trades.
-		/// </summary>
-		/// <param name="trades">My trades, used for the position calculation using the <see cref="GetPosition(StockSharp.BusinessEntities.MyTrade)"/> method.</param>
-		/// <returns>Position.</returns>
-		public static decimal GetPosition(this IEnumerable<MyTrade> trades)
-		{
-			return trades.Sum(t => t.GetPosition());
-		}
+		///// <summary>
+		///// To get the position by My trades.
+		///// </summary>
+		///// <param name="trades">My trades, used for the position calculation using the <see cref="GetPosition(StockSharp.BusinessEntities.MyTrade)"/> method.</param>
+		///// <returns>Position.</returns>
+		//public static decimal GetPosition(this IEnumerable<MyTrade> trades)
+		//{
+		//	return trades.Sum(t => t.GetPosition());
+		//}
 
 		/// <summary>
 		/// To get the trade volume, collatable with the position size.
