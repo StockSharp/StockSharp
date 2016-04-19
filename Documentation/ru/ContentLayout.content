@@ -4,7 +4,7 @@
   <Topic id="ba149b22-2024-4479-aaf3-8dd271a681f5" visible="True" title="Лицензирование StockSharp" />
   <Topic id="536b1c81-5336-4dc0-ab29-8bef70a162ba" visible="True" title="Исходные коды" />
   <Topic id="a594740e-58f1-4148-afe7-d41abc4d486b" visible="True" title="Справочные материалы" />
-  <Topic id="e0f9d08e-5dba-4d5d-9248-4d37eba61b22" visible="True" title="S#.API">
+  <Topic id="e0f9d08e-5dba-4d5d-9248-4d37eba61b22" visible="True" isExpanded="true" title="S#.API">
     <Topic id="87d2cacd-5492-4bca-9140-7d7c3f5218d7" visible="True" title="Архитектура S#.API" />
     <Topic id="b9f672db-e0c9-4208-9759-179e5de17fd8" visible="True" title="Установка S#.API" />
     <Topic id="0f4f40ab-74a7-4a56-ab8b-6c07271e48e2" visible="True" title="История изменений" />
@@ -165,8 +165,9 @@
       <Topic id="ee8f7be8-80ad-4ab9-a5aa-14754fe024f1" visible="True" title="Индекс" />
       <Topic id="39e0b7aa-0303-438c-b347-fea21540c9f3" visible="True" title="Поиск инструмента" />
     </Topic>
-    <Topic id="7a8a9518-6270-4cfe-a829-fa6c40e5fabd" visible="True" title="Хранение данных">
+    <Topic id="7a8a9518-6270-4cfe-a829-fa6c40e5fabd" visible="True" isExpanded="true" title="Хранение данных">
       <Topic id="e4a57b52-bd14-4640-a7c7-0979dba1ad0a" visible="True" title="API" />
+      <Topic id="ac584200-f06a-49e6-b2fd-141b5fc898f9" visible="True" isSelected="true" title="Хранилище сообщений" />
     </Topic>
     <Topic id="cd52cfcf-938c-4fce-9a56-4e9a001f0792" visible="True" title="Свечки">
       <Topic id="287125e1-7c7e-4be3-a8ce-5018538e613f" visible="True" title="График" />
@@ -275,7 +276,7 @@
       <Topic id="c4aa5add-198d-432b-93fa-6ce60d0b7856" visible="True" title="PropertyGridEx" />
       <Topic id="88a40124-43a6-4be9-b04b-a245000fca70" visible="True" title="UniversalGrid" />
     </Topic>
-    <Topic id="5794f4b0-c536-4713-ad08-955a4a01b196" visible="True" isSelected="true" title="Сообщения">
+    <Topic id="5794f4b0-c536-4713-ad08-955a4a01b196" visible="True" title="Сообщения">
       <Topic id="fcd2df04-2463-4f85-aa0c-9b7a8f95a56a" visible="True" title="Описание" />
       <Topic id="fb79e67d-945c-493d-bdac-85d0040af828" visible="True" title="Адаптеры" />
       <Topic id="a26fc10a-4aa5-4a3e-9494-823c43eb9c84" visible="True" title="Хранилище сообщений" />

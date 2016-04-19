@@ -231,12 +231,41 @@
 	</list>
 	<para>
 		Если используется тип <codeEntityReference>F:StockSharp.Messages.ExecutionTypes.Transaction</codeEntityReference>, то речь идет о собственных заявках или сделках. 
-		При этом, если сообщение содержит информацию о заявке то, свойство <codeEntityReference>T:StockSharp.Messages.ExecutionMessage.HasOrderInfo</codeEntityReference> = true, 
-		если есть информация о сделке то, свойство <codeEntityReference>T:StockSharp.Messages.ExecutionMessage.HasTradeInfo</codeEntityReference> = true. Обратите внимание, что
+		При этом, если сообщение содержит информацию о заявке то, свойство <codeEntityReference>P:StockSharp.Messages.ExecutionMessage.HasOrderInfo</codeEntityReference> = true, 
+		если есть информация о сделке то, свойство <codeEntityReference>P:StockSharp.Messages.ExecutionMessage.HasTradeInfo</codeEntityReference> = true. Обратите внимание, что
 		<legacyItalic>собственная сделка</legacyItalic> содержит информацию как о самой сделке, так и о заявке, связанной с этой сделкой. Поэтому в этом случае вышеприведенные
 		свойства имеют значение true. Эти свойства позволяют дифференцировать сообщения с собственными сделками и заявками.
 	</para>
+	<para>
+	<token>stocksharp</token> содержит набор методов расширения для преобразования торговых объектов в сообщения и наоборот. Например, можно преобразовать заявку  
+	<codeEntityReference>T:StockSharp.BusinessEntities.Order</codeEntityReference> в сообщение 
+	<codeEntityReference>T:StockSharp.Messages.ExecutionMessage</codeEntityReference>,
+	а также выполнить обратную операцию, как это показано в следующем фрагменте кода.
+	          <!--var tr = (IMarketDataStorage<Trade>)_storage.GetTickMessageStorage(sec);
+            var ss = tr as IMarketDataStorage<Trade>;
+            var aa = new Trade();
+            var sa = aa.ToMessage();
+            var em = new ExecutionMessage();
+            var ew = em.ToTrade(sec);-->
+	</para>
+						<code language="C#">
+<![CDATA[
+
+	var security = new Security() {Id = "RIM6#FORTS" };
 	
+	// Для демонстрационных целей детали создания заявки опущены
+	var order = new Order();
+	
+	// Конвертируем заявку в сообщение
+	var message = order.ToMessage();
+	
+	// Выполняем обратное преобразование
+	var order1 = message.ToOrder(security);
+
+]]></code>
+	
+	  
+
 	
     </introduction>
   </developerConceptualDocument>

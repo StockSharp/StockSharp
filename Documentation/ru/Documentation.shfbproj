@@ -182,6 +182,7 @@
       <ImageId>candle_qpile</ImageId>
       <AlternateText>candle qpile</AlternateText>
     </None>
+    <None Include="Topics\MessageStorage.aml" />
     <None Include="Topics\Designer.aml" />
     <None Include="Topics\TwimeSample.aml" />
     <None Include="Topics\TWIME.aml" />
