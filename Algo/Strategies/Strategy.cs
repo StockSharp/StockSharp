@@ -247,16 +247,16 @@ namespace StockSharp.Algo.Strategies
 			NameGenerator = new StrategyNameGenerator(this);
 			NameGenerator.Changed += name => _name.Value = name;
 
-			_id = this.Param("Id", base.Id);
-			_volume = this.Param<decimal>("Volume", 1);
-			_name = this.Param("Name", new string(GetType().Name.Where(char.IsUpper).ToArray()));
-			_maxErrorCount = this.Param("MaxErrorCount", 1);
-			_disposeOnStop = this.Param("DisposeOnStop", false);
-			_cancelOrdersWhenStopping = this.Param("CancelOrdersWhenStopping", true);
-			_waitAllTrades = this.Param<bool>("WaitAllTrades");
-			_commentOrders = this.Param<bool>("CommentOrders");
-			_ordersKeepTime = this.Param("OrdersKeepTime", TimeSpan.FromDays(1));
-			_logLevel = this.Param("LogLevel", LogLevels.Inherit);
+			_id = this.Param(nameof(Id), base.Id);
+			_volume = this.Param<decimal>(nameof(Volume), 1);
+			_name = this.Param(nameof(Name), new string(GetType().Name.Where(char.IsUpper).ToArray()));
+			_maxErrorCount = this.Param(nameof(MaxErrorCount), 1);
+			_disposeOnStop = this.Param(nameof(DisposeOnStop), false);
+			_cancelOrdersWhenStopping = this.Param(nameof(CancelOrdersWhenStopping), true);
+			_waitAllTrades = this.Param<bool>(nameof(WaitAllTrades));
+			_commentOrders = this.Param<bool>(nameof(CommentOrders));
+			_ordersKeepTime = this.Param(nameof(OrdersKeepTime), TimeSpan.FromDays(1));
+			_logLevel = this.Param(nameof(LogLevel), LogLevels.Inherit);
 
 			InitMaxOrdersKeepTime();
 
@@ -424,7 +424,7 @@ namespace StockSharp.Algo.Strategies
 					}
 				});
 
-				RaiseParametersChanged("Portfolio");
+				RaiseParametersChanged(nameof(Portfolio));
 				PortfolioChanged?.Invoke();
 			}
 		}
@@ -457,7 +457,7 @@ namespace StockSharp.Algo.Strategies
 					}
 				});
 				
-				RaiseParametersChanged("Security");
+				RaiseParametersChanged(nameof(Security));
 				SecurityChanged?.Invoke();
 			}
 		}
@@ -681,7 +681,7 @@ namespace StockSharp.Algo.Strategies
 					return;
 
 				_errorCount = value;
-				this.Notify("ErrorCount");
+				this.Notify(nameof(ErrorCount));
 			}
 		}
 
@@ -751,7 +751,7 @@ namespace StockSharp.Algo.Strategies
 				try
 				{
 					RaiseProcessStateChanged(this);
-					this.Notify("ProcessState");
+					this.Notify(nameof(ProcessState));
 				}
 				catch (Exception error)
 				{
@@ -931,7 +931,7 @@ namespace StockSharp.Algo.Strategies
 					return;
 
 				_errorState = value;
-				this.Notify("ErrorState");
+				this.Notify(nameof(ErrorState));
 			}
 		}
 
@@ -959,7 +959,7 @@ namespace StockSharp.Algo.Strategies
 			private set
 			{
 				_startedTime = value;
-				this.Notify("StartedTime");
+				this.Notify(nameof(StartedTime));
 			}
 		}
 
@@ -986,7 +986,7 @@ namespace StockSharp.Algo.Strategies
 					return;
 
 				_totalWorkingTime = value;
-				this.Notify("TotalWorkingTime");
+				this.Notify(nameof(TotalWorkingTime));
 			}
 		}
 
