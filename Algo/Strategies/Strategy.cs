@@ -1328,22 +1328,33 @@ namespace StockSharp.Algo.Strategies
 						return true;
 
 					if (order.State != OrderStates.Done)
+					{
+						this.AddWarningLog("Order {0} has state {1}. Rule cannot be stopped.", order.GetTraceId(), order.State);
 						return false;
+					}
 
 					if (!WaitAllTrades)
 						return true;
 
-					var matchedVolume = order.GetMatchedVolume(Connector);
+					//var leftVolume = order.Volume - order.GetMatchedVolume(Connector, true);
 
-					if (matchedVolume == 0)
-						return true;
+					//if (leftVolume == 0)
+					//	return true;
 
 					var info = _ordersInfo.TryGetValue(order);
 
 					if (info == null)
+					{
+						this.AddWarningLog("Order {0} info not found.", order.GetTraceId(), order.State);
 						return false;
+					}
 
-					return matchedVolume == info.ReceivedVolume;
+					var leftVolume = order.Volume - info.ReceivedVolume;
+
+					if (leftVolume != 0)
+						this.AddDebugLog("Order {0} has left trade volume {1}.", order.GetTraceId(), leftVolume);
+
+					return leftVolume == 0;
 				})
 				.Apply(this);
 
