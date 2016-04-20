@@ -6177,9 +6177,10 @@ M:StockSharp.Algo.TraderHelper.ShrinkPrice(StockSharp.BusinessEntities.Security,
 M:StockSharp.Algo.TraderHelper.GetPosition(StockSharp.BusinessEntities.MyTrade)/summary;DocStr2285
 M:StockSharp.Algo.TraderHelper.GetPosition(StockSharp.BusinessEntities.MyTrade)/param/trade;DocStr2286
 M:StockSharp.Algo.TraderHelper.GetPosition(StockSharp.BusinessEntities.MyTrade)/returns;Str862
-M:StockSharp.Algo.TraderHelper.GetPosition(StockSharp.Messages.ExecutionMessage)/summary;DocStr2285
-M:StockSharp.Algo.TraderHelper.GetPosition(StockSharp.Messages.ExecutionMessage)/param/message;DocStr2286
-M:StockSharp.Algo.TraderHelper.GetPosition(StockSharp.Messages.ExecutionMessage)/returns;Str862
+M:StockSharp.Algo.TraderHelper.GetPosition(StockSharp.Messages.ExecutionMessage,System.Boolean)/summary;DocStr2285
+M:StockSharp.Algo.TraderHelper.GetPosition(StockSharp.Messages.ExecutionMessage,System.Boolean)/param/message;DocStr2286
+M:StockSharp.Algo.TraderHelper.GetPosition(StockSharp.Messages.ExecutionMessage,System.Boolean)/param/byOrder;DocStr2376
+M:StockSharp.Algo.TraderHelper.GetPosition(StockSharp.Messages.ExecutionMessage,System.Boolean)/returns;Str862
 M:StockSharp.Algo.TraderHelper.GetPosition(StockSharp.BusinessEntities.Order,StockSharp.BusinessEntities.IConnector)/summary;DocStr2287
 M:StockSharp.Algo.TraderHelper.GetPosition(StockSharp.BusinessEntities.Order,StockSharp.BusinessEntities.IConnector)/param/order;DocStr2288
 M:StockSharp.Algo.TraderHelper.GetPosition(StockSharp.BusinessEntities.Order,StockSharp.BusinessEntities.IConnector)/param/connector;DocStr2398

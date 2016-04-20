@@ -1279,15 +1279,19 @@ namespace StockSharp.Algo.Testing
 				PnLManager.ProcessMyTrade(tradeMsg, out info);
 				tradeMsg.Commission = _parent._commissionManager.Process(tradeMsg);
 
+				var position = tradeMsg.GetPosition(false);
+
+				if (position == null)
+					return;
+
 				bool isNew;
 				var pos = _positions.SafeAdd(tradeMsg.SecurityId, k => RefTuple.Create(0m, 0m), out isNew);
 
 				var totalPos = pos.First + pos.Second;
-				var positionChange = tradeMsg.GetPosition(false);
 				var reqMoney = GetRequiredMoney(tradeMsg.SecurityId, tradeMsg.Side);
 				
-				pos.First += positionChange;
-				pos.Second -= positionChange;
+				pos.First += position.Value;
+				pos.Second -= position.Value;
 
 				_blockedValue += ((pos.First + pos.Second).Abs() - totalPos.Abs()) * reqMoney;
 

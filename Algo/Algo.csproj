@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -107,6 +107,7 @@
     <Compile Include="..\StockSharpAssemblyInfo.cs">
       <Link>Properties\StockSharpAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="CollectionSecurityProvider.cs" />
     <Compile Include="Commissions\CommissionMessageAdapter.cs" />
     <Compile Include="DataType.cs" />
     <Compile Include="Export\Database\CandleTable.cs" />
@@ -423,6 +424,7 @@
     <Compile Include="Testing\RealTimeEmulationTrader.cs" />
     <Compile Include="Testing\TradeGenerator.cs" />
     <Compile Include="TraderHelper.cs" />
+    <Compile Include="TraderHelper_Obsolete.cs" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Client.3.5">

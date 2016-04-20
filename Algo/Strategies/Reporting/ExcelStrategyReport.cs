@@ -262,7 +262,7 @@ namespace StockSharp.Algo.Strategies.Reporting
 						var info = strategy.PnLManager.ProcessMessage(trade.ToMessage());
 
 						totalPnL += info.PnL;
-						position += trade.GetPosition();
+						position += trade.GetPosition() ?? 0;
 
 						var queue = queues.SafeAdd(trade.Trade.Security, key => new PnLQueue(key.ToSecurityId()));
 
