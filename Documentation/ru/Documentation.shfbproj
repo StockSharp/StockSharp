@@ -1684,6 +1684,10 @@
       <ImageId>TwimeSample</ImageId>
       <AlternateText>Twime Sample</AlternateText>
     </Image>
+    <Image Include="Art\GUI_Leve1Grid.png">
+      <ImageId>GUI_Leve1Grid</ImageId>
+      <AlternateText>GUI Leve 1 Grid</AlternateText>
+    </Image>
   </ItemGroup>
   <ItemGroup>
     <None Include="Art\sample_options_calc.png">

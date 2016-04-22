@@ -167,7 +167,7 @@
     </Topic>
     <Topic id="7a8a9518-6270-4cfe-a829-fa6c40e5fabd" visible="True" isExpanded="true" title="Хранение данных">
       <Topic id="e4a57b52-bd14-4640-a7c7-0979dba1ad0a" visible="True" title="API" />
-      <Topic id="ac584200-f06a-49e6-b2fd-141b5fc898f9" visible="True" isSelected="true" title="Хранилище сообщений" />
+      <Topic id="ac584200-f06a-49e6-b2fd-141b5fc898f9" visible="True" title="Хранилище сообщений" />
     </Topic>
     <Topic id="cd52cfcf-938c-4fce-9a56-4e9a001f0792" visible="True" title="Свечки">
       <Topic id="287125e1-7c7e-4be3-a8ce-5018538e613f" visible="True" title="График" />
@@ -229,7 +229,7 @@
       <Topic id="d27245ae-abfd-4d6b-b8c4-d1a24a45116f" visible="True" title="На рыночных данных" />
       <Topic id="9e72851f-2a19-4680-b344-cdc39d1b85e1" visible="True" title="Настройки тестирования" />
     </Topic>
-    <Topic id="a0a4c8df-2bba-4e1e-8ba9-e1fa98728f92" visible="True" title="Пользовательский интерфейс (GUI)">
+    <Topic id="a0a4c8df-2bba-4e1e-8ba9-e1fa98728f92" visible="True" isExpanded="true" title="Пользовательский интерфейс (GUI)">
       <Topic id="956b3163-c537-4e1d-af29-cf80b633db3c" visible="True" title="Графики">
         <Topic id="a76a0a9c-bb95-4596-9464-9903379b3096" visible="True" title="Свечной график" />
         <Topic id="bb71ead8-62c4-47f8-a1aa-242d63d631fb" visible="True" title="График-панель" />
@@ -254,8 +254,9 @@
         <Topic id="43ce1f81-83aa-4e83-816f-7362de518f9e" visible="True" title="Непрерывный фьючерс" />
         <Topic id="c3ee456c-31a9-4bc9-b296-c5f805bafb9e" visible="True" title="Индекс" />
       </Topic>
-      <Topic id="af144c31-4138-4d15-8097-fd0137370830" visible="True" title="Рыночные данные">
+      <Topic id="af144c31-4138-4d15-8097-fd0137370830" visible="True" isExpanded="true" title="Рыночные данные">
         <Topic id="8ec4f4b6-e7c8-4bf0-b05e-1d98960ca45f" visible="True" title="Тиковые сделки" />
+        <Topic id="cec80fb2-5072-4900-92d8-0e5c88becce3" visible="True" isSelected="true" title="Level1" />
         <Topic id="3a23bf32-fcbd-409b-99b3-2ff1b953c85a" visible="True" title="Стакан" />
         <Topic id="583c9ad6-8798-4167-a6a1-667e9929fe2d" visible="True" title="Лог заявок" />
         <Topic id="f9005237-fc93-4086-9300-6b081056a0fa" visible="True" title="Новости" />
