@@ -201,7 +201,7 @@ namespace StockSharp.Algo
 			else if (candle is RenkoCandle)
 				message = new RenkoCandleMessage();
 			else
-				throw new ArgumentException("Неизвестный тип '{0}' свечки.".Put(candle.GetType()), nameof(candle));
+				throw new ArgumentException(LocalizedStrings.UnknownCandleType.Put(candle.GetType()), nameof(candle));
 
 			message.LocalTime = candle.OpenTime;
 			message.SecurityId = candle.Security.ToSecurityId();

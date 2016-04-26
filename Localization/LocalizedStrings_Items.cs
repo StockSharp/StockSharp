@@ -42056,5 +42056,25 @@ namespace StockSharp.Localization
 		/// Custom format.
 		/// </summary>
 		public static string CustomExportFormat => GetString(CustomExportFormatKey);
+
+		/// <summary>
+		/// Unknown candle type '{0}'.
+		/// </summary>
+		public const string UnknownCandleTypeKey = "UnknownCandleType";
+
+		/// <summary>
+		/// Unknown candle type '{0}'.
+		/// </summary>
+		public static string UnknownCandleType => GetString(UnknownCandleTypeKey);
+
+		/// <summary>
+		/// Invalid argument value.
+		/// </summary>
+		public const string InvalidArgumentValueKey = "InvalidArgumentValue";
+
+		/// <summary>
+		/// Invalid argument value.
+		/// </summary>
+		public static string InvalidArgumentValue => GetString(InvalidArgumentValueKey);
 	}
 }

@@ -4240,6 +4240,8 @@ VolumeCandle;Volume candle;Объемные свечи
 RangeCandle;Range candle;Рейндж свечи
 PnFCandle;XO candle;XO свечи
 RenkoCandle;Renko candle;Ренко свечи
+UnknownCandleType;Unknown candle type '{0}'.;Неизвестный тип '{0}' свечи.
+InvalidArgumentValue;Invalid argument value.;Неправильное значение.
 DocStr0;Button activation alert settings;Кнопка активации настроек сигнала
 DocStr1;Initializes a new instance of the {0};Создать {0}
 DocStr2;Load settings;Загрузить настройки

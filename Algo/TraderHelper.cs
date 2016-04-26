@@ -111,7 +111,7 @@ namespace StockSharp.Algo
 		public static OrderStates CheckModification(this OrderStates prev, OrderStates curr)
 		{
 			if (!_stateChangePossibilities[(int)prev][(int)curr])
-				throw new ArgumentException("message");
+				throw new InvalidOperationException($"{prev} -> {curr}");
 
 			return curr;
 		}
