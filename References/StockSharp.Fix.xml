@@ -773,6 +773,14 @@
       <param name="buffer">
         <see cref="T:System.String" /> value.</param>
     </member>
+    <member name="M:StockSharp.Fix.Native.BinaryFixReader.ReadString(System.Char*,System.String)">
+      <summary>
+            Read <see cref="T:System.String" /> value as a constant value.
+            </summary>
+      <param name="buffer">
+        <see cref="T:System.String" /> value.</param>
+      <param name="constValue">The constant value.</param>
+    </member>
     <member name="M:StockSharp.Fix.Native.BinaryFixReader.ReadString">
       <summary>
             Read <see cref="T:System.String" /> value.

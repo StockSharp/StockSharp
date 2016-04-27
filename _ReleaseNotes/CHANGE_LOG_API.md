@@ -1,6 +1,9 @@
 StockSharp API Change log
 ========================
 ###current
+* (feature) TraderHelper. Removed obsolete GetPosition overloads.
+* (bug) Micex TEAP. Fix struct downloading.
+* (feature) Micex TEAP. New enum statuses.
 * (feature) Charting. ChartDrawData.
 * (feature) Plaza. Spectra 5.0 + performance refactoring.
 * (feature) Grid controls (SecurityGrid, OrderGrid etc.) now based on DevExpress.

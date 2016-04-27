@@ -13108,3 +13108,5 @@ DocStr9003;The {0} that contains the event data. The event data reports that the
 DocStr9004;The {0} that contains the event data. The event data reports that the right mouse button was released;The {0} that contains the event data. The event data reports that the right mouse button was released
 DocStr9005;Selected order changed;Событие изменения заявки
 DocStr9006;Raise {0} event;Вызвать событие {0}
+DocStr9007;Read {0} value as a constant value;Прочитать {0} значение как константу
+DocStr9008;The constant value;Константное значение
