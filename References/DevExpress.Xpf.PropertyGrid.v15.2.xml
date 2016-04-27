@@ -1,0 +1,2719 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>DevExpress.Xpf.PropertyGrid.v15.2</name>
+    </assembly>
+    <members>
+        <member name="T:DevExpress.Xpf.PropertyGrid.DescriptionLocation">
+
+            <summary>
+                <para>Lists values that specify the location of the property description.
+</para>
+            </summary>
+
+        </member>
+        <member name="F:DevExpress.Xpf.PropertyGrid.DescriptionLocation.None">
+            <summary>
+                <para>Disable showing property descriptions.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.PropertyGrid.DescriptionLocation.Panel">
+            <summary>
+                <para>Show property descriptions within the description panel.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.PropertyGrid.DescriptionLocation.ToolTip">
+            <summary>
+                <para>Show property descriptions within the tooltip.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.PropertyGrid.DescriptionLocation.ToolTipAndPanel">
+            <summary>
+                <para>Show property descriptions within the description panel and the tooltip.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="T:DevExpress.Xpf.PropertyGrid.AllowExpandingMode">
+
+            <summary>
+                <para>Lists the values used to specify which properties can be expanded.
+</para>
+            </summary>
+
+        </member>
+        <member name="F:DevExpress.Xpf.PropertyGrid.AllowExpandingMode.Default">
+            <summary>
+                <para>Expands properties according to its type converter.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.PropertyGrid.AllowExpandingMode.Force">
+            <summary>
+                <para>Expands all properties.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.PropertyGrid.AllowExpandingMode.ForceIfNoTypeConverter">
+            <summary>
+                <para>Expands all properties that don't have a type converter.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.PropertyGrid.AllowExpandingMode.Never">
+            <summary>
+                <para>Doesn't expand any property.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="T:DevExpress.Xpf.PropertyGrid.HeaderShowMode">
+
+            <summary>
+                <para>Lists the values used to specify the property display mode.
+</para>
+            </summary>
+
+        </member>
+        <member name="F:DevExpress.Xpf.PropertyGrid.HeaderShowMode.Hidden">
+            <summary>
+                <para>Doesn't show the property header.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.PropertyGrid.HeaderShowMode.Left">
+            <summary>
+                <para>Shows the property header to the left of the property value.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.PropertyGrid.HeaderShowMode.OnlyHeader">
+            <summary>
+                <para>Doesn't show the property value.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.PropertyGrid.HeaderShowMode.Top">
+            <summary>
+                <para>Shows the property header at the top of the property value.
+
+</para>
+            </summary>
+
+
+        </member>
+        <member name="T:DevExpress.Xpf.PropertyGrid.ShowMenuMode">
+
+            <summary>
+                <para>Lists values that specify when a Property Grid displays the Property Menu.
+</para>
+            </summary>
+
+        </member>
+        <member name="F:DevExpress.Xpf.PropertyGrid.ShowMenuMode.Always">
+            <summary>
+                <para>The property menu is shown by clicking the menu button or right-clicking the property.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.PropertyGrid.ShowMenuMode.OnMenuButtonClick">
+            <summary>
+                <para>The property menu is shown only by clicking the menu button.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.PropertyGrid.ShowMenuMode.OnRightClick">
+            <summary>
+                <para>The property menu is shown only by right-clicking the property.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="T:DevExpress.Xpf.PropertyGrid.PropertyGridControl">
+
+            <summary>
+                <para>The property grid control.
+</para>
+            </summary>
+
+        </member>
+        <member name="M:DevExpress.Xpf.PropertyGrid.PropertyGridControl.#ctor">
+            <summary>
+                <para>Initializes a new instance of the PropertyGridControl class with default settings.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.PropertyGrid.PropertyGridControl.ActualDescriptionContainerStyle">
+            <summary>
+                <para>Gets the actual property description style. This is a dependency property.
+</para>
+            </summary>
+            <value>A <see cref="T:System.Windows.Style"/> object that specifies the actual style applied to property descriptions. 
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.PropertyGrid.PropertyGridControl.ActualDescriptionContainerStyleProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.PropertyGrid.PropertyGridControl.ActualDescriptionContainerStyleSelector">
+            <summary>
+                <para>Gets the actual style selector that chooses a property description style based on custom logic. This is a dependency property.
+</para>
+            </summary>
+            <value>A <see cref="T:System.Windows.Controls.StyleSelector"/> descendant that is the actual style selector.
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.PropertyGrid.PropertyGridControl.ActualDescriptionContainerStyleSelectorProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.PropertyGrid.PropertyGridControl.ActualDescriptionTemplateSelector">
+            <summary>
+                <para>Gets the actual template selector that chooses a property description template based on custom logic. This is a dependency property.
+</para>
+            </summary>
+            <value>A <see cref="T:System.Windows.Controls.DataTemplateSelector"/> descendant that chooses a template based on custom logic.
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.PropertyGrid.PropertyGridControl.ActualDescriptionTemplateSelectorProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.PropertyGrid.PropertyGridControl.AllowCommitOnValidationAttributeError">
+            <summary>
+                <para> </para>
+            </summary>
+            <value> </value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.PropertyGrid.PropertyGridControl.AllowCommitOnValidationAttributeErrorProperty">
+            <summary>
+                <para> </para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.PropertyGrid.PropertyGridControl.AllowExpanding">
+            <summary>
+                <para>Gets or sets whether the end-user is allowed to expand properties to access its nested properties. This is a dependency property.
+
+</para>
+            </summary>
+            <value>An <see cref="T:DevExpress.Xpf.PropertyGrid.AllowExpandingMode"/> enumeration value.
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.PropertyGrid.PropertyGridControl.AllowExpandingProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.PropertyGrid.PropertyGridControl.AllowInstanceInitializer">
+            <summary>
+                <para>Gets or sets whether to enable the instance initializer for the property grid. This is a dependency property.
+</para>
+            </summary>
+            <value><b>true</b>, to enable the instance initializer; otherwise, <b>false</b>.
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.PropertyGrid.PropertyGridControl.AllowInstanceInitializerProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.PropertyGrid.PropertyGridControl.AllowListItemInitializer">
+            <summary>
+                <para>Gets or sets whether to enable the list item initializer for the property grid. This is a dependency property.
+</para>
+            </summary>
+            <value><b>true</b>, to enable the list item initializer; otherwise, <b>false</b>.
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.PropertyGrid.PropertyGridControl.AllowListItemInitializerProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="M:DevExpress.Xpf.PropertyGrid.PropertyGridControl.BeginInit">
+            <summary>
+                <para>Starts the runtime initialization. 
+</para>
+            </summary>
+
+
+        </member>
+        <member name="E:DevExpress.Xpf.PropertyGrid.PropertyGridControl.CellValueChanged">
+            <summary>
+                <para>Occurs after a cell's value has been changed.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.PropertyGrid.PropertyGridControl.CellValueChangedEvent">
+            <summary>
+                <para>Identifies the  routed event.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="E:DevExpress.Xpf.PropertyGrid.PropertyGridControl.CellValueChanging">
+            <summary>
+                <para>Fires in response to changing the edit value.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.PropertyGrid.PropertyGridControl.CellValueChangingEvent">
+            <summary>
+                <para>Identifies the  routed event.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="M:DevExpress.Xpf.PropertyGrid.PropertyGridControl.CloseEditor">
+            <summary>
+                <para> </para>
+            </summary>
+
+
+        </member>
+        <member name="M:DevExpress.Xpf.PropertyGrid.PropertyGridControl.Collapse(System.String)">
+            <summary>
+                <para>Collapses the specified property.
+</para>
+            </summary>
+            <param name="selectedPropertyPath">
+		A <see cref="T:System.String"/> which specifies the property path.
+
+            </param>
+
+
+        </member>
+        <member name="E:DevExpress.Xpf.PropertyGrid.PropertyGridControl.CustomDisplayText">
+            <summary>
+                <para>Enables you to display a custom text within the property grid rows.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.PropertyGrid.PropertyGridControl.CustomDisplayTextEvent">
+            <summary>
+                <para>Identifies the  routed event.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="E:DevExpress.Xpf.PropertyGrid.PropertyGridControl.CustomExpand">
+            <summary>
+                <para>Enables you to control how categories are expanding.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.PropertyGrid.PropertyGridControl.CustomExpandEvent">
+            <summary>
+                <para>Identifies the  routed event.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.PropertyGrid.PropertyGridControl.DescriptionContainerStyle">
+            <summary>
+                <para>Gets or sets the style applied to property descriptions within the grid. This is a dependency property.
+</para>
+            </summary>
+            <value>A <see cref="T:System.Windows.Style"/> object that specifies the style applied to property descriptions. 
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.PropertyGrid.PropertyGridControl.DescriptionContainerStyleProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.PropertyGrid.PropertyGridControl.DescriptionContainerStyleSelector">
+            <summary>
+                <para>Gets or sets an object that chooses a property description style based on custom logic. This is a dependency property.
+</para>
+            </summary>
+            <value>A <see cref="T:System.Windows.Controls.StyleSelector"/> descendant that chooses a style based on custom logic.
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.PropertyGrid.PropertyGridControl.DescriptionContainerStyleSelectorProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.PropertyGrid.PropertyGridControl.DescriptionTemplate">
+            <summary>
+                <para>Gets or sets the template that defines the presentation of property descriptions. This is a dependency property.
+</para>
+            </summary>
+            <value>A <see cref="T:System.Windows.DataTemplate"/> object that defines the presentation of property descriptions.
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.PropertyGrid.PropertyGridControl.DescriptionTemplateProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.PropertyGrid.PropertyGridControl.DescriptionTemplateSelector">
+            <summary>
+                <para>Gets or sets an object that chooses a property description template based on custom logic. This is a dependency property.
+</para>
+            </summary>
+            <value>A <see cref="T:System.Windows.Controls.DataTemplateSelector"/> descendant that applies a template based on custom logic.
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.PropertyGrid.PropertyGridControl.DescriptionTemplateSelectorProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="M:DevExpress.Xpf.PropertyGrid.PropertyGridControl.EndInit">
+            <summary>
+                <para>Ends the runtime initialization.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="M:DevExpress.Xpf.PropertyGrid.PropertyGridControl.Expand(System.String)">
+            <summary>
+                <para>Expands the specified property.
+</para>
+            </summary>
+            <param name="selectedPropertyPath">
+		A <see cref="T:System.String"/> which specifies the property path.
+
+            </param>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.PropertyGrid.PropertyGridControl.ExpandCategoriesWhenSelectedObjectChanged">
+            <summary>
+                <para>Gets or sets whether to automatically expand all categories when changing the selected object. This is a dependency property.
+</para>
+            </summary>
+            <value><b>true</b>, to expand all categories when changing the selected object; otherwise, <b>false</b>.
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.PropertyGrid.PropertyGridControl.ExpandCategoriesWhenSelectedObjectChangedProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.PropertyGrid.PropertyGridControl.FilterCriteria">
+            <summary>
+                <para>Gets or sets the grid's filter criteria. This is a dependency property.
+</para>
+            </summary>
+            <value>A <see cref="T:DevExpress.Data.Filtering.CriteriaOperator"/> object which represents filter criteria.
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.PropertyGrid.PropertyGridControl.FilterCriteriaProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.PropertyGrid.PropertyGridControl.FilterMode">
+            <summary>
+                <para>Gets or sets the columns by which the grid data is filtered. This is a dependency property.
+
+</para>
+            </summary>
+            <value>A <see cref="T:DevExpress.Xpf.PropertyGrid.PropertyGridFilterMode"/> enumeration value that specifies the columns by which grid data filtered.
+
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.PropertyGrid.PropertyGridControl.FilterModeProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="M:DevExpress.Xpf.PropertyGrid.PropertyGridControl.GetAvailableColumns">
+            <summary>
+                <para>This property supports the internal infrastructure and is not intended to be used directly from your code.
+</para>
+            </summary>
+            <returns> 
+</returns>
+
+
+        </member>
+        <member name="M:DevExpress.Xpf.PropertyGrid.PropertyGridControl.GetRowValueByRowPath(System.String)">
+            <summary>
+                <para>Returns the value of the specified property.
+</para>
+            </summary>
+            <param name="propertyPath">
+		A <see cref="T:System.String"/> which specifies the property path.
+
+            </param>
+            <returns>The object that is the specified property's value.
+</returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.PropertyGrid.PropertyGridControl.HeaderColumnMaxWidth">
+            <summary>
+                <para>Gets or sets the header column's maximum width. This is a dependency property.
+</para>
+            </summary>
+            <value>A <see cref="T:System.Double"/> value that specifies the header column's maximum width, in pixels.
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.PropertyGrid.PropertyGridControl.HeaderColumnMaxWidthProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.PropertyGrid.PropertyGridControl.HeaderColumnMinWidth">
+            <summary>
+                <para>Gets or sets the header column's minimum width. This is a dependency property.
+</para>
+            </summary>
+            <value>A <see cref="T:System.Double"/> value that specifies the header column's minimum width, in pixels.
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.PropertyGrid.PropertyGridControl.HeaderColumnMinWidthProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.PropertyGrid.PropertyGridControl.HeaderColumnWidth">
+            <summary>
+                <para>Gets or sets the header column's width. This is a dependency property.
+</para>
+            </summary>
+            <value>A <see cref="T:System.Windows.GridLength"/> value that specifies the header column's width.
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.PropertyGrid.PropertyGridControl.HeaderColumnWidthProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="E:DevExpress.Xpf.PropertyGrid.PropertyGridControl.HiddenEditor">
+            <summary>
+                <para> </para>
+            </summary>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.PropertyGrid.PropertyGridControl.HiddenEditorEvent">
+            <summary>
+                <para> </para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="M:DevExpress.Xpf.PropertyGrid.PropertyGridControl.HideEditor">
+            <summary>
+                <para> </para>
+            </summary>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.PropertyGrid.PropertyGridControl.HighlightNonDefaultValues">
+            <summary>
+                <para>Gets or sets whether to highlight non-default property values. This is a dependency property.
+</para>
+            </summary>
+            <value><b>true</b>, to highlight non-default property values; otherwise, <b>false</b>.
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.PropertyGrid.PropertyGridControl.HighlightNonDefaultValuesProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="M:DevExpress.Xpf.PropertyGrid.PropertyGridControl.InvalidateData">
+            <summary>
+                <para> </para>
+            </summary>
+
+
+        </member>
+        <member name="E:DevExpress.Xpf.PropertyGrid.PropertyGridControl.InvalidCellException">
+            <summary>
+                <para>Fires when a cell fails validation, or when it cannot be saved to a data source.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.PropertyGrid.PropertyGridControl.InvalidCellExceptionEvent">
+            <summary>
+                <para>Identifies the  routed event.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.PropertyGrid.PropertyGridControl.MenuCustomizations">
+            <summary>
+                <para> </para>
+            </summary>
+            <value> </value>
+
+
+        </member>
+        <member name="M:DevExpress.Xpf.PropertyGrid.PropertyGridControl.OnApplyTemplate">
+            <summary>
+                <para>This property supports the internal infrastructure and is not intended to be used directly from your code.
+
+</para>
+            </summary>
+
+
+        </member>
+        <member name="M:DevExpress.Xpf.PropertyGrid.PropertyGridControl.PostEditor">
+            <summary>
+                <para> </para>
+            </summary>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.PropertyGrid.PropertyGridControl.PropertyDefinitions">
+            <summary>
+                <para>Provides access to the collection of properties. This is a dependency property.
+</para>
+            </summary>
+            <value>The collection of properties.
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.PropertyGrid.PropertyGridControl.PropertyDefinitionsProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.PropertyGrid.PropertyGridControl.PropertyDefinitionsSource">
+            <summary>
+                <para>Gets or sets the source from which the grid generates property definitions. This is a dependency property.
+</para>
+            </summary>
+            <value>The source from which the grid generates property definitions.
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.PropertyGrid.PropertyGridControl.PropertyDefinitionsSourceProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.PropertyGrid.PropertyGridControl.PropertyDefinitionStyle">
+            <summary>
+                <para>Gets or sets the style applied to property definitions. This is a dependency property.
+</para>
+            </summary>
+            <value>A <see cref="T:System.Windows.Style"/> object that represents the style applied to property definitions.
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.PropertyGrid.PropertyGridControl.PropertyDefinitionStyleProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.PropertyGrid.PropertyGridControl.PropertyDefinitionTemplate">
+            <summary>
+                <para>Gets or sets the template that defines the presentation of properties. This is a dependency property.
+</para>
+            </summary>
+            <value>A <see cref="T:System.Windows.DataTemplate"/> object that defines the presentation of properties.
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.PropertyGrid.PropertyGridControl.PropertyDefinitionTemplateProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.PropertyGrid.PropertyGridControl.PropertyDefinitionTemplateSelector">
+            <summary>
+                <para>Gets or sets an object that chooses a property definition template based on custom logic. This is a dependency property.
+</para>
+            </summary>
+            <value>A <see cref="T:System.Windows.Controls.DataTemplateSelector"/> descendant that chooses a template based on custom logic.
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.PropertyGrid.PropertyGridControl.PropertyDefinitionTemplateSelectorProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.PropertyGrid.PropertyGridControl.ReadOnly">
+            <summary>
+                <para>Gets or sets whether the end-user can modify the values of properties displayed by the <see cref="T:DevExpress.Xpf.PropertyGrid.PropertyGridControl"/>. This is a dependency property.
+</para>
+            </summary>
+            <value><b>true</b>, to allow the end-user to edit property values; otherwise, <b>false</b>.
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.PropertyGrid.PropertyGridControl.ReadOnlyProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="M:DevExpress.Xpf.PropertyGrid.PropertyGridControl.ScrollIntoView(System.String)">
+            <summary>
+                <para>Makes the specified property visible onscreen.
+</para>
+            </summary>
+            <param name="path">
+		A <see cref="T:System.String"/> that is a path to the required property.
+
+            </param>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.PropertyGrid.PropertyGridControl.SelectedObject">
+            <summary>
+                <para>Gets or sets the object whose properties are currently displayed within the property grid. This is a dependency property.
+</para>
+            </summary>
+            <value>An object that represents the data source from which the grid retrieves its data.
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.PropertyGrid.PropertyGridControl.SelectedObjectProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.PropertyGrid.PropertyGridControl.SelectedObjects">
+            <summary>
+                <para>Gets or sets the collection of objects whose properties are currently displayed within the property grid. This is a dependency property.
+</para>
+            </summary>
+            <value>The collection of objects that represents the data source from which the grid retrieves its data.
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.PropertyGrid.PropertyGridControl.SelectedObjectsProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.PropertyGrid.PropertyGridControl.SelectedPropertyPath">
+            <summary>
+                <para>Gets or sets the path of the currently selected property.
+
+</para>
+            </summary>
+            <value>A <see cref="T:System.String"/> value that is the name of the data field the property is bound to.
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.PropertyGrid.PropertyGridControl.SelectedPropertyPathProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.PropertyGrid.PropertyGridControl.SelectedPropertyValue">
+            <summary>
+                <para>Gets the value of the currently selected property.
+</para>
+            </summary>
+            <value>The object that is the value of the currently selected property.
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.PropertyGrid.PropertyGridControl.SelectedPropertyValueProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="E:DevExpress.Xpf.PropertyGrid.PropertyGridControl.SelectionChanged">
+            <summary>
+                <para>Occurs after the property grid's selection has been changed.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.PropertyGrid.PropertyGridControl.SelectionChangedEvent">
+            <summary>
+                <para>Identifies the  routed event.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="M:DevExpress.Xpf.PropertyGrid.PropertyGridControl.SetRowValueByRowPath(System.String,System.Object)">
+            <summary>
+                <para>Sets the value of the specified property.
+</para>
+            </summary>
+            <param name="propertyPath">
+		A <see cref="T:System.String"/> which specifies the property path.
+
+            </param>
+            <param name="value">
+		The object to be set as the specified property's value.
+
+            </param>
+            <returns>A <see cref="T:System.Exception"/>.
+</returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.PropertyGrid.PropertyGridControl.ShowCategories">
+            <summary>
+                <para>Gets or sets whether to show property categories. This is a dependency property.
+</para>
+            </summary>
+            <value><b>true</b>, to show property categories; otherwise, <b>false</b>.
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.PropertyGrid.PropertyGridControl.ShowCategoriesProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.PropertyGrid.PropertyGridControl.ShowDescriptionIn">
+            <summary>
+                <para>Gets or sets where to show property descriptions. This is a dependency property.
+</para>
+            </summary>
+            <value>A <see cref="T:DevExpress.Xpf.PropertyGrid.DescriptionLocation"/> enumeration value.
+
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.PropertyGrid.PropertyGridControl.ShowDescriptionInProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="M:DevExpress.Xpf.PropertyGrid.PropertyGridControl.ShowEditor(System.Boolean)">
+            <summary>
+                <para> </para>
+            </summary>
+            <param name="selectAll">
+		 
+            </param>
+
+
+        </member>
+        <member name="E:DevExpress.Xpf.PropertyGrid.PropertyGridControl.ShowingEditor">
+            <summary>
+                <para>Enables you to prevent an end-user from activating editors of individual properties.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.PropertyGrid.PropertyGridControl.ShowingEditorEvent">
+            <summary>
+                <para>Identifies the  routed event.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.PropertyGrid.PropertyGridControl.ShowMenu">
+            <summary>
+                <para>Gets or sets when the Property Menu is shown. This is a dependency property.
+</para>
+            </summary>
+            <value>A <see cref="T:DevExpress.Xpf.PropertyGrid.ShowMenuMode"/> enumeration value that specifies when the property menu is shown. 
+</value>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.PropertyGrid.PropertyGridControl.ShowMenuButtonInRows">
+            <summary>
+                <para>Gets or sets whether to display the menu button. This is a dependency property.
+</para>
+            </summary>
+            <value><b>true</b>, to display the menu button; otherwise, <b>false</b>.
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.PropertyGrid.PropertyGridControl.ShowMenuButtonInRowsProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.PropertyGrid.PropertyGridControl.ShowMenuProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="E:DevExpress.Xpf.PropertyGrid.PropertyGridControl.ShownEditor">
+            <summary>
+                <para> </para>
+            </summary>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.PropertyGrid.PropertyGridControl.ShownEditorEvent">
+            <summary>
+                <para> </para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.PropertyGrid.PropertyGridControl.ShowProperties">
+            <summary>
+                <para>Gets or sets whether rows should be created automatically for all fields in the underlying data source. This is a dependency property.
+</para>
+            </summary>
+            <value>An <see cref="T:DevExpress.Xpf.PropertyGrid.ShowPropertiesMode"/> enumeration value that specifies the way rows are generated. 
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.PropertyGrid.PropertyGridControl.ShowPropertiesProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.PropertyGrid.PropertyGridControl.ShowSearchBox">
+            <summary>
+                <para>Gets or sets whether to display the search box. This is a dependency property.
+</para>
+            </summary>
+            <value><b>true</b>, to display the search box; otherwise, <b>false</b>.
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.PropertyGrid.PropertyGridControl.ShowSearchBoxProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.PropertyGrid.PropertyGridControl.ShowToolPanel">
+            <summary>
+                <para>Gets or sets whether to display the tool panel. This is a dependency property.
+</para>
+            </summary>
+            <value><b>true</b>, to display the tool panel; otherwise, <b>false</b>.
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.PropertyGrid.PropertyGridControl.ShowToolPanelProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="E:DevExpress.Xpf.PropertyGrid.PropertyGridControl.Sort">
+            <summary>
+                <para>Enables you to sort data using custom rules.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.PropertyGrid.PropertyGridControl.SortEvent">
+            <summary>
+                <para>Identifies the  routed event.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.PropertyGrid.PropertyGridControl.SortMode">
+            <summary>
+                <para>Gets or sets how the property grid's data is sorted when sorting is applied. This is a dependency property.
+
+</para>
+            </summary>
+            <value>A <see cref="T:DevExpress.Xpf.PropertyGrid.PropertyGridSortMode"/> enumeration value that specifies the sort mode.
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.PropertyGrid.PropertyGridControl.SortModeProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.PropertyGrid.PropertyGridControl.TrimDisplayText">
+            <summary>
+                <para>Gets or sets whether to display the fully qualified name of the class within the value cell of the collection's object definition. This is a dependency property.
+</para>
+            </summary>
+            <value><b>true</b>, to display only the name of the class; otherwise, <b>false</b>. The default value is <b>true</b>.
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.PropertyGrid.PropertyGridControl.TrimDisplayTextProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="M:DevExpress.Xpf.PropertyGrid.PropertyGridControl.UpdateData">
+            <summary>
+                <para> </para>
+            </summary>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.PropertyGrid.PropertyGridControl.UseCollectionEditor">
+            <summary>
+                <para>Specifies whether to enable collection editing within the grid. This is a dependency property.
+
+</para>
+            </summary>
+            <value><b>true</b>, to enable collection editing; otherwise, <b>false</b>.
+
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.PropertyGrid.PropertyGridControl.UseCollectionEditorProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.PropertyGrid.PropertyGridControl.UseOptimizedEditors">
+            <summary>
+                <para>Gets or sets whether to enable optimized editors. This is a dependency property.
+</para>
+            </summary>
+            <value><b>true</b>, to enable optimized editors; otherwise, <b>false</b>. The default value is <b>true</b>.
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.PropertyGrid.PropertyGridControl.UseOptimizedEditorsProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.PropertyGrid.PropertyGridControl.UserFilterCriteria">
+            <summary>
+                <para>Gets or sets the property grid's user filter criteria. This is a dependency property.
+</para>
+            </summary>
+            <value>A <see cref="T:DevExpress.Data.Filtering.CriteriaOperator"/> object which represents filter criteria.
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.PropertyGrid.PropertyGridControl.UserFilterCriteriaProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="E:DevExpress.Xpf.PropertyGrid.PropertyGridControl.ValidateCell">
+            <summary>
+                <para>Enables you to specify whether the focused cell's data is valid, and whether the node can lose focus.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.PropertyGrid.PropertyGridControl.ValidateCellEvent">
+            <summary>
+                <para>Identifies the  routed event.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.PropertyGrid.PropertyGridControl.ValueColumnMaxWidth">
+            <summary>
+                <para>Gets or sets the value column's maximum width. This is a dependency property.
+</para>
+            </summary>
+            <value>A <see cref="T:System.Double"/> value that specifies the value column's maximum width, in pixels.
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.PropertyGrid.PropertyGridControl.ValueColumnMaxWidthProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.PropertyGrid.PropertyGridControl.ValueColumnMinWidth">
+            <summary>
+                <para>Gets or sets the value column's minimum width. This is a dependency property.
+</para>
+            </summary>
+            <value>A <see cref="T:System.Double"/> value that specifies the value column's minimum width, in pixels.
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.PropertyGrid.PropertyGridControl.ValueColumnMinWidthProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.PropertyGrid.PropertyGridControl.ValueColumnWidth">
+            <summary>
+                <para>Gets or sets the value column's width. This is a dependency property.
+</para>
+            </summary>
+            <value>A <see cref="T:System.Windows.GridLength"/> value that specifies the value column's width.
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.PropertyGrid.PropertyGridControl.ValueColumnWidthProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="T:DevExpress.Xpf.PropertyGrid.RowInfo">
+
+            <summary>
+                <para>Contains information about a data row.
+</para>
+            </summary>
+
+        </member>
+        <member name="F:DevExpress.Xpf.PropertyGrid.RowInfo.DisplayName">
+            <summary>
+                <para>Gets the display name shown by the row.
+</para>
+            </summary>
+            <returns>A <see cref="T:System.String"/> value that is the display name.
+</returns>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.PropertyGrid.RowInfo.DisplayText">
+            <summary>
+                <para>Gets the display text shown by the row.
+</para>
+            </summary>
+            <returns>A <see cref="T:System.String"/> value that is the display text.
+</returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.PropertyGrid.RowInfo.EditableObject">
+            <summary>
+                <para>Gets the row value object.
+</para>
+            </summary>
+            <value>The row value object.
+</value>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.PropertyGrid.RowInfo.FullPath">
+            <summary>
+                <para>Gets the full path to the data field displayed by the row. This is a dependency property.
+</para>
+            </summary>
+            <value>A <see cref="T:System.String"/> value that is the path to the data field.
+</value>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.PropertyGrid.RowInfo.HasPropertyDefinition">
+            <summary>
+                <para>Gets whether the row has any appropriate property definitions.
+</para>
+            </summary>
+            <value><b>true</b>, if the row corresponds to any property definition; otherwise, <b>false</b>.
+</value>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.PropertyGrid.RowInfo.Header">
+            <summary>
+                <para>Gets the actual row header.
+</para>
+            </summary>
+            <value>The row header.
+</value>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.PropertyGrid.RowInfo.IsAttached">
+            <summary>
+                <para>Gets whether the row is attached.
+</para>
+            </summary>
+            <value><b>true</b> if the row is attached; otherwise, <b>false</b>.
+</value>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.PropertyGrid.RowInfo.IsCategory">
+            <summary>
+                <para>Gets whether the row is a category description.
+</para>
+            </summary>
+            <value><b>true</b>, if the row is a category description; otherwise, <b>false</b>.
+</value>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.PropertyGrid.RowInfo.IsReadOnly">
+            <summary>
+                <para>Gets whether the row is read-only.
+</para>
+            </summary>
+            <value><b>true</b> if the row is read-only; otherwise, <b>false</b>.
+</value>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.PropertyGrid.RowInfo.IsVisible">
+            <summary>
+                <para>Gets whether the row is visible.
+</para>
+            </summary>
+            <value><b>true</b>, if the row is visible; otherwise, <b>false</b>.
+</value>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.PropertyGrid.RowInfo.Path">
+            <summary>
+                <para>Gets the path to the database field displayed by the row. This is a dependency property.
+</para>
+            </summary>
+            <value>A <see cref="T:System.String"/> value that is the name of a data field.
+</value>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.PropertyGrid.RowInfo.Type">
+            <summary>
+                <para>Gets the type of data displayed by the row.
+</para>
+            </summary>
+            <value>The <see cref="T:System.Type"/> of data displayed by the row.
+</value>
+
+
+        </member>
+        <member name="T:DevExpress.Xpf.PropertyGrid.CollectionDefinition">
+
+            <summary>
+                <para>Serves as a base for classes that represent collection definitions.
+</para>
+            </summary>
+
+        </member>
+        <member name="M:DevExpress.Xpf.PropertyGrid.CollectionDefinition.#ctor">
+            <summary>
+                <para>Initializes a new instance of the CollectionDefinition class with default settings.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.PropertyGrid.CollectionDefinition.AllowNewItemInitializer">
+            <summary>
+                <para>Gets or sets whether to enable the new item initializer for the collection. This is a dependency property.
+</para>
+            </summary>
+            <value><b>true</b>, to enable the new item initializer; otherwise, <b>false</b>.
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.PropertyGrid.CollectionDefinition.AllowNewItemInitializerProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.PropertyGrid.CollectionDefinition.NewItemInitializer">
+            <summary>
+                <para>Gets or sets a new item initializer. This is a dependency property.
+</para>
+            </summary>
+            <value>An object implementing the <see cref="T:DevExpress.Mvvm.Native.IInstanceInitializer"/> interface.
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.PropertyGrid.CollectionDefinition.NewItemInitializerProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.PropertyGrid.CollectionDefinition.UseCollectionEditor">
+            <summary>
+                <para>Specifies whether to enable collection editing within the collection. This is a dependency property.
+
+</para>
+            </summary>
+            <value><b>true</b>, to enable collection editing; otherwise, <b>false</b>.
+
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.PropertyGrid.CollectionDefinition.UseCollectionEditorProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="T:DevExpress.Xpf.PropertyGrid.ShowPropertiesMode">
+
+            <summary>
+                <para>Lists values that specify which properties are shown.
+</para>
+            </summary>
+
+        </member>
+        <member name="F:DevExpress.Xpf.PropertyGrid.ShowPropertiesMode.All">
+            <summary>
+                <para>Display all properties in the underlying data source.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.PropertyGrid.ShowPropertiesMode.WithPropertyDefinitions">
+            <summary>
+                <para>Display only properties that are defined in XAML.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="T:DevExpress.Xpf.PropertyGrid.PropertyGridSortMode">
+
+            <summary>
+                <para>Lists values that specify how grid data is sorted.
+</para>
+            </summary>
+
+        </member>
+        <member name="F:DevExpress.Xpf.PropertyGrid.PropertyGridSortMode.Ascending">
+            <summary>
+                <para>Sorts grid data by property headers in ascending order.
+
+</para>
+            </summary>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.PropertyGrid.PropertyGridSortMode.Custom">
+            <summary>
+                <para>Sorts grid data using a custom sorting rule, implemented within the <see cref="E:DevExpress.Xpf.PropertyGrid.PropertyGridControl.Sort"/> event handler.
+
+</para>
+            </summary>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.PropertyGrid.PropertyGridSortMode.Definitions">
+            <summary>
+                <para>Sorts grid data in definition order. Properties having no definitions are located below properties that have definitions.
+
+</para>
+            </summary>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.PropertyGrid.PropertyGridSortMode.Descending">
+            <summary>
+                <para>Sorts grid data by definition headers in descending order.
+
+</para>
+            </summary>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.PropertyGrid.PropertyGridSortMode.NoSort">
+            <summary>
+                <para>Doesn't sort grid data.
+
+</para>
+            </summary>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.PropertyGrid.PropertyGridSortMode.Unspecified">
+            <summary>
+                <para>Uses the value of the <see cref="P:DevExpress.Xpf.PropertyGrid.PropertyGridControl.SortMode"/> property.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="T:DevExpress.Xpf.PropertyGrid.PropertyGridFilterMode">
+
+            <summary>
+                <para>Lists values that specify how properties are filtered.
+</para>
+            </summary>
+
+        </member>
+        <member name="F:DevExpress.Xpf.PropertyGrid.PropertyGridFilterMode.ByHeader">
+            <summary>
+                <para>Filters only by header content.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.PropertyGrid.PropertyGridFilterMode.ByHeaderAndValue">
+            <summary>
+                <para>Filters both by header content and value.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.PropertyGrid.PropertyGridFilterMode.ByValue">
+            <summary>
+                <para>Filters only by value.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="T:DevExpress.Xpf.PropertyGrid.PropertyDefinitionCollection">
+
+            <summary>
+                <para>This class supports the internal infrastructure and is not intended to be used directly from your code.
+</para>
+            </summary>
+
+        </member>
+        <member name="M:DevExpress.Xpf.PropertyGrid.PropertyDefinitionCollection.#ctor(DevExpress.Xpf.PropertyGrid.PropertyDefinitionBase)">
+            <summary>
+                <para> </para>
+            </summary>
+            <param name="owner">
+		 
+            </param>
+
+
+        </member>
+        <member name="T:DevExpress.Xpf.PropertyGrid.PropertyDefinitionBase">
+
+            <summary>
+                <para>Serves as a base for classes that represent property definitions.
+</para>
+            </summary>
+
+        </member>
+        <member name="P:DevExpress.Xpf.PropertyGrid.PropertyDefinitionBase.ApplyingMode">
+            <summary>
+                <para>Gets or sets whether a condition for applying the property definition exists. This is a dependency property.
+
+</para>
+            </summary>
+            <value>A <see cref="T:DevExpress.Xpf.PropertyGrid.ApplyingMode"/> enumeration value.
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.PropertyGrid.PropertyDefinitionBase.ApplyingModeProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="M:DevExpress.Xpf.PropertyGrid.PropertyDefinitionBase.BeginInit">
+            <summary>
+                <para>Starts the runtime initialization. 
+</para>
+            </summary>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.PropertyGrid.PropertyDefinitionBase.ChildrenSortMode">
+            <summary>
+                <para>Gets or sets the sort mode for the nested properties. This is a dependency property.
+</para>
+            </summary>
+            <value>A <see cref="T:DevExpress.Xpf.PropertyGrid.PropertyGridSortMode"/> enumeration value.
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.PropertyGrid.PropertyDefinitionBase.ChildrenSortModeProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.PropertyGrid.PropertyDefinitionBase.ContentTemplate">
+            <summary>
+                <para>Gets or sets the template that defines the presentation of the property content. This is a dependency property.
+</para>
+            </summary>
+            <value>A <see cref="T:System.Windows.DataTemplate"/> object that defines the presentation of the property content.
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.PropertyGrid.PropertyDefinitionBase.ContentTemplateProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.PropertyGrid.PropertyDefinitionBase.ContentTemplateSelector">
+            <summary>
+                <para>Gets or sets an object that chooses a property content template based on custom logic. This is a dependency property.
+</para>
+            </summary>
+            <value>A <see cref="T:System.Windows.Controls.DataTemplateSelector"/> descendant that chooses a template based on custom logic.
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.PropertyGrid.PropertyDefinitionBase.ContentTemplateSelectorProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.PropertyGrid.PropertyDefinitionBase.Description">
+            <summary>
+                <para>Gets or sets the property description. This is a dependency property.
+</para>
+            </summary>
+            <value>An object representing the property description.
+</value>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.PropertyGrid.PropertyDefinitionBase.DescriptionContainerStyle">
+            <summary>
+                <para>Gets or sets the style applied to the property description. This is a dependency property.
+</para>
+            </summary>
+            <value>A <see cref="T:System.Windows.Style"/> object that specifies the style applied to the property description. 
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.PropertyGrid.PropertyDefinitionBase.DescriptionContainerStyleProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.PropertyGrid.PropertyDefinitionBase.DescriptionContainerStyleSelector">
+            <summary>
+                <para>Gets or sets an object that chooses a property description style based on custom logic. This is a dependency property.
+</para>
+            </summary>
+            <value>A <see cref="T:System.Windows.Controls.StyleSelector"/> descendant that chooses a style based on custom logic.
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.PropertyGrid.PropertyDefinitionBase.DescriptionContainerStyleSelectorProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.PropertyGrid.PropertyDefinitionBase.DescriptionProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.PropertyGrid.PropertyDefinitionBase.DescriptionTemplate">
+            <summary>
+                <para>Gets or sets the template that defines the presentation of a property description. This is a dependency property.
+</para>
+            </summary>
+            <value>A <see cref="T:System.Windows.DataTemplate"/> object that defines the presentation of a property description.
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.PropertyGrid.PropertyDefinitionBase.DescriptionTemplateProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.PropertyGrid.PropertyDefinitionBase.DescriptionTemplateSelector">
+            <summary>
+                <para>Gets or sets an object that chooses a property description template based on custom logic. This is a dependency property.
+</para>
+            </summary>
+            <value>A <see cref="T:System.Windows.Controls.DataTemplateSelector"/> descendant that applies a template based on custom logic.
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.PropertyGrid.PropertyDefinitionBase.DescriptionTemplateSelectorProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="M:DevExpress.Xpf.PropertyGrid.PropertyDefinitionBase.EndInit">
+            <summary>
+                <para>Ends the runtime initialization.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.PropertyGrid.PropertyDefinitionBase.Header">
+            <summary>
+                <para>Gets or sets the property header's caption. This is a dependency property.
+</para>
+            </summary>
+            <value>An object that represents the header's caption.
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.PropertyGrid.PropertyDefinitionBase.HeaderProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.PropertyGrid.PropertyDefinitionBase.HeaderShowMode">
+            <summary>
+                <para>Gets or sets the property display mode. This is a dependency property.
+</para>
+            </summary>
+            <value>An <see cref="T:DevExpress.Xpf.PropertyGrid.HeaderShowMode"/> enumeration value that specifies the property display mode. 
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.PropertyGrid.PropertyDefinitionBase.HeaderShowModeProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.PropertyGrid.PropertyDefinitionBase.HeaderTemplate">
+            <summary>
+                <para>Gets or sets the template that defines the presentation of property headers. This is a dependency property.
+</para>
+            </summary>
+            <value>A <see cref="T:System.Windows.DataTemplate"/> object that defines the presentation of property headers.
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.PropertyGrid.PropertyDefinitionBase.HeaderTemplateProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.PropertyGrid.PropertyDefinitionBase.HeaderTemplateSelector">
+            <summary>
+                <para>Gets or sets an object that chooses a property header template based on custom logic. This is a dependency property.
+</para>
+            </summary>
+            <value>A <see cref="T:System.Windows.Controls.DataTemplateSelector"/> descendant that chooses a template based on custom logic.
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.PropertyGrid.PropertyDefinitionBase.HeaderTemplateSelectorProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.PropertyGrid.PropertyDefinitionBase.HighlightingMode">
+            <summary>
+                <para>Specifies which parts of the selected property should be highlighted. This is a dependency property.
+</para>
+            </summary>
+            <value>A <see cref="T:DevExpress.Xpf.PropertyGrid.HeaderHighlightingMode"/> enumeration value.
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.PropertyGrid.PropertyDefinitionBase.HighlightingModeProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.PropertyGrid.PropertyDefinitionBase.InstanceInitializer">
+            <summary>
+                <para>Gets or sets the instance initializer. This is a dependency property.
+</para>
+            </summary>
+            <value>An object implementing the <see cref="T:DevExpress.Mvvm.Native.IInstanceInitializer"/> interface.
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.PropertyGrid.PropertyDefinitionBase.InstanceInitializerProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.PropertyGrid.PropertyDefinitionBase.IsReadOnly">
+            <summary>
+                <para>Gets or sets whether the property's value can be changed by end-users. This is a dependency property.
+</para>
+            </summary>
+            <value><b>true</b>, if an end-user cannot modify the property's value; otherwise, <b>false</b>.
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.PropertyGrid.PropertyDefinitionBase.IsReadOnlyProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.PropertyGrid.PropertyDefinitionBase.Path">
+            <summary>
+                <para>Gets or sets the path to the database field assigned to the property. This is a dependency property.
+</para>
+            </summary>
+            <value>A <see cref="T:System.String"/> value that specifies the name of a data field.
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.PropertyGrid.PropertyDefinitionBase.PathProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.PropertyGrid.PropertyDefinitionBase.PropertyDefinitions">
+            <summary>
+                <para>Provides access to the child collection of properties. This is a dependency property.
+</para>
+            </summary>
+            <value>A <see cref="T:DevExpress.Xpf.PropertyGrid.PropertyDefinitionCollection"/> object.
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.PropertyGrid.PropertyDefinitionBase.PropertyDefinitionsProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.PropertyGrid.PropertyDefinitionBase.PropertyDefinitionsSource">
+            <summary>
+                <para>Gets or sets the source from which the grid generates the property definition. This is a dependency property.
+</para>
+            </summary>
+            <value>The source from which the grid generates the property definition.
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.PropertyGrid.PropertyDefinitionBase.PropertyDefinitionsSourceProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.PropertyGrid.PropertyDefinitionBase.PropertyDefinitionStyle">
+            <summary>
+                <para>Gets or sets the style applied to the property. This is a dependency property.
+</para>
+            </summary>
+            <value>A <see cref="T:System.Windows.Style"/> object that represents the style applied to the property.
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.PropertyGrid.PropertyDefinitionBase.PropertyDefinitionStyleProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.PropertyGrid.PropertyDefinitionBase.PropertyDefinitionTemplate">
+            <summary>
+                <para>Gets or sets the template that defines the presentation of the property. This is a dependency property.
+</para>
+            </summary>
+            <value>A <see cref="T:System.Windows.DataTemplate"/> object that defines the presentation of the property.
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.PropertyGrid.PropertyDefinitionBase.PropertyDefinitionTemplateProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.PropertyGrid.PropertyDefinitionBase.PropertyDefinitionTemplateSelector">
+            <summary>
+                <para>Gets or sets an object that chooses a property definition template based on custom logic. This is a dependency property.
+</para>
+            </summary>
+            <value>A <see cref="T:System.Windows.Controls.DataTemplateSelector"/> descendant that chooses a template based on custom logic.
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.PropertyGrid.PropertyDefinitionBase.PropertyDefinitionTemplateSelectorProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.PropertyGrid.PropertyDefinitionBase.RowTemplate">
+            <summary>
+                <para>Gets or sets a template that defines the presentation of rows displayed within the grid. This is a dependency property.
+</para>
+            </summary>
+            <value>A <see cref="T:System.Windows.DataTemplate"/> object that represents the template which defines the presentation of rows displayed within the grid.
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.PropertyGrid.PropertyDefinitionBase.RowTemplateProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.PropertyGrid.PropertyDefinitionBase.ShowChildren">
+            <summary>
+                <para>Gets or sets whether to show child properties. This is a dependency property.
+</para>
+            </summary>
+            <value><b>true</b>, to show child properties; otherwise, <b>false</b>.
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.PropertyGrid.PropertyDefinitionBase.ShowChildrenProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="T:DevExpress.Xpf.PropertyGrid.PropertyDefinition">
+
+            <summary>
+                <para>Serves as a base for classes that represent property definitions.
+</para>
+            </summary>
+
+        </member>
+        <member name="M:DevExpress.Xpf.PropertyGrid.PropertyDefinition.#ctor">
+            <summary>
+                <para>Initializes a new instance of the PropertyDefinition class with default settings.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.PropertyGrid.PropertyDefinition.AllowExpanding">
+            <summary>
+                <para>Gets or sets whether the end-user is allowed to expand the property to get access to its nested properties. This is a dependency property.
+</para>
+            </summary>
+            <value>An <see cref="T:DevExpress.Xpf.PropertyGrid.AllowExpandingMode"/> enumeration value.
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.PropertyGrid.PropertyDefinition.AllowExpandingProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.PropertyGrid.PropertyDefinition.AllowInstanceInitializer">
+            <summary>
+                <para>Gets or sets whether to enable the instance initializer for the property definition. This is a dependency property.
+</para>
+            </summary>
+            <value><b>true</b>, to enable the instance initializer; otherwise, <b>false</b>.
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.PropertyGrid.PropertyDefinition.AllowInstanceInitializerProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.PropertyGrid.PropertyDefinition.CellTemplate">
+            <summary>
+                <para>Gets or sets the template that defines the presentation of data cells. This is a dependency property.
+</para>
+            </summary>
+            <value>A <see cref="T:System.Windows.DataTemplate"/> object that defines the presentation of data cells.
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.PropertyGrid.PropertyDefinition.CellTemplateProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.PropertyGrid.PropertyDefinition.CellTemplateSelector">
+            <summary>
+                <para>Gets or sets an object that chooses a cell template based on custom logic. This is a dependency property.
+</para>
+            </summary>
+            <value>A <see cref="T:System.Windows.Controls.DataTemplateSelector"/> descendant that chooses a template based on custom logic.
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.PropertyGrid.PropertyDefinition.CellTemplateSelectorProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.PropertyGrid.PropertyDefinition.Command">
+            <summary>
+                <para>Gets or sets the command assigned to the property. This is a dependency property.
+</para>
+            </summary>
+            <value>An object that defines a command implementing the <see cref="T:System.Windows.Input.ICommand"/> interface.
+</value>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.PropertyGrid.PropertyDefinition.CommandParameter">
+            <summary>
+                <para>Gets or sets the parameter to pass to the <see cref="P:DevExpress.Xpf.PropertyGrid.PropertyDefinition.Command"/>. This is a dependency property.
+</para>
+            </summary>
+            <value>A parameter to pass to the <see cref="P:DevExpress.Xpf.PropertyGrid.PropertyDefinition.Command"/>.
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.PropertyGrid.PropertyDefinition.CommandParameterProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.PropertyGrid.PropertyDefinition.CommandProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.PropertyGrid.PropertyDefinition.EditSettings">
+            <summary>
+                <para>Gets or sets an object that contains the column editor's settings. This is a dependency property.
+</para>
+            </summary>
+            <value>A <see cref="T:DevExpress.Xpf.Editors.Settings.BaseEditSettings"/> descendant that specifies the row's editor.
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.PropertyGrid.PropertyDefinition.EditSettingsProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.PropertyGrid.PropertyDefinition.InsertDefinitionsFrom">
+            <summary>
+                <para>Gets or sets the property definition whose child definitions should be added to the child collection. This is a dependency property.
+
+</para>
+            </summary>
+            <value><para>A <see cref="T:DevExpress.Xpf.PropertyGrid.PropertyDefinition"/> object.</para>
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.PropertyGrid.PropertyDefinition.InsertDefinitionsFromProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.PropertyGrid.PropertyDefinition.MenuCustomizations">
+            <summary>
+                <para> </para>
+            </summary>
+            <value> </value>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.PropertyGrid.PropertyDefinition.PostOnEditValueChanged">
+            <summary>
+                <para>Gets or sets the way a value specified by a user should be posted. This is a dependency property.
+</para>
+            </summary>
+            <value><b>true</b>, to post changes immediately; otherwise, <b>false</b>.
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.PropertyGrid.PropertyDefinition.PostOnEditValueChangedProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.PropertyGrid.PropertyDefinition.Scope">
+            <summary>
+                <para>Gets or sets the path to the property's parent. This is a dependency property.
+</para>
+            </summary>
+            <value>The path to the property's parent.
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.PropertyGrid.PropertyDefinition.ScopeProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.PropertyGrid.PropertyDefinition.ShowMenuButton">
+            <summary>
+                <para>Gets or sets whether to display the menu button within the property definition. This is a dependency property.
+</para>
+            </summary>
+            <value><b>true</b>, to display the menu button; otherwise, <b>false</b>.
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.PropertyGrid.PropertyDefinition.ShowMenuButtonProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.PropertyGrid.PropertyDefinition.Type">
+            <summary>
+                <para>Gets or sets the property type. This is a dependency property.
+</para>
+            </summary>
+            <value>The property type.
+</value>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.PropertyGrid.PropertyDefinition.TypeMatchMode">
+            <summary>
+                <para>Specifies the property type identification mechanism. This is a dependency property.
+</para>
+            </summary>
+            <value>A <see cref="T:DevExpress.Xpf.PropertyGrid.TypeMatchMode"/> enumeration value.
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.PropertyGrid.PropertyDefinition.TypeMatchModeProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.PropertyGrid.PropertyDefinition.TypeProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.PropertyGrid.PropertyDefinition.UseTypeConverterToStringConversion">
+            <summary>
+                <para>Gets or sets whether to convert values of string properties using a TypeConverter. This is a dependency property.
+</para>
+            </summary>
+            <value><b>true</b>, to use a type converter to convert values of string properties; otherwise, <b>false</b>.
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.PropertyGrid.PropertyDefinition.UseTypeConverterToStringConversionProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="T:DevExpress.Xpf.PropertyGrid.ValidateCellEventArgs">
+
+            <summary>
+                <para> </para>
+            </summary>
+
+        </member>
+        <member name="M:DevExpress.Xpf.PropertyGrid.ValidateCellEventArgs.#ctor(DevExpress.Xpf.PropertyGrid.RowHandle,DevExpress.Xpf.PropertyGrid.Internal.RowDataGenerator,System.Object,System.Object)">
+            <summary>
+                <para> </para>
+            </summary>
+            <param name="handle">
+		 
+            </param>
+            <param name="generator">
+		 
+            </param>
+            <param name="oldValue">
+		 
+            </param>
+            <param name="newValue">
+		 
+            </param>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.PropertyGrid.ValidateCellEventArgs.NewValue">
+            <summary>
+                <para> </para>
+            </summary>
+            <value> </value>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.PropertyGrid.ValidateCellEventArgs.OldValue">
+            <summary>
+                <para> </para>
+            </summary>
+            <value> </value>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.PropertyGrid.ValidateCellEventArgs.Row">
+            <summary>
+                <para> </para>
+            </summary>
+            <value> </value>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.PropertyGrid.ValidateCellEventArgs.ValidationException">
+            <summary>
+                <para> </para>
+            </summary>
+            <value> </value>
+
+
+        </member>
+        <member name="T:DevExpress.Xpf.PropertyGrid.PopupBrushEditSettings">
+
+            <summary>
+                <para>Contains settings specific to a popup brush editor.
+</para>
+            </summary>
+
+        </member>
+        <member name="M:DevExpress.Xpf.PropertyGrid.PopupBrushEditSettings.#ctor">
+            <summary>
+                <para>Initializes a new instance of the PopupBrushEditSettings class with default settings.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="T:DevExpress.Xpf.PropertyGrid.PopupBrushEdit">
+
+            <summary>
+                <para>Represents a brush editor displayed within a dropdown window.
+</para>
+            </summary>
+
+        </member>
+        <member name="M:DevExpress.Xpf.PropertyGrid.PopupBrushEdit.#ctor">
+            <summary>
+                <para>Initializes a new instance of the PopupBrushEdit class with default settings.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="T:DevExpress.Xpf.PropertyGrid.CategoryDefinition">
+
+            <summary>
+                <para>Serves as a base for classes that represent category definitions.
+</para>
+            </summary>
+
+        </member>
+        <member name="M:DevExpress.Xpf.PropertyGrid.CategoryDefinition.#ctor">
+            <summary>
+                <para>Initializes a new instance of the CategoryDefinition class with default settings.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="T:DevExpress.Xpf.PropertyGrid.ApplyingMode">
+
+            <summary>
+                <para>Lists values that specify when the property definition is applied.
+</para>
+            </summary>
+
+        </member>
+        <member name="F:DevExpress.Xpf.PropertyGrid.ApplyingMode.Always">
+            <summary>
+                <para>The definition is always shown.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.PropertyGrid.ApplyingMode.WhenGrouping">
+            <summary>
+                <para>The definition is shown if grouping is applied.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.PropertyGrid.ApplyingMode.WhenNoGrouping">
+            <summary>
+                <para>The definition is shown if grouping is not applied.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="T:DevExpress.Xpf.PropertyGrid.TypeMatchMode">
+
+            <summary>
+                <para> </para>
+            </summary>
+
+        </member>
+        <member name="F:DevExpress.Xpf.PropertyGrid.TypeMatchMode.Direct">
+            <summary>
+                <para> </para>
+            </summary>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.PropertyGrid.TypeMatchMode.Extended">
+            <summary>
+                <para> </para>
+            </summary>
+
+
+        </member>
+        <member name="T:DevExpress.Xpf.PropertyGrid.InstanceInitializer">
+
+            <summary>
+                <para>Represents item initializers.
+</para>
+            </summary>
+
+        </member>
+        <member name="M:DevExpress.Xpf.PropertyGrid.InstanceInitializer.#ctor">
+            <summary>
+                <para>Initializes a new instance of the InstanceInitializer class.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="M:DevExpress.Xpf.PropertyGrid.InstanceInitializer.CreateInstance(DevExpress.Mvvm.Native.TypeInfo)">
+            <summary>
+                <para>Creates an instance of the specified type.
+</para>
+            </summary>
+            <param name="type">
+		The instance type.
+
+            </param>
+            <returns>The created instance.
+</returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.PropertyGrid.InstanceInitializer.Types">
+            <summary>
+                <para>Gets or sets a list of available instance types.
+</para>
+            </summary>
+            <value>A list of available instance types.
+</value>
+
+
+        </member>
+        <member name="T:DevExpress.Xpf.PropertyGrid.HeaderHighlightingMode">
+
+            <summary>
+                <para>Lists values that specify which parts of the selected property should be highlighted.
+</para>
+            </summary>
+
+        </member>
+        <member name="F:DevExpress.Xpf.PropertyGrid.HeaderHighlightingMode.HeaderAndContent">
+            <summary>
+                <para>Both the header cell and the value cell are highlighted.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.PropertyGrid.HeaderHighlightingMode.None">
+            <summary>
+                <para>Neither the header cell, nor the value cell is highlighted.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.PropertyGrid.HeaderHighlightingMode.OnlyContent">
+            <summary>
+                <para>Only the value cell is highlighted.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.PropertyGrid.HeaderHighlightingMode.OnlyHeader">
+            <summary>
+                <para>Only the header cell is highlighted.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="T:DevExpress.Xpf.PropertyGrid.BrushEditSettings">
+
+            <summary>
+                <para>Contains settings specific to a brush editor.
+</para>
+            </summary>
+
+        </member>
+        <member name="M:DevExpress.Xpf.PropertyGrid.BrushEditSettings.#ctor">
+            <summary>
+                <para>Initializes a new instance of the BrushEditSettings class with default settings.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="T:DevExpress.Xpf.PropertyGrid.BrushEdit">
+
+            <summary>
+                <para>Represents the brush editor.
+</para>
+            </summary>
+
+        </member>
+        <member name="M:DevExpress.Xpf.PropertyGrid.BrushEdit.#ctor">
+            <summary>
+                <para>Initializes a new instance of the BrushEdit class with default settings.
+</para>
+            </summary>
+
+
+        </member>
+    </members>
+</doc>
