@@ -524,6 +524,11 @@
             Период агрегирования данных на сервере Transaq.
             </summary>
     </member>
+    <member name="P:StockSharp.Transaq.TransaqTrader.ApiLogsPath">
+      <summary>
+            Путь к логам коннектора.
+            </summary>
+    </member>
     <member name="P:StockSharp.Transaq.TransaqTrader.OverrideDll">
       <summary>
             Перезаписать файл библиотеки из ресурсов. По-умолчанию файл будет перезаписан.
