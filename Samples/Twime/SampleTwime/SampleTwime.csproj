@@ -229,6 +229,10 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\..\StockSharp %28GitLab%29\Connectors\Plaza\Plaza.csproj">
+      <Project>{7eaba894-fc98-4f5e-a212-c40550260886}</Project>
+      <Name>Plaza</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\..\StockSharp %28GitLab%29\Connectors\Twime\Twime.csproj">
       <Project>{2C3ADA93-249E-4EEB-A1B7-CE5DA8DC4E33}</Project>
       <Name>Twime</Name>

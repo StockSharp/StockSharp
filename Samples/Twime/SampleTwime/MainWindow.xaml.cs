@@ -27,6 +27,7 @@ namespace SampleTwime
 	using StockSharp.BusinessEntities;
 	using StockSharp.Logging;
 	using StockSharp.Localization;
+	using StockSharp.Plaza;
 	using StockSharp.Twime;
 
 	public partial class MainWindow
@@ -55,8 +56,11 @@ namespace SampleTwime
 			_securitiesWindow.MakeHideable();
 			_portfoliosWindow.MakeHideable();
 
-			var mdAdapter = new PassThroughMessageAdapter(Trader.TransactionIdGenerator);
-			mdAdapter.AddMarketDataSupport();
+			var mdAdapter = new PlazaMessageAdapter(Trader.TransactionIdGenerator)
+			{
+				IsCGate = true,
+			};
+			mdAdapter.RemoveTransactionalSupport();
 			Trader.Adapter.InnerAdapters.Add(mdAdapter);
 
 			Instance = this;
@@ -157,6 +161,8 @@ namespace SampleTwime
 
 				ShowSecurities.IsEnabled = ShowTrades.IsEnabled = ShowMyTrades.IsEnabled = ShowOrders.IsEnabled = ShowPortfolios.IsEnabled = true;
 			}
+
+			((PlazaMessageAdapter)Trader.MarketDataAdapter).IsDemo = IsDemo.IsChecked == true;
 
 			switch (Trader.ConnectionState)
 			{

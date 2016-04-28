@@ -49,7 +49,6 @@
 
 		<CheckBox x:Name="IsCGate" Grid.Column="0" Grid.Row="2" VerticalAlignment="Center">CGate</CheckBox>
 		<CheckBox x:Name="IsDemo" VerticalAlignment="Center" Grid.Column="1" Grid.Row="2" IsEnabled="{Binding ElementName=IsCGate, Path=IsChecked}" IsChecked="True">Demo</CheckBox>
-		
 		<CheckBox x:Name="IsFastRepl" Grid.Row="2" Grid.Column="2" VerticalAlignment="Center">FASTREPL</CheckBox>
 
 		<Button x:Name="ShowSecurities" Grid.Column="0" Grid.Row="3" IsEnabled="False" Content="{x:Static loc:LocalizedStrings.Securities}" Click="ShowSecuritiesClick" />
