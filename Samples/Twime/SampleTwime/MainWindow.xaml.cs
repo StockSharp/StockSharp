@@ -162,8 +162,6 @@ namespace SampleTwime
 				ShowSecurities.IsEnabled = ShowTrades.IsEnabled = ShowMyTrades.IsEnabled = ShowOrders.IsEnabled = ShowPortfolios.IsEnabled = true;
 			}
 
-			((PlazaMessageAdapter)Trader.MarketDataAdapter).IsDemo = IsDemo.IsChecked == true;
-
 			switch (Trader.ConnectionState)
 			{
 				case ConnectionStates.Failed:
@@ -171,6 +169,8 @@ namespace SampleTwime
 					Trader.TransactionAddress = TransactionAddress.EndPoint;
 					Trader.RecoveryAddress = RecoveryAddress.EndPoint;
 					Trader.Login = Login.Text;
+
+					((PlazaMessageAdapter)Trader.MarketDataAdapter).IsDemo = IsDemo.IsChecked == true;
 
 					Trader.Connect();
 					break;
