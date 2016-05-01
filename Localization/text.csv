@@ -5696,7 +5696,7 @@ DocStr1463;Information on trade, its closed volume and its profitability;Инф�
 DocStr1464;The volume of position, which was closed by own trade;Объем позиции, который был закрыт собственной сделкой
 DocStr1465;The profit, realized by this trade;Реализованная данной сделкой прибыль
 DocStr1466;For example, in strategy position was 2. The trade for -5 contracts. Closed position 2;Например, в стратегии позиция была 2, Сделка на -5 контрактов. Закрытая позиция 2
-DocStr1467;The queue of profit calculation by messages stream;Очередь расчета прибыли по потому сообщений
+DocStr1467;The queue of profit calculation by messages stream;Очередь расчета прибыли по потоку сообщений
 DocStr1468;To process the message, containing information on tick trade;Обработать сообщение, содержащее информацию о тиковой сделке
 DocStr1469;The message, containing information on tick trade;Сообщение, содержащее информацию о тиковой сделке
 DocStr1470;To process the message, containing data on order book;Обработать сообщение, содержащее данные о стакане
@@ -13039,7 +13039,7 @@ DocStr8923;The own amount of bid (+ stop amount to buy);Собственный �
 DocStr8924;The amount of bid;Объем бида
 DocStr8925;The amount of ask;Объем офера
 DocStr8926;The own amount of ask (+ stop amount to sale);Собственный объем офера (+ стоп-объем для продажи)
-DocStr8927;The exchange boards provider;Провайдер биржевых блощадок
+DocStr8927;The exchange boards provider;Провайдер биржевых площадок
 DocStr8928;Gets or sets the text of the currently selected item;Получить или установить текст выбранного элемента
 DocStr8929;Portfolio received;Портфель получен
 DocStr8936;The storage of securities;Хранилище инструментов
@@ -13097,7 +13097,7 @@ DocStr8992;Get columns count;Получить количество колоно�
 DocStr8993;Get or set column visibility by index;Получить или установить видимость для колонки
 DocStr8994;DDE export error handler;Обработчик ошибок DDE экспорта
 DocStr8995;Layout changed event;Событие изменения разметки
-DocStr8996;Called when the ItemsSource property changes;Вызывается когда свойство ItemsSource было изменено
+DocStr8996;Called when the ItemsSource property changes;Вызывается при изменении свойства ItemsSource
 DocStr8997;Old value of the ItemsSource property;Предыдущее значение свойства ItemsSource
 DocStr8998;New value of the ItemsSource property;Новое значение свойства ItemsSource
 DocStr8999;Update the order book;Обновить стакан
@@ -13110,3 +13110,15 @@ DocStr9005;Selected order changed;Событие изменения заявки
 DocStr9006;Raise {0} event;Вызвать событие {0}
 DocStr9007;Read {0} value as a constant value;Прочитать {0} значение как константу
 DocStr9008;The constant value;Константное значение
+DocStr9009;The event of stop-order registration error;Событие ошибки регистрации стоп-заявки
+DocStr9010;Localized enum editor;Локализованный редактор перечислений
+DocStr9011;"{0} to assign specified settings to the new editor; otherwise, {1}";"{0} применить настройки к новому редактору; иначе, {1}"
+DocStr9012;An object implementing the {0} interface;Объект, реализующий интерфейс {0}
+DocStr9013;A {0} enumeration value;Значение перечисления {0}
+DocStr9015;Provides an interface that is implemented by classes when a scenario calls for use of a collection of values represented by a ComboBox for a given property;Provides an interface that is implemented by classes when a scenario calls for use of a collection of values represented by a ComboBox for a given property
+DocStr9016;Get the collection of values represented by a ComboBox;Получить коллекцию значений, представленных в выпадающем списке
+DocStr9017;Collection of values represented by a ComboBox;Коллекция значений, представленных в выпадающем списке
+DocStr9018;Represents an attribute that is set on a property to identify the IItemsSource-derived class that will be used;Атрибут, устанавливающийся на свойство для идентификации IItemsSource типа
+DocStr9019;Gets the type to use;Получить тип
+DocStr9020;The type to use;Используемый тип
+DocStr9021;Contains settings specific to a combobox editor with uses {0};Содержит настройки для редактора {0}

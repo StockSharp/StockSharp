@@ -1079,7 +1079,7 @@ namespace StockSharp.Algo.Strategies
 		public event Action<Order> StopOrderRegistered;
 
 		/// <summary>
-		/// The event of stop-order successful registration.
+		/// The event of stop-order registration error.
 		/// </summary>
 		public event Action<OrderFail> StopOrderRegisterFailed;
 

@@ -4860,7 +4860,7 @@ E:StockSharp.Algo.Strategies.Strategy.OrderRegistered/summary;DocStr1706
 E:StockSharp.Algo.Strategies.Strategy.OrderRegisterFailed/summary;DocStr1707
 E:StockSharp.Algo.Strategies.Strategy.StopOrderRegistering/summary;DocStr1708
 E:StockSharp.Algo.Strategies.Strategy.StopOrderRegistered/summary;DocStr1710
-E:StockSharp.Algo.Strategies.Strategy.StopOrderRegisterFailed/summary;DocStr1710
+E:StockSharp.Algo.Strategies.Strategy.StopOrderRegisterFailed/summary;DocStr9009
 E:StockSharp.Algo.Strategies.Strategy.OrderChanged/summary;DocStr1711
 E:StockSharp.Algo.Strategies.Strategy.StopOrderChanged/summary;DocStr1712
 E:StockSharp.Algo.Strategies.Strategy.OrderCanceling/summary;DocStr1713
