@@ -28708,12 +28708,12 @@ namespace StockSharp.Localization
 		public static string Series => GetString(SeriesKey);
 
 		/// <summary>
-		/// Candles series.
+		/// Candles series
 		/// </summary>
 		public const string CandlesSeriesKey = "CandlesSeries";
 
 		/// <summary>
-		/// Candles series.
+		/// Candles series
 		/// </summary>
 		public static string CandlesSeries => GetString(CandlesSeriesKey);
 

@@ -2876,7 +2876,7 @@ DiagramNotSet;Strategy diagram is not set.;Не задана схема стра
 DiagramContainsErrors;Strategy diagram contains errors.;Схема стратегии содержит ошибки.
 Str3071;Candles source element.;Элемент источника свечек.
 Series;Series;Серия
-CandlesSeries;Candles series.;Серия свечек.
+CandlesSeries;Candles series;Серия свечек
 OnlyFormed;Only formed;Только сформированные
 ProcessOnlyFormed;Process only formed candles.;Обрабатывать только сформированные свечи.
 Str3077;Perform profile volume calculation.;Производить расчет профиля объема.
