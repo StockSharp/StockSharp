@@ -23,8 +23,6 @@ namespace StockSharp.Algo.Indicators
 
 	using StockSharp.Localization;
 
-	using Xceed.Wpf.Toolkit.PropertyGrid.Attributes;
-
 	/// <summary>
 	/// Welles Wilder Directional Movement Index.
 	/// </summary>
@@ -82,7 +80,7 @@ namespace StockSharp.Algo.Indicators
 		/// <summary>
 		/// DI+.
 		/// </summary>
-		[ExpandableObject]
+		[TypeConverter(typeof(ExpandableObjectConverter))]
 		[DisplayName("DI+")]
 		[Description("DI+.")]
 		[CategoryLoc(LocalizedStrings.GeneralKey)]
@@ -91,7 +89,7 @@ namespace StockSharp.Algo.Indicators
 		/// <summary>
 		/// DI-.
 		/// </summary>
-		[ExpandableObject]
+		[TypeConverter(typeof(ExpandableObjectConverter))]
 		[DisplayName("DI-")]
 		[Description("DI-.")]
 		[CategoryLoc(LocalizedStrings.GeneralKey)]

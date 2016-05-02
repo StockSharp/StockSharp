@@ -493,7 +493,7 @@ namespace StockSharp.BusinessEntities
 		[DisplayNameLoc(LocalizedStrings.Str553Key)]
 		[DescriptionLoc(LocalizedStrings.Str554Key)]
 		[MainCategory]
-		[ExpandableObject]
+		[TypeConverter(typeof(ExpandableObjectConverter))]
 		[InnerSchema(NullWhenAllEmpty = false)]
 		public SecurityExternalId ExternalId
 		{
@@ -569,7 +569,7 @@ namespace StockSharp.BusinessEntities
 		[XmlIgnore]
 		[DisplayNameLoc(LocalizedStrings.Str289Key)]
 		[DescriptionLoc(LocalizedStrings.Str557Key)]
-		[ExpandableObject]
+		[TypeConverter(typeof(ExpandableObjectConverter))]
 		[StatisticsCategory]
 		[PropertyOrder(3)]
 		[Browsable(false)]

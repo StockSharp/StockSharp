@@ -27,8 +27,6 @@ namespace StockSharp.BusinessEntities
 	using StockSharp.Messages;
 	using StockSharp.Localization;
 
-	using Xceed.Wpf.Toolkit.PropertyGrid.Attributes;
-
 	/// <summary>
 	/// Market depth quote representing bid or ask.
 	/// </summary>
@@ -36,7 +34,7 @@ namespace StockSharp.BusinessEntities
 	[System.Runtime.Serialization.DataContract]
 	[DisplayNameLoc(LocalizedStrings.Str273Key)]
 	[DescriptionLoc(LocalizedStrings.Str274Key)]
-	[ExpandableObject]
+	[TypeConverter(typeof(ExpandableObjectConverter))]
 	public class Quote : Cloneable<Quote>, IExtendableEntity
 	{
 		/// <summary>

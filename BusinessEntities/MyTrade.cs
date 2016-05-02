@@ -17,6 +17,7 @@ namespace StockSharp.BusinessEntities
 {
 	using System;
 	using System.Collections.Generic;
+	using System.ComponentModel;
 	using System.Runtime.Serialization;
 	using System.Xml.Serialization;
 
@@ -51,7 +52,7 @@ namespace StockSharp.BusinessEntities
 		/// </summary>
 		[DataMember]
 		[RelationSingle]
-		[ExpandableObject]
+		[TypeConverter(typeof(ExpandableObjectConverter))]
 		[DisplayNameLoc(LocalizedStrings.Str504Key)]
 		[DescriptionLoc(LocalizedStrings.Str505Key)]
 		[MainCategory]
@@ -63,7 +64,7 @@ namespace StockSharp.BusinessEntities
 		/// </summary>
 		[DataMember]
 		[RelationSingle]
-		[ExpandableObject]
+		[TypeConverter(typeof(ExpandableObjectConverter))]
 		[DisplayNameLoc(LocalizedStrings.Str506Key)]
 		[DescriptionLoc(LocalizedStrings.Str507Key)]
 		[MainCategory]

@@ -22,8 +22,6 @@ namespace StockSharp.Algo.Indicators
 
 	using StockSharp.Localization;
 
-	using Xceed.Wpf.Toolkit.PropertyGrid.Attributes;
-
 	/// <summary>
 	/// Convergence/divergence of moving averages.
 	/// </summary>
@@ -59,7 +57,7 @@ namespace StockSharp.Algo.Indicators
 		/// <summary>
 		/// Long moving average.
 		/// </summary>
-		[ExpandableObject]
+		[TypeConverter(typeof(ExpandableObjectConverter))]
 		[DisplayNameLoc(LocalizedStrings.Str798Key)]
 		[DescriptionLoc(LocalizedStrings.Str799Key)]
 		[CategoryLoc(LocalizedStrings.GeneralKey)]
@@ -68,7 +66,7 @@ namespace StockSharp.Algo.Indicators
 		/// <summary>
 		/// Short moving average.
 		/// </summary>
-		[ExpandableObject]
+		[TypeConverter(typeof(ExpandableObjectConverter))]
 		[DisplayNameLoc(LocalizedStrings.Str800Key)]
 		[DescriptionLoc(LocalizedStrings.Str801Key)]
 		[CategoryLoc(LocalizedStrings.GeneralKey)]

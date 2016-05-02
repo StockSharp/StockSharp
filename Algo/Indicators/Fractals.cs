@@ -25,8 +25,6 @@ namespace StockSharp.Algo.Indicators
 	using StockSharp.Algo.Candles;
 	using StockSharp.Localization;
 
-	using Xceed.Wpf.Toolkit.PropertyGrid.Attributes;
-
 	/// <summary>
 	/// Fractals.
 	/// </summary>
@@ -100,7 +98,7 @@ namespace StockSharp.Algo.Indicators
 		/// <summary>
 		/// Fractal up.
 		/// </summary>
-		[ExpandableObject]
+		[TypeConverter(typeof(ExpandableObjectConverter))]
 		[DisplayNameLoc(LocalizedStrings.Str846Key)]
 		[DescriptionLoc(LocalizedStrings.Str846Key, true)]
 		[CategoryLoc(LocalizedStrings.GeneralKey)]
@@ -109,7 +107,7 @@ namespace StockSharp.Algo.Indicators
 		/// <summary>
 		/// Fractal down.
 		/// </summary>
-		[ExpandableObject]
+		[TypeConverter(typeof(ExpandableObjectConverter))]
 		[DisplayNameLoc(LocalizedStrings.Str848Key)]
 		[DescriptionLoc(LocalizedStrings.Str848Key, true)]
 		[CategoryLoc(LocalizedStrings.GeneralKey)]

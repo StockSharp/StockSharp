@@ -18,8 +18,6 @@ namespace StockSharp.Algo.Indicators
 	using System;
 	using System.ComponentModel;
 
-	using Xceed.Wpf.Toolkit.PropertyGrid.Attributes;
-
 	using StockSharp.Localization;
 
 	/// <summary>
@@ -63,7 +61,7 @@ namespace StockSharp.Algo.Indicators
 		/// <summary>
 		/// Tenkan line.
 		/// </summary>
-		[ExpandableObject]
+		[TypeConverter(typeof(ExpandableObjectConverter))]
 		[DisplayName("Tenkan")]
 		[DescriptionLoc(LocalizedStrings.Str764Key, true)]
 		[CategoryLoc(LocalizedStrings.GeneralKey)]
@@ -72,7 +70,7 @@ namespace StockSharp.Algo.Indicators
 		/// <summary>
 		/// Kijun line.
 		/// </summary>
-		[ExpandableObject]
+		[TypeConverter(typeof(ExpandableObjectConverter))]
 		[DisplayName("Kijun")]
 		[DescriptionLoc(LocalizedStrings.Str765Key, true)]
 		[CategoryLoc(LocalizedStrings.GeneralKey)]
@@ -81,7 +79,7 @@ namespace StockSharp.Algo.Indicators
 		/// <summary>
 		/// Senkou (A) line.
 		/// </summary>
-		[ExpandableObject]
+		[TypeConverter(typeof(ExpandableObjectConverter))]
 		[DisplayName("SenkouA")]
 		[DescriptionLoc(LocalizedStrings.Str766Key, true)]
 		[CategoryLoc(LocalizedStrings.GeneralKey)]
@@ -90,7 +88,7 @@ namespace StockSharp.Algo.Indicators
 		/// <summary>
 		/// Senkou (B) line.
 		/// </summary>
-		[ExpandableObject]
+		[TypeConverter(typeof(ExpandableObjectConverter))]
 		[DisplayName("SenkouB")]
 		[DescriptionLoc(LocalizedStrings.Str767Key, true)]
 		[CategoryLoc(LocalizedStrings.GeneralKey)]
@@ -99,7 +97,7 @@ namespace StockSharp.Algo.Indicators
 		/// <summary>
 		/// Chinkou line.
 		/// </summary>
-		[ExpandableObject]
+		[TypeConverter(typeof(ExpandableObjectConverter))]
 		[DisplayName("Chinkou")]
 		[DescriptionLoc(LocalizedStrings.Str768Key, true)]
 		[CategoryLoc(LocalizedStrings.GeneralKey)]

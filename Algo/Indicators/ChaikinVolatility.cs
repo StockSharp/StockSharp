@@ -22,8 +22,6 @@ namespace StockSharp.Algo.Indicators
 	using StockSharp.Algo.Candles;
 	using StockSharp.Localization;
 
-	using Xceed.Wpf.Toolkit.PropertyGrid.Attributes;
-
 	/// <summary>
 	/// Chaikin volatility.
 	/// </summary>
@@ -46,7 +44,7 @@ namespace StockSharp.Algo.Indicators
 		/// <summary>
 		/// Moving Average.
 		/// </summary>
-		[ExpandableObject]
+		[TypeConverter(typeof(ExpandableObjectConverter))]
 		[DisplayName("MA")]
 		[DescriptionLoc(LocalizedStrings.Str731Key)]
 		[CategoryLoc(LocalizedStrings.GeneralKey)]
@@ -55,7 +53,7 @@ namespace StockSharp.Algo.Indicators
 		/// <summary>
 		/// Rate of change.
 		/// </summary>
-		[ExpandableObject]
+		[TypeConverter(typeof(ExpandableObjectConverter))]
 		[DisplayName("ROC")]
 		[DescriptionLoc(LocalizedStrings.Str732Key)]
 		[CategoryLoc(LocalizedStrings.GeneralKey)]

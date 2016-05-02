@@ -18,8 +18,6 @@ namespace StockSharp.Algo.Indicators
 	using System;
 	using System.ComponentModel;
 
-	using Xceed.Wpf.Toolkit.PropertyGrid.Attributes;
-
 	using StockSharp.Localization;
 
 	/// <summary>
@@ -66,7 +64,7 @@ namespace StockSharp.Algo.Indicators
 		/// <summary>
 		/// Top histogram.
 		/// </summary>
-		[ExpandableObject]
+		[TypeConverter(typeof(ExpandableObjectConverter))]
 		[DisplayName("Histogram1")]
 		[DescriptionLoc(LocalizedStrings.Str851Key)]
 		[CategoryLoc(LocalizedStrings.GeneralKey)]
@@ -75,7 +73,7 @@ namespace StockSharp.Algo.Indicators
 		/// <summary>
 		/// Lower histogram.
 		/// </summary>
-		[ExpandableObject]
+		[TypeConverter(typeof(ExpandableObjectConverter))]
 		[DisplayName("Histogram2")]
 		[DescriptionLoc(LocalizedStrings.Str852Key)]
 		[CategoryLoc(LocalizedStrings.GeneralKey)]

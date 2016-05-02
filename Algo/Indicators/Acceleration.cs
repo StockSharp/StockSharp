@@ -22,8 +22,6 @@ namespace StockSharp.Algo.Indicators
 
 	using StockSharp.Localization;
 
-	using Xceed.Wpf.Toolkit.PropertyGrid.Attributes;
-
 	/// <summary>
 	/// Acceleration / Decelration Indicator.
 	/// </summary>
@@ -62,7 +60,7 @@ namespace StockSharp.Algo.Indicators
 		/// <summary>
 		/// The moving average.
 		/// </summary>
-		[ExpandableObject]
+		[TypeConverter(typeof(ExpandableObjectConverter))]
 		[DisplayName("MA")]
 		[DescriptionLoc(LocalizedStrings.Str731Key)]
 		[CategoryLoc(LocalizedStrings.GeneralKey)]
@@ -71,7 +69,7 @@ namespace StockSharp.Algo.Indicators
 		/// <summary>
 		/// Awesome Oscillator.
 		/// </summary>
-		[ExpandableObject]
+		[TypeConverter(typeof(ExpandableObjectConverter))]
 		[DisplayName("AO")]
 		[DescriptionLoc(LocalizedStrings.Str836Key)]
 		[CategoryLoc(LocalizedStrings.GeneralKey)]

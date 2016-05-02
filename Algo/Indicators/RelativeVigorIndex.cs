@@ -19,8 +19,6 @@ namespace StockSharp.Algo.Indicators
 
 	using StockSharp.Localization;
 
-	using Xceed.Wpf.Toolkit.PropertyGrid.Attributes;
-
 	/// <summary>
 	/// Relative Vigor Index.
 	/// </summary>
@@ -53,7 +51,7 @@ namespace StockSharp.Algo.Indicators
 		/// <summary>
 		/// Average indicator part.
 		/// </summary>
-		[ExpandableObject]
+		[TypeConverter(typeof(ExpandableObjectConverter))]
 		[DisplayName("Average")]
 		[DescriptionLoc(LocalizedStrings.Str772Key)]
 		[CategoryLoc(LocalizedStrings.GeneralKey)]
@@ -62,7 +60,7 @@ namespace StockSharp.Algo.Indicators
 		/// <summary>
 		/// Signalling part of indicator.
 		/// </summary>
-		[ExpandableObject]
+		[TypeConverter(typeof(ExpandableObjectConverter))]
 		[DisplayName("Signal")]
 		[DescriptionLoc(LocalizedStrings.Str773Key)]
 		[CategoryLoc(LocalizedStrings.GeneralKey)]

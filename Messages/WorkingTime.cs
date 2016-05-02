@@ -17,13 +17,12 @@ namespace StockSharp.Messages
 {
 	using System;
 	using System.Collections.Generic;
+	using System.ComponentModel;
 	using System.Linq;
 	using System.Runtime.Serialization;
 
 	using Ecng.Common;
 	using Ecng.Serialization;
-
-	using Xceed.Wpf.Toolkit.PropertyGrid.Attributes;
 
 	using StockSharp.Localization;
 
@@ -34,7 +33,7 @@ namespace StockSharp.Messages
 	[System.Runtime.Serialization.DataContract]
 	[DisplayNameLoc(LocalizedStrings.Str184Key)]
 	[DescriptionLoc(LocalizedStrings.Str408Key)]
-	[ExpandableObject]
+	[TypeConverter(typeof(ExpandableObjectConverter))]
 	public class WorkingTime : Cloneable<WorkingTime>, IPersistable
 	{
 		/// <summary>
