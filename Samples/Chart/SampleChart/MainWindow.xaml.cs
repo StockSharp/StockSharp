@@ -86,25 +86,23 @@ namespace SampleChart
 		private void OnThemeSelectionChanged(object sender, SelectionChangedEventArgs e)
 		{
 			var theme = (string)((ComboBoxItem)Theme.SelectedValue).Content;
-			if(theme.IsEmpty())
+			if (theme.IsEmpty())
 				return;
 
-			DevExpress.Xpf.Core.ThemeManager.ApplicationThemeName = theme;
+			//DevExpress.Xpf.Core.ThemeManager.ApplicationThemeName = theme;
 
-			switch (theme)
-			{
-				case DevExpress.Xpf.Core.Theme.Office2016BlackName:
-				case DevExpress.Xpf.Core.Theme.MetropolisDarkName:
-					Chart.ChartTheme = "ExpressionDark";
-					break;
-				case DevExpress.Xpf.Core.Theme.Office2016WhiteName:
-				case DevExpress.Xpf.Core.Theme.MetropolisLightName:
-					Chart.ChartTheme = "Chrome";
-					break;
-			}
+			//switch (theme)
+			//{
+			//	case DevExpress.Xpf.Core.Theme.Office2016BlackName:
+			//	case DevExpress.Xpf.Core.Theme.MetropolisDarkName:
+			//		Chart.ChartTheme = "ExpressionDark";
+			//		break;
+			//	case DevExpress.Xpf.Core.Theme.Office2016WhiteName:
+			//	case DevExpress.Xpf.Core.Theme.MetropolisLightName:
+			//		Chart.ChartTheme = "Chrome";
+			//		break;
+			//}
 		}
-
-
 
 		private void Chart_OnSubscribeIndicatorElement(ChartIndicatorElement element, CandleSeries series, IIndicator indicator)
 		{
