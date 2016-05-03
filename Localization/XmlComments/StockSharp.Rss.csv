@@ -19,7 +19,8 @@ P:StockSharp.Rss.RssTrader.Address/summary;Str3505
 P:StockSharp.Rss.RssTrader.CustomDateFormat/summary;DocStr7420
 T:StockSharp.Rss.Xaml.RssAddressComboBox/summary;DocStr7421
 M:StockSharp.Rss.Xaml.RssAddressComboBox.#ctor/summary;DocStr1
-T:StockSharp.Rss.Xaml.RssAddressEditor/summary;DocStr7421
+T:StockSharp.Rss.Xaml.RssAddressEditor/summary;DocStr29
+M:StockSharp.Rss.Xaml.RssAddressEditor.#ctor/summary;DocStr1
 T:StockSharp.Rss.Xaml.RssAddresses/summary;DocStr7422
 F:StockSharp.Rss.Xaml.RssAddresses.Reuters/summary;DocStr7423
 F:StockSharp.Rss.Xaml.RssAddresses.Bloomberg/summary;DocStr7424

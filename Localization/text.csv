@@ -13122,3 +13122,5 @@ DocStr9018;Represents an attribute that is set on a property to identify the IIt
 DocStr9019;Gets the type to use;Получить тип
 DocStr9020;The type to use;Используемый тип
 DocStr9021;Contains settings specific to a combobox editor with uses {0};Содержит настройки для редактора {0}
+DocStr9022;List of available indicators types;Список доступных типов индикаторов
+DocStr9023;Items;Элементы

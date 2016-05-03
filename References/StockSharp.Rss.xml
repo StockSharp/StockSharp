@@ -89,7 +89,12 @@
         </member>
         <member name="T:StockSharp.Rss.Xaml.RssAddressEditor">
             <summary>
-            The drop-down list to select the RSS feed address.
+            <see cref="T:StockSharp.Xaml.PropertyGrid.ItemsSourceEditSettings"/> for <see cref="T:StockSharp.Rss.Xaml.RssAddressComboBox"/>.
+            </summary>
+        </member>
+        <member name="M:StockSharp.Rss.Xaml.RssAddressEditor.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Rss.Xaml.RssAddressEditor"/>.
             </summary>
         </member>
         <member name="T:StockSharp.Rss.Xaml.RssAddresses">

@@ -119,21 +119,6 @@
             An attempt to activate the mode <see cref="F:StockSharp.OpenECry.OpenECryRemoting.Secondary" />, in case of failure the mode <see cref="F:StockSharp.OpenECry.OpenECryRemoting.None" /> is activated.
             </summary>
     </member>
-    <member name="T:StockSharp.OpenECry.Xaml.OpenECryAddressComboBox">
-      <summary>
-            The drop-down list to select the OpenECry server address.
-            </summary>
-    </member>
-    <member name="M:StockSharp.OpenECry.Xaml.OpenECryAddressComboBox.#ctor">
-      <summary>
-            Initializes a new instance of the <see cref="T:StockSharp.OpenECry.Xaml.OpenECryAddressComboBox" />.
-            </summary>
-    </member>
-    <member name="T:StockSharp.OpenECry.Xaml.OpenECryEndPointEditor">
-      <summary>
-            The drop-down list to select the OpenECry server address.
-            </summary>
-    </member>
     <member name="T:StockSharp.OpenECry.OpenECryAddresses">
       <summary>
             Addresses of OpenECry system servers.
@@ -330,6 +315,26 @@
             Process message.
             </summary>
       <param name="message">Message.</param>
+    </member>
+    <member name="T:StockSharp.OpenECry.Xaml.OpenECryAddressComboBox">
+      <summary>
+            The drop-down list to select the OpenECry server address.
+            </summary>
+    </member>
+    <member name="M:StockSharp.OpenECry.Xaml.OpenECryAddressComboBox.#ctor">
+      <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.OpenECry.Xaml.OpenECryAddressComboBox" />.
+            </summary>
+    </member>
+    <member name="T:StockSharp.OpenECry.Xaml.OpenECryEndPointEditor">
+      <summary>
+        <see cref="T:StockSharp.Xaml.PropertyGrid.ItemsSourceEditSettings" /> for <see cref="T:StockSharp.OpenECry.Xaml.OpenECryAddressComboBox" />.
+            </summary>
+    </member>
+    <member name="M:StockSharp.OpenECry.Xaml.OpenECryEndPointEditor.#ctor">
+      <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.OpenECry.Xaml.OpenECryEndPointEditor" />.
+            </summary>
     </member>
   </members>
 </doc>

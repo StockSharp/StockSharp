@@ -598,6 +598,10 @@ M:StockSharp.Xaml.Diagram.ExportDiagramElement.Load(Ecng.Serialization.SettingsS
 M:StockSharp.Xaml.Diagram.ExportDiagramElement.Load(Ecng.Serialization.SettingsStorage)/param/storage;DocStr3
 M:StockSharp.Xaml.Diagram.ExportDiagramElement.Save(Ecng.Serialization.SettingsStorage)/summary;DocStr4
 M:StockSharp.Xaml.Diagram.ExportDiagramElement.Save(Ecng.Serialization.SettingsStorage)/param/storage;DocStr3
+T:StockSharp.Xaml.Diagram.IndicatorTypeItemsSource/summary;DocStr8056
+P:StockSharp.Xaml.Diagram.IndicatorTypeItemsSource.IndicatorTypes/summary;DocStr9022
+M:StockSharp.Xaml.Diagram.IndicatorTypeItemsSource.GetValues/summary;DocStr8057
+M:StockSharp.Xaml.Diagram.IndicatorTypeItemsSource.GetValues/returns;DocStr8058
 T:StockSharp.Xaml.Diagram.SocketTypesSource/summary;DocStr8059
 M:StockSharp.Xaml.Diagram.SocketTypesSource.GetValues/summary;DocStr8060
 M:StockSharp.Xaml.Diagram.SocketTypesSource.GetValues/returns;DocStr8061

@@ -25,9 +25,6 @@ T:StockSharp.OpenECry.OpenECryRemoting/summary;DocStr5930
 F:StockSharp.OpenECry.OpenECryRemoting.None/summary;Str2558
 F:StockSharp.OpenECry.OpenECryRemoting.Primary/summary;DocStr5931
 F:StockSharp.OpenECry.OpenECryRemoting.Secondary/summary;DocStr5932
-T:StockSharp.OpenECry.Xaml.OpenECryAddressComboBox/summary;DocStr5933
-M:StockSharp.OpenECry.Xaml.OpenECryAddressComboBox.#ctor/summary;DocStr1
-T:StockSharp.OpenECry.Xaml.OpenECryEndPointEditor/summary;DocStr5933
 T:StockSharp.OpenECry.OpenECryAddresses/summary;DocStr5934
 F:StockSharp.OpenECry.OpenECryAddresses.DefaultPort/summary;DocStr5935
 F:StockSharp.OpenECry.OpenECryAddresses.Api/summary;DocStr5936
@@ -73,3 +70,7 @@ M:StockSharp.OpenECry.OpenECryTrader.UnSubscribeCandles(StockSharp.Algo.Candles.
 M:StockSharp.OpenECry.OpenECryTrader.UnSubscribeCandles(StockSharp.Algo.Candles.CandleSeries)/param/series;CandlesSeries
 M:StockSharp.OpenECry.OpenECryTrader.OnProcessMessage(StockSharp.Messages.Message)/summary;DocStr80
 M:StockSharp.OpenECry.OpenECryTrader.OnProcessMessage(StockSharp.Messages.Message)/param/message;Str3166
+T:StockSharp.OpenECry.Xaml.OpenECryAddressComboBox/summary;DocStr5933
+M:StockSharp.OpenECry.Xaml.OpenECryAddressComboBox.#ctor/summary;DocStr1
+T:StockSharp.OpenECry.Xaml.OpenECryEndPointEditor/summary;DocStr29
+M:StockSharp.OpenECry.Xaml.OpenECryEndPointEditor.#ctor/summary;DocStr1

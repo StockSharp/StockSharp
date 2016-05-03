@@ -206,7 +206,7 @@ namespace SamplePlaza
 		{
 			_isConnected = isConnected;
 			ConnectBtn.Content = isConnected ? LocalizedStrings.Disconnect : LocalizedStrings.Connect;
-			connectionStatus.Content = isConnected ? LocalizedStrings.Connected : LocalizedStrings.Disconnected;
+			ConnectionStatus.Content = isConnected ? LocalizedStrings.Connected : LocalizedStrings.Disconnected;
             
             ShowSecurities.IsEnabled = ShowTrades.IsEnabled =
             ShowMyTrades.IsEnabled = ShowOrders.IsEnabled =
