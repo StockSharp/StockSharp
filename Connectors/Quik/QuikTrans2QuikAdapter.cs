@@ -24,7 +24,7 @@ namespace StockSharp.Quik
 	using Ecng.Common;
 	using Ecng.Interop;
 	using Ecng.Serialization;
-	using Ecng.Xaml;
+	using Ecng.Xaml.DevExp;
 
 	using StockSharp.Logging;
 	using StockSharp.Messages;
