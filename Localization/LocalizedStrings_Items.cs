@@ -18908,12 +18908,12 @@ namespace StockSharp.Localization
 		public static string Str1984 => GetString(Str1984Key);
 
 		/// <summary>
-		/// Line colur (bar and etc.), with which the indicator will be drawn on chart.
+		/// Line color (bar and etc.), with which the indicator will be drawn on chart.
 		/// </summary>
 		public const string Str1985Key = "Str1985";
 
 		/// <summary>
-		/// Line colur (bar and etc.), with which the indicator will be drawn on chart.
+		/// Line color (bar and etc.), with which the indicator will be drawn on chart.
 		/// </summary>
 		public static string Str1985 => GetString(Str1985Key);
 
@@ -19608,12 +19608,12 @@ namespace StockSharp.Localization
 		public static string Str2055 => GetString(Str2055Key);
 
 		/// <summary>
-		/// Line colur (bar and etc.), with which it will be drawn on chart.
+		/// Line color (bar and etc.), with which it will be drawn on chart.
 		/// </summary>
 		public const string Str2056Key = "Str2056";
 
 		/// <summary>
-		/// Line colur (bar and etc.), with which it will be drawn on chart.
+		/// Line color (bar and etc.), with which it will be drawn on chart.
 		/// </summary>
 		public static string Str2056 => GetString(Str2056Key);
 

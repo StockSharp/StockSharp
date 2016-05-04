@@ -1891,7 +1891,7 @@ Str1979;Indicator settings;Настройки индикатора
 Str1981;Indicator;Индикатор
 Str1983;Indicator header that will be shown on chart.;Заголовок индикатора, который будет отображаться на графике.
 Str1984;Color;Цвет
-Str1985;Line colur (bar and etc.), with which the indicator will be drawn on chart.;Цвет линии (бара и т.д.), которой будет рисоваться на графике индикатор.
+Str1985;Line color (bar and etc.), with which the indicator will be drawn on chart.;Цвет линии (бара и т.д.), которой будет рисоваться на графике индикатор.
 Str1986;Additional color;Дополнительный цвет
 Str1987;Additional line color (bars etc), which will be drawn on the chart indicator.;Дополнительный цвет линии (бара и т.д.), которой будет рисоваться на графике индикатор.
 Str1988;Line width (bar and etc.), with which indicator will be drawn on chart.;Толщина линии (бара и т.д.), с которой будет рисоваться индикатор на графике.
@@ -1961,7 +1961,7 @@ Str2052;Use automatic scaling «Bubble» mode.;Использовать авто
 Str2053;Scale;Масштаб
 Str2054;Manual scale for «Bubble» mode.;Ручной масштаб для режима «Пузырь».
 Str2055;Line settings;Настройки линии
-Str2056;Line colur (bar and etc.), with which it will be drawn on chart.;Цвет линии (бара и т.д.), с которым она будет рисоваться на графике.
+Str2056;Line color (bar and etc.), with which it will be drawn on chart.;Цвет линии (бара и т.д.), с которым она будет рисоваться на графике.
 Str2057;Additional line color (bars etc), with which it will be drawn on the chart.;Дополнительный цвет линии (бара и т.д.), с которым она будет рисоваться на графике.
 Str2058;Line width (bar and etc.), with which it will be drawn on chart.;Толщина линии (бара и т.д.), с которой она будет рисоваться на графике.
 Str2059;Line smoothing.;Сглаживание линии.
