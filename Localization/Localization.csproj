@@ -68,6 +68,7 @@
     <Compile Include="DisplayNameLocAttribute.cs" />
     <Compile Include="EnumDisplayNameLocAttribute.cs" />
     <Compile Include="LocalizedStrings.cs" />
+    <Compile Include="LocalizedStrings_Dots.cs" />
     <Compile Include="LocalizedStrings_Items.cs" />
     <Compile Include="ProjectDescriptions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
