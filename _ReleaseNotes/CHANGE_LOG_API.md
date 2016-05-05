@@ -12,6 +12,7 @@ StockSharp API Change log
 * (bug) ADX, Fractals indicator fixes.
 * (bug) Position manager fix.
 * (bug) SecurityPicker. Show common columns fix.
+* (feature) Connectors. Removed ref from Xceed.
 
 ###v4.3.14.2:
 * (feature) Chart. Active orders.

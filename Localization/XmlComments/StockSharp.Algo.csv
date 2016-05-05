@@ -196,11 +196,11 @@ M:StockSharp.Algo.Export.StockSharpExporter.Export(System.Collections.Generic.IE
 M:StockSharp.Algo.Export.StockSharpExporter.Export(System.Collections.Generic.IEnumerable{StockSharp.Messages.SecurityMessage})/summary;DocStr1094
 M:StockSharp.Algo.Export.StockSharpExporter.Export(System.Collections.Generic.IEnumerable{StockSharp.Messages.SecurityMessage})/param/messages;XamlStr685
 T:StockSharp.Algo.Export.DatabaseExporter/summary;DocStr1097
-M:StockSharp.Algo.Export.DatabaseExporter.#ctor(StockSharp.BusinessEntities.Security,System.Object,System.Func{System.Int32,System.Boolean},Ecng.Xaml.Database.DatabaseConnectionPair)/summary;DocStr1
-M:StockSharp.Algo.Export.DatabaseExporter.#ctor(StockSharp.BusinessEntities.Security,System.Object,System.Func{System.Int32,System.Boolean},Ecng.Xaml.Database.DatabaseConnectionPair)/param/security;DocStr2831
-M:StockSharp.Algo.Export.DatabaseExporter.#ctor(StockSharp.BusinessEntities.Security,System.Object,System.Func{System.Int32,System.Boolean},Ecng.Xaml.Database.DatabaseConnectionPair)/param/arg;DocStr1087
-M:StockSharp.Algo.Export.DatabaseExporter.#ctor(StockSharp.BusinessEntities.Security,System.Object,System.Func{System.Int32,System.Boolean},Ecng.Xaml.Database.DatabaseConnectionPair)/param/isCancelled;DocStr1088
-M:StockSharp.Algo.Export.DatabaseExporter.#ctor(StockSharp.BusinessEntities.Security,System.Object,System.Func{System.Int32,System.Boolean},Ecng.Xaml.Database.DatabaseConnectionPair)/param/connection;DocStr1098
+M:StockSharp.Algo.Export.DatabaseExporter.#ctor(StockSharp.BusinessEntities.Security,System.Object,System.Func{System.Int32,System.Boolean},Ecng.Xaml.DevExp.Database.DatabaseConnectionPair)/summary;DocStr1
+M:StockSharp.Algo.Export.DatabaseExporter.#ctor(StockSharp.BusinessEntities.Security,System.Object,System.Func{System.Int32,System.Boolean},Ecng.Xaml.DevExp.Database.DatabaseConnectionPair)/param/security;DocStr2831
+M:StockSharp.Algo.Export.DatabaseExporter.#ctor(StockSharp.BusinessEntities.Security,System.Object,System.Func{System.Int32,System.Boolean},Ecng.Xaml.DevExp.Database.DatabaseConnectionPair)/param/arg;DocStr1087
+M:StockSharp.Algo.Export.DatabaseExporter.#ctor(StockSharp.BusinessEntities.Security,System.Object,System.Func{System.Int32,System.Boolean},Ecng.Xaml.DevExp.Database.DatabaseConnectionPair)/param/isCancelled;DocStr1088
+M:StockSharp.Algo.Export.DatabaseExporter.#ctor(StockSharp.BusinessEntities.Security,System.Object,System.Func{System.Int32,System.Boolean},Ecng.Xaml.DevExp.Database.DatabaseConnectionPair)/param/connection;DocStr1098
 P:StockSharp.Algo.Export.DatabaseExporter.BatchSize/summary;DocStr1096
 P:StockSharp.Algo.Export.DatabaseExporter.CheckUnique/summary;DocStr1099
 M:StockSharp.Algo.Export.DatabaseExporter.Export(System.Collections.Generic.IEnumerable{StockSharp.Messages.ExecutionMessage})/summary;DocStr1094

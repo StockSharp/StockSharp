@@ -1770,7 +1770,6 @@ Str1853Params;Security {0} does not have a SmartCOM ID.;Инструмент {0}
 Str1854;SmartCOM does not support simultaneous search of securities on multiple queries.;SmartCOM не поддерживает одновременный поиск инструментов по нескольким запросам.
 Str1855Params;Unregistered candles series securityId = {0} timeFrame = {1}.;Незарегистрированная ранее серия свечек securityId = {0} timeFrame = {1}.
 Str1856;Connection was not successful.;Подключение не было произведено.
-Str1859;Version SmartCOM API;Версия SmartCOM API
 Str1860;Version SmartCOM API. By default equal 3.x.;Версия SmartCOM API. По-умолчанию равна 3.x.
 ServerAddress;Server address;Адрес сервера
 Str1862;Client configuration;Конфигурация клиента
@@ -2171,7 +2170,6 @@ Str2299Params;Error loading {0} candles for {1:d} date and {2} security.;Оши�
 Str2300;End of iteration.;Окончание итерации.
 Str2302;Login. Required if server authorization is on.;Имя пользователя. Требуется при включенной авторизации на сервере.
 Str2303;Password. Require when server authorization is enabled.;Пароль. Требуется при включенной авторизации на сервере.
-Str2304;From what date to begin reading data.;С какой даты начать считывать данные.
 Str2305;Receiveing new securities.;Получение новых инструментов.
 Str2306Params;Start from {0:d}.;Старт с {0:d}.
 Str2307Params;Processing security {0}.;Обработка инструмента {0}.
@@ -2400,9 +2398,6 @@ Str2557Params;Unexpected state of order: {0};Неожиданное состоя
 Str2558;Disabled;Отключен
 Str2559;Automatically;Автоматически
 Str2560;Secondary;Второстепенный
-Str2562;OpenECry API server address.;Адрес API сервера OpenECry.
-Str2563;OpenECry login.;Имя пользователя OpenECry.
-Str2564;OpenECry password.;Пароль пользователя OpenECry.
 Str2565;Unique software ID.;Уникальный идентификатор программного обеспечения.
 Str2566;Required mode of connection to the terminal.;Требуемый режим подключения к терминалу.
 Str2567;Use «native» reconnection mechanism.;Использовать «родной» механизм восстановления подключения.
@@ -2429,13 +2424,11 @@ Str2588;User with same name is already connected to server.;Пользовате
 Str2590Params;Quote for {0} have zero volume.;Котировка для {0} имеет нулевой объем.
 Str2591Params;Price of best bid {0} is greater or equal to the price of best ask {1} for security {2}.;Цена лучшего бида {0} больше или равна цене лучшего оффера {1} для инструмента {2}.
 Str2593;Additional;Дополнительное
-Str2594;Server address. By default it's value us equal to the local computer address 127.0.0.1:4001.;Адрес сервера. По-умолчанию значение равно адресу локального компьютера 127.0.0.1:4001.
 Str2595;Name prefix;Префикс имени
 Str2596;Prefix in name of Plaza connection program.;Префикс в имени приложения Plaza соединения.
 UseCGate;Use CGate;Использовать CGate
 Str2598;Should CGate be used to trade through Plaza or use old COM.;Использовать ли CGate для торговли через Plaza или использовать старый COM.
-CGateId;CGate ID;Идентификатор CGate
-Str2600;Client software ID. Used in Cgate mode.;Идентификатор клиентского ПО. Используется при режиме CGate.
+SoftwareId;Software ID;Идентификатор ПО
 Str2601;Login. Used in case of an authorized router connection.;Логин. Используется в случае авторизованного подключения к роутеру.
 Str2602;Password. Used in case of authorized router connection.;Пароль. Используется в случае авторизованного подключения к роутеру.
 Str2603;Time, during which messages from data stream are expected to be received or transactions are expected to be sent.;Время, в течение которого ожидается получение сообщения из потока данных или отправка транзакций.
@@ -2569,7 +2562,7 @@ Str2729;Currency exchange market: trading schedule events types;Валютный
 Str2730;Stock market: accumulated income and REPO rates on settlement date;Фондовый рынок: накопленный доход и ставки РЕПО на дату расчетов
 Str2731;Foreign exchange market: accumulated income and repo rates on settlement date;Валютный рынок: накопленный доход и ставки РЕПО на дату расчетов
 Str2732Params;Table {0} not found.;Таблица {0} не найдена.
-Str2733;Conditional orders are not supported by Plaza2 protocol.;Условные заявки не поддерживаются протоколом Plaza2.
+Str2733;Conditional orders are not supported by Plaza 2 protocol.;Условные заявки не поддерживаются протоколом Plaza 2.
 Str2734;Error cancelling a group of transaction.;Ошибка при отмене группы транзакций.
 Str2735Params;Failed to register order {0}.;Не удалось зарегистрировать заявку {0}.
 Str2736;Incorrect ID value.;Неверное значение идентификатора.
@@ -2635,7 +2628,6 @@ Str2795Params;Unknown stream {0} state.;Неизвестное состояни�
 Str2796;Parameter value can not be less than zero.;Значение параметра не может быть отрицательным.
 Str2797;Unknown error.;Неизвестная ошибка.
 Str2798;Connect through CGate.;Подключаться через CGate.
-Str2799;Client software ID.;Идентификатор клиентского ПО.
 Str2800;Transmit only system trades.;Передавать только системные сделки.
 Str2801;Fast replication;Быстрая репликация
 Str2802;Is fast replication being used.;Используется ли быстрая репликация.
@@ -2664,7 +2656,6 @@ Str2825;BPI;ЛЧИ
 Str2826;Source is designed to obtain data about the Best Private Investor contest.;Источник предназначен для получения данных о ходе конкурса ЛЧИ.
 Str2827Params;Move to year {0}.;Переход к году {0}.
 Str2828Params;Date {0:d} is out of range.;Дата {0:d} вне диапазона.
-Str2829;Should 3rd SmartCOM version be used for connection.;Использовать ли 3-ю версию SmartCOM для подключения.
 Str2830;UX (website);UX (сайт)
 Str2831;Boards;Площадки
 Str2832;Some associations do not have a filled in text value.;Некоторые ассоциации не имеют заполненного текстового значения.
@@ -3184,15 +3175,12 @@ Str3407;Maximum;Максимальная
 Str3410;Path to dll;Путь к dll
 Str3411;Path to mtesrl.dll file.;Путь к файлу mtesrl.dll.
 Str3412;Connection type;Тип подключения
-Str3413;Connection type.;Тип подключения.
 Str3414;Addresses;Адреса
 Str3415;List of addresses and ports for access servers.;Список адресов и портов серверов доступа.
 Str3416;Server;Сервер
 Str3417;Access server ID, e.g. «EQ_TEST».;Идентификатор сервера доступа, например «EQ_TEST».
 Str3418;Interface;Интерфейс
 Str3419;Interface ID for MICEX trading system.;Идентификатор интерфейса торговой системы ММВБ.
-Str3420;User ID in MICEX trading system.;Идентификатор пользователя в торговой системе ММВБ.
-Str3421;MICEX trading system password.;Пароль пользователя в торговой системе ММВБ.
 Str3422;Loggin level in N,M format. Maximum logging level is equal to «5,2». Minimum (disabled) is «0,0».;Уровень логирования в формате N,M. Максимальный уровень логирования равен «5,2». Минимальный (выключен) «0,0».
 Str3423;Compression;Компрессия
 Str3424;Data compression parameter. By default equal to BZip.;Параметр компрессии данных. По-умолчанию равен BZip.
@@ -3432,9 +3420,6 @@ Str3675;Path to the assembly of a published project is not specified.;Не ук�
 Str3676Params;Scheme {0} has changed. Save changes?;Схема {0} была изменена. Сохранить изменения?
 Str3677;Executable file is not specified.;Не указан файл для запуска.
 Str3678Params;New order for '{0}';Новая заявка на '{0}'
-Str3679;Login for Transaq server.;Логин к серверу Transaq.
-Str3680;Transaq server password.;Пароль к серверу Transaq.
-Str3681;Transaq server address.;Адрес сервера Transaq.
 Str3682;Use;Использовать
 Str3683;Is proxy used to connecto to the internet.;Используется ли прокси для подключения к интернету.
 Str3684;Protocol;Протокол
@@ -4242,6 +4227,41 @@ PnFCandle;XO candle;XO свечи
 RenkoCandle;Renko candle;Ренко свечи
 UnknownCandleType;Unknown candle type '{0}'.;Неизвестный тип '{0}' свечи.
 InvalidArgumentValue;Invalid argument value.;Неправильное значение.
+AlfaDirect;Alfa-Direct;Альфа-Директ
+BarChart;Barchart;Barchart
+BitStamp;Bitstamp;Bitstamp
+Fusion;Fusion/Blackwood;Fusion/Blackwood
+DukasCopy;DukasCopy;DukasCopy
+Btce;BTCE;BTCE
+Finam;Finam;Финам
+FIX;FIX;FIX
+GainCapital;GAIN Capital;GAIN Capital
+Google;Google;Google
+MBTrading;MB Trading;MB Trading
+TrueFX;TrueFX;TrueFX
+Yahoo;Yahoo;Yahoo
+UxFtp;UX (FTP);УБ (FTP)
+RTS;RTS;РТС
+UsdRur;USD/RUR;USD/RUR
+Quandl;Quandl;Quandl
+Oanda;OANDA;OANDA
+Lmax;LMAX;LMAX
+DataServer;S#.Data Server;S#.Data сервер
+InteractiveBrokers;Interactive Brokers;Interactive Brokers
+Transaq;Transaq;Transaq
+HFT;HFT;HFT
+SmartCOM;SmartCOM;SmartCOM
+Rss;RSS;RSS
+Rithmic;Rithmic;Rithmic
+OpenECry;OpenECry;OpenECry
+MFD;MFD;MFD
+Micex;Micex;ММВБ
+Itch;ITCH;ITCH
+Plaza;Plaza 2;Plaza 2
+IQFeed;IQFeed;IQFeed
+Quik;Quik;Quik
+Dde;DDE;DDE
+Lua;LUA;LUA
 DocStr0;Button activation alert settings;Кнопка активации настроек сигнала
 DocStr1;Initializes a new instance of the {0};Создать {0}
 DocStr2;Load settings;Загрузить настройки
@@ -13124,3 +13144,4 @@ DocStr9020;The type to use;Используемый тип
 DocStr9021;Contains settings specific to a combobox editor with uses {0};Содержит настройки для редактора {0}
 DocStr9022;List of available indicators types;Список доступных типов индикаторов
 DocStr9023;Items;Элементы
+DocStr9024;Timeframe #2 frame color;Цвет линии таймфрейма #2

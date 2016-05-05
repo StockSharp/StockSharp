@@ -17698,16 +17698,6 @@ namespace StockSharp.Localization
 		public static string Str1856 => GetString(Str1856Key);
 
 		/// <summary>
-		/// Version SmartCOM API
-		/// </summary>
-		public const string Str1859Key = "Str1859";
-
-		/// <summary>
-		/// Version SmartCOM API
-		/// </summary>
-		public static string Str1859 => GetString(Str1859Key);
-
-		/// <summary>
 		/// Version SmartCOM API. By default equal 3.x.
 		/// </summary>
 		public const string Str1860Key = "Str1860";
@@ -21708,16 +21698,6 @@ namespace StockSharp.Localization
 		public static string Str2303 => GetString(Str2303Key);
 
 		/// <summary>
-		/// From what date to begin reading data.
-		/// </summary>
-		public const string Str2304Key = "Str2304";
-
-		/// <summary>
-		/// From what date to begin reading data.
-		/// </summary>
-		public static string Str2304 => GetString(Str2304Key);
-
-		/// <summary>
 		/// Receiveing new securities.
 		/// </summary>
 		public const string Str2305Key = "Str2305";
@@ -23988,36 +23968,6 @@ namespace StockSharp.Localization
 		public static string Str2560 => GetString(Str2560Key);
 
 		/// <summary>
-		/// OpenECry API server address.
-		/// </summary>
-		public const string Str2562Key = "Str2562";
-
-		/// <summary>
-		/// OpenECry API server address.
-		/// </summary>
-		public static string Str2562 => GetString(Str2562Key);
-
-		/// <summary>
-		/// OpenECry login.
-		/// </summary>
-		public const string Str2563Key = "Str2563";
-
-		/// <summary>
-		/// OpenECry login.
-		/// </summary>
-		public static string Str2563 => GetString(Str2563Key);
-
-		/// <summary>
-		/// OpenECry password.
-		/// </summary>
-		public const string Str2564Key = "Str2564";
-
-		/// <summary>
-		/// OpenECry password.
-		/// </summary>
-		public static string Str2564 => GetString(Str2564Key);
-
-		/// <summary>
 		/// Unique software ID.
 		/// </summary>
 		public const string Str2565Key = "Str2565";
@@ -24278,16 +24228,6 @@ namespace StockSharp.Localization
 		public static string Str2593 => GetString(Str2593Key);
 
 		/// <summary>
-		/// Server address. By default it's value us equal to the local computer address 127.0.0.1:4001.
-		/// </summary>
-		public const string Str2594Key = "Str2594";
-
-		/// <summary>
-		/// Server address. By default it's value us equal to the local computer address 127.0.0.1:4001.
-		/// </summary>
-		public static string Str2594 => GetString(Str2594Key);
-
-		/// <summary>
 		/// Name prefix
 		/// </summary>
 		public const string Str2595Key = "Str2595";
@@ -24328,24 +24268,14 @@ namespace StockSharp.Localization
 		public static string Str2598 => GetString(Str2598Key);
 
 		/// <summary>
-		/// CGate ID
+		/// Software ID
 		/// </summary>
-		public const string CGateIdKey = "CGateId";
+		public const string SoftwareIdKey = "SoftwareId";
 
 		/// <summary>
-		/// CGate ID
+		/// Software ID
 		/// </summary>
-		public static string CGateId => GetString(CGateIdKey);
-
-		/// <summary>
-		/// Client software ID. Used in Cgate mode.
-		/// </summary>
-		public const string Str2600Key = "Str2600";
-
-		/// <summary>
-		/// Client software ID. Used in Cgate mode.
-		/// </summary>
-		public static string Str2600 => GetString(Str2600Key);
+		public static string SoftwareId => GetString(SoftwareIdKey);
 
 		/// <summary>
 		/// Login. Used in case of an authorized router connection.
@@ -26328,16 +26258,6 @@ namespace StockSharp.Localization
 		public static string Str2798 => GetString(Str2798Key);
 
 		/// <summary>
-		/// Client software ID.
-		/// </summary>
-		public const string Str2799Key = "Str2799";
-
-		/// <summary>
-		/// Client software ID.
-		/// </summary>
-		public static string Str2799 => GetString(Str2799Key);
-
-		/// <summary>
 		/// Transmit only system trades.
 		/// </summary>
 		public const string Str2800Key = "Str2800";
@@ -26616,16 +26536,6 @@ namespace StockSharp.Localization
 		/// Date {0} is out of range.
 		/// </summary>
 		public static string Str2828Params => GetString(Str2828ParamsKey);
-
-		/// <summary>
-		/// Should 3rd SmartCOM version be used for connection.
-		/// </summary>
-		public const string Str2829Key = "Str2829";
-
-		/// <summary>
-		/// Should 3rd SmartCOM version be used for connection.
-		/// </summary>
-		public static string Str2829 => GetString(Str2829Key);
 
 		/// <summary>
 		/// UX (website)
@@ -31788,16 +31698,6 @@ namespace StockSharp.Localization
 		public static string Str3412 => GetString(Str3412Key);
 
 		/// <summary>
-		/// Connection type.
-		/// </summary>
-		public const string Str3413Key = "Str3413";
-
-		/// <summary>
-		/// Connection type.
-		/// </summary>
-		public static string Str3413 => GetString(Str3413Key);
-
-		/// <summary>
 		/// Addresses
 		/// </summary>
 		public const string Str3414Key = "Str3414";
@@ -31856,26 +31756,6 @@ namespace StockSharp.Localization
 		/// Interface ID for MICEX trading system.
 		/// </summary>
 		public static string Str3419 => GetString(Str3419Key);
-
-		/// <summary>
-		/// User ID in MICEX trading system.
-		/// </summary>
-		public const string Str3420Key = "Str3420";
-
-		/// <summary>
-		/// User ID in MICEX trading system.
-		/// </summary>
-		public static string Str3420 => GetString(Str3420Key);
-
-		/// <summary>
-		/// MICEX trading system password.
-		/// </summary>
-		public const string Str3421Key = "Str3421";
-
-		/// <summary>
-		/// MICEX trading system password.
-		/// </summary>
-		public static string Str3421 => GetString(Str3421Key);
 
 		/// <summary>
 		/// Loggin level in N,M format. Maximum logging level is equal to "5,2". Minimum (disabled) is "0,0".
@@ -34256,36 +34136,6 @@ namespace StockSharp.Localization
 		/// New order for '{0}'
 		/// </summary>
 		public static string Str3678Params => GetString(Str3678ParamsKey);
-
-		/// <summary>
-		/// Login for Transaq server.
-		/// </summary>
-		public const string Str3679Key = "Str3679";
-
-		/// <summary>
-		/// Login for Transaq server.
-		/// </summary>
-		public static string Str3679 => GetString(Str3679Key);
-
-		/// <summary>
-		/// Transaq server password.
-		/// </summary>
-		public const string Str3680Key = "Str3680";
-
-		/// <summary>
-		/// Transaq server password.
-		/// </summary>
-		public static string Str3680 => GetString(Str3680Key);
-
-		/// <summary>
-		/// Transaq server address.
-		/// </summary>
-		public const string Str3681Key = "Str3681";
-
-		/// <summary>
-		/// Transaq server address.
-		/// </summary>
-		public static string Str3681 => GetString(Str3681Key);
 
 		/// <summary>
 		/// Use
@@ -42076,5 +41926,355 @@ namespace StockSharp.Localization
 		/// Invalid argument value.
 		/// </summary>
 		public static string InvalidArgumentValue => GetString(InvalidArgumentValueKey);
+
+		/// <summary>
+		/// AlfaDirect
+		/// </summary>
+		public const string AlfaDirectKey = "AlfaDirect";
+
+		/// <summary>
+		/// AlfaDirect
+		/// </summary>
+		public static string AlfaDirect => GetString(AlfaDirectKey);
+
+		/// <summary>
+		/// Barchart
+		/// </summary>
+		public const string BarChartKey = "BarChart";
+
+		/// <summary>
+		/// Barchart
+		/// </summary>
+		public static string BarChart => GetString(BarChartKey);
+
+		/// <summary>
+		/// Bitstamp
+		/// </summary>
+		public const string BitStampKey = "BitStamp";
+
+		/// <summary>
+		/// Bitstamp
+		/// </summary>
+		public static string BitStamp => GetString(BitStampKey);
+
+		/// <summary>
+		/// Fusion
+		/// </summary>
+		public const string FusionKey = "Fusion";
+
+		/// <summary>
+		/// Fusion
+		/// </summary>
+		public static string Fusion => GetString(FusionKey);
+
+		/// <summary>
+		/// BTCE
+		/// </summary>
+		public const string BtceKey = "Btce";
+
+		/// <summary>
+		/// BTCE
+		/// </summary>
+		public static string Btce => GetString(BtceKey);
+
+		/// <summary>
+		/// DukasCopy
+		/// </summary>
+		public const string DukasCopyKey = "DukasCopy";
+
+		/// <summary>
+		/// DukasCopy
+		/// </summary>
+		public static string DukasCopy => GetString(DukasCopyKey);
+
+		/// <summary>
+		/// Finam
+		/// </summary>
+		public const string FinamKey = "Finam";
+
+		/// <summary>
+		/// Finam
+		/// </summary>
+		public static string Finam => GetString(FinamKey);
+
+		/// <summary>
+		/// FIX
+		/// </summary>
+		public const string FIXKey = "FIX";
+
+		/// <summary>
+		/// FIX
+		/// </summary>
+		public static string FIX => GetString(FIXKey);
+
+		/// <summary>
+		/// GAIN Capital
+		/// </summary>
+		public const string GainCapitalKey = "GainCapital";
+
+		/// <summary>
+		/// GAIN Capital
+		/// </summary>
+		public static string GainCapital => GetString(GainCapitalKey);
+
+		/// <summary>
+		/// Google
+		/// </summary>
+		public const string GoogleKey = "Google";
+
+		/// <summary>
+		/// Google
+		/// </summary>
+		public static string Google => GetString(GoogleKey);
+
+		/// <summary>
+		/// MB Trading
+		/// </summary>
+		public const string MBTradingKey = "MBTrading";
+
+		/// <summary>
+		/// MB Trading
+		/// </summary>
+		public static string MBTrading => GetString(MBTradingKey);
+
+		/// <summary>
+		/// TrueFX
+		/// </summary>
+		public const string TrueFXKey = "TrueFX";
+
+		/// <summary>
+		/// TrueFX
+		/// </summary>
+		public static string TrueFX => GetString(TrueFXKey);
+
+		/// <summary>
+		/// Yahoo
+		/// </summary>
+		public const string YahooKey = "Yahoo";
+
+		/// <summary>
+		/// Yahoo
+		/// </summary>
+		public static string Yahoo => GetString(YahooKey);
+
+		/// <summary>
+		/// UX (FTP)
+		/// </summary>
+		public const string UxFtpKey = "UxFtp";
+
+		/// <summary>
+		/// UX (FTP)
+		/// </summary>
+		public static string UxFtp => GetString(UxFtpKey);
+
+		/// <summary>
+		/// RTS
+		/// </summary>
+		public const string RTSKey = "RTS";
+
+		/// <summary>
+		/// RTS
+		/// </summary>
+		public static string RTS => GetString(RTSKey);
+
+		/// <summary>
+		/// USD/RUR
+		/// </summary>
+		public const string UsdRurKey = "UsdRur";
+
+		/// <summary>
+		/// USD/RUR
+		/// </summary>
+		public static string UsdRur => GetString(UsdRurKey);
+
+		/// <summary>
+		/// Quandl
+		/// </summary>
+		public const string QuandlKey = "Quandl";
+
+		/// <summary>
+		/// Quandl
+		/// </summary>
+		public static string Quandl => GetString(QuandlKey);
+
+		/// <summary>
+		/// OANDA
+		/// </summary>
+		public const string OandaKey = "Oanda";
+
+		/// <summary>
+		/// OANDA
+		/// </summary>
+		public static string Oanda => GetString(OandaKey);
+
+		/// <summary>
+		/// LMAX
+		/// </summary>
+		public const string LmaxKey = "Lmax";
+
+		/// <summary>
+		/// LMAX
+		/// </summary>
+		public static string Lmax => GetString(LmaxKey);
+
+		/// <summary>
+		/// S#.Data Server
+		/// </summary>
+		public const string DataServerKey = "DataServer";
+
+		/// <summary>
+		/// S#.Data Server
+		/// </summary>
+		public static string DataServer => GetString(DataServerKey);
+
+		/// <summary>
+		/// Interactive Brokers
+		/// </summary>
+		public const string InteractiveBrokersKey = "InteractiveBrokers";
+
+		/// <summary>
+		/// Interactive Brokers
+		/// </summary>
+		public static string InteractiveBrokers => GetString(InteractiveBrokersKey);
+
+		/// <summary>
+		/// Transaq
+		/// </summary>
+		public const string TransaqKey = "Transaq";
+
+		/// <summary>
+		/// Transaq
+		/// </summary>
+		public static string Transaq => GetString(TransaqKey);
+
+		/// <summary>
+		/// HFT
+		/// </summary>
+		public const string HFTKey = "HFT";
+
+		/// <summary>
+		/// HFT
+		/// </summary>
+		public static string HFT => GetString(HFTKey);
+
+		/// <summary>
+		/// SmartCOM
+		/// </summary>
+		public const string SmartCOMKey = "SmartCOM";
+
+		/// <summary>
+		/// SmartCOM
+		/// </summary>
+		public static string SmartCOM => GetString(SmartCOMKey);
+
+		/// <summary>
+		/// RSS
+		/// </summary>
+		public const string RssKey = "Rss";
+
+		/// <summary>
+		/// RSS
+		/// </summary>
+		public static string Rss => GetString(RssKey);
+
+		/// <summary>
+		/// Rithmic
+		/// </summary>
+		public const string RithmicKey = "Rithmic";
+
+		/// <summary>
+		/// Rithmic
+		/// </summary>
+		public static string Rithmic => GetString(RithmicKey);
+
+		/// <summary>
+		/// OpenECry
+		/// </summary>
+		public const string OpenECryKey = "OpenECry";
+
+		/// <summary>
+		/// OpenECry
+		/// </summary>
+		public static string OpenECry => GetString(OpenECryKey);
+
+		/// <summary>
+		/// MFD
+		/// </summary>
+		public const string MFDKey = "MFD";
+
+		/// <summary>
+		/// MFD
+		/// </summary>
+		public static string MFD => GetString(MFDKey);
+
+		/// <summary>
+		/// Micex
+		/// </summary>
+		public const string MicexKey = "Micex";
+
+		/// <summary>
+		/// Micex
+		/// </summary>
+		public static string Micex => GetString(MicexKey);
+
+		/// <summary>
+		/// ITCH
+		/// </summary>
+		public const string ItchKey = "Itch";
+
+		/// <summary>
+		/// ITCH
+		/// </summary>
+		public static string Itch => GetString(ItchKey);
+
+		/// <summary>
+		/// Plaza 2
+		/// </summary>
+		public const string PlazaKey = "Plaza";
+
+		/// <summary>
+		/// Plaza 2
+		/// </summary>
+		public static string Plaza => GetString(PlazaKey);
+
+		/// <summary>
+		/// IQFeed
+		/// </summary>
+		public const string IQFeedKey = "IQFeed";
+
+		/// <summary>
+		/// IQFeed
+		/// </summary>
+		public static string IQFeed => GetString(IQFeedKey);
+
+		/// <summary>
+		/// Quik
+		/// </summary>
+		public const string QuikKey = "Quik";
+
+		/// <summary>
+		/// Quik
+		/// </summary>
+		public static string Quik => GetString(QuikKey);
+
+		/// <summary>
+		/// DDE
+		/// </summary>
+		public const string DdeKey = "Dde";
+
+		/// <summary>
+		/// DDE
+		/// </summary>
+		public static string Dde => GetString(DdeKey);
+
+		/// <summary>
+		/// LUA
+		/// </summary>
+		public const string LuaKey = "Lua";
+
+		/// <summary>
+		/// LUA
+		/// </summary>
+		public static string Lua => GetString(LuaKey);
 	}
 }

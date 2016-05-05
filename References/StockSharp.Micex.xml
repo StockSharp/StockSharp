@@ -12761,7 +12761,7 @@
     </member>
     <member name="T:StockSharp.Micex.Xaml.MicexInterfaceEditor">
       <summary>
-        <see cref="T:StockSharp.Xaml.PropertyGrid.ItemsSourceEditSettings" /> для <see cref="T:StockSharp.Micex.Xaml.MicexInterfaceComboBox" />.
+        <see cref="T:Ecng.Xaml.DevExp.ItemsSourceEditSettings" /> для <see cref="T:StockSharp.Micex.Xaml.MicexInterfaceComboBox" />.
             </summary>
     </member>
     <member name="M:StockSharp.Micex.Xaml.MicexInterfaceEditor.#ctor">

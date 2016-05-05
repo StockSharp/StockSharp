@@ -10,8 +10,8 @@ P:StockSharp.OpenECry.OpenECryMessageAdapter.IsSupportNativeSecurityLookup/summa
 M:StockSharp.OpenECry.OpenECryMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)/summary;DocStr46
 M:StockSharp.OpenECry.OpenECryMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)/param/message;Str3166
 P:StockSharp.OpenECry.OpenECryMessageAdapter.Address/summary;DocStr5927
-P:StockSharp.OpenECry.OpenECryMessageAdapter.Login/summary;Str2563
-P:StockSharp.OpenECry.OpenECryMessageAdapter.Password/summary;Str2564
+P:StockSharp.OpenECry.OpenECryMessageAdapter.Login/summary;Login
+P:StockSharp.OpenECry.OpenECryMessageAdapter.Password/summary;Password
 P:StockSharp.OpenECry.OpenECryMessageAdapter.Uuid/summary;Str2565
 P:StockSharp.OpenECry.OpenECryMessageAdapter.Remoting/summary;DocStr5928
 P:StockSharp.OpenECry.OpenECryMessageAdapter.UseNativeReconnect/summary;DocStr5929
@@ -51,8 +51,8 @@ T:StockSharp.OpenECry.OpenECryException/summary;DocStr5942
 T:StockSharp.OpenECry.OpenECryTrader/summary;DocStr5949
 M:StockSharp.OpenECry.OpenECryTrader.#ctor/summary;DocStr1
 P:StockSharp.OpenECry.OpenECryTrader.Uuid/summary;Str2565
-P:StockSharp.OpenECry.OpenECryTrader.Login/summary;Str2563
-P:StockSharp.OpenECry.OpenECryTrader.Password/summary;Str2564
+P:StockSharp.OpenECry.OpenECryTrader.Login/summary;Login
+P:StockSharp.OpenECry.OpenECryTrader.Password/summary;Password
 P:StockSharp.OpenECry.OpenECryTrader.RemotingRequired/summary;DocStr5928
 P:StockSharp.OpenECry.OpenECryTrader.UseNativeReconnect/summary;DocStr5929
 P:StockSharp.OpenECry.OpenECryTrader.Address/summary;DocStr5927

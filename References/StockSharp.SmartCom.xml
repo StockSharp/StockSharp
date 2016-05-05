@@ -1802,7 +1802,7 @@
     </member>
     <member name="T:StockSharp.SmartCom.Xaml.SmartComEndPointEditor">
       <summary>
-        <see cref="T:StockSharp.Xaml.PropertyGrid.ItemsSourceEditSettings" /> для <see cref="T:StockSharp.SmartCom.Xaml.SmartComAddressComboBox" />.
+        <see cref="T:Ecng.Xaml.DevExp.ItemsSourceEditSettings" /> для <see cref="T:StockSharp.SmartCom.Xaml.SmartComAddressComboBox" />.
             </summary>
     </member>
     <member name="M:StockSharp.SmartCom.Xaml.SmartComEndPointEditor.#ctor">

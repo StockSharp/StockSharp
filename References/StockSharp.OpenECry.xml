@@ -54,12 +54,12 @@
     </member>
     <member name="P:StockSharp.OpenECry.OpenECryMessageAdapter.Login">
       <summary>
-            OpenECry login.
+            Login.
             </summary>
     </member>
     <member name="P:StockSharp.OpenECry.OpenECryMessageAdapter.Password">
       <summary>
-            OpenECry password.
+            Password.
             </summary>
     </member>
     <member name="P:StockSharp.OpenECry.OpenECryMessageAdapter.Uuid">
@@ -251,12 +251,12 @@
     </member>
     <member name="P:StockSharp.OpenECry.OpenECryTrader.Login">
       <summary>
-            OpenECry login.
+            Login.
             </summary>
     </member>
     <member name="P:StockSharp.OpenECry.OpenECryTrader.Password">
       <summary>
-            OpenECry password.
+            Password.
             </summary>
     </member>
     <member name="P:StockSharp.OpenECry.OpenECryTrader.RemotingRequired">
@@ -328,7 +328,7 @@
     </member>
     <member name="T:StockSharp.OpenECry.Xaml.OpenECryEndPointEditor">
       <summary>
-        <see cref="T:StockSharp.Xaml.PropertyGrid.ItemsSourceEditSettings" /> for <see cref="T:StockSharp.OpenECry.Xaml.OpenECryAddressComboBox" />.
+        <see cref="T:Ecng.Xaml.DevExp.ItemsSourceEditSettings" /> for <see cref="T:StockSharp.OpenECry.Xaml.OpenECryAddressComboBox" />.
             </summary>
     </member>
     <member name="M:StockSharp.OpenECry.Xaml.OpenECryEndPointEditor.#ctor">

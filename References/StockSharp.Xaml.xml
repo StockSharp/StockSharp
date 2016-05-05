@@ -784,41 +784,6 @@
             Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
             </summary>
     </member>
-    <member name="T:StockSharp.Xaml.PropertyGrid.EnumEditor">
-      <summary>
-            Localized enum editor.
-            </summary>
-      <summary>
-            EnumEditor
-            </summary>
-    </member>
-    <member name="M:StockSharp.Xaml.PropertyGrid.EnumEditor.#ctor">
-      <summary>
-            Initializes a new instance of the <see cref="T:StockSharp.Xaml.PropertyGrid.EnumEditor" />.
-            </summary>
-    </member>
-    <member name="M:StockSharp.Xaml.PropertyGrid.EnumEditor.CreateEditor(System.Boolean,DevExpress.Xpf.Editors.Settings.IDefaultEditorViewInfo,DevExpress.Xpf.Editors.Helpers.EditorOptimizationMode)">
-      <summary>
-        <para>
-            Creates a new editor with the specified settings.
-            </para>
-      </summary>
-      <param name="assignEditorSettings">
-        <b>true</b> to assign specified settings to the new editor; otherwise, <b>false</b>.
-                        </param>
-      <param name="defaultViewInfo">An object implementing the <see cref="T:DevExpress.Xpf.Editors.Settings.IDefaultEditorViewInfo" /> interface.
-                        </param>
-      <param name="optimizationMode">A <see cref="T:DevExpress.Xpf.Editors.Helpers.EditorOptimizationMode" /> enumeration value.
-                        </param>
-      <returns>
-            An object implementing the <see cref="T:DevExpress.Xpf.Editors.IBaseEdit" /> interface.
-            </returns>
-    </member>
-    <member name="M:StockSharp.Xaml.PropertyGrid.EnumEditor.InitializeComponent">
-      <summary>
-            InitializeComponent
-            </summary>
-    </member>
     <member name="T:StockSharp.Xaml.PropertyGrid.ExchangeBoardEditor">
       <summary>
             Editor for <see cref="T:StockSharp.BusinessEntities.ExchangeBoard" />.
@@ -877,48 +842,6 @@
             InitializeComponent
             </summary>
     </member>
-    <member name="T:StockSharp.Xaml.PropertyGrid.IItemsSource">
-      <summary>
-            Provides an interface that is implemented by classes when a scenario calls for use of a collection of values represented by a ComboBox for a given property.
-            </summary>
-    </member>
-    <member name="M:StockSharp.Xaml.PropertyGrid.IItemsSource.GetValues">
-      <summary>
-            Get the collection of values represented by a ComboBox.
-            </summary>
-      <returns>Collection of values represented by a ComboBox.</returns>
-    </member>
-    <member name="T:StockSharp.Xaml.PropertyGrid.ItemsSourceAttribute">
-      <summary>
-            Represents an attribute that is set on a property to identify the IItemsSource-derived class that will be used.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Xaml.PropertyGrid.ItemsSourceAttribute.Type">
-      <summary>
-            Gets the type to use.
-            </summary>
-    </member>
-    <member name="M:StockSharp.Xaml.PropertyGrid.ItemsSourceAttribute.#ctor(System.Type)">
-      <summary>
-            Initializes a new instance of the <see cref="T:StockSharp.Xaml.PropertyGrid.ItemsSourceAttribute" />.
-            </summary>
-      <param name="type">The type to use.</param>
-    </member>
-    <member name="T:StockSharp.Xaml.PropertyGrid.ItemsSourceEditSettings">
-      <summary>
-            Contains settings specific to a combobox editor with uses <see cref="T:StockSharp.Xaml.PropertyGrid.IItemsSource" />.
-            </summary>
-    </member>
-    <member name="M:StockSharp.Xaml.PropertyGrid.ItemsSourceEditSettings.#ctor">
-      <summary>
-            Initializes a new instance of the <see cref="T:StockSharp.Xaml.PropertyGrid.ItemsSourceEditSettings" />.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Xaml.PropertyGrid.ItemsSourceEditSettings.ComboBoxItems">
-      <summary>
-            Items.
-            </summary>
-    </member>
     <member name="T:StockSharp.Xaml.PropertyGrid.PortfolioEditor">
       <summary>
             The control activating <see cref="T:StockSharp.Xaml.PortfolioPickerWindow" />.
@@ -975,24 +898,6 @@
             InitializeComponent
             </summary>
     </member>
-    <member name="T:StockSharp.Xaml.PropertyGrid.TimeSpanEditor">
-      <summary>
-            Editor for <see cref="T:System.TimeSpan" />.
-            </summary>
-      <summary>
-            TimeSpanEditor
-            </summary>
-    </member>
-    <member name="M:StockSharp.Xaml.PropertyGrid.TimeSpanEditor.#ctor">
-      <summary>
-            Initializes a new instance of the <see cref="T:StockSharp.Xaml.PropertyGrid.TimeSpanEditor" />.
-            </summary>
-    </member>
-    <member name="M:StockSharp.Xaml.PropertyGrid.TimeSpanEditor.InitializeComponent">
-      <summary>
-            InitializeComponent
-            </summary>
-    </member>
     <member name="T:StockSharp.Xaml.PropertyGrid.CandleSettingsEditor">
       <summary>
             Editor for <see cref="T:StockSharp.Algo.Candles.CandleSeries" />.
@@ -1033,7 +938,7 @@
     </member>
     <member name="T:StockSharp.Xaml.PropertyGrid.Level1FieldsEditor">
       <summary>
-        <see cref="T:StockSharp.Xaml.PropertyGrid.ItemsSourceEditSettings" /> for <see cref="T:StockSharp.Xaml.Level1FieldsComboBox" />.
+        <see cref="T:Ecng.Xaml.DevExp.ItemsSourceEditSettings" /> for <see cref="T:StockSharp.Xaml.Level1FieldsComboBox" />.
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.PropertyGrid.Level1FieldsEditor.#ctor">
@@ -1098,7 +1003,7 @@
     </member>
     <member name="T:StockSharp.Xaml.PropertyGrid.SecurityTypesEditor">
       <summary>
-        <see cref="T:StockSharp.Xaml.PropertyGrid.ItemsSourceEditSettings" /> for <see cref="T:StockSharp.Xaml.SecurityTypesComboBox" />.
+        <see cref="T:Ecng.Xaml.DevExp.ItemsSourceEditSettings" /> for <see cref="T:StockSharp.Xaml.SecurityTypesComboBox" />.
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.PropertyGrid.SecurityTypesEditor.#ctor">

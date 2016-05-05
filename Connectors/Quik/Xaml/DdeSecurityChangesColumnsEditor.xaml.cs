@@ -17,18 +17,15 @@ namespace StockSharp.Quik.Xaml
 {
 	using System.Collections.Generic;
 	using System.Windows;
-	using System.Windows.Data;
 
 	using Ecng.Common;
 
-	using Xceed.Wpf.Toolkit.PropertyGrid;
-	using Xceed.Wpf.Toolkit.PropertyGrid.Editors;
 	using StockSharp.Localization;
 
 	/// <summary>
 	/// Визуальный редактор для выбора набора столбцов таблицы Инструменты(изменения).
 	/// </summary>
-	public partial class DdeSecurityChangesColumnsEditor : ITypeEditor
+	public partial class DdeSecurityChangesColumnsEditor// : ITypeEditor
 	{
 		/// <summary>
 		/// DependencyProperty для <see cref="SelectedColumns"/>.
@@ -70,21 +67,22 @@ namespace StockSharp.Quik.Xaml
 			return typeof(DdeSecurityColumns).GetColumns(columns);
 		}
 
-		FrameworkElement ITypeEditor.ResolveEditor(PropertyItem propertyItem)
-		{
-			SetBinding(SelectedColumnsProperty, new Binding("Value")
-			{
-				Source = propertyItem,
-				Mode = BindingMode.TwoWay
-			});
+		// TODO
+		//FrameworkElement ITypeEditor.ResolveEditor(PropertyItem propertyItem)
+		//{
+		//	SetBinding(SelectedColumnsProperty, new Binding("Value")
+		//	{
+		//		Source = propertyItem,
+		//		Mode = BindingMode.TwoWay
+		//	});
 
-			ColumnsPicker.SetBinding(DdeColumnsPicker.SelectedColumnsProperty, new Binding(nameof(SelectedColumns))
-			{
-				Source = this,
-				Mode = BindingMode.TwoWay
-			});
+		//	ColumnsPicker.SetBinding(DdeColumnsPicker.SelectedColumnsProperty, new Binding(nameof(SelectedColumns))
+		//	{
+		//		Source = this,
+		//		Mode = BindingMode.TwoWay
+		//	});
 
-			return this;
-		}
+		//	return this;
+		//}
 	}
 }

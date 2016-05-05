@@ -89,7 +89,7 @@
         </member>
         <member name="T:StockSharp.Rss.Xaml.RssAddressEditor">
             <summary>
-            <see cref="T:StockSharp.Xaml.PropertyGrid.ItemsSourceEditSettings"/> for <see cref="T:StockSharp.Rss.Xaml.RssAddressComboBox"/>.
+            <see cref="T:Ecng.Xaml.DevExp.ItemsSourceEditSettings"/> for <see cref="T:StockSharp.Rss.Xaml.RssAddressComboBox"/>.
             </summary>
         </member>
         <member name="M:StockSharp.Rss.Xaml.RssAddressEditor.#ctor">

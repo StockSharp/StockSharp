@@ -156,5 +156,110 @@ namespace StockSharp.Localization
 		/// 
 		/// </summary>
 		public static string LabelsFormatIntradayDescDot => AppendDot(LabelsFormatIntradayDesc);
+
+		/// <summary>
+		/// 
+		/// </summary>
+		public static string TemporaryFilesDot => AppendDot(TemporaryFiles);
+
+		/// <summary>
+		/// 
+		/// </summary>
+		public static string LoginDot => AppendDot(Login);
+
+		/// <summary>
+		/// 
+		/// </summary>
+		public static string PasswordDot => AppendDot(Password);
+
+		/// <summary>
+		/// 
+		/// </summary>
+		public static string Str3304Dot => AppendDot(Str3304);
+
+		/// <summary>
+		/// 
+		/// </summary>
+		public static string AddressDot => AppendDot(Address);
+
+		/// <summary>
+		/// 
+		/// </summary>
+		public static string PinDot => AppendDot(Pin);
+
+		/// <summary>
+		/// 
+		/// </summary>
+		public static string Str3451Dot => AppendDot(Str3451);
+
+		/// <summary>
+		/// 
+		/// </summary>
+		public static string ServerAddressDot => AppendDot(ServerAddress);
+
+		/// <summary>
+		/// 
+		/// </summary>
+		public static string Str2121Dot => AppendDot(Str2121);
+
+		/// <summary>
+		/// 
+		/// </summary>
+		public static string Str1197Dot => AppendDot(Str1197);
+
+		/// <summary>
+		/// 
+		/// </summary>
+		public static string Str3412Dot => AppendDot(Str3412);
+
+		/// <summary>
+		/// 
+		/// </summary>
+		public static string MainUDPDot => AppendDot(MainUDP);
+
+		/// <summary>
+		/// 
+		/// </summary>
+		public static string DuplicateUDPDot => AppendDot(DuplicateUDP);
+
+		/// <summary>
+		/// 
+		/// </summary>
+		public static string RecoveryServerDot => AppendDot(RecoveryServer);
+
+		/// <summary>
+		/// 
+		/// </summary>
+		public static string ReplayServerDot => AppendDot(ReplayServer);
+
+		/// <summary>
+		/// 
+		/// </summary>
+		public static string Str2137Dot => AppendDot(Str2137);
+
+		/// <summary>
+		/// 
+		/// </summary>
+		public static string GroupIdDot => AppendDot(GroupId);
+
+		/// <summary>
+		/// 
+		/// </summary>
+		public static string Str3131Dot => AppendDot(Str3131);
+
+		/// <summary>
+		/// 
+		/// </summary>
+		public static string OrderLogBuilderDot => AppendDot(OrderLogBuilder);
+
+		/// <summary>
+		/// 
+		/// </summary>
+		public static string Str3427Dot => AppendDot(Str3427);
+
+		/// <summary>
+		/// 
+		/// </summary>
+		public static string Str1405Dot => AppendDot(Str1405);
 	}
 }

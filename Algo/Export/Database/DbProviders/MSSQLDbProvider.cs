@@ -23,7 +23,7 @@ namespace StockSharp.Algo.Export.Database.DbProviders
 	using System.Text;
 
 	using Ecng.Common;
-	using Ecng.Xaml.Database;
+	using Ecng.Xaml.DevExp.Database;
 
 	internal class MSSQLDbProvider : BaseDbProvider
 	{
