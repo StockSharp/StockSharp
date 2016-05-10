@@ -182,6 +182,7 @@
       <ImageId>candle_qpile</ImageId>
       <AlternateText>candle qpile</AlternateText>
     </None>
+    <None Include="Topics\MessageStorage.aml" />
     <None Include="Topics\Designer.aml" />
     <None Include="Topics\TwimeSample.aml" />
     <None Include="Topics\TWIME.aml" />
@@ -1682,6 +1683,14 @@
     <Image Include="Art\TwimeSample.png">
       <ImageId>TwimeSample</ImageId>
       <AlternateText>Twime Sample</AlternateText>
+    </Image>
+    <Image Include="Art\GUI_Leve1Grid.png">
+      <ImageId>GUI_Leve1Grid</ImageId>
+      <AlternateText>GUI Leve 1 Grid</AlternateText>
+    </Image>
+    <Image Include="Art\FixServer.png">
+      <ImageId>FixServer</ImageId>
+      <AlternateText>Fix Server</AlternateText>
     </Image>
   </ItemGroup>
   <ItemGroup>

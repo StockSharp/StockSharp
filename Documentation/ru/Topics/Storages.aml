@@ -17,5 +17,10 @@
 		А также универсальным, с возможностью расширения типов поддерживаемых хранилищ.</para>
 	</introduction>
 	
+	<relatedTopics>
+      <link xlink:href="e4a57b52-bd14-4640-a7c7-0979dba1ad0a">Api</link>
+      <link xlink:href="ac584200-f06a-49e6-b2fd-141b5fc898f9">Хранилище сообщений</link>
+    </relatedTopics>
+	
 	</developerConceptualDocument>
 </topic>
