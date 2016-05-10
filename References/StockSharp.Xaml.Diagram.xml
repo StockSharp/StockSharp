@@ -1591,33 +1591,17 @@
             Initializes a new instance of the <see cref="T:StockSharp.Xaml.Diagram.Elements.ChartDiagramElement" />.
             </summary>
     </member>
-    <member name="M:StockSharp.Xaml.Diagram.Elements.ChartDiagramElement.AddElement(System.Type)">
-      <summary>
-            To add a new element.
-            </summary>
-      <param name="type">The element type.</param>
-    </member>
-    <member name="M:StockSharp.Xaml.Diagram.Elements.ChartDiagramElement.RemoveElement(StockSharp.Xaml.Charting.IChartElement)">
-      <summary>
-            To remove the element.
-            </summary>
-      <param name="element">Element.</param>
-    </member>
-    <member name="M:StockSharp.Xaml.Diagram.Elements.ChartDiagramElement.AddXAxis">
-      <summary>
-            To add the X-axis.
-            </summary>
-    </member>
-    <member name="M:StockSharp.Xaml.Diagram.Elements.ChartDiagramElement.AddYAxis">
-      <summary>
-            To add the Y-axis.
-            </summary>
-    </member>
     <member name="M:StockSharp.Xaml.Diagram.Elements.ChartDiagramElement.RemoveAxis(StockSharp.Xaml.Charting.ChartAxis)">
       <summary>
             To remove the axis.
             </summary>
       <param name="axis">The axis.</param>
+    </member>
+    <member name="M:StockSharp.Xaml.Diagram.Elements.ChartDiagramElement.Save(Ecng.Serialization.SettingsStorage)">
+      <summary>
+            Save settings.
+            </summary>
+      <param name="storage">Settings storage.</param>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.Elements.ChartDiagramElement.Load(Ecng.Serialization.SettingsStorage)">
       <summary>
@@ -2285,6 +2269,22 @@
             Save settings.
             </summary>
       <param name="storage">Settings storage.</param>
+    </member>
+    <member name="T:StockSharp.Xaml.Diagram.IndicatorTypeItemsSource">
+      <summary>
+            The graphical component for the indicator type choosing.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Diagram.IndicatorTypeItemsSource.IndicatorTypes">
+      <summary>
+            List of available indicators types.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.Diagram.IndicatorTypeItemsSource.GetValues">
+      <summary>
+            To get a list of available indicators types.
+            </summary>
+      <returns>The indicators types list.</returns>
     </member>
     <member name="T:StockSharp.Xaml.Diagram.SocketTypesSource">
       <summary>

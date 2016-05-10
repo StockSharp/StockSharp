@@ -17,6 +17,7 @@ namespace StockSharp.Quik
 {
 	using System;
 	using System.ComponentModel;
+	using System.ComponentModel.DataAnnotations;
 	using System.IO;
 	using System.Text.RegularExpressions;
 
@@ -24,15 +25,13 @@ namespace StockSharp.Quik
 	using Ecng.Common;
 	using Ecng.Interop;
 	using Ecng.Serialization;
-	using Ecng.Xaml;
+	using Ecng.Xaml.DevExp;
 
 	using StockSharp.Logging;
 	using StockSharp.Messages;
 	using StockSharp.Quik.Native;
 	using StockSharp.Quik.Properties;
 	using StockSharp.Localization;
-
-	using Xceed.Wpf.Toolkit.PropertyGrid.Attributes;
 
 	/// <summary>
 	/// Транзакционный адаптер сообщений для Quik, работающий через библиотеку Trans2Quik.dll.
@@ -119,17 +118,17 @@ namespace StockSharp.Quik
 			this.RemoveSupportedMessage(MessageTypes.PortfolioLookup);
 		}
 
-		private const string _category = "TRANS2QUIK";
-
 		private string _dllName = "TRANS2QUIK.DLL";
 
 		/// <summary>
 		/// Имя dll-файла, содержащее Quik API. По-умолчанию равно TRANS2QUIK.DLL.
 		/// </summary>
-		[Category(_category)]
-		[DisplayNameLoc(LocalizedStrings.Str1777Key)]
-		[DescriptionLoc(LocalizedStrings.Str1778Key)]
-		[PropertyOrder(0)]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.Str1777Key,
+			Description = LocalizedStrings.Str1778Key,
+			GroupName = LocalizedStrings.Str174Key,
+			Order = 0)]
 		[Editor(typeof(FileBrowserEditor), typeof(FileBrowserEditor))]
 		public string DllName
 		{
@@ -154,25 +153,29 @@ namespace StockSharp.Quik
 		/// <remarks>
 		/// По-умолчанию используется асинхронный режим.
 		/// </remarks>
-		[Category(_category)]
-		[DisplayNameLoc(LocalizedStrings.Str1781Key)]
-		[DescriptionLoc(LocalizedStrings.Str1782Key)]
-		[PropertyOrder(2)]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.Str1781Key,
+			Description = LocalizedStrings.Str1782Key,
+			GroupName = LocalizedStrings.Str174Key,
+			Order = 1)]
 		public bool IsAsyncMode { get; set; } = true;
 
 		/// <summary>
 		/// Перезаписать файл библиотеки из ресурсов. По-умолчанию файл будет перезаписан.
 		/// </summary>
-		[Category(_category)]
-		[DisplayNameLoc(LocalizedStrings.OverrideKey)]
-		[DescriptionLoc(LocalizedStrings.OverrideDllKey)]
-		[PropertyOrder(3)]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.OverrideKey,
+			Description = LocalizedStrings.OverrideDllKey,
+			GroupName = LocalizedStrings.Str174Key,
+			Order = 2)]
 		public bool OverrideDll { get; set; } = true;
 
 		/// <summary>
 		/// https://forum.quik.ru/forum10/topic1218/
 		/// </summary>
-		[Category(_category)]
+		[CategoryLoc(LocalizedStrings.Str174Key)]
 		public bool SingleSlash { get; set; } = true;
 
 		/// <summary>

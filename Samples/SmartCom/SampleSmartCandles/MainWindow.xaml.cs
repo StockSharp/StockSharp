@@ -157,7 +157,7 @@ namespace SampleSmartCandles
 
 		private void OnChartTypeChanged(object sender, RoutedEventArgs e)
 		{
-			RealTimeSettings.IsEnabled = IsRealTime.IsChecked == true;
+			CandleSettingsEditorGrid.IsEnabled = IsRealTime.IsChecked == true;
 			HistorySettings.IsEnabled = IsHistory.IsChecked == true;
 		}
 	}

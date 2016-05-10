@@ -63,6 +63,10 @@
     <Reference Include="MoreLinq">
       <HintPath>..\..\..\References\MoreLinq.dll</HintPath>
     </Reference>
+    <Reference Include="StockSharp.Plaza, Version=4.3.14.2, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\References\StockSharp.Plaza.dll</HintPath>
+    </Reference>
     <Reference Include="StockSharp.Twime">
       <HintPath>..\..\..\References\StockSharp.Twime.dll</HintPath>
     </Reference>

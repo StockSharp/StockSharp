@@ -828,7 +828,7 @@
     </member>
     <member name="P:StockSharp.Xaml.Charting.ChartCandleElement.Timeframe2FrameColor">
       <summary>
-            Timeframe #2 color.
+            Timeframe #2 frame color.
             </summary>
     </member>
     <member name="P:StockSharp.Xaml.Charting.ChartCandleElement.Timeframe3Color">
@@ -2721,7 +2721,7 @@
     </member>
     <member name="P:StockSharp.Xaml.Charting.LineElement.Color">
       <summary>
-            Line colur (bar and etc.), with which it will be drawn on chart.
+            Line color (bar and etc.), with which it will be drawn on chart.
             </summary>
     </member>
     <member name="P:StockSharp.Xaml.Charting.LineElement.AdditionalColor">

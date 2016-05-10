@@ -15,9 +15,9 @@ Copyright 2010 by StockSharp, LLC
 #endregion S# License
 namespace StockSharp.Algo.Indicators
 {
-	using StockSharp.Localization;
+	using System.ComponentModel;
 
-	using Xceed.Wpf.Toolkit.PropertyGrid.Attributes;
+	using StockSharp.Localization;
 
 	/// <summary>
 	/// Alligator.
@@ -54,7 +54,7 @@ namespace StockSharp.Algo.Indicators
 		/// <summary>
 		/// Jaw.
 		/// </summary>
-		[ExpandableObject]
+		[TypeConverter(typeof(ExpandableObjectConverter))]
 		[DisplayNameLoc(LocalizedStrings.Str838Key)]
 		[DescriptionLoc(LocalizedStrings.Str838Key, true)]
 		[CategoryLoc(LocalizedStrings.GeneralKey)]
@@ -63,7 +63,7 @@ namespace StockSharp.Algo.Indicators
 		/// <summary>
 		/// Teeth.
 		/// </summary>
-		[ExpandableObject]
+		[TypeConverter(typeof(ExpandableObjectConverter))]
 		[DisplayNameLoc(LocalizedStrings.Str839Key)]
 		[DescriptionLoc(LocalizedStrings.Str839Key, true)]
 		[CategoryLoc(LocalizedStrings.GeneralKey)]
@@ -72,7 +72,7 @@ namespace StockSharp.Algo.Indicators
 		/// <summary>
 		/// Lips.
 		/// </summary>
-		[ExpandableObject]
+		[TypeConverter(typeof(ExpandableObjectConverter))]
 		[DisplayNameLoc(LocalizedStrings.Str840Key)]
 		[DescriptionLoc(LocalizedStrings.Str840Key, true)]
 		[CategoryLoc(LocalizedStrings.GeneralKey)]

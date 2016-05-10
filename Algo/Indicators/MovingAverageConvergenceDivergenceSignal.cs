@@ -19,8 +19,6 @@ namespace StockSharp.Algo.Indicators
 
 	using StockSharp.Localization;
 
-	using Xceed.Wpf.Toolkit.PropertyGrid.Attributes;
-
 	/// <summary>
 	/// Convergence/divergence of moving averages with signal line.
 	/// </summary>
@@ -52,7 +50,7 @@ namespace StockSharp.Algo.Indicators
 		/// <summary>
 		/// Convergence/divergence of moving averages.
 		/// </summary>
-		[ExpandableObject]
+		[TypeConverter(typeof(ExpandableObjectConverter))]
 		[DisplayName("MACD")]
 		[DescriptionLoc(LocalizedStrings.Str797Key)]
 		[CategoryLoc(LocalizedStrings.GeneralKey)]
@@ -61,7 +59,7 @@ namespace StockSharp.Algo.Indicators
 		/// <summary>
 		/// Signalling Voving Average.
 		/// </summary>
-		[ExpandableObject]
+		[TypeConverter(typeof(ExpandableObjectConverter))]
 		[DisplayNameLoc(LocalizedStrings.Str804Key)]
 		[DescriptionLoc(LocalizedStrings.Str805Key)]
 		[CategoryLoc(LocalizedStrings.GeneralKey)]

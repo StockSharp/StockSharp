@@ -451,14 +451,10 @@ P:StockSharp.Xaml.Diagram.Elements.CandleSourceDiagramElement.Icon/summary;DocSt
 M:StockSharp.Xaml.Diagram.Elements.CandleSourceDiagramElement.OnStop/summary;DocStr7894
 T:StockSharp.Xaml.Diagram.Elements.ChartDiagramElement/summary;ChartPanelElement
 M:StockSharp.Xaml.Diagram.Elements.ChartDiagramElement.#ctor/summary;DocStr1
-M:StockSharp.Xaml.Diagram.Elements.ChartDiagramElement.AddElement(System.Type)/summary;DocStr8043
-M:StockSharp.Xaml.Diagram.Elements.ChartDiagramElement.AddElement(System.Type)/param/type;DocStr7802
-M:StockSharp.Xaml.Diagram.Elements.ChartDiagramElement.RemoveElement(StockSharp.Xaml.Charting.IChartElement)/summary;DocStr8044
-M:StockSharp.Xaml.Diagram.Elements.ChartDiagramElement.RemoveElement(StockSharp.Xaml.Charting.IChartElement)/param/element;DocStr419
-M:StockSharp.Xaml.Diagram.Elements.ChartDiagramElement.AddXAxis/summary;DocStr8045
-M:StockSharp.Xaml.Diagram.Elements.ChartDiagramElement.AddYAxis/summary;DocStr8046
 M:StockSharp.Xaml.Diagram.Elements.ChartDiagramElement.RemoveAxis(StockSharp.Xaml.Charting.ChartAxis)/summary;DocStr8047
 M:StockSharp.Xaml.Diagram.Elements.ChartDiagramElement.RemoveAxis(StockSharp.Xaml.Charting.ChartAxis)/param/axis;DocStr8048
+M:StockSharp.Xaml.Diagram.Elements.ChartDiagramElement.Save(Ecng.Serialization.SettingsStorage)/summary;DocStr4
+M:StockSharp.Xaml.Diagram.Elements.ChartDiagramElement.Save(Ecng.Serialization.SettingsStorage)/param/storage;DocStr3
 M:StockSharp.Xaml.Diagram.Elements.ChartDiagramElement.Load(Ecng.Serialization.SettingsStorage)/summary;DocStr2
 M:StockSharp.Xaml.Diagram.Elements.ChartDiagramElement.Load(Ecng.Serialization.SettingsStorage)/param/storage;DocStr3
 P:StockSharp.Xaml.Diagram.Elements.ChartDiagramElement.TypeId/summary;DocStr7902
@@ -602,6 +598,10 @@ M:StockSharp.Xaml.Diagram.ExportDiagramElement.Load(Ecng.Serialization.SettingsS
 M:StockSharp.Xaml.Diagram.ExportDiagramElement.Load(Ecng.Serialization.SettingsStorage)/param/storage;DocStr3
 M:StockSharp.Xaml.Diagram.ExportDiagramElement.Save(Ecng.Serialization.SettingsStorage)/summary;DocStr4
 M:StockSharp.Xaml.Diagram.ExportDiagramElement.Save(Ecng.Serialization.SettingsStorage)/param/storage;DocStr3
+T:StockSharp.Xaml.Diagram.IndicatorTypeItemsSource/summary;DocStr8056
+P:StockSharp.Xaml.Diagram.IndicatorTypeItemsSource.IndicatorTypes/summary;DocStr9022
+M:StockSharp.Xaml.Diagram.IndicatorTypeItemsSource.GetValues/summary;DocStr8057
+M:StockSharp.Xaml.Diagram.IndicatorTypeItemsSource.GetValues/returns;DocStr8058
 T:StockSharp.Xaml.Diagram.SocketTypesSource/summary;DocStr8059
 M:StockSharp.Xaml.Diagram.SocketTypesSource.GetValues/summary;DocStr8060
 M:StockSharp.Xaml.Diagram.SocketTypesSource.GetValues/returns;DocStr8061

@@ -258,6 +258,9 @@ M:StockSharp.Fix.Native.BinaryFixReader.ReadChar/summary;DocStr3211
 M:StockSharp.Fix.Native.BinaryFixReader.ReadChar/returns;DocStr65
 M:StockSharp.Fix.Native.BinaryFixReader.ReadString(System.Char*)/summary;DocStr3211
 M:StockSharp.Fix.Native.BinaryFixReader.ReadString(System.Char*)/param/buffer;DocStr65
+M:StockSharp.Fix.Native.BinaryFixReader.ReadString(System.Char*,System.String)/summary;DocStr9007
+M:StockSharp.Fix.Native.BinaryFixReader.ReadString(System.Char*,System.String)/param/buffer;DocStr65
+M:StockSharp.Fix.Native.BinaryFixReader.ReadString(System.Char*,System.String)/param/constValue;DocStr9008
 M:StockSharp.Fix.Native.BinaryFixReader.ReadString/summary;DocStr3211
 M:StockSharp.Fix.Native.BinaryFixReader.ReadString/returns;DocStr65
 M:StockSharp.Fix.Native.BinaryFixReader.ReadBool/summary;DocStr3211

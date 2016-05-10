@@ -16,19 +16,18 @@ Copyright 2010 by StockSharp, LLC
 namespace StockSharp.Messages
 {
 	using System;
+	using System.ComponentModel;
 
 	using Ecng.Serialization;
 
 	using StockSharp.Localization;
-
-	using Xceed.Wpf.Toolkit.PropertyGrid.Attributes;
 
 	/// <summary>
 	/// Connection tracking settings <see cref="IMessageAdapter"/> with a server.
 	/// </summary>
 	[DisplayNameLoc(LocalizedStrings.Str172Key)]
 	[DescriptionLoc(LocalizedStrings.Str978Key)]
-	[ExpandableObject]
+	[TypeConverter(typeof(ExpandableObjectConverter))]
 	public class ReConnectionSettings : IPersistable
 	{
 		/// <summary>

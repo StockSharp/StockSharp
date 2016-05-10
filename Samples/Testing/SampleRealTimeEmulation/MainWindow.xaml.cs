@@ -57,7 +57,7 @@ namespace SampleRealTimeEmulation
 		{
 			InitializeComponent();
 
-			CandleSettingsEditor.Closed += CandleSettingsEditorOnClosed;
+			CandleSettingsEditor.SettingsChanged += CandleSettingsChanged;
 
 			_logManager = new LogManager();
 			_logManager.Listeners.Add(new GuiLogListener(Log));
@@ -75,7 +75,7 @@ namespace SampleRealTimeEmulation
 			LookupAddressCtrl.Text = IQFeedAddresses.DefaultLookupAddress.To<string>();
 		}
 
-		private void CandleSettingsEditorOnClosed(object sender, RoutedEventArgs routedEventArgs)
+		private void CandleSettingsChanged()
 		{
 			if (_tempCandleSeries == CandleSettingsEditor.Settings || _candleSeries == null)
 				return;

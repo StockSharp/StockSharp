@@ -12759,14 +12759,14 @@
             </summary>
       <param name="e">Параметр события.</param>
     </member>
-    <member name="T:StockSharp.Micex.Xaml.MicexInterfaceComboBoxEditor">
+    <member name="T:StockSharp.Micex.Xaml.MicexInterfaceEditor">
       <summary>
-        <see cref="T:Xceed.Wpf.Toolkit.PropertyGrid.Editors.ITypeEditor" /> для <see cref="T:StockSharp.Micex.Xaml.MicexInterfaceComboBox" />.
+        <see cref="T:Ecng.Xaml.DevExp.ItemsSourceEditSettings" /> для <see cref="T:StockSharp.Micex.Xaml.MicexInterfaceComboBox" />.
             </summary>
     </member>
-    <member name="M:StockSharp.Micex.Xaml.MicexInterfaceComboBoxEditor.SetValueDependencyProperty">
+    <member name="M:StockSharp.Micex.Xaml.MicexInterfaceEditor.#ctor">
       <summary>
-            Установить <see cref="P:Xceed.Wpf.Toolkit.PropertyGrid.Editors.TypeEditor`1.ValueProperty" /> значением <see cref="F:StockSharp.Micex.Xaml.MicexInterfaceComboBox.SelectedInterfaceProperty" />.
+            Initializes a new instance of the <see cref="T:StockSharp.Micex.Xaml.MicexInterfaceEditor" />.
             </summary>
     </member>
   </members>

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -41,6 +41,10 @@
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="DevExpress.Xpf.Core.v15.2, Version=15.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\References\DevExpress.Xpf.Core.v15.2.dll</HintPath>
+    </Reference>
     <Reference Include="Ecng.Localization">
       <HintPath>..\..\References\Ecng.Localization.dll</HintPath>
     </Reference>
@@ -68,12 +72,16 @@
     <Reference Include="Ecng.Xaml">
       <HintPath>..\..\References\Ecng.Xaml.dll</HintPath>
     </Reference>
+    <Reference Include="Ecng.Xaml.DevExp">
+      <HintPath>..\..\References\Ecng.Xaml.DevExp.dll</HintPath>
+    </Reference>
     <Reference Include="MoreLinq">
       <HintPath>..\..\References\MoreLinq.dll</HintPath>
     </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data" />
@@ -82,9 +90,6 @@
     <Reference Include="System.Xaml" />
     <Reference Include="System.XML" />
     <Reference Include="WindowsBase" />
-    <Reference Include="Xceed.Wpf.Toolkit">
-      <HintPath>..\..\References\Xceed.Wpf.Toolkit.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\..\StockSharpAssemblyInfo.cs">

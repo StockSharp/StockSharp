@@ -18,6 +18,7 @@ namespace StockSharp.Quik
 	using System;
 	using System.Collections.Generic;
 	using System.ComponentModel;
+	using System.ComponentModel.DataAnnotations;
 	using System.Linq;
 	using System.Threading;
 
@@ -35,15 +36,13 @@ namespace StockSharp.Quik
 	using StockSharp.Localization;
 	using StockSharp.Quik.Xaml;
 
-	using Xceed.Wpf.Toolkit.PropertyGrid.Attributes;
-
 	/// <summary>
 	/// Маркет-дата адаптер сообщений для Quik, работающий через протокол DDE.
 	/// </summary>
 	[DisplayName("Quik. DDE")]
 	public class QuikDdeAdapter : QuikMessageAdapter
 	{
-		private const string _ddeCategory = "DDE";
+		private const string _ddeCategory = "Dde";
 
 		private readonly SynchronizedDictionary<Tuple<string, string>, SynchronizedDictionary<DdeTableColumn, object>> _prevSecurityChanges = new SynchronizedDictionary<Tuple<string, string>, SynchronizedDictionary<DdeTableColumn, object>>();
 
@@ -364,138 +363,166 @@ namespace StockSharp.Quik
 		/// <summary>
 		/// Использовать в экспорте таблицу <see cref="CurrencyPortfoliosTable"/>. По-умолчанию не используется.
 		/// </summary>
-		[Category(_ddeCategory)]
-		[DisplayNameLoc(LocalizedStrings.Str1783Key)]
-		[DescriptionLoc(LocalizedStrings.Str1784Key)]
-		[PropertyOrder(3)]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.Str1783Key,
+			Description = LocalizedStrings.Str1784Key,
+			GroupName = _ddeCategory,
+			Order = 3)]
 		public bool UseCurrencyPortfolios { get; set; }
 
 		/// <summary>
 		/// Использовать в экспорте таблицу <see cref="SecuritiesChangeTable"/>. По-умолчанию не используется.
 		/// </summary>
-		[Category(_ddeCategory)]
-		[DisplayNameLoc(LocalizedStrings.Str1785Key)]
-		[DescriptionLoc(LocalizedStrings.Str1786Key)]
-		[PropertyOrder(4)]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.Str1785Key,
+			Description = LocalizedStrings.Str1786Key,
+			GroupName = _ddeCategory,
+			Order = 4)]
 		public bool UseSecuritiesChange { get; set; }
 
 		/// <summary>
 		/// Настройки DDE таблицы Инструменты.
 		/// </summary>
-		[Category(_ddeCategory)]
-		[DisplayNameLoc(LocalizedStrings.SecuritiesKey)]
-		[DescriptionLoc(LocalizedStrings.Str1787Key)]
-		[PropertyOrder(5)]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.SecuritiesKey,
+			Description = LocalizedStrings.Str1787Key,
+			GroupName = _ddeCategory,
+			Order = 5)]
 		[Editor(typeof(DdeTableColumnsEditor), typeof(DdeTableColumnsEditor))]
 		public DdeTable SecuritiesTable { get; private set; }
 
 		/// <summary>
 		/// Настройки DDE таблицы Инструменты (изменения).
 		/// </summary>
-		[Category(_ddeCategory)]
-		[DisplayNameLoc(LocalizedStrings.Str1788Key)]
-		[DescriptionLoc(LocalizedStrings.Str1789Key)]
-		[PropertyOrder(6)]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.Str1788Key,
+			Description = LocalizedStrings.Str1789Key,
+			GroupName = _ddeCategory,
+			Order = 6)]
 		[Editor(typeof(DdeTableColumnsEditor), typeof(DdeTableColumnsEditor))]
 		public DdeTable SecuritiesChangeTable { get; private set; }
 
 		/// <summary>
 		/// Настройки DDE таблицы Сделки.
 		/// </summary>
-		[Category(_ddeCategory)]
-		[DisplayNameLoc(LocalizedStrings.Str985Key)]
-		[DescriptionLoc(LocalizedStrings.Str1790Key)]
-		[PropertyOrder(7)]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.Str985Key,
+			Description = LocalizedStrings.Str1790Key,
+			GroupName = _ddeCategory,
+			Order = 7)]
 		[Editor(typeof(DdeTableColumnsEditor), typeof(DdeTableColumnsEditor))]
 		public DdeTable TradesTable { get; private set; }
 
 		/// <summary>
 		/// Настройки DDE таблицы Мои Сделки.
 		/// </summary>
-		[Category(_ddeCategory)]
-		[DisplayNameLoc(LocalizedStrings.Str1791Key)]
-		[DescriptionLoc(LocalizedStrings.Str1792Key)]
-		[PropertyOrder(8)]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.Str1791Key,
+			Description = LocalizedStrings.Str1792Key,
+			GroupName = _ddeCategory,
+			Order = 8)]
 		[Editor(typeof(DdeTableColumnsEditor), typeof(DdeTableColumnsEditor))]
 		public DdeTable MyTradesTable { get; private set; }
 
 		/// <summary>
 		/// Настройки DDE таблицы Заявки.
 		/// </summary>
-		[Category(_ddeCategory)]
-		[DisplayNameLoc(LocalizedStrings.OrdersKey)]
-		[DescriptionLoc(LocalizedStrings.Str1793Key)]
-		[PropertyOrder(9)]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.OrdersKey,
+			Description = LocalizedStrings.Str1793Key,
+			GroupName = _ddeCategory,
+			Order = 9)]
 		[Editor(typeof(DdeTableColumnsEditor), typeof(DdeTableColumnsEditor))]
 		public DdeTable OrdersTable { get; private set; }
 
 		/// <summary>
 		/// Настройки DDE таблицы Стоп-Заявки.
 		/// </summary>
-		[Category(_ddeCategory)]
-		[DisplayNameLoc(LocalizedStrings.Str1351Key)]
-		[DescriptionLoc(LocalizedStrings.Str1794Key)]
-		[PropertyOrder(10)]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.Str1351Key,
+			Description = LocalizedStrings.Str1794Key,
+			GroupName = _ddeCategory,
+			Order = 10)]
 		[Editor(typeof(DdeTableColumnsEditor), typeof(DdeTableColumnsEditor))]
 		public DdeTable StopOrdersTable { get; private set; }
 
 		/// <summary>
 		/// Настройки DDE таблицы со стаканом.
 		/// </summary>
-		[Category(_ddeCategory)]
-		[DisplayNameLoc(LocalizedStrings.MarketDepthKey)]
-		[DescriptionLoc(LocalizedStrings.Str1796Key)]
-		[PropertyOrder(11)]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.MarketDepthKey,
+			Description = LocalizedStrings.Str1796Key,
+			GroupName = _ddeCategory,
+			Order = 11)]
 		[Editor(typeof(DdeTableColumnsEditor), typeof(DdeTableColumnsEditor))]
 		public DdeTable QuotesTable { get; private set; }
 
 		/// <summary>
 		/// Настройки DDE таблицы Портфель по бумагам.
 		/// </summary>
-		[Category(_ddeCategory)]
-		[DisplayNameLoc(LocalizedStrings.Str1797Key)]
-		[DescriptionLoc(LocalizedStrings.Str1798Key)]
-		[PropertyOrder(12)]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.Str1797Key,
+			Description = LocalizedStrings.Str1798Key,
+			GroupName = _ddeCategory,
+			Order = 12)]
 		[Editor(typeof(DdeTableColumnsEditor), typeof(DdeTableColumnsEditor))]
 		public DdeTable EquityPortfoliosTable { get; private set; }
 
 		/// <summary>
 		/// Настройки DDE таблицы Портфель по деривативам.
 		/// </summary>
-		[Category(_ddeCategory)]
-		[DisplayNameLoc(LocalizedStrings.Str1799Key)]
-		[DescriptionLoc(LocalizedStrings.Str1800Key)]
-		[PropertyOrder(13)]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.Str1799Key,
+			Description = LocalizedStrings.Str1800Key,
+			GroupName = _ddeCategory,
+			Order = 13)]
 		[Editor(typeof(DdeTableColumnsEditor), typeof(DdeTableColumnsEditor))]
 		public DdeTable DerivativePortfoliosTable { get; private set; }
 
 		/// <summary>
 		/// Настройки DDE таблицы Позиции по бумагам.
 		/// </summary>
-		[Category(_ddeCategory)]
-		[DisplayNameLoc(LocalizedStrings.Str1801Key)]
-		[DescriptionLoc(LocalizedStrings.Str1802Key)]
-		[PropertyOrder(14)]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.Str1801Key,
+			Description = LocalizedStrings.Str1802Key,
+			GroupName = _ddeCategory,
+			Order = 14)]
 		[Editor(typeof(DdeTableColumnsEditor), typeof(DdeTableColumnsEditor))]
 		public DdeTable EquityPositionsTable { get; private set; }
 
 		/// <summary>
 		/// Настройки DDE таблицы Позиции по деривативам.
 		/// </summary>
-		[Category(_ddeCategory)]
-		[DisplayNameLoc(LocalizedStrings.Str1803Key)]
-		[DescriptionLoc(LocalizedStrings.Str1804Key)]
-		[PropertyOrder(15)]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.Str1803Key,
+			Description = LocalizedStrings.Str1804Key,
+			GroupName = _ddeCategory,
+			Order = 15)]
 		[Editor(typeof(DdeTableColumnsEditor), typeof(DdeTableColumnsEditor))]
 		public DdeTable DerivativePositionsTable { get; private set; }
 
 		/// <summary>
 		/// Настройки DDE таблицы Валюты портфелей.
 		/// </summary>
-		[Category(_ddeCategory)]
-		[DisplayNameLoc(LocalizedStrings.Str1805Key)]
-		[DescriptionLoc(LocalizedStrings.Str1806Key)]
-		[PropertyOrder(16)]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.Str1805Key,
+			Description = LocalizedStrings.Str1806Key,
+			GroupName = _ddeCategory,
+			Order = 16)]
 		[Editor(typeof(DdeTableColumnsEditor), typeof(DdeTableColumnsEditor))]
 		public DdeTable CurrencyPortfoliosTable { get; private set; }
 
@@ -504,10 +531,12 @@ namespace StockSharp.Quik
 		/// <summary>
 		/// Название DDE сервера. По-умолчанию равно STOCKSHARP.
 		/// </summary>
-		[Category(_ddeCategory)]
-		[DisplayNameLoc(LocalizedStrings.Str1779Key)]
-		[DescriptionLoc(LocalizedStrings.Str1780Key)]
-		[PropertyOrder(1)]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.Str1779Key,
+			Description = LocalizedStrings.Str1780Key,
+			GroupName = _ddeCategory,
+			Order = 0)]
 		public string DdeServer
 		{
 			get { return _ddeServer; }
@@ -530,10 +559,12 @@ namespace StockSharp.Quik
 		/// <remarks>
 		/// Значение по умолчанию <see langword="false"/>.
 		/// </remarks>
-		[CategoryLoc(LocalizedStrings.Str1771Key)]
-		[DisplayNameLoc(LocalizedStrings.Str1775Key)]
-		[DescriptionLoc(LocalizedStrings.Str1776Key)]
-		[PropertyOrder(1)]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.Str1775Key,
+			Description = LocalizedStrings.Str1776Key,
+			GroupName = LocalizedStrings.Str1771Key,
+			Order = 1)]
 		public bool SupportManualOrders { get; set; }
 
 		/// <summary>

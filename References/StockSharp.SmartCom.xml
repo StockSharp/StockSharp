@@ -1464,21 +1464,6 @@
             Отписаться от событий.
             </summary>
     </member>
-    <member name="T:StockSharp.SmartCom.Xaml.SmartComAddressComboBox">
-      <summary>
-            Выпадающий список для выбора адреса сервера SmartCOM.
-            </summary>
-    </member>
-    <member name="M:StockSharp.SmartCom.Xaml.SmartComAddressComboBox.#ctor">
-      <summary>
-            Создать <see cref="T:StockSharp.SmartCom.Xaml.SmartComAddressComboBox" />.
-            </summary>
-    </member>
-    <member name="T:StockSharp.SmartCom.Xaml.SmartComEndPointEditor">
-      <summary>
-            Выпадающий список для выбора адреса сервера SmartCOM.
-            </summary>
-    </member>
     <member name="T:StockSharp.SmartCom.SmartComExtensionInfoHelper">
       <summary>
             Вспомогательный класс, который используется для доступа к специфичной SmartCOM информации через <see cref="P:StockSharp.Messages.IExtendableEntity.ExtensionInfo" />.
@@ -1804,6 +1789,26 @@
             Загрузить настройки.
             </summary>
       <param name="storage">Хранилище настроек.</param>
+    </member>
+    <member name="T:StockSharp.SmartCom.Xaml.SmartComAddressComboBox">
+      <summary>
+            Выпадающий список для выбора адреса сервера SmartCOM.
+            </summary>
+    </member>
+    <member name="M:StockSharp.SmartCom.Xaml.SmartComAddressComboBox.#ctor">
+      <summary>
+            Создать <see cref="T:StockSharp.SmartCom.Xaml.SmartComAddressComboBox" />.
+            </summary>
+    </member>
+    <member name="T:StockSharp.SmartCom.Xaml.SmartComEndPointEditor">
+      <summary>
+        <see cref="T:Ecng.Xaml.DevExp.ItemsSourceEditSettings" /> для <see cref="T:StockSharp.SmartCom.Xaml.SmartComAddressComboBox" />.
+            </summary>
+    </member>
+    <member name="M:StockSharp.SmartCom.Xaml.SmartComEndPointEditor.#ctor">
+      <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.SmartCom.Xaml.SmartComEndPointEditor" />.
+            </summary>
     </member>
   </members>
 </doc>

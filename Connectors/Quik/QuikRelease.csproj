@@ -86,9 +86,6 @@
     <Reference Include="System.Xaml" />
     <Reference Include="System.XML" />
     <Reference Include="WindowsBase" />
-    <Reference Include="Xceed.Wpf.Toolkit">
-      <HintPath>..\..\References\Xceed.Wpf.Toolkit.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\..\StockSharpAssemblyInfo.cs">

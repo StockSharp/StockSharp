@@ -7888,65 +7888,50 @@
       <param name="column">Колонка.</param>
       <returns>Значение типа <see cref="T:System.Decimal" />.</returns>
     </member>
-    <member name="T:StockSharp.Plaza.Xaml.PlazaTableListComboBox">
+    <member name="T:StockSharp.Plaza.Xaml.PlazaTableComboBox">
       <summary>
             Выпадающий список для выбора набора таблиц.
             </summary>
     </member>
-    <member name="M:StockSharp.Plaza.Xaml.PlazaTableListComboBox.#ctor">
+    <member name="M:StockSharp.Plaza.Xaml.PlazaTableComboBox.#ctor">
       <summary>
-            Создать <see cref="T:StockSharp.Plaza.Xaml.PlazaTableListComboBox" />.
+            Создать <see cref="T:StockSharp.Plaza.Xaml.PlazaTableComboBox" />.
             </summary>
     </member>
-    <member name="F:StockSharp.Plaza.Xaml.PlazaTableListComboBox.SelectedTablesProperty">
-      <summary>
-            Список идентификаторов выбранных таблиц.
-            </summary>
-    </member>
-    <member name="F:StockSharp.Plaza.Xaml.PlazaTableListComboBox.TableRegistryProperty">
-      <summary>
-            Реестр всех таблиц сервера Плазы.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Plaza.Xaml.PlazaTableListComboBox.SelectedTables">
+    <member name="P:StockSharp.Plaza.Xaml.PlazaTableComboBox.SelectedTables">
       <summary>
             Список выбранных таблиц.
             </summary>
     </member>
-    <member name="M:StockSharp.Plaza.Xaml.PlazaTableListComboBox.OnItemSelectionChanged(Xceed.Wpf.Toolkit.Primitives.ItemSelectionChangedEventArgs)">
+    <member name="F:StockSharp.Plaza.Xaml.PlazaTableComboBox.SelectedTablesProperty">
+      <summary>
+            Список идентификаторов выбранных таблиц.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Plaza.Xaml.PlazaTableComboBox.TableRegistry">
+      <summary>
+            Список выбранных таблиц.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Plaza.Xaml.PlazaTableComboBox.TableRegistryProperty">
+      <summary>
+            Реестр всех таблиц сервера Плазы.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Plaza.Xaml.PlazaTableComboBox.OnItemSelectionChanged(Xceed.Wpf.Toolkit.Primitives.ItemSelectionChangedEventArgs)">
       <summary>
             Метод, который вызывается при изменении значения у элемента.
             </summary>
       <param name="e">Аргументы.</param>
     </member>
-    <member name="T:StockSharp.Plaza.Xaml.PlazaTableListComboBoxEditor">
+    <member name="T:StockSharp.Plaza.Xaml.PlazaTableEditor">
       <summary>
             Визуальный редактор таблиц Плазы 2.
             </summary>
     </member>
-    <member name="M:StockSharp.Plaza.Xaml.PlazaTableListComboBoxEditor.#ctor">
+    <member name="M:StockSharp.Plaza.Xaml.PlazaTableEditor.#ctor">
       <summary>
-            Создать <see cref="T:StockSharp.Plaza.Xaml.PlazaTableListComboBoxEditor" />.
-            </summary>
-    </member>
-    <member name="M:StockSharp.Plaza.Xaml.PlazaTableListComboBoxEditor.SetValueDependencyProperty">
-      <summary>
-            Установить <see cref="P:Xceed.Wpf.Toolkit.PropertyGrid.Editors.TypeEditor`1.ValueProperty" /> значением <see cref="F:StockSharp.Plaza.Xaml.PlazaTableListComboBox.SelectedTablesProperty" />.
-            </summary>
-    </member>
-    <member name="T:StockSharp.Plaza.Xaml.PlazaTableRegistryComboBoxEditor">
-      <summary>
-            Визуальный редактор таблиц Плазы 2.
-            </summary>
-    </member>
-    <member name="M:StockSharp.Plaza.Xaml.PlazaTableRegistryComboBoxEditor.#ctor">
-      <summary>
-            Создать <see cref="T:StockSharp.Plaza.Xaml.PlazaTableRegistryComboBoxEditor" />.
-            </summary>
-    </member>
-    <member name="M:StockSharp.Plaza.Xaml.PlazaTableRegistryComboBoxEditor.SetValueDependencyProperty">
-      <summary>
-            Установить <see cref="P:Xceed.Wpf.Toolkit.PropertyGrid.Editors.TypeEditor`1.ValueProperty" /> значением <see cref="F:StockSharp.Plaza.Xaml.PlazaTableListComboBox.SelectedTablesProperty" />.
+            Создать <see cref="T:StockSharp.Plaza.Xaml.PlazaTableEditor" />.
             </summary>
     </member>
   </members>
