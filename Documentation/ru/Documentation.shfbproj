@@ -1688,6 +1688,10 @@
       <ImageId>GUI_Leve1Grid</ImageId>
       <AlternateText>GUI Leve 1 Grid</AlternateText>
     </Image>
+    <Image Include="Art\FixServer.png">
+      <ImageId>FixServer</ImageId>
+      <AlternateText>Fix Server</AlternateText>
+    </Image>
   </ItemGroup>
   <ItemGroup>
     <None Include="Art\sample_options_calc.png">
