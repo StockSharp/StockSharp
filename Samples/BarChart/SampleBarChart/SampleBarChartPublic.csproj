@@ -212,9 +212,9 @@
       <Project>{99B84E0C-D035-4BD9-8A42-8232ED6BA3F4}</Project>
       <Name>BarChart</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\..\StockSharpApps\Xaml.Charting\Xaml.ChartingPublic.csproj">
+    <ProjectReference Include="..\..\..\..\StockSharpApps\Xaml.Charting\Xaml.Charting.csproj">
       <Project>{C449D618-DEA4-41C3-BA86-9F827C7421DC}</Project>
-      <Name>Xaml.ChartingPublic</Name>
+      <Name>Xaml.Charting</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\..\StockSharpApps\Xaml\Xaml.csproj">
       <Project>{64e4d6f0-36b6-4904-9ba7-fffbe5ff71d8}</Project>

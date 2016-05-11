@@ -175,9 +175,9 @@
       <Project>{a00e5a4b-cb24-474a-8f2b-06a2e370c4f6}</Project>
       <Name>Transaq</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\StockSharpApps\Xaml.Charting\Xaml.ChartingPublic.csproj">
+    <ProjectReference Include="..\..\StockSharpApps\Xaml.Charting\Xaml.Charting.csproj">
       <Project>{c449d618-dea4-41c3-ba86-9f827c7421dc}</Project>
-      <Name>Xaml.ChartingPublic</Name>
+      <Name>Xaml.Charting</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\StockSharpApps\Xaml.Diagram\Xaml.DiagramPublic.csproj">
       <Project>{e5d21a65-1b77-4b4b-87c7-8ac7eee4f085}</Project>

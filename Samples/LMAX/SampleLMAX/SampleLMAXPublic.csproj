@@ -244,9 +244,9 @@
       <Project>{4B37342E-9A01-499B-9E32-2E9948A6D0C4}</Project>
       <Name>LMAX</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\..\StockSharpApps\Xaml.Charting\Xaml.ChartingPublic.csproj">
+    <ProjectReference Include="..\..\..\..\StockSharpApps\Xaml.Charting\Xaml.Charting.csproj">
       <Project>{c449d618-dea4-41c3-ba86-9f827c7421dc}</Project>
-      <Name>Xaml.ChartingPublic</Name>
+      <Name>Xaml.Charting</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\..\StockSharpApps\Xaml\Xaml.csproj">
       <Project>{64e4d6f0-36b6-4904-9ba7-fffbe5ff71d8}</Project>

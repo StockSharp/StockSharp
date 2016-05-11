@@ -228,9 +228,9 @@
       <Project>{F3068408-9764-432E-8FB4-596B308EDB4F}</Project>
       <Name>IQFeed</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\..\StockSharpApps\Xaml.Charting\Xaml.ChartingPublic.csproj">
+    <ProjectReference Include="..\..\..\..\StockSharpApps\Xaml.Charting\Xaml.Charting.csproj">
       <Project>{c449d618-dea4-41c3-ba86-9f827c7421dc}</Project>
-      <Name>Xaml.ChartingPublic</Name>
+      <Name>Xaml.Charting</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\..\StockSharpApps\Xaml\Xaml.csproj">
       <Project>{64e4d6f0-36b6-4904-9ba7-fffbe5ff71d8}</Project>
