@@ -558,7 +558,7 @@ namespace StockSharp.Algo.Testing
 
 						replyMsg.Commission = _parent
 							.GetPortfolioInfo(execution.PortfolioName)
-							.ProcessOrder(order, false, result);
+							.ProcessOrder(order, order.Balance.Value, result);
 					}
 					else
 					{
@@ -574,7 +574,7 @@ namespace StockSharp.Algo.Testing
 				}
 				else
 				{
-					var message = _parent.CheckRegistration(execution);
+					var message = _parent.CheckRegistration(execution, result);
 
 					var replyMsg = CreateReply(execution, time);
 
@@ -596,7 +596,7 @@ namespace StockSharp.Algo.Testing
 
 						replyMsg.Commission = _parent
 							.GetPortfolioInfo(execution.PortfolioName)
-							.ProcessOrder(execution, true, result);
+							.ProcessOrder(execution, null, result);
 
 						MatchOrder(execution.LocalTime, replyMsg, result, true);
 
@@ -905,10 +905,7 @@ namespace StockSharp.Algo.Testing
 
 			private void ProcessGenerator(MarketDataGenerator generator, Message message, ICollection<Message> result)
 			{
-				if (generator == null)
-					return;
-
-				var msg = generator.Process(message);
+				var msg = generator?.Process(message);
 
 				if (msg == null)
 					return;
@@ -1170,24 +1167,85 @@ namespace StockSharp.Algo.Testing
 				return TimeZoneInfo.ConvertTime(time, destTimeZone);//.ApplyTimeZone(destTimeZone);
 			}
 
-			public decimal? GetBestPrice(Sides side)
+			public decimal GetMarginPrice(Sides side)
 			{
-				var quotes = GetQuotes(side.Invert());
-				var pair = quotes.FirstOr();
-
-				return pair?.Key;
+				var field = side == Sides.Buy ? Level1Fields.MarginBuy : Level1Fields.MarginSell;
+				return (decimal?)_parent._secStates.TryGetValue(_securityId)?.TryGetValue(field) ?? GetQuotes(side).FirstOr()?.Key ?? 0;
 			}
 		}
 
 		private sealed class PortfolioEmulator
 		{
+			private class MoneyInfo
+			{
+				private readonly SecurityMarketEmulator _secEmu;
+
+				public MoneyInfo(SecurityMarketEmulator secEmu)
+				{
+					_secEmu = secEmu;
+				}
+
+				public decimal PositionBeginValue;
+				public decimal PositionDiff;
+				public decimal PositionCurrentValue => PositionBeginValue + PositionDiff;
+
+				public decimal PositionAveragePrice;
+
+				public decimal PositionPrice
+				{
+					get
+					{
+						var pos = PositionCurrentValue;
+
+						if (pos == 0)
+							return 0;
+
+						return pos.Abs() * PositionAveragePrice;
+					}
+				}
+
+				public decimal TotalPrice => GetPrice(0, 0);
+
+				public decimal GetPrice(decimal buyVol, decimal sellVol)
+				{
+					var totalMoney = PositionPrice;
+
+					var buyOrderPrice = (TotalBidsVolume + buyVol) * _secEmu.GetMarginPrice(Sides.Buy);
+					var sellOrderPrice = (TotalAsksVolume + sellVol) * _secEmu.GetMarginPrice(Sides.Sell);
+
+					if (totalMoney != 0)
+					{
+						if (PositionCurrentValue > 0)
+						{
+							totalMoney += buyOrderPrice;
+							totalMoney = totalMoney.Max(sellOrderPrice);
+						}
+						else
+						{
+							totalMoney += sellOrderPrice;
+							totalMoney = totalMoney.Max(buyOrderPrice);
+						}
+					}
+					else
+					{
+						totalMoney = buyOrderPrice + sellOrderPrice;
+					}
+
+					return totalMoney;
+				}
+
+				public decimal TotalBidsVolume;
+				public decimal TotalAsksVolume;
+			}
+
 			private readonly MarketEmulator _parent;
 			private readonly string _name;
-			private readonly Dictionary<SecurityId, RefPair<decimal, decimal>> _positions;
+			private readonly Dictionary<SecurityId, MoneyInfo> _moneys = new Dictionary<SecurityId, MoneyInfo>();
 
-			private decimal _beginValue;
-			private decimal _currentValue;
-			private decimal _blockedValue;
+			private decimal _beginMoney;
+			private decimal _currentMoney;
+
+			private decimal _totalBlockedMoney;
 
 			public PortfolioPnLManager PnLManager { get; }
 
@@ -1197,14 +1255,13 @@ namespace StockSharp.Algo.Testing
 				_name = name;
 
 				PnLManager = new PortfolioPnLManager(name);
-				_positions = new Dictionary<SecurityId, RefPair<decimal, decimal>>();
 			}
 
 			public void ProcessPositionChange(PositionChangeMessage posMsg, ICollection<Message> result)
 			{
-				var beginValue = (posMsg.Changes.TryGetValue(PositionChangeTypes.BeginValue) ?? 0m).To<decimal>();
+				var beginValue = posMsg.Changes.TryGetValue(PositionChangeTypes.BeginValue).To<decimal?>() ?? 0m;
 
-				if (!_positions.ContainsKey(posMsg.SecurityId))
+				if (!_moneys.ContainsKey(posMsg.SecurityId))
 				{
 					result.Add(new PositionMessage
 					{
@@ -1215,16 +1272,19 @@ namespace StockSharp.Algo.Testing
 					});
 				}
 
-				_positions[posMsg.SecurityId] = RefTuple.Create(beginValue, 0m);
+				var money = GetMoney(posMsg.SecurityId, posMsg.LocalTime, result);
 
-				if (beginValue == 0m)
-					return;
+				var prevPrice = money.PositionPrice;
+
+				money.PositionBeginValue = beginValue;
+				money.PositionAveragePrice = posMsg.Changes.TryGetValue(PositionChangeTypes.AveragePrice).To<decimal?>() ?? money.PositionAveragePrice;
+
+				//if (beginValue == 0m)
+				//	return;
 
 				result.Add(posMsg.Clone());
 
-				var reqMoney = GetRequiredMoney(posMsg.SecurityId, beginValue > 0 ? Sides.Buy : Sides.Sell);
-
-				_blockedValue += reqMoney * beginValue.Abs();
+				_totalBlockedMoney = _totalBlockedMoney - prevPrice + money.PositionPrice;
 
 				result.Add(
 					new PortfolioChangeMessage
@@ -1232,7 +1292,7 @@ namespace StockSharp.Algo.Testing
 						ServerTime = posMsg.ServerTime,
 						LocalTime = posMsg.LocalTime,
 						PortfolioName = _name,
-					}.Add(PositionChangeTypes.BlockedValue, _blockedValue)
+					}.Add(PositionChangeTypes.BlockedValue, _totalBlockedMoney)
 				);
 			}
 
@@ -1243,28 +1303,55 @@ namespace StockSharp.Algo.Testing
 				if (beginValue == null)
 					return;
 
-				_currentValue = _beginValue = (decimal)beginValue;
+				_currentMoney = _beginMoney = (decimal)beginValue;
 
 				result.Add(CreateChangeMessage(pfChangeMsg.ServerTime));
 			}
 
-			public decimal? ProcessOrder(ExecutionMessage orderMsg, bool register, ICollection<Message> result)
+			private MoneyInfo GetMoney(SecurityId securityId, DateTimeOffset time, ICollection<Message> result)
 			{
-				var reqMoney = GetRequiredMoney(orderMsg.SecurityId, orderMsg.Side, orderMsg.OrderPrice);
+				bool isNew;
+				var money = _moneys.SafeAdd(securityId, k => new MoneyInfo(_parent.GetEmulator(securityId)), out isNew);
 
-				var pos = _positions.SafeAdd(orderMsg.SecurityId, k => RefTuple.Create(0m, 0m));
+				if (isNew)
+				{
+					result.Add(new PositionMessage
+					{
+						LocalTime = time,
+						PortfolioName = _name,
+						SecurityId = securityId,
+					});
+				}
 
-				var sign = orderMsg.Side == Sides.Buy ? 1 : -1;
-				var totalPos = pos.First + pos.Second;
+				return money;
+			}
 
-				if (register)
-					pos.Second += orderMsg.SafeGetVolume() * sign;
+			public decimal? ProcessOrder(ExecutionMessage orderMsg, decimal? cancelBalance, ICollection<Message> result)
+			{
+				var money = GetMoney(orderMsg.SecurityId, orderMsg.LocalTime, result);
+
+				var prevPrice = money.TotalPrice;
+
+				if (cancelBalance == null)
+				{
+					var balance = orderMsg.SafeGetVolume();
+
+					if (orderMsg.Side == Sides.Buy)
+						money.TotalBidsVolume += balance;
+					else
+						money.TotalAsksVolume += balance;
+				}
 				else
-					pos.Second -= orderMsg.GetBalance() * sign;
+				{
+					if (orderMsg.Side == Sides.Buy)
+						money.TotalBidsVolume -= cancelBalance.Value;
+					else
+						money.TotalAsksVolume -= cancelBalance.Value;
+				}
+
+				_totalBlockedMoney = _totalBlockedMoney - prevPrice + money.TotalPrice;
 
 				var commission = _parent._commissionManager.Process(orderMsg);
-
-				_blockedValue += ((pos.First + pos.Second).Abs() - totalPos.Abs()) * reqMoney;
 
 				result.Add(CreateChangeMessage(orderMsg.ServerTime));
 
@@ -1284,26 +1371,27 @@ namespace StockSharp.Algo.Testing
 				if (position == null)
 					return;
 
-				bool isNew;
-				var pos = _positions.SafeAdd(tradeMsg.SecurityId, k => RefTuple.Create(0m, 0m), out isNew);
+				var money = GetMoney(tradeMsg.SecurityId, time, result);
 
-				var totalPos = pos.First + pos.Second;
-				var reqMoney = GetRequiredMoney(tradeMsg.SecurityId, tradeMsg.Side);
-				
-				pos.First += position.Value;
-				pos.Second -= position.Value;
+				var prevPrice = money.TotalPrice;
 
-				_blockedValue += ((pos.First + pos.Second).Abs() - totalPos.Abs()) * reqMoney;
+				var tradeVol = tradeMsg.TradeVolume.Value;
 
-				if (isNew)
-				{
-					result.Add(new PositionMessage
-					{
-						LocalTime = time,
-						PortfolioName = _name,
-						SecurityId = tradeMsg.SecurityId,
-					});
-				}
+				if (tradeMsg.Side == Sides.Buy)
+					money.TotalBidsVolume -= tradeVol;
+				else
+					money.TotalAsksVolume -= tradeVol;
+
+				var prevPos = money.PositionCurrentValue;
+
+				money.PositionDiff += position.Value;
+
+				if (prevPos.Sign() == money.PositionCurrentValue.Sign())
+					money.PositionAveragePrice = (money.PositionAveragePrice * prevPos + position.Value * tradeMsg.TradePrice.Value) / money.PositionCurrentValue;
+				else
+					money.PositionAveragePrice = tradeMsg.TradePrice.Value;
+
+				_totalBlockedMoney = _totalBlockedMoney - prevPrice + money.TotalPrice;
 
 				result.Add(
 					new PositionChangeMessage
@@ -1313,27 +1401,22 @@ namespace StockSharp.Algo.Testing
 						PortfolioName = _name,
 						SecurityId = tradeMsg.SecurityId,
 					}
-					.Add(PositionChangeTypes.CurrentValue, pos.First));
+					.Add(PositionChangeTypes.CurrentValue, money.PositionCurrentValue));
 
 				result.Add(CreateChangeMessage(time));
 			}
 
 			public void ProcessMarginChange(DateTimeOffset time, SecurityId securityId, ICollection<Message> result)
 			{
-				var pos = _positions.TryGetValue(securityId);
+				var money = _moneys.TryGetValue(securityId);
 
-				if (pos == null)
+				if (money == null)
 					return;
 
-				_blockedValue = 0;
+				_totalBlockedMoney = 0;
 
-				foreach (var position in _positions)
-				{
-					var value = position.Value.First + position.Value.Second;
-					var reqMoney = GetRequiredMoney(position.Key, value > 0 ? Sides.Buy : Sides.Sell);
-
-					_blockedValue += reqMoney * value.Abs();
-				}
+				foreach (var pair in _moneys)
+					_totalBlockedMoney += pair.Value.TotalPrice;
 
 				result.Add(
 					new PortfolioChangeMessage
@@ -1341,7 +1424,7 @@ namespace StockSharp.Algo.Testing
 						ServerTime = time,
 						LocalTime = time,
 						PortfolioName = _name,
-					}.Add(PositionChangeTypes.BlockedValue, _blockedValue)
+					}.Add(PositionChangeTypes.BlockedValue, _totalBlockedMoney)
 				);
 			}
 
@@ -1350,9 +1433,9 @@ namespace StockSharp.Algo.Testing
 				var realizedPnL = PnLManager.RealizedPnL;
 				var unrealizedPnL = PnLManager.UnrealizedPnL;
 				var commission = _parent._commissionManager.Commission;
-				var totalPnL = realizedPnL + unrealizedPnL - commission;
+				var totalPnL = PnLManager.PnL - commission;
 
-				_currentValue = _beginValue + totalPnL;
+				_currentMoney = _beginMoney + totalPnL;
 
 				return new PortfolioChangeMessage
 				{
@@ -1361,59 +1444,29 @@ namespace StockSharp.Algo.Testing
 					PortfolioName = _name,
 				}
 				.Add(PositionChangeTypes.RealizedPnL, realizedPnL)
-				.Add(PositionChangeTypes.UnrealizedPnL, unrealizedPnL)
+				.TryAdd(PositionChangeTypes.UnrealizedPnL, unrealizedPnL)
 				.Add(PositionChangeTypes.VariationMargin, totalPnL)
-				.Add(PositionChangeTypes.CurrentValue, _currentValue)
-				.Add(PositionChangeTypes.BlockedValue, _blockedValue)
+				.Add(PositionChangeTypes.CurrentValue, _currentMoney)
+				.Add(PositionChangeTypes.BlockedValue, _totalBlockedMoney)
 				.Add(PositionChangeTypes.Commission, commission);
 			}
 
-			public string CheckRegistration(ExecutionMessage execMsg)
+			public string CheckRegistration(ExecutionMessage execMsg, ICollection<Message> result)
 			{
-				var reqMoney = GetRequiredMoney(execMsg.SecurityId, execMsg.Side, execMsg.OrderPrice);
-
 				// если задан баланс, то проверям по нему (для частично исполненных заявок)
 				var volume = execMsg.Balance ?? execMsg.SafeGetVolume();
 
-				var pos = _positions.SafeAdd(execMsg.SecurityId, k => RefTuple.Create(0m, 0m));
+				var money = GetMoney(execMsg.SecurityId, execMsg.LocalTime, result);
 
-				var sign = execMsg.Side == Sides.Buy ? 1 : -1;
-				var totalPos = pos.First + pos.Second;
+				var needBlock = money.GetPrice(execMsg.Side == Sides.Buy ? volume : 0, execMsg.Side == Sides.Sell ? volume : 0);
 
-				var needBlock = ((totalPos + volume * sign).Abs() - totalPos.Abs()) * reqMoney;
-
-				// при отрицательном значении снимается часть блокировки
-				if (needBlock < 0)
-					return null;
-
-				if ((_currentValue - _blockedValue) < needBlock)
+				if (_currentMoney < needBlock)
 				{
 					return LocalizedStrings.Str1169Params
-							.Put(execMsg.PortfolioName, execMsg.TransactionId, needBlock, _currentValue, _blockedValue);
+							.Put(execMsg.PortfolioName, execMsg.TransactionId, needBlock, _currentMoney, money.TotalPrice);
 				}
 
 				return null;
-			}
-
-			private decimal GetRequiredMoney(SecurityId securityId, Sides side, decimal price = 0)
-			{
-				var state = _parent._secStates.TryGetValue(securityId);
-
-				var reqMoney = (decimal?)state?.TryGetValue(side == Sides.Buy ? Level1Fields.MarginBuy : Level1Fields.MarginSell);
-
-				// отсутствует информация о ГО
-				if (reqMoney == null)
-				{
-					if (price != 0)
-						reqMoney = price;
-					else
-					{
-						var secEmu = _parent.GetEmulator(securityId);
-						reqMoney = secEmu.GetBestPrice(side) ?? 0;
-					}
-				}
-
-				return reqMoney.Value;
 			}
 		}
 
@@ -1737,7 +1790,7 @@ namespace StockSharp.Algo.Testing
 				info.ProcessMarginChange(level1Msg.LocalTime, level1Msg.SecurityId, retVal);
 		}
 
-		private string CheckRegistration(ExecutionMessage execMsg)
+		private string CheckRegistration(ExecutionMessage execMsg, ICollection<Message> result)
 		{
 			var board = _boardDefinitions.TryGetValue(execMsg.SecurityId.BoardCode);
 
@@ -1766,7 +1819,7 @@ namespace StockSharp.Algo.Testing
 
 			var info = GetPortfolioInfo(execMsg.PortfolioName);
 
-			return info.CheckRegistration(execMsg);
+			return info.CheckRegistration(execMsg, result);
 		}
 
 		private void RecalcPnL(ICollection<Message> messages)
