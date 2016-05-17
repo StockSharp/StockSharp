@@ -5722,7 +5722,7 @@ DocStr1469;The message, containing information on tick trade;Сообщение,
 DocStr1470;To process the message, containing data on order book;Обработать сообщение, содержащее данные о стакане
 DocStr1471;The message, containing data on order book;Сообщение, содержащее данные о стакане
 DocStr1472;Last price of tick trade;Последняя цена тиковой сделки
-DocStr1473;Last price of demand;Последняя цена спроса
+DocStr1473;Last price of bid;Последняя цена спроса
 DocStr1474;Last price of offer;Последняя цена предложения
 DocStr1475;The interface, describing statistic parameter, calculated based on orders;Интерфейс, описывающий параметр статистики, рассчитывающийся на основе заявков
 DocStr1476;To add to the parameter an information on new order;Добавить в параметр информацию о новой заявке
