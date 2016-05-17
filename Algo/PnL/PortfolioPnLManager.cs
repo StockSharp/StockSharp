@@ -19,7 +19,10 @@ namespace StockSharp.Algo.PnL
 	using System.Collections.Generic;
 	using System.Linq;
 
+	using Ecng.Common;
 	using Ecng.Collections;
+
+	using MoreLinq;
 
 	using StockSharp.Messages;
 
@@ -127,6 +130,32 @@ namespace StockSharp.Algo.PnL
 
 					var queue = _securityPnLs.TryGetValue(quoteMsg.SecurityId);
 					queue?.ProcessQuotes(quoteMsg);
+
+					break;
+				}
+
+				case MessageTypes.PortfolioChange:
+				{
+					var pfMsg = (PortfolioChangeMessage)message;
+
+					var leverage = pfMsg.Changes.TryGetValue(PositionChangeTypes.Leverage).To<decimal?>();
+					if (leverage != null)
+					{
+						_securityPnLs.CachedValues.ForEach(q => q.Multiplier = leverage.Value);
+					}
+
+					break;
+				}
+
+				case MessageTypes.PositionChange:
+				{
+					var posMsg = (PositionChangeMessage)message;
+
+					var leverage = posMsg.Changes.TryGetValue(PositionChangeTypes.Leverage).To<decimal?>();
+					if (leverage != null)
+					{
+						_securityPnLs.SafeAdd(posMsg.SecurityId, security => new PnLQueue(security)).Multiplier = leverage.Value;
+					}
 
 					break;
 				}

@@ -15,6 +15,7 @@ StockSharp API Change log
 * (feature) Connectors. Removed ref from Xceed.
 * (feature) IPnLManager. UnrealizedPnL is nullable.
 * (bug) Fix https://github.com/StockSharp/StockSharp/issues/227
+* (feature) PnLManager. Uses leverage.
 
 ###v4.3.14.2:
 * (feature) Chart. Active orders.

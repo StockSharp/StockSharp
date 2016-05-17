@@ -79,6 +79,15 @@ namespace StockSharp.Algo.PnL
 		}
 
 		/// <summary>
+		/// Multiplier.
+		/// </summary>
+		public decimal Multiplier
+		{
+			get { return _multiplier; }
+			set { _multiplier = value; }
+		}
+
+		/// <summary>
 		/// Last price of tick trade.
 		/// </summary>
 		public decimal? TradePrice { get; private set; }
