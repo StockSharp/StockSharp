@@ -81,45 +81,47 @@ namespace StockSharp.Algo.PnL
 		/// <summary>
 		/// Last price of tick trade.
 		/// </summary>
-		public decimal TradePrice { get; private set; }
+		public decimal? TradePrice { get; private set; }
 
 		/// <summary>
-		/// Last price of demand.
+		/// Last price of bid.
 		/// </summary>
-		public decimal BidPrice { get; private set; }
+		public decimal? BidPrice { get; private set; }
 
 		/// <summary>
 		/// Last price of offer.
 		/// </summary>
-		public decimal AskPrice { get; private set; }
+		public decimal? AskPrice { get; private set; }
 
+		private bool _recalcUnrealizedPnL;
 		private decimal? _unrealizedPnL;
 
 		/// <summary>
 		/// Unrealized profit.
 		/// </summary>
-		public decimal UnrealizedPnL
+		public decimal? UnrealizedPnL
 		{
 			get
 			{
-				var v = _unrealizedPnL;
-
-				if (v != null)
-					return v.Value;
+				if (!_recalcUnrealizedPnL)
+					return _unrealizedPnL;
 
 				var sum = _openedTrades
 					.SyncGet(c => c.Sum(t =>
 					{
 						var price = _openedPosSide == Sides.Buy ? AskPrice : BidPrice;
 
-						if (price == 0)
+						if (price == null)
 							price = TradePrice;
 
-						return GetPnL(t.First, t.Second, _openedPosSide, price);
+						if (price == null)
+							return null;
+
+						return GetPnL(t.First, t.Second, _openedPosSide, price.Value);
 					}));
 
-				v = _unrealizedPnL = sum * _multiplier;
-				return v.Value;
+				_unrealizedPnL = sum * _multiplier;
+				return _unrealizedPnL;
 			}
 		}
 
@@ -200,35 +202,35 @@ namespace StockSharp.Algo.PnL
 			if (priceStep != null)
 			{
 				PriceStep = (decimal)priceStep;
-				_unrealizedPnL = null;
+				_recalcUnrealizedPnL = true;
 			}
 
 			var stepPrice = levelMsg.Changes.TryGetValue(Level1Fields.StepPrice);
 			if (stepPrice != null)
 			{
 				StepPrice = (decimal)stepPrice;
-				_unrealizedPnL = null;
+				_recalcUnrealizedPnL = true;
 			}
 
 			var tradePrice = levelMsg.Changes.TryGetValue(Level1Fields.LastTradePrice);
 			if (tradePrice != null)
 			{
 				TradePrice = (decimal)tradePrice;
-				_unrealizedPnL = null;
+				_recalcUnrealizedPnL = true;
 			}
 
 			var bidPrice = levelMsg.Changes.TryGetValue(Level1Fields.BestBidPrice);
 			if (bidPrice != null)
 			{
 				BidPrice = (decimal)bidPrice;
-				_unrealizedPnL = null;
+				_recalcUnrealizedPnL = true;
 			}
 
 			var askPrice = levelMsg.Changes.TryGetValue(Level1Fields.BestAskPrice);
 			if (askPrice != null)
 			{
 				AskPrice = (decimal)askPrice;
-				_unrealizedPnL = null;
+				_recalcUnrealizedPnL = true;
 			}
 		}
 
@@ -238,11 +240,12 @@ namespace StockSharp.Algo.PnL
 		/// <param name="execMsg">The message, containing information on tick trade.</param>
 		public void ProcessExecution(ExecutionMessage execMsg)
 		{
-			if (execMsg.TradePrice != null)
-			{
-				TradePrice = execMsg.TradePrice.Value;
-				_unrealizedPnL = null;
-			}
+			if (execMsg.TradePrice == null)
+				return;
+
+			TradePrice = execMsg.TradePrice.Value;
+
+			_recalcUnrealizedPnL = true;
 		}
 
 		/// <summary>
@@ -251,13 +254,10 @@ namespace StockSharp.Algo.PnL
 		/// <param name="quoteMsg">The message, containing data on order book.</param>
 		public void ProcessQuotes(QuoteChangeMessage quoteMsg)
 		{
-			var ask = quoteMsg.GetBestAsk();
-			AskPrice = ask != null ? ask.Price : 0;
+			AskPrice = quoteMsg.GetBestAsk()?.Price;
+			BidPrice = quoteMsg.GetBestBid()?.Price;
 
-			var bid = quoteMsg.GetBestBid();
-			BidPrice = bid != null ? bid.Price : 0;
-
-			_unrealizedPnL = null;
+			_recalcUnrealizedPnL = true;
 		}
 
 		private void UpdateMultiplier()

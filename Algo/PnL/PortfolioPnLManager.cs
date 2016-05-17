@@ -41,7 +41,7 @@ namespace StockSharp.Algo.PnL
 		/// <summary>
 		/// Total profit-loss.
 		/// </summary>
-		public decimal PnL => RealizedPnL + UnrealizedPnL;
+		public decimal PnL => RealizedPnL + UnrealizedPnL ?? 0;
 
 		private decimal _realizedPnL;
 
@@ -59,7 +59,7 @@ namespace StockSharp.Algo.PnL
 			_securityPnLs.Clear();
 		}
 
-		public decimal UnrealizedPnL
+		public decimal? UnrealizedPnL
 		{
 			get { return _securityPnLs.CachedValues.Sum(q => q.UnrealizedPnL); }
 		}

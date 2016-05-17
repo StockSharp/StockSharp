@@ -13,6 +13,7 @@ StockSharp API Change log
 * (bug) Position manager fix.
 * (bug) SecurityPicker. Show common columns fix.
 * (feature) Connectors. Removed ref from Xceed.
+* (feature) IPnLManager. UnrealizedPnL is nullable.
 
 ###v4.3.14.2:
 * (feature) Chart. Active orders.
