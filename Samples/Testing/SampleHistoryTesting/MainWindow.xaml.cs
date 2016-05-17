@@ -534,7 +534,7 @@ namespace SampleHistoryTesting
 					var unrealizedPnL = new EquityData
 					{
 						Time = strategy.CurrentTime,
-						Value = strategy.PnLManager.UnrealizedPnL
+						Value = strategy.PnLManager.UnrealizedPnL ?? 0
 					};
 
 					var commission = new EquityData
