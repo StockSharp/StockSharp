@@ -1692,7 +1692,7 @@ namespace StockSharp.Algo.Testing
 					break;
 			}
 
-			RecalcPnL(retVal);
+			RecalcPnL(message.LocalTime, retVal);
 
 			BufferResult(retVal, message.LocalTime).ForEach(RaiseNewOutMessage);
 		}
@@ -1822,12 +1822,13 @@ namespace StockSharp.Algo.Testing
 			return info.CheckRegistration(execMsg, result);
 		}
 
-		private void RecalcPnL(ICollection<Message> messages)
+		private void RecalcPnL(DateTimeOffset time, ICollection<Message> messages)
 		{
 			if (Settings.PortfolioRecalcInterval == TimeSpan.Zero)
 				return;
 
-			var time = _portfoliosPrevRecalc;
+			if (time - _portfoliosPrevRecalc <= Settings.PortfolioRecalcInterval)
+				return;
 
 			foreach (var message in messages)
 			{
@@ -1836,9 +1837,6 @@ namespace StockSharp.Algo.Testing
 
 				time = message.LocalTime;
 			}
-
-			if (time - _portfoliosPrevRecalc <= Settings.PortfolioRecalcInterval)
-				return;
 
 			foreach (var emulator in _portfolios.Values)
 				messages.Add(emulator.CreateChangeMessage(time));
