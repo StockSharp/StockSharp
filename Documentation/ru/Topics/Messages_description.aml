@@ -17,7 +17,8 @@
     	<para><codeEntityReference>T:StockSharp.Messages.Message</codeEntityReference></para>
    		</entry>
     	<entry>
-    		<para>Абстрактный класс сообщения, от которого наследуют классы других сообщений. Содержит информацию о времени, типе <codeEntityReference>T:StockSharp.Messages.MessageTypes</codeEntityReference> и адаптере, который создал сообщение.</para>
+    		<para>Абстрактный класс сообщения, от которого наследуют классы других сообщений. Содержит информацию о времени, типе 
+    		<codeEntityReference>T:StockSharp.Messages.MessageTypes</codeEntityReference> и адаптере, который создал сообщение.</para>
     	</entry>
   		</row>
 		<row>
@@ -215,7 +216,7 @@
 	<para>Сообщение <codeEntityReference>T:StockSharp.Messages.ExecutionMessage</codeEntityReference> является универсальным сообщением, которое позволяет 
 	передавать различную биржевую информацию, связанную с заявками и сделками: тиковые сделки, ордерлоги, собственные заявки и сделки.</para>
 	<para>
-		Тип информации в сообщении определяется значением свойства <codeEntityReference>P:StockSharp.Messages.ExecutionType</codeEntityReference>:
+		Тип информации в сообщении определяется значением свойства <codeEntityReference>P:StockSharp.Messages.ExecutionMessage.ExecutionType</codeEntityReference>:
 	</para>
 	
 	<list class="bullet">
