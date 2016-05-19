@@ -227,7 +227,7 @@
   			<para><codeEntityReference>F:StockSharp.Messages.ExecutionTypes.Transaction</codeEntityReference> - транзакция (информация о собственной сделке или заявке).</para>
   		</listItem>
   		<listItem>
-  			<para><codeEntityReference>F:StockSharp.Messages.ExecutionTypes.OrderLog</codeEntityReference> - лог заявкок.</para>
+  			<para><codeEntityReference>F:StockSharp.Messages.ExecutionTypes.OrderLog</codeEntityReference> - лог заявок.</para>
   		</listItem>
 	</list>
 	<para>
