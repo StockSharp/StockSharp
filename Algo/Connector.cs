@@ -1177,7 +1177,7 @@ namespace StockSharp.Algo
 		public void CancelOrders(bool? isStopOrder = null, Portfolio portfolio = null, Sides? direction = null, ExchangeBoard board = null, Security security = null)
 		{
 			var transactionId = TransactionIdGenerator.GetNextId();
-			//_entityCache.AddOrderByCancelationId(transactionId, );
+			_entityCache.AddMassCancelationId(transactionId);
 			OnCancelOrders(transactionId, isStopOrder, portfolio, direction, board, security);
 		}
 

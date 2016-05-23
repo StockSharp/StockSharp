@@ -1661,6 +1661,16 @@ namespace StockSharp.Algo
 			{
 				case ExecutionTypes.Transaction:
 				{
+					if (_entityCache.IsMassCancelation(message.OriginalTransactionId))
+					{
+						if (message.Error == null)
+							RaiseMassOrderCanceled(message.OriginalTransactionId);
+						else
+							RaiseMassOrderCancelFailed(message.OriginalTransactionId, message.Error);
+
+						break;
+					}
+
 					long transactionId;
 					var order = _entityCache.GetOrder(message, out transactionId);
 
