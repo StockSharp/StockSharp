@@ -230,6 +230,7 @@ namespace StockSharp.Algo
 		private readonly Dictionary<object, Security> _nativeIdSecurities = new Dictionary<object, Security>();
 		private readonly CachedSynchronizedDictionary<string, Portfolio> _portfolios = new CachedSynchronizedDictionary<string, Portfolio>();
 		private readonly HashSet<long> _orderStatusTransactions = new HashSet<long>();
+		private readonly HashSet<long> _massCancelationTransactions = new HashSet<long>();
 
 		private IEntityFactory _entityFactory = new EntityFactory();
 
@@ -301,6 +302,7 @@ namespace StockSharp.Algo
 			_tradeStat.Clear();
 
 			_orderStatusTransactions.Clear();
+			_massCancelationTransactions.Clear();
 
 			_exchangeBoards.Clear();
 			_securities.Clear();
@@ -314,7 +316,8 @@ namespace StockSharp.Algo
 
 		public void AddOrderStatusTransactionId(long transactionId)
 		{
-			_orderStatusTransactions.Add(transactionId);
+			if (!_orderStatusTransactions.Add(transactionId))
+				throw new InvalidOperationException();
 		}
 
 		public IEnumerable<Order> GetOrders(Security security, OrderStates state)
@@ -324,6 +327,14 @@ namespace StockSharp.Algo
 
 			return GetData(security).Orders.CachedValues.Select(info => info.Order).Filter(state);
 		}
+
+		public void AddMassCancelationId(long transactionId)
+		{
+			if (!_massCancelationTransactions.Add(transactionId))
+				throw new InvalidOperationException();
+		}
+
+		public bool IsMassCancelation(long transactionId) => _massCancelationTransactions.Contains(transactionId);
 
 		public void AddOrderByCancelationId(Order order, long transactionId)
 		{
@@ -758,7 +769,7 @@ namespace StockSharp.Algo
 		public long GetTransactionId(long originalTransactionId)
 		{
 			// ExecMsg.OriginalTransactionId == OrderStatMsg.TransactionId when orders info requested by OrderStatMsg
-			return _orderStatusTransactions.Contains(originalTransactionId) ? 0 : originalTransactionId;
+			return _orderStatusTransactions.Contains(originalTransactionId) || IsMassCancelation(originalTransactionId) ? 0 : originalTransactionId;
 		}
 
 		public Order GetOrder(ExecutionMessage message, out long transactionId)
