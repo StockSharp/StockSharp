@@ -42276,5 +42276,85 @@ namespace StockSharp.Localization
 		/// LUA
 		/// </summary>
 		public static string Lua => GetString(LuaKey);
+
+		/// <summary>
+		/// Initializing.
+		/// </summary>
+		public const string InitializingKey = "Initializing";
+
+		/// <summary>
+		/// Initializing.
+		/// </summary>
+		public static string Initializing => GetString(InitializingKey);
+
+		/// <summary>
+		/// Initializing database.
+		/// </summary>
+		public const string InitializingDatabaseKey = "InitializingDatabase";
+
+		/// <summary>
+		/// Initializing database.
+		/// </summary>
+		public static string InitializingDatabase => GetString(InitializingDatabaseKey);
+
+		/// <summary>
+		/// Initializing command handlers.
+		/// </summary>
+		public const string InitializingCommandsKey = "InitializingCommands";
+
+		/// <summary>
+		/// Initializing command handlers.
+		/// </summary>
+		public static string InitializingCommands => GetString(InitializingCommandsKey);
+
+		/// <summary>
+		/// Initializing connector.
+		/// </summary>
+		public const string InitializingConnectorKey = "InitializingConnector";
+
+		/// <summary>
+		/// Initializing connector.
+		/// </summary>
+		public static string InitializingConnector => GetString(InitializingConnectorKey);
+
+		/// <summary>
+		/// Initializing layout manager.
+		/// </summary>
+		public const string InitializingLayoutManagerKey = "InitializingLayoutManager";
+
+		/// <summary>
+		/// Initializing layout manager.
+		/// </summary>
+		public static string InitializingLayoutManager => GetString(InitializingLayoutManagerKey);
+
+		/// <summary>
+		/// Initializing strategies.
+		/// </summary>
+		public const string InitializingStrategiesKey = "InitializingStrategies";
+
+		/// <summary>
+		/// Initializing strategies.
+		/// </summary>
+		public static string InitializingStrategies => GetString(InitializingStrategiesKey);
+
+		/// <summary>
+		/// Loading ribbon controls.
+		/// </summary>
+		public const string LoadingRibbonControlsKey = "LoadingRibbonControls";
+
+		/// <summary>
+		/// Loading ribbon controls.
+		/// </summary>
+		public static string LoadingRibbonControls => GetString(LoadingRibbonControlsKey);
+
+		/// <summary>
+		/// Loading settings.
+		/// </summary>
+		public const string LoadingSettingsKey = "LoadingSettings";
+
+		/// <summary>
+		/// Loading settings.
+		/// </summary>
+		public static string LoadingSettings => GetString(LoadingSettingsKey);
 	}
 }
