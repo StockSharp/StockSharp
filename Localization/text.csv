@@ -7276,7 +7276,7 @@ DocStr3024;To get the latest news;Получить последние новос
 DocStr3025;Session ID. It can be empty if the request is anonymous;Идентификатор сессии. Может быть пустым, если запрос идет анонимно
 DocStr3026;The identifier from which you need to receive the news;Идентификатор, с которого необходимо получить новости
 DocStr3027;Last news;Последние новости
-DocStr3028;The profile Information;Информация о профиле
+DocStr3028;The profile information;Информация о профиле
 DocStr3029;Password (not filled in when obtaining from the server);Пароль (не заполняется при получении с сервера)
 DocStr3030;E-mail address;Адрес электронной почты
 DocStr3031;Phone;Номер телефона

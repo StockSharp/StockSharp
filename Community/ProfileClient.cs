@@ -44,7 +44,7 @@ namespace StockSharp.Community
 		/// <summary>
 		/// To start the registration.
 		/// </summary>
-		/// <param name="profile">The profile Information.</param>
+		/// <param name="profile">The profile information.</param>
 		public void CreateProfile(Profile profile)
 		{
 			ValidateError(Invoke(f => f.CreateProfile(profile)));
@@ -96,7 +96,7 @@ namespace StockSharp.Community
 		/// <summary>
 		/// To update profile information.
 		/// </summary>
-		/// <param name="profile">The profile Information.</param>
+		/// <param name="profile">The profile information.</param>
 		public void UpdateProfile(Profile profile)
 		{
 			ValidateError(Invoke(f => f.UpdateProfile(SessionId, profile)));
@@ -105,7 +105,7 @@ namespace StockSharp.Community
 		/// <summary>
 		/// To get profile information.
 		/// </summary>
-		/// <returns>The profile Information.</returns>
+		/// <returns>The profile information.</returns>
 		public Profile GetProfile()
 		{
 			return Invoke(f => f.GetProfile(SessionId));

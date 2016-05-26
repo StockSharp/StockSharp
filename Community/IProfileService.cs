@@ -20,7 +20,7 @@ namespace StockSharp.Community
 	using System.ServiceModel;
 
 	/// <summary>
-	/// The profile Information.
+	/// The profile information.
 	/// </summary>
 	[DataContract]
 	public class Profile
@@ -95,7 +95,7 @@ namespace StockSharp.Community
 		/// <summary>
 		/// To start the registration.
 		/// </summary>
-		/// <param name="profile">The profile Information.</param>
+		/// <param name="profile">The profile information.</param>
 		/// <returns>The execution result code.</returns>
 		[OperationContract]
 		byte CreateProfile(Profile profile);
@@ -143,7 +143,7 @@ namespace StockSharp.Community
 		/// To update profile information.
 		/// </summary>
 		/// <param name="sessionId">Session ID.</param>
-		/// <param name="profile">The profile Information.</param>
+		/// <param name="profile">The profile information.</param>
 		/// <returns>The execution result code.</returns>
 		[OperationContract]
 		byte UpdateProfile(Guid sessionId, Profile profile);
@@ -152,7 +152,7 @@ namespace StockSharp.Community
 		/// To get profile information.
 		/// </summary>
 		/// <param name="sessionId">Session ID.</param>
-		/// <returns>The profile Information.</returns>
+		/// <returns>The profile information.</returns>
 		[OperationContract]
 		Profile GetProfile(Guid sessionId);
 
