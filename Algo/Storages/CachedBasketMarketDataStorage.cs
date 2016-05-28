@@ -371,7 +371,7 @@ namespace StockSharp.Algo.Storages
 				{
 					var period = board.WorkingTime.GetPeriod(date.ToLocalTime(board.TimeZone));
 
-					return period == null || period.Times.Length == 0
+					return period == null || period.Times.Count == 0
 						       ? new[] { Tuple.Create(board, new Range<TimeSpan>(TimeSpan.Zero, TimeHelper.LessOneDay)) }
 						       : period.Times.Select(t => Tuple.Create(board, ToUtc(board, t)));
 				})

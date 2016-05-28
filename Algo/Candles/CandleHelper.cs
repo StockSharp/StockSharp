@@ -763,7 +763,7 @@ namespace StockSharp.Algo.Candles
 
 				// http://stocksharp.com/forum/yaf_postsm13887_RealtimeEmulationTrader---niepravil-nyie-sviechi.aspx#post13887
 				// отсчет свечек идет от начала сессии и игнорируются клиринги
-				var startTime = period != null && period.Times.Length > 0 ? period.Times[0].Min : TimeSpan.Zero;
+				var startTime = period != null && period.Times.Count > 0 ? period.Times[0].Min : TimeSpan.Zero;
 
 				var length = (exchangeTime.TimeOfDay - startTime).To<long>();
 				var beginTime = exchangeTime.Date + (startTime + length.Floor(timeFrame.Ticks).To<TimeSpan>());
@@ -772,7 +772,7 @@ namespace StockSharp.Algo.Candles
 				var tempEndTime = beginTime.TimeOfDay + timeFrame;
 				TimeSpan stopTime;
 
-				if (period != null && period.Times.Length > 0)
+				if (period != null && period.Times.Count > 0)
 				{
 					var last = period.Times.LastOrDefault(t => tempEndTime > t.Min);
 					stopTime = last == null ? TimeSpan.MaxValue : last.Max;

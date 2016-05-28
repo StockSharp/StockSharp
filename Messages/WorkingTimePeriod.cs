@@ -16,6 +16,7 @@ Copyright 2010 by StockSharp, LLC
 namespace StockSharp.Messages
 {
 	using System;
+	using System.Collections.Generic;
 	using System.Linq;
 	using System.Runtime.Serialization;
 
@@ -34,6 +35,14 @@ namespace StockSharp.Messages
 	[DescriptionLoc(LocalizedStrings.Str417Key)]
 	public class WorkingTimePeriod : Cloneable<WorkingTimePeriod>, IPersistable
 	{
+		class TimeSpanRangeInitializer : IItemInitializer
+		{
+			public object Create()
+			{
+				return new Range<TimeSpan>(TimeSpan.Zero, TimeSpan.Zero);
+			}
+		}
+
 		/// <summary>
 		/// Schedule expiration date.
 		/// </summary>
@@ -42,8 +51,8 @@ namespace StockSharp.Messages
 		[DisplayNameLoc(LocalizedStrings.Str418Key)]
 		[DescriptionLoc(LocalizedStrings.Str419Key)]
 		public DateTime Till { get; set; }
-
-		private Range<TimeSpan>[] _times = new Range<TimeSpan>[0];
+		
+		private List<Range<TimeSpan>> _times = new List<Range<TimeSpan>>();
 
 		/// <summary>
 		/// Work schedule within day.
@@ -52,7 +61,8 @@ namespace StockSharp.Messages
 		[CategoryLoc(LocalizedStrings.GeneralKey)]
 		[DisplayNameLoc(LocalizedStrings.Str416Key)]
 		[DescriptionLoc(LocalizedStrings.Str420Key)]
-		public Range<TimeSpan>[] Times
+		[ItemInitializer(typeof(TimeSpanRangeInitializer))]
+		public List<Range<TimeSpan>> Times
 		{
 			get { return _times; }
 			set
@@ -73,7 +83,7 @@ namespace StockSharp.Messages
 			return new WorkingTimePeriod
 			{
 				Till = Till,
-				Times = Times.Select(t => t.Clone()).ToArray(),
+				Times = Times.Select(t => t.Clone()).ToList(),
 			};
 		}
 
@@ -83,7 +93,7 @@ namespace StockSharp.Messages
 		/// <param name="storage">Settings storage.</param>
 		public void Load(SettingsStorage storage)
 		{
-			Times = storage.GetValue<Range<TimeSpan>[]>(nameof(Times));
+			Times = storage.GetValue<List<Range<TimeSpan>>>(nameof(Times));
 			Till = storage.GetValue<DateTime>(nameof(Till));
 		}
 

@@ -16,6 +16,7 @@ Copyright 2010 by StockSharp, LLC
 namespace StockSharp.BusinessEntities
 {
 	using System;
+	using System.Collections.Generic;
 	using System.Linq;
 
 	using Ecng.Common;
@@ -327,12 +328,12 @@ namespace StockSharp.BusinessEntities
 				Code = "FORTS",
 				WorkingTime = new WorkingTime
 				{
-					Periods = new[]
+					Periods = new List<WorkingTimePeriod>
 					{
 						new WorkingTimePeriod
 						{
 							Till = DateTime.MaxValue,
-							Times = new[]
+							Times = new List<Range<TimeSpan>>
 							{
 								new Range<TimeSpan>("10:00:00".To<TimeSpan>(), "14:00:00".To<TimeSpan>()),
 								new Range<TimeSpan>("14:03:00".To<TimeSpan>(), "18:45:00".To<TimeSpan>()),
@@ -340,8 +341,8 @@ namespace StockSharp.BusinessEntities
 							},
 						}
 					},
-					SpecialWorkingDays = ArrayHelper.Clone(russianSpecialWorkingDays),
-					SpecialHolidays = ArrayHelper.Clone(russianSpecialHolidays),
+					SpecialWorkingDays = new List<DateTime>(russianSpecialWorkingDays),
+					SpecialHolidays = new List<DateTime>(russianSpecialHolidays),
 				},
 				ExpiryTime = new TimeSpan(18, 45, 00),
 				IsSupportAtomicReRegister = true,
@@ -351,19 +352,19 @@ namespace StockSharp.BusinessEntities
 
 			var micexWorkingTime = new WorkingTime
 			{
-				Periods = new[]
+				Periods = new List<WorkingTimePeriod>
 				{
 					new WorkingTimePeriod
 					{
 						Till = DateTime.MaxValue,
-						Times = new[]
+						Times = new List<Range<TimeSpan>>
 						{
 							new Range<TimeSpan>("10:00:00".To<TimeSpan>(), "18:45:00".To<TimeSpan>())
 						},
 					}
 				},
-				SpecialWorkingDays = ArrayHelper.Clone(russianSpecialWorkingDays),
-				SpecialHolidays = ArrayHelper.Clone(russianSpecialHolidays),
+				SpecialWorkingDays = new List<DateTime>(russianSpecialWorkingDays),
+				SpecialHolidays = new List<DateTime>(russianSpecialHolidays),
 			};
 
 			Micex = new ExchangeBoard
@@ -1397,12 +1398,12 @@ namespace StockSharp.BusinessEntities
 				Code = "UX",
 				WorkingTime = new WorkingTime
 				{
-					Periods = new[]
+					Periods = new List<WorkingTimePeriod>
 					{
 						new WorkingTimePeriod
 						{
 							Till = DateTime.MaxValue,
-							Times = new[]
+							Times = new List<Range<TimeSpan>>
 							{
 								new Range<TimeSpan>("10:30:00".To<TimeSpan>(), "13:00:00".To<TimeSpan>()),
 								new Range<TimeSpan>("13:03:00".To<TimeSpan>(), "17:30:00".To<TimeSpan>())
@@ -1421,12 +1422,12 @@ namespace StockSharp.BusinessEntities
 				Code = "GTS",
 				WorkingTime = new WorkingTime
 				{
-					Periods = new[]
+					Periods = new List<WorkingTimePeriod>
 					{
 						new WorkingTimePeriod
 						{
 							Till = DateTime.MaxValue,
-							Times = new[]
+							Times = new List<Range<TimeSpan>>
 							{
 								new Range<TimeSpan>("10:30:00".To<TimeSpan>(), "17:30:00".To<TimeSpan>())
 							},
@@ -1445,12 +1446,12 @@ namespace StockSharp.BusinessEntities
 				Code = "AMEX",
 				WorkingTime = new WorkingTime
 				{
-					Periods = new[]
+					Periods = new List<WorkingTimePeriod>
 					{
 						new WorkingTimePeriod
 						{
 							Till = DateTime.MaxValue,
-							Times = new[]
+							Times = new List<Range<TimeSpan>>
 							{
 								new Range<TimeSpan>("09:30:00".To<TimeSpan>(), "16:00:00".To<TimeSpan>())
 							},
@@ -1488,12 +1489,12 @@ namespace StockSharp.BusinessEntities
 				Code = "NYSE",
 				WorkingTime = new WorkingTime
 				{
-					Periods = new[]
+					Periods = new List<WorkingTimePeriod>
 					{
 						new WorkingTimePeriod
 						{
 							Till = DateTime.MaxValue,
-							Times = new[]
+							Times = new List<Range<TimeSpan>>
 							{
 								new Range<TimeSpan>("09:30:00".To<TimeSpan>(), "16:00:00".To<TimeSpan>())
 							},
@@ -1517,12 +1518,12 @@ namespace StockSharp.BusinessEntities
 				Code = "NASDAQ",
 				WorkingTime = new WorkingTime
 				{
-					Periods = new[]
+					Periods = new List<WorkingTimePeriod>
 					{
 						new WorkingTimePeriod
 						{
 							Till = DateTime.MaxValue,
-							Times = new[]
+							Times = new List<Range<TimeSpan>>
 							{
 								new Range<TimeSpan>("09:30:00".To<TimeSpan>(), "16:00:00".To<TimeSpan>())
 							},
@@ -1546,12 +1547,12 @@ namespace StockSharp.BusinessEntities
 				Code = "TSX",
 				WorkingTime = new WorkingTime
 				{
-					Periods = new[]
+					Periods = new List<WorkingTimePeriod>
 					{
 						new WorkingTimePeriod
 						{
 							Till = DateTime.MaxValue,
-							Times = new[]
+							Times = new List<Range<TimeSpan>>
 							{
 								new Range<TimeSpan>("09:30:00".To<TimeSpan>(), "16:00:00".To<TimeSpan>())
 							},
@@ -1567,12 +1568,12 @@ namespace StockSharp.BusinessEntities
 				Code = "LSE",
 				WorkingTime = new WorkingTime
 				{
-					Periods = new[]
+					Periods = new List<WorkingTimePeriod>
 					{
 						new WorkingTimePeriod
 						{
 							Till = DateTime.MaxValue,
-							Times = new[]
+							Times = new List<Range<TimeSpan>>
 							{
 								new Range<TimeSpan>("08:00:00".To<TimeSpan>(), "16:30:00".To<TimeSpan>())
 							},
@@ -1588,12 +1589,12 @@ namespace StockSharp.BusinessEntities
 				Code = "TSE",
 				WorkingTime = new WorkingTime
 				{
-					Periods = new[]
+					Periods = new List<WorkingTimePeriod>
 					{
 						new WorkingTimePeriod
 						{
 							Till = DateTime.MaxValue,
-							Times = new[]
+							Times = new List<Range<TimeSpan>>
 							{
 								new Range<TimeSpan>("09:00:00".To<TimeSpan>(), "11:30:00".To<TimeSpan>()),
 								new Range<TimeSpan>("12:30:00".To<TimeSpan>(), "15:00:00".To<TimeSpan>())
@@ -1612,12 +1613,12 @@ namespace StockSharp.BusinessEntities
 				Code = "HKEX",
 				WorkingTime = new WorkingTime
 				{
-					Periods = new[]
+					Periods = new List<WorkingTimePeriod>
 					{
 						new WorkingTimePeriod
 						{
 							Till = DateTime.MaxValue,
-							Times = new[]
+							Times = new List<Range<TimeSpan>>
 							{
 								new Range<TimeSpan>("09:20:00".To<TimeSpan>(), "12:00:00".To<TimeSpan>()),
 								new Range<TimeSpan>("13:00:00".To<TimeSpan>(), "16:00:00".To<TimeSpan>())
@@ -1634,12 +1635,12 @@ namespace StockSharp.BusinessEntities
 				Code = "HKFE",
 				WorkingTime = new WorkingTime
 				{
-					Periods = new[]
+					Periods = new List<WorkingTimePeriod>
 					{
 						new WorkingTimePeriod
 						{
 							Till = DateTime.MaxValue,
-							Times = new[]
+							Times = new List<Range<TimeSpan>>
 							{
 								new Range<TimeSpan>("09:15:00".To<TimeSpan>(), "12:00:00".To<TimeSpan>()),
 								new Range<TimeSpan>("13:00:00".To<TimeSpan>(), "16:00:00".To<TimeSpan>())
@@ -1656,12 +1657,12 @@ namespace StockSharp.BusinessEntities
 				Code = "SSE",
 				WorkingTime = new WorkingTime
 				{
-					Periods = new[]
+					Periods = new List<WorkingTimePeriod>
 					{
 						new WorkingTimePeriod
 						{
 							Till = DateTime.MaxValue,
-							Times = new[]
+							Times = new List<Range<TimeSpan>>
 							{
 								new Range<TimeSpan>("09:30:00".To<TimeSpan>(), "11:30:00".To<TimeSpan>()),
 								new Range<TimeSpan>("13:00:00".To<TimeSpan>(), "15:00:00".To<TimeSpan>())
@@ -1678,12 +1679,12 @@ namespace StockSharp.BusinessEntities
 				Code = "SZSE",
 				WorkingTime = new WorkingTime
 				{
-					Periods = new[]
+					Periods = new List<WorkingTimePeriod>
 					{
 						new WorkingTimePeriod
 						{
 							Till = DateTime.MaxValue,
-							Times = new[]
+							Times = new List<Range<TimeSpan>>
 							{
 								new Range<TimeSpan>("09:30:00".To<TimeSpan>(), "11:30:00".To<TimeSpan>()),
 								new Range<TimeSpan>("13:00:00".To<TimeSpan>(), "15:00:00".To<TimeSpan>())
@@ -1700,12 +1701,12 @@ namespace StockSharp.BusinessEntities
 				Code = "TSEC",
 				WorkingTime = new WorkingTime
 				{
-					Periods = new[]
+					Periods = new List<WorkingTimePeriod>
 					{
 						new WorkingTimePeriod
 						{
 							Till = DateTime.MaxValue,
-							Times = new[]
+							Times = new List<Range<TimeSpan>>
 							{
 								new Range<TimeSpan>("09:00:00".To<TimeSpan>(), "13:30:00".To<TimeSpan>())
 							},
@@ -1723,12 +1724,12 @@ namespace StockSharp.BusinessEntities
 				Code = "SGX",
 				WorkingTime = new WorkingTime
 				{
-					Periods = new[]
+					Periods = new List<WorkingTimePeriod>
 					{
 						new WorkingTimePeriod
 						{
 							Till = DateTime.MaxValue,
-							Times = new[]
+							Times = new List<Range<TimeSpan>>
 							{
 								new Range<TimeSpan>("09:00:00".To<TimeSpan>(), "17:00:00".To<TimeSpan>())
 							},
@@ -1744,12 +1745,12 @@ namespace StockSharp.BusinessEntities
 				Code = "PSE",
 				WorkingTime = new WorkingTime
 				{
-					Periods = new[]
+					Periods = new List<WorkingTimePeriod>
 					{
 						new WorkingTimePeriod
 						{
 							Till = DateTime.MaxValue,
-							Times = new[]
+							Times = new List<Range<TimeSpan>>
 							{
 								new Range<TimeSpan>("09:30:00".To<TimeSpan>(), "12:00:00".To<TimeSpan>()),
 								new Range<TimeSpan>("13:30:00".To<TimeSpan>(), "15:30:00".To<TimeSpan>())
@@ -1766,12 +1767,12 @@ namespace StockSharp.BusinessEntities
 				Code = "KLSE",
 				WorkingTime = new WorkingTime
 				{
-					Periods = new[]
+					Periods = new List<WorkingTimePeriod>
 					{
 						new WorkingTimePeriod
 						{
 							Till = DateTime.MaxValue,
-							Times = new[]
+							Times = new List<Range<TimeSpan>>
 							{
 								new Range<TimeSpan>("09:00:00".To<TimeSpan>(), "12:30:00".To<TimeSpan>()),
 								new Range<TimeSpan>("14:00:00".To<TimeSpan>(), "17:00:00".To<TimeSpan>())
@@ -1790,12 +1791,12 @@ namespace StockSharp.BusinessEntities
 				Code = "IDX",
 				WorkingTime = new WorkingTime
 				{
-					Periods = new[]
+					Periods = new List<WorkingTimePeriod>
 					{
 						new WorkingTimePeriod
 						{
 							Till = DateTime.MaxValue,
-							Times = new[]
+							Times = new List<Range<TimeSpan>>
 							{
 								new Range<TimeSpan>("09:30:00".To<TimeSpan>(), "16:00:00".To<TimeSpan>())
 							},
@@ -1811,12 +1812,12 @@ namespace StockSharp.BusinessEntities
 				Code = "SET",
 				WorkingTime = new WorkingTime
 				{
-					Periods = new[]
+					Periods = new List<WorkingTimePeriod>
 					{
 						new WorkingTimePeriod
 						{
 							Till = DateTime.MaxValue,
-							Times = new[]
+							Times = new List<Range<TimeSpan>>
 							{
 								new Range<TimeSpan>("10:00:00".To<TimeSpan>(), "12:30:00".To<TimeSpan>()),
 								new Range<TimeSpan>("14:30:00".To<TimeSpan>(), "16:30:00".To<TimeSpan>())
@@ -1835,12 +1836,12 @@ namespace StockSharp.BusinessEntities
 				Code = "BSE",
 				WorkingTime = new WorkingTime
 				{
-					Periods = new[]
+					Periods = new List<WorkingTimePeriod>
 					{
 						new WorkingTimePeriod
 						{
 							Till = DateTime.MaxValue,
-							Times = new[]
+							Times = new List<Range<TimeSpan>>
 							{
 								new Range<TimeSpan>("09:15:00".To<TimeSpan>(), "15:30:00".To<TimeSpan>())
 							},
@@ -1856,12 +1857,12 @@ namespace StockSharp.BusinessEntities
 				Code = "NSE",
 				WorkingTime = new WorkingTime
 				{
-					Periods = new[]
+					Periods = new List<WorkingTimePeriod>
 					{
 						new WorkingTimePeriod
 						{
 							Till = DateTime.MaxValue,
-							Times = new[]
+							Times = new List<Range<TimeSpan>>
 							{
 								new Range<TimeSpan>("09:15:00".To<TimeSpan>(), "15:30:00".To<TimeSpan>())
 							},
@@ -1877,12 +1878,12 @@ namespace StockSharp.BusinessEntities
 				Code = "CSE",
 				WorkingTime = new WorkingTime
 				{
-					Periods = new[]
+					Periods = new List<WorkingTimePeriod>
 					{
 						new WorkingTimePeriod
 						{
 							Till = DateTime.MaxValue,
-							Times = new[]
+							Times = new List<Range<TimeSpan>>
 							{
 								new Range<TimeSpan>("09:30:00".To<TimeSpan>(), "14:30:00".To<TimeSpan>())
 							},
@@ -1898,12 +1899,12 @@ namespace StockSharp.BusinessEntities
 				Code = "KRX",
 				WorkingTime = new WorkingTime
 				{
-					Periods = new[]
+					Periods = new List<WorkingTimePeriod>
 					{
 						new WorkingTimePeriod
 						{
 							Till = DateTime.MaxValue,
-							Times = new[]
+							Times = new List<Range<TimeSpan>>
 							{
 								new Range<TimeSpan>("09:00:00".To<TimeSpan>(), "15:00:00".To<TimeSpan>())
 							},
@@ -1919,12 +1920,12 @@ namespace StockSharp.BusinessEntities
 				Code = "ASX",
 				WorkingTime = new WorkingTime
 				{
-					Periods = new[]
+					Periods = new List<WorkingTimePeriod>
 					{
 						new WorkingTimePeriod
 						{
 							Till = DateTime.MaxValue,
-							Times = new[]
+							Times = new List<Range<TimeSpan>>
 							{
 								new Range<TimeSpan>("09:50:00".To<TimeSpan>(), "16:12:00".To<TimeSpan>())
 							},
@@ -1940,12 +1941,12 @@ namespace StockSharp.BusinessEntities
 				Code = "NZX",
 				WorkingTime = new WorkingTime
 				{
-					Periods = new[]
+					Periods = new List<WorkingTimePeriod>
 					{
 						new WorkingTimePeriod
 						{
 							Till = DateTime.MaxValue,
-							Times = new[]
+							Times = new List<Range<TimeSpan>>
 							{
 								new Range<TimeSpan>("10:00:00".To<TimeSpan>(), "17:00:00".To<TimeSpan>())
 							},
@@ -1961,12 +1962,12 @@ namespace StockSharp.BusinessEntities
 				Code = "TASE",
 				WorkingTime = new WorkingTime
 				{
-					Periods = new[]
+					Periods = new List<WorkingTimePeriod>
 					{
 						new WorkingTimePeriod
 						{
 							Till = DateTime.MaxValue,
-							Times = new[]
+							Times = new List<Range<TimeSpan>>
 							{
 								new Range<TimeSpan>("09:00:00".To<TimeSpan>(), "16:25:00".To<TimeSpan>())
 							},
@@ -1982,12 +1983,12 @@ namespace StockSharp.BusinessEntities
 				Code = "FWB",
 				WorkingTime = new WorkingTime
 				{
-					Periods = new[]
+					Periods = new List<WorkingTimePeriod>
 					{
 						new WorkingTimePeriod
 						{
 							Till = DateTime.MaxValue,
-							Times = new[]
+							Times = new List<Range<TimeSpan>>
 							{
 								new Range<TimeSpan>("08:00:00".To<TimeSpan>(), "22:00:00".To<TimeSpan>())
 							},
@@ -2003,12 +2004,12 @@ namespace StockSharp.BusinessEntities
 				Code = "MSE",
 				WorkingTime = new WorkingTime
 				{
-					Periods = new[]
+					Periods = new List<WorkingTimePeriod>
 					{
 						new WorkingTimePeriod
 						{
 							Till = DateTime.MaxValue,
-							Times = new[]
+							Times = new List<Range<TimeSpan>>
 							{
 								new Range<TimeSpan>("9:00:00".To<TimeSpan>(), "17:30:00".To<TimeSpan>())
 							},
@@ -2024,12 +2025,12 @@ namespace StockSharp.BusinessEntities
 				Code = "SWX",
 				WorkingTime = new WorkingTime
 				{
-					Periods = new[]
+					Periods = new List<WorkingTimePeriod>
 					{
 						new WorkingTimePeriod
 						{
 							Till = DateTime.MaxValue,
-							Times = new[]
+							Times = new List<Range<TimeSpan>>
 							{
 								new Range<TimeSpan>("9:00:00".To<TimeSpan>(), "17:30:00".To<TimeSpan>())
 							},
@@ -2045,12 +2046,12 @@ namespace StockSharp.BusinessEntities
 				Code = "JSE",
 				WorkingTime = new WorkingTime
 				{
-					Periods = new[]
+					Periods = new List<WorkingTimePeriod>
 					{
 						new WorkingTimePeriod
 						{
 							Till = DateTime.MaxValue,
-							Times = new[]
+							Times = new List<Range<TimeSpan>>
 							{
 								new Range<TimeSpan>("9:00:00".To<TimeSpan>(), "17:00:00".To<TimeSpan>())
 							},
@@ -2066,12 +2067,12 @@ namespace StockSharp.BusinessEntities
 				Code = "LMAX",
 				WorkingTime = new WorkingTime
 				{
-					Periods = new[]
+					Periods = new List<WorkingTimePeriod>
 					{
 						new WorkingTimePeriod
 						{
 							Till = DateTime.MaxValue,
-							Times = new[]
+							Times = new List<Range<TimeSpan>>
 							{
 								new Range<TimeSpan>("9:00:00".To<TimeSpan>(), "17:00:00".To<TimeSpan>())
 							},

@@ -499,7 +499,7 @@ namespace StockSharp.Algo
 
 			var period = workingTime.GetPeriod(exchangeTime);
 
-			if ((period == null || period.Times.Length == 0) && workingTime.SpecialWorkingDays.Length == 0 && workingTime.SpecialHolidays.Length == 0)
+			if ((period == null || period.Times.Count == 0) && workingTime.SpecialWorkingDays.Count == 0 && workingTime.SpecialHolidays.Count == 0)
 				return true;
 
 			bool isWorkingDay;

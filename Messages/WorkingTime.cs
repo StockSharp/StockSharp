@@ -41,9 +41,9 @@ namespace StockSharp.Messages
 		/// </summary>
 		public WorkingTime()
 		{
-		}
+        }
 
-		private WorkingTimePeriod[] _periods = ArrayHelper.Empty<WorkingTimePeriod>();
+		private List<WorkingTimePeriod> _periods = new List<WorkingTimePeriod>();
 
 		/// <summary>
 		/// Schedule validity periods.
@@ -52,7 +52,7 @@ namespace StockSharp.Messages
 		[CategoryLoc(LocalizedStrings.GeneralKey)]
 		[DisplayNameLoc(LocalizedStrings.Str409Key)]
 		[DescriptionLoc(LocalizedStrings.Str410Key)]
-		public WorkingTimePeriod[] Periods
+		public List<WorkingTimePeriod> Periods
 		{
 			get { return _periods; }
 			set
@@ -64,7 +64,7 @@ namespace StockSharp.Messages
 			}
 		}
 
-		private DateTime[] _specialWorkingDays = ArrayHelper.Empty<DateTime>();
+		private List<DateTime> _specialWorkingDays = new List<DateTime>();
 
 		/// <summary>
 		/// Working days, falling on Saturday and Sunday.
@@ -73,13 +73,13 @@ namespace StockSharp.Messages
 		[CategoryLoc(LocalizedStrings.GeneralKey)]
 		[DisplayNameLoc(LocalizedStrings.Str411Key)]
 		[DescriptionLoc(LocalizedStrings.Str412Key)]
-		public DateTime[] SpecialWorkingDays
+		public List<DateTime> SpecialWorkingDays
 		{
 			get { return _specialWorkingDays; }
 			set { _specialWorkingDays = CheckDates(value); }
 		}
 
-		private DateTime[] _specialHolidays = ArrayHelper.Empty<DateTime>();
+		private List<DateTime> _specialHolidays = new List<DateTime>();
 
 		/// <summary>
 		/// Holidays that fall on workdays.
@@ -88,7 +88,7 @@ namespace StockSharp.Messages
 		[CategoryLoc(LocalizedStrings.GeneralKey)]
 		[DisplayNameLoc(LocalizedStrings.Str413Key)]
 		[DescriptionLoc(LocalizedStrings.Str414Key)]
-		public DateTime[] SpecialHolidays
+		public List<DateTime> SpecialHolidays
 		{
 			get { return _specialHolidays; }
 			set { _specialHolidays = CheckDates(value); }
@@ -96,7 +96,7 @@ namespace StockSharp.Messages
 
 		private bool _checkDates = true;
 
-		private DateTime[] CheckDates(DateTime[] dates)
+		private List<DateTime> CheckDates(List<DateTime> dates)
 		{
 			if (!_checkDates)
 				return dates;
@@ -121,9 +121,9 @@ namespace StockSharp.Messages
 			var clone = new WorkingTime
 			{
 				_checkDates = false,
-				Periods = Periods.Select(t => t.Clone()).ToArray(),
-				SpecialWorkingDays = SpecialWorkingDays.ToArray(),
-				SpecialHolidays = SpecialHolidays.ToArray()
+				Periods = Periods.Select(t => t.Clone()).ToList(),
+				SpecialWorkingDays = SpecialWorkingDays.ToList(),
+				SpecialHolidays = SpecialHolidays.ToList()
 			};
 
 			clone._checkDates = true;
@@ -137,9 +137,9 @@ namespace StockSharp.Messages
 		/// <param name="storage">Settings storage.</param>
 		public void Load(SettingsStorage storage)
 		{
-			Periods = storage.GetValue<IEnumerable<SettingsStorage>>(nameof(Periods)).Select(s => s.Load<WorkingTimePeriod>()).ToArray();
-			SpecialWorkingDays = storage.GetValue<DateTime[]>(nameof(SpecialWorkingDays));
-			SpecialHolidays = storage.GetValue<DateTime[]>(nameof(SpecialHolidays));
+			Periods = storage.GetValue<IEnumerable<SettingsStorage>>(nameof(Periods)).Select(s => s.Load<WorkingTimePeriod>()).ToList();
+			SpecialWorkingDays = storage.GetValue<List<DateTime>>(nameof(SpecialWorkingDays));
+			SpecialHolidays = storage.GetValue<List<DateTime>>(nameof(SpecialHolidays));
 		}
 
 		/// <summary>
