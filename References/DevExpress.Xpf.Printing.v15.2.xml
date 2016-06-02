@@ -98,7 +98,7 @@
 
 
         </member>
-        <member name="P:DevExpress.Xpf.Printing.Parameters.ParameterTemplateSelector.GuidTempate">
+        <member name="P:DevExpress.Xpf.Printing.Parameters.ParameterTemplateSelector.GuidTemplate">
             <summary>
                 <para> </para>
             </summary>
@@ -184,65 +184,57 @@
 
 
         </member>
-        <member name="T:DevExpress.Xpf.Printing.IExportSendService">
+        <member name="T:DevExpress.Xpf.Printing.DocumentPreviewMouseEventArgs">
 
             <summary>
-                <para>When implemented by a class, enables it to export documents and attach them to emails.
+                <para>Provides data for the <see cref="E:DevExpress.Xpf.Printing.DocumentPreviewControl.DocumentPreviewMouseClick"/>, <see cref="E:DevExpress.Xpf.Printing.DocumentPreviewControl.DocumentPreviewMouseDoubleClick"/> and <see cref="E:DevExpress.Xpf.Printing.DocumentPreviewControl.DocumentPreviewMouseMove"/> events.
 </para>
             </summary>
 
         </member>
-        <member name="M:DevExpress.Xpf.Printing.IExportSendService.Export(DevExpress.XtraPrinting.PrintingSystemBase,System.Windows.Window,DevExpress.XtraPrinting.ExportOptionsBase,DevExpress.Xpf.Printing.IDialogService)">
+        <member name="M:DevExpress.Xpf.Printing.DocumentPreviewMouseEventArgs.#ctor(System.Int32,DevExpress.XtraPrinting.Brick)">
             <summary>
-                <para>Exports the document in the specified format.
-
+                <para>Initializes a new instance of the DocumentPreviewMouseEventArgs class with the specified settings.
 </para>
             </summary>
-            <param name="ps">
-		A <see cref="T:DevExpress.XtraPrinting.PrintingSystemBase"/> descendant.
+            <param name="pageIndex">
+		A zero-based index of the document page. This value is assigned to the <see cref="P:DevExpress.Xpf.Printing.DocumentPreviewMouseEventArgs.PageIndex"/> property.
 
             </param>
-            <param name="ownerWindow">
-		A <see cref="T:System.Windows.Window"/> object.
-
-            </param>
-            <param name="options">
-		An <see cref="T:DevExpress.XtraPrinting.ExportOptionsBase"/> descendant.
-
-            </param>
-            <param name="dialogService">
-		An object implementing the <see cref="T:DevExpress.Xpf.Printing.IDialogService"/> interface.
+            <param name="brick">
+		A brick representing the document content on the preview page. This value is assigned to the <see cref="P:DevExpress.Xpf.Printing.DocumentPreviewMouseEventArgs.Brick"/> property.
 
             </param>
 
 
         </member>
-        <member name="M:DevExpress.Xpf.Printing.IExportSendService.SendFileByEmail(DevExpress.XtraPrinting.PrintingSystemBase,DevExpress.XtraPrinting.Export.EmailSenderBase,System.Windows.Window,DevExpress.XtraPrinting.ExportOptionsBase,DevExpress.Xpf.Printing.IDialogService)">
+        <member name="P:DevExpress.Xpf.Printing.DocumentPreviewMouseEventArgs.Brick">
             <summary>
-                <para>Exports the document in the specified format and attaches it to an e-mail.
-
+                <para>Gets a brick for which the corresponding event has been raised.
 </para>
             </summary>
-            <param name="ps">
-		A <see cref="T:DevExpress.XtraPrinting.PrintingSystemBase"/> descendant.
+            <value>A brick representing the document content in the preview.
+</value>
 
-            </param>
-            <param name="emailSender">
-		A <see cref="T:DevExpress.XtraPrinting.Export.EmailSenderBase"/> descendant.
 
-            </param>
-            <param name="ownerWindow">
-		A <see cref="T:System.Windows.Window"/> object.
+        </member>
+        <member name="P:DevExpress.Xpf.Printing.DocumentPreviewMouseEventArgs.ElementTag">
+            <summary>
+                <para>Gets the <b>Tag</b> property value of the document element for which the corresponding event has been raised.
+</para>
+            </summary>
+            <value>An object that specifies the tag of the document element.
+</value>
 
-            </param>
-            <param name="options">
-		An <see cref="T:DevExpress.XtraPrinting.ExportOptionsBase"/> descendant.
 
-            </param>
-            <param name="dialogService">
-		An object implementing the <see cref="T:DevExpress.Xpf.Printing.IDialogService"/> interface.
-
-            </param>
+        </member>
+        <member name="P:DevExpress.Xpf.Printing.DocumentPreviewMouseEventArgs.PageIndex">
+            <summary>
+                <para>Gets the index of the document page for which the corresponding event has been raised.
+</para>
+            </summary>
+            <value>A zero-based index of the document page.
+</value>
 
 
         </member>
@@ -349,38 +341,6 @@
 </para>
             </summary>
             <value>A <see cref="T:System.Exception"/> object.
-</value>
-
-
-        </member>
-        <member name="T:DevExpress.Xpf.Printing.FaultEventArgs">
-
-            <summary>
-                <para>Provides data for the <see cref="E:DevExpress.Xpf.Printing.ReportServicePreviewModel.CreateDocumentError"/>, <see cref="E:DevExpress.Xpf.Printing.ReportServicePreviewModel.ExportError"/> and <see cref="E:DevExpress.Xpf.Printing.ReportServicePreviewModel.PrintError"/> events.
-</para>
-            </summary>
-
-        </member>
-        <member name="M:DevExpress.Xpf.Printing.FaultEventArgs.#ctor(System.Exception)">
-            <summary>
-                <para>Initializes a new instance of the FaultEventArgs class with the specified exception.
-</para>
-            </summary>
-            <param name="fault">
-		A <see cref="T:System.Exception"/> object. This value is assigned to the <see cref="P:DevExpress.Xpf.Printing.SimpleFaultEventArgs.Fault"/> property.
-
-
-            </param>
-
-
-        </member>
-        <member name="P:DevExpress.Xpf.Printing.FaultEventArgs.Handled">
-            <summary>
-                <para>Specifies whether or not the corresponding event was handled.
-
-</para>
-            </summary>
-            <value><b>true</b> if the exception is handled; otherwise, <b>false</b>.
 </value>
 
 
@@ -545,6 +505,63 @@
 </para>
             </summary>
             <value>A <see cref="T:DevExpress.Xpf.Ribbon.RibbonStatusBarControl"/> object.
+</value>
+
+
+        </member>
+        <member name="T:DevExpress.Xpf.Printing.CompositeLink">
+
+            <summary>
+                <para>A composite link that can be used to combine several Printing Links together into a composite document.
+</para>
+            </summary>
+
+        </member>
+        <member name="M:DevExpress.Xpf.Printing.CompositeLink.#ctor(System.Collections.Generic.IEnumerable`1)">
+            <summary>
+                <para>Initializes a new instance of the CompositeLink class with the specified collection of printing links to compose.
+</para>
+            </summary>
+            <param name="links">
+		A collection of <see cref="T:DevExpress.Xpf.Printing.TemplatedLink"/> objects specifying printing links to compose.
+
+            </param>
+
+
+        </member>
+        <member name="M:DevExpress.Xpf.Printing.CompositeLink.#ctor(System.Collections.Generic.IEnumerable`1,System.String)">
+            <summary>
+                <para>Initializes a new object of the CompositeLink type with the specified settings.
+</para>
+            </summary>
+            <param name="links">
+		A collection of <see cref="T:DevExpress.Xpf.Printing.TemplatedLink"/> objects specifying printing links to compose.
+
+            </param>
+            <param name="documentName">
+		A <see cref="T:System.String"/> value, specifying the document name.
+
+            </param>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.Printing.CompositeLink.Links">
+            <summary>
+                <para>Gets a collection of links belonging to the CompositeLink object.
+</para>
+            </summary>
+            <value>A collection of printing links.
+</value>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.Printing.CompositeLink.PageBreaks">
+            <summary>
+                <para>Provides access to a collection of page breaks to be inserted into the resulting document.
+</para>
+            </summary>
+            <value>A collection of page breaks to be inserted into the resulting document.
+
 </value>
 
 
@@ -763,69 +780,65 @@
 
 
         </member>
-        <member name="T:DevExpress.Xpf.Printing.PageBreakInfo">
+        <member name="T:DevExpress.Xpf.Printing.IExportSendService">
 
             <summary>
-                <para>Contains information about a page break.
+                <para>When implemented by a class, enables it to export documents and attach them to emails.
 </para>
             </summary>
 
         </member>
-        <member name="M:DevExpress.Xpf.Printing.PageBreakInfo.#ctor(DevExpress.Xpf.Printing.TemplatedLink)">
+        <member name="M:DevExpress.Xpf.Printing.IExportSendService.Export(DevExpress.XtraPrinting.PrintingSystemBase,System.Windows.Window,DevExpress.XtraPrinting.ExportOptionsBase,DevExpress.Xpf.Printing.IDialogService)">
             <summary>
-                <para>Initializes a new instance of the PageBreakInfo class with the specified link.
+                <para>Exports the document in the specified format.
+
 </para>
             </summary>
-            <param name="link">
-		A <see cref="T:DevExpress.Xpf.Printing.TemplatedLink"/> descendant.
+            <param name="ps">
+		A <see cref="T:DevExpress.XtraPrinting.PrintingSystemBase"/> descendant.
+
+            </param>
+            <param name="ownerWindow">
+		A <see cref="T:System.Windows.Window"/> object.
+
+            </param>
+            <param name="options">
+		An <see cref="T:DevExpress.XtraPrinting.ExportOptionsBase"/> descendant.
+
+            </param>
+            <param name="dialogService">
+		An object implementing the <see cref="T:DevExpress.Xpf.Printing.IDialogService"/> interface.
 
             </param>
 
 
         </member>
-        <member name="P:DevExpress.Xpf.Printing.PageBreakInfo.Link">
+        <member name="M:DevExpress.Xpf.Printing.IExportSendService.SendFileByEmail(DevExpress.XtraPrinting.PrintingSystemBase,DevExpress.XtraPrinting.Export.EmailSenderBase,System.Windows.Window,DevExpress.XtraPrinting.ExportOptionsBase,DevExpress.Xpf.Printing.IDialogService)">
             <summary>
-                <para>Provides access to the associated printing link.
+                <para>Exports the document in the specified format and attaches it to an e-mail.
+
 </para>
             </summary>
-            <value>A <see cref="T:DevExpress.Xpf.Printing.TemplatedLink"/> object.
-</value>
+            <param name="ps">
+		A <see cref="T:DevExpress.XtraPrinting.PrintingSystemBase"/> descendant.
 
+            </param>
+            <param name="emailSender">
+		A <see cref="T:DevExpress.XtraPrinting.Export.EmailSenderBase"/> descendant.
 
-        </member>
-        <member name="P:DevExpress.Xpf.Printing.PageBreakInfo.PageBreakAfter">
-            <summary>
-                <para>Specifies whether or not a new page starts immediately after the page break.
-</para>
-            </summary>
-            <value><b>true</b> to start a new page after the page break; otherwise <b>false</b>.
-</value>
+            </param>
+            <param name="ownerWindow">
+		A <see cref="T:System.Windows.Window"/> object.
 
+            </param>
+            <param name="options">
+		An <see cref="T:DevExpress.XtraPrinting.ExportOptionsBase"/> descendant.
 
-        </member>
-        <member name="P:DevExpress.Xpf.Printing.PageBreakInfo.PageBreakBefore">
-            <summary>
-                <para>Specifies whether or not a new page starts immediately before the page break.
-</para>
-            </summary>
-            <value><b>true</b> to start a new page before the page break; otherwise <b>false</b>.
-</value>
+            </param>
+            <param name="dialogService">
+		An object implementing the <see cref="T:DevExpress.Xpf.Printing.IDialogService"/> interface.
 
-
-        </member>
-        <member name="T:DevExpress.Xpf.Printing.PageBreakInfoCollection">
-
-            <summary>
-                <para>A collection of <see cref="T:DevExpress.Xpf.Printing.PageBreakInfo"/> objects.
-</para>
-            </summary>
-
-        </member>
-        <member name="M:DevExpress.Xpf.Printing.PageBreakInfoCollection.#ctor">
-            <summary>
-                <para>Initializes a new instance of the PageBreakInfoCollection class with default settings.
-</para>
-            </summary>
+            </param>
 
 
         </member>
@@ -1003,7 +1016,7 @@
                 <para>Provides access to a collection of <see cref="T:DevExpress.Xpf.Printing.Parameters.Models.ParameterModel"/> objects associated with the IDocumentPreviewModel class.
 </para>
             </summary>
-            <value>A <see cref="T:DevExpress.Xpf.Printing.Parameters.Models.ParametersModel"/> value.
+            <value>A <see cref="T:DevExpress.Xpf.Printing.Parameters.Models.ParametersModel"/> object.
 </value>
 
 
@@ -1217,84 +1230,6 @@
 
 
         </member>
-        <member name="T:DevExpress.Xpf.Printing.DocumentPreviewMouseEventArgs">
-
-            <summary>
-                <para>Provides data for the <see cref="E:DevExpress.Xpf.Printing.DocumentPreviewControl.DocumentPreviewMouseClick"/>, <see cref="E:DevExpress.Xpf.Printing.DocumentPreviewControl.DocumentPreviewMouseDoubleClick"/> and <see cref="E:DevExpress.Xpf.Printing.DocumentPreviewControl.DocumentPreviewMouseMove"/> events.
-</para>
-            </summary>
-
-        </member>
-        <member name="M:DevExpress.Xpf.Printing.DocumentPreviewMouseEventArgs.#ctor(System.Int32,DevExpress.XtraPrinting.Brick)">
-            <summary>
-                <para>Initializes a new instance of the DocumentPreviewMouseEventArgs class with the specified settings.
-</para>
-            </summary>
-            <param name="pageIndex">
-		A zero-based index of the current document page. This value is assigned to the <see cref="P:DevExpress.Xpf.Printing.DocumentPreviewMouseEventArgs.Brick"/> property.
-
-            </param>
-            <param name="brick">
-		A brick representing the document content on the preview page. This value is assigned to the <see cref="P:DevExpress.Xpf.Printing.DocumentPreviewMouseEventArgs.Brick"/> property.
-
-            </param>
-
-
-        </member>
-        <member name="P:DevExpress.Xpf.Printing.DocumentPreviewMouseEventArgs.Brick">
-            <summary>
-                <para>Gets a brick for which the corresponding even has been raised.
-</para>
-            </summary>
-            <value>An object representing the document content in the preview.
-</value>
-
-
-        </member>
-        <member name="P:DevExpress.Xpf.Printing.DocumentPreviewMouseEventArgs.ElementTag">
-            <summary>
-                <para>Gets the <b>Tag</b> property value of the document element for which the corresponding event has been raised.
-</para>
-            </summary>
-            <value>An object that specifies the tag of the document element.
-</value>
-
-
-        </member>
-        <member name="P:DevExpress.Xpf.Printing.DocumentPreviewMouseEventArgs.PageIndex">
-            <summary>
-                <para>Gets the index of the current document page when the corresponding event has been raised.
-</para>
-            </summary>
-            <value>A zero-based index of the current document page.
-</value>
-
-
-        </member>
-        <member name="T:DevExpress.Xpf.Printing.CursorModeType">
-
-            <summary>
-                <para>Enumerates values that specify the cursor mode in the document preview.
-</para>
-            </summary>
-
-        </member>
-        <member name="F:DevExpress.Xpf.Printing.CursorModeType.HandTool">
-            <summary>
-                <para>The cursor mode is the hand tool used to scroll the current document's pages.
-</para>
-            </summary>
-
-
-        </member>
-        <member name="F:DevExpress.Xpf.Printing.CursorModeType.SelectTool">
-            <summary>
-                <para>The cursor mode is the select tool used to select text in the current document.
-</para>
-            </summary>
-
-
-        </member>
         <member name="T:DevExpress.Xpf.Printing.XtraReportPreviewModel">
 
             <summary>
@@ -1359,7 +1294,7 @@
                 <para>Provides access to a collection of <see cref="T:DevExpress.Xpf.Printing.Parameters.Models.ParameterModel"/> objects associated with the XtraReportPreviewModel class.
 </para>
             </summary>
-            <value>A <see cref="T:DevExpress.Xpf.Printing.Parameters.Models.ParametersModel"/> value.
+            <value>A <see cref="T:DevExpress.Xpf.Printing.Parameters.Models.ParametersModel"/> object.
 </value>
 
 
@@ -1415,42 +1350,6 @@
 </para>
             </summary>
             <returns> </returns>
-
-
-        </member>
-        <member name="T:DevExpress.Xpf.Printing.Parameters.ParametersExtensions">
-
-            <summary>
-                <para>For internal use.
-</para>
-            </summary>
-
-        </member>
-        <member name="M:DevExpress.Xpf.Printing.Parameters.ParametersExtensions.GetReportParameterStub(DevExpress.Xpf.Printing.Parameters.Models.ParameterModel)">
-            <summary>
-                <para>For internal use. 
-</para>
-            </summary>
-            <param name="model">
-		A <see cref="T:DevExpress.Xpf.Printing.Parameters.Models.ParameterModel"/> value.
-
-            </param>
-            <returns>A <see cref="T:DevExpress.DocumentServices.ServiceModel.DataContracts.ReportParameter"/> value.
-</returns>
-
-
-        </member>
-        <member name="M:DevExpress.Xpf.Printing.Parameters.ParametersExtensions.GetReportParameterStubs(DevExpress.Xpf.Printing.Parameters.Models.ParametersModel)">
-            <summary>
-                <para>For internal use. 
-</para>
-            </summary>
-            <param name="model">
-		A <see cref="T:DevExpress.Xpf.Printing.Parameters.Models.ParametersModel"/> value.
-
-            </param>
-            <returns>An array of <see cref="T:DevExpress.DocumentServices.ServiceModel.DataContracts.ReportParameter"/> values.
-</returns>
 
 
         </member>
@@ -1594,37 +1493,53 @@
 
 
         </member>
-        <member name="T:DevExpress.Xpf.Printing.Parameters.ParameterValueProvider">
+        <member name="T:DevExpress.Xpf.Printing.PageBreakInfo">
 
             <summary>
-                <para>For internal use.
+                <para>Contains information about a page break.
 </para>
             </summary>
 
         </member>
-        <member name="M:DevExpress.Xpf.Printing.Parameters.ParameterValueProvider.#ctor(System.Collections.Generic.IEnumerable`1)">
+        <member name="M:DevExpress.Xpf.Printing.PageBreakInfo.#ctor(DevExpress.Xpf.Printing.TemplatedLink)">
             <summary>
-                <para>Initializes a new instance of the ParameterValueProvider class with the specified parameter models.
+                <para>Initializes a new instance of the PageBreakInfo class with the specified link.
 </para>
             </summary>
-            <param name="parameterModels">
-		A collection of <see cref="T:DevExpress.Xpf.Printing.Parameters.Models.ParameterModel"/> values.
+            <param name="link">
+		A <see cref="T:DevExpress.Xpf.Printing.TemplatedLink"/> descendant.
 
             </param>
 
 
         </member>
-        <member name="M:DevExpress.Xpf.Printing.Parameters.ParameterValueProvider.GetValue(DevExpress.Data.IParameter)">
+        <member name="P:DevExpress.Xpf.Printing.PageBreakInfo.Link">
             <summary>
-                <para>Returns the value of a specified parameter.
+                <para>Provides access to the associated printing link.
 </para>
             </summary>
-            <param name="parameterIdentity">
-		An object implementing the <see cref="T:DevExpress.Data.IParameter"/> interface.
+            <value>A <see cref="T:DevExpress.Xpf.Printing.TemplatedLink"/> object.
+</value>
 
-            </param>
-            <returns>A <see cref="T:System.Object"/>, specifying the parameter value.
-</returns>
+
+        </member>
+        <member name="P:DevExpress.Xpf.Printing.PageBreakInfo.PageBreakAfter">
+            <summary>
+                <para>Specifies whether or not a new page starts immediately after the page break.
+</para>
+            </summary>
+            <value><b>true</b> to start a new page after the page break; otherwise <b>false</b>.
+</value>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.Printing.PageBreakInfo.PageBreakBefore">
+            <summary>
+                <para>Specifies whether or not a new page starts immediately before the page break.
+</para>
+            </summary>
+            <value><b>true</b> to start a new page before the page break; otherwise <b>false</b>.
+</value>
 
 
         </member>
@@ -6651,6 +6566,7 @@
         <member name="P:DevExpress.Xpf.Printing.DocumentPreviewControl.ActualDocumentMapSettings">
             <summary>
                 <para>Provides access to actual settings of the document map, which reflects the document structure in a tree-like form. 
+
 </para>
             </summary>
             <value>An object that specifies document map settings.
@@ -6775,8 +6691,7 @@
         </member>
         <member name="P:DevExpress.Xpf.Printing.DocumentPreviewControl.DialogServiceTemplate">
             <summary>
-                <para>Specifies a data template which provides a service to display dialog windows in the document preview. This is a dependency property. 
-</para>
+                <para> </para>
             </summary>
             <value>A <see cref="T:System.Windows.DataTemplate"/> object.
 </value>
@@ -6943,8 +6858,7 @@
         </member>
         <member name="P:DevExpress.Xpf.Printing.DocumentPreviewControl.MessageBoxServiceTemplate">
             <summary>
-                <para>Specifies a data template which provides a service to display messages in the document preview. This is a dependency property. 
-</para>
+                <para> </para>
             </summary>
             <value>A <see cref="T:System.Windows.DataTemplate"/> object.
 </value>
@@ -7040,6 +6954,14 @@
 
 
         </member>
+        <member name="P:DevExpress.Xpf.Printing.DocumentPreviewControl.PropertyProvider">
+            <summary>
+                <para> </para>
+            </summary>
+            <value> </value>
+
+
+        </member>
         <member name="P:DevExpress.Xpf.Printing.DocumentPreviewControl.RequestDocumentCreation">
             <summary>
                 <para>Specifies whether to create a document automatically, or on a user request. This is a dependency property. 
@@ -7072,10 +6994,10 @@
         </member>
         <member name="P:DevExpress.Xpf.Printing.DocumentPreviewControl.SaveFileDialogTemplate">
             <summary>
-                <para>Specifies a data template used to display the <b>Save As</b> dialog. This is a dependency property.
+                <para>Gets or sets a data template used to display the <b>Save As</b> dialog. This is a dependency property.
 </para>
             </summary>
-            <value>A <see cref="DataTemplate"/> object.
+            <value>A <see cref="DataTemplate"/> object that defines the visual representation of the save dialog.
 </value>
 
 
@@ -7217,62 +7139,6 @@
 </para>
             </summary>
             <value>An object implementing the <see cref="T:System.Windows.Input.ICommand"/> interface that defines the command.
-</value>
-
-
-        </member>
-        <member name="T:DevExpress.Xpf.Printing.CompositeLink">
-
-            <summary>
-                <para>A composite link that can be used to combine several Printing Links together into a composite document.
-</para>
-            </summary>
-
-        </member>
-        <member name="M:DevExpress.Xpf.Printing.CompositeLink.#ctor(System.Collections.Generic.IEnumerable`1)">
-            <summary>
-                <para>Initializes a new instance of the CompositeLink class with the specified collection of printing links to compose.
-</para>
-            </summary>
-            <param name="links">
-		A collection of <see cref="T:DevExpress.Xpf.Printing.TemplatedLink"/> objects specifying printing links to compose.
-
-            </param>
-
-
-        </member>
-        <member name="M:DevExpress.Xpf.Printing.CompositeLink.#ctor(System.Collections.Generic.IEnumerable`1,System.String)">
-            <summary>
-                <para>Initializes a new object of the CompositeLink type with the specified settings.
-</para>
-            </summary>
-            <param name="links">
-		A collection of <see cref="T:DevExpress.Xpf.Printing.TemplatedLink"/> objects specifying printing links to compose.
-
-            </param>
-            <param name="documentName">
-		A <see cref="T:System.String"/> value, specifying the document name.
-
-            </param>
-
-
-        </member>
-        <member name="P:DevExpress.Xpf.Printing.CompositeLink.Links">
-            <summary>
-                <para>Gets a collection of links of a CompositeLink object.
-</para>
-            </summary>
-            <value>A collection of printing links.
-</value>
-
-
-        </member>
-        <member name="P:DevExpress.Xpf.Printing.CompositeLink.PageBreaks">
-            <summary>
-                <para>Provides access to a collection of page breaks to be inserted into the resulting document.
-</para>
-            </summary>
-            <value>A collection of page breaks to insert into the resulting document.
 </value>
 
 
@@ -7476,6 +7342,40 @@
 
 
         </member>
+        <member name="T:DevExpress.Xpf.Printing.Parameters.ParameterValueProvider">
+
+            <summary>
+                <para>For internal use.
+</para>
+            </summary>
+
+        </member>
+        <member name="M:DevExpress.Xpf.Printing.Parameters.ParameterValueProvider.#ctor(System.Collections.Generic.IEnumerable`1)">
+            <summary>
+                <para>Initializes a new instance of the ParameterValueProvider class with the specified parameter models.
+</para>
+            </summary>
+            <param name="parameterModels">
+		A collection of <see cref="T:DevExpress.Xpf.Printing.Parameters.Models.ParameterModel"/> values.
+
+            </param>
+
+
+        </member>
+        <member name="M:DevExpress.Xpf.Printing.Parameters.ParameterValueProvider.GetValue(DevExpress.Data.IParameter)">
+            <summary>
+                <para>Returns the value of a specified parameter.
+</para>
+            </summary>
+            <param name="parameterIdentity">
+		An object implementing the <see cref="T:DevExpress.Data.IParameter"/> interface.
+
+            </param>
+            <returns>A <see cref="T:System.Object"/>, specifying the parameter value.
+</returns>
+
+
+        </member>
         <member name="T:DevExpress.Xpf.Printing.Parameters.ParametersPanel">
 
             <summary>
@@ -7513,7 +7413,8 @@
         </member>
         <member name="P:DevExpress.Xpf.Printing.Parameters.ParametersPanel.ParameterTemplateSelector">
             <summary>
-                <para>This is a dependency property.
+                <para>Specifies an object that provides a way to choose a <see cref="T:System.Windows.DataTemplate"/> based on the data object and the data-bound element. This is a dependency property.
+
 </para>
             </summary>
             <value>A <see cref="T:System.Windows.Controls.DataTemplateSelector"/> object.
@@ -7527,6 +7428,42 @@
 </para>
             </summary>
             <returns> </returns>
+
+
+        </member>
+        <member name="T:DevExpress.Xpf.Printing.Parameters.ParametersExtensions">
+
+            <summary>
+                <para>For internal use.
+</para>
+            </summary>
+
+        </member>
+        <member name="M:DevExpress.Xpf.Printing.Parameters.ParametersExtensions.GetReportParameterStub(DevExpress.Xpf.Printing.Parameters.Models.ParameterModel)">
+            <summary>
+                <para>For internal use. 
+</para>
+            </summary>
+            <param name="model">
+		A <see cref="T:DevExpress.Xpf.Printing.Parameters.Models.ParameterModel"/> value.
+
+            </param>
+            <returns>A <see cref="T:DevExpress.DocumentServices.ServiceModel.DataContracts.ReportParameter"/> value.
+</returns>
+
+
+        </member>
+        <member name="M:DevExpress.Xpf.Printing.Parameters.ParametersExtensions.GetReportParameterStubs(DevExpress.Xpf.Printing.Parameters.Models.ParametersModel)">
+            <summary>
+                <para>For internal use. 
+</para>
+            </summary>
+            <param name="model">
+		A <see cref="T:DevExpress.Xpf.Printing.Parameters.Models.ParametersModel"/> value.
+
+            </param>
+            <returns>An array of <see cref="T:DevExpress.DocumentServices.ServiceModel.DataContracts.ReportParameter"/> values.
+</returns>
 
 
         </member>
@@ -7568,7 +7505,8 @@
         </member>
         <member name="P:DevExpress.Xpf.Printing.Parameters.EditorTemplates.DescriptionDefaultStyle">
             <summary>
-                <para> </para>
+                <para>Returns the editor description's default style.
+</para>
             </summary>
             <value>A <see cref="T:System.Windows.Style"/> value.
 </value>
@@ -7577,9 +7515,11 @@
         </member>
         <member name="P:DevExpress.Xpf.Printing.Parameters.EditorTemplates.GuidTemplate">
             <summary>
-                <para> </para>
+                <para>Specifies the editor for GUID (Globally Unique Identifier) values in the <b>Parameters</b> panel.
+</para>
             </summary>
-            <value> </value>
+            <value>A <see cref="T:System.Windows.DataTemplate"/> object.
+</value>
 
 
         </member>
@@ -7648,264 +7588,6 @@
 </para>
             </summary>
             <value>A <see cref="T:System.Windows.DataTemplate"/> containing a template definition.
-</value>
-
-
-        </member>
-        <member name="T:DevExpress.Xpf.Printing.TemplatedLink">
-
-            <summary>
-                <para>The base class for links that provide printing functionality for WPF controls.
-</para>
-            </summary>
-
-        </member>
-        <member name="P:DevExpress.Xpf.Printing.TemplatedLink.BottomMarginData">
-            <summary>
-                <para>Specifies the content for the document's <i>bottom margin</i>. This is a dependency property.
-</para>
-            </summary>
-            <value>A <see cref="T:System.Object"/> value.
-</value>
-
-
-        </member>
-        <member name="F:DevExpress.Xpf.Printing.TemplatedLink.BottomMarginDataProperty">
-            <summary>
-                <para>Identifies the  dependency property.
-</para>
-            </summary>
-            <returns> </returns>
-
-
-        </member>
-        <member name="P:DevExpress.Xpf.Printing.TemplatedLink.BottomMarginTemplate">
-            <summary>
-                <para>Specifies the <i>bottom margin</i> template for the document.
-</para>
-            </summary>
-            <value>A <see cref="T:System.Windows.DataTemplate"/> object. 
-</value>
-
-
-        </member>
-        <member name="P:DevExpress.Xpf.Printing.TemplatedLink.ColumnLayout">
-            <summary>
-                <para>Gets or sets the column layout.
-</para>
-            </summary>
-            <value>A <see cref="T:DevExpress.XtraPrinting.ColumnLayout"/> enumeration value. 
-</value>
-
-
-        </member>
-        <member name="P:DevExpress.Xpf.Printing.TemplatedLink.ColumnWidth">
-            <summary>
-                <para>Gets or sets the width of a single column.
-</para>
-            </summary>
-            <value>A <see cref="T:System.Single"/> value. 
-</value>
-
-
-        </member>
-        <member name="P:DevExpress.Xpf.Printing.TemplatedLink.PageFooterData">
-            <summary>
-                <para>Specifies the content for the document's <i>page footer</i>. This is a dependency property.
-</para>
-            </summary>
-            <value>A <see cref="T:System.Object"/> value. 
-</value>
-
-
-        </member>
-        <member name="F:DevExpress.Xpf.Printing.TemplatedLink.PageFooterDataProperty">
-            <summary>
-                <para>Identifies the  dependency property.
-</para>
-            </summary>
-            <returns> </returns>
-
-
-        </member>
-        <member name="P:DevExpress.Xpf.Printing.TemplatedLink.PageFooterTemplate">
-            <summary>
-                <para>Specifies the <i>page footer</i> template for the document.
-</para>
-            </summary>
-            <value>A <see cref="T:System.Windows.DataTemplate"/> object.
-</value>
-
-
-        </member>
-        <member name="P:DevExpress.Xpf.Printing.TemplatedLink.PageHeaderData">
-            <summary>
-                <para>Specifies the content for the document's <i>page header</i>. This is a dependency property.
-</para>
-            </summary>
-            <value>A <see cref="T:System.Object"/> value. 
-</value>
-
-
-        </member>
-        <member name="F:DevExpress.Xpf.Printing.TemplatedLink.PageHeaderDataProperty">
-            <summary>
-                <para>Identifies the  dependency property.
-</para>
-            </summary>
-            <returns> </returns>
-
-
-        </member>
-        <member name="P:DevExpress.Xpf.Printing.TemplatedLink.PageHeaderTemplate">
-            <summary>
-                <para>Specifies the <i>page header</i> template for the document.
-</para>
-            </summary>
-            <value>A <see cref="T:System.Windows.DataTemplate"/> object. 
-</value>
-
-
-        </member>
-        <member name="P:DevExpress.Xpf.Printing.TemplatedLink.PrintReportFooterAtBottom">
-            <summary>
-                <para>Specifies whether the report footer is printed at the bottom of the page, or immediately after the report content.
-</para>
-            </summary>
-            <value><b>true</b> to always print the report footer at the bottom of the document last page; otherwise <b>false</b>.
-</value>
-
-
-        </member>
-        <member name="P:DevExpress.Xpf.Printing.TemplatedLink.ReportFooterData">
-            <summary>
-                <para>Specifies the content for the document's <i>report footer</i>. This is a dependency property.
-</para>
-            </summary>
-            <value>A <see cref="T:System.Object"/> value. 
-</value>
-
-
-        </member>
-        <member name="F:DevExpress.Xpf.Printing.TemplatedLink.ReportFooterDataProperty">
-            <summary>
-                <para>Identifies the  dependency property.
-</para>
-            </summary>
-            <returns> </returns>
-
-
-        </member>
-        <member name="P:DevExpress.Xpf.Printing.TemplatedLink.ReportFooterTemplate">
-            <summary>
-                <para>Specifies the <i>report footer</i> template for the document.
-</para>
-            </summary>
-            <value>A <see cref="T:System.Windows.DataTemplate"/> object. 
-</value>
-
-
-        </member>
-        <member name="P:DevExpress.Xpf.Printing.TemplatedLink.ReportHeaderData">
-            <summary>
-                <para>Specifies the content for the document's <i>report header</i>. This is a dependency property.
-</para>
-            </summary>
-            <value>A <see cref="T:System.Object"/> value. 
-</value>
-
-
-        </member>
-        <member name="F:DevExpress.Xpf.Printing.TemplatedLink.ReportHeaderDataProperty">
-            <summary>
-                <para>Identifies the  dependency property.
-</para>
-            </summary>
-            <returns> </returns>
-
-
-        </member>
-        <member name="P:DevExpress.Xpf.Printing.TemplatedLink.ReportHeaderTemplate">
-            <summary>
-                <para>Specifies the <i>report header</i> template for the document.
-</para>
-            </summary>
-            <value>A <see cref="T:System.Windows.DataTemplate"/> object. 
-</value>
-
-
-        </member>
-        <member name="P:DevExpress.Xpf.Printing.TemplatedLink.TopMarginData">
-            <summary>
-                <para>Specifies the content for the document's <i>top margin</i>. This is a dependency property.
-</para>
-            </summary>
-            <value>A <see cref="T:System.Object"/> value. 
-</value>
-
-
-        </member>
-        <member name="F:DevExpress.Xpf.Printing.TemplatedLink.TopMarginDataProperty">
-            <summary>
-                <para>Identifies the  dependency property.
-</para>
-            </summary>
-            <returns> </returns>
-
-
-        </member>
-        <member name="P:DevExpress.Xpf.Printing.TemplatedLink.TopMarginTemplate">
-            <summary>
-                <para>Specifies the <i>top margin</i> template for the document.
-</para>
-            </summary>
-            <value>A <see cref="T:System.Windows.DataTemplate"/> object. 
-</value>
-
-
-        </member>
-        <member name="T:DevExpress.Xpf.Printing.LegacyPrintableComponentLink">
-
-            <summary>
-                <para>A link to print Windows Forms controls that implement the <see cref="T:DevExpress.XtraPrinting.IPrintable"/> interface.
-</para>
-            </summary>
-
-        </member>
-        <member name="M:DevExpress.Xpf.Printing.LegacyPrintableComponentLink.#ctor(DevExpress.XtraPrinting.IPrintable)">
-            <summary>
-                <para>Initializes a new instance of the LegacyPrintableComponentLink class with the specified settings.
-</para>
-            </summary>
-            <param name="printableComponent">
-		An object implementing the <see cref="T:DevExpress.XtraPrinting.IPrintable"/> interface.
-
-            </param>
-
-
-        </member>
-        <member name="M:DevExpress.Xpf.Printing.LegacyPrintableComponentLink.#ctor(DevExpress.XtraPrinting.IPrintable,System.String)">
-            <summary>
-                <para>Initializes a new instance of the LegacyPrintableComponentLink class with the specified settings.
-</para>
-            </summary>
-            <param name="printableComponent">
-		An object implementing the <see cref="T:DevExpress.XtraPrinting.IPrintable"/> interface.
-
-            </param>
-            <param name="documentName">
-		A <see cref="T:System.String"/> value, specifying the document name.
-
-            </param>
-
-
-        </member>
-        <member name="P:DevExpress.Xpf.Printing.LegacyPrintableComponentLink.PrintableComponent">
-            <summary>
-                <para>Gets the component that is to be printed via LegacyPrintableComponentLink.
-</para>
-            </summary>
-            <value>An object implementing the <see cref="T:DevExpress.XtraPrinting.IPrintable"/> interface.
 </value>
 
 
@@ -8566,6 +8248,30 @@
             </summary>
             <value>An object implementing the <see cref="T:DevExpress.Xpf.Printing.IPreviewModel"/> interface.
 </value>
+
+
+        </member>
+        <member name="T:DevExpress.Xpf.Printing.CursorModeType">
+
+            <summary>
+                <para>Enumerates values that specify the cursor mode in the document preview.
+</para>
+            </summary>
+
+        </member>
+        <member name="F:DevExpress.Xpf.Printing.CursorModeType.HandTool">
+            <summary>
+                <para>The cursor mode is the hand tool used to scroll the current document's pages.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.Printing.CursorModeType.SelectTool">
+            <summary>
+                <para>The cursor mode is the select tool used to select text in the current document.
+</para>
+            </summary>
 
 
         </member>
@@ -9534,7 +9240,7 @@ An object implementing the <see cref="T:DevExpress.Xpf.Printing.IDialogService"/
         </member>
         <member name="M:DevExpress.Xpf.Printing.Parameters.Models.ParametersModel.CanSubmitParameters">
             <summary>
-                <para>Specifies whether it is currently allowed to submit the parameter values.
+                <para>Specifies whether or not it is currently allowed to submit the parameter values.
 </para>
             </summary>
             <returns><b>true</b> if submitting parameter values is permitted; otherwise <b>false</b>.
@@ -9663,6 +9369,280 @@ An object implementing the <see cref="T:DevExpress.Xpf.Printing.IDialogService"/
 
 
         </member>
+        <member name="T:DevExpress.Xpf.Printing.TemplatedLink">
+
+            <summary>
+                <para>The base class for links that provide printing functionality for WPF controls.
+</para>
+            </summary>
+
+        </member>
+        <member name="P:DevExpress.Xpf.Printing.TemplatedLink.BottomMarginData">
+            <summary>
+                <para>Specifies the content for the document's <i>bottom margin</i>. This is a dependency property.
+</para>
+            </summary>
+            <value>A <see cref="T:System.Object"/> value.
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.Printing.TemplatedLink.BottomMarginDataProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.Printing.TemplatedLink.BottomMarginTemplate">
+            <summary>
+                <para>Specifies the <i>bottom margin</i> template for the document.
+</para>
+            </summary>
+            <value>A <see cref="T:System.Windows.DataTemplate"/> object. 
+</value>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.Printing.TemplatedLink.ColumnLayout">
+            <summary>
+                <para>Gets or sets the column layout.
+</para>
+            </summary>
+            <value>A <see cref="T:DevExpress.XtraPrinting.ColumnLayout"/> enumeration value. 
+</value>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.Printing.TemplatedLink.ColumnWidth">
+            <summary>
+                <para>Gets or sets the width of a single column.
+</para>
+            </summary>
+            <value>A <see cref="T:System.Single"/> value. 
+</value>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.Printing.TemplatedLink.PageFooterData">
+            <summary>
+                <para>Specifies the content for the document's <i>page footer</i>. This is a dependency property.
+</para>
+            </summary>
+            <value>A <see cref="T:System.Object"/> value. 
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.Printing.TemplatedLink.PageFooterDataProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.Printing.TemplatedLink.PageFooterTemplate">
+            <summary>
+                <para>Specifies the <i>page footer</i> template for the document.
+</para>
+            </summary>
+            <value>A <see cref="T:System.Windows.DataTemplate"/> object.
+</value>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.Printing.TemplatedLink.PageHeaderData">
+            <summary>
+                <para>Specifies the content for the document's <i>page header</i>. This is a dependency property.
+</para>
+            </summary>
+            <value>A <see cref="T:System.Object"/> value. 
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.Printing.TemplatedLink.PageHeaderDataProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.Printing.TemplatedLink.PageHeaderTemplate">
+            <summary>
+                <para>Specifies the <i>page header</i> template for the document.
+</para>
+            </summary>
+            <value>A <see cref="T:System.Windows.DataTemplate"/> object. 
+</value>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.Printing.TemplatedLink.PrintReportFooterAtBottom">
+            <summary>
+                <para>Specifies whether the report footer is printed at the bottom of the page, or immediately after the report content.
+</para>
+            </summary>
+            <value><b>true</b> to always print the report footer at the bottom of the document last page; otherwise <b>false</b>.
+</value>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.Printing.TemplatedLink.ReportFooterData">
+            <summary>
+                <para>Specifies the content for the document's <i>report footer</i>. This is a dependency property.
+</para>
+            </summary>
+            <value>A <see cref="T:System.Object"/> value. 
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.Printing.TemplatedLink.ReportFooterDataProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.Printing.TemplatedLink.ReportFooterTemplate">
+            <summary>
+                <para>Specifies the <i>report footer</i> template for the document.
+</para>
+            </summary>
+            <value>A <see cref="T:System.Windows.DataTemplate"/> object. 
+</value>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.Printing.TemplatedLink.ReportHeaderData">
+            <summary>
+                <para>Specifies the content for the document's <i>report header</i>. This is a dependency property.
+</para>
+            </summary>
+            <value>A <see cref="T:System.Object"/> value. 
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.Printing.TemplatedLink.ReportHeaderDataProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.Printing.TemplatedLink.ReportHeaderTemplate">
+            <summary>
+                <para>Specifies the <i>report header</i> template for the document.
+</para>
+            </summary>
+            <value>A <see cref="T:System.Windows.DataTemplate"/> object. 
+</value>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.Printing.TemplatedLink.TopMarginData">
+            <summary>
+                <para>Specifies the content for the document's <i>top margin</i>. This is a dependency property.
+</para>
+            </summary>
+            <value>A <see cref="T:System.Object"/> value. 
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.Printing.TemplatedLink.TopMarginDataProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.Printing.TemplatedLink.TopMarginTemplate">
+            <summary>
+                <para>Specifies the <i>top margin</i> template for the document.
+</para>
+            </summary>
+            <value>A <see cref="T:System.Windows.DataTemplate"/> object. 
+</value>
+
+
+        </member>
+        <member name="T:DevExpress.Xpf.Printing.PageBreakInfoCollection">
+
+            <summary>
+                <para>A collection of <see cref="T:DevExpress.Xpf.Printing.PageBreakInfo"/> objects.
+</para>
+            </summary>
+
+        </member>
+        <member name="M:DevExpress.Xpf.Printing.PageBreakInfoCollection.#ctor">
+            <summary>
+                <para>Initializes a new instance of the PageBreakInfoCollection class with default settings.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="T:DevExpress.Xpf.Printing.LegacyPrintableComponentLink">
+
+            <summary>
+                <para>A link to print Windows Forms controls that implement the <see cref="T:DevExpress.XtraPrinting.IPrintable"/> interface.
+</para>
+            </summary>
+
+        </member>
+        <member name="M:DevExpress.Xpf.Printing.LegacyPrintableComponentLink.#ctor(DevExpress.XtraPrinting.IPrintable)">
+            <summary>
+                <para>Initializes a new instance of the LegacyPrintableComponentLink class with the specified settings.
+</para>
+            </summary>
+            <param name="printableComponent">
+		An object implementing the <see cref="T:DevExpress.XtraPrinting.IPrintable"/> interface.
+
+            </param>
+
+
+        </member>
+        <member name="M:DevExpress.Xpf.Printing.LegacyPrintableComponentLink.#ctor(DevExpress.XtraPrinting.IPrintable,System.String)">
+            <summary>
+                <para>Initializes a new instance of the LegacyPrintableComponentLink class with the specified settings.
+</para>
+            </summary>
+            <param name="printableComponent">
+		An object implementing the <see cref="T:DevExpress.XtraPrinting.IPrintable"/> interface.
+
+            </param>
+            <param name="documentName">
+		A <see cref="T:System.String"/> value, specifying the document name.
+
+            </param>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.Printing.LegacyPrintableComponentLink.PrintableComponent">
+            <summary>
+                <para>Gets the component that is to be printed via LegacyPrintableComponentLink.
+</para>
+            </summary>
+            <value>An object implementing the <see cref="T:DevExpress.XtraPrinting.IPrintable"/> interface.
+</value>
+
+
+        </member>
         <member name="T:DevExpress.Xpf.Printing.PreviewClickEventArgs">
 
             <summary>
@@ -9704,6 +9684,38 @@ An object implementing the <see cref="T:DevExpress.Xpf.Printing.IDialogService"/
 </para>
             </summary>
             <value>A <see cref="T:System.String"/> value.
+</value>
+
+
+        </member>
+        <member name="T:DevExpress.Xpf.Printing.FaultEventArgs">
+
+            <summary>
+                <para>Provides data for the <see cref="E:DevExpress.Xpf.Printing.ReportServicePreviewModel.CreateDocumentError"/>, <see cref="E:DevExpress.Xpf.Printing.ReportServicePreviewModel.ExportError"/> and <see cref="E:DevExpress.Xpf.Printing.ReportServicePreviewModel.PrintError"/> events.
+</para>
+            </summary>
+
+        </member>
+        <member name="M:DevExpress.Xpf.Printing.FaultEventArgs.#ctor(System.Exception)">
+            <summary>
+                <para>Initializes a new instance of the FaultEventArgs class with the specified exception.
+</para>
+            </summary>
+            <param name="fault">
+		A <see cref="T:System.Exception"/> object. This value is assigned to the <see cref="P:DevExpress.Xpf.Printing.SimpleFaultEventArgs.Fault"/> property.
+
+
+            </param>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.Printing.FaultEventArgs.Handled">
+            <summary>
+                <para>Specifies whether or not the corresponding event was handled.
+
+</para>
+            </summary>
+            <value><b>true</b> if the exception is handled; otherwise, <b>false</b>.
 </value>
 
 
@@ -12998,7 +13010,7 @@ An object implementing the <see cref="T:DevExpress.Xpf.Printing.IDialogService"/
                 <para>Provides access to a collection of <see cref="T:DevExpress.Xpf.Printing.Parameters.Models.ParameterModel"/> objects associated with the DocumentPreviewModelBase class.
 </para>
             </summary>
-            <value>A <see cref="T:DevExpress.Xpf.Printing.Parameters.Models.ParametersModel"/> value.
+            <value>A <see cref="T:DevExpress.Xpf.Printing.Parameters.Models.ParametersModel"/> object.
 </value>
 
 

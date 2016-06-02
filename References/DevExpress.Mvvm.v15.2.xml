@@ -263,6 +263,42 @@
 
 
         </member>
+        <member name="T:DevExpress.Mvvm.DataAnnotations.InstanceInitializerAttribute">
+
+            <summary>
+                <para>Provides attributes for the instance initializer builder.
+</para>
+            </summary>
+
+        </member>
+        <member name="M:DevExpress.Mvvm.DataAnnotations.InstanceInitializerAttribute.#ctor(System.Type)">
+            <summary>
+                <para>Initializes a new instance of the InstanceInitializerAttribute class.
+</para>
+            </summary>
+            <param name="type">
+		A <see cref="T:System.Type"/> object that specifies the instance type.
+
+            </param>
+
+
+        </member>
+        <member name="M:DevExpress.Mvvm.DataAnnotations.InstanceInitializerAttribute.#ctor(System.Type,System.String)">
+            <summary>
+                <para>Initializes a new instance of the InstanceInitializerAttribute class.
+</para>
+            </summary>
+            <param name="type">
+		A <see cref="T:System.Type"/> object that specifies the instance type.
+
+            </param>
+            <param name="name">
+		A <see cref="T:System.String"/> value that specifies the instance name.
+
+            </param>
+
+
+        </member>
         <member name="T:DevExpress.Mvvm.DataAnnotations.POCOViewModelAttribute">
 
             <summary>
@@ -307,26 +343,6 @@
 
 
         </member>
-        <member name="T:DevExpress.Mvvm.IDispatcherService">
-
-            <summary>
-                <para>Provides the method to perform actions in a ViewModel using the <b>Dispatcher</b>.
-</para>
-            </summary>
-
-        </member>
-        <member name="M:DevExpress.Mvvm.IDispatcherService.BeginInvoke(System.Action)">
-            <summary>
-                <para>Executes the specified delegate asynchronously.
-</para>
-            </summary>
-            <param name="action">
-		The delegate to execute, which takes no arguments and does not return a value.
-
-            </param>
-
-
-        </member>
         <member name="T:DevExpress.Mvvm.IDialogService">
 
             <summary>
@@ -367,58 +383,6 @@
             </param>
             <returns>An object of the <see cref="T:DevExpress.Mvvm.UICommand"/> type that is the command corresponding to the button the end-user clicked.
 </returns>
-
-
-        </member>
-        <member name="T:DevExpress.Mvvm.ICurrentWindowService">
-
-            <summary>
-                <para>Provides methods to work with a window.
-</para>
-            </summary>
-
-        </member>
-        <member name="M:DevExpress.Mvvm.ICurrentWindowService.Activate">
-            <summary>
-                <para>Activates the window associated with the ICurrentWindowService.
-</para>
-            </summary>
-
-
-        </member>
-        <member name="M:DevExpress.Mvvm.ICurrentWindowService.Close">
-            <summary>
-                <para>Closes the window associated with the ICurrentWindowService.
-</para>
-            </summary>
-
-
-        </member>
-        <member name="M:DevExpress.Mvvm.ICurrentWindowService.Hide">
-            <summary>
-                <para>Hides the window associated with the ICurrentWindowService.
-</para>
-            </summary>
-
-
-        </member>
-        <member name="M:DevExpress.Mvvm.ICurrentWindowService.SetWindowState(System.Windows.WindowState)">
-            <summary>
-                <para>Sets the specified state for the window associated with the ICurrentWindowService.
-</para>
-            </summary>
-            <param name="state">
-		A <see cref="T:System.Windows.WindowState"/> enumeration value.
-
-            </param>
-
-
-        </member>
-        <member name="M:DevExpress.Mvvm.ICurrentWindowService.Show">
-            <summary>
-                <para>Shows the window associated with the ICurrentWindowService.
-</para>
-            </summary>
 
 
         </member>
@@ -522,176 +486,221 @@
 
 
         </member>
-        <member name="T:DevExpress.Mvvm.ViewInjectionManagerExtensions">
+        <member name="T:DevExpress.Mvvm.UICommand">
 
             <summary>
-                <para><para>Provides extension methods for the <see cref="T:DevExpress.Mvvm.ViewInjectionManager"/> to integrate and control ViewModels (with their Views).</para>
+                <para>A ViewModel that is used to generate a dialog button. 
 </para>
             </summary>
 
         </member>
-        <member name="M:DevExpress.Mvvm.ViewInjectionManagerExtensions.Inject(DevExpress.Mvvm.IViewInjectionManager,System.String,System.Object,System.Func`1)">
+        <member name="M:DevExpress.Mvvm.UICommand.#ctor">
             <summary>
-                <para>Injects a ViewModel (and its View) with the specified parameters. 
-</para>
-            </summary>
-            <param name="service">
-		The type the static extension method operates with. 
-
-            </param>
-            <param name="regionName">
-		A <b>System.String</b> value specifying the region name. 
-
-            </param>
-            <param name="key">
-		An object specifying the identifier (key) of the View and its ViewModel. 
-
-            </param>
-            <param name="viewModelFactory">
-		A object encapsulating the method that returns the ViewModel.
-
-            </param>
-
-
-        </member>
-        <member name="M:DevExpress.Mvvm.ViewInjectionManagerExtensions.Inject(DevExpress.Mvvm.IViewInjectionManager,System.String,System.Object,System.Func`1,System.String)">
-            <summary>
-                <para>Static extension method that injects a ViewModel (and its View) with the specified parameters.
-</para>
-            </summary>
-            <param name="service">
-		The type the static extension method operates with.
-
-            </param>
-            <param name="regionName">
-		A <b>System.String</b> value specifying the region name. 
-
-            </param>
-            <param name="key">
-		An object specifying the identifier (key) of the View and its ViewModel. 
-
-            </param>
-            <param name="viewModelFactory">
-		A object encapsulating the method that returns the ViewModel.
-
-            </param>
-            <param name="viewName">
-		A <b>System.String</b> value specifying the view that will be created using the <see cref="T:DevExpress.Mvvm.UI.ViewLocator"/>. 
-
-            </param>
-
-
-        </member>
-        <member name="M:DevExpress.Mvvm.ViewInjectionManagerExtensions.Inject(DevExpress.Mvvm.IViewInjectionManager,System.String,System.Object,System.Func`1,System.Type)">
-            <summary>
-                <para>Static extension method that injects a ViewModel (and its View) with the specified parameters.
-</para>
-            </summary>
-            <param name="service">
-		The type the static extension method operates with. 
-
-            </param>
-            <param name="regionName">
-		A <b>System.String</b> value specifying the region name. 
-
-            </param>
-            <param name="key">
-		An object specifying the identifier (key) of the View and its ViewModel. 
-
-            </param>
-            <param name="viewModelFactory">
-		A object encapsulating the method that returns the ViewModel.
-
-            </param>
-            <param name="viewType">
-		A <b>System.String</b> value specifying the view that will be created using the <see cref="T:DevExpress.Mvvm.UI.ViewLocator"/>. 
-
-            </param>
-
-
-        </member>
-        <member name="T:DevExpress.Mvvm.DataAnnotations.SimpleMaskAttribute">
-
-            <summary>
-                <para>Provides simple mask attributes.
-</para>
-            </summary>
-
-        </member>
-        <member name="M:DevExpress.Mvvm.DataAnnotations.SimpleMaskAttribute.#ctor">
-            <summary>
-                <para>Initializes a new instance of the SimpleMaskAttribute class with default settings.
+                <para>Initializes a new instance of the UICommand class with default settings.
 </para>
             </summary>
 
 
         </member>
-        <member name="P:DevExpress.Mvvm.DataAnnotations.SimpleMaskAttribute.SaveLiteral">
+        <member name="M:DevExpress.Mvvm.UICommand.#ctor(System.Object,System.Object,System.Windows.Input.ICommand,System.Boolean,System.Boolean,System.Object)">
             <summary>
-                <para>Gets or sets whether constantly displayed mask characters (literals) are included in an editor's value.
+                <para>Initializes a new instance of the UICommand class.
 </para>
             </summary>
-            <value><b>true</b> if the constantly displayed mask characters are included in an editor's value; otherwise, <b>false</b>. 
+            <param name="id">
+		An object that specifies the identifier the dialog button. 
+
+            </param>
+            <param name="caption">
+		A string that specifies the text displayed within the dialog button. 
+
+            </param>
+            <param name="command">
+		A command to invoke when the dialog button is clicked. 
+
+            </param>
+            <param name="isDefault">
+		A boolean value that specifies whether the dialog button is the default button. 
+
+            </param>
+            <param name="isCancel">
+		A boolean value that specifies whether the dialog button is the cancel button. 
+
+            </param>
+            <param name="tag">
+		An object that contains information associated with the dialog button. 
+
+            </param>
+
+
+        </member>
+        <member name="P:DevExpress.Mvvm.UICommand.Caption">
+            <summary>
+                <para>Gets or sets the text displayed within the dialog button.
+</para>
+            </summary>
+            <value>A string which specifies the text displayed within the dialog button.
 </value>
 
 
         </member>
-        <member name="T:DevExpress.Mvvm.DataAnnotations.DXImageAttribute">
+        <member name="P:DevExpress.Mvvm.UICommand.Command">
+            <summary>
+                <para>Gets or sets the command to invoke when the dialog button is clicked.
+</para>
+            </summary>
+            <value>A command to invoke when the dialog button is clicked. 
+</value>
+
+
+        </member>
+        <member name="M:DevExpress.Mvvm.UICommand.GenerateFromMessageBoxButton(System.Windows.MessageBoxButton,DevExpress.Mvvm.IMessageBoxButtonLocalizer,System.Nullable`1,System.Nullable`1)">
+            <summary>
+                <para>For internal use.
+</para>
+            </summary>
+            <param name="dialogButtons">
+		 
+
+            </param>
+            <param name="buttonLocalizer">
+		 
+
+            </param>
+            <param name="defaultButton">
+		 
+
+            </param>
+            <param name="cancelButton">
+		 
+
+            </param>
+            <returns> 
+</returns>
+
+
+        </member>
+        <member name="M:DevExpress.Mvvm.UICommand.GenerateFromMessageBoxButton(System.Windows.MessageBoxButton,DevExpress.Mvvm.IMessageButtonLocalizer,System.Nullable`1,System.Nullable`1)">
+            <summary>
+                <para>For internal use.
+</para>
+            </summary>
+            <param name="dialogButtons">
+		 
+
+            </param>
+            <param name="buttonLocalizer">
+		 
+
+            </param>
+            <param name="defaultButton">
+		 
+
+            </param>
+            <param name="cancelButton">
+		 
+
+            </param>
+            <returns> 
+</returns>
+
+
+        </member>
+        <member name="M:DevExpress.Mvvm.UICommand.GenerateFromMessageButton(DevExpress.Mvvm.MessageButton,DevExpress.Mvvm.IMessageButtonLocalizer,System.Nullable`1,System.Nullable`1)">
+            <summary>
+                <para>For internal use. 
+</para>
+            </summary>
+            <param name="dialogButtons">
+		 
+
+            </param>
+            <param name="buttonLocalizer">
+		 
+
+            </param>
+            <param name="defaultButton">
+		 
+
+            </param>
+            <param name="cancelButton">
+		 
+
+            </param>
+            <returns> 
+</returns>
+
+
+        </member>
+        <member name="P:DevExpress.Mvvm.UICommand.Id">
+            <summary>
+                <para>Gets or sets the identifier of the dialog button.
+</para>
+            </summary>
+            <value>An object that specifies the identifier the dialog button.
+</value>
+
+
+        </member>
+        <member name="P:DevExpress.Mvvm.UICommand.IsCancel">
+            <summary>
+                <para>Gets or sets a value that indicates whether the dialog button is the cancel button.
+</para>
+            </summary>
+            <value><b>true</b>, if the dialog button is the cancel button; otherwise, <b>false</b>.
+
+</value>
+
+
+        </member>
+        <member name="P:DevExpress.Mvvm.UICommand.IsDefault">
+            <summary>
+                <para>Gets or sets a value that indicates whether the dialog button is the default button.
+</para>
+            </summary>
+            <value><b>true</b>, if the dialog button is the default button; otherwise, <b>false</b>.
+</value>
+
+
+        </member>
+        <member name="P:DevExpress.Mvvm.UICommand.Tag">
+            <summary>
+                <para>Gets or sets the data associated with the dialog button. 
+</para>
+            </summary>
+            <value>An object that contains information associated with the dialog button.
+</value>
+
+
+        </member>
+        <member name="T:DevExpress.Mvvm.ILayoutSerializationService">
 
             <summary>
-                <para>Provides the ability to associate an image file with a data item.
+                <para>Provides methods to save/restore the layout of serializable DevExpress WPF Controls.
+
 </para>
             </summary>
 
         </member>
-        <member name="M:DevExpress.Mvvm.DataAnnotations.DXImageAttribute.#ctor">
+        <member name="M:DevExpress.Mvvm.ILayoutSerializationService.Deserialize(System.String)">
             <summary>
-                <para>Initializes a new instance of the DXImageAttribute class with the specified owner.
+                <para>Restores the layout of an associated View from a string.
 </para>
             </summary>
-
-
-        </member>
-        <member name="M:DevExpress.Mvvm.DataAnnotations.DXImageAttribute.#ctor(System.String)">
-            <summary>
-                <para>Initializes a new instance of the DXImageAttribute class with the specified image name.
-</para>
-            </summary>
-            <param name="imageName">
-		The image name.
-
+            <param name="state">
+		A string object from which the layout of an associated View is restored. 
 
             </param>
 
 
         </member>
-        <member name="P:DevExpress.Mvvm.DataAnnotations.DXImageAttribute.ImageName">
+        <member name="M:DevExpress.Mvvm.ILayoutSerializationService.Serialize">
             <summary>
-                <para>Gets the image name.
+                <para>Saves the layout of an associated View to a string.
 </para>
             </summary>
-            <value>The image name.
-</value>
-
-
-        </member>
-        <member name="P:DevExpress.Mvvm.DataAnnotations.DXImageAttribute.LargeImageUri">
-            <summary>
-                <para>Gets or sets the absolute Uri that defines the location of an image file.
-</para>
-            </summary>
-            <value>A string that is a Uri to the image file.
-</value>
-
-
-        </member>
-        <member name="P:DevExpress.Mvvm.DataAnnotations.DXImageAttribute.SmallImageUri">
-            <summary>
-                <para>Gets or sets the Uri that defines the relative location of an image file.
-</para>
-            </summary>
-            <value>A string that is a Uri to the image file.
-</value>
+            <returns>A string value in which the layout is stored. 
+</returns>
 
 
         </member>
@@ -719,6 +728,79 @@
                 <para>The base class for the data source configuration functionality.
 </para>
             </summary>
+
+        </member>
+        <member name="T:DevExpress.Mvvm.DelegateCommand`1">
+
+            <summary>
+                <para>A command that calls your parameterized delegates when Execute and CanExecute logic is invoked on the command.
+</para>
+            </summary>
+
+        </member>
+        <member name="M:DevExpress.Mvvm.DelegateCommand`1.#ctor(System.Action`1,System.Boolean)">
+            <summary>
+                <para>Initializes a new instance of the DelegateCommand&lt;T&gt; that can always be executed.
+
+</para>
+            </summary>
+            <param name="executeMethod">
+		The execution logic. 
+
+            </param>
+            <param name="useCommandManager">
+		Specifies whether the command is automatically updated by the command manager. 
+
+
+            </param>
+
+
+        </member>
+        <member name="M:DevExpress.Mvvm.DelegateCommand`1.#ctor(System.Action`1)">
+            <summary>
+                <para>Initializes a new instance of the DelegateCommand&lt;T&gt; that can always be executed.
+
+</para>
+            </summary>
+            <param name="executeMethod">
+		The execution logic.
+
+            </param>
+
+
+        </member>
+        <member name="M:DevExpress.Mvvm.DelegateCommand`1.#ctor(System.Action`1,System.Func`2,System.Nullable`1)">
+            <summary>
+                <para>Initializes a new instance of the DelegateCommand&lt;T&gt; that can always be executed.
+
+</para>
+            </summary>
+            <param name="executeMethod">
+		The execution logic.
+
+            </param>
+            <param name="canExecuteMethod">
+		The execution status logic.
+
+            </param>
+            <param name="useCommandManager">
+		Specifies whether the command is automatically updated by the command manager. 
+
+
+            </param>
+
+
+        </member>
+        <member name="M:DevExpress.Mvvm.DelegateCommand`1.Execute(DevExpress.Mvvm.T)">
+            <summary>
+                <para>Defines the method to be called when the command is invoked.
+</para>
+            </summary>
+            <param name="parameter">
+		Data used by the command. If the command does not require data to be passed, this object can be set to a null reference.
+
+            </param>
+
 
         </member>
         <member name="T:DevExpress.Mvvm.IDocumentManagerService">
@@ -780,6 +862,58 @@
             </summary>
             <value>A set of created documents.
 </value>
+
+
+        </member>
+        <member name="T:DevExpress.Mvvm.ICurrentWindowService">
+
+            <summary>
+                <para>Provides methods to work with a window.
+</para>
+            </summary>
+
+        </member>
+        <member name="M:DevExpress.Mvvm.ICurrentWindowService.Activate">
+            <summary>
+                <para>Activates the window associated with the ICurrentWindowService.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="M:DevExpress.Mvvm.ICurrentWindowService.Close">
+            <summary>
+                <para>Closes the window associated with the ICurrentWindowService.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="M:DevExpress.Mvvm.ICurrentWindowService.Hide">
+            <summary>
+                <para>Hides the window associated with the ICurrentWindowService.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="M:DevExpress.Mvvm.ICurrentWindowService.SetWindowState(System.Windows.WindowState)">
+            <summary>
+                <para>Sets the specified state for the window associated with the ICurrentWindowService.
+</para>
+            </summary>
+            <param name="state">
+		A <see cref="T:System.Windows.WindowState"/> enumeration value.
+
+            </param>
+
+
+        </member>
+        <member name="M:DevExpress.Mvvm.ICurrentWindowService.Show">
+            <summary>
+                <para>Shows the window associated with the ICurrentWindowService.
+</para>
+            </summary>
 
 
         </member>
@@ -1119,6 +1253,94 @@
 
 
         </member>
+        <member name="T:DevExpress.Mvvm.ViewInjectionManagerExtensions">
+
+            <summary>
+                <para><para>Provides extension methods for the <see cref="T:DevExpress.Mvvm.ViewInjectionManager"/> to integrate and control ViewModels (with their Views).</para>
+</para>
+            </summary>
+
+        </member>
+        <member name="M:DevExpress.Mvvm.ViewInjectionManagerExtensions.Inject(DevExpress.Mvvm.IViewInjectionManager,System.String,System.Object,System.Func`1)">
+            <summary>
+                <para>Injects a ViewModel (and its View) with the specified parameters. 
+</para>
+            </summary>
+            <param name="service">
+		The type the static extension method operates with. 
+
+            </param>
+            <param name="regionName">
+		A <b>System.String</b> value specifying the region name. 
+
+            </param>
+            <param name="key">
+		An object specifying the identifier (key) of the View and its ViewModel. 
+
+            </param>
+            <param name="viewModelFactory">
+		A object encapsulating the method that returns the ViewModel.
+
+            </param>
+
+
+        </member>
+        <member name="M:DevExpress.Mvvm.ViewInjectionManagerExtensions.Inject(DevExpress.Mvvm.IViewInjectionManager,System.String,System.Object,System.Func`1,System.String)">
+            <summary>
+                <para>Static extension method that injects a ViewModel (and its View) with the specified parameters.
+</para>
+            </summary>
+            <param name="service">
+		The type the static extension method operates with.
+
+            </param>
+            <param name="regionName">
+		A <b>System.String</b> value specifying the region name. 
+
+            </param>
+            <param name="key">
+		An object specifying the identifier (key) of the View and its ViewModel. 
+
+            </param>
+            <param name="viewModelFactory">
+		A object encapsulating the method that returns the ViewModel.
+
+            </param>
+            <param name="viewName">
+		A <b>System.String</b> value specifying the view that will be created using the <see cref="T:DevExpress.Mvvm.UI.ViewLocator"/>. 
+
+            </param>
+
+
+        </member>
+        <member name="M:DevExpress.Mvvm.ViewInjectionManagerExtensions.Inject(DevExpress.Mvvm.IViewInjectionManager,System.String,System.Object,System.Func`1,System.Type)">
+            <summary>
+                <para>Static extension method that injects a ViewModel (and its View) with the specified parameters.
+</para>
+            </summary>
+            <param name="service">
+		The type the static extension method operates with. 
+
+            </param>
+            <param name="regionName">
+		A <b>System.String</b> value specifying the region name. 
+
+            </param>
+            <param name="key">
+		An object specifying the identifier (key) of the View and its ViewModel. 
+
+            </param>
+            <param name="viewModelFactory">
+		A object encapsulating the method that returns the ViewModel.
+
+            </param>
+            <param name="viewType">
+		A <b>System.String</b> value specifying the view that will be created using the <see cref="T:DevExpress.Mvvm.UI.ViewLocator"/>. 
+
+            </param>
+
+
+        </member>
         <member name="T:DevExpress.Mvvm.ISupportParentViewModel">
 
             <summary>
@@ -1411,6 +1633,75 @@
                 <para>Updates the thumbnail clipping margin.
 </para>
             </summary>
+
+
+        </member>
+        <member name="T:DevExpress.Mvvm.ISplashScreenService">
+
+            <summary>
+                <para>Provides methods to display splash screens.
+</para>
+            </summary>
+
+        </member>
+        <member name="M:DevExpress.Mvvm.ISplashScreenService.HideSplashScreen">
+            <summary>
+                <para>Hides the splash screen.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="P:DevExpress.Mvvm.ISplashScreenService.IsSplashScreenActive">
+            <summary>
+                <para>Gets whether the splash screen is currently shown.
+</para>
+            </summary>
+            <value><b>true</b>, if the splash screen is currently shown; otherwise, <b>false</b>.
+</value>
+
+
+        </member>
+        <member name="M:DevExpress.Mvvm.ISplashScreenService.SetSplashScreenProgress(System.Double,System.Double)">
+            <summary>
+                <para>Specifies the current progress of the splash screen.
+</para>
+            </summary>
+            <param name="progress">
+		The current progress value.
+
+
+            </param>
+            <param name="maxProgress">
+		The maximum progress value.
+
+
+            </param>
+
+
+        </member>
+        <member name="M:DevExpress.Mvvm.ISplashScreenService.SetSplashScreenState(System.Object)">
+            <summary>
+                <para>Specifies a data object to be passed to the splash screen service.
+</para>
+            </summary>
+            <param name="state">
+		A data object to be passed to the splash screen service.
+
+            </param>
+
+
+        </member>
+        <member name="M:DevExpress.Mvvm.ISplashScreenService.ShowSplashScreen(System.String)">
+            <summary>
+                <para>Shows the splash screen.
+</para>
+            </summary>
+            <param name="documentType">
+		A <see cref="T:System.String"/> value that specifies the name of a document type to be shown in the splash screen.
+
+
+            </param>
 
 
         </member>
@@ -2075,240 +2366,90 @@
 
 
         </member>
-        <member name="T:DevExpress.Mvvm.IViewInjectionManager">
+        <member name="T:DevExpress.Mvvm.IMessenger">
 
             <summary>
-                <para>Provides methods to inject and manipulate under ViewModels (and their Views)
-
+                <para>Provides methods to send messages and register message handlers.
 </para>
             </summary>
 
         </member>
-        <member name="M:DevExpress.Mvvm.IViewInjectionManager.GetService(System.String)">
+        <member name="M:DevExpress.Mvvm.IMessenger.Register``1(System.Object,System.Object,System.Boolean,System.Action{``0})">
             <summary>
-                <para>Gets the service attached to the specified control (region).
+                <para>Registers a handler of a specific message type.
 </para>
             </summary>
-            <param name="regionName">
-		A <b>System.String</b> value specifying the region.
+            <param name="recipient">
+		An object that will receive messages.
 
             </param>
-            <returns>An <see cref="T:DevExpress.Mvvm.IViewInjectionService"/> implementation.
-</returns>
-
-
-        </member>
-        <member name="M:DevExpress.Mvvm.IViewInjectionManager.Inject(System.String,System.Object,System.Func`1,System.String,System.Type)">
-            <summary>
-                <para>Injects a ViewModel (and its View) with the specified parameters. 
-</para>
-            </summary>
-            <param name="regionName">
-		A <b>System.String</b> value specifying the region name. 
+            <param name="token">
+		An object (marker) that can be used to identify a specific message. <b>null</b> if you want to process messages without tokens.
 
             </param>
-            <param name="key">
-		An object specifying the identifier (key) of the View and its ViewModel. 
+            <param name="receiveInheritedMessages">
+		<b>true</b> to receive messages of the TMessage type and all derived types; <b>false</b> to receive messages of the TMessage type only.
 
             </param>
-            <param name="viewModelFactory">
-		A object encapsulating the method that returns the ViewModel.
-
-            </param>
-            <param name="viewName">
-		A <b>System.String</b> value specifying the view that will be created using the <see cref="T:DevExpress.Mvvm.UI.ViewLocator"/>. 
-
-            </param>
-            <param name="viewType">
-		A <b>System.Type </b> value specifying the view that will be created using the <see cref="T:DevExpress.Mvvm.UI.ViewLocator"/>. 
+            <param name="action">
+		An action that will be invoked when the specified message occurs.
 
             </param>
 
 
         </member>
-        <member name="M:DevExpress.Mvvm.IViewInjectionManager.Navigate(System.String,System.Object)">
+        <member name="M:DevExpress.Mvvm.IMessenger.Send``1(``0,System.Type,System.Object)">
             <summary>
-                <para>Navigates to the specified ViewModel (and its View) inside the corresponding region.
+                <para>Sends the specified message.
 </para>
             </summary>
-            <param name="regionName">
-		A <b>System.String</b> value specifying the region name.
+            <param name="message">
+		The message of the TMessage type to be sent.
 
             </param>
-            <param name="key">
-		An object specifying the key of the ViewModel (and its View).
+            <param name="messageTargetType">
+		Only recipients of the <i>messageTargetType</i> or inherited type will receive the current message. Set this parameter to <b>null</b> to send a message without an addressee type.
+
+            </param>
+            <param name="token">
+		An object (marker) that can be used to identify a specific message. <b>null</b> if you want to send regular messages (without tokens).
+<para>
+When sending a message, a token can be assigned to the message via the current <i>token</i> parameter. Only message recipients that registered the same token via the Register method are invoked when this message occurs.
+</para>
 
             </param>
 
 
         </member>
-        <member name="M:DevExpress.Mvvm.IViewInjectionManager.RaiseNavigatedAwayEvent(System.Object)">
+        <member name="M:DevExpress.Mvvm.IMessenger.Unregister(System.Object)">
             <summary>
-                <para>Raises the NavigateAway event. For internal use.
+                <para>Unsubscribes the specified object from receiving any messages.
 </para>
             </summary>
-            <param name="viewModel">
-		 
+            <param name="recipient">
+		An object to be unsubscribed from receiving any messages.
 
             </param>
 
 
         </member>
-        <member name="M:DevExpress.Mvvm.IViewInjectionManager.RaiseNavigatedEvent(System.Object)">
+        <member name="M:DevExpress.Mvvm.IMessenger.Unregister``1(System.Object,System.Object,System.Action{``0})">
             <summary>
-                <para>Raises the Navigated event. For internal use.
+                <para>Unsubscribes the specified object's action from being invoked when a specific message occurs.
 </para>
             </summary>
-            <param name="viewModel">
-		 
+            <param name="recipient">
+		An object containing an action to be unsubscribed from receiving the messages of TMessage type.
+
 
             </param>
+            <param name="token">
+		An object (marker) that was used to identify a specific message when subscribing to it via the Register method. <b>null</b> to unsubscribe from the message regardless of the token assigned to it.
 
-
-        </member>
-        <member name="M:DevExpress.Mvvm.IViewInjectionManager.RaiseViewModelClosingEvent(DevExpress.Mvvm.ViewModelClosingEventArgs)">
-            <summary>
-                <para>Raises the ViewModelClosing event. For internal use.
-</para>
-            </summary>
-            <param name="e">
-		 
 
             </param>
-
-
-        </member>
-        <member name="M:DevExpress.Mvvm.IViewInjectionManager.RegisterNavigatedAwayEventHandler(System.Object,System.Action)">
-            <summary>
-                <para>Registers the <b>NavigateAway</b> event handler for the specified ViewModel.
-</para>
-            </summary>
-            <param name="viewModel">
-		An object representing the ViewModel. 
-
-            </param>
-            <param name="eventHandler">
-		A <b>System.Action</b> object encapsulating the event handler.
-
-            </param>
-
-
-        </member>
-        <member name="M:DevExpress.Mvvm.IViewInjectionManager.RegisterNavigatedEventHandler(System.Object,System.Action)">
-            <summary>
-                <para>Registers the <b>Navigated</b> event handler for the specified ViewModel.
-</para>
-            </summary>
-            <param name="viewModel">
-		An object representing the ViewModel. 
-
-            </param>
-            <param name="eventHandler">
-		A <b>System.Action</b> object encapsulating the event handler.
-
-            </param>
-
-
-        </member>
-        <member name="M:DevExpress.Mvvm.IViewInjectionManager.RegisterService(DevExpress.Mvvm.IViewInjectionService)">
-            <summary>
-                <para>Register the service. For internal use.
-</para>
-            </summary>
-            <param name="service">
-		 
-
-            </param>
-
-
-        </member>
-        <member name="M:DevExpress.Mvvm.IViewInjectionManager.RegisterViewModelClosingEventHandler(System.Object,System.Action`1)">
-            <summary>
-                <para>Registers the <b>ViewModelClosing</b> event handler for the specified ViewModel.
-</para>
-            </summary>
-            <param name="viewModel">
-		An object representing the ViewModel. 
-
-            </param>
-            <param name="eventHandler">
-		A <b>System.Action</b> object encapsulating the event handler.
-
-            </param>
-
-
-        </member>
-        <member name="M:DevExpress.Mvvm.IViewInjectionManager.Remove(System.String,System.Object)">
-            <summary>
-                <para>Removes the ViewModel (and its View) from the specified region. 
-</para>
-            </summary>
-            <param name="regionName">
-		A <b>System.String</b> value specifying the region name. 
-
-            </param>
-            <param name="key">
-		An object specifying the identifier (key) of the View and its ViewModel. 
-
-            </param>
-
-
-        </member>
-        <member name="M:DevExpress.Mvvm.IViewInjectionManager.UnregisterNavigatedAwayEventHandler(System.Object,System.Action)">
-            <summary>
-                <para>Unregisters the <b>NavigateAway</b> event handler for the specified ViewModel.
-</para>
-            </summary>
-            <param name="viewModel">
-		An object representing the ViewModel. 
-
-            </param>
-            <param name="eventHandler">
-		A <b>System.Action</b> object encapsulating the event handler.
-
-            </param>
-
-
-        </member>
-        <member name="M:DevExpress.Mvvm.IViewInjectionManager.UnregisterNavigatedEventHandler(System.Object,System.Action)">
-            <summary>
-                <para>Unregisters the <b>Navigated</b> event handler for the specified ViewModel.
-</para>
-            </summary>
-            <param name="viewModel">
-		An object representing the ViewModel. 
-
-            </param>
-            <param name="eventHandler">
-		A <b>System.Action</b> object encapsulating the event handler.
-
-            </param>
-
-
-        </member>
-        <member name="M:DevExpress.Mvvm.IViewInjectionManager.UnregisterService(DevExpress.Mvvm.IViewInjectionService)">
-            <summary>
-                <para>Unregister the service. For internal use.
-</para>
-            </summary>
-            <param name="service">
-		 
-
-            </param>
-
-
-        </member>
-        <member name="M:DevExpress.Mvvm.IViewInjectionManager.UnregisterViewModelClosingEventHandler(System.Object,System.Action`1)">
-            <summary>
-                <para>Unregisters the <b>ViewModelClosing</b> event handler for the specified ViewModel.
-</para>
-            </summary>
-            <param name="viewModel">
-		An object representing the ViewModel. 
-
-            </param>
-            <param name="eventHandler">
-		A <b>System.Action</b> object encapsulating the event handler.
+            <param name="action">
+		An action to be unsubscribed from receiving messages.
 
             </param>
 
@@ -2421,7 +2562,7 @@
         </member>
         <member name="M:DevExpress.Mvvm.DataAnnotations.MetadataBuilder`1.#ctor">
             <summary>
-                <para>Initializes a new instance of the MetadataBuilder class with default settings.
+                <para>Initializes a new instance of the MetadataBuilder&lt;T&gt; class with default settings.
 </para>
             </summary>
 
@@ -2505,6 +2646,134 @@
             </summary>
             <returns>The toolbar layout builder instance.
 </returns>
+
+
+        </member>
+        <member name="T:DevExpress.Mvvm.IFileDialogServiceBase">
+
+            <summary>
+                <para>Provides methods and properties to configure the standard dialog box.
+ 
+</para>
+            </summary>
+
+        </member>
+        <member name="P:DevExpress.Mvvm.IFileDialogServiceBase.AddExtension">
+            <summary>
+                <para>Gets or sets a value indicating whether the dialog box automatically adds an extension to the file name if the user omits it.
+
+</para>
+            </summary>
+            <value><b>true</b>, if the dialog box adds an extension to the file name; otherwise, <b>false</b>. The default is <b>true</b>.
+</value>
+
+
+        </member>
+        <member name="P:DevExpress.Mvvm.IFileDialogServiceBase.AutoUpgradeEnabled">
+            <summary>
+                <para>Gets or sets a value indicating whether the dialog box automatically upgrades appearance and behavior.
+</para>
+            </summary>
+            <value><b>true</b>, if the dialog box automatically upgrades appearance and behavior; otherwise, <b>false</b>. The default is <b>true</b>.
+</value>
+
+
+        </member>
+        <member name="P:DevExpress.Mvvm.IFileDialogServiceBase.CheckFileExists">
+            <summary>
+                <para>Gets or sets a value indicating whether the dialog box displays a warning when the user specifies a file name that does not exist.  
+</para>
+            </summary>
+            <value><b>true</b>, if the dialog box displays a warning when the user specifies a file name that does not exist; otherwise, <b>false</b>. The default is <b>false</b>.
+</value>
+
+
+        </member>
+        <member name="P:DevExpress.Mvvm.IFileDialogServiceBase.CheckPathExists">
+            <summary>
+                <para>Gets or sets a value indicating whether the dialog box displays a warning when the user specifies a path that does not exist.
+</para>
+            </summary>
+            <value><b>true</b>, if the dialog box displays a warning when the user specifies a path that does not exist; otherwise, <b>false</b>. The default is <b>true</b>.
+</value>
+
+
+        </member>
+        <member name="P:DevExpress.Mvvm.IFileDialogServiceBase.DereferenceLinks">
+            <summary>
+                <para>Gets or sets a value indicating whether the dialog box returns the location of the file referenced by the shortcut or it returns the location of the shortcut.
+</para>
+            </summary>
+            <value><b>true</b>, if the dialog box returns the location of the file referenced by the shortcut; otherwise, <b>false</b>. The default is <b>true</b>.
+</value>
+
+
+        </member>
+        <member name="P:DevExpress.Mvvm.IFileDialogServiceBase.InitialDirectory">
+            <summary>
+                <para>Gets or sets the initial folder shown by the dialog box.
+</para>
+            </summary>
+            <value>A <b>System.String</b> value specifying the initial folder shown by the dialog box. The default is an empty string.
+</value>
+
+
+        </member>
+        <member name="M:DevExpress.Mvvm.IFileDialogServiceBase.Reset">
+            <summary>
+                <para>Resets all properties to the default values.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="P:DevExpress.Mvvm.IFileDialogServiceBase.RestoreDirectory">
+            <summary>
+                <para>Gets or sets a value indicating whether the dialog box restores the directory to the previously selected directory before closing.
+</para>
+            </summary>
+            <value><b>true</b>, if the dialog box restores the current directory to the previously selected directory if the initial directory was changed while searching for files; otherwise, <b>false</b>. The default is <b>false</b>.
+</value>
+
+
+        </member>
+        <member name="P:DevExpress.Mvvm.IFileDialogServiceBase.ShowHelp">
+            <summary>
+                <para>Gets or sets a value indicating whether the <b>Help</b> button is displayed in the dialog box.
+</para>
+            </summary>
+            <value><b>true</b>, if the <b>Help</b> button is shown in the dialog box; otherwise, <b>false</b>. The default is <b>true</b>.
+</value>
+
+
+        </member>
+        <member name="P:DevExpress.Mvvm.IFileDialogServiceBase.SupportMultiDottedExtensions">
+            <summary>
+                <para>Gets or sets a value whether the dialog box displays and saves files that have multiple file name extensions.
+</para>
+            </summary>
+            <value><b>true</b>, if the dialog box supports multiple file name extensions; otherwise, <b>false</b>. The default is <b>false</b>. 
+</value>
+
+
+        </member>
+        <member name="P:DevExpress.Mvvm.IFileDialogServiceBase.Title">
+            <summary>
+                <para>Gets or sets the title displayed by the dialog box.
+</para>
+            </summary>
+            <value>A <b>System.String</b> value that specifies the title displayed by the dialog box.
+</value>
+
+
+        </member>
+        <member name="P:DevExpress.Mvvm.IFileDialogServiceBase.ValidateNames">
+            <summary>
+                <para>Gets or sets a value indicating whether the dialog box accepts only valid Win32 file names.
+</para>
+            </summary>
+            <value><b>true</b>, if the dialog box accepts only valid Win32 file names; otherwise, <b>false</b>. The default is <b>true</b>.
+</value>
 
 
         </member>
@@ -2612,72 +2881,83 @@
             </summary>
 
         </member>
-        <member name="T:DevExpress.Mvvm.ISplashScreenService">
+        <member name="T:DevExpress.Mvvm.IDocument">
 
             <summary>
-                <para>Provides methods to display splash screens.
+                <para>Provides methods to work with a document created with the IDocumentManagerService.
 </para>
             </summary>
 
         </member>
-        <member name="M:DevExpress.Mvvm.ISplashScreenService.HideSplashScreen">
+        <member name="M:DevExpress.Mvvm.IDocument.Close(System.Boolean)">
             <summary>
-                <para>Hides the splash screen.
+                <para>Closes the document.
 </para>
             </summary>
+            <param name="force">
+		<b>true</b>, to disable the confirmation logic; otherwise, <b>false</b>.
+
+            </param>
 
 
         </member>
-        <member name="P:DevExpress.Mvvm.ISplashScreenService.IsSplashScreenActive">
+        <member name="P:DevExpress.Mvvm.IDocument.Content">
             <summary>
-                <para>Gets whether the splash screen is currently shown.
+                <para>Specifies the document content.
+
 </para>
             </summary>
-            <value><b>true</b>, if the splash screen is currently shown; otherwise, <b>false</b>.
+            <value>The document content.
+
 </value>
 
 
         </member>
-        <member name="M:DevExpress.Mvvm.ISplashScreenService.SetSplashScreenProgress(System.Double,System.Double)">
+        <member name="P:DevExpress.Mvvm.IDocument.DestroyOnClose">
             <summary>
-                <para>Specifies the current progress of the splash screen.
+                <para>Specifies whether to release the memory reserved for the document after it is closed.
+
 </para>
             </summary>
-            <param name="progress">
-		The current progress value.
+            <value><b>true</b>, to release the memory reserved for the document after it is closed; otherwise, <b>false</b>.
 
-
-            </param>
-            <param name="maxProgress">
-		The maximum progress value.
-
-
-            </param>
+</value>
 
 
         </member>
-        <member name="M:DevExpress.Mvvm.ISplashScreenService.SetSplashScreenState(System.Object)">
+        <member name="M:DevExpress.Mvvm.IDocument.Hide">
             <summary>
-                <para>Specifies a data object to be passed to the splash screen service.
+                <para>Hides the document.
 </para>
             </summary>
-            <param name="state">
-		A data object to be passed to the splash screen service.
-
-            </param>
 
 
         </member>
-        <member name="M:DevExpress.Mvvm.ISplashScreenService.ShowSplashScreen(System.String)">
+        <member name="P:DevExpress.Mvvm.IDocument.Id">
             <summary>
-                <para>Shows the splash screen.
+                <para>Specifies the document ID.
 </para>
             </summary>
-            <param name="documentType">
-		A <see cref="T:System.String"/> value that specifies the name of a document type to be shown in the splash screen.
+            <value>The document ID.
+</value>
 
 
-            </param>
+        </member>
+        <member name="M:DevExpress.Mvvm.IDocument.Show">
+            <summary>
+                <para>Shows the document.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="P:DevExpress.Mvvm.IDocument.Title">
+            <summary>
+                <para>Specifies the document title.
+</para>
+            </summary>
+            <value>The document title.
+</value>
 
 
         </member>
@@ -2767,70 +3047,19 @@
 
 
         </member>
-        <member name="T:DevExpress.Mvvm.ILayoutSerializationService">
+        <member name="T:DevExpress.Mvvm.DataAnnotations.HiddenAttribute">
 
             <summary>
-                <para>Provides methods to save/restore the layout of serializable DevExpress WPF Controls.
-
+                <para>Configures the property to be hidden.
 </para>
             </summary>
 
         </member>
-        <member name="M:DevExpress.Mvvm.ILayoutSerializationService.Deserialize(System.String)">
+        <member name="M:DevExpress.Mvvm.DataAnnotations.HiddenAttribute.#ctor">
             <summary>
-                <para>Restores the layout of an associated View from a string.
+                <para>Initializes a new instance of the HiddenAttribute class with default settings.
 </para>
             </summary>
-            <param name="state">
-		A string object from which the layout of an associated View is restored. 
-
-            </param>
-
-
-        </member>
-        <member name="M:DevExpress.Mvvm.ILayoutSerializationService.Serialize">
-            <summary>
-                <para>Saves the layout of an associated View to a string.
-</para>
-            </summary>
-            <returns>A string value in which the layout is stored. 
-</returns>
-
-
-        </member>
-        <member name="T:DevExpress.Mvvm.DataAnnotations.InstanceInitializerAttribute">
-
-            <summary>
-                <para>Provides attributes for the instance initializer builder.
-</para>
-            </summary>
-
-        </member>
-        <member name="M:DevExpress.Mvvm.DataAnnotations.InstanceInitializerAttribute.#ctor(System.Type)">
-            <summary>
-                <para>Initializes a new instance of the InstanceInitializerAttribute class.
-</para>
-            </summary>
-            <param name="type">
-		A <see cref="T:System.Type"/> object that specifies the instance type.
-
-            </param>
-
-
-        </member>
-        <member name="M:DevExpress.Mvvm.DataAnnotations.InstanceInitializerAttribute.#ctor(System.Type,System.String)">
-            <summary>
-                <para>Initializes a new instance of the InstanceInitializerAttribute class.
-</para>
-            </summary>
-            <param name="type">
-		A <see cref="T:System.Type"/> object that specifies the instance type.
-
-            </param>
-            <param name="name">
-		A <see cref="T:System.String"/> value that specifies the instance name.
-
-            </param>
 
 
         </member>
@@ -2840,6 +3069,65 @@
                 <para>Provides the command generating functionality.
 </para>
             </summary>
+
+        </member>
+        <member name="T:DevExpress.Mvvm.DataAnnotations.DXImageAttribute">
+
+            <summary>
+                <para>Provides the ability to associate an image file with a data item.
+</para>
+            </summary>
+
+        </member>
+        <member name="M:DevExpress.Mvvm.DataAnnotations.DXImageAttribute.#ctor">
+            <summary>
+                <para>Initializes a new instance of the DXImageAttribute class with the specified owner.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="M:DevExpress.Mvvm.DataAnnotations.DXImageAttribute.#ctor(System.String)">
+            <summary>
+                <para>Initializes a new instance of the DXImageAttribute class with the specified image name.
+</para>
+            </summary>
+            <param name="imageName">
+		The image name.
+
+
+            </param>
+
+
+        </member>
+        <member name="P:DevExpress.Mvvm.DataAnnotations.DXImageAttribute.ImageName">
+            <summary>
+                <para>Gets the image name.
+</para>
+            </summary>
+            <value>The image name.
+</value>
+
+
+        </member>
+        <member name="P:DevExpress.Mvvm.DataAnnotations.DXImageAttribute.LargeImageUri">
+            <summary>
+                <para>Gets or sets the absolute Uri that defines the location of an image file.
+</para>
+            </summary>
+            <value>A string that is a Uri to the image file.
+</value>
+
+
+        </member>
+        <member name="P:DevExpress.Mvvm.DataAnnotations.DXImageAttribute.SmallImageUri">
+            <summary>
+                <para>Gets or sets the Uri that defines the relative location of an image file.
+</para>
+            </summary>
+            <value>A string that is a Uri to the image file.
+</value>
+
 
         </member>
         <member name="T:DevExpress.Mvvm.DataAnnotations.CommandMetadataBuilderBase`2">
@@ -3009,74 +3297,21 @@
 
 
         </member>
-        <member name="T:DevExpress.Mvvm.DelegateCommand`1">
+        <member name="T:DevExpress.Mvvm.IDispatcherService">
 
             <summary>
-                <para>A command that calls your parameterized delegates when Execute and CanExecute logic is invoked on the command.
+                <para>Provides the method to perform actions in a ViewModel using the <b>Dispatcher</b>.
 </para>
             </summary>
 
         </member>
-        <member name="M:DevExpress.Mvvm.DelegateCommand`1.#ctor(System.Action`1,System.Boolean)">
+        <member name="M:DevExpress.Mvvm.IDispatcherService.BeginInvoke(System.Action)">
             <summary>
-                <para>Initializes a new instance of the DelegateCommand that can always be executed.
-
+                <para>Executes the specified delegate asynchronously.
 </para>
             </summary>
-            <param name="executeMethod">
-		The execution logic. 
-
-            </param>
-            <param name="useCommandManager">
-		Specifies whether the command is automatically updated by the command manager. 
-
-
-            </param>
-
-
-        </member>
-        <member name="M:DevExpress.Mvvm.DelegateCommand`1.#ctor(System.Action`1)">
-            <summary>
-                <para>Initializes a new instance of the DelegateCommand that can always be executed.
-
-</para>
-            </summary>
-            <param name="executeMethod">
-		The execution logic.
-
-            </param>
-
-
-        </member>
-        <member name="M:DevExpress.Mvvm.DelegateCommand`1.#ctor(System.Action`1,System.Func`2,System.Nullable`1)">
-            <summary>
-                <para>Initializes a new instance of the DelegateCommand that can always be executed.
-
-</para>
-            </summary>
-            <param name="executeMethod">
-		The execution logic.
-
-            </param>
-            <param name="canExecuteMethod">
-		The execution status logic.
-
-            </param>
-            <param name="useCommandManager">
-		Specifies whether the command is automatically updated by the command manager. 
-
-
-            </param>
-
-
-        </member>
-        <member name="M:DevExpress.Mvvm.DelegateCommand`1.Execute(DevExpress.Mvvm.T)">
-            <summary>
-                <para>Defines the method to be called when the command is invoked.
-</para>
-            </summary>
-            <param name="parameter">
-		Data used by the command. If the command does not require data to be passed, this object can be set to a null reference.
+            <param name="action">
+		The delegate to execute, which takes no arguments and does not return a value.
 
             </param>
 
@@ -3505,103 +3740,6 @@
 
 
         </member>
-        <member name="T:DevExpress.Mvvm.DataAnnotations.PredefinedMasks">
-
-            <summary>
-                <para>Contains predefined mask expressions.
-</para>
-            </summary>
-
-        </member>
-        <member name="T:DevExpress.Mvvm.IMessenger">
-
-            <summary>
-                <para>Provides methods to send messages and register message handlers.
-</para>
-            </summary>
-
-        </member>
-        <member name="M:DevExpress.Mvvm.IMessenger.Register``1(System.Object,System.Object,System.Boolean,System.Action{``0})">
-            <summary>
-                <para>Registers a handler of a specific message type.
-</para>
-            </summary>
-            <param name="recipient">
-		An object that will receive messages.
-
-            </param>
-            <param name="token">
-		An object (marker) that can be used to identify a specific message. <b>null</b> if you want to process messages without tokens.
-
-            </param>
-            <param name="receiveInheritedMessages">
-		<b>true</b> to receive messages of the TMessage type and all derived types; <b>false</b> to receive messages of the TMessage type only.
-
-            </param>
-            <param name="action">
-		An action that will be invoked when the specified message occurs.
-
-            </param>
-
-
-        </member>
-        <member name="M:DevExpress.Mvvm.IMessenger.Send``1(``0,System.Type,System.Object)">
-            <summary>
-                <para>Sends the specified message.
-</para>
-            </summary>
-            <param name="message">
-		The message of the TMessage type to be sent.
-
-            </param>
-            <param name="messageTargetType">
-		Only recipients of the <i>messageTargetType</i> or inherited type will receive the current message. Set this parameter to <b>null</b> to send a message without an addressee type.
-
-            </param>
-            <param name="token">
-		An object (marker) that can be used to identify a specific message. <b>null</b> if you want to send regular messages (without tokens).
-<para>
-When sending a message, a token can be assigned to the message via the current <i>token</i> parameter. Only message recipients that registered the same token via the Register method are invoked when this message occurs.
-</para>
-
-            </param>
-
-
-        </member>
-        <member name="M:DevExpress.Mvvm.IMessenger.Unregister(System.Object)">
-            <summary>
-                <para>Unsubscribes the specified object from receiving any messages.
-</para>
-            </summary>
-            <param name="recipient">
-		An object to be unsubscribed from receiving any messages.
-
-            </param>
-
-
-        </member>
-        <member name="M:DevExpress.Mvvm.IMessenger.Unregister``1(System.Object,System.Object,System.Action{``0})">
-            <summary>
-                <para>Unsubscribes the specified object's action from being invoked when a specific message occurs.
-</para>
-            </summary>
-            <param name="recipient">
-		An object containing an action to be unsubscribed from receiving the messages of TMessage type.
-
-
-            </param>
-            <param name="token">
-		An object (marker) that was used to identify a specific message when subscribing to it via the Register method. <b>null</b> to unsubscribe from the message regardless of the token assigned to it.
-
-
-            </param>
-            <param name="action">
-		An action to be unsubscribed from receiving messages.
-
-            </param>
-
-
-        </member>
         <member name="T:DevExpress.Mvvm.DelegateCommand">
 
             <summary>
@@ -3660,86 +3798,6 @@ When sending a message, a token can be assigned to the message via the current <
 
 
             </param>
-
-
-        </member>
-        <member name="T:DevExpress.Mvvm.IDocument">
-
-            <summary>
-                <para>Provides methods to work with a document created with the IDocumentManagerService.
-</para>
-            </summary>
-
-        </member>
-        <member name="M:DevExpress.Mvvm.IDocument.Close(System.Boolean)">
-            <summary>
-                <para>Closes the document.
-</para>
-            </summary>
-            <param name="force">
-		<b>true</b>, to disable the confirmation logic; otherwise, <b>false</b>.
-
-            </param>
-
-
-        </member>
-        <member name="P:DevExpress.Mvvm.IDocument.Content">
-            <summary>
-                <para>Specifies the document content.
-
-</para>
-            </summary>
-            <value>The document content.
-
-</value>
-
-
-        </member>
-        <member name="P:DevExpress.Mvvm.IDocument.DestroyOnClose">
-            <summary>
-                <para>Specifies whether to release the memory reserved for the document after it is closed.
-
-</para>
-            </summary>
-            <value><b>true</b>, to release the memory reserved for the document after it is closed; otherwise, <b>false</b>.
-
-</value>
-
-
-        </member>
-        <member name="M:DevExpress.Mvvm.IDocument.Hide">
-            <summary>
-                <para>Hides the document.
-</para>
-            </summary>
-
-
-        </member>
-        <member name="P:DevExpress.Mvvm.IDocument.Id">
-            <summary>
-                <para>Specifies the document ID.
-</para>
-            </summary>
-            <value>The document ID.
-</value>
-
-
-        </member>
-        <member name="M:DevExpress.Mvvm.IDocument.Show">
-            <summary>
-                <para>Shows the document.
-</para>
-            </summary>
-
-
-        </member>
-        <member name="P:DevExpress.Mvvm.IDocument.Title">
-            <summary>
-                <para>Specifies the document title.
-</para>
-            </summary>
-            <value>The document title.
-</value>
 
 
         </member>
@@ -3867,130 +3925,28 @@ When sending a message, a token can be assigned to the message via the current <
 
 
         </member>
-        <member name="T:DevExpress.Mvvm.IFileDialogServiceBase">
+        <member name="T:DevExpress.Mvvm.DataAnnotations.SimpleMaskAttribute">
 
             <summary>
-                <para>Provides methods and properties to configure the standard dialog box.
- 
+                <para>Provides simple mask attributes.
 </para>
             </summary>
 
         </member>
-        <member name="P:DevExpress.Mvvm.IFileDialogServiceBase.AddExtension">
+        <member name="M:DevExpress.Mvvm.DataAnnotations.SimpleMaskAttribute.#ctor">
             <summary>
-                <para>Gets or sets a value indicating whether the dialog box automatically adds an extension to the file name if the user omits it.
-
-</para>
-            </summary>
-            <value><b>true</b>, if the dialog box adds an extension to the file name; otherwise, <b>false</b>. The default is <b>true</b>.
-</value>
-
-
-        </member>
-        <member name="P:DevExpress.Mvvm.IFileDialogServiceBase.AutoUpgradeEnabled">
-            <summary>
-                <para>Gets or sets a value indicating whether the dialog box automatically upgrades appearance and behavior.
-</para>
-            </summary>
-            <value><b>true</b>, if the dialog box automatically upgrades appearance and behavior; otherwise, <b>false</b>. The default is <b>true</b>.
-</value>
-
-
-        </member>
-        <member name="P:DevExpress.Mvvm.IFileDialogServiceBase.CheckFileExists">
-            <summary>
-                <para>Gets or sets a value indicating whether the dialog box displays a warning when the user specifies a file name that does not exist.  
-</para>
-            </summary>
-            <value><b>true</b>, if the dialog box displays a warning when the user specifies a file name that does not exist; otherwise, <b>false</b>. The default is <b>false</b>.
-</value>
-
-
-        </member>
-        <member name="P:DevExpress.Mvvm.IFileDialogServiceBase.CheckPathExists">
-            <summary>
-                <para>Gets or sets a value indicating whether the dialog box displays a warning when the user specifies a path that does not exist.
-</para>
-            </summary>
-            <value><b>true</b>, if the dialog box displays a warning when the user specifies a path that does not exist; otherwise, <b>false</b>. The default is <b>true</b>.
-</value>
-
-
-        </member>
-        <member name="P:DevExpress.Mvvm.IFileDialogServiceBase.DereferenceLinks">
-            <summary>
-                <para>Gets or sets a value indicating whether the dialog box returns the location of the file referenced by the shortcut or it returns the location of the shortcut.
-</para>
-            </summary>
-            <value><b>true</b>, if the dialog box returns the location of the file referenced by the shortcut; otherwise, <b>false</b>. The default is <b>true</b>.
-</value>
-
-
-        </member>
-        <member name="P:DevExpress.Mvvm.IFileDialogServiceBase.InitialDirectory">
-            <summary>
-                <para>Gets or sets the initial folder shown by the dialog box.
-</para>
-            </summary>
-            <value>A <b>System.String</b> value specifying the initial folder shown by the dialog box. The default is an empty string.
-</value>
-
-
-        </member>
-        <member name="M:DevExpress.Mvvm.IFileDialogServiceBase.Reset">
-            <summary>
-                <para>Resets all properties to the default values.
+                <para>Initializes a new instance of the SimpleMaskAttribute class with default settings.
 </para>
             </summary>
 
 
         </member>
-        <member name="P:DevExpress.Mvvm.IFileDialogServiceBase.RestoreDirectory">
+        <member name="P:DevExpress.Mvvm.DataAnnotations.SimpleMaskAttribute.SaveLiteral">
             <summary>
-                <para>Gets or sets a value indicating whether the dialog box restores the directory to the previously selected directory before closing.
+                <para>Gets or sets whether constantly displayed mask characters (literals) are included in an editor's value.
 </para>
             </summary>
-            <value><b>true</b>, if the dialog box restores the current directory to the previously selected directory if the initial directory was changed while searching for files; otherwise, <b>false</b>. The default is <b>false</b>.
-</value>
-
-
-        </member>
-        <member name="P:DevExpress.Mvvm.IFileDialogServiceBase.ShowHelp">
-            <summary>
-                <para>Gets or sets a value indicating whether the <b>Help</b> button is displayed in the dialog box.
-</para>
-            </summary>
-            <value><b>true</b>, if the <b>Help</b> button is shown in the dialog box; otherwise, <b>false</b>. The default is <b>true</b>.
-</value>
-
-
-        </member>
-        <member name="P:DevExpress.Mvvm.IFileDialogServiceBase.SupportMultiDottedExtensions">
-            <summary>
-                <para>Gets or sets a value whether the dialog box displays and saves files that have multiple file name extensions.
-</para>
-            </summary>
-            <value><b>true</b>, if the dialog box supports multiple file name extensions; otherwise, <b>false</b>. The default is <b>false</b>. 
-</value>
-
-
-        </member>
-        <member name="P:DevExpress.Mvvm.IFileDialogServiceBase.Title">
-            <summary>
-                <para>Gets or sets the title displayed by the dialog box.
-</para>
-            </summary>
-            <value>A <b>System.String</b> value that specifies the title displayed by the dialog box.
-</value>
-
-
-        </member>
-        <member name="P:DevExpress.Mvvm.IFileDialogServiceBase.ValidateNames">
-            <summary>
-                <para>Gets or sets a value indicating whether the dialog box accepts only valid Win32 file names.
-</para>
-            </summary>
-            <value><b>true</b>, if the dialog box accepts only valid Win32 file names; otherwise, <b>false</b>. The default is <b>true</b>.
+            <value><b>true</b> if the constantly displayed mask characters are included in an editor's value; otherwise, <b>false</b>. 
 </value>
 
 
@@ -4586,6 +4542,46 @@ When sending a message, a token can be assigned to the message via the current <
 
 
         </member>
+        <member name="M:DevExpress.Mvvm.DataAnnotations.PropertyMetadataBuilderExtensions.InRange``2(DevExpress.Mvvm.DataAnnotations.PropertyMetadataBuilder{``0,``1},``1,``1,System.Func{``1,System.String})">
+            <summary>
+                <para> </para>
+            </summary>
+            <param name="builder">
+		 
+            </param>
+            <param name="minimum">
+		 
+            </param>
+            <param name="maximum">
+		 
+            </param>
+            <param name="errorMessageAccessor">
+		 
+            </param>
+            <returns> </returns>
+
+
+        </member>
+        <member name="M:DevExpress.Mvvm.DataAnnotations.PropertyMetadataBuilderExtensions.InRange``2(DevExpress.Mvvm.DataAnnotations.PropertyMetadataBuilder{``0,System.Nullable`1},System.Nullable{``1},System.Nullable{``1},System.Func{``1,System.String})">
+            <summary>
+                <para> </para>
+            </summary>
+            <param name="builder">
+		 
+            </param>
+            <param name="minimum">
+		 
+            </param>
+            <param name="maximum">
+		 
+            </param>
+            <param name="errorMessageAccessor">
+		 
+            </param>
+            <returns> </returns>
+
+
+        </member>
         <member name="M:DevExpress.Mvvm.DataAnnotations.PropertyMetadataBuilderExtensions.MultilineTextDataType``1(DevExpress.Mvvm.DataAnnotations.PropertyMetadataBuilder{``0,System.String})">
             <summary>
                 <para>Configures the property editor to display multiline data values.
@@ -5063,6 +5059,14 @@ When sending a message, a token can be assigned to the message via the current <
 
 
         </member>
+        <member name="T:DevExpress.Mvvm.DataAnnotations.PredefinedMasks">
+
+            <summary>
+                <para>Contains predefined mask expressions.
+</para>
+            </summary>
+
+        </member>
         <member name="T:DevExpress.Mvvm.DataAnnotations.NumericUnsignedPropertyMetadataBuilderExtensions">
 
             <summary>
@@ -5342,19 +5346,242 @@ When sending a message, a token can be assigned to the message via the current <
 
 
         </member>
-        <member name="T:DevExpress.Mvvm.DataAnnotations.HiddenAttribute">
+        <member name="T:DevExpress.Mvvm.IViewInjectionManager">
 
             <summary>
-                <para>Configures the property to be hidden.
+                <para>Provides methods to inject and manipulate under ViewModels (and their Views)
+
 </para>
             </summary>
 
         </member>
-        <member name="M:DevExpress.Mvvm.DataAnnotations.HiddenAttribute.#ctor">
+        <member name="M:DevExpress.Mvvm.IViewInjectionManager.GetService(System.String)">
             <summary>
-                <para>Initializes a new instance of the HiddenAttribute class with default settings.
+                <para>Gets the service attached to the specified control (region).
 </para>
             </summary>
+            <param name="regionName">
+		A <b>System.String</b> value specifying the region.
+
+            </param>
+            <returns>An <see cref="T:DevExpress.Mvvm.IViewInjectionService"/> implementation.
+</returns>
+
+
+        </member>
+        <member name="M:DevExpress.Mvvm.IViewInjectionManager.Inject(System.String,System.Object,System.Func`1,System.String,System.Type)">
+            <summary>
+                <para>Injects a ViewModel (and its View) with the specified parameters. 
+</para>
+            </summary>
+            <param name="regionName">
+		A <b>System.String</b> value specifying the region name. 
+
+            </param>
+            <param name="key">
+		An object specifying the identifier (key) of the View and its ViewModel. 
+
+            </param>
+            <param name="viewModelFactory">
+		A object encapsulating the method that returns the ViewModel.
+
+            </param>
+            <param name="viewName">
+		A <b>System.String</b> value specifying the view that will be created using the <see cref="T:DevExpress.Mvvm.UI.ViewLocator"/>. 
+
+            </param>
+            <param name="viewType">
+		A <b>System.Type </b> value specifying the view that will be created using the <see cref="T:DevExpress.Mvvm.UI.ViewLocator"/>. 
+
+            </param>
+
+
+        </member>
+        <member name="M:DevExpress.Mvvm.IViewInjectionManager.Navigate(System.String,System.Object)">
+            <summary>
+                <para>Navigates to the specified ViewModel (and its View) inside the corresponding region.
+</para>
+            </summary>
+            <param name="regionName">
+		A <b>System.String</b> value specifying the region name.
+
+            </param>
+            <param name="key">
+		An object specifying the key of the ViewModel (and its View).
+
+            </param>
+
+
+        </member>
+        <member name="M:DevExpress.Mvvm.IViewInjectionManager.RaiseNavigatedAwayEvent(System.Object)">
+            <summary>
+                <para>Raises the NavigateAway event. For internal use.
+</para>
+            </summary>
+            <param name="viewModel">
+		 
+
+            </param>
+
+
+        </member>
+        <member name="M:DevExpress.Mvvm.IViewInjectionManager.RaiseNavigatedEvent(System.Object)">
+            <summary>
+                <para>Raises the Navigated event. For internal use.
+</para>
+            </summary>
+            <param name="viewModel">
+		 
+
+            </param>
+
+
+        </member>
+        <member name="M:DevExpress.Mvvm.IViewInjectionManager.RaiseViewModelClosingEvent(DevExpress.Mvvm.ViewModelClosingEventArgs)">
+            <summary>
+                <para>Raises the ViewModelClosing event. For internal use.
+</para>
+            </summary>
+            <param name="e">
+		 
+
+            </param>
+
+
+        </member>
+        <member name="M:DevExpress.Mvvm.IViewInjectionManager.RegisterNavigatedAwayEventHandler(System.Object,System.Action)">
+            <summary>
+                <para>Registers the <b>NavigateAway</b> event handler for the specified ViewModel.
+</para>
+            </summary>
+            <param name="viewModel">
+		An object representing the ViewModel. 
+
+            </param>
+            <param name="eventHandler">
+		A <b>System.Action</b> object encapsulating the event handler.
+
+            </param>
+
+
+        </member>
+        <member name="M:DevExpress.Mvvm.IViewInjectionManager.RegisterNavigatedEventHandler(System.Object,System.Action)">
+            <summary>
+                <para>Registers the <b>Navigated</b> event handler for the specified ViewModel.
+</para>
+            </summary>
+            <param name="viewModel">
+		An object representing the ViewModel. 
+
+            </param>
+            <param name="eventHandler">
+		A <b>System.Action</b> object encapsulating the event handler.
+
+            </param>
+
+
+        </member>
+        <member name="M:DevExpress.Mvvm.IViewInjectionManager.RegisterService(DevExpress.Mvvm.IViewInjectionService)">
+            <summary>
+                <para>Register the service. For internal use.
+</para>
+            </summary>
+            <param name="service">
+		 
+
+            </param>
+
+
+        </member>
+        <member name="M:DevExpress.Mvvm.IViewInjectionManager.RegisterViewModelClosingEventHandler(System.Object,System.Action`1)">
+            <summary>
+                <para>Registers the <b>ViewModelClosing</b> event handler for the specified ViewModel.
+</para>
+            </summary>
+            <param name="viewModel">
+		An object representing the ViewModel. 
+
+            </param>
+            <param name="eventHandler">
+		A <b>System.Action</b> object encapsulating the event handler.
+
+            </param>
+
+
+        </member>
+        <member name="M:DevExpress.Mvvm.IViewInjectionManager.Remove(System.String,System.Object)">
+            <summary>
+                <para>Removes the ViewModel (and its View) from the specified region. 
+</para>
+            </summary>
+            <param name="regionName">
+		A <b>System.String</b> value specifying the region name. 
+
+            </param>
+            <param name="key">
+		An object specifying the identifier (key) of the View and its ViewModel. 
+
+            </param>
+
+
+        </member>
+        <member name="M:DevExpress.Mvvm.IViewInjectionManager.UnregisterNavigatedAwayEventHandler(System.Object,System.Action)">
+            <summary>
+                <para>Unregisters the <b>NavigateAway</b> event handler for the specified ViewModel.
+</para>
+            </summary>
+            <param name="viewModel">
+		An object representing the ViewModel. 
+
+            </param>
+            <param name="eventHandler">
+		A <b>System.Action</b> object encapsulating the event handler.
+
+            </param>
+
+
+        </member>
+        <member name="M:DevExpress.Mvvm.IViewInjectionManager.UnregisterNavigatedEventHandler(System.Object,System.Action)">
+            <summary>
+                <para>Unregisters the <b>Navigated</b> event handler for the specified ViewModel.
+</para>
+            </summary>
+            <param name="viewModel">
+		An object representing the ViewModel. 
+
+            </param>
+            <param name="eventHandler">
+		A <b>System.Action</b> object encapsulating the event handler.
+
+            </param>
+
+
+        </member>
+        <member name="M:DevExpress.Mvvm.IViewInjectionManager.UnregisterService(DevExpress.Mvvm.IViewInjectionService)">
+            <summary>
+                <para>Unregister the service. For internal use.
+</para>
+            </summary>
+            <param name="service">
+		 
+
+            </param>
+
+
+        </member>
+        <member name="M:DevExpress.Mvvm.IViewInjectionManager.UnregisterViewModelClosingEventHandler(System.Object,System.Action`1)">
+            <summary>
+                <para>Unregisters the <b>ViewModelClosing</b> event handler for the specified ViewModel.
+</para>
+            </summary>
+            <param name="viewModel">
+		An object representing the ViewModel. 
+
+            </param>
+            <param name="eventHandler">
+		A <b>System.Action</b> object encapsulating the event handler.
+
+            </param>
 
 
         </member>

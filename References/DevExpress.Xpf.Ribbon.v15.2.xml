@@ -4,270 +4,6 @@
         <name>DevExpress.Xpf.Ribbon.v15.2</name>
     </assembly>
     <members>
-        <member name="T:DevExpress.Xpf.Ribbon.RibbonGalleryBarItem">
-
-            <summary>
-                <para>A bar item that displays a gallery. 
-</para>
-            </summary>
-
-        </member>
-        <member name="M:DevExpress.Xpf.Ribbon.RibbonGalleryBarItem.#ctor">
-            <summary>
-                <para>Initializes a new instance of the RibbonGalleryBarItem class.
-</para>
-            </summary>
-
-
-        </member>
-        <member name="P:DevExpress.Xpf.Ribbon.RibbonGalleryBarItem.ActualLinks">
-            <summary>
-                <para>Returns the links currently displayed by the link container.
-</para>
-            </summary>
-            <value>A <see cref="T:DevExpress.Xpf.Bars.BarItemLinkCollection"/> object that contains the links currently displayed by the link container.
-</value>
-
-
-        </member>
-        <member name="P:DevExpress.Xpf.Ribbon.RibbonGalleryBarItem.DropDownGallery">
-            <summary>
-                <para>Gets or sets the item's dropdown gallery, which is invoked when clicking the RibbonGalleryBarItem's dropdown button.
-This is a dependency property.
-</para>
-            </summary>
-            <value>A <see cref="T:DevExpress.Xpf.Bars.Gallery"/> object that represents the dropdown gallery.
-</value>
-
-
-        </member>
-        <member name="E:DevExpress.Xpf.Ribbon.RibbonGalleryBarItem.DropDownGalleryClosed">
-            <summary>
-                <para>Fires when a popup window containing the dropdown gallery is closed.
-</para>
-            </summary>
-
-
-        </member>
-        <member name="P:DevExpress.Xpf.Ribbon.RibbonGalleryBarItem.DropDownGalleryEnabled">
-            <summary>
-                <para>Gets or sets if a drop-down behavior is enabled for the current gallery.
-</para>
-            </summary>
-            <value><b>true</b> if a drop-down behavior is enabled for the current gallery; otherwise, <b>false</b>.
-</value>
-
-
-        </member>
-        <member name="F:DevExpress.Xpf.Ribbon.RibbonGalleryBarItem.DropDownGalleryEnabledProperty">
-            <summary>
-                <para>Identifies the  dependency property.
-</para>
-            </summary>
-            <returns> </returns>
-
-
-        </member>
-        <member name="E:DevExpress.Xpf.Ribbon.RibbonGalleryBarItem.DropDownGalleryInit">
-            <summary>
-                <para>Allows you to customize the dropdown gallery.
-</para>
-            </summary>
-
-
-        </member>
-        <member name="P:DevExpress.Xpf.Ribbon.RibbonGalleryBarItem.DropDownGalleryMenuItemsGlyphSize">
-            <summary>
-                <para>Gets or sets the size of the images displayed for the menu items within the dropdown gallery.
-This is a dependency property.
-</para>
-            </summary>
-            <value>A <see cref="T:DevExpress.Xpf.Bars.GlyphSize"/> value that specifies the size of the corresponding images.
-</value>
-
-
-        </member>
-        <member name="F:DevExpress.Xpf.Ribbon.RibbonGalleryBarItem.DropDownGalleryMenuItemsGlyphSizeProperty">
-            <summary>
-                <para>Identifies the  dependency property.
-</para>
-            </summary>
-            <returns> </returns>
-
-
-        </member>
-        <member name="F:DevExpress.Xpf.Ribbon.RibbonGalleryBarItem.DropDownGalleryProperty">
-            <summary>
-                <para>Identifies the  dependency property.
-</para>
-            </summary>
-            <returns> </returns>
-
-
-        </member>
-        <member name="P:DevExpress.Xpf.Ribbon.RibbonGalleryBarItem.DropDownMenuItemLinks">
-            <summary>
-                <para>Gets the bar item links displayed below the dropdown gallery.
-</para>
-            </summary>
-            <value>A <see cref="T:DevExpress.Xpf.Bars.BarItemLinkCollection"/> object that contains the corresponding items.
-</value>
-
-
-        </member>
-        <member name="P:DevExpress.Xpf.Ribbon.RibbonGalleryBarItem.DropDownMenuItems">
-            <summary>
-                <para>Provides access to a collection of bar items whose links are displayed below the dropdown gallery.
-
-</para>
-            </summary>
-            <value>A <see cref="CommonBarItemCollection"/> object that owns bar items whose links are displayed below the dropdown gallery.
-
-</value>
-
-
-        </member>
-        <member name="P:DevExpress.Xpf.Ribbon.RibbonGalleryBarItem.Gallery">
-            <summary>
-                <para>Gets or sets the in-ribbon gallery associated with the item.
-This is a dependency property.
-</para>
-            </summary>
-            <value>A <see cref="T:DevExpress.Xpf.Bars.Gallery"/> object.
-</value>
-
-
-        </member>
-        <member name="F:DevExpress.Xpf.Ribbon.RibbonGalleryBarItem.GalleryProperty">
-            <summary>
-                <para>Identifies the  dependency property.
-</para>
-            </summary>
-            <returns> </returns>
-
-
-        </member>
-        <member name="M:DevExpress.Xpf.Ribbon.RibbonGalleryBarItem.GetDefaultItemsGlyphSize(DevExpress.Xpf.Bars.LinkContainerType)">
-            <summary>
-                <para>Implements the <see cref="M:DevExpress.Xpf.Bars.ILinksHolder.GetDefaultItemsGlyphSize"/> method, and is not supposed to be used directly from your code.
-</para>
-            </summary>
-            <param name="linkContainerType">
-		A LinkContainerType value that specifies the type of bar item container.
-
-            </param>
-            <returns>A <see cref="T:DevExpress.Xpf.Bars.GlyphSize"/> value.
-</returns>
-
-
-        </member>
-        <member name="M:DevExpress.Xpf.Ribbon.RibbonGalleryBarItem.GetLogicalChildrenEnumerator">
-            <summary>
-                <para>Gets an enumerator used to iterate through bar item links.
-</para>
-            </summary>
-            <returns>An IEnumerator object.
-</returns>
-
-
-        </member>
-        <member name="P:DevExpress.Xpf.Ribbon.RibbonGalleryBarItem.IsMergedState">
-            <summary>
-                <para>Gets whether other link containers have been merged with the current container.
-</para>
-            </summary>
-            <value><b>true</b> if other link containers have been merged with the current container; otherwise, <b>false</b>.
-</value>
-
-
-        </member>
-        <member name="P:DevExpress.Xpf.Ribbon.RibbonGalleryBarItem.ItemsGlyphSize">
-            <summary>
-                <para>Gets the size of images used by bar item links owned by the current object.
-</para>
-            </summary>
-            <value>A <see cref="T:DevExpress.Xpf.Bars.GlyphSize"/> value.
-</value>
-
-
-        </member>
-        <member name="P:DevExpress.Xpf.Ribbon.RibbonGalleryBarItem.Links">
-            <summary>
-                <para>Gets or sets the bar item links displayed below the dropdown gallery.
-</para>
-            </summary>
-            <value>A <see cref="T:DevExpress.Xpf.Bars.BarItemLinkCollection"/> object that contains the corresponding bar item links.
-</value>
-
-
-        </member>
-        <member name="M:DevExpress.Xpf.Ribbon.RibbonGalleryBarItem.Merge(DevExpress.Xpf.Bars.ILinksHolder)">
-            <summary>
-                <para>Adds the visible links from the specified link container onto the current link container. 
-</para>
-            </summary>
-            <param name="holder">
-		A <see cref="T:DevExpress.Xpf.Bars.ILinksHolder"/> object whose visible links are merged with the current link container.
-
-            </param>
-
-
-        </member>
-        <member name="P:DevExpress.Xpf.Ribbon.RibbonGalleryBarItem.MergedLinks">
-            <summary>
-                <para>Gets the links currently displayed by the link container, including the links that have been merged with the container.
-</para>
-            </summary>
-            <value>A <see cref="T:DevExpress.Xpf.Bars.BarItemLinkCollection"/> object that contains the links currently displayed by the link container.
-</value>
-
-
-        </member>
-        <member name="M:DevExpress.Xpf.Ribbon.RibbonGalleryBarItem.OnLinkAdded(DevExpress.Xpf.Bars.BarItemLinkBase)">
-            <summary>
-                <para>This method is called before a bar item link is added to the current link holder.
-</para>
-            </summary>
-            <param name="link">
-		A <see cref="T:DevExpress.Xpf.Bars.BarItemLink"/> object being added.
-
-            </param>
-
-
-        </member>
-        <member name="M:DevExpress.Xpf.Ribbon.RibbonGalleryBarItem.OnLinkRemoved(DevExpress.Xpf.Bars.BarItemLinkBase)">
-            <summary>
-                <para>This method is called before a bar item link is removed from the current link holder.
-</para>
-            </summary>
-            <param name="link">
-		A <see cref="T:DevExpress.Xpf.Bars.BarItemLink"/> object being removed.
-
-            </param>
-
-
-        </member>
-        <member name="M:DevExpress.Xpf.Ribbon.RibbonGalleryBarItem.UnMerge">
-            <summary>
-                <para>Removes the links of other link containers from the current link container. This method is in effect when other link containers have been merged with the current container.
-</para>
-            </summary>
-
-
-        </member>
-        <member name="M:DevExpress.Xpf.Ribbon.RibbonGalleryBarItem.UnMerge(DevExpress.Xpf.Bars.ILinksHolder)">
-            <summary>
-                <para>Removes the links of the specified link container from the current link container. This method is in effect when the specified link container has been merged with the current container.
-
-</para>
-            </summary>
-            <param name="holder">
-		A <see cref="T:DevExpress.Xpf.Bars.ILinksHolder"/> object whose links must be removed from the current link container.
-
-            </param>
-
-
-        </member>
         <member name="T:DevExpress.Xpf.Ribbon.ApplicationMenuInfo">
 
             <summary>
@@ -1413,7 +1149,7 @@ This is a dependency property.
                 <para>Gets or sets whether the current page is automatically hidden if it does not contain any items. This is a dependency property. 
 </para>
             </summary>
-            <value>The <see cref="Nullable"/> value that specifies whether the current page is automatically hidden if it does not contain any items. The default is <b>null</b>.
+            <value>The <see cref="Nullable&lt;Boolean&gt;"/> value that specifies whether the current page is automatically hidden if it does not contain any items. The default is <b>null</b>.
 </value>
 
 
@@ -2716,6 +2452,250 @@ This is a dependency property.
                 <para>Initializes a new instance of the RibbonGalleryBarItemLink class.
 </para>
             </summary>
+
+
+        </member>
+        <member name="T:DevExpress.Xpf.Ribbon.RibbonGalleryBarItem">
+
+            <summary>
+                <para>A bar item that displays a gallery. 
+</para>
+            </summary>
+
+        </member>
+        <member name="M:DevExpress.Xpf.Ribbon.RibbonGalleryBarItem.#ctor">
+            <summary>
+                <para>Initializes a new instance of the RibbonGalleryBarItem class.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.Ribbon.RibbonGalleryBarItem.DropDownGallery">
+            <summary>
+                <para>Gets or sets the item's dropdown gallery, which is invoked when clicking the RibbonGalleryBarItem's dropdown button.
+This is a dependency property.
+</para>
+            </summary>
+            <value>A <see cref="T:DevExpress.Xpf.Bars.Gallery"/> object that represents the dropdown gallery.
+</value>
+
+
+        </member>
+        <member name="E:DevExpress.Xpf.Ribbon.RibbonGalleryBarItem.DropDownGalleryClosed">
+            <summary>
+                <para>Fires when a popup window containing the dropdown gallery is closed.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.Ribbon.RibbonGalleryBarItem.DropDownGalleryEnabled">
+            <summary>
+                <para>Gets or sets if a drop-down behavior is enabled for the current gallery.
+</para>
+            </summary>
+            <value><b>true</b> if a drop-down behavior is enabled for the current gallery; otherwise, <b>false</b>.
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.Ribbon.RibbonGalleryBarItem.DropDownGalleryEnabledProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="E:DevExpress.Xpf.Ribbon.RibbonGalleryBarItem.DropDownGalleryInit">
+            <summary>
+                <para>Allows you to customize the dropdown gallery.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.Ribbon.RibbonGalleryBarItem.DropDownGalleryMenuItemsGlyphSize">
+            <summary>
+                <para>Gets or sets the size of the images displayed for the menu items within the dropdown gallery.
+This is a dependency property.
+</para>
+            </summary>
+            <value>A <see cref="T:DevExpress.Xpf.Bars.GlyphSize"/> value that specifies the size of the corresponding images.
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.Ribbon.RibbonGalleryBarItem.DropDownGalleryMenuItemsGlyphSizeProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.Ribbon.RibbonGalleryBarItem.DropDownGalleryProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.Ribbon.RibbonGalleryBarItem.DropDownMenuItemLinks">
+            <summary>
+                <para>Gets the bar item links displayed below the dropdown gallery.
+</para>
+            </summary>
+            <value>A <see cref="T:DevExpress.Xpf.Bars.BarItemLinkCollection"/> object that contains the corresponding items.
+</value>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.Ribbon.RibbonGalleryBarItem.DropDownMenuItems">
+            <summary>
+                <para>Provides access to a collection of bar items whose links are displayed below the dropdown gallery.
+
+</para>
+            </summary>
+            <value>A <see cref="CommonBarItemCollection"/> object that owns bar items whose links are displayed below the dropdown gallery.
+
+</value>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.Ribbon.RibbonGalleryBarItem.Gallery">
+            <summary>
+                <para>Gets or sets the in-ribbon gallery associated with the item.
+This is a dependency property.
+</para>
+            </summary>
+            <value>A <see cref="T:DevExpress.Xpf.Bars.Gallery"/> object.
+</value>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.Ribbon.RibbonGalleryBarItem.GalleryProperty">
+            <summary>
+                <para>Identifies the  dependency property.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="M:DevExpress.Xpf.Ribbon.RibbonGalleryBarItem.GetDefaultItemsGlyphSize(DevExpress.Xpf.Bars.LinkContainerType)">
+            <summary>
+                <para>Implements the <see cref="M:DevExpress.Xpf.Bars.ILinksHolder.GetDefaultItemsGlyphSize"/> method, and is not supposed to be used directly from your code.
+</para>
+            </summary>
+            <param name="linkContainerType">
+		A LinkContainerType value that specifies the type of bar item container.
+
+            </param>
+            <returns>A <see cref="T:DevExpress.Xpf.Bars.GlyphSize"/> value.
+</returns>
+
+
+        </member>
+        <member name="M:DevExpress.Xpf.Ribbon.RibbonGalleryBarItem.GetLogicalChildrenEnumerator">
+            <summary>
+                <para>Gets an enumerator used to iterate through bar item links.
+</para>
+            </summary>
+            <returns>An IEnumerator object.
+</returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.Ribbon.RibbonGalleryBarItem.ItemsGlyphSize">
+            <summary>
+                <para>Gets the size of images used by bar item links owned by the current object.
+</para>
+            </summary>
+            <value>A <see cref="T:DevExpress.Xpf.Bars.GlyphSize"/> value.
+</value>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.Ribbon.RibbonGalleryBarItem.Links">
+            <summary>
+                <para>Gets or sets the bar item links displayed below the dropdown gallery.
+</para>
+            </summary>
+            <value>A <see cref="T:DevExpress.Xpf.Bars.BarItemLinkCollection"/> object that contains the corresponding bar item links.
+</value>
+
+
+        </member>
+        <member name="M:DevExpress.Xpf.Ribbon.RibbonGalleryBarItem.Merge(DevExpress.Xpf.Bars.ILinksHolder)">
+            <summary>
+                <para>Adds the visible links from the specified link container onto the current link container. 
+</para>
+            </summary>
+            <param name="holder">
+		A <see cref="T:DevExpress.Xpf.Bars.ILinksHolder"/> object whose visible links are merged with the current link container.
+
+            </param>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.Ribbon.RibbonGalleryBarItem.MergedLinks">
+            <summary>
+                <para>Gets the links currently displayed by the link container, including the links that have been merged with the container.
+</para>
+            </summary>
+            <value>A <see cref="T:DevExpress.Xpf.Bars.BarItemLinkCollection"/> object that contains the links currently displayed by the link container.
+</value>
+
+
+        </member>
+        <member name="M:DevExpress.Xpf.Ribbon.RibbonGalleryBarItem.OnLinkAdded(DevExpress.Xpf.Bars.BarItemLinkBase)">
+            <summary>
+                <para>This method is called before a bar item link is added to the current link holder.
+</para>
+            </summary>
+            <param name="link">
+		A <see cref="T:DevExpress.Xpf.Bars.BarItemLink"/> object being added.
+
+            </param>
+
+
+        </member>
+        <member name="M:DevExpress.Xpf.Ribbon.RibbonGalleryBarItem.OnLinkRemoved(DevExpress.Xpf.Bars.BarItemLinkBase)">
+            <summary>
+                <para>This method is called before a bar item link is removed from the current link holder.
+</para>
+            </summary>
+            <param name="link">
+		A <see cref="T:DevExpress.Xpf.Bars.BarItemLink"/> object being removed.
+
+            </param>
+
+
+        </member>
+        <member name="M:DevExpress.Xpf.Ribbon.RibbonGalleryBarItem.UnMerge">
+            <summary>
+                <para>Removes the links of other link containers from the current link container. This method is in effect when other link containers have been merged with the current container.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="M:DevExpress.Xpf.Ribbon.RibbonGalleryBarItem.UnMerge(DevExpress.Xpf.Bars.ILinksHolder)">
+            <summary>
+                <para>Removes the links of the specified link container from the current link container. This method is in effect when the specified link container has been merged with the current container.
+
+</para>
+            </summary>
+            <param name="holder">
+		A <see cref="T:DevExpress.Xpf.Bars.ILinksHolder"/> object whose links must be removed from the current link container.
+
+            </param>
 
 
         </member>

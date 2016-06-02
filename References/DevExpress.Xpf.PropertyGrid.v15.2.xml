@@ -4,46 +4,6 @@
         <name>DevExpress.Xpf.PropertyGrid.v15.2</name>
     </assembly>
     <members>
-        <member name="T:DevExpress.Xpf.PropertyGrid.DescriptionLocation">
-
-            <summary>
-                <para>Lists values that specify the location of the property description.
-</para>
-            </summary>
-
-        </member>
-        <member name="F:DevExpress.Xpf.PropertyGrid.DescriptionLocation.None">
-            <summary>
-                <para>Disable showing property descriptions.
-</para>
-            </summary>
-
-
-        </member>
-        <member name="F:DevExpress.Xpf.PropertyGrid.DescriptionLocation.Panel">
-            <summary>
-                <para>Show property descriptions within the description panel.
-</para>
-            </summary>
-
-
-        </member>
-        <member name="F:DevExpress.Xpf.PropertyGrid.DescriptionLocation.ToolTip">
-            <summary>
-                <para>Show property descriptions within the tooltip.
-</para>
-            </summary>
-
-
-        </member>
-        <member name="F:DevExpress.Xpf.PropertyGrid.DescriptionLocation.ToolTipAndPanel">
-            <summary>
-                <para>Show property descriptions within the description panel and the tooltip.
-</para>
-            </summary>
-
-
-        </member>
         <member name="T:DevExpress.Xpf.PropertyGrid.AllowExpandingMode">
 
             <summary>
@@ -384,7 +344,7 @@
         </member>
         <member name="E:DevExpress.Xpf.PropertyGrid.PropertyGridControl.CustomExpand">
             <summary>
-                <para>Enables you to control how categories are expanding.
+                <para>Enables you to control how properties and categories are expanding.
 </para>
             </summary>
 
@@ -1342,6 +1302,14 @@
             </summary>
 
         </member>
+        <member name="P:DevExpress.Xpf.PropertyGrid.RowInfo.Children">
+            <summary>
+                <para> </para>
+            </summary>
+            <value> </value>
+
+
+        </member>
         <member name="F:DevExpress.Xpf.PropertyGrid.RowInfo.DisplayName">
             <summary>
                 <para>Gets the display name shown by the row.
@@ -1649,6 +1617,46 @@
         <member name="F:DevExpress.Xpf.PropertyGrid.PropertyGridFilterMode.ByValue">
             <summary>
                 <para>Filters only by value.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="T:DevExpress.Xpf.PropertyGrid.DescriptionLocation">
+
+            <summary>
+                <para>Lists values that specify the location of the property description.
+</para>
+            </summary>
+
+        </member>
+        <member name="F:DevExpress.Xpf.PropertyGrid.DescriptionLocation.None">
+            <summary>
+                <para>Disable showing property descriptions.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.PropertyGrid.DescriptionLocation.Panel">
+            <summary>
+                <para>Show property descriptions within the description panel.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.PropertyGrid.DescriptionLocation.ToolTip">
+            <summary>
+                <para>Show property descriptions within the tooltip.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.PropertyGrid.DescriptionLocation.ToolTipAndPanel">
+            <summary>
+                <para>Show property descriptions within the description panel and the tooltip.
 </para>
             </summary>
 
@@ -2441,6 +2449,37 @@
 </para>
             </summary>
             <returns> </returns>
+
+
+        </member>
+        <member name="T:DevExpress.Xpf.PropertyGrid.CustomExpandEventArgs">
+
+            <summary>
+                <para> </para>
+            </summary>
+
+        </member>
+        <member name="P:DevExpress.Xpf.PropertyGrid.CustomExpandEventArgs.IsExpanded">
+            <summary>
+                <para> </para>
+            </summary>
+            <value> </value>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.PropertyGrid.CustomExpandEventArgs.IsInitializing">
+            <summary>
+                <para> </para>
+            </summary>
+            <value> </value>
+
+
+        </member>
+        <member name="P:DevExpress.Xpf.PropertyGrid.CustomExpandEventArgs.Row">
+            <summary>
+                <para> </para>
+            </summary>
+            <value> </value>
 
 
         </member>
