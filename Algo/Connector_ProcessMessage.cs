@@ -416,10 +416,10 @@ namespace StockSharp.Algo
 					//	OwnInnerAdaper = true
 					//};
 
+					_inAdapter = new SecurityAdapter(_inAdapter) { OwnInnerAdaper = true };
+
 					if (TimeChange)
-					{
 						_inAdapter = _timeAdapter = new TimeAdapter(this, _inAdapter) { OwnInnerAdaper = true };
-					}
 
 					if (LatencyManager != null)
 						_inAdapter = new LatencyMessageAdapter(_inAdapter) { LatencyManager = LatencyManager, OwnInnerAdaper = true };
@@ -682,7 +682,6 @@ namespace StockSharp.Algo
 
 			var securityId = getId(message);
 
-			var nativeSecurityId = securityId.Native;
 			var securityCode = securityId.SecurityCode;
 			var boardCode = securityId.BoardCode;
 
@@ -690,11 +689,10 @@ namespace StockSharp.Algo
 			//	boardCode = AssociatedBoardCode;
 
 			var isSecurityIdEmpty = securityCode.IsEmpty() || boardCode.IsEmpty();
-			var isNativeIdNull = nativeSecurityId == null;
 
 			Security security = null;
 
-			if (isSecurityIdEmpty && isNativeIdNull)
+			if (isSecurityIdEmpty)
 			{
 				// если указан код и тип инструмента, то пытаемся найти инструмент по ним
 				if (!securityCode.IsEmpty() && securityId.SecurityType != null)
@@ -713,40 +711,28 @@ namespace StockSharp.Algo
 			if (!isSecurityIdEmpty)
 				stockSharpId = CreateSecurityId(securityCode, boardCode);
 
-			lock (_suspendSync)
+			if (!isSecurityIdEmpty)
+				security = _entityCache.GetSecurityById(stockSharpId);
+
+			if (security == null && !isSecurityIdEmpty)
+			{
+				var secProvider = EntityFactory as ISecurityProvider;
+
+				if (secProvider != null)
+					security = secProvider.LookupById(stockSharpId);
+			}
+
+			if (security == null)
 			{
 				if (!isSecurityIdEmpty)
-					security = _entityCache.GetSecurityById(stockSharpId);
-
-				if (security == null && !isNativeIdNull)
-					security = _entityCache.GetSecurityByNativeId(nativeSecurityId);
-
-				if (security == null && !isSecurityIdEmpty)
-				{
-					var secProvider = EntityFactory as ISecurityProvider;
-
-					if (secProvider != null)
-						security = secProvider.LookupById(stockSharpId);
-				}
+					security = GetSecurity(securityId);
 
 				if (security == null)
 				{
-					if (!isSecurityIdEmpty)
-						security = GetSecurity(securityId);
+					if (!ignoreIfNotExist)
+						throw new ArgumentNullException(nameof(message), LocalizedStrings.Str692Params.Put(securityId, this));
 
-					if (security == null)
-					{
-						if (!ignoreIfNotExist)
-						{
-							var clone = message.Clone();
-							_suspendedSecurityMessages.SafeAdd(securityId).Add(clone);
-
-							this.AddInfoLog("Msg delayed (no sec info): {0}", message);
-							_messageStat.Add(clone);
-						}
-
-						return;
-					}
+					return;
 				}
 			}
 
@@ -942,17 +928,14 @@ namespace StockSharp.Algo
 			var native = securityId.Native;
 			var stocksharp = CreateSecurityId(securityId.SecurityCode, securityId.BoardCode);
 
-			lock (_suspendSync)
-			{
-				var sec = _entityCache.GetSecurityByNativeId(native);
+			var sec = _entityCache.GetSecurityByNativeId(native);
 
-				if (sec == null)
-					_entityCache.AddSecurityByNativeId(native, stocksharp);
-				else
-				{
-					if (!sec.Id.CompareIgnoreCase(stocksharp))
-						throw new InvalidOperationException(LocalizedStrings.Str687Params.Put(stocksharp, sec.Id, native));
-				}
+			if (sec == null)
+				_entityCache.AddSecurityByNativeId(native, stocksharp);
+			else
+			{
+				if (!sec.Id.CompareIgnoreCase(stocksharp))
+					throw new InvalidOperationException(LocalizedStrings.Str687Params.Put(stocksharp, sec.Id, native));
 			}
 		}
 
@@ -974,16 +957,6 @@ namespace StockSharp.Algo
 
 			if (message.OriginalTransactionId != 0)
 				_lookupResult.Add(security);
-
-			if (message.SecurityId.Native != null)
-				ProcessSuspendedSecurityMessages(message.SecurityId);
-
-			//необходимо обработать отложенные сообщения не только по NativeId, но и по обычным идентификаторам S#
-			var stocksharpId = message.SecurityId.Native == null
-				? message.SecurityId
-				: new SecurityId { SecurityCode = message.SecurityId.SecurityCode, BoardCode = message.SecurityId.BoardCode };
-
-			ProcessSuspendedSecurityMessages(stocksharpId);
 
 			if (CreateAssociatedSecurity && !IsAssociated(message.SecurityId.BoardCode))
 			{
@@ -1716,53 +1689,6 @@ namespace StockSharp.Algo
 				
 				default:
 					throw new ArgumentOutOfRangeException(LocalizedStrings.Str1695Params.Put(message.ExecutionType));
-			}
-		}
-
-		private void ProcessSuspendedSecurityMessages(SecurityId securityId)
-		{
-			List<Message> msgs;
-
-			lock (_suspendSync)
-			{
-				msgs = _suspendedSecurityMessages.TryGetValue(securityId);
-
-				if (msgs != null)
-					_suspendedSecurityMessages.Remove(securityId);
-
-				// find association by code and code + type
-				var pair = _suspendedSecurityMessages
-					.FirstOrDefault(p =>
-						p.Key.SecurityCode.CompareIgnoreCase(securityId.SecurityCode) &&
-						p.Key.BoardCode.IsEmpty() &&
-						(securityId.SecurityType == null || p.Key.SecurityType == securityId.SecurityType));
-
-				if (pair.Value != null)
-					_suspendedSecurityMessages.Remove(pair.Key);
-
-				if (msgs != null)
-				{
-					if (pair.Value != null)
-						msgs.AddRange(pair.Value);
-				}
-				else
-					msgs = pair.Value;
-
-				if (msgs == null)
-					return;
-			}
-
-			foreach (var msg in msgs)
-			{
-				try
-				{
-					OnProcessMessage(msg);
-					_messageStat.Remove(msg);
-				}
-				catch (Exception error)
-				{
-					RaiseError(error);
-				}
 			}
 		}
 	}

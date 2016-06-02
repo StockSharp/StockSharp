@@ -189,8 +189,6 @@ namespace StockSharp.Algo
 		private readonly Dictionary<string, List<ExecutionMessage>> _nonAssociatedByStringIdMyTrades = new Dictionary<string, List<ExecutionMessage>>();
 		private readonly MultiDictionary<Tuple<long?, string>, RefPair<Order, Action<Order, Order>>> _orderStopOrderAssociations = new MultiDictionary<Tuple<long?, string>, RefPair<Order, Action<Order, Order>>>(false);
 
-		private readonly Dictionary<SecurityId, List<Message>> _suspendedSecurityMessages = new Dictionary<SecurityId, List<Message>>();
-		private readonly object _suspendSync = new object();
 		private readonly List<Security> _lookupResult = new List<Security>();
 		private readonly SynchronizedQueue<SecurityLookupMessage> _lookupQueue = new SynchronizedQueue<SecurityLookupMessage>();
 		private readonly SynchronizedDictionary<long, SecurityLookupMessage> _securityLookups = new SynchronizedDictionary<long, SecurityLookupMessage>();
@@ -1297,10 +1295,7 @@ namespace StockSharp.Algo
 				throw new ArgumentNullException(nameof(security));
 
 			var secId = security.ToSecurityId(SecurityIdGenerator);
-
-			lock (_suspendSync)
-				secId.Native = GetNativeId(security);
-
+			secId.Native = GetNativeId(security);
 			return secId;
 		}
 
@@ -1390,8 +1385,6 @@ namespace StockSharp.Algo
 			ConnectionState = ConnectionStates.Disconnected;
 
 			_adapterStates.Clear();
-
-			_suspendedSecurityMessages.Clear();
 
 			_subscriptionManager.ClearCache();
 

@@ -122,6 +122,7 @@
     <Compile Include="PnL\PnLMessageAdapter.cs" />
     <Compile Include="Positions\PositionMessageAdapter.cs" />
     <Compile Include="Risk\RiskMessageAdapter.cs" />
+    <Compile Include="SecurityAdapter.cs" />
     <Compile Include="SecurityTrie.cs" />
     <Compile Include="Slippage\SlippageMessageAdapter.cs" />
     <Compile Include="BasketMessageAdapter.cs" />
