@@ -43,7 +43,7 @@ namespace StockSharp.Messages
 		{
         }
 
-		private List<WorkingTimePeriod> _periods = new List<WorkingTimePeriod>();
+		private IList<WorkingTimePeriod> _periods = new List<WorkingTimePeriod>();
 
 		/// <summary>
 		/// Schedule validity periods.
@@ -52,7 +52,7 @@ namespace StockSharp.Messages
 		[CategoryLoc(LocalizedStrings.GeneralKey)]
 		[DisplayNameLoc(LocalizedStrings.Str409Key)]
 		[DescriptionLoc(LocalizedStrings.Str410Key)]
-		public List<WorkingTimePeriod> Periods
+		public IList<WorkingTimePeriod> Periods
 		{
 			get { return _periods; }
 			set
@@ -151,6 +151,17 @@ namespace StockSharp.Messages
 			storage.SetValue(nameof(Periods), Periods.Select(p => p.Save()).ToArray());
 			storage.SetValue(nameof(SpecialWorkingDays), SpecialWorkingDays);
 			storage.SetValue(nameof(SpecialHolidays), SpecialHolidays);
+		}
+
+		/// <summary>
+		/// Returns a <see cref="T:System.String"/> that represents the current <see cref="T:System.Object"/>.
+		/// </summary>
+		/// <returns>
+		/// A <see cref="T:System.String"/> that represents the current <see cref="T:System.Object"/>.
+		/// </returns>
+		public override string ToString()
+		{
+			return Periods.Select(p => p.ToString()).Join(",");
 		}
 	}
 }

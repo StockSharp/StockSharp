@@ -106,5 +106,16 @@ namespace StockSharp.Messages
 			storage.SetValue(nameof(Times), Times);
 			storage.SetValue(nameof(Till), Till);
 		}
+
+		/// <summary>
+		/// Returns a <see cref="T:System.String"/> that represents the current <see cref="T:System.Object"/>.
+		/// </summary>
+		/// <returns>
+		/// A <see cref="T:System.String"/> that represents the current <see cref="T:System.Object"/>.
+		/// </returns>
+		public override string ToString()
+		{
+			return Times.Select(t => t.ToString()).Join(",");
+		}
 	}
 }
