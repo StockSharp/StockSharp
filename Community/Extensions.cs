@@ -1,6 +1,7 @@
 namespace StockSharp.Community
 {
 	using System;
+	using System.Linq;
 
 	using Ecng.Common;
 
@@ -8,7 +9,20 @@ namespace StockSharp.Community
 
 	static class Extensions
 	{
-		public static void ThrowIfError(this ErrorCodes code)
+		public static ErrorCodes ToErrorCode(this Guid sessionId)
+		{
+			if (sessionId == Guid.Empty)
+				return ErrorCodes.UnknownServerError;
+
+			var bytes = sessionId.ToByteArray();
+
+			if (bytes.Take(14).All(b => b == 0))
+				return (ErrorCodes)bytes[15];
+
+			return ErrorCodes.Ok;
+		}
+
+		public static void ThrowIfError(this ErrorCodes code, params object[] args)
 		{
 			switch (code)
 			{
@@ -56,7 +70,35 @@ namespace StockSharp.Community
 					throw new InvalidOperationException(LocalizedStrings.EmailNotEnough);
 				case ErrorCodes.PhoneNotExist:
 					throw new InvalidOperationException(LocalizedStrings.PhoneNotSpecified);
+				
+				// license error codes
+				case ErrorCodes.LicenseRejected:
+					throw new InvalidOperationException(LocalizedStrings.LicenseRevoked);
+				case ErrorCodes.LicenseMaxRenew:
+					throw new InvalidOperationException(LocalizedStrings.LicenseMaxRenew);
+				case ErrorCodes.ClientNotApproved:
+					throw new InvalidOperationException(LocalizedStrings.SmsActivationFailed);
+				case ErrorCodes.TooMuchFrequency:
+					throw new InvalidOperationException(LocalizedStrings.MaxLicensePerMin);
 
+				case ErrorCodes.StrategyRemoved:
+					throw new InvalidOperationException(LocalizedStrings.StrategyRemoved.Put(args));
+				case ErrorCodes.StrategyNotExist:
+					throw new InvalidOperationException(LocalizedStrings.StrategyNotExist.Put(args));
+				case ErrorCodes.StrategyPriceTypeCannotChange:
+					throw new InvalidOperationException(LocalizedStrings.StrategyPriceTypeCannotChange.Put(args));
+				case ErrorCodes.StrategyContentTypeCannotChange:
+					throw new InvalidOperationException(LocalizedStrings.StrategyContentTypeCannotChange.Put(args));
+				case ErrorCodes.TooMuchPrice:
+					throw new InvalidOperationException(LocalizedStrings.TooMuchPrice);
+				case ErrorCodes.NotEnoughBalance:
+					throw new InvalidOperationException(LocalizedStrings.NotEnoughBalance.Put(args));
+				case ErrorCodes.NotSubscribed:
+					throw new InvalidOperationException(LocalizedStrings.NotSubscribed.Put(args));
+				case ErrorCodes.CurrencyCannotChange:
+					throw new InvalidOperationException(LocalizedStrings.CurrencyCannotChange);
+				case ErrorCodes.NotCompleteRegistered:
+					throw new InvalidOperationException(LocalizedStrings.NotCompleteRegistered);
 				default:
 					throw new InvalidOperationException(LocalizedStrings.UnknownServerErrorCode.Put(code));
 			}

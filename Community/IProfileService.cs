@@ -84,6 +84,12 @@ namespace StockSharp.Community
 		/// </summary>
 		[DataMember]
 		public string Language { get; set; }
+
+		/// <summary>
+		/// Balance.
+		/// </summary>
+		[DataMember]
+		public decimal Balance { get; set; }
 	}
 
 	/// <summary>

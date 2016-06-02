@@ -19,6 +19,62 @@ namespace StockSharp.Community
 	using System.Runtime.Serialization;
 
 	/// <summary>
+	/// Strategy content types.
+	/// </summary>
+	[DataContract]
+	public enum StrategyContentTypes
+	{
+		/// <summary>
+		/// Source code (if the strategy is distributed in source code).
+		/// </summary>
+		[EnumMember]
+		SourceCode,
+
+		/// <summary>
+		/// The compiled build (if the strategy is distributed as a finished build).
+		/// </summary>
+		[EnumMember]
+		CompiledAssembly,
+
+		/// <summary>
+		/// Schema in visual designer (if the strategy is distributed as a schema).
+		/// </summary>
+		[EnumMember]
+		Schema,
+
+		/// <summary>
+		/// Encrypted version of <see cref="Schema"/>.
+		/// </summary>
+		[EnumMember]
+		EncryptedSchema,
+	}
+
+	/// <summary>
+	/// Strategy price types.
+	/// </summary>
+	[DataContract]
+	public enum StrategyPriceTypes
+	{
+		/// <summary>
+		/// Lifetime.
+		/// </summary>
+		[EnumMember]
+		Lifetime,
+
+		/// <summary>
+		/// Per month.
+		/// </summary>
+		[EnumMember]
+		PerMonth,
+
+		/// <summary>
+		/// Annual.
+		/// </summary>
+		[EnumMember]
+		Annual
+	}
+
+	/// <summary>
 	/// The strategy data.
 	/// </summary>
 	[DataContract]
@@ -37,22 +93,40 @@ namespace StockSharp.Community
 		public DateTime CreationDate { get; set; }
 
 		/// <summary>
-		/// Name.
+		/// Name (en).
 		/// </summary>
 		[DataMember]
-		public string Name { get; set; }
+		public string EnName { get; set; }
 
 		/// <summary>
-		/// Strategy description.
+		/// Strategy description (en).
 		/// </summary>
 		[DataMember]
-		public string Description { get; set; }
+		public string EnDescription { get; set; }
+
+		/// <summary>
+		/// Name (ru).
+		/// </summary>
+		[DataMember]
+		public string RuName { get; set; }
+
+		/// <summary>
+		/// Strategy description (ru).
+		/// </summary>
+		[DataMember]
+		public string RuDescription { get; set; }
 
 		/// <summary>
 		/// The identifier of a topic in the forum where the strategy is discussed.
 		/// </summary>
 		[DataMember]
-		public int TopicId { get; set; }
+		public int DescriptionId { get; set; }
+
+		/// <summary>
+		/// Type of <see cref="Price"/>.
+		/// </summary>
+		[DataMember]
+		public StrategyPriceTypes PriceType { get; set; }
 
 		/// <summary>
 		/// The purchase price.
@@ -60,22 +134,46 @@ namespace StockSharp.Community
 		[DataMember]
 		public decimal Price { get; set; }
 
-		/// <summary>
-		/// Source code (if the strategy is distributed in source code).
-		/// </summary>
-		[DataMember]
-		public string SourceCode { get; set; }
+		///// <summary>
+		///// Is the <see cref="Price"/> in USD.
+		///// </summary>
+		//[DataMember]
+		//public bool IsUsd { get; set; }
 
 		/// <summary>
-		/// The compiled build (if the strategy is distributed as a finished build).
+		/// Type of <see cref="Content"/>.
 		/// </summary>
 		[DataMember]
-		public byte[] CompiledAssembly { get; set; }
+		public StrategyContentTypes ContentType { get; set; }
+
+		/// <summary>
+		/// Content name (file name etc.).
+		/// </summary>
+		[DataMember]
+		public string ContentName { get; set; }
+
+		/// <summary>
+		/// Content.
+		/// </summary>
+		[DataMember]
+		public byte[] Content { get; set; }
 
 		/// <summary>
 		/// The author identifier.
 		/// </summary>
 		[DataMember]
 		public long Author { get; set; }
+
+		/// <summary>
+		/// The picture identifier.
+		/// </summary>
+		[DataMember]
+		public long Picture { get; set; }
+
+		/// <summary>
+		/// The content revision.
+		/// </summary>
+		[DataMember]
+		public int Revision { get; set; }
 	}
 }

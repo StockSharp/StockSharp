@@ -48,5 +48,19 @@ namespace StockSharp.Community
 		DuplicateLogin,
 		InvalidEmailCode,
 		InvalidSmsCode,
+
+		// strategy service
+		StrategyRemoved,
+		StrategyNotExist,
+		StrategyPriceTypeCannotChange,
+		StrategyContentTypeCannotChange,
+
+		TooMuchPrice,
+		NotEnoughBalance,
+		NotSubscribed,
+
+		CurrencyCannotChange,
+
+		NotCompleteRegistered
 	}
 }

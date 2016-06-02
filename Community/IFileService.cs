@@ -25,13 +25,23 @@ namespace StockSharp.Community
 	public interface IFileService
 	{
 		/// <summary>
-		/// To upload the file to the site .
+		/// To get the file data.
+		/// </summary>
+		/// <param name="sessionId">Session ID.</param>
+		/// <param name="id">File ID.</param>
+		/// <returns>The file data.</returns>
+		[OperationContract]
+		FileData GetFile(Guid sessionId, long id);
+
+		/// <summary>
+		/// To upload the file to the site.
 		/// </summary>
 		/// <param name="sessionId">Session ID.</param>
 		/// <param name="fileName">File name.</param>
 		/// <param name="body">File body.</param>
-		/// <returns>Uploaded file link.</returns>
+		/// <param name="isPublic">Is the file available for public.</param>
+		/// <returns>File ID.</returns>
 		[OperationContract]
-		string Upload(Guid sessionId, string fileName, byte[] body);
+		long Upload(Guid sessionId, string fileName, byte[] body, bool isPublic);
 	}
 }

@@ -16,11 +16,8 @@ Copyright 2010 by StockSharp, LLC
 namespace StockSharp.Community
 {
 	using System;
-	using System.Linq;
 
 	using Ecng.Common;
-
-	using StockSharp.Localization;
 
 	/// <summary>
 	/// The client for access to the StockSharp authentication service.
@@ -82,6 +79,11 @@ namespace StockSharp.Community
 				return _sessionId;
 			}
 		}
+		
+		/// <summary>
+		/// To get the session id if the user was authorized.
+		/// </summary>
+		public Guid? TryGetSession => IsLoggedIn ? SessionId : (Guid?)null;
 
 		/// <summary>
 		/// To log in.
@@ -106,12 +108,7 @@ namespace StockSharp.Community
 
 			var sessionId = Invoke(f => f.Login(login, password));
 
-			if (sessionId == Guid.Empty)
-				throw new InvalidOperationException(LocalizedStrings.UnknownServerError);
-
-			var bytes = sessionId.ToByteArray();
-			if (bytes.Take(14).All(b => b == 0))
-				((ErrorCodes)bytes[15]).ThrowIfError();
+			sessionId.ToErrorCode().ThrowIfError();
 
 			_sessionId = sessionId;
 			IsLoggedIn = true;

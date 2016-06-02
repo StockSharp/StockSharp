@@ -16,7 +16,10 @@ Copyright 2010 by StockSharp, LLC
 namespace StockSharp.Community
 {
 	using System;
+	using System.ServiceModel;
+	using System.ServiceModel.Description;
 
+	using Ecng.Collections;
 	using Ecng.Common;
 
 	/// <summary>
@@ -24,6 +27,8 @@ namespace StockSharp.Community
 	/// </summary>
 	public class FileClient : BaseCommunityClient<IFileService>
 	{
+		private readonly CachedSynchronizedDictionary<long, FileData> _cache = new CachedSynchronizedDictionary<long, FileData>(); 
+
 		/// <summary>
 		/// Initializes a new instance of the <see cref="FileClient"/>.
 		/// </summary>
@@ -42,14 +47,66 @@ namespace StockSharp.Community
 		}
 
 		/// <summary>
+		/// Create WCF channel.
+		/// </summary>
+		/// <returns>WCF channel.</returns>
+		protected override ChannelFactory<IFileService> CreateChannel()
+		{
+			var f = new ChannelFactory<IFileService>(new WSHttpBinding(SecurityMode.None)
+			{
+				OpenTimeout = TimeSpan.FromMinutes(5),
+				SendTimeout = TimeSpan.FromMinutes(10),
+				ReceiveTimeout = TimeSpan.FromMinutes(10),
+				MaxReceivedMessageSize = int.MaxValue,
+				ReaderQuotas =
+				{
+					MaxArrayLength = int.MaxValue,
+					MaxBytesPerRead = int.MaxValue
+				},
+				MaxBufferPoolSize = int.MaxValue,
+			}, new EndpointAddress(Address));
+
+			foreach (var op in f.Endpoint.Contract.Operations)
+			{
+				var dataContractBehavior = op.Behaviors[typeof(DataContractSerializerOperationBehavior)] as DataContractSerializerOperationBehavior;
+
+				if (dataContractBehavior != null)
+					dataContractBehavior.MaxItemsInObjectGraph = int.MaxValue;
+			}
+
+			return f;
+		}
+
+		/// <summary>
+		/// To get the file data.
+		/// </summary>
+		/// <param name="id">File ID.</param>
+		/// <returns>The file data.</returns>
+		public FileData GetFile(long id)
+		{
+			return _cache.SafeAdd(id, key => Invoke(f => f.GetFile(AuthenticationClient.Instance.TryGetSession ?? Guid.Empty, id)));
+		}
+
+		/// <summary>
 		/// To upload the file to the site .
 		/// </summary>
 		/// <param name="fileName">File name.</param>
 		/// <param name="body">File body.</param>
-		/// <returns>Uploaded file link.</returns>
-		public string Upload(string fileName, byte[] body)
+		/// <param name="isPublic">Is the file available for public.</param>
+		/// <returns>File ID.</returns>
+		public long Upload(string fileName, byte[] body, bool isPublic)
 		{
-			return Invoke(f => f.Upload(SessionId, fileName, body));
+			var id = Invoke(f => f.Upload(AuthenticationClient.Instance.TryGetSession ?? Guid.Empty, fileName, body, isPublic));
+
+			_cache.Add(id, new FileData
+			{
+				Id = id,
+				FileName = fileName,
+				Body = body,
+				IsPublic = isPublic
+			});
+
+			return id;
 		}
 	}
 }

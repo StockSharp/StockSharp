@@ -42,11 +42,11 @@ namespace StockSharp.Community
 			if (_sessionId != 0)
 				throw new InvalidOperationException();
 
-			var authClient = AuthenticationClient.Instance;
+			var sessionId = AuthenticationClient.Instance.TryGetSession ?? Guid.Empty;
 #if DEBUG
-			_sessionId = DateTime.Now.Ticks + (authClient.IsLoggedIn ? authClient.SessionId : Guid.Empty).GetHashCode();
+			_sessionId = DateTime.Now.Ticks + sessionId.GetHashCode();
 #else
-			_sessionId = Invoke(f => f.CreateSession(product, authClient.IsLoggedIn ? authClient.SessionId : Guid.Empty));
+			_sessionId = Invoke(f => f.CreateSession(product, sessionId));
 #endif
 
 			_pingTimer = ThreadingHelper.Timer(() =>

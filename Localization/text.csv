@@ -4270,6 +4270,15 @@ InitializingLayoutManager;Initializing layout manager...;Инициализац�
 InitializingStrategies;Initializing strategies...;Инициализация стратегий...
 LoadingRibbonControls;Loading ribbon controls...;Загрузка элементов риббона...
 LoadingSettings;Loading settings...;Загрузка настроек...
+StrategyRemoved;The strategy {0} has removed.;Стратегия {0} была удалена.
+StrategyNotExist;Strategy with id {0} not exist.;Стратегия с номером {0} не существует.
+StrategyPriceTypeCannotChange;Cannot change price type for strategy {0}.;Невозможно поменять тип цены для стратегии {0}.
+StrategyContentTypeCannotChange;Cannot change content type for strategy {0}.;Невозможно поменять тип контента для стратегии {0}.
+TooMuchPrice;Too much price.;Цена больше допустимого лимита.
+NotEnoughBalance;Not enough balance for subscribe to strategy {0}.;Недостаточно баланса для подписки на стратегию {0}.
+NotSubscribed;Strategy {0} has not subscribed.;На стратегию {0} нет подписки.
+CurrencyCannotChange;Currency cannot be changed.;Невозможно поменять валюту.
+NotCompleteRegistered;Registration was not completed.;Регистрация не была пройдена до конца.
 DocStr0;Button activation alert settings;Кнопка активации настроек сигнала
 DocStr1;Initializes a new instance of the {0};Создать {0}
 DocStr2;Load settings;Загрузить настройки

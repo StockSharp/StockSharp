@@ -42356,5 +42356,95 @@ namespace StockSharp.Localization
 		/// Loading settings.
 		/// </summary>
 		public static string LoadingSettings => GetString(LoadingSettingsKey);
+
+		/// <summary>
+		/// The strategy {0} has removed.
+		/// </summary>
+		public const string StrategyRemovedKey = "StrategyRemoved";
+
+		/// <summary>
+		/// The strategy {0} has removed.
+		/// </summary>
+		public static string StrategyRemoved => GetString(StrategyRemovedKey);
+
+		/// <summary>
+		/// Strategy with id {0} not exist.
+		/// </summary>
+		public const string StrategyNotExistKey = "StrategyNotExist";
+
+		/// <summary>
+		/// Strategy with id {0} not exist.
+		/// </summary>
+		public static string StrategyNotExist => GetString(StrategyNotExistKey);
+
+		/// <summary>
+		/// Cannot change price type for strategy {0}.
+		/// </summary>
+		public const string StrategyPriceTypeCannotChangeKey = "StrategyPriceTypeCannotChange";
+
+		/// <summary>
+		/// Cannot change price type for strategy {0}.
+		/// </summary>
+		public static string StrategyPriceTypeCannotChange => GetString(StrategyPriceTypeCannotChangeKey);
+
+		/// <summary>
+		/// Cannot change content type for strategy {0}.
+		/// </summary>
+		public const string StrategyContentTypeCannotChangeKey = "StrategyContentTypeCannotChange";
+
+		/// <summary>
+		/// Cannot change content type for strategy {0}.
+		/// </summary>
+		public static string StrategyContentTypeCannotChange => GetString(StrategyContentTypeCannotChangeKey);
+
+		/// <summary>
+		/// Too much price.
+		/// </summary>
+		public const string TooMuchPriceKey = "TooMuchPrice";
+
+		/// <summary>
+		/// Too much price.
+		/// </summary>
+		public static string TooMuchPrice => GetString(TooMuchPriceKey);
+
+		/// <summary>
+		/// Not enough balance for subscribe to strategy {0}.
+		/// </summary>
+		public const string NotEnoughBalanceKey = "NotEnoughBalance";
+
+		/// <summary>
+		/// Not enough balance for subscribe to strategy {0}.
+		/// </summary>
+		public static string NotEnoughBalance => GetString(NotEnoughBalanceKey);
+
+		/// <summary>
+		/// Strategy {0} has not subscribed.
+		/// </summary>
+		public const string NotSubscribedKey = "NotSubscribed";
+
+		/// <summary>
+		/// Strategy {0} has not subscribed.
+		/// </summary>
+		public static string NotSubscribed => GetString(NotSubscribedKey);
+
+		/// <summary>
+		/// Currency cannot be changed.
+		/// </summary>
+		public const string CurrencyCannotChangeKey = "CurrencyCannotChange";
+
+		/// <summary>
+		/// Currency cannot be changed.
+		/// </summary>
+		public static string CurrencyCannotChange => GetString(CurrencyCannotChangeKey);
+
+		/// <summary>
+		/// Registration was not completed.
+		/// </summary>
+		public const string NotCompleteRegisteredKey = "NotCompleteRegistered";
+
+		/// <summary>
+		/// Registration was not completed.
+		/// </summary>
+		public static string NotCompleteRegistered => GetString(NotCompleteRegisteredKey);
 	}
 }
