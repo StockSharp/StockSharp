@@ -64,7 +64,7 @@ namespace StockSharp.Messages
 			}
 		}
 
-		private List<DateTime> _specialWorkingDays = new List<DateTime>();
+		private IList<DateTime> _specialWorkingDays = new List<DateTime>();
 
 		/// <summary>
 		/// Working days, falling on Saturday and Sunday.
@@ -73,13 +73,13 @@ namespace StockSharp.Messages
 		[CategoryLoc(LocalizedStrings.GeneralKey)]
 		[DisplayNameLoc(LocalizedStrings.Str411Key)]
 		[DescriptionLoc(LocalizedStrings.Str412Key)]
-		public List<DateTime> SpecialWorkingDays
+		public IList<DateTime> SpecialWorkingDays
 		{
 			get { return _specialWorkingDays; }
 			set { _specialWorkingDays = CheckDates(value); }
 		}
 
-		private List<DateTime> _specialHolidays = new List<DateTime>();
+		private IList<DateTime> _specialHolidays = new List<DateTime>();
 
 		/// <summary>
 		/// Holidays that fall on workdays.
@@ -88,7 +88,7 @@ namespace StockSharp.Messages
 		[CategoryLoc(LocalizedStrings.GeneralKey)]
 		[DisplayNameLoc(LocalizedStrings.Str413Key)]
 		[DescriptionLoc(LocalizedStrings.Str414Key)]
-		public List<DateTime> SpecialHolidays
+		public IList<DateTime> SpecialHolidays
 		{
 			get { return _specialHolidays; }
 			set { _specialHolidays = CheckDates(value); }
@@ -96,7 +96,7 @@ namespace StockSharp.Messages
 
 		private bool _checkDates = true;
 
-		private List<DateTime> CheckDates(List<DateTime> dates)
+		private IList<DateTime> CheckDates(IList<DateTime> dates)
 		{
 			if (!_checkDates)
 				return dates;
