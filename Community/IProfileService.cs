@@ -26,6 +26,12 @@ namespace StockSharp.Community
 	public class Profile
 	{
 		/// <summary>
+		/// Identifier.
+		/// </summary>
+		[DataMember]
+		public long Id { get; set; }
+
+		/// <summary>
 		/// Login.
 		/// </summary>
 		[DataMember]
@@ -36,6 +42,12 @@ namespace StockSharp.Community
 		/// </summary>
 		[DataMember]
 		public string Password { get; set; }
+
+		/// <summary>
+		/// Real name.
+		/// </summary>
+		[DataMember]
+		public string RealName { get; set; }
 
 		/// <summary>
 		/// E-mail address.
@@ -90,6 +102,12 @@ namespace StockSharp.Community
 		/// </summary>
 		[DataMember]
 		public decimal Balance { get; set; }
+
+		/// <summary>
+		/// Balance.
+		/// </summary>
+		[DataMember]
+		public long? Avatar { get; set; }
 	}
 
 	/// <summary>
@@ -163,21 +181,28 @@ namespace StockSharp.Community
 		Profile GetProfile(Guid sessionId);
 
 		/// <summary>
-		/// To update the profile photo.
+		/// To get user information.
 		/// </summary>
-		/// <param name="sessionId">Session ID.</param>
-		/// <param name="fileName">The file name.</param>
-		/// <param name="body">The contents of the image file.</param>
-		/// <returns>The execution result code.</returns>
+		/// <param name="userId">User ID.</param>
+		/// <returns>The user information.</returns>
 		[OperationContract]
-		byte UpdateAvatar(Guid sessionId, string fileName, byte[] body);
+		Profile GetUserProfile(long userId);
 
-		/// <summary>
-		/// To get a profile photo.
-		/// </summary>
-		/// <param name="sessionId">Session ID.</param>
-		/// <returns>The contents of the image file.</returns>
-		[OperationContract]
-		byte[] GetAvatar(Guid sessionId);
+		///// <summary>
+		///// To update the profile photo.
+		///// </summary>
+		///// <param name="sessionId">Session ID.</param>
+		///// <param name="fileId">The image identifier, recieved from <see cref="IFileService.Upload"/>.</param>
+		///// <returns>The execution result code.</returns>
+		//[OperationContract]
+		//byte UpdateAvatar(Guid sessionId, long fileId);
+
+		///// <summary>
+		///// To get a profile photo.
+		///// </summary>
+		///// <param name="sessionId">Session ID.</param>
+		///// <returns>The image identifier. Use the <see cref="IFileService.GetFile"/> to get the content.</returns>
+		//[OperationContract]
+		//long GetAvatar(Guid sessionId);
 	}
 }

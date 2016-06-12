@@ -92,7 +92,6 @@
     <Compile Include="StrategyClient.cs" />
     <Compile Include="StrategyData.cs" />
     <Compile Include="StrategySubscription.cs" />
-    <Compile Include="User.cs" />
     <Compile Include="Products.cs" />
     <Compile Include="ISessionService.cs" />
     <Compile Include="SessionClient.cs" />
