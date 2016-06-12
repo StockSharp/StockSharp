@@ -111,6 +111,16 @@ namespace StockSharp.Community
 			return Invoke(f => f.GetProfile(SessionId));
 		}
 
+		/// <summary>
+		/// To get public user information.
+		/// </summary>
+		/// <param name="userId">The user identifier.</param>
+		/// <returns>The public user information.</returns>
+		public Profile GetUserProfile(long userId)
+		{
+			return Invoke(f => f.GetUserProfile(userId));
+		}
+
 		///// <summary>
 		///// To update the profile photo.
 		///// </summary>
