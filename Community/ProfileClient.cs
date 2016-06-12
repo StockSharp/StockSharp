@@ -121,25 +121,6 @@ namespace StockSharp.Community
 			return Invoke(f => f.GetUserProfile(userId));
 		}
 
-		///// <summary>
-		///// To update the profile photo.
-		///// </summary>
-		///// <param name="fileName">The file name.</param>
-		///// <param name="body">The contents of the image file.</param>
-		//public void UpdateAvatar(string fileName, byte[] body)
-		//{
-		//	ValidateError(Invoke(f => f.UpdateAvatar(SessionId, fileName, body)));
-		//}
-
-		///// <summary>
-		///// To get a profile photo.
-		///// </summary>
-		///// <returns>The contents of the image file.</returns>
-		//public byte[] GetAvatar()
-		//{
-		//	return Invoke(f => f.GetAvatar(SessionId));
-		//}
-
 		private static void ValidateError(byte errorCode)
 		{
 			((ErrorCodes)errorCode).ThrowIfError();
