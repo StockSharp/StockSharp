@@ -42446,5 +42446,125 @@ namespace StockSharp.Localization
 		/// Registration was not completed.
 		/// </summary>
 		public static string NotCompleteRegistered => GetString(NotCompleteRegisteredKey);
+
+		/// <summary>
+		/// Strategies gallery.
+		/// </summary>
+		public const string StrategiesGalleryKey = "StrategiesGallery";
+
+		/// <summary>
+		/// Strategies gallery.
+		/// </summary>
+		public static string StrategiesGallery => GetString(StrategiesGalleryKey);
+
+		/// <summary>
+		/// Strategies subscriptions.
+		/// </summary>
+		public const string StrategiesSubscriptionsKey = "StrategiesSubscriptions";
+
+		/// <summary>
+		/// Strategies subscriptions.
+		/// </summary>
+		public static string StrategiesSubscriptions => GetString(StrategiesSubscriptionsKey);
+
+		/// <summary>
+		/// Refresh strategies.
+		/// </summary>
+		public const string RefreshStrategiesKey = "RefreshStrategies";
+
+		/// <summary>
+		/// Refresh strategies.
+		/// </summary>
+		public static string RefreshStrategies => GetString(RefreshStrategiesKey);
+
+		/// <summary>
+		/// All strategies.
+		/// </summary>
+		public const string AllStrategiesKey = "AllStrategies";
+
+		/// <summary>
+		/// All strategies.
+		/// </summary>
+		public static string AllStrategies => GetString(AllStrategiesKey);
+
+		/// <summary>
+		/// Subscribed strategies.
+		/// </summary>
+		public const string SubscribedStrategiesKey = "SubscribedStrategies";
+
+		/// <summary>
+		/// Subscribed strategies.
+		/// </summary>
+		public static string SubscribedStrategies => GetString(SubscribedStrategiesKey);
+
+		/// <summary>
+		/// Free strategies.
+		/// </summary>
+		public const string FreeStrategiesKey = "FreeStrategies";
+
+		/// <summary>
+		/// Free strategies.
+		/// </summary>
+		public static string FreeStrategies => GetString(FreeStrategiesKey);
+
+		/// <summary>
+		/// Author.
+		/// </summary>
+		public const string AuthorKey = "Author";
+
+		/// <summary>
+		/// Author.
+		/// </summary>
+		public static string Author => GetString(AuthorKey);
+
+		/// <summary>
+		/// Loading gallery strategies.
+		/// </summary>
+		public const string LoadingGalleryStrategiesKey = "LoadingGalleryStrategies";
+
+		/// <summary>
+		/// Loading gallery strategies.
+		/// </summary>
+		public static string LoadingGalleryStrategies => GetString(LoadingGalleryStrategiesKey);
+
+		/// <summary>
+		/// Logo.
+		/// </summary>
+		public const string LogoKey = "Logo";
+
+		/// <summary>
+		/// Logo.
+		/// </summary>
+		public static string Logo => GetString(LogoKey);
+
+		/// <summary>
+		/// Price type.
+		/// </summary>
+		public const string PriceTypeKey = "PriceType";
+
+		/// <summary>
+		/// Price type.
+		/// </summary>
+		public static string PriceType => GetString(PriceTypeKey);
+
+		/// <summary>
+		/// Publish strategy.
+		/// </summary>
+		public const string PublishStrategyKey = "PublishStrategy";
+
+		/// <summary>
+		/// Publish strategy.
+		/// </summary>
+		public static string PublishStrategy => GetString(PublishStrategyKey);
+
+		/// <summary>
+		/// Strategy already published.
+		/// </summary>
+		public const string StrategyAlreadyPublishedKey = "StrategyAlreadyPublished";
+
+		/// <summary>
+		/// Strategy already published.
+		/// </summary>
+		public static string StrategyAlreadyPublished => GetString(StrategyAlreadyPublishedKey);
 	}
 }
