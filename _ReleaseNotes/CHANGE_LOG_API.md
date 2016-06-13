@@ -1,13 +1,18 @@
 StockSharp API Change log
 ========================
-###current
+###v4.3.15:
+* (feature) TWIME connector.
+* (feature) IConnector. MassOrderCanceled, MassOrderCancelFailed.
+* (feature) SecurityAdapter.
+* (bug) OptionDesk fixes.
+* (bug) SmartCOM. Fractal price step fixes.
 * (feature) TraderHelper. Removed obsolete GetPosition overloads.
 * (bug) Micex TEAP. Fix struct downloading.
 * (feature) Micex TEAP. New enum statuses.
 * (feature) Charting. ChartDrawData.
 * (feature) Plaza. Spectra 5.0 + performance refactoring.
 * (feature) Grid controls (SecurityGrid, OrderGrid etc.) now based on DevExpress.
-* (feature) Quik lua. Averate price for positions.
+* (feature) Quik lua. Average price for positions.
 * (feature) FIX server. Handle transaction errors.
 * (bug) ADX, Fractals indicator fixes.
 * (bug) Position manager fix.
