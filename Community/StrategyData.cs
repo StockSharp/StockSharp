@@ -175,5 +175,11 @@ namespace StockSharp.Community
 		/// </summary>
 		[DataMember]
 		public int Revision { get; set; }
+
+		/// <summary>
+		/// The user identifier.
+		/// </summary>
+		[DataMember]
+		public string UserId { get; set; }
 	}
 }
