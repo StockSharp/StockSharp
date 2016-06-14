@@ -168,7 +168,7 @@ namespace StockSharp.Community
 		/// The picture identifier.
 		/// </summary>
 		[DataMember]
-		public long Picture { get; set; }
+		public long? Picture { get; set; }
 
 		/// <summary>
 		/// The content revision.
