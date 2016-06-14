@@ -41,8 +41,7 @@
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="DevExpress.Xpf.Core.v15.2, Version=15.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="DevExpress.Xpf.Core.v15.2">
       <HintPath>..\..\References\DevExpress.Xpf.Core.v15.2.dll</HintPath>
     </Reference>
     <Reference Include="Ecng.Common">
@@ -72,8 +71,7 @@
     <Reference Include="Ecng.Xaml">
       <HintPath>..\..\References\Ecng.Xaml.dll</HintPath>
     </Reference>
-    <Reference Include="Ecng.Xaml.DevExp, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="Ecng.Xaml.DevExp">
       <HintPath>..\..\References\Ecng.Xaml.DevExp.dll</HintPath>
     </Reference>
     <Reference Include="MoreLinq">

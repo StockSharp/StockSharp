@@ -60,8 +60,7 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="DevExpress.Xpf.PropertyGrid.v15.2, Version=15.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="DevExpress.Xpf.PropertyGrid.v15.2">
       <HintPath>..\..\..\References\DevExpress.Xpf.PropertyGrid.v15.2.dll</HintPath>
     </Reference>
     <Reference Include="Ecng.Net">
