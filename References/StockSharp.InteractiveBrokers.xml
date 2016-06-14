@@ -1231,15 +1231,6 @@
       <summary>
             The messages adapter for InteractiveBrokers.
             </summary>
-      <summary>
-            The messages adapter for InteractiveBrokers.
-            </summary>
-      <summary>
-            The messages adapter for InteractiveBrokers.
-            </summary>
-      <summary>
-            The messages adapter for InteractiveBrokers.
-            </summary>
     </member>
     <member name="M:StockSharp.InteractiveBrokers.InteractiveBrokersMessageAdapter.#ctor(Ecng.Common.IdGenerator)">
       <summary>

@@ -8,15 +8,6 @@
             <summary>
             The messages adapter for BTC-e.
             </summary>
-            <summary>
-            The messages adapter for BTC-e.
-            </summary>
-            <summary>
-            The messages adapter for BTC-e.
-            </summary>
-            <summary>
-            The messages adapter for BTC-e.
-            </summary>
         </member>
         <member name="M:StockSharp.Btce.BtceMessageAdapter.#ctor(Ecng.Common.IdGenerator)">
             <summary>

@@ -8,12 +8,6 @@
       <summary>
             The messages adapter for IQFeed.
             </summary>
-      <summary>
-            The messages adapter for IQFeed.
-            </summary>
-      <summary>
-            The messages adapter for IQFeed.
-            </summary>
     </member>
     <member name="P:StockSharp.IQFeed.IQFeedMarketDataMessageAdapter.Level1Address">
       <summary>

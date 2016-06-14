@@ -8,15 +8,6 @@
       <summary>
             The messages adapter for LMAX.
             </summary>
-      <summary>
-            The messages adapter for LMAX.
-            </summary>
-      <summary>
-            The messages adapter for LMAX.
-            </summary>
-      <summary>
-            The messages adapter for LMAX.
-            </summary>
     </member>
     <member name="M:StockSharp.LMAX.LmaxMessageAdapter.#ctor(Ecng.Common.IdGenerator)">
       <summary>

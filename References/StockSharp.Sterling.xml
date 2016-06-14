@@ -8,15 +8,6 @@
             <summary>
             The message adapter for Sterling.
             </summary>
-            <summary>
-            The message adapter for Sterling.
-            </summary>
-            <summary>
-            The message adapter for Sterling.
-            </summary>
-            <summary>
-            The message adapter for Sterling.
-            </summary>
         </member>
         <member name="M:StockSharp.Sterling.SterlingMessageAdapter.#ctor(Ecng.Common.IdGenerator)">
             <summary>
