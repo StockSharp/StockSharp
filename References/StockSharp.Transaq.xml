@@ -409,6 +409,11 @@
             Прокси.
             </summary>
     </member>
+    <member name="P:StockSharp.Transaq.Proxy.IsEnabled">
+      <summary>
+            Использовать прокси.
+            </summary>
+    </member>
     <member name="P:StockSharp.Transaq.Proxy.Type">
       <summary>
             Тип протокола, который использует прокси.

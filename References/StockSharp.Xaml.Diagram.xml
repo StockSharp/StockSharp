@@ -976,7 +976,7 @@
     </member>
     <member name="M:StockSharp.Xaml.Diagram.DiagramElementParamHelper.SetExpandable``1(StockSharp.Xaml.Diagram.DiagramElementParam{``0})">
       <summary>
-            To set the <see cref="T:Xceed.Wpf.Toolkit.PropertyGrid.Attributes.ExpandableObjectAttribute" /> attribute for the diagram element parameter.
+            To set the <see cref="T:System.ComponentModel.ExpandableObjectConverter" /> attribute for the diagram element parameter.
             </summary>
       <typeparam name="T">The diagram element parameter type.</typeparam>
       <param name="param">The diagram element parameter.</param>
@@ -991,40 +991,16 @@
       <param name="editor">Attribute.</param>
       <returns>The diagram element parameter.</returns>
     </member>
-    <member name="M:StockSharp.Xaml.Diagram.DiagramElementParamHelper.SetOrder``1(StockSharp.Xaml.Diagram.DiagramElementParam{``0},System.Int32)">
+    <member name="M:StockSharp.Xaml.Diagram.DiagramElementParamHelper.SetDisplay``1(StockSharp.Xaml.Diagram.DiagramElementParam{``0},System.String,System.String,System.String,System.Int32)">
       <summary>
-            To set the <see cref="T:Xceed.Wpf.Toolkit.PropertyGrid.Attributes.PropertyOrderAttribute" /> attribute for the diagram element parameter.
+            To set the <see cref="T:System.ComponentModel.DataAnnotations.DisplayAttribute" /> attribute for the diagram element parameter.
             </summary>
       <typeparam name="T">The diagram element parameter type.</typeparam>
       <param name="param">The diagram element parameter.</param>
+      <param name="groupName">The category of the diagram element parameter.</param>
+      <param name="displayName">The display name.</param>
+      <param name="desciption">The description of the diagram element parameter.</param>
       <param name="order">The property order.</param>
-      <returns>The diagram element parameter.</returns>
-    </member>
-    <member name="M:StockSharp.Xaml.Diagram.DiagramElementParamHelper.SetDisplayName``1(StockSharp.Xaml.Diagram.DiagramElementParam{``0},System.String)">
-      <summary>
-            To set the displayed name for the diagram element parameter.
-            </summary>
-      <typeparam name="T">The diagram element parameter type.</typeparam>
-      <param name="param">The diagram element parameter.</param>
-      <param name="text">The display name.</param>
-      <returns>The diagram element parameter.</returns>
-    </member>
-    <member name="M:StockSharp.Xaml.Diagram.DiagramElementParamHelper.SetDescription``1(StockSharp.Xaml.Diagram.DiagramElementParam{``0},System.String)">
-      <summary>
-            To set a description for the diagram element parameter.
-            </summary>
-      <typeparam name="T">The diagram element parameter type.</typeparam>
-      <param name="param">The diagram element parameter.</param>
-      <param name="text">The description of the diagram element parameter.</param>
-      <returns>The diagram element parameter.</returns>
-    </member>
-    <member name="M:StockSharp.Xaml.Diagram.DiagramElementParamHelper.SetCategory``1(StockSharp.Xaml.Diagram.DiagramElementParam{``0},System.String)">
-      <summary>
-            To set a category for the diagram element parameter.
-            </summary>
-      <typeparam name="T">The diagram element parameter type.</typeparam>
-      <param name="param">The diagram element parameter.</param>
-      <param name="text">The category of the diagram element parameter.</param>
       <returns>The diagram element parameter.</returns>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.DiagramElementParamHelper.SetReadOnly``1(StockSharp.Xaml.Diagram.DiagramElementParam{``0},System.Boolean)">

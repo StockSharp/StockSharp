@@ -906,6 +906,11 @@
             CandleSettingsEditor
             </summary>
     </member>
+    <member name="E:StockSharp.Xaml.PropertyGrid.CandleSettingsEditor.SettingsChanged">
+      <summary>
+            Settings changed event.
+            </summary>
+    </member>
     <member name="M:StockSharp.Xaml.PropertyGrid.CandleSettingsEditor.#ctor">
       <summary>
             Initializes a new instance of the <see cref="T:StockSharp.Xaml.PropertyGrid.CandleSettingsEditor" />.
@@ -2079,12 +2084,6 @@
             The set of selected default fields.
             </summary>
     </member>
-    <member name="M:StockSharp.Xaml.Level1FieldsComboBox.OnItemSelectionChanged(Xceed.Wpf.Toolkit.Primitives.ItemSelectionChangedEventArgs)">
-      <summary>
-            The method that is called when the value of the item is changed.
-            </summary>
-      <param name="e">Arguments.</param>
-    </member>
     <member name="T:StockSharp.Xaml.RiskPanel">
       <summary>
             The panel for the list editing <see cref="T:StockSharp.Algo.Risk.IRiskRule" />.
@@ -2331,6 +2330,44 @@
             InitializeComponent
             </summary>
     </member>
+    <member name="T:StockSharp.Xaml.SplashScreenControl">
+      <summary>
+            The splash screen for the application.
+            </summary>
+      <summary>
+            SplashScreenControl
+            </summary>
+    </member>
+    <member name="F:StockSharp.Xaml.SplashScreenControl.AppNameProperty">
+      <summary>
+        <see cref="T:System.Windows.DependencyProperty" /> for <see cref="P:StockSharp.Xaml.SplashScreenControl.AppName" />.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.SplashScreenControl.AppName">
+      <summary>
+            The application name.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Xaml.SplashScreenControl.AppIconProperty">
+      <summary>
+        <see cref="T:System.Windows.DependencyProperty" /> for <see cref="P:StockSharp.Xaml.SplashScreenControl.AppIcon" />.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.SplashScreenControl.AppIcon">
+      <summary>
+            The application icon.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.SplashScreenControl.#ctor">
+      <summary>
+            Create <see cref="T:StockSharp.Xaml.SplashScreenControl" />.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.SplashScreenControl.InitializeComponent">
+      <summary>
+            InitializeComponent
+            </summary>
+    </member>
     <member name="T:StockSharp.Xaml.StorageFormatComboBox">
       <summary>
             The drop-down list to select the instrument type.
@@ -2385,12 +2422,6 @@
       <summary>
             List of selected types.
             </summary>
-    </member>
-    <member name="M:StockSharp.Xaml.SecurityTypesComboBox.OnItemSelectionChanged(Xceed.Wpf.Toolkit.Primitives.ItemSelectionChangedEventArgs)">
-      <summary>
-            The method that is called when the value of the item is changed.
-            </summary>
-      <param name="e">Arguments.</param>
     </member>
     <member name="T:StockSharp.Xaml.ConnectorWindow">
       <summary>
@@ -2560,6 +2591,16 @@
     <member name="E:StockSharp.Xaml.GuiConnector`1.OrdersCancelFailed">
       <summary>
             Order cancellation errors event.
+            </summary>
+    </member>
+    <member name="E:StockSharp.Xaml.GuiConnector`1.MassOrderCanceled">
+      <summary>
+            Mass order cancellation event.
+            </summary>
+    </member>
+    <member name="E:StockSharp.Xaml.GuiConnector`1.MassOrderCancelFailed">
+      <summary>
+            Mass order cancellation event.
             </summary>
     </member>
     <member name="E:StockSharp.Xaml.GuiConnector`1.NewStopOrders">
