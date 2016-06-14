@@ -225,6 +225,7 @@ namespace StockSharp.Community
 				strategy.Id = id;
 
 			_strategies.Add(id, strategy);
+			StrategyCreated?.Invoke(strategy);
 		}
 
 		/// <summary>
@@ -234,6 +235,7 @@ namespace StockSharp.Community
 		public void UpdateStrategy(StrategyData strategy)
 		{
 			ValidateError(Invoke(f => f.UpdateStrategy(SessionId, strategy)), strategy.Id);
+			StrategyUpdated?.Invoke(strategy);
 		}
 
 		/// <summary>
@@ -248,6 +250,7 @@ namespace StockSharp.Community
 			ValidateError(Invoke(f => f.DeleteStrategy(SessionId, strategy.Id)), strategy.Id);
 
 			_strategies.Remove(strategy.Id);
+			StrategyDeleted?.Invoke(strategy);
 		}
 
 		/// <summary>
