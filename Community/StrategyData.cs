@@ -177,7 +177,7 @@ namespace StockSharp.Community
 		public int Revision { get; set; }
 
 		/// <summary>
-		/// The user identifier.
+		/// User ID.
 		/// </summary>
 		[DataMember]
 		public string UserId { get; set; }

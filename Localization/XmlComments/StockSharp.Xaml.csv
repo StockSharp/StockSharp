@@ -184,6 +184,7 @@ P:StockSharp.Xaml.PropertyGrid.SecurityEditor.SecurityProvider/summary;DocStr972
 M:StockSharp.Xaml.PropertyGrid.SecurityEditor.#ctor/summary;DocStr1
 M:StockSharp.Xaml.PropertyGrid.SecurityEditor.InitializeComponent/summary;DocStr8
 T:StockSharp.Xaml.PropertyGrid.CandleSettingsEditor/summary;DocStr8144
+E:StockSharp.Xaml.PropertyGrid.CandleSettingsEditor.SettingsChanged/summary;DocStr9074
 M:StockSharp.Xaml.PropertyGrid.CandleSettingsEditor.#ctor/summary;DocStr1
 F:StockSharp.Xaml.PropertyGrid.CandleSettingsEditor.SettingsProperty/summary;DocStr29
 P:StockSharp.Xaml.PropertyGrid.CandleSettingsEditor.Settings/summary;DocStr8272
@@ -427,8 +428,6 @@ M:StockSharp.Xaml.Level1FieldsComboBox.#ctor/summary;DocStr1
 F:StockSharp.Xaml.Level1FieldsComboBox.SelectedFieldsProperty/summary;DocStr29
 P:StockSharp.Xaml.Level1FieldsComboBox.SelectedFields/summary;DocStr8288
 P:StockSharp.Xaml.Level1FieldsComboBox.DefaultFields/summary;DocStr8289
-M:StockSharp.Xaml.Level1FieldsComboBox.OnItemSelectionChanged(Xceed.Wpf.Toolkit.Primitives.ItemSelectionChangedEventArgs)/summary;DocStr6848
-M:StockSharp.Xaml.Level1FieldsComboBox.OnItemSelectionChanged(Xceed.Wpf.Toolkit.Primitives.ItemSelectionChangedEventArgs)/param/e;DocStr6849
 T:StockSharp.Xaml.RiskPanel/summary;DocStr8122
 M:StockSharp.Xaml.RiskPanel.#ctor/summary;DocStr1
 P:StockSharp.Xaml.RiskPanel.Rules/summary;DocStr8125
@@ -478,6 +477,13 @@ M:StockSharp.Xaml.SecurityLookupPanel.Load(Ecng.Serialization.SettingsStorage)/p
 M:StockSharp.Xaml.SecurityLookupPanel.Save(Ecng.Serialization.SettingsStorage)/summary;DocStr4
 M:StockSharp.Xaml.SecurityLookupPanel.Save(Ecng.Serialization.SettingsStorage)/param/storage;DocStr3
 M:StockSharp.Xaml.SecurityLookupPanel.InitializeComponent/summary;DocStr8
+T:StockSharp.Xaml.SplashScreenControl/summary;DocStr9075
+F:StockSharp.Xaml.SplashScreenControl.AppNameProperty/summary;DocStr29
+P:StockSharp.Xaml.SplashScreenControl.AppName/summary;DocStr8427
+F:StockSharp.Xaml.SplashScreenControl.AppIconProperty/summary;DocStr29
+P:StockSharp.Xaml.SplashScreenControl.AppIcon/summary;DocStr8078
+M:StockSharp.Xaml.SplashScreenControl.#ctor/summary;DocStr1
+M:StockSharp.Xaml.SplashScreenControl.InitializeComponent/summary;DocStr8
 T:StockSharp.Xaml.StorageFormatComboBox/summary;DocStr8305
 M:StockSharp.Xaml.StorageFormatComboBox.#ctor/summary;DocStr1
 P:StockSharp.Xaml.StorageFormatComboBox.SelectedFormat/summary;DocStr8306
@@ -489,8 +495,6 @@ T:StockSharp.Xaml.SecurityTypesComboBox/summary;DocStr8309
 M:StockSharp.Xaml.SecurityTypesComboBox.#ctor/summary;DocStr1
 F:StockSharp.Xaml.SecurityTypesComboBox.SelectedTypesProperty/summary;DocStr29
 P:StockSharp.Xaml.SecurityTypesComboBox.SelectedTypes/summary;DocStr8310
-M:StockSharp.Xaml.SecurityTypesComboBox.OnItemSelectionChanged(Xceed.Wpf.Toolkit.Primitives.ItemSelectionChangedEventArgs)/summary;DocStr6848
-M:StockSharp.Xaml.SecurityTypesComboBox.OnItemSelectionChanged(Xceed.Wpf.Toolkit.Primitives.ItemSelectionChangedEventArgs)/param/e;DocStr6849
 T:StockSharp.Xaml.ConnectorWindow/summary;DocStr8322
 F:StockSharp.Xaml.ConnectorWindow.RemoveCommand/summary;DocStr8312
 F:StockSharp.Xaml.ConnectorWindow.EnableCommand/summary;DocStr8313
@@ -527,6 +531,8 @@ E:StockSharp.Xaml.GuiConnector`1.NewOrders/summary;DocStr869
 E:StockSharp.Xaml.GuiConnector`1.OrdersChanged/summary;DocStr871
 E:StockSharp.Xaml.GuiConnector`1.OrdersRegisterFailed/summary;DocStr873
 E:StockSharp.Xaml.GuiConnector`1.OrdersCancelFailed/summary;DocStr874
+E:StockSharp.Xaml.GuiConnector`1.MassOrderCanceled/summary;DocStr9027
+E:StockSharp.Xaml.GuiConnector`1.MassOrderCancelFailed/summary;DocStr9027
 E:StockSharp.Xaml.GuiConnector`1.NewStopOrders/summary;DocStr870
 E:StockSharp.Xaml.GuiConnector`1.StopOrdersChanged/summary;DocStr870
 E:StockSharp.Xaml.GuiConnector`1.StopOrdersRegisterFailed/summary;DocStr875

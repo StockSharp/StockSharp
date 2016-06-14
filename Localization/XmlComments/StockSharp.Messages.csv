@@ -1345,6 +1345,8 @@ M:StockSharp.Messages.WorkingTime.Load(Ecng.Serialization.SettingsStorage)/summa
 M:StockSharp.Messages.WorkingTime.Load(Ecng.Serialization.SettingsStorage)/param/storage;DocStr3
 M:StockSharp.Messages.WorkingTime.Save(Ecng.Serialization.SettingsStorage)/summary;DocStr4
 M:StockSharp.Messages.WorkingTime.Save(Ecng.Serialization.SettingsStorage)/param/storage;DocStr3
+M:StockSharp.Messages.WorkingTime.ToString/summary;DocStr8494
+M:StockSharp.Messages.WorkingTime.ToString/returns;DocStr8495
 T:StockSharp.Messages.WorkingTimePeriod/summary;Str417
 P:StockSharp.Messages.WorkingTimePeriod.Till/summary;Str419
 P:StockSharp.Messages.WorkingTimePeriod.Times/summary;Str420
@@ -1354,3 +1356,5 @@ M:StockSharp.Messages.WorkingTimePeriod.Load(Ecng.Serialization.SettingsStorage)
 M:StockSharp.Messages.WorkingTimePeriod.Load(Ecng.Serialization.SettingsStorage)/param/storage;DocStr3
 M:StockSharp.Messages.WorkingTimePeriod.Save(Ecng.Serialization.SettingsStorage)/summary;DocStr4
 M:StockSharp.Messages.WorkingTimePeriod.Save(Ecng.Serialization.SettingsStorage)/param/storage;DocStr3
+M:StockSharp.Messages.WorkingTimePeriod.ToString/summary;DocStr8494
+M:StockSharp.Messages.WorkingTimePeriod.ToString/returns;DocStr8495

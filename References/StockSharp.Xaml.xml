@@ -2332,7 +2332,7 @@
     </member>
     <member name="T:StockSharp.Xaml.SplashScreenControl">
       <summary>
-            The splash screen for the application.
+            The splash screen for application.
             </summary>
       <summary>
             SplashScreenControl
@@ -2360,7 +2360,7 @@
     </member>
     <member name="M:StockSharp.Xaml.SplashScreenControl.#ctor">
       <summary>
-            Create <see cref="T:StockSharp.Xaml.SplashScreenControl" />.
+            Initializes a new instance of the <see cref="T:StockSharp.Xaml.SplashScreenControl" />.
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.SplashScreenControl.InitializeComponent">

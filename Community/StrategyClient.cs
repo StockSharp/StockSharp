@@ -241,7 +241,7 @@ namespace StockSharp.Community
 		}
 
 		/// <summary>
-		/// To get the the source and executable codes.
+		/// To get the source or executable codes.
 		/// </summary>
 		/// <param name="strategy">The strategy data.</param>
 		public void Download(StrategyData strategy)
