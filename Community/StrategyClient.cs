@@ -124,6 +124,16 @@ namespace StockSharp.Community
 		/// </summary>
 		public event Action<StrategyData> StrategyDeleted;
 
+		/// <summary>
+		/// Strategy was subscribed.
+		/// </summary>
+		public event Action<StrategySubscription> StrategySubscribed;
+
+		/// <summary>
+		/// Strategy was unsubscribed.
+		/// </summary>
+		public event Action<StrategySubscription> StrategyUnSubscribed;
+
 		private void EnsureInit()
 		{
 			if (_refreshTimer != null)
@@ -282,6 +292,8 @@ namespace StockSharp.Community
 					else
 						subscription = prevSubscr;
 				}
+
+				StrategySubscribed?.Invoke(subscription);
 			}
 
 			return subscription;
@@ -298,6 +310,7 @@ namespace StockSharp.Community
 
 			ValidateError(Invoke(f => f.UnSubscribe(SessionId, subscription.Id)));
 
+			StrategyUnSubscribed?.Invoke(subscription);
 			_subscriptions.Remove(subscription.Id);
 		}
 

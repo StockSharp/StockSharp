@@ -4279,6 +4279,18 @@ NotEnoughBalance;Not enough balance for subscribe to strategy {0}.;Недост�
 NotSubscribed;Strategy {0} has not subscribed.;На стратегию {0} нет подписки.
 CurrencyCannotChange;Currency cannot be changed.;Невозможно поменять валюту.
 NotCompleteRegistered;Registration was not completed.;Регистрация не была пройдена до конца.
+StrategiesGallery;Strategies gallery;Галерея стратегий
+StrategiesSubscriptions;Strategies subscriptions;Подписки на стратегии
+RefreshStrategies;Refresh strategies;Обновить список стратегий
+AllStrategies;All strategies;Все стратегии
+SubscribedStrategies;Subscribed strategies;Купленные стратегии
+FreeStrategies;Free strategies;Бесплатные стратегии
+Author;Author;Автор
+LoadingGalleryStrategies;Loading gallery strategies...;Загрузка стратегий из галереи...
+Logo;Logo;Логотип
+PriceType;Price type;Тип цены
+PublishStrategy;Publish;Опубликовать
+StrategyAlreadyPublished;Strategy was published. Update?;Стратегия была опубликована ранее. Обновить?
 DocStr0;Button activation alert settings;Кнопка активации настроек сигнала
 DocStr1;Initializes a new instance of the {0};Создать {0}
 DocStr2;Load settings;Загрузить настройки
