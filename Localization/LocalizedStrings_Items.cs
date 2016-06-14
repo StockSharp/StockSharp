@@ -42566,5 +42566,15 @@ namespace StockSharp.Localization
 		/// Strategy already published.
 		/// </summary>
 		public static string StrategyAlreadyPublished => GetString(StrategyAlreadyPublishedKey);
+
+		/// <summary>
+		/// Own strategies.
+		/// </summary>
+		public const string OwnStrategiesKey = "OwnStrategies";
+
+		/// <summary>
+		/// Own strategies.
+		/// </summary>
+		public static string OwnStrategies => GetString(OwnStrategiesKey);
 	}
 }
