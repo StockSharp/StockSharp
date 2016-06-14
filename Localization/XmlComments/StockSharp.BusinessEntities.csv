@@ -303,6 +303,8 @@ E:StockSharp.BusinessEntities.IConnector.OrderRegisterFailed/summary;DocStr8550
 E:StockSharp.BusinessEntities.IConnector.OrderCancelFailed/summary;DocStr8551
 E:StockSharp.BusinessEntities.IConnector.OrdersRegisterFailed/summary;DocStr873
 E:StockSharp.BusinessEntities.IConnector.OrdersCancelFailed/summary;DocStr874
+E:StockSharp.BusinessEntities.IConnector.MassOrderCanceled/summary;DocStr9027
+E:StockSharp.BusinessEntities.IConnector.MassOrderCancelFailed/summary;DocStr9028
 E:StockSharp.BusinessEntities.IConnector.StopOrdersRegisterFailed/summary;DocStr875
 E:StockSharp.BusinessEntities.IConnector.StopOrdersCancelFailed/summary;DocStr876
 E:StockSharp.BusinessEntities.IConnector.NewStopOrders/summary;DocStr870

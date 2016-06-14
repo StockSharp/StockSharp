@@ -112,10 +112,10 @@ namespace StockSharp.Community
 		}
 
 		/// <summary>
-		/// To get public user information.
+		/// To get user information.
 		/// </summary>
-		/// <param name="userId">The user identifier.</param>
-		/// <returns>The public user information.</returns>
+		/// <param name="userId">User ID.</param>
+		/// <returns>The user information.</returns>
 		public Profile GetUserProfile(long userId)
 		{
 			return Invoke(f => f.GetUserProfile(userId));

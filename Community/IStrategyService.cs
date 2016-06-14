@@ -69,7 +69,7 @@ namespace StockSharp.Community
 		IEnumerable<StrategyData> GetDescription(long[] strategyIds);
 
 		/// <summary>
-		/// To get the the source or executable codes.
+		/// To get the source or executable codes.
 		/// </summary>
 		/// <param name="sessionId">Session ID.</param>
 		/// <param name="strategyId">The strategy identifier.</param>

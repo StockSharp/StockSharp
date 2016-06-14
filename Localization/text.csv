@@ -13174,3 +13174,50 @@ DocStr9021;Contains settings specific to a combobox editor with uses {0};Сод�
 DocStr9022;List of available indicators types;Список доступных типов индикаторов
 DocStr9023;Items;Элементы
 DocStr9024;Timeframe #2 frame color;Цвет линии таймфрейма #2
+DocStr9025;Multiplier;Множитель
+DocStr9026;Security message adapter;Адаптер для сообщений с инструментами
+DocStr9027;Mass order cancellation event;Событие массовой отмены заявок
+DocStr9028;Mass order cancellation errors event;Событие об ошибке массовой отмены заявок
+DocStr9029;To get the session id if the user was authorized;Получить идентификатор сессии если пользователь авторизован
+DocStr9030;To get the file data;Получить файл
+DocStr9031;File ID;Идентификатор файла
+DocStr9032;The file data;Тело файла
+DocStr9033;Is the file available for public;Публичный ли файл
+DocStr9034;To get user information;Получить информацию о пользователе
+DocStr9035;User ID;Идентификатор пользователя
+DocStr9036;The user information;Информация о пользователе
+DocStr9037;Last time of calling the method;Метка времени предыдущего вызова метода
+DocStr9038;Strategies identifiers and revisions;Идентификаторы и ревизии стратегий
+DocStr9039;To get the source or executable codes;Получить файл стратегии
+DocStr9040;The source or executable codes;Файл стратегии
+DocStr9041;To get active subscriptions signed by {0};Получить список активных подписок, созданных через {0}
+DocStr9042;Active subscriptions;Активные подписки
+DocStr9043;Is auto renewable subscription;Авто-продление подписки
+DocStr9044;The strategy subscription;Подписка на стратегию
+DocStr9045;The subscription identifier;Идентификатор подписки
+DocStr9046;Real name;Настоящее имя
+DocStr9050;All strategies;Все стратегии
+DocStr9051;Strategy subscriptions signed by {0};Подписки на стратегию, созданные через {0}
+DocStr9052;A new strategy was created in the store;Новая стратегия была добавлена в магазин
+DocStr9053;Existing strategy was updated in the store;Стратегия была обновлена в магазине
+DocStr9054;Existing strategy was deleted from the store;Стратегия была удалена из магазина
+DocStr9056;Strategy content types;Типы контента стратегии
+DocStr9057;Schema in visual designer (if the strategy is distributed as a schema);Схема визуального дизайнера (если стратегия распространяется как схема)
+DocStr9058;Encrypted version of {0};Зашифрованная версия {0}
+DocStr9059;Strategy price types;Типы цены стратегии
+DocStr9060;Lifetime;Пожизненно
+DocStr9061;Per month;Помесячно
+DocStr9062;Annual;Ежегодно
+DocStr9063;Name (en);Название (англ.)
+DocStr9064;Strategy description (en);Описание стратегии (англ.)
+DocStr9065;Name (ru);Название (рус.)
+DocStr9066;Strategy description (ru);Описание стратегии (рус.)
+DocStr9067;Type of {0};Тип {0}
+DocStr9068;Content name (file name etc.);Название контента (например, название файла)
+DocStr9069;Content;Контент
+DocStr9070;The picture identifier;Идентификатор картинки
+DocStr9071;The content revision;Ревизия
+DocStr9072;Identifier of {0};Идентификатор {0}
+DocStr9073;Amount of the subscription;Стоимость подписки
+DocStr9074;Settings changed event;Событие изменения настроек
+DocStr9075;The splash screen for application;Окно-заставка
