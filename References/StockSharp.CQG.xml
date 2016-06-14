@@ -8,15 +8,6 @@
             <summary>
             CQG message adapter.
             </summary>
-            <summary>
-            CQG message adapter.
-            </summary>
-            <summary>
-            CQG message adapter.
-            </summary>
-            <summary>
-            CQG message adapter.
-            </summary>
         </member>
         <member name="M:StockSharp.CQG.CQGMessageAdapter.#ctor(Ecng.Common.IdGenerator)">
             <summary>

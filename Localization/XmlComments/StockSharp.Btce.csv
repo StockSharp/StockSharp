@@ -1,7 +1,4 @@
 T:StockSharp.Btce.BtceMessageAdapter/summary;DocStr2581
-T:StockSharp.Btce.BtceMessageAdapter/summary;DocStr2581
-T:StockSharp.Btce.BtceMessageAdapter/summary;DocStr2581
-T:StockSharp.Btce.BtceMessageAdapter/summary;DocStr2581
 M:StockSharp.Btce.BtceMessageAdapter.#ctor(Ecng.Common.IdGenerator)/summary;DocStr1
 M:StockSharp.Btce.BtceMessageAdapter.#ctor(Ecng.Common.IdGenerator)/param/transactionIdGenerator;DocStr3311
 P:StockSharp.Btce.BtceMessageAdapter.IsSupportNativeSecurityLookup/summary;DocStr52

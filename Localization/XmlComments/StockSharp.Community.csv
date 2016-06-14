@@ -260,6 +260,8 @@ P:StockSharp.Community.StrategyClient.Subscriptions/summary;DocStr9051
 E:StockSharp.Community.StrategyClient.StrategyCreated/summary;DocStr9052
 E:StockSharp.Community.StrategyClient.StrategyUpdated/summary;DocStr9053
 E:StockSharp.Community.StrategyClient.StrategyDeleted/summary;DocStr9054
+E:StockSharp.Community.StrategyClient.StrategySubscribed/summary;DocStr9076
+E:StockSharp.Community.StrategyClient.StrategyUnSubscribed/summary;DocStr9077
 M:StockSharp.Community.StrategyClient.CreateStrategy(StockSharp.Community.StrategyData)/summary;DocStr8695
 M:StockSharp.Community.StrategyClient.CreateStrategy(StockSharp.Community.StrategyData)/param/strategy;DocStr3052
 M:StockSharp.Community.StrategyClient.UpdateStrategy(StockSharp.Community.StrategyData)/summary;DocStr3054

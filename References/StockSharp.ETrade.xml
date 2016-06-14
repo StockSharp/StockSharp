@@ -163,15 +163,6 @@
       <summary>
             The messages adapter for ETrade.
             </summary>
-      <summary>
-            The messages adapter for ETrade.
-            </summary>
-      <summary>
-            The messages adapter for ETrade.
-            </summary>
-      <summary>
-            The messages adapter for ETrade.
-            </summary>
     </member>
     <member name="P:StockSharp.ETrade.ETradeMessageAdapter.IsSupportNativeSecurityLookup">
       <summary>

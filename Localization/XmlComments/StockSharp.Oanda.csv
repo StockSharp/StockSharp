@@ -1,7 +1,4 @@
 T:StockSharp.Oanda.OandaMessageAdapter/summary;DocStr5923
-T:StockSharp.Oanda.OandaMessageAdapter/summary;DocStr5923
-T:StockSharp.Oanda.OandaMessageAdapter/summary;DocStr5923
-T:StockSharp.Oanda.OandaMessageAdapter/summary;DocStr5923
 M:StockSharp.Oanda.OandaMessageAdapter.#ctor(Ecng.Common.IdGenerator)/summary;DocStr1
 M:StockSharp.Oanda.OandaMessageAdapter.#ctor(Ecng.Common.IdGenerator)/param/transactionIdGenerator;DocStr3311
 M:StockSharp.Oanda.OandaMessageAdapter.CreateOrderCondition/summary;DocStr44

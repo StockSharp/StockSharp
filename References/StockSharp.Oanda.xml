@@ -8,15 +8,6 @@
       <summary>
             The messages adapter for OANDA (REST protocol).
             </summary>
-      <summary>
-            The messages adapter for OANDA (REST protocol).
-            </summary>
-      <summary>
-            The messages adapter for OANDA (REST protocol).
-            </summary>
-      <summary>
-            The messages adapter for OANDA (REST protocol).
-            </summary>
     </member>
     <member name="M:StockSharp.Oanda.OandaMessageAdapter.#ctor(Ecng.Common.IdGenerator)">
       <summary>

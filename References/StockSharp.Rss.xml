@@ -8,9 +8,6 @@
             <summary>
             The market-data message adapter for Rss.
             </summary>
-            <summary>
-            The market-data message adapter for Rss.
-            </summary>
         </member>
         <member name="M:StockSharp.Rss.RssMarketDataMessageAdapter.#ctor(Ecng.Common.IdGenerator)">
             <summary>

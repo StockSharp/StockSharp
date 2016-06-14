@@ -17,9 +17,6 @@ P:StockSharp.Blackwood.BlackwoodImbalance.CurrInitImbalanceVolume/summary;DocStr
 P:StockSharp.Blackwood.BlackwoodImbalance.ClearingPrice/summary;DocStr2553
 P:StockSharp.Blackwood.BlackwoodImbalance.ClosingOnlyClearingPrice/summary;DocStr2554
 T:StockSharp.Blackwood.BlackwoodMessageAdapter/summary;DocStr2555
-T:StockSharp.Blackwood.BlackwoodMessageAdapter/summary;DocStr2555
-T:StockSharp.Blackwood.BlackwoodMessageAdapter/summary;DocStr2555
-T:StockSharp.Blackwood.BlackwoodMessageAdapter/summary;DocStr2555
 M:StockSharp.Blackwood.BlackwoodMessageAdapter.#ctor(Ecng.Common.IdGenerator)/summary;DocStr1
 M:StockSharp.Blackwood.BlackwoodMessageAdapter.#ctor(Ecng.Common.IdGenerator)/param/transactionIdGenerator;DocStr3311
 M:StockSharp.Blackwood.BlackwoodMessageAdapter.CreateOrderCondition/summary;DocStr44

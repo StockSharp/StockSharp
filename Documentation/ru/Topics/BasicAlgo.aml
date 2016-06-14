@@ -87,7 +87,7 @@ Console.WriteLine(someSecurity.ShrinkPrice(13453.65342));</code>
 Console.WriteLine(someStrategy.Trades.GetPosition());</code>
 			  </content>
 		  </step>
-		  <step>
+		  <!--step>
 			  <content>
 				  <para>
 					  Получить общую прибыль-убыток по совершенным сделкам через метод <codeEntityReference>Overload:StockSharp.Algo.TraderHelper.GetPnL</codeEntityReference>:
@@ -97,7 +97,7 @@ var someSecurity = trader.Securities.First();
 
 Console.WriteLine(someSecurity.GetPnL(trader.GetMyTrades(someSecurity)));</code>
 			  </content>
-		  </step>
+		  </step-->
 		  <!--<step>
 			<content>
 			  <para>
@@ -117,7 +117,7 @@ Console.WriteLine(someTrade.GetSlippage(someTrade.Order.Price));</code>
 				  <code language="C#">// любой инструмент
 var someSecurity = trader.Securities.First();
 
-Console.WriteLine(someSecurity.Exchange.IsTradeTime(trader));</code>
+Console.WriteLine(someSecurity.Exchange.IsTradeTime(currentTime));</code>
 			  </content>
 		  </step>
 		  <step>

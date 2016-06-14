@@ -97,15 +97,6 @@
       <summary>
             The messages adapter for Blackwood (Fusion) DMA.
             </summary>
-      <summary>
-            The messages adapter for Blackwood (Fusion) DMA.
-            </summary>
-      <summary>
-            The messages adapter for Blackwood (Fusion) DMA.
-            </summary>
-      <summary>
-            The messages adapter for Blackwood (Fusion) DMA.
-            </summary>
     </member>
     <member name="M:StockSharp.Blackwood.BlackwoodMessageAdapter.#ctor(Ecng.Common.IdGenerator)">
       <summary>

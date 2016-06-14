@@ -1,5 +1,4 @@
 T:StockSharp.Rss.RssMarketDataMessageAdapter/summary;DocStr7418
-T:StockSharp.Rss.RssMarketDataMessageAdapter/summary;DocStr7418
 M:StockSharp.Rss.RssMarketDataMessageAdapter.#ctor(Ecng.Common.IdGenerator)/summary;DocStr1
 M:StockSharp.Rss.RssMarketDataMessageAdapter.#ctor(Ecng.Common.IdGenerator)/param/transactionIdGenerator;DocStr3311
 M:StockSharp.Rss.RssMarketDataMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)/summary;DocStr46

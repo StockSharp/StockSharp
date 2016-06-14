@@ -1,7 +1,4 @@
 T:StockSharp.LMAX.LmaxMessageAdapter/summary;DocStr3904
-T:StockSharp.LMAX.LmaxMessageAdapter/summary;DocStr3904
-T:StockSharp.LMAX.LmaxMessageAdapter/summary;DocStr3904
-T:StockSharp.LMAX.LmaxMessageAdapter/summary;DocStr3904
 M:StockSharp.LMAX.LmaxMessageAdapter.#ctor(Ecng.Common.IdGenerator)/summary;DocStr1
 M:StockSharp.LMAX.LmaxMessageAdapter.#ctor(Ecng.Common.IdGenerator)/param/transactionIdGenerator;DocStr3311
 M:StockSharp.LMAX.LmaxMessageAdapter.CreateOrderCondition/summary;DocStr44

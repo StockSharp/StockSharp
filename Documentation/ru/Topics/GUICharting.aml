@@ -18,9 +18,9 @@
   		<listItem>
   			<para><codeEntityReference>T:StockSharp.Xaml.Charting.ChartPanel</codeEntityReference> - расширенный графический компонент для отображения биржевых графиков.</para>
   		</listItem>
-  		<listItem>
+  		<!--listItem>
   			<para><codeEntityReference>T:StockSharp.Xaml.Charting.BufferedChart</codeEntityReference> - графический компонент для отображения биржевых графиков, который использует буфферизацию при выводе данных.</para>
-  		</listItem>
+  		</listItem-->
   		<listItem>
   			<para><codeEntityReference>T:StockSharp.Xaml.Charting.EquityCurveChart</codeEntityReference> - графический компонент для отображения кривой доходности.</para>
   		</listItem>
@@ -102,7 +102,7 @@
   			</listItem>
   			<listItem>
   				<para>
-  				<codeEntityReference>M:StockSharp.Xaml.Charting.IChart.Draw(System.Collections.Generic.IEnumerable{Ecng.Common.RefPair{System.DateTimeOffset,System.Collections.Generic.IDictionary{StockSharp.Xaml.Charting.IChartElement,System.Object}}})</codeEntityReference> - отрисовать значение на графике.
+  				<codeEntityReference>M:StockSharp.Xaml.Charting.IChart.Draw(StockSharp.Xaml.Charting.ChartDrawData)</codeEntityReference> - отрисовать значение на графике.
   				</para>
   			</listItem>
   			

@@ -68,8 +68,7 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Ecng.Configuration, Version=1.0.0.0, Culture=neutral, PublicKeyToken=b10e79ed0227b515, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="Ecng.Configuration">
       <HintPath>..\..\..\References\Ecng.Configuration.dll</HintPath>
     </Reference>
     <Reference Include="Ecng.Localization">

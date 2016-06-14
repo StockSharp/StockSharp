@@ -16,6 +16,7 @@ Copyright 2010 by StockSharp, LLC
 namespace SampleTwime
 {
 	using System.Collections.Generic;
+	using System.Linq;
 	using System.Windows;
 
 	using Ecng.Common;
@@ -26,6 +27,7 @@ namespace SampleTwime
 	using StockSharp.Algo;
 	using StockSharp.BusinessEntities;
 	using StockSharp.Localization;
+	using StockSharp.Twime;
 	using StockSharp.Xaml;
 
 	public partial class OrdersWindow
@@ -35,9 +37,11 @@ namespace SampleTwime
 			InitializeComponent();
 		}
 
+		private TwimeTrader Trader => MainWindow.Instance.Trader;
+
 		private void OrderGrid_OnOrderCanceling(IEnumerable<Order> orders)
 		{
-			orders.ForEach(MainWindow.Instance.Trader.CancelOrder);
+			orders.ForEach(Trader.CancelOrder);
 		}
 
 		private void OrderGrid_OnOrderReRegistering(Order order)
@@ -45,21 +49,21 @@ namespace SampleTwime
 			var window = new OrderWindow
 			{
 				Title = LocalizedStrings.Str2976Params.Put(order.TransactionId),
-				SecurityProvider = MainWindow.Instance.Trader,
-				MarketDataProvider = MainWindow.Instance.Trader,
-				Portfolios = new PortfolioDataSource(MainWindow.Instance.Trader),
+				SecurityProvider = Trader,
+				MarketDataProvider = Trader,
+				Portfolios = new PortfolioDataSource(Trader),
 				Order = order.ReRegisterClone(newVolume: order.Balance),
 			};
 
 			if (window.ShowModal(this))
 			{
-				MainWindow.Instance.Trader.ReRegisterOrder(order, window.Order);
+				Trader.ReRegisterOrder(order, window.Order);
 			}
 		}
 
 		private void CancelAll_OnClick(object sender, RoutedEventArgs e)
 		{
-			MainWindow.Instance.Trader.CancelOrders();
+			Trader.CancelOrders(portfolio: Trader.Portfolios.FirstOrDefault());
 		}
 	}
 }

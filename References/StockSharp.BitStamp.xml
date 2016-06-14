@@ -8,15 +8,6 @@
       <summary>
             The message adapter for BitStamp.
             </summary>
-      <summary>
-            The message adapter for BitStamp.
-            </summary>
-      <summary>
-            The message adapter for BitStamp.
-            </summary>
-      <summary>
-            The message adapter for BitStamp.
-            </summary>
     </member>
     <member name="M:StockSharp.BitStamp.BitStampMessageAdapter.#ctor(Ecng.Common.IdGenerator)">
       <summary>

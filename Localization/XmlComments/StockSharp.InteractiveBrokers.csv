@@ -261,9 +261,6 @@ F:StockSharp.InteractiveBrokers.ExchangeNewsTypes.Html/summary;DocStr8459
 F:StockSharp.InteractiveBrokers.ExchangeNewsTypes.PopupText/summary;DocStr8459
 F:StockSharp.InteractiveBrokers.ExchangeNewsTypes.PopupHtml/summary;DocStr8459
 T:StockSharp.InteractiveBrokers.InteractiveBrokersMessageAdapter/summary;DocStr3461
-T:StockSharp.InteractiveBrokers.InteractiveBrokersMessageAdapter/summary;DocStr3461
-T:StockSharp.InteractiveBrokers.InteractiveBrokersMessageAdapter/summary;DocStr3461
-T:StockSharp.InteractiveBrokers.InteractiveBrokersMessageAdapter/summary;DocStr3461
 M:StockSharp.InteractiveBrokers.InteractiveBrokersMessageAdapter.#ctor(Ecng.Common.IdGenerator)/summary;DocStr1
 M:StockSharp.InteractiveBrokers.InteractiveBrokersMessageAdapter.#ctor(Ecng.Common.IdGenerator)/param/transactionIdGenerator;DocStr3311
 M:StockSharp.InteractiveBrokers.InteractiveBrokersMessageAdapter.CreateOrderCondition/summary;DocStr44

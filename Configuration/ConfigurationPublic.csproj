@@ -61,24 +61,19 @@
     </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
-    <Reference Include="StockSharp.Fix, Version=4.3.14.1, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="StockSharp.Fix">
       <HintPath>..\References\StockSharp.Fix.dll</HintPath>
     </Reference>
-    <Reference Include="StockSharp.ITCH, Version=4.3.14.1, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="StockSharp.ITCH">
       <HintPath>..\References\StockSharp.ITCH.dll</HintPath>
     </Reference>
-    <Reference Include="StockSharp.Micex, Version=4.3.14.1, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="StockSharp.Micex">
       <HintPath>..\References\StockSharp.Micex.dll</HintPath>
     </Reference>
-    <Reference Include="StockSharp.Plaza, Version=4.3.14.1, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="StockSharp.Plaza">
       <HintPath>..\References\StockSharp.Plaza.dll</HintPath>
     </Reference>
-    <Reference Include="StockSharp.Twime, Version=4.3.14.1, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="StockSharp.Twime">
       <HintPath>..\References\StockSharp.Twime.dll</HintPath>
     </Reference>
     <Reference Include="System" />
