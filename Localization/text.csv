@@ -13221,3 +13221,5 @@ DocStr9072;Identifier of {0};Идентификатор {0}
 DocStr9073;Amount of the subscription;Стоимость подписки
 DocStr9074;Settings changed event;Событие изменения настроек
 DocStr9075;The splash screen for application;Окно-заставка
+DocStr9076;Strategy was subscribed;Событие о создании подписки
+DocStr9077;Strategy was unsubscribed;Событие об отмене подписки
