@@ -34,9 +34,6 @@ M:StockSharp.ETrade.Native.OAuthToken.Serialize/returns;DocStr3148
 M:StockSharp.ETrade.Native.OAuthToken.Deserialize(System.String)/summary;DocStr3149
 M:StockSharp.ETrade.Native.OAuthToken.Deserialize(System.String)/returns;DocStr3145
 T:StockSharp.ETrade.ETradeMessageAdapter/summary;DocStr3108
-T:StockSharp.ETrade.ETradeMessageAdapter/summary;DocStr3108
-T:StockSharp.ETrade.ETradeMessageAdapter/summary;DocStr3108
-T:StockSharp.ETrade.ETradeMessageAdapter/summary;DocStr3108
 P:StockSharp.ETrade.ETradeMessageAdapter.IsSupportNativeSecurityLookup/summary;DocStr52
 M:StockSharp.ETrade.ETradeMessageAdapter.#ctor(Ecng.Common.IdGenerator)/summary;DocStr1
 M:StockSharp.ETrade.ETradeMessageAdapter.#ctor(Ecng.Common.IdGenerator)/param/transactionIdGenerator;DocStr3311

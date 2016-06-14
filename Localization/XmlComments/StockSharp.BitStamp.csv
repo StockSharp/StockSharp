@@ -1,7 +1,4 @@
 T:StockSharp.BitStamp.BitStampMessageAdapter/summary;DocStr2538
-T:StockSharp.BitStamp.BitStampMessageAdapter/summary;DocStr2538
-T:StockSharp.BitStamp.BitStampMessageAdapter/summary;DocStr2538
-T:StockSharp.BitStamp.BitStampMessageAdapter/summary;DocStr2538
 M:StockSharp.BitStamp.BitStampMessageAdapter.#ctor(Ecng.Common.IdGenerator)/summary;DocStr1
 M:StockSharp.BitStamp.BitStampMessageAdapter.#ctor(Ecng.Common.IdGenerator)/param/transactionIdGenerator;DocStr3311
 P:StockSharp.BitStamp.BitStampMessageAdapter.IsSupportNativeSecurityLookup/summary;DocStr52

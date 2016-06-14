@@ -1,7 +1,4 @@
 T:StockSharp.CQG.CQGMessageAdapter/summary;DocStr3085
-T:StockSharp.CQG.CQGMessageAdapter/summary;DocStr3085
-T:StockSharp.CQG.CQGMessageAdapter/summary;DocStr3085
-T:StockSharp.CQG.CQGMessageAdapter/summary;DocStr3085
 M:StockSharp.CQG.CQGMessageAdapter.#ctor(Ecng.Common.IdGenerator)/summary;DocStr1
 M:StockSharp.CQG.CQGMessageAdapter.#ctor(Ecng.Common.IdGenerator)/param/transactionIdGenerator;DocStr3311
 M:StockSharp.CQG.CQGMessageAdapter.CreateOrderCondition/summary;DocStr44

@@ -1,7 +1,4 @@
 T:StockSharp.Sterling.SterlingMessageAdapter/summary;DocStr7558
-T:StockSharp.Sterling.SterlingMessageAdapter/summary;DocStr7558
-T:StockSharp.Sterling.SterlingMessageAdapter/summary;DocStr7558
-T:StockSharp.Sterling.SterlingMessageAdapter/summary;DocStr7558
 M:StockSharp.Sterling.SterlingMessageAdapter.#ctor(Ecng.Common.IdGenerator)/summary;DocStr1
 M:StockSharp.Sterling.SterlingMessageAdapter.#ctor(Ecng.Common.IdGenerator)/param/transactionIdGenerator;DocStr3311
 M:StockSharp.Sterling.SterlingMessageAdapter.CreateOrderCondition/summary;DocStr44
