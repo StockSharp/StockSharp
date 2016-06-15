@@ -1386,10 +1386,13 @@ namespace StockSharp.Algo.Testing
 
 				money.PositionDiff += position.Value;
 
-				if (prevPos.Sign() == money.PositionCurrentValue.Sign())
-					money.PositionAveragePrice = (money.PositionAveragePrice * prevPos + position.Value * tradeMsg.TradePrice.Value) / money.PositionCurrentValue;
+				var tradePrice = tradeMsg.TradePrice.Value;
+				var currPos = money.PositionCurrentValue;
+
+				if (prevPos.Sign() == currPos.Sign())
+					money.PositionAveragePrice = (money.PositionAveragePrice * prevPos + position.Value * tradePrice) / currPos;
 				else
-					money.PositionAveragePrice = tradeMsg.TradePrice.Value;
+					money.PositionAveragePrice = currPos == 0 ? 0 : tradePrice;
 
 				_totalBlockedMoney = _totalBlockedMoney - prevPrice + money.TotalPrice;
 
@@ -1401,7 +1404,9 @@ namespace StockSharp.Algo.Testing
 						PortfolioName = _name,
 						SecurityId = tradeMsg.SecurityId,
 					}
-					.Add(PositionChangeTypes.CurrentValue, money.PositionCurrentValue));
+					.Add(PositionChangeTypes.CurrentValue, money.PositionCurrentValue)
+					.TryAdd(PositionChangeTypes.AveragePrice, money.PositionAveragePrice)
+				);
 
 				result.Add(CreateChangeMessage(time));
 			}
