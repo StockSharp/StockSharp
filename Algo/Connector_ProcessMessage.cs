@@ -258,7 +258,10 @@ namespace StockSharp.Algo
 			var builder = _quoteChangeDepthBuilders
 				.SafeAdd(quoteMsg.SecurityId.SecurityCode, c => new QuoteChangeDepthBuilder(c, AssociatedBoardCode));
 
-			ProcessSecurityAction(builder.Process(quoteMsg), m => m.SecurityId, (s, m) => ProcessQuotesMessage(s, m, false), true);
+			quoteMsg = builder.Process(quoteMsg);
+
+			var security = LookupSecurity(quoteMsg.SecurityId);
+			ProcessQuotesMessage(security, quoteMsg, false);
 		}
 
 		private SecurityId CreateAssociatedId(SecurityId securityId)
@@ -539,7 +542,7 @@ namespace StockSharp.Algo
 				switch (message.Type)
 				{
 					case MessageTypes.QuoteChange:
-						ProcessSecurityAction((QuoteChangeMessage)message, m => m.SecurityId, (s, m) => ProcessQuotesMessage(s, m, false), true);
+						ProcessQuotesMessage((QuoteChangeMessage)message, false);
 						break;
 
 					case MessageTypes.Board:
@@ -559,11 +562,11 @@ namespace StockSharp.Algo
 						break;
 
 					case MessageTypes.Level1Change:
-						ProcessSecurityAction((Level1ChangeMessage)message, m => m.SecurityId, ProcessLevel1ChangeMessage, true);
+						ProcessLevel1ChangeMessage((Level1ChangeMessage)message);
 						break;
 
 					case MessageTypes.News:
-						ProcessNewsMessage(null, (NewsMessage)message);
+						ProcessNewsMessage((NewsMessage)message);
 						break;
 
 					case MessageTypes.Execution:
@@ -579,11 +582,11 @@ namespace StockSharp.Algo
 						break;
 
 					case MessageTypes.Position:
-						ProcessSecurityAction((PositionMessage)message, m => m.SecurityId, ProcessPositionMessage);
+						ProcessPositionMessage((PositionMessage)message);
 						break;
 
 					case MessageTypes.PositionChange:
-						ProcessSecurityAction((PositionChangeMessage)message, m => m.SecurityId, ProcessPositionChangeMessage);
+						ProcessPositionChangeMessage((PositionChangeMessage)message);
 						break;
 
 					//case MessageTypes.Time:
@@ -610,27 +613,26 @@ namespace StockSharp.Algo
 							break;
 						}
 
-						ProcessSecurityAction(mdMsg, m => m.SecurityId, (s, m) =>
-						{
-							if (m.IsSubscribe)
-							{
-								if (m.DataType == _filteredMarketDepth)
-								{
-									GetFilteredMarketDepthInfo(s).Init(GetMarketDepth(s), _entityCache.GetOrders(s, OrderStates.Active).Select(o => o.ToMessage()));
-									return;
-								}
+						var security = LookupSecurity(mdMsg.SecurityId);
 
-								if (m.Error == null)
-									RaiseMarketDataSubscriptionSucceeded(s, m);
-								else
-									RaiseMarketDataSubscriptionFailed(s, m.DataType, m.Error ?? new NotSupportedException(LocalizedStrings.ConnectionNotSupportSecurity.Put(s.Id)));
-							}
-							else
+						if (mdMsg.IsSubscribe)
+						{
+							if (mdMsg.DataType == _filteredMarketDepth)
 							{
-								if (m.DataType == _filteredMarketDepth)
-									_filteredMarketDepths.Remove(s);
+								GetFilteredMarketDepthInfo(security).Init(GetMarketDepth(security), _entityCache.GetOrders(security, OrderStates.Active).Select(o => o.ToMessage()));
+								return;
 							}
-						});
+
+							if (mdMsg.Error == null)
+								RaiseMarketDataSubscriptionSucceeded(security, mdMsg);
+							else
+								RaiseMarketDataSubscriptionFailed(security, mdMsg.DataType, mdMsg.Error);
+						}
+						else
+						{
+							if (mdMsg.DataType == _filteredMarketDepth)
+								_filteredMarketDepths.Remove(security);
+						}
 
 						break;
 					}
@@ -671,17 +673,8 @@ namespace StockSharp.Algo
 			}
 		}
 
-		private void ProcessSecurityAction<TMessage>(TMessage message, Func<TMessage, SecurityId> getId, Action<Security, TMessage> action, bool ignoreIfNotExist = false)
-			where TMessage : Message
+		private Security LookupSecurity(SecurityId securityId)
 		{
-			if (message == null)
-				throw new ArgumentNullException(nameof(message));
-
-			if (getId == null)
-				throw new ArgumentNullException(nameof(getId));
-
-			var securityId = getId(message);
-
 			var securityCode = securityId.SecurityCode;
 			var boardCode = securityId.BoardCode;
 
@@ -700,10 +693,10 @@ namespace StockSharp.Algo
 					var securities = _entityCache.GetSecuritiesByCode(securityCode).ToArray();
 
 					security = securities.FirstOrDefault(s => s.Type == securityId.SecurityType)
-					           ?? securities.FirstOrDefault(s => s.Type == null);
+							   ?? securities.FirstOrDefault(s => s.Type == null);
 				}
 				else
-					throw new ArgumentNullException(nameof(message), LocalizedStrings.Str682Params.Put(securityCode, securityId.SecurityType));
+					throw new ArgumentException(nameof(securityId), LocalizedStrings.Str682Params.Put(securityCode, securityId.SecurityType));
 			}
 
 			string stockSharpId = null;
@@ -729,14 +722,14 @@ namespace StockSharp.Algo
 
 				if (security == null)
 				{
-					if (!ignoreIfNotExist)
-						throw new ArgumentNullException(nameof(message), LocalizedStrings.Str692Params.Put(securityId, this));
+					//if (!ignoreIfNotExist)
+					throw new ArgumentException(nameof(securityId), LocalizedStrings.Str692Params.Put(securityId, this));
 
-					return;
+					//return;
 				}
 			}
 
-			action(security, message);
+			return security;
 		}
 
 		private void ProcessConnectMessage(BaseConnectionMessage message)
@@ -1023,8 +1016,10 @@ namespace StockSharp.Algo
 			RaiseLookupPortfoliosResult(Portfolios.Where(pf => pf.Name.CompareIgnoreCase(criteria.PortfolioName)));
 		}
 
-		private void ProcessLevel1ChangeMessage(Security security, Level1ChangeMessage message)
+		private void ProcessLevel1ChangeMessage(Level1ChangeMessage message)
 		{
+			var security = LookupSecurity(message.SecurityId);
+
 			if (UpdateSecurityByLevel1)
 			{
 				security.ApplyChanges(message);
@@ -1058,7 +1053,7 @@ namespace StockSharp.Algo
 				// обновление BestXXX для ALL из конкретных тикеров
 				var clone = (Level1ChangeMessage)message.Clone();
 				clone.SecurityId = CreateAssociatedId(clone.SecurityId);
-				ProcessSecurityAction(clone, m => m.SecurityId, ProcessLevel1ChangeMessage, true);
+				ProcessLevel1ChangeMessage(clone);
 			}
 		}
 
@@ -1116,16 +1111,18 @@ namespace StockSharp.Algo
 			});
 		}
 
-		private void ProcessPositionMessage(Security security, PositionMessage message)
+		private void ProcessPositionMessage(PositionMessage message)
 		{
+			var security = LookupSecurity(message.SecurityId);
 			var portfolio = GetPortfolio(message.PortfolioName);
 			var position = GetPosition(portfolio, security, message.DepoName, message.LimitType, message.Description);
 
 			message.CopyExtensionInfo(position);
 		}
 
-		private void ProcessPositionChangeMessage(Security security, PositionChangeMessage message)
+		private void ProcessPositionChangeMessage(PositionChangeMessage message)
 		{
+			var security = LookupSecurity(message.SecurityId);
 			var portfolio = GetPortfolio(message.PortfolioName);
 
 			var valueInLots = message.Changes.TryGetValue(PositionChangeTypes.CurrentValueInLots);
@@ -1146,21 +1143,23 @@ namespace StockSharp.Algo
 			RaisePositionChanged(position);
 		}
 
-		private void ProcessNewsMessage(Security security, NewsMessage message)
+		private void ProcessNewsMessage(NewsMessage message)
 		{
-			var secId = message.SecurityId;
+			var security = message.SecurityId == null ? null : LookupSecurity(message.SecurityId.Value);
 
-			if (security != null || secId == null)
-			{
-				var news = _entityCache.ProcessNewsMessage(security, message);
+			var news = _entityCache.ProcessNewsMessage(security, message);
 
-				if (news.Item2)
-					RaiseNewNews(news.Item1);
-				else
-					RaiseNewsChanged(news.Item1);
-			}
+			if (news.Item2)
+				RaiseNewNews(news.Item1);
 			else
-				ProcessSecurityAction(message, m => secId.Value, ProcessNewsMessage);
+				RaiseNewsChanged(news.Item1);
+		}
+
+		private void ProcessQuotesMessage(QuoteChangeMessage message, bool fromLevel1)
+		{
+			var security = LookupSecurity(message.SecurityId);
+
+			ProcessQuotesMessage(security, message, fromLevel1);
 		}
 
 		private void ProcessQuotesMessage(Security security, QuoteChangeMessage message, bool fromLevel1)
@@ -1649,8 +1648,8 @@ namespace StockSharp.Algo
 
 					if (order == null)
 					{
-						ProcessSecurityAction(message, m => m.SecurityId,
-							(s, m) => ProcessTransactionMessage(null, s, m, transactionId));
+						var security = LookupSecurity(message.SecurityId);
+						ProcessTransactionMessage(null, security, message, transactionId);
 					}
 					else
 					{
@@ -1664,18 +1663,17 @@ namespace StockSharp.Algo
 				case ExecutionTypes.OrderLog:
 				//case null:
 				{
-					ProcessSecurityAction(message, m => m.SecurityId, (s, m) =>
+					var security = LookupSecurity(message.SecurityId);
+
+					switch (message.ExecutionType)
 					{
-						switch (message.ExecutionType)
-						{
-							case ExecutionTypes.Tick:
-								ProcessTradeMessage(s, message);
-								break;
-							case ExecutionTypes.OrderLog:
-								ProcessOrderLogMessage(s, message);
-								break;
-						}
-					});
+						case ExecutionTypes.Tick:
+							ProcessTradeMessage(security, message);
+							break;
+						case ExecutionTypes.OrderLog:
+							ProcessOrderLogMessage(security, message);
+							break;
+					}
 
 					if (CreateAssociatedSecurity && !IsAssociated(message.SecurityId.BoardCode))
 					{

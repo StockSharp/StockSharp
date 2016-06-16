@@ -68,8 +68,25 @@ namespace StockSharp.Messages
 		/// </summary>
 		public object Native
 		{
-			get { return _native; }
-			set { _native = value; }
+			get { return _nativeAsInt != 0 ? _nativeAsInt : _native; }
+			set
+			{
+				_native = value;
+
+				if (value is long)
+					_nativeAsInt = (long)value;
+			}
+		}
+
+		private long _nativeAsInt;
+
+		/// <summary>
+		/// Native (internal) trading system security id represented as integer.
+		/// </summary>
+		public long NativeAsInt
+		{
+			get { return _nativeAsInt; }
+			set { _nativeAsInt = value; }
 		}
 
 		private SecurityTypes? _securityType;
@@ -149,7 +166,7 @@ namespace StockSharp.Messages
 		public string Plaza { get; set; }
 
 		private int _hashCode;
-		
+
 		/// <summary>
 		/// Get the hash code of the object.
 		/// </summary>
@@ -163,7 +180,8 @@ namespace StockSharp.Messages
 		{
 			if (_hashCode == 0)
 			{
-				_hashCode = _native?.GetHashCode() ?? (_securityCode + _boardCode).ToLowerInvariant().GetHashCode();
+				_hashCode = (_nativeAsInt != 0 ? _nativeAsInt.GetHashCode() : _native?.GetHashCode())
+					?? (_securityCode + _boardCode).ToLowerInvariant().GetHashCode();
 			}
 
 			return _hashCode;
@@ -189,10 +207,13 @@ namespace StockSharp.Messages
 			if (EnsureGetHashCode() != other.EnsureGetHashCode())
 				return false;
 
-			if (_native == null)
-				return _securityCode.CompareIgnoreCase(other._securityCode) && _boardCode.CompareIgnoreCase(other._boardCode);
+			if (_nativeAsInt != 0)
+				return _nativeAsInt.Equals(other._nativeAsInt);
 
-			return _native.Equals(other.Native);
+			if (_native != null)
+				return _native.Equals(other._native);
+
+			return _securityCode.CompareIgnoreCase(other._securityCode) && _boardCode.CompareIgnoreCase(other._boardCode);
 		}
 
 		/// <summary>
