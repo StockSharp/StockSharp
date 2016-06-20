@@ -342,6 +342,15 @@ namespace StockSharp.Quik.Lua
 		}
 
 		/// <summary>
+		/// Конвертировать кириллицу в латиницу.
+		/// </summary>
+		public bool ConvertToLatin
+		{
+			get { return _fixServer.ConvertToLatin; }
+			set { _fixServer.ConvertToLatin = value; }
+		}
+
+		/// <summary>
 		/// https://forum.quik.ru/forum10/topic1218/
 		/// </summary>
 		public bool SingleSlash { get; set; } = true;
