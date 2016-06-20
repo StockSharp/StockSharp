@@ -205,7 +205,7 @@
 
 				if (tuple != null)
 				{
-					msgs = tuple.First ?? tuple.Second.Values.ToList();
+					msgs = GetMessages(tuple);
 					_suspendedSecurityMessages.Remove(securityId);
 				}
 
@@ -216,14 +216,16 @@
 						p.Key.BoardCode.IsEmpty() &&
 						(securityId.SecurityType == null || p.Key.SecurityType == securityId.SecurityType));
 
-				if (pair.Value != null)
+				var value = pair.Value;
+
+				if (value != null)
 				{
 					_suspendedSecurityMessages.Remove(pair.Key);
 
 					if (msgs == null)
-						msgs = pair.Value.First;
+						msgs = GetMessages(value);
 					else
-						msgs.AddRange(pair.Value.First);
+						msgs.AddRange(GetMessages(value));
 				}
 			}
 
@@ -235,6 +237,11 @@
 				ReplaceSecurityId(msg, securityId);
 				base.OnInnerAdapterNewOutMessage(msg);
 			}
+		}
+
+		private static List<Message> GetMessages(RefPair<List<Message>, Dictionary<MessageTypes, Message>> tuple)
+		{
+			return tuple.First ?? tuple.Second.Values.ToList();
 		}
 
 		private static void ReplaceSecurityId(Message message, SecurityId securityId)
