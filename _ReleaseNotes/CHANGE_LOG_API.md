@@ -1,5 +1,18 @@
 StockSharp API Change log
 ========================
+###current:
+* (feature) FIX connector. Exante dialect
+* (feature) TwimeTrader.PortfolioName
+* (feature) QuikLua. ConvertToLatin now optional.
+* (feature) Transaq. Address. IP -> Host.
+* (bug) SecurityAdapter fix.
+* (feature) BasePosition.Currency
+* (feature) TimeZoneInfo. Serialization -> ID https://github.com/StockSharp/StockSharp/issues/228#issuecomment-227014493
+* (feature) SecurityLookupMessage.CFICode
+* (bug) RandomGen fixes.
+* (bug) MarketEmulator. AvgPosPrice fix.
+* (feature) SecurityId.NativeAsInt
+
 ###v4.3.15:
 * (feature) TWIME connector.
 * (feature) IConnector. MassOrderCanceled, MassOrderCancelFailed.
