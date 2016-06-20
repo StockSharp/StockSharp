@@ -15,6 +15,11 @@
             </summary>
             <param name="transactionIdGenerator">Генератор идентификаторов транзакций.</param>
         </member>
+        <member name="P:StockSharp.Twime.TwimeMessageAdapter.IsSupportNativePortfolioLookup">
+            <summary>
+            Gets a value indicating whether the connector supports position lookup.
+            </summary>
+        </member>
         <member name="M:StockSharp.Twime.TwimeMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)">
             <summary>
             Отправить сообщение.
@@ -34,6 +39,11 @@
         <member name="P:StockSharp.Twime.TwimeMessageAdapter.Login">
             <summary>
             Логин.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Twime.TwimeMessageAdapter.PortfolioName">
+            <summary>
+            7-ми символьный код клиента.
             </summary>
         </member>
         <member name="P:StockSharp.Twime.TwimeMessageAdapter.IsValid">
@@ -82,6 +92,11 @@
         <member name="P:StockSharp.Twime.TwimeTrader.Login">
             <summary>
             Логин.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Twime.TwimeTrader.PortfolioName">
+            <summary>
+            7-ми символьный код клиента.
             </summary>
         </member>
     </members>
