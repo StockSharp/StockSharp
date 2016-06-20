@@ -316,7 +316,8 @@ namespace StockSharp.BusinessEntities
 				new DateTime(2013, 6, 12)
 			};
 
-			var moscowTime = TimeZoneInfo.FromSerializedString("Russian Standard Time;180;(UTC+03:00) Moscow, St. Petersburg, Volgograd (RTZ 2);Russia TZ 2 Standard Time;Russia TZ 2 Daylight Time;[01:01:0001;12:31:2010;60;[0;02:00:00;3;5;0;];[0;03:00:00;10;5;0;];][01:01:2011;12:31:2011;60;[0;02:00:00;3;5;0;];[0;00:00:00;1;1;6;];][01:01:2014;12:31:2014;60;[0;00:00:00;1;1;3;];[0;02:00:00;10;5;0;];];");
+			//var moscowTime = TimeZoneInfo.FromSerializedString("Russian Standard Time;180;(UTC+03:00) Moscow, St. Petersburg, Volgograd (RTZ 2);Russia TZ 2 Standard Time;Russia TZ 2 Daylight Time;[01:01:0001;12:31:2010;60;[0;02:00:00;3;5;0;];[0;03:00:00;10;5;0;];][01:01:2011;12:31:2011;60;[0;02:00:00;3;5;0;];[0;00:00:00;1;1;6;];][01:01:2014;12:31:2014;60;[0;00:00:00;1;1;3;];[0;02:00:00;10;5;0;];];");
+			var moscowTime = TimeHelper.Moscow;
 
 			//russianSpecialHolidays =
 			//	russianSpecialHolidays
@@ -1414,7 +1415,7 @@ namespace StockSharp.BusinessEntities
 				ExpiryTime = new TimeSpan(18, 45, 00),
 				IsSupportAtomicReRegister = true,
 				Exchange = Exchange.Ux,
-				TimeZone = TimeZoneInfo.FromSerializedString("FLE Standard Time;120;(GMT+02:00) Helsinki, Kyiv, Riga, Sofia, Tallinn, Vilnius;FLE Standard Time;FLE Daylight Time;[01:01:0001;12:31:9999;60;[0;03:00:00;3;5;0;];[0;04:00:00;10;5;0;];];"),
+				TimeZone = TimeZoneInfo.FindSystemTimeZoneById("FLE Standard Time"),
 			};
 
 			UxStock = new ExchangeBoard
@@ -1435,11 +1436,11 @@ namespace StockSharp.BusinessEntities
 					},
 				},
 				Exchange = Exchange.Ux,
-				TimeZone = TimeZoneInfo.FromSerializedString("FLE Standard Time;120;(GMT+02:00) Helsinki, Kyiv, Riga, Sofia, Tallinn, Vilnius;FLE Standard Time;FLE Daylight Time;[01:01:0001;12:31:9999;60;[0;03:00:00;3;5;0;];[0;04:00:00;10;5;0;];];"),
+				TimeZone = TimeZoneInfo.FindSystemTimeZoneById("FLE Standard Time"),
 			};
 
-			var newYorkTime = TimeZoneInfo.FromSerializedString("Eastern Standard Time;-300;(UTC-05:00) Eastern Time (US & Canada);Eastern Standard Time;Eastern Daylight Time;[01:01:0001;12:31:2006;60;[0;02:00:00;4;1;0;];[0;02:00:00;10;5;0;];][01:01:2007;12:31:9999;60;[0;02:00:00;3;2;0;];[0;02:00:00;11;1;0;];];");
-			var chicagoTime = TimeZoneInfo.FromSerializedString("Central Standard Time;-360;(UTC-06:00) Central Time (US & Canada);Central Standard Time;Central Daylight Time;[01:01:0001;12:31:2006;60;[0;02:00:00;4;1;0;];[0;02:00:00;10;5;0;];][01:01:2007;12:31:9999;60;[0;02:00:00;3;2;0;];[0;02:00:00;11;1;0;];];");
+			var newYorkTime = TimeZoneInfo.FindSystemTimeZoneById("Eastern Standard Time");
+			var chicagoTime = TimeZoneInfo.FindSystemTimeZoneById("Central Standard Time");
 
 			Amex = new ExchangeBoard
 			{
@@ -1581,7 +1582,7 @@ namespace StockSharp.BusinessEntities
 					},
 				},
 				Exchange = Exchange.Lse,
-				TimeZone = TimeZoneInfo.FromSerializedString("GMT Standard Time;0;(UTC) Dublin, Edinburgh, Lisbon, London;GMT Standard Time;GMT Daylight Time;[01:01:0001;12:31:9999;60;[0;01:00:00;3;5;0;];[0;02:00:00;10;5;0;];];"),
+				TimeZone = TimeZoneInfo.FindSystemTimeZoneById("GMT Standard Time"),
 			};
 
 			Tse = new ExchangeBoard
@@ -1603,10 +1604,10 @@ namespace StockSharp.BusinessEntities
 					},
 				},
 				Exchange = Exchange.Tse,
-				TimeZone = TimeZoneInfo.FromSerializedString("Tokyo Standard Time;540;(UTC+09:00) Osaka, Sapporo, Tokyo;Tokyo Standard Time;Tokyo Daylight Time;;"),
+				TimeZone = TimeZoneInfo.FindSystemTimeZoneById("Tokyo Standard Time"),
 			};
 
-			var chinaTime = TimeZoneInfo.FromSerializedString("China Standard Time;480;(UTC+08:00) Beijing, Chongqing, Hong Kong, Urumqi;China Standard Time;China Daylight Time;;");
+			var chinaTime = TimeZoneInfo.FindSystemTimeZoneById("China Standard Time");
 
 			Hkex = new ExchangeBoard
 			{
@@ -1717,7 +1718,7 @@ namespace StockSharp.BusinessEntities
 				TimeZone = chinaTime,
 			};
 
-			var singaporeTime = TimeZoneInfo.FromSerializedString("Singapore Standard Time;480;(UTC+08:00) Kuala Lumpur, Singapore;Malay Peninsula Standard Time;Malay Peninsula Daylight Time;;");
+			var singaporeTime = TimeZoneInfo.FindSystemTimeZoneById("Singapore Standard Time");
 
 			Sgx = new ExchangeBoard
 			{
@@ -1784,7 +1785,7 @@ namespace StockSharp.BusinessEntities
 				TimeZone = singaporeTime,
 			};
 
-			var bangkokTime = TimeZoneInfo.FromSerializedString("SE Asia Standard Time;420;(UTC+07:00) Bangkok, Hanoi, Jakarta;SE Asia Standard Time;SE Asia Daylight Time;;");
+			var bangkokTime = TimeZoneInfo.FindSystemTimeZoneById("SE Asia Standard Time");
 
 			Idx = new ExchangeBoard
 			{
@@ -1829,7 +1830,7 @@ namespace StockSharp.BusinessEntities
 				TimeZone = bangkokTime,
 			};
 
-			var indiaTime = TimeZoneInfo.FromSerializedString("India Standard Time;330;(UTC+05:30) Chennai, Kolkata, Mumbai, New Delhi;India Standard Time;India Daylight Time;;");
+			var indiaTime = TimeZoneInfo.FindSystemTimeZoneById("India Standard Time");
 
 			Bse = new ExchangeBoard
 			{
@@ -1891,7 +1892,7 @@ namespace StockSharp.BusinessEntities
 					},
 				},
 				Exchange = Exchange.Cse,
-				TimeZone = TimeZoneInfo.FromSerializedString("Sri Lanka Standard Time;330;(UTC+05:30) Sri Jayawardenepura;Sri Lanka Standard Time;Sri Lanka Daylight Time;;"),
+				TimeZone = TimeZoneInfo.FindSystemTimeZoneById("Sri Lanka Standard Time"),
 			};
 
 			Krx = new ExchangeBoard
@@ -1912,7 +1913,7 @@ namespace StockSharp.BusinessEntities
 					},
 				},
 				Exchange = Exchange.Krx,
-				TimeZone = TimeZoneInfo.FromSerializedString("Korea Standard Time;540;(UTC+09:00) Seoul;Korea Standard Time;Korea Daylight Time;;"),
+				TimeZone = TimeZoneInfo.FindSystemTimeZoneById("Korea Standard Time"),
 			};
 
 			Asx = new ExchangeBoard
@@ -1933,7 +1934,7 @@ namespace StockSharp.BusinessEntities
 					},
 				},
 				Exchange = Exchange.Asx,
-				TimeZone = TimeZoneInfo.FromSerializedString("AUS Eastern Standard Time;600;(UTC+10:00) Canberra, Melbourne, Sydney;AUS Eastern Standard Time;AUS Eastern Daylight Time;[01:01:0001;12:31:2007;60;[0;02:00:00;10;5;0;];[0;03:00:00;3;5;0;];][01:01:2008;12:31:9999;60;[0;02:00:00;10;1;0;];[0;03:00:00;4;1;0;];];"),
+				TimeZone = TimeZoneInfo.FindSystemTimeZoneById("AUS Eastern Standard Time"),
 			};
 
 			Nzx = new ExchangeBoard
@@ -1954,7 +1955,7 @@ namespace StockSharp.BusinessEntities
 					},
 				},
 				Exchange = Exchange.Nzx,
-				TimeZone = TimeZoneInfo.FromSerializedString("New Zealand Standard Time;720;(UTC+12:00) Auckland, Wellington;New Zealand Standard Time;New Zealand Daylight Time;[01:01:0001;12:31:2006;60;[0;02:00:00;10;1;0;];[0;03:00:00;3;3;0;];][01:01:2007;12:31:2007;60;[0;02:00:00;9;5;0;];[0;03:00:00;3;3;0;];][01:01:2008;12:31:9999;60;[0;02:00:00;9;5;0;];[0;03:00:00;4;1;0;];];"),
+				TimeZone = TimeZoneInfo.FindSystemTimeZoneById("New Zealand Standard Time"),
 			};
 
 			Tase = new ExchangeBoard
@@ -1975,7 +1976,7 @@ namespace StockSharp.BusinessEntities
 					},
 				},
 				Exchange = Exchange.Tase,
-				TimeZone = TimeZoneInfo.FromSerializedString("Israel Standard Time;120;(UTC+02:00) Jerusalem;Jerusalem Standard Time;Jerusalem Daylight Time;[01:01:2005;12:31:2005;60;[0;02:00:00;4;1;5;];[0;02:00:00;10;2;0;];][01:01:2006;12:31:2006;60;[0;02:00:00;3;5;5;];[0;02:00:00;10;1;0;];][01:01:2007;12:31:2007;60;[0;02:00:00;3;5;5;];[0;02:00:00;9;3;0;];][01:01:2008;12:31:2008;60;[0;02:00:00;3;5;5;];[0;02:00:00;10;1;0;];][01:01:2009;12:31:2009;60;[0;02:00:00;3;5;5;];[0;02:00:00;9;5;0;];][01:01:2010;12:31:2010;60;[0;02:00:00;3;5;5;];[0;02:00:00;9;2;0;];][01:01:2011;12:31:2011;60;[0;02:00:00;4;1;5;];[0;02:00:00;10;1;0;];][01:01:2012;12:31:2012;60;[0;02:00:00;3;5;5;];[0;02:00:00;9;4;0;];][01:01:2013;12:31:2013;60;[0;02:00:00;3;5;5;];[0;02:00:00;9;2;0;];][01:01:2014;12:31:2014;60;[0;02:00:00;3;5;5;];[0;02:00:00;9;4;0;];][01:01:2015;12:31:2015;60;[0;02:00:00;3;5;5;];[0;02:00:00;9;3;0;];][01:01:2016;12:31:2016;60;[0;02:00:00;4;1;5;];[0;02:00:00;10;2;0;];][01:01:2017;12:31:2017;60;[0;02:00:00;3;5;5;];[0;02:00:00;9;4;0;];][01:01:2018;12:31:2018;60;[0;02:00:00;3;5;5;];[0;02:00:00;9;3;0;];][01:01:2019;12:31:2019;60;[0;02:00:00;3;5;5;];[0;02:00:00;10;1;0;];][01:01:2020;12:31:2020;60;[0;02:00:00;3;5;5;];[0;02:00:00;9;4;0;];][01:01:2021;12:31:2021;60;[0;02:00:00;3;5;5;];[0;02:00:00;9;2;0;];][01:01:2022;12:31:2022;60;[0;02:00:00;4;1;5;];[0;02:00:00;10;1;0;];];"),
+				TimeZone = TimeZoneInfo.FindSystemTimeZoneById("Israel Standard Time"),
 			};
 
 			Fwb = new ExchangeBoard
@@ -1996,7 +1997,7 @@ namespace StockSharp.BusinessEntities
 					},
 				},
 				Exchange = Exchange.Fwb,
-				TimeZone = TimeZoneInfo.FromSerializedString("W. Europe Standard Time;60;(UTC+01:00) Amsterdam, Berlin, Bern, Rome, Stockholm, Vienna;W. Europe Standard Time;W. Europe Daylight Time;[01:01:0001;12:31:9999;60;[0;02:00:00;3;5;0;];[0;03:00:00;10;5;0;];];"),
+				TimeZone = TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"),
 			};
 
 			Mse = new ExchangeBoard
@@ -2017,7 +2018,7 @@ namespace StockSharp.BusinessEntities
 					},
 				},
 				Exchange = Exchange.Mse,
-				TimeZone = TimeZoneInfo.FromSerializedString("Romance Standard Time;60;(UTC+01:00) Brussels, Copenhagen, Madrid, Paris;Romance Standard Time;Romance Daylight Time;[01:01:0001;12:31:9999;60;[0;02:00:00;3;5;0;];[0;03:00:00;10;5;0;];];"),
+				TimeZone = TimeZoneInfo.FindSystemTimeZoneById("Romance Standard Time"),
 			};
 
 			Swx = new ExchangeBoard
