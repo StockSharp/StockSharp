@@ -13225,3 +13225,9 @@ DocStr9074;Settings changed event;Событие изменения настро
 DocStr9075;The splash screen for application;Окно-заставка
 DocStr9076;Strategy was subscribed;Событие о создании подписки
 DocStr9077;Strategy was unsubscribed;Событие об отмене подписки
+DocStr9078;Display name;Отображаемое имя
+DocStr9079;Has position in {0};Присутствует ли позиция в {0}
+DocStr9080;Convert all non-latin text messages to latin;Конвертировать кириллицу в латиницу
+DocStr9081;Exante;Exante
+DocStr9082;Native (internal) trading system security id represented as integer;Внутренний числовой идентификатор торговой системы
+DocStr9083;CFI code;CFI код

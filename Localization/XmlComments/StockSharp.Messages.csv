@@ -1088,6 +1088,7 @@ T:StockSharp.Messages.SecurityId/summary;SecurityId
 P:StockSharp.Messages.SecurityId.SecurityCode/summary;DocStr3307
 P:StockSharp.Messages.SecurityId.BoardCode/summary;DocStr4375
 P:StockSharp.Messages.SecurityId.Native/summary;DocStr802
+P:StockSharp.Messages.SecurityId.NativeAsInt/summary;DocStr9082
 P:StockSharp.Messages.SecurityId.SecurityType/summary;Str360
 P:StockSharp.Messages.SecurityId.Sedol/summary;Str351
 P:StockSharp.Messages.SecurityId.Cusip/summary;Str352
@@ -1118,6 +1119,7 @@ M:StockSharp.Messages.SecurityId.ToString/returns;DocStr50
 T:StockSharp.Messages.SecurityLookupMessage/summary;DocStr4431
 P:StockSharp.Messages.SecurityLookupMessage.TransactionId/summary;TransactionId
 P:StockSharp.Messages.SecurityLookupMessage.SecurityTypes/summary;Str2539
+P:StockSharp.Messages.SecurityLookupMessage.CFICode/summary;DocStr9083
 M:StockSharp.Messages.SecurityLookupMessage.#ctor/summary;DocStr1
 M:StockSharp.Messages.SecurityLookupMessage.Clone/summary;DocStr643
 M:StockSharp.Messages.SecurityLookupMessage.Clone/returns;DocStr1116

@@ -20,6 +20,7 @@ P:StockSharp.Fix.Dialects.BaseDialect.TimeStampFormat/summary;DocStr8747
 P:StockSharp.Fix.Dialects.BaseDialect.TimeFormat/summary;DocStr8748
 P:StockSharp.Fix.Dialects.BaseDialect.DateFormat/summary;DocStr8749
 P:StockSharp.Fix.Dialects.BaseDialect.TimeZone/summary;Str68
+P:StockSharp.Fix.Dialects.BaseDialect.HasPosition/summary;DocStr9079
 P:StockSharp.Fix.Dialects.BaseDialect.Format/summary;FixFormat
 P:StockSharp.Fix.Dialects.BaseDialect.SecurityLookup/summary;DocStr8750
 P:StockSharp.Fix.Dialects.BaseDialect.PortfolioLookup/summary;DocStr8750
@@ -84,6 +85,7 @@ M:StockSharp.Fix.Dialects.DefaultDialect.#ctor(System.String,System.String,Syste
 M:StockSharp.Fix.Dialects.DefaultDialect.#ctor(System.String,System.String,System.IO.Stream,Ecng.Common.IncrementalIdGenerator,System.TimeSpan,System.Boolean,System.String,System.Security.SecureString,System.TimeZoneInfo,System.Func{StockSharp.Messages.OrderCondition})/param/password;Password
 M:StockSharp.Fix.Dialects.DefaultDialect.#ctor(System.String,System.String,System.IO.Stream,Ecng.Common.IncrementalIdGenerator,System.TimeSpan,System.Boolean,System.String,System.Security.SecureString,System.TimeZoneInfo,System.Func{StockSharp.Messages.OrderCondition})/param/timeZone;Str68
 M:StockSharp.Fix.Dialects.DefaultDialect.#ctor(System.String,System.String,System.IO.Stream,Ecng.Common.IncrementalIdGenerator,System.TimeSpan,System.Boolean,System.String,System.Security.SecureString,System.TimeZoneInfo,System.Func{StockSharp.Messages.OrderCondition})/param/createOrderCondition;DocStr8771
+P:StockSharp.Fix.Dialects.DefaultDialect.ConvertToLatin/summary;DocStr9080
 M:StockSharp.Fix.Dialects.DefaultDialect.OnWrite(StockSharp.Fix.Native.IFixWriter,StockSharp.Messages.Message)/summary;DocStr8756
 M:StockSharp.Fix.Dialects.DefaultDialect.OnWrite(StockSharp.Fix.Native.IFixWriter,StockSharp.Messages.Message)/param/writer;DocStr8757
 M:StockSharp.Fix.Dialects.DefaultDialect.OnWrite(StockSharp.Fix.Native.IFixWriter,StockSharp.Messages.Message)/param/message;DocStr8489
@@ -114,9 +116,6 @@ M:StockSharp.Fix.Dialects.IFixDialect.Write(StockSharp.Messages.Message)/returns
 M:StockSharp.Fix.Dialects.IFixDialect.Read/summary;DocStr8775
 M:StockSharp.Fix.Dialects.IFixDialect.Read/returns;DocStr8776
 T:StockSharp.Fix.FixServer/summary;DocStr3152
-T:StockSharp.Fix.FixServer/summary;DocStr3152
-T:StockSharp.Fix.FixServer/summary;DocStr3152
-T:StockSharp.Fix.FixServer/summary;DocStr3152
 E:StockSharp.Fix.FixServer.NewOutMessage/summary;DocStr2237
 M:StockSharp.Fix.FixServer.RaiseNewOutMessage(StockSharp.Messages.Message)/summary;DocStr466
 M:StockSharp.Fix.FixServer.RaiseNewOutMessage(StockSharp.Messages.Message)/param/message;Str3166
@@ -138,6 +137,7 @@ M:StockSharp.Fix.FixServer.OnProcess(StockSharp.Fix.FixSession,System.String,Sto
 M:StockSharp.Fix.FixServer.#ctor(System.Func{System.String,System.String,System.Tuple{System.TimeSpan,StockSharp.Fix.FixClientRoles}})/summary;DocStr1
 M:StockSharp.Fix.FixServer.#ctor(System.Func{System.String,System.String,System.Tuple{System.TimeSpan,StockSharp.Fix.FixClientRoles}})/param/authorize;DocStr3162
 P:StockSharp.Fix.FixServer.InitialTransactionId/summary;DocStr3172
+P:StockSharp.Fix.FixServer.ConvertToLatin/summary;DocStr9080
 P:StockSharp.Fix.FixServer.TransactionSession/summary;TransactionalSession
 P:StockSharp.Fix.FixServer.MarketDataSession/summary;TransactionalSession
 P:StockSharp.Fix.FixServer.State/summary;DocStr3173
@@ -1069,6 +1069,7 @@ F:StockSharp.Fix.Native.FixMessages.QuoteCancel/summary;DocStr3280
 F:StockSharp.Fix.Native.FixMessages.OrderMassCancelReport/summary;DocStr3264
 T:StockSharp.Fix.Native.FixTags/summary;DocStr3321
 F:StockSharp.Fix.Native.FixTags.Account/summary;DocStr8459
+F:StockSharp.Fix.Native.FixTags.AvgPx/summary;DocStr8459
 F:StockSharp.Fix.Native.FixTags.BeginSeqNo/summary;DocStr8459
 F:StockSharp.Fix.Native.FixTags.BeginString/summary;DocStr8459
 F:StockSharp.Fix.Native.FixTags.BodyLength/summary;DocStr8459
@@ -1402,6 +1403,7 @@ F:StockSharp.Fix.FixDialects.ASTS/summary;DocStr8810
 F:StockSharp.Fix.FixDialects.Spectra/summary;DocStr8811
 F:StockSharp.Fix.FixDialects.Otkritie/summary;DocStr8812
 F:StockSharp.Fix.FixDialects.QuikServer/summary;DocStr8813
+F:StockSharp.Fix.FixDialects.Exante/summary;DocStr9081
 T:StockSharp.Fix.FixTrader/summary;DocStr3349
 M:StockSharp.Fix.FixTrader.#ctor/summary;DocStr1
 T:StockSharp.Fix.FixStopOrderType/summary;DocStr3350

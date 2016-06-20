@@ -202,6 +202,7 @@ P:StockSharp.Community.Profile.Id/summary;Str361
 P:StockSharp.Community.Profile.Login/summary;Login
 P:StockSharp.Community.Profile.Password/summary;DocStr3029
 P:StockSharp.Community.Profile.RealName/summary;DocStr9046
+P:StockSharp.Community.Profile.DisplayName/summary;DocStr9078
 P:StockSharp.Community.Profile.Email/summary;DocStr3030
 P:StockSharp.Community.Profile.Phone/summary;DocStr3031
 P:StockSharp.Community.Profile.Homepage/summary;DocStr3032

@@ -20,6 +20,7 @@ P:StockSharp.BusinessEntities.BasePosition.Commission/summary;Str262
 P:StockSharp.BusinessEntities.BasePosition.LastChangeTime/summary;Str435
 P:StockSharp.BusinessEntities.BasePosition.LocalTime/summary;DocStr2618
 P:StockSharp.BusinessEntities.BasePosition.Description/summary;Str269
+P:StockSharp.BusinessEntities.BasePosition.Currency/summary;Str251
 M:StockSharp.BusinessEntities.BasePosition.CopyTo(StockSharp.BusinessEntities.BasePosition)/summary;DocStr2615
 M:StockSharp.BusinessEntities.BasePosition.CopyTo(StockSharp.BusinessEntities.BasePosition)/param/destination;DocStr2616
 T:StockSharp.BusinessEntities.BasketSecurity/summary;DocStr2619
@@ -671,7 +672,6 @@ T:StockSharp.BusinessEntities.Portfolio/summary;Str541
 M:StockSharp.BusinessEntities.Portfolio.#ctor/summary;DocStr1
 P:StockSharp.BusinessEntities.Portfolio.Name/summary;Str247
 P:StockSharp.BusinessEntities.Portfolio.Leverage/summary;Str261
-P:StockSharp.BusinessEntities.Portfolio.Currency/summary;Str251
 P:StockSharp.BusinessEntities.Portfolio.Board/summary;Str544
 P:StockSharp.BusinessEntities.Portfolio.State/summary;Str265
 P:StockSharp.BusinessEntities.Portfolio.AnonymousPortfolio/summary;DocStr2932
