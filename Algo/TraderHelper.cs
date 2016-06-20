@@ -2274,6 +2274,9 @@ namespace StockSharp.Algo
 					case PositionChangeTypes.DepoName:
 						position.ExtensionInfo[change.Key] = change.Value;
 						break;
+					case PositionChangeTypes.Currency:
+						position.Currency = (CurrencyTypes)change.Value;
+						break;
 					default:
 						throw new ArgumentOutOfRangeException(nameof(change), change.Key, LocalizedStrings.Str1219);
 				}

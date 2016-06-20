@@ -86,26 +86,6 @@ namespace StockSharp.BusinessEntities
 			}
 		}
 
-		private CurrencyTypes? _currency;
-
-		/// <summary>
-		/// Portfolio currency.
-		/// </summary>
-		[DataMember]
-		[DisplayNameLoc(LocalizedStrings.CurrencyKey)]
-		[DescriptionLoc(LocalizedStrings.Str251Key)]
-		[MainCategory]
-		[Nullable]
-		public CurrencyTypes? Currency
-		{
-			get { return _currency; }
-			set
-			{
-				_currency = value;
-				NotifyChanged(nameof(Currency));
-			}
-		}
-
 		//[field: NonSerialized]
 		//private IConnector _connector;
 
