@@ -50,6 +50,11 @@
             Information about the time zone where the exchange is located.
             </summary>
     </member>
+    <member name="P:StockSharp.Fix.Dialects.BaseDialect.HasPosition">
+      <summary>
+            Has position in <see cref="F:StockSharp.Fix.Native.FixMessages.MarketDataSnapshotFullRefresh" />.
+            </summary>
+    </member>
     <member name="P:StockSharp.Fix.Dialects.BaseDialect.Format">
       <summary>
             FIX protocol format.
@@ -203,6 +208,11 @@
       <param name="timeZone">Information about the time zone where the exchange is located.</param>
       <param name="createOrderCondition">Order condition creating handler.</param>
     </member>
+    <member name="P:StockSharp.Fix.Dialects.DefaultDialect.ConvertToLatin">
+      <summary>
+            Convert all non-latin text messages to latin.
+            </summary>
+    </member>
     <member name="M:StockSharp.Fix.Dialects.DefaultDialect.OnWrite(StockSharp.Fix.Native.IFixWriter,StockSharp.Messages.Message)">
       <summary>
             Write the specified message into FIX protocol.
@@ -291,15 +301,6 @@
       <summary>
             FIX server.
             </summary>
-      <summary>
-            FIX server.
-            </summary>
-      <summary>
-            FIX server.
-            </summary>
-      <summary>
-            FIX server.
-            </summary>
     </member>
     <member name="E:StockSharp.Fix.FixServer.NewOutMessage">
       <summary>
@@ -352,6 +353,11 @@
     <member name="P:StockSharp.Fix.FixServer.InitialTransactionId">
       <summary>
             The <see cref="T:StockSharp.Fix.FixServer" /> number from which transaction numbers will be generated.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.FixServer.ConvertToLatin">
+      <summary>
+            Convert all non-latin text messages to latin.
             </summary>
     </member>
     <member name="P:StockSharp.Fix.FixServer.TransactionSession">
@@ -4069,6 +4075,10 @@
       <summary>
       </summary>
     </member>
+    <member name="F:StockSharp.Fix.Native.FixTags.AvgPx">
+      <summary>
+      </summary>
+    </member>
     <member name="F:StockSharp.Fix.Native.FixTags.BeginSeqNo">
       <summary>
       </summary>
@@ -5351,6 +5361,11 @@
     <member name="F:StockSharp.Fix.FixDialects.QuikServer">
       <summary>
             Quik (server).
+            </summary>
+    </member>
+    <member name="F:StockSharp.Fix.FixDialects.Exante">
+      <summary>
+            Exante.
             </summary>
     </member>
     <member name="T:StockSharp.Fix.FixTrader">

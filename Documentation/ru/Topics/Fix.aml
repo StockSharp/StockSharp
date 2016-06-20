@@ -35,7 +35,10 @@
 			CFH (FIX);
 		</listItem>
 		<listItem>
-			Otkritie Securities (FIX).
+			Otkritie Securities (FIX);
+		</listItem>
+		<listItem>
+			Exante (FIX).
 		</listItem>
 	</list>
 	
