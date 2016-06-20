@@ -466,12 +466,12 @@
     </member>
     <member name="F:StockSharp.Transaq.TransaqAddresses.FinamReal1">
       <summary>
-            Финам боевой сервер 1. IP адрес 213.247.141.133, порт 3900.
+            Финам боевой сервер 1. IP адрес tr1.finam.ru, порт 3900.
             </summary>
     </member>
     <member name="F:StockSharp.Transaq.TransaqAddresses.FinamReal2">
       <summary>
-            Финам боевой сервер 2. IP адрес 78.41.199.24, порт 3900.
+            Финам боевой сервер 2. IP адрес tr2.finam.ru, порт 3900.
             </summary>
     </member>
     <member name="T:StockSharp.Transaq.TransaqTrader">
