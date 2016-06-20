@@ -169,6 +169,7 @@ namespace SampleTwime
 					Trader.TransactionAddress = TransactionAddress.EndPoint;
 					Trader.RecoveryAddress = RecoveryAddress.EndPoint;
 					Trader.Login = Login.Text;
+					Trader.PortfolioName = PortfolioName.Text;
 
 					((PlazaMessageAdapter)Trader.MarketDataAdapter).IsDemo = IsDemo.IsChecked == true;
 

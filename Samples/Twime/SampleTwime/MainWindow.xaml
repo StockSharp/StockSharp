@@ -21,6 +21,7 @@
 		<ex:EndPointEditor x:Name="TransactionAddress" Grid.Column="0" Grid.Row="0" />
 		<ex:EndPointEditor x:Name="RecoveryAddress" Grid.Column="1" Grid.Row="0" />
 		<TextBox x:Name="Login" Grid.Column="2" Grid.Row="0" />
+		<TextBox x:Name="PortfolioName" Grid.Column="3" Grid.Row="0" />
 
 		<CheckBox x:Name="IsDemo" VerticalAlignment="Center" Grid.Column="1" Grid.Row="1" IsChecked="True">Demo</CheckBox>
 		<CheckBox x:Name="IsFastRepl" Grid.Row="1" Grid.Column="2" VerticalAlignment="Center">FASTREPL</CheckBox>
