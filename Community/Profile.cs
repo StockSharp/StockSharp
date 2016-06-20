@@ -33,6 +33,12 @@ namespace StockSharp.Community
 		public string RealName { get; set; }
 
 		/// <summary>
+		/// Display name.
+		/// </summary>
+		[DataMember]
+		public string DisplayName { get; set; }
+
+		/// <summary>
 		/// E-mail address.
 		/// </summary>
 		[DataMember]
