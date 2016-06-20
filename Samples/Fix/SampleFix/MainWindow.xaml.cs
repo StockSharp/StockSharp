@@ -157,7 +157,7 @@ namespace SampleFix
 				Trader.NewPortfolios += portfolios =>
 				{
 					// subscribe on portfolio updates
-					portfolios.ForEach(Trader.RegisterPortfolio);
+					//portfolios.ForEach(Trader.RegisterPortfolio);
 
 					_portfoliosWindow.PortfolioGrid.Portfolios.AddRange(portfolios);
 				};
