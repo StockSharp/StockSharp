@@ -75,6 +75,8 @@ namespace StockSharp.Messages
 
 				if (value is long)
 					_nativeAsInt = (long)value;
+				else if (value == null)
+					_nativeAsInt = 0;
 			}
 		}
 

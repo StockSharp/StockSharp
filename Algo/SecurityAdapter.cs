@@ -16,7 +16,7 @@
 	public class SecurityAdapter : MessageAdapterWrapper
 	{
 		private readonly Dictionary<SecurityId, SecurityId> _securityIds = new Dictionary<SecurityId, SecurityId>();
-		private readonly Dictionary<SecurityId, object> _nativeIds = new Dictionary<SecurityId, object>();
+		private readonly PairSet<SecurityId, object> _nativeIds = new PairSet<SecurityId, object>();
 		private readonly Dictionary<SecurityId, RefPair<List<Message>, Dictionary<MessageTypes, Message>>> _suspendedSecurityMessages = new Dictionary<SecurityId, RefPair<List<Message>, Dictionary<MessageTypes, Message>>>();
 		private readonly SyncObject _syncRoot = new SyncObject();
 
@@ -43,6 +43,7 @@
 					{
 						_securityIds.Clear();
 						_suspendedSecurityMessages.Clear();
+						_nativeIds.Clear();
 					}
 
 					break;
@@ -69,7 +70,14 @@
 							var temp = securityId;
 							// GetHashCode shouldn't calc based on native id
 							temp.Native = null;
-							_nativeIds[temp] = nativeSecurityId;
+
+							if (!_nativeIds.TryAdd(temp, nativeSecurityId))
+							{
+								var prevId = _nativeIds[nativeSecurityId];
+
+								if (prevId != securityId)
+									throw new InvalidOperationException(LocalizedStrings.Str687Params.Put(securityId, prevId, nativeSecurityId));
+							}
 						}
 					}
 
