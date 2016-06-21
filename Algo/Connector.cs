@@ -371,7 +371,7 @@ namespace StockSharp.Algo
 		/// <returns>Native (internal) trading system security id.</returns>
 		public object GetNativeId(Security security)
 		{
-			return _entityCache.GetNativeId(security);
+			return _securityAdapter?.GetNativeId(security.ToSecurityId());
 		}
 
 		private DateTimeOffset _currentTime;

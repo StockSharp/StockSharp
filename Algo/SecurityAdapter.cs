@@ -16,6 +16,7 @@
 	public class SecurityAdapter : MessageAdapterWrapper
 	{
 		private readonly Dictionary<SecurityId, SecurityId> _securityIds = new Dictionary<SecurityId, SecurityId>();
+		private readonly Dictionary<SecurityId, object> _nativeIds = new Dictionary<SecurityId, object>();
 		private readonly Dictionary<SecurityId, RefPair<List<Message>, Dictionary<MessageTypes, Message>>> _suspendedSecurityMessages = new Dictionary<SecurityId, RefPair<List<Message>, Dictionary<MessageTypes, Message>>>();
 		private readonly SyncObject _syncRoot = new SyncObject();
 
@@ -62,7 +63,14 @@
 					if (!isNativeIdNull && !isSecurityIdEmpty)
 					{
 						lock (_syncRoot)
+						{
 							_securityIds[securityId] = securityId;
+
+							var temp = securityId;
+							// GetHashCode shouldn't calc based on native id
+							temp.Native = null;
+							_nativeIds[temp] = nativeSecurityId;
+						}
 					}
 
 					base.OnInnerAdapterNewOutMessage(message);
@@ -286,6 +294,16 @@
 				default:
 					throw new ArgumentOutOfRangeException(nameof(message), message.Type, LocalizedStrings.Str2770);
 			}
+		}
+
+		/// <summary>
+		/// Get native id.
+		/// </summary>
+		/// <param name="securityId">Security ID.</param>
+		/// <returns>Native (internal) trading system security id.</returns>
+		public object GetNativeId(SecurityId securityId)
+		{
+			return _nativeIds.TryGetValue(securityId);
 		}
 	}
 }
