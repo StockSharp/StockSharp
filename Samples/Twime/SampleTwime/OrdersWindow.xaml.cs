@@ -27,6 +27,7 @@ namespace SampleTwime
 	using StockSharp.Algo;
 	using StockSharp.BusinessEntities;
 	using StockSharp.Localization;
+	using StockSharp.Messages;
 	using StockSharp.Twime;
 	using StockSharp.Xaml;
 
@@ -63,7 +64,10 @@ namespace SampleTwime
 
 		private void CancelAll_OnClick(object sender, RoutedEventArgs e)
 		{
-			Trader.CancelOrders(portfolio: Trader.Portfolios.FirstOrDefault());
+			var pf = Trader.Portfolios.FirstOrDefault();
+
+			Trader.CancelOrders(portfolio: pf, securityType: SecurityTypes.Future);
+			Trader.CancelOrders(portfolio: pf, securityType: SecurityTypes.Option);
 		}
 	}
 }
