@@ -26,6 +26,8 @@ namespace StockSharp.Algo
 	using Ecng.Common;
 	using Ecng.Collections;
 
+	using MoreLinq;
+
 	using StockSharp.Algo.Positions;
 	using StockSharp.Algo.Storages;
 	using StockSharp.Algo.Testing;
@@ -1476,7 +1478,8 @@ namespace StockSharp.Algo
 		/// <param name="direction">Order side. If the value is <see langword="null" />, the direction does not use.</param>
 		/// <param name="board">Trading board. If the value is equal to <see langword="null" />, then the board does not match the orders cancel filter.</param>
 		/// <param name="security">Instrument. If the value is equal to <see langword="null" />, then the instrument does not match the orders cancel filter.</param>
-		public static void CancelOrders(this IConnector connector, IEnumerable<Order> orders, bool? isStopOrder = null, Portfolio portfolio = null, Sides? direction = null, ExchangeBoard board = null, Security security = null)
+		/// <param name="securityType">Security type. If the value is <see langword="null" />, the type does not use.</param>
+		public static void CancelOrders(this IConnector connector, IEnumerable<Order> orders, bool? isStopOrder = null, Portfolio portfolio = null, Sides? direction = null, ExchangeBoard board = null, Security security = null, SecurityTypes? securityType = null)
 		{
 			if (connector == null)
 				throw new ArgumentNullException(nameof(connector));
@@ -1484,25 +1487,17 @@ namespace StockSharp.Algo
 			if (orders == null)
 				throw new ArgumentNullException(nameof(orders));
 
-			foreach (var order in orders.Where(o => o.State != OrderStates.Done).ToArray())
-			{
-				if (isStopOrder == null || (order.Type == OrderTypes.Conditional) == isStopOrder)
-				{
-					if (portfolio == null || (order.Portfolio == portfolio))
-					{
-						if (direction == null || order.Direction == direction)
-						{
-							if (board == null || order.Security.Board == board)
-							{
-								if (security == null || order.Security == security)
-								{
-									connector.CancelOrder(order);
-								}
-							}
-						}
-					}
-				}
-			}
+			orders = orders
+				.Where(order => order.State != OrderStates.Done)
+				.Where(order => isStopOrder == null || (order.Type == OrderTypes.Conditional) == isStopOrder.Value)
+				.Where(order => portfolio == null || (order.Portfolio == portfolio))
+				.Where(order => direction == null || order.Direction == direction.Value)
+				.Where(order => board == null || order.Security.Board == board)
+				.Where(order => security == null || order.Security == security)
+				.Where(order => securityType == null || order.Security.Type == securityType.Value)
+				;
+
+			orders.ForEach(connector.CancelOrder);
 		}
 
 		/// <summary>

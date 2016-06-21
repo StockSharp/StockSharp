@@ -548,46 +548,6 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// To create the message of orders mass cancelling.
-		/// </summary>
-		/// <param name="transactionId">Transaction ID.</param>
-		/// <param name="isStopOrder"><see langword="true" />, if cancel only a stop orders, <see langword="false" /> - if regular orders, <see langword="null" /> - both.</param>
-		/// <param name="portfolio">Portfolio. If the value is equal to <see langword="null" />, then the portfolio does not match the orders cancel filter.</param>
-		/// <param name="direction">Order side. If the value is <see langword="null" />, the direction does not use.</param>
-		/// <param name="board">Trading board. If the value is equal to <see langword="null" />, then the board does not match the orders cancel filter.</param>
-		/// <param name="securityId">Security ID.</param>
-		/// <param name="security">Security.</param>
-		/// <returns>Message.</returns>
-		public static OrderGroupCancelMessage CreateGroupCancelMessage(long transactionId, bool? isStopOrder, Portfolio portfolio, Sides? direction, ExchangeBoard board, SecurityId securityId, Security security)
-		{
-			var msg = new OrderGroupCancelMessage
-			{
-				TransactionId = transactionId,
-
-				SecurityId = new SecurityId
-				{
-					BoardCode = board == null ? null : board.Code,
-					SecurityCode = securityId.SecurityCode,
-					Native = securityId.Native,
-				},
-			};
-
-			if (portfolio != null)
-				msg.PortfolioName = portfolio.Name;
-
-			if (isStopOrder != null)
-				msg.OrderType = isStopOrder == true ? OrderTypes.Conditional : OrderTypes.Limit;
-
-			if (direction != null)
-				msg.Side = direction.Value;
-
-			if (security != null)
-				security.ToMessage(securityId).CopyTo(msg);
-
-			return msg;
-		}
-
-		/// <summary>
 		/// To convert the instrument into message.
 		/// </summary>
 		/// <param name="security">Security.</param>
