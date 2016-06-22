@@ -42586,5 +42586,15 @@ namespace StockSharp.Localization
 		/// Open strategies gallery.
 		/// </summary>
 		public static string OpenStrategiesGalleryQuestion => GetString(OpenStrategiesGalleryQuestionKey);
+
+		/// <summary>
+		/// Fill up balance.
+		/// </summary>
+		public const string FillUpBalanceKey = "FillUpBalance";
+
+		/// <summary>
+		/// Fill up balance.
+		/// </summary>
+		public static string FillUpBalance => GetString(FillUpBalanceKey);
 	}
 }
