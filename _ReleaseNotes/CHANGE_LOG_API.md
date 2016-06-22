@@ -1,6 +1,7 @@
 StockSharp API Change log
 ========================
 ###current:
+* (feature) IConnector.CancelOrders. SecurityType filter.
 * (feature) FIX connector. Exante dialect
 * (feature) TwimeTrader.PortfolioName
 * (feature) QuikLua. ConvertToLatin now optional.

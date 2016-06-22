@@ -227,7 +227,6 @@ namespace StockSharp.Algo
 			RecycleOrders();
 		}
 
-		private readonly Dictionary<object, Security> _nativeIdSecurities = new Dictionary<object, Security>();
 		private readonly CachedSynchronizedDictionary<string, Portfolio> _portfolios = new CachedSynchronizedDictionary<string, Portfolio>();
 		private readonly HashSet<long> _orderStatusTransactions = new HashSet<long>();
 		private readonly HashSet<long> _massCancelationTransactions = new HashSet<long>();
@@ -306,7 +305,6 @@ namespace StockSharp.Algo
 
 			_exchangeBoards.Clear();
 			_securities.Clear();
-			_nativeIdSecurities.Clear();
 
 			_orderCancelFails.Clear();
 			_orderRegisterFails.Clear();
@@ -871,11 +869,6 @@ namespace StockSharp.Algo
 			return _securities.TryGetValue(id);
 		}
 
-		public Security GetSecurityByNativeId(object nativeSecurityId)
-		{
-			return _nativeIdSecurities.TryGetValue(nativeSecurityId);
-		}
-
 		public IEnumerable<Security> GetSecuritiesByCode(string code)
 		{
 			return _securities.CachedValues.Where(s => s.Code.CompareIgnoreCase(code));
@@ -954,19 +947,6 @@ namespace StockSharp.Algo
 			}
 
 			return position;
-		}
-
-		public object GetNativeId(Security security)
-		{
-			if (security == null)
-				throw new ArgumentNullException(nameof(security));
-
-			return _nativeIdSecurities.LastOrDefault(p => p.Value == security).Key;
-		}
-
-		public void AddSecurityByNativeId(object native, string stocksharp)
-		{
-			_nativeIdSecurities.Add(native, GetSecurityById(stocksharp));
 		}
 
 		private void RecycleTrades()

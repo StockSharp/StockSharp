@@ -371,6 +371,7 @@ namespace StockSharp.Algo
 		private IMessageAdapter _inAdapter;
 		private BasketMessageAdapter _adapter;
 		private TimeAdapter _timeAdapter;
+		private SecurityAdapter _securityAdapter;
 
 		/// <summary>
 		/// Message adapter.
@@ -419,7 +420,7 @@ namespace StockSharp.Algo
 					//	OwnInnerAdaper = true
 					//};
 
-					_inAdapter = new SecurityAdapter(_inAdapter) { OwnInnerAdaper = true };
+					_inAdapter = _securityAdapter = new SecurityAdapter(_inAdapter) { OwnInnerAdaper = true };
 
 					if (TimeChange)
 						_inAdapter = _timeAdapter = new TimeAdapter(this, _inAdapter) { OwnInnerAdaper = true };
@@ -916,22 +917,6 @@ namespace StockSharp.Algo
 			});
 		}
 
-		private void BindNativeSecurityId(SecurityId securityId)
-		{
-			var native = securityId.Native;
-			var stocksharp = CreateSecurityId(securityId.SecurityCode, securityId.BoardCode);
-
-			var sec = _entityCache.GetSecurityByNativeId(native);
-
-			if (sec == null)
-				_entityCache.AddSecurityByNativeId(native, stocksharp);
-			else
-			{
-				if (!sec.Id.CompareIgnoreCase(stocksharp))
-					throw new InvalidOperationException(LocalizedStrings.Str687Params.Put(stocksharp, sec.Id, native));
-			}
-		}
-
 		private void ProcessSecurityMessage(SecurityMessage message/*, string boardCode = null*/)
 		{
 			var secId = CreateSecurityId(message.SecurityId.SecurityCode, message.SecurityId.BoardCode);
@@ -939,12 +924,6 @@ namespace StockSharp.Algo
 			var security = GetSecurity(secId, s =>
 			{
 				s.ApplyChanges(message);
-
-				//если для инструмента есть NativeId, то его надо  связать с инструментом до вызова NewSecurities,
-				//т.к. в обработчике может выполняться подписка на маркет-данные где нужен nativeId.
-				if (message.SecurityId.Native != null)
-					BindNativeSecurityId(message.SecurityId);
-
 				return true;
 			});
 

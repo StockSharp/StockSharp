@@ -465,7 +465,8 @@ namespace StockSharp.BusinessEntities
 		/// <param name="direction">Order side. If the value is <see langword="null" />, the direction does not use.</param>
 		/// <param name="board">Trading board. If the value is equal to <see langword="null" />, then the board does not match the orders cancel filter.</param>
 		/// <param name="security">Instrument. If the value is equal to <see langword="null" />, then the instrument does not match the orders cancel filter.</param>
-		void CancelOrders(bool? isStopOrder = null, Portfolio portfolio = null, Sides? direction = null, ExchangeBoard board = null, Security security = null);
+		/// <param name="securityType">Security type. If the value is <see langword="null" />, the type does not use.</param>
+		void CancelOrders(bool? isStopOrder = null, Portfolio portfolio = null, Sides? direction = null, ExchangeBoard board = null, Security security = null, SecurityTypes? securityType = null);
 
 		/// <summary>
 		/// To sign up to get market data by the instrument.

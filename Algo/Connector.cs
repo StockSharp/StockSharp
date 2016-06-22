@@ -371,7 +371,7 @@ namespace StockSharp.Algo
 		/// <returns>Native (internal) trading system security id.</returns>
 		public object GetNativeId(Security security)
 		{
-			return _entityCache.GetNativeId(security);
+			return _securityAdapter?.GetNativeId(security.ToSecurityId());
 		}
 
 		private DateTimeOffset _currentTime;
@@ -720,7 +720,7 @@ namespace StockSharp.Algo
 		/// <returns>Position.</returns>
 		public Position GetPosition(Portfolio portfolio, Security security, string depoName = "")
 		{
-			return GetPosition(portfolio, security, depoName, TPlusLimits.T0, string.Empty);
+			return GetPosition(portfolio, security, depoName, null, string.Empty);
 		}
 
 		private Position GetPosition(Portfolio portfolio, Security security, string depoName, TPlusLimits? limitType, string description)
@@ -1172,11 +1172,12 @@ namespace StockSharp.Algo
 		/// <param name="direction">Order side. If the value is <see langword="null" />, the direction does not use.</param>
 		/// <param name="board">Trading board. If the value is equal to <see langword="null" />, then the board does not match the orders cancel filter.</param>
 		/// <param name="security">Instrument. If the value is equal to <see langword="null" />, then the instrument does not match the orders cancel filter.</param>
-		public void CancelOrders(bool? isStopOrder = null, Portfolio portfolio = null, Sides? direction = null, ExchangeBoard board = null, Security security = null)
+		/// <param name="securityType">Security type. If the value is <see langword="null" />, the type does not use.</param>
+		public void CancelOrders(bool? isStopOrder = null, Portfolio portfolio = null, Sides? direction = null, ExchangeBoard board = null, Security security = null, SecurityTypes? securityType = null)
 		{
 			var transactionId = TransactionIdGenerator.GetNextId();
 			_entityCache.AddMassCancelationId(transactionId);
-			OnCancelOrders(transactionId, isStopOrder, portfolio, direction, board, security);
+			OnCancelOrders(transactionId, isStopOrder, portfolio, direction, board, security, securityType);
 		}
 
 		/// <summary>
@@ -1188,9 +1189,36 @@ namespace StockSharp.Algo
 		/// <param name="direction">Order side. If the value is <see langword="null" />, the direction does not use.</param>
 		/// <param name="board">Trading board. If the value is equal to <see langword="null" />, then the board does not match the orders cancel filter.</param>
 		/// <param name="security">Instrument. If the value is equal to <see langword="null" />, then the instrument does not match the orders cancel filter.</param>
-		protected virtual void OnCancelOrders(long transactionId, bool? isStopOrder = null, Portfolio portfolio = null, Sides? direction = null, ExchangeBoard board = null, Security security = null)
+		/// <param name="securityType">Security type. If the value is <see langword="null" />, the type does not use.</param>
+		protected virtual void OnCancelOrders(long transactionId, bool? isStopOrder = null, Portfolio portfolio = null, Sides? direction = null, ExchangeBoard board = null, Security security = null, SecurityTypes? securityType = null)
 		{
-			var cancelMsg = MessageConverterHelper.CreateGroupCancelMessage(transactionId, isStopOrder, portfolio, direction, board, security == null ? default(SecurityId) : GetSecurityId(security), security);
+			var cancelMsg = new OrderGroupCancelMessage { TransactionId = transactionId };
+
+			if (security != null)
+				cancelMsg.SecurityId = GetSecurityId(security);
+
+			if (board != null)
+			{
+				var temp = cancelMsg.SecurityId;
+				temp.BoardCode = board.Code;
+				cancelMsg.SecurityId = temp;
+			}
+
+			if (portfolio != null)
+				cancelMsg.PortfolioName = portfolio.Name;
+
+			if (isStopOrder != null)
+				cancelMsg.OrderType = isStopOrder == true ? OrderTypes.Conditional : OrderTypes.Limit;
+
+			if (direction != null)
+				cancelMsg.Side = direction.Value;
+
+			//if (security != null)
+			//	security.ToMessage(securityId).CopyTo(cancelMsg);
+
+			if (securityType != null)
+				cancelMsg.SecurityType = securityType;
+
 			SendInMessage(cancelMsg);
 		}
 

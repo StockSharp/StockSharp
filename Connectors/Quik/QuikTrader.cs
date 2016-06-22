@@ -460,12 +460,13 @@ namespace StockSharp.Quik
 		/// <param name="direction">Направление заявки. Если значение равно <see langword="null"/>, то направление не попадает в фильтр снятия заявок.</param>
 		/// <param name="board">Торговая площадка. Если значение равно <see langword="null"/>, то площадка не попадает в фильтр снятия заявок.</param>
 		/// <param name="security">Инструмент. Если значение равно <see langword="null"/>, то инструмент не попадает в фильтр снятия заявок.</param>
-		protected override void OnCancelOrders(long transactionId, bool? isStopOrder = null, Portfolio portfolio = null, Sides? direction = null, ExchangeBoard board = null, Security security = null)
+		/// <param name="securityType">Тип инструмента. Если значение равно <see langword="null"/>, то тип не попадает в фильтр снятия заявок.</param>
+		protected override void OnCancelOrders(long transactionId, bool? isStopOrder = null, Portfolio portfolio = null, Sides? direction = null, ExchangeBoard board = null, Security security = null, SecurityTypes? securityType = null)
 		{
 			if (security != null && portfolio != null && security.Type == SecurityTypes.Future && !security.UnderlyingSecurityId.IsEmpty())
 				base.OnCancelOrders(transactionId, isStopOrder, portfolio, direction, board, security);
 			else
-				this.CancelOrders(Orders, isStopOrder, portfolio, direction, board);
+				this.CancelOrders(Orders, isStopOrder, portfolio, direction, board, null, securityType);
 		}
 
 		///// <summary>
