@@ -720,7 +720,7 @@ namespace StockSharp.Algo
 		/// <returns>Position.</returns>
 		public Position GetPosition(Portfolio portfolio, Security security, string depoName = "")
 		{
-			return GetPosition(portfolio, security, depoName, TPlusLimits.T0, string.Empty);
+			return GetPosition(portfolio, security, depoName, null, string.Empty);
 		}
 
 		private Position GetPosition(Portfolio portfolio, Security security, string depoName, TPlusLimits? limitType, string description)
