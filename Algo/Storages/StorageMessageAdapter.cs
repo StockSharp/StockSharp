@@ -49,8 +49,6 @@ namespace StockSharp.Algo.Storages
 			if (storageRegistry == null)
 				throw new ArgumentNullException(nameof(storageRegistry));
 
-			Format = StorageFormats.Csv;
-
 			_entityRegistry = entityRegistry;
 			_storageRegistry = storageRegistry;
 
