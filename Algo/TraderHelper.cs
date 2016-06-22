@@ -3298,6 +3298,7 @@ namespace StockSharp.Algo
 					return OptionTypes.Call;
 				case 'P':
 					return OptionTypes.Put;
+				case 'X':
 				case ' ':
 					return null;
 				default:
