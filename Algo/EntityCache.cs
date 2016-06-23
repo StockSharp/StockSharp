@@ -869,11 +869,6 @@ namespace StockSharp.Algo
 			return _securities.TryGetValue(id);
 		}
 
-		public IEnumerable<Security> GetSecuritiesByCode(string code)
-		{
-			return _securities.CachedValues.Where(s => s.Code.CompareIgnoreCase(code));
-		}
-
 		public Security TryAddSecurity(string id, Func<string, Tuple<string, ExchangeBoard>> idConvert, out bool isNew)
 		{
 			if (idConvert == null)

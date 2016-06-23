@@ -420,8 +420,6 @@ namespace StockSharp.Algo
 					//	OwnInnerAdaper = true
 					//};
 
-					_inAdapter = _securityAdapter = new SecurityAdapter(_inAdapter) { OwnInnerAdaper = true };
-
 					if (TimeChange)
 						_inAdapter = _timeAdapter = new TimeAdapter(this, _inAdapter) { OwnInnerAdaper = true };
 
@@ -442,6 +440,8 @@ namespace StockSharp.Algo
 
 					if (_entityRegistry != null && _storageRegistry != null)
 						_inAdapter = StorageAdapter = new StorageMessageAdapter(_inAdapter, _entityRegistry, _storageRegistry) { OwnInnerAdaper = true };
+
+					_inAdapter = _securityAdapter = new SecurityAdapter(_inAdapter) { OwnInnerAdaper = true };
 
 					_inAdapter.NewOutMessage += AdapterOnNewOutMessage;
 				}
@@ -682,33 +682,10 @@ namespace StockSharp.Algo
 			//if (boardCode.IsEmpty())
 			//	boardCode = AssociatedBoardCode;
 
-			var isSecurityIdEmpty = securityCode.IsEmpty() || boardCode.IsEmpty();
+			var stockSharpId = CreateSecurityId(securityCode, boardCode);
+			var security = _entityCache.GetSecurityById(stockSharpId);
 
-			Security security = null;
-
-			if (isSecurityIdEmpty)
-			{
-				// если указан код и тип инструмента, то пытаемся найти инструмент по ним
-				if (!securityCode.IsEmpty() && securityId.SecurityType != null)
-				{
-					var securities = _entityCache.GetSecuritiesByCode(securityCode).ToArray();
-
-					security = securities.FirstOrDefault(s => s.Type == securityId.SecurityType)
-							   ?? securities.FirstOrDefault(s => s.Type == null);
-				}
-				else
-					throw new ArgumentException(nameof(securityId), LocalizedStrings.Str682Params.Put(securityCode, securityId.SecurityType));
-			}
-
-			string stockSharpId = null;
-
-			if (!isSecurityIdEmpty)
-				stockSharpId = CreateSecurityId(securityCode, boardCode);
-
-			if (!isSecurityIdEmpty)
-				security = _entityCache.GetSecurityById(stockSharpId);
-
-			if (security == null && !isSecurityIdEmpty)
+			if (security == null)
 			{
 				var secProvider = EntityFactory as ISecurityProvider;
 
@@ -718,8 +695,7 @@ namespace StockSharp.Algo
 
 			if (security == null)
 			{
-				if (!isSecurityIdEmpty)
-					security = GetSecurity(securityId);
+				security = GetSecurity(securityId);
 
 				if (security == null)
 				{

@@ -17,7 +17,7 @@
 	{
 		private readonly Dictionary<SecurityId, SecurityId> _securityIds = new Dictionary<SecurityId, SecurityId>();
 		private readonly PairSet<SecurityId, object> _nativeIds = new PairSet<SecurityId, object>();
-		private readonly Dictionary<SecurityId, RefPair<List<Message>, Dictionary<MessageTypes, Message>>> _suspendedSecurityMessages = new Dictionary<SecurityId, RefPair<List<Message>, Dictionary<MessageTypes, Message>>>();
+		private readonly Dictionary<SecurityId, RefPair<List<Message>, Dictionary<MessageTypes, Message>>> _suspendedMessages = new Dictionary<SecurityId, RefPair<List<Message>, Dictionary<MessageTypes, Message>>>();
 		private readonly SyncObject _syncRoot = new SyncObject();
 
 		/// <summary>
@@ -42,7 +42,7 @@
 					lock (_syncRoot)
 					{
 						_securityIds.Clear();
-						_suspendedSecurityMessages.Clear();
+						_suspendedMessages.Clear();
 						_nativeIds.Clear();
 					}
 
@@ -58,10 +58,15 @@
 					var securityCode = securityId.SecurityCode;
 					var boardCode = securityId.BoardCode;
 
-					var isSecurityIdEmpty = securityCode.IsEmpty() || boardCode.IsEmpty();
+					if (securityCode.IsEmpty())
+						throw new InvalidOperationException();
+
+					if (securityId.SecurityType == null)
+						securityId.SecurityType = secMsg.SecurityType;
+
 					var isNativeIdNull = nativeSecurityId == null;
 
-					if (!isNativeIdNull && !isSecurityIdEmpty)
+					if (!boardCode.IsEmpty())
 					{
 						lock (_syncRoot)
 						{
@@ -71,27 +76,24 @@
 							// GetHashCode shouldn't calc based on native id
 							temp.Native = null;
 
-							if (!_nativeIds.TryAdd(temp, nativeSecurityId))
+							if (!isNativeIdNull && !_nativeIds.TryAdd(temp, nativeSecurityId))
 							{
 								var prevId = _nativeIds[nativeSecurityId];
 
-								if (prevId != securityId)
-									throw new InvalidOperationException(LocalizedStrings.Str687Params.Put(securityId, prevId, nativeSecurityId));
+								// TODO
+								//if (prevId != securityId)
+								//	throw new InvalidOperationException(LocalizedStrings.Str687Params.Put(securityId, prevId, nativeSecurityId));
 							}
 						}
+					}
+					else
+					{
+						// TODO
 					}
 
 					base.OnInnerAdapterNewOutMessage(message);
 
-					if (securityId.Native != null)
-						ProcessSuspendedSecurityMessages(securityId);
-
-					//необходимо обработать отложенные сообщения не только по NativeId, но и по обычным идентификаторам S#
-					var stocksharpId = securityId.Native == null
-							? securityId
-							: new SecurityId { SecurityCode = securityId.SecurityCode, BoardCode = securityId.BoardCode };
-
-					ProcessSuspendedSecurityMessages(stocksharpId);
+					ProcessSuspendedSecurityMessages(securityId);
 
 					break;
 				}
@@ -149,6 +151,16 @@
 					break;
 				}
 
+				case MessageTypes.News:
+				{
+					var newsMsg = (NewsMessage)message;
+
+					if (newsMsg.SecurityId != null)
+						ProcessMessage(newsMsg.SecurityId.Value, newsMsg, null);
+
+					break;
+				}
+
 				default:
 					base.OnInnerAdapterNewOutMessage(message);
 					break;
@@ -162,6 +174,16 @@
 		public override IMessageChannel Clone()
 		{
 			return new SecurityAdapter(InnerAdapter);
+		}
+
+		/// <summary>
+		/// Get native id.
+		/// </summary>
+		/// <param name="securityId">Security ID.</param>
+		/// <returns>Native (internal) trading system security id.</returns>
+		public object GetNativeId(SecurityId securityId)
+		{
+			return _nativeIds.TryGetValue(securityId);
 		}
 
 		private void ProcessMessage<TMessage>(SecurityId securityId, TMessage message, Func<TMessage, TMessage, TMessage> processSuspend)
@@ -178,7 +200,7 @@
 				{
 					lock (_syncRoot)
 					{
-						var tuple = _suspendedSecurityMessages.SafeAdd(securityId, key => RefTuple.Create((List<Message>)null, (Dictionary<MessageTypes, Message>)null));
+						var tuple = _suspendedMessages.SafeAdd(securityId, key => RefTuple.Create((List<Message>)null, (Dictionary<MessageTypes, Message>)null));
 
 						var clone = message.Clone();
 
@@ -207,6 +229,52 @@
 
 				ReplaceSecurityId(message, fullSecurityId.Value);
 			}
+			else
+			{
+				var securityCode = securityId.SecurityCode;
+				var boardCode = securityId.BoardCode;
+
+				var isSecCodeEmpty = securityCode.IsEmpty();
+
+				if (isSecCodeEmpty && message.Type != MessageTypes.Execution)
+					throw new InvalidOperationException();
+
+				if (!isSecCodeEmpty && boardCode.IsEmpty())
+				{
+					SecurityId? foundedId = null;
+
+					lock (_syncRoot)
+					{
+						foreach (var id in _securityIds.Keys)
+						{
+							if (!id.SecurityCode.CompareIgnoreCase(securityCode))
+								continue;
+
+							if (securityId.SecurityType != null && securityId.SecurityType != id.SecurityType)
+								continue;
+
+							foundedId = id;
+						}
+
+						if (foundedId == null)
+						{
+							var tuple = _suspendedMessages.SafeAdd(securityId, key => RefTuple.Create(new List<Message>(), (Dictionary<MessageTypes, Message>)null));
+							tuple.First.Add(message.Clone());
+							return;
+						}
+					}
+
+					ReplaceSecurityId(message, foundedId.Value);
+
+					//// если указан код и тип инструмента, то пытаемся найти инструмент по ним
+					//if (securityId.SecurityType != null)
+					//{
+
+					//}
+					//else
+					//	throw new ArgumentException(nameof(securityId), LocalizedStrings.Str682Params.Put(securityCode, securityId.SecurityType));
+				}
+			}
 
 			base.OnInnerAdapterNewOutMessage(message);
 		}
@@ -217,16 +285,16 @@
 
 			lock (_syncRoot)
 			{
-				var tuple = _suspendedSecurityMessages.TryGetValue(securityId);
+				var tuple = _suspendedMessages.TryGetValue(securityId);
 
 				if (tuple != null)
 				{
 					msgs = GetMessages(tuple);
-					_suspendedSecurityMessages.Remove(securityId);
+					_suspendedMessages.Remove(securityId);
 				}
 
 				// find association by code and code + type
-				var pair = _suspendedSecurityMessages
+				var pair = _suspendedMessages
 					.FirstOrDefault(p =>
 						p.Key.SecurityCode.CompareIgnoreCase(securityId.SecurityCode) &&
 						p.Key.BoardCode.IsEmpty() &&
@@ -236,7 +304,7 @@
 
 				if (value != null)
 				{
-					_suspendedSecurityMessages.Remove(pair.Key);
+					_suspendedMessages.Remove(pair.Key);
 
 					if (msgs == null)
 						msgs = GetMessages(value);
@@ -257,7 +325,14 @@
 
 		private static List<Message> GetMessages(RefPair<List<Message>, Dictionary<MessageTypes, Message>> tuple)
 		{
-			return tuple.First ?? tuple.Second.Values.ToList();
+			var retVal = tuple.First;
+
+			if (retVal == null)
+				retVal = tuple.Second.Values.ToList();
+			else if (tuple.Second != null)
+				retVal.AddRange(tuple.Second.Values);
+
+			return retVal;
 		}
 
 		private static void ReplaceSecurityId(Message message, SecurityId securityId)
@@ -299,19 +374,16 @@
 					break;
 				}
 
+				case MessageTypes.News:
+				{
+					var newsMsg = (NewsMessage)message;
+					newsMsg.SecurityId = securityId;
+					break;
+				}
+
 				default:
 					throw new ArgumentOutOfRangeException(nameof(message), message.Type, LocalizedStrings.Str2770);
 			}
-		}
-
-		/// <summary>
-		/// Get native id.
-		/// </summary>
-		/// <param name="securityId">Security ID.</param>
-		/// <returns>Native (internal) trading system security id.</returns>
-		public object GetNativeId(SecurityId securityId)
-		{
-			return _nativeIds.TryGetValue(securityId);
 		}
 	}
 }
