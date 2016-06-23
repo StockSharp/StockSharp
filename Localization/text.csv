@@ -4294,6 +4294,8 @@ StrategyAlreadyPublished;Strategy was published. Update?;Стратегия бы
 OwnStrategies;Own strategies;Свои стратегии
 OpenStrategiesGalleryQuestion;Open strategies gallery?;Открыть галерею стратегий?
 FillUpBalance;Fill up balance;Пополнить баланс
+FileNotStarted;File uploading has not started.;Загрузка файла не начата.
+FileTooMuch;This file exceeds the maximum upload size.;Файл превысил максимальный размер.
 DocStr0;Button activation alert settings;Кнопка активации настроек сигнала
 DocStr1;Initializes a new instance of the {0};Создать {0}
 DocStr2;Load settings;Загрузить настройки

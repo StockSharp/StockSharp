@@ -42596,5 +42596,25 @@ namespace StockSharp.Localization
 		/// Fill up balance.
 		/// </summary>
 		public static string FillUpBalance => GetString(FillUpBalanceKey);
+
+		/// <summary>
+		/// File uploading has not started.
+		/// </summary>
+		public const string FileNotStartedKey = "FileNotStarted";
+
+		/// <summary>
+		/// File uploading has not started.
+		/// </summary>
+		public static string FileNotStarted => GetString(FileNotStartedKey);
+
+		/// <summary>
+		/// This file exceeds the maximum upload size.
+		/// </summary>
+		public const string FileTooMuchKey = "FileTooMuch";
+
+		/// <summary>
+		/// This file exceeds the maximum upload size.
+		/// </summary>
+		public static string FileTooMuch => GetString(FileTooMuchKey);
 	}
 }

@@ -61,6 +61,9 @@ namespace StockSharp.Community
 
 		CurrencyCannotChange,
 
-		NotCompleteRegistered
+		NotCompleteRegistered,
+
+		FileNotStarted,
+		FileTooMuch,
 	}
 }

@@ -99,6 +99,11 @@ namespace StockSharp.Community
 					throw new InvalidOperationException(LocalizedStrings.CurrencyCannotChange);
 				case ErrorCodes.NotCompleteRegistered:
 					throw new InvalidOperationException(LocalizedStrings.NotCompleteRegistered);
+
+				case ErrorCodes.FileNotStarted:
+					throw new InvalidOperationException(LocalizedStrings.FileNotStarted);
+				case ErrorCodes.FileTooMuch:
+					throw new InvalidOperationException(LocalizedStrings.FileTooMuch);
 				default:
 					throw new InvalidOperationException(LocalizedStrings.UnknownServerErrorCode.Put(code));
 			}

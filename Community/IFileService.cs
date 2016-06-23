@@ -33,15 +33,43 @@ namespace StockSharp.Community
 		[OperationContract]
 		FileData GetFile(Guid sessionId, long id);
 
+		///// <summary>
+		///// To upload the file to the site.
+		///// </summary>
+		///// <param name="sessionId">Session ID.</param>
+		///// <param name="fileName">File name.</param>
+		///// <param name="body">File body.</param>
+		///// <param name="isPublic">Is the file available for public.</param>
+		///// <returns>File ID.</returns>
+		//[OperationContract]
+		//long Upload(Guid sessionId, string fileName, byte[] body, bool isPublic);
+
 		/// <summary>
-		/// To upload the file to the site.
+		/// To start uploading the file to the site.
 		/// </summary>
 		/// <param name="sessionId">Session ID.</param>
 		/// <param name="fileName">File name.</param>
-		/// <param name="body">File body.</param>
 		/// <param name="isPublic">Is the file available for public.</param>
+		/// <returns>Operation ID.</returns>
+		[OperationContract]
+		Guid BeginUpload(Guid sessionId, string fileName, bool isPublic);
+
+		/// <summary>
+		/// Upload part of file.
+		/// </summary>
+		/// <param name="operationId">Operation ID, received from <see cref="BeginUpload"/>.</param>
+		/// <param name="bodyPart">The part of file.</param>
+		/// <returns>The execution result code.</returns>
+		[OperationContract]
+		byte ProcessUpload(Guid operationId, byte[] bodyPart);
+
+		/// <summary>
+		/// To finish uploading the file.
+		/// </summary>
+		/// <param name="operationId">Operation ID, received from <see cref="BeginUpload"/>.</param>
+		/// <param name="isCancel">Cancel the operation.</param>
 		/// <returns>File ID.</returns>
 		[OperationContract]
-		long Upload(Guid sessionId, string fileName, byte[] body, bool isPublic);
+		long FinishUpload(Guid operationId, bool isCancel);
 	}
 }

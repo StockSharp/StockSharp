@@ -16,11 +16,14 @@ Copyright 2010 by StockSharp, LLC
 namespace StockSharp.Community
 {
 	using System;
+	using System.Linq;
 	using System.ServiceModel;
 	using System.ServiceModel.Description;
 
 	using Ecng.Collections;
 	using Ecng.Common;
+
+	using MoreLinq;
 
 	/// <summary>
 	/// The client for access to the service of work with files and documents.
@@ -88,15 +91,35 @@ namespace StockSharp.Community
 		}
 
 		/// <summary>
-		/// To upload the file to the site .
+		/// To upload the file to the site.
 		/// </summary>
 		/// <param name="fileName">File name.</param>
 		/// <param name="body">File body.</param>
 		/// <param name="isPublic">Is the file available for public.</param>
+		/// <param name="progress">Progress callback.</param>
 		/// <returns>File ID.</returns>
-		public long Upload(string fileName, byte[] body, bool isPublic)
+		public long Upload(string fileName, byte[] body, bool isPublic, Action<int> progress = null)
 		{
-			var id = Invoke(f => f.Upload(AuthenticationClient.Instance.TryGetSession ?? Guid.Empty, fileName, body, isPublic));
+			var operationId = Invoke(f => f.BeginUpload(AuthenticationClient.Instance.SessionId, fileName, isPublic));
+
+			const int partSize = 20 * 1024; // 10kb
+
+			var sentCount = 0;
+
+			foreach (var part in body.Batch(partSize))
+			{
+				var arr = part.ToArray();
+
+				ValidateError(Invoke(f => f.ProcessUpload(operationId, arr)));
+
+				sentCount += arr.Length;
+				progress?.Invoke(sentCount);
+			}
+
+			var id = Invoke(f => f.FinishUpload(operationId, false));
+
+			if (id < 0)
+				ValidateError((byte)-id);
 
 			_cache.Add(id, new FileData
 			{
@@ -107,6 +130,11 @@ namespace StockSharp.Community
 			});
 
 			return id;
+		}
+
+		private static void ValidateError(byte errorCode)
+		{
+			((ErrorCodes)errorCode).ThrowIfError();
 		}
 	}
 }
