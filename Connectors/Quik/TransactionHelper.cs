@@ -40,7 +40,7 @@ namespace StockSharp.Quik
 			if (message.OldOrderId == null)
 				throw new InvalidOperationException(LocalizedStrings.Str2252Params.Put(message.OldTransactionId));
 
-			return
+			var transaction =
 				new Transaction(TransactionTypes.ReRegister, message)
 					.SetAction(TransactionActions.MoveOrders)
 					.SetSecurity(message, securityClassInfo)
@@ -48,6 +48,11 @@ namespace StockSharp.Quik
 					.SetFirstOrderId(message.OldOrderId.Value)
 					.SetFirstOrderPrice(message.Price)
 					.SetFirstVolume((int)message.Volume);
+
+			if (!message.BrokerCode.IsEmpty())
+				transaction.SetFirmId(message.BrokerCode);
+
+			return transaction;
 		}
 
 		public static Transaction CreateRegisterTransaction(this OrderRegisterMessage message, string orderAccount, IDictionary<string, RefPair<SecurityTypes, string>> securityClassInfo, bool singleSlash)
@@ -96,6 +101,9 @@ namespace StockSharp.Quik
 			if (!clientCode.IsEmpty())
 				transaction.SetClientCode(clientCode);
 
+			if (!message.BrokerCode.IsEmpty())
+				transaction.SetFirmId(message.BrokerCode);
+
 			transaction.SetExpiryDate(message.TillDate);
 
 			if (message.VisibleVolume != null && message.VisibleVolume != message.Volume)
@@ -128,6 +136,7 @@ namespace StockSharp.Quik
 			{
 				case OrderTypes.Market:
 				case OrderTypes.Limit:
+				{
 					transaction
 						.SetSide(message.Side)
 						.SetType(message.OrderType.Value)
@@ -140,6 +149,7 @@ namespace StockSharp.Quik
 						transaction.SetTimeInForce(tif);
 
 					break;
+				}
 				case OrderTypes.Conditional:
 				{
 					var condition = (QuikOrderCondition)message.Condition;
@@ -340,36 +350,40 @@ namespace StockSharp.Quik
 			if (message == null)
 				throw new ArgumentNullException(nameof(message));
 
+			if (message.OrderId == null)
+				throw new InvalidOperationException(LocalizedStrings.Str2252Params.Put(message.OrderTransactionId));
+
 			var transaction = new Transaction(TransactionTypes.Cancel, message);
 
 			transaction.SetSecurity(message, securityClassInfo);
 
 			string action;
-			Func<long, Transaction> idSetterFunc = transaction.SetOrderId;
 
 			switch (message.OrderType)
 			{
 				case OrderTypes.Limit:
 				case OrderTypes.Market:
 					action = TransactionActions.KillOrder;
+					transaction.SetOrderId(message.OrderId.Value);
 					break;
 				case OrderTypes.Conditional:
 					action = TransactionActions.KillStopOrder;
-					idSetterFunc = transaction.SetStopOrderId;
+					transaction.SetStopOrderId(message.OrderId.Value);
 					break;
 				case OrderTypes.Repo:
 				case OrderTypes.ExtRepo:
 				case OrderTypes.Rps:
 					action = TransactionActions.KillNegDeal;
+					transaction.SetOrderId(message.OrderId.Value);
 					break;
 				default:
 					throw new ArgumentOutOfRangeException(nameof(message), message.Type, LocalizedStrings.Str1600);
 			}
 
-			if (message.OrderId == null)
-				throw new InvalidOperationException(LocalizedStrings.Str2252Params.Put(message.OrderTransactionId));
+			transaction.SetAction(action);
 
-			idSetterFunc(message.OrderId.Value).SetAction(action);
+			if (!message.BrokerCode.IsEmpty())
+				transaction.SetFirmId(message.BrokerCode);
 
 			return transaction;
 		}
@@ -405,6 +419,9 @@ namespace StockSharp.Quik
 
 			if (message.Side != null)
 				transaction.SetSide(message.Side.Value);
+
+			if (!message.BrokerCode.IsEmpty())
+				transaction.SetFirmId(message.BrokerCode);
 
 			return transaction;
 		}

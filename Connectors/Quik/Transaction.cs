@@ -520,6 +520,11 @@ namespace StockSharp.Quik
 		public const string ForAccount = "FOR_ACCOUNT";
 
 		/// <summary>
+		/// Идентификатор участника торгов (код фирмы).
+		/// </summary>
+		public const string FirmId = "FIRM_ID";
+
+		/// <summary>
 		/// Все названия инструкций, добавленные в данный момент.
 		/// </summary>
 		public IEnumerable<string> Names => Keys;
@@ -1288,6 +1293,16 @@ namespace StockSharp.Quik
 		public Transaction SetForAccount(string value)
 		{
 			return SetInstruction(ForAccount, value);
+		}
+
+		/// <summary>
+		/// Установить значение для инструкции <see cref="FirmId"/>.
+		/// </summary>
+		/// <param name="value">Значение.</param>
+		/// <returns>Транзакция.</returns>
+		public Transaction SetFirmId(string value)
+		{
+			return SetInstruction(FirmId, value);
 		}
 	}
 }
