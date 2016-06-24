@@ -556,8 +556,9 @@ namespace StockSharp.Algo
 				if (data.Orders.ContainsKey(CreateOrderKey(order.Type, message.OriginalTransactionId, true)))
 					orders.Add(Tuple.Create(order, true));
 
-				if (data.Orders.ContainsKey(CreateOrderKey(order.Type, message.OriginalTransactionId, false)))
-					orders.Add(Tuple.Create(order, false));
+				var registeredOrder = data.Orders.TryGetValue(CreateOrderKey(order.Type, message.OriginalTransactionId, false))?.Order;
+				if (registeredOrder != null)
+					orders.Add(Tuple.Create(registeredOrder, false));
 			}
 
 			if (orders.Count == 0)
