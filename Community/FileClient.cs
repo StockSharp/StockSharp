@@ -50,37 +50,6 @@ namespace StockSharp.Community
 		{
 		}
 
-		///// <summary>
-		///// Create WCF channel.
-		///// </summary>
-		///// <returns>WCF channel.</returns>
-		//protected override ChannelFactory<IFileService> CreateChannel()
-		//{
-		//	var f = new ChannelFactory<IFileService>(new WSHttpBinding(SecurityMode.None)
-		//	{
-		//		OpenTimeout = TimeSpan.FromMinutes(5),
-		//		SendTimeout = TimeSpan.FromMinutes(10),
-		//		ReceiveTimeout = TimeSpan.FromMinutes(10),
-		//		MaxReceivedMessageSize = int.MaxValue,
-		//		ReaderQuotas =
-		//		{
-		//			MaxArrayLength = int.MaxValue,
-		//			MaxBytesPerRead = int.MaxValue
-		//		},
-		//		MaxBufferPoolSize = int.MaxValue,
-		//	}, new EndpointAddress(Address));
-
-		//	foreach (var op in f.Endpoint.Contract.Operations)
-		//	{
-		//		var dataContractBehavior = op.Behaviors[typeof(DataContractSerializerOperationBehavior)] as DataContractSerializerOperationBehavior;
-
-		//		if (dataContractBehavior != null)
-		//			dataContractBehavior.MaxItemsInObjectGraph = int.MaxValue;
-		//	}
-
-		//	return f;
-		//}
-
 		/// <summary>
 		/// To get the file data.
 		/// </summary>
@@ -128,6 +97,48 @@ namespace StockSharp.Community
 		}
 
 		/// <summary>
+		/// To upload the existing file.
+		/// </summary>
+		/// <param name="data">File data.</param>
+		/// <param name="progress">Progress callback.</param>
+		public void Update(FileData data, Action<int> progress = null)
+		{
+			if (data == null)
+				throw new ArgumentNullException(nameof(data));
+
+			if (data.Body == null)
+				throw new ArgumentException(nameof(data));
+
+			if (data.Body.Length == 0)
+				throw new ArgumentOutOfRangeException(nameof(data));
+
+			var operationId = Invoke(f => f.BeginUploadExisting(AuthenticationClient.Instance.SessionId, data.Id));
+			Upload(operationId, data.Body, progress);
+		}
+
+		private long Upload(Guid operationId, byte[] body, Action<int> progress)
+		{
+			var sentCount = 0;
+
+			foreach (var part in body.Batch(_partSize))
+			{
+				var arr = part.ToArray();
+
+				ValidateError(Invoke(f => f.ProcessUpload(operationId, arr)));
+
+				sentCount += arr.Length;
+				progress?.Invoke(sentCount);
+			}
+
+			var id = Invoke(f => f.FinishUpload(operationId, false));
+
+			if (id < 0)
+				ValidateError((byte)-id);
+
+			return id;
+		}
+
+		/// <summary>
 		/// To upload the file to the site.
 		/// </summary>
 		/// <param name="fileName">File name.</param>
@@ -148,22 +159,7 @@ namespace StockSharp.Community
 
 			var operationId = Invoke(f => f.BeginUpload(AuthenticationClient.Instance.SessionId, fileName, isPublic));
 
-			var sentCount = 0;
-
-			foreach (var part in body.Batch(_partSize))
-			{
-				var arr = part.ToArray();
-
-				ValidateError(Invoke(f => f.ProcessUpload(operationId, arr)));
-
-				sentCount += arr.Length;
-				progress?.Invoke(sentCount);
-			}
-
-			var id = Invoke(f => f.FinishUpload(operationId, false));
-
-			if (id < 0)
-				ValidateError((byte)-id);
+			var id = Upload(operationId, body, progress);
 
 			var data = new FileData
 			{

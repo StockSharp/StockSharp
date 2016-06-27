@@ -74,9 +74,18 @@ namespace StockSharp.Community
 		Guid BeginUpload(Guid sessionId, string fileName, bool isPublic);
 
 		/// <summary>
+		/// To start uploading the file to the site.
+		/// </summary>
+		/// <param name="sessionId">Session ID.</param>
+		/// <param name="id">File ID.</param>
+		/// <returns>Operation ID.</returns>
+		[OperationContract]
+		Guid BeginUploadExisting(Guid sessionId, long id);
+
+		/// <summary>
 		/// Upload part of file.
 		/// </summary>
-		/// <param name="operationId">Operation ID, received from <see cref="BeginUpload"/>.</param>
+		/// <param name="operationId">Operation ID, received from <see cref="BeginUpload"/> or <see cref="BeginUploadExisting"/>.</param>
 		/// <param name="bodyPart">The part of file.</param>
 		/// <returns>The execution result code.</returns>
 		[OperationContract]
@@ -85,7 +94,7 @@ namespace StockSharp.Community
 		/// <summary>
 		/// To finish uploading the file.
 		/// </summary>
-		/// <param name="operationId">Operation ID, received from <see cref="BeginUpload"/>.</param>
+		/// <param name="operationId">Operation ID, received from <see cref="BeginUpload"/> or <see cref="BeginUploadExisting"/>.</param>
 		/// <param name="isCancel">Cancel the operation.</param>
 		/// <returns>File ID.</returns>
 		[OperationContract]

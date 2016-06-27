@@ -56,37 +56,6 @@ namespace StockSharp.Community
 		{
 		}
 
-		///// <summary>
-		///// Create WCF channel.
-		///// </summary>
-		///// <returns>WCF channel.</returns>
-		//protected override ChannelFactory<IStrategyService> CreateChannel()
-		//{
-		//	var f = new ChannelFactory<IStrategyService>(new WSHttpBinding(SecurityMode.None)
-		//	{
-		//		OpenTimeout = TimeSpan.FromMinutes(5),
-		//		SendTimeout = TimeSpan.FromMinutes(10),
-		//		ReceiveTimeout = TimeSpan.FromMinutes(10),
-		//		MaxReceivedMessageSize = int.MaxValue,
-		//		ReaderQuotas =
-		//		{
-		//			MaxArrayLength = int.MaxValue,
-		//			MaxBytesPerRead = int.MaxValue
-		//		},
-		//		MaxBufferPoolSize = int.MaxValue,
-		//	}, new EndpointAddress(Address));
-
-		//	foreach (var op in f.Endpoint.Contract.Operations)
-		//	{
-		//		var dataContractBehavior = op.Behaviors[typeof(DataContractSerializerOperationBehavior)] as DataContractSerializerOperationBehavior;
-
-		//		if (dataContractBehavior != null)
-		//			dataContractBehavior.MaxItemsInObjectGraph = int.MaxValue;
-		//	}
-
-		//	return f;
-		//}
-
 		/// <summary>
 		/// All strategies.
 		/// </summary>
