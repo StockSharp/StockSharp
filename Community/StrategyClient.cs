@@ -19,7 +19,6 @@ namespace StockSharp.Community
 	using System.Collections.Generic;
 	using System.Linq;
 	using System.ServiceModel;
-	using System.ServiceModel.Description;
 	using System.Threading;
 
 	using Ecng.Collections;
@@ -35,7 +34,10 @@ namespace StockSharp.Community
 
 		private DateTime _lastCheckTime;
 		private readonly CachedSynchronizedDictionary<long, StrategyData> _strategies = new CachedSynchronizedDictionary<long, StrategyData>();
-		private readonly CachedSynchronizedDictionary<long, StrategySubscription> _subscriptions = new CachedSynchronizedDictionary<long, StrategySubscription>(); 
+		private readonly CachedSynchronizedDictionary<long, StrategySubscription> _subscriptions = new CachedSynchronizedDictionary<long, StrategySubscription>();
+		private readonly CachedSynchronizedDictionary<long, StrategyBacktest> _backtests = new CachedSynchronizedDictionary<long, StrategyBacktest>();
+		private readonly CachedSynchronizedDictionary<StrategyBacktest, long> _backtestResults = new CachedSynchronizedDictionary<StrategyBacktest, long>();
+		private readonly CachedSynchronizedDictionary<StrategyBacktest, int> _startedBacktests = new CachedSynchronizedDictionary<StrategyBacktest, int>();
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="StrategyClient"/>.
@@ -54,36 +56,36 @@ namespace StockSharp.Community
 		{
 		}
 
-		/// <summary>
-		/// Create WCF channel.
-		/// </summary>
-		/// <returns>WCF channel.</returns>
-		protected override ChannelFactory<IStrategyService> CreateChannel()
-		{
-			var f = new ChannelFactory<IStrategyService>(new WSHttpBinding(SecurityMode.None)
-			{
-				OpenTimeout = TimeSpan.FromMinutes(5),
-				SendTimeout = TimeSpan.FromMinutes(10),
-				ReceiveTimeout = TimeSpan.FromMinutes(10),
-				MaxReceivedMessageSize = int.MaxValue,
-				ReaderQuotas =
-				{
-					MaxArrayLength = int.MaxValue,
-					MaxBytesPerRead = int.MaxValue
-				},
-				MaxBufferPoolSize = int.MaxValue,
-			}, new EndpointAddress(Address));
+		///// <summary>
+		///// Create WCF channel.
+		///// </summary>
+		///// <returns>WCF channel.</returns>
+		//protected override ChannelFactory<IStrategyService> CreateChannel()
+		//{
+		//	var f = new ChannelFactory<IStrategyService>(new WSHttpBinding(SecurityMode.None)
+		//	{
+		//		OpenTimeout = TimeSpan.FromMinutes(5),
+		//		SendTimeout = TimeSpan.FromMinutes(10),
+		//		ReceiveTimeout = TimeSpan.FromMinutes(10),
+		//		MaxReceivedMessageSize = int.MaxValue,
+		//		ReaderQuotas =
+		//		{
+		//			MaxArrayLength = int.MaxValue,
+		//			MaxBytesPerRead = int.MaxValue
+		//		},
+		//		MaxBufferPoolSize = int.MaxValue,
+		//	}, new EndpointAddress(Address));
 
-			foreach (var op in f.Endpoint.Contract.Operations)
-			{
-				var dataContractBehavior = op.Behaviors[typeof(DataContractSerializerOperationBehavior)] as DataContractSerializerOperationBehavior;
+		//	foreach (var op in f.Endpoint.Contract.Operations)
+		//	{
+		//		var dataContractBehavior = op.Behaviors[typeof(DataContractSerializerOperationBehavior)] as DataContractSerializerOperationBehavior;
 
-				if (dataContractBehavior != null)
-					dataContractBehavior.MaxItemsInObjectGraph = int.MaxValue;
-			}
+		//		if (dataContractBehavior != null)
+		//			dataContractBehavior.MaxItemsInObjectGraph = int.MaxValue;
+		//	}
 
-			return f;
-		}
+		//	return f;
+		//}
 
 		/// <summary>
 		/// All strategies.
@@ -106,6 +108,18 @@ namespace StockSharp.Community
 			{
 				EnsureInit();
 				return _subscriptions.CachedValues;
+			}
+		}
+
+		/// <summary>
+		/// All strategy backtests.
+		/// </summary>
+		public IEnumerable<StrategyBacktest> StrategyBacktests
+		{
+			get
+			{
+				EnsureInit();
+				return _backtests.CachedValues;
 			}
 		}
 
@@ -134,6 +148,16 @@ namespace StockSharp.Community
 		/// </summary>
 		public event Action<StrategySubscription> StrategyUnSubscribed;
 
+		/// <summary>
+		/// Backtesting process has changed.
+		/// </summary>
+		public event Action<StrategyBacktest, int> BacktestProgressChanged;
+
+		/// <summary>
+		/// Backtesting process has stopped.
+		/// </summary>
+		public event Action<StrategyBacktest> BacktestStopped;
+
 		private void EnsureInit()
 		{
 			if (_refreshTimer != null)
@@ -146,6 +170,13 @@ namespace StockSharp.Community
 			foreach (var subscription in subscriptions)
 			{
 				_subscriptions.Add(subscription.Id, subscription);
+			}
+
+			var backtests = Invoke(f => f.GetBacktests(SessionId, DateTime.Today - TimeSpan.FromDays(5), DateTime.UtcNow));
+
+			foreach (var backtest in backtests)
+			{
+				_backtests.Add(backtest.Id, backtest);
 			}
 
 			_refreshTimer = ThreadingHelper
@@ -196,6 +227,38 @@ namespace StockSharp.Community
 			}
 
 			_lastCheckTime = DateTime.Now;
+
+			foreach (var backtest in _backtests.CachedValues)
+			{
+				if (_backtestResults.ContainsKey(backtest))
+					continue;
+
+				var resultId = Invoke(f => f.GetBacktestResult(SessionId, backtest.Id));
+
+				if (resultId == null)
+					continue;
+
+				_backtestResults.Add(backtest, resultId.Value);
+				BacktestStopped?.Invoke(backtest);
+
+				_startedBacktests.Remove(backtest);
+			}
+
+			foreach (var backtest in _startedBacktests.CachedKeys)
+			{
+				var count = Invoke(f => f.GetCompletedIterationCount(SessionId, backtest.Id));
+				var prevCount = _startedBacktests[backtest];
+
+				if (count == prevCount)
+					continue;
+
+				BacktestProgressChanged?.Invoke(backtest, count);
+
+				if (count == backtest.Iterations.Length)
+					_startedBacktests.Remove(backtest);
+				else
+					_startedBacktests[backtest] = count;
+			}
 		}
 
 		private static void CopyTo(StrategyData source, StrategyData destination)
@@ -207,7 +270,7 @@ namespace StockSharp.Community
 			destination.Price = source.Price;
 			destination.Revision = source.Revision;
 			destination.DescriptionId = source.DescriptionId;
-			destination.ContentName = source.ContentName;
+			destination.Content = source.Content;
 			destination.ContentType = source.ContentType;
 		}
 
@@ -253,21 +316,21 @@ namespace StockSharp.Community
 			StrategyDeleted?.Invoke(strategy);
 		}
 
-		/// <summary>
-		/// To get the source or executable codes.
-		/// </summary>
-		/// <param name="strategy">The strategy data.</param>
-		public void Download(StrategyData strategy)
-		{
-			if (strategy == null)
-				throw new ArgumentNullException(nameof(strategy));
+		///// <summary>
+		///// To get the source or executable codes.
+		///// </summary>
+		///// <param name="strategy">The strategy data.</param>
+		//public void Download(StrategyData strategy)
+		//{
+		//	if (strategy == null)
+		//		throw new ArgumentNullException(nameof(strategy));
 
-			var content = Invoke(f => f.GetContent(SessionId, strategy.Id));
+		//	var content = Invoke(f => f.GetContent(SessionId, strategy.Id));
 
-			strategy.Revision = content.Revision;
-			strategy.Content = content.Content;
-			strategy.ContentName = content.ContentName;
-		}
+		//	strategy.Revision = content.Revision;
+		//	strategy.Content = content.Content;
+		//	strategy.ContentName = content.ContentName;
+		//}
 
 		/// <summary>
 		/// To subscribe for the strategy.
@@ -315,6 +378,36 @@ namespace StockSharp.Community
 
 			StrategyUnSubscribed?.Invoke(subscription);
 			_subscriptions.Remove(subscription.Id);
+		}
+
+		/// <summary>
+		/// To get an approximate of money to spend for the specified backtesting configuration.
+		/// </summary>
+		/// <param name="backtest">Backtesting session.</param>
+		/// <returns>An approximate of money.</returns>
+		public decimal GetApproximateAmount(StrategyBacktest backtest)
+		{
+			return Invoke(f => f.GetApproximateAmount(SessionId, backtest));
+		}
+
+		/// <summary>
+		/// To start backtesing.
+		/// </summary>
+		/// <param name="backtest">Backtesting session.</param>
+		public void StartBacktest(StrategyBacktest backtest)
+		{
+			backtest.Id = Invoke(f => f.StartBacktest(SessionId, backtest));
+			_backtests.Add(backtest.Id, backtest);
+			_startedBacktests.Add(backtest, 0);
+		}
+
+		/// <summary>
+		/// To stop the backtesing.
+		/// </summary>
+		/// <param name="backtest">Backtesting session.</param>
+		public void StopBacktest(StrategyBacktest backtest)
+		{
+			ValidateError(Invoke(f => f.StopBacktest(SessionId, backtest.Id)));
 		}
 
 		private static void ValidateError(byte errorCode, params object[] args)

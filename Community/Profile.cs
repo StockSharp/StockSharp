@@ -1,5 +1,6 @@
 namespace StockSharp.Community
 {
+	using System;
 	using System.Runtime.Serialization;
 
 	/// <summary>
@@ -97,5 +98,11 @@ namespace StockSharp.Community
 		/// </summary>
 		[DataMember]
 		public long? Avatar { get; set; }
+
+		/// <summary>
+		/// Date of registration.
+		/// </summary>
+		[DataMember]
+		public DateTime CreationDate { get; set; }
 	}
 }

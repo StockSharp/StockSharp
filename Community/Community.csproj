@@ -95,6 +95,7 @@
     <Compile Include="SessionClient.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="FileData.cs" />
+    <Compile Include="StrategyBacktest.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Localization\Localization.csproj">

@@ -68,14 +68,14 @@ namespace StockSharp.Community
 		[OperationContract]
 		IEnumerable<StrategyData> GetDescription(long[] strategyIds);
 
-		/// <summary>
-		/// To get the source or executable codes.
-		/// </summary>
-		/// <param name="sessionId">Session ID.</param>
-		/// <param name="strategyId">The strategy identifier.</param>
-		/// <returns>The source or executable codes.</returns>
-		[OperationContract]
-		StrategyData GetContent(Guid sessionId, long strategyId);
+		///// <summary>
+		///// To get the source or executable codes.
+		///// </summary>
+		///// <param name="sessionId">Session ID.</param>
+		///// <param name="strategyId">The strategy identifier.</param>
+		///// <returns>The source or executable codes.</returns>
+		//[OperationContract]
+		//StrategyData GetContent(Guid sessionId, long strategyId);
 
 		/// <summary>
 		/// To get active subscriptions signed by <see cref="Subscribe"/>.
@@ -104,5 +104,59 @@ namespace StockSharp.Community
 		/// <returns>The execution result code.</returns>
 		[OperationContract]
 		byte UnSubscribe(Guid sessionId, long subscriptionId);
+
+		/// <summary>
+		/// To find backtesting session.
+		/// </summary>
+		/// <param name="sessionId">Session ID.</param>
+		/// <param name="from">Minimum creation date.</param>
+		/// <param name="to">Maximum creation date.</param>
+		/// <returns>Founded sessions.</returns>
+		StrategyBacktest[] GetBacktests(Guid sessionId, DateTime from, DateTime to);
+
+		/// <summary>
+		/// To get an approximate of money to spend for the specified backtesting configuration.
+		/// </summary>
+		/// <param name="sessionId">Session ID.</param>
+		/// <param name="backtest">Backtesting session.</param>
+		/// <returns>An approximate of money.</returns>
+		[OperationContract]
+		decimal GetApproximateAmount(Guid sessionId, StrategyBacktest backtest);
+
+		/// <summary>
+		/// To start backtesing.
+		/// </summary>
+		/// <param name="sessionId">Session ID.</param>
+		/// <param name="backtest">Backtesting session.</param>
+		/// <returns>The backtesting session identifier.</returns>
+		[OperationContract]
+		long StartBacktest(Guid sessionId, StrategyBacktest backtest);
+
+		/// <summary>
+		/// To stop the backtesing.
+		/// </summary>
+		/// <param name="sessionId">Session ID.</param>
+		/// <param name="backtestId">The backtesting session identifier.</param>
+		/// <returns>The execution result code.</returns>
+		[OperationContract]
+		byte StopBacktest(Guid sessionId, long backtestId);
+
+		/// <summary>
+		/// To get the count of completed interations.
+		/// </summary>
+		/// <param name="sessionId">Session ID.</param>
+		/// <param name="backtestId">The backtesting session identifier.</param>
+		/// <returns>The count of completed interations.</returns>
+		[OperationContract]
+		int GetCompletedIterationCount(Guid sessionId, long backtestId);
+
+		/// <summary>
+		/// To gey the identifier of formatted file.
+		/// </summary>
+		/// <param name="sessionId">Session ID.</param>
+		/// <param name="backtestId">The backtesting session identifier.</param>
+		/// <returns>Identifier of formatted file.</returns>
+		[OperationContract]
+		long? GetBacktestResult(Guid sessionId, long backtestId);
 	}
 }

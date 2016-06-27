@@ -146,17 +146,17 @@ namespace StockSharp.Community
 		[DataMember]
 		public StrategyContentTypes ContentType { get; set; }
 
-		/// <summary>
-		/// Content name (file name etc.).
-		/// </summary>
-		[DataMember]
-		public string ContentName { get; set; }
+		///// <summary>
+		///// Content name (file name etc.).
+		///// </summary>
+		//[DataMember]
+		//public string ContentName { get; set; }
 
 		/// <summary>
 		/// Content.
 		/// </summary>
 		[DataMember]
-		public byte[] Content { get; set; }
+		public long Content { get; set; }
 
 		/// <summary>
 		/// The author identifier.
@@ -181,5 +181,11 @@ namespace StockSharp.Community
 		/// </summary>
 		[DataMember]
 		public string UserId { get; set; }
+
+		/// <summary>
+		/// Only visible to author.
+		/// </summary>
+		[DataMember]
+		public bool IsPrivate { get; set; }
 	}
 }
