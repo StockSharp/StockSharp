@@ -86,6 +86,18 @@ namespace StockSharp.Community
 		/// </summary>
 		/// <param name="id">File ID.</param>
 		/// <returns>The file data.</returns>
+		public FileData GetFile(long id)
+		{
+			var data = GetFileInfo(id);
+			Download(data);
+			return data;
+		}
+
+		/// <summary>
+		/// To get the file data.
+		/// </summary>
+		/// <param name="id">File ID.</param>
+		/// <returns>The file data.</returns>
 		public FileData GetFileInfo(long id)
 		{
 			return _cache.SafeAdd(id, key => Invoke(f => f.GetFileInfo(AuthenticationClient.Instance.TryGetSession ?? Guid.Empty, id)));
