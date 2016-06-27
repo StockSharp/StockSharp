@@ -31,7 +31,26 @@ namespace StockSharp.Community
 		/// <param name="id">File ID.</param>
 		/// <returns>The file data.</returns>
 		[OperationContract]
-		FileData GetFile(Guid sessionId, long id);
+		FileData GetFileInfo(Guid sessionId, long id);
+
+		/// <summary>
+		/// To start downloading the file.
+		/// </summary>
+		/// <param name="sessionId">Session ID.</param>
+		/// <param name="id">File ID.</param>
+		/// <returns>Operation ID.</returns>
+		[OperationContract]
+		Guid BeginDownload(Guid sessionId, long id);
+
+		/// <summary>
+		/// Download part of file.
+		/// </summary>
+		/// <param name="operationId">>Operation ID, received from <see cref="BeginDownload"/>.</param>
+		/// <param name="startIndex">The zero-based byte offset in file.</param>
+		/// <param name="count">The maximum number of bytes to be read.</param>
+		/// <returns>The part of file.</returns>
+		[OperationContract]
+		byte[] ProcessDownload(Guid operationId, int startIndex, int count);
 
 		///// <summary>
 		///// To upload the file to the site.
@@ -71,5 +90,14 @@ namespace StockSharp.Community
 		/// <returns>File ID.</returns>
 		[OperationContract]
 		long FinishUpload(Guid operationId, bool isCancel);
+
+		/// <summary>
+		/// To delete the file.
+		/// </summary>
+		/// <param name="sessionId">Session ID.</param>
+		/// <param name="id">File ID.</param>
+		/// <returns>The execution result code.</returns>
+		[OperationContract]
+		byte Delete(Guid sessionId, long id);
 	}
 }

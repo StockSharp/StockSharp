@@ -1,5 +1,6 @@
 namespace StockSharp.Community
 {
+	using System;
 	using System.Runtime.Serialization;
 
 	/// <summary>
@@ -27,9 +28,27 @@ namespace StockSharp.Community
 		public byte[] Body { get; set; }
 
 		/// <summary>
+		/// File body length.
+		/// </summary>
+		[DataMember]
+		public int BodyLength { get; set; }
+
+		/// <summary>
 		/// Is the file available for public.
 		/// </summary>
 		[DataMember]
 		public bool IsPublic { get; set; }
+
+		/// <summary>
+		/// File url.
+		/// </summary>
+		[DataMember]
+		public string Url { get; set; }
+
+		/// <summary>
+		/// Date of creation.
+		/// </summary>
+		[DataMember]
+		public DateTime CreationDate { get; set; }
 	}
 }

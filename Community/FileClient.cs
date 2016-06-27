@@ -16,9 +16,8 @@ Copyright 2010 by StockSharp, LLC
 namespace StockSharp.Community
 {
 	using System;
+	using System.Collections.Generic;
 	using System.Linq;
-	using System.ServiceModel;
-	using System.ServiceModel.Description;
 
 	using Ecng.Collections;
 	using Ecng.Common;
@@ -30,6 +29,8 @@ namespace StockSharp.Community
 	/// </summary>
 	public class FileClient : BaseCommunityClient<IFileService>
 	{
+		private const int _partSize = 20 * 1024; // 10kb
+
 		private readonly CachedSynchronizedDictionary<long, FileData> _cache = new CachedSynchronizedDictionary<long, FileData>(); 
 
 		/// <summary>
@@ -49,45 +50,69 @@ namespace StockSharp.Community
 		{
 		}
 
-		/// <summary>
-		/// Create WCF channel.
-		/// </summary>
-		/// <returns>WCF channel.</returns>
-		protected override ChannelFactory<IFileService> CreateChannel()
-		{
-			var f = new ChannelFactory<IFileService>(new WSHttpBinding(SecurityMode.None)
-			{
-				OpenTimeout = TimeSpan.FromMinutes(5),
-				SendTimeout = TimeSpan.FromMinutes(10),
-				ReceiveTimeout = TimeSpan.FromMinutes(10),
-				MaxReceivedMessageSize = int.MaxValue,
-				ReaderQuotas =
-				{
-					MaxArrayLength = int.MaxValue,
-					MaxBytesPerRead = int.MaxValue
-				},
-				MaxBufferPoolSize = int.MaxValue,
-			}, new EndpointAddress(Address));
+		///// <summary>
+		///// Create WCF channel.
+		///// </summary>
+		///// <returns>WCF channel.</returns>
+		//protected override ChannelFactory<IFileService> CreateChannel()
+		//{
+		//	var f = new ChannelFactory<IFileService>(new WSHttpBinding(SecurityMode.None)
+		//	{
+		//		OpenTimeout = TimeSpan.FromMinutes(5),
+		//		SendTimeout = TimeSpan.FromMinutes(10),
+		//		ReceiveTimeout = TimeSpan.FromMinutes(10),
+		//		MaxReceivedMessageSize = int.MaxValue,
+		//		ReaderQuotas =
+		//		{
+		//			MaxArrayLength = int.MaxValue,
+		//			MaxBytesPerRead = int.MaxValue
+		//		},
+		//		MaxBufferPoolSize = int.MaxValue,
+		//	}, new EndpointAddress(Address));
 
-			foreach (var op in f.Endpoint.Contract.Operations)
-			{
-				var dataContractBehavior = op.Behaviors[typeof(DataContractSerializerOperationBehavior)] as DataContractSerializerOperationBehavior;
+		//	foreach (var op in f.Endpoint.Contract.Operations)
+		//	{
+		//		var dataContractBehavior = op.Behaviors[typeof(DataContractSerializerOperationBehavior)] as DataContractSerializerOperationBehavior;
 
-				if (dataContractBehavior != null)
-					dataContractBehavior.MaxItemsInObjectGraph = int.MaxValue;
-			}
+		//		if (dataContractBehavior != null)
+		//			dataContractBehavior.MaxItemsInObjectGraph = int.MaxValue;
+		//	}
 
-			return f;
-		}
+		//	return f;
+		//}
 
 		/// <summary>
 		/// To get the file data.
 		/// </summary>
 		/// <param name="id">File ID.</param>
 		/// <returns>The file data.</returns>
-		public FileData GetFile(long id)
+		public FileData GetFileInfo(long id)
 		{
-			return _cache.SafeAdd(id, key => Invoke(f => f.GetFile(AuthenticationClient.Instance.TryGetSession ?? Guid.Empty, id)));
+			return _cache.SafeAdd(id, key => Invoke(f => f.GetFileInfo(AuthenticationClient.Instance.TryGetSession ?? Guid.Empty, id)));
+		}
+
+		/// <summary>
+		/// Download file.
+		/// </summary>
+		/// <param name="data">The file data.</param>
+		public void Download(FileData data)
+		{
+			if (data == null)
+				throw new ArgumentNullException(nameof(data));
+
+			if (data.Body != null)
+				return;
+
+			var operationId = Invoke(f => f.BeginDownload(AuthenticationClient.Instance.SessionId, data.Id));
+
+			var body = new List<byte>();
+
+			while (body.Count < data.BodyLength)
+			{
+				body.AddRange(Invoke(f => f.ProcessDownload(operationId, body.Count, _partSize)));
+			}
+
+			data.Body = body.ToArray();
 		}
 
 		/// <summary>
@@ -97,16 +122,23 @@ namespace StockSharp.Community
 		/// <param name="body">File body.</param>
 		/// <param name="isPublic">Is the file available for public.</param>
 		/// <param name="progress">Progress callback.</param>
-		/// <returns>File ID.</returns>
-		public long Upload(string fileName, byte[] body, bool isPublic, Action<int> progress = null)
+		/// <returns>File data.</returns>
+		public FileData Upload(string fileName, byte[] body, bool isPublic, Action<int> progress = null)
 		{
-			var operationId = Invoke(f => f.BeginUpload(AuthenticationClient.Instance.SessionId, fileName, isPublic));
+			if (fileName.IsEmpty())
+				throw new ArgumentNullException(nameof(fileName));
 
-			const int partSize = 20 * 1024; // 10kb
+			if (body == null)
+				throw new ArgumentNullException(nameof(body));
+
+			if (body.Length == 0)
+				throw new ArgumentOutOfRangeException(nameof(body));
+
+			var operationId = Invoke(f => f.BeginUpload(AuthenticationClient.Instance.SessionId, fileName, isPublic));
 
 			var sentCount = 0;
 
-			foreach (var part in body.Batch(partSize))
+			foreach (var part in body.Batch(_partSize))
 			{
 				var arr = part.ToArray();
 
@@ -121,15 +153,19 @@ namespace StockSharp.Community
 			if (id < 0)
 				ValidateError((byte)-id);
 
-			_cache.Add(id, new FileData
+			var data = new FileData
 			{
 				Id = id,
 				FileName = fileName,
 				Body = body,
-				IsPublic = isPublic
-			});
+				BodyLength = body.Length,
+				IsPublic = isPublic,
+				CreationDate = DateTime.UtcNow
+			};
 
-			return id;
+			_cache.Add(id, data);
+
+			return data;
 		}
 
 		private static void ValidateError(byte errorCode)
