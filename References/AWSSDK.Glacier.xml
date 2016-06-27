@@ -269,16 +269,27 @@
             Returned if the service cannot complete the request.
             </exception>
         </member>
-        <member name="M:Amazon.Glacier.AmazonGlacierClient.AbortMultipartUploadAsync(Amazon.Glacier.Model.AbortMultipartUploadRequest,System.Threading.CancellationToken)">
+        <member name="M:Amazon.Glacier.AmazonGlacierClient.BeginAbortMultipartUpload(Amazon.Glacier.Model.AbortMultipartUploadRequest,System.AsyncCallback,System.Object)">
             <summary>
             Initiates the asynchronous execution of the AbortMultipartUpload operation.
             </summary>
             
-            <param name="request">Container for the necessary parameters to execute the AbortMultipartUpload operation.</param>
-            <param name="cancellationToken">
-                A cancellation token that can be used by other objects or threads to receive notice of cancellation.
-            </param>
-            <returns>The task object representing the asynchronous operation.</returns>
+            <param name="request">Container for the necessary parameters to execute the AbortMultipartUpload operation on AmazonGlacierClient.</param>
+            <param name="callback">An AsyncCallback delegate that is invoked when the operation completes.</param>
+            <param name="state">A user-defined state object that is passed to the callback procedure. Retrieve this object from within the callback
+                     procedure using the AsyncState property.</param>
+            
+            <returns>An IAsyncResult that can be used to poll or wait for results, or both; this value is also needed when invoking EndAbortMultipartUpload
+                    operation.</returns>
+        </member>
+        <member name="M:Amazon.Glacier.AmazonGlacierClient.EndAbortMultipartUpload(System.IAsyncResult)">
+            <summary>
+            Finishes the asynchronous execution of the  AbortMultipartUpload operation.
+            </summary>
+            
+            <param name="asyncResult">The IAsyncResult returned by the call to BeginAbortMultipartUpload.</param>
+            
+            <returns>Returns a  AbortMultipartUploadResult from Glacier.</returns>
         </member>
         <member name="M:Amazon.Glacier.AmazonGlacierClient.AbortVaultLock(Amazon.Glacier.Model.AbortVaultLockRequest)">
             <summary>
@@ -321,16 +332,27 @@
             Returned if the service cannot complete the request.
             </exception>
         </member>
-        <member name="M:Amazon.Glacier.AmazonGlacierClient.AbortVaultLockAsync(Amazon.Glacier.Model.AbortVaultLockRequest,System.Threading.CancellationToken)">
+        <member name="M:Amazon.Glacier.AmazonGlacierClient.BeginAbortVaultLock(Amazon.Glacier.Model.AbortVaultLockRequest,System.AsyncCallback,System.Object)">
             <summary>
             Initiates the asynchronous execution of the AbortVaultLock operation.
             </summary>
             
-            <param name="request">Container for the necessary parameters to execute the AbortVaultLock operation.</param>
-            <param name="cancellationToken">
-                A cancellation token that can be used by other objects or threads to receive notice of cancellation.
-            </param>
-            <returns>The task object representing the asynchronous operation.</returns>
+            <param name="request">Container for the necessary parameters to execute the AbortVaultLock operation on AmazonGlacierClient.</param>
+            <param name="callback">An AsyncCallback delegate that is invoked when the operation completes.</param>
+            <param name="state">A user-defined state object that is passed to the callback procedure. Retrieve this object from within the callback
+                     procedure using the AsyncState property.</param>
+            
+            <returns>An IAsyncResult that can be used to poll or wait for results, or both; this value is also needed when invoking EndAbortVaultLock
+                    operation.</returns>
+        </member>
+        <member name="M:Amazon.Glacier.AmazonGlacierClient.EndAbortVaultLock(System.IAsyncResult)">
+            <summary>
+            Finishes the asynchronous execution of the  AbortVaultLock operation.
+            </summary>
+            
+            <param name="asyncResult">The IAsyncResult returned by the call to BeginAbortVaultLock.</param>
+            
+            <returns>Returns a  AbortVaultLockResult from Glacier.</returns>
         </member>
         <member name="M:Amazon.Glacier.AmazonGlacierClient.AddTagsToVault(Amazon.Glacier.Model.AddTagsToVaultRequest)">
             <summary>
@@ -361,16 +383,27 @@
             Returned if the service cannot complete the request.
             </exception>
         </member>
-        <member name="M:Amazon.Glacier.AmazonGlacierClient.AddTagsToVaultAsync(Amazon.Glacier.Model.AddTagsToVaultRequest,System.Threading.CancellationToken)">
+        <member name="M:Amazon.Glacier.AmazonGlacierClient.BeginAddTagsToVault(Amazon.Glacier.Model.AddTagsToVaultRequest,System.AsyncCallback,System.Object)">
             <summary>
             Initiates the asynchronous execution of the AddTagsToVault operation.
             </summary>
             
-            <param name="request">Container for the necessary parameters to execute the AddTagsToVault operation.</param>
-            <param name="cancellationToken">
-                A cancellation token that can be used by other objects or threads to receive notice of cancellation.
-            </param>
-            <returns>The task object representing the asynchronous operation.</returns>
+            <param name="request">Container for the necessary parameters to execute the AddTagsToVault operation on AmazonGlacierClient.</param>
+            <param name="callback">An AsyncCallback delegate that is invoked when the operation completes.</param>
+            <param name="state">A user-defined state object that is passed to the callback procedure. Retrieve this object from within the callback
+                     procedure using the AsyncState property.</param>
+            
+            <returns>An IAsyncResult that can be used to poll or wait for results, or both; this value is also needed when invoking EndAddTagsToVault
+                    operation.</returns>
+        </member>
+        <member name="M:Amazon.Glacier.AmazonGlacierClient.EndAddTagsToVault(System.IAsyncResult)">
+            <summary>
+            Finishes the asynchronous execution of the  AddTagsToVault operation.
+            </summary>
+            
+            <param name="asyncResult">The IAsyncResult returned by the call to BeginAddTagsToVault.</param>
+            
+            <returns>Returns a  AddTagsToVaultResult from Glacier.</returns>
         </member>
         <member name="M:Amazon.Glacier.AmazonGlacierClient.CompleteMultipartUpload(Amazon.Glacier.Model.CompleteMultipartUploadRequest)">
             <summary>
@@ -443,16 +476,27 @@
             Returned if the service cannot complete the request.
             </exception>
         </member>
-        <member name="M:Amazon.Glacier.AmazonGlacierClient.CompleteMultipartUploadAsync(Amazon.Glacier.Model.CompleteMultipartUploadRequest,System.Threading.CancellationToken)">
+        <member name="M:Amazon.Glacier.AmazonGlacierClient.BeginCompleteMultipartUpload(Amazon.Glacier.Model.CompleteMultipartUploadRequest,System.AsyncCallback,System.Object)">
             <summary>
             Initiates the asynchronous execution of the CompleteMultipartUpload operation.
             </summary>
             
-            <param name="request">Container for the necessary parameters to execute the CompleteMultipartUpload operation.</param>
-            <param name="cancellationToken">
-                A cancellation token that can be used by other objects or threads to receive notice of cancellation.
-            </param>
-            <returns>The task object representing the asynchronous operation.</returns>
+            <param name="request">Container for the necessary parameters to execute the CompleteMultipartUpload operation on AmazonGlacierClient.</param>
+            <param name="callback">An AsyncCallback delegate that is invoked when the operation completes.</param>
+            <param name="state">A user-defined state object that is passed to the callback procedure. Retrieve this object from within the callback
+                     procedure using the AsyncState property.</param>
+            
+            <returns>An IAsyncResult that can be used to poll or wait for results, or both; this value is also needed when invoking EndCompleteMultipartUpload
+                    operation.</returns>
+        </member>
+        <member name="M:Amazon.Glacier.AmazonGlacierClient.EndCompleteMultipartUpload(System.IAsyncResult)">
+            <summary>
+            Finishes the asynchronous execution of the  CompleteMultipartUpload operation.
+            </summary>
+            
+            <param name="asyncResult">The IAsyncResult returned by the call to BeginCompleteMultipartUpload.</param>
+            
+            <returns>Returns a  CompleteMultipartUploadResult from Glacier.</returns>
         </member>
         <member name="M:Amazon.Glacier.AmazonGlacierClient.CompleteVaultLock(Amazon.Glacier.Model.CompleteVaultLockRequest)">
             <summary>
@@ -495,16 +539,27 @@
             Returned if the service cannot complete the request.
             </exception>
         </member>
-        <member name="M:Amazon.Glacier.AmazonGlacierClient.CompleteVaultLockAsync(Amazon.Glacier.Model.CompleteVaultLockRequest,System.Threading.CancellationToken)">
+        <member name="M:Amazon.Glacier.AmazonGlacierClient.BeginCompleteVaultLock(Amazon.Glacier.Model.CompleteVaultLockRequest,System.AsyncCallback,System.Object)">
             <summary>
             Initiates the asynchronous execution of the CompleteVaultLock operation.
             </summary>
             
-            <param name="request">Container for the necessary parameters to execute the CompleteVaultLock operation.</param>
-            <param name="cancellationToken">
-                A cancellation token that can be used by other objects or threads to receive notice of cancellation.
-            </param>
-            <returns>The task object representing the asynchronous operation.</returns>
+            <param name="request">Container for the necessary parameters to execute the CompleteVaultLock operation on AmazonGlacierClient.</param>
+            <param name="callback">An AsyncCallback delegate that is invoked when the operation completes.</param>
+            <param name="state">A user-defined state object that is passed to the callback procedure. Retrieve this object from within the callback
+                     procedure using the AsyncState property.</param>
+            
+            <returns>An IAsyncResult that can be used to poll or wait for results, or both; this value is also needed when invoking EndCompleteVaultLock
+                    operation.</returns>
+        </member>
+        <member name="M:Amazon.Glacier.AmazonGlacierClient.EndCompleteVaultLock(System.IAsyncResult)">
+            <summary>
+            Finishes the asynchronous execution of the  CompleteVaultLock operation.
+            </summary>
+            
+            <param name="asyncResult">The IAsyncResult returned by the call to BeginCompleteVaultLock.</param>
+            
+            <returns>Returns a  CompleteVaultLockResult from Glacier.</returns>
         </member>
         <member name="M:Amazon.Glacier.AmazonGlacierClient.CreateVault(Amazon.Glacier.Model.CreateVaultRequest)">
             <summary>
@@ -563,16 +618,27 @@
             Returned if the service cannot complete the request.
             </exception>
         </member>
-        <member name="M:Amazon.Glacier.AmazonGlacierClient.CreateVaultAsync(Amazon.Glacier.Model.CreateVaultRequest,System.Threading.CancellationToken)">
+        <member name="M:Amazon.Glacier.AmazonGlacierClient.BeginCreateVault(Amazon.Glacier.Model.CreateVaultRequest,System.AsyncCallback,System.Object)">
             <summary>
             Initiates the asynchronous execution of the CreateVault operation.
             </summary>
             
-            <param name="request">Container for the necessary parameters to execute the CreateVault operation.</param>
-            <param name="cancellationToken">
-                A cancellation token that can be used by other objects or threads to receive notice of cancellation.
-            </param>
-            <returns>The task object representing the asynchronous operation.</returns>
+            <param name="request">Container for the necessary parameters to execute the CreateVault operation on AmazonGlacierClient.</param>
+            <param name="callback">An AsyncCallback delegate that is invoked when the operation completes.</param>
+            <param name="state">A user-defined state object that is passed to the callback procedure. Retrieve this object from within the callback
+                     procedure using the AsyncState property.</param>
+            
+            <returns>An IAsyncResult that can be used to poll or wait for results, or both; this value is also needed when invoking EndCreateVault
+                    operation.</returns>
+        </member>
+        <member name="M:Amazon.Glacier.AmazonGlacierClient.EndCreateVault(System.IAsyncResult)">
+            <summary>
+            Finishes the asynchronous execution of the  CreateVault operation.
+            </summary>
+            
+            <param name="asyncResult">The IAsyncResult returned by the call to BeginCreateVault.</param>
+            
+            <returns>Returns a  CreateVaultResult from Glacier.</returns>
         </member>
         <member name="M:Amazon.Glacier.AmazonGlacierClient.DeleteArchive(Amazon.Glacier.Model.DeleteArchiveRequest)">
             <summary>
@@ -621,16 +687,27 @@
             Returned if the service cannot complete the request.
             </exception>
         </member>
-        <member name="M:Amazon.Glacier.AmazonGlacierClient.DeleteArchiveAsync(Amazon.Glacier.Model.DeleteArchiveRequest,System.Threading.CancellationToken)">
+        <member name="M:Amazon.Glacier.AmazonGlacierClient.BeginDeleteArchive(Amazon.Glacier.Model.DeleteArchiveRequest,System.AsyncCallback,System.Object)">
             <summary>
             Initiates the asynchronous execution of the DeleteArchive operation.
             </summary>
             
-            <param name="request">Container for the necessary parameters to execute the DeleteArchive operation.</param>
-            <param name="cancellationToken">
-                A cancellation token that can be used by other objects or threads to receive notice of cancellation.
-            </param>
-            <returns>The task object representing the asynchronous operation.</returns>
+            <param name="request">Container for the necessary parameters to execute the DeleteArchive operation on AmazonGlacierClient.</param>
+            <param name="callback">An AsyncCallback delegate that is invoked when the operation completes.</param>
+            <param name="state">A user-defined state object that is passed to the callback procedure. Retrieve this object from within the callback
+                     procedure using the AsyncState property.</param>
+            
+            <returns>An IAsyncResult that can be used to poll or wait for results, or both; this value is also needed when invoking EndDeleteArchive
+                    operation.</returns>
+        </member>
+        <member name="M:Amazon.Glacier.AmazonGlacierClient.EndDeleteArchive(System.IAsyncResult)">
+            <summary>
+            Finishes the asynchronous execution of the  DeleteArchive operation.
+            </summary>
+            
+            <param name="asyncResult">The IAsyncResult returned by the call to BeginDeleteArchive.</param>
+            
+            <returns>Returns a  DeleteArchiveResult from Glacier.</returns>
         </member>
         <member name="M:Amazon.Glacier.AmazonGlacierClient.DeleteVault(Amazon.Glacier.Model.DeleteVaultRequest)">
             <summary>
@@ -680,16 +757,27 @@
             Returned if the service cannot complete the request.
             </exception>
         </member>
-        <member name="M:Amazon.Glacier.AmazonGlacierClient.DeleteVaultAsync(Amazon.Glacier.Model.DeleteVaultRequest,System.Threading.CancellationToken)">
+        <member name="M:Amazon.Glacier.AmazonGlacierClient.BeginDeleteVault(Amazon.Glacier.Model.DeleteVaultRequest,System.AsyncCallback,System.Object)">
             <summary>
             Initiates the asynchronous execution of the DeleteVault operation.
             </summary>
             
-            <param name="request">Container for the necessary parameters to execute the DeleteVault operation.</param>
-            <param name="cancellationToken">
-                A cancellation token that can be used by other objects or threads to receive notice of cancellation.
-            </param>
-            <returns>The task object representing the asynchronous operation.</returns>
+            <param name="request">Container for the necessary parameters to execute the DeleteVault operation on AmazonGlacierClient.</param>
+            <param name="callback">An AsyncCallback delegate that is invoked when the operation completes.</param>
+            <param name="state">A user-defined state object that is passed to the callback procedure. Retrieve this object from within the callback
+                     procedure using the AsyncState property.</param>
+            
+            <returns>An IAsyncResult that can be used to poll or wait for results, or both; this value is also needed when invoking EndDeleteVault
+                    operation.</returns>
+        </member>
+        <member name="M:Amazon.Glacier.AmazonGlacierClient.EndDeleteVault(System.IAsyncResult)">
+            <summary>
+            Finishes the asynchronous execution of the  DeleteVault operation.
+            </summary>
+            
+            <param name="asyncResult">The IAsyncResult returned by the call to BeginDeleteVault.</param>
+            
+            <returns>Returns a  DeleteVaultResult from Glacier.</returns>
         </member>
         <member name="M:Amazon.Glacier.AmazonGlacierClient.DeleteVaultAccessPolicy(Amazon.Glacier.Model.DeleteVaultAccessPolicyRequest)">
             <summary>
@@ -723,16 +811,27 @@
             Returned if the service cannot complete the request.
             </exception>
         </member>
-        <member name="M:Amazon.Glacier.AmazonGlacierClient.DeleteVaultAccessPolicyAsync(Amazon.Glacier.Model.DeleteVaultAccessPolicyRequest,System.Threading.CancellationToken)">
+        <member name="M:Amazon.Glacier.AmazonGlacierClient.BeginDeleteVaultAccessPolicy(Amazon.Glacier.Model.DeleteVaultAccessPolicyRequest,System.AsyncCallback,System.Object)">
             <summary>
             Initiates the asynchronous execution of the DeleteVaultAccessPolicy operation.
             </summary>
             
-            <param name="request">Container for the necessary parameters to execute the DeleteVaultAccessPolicy operation.</param>
-            <param name="cancellationToken">
-                A cancellation token that can be used by other objects or threads to receive notice of cancellation.
-            </param>
-            <returns>The task object representing the asynchronous operation.</returns>
+            <param name="request">Container for the necessary parameters to execute the DeleteVaultAccessPolicy operation on AmazonGlacierClient.</param>
+            <param name="callback">An AsyncCallback delegate that is invoked when the operation completes.</param>
+            <param name="state">A user-defined state object that is passed to the callback procedure. Retrieve this object from within the callback
+                     procedure using the AsyncState property.</param>
+            
+            <returns>An IAsyncResult that can be used to poll or wait for results, or both; this value is also needed when invoking EndDeleteVaultAccessPolicy
+                    operation.</returns>
+        </member>
+        <member name="M:Amazon.Glacier.AmazonGlacierClient.EndDeleteVaultAccessPolicy(System.IAsyncResult)">
+            <summary>
+            Finishes the asynchronous execution of the  DeleteVaultAccessPolicy operation.
+            </summary>
+            
+            <param name="asyncResult">The IAsyncResult returned by the call to BeginDeleteVaultAccessPolicy.</param>
+            
+            <returns>Returns a  DeleteVaultAccessPolicyResult from Glacier.</returns>
         </member>
         <member name="M:Amazon.Glacier.AmazonGlacierClient.DeleteVaultNotifications(Amazon.Glacier.Model.DeleteVaultNotificationsRequest)">
             <summary>
@@ -773,16 +872,27 @@
             Returned if the service cannot complete the request.
             </exception>
         </member>
-        <member name="M:Amazon.Glacier.AmazonGlacierClient.DeleteVaultNotificationsAsync(Amazon.Glacier.Model.DeleteVaultNotificationsRequest,System.Threading.CancellationToken)">
+        <member name="M:Amazon.Glacier.AmazonGlacierClient.BeginDeleteVaultNotifications(Amazon.Glacier.Model.DeleteVaultNotificationsRequest,System.AsyncCallback,System.Object)">
             <summary>
             Initiates the asynchronous execution of the DeleteVaultNotifications operation.
             </summary>
             
-            <param name="request">Container for the necessary parameters to execute the DeleteVaultNotifications operation.</param>
-            <param name="cancellationToken">
-                A cancellation token that can be used by other objects or threads to receive notice of cancellation.
-            </param>
-            <returns>The task object representing the asynchronous operation.</returns>
+            <param name="request">Container for the necessary parameters to execute the DeleteVaultNotifications operation on AmazonGlacierClient.</param>
+            <param name="callback">An AsyncCallback delegate that is invoked when the operation completes.</param>
+            <param name="state">A user-defined state object that is passed to the callback procedure. Retrieve this object from within the callback
+                     procedure using the AsyncState property.</param>
+            
+            <returns>An IAsyncResult that can be used to poll or wait for results, or both; this value is also needed when invoking EndDeleteVaultNotifications
+                    operation.</returns>
+        </member>
+        <member name="M:Amazon.Glacier.AmazonGlacierClient.EndDeleteVaultNotifications(System.IAsyncResult)">
+            <summary>
+            Finishes the asynchronous execution of the  DeleteVaultNotifications operation.
+            </summary>
+            
+            <param name="asyncResult">The IAsyncResult returned by the call to BeginDeleteVaultNotifications.</param>
+            
+            <returns>Returns a  DeleteVaultNotificationsResult from Glacier.</returns>
         </member>
         <member name="M:Amazon.Glacier.AmazonGlacierClient.DescribeJob(Amazon.Glacier.Model.DescribeJobRequest)">
             <summary>
@@ -834,16 +944,27 @@
             Returned if the service cannot complete the request.
             </exception>
         </member>
-        <member name="M:Amazon.Glacier.AmazonGlacierClient.DescribeJobAsync(Amazon.Glacier.Model.DescribeJobRequest,System.Threading.CancellationToken)">
+        <member name="M:Amazon.Glacier.AmazonGlacierClient.BeginDescribeJob(Amazon.Glacier.Model.DescribeJobRequest,System.AsyncCallback,System.Object)">
             <summary>
             Initiates the asynchronous execution of the DescribeJob operation.
             </summary>
             
-            <param name="request">Container for the necessary parameters to execute the DescribeJob operation.</param>
-            <param name="cancellationToken">
-                A cancellation token that can be used by other objects or threads to receive notice of cancellation.
-            </param>
-            <returns>The task object representing the asynchronous operation.</returns>
+            <param name="request">Container for the necessary parameters to execute the DescribeJob operation on AmazonGlacierClient.</param>
+            <param name="callback">An AsyncCallback delegate that is invoked when the operation completes.</param>
+            <param name="state">A user-defined state object that is passed to the callback procedure. Retrieve this object from within the callback
+                     procedure using the AsyncState property.</param>
+            
+            <returns>An IAsyncResult that can be used to poll or wait for results, or both; this value is also needed when invoking EndDescribeJob
+                    operation.</returns>
+        </member>
+        <member name="M:Amazon.Glacier.AmazonGlacierClient.EndDescribeJob(System.IAsyncResult)">
+            <summary>
+            Finishes the asynchronous execution of the  DescribeJob operation.
+            </summary>
+            
+            <param name="asyncResult">The IAsyncResult returned by the call to BeginDescribeJob.</param>
+            
+            <returns>Returns a  DescribeJobResult from Glacier.</returns>
         </member>
         <member name="M:Amazon.Glacier.AmazonGlacierClient.DescribeVault(Amazon.Glacier.Model.DescribeVaultRequest)">
             <summary>
@@ -889,16 +1010,27 @@
             Returned if the service cannot complete the request.
             </exception>
         </member>
-        <member name="M:Amazon.Glacier.AmazonGlacierClient.DescribeVaultAsync(Amazon.Glacier.Model.DescribeVaultRequest,System.Threading.CancellationToken)">
+        <member name="M:Amazon.Glacier.AmazonGlacierClient.BeginDescribeVault(Amazon.Glacier.Model.DescribeVaultRequest,System.AsyncCallback,System.Object)">
             <summary>
             Initiates the asynchronous execution of the DescribeVault operation.
             </summary>
             
-            <param name="request">Container for the necessary parameters to execute the DescribeVault operation.</param>
-            <param name="cancellationToken">
-                A cancellation token that can be used by other objects or threads to receive notice of cancellation.
-            </param>
-            <returns>The task object representing the asynchronous operation.</returns>
+            <param name="request">Container for the necessary parameters to execute the DescribeVault operation on AmazonGlacierClient.</param>
+            <param name="callback">An AsyncCallback delegate that is invoked when the operation completes.</param>
+            <param name="state">A user-defined state object that is passed to the callback procedure. Retrieve this object from within the callback
+                     procedure using the AsyncState property.</param>
+            
+            <returns>An IAsyncResult that can be used to poll or wait for results, or both; this value is also needed when invoking EndDescribeVault
+                    operation.</returns>
+        </member>
+        <member name="M:Amazon.Glacier.AmazonGlacierClient.EndDescribeVault(System.IAsyncResult)">
+            <summary>
+            Finishes the asynchronous execution of the  DescribeVault operation.
+            </summary>
+            
+            <param name="asyncResult">The IAsyncResult returned by the call to BeginDescribeVault.</param>
+            
+            <returns>Returns a  DescribeVaultResult from Glacier.</returns>
         </member>
         <member name="M:Amazon.Glacier.AmazonGlacierClient.GetDataRetrievalPolicy(Amazon.Glacier.Model.GetDataRetrievalPolicyRequest)">
             <summary>
@@ -920,16 +1052,27 @@
             Returned if the service cannot complete the request.
             </exception>
         </member>
-        <member name="M:Amazon.Glacier.AmazonGlacierClient.GetDataRetrievalPolicyAsync(Amazon.Glacier.Model.GetDataRetrievalPolicyRequest,System.Threading.CancellationToken)">
+        <member name="M:Amazon.Glacier.AmazonGlacierClient.BeginGetDataRetrievalPolicy(Amazon.Glacier.Model.GetDataRetrievalPolicyRequest,System.AsyncCallback,System.Object)">
             <summary>
             Initiates the asynchronous execution of the GetDataRetrievalPolicy operation.
             </summary>
             
-            <param name="request">Container for the necessary parameters to execute the GetDataRetrievalPolicy operation.</param>
-            <param name="cancellationToken">
-                A cancellation token that can be used by other objects or threads to receive notice of cancellation.
-            </param>
-            <returns>The task object representing the asynchronous operation.</returns>
+            <param name="request">Container for the necessary parameters to execute the GetDataRetrievalPolicy operation on AmazonGlacierClient.</param>
+            <param name="callback">An AsyncCallback delegate that is invoked when the operation completes.</param>
+            <param name="state">A user-defined state object that is passed to the callback procedure. Retrieve this object from within the callback
+                     procedure using the AsyncState property.</param>
+            
+            <returns>An IAsyncResult that can be used to poll or wait for results, or both; this value is also needed when invoking EndGetDataRetrievalPolicy
+                    operation.</returns>
+        </member>
+        <member name="M:Amazon.Glacier.AmazonGlacierClient.EndGetDataRetrievalPolicy(System.IAsyncResult)">
+            <summary>
+            Finishes the asynchronous execution of the  GetDataRetrievalPolicy operation.
+            </summary>
+            
+            <param name="asyncResult">The IAsyncResult returned by the call to BeginGetDataRetrievalPolicy.</param>
+            
+            <returns>Returns a  GetDataRetrievalPolicyResult from Glacier.</returns>
         </member>
         <member name="M:Amazon.Glacier.AmazonGlacierClient.GetJobOutput(Amazon.Glacier.Model.GetJobOutputRequest)">
             <summary>
@@ -1010,16 +1153,27 @@
             Returned if the service cannot complete the request.
             </exception>
         </member>
-        <member name="M:Amazon.Glacier.AmazonGlacierClient.GetJobOutputAsync(Amazon.Glacier.Model.GetJobOutputRequest,System.Threading.CancellationToken)">
+        <member name="M:Amazon.Glacier.AmazonGlacierClient.BeginGetJobOutput(Amazon.Glacier.Model.GetJobOutputRequest,System.AsyncCallback,System.Object)">
             <summary>
             Initiates the asynchronous execution of the GetJobOutput operation.
             </summary>
             
-            <param name="request">Container for the necessary parameters to execute the GetJobOutput operation.</param>
-            <param name="cancellationToken">
-                A cancellation token that can be used by other objects or threads to receive notice of cancellation.
-            </param>
-            <returns>The task object representing the asynchronous operation.</returns>
+            <param name="request">Container for the necessary parameters to execute the GetJobOutput operation on AmazonGlacierClient.</param>
+            <param name="callback">An AsyncCallback delegate that is invoked when the operation completes.</param>
+            <param name="state">A user-defined state object that is passed to the callback procedure. Retrieve this object from within the callback
+                     procedure using the AsyncState property.</param>
+            
+            <returns>An IAsyncResult that can be used to poll or wait for results, or both; this value is also needed when invoking EndGetJobOutput
+                    operation.</returns>
+        </member>
+        <member name="M:Amazon.Glacier.AmazonGlacierClient.EndGetJobOutput(System.IAsyncResult)">
+            <summary>
+            Finishes the asynchronous execution of the  GetJobOutput operation.
+            </summary>
+            
+            <param name="asyncResult">The IAsyncResult returned by the call to BeginGetJobOutput.</param>
+            
+            <returns>Returns a  GetJobOutputResult from Glacier.</returns>
         </member>
         <member name="M:Amazon.Glacier.AmazonGlacierClient.GetVaultAccessPolicy(Amazon.Glacier.Model.GetVaultAccessPolicyRequest)">
             <summary>
@@ -1047,28 +1201,50 @@
             Returned if the service cannot complete the request.
             </exception>
         </member>
-        <member name="M:Amazon.Glacier.AmazonGlacierClient.GetVaultAccessPolicyAsync(Amazon.Glacier.Model.GetVaultAccessPolicyRequest,System.Threading.CancellationToken)">
+        <member name="M:Amazon.Glacier.AmazonGlacierClient.BeginGetVaultAccessPolicy(Amazon.Glacier.Model.GetVaultAccessPolicyRequest,System.AsyncCallback,System.Object)">
             <summary>
             Initiates the asynchronous execution of the GetVaultAccessPolicy operation.
             </summary>
             
-            <param name="request">Container for the necessary parameters to execute the GetVaultAccessPolicy operation.</param>
-            <param name="cancellationToken">
-                A cancellation token that can be used by other objects or threads to receive notice of cancellation.
-            </param>
-            <returns>The task object representing the asynchronous operation.</returns>
+            <param name="request">Container for the necessary parameters to execute the GetVaultAccessPolicy operation on AmazonGlacierClient.</param>
+            <param name="callback">An AsyncCallback delegate that is invoked when the operation completes.</param>
+            <param name="state">A user-defined state object that is passed to the callback procedure. Retrieve this object from within the callback
+                     procedure using the AsyncState property.</param>
+            
+            <returns>An IAsyncResult that can be used to poll or wait for results, or both; this value is also needed when invoking EndGetVaultAccessPolicy
+                    operation.</returns>
+        </member>
+        <member name="M:Amazon.Glacier.AmazonGlacierClient.EndGetVaultAccessPolicy(System.IAsyncResult)">
+            <summary>
+            Finishes the asynchronous execution of the  GetVaultAccessPolicy operation.
+            </summary>
+            
+            <param name="asyncResult">The IAsyncResult returned by the call to BeginGetVaultAccessPolicy.</param>
+            
+            <returns>Returns a  GetVaultAccessPolicyResult from Glacier.</returns>
         </member>
         <!-- Badly formed XML comment ignored for member "M:Amazon.Glacier.AmazonGlacierClient.GetVaultLock(Amazon.Glacier.Model.GetVaultLockRequest)" -->
-        <member name="M:Amazon.Glacier.AmazonGlacierClient.GetVaultLockAsync(Amazon.Glacier.Model.GetVaultLockRequest,System.Threading.CancellationToken)">
+        <member name="M:Amazon.Glacier.AmazonGlacierClient.BeginGetVaultLock(Amazon.Glacier.Model.GetVaultLockRequest,System.AsyncCallback,System.Object)">
             <summary>
             Initiates the asynchronous execution of the GetVaultLock operation.
             </summary>
             
-            <param name="request">Container for the necessary parameters to execute the GetVaultLock operation.</param>
-            <param name="cancellationToken">
-                A cancellation token that can be used by other objects or threads to receive notice of cancellation.
-            </param>
-            <returns>The task object representing the asynchronous operation.</returns>
+            <param name="request">Container for the necessary parameters to execute the GetVaultLock operation on AmazonGlacierClient.</param>
+            <param name="callback">An AsyncCallback delegate that is invoked when the operation completes.</param>
+            <param name="state">A user-defined state object that is passed to the callback procedure. Retrieve this object from within the callback
+                     procedure using the AsyncState property.</param>
+            
+            <returns>An IAsyncResult that can be used to poll or wait for results, or both; this value is also needed when invoking EndGetVaultLock
+                    operation.</returns>
+        </member>
+        <member name="M:Amazon.Glacier.AmazonGlacierClient.EndGetVaultLock(System.IAsyncResult)">
+            <summary>
+            Finishes the asynchronous execution of the  GetVaultLock operation.
+            </summary>
+            
+            <param name="asyncResult">The IAsyncResult returned by the call to BeginGetVaultLock.</param>
+            
+            <returns>Returns a  GetVaultLockResult from Glacier.</returns>
         </member>
         <member name="M:Amazon.Glacier.AmazonGlacierClient.GetVaultNotifications(Amazon.Glacier.Model.GetVaultNotificationsRequest)">
             <summary>
@@ -1116,16 +1292,27 @@
             Returned if the service cannot complete the request.
             </exception>
         </member>
-        <member name="M:Amazon.Glacier.AmazonGlacierClient.GetVaultNotificationsAsync(Amazon.Glacier.Model.GetVaultNotificationsRequest,System.Threading.CancellationToken)">
+        <member name="M:Amazon.Glacier.AmazonGlacierClient.BeginGetVaultNotifications(Amazon.Glacier.Model.GetVaultNotificationsRequest,System.AsyncCallback,System.Object)">
             <summary>
             Initiates the asynchronous execution of the GetVaultNotifications operation.
             </summary>
             
-            <param name="request">Container for the necessary parameters to execute the GetVaultNotifications operation.</param>
-            <param name="cancellationToken">
-                A cancellation token that can be used by other objects or threads to receive notice of cancellation.
-            </param>
-            <returns>The task object representing the asynchronous operation.</returns>
+            <param name="request">Container for the necessary parameters to execute the GetVaultNotifications operation on AmazonGlacierClient.</param>
+            <param name="callback">An AsyncCallback delegate that is invoked when the operation completes.</param>
+            <param name="state">A user-defined state object that is passed to the callback procedure. Retrieve this object from within the callback
+                     procedure using the AsyncState property.</param>
+            
+            <returns>An IAsyncResult that can be used to poll or wait for results, or both; this value is also needed when invoking EndGetVaultNotifications
+                    operation.</returns>
+        </member>
+        <member name="M:Amazon.Glacier.AmazonGlacierClient.EndGetVaultNotifications(System.IAsyncResult)">
+            <summary>
+            Finishes the asynchronous execution of the  GetVaultNotifications operation.
+            </summary>
+            
+            <param name="asyncResult">The IAsyncResult returned by the call to BeginGetVaultNotifications.</param>
+            
+            <returns>Returns a  GetVaultNotificationsResult from Glacier.</returns>
         </member>
         <member name="M:Amazon.Glacier.AmazonGlacierClient.InitiateJob(Amazon.Glacier.Model.InitiateJobRequest)">
             <summary>
@@ -1313,16 +1500,27 @@
             Returned if the service cannot complete the request.
             </exception>
         </member>
-        <member name="M:Amazon.Glacier.AmazonGlacierClient.InitiateJobAsync(Amazon.Glacier.Model.InitiateJobRequest,System.Threading.CancellationToken)">
+        <member name="M:Amazon.Glacier.AmazonGlacierClient.BeginInitiateJob(Amazon.Glacier.Model.InitiateJobRequest,System.AsyncCallback,System.Object)">
             <summary>
             Initiates the asynchronous execution of the InitiateJob operation.
             </summary>
             
-            <param name="request">Container for the necessary parameters to execute the InitiateJob operation.</param>
-            <param name="cancellationToken">
-                A cancellation token that can be used by other objects or threads to receive notice of cancellation.
-            </param>
-            <returns>The task object representing the asynchronous operation.</returns>
+            <param name="request">Container for the necessary parameters to execute the InitiateJob operation on AmazonGlacierClient.</param>
+            <param name="callback">An AsyncCallback delegate that is invoked when the operation completes.</param>
+            <param name="state">A user-defined state object that is passed to the callback procedure. Retrieve this object from within the callback
+                     procedure using the AsyncState property.</param>
+            
+            <returns>An IAsyncResult that can be used to poll or wait for results, or both; this value is also needed when invoking EndInitiateJob
+                    operation.</returns>
+        </member>
+        <member name="M:Amazon.Glacier.AmazonGlacierClient.EndInitiateJob(System.IAsyncResult)">
+            <summary>
+            Finishes the asynchronous execution of the  InitiateJob operation.
+            </summary>
+            
+            <param name="asyncResult">The IAsyncResult returned by the call to BeginInitiateJob.</param>
+            
+            <returns>Returns a  InitiateJobResult from Glacier.</returns>
         </member>
         <member name="M:Amazon.Glacier.AmazonGlacierClient.InitiateMultipartUpload(Amazon.Glacier.Model.InitiateMultipartUploadRequest)">
             <summary>
@@ -1389,28 +1587,50 @@
             Returned if the service cannot complete the request.
             </exception>
         </member>
-        <member name="M:Amazon.Glacier.AmazonGlacierClient.InitiateMultipartUploadAsync(Amazon.Glacier.Model.InitiateMultipartUploadRequest,System.Threading.CancellationToken)">
+        <member name="M:Amazon.Glacier.AmazonGlacierClient.BeginInitiateMultipartUpload(Amazon.Glacier.Model.InitiateMultipartUploadRequest,System.AsyncCallback,System.Object)">
             <summary>
             Initiates the asynchronous execution of the InitiateMultipartUpload operation.
             </summary>
             
-            <param name="request">Container for the necessary parameters to execute the InitiateMultipartUpload operation.</param>
-            <param name="cancellationToken">
-                A cancellation token that can be used by other objects or threads to receive notice of cancellation.
-            </param>
-            <returns>The task object representing the asynchronous operation.</returns>
+            <param name="request">Container for the necessary parameters to execute the InitiateMultipartUpload operation on AmazonGlacierClient.</param>
+            <param name="callback">An AsyncCallback delegate that is invoked when the operation completes.</param>
+            <param name="state">A user-defined state object that is passed to the callback procedure. Retrieve this object from within the callback
+                     procedure using the AsyncState property.</param>
+            
+            <returns>An IAsyncResult that can be used to poll or wait for results, or both; this value is also needed when invoking EndInitiateMultipartUpload
+                    operation.</returns>
+        </member>
+        <member name="M:Amazon.Glacier.AmazonGlacierClient.EndInitiateMultipartUpload(System.IAsyncResult)">
+            <summary>
+            Finishes the asynchronous execution of the  InitiateMultipartUpload operation.
+            </summary>
+            
+            <param name="asyncResult">The IAsyncResult returned by the call to BeginInitiateMultipartUpload.</param>
+            
+            <returns>Returns a  InitiateMultipartUploadResult from Glacier.</returns>
         </member>
         <!-- Badly formed XML comment ignored for member "M:Amazon.Glacier.AmazonGlacierClient.InitiateVaultLock(Amazon.Glacier.Model.InitiateVaultLockRequest)" -->
-        <member name="M:Amazon.Glacier.AmazonGlacierClient.InitiateVaultLockAsync(Amazon.Glacier.Model.InitiateVaultLockRequest,System.Threading.CancellationToken)">
+        <member name="M:Amazon.Glacier.AmazonGlacierClient.BeginInitiateVaultLock(Amazon.Glacier.Model.InitiateVaultLockRequest,System.AsyncCallback,System.Object)">
             <summary>
             Initiates the asynchronous execution of the InitiateVaultLock operation.
             </summary>
             
-            <param name="request">Container for the necessary parameters to execute the InitiateVaultLock operation.</param>
-            <param name="cancellationToken">
-                A cancellation token that can be used by other objects or threads to receive notice of cancellation.
-            </param>
-            <returns>The task object representing the asynchronous operation.</returns>
+            <param name="request">Container for the necessary parameters to execute the InitiateVaultLock operation on AmazonGlacierClient.</param>
+            <param name="callback">An AsyncCallback delegate that is invoked when the operation completes.</param>
+            <param name="state">A user-defined state object that is passed to the callback procedure. Retrieve this object from within the callback
+                     procedure using the AsyncState property.</param>
+            
+            <returns>An IAsyncResult that can be used to poll or wait for results, or both; this value is also needed when invoking EndInitiateVaultLock
+                    operation.</returns>
+        </member>
+        <member name="M:Amazon.Glacier.AmazonGlacierClient.EndInitiateVaultLock(System.IAsyncResult)">
+            <summary>
+            Finishes the asynchronous execution of the  InitiateVaultLock operation.
+            </summary>
+            
+            <param name="asyncResult">The IAsyncResult returned by the call to BeginInitiateVaultLock.</param>
+            
+            <returns>Returns a  InitiateVaultLockResult from Glacier.</returns>
         </member>
         <member name="M:Amazon.Glacier.AmazonGlacierClient.ListJobs(Amazon.Glacier.Model.ListJobsRequest)">
             <summary>
@@ -1485,16 +1705,27 @@
             Returned if the service cannot complete the request.
             </exception>
         </member>
-        <member name="M:Amazon.Glacier.AmazonGlacierClient.ListJobsAsync(Amazon.Glacier.Model.ListJobsRequest,System.Threading.CancellationToken)">
+        <member name="M:Amazon.Glacier.AmazonGlacierClient.BeginListJobs(Amazon.Glacier.Model.ListJobsRequest,System.AsyncCallback,System.Object)">
             <summary>
             Initiates the asynchronous execution of the ListJobs operation.
             </summary>
             
-            <param name="request">Container for the necessary parameters to execute the ListJobs operation.</param>
-            <param name="cancellationToken">
-                A cancellation token that can be used by other objects or threads to receive notice of cancellation.
-            </param>
-            <returns>The task object representing the asynchronous operation.</returns>
+            <param name="request">Container for the necessary parameters to execute the ListJobs operation on AmazonGlacierClient.</param>
+            <param name="callback">An AsyncCallback delegate that is invoked when the operation completes.</param>
+            <param name="state">A user-defined state object that is passed to the callback procedure. Retrieve this object from within the callback
+                     procedure using the AsyncState property.</param>
+            
+            <returns>An IAsyncResult that can be used to poll or wait for results, or both; this value is also needed when invoking EndListJobs
+                    operation.</returns>
+        </member>
+        <member name="M:Amazon.Glacier.AmazonGlacierClient.EndListJobs(System.IAsyncResult)">
+            <summary>
+            Finishes the asynchronous execution of the  ListJobs operation.
+            </summary>
+            
+            <param name="asyncResult">The IAsyncResult returned by the call to BeginListJobs.</param>
+            
+            <returns>Returns a  ListJobsResult from Glacier.</returns>
         </member>
         <member name="M:Amazon.Glacier.AmazonGlacierClient.ListMultipartUploads(Amazon.Glacier.Model.ListMultipartUploadsRequest)">
             <summary>
@@ -1553,16 +1784,27 @@
             Returned if the service cannot complete the request.
             </exception>
         </member>
-        <member name="M:Amazon.Glacier.AmazonGlacierClient.ListMultipartUploadsAsync(Amazon.Glacier.Model.ListMultipartUploadsRequest,System.Threading.CancellationToken)">
+        <member name="M:Amazon.Glacier.AmazonGlacierClient.BeginListMultipartUploads(Amazon.Glacier.Model.ListMultipartUploadsRequest,System.AsyncCallback,System.Object)">
             <summary>
             Initiates the asynchronous execution of the ListMultipartUploads operation.
             </summary>
             
-            <param name="request">Container for the necessary parameters to execute the ListMultipartUploads operation.</param>
-            <param name="cancellationToken">
-                A cancellation token that can be used by other objects or threads to receive notice of cancellation.
-            </param>
-            <returns>The task object representing the asynchronous operation.</returns>
+            <param name="request">Container for the necessary parameters to execute the ListMultipartUploads operation on AmazonGlacierClient.</param>
+            <param name="callback">An AsyncCallback delegate that is invoked when the operation completes.</param>
+            <param name="state">A user-defined state object that is passed to the callback procedure. Retrieve this object from within the callback
+                     procedure using the AsyncState property.</param>
+            
+            <returns>An IAsyncResult that can be used to poll or wait for results, or both; this value is also needed when invoking EndListMultipartUploads
+                    operation.</returns>
+        </member>
+        <member name="M:Amazon.Glacier.AmazonGlacierClient.EndListMultipartUploads(System.IAsyncResult)">
+            <summary>
+            Finishes the asynchronous execution of the  ListMultipartUploads operation.
+            </summary>
+            
+            <param name="asyncResult">The IAsyncResult returned by the call to BeginListMultipartUploads.</param>
+            
+            <returns>Returns a  ListMultipartUploadsResult from Glacier.</returns>
         </member>
         <member name="M:Amazon.Glacier.AmazonGlacierClient.ListParts(Amazon.Glacier.Model.ListPartsRequest)">
             <summary>
@@ -1615,16 +1857,27 @@
             Returned if the service cannot complete the request.
             </exception>
         </member>
-        <member name="M:Amazon.Glacier.AmazonGlacierClient.ListPartsAsync(Amazon.Glacier.Model.ListPartsRequest,System.Threading.CancellationToken)">
+        <member name="M:Amazon.Glacier.AmazonGlacierClient.BeginListParts(Amazon.Glacier.Model.ListPartsRequest,System.AsyncCallback,System.Object)">
             <summary>
             Initiates the asynchronous execution of the ListParts operation.
             </summary>
             
-            <param name="request">Container for the necessary parameters to execute the ListParts operation.</param>
-            <param name="cancellationToken">
-                A cancellation token that can be used by other objects or threads to receive notice of cancellation.
-            </param>
-            <returns>The task object representing the asynchronous operation.</returns>
+            <param name="request">Container for the necessary parameters to execute the ListParts operation on AmazonGlacierClient.</param>
+            <param name="callback">An AsyncCallback delegate that is invoked when the operation completes.</param>
+            <param name="state">A user-defined state object that is passed to the callback procedure. Retrieve this object from within the callback
+                     procedure using the AsyncState property.</param>
+            
+            <returns>An IAsyncResult that can be used to poll or wait for results, or both; this value is also needed when invoking EndListParts
+                    operation.</returns>
+        </member>
+        <member name="M:Amazon.Glacier.AmazonGlacierClient.EndListParts(System.IAsyncResult)">
+            <summary>
+            Finishes the asynchronous execution of the  ListParts operation.
+            </summary>
+            
+            <param name="asyncResult">The IAsyncResult returned by the call to BeginListParts.</param>
+            
+            <returns>Returns a  ListPartsResult from Glacier.</returns>
         </member>
         <member name="M:Amazon.Glacier.AmazonGlacierClient.ListTagsForVault(Amazon.Glacier.Model.ListTagsForVaultRequest)">
             <summary>
@@ -1649,16 +1902,27 @@
             Returned if the service cannot complete the request.
             </exception>
         </member>
-        <member name="M:Amazon.Glacier.AmazonGlacierClient.ListTagsForVaultAsync(Amazon.Glacier.Model.ListTagsForVaultRequest,System.Threading.CancellationToken)">
+        <member name="M:Amazon.Glacier.AmazonGlacierClient.BeginListTagsForVault(Amazon.Glacier.Model.ListTagsForVaultRequest,System.AsyncCallback,System.Object)">
             <summary>
             Initiates the asynchronous execution of the ListTagsForVault operation.
             </summary>
             
-            <param name="request">Container for the necessary parameters to execute the ListTagsForVault operation.</param>
-            <param name="cancellationToken">
-                A cancellation token that can be used by other objects or threads to receive notice of cancellation.
-            </param>
-            <returns>The task object representing the asynchronous operation.</returns>
+            <param name="request">Container for the necessary parameters to execute the ListTagsForVault operation on AmazonGlacierClient.</param>
+            <param name="callback">An AsyncCallback delegate that is invoked when the operation completes.</param>
+            <param name="state">A user-defined state object that is passed to the callback procedure. Retrieve this object from within the callback
+                     procedure using the AsyncState property.</param>
+            
+            <returns>An IAsyncResult that can be used to poll or wait for results, or both; this value is also needed when invoking EndListTagsForVault
+                    operation.</returns>
+        </member>
+        <member name="M:Amazon.Glacier.AmazonGlacierClient.EndListTagsForVault(System.IAsyncResult)">
+            <summary>
+            Finishes the asynchronous execution of the  ListTagsForVault operation.
+            </summary>
+            
+            <param name="asyncResult">The IAsyncResult returned by the call to BeginListTagsForVault.</param>
+            
+            <returns>Returns a  ListTagsForVaultResult from Glacier.</returns>
         </member>
         <member name="M:Amazon.Glacier.AmazonGlacierClient.ListVaults">
             <summary>
@@ -1755,66 +2019,27 @@
             Returned if the service cannot complete the request.
             </exception>
         </member>
-        <member name="M:Amazon.Glacier.AmazonGlacierClient.ListVaultsAsync(System.Threading.CancellationToken)">
-            <summary>
-            This operation lists all vaults owned by the calling user's account. The list returned
-            in the response is ASCII-sorted by vault name. 
-            
-             
-            <para>
-            By default, this operation returns up to 1,000 items. If there are more vaults to
-            list, the response <code class="code">marker</code> field contains the vault Amazon
-            Resource Name (ARN) at which to continue the list with a new List Vaults request;
-            otherwise, the <code class="code">marker</code> field is <code class="code">null</code>.
-            To return a list of vaults that begins at a specific vault, set the <code class="code">marker</code>
-            request parameter to the vault ARN you obtained from a previous List Vaults request.
-            You can also limit the number of vaults returned in the response by specifying the
-            <code class="code">limit</code> parameter in the request. 
-            </para>
-             
-            <para>
-            An AWS account has full permission to perform all operations (actions). However, AWS
-            Identity and Access Management (IAM) users don't have any permissions by default.
-            You must grant them explicit permission to perform specific actions. For more information,
-            see <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/using-iam-with-amazon-glacier.html">Access
-            Control Using AWS Identity and Access Management (IAM)</a>.
-            </para>
-             
-            <para>
-            For conceptual information and underlying REST API, go to <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/retrieving-vault-info.html">Retrieving
-            Vault Metadata in Amazon Glacier</a> and <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/api-vaults-get.html">List
-            Vaults </a> in the <i>Amazon Glacier Developer Guide</i>. 
-            </para>
-            </summary>
-            <param name="cancellationToken">
-                A cancellation token that can be used by other objects or threads to receive notice of cancellation.
-            </param>
-            
-            <returns>The response from the ListVaults service method, as returned by Glacier.</returns>
-            <exception cref="T:Amazon.Glacier.Model.InvalidParameterValueException">
-            Returned if a parameter of the request is incorrectly specified.
-            </exception>
-            <exception cref="T:Amazon.Glacier.Model.MissingParameterValueException">
-            Returned if a required header or parameter is missing from the request.
-            </exception>
-            <exception cref="T:Amazon.Glacier.Model.ResourceNotFoundException">
-            Returned if the specified resource, such as a vault, upload ID, or job ID, does not
-            exist.
-            </exception>
-            <exception cref="T:Amazon.Glacier.Model.ServiceUnavailableException">
-            Returned if the service cannot complete the request.
-            </exception>
-        </member>
-        <member name="M:Amazon.Glacier.AmazonGlacierClient.ListVaultsAsync(Amazon.Glacier.Model.ListVaultsRequest,System.Threading.CancellationToken)">
+        <member name="M:Amazon.Glacier.AmazonGlacierClient.BeginListVaults(Amazon.Glacier.Model.ListVaultsRequest,System.AsyncCallback,System.Object)">
             <summary>
             Initiates the asynchronous execution of the ListVaults operation.
             </summary>
             
-            <param name="request">Container for the necessary parameters to execute the ListVaults operation.</param>
-            <param name="cancellationToken">
-                A cancellation token that can be used by other objects or threads to receive notice of cancellation.
-            </param>
-            <returns>The task object representing the asynchronous operation.</returns>
+            <param name="request">Container for the necessary parameters to execute the ListVaults operation on AmazonGlacierClient.</param>
+            <param name="callback">An AsyncCallback delegate that is invoked when the operation completes.</param>
+            <param name="state">A user-defined state object that is passed to the callback procedure. Retrieve this object from within the callback
+                     procedure using the AsyncState property.</param>
+            
+            <returns>An IAsyncResult that can be used to poll or wait for results, or both; this value is also needed when invoking EndListVaults
+                    operation.</returns>
+        </member>
+        <member name="M:Amazon.Glacier.AmazonGlacierClient.EndListVaults(System.IAsyncResult)">
+            <summary>
+            Finishes the asynchronous execution of the  ListVaults operation.
+            </summary>
+            
+            <param name="asyncResult">The IAsyncResult returned by the call to BeginListVaults.</param>
+            
+            <returns>Returns a  ListVaultsResult from Glacier.</returns>
         </member>
         <member name="M:Amazon.Glacier.AmazonGlacierClient.RemoveTagsFromVault(Amazon.Glacier.Model.RemoveTagsFromVaultRequest)">
             <summary>
@@ -1840,16 +2065,27 @@
             Returned if the service cannot complete the request.
             </exception>
         </member>
-        <member name="M:Amazon.Glacier.AmazonGlacierClient.RemoveTagsFromVaultAsync(Amazon.Glacier.Model.RemoveTagsFromVaultRequest,System.Threading.CancellationToken)">
+        <member name="M:Amazon.Glacier.AmazonGlacierClient.BeginRemoveTagsFromVault(Amazon.Glacier.Model.RemoveTagsFromVaultRequest,System.AsyncCallback,System.Object)">
             <summary>
             Initiates the asynchronous execution of the RemoveTagsFromVault operation.
             </summary>
             
-            <param name="request">Container for the necessary parameters to execute the RemoveTagsFromVault operation.</param>
-            <param name="cancellationToken">
-                A cancellation token that can be used by other objects or threads to receive notice of cancellation.
-            </param>
-            <returns>The task object representing the asynchronous operation.</returns>
+            <param name="request">Container for the necessary parameters to execute the RemoveTagsFromVault operation on AmazonGlacierClient.</param>
+            <param name="callback">An AsyncCallback delegate that is invoked when the operation completes.</param>
+            <param name="state">A user-defined state object that is passed to the callback procedure. Retrieve this object from within the callback
+                     procedure using the AsyncState property.</param>
+            
+            <returns>An IAsyncResult that can be used to poll or wait for results, or both; this value is also needed when invoking EndRemoveTagsFromVault
+                    operation.</returns>
+        </member>
+        <member name="M:Amazon.Glacier.AmazonGlacierClient.EndRemoveTagsFromVault(System.IAsyncResult)">
+            <summary>
+            Finishes the asynchronous execution of the  RemoveTagsFromVault operation.
+            </summary>
+            
+            <param name="asyncResult">The IAsyncResult returned by the call to BeginRemoveTagsFromVault.</param>
+            
+            <returns>Returns a  RemoveTagsFromVaultResult from Glacier.</returns>
         </member>
         <member name="M:Amazon.Glacier.AmazonGlacierClient.SetDataRetrievalPolicy(Amazon.Glacier.Model.SetDataRetrievalPolicyRequest)">
             <summary>
@@ -1878,16 +2114,27 @@
             Returned if the service cannot complete the request.
             </exception>
         </member>
-        <member name="M:Amazon.Glacier.AmazonGlacierClient.SetDataRetrievalPolicyAsync(Amazon.Glacier.Model.SetDataRetrievalPolicyRequest,System.Threading.CancellationToken)">
+        <member name="M:Amazon.Glacier.AmazonGlacierClient.BeginSetDataRetrievalPolicy(Amazon.Glacier.Model.SetDataRetrievalPolicyRequest,System.AsyncCallback,System.Object)">
             <summary>
             Initiates the asynchronous execution of the SetDataRetrievalPolicy operation.
             </summary>
             
-            <param name="request">Container for the necessary parameters to execute the SetDataRetrievalPolicy operation.</param>
-            <param name="cancellationToken">
-                A cancellation token that can be used by other objects or threads to receive notice of cancellation.
-            </param>
-            <returns>The task object representing the asynchronous operation.</returns>
+            <param name="request">Container for the necessary parameters to execute the SetDataRetrievalPolicy operation on AmazonGlacierClient.</param>
+            <param name="callback">An AsyncCallback delegate that is invoked when the operation completes.</param>
+            <param name="state">A user-defined state object that is passed to the callback procedure. Retrieve this object from within the callback
+                     procedure using the AsyncState property.</param>
+            
+            <returns>An IAsyncResult that can be used to poll or wait for results, or both; this value is also needed when invoking EndSetDataRetrievalPolicy
+                    operation.</returns>
+        </member>
+        <member name="M:Amazon.Glacier.AmazonGlacierClient.EndSetDataRetrievalPolicy(System.IAsyncResult)">
+            <summary>
+            Finishes the asynchronous execution of the  SetDataRetrievalPolicy operation.
+            </summary>
+            
+            <param name="asyncResult">The IAsyncResult returned by the call to BeginSetDataRetrievalPolicy.</param>
+            
+            <returns>Returns a  SetDataRetrievalPolicyResult from Glacier.</returns>
         </member>
         <member name="M:Amazon.Glacier.AmazonGlacierClient.SetVaultAccessPolicy(Amazon.Glacier.Model.SetVaultAccessPolicyRequest)">
             <summary>
@@ -1915,16 +2162,27 @@
             Returned if the service cannot complete the request.
             </exception>
         </member>
-        <member name="M:Amazon.Glacier.AmazonGlacierClient.SetVaultAccessPolicyAsync(Amazon.Glacier.Model.SetVaultAccessPolicyRequest,System.Threading.CancellationToken)">
+        <member name="M:Amazon.Glacier.AmazonGlacierClient.BeginSetVaultAccessPolicy(Amazon.Glacier.Model.SetVaultAccessPolicyRequest,System.AsyncCallback,System.Object)">
             <summary>
             Initiates the asynchronous execution of the SetVaultAccessPolicy operation.
             </summary>
             
-            <param name="request">Container for the necessary parameters to execute the SetVaultAccessPolicy operation.</param>
-            <param name="cancellationToken">
-                A cancellation token that can be used by other objects or threads to receive notice of cancellation.
-            </param>
-            <returns>The task object representing the asynchronous operation.</returns>
+            <param name="request">Container for the necessary parameters to execute the SetVaultAccessPolicy operation on AmazonGlacierClient.</param>
+            <param name="callback">An AsyncCallback delegate that is invoked when the operation completes.</param>
+            <param name="state">A user-defined state object that is passed to the callback procedure. Retrieve this object from within the callback
+                     procedure using the AsyncState property.</param>
+            
+            <returns>An IAsyncResult that can be used to poll or wait for results, or both; this value is also needed when invoking EndSetVaultAccessPolicy
+                    operation.</returns>
+        </member>
+        <member name="M:Amazon.Glacier.AmazonGlacierClient.EndSetVaultAccessPolicy(System.IAsyncResult)">
+            <summary>
+            Finishes the asynchronous execution of the  SetVaultAccessPolicy operation.
+            </summary>
+            
+            <param name="asyncResult">The IAsyncResult returned by the call to BeginSetVaultAccessPolicy.</param>
+            
+            <returns>Returns a  SetVaultAccessPolicyResult from Glacier.</returns>
         </member>
         <member name="M:Amazon.Glacier.AmazonGlacierClient.SetVaultNotifications(Amazon.Glacier.Model.SetVaultNotificationsRequest)">
             <summary>
@@ -1984,16 +2242,27 @@
             Returned if the service cannot complete the request.
             </exception>
         </member>
-        <member name="M:Amazon.Glacier.AmazonGlacierClient.SetVaultNotificationsAsync(Amazon.Glacier.Model.SetVaultNotificationsRequest,System.Threading.CancellationToken)">
+        <member name="M:Amazon.Glacier.AmazonGlacierClient.BeginSetVaultNotifications(Amazon.Glacier.Model.SetVaultNotificationsRequest,System.AsyncCallback,System.Object)">
             <summary>
             Initiates the asynchronous execution of the SetVaultNotifications operation.
             </summary>
             
-            <param name="request">Container for the necessary parameters to execute the SetVaultNotifications operation.</param>
-            <param name="cancellationToken">
-                A cancellation token that can be used by other objects or threads to receive notice of cancellation.
-            </param>
-            <returns>The task object representing the asynchronous operation.</returns>
+            <param name="request">Container for the necessary parameters to execute the SetVaultNotifications operation on AmazonGlacierClient.</param>
+            <param name="callback">An AsyncCallback delegate that is invoked when the operation completes.</param>
+            <param name="state">A user-defined state object that is passed to the callback procedure. Retrieve this object from within the callback
+                     procedure using the AsyncState property.</param>
+            
+            <returns>An IAsyncResult that can be used to poll or wait for results, or both; this value is also needed when invoking EndSetVaultNotifications
+                    operation.</returns>
+        </member>
+        <member name="M:Amazon.Glacier.AmazonGlacierClient.EndSetVaultNotifications(System.IAsyncResult)">
+            <summary>
+            Finishes the asynchronous execution of the  SetVaultNotifications operation.
+            </summary>
+            
+            <param name="asyncResult">The IAsyncResult returned by the call to BeginSetVaultNotifications.</param>
+            
+            <returns>Returns a  SetVaultNotificationsResult from Glacier.</returns>
         </member>
         <member name="M:Amazon.Glacier.AmazonGlacierClient.UploadArchive(Amazon.Glacier.Model.UploadArchiveRequest)">
             <summary>
@@ -2067,16 +2336,27 @@
             Returned if the service cannot complete the request.
             </exception>
         </member>
-        <member name="M:Amazon.Glacier.AmazonGlacierClient.UploadArchiveAsync(Amazon.Glacier.Model.UploadArchiveRequest,System.Threading.CancellationToken)">
+        <member name="M:Amazon.Glacier.AmazonGlacierClient.BeginUploadArchive(Amazon.Glacier.Model.UploadArchiveRequest,System.AsyncCallback,System.Object)">
             <summary>
             Initiates the asynchronous execution of the UploadArchive operation.
             </summary>
             
-            <param name="request">Container for the necessary parameters to execute the UploadArchive operation.</param>
-            <param name="cancellationToken">
-                A cancellation token that can be used by other objects or threads to receive notice of cancellation.
-            </param>
-            <returns>The task object representing the asynchronous operation.</returns>
+            <param name="request">Container for the necessary parameters to execute the UploadArchive operation on AmazonGlacierClient.</param>
+            <param name="callback">An AsyncCallback delegate that is invoked when the operation completes.</param>
+            <param name="state">A user-defined state object that is passed to the callback procedure. Retrieve this object from within the callback
+                     procedure using the AsyncState property.</param>
+            
+            <returns>An IAsyncResult that can be used to poll or wait for results, or both; this value is also needed when invoking EndUploadArchive
+                    operation.</returns>
+        </member>
+        <member name="M:Amazon.Glacier.AmazonGlacierClient.EndUploadArchive(System.IAsyncResult)">
+            <summary>
+            Finishes the asynchronous execution of the  UploadArchive operation.
+            </summary>
+            
+            <param name="asyncResult">The IAsyncResult returned by the call to BeginUploadArchive.</param>
+            
+            <returns>Returns a  UploadArchiveResult from Glacier.</returns>
         </member>
         <member name="M:Amazon.Glacier.AmazonGlacierClient.UploadMultipartPart(Amazon.Glacier.Model.UploadMultipartPartRequest)">
             <summary>
@@ -2157,16 +2437,27 @@
             Returned if the service cannot complete the request.
             </exception>
         </member>
-        <member name="M:Amazon.Glacier.AmazonGlacierClient.UploadMultipartPartAsync(Amazon.Glacier.Model.UploadMultipartPartRequest,System.Threading.CancellationToken)">
+        <member name="M:Amazon.Glacier.AmazonGlacierClient.BeginUploadMultipartPart(Amazon.Glacier.Model.UploadMultipartPartRequest,System.AsyncCallback,System.Object)">
             <summary>
             Initiates the asynchronous execution of the UploadMultipartPart operation.
             </summary>
             
-            <param name="request">Container for the necessary parameters to execute the UploadMultipartPart operation.</param>
-            <param name="cancellationToken">
-                A cancellation token that can be used by other objects or threads to receive notice of cancellation.
-            </param>
-            <returns>The task object representing the asynchronous operation.</returns>
+            <param name="request">Container for the necessary parameters to execute the UploadMultipartPart operation on AmazonGlacierClient.</param>
+            <param name="callback">An AsyncCallback delegate that is invoked when the operation completes.</param>
+            <param name="state">A user-defined state object that is passed to the callback procedure. Retrieve this object from within the callback
+                     procedure using the AsyncState property.</param>
+            
+            <returns>An IAsyncResult that can be used to poll or wait for results, or both; this value is also needed when invoking EndUploadMultipartPart
+                    operation.</returns>
+        </member>
+        <member name="M:Amazon.Glacier.AmazonGlacierClient.EndUploadMultipartPart(System.IAsyncResult)">
+            <summary>
+            Finishes the asynchronous execution of the  UploadMultipartPart operation.
+            </summary>
+            
+            <param name="asyncResult">The IAsyncResult returned by the call to BeginUploadMultipartPart.</param>
+            
+            <returns>Returns a  UploadMultipartPartResult from Glacier.</returns>
         </member>
         <member name="T:Amazon.Glacier.AmazonGlacierConfig">
             <summary>
@@ -2286,15 +2577,14 @@
             <param name="executionContext">The execution context which contains both the
             requests and response context.</param>
         </member>
-        <member name="M:Amazon.Glacier.Internal.ProcessRequestHandler.InvokeAsync``1(Amazon.Runtime.IExecutionContext)">
+        <member name="M:Amazon.Glacier.Internal.ProcessRequestHandler.InvokeAsync(Amazon.Runtime.IAsyncExecutionContext)">
             <summary>
             Calls pre invoke logic before calling the next handler 
             in the pipeline.
             </summary>
-            <typeparam name="T">The response type for the current request.</typeparam>
-            <param name="executionContext">The execution context, it contains the
-            request and response context.</param>
-            <returns>A task that represents the asynchronous operation.</returns>
+            <param name="executionContext">The execution context which contains both the
+            requests and response context.</param>
+            <returns>IAsyncResult which represent an async operation.</returns>
         </member>
         <member name="M:Amazon.Glacier.Internal.ProcessRequestHandler.PreInvoke(Amazon.Runtime.IExecutionContext)">
             <summary>
@@ -8938,16 +9228,27 @@
             Returned if the service cannot complete the request.
             </exception>
         </member>
-        <member name="M:Amazon.Glacier.IAmazonGlacier.AbortMultipartUploadAsync(Amazon.Glacier.Model.AbortMultipartUploadRequest,System.Threading.CancellationToken)">
+        <member name="M:Amazon.Glacier.IAmazonGlacier.BeginAbortMultipartUpload(Amazon.Glacier.Model.AbortMultipartUploadRequest,System.AsyncCallback,System.Object)">
             <summary>
             Initiates the asynchronous execution of the AbortMultipartUpload operation.
             </summary>
             
-            <param name="request">Container for the necessary parameters to execute the AbortMultipartUpload operation.</param>
-            <param name="cancellationToken">
-                A cancellation token that can be used by other objects or threads to receive notice of cancellation.
-            </param>
-            <returns>The task object representing the asynchronous operation.</returns>
+            <param name="request">Container for the necessary parameters to execute the AbortMultipartUpload operation on AmazonGlacierClient.</param>
+            <param name="callback">An AsyncCallback delegate that is invoked when the operation completes.</param>
+            <param name="state">A user-defined state object that is passed to the callback procedure. Retrieve this object from within the callback
+                     procedure using the AsyncState property.</param>
+            
+            <returns>An IAsyncResult that can be used to poll or wait for results, or both; this value is also needed when invoking EndAbortMultipartUpload
+                    operation.</returns>
+        </member>
+        <member name="M:Amazon.Glacier.IAmazonGlacier.EndAbortMultipartUpload(System.IAsyncResult)">
+            <summary>
+            Finishes the asynchronous execution of the  AbortMultipartUpload operation.
+            </summary>
+            
+            <param name="asyncResult">The IAsyncResult returned by the call to BeginAbortMultipartUpload.</param>
+            
+            <returns>Returns a  AbortMultipartUploadResult from Glacier.</returns>
         </member>
         <member name="M:Amazon.Glacier.IAmazonGlacier.AbortVaultLock(Amazon.Glacier.Model.AbortVaultLockRequest)">
             <summary>
@@ -8990,16 +9291,27 @@
             Returned if the service cannot complete the request.
             </exception>
         </member>
-        <member name="M:Amazon.Glacier.IAmazonGlacier.AbortVaultLockAsync(Amazon.Glacier.Model.AbortVaultLockRequest,System.Threading.CancellationToken)">
+        <member name="M:Amazon.Glacier.IAmazonGlacier.BeginAbortVaultLock(Amazon.Glacier.Model.AbortVaultLockRequest,System.AsyncCallback,System.Object)">
             <summary>
             Initiates the asynchronous execution of the AbortVaultLock operation.
             </summary>
             
-            <param name="request">Container for the necessary parameters to execute the AbortVaultLock operation.</param>
-            <param name="cancellationToken">
-                A cancellation token that can be used by other objects or threads to receive notice of cancellation.
-            </param>
-            <returns>The task object representing the asynchronous operation.</returns>
+            <param name="request">Container for the necessary parameters to execute the AbortVaultLock operation on AmazonGlacierClient.</param>
+            <param name="callback">An AsyncCallback delegate that is invoked when the operation completes.</param>
+            <param name="state">A user-defined state object that is passed to the callback procedure. Retrieve this object from within the callback
+                     procedure using the AsyncState property.</param>
+            
+            <returns>An IAsyncResult that can be used to poll or wait for results, or both; this value is also needed when invoking EndAbortVaultLock
+                    operation.</returns>
+        </member>
+        <member name="M:Amazon.Glacier.IAmazonGlacier.EndAbortVaultLock(System.IAsyncResult)">
+            <summary>
+            Finishes the asynchronous execution of the  AbortVaultLock operation.
+            </summary>
+            
+            <param name="asyncResult">The IAsyncResult returned by the call to BeginAbortVaultLock.</param>
+            
+            <returns>Returns a  AbortVaultLockResult from Glacier.</returns>
         </member>
         <member name="M:Amazon.Glacier.IAmazonGlacier.AddTagsToVault(Amazon.Glacier.Model.AddTagsToVaultRequest)">
             <summary>
@@ -9030,16 +9342,27 @@
             Returned if the service cannot complete the request.
             </exception>
         </member>
-        <member name="M:Amazon.Glacier.IAmazonGlacier.AddTagsToVaultAsync(Amazon.Glacier.Model.AddTagsToVaultRequest,System.Threading.CancellationToken)">
+        <member name="M:Amazon.Glacier.IAmazonGlacier.BeginAddTagsToVault(Amazon.Glacier.Model.AddTagsToVaultRequest,System.AsyncCallback,System.Object)">
             <summary>
             Initiates the asynchronous execution of the AddTagsToVault operation.
             </summary>
             
-            <param name="request">Container for the necessary parameters to execute the AddTagsToVault operation.</param>
-            <param name="cancellationToken">
-                A cancellation token that can be used by other objects or threads to receive notice of cancellation.
-            </param>
-            <returns>The task object representing the asynchronous operation.</returns>
+            <param name="request">Container for the necessary parameters to execute the AddTagsToVault operation on AmazonGlacierClient.</param>
+            <param name="callback">An AsyncCallback delegate that is invoked when the operation completes.</param>
+            <param name="state">A user-defined state object that is passed to the callback procedure. Retrieve this object from within the callback
+                     procedure using the AsyncState property.</param>
+            
+            <returns>An IAsyncResult that can be used to poll or wait for results, or both; this value is also needed when invoking EndAddTagsToVault
+                    operation.</returns>
+        </member>
+        <member name="M:Amazon.Glacier.IAmazonGlacier.EndAddTagsToVault(System.IAsyncResult)">
+            <summary>
+            Finishes the asynchronous execution of the  AddTagsToVault operation.
+            </summary>
+            
+            <param name="asyncResult">The IAsyncResult returned by the call to BeginAddTagsToVault.</param>
+            
+            <returns>Returns a  AddTagsToVaultResult from Glacier.</returns>
         </member>
         <member name="M:Amazon.Glacier.IAmazonGlacier.CompleteMultipartUpload(Amazon.Glacier.Model.CompleteMultipartUploadRequest)">
             <summary>
@@ -9112,16 +9435,27 @@
             Returned if the service cannot complete the request.
             </exception>
         </member>
-        <member name="M:Amazon.Glacier.IAmazonGlacier.CompleteMultipartUploadAsync(Amazon.Glacier.Model.CompleteMultipartUploadRequest,System.Threading.CancellationToken)">
+        <member name="M:Amazon.Glacier.IAmazonGlacier.BeginCompleteMultipartUpload(Amazon.Glacier.Model.CompleteMultipartUploadRequest,System.AsyncCallback,System.Object)">
             <summary>
             Initiates the asynchronous execution of the CompleteMultipartUpload operation.
             </summary>
             
-            <param name="request">Container for the necessary parameters to execute the CompleteMultipartUpload operation.</param>
-            <param name="cancellationToken">
-                A cancellation token that can be used by other objects or threads to receive notice of cancellation.
-            </param>
-            <returns>The task object representing the asynchronous operation.</returns>
+            <param name="request">Container for the necessary parameters to execute the CompleteMultipartUpload operation on AmazonGlacierClient.</param>
+            <param name="callback">An AsyncCallback delegate that is invoked when the operation completes.</param>
+            <param name="state">A user-defined state object that is passed to the callback procedure. Retrieve this object from within the callback
+                     procedure using the AsyncState property.</param>
+            
+            <returns>An IAsyncResult that can be used to poll or wait for results, or both; this value is also needed when invoking EndCompleteMultipartUpload
+                    operation.</returns>
+        </member>
+        <member name="M:Amazon.Glacier.IAmazonGlacier.EndCompleteMultipartUpload(System.IAsyncResult)">
+            <summary>
+            Finishes the asynchronous execution of the  CompleteMultipartUpload operation.
+            </summary>
+            
+            <param name="asyncResult">The IAsyncResult returned by the call to BeginCompleteMultipartUpload.</param>
+            
+            <returns>Returns a  CompleteMultipartUploadResult from Glacier.</returns>
         </member>
         <member name="M:Amazon.Glacier.IAmazonGlacier.CompleteVaultLock(Amazon.Glacier.Model.CompleteVaultLockRequest)">
             <summary>
@@ -9164,16 +9498,27 @@
             Returned if the service cannot complete the request.
             </exception>
         </member>
-        <member name="M:Amazon.Glacier.IAmazonGlacier.CompleteVaultLockAsync(Amazon.Glacier.Model.CompleteVaultLockRequest,System.Threading.CancellationToken)">
+        <member name="M:Amazon.Glacier.IAmazonGlacier.BeginCompleteVaultLock(Amazon.Glacier.Model.CompleteVaultLockRequest,System.AsyncCallback,System.Object)">
             <summary>
             Initiates the asynchronous execution of the CompleteVaultLock operation.
             </summary>
             
-            <param name="request">Container for the necessary parameters to execute the CompleteVaultLock operation.</param>
-            <param name="cancellationToken">
-                A cancellation token that can be used by other objects or threads to receive notice of cancellation.
-            </param>
-            <returns>The task object representing the asynchronous operation.</returns>
+            <param name="request">Container for the necessary parameters to execute the CompleteVaultLock operation on AmazonGlacierClient.</param>
+            <param name="callback">An AsyncCallback delegate that is invoked when the operation completes.</param>
+            <param name="state">A user-defined state object that is passed to the callback procedure. Retrieve this object from within the callback
+                     procedure using the AsyncState property.</param>
+            
+            <returns>An IAsyncResult that can be used to poll or wait for results, or both; this value is also needed when invoking EndCompleteVaultLock
+                    operation.</returns>
+        </member>
+        <member name="M:Amazon.Glacier.IAmazonGlacier.EndCompleteVaultLock(System.IAsyncResult)">
+            <summary>
+            Finishes the asynchronous execution of the  CompleteVaultLock operation.
+            </summary>
+            
+            <param name="asyncResult">The IAsyncResult returned by the call to BeginCompleteVaultLock.</param>
+            
+            <returns>Returns a  CompleteVaultLockResult from Glacier.</returns>
         </member>
         <member name="M:Amazon.Glacier.IAmazonGlacier.CreateVault(Amazon.Glacier.Model.CreateVaultRequest)">
             <summary>
@@ -9232,16 +9577,27 @@
             Returned if the service cannot complete the request.
             </exception>
         </member>
-        <member name="M:Amazon.Glacier.IAmazonGlacier.CreateVaultAsync(Amazon.Glacier.Model.CreateVaultRequest,System.Threading.CancellationToken)">
+        <member name="M:Amazon.Glacier.IAmazonGlacier.BeginCreateVault(Amazon.Glacier.Model.CreateVaultRequest,System.AsyncCallback,System.Object)">
             <summary>
             Initiates the asynchronous execution of the CreateVault operation.
             </summary>
             
-            <param name="request">Container for the necessary parameters to execute the CreateVault operation.</param>
-            <param name="cancellationToken">
-                A cancellation token that can be used by other objects or threads to receive notice of cancellation.
-            </param>
-            <returns>The task object representing the asynchronous operation.</returns>
+            <param name="request">Container for the necessary parameters to execute the CreateVault operation on AmazonGlacierClient.</param>
+            <param name="callback">An AsyncCallback delegate that is invoked when the operation completes.</param>
+            <param name="state">A user-defined state object that is passed to the callback procedure. Retrieve this object from within the callback
+                     procedure using the AsyncState property.</param>
+            
+            <returns>An IAsyncResult that can be used to poll or wait for results, or both; this value is also needed when invoking EndCreateVault
+                    operation.</returns>
+        </member>
+        <member name="M:Amazon.Glacier.IAmazonGlacier.EndCreateVault(System.IAsyncResult)">
+            <summary>
+            Finishes the asynchronous execution of the  CreateVault operation.
+            </summary>
+            
+            <param name="asyncResult">The IAsyncResult returned by the call to BeginCreateVault.</param>
+            
+            <returns>Returns a  CreateVaultResult from Glacier.</returns>
         </member>
         <member name="M:Amazon.Glacier.IAmazonGlacier.DeleteArchive(Amazon.Glacier.Model.DeleteArchiveRequest)">
             <summary>
@@ -9290,16 +9646,27 @@
             Returned if the service cannot complete the request.
             </exception>
         </member>
-        <member name="M:Amazon.Glacier.IAmazonGlacier.DeleteArchiveAsync(Amazon.Glacier.Model.DeleteArchiveRequest,System.Threading.CancellationToken)">
+        <member name="M:Amazon.Glacier.IAmazonGlacier.BeginDeleteArchive(Amazon.Glacier.Model.DeleteArchiveRequest,System.AsyncCallback,System.Object)">
             <summary>
             Initiates the asynchronous execution of the DeleteArchive operation.
             </summary>
             
-            <param name="request">Container for the necessary parameters to execute the DeleteArchive operation.</param>
-            <param name="cancellationToken">
-                A cancellation token that can be used by other objects or threads to receive notice of cancellation.
-            </param>
-            <returns>The task object representing the asynchronous operation.</returns>
+            <param name="request">Container for the necessary parameters to execute the DeleteArchive operation on AmazonGlacierClient.</param>
+            <param name="callback">An AsyncCallback delegate that is invoked when the operation completes.</param>
+            <param name="state">A user-defined state object that is passed to the callback procedure. Retrieve this object from within the callback
+                     procedure using the AsyncState property.</param>
+            
+            <returns>An IAsyncResult that can be used to poll or wait for results, or both; this value is also needed when invoking EndDeleteArchive
+                    operation.</returns>
+        </member>
+        <member name="M:Amazon.Glacier.IAmazonGlacier.EndDeleteArchive(System.IAsyncResult)">
+            <summary>
+            Finishes the asynchronous execution of the  DeleteArchive operation.
+            </summary>
+            
+            <param name="asyncResult">The IAsyncResult returned by the call to BeginDeleteArchive.</param>
+            
+            <returns>Returns a  DeleteArchiveResult from Glacier.</returns>
         </member>
         <member name="M:Amazon.Glacier.IAmazonGlacier.DeleteVault(Amazon.Glacier.Model.DeleteVaultRequest)">
             <summary>
@@ -9349,16 +9716,27 @@
             Returned if the service cannot complete the request.
             </exception>
         </member>
-        <member name="M:Amazon.Glacier.IAmazonGlacier.DeleteVaultAsync(Amazon.Glacier.Model.DeleteVaultRequest,System.Threading.CancellationToken)">
+        <member name="M:Amazon.Glacier.IAmazonGlacier.BeginDeleteVault(Amazon.Glacier.Model.DeleteVaultRequest,System.AsyncCallback,System.Object)">
             <summary>
             Initiates the asynchronous execution of the DeleteVault operation.
             </summary>
             
-            <param name="request">Container for the necessary parameters to execute the DeleteVault operation.</param>
-            <param name="cancellationToken">
-                A cancellation token that can be used by other objects or threads to receive notice of cancellation.
-            </param>
-            <returns>The task object representing the asynchronous operation.</returns>
+            <param name="request">Container for the necessary parameters to execute the DeleteVault operation on AmazonGlacierClient.</param>
+            <param name="callback">An AsyncCallback delegate that is invoked when the operation completes.</param>
+            <param name="state">A user-defined state object that is passed to the callback procedure. Retrieve this object from within the callback
+                     procedure using the AsyncState property.</param>
+            
+            <returns>An IAsyncResult that can be used to poll or wait for results, or both; this value is also needed when invoking EndDeleteVault
+                    operation.</returns>
+        </member>
+        <member name="M:Amazon.Glacier.IAmazonGlacier.EndDeleteVault(System.IAsyncResult)">
+            <summary>
+            Finishes the asynchronous execution of the  DeleteVault operation.
+            </summary>
+            
+            <param name="asyncResult">The IAsyncResult returned by the call to BeginDeleteVault.</param>
+            
+            <returns>Returns a  DeleteVaultResult from Glacier.</returns>
         </member>
         <member name="M:Amazon.Glacier.IAmazonGlacier.DeleteVaultAccessPolicy(Amazon.Glacier.Model.DeleteVaultAccessPolicyRequest)">
             <summary>
@@ -9392,16 +9770,27 @@
             Returned if the service cannot complete the request.
             </exception>
         </member>
-        <member name="M:Amazon.Glacier.IAmazonGlacier.DeleteVaultAccessPolicyAsync(Amazon.Glacier.Model.DeleteVaultAccessPolicyRequest,System.Threading.CancellationToken)">
+        <member name="M:Amazon.Glacier.IAmazonGlacier.BeginDeleteVaultAccessPolicy(Amazon.Glacier.Model.DeleteVaultAccessPolicyRequest,System.AsyncCallback,System.Object)">
             <summary>
             Initiates the asynchronous execution of the DeleteVaultAccessPolicy operation.
             </summary>
             
-            <param name="request">Container for the necessary parameters to execute the DeleteVaultAccessPolicy operation.</param>
-            <param name="cancellationToken">
-                A cancellation token that can be used by other objects or threads to receive notice of cancellation.
-            </param>
-            <returns>The task object representing the asynchronous operation.</returns>
+            <param name="request">Container for the necessary parameters to execute the DeleteVaultAccessPolicy operation on AmazonGlacierClient.</param>
+            <param name="callback">An AsyncCallback delegate that is invoked when the operation completes.</param>
+            <param name="state">A user-defined state object that is passed to the callback procedure. Retrieve this object from within the callback
+                     procedure using the AsyncState property.</param>
+            
+            <returns>An IAsyncResult that can be used to poll or wait for results, or both; this value is also needed when invoking EndDeleteVaultAccessPolicy
+                    operation.</returns>
+        </member>
+        <member name="M:Amazon.Glacier.IAmazonGlacier.EndDeleteVaultAccessPolicy(System.IAsyncResult)">
+            <summary>
+            Finishes the asynchronous execution of the  DeleteVaultAccessPolicy operation.
+            </summary>
+            
+            <param name="asyncResult">The IAsyncResult returned by the call to BeginDeleteVaultAccessPolicy.</param>
+            
+            <returns>Returns a  DeleteVaultAccessPolicyResult from Glacier.</returns>
         </member>
         <member name="M:Amazon.Glacier.IAmazonGlacier.DeleteVaultNotifications(Amazon.Glacier.Model.DeleteVaultNotificationsRequest)">
             <summary>
@@ -9442,16 +9831,27 @@
             Returned if the service cannot complete the request.
             </exception>
         </member>
-        <member name="M:Amazon.Glacier.IAmazonGlacier.DeleteVaultNotificationsAsync(Amazon.Glacier.Model.DeleteVaultNotificationsRequest,System.Threading.CancellationToken)">
+        <member name="M:Amazon.Glacier.IAmazonGlacier.BeginDeleteVaultNotifications(Amazon.Glacier.Model.DeleteVaultNotificationsRequest,System.AsyncCallback,System.Object)">
             <summary>
             Initiates the asynchronous execution of the DeleteVaultNotifications operation.
             </summary>
             
-            <param name="request">Container for the necessary parameters to execute the DeleteVaultNotifications operation.</param>
-            <param name="cancellationToken">
-                A cancellation token that can be used by other objects or threads to receive notice of cancellation.
-            </param>
-            <returns>The task object representing the asynchronous operation.</returns>
+            <param name="request">Container for the necessary parameters to execute the DeleteVaultNotifications operation on AmazonGlacierClient.</param>
+            <param name="callback">An AsyncCallback delegate that is invoked when the operation completes.</param>
+            <param name="state">A user-defined state object that is passed to the callback procedure. Retrieve this object from within the callback
+                     procedure using the AsyncState property.</param>
+            
+            <returns>An IAsyncResult that can be used to poll or wait for results, or both; this value is also needed when invoking EndDeleteVaultNotifications
+                    operation.</returns>
+        </member>
+        <member name="M:Amazon.Glacier.IAmazonGlacier.EndDeleteVaultNotifications(System.IAsyncResult)">
+            <summary>
+            Finishes the asynchronous execution of the  DeleteVaultNotifications operation.
+            </summary>
+            
+            <param name="asyncResult">The IAsyncResult returned by the call to BeginDeleteVaultNotifications.</param>
+            
+            <returns>Returns a  DeleteVaultNotificationsResult from Glacier.</returns>
         </member>
         <member name="M:Amazon.Glacier.IAmazonGlacier.DescribeJob(Amazon.Glacier.Model.DescribeJobRequest)">
             <summary>
@@ -9503,16 +9903,27 @@
             Returned if the service cannot complete the request.
             </exception>
         </member>
-        <member name="M:Amazon.Glacier.IAmazonGlacier.DescribeJobAsync(Amazon.Glacier.Model.DescribeJobRequest,System.Threading.CancellationToken)">
+        <member name="M:Amazon.Glacier.IAmazonGlacier.BeginDescribeJob(Amazon.Glacier.Model.DescribeJobRequest,System.AsyncCallback,System.Object)">
             <summary>
             Initiates the asynchronous execution of the DescribeJob operation.
             </summary>
             
-            <param name="request">Container for the necessary parameters to execute the DescribeJob operation.</param>
-            <param name="cancellationToken">
-                A cancellation token that can be used by other objects or threads to receive notice of cancellation.
-            </param>
-            <returns>The task object representing the asynchronous operation.</returns>
+            <param name="request">Container for the necessary parameters to execute the DescribeJob operation on AmazonGlacierClient.</param>
+            <param name="callback">An AsyncCallback delegate that is invoked when the operation completes.</param>
+            <param name="state">A user-defined state object that is passed to the callback procedure. Retrieve this object from within the callback
+                     procedure using the AsyncState property.</param>
+            
+            <returns>An IAsyncResult that can be used to poll or wait for results, or both; this value is also needed when invoking EndDescribeJob
+                    operation.</returns>
+        </member>
+        <member name="M:Amazon.Glacier.IAmazonGlacier.EndDescribeJob(System.IAsyncResult)">
+            <summary>
+            Finishes the asynchronous execution of the  DescribeJob operation.
+            </summary>
+            
+            <param name="asyncResult">The IAsyncResult returned by the call to BeginDescribeJob.</param>
+            
+            <returns>Returns a  DescribeJobResult from Glacier.</returns>
         </member>
         <member name="M:Amazon.Glacier.IAmazonGlacier.DescribeVault(Amazon.Glacier.Model.DescribeVaultRequest)">
             <summary>
@@ -9558,16 +9969,27 @@
             Returned if the service cannot complete the request.
             </exception>
         </member>
-        <member name="M:Amazon.Glacier.IAmazonGlacier.DescribeVaultAsync(Amazon.Glacier.Model.DescribeVaultRequest,System.Threading.CancellationToken)">
+        <member name="M:Amazon.Glacier.IAmazonGlacier.BeginDescribeVault(Amazon.Glacier.Model.DescribeVaultRequest,System.AsyncCallback,System.Object)">
             <summary>
             Initiates the asynchronous execution of the DescribeVault operation.
             </summary>
             
-            <param name="request">Container for the necessary parameters to execute the DescribeVault operation.</param>
-            <param name="cancellationToken">
-                A cancellation token that can be used by other objects or threads to receive notice of cancellation.
-            </param>
-            <returns>The task object representing the asynchronous operation.</returns>
+            <param name="request">Container for the necessary parameters to execute the DescribeVault operation on AmazonGlacierClient.</param>
+            <param name="callback">An AsyncCallback delegate that is invoked when the operation completes.</param>
+            <param name="state">A user-defined state object that is passed to the callback procedure. Retrieve this object from within the callback
+                     procedure using the AsyncState property.</param>
+            
+            <returns>An IAsyncResult that can be used to poll or wait for results, or both; this value is also needed when invoking EndDescribeVault
+                    operation.</returns>
+        </member>
+        <member name="M:Amazon.Glacier.IAmazonGlacier.EndDescribeVault(System.IAsyncResult)">
+            <summary>
+            Finishes the asynchronous execution of the  DescribeVault operation.
+            </summary>
+            
+            <param name="asyncResult">The IAsyncResult returned by the call to BeginDescribeVault.</param>
+            
+            <returns>Returns a  DescribeVaultResult from Glacier.</returns>
         </member>
         <member name="M:Amazon.Glacier.IAmazonGlacier.GetDataRetrievalPolicy(Amazon.Glacier.Model.GetDataRetrievalPolicyRequest)">
             <summary>
@@ -9589,16 +10011,27 @@
             Returned if the service cannot complete the request.
             </exception>
         </member>
-        <member name="M:Amazon.Glacier.IAmazonGlacier.GetDataRetrievalPolicyAsync(Amazon.Glacier.Model.GetDataRetrievalPolicyRequest,System.Threading.CancellationToken)">
+        <member name="M:Amazon.Glacier.IAmazonGlacier.BeginGetDataRetrievalPolicy(Amazon.Glacier.Model.GetDataRetrievalPolicyRequest,System.AsyncCallback,System.Object)">
             <summary>
             Initiates the asynchronous execution of the GetDataRetrievalPolicy operation.
             </summary>
             
-            <param name="request">Container for the necessary parameters to execute the GetDataRetrievalPolicy operation.</param>
-            <param name="cancellationToken">
-                A cancellation token that can be used by other objects or threads to receive notice of cancellation.
-            </param>
-            <returns>The task object representing the asynchronous operation.</returns>
+            <param name="request">Container for the necessary parameters to execute the GetDataRetrievalPolicy operation on AmazonGlacierClient.</param>
+            <param name="callback">An AsyncCallback delegate that is invoked when the operation completes.</param>
+            <param name="state">A user-defined state object that is passed to the callback procedure. Retrieve this object from within the callback
+                     procedure using the AsyncState property.</param>
+            
+            <returns>An IAsyncResult that can be used to poll or wait for results, or both; this value is also needed when invoking EndGetDataRetrievalPolicy
+                    operation.</returns>
+        </member>
+        <member name="M:Amazon.Glacier.IAmazonGlacier.EndGetDataRetrievalPolicy(System.IAsyncResult)">
+            <summary>
+            Finishes the asynchronous execution of the  GetDataRetrievalPolicy operation.
+            </summary>
+            
+            <param name="asyncResult">The IAsyncResult returned by the call to BeginGetDataRetrievalPolicy.</param>
+            
+            <returns>Returns a  GetDataRetrievalPolicyResult from Glacier.</returns>
         </member>
         <member name="M:Amazon.Glacier.IAmazonGlacier.GetJobOutput(Amazon.Glacier.Model.GetJobOutputRequest)">
             <summary>
@@ -9679,16 +10112,27 @@
             Returned if the service cannot complete the request.
             </exception>
         </member>
-        <member name="M:Amazon.Glacier.IAmazonGlacier.GetJobOutputAsync(Amazon.Glacier.Model.GetJobOutputRequest,System.Threading.CancellationToken)">
+        <member name="M:Amazon.Glacier.IAmazonGlacier.BeginGetJobOutput(Amazon.Glacier.Model.GetJobOutputRequest,System.AsyncCallback,System.Object)">
             <summary>
             Initiates the asynchronous execution of the GetJobOutput operation.
             </summary>
             
-            <param name="request">Container for the necessary parameters to execute the GetJobOutput operation.</param>
-            <param name="cancellationToken">
-                A cancellation token that can be used by other objects or threads to receive notice of cancellation.
-            </param>
-            <returns>The task object representing the asynchronous operation.</returns>
+            <param name="request">Container for the necessary parameters to execute the GetJobOutput operation on AmazonGlacierClient.</param>
+            <param name="callback">An AsyncCallback delegate that is invoked when the operation completes.</param>
+            <param name="state">A user-defined state object that is passed to the callback procedure. Retrieve this object from within the callback
+                     procedure using the AsyncState property.</param>
+            
+            <returns>An IAsyncResult that can be used to poll or wait for results, or both; this value is also needed when invoking EndGetJobOutput
+                    operation.</returns>
+        </member>
+        <member name="M:Amazon.Glacier.IAmazonGlacier.EndGetJobOutput(System.IAsyncResult)">
+            <summary>
+            Finishes the asynchronous execution of the  GetJobOutput operation.
+            </summary>
+            
+            <param name="asyncResult">The IAsyncResult returned by the call to BeginGetJobOutput.</param>
+            
+            <returns>Returns a  GetJobOutputResult from Glacier.</returns>
         </member>
         <member name="M:Amazon.Glacier.IAmazonGlacier.GetVaultAccessPolicy(Amazon.Glacier.Model.GetVaultAccessPolicyRequest)">
             <summary>
@@ -9716,28 +10160,50 @@
             Returned if the service cannot complete the request.
             </exception>
         </member>
-        <member name="M:Amazon.Glacier.IAmazonGlacier.GetVaultAccessPolicyAsync(Amazon.Glacier.Model.GetVaultAccessPolicyRequest,System.Threading.CancellationToken)">
+        <member name="M:Amazon.Glacier.IAmazonGlacier.BeginGetVaultAccessPolicy(Amazon.Glacier.Model.GetVaultAccessPolicyRequest,System.AsyncCallback,System.Object)">
             <summary>
             Initiates the asynchronous execution of the GetVaultAccessPolicy operation.
             </summary>
             
-            <param name="request">Container for the necessary parameters to execute the GetVaultAccessPolicy operation.</param>
-            <param name="cancellationToken">
-                A cancellation token that can be used by other objects or threads to receive notice of cancellation.
-            </param>
-            <returns>The task object representing the asynchronous operation.</returns>
+            <param name="request">Container for the necessary parameters to execute the GetVaultAccessPolicy operation on AmazonGlacierClient.</param>
+            <param name="callback">An AsyncCallback delegate that is invoked when the operation completes.</param>
+            <param name="state">A user-defined state object that is passed to the callback procedure. Retrieve this object from within the callback
+                     procedure using the AsyncState property.</param>
+            
+            <returns>An IAsyncResult that can be used to poll or wait for results, or both; this value is also needed when invoking EndGetVaultAccessPolicy
+                    operation.</returns>
+        </member>
+        <member name="M:Amazon.Glacier.IAmazonGlacier.EndGetVaultAccessPolicy(System.IAsyncResult)">
+            <summary>
+            Finishes the asynchronous execution of the  GetVaultAccessPolicy operation.
+            </summary>
+            
+            <param name="asyncResult">The IAsyncResult returned by the call to BeginGetVaultAccessPolicy.</param>
+            
+            <returns>Returns a  GetVaultAccessPolicyResult from Glacier.</returns>
         </member>
         <!-- Badly formed XML comment ignored for member "M:Amazon.Glacier.IAmazonGlacier.GetVaultLock(Amazon.Glacier.Model.GetVaultLockRequest)" -->
-        <member name="M:Amazon.Glacier.IAmazonGlacier.GetVaultLockAsync(Amazon.Glacier.Model.GetVaultLockRequest,System.Threading.CancellationToken)">
+        <member name="M:Amazon.Glacier.IAmazonGlacier.BeginGetVaultLock(Amazon.Glacier.Model.GetVaultLockRequest,System.AsyncCallback,System.Object)">
             <summary>
             Initiates the asynchronous execution of the GetVaultLock operation.
             </summary>
             
-            <param name="request">Container for the necessary parameters to execute the GetVaultLock operation.</param>
-            <param name="cancellationToken">
-                A cancellation token that can be used by other objects or threads to receive notice of cancellation.
-            </param>
-            <returns>The task object representing the asynchronous operation.</returns>
+            <param name="request">Container for the necessary parameters to execute the GetVaultLock operation on AmazonGlacierClient.</param>
+            <param name="callback">An AsyncCallback delegate that is invoked when the operation completes.</param>
+            <param name="state">A user-defined state object that is passed to the callback procedure. Retrieve this object from within the callback
+                     procedure using the AsyncState property.</param>
+            
+            <returns>An IAsyncResult that can be used to poll or wait for results, or both; this value is also needed when invoking EndGetVaultLock
+                    operation.</returns>
+        </member>
+        <member name="M:Amazon.Glacier.IAmazonGlacier.EndGetVaultLock(System.IAsyncResult)">
+            <summary>
+            Finishes the asynchronous execution of the  GetVaultLock operation.
+            </summary>
+            
+            <param name="asyncResult">The IAsyncResult returned by the call to BeginGetVaultLock.</param>
+            
+            <returns>Returns a  GetVaultLockResult from Glacier.</returns>
         </member>
         <member name="M:Amazon.Glacier.IAmazonGlacier.GetVaultNotifications(Amazon.Glacier.Model.GetVaultNotificationsRequest)">
             <summary>
@@ -9785,16 +10251,27 @@
             Returned if the service cannot complete the request.
             </exception>
         </member>
-        <member name="M:Amazon.Glacier.IAmazonGlacier.GetVaultNotificationsAsync(Amazon.Glacier.Model.GetVaultNotificationsRequest,System.Threading.CancellationToken)">
+        <member name="M:Amazon.Glacier.IAmazonGlacier.BeginGetVaultNotifications(Amazon.Glacier.Model.GetVaultNotificationsRequest,System.AsyncCallback,System.Object)">
             <summary>
             Initiates the asynchronous execution of the GetVaultNotifications operation.
             </summary>
             
-            <param name="request">Container for the necessary parameters to execute the GetVaultNotifications operation.</param>
-            <param name="cancellationToken">
-                A cancellation token that can be used by other objects or threads to receive notice of cancellation.
-            </param>
-            <returns>The task object representing the asynchronous operation.</returns>
+            <param name="request">Container for the necessary parameters to execute the GetVaultNotifications operation on AmazonGlacierClient.</param>
+            <param name="callback">An AsyncCallback delegate that is invoked when the operation completes.</param>
+            <param name="state">A user-defined state object that is passed to the callback procedure. Retrieve this object from within the callback
+                     procedure using the AsyncState property.</param>
+            
+            <returns>An IAsyncResult that can be used to poll or wait for results, or both; this value is also needed when invoking EndGetVaultNotifications
+                    operation.</returns>
+        </member>
+        <member name="M:Amazon.Glacier.IAmazonGlacier.EndGetVaultNotifications(System.IAsyncResult)">
+            <summary>
+            Finishes the asynchronous execution of the  GetVaultNotifications operation.
+            </summary>
+            
+            <param name="asyncResult">The IAsyncResult returned by the call to BeginGetVaultNotifications.</param>
+            
+            <returns>Returns a  GetVaultNotificationsResult from Glacier.</returns>
         </member>
         <member name="M:Amazon.Glacier.IAmazonGlacier.InitiateJob(Amazon.Glacier.Model.InitiateJobRequest)">
             <summary>
@@ -9982,16 +10459,27 @@
             Returned if the service cannot complete the request.
             </exception>
         </member>
-        <member name="M:Amazon.Glacier.IAmazonGlacier.InitiateJobAsync(Amazon.Glacier.Model.InitiateJobRequest,System.Threading.CancellationToken)">
+        <member name="M:Amazon.Glacier.IAmazonGlacier.BeginInitiateJob(Amazon.Glacier.Model.InitiateJobRequest,System.AsyncCallback,System.Object)">
             <summary>
             Initiates the asynchronous execution of the InitiateJob operation.
             </summary>
             
-            <param name="request">Container for the necessary parameters to execute the InitiateJob operation.</param>
-            <param name="cancellationToken">
-                A cancellation token that can be used by other objects or threads to receive notice of cancellation.
-            </param>
-            <returns>The task object representing the asynchronous operation.</returns>
+            <param name="request">Container for the necessary parameters to execute the InitiateJob operation on AmazonGlacierClient.</param>
+            <param name="callback">An AsyncCallback delegate that is invoked when the operation completes.</param>
+            <param name="state">A user-defined state object that is passed to the callback procedure. Retrieve this object from within the callback
+                     procedure using the AsyncState property.</param>
+            
+            <returns>An IAsyncResult that can be used to poll or wait for results, or both; this value is also needed when invoking EndInitiateJob
+                    operation.</returns>
+        </member>
+        <member name="M:Amazon.Glacier.IAmazonGlacier.EndInitiateJob(System.IAsyncResult)">
+            <summary>
+            Finishes the asynchronous execution of the  InitiateJob operation.
+            </summary>
+            
+            <param name="asyncResult">The IAsyncResult returned by the call to BeginInitiateJob.</param>
+            
+            <returns>Returns a  InitiateJobResult from Glacier.</returns>
         </member>
         <member name="M:Amazon.Glacier.IAmazonGlacier.InitiateMultipartUpload(Amazon.Glacier.Model.InitiateMultipartUploadRequest)">
             <summary>
@@ -10058,28 +10546,50 @@
             Returned if the service cannot complete the request.
             </exception>
         </member>
-        <member name="M:Amazon.Glacier.IAmazonGlacier.InitiateMultipartUploadAsync(Amazon.Glacier.Model.InitiateMultipartUploadRequest,System.Threading.CancellationToken)">
+        <member name="M:Amazon.Glacier.IAmazonGlacier.BeginInitiateMultipartUpload(Amazon.Glacier.Model.InitiateMultipartUploadRequest,System.AsyncCallback,System.Object)">
             <summary>
             Initiates the asynchronous execution of the InitiateMultipartUpload operation.
             </summary>
             
-            <param name="request">Container for the necessary parameters to execute the InitiateMultipartUpload operation.</param>
-            <param name="cancellationToken">
-                A cancellation token that can be used by other objects or threads to receive notice of cancellation.
-            </param>
-            <returns>The task object representing the asynchronous operation.</returns>
+            <param name="request">Container for the necessary parameters to execute the InitiateMultipartUpload operation on AmazonGlacierClient.</param>
+            <param name="callback">An AsyncCallback delegate that is invoked when the operation completes.</param>
+            <param name="state">A user-defined state object that is passed to the callback procedure. Retrieve this object from within the callback
+                     procedure using the AsyncState property.</param>
+            
+            <returns>An IAsyncResult that can be used to poll or wait for results, or both; this value is also needed when invoking EndInitiateMultipartUpload
+                    operation.</returns>
+        </member>
+        <member name="M:Amazon.Glacier.IAmazonGlacier.EndInitiateMultipartUpload(System.IAsyncResult)">
+            <summary>
+            Finishes the asynchronous execution of the  InitiateMultipartUpload operation.
+            </summary>
+            
+            <param name="asyncResult">The IAsyncResult returned by the call to BeginInitiateMultipartUpload.</param>
+            
+            <returns>Returns a  InitiateMultipartUploadResult from Glacier.</returns>
         </member>
         <!-- Badly formed XML comment ignored for member "M:Amazon.Glacier.IAmazonGlacier.InitiateVaultLock(Amazon.Glacier.Model.InitiateVaultLockRequest)" -->
-        <member name="M:Amazon.Glacier.IAmazonGlacier.InitiateVaultLockAsync(Amazon.Glacier.Model.InitiateVaultLockRequest,System.Threading.CancellationToken)">
+        <member name="M:Amazon.Glacier.IAmazonGlacier.BeginInitiateVaultLock(Amazon.Glacier.Model.InitiateVaultLockRequest,System.AsyncCallback,System.Object)">
             <summary>
             Initiates the asynchronous execution of the InitiateVaultLock operation.
             </summary>
             
-            <param name="request">Container for the necessary parameters to execute the InitiateVaultLock operation.</param>
-            <param name="cancellationToken">
-                A cancellation token that can be used by other objects or threads to receive notice of cancellation.
-            </param>
-            <returns>The task object representing the asynchronous operation.</returns>
+            <param name="request">Container for the necessary parameters to execute the InitiateVaultLock operation on AmazonGlacierClient.</param>
+            <param name="callback">An AsyncCallback delegate that is invoked when the operation completes.</param>
+            <param name="state">A user-defined state object that is passed to the callback procedure. Retrieve this object from within the callback
+                     procedure using the AsyncState property.</param>
+            
+            <returns>An IAsyncResult that can be used to poll or wait for results, or both; this value is also needed when invoking EndInitiateVaultLock
+                    operation.</returns>
+        </member>
+        <member name="M:Amazon.Glacier.IAmazonGlacier.EndInitiateVaultLock(System.IAsyncResult)">
+            <summary>
+            Finishes the asynchronous execution of the  InitiateVaultLock operation.
+            </summary>
+            
+            <param name="asyncResult">The IAsyncResult returned by the call to BeginInitiateVaultLock.</param>
+            
+            <returns>Returns a  InitiateVaultLockResult from Glacier.</returns>
         </member>
         <member name="M:Amazon.Glacier.IAmazonGlacier.ListJobs(Amazon.Glacier.Model.ListJobsRequest)">
             <summary>
@@ -10154,16 +10664,27 @@
             Returned if the service cannot complete the request.
             </exception>
         </member>
-        <member name="M:Amazon.Glacier.IAmazonGlacier.ListJobsAsync(Amazon.Glacier.Model.ListJobsRequest,System.Threading.CancellationToken)">
+        <member name="M:Amazon.Glacier.IAmazonGlacier.BeginListJobs(Amazon.Glacier.Model.ListJobsRequest,System.AsyncCallback,System.Object)">
             <summary>
             Initiates the asynchronous execution of the ListJobs operation.
             </summary>
             
-            <param name="request">Container for the necessary parameters to execute the ListJobs operation.</param>
-            <param name="cancellationToken">
-                A cancellation token that can be used by other objects or threads to receive notice of cancellation.
-            </param>
-            <returns>The task object representing the asynchronous operation.</returns>
+            <param name="request">Container for the necessary parameters to execute the ListJobs operation on AmazonGlacierClient.</param>
+            <param name="callback">An AsyncCallback delegate that is invoked when the operation completes.</param>
+            <param name="state">A user-defined state object that is passed to the callback procedure. Retrieve this object from within the callback
+                     procedure using the AsyncState property.</param>
+            
+            <returns>An IAsyncResult that can be used to poll or wait for results, or both; this value is also needed when invoking EndListJobs
+                    operation.</returns>
+        </member>
+        <member name="M:Amazon.Glacier.IAmazonGlacier.EndListJobs(System.IAsyncResult)">
+            <summary>
+            Finishes the asynchronous execution of the  ListJobs operation.
+            </summary>
+            
+            <param name="asyncResult">The IAsyncResult returned by the call to BeginListJobs.</param>
+            
+            <returns>Returns a  ListJobsResult from Glacier.</returns>
         </member>
         <member name="M:Amazon.Glacier.IAmazonGlacier.ListMultipartUploads(Amazon.Glacier.Model.ListMultipartUploadsRequest)">
             <summary>
@@ -10222,16 +10743,27 @@
             Returned if the service cannot complete the request.
             </exception>
         </member>
-        <member name="M:Amazon.Glacier.IAmazonGlacier.ListMultipartUploadsAsync(Amazon.Glacier.Model.ListMultipartUploadsRequest,System.Threading.CancellationToken)">
+        <member name="M:Amazon.Glacier.IAmazonGlacier.BeginListMultipartUploads(Amazon.Glacier.Model.ListMultipartUploadsRequest,System.AsyncCallback,System.Object)">
             <summary>
             Initiates the asynchronous execution of the ListMultipartUploads operation.
             </summary>
             
-            <param name="request">Container for the necessary parameters to execute the ListMultipartUploads operation.</param>
-            <param name="cancellationToken">
-                A cancellation token that can be used by other objects or threads to receive notice of cancellation.
-            </param>
-            <returns>The task object representing the asynchronous operation.</returns>
+            <param name="request">Container for the necessary parameters to execute the ListMultipartUploads operation on AmazonGlacierClient.</param>
+            <param name="callback">An AsyncCallback delegate that is invoked when the operation completes.</param>
+            <param name="state">A user-defined state object that is passed to the callback procedure. Retrieve this object from within the callback
+                     procedure using the AsyncState property.</param>
+            
+            <returns>An IAsyncResult that can be used to poll or wait for results, or both; this value is also needed when invoking EndListMultipartUploads
+                    operation.</returns>
+        </member>
+        <member name="M:Amazon.Glacier.IAmazonGlacier.EndListMultipartUploads(System.IAsyncResult)">
+            <summary>
+            Finishes the asynchronous execution of the  ListMultipartUploads operation.
+            </summary>
+            
+            <param name="asyncResult">The IAsyncResult returned by the call to BeginListMultipartUploads.</param>
+            
+            <returns>Returns a  ListMultipartUploadsResult from Glacier.</returns>
         </member>
         <member name="M:Amazon.Glacier.IAmazonGlacier.ListParts(Amazon.Glacier.Model.ListPartsRequest)">
             <summary>
@@ -10284,16 +10816,27 @@
             Returned if the service cannot complete the request.
             </exception>
         </member>
-        <member name="M:Amazon.Glacier.IAmazonGlacier.ListPartsAsync(Amazon.Glacier.Model.ListPartsRequest,System.Threading.CancellationToken)">
+        <member name="M:Amazon.Glacier.IAmazonGlacier.BeginListParts(Amazon.Glacier.Model.ListPartsRequest,System.AsyncCallback,System.Object)">
             <summary>
             Initiates the asynchronous execution of the ListParts operation.
             </summary>
             
-            <param name="request">Container for the necessary parameters to execute the ListParts operation.</param>
-            <param name="cancellationToken">
-                A cancellation token that can be used by other objects or threads to receive notice of cancellation.
-            </param>
-            <returns>The task object representing the asynchronous operation.</returns>
+            <param name="request">Container for the necessary parameters to execute the ListParts operation on AmazonGlacierClient.</param>
+            <param name="callback">An AsyncCallback delegate that is invoked when the operation completes.</param>
+            <param name="state">A user-defined state object that is passed to the callback procedure. Retrieve this object from within the callback
+                     procedure using the AsyncState property.</param>
+            
+            <returns>An IAsyncResult that can be used to poll or wait for results, or both; this value is also needed when invoking EndListParts
+                    operation.</returns>
+        </member>
+        <member name="M:Amazon.Glacier.IAmazonGlacier.EndListParts(System.IAsyncResult)">
+            <summary>
+            Finishes the asynchronous execution of the  ListParts operation.
+            </summary>
+            
+            <param name="asyncResult">The IAsyncResult returned by the call to BeginListParts.</param>
+            
+            <returns>Returns a  ListPartsResult from Glacier.</returns>
         </member>
         <member name="M:Amazon.Glacier.IAmazonGlacier.ListTagsForVault(Amazon.Glacier.Model.ListTagsForVaultRequest)">
             <summary>
@@ -10318,16 +10861,27 @@
             Returned if the service cannot complete the request.
             </exception>
         </member>
-        <member name="M:Amazon.Glacier.IAmazonGlacier.ListTagsForVaultAsync(Amazon.Glacier.Model.ListTagsForVaultRequest,System.Threading.CancellationToken)">
+        <member name="M:Amazon.Glacier.IAmazonGlacier.BeginListTagsForVault(Amazon.Glacier.Model.ListTagsForVaultRequest,System.AsyncCallback,System.Object)">
             <summary>
             Initiates the asynchronous execution of the ListTagsForVault operation.
             </summary>
             
-            <param name="request">Container for the necessary parameters to execute the ListTagsForVault operation.</param>
-            <param name="cancellationToken">
-                A cancellation token that can be used by other objects or threads to receive notice of cancellation.
-            </param>
-            <returns>The task object representing the asynchronous operation.</returns>
+            <param name="request">Container for the necessary parameters to execute the ListTagsForVault operation on AmazonGlacierClient.</param>
+            <param name="callback">An AsyncCallback delegate that is invoked when the operation completes.</param>
+            <param name="state">A user-defined state object that is passed to the callback procedure. Retrieve this object from within the callback
+                     procedure using the AsyncState property.</param>
+            
+            <returns>An IAsyncResult that can be used to poll or wait for results, or both; this value is also needed when invoking EndListTagsForVault
+                    operation.</returns>
+        </member>
+        <member name="M:Amazon.Glacier.IAmazonGlacier.EndListTagsForVault(System.IAsyncResult)">
+            <summary>
+            Finishes the asynchronous execution of the  ListTagsForVault operation.
+            </summary>
+            
+            <param name="asyncResult">The IAsyncResult returned by the call to BeginListTagsForVault.</param>
+            
+            <returns>Returns a  ListTagsForVaultResult from Glacier.</returns>
         </member>
         <member name="M:Amazon.Glacier.IAmazonGlacier.ListVaults">
             <summary>
@@ -10424,66 +10978,27 @@
             Returned if the service cannot complete the request.
             </exception>
         </member>
-        <member name="M:Amazon.Glacier.IAmazonGlacier.ListVaultsAsync(System.Threading.CancellationToken)">
-            <summary>
-            This operation lists all vaults owned by the calling user's account. The list returned
-            in the response is ASCII-sorted by vault name. 
-            
-             
-            <para>
-            By default, this operation returns up to 1,000 items. If there are more vaults to
-            list, the response <code class="code">marker</code> field contains the vault Amazon
-            Resource Name (ARN) at which to continue the list with a new List Vaults request;
-            otherwise, the <code class="code">marker</code> field is <code class="code">null</code>.
-            To return a list of vaults that begins at a specific vault, set the <code class="code">marker</code>
-            request parameter to the vault ARN you obtained from a previous List Vaults request.
-            You can also limit the number of vaults returned in the response by specifying the
-            <code class="code">limit</code> parameter in the request. 
-            </para>
-             
-            <para>
-            An AWS account has full permission to perform all operations (actions). However, AWS
-            Identity and Access Management (IAM) users don't have any permissions by default.
-            You must grant them explicit permission to perform specific actions. For more information,
-            see <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/using-iam-with-amazon-glacier.html">Access
-            Control Using AWS Identity and Access Management (IAM)</a>.
-            </para>
-             
-            <para>
-            For conceptual information and underlying REST API, go to <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/retrieving-vault-info.html">Retrieving
-            Vault Metadata in Amazon Glacier</a> and <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/api-vaults-get.html">List
-            Vaults </a> in the <i>Amazon Glacier Developer Guide</i>. 
-            </para>
-            </summary>
-            <param name="cancellationToken">
-                A cancellation token that can be used by other objects or threads to receive notice of cancellation.
-            </param>
-            
-            <returns>The response from the ListVaults service method, as returned by Glacier.</returns>
-            <exception cref="T:Amazon.Glacier.Model.InvalidParameterValueException">
-            Returned if a parameter of the request is incorrectly specified.
-            </exception>
-            <exception cref="T:Amazon.Glacier.Model.MissingParameterValueException">
-            Returned if a required header or parameter is missing from the request.
-            </exception>
-            <exception cref="T:Amazon.Glacier.Model.ResourceNotFoundException">
-            Returned if the specified resource, such as a vault, upload ID, or job ID, does not
-            exist.
-            </exception>
-            <exception cref="T:Amazon.Glacier.Model.ServiceUnavailableException">
-            Returned if the service cannot complete the request.
-            </exception>
-        </member>
-        <member name="M:Amazon.Glacier.IAmazonGlacier.ListVaultsAsync(Amazon.Glacier.Model.ListVaultsRequest,System.Threading.CancellationToken)">
+        <member name="M:Amazon.Glacier.IAmazonGlacier.BeginListVaults(Amazon.Glacier.Model.ListVaultsRequest,System.AsyncCallback,System.Object)">
             <summary>
             Initiates the asynchronous execution of the ListVaults operation.
             </summary>
             
-            <param name="request">Container for the necessary parameters to execute the ListVaults operation.</param>
-            <param name="cancellationToken">
-                A cancellation token that can be used by other objects or threads to receive notice of cancellation.
-            </param>
-            <returns>The task object representing the asynchronous operation.</returns>
+            <param name="request">Container for the necessary parameters to execute the ListVaults operation on AmazonGlacierClient.</param>
+            <param name="callback">An AsyncCallback delegate that is invoked when the operation completes.</param>
+            <param name="state">A user-defined state object that is passed to the callback procedure. Retrieve this object from within the callback
+                     procedure using the AsyncState property.</param>
+            
+            <returns>An IAsyncResult that can be used to poll or wait for results, or both; this value is also needed when invoking EndListVaults
+                    operation.</returns>
+        </member>
+        <member name="M:Amazon.Glacier.IAmazonGlacier.EndListVaults(System.IAsyncResult)">
+            <summary>
+            Finishes the asynchronous execution of the  ListVaults operation.
+            </summary>
+            
+            <param name="asyncResult">The IAsyncResult returned by the call to BeginListVaults.</param>
+            
+            <returns>Returns a  ListVaultsResult from Glacier.</returns>
         </member>
         <member name="M:Amazon.Glacier.IAmazonGlacier.RemoveTagsFromVault(Amazon.Glacier.Model.RemoveTagsFromVaultRequest)">
             <summary>
@@ -10509,16 +11024,27 @@
             Returned if the service cannot complete the request.
             </exception>
         </member>
-        <member name="M:Amazon.Glacier.IAmazonGlacier.RemoveTagsFromVaultAsync(Amazon.Glacier.Model.RemoveTagsFromVaultRequest,System.Threading.CancellationToken)">
+        <member name="M:Amazon.Glacier.IAmazonGlacier.BeginRemoveTagsFromVault(Amazon.Glacier.Model.RemoveTagsFromVaultRequest,System.AsyncCallback,System.Object)">
             <summary>
             Initiates the asynchronous execution of the RemoveTagsFromVault operation.
             </summary>
             
-            <param name="request">Container for the necessary parameters to execute the RemoveTagsFromVault operation.</param>
-            <param name="cancellationToken">
-                A cancellation token that can be used by other objects or threads to receive notice of cancellation.
-            </param>
-            <returns>The task object representing the asynchronous operation.</returns>
+            <param name="request">Container for the necessary parameters to execute the RemoveTagsFromVault operation on AmazonGlacierClient.</param>
+            <param name="callback">An AsyncCallback delegate that is invoked when the operation completes.</param>
+            <param name="state">A user-defined state object that is passed to the callback procedure. Retrieve this object from within the callback
+                     procedure using the AsyncState property.</param>
+            
+            <returns>An IAsyncResult that can be used to poll or wait for results, or both; this value is also needed when invoking EndRemoveTagsFromVault
+                    operation.</returns>
+        </member>
+        <member name="M:Amazon.Glacier.IAmazonGlacier.EndRemoveTagsFromVault(System.IAsyncResult)">
+            <summary>
+            Finishes the asynchronous execution of the  RemoveTagsFromVault operation.
+            </summary>
+            
+            <param name="asyncResult">The IAsyncResult returned by the call to BeginRemoveTagsFromVault.</param>
+            
+            <returns>Returns a  RemoveTagsFromVaultResult from Glacier.</returns>
         </member>
         <member name="M:Amazon.Glacier.IAmazonGlacier.SetDataRetrievalPolicy(Amazon.Glacier.Model.SetDataRetrievalPolicyRequest)">
             <summary>
@@ -10547,16 +11073,27 @@
             Returned if the service cannot complete the request.
             </exception>
         </member>
-        <member name="M:Amazon.Glacier.IAmazonGlacier.SetDataRetrievalPolicyAsync(Amazon.Glacier.Model.SetDataRetrievalPolicyRequest,System.Threading.CancellationToken)">
+        <member name="M:Amazon.Glacier.IAmazonGlacier.BeginSetDataRetrievalPolicy(Amazon.Glacier.Model.SetDataRetrievalPolicyRequest,System.AsyncCallback,System.Object)">
             <summary>
             Initiates the asynchronous execution of the SetDataRetrievalPolicy operation.
             </summary>
             
-            <param name="request">Container for the necessary parameters to execute the SetDataRetrievalPolicy operation.</param>
-            <param name="cancellationToken">
-                A cancellation token that can be used by other objects or threads to receive notice of cancellation.
-            </param>
-            <returns>The task object representing the asynchronous operation.</returns>
+            <param name="request">Container for the necessary parameters to execute the SetDataRetrievalPolicy operation on AmazonGlacierClient.</param>
+            <param name="callback">An AsyncCallback delegate that is invoked when the operation completes.</param>
+            <param name="state">A user-defined state object that is passed to the callback procedure. Retrieve this object from within the callback
+                     procedure using the AsyncState property.</param>
+            
+            <returns>An IAsyncResult that can be used to poll or wait for results, or both; this value is also needed when invoking EndSetDataRetrievalPolicy
+                    operation.</returns>
+        </member>
+        <member name="M:Amazon.Glacier.IAmazonGlacier.EndSetDataRetrievalPolicy(System.IAsyncResult)">
+            <summary>
+            Finishes the asynchronous execution of the  SetDataRetrievalPolicy operation.
+            </summary>
+            
+            <param name="asyncResult">The IAsyncResult returned by the call to BeginSetDataRetrievalPolicy.</param>
+            
+            <returns>Returns a  SetDataRetrievalPolicyResult from Glacier.</returns>
         </member>
         <member name="M:Amazon.Glacier.IAmazonGlacier.SetVaultAccessPolicy(Amazon.Glacier.Model.SetVaultAccessPolicyRequest)">
             <summary>
@@ -10584,16 +11121,27 @@
             Returned if the service cannot complete the request.
             </exception>
         </member>
-        <member name="M:Amazon.Glacier.IAmazonGlacier.SetVaultAccessPolicyAsync(Amazon.Glacier.Model.SetVaultAccessPolicyRequest,System.Threading.CancellationToken)">
+        <member name="M:Amazon.Glacier.IAmazonGlacier.BeginSetVaultAccessPolicy(Amazon.Glacier.Model.SetVaultAccessPolicyRequest,System.AsyncCallback,System.Object)">
             <summary>
             Initiates the asynchronous execution of the SetVaultAccessPolicy operation.
             </summary>
             
-            <param name="request">Container for the necessary parameters to execute the SetVaultAccessPolicy operation.</param>
-            <param name="cancellationToken">
-                A cancellation token that can be used by other objects or threads to receive notice of cancellation.
-            </param>
-            <returns>The task object representing the asynchronous operation.</returns>
+            <param name="request">Container for the necessary parameters to execute the SetVaultAccessPolicy operation on AmazonGlacierClient.</param>
+            <param name="callback">An AsyncCallback delegate that is invoked when the operation completes.</param>
+            <param name="state">A user-defined state object that is passed to the callback procedure. Retrieve this object from within the callback
+                     procedure using the AsyncState property.</param>
+            
+            <returns>An IAsyncResult that can be used to poll or wait for results, or both; this value is also needed when invoking EndSetVaultAccessPolicy
+                    operation.</returns>
+        </member>
+        <member name="M:Amazon.Glacier.IAmazonGlacier.EndSetVaultAccessPolicy(System.IAsyncResult)">
+            <summary>
+            Finishes the asynchronous execution of the  SetVaultAccessPolicy operation.
+            </summary>
+            
+            <param name="asyncResult">The IAsyncResult returned by the call to BeginSetVaultAccessPolicy.</param>
+            
+            <returns>Returns a  SetVaultAccessPolicyResult from Glacier.</returns>
         </member>
         <member name="M:Amazon.Glacier.IAmazonGlacier.SetVaultNotifications(Amazon.Glacier.Model.SetVaultNotificationsRequest)">
             <summary>
@@ -10653,16 +11201,27 @@
             Returned if the service cannot complete the request.
             </exception>
         </member>
-        <member name="M:Amazon.Glacier.IAmazonGlacier.SetVaultNotificationsAsync(Amazon.Glacier.Model.SetVaultNotificationsRequest,System.Threading.CancellationToken)">
+        <member name="M:Amazon.Glacier.IAmazonGlacier.BeginSetVaultNotifications(Amazon.Glacier.Model.SetVaultNotificationsRequest,System.AsyncCallback,System.Object)">
             <summary>
             Initiates the asynchronous execution of the SetVaultNotifications operation.
             </summary>
             
-            <param name="request">Container for the necessary parameters to execute the SetVaultNotifications operation.</param>
-            <param name="cancellationToken">
-                A cancellation token that can be used by other objects or threads to receive notice of cancellation.
-            </param>
-            <returns>The task object representing the asynchronous operation.</returns>
+            <param name="request">Container for the necessary parameters to execute the SetVaultNotifications operation on AmazonGlacierClient.</param>
+            <param name="callback">An AsyncCallback delegate that is invoked when the operation completes.</param>
+            <param name="state">A user-defined state object that is passed to the callback procedure. Retrieve this object from within the callback
+                     procedure using the AsyncState property.</param>
+            
+            <returns>An IAsyncResult that can be used to poll or wait for results, or both; this value is also needed when invoking EndSetVaultNotifications
+                    operation.</returns>
+        </member>
+        <member name="M:Amazon.Glacier.IAmazonGlacier.EndSetVaultNotifications(System.IAsyncResult)">
+            <summary>
+            Finishes the asynchronous execution of the  SetVaultNotifications operation.
+            </summary>
+            
+            <param name="asyncResult">The IAsyncResult returned by the call to BeginSetVaultNotifications.</param>
+            
+            <returns>Returns a  SetVaultNotificationsResult from Glacier.</returns>
         </member>
         <member name="M:Amazon.Glacier.IAmazonGlacier.UploadArchive(Amazon.Glacier.Model.UploadArchiveRequest)">
             <summary>
@@ -10736,16 +11295,27 @@
             Returned if the service cannot complete the request.
             </exception>
         </member>
-        <member name="M:Amazon.Glacier.IAmazonGlacier.UploadArchiveAsync(Amazon.Glacier.Model.UploadArchiveRequest,System.Threading.CancellationToken)">
+        <member name="M:Amazon.Glacier.IAmazonGlacier.BeginUploadArchive(Amazon.Glacier.Model.UploadArchiveRequest,System.AsyncCallback,System.Object)">
             <summary>
             Initiates the asynchronous execution of the UploadArchive operation.
             </summary>
             
-            <param name="request">Container for the necessary parameters to execute the UploadArchive operation.</param>
-            <param name="cancellationToken">
-                A cancellation token that can be used by other objects or threads to receive notice of cancellation.
-            </param>
-            <returns>The task object representing the asynchronous operation.</returns>
+            <param name="request">Container for the necessary parameters to execute the UploadArchive operation on AmazonGlacierClient.</param>
+            <param name="callback">An AsyncCallback delegate that is invoked when the operation completes.</param>
+            <param name="state">A user-defined state object that is passed to the callback procedure. Retrieve this object from within the callback
+                     procedure using the AsyncState property.</param>
+            
+            <returns>An IAsyncResult that can be used to poll or wait for results, or both; this value is also needed when invoking EndUploadArchive
+                    operation.</returns>
+        </member>
+        <member name="M:Amazon.Glacier.IAmazonGlacier.EndUploadArchive(System.IAsyncResult)">
+            <summary>
+            Finishes the asynchronous execution of the  UploadArchive operation.
+            </summary>
+            
+            <param name="asyncResult">The IAsyncResult returned by the call to BeginUploadArchive.</param>
+            
+            <returns>Returns a  UploadArchiveResult from Glacier.</returns>
         </member>
         <member name="M:Amazon.Glacier.IAmazonGlacier.UploadMultipartPart(Amazon.Glacier.Model.UploadMultipartPartRequest)">
             <summary>
@@ -10826,16 +11396,27 @@
             Returned if the service cannot complete the request.
             </exception>
         </member>
-        <member name="M:Amazon.Glacier.IAmazonGlacier.UploadMultipartPartAsync(Amazon.Glacier.Model.UploadMultipartPartRequest,System.Threading.CancellationToken)">
+        <member name="M:Amazon.Glacier.IAmazonGlacier.BeginUploadMultipartPart(Amazon.Glacier.Model.UploadMultipartPartRequest,System.AsyncCallback,System.Object)">
             <summary>
             Initiates the asynchronous execution of the UploadMultipartPart operation.
             </summary>
             
-            <param name="request">Container for the necessary parameters to execute the UploadMultipartPart operation.</param>
-            <param name="cancellationToken">
-                A cancellation token that can be used by other objects or threads to receive notice of cancellation.
-            </param>
-            <returns>The task object representing the asynchronous operation.</returns>
+            <param name="request">Container for the necessary parameters to execute the UploadMultipartPart operation on AmazonGlacierClient.</param>
+            <param name="callback">An AsyncCallback delegate that is invoked when the operation completes.</param>
+            <param name="state">A user-defined state object that is passed to the callback procedure. Retrieve this object from within the callback
+                     procedure using the AsyncState property.</param>
+            
+            <returns>An IAsyncResult that can be used to poll or wait for results, or both; this value is also needed when invoking EndUploadMultipartPart
+                    operation.</returns>
+        </member>
+        <member name="M:Amazon.Glacier.IAmazonGlacier.EndUploadMultipartPart(System.IAsyncResult)">
+            <summary>
+            Finishes the asynchronous execution of the  UploadMultipartPart operation.
+            </summary>
+            
+            <param name="asyncResult">The IAsyncResult returned by the call to BeginUploadMultipartPart.</param>
+            
+            <returns>Returns a  UploadMultipartPartResult from Glacier.</returns>
         </member>
     </members>
 </doc>

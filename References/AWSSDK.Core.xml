@@ -2464,14 +2464,6 @@
              </summary>
              <returns></returns>
         </member>
-        <member name="M:Amazon.Runtime.RefreshingAWSCredentials.GenerateNewCredentialsAsync">
-             <summary>
-             When overridden in a derived class, generates new credentials and new expiration date.
-            
-             Called on first credentials request and when expiration date is in the past.
-             </summary>
-             <returns></returns>
-        </member>
         <member name="M:Amazon.Runtime.RefreshingAWSCredentials.ClearCredentials">
             <summary>
             Clears currently-stored credentials, forcing the next GetCredentials call to generate new credentials.
@@ -5938,16 +5930,37 @@
             <param name="executionContext">The execution context which contains both the
             requests and response context.</param>
         </member>
-        <member name="M:Amazon.Runtime.Internal.PipelineHandler.InvokeAsync``1(Amazon.Runtime.IExecutionContext)">
+        <member name="M:Amazon.Runtime.Internal.PipelineHandler.InvokeAsync(Amazon.Runtime.IAsyncExecutionContext)">
             <summary>
             Contains the processing logic for an asynchronous request invocation.
-            This method calls InnerHandler.InvokeSync to continue processing of the
+            This method should calls InnerHandler.InvokeSync to continue processing of the
             request by the pipeline.
             </summary>
-            <typeparam name="T">The response type for the current request.</typeparam>
+            <param name="executionContext">The execution context which contains both the
+            requests and response context.</param>
+            <returns>IAsyncResult which represent an async operation.</returns>
+        </member>
+        <member name="M:Amazon.Runtime.Internal.PipelineHandler.AsyncCallback(Amazon.Runtime.IAsyncExecutionContext)">
+            <summary>
+            This callback method is called by the callback method of the inner handler
+            as part of asynchronous processing after any underlying asynchronous
+            operations complete. 
+            </summary>
             <param name="executionContext">The execution context, it contains the
             request and response context.</param>
-            <returns>A task that represents the asynchronous operation.</returns>
+        </member>
+        <member name="M:Amazon.Runtime.Internal.PipelineHandler.InvokeAsyncCallback(Amazon.Runtime.IAsyncExecutionContext)">
+            <summary>
+            This callback method contains the processing logic that should be executed 
+            after the underlying asynchronous operation completes.
+            This method is called as part of a callback chain which starts 
+            from the InvokeAsyncCallback method of the bottommost handler and then invokes
+            each callback method of the handler above it.
+            This method calls OuterHandler.AsyncCallback to continue processing of the
+            request by the pipeline, unless it's the topmost handler.
+            </summary>
+            <param name="executionContext">The execution context, it contains the
+            request and response context.</param>
         </member>
         <member name="M:Amazon.Runtime.Internal.PipelineHandler.LogMetrics(Amazon.Runtime.IExecutionContext)">
             <summary>
@@ -6000,12 +6013,12 @@
             <param name="executionContext">Request context</param>
             <returns>Response context</returns>
         </member>
-        <member name="M:Amazon.Runtime.Internal.RuntimePipeline.InvokeAsync``1(Amazon.Runtime.IExecutionContext)">
+        <member name="M:Amazon.Runtime.Internal.RuntimePipeline.InvokeAsync(Amazon.Runtime.IAsyncExecutionContext)">
             <summary>
             Invokes the pipeline asynchronously.
             </summary>
             <param name="executionContext">Request context</param>
-            <returns>Response context</returns>
+            <returns>IAsyncResult which represents the in progress asynchronous operation.</returns>
         </member>
         <member name="M:Amazon.Runtime.Internal.RuntimePipeline.AddHandler(Amazon.Runtime.IPipelineHandler)">
             <summary>
@@ -6094,14 +6107,12 @@
             <param name="executionContext">The execution context which contains both the
             requests and response context.</param>
         </member>
-        <member name="M:Amazon.Runtime.Internal.ErrorHandler.InvokeAsync``1(Amazon.Runtime.IExecutionContext)">
+        <member name="M:Amazon.Runtime.Internal.ErrorHandler.InvokeAsyncCallback(Amazon.Runtime.IAsyncExecutionContext)">
             <summary>
-            Handles and processes any exception thrown from underlying handlers.
+             Handles and processes any exception thrown from underlying handlers.
             </summary>
-            <typeparam name="T">The response type for the current request.</typeparam>
             <param name="executionContext">The execution context, it contains the
             request and response context.</param>
-            <returns>A task that represents the asynchronous operation.</returns>
         </member>
         <member name="M:Amazon.Runtime.Internal.ErrorHandler.DisposeReponse(Amazon.Runtime.IResponseContext)">
             <summary>
@@ -6197,15 +6208,21 @@
             <param name="executionContext">The execution context which contains both the
             requests and response context.</param>
         </member>
-        <member name="M:Amazon.Runtime.Internal.CallbackHandler.InvokeAsync``1(Amazon.Runtime.IExecutionContext)">
+        <member name="M:Amazon.Runtime.Internal.CallbackHandler.InvokeAsync(Amazon.Runtime.IAsyncExecutionContext)">
             <summary>
-            Calls the PreInvoke and PostInvoke methods before and after calling the next handler 
+            Calls the PreInvoke method before calling the next handler in the pipeline.
+            </summary>
+            <param name="executionContext">The execution context which contains both the
+            requests and response context.</param>
+            <returns>IAsyncResult which represent an async operation.</returns>
+        </member>
+        <member name="M:Amazon.Runtime.Internal.CallbackHandler.InvokeAsyncCallback(Amazon.Runtime.IAsyncExecutionContext)">
+            <summary>
+            Calls the PostInvoke methods after calling the next handler 
             in the pipeline.
             </summary>
-            <typeparam name="T">The response type for the current request.</typeparam>
             <param name="executionContext">The execution context, it contains the
             request and response context.</param>
-            <returns>A task that represents the asynchronous operation.</returns>
         </member>
         <member name="M:Amazon.Runtime.Internal.CallbackHandler.PreInvoke(Amazon.Runtime.IExecutionContext)">
             <summary>
@@ -6247,15 +6264,14 @@
             <param name="executionContext">The execution context which contains both the
             requests and response context.</param>
         </member>
-        <member name="M:Amazon.Runtime.Internal.CredentialsRetriever.InvokeAsync``1(Amazon.Runtime.IExecutionContext)">
+        <member name="M:Amazon.Runtime.Internal.CredentialsRetriever.InvokeAsync(Amazon.Runtime.IAsyncExecutionContext)">
             <summary>
             Calls pre invoke logic before calling the next handler 
             in the pipeline.
             </summary>
-            <typeparam name="T">The response type for the current request.</typeparam>
-            <param name="executionContext">The execution context, it contains the
-            request and response context.</param>
-            <returns>A task that represents the asynchronous operation.</returns>
+            <param name="executionContext">The execution context which contains both the
+            requests and response context.</param>
+            <returns>IAsyncResult which represent an async operation.</returns>
         </member>
         <member name="T:Amazon.Runtime.Internal.EndpointResolver">
             <summary>
@@ -6270,15 +6286,14 @@
             <param name="executionContext">The execution context which contains both the
             requests and response context.</param>
         </member>
-        <member name="M:Amazon.Runtime.Internal.EndpointResolver.InvokeAsync``1(Amazon.Runtime.IExecutionContext)">
+        <member name="M:Amazon.Runtime.Internal.EndpointResolver.InvokeAsync(Amazon.Runtime.IAsyncExecutionContext)">
             <summary>
             Calls pre invoke logic before calling the next handler 
             in the pipeline.
             </summary>
-            <typeparam name="T">The response type for the current request.</typeparam>
-            <param name="executionContext">The execution context, it contains the
-            request and response context.</param>
-            <returns>A task that represents the asynchronous operation.</returns>
+            <param name="executionContext">The execution context which contains both the
+            requests and response context.</param>
+            <returns>IAsyncResult which represent an async operation.</returns>
         </member>
         <member name="M:Amazon.Runtime.Internal.EndpointResolver.PreInvoke(Amazon.Runtime.IExecutionContext)">
             <summary>
@@ -6328,15 +6343,14 @@
             <param name="executionContext">The execution context which contains both the
             requests and response context.</param>
         </member>
-        <member name="M:Amazon.Runtime.Internal.Marshaller.InvokeAsync``1(Amazon.Runtime.IExecutionContext)">
+        <member name="M:Amazon.Runtime.Internal.Marshaller.InvokeAsync(Amazon.Runtime.IAsyncExecutionContext)">
             <summary>
             Calls pre invoke logic before calling the next handler 
             in the pipeline.
             </summary>
-            <typeparam name="T">The response type for the current request.</typeparam>
-            <param name="executionContext">The execution context, it contains the
-            request and response context.</param>
-            <returns>A task that represents the asynchronous operation.</returns>
+            <param name="executionContext">The execution context which contains both the
+            requests and response context.</param>
+            <returns>IAsyncResult which represent an async operation.</returns>
         </member>
         <member name="M:Amazon.Runtime.Internal.Marshaller.PreInvoke(Amazon.Runtime.IExecutionContext)">
             <summary>
@@ -6358,15 +6372,20 @@
             <param name="executionContext">The execution context which contains both the
             requests and response context.</param>
         </member>
-        <member name="M:Amazon.Runtime.Internal.MetricsHandler.InvokeAsync``1(Amazon.Runtime.IExecutionContext)">
+        <member name="M:Amazon.Runtime.Internal.MetricsHandler.InvokeAsync(Amazon.Runtime.IAsyncExecutionContext)">
+            <summary>
+            Captures the overall execution time.
+            </summary>
+            <param name="executionContext">The execution context which contains both the
+            requests and response context.</param>
+            <returns>IAsyncResult which represent an async operation.</returns>
+        </member>
+        <member name="M:Amazon.Runtime.Internal.MetricsHandler.InvokeAsyncCallback(Amazon.Runtime.IAsyncExecutionContext)">
             <summary>
             Captures the overall execution time and logs final metrics.
             </summary>
-            <typeparam name="T">The response type for the current request.</typeparam>
-            <param name="executionContext">
-            The execution context, it contains the request and response context.
-            </param>
-            <returns>A task that represents the asynchronous operation.</returns>
+            <param name="executionContext">The execution context, it contains the
+            request and response context.</param>
         </member>
         <member name="T:Amazon.Runtime.Internal.RedirectHandler">
             <summary>
@@ -6382,15 +6401,13 @@
             <param name="executionContext">The execution context which contains both the
             requests and response context.</param>
         </member>
-        <member name="M:Amazon.Runtime.Internal.RedirectHandler.InvokeAsync``1(Amazon.Runtime.IExecutionContext)">
+        <member name="M:Amazon.Runtime.Internal.RedirectHandler.InvokeAsyncCallback(Amazon.Runtime.IAsyncExecutionContext)">
             <summary>
             Processes HTTP redirects and reissues the call to the
             redirected location.
             </summary>
-            <typeparam name="T">The response type for the current request.</typeparam>
             <param name="executionContext">The execution context, it contains the
             request and response context.</param>
-            <returns>A task that represents the asynchronous operation.</returns>
         </member>
         <member name="M:Amazon.Runtime.Internal.RedirectHandler.HandleRedirect(Amazon.Runtime.IExecutionContext)">
             <summary>
@@ -6417,15 +6434,14 @@
             <param name="executionContext">The execution context which contains both the
             requests and response context.</param>
         </member>
-        <member name="M:Amazon.Runtime.Internal.Signer.InvokeAsync``1(Amazon.Runtime.IExecutionContext)">
+        <member name="M:Amazon.Runtime.Internal.Signer.InvokeAsync(Amazon.Runtime.IAsyncExecutionContext)">
             <summary>
             Calls pre invoke logic before calling the next handler 
             in the pipeline.
             </summary>
-            <typeparam name="T">The response type for the current request.</typeparam>
-            <param name="executionContext">The execution context, it contains the
-            request and response context.</param>
-            <returns>A task that represents the asynchronous operation.</returns>
+            <param name="executionContext">The execution context which contains both the
+            requests and response context.</param>
+            <returns>IAsyncResult which represent an async operation.</returns>
         </member>
         <member name="M:Amazon.Runtime.Internal.Signer.PreInvoke(Amazon.Runtime.IExecutionContext)">
             <summary>
@@ -6469,14 +6485,12 @@
             <param name="executionContext">The execution context which contains both the
             requests and response context.</param>
         </member>
-        <member name="M:Amazon.Runtime.Internal.Unmarshaller.InvokeAsync``1(Amazon.Runtime.IExecutionContext)">
+        <member name="M:Amazon.Runtime.Internal.Unmarshaller.InvokeAsyncCallback(Amazon.Runtime.IAsyncExecutionContext)">
             <summary>
             Unmarshalls the response returned by the HttpHandler.
             </summary>
-            <typeparam name="T">The response type for the current request.</typeparam>
             <param name="executionContext">The execution context, it contains the
             request and response context.</param>
-            <returns>A task that represents the asynchronous operation.</returns>
         </member>
         <member name="M:Amazon.Runtime.Internal.Unmarshaller.Unmarshall(Amazon.Runtime.IExecutionContext)">
             <summary>
@@ -6512,14 +6526,13 @@
             <param name="executionContext">The execution context which contains both the
             requests and response context.</param>
         </member>
-        <member name="M:Amazon.Runtime.Internal.HttpHandler`1.InvokeAsync``1(Amazon.Runtime.IExecutionContext)">
+        <member name="M:Amazon.Runtime.Internal.HttpHandler`1.InvokeAsync(Amazon.Runtime.IAsyncExecutionContext)">
             <summary>
             Issues an HTTP request for the current request context.
             </summary>
-            <typeparam name="T">The response type for the current request.</typeparam>
-            <param name="executionContext">The execution context, it contains the
-            request and response context.</param>
-            <returns>A task that represents the asynchronous operation.</returns>
+            <param name="executionContext">The execution context which contains both the
+            requests and response context.</param>
+            <returns>IAsyncResult which represent an async operation.</returns>
         </member>
         <member name="M:Amazon.Runtime.Internal.HttpHandler`1.WriteContentToRequestBody(`0,Amazon.Runtime.IHttpRequest{`0},Amazon.Runtime.IRequestContext)">
             <summary>
@@ -6619,18 +6632,35 @@
             Aborts the HTTP request.
             </summary>
         </member>
-        <member name="M:Amazon.Runtime.Internal.HttpRequest.GetRequestContentAsync">
+        <member name="M:Amazon.Runtime.Internal.HttpRequest.BeginGetRequestContent(System.AsyncCallback,System.Object)">
             <summary>
-            Gets a handle to the request content.
+            Initiates the operation to gets a handle to the request content.
             </summary>
-            <returns></returns>
+            <param name="callback">The async callback invoked when the operation completes.</param>
+            <param name="state">The state object to be passed to the async callback.</param>
+            <returns>IAsyncResult that represents an async operation.</returns>
         </member>
-        <member name="M:Amazon.Runtime.Internal.HttpRequest.GetResponseAsync(System.Threading.CancellationToken)">
+        <member name="M:Amazon.Runtime.Internal.HttpRequest.EndGetRequestContent(System.IAsyncResult)">
             <summary>
-            Returns the HTTP response.
+            Ends the operation to gets a handle to the request content.
             </summary>
-            <param name="cancellationToken">A cancellation token that can be used to cancel the asynchronous operation.</param>
-            <returns></returns>
+            <param name="asyncResult">IAsyncResult that represents an async operation.</param>
+            <returns>The request content.</returns>
+        </member>
+        <member name="M:Amazon.Runtime.Internal.HttpRequest.BeginGetResponse(System.AsyncCallback,System.Object)">
+            <summary>
+            Initiates the operation to Returns the HTTP response.
+            </summary>
+            <param name="callback">The async callback invoked when the operation completes.</param>
+            <param name="state">The state object to be passed to the async callback.</param>
+            <returns>IAsyncResult that represents an async operation.</returns>
+        </member>
+        <member name="M:Amazon.Runtime.Internal.HttpRequest.EndGetResponse(System.IAsyncResult)">
+            <summary>
+            Ends the operation to Returns the HTTP response.
+            </summary>
+            <param name="asyncResult">IAsyncResult that represents an async operation.</param>
+            <returns>The HTTP response.</returns>
         </member>
         <member name="M:Amazon.Runtime.Internal.HttpRequest.ConfigureRequest(Amazon.Runtime.IRequestContext)">
             <summary>
@@ -6754,15 +6784,13 @@
             <param name="executionContext">The execution context which contains both the
             requests and response context.</param>
         </member>
-        <member name="M:Amazon.Runtime.Internal.RetryHandler.InvokeAsync``1(Amazon.Runtime.IExecutionContext)">
+        <member name="M:Amazon.Runtime.Internal.RetryHandler.InvokeAsyncCallback(Amazon.Runtime.IAsyncExecutionContext)">
             <summary>
             Invokes the inner handler and performs a retry, if required as per the
             retry policy.
             </summary>
-            <typeparam name="T">The response type for the current request.</typeparam>
-            <param name="executionContext">The execution context, it contains the
-            request and response context.</param>
-            <returns>A task that represents the asynchronous operation.</returns>
+            <param name="executionContext">The execution context which contains both the
+            requests and response context.</param>
         </member>
         <member name="M:Amazon.Runtime.Internal.RetryHandler.PrepareForRetry(Amazon.Runtime.IRequestContext)">
             <summary>
@@ -7077,16 +7105,28 @@
             <param name="executionContext">The execution context which contains both the
             requests and response context.</param>
         </member>
-        <member name="M:Amazon.Runtime.IPipelineHandler.InvokeAsync``1(Amazon.Runtime.IExecutionContext)">
+        <member name="M:Amazon.Runtime.IPipelineHandler.InvokeAsync(Amazon.Runtime.IAsyncExecutionContext)">
             <summary>
             Contains the processing logic for an asynchronous request invocation.
             This method should call InnerHandler.InvokeSync to continue processing of the
             request by the pipeline, unless it's a terminating handler.
             </summary>
-            <typeparam name="T">The response type for the current request.</typeparam>
+            <param name="executionContext">The execution context which contains both the
+            requests and response context.</param>
+            <returns>IAsyncResult which represent a async operation.</returns>
+        </member>
+        <member name="M:Amazon.Runtime.IPipelineHandler.AsyncCallback(Amazon.Runtime.IAsyncExecutionContext)">
+            <summary>
+            This callback method contains the processing logic that should be executed 
+            after the underlying asynchronous operation completes.
+            This method is called as part of a callback chain which starts 
+            from the InvokeAsyncCallback method of the bottommost handler and then invokes
+            each callback method of the handler above it.
+            This method should call OuterHandler.AsyncCallback to continue processing of the
+            request by the pipeline, unless it's the topmost handler.
+            </summary>
             <param name="executionContext">The execution context, it contains the
             request and response context.</param>
-            <returns>A task that represents the asynchronous operation.</returns>
         </member>
         <member name="T:Amazon.Runtime.IExceptionHandler">
             <summary>
@@ -7210,18 +7250,35 @@
             Aborts the HTTP request.
             </summary>
         </member>
-        <member name="M:Amazon.Runtime.IHttpRequest`1.GetRequestContentAsync">
+        <member name="M:Amazon.Runtime.IHttpRequest`1.BeginGetRequestContent(System.AsyncCallback,System.Object)">
             <summary>
-            Gets a handle to the request content.
+            Initiates the operation to gets a handle to the request content.
             </summary>
-            <returns></returns>
+            <param name="callback">The async callback invoked when the operation completes.</param>
+            <param name="state">The state object to be passed to the async callback.</param>
+            <returns>IAsyncResult that represents an async operation.</returns>
         </member>
-        <member name="M:Amazon.Runtime.IHttpRequest`1.GetResponseAsync(System.Threading.CancellationToken)">
+        <member name="M:Amazon.Runtime.IHttpRequest`1.EndGetRequestContent(System.IAsyncResult)">
             <summary>
-            Returns the HTTP response.
+            Ends the operation to gets a handle to the request content.
             </summary>
-            <param name="cancellationToken">A cancellation token that can be used to cancel the asynchronous operation.</param>
-            <returns></returns>
+            <param name="asyncResult">IAsyncResult that represents an async operation.</param>
+            <returns>The request content.</returns>
+        </member>
+        <member name="M:Amazon.Runtime.IHttpRequest`1.BeginGetResponse(System.AsyncCallback,System.Object)">
+            <summary>
+            Initiates the operation to Returns the HTTP response.
+            </summary>
+            <param name="callback">The async callback invoked when the operation completes.</param>
+            <param name="state">The state object to be passed to the async callback.</param>
+            <returns>IAsyncResult that represents an async operation.</returns>
+        </member>
+        <member name="M:Amazon.Runtime.IHttpRequest`1.EndGetResponse(System.IAsyncResult)">
+            <summary>
+            Ends the operation to Returns the HTTP response.
+            </summary>
+            <param name="asyncResult">IAsyncResult that represents an async operation.</param>
+            <returns>The HTTP response.</returns>
         </member>
         <member name="T:Amazon.Runtime.RetryPolicy">
             <summary>
@@ -7380,57 +7437,93 @@
             <param name="bucketName"></param>
             <returns></returns>
         </member>
-        <member name="M:Amazon.Runtime.SharedInterfaces.ICoreAmazonS3.UploadObjectFromStreamAsync(System.String,System.String,System.IO.Stream,System.Collections.Generic.IDictionary{System.String,System.Object},System.Threading.CancellationToken)">
+        <member name="M:Amazon.Runtime.SharedInterfaces.ICoreAmazonS3.BeginDelete(System.String,System.String,System.Collections.Generic.IDictionary{System.String,System.Object},System.AsyncCallback,System.Object)">
             <summary>
-            Upload an object from a stream.
+            Start a delete object.
+            </summary>
+            <param name="bucketName"></param>
+            <param name="objectKey"></param>
+            <param name="additionalProperties"></param>
+            <param name="callback"></param>
+            <param name="state"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Amazon.Runtime.SharedInterfaces.ICoreAmazonS3.EndDelete(System.IAsyncResult)">
+            <summary>
+            Get the results of a delete object.
+            </summary>
+            <param name="result"></param>
+        </member>
+        <member name="M:Amazon.Runtime.SharedInterfaces.ICoreAmazonS3.BeginUploadObjectFromStream(System.String,System.String,System.IO.Stream,System.Collections.Generic.IDictionary{System.String,System.Object},System.AsyncCallback,System.Object)">
+            <summary>
+            Start an upload object from stream.
             </summary>
             <param name="bucketName"></param>
             <param name="objectKey"></param>
             <param name="stream"></param>
             <param name="additionalProperties"></param>
-            <param name="cancellationToken"></param>
+            <param name="callback"></param>
+            <param name="state"></param>
             <returns></returns>
         </member>
-        <member name="M:Amazon.Runtime.SharedInterfaces.ICoreAmazonS3.DeleteAsync(System.String,System.String,System.Collections.Generic.IDictionary{System.String,System.Object},System.Threading.CancellationToken)">
+        <member name="M:Amazon.Runtime.SharedInterfaces.ICoreAmazonS3.EndUploadObjectFromStream(System.IAsyncResult)">
             <summary>
-            Delete an object.
+            Get the results of an upload from stream.
             </summary>
-            <param name="bucketName"></param>
-            <param name="objectKey"></param>
-            <param name="additionalProperties"></param>
-            <param name="cancellationToken"></param>
-            <returns></returns>
+            <param name="result"></param>
         </member>
-        <member name="M:Amazon.Runtime.SharedInterfaces.ICoreAmazonS3.GetObjectStreamAsync(System.String,System.String,System.Collections.Generic.IDictionary{System.String,System.Object},System.Threading.CancellationToken)">
+        <member name="M:Amazon.Runtime.SharedInterfaces.ICoreAmazonS3.BeginUploadObjectFromFilePath(System.String,System.String,System.String,System.Collections.Generic.IDictionary{System.String,System.Object},System.AsyncCallback,System.Object)">
             <summary>
-            Open a stream to an object in S3.
-            </summary>
-            <param name="bucketName"></param>
-            <param name="objectKey"></param>
-            <param name="additionalProperties"></param>
-            <param name="cancellationToken"></param>
-            <returns></returns>
-        </member>
-        <member name="M:Amazon.Runtime.SharedInterfaces.ICoreAmazonS3.UploadObjectFromFilePathAsync(System.String,System.String,System.String,System.Collections.Generic.IDictionary{System.String,System.Object},System.Threading.CancellationToken)">
-            <summary>
-            Upload an object from a file path.
+            Start an upload object from file path.
             </summary>
             <param name="bucketName"></param>
             <param name="objectKey"></param>
             <param name="filepath"></param>
             <param name="additionalProperties"></param>
-            <param name="cancellationToken"></param>
+            <param name="callback"></param>
+            <param name="state"></param>
             <returns></returns>
         </member>
-        <member name="M:Amazon.Runtime.SharedInterfaces.ICoreAmazonS3.DownloadToFilePathAsync(System.String,System.String,System.String,System.Collections.Generic.IDictionary{System.String,System.Object},System.Threading.CancellationToken)">
+        <member name="M:Amazon.Runtime.SharedInterfaces.ICoreAmazonS3.EndUploadObjectFromFilePath(System.IAsyncResult)">
             <summary>
-            Download an object in S3 to a file path.
+            Get the results of an upload from file path.
+            </summary>
+            <param name="result"></param>
+        </member>
+        <member name="M:Amazon.Runtime.SharedInterfaces.ICoreAmazonS3.BeginDownloadToFilePath(System.String,System.String,System.String,System.Collections.Generic.IDictionary{System.String,System.Object},System.AsyncCallback,System.Object)">
+            <summary>
+            Start a download to a file path.
             </summary>
             <param name="bucketName"></param>
             <param name="objectKey"></param>
             <param name="filepath"></param>
             <param name="additionalProperties"></param>
-            <param name="cancellationToken"></param>
+            <param name="callback"></param>
+            <param name="state"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Amazon.Runtime.SharedInterfaces.ICoreAmazonS3.EndDownloadToFilePath(System.IAsyncResult)">
+            <summary>
+            Get results of downloading an object to a file path.
+            </summary>
+            <param name="result"></param>
+        </member>
+        <member name="M:Amazon.Runtime.SharedInterfaces.ICoreAmazonS3.BeginGetObjectStream(System.String,System.String,System.Collections.Generic.IDictionary{System.String,System.Object},System.AsyncCallback,System.Object)">
+            <summary>
+            Start opening a stream to an object in S3.
+            </summary>
+            <param name="bucketName"></param>
+            <param name="objectKey"></param>
+            <param name="additionalProperties"></param>
+            <param name="callback"></param>
+            <param name="state"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Amazon.Runtime.SharedInterfaces.ICoreAmazonS3.EndGetObjectStream(System.IAsyncResult)">
+            <summary>
+            Get results of opening a stream to an object in S3.
+            </summary>
+            <param name="result"></param>
             <returns></returns>
         </member>
         <member name="T:Amazon.Runtime.SharedInterfaces.ICoreAmazonSQS">
