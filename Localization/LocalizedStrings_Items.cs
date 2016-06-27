@@ -42616,5 +42616,15 @@ namespace StockSharp.Localization
 		/// This file exceeds the maximum upload size.
 		/// </summary>
 		public static string FileTooMuch => GetString(FileTooMuchKey);
+
+		/// <summary>
+		/// Strategy has been encrypted and can not be viewed.
+		/// </summary>
+		public const string StrategyEncryptedKey = "StrategyEncrypted";
+
+		/// <summary>
+		/// Strategy has been encrypted and can not be viewed.
+		/// </summary>
+		public static string StrategyEncrypted => GetString(StrategyEncryptedKey);
 	}
 }
