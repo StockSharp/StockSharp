@@ -54,43 +54,39 @@ namespace StockSharp.Community
 		/// To send an e-mail message.
 		/// </summary>
 		/// <param name="email">E-mail address.</param>
-		/// <param name="login">Login.</param>
-		public void SendEmail(string email, string login)
+		public void SendEmail(string email)
 		{
-			ValidateError(Invoke(f => f.SendEmail(email, login)));
+			ValidateError(Invoke(f => f.SendEmail(email)));
 		}
 
 		/// <summary>
 		/// To confirm the e-mail address.
 		/// </summary>
 		/// <param name="email">E-mail address.</param>
-		/// <param name="login">Login.</param>
 		/// <param name="emailCode">The e-mail confirmation code.</param>
-		public void ValidateEmail(string email, string login, string emailCode)
+		public void ValidateEmail(string email, string emailCode)
 		{
-			ValidateError(Invoke(f => f.ValidateEmail(email, login, emailCode)));
+			ValidateError(Invoke(f => f.ValidateEmail(email, emailCode)));
 		}
 
 		/// <summary>
 		/// To send SMS.
 		/// </summary>
 		/// <param name="email">E-mail address.</param>
-		/// <param name="login">Login.</param>
 		/// <param name="phone">Phone.</param>
-		public void SendSms(string email, string login, string phone)
+		public void SendSms(string email, string phone)
 		{
-			ValidateError(Invoke(f => f.SendSms(email, login, phone)));
+			ValidateError(Invoke(f => f.SendSms(email, phone)));
 		}
 
 		/// <summary>
 		/// To confirm the phone number.
 		/// </summary>
 		/// <param name="email">E-mail address.</param>
-		/// <param name="login">Login.</param>
 		/// <param name="smsCode">SMS verification code.</param>
-		public void ValidatePhone(string email, string login, string smsCode)
+		public void ValidatePhone(string email, string smsCode)
 		{
-			ValidateError(Invoke(f => f.ValidatePhone(email, login, smsCode)));
+			ValidateError(Invoke(f => f.ValidatePhone(email, smsCode)));
 		}
 
 		/// <summary>

@@ -27,11 +27,11 @@ namespace StockSharp.Community
 		/// <summary>
 		/// To log in.
 		/// </summary>
-		/// <param name="login">Login.</param>
+		/// <param name="email">Email.</param>
 		/// <param name="password">Password.</param>
 		/// <returns>Session ID.</returns>
 		[OperationContract]
-		Guid Login(string login, string password);
+		Guid Login(string email, string password);
 
 		/// <summary>
 		/// Logout.

@@ -16,22 +16,10 @@ namespace StockSharp.Community
 		public long Id { get; set; }
 
 		/// <summary>
-		/// Login.
-		/// </summary>
-		[DataMember]
-		public string Login { get; set; }
-
-		/// <summary>
 		/// Password (not filled in when obtaining from the server).
 		/// </summary>
 		[DataMember]
 		public string Password { get; set; }
-
-		/// <summary>
-		/// Real name.
-		/// </summary>
-		[DataMember]
-		public string RealName { get; set; }
 
 		/// <summary>
 		/// Display name.

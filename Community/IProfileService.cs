@@ -36,40 +36,36 @@ namespace StockSharp.Community
 		/// To send an e-mail message.
 		/// </summary>
 		/// <param name="email">E-mail address.</param>
-		/// <param name="login">Login.</param>
 		/// <returns>The execution result code.</returns>
 		[OperationContract]
-		byte SendEmail(string email, string login);
+		byte SendEmail(string email);
 
 		/// <summary>
 		/// To confirm the e-mail address.
 		/// </summary>
 		/// <param name="email">E-mail address.</param>
-		/// <param name="login">Login.</param>
 		/// <param name="emailCode">The e-mail confirmation code.</param>
 		/// <returns>The execution result code.</returns>
 		[OperationContract]
-		byte ValidateEmail(string email, string login, string emailCode);
+		byte ValidateEmail(string email, string emailCode);
 
 		/// <summary>
 		/// To send SMS.
 		/// </summary>
 		/// <param name="email">E-mail address.</param>
-		/// <param name="login">Login.</param>
 		/// <param name="phone">Phone.</param>
 		/// <returns>The execution result code.</returns>
 		[OperationContract]
-		byte SendSms(string email, string login, string phone);
+		byte SendSms(string email, string phone);
 
 		/// <summary>
 		/// To confirm the phone number.
 		/// </summary>
 		/// <param name="email">E-mail address.</param>
-		/// <param name="login">Login.</param>
 		/// <param name="smsCode">SMS verification code.</param>
 		/// <returns>The execution result code.</returns>
 		[OperationContract]
-		byte ValidatePhone(string email, string login, string smsCode);
+		byte ValidatePhone(string email, string smsCode);
 
 		/// <summary>
 		/// To update profile information.
