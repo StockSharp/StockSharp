@@ -2280,6 +2280,7 @@ namespace StockSharp.Algo.Strategies
 			PositionChanged?.Invoke();
 
 			StatisticManager.AddPosition(CurrentTime, Position);
+			StatisticManager.AddPnL(CurrentTime, PnL);
 		}
 
 		private void RaiseCommissionChanged()
