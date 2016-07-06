@@ -212,7 +212,7 @@ namespace SampleHistoryTestingParallel
 				});
 
 			// start emulation
-			batchEmulation.Start(strategies);
+			batchEmulation.Start(strategies, periods.Length);
 		}
 	}
 }

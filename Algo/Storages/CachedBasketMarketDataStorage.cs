@@ -235,7 +235,8 @@ namespace StockSharp.Algo.Storages
 		public void Reset()
 		{
 			_currentMessage = null;
-			_basketStorage.InnerStorages.Clear();
+			_currentTime = DateTimeOffset.MinValue;
+            _basketStorage.InnerStorages.Clear();
 		}
 
 		/// <summary>

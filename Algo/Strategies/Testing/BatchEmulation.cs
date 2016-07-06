@@ -18,6 +18,7 @@ namespace StockSharp.Algo.Strategies.Testing
 	using System;
 	using System.Collections.Generic;
 	using System.Linq;
+	using System.Threading.Tasks;
 
 	using Ecng.Collections;
 	using Ecng.Common;
@@ -296,12 +297,9 @@ namespace StockSharp.Algo.Strategies.Testing
 				UpdateSecurityByLevel1 = false
 			};
 
-			//_basketSessionHolder = new HistoryBasketSessionHolder(EmulationConnector.TransactionIdGenerator);
-
-			EmulationConnector.Adapter.InnerAdapters.Add(new BasketEmulationAdapter(EmulationConnector.TransactionIdGenerator, EmulationSettings));
-
 			EmulationConnector.StateChanged += EmulationConnectorOnStateChanged;
 			EmulationConnector.MarketTimeChanged += EmulationConnectorOnMarketTimeChanged;
+			EmulationConnector.Disconnected += EmulationConnectorOnDisconnected;
 		}
 
 		private void EmulationConnectorOnStateChanged()
@@ -317,10 +315,6 @@ namespace StockSharp.Algo.Strategies.Testing
 					CurrentProgress = 0;
 
 					ApplySettings();
-
-					//EmulationConnector.StartExport();
-					OnEmulationStarting();
-
 					break;
 				}
 
@@ -329,7 +323,6 @@ namespace StockSharp.Algo.Strategies.Testing
 					break;
 
 				case EmulationStates.Stopping:
-					//EmulationConnector.StopExport();
 					break;
 
 				case EmulationStates.Stopped:
@@ -349,11 +342,20 @@ namespace StockSharp.Algo.Strategies.Testing
 			CurrentProgress++;
 		}
 
+		private void EmulationConnectorOnDisconnected()
+		{
+			if (_cancelEmulation)
+				return;
+
+			TryStartNextBatch();
+		}
+
 		/// <summary>
 		/// Start emulation.
 		/// </summary>
 		/// <param name="strategies">The strategies.</param>
-		public void Start(IEnumerable<Strategy> strategies)
+		/// <param name="iterationCount"></param>
+		public void Start(IEnumerable<Strategy> strategies, int iterationCount)
 		{
 			if (strategies == null)
 				throw new ArgumentNullException(nameof(strategies));
@@ -361,7 +363,7 @@ namespace StockSharp.Algo.Strategies.Testing
 			_progressStep = ((EmulationSettings.StopTime - EmulationSettings.StartTime).Ticks / 100).To<TimeSpan>();
 			
 			_cancelEmulation = false;
-			_totalBatches = (int)((decimal)strategies.Count() / EmulationSettings.BatchSize).Ceiling();
+			_totalBatches = (int)((decimal)iterationCount / EmulationSettings.BatchSize).Ceiling();
 			_currentBatch = -1;
 
 			CurrentProgress = 0;
@@ -390,42 +392,44 @@ namespace StockSharp.Algo.Strategies.Testing
 			EmulationConnector.HistoryMessageAdapter.StartDate = EmulationSettings.StartTime;
 			EmulationConnector.HistoryMessageAdapter.StopDate = EmulationSettings.StopTime;
 
+			EmulationConnector.LookupSecuritiesResult += OnEmulationConnectorOnLookupSecuritiesResult;
+
 			EmulationConnector.Connect();
 		}
 
 		private void InitAdapters(IEnumerable<Strategy> strategies)
 		{
-			//_basketSessionHolder.InnerSessions.Clear();
-			//_basketSessionHolder.Portfolios.Clear();
+			//var adapter = EmulationConnector.Adapter;
+			//var adapters = adapter.Portfolios.ToArray();
+
+			//foreach (var pair in adapters)
+			//{
+			//	adapter.Portfolios.Remove(pair.Key);
+			//	adapter.InnerAdapters.Remove(pair.Value);
+			//}
+
+			//adapter.InnerAdapters.RemoveWhere(a => a is EmulationMessageAdapter);
+			//adapter.InnerAdapters.Add(new EmulationMessageAdapter(EmulationConnector.TransactionIdGenerator));
 
 			var id = 0;
 
 			foreach (var strategy in strategies)
 			{
-				//strategy.CheckCanStart();
-
 				_strategyInfo[strategy] = new Tuple<Portfolio, Security>(strategy.Portfolio, strategy.Security);
 
 				var portfolio = strategy.Portfolio.Clone();
 				portfolio.Name += "_" + ++id;
 				EmulationConnector.RegisterPortfolio(portfolio);
 
-				AddHistoryAdapter(portfolio.Name);
+				//var strategyAdapter = new EmulationMessageAdapter(EmulationConnector.TransactionIdGenerator);
+
+				//adapter.InnerAdapters.Add(strategyAdapter);
+				//adapter.Portfolios[portfolio.Name] = strategyAdapter;
 
 				strategy.Connector = EmulationConnector;
 				strategy.Portfolio = portfolio;
-				strategy.Security = EmulationConnector.LookupById(strategy.Security.Id);
+				//strategy.Security = EmulationConnector.LookupById(strategy.Security.Id);
 			}
-		}
-
-		private void AddHistoryAdapter(string portfolio)
-		{
-			var session = new HistoryMessageAdapter(EmulationConnector.TransactionIdGenerator)
-			{
-			};
-
-			//_basketSessionHolder.InnerSessions.Add(session, 0);
-			//_basketSessionHolder.Portfolios[portfolio] = session;
 		}
 
 		private void ApplySettings()
@@ -480,6 +484,17 @@ namespace StockSharp.Algo.Strategies.Testing
 			MemoryStatistics.Instance.LogLevel = EmulationSettings.LogLevel;
 		}
 
+		private void OnEmulationConnectorOnLookupSecuritiesResult(IEnumerable<Security> ss)
+		{
+			EmulationConnector.LookupSecuritiesResult -= OnEmulationConnectorOnLookupSecuritiesResult;
+
+			// start strategy before emulation started
+			OnEmulationStarting();
+
+			// start historical data loading when connection established successfully and all data subscribed
+			EmulationConnector.Start();
+		}
+
 		private void OnEmulationStarting()
 		{
 			MemoryStatistics.Instance.Clear(false);
@@ -499,6 +514,8 @@ namespace StockSharp.Algo.Strategies.Testing
 			{
 				strategy.Stop();
 
+				strategy.GetCandleManager()?.Dispose();
+
 				var tuple = _strategyInfo.TryGetValue(strategy);
 
 				if (tuple == null)
@@ -512,8 +529,6 @@ namespace StockSharp.Algo.Strategies.Testing
 			_strategyInfo.Clear();
 
 			EmulationConnector.Disconnect();
-
-			TryStartNextBatch();
 		}
 
 		/// <summary>
