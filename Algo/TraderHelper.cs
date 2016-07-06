@@ -515,6 +515,24 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
+		/// Get last trade date.
+		/// </summary>
+		/// <param name="board">Board info.</param>
+		/// <param name="date">The date from which to start checking.</param>
+		/// <param name="checkHolidays">Whether to check the passed date for a weekday (Saturday and Sunday are days off, returned value for them is <see langword="false" />).</param>
+		/// <returns>Last trade date.</returns>
+		public static DateTimeOffset LastTradeDay(this BoardMessage board, DateTimeOffset date, bool checkHolidays = true)
+		{
+			if (board == null)
+				throw new ArgumentNullException(nameof(board));
+
+			while (!board.IsTradeDate(date, checkHolidays))
+				date = date.AddDays(-1);
+
+			return date;
+		}
+
+		/// <summary>
 		/// To create copy of the order for re-registration.
 		/// </summary>
 		/// <param name="oldOrder">The original order.</param>
