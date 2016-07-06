@@ -302,7 +302,7 @@ namespace StockSharp.Algo.Testing
 						break;
 					case EmulationStates.Stopping:
 						throwError = (_state != EmulationStates.Started && _state != EmulationStates.Suspended
-							&& State == EmulationStates.Starting);  // при ошибках при запуске эмуляции состояние может быть Starting
+							&& State != EmulationStates.Starting);  // при ошибках при запуске эмуляции состояние может быть Starting
 						break;
 					case EmulationStates.Starting:
 						throwError = (_state != EmulationStates.Stopped && _state != EmulationStates.Suspended);
@@ -370,7 +370,8 @@ namespace StockSharp.Algo.Testing
 		/// </summary>
 		protected override void OnDisconnect()
 		{
-			SendEmulationState(EmulationStates.Stopping);
+			if (State != EmulationStates.Stopped && State != EmulationStates.Stopping)
+				SendEmulationState(EmulationStates.Stopping);
 		}
 
 		/// <summary>
