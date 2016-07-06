@@ -133,6 +133,7 @@ namespace StockSharp.Algo.Candles
 
 		private sealed class ExternalCandleSource : Disposable, ICandleManagerSource
 		{
+			private readonly HashSet<CandleSeries> _series = new HashSet<CandleSeries>();
 			private readonly IExternalCandleSource _source;
 
 			public ExternalCandleSource(IExternalCandleSource source)
@@ -163,16 +164,21 @@ namespace StockSharp.Algo.Candles
 
 			void ICandleSource<Candle>.Start(CandleSeries series, DateTimeOffset from, DateTimeOffset to)
 			{
-				_source.SubscribeCandles(series, from, to);
+				_series.Add(series);
+                _source.SubscribeCandles(series, from, to);
 			}
 
 			void ICandleSource<Candle>.Stop(CandleSeries series)
 			{
+				_series.Remove(series);
 				_source.UnSubscribeCandles(series);
 			}
 
 			private void OnNewCandles(CandleSeries series, IEnumerable<Candle> candles)
 			{
+				if (!_series.Contains(series))
+					return;
+
 				foreach (var c in candles)
 				{
 					var candle = c.Clone();
