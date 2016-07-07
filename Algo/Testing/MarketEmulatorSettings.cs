@@ -446,7 +446,7 @@ namespace StockSharp.Algo.Testing
 			storage.SetValue(nameof(IncreaseDepthVolume), IncreaseDepthVolume);
 
 			if (TimeZone != null)
-				storage.SetValue(nameof(TimeZone), TimeZone.Id);
+				storage.SetValue(nameof(TimeZone), TimeZone);
 		}
 
 		/// <summary>
@@ -474,7 +474,7 @@ namespace StockSharp.Algo.Testing
 			IncreaseDepthVolume = storage.GetValue(nameof(IncreaseDepthVolume), IncreaseDepthVolume);
 
 			if (storage.Contains(nameof(TimeZone)))
-				TimeZone = TimeZoneInfo.FindSystemTimeZoneById(storage.GetValue<string>(nameof(TimeZone)));
+				TimeZone = storage.GetValue<TimeZoneInfo>(nameof(TimeZone));
 		}
 	}
 }
