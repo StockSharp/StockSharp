@@ -130,6 +130,11 @@ namespace StockSharp.Logging
 			FlushInterval = TimeSpan.FromMilliseconds(500);
 		}
 
+		/// <summary>
+		/// Local time zone to convert all incoming messages. Not use in case of <see langword="null"/>.
+		/// </summary>
+		public TimeZoneInfo LocalTimeZone { get; set; }
+
 		private void Flush()
 		{
 			LogMessage[] temp;
@@ -173,6 +178,8 @@ namespace StockSharp.Logging
 
 					if (message.IsDispose)
 						disposeMessage = (DisposeLogMessage)message;
+					else if (LocalTimeZone != null)
+						message.Time = message.Time.Convert(LocalTimeZone);
 				}
 
 				if (messages.Count > 0)
@@ -322,6 +329,9 @@ namespace StockSharp.Logging
 			FlushInterval = storage.GetValue<TimeSpan>(nameof(FlushInterval));
 			//MaxMessageCount = storage.GetValue<int>(nameof(MaxMessageCount));
 			Listeners.AddRange(storage.GetValue<IEnumerable<SettingsStorage>>(nameof(Listeners)).Select(s => s.LoadEntire<ILogListener>()));
+
+			if (storage.Contains(nameof(LocalTimeZone)))
+				LocalTimeZone = storage.GetValue<TimeZoneInfo>(nameof(LocalTimeZone));
 		}
 
 		/// <summary>
@@ -333,6 +343,9 @@ namespace StockSharp.Logging
 			storage.SetValue(nameof(FlushInterval), FlushInterval);
 			//storage.SetValue(nameof(MaxMessageCount), MaxMessageCount);
 			storage.SetValue(nameof(Listeners), Listeners.Select(l => l.SaveEntire(false)).ToArray());
+
+			if (LocalTimeZone != null)
+				storage.SetValue(nameof(LocalTimeZone), LocalTimeZone);
 		}
 	}
 }

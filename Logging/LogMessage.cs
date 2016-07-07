@@ -71,7 +71,7 @@ namespace StockSharp.Logging
 		/// <summary>
 		/// Message creating time.
 		/// </summary>
-		public DateTimeOffset Time { get; }
+		public DateTimeOffset Time { get; set; }
 
 		/// <summary>
 		/// The level of the log message.
