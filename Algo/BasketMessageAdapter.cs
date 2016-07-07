@@ -123,7 +123,8 @@ namespace StockSharp.Algo
 		private readonly SynchronizedDictionary<SubscriptionInfo, IMessageAdapter> _subscriptions = new SynchronizedDictionary<SubscriptionInfo, IMessageAdapter>();
 		//private readonly SynchronizedDictionary<IMessageAdapter, RefPair<bool, Exception>> _adapterStates = new SynchronizedDictionary<IMessageAdapter, RefPair<bool, Exception>>();
 		private readonly SynchronizedDictionary<IMessageAdapter, IMessageAdapter> _hearbeatAdapters = new SynchronizedDictionary<IMessageAdapter, IMessageAdapter>();
-		private readonly CachedSynchronizedDictionary<MessageTypes, CachedSynchronizedList<IMessageAdapter>> _connectedAdapters = new CachedSynchronizedDictionary<MessageTypes, CachedSynchronizedList<IMessageAdapter>>();
+		private readonly SynchronizedDictionary<MessageTypes, CachedSynchronizedList<IMessageAdapter>> _messageTypeAdapters = new SynchronizedDictionary<MessageTypes, CachedSynchronizedList<IMessageAdapter>>();
+		private readonly CachedSynchronizedSet<IMessageAdapter> _connectedAdapters = new CachedSynchronizedSet<IMessageAdapter>();
 		private bool _isFirstConnect;
 		private readonly InnerAdapterList _innerAdapters;
 
@@ -217,6 +218,7 @@ namespace StockSharp.Algo
 			});
 
 			_connectedAdapters.Clear();
+			_messageTypeAdapters.Clear();
 			_hearbeatAdapters.Clear();
 			_subscriptionQueue.Clear();
 			_subscriptions.Clear();
@@ -260,12 +262,7 @@ namespace StockSharp.Algo
 
 				case MessageTypes.Disconnect:
 				{
-					_connectedAdapters
-						.CachedValues
-						.SelectMany(c => c.Cache)
-						.Distinct()
-						.ForEach(a => a.SendInMessage(message));
-
+					_connectedAdapters.Cache.ForEach(a => a.SendInMessage(message));
 					break;
 				}
 
@@ -295,7 +292,7 @@ namespace StockSharp.Algo
 
 				case MessageTypes.MarketData:
 				{
-					var adapters = _connectedAdapters.TryGetValue(message.Type);
+					var adapters = _messageTypeAdapters.TryGetValue(message.Type)?.Cache;
 
 					if (adapters == null)
 						throw new InvalidOperationException(LocalizedStrings.Str629Params.Put(message.Type));
@@ -305,7 +302,7 @@ namespace StockSharp.Algo
 					switch (mdMsg.DataType)
 					{
 						case MarketDataTypes.News:
-							adapters.Cache.ForEach(a => a.SendInMessage(mdMsg));
+							adapters.ForEach(a => a.SendInMessage(mdMsg));
 							break;
 
 						default:
@@ -357,7 +354,7 @@ namespace StockSharp.Algo
 								//if (_subscriptionQueue.ContainsKey(key))
 								//	return;
 
-								var enumerator = adapters.Cache.Cast<IMessageAdapter>().GetEnumerator();
+								var enumerator = adapters.Cast<IMessageAdapter>().GetEnumerator();
 
 								_subscriptionQueue.Add(key, enumerator);
 								ProcessSubscriptionAction(enumerator, mdMsg, mdMsg.TransactionId);
@@ -399,12 +396,12 @@ namespace StockSharp.Algo
 						break;
 					}
 
-					var adapters = _connectedAdapters.TryGetValue(message.Type);
+					var adapters = _messageTypeAdapters.TryGetValue(message.Type)?.Cache;
 
 					if (adapters == null)
 						throw new InvalidOperationException(LocalizedStrings.Str629Params.Put(message.Type));
 
-					adapters.Cache.ForEach(a => a.SendInMessage(message));
+					adapters.ForEach(a => a.SendInMessage(message));
 					break;
 				}
 			}
@@ -416,12 +413,12 @@ namespace StockSharp.Algo
 
 			if (adapter == null)
 			{
-				var adapters = _connectedAdapters.TryGetValue(message.Type);
+				var adapters = _messageTypeAdapters.TryGetValue(message.Type)?.Cache;
 
-				if (adapters == null || adapters.Count != 1)
+				if (adapters == null || adapters.Length != 1)
 					throw new InvalidOperationException(LocalizedStrings.Str623Params.Put(portfolioName));
 
-				adapter = adapters.Cache.First();
+				adapter = adapters.First();
 			}
 			else
 				adapter = _hearbeatAdapters[adapter];
@@ -469,8 +466,10 @@ namespace StockSharp.Algo
 
 				foreach (var supportedMessage in adapter.SupportedMessages)
 				{
-					_connectedAdapters.SafeAdd(supportedMessage).Add(adapter);
+					_messageTypeAdapters.SafeAdd(supportedMessage).Add(adapter);
 				}
+
+				_connectedAdapters.Add(adapter);
 			}
 
 			SendOutMessage(message);
