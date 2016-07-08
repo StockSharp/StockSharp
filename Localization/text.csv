@@ -3715,7 +3715,7 @@ LicenseStockSharp;License StockSharp;Лицензия StockSharp
 Log;Log;Лог
 OrderLog;Order log;Лог заявок
 LogsHasErrors;Logs (has errors);Логи (есть ошибки)
-StockSharpLogin;StockSharp login;Логин на СтокШарп
+StockSharpEmail;StockSharp email;Почта на СтокШарп
 CredentialsStockSharpCom;Credentials to StockSharp.com;Логин/пароль к сайту StockSharp.com
 XamlStr284;Best bid price or a trade by specified price or higher.;Лучшая цена покупки или сделка по заданной цене и выше.
 XamlStr286;Best ask price or a trade by specified price or lower.;Лучшая цена продажи или сделка по заданной цене и ниже.
@@ -4297,6 +4297,7 @@ FillUpBalance;Fill up balance;Пополнить баланс
 FileNotStarted;File uploading has not started.;Загрузка файла не начата.
 FileTooMuch;This file exceeds the maximum upload size.;Файл превысил максимальный размер.
 StrategyEncrypted;Strategy has been encrypted and can not be viewed.;Стратегия зашифрована и не может быть просмотрена.
+Email;Email;Почта
 DocStr0;Button activation alert settings;Кнопка активации настроек сигнала
 DocStr1;Initializes a new instance of the {0};Создать {0}
 DocStr2;Load settings;Загрузить настройки

@@ -90,7 +90,7 @@ namespace StockSharp.Community
 		/// </summary>
 		public void Login()
 		{
-			Login(Credentials.Login, Credentials.Password.To<string>());
+			Login(Credentials.Email, Credentials.Password.To<string>());
 		}
 
 		/// <summary>

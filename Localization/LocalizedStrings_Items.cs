@@ -37088,14 +37088,14 @@ namespace StockSharp.Localization
 		public static string LogsHasErrors => GetString(LogsHasErrorsKey);
 
 		/// <summary>
-		/// StockSharp login
+		/// StockSharp email
 		/// </summary>
-		public const string StockSharpLoginKey = "StockSharpLogin";
+		public const string StockSharpEmailKey = "StockSharpEmail";
 
 		/// <summary>
-		/// StockSharp login
+		/// StockSharp email
 		/// </summary>
-		public static string StockSharpLogin => GetString(StockSharpLoginKey);
+		public static string StockSharpEmail => GetString(StockSharpEmailKey);
 
 		/// <summary>
 		/// Credentials to StockSharp.com
@@ -42626,5 +42626,15 @@ namespace StockSharp.Localization
 		/// Strategy has been encrypted and can not be viewed.
 		/// </summary>
 		public static string StrategyEncrypted => GetString(StrategyEncryptedKey);
+
+		/// <summary>
+		/// Email
+		/// </summary>
+		public const string EmailKey = "Email";
+
+		/// <summary>
+		/// Email
+		/// </summary>
+		public static string Email => GetString(EmailKey);
 	}
 }

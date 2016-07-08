@@ -33,9 +33,9 @@ namespace StockSharp.Community
 		}
 
 		/// <summary>
-		/// Login.
+		/// Email.
 		/// </summary>
-		public string Login { get; set; }
+		public string Email { get; set; }
 
 		/// <summary>
 		/// Password.
@@ -53,7 +53,7 @@ namespace StockSharp.Community
 		/// <param name="storage">Settings storage.</param>
 		public void Load(SettingsStorage storage)
 		{
-			Login = storage.GetValue<string>(nameof(Login));
+			Email = storage.GetValue<string>(nameof(Email));
 			Password = storage.GetValue<SecureString>(nameof(Password));
 			AutoLogon = storage.GetValue<bool>(nameof(AutoLogon));
 		}
@@ -64,7 +64,7 @@ namespace StockSharp.Community
 		/// <param name="storage">Settings storage.</param>
 		public void Save(SettingsStorage storage)
 		{
-			storage.SetValue(nameof(Login), Login);
+			storage.SetValue(nameof(Email), Email);
 			storage.SetValue(nameof(Password), Password);
 			storage.SetValue(nameof(AutoLogon), AutoLogon);
 		}
