@@ -339,10 +339,14 @@ namespace SampleHistoryTesting
 			var maxVolume = MaxVolume.Text.To<int>();
 			var secId = security.ToSecurityId();
 
+			SetIsEnabled(true);
+
 			foreach (var set in settings)
 			{
 				if (set.Item1.IsChecked == false)
 					continue;
+
+				var title = (string)set.Item1.Content;
 
 				InitChart(set.Item5, set.Item6, set.Item7);
 
@@ -602,25 +606,30 @@ namespace SampleHistoryTesting
 						candleManager.Stop(series);
 						strategy.Stop();
 
-						logManager.Dispose();
-						_connectors.Clear();
+						SetIsChartEnabled(chart, false);
 
-						SetIsEnabled(chart, false);
+						if (_connectors.All(c => c.State == EmulationStates.Stopped))
+						{
+							logManager.Dispose();
+							_connectors.Clear();
+
+							SetIsEnabled(false);
+						}
 
 						this.GuiAsync(() =>
 						{
 							if (connector.IsFinished)
 							{
 								progressBar.Value = progressBar.Maximum;
-								MessageBox.Show(this, LocalizedStrings.Str3024.Put(DateTime.Now - _startEmulationTime));
+								MessageBox.Show(this, LocalizedStrings.Str3024.Put(DateTime.Now - _startEmulationTime), title);
 							}
 							else
-								MessageBox.Show(this, LocalizedStrings.cancelled);
+								MessageBox.Show(this, LocalizedStrings.cancelled, title);
 						});
 					}
 					else if (connector.State == EmulationStates.Started)
 					{
-						SetIsEnabled(chart, true);
+						SetIsChartEnabled(chart, true);
 					}
 				};
 
@@ -692,7 +701,7 @@ namespace SampleHistoryTesting
 			chart.AddElement(_area, _tradesElem);
 		}
 
-		private void SetIsEnabled(IChart chart, bool started)
+		private void SetIsEnabled(bool started)
 		{
 			this.GuiAsync(() =>
 			{
@@ -703,9 +712,12 @@ namespace SampleHistoryTesting
 				{
 					checkBox.IsEnabled = !started;
 				}
-
-				chart.IsAutoRange = started;
 			});
+		}
+
+		private void SetIsChartEnabled(IChart chart, bool started)
+		{
+			this.GuiAsync(() => chart.IsAutoRange = started);
 		}
 	}
 }
