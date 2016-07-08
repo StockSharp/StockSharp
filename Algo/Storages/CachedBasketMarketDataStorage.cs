@@ -24,30 +24,7 @@ namespace StockSharp.Algo.Storages
 	public class CachedBasketMarketDataStorage<T> : BaseLogReceiver, IEnumerator<T>
 		where T : Message
 	{
-		private sealed class BlockingPriorityQueue : BaseBlockingQueue<KeyValuePair<DateTimeOffset, Message>, OrderedPriorityQueue<DateTimeOffset, Message>>
-		{
-			public BlockingPriorityQueue()
-				: base(new OrderedPriorityQueue<DateTimeOffset, Message>())
-			{
-			}
-
-			protected override void OnEnqueue(KeyValuePair<DateTimeOffset, Message> item, bool force)
-			{
-				InnerCollection.Enqueue(item.Key, item.Value);
-			}
-
-			protected override KeyValuePair<DateTimeOffset, Message> OnDequeue()
-			{
-				return InnerCollection.Dequeue();
-			}
-
-			protected override KeyValuePair<DateTimeOffset, Message> OnPeek()
-			{
-				return InnerCollection.Peek();
-			}
-		}
-
-		private readonly BlockingPriorityQueue _messageQueue = new BlockingPriorityQueue();
+		private readonly MessagePriorityQueue _messageQueue = new MessagePriorityQueue();
 		private readonly List<Tuple<IMarketDataStorage, bool>> _actions = new List<Tuple<IMarketDataStorage, bool>>();
 		private readonly SyncObject _moveNextSyncRoot  = new SyncObject();
 		private readonly SyncObject _syncRoot = new SyncObject();
@@ -216,8 +193,10 @@ namespace StockSharp.Algo.Storages
 			if (_isChanged)
 				_moveNextSyncRoot.WaitSignal();
 
-			var pair = _messageQueue.Dequeue();
-			var message = pair.Value;
+			Message message;
+
+			if (!_messageQueue.TryDequeue(out message))
+				return false;
 
 			var serverTime = message.GetServerTime();
 
@@ -361,7 +340,7 @@ namespace StockSharp.Algo.Storages
 
 		private void EnqueueMessage(Message message)
 		{
-			_messageQueue.Enqueue(new KeyValuePair<DateTimeOffset, Message>(message.LocalTime, message));
+			_messageQueue.Enqueue(message);
 		}
 
 		private IEnumerable<Tuple<ExchangeBoard, Range<TimeSpan>>> GetOrderedRanges(DateTimeOffset date)

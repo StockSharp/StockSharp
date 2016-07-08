@@ -75,30 +75,7 @@ namespace StockSharp.Algo.Testing
 
 		private sealed class HistoryEmulationMessageChannel : Cloneable<IMessageChannel>, IMessageChannel
 		{
-			private class BlockingPriorityQueue : BaseBlockingQueue<KeyValuePair<DateTimeOffset, Message>, OrderedPriorityQueue<DateTimeOffset, Message>>
-			{
-				public BlockingPriorityQueue()
-					: base(new OrderedPriorityQueue<DateTimeOffset, Message>())
-				{
-				}
-
-				protected override void OnEnqueue(KeyValuePair<DateTimeOffset, Message> item, bool force)
-				{
-					InnerCollection.Enqueue(item.Key, item.Value);
-				}
-
-				protected override KeyValuePair<DateTimeOffset, Message> OnDequeue()
-				{
-					return InnerCollection.Dequeue();
-				}
-
-				protected override KeyValuePair<DateTimeOffset, Message> OnPeek()
-				{
-					return InnerCollection.Peek();
-				}
-			}
-
-			private readonly BlockingPriorityQueue _messageQueue = new BlockingPriorityQueue();
+			private readonly MessagePriorityQueue _messageQueue = new MessagePriorityQueue();
 
 			private readonly HistoryMessageAdapter _historyMessageAdapter;
 			private readonly Action<Exception> _errorHandler;
@@ -134,15 +111,15 @@ namespace StockSharp.Algo.Testing
 							{
 								var sended = _historyMessageAdapter.SendOutMessage();
 
-								KeyValuePair<DateTimeOffset, Message> pair;
+								Message message;
 
-								if (!_messageQueue.TryDequeue(out pair, true, !sended))
+								if (!_messageQueue.TryDequeue(out message, true, !sended))
 								{
 									if (!sended)
 										break;
 								}
 								else
-									NewOutMessage?.Invoke(pair.Value);
+									NewOutMessage?.Invoke(message);
 							}
 							catch (Exception ex)
 							{
@@ -164,7 +141,7 @@ namespace StockSharp.Algo.Testing
 				if (!IsOpened)
 					Open();
 
-				_messageQueue.Enqueue(new KeyValuePair<DateTimeOffset, Message>(message.LocalTime, message));
+				_messageQueue.Enqueue(message);
 			}
 
 			void IDisposable.Dispose()
