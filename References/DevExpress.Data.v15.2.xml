@@ -2642,50 +2642,6 @@ To create the <b>logical OR</b> operator using the <see cref="M:DevExpress.Data.
 
 
         </member>
-        <member name="T:DevExpress.Data.Browsing.Design.TypeSpecificsService">
-
-            <summary>
-                <para>For internal use.
-</para>
-            </summary>
-
-        </member>
-        <member name="M:DevExpress.Data.Browsing.Design.TypeSpecificsService.#ctor">
-            <summary>
-                <para>Initializes a new instance of the TypeSpecificsService class with default settings.
-</para>
-            </summary>
-
-
-        </member>
-        <member name="M:DevExpress.Data.Browsing.Design.TypeSpecificsService.GetPropertyTypeSpecifics(System.ComponentModel.PropertyDescriptor)">
-            <summary>
-                <para>For internal use.
-</para>
-            </summary>
-            <param name="property">
-		 
-
-            </param>
-            <returns> 
-</returns>
-
-
-        </member>
-        <member name="M:DevExpress.Data.Browsing.Design.TypeSpecificsService.GetTypeSpecifics(System.Type)">
-            <summary>
-                <para>For internal use.
-</para>
-            </summary>
-            <param name="type">
-		 
-
-            </param>
-            <returns> 
-</returns>
-
-
-        </member>
         <member name="T:DevExpress.Schedule.OutlookHolidaysLoader">
 
             <summary>
@@ -3245,6 +3201,24 @@ To create the <b>logical OR</b> operator using the <see cref="M:DevExpress.Data.
 
 
         </member>
+        <member name="T:DevExpress.Utils.AzureCompatibility">
+
+            <summary>
+                <para>Provides an option to fix issues with unexpected output content (such as red crosses X, distorted fonts, etc.) for Printing, Reporting, RichEditDocumentServer and PDF libraries used on the Azure Web Site.
+</para>
+            </summary>
+
+        </member>
+        <member name="P:DevExpress.Utils.AzureCompatibility.Enable">
+            <summary>
+                <para>Triggers Microsoft Azure specific options for rendering and printing.
+</para>
+            </summary>
+            <value><b>True</b>, to use Azure specific settings; otherwise, <b>false</b>. 
+</value>
+
+
+        </member>
         <member name="T:DevExpress.Data.SubstituteFilterEventArgs">
 
             <summary>
@@ -3587,6 +3561,30 @@ To create the <b>logical OR</b> operator using the <see cref="M:DevExpress.Data.
             </summary>
             <param name="m">
 		The Windows Message to process.
+
+            </param>
+
+
+        </member>
+        <member name="T:DevExpress.Utils.Controls.BaseOptionChangedEventHandler">
+
+            <summary>
+                <para>Represents a method that will handle the event raised after an option value change.
+</para>
+            </summary>
+
+        </member>
+        <member name="M:DevExpress.Utils.Controls.BaseOptionChangedEventHandler.Invoke(System.Object,DevExpress.Utils.Controls.BaseOptionChangedEventArgs)">
+            <summary>
+                <para>Represents a method that will handle the event raised after the option has been changed.
+</para>
+            </summary>
+            <param name="sender">
+		The event sender.
+
+            </param>
+            <param name="e">
+		A <see cref="T:DevExpress.Utils.Controls.BaseOptionChangedEventArgs"/> object that contains data related to the event.
 
             </param>
 
@@ -4184,7 +4182,7 @@ To create the <b>logical OR</b> operator using the <see cref="M:DevExpress.Data.
         </member>
         <member name="M:DevExpress.Utils.DXCollectionBase`1.#ctor">
             <summary>
-                <para>Initializes a new instance of the DXCollectionBase class with default settings.
+                <para>Initializes a new instance of the DXCollectionBase&lt;T&gt; class with default settings.
 </para>
             </summary>
 
@@ -4192,7 +4190,7 @@ To create the <b>logical OR</b> operator using the <see cref="M:DevExpress.Data.
         </member>
         <member name="M:DevExpress.Utils.DXCollectionBase`1.#ctor(System.Int32)">
             <summary>
-                <para>Initializes a new instance of the DXCollectionBase class with the specified capacity.
+                <para>Initializes a new instance of the DXCollectionBase&lt;T&gt; class with the specified capacity.
 
 </para>
             </summary>
@@ -4210,7 +4208,7 @@ To create the <b>logical OR</b> operator using the <see cref="M:DevExpress.Data.
 </para>
             </summary>
             <param name="value">
-		A  object to append to the collection.
+		A &lt;T&gt; object to append to the collection.
 
             </param>
             <returns>An integer value indicating the position into which the new element was inserted.
@@ -4232,7 +4230,7 @@ To create the <b>logical OR</b> operator using the <see cref="M:DevExpress.Data.
         </member>
         <member name="P:DevExpress.Utils.DXCollectionBase`1.Capacity">
             <summary>
-                <para>Gets or sets the number of elements that the DXCollectionBase can contain.
+                <para>Gets or sets the number of elements that the DXCollectionBase&lt;T&gt; can contain.
 </para>
             </summary>
             <value>An integer value representing the number of elements that the collection can contain. 
@@ -4242,7 +4240,7 @@ To create the <b>logical OR</b> operator using the <see cref="M:DevExpress.Data.
         </member>
         <member name="M:DevExpress.Utils.DXCollectionBase`1.Clear">
             <summary>
-                <para>Removes all objects from the DXCollectionBase instance.
+                <para>Removes all objects from the DXCollectionBase&lt;T&gt; instance.
 </para>
             </summary>
 
@@ -4255,7 +4253,7 @@ To create the <b>logical OR</b> operator using the <see cref="M:DevExpress.Data.
 </para>
             </summary>
             <param name="value">
-		A  object to locate in the collection.
+		A &lt;T&gt; object to locate in the collection.
 
             </param>
             <returns><b>true</b> if the collection contains the specified item; otherwise, <b>false</b>.
@@ -4265,12 +4263,12 @@ To create the <b>logical OR</b> operator using the <see cref="M:DevExpress.Data.
         </member>
         <member name="M:DevExpress.Utils.DXCollectionBase`1.CopyTo(DevExpress.Utils.T[],System.Int32)">
             <summary>
-                <para>Copies all the elements from the DXCollectionBase instance to a one-dimensional array, starting at the specified index of the target array.
+                <para>Copies all the elements from the DXCollectionBase&lt;T&gt; instance to a one-dimensional array, starting at the specified index of the target array.
 
 </para>
             </summary>
             <param name="array">
-		A one-dimensional array of  objects.
+		A one-dimensional array of &lt;T&gt; objects.
 
 
             </param>
@@ -4283,7 +4281,7 @@ To create the <b>logical OR</b> operator using the <see cref="M:DevExpress.Data.
         </member>
         <member name="P:DevExpress.Utils.DXCollectionBase`1.Count">
             <summary>
-                <para>Gets the number of elements contained in the DXCollectionBase instance.
+                <para>Gets the number of elements contained in the DXCollectionBase&lt;T&gt; instance.
 </para>
             </summary>
             <value>An integer value representing the number of elements contained in the collection. 
@@ -4293,11 +4291,11 @@ To create the <b>logical OR</b> operator using the <see cref="M:DevExpress.Data.
         </member>
         <member name="M:DevExpress.Utils.DXCollectionBase`1.Find(System.Predicate`1)">
             <summary>
-                <para>Searches for an element that matches the conditions defined by the specified predicate, and returns the first occurrence within the entire DXCollectionBase.
+                <para>Searches for an element that matches the conditions defined by the specified predicate, and returns the first occurrence within the entire DXCollectionBase&lt;T&gt;.
 </para>
             </summary>
             <param name="match">
-		The <see cref="T:System.Predicate"/><b></b> delegate that defines the conditions of the element to search for.
+		The <see cref="T:System.Predicate"/><b>&lt;T&gt;</b> delegate that defines the conditions of the element to search for.
 
 
 
@@ -4309,11 +4307,11 @@ To create the <b>logical OR</b> operator using the <see cref="M:DevExpress.Data.
         </member>
         <member name="M:DevExpress.Utils.DXCollectionBase`1.ForEach(System.Action`1)">
             <summary>
-                <para>Performs the specified action on each element of the DXCollectionBase.
+                <para>Performs the specified action on each element of the DXCollectionBase&lt;T&gt;.
 </para>
             </summary>
             <param name="action">
-		The <see cref="T:System.Action"/> delegate to perform on each element of the DXCollectionBase.
+		The <see cref="T:System.Action"/>&lt;T&gt; delegate to perform on each element of the DXCollectionBase&lt;T&gt;.
 
             </param>
 
@@ -4321,10 +4319,10 @@ To create the <b>logical OR</b> operator using the <see cref="M:DevExpress.Data.
         </member>
         <member name="M:DevExpress.Utils.DXCollectionBase`1.GetEnumerator">
             <summary>
-                <para>Returns an enumerator that iterates through the DXCollectionBase instance.
+                <para>Returns an enumerator that iterates through the DXCollectionBase&lt;T&gt; instance.
 </para>
             </summary>
-            <returns>A <see cref="T:System.Collections.IEnumerator"/> for the DXCollectionBase instance.
+            <returns>A <see cref="T:System.Collections.IEnumerator"/> for the DXCollectionBase&lt;T&gt; instance.
 </returns>
 
 
@@ -4335,7 +4333,7 @@ To create the <b>logical OR</b> operator using the <see cref="M:DevExpress.Data.
 </para>
             </summary>
             <param name="value">
-		A  object to locate in the collection. 
+		A &lt;T&gt; object to locate in the collection. 
 
             </param>
             <returns>An integer value representing the position of the specified element in the collection.
@@ -4354,7 +4352,7 @@ To create the <b>logical OR</b> operator using the <see cref="M:DevExpress.Data.
 
             </param>
             <param name="value">
-		A  object to insert into the collection.
+		A &lt;T&gt; object to insert into the collection.
 
 
             </param>
@@ -4367,7 +4365,7 @@ To create the <b>logical OR</b> operator using the <see cref="M:DevExpress.Data.
 </para>
             </summary>
             <param name="value">
-		A  object to be removed from the collection.
+		A &lt;T&gt; object to be removed from the collection.
 
             </param>
             <returns><b>true</b> if the specified element has been successfully removed from the collection; <b>false</b> if the specified element has not been found within the collection.
@@ -4377,7 +4375,7 @@ To create the <b>logical OR</b> operator using the <see cref="M:DevExpress.Data.
         </member>
         <member name="M:DevExpress.Utils.DXCollectionBase`1.RemoveAt(System.Int32)">
             <summary>
-                <para>Removes the element at the specified index of the DXCollectionBase instance.
+                <para>Removes the element at the specified index of the DXCollectionBase&lt;T&gt; instance.
 </para>
             </summary>
             <param name="index">
@@ -4389,7 +4387,7 @@ To create the <b>logical OR</b> operator using the <see cref="M:DevExpress.Data.
         </member>
         <member name="M:DevExpress.Utils.DXCollectionBase`1.Sort(System.Collections.Generic.IComparer`1)">
             <summary>
-                <para>Sorts the elements in the entire DXCollectionBase using the specified comparer.
+                <para>Sorts the elements in the entire DXCollectionBase&lt;T&gt; using the specified comparer.
 </para>
             </summary>
             <param name="comparer">
@@ -4401,17 +4399,17 @@ To create the <b>logical OR</b> operator using the <see cref="M:DevExpress.Data.
         </member>
         <member name="M:DevExpress.Utils.DXCollectionBase`1.ToArray">
             <summary>
-                <para>Copies the DXCollectionBase elements to a new array.
+                <para>Copies the DXCollectionBase&lt;T&gt; elements to a new array.
 </para>
             </summary>
-            <returns>An array containing the <b>DXCollectionBase</b> elements.
+            <returns>An array containing the <b>DXCollectionBase&lt;T&gt;</b> elements.
 </returns>
 
 
         </member>
         <member name="P:DevExpress.Utils.DXCollectionBase`1.UniquenessProviderType">
             <summary>
-                <para>Gets or sets the type of an object, which provides uniqueness for the current DXCollectionBase.
+                <para>Gets or sets the type of an object, which provides uniqueness for the current DXCollectionBase&lt;T&gt;.
 </para>
             </summary>
             <value>A <see cref="T:DevExpress.Utils.DXCollectionUniquenessProviderType"/> instance.
@@ -4429,7 +4427,7 @@ To create the <b>logical OR</b> operator using the <see cref="M:DevExpress.Data.
         </member>
         <member name="M:DevExpress.Utils.DXCollection`1.#ctor">
             <summary>
-                <para>Initializes a new instance of the DXCollection class with default settings.
+                <para>Initializes a new instance of the DXCollection&lt;T&gt; class with default settings.
 </para>
             </summary>
 
@@ -4445,7 +4443,7 @@ To create the <b>logical OR</b> operator using the <see cref="M:DevExpress.Data.
 		A zero-based integer specifying the desired item's position within the collection. If it's negative or exceeds the last available index, an exception is raised. 
 
             </param>
-            <value>A  object which represents the item at the specified position.
+            <value>A &lt;T&gt; object which represents the item at the specified position.
 </value>
 
 
@@ -4463,7 +4461,7 @@ To create the <b>logical OR</b> operator using the <see cref="M:DevExpress.Data.
                 <para>Gets or sets a localizer object providing localization of the user interface at runtime.
 </para>
             </summary>
-            <value>A XtraLocalizer descendant, which is used to localize the user interface at runtime.
+            <value>A XtraLocalizer&lt;T&gt; descendant, which is used to localize the user interface at runtime.
 </value>
 
 
@@ -4488,7 +4486,7 @@ To create the <b>logical OR</b> operator using the <see cref="M:DevExpress.Data.
         </member>
         <member name="M:DevExpress.Utils.Localization.XtraLocalizer`1.CreateXmlDocument">
             <summary>
-                <para>Creates an XML document, which contains resource strings provided by the current XtraLocalizer object.
+                <para>Creates an XML document, which contains resource strings provided by the current XtraLocalizer&lt;T&gt; object.
 </para>
             </summary>
             <returns>A <see cref="T:System.Xml.XmlDocument"/> object.
@@ -4498,17 +4496,17 @@ To create the <b>logical OR</b> operator using the <see cref="M:DevExpress.Data.
         </member>
         <member name="M:DevExpress.Utils.Localization.XtraLocalizer`1.GetActiveLocalizerProvider">
             <summary>
-                <para>Returns an active localizer provider for this XtraLocalizer object.
+                <para>Returns an active localizer provider for this XtraLocalizer&lt;T&gt; object.
 </para>
             </summary>
-            <returns>An <b>ActiveLocalizerProvider</b> object.
+            <returns>An <b>ActiveLocalizerProvider&lt;T&gt;</b> object.
 </returns>
 
 
         </member>
         <member name="M:DevExpress.Utils.Localization.XtraLocalizer`1.GetLocalizedString(DevExpress.Utils.Localization.T)">
             <summary>
-                <para>Gets the string, localized by the current XtraLocalizer, for the specified user interface element.
+                <para>Gets the string, localized by the current XtraLocalizer&lt;T&gt;, for the specified user interface element.
 </para>
             </summary>
             <param name="id">
@@ -4540,11 +4538,11 @@ To create the <b>logical OR</b> operator using the <see cref="M:DevExpress.Data.
         </member>
         <member name="M:DevExpress.Utils.Localization.XtraLocalizer`1.SetActiveLocalizerProvider(DevExpress.Utils.Localization.Internal.ActiveLocalizerProvider`1)">
             <summary>
-                <para>Sets an active localizer provider for this XtraLocalizer object.
+                <para>Sets an active localizer provider for this XtraLocalizer&lt;T&gt; object.
 </para>
             </summary>
             <param name="value">
-		An <b>ActiveLocalizerProvider</b> object.
+		An <b>ActiveLocalizerProvider&lt;T&gt;</b> object.
 
             </param>
 
@@ -4552,7 +4550,7 @@ To create the <b>logical OR</b> operator using the <see cref="M:DevExpress.Data.
         </member>
         <member name="M:DevExpress.Utils.Localization.XtraLocalizer`1.WriteToXml(System.String)">
             <summary>
-                <para>Saves the current XtraLocalizer's resources to the specified XML file.
+                <para>Saves the current XtraLocalizer&lt;T&gt;'s resources to the specified XML file.
 </para>
             </summary>
             <param name="fileName">
@@ -4573,7 +4571,7 @@ To create the <b>logical OR</b> operator using the <see cref="M:DevExpress.Data.
         </member>
         <member name="M:DevExpress.Utils.NotificationCollection`1.#ctor">
             <summary>
-                <para>Initializes a new instance of the NotificationCollection class with default settings.
+                <para>Initializes a new instance of the NotificationCollection&lt;T&gt; class with default settings.
 </para>
             </summary>
 
@@ -4593,7 +4591,7 @@ To create the <b>logical OR</b> operator using the <see cref="M:DevExpress.Data.
         </member>
         <member name="M:DevExpress.Utils.NotificationCollection`1.BeginUpdate">
             <summary>
-                <para>Locks the NotificationCollection, preventing change notifications (and visual updates) from being raised by the object until the <b>EndUpdate</b> or <b>CancelUpdate</b> method is called.
+                <para>Locks the NotificationCollection&lt;T&gt;, preventing change notifications (and visual updates) from being raised by the object until the <b>EndUpdate</b> or <b>CancelUpdate</b> method is called.
 
 
 </para>
@@ -4603,7 +4601,7 @@ To create the <b>logical OR</b> operator using the <see cref="M:DevExpress.Data.
         </member>
         <member name="M:DevExpress.Utils.NotificationCollection`1.CancelUpdate">
             <summary>
-                <para>Unlocks the NotificationCollection object after it has been locked by the <b>BeginUpdate</b> method, without causing an immediate visual update.
+                <para>Unlocks the NotificationCollection&lt;T&gt; object after it has been locked by the <b>BeginUpdate</b> method, without causing an immediate visual update.
 </para>
             </summary>
 
@@ -4627,7 +4625,7 @@ To create the <b>logical OR</b> operator using the <see cref="M:DevExpress.Data.
         </member>
         <member name="M:DevExpress.Utils.NotificationCollection`1.EndUpdate">
             <summary>
-                <para>Unlocks the NotificationCollection object after a call to the <b>BeginUpdate</b> method and causes an immediate visual update.
+                <para>Unlocks the NotificationCollection&lt;T&gt; object after a call to the <b>BeginUpdate</b> method and causes an immediate visual update.
 
 
 </para>
@@ -4642,112 +4640,6 @@ To create the <b>logical OR</b> operator using the <see cref="M:DevExpress.Data.
             </summary>
             <value><b>true</b> if the collection is locked; otherwise, <b>false</b>.
 </value>
-
-
-        </member>
-        <member name="T:DevExpress.XtraReports.UI.FieldType">
-
-            <summary>
-                <para>Specifies the type of the value returned by a calculated field.
-
-</para>
-            </summary>
-
-        </member>
-        <member name="F:DevExpress.XtraReports.UI.FieldType.Boolean">
-            <summary>
-                <para>Indicates that the field returns a Boolean value (the <see cref="T:System.Boolean"/> type).
-</para>
-            </summary>
-
-
-        </member>
-        <member name="F:DevExpress.XtraReports.UI.FieldType.Byte">
-            <summary>
-                <para>Indicates that the field returns a byte value (the <see cref="T:System.Byte"/> type).
-</para>
-            </summary>
-
-
-        </member>
-        <member name="F:DevExpress.XtraReports.UI.FieldType.DateTime">
-            <summary>
-                <para>Indicates that the field returns a date-time value (the <see cref="T:System.DateTime"/> type).
-</para>
-            </summary>
-
-
-        </member>
-        <member name="F:DevExpress.XtraReports.UI.FieldType.Decimal">
-            <summary>
-                <para>Indicates that the field returns a decimal value (the <see cref="T:System.Decimal"/> type).
-</para>
-            </summary>
-
-
-        </member>
-        <member name="F:DevExpress.XtraReports.UI.FieldType.Double">
-            <summary>
-                <para>Indicates that the field returns a double value (the <see cref="T:System.Double"/> type).
-</para>
-            </summary>
-
-
-        </member>
-        <member name="F:DevExpress.XtraReports.UI.FieldType.Float">
-            <summary>
-                <para>Indicates that the field returns a float value (the <see cref="T:System.Single"/> type).
-</para>
-            </summary>
-
-
-        </member>
-        <member name="F:DevExpress.XtraReports.UI.FieldType.Guid">
-            <summary>
-                <para>Indicates that the field returns a GUID value (the System.Guid type)
-</para>
-            </summary>
-
-
-        </member>
-        <member name="F:DevExpress.XtraReports.UI.FieldType.Int16">
-            <summary>
-                <para>Indicates that the field returns an integer value (the <see cref="T:System.Int16"/> type).
-</para>
-            </summary>
-
-
-        </member>
-        <member name="F:DevExpress.XtraReports.UI.FieldType.Int32">
-            <summary>
-                <para>Indicates that the field returns an integer value (the <see cref="T:System.Int32"/> type).
-</para>
-            </summary>
-
-
-        </member>
-        <member name="F:DevExpress.XtraReports.UI.FieldType.None">
-            <summary>
-                <para>Indicates that the field's type is undefined, and it determined by evaluating the actually returned object when it is used during report generation.
-
-</para>
-            </summary>
-
-
-        </member>
-        <member name="F:DevExpress.XtraReports.UI.FieldType.String">
-            <summary>
-                <para>Indicates that the field returns a string value (the <see cref="T:System.String"/> type).
-</para>
-            </summary>
-
-
-        </member>
-        <member name="F:DevExpress.XtraReports.UI.FieldType.TimeSpan">
-            <summary>
-                <para>Indicates that the field returns a time span value (the <see cref="T:System.TimeSpan"/> type).
-</para>
-            </summary>
 
 
         </member>
@@ -4997,24 +4889,6 @@ To create the <b>logical OR</b> operator using the <see cref="M:DevExpress.Data.
 
 
         </member>
-        <member name="T:DevExpress.Data.XtraReports.Wizard.Views.IChooseReportTypePageView">
-
-            <summary>
-                <para>If implemented, provides a view for the <b>Select the Report Type</b> page of the Report Wizard.
-</para>
-            </summary>
-
-        </member>
-        <member name="P:DevExpress.Data.XtraReports.Wizard.Views.IChooseReportTypePageView.ReportType">
-            <summary>
-                <para>If implemented, specifies the selected report type.
-</para>
-            </summary>
-            <value>A <see cref="T:DevExpress.Data.XtraReports.Wizard.ReportType"/> enumeration value.
-</value>
-
-
-        </member>
         <member name="T:DevExpress.XtraPrinting.DataNodes.GroupUnion">
 
             <summary>
@@ -5048,21 +4922,136 @@ To create the <b>logical OR</b> operator using the <see cref="M:DevExpress.Data.
 
 
         </member>
-        <member name="T:DevExpress.Data.XtraReports.Wizard.Views.IChooseReportStylePageView">
+        <member name="T:DevExpress.Xpf.Printing.ServiceKnownTypeProvider">
 
             <summary>
-                <para>If implemented, provides a view for the <b>Specify the Report Style</b> page of the Report Wizard.
+                <para>Registers known types on a WCF-service.
 </para>
             </summary>
 
         </member>
-        <member name="P:DevExpress.Data.XtraReports.Wizard.Views.IChooseReportStylePageView.ReportStyleId">
+        <member name="M:DevExpress.Xpf.Printing.ServiceKnownTypeProvider.GetKnownTypes(System.Reflection.ICustomAttributeProvider)">
             <summary>
-                <para>If implemented, specifies the selected report style.
+                <para>For internal use.
 </para>
             </summary>
-            <value>A <see cref="T:DevExpress.Data.XtraReports.Wizard.ReportStyleId"/> enumeration value.
-</value>
+            <param name="provider">
+		 
+
+            </param>
+            <returns> 
+</returns>
+
+
+        </member>
+        <member name="F:DevExpress.Xpf.Printing.ServiceKnownTypeProvider.GetKnownTypesMethodName">
+            <summary>
+                <para>"<b>GetKnownTypes</b>"
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="M:DevExpress.Xpf.Printing.ServiceKnownTypeProvider.IsRegistered(System.Type)">
+            <summary>
+                <para>Specifies whether or not a custom parameter type is registered.
+</para>
+            </summary>
+            <param name="type">
+		A <see cref="T:System.Type"/> enumeration value. 
+
+            </param>
+            <returns><b>true</b> if the parameter type is registered; otherwise <b>false</b>. 
+</returns>
+
+
+        </member>
+        <member name="M:DevExpress.Xpf.Printing.ServiceKnownTypeProvider.Register(System.Type[])">
+            <summary>
+                <para>Registers an array of custom parameter types.
+</para>
+            </summary>
+            <param name="types">
+		An array of <see cref="T:System.Type"/> enumeration values. 
+
+            </param>
+
+
+        </member>
+        <member name="M:DevExpress.Xpf.Printing.ServiceKnownTypeProvider.Register(System.Type)">
+            <summary>
+                <para>Registers a custom parameter type.
+</para>
+            </summary>
+            <param name="type">
+		A <see cref="T:System.Type"/> enumeration value. 
+
+            </param>
+
+
+        </member>
+        <member name="M:DevExpress.Xpf.Printing.ServiceKnownTypeProvider.Register(System.Collections.Generic.IEnumerable`1)">
+            <summary>
+                <para>Registers a collection of custom parameter types.
+</para>
+            </summary>
+            <param name="types">
+		A collection of <see cref="T:System.Type"/> objects.
+
+            </param>
+
+
+        </member>
+        <member name="M:DevExpress.Xpf.Printing.ServiceKnownTypeProvider.Register``1">
+            <summary>
+                <para>Registers a custom parameter type.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="T:DevExpress.Data.Browsing.Design.TypeSpecificsService">
+
+            <summary>
+                <para>For internal use.
+</para>
+            </summary>
+
+        </member>
+        <member name="M:DevExpress.Data.Browsing.Design.TypeSpecificsService.#ctor">
+            <summary>
+                <para>Initializes a new instance of the TypeSpecificsService class with default settings.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="M:DevExpress.Data.Browsing.Design.TypeSpecificsService.GetPropertyTypeSpecifics(System.ComponentModel.PropertyDescriptor)">
+            <summary>
+                <para>For internal use.
+</para>
+            </summary>
+            <param name="property">
+		 
+
+            </param>
+            <returns> 
+</returns>
+
+
+        </member>
+        <member name="M:DevExpress.Data.Browsing.Design.TypeSpecificsService.GetTypeSpecifics(System.Type)">
+            <summary>
+                <para>For internal use.
+</para>
+            </summary>
+            <param name="type">
+		 
+
+            </param>
+            <returns> 
+</returns>
 
 
         </member>
@@ -5166,68 +5155,6 @@ To create the <b>logical OR</b> operator using the <see cref="M:DevExpress.Data.
             </param>
             <returns>An <a href="https://msdn.microsoft.com/en-us/library/system.linq.expressions.expression.aspx">Expression</a> object that specifies the LINQ expression. 
 </returns>
-
-
-        </member>
-        <member name="T:DevExpress.Xpo.DB.DBNameTypePair">
-
-            <summary>
-                <para>Stores a pair of values, specifying a <see cref="T:DevExpress.Xpo.DB.DBColumnType"/> along with its corresponding name.
-</para>
-            </summary>
-
-        </member>
-        <member name="M:DevExpress.Xpo.DB.DBNameTypePair.#ctor">
-            <summary>
-                <para>Initializes a new instance of the DBNameTypePair class with default settings.
-</para>
-            </summary>
-
-
-        </member>
-        <member name="M:DevExpress.Xpo.DB.DBNameTypePair.#ctor(System.String,DevExpress.Xpo.DB.DBColumnType)">
-            <summary>
-                <para>Initializes a new instance of the DBNameTypePair class with the specified settings.
-</para>
-            </summary>
-            <param name="name">
-		A <see cref="T:System.String"/> value.
-
-
-            </param>
-            <param name="type">
-		A <see cref="T:DevExpress.Xpo.DB.DBColumnType"/> enumeration value.
-
-            </param>
-
-
-        </member>
-        <member name="F:DevExpress.Xpo.DB.DBNameTypePair.Name">
-            <summary>
-                <para>A <see cref="T:System.String"/> value, specifying the database column name.
-</para>
-            </summary>
-            <returns> </returns>
-
-
-        </member>
-        <member name="M:DevExpress.Xpo.DB.DBNameTypePair.ToString">
-            <summary>
-                <para>Returns a value, specifying the name and type of the data table column (separated by a white space).
-</para>
-            </summary>
-            <returns>A <see cref="T:System.String"/> value. Example: "<b>OrderDate DateTime</b>".
-
-</returns>
-
-
-        </member>
-        <member name="F:DevExpress.Xpo.DB.DBNameTypePair.Type">
-            <summary>
-                <para>A <see cref="T:DevExpress.Xpo.DB.DBColumnType"/> value, specifying the database column type.
-</para>
-            </summary>
-            <returns> </returns>
 
 
         </member>
@@ -5570,77 +5497,6 @@ To create the <b>logical OR</b> operator using the <see cref="M:DevExpress.Data.
             </summary>
             <value>A collection of <see cref="T:DevExpress.Entity.ProjectModel.IDXTypeInfo"/> objects.
 </value>
-
-
-        </member>
-        <member name="T:DevExpress.Xpo.DB.DBStoredProcedureArgument">
-
-            <summary>
-                <para>Provides information about a stored procedure's parameter.
-</para>
-            </summary>
-
-        </member>
-        <member name="M:DevExpress.Xpo.DB.DBStoredProcedureArgument.#ctor">
-            <summary>
-                <para>Initializes a new instance of the DBStoredProcedureArgument class with default settings.
-</para>
-            </summary>
-
-
-        </member>
-        <member name="M:DevExpress.Xpo.DB.DBStoredProcedureArgument.#ctor(System.String,DevExpress.Xpo.DB.DBColumnType)">
-            <summary>
-                <para>Initializes a new instance of the DBStoredProcedureArgument class with the specified settings.
-</para>
-            </summary>
-            <param name="name">
-		A <see cref="T:System.String"/> value.
-
-            </param>
-            <param name="type">
-		A <see cref="T:DevExpress.Xpo.DB.DBColumnType"/> enumeration value.
-
-            </param>
-
-
-        </member>
-        <member name="M:DevExpress.Xpo.DB.DBStoredProcedureArgument.#ctor(System.String,DevExpress.Xpo.DB.DBColumnType,DevExpress.Xpo.DB.DBStoredProcedureArgumentDirection)">
-            <summary>
-                <para>Initializes a new instance of the DBStoredProcedureArgument class with the specified settings.
-</para>
-            </summary>
-            <param name="name">
-		A <see cref="T:System.String"/> value. This value is assigned to the <see cref="F:DevExpress.Xpo.DB.DBNameTypePair.Name"/> property.
-
-            </param>
-            <param name="type">
-		A <see cref="T:DevExpress.Xpo.DB.DBColumnType"/> enumeration value. This value is assigned to the <see cref="F:DevExpress.Xpo.DB.DBNameTypePair.Type"/> property.
-
-            </param>
-            <param name="direction">
-		A <see cref="T:DevExpress.Xpo.DB.DBStoredProcedureArgumentDirection"/> enumeration value. This value is assigned to the <see cref="F:DevExpress.Xpo.DB.DBStoredProcedureArgument.Direction"/> property.
-
-            </param>
-
-
-        </member>
-        <member name="F:DevExpress.Xpo.DB.DBStoredProcedureArgument.Direction">
-            <summary>
-                <para>A <see cref="T:DevExpress.Xpo.DB.DBStoredProcedureArgumentDirection"/> value corresponding to an appropriate <see cref="T:DevExpress.Xpo.DB.DBNameTypePair"/> object.
-</para>
-            </summary>
-            <returns> </returns>
-
-
-        </member>
-        <member name="M:DevExpress.Xpo.DB.DBStoredProcedureArgument.ToString">
-            <summary>
-                <para>Returns a value, specifying the stored procedure's parameter direction (within brackets and in uppercase letters) along with the name and type of the parameter (separated by a white space).
-</para>
-            </summary>
-            <returns>A <see cref="T:System.String"/> value. Example: "<b>[INOUT] OrderDate DateTime</b>".
-</returns>
 
 
         </member>
@@ -6159,57 +6015,6 @@ To create the <b>logical OR</b> operator using the <see cref="M:DevExpress.Data.
 
 
         </member>
-        <member name="T:DevExpress.Data.Entity.IConnectionStringInfo">
-
-            <summary>
-                <para>If implemented, provides information about a connection string.
-</para>
-            </summary>
-
-        </member>
-        <member name="P:DevExpress.Data.Entity.IConnectionStringInfo.Location">
-            <summary>
-                <para>Indicates from where the Report Wizard obtains its data connection settings.
-
-</para>
-            </summary>
-            <value>A <see cref="T:DevExpress.Data.Entity.DataConnectionLocation"/> enumeration value.
-</value>
-
-
-        </member>
-        <member name="P:DevExpress.Data.Entity.IConnectionStringInfo.Name">
-            <summary>
-                <para>If implemented, specifies the name of a connection string.
-</para>
-            </summary>
-            <value>A <see cref="T:System.String"/> value specifying the connection string name.
-</value>
-
-
-        </member>
-        <member name="P:DevExpress.Data.Entity.IConnectionStringInfo.ProviderName">
-            <summary>
-                <para>If implemented, gets the name of the data provider.
-</para>
-            </summary>
-            <value>A <see cref="T:System.String"/> value specifying the data provider name.
-
-</value>
-
-
-        </member>
-        <member name="P:DevExpress.Data.Entity.IConnectionStringInfo.RunTimeConnectionString">
-            <summary>
-                <para>If implemented, obtains the connection string used to establish the data connection at run time.
-
-</para>
-            </summary>
-            <value>A <see cref="T:System.String"/> containing a connection string.
-</value>
-
-
-        </member>
         <member name="T:DevExpress.XtraPrinting.Localization.PreviewResLocalizer">
 
             <summary>
@@ -6391,91 +6196,54 @@ To create the <b>logical OR</b> operator using the <see cref="M:DevExpress.Data.
 
 
         </member>
-        <member name="T:DevExpress.XtraPrinting.ImageAlignment">
+        <member name="T:DevExpress.Data.Entity.IConnectionStringInfo">
 
             <summary>
-                <para>Specifies the alignment of a displayed image in relation to the container control's boundaries.
+                <para>If implemented, provides information about a connection string.
 </para>
             </summary>
 
         </member>
-        <member name="F:DevExpress.XtraPrinting.ImageAlignment.BottomCenter">
+        <member name="P:DevExpress.Data.Entity.IConnectionStringInfo.Location">
             <summary>
-                <para>An image is aligned to the bottom side of a control.
+                <para>Indicates from where the Report Wizard obtains its data connection settings.
+
 </para>
             </summary>
+            <value>A <see cref="T:DevExpress.Data.Entity.DataConnectionLocation"/> enumeration value.
+</value>
 
 
         </member>
-        <member name="F:DevExpress.XtraPrinting.ImageAlignment.BottomLeft">
+        <member name="P:DevExpress.Data.Entity.IConnectionStringInfo.Name">
             <summary>
-                <para>An image is aligned to the bottom left corner of a control.
+                <para>If implemented, specifies the name of a connection string.
 </para>
             </summary>
+            <value>A <see cref="T:System.String"/> value specifying the connection string name.
+</value>
 
 
         </member>
-        <member name="F:DevExpress.XtraPrinting.ImageAlignment.BottomRight">
+        <member name="P:DevExpress.Data.Entity.IConnectionStringInfo.ProviderName">
             <summary>
-                <para>An image is aligned to the bottom right corner of a control.
+                <para>If implemented, gets the name of the data provider.
 </para>
             </summary>
+            <value>A <see cref="T:System.String"/> value specifying the data provider name.
+
+</value>
 
 
         </member>
-        <member name="F:DevExpress.XtraPrinting.ImageAlignment.Default">
+        <member name="P:DevExpress.Data.Entity.IConnectionStringInfo.RunTimeConnectionString">
             <summary>
-                <para>The default image alignment is used.
+                <para>If implemented, obtains the connection string used to establish the data connection at run time.
+
 </para>
             </summary>
-
-
-        </member>
-        <member name="F:DevExpress.XtraPrinting.ImageAlignment.MiddleCenter">
-            <summary>
-                <para>An image is aligned to the middler of a control
-</para>
-            </summary>
-
-
-        </member>
-        <member name="F:DevExpress.XtraPrinting.ImageAlignment.MiddleLeft">
-            <summary>
-                <para>An image is aligned to the left side of a control. 
-</para>
-            </summary>
-
-
-        </member>
-        <member name="F:DevExpress.XtraPrinting.ImageAlignment.MiddleRight">
-            <summary>
-                <para>An image is aligned to the right side of a control. 
-</para>
-            </summary>
-
-
-        </member>
-        <member name="F:DevExpress.XtraPrinting.ImageAlignment.TopCenter">
-            <summary>
-                <para>An image is aligned to the top side of a control. 
-</para>
-            </summary>
-
-
-        </member>
-        <member name="F:DevExpress.XtraPrinting.ImageAlignment.TopLeft">
-            <summary>
-                <para>An image is aligned to the top left corner of a control. 
-</para>
-            </summary>
-
-
-        </member>
-        <member name="F:DevExpress.XtraPrinting.ImageAlignment.TopRight">
-            <summary>
-                <para>An image is aligned to the top right corner of a control. 
-</para>
-            </summary>
+            <value>A <see cref="T:System.String"/> containing a connection string.
+</value>
 
 
         </member>
@@ -6881,15 +6649,19 @@ To create the <b>logical OR</b> operator using the <see cref="M:DevExpress.Data.
         </member>
         <member name="M:DevExpress.Entity.ProjectModel.ISolutionTypesProvider.GetAssemblyReferencePath(System.String,System.String)">
             <summary>
-                <para> </para>
+                <para>Returns the path to an application's assembly reference.
+</para>
             </summary>
             <param name="projectAssemblyFullName">
-		 
+		A <see cref="T:System.String"/> value.
+
             </param>
             <param name="referenceName">
-		 
+		A <see cref="T:System.String"/> value.
+
             </param>
-            <returns> </returns>
+            <returns>A <see cref="T:System.String"/> value.
+</returns>
 
 
         </member>
@@ -7170,6 +6942,112 @@ To create the <b>logical OR</b> operator using the <see cref="M:DevExpress.Data.
 
 
         </member>
+        <member name="T:DevExpress.XtraReports.UI.FieldType">
+
+            <summary>
+                <para>Specifies the type of the value returned by a calculated field.
+
+</para>
+            </summary>
+
+        </member>
+        <member name="F:DevExpress.XtraReports.UI.FieldType.Boolean">
+            <summary>
+                <para>Indicates that the field returns a Boolean value (the <see cref="T:System.Boolean"/> type).
+</para>
+            </summary>
+
+
+        </member>
+        <member name="F:DevExpress.XtraReports.UI.FieldType.Byte">
+            <summary>
+                <para>Indicates that the field returns a byte value (the <see cref="T:System.Byte"/> type).
+</para>
+            </summary>
+
+
+        </member>
+        <member name="F:DevExpress.XtraReports.UI.FieldType.DateTime">
+            <summary>
+                <para>Indicates that the field returns a date-time value (the <see cref="T:System.DateTime"/> type).
+</para>
+            </summary>
+
+
+        </member>
+        <member name="F:DevExpress.XtraReports.UI.FieldType.Decimal">
+            <summary>
+                <para>Indicates that the field returns a decimal value (the <see cref="T:System.Decimal"/> type).
+</para>
+            </summary>
+
+
+        </member>
+        <member name="F:DevExpress.XtraReports.UI.FieldType.Double">
+            <summary>
+                <para>Indicates that the field returns a double value (the <see cref="T:System.Double"/> type).
+</para>
+            </summary>
+
+
+        </member>
+        <member name="F:DevExpress.XtraReports.UI.FieldType.Float">
+            <summary>
+                <para>Indicates that the field returns a float value (the <see cref="T:System.Single"/> type).
+</para>
+            </summary>
+
+
+        </member>
+        <member name="F:DevExpress.XtraReports.UI.FieldType.Guid">
+            <summary>
+                <para>Indicates that the field returns a GUID value (the System.Guid type)
+</para>
+            </summary>
+
+
+        </member>
+        <member name="F:DevExpress.XtraReports.UI.FieldType.Int16">
+            <summary>
+                <para>Indicates that the field returns an integer value (the <see cref="T:System.Int16"/> type).
+</para>
+            </summary>
+
+
+        </member>
+        <member name="F:DevExpress.XtraReports.UI.FieldType.Int32">
+            <summary>
+                <para>Indicates that the field returns an integer value (the <see cref="T:System.Int32"/> type).
+</para>
+            </summary>
+
+
+        </member>
+        <member name="F:DevExpress.XtraReports.UI.FieldType.None">
+            <summary>
+                <para>Indicates that the field's type is undefined, and it determined by evaluating the actually returned object when it is used during report generation.
+
+</para>
+            </summary>
+
+
+        </member>
+        <member name="F:DevExpress.XtraReports.UI.FieldType.String">
+            <summary>
+                <para>Indicates that the field returns a string value (the <see cref="T:System.String"/> type).
+</para>
+            </summary>
+
+
+        </member>
+        <member name="F:DevExpress.XtraReports.UI.FieldType.TimeSpan">
+            <summary>
+                <para>Indicates that the field returns a time span value (the <see cref="T:System.TimeSpan"/> type).
+</para>
+            </summary>
+
+
+        </member>
         <member name="T:DevExpress.Data.Linq.LinqServerModeExceptionThrownEventArgs">
 
             <summary>
@@ -7222,42 +7100,6 @@ To create the <b>logical OR</b> operator using the <see cref="M:DevExpress.Data.
 
 
             </param>
-
-
-        </member>
-        <member name="T:DevExpress.XtraPrinting.BrickStringFormatPrototypeKind">
-
-            <summary>
-                <para>Specifies the prototype string format for the <see cref="T:DevExpress.XtraPrinting.BrickStringFormat"/>.
-
-</para>
-            </summary>
-
-        </member>
-        <member name="F:DevExpress.XtraPrinting.BrickStringFormatPrototypeKind.Default">
-            <summary>
-                <para>The current string format is based on the default string format.
-
-</para>
-            </summary>
-
-
-        </member>
-        <member name="F:DevExpress.XtraPrinting.BrickStringFormatPrototypeKind.GenericDefault">
-            <summary>
-                <para>The current string format is based on the generic default string format.
-
-</para>
-            </summary>
-
-
-        </member>
-        <member name="F:DevExpress.XtraPrinting.BrickStringFormatPrototypeKind.GenericTypographic">
-            <summary>
-                <para>The current string format is based on the generic typographic string format.
-
-</para>
-            </summary>
 
 
         </member>
@@ -7772,6 +7614,38 @@ To create the <b>logical OR</b> operator using the <see cref="M:DevExpress.Data.
             <value><b>true</b>, if the weak reference is used; otherwise, <b>false</b>. 
 
 </value>
+
+
+        </member>
+        <member name="T:DevExpress.XtraEditors.FilterControlAllowAggregateEditing">
+
+            <summary>
+                <para>Contains values that specify if filters against List properties can be created.
+</para>
+            </summary>
+
+        </member>
+        <member name="F:DevExpress.XtraEditors.FilterControlAllowAggregateEditing.Aggregate">
+            <summary>
+                <para>Allows filters to be created against properties that are List objects.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="F:DevExpress.XtraEditors.FilterControlAllowAggregateEditing.AggregateWithCondition">
+            <summary>
+                <para>Allows filters to be created against properties that are List objects, and against the List's children.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="F:DevExpress.XtraEditors.FilterControlAllowAggregateEditing.No">
+            <summary>
+                <para>Doesn't allow filters to be created against List properties and against their children.
+</para>
+            </summary>
 
 
         </member>
@@ -9183,202 +9057,39 @@ An integer value.
 
 
         </member>
-        <member name="T:DevExpress.Xpo.DB.DBTable">
+        <member name="T:DevExpress.Data.XtraReports.Wizard.Views.IChooseReportTypePageView">
 
             <summary>
-                <para>A table that stores a persistent object's data.
+                <para>If implemented, provides a view for the <b>Select the Report Type</b> page of the Report Wizard.
 </para>
             </summary>
 
         </member>
-        <member name="M:DevExpress.Xpo.DB.DBTable.#ctor">
+        <member name="P:DevExpress.Data.XtraReports.Wizard.Views.IChooseReportTypePageView.ReportType">
             <summary>
-                <para>Initializes a new instance of the <see cref="T:DevExpress.Xpo.DB.DBTable"/> class with default settings.
+                <para>If implemented, specifies the selected report type.
 </para>
             </summary>
-
-
-        </member>
-        <member name="M:DevExpress.Xpo.DB.DBTable.#ctor(System.String)">
-            <summary>
-                <para>Initializes a new instance of the <see cref="T:DevExpress.Xpo.DB.DBTable"/> class with the specified name.
-</para>
-            </summary>
-            <param name="name">
-		A <see cref="T:System.String"/> value that specifies the table's name. This value is assigned to the <see cref="F:DevExpress.Xpo.DB.DBTable.Name"/> property.
-
-            </param>
-
-
-        </member>
-        <member name="M:DevExpress.Xpo.DB.DBTable.AddColumn(DevExpress.Xpo.DB.DBColumn)">
-            <summary>
-                <para>Appends a column to the <see cref="P:DevExpress.Xpo.DB.DBTable.Columns"/> collection.
-</para>
-            </summary>
-            <param name="column">
-		A <see cref="T:DevExpress.Xpo.DB.DBColumn"/> object that represents the column to be added to the collection.
-
-            </param>
-
-
-        </member>
-        <member name="M:DevExpress.Xpo.DB.DBTable.AddForeignKey(DevExpress.Xpo.DB.DBForeignKey)">
-            <summary>
-                <para>Appends a <see cref="T:DevExpress.Xpo.DB.DBForeignKey"/> object to the <see cref="P:DevExpress.Xpo.DB.DBTable.ForeignKeys"/> collection.
-</para>
-            </summary>
-            <param name="fk">
-		A <see cref="T:DevExpress.Xpo.DB.DBForeignKey"/> object to be added to the collection.
-
-            </param>
-
-
-        </member>
-        <member name="M:DevExpress.Xpo.DB.DBTable.AddIndex(DevExpress.Xpo.DB.DBIndex)">
-            <summary>
-                <para>Appends a <see cref="T:DevExpress.Xpo.DB.DBIndex"/> object to the <see cref="P:DevExpress.Xpo.DB.DBTable.Indexes"/> collection.
-</para>
-            </summary>
-            <param name="index">
-		A <see cref="T:DevExpress.Xpo.DB.DBIndex"/> object to be added to the collection.
-
-            </param>
-
-
-        </member>
-        <member name="P:DevExpress.Xpo.DB.DBTable.Columns">
-            <summary>
-                <para>Provides access to the current DBTable's column collection.
-</para>
-            </summary>
-            <value>A list of <see cref="T:DevExpress.Xpo.DB.DBColumn"/> objects that represent the columns defined in the current <b>DBTable</b>.
+            <value>A <see cref="T:DevExpress.Data.XtraReports.Wizard.ReportType"/> enumeration value.
 </value>
 
 
         </member>
-        <member name="M:DevExpress.Xpo.DB.DBTable.Equals(System.Object)">
+        <member name="T:DevExpress.Data.XtraReports.Wizard.Views.IChooseReportStylePageView">
+
             <summary>
-                <para>Determines whether the current object has the same settings as the specified object.
+                <para>If implemented, provides a view for the <b>Specify the Report Style</b> page of the Report Wizard.
 </para>
             </summary>
-            <param name="obj">
-		A DBTable object to compare with the current object.
-
-            </param>
-            <returns><b>true</b> if the object specified by the parameter has the same settings as the current object; otherwise, <b>false</b>.
-
-</returns>
-
 
         </member>
-        <member name="P:DevExpress.Xpo.DB.DBTable.ForeignKeys">
+        <member name="P:DevExpress.Data.XtraReports.Wizard.Views.IChooseReportStylePageView.ReportStyleId">
             <summary>
-                <para>Provides access to the current DBTable's foreign keys collection.
+                <para>If implemented, specifies the selected report style.
 </para>
             </summary>
-            <value>A list of <see cref="T:DevExpress.Xpo.DB.DBForeignKey"/> objects that represent the foreign keys defined in the current <b>DBTable</b>.
+            <value>A <see cref="T:DevExpress.Data.XtraReports.Wizard.ReportStyleId"/> enumeration value.
 </value>
-
-
-        </member>
-        <member name="M:DevExpress.Xpo.DB.DBTable.GetColumn(System.String)">
-            <summary>
-                <para>Creates a new column with the specified name and appends it to the <see cref="P:DevExpress.Xpo.DB.DBTable.Columns"/> collection.
-</para>
-            </summary>
-            <param name="columnName">
-		A <see cref="T:System.String"/> value that specifies the column's name. This value is assigned to the <see cref="F:DevExpress.Xpo.DB.DBColumn.Name"/> property.
-
-            </param>
-            <returns>A <see cref="T:DevExpress.Xpo.DB.DBColumn"/> object that represents the new column.
-</returns>
-
-
-        </member>
-        <member name="M:DevExpress.Xpo.DB.DBTable.GetHashCode">
-            <summary>
-                <para>Gets the hash code (a number) that corresponds to the value of the current DBTable object.
-
-</para>
-            </summary>
-            <returns>An integer value representing the hash code for the current object.
-</returns>
-
-
-        </member>
-        <member name="P:DevExpress.Xpo.DB.DBTable.Indexes">
-            <summary>
-                <para>Provides access to the current DBTable's indexes collection.
-</para>
-            </summary>
-            <value>A list of <see cref="T:DevExpress.Xpo.DB.DBIndex"/> objects that represent the indexes defined for the current <b>DBTable</b>.
-</value>
-
-
-        </member>
-        <member name="M:DevExpress.Xpo.DB.DBTable.IsForeignKeyIncluded(DevExpress.Xpo.DB.DBForeignKey)">
-            <summary>
-                <para>Indicates whether the <see cref="P:DevExpress.Xpo.DB.DBTable.ForeignKeys"/> collection contains the specified <see cref="T:DevExpress.Xpo.DB.DBForeignKey"/> object.
-</para>
-            </summary>
-            <param name="fk">
-		A <see cref="T:DevExpress.Xpo.DB.DBForeignKey"/> object to locate in the collection.
-
-            </param>
-            <returns><b>true</b> if the collection contains the specified object; otherwise, <b>false</b>.
-</returns>
-
-
-        </member>
-        <member name="M:DevExpress.Xpo.DB.DBTable.IsIndexIncluded(DevExpress.Xpo.DB.DBIndex)">
-            <summary>
-                <para>Indicates whether the <see cref="P:DevExpress.Xpo.DB.DBTable.Indexes"/> collection contains the specified <see cref="T:DevExpress.Xpo.DB.DBIndex"/> object.
-</para>
-            </summary>
-            <param name="index">
-		A <see cref="T:DevExpress.Xpo.DB.DBIndex"/> object to locate in the collection.
-
-            </param>
-            <returns><b>true</b> if the collection contains the specified object; otherwise, <b>false</b>.
-</returns>
-
-
-        </member>
-        <member name="F:DevExpress.Xpo.DB.DBTable.IsView">
-            <summary>
-                <para>This member supports the .NET Framework infrastructure and is not intended to be used directly from your code.
-</para>
-            </summary>
-            <returns> 
-</returns>
-
-
-        </member>
-        <member name="F:DevExpress.Xpo.DB.DBTable.Name">
-            <summary>
-                <para>Specifies the table's name.
-</para>
-            </summary>
-            <returns>A <see cref="T:System.String"/> value that specifies the table's name.
-</returns>
-
-
-        </member>
-        <member name="F:DevExpress.Xpo.DB.DBTable.PrimaryKey">
-            <summary>
-                <para>Specifies a <see cref="T:DevExpress.Xpo.DB.DBPrimaryKey"/> object that represents a primary keys for the table. The primary key must be unique to identify the record in the table. It's also possible to have a table with a primary key made up of two or more columns.
-</para>
-            </summary>
-            <returns> </returns>
-
-
-        </member>
-        <member name="M:DevExpress.Xpo.DB.DBTable.ToString">
-            <summary>
-                <para> </para>
-            </summary>
-            <returns> </returns>
 
 
         </member>
@@ -9677,7 +9388,7 @@ An integer value.
         </member>
         <member name="M:DevExpress.Data.XtraReports.Wizard.Presenters.SetReportTitlePage`1.#ctor(DevExpress.Data.XtraReports.Wizard.Views.ISetReportTitlePageView)">
             <summary>
-                <para>Initializes a new instance of the SetReportTitlePage class with the specified view.
+                <para>Initializes a new instance of the SetReportTitlePage&lt;TModel&gt; class with the specified view.
 </para>
             </summary>
             <param name="view">
@@ -9723,7 +9434,7 @@ An integer value.
         </member>
         <member name="M:DevExpress.Data.XtraReports.Wizard.Presenters.SelectLabelTypePage`1.#ctor(DevExpress.Data.XtraReports.Wizard.Views.ISelectLabelTypePageView,DevExpress.Data.XtraReports.Labels.ILabelProductRepository)">
             <summary>
-                <para>Initializes a new instance of the SelectLabelTypePage class with the specified settings.
+                <para>Initializes a new instance of the SelectLabelTypePage&lt;TModel&gt; class with the specified settings.
 </para>
             </summary>
             <param name="view">
@@ -9795,7 +9506,7 @@ An integer value.
         </member>
         <member name="M:DevExpress.Data.XtraReports.Wizard.Presenters.SelectHierarchicalDataSourceColumnsPage`1.#ctor(DevExpress.Data.XtraReports.Wizard.Views.ISelectHierarchicalDataSourceColumnsPageView,DevExpress.Data.Browsing.Design.PickManagerBase,DevExpress.Data.XtraReports.Wizard.IColumnInfoCache)">
             <summary>
-                <para>Initializes a new instance of the SelectHierarchicalDataSourceColumnsPage class with the specified settings.
+                <para>Initializes a new instance of the SelectHierarchicalDataSourceColumnsPage&lt;TModel&gt; class with the specified settings.
 </para>
             </summary>
             <param name="view">
@@ -9871,7 +9582,7 @@ An integer value.
         </member>
         <member name="M:DevExpress.Data.XtraReports.Wizard.Presenters.SelectDataSourcePage`1.#ctor(DevExpress.Data.XtraReports.Wizard.Views.ISelectDataSourcePageView,DevExpress.Data.XtraReports.ServiceModel.IReportWizardServiceClient)">
             <summary>
-                <para>Initializes a new instance of the SelectDataSourcePage class with the specified settings.
+                <para>Initializes a new instance of the SelectDataSourcePage&lt;TModel&gt; class with the specified settings.
 </para>
             </summary>
             <param name="view">
@@ -9932,7 +9643,7 @@ An integer value.
         </member>
         <member name="M:DevExpress.Data.XtraReports.Wizard.Presenters.SelectDataMemberPage`1.#ctor(DevExpress.Data.XtraReports.Wizard.Views.ISelectDataMemberPageView,DevExpress.Data.XtraReports.ServiceModel.IReportWizardServiceClient)">
             <summary>
-                <para>Initializes a new instance of the SelectDataMemberPage class with the specified settings.
+                <para>Initializes a new instance of the SelectDataMemberPage&lt;TModel&gt; class with the specified settings.
 </para>
             </summary>
             <param name="view">
@@ -9992,7 +9703,7 @@ An integer value.
         </member>
         <member name="M:DevExpress.Data.XtraReports.Wizard.Presenters.SelectColumnsPage`1.#ctor(DevExpress.Data.XtraReports.Wizard.Views.ISelectColumnsPageView,DevExpress.Data.XtraReports.ServiceModel.IReportWizardServiceClient,DevExpress.Data.XtraReports.Wizard.IColumnInfoCache)">
             <summary>
-                <para>Initializes a new instance of the SelectColumnsPage class with the specified settings.
+                <para>Initializes a new instance of the SelectColumnsPage&lt;TModel&gt; class with the specified settings.
 </para>
             </summary>
             <param name="view">
@@ -10090,7 +9801,7 @@ An integer value.
         </member>
         <member name="M:DevExpress.Data.XtraReports.Wizard.Presenters.CustomizeLabelPage`1.#ctor(DevExpress.Data.XtraReports.Wizard.Views.ICustomizeLabelPageView,DevExpress.Data.XtraReports.Labels.ILabelProductRepository)">
             <summary>
-                <para>Initializes a new instance of the CustomizeLabelPage class with the specified settings.
+                <para>Initializes a new instance of the CustomizeLabelPage&lt;TModel&gt; class with the specified settings.
 </para>
             </summary>
             <param name="view">
@@ -10151,7 +9862,7 @@ An integer value.
         </member>
         <member name="M:DevExpress.Data.XtraReports.Wizard.Presenters.ChooseSummaryOptionsPage`1.#ctor(DevExpress.Data.XtraReports.Wizard.Views.IChooseSummaryOptionsPageView,DevExpress.Data.XtraReports.Wizard.IColumnInfoCache)">
             <summary>
-                <para>Initializes a new instance of the ChooseSummaryOptionsPage class with the specified settings.
+                <para>Initializes a new instance of the ChooseSummaryOptionsPage&lt;TModel&gt; class with the specified settings.
 </para>
             </summary>
             <param name="view">
@@ -10222,7 +9933,7 @@ An integer value.
         </member>
         <member name="M:DevExpress.Data.XtraReports.Wizard.Presenters.ChooseReportTypePage`1.#ctor(DevExpress.Data.XtraReports.Wizard.Views.IChooseReportTypePageView)">
             <summary>
-                <para>Initializes a new instance of the ChooseReportTypePage class with the specified view.
+                <para>Initializes a new instance of the ChooseReportTypePage&lt;TModel&gt; class with the specified view.
 </para>
             </summary>
             <param name="view">
@@ -10279,7 +9990,7 @@ An integer value.
         </member>
         <member name="M:DevExpress.Data.XtraReports.Wizard.Presenters.ChooseReportStylePage`1.#ctor(DevExpress.Data.XtraReports.Wizard.Views.IChooseReportStylePageView)">
             <summary>
-                <para>Initializes a new instance of the ChooseReportStylePage class with the specified view.
+                <para>Initializes a new instance of the ChooseReportStylePage&lt;TModel&gt; class with the specified view.
 </para>
             </summary>
             <param name="view">
@@ -10346,7 +10057,7 @@ An integer value.
         </member>
         <member name="M:DevExpress.Data.XtraReports.Wizard.Presenters.ChooseReportLayoutPage`1.#ctor(DevExpress.Data.XtraReports.Wizard.Views.IChooseReportLayoutPageView)">
             <summary>
-                <para>Initializes a new instance of the ChooseReportLayoutPage class with the specified view.
+                <para>Initializes a new instance of the ChooseReportLayoutPage&lt;TModel&gt; class with the specified view.
 </para>
             </summary>
             <param name="view">
@@ -10403,6 +10114,76 @@ An integer value.
 
 
         </member>
+        <member name="T:DevExpress.Data.XtraReports.Wizard.Presenters.AddGroupingLevelPage`1">
+
+            <summary>
+                <para>The <b>Create Groups</b> page of the Report Wizard.
+</para>
+            </summary>
+
+        </member>
+        <member name="M:DevExpress.Data.XtraReports.Wizard.Presenters.AddGroupingLevelPage`1.#ctor(DevExpress.Data.XtraReports.Wizard.Views.IAddGroupingLevelPageView,DevExpress.Data.XtraReports.Wizard.IColumnInfoCache)">
+            <summary>
+                <para>Initializes a new instance of the AddGroupingLevelPage&lt;TModel&gt; class with the specified settings.
+</para>
+            </summary>
+            <param name="view">
+		An object implementing the <see cref="T:DevExpress.Data.XtraReports.Wizard.Views.IAddGroupingLevelPageView"/> interface.
+
+            </param>
+            <param name="columnInfoCache">
+		An object implementing the <see cref="T:DevExpress.Data.XtraReports.Wizard.IColumnInfoCache"/> interface. (Typically, it is the <see cref="T:DevExpress.Data.XtraReports.Wizard.ColumnInfoCache"/> object.)
+
+            </param>
+
+
+        </member>
+        <member name="M:DevExpress.Data.XtraReports.Wizard.Presenters.AddGroupingLevelPage`1.Begin">
+            <summary>
+                <para>Initializes controls of the <b>Create Groups</b> page of the Report Wizard.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="M:DevExpress.Data.XtraReports.Wizard.Presenters.AddGroupingLevelPage`1.Commit">
+            <summary>
+                <para>Saves settings specified by a wizard page to the report model.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="P:DevExpress.Data.XtraReports.Wizard.Presenters.AddGroupingLevelPage`1.FinishEnabled">
+            <summary>
+                <para>Specifies whether of not the <b>Finish</b> button is enabled on the <b>Create Groups</b> page of the Report Wizard.
+</para>
+            </summary>
+            <value><b>true</b>, if the <b>Finish</b> button is  enabled; otherwise, <b>false</b>.
+</value>
+
+
+        </member>
+        <member name="M:DevExpress.Data.XtraReports.Wizard.Presenters.AddGroupingLevelPage`1.GetNextPageType">
+            <summary>
+                <para>Returns the type of the next wizard page.
+</para>
+            </summary>
+            <returns>A <see cref="T:System.Type"/> enumeration value.
+</returns>
+
+
+        </member>
+        <member name="P:DevExpress.Data.XtraReports.Wizard.Presenters.AddGroupingLevelPage`1.MoveNextEnabled">
+            <summary>
+                <para>Specifies whether of not the <b>Next</b> button is enabled on the <b>Create Groups</b>  page of the Report Wizard.
+</para>
+            </summary>
+            <value><b>true</b>, if the <b>Next</b> button is  enabled; otherwise, <b>false</b>.
+</value>
+
+
+        </member>
         <member name="T:DevExpress.XtraPrinting.HorizontalContentSplitting">
 
             <summary>
@@ -10437,7 +10218,7 @@ An integer value.
         </member>
         <member name="M:DevExpress.Data.Utils.ServiceModel.ScalarOperationCompletedEventArgs`1.#ctor(System.Object,System.Exception,System.Boolean,System.Object)">
             <summary>
-                <para>Initializes a new instance of the ScalarOperationCompletedEventArgs class with the specified settings.
+                <para>Initializes a new instance of the ScalarOperationCompletedEventArgs&lt;T&gt; class with the specified settings.
 </para>
             </summary>
             <param name="result">
@@ -10520,6 +10301,42 @@ An integer value.
         <member name="F:DevExpress.XtraSpellChecker.SpellCheckMode.OnDemand">
             <summary>
                 <para>Starts spelling check and invokes the spelling form for making corrections.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="T:DevExpress.XtraPrinting.BrickStringFormatPrototypeKind">
+
+            <summary>
+                <para>Specifies the prototype string format for the <see cref="T:DevExpress.XtraPrinting.BrickStringFormat"/>.
+
+</para>
+            </summary>
+
+        </member>
+        <member name="F:DevExpress.XtraPrinting.BrickStringFormatPrototypeKind.Default">
+            <summary>
+                <para>The current string format is based on the default string format.
+
+</para>
+            </summary>
+
+
+        </member>
+        <member name="F:DevExpress.XtraPrinting.BrickStringFormatPrototypeKind.GenericDefault">
+            <summary>
+                <para>The current string format is based on the generic default string format.
+
+</para>
+            </summary>
+
+
+        </member>
+        <member name="F:DevExpress.XtraPrinting.BrickStringFormatPrototypeKind.GenericTypographic">
+            <summary>
+                <para>The current string format is based on the generic typographic string format.
+
 </para>
             </summary>
 
@@ -13075,6 +12892,205 @@ The <see cref="E:DevExpress.XtraEditors.DXErrorProvider.DXErrorProvider.GetError
             <summary>
                 <para>This member supports the XPO Framework infrastructure and is not intended to be used directly from your code.
 </para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="T:DevExpress.Xpo.DB.DBTable">
+
+            <summary>
+                <para>A table that stores a persistent object's data.
+</para>
+            </summary>
+
+        </member>
+        <member name="M:DevExpress.Xpo.DB.DBTable.#ctor">
+            <summary>
+                <para>Initializes a new instance of the <see cref="T:DevExpress.Xpo.DB.DBTable"/> class with default settings.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="M:DevExpress.Xpo.DB.DBTable.#ctor(System.String)">
+            <summary>
+                <para>Initializes a new instance of the <see cref="T:DevExpress.Xpo.DB.DBTable"/> class with the specified name.
+</para>
+            </summary>
+            <param name="name">
+		A <see cref="T:System.String"/> value that specifies the table's name. This value is assigned to the <see cref="F:DevExpress.Xpo.DB.DBTable.Name"/> property.
+
+            </param>
+
+
+        </member>
+        <member name="M:DevExpress.Xpo.DB.DBTable.AddColumn(DevExpress.Xpo.DB.DBColumn)">
+            <summary>
+                <para>Appends a column to the <see cref="P:DevExpress.Xpo.DB.DBTable.Columns"/> collection.
+</para>
+            </summary>
+            <param name="column">
+		A <see cref="T:DevExpress.Xpo.DB.DBColumn"/> object that represents the column to be added to the collection.
+
+            </param>
+
+
+        </member>
+        <member name="M:DevExpress.Xpo.DB.DBTable.AddForeignKey(DevExpress.Xpo.DB.DBForeignKey)">
+            <summary>
+                <para>Appends a <see cref="T:DevExpress.Xpo.DB.DBForeignKey"/> object to the <see cref="P:DevExpress.Xpo.DB.DBTable.ForeignKeys"/> collection.
+</para>
+            </summary>
+            <param name="fk">
+		A <see cref="T:DevExpress.Xpo.DB.DBForeignKey"/> object to be added to the collection.
+
+            </param>
+
+
+        </member>
+        <member name="M:DevExpress.Xpo.DB.DBTable.AddIndex(DevExpress.Xpo.DB.DBIndex)">
+            <summary>
+                <para>Appends a <see cref="T:DevExpress.Xpo.DB.DBIndex"/> object to the <see cref="P:DevExpress.Xpo.DB.DBTable.Indexes"/> collection.
+</para>
+            </summary>
+            <param name="index">
+		A <see cref="T:DevExpress.Xpo.DB.DBIndex"/> object to be added to the collection.
+
+            </param>
+
+
+        </member>
+        <member name="P:DevExpress.Xpo.DB.DBTable.Columns">
+            <summary>
+                <para>Provides access to the current DBTable's column collection.
+</para>
+            </summary>
+            <value>A list of <see cref="T:DevExpress.Xpo.DB.DBColumn"/> objects that represent the columns defined in the current <b>DBTable</b>.
+</value>
+
+
+        </member>
+        <member name="M:DevExpress.Xpo.DB.DBTable.Equals(System.Object)">
+            <summary>
+                <para>Determines whether the current object has the same settings as the specified object.
+</para>
+            </summary>
+            <param name="obj">
+		A DBTable object to compare with the current object.
+
+            </param>
+            <returns><b>true</b> if the object specified by the parameter has the same settings as the current object; otherwise, <b>false</b>.
+
+</returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpo.DB.DBTable.ForeignKeys">
+            <summary>
+                <para>Provides access to the current DBTable's foreign keys collection.
+</para>
+            </summary>
+            <value>A list of <see cref="T:DevExpress.Xpo.DB.DBForeignKey"/> objects that represent the foreign keys defined in the current <b>DBTable</b>.
+</value>
+
+
+        </member>
+        <member name="M:DevExpress.Xpo.DB.DBTable.GetColumn(System.String)">
+            <summary>
+                <para>Creates a new column with the specified name and appends it to the <see cref="P:DevExpress.Xpo.DB.DBTable.Columns"/> collection.
+</para>
+            </summary>
+            <param name="columnName">
+		A <see cref="T:System.String"/> value that specifies the column's name. This value is assigned to the <see cref="F:DevExpress.Xpo.DB.DBColumn.Name"/> property.
+
+            </param>
+            <returns>A <see cref="T:DevExpress.Xpo.DB.DBColumn"/> object that represents the new column.
+</returns>
+
+
+        </member>
+        <member name="M:DevExpress.Xpo.DB.DBTable.GetHashCode">
+            <summary>
+                <para>Gets the hash code (a number) that corresponds to the value of the current DBTable object.
+
+</para>
+            </summary>
+            <returns>An integer value representing the hash code for the current object.
+</returns>
+
+
+        </member>
+        <member name="P:DevExpress.Xpo.DB.DBTable.Indexes">
+            <summary>
+                <para>Provides access to the current DBTable's indexes collection.
+</para>
+            </summary>
+            <value>A list of <see cref="T:DevExpress.Xpo.DB.DBIndex"/> objects that represent the indexes defined for the current <b>DBTable</b>.
+</value>
+
+
+        </member>
+        <member name="M:DevExpress.Xpo.DB.DBTable.IsForeignKeyIncluded(DevExpress.Xpo.DB.DBForeignKey)">
+            <summary>
+                <para>Indicates whether the <see cref="P:DevExpress.Xpo.DB.DBTable.ForeignKeys"/> collection contains the specified <see cref="T:DevExpress.Xpo.DB.DBForeignKey"/> object.
+</para>
+            </summary>
+            <param name="fk">
+		A <see cref="T:DevExpress.Xpo.DB.DBForeignKey"/> object to locate in the collection.
+
+            </param>
+            <returns><b>true</b> if the collection contains the specified object; otherwise, <b>false</b>.
+</returns>
+
+
+        </member>
+        <member name="M:DevExpress.Xpo.DB.DBTable.IsIndexIncluded(DevExpress.Xpo.DB.DBIndex)">
+            <summary>
+                <para>Indicates whether the <see cref="P:DevExpress.Xpo.DB.DBTable.Indexes"/> collection contains the specified <see cref="T:DevExpress.Xpo.DB.DBIndex"/> object.
+</para>
+            </summary>
+            <param name="index">
+		A <see cref="T:DevExpress.Xpo.DB.DBIndex"/> object to locate in the collection.
+
+            </param>
+            <returns><b>true</b> if the collection contains the specified object; otherwise, <b>false</b>.
+</returns>
+
+
+        </member>
+        <member name="F:DevExpress.Xpo.DB.DBTable.IsView">
+            <summary>
+                <para>This member supports the .NET Framework infrastructure and is not intended to be used directly from your code.
+</para>
+            </summary>
+            <returns> 
+</returns>
+
+
+        </member>
+        <member name="F:DevExpress.Xpo.DB.DBTable.Name">
+            <summary>
+                <para>Specifies the table's name.
+</para>
+            </summary>
+            <returns>A <see cref="T:System.String"/> value that specifies the table's name.
+</returns>
+
+
+        </member>
+        <member name="F:DevExpress.Xpo.DB.DBTable.PrimaryKey">
+            <summary>
+                <para>Specifies a <see cref="T:DevExpress.Xpo.DB.DBPrimaryKey"/> object that represents a primary keys for the table. The primary key must be unique to identify the record in the table. It's also possible to have a table with a primary key made up of two or more columns.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="M:DevExpress.Xpo.DB.DBTable.ToString">
+            <summary>
+                <para> </para>
             </summary>
             <returns> </returns>
 
@@ -18346,7 +18362,7 @@ To create the multiplication operator using the <see cref="M:DevExpress.Data.Fil
 To create the Boolean inequality operator using the <see cref="M:DevExpress.Data.Filtering.CriteriaOperator.Parse"/> method use the following syntax:
 </para>
 
-<b>CriteriaOperator.Parse("Field1 != Field2")</b> or <b>CriteriaOperator.Parse("Field1  Field2")</b>
+<b>CriteriaOperator.Parse("Field1 != Field2")</b> or <b>CriteriaOperator.Parse("Field1 &lt;&gt; Field2")</b>
 </para>
             </summary>
 
@@ -18430,95 +18446,6 @@ To create the addition operator using the <see cref="M:DevExpress.Data.Filtering
 
 
         </member>
-        <member name="T:DevExpress.Xpf.Printing.ServiceKnownTypeProvider">
-
-            <summary>
-                <para>Registers known types on a WCF-service.
-</para>
-            </summary>
-
-        </member>
-        <member name="M:DevExpress.Xpf.Printing.ServiceKnownTypeProvider.GetKnownTypes(System.Reflection.ICustomAttributeProvider)">
-            <summary>
-                <para>For internal use.
-</para>
-            </summary>
-            <param name="provider">
-		 
-
-            </param>
-            <returns> 
-</returns>
-
-
-        </member>
-        <member name="F:DevExpress.Xpf.Printing.ServiceKnownTypeProvider.GetKnownTypesMethodName">
-            <summary>
-                <para>"<b>GetKnownTypes</b>"
-</para>
-            </summary>
-            <returns> </returns>
-
-
-        </member>
-        <member name="M:DevExpress.Xpf.Printing.ServiceKnownTypeProvider.IsRegistered(System.Type)">
-            <summary>
-                <para>Specifies whether or not a custom parameter type is registered.
-</para>
-            </summary>
-            <param name="type">
-		A <see cref="T:System.Type"/> enumeration value. 
-
-            </param>
-            <returns><b>true</b> if the parameter type is registered; otherwise <b>false</b>. 
-</returns>
-
-
-        </member>
-        <member name="M:DevExpress.Xpf.Printing.ServiceKnownTypeProvider.Register(System.Type[])">
-            <summary>
-                <para>Registers an array of custom parameter types.
-</para>
-            </summary>
-            <param name="types">
-		An array of <see cref="T:System.Type"/> enumeration values. 
-
-            </param>
-
-
-        </member>
-        <member name="M:DevExpress.Xpf.Printing.ServiceKnownTypeProvider.Register(System.Type)">
-            <summary>
-                <para>Registers a custom parameter type.
-</para>
-            </summary>
-            <param name="type">
-		A <see cref="T:System.Type"/> enumeration value. 
-
-            </param>
-
-
-        </member>
-        <member name="M:DevExpress.Xpf.Printing.ServiceKnownTypeProvider.Register(System.Collections.Generic.IEnumerable`1)">
-            <summary>
-                <para>Registers a collection of custom parameter types.
-</para>
-            </summary>
-            <param name="types">
-		A collection of <see cref="T:System.Type"/> objects.
-
-            </param>
-
-
-        </member>
-        <member name="M:DevExpress.Xpf.Printing.ServiceKnownTypeProvider.Register``1">
-            <summary>
-                <para>Registers a custom parameter type.
-</para>
-            </summary>
-
-
-        </member>
         <member name="T:DevExpress.Xpo.SortProperty">
 
             <summary>
@@ -18596,6 +18523,94 @@ To create the addition operator using the <see cref="M:DevExpress.Data.Filtering
             <value>A <see cref="T:System.String"/> value which specifies the name of the property that identifies the sorted column in a data store. This value is case-sensitive.
 
 </value>
+
+
+        </member>
+        <member name="T:DevExpress.XtraPrinting.ImageAlignment">
+
+            <summary>
+                <para>Specifies the alignment of a displayed image in relation to the container control's boundaries.
+</para>
+            </summary>
+
+        </member>
+        <member name="F:DevExpress.XtraPrinting.ImageAlignment.BottomCenter">
+            <summary>
+                <para>An image is aligned to the bottom side of a control.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="F:DevExpress.XtraPrinting.ImageAlignment.BottomLeft">
+            <summary>
+                <para>An image is aligned to the bottom left corner of a control.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="F:DevExpress.XtraPrinting.ImageAlignment.BottomRight">
+            <summary>
+                <para>An image is aligned to the bottom right corner of a control.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="F:DevExpress.XtraPrinting.ImageAlignment.Default">
+            <summary>
+                <para>The default image alignment is used.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="F:DevExpress.XtraPrinting.ImageAlignment.MiddleCenter">
+            <summary>
+                <para>An image is aligned to the middler of a control
+</para>
+            </summary>
+
+
+        </member>
+        <member name="F:DevExpress.XtraPrinting.ImageAlignment.MiddleLeft">
+            <summary>
+                <para>An image is aligned to the left side of a control. 
+</para>
+            </summary>
+
+
+        </member>
+        <member name="F:DevExpress.XtraPrinting.ImageAlignment.MiddleRight">
+            <summary>
+                <para>An image is aligned to the right side of a control. 
+</para>
+            </summary>
+
+
+        </member>
+        <member name="F:DevExpress.XtraPrinting.ImageAlignment.TopCenter">
+            <summary>
+                <para>An image is aligned to the top side of a control. 
+</para>
+            </summary>
+
+
+        </member>
+        <member name="F:DevExpress.XtraPrinting.ImageAlignment.TopLeft">
+            <summary>
+                <para>An image is aligned to the top left corner of a control. 
+</para>
+            </summary>
+
+
+        </member>
+        <member name="F:DevExpress.XtraPrinting.ImageAlignment.TopRight">
+            <summary>
+                <para>An image is aligned to the top right corner of a control. 
+</para>
+            </summary>
 
 
         </member>
@@ -19417,7 +19432,7 @@ This is supported only by the DXPrinting for WPF library.
         </member>
         <member name="F:DevExpress.XtraPrinting.PrintingSystemCommand.SubmitParameters">
             <summary>
-                <para>Passes the entered values to the report parameters and triggers document creation based on these values.
+                <para>For internal use.
 </para>
             </summary>
 
@@ -20247,14 +20262,14 @@ Otherwise, the closest matching image side (height or width) will be sized to th
         </member>
         <member name="M:DevExpress.Data.XtraReports.DataProviders.EntityInfo`1.Equals(System.Object)">
             <summary>
-                <para>Determines whether or not the specified object is equal to the current EntityInfo instance.
+                <para>Determines whether or not the specified object is equal to the current EntityInfo&lt;TName&gt; instance.
 </para>
             </summary>
             <param name="obj">
 		The object to compare with the current object.
 
             </param>
-            <returns><b>true</b> if the specified object is equal to the current EntityInfo instance; otherwise <b>false</b>.
+            <returns><b>true</b> if the specified object is equal to the current EntityInfo&lt;TName&gt; instance; otherwise <b>false</b>.
 </returns>
 
 
@@ -20279,27 +20294,65 @@ Otherwise, the closest matching image side (height or width) will be sized to th
 
 
         </member>
-        <member name="T:DevExpress.Utils.Controls.BaseOptionChangedEventHandler">
+        <member name="T:DevExpress.Xpo.DB.DBNameTypePair">
 
             <summary>
-                <para>Represents a method that will handle the event raised after an option value change.
+                <para>Stores a pair of values, specifying a <see cref="T:DevExpress.Xpo.DB.DBColumnType"/> along with its corresponding name.
 </para>
             </summary>
 
         </member>
-        <member name="M:DevExpress.Utils.Controls.BaseOptionChangedEventHandler.Invoke(System.Object,DevExpress.Utils.Controls.BaseOptionChangedEventArgs)">
+        <member name="M:DevExpress.Xpo.DB.DBNameTypePair.#ctor">
             <summary>
-                <para>Represents a method that will handle the event raised after the option has been changed.
+                <para>Initializes a new instance of the DBNameTypePair class with default settings.
 </para>
             </summary>
-            <param name="sender">
-		The event sender.
+
+
+        </member>
+        <member name="M:DevExpress.Xpo.DB.DBNameTypePair.#ctor(System.String,DevExpress.Xpo.DB.DBColumnType)">
+            <summary>
+                <para>Initializes a new instance of the DBNameTypePair class with the specified settings.
+</para>
+            </summary>
+            <param name="name">
+		A <see cref="T:System.String"/> value.
+
 
             </param>
-            <param name="e">
-		A <see cref="T:DevExpress.Utils.Controls.BaseOptionChangedEventArgs"/> object that contains data related to the event.
+            <param name="type">
+		A <see cref="T:DevExpress.Xpo.DB.DBColumnType"/> enumeration value.
 
             </param>
+
+
+        </member>
+        <member name="F:DevExpress.Xpo.DB.DBNameTypePair.Name">
+            <summary>
+                <para>A <see cref="T:System.String"/> value, specifying the database column name.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="M:DevExpress.Xpo.DB.DBNameTypePair.ToString">
+            <summary>
+                <para>Returns a value, specifying the name and type of the data table column (separated by a white space).
+</para>
+            </summary>
+            <returns>A <see cref="T:System.String"/> value. Example: "<b>OrderDate DateTime</b>".
+
+</returns>
+
+
+        </member>
+        <member name="F:DevExpress.Xpo.DB.DBNameTypePair.Type">
+            <summary>
+                <para>A <see cref="T:DevExpress.Xpo.DB.DBColumnType"/> value, specifying the database column type.
+</para>
+            </summary>
+            <returns> </returns>
 
 
         </member>
@@ -22637,38 +22690,6 @@ Otherwise, the closest matching image side (height or width) will be sized to th
 
 
         </member>
-        <member name="T:DevExpress.XtraEditors.FilterControlAllowAggregateEditing">
-
-            <summary>
-                <para>Contains values that specify if filters against List properties can be created.
-</para>
-            </summary>
-
-        </member>
-        <member name="F:DevExpress.XtraEditors.FilterControlAllowAggregateEditing.Aggregate">
-            <summary>
-                <para>Allows filters to be created against properties that are List objects.
-</para>
-            </summary>
-
-
-        </member>
-        <member name="F:DevExpress.XtraEditors.FilterControlAllowAggregateEditing.AggregateWithCondition">
-            <summary>
-                <para>Allows filters to be created against properties that are List objects, and against the List's children.
-</para>
-            </summary>
-
-
-        </member>
-        <member name="F:DevExpress.XtraEditors.FilterControlAllowAggregateEditing.No">
-            <summary>
-                <para>Doesn't allow filters to be created against List properties and against their children.
-</para>
-            </summary>
-
-
-        </member>
         <member name="T:DevExpress.Utils.FormatInfo">
 
             <summary>
@@ -23000,76 +23021,6 @@ Also <see cref="P:DevExpress.Utils.FormatInfo.FormatString"/> is set to an empty
 </para>
 </para>
             </summary>
-
-
-        </member>
-        <member name="T:DevExpress.Data.XtraReports.Wizard.Presenters.AddGroupingLevelPage`1">
-
-            <summary>
-                <para>The <b>Create Groups</b> page of the Report Wizard.
-</para>
-            </summary>
-
-        </member>
-        <member name="M:DevExpress.Data.XtraReports.Wizard.Presenters.AddGroupingLevelPage`1.#ctor(DevExpress.Data.XtraReports.Wizard.Views.IAddGroupingLevelPageView,DevExpress.Data.XtraReports.Wizard.IColumnInfoCache)">
-            <summary>
-                <para>Initializes a new instance of the AddGroupingLevelPage class with the specified settings.
-</para>
-            </summary>
-            <param name="view">
-		An object implementing the <see cref="T:DevExpress.Data.XtraReports.Wizard.Views.IAddGroupingLevelPageView"/> interface.
-
-            </param>
-            <param name="columnInfoCache">
-		An object implementing the <see cref="T:DevExpress.Data.XtraReports.Wizard.IColumnInfoCache"/> interface. (Typically, it is the <see cref="T:DevExpress.Data.XtraReports.Wizard.ColumnInfoCache"/> object.)
-
-            </param>
-
-
-        </member>
-        <member name="M:DevExpress.Data.XtraReports.Wizard.Presenters.AddGroupingLevelPage`1.Begin">
-            <summary>
-                <para>Initializes controls of the <b>Create Groups</b> page of the Report Wizard.
-</para>
-            </summary>
-
-
-        </member>
-        <member name="M:DevExpress.Data.XtraReports.Wizard.Presenters.AddGroupingLevelPage`1.Commit">
-            <summary>
-                <para>Saves settings specified by a wizard page to the report model.
-</para>
-            </summary>
-
-
-        </member>
-        <member name="P:DevExpress.Data.XtraReports.Wizard.Presenters.AddGroupingLevelPage`1.FinishEnabled">
-            <summary>
-                <para>Specifies whether of not the <b>Finish</b> button is enabled on the <b>Create Groups</b> page of the Report Wizard.
-</para>
-            </summary>
-            <value><b>true</b>, if the <b>Finish</b> button is  enabled; otherwise, <b>false</b>.
-</value>
-
-
-        </member>
-        <member name="M:DevExpress.Data.XtraReports.Wizard.Presenters.AddGroupingLevelPage`1.GetNextPageType">
-            <summary>
-                <para>Returns the type of the next wizard page.
-</para>
-            </summary>
-            <returns>A <see cref="T:System.Type"/> enumeration value.
-</returns>
-
-
-        </member>
-        <member name="P:DevExpress.Data.XtraReports.Wizard.Presenters.AddGroupingLevelPage`1.MoveNextEnabled">
-            <summary>
-                <para>Specifies whether of not the <b>Next</b> button is enabled on the <b>Create Groups</b>  page of the Report Wizard.
-</para>
-            </summary>
-            <value><b>true</b>, if the <b>Next</b> button is  enabled; otherwise, <b>false</b>.
-</value>
 
 
         </member>
@@ -24104,7 +24055,7 @@ Also <see cref="P:DevExpress.Utils.FormatInfo.FormatString"/> is set to an empty
         </member>
         <member name="F:DevExpress.XtraPrinting.Localization.PreviewStringId.ExportOption_ConfirmOpenPasswordForm_Name">
             <summary>
-                <para>"<b>Document Open Password:</b>"
+                <para>"<b>Document Open Pa&#38;ssword:</b>"
 </para>
             </summary>
 
@@ -24128,7 +24079,7 @@ Also <see cref="P:DevExpress.Utils.FormatInfo.FormatString"/> is set to an empty
         </member>
         <member name="F:DevExpress.XtraPrinting.Localization.PreviewStringId.ExportOption_ConfirmPermissionsPasswordForm_Name">
             <summary>
-                <para>"<b>Permissions Password:</b>"
+                <para>"<b>&#38;Permissions Password:</b>"
 </para>
             </summary>
 
@@ -25102,7 +25053,7 @@ Also <see cref="P:DevExpress.Utils.FormatInfo.FormatString"/> is set to an empty
         </member>
         <member name="F:DevExpress.XtraPrinting.Localization.PreviewStringId.MenuItem_BackgrColor">
             <summary>
-                <para>"<b>Color...</b>"
+                <para>"<b>&#38;Color...</b>"
 </para>
             </summary>
 
@@ -25110,7 +25061,7 @@ Also <see cref="P:DevExpress.Utils.FormatInfo.FormatString"/> is set to an empty
         </member>
         <member name="F:DevExpress.XtraPrinting.Localization.PreviewStringId.MenuItem_Background">
             <summary>
-                <para>"<b>Background</b>"
+                <para>"<b>&#38;Background</b>"
 </para>
             </summary>
 
@@ -25135,7 +25086,7 @@ Also <see cref="P:DevExpress.Utils.FormatInfo.FormatString"/> is set to an empty
         </member>
         <member name="F:DevExpress.XtraPrinting.Localization.PreviewStringId.MenuItem_Exit">
             <summary>
-                <para>"<b>Exit</b>"
+                <para>"<b>E&#38;xit</b>"
 </para>
             </summary>
 
@@ -25143,7 +25094,7 @@ Also <see cref="P:DevExpress.Utils.FormatInfo.FormatString"/> is set to an empty
         </member>
         <member name="F:DevExpress.XtraPrinting.Localization.PreviewStringId.MenuItem_Export">
             <summary>
-                <para>"<b>Export To</b>"
+                <para>"<b>&#38;Export To</b>"
 </para>
             </summary>
 
@@ -25151,7 +25102,7 @@ Also <see cref="P:DevExpress.Utils.FormatInfo.FormatString"/> is set to an empty
         </member>
         <member name="F:DevExpress.XtraPrinting.Localization.PreviewStringId.MenuItem_File">
             <summary>
-                <para>"<b>File</b>"
+                <para>"<b>&#38;File</b>"
 </para>
             </summary>
 
@@ -25183,7 +25134,7 @@ Also <see cref="P:DevExpress.Utils.FormatInfo.FormatString"/> is set to an empty
         </member>
         <member name="F:DevExpress.XtraPrinting.Localization.PreviewStringId.MenuItem_PageLayout">
             <summary>
-                <para>"<b>Page Layout</b>"
+                <para>"<b>&#38;Page Layout</b>"
 </para>
             </summary>
 
@@ -25191,7 +25142,7 @@ Also <see cref="P:DevExpress.Utils.FormatInfo.FormatString"/> is set to an empty
         </member>
         <member name="F:DevExpress.XtraPrinting.Localization.PreviewStringId.MenuItem_PageSetup">
             <summary>
-                <para>"<b>Page Setup...</b>"
+                <para>"<b>Page Set&#38;up...</b>"
 </para>
             </summary>
 
@@ -25207,7 +25158,7 @@ Also <see cref="P:DevExpress.Utils.FormatInfo.FormatString"/> is set to an empty
         </member>
         <member name="F:DevExpress.XtraPrinting.Localization.PreviewStringId.MenuItem_Print">
             <summary>
-                <para>"<b>Print...</b>"
+                <para>"<b>&#38;Print...</b>"
 </para>
             </summary>
 
@@ -25215,7 +25166,7 @@ Also <see cref="P:DevExpress.Utils.FormatInfo.FormatString"/> is set to an empty
         </member>
         <member name="F:DevExpress.XtraPrinting.Localization.PreviewStringId.MenuItem_PrintDirect">
             <summary>
-                <para>"<b>Print</b>"
+                <para>"<b>P&#38;rint</b>"
 </para>
             </summary>
 
@@ -25240,7 +25191,7 @@ Also <see cref="P:DevExpress.Utils.FormatInfo.FormatString"/> is set to an empty
         </member>
         <member name="F:DevExpress.XtraPrinting.Localization.PreviewStringId.MenuItem_Send">
             <summary>
-                <para>"<b>Send As</b>"
+                <para>"<b>Sen&#38;d As</b>"
 </para>
             </summary>
 
@@ -25256,7 +25207,7 @@ Also <see cref="P:DevExpress.Utils.FormatInfo.FormatString"/> is set to an empty
         </member>
         <member name="F:DevExpress.XtraPrinting.Localization.PreviewStringId.MenuItem_View">
             <summary>
-                <para>"<b>View</b>"
+                <para>"<b>&#38;View</b>"
 </para>
             </summary>
 
@@ -25264,7 +25215,7 @@ Also <see cref="P:DevExpress.Utils.FormatInfo.FormatString"/> is set to an empty
         </member>
         <member name="F:DevExpress.XtraPrinting.Localization.PreviewStringId.MenuItem_ViewContinuous">
             <summary>
-                <para>"<b>Continuous</b>"
+                <para>"<b>&#38;Continuous</b>"
 </para>
             </summary>
 
@@ -25272,7 +25223,7 @@ Also <see cref="P:DevExpress.Utils.FormatInfo.FormatString"/> is set to an empty
         </member>
         <member name="F:DevExpress.XtraPrinting.Localization.PreviewStringId.MenuItem_ViewFacing">
             <summary>
-                <para>"<b>Facing</b>"
+                <para>"<b>&#38;Facing</b>"
 </para>
             </summary>
 
@@ -25280,7 +25231,7 @@ Also <see cref="P:DevExpress.Utils.FormatInfo.FormatString"/> is set to an empty
         </member>
         <member name="F:DevExpress.XtraPrinting.Localization.PreviewStringId.MenuItem_ViewStatusbar">
             <summary>
-                <para>"<b>Statusbar</b>"
+                <para>"<b>&#38;Statusbar</b>"
 </para>
             </summary>
 
@@ -25288,7 +25239,7 @@ Also <see cref="P:DevExpress.Utils.FormatInfo.FormatString"/> is set to an empty
         </member>
         <member name="F:DevExpress.XtraPrinting.Localization.PreviewStringId.MenuItem_ViewToolbar">
             <summary>
-                <para>"<b>Toolbar</b>"
+                <para>"<b>&#38;Toolbar</b>"
 </para>
             </summary>
 
@@ -25296,7 +25247,7 @@ Also <see cref="P:DevExpress.Utils.FormatInfo.FormatString"/> is set to an empty
         </member>
         <member name="F:DevExpress.XtraPrinting.Localization.PreviewStringId.MenuItem_Watermark">
             <summary>
-                <para>"<b>Watermark...</b>"
+                <para>"<b>&#38;Watermark...</b>"
 </para>
             </summary>
 
@@ -28731,7 +28682,7 @@ Also <see cref="P:DevExpress.Utils.FormatInfo.FormatString"/> is set to an empty
         </member>
         <member name="F:DevExpress.XtraPrinting.Localization.PreviewStringId.WMForm_PageRangeRgrItem_All">
             <summary>
-                <para>"<b>All</b>"
+                <para>"<b>&#38;All</b>"
 </para>
             </summary>
 
@@ -28739,7 +28690,7 @@ Also <see cref="P:DevExpress.Utils.FormatInfo.FormatString"/> is set to an empty
         </member>
         <member name="F:DevExpress.XtraPrinting.Localization.PreviewStringId.WMForm_PageRangeRgrItem_Pages">
             <summary>
-                <para>"<b>Pages:</b>"
+                <para>"<b>&#38;Pages:</b>"
 </para>
             </summary>
 
@@ -28867,7 +28818,7 @@ Also <see cref="P:DevExpress.Utils.FormatInfo.FormatString"/> is set to an empty
         </member>
         <member name="F:DevExpress.XtraPrinting.Localization.PreviewStringId.WMForm_ZOrderRgrItem_Behind">
             <summary>
-                <para>"<b>Behind"</b>
+                <para>"<b>&#38;Behind"</b>
 </para>
             </summary>
 
@@ -28875,632 +28826,9 @@ Also <see cref="P:DevExpress.Utils.FormatInfo.FormatString"/> is set to an empty
         </member>
         <member name="F:DevExpress.XtraPrinting.Localization.PreviewStringId.WMForm_ZOrderRgrItem_InFront">
             <summary>
-                <para>"<b>In front</b>"
+                <para>"<b>In &#38;front</b>"
 </para>
             </summary>
-
-
-        </member>
-        <member name="T:DevExpress.XtraPrinting.BrickStyle">
-
-            <summary>
-                <para>Represents a report drawing style.
-</para>
-            </summary>
-
-        </member>
-        <member name="M:DevExpress.XtraPrinting.BrickStyle.#ctor">
-            <summary>
-                <para>Initializes a new instance of the BrickStyle class with default settings.
-</para>
-            </summary>
-
-
-        </member>
-        <member name="M:DevExpress.XtraPrinting.BrickStyle.#ctor(DevExpress.XtraPrinting.BorderSide,System.Single,System.Drawing.Color,System.Drawing.Color,System.Drawing.Color,System.Drawing.Font,DevExpress.XtraPrinting.BrickStringFormat)">
-            <summary>
-                <para>Initializes a new instance of the BrickStyle class with the specified settings.
-</para>
-            </summary>
-            <param name="sides">
-		A <see cref="T:DevExpress.XtraPrinting.BorderSide"/> enumeration value, specifying the visible brick borders. This value is assigned to the <see cref="P:DevExpress.XtraPrinting.BrickStyle.Sides"/> property.
-
-            </param>
-            <param name="borderWidth">
-		A <see cref="T:System.Single"/> value, specifying the border width. This value is assigned to the <see cref="P:DevExpress.XtraPrinting.BrickStyle.BorderWidth"/> property.
-
-            </param>
-            <param name="borderColor">
-		A <see cref="T:System.Drawing.Color"/> structure, specifying the border color. This value is assigned to the <see cref="P:DevExpress.XtraPrinting.BrickStyle.BorderColor"/> property.
-
-            </param>
-            <param name="backColor">
-		A <see cref="T:System.Drawing.Color"/> structure, specifying the background color. This value is assigned to the <see cref="P:DevExpress.XtraPrinting.BrickStyle.BackColor"/> property.
-
-            </param>
-            <param name="foreColor">
-		A <see cref="T:System.Drawing.Color"/> structure, specifying the foreground color. This value is assigned to the <see cref="P:DevExpress.XtraPrinting.BrickStyle.ForeColor"/> property.
-
-
-            </param>
-            <param name="font">
-		A <see cref="T:System.Drawing.Font"/> object, specifying the font settings. This value is assigned to the <see cref="P:DevExpress.XtraPrinting.BrickStyle.Font"/> property.
-
-            </param>
-            <param name="sf">
-		A <see cref="T:DevExpress.XtraPrinting.BrickStringFormat"/> object, specifying the text format. This value is assigned to the <see cref="P:DevExpress.XtraPrinting.BrickStyle.StringFormat"/> property.
-
-            </param>
-
-
-        </member>
-        <member name="M:DevExpress.XtraPrinting.BrickStyle.#ctor(DevExpress.XtraPrinting.BrickStyle)">
-            <summary>
-                <para>Initializes a new instance of the <see cref="T:DevExpress.XtraPrinting.BrickStyle"/> class and copies the settings from the object passed as the parameter.
-</para>
-            </summary>
-            <param name="src">
-		A <see cref="T:DevExpress.XtraPrinting.BrickStyle"/> object whose settings are used to initialize the created object's properties.
-
-            </param>
-
-
-        </member>
-        <member name="M:DevExpress.XtraPrinting.BrickStyle.#ctor(System.Single)">
-            <summary>
-                <para>Initializes a new instance of the BrickStyle class with the specified dpi value.
-</para>
-            </summary>
-            <param name="dpi">
-		A <see cref="T:System.Single"/> value which specifies the dpi value for the BrickStyle's padding.
-
-            </param>
-
-
-        </member>
-        <member name="P:DevExpress.XtraPrinting.BrickStyle.BackColor">
-            <summary>
-                <para>Gets or sets the background color.
-</para>
-            </summary>
-            <value>A <b>Color</b> representing the background color.
-</value>
-
-
-        </member>
-        <member name="P:DevExpress.XtraPrinting.BrickStyle.BorderColor">
-            <summary>
-                <para>Gets or sets the border color.
-</para>
-            </summary>
-            <value>A <b>Color</b> representing the border color. 
-</value>
-
-
-        </member>
-        <member name="P:DevExpress.XtraPrinting.BrickStyle.BorderDashStyle">
-            <summary>
-                <para>Specifies the dash style for the brick's border.
-</para>
-            </summary>
-            <value>A <see cref="T:DevExpress.XtraPrinting.BorderDashStyle"/> enumeration value.
-</value>
-
-
-        </member>
-        <member name="P:DevExpress.XtraPrinting.BrickStyle.BorderStyle">
-            <summary>
-                <para>Gets or sets the border style of a brick.
-</para>
-            </summary>
-            <value>A <see cref="T:DevExpress.XtraPrinting.BrickBorderStyle"/> enumeration value that represents the border style of a brick.
-</value>
-
-
-        </member>
-        <member name="P:DevExpress.XtraPrinting.BrickStyle.BorderWidth">
-            <summary>
-                <para>Gets or sets the border width.
-</para>
-            </summary>
-            <value>A <see cref="T:System.Single"/> value.
-</value>
-
-
-        </member>
-        <member name="P:DevExpress.XtraPrinting.BrickStyle.BorderWidthSerializable">
-            <summary>
-                <para>Gets or sets the string value used to support serialization of the <see cref="P:DevExpress.XtraPrinting.BrickStyle.BorderWidth"/> property.
-</para>
-            </summary>
-            <value>A <see cref="T:System.String"/> value.
-</value>
-
-
-        </member>
-        <member name="M:DevExpress.XtraPrinting.BrickStyle.Clone">
-            <summary>
-                <para>Creates a new <see cref="T:DevExpress.XtraPrinting.BrickStyle"/> instance, which is a copy of the current instance.
-
-</para>
-            </summary>
-            <returns>A new <see cref="T:DevExpress.XtraPrinting.BrickStyle"/> instance, which is a copy of the current instance.
-
-</returns>
-
-
-        </member>
-        <member name="M:DevExpress.XtraPrinting.BrickStyle.CreateDefault">
-            <summary>
-                <para>Creates the BrickStyle instance with the defaul settings.
-</para>
-            </summary>
-            <returns>A BrickStyle object representing a new brick style.
-</returns>
-
-
-        </member>
-        <member name="P:DevExpress.XtraPrinting.BrickStyle.Default">
-            <summary>
-                <para>Gets the <see cref="T:DevExpress.XtraPrinting.BrickStyle"/> object whose properties are set to their default values.
-</para>
-            </summary>
-            <value>A <see cref="T:DevExpress.XtraPrinting.BrickStyle"/> object representing a report drawing style.
-</value>
-
-
-        </member>
-        <member name="P:DevExpress.XtraPrinting.BrickStyle.DefaultFont">
-            <summary>
-                <para>Gets the default font for a brick style.
-</para>
-            </summary>
-            <value>The default font for a brick style.
-</value>
-
-
-        </member>
-        <member name="M:DevExpress.XtraPrinting.BrickStyle.DeflateBorderWidth(System.Drawing.RectangleF,System.Single,System.Boolean)">
-            <summary>
-                <para>Deflates the specified rectangle by the width of borders represented by this brick style, and optionally applies the current border style.
-
-</para>
-            </summary>
-            <param name="rect">
-		A <see cref="T:System.Drawing.RectangleF"/> value which specifies the rectangle to be deflated.
-
-            </param>
-            <param name="dpi">
-		A <see cref="T:System.Single"/> value which specifies the dpi value to be applied to the width of borders before deflating.
-
-
-            </param>
-            <param name="applyBorderStyle">
-		<b>true</b> to apply the current border style; otherwise, <b>false</b>. The current border style can be accessed via the <see cref="P:DevExpress.XtraPrinting.BrickStyle.BorderStyle"/> property.
-
-            </param>
-            <returns>A <see cref="T:System.Drawing.RectangleF"/> value that represents the deflated rectangle.
-</returns>
-
-
-        </member>
-        <member name="M:DevExpress.XtraPrinting.BrickStyle.DeflateBorderWidth(System.Drawing.RectangleF,System.Single)">
-            <summary>
-                <para>Deflates the specified rectangle by the width of borders represented by this brick style.
-</para>
-            </summary>
-            <param name="rect">
-		A <see cref="T:System.Drawing.RectangleF"/> value which specifies the rectangle to be deflated.
-
-            </param>
-            <param name="dpi">
-		A <see cref="T:System.Single"/> value which specifies the dpi value to be applied to the width of borders before deflating.
-
-
-            </param>
-            <returns>A <see cref="T:System.Drawing.RectangleF"/> value that represents the deflated rectangle.
-</returns>
-
-
-        </member>
-        <member name="M:DevExpress.XtraPrinting.BrickStyle.DeflateBorderWidth(System.Drawing.RectangleF,DevExpress.XtraPrinting.BorderSide,System.Single,DevExpress.XtraPrinting.BrickBorderStyle)">
-            <summary>
-                <para>Deflates the specified rectangle by the specified width of the specified borders using the specified border style.
-
-
-</para>
-            </summary>
-            <param name="rect">
-		A <see cref="T:System.Drawing.RectangleF"/> value which specifies the rectangle to be deflated.
-
-            </param>
-            <param name="sides">
-		A <see cref="T:DevExpress.XtraPrinting.BorderSide"/> enumeration value that specifies which sides of a brick have borders.
-
-            </param>
-            <param name="borderWidth">
-		A <see cref="T:System.Single"/> value which specifies the width of borders.
-
-            </param>
-            <param name="borderStyle">
-		A <see cref="T:DevExpress.XtraPrinting.BrickBorderStyle"/> enumeration value that specifies the brick style.
-
-            </param>
-            <returns>A <see cref="T:System.Drawing.RectangleF"/> value that represents the deflated rectangle.
-</returns>
-
-
-        </member>
-        <member name="M:DevExpress.XtraPrinting.BrickStyle.DeflateBorderWidth(System.Drawing.RectangleF,DevExpress.XtraPrinting.BorderSide,System.Single)">
-            <summary>
-                <para>Deflates the specified rectangle by the specified width of the specified borders.
-
-
-</para>
-            </summary>
-            <param name="rect">
-		A <see cref="T:System.Drawing.RectangleF"/> value which specifies the rectangle to be deflated.
-
-            </param>
-            <param name="sides">
-		A <see cref="T:DevExpress.XtraPrinting.BorderSide"/> enumeration value that specifies which sides of a brick have borders.
-
-
-            </param>
-            <param name="borderWidth">
-		A <see cref="T:System.Single"/> value which specifies the width of borders.
-
-            </param>
-            <returns>A <see cref="T:System.Drawing.RectangleF"/> value that represents the deflated rectangle.
-</returns>
-
-
-        </member>
-        <member name="M:DevExpress.XtraPrinting.BrickStyle.Dispose">
-            <summary>
-                <para>Disposes of the BrickStyle object.
-
-</para>
-            </summary>
-
-
-        </member>
-        <member name="M:DevExpress.XtraPrinting.BrickStyle.Equals(System.Object)">
-            <summary>
-                <para>Determines whether or not the specified object is equal to the current BrickStyle instance.
-</para>
-            </summary>
-            <param name="obj">
-		The object to compare with the current object.
-
-            </param>
-            <returns><b>true</b> if the specified object is equal to the current BrickStyle instance; otherwise <b>false</b>.
-</returns>
-
-
-        </member>
-        <member name="P:DevExpress.XtraPrinting.BrickStyle.Font">
-            <summary>
-                <para>Gets or sets the <b>Font</b> used to display text.
-</para>
-            </summary>
-            <value>The <b>Font</b> used to display text.
-</value>
-
-
-        </member>
-        <member name="P:DevExpress.XtraPrinting.BrickStyle.ForeColor">
-            <summary>
-                <para>Gets or sets the foreground color.
-</para>
-            </summary>
-            <value>The foreground color.
-</value>
-
-
-        </member>
-        <member name="M:DevExpress.XtraPrinting.BrickStyle.GetHashCode">
-            <summary>
-                <para>Serves as the default hash function.
-</para>
-            </summary>
-            <returns>An integer value, specifying the hash code for the current object.
-</returns>
-
-
-        </member>
-        <member name="M:DevExpress.XtraPrinting.BrickStyle.InflateBorderWidth(System.Drawing.RectangleF,System.Single,System.Boolean)">
-            <summary>
-                <para>Inflates the specified rectangle by the width of borders represented by this brick style, and optionally applies the current border style.
-
-</para>
-            </summary>
-            <param name="rect">
-		A <see cref="T:System.Drawing.RectangleF"/> value which specifies the rectangle to be inflated.
-
-            </param>
-            <param name="dpi">
-		A <see cref="T:System.Single"/> value which specifies the dpi value to be applied to the width of borders before inflating.
-
-
-            </param>
-            <param name="applyBorderStyle">
-		<b>true</b> to apply the current border style; otherwise, <b>false</b>. The current border style can be accessed via the <see cref="P:DevExpress.XtraPrinting.BrickStyle.BorderStyle"/> property.
-
-            </param>
-            <returns>A <see cref="T:System.Drawing.RectangleF"/> value that represents the inflated rectangle.
-</returns>
-
-
-        </member>
-        <member name="M:DevExpress.XtraPrinting.BrickStyle.InflateBorderWidth(System.Drawing.RectangleF,System.Single)">
-            <summary>
-                <para>Inflates the specified rectangle by the width of borders represented by this brick style.
-</para>
-            </summary>
-            <param name="rect">
-		A <see cref="T:System.Drawing.RectangleF"/> value which specifies the rectangle to be inflated.
-
-            </param>
-            <param name="dpi">
-		A <see cref="T:System.Single"/> value which specifies the dpi value to be applied to the width of borders before inflating.
-
-
-            </param>
-            <returns>A <see cref="T:System.Drawing.RectangleF"/> value that represents the inflated rectangle.
-</returns>
-
-
-        </member>
-        <member name="M:DevExpress.XtraPrinting.BrickStyle.InflateBorderWidth(System.Drawing.RectangleF,DevExpress.XtraPrinting.BorderSide,System.Single,DevExpress.XtraPrinting.BrickBorderStyle)">
-            <summary>
-                <para>Inflates the specified rectangle by the specified width of specified borders using the specified border style.
-
-</para>
-            </summary>
-            <param name="rect">
-		A <see cref="T:System.Drawing.RectangleF"/> value which specifies the rectangle to be inflated.
-
-            </param>
-            <param name="sides">
-		A <see cref="T:DevExpress.XtraPrinting.BorderSide"/> enumeration value that specifies which sides of a brick have borders.
-
-            </param>
-            <param name="borderWidth">
-		A <see cref="T:System.Single"/> value which specifies the width of borders.
-
-            </param>
-            <param name="borderStyle">
-		A <see cref="T:DevExpress.XtraPrinting.BrickBorderStyle"/> enumeration value that specifies the brick style.
-
-            </param>
-            <returns>A <see cref="T:System.Drawing.RectangleF"/> value that represents the inflated rectangle.
-</returns>
-
-
-        </member>
-        <member name="M:DevExpress.XtraPrinting.BrickStyle.InflateBorderWidth(System.Drawing.RectangleF,DevExpress.XtraPrinting.BorderSide,System.Single)">
-            <summary>
-                <para>Inflates the specified rectangle by the specified width of specified borders.
-
-</para>
-            </summary>
-            <param name="rect">
-		A <see cref="T:System.Drawing.RectangleF"/> value which specifies the rectangle to be inflated.
-
-            </param>
-            <param name="sides">
-		A <see cref="T:DevExpress.XtraPrinting.BorderSide"/> enumeration value that specifies which sides of a brick have borders.
-
-            </param>
-            <param name="borderWidth">
-		A <see cref="T:System.Single"/> value which specifies the width of borders.
-
-            </param>
-            <returns>A <see cref="T:System.Drawing.RectangleF"/> value that represents the inflated rectangle.
-</returns>
-
-
-        </member>
-        <member name="M:DevExpress.XtraPrinting.BrickStyle.InflateBorderWidth(System.Drawing.RectangleF,System.Single,System.Boolean,DevExpress.XtraPrinting.BorderSide)">
-            <summary>
-                <para>For internal use.
-</para>
-            </summary>
-            <param name="rect">
-		A <see cref="T:System.Drawing.RectangleF"/> structure.
-
-            </param>
-            <param name="dpi">
-		A <see cref="T:System.Single"/> value.
-
-            </param>
-            <param name="applyBorderStyle">
-		A Boolean value.
-
-            </param>
-            <param name="sides">
-		A <see cref="T:DevExpress.XtraPrinting.BorderSide"/> enumeration value.
-
-            </param>
-            <returns>A <see cref="T:System.Drawing.RectangleF"/> structure.
-</returns>
-
-
-        </member>
-        <member name="P:DevExpress.XtraPrinting.BrickStyle.IsJustified">
-            <summary>
-                <para>Specifies whether or not the brick's alignment is justified.
-</para>
-            </summary>
-            <value><b>true</b> is the brick has a justified alignment; otherwise <b>false</b>.
-</value>
-
-
-        </member>
-        <member name="P:DevExpress.XtraPrinting.BrickStyle.IsTransparent">
-            <summary>
-                <para>Gets a value indicating whether the brick style paints a <i>transparent</i> brick.
-
-</para>
-            </summary>
-            <value><b>true</b> if the brick will be painted as <i>transparent</i>; otherwise, <b>false</b>.
-</value>
-
-
-        </member>
-        <member name="P:DevExpress.XtraPrinting.BrickStyle.IsValid">
-            <summary>
-                <para>Gets a value indicating whether the brick style is valid.
-
-</para>
-            </summary>
-            <value><b>true</b> if the current brick style is valid; otherwise, <b>false</b>.
-</value>
-
-
-        </member>
-        <member name="P:DevExpress.XtraPrinting.BrickStyle.Padding">
-            <summary>
-                <para>Gets or sets the padding values of a brick.
-</para>
-            </summary>
-            <value>A <see cref="T:DevExpress.XtraPrinting.PaddingInfo"/> object which contains the padding values of a brick.
-
-</value>
-
-
-        </member>
-        <member name="M:DevExpress.XtraPrinting.BrickStyle.ResetBackColor">
-            <summary>
-                <para>Resets the <see cref="P:DevExpress.XtraPrinting.BrickStyle.BackColor"/> property value.
-</para>
-            </summary>
-
-
-        </member>
-        <member name="M:DevExpress.XtraPrinting.BrickStyle.ResetBorderColor">
-            <summary>
-                <para>Resets the <see cref="P:DevExpress.XtraPrinting.BrickStyle.BackColor"/> property value.
-</para>
-            </summary>
-
-
-        </member>
-        <member name="M:DevExpress.XtraPrinting.BrickStyle.ResetBorderDashStyle">
-            <summary>
-                <para>Resets the <see cref="P:DevExpress.XtraPrinting.BrickStyle.BorderDashStyle"/> property value.
-</para>
-            </summary>
-
-
-        </member>
-        <member name="M:DevExpress.XtraPrinting.BrickStyle.ResetBorders">
-            <summary>
-                <para>Resets all border settings.
-</para>
-            </summary>
-
-
-        </member>
-        <member name="M:DevExpress.XtraPrinting.BrickStyle.ResetBorderWidth">
-            <summary>
-                <para>Resets the <see cref="P:DevExpress.XtraPrinting.BrickStyle.BorderWidth"/> property value.
-</para>
-            </summary>
-
-
-        </member>
-        <member name="M:DevExpress.XtraPrinting.BrickStyle.ResetFont">
-            <summary>
-                <para>Resets the <see cref="P:DevExpress.XtraPrinting.BrickStyle.Font"/> property value.
-</para>
-            </summary>
-
-
-        </member>
-        <member name="M:DevExpress.XtraPrinting.BrickStyle.ResetForeColor">
-            <summary>
-                <para>Resets the <see cref="P:DevExpress.XtraPrinting.BrickStyle.ForeColor"/> property value.
-</para>
-            </summary>
-
-
-        </member>
-        <member name="M:DevExpress.XtraPrinting.BrickStyle.ResetPadding">
-            <summary>
-                <para>Resets the <see cref="P:DevExpress.XtraPrinting.BrickStyle.Padding"/> property value.
-</para>
-            </summary>
-
-
-        </member>
-        <member name="M:DevExpress.XtraPrinting.BrickStyle.ResetTextAlignment">
-            <summary>
-                <para>Resets the <see cref="P:DevExpress.XtraPrinting.BrickStyle.TextAlignment"/> property value.
-</para>
-            </summary>
-
-
-        </member>
-        <member name="M:DevExpress.XtraPrinting.BrickStyle.Scale(System.Single)">
-            <summary>
-                <para>Rescales the brick style to the specified ratio.
-</para>
-            </summary>
-            <param name="ratio">
-		A <see cref="T:System.Single"/> value specifying the ratio to rescale the brick style.
-
-            </param>
-            <returns>A <see cref="T:DevExpress.XtraPrinting.BrickStyle"/> object which represents the brick style with the scaling applied.
-</returns>
-
-
-        </member>
-        <member name="M:DevExpress.XtraPrinting.BrickStyle.SetAlignment(DevExpress.Utils.HorzAlignment,DevExpress.Utils.VertAlignment)">
-            <summary>
-                <para>Sets the brick's alignment.
-</para>
-            </summary>
-            <param name="horzAlignment">
-		A <see cref="T:DevExpress.Utils.HorzAlignment"/> enumeration value.
-
-            </param>
-            <param name="vertAlignment">
-		A <see cref="T:DevExpress.Utils.VertAlignment"/> enumeration value.
-
-            </param>
-
-
-        </member>
-        <member name="P:DevExpress.XtraPrinting.BrickStyle.Sides">
-            <summary>
-                <para>Gets or sets a value defining which borders of the current brick are visible.
-</para>
-            </summary>
-            <value>A <see cref="T:DevExpress.XtraPrinting.BorderSide"/> enumerator value, defining visible brick borders.
-</value>
-
-
-        </member>
-        <member name="P:DevExpress.XtraPrinting.BrickStyle.StringFormat">
-            <summary>
-                <para>Gets or sets a <see cref="T:DevExpress.XtraPrinting.BrickStringFormat"/> instance specifying text formatting and layout.
-</para>
-            </summary>
-            <value>A <see cref="T:DevExpress.XtraPrinting.BrickStringFormat"/> specifying text formatting and layout.
-</value>
-
-
-        </member>
-        <member name="P:DevExpress.XtraPrinting.BrickStyle.TextAlignment">
-            <summary>
-                <para>Gets or sets the alignment of the text in the brick.
-
-</para>
-            </summary>
-            <value>One of the <see cref="T:DevExpress.XtraPrinting.TextAlignment"/> enumeration's values that specifies how the text is aligned in the brick.
-</value>
 
 
         </member>
@@ -30186,6 +29514,629 @@ based on the specified <b>Hashtable</b> object.
             <returns>A <b>DevExpress.XtraPrinting.ChangeEventArgs.EventInfo</b> object with the specified name.
 
 </returns>
+
+
+        </member>
+        <member name="T:DevExpress.XtraPrinting.BrickStyle">
+
+            <summary>
+                <para>Represents a report drawing style.
+</para>
+            </summary>
+
+        </member>
+        <member name="M:DevExpress.XtraPrinting.BrickStyle.#ctor">
+            <summary>
+                <para>Initializes a new instance of the BrickStyle class with default settings.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="M:DevExpress.XtraPrinting.BrickStyle.#ctor(DevExpress.XtraPrinting.BorderSide,System.Single,System.Drawing.Color,System.Drawing.Color,System.Drawing.Color,System.Drawing.Font,DevExpress.XtraPrinting.BrickStringFormat)">
+            <summary>
+                <para>Initializes a new instance of the BrickStyle class with the specified settings.
+</para>
+            </summary>
+            <param name="sides">
+		A <see cref="T:DevExpress.XtraPrinting.BorderSide"/> enumeration value, specifying the visible brick borders. This value is assigned to the <see cref="P:DevExpress.XtraPrinting.BrickStyle.Sides"/> property.
+
+            </param>
+            <param name="borderWidth">
+		A <see cref="T:System.Single"/> value, specifying the border width. This value is assigned to the <see cref="P:DevExpress.XtraPrinting.BrickStyle.BorderWidth"/> property.
+
+            </param>
+            <param name="borderColor">
+		A <see cref="T:System.Drawing.Color"/> structure, specifying the border color. This value is assigned to the <see cref="P:DevExpress.XtraPrinting.BrickStyle.BorderColor"/> property.
+
+            </param>
+            <param name="backColor">
+		A <see cref="T:System.Drawing.Color"/> structure, specifying the background color. This value is assigned to the <see cref="P:DevExpress.XtraPrinting.BrickStyle.BackColor"/> property.
+
+            </param>
+            <param name="foreColor">
+		A <see cref="T:System.Drawing.Color"/> structure, specifying the foreground color. This value is assigned to the <see cref="P:DevExpress.XtraPrinting.BrickStyle.ForeColor"/> property.
+
+
+            </param>
+            <param name="font">
+		A <see cref="T:System.Drawing.Font"/> object, specifying the font settings. This value is assigned to the <see cref="P:DevExpress.XtraPrinting.BrickStyle.Font"/> property.
+
+            </param>
+            <param name="sf">
+		A <see cref="T:DevExpress.XtraPrinting.BrickStringFormat"/> object, specifying the text format. This value is assigned to the <see cref="P:DevExpress.XtraPrinting.BrickStyle.StringFormat"/> property.
+
+            </param>
+
+
+        </member>
+        <member name="M:DevExpress.XtraPrinting.BrickStyle.#ctor(DevExpress.XtraPrinting.BrickStyle)">
+            <summary>
+                <para>Initializes a new instance of the <see cref="T:DevExpress.XtraPrinting.BrickStyle"/> class and copies the settings from the object passed as the parameter.
+</para>
+            </summary>
+            <param name="src">
+		A <see cref="T:DevExpress.XtraPrinting.BrickStyle"/> object whose settings are used to initialize the created object's properties.
+
+            </param>
+
+
+        </member>
+        <member name="M:DevExpress.XtraPrinting.BrickStyle.#ctor(System.Single)">
+            <summary>
+                <para>Initializes a new instance of the BrickStyle class with the specified dpi value.
+</para>
+            </summary>
+            <param name="dpi">
+		A <see cref="T:System.Single"/> value which specifies the dpi value for the BrickStyle's padding.
+
+            </param>
+
+
+        </member>
+        <member name="P:DevExpress.XtraPrinting.BrickStyle.BackColor">
+            <summary>
+                <para>Gets or sets the background color.
+</para>
+            </summary>
+            <value>A <b>Color</b> representing the background color.
+</value>
+
+
+        </member>
+        <member name="P:DevExpress.XtraPrinting.BrickStyle.BorderColor">
+            <summary>
+                <para>Gets or sets the border color.
+</para>
+            </summary>
+            <value>A <b>Color</b> representing the border color. 
+</value>
+
+
+        </member>
+        <member name="P:DevExpress.XtraPrinting.BrickStyle.BorderDashStyle">
+            <summary>
+                <para>Specifies the dash style for the brick's border.
+</para>
+            </summary>
+            <value>A <see cref="T:DevExpress.XtraPrinting.BorderDashStyle"/> enumeration value.
+</value>
+
+
+        </member>
+        <member name="P:DevExpress.XtraPrinting.BrickStyle.BorderStyle">
+            <summary>
+                <para>Gets or sets the border style of a brick.
+</para>
+            </summary>
+            <value>A <see cref="T:DevExpress.XtraPrinting.BrickBorderStyle"/> enumeration value that represents the border style of a brick.
+</value>
+
+
+        </member>
+        <member name="P:DevExpress.XtraPrinting.BrickStyle.BorderWidth">
+            <summary>
+                <para>Gets or sets the border width.
+</para>
+            </summary>
+            <value>A <see cref="T:System.Single"/> value.
+</value>
+
+
+        </member>
+        <member name="P:DevExpress.XtraPrinting.BrickStyle.BorderWidthSerializable">
+            <summary>
+                <para>Gets or sets the string value used to support serialization of the <see cref="P:DevExpress.XtraPrinting.BrickStyle.BorderWidth"/> property.
+</para>
+            </summary>
+            <value>A <see cref="T:System.String"/> value.
+</value>
+
+
+        </member>
+        <member name="M:DevExpress.XtraPrinting.BrickStyle.Clone">
+            <summary>
+                <para>Creates a new <see cref="T:DevExpress.XtraPrinting.BrickStyle"/> instance, which is a copy of the current instance.
+
+</para>
+            </summary>
+            <returns>A new <see cref="T:DevExpress.XtraPrinting.BrickStyle"/> instance, which is a copy of the current instance.
+
+</returns>
+
+
+        </member>
+        <member name="M:DevExpress.XtraPrinting.BrickStyle.CreateDefault">
+            <summary>
+                <para>Creates the BrickStyle instance with the defaul settings.
+</para>
+            </summary>
+            <returns>A BrickStyle object representing a new brick style.
+</returns>
+
+
+        </member>
+        <member name="P:DevExpress.XtraPrinting.BrickStyle.Default">
+            <summary>
+                <para>Gets the <see cref="T:DevExpress.XtraPrinting.BrickStyle"/> object whose properties are set to their default values.
+</para>
+            </summary>
+            <value>A <see cref="T:DevExpress.XtraPrinting.BrickStyle"/> object representing a report drawing style.
+</value>
+
+
+        </member>
+        <member name="P:DevExpress.XtraPrinting.BrickStyle.DefaultFont">
+            <summary>
+                <para>Gets the default font for a brick style.
+</para>
+            </summary>
+            <value>The default font for a brick style.
+</value>
+
+
+        </member>
+        <member name="M:DevExpress.XtraPrinting.BrickStyle.DeflateBorderWidth(System.Drawing.RectangleF,System.Single,System.Boolean)">
+            <summary>
+                <para>Deflates the specified rectangle by the width of borders represented by this brick style, and optionally applies the current border style.
+
+</para>
+            </summary>
+            <param name="rect">
+		A <see cref="T:System.Drawing.RectangleF"/> value which specifies the rectangle to be deflated.
+
+            </param>
+            <param name="dpi">
+		A <see cref="T:System.Single"/> value which specifies the dpi value to be applied to the width of borders before deflating.
+
+
+            </param>
+            <param name="applyBorderStyle">
+		<b>true</b> to apply the current border style; otherwise, <b>false</b>. The current border style can be accessed via the <see cref="P:DevExpress.XtraPrinting.BrickStyle.BorderStyle"/> property.
+
+            </param>
+            <returns>A <see cref="T:System.Drawing.RectangleF"/> value that represents the deflated rectangle.
+</returns>
+
+
+        </member>
+        <member name="M:DevExpress.XtraPrinting.BrickStyle.DeflateBorderWidth(System.Drawing.RectangleF,System.Single)">
+            <summary>
+                <para>Deflates the specified rectangle by the width of borders represented by this brick style.
+</para>
+            </summary>
+            <param name="rect">
+		A <see cref="T:System.Drawing.RectangleF"/> value which specifies the rectangle to be deflated.
+
+            </param>
+            <param name="dpi">
+		A <see cref="T:System.Single"/> value which specifies the dpi value to be applied to the width of borders before deflating.
+
+
+            </param>
+            <returns>A <see cref="T:System.Drawing.RectangleF"/> value that represents the deflated rectangle.
+</returns>
+
+
+        </member>
+        <member name="M:DevExpress.XtraPrinting.BrickStyle.DeflateBorderWidth(System.Drawing.RectangleF,DevExpress.XtraPrinting.BorderSide,System.Single,DevExpress.XtraPrinting.BrickBorderStyle)">
+            <summary>
+                <para>Deflates the specified rectangle by the specified width of the specified borders using the specified border style.
+
+
+</para>
+            </summary>
+            <param name="rect">
+		A <see cref="T:System.Drawing.RectangleF"/> value which specifies the rectangle to be deflated.
+
+            </param>
+            <param name="sides">
+		A <see cref="T:DevExpress.XtraPrinting.BorderSide"/> enumeration value that specifies which sides of a brick have borders.
+
+            </param>
+            <param name="borderWidth">
+		A <see cref="T:System.Single"/> value which specifies the width of borders.
+
+            </param>
+            <param name="borderStyle">
+		A <see cref="T:DevExpress.XtraPrinting.BrickBorderStyle"/> enumeration value that specifies the brick style.
+
+            </param>
+            <returns>A <see cref="T:System.Drawing.RectangleF"/> value that represents the deflated rectangle.
+</returns>
+
+
+        </member>
+        <member name="M:DevExpress.XtraPrinting.BrickStyle.DeflateBorderWidth(System.Drawing.RectangleF,DevExpress.XtraPrinting.BorderSide,System.Single)">
+            <summary>
+                <para>Deflates the specified rectangle by the specified width of the specified borders.
+
+
+</para>
+            </summary>
+            <param name="rect">
+		A <see cref="T:System.Drawing.RectangleF"/> value which specifies the rectangle to be deflated.
+
+            </param>
+            <param name="sides">
+		A <see cref="T:DevExpress.XtraPrinting.BorderSide"/> enumeration value that specifies which sides of a brick have borders.
+
+
+            </param>
+            <param name="borderWidth">
+		A <see cref="T:System.Single"/> value which specifies the width of borders.
+
+            </param>
+            <returns>A <see cref="T:System.Drawing.RectangleF"/> value that represents the deflated rectangle.
+</returns>
+
+
+        </member>
+        <member name="M:DevExpress.XtraPrinting.BrickStyle.Dispose">
+            <summary>
+                <para>Disposes of the BrickStyle object.
+
+</para>
+            </summary>
+
+
+        </member>
+        <member name="M:DevExpress.XtraPrinting.BrickStyle.Equals(System.Object)">
+            <summary>
+                <para>Determines whether or not the specified object is equal to the current BrickStyle instance.
+</para>
+            </summary>
+            <param name="obj">
+		The object to compare with the current object.
+
+            </param>
+            <returns><b>true</b> if the specified object is equal to the current BrickStyle instance; otherwise <b>false</b>.
+</returns>
+
+
+        </member>
+        <member name="P:DevExpress.XtraPrinting.BrickStyle.Font">
+            <summary>
+                <para>Gets or sets the <b>Font</b> used to display text.
+</para>
+            </summary>
+            <value>The <b>Font</b> used to display text.
+</value>
+
+
+        </member>
+        <member name="P:DevExpress.XtraPrinting.BrickStyle.ForeColor">
+            <summary>
+                <para>Gets or sets the foreground color.
+</para>
+            </summary>
+            <value>The foreground color.
+</value>
+
+
+        </member>
+        <member name="M:DevExpress.XtraPrinting.BrickStyle.GetHashCode">
+            <summary>
+                <para>Serves as the default hash function.
+</para>
+            </summary>
+            <returns>An integer value, specifying the hash code for the current object.
+</returns>
+
+
+        </member>
+        <member name="M:DevExpress.XtraPrinting.BrickStyle.InflateBorderWidth(System.Drawing.RectangleF,System.Single,System.Boolean)">
+            <summary>
+                <para>Inflates the specified rectangle by the width of borders represented by this brick style, and optionally applies the current border style.
+
+</para>
+            </summary>
+            <param name="rect">
+		A <see cref="T:System.Drawing.RectangleF"/> value which specifies the rectangle to be inflated.
+
+            </param>
+            <param name="dpi">
+		A <see cref="T:System.Single"/> value which specifies the dpi value to be applied to the width of borders before inflating.
+
+
+            </param>
+            <param name="applyBorderStyle">
+		<b>true</b> to apply the current border style; otherwise, <b>false</b>. The current border style can be accessed via the <see cref="P:DevExpress.XtraPrinting.BrickStyle.BorderStyle"/> property.
+
+            </param>
+            <returns>A <see cref="T:System.Drawing.RectangleF"/> value that represents the inflated rectangle.
+</returns>
+
+
+        </member>
+        <member name="M:DevExpress.XtraPrinting.BrickStyle.InflateBorderWidth(System.Drawing.RectangleF,System.Single)">
+            <summary>
+                <para>Inflates the specified rectangle by the width of borders represented by this brick style.
+</para>
+            </summary>
+            <param name="rect">
+		A <see cref="T:System.Drawing.RectangleF"/> value which specifies the rectangle to be inflated.
+
+            </param>
+            <param name="dpi">
+		A <see cref="T:System.Single"/> value which specifies the dpi value to be applied to the width of borders before inflating.
+
+
+            </param>
+            <returns>A <see cref="T:System.Drawing.RectangleF"/> value that represents the inflated rectangle.
+</returns>
+
+
+        </member>
+        <member name="M:DevExpress.XtraPrinting.BrickStyle.InflateBorderWidth(System.Drawing.RectangleF,DevExpress.XtraPrinting.BorderSide,System.Single,DevExpress.XtraPrinting.BrickBorderStyle)">
+            <summary>
+                <para>Inflates the specified rectangle by the specified width of specified borders using the specified border style.
+
+</para>
+            </summary>
+            <param name="rect">
+		A <see cref="T:System.Drawing.RectangleF"/> value which specifies the rectangle to be inflated.
+
+            </param>
+            <param name="sides">
+		A <see cref="T:DevExpress.XtraPrinting.BorderSide"/> enumeration value that specifies which sides of a brick have borders.
+
+            </param>
+            <param name="borderWidth">
+		A <see cref="T:System.Single"/> value which specifies the width of borders.
+
+            </param>
+            <param name="borderStyle">
+		A <see cref="T:DevExpress.XtraPrinting.BrickBorderStyle"/> enumeration value that specifies the brick style.
+
+            </param>
+            <returns>A <see cref="T:System.Drawing.RectangleF"/> value that represents the inflated rectangle.
+</returns>
+
+
+        </member>
+        <member name="M:DevExpress.XtraPrinting.BrickStyle.InflateBorderWidth(System.Drawing.RectangleF,DevExpress.XtraPrinting.BorderSide,System.Single)">
+            <summary>
+                <para>Inflates the specified rectangle by the specified width of specified borders.
+
+</para>
+            </summary>
+            <param name="rect">
+		A <see cref="T:System.Drawing.RectangleF"/> value which specifies the rectangle to be inflated.
+
+            </param>
+            <param name="sides">
+		A <see cref="T:DevExpress.XtraPrinting.BorderSide"/> enumeration value that specifies which sides of a brick have borders.
+
+            </param>
+            <param name="borderWidth">
+		A <see cref="T:System.Single"/> value which specifies the width of borders.
+
+            </param>
+            <returns>A <see cref="T:System.Drawing.RectangleF"/> value that represents the inflated rectangle.
+</returns>
+
+
+        </member>
+        <member name="M:DevExpress.XtraPrinting.BrickStyle.InflateBorderWidth(System.Drawing.RectangleF,System.Single,System.Boolean,DevExpress.XtraPrinting.BorderSide)">
+            <summary>
+                <para>For internal use.
+</para>
+            </summary>
+            <param name="rect">
+		A <see cref="T:System.Drawing.RectangleF"/> structure.
+
+            </param>
+            <param name="dpi">
+		A <see cref="T:System.Single"/> value.
+
+            </param>
+            <param name="applyBorderStyle">
+		A Boolean value.
+
+            </param>
+            <param name="sides">
+		A <see cref="T:DevExpress.XtraPrinting.BorderSide"/> enumeration value.
+
+            </param>
+            <returns>A <see cref="T:System.Drawing.RectangleF"/> structure.
+</returns>
+
+
+        </member>
+        <member name="P:DevExpress.XtraPrinting.BrickStyle.IsJustified">
+            <summary>
+                <para>Specifies whether or not the brick's alignment is justified.
+</para>
+            </summary>
+            <value><b>true</b> is the brick has a justified alignment; otherwise <b>false</b>.
+</value>
+
+
+        </member>
+        <member name="P:DevExpress.XtraPrinting.BrickStyle.IsTransparent">
+            <summary>
+                <para>Gets a value indicating whether the brick style paints a <i>transparent</i> brick.
+
+</para>
+            </summary>
+            <value><b>true</b> if the brick will be painted as <i>transparent</i>; otherwise, <b>false</b>.
+</value>
+
+
+        </member>
+        <member name="P:DevExpress.XtraPrinting.BrickStyle.IsValid">
+            <summary>
+                <para>Gets a value indicating whether the brick style is valid.
+
+</para>
+            </summary>
+            <value><b>true</b> if the current brick style is valid; otherwise, <b>false</b>.
+</value>
+
+
+        </member>
+        <member name="P:DevExpress.XtraPrinting.BrickStyle.Padding">
+            <summary>
+                <para>Gets or sets the padding values of a brick.
+</para>
+            </summary>
+            <value>A <see cref="T:DevExpress.XtraPrinting.PaddingInfo"/> object which contains the padding values of a brick.
+
+</value>
+
+
+        </member>
+        <member name="M:DevExpress.XtraPrinting.BrickStyle.ResetBackColor">
+            <summary>
+                <para>Resets the <see cref="P:DevExpress.XtraPrinting.BrickStyle.BackColor"/> property value.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="M:DevExpress.XtraPrinting.BrickStyle.ResetBorderColor">
+            <summary>
+                <para>Resets the <see cref="P:DevExpress.XtraPrinting.BrickStyle.BackColor"/> property value.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="M:DevExpress.XtraPrinting.BrickStyle.ResetBorderDashStyle">
+            <summary>
+                <para>Resets the <see cref="P:DevExpress.XtraPrinting.BrickStyle.BorderDashStyle"/> property value.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="M:DevExpress.XtraPrinting.BrickStyle.ResetBorders">
+            <summary>
+                <para>Resets all border settings.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="M:DevExpress.XtraPrinting.BrickStyle.ResetBorderWidth">
+            <summary>
+                <para>Resets the <see cref="P:DevExpress.XtraPrinting.BrickStyle.BorderWidth"/> property value.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="M:DevExpress.XtraPrinting.BrickStyle.ResetFont">
+            <summary>
+                <para>Resets the <see cref="P:DevExpress.XtraPrinting.BrickStyle.Font"/> property value.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="M:DevExpress.XtraPrinting.BrickStyle.ResetForeColor">
+            <summary>
+                <para>Resets the <see cref="P:DevExpress.XtraPrinting.BrickStyle.ForeColor"/> property value.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="M:DevExpress.XtraPrinting.BrickStyle.ResetPadding">
+            <summary>
+                <para>Resets the <see cref="P:DevExpress.XtraPrinting.BrickStyle.Padding"/> property value.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="M:DevExpress.XtraPrinting.BrickStyle.ResetTextAlignment">
+            <summary>
+                <para>Resets the <see cref="P:DevExpress.XtraPrinting.BrickStyle.TextAlignment"/> property value.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="M:DevExpress.XtraPrinting.BrickStyle.Scale(System.Single)">
+            <summary>
+                <para>Rescales the brick style to the specified ratio.
+</para>
+            </summary>
+            <param name="ratio">
+		A <see cref="T:System.Single"/> value specifying the ratio to rescale the brick style.
+
+            </param>
+            <returns>A <see cref="T:DevExpress.XtraPrinting.BrickStyle"/> object which represents the brick style with the scaling applied.
+</returns>
+
+
+        </member>
+        <member name="M:DevExpress.XtraPrinting.BrickStyle.SetAlignment(DevExpress.Utils.HorzAlignment,DevExpress.Utils.VertAlignment)">
+            <summary>
+                <para>Sets the brick's alignment.
+</para>
+            </summary>
+            <param name="horzAlignment">
+		A <see cref="T:DevExpress.Utils.HorzAlignment"/> enumeration value.
+
+            </param>
+            <param name="vertAlignment">
+		A <see cref="T:DevExpress.Utils.VertAlignment"/> enumeration value.
+
+            </param>
+
+
+        </member>
+        <member name="P:DevExpress.XtraPrinting.BrickStyle.Sides">
+            <summary>
+                <para>Gets or sets a value defining which borders of the current brick are visible.
+</para>
+            </summary>
+            <value>A <see cref="T:DevExpress.XtraPrinting.BorderSide"/> enumerator value, defining visible brick borders.
+</value>
+
+
+        </member>
+        <member name="P:DevExpress.XtraPrinting.BrickStyle.StringFormat">
+            <summary>
+                <para>Gets or sets a <see cref="T:DevExpress.XtraPrinting.BrickStringFormat"/> instance specifying text formatting and layout.
+</para>
+            </summary>
+            <value>A <see cref="T:DevExpress.XtraPrinting.BrickStringFormat"/> specifying text formatting and layout.
+</value>
+
+
+        </member>
+        <member name="P:DevExpress.XtraPrinting.BrickStyle.TextAlignment">
+            <summary>
+                <para>Gets or sets the alignment of the text in the brick.
+
+</para>
+            </summary>
+            <value>One of the <see cref="T:DevExpress.XtraPrinting.TextAlignment"/> enumeration's values that specifies how the text is aligned in the brick.
+</value>
 
 
         </member>
@@ -30983,6 +30934,77 @@ based on the specified <b>Hashtable</b> object.
                 <para>Applies the top border to a brick.
 </para>
             </summary>
+
+
+        </member>
+        <member name="T:DevExpress.Xpo.DB.DBStoredProcedureArgument">
+
+            <summary>
+                <para>Provides information about a stored procedure's parameter.
+</para>
+            </summary>
+
+        </member>
+        <member name="M:DevExpress.Xpo.DB.DBStoredProcedureArgument.#ctor">
+            <summary>
+                <para>Initializes a new instance of the DBStoredProcedureArgument class with default settings.
+</para>
+            </summary>
+
+
+        </member>
+        <member name="M:DevExpress.Xpo.DB.DBStoredProcedureArgument.#ctor(System.String,DevExpress.Xpo.DB.DBColumnType)">
+            <summary>
+                <para>Initializes a new instance of the DBStoredProcedureArgument class with the specified settings.
+</para>
+            </summary>
+            <param name="name">
+		A <see cref="T:System.String"/> value.
+
+            </param>
+            <param name="type">
+		A <see cref="T:DevExpress.Xpo.DB.DBColumnType"/> enumeration value.
+
+            </param>
+
+
+        </member>
+        <member name="M:DevExpress.Xpo.DB.DBStoredProcedureArgument.#ctor(System.String,DevExpress.Xpo.DB.DBColumnType,DevExpress.Xpo.DB.DBStoredProcedureArgumentDirection)">
+            <summary>
+                <para>Initializes a new instance of the DBStoredProcedureArgument class with the specified settings.
+</para>
+            </summary>
+            <param name="name">
+		A <see cref="T:System.String"/> value. This value is assigned to the <see cref="F:DevExpress.Xpo.DB.DBNameTypePair.Name"/> property.
+
+            </param>
+            <param name="type">
+		A <see cref="T:DevExpress.Xpo.DB.DBColumnType"/> enumeration value. This value is assigned to the <see cref="F:DevExpress.Xpo.DB.DBNameTypePair.Type"/> property.
+
+            </param>
+            <param name="direction">
+		A <see cref="T:DevExpress.Xpo.DB.DBStoredProcedureArgumentDirection"/> enumeration value. This value is assigned to the <see cref="F:DevExpress.Xpo.DB.DBStoredProcedureArgument.Direction"/> property.
+
+            </param>
+
+
+        </member>
+        <member name="F:DevExpress.Xpo.DB.DBStoredProcedureArgument.Direction">
+            <summary>
+                <para>A <see cref="T:DevExpress.Xpo.DB.DBStoredProcedureArgumentDirection"/> value corresponding to an appropriate <see cref="T:DevExpress.Xpo.DB.DBNameTypePair"/> object.
+</para>
+            </summary>
+            <returns> </returns>
+
+
+        </member>
+        <member name="M:DevExpress.Xpo.DB.DBStoredProcedureArgument.ToString">
+            <summary>
+                <para>Returns a value, specifying the stored procedure's parameter direction (within brackets and in uppercase letters) along with the name and type of the parameter (separated by a white space).
+</para>
+            </summary>
+            <returns>A <see cref="T:System.String"/> value. Example: "<b>[INOUT] OrderDate DateTime</b>".
+</returns>
 
 
         </member>

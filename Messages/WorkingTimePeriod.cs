@@ -35,14 +35,6 @@ namespace StockSharp.Messages
 	[DescriptionLoc(LocalizedStrings.Str417Key)]
 	public class WorkingTimePeriod : Cloneable<WorkingTimePeriod>, IPersistable
 	{
-		class TimeSpanRangeInitializer : IItemInitializer
-		{
-			public object Create()
-			{
-				return new Range<TimeSpan>(TimeSpan.Zero, TimeSpan.Zero);
-			}
-		}
-
 		/// <summary>
 		/// Schedule expiration date.
 		/// </summary>
@@ -61,7 +53,6 @@ namespace StockSharp.Messages
 		[CategoryLoc(LocalizedStrings.GeneralKey)]
 		[DisplayNameLoc(LocalizedStrings.Str416Key)]
 		[DescriptionLoc(LocalizedStrings.Str420Key)]
-		[ItemInitializer(typeof(TimeSpanRangeInitializer))]
 		public IList<Range<TimeSpan>> Times
 		{
 			get { return _times; }
