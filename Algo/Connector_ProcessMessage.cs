@@ -423,6 +423,8 @@ namespace StockSharp.Algo
 					if (TimeChange)
 						_inAdapter = _timeAdapter = new TimeAdapter(this, _inAdapter) { OwnInnerAdaper = true };
 
+					_inAdapter = _securityAdapter = new SecurityAdapter(_inAdapter) { OwnInnerAdaper = true };
+
 					if (LatencyManager != null)
 						_inAdapter = new LatencyMessageAdapter(_inAdapter) { LatencyManager = LatencyManager, OwnInnerAdaper = true };
 
@@ -440,8 +442,6 @@ namespace StockSharp.Algo
 
 					if (_entityRegistry != null && _storageRegistry != null)
 						_inAdapter = StorageAdapter = new StorageMessageAdapter(_inAdapter, _entityRegistry, _storageRegistry) { OwnInnerAdaper = true };
-
-					_inAdapter = _securityAdapter = new SecurityAdapter(_inAdapter) { OwnInnerAdaper = true };
 
 					_inAdapter.NewOutMessage += AdapterOnNewOutMessage;
 				}

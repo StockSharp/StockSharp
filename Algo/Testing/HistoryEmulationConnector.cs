@@ -240,12 +240,12 @@ namespace StockSharp.Algo.Testing
 			set { HistoryMessageAdapter.MaxMessageCount = value; }
 		}
 
-		private readonly Dictionary<Portfolio, decimal> _initialMoney;
+		private readonly Dictionary<Portfolio, decimal?> _initialMoney;
 
 		/// <summary>
 		/// The initial size of monetary funds on accounts.
 		/// </summary>
-		public IDictionary<Portfolio, decimal> InitialMoney => _initialMoney;
+		public IDictionary<Portfolio, decimal?> InitialMoney => _initialMoney;
 
 		/// <summary>
 		/// The number of loaded messages.

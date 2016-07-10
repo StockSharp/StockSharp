@@ -40,7 +40,7 @@ namespace StockSharp.BusinessEntities
 		{
 		}
 
-		private decimal _beginValue;
+		private decimal? _beginValue;
 
 		/// <summary>
 		/// Position size at the beginning of the trading session.
@@ -49,7 +49,8 @@ namespace StockSharp.BusinessEntities
 		[DisplayNameLoc(LocalizedStrings.Str253Key)]
 		[DescriptionLoc(LocalizedStrings.Str424Key)]
 		[StatisticsCategory]
-		public decimal BeginValue
+		[Nullable]
+		public decimal? BeginValue
 		{
 			get { return _beginValue; }
 			set
@@ -62,7 +63,7 @@ namespace StockSharp.BusinessEntities
 			}
 		}
 
-		private decimal _currentValue;
+		private decimal? _currentValue;
 
 		/// <summary>
 		/// Current position size.
@@ -71,7 +72,8 @@ namespace StockSharp.BusinessEntities
 		[DisplayNameLoc(LocalizedStrings.Str254Key)]
 		[DescriptionLoc(LocalizedStrings.Str425Key)]
 		[StatisticsCategory]
-		public decimal CurrentValue
+		[Nullable]
+		public decimal? CurrentValue
 		{
 			get { return _currentValue; }
 			set
@@ -84,7 +86,7 @@ namespace StockSharp.BusinessEntities
 			}
 		}
 
-		private decimal _blockedValue;
+		private decimal? _blockedValue;
 
 		/// <summary>
 		/// Position size, registered for active orders.
@@ -93,7 +95,8 @@ namespace StockSharp.BusinessEntities
 		[DisplayNameLoc(LocalizedStrings.Str255Key)]
 		[DescriptionLoc(LocalizedStrings.Str426Key)]
 		[StatisticsCategory]
-		public decimal BlockedValue
+		[Nullable]
+		public decimal? BlockedValue
 		{
 			get { return _blockedValue; }
 			set
@@ -130,7 +133,7 @@ namespace StockSharp.BusinessEntities
 			}
 		}
 
-		private decimal _currentPrice;
+		private decimal? _currentPrice;
 
 		/// <summary>
 		/// Position price.
@@ -140,7 +143,7 @@ namespace StockSharp.BusinessEntities
 		[DisplayNameLoc(LocalizedStrings.Str256Key)]
 		[DescriptionLoc(LocalizedStrings.Str428Key)]
 		[StatisticsCategory]
-		public decimal CurrentPrice
+		public decimal? CurrentPrice
 		{
 			get { return _currentPrice; }
 			set
@@ -153,7 +156,7 @@ namespace StockSharp.BusinessEntities
 			}
 		}
 
-		private decimal _averagePrice;
+		private decimal? _averagePrice;
 
 		/// <summary>
 		/// Average price.
@@ -163,7 +166,7 @@ namespace StockSharp.BusinessEntities
 		[DisplayNameLoc(LocalizedStrings.Str257Key)]
 		[DescriptionLoc(LocalizedStrings.Str429Key)]
 		[StatisticsCategory]
-		public decimal AveragePrice
+		public decimal? AveragePrice
 		{
 			get { return _averagePrice; }
 			set
@@ -176,7 +179,7 @@ namespace StockSharp.BusinessEntities
 			}
 		}
 
-		private decimal _unrealizedPnL;
+		private decimal? _unrealizedPnL;
 
 		/// <summary>
 		/// Unrealized profit.
@@ -186,7 +189,7 @@ namespace StockSharp.BusinessEntities
 		[DisplayNameLoc(LocalizedStrings.Str258Key)]
 		[DescriptionLoc(LocalizedStrings.Str430Key)]
 		[StatisticsCategory]
-		public decimal UnrealizedPnL
+		public decimal? UnrealizedPnL
 		{
 			get { return _unrealizedPnL; }
 			set
@@ -199,7 +202,7 @@ namespace StockSharp.BusinessEntities
 			}
 		}
 
-		private decimal _realizedPnL;
+		private decimal? _realizedPnL;
 
 		/// <summary>
 		/// Realized profit.
@@ -209,7 +212,7 @@ namespace StockSharp.BusinessEntities
 		[DisplayNameLoc(LocalizedStrings.Str259Key)]
 		[DescriptionLoc(LocalizedStrings.Str431Key)]
 		[StatisticsCategory]
-		public decimal RealizedPnL
+		public decimal? RealizedPnL
 		{
 			get { return _realizedPnL; }
 			set
@@ -222,7 +225,7 @@ namespace StockSharp.BusinessEntities
 			}
 		}
 
-		private decimal _variationMargin;
+		private decimal? _variationMargin;
 
 		/// <summary>
 		/// Variation margin.
@@ -231,7 +234,8 @@ namespace StockSharp.BusinessEntities
 		[DisplayNameLoc(LocalizedStrings.Str260Key)]
 		[DescriptionLoc(LocalizedStrings.Str432Key)]
 		[StatisticsCategory]
-		public decimal VariationMargin
+		[Nullable]
+		public decimal? VariationMargin
 		{
 			get { return _variationMargin; }
 			set
@@ -244,7 +248,7 @@ namespace StockSharp.BusinessEntities
 			}
 		}
 
-		private decimal _commission;
+		private decimal? _commission;
 
 		/// <summary>
 		/// Total commission.
@@ -253,7 +257,8 @@ namespace StockSharp.BusinessEntities
 		[DisplayNameLoc(LocalizedStrings.Str159Key)]
 		[DescriptionLoc(LocalizedStrings.Str433Key)]
 		[StatisticsCategory]
-		public decimal Commission
+		[Nullable]
+		public decimal? Commission
 		{
 			get { return _commission; }
 			set
