@@ -64,7 +64,7 @@ namespace StockSharp.BusinessEntities
 			}
 		}
 
-		private decimal _leverage;
+		private decimal? _leverage;
 
 		/// <summary>
 		/// Margin leverage.
@@ -73,7 +73,8 @@ namespace StockSharp.BusinessEntities
 		[DisplayNameLoc(LocalizedStrings.Str542Key)]
 		[DescriptionLoc(LocalizedStrings.Str261Key, true)]
 		[MainCategory]
-		public decimal Leverage
+		[Nullable]
+		public decimal? Leverage
 		{
 			get { return _leverage; }
 			set

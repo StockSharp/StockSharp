@@ -399,7 +399,7 @@ namespace StockSharp.Algo
 		/// </summary>
 		/// <param name="portfolio">The portfolio, for which the profit-loss shall be calculated.</param>
 		/// <returns>Profit-loss.</returns>
-		public static decimal GetPnL(this Portfolio portfolio)
+		public static decimal? GetPnL(this Portfolio portfolio)
 		{
 			if (portfolio == null)
 				throw new ArgumentNullException(nameof(portfolio));
@@ -1449,7 +1449,7 @@ namespace StockSharp.Algo
 			if (position == null)
 				throw new ArgumentNullException(nameof(position));
 
-			return position.CurrentValue.GetDirection();
+			return position.CurrentValue?.GetDirection();
 		}
 
 		/// <summary>
@@ -2078,7 +2078,7 @@ namespace StockSharp.Algo
 			/// </summary>
 			decimal IPositionManager.Position
 			{
-				get { return _position.CurrentValue; }
+				get { return _position.CurrentValue ?? 0; }
 				set { throw new NotSupportedException(); }
 			}
 
