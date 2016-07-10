@@ -26,6 +26,7 @@ namespace StockSharp.Algo.Candles
 	using StockSharp.BusinessEntities;
 	using StockSharp.Messages;
 	using StockSharp.Localization;
+	using Compression;
 
 	/// <summary>
 	/// Base candle class (contains main parameters).
@@ -473,6 +474,42 @@ namespace StockSharp.Algo.Candles
 			destination.PriceLevels = PriceLevels?.Select(l => l.Clone()).ToArray();
 
 			return destination;
+		}
+
+		// for performance reason
+		internal void Update(ICandleBuilderSourceValue value)
+		{
+			ThrowIfFinished();
+
+			var price = value.Price;
+			var volume = value.Volume;
+			var time = value.Time;
+
+			if (price < _lowPrice)
+			{
+				_lowPrice = price;
+				_lowTime = time;
+			}
+
+			if (price > _highPrice)
+			{
+				_highPrice = price;
+				_highTime = time;
+			}
+
+			_closePrice = price;
+			_totalPrice += price * volume;
+
+			_lowVolume = (_lowVolume ?? 0m).Min(volume);
+			_highVolume = (_highVolume ?? 0m).Max(volume);
+			_closeVolume = volume;
+			_totalVolume += volume;
+
+			var dir = value.OrderDirection;
+			if (dir != null)
+				_relativeVolume = (_relativeVolume ?? 0) + (dir.Value == Sides.Buy ? volume : -volume);
+
+			_closeTime = time;
 		}
 	}
 

@@ -45,7 +45,7 @@ namespace StockSharp.Algo.Candles
 			private readonly CandleManagerContainer _container;
 			private const int _candlesCapacity = 10000;
 
-			private readonly SynchronizedDictionary<DateTimeOffset, SynchronizedSet<Candle>> _byTime = new SynchronizedDictionary<DateTimeOffset, SynchronizedSet<Candle>>(_candlesCapacity);
+			private readonly SynchronizedDictionary<long, SynchronizedSet<Candle>> _byTime = new SynchronizedDictionary<long, SynchronizedSet<Candle>>(_candlesCapacity);
 			private readonly SynchronizedLinkedList<Candle> _allCandles = new SynchronizedLinkedList<Candle>();
 
 			private long _firstCandleTime;
@@ -79,13 +79,15 @@ namespace StockSharp.Algo.Candles
 				if (candle == null)
 					throw new ArgumentNullException(nameof(candle));
 
-				if (!_byTime.SafeAdd(candle.OpenTime).TryAdd(candle))
+				var ticks = candle.OpenTime.UtcTicks;
+
+				if (!_byTime.SafeAdd(ticks).TryAdd(candle))
 					return false;
 
 				_allCandles.AddLast(candle);
 				_candleStat.Add(candle);
 
-				_lastCandleTime = candle.OpenTime.UtcTicks;
+				_lastCandleTime = ticks;
 
 				RecycleCandles();
 
@@ -116,12 +118,12 @@ namespace StockSharp.Algo.Candles
 					}
 				});
 
-				_byTime.SyncGet(d => d.RemoveWhere(p => p.Key.UtcTicks < _firstCandleTime));
+				_byTime.SyncGet(d => d.RemoveWhere(p => p.Key < _firstCandleTime));
 			}
 
 			public IEnumerable<Candle> GetCandles(DateTimeOffset time)
 			{
-				var candles = _byTime.TryGetValue(time);
+				var candles = _byTime.TryGetValue(time.UtcTicks);
 
 				return candles != null ? candles.SyncGet(c => c.ToArray()) : Enumerable.Empty<Candle>();
 			}

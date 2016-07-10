@@ -720,11 +720,12 @@ namespace StockSharp.Algo.Testing
 				var executions = result == null ? null : new Dictionary<decimal, decimal>();
 
 				var quotes = GetQuotes(order.Side.Invert());
+				List<decimal> toRemove = null;
 
 				var leftBalance = order.GetBalance();
 				var sign = order.Side == Sides.Buy ? 1 : -1;
 
-				foreach (var pair in quotes.ToArray())
+				foreach (var pair in quotes)
 				{
 					var price = pair.Key;
 					var levelQuotes = pair.Value.First;
@@ -772,7 +773,12 @@ namespace StockSharp.Algo.Testing
 							_messagePool.Free(quote);
 
 							if (levelQuotes.Count == 0)
-								quotes.Remove(price);
+							{
+								if (toRemove == null)
+									toRemove = new List<decimal>();
+
+								toRemove.Add(price);
+							}
 						}
 
 						AddTotalVolume(order.Side.Invert(), -volume);
@@ -785,6 +791,12 @@ namespace StockSharp.Algo.Testing
 
 					if (leftBalance == 0 || matchError != null)
 						break;
+				}
+
+				if (toRemove != null)
+				{
+					foreach (var value in toRemove)
+						quotes.Remove(value);
 				}
 
 				// если это не пользовательская заявка

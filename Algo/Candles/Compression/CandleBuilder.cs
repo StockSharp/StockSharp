@@ -434,32 +434,7 @@ namespace StockSharp.Algo.Candles.Compression
 			if (value == null)
 				throw new ArgumentNullException(nameof(value));
 
-			if (value.Price < candle.LowPrice)
-			{
-				candle.LowPrice = value.Price;
-				candle.LowTime = value.Time;
-			}
-
-			if (value.Price > candle.HighPrice)
-			{
-				candle.HighPrice = value.Price;
-				candle.HighTime = value.Time;
-			}
-
-			candle.ClosePrice = value.Price;
-			candle.TotalPrice += value.Price * value.Volume;
-
-			candle.LowVolume = (candle.LowVolume ?? 0m).Min(value.Volume);
-			candle.HighVolume = (candle.HighVolume ?? 0m).Max(value.Volume);
-			candle.CloseVolume = value.Volume;
-			candle.TotalVolume += value.Volume;
-
-			if (value.OrderDirection != null)
-			{
-				candle.RelativeVolume = (candle.RelativeVolume ?? 0) + (value.OrderDirection == Sides.Buy ? value.Volume : -value.Volume);
-			}
-
-			candle.CloseTime = value.Time;
+			candle.Update(value);
 		}
 
 		/// <summary>
@@ -491,7 +466,8 @@ namespace StockSharp.Algo.Candles.Compression
 			}
 
 			UpdateCandle(series, currentCandle, value);
-			this.AddDebugLog("UpdatedCandle {0} ForValue {1}", currentCandle, value);
+			// TODO performance
+			//this.AddDebugLog("UpdatedCandle {0} ForValue {1}", currentCandle, value);
 			return currentCandle;
 		}
 
