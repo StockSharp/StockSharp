@@ -157,7 +157,7 @@ namespace StockSharp.Algo.Testing
 
 		private readonly CachedSynchronizedDictionary<Tuple<SecurityId, MarketDataTypes, object>, int> _subscribedCandles = new CachedSynchronizedDictionary<Tuple<SecurityId, MarketDataTypes, object>, int>();
 		private readonly CachedSynchronizedDictionary<Tuple<SecurityId, MarketDataTypes, object>, int> _historySourceSubscriptions = new CachedSynchronizedDictionary<Tuple<SecurityId, MarketDataTypes, object>, int>();
-		private readonly SynchronizedDictionary<Tuple<SecurityId, MarketDataTypes, object>, CandleSeries> _series = new SynchronizedDictionary<Tuple<SecurityId, MarketDataTypes, object>, CandleSeries>();
+		private readonly SynchronizedDictionary<Tuple<SecurityId, MarketDataTypes, object>, List<CandleSeries>> _series = new SynchronizedDictionary<Tuple<SecurityId, MarketDataTypes, object>, List<CandleSeries>>();
 		
 		/// <summary>
 		/// Initializes a new instance of the <see cref="HistoryEmulationConnector"/>.
@@ -455,9 +455,12 @@ namespace StockSharp.Algo.Testing
 								if (!UseExternalCandleSource)
 									break;
 
-								var series = _series.TryGetValue(Tuple.Create(candleMsg.SecurityId, candleMsg.Type.ToCandleMarketDataType(), candleMsg.Arg));
+								var serieses = _series.TryGetValue(Tuple.Create(candleMsg.SecurityId, candleMsg.Type.ToCandleMarketDataType(), candleMsg.Arg));
 
-								if (series != null)
+								if (serieses == null)
+										break;
+
+								foreach (var series in serieses)
 								{
 									_newCandles?.Invoke(series, new[] { candleMsg.ToCandle(series) });
 
@@ -687,6 +690,8 @@ namespace StockSharp.Algo.Testing
 			var dataType = series.CandleType.ToCandleMessageType().ToCandleMarketDataType();
 			var key = Tuple.Create(securityId, dataType, series.Arg);
 
+			_series.SafeAdd(key).Add(series);
+
 			if (!_historySourceSubscriptions.ContainsKey(key))
 			{
 				if (_subscribedCandles.ChangeSubscribers(key, true) != 1)
@@ -700,8 +705,6 @@ namespace StockSharp.Algo.Testing
 					IsSubscribe = true,
 				}.FillSecurityInfo(this, series.Security));
 			}
-
-			_series.Add(key, series);
 		}
 
 		void IExternalCandleSource.UnSubscribeCandles(CandleSeries series)
@@ -709,6 +712,8 @@ namespace StockSharp.Algo.Testing
 			var securityId = GetSecurityId(series.Security);
 			var dataType = series.CandleType.ToCandleMessageType().ToCandleMarketDataType();
 			var key = Tuple.Create(securityId, dataType, series.Arg);
+
+			_series.SafeAdd(key).Remove(series);
 
 			if (!_historySourceSubscriptions.ContainsKey(key))
 			{
@@ -723,8 +728,6 @@ namespace StockSharp.Algo.Testing
 					IsSubscribe = false,
 				}.FillSecurityInfo(this, series.Security));
 			}
-
-			_series.Remove(key);
 		}
 	}
 }

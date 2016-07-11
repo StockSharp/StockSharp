@@ -300,6 +300,7 @@ namespace StockSharp.Algo.Strategies.Testing
 			EmulationConnector.StateChanged += EmulationConnectorOnStateChanged;
 			EmulationConnector.MarketTimeChanged += EmulationConnectorOnMarketTimeChanged;
 			EmulationConnector.Disconnected += EmulationConnectorOnDisconnected;
+			EmulationConnector.NewSecurities += EmulationConnectorOnNewSecurities;
 		}
 
 		private void EmulationConnectorOnStateChanged()
@@ -349,6 +350,36 @@ namespace StockSharp.Algo.Strategies.Testing
 				return;
 
 			TryStartNextBatch();
+		}
+
+		private void EmulationConnectorOnNewSecurities(IEnumerable<Security> securities)
+		{
+			foreach (var s in securities)
+			{
+				var level1Info = new Level1ChangeMessage
+				{
+					SecurityId = s.ToSecurityId(),
+					ServerTime = EmulationSettings.StartTime
+				};
+
+				if (s.PriceStep != null)
+					level1Info.TryAdd(Level1Fields.PriceStep, s.PriceStep.Value);
+
+				if (s.StepPrice != null)
+					level1Info.TryAdd(Level1Fields.StepPrice, s.StepPrice.Value);
+
+				level1Info.TryAdd(Level1Fields.MinPrice, s.MinPrice ?? 1m);
+				level1Info.TryAdd(Level1Fields.MaxPrice, s.MaxPrice ?? 1000000m);
+
+				if (s.MarginBuy != null)
+					level1Info.TryAdd(Level1Fields.MarginBuy, s.MarginBuy.Value);
+
+				if (s.MarginSell != null)
+					level1Info.TryAdd(Level1Fields.MarginSell, s.MarginSell.Value);
+
+				// fill level1 values
+				EmulationConnector.SendInMessage(level1Info);
+			}
 		}
 
 		/// <summary>
