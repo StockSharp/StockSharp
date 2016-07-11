@@ -29,17 +29,12 @@
             Open an account link.
             </summary>
         </member>
-        <member name="P:StockSharp.Licensing.Broker.Feedbacks">
+        <member name="P:StockSharp.Licensing.Broker.OpenDemoAccountLink">
             <summary>
-            Feedback count.
+            Open a demo account link.
             </summary>
         </member>
-        <member name="P:StockSharp.Licensing.Broker.FeedbackLinkId">
-            <summary>
-            Feedbacks link.
-            </summary>
-        </member>
-        <member name="P:StockSharp.Licensing.Broker.ImageLinkId">
+        <member name="P:StockSharp.Licensing.Broker.Picture">
             <summary>
             Picture id.
             </summary>
