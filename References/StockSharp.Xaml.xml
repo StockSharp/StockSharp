@@ -553,7 +553,7 @@
     </member>
     <member name="E:StockSharp.Xaml.ExchangeEditor.SelectedExchangeChanged">
       <summary>
-            The selected exchange change event .
+            The selected exchange change event.
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.ExchangeEditor.#ctor">
@@ -1251,9 +1251,9 @@
             Initializes a new instance of the <see cref="T:StockSharp.Xaml.CredentialsWindow" />.
             </summary>
     </member>
-    <member name="P:StockSharp.Xaml.CredentialsWindow.Login">
+    <member name="P:StockSharp.Xaml.CredentialsWindow.Email">
       <summary>
-            Login.
+            Email.
             </summary>
     </member>
     <member name="P:StockSharp.Xaml.CredentialsWindow.Password">
@@ -3081,7 +3081,7 @@
             </summary>
       <param name="order">Order to cancel.</param>
     </member>
-    <member name="M:StockSharp.Xaml.GuiConnector`1.CancelOrders(System.Nullable{System.Boolean},StockSharp.BusinessEntities.Portfolio,System.Nullable{StockSharp.Messages.Sides},StockSharp.BusinessEntities.ExchangeBoard,StockSharp.BusinessEntities.Security)">
+    <member name="M:StockSharp.Xaml.GuiConnector`1.CancelOrders(System.Nullable{System.Boolean},StockSharp.BusinessEntities.Portfolio,System.Nullable{StockSharp.Messages.Sides},StockSharp.BusinessEntities.ExchangeBoard,StockSharp.BusinessEntities.Security,System.Nullable{StockSharp.Messages.SecurityTypes})">
       <summary>
             Cancel orders by filter.
             </summary>
@@ -3091,6 +3091,7 @@
       <param name="direction">Order side. If the value is <see langword="null" />, the direction does not use.</param>
       <param name="board">Trading board. If the value is equal to <see langword="null" />, then the board does not match the orders cancel filter.</param>
       <param name="security">Instrument. If the value is equal to <see langword="null" />, then the instrument does not match the orders cancel filter.</param>
+      <param name="securityType">Security type. If the value is <see langword="null" />, the type does not use.</param>
     </member>
     <member name="E:StockSharp.Xaml.GuiConnector`1.ValuesChanged">
       <summary>
