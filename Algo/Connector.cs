@@ -549,8 +549,6 @@ namespace StockSharp.Algo
 		/// </summary>
 		public void Connect()
 		{
-			_prevTime = default(DateTimeOffset);
-			_currentTime = default(DateTimeOffset);
 			this.AddInfoLog("Connect");
 
 			try
