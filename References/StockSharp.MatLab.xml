@@ -1,0 +1,256 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>StockSharp.MatLab</name>
+    </assembly>
+    <members>
+        <member name="T:StockSharp.MatLab.ErrorEventArgs">
+            <summary>
+            Argument which contains an error information.
+            </summary>
+        </member>
+        <member name="P:StockSharp.MatLab.ErrorEventArgs.Error">
+            <summary>
+            Error info.
+            </summary>
+        </member>
+        <member name="T:StockSharp.MatLab.SecuritiesEventArgs">
+            <summary>
+            Argument which contains instruments.
+            </summary>
+        </member>
+        <member name="P:StockSharp.MatLab.SecuritiesEventArgs.Securities">
+            <summary>
+            Securities.
+            </summary>
+        </member>
+        <member name="T:StockSharp.MatLab.OrdersEventArgs">
+            <summary>
+            Argument which contains orders.
+            </summary>
+        </member>
+        <member name="P:StockSharp.MatLab.OrdersEventArgs.Orders">
+            <summary>
+            Orders.
+            </summary>
+        </member>
+        <member name="T:StockSharp.MatLab.OrderFailsEventArgs">
+            <summary>
+            Argument which contains order errors (registration or cancellation).
+            </summary>
+        </member>
+        <member name="P:StockSharp.MatLab.OrderFailsEventArgs.OrderFails">
+            <summary>
+            Errors.
+            </summary>
+        </member>
+        <member name="T:StockSharp.MatLab.TradesEventArgs">
+            <summary>
+            Argument which contains tick teades.
+            </summary>
+        </member>
+        <member name="P:StockSharp.MatLab.TradesEventArgs.Trades">
+            <summary>
+            Trades.
+            </summary>
+        </member>
+        <member name="T:StockSharp.MatLab.MyTradesEventArgs">
+            <summary>
+            Argument which contains own trades.
+            </summary>
+        </member>
+        <member name="P:StockSharp.MatLab.MyTradesEventArgs.Trades">
+            <summary>
+            Trades.
+            </summary>
+        </member>
+        <member name="T:StockSharp.MatLab.PortfoliosEventArgs">
+            <summary>
+            Argument which contains portfolios.
+            </summary>
+        </member>
+        <member name="P:StockSharp.MatLab.PortfoliosEventArgs.Portfolios">
+            <summary>
+            Portfolios.
+            </summary>
+        </member>
+        <member name="T:StockSharp.MatLab.PositionsEventArgs">
+            <summary>
+            Argument which contains positions.
+            </summary>
+        </member>
+        <member name="P:StockSharp.MatLab.PositionsEventArgs.Positions">
+            <summary>
+            Positions.
+            </summary>
+        </member>
+        <member name="T:StockSharp.MatLab.MarketDepthsEventArgs">
+            <summary>
+            Argument which contains order books.
+            </summary>
+        </member>
+        <member name="P:StockSharp.MatLab.MarketDepthsEventArgs.Depths">
+            <summary>
+            Market depths.
+            </summary>
+        </member>
+        <member name="T:StockSharp.MatLab.OrderLogItemsEventArg">
+            <summary>
+            Argument which contains order logs.
+            </summary>
+        </member>
+        <member name="P:StockSharp.MatLab.OrderLogItemsEventArg.Items">
+            <summary>
+            Order log.
+            </summary>
+        </member>
+        <member name="T:StockSharp.MatLab.MatLabConnector">
+            <summary>
+            The interface <see cref="T:StockSharp.BusinessEntities.IConnector"/> implementation which provides ability to use from MatLab scripts.
+            </summary>
+        </member>
+        <member name="M:StockSharp.MatLab.MatLabConnector.#ctor(StockSharp.BusinessEntities.IConnector)">
+            <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.MatLab.MatLabConnector"/>.
+            </summary>
+            <param name="realConnector">The connection for market-data and transactions.</param>
+        </member>
+        <member name="M:StockSharp.MatLab.MatLabConnector.#ctor(StockSharp.BusinessEntities.IConnector,System.Boolean)">
+            <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.MatLab.MatLabConnector"/>.
+            </summary>
+            <param name="realConnector">The connection for market-data and transactions.</param>
+            <param name="ownTrader">Track the connection <paramref name="realConnector" /> lifetime.</param>
+        </member>
+        <member name="P:StockSharp.MatLab.MatLabConnector.RealConnector">
+            <summary>
+            The connection for market-data and transactions.
+            </summary>
+        </member>
+        <member name="E:StockSharp.MatLab.MatLabConnector.Connected">
+            <summary>
+            Connected.
+            </summary>
+        </member>
+        <member name="E:StockSharp.MatLab.MatLabConnector.ConnectionError">
+            <summary>
+            Connection error (for example, the connection was aborted by server).
+            </summary>
+        </member>
+        <member name="E:StockSharp.MatLab.MatLabConnector.Disconnected">
+            <summary>
+            Disconnected.
+            </summary>
+        </member>
+        <member name="E:StockSharp.MatLab.MatLabConnector.Error">
+            <summary>
+            Dats process error.
+            </summary>
+        </member>
+        <member name="E:StockSharp.MatLab.MatLabConnector.MarketTimeChanged">
+            <summary>
+            Server time changed <see cref="P:StockSharp.BusinessEntities.IConnector.ExchangeBoards"/>. It passed the time difference since the last call of the event. The first time the event passes the value <see cref="F:System.TimeSpan.Zero"/>.
+            </summary>
+        </member>
+        <member name="E:StockSharp.MatLab.MatLabConnector.NewSecurities">
+            <summary>
+            Securities received.
+            </summary>
+        </member>
+        <member name="E:StockSharp.MatLab.MatLabConnector.SecuritiesChanged">
+            <summary>
+            Securities changed.
+            </summary>
+        </member>
+        <member name="E:StockSharp.MatLab.MatLabConnector.NewPortfolios">
+            <summary>
+            Portfolios received.
+            </summary>
+        </member>
+        <member name="E:StockSharp.MatLab.MatLabConnector.PortfoliosChanged">
+            <summary>
+            Portfolios changed.
+            </summary>
+        </member>
+        <member name="E:StockSharp.MatLab.MatLabConnector.NewPositions">
+            <summary>
+            Positions received.
+            </summary>
+        </member>
+        <member name="E:StockSharp.MatLab.MatLabConnector.PositionsChanged">
+            <summary>
+            Positions changed.
+            </summary>
+        </member>
+        <member name="E:StockSharp.MatLab.MatLabConnector.NewTrades">
+            <summary>
+            Tick trades received.
+            </summary>
+        </member>
+        <member name="E:StockSharp.MatLab.MatLabConnector.NewMyTrades">
+            <summary>
+            Own trades received.
+            </summary>
+        </member>
+        <member name="E:StockSharp.MatLab.MatLabConnector.NewOrders">
+            <summary>
+            Orders received.
+            </summary>
+        </member>
+        <member name="E:StockSharp.MatLab.MatLabConnector.OrdersChanged">
+            <summary>
+            Orders changed (cancelled, matched).
+            </summary>
+        </member>
+        <member name="E:StockSharp.MatLab.MatLabConnector.OrdersRegisterFailed">
+            <summary>
+            Order registration errors event.
+            </summary>
+        </member>
+        <member name="E:StockSharp.MatLab.MatLabConnector.OrdersCancelFailed">
+            <summary>
+            Order cancellation errors event.
+            </summary>
+        </member>
+        <member name="E:StockSharp.MatLab.MatLabConnector.NewStopOrders">
+            <summary>
+            Stop-orders received.
+            </summary>
+        </member>
+        <member name="E:StockSharp.MatLab.MatLabConnector.StopOrdersChanged">
+            <summary>
+            Stop orders state change event.
+            </summary>
+        </member>
+        <member name="E:StockSharp.MatLab.MatLabConnector.StopOrdersRegisterFailed">
+            <summary>
+            Stop-order registration errors event.
+            </summary>
+        </member>
+        <member name="E:StockSharp.MatLab.MatLabConnector.StopOrdersCancelFailed">
+            <summary>
+            Stop-order cancellation errors event.
+            </summary>
+        </member>
+        <member name="E:StockSharp.MatLab.MatLabConnector.NewMarketDepths">
+            <summary>
+            Order books received.
+            </summary>
+        </member>
+        <member name="E:StockSharp.MatLab.MatLabConnector.MarketDepthsChanged">
+            <summary>
+            Order books changed.
+            </summary>
+        </member>
+        <member name="E:StockSharp.MatLab.MatLabConnector.NewOrderLogItems">
+            <summary>
+            Order log received.
+            </summary>
+        </member>
+        <member name="M:StockSharp.MatLab.MatLabConnector.DisposeManaged">
+            <summary>
+            Release resources.
+            </summary>
+        </member>
+    </members>
+</doc>

@@ -394,7 +394,7 @@
     </member>
     <member name="F:StockSharp.IQFeed.IQFeedLevel1ColumnRegistry.MostRecentTradeMarket">
       <summary>
-            The market identifier of the most frequent trade .
+            The market identifier of the most frequent trade.
             </summary>
     </member>
     <member name="F:StockSharp.IQFeed.IQFeedLevel1ColumnRegistry.ExtendedTradePrice">

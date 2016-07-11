@@ -39,6 +39,11 @@
             Is it possible to edit a composite element diagram.
             </summary>
     </member>
+    <member name="P:StockSharp.Xaml.Diagram.CompositionDiagramElement.IsBrowsable">
+      <summary>
+            Is composite element can be viewed in editor.
+            </summary>
+    </member>
     <member name="P:StockSharp.Xaml.Diagram.CompositionDiagramElement.HasErrors">
       <summary>
             To check the composite element for errors in diagram.
@@ -173,6 +178,14 @@
             To serialize the composite element.
             </summary>
       <param name="composition">Composite element.</param>
+      <returns>Settings storage.</returns>
+    </member>
+    <member name="M:StockSharp.Xaml.Diagram.CompositionRegistry.SerializeExported(StockSharp.Xaml.Diagram.CompositionDiagramElement,System.Boolean)">
+      <summary>
+            To serialize the entire composite element.
+            </summary>
+      <param name="composition">Composite element.</param>
+      <param name="browsable">Is composite element can be viewed in editor.</param>
       <returns>Settings storage.</returns>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.CompositionRegistry.Deserialize(Ecng.Serialization.SettingsStorage)">
@@ -1101,12 +1114,12 @@
     </member>
     <member name="E:StockSharp.Xaml.Diagram.DiagramPaletteControl.PaletteSelectionChanged">
       <summary>
-            The event of the diagram element selection in the Toolbox .
+            The event of the diagram element selection in the Toolbox.
             </summary>
     </member>
     <member name="E:StockSharp.Xaml.Diagram.DiagramPaletteControl.PaletteElementDoubleClicked">
       <summary>
-            The event of the double click on the element in the Toolbox .
+            The event of the double click on the element in the Toolbox.
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.DiagramPaletteControl.#ctor">
@@ -1466,9 +1479,14 @@
             The strategy diagram.
             </summary>
     </member>
+    <member name="P:StockSharp.Xaml.Diagram.DiagramStrategy.UseStrategyParameterValues">
+      <summary>
+            Use strategy parameters values for composition properties.
+            </summary>
+    </member>
     <member name="E:StockSharp.Xaml.Diagram.DiagramStrategy.CompositionChanged">
       <summary>
-            The strategy diagram change event .
+            The strategy diagram change event.
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.DiagramStrategy.#ctor">

@@ -772,17 +772,17 @@
     </member>
     <member name="P:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.ScaleCondition.InitLevelSize">
       <summary>
-            split order into X buckets.
+            Split order into X buckets.
             </summary>
     </member>
     <member name="P:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.ScaleCondition.SubsLevelSize">
       <summary>
-            split order so each bucket is of the size X.
+            Split order so each bucket is of the size X.
             </summary>
     </member>
     <member name="P:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.ScaleCondition.PriceIncrement">
       <summary>
-            price increment per bucket.
+            Price increment per bucket.
             </summary>
     </member>
     <member name="P:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.ScaleCondition.PriceAdjustValue">
@@ -1670,7 +1670,7 @@
             The new financial advice occurring event. Parameters are passed in the xml format.
             </summary>
     </member>
-    <member name="M:StockSharp.InteractiveBrokers.InteractiveBrokersTrader.OnCancelOrders(System.Int64,System.Nullable{System.Boolean},StockSharp.BusinessEntities.Portfolio,System.Nullable{StockSharp.Messages.Sides},StockSharp.BusinessEntities.ExchangeBoard,StockSharp.BusinessEntities.Security)">
+    <member name="M:StockSharp.InteractiveBrokers.InteractiveBrokersTrader.OnCancelOrders(System.Int64,System.Nullable{System.Boolean},StockSharp.BusinessEntities.Portfolio,System.Nullable{StockSharp.Messages.Sides},StockSharp.BusinessEntities.ExchangeBoard,StockSharp.BusinessEntities.Security,System.Nullable{StockSharp.Messages.SecurityTypes})">
       <summary>
             Cancel orders by filter.
             </summary>
@@ -1681,6 +1681,7 @@
       <param name="direction">Order side. If the value is <see langword="null" />, the direction does not use.</param>
       <param name="board">Trading board. If the value is equal to <see langword="null" />, then the board does not match the orders cancel filter.</param>
       <param name="security">Instrument. If the value is equal to <see langword="null" />, then the instrument does not match the orders cancel filter.</param>
+      <param name="securityType">Instrument type. If the value is equal to <see langword="null" />, then the type does not match the orders cancel filter.</param>
     </member>
     <member name="M:StockSharp.InteractiveBrokers.InteractiveBrokersTrader.SubscribeScanner(StockSharp.InteractiveBrokers.ScannerFilter,System.Boolean)">
       <summary>

@@ -3691,6 +3691,19 @@
       <summary>
       </summary>
     </member>
+    <member name="T:StockSharp.Fix.Native.Party">
+      <summary>
+            Party.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.Party.PartyId">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.Party.PartyRole">
+      <summary>
+      </summary>
+    </member>
     <member name="T:StockSharp.Fix.Native.ExecutionReport">
       <summary>
             Execution report.
@@ -3739,6 +3752,11 @@
     <member name="P:StockSharp.Fix.Native.ExecutionReport.TrdRegTimestampType">
       <summary>
             Traded / Regulatory timestamp type.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.Native.ExecutionReport.MaxFloor">
+      <summary>
+            Maximum quantity (e.g. number of shares) within an order to be shown on the exchange floor at any given time.
             </summary>
     </member>
     <member name="F:StockSharp.Fix.Native.ExecutionReport.Price">
@@ -3790,11 +3808,11 @@
       <summary>
       </summary>
     </member>
-    <member name="F:StockSharp.Fix.Native.ExecutionReport.PartyId">
+    <member name="F:StockSharp.Fix.Native.ExecutionReport.ExecBroker">
       <summary>
       </summary>
     </member>
-    <member name="F:StockSharp.Fix.Native.ExecutionReport.PartyRole">
+    <member name="F:StockSharp.Fix.Native.ExecutionReport.Parties">
       <summary>
       </summary>
     </member>
@@ -4224,6 +4242,10 @@
       </summary>
     </member>
     <member name="F:StockSharp.Fix.Native.FixTags.TradeDate">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.FixTags.ExecBroker">
       <summary>
       </summary>
     </member>
