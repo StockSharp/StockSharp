@@ -78,11 +78,12 @@
 
 							if (!isNativeIdNull && !_nativeIds.TryAdd(temp, nativeSecurityId))
 							{
-								var prevId = _nativeIds[nativeSecurityId];
+								SecurityId prevId;
 
-								// TODO
-								//if (prevId != securityId)
-								//	throw new InvalidOperationException(LocalizedStrings.Str687Params.Put(securityId, prevId, nativeSecurityId));
+								if (_nativeIds.TryGetKey(nativeSecurityId, out prevId))
+									throw new InvalidOperationException(LocalizedStrings.Str687Params.Put(securityId, prevId, nativeSecurityId));
+								else
+									throw new InvalidOperationException(LocalizedStrings.Str687Params.Put(nativeSecurityId, _nativeIds[temp], temp));
 							}
 						}
 					}
