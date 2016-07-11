@@ -314,8 +314,11 @@ namespace StockSharp.Algo.Storages
 				if (serverTime == null)
 					throw new InvalidOperationException();
 
-				msg.LocalTime = serverTime.Value;
+				if (serverTime.Value < loadDate)
+					continue;
 
+				msg.LocalTime = serverTime.Value;
+				
 				if (checkFromTime)
 				{
 					// пропускаем только стаканы, тики и ОЛ
