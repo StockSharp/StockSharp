@@ -94,6 +94,11 @@
             Список адресов и портов серверов доступа.
             </summary>
     </member>
+    <member name="P:StockSharp.Micex.MicexMessageAdapter.IgnoreCurrencies">
+      <summary>
+            Игнорируемые валюты.
+            </summary>
+    </member>
     <member name="P:StockSharp.Micex.MicexMessageAdapter.Server">
       <summary>
             Идентификатор сервера доступа, например “EQ_TEST”.
@@ -1417,6 +1422,11 @@
             НГЦБ, нерезиденты (облигации).
             </summary>
     </member>
+    <member name="F:StockSharp.Micex.Native.TrdAccTypes.V">
+      <summary>
+            Клиенты 2-го и 3-го уровней.
+            </summary>
+    </member>
     <member name="T:StockSharp.Micex.Native.USTradeTypes">
       <summary>
             Тип сделки на исполнение.
@@ -1617,6 +1627,11 @@
             Технологический.
             </summary>
     </member>
+    <member name="F:StockSharp.Micex.Native.BankAccTypes.V">
+      <summary>
+            Клиенты 2-го и 3-го уровней.
+            </summary>
+    </member>
     <member name="T:StockSharp.Micex.Native.CodModes">
       <summary>
             COD-подписка.
@@ -1745,6 +1760,21 @@
     <member name="F:StockSharp.Micex.Native.EntryTypes.W">
       <summary>
             Средневзвешенный курс.
+            </summary>
+    </member>
+    <member name="T:StockSharp.Micex.Native.TradeSettleLiabilityFlags">
+      <summary>
+            Сделка Урегулирования.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Micex.Native.TradeSettleLiabilityFlags.N">
+      <summary>
+            Обычная сделка.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Micex.Native.TradeSettleLiabilityFlags.Y">
+      <summary>
+            Сделка урегулирования.
             </summary>
     </member>
     <member name="T:StockSharp.Micex.Native.Tables.Assets">
@@ -2909,6 +2939,31 @@
     <member name="P:StockSharp.Micex.Native.Tables.RmPricerangeFirm.KH">
       <summary>
             Коэффициент для верхней границы курса.
+            </summary>
+    </member>
+    <member name="T:StockSharp.Micex.Native.Tables.RmProductSpread">
+      <summary>
+            Межпродуктовые спреды.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Micex.Native.Tables.RmProductSpread.#ctor">
+      <summary>
+            Создать <see cref="T:StockSharp.Micex.Native.Tables.RmProductSpread" />.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Micex.Native.Tables.RmProductSpread.Asset">
+      <summary>
+            Актив.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Micex.Native.Tables.RmProductSpread.Asset2">
+      <summary>
+            Актив 2.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Micex.Native.Tables.RmProductSpread.Coef">
+      <summary>
+            Ставка скидка.
             </summary>
     </member>
     <member name="T:StockSharp.Micex.Native.Tables.RmsHold">
@@ -4099,6 +4154,11 @@
     <member name="P:StockSharp.Micex.Native.Tables.Clientcodes.Subdetails">
       <summary>
             Данные о клиенте клиента (ИНН, номер паспорта или другой документ).
+            </summary>
+    </member>
+    <member name="P:StockSharp.Micex.Native.Tables.Clientcodes.Qinvestor">
+      <summary>
+            Квалифицированный инвестор.
             </summary>
     </member>
     <member name="T:StockSharp.Micex.Native.Tables.Currency">
@@ -6669,6 +6729,11 @@
             Информация об операции.
             </summary>
     </member>
+    <member name="P:StockSharp.Micex.Native.Tables.Sectransfers.Settlecode">
+      <summary>
+            Код расчетов по сделке.
+            </summary>
+    </member>
     <member name="T:StockSharp.Micex.Native.Tables.Securities">
       <summary>
             Финансовые инструменты.
@@ -7555,6 +7620,11 @@
             Информация о переводе.
             </summary>
     </member>
+    <member name="P:StockSharp.Micex.Native.Tables.Trades.Settleliabilityflag">
+      <summary>
+            Отметка о том, что сделка является сделкой урегулирования обязательств между УК и УТ.
+            </summary>
+    </member>
     <member name="T:StockSharp.Micex.Native.Tables.Tradetime">
       <summary>
             Расписание торгов.
@@ -7820,6 +7890,11 @@
     <member name="P:StockSharp.Micex.Native.Tables.Users.Masteruserflag">
       <summary>
             Идентификатор является контролирующим Мастер Идентификатором (SMA-доступ).
+            </summary>
+    </member>
+    <member name="P:StockSharp.Micex.Native.Tables.Users.Extipclient">
+      <summary>
+            Внешний адрес.
             </summary>
     </member>
     <member name="T:StockSharp.Micex.Native.Tables.UserTrdacc">
@@ -8484,7 +8559,7 @@
     </member>
     <member name="P:StockSharp.Micex.Native.Transactions.CancelTrade.Compval">
       <summary>
-            Сумма отступного, в валюте сделки.
+            Размер отступного, выраженный в валюте сделки.
             </summary>
     </member>
     <member name="P:StockSharp.Micex.Native.Transactions.CancelTrade.Buysell">
@@ -8899,6 +8974,11 @@
             Номер торгового счета партнера.
             </summary>
     </member>
+    <member name="P:StockSharp.Micex.Native.Transactions.ComplexNegdeal.Matchref">
+      <summary>
+            Текст-связка для однозначного соответствия двух встречных внебиржевых заявок.
+            </summary>
+    </member>
     <member name="P:StockSharp.Micex.Native.Transactions.ComplexNegdeal.Cpbrokerref">
       <summary>
             Дополнительная справочная информация (заполняется трейдером), как правило - номер поручения.
@@ -9011,6 +9091,11 @@
     <member name="P:StockSharp.Micex.Native.Transactions.ComplexTransfer.Quantity">
       <summary>
             Количество ценных бумаг, выраженное в лотах.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Micex.Native.Transactions.ComplexTransfer.Value">
+      <summary>
+            Объем, выраженный в валюте расчетов.
             </summary>
     </member>
     <member name="P:StockSharp.Micex.Native.Transactions.ComplexTransfer.Cpaccount">
@@ -9981,6 +10066,11 @@
             Код валюты.
             </summary>
     </member>
+    <member name="P:StockSharp.Micex.Native.Transactions.SetLimit2.Firmid">
+      <summary>
+            Идентификатор фирмы.
+            </summary>
+    </member>
     <member name="P:StockSharp.Micex.Native.Transactions.SetLimit2.Tag">
       <summary>
             Код позиции.
@@ -10027,6 +10117,11 @@
     <member name="P:StockSharp.Micex.Native.Transactions.SetRmPricerangeFirm.Trdaccid">
       <summary>
             Номер торгового счета.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Micex.Native.Transactions.SetRmPricerangeFirm.Firmid">
+      <summary>
+            Идентификатор фирмы.
             </summary>
     </member>
     <member name="P:StockSharp.Micex.Native.Transactions.SetRmPricerangeFirm.Asset">
@@ -12181,6 +12276,26 @@
       <param name="tableHandle">Идентификатор таблицы.</param>
       <param name="handler">Обработчик, куда будут переданы данные после пакетной обработки.</param>
     </member>
+    <member name="M:StockSharp.Micex.Native.MicexClient.OpenRmProductSpreadTable">
+      <summary>
+            Открыть таблицу 'Межпродуктовые спреды'.
+            </summary>
+      <returns>Указатель на таблицу 'Межпродуктовые спреды'.</returns>
+    </member>
+    <member name="M:StockSharp.Micex.Native.MicexClient.ReadRmProductSpreadTable(StockSharp.Micex.Native.MicexPtrReader)">
+      <summary>
+            Межпродуктовые спреды.
+            </summary>
+      <param name="tablePtr">Указатель на таблицу.</param>
+      <returns>Список объектов 'Межпродуктовые спреды'.</returns>
+    </member>
+    <member name="M:StockSharp.Micex.Native.MicexClient.AddRmProductSpreadTable(System.Int32,System.Action{System.Collections.Generic.IEnumerable{StockSharp.Micex.Native.Tables.RmProductSpread}})">
+      <summary>
+            Добавить таблицу 'Межпродуктовые спреды' в пакетную обработку.
+            </summary>
+      <param name="tableHandle">Идентификатор таблицы.</param>
+      <param name="handler">Обработчик, куда будут переданы данные после пакетной обработки.</param>
+    </member>
     <member name="T:StockSharp.Micex.Schema.EnumDesc">
       <summary>
             Перечислимый тип.
@@ -12618,6 +12733,11 @@
             Брокерский валютный интерфейс IFC_Broker24.
             </summary>
     </member>
+    <member name="F:StockSharp.Micex.MicexInterfaces.Currency26">
+      <summary>
+            Брокерский валютный интерфейс IFC_Broker26.
+            </summary>
+    </member>
     <member name="T:StockSharp.Micex.MicexTrader">
       <summary>
             Реализация интерфейса <see cref="T:StockSharp.BusinessEntities.IConnector" />, предоставляющая подключение к Micex Bridge.
@@ -12731,6 +12851,11 @@
     <member name="P:StockSharp.Micex.MicexTrader.ExtraSettings">
       <summary>
             Дополнительные настройки.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Micex.MicexTrader.IgnoreCurrencies">
+      <summary>
+            Игнорируемые валюты.
             </summary>
     </member>
     <member name="T:StockSharp.Micex.Xaml.MicexInterfaceComboBox">
