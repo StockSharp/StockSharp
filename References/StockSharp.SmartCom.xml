@@ -1766,7 +1766,7 @@
       <param name="oldOrder">Старая заявка, которую нужно перерегистрировать.</param>
       <param name="newOrder">Информация о новой заявке.</param>
     </member>
-    <member name="M:StockSharp.SmartCom.SmartTrader.OnCancelOrders(System.Int64,System.Nullable{System.Boolean},StockSharp.BusinessEntities.Portfolio,System.Nullable{StockSharp.Messages.Sides},StockSharp.BusinessEntities.ExchangeBoard,StockSharp.BusinessEntities.Security)">
+    <member name="M:StockSharp.SmartCom.SmartTrader.OnCancelOrders(System.Int64,System.Nullable{System.Boolean},StockSharp.BusinessEntities.Portfolio,System.Nullable{StockSharp.Messages.Sides},StockSharp.BusinessEntities.ExchangeBoard,StockSharp.BusinessEntities.Security,System.Nullable{StockSharp.Messages.SecurityTypes})">
       <summary>
             Отменить группу заявок на бирже по фильтру.
             </summary>
@@ -1777,6 +1777,7 @@
       <param name="direction">Направление заявки. Если значение равно <see langword="null" />, то направление не попадает в фильтр снятия заявок.</param>
       <param name="board">Торговая площадка. Если значение равно <see langword="null" />, то площадка не попадает в фильтр снятия заявок.</param>
       <param name="security">Инструмент. Если значение равно <see langword="null" />, то инструмент не попадает в фильтр снятия заявок.</param>
+      <param name="securityType">Тип инструмента. Если значение равно <see langword="null" />, то тип не попадает в фильтр снятия заявок.</param>
     </member>
     <member name="M:StockSharp.SmartCom.SmartTrader.Save(Ecng.Serialization.SettingsStorage)">
       <summary>
