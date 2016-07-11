@@ -42636,5 +42636,15 @@ namespace StockSharp.Localization
 		/// Email
 		/// </summary>
 		public static string Email => GetString(EmailKey);
+
+		/// <summary>
+		/// Pause
+		/// </summary>
+		public const string PauseKey = "Pause";
+
+		/// <summary>
+		/// Pause
+		/// </summary>
+		public static string Pause => GetString(PauseKey);
 	}
 }
