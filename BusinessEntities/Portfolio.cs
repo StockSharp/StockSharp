@@ -157,7 +157,7 @@ namespace StockSharp.BusinessEntities
 		/// <summary>
 		/// To copy the current portfolio fields to the <paramref name="destination" />.
 		/// </summary>
-		/// <param name="destination">The portfolio, in which fields should be copied .</param>
+		/// <param name="destination">The portfolio, in which fields should be copied.</param>
 		public void CopyTo(Portfolio destination)
 		{
 			base.CopyTo(destination);

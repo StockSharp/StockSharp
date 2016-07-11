@@ -413,7 +413,7 @@ namespace StockSharp.BusinessEntities
 		/// Extended exchange info.
 		/// </summary>
 		/// <remarks>
-		/// Required if additional information associated with the exchange is stored in the program. .
+		/// Required if additional information associated with the exchange is stored in the program.
 		/// </remarks>
 		[XmlIgnore]
 		[Browsable(false)]

@@ -9418,12 +9418,12 @@ namespace StockSharp.Localization
 		public static string Str988 => GetString(Str988Key);
 
 		/// <summary>
-		/// Total number of trades .
+		/// Total number of trades.
 		/// </summary>
 		public const string Str989Key = "Str989";
 
 		/// <summary>
-		/// Total number of trades .
+		/// Total number of trades.
 		/// </summary>
 		public static string Str989 => GetString(Str989Key);
 
@@ -28878,12 +28878,12 @@ namespace StockSharp.Localization
 		public static string IndicatorType => GetString(IndicatorTypeKey);
 
 		/// <summary>
-		/// For diagram '{0}' element, indicator type is not specified .
+		/// For diagram '{0}' element, indicator type is not specified.
 		/// </summary>
 		public const string Str3105ParamsKey = "Str3105Params";
 
 		/// <summary>
-		/// For diagram '{0}' element, indicator type is not specified .
+		/// For diagram '{0}' element, indicator type is not specified.
 		/// </summary>
 		public static string Str3105Params => GetString(Str3105ParamsKey);
 

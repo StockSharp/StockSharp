@@ -26,7 +26,7 @@ namespace StockSharp.Community
 	public interface IStrategyService
 	{
 		/// <summary>
-		/// To add the strategy to the store .
+		/// To add the strategy to the store.
 		/// </summary>
 		/// <param name="sessionId">Session ID.</param>
 		/// <param name="strategy">The strategy data.</param>
@@ -67,15 +67,6 @@ namespace StockSharp.Community
 		/// <returns>Information about strategies.</returns>
 		[OperationContract]
 		IEnumerable<StrategyData> GetDescription(long[] strategyIds);
-
-		///// <summary>
-		///// To get the source or executable codes.
-		///// </summary>
-		///// <param name="sessionId">Session ID.</param>
-		///// <param name="strategyId">The strategy identifier.</param>
-		///// <returns>The source or executable codes.</returns>
-		//[OperationContract]
-		//StrategyData GetContent(Guid sessionId, long strategyId);
 
 		/// <summary>
 		/// To get active subscriptions signed by <see cref="Subscribe"/>.

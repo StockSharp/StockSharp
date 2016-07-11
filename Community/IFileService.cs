@@ -52,17 +52,6 @@ namespace StockSharp.Community
 		[OperationContract]
 		byte[] ProcessDownload(Guid operationId, int startIndex, int count);
 
-		///// <summary>
-		///// To upload the file to the site.
-		///// </summary>
-		///// <param name="sessionId">Session ID.</param>
-		///// <param name="fileName">File name.</param>
-		///// <param name="body">File body.</param>
-		///// <param name="isPublic">Is the file available for public.</param>
-		///// <returns>File ID.</returns>
-		//[OperationContract]
-		//long Upload(Guid sessionId, string fileName, byte[] body, bool isPublic);
-
 		/// <summary>
 		/// To start uploading the file to the site.
 		/// </summary>

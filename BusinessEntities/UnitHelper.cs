@@ -31,7 +31,7 @@ namespace StockSharp.BusinessEntities
 		/// To create from <see cref="int"/> the pips values.
 		/// </summary>
 		/// <param name="value"><see cref="int"/> value.</param>
-		/// <param name="security">The instrument from which information about the price increment is taken .</param>
+		/// <param name="security">The instrument from which information about the price increment is taken.</param>
 		/// <returns>Pips.</returns>
 		public static Unit Pips(this int value, Security security)
 		{
@@ -42,7 +42,7 @@ namespace StockSharp.BusinessEntities
 		/// To create from <see cref="double"/> the pips values.
 		/// </summary>
 		/// <param name="value"><see cref="double"/> value.</param>
-		/// <param name="security">The instrument from which information about the price increment is taken .</param>
+		/// <param name="security">The instrument from which information about the price increment is taken.</param>
 		/// <returns>Pips.</returns>
 		public static Unit Pips(this double value, Security security)
 		{
@@ -53,7 +53,7 @@ namespace StockSharp.BusinessEntities
 		/// To create from <see cref="decimal"/> the pips values.
 		/// </summary>
 		/// <param name="value"><see cref="decimal"/> value.</param>
-		/// <param name="security">The instrument from which information about the price increment is taken .</param>
+		/// <param name="security">The instrument from which information about the price increment is taken.</param>
 		/// <returns>Pips.</returns>
 		public static Unit Pips(this decimal value, Security security)
 		{
@@ -67,7 +67,7 @@ namespace StockSharp.BusinessEntities
 		/// To create from <see cref="int"/> the points values.
 		/// </summary>
 		/// <param name="value"><see cref="int"/> value.</param>
-		/// <param name="security">The instrument from which information about the price increment cost is taken .</param>
+		/// <param name="security">The instrument from which information about the price increment cost is taken.</param>
 		/// <returns>Points.</returns>
 		public static Unit Points(this int value, Security security)
 		{
@@ -78,7 +78,7 @@ namespace StockSharp.BusinessEntities
 		/// To create from <see cref="double"/> the points values.
 		/// </summary>
 		/// <param name="value"><see cref="double"/> value.</param>
-		/// <param name="security">The instrument from which information about the price increment cost is taken .</param>
+		/// <param name="security">The instrument from which information about the price increment cost is taken.</param>
 		/// <returns>Points.</returns>
 		public static Unit Points(this double value, Security security)
 		{
@@ -89,7 +89,7 @@ namespace StockSharp.BusinessEntities
 		/// To create from <see cref="decimal"/> the points values.
 		/// </summary>
 		/// <param name="value"><see cref="decimal"/> value.</param>
-		/// <param name="security">The instrument from which information about the price increment cost is taken .</param>
+		/// <param name="security">The instrument from which information about the price increment cost is taken.</param>
 		/// <returns>Points.</returns>
 		public static Unit Points(this decimal value, Security security)
 		{

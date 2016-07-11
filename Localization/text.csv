@@ -943,7 +943,7 @@ Str985;Trades;Сделки
 Str986;Losing trades;Убыточных сделок
 Str987;Number of trades lost with zero profit (whose profit is less than or equal to 0).;Количество проигранных сделок и с нулевой прибылью (прибыль которых меньше равна 0).
 Str988;Total trades;Всего сделок
-Str989;Total number of trades .;Общее количество сделок.
+Str989;Total number of trades.;Общее количество сделок.
 Str990;Closing trades;Закрывающих сделок
 Str991;Total number of closing trades.;Общее количество закрывающих сделок.
 Str992;Average profit;Средняя прибыль
@@ -997,7 +997,7 @@ Str1044Params;Position {0} decreased below {1};Уменьшение позици
 Str1045Params;Position {0} increased above {1};Увеличение позиции {0} выше {1}
 Str1046;Security change;Изменение инструмента
 Str1047;New trades of a security;Новые сделки инструмента
-Str1048;New entries in orders log for security ;Новые записи в логе заявок для инструмента 
+Str1048;New entries in orders log for security;Новые записи в логе заявок для инструмента
 Str1049;Security's last trade;Последняя сделка инструмента
 Str1050;Security market depth change;Изменение стакана инструмента
 Str1051;Price value can not be zero.;Значение цены не может быть нулевым.
@@ -2893,7 +2893,7 @@ Str3099;Value;Значение
 IndexValue;Index value.;Значение индекса.
 IndicatorElem;Indicator element.;Элемент индикатора.
 IndicatorType;Indicator type.;Тип индикатора.
-Str3105Params;For diagram '{0}' element, indicator type is not specified .;Для элемента схемы '{0}' не указан тип индикатора.
+Str3105Params;For diagram '{0}' element, indicator type is not specified.;Для элемента схемы '{0}' не указан тип индикатора.
 Str3106Params;Indicator does not work with data type '{0}'.;Индикатор не поддерживает работу с типом данных '{0}'.
 LogicalCondition;Logical condition;Логическое условие
 Str3108;Logical condition element.;Элемент логического условия.
@@ -6968,7 +6968,7 @@ DocStr2687;Information about BitStamp;Информация о бирже BitStam
 DocStr2688;Information about BtcChina;Информация о бирже BtcChina
 DocStr2689;Information about Icbit;Информация о бирже Icbit
 DocStr2690;Extended exchange info;Расширенная информация по бирже
-DocStr2691;Required if additional information associated with the exchange is stored in the program. ;Необходима в случае хранения в программе дополнительной информации, ассоциированной с биржей
+DocStr2691;Required if additional information associated with the exchange is stored in the program.;Необходима в случае хранения в программе дополнительной информации, ассоциированной с биржей
 DocStr2692;Information about electronic board;Информация о биржевой площадке
 DocStr2693;To get a list of exchanges;Получить список бирж
 DocStr2694;Exchanges;Биржи
@@ -7105,7 +7105,7 @@ DocStr2824;Available instruments set change event;Событие изменен�
 DocStr2825;The main interface providing the connection to the trading systems;Основной интерфейс, предоставляющий подключение к торговым системам
 DocStr2826;The market data by the instrument provider interface;Интерфейс поставщика маркет-данных по инструменту
 DocStr2827;The order which should be canceled;Заявка, которую нужно отменить
-DocStr2828;Stop orders state change event ;Событие изменения состояния стоп-заявок
+DocStr2828;Stop orders state change event;Событие изменения состояния стоп-заявок
 DocStr2829;Order book;Стакан с котировками
 DocStr2830;Create order book;Создать стакан
 DocStr2831;Security;Инструмент стакана
@@ -7207,7 +7207,7 @@ DocStr2926;System information about error containing the reason for the refusal 
 DocStr2927;Local time, when the error has been received;Метка локального времени, когда ошибка была получена
 DocStr2928;Extended information on the order with an error;Расширенная информация по заявке с ошибкой
 DocStr2929;To copy the current portfolio fields to the {0};Скопировать поля текущего портфеля в {0}
-DocStr2930;The portfolio, in which fields should be copied ;Портфель, в который необходимо скопировать поля
+DocStr2930;The portfolio, in which fields should be copied;Портфель, в который необходимо скопировать поля
 DocStr2931;Connection to the trading system, through which this portfolio has been loaded;Подключение к торговой системе, через которое был загружен данный портфель
 DocStr2932;Portfolio associated with the orders received through the orders log;Портфель, ассоциированный с заявками, полученными через лог заявок
 DocStr2933;The depositary where the physical security;Название депозитария, где находится физически ценная бумага
@@ -7218,10 +7218,10 @@ DocStr2937;Extended trade info;Расширенная информация по 
 DocStr2938;Required if additional information associated with the trade is stored in the program. For example, the operation that results to the trade;Необходима в случае хранения в программе дополнительной информации, ассоциированной со сделкой. Например, операция, приведшая к сделке
 DocStr2939;Extension class for {0};Вспомогательный класс для {0}
 DocStr2940;To create from {0} the pips values;Создать из {0} значения пипсы
-DocStr2941;The instrument from which information about the price increment is taken ;Инструмент, из которого берется информация по шагу цены
+DocStr2941;The instrument from which information about the price increment is taken;Инструмент, из которого берется информация по шагу цены
 DocStr2942;Pips;Пипсы
 DocStr2943;To create from {0} the points values;Создать из {0} значения пункты
-DocStr2944;The instrument from which information about the price increment cost is taken ;Инструмент, из которого берется информация по стоимости шага цены
+DocStr2944;The instrument from which information about the price increment cost is taken;Инструмент, из которого берется информация по стоимости шага цены
 DocStr2945;Points;Пункты
 DocStr2946;Convert string to {0};Пробразовать строку в {0}
 DocStr2947;String value of {0};Строковое представление {0}
@@ -7267,11 +7267,11 @@ DocStr2986;Doc page;Страница документации
 DocStr2987;Content in Russian;Контент на русском языке
 DocStr2988;Content in English;Контент на английском языке
 DocStr2989;Url;Строка запроса
-DocStr2990;The attribute of child pages presence ;Признак наличия дочерних страниц
+DocStr2990;The attribute of child pages presence;Признак наличия дочерних страниц
 DocStr2991;The module of the connection access check based on the {0} authorization;Модуль проверки доступа соединения, основанный на {0} авторизации
 DocStr2992;To check the username and password on correctness;Проверить логин и пароль на правильность
 DocStr2993;The client for access to the service of work with files and documents;Клиент для доступа к сервису работы с файлами и документами
-DocStr2994;To upload the file to the site ;Выложить на сайт файл
+DocStr2994;To upload the file to the site;Выложить на сайт файл
 DocStr2995;File body;Тело файла
 DocStr2996;Uploaded file link;Ссылка на выложенный файл
 DocStr2997;The interface describing the authorization service;Интерфейс, описывающий сервис авторизации
@@ -7328,7 +7328,7 @@ DocStr3047;To update the profile photo;Обновить фотографию п�
 DocStr3048;The contents of the image file;Содержимое графического файла
 DocStr3049;To get a profile photo;Получить фотографию профиля
 DocStr3050;The interface describing the strategy store service;Интерфейс, описывающий сервис магазина стратегий
-DocStr3051;To add the strategy to the store ;Добавить стратегию в магазин
+DocStr3051;To add the strategy to the store;Добавить стратегию в магазин
 DocStr3052;The strategy data;Данные о стратегии
 DocStr3053;The strategy identifier;Идентификатор стратегии
 DocStr3054;To update the strategy in the store;Обновить стратегию в магазине
@@ -8015,7 +8015,7 @@ DocStr3736;The most frequent trade price;Наиболее частая цена 
 DocStr3737;The most frequent trade volume;Наиболее частый объем сделки
 DocStr3738;The most frequent trade time;Наиболее частое время сделки
 DocStr3739;The most frequent trade condition;Наиболее частое условие сделки
-DocStr3740;The market identifier of the most frequent trade ;Идентификатор рынка наиболее частой сделки
+DocStr3740;The market identifier of the most frequent trade;Идентификатор рынка наиболее частой сделки
 DocStr3741;The price of the last extended trade;Цена последней расширенной сделки
 DocStr3742;The volume of the last extended trade;Объем последней расширенной сделки
 DocStr3743;The time of the last extended trade;Время последней расширенной сделки
@@ -8209,7 +8209,7 @@ DocStr3973;To record a warning to the log;Записать предупрежд�
 DocStr3974;To record an error to the log;Записать ошибку в лог
 DocStr3975;To record a debugging to the log;Записать отладку в лог
 DocStr3976;To record an error to the {0};Записать ошибку в {0}
-DocStr3977;Get {0} for the source. If the value is equal to {1}, then parental source level is taken ;Получить {0} для источника. Если значение равно {1}, то берется уровень родительского источника
+DocStr3977;Get {0} for the source. If the value is equal to {1}, then parental source level is taken;Получить {0} для источника. Если значение равно {1}, то берется уровень родительского источника
 DocStr3978;The log source;Источник логов
 DocStr3979;Levels of log messages {0};Уровни лог-сообщений {0}
 DocStr3980;To use the logging level of the container;Использовать уровень логирования контейнера
@@ -8219,7 +8219,7 @@ DocStr3983;Warnings and errors;Предупреждения и ошибки
 DocStr3984;Errors only;Только ошибки
 DocStr3985;Logs off;Логи выключены
 DocStr3986;Messages logging manager that monitors the {0} event and forwards messages to the {1};Менеджер логирования сообщений, который мониторит событие {0} и перенаправляет сообщения в {1}
-DocStr3987;The all application level logs recipient ;Получатель логов уровня всего приложения
+DocStr3987;The all application level logs recipient;Получатель логов уровня всего приложения
 DocStr3988;Messages loggers arriving from {0};Логгеры сообщений, приходящие от {0}
 DocStr3989;Logs sources which are listened to the event {0};Источники логов, у которых слушается событие {0}
 DocStr3990;Sending interval of messages collected from {0} to the {1}. The default is 500 ms;Интервал передачи накопленных от {0} сообщений в {1}. По-умолчанию равно 500 млс
@@ -12198,8 +12198,8 @@ DocStr7999;The attribute type;Тип атрибута
 DocStr8000;The graphical component to display available {0};Графический компонент для отображения доступных {0}
 DocStr8001;Available elements;Доступные элементы
 DocStr8002;The selected element in the Toolbox;Выбранный элемент на панели элементов
-DocStr8003;The event of the diagram element selection in the Toolbox ;Событие выделения элемента схемы на панели элементов
-DocStr8004;The event of the double click on the element in the Toolbox ;Событие двойного клика по элементу на панели элементов
+DocStr8003;The event of the diagram element selection in the Toolbox;Событие выделения элемента схемы на панели элементов
+DocStr8004;The event of the double click on the element in the Toolbox;Событие двойного клика по элементу на панели элементов
 DocStr8005;Directions of connections;Направления соединений
 DocStr8006;Incoming;Входящее
 DocStr8007;Outgoing;Исходящее
@@ -12233,7 +12233,7 @@ DocStr8038;It returns {0}, if the property is to be displayed in the settings;В
 DocStr8039;The property description;Описание свойства
 DocStr8040;{0}, if necessary to show the property, otherwise {1};{0}, если необходимо показывать свойство, иначе {1}
 DocStr8041;The strategy diagram;Схема стратегии
-DocStr8042;The strategy diagram change event ;Событие изменения схемы стратегии
+DocStr8042;The strategy diagram change event;Событие изменения схемы стратегии
 DocStr8043;To add a new element;Добавить новый элемент
 DocStr8044;To remove the element;Удалить элемент
 DocStr8045;To add the X-axis;Добавить ось X
@@ -12379,7 +12379,7 @@ DocStr8184;To set edited exchange;Установить редактируему�
 DocStr8185;The code of edited exchange. The exchange for editing is loaded from {0};Код редактируемой биржи. Биржа для редактирования загружается из {0}
 DocStr8186;List of time zones;Список временных зон
 DocStr8187;The name of the selected exchange;Имя выбранной биржи
-DocStr8188;The selected exchange change event ;Событие смены выбранной биржи
+DocStr8188;The selected exchange change event;Событие смены выбранной биржи
 DocStr8189;To localize {0};Локализовать {0}
 DocStr8190;To save the Docking panel layout;Сохранить разметку Docking панели
 DocStr8191;Docking panel;Docking панель
@@ -12848,24 +12848,16 @@ DocStr8673;Unregister the subscription, previously made by {0};Удалить п
 DocStr8674;Candle type;Тип свечи
 DocStr8675;Message type {0};Тип сообщения {0}
 DocStr8677;The candle message type;Тип сообщения свечи
-DocStr8678;Required if additional information associated with the exchange is stored in the program.;Требуется, если дополнительная информация, ассоциированная с биржей, сохраняется в программе.
 DocStr8679;Saint-Petersburg Exchange (SPB);Санкт-петербургская биржа (SPB)
 DocStr8680;Information about SPB of {0} exchange;Информация о SPB бирже {0}
-DocStr8681;Stop orders state change event;Состояние стоп-заявок изменилось
 DocStr8682;The interface for access to provider of information about news;Интерфейс доступа к провайдеру новостей
 DocStr8683;The portfolio provider interface;Интерфейс провайдера портфелей
 DocStr8684;The profit, realized by trade;Прибыль, реализованная сделкой
 DocStr8685;The position, generated by trade;Позиция, созданная сделкой
 DocStr8686;Last order change local time (Cancellation, Fill);Локальное время последнего изменения заявки (отмена, исполнение)
-DocStr8687;The portfolio, in which fields should be copied;Портфель, в который необходимо скопировать значения полей
 DocStr8688;Creates a new object that is a copy of the current instance;Создать копию текущего объекта
 DocStr8689;A new object that is a copy of this instance;Копия текущего объекта
-DocStr8690;The instrument from which information about the price increment is taken;Инструмент, из которого будет получаться шаг цены
-DocStr8691;The instrument from which information about the price increment cost is taken;Инструмент, из которого будет получаться стоимость шага цены
-DocStr8692;The attribute of child pages presence;Атрибут дочерних страниц
-DocStr8693;To upload the file to the site;Загрузить файл на сервер
 DocStr8694;Is the mail-out enabled;Активна ли подписка на рассылку
-DocStr8695;To add the strategy to the store;Добавить стратегию в магазин
 DocStr8696;S#.Designer;S#.Designer
 DocStr8697;Create a new activity session;Создать новую сессию
 DocStr8698;The product;Продукт
@@ -12985,15 +12977,12 @@ DocStr8811;Spectra;Spectra
 DocStr8812;Otkritie;Открытие
 DocStr8813;Quik (server);Quik (сервер)
 DocStr8814;Exchange id;Идентификатор рынка
-DocStr8815;The market identifier of the most frequent trade;Идентификатор рынка для большинства сделок
 DocStr8816;Delay load instruments from {0};Отложенная загрузка инструментов из {0}
 DocStr8817;Action when the license expired;Действие, когда лицензия истекла
 DocStr8818;Actions when a license expired;Действия, когда лицензия истекла
 DocStr8819;Prevent work;Прекратить работу
 DocStr8820;Prevent upgrade;Прекратить обновление
 DocStr8821;Component;Компонента
-DocStr8822;Get {0} for the source. If the value is equal to {1}, then parental source level is taken;Получить {0} для источника. Если значение равно {1}, тогда берется уровень логов родителя
-DocStr8823;The all application level logs recipient;Получатель всех логов приложения
 DocStr8824;The volumes collection of bids;Объемы бидов
 DocStr8825;The volumes collection of asks;Объемы оферов
 DocStr8826;Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources;Освободить занятые ресурсы
@@ -13068,13 +13057,10 @@ DocStr8895;Selected connection;Выбранные соединения
 DocStr8896;The diagram element connection added event;Событие добавление соединения у элемента
 DocStr8897;The diagram element connection removed event;Событие удаления соединения у элемента
 DocStr8898;The action is called at the processing of the new incoming value for socket;Событие вызывается при обработке нового входящего значения для сокета
-DocStr8899;The event of the diagram element selection in the Toolbox;Событие выбора элемента в Тулбоксе
-DocStr8900;The event of the double click on the element in the Toolbox;Событие двойного клика на элемент в Тулбоксе
 DocStr8901;The socket parent element;Родительский элемент сокета
 DocStr8902;Is socket has break;Имеет ли сокет точку останова
 DocStr8903;Is socket break active;Активна ли точка останова на сокете
 DocStr8904;Can select sockets;Можно ли выбрать сокеты
-DocStr8905;The strategy diagram change event;Событие изменения стратегии диаграммы
 DocStr8906;Type of element;Тип элемента
 DocStr8907;Parent window;Родительское окно
 DocStr8908;Chat panel;Чат панель
@@ -13085,7 +13071,6 @@ DocStr8912;The message adapter;Адаптер сообщений
 DocStr8913;The drop-down list for exchange selection;Выпадающий список для выбора биржи
 DocStr8914;The exchange info provider;Провайдер информации о бирже
 DocStr8915;Selected exchange;Выбранная биржа
-DocStr8916;The selected exchange change event;Событие выбора биржи
 DocStr8917;Cast value to specified type;Преобразовать значение в переданный тип данных
 DocStr8918;Return type;Возвращаемое значение
 DocStr8919;Source value;Исходное значение

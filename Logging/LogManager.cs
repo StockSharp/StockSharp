@@ -201,7 +201,7 @@ namespace StockSharp.Logging
 		private ILogReceiver _application = new ApplicationReceiver();
 
 		/// <summary>
-		/// The all application level logs recipient .
+		/// The all application level logs recipient.
 		/// </summary>
 		public ILogReceiver Application
 		{
