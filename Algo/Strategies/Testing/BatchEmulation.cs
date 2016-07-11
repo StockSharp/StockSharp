@@ -326,6 +326,7 @@ namespace StockSharp.Algo.Strategies.Testing
 					break;
 
 				case EmulationStates.Stopped:
+					CurrentProgress = 100;
 					OnEmulationStopped();
 					break;
 			}
