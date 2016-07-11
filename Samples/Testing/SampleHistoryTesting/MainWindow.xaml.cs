@@ -172,6 +172,14 @@ namespace SampleHistoryTesting
 
 		private void StartBtnClick(object sender, RoutedEventArgs e)
 		{
+			if (_connectors.Count > 0)
+			{
+				foreach (var connector in _connectors)
+					connector.Start();
+
+				return;
+			}
+
 			if (HistoryPath.Folder.IsEmpty() || !Directory.Exists(HistoryPath.Folder))
 			{
 				MessageBox.Show(this, LocalizedStrings.Str3014);
@@ -339,7 +347,7 @@ namespace SampleHistoryTesting
 			var maxVolume = MaxVolume.Text.To<int>();
 			var secId = security.ToSecurityId();
 
-			SetIsEnabled(true);
+			SetIsEnabled(false, false, false);
 
 			foreach (var set in settings)
 			{
@@ -613,7 +621,7 @@ namespace SampleHistoryTesting
 							logManager.Dispose();
 							_connectors.Clear();
 
-							SetIsEnabled(false);
+							SetIsEnabled(true, false, false);
 						}
 
 						this.GuiAsync(() =>
@@ -629,7 +637,15 @@ namespace SampleHistoryTesting
 					}
 					else if (connector.State == EmulationStates.Started)
 					{
+						if (_connectors.All(c => c.State == EmulationStates.Started))
+							SetIsEnabled(false, true, true);
+
 						SetIsChartEnabled(chart, true);
+					}
+					else if (connector.State == EmulationStates.Suspended)
+					{
+						if (_connectors.All(c => c.State == EmulationStates.Suspended))
+							SetIsEnabled(true, false, true);
 					}
 				};
 
@@ -685,6 +701,14 @@ namespace SampleHistoryTesting
 			}
 		}
 
+		private void PauseBtnClick(object sender, RoutedEventArgs e)
+		{
+			foreach (var connector in _connectors)
+			{
+				connector.Suspend();
+			}
+		}
+
 		private void InitChart(IChart chart, EquityCurveChart equity, EquityCurveChart position)
 		{
 			chart.ClearAreas();
@@ -701,16 +725,17 @@ namespace SampleHistoryTesting
 			chart.AddElement(_area, _tradesElem);
 		}
 
-		private void SetIsEnabled(bool started)
+		private void SetIsEnabled(bool canStart, bool canSuspend, bool canStop)
 		{
 			this.GuiAsync(() =>
 			{
-				StopBtn.IsEnabled = started;
-				StartBtn.IsEnabled = !started;
+				StopBtn.IsEnabled = canStop;
+				StartBtn.IsEnabled = canStart;
+				PauseBtn.IsEnabled = canSuspend;
 
 				foreach (var checkBox in _checkBoxes)
 				{
-					checkBox.IsEnabled = !started;
+					checkBox.IsEnabled = !canStop;
 				}
 			});
 		}

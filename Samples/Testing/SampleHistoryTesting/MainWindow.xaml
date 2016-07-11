@@ -98,8 +98,12 @@
 					<CheckBox Content="{x:Static loc:LocalizedStrings.FinamCandles}" Grid.Row="9" Grid.Column="0" Name="FinamCandlesCheckBox" Click="CheckBoxClick" />
 					<CheckBox Content="{x:Static loc:LocalizedStrings.YahooCandles}" Grid.Row="10" Grid.Column="0" Name="YahooCandlesCheckBox" Click="CheckBoxClick" />
 
-					<Button x:Name="StartBtn" Content="{x:Static loc:LocalizedStrings.Str2421}" Grid.Row="11" Grid.Column="0" Click="StartBtnClick" IsEnabled="False"/>
-                    <Button x:Name="StopBtn" Content="{x:Static loc:LocalizedStrings.Str242}" Grid.Row="11" Grid.Column="1" Width="100" HorizontalAlignment="Left" Click="StopBtnClick" IsEnabled="False"/>
+                    <StackPanel Grid.Row="11" Grid.Column="0" Grid.ColumnSpan="2" Orientation="Horizontal">
+                        <Button x:Name="StartBtn" Content="{x:Static loc:LocalizedStrings.Str2421}" Width="100" Click="StartBtnClick" IsEnabled="False"/>
+                        <Button x:Name="PauseBtn" Content="{x:Static loc:LocalizedStrings.Pause}" Width="100" Click="PauseBtnClick" IsEnabled="False"/>
+                        <Button x:Name="StopBtn" Content="{x:Static loc:LocalizedStrings.Str242}" Width="100" HorizontalAlignment="Left" Click="StopBtnClick" IsEnabled="False"/>
+                    </StackPanel>
+					
 					<CheckBox x:Name="GenDepthsCheckBox" Content="{x:Static loc:LocalizedStrings.XamlStr97}" Grid.Row="12" Grid.Column="0" Click="CheckBoxClick" />
 					<CheckBox x:Name="ShowDepth" Content="{x:Static loc:LocalizedStrings.XamlStr85}" Grid.Row="13" Grid.Column="0" IsChecked="True" />
 					

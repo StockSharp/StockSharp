@@ -318,6 +318,12 @@ namespace StockSharp.Algo.Testing
 							isSuspended = true;
 							break;
 						}
+
+						case EmulationStates.Stopping:
+						{
+							_isSuspended = false;
+							break;
+						}
 					}
 
 					SendOutMessage(message);
