@@ -498,7 +498,7 @@ namespace StockSharp.Algo.Testing
 
 			switch (newState)
 			{
-				case EmulationStates.Stopping:
+				case EmulationStates.Stopped:
 				{
 					SendInMessage(new DisconnectMessage());
 					break;

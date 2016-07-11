@@ -387,6 +387,8 @@ namespace StockSharp.Algo.Strategies.Testing
 			_batch = _batches.Current.ToArray();
 			_currentBatch ++;
 
+			EmulationConnector.ClearCache();
+
 			InitAdapters(_batch);
 
 			EmulationConnector.HistoryMessageAdapter.StartDate = EmulationSettings.StartTime;

@@ -110,6 +110,7 @@ namespace StockSharp.Algo.Testing
 			switch (message.Type)
 			{
 				case MessageTypes.Connect:
+					
 					SendOutMessage(new ConnectMessage());
 					return;
 

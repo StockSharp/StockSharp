@@ -549,9 +549,8 @@ namespace StockSharp.Algo
 		/// </summary>
 		public void Connect()
 		{
-			_currentTime = DateTimeOffset.MinValue;
-			_prevTime = DateTimeOffset.MinValue;
-
+			_prevTime = default(DateTimeOffset);
+			_currentTime = default(DateTimeOffset);
 			this.AddInfoLog("Connect");
 
 			try
@@ -1400,6 +1399,7 @@ namespace StockSharp.Algo
 		{
 			_entityCache.Clear();
 			_prevTime = default(DateTimeOffset);
+			_currentTime = default(DateTimeOffset);
 
 			_securityLookups.Clear();
 			_portfolioLookups.Clear();

@@ -227,6 +227,7 @@ namespace StockSharp.Algo.Testing
 				case MessageTypes.Reset:
 				{
 					_isSuspended = false;
+					_currentTime = default(DateTimeOffset);
 					BasketStorage.Reset();
 					
 					LoadedMessageCount = 0;
