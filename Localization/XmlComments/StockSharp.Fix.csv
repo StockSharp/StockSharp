@@ -987,6 +987,9 @@ F:StockSharp.Fix.Native.SecurityIDSource.OptionPriceReportingAuthority/summary;D
 F:StockSharp.Fix.Native.SecurityIDSource.LetterOfCredit/summary;DocStr8459
 F:StockSharp.Fix.Native.SecurityIDSource.IsdaFpmlProductUrl/summary;DocStr8459
 F:StockSharp.Fix.Native.SecurityIDSource.MarketplaceAssignedIdentifier/summary;DocStr8459
+T:StockSharp.Fix.Native.Party/summary;DocStr9138
+F:StockSharp.Fix.Native.Party.PartyId/summary;DocStr8459
+F:StockSharp.Fix.Native.Party.PartyRole/summary;DocStr8459
 T:StockSharp.Fix.Native.ExecutionReport/summary;DocStr8782
 F:StockSharp.Fix.Native.ExecutionReport.ExecType/summary;DocStr8783
 F:StockSharp.Fix.Native.ExecutionReport.OrigClOrdId/summary;DocStr8784
@@ -997,6 +1000,7 @@ F:StockSharp.Fix.Native.ExecutionReport.LeavesQty/summary;DocStr8788
 P:StockSharp.Fix.Native.ExecutionReport.CumQty/summary;DocStr8789
 P:StockSharp.Fix.Native.ExecutionReport.TrdRegTimestamp/summary;DocStr8790
 P:StockSharp.Fix.Native.ExecutionReport.TrdRegTimestampType/summary;DocStr8791
+P:StockSharp.Fix.Native.ExecutionReport.MaxFloor/summary;DocStr9139
 F:StockSharp.Fix.Native.ExecutionReport.Price/summary;DocStr8792
 F:StockSharp.Fix.Native.ExecutionReport.Symbol/summary;DocStr8793
 F:StockSharp.Fix.Native.ExecutionReport.SecurityExchange/summary;DocStr8794
@@ -1008,8 +1012,8 @@ F:StockSharp.Fix.Native.ExecutionReport.TradeDate/summary;DocStr8459
 F:StockSharp.Fix.Native.ExecutionReport.TransactTime/summary;DocStr8459
 F:StockSharp.Fix.Native.ExecutionReport.Account/summary;DocStr8459
 F:StockSharp.Fix.Native.ExecutionReport.ClientId/summary;DocStr8459
-F:StockSharp.Fix.Native.ExecutionReport.PartyId/summary;DocStr8459
-F:StockSharp.Fix.Native.ExecutionReport.PartyRole/summary;DocStr8459
+F:StockSharp.Fix.Native.ExecutionReport.ExecBroker/summary;DocStr8459
+F:StockSharp.Fix.Native.ExecutionReport.Parties/summary;DocStr8459
 F:StockSharp.Fix.Native.ExecutionReport.OrdStatus/summary;DocStr8459
 F:StockSharp.Fix.Native.ExecutionReport.Side/summary;DocStr8797
 F:StockSharp.Fix.Native.ExecutionReport.TimeInForce/summary;DocStr8798
@@ -1107,6 +1111,7 @@ F:StockSharp.Fix.Native.FixTags.TimeInForce/summary;DocStr8459
 F:StockSharp.Fix.Native.FixTags.TransactTime/summary;DocStr8459
 F:StockSharp.Fix.Native.FixTags.SymbolSfx/summary;DocStr8459
 F:StockSharp.Fix.Native.FixTags.TradeDate/summary;DocStr8459
+F:StockSharp.Fix.Native.FixTags.ExecBroker/summary;DocStr8459
 F:StockSharp.Fix.Native.FixTags.EncryptMethod/summary;DocStr8459
 F:StockSharp.Fix.Native.FixTags.StopPx/summary;DocStr8459
 F:StockSharp.Fix.Native.FixTags.ExDestination/summary;DocStr8459

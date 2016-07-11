@@ -82,7 +82,7 @@ F:StockSharp.IQFeed.IQFeedLevel1ColumnRegistry.MostRecentTradePrice/summary;DocS
 F:StockSharp.IQFeed.IQFeedLevel1ColumnRegistry.MostRecentTradeVolume/summary;DocStr3737
 F:StockSharp.IQFeed.IQFeedLevel1ColumnRegistry.MostRecentTradeTime/summary;DocStr3738
 F:StockSharp.IQFeed.IQFeedLevel1ColumnRegistry.MostRecentTradeConditions/summary;DocStr3739
-F:StockSharp.IQFeed.IQFeedLevel1ColumnRegistry.MostRecentTradeMarket/summary;DocStr8815
+F:StockSharp.IQFeed.IQFeedLevel1ColumnRegistry.MostRecentTradeMarket/summary;DocStr3740
 F:StockSharp.IQFeed.IQFeedLevel1ColumnRegistry.ExtendedTradePrice/summary;DocStr3741
 F:StockSharp.IQFeed.IQFeedLevel1ColumnRegistry.ExtendedTradeVolume/summary;DocStr3742
 F:StockSharp.IQFeed.IQFeedLevel1ColumnRegistry.ExtendedTradeTime/summary;DocStr3743

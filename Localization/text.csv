@@ -7728,9 +7728,9 @@ DocStr3448;Used when {0} equals to {1};Используется при {0} ра�
 DocStr3449;Exempt Code for Short Sale Exemption Orders;Exempt Code for Short Sale Exemption Orders
 DocStr3450;Base points type;Тип базовых пунктов
 DocStr3451;Only for the IBDARK exchange;Только для биржи IBDARK
-DocStr3452;split order into X buckets;split order into X buckets
-DocStr3453;split order so each bucket is of the size X;split order so each bucket is of the size X
-DocStr3454;price increment per bucket;price increment per bucket
+DocStr3452;Split order into X buckets;Разделить заявку на X корзин
+DocStr3453;Split order so each bucket is of the size X;Разделить заявку на корзины, равные X
+DocStr3454;Price increment per bucket;Шаг цены для каждой корзины
 DocStr3455;Parameters types for hedging;Типы параметров для хеджирования
 DocStr3456;Clearing objectives;Цели клиринга
 DocStr3457;Post-trading placement;Послеторговое размещение
@@ -13222,3 +13222,69 @@ DocStr9080;Convert all non-latin text messages to latin;Конвертирова
 DocStr9081;Exante;Exante
 DocStr9082;Native (internal) trading system security id represented as integer;Внутренний числовой идентификатор торговой системы
 DocStr9083;CFI code;CFI код
+DocStr9084;To get securities for the instrument code;Получить все инструменты для переданного кода
+DocStr9085;Instrument code;Код инструмента
+DocStr9086;Founded securities;Найденные инструменты
+DocStr9087;Security type. If the value is {0}, the type does not use;Тип инструмента. Если значение равно {0}, тип не используется
+DocStr9088;Download file;Скачать файл
+DocStr9089;To upload the existing file;Загрузить файл
+DocStr9090;File data;Информация о файле
+DocStr9091;Progress callback;Колбэк прогресса
+DocStr9092;To start downloading the file;Запустить загрузку файла
+DocStr9093;Operation ID;Идентификатор операции
+DocStr9094;Download part of file;Скачать часть файла
+DocStr9095;Operation ID, received from {0};Идентификатор операции, полученный из {0}
+DocStr9096;The zero-based byte offset in file;Позиция в файле
+DocStr9097;The maximum number of bytes to be read;Максимальное количество байтов на чтение
+DocStr9098;The part of file;Часть файла
+DocStr9099;To start uploading the file to the site;Запустить загрузку файла на сервер
+DocStr9100;Upload part of file;Загрузить часть файла
+DocStr9101;Operation ID, received from {0} or {1};Идентификатор операции, полученные из {0} или {1}
+DocStr9102;To finish uploading the file;Завершить загрузку файла
+DocStr9103;Cancel the operation;Отмена операции
+DocStr9104;To delete the file;Удалить файл
+DocStr9105;To find backtesting session;Найти бэктест-сессию
+DocStr9106;Minimum creation date;Минимальная дата создания
+DocStr9107;Maximum creation date;Максимальная дата создания
+DocStr9108;Founded sessions;Найденные сессии
+DocStr9109;To get an approximate of money to spend for the specified backtesting configuration;Получить примерную стоимость для указанных настроек
+DocStr9110;Backtesting session;Бэктест сессия
+DocStr9111;An approximate of money;Примерная стоимость
+DocStr9112;To start backtesing;Запустить тестирование
+DocStr9113;The backtesting session identifier;Идентификатор бэктест сессии
+DocStr9114;To stop the backtesing;Остановить тестирование
+DocStr9115;To get the count of completed interations;Получить количество завершенных итераций
+DocStr9116;The count of completed interations;Количество завершенных итераций
+DocStr9117;To gey the identifier of formatted file;Получить идентификатор на файл с результатами
+DocStr9118;Identifier of formatted file;Идентификатор файла
+DocStr9119;Date of registration;Дата регистрации
+DocStr9120;All strategy backtests;Все сессии
+DocStr9121;Backtesting process has changed;Бэктест сессия обновлена
+DocStr9122;Backtesting process has stopped;Бэктест сессия остановлена
+DocStr9123;Only visible to author;Видима только автору
+DocStr9124;File body length;Длина файла
+DocStr9125;File url;Ссылка на файл
+DocStr9126;Date of creation;Дата создания
+DocStr9127;Backtesting market-data types;Типы маркет-данных
+DocStr9128;Full order log;Лог заявок
+DocStr9129;Backtest iteration settings;Настройки бэктест итерации
+DocStr9130;The backtesting identifier;Идентификатор сессии
+DocStr9131;Begin time;Время начала
+DocStr9132;Backtesting market-data type;Тип маркет-данных
+DocStr9133;The security identifier;Идентификатор инструмента
+DocStr9134;Iterations;Итерации
+DocStr9135;Max machine to allocate. If {0} the allocation will be automatically;Максимальное количество серверов. Если равно {0}, серверы будут созданы автоматически
+DocStr9136;The maximum possible amount of money to spend;Максимальное количество денег, которые можно потратить
+DocStr9137;Is the {0} in USD;Значение {0} в USD
+DocStr9138;Party;Группа
+DocStr9139;Maximum quantity (e.g. number of shares) within an order to be shown on the exchange floor at any given time;Максимально видимый объем на бирже
+DocStr9140;Instrument type. If the value is equal to {0}, then the type does not match the orders cancel filter;Тип инструмента. Если значение равно {0}, то тип не попадает в фильтр снятия заявок
+DocStr9141;Open a demo account link;Ссылка на открытие демо-счета
+DocStr9142;Local time zone to convert all incoming messages. Not use in case of {0};Временная зона, в которую конвертируются временные метки сообщений. Не используется, если равно {0}
+DocStr9143;Sorted by {0} queue;Отсортированная по {0} очередь
+DocStr9144;Dequeue the next element;Получить следующий элемент
+DocStr9145;The next element;Следующий элемент
+DocStr9146;To get from top the current element;Получить текущий элемент без удаления из очереди
+DocStr9147;Is composite element can be viewed in editor;Видим ли сложный элемент в редакторе
+DocStr9148;To serialize the entire composite element;Сохранить весь элемент
+DocStr9149;Use strategy parameters values for composition properties;Использовать параметры стратегии для сложного элемента

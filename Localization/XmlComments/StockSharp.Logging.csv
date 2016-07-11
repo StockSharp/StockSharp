@@ -156,7 +156,7 @@ M:StockSharp.Logging.LoggingHelper.AddErrorLog(StockSharp.Logging.ILogReceiver,S
 M:StockSharp.Logging.LoggingHelper.LogError(System.Exception,System.String)/summary;DocStr3976
 M:StockSharp.Logging.LoggingHelper.LogError(System.Exception,System.String)/param/error;Str152
 M:StockSharp.Logging.LoggingHelper.LogError(System.Exception,System.String)/param/message;DocStr2045
-M:StockSharp.Logging.LoggingHelper.GetLogLevel(StockSharp.Logging.ILogSource)/summary;DocStr8822
+M:StockSharp.Logging.LoggingHelper.GetLogLevel(StockSharp.Logging.ILogSource)/summary;DocStr3977
 M:StockSharp.Logging.LoggingHelper.GetLogLevel(StockSharp.Logging.ILogSource)/param/source;DocStr3978
 M:StockSharp.Logging.LoggingHelper.GetLogLevel(StockSharp.Logging.ILogSource)/returns;Str9
 T:StockSharp.Logging.LogLevels/summary;DocStr3979
@@ -185,7 +185,8 @@ M:StockSharp.Logging.LogListener.Save(Ecng.Serialization.SettingsStorage)/summar
 M:StockSharp.Logging.LogListener.Save(Ecng.Serialization.SettingsStorage)/param/storage;DocStr3
 T:StockSharp.Logging.LogManager/summary;DocStr3986
 M:StockSharp.Logging.LogManager.#ctor/summary;DocStr1
-P:StockSharp.Logging.LogManager.Application/summary;DocStr8823
+P:StockSharp.Logging.LogManager.LocalTimeZone/summary;DocStr9142
+P:StockSharp.Logging.LogManager.Application/summary;DocStr3987
 P:StockSharp.Logging.LogManager.Listeners/summary;DocStr3988
 P:StockSharp.Logging.LogManager.Sources/summary;DocStr3989
 P:StockSharp.Logging.LogManager.FlushInterval/summary;DocStr3990

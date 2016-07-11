@@ -45,7 +45,7 @@ namespace StockSharp.Community
 		/// <summary>
 		/// Download part of file.
 		/// </summary>
-		/// <param name="operationId">>Operation ID, received from <see cref="BeginDownload"/>.</param>
+		/// <param name="operationId">Operation ID, received from <see cref="BeginDownload"/>.</param>
 		/// <param name="startIndex">The zero-based byte offset in file.</param>
 		/// <param name="count">The maximum number of bytes to be read.</param>
 		/// <returns>The part of file.</returns>

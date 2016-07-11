@@ -43,7 +43,7 @@ E:StockSharp.MatLab.MatLabConnector.OrdersChanged/summary;DocStr871
 E:StockSharp.MatLab.MatLabConnector.OrdersRegisterFailed/summary;DocStr873
 E:StockSharp.MatLab.MatLabConnector.OrdersCancelFailed/summary;DocStr874
 E:StockSharp.MatLab.MatLabConnector.NewStopOrders/summary;DocStr870
-E:StockSharp.MatLab.MatLabConnector.StopOrdersChanged/summary;DocStr8681
+E:StockSharp.MatLab.MatLabConnector.StopOrdersChanged/summary;DocStr2828
 E:StockSharp.MatLab.MatLabConnector.StopOrdersRegisterFailed/summary;DocStr875
 E:StockSharp.MatLab.MatLabConnector.StopOrdersCancelFailed/summary;DocStr876
 E:StockSharp.MatLab.MatLabConnector.NewMarketDepths/summary;DocStr883

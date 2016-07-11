@@ -408,10 +408,10 @@ M:StockSharp.Algo.History.Russian.MfdHistorySource.GetCandles(StockSharp.Busines
 M:StockSharp.Algo.History.Russian.MfdHistorySource.GetCandles(StockSharp.BusinessEntities.Security,System.TimeSpan,System.DateTime,System.DateTime)/param/to;DocStr251
 M:StockSharp.Algo.History.Russian.MfdHistorySource.GetCandles(StockSharp.BusinessEntities.Security,System.TimeSpan,System.DateTime,System.DateTime)/returns;DocStr205
 T:StockSharp.Algo.History.Russian.MicexDownloader/summary;DocStr8486
-M:StockSharp.Algo.History.Russian.MicexDownloader.UpdateInfo(StockSharp.BusinessEntities.Security,System.Boolean)/summary;DocStr226
-M:StockSharp.Algo.History.Russian.MicexDownloader.UpdateInfo(StockSharp.BusinessEntities.Security,System.Boolean)/param/security;DocStr2831
-M:StockSharp.Algo.History.Russian.MicexDownloader.UpdateInfo(StockSharp.BusinessEntities.Security,System.Boolean)/param/isDownload;DocStr227
-M:StockSharp.Algo.History.Russian.MicexDownloader.UpdateInfo(StockSharp.BusinessEntities.Security,System.Boolean)/returns;DocStr228
+M:StockSharp.Algo.History.Russian.MicexDownloader.GetSecurities(System.String,System.Boolean)/summary;DocStr9084
+M:StockSharp.Algo.History.Russian.MicexDownloader.GetSecurities(System.String,System.Boolean)/param/code;DocStr9085
+M:StockSharp.Algo.History.Russian.MicexDownloader.GetSecurities(System.String,System.Boolean)/param/isDownload;DocStr227
+M:StockSharp.Algo.History.Russian.MicexDownloader.GetSecurities(System.String,System.Boolean)/returns;DocStr9086
 T:StockSharp.Algo.History.Russian.Rts.Competition/summary;DocStr229
 T:StockSharp.Algo.History.Russian.Rts.Competition.CompetitionYear/summary;DocStr234
 P:StockSharp.Algo.History.Russian.Rts.Competition.CompetitionYear.Year/summary;DocStr239

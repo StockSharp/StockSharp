@@ -113,7 +113,7 @@ M:StockSharp.Xaml.ExchangeComboBox.OnSelectionChanged(System.Windows.Controls.Se
 T:StockSharp.Xaml.ExchangeEditor/summary;DocStr8127
 P:StockSharp.Xaml.ExchangeEditor.Exchanges/summary;DocStr1562
 P:StockSharp.Xaml.ExchangeEditor.SelectedExchangeName/summary;DocStr8187
-E:StockSharp.Xaml.ExchangeEditor.SelectedExchangeChanged/summary;DocStr8916
+E:StockSharp.Xaml.ExchangeEditor.SelectedExchangeChanged/summary;DocStr8188
 M:StockSharp.Xaml.ExchangeEditor.#ctor/summary;DocStr1
 M:StockSharp.Xaml.ExchangeEditor.SetExchange(System.String)/summary;DocStr8184
 M:StockSharp.Xaml.ExchangeEditor.SetExchange(System.String)/param/exchangeName;DocStr8185
@@ -255,7 +255,7 @@ P:StockSharp.Xaml.ContinuousSecurityWindow.ContinuousSecurity/summary;Continuous
 M:StockSharp.Xaml.ContinuousSecurityWindow.InitializeComponent/summary;DocStr8
 T:StockSharp.Xaml.CredentialsWindow/summary;DocStr8182
 M:StockSharp.Xaml.CredentialsWindow.#ctor/summary;DocStr1
-P:StockSharp.Xaml.CredentialsWindow.Login/summary;Login
+P:StockSharp.Xaml.CredentialsWindow.Email/summary;DocStr36
 P:StockSharp.Xaml.CredentialsWindow.Password/summary;Password
 P:StockSharp.Xaml.CredentialsWindow.AutoLogon/summary;XamlStr78
 P:StockSharp.Xaml.CredentialsWindow.IsLoggedIn/summary;DocStr8183
@@ -659,12 +659,13 @@ M:StockSharp.Xaml.GuiConnector`1.ReRegisterOrder(StockSharp.BusinessEntities.Ord
 M:StockSharp.Xaml.GuiConnector`1.ReRegisterOrder(StockSharp.BusinessEntities.Order,System.Decimal,System.Decimal)/returns;NewOrder
 M:StockSharp.Xaml.GuiConnector`1.CancelOrder(StockSharp.BusinessEntities.Order)/summary;DocStr835
 M:StockSharp.Xaml.GuiConnector`1.CancelOrder(StockSharp.BusinessEntities.Order)/param/order;DocStr836
-M:StockSharp.Xaml.GuiConnector`1.CancelOrders(System.Nullable{System.Boolean},StockSharp.BusinessEntities.Portfolio,System.Nullable{StockSharp.Messages.Sides},StockSharp.BusinessEntities.ExchangeBoard,StockSharp.BusinessEntities.Security)/summary;DocStr839
-M:StockSharp.Xaml.GuiConnector`1.CancelOrders(System.Nullable{System.Boolean},StockSharp.BusinessEntities.Portfolio,System.Nullable{StockSharp.Messages.Sides},StockSharp.BusinessEntities.ExchangeBoard,StockSharp.BusinessEntities.Security)/param/isStopOrder;DocStr840
-M:StockSharp.Xaml.GuiConnector`1.CancelOrders(System.Nullable{System.Boolean},StockSharp.BusinessEntities.Portfolio,System.Nullable{StockSharp.Messages.Sides},StockSharp.BusinessEntities.ExchangeBoard,StockSharp.BusinessEntities.Security)/param/portfolio;DocStr841
-M:StockSharp.Xaml.GuiConnector`1.CancelOrders(System.Nullable{System.Boolean},StockSharp.BusinessEntities.Portfolio,System.Nullable{StockSharp.Messages.Sides},StockSharp.BusinessEntities.ExchangeBoard,StockSharp.BusinessEntities.Security)/param/direction;DocStr842
-M:StockSharp.Xaml.GuiConnector`1.CancelOrders(System.Nullable{System.Boolean},StockSharp.BusinessEntities.Portfolio,System.Nullable{StockSharp.Messages.Sides},StockSharp.BusinessEntities.ExchangeBoard,StockSharp.BusinessEntities.Security)/param/board;DocStr843
-M:StockSharp.Xaml.GuiConnector`1.CancelOrders(System.Nullable{System.Boolean},StockSharp.BusinessEntities.Portfolio,System.Nullable{StockSharp.Messages.Sides},StockSharp.BusinessEntities.ExchangeBoard,StockSharp.BusinessEntities.Security)/param/security;DocStr844
+M:StockSharp.Xaml.GuiConnector`1.CancelOrders(System.Nullable{System.Boolean},StockSharp.BusinessEntities.Portfolio,System.Nullable{StockSharp.Messages.Sides},StockSharp.BusinessEntities.ExchangeBoard,StockSharp.BusinessEntities.Security,System.Nullable{StockSharp.Messages.SecurityTypes})/summary;DocStr839
+M:StockSharp.Xaml.GuiConnector`1.CancelOrders(System.Nullable{System.Boolean},StockSharp.BusinessEntities.Portfolio,System.Nullable{StockSharp.Messages.Sides},StockSharp.BusinessEntities.ExchangeBoard,StockSharp.BusinessEntities.Security,System.Nullable{StockSharp.Messages.SecurityTypes})/param/isStopOrder;DocStr840
+M:StockSharp.Xaml.GuiConnector`1.CancelOrders(System.Nullable{System.Boolean},StockSharp.BusinessEntities.Portfolio,System.Nullable{StockSharp.Messages.Sides},StockSharp.BusinessEntities.ExchangeBoard,StockSharp.BusinessEntities.Security,System.Nullable{StockSharp.Messages.SecurityTypes})/param/portfolio;DocStr841
+M:StockSharp.Xaml.GuiConnector`1.CancelOrders(System.Nullable{System.Boolean},StockSharp.BusinessEntities.Portfolio,System.Nullable{StockSharp.Messages.Sides},StockSharp.BusinessEntities.ExchangeBoard,StockSharp.BusinessEntities.Security,System.Nullable{StockSharp.Messages.SecurityTypes})/param/direction;DocStr842
+M:StockSharp.Xaml.GuiConnector`1.CancelOrders(System.Nullable{System.Boolean},StockSharp.BusinessEntities.Portfolio,System.Nullable{StockSharp.Messages.Sides},StockSharp.BusinessEntities.ExchangeBoard,StockSharp.BusinessEntities.Security,System.Nullable{StockSharp.Messages.SecurityTypes})/param/board;DocStr843
+M:StockSharp.Xaml.GuiConnector`1.CancelOrders(System.Nullable{System.Boolean},StockSharp.BusinessEntities.Portfolio,System.Nullable{StockSharp.Messages.Sides},StockSharp.BusinessEntities.ExchangeBoard,StockSharp.BusinessEntities.Security,System.Nullable{StockSharp.Messages.SecurityTypes})/param/security;DocStr844
+M:StockSharp.Xaml.GuiConnector`1.CancelOrders(System.Nullable{System.Boolean},StockSharp.BusinessEntities.Portfolio,System.Nullable{StockSharp.Messages.Sides},StockSharp.BusinessEntities.ExchangeBoard,StockSharp.BusinessEntities.Security,System.Nullable{StockSharp.Messages.SecurityTypes})/param/securityType;DocStr9087
 E:StockSharp.Xaml.GuiConnector`1.ValuesChanged/summary;DocStr898
 M:StockSharp.Xaml.GuiConnector`1.GetSecurityValue(StockSharp.BusinessEntities.Security,StockSharp.Messages.Level1Fields)/summary;DocStr853
 M:StockSharp.Xaml.GuiConnector`1.GetSecurityValue(StockSharp.BusinessEntities.Security,StockSharp.Messages.Level1Fields)/param/security;DocStr2831

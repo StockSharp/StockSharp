@@ -3,9 +3,8 @@ P:StockSharp.Licensing.Broker.Id/summary;Str361
 P:StockSharp.Licensing.Broker.Name/summary;DocStr3082
 P:StockSharp.Licensing.Broker.Criteria/summary;DocStr3836
 P:StockSharp.Licensing.Broker.OpenAccountLink/summary;DocStr3837
-P:StockSharp.Licensing.Broker.Feedbacks/summary;DocStr3838
-P:StockSharp.Licensing.Broker.FeedbackLinkId/summary;DocStr3839
-P:StockSharp.Licensing.Broker.ImageLinkId/summary;DocStr3840
+P:StockSharp.Licensing.Broker.OpenDemoAccountLink/summary;DocStr9141
+P:StockSharp.Licensing.Broker.Picture/summary;DocStr3840
 T:StockSharp.Licensing.ILicenseService/summary;DocStr3841
 M:StockSharp.Licensing.ILicenseService.GetTrialLicense(System.String)/summary;DocStr3842
 M:StockSharp.Licensing.ILicenseService.GetTrialLicense(System.String)/param/hardwareId;DocStr3843
