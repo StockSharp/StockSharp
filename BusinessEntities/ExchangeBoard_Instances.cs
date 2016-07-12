@@ -111,7 +111,11 @@ namespace StockSharp.BusinessEntities
 				new DateTime(2012, 5, 5),
 				new DateTime(2012, 5, 12),
 				new DateTime(2012, 6, 9),
-				new DateTime(2012, 12, 29)
+				new DateTime(2012, 12, 29),
+
+				//http://moex.com/a3367
+				new DateTime(2016,02,20)
+
 			};
 
 			var russianSpecialHolidays = new[]
@@ -303,7 +307,7 @@ namespace StockSharp.BusinessEntities
 				new DateTime(2012, 11, 5),
 				new DateTime(2012, 12, 31),
 
-				// http://rts.micex.ru/s690
+				// http://moex.com/a1343
 				new DateTime(2013, 1, 1),
 				new DateTime(2013, 1, 2),
 				new DateTime(2013, 1, 3),
@@ -312,8 +316,46 @@ namespace StockSharp.BusinessEntities
 				new DateTime(2013, 3, 8),
 				new DateTime(2013, 5, 1),
 				new DateTime(2013, 5, 9),
-				new DateTime(2013, 5, 10),
-				new DateTime(2013, 6, 12)
+				new DateTime(2013, 6, 12),
+				new DateTime(2013, 11, 4),
+				new DateTime(2013, 12, 31),
+
+				//http://moex.com/a2973
+				new DateTime(2014, 1, 1),
+				new DateTime(2014, 1, 2),
+				new DateTime(2014, 1, 3),
+				new DateTime(2014, 1, 7),
+				new DateTime(2014, 3, 10),
+				new DateTime(2014, 5, 1),
+				new DateTime(2014, 5, 9),
+				new DateTime(2014, 6, 12),
+				new DateTime(2014, 11, 4),
+				new DateTime(2014, 12, 31),
+				
+				//http://moex.com/a2793
+				new DateTime(2015, 1, 1),
+				new DateTime(2015, 1, 2),
+				new DateTime(2015, 1, 7),
+				new DateTime(2015, 2, 23),
+				new DateTime(2015, 3, 9),
+				new DateTime(2015, 5, 1),
+				new DateTime(2015, 5, 4),
+				new DateTime(2015, 5, 11),
+				new DateTime(2015, 6, 12),
+				new DateTime(2015, 11, 4),
+				new DateTime(2015, 12, 31),
+
+				//http://moex.com/a3367
+				new DateTime(2016, 1, 1),
+				new DateTime(2016, 1, 7),
+				new DateTime(2016, 1, 8),
+				new DateTime(2016, 2, 23),
+				new DateTime(2016, 3, 8),
+				new DateTime(2016, 5, 2),
+				new DateTime(2016, 5, 3),
+				new DateTime(2016, 5, 9),
+				new DateTime(2016, 6, 13),
+				new DateTime(2016, 11, 4),
 			};
 
 			//var moscowTime = TimeZoneInfo.FromSerializedString("Russian Standard Time;180;(UTC+03:00) Moscow, St. Petersburg, Volgograd (RTZ 2);Russia TZ 2 Standard Time;Russia TZ 2 Daylight Time;[01:01:0001;12:31:2010;60;[0;02:00:00;3;5;0;];[0;03:00:00;10;5;0;];][01:01:2011;12:31:2011;60;[0;02:00:00;3;5;0;];[0;00:00:00;1;1;6;];][01:01:2014;12:31:2014;60;[0;00:00:00;1;1;3;];[0;02:00:00;10;5;0;];];");
