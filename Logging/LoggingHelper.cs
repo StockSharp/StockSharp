@@ -211,5 +211,23 @@ namespace StockSharp.Logging
 			
 			return LogLevels.Inherit;
 		}
+
+		/// <summary>
+		/// Wrap the specified action in try/catch clause with logging.
+		/// </summary>
+		/// <param name="action">The action.</param>
+		public static void DoWithLog(this Action action)
+		{
+			if (action == null)
+				throw new ArgumentNullException(nameof(action));
+			try
+			{
+				action();
+			}
+			catch (Exception ex)
+			{
+				ex.LogError();
+			}
+		}
 	}
 }
