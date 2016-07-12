@@ -79,9 +79,12 @@
 							if (!isNativeIdNull && !_nativeIds.TryAdd(temp, nativeSecurityId))
 							{
 								SecurityId prevId;
-
+								
 								if (_nativeIds.TryGetKey(nativeSecurityId, out prevId))
-									throw new InvalidOperationException(LocalizedStrings.Str687Params.Put(securityId, prevId, nativeSecurityId));
+								{
+									if (temp != prevId)
+										throw new InvalidOperationException(LocalizedStrings.Str687Params.Put(temp, prevId, nativeSecurityId));
+								}
 								else
 									throw new InvalidOperationException(LocalizedStrings.Str687Params.Put(nativeSecurityId, _nativeIds[temp], temp));
 							}

@@ -1858,12 +1858,12 @@ namespace StockSharp.Localization
 		public static string Str152 => GetString(Str152Key);
 
 		/// <summary>
-		/// Error registering/cancelling order.
+		/// Error registering/cancelling order
 		/// </summary>
 		public const string Str153Key = "Str153";
 
 		/// <summary>
-		/// Error registering/cancelling order.
+		/// Error registering/cancelling order
 		/// </summary>
 		public static string Str153 => GetString(Str153Key);
 
@@ -27596,16 +27596,6 @@ namespace StockSharp.Localization
 		/// Error connection
 		/// </summary>
 		public static string Str2959 => GetString(Str2959Key);
-
-		/// <summary>
-		/// Error registering order
-		/// </summary>
-		public const string Str2960Key = "Str2960";
-
-		/// <summary>
-		/// Error registering order
-		/// </summary>
-		public static string Str2960 => GetString(Str2960Key);
 
 		/// <summary>
 		/// Disconnect

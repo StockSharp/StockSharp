@@ -161,6 +161,9 @@ namespace SampleSterling
 					// subscribe on error of stop-order cancelling event
 					Trader.StopOrdersCancelFailed += OrdersFailed;
 
+					Trader.MassOrderCancelFailed += (transId, error) =>
+						this.GuiAsync(() => MessageBox.Show(this, error.ToString(), LocalizedStrings.Str716));
+
 					Trader.NewNews += news =>  _newsWindow.NewsPanel.NewsGrid.News.Add(news);
 
 					// set market data provider
@@ -191,7 +194,7 @@ namespace SampleSterling
 				foreach (var fail in fails)
 				{
 					var msg = fail.Error.ToString();
-					MessageBox.Show(this, msg, LocalizedStrings.Str2960);
+					MessageBox.Show(this, msg, LocalizedStrings.Str153);
 				}
 			});
 		}

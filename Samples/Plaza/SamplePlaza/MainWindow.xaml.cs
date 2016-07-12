@@ -176,6 +176,9 @@ namespace SamplePlaza
 						// подписываемся на событие о неудачном снятии заявок
 						Trader.OrdersCancelFailed += OrdersFailed;
 
+						Trader.MassOrderCancelFailed += (transId, error) =>
+							this.GuiAsync(() => MessageBox.Show(this, error.ToString(), LocalizedStrings.Str716));
+
 						// устанавливаем поставщик маркет-данных
 						_securitiesWindow.SecurityPicker.MarketDataProvider = Trader;
 					}
@@ -198,7 +201,7 @@ namespace SamplePlaza
 			this.GuiAsync(() =>
 			{
 				foreach (var fail in fails)
-					MessageBox.Show(this, fail.Error.ToString(), LocalizedStrings.Str2960);
+					MessageBox.Show(this, fail.Error.ToString(), LocalizedStrings.Str153);
 			});
 		}
 

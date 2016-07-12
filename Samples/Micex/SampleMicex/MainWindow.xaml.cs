@@ -161,6 +161,9 @@ namespace SampleMicex
 						// подписываемся на событие о неудачном снятии заявок
 						Trader.OrdersCancelFailed += OrdersFailed;
 
+						Trader.MassOrderCancelFailed += (transId, error) =>
+							this.GuiAsync(() => MessageBox.Show(this, error.ToString(), LocalizedStrings.Str716));
+
 						Trader.NewNews += news => _newsWindow.NewsPanel.NewsGrid.News.Add(news);
 
 						// устанавливаем поставщик маркет-данных
@@ -190,7 +193,7 @@ namespace SampleMicex
 			this.GuiAsync(() =>
 			{
 				foreach (var fail in fails)
-					MessageBox.Show(this, fail.Error.ToString(), LocalizedStrings.Str2960);
+					MessageBox.Show(this, fail.Error.ToString(), LocalizedStrings.Str153);
 			});
 		}
 

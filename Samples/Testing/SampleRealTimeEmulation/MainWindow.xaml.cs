@@ -177,10 +177,13 @@ namespace SampleRealTimeEmulation
 					_connector.OrdersRegisterFailed += OrdersFailed;
 
 					_candleManager.Processing += (s, candle) =>
-						{
-							if (candle.State == CandleStates.Finished)
-								_buffer.Add(candle);
-						};
+					{
+						if (candle.State == CandleStates.Finished)
+							_buffer.Add(candle);
+					};
+
+					_connector.MassOrderCancelFailed += (transId, error) =>
+						this.GuiAsync(() => MessageBox.Show(this, error.ToString(), LocalizedStrings.Str716));
 
 					// subscribe on error event
 					_connector.Error += error => this.GuiAsync(() => MessageBox.Show(this, error.ToString(), LocalizedStrings.Str2955));
@@ -214,7 +217,7 @@ namespace SampleRealTimeEmulation
 			this.GuiAsync(() =>
 			{
 				foreach (var fail in fails)
-					MessageBox.Show(this, fail.Error.ToString(), LocalizedStrings.Str2960);
+					MessageBox.Show(this, fail.Error.ToString(), LocalizedStrings.Str153);
 			});
 		}
 

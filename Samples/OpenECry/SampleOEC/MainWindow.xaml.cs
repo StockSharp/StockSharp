@@ -168,6 +168,9 @@ namespace SampleOEC
 					// subscribe on error of stop-order cancelling event
 					Trader.StopOrdersCancelFailed += OrdersFailed;
 
+					Trader.MassOrderCancelFailed += (transId, error) =>
+						this.GuiAsync(() => MessageBox.Show(this, error.ToString(), LocalizedStrings.Str716));
+
 					Trader.NewNews += news => _newsWindow.NewsPanel.NewsGrid.News.Add(news);
 
 					// set market data provider
@@ -203,7 +206,7 @@ namespace SampleOEC
 			this.GuiAsync(() =>
 			{
 				foreach (var fail in fails)
-					MessageBox.Show(this, fail.Error.ToString(), LocalizedStrings.Str2960);
+					MessageBox.Show(this, fail.Error.ToString(), LocalizedStrings.Str153);
 			});
 		}
 

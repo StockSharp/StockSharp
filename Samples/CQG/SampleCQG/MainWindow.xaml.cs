@@ -170,6 +170,9 @@ namespace SampleCQG
 					// subscribe on error of stop-order cancelling event
 					Trader.StopOrdersCancelFailed += OrdersFailed;
 
+					Trader.MassOrderCancelFailed += (transId, error) =>
+						this.GuiAsync(() => MessageBox.Show(this, error.ToString(), LocalizedStrings.Str716));
+
 					// set market data provider
 					_securitiesWindow.SecurityPicker.MarketDataProvider = Trader;
 				}
@@ -195,7 +198,7 @@ namespace SampleCQG
 				foreach (var fail in fails)
 				{
 					var msg = fail.Error.ToString();
-					MessageBox.Show(this, msg, LocalizedStrings.Str2960);
+					MessageBox.Show(this, msg, LocalizedStrings.Str153);
 				}
 			});
 		}

@@ -182,7 +182,7 @@ Str149;Deal initiator (seller or buyer).;Инициатор сделки (про
 Str150;Open interest;Открытый интерес
 Str151;Number of open positions (open interest).;Количество открытых позиций (открытый интерес).
 Str152;Error;Ошибка
-Str153;Error registering/cancelling order.;Ошибка регистрации/отмены заявки.
+Str153;Error registering/cancelling order;Ошибка регистрации/отмены заявки
 Str154;Condition;Условие
 Str155;Order condition (e.g., stop- and algo- orders parameters).;Условие заявки (например, параметры стоп- или алго- заявков).
 Str156;Conditional order;Условная заявка
@@ -2763,7 +2763,6 @@ Str2955;Data processing error;Ошибка обработки данных
 Str2956Params;Error subscribing to {0} for {1};Ошибка подписки на {0} для {1}
 Str2958;Connection restored.;Подключение восстановлено.
 Str2959;Error connection;Ошибка соединения
-Str2960;Error registering order;Ошибка регистрации заявки
 Disconnect;Disconnect;Отключиться
 Connect;Connect;Подключиться
 Connected;Connected;Подключен
