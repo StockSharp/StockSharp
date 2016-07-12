@@ -404,7 +404,7 @@ namespace StockSharp.Quik
 			if (underlyingSecurityCode.IsEmpty())
 				throw new ArgumentException(LocalizedStrings.Str1850, nameof(message));
 
-			var secType = message.SecurityId.SecurityType;
+			var secType = message.SecurityType;
 
 			if (secType != SecurityTypes.Future)
 				throw new ArgumentException(LocalizedStrings.Str1851Params.Put(secType), nameof(message));
