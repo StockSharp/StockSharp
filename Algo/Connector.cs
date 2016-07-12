@@ -631,6 +631,9 @@ namespace StockSharp.Algo
 		/// <param name="criteria">The instrument whose fields will be used as a filter.</param>
 		public void LookupSecurities(Security criteria)
 		{
+			if (criteria == null)
+				throw new ArgumentNullException(nameof(criteria));
+
 			var boardCode = criteria.Board != null ? criteria.Board.Code : string.Empty;
 			var securityCode = criteria.Code ?? string.Empty;
 
