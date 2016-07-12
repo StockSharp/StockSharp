@@ -42646,5 +42646,15 @@ namespace StockSharp.Localization
 		/// Pause
 		/// </summary>
 		public static string Pause => GetString(PauseKey);
+
+		/// <summary>
+		/// Composition already exist.
+		/// </summary>
+		public const string CompositionAlreadyExistKey = "CompositionAlreadyExist";
+
+		/// <summary>
+		/// Composition already exist.
+		/// </summary>
+		public static string CompositionAlreadyExist => GetString(CompositionAlreadyExistKey);
 	}
 }

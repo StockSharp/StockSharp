@@ -4299,6 +4299,7 @@ FileTooMuch;This file exceeds the maximum upload size.;Файл превысил
 StrategyEncrypted;Strategy has been encrypted and can not be viewed.;Стратегия зашифрована и не может быть просмотрена.
 Email;Email;Почта
 Pause;Pause;Приостановить
+CompositionAlreadyExist;Composition already exist.;Элемент уже существует.
 DocStr0;Button activation alert settings;Кнопка активации настроек сигнала
 DocStr1;Initializes a new instance of the {0};Создать {0}
 DocStr2;Load settings;Загрузить настройки
