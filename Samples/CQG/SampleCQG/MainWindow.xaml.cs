@@ -195,7 +195,7 @@ namespace SampleCQG
 				foreach (var fail in fails)
 				{
 					var msg = fail.Error.ToString();
-					MessageBox.Show(this, msg, LocalizedStrings.Str2960);
+					MessageBox.Show(this, msg, LocalizedStrings.Str153);
 				}
 			});
 		}

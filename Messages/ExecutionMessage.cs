@@ -406,7 +406,7 @@ namespace StockSharp.Messages
 		/// Error registering/cancelling order.
 		/// </summary>
 		[DisplayNameLoc(LocalizedStrings.Str152Key)]
-		[DescriptionLoc(LocalizedStrings.Str153Key)]
+		[DescriptionLoc(LocalizedStrings.Str153Key, true)]
 		[MainCategory]
 		public Exception Error { get; set; }
 

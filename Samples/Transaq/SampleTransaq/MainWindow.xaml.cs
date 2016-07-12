@@ -208,7 +208,7 @@ namespace SampleTransaq
 			this.GuiAsync(() =>
 			{
 				foreach (var fail in fails)
-					MessageBox.Show(this, fail.Error.ToString(), LocalizedStrings.Str2960);
+					MessageBox.Show(this, fail.Error.ToString(), LocalizedStrings.Str153);
 			});
 		}
 

@@ -151,7 +151,7 @@ namespace StockSharp.Algo
 			public RegisterFailedOrderRule(Order order, IConnector connector)
 				: base(order, connector)
 			{
-				Name = LocalizedStrings.Str2960 + " ";
+				Name = LocalizedStrings.Str717 + " ";
 				TrySubscribe();
 			}
 

@@ -156,6 +156,14 @@ namespace SampleTwime
 				// subscribe on error of stop-order cancelling event
 				Trader.StopOrdersCancelFailed += OrdersFailed;
 
+				Trader.MassOrderCancelFailed += (transId, error) =>
+				{
+					this.GuiAsync(() =>
+					{
+						MessageBox.Show(this, error.ToString(), LocalizedStrings.Str716);
+					});
+				};
+
 				// set market data provider
 				_securitiesWindow.SecurityPicker.MarketDataProvider = Trader;
 
@@ -186,7 +194,7 @@ namespace SampleTwime
 			this.GuiAsync(() =>
 			{
 				foreach (var fail in fails)
-					MessageBox.Show(this, fail.Error.ToString(), LocalizedStrings.Str2960);
+					MessageBox.Show(this, fail.Error.ToString(), LocalizedStrings.Str153);
 			});
 		}
 
