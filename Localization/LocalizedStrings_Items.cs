@@ -42656,5 +42656,25 @@ namespace StockSharp.Localization
 		/// Composition already exist.
 		/// </summary>
 		public static string CompositionAlreadyExist => GetString(CompositionAlreadyExistKey);
+
+		/// <summary>
+		/// With ecnryption.
+		/// </summary>
+		public const string WithEcnryptionKey = "WithEcnryption";
+
+		/// <summary>
+		/// With ecnryption.
+		/// </summary>
+		public static string WithEcnryption => GetString(WithEcnryptionKey);
+
+		/// <summary>
+		/// Without ecnryption.
+		/// </summary>
+		public const string WithoutEcnryptionKey = "WithoutEcnryption";
+
+		/// <summary>
+		/// Without ecnryption.
+		/// </summary>
+		public static string WithoutEcnryption => GetString(WithoutEcnryptionKey);
 	}
 }
