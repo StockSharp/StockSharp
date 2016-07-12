@@ -151,6 +151,9 @@ namespace SampleIB
 						// subscribe on error of order cancelling event
 						Trader.OrdersCancelFailed += OrdersFailed;
 
+						Trader.MassOrderCancelFailed += (transId, error) =>
+							this.GuiAsync(() => MessageBox.Show(this, error.ToString(), LocalizedStrings.Str716));
+
 						Trader.NewNews += news => _newsWindow.NewsPanel.NewsGrid.News.Add(news);
 
 						// set market data provider

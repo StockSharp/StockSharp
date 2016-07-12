@@ -163,6 +163,9 @@ namespace SampleAlfa
 						// подписываемся на событие о неудачном снятии стоп-заявок
 						Trader.StopOrdersCancelFailed += OrdersFailed;
 
+						Trader.MassOrderCancelFailed += (transId, error) =>
+							this.GuiAsync(() => MessageBox.Show(this, error.ToString(), LocalizedStrings.Str716));
+
 						// устанавливаем поставщик маркет-данных
 						_securitiesWindow.SecurityPicker.MarketDataProvider = Trader;
 

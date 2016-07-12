@@ -177,6 +177,9 @@ namespace SampleQuik
 					Trader.NewPortfolios += portfolios => _portfoliosWindow.PortfolioGrid.Portfolios.AddRange(portfolios);
 					Trader.NewPositions += positions => _portfoliosWindow.PortfolioGrid.Positions.AddRange(positions);
 
+					Trader.MassOrderCancelFailed += (transId, error) =>
+						this.GuiAsync(() => MessageBox.Show(this, error.ToString(), LocalizedStrings.Str716));
+
 					// устанавливаем поставщик маркет-данных
 					_securitiesWindow.SecurityPicker.MarketDataProvider = Trader;
 

@@ -172,6 +172,9 @@ namespace SampleTransaq
 					// подписываемся на событие о неудачном снятии стоп-заявок
 					Trader.StopOrdersCancelFailed += OrdersFailed;
 
+					Trader.MassOrderCancelFailed += (transId, error) =>
+						this.GuiAsync(() => MessageBox.Show(this, error.ToString(), LocalizedStrings.Str716));
+
 					Trader.NewNews += news => _newsWindow.NewsPanel.NewsGrid.News.Add(news);
 
 					// устанавливаем поставщик маркет-данных

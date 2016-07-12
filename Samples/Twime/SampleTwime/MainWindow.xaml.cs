@@ -157,12 +157,7 @@ namespace SampleTwime
 				Trader.StopOrdersCancelFailed += OrdersFailed;
 
 				Trader.MassOrderCancelFailed += (transId, error) =>
-				{
-					this.GuiAsync(() =>
-					{
-						MessageBox.Show(this, error.ToString(), LocalizedStrings.Str716);
-					});
-				};
+						this.GuiAsync(() => MessageBox.Show(this, error.ToString(), LocalizedStrings.Str716));
 
 				// set market data provider
 				_securitiesWindow.SecurityPicker.MarketDataProvider = Trader;
