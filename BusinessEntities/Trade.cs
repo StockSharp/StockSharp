@@ -18,6 +18,7 @@ namespace StockSharp.BusinessEntities
 	using System;
 	using System.Collections.Generic;
 	using System.ComponentModel;
+	using System.ComponentModel.DataAnnotations;
 	using System.Runtime.Serialization;
 	using System.Xml.Serialization;
 
@@ -26,8 +27,6 @@ namespace StockSharp.BusinessEntities
 
 	using StockSharp.Messages;
 	using StockSharp.Localization;
-
-	using Xceed.Wpf.Toolkit.PropertyGrid.Attributes;
 
 	/// <summary>
 	/// Tick trade.
@@ -49,21 +48,25 @@ namespace StockSharp.BusinessEntities
 		/// Trade ID.
 		/// </summary>
 		[DataMember]
-		[DisplayNameLoc(LocalizedStrings.Str361Key)]
-		[DescriptionLoc(LocalizedStrings.Str145Key)]
-		[MainCategory]
 		[Identity]
-		[PropertyOrder(0)]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.Str361Key,
+			Description = LocalizedStrings.Str145Key,
+			GroupName = LocalizedStrings.GeneralKey,
+			Order = 0)]
 		public long Id { get; set; }
 
 		/// <summary>
 		/// Trade ID (as string, if electronic board does not use numeric order ID representation).
 		/// </summary>
 		[DataMember]
-		[DisplayNameLoc(LocalizedStrings.OrderIdStringKey)]
-		[DescriptionLoc(LocalizedStrings.Str146Key)]
-		[MainCategory]
-		[PropertyOrder(1)]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.OrderIdStringKey,
+			Description = LocalizedStrings.Str146Key,
+			GroupName = LocalizedStrings.GeneralKey,
+			Order = 1)]
 		public string StringId { get; set; }
 
 		/// <summary>
@@ -72,47 +75,54 @@ namespace StockSharp.BusinessEntities
 		[RelationSingle(IdentityType = typeof(string))]
 		[XmlIgnore]
 		[Browsable(false)]
-		[PropertyOrder(2)]
 		public Security Security { get; set; }
 
 		/// <summary>
 		/// Trade time.
 		/// </summary>
 		[DataMember]
-		[DisplayNameLoc(LocalizedStrings.TimeKey)]
-		[DescriptionLoc(LocalizedStrings.Str605Key)]
-		[MainCategory]
-		[PropertyOrder(3)]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.TimeKey,
+			Description = LocalizedStrings.Str605Key,
+			GroupName = LocalizedStrings.GeneralKey,
+			Order = 3)]
 		public DateTimeOffset Time { get; set; }
 
 		/// <summary>
 		/// Trade received local time.
 		/// </summary>
 		[DataMember]
-		[DisplayNameLoc(LocalizedStrings.Str514Key)]
-		[DescriptionLoc(LocalizedStrings.Str606Key)]
-		[MainCategory]
-		[PropertyOrder(9)]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.Str514Key,
+			Description = LocalizedStrings.Str606Key,
+			GroupName = LocalizedStrings.GeneralKey,
+			Order = 9)]
 		public DateTimeOffset LocalTime { get; set; }
 
 		/// <summary>
 		/// Number of contracts in a trade.
 		/// </summary>
 		[DataMember]
-		[DisplayNameLoc(LocalizedStrings.VolumeKey)]
-		[DescriptionLoc(LocalizedStrings.TradeVolumeKey)]
-		[MainCategory]
-		[PropertyOrder(4)]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.VolumeKey,
+			Description = LocalizedStrings.TradeVolumeKey,
+			GroupName = LocalizedStrings.GeneralKey,
+			Order = 4)]
 		public decimal Volume { get; set; }
 
 		/// <summary>
 		/// Trade price.
 		/// </summary>
 		[DataMember]
-		[DisplayNameLoc(LocalizedStrings.PriceKey)]
-		[DescriptionLoc(LocalizedStrings.Str147Key)]
-		[MainCategory]
-		[PropertyOrder(3)]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.PriceKey,
+			Description = LocalizedStrings.Str147Key,
+			GroupName = LocalizedStrings.GeneralKey,
+			Order = 3)]
 		public decimal Price { get; set; }
 
 		/// <summary>
@@ -120,20 +130,24 @@ namespace StockSharp.BusinessEntities
 		/// </summary>
 		[DataMember]
 		[Nullable]
-		[DisplayNameLoc(LocalizedStrings.Str128Key)]
-		[DescriptionLoc(LocalizedStrings.Str608Key)]
-		[MainCategory]
-		[PropertyOrder(5)]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.Str128Key,
+			Description = LocalizedStrings.Str608Key,
+			GroupName = LocalizedStrings.GeneralKey,
+			Order = 5)]
 		public Sides? OrderDirection { get; set; }
 
 		/// <summary>
 		/// Is a system trade.
 		/// </summary>
 		[DataMember]
-		[DisplayNameLoc(LocalizedStrings.SystemTradeKey)]
-		[DescriptionLoc(LocalizedStrings.IsSystemTradeKey)]
-		[MainCategory]
-		[PropertyOrder(6)]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.SystemTradeKey,
+			Description = LocalizedStrings.IsSystemTradeKey,
+			GroupName = LocalizedStrings.GeneralKey,
+			Order = 6)]
 		[Nullable]
 		public bool? IsSystem { get; set; }
 
@@ -148,31 +162,38 @@ namespace StockSharp.BusinessEntities
 		/// Number of open positions (open interest).
 		/// </summary>
 		[DataMember]
-		[DisplayNameLoc(LocalizedStrings.Str150Key)]
-		[DescriptionLoc(LocalizedStrings.Str151Key)]
-		[MainCategory]
 		[Nullable]
-		[PropertyOrder(7)]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.Str150Key,
+			Description = LocalizedStrings.Str151Key,
+			GroupName = LocalizedStrings.Str436Key,
+			Order = 10)]
 		public decimal? OpenInterest { get; set; }
 
 		/// <summary>
 		/// Is tick ascending or descending in price.
 		/// </summary>
 		[DataMember]
-		[DisplayNameLoc(LocalizedStrings.Str157Key)]
-		[DescriptionLoc(LocalizedStrings.Str158Key)]
-		[MainCategory]
 		[Nullable]
-		[PropertyOrder(8)]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.Str157Key,
+			Description = LocalizedStrings.Str158Key,
+			GroupName = LocalizedStrings.Str436Key,
+			Order = 11)]
 		public bool? IsUpTick { get; set; }
 
 		/// <summary>
 		/// Trading security currency.
 		/// </summary>
 		[DataMember]
-		[DisplayNameLoc(LocalizedStrings.CurrencyKey)]
-		[DescriptionLoc(LocalizedStrings.Str382Key)]
-		[MainCategory]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.CurrencyKey,
+			Description = LocalizedStrings.Str382Key,
+			GroupName = LocalizedStrings.GeneralKey,
+			Order = 7)]
 		[Nullable]
 		public CurrencyTypes? Currency { get; set; }
 
@@ -187,9 +208,12 @@ namespace StockSharp.BusinessEntities
 		/// </remarks>
 		[Ignore]
 		[XmlIgnore]
-		[DisplayNameLoc(LocalizedStrings.ExtendedInfoKey)]
-		[DescriptionLoc(LocalizedStrings.Str427Key)]
-		[MainCategory]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.ExtendedInfoKey,
+			Description = LocalizedStrings.Str427Key,
+			GroupName = LocalizedStrings.GeneralKey,
+			Order = 8)]
 		public IDictionary<object, object> ExtensionInfo
 		{
 			get { return _extensionInfo; }
@@ -226,7 +250,7 @@ namespace StockSharp.BusinessEntities
 		/// <returns>A hash code.</returns>
 		public override int GetHashCode()
 		{
-			return (Security != null ? Security.GetHashCode() : 0) ^ Id.GetHashCode();
+			return (Security?.GetHashCode() ?? 0) ^ Id.GetHashCode();
 		}
 
 		/// <summary>

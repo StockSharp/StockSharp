@@ -261,5 +261,55 @@ namespace StockSharp.Localization
 		/// 
 		/// </summary>
 		public static string Str1405Dot => AppendDot(Str1405);
+
+		/// <summary>
+		/// 
+		/// </summary>
+		public static string PnLDot => AppendDot(PnL);
+
+		/// <summary>
+		/// 
+		/// </summary>
+		public static string Str862Dot => AppendDot(Str862);
+
+		/// <summary>
+		/// 
+		/// </summary>
+		public static string SecurityIdDot => AppendDot(SecurityId);
+
+		/// <summary>
+		/// 
+		/// </summary>
+		public static string Str349Dot => AppendDot(Str349);
+
+		/// <summary>
+		/// 
+		/// </summary>
+		public static string BestPairDot => AppendDot(BestPair);
+
+		/// <summary>
+		/// 
+		/// </summary>
+		public static string Str293Dot => AppendDot(Str293);
+
+		/// <summary>
+		/// 
+		/// </summary>
+		public static string Str299Dot => AppendDot(Str299);
+
+		/// <summary>
+		/// 
+		/// </summary>
+		public static string Str232Dot => AppendDot(Str232);
+
+		/// <summary>
+		/// 
+		/// </summary>
+		public static string Str321Dot => AppendDot(Str321);
+
+		/// <summary>
+		/// 
+		/// </summary>
+		public static string AveragePriceDot => AppendDot(AveragePrice);
 	}
 }

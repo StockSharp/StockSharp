@@ -4301,6 +4301,8 @@ Pause;Pause;Приостановить
 CompositionAlreadyExist;Composition already exist.;Элемент уже существует.
 WithEcnryption;With ecnryption;С шифрованием
 WithoutEcnryption;Without ecnryption;Без шифрования
+IV;IV;IV
+HV;HV;HV
 DocStr0;Button activation alert settings;Кнопка активации настроек сигнала
 DocStr1;Initializes a new instance of the {0};Создать {0}
 DocStr2;Load settings;Загрузить настройки
