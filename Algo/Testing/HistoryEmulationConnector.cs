@@ -412,7 +412,6 @@ namespace StockSharp.Algo.Testing
 
 							// все данных пришли без ошибок или в процессе чтения произошла ошибка - начинаем остановку
 							SendEmulationState(EmulationStates.Stopping);
-							SendEmulationState(EmulationStates.Stopped);
 						}
 
 						if (State == EmulationStates.Stopping)
