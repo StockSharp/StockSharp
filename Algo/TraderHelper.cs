@@ -1906,25 +1906,32 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// To get the T+N date.
+		/// To get date of day T +/- of N trading days.
 		/// </summary>
 		/// <param name="board">Board info.</param>
-		/// <param name="date">The start T date.</param>
-		/// <param name="n">The N size.</param>
-		/// <returns>The end T+N date.</returns>
-		public static DateTimeOffset GetTPlusNDate(this ExchangeBoard board, DateTimeOffset date, int n)
+		/// <param name="date">The start T date, to which are added or subtracted N trading days.</param>
+		/// <param name="n">The N size. The number of trading days for the addition or subtraction.</param>
+		/// <param name="checkHolidays">Whether to check the passed date for a weekday (Saturday and Sunday are days off, returned value for them is <see langword="false" />).</param>
+		/// <returns>The end T +/- N date.</returns>
+		public static DateTimeOffset AddOrSubtractTradingDays(this ExchangeBoard board, DateTimeOffset date, int n, bool checkHolidays = true)
 		{
 			if (board == null)
 				throw new ArgumentNullException(nameof(board));
 
-			date = date.Date.ApplyTimeZone(date.Offset);
-
-			while (n > 0)
+			while (n != 0)
 			{
-				if (board.IsTradeDate(date))
-					n--;
-
-				date = date.AddDays(1);
+				//if need to Add
+				if (n > 0)
+				{
+					date = date.AddDays(1);
+					if (board.IsTradeDate(date, checkHolidays)) n--;
+				}
+				//if need to Subtract
+				if (n < 0)
+				{
+					date = date.AddDays(-1);
+					if (board.IsTradeDate(date, checkHolidays)) n++;
+				}
 			}
 
 			return date;
