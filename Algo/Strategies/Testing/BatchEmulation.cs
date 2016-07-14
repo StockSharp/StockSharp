@@ -327,9 +327,13 @@ namespace StockSharp.Algo.Strategies.Testing
 					break;
 
 				case EmulationStates.Stopped:
-					CurrentProgress = 100;
+				{
+					if (!_cancelEmulation)
+						CurrentProgress = 100;
+
 					OnEmulationStopped();
 					break;
+				}
 			}
 
 			_prev = EmulationConnector.State;
@@ -346,9 +350,6 @@ namespace StockSharp.Algo.Strategies.Testing
 
 		private void EmulationConnectorOnDisconnected()
 		{
-			if (_cancelEmulation)
-				return;
-
 			TryStartNextBatch();
 		}
 
@@ -561,8 +562,6 @@ namespace StockSharp.Algo.Strategies.Testing
 
 			_batch = ArrayHelper.Empty<Strategy>();
 			_strategyInfo.Clear();
-
-			EmulationConnector.Disconnect();
 		}
 
 		/// <summary>

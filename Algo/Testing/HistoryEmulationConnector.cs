@@ -508,6 +508,10 @@ namespace StockSharp.Algo.Testing
 
 				case EmulationStates.Stopped:
 				{
+					// change ConnectionState to Disconnecting
+					if (ConnectionState != ConnectionStates.Disconnecting)
+						Disconnect();
+
 					SendInMessage(new DisconnectMessage());
 					break;
 				}
