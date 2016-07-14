@@ -44,7 +44,7 @@ namespace StockSharp.Messages
 		[DescriptionLoc(LocalizedStrings.Str419Key)]
 		public DateTime Till { get; set; }
 		
-		private IList<Range<TimeSpan>> _times = new List<Range<TimeSpan>>();
+		private List<Range<TimeSpan>> _times = new List<Range<TimeSpan>>();
 
 		/// <summary>
 		/// Work schedule within day.
@@ -53,7 +53,7 @@ namespace StockSharp.Messages
 		[CategoryLoc(LocalizedStrings.GeneralKey)]
 		[DisplayNameLoc(LocalizedStrings.Str416Key)]
 		[DescriptionLoc(LocalizedStrings.Str420Key)]
-		public IList<Range<TimeSpan>> Times
+		public List<Range<TimeSpan>> Times
 		{
 			get { return _times; }
 			set

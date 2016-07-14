@@ -311,7 +311,7 @@ namespace StockSharp.BusinessEntities
 		/// </summary>
 		[TimeZoneInfo]
 		[XmlIgnore]
-		[DataMember]
+		//[DataMember]
 		public TimeZoneInfo TimeZone
 		{
 			get { return _timeZone; }

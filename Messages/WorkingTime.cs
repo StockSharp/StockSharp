@@ -43,7 +43,7 @@ namespace StockSharp.Messages
 		{
         }
 
-		private IList<WorkingTimePeriod> _periods = new List<WorkingTimePeriod>();
+		private List<WorkingTimePeriod> _periods = new List<WorkingTimePeriod>();
 
 		/// <summary>
 		/// Schedule validity periods.
@@ -52,7 +52,7 @@ namespace StockSharp.Messages
 		[CategoryLoc(LocalizedStrings.GeneralKey)]
 		[DisplayNameLoc(LocalizedStrings.Str409Key)]
 		[DescriptionLoc(LocalizedStrings.Str410Key)]
-		public IList<WorkingTimePeriod> Periods
+		public List<WorkingTimePeriod> Periods
 		{
 			get { return _periods; }
 			set
@@ -64,7 +64,7 @@ namespace StockSharp.Messages
 			}
 		}
 
-		private IList<DateTime> _specialWorkingDays = new List<DateTime>();
+		private List<DateTime> _specialWorkingDays = new List<DateTime>();
 
 		/// <summary>
 		/// Working days, falling on Saturday and Sunday.
@@ -73,13 +73,13 @@ namespace StockSharp.Messages
 		[CategoryLoc(LocalizedStrings.GeneralKey)]
 		[DisplayNameLoc(LocalizedStrings.Str411Key)]
 		[DescriptionLoc(LocalizedStrings.Str412Key)]
-		public IList<DateTime> SpecialWorkingDays
+		public List<DateTime> SpecialWorkingDays
 		{
 			get { return _specialWorkingDays; }
 			set { _specialWorkingDays = CheckDates(value); }
 		}
 
-		private IList<DateTime> _specialHolidays = new List<DateTime>();
+		private List<DateTime> _specialHolidays = new List<DateTime>();
 
 		/// <summary>
 		/// Holidays that fall on workdays.
@@ -88,7 +88,7 @@ namespace StockSharp.Messages
 		[CategoryLoc(LocalizedStrings.GeneralKey)]
 		[DisplayNameLoc(LocalizedStrings.Str413Key)]
 		[DescriptionLoc(LocalizedStrings.Str414Key)]
-		public IList<DateTime> SpecialHolidays
+		public List<DateTime> SpecialHolidays
 		{
 			get { return _specialHolidays; }
 			set { _specialHolidays = CheckDates(value); }
@@ -96,7 +96,7 @@ namespace StockSharp.Messages
 
 		private bool _checkDates = true;
 
-		private IList<DateTime> CheckDates(IList<DateTime> dates)
+		private List<DateTime> CheckDates(List<DateTime> dates)
 		{
 			if (!_checkDates)
 				return dates;
