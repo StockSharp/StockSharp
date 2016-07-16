@@ -29,6 +29,7 @@ namespace StockSharp.Algo.Storages
 	using Ecng.Interop;
 	using Ecng.Serialization;
 	using Ecng.ComponentModel;
+	using Ecng.Configuration;
 
 	using StockSharp.Messages;
 	using StockSharp.Localization;
@@ -290,7 +291,7 @@ namespace StockSharp.Algo.Storages
 		/// <param name="path">The path to the directory with data.</param>
 		public LocalMarketDataDrive(string path)
 		{
-			_path = path;
+			_path = path.ToFullPathIfNeed();
 		}
 
 		private string _path;

@@ -30,18 +30,18 @@ namespace StockSharp.Alerts
 			InitializeComponent();
 		}
 
-		private DateTime _time;
+		private DateTimeOffset _time;
 
 		/// <summary>
 		/// Alert creation time.
 		/// </summary>
-		public DateTime Time
+		public DateTimeOffset Time
 		{
 			get { return _time; }
 			set
 			{
 				_time = value;
-				TimeCtrl.Text = value.TimeOfDay.ToString(@"hh\:mm\:ss");
+				TimeCtrl.Text = value.TimeOfDay.ToString();
 			}
 		}
 

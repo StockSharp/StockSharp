@@ -50,6 +50,8 @@ namespace StockSharp.Alerts
 			if (dumpDir.IsEmpty())
 				throw new ArgumentNullException(nameof(dumpDir));
 
+			dumpDir = dumpDir.ToFullPathIfNeed();
+
 			ThreadingHelper
 				.Thread(() =>
 				{
@@ -82,31 +84,35 @@ namespace StockSharp.Alerts
 
 								try
 								{
+									var title = alert.Item2;
+									var message = alert.Item3;
+									var time = alert.Item4;
+
 									switch (alert.Item1)
 									{
 										case AlertTypes.Sound:
 											player.Play();
 											break;
 										case AlertTypes.Speech:
-											speech.Speak(alert.Item2);
+											speech.Speak(title);
 											break;
 										case AlertTypes.Popup:
 											GuiDispatcher.GlobalDispatcher.AddAction(() => new AlertPopupWindow
 											{
-												Title = alert.Item2,
-												Message = alert.Item3,
-												Time = alert.Item4.UtcDateTime
+												Title = title,
+												Message = message,
+												Time = time
 											}.Show());
 											break;
 										case AlertTypes.Sms:
-											client.SendSms(alert.Item2);
+											client.SendSms(title);
 											break;
 										case AlertTypes.Email:
-											client.SendEmail(alert.Item2, alert.Item3);
+											client.SendEmail(title, message);
 											break;
 										case AlertTypes.Log:
 											logManager.Application.AddWarningLog(() => LocalizedStrings.Str3033Params
-												.Put(alert.Item4, alert.Item2, Environment.NewLine + alert.Item3));
+												.Put(time, title, Environment.NewLine + message));
 											break;
 										default:
 											throw new ArgumentOutOfRangeException();

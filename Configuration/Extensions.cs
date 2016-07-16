@@ -324,7 +324,7 @@ namespace StockSharp.Configuration
 			if (dbFile == null)
 				return null;
 
-			dbFile = dbFile.Replace("%Documents%", Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments));
+			dbFile = dbFile.ToFullPathIfNeed();
 
 			conStr["Data Source"] = dbFile;
 			database.ConnectionString = conStr.ToString();
