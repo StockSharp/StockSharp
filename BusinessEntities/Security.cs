@@ -485,7 +485,7 @@ namespace StockSharp.BusinessEntities
 			GroupName = LocalizedStrings.Str436Key,
 			Order = 200)]
 		[Browsable(false)]
-		//[Obsolete("Необходимо использовать метод IConnector.GetSecurityValue.")]
+		//[Obsolete("Use the IConnector.GetSecurityValue.")]
 		public decimal? StepPrice
 		{
 			get { return _stepPrice; }
@@ -518,7 +518,7 @@ namespace StockSharp.BusinessEntities
 			GroupName = LocalizedStrings.Str436Key,
 			Order = 201)]
 		[Browsable(false)]
-		//[Obsolete("Необходимо использовать метод IConnector.GetSecurityValue.")]
+		//[Obsolete("Use the IConnector.GetSecurityValue.")]
 		public Trade LastTrade
 		{
 			get { return _lastTrade; }
@@ -553,7 +553,7 @@ namespace StockSharp.BusinessEntities
 			GroupName = LocalizedStrings.Str436Key,
 			Order = 202)]
 		[Browsable(false)]
-		//[Obsolete("Необходимо использовать метод IConnector.GetSecurityValue.")]
+		//[Obsolete("Use the IConnector.GetSecurityValue.")]
 		public decimal? OpenPrice
 		{
 			get { return _openPrice; }
@@ -582,7 +582,7 @@ namespace StockSharp.BusinessEntities
 			GroupName = LocalizedStrings.Str436Key,
 			Order = 203)]
 		[Browsable(false)]
-		//[Obsolete("Необходимо использовать метод IConnector.GetSecurityValue.")]
+		//[Obsolete("Use the IConnector.GetSecurityValue.")]
 		public decimal? ClosePrice
 		{
 			get { return _closePrice; }
@@ -611,7 +611,7 @@ namespace StockSharp.BusinessEntities
 			GroupName = LocalizedStrings.Str436Key,
 			Order = 204)]
 		[Browsable(false)]
-		//[Obsolete("Необходимо использовать метод IConnector.GetSecurityValue.")]
+		//[Obsolete("Use the IConnector.GetSecurityValue.")]
 		public decimal? LowPrice
 		{
 			get { return _lowPrice; }
@@ -640,7 +640,7 @@ namespace StockSharp.BusinessEntities
 			GroupName = LocalizedStrings.Str436Key,
 			Order = 205)]
 		[Browsable(false)]
-		//[Obsolete("Необходимо использовать метод IConnector.GetSecurityValue.")]
+		//[Obsolete("Use the IConnector.GetSecurityValue.")]
 		public decimal? HighPrice
 		{
 			get { return _highPrice; }
@@ -669,7 +669,7 @@ namespace StockSharp.BusinessEntities
 			GroupName = LocalizedStrings.Str436Key,
 			Order = 206)]
 		[Browsable(false)]
-		//[Obsolete("Необходимо использовать метод IConnector.GetSecurityValue.")]
+		//[Obsolete("Use the IConnector.GetSecurityValue.")]
 		public Quote BestBid
 		{
 			get { return _bestBid; }
@@ -701,7 +701,7 @@ namespace StockSharp.BusinessEntities
 			GroupName = LocalizedStrings.Str436Key,
 			Order = 207)]
 		[Browsable(false)]
-		//[Obsolete("Необходимо использовать метод IConnector.GetSecurityValue.")]
+		//[Obsolete("Use the IConnector.GetSecurityValue.")]
 		public Quote BestAsk
 		{
 			get { return _bestAsk; }
@@ -723,7 +723,7 @@ namespace StockSharp.BusinessEntities
 		/// Best pair quotes.
 		/// </summary>
 		[Browsable(false)]
-		//[Obsolete("Необходимо использовать метод IConnector.GetSecurityValue.")]
+		//[Obsolete("Use the IConnector.GetSecurityValue.")]
 		[Display(
 			ResourceType = typeof(LocalizedStrings),
 			Name = LocalizedStrings.BestPairKey,
@@ -748,7 +748,7 @@ namespace StockSharp.BusinessEntities
 		[Ignore]
 		[XmlIgnore]
 		[Browsable(false)]
-		//[Obsolete("Необходимо использовать метод IConnector.GetSecurityValue.")]
+		//[Obsolete("Use the IConnector.GetSecurityValue.")]
 		public SecurityStates? State
 		{
 			get { return _state; }
@@ -777,7 +777,7 @@ namespace StockSharp.BusinessEntities
 		[Ignore]
 		[XmlIgnore]
 		[Browsable(false)]
-		//[Obsolete("Необходимо использовать метод IConnector.GetSecurityValue.")]
+		//[Obsolete("Use the IConnector.GetSecurityValue.")]
 		public decimal? MinPrice
 		{
 			get { return _minPrice; }
@@ -806,7 +806,7 @@ namespace StockSharp.BusinessEntities
 		[Ignore]
 		[XmlIgnore]
 		[Browsable(false)]
-		//[Obsolete("Необходимо использовать метод IConnector.GetSecurityValue.")]
+		//[Obsolete("Use the IConnector.GetSecurityValue.")]
 		public decimal? MaxPrice
 		{
 			get { return _maxPrice; }
@@ -835,7 +835,7 @@ namespace StockSharp.BusinessEntities
 		[Ignore]
 		[XmlIgnore]
 		[Browsable(false)]
-		//[Obsolete("Необходимо использовать метод IConnector.GetSecurityValue.")]
+		//[Obsolete("Use the IConnector.GetSecurityValue.")]
 		public decimal? MarginBuy
 		{
 			get { return _marginBuy; }
@@ -864,7 +864,7 @@ namespace StockSharp.BusinessEntities
 		[Ignore]
 		[XmlIgnore]
 		[Browsable(false)]
-		//[Obsolete("Необходимо использовать метод IConnector.GetSecurityValue.")]
+		//[Obsolete("Use the IConnector.GetSecurityValue.")]
 		public decimal? MarginSell
 		{
 			get { return _marginSell; }
@@ -1021,7 +1021,7 @@ namespace StockSharp.BusinessEntities
 			GroupName = LocalizedStrings.Str437Key,
 			Order = 104)]
 		[Browsable(false)]
-		//[Obsolete("Необходимо использовать метод IConnector.GetSecurityValue.")]
+		//[Obsolete("Use the IConnector.GetSecurityValue.")]
 		public decimal? ImpliedVolatility
 		{
 			get { return _impliedVolatility; }
@@ -1050,7 +1050,7 @@ namespace StockSharp.BusinessEntities
 			GroupName = LocalizedStrings.Str437Key,
 			Order = 105)]
 		[Browsable(false)]
-		//[Obsolete("Необходимо использовать метод IConnector.GetSecurityValue.")]
+		//[Obsolete("Use the IConnector.GetSecurityValue.")]
 		public decimal? HistoricalVolatility
 		{
 			get { return _historicalVolatility; }
@@ -1079,7 +1079,7 @@ namespace StockSharp.BusinessEntities
 			GroupName = LocalizedStrings.Str437Key,
 			Order = 106)]
 		[Browsable(false)]
-		//[Obsolete("Необходимо использовать метод IConnector.GetSecurityValue.")]
+		//[Obsolete("Use the IConnector.GetSecurityValue.")]
 		public decimal? TheorPrice
 		{
 			get { return _theorPrice; }
@@ -1108,7 +1108,7 @@ namespace StockSharp.BusinessEntities
 		[Ignore]
 		[XmlIgnore]
 		[Browsable(false)]
-		//[Obsolete("Необходимо использовать метод IConnector.GetSecurityValue.")]
+		//[Obsolete("Use the IConnector.GetSecurityValue.")]
 		public decimal? Delta
 		{
 			get { return _delta; }
@@ -1137,7 +1137,7 @@ namespace StockSharp.BusinessEntities
 			GroupName = LocalizedStrings.Str437Key,
 			Order = 108)]
 		[Browsable(false)]
-		//[Obsolete("Необходимо использовать метод IConnector.GetSecurityValue.")]
+		//[Obsolete("Use the IConnector.GetSecurityValue.")]
 		public decimal? Gamma
 		{
 			get { return _gamma; }
@@ -1166,7 +1166,7 @@ namespace StockSharp.BusinessEntities
 			GroupName = LocalizedStrings.Str437Key,
 			Order = 109)]
 		[Browsable(false)]
-		//[Obsolete("Необходимо использовать метод IConnector.GetSecurityValue.")]
+		//[Obsolete("Use the IConnector.GetSecurityValue.")]
 		public decimal? Vega
 		{
 			get { return _vega; }
@@ -1195,7 +1195,7 @@ namespace StockSharp.BusinessEntities
 			GroupName = LocalizedStrings.Str437Key,
 			Order = 110)]
 		[Browsable(false)]
-		//[Obsolete("Необходимо использовать метод IConnector.GetSecurityValue.")]
+		//[Obsolete("Use the IConnector.GetSecurityValue.")]
 		public decimal? Theta
 		{
 			get { return _theta; }
@@ -1224,7 +1224,7 @@ namespace StockSharp.BusinessEntities
 			GroupName = LocalizedStrings.Str437Key,
 			Order = 111)]
 		[Browsable(false)]
-		//[Obsolete("Необходимо использовать метод IConnector.GetSecurityValue.")]
+		//[Obsolete("Use the IConnector.GetSecurityValue.")]
 		public decimal? Rho
 		{
 			get { return _rho; }
@@ -1253,7 +1253,7 @@ namespace StockSharp.BusinessEntities
 		[Ignore]
 		[XmlIgnore]
 		[Browsable(false)]
-		//[Obsolete("Необходимо использовать метод IConnector.GetSecurityValue.")]
+		//[Obsolete("Use the IConnector.GetSecurityValue.")]
 		public decimal? OpenInterest
 		{
 			get { return _openInterest; }
@@ -1292,7 +1292,7 @@ namespace StockSharp.BusinessEntities
 		/// Time of the last instrument change.
 		/// </summary>
 		[Browsable(false)]
-		//[Obsolete("Необходимо использовать метод IConnector.GetSecurityValue.")]
+		//[Obsolete("Use the IConnector.GetSecurityValue.")]
 		[Ignore]
 		[XmlIgnore]
 		public DateTimeOffset LastChangeTime
@@ -1320,7 +1320,7 @@ namespace StockSharp.BusinessEntities
 			GroupName = LocalizedStrings.Str436Key,
 			Order = 221)]
 		[Browsable(false)]
-		//[Obsolete("Необходимо использовать метод IConnector.GetSecurityValue.")]
+		//[Obsolete("Use the IConnector.GetSecurityValue.")]
 		public decimal? BidsVolume
 		{
 			get { return _bidsVolume; }
@@ -1346,7 +1346,7 @@ namespace StockSharp.BusinessEntities
 			GroupName = LocalizedStrings.Str436Key,
 			Order = 222)]
 		[Browsable(false)]
-		//[Obsolete("Необходимо использовать метод IConnector.GetSecurityValue.")]
+		//[Obsolete("Use the IConnector.GetSecurityValue.")]
 		public int? BidsCount
 		{
 			get { return _bidsCount; }
@@ -1372,7 +1372,7 @@ namespace StockSharp.BusinessEntities
 			GroupName = LocalizedStrings.Str436Key,
 			Order = 223)]
 		[Browsable(false)]
-		//[Obsolete("Необходимо использовать метод IConnector.GetSecurityValue.")]
+		//[Obsolete("Use the IConnector.GetSecurityValue.")]
 		public decimal? AsksVolume
 		{
 			get { return _asksVolume; }
@@ -1398,7 +1398,7 @@ namespace StockSharp.BusinessEntities
 			GroupName = LocalizedStrings.Str436Key,
 			Order = 224)]
 		[Browsable(false)]
-		//[Obsolete("Необходимо использовать метод IConnector.GetSecurityValue.")]
+		//[Obsolete("Use the IConnector.GetSecurityValue.")]
 		public int? AsksCount
 		{
 			get { return _asksCount; }
@@ -1424,7 +1424,7 @@ namespace StockSharp.BusinessEntities
 			GroupName = LocalizedStrings.Str436Key,
 			Order = 225)]
 		[Browsable(false)]
-		//[Obsolete("Необходимо использовать метод IConnector.GetSecurityValue.")]
+		//[Obsolete("Use the IConnector.GetSecurityValue.")]
 		public int? TradesCount
 		{
 			get { return _tradesCount; }
@@ -1450,7 +1450,7 @@ namespace StockSharp.BusinessEntities
 			GroupName = LocalizedStrings.Str436Key,
 			Order = 226)]
 		[Browsable(false)]
-		//[Obsolete("Необходимо использовать метод IConnector.GetSecurityValue.")]
+		//[Obsolete("Use the IConnector.GetSecurityValue.")]
 		public decimal? HighBidPrice
 		{
 			get { return _highBidPrice; }
@@ -1476,7 +1476,7 @@ namespace StockSharp.BusinessEntities
 			GroupName = LocalizedStrings.Str436Key,
 			Order = 227)]
 		[Browsable(false)]
-		//[Obsolete("Необходимо использовать метод IConnector.GetSecurityValue.")]
+		//[Obsolete("Use the IConnector.GetSecurityValue.")]
 		public decimal? LowAskPrice
 		{
 			get { return _lowAskPrice; }
@@ -1502,7 +1502,7 @@ namespace StockSharp.BusinessEntities
 		[Ignore]
 		[XmlIgnore]
 		[Browsable(false)]
-		//[Obsolete("Необходимо использовать метод IConnector.GetSecurityValue.")]
+		//[Obsolete("Use the IConnector.GetSecurityValue.")]
 		public decimal? Yield
 		{
 			get { return _yield; }
@@ -1528,7 +1528,7 @@ namespace StockSharp.BusinessEntities
 		[Ignore]
 		[XmlIgnore]
 		[Browsable(false)]
-		//[Obsolete("Необходимо использовать метод IConnector.GetSecurityValue.")]
+		//[Obsolete("Use the IConnector.GetSecurityValue.")]
 		public decimal? VWAP
 		{
 			get { return _vwap; }
@@ -1554,7 +1554,7 @@ namespace StockSharp.BusinessEntities
 		[Ignore]
 		[XmlIgnore]
 		[Browsable(false)]
-		//[Obsolete("Необходимо использовать метод IConnector.GetSecurityValue.")]
+		//[Obsolete("Use the IConnector.GetSecurityValue.")]
 		public decimal? SettlementPrice
 		{
 			get { return _settlementPrice; }
@@ -1580,7 +1580,7 @@ namespace StockSharp.BusinessEntities
 		[Ignore]
 		[XmlIgnore]
 		[Browsable(false)]
-		//[Obsolete("Необходимо использовать метод IConnector.GetSecurityValue.")]
+		//[Obsolete("Use the IConnector.GetSecurityValue.")]
 		public decimal? AveragePrice
 		{
 			get { return _averagePrice; }
@@ -1606,7 +1606,7 @@ namespace StockSharp.BusinessEntities
 		[Ignore]
 		[XmlIgnore]
 		[Browsable(false)]
-		//[Obsolete("Необходимо использовать метод IConnector.GetSecurityValue.")]
+		//[Obsolete("Use the IConnector.GetSecurityValue.")]
 		public decimal? Volume
 		{
 			get { return _volume; }
