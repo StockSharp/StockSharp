@@ -28,6 +28,8 @@ M:StockSharp.Xaml.Diagram.CompositionDiagramElement.OnReseted/summary;DocStr7896
 M:StockSharp.Xaml.Diagram.CompositionDiagramElement.OnProcess(StockSharp.Xaml.Diagram.DiagramSocket,StockSharp.Xaml.Diagram.DiagramSocketValue)/summary;DocStr7882
 M:StockSharp.Xaml.Diagram.CompositionDiagramElement.OnProcess(StockSharp.Xaml.Diagram.DiagramSocket,StockSharp.Xaml.Diagram.DiagramSocketValue)/param/socket;DocStr8883
 M:StockSharp.Xaml.Diagram.CompositionDiagramElement.OnProcess(StockSharp.Xaml.Diagram.DiagramSocket,StockSharp.Xaml.Diagram.DiagramSocketValue)/param/value;Str3099
+M:StockSharp.Xaml.Diagram.CompositionDiagramElement.SetTypeId(System.Guid)/summary;DocStr9183
+M:StockSharp.Xaml.Diagram.CompositionDiagramElement.SetTypeId(System.Guid)/param/typeId;DocStr9184
 M:StockSharp.Xaml.Diagram.CompositionDiagramElement.Clone(System.Boolean)/summary;DocStr643
 M:StockSharp.Xaml.Diagram.CompositionDiagramElement.Clone(System.Boolean)/param/cloneSockets;DocStr7899
 M:StockSharp.Xaml.Diagram.CompositionDiagramElement.Clone(System.Boolean)/returns;DocStr1116

@@ -159,6 +159,12 @@ M:StockSharp.Logging.LoggingHelper.LogError(System.Exception,System.String)/para
 M:StockSharp.Logging.LoggingHelper.GetLogLevel(StockSharp.Logging.ILogSource)/summary;DocStr3977
 M:StockSharp.Logging.LoggingHelper.GetLogLevel(StockSharp.Logging.ILogSource)/param/source;DocStr3978
 M:StockSharp.Logging.LoggingHelper.GetLogLevel(StockSharp.Logging.ILogSource)/returns;Str9
+M:StockSharp.Logging.LoggingHelper.DoWithLog(System.Action)/summary;DocStr9173
+M:StockSharp.Logging.LoggingHelper.DoWithLog(System.Action)/param/action;DocStr9174
+M:StockSharp.Logging.LoggingHelper.DoWithLog``1(System.Func{``0})/summary;DocStr9173
+M:StockSharp.Logging.LoggingHelper.DoWithLog``1(System.Func{``0})/typeparam/T;DocStr1837
+M:StockSharp.Logging.LoggingHelper.DoWithLog``1(System.Func{``0})/param/action;DocStr9174
+M:StockSharp.Logging.LoggingHelper.DoWithLog``1(System.Func{``0})/returns;DocStr1131
 T:StockSharp.Logging.LogLevels/summary;DocStr3979
 F:StockSharp.Logging.LogLevels.Inherit/summary;DocStr3980
 F:StockSharp.Logging.LogLevels.Debug/summary;DocStr3981

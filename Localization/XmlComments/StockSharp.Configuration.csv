@@ -54,11 +54,6 @@ M:StockSharp.Configuration.Extensions.FirstTimeInit(Ecng.Data.Database,System.By
 M:StockSharp.Configuration.Extensions.FirstTimeInit(Ecng.Data.Database,System.Byte[],System.Action{Ecng.Data.Database})/param/databaseRaw;DocStr8729
 M:StockSharp.Configuration.Extensions.FirstTimeInit(Ecng.Data.Database,System.Byte[],System.Action{Ecng.Data.Database})/param/init;DocStr8730
 M:StockSharp.Configuration.Extensions.FirstTimeInit(Ecng.Data.Database,System.Byte[],System.Action{Ecng.Data.Database})/returns;DocStr8731
-M:StockSharp.Configuration.Extensions.TryLoadSettings``1(Ecng.Serialization.SettingsStorage,System.String,System.Action{``0})/summary;DocStr8459
-M:StockSharp.Configuration.Extensions.TryLoadSettings``1(Ecng.Serialization.SettingsStorage,System.String,System.Action{``0})/typeparam/T;DocStr8459
-M:StockSharp.Configuration.Extensions.TryLoadSettings``1(Ecng.Serialization.SettingsStorage,System.String,System.Action{``0})/param/storage;DocStr8459
-M:StockSharp.Configuration.Extensions.TryLoadSettings``1(Ecng.Serialization.SettingsStorage,System.String,System.Action{``0})/param/name;DocStr8459
-M:StockSharp.Configuration.Extensions.TryLoadSettings``1(Ecng.Serialization.SettingsStorage,System.String,System.Action{``0})/param/load;DocStr8459
 T:StockSharp.Configuration.IndicatorElement/summary;DocStr8733
 P:StockSharp.Configuration.IndicatorElement.Type/summary;DocStr8734
 P:StockSharp.Configuration.IndicatorElement.Painter/summary;DocStr8735
