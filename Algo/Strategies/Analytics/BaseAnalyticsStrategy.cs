@@ -22,7 +22,6 @@ namespace StockSharp.Algo.Strategies.Analytics
 
 	using Ecng.Xaml.Charting.Visuals;
 	using Ecng.Common;
-	using Ecng.Xaml.Grids;
 
 	using StockSharp.Algo.Storages;
 	using StockSharp.Logging;
@@ -104,7 +103,7 @@ namespace StockSharp.Algo.Strategies.Analytics
 		/// <summary>
 		/// Table.
 		/// </summary>
-		protected UniversalGrid Grid => Environment.GetValue<UniversalGrid>(nameof(Grid));
+		protected IAnalyticsGrid Grid => Environment.GetValue<IAnalyticsGrid>(nameof(Grid));
 
 		/// <summary>
 		/// Data format.

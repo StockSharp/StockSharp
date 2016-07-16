@@ -30,7 +30,6 @@ namespace StockSharp.Algo.Strategies.Analytics
 	using Ecng.Collections;
 	using Ecng.ComponentModel;
 	using Ecng.Xaml;
-	using Ecng.Xaml.Grids;
 
 	using StockSharp.Algo.Candles;
 	using StockSharp.Algo.Storages;
@@ -80,7 +79,7 @@ namespace StockSharp.Algo.Strategies.Analytics
 		/// </summary>
 		public PriceVolumeDistributionStrategy()
 		{
-			_timeFrame = this.Param("TimeFrame", TimeSpan.FromMinutes(5));
+			_timeFrame = this.Param(nameof(TimeFrame), TimeSpan.FromMinutes(5));
 		}
 
 		/// <summary>
@@ -98,7 +97,7 @@ namespace StockSharp.Algo.Strategies.Analytics
 			{
 				// clear prev values
 				chart.RenderableSeries.Clear();
-				grid.Columns.Clear();
+				grid.ClearColumns();
 
 				chart.RenderableSeries.Add(new FastColumnRenderableSeries
 				{
@@ -111,8 +110,8 @@ namespace StockSharp.Algo.Strategies.Analytics
 				chart.XAxis = new NumericAxis { AxisTitle = LocalizedStrings.Price };
 				chart.YAxis = new NumericAxis { AxisTitle = LocalizedStrings.Volume, GrowBy = new DoubleRange(0, 0.1) };
 
-				grid.AddTextColumn("Price", LocalizedStrings.Price).Width = 150;
-				var volumeColumn = grid.AddTextColumn("Volume", LocalizedStrings.Volume);
+				grid.AddColumn(nameof(GridRow.Price), LocalizedStrings.Price).Width = 150;
+				var volumeColumn = grid.AddColumn(nameof(GridRow.Volume), LocalizedStrings.Volume);
 				volumeColumn.Width = 100;
 
 				var gridSource = new ObservableCollectionEx<GridRow>();
@@ -177,9 +176,6 @@ namespace StockSharp.Algo.Strategies.Analytics
 
 				chart.GuiAsync(() =>
 				{
-					// update grid sorting
-					grid.RefreshSort();
-
 					// scale chart
 					chart.ZoomExtents();
 				});

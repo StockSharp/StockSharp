@@ -31,7 +31,6 @@ namespace StockSharp.Algo.Strategies.Analytics
 	using Ecng.ComponentModel;
 	using Ecng.Collections;
 	using Ecng.Xaml;
-	using Ecng.Xaml.Grids;
 
 	using StockSharp.Algo.Candles;
 	using StockSharp.Algo.Storages;
@@ -99,7 +98,7 @@ namespace StockSharp.Algo.Strategies.Analytics
 			{
 				// clear prev values
 				chart.RenderableSeries.Clear();
-				grid.Columns.Clear();
+				grid.ClearColumns();
 
 				chart.RenderableSeries.Add(new FastBubbleRenderableSeries
 				{
@@ -113,8 +112,8 @@ namespace StockSharp.Algo.Strategies.Analytics
 				chart.XAxis = new DateTimeAxis { GrowBy = new DoubleRange(0.0, 0.1) };
 				chart.YAxis = new NumericAxis { GrowBy = new DoubleRange(0.1, 0.1) };
 
-				grid.AddTextColumn("Time", LocalizedStrings.Time).Width = 150;
-				var volumeColumn = grid.AddTextColumn("Volume", LocalizedStrings.Volume);
+				grid.AddColumn(nameof(GridRow.Time), LocalizedStrings.Time).Width = 150;
+				var volumeColumn = grid.AddColumn(nameof(GridRow.Volume), LocalizedStrings.Volume);
 				volumeColumn.Width = 100;
 
 				var gridSource = new ObservableCollectionEx<GridRow>();
@@ -179,9 +178,6 @@ namespace StockSharp.Algo.Strategies.Analytics
 				
 				chart.GuiAsync(() =>
 				{
-					// update grid sorting
-					grid.RefreshSort();
-
 					// scale chart
 					chart.ZoomExtents();
 				});

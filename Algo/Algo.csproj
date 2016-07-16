@@ -359,6 +359,7 @@
     <Compile Include="Storages\StorageRegistry.cs" />
     <Compile Include="Strategies\Analytics\BaseAnalyticsStrategy.cs" />
     <Compile Include="Strategies\Analytics\DailyHighestVolumeStrategy.cs" />
+    <Compile Include="Strategies\Analytics\IAnalyticsGrid.cs" />
     <Compile Include="Strategies\Analytics\PriceVolumeDistributionStrategy.cs" />
     <Compile Include="Strategies\BasketStrategy.cs" />
     <Compile Include="Strategies\IStrategyChildStrategyList.cs" />
