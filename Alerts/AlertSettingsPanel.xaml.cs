@@ -24,11 +24,15 @@ namespace StockSharp.Alerts
 	using System.Windows;
 	using System.Windows.Controls;
 
+	using DevExpress.Xpf.Editors;
+
 	using Ecng.Collections;
 	using Ecng.Common;
 	using Ecng.ComponentModel;
 	using Ecng.Reflection;
+
 	using StockSharp.Localization;
+	using StockSharp.Messages;
 
 	/// <summary>
 	/// Panel schema parameter modification.
@@ -40,7 +44,9 @@ namespace StockSharp.Alerts
 		private readonly ObservableCollection<Tuple<string, PropertyInfo>> _fields;
 		private static readonly HashSet<string> _ignoringFields = new HashSet<string>
 		{
-			"ExtensionInfo", "Type", "OriginalTransactionId"
+			nameof(Message.ExtensionInfo),
+			nameof(Message.Type),
+			nameof(ExecutionMessage.OriginalTransactionId)
 		}; 
 
 		/// <summary>
@@ -58,7 +64,7 @@ namespace StockSharp.Alerts
 		}
 
 		/// <summary>
-		/// <see cref="DependencyProperty"/> for <see cref="AlertSettingsPanel.MessageType"/>.
+		/// <see cref="DependencyProperty"/> for <see cref="MessageType"/>.
 		/// </summary>
 		public static readonly DependencyProperty MessageTypeProperty =
 			DependencyProperty.Register(nameof(MessageType), typeof(Type), typeof(AlertSettingsPanel), new PropertyMetadata(null, MessageTypeChanged));
@@ -69,7 +75,7 @@ namespace StockSharp.Alerts
 		}
 
 		/// <summary>
-		/// <see cref="DependencyProperty"/> for <see cref="AlertSettingsPanel.Property"/>.
+		/// <see cref="DependencyProperty"/> for <see cref="Property"/>.
 		/// </summary>
 		public static readonly DependencyProperty PropertyProperty =
 			DependencyProperty.Register(nameof(Property), typeof(PropertyInfo), typeof(AlertSettingsPanel), new PropertyMetadata(null, PropertyChanged));
@@ -86,7 +92,7 @@ namespace StockSharp.Alerts
 		}
 
 		/// <summary>
-		/// <see cref="DependencyProperty"/> for <see cref="AlertSettingsPanel.Operator"/>.
+		/// <see cref="DependencyProperty"/> for <see cref="Operator"/>.
 		/// </summary>
 		public static readonly DependencyProperty OperatorProperty =
 			DependencyProperty.Register(nameof(Operator), typeof(ComparisonOperator?), typeof(AlertSettingsPanel), new PropertyMetadata(null, OperatorChanged));
@@ -108,13 +114,13 @@ namespace StockSharp.Alerts
 			var value = e.NewValue;
 
 			if (ctrl.DecimalValue.Visibility == Visibility.Visible)
-				ctrl.DecimalValue.Value = (decimal?)value;
+				ctrl.DecimalValue.EditValue = (decimal?)value;
 			else if (ctrl.TextValue.Visibility == Visibility.Visible)
 				ctrl.TextValue.Text = (string)value;
 			else if (ctrl.TimeValue.Visibility == Visibility.Visible)
-				ctrl.TimeValue.Value = DateTime.Today + (TimeSpan?)value;
+				ctrl.TimeValue.EditValue = DateTime.Today + (TimeSpan?)value;
 			else if (ctrl.DateValue.Visibility == Visibility.Visible)
-				ctrl.DateValue.Value = (DateTime?)value;
+				ctrl.DateValue.DateTime = (DateTime?)value ?? default(DateTime);
 			//else if (ctrl.SecurityValue.Visibility == Visibility.Visible)
 			//	ctrl.SecurityValue.SelectedSecurity = (Security)value;
 			//else if (ctrl.PortfolioValue.Visibility == Visibility.Visible)
@@ -154,7 +160,7 @@ namespace StockSharp.Alerts
 		}
 
 		/// <summary>
-		/// Message property, which will be made a comparison with the value of <see cref="AlertSettingsPanel.Value"/> based on the criterion <see cref="AlertSettingsPanel.Operator"/>.
+		/// Message property, which will be made a comparison with the value of <see cref="Value"/> based on the criterion <see cref="AlertSettingsPanel.Operator"/>.
 		/// </summary>
 		public PropertyInfo Property
 		{
@@ -163,7 +169,7 @@ namespace StockSharp.Alerts
 		}
 
 		/// <summary>
-		/// The criterion of comparison values <see cref="AlertSettingsPanel.Value"/>.
+		/// The criterion of comparison values <see cref="Value"/>.
 		/// </summary>
 		public ComparisonOperator? Operator
 		{
@@ -274,7 +280,7 @@ namespace StockSharp.Alerts
 			Value = TextValue.Text;
 		}
 
-		private void DecimalValue_OnValueChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
+		private void DecimalValue_OnValueChanged(object sender, EditValueChangedEventArgs e)
 		{
 			Value = DecimalValue.Value;
 		}
@@ -289,14 +295,14 @@ namespace StockSharp.Alerts
 		//	Value = SecurityValue.SelectedSecurity;
 		//}
 
-		private void TimeValue_OnValueChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
+		private void TimeValue_OnValueChanged(object sender, EditValueChangedEventArgs e)
 		{
-			Value = TimeValue.Value;
+			Value = TimeValue.EditValue;
 		}
 
-		private void DateValue_OnValueChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
+		private void DateValue_OnValueChanged(object sender, DateTimeChangedEventArgs e)
 		{
-			Value = DateValue.Value;
+			Value = DateValue.DateTime;
 		}
 
 		private void EnumValue_OnSelectionChanged(object sender, SelectionChangedEventArgs e)

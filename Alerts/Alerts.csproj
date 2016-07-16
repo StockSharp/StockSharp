@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
@@ -33,6 +33,9 @@
     <DocumentationFile>bin\Release\StockSharp.Alerts.XML</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="DevExpress.Xpf.Core.v15.2">
+      <HintPath>..\References\DevExpress.Xpf.Core.v15.2.dll</HintPath>
+    </Reference>
     <Reference Include="Ecng.Collections">
       <HintPath>..\References\Ecng.Collections.dll</HintPath>
     </Reference>
@@ -66,9 +69,6 @@
     <Reference Include="System.Xaml" />
     <Reference Include="System.Xml" />
     <Reference Include="WindowsBase" />
-    <Reference Include="Xceed.Wpf.Toolkit">
-      <HintPath>..\References\Xceed.Wpf.Toolkit.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\StockSharpAssemblyInfo.cs">
