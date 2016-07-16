@@ -16,7 +16,7 @@ Copyright 2010 by StockSharp, LLC
 namespace StockSharp.Algo.Testing
 {
 	using System;
-	using System.ComponentModel;
+	using System.ComponentModel.DataAnnotations;
 
 	using Ecng.ComponentModel;
 	using Ecng.Serialization;
@@ -24,8 +24,6 @@ namespace StockSharp.Algo.Testing
 	using StockSharp.Localization;
 	using StockSharp.BusinessEntities;
 	using StockSharp.Messages;
-
-	using Xceed.Wpf.Toolkit.PropertyGrid.Attributes;
 
 	/// <summary>
 	/// Settings of exchange emulator.
@@ -47,10 +45,12 @@ namespace StockSharp.Algo.Testing
 		/// <summary>
 		/// At emulation of clearing by trades, to perform clearing of orders, when trade price touches the order price (is equal to order price), rather than only when the trade price is better than order price. Is On by default (optimistic scenario).
 		/// </summary>
-		[CategoryLoc(LocalizedStrings.Str1175Key)]
-		[PropertyOrder(50)]
-		[DisplayNameLoc(LocalizedStrings.Str1176Key)]
-		[DescriptionLoc(LocalizedStrings.Str1177Key)]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.Str1176Key,
+			Description = LocalizedStrings.Str1177Key,
+			GroupName = LocalizedStrings.Str1175Key,
+			Order = 0)]
 		public bool MatchOnTouch
 		{
 			get { return _matchOnTouch; }
@@ -69,10 +69,12 @@ namespace StockSharp.Algo.Testing
 		/// <summary>
 		/// The maximal time, during which the order book is in the emulator, If no renewal during this time, the order book is deleted, This feature may be used to remove old order books if the are holes in data. By default is equal to 1 day.
 		/// </summary>
-		[CategoryLoc(LocalizedStrings.Str1175Key)]
-		[PropertyOrder(200)]
-		[DisplayNameLoc(LocalizedStrings.Str1178Key)]
-		[DescriptionLoc(LocalizedStrings.Str1179Key)]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.Str1178Key,
+			Description = LocalizedStrings.Str1179Key,
+			GroupName = LocalizedStrings.Str1175Key,
+			Order = 1)]
 		public TimeSpan DepthExpirationTime
 		{
 			get { return _depthExpirationTime; }
@@ -91,10 +93,12 @@ namespace StockSharp.Algo.Testing
 		/// <summary>
 		/// The percentage value of new orders registration error. The value may be from 0 (not a single error) to 100. By default is Off.
 		/// </summary>
-		[CategoryLoc(LocalizedStrings.Str1175Key)]
-		[PropertyOrder(60)]
-		[DisplayNameLoc(LocalizedStrings.Str1180Key)]
-		[DescriptionLoc(LocalizedStrings.Str1181Key)]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.Str1180Key,
+			Description = LocalizedStrings.Str1181Key,
+			GroupName = LocalizedStrings.Str1175Key,
+			Order = 2)]
 		public double Failing
 		{
 			get { return _failing; }
@@ -116,10 +120,12 @@ namespace StockSharp.Algo.Testing
 		/// <summary>
 		/// The minimal value of the registered orders delay. By default, it is <see cref="TimeSpan.Zero"/>, which means instant adoption of registered orders by  exchange.
 		/// </summary>
-		[CategoryLoc(LocalizedStrings.Str1175Key)]
-		[PropertyOrder(20)]
-		[DisplayNameLoc(LocalizedStrings.Str161Key)]
-		[DescriptionLoc(LocalizedStrings.Str1184Key)]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.Str161Key,
+			Description = LocalizedStrings.Str1184Key,
+			GroupName = LocalizedStrings.Str1175Key,
+			Order = 3)]
 		public TimeSpan Latency
 		{
 			get { return _latency; }
@@ -138,10 +144,12 @@ namespace StockSharp.Algo.Testing
 		/// <summary>
 		/// Gets a value indicating whether the re-registration orders as a single transaction. By default is enabled.
 		/// </summary>
-		[CategoryLoc(LocalizedStrings.Str1175Key)]
-		[PropertyOrder(30)]
-		[DisplayName("MOVE")]
-		[DescriptionLoc(LocalizedStrings.Str60Key)]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.ReregisteringKey,
+			Description = LocalizedStrings.Str60Key,
+			GroupName = LocalizedStrings.Str1175Key,
+			Order = 4)]
 		public bool IsSupportAtomicReRegister
 		{
 			get { return _isSupportAtomicReRegister; }
@@ -157,10 +165,12 @@ namespace StockSharp.Algo.Testing
 		/// <summary>
 		/// Responses shall be sent in intervals by whole package. The network delay and bufferized operation of exchange are emulated. The default is 0 ms.
 		/// </summary>
-		[CategoryLoc(LocalizedStrings.Str1175Key)]
-		[PropertyOrder(80)]
-		[DisplayNameLoc(LocalizedStrings.Str1186Key)]
-		[DescriptionLoc(LocalizedStrings.Str1187Key)]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.Str1186Key,
+			Description = LocalizedStrings.Str1187Key,
+			GroupName = LocalizedStrings.Str1175Key,
+			Order = 5)]
 		public TimeSpan BufferTime
 		{
 			get { return _bufferTime; }
@@ -203,10 +213,12 @@ namespace StockSharp.Algo.Testing
 		/// <summary>
 		/// The number, starting at which the emulator will generate identifiers for orders <see cref="Order.Id"/>.
 		/// </summary>
-		[CategoryLoc(LocalizedStrings.Str1175Key)]
-		[PropertyOrder(70)]
-		[DisplayNameLoc(LocalizedStrings.Str1190Key)]
-		[DescriptionLoc(LocalizedStrings.Str1191Key)]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.Str1190Key,
+			Description = LocalizedStrings.Str1191Key,
+			GroupName = LocalizedStrings.Str1175Key,
+			Order = 6)]
 		public long InitialOrderId
 		{
 			get { return _initialOrderId; }
@@ -222,10 +234,12 @@ namespace StockSharp.Algo.Testing
 		/// <summary>
 		/// The number, starting at which the emulator will generate identifiers fir trades <see cref="Trade.Id"/>.
 		/// </summary>
-		[CategoryLoc(LocalizedStrings.Str1175Key)]
-		[PropertyOrder(80)]
-		[DisplayNameLoc(LocalizedStrings.Str1192Key)]
-		[DescriptionLoc(LocalizedStrings.Str1193Key)]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.Str1192Key,
+			Description = LocalizedStrings.Str1193Key,
+			GroupName = LocalizedStrings.Str1175Key,
+			Order = 7)]
 		public long InitialTradeId
 		{
 			get { return _initialTradeId; }
@@ -241,10 +255,12 @@ namespace StockSharp.Algo.Testing
 		/// <summary>
 		/// The number, starting at which the emulator will generate numbers for order trades <see cref="Order.TransactionId"/>.
 		/// </summary>
-		[CategoryLoc(LocalizedStrings.Str1175Key)]
-		[PropertyOrder(80)]
-		[DisplayNameLoc(LocalizedStrings.TransactionKey)]
-		[DescriptionLoc(LocalizedStrings.Str1194Key)]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.TransactionKey,
+			Description = LocalizedStrings.Str1194Key,
+			GroupName = LocalizedStrings.Str1175Key,
+			Order = 8)]
 		public long InitialTransactionId
 		{
 			get { return _initialTransactionId; }
@@ -260,10 +276,12 @@ namespace StockSharp.Algo.Testing
 		/// <summary>
 		/// The size of spread in price increments. It used at determination of spread for generation of order book from tick trades. By default equals to 2.
 		/// </summary>
-		[CategoryLoc(LocalizedStrings.Str1175Key)]
-		[PropertyOrder(90)]
-		[DisplayNameLoc(LocalizedStrings.Str1195Key)]
-		[DescriptionLoc(LocalizedStrings.Str1196Key)]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.Str1195Key,
+			Description = LocalizedStrings.Str1196Key,
+			GroupName = LocalizedStrings.Str1175Key,
+			Order = 9)]
 		public int SpreadSize
 		{
 			get { return _spreadSize; }
@@ -282,10 +300,12 @@ namespace StockSharp.Algo.Testing
 		/// <summary>
 		/// The maximal depth of order book, which will be generated from ticks. It used, if there is no order book history. By default equals to 5.
 		/// </summary>
-		[CategoryLoc(LocalizedStrings.Str1175Key)]
-		[PropertyOrder(100)]
-		[DisplayNameLoc(LocalizedStrings.Str1197Key)]
-		[DescriptionLoc(LocalizedStrings.Str1198Key)]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.Str1197Key,
+			Description = LocalizedStrings.Str1198Key,
+			GroupName = LocalizedStrings.Str1175Key,
+			Order = 10)]
 		public int MaxDepth
 		{
 			get { return _maxDepth; }
@@ -304,10 +324,12 @@ namespace StockSharp.Algo.Testing
 		/// <summary>
 		/// The number of volume increments, at which the order exceeds the tick trade. It used at testing on tick trades. By default equals to 2.
 		/// </summary>
-		[CategoryLoc(LocalizedStrings.Str1175Key)]
-		[PropertyOrder(110)]
-		[DisplayNameLoc(LocalizedStrings.Str1199Key)]
-		[DescriptionLoc(LocalizedStrings.Str1200Key)]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.Str1199Key,
+			Description = LocalizedStrings.Str1200Key,
+			GroupName = LocalizedStrings.Str1175Key,
+			Order = 11)]
 		public int VolumeMultiplier
 		{
 			get { return _volumeMultiplier; }
@@ -326,10 +348,12 @@ namespace StockSharp.Algo.Testing
 		/// <summary>
 		/// The interval for recalculation of data on portfolios. If interval equals <see cref="TimeSpan.Zero"/>, recalculation is not performed.
 		/// </summary>
-		[CategoryLoc(LocalizedStrings.Str1175Key)]
-		[PropertyOrder(120)]
-		[DisplayNameLoc(LocalizedStrings.Str1201Key)]
-		[DescriptionLoc(LocalizedStrings.Str1202Key)]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.Str1201Key,
+			Description = LocalizedStrings.Str1202Key,
+			GroupName = LocalizedStrings.Str1175Key,
+			Order = 12)]
 		public TimeSpan PortfolioRecalcInterval
 		{
 			get { return _portfolioRecalcInterval; }
@@ -348,10 +372,12 @@ namespace StockSharp.Algo.Testing
 		/// <summary>
 		/// To convert time for orders and trades into exchange time. By default, it is disabled.
 		/// </summary>
-		[CategoryLoc(LocalizedStrings.Str1175Key)]
-		[PropertyOrder(130)]
-		[DisplayNameLoc(LocalizedStrings.Str1203Key)]
-		[DescriptionLoc(LocalizedStrings.Str1204Key)]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.Str1203Key,
+			Description = LocalizedStrings.Str1204Key,
+			GroupName = LocalizedStrings.Str1175Key,
+			Order = 13)]
 		public bool ConvertTime
 		{
 			get { return _convertTime; }
@@ -367,10 +393,12 @@ namespace StockSharp.Algo.Testing
 		/// <summary>
 		/// Information about the time zone where the exchange is located.
 		/// </summary>
-		[CategoryLoc(LocalizedStrings.Str1175Key)]
-		[PropertyOrder(140)]
-		[DisplayNameLoc(LocalizedStrings.TimeZoneKey)]
-		[DescriptionLoc(LocalizedStrings.Str68Key)]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.TimeZoneKey,
+			Description = LocalizedStrings.Str68Key,
+			GroupName = LocalizedStrings.Str1175Key,
+			Order = 14)]
 		public TimeZoneInfo TimeZone
 		{
 			get { return _timeZone; }
@@ -386,10 +414,12 @@ namespace StockSharp.Algo.Testing
 		/// <summary>
 		/// The price shift from the previous trade, determining boundaries of maximal and minimal prices for the next session. Used only if there is no saved information <see cref="Level1ChangeMessage"/>. By default, it equals to 40%.
 		/// </summary>
-		[CategoryLoc(LocalizedStrings.Str1175Key)]
-		[PropertyOrder(150)]
-		[DisplayNameLoc(LocalizedStrings.Str1205Key)]
-		[DescriptionLoc(LocalizedStrings.Str1206Key)]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.Str1205Key,
+			Description = LocalizedStrings.Str1206Key,
+			GroupName = LocalizedStrings.Str1175Key,
+			Order = 15)]
 		public Unit PriceLimitOffset
 		{
 			get { return _priceLimitOffset; }
@@ -407,10 +437,12 @@ namespace StockSharp.Algo.Testing
 		/// <summary>
 		/// To add the additional volume into order book at registering orders with greater volume. By default, it is enabled.
 		/// </summary>
-		[CategoryLoc(LocalizedStrings.Str1175Key)]
-		[PropertyOrder(150)]
-		[DisplayNameLoc(LocalizedStrings.Str1207Key)]
-		[DescriptionLoc(LocalizedStrings.Str1208Key)]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.Str1207Key,
+			Description = LocalizedStrings.Str1208Key,
+			GroupName = LocalizedStrings.Str1175Key,
+			Order = 16)]
 		public bool IncreaseDepthVolume
 		{
 			get { return _increaseDepthVolume; }

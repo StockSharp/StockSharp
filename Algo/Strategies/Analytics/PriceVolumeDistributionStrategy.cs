@@ -18,6 +18,7 @@ namespace StockSharp.Algo.Strategies.Analytics
 	using System;
 	using System.Collections.Generic;
 	using System.ComponentModel;
+	using System.ComponentModel.DataAnnotations;
 	using System.Linq;
 	using System.Windows.Media;
 
@@ -34,8 +35,6 @@ namespace StockSharp.Algo.Strategies.Analytics
 	using StockSharp.Algo.Candles;
 	using StockSharp.Algo.Storages;
 	using StockSharp.Localization;
-
-	using Xceed.Wpf.Toolkit.PropertyGrid.Attributes;
 
 	/// <summary>
 	/// The analytic strategy, calculating distribution of the volume by price levels.
@@ -54,7 +53,7 @@ namespace StockSharp.Algo.Strategies.Analytics
 				set
 				{
 					_volume = value;
-					NotifyChanged("Price");
+					NotifyChanged(nameof(Volume));
 				}
 			}
 		}
@@ -64,10 +63,12 @@ namespace StockSharp.Algo.Strategies.Analytics
 		/// <summary>
 		/// Time-frame.
 		/// </summary>
-		[DisplayNameLoc(LocalizedStrings.Str1242Key)]
-		[DescriptionLoc(LocalizedStrings.Str1243Key)]
-		[CategoryLoc(LocalizedStrings.Str1221Key)]
-		[PropertyOrder(2)]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.Str1242Key,
+			Description = LocalizedStrings.Str1243Key,
+			GroupName = LocalizedStrings.Str1221Key,
+			Order = 0)]
 		public TimeSpan TimeFrame
 		{
 			get { return _timeFrame.Value; }
