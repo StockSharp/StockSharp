@@ -42686,5 +42686,15 @@ namespace StockSharp.Localization
 		/// HV
 		/// </summary>
 		public static string HV => GetString(HVKey);
+
+		/// <summary>
+		/// Scheme version is not supported.
+		/// </summary>
+		public const string UnsupportedSchemeVersionParamsKey = "UnsupportedSchemeVersionParams";
+
+		/// <summary>
+		/// Scheme version is not supported.
+		/// </summary>
+		public static string UnsupportedSchemeVersionParams => GetString(UnsupportedSchemeVersionParamsKey);
 	}
 }

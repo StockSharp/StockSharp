@@ -4303,6 +4303,7 @@ WithEcnryption;With ecnryption;С шифрованием
 WithoutEcnryption;Without ecnryption;Без шифрования
 IV;IV;IV
 HV;HV;HV
+UnsupportedSchemeVersionParams;Scheme version {0} is not supported.;Версия схемы {0} не поддерживается.
 DocStr0;Button activation alert settings;Кнопка активации настроек сигнала
 DocStr1;Initializes a new instance of the {0};Создать {0}
 DocStr2;Load settings;Загрузить настройки
