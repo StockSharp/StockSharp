@@ -18,6 +18,7 @@ namespace StockSharp.Algo.Strategies.Analytics
 	using System;
 	using System.Collections.Generic;
 	using System.ComponentModel;
+	using System.ComponentModel.DataAnnotations;
 	using System.Linq;
 	using System.Windows.Media;
 
@@ -30,13 +31,10 @@ namespace StockSharp.Algo.Strategies.Analytics
 	using Ecng.ComponentModel;
 	using Ecng.Collections;
 	using Ecng.Xaml;
-	using Ecng.Xaml.Grids;
 
 	using StockSharp.Algo.Candles;
 	using StockSharp.Algo.Storages;
 	using StockSharp.Localization;
-
-	using Xceed.Wpf.Toolkit.PropertyGrid.Attributes;
 
 	/// <summary>
 	/// The analytic strategy, calculating distribution of the biggest volume by hours.
@@ -55,7 +53,7 @@ namespace StockSharp.Algo.Strategies.Analytics
 				set
 				{
 					_volume = value;
-					NotifyChanged("Price");
+					NotifyChanged(nameof(Volume));
 				}
 			}
 		}
@@ -65,10 +63,12 @@ namespace StockSharp.Algo.Strategies.Analytics
 		/// <summary>
 		/// Time-frame.
 		/// </summary>
-		[DisplayNameLoc(LocalizedStrings.Str1242Key)]
-		[DescriptionLoc(LocalizedStrings.Str1243Key)]
-		[CategoryLoc(LocalizedStrings.Str1221Key)]
-		[PropertyOrder(2)]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.Str1242Key,
+			Description = LocalizedStrings.Str1243Key,
+			GroupName = LocalizedStrings.Str1221Key,
+			Order = 0)]
 		public TimeSpan TimeFrame
 		{
 			get { return _timeFrame.Value; }
@@ -80,7 +80,7 @@ namespace StockSharp.Algo.Strategies.Analytics
 		/// </summary>
 		public DailyHighestVolumeStrategy()
 		{
-			_timeFrame = this.Param("TimeFrame", TimeSpan.FromMinutes(5));
+			_timeFrame = this.Param(nameof(TimeFrame), TimeSpan.FromMinutes(5));
 		}
 
 		/// <summary>
@@ -98,7 +98,7 @@ namespace StockSharp.Algo.Strategies.Analytics
 			{
 				// clear prev values
 				chart.RenderableSeries.Clear();
-				grid.Columns.Clear();
+				grid.ClearColumns();
 
 				chart.RenderableSeries.Add(new FastBubbleRenderableSeries
 				{
@@ -112,8 +112,8 @@ namespace StockSharp.Algo.Strategies.Analytics
 				chart.XAxis = new DateTimeAxis { GrowBy = new DoubleRange(0.0, 0.1) };
 				chart.YAxis = new NumericAxis { GrowBy = new DoubleRange(0.1, 0.1) };
 
-				grid.AddTextColumn("Time", LocalizedStrings.Time).Width = 150;
-				var volumeColumn = grid.AddTextColumn("Volume", LocalizedStrings.Volume);
+				grid.AddColumn(nameof(GridRow.Time), LocalizedStrings.Time).Width = 150;
+				var volumeColumn = grid.AddColumn(nameof(GridRow.Volume), LocalizedStrings.Volume);
 				volumeColumn.Width = 100;
 
 				var gridSource = new ObservableCollectionEx<GridRow>();
@@ -178,9 +178,6 @@ namespace StockSharp.Algo.Strategies.Analytics
 				
 				chart.GuiAsync(() =>
 				{
-					// update grid sorting
-					grid.RefreshSort();
-
 					// scale chart
 					chart.ZoomExtents();
 				});

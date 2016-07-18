@@ -324,7 +324,7 @@ namespace StockSharp.Configuration
 			if (dbFile == null)
 				return null;
 
-			dbFile = dbFile.Replace("%Documents%", Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments));
+			dbFile = dbFile.ToFullPathIfNeed();
 
 			conStr["Data Source"] = dbFile;
 			database.ConnectionString = conStr.ToString();
@@ -347,30 +347,6 @@ namespace StockSharp.Configuration
 			var walQuery = Query.Execute("PRAGMA journal_mode=WAL;");
 			var walCmd = database.GetCommand(walQuery, null, new FieldList(), new FieldList(), false);
 			database.Execute(walCmd, new SerializationItemCollection(), false);
-		}
-
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <typeparam name="T"></typeparam>
-		/// <param name="storage"></param>
-		/// <param name="name"></param>
-		/// <param name="load"></param>
-		public static void TryLoadSettings<T>(this SettingsStorage storage, string name, Action<T> load)
-		{
-			try
-			{
-				var settings = storage.GetValue<T>(name);
-
-				if (settings == null)
-					return;
-
-				load(settings);
-			}
-			catch (Exception excp)
-			{
-				ConfigManager.GetService<LogManager>().Application.AddErrorLog(excp);
-			}
 		}
 	}
 }

@@ -18,6 +18,7 @@ namespace StockSharp.Algo.Strategies
 	using System;
 	using System.Collections.Generic;
 	using System.ComponentModel;
+	using System.ComponentModel.DataAnnotations;
 	using System.Linq;
 
 	using Ecng.Common;
@@ -35,8 +36,6 @@ namespace StockSharp.Algo.Strategies
 	using StockSharp.Logging;
 	using StockSharp.Messages;
 	using StockSharp.Localization;
-
-	using Xceed.Wpf.Toolkit.PropertyGrid.Attributes;
 
 	/// <summary>
 	/// The base class for all trade strategies.
@@ -294,10 +293,12 @@ namespace StockSharp.Algo.Strategies
 		/// <summary>
 		/// Strategy name.
 		/// </summary>
-		[CategoryLoc(LocalizedStrings.GeneralKey)]
-		[PropertyOrder(0)]
-		[DisplayNameLoc(LocalizedStrings.NameKey)]
-		[DescriptionLoc(LocalizedStrings.Str1359Key)]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.NameKey,
+			Description = LocalizedStrings.Str1359Key,
+			GroupName = LocalizedStrings.GeneralKey,
+			Order = 0)]
 		public override string Name
 		{
 			get { return _name.Value; }
@@ -401,10 +402,12 @@ namespace StockSharp.Algo.Strategies
 		/// <summary>
 		/// Portfolio.
 		/// </summary>
-		[CategoryLoc(LocalizedStrings.GeneralKey)]
-		[PropertyOrder(1)]
-		[DisplayNameLoc(LocalizedStrings.PortfolioKey)]
-		[DescriptionLoc(LocalizedStrings.Str1361Key)]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.PortfolioKey,
+			Description = LocalizedStrings.Str1361Key,
+			GroupName = LocalizedStrings.GeneralKey,
+			Order = 1)]
 		public virtual Portfolio Portfolio
 		{
 			get { return _portfolio; }
@@ -434,10 +437,12 @@ namespace StockSharp.Algo.Strategies
 		/// <summary>
 		/// Security.
 		/// </summary>
-		[CategoryLoc(LocalizedStrings.GeneralKey)]
-		[PropertyOrder(2)]
-		[DisplayNameLoc(LocalizedStrings.SecurityKey)]
-		[DescriptionLoc(LocalizedStrings.Str1362Key)]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.SecurityKey,
+			Description = LocalizedStrings.Str1362Key,
+			GroupName = LocalizedStrings.GeneralKey,
+			Order = 2)]
 		public virtual Security Security
 		{
 			get { return _security; }
@@ -465,10 +470,12 @@ namespace StockSharp.Algo.Strategies
 		/// <summary>
 		/// Total slippage.
 		/// </summary>
-		[CategoryLoc(LocalizedStrings.Str436Key)]
-		[PropertyOrder(4)]
-		[DisplayNameLoc(LocalizedStrings.Str163Key)]
-		[DescriptionLoc(LocalizedStrings.Str1363Key)]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.Str163Key,
+			Description = LocalizedStrings.Str1363Key,
+			GroupName = LocalizedStrings.Str436Key,
+			Order = 99)]
 		[ReadOnly(true)]
 		public decimal? Slippage { get; private set; }
 
@@ -498,10 +505,12 @@ namespace StockSharp.Algo.Strategies
 		/// <summary>
 		/// The aggregate value of profit-loss without accounting commission <see cref="Strategy.Commission"/>.
 		/// </summary>
-		[CategoryLoc(LocalizedStrings.Str436Key)]
-		[PropertyOrder(5)]
-		[DisplayNameLoc(LocalizedStrings.PnLKey)]
-		[DescriptionLoc(LocalizedStrings.Str1364Key)]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.PnLKey,
+			Description = LocalizedStrings.Str1364Key,
+			GroupName = LocalizedStrings.Str436Key,
+			Order = 100)]
 		[ReadOnly(true)]
 		public decimal PnL => PnLManager.PnL;
 
@@ -513,10 +522,12 @@ namespace StockSharp.Algo.Strategies
 		/// <summary>
 		/// Total commission.
 		/// </summary>
-		[CategoryLoc(LocalizedStrings.Str436Key)]
-		[PropertyOrder(6)]
-		[DisplayNameLoc(LocalizedStrings.Str159Key)]
-		[DescriptionLoc(LocalizedStrings.Str1365Key)]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.Str159Key,
+			Description = LocalizedStrings.Str1365Key,
+			GroupName = LocalizedStrings.Str436Key,
+			Order = 101)]
 		[ReadOnly(true)]
 		public decimal? Commission { get; private set; }
 
@@ -568,10 +579,12 @@ namespace StockSharp.Algo.Strategies
 		/// <summary>
 		/// Total latency.
 		/// </summary>
-		[CategoryLoc(LocalizedStrings.Str436Key)]
-		[PropertyOrder(8)]
-		[DisplayNameLoc(LocalizedStrings.Str161Key)]
-		[DescriptionLoc(LocalizedStrings.Str1366Key)]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.Str161Key,
+			Description = LocalizedStrings.Str1366Key,
+			GroupName = LocalizedStrings.Str436Key,
+			Order = 102)]
 		[ReadOnly(true)]
 		public TimeSpan? Latency { get; private set; }
 
@@ -900,10 +913,12 @@ namespace StockSharp.Algo.Strategies
 		/// <remarks>
 		/// If the value is set 0, the parameter is ignored.
 		/// </remarks>
-		[CategoryLoc(LocalizedStrings.GeneralKey)]
-		[PropertyOrder(3)]
-		[DisplayNameLoc(LocalizedStrings.VolumeKey)]
-		[DescriptionLoc(LocalizedStrings.Str1376Key)]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.VolumeKey,
+			Description = LocalizedStrings.Str1376Key,
+			GroupName = LocalizedStrings.GeneralKey,
+			Order = 4)]
 		public decimal Volume
 		{
 			get { return _volume.Value; }
@@ -948,10 +963,12 @@ namespace StockSharp.Algo.Strategies
 		/// <summary>
 		/// Strategy start time.
 		/// </summary>
-		[CategoryLoc(LocalizedStrings.Str436Key)]
-		[PropertyOrder(3)]
-		[DisplayNameLoc(LocalizedStrings.Str1378Key)]
-		[DescriptionLoc(LocalizedStrings.Str1379Key)]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.Str1378Key,
+			Description = LocalizedStrings.Str1379Key,
+			GroupName = LocalizedStrings.Str436Key,
+			Order = 105)]
 		[ReadOnly(true)]
 		public DateTimeOffset StartedTime
 		{

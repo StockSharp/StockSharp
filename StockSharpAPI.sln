@@ -148,8 +148,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Messages", "Messages\Messag
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BusinessEntities", "BusinessEntities\BusinessEntities.csproj", "{DCE69DB8-53CA-4B7F-9368-02F175A31074}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Alerts", "Alerts\Alerts.csproj", "{96725E45-F785-4612-9743-BFB40A9E725D}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Community", "Community\Community.csproj", "{E8E18F8F-97BD-41AE-8888-F54F2411D575}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Connectors", "Connectors", "{42B35529-B842-4F17-9277-0618B074AA91}"
@@ -364,10 +362,6 @@ Global
 		{DCE69DB8-53CA-4B7F-9368-02F175A31074}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DCE69DB8-53CA-4B7F-9368-02F175A31074}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DCE69DB8-53CA-4B7F-9368-02F175A31074}.Release|Any CPU.Build.0 = Release|Any CPU
-		{96725E45-F785-4612-9743-BFB40A9E725D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{96725E45-F785-4612-9743-BFB40A9E725D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{96725E45-F785-4612-9743-BFB40A9E725D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{96725E45-F785-4612-9743-BFB40A9E725D}.Release|Any CPU.Build.0 = Release|Any CPU
 		{E8E18F8F-97BD-41AE-8888-F54F2411D575}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{E8E18F8F-97BD-41AE-8888-F54F2411D575}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E8E18F8F-97BD-41AE-8888-F54F2411D575}.Release|Any CPU.ActiveCfg = Release|Any CPU

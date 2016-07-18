@@ -17,17 +17,15 @@ namespace StockSharp.Algo.Strategies.Analytics
 {
 	using System;
 	using System.ComponentModel;
+	using System.ComponentModel.DataAnnotations;
 	using System.Globalization;
 
 	using Ecng.Xaml.Charting.Visuals;
 	using Ecng.Common;
-	using Ecng.Xaml.Grids;
 
 	using StockSharp.Algo.Storages;
 	using StockSharp.Logging;
 	using StockSharp.Localization;
-
-	using Xceed.Wpf.Toolkit.PropertyGrid.Attributes;
 
 	/// <summary>
 	/// The base analytic strategy.
@@ -40,10 +38,12 @@ namespace StockSharp.Algo.Strategies.Analytics
 		/// <summary>
 		/// Start date.
 		/// </summary>
-		[DisplayNameLoc(LocalizedStrings.Str343Key)]
-		[DescriptionLoc(LocalizedStrings.Str1222Key)]
-		[CategoryLoc(LocalizedStrings.Str1221Key)]
-		[PropertyOrder(0)]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.Str343Key,
+			Description = LocalizedStrings.Str1222Key,
+			GroupName = LocalizedStrings.Str1221Key,
+			Order = 0)]
 		public DateTime From
 		{
 			get { return _from.Value; }
@@ -55,10 +55,12 @@ namespace StockSharp.Algo.Strategies.Analytics
 		/// <summary>
 		/// End date.
 		/// </summary>
-		[DisplayNameLoc(LocalizedStrings.Str345Key)]
-		[DescriptionLoc(LocalizedStrings.Str418Key, true)]
-		[CategoryLoc(LocalizedStrings.Str1221Key)]
-		[PropertyOrder(1)]
+		[Display(
+			ResourceType = typeof(LocalizedStrings),
+			Name = LocalizedStrings.Str345Key,
+			Description = LocalizedStrings.Str345Key + LocalizedStrings.Dot,
+			GroupName = LocalizedStrings.Str1221Key,
+			Order = 1)]
 		public DateTime To
 		{
 			get { return _to.Value; }
@@ -101,7 +103,7 @@ namespace StockSharp.Algo.Strategies.Analytics
 		/// <summary>
 		/// Table.
 		/// </summary>
-		protected UniversalGrid Grid => Environment.GetValue<UniversalGrid>(nameof(Grid));
+		protected IAnalyticsGrid Grid => Environment.GetValue<IAnalyticsGrid>(nameof(Grid));
 
 		/// <summary>
 		/// Data format.

@@ -230,6 +230,7 @@ namespace StockSharp.BusinessEntities
 		[MainCategory]
 		public Portfolio Portfolio { get; set; }
 
+		[field: NonSerialized]
 		private readonly Lazy<SynchronizedList<string>> _messages = new Lazy<SynchronizedList<string>>(() => new SynchronizedList<string>());
 
 		/// <summary>

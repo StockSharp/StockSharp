@@ -83,7 +83,3 @@ M:StockSharp.Alerts.IAlertService.UnRegister(StockSharp.Alerts.AlertSchema)/summ
 M:StockSharp.Alerts.IAlertService.UnRegister(StockSharp.Alerts.AlertSchema)/param/schema;DocStr18
 M:StockSharp.Alerts.IAlertService.Process(StockSharp.Messages.Message)/summary;DocStr26
 M:StockSharp.Alerts.IAlertService.Process(StockSharp.Messages.Message)/param/message;Str3166
-T:StockSharp.Alerts.Properties.Resources/summary;DocStr38
-P:StockSharp.Alerts.Properties.Resources.ResourceManager/summary;DocStr39
-P:StockSharp.Alerts.Properties.Resources.Culture/summary;DocStr40
-P:StockSharp.Alerts.Properties.Resources.Alert/summary;DocStr41

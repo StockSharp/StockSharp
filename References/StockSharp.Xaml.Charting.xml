@@ -1824,6 +1824,46 @@
       <returns>
         <see langword="true" /> if the field was updated. <see langword="false" /> otherwise.</returns>
     </member>
+    <member name="T:StockSharp.Xaml.Charting.ChartThemes">
+      <summary>
+            Chart themes.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Xaml.Charting.ChartThemes.BlackSteel">
+      <summary>
+            BlackSteel theme.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Xaml.Charting.ChartThemes.BrightSpark">
+      <summary>
+            BrightSpark theme.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Xaml.Charting.ChartThemes.Chrome">
+      <summary>
+            Chrome theme.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Xaml.Charting.ChartThemes.Electric">
+      <summary>
+            Electric theme.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Xaml.Charting.ChartThemes.ExpressionDark">
+      <summary>
+            ExpressionDark theme.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Xaml.Charting.ChartThemes.ExpressionLight">
+      <summary>
+            ExpressionLight theme.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Xaml.Charting.ChartThemes.Oscilloscope">
+      <summary>
+            Oscilloscope theme.
+            </summary>
+    </member>
     <member name="T:StockSharp.Xaml.Charting.ChartTradeElement">
       <summary>
             The chart element representing trades.
@@ -1901,6 +1941,11 @@
             </summary>
       <summary>
             EquityCurveChart
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Charting.EquityCurveChart.ChartTheme">
+      <summary>
+            The name of the graphic theme.
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.Charting.EquityCurveChart.#ctor">

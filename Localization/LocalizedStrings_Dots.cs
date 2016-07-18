@@ -311,5 +311,15 @@ namespace StockSharp.Localization
 		/// 
 		/// </summary>
 		public static string AveragePriceDot => AppendDot(AveragePrice);
+
+		/// <summary>
+		/// 
+		/// </summary>
+		public static string Str9Dot => AppendDot(Str9);
+
+		/// <summary>
+		/// 
+		/// </summary>
+		public static string Str345Dot => AppendDot(Str345);
 	}
 }

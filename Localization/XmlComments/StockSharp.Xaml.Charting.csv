@@ -509,6 +509,14 @@ M:StockSharp.Xaml.Charting.ChartPart`1.SetField``1(``0@,``0,System.String)/param
 M:StockSharp.Xaml.Charting.ChartPart`1.SetField``1(``0@,``0,System.String)/param/name;DocStr8880
 M:StockSharp.Xaml.Charting.ChartPart`1.SetField``1(``0@,``0,System.String)/typeparam/TField;DocStr8881
 M:StockSharp.Xaml.Charting.ChartPart`1.SetField``1(``0@,``0,System.String)/returns;DocStr8882
+T:StockSharp.Xaml.Charting.ChartThemes/summary;DocStr9175
+F:StockSharp.Xaml.Charting.ChartThemes.BlackSteel/summary;DocStr9176
+F:StockSharp.Xaml.Charting.ChartThemes.BrightSpark/summary;DocStr9177
+F:StockSharp.Xaml.Charting.ChartThemes.Chrome/summary;DocStr9178
+F:StockSharp.Xaml.Charting.ChartThemes.Electric/summary;DocStr9179
+F:StockSharp.Xaml.Charting.ChartThemes.ExpressionDark/summary;DocStr9180
+F:StockSharp.Xaml.Charting.ChartThemes.ExpressionLight/summary;DocStr9181
+F:StockSharp.Xaml.Charting.ChartThemes.Oscilloscope/summary;DocStr9182
 T:StockSharp.Xaml.Charting.ChartTradeElement/summary;DocStr7815
 T:StockSharp.Xaml.Charting.ChartTransactionElement`1/summary;DocStr7801
 T:StockSharp.Xaml.Charting.ChartTransactionElement`1/typeparam/T;DocStr7802
@@ -529,6 +537,7 @@ M:StockSharp.Xaml.Charting.ChartTransactionElement`1.FillClone(`0)/returns;DocSt
 M:StockSharp.Xaml.Charting.ChartTransactionElement`1.Clone/summary;DocStr643
 M:StockSharp.Xaml.Charting.ChartTransactionElement`1.Clone/returns;DocStr1116
 T:StockSharp.Xaml.Charting.EquityCurveChart/summary;DocStr7816
+P:StockSharp.Xaml.Charting.EquityCurveChart.ChartTheme/summary;DocStr7731
 M:StockSharp.Xaml.Charting.EquityCurveChart.#ctor/summary;DocStr1
 P:StockSharp.Xaml.Charting.EquityCurveChart.NoGapMode/summary;DocStr7826
 M:StockSharp.Xaml.Charting.EquityCurveChart.CreateCurve(System.String,System.Windows.Media.Color,StockSharp.Xaml.Charting.EquityCurveChartStyles)/summary;DocStr7817

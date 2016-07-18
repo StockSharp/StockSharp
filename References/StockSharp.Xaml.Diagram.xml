@@ -122,6 +122,12 @@
       <param name="socket">Socket.</param>
       <param name="value">Value.</param>
     </member>
+    <member name="M:StockSharp.Xaml.Diagram.CompositionDiagramElement.SetTypeId(System.Guid)">
+      <summary>
+            Change <see cref="P:StockSharp.Xaml.Diagram.CompositionDiagramElement.TypeId" /> for composition element.
+            </summary>
+      <param name="typeId">Type identifier.</param>
+    </member>
     <member name="M:StockSharp.Xaml.Diagram.CompositionDiagramElement.Clone(System.Boolean)">
       <summary>
             Create a copy of <see cref="T:StockSharp.Xaml.Diagram.CompositionDiagramElement" />.

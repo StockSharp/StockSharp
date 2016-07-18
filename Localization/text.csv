@@ -13292,3 +13292,38 @@ DocStr9146;To get from top the current element;Получить текущий �
 DocStr9147;Is composite element can be viewed in editor;Видим ли сложный элемент в редакторе
 DocStr9148;To serialize the entire composite element;Сохранить весь элемент
 DocStr9149;Use strategy parameters values for composition properties;Использовать параметры стратегии для сложного элемента
+DocStr9150;Error registering order;Ошибка регистрации заявки
+DocStr9151;The interface for work with the grid column;Интерфейс для работы с колонкой таблицы
+DocStr9152;Width of the column;Ширина колонки
+DocStr9153;The interface for work with the grid;Интерфейс для работы с таблицей
+DocStr9154;Remove all columns;Удалить все колонки
+DocStr9155;Add new column;Добавить новую колонку
+DocStr9156;Field name to bind;Название поля
+DocStr9157;Header text;Текст заголовка
+DocStr9158;The new column;Новая колонка
+DocStr9159;Items source;Источник данных
+DocStr9160;Set sorting mode;Установить сортировку
+DocStr9161;The column;Колонка
+DocStr9162;The direction;Направление
+DocStr9163;Get last trade date;Получить последний торговый день
+DocStr9164;The date from which to start checking;Дата начала проверки
+DocStr9165;To get date of day T +/- of N trading days;Получить дату T +/- от текущей
+DocStr9166;The start T date, to which are added or subtracted N trading days;Дата начала
+DocStr9167;The N size. The number of trading days for the addition or subtraction;Количество добавляемых или вычитаемых торговых дней
+DocStr9168;The end T +/- N date;Результирующая дата
+DocStr9169;The StockSharp folder in {0} location;Директория StockSharp в {0}
+DocStr9170;Try load credentials from {0};Загрузить параметры из {0}
+DocStr9171;{0} if the specified credentials was loaded successfully, otherwise, {1};{0} если загрузка была успешной, иначе, {1}
+DocStr9172;Save the credentials to {0};Сохранить параметры в {0}
+DocStr9173;Wrap the specified action in try/catch clause with logging;Обернуть действие в try/catch условие с логирование возможной ошибки
+DocStr9174;The action;Действие
+DocStr9175;Chart themes;Chart тема
+DocStr9176;BlackSteel theme;BlackSteel тема
+DocStr9177;BrightSpark theme;BrightSpark тема
+DocStr9178;Chrome theme;Chrome тема
+DocStr9179;Electric theme;Electric тема
+DocStr9180;ExpressionDark theme;ExpressionDark тема
+DocStr9181;ExpressionLight theme;ExpressionLight тема
+DocStr9182;Oscilloscope theme;Oscilloscope тема
+DocStr9183;Change {0} for composition element;Изменить {0} для сложного элемента
+DocStr9184;Type identifier;Идентификатор типа

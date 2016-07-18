@@ -293,6 +293,13 @@ M:StockSharp.Community.ServerCredentials.Load(Ecng.Serialization.SettingsStorage
 M:StockSharp.Community.ServerCredentials.Load(Ecng.Serialization.SettingsStorage)/param/storage;DocStr3
 M:StockSharp.Community.ServerCredentials.Save(Ecng.Serialization.SettingsStorage)/summary;DocStr4
 M:StockSharp.Community.ServerCredentials.Save(Ecng.Serialization.SettingsStorage)/param/storage;DocStr3
+T:StockSharp.Community.ServerCredentialsExtensions/summary;DocStr4290
+F:StockSharp.Community.ServerCredentialsExtensions.StockSharpFolder/summary;DocStr9169
+M:StockSharp.Community.ServerCredentialsExtensions.TryLoadCredentials(StockSharp.Community.ServerCredentials)/summary;DocStr9170
+M:StockSharp.Community.ServerCredentialsExtensions.TryLoadCredentials(StockSharp.Community.ServerCredentials)/param/credentials;DocStr3074
+M:StockSharp.Community.ServerCredentialsExtensions.TryLoadCredentials(StockSharp.Community.ServerCredentials)/returns;DocStr9171
+M:StockSharp.Community.ServerCredentialsExtensions.SaveCredentials(StockSharp.Community.ServerCredentials)/summary;DocStr9172
+M:StockSharp.Community.ServerCredentialsExtensions.SaveCredentials(StockSharp.Community.ServerCredentials)/param/credentials;DocStr3074
 T:StockSharp.Community.StrategyClient/summary;DocStr2979
 M:StockSharp.Community.StrategyClient.#ctor/summary;DocStr1
 M:StockSharp.Community.StrategyClient.#ctor(System.Uri)/summary;DocStr1

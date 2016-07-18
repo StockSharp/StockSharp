@@ -220,6 +220,7 @@ namespace StockSharp.Logging
 		{
 			if (action == null)
 				throw new ArgumentNullException(nameof(action));
+
 			try
 			{
 				action();
@@ -227,6 +228,28 @@ namespace StockSharp.Logging
 			catch (Exception ex)
 			{
 				ex.LogError();
+			}
+		}
+
+		/// <summary>
+		/// Wrap the specified action in try/catch clause with logging.
+		/// </summary>
+		/// <typeparam name="T">The type of returned result.</typeparam>
+		/// <param name="action">The action.</param>
+		/// <returns>The resulting value.</returns>
+		public static T DoWithLog<T>(this Func<T> action)
+		{
+			if (action == null)
+				throw new ArgumentNullException(nameof(action));
+
+			try
+			{
+				return action();
+			}
+			catch (Exception ex)
+			{
+				ex.LogError();
+				return default(T);
 			}
 		}
 	}
