@@ -42640,12 +42640,12 @@ namespace StockSharp.Localization
 		/// <summary>
 		/// Composition already exist.
 		/// </summary>
-		public const string CompositionAlreadyExistKey = "CompositionAlreadyExist";
+		public const string CompositionAlreadyExistParamsKey = "CompositionAlreadyExistParams";
 
 		/// <summary>
 		/// Composition already exist.
 		/// </summary>
-		public static string CompositionAlreadyExist => GetString(CompositionAlreadyExistKey);
+		public static string CompositionAlreadyExistParams => GetString(CompositionAlreadyExistParamsKey);
 
 		/// <summary>
 		/// With ecnryption

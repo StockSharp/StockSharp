@@ -4298,7 +4298,7 @@ FileTooMuch;This file exceeds the maximum upload size.;Файл превысил
 StrategyEncrypted;Strategy has been encrypted and can not be viewed.;Стратегия зашифрована и не может быть просмотрена.
 Email;Email;Почта
 Pause;Pause;Приостановить
-CompositionAlreadyExist;Composition already exist.;Элемент уже существует.
+CompositionAlreadyExistParams;{0} {1} already exist.;{0} {1} уже существует.
 WithEcnryption;With ecnryption;С шифрованием
 WithoutEcnryption;Without ecnryption;Без шифрования
 IV;IV;IV
