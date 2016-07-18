@@ -40,9 +40,6 @@ namespace StockSharp.Algo.Strategies
 	/// <summary>
 	/// The base class for all trade strategies.
 	/// </summary>
-	[CategoryOrderLoc(LocalizedStrings.GeneralKey, 10)]
-	[CategoryOrderLoc(LocalizedStrings.Str436Key, 11)]
-	[CategoryOrderLoc(LocalizedStrings.LoggingKey, 12)]
 	public class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMarketRuleContainer, ICloneable<Strategy>, IMarketDataProvider, ISecurityProvider
 	{
 		private static readonly MemoryStatisticsValue<Strategy> _strategyStat = new MemoryStatisticsValue<Strategy>(LocalizedStrings.Str1355);

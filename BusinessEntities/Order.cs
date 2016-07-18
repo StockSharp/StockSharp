@@ -36,8 +36,6 @@ namespace StockSharp.BusinessEntities
 	[Serializable]
 	[DisplayNameLoc(LocalizedStrings.Str504Key)]
 	[DescriptionLoc(LocalizedStrings.Str516Key)]
-	[CategoryOrderLoc(MainCategoryAttribute.NameKey, 0)]
-	[CategoryOrderLoc(StatisticsCategoryAttribute.NameKey, 1)]
 	public class Order : NotifiableObject, IExtendableEntity
 	{
 		/// <summary>

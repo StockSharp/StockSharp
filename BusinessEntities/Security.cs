@@ -36,9 +36,6 @@ namespace StockSharp.BusinessEntities
 	[System.Runtime.Serialization.DataContract]
 	[DisplayNameLoc(LocalizedStrings.SecurityKey)]
 	[DescriptionLoc(LocalizedStrings.Str546Key)]
-	[CategoryOrderLoc(MainCategoryAttribute.NameKey, 0)]
-	[CategoryOrderLoc(LocalizedStrings.Str437Key, 1)]
-	[CategoryOrderLoc(StatisticsCategoryAttribute.NameKey, 2)]
 	public class Security : Cloneable<Security>, IExtendableEntity, INotifyPropertyChanged
 	{
 		/// <summary>
