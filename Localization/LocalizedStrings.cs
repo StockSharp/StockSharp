@@ -28,7 +28,7 @@ namespace StockSharp.Localization
 	{
 		static LocalizedStrings()
 		{
-			var activeLang = CultureInfo.CurrentCulture.Name.CompareIgnoreCase("ru-RU")
+			var activeLang = CultureInfo.CurrentCulture.Name.CompareIgnoreCase(LocalizationHelper.Ru)
 				? Languages.Russian
 				: Languages.English;
 
