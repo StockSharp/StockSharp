@@ -77,7 +77,7 @@ namespace StockSharp.Configuration
 
 		static Extensions()
 		{
-			var section = ConfigManager.InnerConfig.Sections.OfType<StockSharpSection>().FirstOrDefault();
+			var section = RootSection;
 
 			if (section == null)
 				return;
@@ -87,6 +87,11 @@ namespace StockSharp.Configuration
 			_customCandles = SafeAdd<CandleElement, Type>(section.CustomCandles, elem => elem.Type.To<Type>());
 			_customDiagramElements = SafeAdd<DiagramElement, Type>(section.CustomDiagramElements, elem => elem.Type.To<Type>());
 		}
+
+		/// <summary>
+		/// Instance of the root section <see cref="StockSharpSection"/>.
+		/// </summary>
+		public static StockSharpSection RootSection => ConfigManager.InnerConfig.Sections.OfType<StockSharpSection>().FirstOrDefault();
 
 		private static T2[] SafeAdd<T1, T2>(IEnumerable from, Func<T1, T2> func)
 		{
