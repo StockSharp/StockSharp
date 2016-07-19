@@ -19,9 +19,9 @@ namespace StockSharp.Localization
 	using System.ComponentModel;
 
 	/// <summary>
-	/// Specifies the name of the category in which to group the property or event when displayed in a System.Windows.Forms.PropertyGrid control set to Categorized mode.
+	/// Specifies the name of the category in which to group the property or event when displayed in a PropertyGrid control set to Categorized mode.
 	/// </summary>
-	[AttributeUsageAttribute(AttributeTargets.All)]
+	[AttributeUsage(AttributeTargets.All)]
 	public class CategoryLocAttribute : CategoryAttribute
 	{
 		/// <summary>

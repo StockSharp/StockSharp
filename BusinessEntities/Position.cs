@@ -31,8 +31,6 @@ namespace StockSharp.BusinessEntities
 	[System.Runtime.Serialization.DataContract]
 	[DisplayNameLoc(LocalizedStrings.PortfolioKey)]
 	[DescriptionLoc(LocalizedStrings.Str541Key)]
-	[CategoryOrderLoc(MainCategoryAttribute.NameKey, 0)]
-	[CategoryOrderLoc(StatisticsCategoryAttribute.NameKey, 1)]
 	public class Position : BasePosition
 	{
 		/// <summary>

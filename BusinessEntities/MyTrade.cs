@@ -35,8 +35,6 @@ namespace StockSharp.BusinessEntities
 	[System.Runtime.Serialization.DataContract]
 	[DisplayNameLoc(LocalizedStrings.Str502Key)]
 	[DescriptionLoc(LocalizedStrings.Str503Key)]
-	[CategoryOrderLoc(MainCategoryAttribute.NameKey, 0)]
-	[CategoryOrderLoc(StatisticsCategoryAttribute.NameKey, 1)]
 	public class MyTrade : IExtendableEntity
 	{
 		/// <summary>

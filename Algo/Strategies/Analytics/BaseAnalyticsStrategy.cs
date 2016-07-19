@@ -30,7 +30,6 @@ namespace StockSharp.Algo.Strategies.Analytics
 	/// <summary>
 	/// The base analytic strategy.
 	/// </summary>
-	[CategoryOrderLoc(LocalizedStrings.Str1221Key, 0)]
 	public abstract class BaseAnalyticsStrategy : Strategy
 	{
 		private readonly StrategyParam<DateTime> _from;
