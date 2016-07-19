@@ -903,6 +903,16 @@ namespace StockSharp.Algo
 			}, out isNew);
 		}
 
+		public Security TryRemoveSecurity(string id)
+		{
+			lock (_securities.SyncRoot)
+			{
+				var security = _securities.TryGetValue(id);
+				_securities.Remove(id);
+				return security;
+			}
+		}
+
 		public void TryAddBoard(ExchangeBoard board)
 		{
 			_exchangeBoards.TryAdd(board);

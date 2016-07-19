@@ -340,10 +340,12 @@ namespace StockSharp.Algo
 			remove { _added -= value; }
 		}
 
+		private Action<IEnumerable<Security>> _removed;
+
 		event Action<IEnumerable<Security>> ISecurityProvider.Removed
 		{
-			add { }
-			remove { }
+			add { _removed += value; }
+			remove { _removed -= value; }
 		}
 
 		private Action _cleared;
