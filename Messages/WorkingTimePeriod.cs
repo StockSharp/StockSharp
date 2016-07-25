@@ -20,6 +20,8 @@ namespace StockSharp.Messages
 	using System.Linq;
 	using System.Runtime.Serialization;
 
+	using DevExpress.Mvvm.DataAnnotations;
+
 	using Ecng.Common;
 	using Ecng.ComponentModel;
 	using Ecng.Serialization;
@@ -35,6 +37,19 @@ namespace StockSharp.Messages
 	[DescriptionLoc(LocalizedStrings.Str417Key)]
 	public class WorkingTimePeriod : Cloneable<WorkingTimePeriod>, IPersistable
 	{
+		sealed class TimeSpanRangeInitializer : NewItemInstanceInitializerAttribute
+		{
+			public TimeSpanRangeInitializer()
+				: base(typeof(Range<TimeSpan>), "item")
+			{
+			}
+
+			public override object CreateInstance()
+			{
+				return new Range<TimeSpan>(TimeSpan.Zero, TimeSpan.Zero);
+			}
+		}
+
 		/// <summary>
 		/// Schedule expiration date.
 		/// </summary>
@@ -53,6 +68,7 @@ namespace StockSharp.Messages
 		[CategoryLoc(LocalizedStrings.GeneralKey)]
 		[DisplayNameLoc(LocalizedStrings.Str416Key)]
 		[DescriptionLoc(LocalizedStrings.Str420Key)]
+		[TimeSpanRangeInitializer]
 		public List<Range<TimeSpan>> Times
 		{
 			get { return _times; }
