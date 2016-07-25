@@ -24,6 +24,7 @@ namespace StockSharp.Algo.Storages
 	using MoreLinq;
 
 	using StockSharp.BusinessEntities;
+	using StockSharp.Logging;
 	using StockSharp.Messages;
 
 	/// <summary>
@@ -56,43 +57,49 @@ namespace StockSharp.Algo.Storages
 
 			ThreadingHelper.Timer(() =>
 			{
-				foreach (var pair in GetTicks())
+				try
 				{
-					GetStorage<ExecutionMessage>(pair.Key, ExecutionTypes.Tick).Save(pair.Value);
-				}
+					foreach (var pair in GetTicks())
+					{
+						GetStorage<ExecutionMessage>(pair.Key, ExecutionTypes.Tick).Save(pair.Value);
+					}
 
-				foreach (var pair in GetOrderLog())
+					foreach (var pair in GetOrderLog())
+					{
+						GetStorage<ExecutionMessage>(pair.Key, ExecutionTypes.OrderLog).Save(pair.Value);
+					}
+
+					foreach (var pair in GetTransactions())
+					{
+						GetStorage<ExecutionMessage>(pair.Key, ExecutionTypes.Transaction).Save(pair.Value);
+					}
+
+					foreach (var pair in GetOrderBooks())
+					{
+						GetStorage(pair.Key, typeof(QuoteChangeMessage), null).Save(pair.Value);
+					}
+
+					foreach (var pair in GetLevel1())
+					{
+						GetStorage(pair.Key, typeof(Level1ChangeMessage), null).Save(pair.Value);
+					}
+
+					foreach (var pair in GetCandles())
+					{
+						GetStorage(pair.Key.Item1, pair.Key.Item2, pair.Key.Item3).Save(pair.Value);
+					}
+
+					var news = GetNews().ToArray();
+
+					if (news.Length > 0)
+					{
+						_storageRegistry.GetNewsMessageStorage(Drive, Format).Save(news);
+					}
+				}
+				catch (Exception excp)
 				{
-					GetStorage<ExecutionMessage>(pair.Key, ExecutionTypes.OrderLog).Save(pair.Value);
+					excp.LogError();
 				}
-
-				foreach (var pair in GetTransactions())
-				{
-					GetStorage<ExecutionMessage>(pair.Key, ExecutionTypes.Transaction).Save(pair.Value);
-				}
-
-				foreach (var pair in GetOrderBooks())
-				{
-					GetStorage(pair.Key, typeof(QuoteChangeMessage), null).Save(pair.Value);
-				}
-
-				foreach (var pair in GetLevel1())
-				{
-					GetStorage(pair.Key, typeof(Level1ChangeMessage), null).Save(pair.Value);
-				}
-
-				foreach (var pair in GetCandles())
-				{
-					GetStorage(pair.Key.Item1, pair.Key.Item2, pair.Key.Item3).Save(pair.Value);
-				}
-
-				var news = GetNews().ToArray();
-
-				if (news.Length > 0)
-				{
-					_storageRegistry.GetNewsMessageStorage(Drive, Format).Save(news);
-				}
-
 			}).Interval(TimeSpan.FromSeconds(10));
 		}
 
@@ -196,20 +203,68 @@ namespace StockSharp.Algo.Storages
 
 			foreach (var secId in requiredSecurities)
 			{
-				GetStorage<ExecutionMessage>(secId, ExecutionTypes.Tick)
-					.Load(from, to)
-					.ForEach(RaiseStorageMessage);
-
 				GetStorage<ExecutionMessage>(secId, ExecutionTypes.Transaction)
 					.Load(from, to)
 					.ForEach(RaiseStorageMessage);
-
-				GetStorage<ExecutionMessage>(secId, ExecutionTypes.OrderLog)
-					.Load(from, to)
-					.ForEach(RaiseStorageMessage);
 			}
+		}
 
-			//_storageRegistry.DefaultDrive.GetCandleTypes();
+		/// <summary>
+		/// Send message.
+		/// </summary>
+		/// <param name="message">Message.</param>
+		public override void SendInMessage(Message message)
+		{
+			if (message.Type == MessageTypes.MarketData)
+				ProcessMarketDataMessage((MarketDataMessage)message);
+
+			base.SendInMessage(message);
+		}
+
+		private void ProcessMarketDataMessage(MarketDataMessage msg)
+		{
+			if (!msg.IsSubscribe || DaysLoad == TimeSpan.Zero)
+				return;
+
+			var today = DateTime.UtcNow.Date;
+
+			var from = (DateTimeOffset)(today - DaysLoad);
+			var to = DateTimeOffset.Now;
+
+			switch (msg.DataType)
+			{
+				case MarketDataTypes.Level1:
+					GetStorage<Level1ChangeMessage>(msg.SecurityId, null)
+						.Load(from, to)
+						.ForEach(RaiseStorageMessage);
+					break;
+
+				case MarketDataTypes.MarketDepth:
+					GetStorage<QuoteChangeMessage>(msg.SecurityId, null)
+						.Load(from, to)
+						.ForEach(RaiseStorageMessage);
+					break;
+
+				case MarketDataTypes.Trades:
+				case MarketDataTypes.OrderLog:
+					GetStorage<ExecutionMessage>(msg.SecurityId, msg.Arg)
+						.Load(from, to)
+						.ForEach(RaiseStorageMessage);
+					break;
+
+				case MarketDataTypes.News:
+					_storageRegistry
+						.GetNewsMessageStorage(Drive, Format)
+						.Load(from, to)
+						.ForEach(RaiseStorageMessage);
+					break;
+
+				case MarketDataTypes.CandleTimeFrame:
+					GetStorage<TimeFrameCandleMessage>(msg.SecurityId, msg.Arg)
+						.Load(from, to)
+						.ForEach(RaiseStorageMessage);
+					break;
+			}
 		}
 
 		/// <summary>
@@ -223,14 +278,14 @@ namespace StockSharp.Algo.Storages
 				case MessageTypes.Security:
 				{
 					var secMsg = (SecurityMessage)message;
-                    var security = _entityRegistry.Securities.ReadBySecurityId(secMsg.SecurityId);
+					var security = _entityRegistry.Securities.ReadBySecurityId(secMsg.SecurityId);
 
 					if (security == null)
 						security = secMsg.ToSecurity();
 					else
 						security.ApplyChanges(secMsg);
 
-                    _entityRegistry.Securities.Save(security);
+					_entityRegistry.Securities.Save(security);
 					break;
 				}
 				case MessageTypes.Board:
@@ -252,7 +307,7 @@ namespace StockSharp.Algo.Storages
 					}
 
 					_entityRegistry.Exchanges.Save(board.Exchange);
-                    _entityRegistry.ExchangeBoards.Save(board);
+					_entityRegistry.ExchangeBoards.Save(board);
 					break;
 				}
 
@@ -341,7 +396,7 @@ namespace StockSharp.Algo.Storages
 					Name = portfolioName
 				};
 
-                _entityRegistry.Portfolios.Add(portfolio);
+				_entityRegistry.Portfolios.Add(portfolio);
 			}
 
 			return _entityRegistry.Positions.ReadBySecurityAndPortfolio(security, portfolio)
