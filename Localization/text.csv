@@ -3053,7 +3053,6 @@ Str3270;Panel for viewing parameters (securities, portfolios, trades etc.).;Па
 Str3271;Panel for viewing own trades data.;Панель для просмотра данных по собственным сделкам.
 Str3272;Market depth with quotes, showing the depth of market.;Стакан с котировками, показывающий глубину рынка.
 Str3273;Incorrect limit order price.;Неверно указана цена для лимитной заявки.
-Str3274;Securities.;Торговые инструменты.
 Str3276;New securities in storage;Новые инструменты в хранилище
 Str3277;Open market depth;Открыть стакан
 Str3278;Trades feed;Лента сделок
@@ -4304,6 +4303,7 @@ WithoutEcnryption;Without ecnryption;Без шифрования
 IV;IV;IV
 HV;HV;HV
 UnsupportedSchemeVersionParams;Scheme version {0} is not supported.;Версия схемы {0} не поддерживается.
+FinamPanel;Finam historical market data.;Исторические маркет-данные Финам.
 DocStr0;Button activation alert settings;Кнопка активации настроек сигнала
 DocStr1;Initializes a new instance of the {0};Создать {0}
 DocStr2;Load settings;Загрузить настройки

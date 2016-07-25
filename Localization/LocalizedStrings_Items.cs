@@ -30478,16 +30478,6 @@ namespace StockSharp.Localization
 		public static string Str3273 => GetString(Str3273Key);
 
 		/// <summary>
-		/// Securities.
-		/// </summary>
-		public const string Str3274Key = "Str3274";
-
-		/// <summary>
-		/// Securities.
-		/// </summary>
-		public static string Str3274 => GetString(Str3274Key);
-
-		/// <summary>
 		/// New securities in storage
 		/// </summary>
 		public const string Str3276Key = "Str3276";
@@ -42438,152 +42428,152 @@ namespace StockSharp.Localization
 		public static string NotCompleteRegistered => GetString(NotCompleteRegisteredKey);
 
 		/// <summary>
-		/// Strategies gallery.
+		/// Strategies gallery
 		/// </summary>
 		public const string StrategiesGalleryKey = "StrategiesGallery";
 
 		/// <summary>
-		/// Strategies gallery.
+		/// Strategies gallery
 		/// </summary>
 		public static string StrategiesGallery => GetString(StrategiesGalleryKey);
 
 		/// <summary>
-		/// Strategies subscriptions.
+		/// Strategies subscriptions
 		/// </summary>
 		public const string StrategiesSubscriptionsKey = "StrategiesSubscriptions";
 
 		/// <summary>
-		/// Strategies subscriptions.
+		/// Strategies subscriptions
 		/// </summary>
 		public static string StrategiesSubscriptions => GetString(StrategiesSubscriptionsKey);
 
 		/// <summary>
-		/// Refresh strategies.
+		/// Refresh strategies
 		/// </summary>
 		public const string RefreshStrategiesKey = "RefreshStrategies";
 
 		/// <summary>
-		/// Refresh strategies.
+		/// Refresh strategies
 		/// </summary>
 		public static string RefreshStrategies => GetString(RefreshStrategiesKey);
 
 		/// <summary>
-		/// All strategies.
+		/// All strategies
 		/// </summary>
 		public const string AllStrategiesKey = "AllStrategies";
 
 		/// <summary>
-		/// All strategies.
+		/// All strategies
 		/// </summary>
 		public static string AllStrategies => GetString(AllStrategiesKey);
 
 		/// <summary>
-		/// Subscribed strategies.
+		/// Subscribed strategies
 		/// </summary>
 		public const string SubscribedStrategiesKey = "SubscribedStrategies";
 
 		/// <summary>
-		/// Subscribed strategies.
+		/// Subscribed strategies
 		/// </summary>
 		public static string SubscribedStrategies => GetString(SubscribedStrategiesKey);
 
 		/// <summary>
-		/// Free strategies.
+		/// Free strategies
 		/// </summary>
 		public const string FreeStrategiesKey = "FreeStrategies";
 
 		/// <summary>
-		/// Free strategies.
+		/// Free strategies
 		/// </summary>
 		public static string FreeStrategies => GetString(FreeStrategiesKey);
 
 		/// <summary>
-		/// Author.
+		/// Author
 		/// </summary>
 		public const string AuthorKey = "Author";
 
 		/// <summary>
-		/// Author.
+		/// Author
 		/// </summary>
 		public static string Author => GetString(AuthorKey);
 
 		/// <summary>
-		/// Loading gallery strategies.
+		/// Loading gallery strategies...
 		/// </summary>
 		public const string LoadingGalleryStrategiesKey = "LoadingGalleryStrategies";
 
 		/// <summary>
-		/// Loading gallery strategies.
+		/// Loading gallery strategies...
 		/// </summary>
 		public static string LoadingGalleryStrategies => GetString(LoadingGalleryStrategiesKey);
 
 		/// <summary>
-		/// Logo.
+		/// Logo
 		/// </summary>
 		public const string LogoKey = "Logo";
 
 		/// <summary>
-		/// Logo.
+		/// Logo
 		/// </summary>
 		public static string Logo => GetString(LogoKey);
 
 		/// <summary>
-		/// Price type.
+		/// Price type
 		/// </summary>
 		public const string PriceTypeKey = "PriceType";
 
 		/// <summary>
-		/// Price type.
+		/// Price type
 		/// </summary>
 		public static string PriceType => GetString(PriceTypeKey);
 
 		/// <summary>
-		/// Publish strategy.
+		/// Publish strategy
 		/// </summary>
 		public const string PublishStrategyKey = "PublishStrategy";
 
 		/// <summary>
-		/// Publish strategy.
+		/// Publish strategy
 		/// </summary>
 		public static string PublishStrategy => GetString(PublishStrategyKey);
 
 		/// <summary>
-		/// Strategy already published.
+		/// Strategy already published. Update?
 		/// </summary>
 		public const string StrategyAlreadyPublishedKey = "StrategyAlreadyPublished";
 
 		/// <summary>
-		/// Strategy already published.
+		/// Strategy already published. Update?
 		/// </summary>
 		public static string StrategyAlreadyPublished => GetString(StrategyAlreadyPublishedKey);
 
 		/// <summary>
-		/// Own strategies.
+		/// Own strategies
 		/// </summary>
 		public const string OwnStrategiesKey = "OwnStrategies";
 
 		/// <summary>
-		/// Own strategies.
+		/// Own strategies
 		/// </summary>
 		public static string OwnStrategies => GetString(OwnStrategiesKey);
 
 		/// <summary>
-		/// Open strategies gallery.
+		/// Open strategies gallery?
 		/// </summary>
 		public const string OpenStrategiesGalleryQuestionKey = "OpenStrategiesGalleryQuestion";
 
 		/// <summary>
-		/// Open strategies gallery.
+		/// Open strategies gallery?
 		/// </summary>
 		public static string OpenStrategiesGalleryQuestion => GetString(OpenStrategiesGalleryQuestionKey);
 
 		/// <summary>
-		/// Fill up balance.
+		/// Fill up balance
 		/// </summary>
 		public const string FillUpBalanceKey = "FillUpBalance";
 
 		/// <summary>
-		/// Fill up balance.
+		/// Fill up balance
 		/// </summary>
 		public static string FillUpBalance => GetString(FillUpBalanceKey);
 
@@ -42696,5 +42686,15 @@ namespace StockSharp.Localization
 		/// Scheme version is not supported.
 		/// </summary>
 		public static string UnsupportedSchemeVersionParams => GetString(UnsupportedSchemeVersionParamsKey);
+
+		/// <summary>
+		/// Finam historical market data.
+		/// </summary>
+		public const string FinamPanelKey = "FinamPanel";
+
+		/// <summary>
+		/// Finam historical market data.
+		/// </summary>
+		public static string FinamPanel => GetString(FinamPanelKey);
 	}
 }

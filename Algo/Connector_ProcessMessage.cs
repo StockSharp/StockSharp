@@ -663,6 +663,10 @@ namespace StockSharp.Algo
 						ProcessSessionMessage((SessionMessage)message);
 						break;
 
+					case ExtendedMessageTypes.RemoveSecurity:
+						ProcessSecurityRemoveMessage((SecurityRemoveMessage)message);
+						break;
+
 					// если адаптеры передают специфичные сообщения
 					//default:
 					//	throw new ArgumentOutOfRangeException("Тип сообщения {0} не поддерживается.".Put(message.Type));
@@ -672,6 +676,19 @@ namespace StockSharp.Algo
 			{
 				RaiseError(new InvalidOperationException(LocalizedStrings.Str681Params.Put(message), ex));
 			}
+		}
+
+		private void ProcessSecurityRemoveMessage(SecurityRemoveMessage message)
+		{
+			if (message == null)
+				throw new ArgumentNullException(nameof(message));
+
+			var securityId = message.SecurityId;
+
+			var removedSecurity = _entityCache.TryRemoveSecurity(CreateSecurityId(securityId.SecurityCode, securityId.BoardCode));
+
+			if (removedSecurity != null)
+				_removed?.Invoke(new[] { removedSecurity });
 		}
 
 		private Security LookupSecurity(SecurityId securityId)
