@@ -42696,5 +42696,25 @@ namespace StockSharp.Localization
 		/// Finam historical market data.
 		/// </summary>
 		public static string FinamPanel => GetString(FinamPanelKey);
+
+		/// <summary>
+		/// Can not subscribe to own strategy.
+		/// </summary>
+		public const string OwnStrategySubscriptionKey = "OwnStrategySubscription";
+
+		/// <summary>
+		/// Can not subscribe to own strategy.
+		/// </summary>
+		public static string OwnStrategySubscription => GetString(OwnStrategySubscriptionKey);
+
+		/// <summary>
+		/// Not enough money for subscription.
+		/// </summary>
+		public const string NotEnoughMoneyForSubscriptionKey = "NotEnoughMoneyForSubscription";
+
+		/// <summary>
+		/// Not enough money for subscription.
+		/// </summary>
+		public static string NotEnoughMoneyForSubscription => GetString(NotEnoughMoneyForSubscriptionKey);
 	}
 }

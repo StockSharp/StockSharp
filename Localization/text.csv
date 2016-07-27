@@ -4304,6 +4304,8 @@ IV;IV;IV
 HV;HV;HV
 UnsupportedSchemeVersionParams;Scheme version {0} is not supported.;Версия схемы {0} не поддерживается.
 FinamPanel;Finam historical market data.;Исторические маркет-данные Финам.
+OwnStrategySubscription;Can not subscribe to own strategy.;Невозможно подписаться на свою стратегию.
+NotEnoughMoneyForSubscription;Not enough money for subscription.;Недостаточно денег для подписки на стратегию.
 DocStr0;Button activation alert settings;Кнопка активации настроек сигнала
 DocStr1;Initializes a new instance of the {0};Создать {0}
 DocStr2;Load settings;Загрузить настройки
