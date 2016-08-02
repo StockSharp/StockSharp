@@ -60,7 +60,6 @@
       <Link>Properties\StockSharpAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="CategoryLocAttribute.cs" />
-    <Compile Include="CategoryOrderLocAttribute.cs" />
     <Compile Include="DescriptionLocAttribute.cs" />
     <Compile Include="DisplayNameLocAttribute.cs" />
     <Compile Include="EnumDisplayNameLocAttribute.cs" />
