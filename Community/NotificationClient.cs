@@ -19,7 +19,9 @@ namespace StockSharp.Community
 	using System.Threading;
 
 	using Ecng.Common;
+	using Ecng.Localization;
 
+	using StockSharp.Localization;
 	using StockSharp.Logging;
 
 	/// <summary>
@@ -115,7 +117,7 @@ namespace StockSharp.Community
 
 		private void RequestNews()
 		{
-			var news = Invoke(f => f.GetNews(Guid.Empty, 0));
+			var news = Invoke(f => f.GetNews2(Guid.Empty, LocalizedStrings.ActiveLanguage != Languages.Russian, 0));
 
 			//if (news.Length <= 0)
 			//	return;

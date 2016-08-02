@@ -67,5 +67,15 @@ namespace StockSharp.Community
 		/// <returns>Last news.</returns>
 		[OperationContract]
 		CommunityNews[] GetNews(Guid sessionId, long fromId);
+
+		/// <summary>
+		/// To get the latest news.
+		/// </summary>
+		/// <param name="sessionId">Session ID. It can be empty if the request is anonymous.</param>
+		/// <param name="isEnglish">Request news on english.</param>
+		/// <param name="fromId">The identifier from which you need to receive the news.</param>
+		/// <returns>Last news.</returns>
+		[OperationContract]
+		CommunityNews[] GetNews2(Guid sessionId, bool isEnglish, long fromId);
 	}
 }
