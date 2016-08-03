@@ -89,6 +89,8 @@ namespace StockSharp.Community
 					throw new InvalidOperationException(LocalizedStrings.StrategyPriceTypeCannotChange.Put(args));
 				case ErrorCodes.StrategyContentTypeCannotChange:
 					throw new InvalidOperationException(LocalizedStrings.StrategyContentTypeCannotChange.Put(args));
+				case ErrorCodes.StrategyOwnSubscribe:
+					throw new InvalidOperationException(LocalizedStrings.OwnStrategySubscription);
 				case ErrorCodes.TooMuchPrice:
 					throw new InvalidOperationException(LocalizedStrings.TooMuchPrice);
 				case ErrorCodes.NotEnoughBalance:

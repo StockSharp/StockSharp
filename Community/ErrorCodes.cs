@@ -56,7 +56,8 @@ namespace StockSharp.Community
 		StrategyContentTypeCannotChange,
 		StrategyBacktestNotOwned,
 		StrategyPrivateCannotChange,
-
+		StrategyOwnSubscribe,
+		
 		TooMuchPrice,
 		NotEnoughBalance,
 		NotSubscribed,
