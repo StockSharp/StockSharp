@@ -361,8 +361,8 @@ namespace StockSharp.Algo.Strategies
 			{
 				base.OnStarted();
 
-				Security
-					.WhenTimeCome(SafeGetConnector(), _orders.Keys)
+				SafeGetConnector()
+					.WhenTimeCome(_orders.Keys)
 					.Do(time => _orders[time].ForEach(o => _childStrategies[GetKey(o)].RegisterOrder(o)))
 					.Apply(this);
 			}

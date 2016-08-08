@@ -1197,12 +1197,12 @@ namespace StockSharp.Algo
 			}
 		}
 
-		private sealed class SecurityMarketTimeRule : SecurityRule<DateTimeOffset>
+		private sealed class TimeComeRule : MarketRule<IConnector, DateTimeOffset>
 		{
 			private readonly MarketTimer _timer;
 
-			public SecurityMarketTimeRule(Security security, IConnector connector, IEnumerable<DateTimeOffset> times)
-				: base(security, connector)
+			public TimeComeRule(IConnector connector, IEnumerable<DateTimeOffset> times)
+				: base(connector)
 			{
 				if (times == null)
 					throw new ArgumentNullException(nameof(times));
@@ -1267,25 +1267,23 @@ namespace StockSharp.Algo
 		/// <summary>
 		/// To create a rule, activated at the exact time, specified through <paramref name="times" />.
 		/// </summary>
-		/// <param name="security">Security.</param>
 		/// <param name="connector">Connection to the trading system.</param>
 		/// <param name="times">The exact time. Several values may be sent.</param>
 		/// <returns>Rule.</returns>
-		public static MarketRule<Security, DateTimeOffset> WhenTimeCome(this Security security, IConnector connector, params DateTimeOffset[] times)
+		public static MarketRule<IConnector, DateTimeOffset> WhenTimeCome(this IConnector connector, params DateTimeOffset[] times)
 		{
-			return security.WhenTimeCome(connector, (IEnumerable<DateTimeOffset>)times);
+			return connector.WhenTimeCome((IEnumerable<DateTimeOffset>)times);
 		}
 
 		/// <summary>
 		/// To create a rule, activated at the exact time, specified through <paramref name="times" />.
 		/// </summary>
-		/// <param name="security">Security.</param>
 		/// <param name="connector">Connection to the trading system.</param>
 		/// <param name="times">The exact time. Several values may be sent.</param>
 		/// <returns>Rule.</returns>
-		public static MarketRule<Security, DateTimeOffset> WhenTimeCome(this Security security, IConnector connector, IEnumerable<DateTimeOffset> times)
+		public static MarketRule<IConnector, DateTimeOffset> WhenTimeCome(this IConnector connector, IEnumerable<DateTimeOffset> times)
 		{
-			return new SecurityMarketTimeRule(security, connector, times);
+			return new TimeComeRule(connector, times);
 		}
 
 		#endregion
@@ -2037,11 +2035,11 @@ namespace StockSharp.Algo
 			protected IConnector Connector { get; }
 		}
 
-		private sealed class MarketTimeRule : ConnectorRule<IConnector>
+		private sealed class IntervalTimeRule : ConnectorRule<IConnector>
 		{
 			private readonly MarketTimer _timer;
 
-			public MarketTimeRule(IConnector connector, TimeSpan interval/*, bool firstTimeRun*/)
+			public IntervalTimeRule(IConnector connector, TimeSpan interval/*, bool firstTimeRun*/)
 				: base(connector)
 			{
 				Name = LocalizedStrings.Str175 + " " + interval;
@@ -2113,7 +2111,7 @@ namespace StockSharp.Algo
 			if (connector == null)
 				throw new ArgumentNullException(nameof(connector));
 
-			return new MarketTimeRule(connector, interval/*, firstTimeRun*/);
+			return new IntervalTimeRule(connector, interval/*, firstTimeRun*/);
 		}
 
 		/// <summary>
