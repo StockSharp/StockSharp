@@ -26,7 +26,7 @@ namespace StockSharp.Algo.Storages
 	{
 		private readonly MessagePriorityQueue _messageQueue = new MessagePriorityQueue();
 		private readonly List<Tuple<IMarketDataStorage, bool>> _actions = new List<Tuple<IMarketDataStorage, bool>>();
-		private readonly SyncObject _moveNextSyncRoot  = new SyncObject();
+		private readonly SyncObject _moveNextSyncRoot = new SyncObject();
 		private readonly SyncObject _syncRoot = new SyncObject();
 
 		private readonly BasketMarketDataStorage<T> _basketStorage;
@@ -153,6 +153,8 @@ namespace StockSharp.Algo.Storages
 
 			_isChanged = true;
 			_actions.Add(Tuple.Create(storage, true));
+
+			_messageQueue.Close();
 			_syncRoot.PulseSignal();
 		}
 
@@ -176,6 +178,8 @@ namespace StockSharp.Algo.Storages
 
 			_isChanged = true;
 			_actions.Add(Tuple.Create((IMarketDataStorage)storage, false));
+
+			_messageQueue.Close();
 			_syncRoot.PulseSignal();
 		}
 
@@ -215,7 +219,7 @@ namespace StockSharp.Algo.Storages
 		{
 			_currentMessage = null;
 			_currentTime = DateTimeOffset.MinValue;
-            _basketStorage.InnerStorages.Clear();
+			_basketStorage.InnerStorages.Clear();
 		}
 
 		/// <summary>
@@ -249,6 +253,7 @@ namespace StockSharp.Algo.Storages
 				{
 					_syncRoot.WaitSignal();
 					_messageQueue.Clear();
+					_messageQueue.Open();
 
 					_isInitialized = true;
 					_isChanged = false;
@@ -264,7 +269,8 @@ namespace StockSharp.Algo.Storages
 					}
 
 					var boards = Boards.ToArray();
-					var loadDate = _currentTime != DateTimeOffset.MinValue ? _currentTime : StartDate;
+					var loadDate = _currentTime != DateTimeOffset.MinValue ? _currentTime.Date : StartDate;
+					var startTime = _currentTime;
 
 					while (loadDate.Date <= StopDate.Date && !_isChanged && !token.IsCancellationRequested)
 					{
@@ -278,9 +284,9 @@ namespace StockSharp.Algo.Storages
 								var noData = !enumerator.DataTypes.Except(messageTypes).Any();
 
 								if (noData)
-									EnqueueMessages(loadDate, token, GetSimpleTimeLine(loadDate).GetEnumerator());
+									EnqueueMessages(startTime, token, GetSimpleTimeLine(loadDate).GetEnumerator());
 								else
-									EnqueueMessages(loadDate, token, enumerator);
+									EnqueueMessages(startTime, token, enumerator);
 							}
 						}
 
@@ -318,7 +324,7 @@ namespace StockSharp.Algo.Storages
 					continue;
 
 				msg.LocalTime = serverTime.Value;
-				
+
 				if (checkFromTime)
 				{
 					// пропускаем только стаканы, тики и ОЛ
