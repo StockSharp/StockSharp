@@ -44,7 +44,7 @@ namespace StockSharp.Messages
 		/// <param name="message"></param>
 		public void Enqueue(Message message)
 		{
-			Enqueue(new KeyValuePair<long, Message>(message.LocalTime.Ticks, message));
+			Enqueue(new KeyValuePair<long, Message>(message.LocalTime.UtcTicks, message));
 		}
 
 		/// <summary>
