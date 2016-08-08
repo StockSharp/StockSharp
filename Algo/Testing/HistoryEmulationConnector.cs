@@ -157,7 +157,7 @@ namespace StockSharp.Algo.Testing
 
 		private readonly CachedSynchronizedDictionary<Tuple<SecurityId, MarketDataTypes, object>, int> _subscribedCandles = new CachedSynchronizedDictionary<Tuple<SecurityId, MarketDataTypes, object>, int>();
 		private readonly CachedSynchronizedDictionary<Tuple<SecurityId, MarketDataTypes, object>, int> _historySourceSubscriptions = new CachedSynchronizedDictionary<Tuple<SecurityId, MarketDataTypes, object>, int>();
-		private readonly SynchronizedDictionary<Tuple<SecurityId, MarketDataTypes, object>, List<CandleSeries>> _series = new SynchronizedDictionary<Tuple<SecurityId, MarketDataTypes, object>, List<CandleSeries>>();
+		private readonly SynchronizedDictionary<Tuple<SecurityId, MarketDataTypes, object>, CachedSynchronizedSet<CandleSeries>> _series = new SynchronizedDictionary<Tuple<SecurityId, MarketDataTypes, object>, CachedSynchronizedSet<CandleSeries>>();
 		
 		/// <summary>
 		/// Initializes a new instance of the <see cref="HistoryEmulationConnector"/>.
@@ -454,12 +454,12 @@ namespace StockSharp.Algo.Testing
 								if (!UseExternalCandleSource)
 									break;
 
-								var serieses = _series.TryGetValue(Tuple.Create(candleMsg.SecurityId, candleMsg.Type.ToCandleMarketDataType(), candleMsg.Arg));
+								var seriesList = _series.TryGetValue(Tuple.Create(candleMsg.SecurityId, candleMsg.Type.ToCandleMarketDataType(), candleMsg.Arg));
 
-								if (serieses == null)
-										break;
+								if (seriesList == null)
+									break;
 
-								foreach (var series in serieses)
+								foreach (var series in seriesList.Cache)
 								{
 									_newCandles?.Invoke(series, new[] { candleMsg.ToCandle(series) });
 

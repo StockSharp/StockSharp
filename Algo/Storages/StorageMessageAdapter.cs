@@ -24,6 +24,7 @@ namespace StockSharp.Algo.Storages
 	using MoreLinq;
 
 	using StockSharp.BusinessEntities;
+	using StockSharp.Localization;
 	using StockSharp.Logging;
 	using StockSharp.Messages;
 
@@ -234,37 +235,57 @@ namespace StockSharp.Algo.Storages
 			switch (msg.DataType)
 			{
 				case MarketDataTypes.Level1:
-					GetStorage<Level1ChangeMessage>(msg.SecurityId, null)
-						.Load(from, to)
-						.ForEach(RaiseStorageMessage);
+					LoadMessages(GetStorage<Level1ChangeMessage>(msg.SecurityId, null), from, to);
 					break;
 
 				case MarketDataTypes.MarketDepth:
-					GetStorage<QuoteChangeMessage>(msg.SecurityId, null)
-						.Load(from, to)
-						.ForEach(RaiseStorageMessage);
+					LoadMessages(GetStorage<QuoteChangeMessage>(msg.SecurityId, null), from, to);
 					break;
 
 				case MarketDataTypes.Trades:
 				case MarketDataTypes.OrderLog:
-					GetStorage<ExecutionMessage>(msg.SecurityId, msg.Arg)
-						.Load(from, to)
-						.ForEach(RaiseStorageMessage);
+					LoadMessages(GetStorage<ExecutionMessage>(msg.SecurityId, msg.Arg), from, to);
 					break;
 
 				case MarketDataTypes.News:
-					_storageRegistry
-						.GetNewsMessageStorage(Drive, Format)
-						.Load(from, to)
-						.ForEach(RaiseStorageMessage);
+					LoadMessages(_storageRegistry.GetNewsMessageStorage(Drive, Format), from, to);
 					break;
 
 				case MarketDataTypes.CandleTimeFrame:
-					GetStorage<TimeFrameCandleMessage>(msg.SecurityId, msg.Arg)
-						.Load(from, to)
-						.ForEach(RaiseStorageMessage);
+					LoadMessages(GetStorage<TimeFrameCandleMessage>(msg.SecurityId, msg.Arg), from, to);
 					break;
+
+				case MarketDataTypes.CandlePnF:
+					LoadMessages(GetStorage<PnFCandleMessage>(msg.SecurityId, msg.Arg), from, to);
+					break;
+
+				case MarketDataTypes.CandleRange:
+					LoadMessages(GetStorage<RangeCandleMessage>(msg.SecurityId, msg.Arg), from, to);
+					break;
+
+				case MarketDataTypes.CandleRenko:
+					LoadMessages(GetStorage<RenkoCandleMessage>(msg.SecurityId, msg.Arg), from, to);
+					break;
+
+				case MarketDataTypes.CandleTick:
+					LoadMessages(GetStorage<TickCandleMessage>(msg.SecurityId, msg.Arg), from, to);
+					break;
+
+				case MarketDataTypes.CandleVolume:
+					LoadMessages(GetStorage<VolumeCandleMessage>(msg.SecurityId, msg.Arg), from, to);
+					break;
+
+				default:
+					throw new ArgumentOutOfRangeException(nameof(msg), msg.DataType, LocalizedStrings.Str721);
 			}
+		}
+
+		private void LoadMessages<TMessage>(IMarketDataStorage<TMessage> storage, DateTimeOffset from, DateTimeOffset to)
+			where TMessage : Message
+		{
+			storage
+				.Load(from, to)
+				.ForEach(RaiseStorageMessage);
 		}
 
 		/// <summary>
