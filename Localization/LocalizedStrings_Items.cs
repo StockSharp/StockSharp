@@ -42716,5 +42716,35 @@ namespace StockSharp.Localization
 		/// Not enough money for subscription.
 		/// </summary>
 		public static string NotEnoughMoneyForSubscription => GetString(NotEnoughMoneyForSubscriptionKey);
+
+		/// <summary>
+		/// Is encrypted
+		/// </summary>
+		public const string IsEncryptedKey = "IsEncrypted";
+
+		/// <summary>
+		/// Is encrypted
+		/// </summary>
+		public static string IsEncrypted => GetString(IsEncryptedKey);
+
+		/// <summary>
+		/// Error while loading scheme. Verify that the specified password.
+		/// </summary>
+		public const string LoadCompositionWrongPasswordErrorKey = "LoadCompositionWrongPasswordError";
+
+		/// <summary>
+		/// Error while loading scheme. Verify that the specified password.
+		/// </summary>
+		public static string LoadCompositionWrongPasswordError => GetString(LoadCompositionWrongPasswordErrorKey);
+
+		/// <summary>
+		/// Error while loading scheme. Possibly file is corrupted, has an incorrect format or can not be read.
+		/// </summary>
+		public const string LoadCompositionErrorKey = "LoadCompositionError";
+
+		/// <summary>
+		/// Error while loading scheme. Possibly file is corrupted, has an incorrect format or can not be read.
+		/// </summary>
+		public static string LoadCompositionError => GetString(LoadCompositionErrorKey);
 	}
 }

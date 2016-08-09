@@ -4306,6 +4306,9 @@ UnsupportedSchemeVersionParams;Scheme version {0} is not supported.;Версия
 FinamPanel;Finam historical market data.;Исторические маркет-данные Финам.
 OwnStrategySubscription;Can not subscribe to own strategy.;Невозможно подписаться на свою стратегию.
 NotEnoughMoneyForSubscription;Not enough money for subscription.;Недостаточно денег для подписки на стратегию.
+IsEncrypted;Is encrypted;Зашифрована
+LoadCompositionWrongPasswordError;Error while loading scheme. Verify the specified password.;Ошибка загрузки схемы. Проверьте правильность указанного пароля.
+LoadCompositionError;Error while loading scheme. Possibly file is corrupted, has an incorrect format or can not be read.;Ошибка загрузки схемы. Возможно Файл поврежден, имеет неверный формат или не может быть прочитан.
 DocStr0;Button activation alert settings;Кнопка активации настроек сигнала
 DocStr1;Initializes a new instance of the {0};Создать {0}
 DocStr2;Load settings;Загрузить настройки
