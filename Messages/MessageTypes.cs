@@ -174,7 +174,7 @@ namespace StockSharp.Messages
 		ChangePassword,
 
 		/// <summary>
-		/// Clear message queueu.
+		/// Clear message queue.
 		/// </summary>
 		ClearQueue,
 

@@ -8600,7 +8600,7 @@ DocStr4364;Order state request;Запросить состояние заяво�
 DocStr4365;Electronic board info;Информация об электронной площадке
 DocStr4366;Portfolio lookup result;Окончание поиска портфелей
 DocStr4367;Password change;Изменение пароля
-DocStr4368;Clear message queueu;Очистить очередь сообщений
+DocStr4368;Clear message queue;Очистить очередь сообщений
 DocStr4369;Candle (tick);Свеча (тиковая)
 DocStr4370;Candle (volume);Свеча (объем)
 DocStr4371;Candle (range);Свеча (рендж)
