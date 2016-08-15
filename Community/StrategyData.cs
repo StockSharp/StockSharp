@@ -93,28 +93,28 @@ namespace StockSharp.Community
 		public DateTime CreationDate { get; set; }
 
 		/// <summary>
-		/// Name (en).
+		/// Name.
 		/// </summary>
 		[DataMember]
-		public string EnName { get; set; }
+		public string Name { get; set; }
 
 		/// <summary>
-		/// Strategy description (en).
+		/// Strategy description.
 		/// </summary>
 		[DataMember]
-		public string EnDescription { get; set; }
+		public string Description { get; set; }
 
-		/// <summary>
-		/// Name (ru).
-		/// </summary>
-		[DataMember]
-		public string RuName { get; set; }
+		///// <summary>
+		///// Name (ru).
+		///// </summary>
+		//[DataMember]
+		//public string RuName { get; set; }
 
-		/// <summary>
-		/// Strategy description (ru).
-		/// </summary>
-		[DataMember]
-		public string RuDescription { get; set; }
+		///// <summary>
+		///// Strategy description (ru).
+		///// </summary>
+		//[DataMember]
+		//public string RuDescription { get; set; }
 
 		/// <summary>
 		/// The identifier of a topic in the forum where the strategy is discussed.

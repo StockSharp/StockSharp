@@ -232,10 +232,10 @@ namespace StockSharp.Community
 
 		private static void CopyTo(StrategyData source, StrategyData destination)
 		{
-			destination.RuName = source.RuName;
-			destination.EnName = source.EnName;
-			destination.RuDescription = source.RuDescription;
-			destination.EnDescription = source.EnDescription;
+			destination.Name = source.Name;
+			//destination.EnName = source.EnName;
+			destination.Description = source.Description;
+			//destination.EnDescription = source.EnDescription;
 			destination.Price = source.Price;
 			destination.Revision = source.Revision;
 			destination.DescriptionId = source.DescriptionId;
