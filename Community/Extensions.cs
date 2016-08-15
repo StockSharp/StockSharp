@@ -106,6 +106,8 @@ namespace StockSharp.Community
 					throw new InvalidOperationException(LocalizedStrings.FileNotStarted);
 				case ErrorCodes.FileTooMuch:
 					throw new InvalidOperationException(LocalizedStrings.FileTooMuch);
+				case ErrorCodes.FileNotExist:
+					throw new InvalidOperationException(LocalizedStrings.Str1575);
 				default:
 					throw new InvalidOperationException(LocalizedStrings.UnknownServerErrorCode.Put(code));
 			}

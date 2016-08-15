@@ -68,5 +68,6 @@ namespace StockSharp.Community
 
 		FileNotStarted,
 		FileTooMuch,
+		FileNotExist
 	}
 }
