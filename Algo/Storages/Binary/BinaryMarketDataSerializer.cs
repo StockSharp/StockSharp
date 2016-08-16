@@ -90,7 +90,11 @@ namespace StockSharp.Algo.Storages.Binary
 		public TimeSpan FirstServerOffset { get; set; }
 		public TimeSpan LastServerOffset { get; set; }
 
-		public override object LastId => LastTime;
+		public override object LastId
+		{
+			get { return LastTime; }
+			set { }
+		}
 
 		public bool IsEmpty()
 		{
@@ -348,6 +352,8 @@ namespace StockSharp.Algo.Storages.Binary
 		protected SecurityId SecurityId { get; private set; }
 		protected int DataSize { get; private set; }
 		protected Version Version { get; set; }
+
+		public StorageFormats Format => StorageFormats.Binary;
 
 		IMarketDataMetaInfo IMarketDataSerializer.CreateMetaInfo(DateTime date)
 		{

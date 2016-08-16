@@ -57,7 +57,11 @@ namespace StockSharp.Algo.Storages.Csv
 
 		private object _lastId;
 
-		public override object LastId => _lastId;
+		public override object LastId
+		{
+			get { return _lastId; }
+			set { _lastId = value; }
+		}
 
 		public override void Write(Stream stream)
 		{
@@ -186,6 +190,11 @@ namespace StockSharp.Algo.Storages.Csv
 		public SecurityId SecurityId { get; }
 
 		/// <summary>
+		/// Storage format.
+		/// </summary>
+		public StorageFormats Format => StorageFormats.Csv;
+
+		/// <summary>
 		/// To create empty meta-information.
 		/// </summary>
 		/// <param name="date">Date.</param>
@@ -221,7 +230,7 @@ namespace StockSharp.Algo.Storages.Csv
 				{
 					foreach (var item in data)
 					{
-						Write(writer, item);
+						Write(writer, item, metaInfo);
 					}
 				}
 				finally
@@ -236,7 +245,8 @@ namespace StockSharp.Algo.Storages.Csv
 		/// </summary>
 		/// <param name="writer">CSV writer.</param>
 		/// <param name="data">Data.</param>
-		protected abstract void Write(CsvFileWriter writer, TData data);
+		/// <param name="metaInfo">Meta-information on data for one day.</param>
+		protected abstract void Write(CsvFileWriter writer, TData data, IMarketDataMetaInfo metaInfo);
 
 		private class CsvEnumerator : SimpleEnumerator<TData>
 		{

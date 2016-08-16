@@ -26,6 +26,11 @@ namespace StockSharp.Algo.Storages
 	public interface IMarketDataSerializer
 	{
 		/// <summary>
+		/// Storage format.
+		/// </summary>
+		StorageFormats Format { get; }
+
+		/// <summary>
 		/// To create empty meta-information.
 		/// </summary>
 		/// <param name="date">Date.</param>

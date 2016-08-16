@@ -58,7 +58,7 @@ namespace StockSharp.Algo.Storages
 		/// <summary>
 		/// Last record identifier.
 		/// </summary>
-		object LastId { get; }
+		object LastId { get; set; }
 
 		/// <summary>
 		/// To save meta-information parameters to stream.
@@ -89,7 +89,7 @@ namespace StockSharp.Algo.Storages
 		public DateTime FirstTime { get; set; }
 		public DateTime LastTime { get; set; }
 
-		public abstract object LastId { get; }
+		public abstract object LastId { get; set; }
 
 		/// <summary>
 		/// To save meta-information parameters to stream.

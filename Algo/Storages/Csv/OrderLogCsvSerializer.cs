@@ -52,7 +52,8 @@ namespace StockSharp.Algo.Storages.Csv
 		/// </summary>
 		/// <param name="writer">CSV writer.</param>
 		/// <param name="data">Data.</param>
-		protected override void Write(CsvFileWriter writer, ExecutionMessage data)
+		/// <param name="metaInfo">Meta-information on data for one day.</param>
+		protected override void Write(CsvFileWriter writer, ExecutionMessage data, IMarketDataMetaInfo metaInfo)
 		{
 			writer.WriteRow(new[]
 			{
@@ -70,6 +71,9 @@ namespace StockSharp.Algo.Storages.Csv
 				data.PortfolioName,
 				data.IsSystem.ToString()
 			});
+
+			metaInfo.LastTime = data.ServerTime.UtcDateTime;
+			metaInfo.LastId = data.TransactionId;
 		}
 
 		/// <summary>

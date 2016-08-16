@@ -53,7 +53,8 @@ namespace StockSharp.Algo.Storages.Csv
 		/// </summary>
 		/// <param name="writer">CSV writer.</param>
 		/// <param name="data">Data.</param>
-		protected override void Write(CsvFileWriter writer, TCandleMessage data)
+		/// <param name="metaInfo">Meta-information on data for one day.</param>
+		protected override void Write(CsvFileWriter writer, TCandleMessage data, IMarketDataMetaInfo metaInfo)
 		{
 			writer.WriteRow(new[]
 			{
@@ -65,6 +66,8 @@ namespace StockSharp.Algo.Storages.Csv
 				data.ClosePrice.ToString(),
 				data.TotalVolume.ToString()
 			});
+
+			metaInfo.LastTime = data.OpenTime.UtcDateTime;
 		}
 
 		/// <summary>

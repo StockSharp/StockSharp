@@ -42,7 +42,8 @@ namespace StockSharp.Algo.Storages.Csv
 		/// </summary>
 		/// <param name="writer">CSV writer.</param>
 		/// <param name="data">Data.</param>
-		protected override void Write(CsvFileWriter writer, ExecutionMessage data)
+		/// <param name="metaInfo">Meta-information on data for one day.</param>
+		protected override void Write(CsvFileWriter writer, ExecutionMessage data, IMarketDataMetaInfo metaInfo)
 		{
 			var row = new[]
 			{
@@ -95,7 +96,9 @@ namespace StockSharp.Algo.Storages.Csv
 				data.ExpiryDate?.ToString("zzz")
 			};
 			writer.WriteRow(row);
-        }
+
+			metaInfo.LastTime = data.ServerTime.UtcDateTime;
+		}
 
 		/// <summary>
 		/// Load data from the specified reader.
