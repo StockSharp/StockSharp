@@ -2176,7 +2176,8 @@ namespace StockSharp.Algo.Strategies
 		{
 			var msg = new Level1ChangeMessage { SecurityId = security.ToSecurityId(), ServerTime = CurrentTime }
 					.TryAdd(Level1Fields.PriceStep, security.PriceStep)
-					.TryAdd(Level1Fields.StepPrice, this.GetSecurityValue<decimal?>(security, Level1Fields.StepPrice));
+					.TryAdd(Level1Fields.StepPrice, security.StepPrice)
+					.TryAdd(Level1Fields.Multiplier, security.Multiplier);
 
 			PnLManager.ProcessMessage(msg);
 		}
