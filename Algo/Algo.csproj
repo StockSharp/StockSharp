@@ -288,6 +288,7 @@
     <Compile Include="Storages\BufferMessageAdapter.cs" />
     <Compile Include="Storages\CacheableMarketDataDrive.cs" />
     <Compile Include="Storages\CachedBasketMarketDataStorage.cs" />
+    <Compile Include="Storages\CsvEntityRegistry.cs" />
     <Compile Include="Storages\Csv\CandleCsvSerializer.cs" />
     <Compile Include="Storages\Csv\CsvMarketDataSerializer.cs" />
     <Compile Include="Storages\Csv\Level1CsvSerializer.cs" />
