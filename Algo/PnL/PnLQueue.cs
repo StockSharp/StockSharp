@@ -212,7 +212,7 @@ namespace StockSharp.Algo.PnL
 				RealizedPnL += _multiplier * pnl;
 			}
 
-			return new PnLInfo(trade, closedVolume, pnl);
+			return new PnLInfo(trade, closedVolume, _multiplier * pnl);
 		}
 
 		/// <summary>
