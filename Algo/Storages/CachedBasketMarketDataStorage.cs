@@ -134,8 +134,6 @@ namespace StockSharp.Algo.Storages
 
 			_cancellationToken = new CancellationTokenSource();
 
-			MaxMessageCount = 1000000;
-
 			ThreadingHelper
 				.Thread(() => CultureInfo.InvariantCulture.DoInCulture(OnLoad))
 				.Name("Cached marketdata storage thread.")

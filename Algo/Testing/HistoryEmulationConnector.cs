@@ -232,7 +232,7 @@ namespace StockSharp.Algo.Testing
 		public HistoryMessageAdapter HistoryMessageAdapter { get; }
 
 		/// <summary>
-		/// The maximal size of the message queue, up to which history data are red. By default, it is equal to 1000.
+		/// The maximal size of the message queue, up to which history data are read. By default, it is equal to <see cref="Testing.HistoryMessageAdapter.DefaultMaxMessageCount"/>.
 		/// </summary>
 		public int MaxMessageCount
 		{

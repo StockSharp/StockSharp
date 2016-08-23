@@ -115,11 +115,13 @@ namespace StockSharp.Algo.Testing
 		}
 
 		/// <summary>
-		/// Max message queue count.
+		/// Default value of <see cref="MaxMessageCount"/>.
 		/// </summary>
-		/// <remarks>
-		/// The default value is -1, which corresponds to the size without limitations.
-		/// </remarks>
+		public const int DefaultMaxMessageCount = 1000000;
+
+		/// <summary>
+		/// The maximal size of the message queue, up to which history data are read. By default, it is equal to <see cref="DefaultMaxMessageCount"/>.
+		/// </summary>
 		public int MaxMessageCount
 		{
 			get { return BasketStorage.MaxMessageCount; }
@@ -137,6 +139,8 @@ namespace StockSharp.Algo.Testing
 			{
 				Boards = Enumerable.Empty<ExchangeBoard>()
 			};
+
+			MaxMessageCount = DefaultMaxMessageCount;
 
 			StartDate = DateTimeOffset.MinValue;
 			StopDate = DateTimeOffset.MaxValue;
