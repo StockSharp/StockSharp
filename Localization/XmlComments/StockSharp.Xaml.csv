@@ -1,4 +1,6 @@
 T:StockSharp.Xaml.AdvertisePanel/summary;DocStr8063
+F:StockSharp.Xaml.AdvertisePanel.TextColorProperty/summary;DocStr29
+P:StockSharp.Xaml.AdvertisePanel.TextColor/summary;DocStr9202
 M:StockSharp.Xaml.AdvertisePanel.#ctor/summary;DocStr1
 P:StockSharp.Xaml.AdvertisePanel.Client/summary;DocStr3070
 M:StockSharp.Xaml.AdvertisePanel.InitializeComponent/summary;DocStr8
@@ -761,6 +763,7 @@ F:StockSharp.Xaml.OrderGrid.RegisterOrderCommand/summary;DocStr7806
 F:StockSharp.Xaml.OrderGrid.ReRegisterOrderCommand/summary;DocStr8152
 F:StockSharp.Xaml.OrderGrid.CancelOrderCommand/summary;DocStr8153
 F:StockSharp.Xaml.OrderGrid.CopyErrorCommand/summary;DocStr8154
+P:StockSharp.Xaml.OrderGrid.IsInteractive/summary;DocStr9203
 M:StockSharp.Xaml.OrderGrid.#ctor/summary;DocStr1
 P:StockSharp.Xaml.OrderGrid.MaxCount/summary;DocStr8157
 P:StockSharp.Xaml.OrderGrid.Orders/summary;DocStr8158

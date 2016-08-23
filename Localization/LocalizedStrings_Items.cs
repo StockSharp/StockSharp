@@ -42748,12 +42748,12 @@ namespace StockSharp.Localization
 		public static string LoadCompositionError => GetString(LoadCompositionErrorKey);
 
 		/// <summary>
-		/// Storage has no data.
+		/// Selected storage does not contains market data for {0} {1} from {2} till {3}.
 		/// </summary>
 		public const string StorageHasNoDataParamsKey = "StorageHasNoDataParams";
 
 		/// <summary>
-		/// Storage has no data.
+		/// Selected storage does not contains market data for {0} {1} from {2} till {3}.
 		/// </summary>
 		public static string StorageHasNoDataParams => GetString(StorageHasNoDataParamsKey);
 	}

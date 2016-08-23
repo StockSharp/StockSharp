@@ -144,6 +144,11 @@ M:StockSharp.Community.INotificationService.GetNews(System.Guid,System.Int64)/su
 M:StockSharp.Community.INotificationService.GetNews(System.Guid,System.Int64)/param/sessionId;DocStr3025
 M:StockSharp.Community.INotificationService.GetNews(System.Guid,System.Int64)/param/fromId;DocStr3026
 M:StockSharp.Community.INotificationService.GetNews(System.Guid,System.Int64)/returns;DocStr3027
+M:StockSharp.Community.INotificationService.GetNews2(System.Guid,System.Boolean,System.Int64)/summary;DocStr3024
+M:StockSharp.Community.INotificationService.GetNews2(System.Guid,System.Boolean,System.Int64)/param/sessionId;DocStr3025
+M:StockSharp.Community.INotificationService.GetNews2(System.Guid,System.Boolean,System.Int64)/param/isEnglish;DocStr9195
+M:StockSharp.Community.INotificationService.GetNews2(System.Guid,System.Boolean,System.Int64)/param/fromId;DocStr3026
+M:StockSharp.Community.INotificationService.GetNews2(System.Guid,System.Boolean,System.Int64)/returns;DocStr3027
 T:StockSharp.Community.IProfileService/summary;DocStr3037
 M:StockSharp.Community.IProfileService.CreateProfile(StockSharp.Community.Profile)/summary;DocStr3038
 M:StockSharp.Community.IProfileService.CreateProfile(StockSharp.Community.Profile)/param/profile;DocStr3028
@@ -346,10 +351,8 @@ F:StockSharp.Community.StrategyPriceTypes.Annual/summary;DocStr9062
 T:StockSharp.Community.StrategyData/summary;DocStr3052
 P:StockSharp.Community.StrategyData.Id/summary;Str361
 P:StockSharp.Community.StrategyData.CreationDate/summary;DocStr3076
-P:StockSharp.Community.StrategyData.EnName/summary;DocStr9063
-P:StockSharp.Community.StrategyData.EnDescription/summary;DocStr9064
-P:StockSharp.Community.StrategyData.RuName/summary;DocStr9065
-P:StockSharp.Community.StrategyData.RuDescription/summary;DocStr9066
+P:StockSharp.Community.StrategyData.Name/summary;DocStr3082
+P:StockSharp.Community.StrategyData.Description/summary;Str3185
 P:StockSharp.Community.StrategyData.DescriptionId/summary;DocStr3077
 P:StockSharp.Community.StrategyData.PriceType/summary;DocStr9067
 P:StockSharp.Community.StrategyData.Price/summary;DocStr3078
