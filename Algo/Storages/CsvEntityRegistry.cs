@@ -292,7 +292,7 @@ namespace StockSharp.Algo.Storages
 				using (var stream = new MemoryStream())
 				{
 					serializer.Serialize(item, stream);
-					return Encoding.UTF8.GetString(stream.ToArray()).Replace(Environment.NewLine, string.Empty).Replace("\"", "'");
+					return Encoding.UTF8.GetString(stream.ToArray()).Remove(Environment.NewLine).Replace("\"", "'");
 				}
 			}
 

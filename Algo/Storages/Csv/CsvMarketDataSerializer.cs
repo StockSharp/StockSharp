@@ -145,7 +145,7 @@ namespace StockSharp.Algo.Storages.Csv
 			if (reader == null)
 				throw new ArgumentNullException(nameof(reader));
 
-			return (date + TimeParser.Parse(reader.ReadString())).ToDateTimeOffset(TimeSpan.Parse(reader.ReadString().Replace("+", string.Empty)));
+			return (date + TimeParser.Parse(reader.ReadString())).ToDateTimeOffset(TimeSpan.Parse(reader.ReadString().Remove("+")));
 		}
 	}
 

@@ -2951,7 +2951,7 @@ namespace StockSharp.Algo
 		/// <returns>Directory name.</returns>
 		public static string CandleArgToFolderName(object arg)
 		{
-			return arg?.ToString().Replace(":", "-") ?? string.Empty;
+			return arg?.ToString().Replace(':', '-') ?? string.Empty;
 		}
 
 		/// <summary>

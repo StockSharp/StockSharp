@@ -384,7 +384,7 @@ namespace StockSharp.Algo.Storages
 
 			if (type == typeof(TimeFrameCandleMessage))
 			{
-				return str.Replace("-", ":").To<TimeSpan>();
+				return str.Replace('-', ':').To<TimeSpan>();
 			}
 			else if (type == typeof(TickCandleMessage))
 			{

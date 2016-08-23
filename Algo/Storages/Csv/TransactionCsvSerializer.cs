@@ -165,7 +165,7 @@ namespace StockSharp.Algo.Storages.Csv
 
 			if (dtStr != null)
 			{
-				msg.ExpiryDate = (DateParser.Parse(dtStr) + TimeParser.Parse(reader.ReadString())).ToDateTimeOffset(TimeSpan.Parse(reader.ReadString().Replace("+", string.Empty)));
+				msg.ExpiryDate = (DateParser.Parse(dtStr) + TimeParser.Parse(reader.ReadString())).ToDateTimeOffset(TimeSpan.Parse(reader.ReadString().Remove("+")));
 			}
 			else
 				reader.Skip(2);

@@ -19,6 +19,7 @@ namespace StockSharp.Algo.Statistics
 
 	using Ecng.ComponentModel;
 	using Ecng.Serialization;
+	using Ecng.Common;
 
 	/// <summary>
 	/// The interface, describing statistic parameter.
@@ -86,7 +87,7 @@ namespace StockSharp.Algo.Statistics
 		protected BaseStatisticParameter()
 		{
 			var type = GetType();
-			_name = type.Name.Replace("Parameter", string.Empty);
+			_name = type.Name.Remove("Parameter");
 
 			DisplayName = type.GetDisplayName(GetReadableName(_name));
 			Description = type.GetDescription(DisplayName);

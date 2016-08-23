@@ -23,6 +23,8 @@ namespace XMLCommToHTM.DOM
 {
 	using System.Linq;
 
+	using Ecng.Common;
+
 	public class MethodDom: MemberDom
 	{
 		private readonly MethodInfo _mi;
@@ -42,7 +44,7 @@ namespace XMLCommToHTM.DOM
 			get
 			{
 				if (IsOperator)
-					return base.Name.Replace("op_", "");
+					return base.Name.Remove("op_");
 				else 
 					return base.Name;
 			}
@@ -56,7 +58,7 @@ namespace XMLCommToHTM.DOM
 		{
 			var ret = base.ShortSignature;
 			if (IsOperator)
-				ret = ret.Replace("op_","");
+				ret = ret.Remove("op_");
 			ret += MemberUtils.GetGenericListSignature(_mi);
 			ret += MemberUtils.GetParametersShortSignature(_mi.GetParameters(), (asExtention?1:0));
 			return ret;

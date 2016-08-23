@@ -16,6 +16,7 @@ Copyright 2010 by StockSharp, LLC
 using System;
 using System.Reflection;
 using System.Xml.Linq;
+using Ecng.Common;
 
 namespace XMLCommToHTM.DOM.Internal.DOC
 {
@@ -118,7 +119,7 @@ namespace XMLCommToHTM.DOM.Internal.DOC
 		{
 			argument = argument
 				.Replace('@', '&')
-				.Replace("0:","");
+				.Remove("0:");
 			return argument;
 		}
 

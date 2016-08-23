@@ -100,7 +100,7 @@ namespace StockSharp.Algo.Storages.Csv
 
 						if (dtStr != null)
 						{
-							level1.Changes.Add(field, (DateParser.Parse(dtStr) + TimeParser.Parse(reader.ReadString())).ToDateTimeOffset(TimeSpan.Parse(reader.ReadString().Replace("+", string.Empty))));
+							level1.Changes.Add(field, (DateParser.Parse(dtStr) + TimeParser.Parse(reader.ReadString())).ToDateTimeOffset(TimeSpan.Parse(reader.ReadString().Remove("+"))));
 						}
 						else
 						{

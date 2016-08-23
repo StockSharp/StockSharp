@@ -174,7 +174,7 @@ namespace StockSharp.Quik
 			for (var i = 0; i < addresses.Length; i++)
 			{
 				var item = combo[i];
-				item = item.Substring(item.IndexOf('[') + 1).Replace("]", string.Empty);
+				item = item.Substring(item.IndexOf('[') + 1).Remove("]");
 				addresses[i] = item.To<IPEndPoint>();
 			}
 

@@ -466,7 +466,7 @@ namespace StockSharp.Algo.Storages
 			string fileName;
 
 			if (dataType.IsCandleMessage())
-				fileName = "candles_{0}_{1}".Put(dataType.Name.Replace("Message", string.Empty), TraderHelper.CandleArgToFolderName(arg));
+				fileName = "candles_{0}_{1}".Put(dataType.Name.Remove(nameof(Message)), TraderHelper.CandleArgToFolderName(arg));
 			else
 			{
 				fileName = _fileNames.TryGetValue(DataType.Create(dataType, arg));

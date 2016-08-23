@@ -151,7 +151,7 @@ namespace XMLCommToHTM
 			var name = TypeUtils.ToDisplayString(type, includeNamespace);
 
 			if (truncateIfAfftibute && type.IsSubclassOf(typeof(Attribute)))
-				name = "[" + name.Replace("Attribute", string.Empty) + "]";
+				name = "[" + name.Remove("Attribute") + "]";
 
 			return BuildUrl(name, Navigation.GetTypeHref(type));
 		}

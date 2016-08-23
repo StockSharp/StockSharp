@@ -128,7 +128,7 @@ namespace SampleSmartCandles
 			{
 				var wnd = new ChartWindow
 				{
-					Title = "{0} {1} {2}".Put(security.Code, series.CandleType.Name.Replace("Candle", string.Empty), series.Arg)
+					Title = "{0} {1} {2}".Put(security.Code, series.CandleType.Name.Remove("Candle"), series.Arg)
 				};
 
 				wnd.MakeHideable();
