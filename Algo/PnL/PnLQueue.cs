@@ -39,8 +39,7 @@ namespace StockSharp.Algo.PnL
 		public PnLQueue(SecurityId securityId)
 		{
 			SecurityId = securityId;
-			PriceStep = 1;
-			StepPrice = 1;
+			UpdateMultiplier();
 		}
 
 		/// <summary>
@@ -48,7 +47,7 @@ namespace StockSharp.Algo.PnL
 		/// </summary>
 		public SecurityId SecurityId { get; private set; }
 
-		private decimal _priceStep;
+		private decimal _priceStep = 1;
 
 		/// <summary>
 		/// Price step.
@@ -58,12 +57,15 @@ namespace StockSharp.Algo.PnL
 			get { return _priceStep; }
 			private set
 			{
+				if (value <= 0)
+					throw new ArgumentOutOfRangeException(nameof(value));
+
 				_priceStep = value;
 				UpdateMultiplier();
 			}
 		}
 
-		private decimal _stepPrice;
+		private decimal _stepPrice = 1;
 
 		/// <summary>
 		/// Step price.
@@ -73,18 +75,48 @@ namespace StockSharp.Algo.PnL
 			get { return _stepPrice; }
 			private set
 			{
+				if (value <= 0)
+					throw new ArgumentOutOfRangeException(nameof(value));
+
 				_stepPrice = value;
 				UpdateMultiplier();
 			}
 		}
 
+		private decimal _leverage = 1;
+
 		/// <summary>
-		/// Multiplier.
+		/// Leverage.
 		/// </summary>
-		public decimal Multiplier
+		public decimal Leverage
 		{
-			get { return _multiplier; }
-			set { _multiplier = value; }
+			get { return _leverage; }
+			set
+			{
+				if (value <= 0)
+					throw new ArgumentOutOfRangeException(nameof(value));
+
+				_leverage = value;
+				UpdateMultiplier();
+			}
+		}
+
+		private decimal _lotMultiplier = 1;
+
+		/// <summary>
+		/// Lot multiplier.
+		/// </summary>
+		public decimal LotMultiplier
+		{
+			get { return _lotMultiplier; }
+			set
+			{
+				if (value <= 0)
+					throw new ArgumentOutOfRangeException(nameof(value));
+
+				_lotMultiplier = value;
+				UpdateMultiplier();
+			}
 		}
 
 		/// <summary>
@@ -156,6 +188,8 @@ namespace StockSharp.Algo.PnL
 
 			_unrealizedPnL = null;
 
+			decimal tradePnL;
+
 			lock (_openedTrades.SyncRoot)
 			{
 				if (_openedTrades.Count > 0)
@@ -195,10 +229,11 @@ namespace StockSharp.Algo.PnL
 					_openedTrades.Push(RefTuple.Create(price, volume));
 				}
 
-				RealizedPnL += _multiplier * pnl;
+				tradePnL = _multiplier * pnl;
+				RealizedPnL += tradePnL;
 			}
 
-			return new PnLInfo(trade, closedVolume, pnl);
+			return new PnLInfo(trade, closedVolume, tradePnL);
 		}
 
 		/// <summary>
@@ -218,6 +253,13 @@ namespace StockSharp.Algo.PnL
 			if (stepPrice != null)
 			{
 				StepPrice = (decimal)stepPrice;
+				_recalcUnrealizedPnL = true;
+			}
+
+			var lotMultiplier = levelMsg.Changes.TryGetValue(Level1Fields.Multiplier);
+			if (lotMultiplier != null)
+			{
+				LotMultiplier = (decimal)lotMultiplier;
 				_recalcUnrealizedPnL = true;
 			}
 
@@ -271,9 +313,7 @@ namespace StockSharp.Algo.PnL
 
 		private void UpdateMultiplier()
 		{
-			_multiplier = StepPrice == 0 || PriceStep == 0 
-				? 1 
-				: StepPrice / PriceStep;
+			_multiplier = (StepPrice / PriceStep) * Leverage * LotMultiplier;
 		}
 
 		private static decimal GetPnL(decimal price, decimal volume, Sides side, decimal marketPrice)

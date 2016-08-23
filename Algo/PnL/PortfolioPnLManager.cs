@@ -141,7 +141,7 @@ namespace StockSharp.Algo.PnL
 					var leverage = pfMsg.Changes.TryGetValue(PositionChangeTypes.Leverage).To<decimal?>();
 					if (leverage != null)
 					{
-						_securityPnLs.CachedValues.ForEach(q => q.Multiplier = leverage.Value);
+						_securityPnLs.CachedValues.ForEach(q => q.Leverage = leverage.Value);
 					}
 
 					break;
@@ -154,7 +154,7 @@ namespace StockSharp.Algo.PnL
 					var leverage = posMsg.Changes.TryGetValue(PositionChangeTypes.Leverage).To<decimal?>();
 					if (leverage != null)
 					{
-						_securityPnLs.SafeAdd(posMsg.SecurityId, security => new PnLQueue(security)).Multiplier = leverage.Value;
+						_securityPnLs.SafeAdd(posMsg.SecurityId, security => new PnLQueue(security)).Leverage = leverage.Value;
 					}
 
 					break;
