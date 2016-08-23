@@ -82,333 +82,6 @@
             </summary>
             <exclude />
         </member>
-        <member name="T:OEC.API.Core">
-            <summary>
-                Internal functionality of the OECAPI
-            </summary>
-        </member>
-        <member name="F:OEC.API.Core.ReconnectTimeOut">
-            <summary>
-                Reconnect timeout in ms
-            </summary>
-        </member>
-        <member name="F:OEC.API.Core.EventsTimeOut">
-            <summary>
-                Events batch interval
-            </summary>
-        </member>
-        <member name="F:OEC.API.Core.LightReconnectAttempts">
-            <summary>
-                Amount of attempts allowed for light-weight reconnect
-            </summary>
-        </member>
-        <member name="F:OEC.API.Core._client">
-            <summary>
-                Owner
-            </summary>
-        </member>
-        <member name="F:OEC.API.Core._connection">
-            <summary>
-                Shared with OECClient
-            </summary>
-        </member>
-        <member name="F:OEC.API.Core._priceEvents">
-            <summary>
-                Accumulated price events
-            </summary>
-        </member>
-        <member name="F:OEC.API.Core.Accounts">
-            <summary>
-                Collections of API objects
-            </summary>
-        </member>
-        <member name="M:OEC.API.Core.#ctor(OEC.API.OECClient)">
-            <summary>
-                Constructor
-            </summary>
-            <param name="client">OECClient instance</param>
-        </member>
-        <member name="F:OEC.API.Core.PriceHost">
-            <summary>
-                Price host, overrides _priceHosts if exists
-            </summary>
-        </member>
-        <member name="M:OEC.API.Core.Connect(System.String,System.Int32,System.String,System.String,System.Boolean,OEC.HashTools.Certificate)">
-            <summary>
-                Connect to the OEC Server
-            </summary>
-            <param name="host">server host</param>
-            <param name="port">server port</param>
-            <param name="username">user name</param>
-            <param name="password">password</param>
-            <param name="autoReconnect">auto-reconnect enabled</param>
-            <param name="certificate">certificate of calling application</param>
-        </member>
-        <member name="M:OEC.API.Core.DoConnect">
-            <summary>
-                connect implementation
-            </summary>
-        </member>
-        <member name="M:OEC.API.Core.Disconnect">
-            <summary>
-                Disconnect by user request
-            </summary>
-        </member>
-        <member name="M:OEC.API.Core.VerifyConnection">
-            <summary>
-                pumps messages from the connection
-                called by winforms timer to make processing and events happen in the main thread
-            </summary>
-        </member>
-        <member name="M:OEC.API.Core.DispatchClientResponse(OEC.Protocol.ClientResponse)">
-            <summary>
-                Process the server response, dispatch to handler method by type
-            </summary>
-            <param name="response">response object</param>
-        </member>
-        <member name="M:OEC.API.Core.LoadClient(OEC.Protocol.APIData)">
-            <summary>
-                Process initialization response
-            </summary>
-            <param name="initdata">initialization response data</param>
-        </member>
-        <member name="M:OEC.API.Core.CheckEvents">
-            <summary>
-                check for delayed price event and raise if necessary
-            </summary>
-        </member>
-        <member name="M:OEC.API.Core.AddPriceEvent(OEC.API.Contract,OEC.API.Price,OEC.API.Price)">
-            <summary>
-                Schedule price event
-            </summary>
-            <param name="contract">contract to update</param>
-            <param name="newprice">new price data</param>
-            <param name="oldprice">old price data</param>
-        </member>
-        <member name="M:OEC.API.Core.ProcessRelations(System.Collections.Generic.List{OEC.Data.UserStatus},System.Boolean)">
-            <summary>
-                update relations (related chat users)
-            </summary>
-            <param name="relations">new user list</param>
-            <param name="callevent">notify user?</param>
-        </member>
-        <member name="M:OEC.API.Core.ProcessTraders(System.Collections.Generic.List{OEC.Data.Trader},System.Boolean)">
-            <summary>
-                update traders/accounts
-            </summary>
-            <param name="traders">traders/accounts array</param>
-            <param name="update">notify user?</param>
-        </member>
-        <member name="M:OEC.API.Core.ProcessPitGroups(System.Collections.Generic.List{OEC.Data.PitGroup},System.Boolean)">
-            <summary>
-                Update pit groups (routes)
-            </summary>
-            <param name="pitGroups">new pit groups</param>
-            <param name="update">notify user?</param>
-        </member>
-        <member name="M:OEC.API.Core.AddOrder(OEC.Data.Order)">
-            <summary>
-                Creates an order from serializable order data and adds it to collection of orders
-            </summary>
-            <param name="orderdata">serializable order</param>
-        </member>
-        <member name="M:OEC.API.Core.AddOrderState(OEC.Data.State,System.Boolean)">
-            <summary>
-                converts a state and adds it to the order
-            </summary>
-            <param name="datastate">serializable state</param>
-            <param name="callevent">notify user?</param>
-        </member>
-        <member name="M:OEC.API.Core.AddOrderState(OEC.API.Order,OEC.API.State,System.Boolean)">
-            <summary>
-                Adds a new state to the order
-            </summary>
-            <param name="order">Order to change</param>
-            <param name="newState">New state</param>
-            <param name="callevent">notify user?</param>
-        </member>
-        <member name="M:OEC.API.Core.AddOrderFill(OEC.Data.Fill)">
-            <summary>
-                Converts and adds a fill to order
-                updates positions
-            </summary>
-            <param name="datafill">serializable fill</param>
-        </member>
-        <member name="M:OEC.API.Core.RefreshPositions(OEC.API.Account,OEC.API.Contract)">
-            <summary>
-                Recalculate positions
-            </summary>
-            <param name="account">Account to recalculate</param>
-            <param name="contract">Position contract</param>
-        </member>
-        <member name="M:OEC.API.Core.StorePosition(OEC.Data.Position,System.Boolean)">
-            <summary>
-                Stores external position
-            </summary>
-            <param name="position">serializable position</param>
-            <param name="raiseevent">notify user?</param>
-        </member>
-        <member name="M:OEC.API.Core.UpdateBalance(OEC.Data.Balance,System.Boolean)">
-            <summary>
-                Stores external cash balance
-            </summary>
-            <param name="cash">serializable cash record</param>
-            <param name="raiseevent">notify user?</param>
-        </member>
-        <member name="M:OEC.API.Core.StorePrevPosition(OEC.Data.Position)">
-            <summary>
-                Store external previous position
-            </summary>
-            <param name="position">serializable position</param>
-        </member>
-        <member name="M:OEC.API.Core.FillPositions(System.Collections.Generic.List{OEC.API.Fill})">
-            <summary>
-                Initialize positions with all order fills
-            </summary>
-        </member>
-        <member name="M:OEC.API.Core.AddPositionFill(OEC.API.Account,OEC.API.Contract,System.Collections.Generic.IEnumerable{OEC.API.Fill},System.Boolean,System.Boolean)">
-            <summary>
-                Adds a fill to position
-            </summary>
-            <param name="fills"></param>
-            <param name="callevent">notify user?</param>
-            <param name="recalculateAveragePosition">recalculate avg position?</param>
-            <param name="account"></param>
-            <param name="contract"></param>
-        </member>
-        <member name="M:OEC.API.Core.StorePrice(OEC.Data.Quote)">
-            <summary>
-                Store external price to currency or contract
-            </summary>
-            <param name="response">serializable price record</param>
-        </member>
-        <member name="M:OEC.API.Core.ProcessPrice(OEC.API.Contract,OEC.API.Price,OEC.API.Price,OEC.API.Core.CurrencyAccountCheckList)">
-            <summary>
-                Update account and position stats
-            </summary>
-            <param name="c">Contract</param>
-            <param name="newprice">New Price</param>
-            <param name="oldprice">Old Price</param>
-            <param name="curs">List to accumulate changed currencies</param>
-        </member>
-        <member name="M:OEC.API.Core.StoreDOM(OEC.Data.DOM)">
-            <summary>
-                Store DOM data
-            </summary>
-            <param name="response">serializable DOM record</param>
-        </member>
-        <member name="M:OEC.API.Core.UpdateUserStatus(OEC.Data.UserStatus)">
-            <summary>
-                Update partner user online status
-            </summary>
-            <param name="response">serialized user status record</param>
-        </member>
-        <member name="M:OEC.API.Core.ProcessUserMessage(OEC.Data.ChatMessage)">
-            <summary>
-                decode user message and fire an event
-            </summary>
-            <param name="response">serialized message record</param>
-        </member>
-        <member name="M:OEC.API.Core.ProcessNewsMessage(OEC.Data.NewsMessage)">
-            <summary>
-                decode news message and fire an event
-            </summary>
-            <param name="response">serializable news message</param>
-        </member>
-        <member name="M:OEC.API.Core.ProcessError(OEC.Protocol.Error)">
-            <summary>
-                processes server error message
-            </summary>
-            <param name="response"></param>
-        </member>
-        <member name="M:OEC.API.Core.ProcessTicks(OEC.Protocol.PriceResponse)">
-            <summary>
-                decode ticks and fire an event
-            </summary>
-            <param name="response">serializable ticks</param>
-        </member>
-        <member name="M:OEC.API.Core.ProcessTick(OEC.Protocol.PriceResponse)">
-            <summary>
-                decode tick and fire an event
-            </summary>
-            <param name="response">serializable ticks</param>
-        </member>
-        <member name="M:OEC.API.Core.ProcessOrderCreated(OEC.Protocol.OrderRequest)">
-            <summary>
-                process an order, created by someone else
-            </summary>
-            <param name="response">serializable order data</param>
-        </member>
-        <member name="M:OEC.API.Core.ProcessOrderVersion(OEC.Protocol.OrderRequest)">
-            <summary>
-                process new order version (possibly created by another user)
-            </summary>
-            <param name="response">serializable version data</param>
-        </member>
-        <member name="M:OEC.API.Core.ConfirmOrder(OEC.Protocol.OrderRequest)">
-            <summary>
-                processes confirmation response - assign IDs to the order,command and state, set timestamps
-                sends cancel/modify requests awaiting order confirmation
-            </summary>
-            <param name="response">serializable order id data</param>
-        </member>
-        <member name="M:OEC.API.Core.ConfirmCommand(OEC.Protocol.OrderRequest)">
-            <summary>
-                Processes command confirmation message - assigns ID to the command
-            </summary>
-            <param name="response">serializable command id data</param>
-        </member>
-        <member name="M:OEC.API.Core.UpdateCommand(OEC.Protocol.OrderRequest)">
-            <summary>
-                processes command state and commands
-            </summary>
-            <param name="response">serializable command data</param>
-        </member>
-        <member name="M:OEC.API.Core.DoSubscription(System.Boolean,OEC.API.Contract,System.Boolean)">
-            <summary>
-                Perform subscription/unsubscription and reference counting for a contract
-            </summary>
-            <param name="subscribe">true=subscribe</param>
-            <param name="contract">Contract to subscribe</param>
-            <param name="permanent">Don't unsubscribe (for position subscriptions)</param>
-        </member>
-        <member name="M:OEC.API.Core.DoCurrencySubscription(OEC.API.Currency,System.Boolean)">
-            <summary>
-                Perform subscription for a currency
-            </summary>
-            <param name="currency">Currency to subscribe</param>
-            <param name="forwardSpot"></param>
-        </member>
-        <member name="M:OEC.API.Core.DoDOMSubscription(OEC.API.Contract,System.Boolean)">
-            <summary>
-                Perform subscription/unsubscription for DOM data
-            </summary>
-            <param name="contract">contract</param>
-            <param name="subscribe">true=subscribe</param>
-        </member>
-        <member name="M:OEC.API.Core.GetNextLocalOrderID">
-            <summary>
-                Local unique order ID generator
-            </summary>
-        </member>
-        <member name="M:OEC.API.Core.SendSysMessage(System.Exception,System.String,System.Object[])">
-            <summary>
-                Send an error report to the OEC server
-            </summary>
-            <param name="ex">Optional exception</param>
-            <param name="format">Format</param>
-            <param name="args">Parameters</param>
-        </member>
-        <member name="M:OEC.API.Core.GetNextContractRequestID">
-            <summary>
-                Local unique contract request ID generator
-            </summary>
-        </member>
-        <member name="T:OEC.API.Core.CurrencyAccountCheckList">
-            <summary>
-                internal list for accumulate changed currency/account pairs.
-            </summary>
-        </member>
         <member name="T:OEC.API.OECException">
             <summary>
                 Base class for OEC API exceptions
@@ -1499,6 +1172,12 @@
             <param name="item"></param>
             <returns></returns>
         </member>
+        <member name="M:OEC.API.AllocationBlockItems.Sort(System.Collections.Generic.IComparer{OEC.API.AllocationBlockItem})">
+            <summary>
+            Sort items in AB
+            </summary>
+            <param name="comparer"></param>
+        </member>
         <member name="M:OEC.API.AllocationBlockItems.GetEnumerator">
             <summary>
                 IEnumerable implementation
@@ -2488,7 +2167,7 @@
                 protected ObjectStream instance used to serialize objects over the network
             </summary>
         </member>
-        <member name="M:OEC.API.Connection.Connect(System.String,System.Int32,System.String,System.String,OEC.HashTools.Certificate)">
+        <member name="M:OEC.API.Connection.Connect(OEC.API.Objects.ServerInfo,System.Net.NetworkCredential,OEC.API.Objects.ConnectionFeatures,OEC.HashTools.Certificate)">
             <summary>
                 establish a connection to OECServer, do encryption handshake and send logon request
             </summary>
@@ -2728,6 +2407,11 @@
                 Net position and avg. price
             </summary>
         </member>
+        <member name="P:OEC.API.Position.IsFlat">
+            <summary>
+                True if Position is neither long nor short
+            </summary>
+        </member>
         <member name="P:OEC.API.Position.Prev">
             <summary>
                 Previous day position and avg. price
@@ -2857,6 +2541,70 @@
                 List of compound position groups
             </summary>
             <exclude />
+        </member>
+        <member name="T:OEC.API.Objects.ConnectionFeatures">
+            <summary>
+            User connection settings provided at login
+            </summary>
+        </member>
+        <member name="M:OEC.API.Objects.ConnectionFeatures.#ctor">
+            <summary>
+            Construct a ConnectionFeatures object with default values
+            </summary>
+        </member>
+        <member name="P:OEC.API.Objects.ConnectionFeatures.ForceLogin">
+            <summary>
+            If true, existing user sessions will be disconnected at login.
+            Default value is true.
+            </summary>
+        </member>
+        <member name="P:OEC.API.Objects.ConnectionFeatures.AutoReconnect">
+            <summary>
+            If true, lost connections will automatically restore.
+            Default value is false;
+            </summary>
+        </member>
+        <member name="T:OEC.API.Objects.ConnectionFeatures.Builder">
+            <summary>
+            ConnectionFeature Builder
+            </summary>
+            <example>
+            var features = new ConnectionFeatures.Builder()
+                .SetForceLogin(true)
+                .SetAutoReconnect(true)
+                .Build();
+            </example>
+        </member>
+        <member name="M:OEC.API.Objects.ConnectionFeatures.Builder.#ctor">
+            <summary>
+            Construct a Builder object using ConnectionFeatures' default values
+            </summary>
+        </member>
+        <member name="M:OEC.API.Objects.ConnectionFeatures.Builder.#ctor(OEC.API.Objects.ConnectionFeatures)">
+            <summary>
+            Contruct a Builder object using an existing ConnectionFeatures object
+            </summary>
+            <param name="features">Features to be copied into new Builder object</param>
+        </member>
+        <member name="M:OEC.API.Objects.ConnectionFeatures.Builder.SetForceLogin(System.Boolean)">
+            <summary>
+            Sets the ForceLogin feature
+            </summary>
+            <param name="forceLogin">If true, existing user sessions will be disconnected at login</param>
+            <returns>ConnectionFeatures Builder</returns>
+        </member>
+        <member name="M:OEC.API.Objects.ConnectionFeatures.Builder.SetAutoReconnect(System.Boolean)">
+            <summary>
+            Sets the AutoReconnect feature
+            </summary>
+            <param name="autoReconnect"> If true, connection will automatically restore when disconnected</param>
+            <returns>ConnectionFeatures Builder</returns>
+        </member>
+        <member name="M:OEC.API.Objects.ConnectionFeatures.Builder.Build">
+            <summary>
+            Build the ConnectionFeatures object
+            </summary>
+            <returns>A ConnectionFeatures object containing the set of features initialized in the Builder</returns>
         </member>
         <member name="T:OEC.API.ContinuousContractRule">
             <summary>
@@ -3331,6 +3079,11 @@
         <member name="P:OEC.API.Contract.IsFrontMonth">
             <exclude />
         </member>
+        <member name="P:OEC.API.Contract.IsTAS">
+            <summary>
+                Is the contract a TAS future?
+            </summary>
+        </member>
         <member name="P:OEC.API.Contract.Legs">
             <summary>
                 Legs for compound contract
@@ -3537,6 +3290,11 @@
                 List of risk limits by provider ID
             </summary>
         </member>
+        <member name="T:OEC.API.LegList">
+            <summary>
+                List of risk limits by provider ID
+            </summary>
+        </member>
         <member name="T:OEC.API.ContractGroup">
             <summary>
                 Group of contracts
@@ -3571,6 +3329,323 @@
             <remarks>
                 The list is indexed by ID and Name
             </remarks>
+        </member>
+        <member name="T:OEC.API.Core">
+            <summary>
+                Internal functionality of the OECAPI
+            </summary>
+        </member>
+        <member name="F:OEC.API.Core.ReconnectTimeOut">
+            <summary>
+                Reconnect timeout in ms
+            </summary>
+        </member>
+        <member name="F:OEC.API.Core.EventsTimeOut">
+            <summary>
+                Events batch interval
+            </summary>
+        </member>
+        <member name="F:OEC.API.Core.LightReconnectAttempts">
+            <summary>
+                Amount of attempts allowed for light-weight reconnect
+            </summary>
+        </member>
+        <member name="F:OEC.API.Core._client">
+            <summary>
+                Owner
+            </summary>
+        </member>
+        <member name="F:OEC.API.Core._connection">
+            <summary>
+                Shared with OECClient
+            </summary>
+        </member>
+        <member name="F:OEC.API.Core._priceEvents">
+            <summary>
+                Accumulated price events
+            </summary>
+        </member>
+        <member name="F:OEC.API.Core.Accounts">
+            <summary>
+                Collections of API objects
+            </summary>
+        </member>
+        <member name="M:OEC.API.Core.#ctor(OEC.API.OECClient)">
+            <summary>
+                Constructor
+            </summary>
+            <param name="client">OECClient instance</param>
+        </member>
+        <member name="F:OEC.API.Core.PriceHost">
+            <summary>
+                Price host, overrides _priceHosts if exists
+            </summary>
+        </member>
+        <member name="M:OEC.API.Core.DoConnect">
+            <summary>
+                connect implementation
+            </summary>
+        </member>
+        <member name="M:OEC.API.Core.Disconnect">
+            <summary>
+                Disconnect by user request
+            </summary>
+        </member>
+        <member name="M:OEC.API.Core.VerifyConnection">
+            <summary>
+                pumps messages from the connection
+                called by winforms timer to make processing and events happen in the main thread
+            </summary>
+        </member>
+        <member name="M:OEC.API.Core.DispatchClientResponse(OEC.Protocol.ClientResponse)">
+            <summary>
+                Process the server response, dispatch to handler method by type
+            </summary>
+            <param name="response">response object</param>
+        </member>
+        <member name="M:OEC.API.Core.LoadClient(OEC.Protocol.APIData)">
+            <summary>
+                Process initialization response
+            </summary>
+            <param name="initdata">initialization response data</param>
+        </member>
+        <member name="M:OEC.API.Core.CheckEvents">
+            <summary>
+                check for delayed price event and raise if necessary
+            </summary>
+        </member>
+        <member name="M:OEC.API.Core.AddPriceEvent(OEC.API.Contract,OEC.API.Price,OEC.API.Price)">
+            <summary>
+                Schedule price event
+            </summary>
+            <param name="contract">contract to update</param>
+            <param name="newprice">new price data</param>
+            <param name="oldprice">old price data</param>
+        </member>
+        <member name="M:OEC.API.Core.ProcessRelations(System.Collections.Generic.List{OEC.Data.UserStatus},System.Boolean)">
+            <summary>
+                update relations (related chat users)
+            </summary>
+            <param name="relations">new user list</param>
+            <param name="callevent">notify user?</param>
+        </member>
+        <member name="M:OEC.API.Core.ProcessTraders(System.Collections.Generic.List{OEC.Data.Trader},System.Boolean)">
+            <summary>
+                update traders/accounts
+            </summary>
+            <param name="traders">traders/accounts array</param>
+            <param name="update">notify user?</param>
+        </member>
+        <member name="M:OEC.API.Core.ProcessPitGroups(System.Collections.Generic.List{OEC.Data.PitGroup},System.Boolean)">
+            <summary>
+                Update pit groups (routes)
+            </summary>
+            <param name="pitGroups">new pit groups</param>
+            <param name="update">notify user?</param>
+        </member>
+        <member name="M:OEC.API.Core.AddOrder(OEC.Data.Order)">
+            <summary>
+                Creates an order from serializable order data and adds it to collection of orders
+            </summary>
+            <param name="orderdata">serializable order</param>
+        </member>
+        <member name="M:OEC.API.Core.AddOrderState(OEC.Data.State,System.Boolean)">
+            <summary>
+                converts a state and adds it to the order
+            </summary>
+            <param name="datastate">serializable state</param>
+            <param name="callevent">notify user?</param>
+        </member>
+        <member name="M:OEC.API.Core.AddOrderState(OEC.API.Order,OEC.API.State,System.Boolean)">
+            <summary>
+                Adds a new state to the order
+            </summary>
+            <param name="order">Order to change</param>
+            <param name="newState">New state</param>
+            <param name="callevent">notify user?</param>
+        </member>
+        <member name="M:OEC.API.Core.AddOrderFill(OEC.Data.Fill,System.Boolean,OEC.API.DeferredEvents)">
+            <summary>
+                Converts and adds a fill to order
+                updates positions
+            </summary>
+            <param name="datafill">serializable fill</param>
+            <param name="callEvent">if true, will fire <see cref="T:OEC.API.OnOrderFilledEvent"/></param>
+        </member>
+        <member name="M:OEC.API.Core.RefreshPositions(OEC.API.Account,OEC.API.Contract,OEC.API.DeferredEvents)">
+            <summary>
+                Recalculate positions
+            </summary>
+            <param name="account">Account to recalculate</param>
+            <param name="contract">Position contract</param>
+        </member>
+        <member name="M:OEC.API.Core.StorePosition(OEC.Data.Position,System.Boolean,OEC.API.DeferredEvents)">
+            <summary>
+                Stores external position
+            </summary>
+            <param name="position">serializable position</param>
+            <param name="raiseevent">notify user?</param>
+        </member>
+        <member name="M:OEC.API.Core.StorePrevPosition(OEC.Data.Position)">
+            <summary>
+                Store external previous position
+            </summary>
+            <param name="position">serializable position</param>
+        </member>
+        <member name="M:OEC.API.Core.UpdateBalance(OEC.Data.Balance,System.Boolean,OEC.API.DeferredEvents)">
+            <summary>
+                Stores external cash balance
+            </summary>
+            <param name="cash">serializable cash record</param>
+            <param name="raiseevent">notify user?</param>
+        </member>
+        <member name="M:OEC.API.Core.FillPositions(System.Collections.Generic.List{OEC.API.Fill})">
+            <summary>
+                Initialize positions with all order fills
+            </summary>
+        </member>
+        <member name="M:OEC.API.Core.AddPositionFill(OEC.API.Account,OEC.API.Contract,System.Collections.Generic.IEnumerable{OEC.API.Fill},System.Boolean,System.Boolean,OEC.API.DeferredEvents)">
+            <summary>
+                Adds a fill to position
+            </summary>
+            <param name="fills"></param>
+            <param name="callevent">notify user?</param>
+            <param name="recalculateAveragePosition">recalculate avg position?</param>
+            <param name="account"></param>
+            <param name="contract"></param>
+        </member>
+        <member name="M:OEC.API.Core.StorePrice(OEC.Data.Quote)">
+            <summary>
+                Store external price to currency or contract
+            </summary>
+            <param name="response">serializable price record</param>
+        </member>
+        <member name="M:OEC.API.Core.ProcessPrice(OEC.API.Contract,OEC.API.Price,OEC.API.Price,OEC.API.Core.CurrencyAccountCheckList,OEC.API.DeferredEvents)">
+            <summary>
+                Update account and position stats
+            </summary>
+            <param name="c">Contract</param>
+            <param name="newprice">New Price</param>
+            <param name="oldprice">Old Price</param>
+            <param name="curs">List to accumulate changed currencies</param>
+        </member>
+        <member name="M:OEC.API.Core.StoreDOM(OEC.Data.DOM)">
+            <summary>
+                Store DOM data
+            </summary>
+            <param name="response">serializable DOM record</param>
+        </member>
+        <member name="M:OEC.API.Core.UpdateUserStatus(OEC.Data.UserStatus)">
+            <summary>
+                Update partner user online status
+            </summary>
+            <param name="response">serialized user status record</param>
+        </member>
+        <member name="M:OEC.API.Core.ProcessUserMessage(OEC.Data.ChatMessage)">
+            <summary>
+                decode user message and fire an event
+            </summary>
+            <param name="response">serialized message record</param>
+        </member>
+        <member name="M:OEC.API.Core.ProcessNewsMessage(OEC.Data.NewsMessage)">
+            <summary>
+                decode news message and fire an event
+            </summary>
+            <param name="response">serializable news message</param>
+        </member>
+        <member name="M:OEC.API.Core.ProcessError(OEC.Protocol.Error)">
+            <summary>
+                processes server error message
+            </summary>
+            <param name="response"></param>
+        </member>
+        <member name="M:OEC.API.Core.ProcessTicks(OEC.Protocol.PriceResponse)">
+            <summary>
+                decode ticks and fire an event
+            </summary>
+            <param name="response">serializable ticks</param>
+        </member>
+        <member name="M:OEC.API.Core.ProcessTick(OEC.Protocol.PriceResponse)">
+            <summary>
+                decode tick and fire an event
+            </summary>
+            <param name="response">serializable ticks</param>
+        </member>
+        <member name="M:OEC.API.Core.ProcessOrderCreated(OEC.Protocol.OrderRequest)">
+            <summary>
+                process an order, created by someone else
+            </summary>
+            <param name="response">serializable order data</param>
+        </member>
+        <member name="M:OEC.API.Core.ProcessOrderVersion(OEC.Protocol.OrderRequest)">
+            <summary>
+                process new order version (possibly created by another user)
+            </summary>
+            <param name="response">serializable version data</param>
+        </member>
+        <member name="M:OEC.API.Core.ConfirmOrder(OEC.Protocol.OrderRequest)">
+            <summary>
+                processes confirmation response - assign IDs to the order,command and state, set timestamps
+                sends cancel/modify requests awaiting order confirmation
+            </summary>
+            <param name="response">serializable order id data</param>
+        </member>
+        <member name="M:OEC.API.Core.ConfirmCommand(OEC.Protocol.OrderRequest)">
+            <summary>
+                Processes command confirmation message - assigns ID to the command
+            </summary>
+            <param name="response">serializable command id data</param>
+        </member>
+        <member name="M:OEC.API.Core.UpdateCommand(OEC.Protocol.OrderRequest)">
+            <summary>
+                processes command state and commands
+            </summary>
+            <param name="response">serializable command data</param>
+        </member>
+        <member name="M:OEC.API.Core.DoSubscription(System.Boolean,OEC.API.Contract,System.Boolean)">
+            <summary>
+                Perform subscription/unsubscription and reference counting for a contract
+            </summary>
+            <param name="subscribe">true=subscribe</param>
+            <param name="contract">Contract to subscribe</param>
+            <param name="permanent">Don't unsubscribe (for position subscriptions)</param>
+        </member>
+        <member name="M:OEC.API.Core.DoCurrencySubscription(OEC.API.Currency,System.Boolean)">
+            <summary>
+                Perform subscription for a currency
+            </summary>
+            <param name="currency">Currency to subscribe</param>
+            <param name="forwardSpot"></param>
+        </member>
+        <member name="M:OEC.API.Core.DoDOMSubscription(OEC.API.Contract,System.Boolean)">
+            <summary>
+                Perform subscription/unsubscription for DOM data
+            </summary>
+            <param name="contract">contract</param>
+            <param name="subscribe">true=subscribe</param>
+        </member>
+        <member name="M:OEC.API.Core.GetNextLocalOrderID">
+            <summary>
+                Local unique order ID generator
+            </summary>
+        </member>
+        <member name="M:OEC.API.Core.SendSysMessage(System.Exception,System.String,System.Object[])">
+            <summary>
+                Send an error report to the OEC server
+            </summary>
+            <param name="ex">Optional exception</param>
+            <param name="format">Format</param>
+            <param name="args">Parameters</param>
+        </member>
+        <member name="M:OEC.API.Core.GetNextContractRequestID">
+            <summary>
+                Local unique contract request ID generator
+            </summary>
+        </member>
+        <member name="T:OEC.API.Core.CurrencyAccountCheckList">
+            <summary>
+                internal list for accumulate changed currency/account pairs.
+            </summary>
         </member>
         <member name="T:OEC.API.OECError">
             <summary>
@@ -3789,7 +3864,7 @@
             Data Feed Entitlement
             </summary>
             <remarks>
-            Some exchanges can require individual data feed entitlements. This class is intented to show what exchange and subscription types are entitled for user
+            Some exchanges can require individual data feed entitlements. This class is intended to show what exchange and subscription types are entitled for user
             </remarks>
         </member>
         <member name="T:OEC.API.DataFeedEntitlementList">
@@ -4595,6 +4670,28 @@
                 Removes an element to the collection
             </summary>
             <param name="contractKind">An element</param>
+        </member>
+        <member name="T:OEC.API.Objects.ServerInfo">
+            <summary>
+            Server addressing information
+            </summary>
+        </member>
+        <member name="M:OEC.API.Objects.ServerInfo.#ctor(System.String,System.Int32)">
+            <summary>
+            Create a ServerInfo object
+            </summary>
+            <param name="host">Host name/address of the server</param>
+            <param name="port">Port number of the server</param>
+        </member>
+        <member name="P:OEC.API.Objects.ServerInfo.Host">
+            <summary>
+            Host name/address of the server
+            </summary>
+        </member>
+        <member name="P:OEC.API.Objects.ServerInfo.Port">
+            <summary>
+            Port number of the server
+            </summary>
         </member>
         <member name="T:OEC.API.Strategies.Info.ServerStrategyParam">
             <summary>
@@ -5510,6 +5607,19 @@
             <param name="password">Password - case sensitive</param>
             <param name="autoReconnect">If true, API will automatically restore connection when disconnected</param>
         </member>
+        <member name="M:OEC.API.OECClient.Connect(OEC.API.Objects.ServerInfo,System.Net.NetworkCredential,OEC.API.Objects.ConnectionFeatures)">
+            <summary>
+                Establishes new connection to the OEC server.
+            </summary>
+            <remarks>
+                Throws an exception if network connection couldn't be established or if already connected.
+                Note that OECClient will be ready for operations only when <see cref="E:OEC.API.OECClient.OnLoginComplete"/> event was received.
+                Client should also expect <see cref="E:OEC.API.OECClient.OnLoginFailed"/> event if supplied login information is incorrect.
+            </remarks>
+            <param name="server">OEC Server containing the host and port</param>
+            <param name="credentials">Username and Password, both are case sensitive</param>
+            <param name="features">Preferred configuration settings (e.g., AutoReconnect when connection to server is lost)</param>
+        </member>
         <member name="M:OEC.API.OECClient.Disconnect">
             <summary>
                 Closes the connection to the OEC server.
@@ -5761,7 +5871,7 @@
                 Creates a new blank <see cref="T:OEC.API.OrderDraft"/>
             </summary>
             <remarks>
-                Order draft is a placeholder for oreder parameters. To send an order, client needs to create an order
+                Order draft is a placeholder for order parameters. To send an order, client needs to create an order
                 draft instance, fill its parameters and call <see cref="M:OEC.API.OECClient.SendOrder(OEC.API.OrderDraft)"/> method.
                 It could be also stored (for example, as a template order)
             </remarks>
@@ -5790,7 +5900,7 @@
             </example>
             <seealso cref="T:OEC.API.Order"/>
             <seealso cref="M:OEC.API.OECClient.SendOrder(OEC.API.OrderDraft)"/>
-            <param name="template">string with order parameters</param>
+            <param name="templatestr">string with order parameters</param>
             <returns>New order draft</returns>
         </member>
         <member name="M:OEC.API.OECClient.CreateDraft(OEC.API.Order)">
@@ -6339,6 +6449,11 @@
                 Raised any time when connection to OEC Server is dropped.
             </summary>
         </member>
+        <member name="E:OEC.API.OECClient.OnForciblyDisconnected">
+            <summary>
+                Raised when connection has been forcibly closed by administrator.
+            </summary>
+        </member>
         <member name="E:OEC.API.OECClient.OnOrderConfirmed">
             <summary>
                 Occurs when new <see cref="T:OEC.API.Order"/> was confirmed and order id was assigned by server
@@ -6752,7 +6867,7 @@
                 Unique Universal IDentifier (UUID)
                 This value has to be set to identify application when OEC API is being used by 3rd parties.
                 Remoting connections are required to specify UUID as well.
-                UUID must be obtained from OEC by contacting support (support@openecry.com).
+                UUID must be obtained from OEC by contacting support (support@gaincapital.com).
                 Obtaining the UUID and connecting your application to OEC with the UUID will enable your users
                 to leverage a single login to access both your application as well as OEC's Trading platform at the same time.
             </summary>
@@ -7810,6 +7925,13 @@
                 See <see cref="T:OEC.API.NewOrderDraft"/> and <see cref="T:OEC.API.ModifyOrderDraft"/> for details.
             </remarks>
         </member>
+        <member name="M:OEC.API.OrderDraft.#ctor(OEC.API.OECClient)">
+            <summary>
+                Makes order draft with owner
+            </summary>
+            <param name="client">owner of order draft</param>
+            <remarks>client is used to check order's data</remarks>
+        </member>
         <member name="M:OEC.API.OrderDraft.ClearExtData">
             <summary>
                 Clears extended order data
@@ -7909,6 +8031,80 @@
                 Order as text
             </summary>
             <returns>String representation of order</returns>
+        </member>
+        <member name="M:OEC.API.OrderDraft.ToString(System.String)">
+            <summary>
+            String representation of order using specified format
+            </summary>
+            <param name="format">Format string
+                <list type="table">
+                    <listheader>
+                        <term>Value</term>
+                        <description>Output</description>
+                    </listheader>
+                    <item> 
+                        <term>G</term>
+                        <description>Generic format</description> 
+                    </item> 
+                    <item> 
+                        <term>S</term>
+                        <description>Order side</description> 
+                    </item> 
+                    <item> 
+                        <term>Q</term>
+                        <description>Order quantity</description> 
+                    </item> 
+                    <item> 
+                        <term>C</term>
+                        <description>Order contract</description> 
+                    </item> 
+                    <item> 
+                        <term>E</term>
+                        <description>Order type, price and flags</description> 
+                    </item> 
+                    <item> 
+                        <term>F</term>
+                        <description>Filled quantity</description> 
+                    </item> 
+                    <item> 
+                        <term>L</term>
+                        <description>Leaves quantity</description> 
+                    </item> 
+                    <item> 
+                        <term>T</term>
+                        <description>Order type</description> 
+                    </item>
+                    <item> 
+                        <term>P or P1</term>
+                        <description>Order limit/stop price</description> 
+                    </item>
+                    <item> 
+                        <term>P2 or 2</term>
+                        <description>Current order limit price for STPLMT orders</description> 
+                    </item>
+                    <item> 
+                        <term>FG</term>
+                        <description>Order execution flags</description> 
+                    </item>
+                </list> 
+            <para> </para>
+            <para>To change case of output string add one of the following values:</para>
+                <list type="table">
+                    <item>
+                        <term>U</term>
+                        <description>Upper case</description>
+                    </item>
+                    <item>
+                        <term>L</term>
+                        <description>Lower case</description>
+                    </item>
+                    <item>
+                        <term>T</term>
+                        <description>Title case</description>
+                    </item>
+                </list>
+            </param>
+            <returns>String representation of order in accordance with specified format</returns>
         </member>
         <member name="P:OEC.API.OrderDraft.Account">
             <summary>
@@ -8023,6 +8219,8 @@
             <summary>
                 Construct new instance
             </summary>
+            <param name="client">owner of order draft</param>
+            <remarks>client is used to check order's data</remarks>
         </member>
         <member name="M:OEC.API.NewOrderDraft.GetInvalidParts">
             <summary>
@@ -8070,6 +8268,8 @@
                 Constructs an instance of draft for given order
             </summary>
             <param name="order">order to be modified</param>
+            <param name="client">owner of order draft</param>
+            <remarks>client is used to check order's data</remarks>
         </member>
         <member name="P:OEC.API.ModifyOrderDraft.Account">
             <summary>
@@ -8145,6 +8345,12 @@
                 Occurs when connection is terminated
             </summary>
             <param name="unexpected">false if disconnected by user request</param>
+        </member>
+        <member name="T:OEC.API.OnForciblyDisconnectedEvent">
+            <summary>
+                Occurs when connection is forcibly closed by administrator
+            </summary>
+            <param name="message">Text message</param>
         </member>
         <member name="T:OEC.API.OnOrderConfirmedEvent">
             <summary>
@@ -8377,6 +8583,11 @@
                 Exchange.
             </summary>
             <seealso cref="P:OEC.API.Contract.Exchange"/>
+        </member>
+        <member name="P:OEC.API.Exchange.PaidData">
+            <summary>
+            Prices from this exchange require a Data Feed Entitlement
+            </summary>
         </member>
         <member name="T:OEC.API.ExchangeList">
             <summary>
@@ -8860,6 +9071,10 @@
             <summary>
             </summary>
         </member>
+        <member name="P:OEC.API.ClientInfo.PluginsInfo">
+            <summary>
+            </summary>
+        </member>
         <member name="T:OEC.API.Order">
             <summary>
                 A client order.
@@ -9297,6 +9512,11 @@
         <member name="P:OEC.API.Price.Hidden">
             <summary>
                 Flag: Don't update UI
+            </summary>
+        </member>
+        <member name="P:OEC.API.Price.PnLOnly">
+            <summary>
+                Flag: Don't show price, only for position caluclations.
             </summary>
         </member>
         <member name="P:OEC.API.Price.ImpliedVolatility">
@@ -9885,73 +10105,6 @@
             <param name="priceMultiplier">Multiplier, power of 10</param>
             <param name="tickSize">Tick size - minimal price increment</param>
             <param name="value">Price value</param>
-        </member>
-        <member name="M:OEC.API.PriceIntern.fromString(System.String,System.Globalization.CultureInfo)">
-            <summary>
-                Parse formatted price
-            </summary>
-            <param name="value">string price</param>
-            <param name="culture"></param>
-            <returns>false, if price doesn't match expected pattern</returns>
-        </member>
-        <member name="M:OEC.API.PriceIntern.fromString(System.String)">
-            <summary>
-                Parse formatted price
-            </summary>
-            <param name="value">string price</param>
-            <returns>false, if price doesn't match expected pattern</returns>
-        </member>
-        <member name="M:OEC.API.PriceIntern.ToString(System.Globalization.CultureInfo)">
-            <summary>
-                Format current value
-            </summary>
-            <returns>formatted price</returns>
-        </member>
-        <member name="M:OEC.API.PriceIntern.ToString">
-            <summary>
-                Format current value
-            </summary>
-            <returns>formatted price</returns>
-        </member>
-        <member name="M:OEC.API.PriceIntern.Inc">
-            <summary>
-                increase value by 1 tick
-            </summary>
-        </member>
-        <member name="M:OEC.API.PriceIntern.Dec">
-            <summary>
-                decrease value by 1 tick
-            </summary>
-        </member>
-        <member name="M:OEC.API.PriceIntern.getPriceMask">
-            <summary>
-                Returns a string representing input mask for given format and tick
-                <see cref="P:OEC.API.Contract.PriceFormat"/>
-                <see cref="P:OEC.API.Contract.TickSize"/>
-            </summary>
-            <returns>string mask</returns>
-        </member>
-        <member name="M:OEC.API.PriceIntern.getPriceFormatString">
-            <summary>
-                builds format string for using with string.Format(integer part, fractional part)
-            </summary>
-            <returns>price format string</returns>
-        </member>
-        <member name="P:OEC.API.PriceIntern.Value">
-            <summary>
-                get or set current price value
-                when assigning, value will be aligned by tick size and min/max boundaries.
-            </summary>
-        </member>
-        <member name="P:OEC.API.PriceIntern.MinValue">
-            <summary>
-                get/set min value
-            </summary>
-        </member>
-        <member name="P:OEC.API.PriceIntern.MaxValue">
-            <summary>
-                get/set maxvalue
-            </summary>
         </member>
         <member name="T:OEC.API.Trader">
             <summary>

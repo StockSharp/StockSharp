@@ -131,12 +131,17 @@
     </member>
     <member name="F:StockSharp.OpenECry.OpenECryAddresses.Api">
       <summary>
-            The main server. Address is api.openecry.com, port 9200.
+            The develop server. Address is api.gainfutures.com, port 9200.
             </summary>
     </member>
     <member name="F:StockSharp.OpenECry.OpenECryAddresses.Sim">
       <summary>
-            Demo server. Address is sim.openecry.com, port 9200.
+            Demo server. Address is sim.gainfutures.com, port 9200.
+            </summary>
+    </member>
+    <member name="F:StockSharp.OpenECry.OpenECryAddresses.Prod">
+      <summary>
+            Production server. Address is prod.gainfutures.com, port 9200.
             </summary>
     </member>
     <member name="T:StockSharp.OpenECry.OpenECryStopType">

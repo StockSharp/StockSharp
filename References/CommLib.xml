@@ -191,6 +191,109 @@
             </summary>
             <exclude />
         </member>
+        <member name="T:OEC.CommLib.PriceIntern">
+            <summary>
+                Utility class for formatting and parsing prices
+            </summary>
+            <remarks>
+                This class using special notation for price format:
+                <ul>
+                    <li>positive values specifies number of digits after decimal point (2 = 0.00)</li>
+                    <li>negative - divisor of fraction (-32 = 1/32)</li>
+                </ul>
+            </remarks>
+        </member>
+        <member name="M:OEC.CommLib.PriceIntern.#ctor(System.Int32,System.Int32,System.Double,System.Double,System.Double,System.Double)">
+            <summary>
+                Construct the formatter using given format specifiers, value and min/max value
+            </summary>
+            <param name="pPriceFormat">
+                <see cref="!:Contract.PriceFormat"/>
+            </param>
+            <param name="pPriceMultiplier">Multiplier, power of 10</param>
+            <param name="tickSize">Tick size - mimimal price increment</param>
+            <param name="value">Price value</param>
+            <param name="minvalue">Minimum</param>
+            <param name="maxvalue">Maximum</param>
+        </member>
+        <member name="M:OEC.CommLib.PriceIntern.#ctor(System.Int32,System.Int32,System.Double,System.Double)">
+            <summary>
+                Constructs formatter using given format specifiers value and default min/max values (0, 1e9)
+            </summary>
+            <param name="priceFormat">
+                <see cref="!:Contract.PriceFormat"/>
+            </param>
+            <param name="priceMultiplier">Multiplier, power of 10</param>
+            <param name="tickSize">Tick size - minimal price increment</param>
+            <param name="value">Price value</param>
+        </member>
+        <member name="M:OEC.CommLib.PriceIntern.fromString(System.String,System.Globalization.CultureInfo)">
+            <summary>
+                Parse formatted price
+            </summary>
+            <param name="value">string price</param>
+            <param name="culture"></param>
+            <returns>false, if price doesn't match expected pattern</returns>
+        </member>
+        <member name="M:OEC.CommLib.PriceIntern.fromString(System.String)">
+            <summary>
+                Parse formatted price
+            </summary>
+            <param name="value">string price</param>
+            <returns>false, if price doesn't match expected pattern</returns>
+        </member>
+        <member name="M:OEC.CommLib.PriceIntern.ToString(System.Globalization.CultureInfo)">
+            <summary>
+                Format current value
+            </summary>
+            <returns>formatted price</returns>
+        </member>
+        <member name="M:OEC.CommLib.PriceIntern.ToString">
+            <summary>
+                Format current value
+            </summary>
+            <returns>formatted price</returns>
+        </member>
+        <member name="M:OEC.CommLib.PriceIntern.Inc">
+            <summary>
+                increase value by 1 tick
+            </summary>
+        </member>
+        <member name="M:OEC.CommLib.PriceIntern.Dec">
+            <summary>
+                decrease value by 1 tick
+            </summary>
+        </member>
+        <member name="M:OEC.CommLib.PriceIntern.getPriceMask">
+            <summary>
+                Returns a string representing input mask for given format and tick
+                <see cref="!:Contract.PriceFormat"/>
+                <see cref="F:OEC.Data.Contract.TickSize"/>
+            </summary>
+            <returns>string mask</returns>
+        </member>
+        <member name="M:OEC.CommLib.PriceIntern.getPriceFormatString">
+            <summary>
+                builds format string for using with string.Format(integer part, fractional part)
+            </summary>
+            <returns>price format string</returns>
+        </member>
+        <member name="P:OEC.CommLib.PriceIntern.Value">
+            <summary>
+                get or set current price value
+                when assigning, value will be aligned by tick size and min/max boundaries.
+            </summary>
+        </member>
+        <member name="P:OEC.CommLib.PriceIntern.MinValue">
+            <summary>
+                get/set min value
+            </summary>
+        </member>
+        <member name="P:OEC.CommLib.PriceIntern.MaxValue">
+            <summary>
+                get/set maxvalue
+            </summary>
+        </member>
         <member name="T:OEC.Scheduler">
             <summary />
             <exclude/>
@@ -3293,7 +3396,7 @@
         </member>
         <member name="M:OEC.Tools.EqualDouble(System.Double,System.Double)">
             <summary>
-            Compares doubles with precision of 1e-6. 
+            Compares doubles with precision of 5e-8. 
             </summary>
         </member>
         <member name="M:OEC.Tools.GroupBy``2(System.Collections.Generic.List{``1},System.Converter{``1,``0})">
