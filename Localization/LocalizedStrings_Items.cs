@@ -42746,5 +42746,15 @@ namespace StockSharp.Localization
 		/// Error while loading scheme. Possibly file is corrupted, has an incorrect format or can not be read.
 		/// </summary>
 		public static string LoadCompositionError => GetString(LoadCompositionErrorKey);
+
+		/// <summary>
+		/// Storage has no data.
+		/// </summary>
+		public const string StorageHasNoDataParamsKey = "StorageHasNoDataParams";
+
+		/// <summary>
+		/// Storage has no data.
+		/// </summary>
+		public static string StorageHasNoDataParams => GetString(StorageHasNoDataParamsKey);
 	}
 }

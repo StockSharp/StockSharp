@@ -4309,6 +4309,7 @@ NotEnoughMoneyForSubscription;Not enough money for subscription.;Недоста�
 IsEncrypted;Is encrypted;Зашифрована
 LoadCompositionWrongPasswordError;Error while loading scheme. Verify the specified password.;Ошибка загрузки схемы. Проверьте правильность указанного пароля.
 LoadCompositionError;Error while loading scheme. Possibly file is corrupted, has an incorrect format or can not be read.;Ошибка загрузки схемы. Возможно Файл поврежден, имеет неверный формат или не может быть прочитан.
+StorageHasNoDataParams;Selected storage does not contains market data for {0} from {1} to {2}.;Выбранное хранилище данных не содержитданные для {0} за период с {1} по {2}.
 DocStr0;Button activation alert settings;Кнопка активации настроек сигнала
 DocStr1;Initializes a new instance of the {0};Создать {0}
 DocStr2;Load settings;Загрузить настройки
