@@ -39,8 +39,6 @@ namespace StockSharp.Algo.PnL
 		public PnLQueue(SecurityId securityId)
 		{
 			SecurityId = securityId;
-			PriceStep = 1;
-			StepPrice = 1;
 		}
 
 		/// <summary>
@@ -78,9 +76,25 @@ namespace StockSharp.Algo.PnL
 			}
 		}
 
+		private decimal _lotMultiplier;
+
+		/// <summary>
+		/// Lot size multiplier
+		/// </summary>
+		public decimal LotMultiplier
+		{
+			get { return _lotMultiplier; }
+			private set
+			{
+				_lotMultiplier = value;
+				UpdateMultiplier();
+			}
+		}
+
 		/// <summary>
 		/// Multiplier.
 		/// </summary>
+		/// <remarks>Returns a value by which to multiply the PnL in points, to return a PnL in money </remarks>
 		public decimal Multiplier
 		{
 			get { return _multiplier; }
@@ -198,7 +212,7 @@ namespace StockSharp.Algo.PnL
 				RealizedPnL += _multiplier * pnl;
 			}
 
-			return new PnLInfo(trade, closedVolume, pnl);
+			return new PnLInfo(trade, closedVolume, _multiplier * pnl);
 		}
 
 		/// <summary>
@@ -241,6 +255,13 @@ namespace StockSharp.Algo.PnL
 				AskPrice = (decimal)askPrice;
 				_recalcUnrealizedPnL = true;
 			}
+
+			var lotMultiplier = levelMsg.Changes.TryGetValue(Level1Fields.Multiplier);
+			if (lotMultiplier != null)
+			{
+				LotMultiplier = (decimal)lotMultiplier;
+				_recalcUnrealizedPnL = true;
+			}
 		}
 
 		/// <summary>
@@ -271,9 +292,9 @@ namespace StockSharp.Algo.PnL
 
 		private void UpdateMultiplier()
 		{
-			_multiplier = StepPrice == 0 || PriceStep == 0 
-				? 1 
-				: StepPrice / PriceStep;
+			_multiplier = StepPrice == 0 || PriceStep == 0 || LotMultiplier == 0
+				? 0 
+				: StepPrice / PriceStep * LotMultiplier;
 		}
 
 		private static decimal GetPnL(decimal price, decimal volume, Sides side, decimal marketPrice)
