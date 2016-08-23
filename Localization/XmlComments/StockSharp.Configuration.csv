@@ -23,6 +23,7 @@ M:StockSharp.Configuration.DiagramElementCollection.GetElementKey(System.Configu
 M:StockSharp.Configuration.DiagramElementCollection.GetElementKey(System.Configuration.ConfigurationElement)/returns;DocStr8709
 M:StockSharp.Configuration.DiagramElementCollection.GetElementKey(System.Configuration.ConfigurationElement)/param/element;DocStr8710
 T:StockSharp.Configuration.Extensions/summary;DocStr4290
+P:StockSharp.Configuration.Extensions.RootSection/summary;DocStr9196
 M:StockSharp.Configuration.Extensions.Configure(StockSharp.Algo.Connector,System.Windows.Window)/summary;DocStr8717
 M:StockSharp.Configuration.Extensions.Configure(StockSharp.Algo.Connector,System.Windows.Window)/param/connector;DocStr8718
 M:StockSharp.Configuration.Extensions.Configure(StockSharp.Algo.Connector,System.Windows.Window)/param/owner;DocStr8719

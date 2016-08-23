@@ -20,7 +20,7 @@ namespace StockSharp.Algo.Storages
 	using StockSharp.Messages;
 
 	/// <summary>
-	/// The CSV storage of trade objects.
+	/// The CSV storage of trading objects.
 	/// </summary>
 	public class CsvEntityRegistry : IEntityRegistry
 	{

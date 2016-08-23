@@ -1,3 +1,6 @@
+T:StockSharp.Xaml.Diagram.SchemeTypes/summary;DocStr9197
+F:StockSharp.Xaml.Diagram.SchemeTypes.Regular/summary;DocStr9198
+F:StockSharp.Xaml.Diagram.SchemeTypes.Encrypted/summary;DocStr9199
 T:StockSharp.Xaml.Diagram.CompositionDiagramElement/summary;XamlStr688
 P:StockSharp.Xaml.Diagram.CompositionDiagramElement.TypeId/summary;DocStr7902
 P:StockSharp.Xaml.Diagram.CompositionDiagramElement.Icon/summary;DocStr7908
@@ -5,7 +8,7 @@ P:StockSharp.Xaml.Diagram.CompositionDiagramElement.Parameters/summary;DocStr790
 P:StockSharp.Xaml.Diagram.CompositionDiagramElement.Category/summary;DocStr7906
 P:StockSharp.Xaml.Diagram.CompositionDiagramElement.Description/summary;DocStr7907
 P:StockSharp.Xaml.Diagram.CompositionDiagramElement.IsModifiable/summary;DocStr7914
-P:StockSharp.Xaml.Diagram.CompositionDiagramElement.IsBrowsable/summary;DocStr9147
+P:StockSharp.Xaml.Diagram.CompositionDiagramElement.Type/summary;DocStr9200
 P:StockSharp.Xaml.Diagram.CompositionDiagramElement.HasErrors/summary;DocStr7915
 E:StockSharp.Xaml.Diagram.CompositionDiagramElement.Changed/summary;DocStr7916
 M:StockSharp.Xaml.Diagram.CompositionDiagramElement.#ctor/summary;DocStr1
@@ -33,6 +36,10 @@ M:StockSharp.Xaml.Diagram.CompositionDiagramElement.SetTypeId(System.Guid)/param
 M:StockSharp.Xaml.Diagram.CompositionDiagramElement.Clone(System.Boolean)/summary;DocStr643
 M:StockSharp.Xaml.Diagram.CompositionDiagramElement.Clone(System.Boolean)/param/cloneSockets;DocStr7899
 M:StockSharp.Xaml.Diagram.CompositionDiagramElement.Clone(System.Boolean)/returns;DocStr1116
+M:StockSharp.Xaml.Diagram.CompositionDiagramElement.Clone(StockSharp.Xaml.Diagram.SchemeTypes,System.Boolean)/summary;DocStr643
+M:StockSharp.Xaml.Diagram.CompositionDiagramElement.Clone(StockSharp.Xaml.Diagram.SchemeTypes,System.Boolean)/param/schemeType;DocStr9200
+M:StockSharp.Xaml.Diagram.CompositionDiagramElement.Clone(StockSharp.Xaml.Diagram.SchemeTypes,System.Boolean)/param/cloneSockets;DocStr7899
+M:StockSharp.Xaml.Diagram.CompositionDiagramElement.Clone(StockSharp.Xaml.Diagram.SchemeTypes,System.Boolean)/returns;DocStr1116
 T:StockSharp.Xaml.Diagram.CompositionRegistry/summary;DocStr7924
 P:StockSharp.Xaml.Diagram.CompositionRegistry.DiagramElements/summary;DocStr7930
 E:StockSharp.Xaml.Diagram.CompositionRegistry.SaveComposition/summary;DocStr7931
@@ -48,10 +55,10 @@ M:StockSharp.Xaml.Diagram.CompositionRegistry.Load(Ecng.Serialization.SettingsSt
 M:StockSharp.Xaml.Diagram.CompositionRegistry.Serialize(StockSharp.Xaml.Diagram.CompositionDiagramElement)/summary;DocStr7928
 M:StockSharp.Xaml.Diagram.CompositionRegistry.Serialize(StockSharp.Xaml.Diagram.CompositionDiagramElement)/param/composition;XamlStr688
 M:StockSharp.Xaml.Diagram.CompositionRegistry.Serialize(StockSharp.Xaml.Diagram.CompositionDiagramElement)/returns;DocStr3
-M:StockSharp.Xaml.Diagram.CompositionRegistry.SerializeExported(StockSharp.Xaml.Diagram.CompositionDiagramElement,System.Boolean)/summary;DocStr9148
-M:StockSharp.Xaml.Diagram.CompositionRegistry.SerializeExported(StockSharp.Xaml.Diagram.CompositionDiagramElement,System.Boolean)/param/composition;XamlStr688
-M:StockSharp.Xaml.Diagram.CompositionRegistry.SerializeExported(StockSharp.Xaml.Diagram.CompositionDiagramElement,System.Boolean)/param/browsable;DocStr9147
-M:StockSharp.Xaml.Diagram.CompositionRegistry.SerializeExported(StockSharp.Xaml.Diagram.CompositionDiagramElement,System.Boolean)/returns;DocStr3
+M:StockSharp.Xaml.Diagram.CompositionRegistry.SerializeExported(StockSharp.Xaml.Diagram.CompositionDiagramElement,StockSharp.Xaml.Diagram.SchemeTypes)/summary;DocStr9148
+M:StockSharp.Xaml.Diagram.CompositionRegistry.SerializeExported(StockSharp.Xaml.Diagram.CompositionDiagramElement,StockSharp.Xaml.Diagram.SchemeTypes)/param/composition;XamlStr688
+M:StockSharp.Xaml.Diagram.CompositionRegistry.SerializeExported(StockSharp.Xaml.Diagram.CompositionDiagramElement,StockSharp.Xaml.Diagram.SchemeTypes)/param/schemeType;DocStr9200
+M:StockSharp.Xaml.Diagram.CompositionRegistry.SerializeExported(StockSharp.Xaml.Diagram.CompositionDiagramElement,StockSharp.Xaml.Diagram.SchemeTypes)/returns;DocStr3
 M:StockSharp.Xaml.Diagram.CompositionRegistry.Deserialize(Ecng.Serialization.SettingsStorage)/summary;DocStr7929
 M:StockSharp.Xaml.Diagram.CompositionRegistry.Deserialize(Ecng.Serialization.SettingsStorage)/param/storage;DocStr3
 M:StockSharp.Xaml.Diagram.CompositionRegistry.Deserialize(Ecng.Serialization.SettingsStorage)/returns;XamlStr688
@@ -141,6 +148,7 @@ P:StockSharp.Xaml.Diagram.DiagramElement.Description/summary;DocStr7907
 P:StockSharp.Xaml.Diagram.DiagramElement.LogLevel/summary;DocStr1679
 P:StockSharp.Xaml.Diagram.DiagramElement.ShowParameters/summary;Str3054
 P:StockSharp.Xaml.Diagram.DiagramElement.Icon/summary;DocStr7908
+P:StockSharp.Xaml.Diagram.DiagramElement.PathIcon/summary;DocStr9201
 P:StockSharp.Xaml.Diagram.DiagramElement.Strategy/summary;DocStr7909
 P:StockSharp.Xaml.Diagram.DiagramElement.DebuggerSyncObject/summary;DocStr7910
 E:StockSharp.Xaml.Diagram.DiagramElement.ProcessOutput/summary;DocStr3788
@@ -444,6 +452,7 @@ P:StockSharp.Xaml.Diagram.Elements.CandleSourceDiagramElement.Series/summary;Can
 M:StockSharp.Xaml.Diagram.Elements.CandleSourceDiagramElement.#ctor/summary;DocStr1
 P:StockSharp.Xaml.Diagram.Elements.CandleSourceDiagramElement.TypeId/summary;DocStr7902
 P:StockSharp.Xaml.Diagram.Elements.CandleSourceDiagramElement.Icon/summary;DocStr7908
+P:StockSharp.Xaml.Diagram.Elements.CandleSourceDiagramElement.PathIcon/summary;DocStr9201
 M:StockSharp.Xaml.Diagram.Elements.CandleSourceDiagramElement.OnStop/summary;DocStr7894
 T:StockSharp.Xaml.Diagram.Elements.ChartDiagramElement/summary;ChartPanelElement
 M:StockSharp.Xaml.Diagram.Elements.ChartDiagramElement.#ctor/summary;DocStr1

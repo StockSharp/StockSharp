@@ -13334,3 +13334,22 @@ DocStr9181;ExpressionLight theme;ExpressionLight тема
 DocStr9182;Oscilloscope theme;Oscilloscope тема
 DocStr9183;Change {0} for composition element;Изменить {0} для сложного элемента
 DocStr9184;Type identifier;Идентификатор типа
+DocStr9185;Alert processing service;Сервис обработки событий
+DocStr9186;Alert notification service;Сервис оповещения событий
+DocStr9187;Defines an alert notification service;Интерфейс оповещения событий
+DocStr9188;Defines an alert processing service;Интерфейс обработки событий
+DocStr9189;Find schema by the specified identifier;Найти схему по заданному идентификатору
+DocStr9190;The identifier;Идентификатор
+DocStr9191;Founded schema. {0} if schema with the specified identifier doesn't exist;Найденная схема. {0} если схема не существует
+DocStr9192;The message, containing security id to remove;Сообщение об удалении инструмента
+DocStr9193;The CSV storage of trading objects;Реестр CSV объектов
+DocStr9194;The path to data directory;Путь к данным
+DocStr9195;Request news on english;Запросить новости на английском
+DocStr9196;Instance of the root section {0};Объект корневой секции {0}
+DocStr9197;Scheme types;Типы схемы
+DocStr9198;Regular scheme;Обычная схема
+DocStr9199;Encrypted scheme;Зашифрованная схема
+DocStr9200;Scheme type;Тип схемы
+DocStr9201;Path icon;Путь к иконке
+DocStr9202;The color of text;Цвет текста
+DocStr9203;Interactive mode;Интерактивный режим

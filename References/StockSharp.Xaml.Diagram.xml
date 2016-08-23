@@ -4,6 +4,21 @@
     <name>StockSharp.Xaml.Diagram</name>
   </assembly>
   <members>
+    <member name="T:StockSharp.Xaml.Diagram.SchemeTypes">
+      <summary>
+            Scheme types.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Xaml.Diagram.SchemeTypes.Regular">
+      <summary>
+            Regular scheme.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Xaml.Diagram.SchemeTypes.Encrypted">
+      <summary>
+            Encrypted scheme.
+            </summary>
+    </member>
     <member name="T:StockSharp.Xaml.Diagram.CompositionDiagramElement">
       <summary>
             Composite element.
@@ -39,9 +54,9 @@
             Is it possible to edit a composite element diagram.
             </summary>
     </member>
-    <member name="P:StockSharp.Xaml.Diagram.CompositionDiagramElement.IsBrowsable">
+    <member name="P:StockSharp.Xaml.Diagram.CompositionDiagramElement.Type">
       <summary>
-            Is composite element can be viewed in editor.
+            Scheme type.
             </summary>
     </member>
     <member name="P:StockSharp.Xaml.Diagram.CompositionDiagramElement.HasErrors">
@@ -135,6 +150,14 @@
       <param name="cloneSockets">To create copies of connections.</param>
       <returns>Copy.</returns>
     </member>
+    <member name="M:StockSharp.Xaml.Diagram.CompositionDiagramElement.Clone(StockSharp.Xaml.Diagram.SchemeTypes,System.Boolean)">
+      <summary>
+            Create a copy of <see cref="T:StockSharp.Xaml.Diagram.CompositionDiagramElement" />.
+            </summary>
+      <param name="schemeType">Scheme type.</param>
+      <param name="cloneSockets">To create copies of connections.</param>
+      <returns>Copy.</returns>
+    </member>
     <member name="T:StockSharp.Xaml.Diagram.CompositionRegistry">
       <summary>
             The storage of composite elements.
@@ -186,12 +209,12 @@
       <param name="composition">Composite element.</param>
       <returns>Settings storage.</returns>
     </member>
-    <member name="M:StockSharp.Xaml.Diagram.CompositionRegistry.SerializeExported(StockSharp.Xaml.Diagram.CompositionDiagramElement,System.Boolean)">
+    <member name="M:StockSharp.Xaml.Diagram.CompositionRegistry.SerializeExported(StockSharp.Xaml.Diagram.CompositionDiagramElement,StockSharp.Xaml.Diagram.SchemeTypes)">
       <summary>
             To serialize the entire composite element.
             </summary>
       <param name="composition">Composite element.</param>
-      <param name="browsable">Is composite element can be viewed in editor.</param>
+      <param name="schemeType">Scheme type..</param>
       <returns>Settings storage.</returns>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.CompositionRegistry.Deserialize(Ecng.Serialization.SettingsStorage)">
@@ -550,6 +573,11 @@
     <member name="P:StockSharp.Xaml.Diagram.DiagramElement.Icon">
       <summary>
             Icon.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Diagram.DiagramElement.PathIcon">
+      <summary>
+            Path icon.
             </summary>
     </member>
     <member name="P:StockSharp.Xaml.Diagram.DiagramElement.Strategy">
@@ -1574,6 +1602,11 @@
     <member name="P:StockSharp.Xaml.Diagram.Elements.CandleSourceDiagramElement.Icon">
       <summary>
             Icon.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Diagram.Elements.CandleSourceDiagramElement.PathIcon">
+      <summary>
+            Path icon.
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.Elements.CandleSourceDiagramElement.OnStop">

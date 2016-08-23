@@ -12,6 +12,16 @@
             AdvertisePanel
             </summary>
     </member>
+    <member name="F:StockSharp.Xaml.AdvertisePanel.TextColorProperty">
+      <summary>
+        <see cref="T:System.Windows.DependencyProperty" /> for <see cref="P:StockSharp.Xaml.AdvertisePanel.TextColor" />.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.AdvertisePanel.TextColor">
+      <summary>
+            The color of text.
+            </summary>
+    </member>
     <member name="M:StockSharp.Xaml.AdvertisePanel.#ctor">
       <summary>
             Initializes a new instance of the <see cref="T:StockSharp.Xaml.AdvertisePanel" />.
@@ -3458,6 +3468,11 @@
     <member name="F:StockSharp.Xaml.OrderGrid.CopyErrorCommand">
       <summary>
             The command for the copying of the error text.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.OrderGrid.IsInteractive">
+      <summary>
+            Interactive mode.
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.OrderGrid.#ctor">
