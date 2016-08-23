@@ -29,6 +29,7 @@ T:StockSharp.OpenECry.OpenECryAddresses/summary;DocStr5934
 F:StockSharp.OpenECry.OpenECryAddresses.DefaultPort/summary;DocStr5935
 F:StockSharp.OpenECry.OpenECryAddresses.Api/summary;DocStr5936
 F:StockSharp.OpenECry.OpenECryAddresses.Sim/summary;DocStr5937
+F:StockSharp.OpenECry.OpenECryAddresses.Prod/summary;DocStr9207
 T:StockSharp.OpenECry.OpenECryStopType/summary;DocStr8850
 F:StockSharp.OpenECry.OpenECryStopType.StopMarket/summary;DocStr3138
 F:StockSharp.OpenECry.OpenECryStopType.StopLimit/summary;DocStr3139

@@ -1376,7 +1376,8 @@ M:StockSharp.Algo.PnL.PnLQueue.#ctor(StockSharp.Messages.SecurityId)/param/secur
 P:StockSharp.Algo.PnL.PnLQueue.SecurityId/summary;SecurityId
 P:StockSharp.Algo.PnL.PnLQueue.PriceStep/summary;DocStr4537
 P:StockSharp.Algo.PnL.PnLQueue.StepPrice/summary;Str290
-P:StockSharp.Algo.PnL.PnLQueue.Multiplier/summary;DocStr9025
+P:StockSharp.Algo.PnL.PnLQueue.Leverage/summary;Str542
+P:StockSharp.Algo.PnL.PnLQueue.LotMultiplier/summary;DocStr2623
 P:StockSharp.Algo.PnL.PnLQueue.TradePrice/summary;DocStr1472
 P:StockSharp.Algo.PnL.PnLQueue.BidPrice/summary;DocStr1473
 P:StockSharp.Algo.PnL.PnLQueue.AskPrice/summary;DocStr1474
@@ -5297,8 +5298,8 @@ P:StockSharp.Algo.Testing.HistoryMessageAdapter.StorageFormat/summary;DocStr2109
 P:StockSharp.Algo.Testing.HistoryMessageAdapter.BasketStorage/summary;DocStr2110
 P:StockSharp.Algo.Testing.HistoryMessageAdapter.SecurityProvider/summary;DocStr972
 P:StockSharp.Algo.Testing.HistoryMessageAdapter.MarketTimeChangedInterval/summary;DocStr2111
-P:StockSharp.Algo.Testing.HistoryMessageAdapter.MaxMessageCount/summary;DocStr4314
-P:StockSharp.Algo.Testing.HistoryMessageAdapter.MaxMessageCount/remarks;DocStr4315
+F:StockSharp.Algo.Testing.HistoryMessageAdapter.DefaultMaxMessageCount/summary;DocStr9204
+P:StockSharp.Algo.Testing.HistoryMessageAdapter.MaxMessageCount/summary;DocStr2121
 M:StockSharp.Algo.Testing.HistoryMessageAdapter.#ctor(Ecng.Common.IdGenerator)/summary;DocStr1
 M:StockSharp.Algo.Testing.HistoryMessageAdapter.#ctor(Ecng.Common.IdGenerator)/param/transactionIdGenerator;DocStr3311
 M:StockSharp.Algo.Testing.HistoryMessageAdapter.#ctor(Ecng.Common.IdGenerator,StockSharp.BusinessEntities.ISecurityProvider)/summary;DocStr1

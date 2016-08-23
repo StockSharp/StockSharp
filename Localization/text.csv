@@ -5206,8 +5206,8 @@ DocStr901;List of all securities, subscribed via {0};Список всех ин�
 DocStr902;List of all portfolios, subscribed via {0};Список всех портфелей, зарегистрированных через {0}
 DocStr903;Settings of the connection control {0} to the trading system;Настройки контроля подключения {0} к торговой системе
 DocStr904;Entity factory ({0}, {1} etc.);Фабрика бизнес-сущностей ({0}, {1} и т.д.)
-DocStr905;Number of tick trades for storage. The default is 100000. If the value is set to -1, the trades will not be deleted. If the value is set to 0, then the trades will not be stored;Количество тиковых сделок для хранения. По умолчанию равно 100000. Если значение установлено в -1, то сделки не будут удаляться. Если значение установлено в 0, то сделки не будут сохраняться
-DocStr906;The number of orders for storage. The default is 1000. If the value is set to -1, then the orders will not be deleted. If the value is set to 0, then the orders will not be stored;Количество заявок для хранения. По умолчанию равно 1000. Если значение установлено в -1, то заявки не будут удаляться. Если значение установлено в 0, то заявки не будут сохраняться
+DocStr905;Number of tick trades for storage. The default is 100000. If the value is set to {0}, the trades will not be deleted. If the value is set to 0, then the trades will not be stored;Количество тиковых сделок для хранения. По умолчанию равно 100000. Если значение установлено в {0}, то сделки не будут удаляться. Если значение установлено в 0, то сделки не будут сохраняться
+DocStr906;The number of orders for storage. The default is 1000. If the value is set to {0}, then the orders will not be deleted. If the value is set to 0, then the orders will not be stored;Количество заявок для хранения. По умолчанию равно 1000. Если значение установлено в {0}, то заявки не будут удаляться. Если значение установлено в 0, то заявки не будут сохраняться
 DocStr907;The instrument identifiers generator {0};Генератор идентификаторов инструментов {0}
 DocStr908;List of all exchange boards, for which instruments are loaded {0};Список всех биржевых площадок, для которых загружены инструменты {0}
 DocStr909;List of all loaded instruments. It should be called after event {0} arisen. Otherwise the empty set will be returned;Список всех загруженных инструментов. Вызывать необходимо после того, как пришло событие {0}. Иначе будет возвращено пустое множество
@@ -6414,7 +6414,7 @@ DocStr2117;Instruments, which will be sent through the {0} event;Инструм�
 DocStr2118;Portfolios, which will be sent through the {0} event;Портфели, которые будут переданы через событие {0}
 DocStr2119;To start the emulation;Запустить эмуляцию
 DocStr2120;To suspend the emulation;Приостановить эмуляцию
-DocStr2121;The maximal size of the message queue, up to which history data are red. By default, it is equal to 1000;Максимальный размер очереди сообщений, до которого читаются исторические данные. По-умолчанию равно 1000
+DocStr2121;The maximal size of the message queue, up to which history data are read. By default, it is equal to {0};Максимальный размер очереди сообщений, до которого читаются исторические данные. По-умолчанию равно {0}
 DocStr2122;The initial size of monetary funds on accounts;Первоначальный размер денежных средств на счетах
 DocStr2123;The number of loaded messages;Число загруженных сообщений
 DocStr2124;The event on the emulator state change {0};Событие о изменении состояния эмулятора {0}
@@ -10157,8 +10157,8 @@ DocStr5932;An attempt to activate the mode {0}, in case of failure the mode {1} 
 DocStr5933;The drop-down list to select the OpenECry server address;Выпадающий список для выбора адреса сервера OpenECry
 DocStr5934;Addresses of OpenECry system servers;Адреса серверов системы OpenECry
 DocStr5935;The server port default value is 9200;Порт сервера по умолчанию, равный 9200
-DocStr5936;The main server. Address is api.openecry.com, port 9200;Основной сервер. Адрес api.openecry.com, порт 9200
-DocStr5937;Demo server. Address is sim.openecry.com, port 9200;Демо сервер. Адрес sim.openecry.com, порт 9200
+DocStr5936;The develop server. Address is api.gainfutures.com, port 9200;API сервер. Адрес api.gainfutures.com, порт 9200
+DocStr5937;Demo server. Address is sim.gainfutures.com, port 9200;Демо сервер. Адрес sim.gainfutures.com, порт 9200
 DocStr5938;The type of the conditional order OEC;Тип условной заявки OEC
 DocStr5939;Stop price automatically follows the market, but only in a profitable direction for position, staying on specified in advance interval from market price. If the market reaches the stop price, the market order is automatically registered;Стоп-цена автоматически следует за рынком, но только в выгодном для позиции направлении, оставаясь на заранее заявленном интервале от рыночной цены. В случае, если рынок достигает стоп-цены, автоматически выставляется рыночная заявка
 DocStr5940;As {0}, but when it reaches the stop price the limit order is registered;Как {0}, но при достижении стоп-цены выставляется лимитная заявка
@@ -13353,3 +13353,5 @@ DocStr9200;Scheme type;Тип схемы
 DocStr9201;Path icon;Путь к иконке
 DocStr9202;The color of text;Цвет текста
 DocStr9203;Interactive mode;Интерактивный режим
+DocStr9204;Default value of {0};Значение по-умолчанию {0}
+DocStr9207;Production server. Address is prod.gainfutures.com, port 9200;Production server. Address is prod.gainfutures.com, port 9200
