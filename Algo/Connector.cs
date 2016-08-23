@@ -277,7 +277,7 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Number of tick trades for storage. The default is 100000. If the value is set to -1, the trades will not be deleted. If the value is set to 0, then the trades will not be stored.
+		/// Number of tick trades for storage. The default is 100000. If the value is set to <see cref="int.MaxValue"/>, the trades will not be deleted. If the value is set to 0, then the trades will not be stored.
 		/// </summary>
 		public int TradesKeepCount
 		{
@@ -286,7 +286,7 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// The number of orders for storage. The default is 1000. If the value is set to -1, then the orders will not be deleted. If the value is set to 0, then the orders will not be stored.
+		/// The number of orders for storage. The default is 1000. If the value is set to <see cref="int.MaxValue"/>, then the orders will not be deleted. If the value is set to 0, then the orders will not be stored.
 		/// </summary>
 		public int OrdersKeepCount
 		{

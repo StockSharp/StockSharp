@@ -179,7 +179,7 @@ namespace StockSharp.Algo
 				if (_tradesKeepCount == value)
 					return;
 
-				if (value < -1)
+				if (value < 0)
 					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.NegativeTickCountStorage);
 
 				_tradesKeepCount = value;
@@ -197,7 +197,7 @@ namespace StockSharp.Algo
 				if (_ordersKeepCount == value)
 					return;
 
-				if (value < -1)
+				if (value < 0)
 					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.NegativeOrderCountStorage);
 
 				_ordersKeepCount = value;
@@ -212,6 +212,7 @@ namespace StockSharp.Algo
 
 			_tradeStat.Add(trade);
 			_trades.Add(trade);
+
 			RecycleTrades();
 		}
 
@@ -220,10 +221,9 @@ namespace StockSharp.Algo
 			if (order == null)
 				throw new ArgumentNullException(nameof(order));
 
-			if (OrdersKeepCount == 0)
-				return;
+			if (OrdersKeepCount > 0)
+				_orders.Add(order);
 
-			_orders.Add(order);
 			RecycleOrders();
 		}
 
@@ -298,7 +298,7 @@ namespace StockSharp.Algo
 			_myTrades.Clear();
 
 			_trades.Clear();
-			_tradeStat.Clear();
+			_tradeStat.Clear(true);
 
 			_orderStatusTransactions.Clear();
 			_massCancelationTransactions.Clear();
@@ -796,37 +796,45 @@ namespace StockSharp.Algo
 
 			Trade trade;
 
-			var securityData = GetData(security);
-
-			if (id != null)
+			if (TradesKeepCount > 0)
 			{
-				trade = securityData.TradesById.SafeAdd(id.Value, k =>
+				var securityData = GetData(security);
+
+				if (id != null)
+				{
+					trade = securityData.TradesById.SafeAdd(id.Value, k =>
+					{
+						isNew = true;
+
+						var t = createTrade(id.Value, strId);
+						AddTrade(t);
+						return t;
+					});
+				}
+				else if (!strId.IsEmpty())
+				{
+					trade = securityData.TradesByStringId.SafeAdd(strId, k =>
+					{
+						isNew = true;
+
+						var t = createTrade(null, strId);
+						AddTrade(t);
+						return t;
+					});
+				}
+				else
 				{
 					isNew = true;
 
-					var t = createTrade(id.Value, strId);
-					AddTrade(t);
-					return t;
-				});
-			}
-			else if (!strId.IsEmpty())
-			{
-				trade = securityData.TradesByStringId.SafeAdd(strId, k =>
-				{
-					isNew = true;
-
-					var t = createTrade(null, strId);
-					AddTrade(t);
-					return t;
-				});
+					trade = createTrade(null, null);
+					AddTrade(trade);
+					securityData.Trades.Add(trade);
+				}
 			}
 			else
 			{
 				isNew = true;
-
-				trade = createTrade(null, null);
-				AddTrade(trade);
-				securityData.Trades.Add(trade);
+				trade = createTrade(id, strId);
 			}
 
 			return Tuple.Create(trade, isNew);
@@ -970,10 +978,12 @@ namespace StockSharp.Algo
 
 				return;
 			}
+			else if (TradesKeepCount == int.MaxValue)
+				return;
 
 			var totalCount = _trades.Count;
 
-			if (TradesKeepCount == -1 || totalCount < (1.5 * TradesKeepCount))
+			if (totalCount < (1.5 * TradesKeepCount))
 				return;
 
 			var countToRemove = totalCount - TradesKeepCount;
@@ -1022,10 +1032,12 @@ namespace StockSharp.Algo
 
 				return;
 			}
+			else if (OrdersKeepCount == int.MaxValue)
+				return;
 
 			var totalCount = _orders.Count;
 
-			if (OrdersKeepCount == -1 || totalCount < (1.5 * OrdersKeepCount))
+			if (totalCount < (1.5 * OrdersKeepCount))
 				return;
 
 			var countToRemove = totalCount - OrdersKeepCount;
