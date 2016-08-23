@@ -232,7 +232,7 @@ namespace StockSharp.Algo.Testing
 		public HistoryMessageAdapter HistoryMessageAdapter { get; }
 
 		/// <summary>
-		/// The maximal size of the message queue, up to which history data are red. By default, it is equal to 1000.
+		/// The maximal size of the message queue, up to which history data are red. By default, using CachedBasketMarketDataStorage maximal size of the message queue.
 		/// </summary>
 		public int MaxMessageCount
 		{
