@@ -144,10 +144,6 @@ namespace StockSharp.Algo
 
 			private void OnConnectorMarketDataSubscriptionSucceeded(Security security, MarketDataTypes type)
 			{
-				var subscribers = GetSubscribers(type);
-
-				subscribers.ChangeSubscribers(security, true);
-
 				var types = _unsubscribeActions.TryGetValue(security);
 
 				if (types == null)
@@ -155,6 +151,8 @@ namespace StockSharp.Algo
 
 				if (!types.Remove(type))
 					return;
+
+				var subscribers = GetSubscribers(type);
 
 				if (TryUnSubscribe(subscribers, security))
 					SendUnSubscribeMessage(security, type);

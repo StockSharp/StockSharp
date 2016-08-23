@@ -489,13 +489,13 @@ namespace StockSharp.Algo.Storages
 					Board = Registry.ExchangeBoards.ReadById(reader.ReadString()),
 					UnderlyingSecurityId = reader.ReadString(),
 					PriceStep = reader.ReadNullableDecimal(),
-					VolumeStep = reader.ReadNullableInt(),
-					Multiplier = reader.ReadNullableInt(),
+					VolumeStep = reader.ReadNullableDecimal(),
+					Multiplier = reader.ReadNullableDecimal(),
 					Decimals = reader.ReadNullableInt(),
 					Type = reader.ReadNullableEnum<SecurityTypes>(),
 					ExpiryDate = reader.ReadNullableDateTime(_dateTimeFormat),
 					SettlementDate = reader.ReadNullableDateTime(_dateTimeFormat),
-					Strike = reader.ReadNullableInt(),
+					Strike = reader.ReadNullableDecimal(),
 					OptionType = reader.ReadNullableEnum<OptionTypes>(),
 					Currency = reader.ReadNullableEnum<CurrencyTypes>(),
 					ExternalId = new SecurityExternalId
@@ -579,6 +579,7 @@ namespace StockSharp.Algo.Storages
 					Commission = reader.ReadNullableDecimal(),
 					Currency = reader.ReadNullableEnum<CurrencyTypes>(),
 					State = reader.ReadNullableEnum<PortfolioStates>(),
+					Description = reader.ReadString(),
 					LastChangeTime = reader.ReadDateTime(_dateTimeFormat),
 					LocalTime = reader.ReadDateTime(_dateTimeFormat)
 				};
