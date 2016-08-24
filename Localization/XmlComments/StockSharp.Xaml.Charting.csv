@@ -842,10 +842,3 @@ M:StockSharp.Xaml.Charting.OptionPositionChart.Refresh(System.Decimal,System.Dec
 M:StockSharp.Xaml.Charting.OptionPositionChart.Refresh(System.Decimal,System.Decimal,System.DateTimeOffset,System.DateTimeOffset)/param/currentTime;DocStr955
 M:StockSharp.Xaml.Charting.OptionPositionChart.Refresh(System.Decimal,System.Decimal,System.DateTimeOffset,System.DateTimeOffset)/param/expiryDate;DocStr1018
 M:StockSharp.Xaml.Charting.OptionPositionChart.InitializeComponent/summary;DocStr8
-T:StockSharp.Xaml.Charting.Ultrachart.ByItemTypeTemplateSelector/summary;DocStr8984
-P:StockSharp.Xaml.Charting.Ultrachart.ByItemTypeTemplateSelector.SeriesInfoTemplate/summary;DocStr8985
-P:StockSharp.Xaml.Charting.Ultrachart.ByItemTypeTemplateSelector.ChartElementTemplate/summary;DocStr8985
-M:StockSharp.Xaml.Charting.Ultrachart.ByItemTypeTemplateSelector.SelectTemplate(System.Object,System.Windows.DependencyObject)/summary;DocStr8986
-M:StockSharp.Xaml.Charting.Ultrachart.ByItemTypeTemplateSelector.SelectTemplate(System.Object,System.Windows.DependencyObject)/returns;DocStr8987
-M:StockSharp.Xaml.Charting.Ultrachart.ByItemTypeTemplateSelector.SelectTemplate(System.Object,System.Windows.DependencyObject)/param/item;DocStr8988
-M:StockSharp.Xaml.Charting.Ultrachart.ByItemTypeTemplateSelector.SelectTemplate(System.Object,System.Windows.DependencyObject)/param/container;DocStr8989

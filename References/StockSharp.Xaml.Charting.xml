@@ -2892,30 +2892,5 @@
             InitializeComponent
             </summary>
     </member>
-    <member name="T:StockSharp.Xaml.Charting.Ultrachart.ByItemTypeTemplateSelector">
-      <summary>
-            Select data template by item type.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Xaml.Charting.Ultrachart.ByItemTypeTemplateSelector.SeriesInfoTemplate">
-      <summary>
-            Template for <see cref="T:Ecng.Xaml.Charting.SeriesInfo" /> item type.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Xaml.Charting.Ultrachart.ByItemTypeTemplateSelector.ChartElementTemplate">
-      <summary>
-            Template for <see cref="T:StockSharp.Xaml.Charting.IChartElement" /> item type.
-            </summary>
-    </member>
-    <member name="M:StockSharp.Xaml.Charting.Ultrachart.ByItemTypeTemplateSelector.SelectTemplate(System.Object,System.Windows.DependencyObject)">
-      <summary>
-            When overridden in a derived class, returns a <see cref="T:System.Windows.DataTemplate" /> based on custom logic.
-            </summary>
-      <returns>
-            Returns a <see cref="T:System.Windows.DataTemplate" /> or null. The default value is null.
-            </returns>
-      <param name="item">The data object for which to select the template.</param>
-      <param name="container">The data-bound object.</param>
-    </member>
   </members>
 </doc>
