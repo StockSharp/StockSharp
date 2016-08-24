@@ -26,6 +26,11 @@
 				<p>Алгоритмы построения свечек.</p>
 			</summary>
 		</member>
+		<member name="N:StockSharp.Algo.Candles.Compression">
+			<summary>
+				<p>Механизмы работы построителей свечек и источников данных.</p>
+			</summary>
+		</member>
 		<member name="N:StockSharp.Algo.Candles.VolumePriceStatistics">
 			<summary>
 				<p>Профили рынка (ценовые, объема).</p>
@@ -114,11 +119,6 @@
 		<member name="N:StockSharp.Algo.Testing">
 			<summary>
 				<p>Механизм тестирования торговых стратегий на историческим, реальных и эмулируемых данных.</p>
-			</summary>
-		</member>
-				<member name="N:StockSharp.Algo.Candles.Compression">
-			<summary>
-				<p>Механизмы работы построителей свечек и источников данных.</p>
 			</summary>
 		</member>
 		<member name="N:StockSharp.Algo.Commissions">
@@ -307,19 +307,9 @@
 				<p>Графические рендереры индикаторов <see cref="N:StockSharp.Algo.Indicators"/>.</p>
 			</summary>
 		</member>
-		<member name="N:StockSharp.Xaml.Charting.MsChart">
-			<summary>
-				<p>Устаревшие графические компоненты для графиков свечек.</p>
-			</summary>
-		</member>
 		<member name="N:StockSharp.Hydra.Core">
 			<summary>
 				<p>Общие классы S#.Data, использующиеся для написания собственных источников.</p>
-			</summary>
-		</member>
-		<member name="N:StockSharp.Hydra.Core.HydraTasks">
-			<summary>
-				<p>Общие классы S#.Data, использующиеся для написания собственных задач.</p>
 			</summary>
 		</member>
 		<member name="N:StockSharp.Licensing">
@@ -484,7 +474,7 @@
 		</member>
 		<member name="N:StockSharp.Rithmic.Xaml">
 			<summary>
-				<p>Графические компоненты Rithmic.</p>
+				<p>Графические компоненты <see cref="N:StockSharp.Rithmic"/>.</p>
 			</summary>
 		</member>
 		<member name="N:StockSharp.Rss">
@@ -517,9 +507,9 @@
 				<p>Элементы для <see cref="N:StockSharp.Xaml.Diagram"/>.</p>
 			</summary>
 		</member>
-		<member name="N:StockSharp.Xaml.Code">
+		<member name="N:StockSharp.Xaml.GridControl">
 			<summary>
-				<p>Классы для <see cref="N:StockSharp.Xaml"/>.</p>
+				<p>Табличные компоненты.</p>
 			</summary>
 		</member>
 		<member name="N:StockSharp.Xaml.PropertyGrid">

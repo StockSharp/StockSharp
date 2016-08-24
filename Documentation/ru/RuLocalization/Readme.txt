@@ -1,3 +1,6 @@
+Для SHFB 2016
+1. Заменить C:\Program Files (x86)\EWSoftware\Sandcastle Help File Builder\PresentationStyles\VS2013\icons\favicon.ico на S# иконку.
+
 Для SHFB 1.9.5
 1. Заменить C:\Program Files (x86)\EWSoftware\Sandcastle Help File Builder\Web\favicon.ico на S# иконку.
 

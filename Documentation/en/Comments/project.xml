@@ -3,528 +3,377 @@
 	<members>
 		<member name="N:StockSharp.Alerts">
 			<summary>
-				<p>Оповещения.</p>
-			</summary>
-		</member>
-		<member name="N:StockSharp.AlfaDirect">
-			<summary>
-				<p>Коннектор к торговой программе AlfaDirect.</p>
-			</summary>
-		</member>
-		<member name="N:StockSharp.AlfaDirect.Xaml">
-			<summary>
-				<p>Графические компоненты для <see cref="N:StockSharp.AlfaDirect"/>.</p>
+				<p>Alerts.</p>
 			</summary>
 		</member>
 		<member name="N:StockSharp.Algo">
 			<summary>
-				<p>Торговые алгоритмы.</p>
+				<p>Trading algorithms.</p>
 			</summary>
 		</member>
 		<member name="N:StockSharp.Algo.Candles">
 			<summary>
-				<p>Алгоритмы построения свечек.</p>
+				<p>Candle algos (pattern recognition).</p>
+			</summary>
+		</member>
+		<member name="N:StockSharp.Algo.Candles.Compression">
+			<summary>
+				<p>Candle builders (time-frame, renko, volume, tick).</p>
 			</summary>
 		</member>
 		<member name="N:StockSharp.Algo.Candles.VolumePriceStatistics">
 			<summary>
-				<p>Профили рынка (ценовые, объема).</p>
+				<p>Market profile (price, volume).</p>
 			</summary>
 		</member>
 		<member name="N:StockSharp.Algo.Equity">
 			<summary>
-				<p>Расчет доходности на кривой, коэффициенты кривой.</p>
+				<p>Equity calculation.</p>
 			</summary>
 		</member>
 		<member name="N:StockSharp.Algo.History">
 			<summary>
-				<p>Источники исторических данных.</p>
+				<p>Historical market-data sources.</p>
 			</summary>
 		</member>
 		<member name="N:StockSharp.Algo.History.Forex">
 			<summary>
-				<p>Источники исторических данных c Forex.</p>
+				<p>Historical Forex market-data sources.</p>
 			</summary>
 		</member>
 		<member name="N:StockSharp.Algo.History.Russian">
 			<summary>
-				<p>Источники исторических данных с русских сайтов.</p>
+				<p>Historical Russian market-data sources.</p>
 			</summary>
 		</member>
 		<member name="N:StockSharp.Algo.History.Russian.Finam">
 			<summary>
-				<p>Источники исторических данных сайта Finam.</p>
+				<p>Historical Finam market-data source.</p>
 			</summary>
 		</member>
 		<member name="N:StockSharp.Algo.History.Russian.Rts">
 			<summary>
-				<p>Источники исторических данных биржи RTS.</p>
+				<p>Historical Moex market-data source.</p>
 			</summary>
 		</member>
 		<member name="N:StockSharp.Algo.Latency">
 			<summary>
-				<p>Менеджеры расчета задержки регистрирации заявок на бирже.</p>
+				<p>Order latency calculation (registration and cancellation).</p>
 			</summary>
 		</member>
 		<member name="N:StockSharp.Algo.PnL">
 			<summary>
-				<p>Менеджер расчета прибыли-убытка.</p>
+				<p>Profit-loss calculation.</p>
 			</summary>
 		</member>
 		<member name="N:StockSharp.Algo.Positions">
 			<summary>
-				<p>Менеджер расчета позиции.</p>
+				<p>Position calculation.</p>
 			</summary>
 		</member>
 		<member name="N:StockSharp.Algo.Reporting">
 			<summary>
-				<p>Генераторы отчетов торговых стратегий.</p>
+				<p>Report generator.</p>
 			</summary>
 		</member>
 		<member name="N:StockSharp.Algo.Slippage">
 			<summary>
-				<p>Менеджер расчета проскальзывания.</p>
+				<p>Slippage generator.</p>
 			</summary>
 		</member>
 		<member name="N:StockSharp.Algo.Strategies">
 			<summary>
-				<p>Каркасы для написания торговых стратегий.</p>
+				<p>Trading strategies base classes.</p>
 			</summary>
 		</member>
 		<member name="N:StockSharp.Algo.Strategies.Analytics">
 			<summary>
-				<p>Аналитические торговые стратегии.</p>
+				<p>Analytics strategies.</p>
 			</summary>
 		</member>
 		<member name="N:StockSharp.Algo.Strategies.Derivatives">
 			<summary>
-				<p>Торговые стратегии для работы с опционами (хедждирование, котирование, волатильность).</p>
+				<p>Options trading strategies (delta-hedging, quoting, volatility).</p>
 			</summary>
 		</member>
 		<member name="N:StockSharp.Algo.Strategies.Protective">
 			<summary>
-				<p>Торговые стратегии для защиты позиций (тейк, стоп, скользящие стопы).</p>
+				<p>Position protestions (take-profit, stop-loss, trailing stops).</p>
 			</summary>
 		</member>
 		<member name="N:StockSharp.Algo.Strategies.Quoting">
 			<summary>
-				<p>Торговые стратегии для набора позиций, котирования, маркет-мейкинга.</p>
+				<p>Market making strategies.</p>
 			</summary>
 		</member>
 		<member name="N:StockSharp.Algo.Testing">
 			<summary>
-				<p>Механизм тестирования торговых стратегий на историческим, реальных и эмулируемых данных.</p>
-			</summary>
-		</member>
-				<member name="N:StockSharp.Algo.Candles.Compression">
-			<summary>
-				<p>Механизмы работы построителей свечек и источников данных.</p>
+				<p>Backtesting and paper-trading (simulator).</p>
 			</summary>
 		</member>
 		<member name="N:StockSharp.Algo.Commissions">
 			<summary>
-				<p>Менеджер расчета комиссий.</p>
+				<p>Commisson calculation.</p>
 			</summary>
 		</member>
 		<member name="N:StockSharp.Algo.Derivatives">
 			<summary>
-				<p>Торговые сущности для работы с опционами.</p>
+				<p>Option algorithms.</p>
 			</summary>
 		</member>
 		<member name="N:StockSharp.Algo.Export">
 			<summary>
-				<p>Классы для экспорта данных в различные форматы.</p>
+				<p>Exporting components.</p>
 			</summary>
 		</member>
 		<member name="N:StockSharp.Algo.History.Hydra">
 			<summary>
-				<p>Источники исторических данных сервера Hydra.</p>
+				<p>Hydra server components.</p>
 			</summary>
 		</member>
 		<member name="N:StockSharp.Algo.Indicators">
 			<summary>
-				<p>Базовые классы индикаторов и классы самих индикаторов.</p>
+				<p>Trading technical analysis indicators.</p>
 			</summary>
 		</member>
-
 		<member name="N:StockSharp.Algo.Statistics">
 			<summary>
-				<p>Расчет статистических параметров.</p>
+				<p>Statistics calculation.</p>
 			</summary>
 		</member>
 		<member name="N:StockSharp.Algo.Risk">
 			<summary>
-				<p>Менеджер параметров риска стратегии.</p>
+				<p>Risk management calculation.</p>
 			</summary>
 		</member>
 		<member name="N:StockSharp.Algo.Storages">
 			<summary>
-				<p>Механизмы сохранения и загрузки маркет данных.</p>
+				<p>Market-data storages.</p>
 			</summary>
 		</member>
 		<member name="N:StockSharp.Algo.Expressions">
 			<summary>
-				<p>Математические формулы.</p>
+				<p>Math expressions.</p>
 			</summary>
 		</member>
 		<member name="N:StockSharp.Algo.Expressions.Xaml">
 			<summary>
-				<p>Графические компоненты для математических формул.</p>
+				<p>Math expressions WPF compontents.</p>
 			</summary>
 		</member>
 		<member name="N:StockSharp.Algo.Storages.Csv">
 			<summary>
-				<p>Классы для работы с форматом csv хранилища.</p>
+				<p>CSV storage compontents.</p>
 			</summary>
 		</member>
 		<member name="N:StockSharp.Algo.Strategies.Reporting">
 			<summary>
-				<p>Отчеты работы стратегии.</p>
+				<p>Strategies report components.</p>
 			</summary>
 		</member>
 		<member name="N:StockSharp.Algo.Strategies.Testing">
 			<summary>
-				<p>Тестирование стратегий.</p>
+				<p>Strategies backtesting components.</p>
 			</summary>
 		</member>
 		<member name="N:StockSharp.BitStamp">
 			<summary>
-				<p>Коннектор к бирже BitStamp.</p>
+				<p>BitStamp connectivity components.</p>
 			</summary>
 		</member>
 		<member name="N:StockSharp.Btce">
 			<summary>
-				<p>Коннектор к бирже BTCE.</p>
+				<p>BTCE connectivity components.</p>
 			</summary>
 		</member>
 		<member name="N:StockSharp.BusinessEntities">
 			<summary>
-				<p>Основные сущности торговли (инструмент, заказ, шлюз к торговой системе и т.д.).</p>
+				<p>Main trading entities (security, order, connector etc.).</p>
 			</summary>
 		</member>	
 		<member name="N:StockSharp.Community">
 			<summary>
-				<p>Веб сервисы сайта StockSharp.</p>
+				<p>StockSharp website components.</p>
 			</summary>
 		</member>
 		<member name="N:StockSharp.Configuration">
 			<summary>
-				<p>Классы для конфигурирования различных компонентов StockSharp.</p>
+				<p>StockSharp configuration.</p>
 			</summary>
 		</member>
 		<member name="N:StockSharp.CQG">
 			<summary>
-				<p>Коннектор к торговой программе CQG.</p>
+				<p>CQG connectivity components.</p>
 			</summary>
 		</member>
 		<member name="N:StockSharp.Logging">
 			<summary>
-				<p>Логирование операций.</p>
-			</summary>
-		</member>
-		<member name="N:StockSharp.Plaza">
-			<summary>
-				<p>Коннектор к торговой системе РТС Плаза (Московская биржа).</p>
-			</summary>
-		</member>
-		<member name="N:StockSharp.Plaza.Metadata">
-			<summary>
-				<p>Метаданные торговой системы РТС Плаза.</p>
-			</summary>
-		</member>
-		<member name="N:StockSharp.Plaza.Xaml">
-			<summary>
-				<p>Графические компоненты для <see cref="N:StockSharp.Plaza"/>.</p>
-			</summary>
-		</member>
-		<member name="N:StockSharp.Plaza.Native.CGate">
-			<summary>
-				<p>Классы для нативного API Plaza CGate.</p>
-			</summary>
-		</member>
-		<member name="N:StockSharp.Plaza.Native.ClientGate">
-			<summary>
-				<p>Классы для нативного API Plaza CGate.</p>
-			</summary>
-		</member>
-		<member name="N:StockSharp.Quik">
-			<summary>
-				<p>Коннектор к торговой программе Quik.</p>
-			</summary>
-		</member>
-		<member name="N:StockSharp.Quik.Xaml">
-			<summary>
-				<p>Графические компоненты для <see cref="N:StockSharp.Quik"/>.</p>
-			</summary>
-		</member>
-		<member name="N:StockSharp.Quik.Lua">
-			<summary>
-				<p>Классы для работы с Quik Lua.</p>
-			</summary>
-		</member>
-		<member name="N:StockSharp.Quik.Native">
-			<summary>
-				<p>Классы для нативного API Quik.</p>
-			</summary>
-		</member>
-		<member name="N:StockSharp.SmartCom">
-			<summary>
-				<p>Коннектор к торговой программе SmartCOM.</p>
-			</summary>
-		</member>
-		<member name="N:StockSharp.SmartCom.Wrapper">
-			<summary>
-				<p>Системные классы SmartCOM.</p>
-			</summary>
-		</member>
-		<member name="N:StockSharp.SmartCom.Xaml">
-			<summary>
-				<p>Графические компоненты для <see cref="N:StockSharp.SmartCom"/>.</p>
-			</summary>
-		</member>
-		<member name="N:StockSharp.SmartCom.Native">
-			<summary>
-				<p>Классы нативного API SmartCOM.</p>
+				<p>Log component.</p>
 			</summary>
 		</member>
 		<member name="N:StockSharp.Sterling">
 			<summary>
-				<p>Коннектор для платформы Sterling.</p>
+				<p>Sterling connectivity components.</p>
 			</summary>
 		</member>
 		<member name="N:StockSharp.Xaml">
 			<summary>
-				<p>Графические компоненты (график для отрисовки свечек, окно для логов, монитор работы стратегий и т.д.).</p>
+				<p>WPF components (candle chart, tables etc.).</p>
 			</summary>
 		</member>
 		<member name="N:StockSharp.Xaml.Charting">
 			<summary>
-				<p>График для отрисовки свечек и эквити.</p>
+				<p>WPF candle chart and equity components.</p>
 			</summary>
 		</member>
 		<member name="N:StockSharp.Xaml.Charting.IndicatorPainters">
 			<summary>
-				<p>Графические рендереры индикаторов <see cref="N:StockSharp.Algo.Indicators"/>.</p>
-			</summary>
-		</member>
-		<member name="N:StockSharp.Xaml.Charting.MsChart">
-			<summary>
-				<p>Устаревшие графические компоненты для графиков свечек.</p>
+				<p><see cref="N:StockSharp.Algo.Indicators"/> custom renderers.</p>
 			</summary>
 		</member>
 		<member name="N:StockSharp.Hydra.Core">
 			<summary>
-				<p>Общие классы S#.Data, использующиеся для написания собственных источников.</p>
-			</summary>
-		</member>
-		<member name="N:StockSharp.Hydra.Core.HydraTasks">
-			<summary>
-				<p>Общие классы S#.Data, использующиеся для написания собственных задач.</p>
+				<p>Common S#.Data components.</p>
 			</summary>
 		</member>
 		<member name="N:StockSharp.Licensing">
 			<summary>
-				<p>Лицензии.</p>
+				<p>Licenses.</p>
 			</summary>
 		</member>
 		<member name="N:StockSharp.Licensing.Xaml">
 			<summary>
-				<p>Лицензии: графические компоненты.</p>
+				<p>License WPF components.</p>
 			</summary>
 		</member>
 		<member name="N:StockSharp.InteractiveBrokers">
 			<summary>
-				<p>Коннектор к брокеру InteractiveBrokers.</p>
+				<p>InteractiveBrokers connectivity components.</p>
 			</summary>
 		</member>
 		<member name="N:StockSharp.InteractiveBrokers.Web">
 			<summary>
-				<p>Классы для работы с Web-компонентами InteractiveBrokers.</p>
+				<p>InteractiveBrokers site-grabber components.</p>
 			</summary>
 		</member>
 		<member name="N:StockSharp.Oanda">
 			<summary>
-				<p>Коннектор к брокеру Oanda.</p>
+				<p>Oanda connectivity components.</p>
 			</summary>
 		</member>
 		<member name="N:StockSharp.OpenECry">
 			<summary>
-				<p>Коннектор к брокеру OpenECry.</p>
+				<p>OpenECry (Gain futures) connectivity components.</p>
 			</summary>
 		</member>
 		<member name="N:StockSharp.OpenECry.Xaml">
 			<summary>
-				<p>Графические компоненты для <see cref="N:StockSharp.OpenECry"/>.</p>
-			</summary>
-		</member>
-		<member name="N:StockSharp.Plaza.Wrapper">
-			<summary>
-				<p>Системные классы Plaza.</p>
-			</summary>
-		</member>
-		<member name="N:StockSharp.Plaza.Wrapper.ClientGate">
-			<summary>
-				<p>Системные классы Plaza версии ClientGate (COM).</p>
-			</summary>
-		</member>
-		<member name="N:StockSharp.Plaza.Wrapper.CGate">
-			<summary>
-				<p>Системные классы Plaza версии CGate.</p>
+				<p><see cref="N:StockSharp.OpenECry"/> WPF components.</p>
 			</summary>
 		</member>
 		<member name="N:StockSharp.MatLab">
 			<summary>
-				<p>Интеграция MatLab с StockSharp.</p>
+				<p>MatLab integration components.</p>
 			</summary>
 		</member>
-		<member name="N:StockSharp.Micex">
-			<summary>
-				<p>Коннектор к Micex Bridge через TEAP (Московская биржа).</p>
-			</summary>
-		</member>
-		<member name="N:StockSharp.Micex.Xaml">
-			<summary>
-				<p>Графические компоненты для <see cref="N:StockSharp.Micex"/>.</p>
-			</summary>
-		</member>
-		<member name="N:StockSharp.Micex.Schema">
-			<summary>
-				<p>Схема данных в Micex Bridge.</p>
-			</summary>
-		</member>
-		<member name="N:StockSharp.Micex.Native">
-			<summary>
-				<p>Низкоуровневый доступ к Micex Bridge.</p>
-			</summary>
-		</member>
-		<member name="N:StockSharp.Micex.Native.Tables">
-			<summary>
-				<p>Описание табличных данных.</p>
-			</summary>
-		</member>
-		<member name="N:StockSharp.Micex.Native.Transactions">
-			<summary>
-				<p>Команды к Micex Bridge.</p>
-			</summary>
-		</member>
-		<member name="N:StockSharp.Transaq">
-			<summary>
-				<p>Коннектор к Transaq.</p>
-			</summary>
-		</member>
-		<member name="N:StockSharp.Transaq.Wrapper">
-			<summary>
-				<p>Низкоуровневый доступ к Transaq.</p>
-			</summary>
-		</member>
-		<member name="N:StockSharp.Transaq.Native">
-			<summary>
-				<p>Низкоуровневый доступ к Transaq.</p>
-			</summary>
-		</member>	
 		<member name="N:StockSharp.ETrade">
 			<summary>
-				<p>Реализация шлюза к ETrade.</p>
+				<p>ETrade connectivity components.</p>
 			</summary>
 		</member>
 		<member name="N:StockSharp.ETrade.Client">
 			<summary>
-				<p>Описание данных протокола ETrade.</p>
+				<p>ETrade protocol classes.</p>
 			</summary>
 		</member>
 		<member name="N:StockSharp.ETrade.Xaml">
 			<summary>
-				<p>Графические компоненты для <see cref="N:StockSharp.ETrade"/>.</p>
+				<p><see cref="N:StockSharp.ETrade"/> WPF components.</p>
 			</summary>
 		</member>
 		<member name="N:StockSharp.ETrade.Native">
 			<summary>
-				<p>Классы для нативного API ETrade.</p>
+				<p>API ETrade implementation.</p>
 			</summary>
 		</member>
 		<member name="N:StockSharp.LMAX">
 			<summary>
-				<p>Реализация шлюза к LMAX Exchange.</p>
+				<p>LMAX Exchange connectivity components.</p>
 			</summary>
 		</member>
 		<member name="N:StockSharp.Blackwood">
 			<summary>
-				<p>Коннектор к Blackwood (Fusion) DMA.</p>
+				<p>Blackwood (Fusion) DMA connectivity components.</p>
 			</summary>
 		</member>
 		<member name="N:StockSharp.IQFeed">
 			<summary>
-				<p>Реализация шлюза для взаимодействия с DTN IQFeed для скачивания исторических и реал-тайм маркет-данных (level 1, level 2).</p>
+				<p>DTN IQFeed connectivity components.</p>
 			</summary>
 		</member>
 		<member name="N:StockSharp.ITCH">
 			<summary>
-				<p>Реализация шлюза для ITCH протокола.</p>
+				<p>ITCH protocol connectivity components.</p>
 			</summary>
 		</member>
 		<member name="N:StockSharp.Fix">
 			<summary>
-				<p>Реализация шлюза для FIX протокола.</p>
+				<p>FIX protocol connectivity components.</p>
 			</summary>
 		</member>
 		<member name="N:StockSharp.Fix.Dialects">
 			<summary>
-				<p>Диалекты FIX протокола.</p>
+				<p>FIX protocol dialects.</p>
 			</summary>
 		</member>
 		<member name="N:StockSharp.Fix.Native">
 			<summary>
-				<p>Классы для нативного API FIX протокола.</p>
+				<p>FIX protocol native components.</p>
 			</summary>
 		</member>
 		<member name="N:StockSharp.Rithmic">
 			<summary>
-				<p>Коннектор к торговой системе Rithmic.</p>
+				<p>Rithmic connectivity components.</p>
 			</summary>
 		</member>
 		<member name="N:StockSharp.Rithmic.Xaml">
 			<summary>
-				<p>Графические компоненты Rithmic.</p>
+				<p><see cref="N:StockSharp.Rithmic"/> WPF components.</p>
 			</summary>
 		</member>
 		<member name="N:StockSharp.Rss">
 			<summary>
-				<p>Коннектор для получения новостей через RSS протокол.</p>
+				<p>RSS feed components.</p>
 			</summary>
 		</member>
 		<member name="N:StockSharp.Rss.Xaml">
 			<summary>
-				<p>Графические компоненты для <see cref="N:StockSharp.Rss"/>.</p>
-			</summary>
-		</member>
-		<member name="N:StockSharp.Twime">
-			<summary>
-				<p>Коннектор прямого доступа на срочный рынок Московской биржи.</p>
+				<p><see cref="N:StockSharp.Rss"/> WPF components.</p>
 			</summary>
 		</member>
 		<member name="N:StockSharp.Messages">
 			<summary>
-				<p>Торговые сообщения.</p>
+				<p>Trading messages.</p>
 			</summary>
 		</member>
 		<member name="N:StockSharp.Xaml.Diagram">
 			<summary>
-				<p>Дизайнер стратегий.</p>
+				<p>Visual strategies designer.</p>
 			</summary>
 		</member>
 		<member name="N:StockSharp.Xaml.Diagram.Elements">
 			<summary>
-				<p>Элементы для <see cref="N:StockSharp.Xaml.Diagram"/>.</p>
+				<p><see cref="N:StockSharp.Xaml.Diagram"/> elements.</p>
 			</summary>
 		</member>
-		<member name="N:StockSharp.Xaml.Code">
+		<member name="N:StockSharp.Xaml.GridControl">
 			<summary>
-				<p>Классы для <see cref="N:StockSharp.Xaml"/>.</p>
+				<p>Table components.</p>
 			</summary>
 		</member>
 		<member name="N:StockSharp.Xaml.PropertyGrid">
 			<summary>
-				<p>Графический компонент PropertyGridEx.</p>
+				<p>PropertyGridEx compontent.</p>
 			</summary>
 		</member>
 	</members>
