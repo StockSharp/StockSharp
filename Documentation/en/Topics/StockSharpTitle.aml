@@ -21,7 +21,7 @@
      	<link xlink:href="8a531942-a16c-4348-a4d0-dd4ae999d8f9">Sterling</link>, <link xlink:href="c7ff5937-e230-4db3-857f-4cd68583ebfc">IQFeed</link>, 
      	<link xlink:href="84d6a0fb-607f-4d87-be8a-e2b58006493e">E*Trade</link>, <link xlink:href="5d162089-902a-4a4e-885f-f38ff94fbe58">BTCE</link>, 
      	<link xlink:href="345fa341-661d-4992-a9a6-9c89af399feb">BitStamp</link>, <link xlink:href="aac980b1-ac5b-415b-811c-a8d128942391">CQG</link>, 
-     	<link xlink:href="c2162c96-d12f-4107-ac96-0238b793f466">OANDA</link> дают возможность использовать <token>stocksharp</token> на всех международных и российских
+     	<link xlink:href="c2162c96-d12f-4107-ac96-0238b793f466">OANDA</link>, <token>itch</token> дают возможность использовать <token>stocksharp</token> на всех международных и российских
       	торговых площадках.
       </para>
       <para>
@@ -53,20 +53,20 @@
 	
 	<list class="bullet">
   		<listItem>
-  			<link xlink:href="e0f9d08e-5dba-4d5d-9248-4d37eba61b22">S#.Api</link> - библиотека для профессиональной разработки торговых роботов на языке C#.
+  			<link xlink:href="e0f9d08e-5dba-4d5d-9248-4d37eba61b22">S#.API</link> - библиотека для профессиональной разработки торговых роботов на языке C#.
   		</listItem>
   		<listItem>
   			<link xlink:href="a720a275-440a-44ce-86e2-bcec2e0bc55f">S#.Data</link> - программа для автоматической загрузки исторических и реал-тайм маркет-данных.
   		</listItem>
   		<listItem>
-  			<link xlink:href="49ba804f-908b-473a-a31f-76540d8a79d7">S#.Studio</link> - графическая среда для создания торговых роботов и автоматической торговли.
+  			<token>designer</token> - визуальный дизайнер торговых стратегий.
   		</listItem>
   		<listItem>
   			<link xlink:href="e3f889a5-ddcd-4c77-a174-2f24385386a0">S#.MatLab</link> - интеграция MatLab с торговыми системами. Торговля из скриптов MatLab.
   		</listItem>
-  		<listItem>
+  		<!--<listItem>
   			<link xlink:href="b65b25d8-871b-4d37-bfd4-c85e02996f99">S#.WealthLab</link> - интеграция WealthLab с торговыми системами.
-  		</listItem>
+  		</listItem>-->
   		<listItem>
   			<externalLink>
 				<linkText>S#.Shell</linkText>

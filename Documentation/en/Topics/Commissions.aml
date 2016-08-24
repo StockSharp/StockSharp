@@ -54,8 +54,8 @@ _commissionManager.Rules.Add(commissionRule);;
 	
 	<summary>
 		<para>Подсчет комиссии можно вести как по сделкам, так и по заявкам. Для подсчета комиссии по сделке вызывается метод 
-		<codeEntityReference qualifyHint="false" autoUpgrade="true">M:StockSharp.Algo.Commissions.CommissionManager.ProcessExecution(StockSharp.Messages.ExecutionMessage)</codeEntityReference>,
-		в который в качестве параметра передается <codeEntityReference qualifyHint="false">T:StockSharp.Messages.ExecutionMessage</codeEntityReference> - cообщение, содержащее информацию о заявке или собственной сделке.</para>
+		<codeEntityReference qualifyHint="false" autoUpgrade="true">M:StockSharp.Algo.Commissions.CommissionManager.Process(StockSharp.Messages.Message)</codeEntityReference>,
+		в который в качестве параметра передается <codeEntityReference qualifyHint="false">T:StockSharp.Messages.Message</codeEntityReference> - cообщение, содержащее информацию о заявке или собственной сделке.</para>
 		<!-- <para>Для подсчета комиссии по заявке вызывается метод <codeEntityReference qualifyHint="false" autoUpgrade="true">M:StockSharp.Algo.Commissions.CommissionManager.ProcessOrder(StockSharp.BusinessEntities.Order)</codeEntityReference>,
 		в который в качестве параметра передается <codeEntityReference qualifyHint="false">T:StockSharp.BusinessEntities.Order</codeEntityReference>.</para>-->
 		<para>Суммарное значение комиссии можно узнать через <codeEntityReference qualifyHint="false">P:StockSharp.Algo.Commissions.CommissionManager.Commission</codeEntityReference>.</para>

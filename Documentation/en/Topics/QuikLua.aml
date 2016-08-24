@@ -18,9 +18,9 @@
         <step>
           <content>
           	<para>Скачать и установить <externalLink>
-			<linkText>Visual C++ 2013</linkText>
-			<linkAlternateText>Пакет Visual C++ для Visual Studio 2013</linkAlternateText>
-			<linkUri>http://microsoft.com/ru-ru/download/details.aspx?id=40784</linkUri>
+			<linkText>Visual C++ 2015</linkText>
+			<linkAlternateText>Пакет Visual C++ для Visual Studio 2015</linkAlternateText>
+			<linkUri>https://www.microsoft.com/ru-RU/download/details.aspx?id=48145</linkUri>
 			<linkTarget>_blank</linkTarget>
 			</externalLink>
  (необходимо скачать vcredist_x86.exe).</para>

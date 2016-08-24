@@ -283,7 +283,7 @@
 					на значение, большее или равно параметру.
 				</listItem>
 				<listItem>
-					<codeEntityReference qualifyHint="true" autoUpgrade="true">M:StockSharp.Algo.MarketRuleHelper.WhenTimeCome(StockSharp.BusinessEntities.Security,StockSharp.BusinessEntities.IConnector,System.DateTimeOffset[])</codeEntityReference>
+					<codeEntityReference qualifyHint="true" autoUpgrade="true">M:StockSharp.Algo.MarketRuleHelper.WhenTimeCome(StockSharp.BusinessEntities.IConnector,System.DateTimeOffset[])</codeEntityReference>
 					- правило, которое активизируется при наступлении точного времени.
 				</listItem>
 		  	    

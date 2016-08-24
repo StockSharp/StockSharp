@@ -17,6 +17,35 @@
       </para>
     </introduction>
     
+    <para>
+		  В настоящий момент поддерживаются следующие площадки:
+    </para>
+    
+    <list class="bullet">
+		<listItem>
+			MOEX ASTS (FIX/FAST);
+		</listItem>
+		<listItem>
+			MOEX RTS Spectra (FIX/FAST);
+		</listItem>
+		<listItem>
+			QUIK Server (FIX);
+		</listItem>
+		<listItem>
+			CFH (FIX);
+		</listItem>
+		<listItem>
+			Otkritie Securities (FIX);
+		</listItem>
+		<listItem>
+			Exante (FIX).
+		</listItem>
+	</list>
+	
+	<para>
+		  <legacyItalic>В случае необходимости возможно подключение дополнительной площадки.</legacyItalic>
+    </para>
+    
     <relatedTopics>
     	<link xlink:href="4d00c89b-59d8-4e69-9ea2-db92f6d08a43">Пример работы с FixTrader</link>
     	<link xlink:href="55f27fed-449d-486d-b662-8ddde39ae852">Стоп-заявки</link>

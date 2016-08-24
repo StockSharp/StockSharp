@@ -3,7 +3,7 @@
 	<developerWalkthroughDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
 
 	<introduction>
-		<para>Пример работы с <codeEntityReference qualifyHint="false">T:StockSharp.OpenECry.OECTrader</codeEntityReference> демонстрирует приложение SampleOEC, показанное на рисунке ниже. 
+		<para>Пример работы с <codeEntityReference qualifyHint="false">T:StockSharp.OpenECry.OpenECryTrader</codeEntityReference> демонстрирует приложение SampleOEC, показанное на рисунке ниже. 
 		Исходные коды примера лежат в дистрибутиве в папке <legacyItalic>Samples/OpenECry</legacyItalic>.</para>
 		
 		<mediaLink><image placement="center" xlink:href="OECTraderMainWindow"/></mediaLink>
@@ -14,11 +14,11 @@
 					<step>
 						<content>
 							<para>В самом начале необходимо создать экземпляр класса шлюза 
-							<codeEntityReference qualifyHint="false">T:StockSharp.OpenECry.OECTrader</codeEntityReference>:</para>
+							<codeEntityReference qualifyHint="false">T:StockSharp.OpenECry.OpenECryTrader</codeEntityReference>:</para>
             				<code language="C#">
             				<![CDATA[
-Trader = new OECTrader {
-	Login = Login.Text, 
+Trader = new OpenECryTrader {
+    Login = Login.Text, 
     Password = Password.Password,
     OECConnectionAddress = address,
     OECConnectionPort = port,

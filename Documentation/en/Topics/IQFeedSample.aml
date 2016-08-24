@@ -160,7 +160,7 @@ private void Control_OnMouseDoubleClick(object sender, MouseButtonEventArgs e)
 		
 		<listItem>
  	  		<para>Для получения истории сделок за указанную дату необходимо воспользоваться методом 
- 	  		<codeEntityReference qualifyHint="true">M:StockSharp.IQFeed.IQFeedTrader.GetTrades(StockSharp.BusinessEntities.Security,System.DateTime,System.DateTime,System.Boolean@)</codeEntityReference>:</para>
+ 	  		<codeEntityReference qualifyHint="true">M:StockSharp.IQFeed.IQFeedTrader.GetHistoricalLevel1(StockSharp.Messages.SecurityId,System.DateTimeOffset,System.DateTimeOffset,System.Boolean@)</codeEntityReference>:</para>
  	  		<mediaLink><image placement="center" xlink:href="IQFeedHistoryTrades"/></mediaLink>
   	  		<code language="C#">
 Trades.Clear();

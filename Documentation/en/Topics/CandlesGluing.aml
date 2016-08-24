@@ -68,7 +68,7 @@ private void DrawCandles(CandleSeries series, Candle candle)
 		</code>
 		
 <para>При вызове метода 
-<codeEntityReference qualifyHint="true" autoUpgrade="true">M:StockSharp.Algo.Candles.CandleHelper.GetCandles``1(StockSharp.Algo.Candles.CandleSeries)</codeEntityReference>
+<codeEntityReference qualifyHint="true" autoUpgrade="true">M:StockSharp.Algo.Candles.CandleHelper.GetCandles``1(StockSharp.Algo.Candles.ICandleManager,StockSharp.Algo.Candles.CandleSeries)</codeEntityReference>
 получим все свечки, история + реал-тайм:</para>		
         <code language="C#">
         <![CDATA[

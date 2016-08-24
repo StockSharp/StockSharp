@@ -3,7 +3,7 @@
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     <introduction>
 		<para>
-			Для корректной работы с <codeEntityReference>T:StockSharp.InteractiveBrokers.IBTrader</codeEntityReference> необходимо предварительно 
+			Для корректной работы с <codeEntityReference>T:StockSharp.InteractiveBrokers.InteractiveBrokersTrader</codeEntityReference> необходимо предварительно 
 			настроить торговый терминал <token>IB_TWS</token>.
 		</para>
     </introduction>

@@ -81,6 +81,9 @@
  					<listItem>
           				<para><link xlink:href="c60b2dd2-518c-49e5-8ba4-edabbda04222">Yahoo Finance</link> - зарубежный сервис исторических данных.</para>
         			</listItem>
+        			<listItem>
+          				<para><link xlink:href="1e3811a4-60e6-4f6c-bb55-0d3b3c2e246f">ITCH</link> - протокол прямого доступа к биржевым данным.</para>
+        			</listItem>
 				</list>
       	</listItem>
       	<listItem>

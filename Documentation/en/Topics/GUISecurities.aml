@@ -1,11 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <topic id="c4bfe1be-0e21-4480-814b-abaa13536f1f" revisionNumber="1">
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <!--
-    <summary>
-      <para>Optional summary abstract</para>
-    </summary>
-    -->
+   
     <introduction>
       <para> <token>stocksharp</token> предлагает большой набор графических компонентов для работы с инструментами. В этот набор входят:</para>
       
@@ -19,13 +15,16 @@
   			</listItem>
   			
   			<listItem>
-  				<para>Компоненты для выбора инструмента - <codeEntityReference>T:StockSharp.Xaml.SecurityPicker</codeEntityReference>, 
+  				<para>Компоненты для поиска и выбора инструментов - <codeEntityReference>T:StockSharp.Xaml.SecurityPicker</codeEntityReference>, 
   				<codeEntityReference>T:StockSharp.Xaml.SecurityPickerWindow</codeEntityReference> и <codeEntityReference>T:StockSharp.Xaml.SecurityEditor</codeEntityReference>.
   				</para>
   			</listItem>
   			
+  			
+  			
   			<listItem>
-  				<para>Компонент для поиска инструмента по заданным критериям - <codeEntityReference>T:StockSharp.Xaml.SecurityLookupPanel</codeEntityReference>. </para>
+  				<para>Компоненты для создания непрерывных и индексных инструментов - <codeEntityReference>T:StockSharp.Xaml.ContinuousSecurityWindow</codeEntityReference> и 
+  				<codeEntityReference>T:StockSharp.Algo.Expressions.Xaml.IndexSecurityWindow</codeEntityReference>. </para>
   			</listItem>
   			
 		</list>
@@ -33,12 +32,11 @@
     </introduction>
     
       <relatedTopics>
-      	<link xlink:href="3d7de2e9-079d-40f5-9800-8cd81456f477">CreateSecurityWindow</link>
-      	<link xlink:href="de52af78-ec80-45b4-9820-0052f8add762">SecurityGrid</link>
-       	<link xlink:href="f4e84944-41ad-42f2-9d2a-2854a8665152">SecurityPicker</link>
-       	<link xlink:href="3dc4f866-ab4e-4c74-a627-13727abdb966">SecurityPickerWindow</link>
-       	<link xlink:href="04856acb-88f2-4b39-8880-c9ce8e655801">SecurityEditor</link>
-       	<link xlink:href="ceaecc17-9f6f-48db-bc83-28c7c9f57104">SecurityLookupPanel</link>
+      	<link xlink:href="3d7de2e9-079d-40f5-9800-8cd81456f477">Создание инструмента</link>
+      	<link xlink:href="de52af78-ec80-45b4-9820-0052f8add762">Инструменты</link>
+       	<link xlink:href="f4e84944-41ad-42f2-9d2a-2854a8665152">Выбор инструмента</link>
+       	<link xlink:href="43ce1f81-83aa-4e83-816f-7362de518f9e">Непрерывный фьючерс</link>
+       	<link xlink:href="c3ee456c-31a9-4bc9-b296-c5f805bafb9e">Индекс</link>
     </relatedTopics>
     
   </developerConceptualDocument>

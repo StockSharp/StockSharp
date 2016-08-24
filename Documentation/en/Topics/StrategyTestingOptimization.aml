@@ -55,130 +55,173 @@
 };]]></code>
 				</content>
 			</step>
+			
 			<step>
 				<content>
 					<para>
-						Создание объединенного шлюза <codeEntityReference>T:StockSharp.Algo.BasketTrader</codeEntityReference>, который будет
+						Создается экземпляр хранилища, инструмент, сообщение для установки значений Level1  и портфель:
+					</para>
+					<code language="C#"><![CDATA[
+					
+// storage to historical data
+var storageRegistry = new StorageRegistry
+{
+	// set historical path
+		DefaultDrive = new LocalMarketDataDrive(HistoryPath.Folder)
+};
+
+var timeFrame = TimeSpan.FromMinutes(5);
+
+// create test security
+var security = new Security
+{
+	Id = "RIZ2@FORTS", // sec id has the same name as folder with historical data
+	Code = "RIZ2",
+	Name = "RTS-12.12",
+	Board = ExchangeBoard.Forts,
+};
+
+var startTime = new DateTime(2012, 10, 1);
+var stopTime = new DateTime(2012, 10, 31);
+
+var level1Info = new Level1ChangeMessage
+{
+	SecurityId = security.ToSecurityId(),
+	ServerTime = startTime,
+}
+.TryAdd(Level1Fields.PriceStep, 10m)
+.TryAdd(Level1Fields.StepPrice, 6m)
+.TryAdd(Level1Fields.MinPrice, 10m)
+.TryAdd(Level1Fields.MaxPrice, 1000000m)
+.TryAdd(Level1Fields.MarginBuy, 10000m)
+.TryAdd(Level1Fields.MarginSell, 10000m);
+
+// test portfolio
+var portfolio = new Portfolio
+{
+	Name = "test account",
+	BeginValue = 1000000,
+};
+
+]]></code>
+				</content>
+			</step>
+			
+			<step>
+				<content>
+					<para>
+						Создание объединенного шлюза <codeEntityReference>T:StockSharp.Algo.Strategies.Testing.BatchEmulation</codeEntityReference>, который будет
 						содержать все созданные на следующем шаге <codeEntityReference>T:StockSharp.Algo.Testing.HistoryEmulationConnector</codeEntityReference>:
 					</para>
-					<code language="C#">var basketTrader = new BasketTrader
-{
-	// не поддерживать контроль уникальности сделок
-	// (уменьшает потребление памяти)
-	SupportTradesUnique = false,
-};</code>
+					<code language="C#">
+// create backtesting connector
+var batchEmulation = new BatchEmulation(new[] { security }, new[] { portfolio }, storageRegistry)
+	{
+		EmulationSettings =
+		{
+			MarketTimeChangedInterval = timeFrame,
+			StartTime = startTime,
+			StopTime = stopTime,
+
+			// count of parallel testing strategies
+			BatchSize = periods.Length,
+		}
+	};
+</code>
 				</content>
 			</step>
 			<step>
 				<content>
 					<para>
-						Далее, для каждого периода создается свой отдельный инструмент, портфель, стратегия, шлюз для тестирования и т.д. Это сделано для
-						того, чтобы отдельные потоки могли менять свою копию данных, не создавая коллизии в других потоках тестирования.
+						Далее, выполняется подписка на события объединенного шлюза и коннектора, выполняется настройка параметров тестирования, а также для каждого периода создается стратегия.
 					</para>
 					<code language="C#"><![CDATA[
-var startTime = new DateTime(2009, 6, 1);
-var stopTime = new DateTime(2009, 9, 1);
 
-foreach (var period in periods)
+// handle historical time for update ProgressBar
+batchEmulation.ProgressChanged += (curr, total) => this.GuiAsync(() => TestingProcess.Value = total);
+
+batchEmulation.StateChanged += (oldState, newState) =>
 {
-	// создаем тестовый инструмент, на котором будет производится тестирование
-	var security = new Security
-	{
-		Id = "RIU9@FORTS", // по идентификатору инструмента будет искаться папка с историческими маркет данными
-		Code = "RIU9",
-		Name = "RTS-9.09",
-		MinStepSize = 5,
-		MinStepPrice = 2,
-		ExchangeBoard = Exchange.Rts,
-	};
+	if (batchEmulation.State != EmulationStates.Stopped)
+		return;
 
-	// тестовый портфель
-	var portfolio = new Portfolio { Name = "test account" };
-
-	// создаем шлюз для эмуляции
-	// инициализируем настройки (инструмент в истории обновляется раз в секунду)
-	var trader = new EmulationTrader(
-		new [] { security },
-		new[] { portfolio },
-		storageRegistry)
+	this.GuiAsync(() =>
 	{
-		MarketTimeChangedInterval = timeFrame,
-		StorageRegistry = storageRegistry,
-	};
+		if (batchEmulation.IsFinished)
+		{
+			TestingProcess.Value = TestingProcess.Maximum;
+			MessageBox.Show(this, LocalizedStrings.Str3024.Put(DateTime.Now - _startEmulationTime));
+		}
+		else
+			MessageBox.Show(this, LocalizedStrings.cancelled);
+	});
+};
 
-	trader.RegisterMarketDepth(new TrendMarketDepthGenerator(security)
+// get emulation connector
+var connector = batchEmulation.EmulationConnector;
+
+logManager.Sources.Add(connector);
+
+connector.NewSecurities += securities =>
+{
+	if (securities.All(s => s != security))
+		return;
+
+	// fill level1 values
+	connector.SendInMessage(level1Info);
+
+	connector.RegisterMarketDepth(new TrendMarketDepthGenerator(connector.GetSecurityId(security))
 	{
-		// стакан для инструмента в истории обновляется раз в секунду
+		// order book freq refresh is 1 sec
 		Interval = TimeSpan.FromSeconds(1),
 	});
+};
 
-	// соединяемся с трейдером и запускаем экспорт,
-	// чтобы инициализировать переданными инструментами и портфелями необходимые свойства EmulationTrader
-	trader.Connect();
-	trader.StartExport();
+TestingProcess.Maximum = 100;
+TestingProcess.Value = 0;
 
-	var candleManager = new CandleManager(trader);
+_startEmulationTime = DateTime.Now;
 
-	var series = new CandleSeries(typeof(TimeFrameCandle), security, timeFrame);
-	candleManager.Start(series);
 
-	// создаем торговую стратегию
-	var strategy = new SmaStrategy(series, new SimpleMovingAverage { Length = period.First }, new SimpleMovingAverage { Length = period.Second })
+var strategies = periods
+	.Select(period =>
 	{
-		Volume = 1,
-		Security = security,
-		Portfolio = portfolio,
-		Trader = trader,
-	};
+		var candleManager = new CandleManager(connector);
+                 var series = new CandleSeries(typeof(TimeFrameCandle), security, timeFrame);
 
-	var curveItems = Curve.CreateCurve("Длинная {0} Короткая {1}".Put(period.First, period.Second), period.Third);
-	_strategy.PnLChanged += () =>
-	{
-		var data = new EquityData
+		// create strategy based SMA
+		var strategy = new SmaStrategy(candleManager, series, new SimpleMovingAverage { Length = period.Item1 }, new SimpleMovingAverage { Length = period.Item2 })
 		{
-			Time = _strategy.Trader.MarketTime,
-			Value = _strategy.PnL,
+			Volume = 1,
+			Security = security,
+			Portfolio = portfolio,
+			Connector = connector,
+
+			// by default interval is 1 min,
+			// it is excessively for time range with several months
+			UnrealizedPnLInterval = ((stopTime - startTime).Ticks / 1000).To<TimeSpan>()
 		};
 
-		this.GuiAsync(() => _curveItems.Add(data));
-	};
+		strategy.SetCandleManager(candleManager);
 
-	// полосу прогресса будет обновлять только первый период
-	if (periods.IndexOf(period) == 0)
-	{
-		// и подписываемся на событие изменения времени, чтобы обновить ProgressBar
-		trader.MarketTimeChanged += () =>
+		var curveItems = Curve.CreateCurve(LocalizedStrings.Str3026Params.Put(period.Item1, period.Item2), period.Item3);
+		strategy.PnLChanged += () =>
 		{
-			if (trader.MarketTime >= _nextTime || trader.MarketTime >= stopTime)
+			var data = new EquityData
 			{
-				_nextTime += progressStep;
-				this.GuiAsync(() => TestingProcess.Value++);
-			}
+				Time = strategy.CurrentTime,
+				Value = strategy.PnL,
+			};
+
+			this.GuiAsync(() => curveItems.Add(data));
 		};
-	}
 
-	trader.StateChanged += () =>
-	{
-		if (trader.State == EmulationStates.Stopped)
-		{
-			this.GuiAsync(() =>
-			{
-				if (Math.Abs(TestingProcess.Value - TestingProcess.Maximum) < double.Epsilon)
-					MessageBox.Show("Закончено за " + (DateTime.Now - _startEmulationTime));
-				else
-					MessageBox.Show("Отменено");
-			});
-		}
-		else if (trader.State == EmulationStates.Started)
-		{
-			// запускаем стратегию когда эмулятор запустился
-			strategy.Start();
-		}
-	};
+		Stat.AddStrategies(new[] { strategy });
 
-	basketTrader.InnerTraders.Add(trader);
-}
-}]]></code>
+		return strategy;
+	})
+	.ToEx(periods.Length);
+]]></code>
 				</content>
 			</step>
 			<step>
@@ -186,13 +229,11 @@ foreach (var period in periods)
 					<para>
 						Запуск тестирования:
 					</para>
-					<code language="C#"><![CDATA[// соединяемся с трейдером и запускаем экспорт,
-// запускаем эмуляцию
-foreach (var trader in basketTrader.InnerTraders.OfType<IEmulationTrader>())
-{
-	// указываем даты начала и конца тестирования
-	trader.Start(startTime, stopTime);
-}]]></code>
+					<code language="C#"><![CDATA[
+// start emulation
+batchEmulation.Start(strategies);
+
+]]></code>
 				</content>
 			</step>
 		</steps>
