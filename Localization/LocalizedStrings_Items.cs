@@ -41048,14 +41048,14 @@ namespace StockSharp.Localization
 		public static string RequestAllDepths => GetString(RequestAllDepthsKey);
 
 		/// <summary>
-		/// Export schema to container
+		/// Export scheme
 		/// </summary>
-		public const string ExportSchemaKey = "ExportSchema";
+		public const string ExportSchemeKey = "ExportScheme";
 
 		/// <summary>
-		/// Export schema to container
+		/// Export scheme
 		/// </summary>
-		public static string ExportSchema => GetString(ExportSchemaKey);
+		public static string ExportScheme => GetString(ExportSchemeKey);
 
 		/// <summary>
 		/// Control connection lost.
