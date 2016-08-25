@@ -374,6 +374,62 @@ namespace StockSharp.Algo
 		private SecurityAdapter _securityAdapter;
 
 		/// <summary>
+		/// Inner message adapter.
+		/// </summary>
+		public IMessageAdapter InnerAdapter
+		{
+			get { return _inAdapter; }
+			set
+			{
+				if (_inAdapter == value)
+					return;
+
+				if (_inAdapter != null)
+				{
+					_inAdapter.NewOutMessage -= AdapterOnNewOutMessage;
+				}
+
+				if (_adapter != null)
+				{
+					_adapter.InnerAdapters.Added -= InnerAdaptersOnAdded;
+					_adapter.InnerAdapters.Removed -= InnerAdaptersOnRemoved;
+					_adapter.InnerAdapters.Cleared -= InnerAdaptersOnCleared;
+				}
+
+				_inAdapter = value;
+				_adapter = null;
+				_timeAdapter = null;
+				_securityAdapter = null;
+				StorageAdapter = null;
+
+				if (_inAdapter == null)
+					return;
+
+				var adapter = _inAdapter as IMessageAdapterWrapper;
+
+				while (adapter != null)
+				{
+					adapter.DoIf<IMessageAdapter, TimeAdapter>(a => _timeAdapter = a);
+					adapter.DoIf<IMessageAdapter, SecurityAdapter>(a => _securityAdapter = a);
+					adapter.DoIf<IMessageAdapter, StorageMessageAdapter>(a => StorageAdapter = a);
+
+					adapter.InnerAdapter.DoIf<IMessageAdapter, BasketMessageAdapter>(a => _adapter = a);
+
+					adapter = adapter.InnerAdapter as IMessageAdapterWrapper;
+				}
+
+				if (_adapter != null)
+				{
+					_adapter.InnerAdapters.Added += InnerAdaptersOnAdded;
+					_adapter.InnerAdapters.Removed += InnerAdaptersOnRemoved;
+					_adapter.InnerAdapters.Cleared += InnerAdaptersOnCleared;
+				}
+
+				_inAdapter.NewOutMessage += AdapterOnNewOutMessage;
+			}
+		}
+
+		/// <summary>
 		/// Message adapter.
 		/// </summary>
 		public BasketMessageAdapter Adapter

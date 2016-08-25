@@ -541,7 +541,7 @@ namespace StockSharp.Algo
 		/// To call the event <see cref="Connector.Error"/>.
 		/// </summary>
 		/// <param name="exception">Data processing error.</param>
-		private void RaiseError(Exception exception)
+		protected void RaiseError(Exception exception)
 		{
 			if (exception == null)
 				throw new ArgumentNullException(nameof(exception));

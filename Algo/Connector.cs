@@ -232,7 +232,13 @@ namespace StockSharp.Algo
 			InitAdapter();
 		}
 
-		private Connector(bool initAdapter)
+		/// <summary>
+		/// Initializes a new instance of the <see cref="Connector"/>.
+		/// </summary>
+		/// <param name="initAdapter">Initialize basket adapter.</param>
+		/// <param name="initChannels">Initialize channels.</param>
+		/// <param name="initManagers">Initialize managers.</param>
+		protected Connector(bool initAdapter, bool initChannels = true, bool initManagers = true)
 		{
 			ReConnectionSettings = new ReConnectionSettings();
 
@@ -242,16 +248,22 @@ namespace StockSharp.Algo
 
 			CreateDepthFromLevel1 = true;
 
-			LatencyManager = new LatencyManager();
-			CommissionManager = new CommissionManager();
-			//PnLManager = new PnLManager();
-			RiskManager = new RiskManager();
-			SlippageManager = new SlippageManager();
+			if (initManagers)
+			{
+				LatencyManager = new LatencyManager();
+				CommissionManager = new CommissionManager();
+				//PnLManager = new PnLManager();
+				RiskManager = new RiskManager();
+				SlippageManager = new SlippageManager();
+			}
 
 			_connectorStat.Add(this);
 
-			InMessageChannel = new InMemoryMessageChannel("Connector In", RaiseError);
-			OutMessageChannel = new InMemoryMessageChannel("Connector Out", RaiseError);
+			if (initChannels)
+			{
+				InMessageChannel = new InMemoryMessageChannel("Connector In", RaiseError);
+				OutMessageChannel = new InMemoryMessageChannel("Connector Out", RaiseError);
+			}
 
 			if (initAdapter)
 				InitAdapter();
