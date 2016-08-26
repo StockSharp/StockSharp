@@ -17,6 +17,8 @@ StockSharp API Change log
 * (feature) MarketRuleHelper.WhenTimeCome. Removed Security param
 * (feature) OpenECry. v3.5.14.1
 * (feature) OpenECry. Address changed to gainfutures domain.
+* (feature) Micex TEAP. Currency26 interface.
+* (feature) Micex TEAP. IgnoreCurrencies.
 
 ###v4.3.15:
 * (feature) TWIME connector.

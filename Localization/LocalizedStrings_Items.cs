@@ -42756,5 +42756,15 @@ namespace StockSharp.Localization
 		/// Selected storage does not contains market data for {0} {1} from {2} till {3}.
 		/// </summary>
 		public static string StorageHasNoDataParams => GetString(StorageHasNoDataParamsKey);
+
+		/// <summary>
+		/// Incorrect time zone.
+		/// </summary>
+		public const string IncorrectTimeZoneKey = "IncorrectTimeZone";
+
+		/// <summary>
+		/// Incorrect time zone.
+		/// </summary>
+		public static string IncorrectTimeZone => GetString(IncorrectTimeZoneKey);
 	}
 }
