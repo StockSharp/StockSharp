@@ -42766,5 +42766,15 @@ namespace StockSharp.Localization
 		/// Incorrect time zone.
 		/// </summary>
 		public static string IncorrectTimeZone => GetString(IncorrectTimeZoneKey);
+
+		/// <summary>
+		/// Download historical market data?
+		/// </summary>
+		public const string DownloadHistoricalMarketDataQuestionKey = "DownloadHistoricalMarketDataQuestion";
+
+		/// <summary>
+		/// Download historical market data?
+		/// </summary>
+		public static string DownloadHistoricalMarketDataQuestion => GetString(DownloadHistoricalMarketDataQuestionKey);
 	}
 }
