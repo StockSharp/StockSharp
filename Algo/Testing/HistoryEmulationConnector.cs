@@ -488,7 +488,7 @@ namespace StockSharp.Algo.Testing
 			catch (Exception ex)
 			{
 				SendOutError(ex);
-				SendEmulationState(EmulationStates.Stopping);
+				Disconnect();
 			}
 		}
 
