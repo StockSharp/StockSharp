@@ -117,7 +117,7 @@ namespace StockSharp.Community
 
 		private void RequestNews()
 		{
-			var news = Invoke(f => f.GetNews2(Guid.Empty, LocalizedStrings.ActiveLanguage != Languages.Russian, 0));
+			var news = Invoke(f => f.GetNews2(TryGetSession ?? Guid.Empty, LocalizedStrings.ActiveLanguage != Languages.Russian, 0));
 
 			//if (news.Length <= 0)
 			//	return;

@@ -41,6 +41,11 @@ namespace StockSharp.Community
 		protected virtual Guid SessionId => AuthenticationClient.Instance.SessionId;
 
 		/// <summary>
+		/// To get the <see cref="SessionId"/> if the user was authorized.
+		/// </summary>
+		protected virtual Guid? TryGetSession => AuthenticationClient.Instance.TryGetSession;
+
+		/// <summary>
 		/// The user identifier for <see cref="SessionId"/>.
 		/// </summary>
 		public long UserId => AuthenticationClient.Instance.GetId(SessionId);

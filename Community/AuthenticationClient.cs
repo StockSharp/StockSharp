@@ -79,9 +79,9 @@ namespace StockSharp.Community
 				return _sessionId;
 			}
 		}
-		
+
 		/// <summary>
-		/// To get the session id if the user was authorized.
+		/// To get the <see cref="SessionId"/> if the user was authorized.
 		/// </summary>
 		public Guid? TryGetSession => IsLoggedIn ? SessionId : (Guid?)null;
 

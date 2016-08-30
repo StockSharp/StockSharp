@@ -42,7 +42,7 @@ namespace StockSharp.Community
 			if (_sessionId != 0)
 				throw new InvalidOperationException();
 
-			var sessionId = AuthenticationClient.Instance.TryGetSession ?? Guid.Empty;
+			var sessionId = TryGetSession ?? Guid.Empty;
 #if DEBUG
 			_sessionId = DateTime.Now.Ticks + sessionId.GetHashCode();
 #else
