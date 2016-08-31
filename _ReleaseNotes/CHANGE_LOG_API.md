@@ -1,6 +1,6 @@
 StockSharp API Change log
 ========================
-###current:
+###v4.3.16:
 * (feature) IConnector.CancelOrders. SecurityType filter.
 * (feature) FIX connector. Exante dialect
 * (feature) TwimeTrader.PortfolioName
@@ -19,6 +19,8 @@ StockSharp API Change log
 * (feature) OpenECry. Address changed to gainfutures domain.
 * (feature) Micex TEAP. Currency26 interface.
 * (feature) Micex TEAP. IgnoreCurrencies.
+* (bug) PropertyGridEx. Nullable and unsigned number fixes.
+* (bug) Xaml.Diagram minor fixes.
 
 ###v4.3.15:
 * (feature) TWIME connector.

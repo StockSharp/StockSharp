@@ -29,9 +29,9 @@
             The unique identifier of the diagram element type.
             </summary>
     </member>
-    <member name="P:StockSharp.Xaml.Diagram.CompositionDiagramElement.Icon">
+    <member name="P:StockSharp.Xaml.Diagram.CompositionDiagramElement.IconName">
       <summary>
-            Icon.
+            Icon resource name.
             </summary>
     </member>
     <member name="P:StockSharp.Xaml.Diagram.CompositionDiagramElement.Parameters">
@@ -74,12 +74,11 @@
             Initializes a new instance of the <see cref="T:StockSharp.Xaml.Diagram.CompositionDiagramElement" />.
             </summary>
     </member>
-    <member name="M:StockSharp.Xaml.Diagram.CompositionDiagramElement.RaisePropertyChanged(System.Object,System.ComponentModel.PropertyChangedEventArgs)">
+    <member name="M:StockSharp.Xaml.Diagram.CompositionDiagramElement.RaiseParameterValueChanged(System.String)">
       <summary>
-            To call the diagram element property value change event.
+            To call the diagram element parameter value change event.
             </summary>
-      <param name="sender">Sender.</param>
-      <param name="args">Arguments.</param>
+      <param name="parameterName">Parameter name.</param>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.CompositionDiagramElement.Save(Ecng.Serialization.SettingsStorage)">
       <summary>
@@ -416,6 +415,22 @@
             DiagramEditorControl
             </summary>
     </member>
+    <member name="F:StockSharp.Xaml.Diagram.DiagramEditorControl.OpenCommand">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Xaml.Diagram.DiagramEditorControl.RemoveLinkCommand">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Xaml.Diagram.DiagramEditorControl.RemoveNodeCommand">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Xaml.Diagram.DiagramEditorControl.PropertiesCommand">
+      <summary>
+      </summary>
+    </member>
     <member name="F:StockSharp.Xaml.Diagram.DiagramEditorControl.CompositionProperty">
       <summary>
         <see cref="T:System.Windows.DependencyProperty" /> for <see cref="P:StockSharp.Xaml.Diagram.DiagramEditorControl.Composition" />.
@@ -469,6 +484,16 @@
     <member name="P:StockSharp.Xaml.Diagram.DiagramEditorControl.IndicatorTypes">
       <summary>
             The list of available indicators types.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Diagram.DiagramEditorControl.OpenElementCommand">
+      <summary>
+            Command for opening composition element.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Diagram.DiagramEditorControl.OpenPropertiesCommand">
+      <summary>
+            Command for opening element properties.
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.DiagramEditorControl.#ctor">
@@ -575,9 +600,9 @@
             Icon.
             </summary>
     </member>
-    <member name="P:StockSharp.Xaml.Diagram.DiagramElement.PathIcon">
+    <member name="P:StockSharp.Xaml.Diagram.DiagramElement.IconName">
       <summary>
-            Path icon.
+            Icon resource name.
             </summary>
     </member>
     <member name="P:StockSharp.Xaml.Diagram.DiagramElement.Strategy">
@@ -676,6 +701,13 @@
             </summary>
       <param name="sender">Sender.</param>
       <returns>Connection.</returns>
+    </member>
+    <member name="M:StockSharp.Xaml.Diagram.DiagramElement.GetSourceElements(StockSharp.Xaml.Diagram.DiagramSocket)">
+      <summary>
+            To get the sender elements by the connection object.
+            </summary>
+      <param name="socket">Connection.</param>
+      <returns>Sender elements.</returns>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.DiagramElement.RaiseProcessOutput(StockSharp.Xaml.Diagram.DiagramElement,System.DateTimeOffset,System.Object)">
       <summary>
@@ -804,6 +836,17 @@
             </summary>
       <param name="sender">Sender.</param>
       <param name="args">Arguments.</param>
+    </member>
+    <member name="E:StockSharp.Xaml.Diagram.DiagramElement.ParameterValueChanged">
+      <summary>
+            The diagram element parameter value change event.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.Diagram.DiagramElement.RaiseParameterValueChanged(System.String)">
+      <summary>
+            To call the diagram element parameter value change event.
+            </summary>
+      <param name="parameterName">Parameter name.</param>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.DiagramElement.Clone(System.Boolean)">
       <summary>
@@ -1599,14 +1642,9 @@
             The unique identifier of the diagram element type.
             </summary>
     </member>
-    <member name="P:StockSharp.Xaml.Diagram.Elements.CandleSourceDiagramElement.Icon">
+    <member name="P:StockSharp.Xaml.Diagram.Elements.CandleSourceDiagramElement.IconName">
       <summary>
-            Icon.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Xaml.Diagram.Elements.CandleSourceDiagramElement.PathIcon">
-      <summary>
-            Path icon.
+            Icon resource name.
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.Elements.CandleSourceDiagramElement.OnStop">
@@ -1647,9 +1685,9 @@
             The unique identifier of the diagram element type.
             </summary>
     </member>
-    <member name="P:StockSharp.Xaml.Diagram.Elements.ChartDiagramElement.Icon">
+    <member name="P:StockSharp.Xaml.Diagram.Elements.ChartDiagramElement.IconName">
       <summary>
-            Icon.
+            Icon resource name.
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.Elements.ChartDiagramElement.OnUnInit">
@@ -1682,9 +1720,9 @@
             The unique identifier of the diagram element type.
             </summary>
     </member>
-    <member name="P:StockSharp.Xaml.Diagram.Elements.CheckWorkingTimeDiagramElement.Icon">
+    <member name="P:StockSharp.Xaml.Diagram.Elements.CheckWorkingTimeDiagramElement.IconName">
       <summary>
-            Icon.
+            Icon resource name.
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.Elements.CheckWorkingTimeDiagramElement.#ctor">
@@ -1707,9 +1745,9 @@
             The unique identifier of the diagram element type.
             </summary>
     </member>
-    <member name="P:StockSharp.Xaml.Diagram.Elements.ComparisonDiagramElement.Icon">
+    <member name="P:StockSharp.Xaml.Diagram.Elements.ComparisonDiagramElement.IconName">
       <summary>
-            Icon.
+            Icon resource name.
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.Elements.ComparisonDiagramElement.OnStart">
@@ -1732,9 +1770,9 @@
             The unique identifier of the diagram element type.
             </summary>
     </member>
-    <member name="P:StockSharp.Xaml.Diagram.Elements.IndexerDiagramElement.Icon">
+    <member name="P:StockSharp.Xaml.Diagram.Elements.IndexerDiagramElement.IconName">
       <summary>
-            Icon.
+            Icon resource name.
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.Elements.IndexerDiagramElement.#ctor">
@@ -1767,9 +1805,9 @@
             The unique identifier of the diagram element type.
             </summary>
     </member>
-    <member name="P:StockSharp.Xaml.Diagram.Elements.IndicatorDiagramElement.Icon">
+    <member name="P:StockSharp.Xaml.Diagram.Elements.IndicatorDiagramElement.IconName">
       <summary>
-            Icon.
+            Icon resource name.
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.Elements.IndicatorDiagramElement.OnInit">
@@ -1829,9 +1867,9 @@
             The unique identifier of the diagram element type.
             </summary>
     </member>
-    <member name="P:StockSharp.Xaml.Diagram.Elements.LogicalConditionDiagramElement.Icon">
+    <member name="P:StockSharp.Xaml.Diagram.Elements.LogicalConditionDiagramElement.IconName">
       <summary>
-            Icon.
+            Icon resource name.
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.Elements.LogicalConditionDiagramElement.OnStart">
@@ -1854,9 +1892,9 @@
             The unique identifier of the diagram element type.
             </summary>
     </member>
-    <member name="P:StockSharp.Xaml.Diagram.Elements.LogicOneParamFunctionDiagramElement.Icon">
+    <member name="P:StockSharp.Xaml.Diagram.Elements.LogicOneParamFunctionDiagramElement.IconName">
       <summary>
-            Icon.
+            Icon resource name.
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.Elements.LogicOneParamFunctionDiagramElement.#ctor">
@@ -1874,9 +1912,9 @@
             The unique identifier of the diagram element type.
             </summary>
     </member>
-    <member name="P:StockSharp.Xaml.Diagram.Elements.MarketDepthDiagramElement.Icon">
+    <member name="P:StockSharp.Xaml.Diagram.Elements.MarketDepthDiagramElement.IconName">
       <summary>
-            Icon.
+            Icon resource name.
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.Elements.MarketDepthDiagramElement.#ctor">
@@ -1899,9 +1937,9 @@
             The unique identifier of the diagram element type.
             </summary>
     </member>
-    <member name="P:StockSharp.Xaml.Diagram.Elements.OneParamFunctionDiagramElement.Icon">
+    <member name="P:StockSharp.Xaml.Diagram.Elements.OneParamFunctionDiagramElement.IconName">
       <summary>
-            Icon.
+            Icon resource name.
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.Elements.OneParamFunctionDiagramElement.#ctor">
@@ -1919,9 +1957,9 @@
             The unique identifier of the diagram element type.
             </summary>
     </member>
-    <member name="P:StockSharp.Xaml.Diagram.Elements.TwoParamFunctionDiagramElement.Icon">
+    <member name="P:StockSharp.Xaml.Diagram.Elements.TwoParamFunctionDiagramElement.IconName">
       <summary>
-            Icon.
+            Icon resource name.
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.Elements.TwoParamFunctionDiagramElement.#ctor">
@@ -1949,9 +1987,9 @@
             The unique identifier of the diagram element type.
             </summary>
     </member>
-    <member name="P:StockSharp.Xaml.Diagram.Elements.OpenPositionDiagramElement.Icon">
+    <member name="P:StockSharp.Xaml.Diagram.Elements.OpenPositionDiagramElement.IconName">
       <summary>
-            Icon.
+            Icon resource name.
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.Elements.OpenPositionDiagramElement.OnStop">
@@ -1974,9 +2012,9 @@
             The unique identifier of the diagram element type.
             </summary>
     </member>
-    <member name="P:StockSharp.Xaml.Diagram.Elements.OrderTradesDiagramElement.Icon">
+    <member name="P:StockSharp.Xaml.Diagram.Elements.OrderTradesDiagramElement.IconName">
       <summary>
-            Icon.
+            Icon resource name.
             </summary>
     </member>
     <member name="T:StockSharp.Xaml.Diagram.Elements.PartDiagramElement">
@@ -1989,9 +2027,9 @@
             The unique identifier of the diagram element type.
             </summary>
     </member>
-    <member name="P:StockSharp.Xaml.Diagram.Elements.PartDiagramElement.Icon">
+    <member name="P:StockSharp.Xaml.Diagram.Elements.PartDiagramElement.IconName">
       <summary>
-            Icon.
+            Icon resource name.
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.Elements.PartDiagramElement.#ctor">
@@ -2025,9 +2063,9 @@
             The unique identifier of the diagram element type.
             </summary>
     </member>
-    <member name="P:StockSharp.Xaml.Diagram.Elements.PassThroughDiagramElement.Icon">
+    <member name="P:StockSharp.Xaml.Diagram.Elements.PassThroughDiagramElement.IconName">
       <summary>
-            Icon.
+            Icon resource name.
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.Elements.PassThroughDiagramElement.TypeChanged">
@@ -2051,9 +2089,9 @@
             The unique identifier of the diagram element type.
             </summary>
     </member>
-    <member name="P:StockSharp.Xaml.Diagram.Elements.PositionDiagramElement.Icon">
+    <member name="P:StockSharp.Xaml.Diagram.Elements.PositionDiagramElement.IconName">
       <summary>
-            Icon.
+            Icon resource name.
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.Elements.PositionDiagramElement.#ctor">
@@ -2086,9 +2124,9 @@
             The unique identifier of the diagram element type.
             </summary>
     </member>
-    <member name="P:StockSharp.Xaml.Diagram.Elements.PreviousValueDiagramElement.Icon">
+    <member name="P:StockSharp.Xaml.Diagram.Elements.PreviousValueDiagramElement.IconName">
       <summary>
-            Icon.
+            Icon resource name.
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.Elements.PreviousValueDiagramElement.OnStart">
@@ -2111,9 +2149,9 @@
             The unique identifier of the diagram element type.
             </summary>
     </member>
-    <member name="P:StockSharp.Xaml.Diagram.Elements.ProtectPositionDiagramElement.Icon">
+    <member name="P:StockSharp.Xaml.Diagram.Elements.ProtectPositionDiagramElement.IconName">
       <summary>
-            Icon.
+            Icon resource name.
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.Elements.ProtectPositionDiagramElement.OnStart">
@@ -2136,9 +2174,9 @@
             The unique identifier of the diagram element type.
             </summary>
     </member>
-    <member name="P:StockSharp.Xaml.Diagram.Elements.SecurityDiagramElement.Icon">
+    <member name="P:StockSharp.Xaml.Diagram.Elements.SecurityDiagramElement.IconName">
       <summary>
-            Icon.
+            Icon resource name.
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.Elements.SecurityDiagramElement.#ctor">
@@ -2161,9 +2199,9 @@
             The unique identifier of the diagram element type.
             </summary>
     </member>
-    <member name="P:StockSharp.Xaml.Diagram.Elements.StrategyTradesDiagramElement.Icon">
+    <member name="P:StockSharp.Xaml.Diagram.Elements.StrategyTradesDiagramElement.IconName">
       <summary>
-            Icon.
+            Icon resource name.
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.Elements.StrategyTradesDiagramElement.OnStart">
@@ -2220,9 +2258,9 @@
             The unique identifier of the diagram element type.
             </summary>
     </member>
-    <member name="P:StockSharp.Xaml.Diagram.Elements.VariableDiagramElement.Icon">
+    <member name="P:StockSharp.Xaml.Diagram.Elements.VariableDiagramElement.IconName">
       <summary>
-            Icon.
+            Icon resource name.
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.Elements.VariableDiagramElement.#ctor">
@@ -2266,9 +2304,9 @@
             The unique identifier of the diagram element type.
             </summary>
     </member>
-    <member name="P:StockSharp.Xaml.Diagram.Elements.AlertDiagramElement.Icon">
+    <member name="P:StockSharp.Xaml.Diagram.Elements.AlertDiagramElement.IconName">
       <summary>
-            Icon.
+            Icon resource name.
             </summary>
     </member>
     <member name="T:StockSharp.Xaml.Diagram.ExportDiagramElement">
