@@ -8,7 +8,7 @@
 	    	 Предоставляется бесплатно и пожизненно всем желающим  Для этого необходимо только <externalLink>
 			<linkText>пройти регистрацию!</linkText>
 			<linkAlternateText>Регистрация в Stocksharp</linkAlternateText>
-			<linkUri>http://stocksharp.com/register/</linkUri>
+			<linkUri>http://stocksharp.ru/register/</linkUri>
 			<linkTarget>_blank</linkTarget>
 			</externalLink>
 			 Эта лицензия включает S#.Designer, <token>hydra</token>, <token>stocksharpapi</token> 
@@ -44,14 +44,14 @@
 		<para><legacyUnderline>Расширенная лицензия+</legacyUnderline> предоставляется клиентам прошедшим полный <externalLink>
 			<linkText>курс обучения</linkText>
 			<linkAlternateText>Обучение Stocksharp</linkAlternateText>
-			<linkUri>http://stocksharp.com/edu</linkUri>
+			<linkUri>http://stocksharp.ru/edu</linkUri>
 			<linkTarget>_blank</linkTarget>
 			</externalLink>
  и действует в течение 6 месяцев.</para>
 		<para><legacyUnderline>Расширенная лицензия++</legacyUnderline> предоставляется клиентам прошедшим расширенный <externalLink>
 			<linkText>курс обучения</linkText>
 			<linkAlternateText>Обучение Stocksharp</linkAlternateText>
-			<linkUri>http://stocksharp.com/edu</linkUri>
+			<linkUri>http://stocksharp.ru/edu</linkUri>
 			<linkTarget>_blank</linkTarget>
 			</externalLink>
  и действует в течение 12 месяцев.</para> 
@@ -89,7 +89,7 @@
 		(<token>hydra</token>, <token>designer</token>,   			<externalLink>
 				<linkText>S#.Shell</linkText>
 				<linkAlternateText>Каркас для торговых стратегий</linkAlternateText>
-				<linkUri>http://stocksharp.com/products/shell/</linkUri>
+				<linkUri>http://stocksharp.ru/products/shell/</linkUri>
 				<linkTarget>_blank</linkTarget>
 			</externalLink>),
 		а также исходные коды самой платформы: S#.API.</para>
@@ -109,7 +109,7 @@
      	<externalLink>
 			<linkText>Новые подходы к лицензированию</linkText>
 			<linkAlternateText>Лицензирование</linkAlternateText>
-			<linkUri>http://stocksharp.com/news/10456-novye-podhody-k-litsenzirovaniyu</linkUri>
+			<linkUri>http://stocksharp.ru/news/10456-novye-podhody-k-litsenzirovaniyu</linkUri>
 			<linkTarget>_blank</linkTarget>
 		</externalLink>
 		<externalLink>

@@ -101,9 +101,9 @@
       <DocumentationSource sourceFile="..\..\..\StockSharpReleases\LatestDocRefs\ru\StockSharp.Twime.dll" />
       <DocumentationSource sourceFile="..\..\..\StockSharpReleases\LatestDocRefs\ru\StockSharp.Twime.xml" />
     </DocumentationSources>
-    <CopyrightHref>http://stocksharp.com</CopyrightHref>
+    <CopyrightHref>http://stocksharp.ru</CopyrightHref>
     <CopyrightText>&amp;#169%3b 2016 - StockSharp LLC</CopyrightText>
-    <FeedbackEMailAddress>info%40stocksharp.com</FeedbackEMailAddress>
+    <FeedbackEMailAddress>info%40stocksharp.ru</FeedbackEMailAddress>
     <FeedbackEMailLinkText>отзыв</FeedbackEMailLinkText>
     <ApiFilter>
       <Filter entryType="Namespace" fullName="XamlGeneratedNamespace" isExposed="False" xmlns="" />
@@ -180,6 +180,7 @@
       <ImageId>candle_qpile</ImageId>
       <AlternateText>candle qpile</AlternateText>
     </None>
+    <None Include="Topics\BarChart.aml" />
     <None Include="Topics\MessageStorage.aml" />
     <None Include="Topics\Designer.aml" />
     <None Include="Topics\TwimeSample.aml" />

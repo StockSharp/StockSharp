@@ -8,8 +8,8 @@
 				<step>
 					<content>
 						<externalLink>
-							<linkText>Пройти процедуру регистрации на сайте StockSharp.Com</linkText>
-							<linkUri>http://stocksharp.com/register/</linkUri>
+							<linkText>Пройти процедуру регистрации на сайте StockSharp.Ru</linkText>
+							<linkUri>http://stocksharp.ru/register/</linkUri>
 						</externalLink>.
 					</content>
 				</step>
@@ -17,7 +17,7 @@
 					<content>
 						Войти в <externalLink>
 							<linkText>Личный Кабинет</linkText>
-							<linkUri>http://stocksharp.com/profile/</linkUri>
+							<linkUri>http://stocksharp.ru/profile/</linkUri>
 						</externalLink>.
 					</content>
 				</step>
@@ -94,7 +94,7 @@
 										Скачать утилиту
 										<externalLink>
 											<linkText>LicenseTool</linkText>
-											<linkUri>http://stocksharp.com/download/</linkUri>
+											<linkUri>http://stocksharp.ru/download/</linkUri>
 										</externalLink>.
 									</content>
 								</step>

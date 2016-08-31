@@ -4,12 +4,12 @@
   
     <introduction>
      <para>В настоящее время проект <token>stocksharp</token> разрабатывается в рамках Open Source комьюнити. Поэтому все основные компоненты <token>stocksharp</token>, необходимые для разработки торговых роботов, 
-     доступны в виде исходных кодов, размещенных в репозитории <token>stocksharpgithub</token>	на веб-сервисе <token>github</token>.
+     доступны в виде исходных кодов, размещенных в репозитории <token>stocksharpgithub</token> на веб-сервисе <token>github</token>.
  	</para>
  	<para><externalLink>
 	<linkText>Инструкция использования GitHub</linkText>
 	<linkAlternateText>Инструкция использования GitHub</linkAlternateText>
-		<linkUri>http://stocksharp.com/forum/yaf_postst5473_Rukovodstvo-po-GitHub.aspx</linkUri>
+		<linkUri>http://stocksharp.ru/forum/yaf_postst5473_Rukovodstvo-po-GitHub.aspx</linkUri>
 		<linkTarget>_blank</linkTarget>
 	</externalLink>
 </para>
@@ -41,9 +41,9 @@
   				<externalLink>
 					<linkText>S#.Shell</linkText>
 					<linkAlternateText>Каркас для торговых стратегий</linkAlternateText>
-					<linkUri>http://stocksharp.com/products/shell/</linkUri>
+					<linkUri>http://stocksharp.ru/products/shell/</linkUri>
 					<linkTarget>_blank</linkTarget>
-				</externalLink> 			- готовый каркас для торговых стратегий.
+				</externalLink> - готовый каркас для торговых стратегий.
  			</para>
   					
   				</listItem>
@@ -70,7 +70,7 @@
      	<externalLink>
 			<linkText>Исходный код S# на GitHub</linkText>
 			<linkAlternateText>Optional alternate text</linkAlternateText>
-			<linkUri>http://stocksharp.com/news/10454-ishodnyi-kod-s-na-github</linkUri>
+			<linkUri>http://stocksharp.ru/news/10454-ishodnyi-kod-s-na-github</linkUri>
 			<linkTarget>_blank</linkTarget>
 		</externalLink>
     <link xlink:href="b9f672db-e0c9-4208-9759-179e5de17fd8">Установка StockSharp</link>

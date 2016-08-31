@@ -2,8 +2,8 @@
 <topic id="ba149b22-2024-4479-aaf3-8dd271a681f5" revisionNumber="1">
 	<developerWalkthroughDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
 	<introduction>
-		<para> <token>stocksharp</token> предлагает следующие виды лицензий.</para>
-		<para><legacyBold>Частный трейдер</legacyBold></para>
+		<para> <token>stocksharp</token> has a few licence types.</para>
+		<para><legacyBold>Personal License</legacyBold></para>
 		<para>
 	    	 Предоставляется бесплатно и пожизненно всем желающим  Для этого необходимо только <externalLink>
 			<linkText>пройти регистрацию!</linkText>
@@ -98,7 +98,7 @@
   			Подробную информацию о лицензиях см. <externalLink>
 			<linkText>Стоимость лицензий StockSharp</linkText>
 			<linkAlternateText>Стоимость лицензий</linkAlternateText>
-			<linkUri>http://stocksharp.ru/products/pricing/</linkUri>
+			<linkUri>http://stocksharp.com/products/pricing/</linkUri>
 			<linkTarget>_blank</linkTarget>
 			</externalLink>.
   		</para>
@@ -115,7 +115,7 @@
 		<externalLink>
 			<linkText>Стоимость лицензий StockSharp</linkText>
 			<linkAlternateText>Стоимость лицензий</linkAlternateText>
-			<linkUri>http://stocksharp.ru/products/pricing/</linkUri>
+			<linkUri>http://stocksharp.com/products/pricing/</linkUri>
 			<linkTarget>_blank</linkTarget>
 		</externalLink>
      </relatedTopics>

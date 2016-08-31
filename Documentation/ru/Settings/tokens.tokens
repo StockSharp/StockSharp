@@ -211,15 +211,15 @@
   <item id="stocksharpapi"><ddue:link xlink:href="e0f9d08e-5dba-4d5d-9248-4d37eba61b22" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">S#.API</ddue:link></item>
   <item id="stocksharpcontacts"><ddue:externalLink xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">
     <ddue:linkText>StockSharp Contacts</ddue:linkText>
-    <ddue:linkUri>http://stocksharp.com/company/contacts/</ddue:linkUri>
+    <ddue:linkUri>http://stocksharp.ru/company/contacts/</ddue:linkUri>
    </ddue:externalLink></item>
   <item id="stocksharpeducation"><ddue:externalLink xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">
 		  <ddue:linkText>StockSharp Education</ddue:linkText>
-		  <ddue:linkUri>http://stocksharp.com/edu/#pricing/</ddue:linkUri>
+		  <ddue:linkUri>http://stocksharp.ru/edu/#pricing/</ddue:linkUri>
 		</ddue:externalLink></item>
   <item id="stocksharpforum"><ddue:externalLink xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">
 		  <ddue:linkText>StockSharp Forum</ddue:linkText>
-		  <ddue:linkUri>http://stocksharp.com/forum/</ddue:linkUri>
+		  <ddue:linkUri>http://stocksharp.ru/forum/</ddue:linkUri>
 		</ddue:externalLink></item>
   <item id="stocksharpgithub"><ddue:externalLink xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">
     <ddue:linkText>GitHub/StockSharp</ddue:linkText>
@@ -227,23 +227,23 @@
   </ddue:externalLink></item>
   <item id="stocksharpnews"><ddue:externalLink xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">
     <ddue:linkText>StockSharp News</ddue:linkText>
-    <ddue:linkUri>http://stocksharp.com/news/</ddue:linkUri>
+    <ddue:linkUri>http://stocksharp.ru/news/</ddue:linkUri>
   </ddue:externalLink></item>
   <item id="stocksharpnotify"><ddue:externalLink xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">
    <ddue:linkText>S#.Notify</ddue:linkText>
-   <ddue:linkUri>http://stocksharp.com/products/notify/</ddue:linkUri>
+   <ddue:linkUri>http://stocksharp.ru/products/notify/</ddue:linkUri>
   </ddue:externalLink></item>
   <item id="stocksharpprofile"><ddue:externalLink xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">
-    <ddue:linkText>http://stocksharp.com/profile/</ddue:linkText>
-    <ddue:linkUri>http://stocksharp.com/profile/</ddue:linkUri>
+    <ddue:linkText>http://stocksharp.ru/profile/</ddue:linkText>
+    <ddue:linkUri>http://stocksharp.ru/profile/</ddue:linkUri>
    </ddue:externalLink></item>
   <item id="stocksharpshell"><ddue:externalLink xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">
     <ddue:linkText>StockSharp Shell</ddue:linkText>
-    <ddue:linkUri>http://stocksharp.com/products/shell/</ddue:linkUri>
+    <ddue:linkUri>http://stocksharp.ru/products/shell/</ddue:linkUri>
   </ddue:externalLink></item>
   <item id="stocksharpsite"><ddue:externalLink xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">
-		  <ddue:linkText>http://stocksharp.com</ddue:linkText>
-		  <ddue:linkUri>http://stocksharp.com</ddue:linkUri>
+		  <ddue:linkText>http://stocksharp.ru</ddue:linkText>
+		  <ddue:linkUri>http://stocksharp.ru</ddue:linkUri>
 		</ddue:externalLink></item>
   <item id="stocksharpsources"><ddue:externalLink xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">
     <ddue:linkText>StockSharp Sources</ddue:linkText>
@@ -252,7 +252,7 @@
   <item id="stocksharpstudio"><ddue:link xlink:href="49ba804f-908b-473a-a31f-76540d8a79d7" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">S#.Studio</ddue:link></item>
   <item id="stocksharpsupport"><ddue:externalLink xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">
 		  <ddue:linkText>StockSharp.Support</ddue:linkText>
-		  <ddue:linkUri>http://stocksharp.com/support/</ddue:linkUri>
+		  <ddue:linkUri>http://stocksharp.ru/support/</ddue:linkUri>
 		</ddue:externalLink></item>
   <item id="stocksharptwitter"><ddue:externalLink xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">
     <ddue:linkText>StockSharp Twitter</ddue:linkText>
