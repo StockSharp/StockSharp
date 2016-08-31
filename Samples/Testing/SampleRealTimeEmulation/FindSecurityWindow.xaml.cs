@@ -30,10 +30,7 @@ namespace SampleRealTimeEmulation
 			SecCode.Text = "AAPL";
 		}
 
-		public Security Criteria
-		{
-			get { return new Security { Type = SecType.SelectedType, Code = SecCode.Text }; }
-		}
+		public Security Criteria => new Security { Type = SecType.SelectedType, Code = SecCode.Text };
 
 		private void SecCode_TextChanged(object sender, TextChangedEventArgs e) { TryEnableOk(); }
 

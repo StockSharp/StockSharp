@@ -1,4 +1,4 @@
-#region S# License
+﻿#region S# License
 /******************************************************************************************
 NOTICE!!!  This program and source code is owned and licensed by
 StockSharp, LLC, www.stocksharp.com
@@ -48,10 +48,7 @@ namespace SampleAsyncTransactions
 
 		public static MainWindow Instance { get; private set; }
 
-		public Portfolio Portfolio
-		{
-			get { return Portfolios.SelectedPortfolio; }
-		}
+		public Portfolio Portfolio => Portfolios.SelectedPortfolio;
 
 		protected override void OnClosing(CancelEventArgs e)
 		{

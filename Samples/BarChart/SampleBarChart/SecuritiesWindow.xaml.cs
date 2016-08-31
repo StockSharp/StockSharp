@@ -68,10 +68,7 @@ namespace SampleBarChart
 			window.Close();
 		}
 
-		public Security SelectedSecurity
-		{
-			get { return SecurityPicker.SelectedSecurity; }
-		}
+		public Security SelectedSecurity => SecurityPicker.SelectedSecurity;
 
 		private void SecurityPicker_OnSecuritySelected(Security security)
 		{

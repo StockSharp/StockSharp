@@ -57,15 +57,9 @@ namespace SampleETrade
 
 		//private Security[] _securities;
 
-		private static string ConsumerKey
-		{
-			get { return Properties.Settings.Default.ConsumerKey; }
-		}
+		private static string ConsumerKey => Properties.Settings.Default.ConsumerKey;
 
-		private static bool IsSandbox
-		{
-			get { return Properties.Settings.Default.Sandbox; }
-		}
+		private static bool IsSandbox => Properties.Settings.Default.Sandbox;
 
 		private readonly LogManager _logManager = new LogManager();
 

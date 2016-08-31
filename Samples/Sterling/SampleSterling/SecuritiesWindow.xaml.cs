@@ -33,10 +33,7 @@ namespace SampleSterling
 		private readonly SynchronizedDictionary<Security, TradesWindow> _tradesWindows = new SynchronizedDictionary<Security, TradesWindow>();
 		private bool _initialized;
 
-		public Security SelectedSecurity
-		{
-			get { return SecurityPicker.SelectedSecurity; }
-		}
+		public Security SelectedSecurity => SecurityPicker.SelectedSecurity;
 
 		public SecuritiesWindow()
 		{

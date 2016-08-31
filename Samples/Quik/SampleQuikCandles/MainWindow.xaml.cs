@@ -1,4 +1,4 @@
-#region S# License
+﻿#region S# License
 /******************************************************************************************
 NOTICE!!!  This program and source code is owned and licensed by
 StockSharp, LLC, www.stocksharp.com
@@ -158,10 +158,7 @@ namespace SampleQuikCandles
 			base.OnClosing(e);
 		}
 
-		private Security SelectedSecurity
-		{
-			get { return Security.SelectedSecurity; }
-		}
+		private Security SelectedSecurity => Security.SelectedSecurity;
 
 		private void OnSecuritySelected()
 		{

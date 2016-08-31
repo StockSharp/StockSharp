@@ -55,10 +55,7 @@ namespace SampleCQG
 
 		private readonly LogManager _logManager = new LogManager();
 
-		private static string Username
-		{
-			get { return Properties.Settings.Default.Username; }
-		}
+		private static string Username => Properties.Settings.Default.Username;
 
 		public MainWindow()
 		{

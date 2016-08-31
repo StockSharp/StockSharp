@@ -31,17 +31,11 @@ namespace SampleHistoryTestingParallel
 
 		private readonly StrategyParam<int> _longSmaPeriod;
 
-		public int LongSmaPeriod
-		{
-			get { return _longSmaPeriod.Value; }
-		}
+		public int LongSmaPeriod => _longSmaPeriod.Value;
 
 		private readonly StrategyParam<int> _shortSmaPeriod;
 
-		public int ShortSmaPeriod
-		{
-			get { return _shortSmaPeriod.Value; }
-		}
+		public int ShortSmaPeriod => _shortSmaPeriod.Value;
 
 		public SmaStrategy(ICandleManager candleManager, CandleSeries series, SimpleMovingAverage longSma, SimpleMovingAverage shortSma)
 		{
