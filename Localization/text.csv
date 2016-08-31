@@ -13356,4 +13356,17 @@ DocStr9201;Path icon;Путь к иконке
 DocStr9202;The color of text;Цвет текста
 DocStr9203;Interactive mode;Интерактивный режим
 DocStr9204;Default value of {0};Значение по-умолчанию {0}
-DocStr9207;Production server. Address is prod.gainfutures.com, port 9200;Production server. Address is prod.gainfutures.com, port 9200
+DocStr9207;Production server. Address is prod.gainfutures.com, port 9200;Боевой сервер. Адрес prod.gainfutures.com, порт 9200
+DocStr9208;Inner message adapter;Внутренний адаптер сообщений
+DocStr9209;Initialize basket adapter;Инициализировать адаптер
+DocStr9210;Initialize channels;Инициализировать каналы сообщений
+DocStr9211;Initialize managers;Инициализировать менеджеры
+DocStr9212;Subscription counter adapter;Адаптер учета подписок
+DocStr9213;To get the {0} if the user was authorized;Получить {0} если была пройдена авторизация
+DocStr9214;Icon resource name;Название ресурса с изображением
+DocStr9215;To call the diagram element parameter value change event;Вызвать событие изменения параметра диаграммы 
+DocStr9216;Command for opening composition element;Команда на открытие сложного элемента
+DocStr9217;Command for opening element properties;Команда на открытие свойство элемента
+DocStr9218;To get the sender elements by the connection object;Получить инициаторов по соединению
+DocStr9219;Sender elements;Инициаторы
+DocStr9220;The diagram element parameter value change event;Событие изменения параметра диаграммы

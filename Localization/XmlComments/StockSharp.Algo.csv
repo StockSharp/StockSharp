@@ -2573,6 +2573,7 @@ T:StockSharp.Algo.Connector/summary;DocStr754
 P:StockSharp.Algo.Connector.RaiseConnectedOnFirstAdapter/summary;DocStr862
 P:StockSharp.Algo.Connector.InMessageChannel/summary;DocStr8544
 P:StockSharp.Algo.Connector.OutMessageChannel/summary;DocStr863
+P:StockSharp.Algo.Connector.InnerAdapter/summary;DocStr9208
 P:StockSharp.Algo.Connector.Adapter/summary;DocStr864
 P:StockSharp.Algo.Connector.TransactionAdapter/summary;DocStr865
 P:StockSharp.Algo.Connector.MarketDataAdapter/summary;DocStr866
@@ -2726,6 +2727,10 @@ M:StockSharp.Algo.Connector.#ctor/summary;DocStr1
 M:StockSharp.Algo.Connector.#ctor(StockSharp.Algo.Storages.IEntityRegistry,StockSharp.Algo.Storages.IStorageRegistry)/summary;DocStr1
 M:StockSharp.Algo.Connector.#ctor(StockSharp.Algo.Storages.IEntityRegistry,StockSharp.Algo.Storages.IStorageRegistry)/param/entityRegistry;DocStr1309
 M:StockSharp.Algo.Connector.#ctor(StockSharp.Algo.Storages.IEntityRegistry,StockSharp.Algo.Storages.IStorageRegistry)/param/storageRegistry;DocStr8561
+M:StockSharp.Algo.Connector.#ctor(System.Boolean,System.Boolean,System.Boolean)/summary;DocStr1
+M:StockSharp.Algo.Connector.#ctor(System.Boolean,System.Boolean,System.Boolean)/param/initAdapter;DocStr9209
+M:StockSharp.Algo.Connector.#ctor(System.Boolean,System.Boolean,System.Boolean)/param/initChannels;DocStr9210
+M:StockSharp.Algo.Connector.#ctor(System.Boolean,System.Boolean,System.Boolean)/param/initManagers;DocStr9211
 P:StockSharp.Algo.Connector.ReConnectionSettings/summary;DocStr903
 P:StockSharp.Algo.Connector.EntityFactory/summary;DocStr904
 P:StockSharp.Algo.Connector.TradesKeepCount/summary;DocStr905
@@ -5259,6 +5264,13 @@ P:StockSharp.Algo.Strategies.TimeFrameStrategy.Interval/summary;DocStr1911
 M:StockSharp.Algo.Strategies.TimeFrameStrategy.OnStarted/summary;DocStr282
 M:StockSharp.Algo.Strategies.TimeFrameStrategy.OnProcess/summary;DocStr1909
 M:StockSharp.Algo.Strategies.TimeFrameStrategy.OnProcess/returns;DocStr1910
+T:StockSharp.Algo.SubscriptionMessageAdapter/summary;DocStr9212
+M:StockSharp.Algo.SubscriptionMessageAdapter.#ctor(StockSharp.Messages.IMessageAdapter)/summary;DocStr1
+M:StockSharp.Algo.SubscriptionMessageAdapter.#ctor(StockSharp.Messages.IMessageAdapter)/param/innerAdapter;DocStr9208
+M:StockSharp.Algo.SubscriptionMessageAdapter.SendInMessage(StockSharp.Messages.Message)/summary;DocStr46
+M:StockSharp.Algo.SubscriptionMessageAdapter.SendInMessage(StockSharp.Messages.Message)/param/message;Str3166
+M:StockSharp.Algo.SubscriptionMessageAdapter.Clone/summary;DocStr643
+M:StockSharp.Algo.SubscriptionMessageAdapter.Clone/returns;DocStr1116
 T:StockSharp.Algo.Testing.CommissionRuleMessage/summary;DocStr1912
 M:StockSharp.Algo.Testing.CommissionRuleMessage.#ctor/summary;DocStr1
 P:StockSharp.Algo.Testing.CommissionRuleMessage.Rule/summary;DocStr753

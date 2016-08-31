@@ -6,7 +6,7 @@ P:StockSharp.Community.AuthenticationClient.Instance/summary;DocStr2967
 P:StockSharp.Community.AuthenticationClient.Credentials/summary;DocStr2968
 P:StockSharp.Community.AuthenticationClient.IsLoggedIn/summary;DocStr2969
 P:StockSharp.Community.AuthenticationClient.SessionId/summary;DocStr138
-P:StockSharp.Community.AuthenticationClient.TryGetSession/summary;DocStr9029
+P:StockSharp.Community.AuthenticationClient.TryGetSession/summary;DocStr9213
 M:StockSharp.Community.AuthenticationClient.Login/summary;DocStr2963
 M:StockSharp.Community.AuthenticationClient.Login(System.String,System.String)/summary;DocStr2963
 M:StockSharp.Community.AuthenticationClient.Login(System.String,System.String)/param/login;Login
@@ -23,6 +23,7 @@ M:StockSharp.Community.BaseCommunityClient`1.#ctor(System.Uri,System.String,Syst
 M:StockSharp.Community.BaseCommunityClient`1.#ctor(System.Uri,System.String,System.Boolean)/param/endpointName;DocStr2958
 M:StockSharp.Community.BaseCommunityClient`1.#ctor(System.Uri,System.String,System.Boolean)/param/hasCallbacks;DocStr2959
 P:StockSharp.Community.BaseCommunityClient`1.SessionId/summary;DocStr188
+P:StockSharp.Community.BaseCommunityClient`1.TryGetSession/summary;DocStr9213
 P:StockSharp.Community.BaseCommunityClient`1.UserId/summary;DocStr2971
 T:StockSharp.Community.BaseServiceClient`1/summary;DocStr2956
 T:StockSharp.Community.BaseServiceClient`1/typeparam/TService;DocStr2957
