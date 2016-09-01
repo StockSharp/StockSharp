@@ -1,6 +1,6 @@
 StockSharp Designer Change log
 ========================
-###v4.3.16
+###v4.3.16.1
 * (feature) Optimizator.
 * (feature) Strategy gallery.
 * (feature) Import/export with optional encryption.
@@ -9,6 +9,9 @@ StockSharp Designer Change log
 * (feature) SQLite -> csv.
 * (feature) Live trading.
 * (bug) Many minor fixes.
+
+###v4.3.16
+* (feature) See next release.
 
 ###v4.3.14.2
 * (feature) New design.
