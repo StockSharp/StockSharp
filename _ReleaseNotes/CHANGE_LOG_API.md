@@ -1,5 +1,8 @@
 StockSharp API Change log
 ========================
+###current:
+* (feature) MicexDownloader + FortsDownloader -> MoexDownloader
+
 ###v4.3.16:
 * (feature) IConnector.CancelOrders. SecurityType filter.
 * (feature) FIX connector. Exante dialect
