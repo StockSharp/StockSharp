@@ -26,6 +26,13 @@ namespace StockSharp.Algo.Storages
 	{
 		private class FakeStorage : IStorage
 		{
+			private readonly CsvEntityRegistry _registry;
+
+			public FakeStorage(CsvEntityRegistry registry)
+			{
+				_registry = registry;
+			}
+
 			public long GetCount<TEntity>()
 			{
 				return 0;
@@ -39,7 +46,8 @@ namespace StockSharp.Algo.Storages
 
 			public TEntity GetBy<TEntity>(SerializationItemCollection by)
 			{
-				throw new NotSupportedException();
+				return _registry.Securities.ReadById(by[0].Value).To<TEntity>();
+				//throw new NotSupportedException();
 			}
 
 			public TEntity GetById<TEntity>(object id)
@@ -773,7 +781,7 @@ namespace StockSharp.Algo.Storages
 				throw new ArgumentNullException(nameof(path));
 
 			Path = path;
-			Storage = new FakeStorage();
+			Storage = new FakeStorage(this);
 
 			_exchanges = new ExchangeCsvList(this);
 			_exchangeBoards = new ExchangeBoardCsvList(this);
