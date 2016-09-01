@@ -1,7 +1,8 @@
 StockSharp API Change log
 ========================
-###current:
+###v4.3.16.1:
 * (feature) MicexDownloader + FortsDownloader -> MoexDownloader
+* (feature) StockSharp.Xaml.Code
 
 ###v4.3.16:
 * (feature) IConnector.CancelOrders. SecurityType filter.
