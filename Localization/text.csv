@@ -3393,7 +3393,7 @@ Str3645;Request for broker license sent.;Запрос на получение л
 Str3646;Error requesting license from broker: ;Ошибка при запросе лицензии у брокера: 
 Str3647;Error authorizing: ;Ошибка при авторизации: 
 Str3648Params;To close the tab {0} all running strategies must be stopped.;Для закрытия вкладки {0} необходимо остановить все работающие стратегии.
-Str3649;Error loading settings.;Ошибка загрузки настроек.
+Str3649;Error loading settings: {0};Ошибка загрузки настроек: {0}
 Str3650;At least one connection should be made.;Необходимо создать хотя бы одно подключение.
 Str3651;At least one connection must be active.;Необходимо активировать хотя бы одно подключение.
 Str3652Params;Strategy '{0}' is running for several configurations. They must first be stopped.;Стратегия '{0}' запущена для нескольких конфигураций. Необходимо предварительно их остановить.
@@ -4312,6 +4312,8 @@ LoadCompositionError;Error while loading scheme. Possibly file is corrupted, has
 StorageHasNoDataParams;Selected storage does not contains market data for {0} {1} {2} from {3} till {4}.;Выбранное хранилище не содержит маркет-данные для {0} {1} {2} за период с {3} по {4}.
 IncorrectTimeZone;Incorrect time zone.;Неверная временная зона.
 DownloadHistoricalMarketDataQuestion;Download historical market data?;Загрузить исторические данные?
+PublishError;Publish strategy error: {0};Ошибка загрузки стратегии: {0}
+ServiceNotRegistered;Service '{0}' not registered.;Сервис '{0}' не зарегистрирован.
 DocStr0;Button activation alert settings;Кнопка активации настроек сигнала
 DocStr1;Initializes a new instance of the {0};Создать {0}
 DocStr2;Load settings;Загрузить настройки

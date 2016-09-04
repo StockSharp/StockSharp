@@ -33873,7 +33873,7 @@ namespace StockSharp.Localization
 		public const string Str3649Key = "Str3649";
 
 		/// <summary>
-		/// Error loading settings.
+		/// Error loading settings: {0}
 		/// </summary>
 		public static string Str3649 => GetString(Str3649Key);
 
@@ -42776,5 +42776,25 @@ namespace StockSharp.Localization
 		/// Download historical market data?
 		/// </summary>
 		public static string DownloadHistoricalMarketDataQuestion => GetString(DownloadHistoricalMarketDataQuestionKey);
+
+		/// <summary>
+		/// Publish strategy error: {0}
+		/// </summary>
+		public const string PublishErrorKey = "PublishError";
+
+		/// <summary>
+		/// Publish strategy error: {0}
+		/// </summary>
+		public static string PublishError => GetString(PublishErrorKey);
+
+		/// <summary>
+		/// Service '{0}' not registered.
+		/// </summary>
+		public const string ServiceNotRegisteredKey = "ServiceNotRegistered";
+
+		/// <summary>
+		/// Service '{0}' not registered.
+		/// </summary>
+		public static string ServiceNotRegistered => GetString(ServiceNotRegisteredKey);
 	}
 }
