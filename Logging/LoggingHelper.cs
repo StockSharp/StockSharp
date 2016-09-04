@@ -119,8 +119,8 @@ namespace StockSharp.Logging
 		/// </summary>
 		/// <param name="receiver">Logs receiver.</param>
 		/// <param name="exception">Error detais.</param>
-		/// <param name="message">Text message.</param>
-		public static void AddErrorLog(this ILogReceiver receiver, Exception exception, string message)
+		/// <param name="format">A format string.</param>
+		public static void AddErrorLog(this ILogReceiver receiver, Exception exception, string format)
 		{
 			if (receiver == null)
 				throw new ArgumentNullException(nameof(receiver));
@@ -143,8 +143,8 @@ namespace StockSharp.Logging
 							.Join(Environment.NewLine);
 				}
 
-				if (message != null)
-					msg = message.Put(msg);
+				if (format != null)
+					msg = format.Put(msg);
 
 				return msg;
 			}));
@@ -176,8 +176,8 @@ namespace StockSharp.Logging
 		/// To record an error to the <see cref="LogManager.Application"/>.
 		/// </summary>
 		/// <param name="error">Error.</param>
-		/// <param name="message">Text message.</param>
-		public static void LogError(this Exception error, string message = null)
+		/// <param name="format">A format string.</param>
+		public static void LogError(this Exception error, string format = null)
 		{
 			if (error == null)
 				throw new ArgumentNullException(nameof(error));
@@ -185,7 +185,7 @@ namespace StockSharp.Logging
 			var manager = ConfigManager.TryGetService<LogManager>();
 
 			if (manager != null)
-				manager.Application.AddErrorLog(error, message);
+				manager.Application.AddErrorLog(error, format);
 		}
 
 		/// <summary>
