@@ -47,7 +47,7 @@ namespace StockSharp.Algo.Storages.Csv
 		{
 			var row = new[]
 			{
-				data.ServerTime.UtcDateTime.ToString(TimeFormat),
+				data.ServerTime.WriteTimeMls(),
 				data.ServerTime.ToString("zzz"),
 				data.TransactionId.ToString(),
 				data.OriginalTransactionId.ToString(),
@@ -91,8 +91,8 @@ namespace StockSharp.Algo.Storages.Csv
 				data.OrderStatus.ToString(),
 				data.Latency?.Ticks.ToString(),
 				data.Error?.Message,
-				data.ExpiryDate?.UtcDateTime.ToString(DateFormat),
-				data.ExpiryDate?.UtcDateTime.ToString(TimeFormat),
+				data.ExpiryDate?.WriteDate(),
+				data.ExpiryDate?.WriteTimeMls(),
 				data.ExpiryDate?.ToString("zzz")
 			};
 			writer.WriteRow(row);
@@ -112,7 +112,7 @@ namespace StockSharp.Algo.Storages.Csv
 			{
 				SecurityId = SecurityId,
 				ExecutionType = ExecutionTypes.Transaction,
-				ServerTime = ReadTime(reader, date),
+				ServerTime = reader.ReadTime(date),
 				TransactionId = reader.ReadLong(),
 				OriginalTransactionId = reader.ReadLong(),
 				OrderId = reader.ReadNullableLong(),
@@ -165,7 +165,7 @@ namespace StockSharp.Algo.Storages.Csv
 
 			if (dtStr != null)
 			{
-				msg.ExpiryDate = (DateParser.Parse(dtStr) + TimeParser.Parse(reader.ReadString())).ToDateTimeOffset(TimeSpan.Parse(reader.ReadString().Remove("+")));
+				msg.ExpiryDate = (dtStr.ToDateTime() + reader.ReadString().ToTimeMls()).ToDateTimeOffset(TimeSpan.Parse(reader.ReadString().Remove("+")));
 			}
 			else
 				reader.Skip(2);

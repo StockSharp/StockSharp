@@ -47,7 +47,7 @@ namespace StockSharp.Algo.Storages.Csv
 		{
 			writer.WriteRow(new[]
 			{
-				data.ServerTime.UtcDateTime.ToString(TimeFormat),
+				data.ServerTime.WriteTimeMls(),
 				data.ServerTime.ToString("zzz"),
 				data.Price.ToString(),
 				data.Volume.ToString(),
@@ -67,7 +67,7 @@ namespace StockSharp.Algo.Storages.Csv
 		{
 			return new TimeQuoteChange
 			{
-				ServerTime = ReadTime(reader, date),
+				ServerTime = reader.ReadTime(date),
 				Price = reader.ReadDecimal(),
 				Volume = reader.ReadDecimal(),
 				Side = reader.ReadEnum<Sides>()

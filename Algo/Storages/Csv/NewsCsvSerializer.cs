@@ -36,7 +36,7 @@ namespace StockSharp.Algo.Storages.Csv
 		{
 			writer.WriteRow(new[]
 			{
-				data.ServerTime.UtcDateTime.ToString(TimeFormat),
+				data.ServerTime.WriteTimeMls(),
 				data.ServerTime.ToString("zzz"),
 				data.Headline,
 				data.Source,
@@ -59,7 +59,7 @@ namespace StockSharp.Algo.Storages.Csv
 		{
 			var news = new NewsMessage
 			{
-				ServerTime = ReadTime(reader, date),
+				ServerTime = reader.ReadTime(date),
 				Headline = reader.ReadString(),
 				Source = reader.ReadString(),
 				Url = reader.ReadString().To<Uri>(),

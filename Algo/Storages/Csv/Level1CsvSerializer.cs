@@ -52,7 +52,7 @@ namespace StockSharp.Algo.Storages.Csv
 		{
 			var row = new List<string>();
 
-			row.AddRange(new[] { data.ServerTime.UtcDateTime.ToString(TimeFormat), data.ServerTime.ToString("zzz") });
+			row.AddRange(new[] { data.ServerTime.WriteTimeMls(), data.ServerTime.ToString("zzz") });
 
 			foreach (var field in _level1Fields)
 			{
@@ -62,7 +62,7 @@ namespace StockSharp.Algo.Storages.Csv
 					case Level1Fields.BestBidTime:
 					case Level1Fields.LastTradeTime:
 						var date = (DateTimeOffset?)data.Changes.TryGetValue(field);
-						row.AddRange(new[] { date?.UtcDateTime.ToString(DateFormat), date?.UtcDateTime.ToString(TimeFormat), date?.ToString("zzz") });
+						row.AddRange(new[] { date?.WriteDate(), date?.WriteTimeMls(), date?.ToString("zzz") });
 						break;
 					default:
 						row.Add(data.Changes.TryGetValue(field)?.ToString());
@@ -86,7 +86,7 @@ namespace StockSharp.Algo.Storages.Csv
 			var level1 = new Level1ChangeMessage
 			{
 				SecurityId = SecurityId,
-				ServerTime = ReadTime(reader, date),
+				ServerTime = reader.ReadTime(date),
 			};
 
 			foreach (var field in _level1Fields)
@@ -100,7 +100,7 @@ namespace StockSharp.Algo.Storages.Csv
 
 						if (dtStr != null)
 						{
-							level1.Changes.Add(field, (DateParser.Parse(dtStr) + TimeParser.Parse(reader.ReadString())).ToDateTimeOffset(TimeSpan.Parse(reader.ReadString().Remove("+"))));
+							level1.Changes.Add(field, (dtStr.ToDateTime() + reader.ReadString().ToTimeMls()).ToDateTimeOffset(TimeSpan.Parse(reader.ReadString().Remove("+"))));
 						}
 						else
 						{

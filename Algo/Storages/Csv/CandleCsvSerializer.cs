@@ -58,7 +58,7 @@ namespace StockSharp.Algo.Storages.Csv
 		{
 			writer.WriteRow(new[]
 			{
-				data.OpenTime.UtcDateTime.ToString(TimeFormat),
+				data.OpenTime.WriteTimeMls(),
 				data.OpenTime.ToString("zzz"),
 				data.OpenPrice.ToString(),
 				data.HighPrice.ToString(),
@@ -82,7 +82,7 @@ namespace StockSharp.Algo.Storages.Csv
 			{
 				SecurityId = SecurityId,
 				Arg = Arg,
-				OpenTime = ReadTime(reader, date),
+				OpenTime = reader.ReadTime(date),
 				OpenPrice = reader.ReadDecimal(),
 				HighPrice = reader.ReadDecimal(),
 				LowPrice = reader.ReadDecimal(),

@@ -57,7 +57,7 @@ namespace StockSharp.Algo.Storages.Csv
 		{
 			writer.WriteRow(new[]
 			{
-				data.ServerTime.UtcDateTime.ToString(TimeFormat),
+				data.ServerTime.WriteTimeMls(),
 				data.ServerTime.ToString("zzz"),
 				data.TradeId.ToString(),
 				data.TradePrice.ToString(),
@@ -83,7 +83,7 @@ namespace StockSharp.Algo.Storages.Csv
 			{
 				SecurityId = SecurityId,
 				ExecutionType = ExecutionTypes.Tick,
-				ServerTime = ReadTime(reader, date),
+				ServerTime = reader.ReadTime(date),
 				TradeId = reader.ReadNullableLong(),
 				TradePrice = reader.ReadNullableDecimal(),
 				TradeVolume = reader.ReadNullableDecimal(),

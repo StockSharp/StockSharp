@@ -84,7 +84,7 @@ namespace StockSharp.Algo.Storages.Csv
 
 					if (!firstTimeRead)
 					{
-						FirstTime = CsvBase.ReadTime(reader, Date).UtcDateTime;
+						FirstTime = reader.ReadTime(Date).UtcDateTime;
 						firstTimeRead = true;
 					}
 
@@ -100,7 +100,7 @@ namespace StockSharp.Algo.Storages.Csv
 					if (!reader.NextLine())
 						throw new InvalidOperationException();
 
-					LastTime = CsvBase.ReadTime(reader, Date).UtcDateTime;
+					LastTime = reader.ReadTime(Date).UtcDateTime;
 					_lastId = _readId?.Invoke(reader);
 				}
 
@@ -110,50 +110,10 @@ namespace StockSharp.Algo.Storages.Csv
 	}
 
 	/// <summary>
-	/// CSV helper class.
-	/// </summary>
-	public abstract class CsvBase
-	{
-		/// <summary>
-		/// <see cref="DateTime"/> format.
-		/// </summary>
-		public const string DateFormat = "yyyyMMdd";
-
-		/// <summary>
-		/// <see cref="TimeSpan"/> format.
-		/// </summary>
-		public const string TimeFormat = "HHmmssfff";
-
-		/// <summary>
-		/// <see cref="DateTime"/> parser.
-		/// </summary>
-		public static readonly FastDateTimeParser DateParser = new FastDateTimeParser(DateFormat);
-
-		/// <summary>
-		/// <see cref="TimeSpan"/> parser.
-		/// </summary>
-		public static readonly FastTimeSpanParser TimeParser = new FastTimeSpanParser(TimeFormat.ToLowerInvariant());
-
-		/// <summary>
-		/// Read <see cref="DateTimeOffset"/>.
-		/// </summary>
-		/// <param name="reader">CSV reader.</param>
-		/// <param name="date">Date.</param>
-		/// <returns><see cref="DateTimeOffset"/>.</returns>
-		internal static DateTimeOffset ReadTime(FastCsvReader reader, DateTime date)
-		{
-			if (reader == null)
-				throw new ArgumentNullException(nameof(reader));
-
-			return (date + TimeParser.Parse(reader.ReadString())).ToDateTimeOffset(TimeSpan.Parse(reader.ReadString().Remove("+")));
-		}
-	}
-
-	/// <summary>
 	/// The serializer in the CSV format.
 	/// </summary>
 	/// <typeparam name="TData">Data type.</typeparam>
-	public abstract class CsvMarketDataSerializer<TData> : CsvBase, IMarketDataSerializer<TData>
+	public abstract class CsvMarketDataSerializer<TData> : IMarketDataSerializer<TData>
 	{
 		// ReSharper disable StaticFieldInGenericType
 		private static readonly UTF8Encoding _utf = new UTF8Encoding(false);
