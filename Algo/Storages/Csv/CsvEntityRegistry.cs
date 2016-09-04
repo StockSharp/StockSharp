@@ -1,4 +1,4 @@
-namespace StockSharp.Algo.Storages
+namespace StockSharp.Algo.Storages.Csv
 {
 	using System;
 	using System.Collections.Generic;
@@ -359,8 +359,6 @@ namespace StockSharp.Algo.Storages
 
 		sealed class ExchangeBoardCsvList : CsvEntityList<ExchangeBoard>
 		{
-			private const string _timeSpanFormat = "hh\\:mm\\:ss";
-
 			public ExchangeBoardCsvList(CsvEntityRegistry registry)
 				: base(registry, "exchangeboard.csv", Encoding.UTF8)
 			{
@@ -377,7 +375,7 @@ namespace StockSharp.Algo.Storages
 				{
 					Code = reader.ReadString(),
 					Exchange = Registry.Exchanges.ReadById(reader.ReadString()),
-					ExpiryTime = reader.ReadTimeSpan(_timeSpanFormat),
+					ExpiryTime = reader.ReadString().ToTime(),
 					IsSupportAtomicReRegister = reader.ReadBool(),
 					IsSupportMarketOrders = reader.ReadBool(),
 					TimeZone = TimeZoneInfo.FindSystemTimeZoneById(reader.ReadString()),
@@ -399,7 +397,7 @@ namespace StockSharp.Algo.Storages
 				{
 					data.Code,
 					data.Exchange.Name,
-					data.ExpiryTime.ToString(_timeSpanFormat),
+					data.ExpiryTime.WriteTime(),
 					data.IsSupportAtomicReRegister.To<string>(),
 					data.IsSupportMarketOrders.To<string>(),
 					data.TimeZone.Id,
@@ -413,8 +411,6 @@ namespace StockSharp.Algo.Storages
 
 		sealed class SecurityCsvList : CsvEntityList<Security>, IStorageSecurityList
 		{
-			private const string _dateTimeFormat = "dd.MM.yyyy HH:mm:ss";
-
 			public SecurityCsvList(CsvEntityRegistry registry)
 				: base(registry, "security.csv", Encoding.UTF8)
 			{
@@ -501,8 +497,8 @@ namespace StockSharp.Algo.Storages
 					Multiplier = reader.ReadNullableDecimal(),
 					Decimals = reader.ReadNullableInt(),
 					Type = reader.ReadNullableEnum<SecurityTypes>(),
-					ExpiryDate = reader.ReadNullableDateTime(_dateTimeFormat),
-					SettlementDate = reader.ReadNullableDateTime(_dateTimeFormat),
+					ExpiryDate = ReadNullableDateTime(reader),
+					SettlementDate = ReadNullableDateTime(reader),
 					Strike = reader.ReadNullableDecimal(),
 					OptionType = reader.ReadNullableEnum<OptionTypes>(),
 					Currency = reader.ReadNullableEnum<CurrencyTypes>(),
@@ -539,8 +535,8 @@ namespace StockSharp.Algo.Storages
 					data.Multiplier.To<string>(),
 					data.Decimals.To<string>(),
 					data.Type.To<string>(),
-					data.ExpiryDate?.ToString(_dateTimeFormat),
-					data.SettlementDate?.ToString(_dateTimeFormat),
+					data.ExpiryDate?.UtcDateTime.ToString(_dateTimeFormat),
+					data.SettlementDate?.UtcDateTime.ToString(_dateTimeFormat),
 					data.Strike.To<string>(),
 					data.OptionType.To<string>(),
 					data.Currency.To<string>(),
@@ -561,8 +557,6 @@ namespace StockSharp.Algo.Storages
 
 		sealed class PortfolioCsvList : CsvEntityList<Portfolio>
 		{
-			private const string _dateTimeFormat = "dd.MM.yyyy HH:mm:ss";
-
 			public PortfolioCsvList(CsvEntityRegistry registry)
 				: base(registry, "portfolio.csv", Encoding.UTF8)
 			{
@@ -588,8 +582,8 @@ namespace StockSharp.Algo.Storages
 					Currency = reader.ReadNullableEnum<CurrencyTypes>(),
 					State = reader.ReadNullableEnum<PortfolioStates>(),
 					Description = reader.ReadString(),
-					LastChangeTime = reader.ReadDateTime(_dateTimeFormat),
-					LocalTime = reader.ReadDateTime(_dateTimeFormat)
+					LastChangeTime = _dateTimeParser.Parse(reader.ReadString()).ChangeKind(DateTimeKind.Utc),
+					LocalTime = _dateTimeParser.Parse(reader.ReadString()).ChangeKind(DateTimeKind.Utc)
 				};
 
 				return portfolio;
@@ -610,16 +604,14 @@ namespace StockSharp.Algo.Storages
 					data.Currency.To<string>(),
 					data.State.To<string>(),
 					data.Description,
-					data.LastChangeTime.ToString(_dateTimeFormat),
-					data.LocalTime.ToString(_dateTimeFormat)
+					data.LastChangeTime.UtcDateTime.ToString(_dateTimeFormat),
+					data.LocalTime.UtcDateTime.ToString(_dateTimeFormat)
 				});
 			}
 		}
 
 		sealed class PositionCsvList : CsvEntityList<Position>, IStoragePositionList
 		{
-			private const string _dateTimeFormat = "dd.MM.yyyy HH:mm:ss";
-
 			public PositionCsvList(CsvEntityRegistry registry)
 				: base(registry, "position.csv", Encoding.UTF8)
 			{
@@ -644,8 +636,8 @@ namespace StockSharp.Algo.Storages
 					VariationMargin = reader.ReadNullableDecimal(),
 					Commission = reader.ReadNullableDecimal(),
 					Currency = reader.ReadNullableEnum<CurrencyTypes>(),
-					LastChangeTime = reader.ReadDateTime(_dateTimeFormat),
-					LocalTime = reader.ReadDateTime(_dateTimeFormat)
+					LastChangeTime = _dateTimeParser.Parse(reader.ReadString()).ChangeKind(DateTimeKind.Utc),
+					LocalTime = _dateTimeParser.Parse(reader.ReadString()).ChangeKind(DateTimeKind.Utc)
 				};
 
 				return position;
@@ -665,8 +657,8 @@ namespace StockSharp.Algo.Storages
 					data.VariationMargin.To<string>(),
 					data.Commission.To<string>(),
 					data.Description,
-					data.LastChangeTime.ToString(_dateTimeFormat),
-					data.LocalTime.ToString(_dateTimeFormat)
+					data.LastChangeTime.UtcDateTime.ToString(_dateTimeFormat),
+					data.LocalTime.UtcDateTime.ToString(_dateTimeFormat)
 				});
 			}
 
@@ -674,6 +666,19 @@ namespace StockSharp.Algo.Storages
 			{
 				return ReadById(Tuple.Create(portfolio, security));
 			}
+		}
+
+		private const string _dateTimeFormat = "yyyMMddHHmmss";
+		private static readonly FastDateTimeParser _dateTimeParser = new FastDateTimeParser(_dateTimeFormat);
+
+		private static DateTimeOffset? ReadNullableDateTime(FastCsvReader reader)
+		{
+			var str = reader.ReadString();
+
+			if (str == null)
+				return null;
+
+			return _dateTimeParser.Parse(reader.ReadString()).ChangeKind(DateTimeKind.Utc);
 		}
 
 		private readonly TimeSpan _flushInterval = TimeSpan.FromSeconds(1);
@@ -844,7 +849,7 @@ namespace StockSharp.Algo.Storages
 			}
 			catch (Exception ex)
 			{
-				ex.LogError("Flush CSV entity registry error.");
+				ex.LogError("Flush CSV entity registry error: {0}");
 			}
 		}
 	}
