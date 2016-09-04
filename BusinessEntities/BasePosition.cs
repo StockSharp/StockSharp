@@ -17,6 +17,7 @@ namespace StockSharp.BusinessEntities
 {
 	using System;
 	using System.Collections.Generic;
+	using System.ComponentModel;
 	using System.Runtime.Serialization;
 	using System.Xml.Serialization;
 
@@ -50,6 +51,7 @@ namespace StockSharp.BusinessEntities
 		[DescriptionLoc(LocalizedStrings.Str424Key)]
 		[StatisticsCategory]
 		[Nullable]
+		[Browsable(false)]
 		public decimal? BeginValue
 		{
 			get { return _beginValue; }
@@ -73,6 +75,7 @@ namespace StockSharp.BusinessEntities
 		[DescriptionLoc(LocalizedStrings.Str425Key)]
 		[StatisticsCategory]
 		[Nullable]
+		[Browsable(false)]
 		public decimal? CurrentValue
 		{
 			get { return _currentValue; }
@@ -96,6 +99,7 @@ namespace StockSharp.BusinessEntities
 		[DescriptionLoc(LocalizedStrings.Str426Key)]
 		[StatisticsCategory]
 		[Nullable]
+		[Browsable(false)]
 		public decimal? BlockedValue
 		{
 			get { return _blockedValue; }
@@ -143,6 +147,7 @@ namespace StockSharp.BusinessEntities
 		[DisplayNameLoc(LocalizedStrings.Str256Key)]
 		[DescriptionLoc(LocalizedStrings.Str428Key)]
 		[StatisticsCategory]
+		[Browsable(false)]
 		public decimal? CurrentPrice
 		{
 			get { return _currentPrice; }
@@ -166,6 +171,7 @@ namespace StockSharp.BusinessEntities
 		[DisplayNameLoc(LocalizedStrings.Str257Key)]
 		[DescriptionLoc(LocalizedStrings.Str429Key)]
 		[StatisticsCategory]
+		[Browsable(false)]
 		public decimal? AveragePrice
 		{
 			get { return _averagePrice; }
@@ -189,6 +195,7 @@ namespace StockSharp.BusinessEntities
 		[DisplayNameLoc(LocalizedStrings.Str258Key)]
 		[DescriptionLoc(LocalizedStrings.Str430Key)]
 		[StatisticsCategory]
+		[Browsable(false)]
 		public decimal? UnrealizedPnL
 		{
 			get { return _unrealizedPnL; }
@@ -212,6 +219,7 @@ namespace StockSharp.BusinessEntities
 		[DisplayNameLoc(LocalizedStrings.Str259Key)]
 		[DescriptionLoc(LocalizedStrings.Str431Key)]
 		[StatisticsCategory]
+		[Browsable(false)]
 		public decimal? RealizedPnL
 		{
 			get { return _realizedPnL; }
@@ -235,6 +243,7 @@ namespace StockSharp.BusinessEntities
 		[DescriptionLoc(LocalizedStrings.Str432Key)]
 		[StatisticsCategory]
 		[Nullable]
+		[Browsable(false)]
 		public decimal? VariationMargin
 		{
 			get { return _variationMargin; }
@@ -258,6 +267,7 @@ namespace StockSharp.BusinessEntities
 		[DescriptionLoc(LocalizedStrings.Str433Key)]
 		[StatisticsCategory]
 		[Nullable]
+		[Browsable(false)]
 		public decimal? Commission
 		{
 			get { return _commission; }
@@ -280,6 +290,7 @@ namespace StockSharp.BusinessEntities
 		[DisplayNameLoc(LocalizedStrings.Str434Key)]
 		[DescriptionLoc(LocalizedStrings.Str435Key)]
 		[StatisticsCategory]
+		[Browsable(false)]
 		public DateTimeOffset LastChangeTime
 		{
 			get { return _lastChangeTime; }
@@ -299,6 +310,7 @@ namespace StockSharp.BusinessEntities
 		[DisplayNameLoc(LocalizedStrings.Str530Key)]
 		[DescriptionLoc(LocalizedStrings.Str530Key, true)]
 		[StatisticsCategory]
+		[Browsable(false)]
 		public DateTimeOffset LocalTime
 		{
 			get { return _localTime; }
@@ -367,8 +379,8 @@ namespace StockSharp.BusinessEntities
 			destination.AveragePrice = AveragePrice;
 			destination.CurrentPrice = CurrentPrice;
 			destination.Description = Description;
-			destination.LastChangeTime = LastChangeTime;
-			destination.LocalTime = LocalTime;
+			//destination.LastChangeTime = LastChangeTime;
+			//destination.LocalTime = LocalTime;
 		}
 	}
 }

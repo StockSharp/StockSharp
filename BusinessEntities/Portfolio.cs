@@ -16,6 +16,7 @@ Copyright 2010 by StockSharp, LLC
 namespace StockSharp.BusinessEntities
 {
 	using System;
+	using System.ComponentModel;
 	using System.Runtime.Serialization;
 
 	using Ecng.Serialization;
@@ -121,6 +122,7 @@ namespace StockSharp.BusinessEntities
 		[DescriptionLoc(LocalizedStrings.Str252Key)]
 		[MainCategory]
 		[Nullable]
+		[Browsable(false)]
 		public PortfolioStates? State
 		{
 			get { return _state; }
