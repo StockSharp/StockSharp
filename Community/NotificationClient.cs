@@ -49,20 +49,38 @@ namespace StockSharp.Community
 		{
 		}
 
+		private int? _smsCount;
+
 		/// <summary>
 		/// The available number of SMS-messages.
 		/// </summary>
 		public int SmsCount
 		{
-			get { return Invoke(f => f.GetSmsCount(SessionId)); }
+			get
+			{
+				if (_smsCount == null)
+					_smsCount = Invoke(f => f.GetSmsCount(SessionId));
+
+				return _smsCount.Value;
+			}
+			private set { _smsCount = value; }
 		}
+
+		private int? _emailCount;
 
 		/// <summary>
 		/// The available number of email messages.
 		/// </summary>
 		public int EmailCount
 		{
-			get { return Invoke(f => f.GetEmailCount(SessionId)); }
+			get
+			{
+				if (_emailCount == null)
+					_emailCount = Invoke(f => f.GetEmailCount(SessionId));
+
+				return _emailCount.Value;
+			}
+			private set { _emailCount = value; }
 		}
 
 		/// <summary>
@@ -72,6 +90,7 @@ namespace StockSharp.Community
 		public void SendSms(string message)
 		{
 			ValidateError(Invoke(f => f.SendSms(SessionId, message)));
+			SmsCount--;
 		}
 
 		/// <summary>
@@ -82,6 +101,7 @@ namespace StockSharp.Community
 		public void SendEmail(string caption, string message)
 		{
 			ValidateError(Invoke(f => f.SendEmail(SessionId, caption, message)));
+			EmailCount--;
 		}
 
 		/// <summary>
