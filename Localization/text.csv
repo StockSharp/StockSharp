@@ -4315,6 +4315,8 @@ DownloadHistoricalMarketDataQuestion;Download historical market data?;Загру
 PublishError;Publish strategy error: {0};Ошибка загрузки стратегии: {0}
 ServiceNotRegistered;Service '{0}' not registered.;Сервис '{0}' не зарегистрирован.
 ClearItems;Clear items;Очистить список
+ViewOnly;View only;Только просмотр
+IsIndependent;Independent;Независимая
 DocStr0;Button activation alert settings;Кнопка активации настроек сигнала
 DocStr1;Initializes a new instance of the {0};Создать {0}
 DocStr2;Load settings;Загрузить настройки

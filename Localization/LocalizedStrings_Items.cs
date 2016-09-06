@@ -42806,5 +42806,25 @@ namespace StockSharp.Localization
 		/// Clear items.
 		/// </summary>
 		public static string ClearItems => GetString(ClearItemsKey);
+
+		/// <summary>
+		/// View only.
+		/// </summary>
+		public const string ViewOnlyKey = "ViewOnly";
+
+		/// <summary>
+		/// View only.
+		/// </summary>
+		public static string ViewOnly => GetString(ViewOnlyKey);
+
+		/// <summary>
+		/// Is independent.
+		/// </summary>
+		public const string IsIndependentKey = "IsIndependent";
+
+		/// <summary>
+		/// Is independent.
+		/// </summary>
+		public static string IsIndependent => GetString(IsIndependentKey);
 	}
 }
