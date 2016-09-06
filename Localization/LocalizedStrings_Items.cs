@@ -42796,5 +42796,15 @@ namespace StockSharp.Localization
 		/// Service '{0}' not registered.
 		/// </summary>
 		public static string ServiceNotRegistered => GetString(ServiceNotRegisteredKey);
+
+		/// <summary>
+		/// Clear items.
+		/// </summary>
+		public const string ClearItemsKey = "ClearItems";
+
+		/// <summary>
+		/// Clear items.
+		/// </summary>
+		public static string ClearItems => GetString(ClearItemsKey);
 	}
 }
