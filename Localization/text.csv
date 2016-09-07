@@ -3573,7 +3573,8 @@ InStorage;In storage;В хранилище
 XamlStr52;To:;В:
 XamlStr54;Var margin;Вар. маржа
 XamlStr57;Size of the movement:;Величина движения:
-Undo;Undo;Вернуть
+Undo;Undo;Отменить
+Redo;Redo;Вернуть
 UndoChanges;Undo changes;Вернуть изменения
 XamlStr61;On;Вкл.
 XamlStr62;Non system;Внесистемные

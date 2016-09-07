@@ -35678,6 +35678,16 @@ namespace StockSharp.Localization
 		public static string Undo => GetString(UndoKey);
 
 		/// <summary>
+		/// Redo
+		/// </summary>
+		public const string RedoKey = "Redo";
+
+		/// <summary>
+		/// Redo
+		/// </summary>
+		public static string Redo => GetString(RedoKey);
+
+		/// <summary>
 		/// Undo changes
 		/// </summary>
 		public const string UndoChangesKey = "UndoChanges";
