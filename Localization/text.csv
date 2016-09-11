@@ -3622,7 +3622,6 @@ Details;Details;Детальная информация
 LogDirectory;Log directory;Директория с логами
 SettingsDirectory;Settings directory;Директория с настройками
 XamlStr131;To continue the E*TRADE authorization process it is necessary to get verification code on the official E*TRADE website and copy it to the text field below.;Для продолжения процесса авторизации в системе E*TRADE необходимо получить код верификации на официальном сайте E*TRADE и скопировать его в текстовое поле ниже.
-XamlStr132;till;до
 XamlStr135;Change mapping...;Добавить ассоциацию...
 XamlStr136;Add tools;Добавить задачи
 XamlStr137;Add security...;Добавить инструмент...

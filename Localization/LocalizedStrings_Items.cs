@@ -36158,16 +36158,6 @@ namespace StockSharp.Localization
 		public static string XamlStr131 => GetString(XamlStr131Key);
 
 		/// <summary>
-		/// till
-		/// </summary>
-		public const string XamlStr132Key = "XamlStr132";
-
-		/// <summary>
-		/// till
-		/// </summary>
-		public static string XamlStr132 => GetString(XamlStr132Key);
-
-		/// <summary>
 		/// Change mapping...
 		/// </summary>
 		public const string XamlStr135Key = "XamlStr135";
