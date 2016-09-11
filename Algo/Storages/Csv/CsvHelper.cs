@@ -17,12 +17,12 @@ namespace StockSharp.Algo.Storages.Csv
 		/// <summary>
 		/// <see cref="TimeSpan"/> format with milliseconds.
 		/// </summary>
-		public const string TimeMlsFormat = "HHmmssfff";
+		public const string TimeMlsFormat = "hhmmssfff";
 
 		/// <summary>
 		/// <see cref="TimeSpan"/> format.
 		/// </summary>
-		public const string TimeFormat = "HHmmss";
+		public const string TimeFormat = "hhmmss";
 
 		/// <summary>
 		/// <see cref="DateTime"/> parser.
@@ -32,12 +32,12 @@ namespace StockSharp.Algo.Storages.Csv
 		/// <summary>
 		/// <see cref="TimeSpan"/> parser.
 		/// </summary>
-		public static readonly FastTimeSpanParser TimeMlsParser = new FastTimeSpanParser(TimeMlsFormat.ToLowerInvariant());
+		public static readonly FastTimeSpanParser TimeMlsParser = new FastTimeSpanParser(TimeMlsFormat);
 
 		/// <summary>
 		/// <see cref="TimeSpan"/> parser.
 		/// </summary>
-		public static readonly FastTimeSpanParser TimeParser = new FastTimeSpanParser(TimeFormat.ToLowerInvariant());
+		public static readonly FastTimeSpanParser TimeParser = new FastTimeSpanParser(TimeFormat);
 
 		/// <summary>
 		/// Read <see cref="DateTimeOffset"/>.
@@ -65,7 +65,7 @@ namespace StockSharp.Algo.Storages.Csv
 
 		public static string WriteTimeMls(this DateTimeOffset time)
 		{
-			return time.UtcDateTime.ToString(TimeMlsFormat);
+			return time.UtcDateTime.TimeOfDay.WriteTimeMls();
 		}
 
 		public static string WriteDate(this DateTimeOffset time)
