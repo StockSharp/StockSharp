@@ -4317,6 +4317,10 @@ ServiceNotRegistered;Service '{0}' not registered.;Сервис '{0}' не за�
 ClearItems;Clear items;Очистить список
 ViewOnly;View only;Только просмотр
 IsIndependent;Independent;Независимая
+DaysPart;Days;Дни
+HoursPart;Hours;Часы
+MinutesPart;Minutes;Минуты
+SecondsPart;Seconds;Секунды
 DocStr0;Button activation alert settings;Кнопка активации настроек сигнала
 DocStr1;Initializes a new instance of the {0};Создать {0}
 DocStr2;Load settings;Загрузить настройки

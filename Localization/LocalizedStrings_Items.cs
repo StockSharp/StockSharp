@@ -42826,5 +42826,45 @@ namespace StockSharp.Localization
 		/// Is independent.
 		/// </summary>
 		public static string IsIndependent => GetString(IsIndependentKey);
+
+		/// <summary>
+		/// Days.
+		/// </summary>
+		public const string DaysPartKey = "DaysPart";
+
+		/// <summary>
+		/// Days.
+		/// </summary>
+		public static string DaysPart => GetString(DaysPartKey);
+
+		/// <summary>
+		/// Hours.
+		/// </summary>
+		public const string HoursPartKey = "HoursPart";
+
+		/// <summary>
+		/// Hours.
+		/// </summary>
+		public static string HoursPart => GetString(HoursPartKey);
+
+		/// <summary>
+		/// Minutes.
+		/// </summary>
+		public const string MinutesPartKey = "MinutesPart";
+
+		/// <summary>
+		/// Minutes.
+		/// </summary>
+		public static string MinutesPart => GetString(MinutesPartKey);
+
+		/// <summary>
+		/// Seconds.
+		/// </summary>
+		public const string SecondsPartKey = "SecondsPart";
+
+		/// <summary>
+		/// Seconds.
+		/// </summary>
+		public static string SecondsPart => GetString(SecondsPartKey);
 	}
 }
