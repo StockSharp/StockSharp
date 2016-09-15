@@ -282,9 +282,9 @@ namespace StockSharp.Algo.Storages
 								var noData = !enumerator.DataTypes.Except(messageTypes).Any();
 
 								if (noData)
-									EnqueueMessages(startTime, token, GetSimpleTimeLine(loadDate).GetEnumerator());
+									EnqueueMessages(loadDate, startTime, token, GetSimpleTimeLine(loadDate).GetEnumerator());
 								else
-									EnqueueMessages(startTime, token, enumerator);
+									EnqueueMessages(loadDate, startTime, token, enumerator);
 							}
 						}
 
@@ -304,7 +304,7 @@ namespace StockSharp.Algo.Storages
 			}
 		}
 
-		private void EnqueueMessages(DateTimeOffset loadDate, CancellationToken token, IEnumerator<Message> enumerator)
+		private void EnqueueMessages(DateTimeOffset loadDate, DateTimeOffset startTime, CancellationToken token, IEnumerator<Message> enumerator)
 		{
 			var checkFromTime = loadDate.Date == StartDate.Date && loadDate.TimeOfDay != TimeSpan.Zero;
 			var checkToTime = loadDate.Date == StopDate.Date;
@@ -318,7 +318,7 @@ namespace StockSharp.Algo.Storages
 				if (serverTime == null)
 					throw new InvalidOperationException();
 
-				if (serverTime.Value < loadDate)
+				if (serverTime.Value < startTime)
 					continue;
 
 				msg.LocalTime = serverTime.Value;
