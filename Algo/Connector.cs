@@ -1177,7 +1177,24 @@ namespace StockSharp.Algo
 		/// <param name="transactionId">Order cancellation transaction id.</param>
 		protected virtual void OnCancelOrder(Order order, long transactionId)
 		{
-			var cancelMsg = order.CreateCancelMessage(GetSecurityId(order.Security), transactionId, TransactionAdapter.OrderCancelVolumeRequired ? order.Balance : (decimal?)null);
+			decimal? volume;
+
+			switch (TransactionAdapter.OrderCancelVolumeRequired)
+			{
+				case null:
+					volume = null;
+					break;
+				case OrderCancelVolumeRequireTypes.Balance:
+					volume = order.Balance;
+					break;
+				case OrderCancelVolumeRequireTypes.Volume:
+					volume = order.Volume;
+					break;
+				default:
+					throw new ArgumentOutOfRangeException();
+			}
+
+			var cancelMsg = order.CreateCancelMessage(GetSecurityId(order.Security), transactionId, volume);
 			SendInMessage(cancelMsg);
 		}
 
@@ -1209,7 +1226,10 @@ namespace StockSharp.Algo
 		/// <param name="securityType">Security type. If the value is <see langword="null" />, the type does not use.</param>
 		protected virtual void OnCancelOrders(long transactionId, bool? isStopOrder = null, Portfolio portfolio = null, Sides? direction = null, ExchangeBoard board = null, Security security = null, SecurityTypes? securityType = null)
 		{
-			var cancelMsg = new OrderGroupCancelMessage { TransactionId = transactionId };
+			var cancelMsg = new OrderGroupCancelMessage
+			{
+				TransactionId = transactionId
+			};
 
 			if (security != null)
 				cancelMsg.SecurityId = GetSecurityId(security);

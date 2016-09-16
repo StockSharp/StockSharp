@@ -24,6 +24,22 @@ namespace StockSharp.Messages
 	using StockSharp.Logging;
 
 	/// <summary>
+	/// Types of <see cref="OrderCancelMessage.Volume"/> required to cancel orders.
+	/// </summary>
+	public enum OrderCancelVolumeRequireTypes
+	{
+		/// <summary>
+		/// Non filled balance.
+		/// </summary>
+		Balance,
+
+		/// <summary>
+		/// Initial volume.
+		/// </summary>
+		Volume
+	}
+
+	/// <summary>
 	/// Base message adapter interface which convert messages <see cref="Message"/> to native commands and back.
 	/// </summary>
 	public interface IMessageAdapter : IMessageChannel, IPersistable, ILogReceiver
@@ -76,7 +92,7 @@ namespace StockSharp.Messages
 		/// <summary>
 		/// <see cref="OrderCancelMessage.Volume"/> required to cancel orders.
 		/// </summary>
-		bool OrderCancelVolumeRequired { get; }
+		OrderCancelVolumeRequireTypes? OrderCancelVolumeRequired { get; }
 
 		/// <summary>
 		/// Board code for combined security.

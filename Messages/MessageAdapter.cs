@@ -183,7 +183,7 @@ namespace StockSharp.Messages
 		/// <see cref="OrderCancelMessage.Volume"/> required to cancel orders.
 		/// </summary>
 		[Browsable(false)]
-		public virtual bool OrderCancelVolumeRequired { get; } = false;
+		public virtual OrderCancelVolumeRequireTypes? OrderCancelVolumeRequired { get; } = null;
 
 		/// <summary>
 		/// Gets a value indicating whether the connector supports security lookup.

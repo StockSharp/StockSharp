@@ -173,7 +173,7 @@ namespace StockSharp.Messages
 
 		bool IMessageAdapter.OrderStatusRequired => InnerAdapter.OrderStatusRequired;
 
-		bool IMessageAdapter.OrderCancelVolumeRequired => InnerAdapter.OrderCancelVolumeRequired;
+		OrderCancelVolumeRequireTypes? IMessageAdapter.OrderCancelVolumeRequired => InnerAdapter.OrderCancelVolumeRequired;
 
 		string IMessageAdapter.AssociatedBoardCode => InnerAdapter.AssociatedBoardCode;
 
