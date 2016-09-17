@@ -13379,3 +13379,22 @@ DocStr9217;Command for opening element properties;Команда на откры
 DocStr9218;To get the sender elements by the connection object;Получить инициаторов по соединению
 DocStr9219;Sender elements;Инициаторы
 DocStr9220;The diagram element parameter value change event;Событие изменения параметра диаграммы
+DocStr9221;{0} format with milliseconds;{0} формат с миллисекундами
+DocStr9222;A format string;Форматирующая строка
+DocStr9223;Types of {0} required to cancel orders;Типы {0} необходимые для отмены заявок
+DocStr9224;Non filled balance;Неисполненный баланс
+DocStr9225;Initial volume;Первоначальный объем
+DocStr9226;Independed scheme;Независивая схема
+DocStr9227;Update {0} for composition elements;Обновление {0} для композитных элементов
+DocStr9228;The current error;Текущая ошибка
+DocStr9229;The action with the element at error;Действие с элементом при ошибке
+DocStr9230;The event of the stop at the error;Событие остановки по ошибке
+DocStr9237;The {0} changed event;Событие изменения {0}
+DocStr9238;Xaml extension to extract the resources from a {0};Xaml расширение для получения ресурсов из {0}
+DocStr9239;The command to clear log items;Команда на очистку лога
+DocStr9240;{0} editor;{0} редактор
+DocStr9241;The {0} value;{0} значение
+DocStr9242;The seconds value;Секунды
+DocStr9243;The minutes value;Минуты
+DocStr9244;The hours value;Часы
+DocStr9245;The days value;Дни

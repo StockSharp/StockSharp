@@ -148,14 +148,14 @@ M:StockSharp.Logging.LoggingHelper.AddErrorLog(StockSharp.Logging.ILogReceiver,S
 M:StockSharp.Logging.LoggingHelper.AddErrorLog(StockSharp.Logging.ILogReceiver,System.Exception,System.String)/summary;DocStr3974
 M:StockSharp.Logging.LoggingHelper.AddErrorLog(StockSharp.Logging.ILogReceiver,System.Exception,System.String)/param/receiver;DocStr2469
 M:StockSharp.Logging.LoggingHelper.AddErrorLog(StockSharp.Logging.ILogReceiver,System.Exception,System.String)/param/exception;DocStr325
-M:StockSharp.Logging.LoggingHelper.AddErrorLog(StockSharp.Logging.ILogReceiver,System.Exception,System.String)/param/message;DocStr2045
+M:StockSharp.Logging.LoggingHelper.AddErrorLog(StockSharp.Logging.ILogReceiver,System.Exception,System.String)/param/format;DocStr9222
 M:StockSharp.Logging.LoggingHelper.AddErrorLog(StockSharp.Logging.ILogReceiver,System.String,System.Object[])/summary;DocStr3974
 M:StockSharp.Logging.LoggingHelper.AddErrorLog(StockSharp.Logging.ILogReceiver,System.String,System.Object[])/param/receiver;DocStr2469
 M:StockSharp.Logging.LoggingHelper.AddErrorLog(StockSharp.Logging.ILogReceiver,System.String,System.Object[])/param/message;DocStr2045
 M:StockSharp.Logging.LoggingHelper.AddErrorLog(StockSharp.Logging.ILogReceiver,System.String,System.Object[])/param/args;DocStr2046
 M:StockSharp.Logging.LoggingHelper.LogError(System.Exception,System.String)/summary;DocStr3976
 M:StockSharp.Logging.LoggingHelper.LogError(System.Exception,System.String)/param/error;Str152
-M:StockSharp.Logging.LoggingHelper.LogError(System.Exception,System.String)/param/message;DocStr2045
+M:StockSharp.Logging.LoggingHelper.LogError(System.Exception,System.String)/param/format;DocStr9222
 M:StockSharp.Logging.LoggingHelper.GetLogLevel(StockSharp.Logging.ILogSource)/summary;DocStr3977
 M:StockSharp.Logging.LoggingHelper.GetLogLevel(StockSharp.Logging.ILogSource)/param/source;DocStr3978
 M:StockSharp.Logging.LoggingHelper.GetLogLevel(StockSharp.Logging.ILogSource)/returns;Str9

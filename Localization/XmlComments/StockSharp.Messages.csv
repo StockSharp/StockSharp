@@ -492,6 +492,9 @@ M:StockSharp.Messages.ExtandableEntityHelper.GetValue``1(StockSharp.Messages.IEx
 M:StockSharp.Messages.ExtandableEntityHelper.GetValue``1(StockSharp.Messages.IExtendableEntity,System.Object)/param/entity;DocStr2216
 M:StockSharp.Messages.ExtandableEntityHelper.GetValue``1(StockSharp.Messages.IExtendableEntity,System.Object)/param/key;Str3304
 M:StockSharp.Messages.ExtandableEntityHelper.GetValue``1(StockSharp.Messages.IExtendableEntity,System.Object)/returns;Str3099
+T:StockSharp.Messages.OrderCancelVolumeRequireTypes/summary;DocStr9223
+F:StockSharp.Messages.OrderCancelVolumeRequireTypes.Balance/summary;DocStr9224
+F:StockSharp.Messages.OrderCancelVolumeRequireTypes.Volume/summary;DocStr9225
 T:StockSharp.Messages.IMessageAdapter/summary;DocStr4074
 P:StockSharp.Messages.IMessageAdapter.TransactionIdGenerator/summary;DocStr3311
 P:StockSharp.Messages.IMessageAdapter.SupportedMessages/summary;DocStr449
