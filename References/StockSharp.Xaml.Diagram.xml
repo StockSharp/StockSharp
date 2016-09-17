@@ -19,6 +19,11 @@
             Encrypted scheme.
             </summary>
     </member>
+    <member name="F:StockSharp.Xaml.Diagram.SchemeTypes.Independent">
+      <summary>
+            Independed scheme.
+            </summary>
+    </member>
     <member name="T:StockSharp.Xaml.Diagram.CompositionDiagramElement">
       <summary>
             Composite element.
@@ -136,11 +141,10 @@
       <param name="socket">Socket.</param>
       <param name="value">Value.</param>
     </member>
-    <member name="M:StockSharp.Xaml.Diagram.CompositionDiagramElement.SetTypeId(System.Guid)">
+    <member name="M:StockSharp.Xaml.Diagram.CompositionDiagramElement.UpdateTypeId">
       <summary>
-            Change <see cref="P:StockSharp.Xaml.Diagram.CompositionDiagramElement.TypeId" /> for composition element.
+            Update <see cref="P:StockSharp.Xaml.Diagram.CompositionDiagramElement.TypeId" /> for composition elements.
             </summary>
-      <param name="typeId">Type identifier.</param>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.CompositionDiagramElement.Clone(System.Boolean)">
       <summary>
@@ -201,29 +205,15 @@
       <param name="data">The data string.</param>
       <param name="readOnly">Is it possible to modify the element.</param>
     </member>
-    <member name="M:StockSharp.Xaml.Diagram.CompositionRegistry.Serialize(StockSharp.Xaml.Diagram.CompositionDiagramElement)">
+    <member name="M:StockSharp.Xaml.Diagram.CompositionRegistry.Serialize(StockSharp.Xaml.Diagram.CompositionDiagramElement,System.Nullable{StockSharp.Xaml.Diagram.SchemeTypes})">
       <summary>
             To serialize the composite element.
             </summary>
       <param name="composition">Composite element.</param>
-      <returns>Settings storage.</returns>
-    </member>
-    <member name="M:StockSharp.Xaml.Diagram.CompositionRegistry.SerializeExported(StockSharp.Xaml.Diagram.CompositionDiagramElement,StockSharp.Xaml.Diagram.SchemeTypes)">
-      <summary>
-            To serialize the entire composite element.
-            </summary>
-      <param name="composition">Composite element.</param>
-      <param name="schemeType">Scheme type..</param>
+      <param name="schemeType">Scheme type.</param>
       <returns>Settings storage.</returns>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.CompositionRegistry.Deserialize(Ecng.Serialization.SettingsStorage)">
-      <summary>
-            To deserialize the composite element.
-            </summary>
-      <param name="storage">Settings storage.</param>
-      <returns>Composite element.</returns>
-    </member>
-    <member name="M:StockSharp.Xaml.Diagram.CompositionRegistry.DeserializeExported(Ecng.Serialization.SettingsStorage)">
       <summary>
             To deserialize the composite element.
             </summary>
@@ -252,12 +242,18 @@
             The current socket.
             </summary>
     </member>
-    <member name="M:StockSharp.Xaml.Diagram.DebuggerSyncObject.#ctor(System.Func{StockSharp.Xaml.Diagram.DiagramSocket,System.Boolean,System.Boolean},System.Action{StockSharp.Xaml.Diagram.DebuggerSyncObject})">
+    <member name="P:StockSharp.Xaml.Diagram.DebuggerSyncObject.CurrentError">
+      <summary>
+            The current error.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.Diagram.DebuggerSyncObject.#ctor(System.Func{StockSharp.Xaml.Diagram.DiagramSocket,System.Boolean,System.Boolean},System.Action{StockSharp.Xaml.Diagram.DebuggerSyncObject},System.Action{StockSharp.Xaml.Diagram.DebuggerSyncObject})">
       <summary>
             Initializes a new instance of the <see cref="T:StockSharp.Xaml.Diagram.DebuggerSyncObject" />.
             </summary>
       <param name="isBreak">The handler that returns a stop flag for the socket.</param>
       <param name="breakAction">The action with the element at stop.</param>
+      <param name="errorAction">The action with the element at error.</param>
     </member>
     <member name="P:StockSharp.Xaml.Diagram.DebuggerSyncObject.IsWaitingOnInput">
       <summary>
@@ -347,6 +343,11 @@
             The event of the stop at the breakpoint.
             </summary>
     </member>
+    <member name="E:StockSharp.Xaml.Diagram.DiagramDebugger.Error">
+      <summary>
+            The event of the stop at the error.
+            </summary>
+    </member>
     <member name="M:StockSharp.Xaml.Diagram.DiagramDebugger.#ctor(StockSharp.Xaml.Diagram.CompositionDiagramElement)">
       <summary>
             Initializes a new instance of the <see cref="T:StockSharp.Xaml.Diagram.DiagramDebugger" />.
@@ -419,15 +420,19 @@
       <summary>
       </summary>
     </member>
-    <member name="F:StockSharp.Xaml.Diagram.DiagramEditorControl.RemoveLinkCommand">
-      <summary>
-      </summary>
-    </member>
-    <member name="F:StockSharp.Xaml.Diagram.DiagramEditorControl.RemoveNodeCommand">
+    <member name="F:StockSharp.Xaml.Diagram.DiagramEditorControl.RemoveCommand">
       <summary>
       </summary>
     </member>
     <member name="F:StockSharp.Xaml.Diagram.DiagramEditorControl.PropertiesCommand">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Xaml.Diagram.DiagramEditorControl.UndoCommand">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Xaml.Diagram.DiagramEditorControl.RedoCommand">
       <summary>
       </summary>
     </member>
@@ -618,11 +623,6 @@
     <member name="E:StockSharp.Xaml.Diagram.DiagramElement.ProcessOutput">
       <summary>
             New data occurring event.
-            </summary>
-    </member>
-    <member name="E:StockSharp.Xaml.Diagram.DiagramElement.NameChanging">
-      <summary>
-            The diagram element name change event.
             </summary>
     </member>
     <member name="E:StockSharp.Xaml.Diagram.DiagramElement.SocketAdded">
