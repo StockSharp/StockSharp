@@ -908,6 +908,79 @@
             InitializeComponent
             </summary>
     </member>
+    <member name="T:StockSharp.Xaml.PropertyGrid.TimeSpanEditor">
+      <summary>
+        <see cref="T:System.TimeSpan" /> editor.
+            </summary>
+      <summary>
+            TimeSpanEditor
+            </summary>
+    </member>
+    <member name="F:StockSharp.Xaml.PropertyGrid.TimeSpanEditor.ValueProperty">
+      <summary>
+        <see cref="T:System.Windows.DependencyProperty" /> for <see cref="P:StockSharp.Xaml.PropertyGrid.TimeSpanEditor.Value" />.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.PropertyGrid.TimeSpanEditor.Value">
+      <summary>
+            The <see cref="T:System.TimeSpan" /> value.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Xaml.PropertyGrid.TimeSpanEditor.SecondsProperty">
+      <summary>
+        <see cref="T:System.Windows.DependencyProperty" /> for <see cref="P:StockSharp.Xaml.PropertyGrid.TimeSpanEditor.Seconds" />.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.PropertyGrid.TimeSpanEditor.Seconds">
+      <summary>
+            The seconds value.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Xaml.PropertyGrid.TimeSpanEditor.MinutesProperty">
+      <summary>
+        <see cref="T:System.Windows.DependencyProperty" /> for <see cref="P:StockSharp.Xaml.PropertyGrid.TimeSpanEditor.Minutes" />.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.PropertyGrid.TimeSpanEditor.Minutes">
+      <summary>
+            The minutes value.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Xaml.PropertyGrid.TimeSpanEditor.HoursProperty">
+      <summary>
+        <see cref="T:System.Windows.DependencyProperty" /> for <see cref="P:StockSharp.Xaml.PropertyGrid.TimeSpanEditor.Hours" />.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.PropertyGrid.TimeSpanEditor.Hours">
+      <summary>
+            The hours value.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Xaml.PropertyGrid.TimeSpanEditor.DaysProperty">
+      <summary>
+        <see cref="T:System.Windows.DependencyProperty" /> for <see cref="P:StockSharp.Xaml.PropertyGrid.TimeSpanEditor.Days" />.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.PropertyGrid.TimeSpanEditor.Days">
+      <summary>
+            The days value.
+            </summary>
+    </member>
+    <member name="E:StockSharp.Xaml.PropertyGrid.TimeSpanEditor.ValueChanged">
+      <summary>
+            The <see cref="P:StockSharp.Xaml.PropertyGrid.TimeSpanEditor.Value" /> changed event.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.PropertyGrid.TimeSpanEditor.#ctor">
+      <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Xaml.PropertyGrid.TimeSpanEditor" />.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.PropertyGrid.TimeSpanEditor.InitializeComponent">
+      <summary>
+            InitializeComponent
+            </summary>
+    </member>
     <member name="T:StockSharp.Xaml.PropertyGrid.CandleSettingsEditor">
       <summary>
             Editor for <see cref="T:StockSharp.Algo.Candles.CandleSeries" />.
@@ -1145,6 +1218,24 @@
       <summary>
             InitializeComponent
             </summary>
+    </member>
+    <member name="T:StockSharp.Xaml.IconsExtension">
+      <summary>
+            Xaml extension to extract the resources from a <see cref="T:System.Windows.ResourceDictionary" />.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.IconsExtension.#ctor">
+      <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Xaml.IconsExtension" />.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.IconsExtension.GetImage(System.String)">
+      <summary>
+      </summary>
+      <param name="key">
+      </param>
+      <returns>
+      </returns>
     </member>
     <member name="T:StockSharp.Xaml.SecurityJump">
       <summary>
@@ -3253,6 +3344,16 @@
     <member name="P:StockSharp.Xaml.LogControl.Messages">
       <summary>
             The log entries collection.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Xaml.LogControl.ClearCommandProperty">
+      <summary>
+        <see cref="T:System.Windows.DependencyProperty" /> for <see cref="P:StockSharp.Xaml.LogControl.ClearCommand" />.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.LogControl.ClearCommand">
+      <summary>
+            The command to clear log items.
             </summary>
     </member>
     <member name="F:StockSharp.Xaml.LogControl.LogAutoScrollProperty">
