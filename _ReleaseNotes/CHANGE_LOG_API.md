@@ -1,5 +1,15 @@
 StockSharp API Change log
 ========================
+###current:
+* (feature) Transaq. v2.20.13
+* (bug) CSV storage. TimeSpan serialization fix.
+* (bug) Fix http://stocksharp.ru/posts/m/36986/
+* (bug) LoggingHelper. Fix xml doc.
+* (feature) Xaml.Diagram update.
+* (feature) TimeSpanEditor
+* (feature) OrderCancelVolumeRequireTypes enum.
+* (feature) MatLab connector update.
+
 ###v4.3.16.1:
 * (feature) MicexDownloader + FortsDownloader -> MoexDownloader
 * (feature) StockSharp.Xaml.Code
