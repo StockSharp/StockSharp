@@ -30,7 +30,7 @@ namespace StockSharp.Quik
 	[TargetPlatform(Languages.Russian)]
 	[CategoryLoc(LocalizedStrings.RussiaKey)]
 	[Icon("Quik_logo.png")]
-	[Doc("http://stocksharp.com/doc/html/c338d4b4-ba54-4671-9206-976c07ef655e.htm")]
+	[Doc("c338d4b4-ba54-4671-9206-976c07ef655e.htm")]
 	public abstract class QuikMessageAdapter : MessageAdapter
 	{
 		/// <summary>
