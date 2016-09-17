@@ -11,7 +11,7 @@
 			<linkUri>http://stocksharp.ru/register/</linkUri>
 			<linkTarget>_blank</linkTarget>
 			</externalLink>
-			 Эта лицензия включает S#.Designer, <token>hydra</token>, <token>stocksharpapi</token> 
+			 Эта лицензия включает <token>designer</token>, <token>hydra</token>, <token>stocksharpapi</token> 
 			 (<token>quik</token>, <token>alfa</token>, <token>smartcom</token>, <token>transaq</token>, <token>alor</token>,
 			 <token>openecry</token>, <token>IB</token>, <token>etrade</token>, <token>lmax</token>, <token>oanda</token>, 
 			 <token>blackwood</token>, <token>iqfeed</token>, <token>sterling</token>, <token>rithmic</token>, <token>cqg</token>, 
@@ -19,13 +19,9 @@
 		</para>
 		<para>Cм. также <link xlink:href="b9f672db-e0c9-4208-9759-179e5de17fd8">Установка StockSharp</link>.</para>
 		<para><legacyBold>Расширенная лицензия</legacyBold></para>
-		<para>Существуют два уровня расширенной лицензии. Наполненность по функционалу для каждого уровня идентична и включает все, что есть в базовой версии плюс:</para> 
 		<list class="ordered">
   			<listItem>
   				<para><token>plaza</token> коннектор (режим ClientGate COM).</para>
-  			</listItem>
-  			<listItem>
-  				<para><token>fix</token> коннектор (поддерживается ограниченное количество брокеров).</para>
   			</listItem>
   			<listItem>
   				<para>Готовые торговые стратегии (хеджирование опционов, маркет-мэйкинг, котирование, скользящие стоп и тейк защиты и т.д.).</para>
@@ -39,24 +35,19 @@
   			<listItem>
   				<para>S#.Data server.</para>
   			</listItem>
-  			
+			<listItem>
+  				<para>S#.Shell исходные коды.</para>
+  			</listItem>
+  			<listItem>
+  				<para>Расширенные примеры.</para>
+  			</listItem>
+  			<listItem>
+  				<para>40+ часов видео-уроков.</para>
+  			</listItem>
+  			<listItem>
+  				<para>Техподдержка от StockSharp.</para>
+  			</listItem>
 		</list>
-		<para><legacyUnderline>Расширенная лицензия+</legacyUnderline> предоставляется клиентам прошедшим полный <externalLink>
-			<linkText>курс обучения</linkText>
-			<linkAlternateText>Обучение Stocksharp</linkAlternateText>
-			<linkUri>http://stocksharp.ru/edu</linkUri>
-			<linkTarget>_blank</linkTarget>
-			</externalLink>
- и действует в течение 6 месяцев.</para>
-		<para><legacyUnderline>Расширенная лицензия++</legacyUnderline> предоставляется клиентам прошедшим расширенный <externalLink>
-			<linkText>курс обучения</linkText>
-			<linkAlternateText>Обучение Stocksharp</linkAlternateText>
-			<linkUri>http://stocksharp.ru/edu</linkUri>
-			<linkTarget>_blank</linkTarget>
-			</externalLink>
- и действует в течение 12 месяцев.</para> 
-		<para>По окончании срока действия лицензии необходимо будет либо ее продлить, либо пользоваться базовым функционалом.</para>
-
 
 		<para><legacyBold>Корпоративная лицензия</legacyBold></para>
 		<para>
@@ -74,7 +65,7 @@
   					<para><link xlink:href="62dc0f78-2b9a-4f88-b6bc-68361bd0d8fe">ITCH</link> - прямое подключение к торгам на биржах LSE и/или NASDAQ по протоколу ITCH.</para>
   				</listItem>
   				<listItem>
-  					<para><link xlink:href="b0198d6a-0667-45d4-b172-698afd3ca310">FIX/FAST</link> - прямое подключение к торгам на Московской бирже по протоколу FIX/FAST.</para>
+  					<para><link xlink:href="b0198d6a-0667-45d4-b172-698afd3ca310">FIX/FAST</link> - прямое подключение к торгам по протоколу FIX/FAST (список поддерживаемых площадок на странице <token>stocksharppricing</token>).</para>
   				</listItem>
   				<listItem>
   					<para><link xlink:href="1ee210ee-a004-4277-b8f4-91cb08d651db">TWIME</link> - коннектор для управления заявками на срочном рынке Московской Биржи.</para>
@@ -95,18 +86,13 @@
 		а также исходные коды самой платформы: S#.API.</para>
 
 		<para>
-  			Подробную информацию о лицензиях см. <externalLink>
-			<linkText>Стоимость лицензий StockSharp</linkText>
-			<linkAlternateText>Стоимость лицензий</linkAlternateText>
-			<linkUri>http://stocksharp.ru/products/pricing/</linkUri>
-			<linkTarget>_blank</linkTarget>
-			</externalLink>.
+  			Подробную информацию о лицензиях см. <token>stocksharppricing</token>.
   		</para>
 
 	</introduction>
 	
 	 <relatedTopics>
-     	<externalLink>
+     	<!--externalLink>
 			<linkText>Новые подходы к лицензированию</linkText>
 			<linkAlternateText>Лицензирование</linkAlternateText>
 			<linkUri>http://stocksharp.ru/news/264/novye-podhody-k-litsenzirovaniyu/</linkUri>
@@ -118,7 +104,7 @@
 			<linkUri>http://stocksharp.ru/products/pricing/</linkUri>
 			<linkTarget>_blank</linkTarget>
 		</externalLink>
-     </relatedTopics>
+     </relatedTopics-->
 	</developerWalkthroughDocument>
 </topic>
 

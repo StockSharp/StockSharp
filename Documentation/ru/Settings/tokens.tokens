@@ -301,4 +301,13 @@
 		  <ddue:linkText>Xslt</ddue:linkText>
 		  <ddue:linkUri>http://ru.wikipedia.org/wiki/XSLT</ddue:linkUri>
 		</ddue:externalLink></item>
+  <item id="stocksharpfacebook"><ddue:externalLink xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">
+    <ddue:linkText>StockSharp Facebook</ddue:linkText>
+    <ddue:linkUri>https://facebook.com/stocksharp</ddue:linkUri>
+  </ddue:externalLink></item>
+  <item id="barchart"><ddue:link xlink:href="4448a233-b3d5-46e1-a0f2-549ec5fa681a" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">BarChart</ddue:link></item>
+  <item id="stocksharppricing"><ddue:externalLink xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">
+    <ddue:linkText>StockSharp Pricing</ddue:linkText>
+    <ddue:linkUri>http://stocksharp.ru/products/pricing/</ddue:linkUri>
+  </ddue:externalLink></item>
 </content>

@@ -3,9 +3,10 @@
 	<developerWalkthroughDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
 
 	<introduction>
-		<para>Пример работы с <codeEntityReference qualifyHint="false">T:StockSharp.OpenECry.OpenECryTrader</codeEntityReference> демонстрирует приложение SampleOEC, показанное на рисунке ниже. 
-		Исходные коды примера лежат в дистрибутиве в папке <legacyItalic>Samples/OpenECry</legacyItalic>.</para>
-		
+		<para>The SampleOEC application shows an example of working with the <codeEntityReference qualifyHint="false">T:StockSharp.OpenECry.OpenECryTrader</codeEntityReference>,
+		as shown in the figure below.
+		The example source code is in the <legacyItalic>Samples/OpenECry</legacyItalic> folder of the installation package.</para>
+
 		<mediaLink><image placement="center" xlink:href="OECTraderMainWindow"/></mediaLink>
 	</introduction>
 
@@ -13,7 +14,7 @@
 				<steps class="ordered">
 					<step>
 						<content>
-							<para>В самом начале необходимо создать экземпляр класса шлюза 
+							<para>First, you need to create an instance of the 
 							<codeEntityReference qualifyHint="false">T:StockSharp.OpenECry.OpenECryTrader</codeEntityReference>:</para>
             				<code language="C#">
             				<![CDATA[
@@ -31,7 +32,7 @@ Trader = new OpenECryTrader {
 
 					<step>
 						<content>
-							<para>Далее следует установить требуемые обработчики событий <codeEntityReference qualifyHint="false">T:StockSharp.BusinessEntities.IConnector</codeEntityReference>:</para>
+							<para>Next, you should subscribe to required <codeEntityReference qualifyHint="false">T:StockSharp.BusinessEntities.IConnector</codeEntityReference> events handlers:</para>
             				<code language="C#">
             				<![CDATA[
 // событие восстановления соединения
@@ -102,30 +103,30 @@ Trader.StopOrdersCancelFailed += OrdersFailed;
 					
 					<step>
 						<content>
-							<para>Далее необходимо выполнить подключение к серверу OEC:</para>
+							<para>Finally, you need to connect to OEC server:</para>
             				<code language="C#">
             				<![CDATA[
 Trader.Connect();
 							]]>
 							</code>						
-							<para>После подключения можно ожидать срабатывания событий:</para>
+							<para>Once connected, you can expect to trigger events:</para>
 							<list class="bullet">
 								<listItem>
 									<para><codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.SecuritiesChanged</codeEntityReference> – 
-									изменение инструмента (последней цены, цены спроса/предложения и т.д.) запрошенного через
+									instrument change (last price, best bid/ask price, etc.) requested through
 									<codeEntityReference>M:StockSharp.BusinessEntities.IConnector.RegisterSecurity(StockSharp.BusinessEntities.Security)</codeEntityReference>.</para>
 								</listItem>
 								<listItem>
 									<para><codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.MarketDepthsChanged</codeEntityReference> – 
-									изменение стакана, запрошенного с помощью <codeEntityReference>M:StockSharp.BusinessEntities.IConnector.RegisterMarketDepth(StockSharp.BusinessEntities.Security)</codeEntityReference>.</para>
+									order book change, requested through <codeEntityReference>M:StockSharp.BusinessEntities.IConnector.RegisterMarketDepth(StockSharp.BusinessEntities.Security)</codeEntityReference>.</para>
 								</listItem>
 								<listItem>
 									<para><codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.NewTrades</codeEntityReference> – 
-									новые тики по подписанным с помощью <codeEntityReference>M:StockSharp.BusinessEntities.IConnector.RegisterTrades(StockSharp.BusinessEntities.Security)</codeEntityReference> инструментам.</para>
+									new ticks on instruments subscribed by using <codeEntityReference>M:StockSharp.BusinessEntities.IConnector.RegisterTrades(StockSharp.BusinessEntities.Security)</codeEntityReference> инструментам.</para>
 								</listItem>
 								<listItem>
 									<para><codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.PortfoliosChanged</codeEntityReference> – 
-									изменение портфелей, запрошенное с помощью <codeEntityReference>M:StockSharp.BusinessEntities.IConnector.RegisterPortfolio(StockSharp.BusinessEntities.Portfolio)</codeEntityReference>.</para>
+									portfolios change requested through <codeEntityReference>M:StockSharp.BusinessEntities.IConnector.RegisterPortfolio(StockSharp.BusinessEntities.Portfolio)</codeEntityReference>.</para>
 								</listItem>
 							</list>
 						</content>
@@ -133,7 +134,7 @@ Trader.Connect();
 
 					<step>
 						<content>
-							<para>Поиск инструментов (<link xlink:href="39e0b7aa-0303-438c-b347-fea21540c9f3">подробнее</link>):</para>
+							<para>Instruments search (<link xlink:href="39e0b7aa-0303-438c-b347-fea21540c9f3">in more detail</link>):</para>
 							
 							<mediaLink><image placement="center" xlink:href="OECTraderSecurity"/></mediaLink>
             				
@@ -158,9 +159,9 @@ private void SearchText_PreviewKeyUp(object sender, KeyEventArgs e)
 
 					<step>
 						<content>
-							<para>Для получения обновлений по выбранному инструменту и тикам необходимо воспользоваться методами 
+							<para>For updates on the selected instrument and ticks you need to use the 
 							<codeEntityReference>M:StockSharp.BusinessEntities.IConnector.RegisterSecurity(StockSharp.BusinessEntities.Security)</codeEntityReference> 
-							и <codeEntityReference>M:StockSharp.BusinessEntities.IConnector.RegisterTrades(StockSharp.BusinessEntities.Security)</codeEntityReference> соответственно:</para>
+							and <codeEntityReference>M:StockSharp.BusinessEntities.IConnector.RegisterTrades(StockSharp.BusinessEntities.Security)</codeEntityReference> methods, respectively:</para>
             				<code language="C#">
             				<![CDATA[
 private void BidAsk_Click(object sender, RoutedEventArgs e)
@@ -192,8 +193,8 @@ private void BidAsk_Click(object sender, RoutedEventArgs e)
 
 					<step>
 						<content>
-							<para>Для запроса обновлений по стаканам необходимо воспользоваться методом 
-							<codeEntityReference>M:StockSharp.BusinessEntities.IConnector.RegisterMarketDepth(StockSharp.BusinessEntities.Security)</codeEntityReference>:</para>
+							<para>To request updates on the order books you need to use the 
+							<codeEntityReference>M:StockSharp.BusinessEntities.IConnector.RegisterMarketDepth(StockSharp.BusinessEntities.Security)</codeEntityReference> method:</para>
             				<code language="C#">
             				<![CDATA[
 private void Quotes_Click(object sender, RoutedEventArgs e)
@@ -221,7 +222,7 @@ private void Quotes_Click(object sender, RoutedEventArgs e)
 
 					<step>
 						<content>
-							<para>Для получения обновлений по портфелям используется метод <codeEntityReference>M:StockSharp.BusinessEntities.IConnector.RegisterPortfolio(StockSharp.BusinessEntities.Portfolio)</codeEntityReference>:</para>
+							<para>For portfolios updates the <codeEntityReference>M:StockSharp.BusinessEntities.IConnector.RegisterPortfolio(StockSharp.BusinessEntities.Portfolio)</codeEntityReference> method is used:</para>
             				<code language="C#">
             				<![CDATA[
 Trader.NewPortfolios += portfolios =>
@@ -238,9 +239,9 @@ Trader.NewPortfolios += portfolios =>
 
 					<step>
 						<content>
-							<para>Для регистрации заявок предусмотрена кнопка «Новая заявка». 
-							Метод <codeEntityReference>M:StockSharp.BusinessEntities.IConnector.RegisterOrder(StockSharp.BusinessEntities.Order)</codeEntityReference> отправляет 
-							заявку на сервер:</para>
+							<para>For orders registration the «New Order» button used. 
+							The <codeEntityReference>M:StockSharp.BusinessEntities.IConnector.RegisterOrder(StockSharp.BusinessEntities.Order)</codeEntityReference>
+							method sends an order to the server:</para>
             				<code language="C#">
             				<![CDATA[
 private void Send_Click(object sender, RoutedEventArgs e)

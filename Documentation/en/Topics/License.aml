@@ -3,35 +3,24 @@
 	<developerWalkthroughDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
 	<introduction>
 		<para> <token>stocksharp</token> has a few licence types.</para>
-		<para><legacyBold>Personal License</legacyBold></para>
+		<para><legacyBold>Private Trader</legacyBold></para>
 		<para>
-	    	 Предоставляется бесплатно и пожизненно всем желающим  Для этого необходимо только <externalLink>
-			<linkText>пройти регистрацию!</linkText>
-			<linkAlternateText>Регистрация в Stocksharp</linkAlternateText>
+	    	 Free and for everyone. You do not need to generate and download license files! Just <externalLink>
+			<linkText>complete the registration!</linkText>
+			<linkAlternateText>Registration</linkAlternateText>
 			<linkUri>http://stocksharp.com/register/</linkUri>
 			<linkTarget>_blank</linkTarget>
 			</externalLink>
-			 Эта лицензия включает S#.Designer, <token>hydra</token>, <token>stocksharpapi</token> 
-			 (<token>quik</token>, <token>alfa</token>, <token>smartcom</token>, <token>transaq</token>, <token>alor</token>,
-			 <token>openecry</token>, <token>IB</token>, <token>etrade</token>, <token>lmax</token>, <token>oanda</token>, 
+			 Its include <token>designer</token>, <token>hydra</token>, <token>stocksharpapi</token> 
+			 (<token>openecry</token>, <token>IB</token>, <token>etrade</token>, <token>lmax</token>, <token>oanda</token>, 
 			 <token>blackwood</token>, <token>iqfeed</token>, <token>sterling</token>, <token>rithmic</token>, <token>cqg</token>, 
-			 <token>matlab</token>, <token>btce</token>, <token>bitstamp</token>, BarChart и RSS).
+			 <token>matlab</token>, <token>btce</token>, <token>bitstamp</token>, <token>barchart</token> и RSS).
 		</para>
-		<para>Cм. также <link xlink:href="b9f672db-e0c9-4208-9759-179e5de17fd8">Установка StockSharp</link>.</para>
-		<para><legacyBold>Расширенная лицензия</legacyBold></para>
-		<para>Существуют два уровня расширенной лицензии. Наполненность по функционалу для каждого уровня идентична и включает все, что есть в базовой версии плюс:</para> 
+		<para>See also <link xlink:href="b9f672db-e0c9-4208-9759-179e5de17fd8">StockSharp installation</link>.</para>
+		<para><legacyBold>Extended License</legacyBold></para>
 		<list class="ordered">
   			<listItem>
-  				<para><token>plaza</token> коннектор (режим ClientGate COM).</para>
-  			</listItem>
-  			<listItem>
-  				<para><token>fix</token> коннектор (поддерживается ограниченное количество брокеров).</para>
-  			</listItem>
-  			<listItem>
-  				<para>Готовые торговые стратегии (хеджирование опционов, маркет-мэйкинг, котирование, скользящие стоп и тейк защиты и т.д.).</para>
-  			</listItem>
-  			<listItem>
-  				<para>Подключение до 3 программ одновременно к одному терминалу QUIK.</para>
+  				<para>Ready-to-use trading strategies (option hedging, market-making, quoting, trailing stop and take-profit, etc.).</para>
   			</listItem>
   			<listItem>
   				<para>Order Log.</para>
@@ -39,73 +28,53 @@
   			<listItem>
   				<para>S#.Data server.</para>
   			</listItem>
-  			
+  			<listItem>
+  				<para>S#.Shell source code.</para>
+  			</listItem>
+  			<listItem>
+  				<para>Extended samples.</para>
+  			</listItem>
+  			<listItem>
+  				<para>40+ hours video training.</para>
+  			</listItem>
+  			<listItem>
+  				<para>Premium support.</para>
+  			</listItem>
 		</list>
-		<para><legacyUnderline>Расширенная лицензия+</legacyUnderline> предоставляется клиентам прошедшим полный <externalLink>
-			<linkText>курс обучения</linkText>
-			<linkAlternateText>Обучение Stocksharp</linkAlternateText>
-			<linkUri>http://stocksharp.com/edu</linkUri>
-			<linkTarget>_blank</linkTarget>
-			</externalLink>
- и действует в течение 6 месяцев.</para>
-		<para><legacyUnderline>Расширенная лицензия++</legacyUnderline> предоставляется клиентам прошедшим расширенный <externalLink>
-			<linkText>курс обучения</linkText>
-			<linkAlternateText>Обучение Stocksharp</linkAlternateText>
-			<linkUri>http://stocksharp.com/edu</linkUri>
-			<linkTarget>_blank</linkTarget>
-			</externalLink>
- и действует в течение 12 месяцев.</para> 
-		<para>По окончании срока действия лицензии необходимо будет либо ее продлить, либо пользоваться базовым функционалом.</para>
 
-
-		<para><legacyBold>Корпоративная лицензия</legacyBold></para>
+		<para><legacyBold>Maximum</legacyBold></para>
 		<para>
-  			Корпоративная лицензия предоставляется платно и включает все функциональности базовой и расширенной лицензий, а также
-  			коннекторы прямого доступа к биржам:
+  			The license is paid and includes all the basic and extended licenses functionality, as well as:
   		</para>
   		<list class="ordered">
-  				<listItem>
-  					<para><link xlink:href="7eda6d74-d3b8-4fe5-b6a3-fab60e441daf">Plaza 2 CGate</link> - прямое подключение к торгам к секции Срочного рынка на Московской бирже по протоколу Plaza2 Cgate.</para>
-  				</listItem>
-  				<listItem>
-  					<para><link xlink:href="61692ace-225e-4ecc-845a-504021d59a8f">Micex TEAP</link> - прямое подключение к торгам к секции Фондового рынка на Московской бирже по протоколу TEAP.</para>
-  				</listItem>
-  				<listItem>
-  					<para><link xlink:href="62dc0f78-2b9a-4f88-b6bc-68361bd0d8fe">ITCH</link> - прямое подключение к торгам на биржах LSE и/или NASDAQ по протоколу ITCH.</para>
-  				</listItem>
-  				<listItem>
-  					<para><link xlink:href="b0198d6a-0667-45d4-b172-698afd3ca310">FIX/FAST</link> - прямое подключение к торгам на Московской бирже по протоколу FIX/FAST.</para>
-  				</listItem>
-  				<listItem>
-  					<para><link xlink:href="1ee210ee-a004-4277-b8f4-91cb08d651db">TWIME</link> - коннектор для управления заявками на срочном рынке Московской Биржи.</para>
-  				</listItem>
+			<listItem>
+				<para><link xlink:href="b0198d6a-0667-45d4-b172-698afd3ca310">FIX/FAST</link> - direct access to exchanges, to a range of brokers (see all list on <token>stocksharppricing</token>).</para>
+			</listItem>
+			<listItem>
+				<para><link xlink:href="62dc0f78-2b9a-4f88-b6bc-68361bd0d8fe">ITCH</link> - market data connector to LSE or NASDAQ.</para>
+			</listItem>
 		</list>
 		<para>
-  			Для HFT коннекторов корпоративная лицензия имеет бессрочный характер с годовой подпиской обновления.
+  			HFT connectors has perpetual license with one year upgrade subscription option.
   		</para>
 
-		<para><legacyBold>Корпоративная плюс</legacyBold></para>
-		<para>Включает в себя исходные коды любого из наших готовых программных решений 
-		(<token>hydra</token>, <token>designer</token>,   			<externalLink>
+		<para><legacyBold>Source codes</legacyBold></para>
+		<para>Includes any of our ready-to-use applications 
+		(<token>hydra</token>, <token>designer</token>, <externalLink>
 				<linkText>S#.Shell</linkText>
-				<linkAlternateText>Каркас для торговых стратегий</linkAlternateText>
+				<linkAlternateText>Shell</linkAlternateText>
 				<linkUri>http://stocksharp.com/products/shell/</linkUri>
 				<linkTarget>_blank</linkTarget>
 			</externalLink>),
-		а также исходные коды самой платформы: S#.API.</para>
+		and the whole S#.API.</para>
 
 		<para>
-  			Подробную информацию о лицензиях см. <externalLink>
-			<linkText>Стоимость лицензий StockSharp</linkText>
-			<linkAlternateText>Стоимость лицензий</linkAlternateText>
-			<linkUri>http://stocksharp.com/products/pricing/</linkUri>
-			<linkTarget>_blank</linkTarget>
-			</externalLink>.
+  			For more details please visit the <token>stocksharppricing</token>.
   		</para>
 
 	</introduction>
 	
-	 <relatedTopics>
+	 <!--relatedTopics>
      	<externalLink>
 			<linkText>Новые подходы к лицензированию</linkText>
 			<linkAlternateText>Лицензирование</linkAlternateText>
@@ -118,7 +87,7 @@
 			<linkUri>http://stocksharp.com/products/pricing/</linkUri>
 			<linkTarget>_blank</linkTarget>
 		</externalLink>
-     </relatedTopics>
+     </relatedTopics-->
 	</developerWalkthroughDocument>
 </topic>
 
