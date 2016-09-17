@@ -136,6 +136,9 @@ P:StockSharp.Xaml.HelpButton.DocUrl/summary;DocStr8142
 F:StockSharp.Xaml.HelpButton.ShowTextProperty/summary;DocStr29
 P:StockSharp.Xaml.HelpButton.ShowText/summary;DocStr8143
 M:StockSharp.Xaml.HelpButton.OnClick/summary;DocStr8141
+M:StockSharp.Xaml.HelpButton.CreateUrl(System.String)/summary;DocStr9246
+M:StockSharp.Xaml.HelpButton.CreateUrl(System.String)/param/docUrl;DocStr9247
+M:StockSharp.Xaml.HelpButton.CreateUrl(System.String)/returns;DocStr9248
 M:StockSharp.Xaml.HelpButton.InitializeComponent/summary;DocStr8
 T:StockSharp.Xaml.NewsMessageGrid/summary;DocStr8133
 F:StockSharp.Xaml.NewsMessageGrid.RequestStoryCommand/summary;DocStr8145

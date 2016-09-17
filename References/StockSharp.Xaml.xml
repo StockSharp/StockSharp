@@ -664,6 +664,13 @@
             Called when a <see cref="T:System.Windows.Controls.Button" /> is clicked.
             </summary>
     </member>
+    <member name="M:StockSharp.Xaml.HelpButton.CreateUrl(System.String)">
+      <summary>
+            To create localized url.
+            </summary>
+      <param name="docUrl">Help topic.</param>
+      <returns>Localized url.</returns>
+    </member>
     <member name="M:StockSharp.Xaml.HelpButton.InitializeComponent">
       <summary>
             InitializeComponent
