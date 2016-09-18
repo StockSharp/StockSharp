@@ -29,8 +29,8 @@
         <Topic id="c23146af-3f08-4928-a95a-dd1173b23133" visible="True" title="Сканер" />
       </Topic>
       <Topic id="84d6a0fb-607f-4d87-be8a-e2b58006493e" visible="True" isExpanded="true" title="E*TRADE">
+        <Topic id="2b16e1d6-32bf-426d-8d20-08020f5f1f40" visible="True" isSelected="true" title="Getting started" />
         <Topic id="df8227ff-5381-4912-b080-b58e6004480b" visible="True" title="Авторизация" />
-        <Topic id="2b16e1d6-32bf-426d-8d20-08020f5f1f40" visible="True" title="Getting started" />
         <Topic id="028b3872-d610-4ca4-9127-5434764f05de" visible="True" title="Стоп-заявки" />
       </Topic>
       <Topic id="c7ff5937-e230-4db3-857f-4cd68583ebfc" visible="True" isExpanded="true" title="IQFeed">
@@ -55,7 +55,7 @@
         <Topic id="beafeb9f-608e-4986-99ae-1bcca1500c4b" visible="True" title="Исторические данные" />
       </Topic>
       <Topic id="62dc0f78-2b9a-4f88-b6bc-68361bd0d8fe" visible="True" isExpanded="true" title="ITCH">
-        <Topic id="ca67819a-60b8-42f0-a512-ad0792d544f2" visible="True" isSelected="true" title="Getting started" />
+        <Topic id="ca67819a-60b8-42f0-a512-ad0792d544f2" visible="True" title="Getting started" />
       </Topic>
       <Topic id="4448a233-b3d5-46e1-a0f2-549ec5fa681a" visible="True" />
     </Topic>
@@ -107,7 +107,7 @@
       <Topic id="ee8f7be8-80ad-4ab9-a5aa-14754fe024f1" visible="True" title="Индекс" />
       <Topic id="39e0b7aa-0303-438c-b347-fea21540c9f3" visible="True" title="Поиск инструмента" />
     </Topic>
-    <Topic id="7a8a9518-6270-4cfe-a829-fa6c40e5fabd" visible="True" isExpanded="true" title="Хранение данных">
+    <Topic id="7a8a9518-6270-4cfe-a829-fa6c40e5fabd" visible="True" title="Хранение данных">
       <Topic id="e4a57b52-bd14-4640-a7c7-0979dba1ad0a" visible="True" title="API" />
       <Topic id="ac584200-f06a-49e6-b2fd-141b5fc898f9" visible="True" title="Хранилище сообщений" />
     </Topic>
