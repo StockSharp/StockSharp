@@ -31,17 +31,6 @@ Trader = new LmaxTrader
 							<para>Далее следует установить требуемые обработчики событий <codeEntityReference qualifyHint="false">T:StockSharp.BusinessEntities.IConnector</codeEntityReference>:</para>
             				<code language="C#">
             				<![CDATA[
-// инициализируем механизм переподключения (будет автоматически соединяться
-// каждые 10 секунд, если шлюз потеряется связь с сервером)
-Trader.ReConnectionSettings.Interval = TimeSpan.FromSeconds(10);
-//Trader.ReConnectionSettings.WorkingTime = Exchange.Rts.WorkingTime;
-Trader.ReConnectionSettings.ConnectionRestored += () => this.GuiAsync(() =>
-{
-	// разблокируем кнопку (соединение было восстановлено)
-	ChangeConnectStatus(true);
-	MessageBox.Show(this, "Соединение восстановлено.");
-});
-
 // подписываемся на событие успешного соединения
 Trader.Connected += () =>
 {
@@ -62,7 +51,7 @@ Trader.ConnectionError += error => this.GuiAsync(() =>
 	MessageBox.Show(this, error.ToString(), "Ошибка соединения");
 });
 
-Trader.ProcessDataError += error => this.GuiAsync(() => MessageBox.Show(this, error.ToString(), "Ошибка обработки данных"));
+Trader.Error += error => this.GuiAsync(() => MessageBox.Show(this, error.ToString(), "Ошибка обработки данных"));
 
 Trader.NewSecurities += securities => this.GuiAsync(() => _securitiesWindow.AddSecurities(securities));
 

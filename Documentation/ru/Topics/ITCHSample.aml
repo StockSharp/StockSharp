@@ -60,14 +60,6 @@ private void ConnectClick(object sender, RoutedEventArgs e)
 		{
 			_initialized = true;
 
-			// update gui labes
-			Trader.ReConnectionSettings.WorkingTime = ExchangeBoard.Forts.WorkingTime;
-			Trader.Restored += () => this.GuiAsync(() =>
-			{
-				ChangeConnectStatus(true);
-				MessageBox.Show(this, LocalizedStrings.Str2958);
-			});
-
 			// subscribe on connection successfully event
 			Trader.Connected += () =>
 			{

@@ -10,7 +10,7 @@
 		<mediaLink><image placement="center" xlink:href="OECTrader"/></mediaLink>
 		
 		<para>As can be seen from the figure, <codeEntityReference qualifyHint="false">T:StockSharp.OpenECry.OpenECryTrader</codeEntityReference>
-		communicates with the OEC server through the <token>OECApi</token>. The <token>OECApi</token> using does not require a working OEC Trader terminal.
+		communicates with the OEC server through the <token>OECApi</token>. The <token>OECApi</token> using does not require a working OEC Trader terminal.</para>
 	</introduction>
 	<relatedTopics>
 		<link xlink:href="1dbc72c4-cc59-4094-824a-a2b77f9623d6">Example of working with OpenECryTrader</link>

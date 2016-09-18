@@ -6,7 +6,8 @@
 		<para>
 		If necessary, you can configure the OEC Trader terminal to operate in <codeEntityReference qualifyHint="false">F:StockSharp.OpenECry.OpenECryRemoting.Primary</codeEntityReference>
 		mode and then run the algorithm <token>stocksharp</token> in <codeEntityReference qualifyHint="false">F:StockSharp.OpenECry.OpenECryRemoting.Primary</codeEntityReference> mode.
-		In this case, the terminal and the algorithm will use the same connection to the OEC server. To configure it you should check the menu item File -> Allow Remoting in OEC Trader terminal		
+		In this case, the terminal and the algorithm will use the same connection to the OEC server.
+		To configure it you should check the menu item File -> Allow Remoting in OEC Trader terminal:</para>
 		<mediaLink><image placement="center" xlink:href="OECTraderSettings"/></mediaLink>
 
 	</introduction>

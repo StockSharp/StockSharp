@@ -59,7 +59,7 @@ addlistener(trader, 'OrdersChanged', @ordersChanged);
 addlistener(trader, 'NewMyTrades', @newMyTrades);
 addlistener(trader, 'NewPositions', @newPositions);
 addlistener(trader, 'PositionsChanged', @positionsChanged);
-addlistener(trader, 'ProcessDataError', @processError);
+addlistener(trader, 'Error', @processError);
 addlistener(trader, 'ConnectionError', @processError);
 			  </code>
           </content>

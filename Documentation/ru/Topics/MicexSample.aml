@@ -49,10 +49,6 @@ Trader.OrderBookDepth = Depth.Text.To<int>();
 							если "взведен" сооветствующий флаг:</para>
             				<code language="C#">
             				<![CDATA[
-// инициализируем механизм переподключения
-Trader.ReConnectionSettings.WorkingTime = ExchangeBoard.Micex.WorkingTime;
-Trader.Restored += () => this.GuiAsync(() => MessageBox.Show(this, LocalizedStrings.Str2958));
-
 // подписываемся на событие успешного соединения
 Trader.Connected += () =>
 {

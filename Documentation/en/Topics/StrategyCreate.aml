@@ -250,7 +250,7 @@ _trader.Connected += () =>
 			DrawSma();
 	};
 	_candleManager.CandlesChanged += (token, candles) => DrawCandles(candles.Keys);
-	//_trader.ProcessDataError += ex => this.Sync(() => MessageBox.Show(this, ex.ToString()));
+	//_trader.Error += ex => this.Sync(() => MessageBox.Show(this, ex.ToString()));
 	_trader.ConnectionError += ex =>
 	{
 		if (ex != null)

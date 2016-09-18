@@ -35,11 +35,12 @@
 					
 					<step>
 						<content>
-						<legacyBold><link xlink:href="ad178c36-15c8-4314-bc5c-56220f41a67e">Мировые площадки</link></legacyBold> - торговля NASDAQ, NYSE, CME и т.д. через брокеров <token>OpenECry</token>, <token>IB</token>, <token>etrade</token> и <externalLink>
-						<linkText>других</linkText>
-						<linkAlternateText>Брокеры-партнеры StockSharp</linkAlternateText>
-						<linkUri>http://stocksharp.ru/broker/</linkUri>
-						<linkTarget>_blank</linkTarget>
+						<legacyBold><link xlink:href="ad178c36-15c8-4314-bc5c-56220f41a67e">Мировые площадки</link></legacyBold> - торговля NASDAQ, NYSE, CME и т.д. через брокеров <token>OpenECry</token>, <token>IB</token>, <token>etrade</token> и
+						<externalLink>
+							<linkText>других</linkText>
+							<linkAlternateText>Брокеры-партнеры StockSharp</linkAlternateText>
+							<linkUri>http://stocksharp.ru/broker/</linkUri>
+							<linkTarget>_blank</linkTarget>
 						</externalLink>.
 						</content>
 					</step>

@@ -42,7 +42,7 @@ Trader.ConnectionError += error => this.GuiAsync(() =>
 	MessageBox.Show(this, error.ToString(), "Ошибка соединения");
 });
 
-Trader.ProcessDataError += error => this.GuiAsync(() => MessageBox.Show(this, error.ToString(), "Ошибка обработки данных"));
+Trader.Error += error => this.GuiAsync(() => MessageBox.Show(this, error.ToString(), "Ошибка обработки данных"));
 
 Trader.NewSecurities += securities => this.GuiAsync(() => _securitiesWindow.AddSecurities(securities));
 

@@ -35,12 +35,6 @@ Trader = new BlackwoodTrader
 							<para>Далее следует установить требуемые обработчики событий <codeEntityReference qualifyHint="false">T:StockSharp.BusinessEntities.IConnector</codeEntityReference>:</para>
             				<code language="C#">
             				<![CDATA[
-// инициализируем механизм переподключения (будет автоматически соединяться
-// каждые 10 секунд, если шлюз потеряется связь с сервером)
-Trader.ReConnectionSettings.Interval = TimeSpan.FromSeconds(10);
-//Trader.ReConnectionSettings.WorkingTime = Exchange.Rts.WorkingTime;
-Trader.ReConnectionSettings.ConnectionRestored += () => this.GuiAsync(() => MessageBox.Show(this, "Соединение восстановлено."));
-
 // подписываемся на событие успешного соединения
 Trader.Connected += () =>
 {
@@ -57,7 +51,7 @@ Trader.ConnectionError += error => this.GuiAsync(() =>
 // подписываемся на событие успешного отключения
 Trader.Disconnected += () => this.GuiAsync(() => ChangeConnectStatus(false));
 
-Trader.ProcessDataError += error => this.GuiAsync(() => MessageBox.Show(this, error.ToString(), "Ошибка обработки данных"));
+Trader.Error += error => this.GuiAsync(() => MessageBox.Show(this, error.ToString(), "Ошибка обработки данных"));
 Trader.NewSecurities += securities => this.GuiAsync(() => _securitiesWindow.AddSecurities(securities));
 Trader.NewTrades += trades =>this.GuiAsync(() => _tradesWindow.Trades.AddRange(trades));
 Trader.NewOrders +=orders => this.GuiAsync(() => _ordersWindow.Orders.AddRange(orders));
@@ -140,8 +134,6 @@ MainWindow.Instance.Trader.LookupSecurities(criteria);
 							]]>
 							</code>
 							
-							<!--para>Если инструментов с заданными критериями не будет найдено, то вернется ошибка через событие <codeEntityReference>E:StockSharp.BusinessEntities.ITrader.ProcessDataError</codeEntityReference>:</para>
-							<mediaLink><image placement="center" xlink:href="blackwood_security_not_found"/></mediaLink-->
 						</content>
 					</step>
 

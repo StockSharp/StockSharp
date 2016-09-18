@@ -35,65 +35,68 @@ Trader = new OpenECryTrader {
 							<para>Next, you should subscribe to required <codeEntityReference qualifyHint="false">T:StockSharp.BusinessEntities.IConnector</codeEntityReference> events handlers:</para>
             				<code language="C#">
             				<![CDATA[
-// событие восстановления соединения
-Trader.ReConnectionSettings.ConnectionRestored += () => this.GuiAsync(() =>
-{
-	// разблокируем кнопку Экспорт (соединение было восстановлено)
-	ChangeConnectStatus(true);
-	MessageBox.Show(this, "Соединение восстановлено.");
-});
-
-// подписываемся на событие успешного соединения
+// subscribe on successfully connect event
 Trader.Connected += () =>
 {
-	// возводим флаг, что соединение установлено
+	// set flag (connection is established)
 	_isConnected = true;
 
-	// разблокируем кнопку Экспорт
+	// update gui labes
 	this.GuiAsync(() => ChangeConnectStatus(true));
 };
 
-// подписываемся на событие разрыва соединения
+// subscribe on connection error event
 Trader.ConnectionError += error => this.GuiAsync(() =>
 {
-	// заблокируем кнопку Экспорт (так как соединение было потеряно)
+	// update gui labes
 	ChangeConnectStatus(false);
 
-	MessageBox.Show(this, error.ToString(), "Ошибка соединения");	
+	MessageBox.Show(this, error.ToString(), "Connection was dropped.");	
 });
 
-// событие успешного отключения
+// subscribe on successfully disconnect event
 Trader.Disconnected += () => this.GuiAsync(() => ChangeConnectStatus(false));
 
-// событие ошибки обработки данных
-Trader.ProcessDataError += error => this.GuiAsync(() => MessageBox.Show(this, error.ToString(), "Ошибка обработки данных"));
+// subscribe on error event
+Trader.Error += error => this.GuiAsync(() => MessageBox.Show(this, error.ToString(), "Ошибка обработки данных"));
 
-// событие получения новых инструментов
+// new securities received
 Trader.NewSecurities += securities => this.GuiAsync(() => _securitiesWindow.AddSecurities(securities));
-// событие получения новых собственных сделок
+
+// new own trades received
 Trader.NewMyTrades += trades => this.GuiAsync(() => _myTradesWindow.Trades.AddRange(trades));
-// событие получения новых сделок по подписанным инструментам
+
+// new anonymous trades received
 Trader.NewTrades += trades => this.GuiAsync(() => _tradesWindow.Trades.AddRange(trades));
-// событие получения новых заявок
+
+// new orders received
 Trader.NewOrders += orders => this.GuiAsync(() => _ordersWindow.Orders.AddRange(orders));
-// событие получения новых стоп-заявок
+
+// new stop-orders received
 Trader.NewStopOrders += orders => this.GuiAsync(() => _stopOrdersWindow.Orders.AddRange(orders));
-// событие получения новых портфелей
+
+// new portofolios (=accounts) received
 Trader.NewPortfolios += portfolios =>
 {
+	// subscribe on portfolio updates
     portfolios.ForEach(Trader.RegisterPortfolio);
+    
     _portfoliosWindow.Portfolios.AddRange(portfolios);
 };
-// событие получения новых позиций
+
+// new positions received
 Trader.NewPositions += positions => this.GuiAsync(() => _positionsWindow.Positions.AddRange(positions));
 
-// событие неудачной регистрации заявок
+// subscribe on error of order registration event
 Trader.OrdersRegisterFailed += OrdersFailed;
-// событие неудачного снятия заявок
+
+// subscribe on error of order cancelling event
 Trader.OrdersCancelFailed += OrdersFailed;
-// событие неудачной регистрации стоп-заявок
+
+// subscribe on error of stop-order registration event
 Trader.StopOrdersRegisterFailed += OrdersFailed;
-// событие неудачного снятия стоп-заявок
+
+// subscribe on error of stop-order cancelling event
 Trader.StopOrdersCancelFailed += OrdersFailed;
 
 							]]>
@@ -171,7 +174,7 @@ private void BidAsk_Click(object sender, RoutedEventArgs e)
 
     if (_bidAskSecurities.Contains(security))
     {
-        // останавливаем обновления по инструменту
+        // unsubscribe from level1 flow
         trader.UnRegisterSecurity(security);
         trader.UnRegisterTrades(security);
 
@@ -179,7 +182,7 @@ private void BidAsk_Click(object sender, RoutedEventArgs e)
     }
     else
     {
-        // начинаем получать обновления по инструменту
+        // subscribe on level1 flow
         trader.RegisterSecurity(security);
         trader.RegisterTrades(security);
 
@@ -201,10 +204,10 @@ private void Quotes_Click(object sender, RoutedEventArgs e)
 {
     var window = _quotesWindows.SafeAdd(SelectedSecurity, security =>
     {
-        // начинаем получать котировки стакана
+        // subscribe on order book flow
         MainWindow.Instance.Trader.RegisterMarketDepth(security);
 
-        // создаем окно со стаканом
+        // create order book window
         var wnd = new QuotesWindow { Title = security.Code + " котировки" };
         wnd.MakeHideable();
         return wnd;
@@ -227,7 +230,7 @@ private void Quotes_Click(object sender, RoutedEventArgs e)
             				<![CDATA[
 Trader.NewPortfolios += portfolios =>
 {
-    // регистрирует портфели на обновление данных
+    // subscribe on portfolio updates
     portfolios.ForEach(Trader.RegisterPortfolio);
 
     _portfoliosWindow.Portfolios.AddRange(portfolios);

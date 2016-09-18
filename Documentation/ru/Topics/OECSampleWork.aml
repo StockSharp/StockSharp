@@ -34,14 +34,6 @@ Trader = new OpenECryTrader {
 							<para>Далее следует установить требуемые обработчики событий <codeEntityReference qualifyHint="false">T:StockSharp.BusinessEntities.IConnector</codeEntityReference>:</para>
             				<code language="C#">
             				<![CDATA[
-// событие восстановления соединения
-Trader.ReConnectionSettings.ConnectionRestored += () => this.GuiAsync(() =>
-{
-	// разблокируем кнопку Экспорт (соединение было восстановлено)
-	ChangeConnectStatus(true);
-	MessageBox.Show(this, "Соединение восстановлено.");
-});
-
 // подписываемся на событие успешного соединения
 Trader.Connected += () =>
 {
@@ -65,7 +57,7 @@ Trader.ConnectionError += error => this.GuiAsync(() =>
 Trader.Disconnected += () => this.GuiAsync(() => ChangeConnectStatus(false));
 
 // событие ошибки обработки данных
-Trader.ProcessDataError += error => this.GuiAsync(() => MessageBox.Show(this, error.ToString(), "Ошибка обработки данных"));
+Trader.Error += error => this.GuiAsync(() => MessageBox.Show(this, error.ToString(), "Ошибка обработки данных"));
 
 // событие получения новых инструментов
 Trader.NewSecurities += securities => this.GuiAsync(() => _securitiesWindow.AddSecurities(securities));

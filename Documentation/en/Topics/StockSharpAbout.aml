@@ -38,10 +38,11 @@
 						<content>
 						<legacyBold><link xlink:href="ad178c36-15c8-4314-bc5c-56220f41a67e">Global exchanges</link></legacyBold> - 
 						NASDAQ, NYSE, CME, etc. trading by means of <token>OpenECry</token>, <token>IB</token>, <token>etrade</token> and
-						<linkText>other brokers</linkText>
-						<linkAlternateText>Broker-Partners</linkAlternateText>
-						<linkUri>http://stocksharp.com/broker/</linkUri>
-						<linkTarget>_blank</linkTarget>
+						<externalLink>
+							<linkText>other brokers</linkText>
+							<linkAlternateText>Broker-Partners</linkAlternateText>
+							<linkUri>http://stocksharp.com/broker/</linkUri>
+							<linkTarget>_blank</linkTarget>
 						</externalLink>.
 						</content>
 					</step>
