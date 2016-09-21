@@ -4321,6 +4321,7 @@ DaysPart;Days;Дни
 HoursPart;Hours;Часы
 MinutesPart;Minutes;Минуты
 SecondsPart;Seconds;Секунды
+NotInitializedParams;{0} not initialized.;{0} не выбрано.
 DocStr0;Button activation alert settings;Кнопка активации настроек сигнала
 DocStr1;Initializes a new instance of the {0};Создать {0}
 DocStr2;Load settings;Загрузить настройки

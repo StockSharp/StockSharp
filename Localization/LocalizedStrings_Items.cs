@@ -42866,5 +42866,15 @@ namespace StockSharp.Localization
 		/// Seconds.
 		/// </summary>
 		public static string SecondsPart => GetString(SecondsPartKey);
+
+		/// <summary>
+		/// {0} not initialized.
+		/// </summary>
+		public const string NotInitializedParamsKey = "NotInitializedParams";
+
+		/// <summary>
+		/// {0} not initialized.
+		/// </summary>
+		public static string NotInitializedParams => GetString(NotInitializedParamsKey);
 	}
 }
