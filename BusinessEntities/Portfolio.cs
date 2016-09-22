@@ -81,6 +81,9 @@ namespace StockSharp.BusinessEntities
 				if (_leverage == value)
 					return;
 
+				if (value < 0)
+					throw new ArgumentOutOfRangeException(nameof(value));
+
 				_leverage = value;
 				NotifyChanged(nameof(Leverage));
 			}
