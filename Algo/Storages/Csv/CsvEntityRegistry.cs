@@ -16,6 +16,7 @@ namespace StockSharp.Algo.Storages.Csv
 	using MoreLinq;
 
 	using StockSharp.BusinessEntities;
+	using StockSharp.Localization;
 	using StockSharp.Logging;
 	using StockSharp.Messages;
 
@@ -130,8 +131,6 @@ namespace StockSharp.Algo.Storages.Csv
 
 				_fileName = System.IO.Path.Combine(Registry.Path, fileName);
 				_encoding = encoding;
-
-				ReadItems();
 			}
 
 			#region IStorageEntityList
@@ -193,7 +192,7 @@ namespace StockSharp.Algo.Storages.Csv
 				Write();
 			}
 
-			private void ReadItems()
+			public void ReadItems()
 			{
 				CultureInfo.InvariantCulture.DoInCulture(() =>
 				{
@@ -632,10 +631,13 @@ namespace StockSharp.Algo.Storages.Csv
 
 			protected override Position Read(FastCsvReader reader)
 			{
+				var pfName = reader.ReadString();
+				var secId = reader.ReadString();
+
 				var position = new Position
 				{
-					Portfolio = Registry.Portfolios.ReadById(reader.ReadString()),
-					Security = Registry.Securities.ReadById(reader.ReadString()),
+					Portfolio = Registry.Portfolios.ReadById(pfName),
+					Security = Registry.Securities.ReadById(secId),
 					DepoName = reader.ReadString(),
 					LimitType = reader.ReadNullableEnum<TPlusLimits>(),
 					BeginValue = reader.ReadNullableDecimal(),
@@ -647,6 +649,12 @@ namespace StockSharp.Algo.Storages.Csv
 					LastChangeTime = _dateTimeParser.Parse(reader.ReadString()).ChangeKind(DateTimeKind.Utc),
 					LocalTime = _dateTimeParser.Parse(reader.ReadString()).ChangeKind(DateTimeKind.Utc)
 				};
+
+				if (position.Security == null)
+					throw new InvalidOperationException(LocalizedStrings.Str1218Params.Put(secId));
+
+				if (position.Portfolio == null)
+					throw new InvalidOperationException(LocalizedStrings.Str891);
 
 				return position;
 			}
@@ -801,6 +809,36 @@ namespace StockSharp.Algo.Storages.Csv
 			_securities = new SecurityCsvList(this);
 			_portfolios = new PortfolioCsvList(this);
 			_positions = new PositionCsvList(this);
+		}
+
+		/// <summary>
+		/// Initialize the storage.
+		/// </summary>
+		public void Init()
+		{
+			var errors = new List<Exception>();
+
+			ReadItems(_exchanges, errors);
+			ReadItems(_exchangeBoards, errors);
+			ReadItems(_securities, errors);
+			ReadItems(_portfolios, errors);
+			ReadItems(_positions, errors);
+
+			if (errors.Count > 0)
+				throw new AggregateException(errors);
+		}
+
+		private static void ReadItems<T>(CsvEntityList<T> list, ICollection<Exception> errors)
+			where T : class
+		{
+			try
+			{
+				list.ReadItems();
+			}
+			catch (Exception ex)
+			{
+				errors.Add(ex);
+			}
 		}
 
 		private void TryCreateTimer()
