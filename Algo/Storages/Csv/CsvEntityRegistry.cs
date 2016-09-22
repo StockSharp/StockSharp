@@ -572,7 +572,7 @@ namespace StockSharp.Algo.Storages.Csv
 				var portfolio = new Portfolio
 				{
 					Name = reader.ReadString(),
-					Board = Registry.ExchangeBoards.ReadById(reader.ReadString()),
+					Board = GetBoard(reader.ReadString()),
 					Leverage = reader.ReadNullableDecimal(),
 					BeginValue = reader.ReadNullableDecimal(),
 					CurrentValue = reader.ReadNullableDecimal(),
@@ -589,12 +589,20 @@ namespace StockSharp.Algo.Storages.Csv
 				return portfolio;
 			}
 
+			private ExchangeBoard GetBoard(string code)
+			{
+				if (code.IsEmpty())
+					return null;
+
+				return Registry.ExchangeBoards.ReadById(code);
+			}
+
 			protected override void Write(CsvFileWriter writer, Portfolio data)
 			{
 				writer.WriteRow(new[]
 				{
 					data.Name,
-					data.Board.Code,
+					data.Board?.Code,
 					data.Leverage.To<string>(),
 					data.BeginValue.To<string>(),
 					data.CurrentValue.To<string>(),
