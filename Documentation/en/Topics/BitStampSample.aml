@@ -12,7 +12,7 @@
 		<steps class="ordered">
 			<step>
 				<content>
-					<para>, you need to create an instance of the
+					<para>First, you need to create an instance of the
 					<codeEntityReference qualifyHint="false">T:StockSharp.BitStamp.BitStampTrader</codeEntityReference>:</para>
             		<code language="C#">
             				<![CDATA[

@@ -2,19 +2,18 @@
 <topic id="bf4d89d7-32a7-4755-beab-3bfd0581db6c" revisionNumber="1">
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
    <introduction>
-      <para>Пример работы с <codeEntityReference qualifyHint="false">T:StockSharp.Oanda.OandaTrader</codeEntityReference> демонстрирует приложение SampleOanda,
-        показанное на рисунке ниже. Исходные коды примера лежат в дистрибутиве в папке <legacyItalic>Samples/Oanda</legacyItalic>.</para>
+      <para>The SampleOanda application shows an example of working with the <codeEntityReference qualifyHint="false">T:StockSharp.Oanda.OandaTrader</codeEntityReference>
+      as shown in the figure below.	The example source code is in the <legacyItalic>Samples/Oanda</legacyItalic> folder of the installation package.</para>
 		<mediaLink><image placement="center" xlink:href="OandaSample"/></mediaLink>
     </introduction>
     <procedure>
 		<steps class="ordered">
 			<step>
 				<content>
-					<para>В самом начале необходимо создать экземпляр класса шлюза 
+					<para>First, you need to create an instance of the 
 					<codeEntityReference qualifyHint="false">T:StockSharp.Oanda.OandaTrader</codeEntityReference>:</para>
             		<code language="C#">
             				<![CDATA[
-// создаем шлюз
 Trader = new OandaTrader();
 .....
 Trader.Token = Token.Password.To<SecureString>();
@@ -25,73 +24,72 @@ Trader.Server = IsDemo.IsChecked == true ? OandaServers.Practice : OandaServers.
 			</step>
 			<step>
 				<content>
-					<para>Далее следует установить требуемые обработчики событий <codeEntityReference qualifyHint="false">T:StockSharp.BusinessEntities.IConnector</codeEntityReference>:</para>
+					<para>Next, you should subscribe on required <codeEntityReference qualifyHint="false">T:StockSharp.BusinessEntities.IConnector</codeEntityReference> events:</para>
             		<code language="C#">
             				<![CDATA[
-
-Trader.Restored += () => this.GuiAsync(() =>
-{
-	// update gui labes
-	ChangeConnectStatus(true);
-	MessageBox.Show(this, LocalizedStrings.Str2958);
-});
-
-// подписываемся на событие успешного соединения
+// subscribe on successfully connect event
 Trader.Connected += () =>
 {
-	// устанавливаем флаг (соединение установлено)
+	// set flag (connection is established)
 	_isConnected = true;
 
-	// обновляем пользовательский интерфейс
+	// update gui labes
 	this.GuiAsync(() => ChangeConnectStatus(true));
 };
-					
-Trader.Disconnected += () => this.GuiAsync(() => ChangeConnectStatus(false));
 
-// подписываемся на событие ошибки соединения
+// subscribe on connection error event
 Trader.ConnectionError += error => this.GuiAsync(() =>
 {
-	// обновляем пользовательский интерфейс
+	// update gui labes
 	ChangeConnectStatus(false);
 
-	MessageBox.Show(this, error.ToString(), LocalizedStrings.Str2959);
+	MessageBox.Show(this, error.ToString(), "Connection was dropped.");	
 });
 
-// подписываемся на событие ошибки
-Trader.Error += error =>
-				this.GuiAsync(() => MessageBox.Show(this, error.ToString(), LocalizedStrings.Str2955));
+// subscribe on successfully disconnect event
+Trader.Disconnected += () => this.GuiAsync(() => ChangeConnectStatus(false));
 
-// подписываемся на событие ошибки получения рыночных данных
-Trader.MarketDataSubscriptionFailed += (security, type, error) =>
-				this.GuiAsync(() => MessageBox.Show(this, error.ToString(), LocalizedStrings.Str2956Params.Put(type, security)));
+// subscribe on error event
+Trader.Error += error => this.GuiAsync(() => MessageBox.Show(this, error.ToString(), "Data processing error"));
 
-Trader.NewSecurities += securities => _securitiesWindow.SecurityPicker.Securities.AddRange(securities);
-Trader.NewMyTrades += trades => _myTradesWindow.TradeGrid.Trades.AddRange(trades);
-Trader.NewTrades += trades => _tradesWindow.TradeGrid.Trades.AddRange(trades);
-Trader.NewOrders += orders => _ordersWindow.OrderGrid.Orders.AddRange(orders);
-Trader.NewStopOrders += orders => _stopOrdersWindow.OrderGrid.Orders.AddRange(orders);
-					
+// new securities received
+Trader.NewSecurities += securities => this.GuiAsync(() => _securitiesWindow.AddSecurities(securities));
+
+// new own trades received
+Trader.NewMyTrades += trades => this.GuiAsync(() => _myTradesWindow.Trades.AddRange(trades));
+
+// new anonymous trades received
+Trader.NewTrades += trades => this.GuiAsync(() => _tradesWindow.Trades.AddRange(trades));
+
+// new orders received
+Trader.NewOrders += orders => this.GuiAsync(() => _ordersWindow.Orders.AddRange(orders));
+
+// new stop-orders received
+Trader.NewStopOrders += orders => this.GuiAsync(() => _stopOrdersWindow.Orders.AddRange(orders));
+
+// new portofolios (=accounts) received
 Trader.NewPortfolios += portfolios =>
 {
-	// подписываемся на событие обновления портфеля
-	portfolios.ForEach(Trader.RegisterPortfolio);
-
-	_portfoliosWindow.PortfolioGrid.Portfolios.AddRange(portfolios);
+	// subscribe on portfolio updates
+    portfolios.ForEach(Trader.RegisterPortfolio);
+    
+    _portfoliosWindow.Portfolios.AddRange(portfolios);
 };
-					
-Trader.NewPositions += positions => _portfoliosWindow.PortfolioGrid.Positions.AddRange(positions);
 
-// подписываемся на событие ошибки регистрации заявки
+// new positions received
+Trader.NewPositions += positions => this.GuiAsync(() => _positionsWindow.Positions.AddRange(positions));
+
+// subscribe on error of order registration event
 Trader.OrdersRegisterFailed += OrdersFailed;
 
-// подписываемся на событие ошибки отмены заявки
+// subscribe on error of order cancelling event
 Trader.OrdersCancelFailed += OrdersFailed;
 
-// подписываемся на событие ошибки регистрации стоп-заявки
+// subscribe on error of stop-order registration event
 Trader.StopOrdersRegisterFailed += OrdersFailed;
 
-// подписываемся на событие ошибки отмены стоп-заявки
-Trader.StopOrdersCancelFailed += OrdersFailed;
+// subscribe on error of stop-order cancelling event
+Trader.StopOrdersCancelFailed += OrdersFailed;  
 
 							]]>
 					</code>						
@@ -99,7 +97,7 @@ Trader.StopOrdersCancelFailed += OrdersFailed;
 			</step>
 			<step>
 				<content>
-					<para>Далее необходимо выполнить подключение к серверу <token>oanda</token>:</para>
+					<para>Finally, you need to connect to <token>oanda</token> server:</para>
             		<code language="C#">
             				<![CDATA[
 Trader.Connect();
@@ -110,24 +108,24 @@ Trader.Connect();
 					
 			<step>
 				<content>
-					<para>После подключения можно ожидать срабатывания событий:</para>
+					<para>Once connected, you can expect to trigger events:</para>
 						<list class="bullet">
 							<listItem>
 								<para><codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.SecuritiesChanged</codeEntityReference> – 
-								изменение инструмента (последней цены, цены спроса/предложения и т.д.) запрошенного через 
-								<codeEntityReference>M:StockSharp.BusinessEntities.IConnector.RegisterSecurity(StockSharp.BusinessEntities.Security)</codeEntityReference>.</para>
+								instrument change (last price, best bid/ask price, etc.) requested through 
+								<codeEntityReference>M:StockSharp.BusinessEntities.IConnector.RegisterSecurity(StockSharp.BusinessEntities.Security)</codeEntityReference> method.</para>
 							</listItem>
 							<listItem>
 								<para><codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.MarketDepthsChanged</codeEntityReference> – 
-									изменение стакана, запрошенного с помощью <codeEntityReference>M:StockSharp.BusinessEntities.IConnector.RegisterMarketDepth(StockSharp.BusinessEntities.Security)</codeEntityReference>.</para>
+									order book change, requested through <codeEntityReference>M:StockSharp.BusinessEntities.IConnector.RegisterMarketDepth(StockSharp.BusinessEntities.Security)</codeEntityReference> method.</para>
 							</listItem>
 							<listItem>
 								<para><codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.NewTrades</codeEntityReference> – 
-									новые тики по подписанным с помощью <codeEntityReference>M:StockSharp.BusinessEntities.IConnector.RegisterTrades(StockSharp.BusinessEntities.Security)</codeEntityReference> инструментам.</para>
+									new ticks on instruments subscribed by using <codeEntityReference>M:StockSharp.BusinessEntities.IConnector.RegisterTrades(StockSharp.BusinessEntities.Security)</codeEntityReference> method.</para>
 							</listItem>
 							<listItem>
 								<para><codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.PortfoliosChanged</codeEntityReference> – 
-									изменение портфелей, запрошенное с помощью <codeEntityReference>M:StockSharp.BusinessEntities.IConnector.RegisterPortfolio(StockSharp.BusinessEntities.Portfolio)</codeEntityReference>.</para>
+									portfolios change requested through <codeEntityReference>M:StockSharp.BusinessEntities.IConnector.RegisterPortfolio(StockSharp.BusinessEntities.Portfolio)</codeEntityReference> method.</para>
 							</listItem>
 						</list>
 				</content>
@@ -135,7 +133,7 @@ Trader.Connect();
 
 			<step>
 				<content>
-					<para>Поиск инструментов (<link xlink:href="39e0b7aa-0303-438c-b347-fea21540c9f3">подробнее</link>):</para>
+					<para>Instruments search (<link xlink:href="39e0b7aa-0303-438c-b347-fea21540c9f3">in more detail</link>):</para>
 					<mediaLink><image placement="center" xlink:href="OandaSecurities"/></mediaLink>
             		<code language="C#">
             				<![CDATA[
@@ -155,8 +153,8 @@ private void Ok_Click(object sender, RoutedEventArgs e)
 			</step>
 			<step>
 				<content>
-					<para>Для получения обновлений по выбранному инструменту необходимо вызвать методам
-					<codeEntityReference>M:StockSharp.BusinessEntities.IConnector.RegisterSecurity(StockSharp.BusinessEntities.Security)</codeEntityReference>:</para>
+					<para>For updates on the selected instrument and ticks you need to use the
+					<codeEntityReference>M:StockSharp.BusinessEntities.IConnector.RegisterSecurity(StockSharp.BusinessEntities.Security)</codeEntityReference> method:</para>
             		<code language="C#">
             				<![CDATA[
 private void Level1Click(object sender, RoutedEventArgs e)
@@ -210,8 +208,9 @@ private void QuotesClick(object sender, RoutedEventArgs e)
 
 					<step>
 						<content>
-							<para>Для регистрации заявок предусмотрена кнопка <legacyBold>Новая заявка</legacyBold>. 
-							Метод <codeEntityReference>M:StockSharp.BusinessEntities.IConnector.RegisterOrder(StockSharp.BusinessEntities.Order)</codeEntityReference> отправляет заявку на сервер:</para>
+							<para>For orders registration the <legacyBold>New Order</legacyBold> button used. 
+							The <codeEntityReference>M:StockSharp.BusinessEntities.IConnector.RegisterOrder(StockSharp.BusinessEntities.Order)</codeEntityReference>
+							method sends an order to the server:</para>
             				<code language="C#">
             				<![CDATA[
 private void NewOrderClick(object sender, RoutedEventArgs e)

@@ -3,8 +3,7 @@
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     <introduction>
       <para>The SampleBtce application shows an example of working with the <codeEntityReference qualifyHint="false">T:StockSharp.Btce.BtceTrader</codeEntityReference>
-      as shown in the figure below.
-		The example source code is in the <legacyItalic>Samples/Btce</legacyItalic> folder of the installation package.</para>
+      as shown in the figure below.	The example source code is in the <legacyItalic>Samples/Btce</legacyItalic> folder of the installation package.</para>
 		<mediaLink><image placement="center" xlink:href="BtceSample"/></mediaLink>
     </introduction>
     
@@ -12,7 +11,7 @@
 		<steps class="ordered">
 			<step>
 				<content>
-					<para>, you need to create an instance of the
+					<para>First, you need to create an instance of the
 					<codeEntityReference qualifyHint="false">T:StockSharp.Btce.BtceTrader</codeEntityReference>:</para>
             		<code language="C#">
             				<![CDATA[

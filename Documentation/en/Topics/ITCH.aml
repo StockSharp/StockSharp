@@ -3,35 +3,31 @@
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     <introduction>
       <para>
-      <token>itch</token> - протокол прямого доступа к данным (direct data-feed protocol), 
-      который позволяет подключаться к серверам данных при помощи TCP и UDP протоколов. Особеностью <token>itch</token> является то, 
-      что он позволяет отслеживать изменение статуса заявки, т.е. получать лог заявок. 
-      Этот протокол используется биржами NASDAQ (см. <externalLink>
+      <token>itch</token> - direct data-feed protocol, which allows to connect via TCP and UDP protocols. <token>itch</token> provide the order log to track
+      all changes to any order. This protocol is used by the NASDAQ (see <externalLink>
 <linkText>TotalView-ITCH</linkText>
 <linkAlternateText>TotalView-ITCH</linkAlternateText>
 <linkUri>http://www.nasdaqtrader.com/Trader.aspx?id=Totalview2</linkUri>
 <linkTarget>_blank</linkTarget>
 </externalLink>
-) и LSE (см. <externalLink>
+) and LSE (see <externalLink>
 <linkText>MITCH</linkText>
 <linkAlternateText>Optional alternate text</linkAlternateText>
 <linkUri>http://www.londonstockexchange.com/products-and-services/millennium-exchange/technicalinformation/technicalinformation.htm</linkUri>
 <linkTarget>_blank</linkTarget>
 </externalLink>
-).
+) exchanges.
       </para>
 	<alert class="note">
-  <para><token>itch</token> используется только для получения биржевых данных, торговые транзакции не поддерживаются.</para>
+  <para><token>itch</token> support only market-data feed, transaction are not supported.</para>
 </alert>
 <para>
-	В <token>stocksharp</token> для работы с <token>itch</token> необходимо использовать 
-			<codeEntityReference>T:StockSharp.ITCH.ItchTrader</codeEntityReference>.
-
+	The <codeEntityReference qualifyHint="false">T:StockSharp.ITCH.ItchTrader</codeEntityReference> should be used for trading algorithms creating for <token>itch</token>.
 </para>
       
     </introduction>
      <relatedTopics>
-    	<link xlink:href="ca67819a-60b8-42f0-a512-ad0792d544f2">Пример работы с ItchTrader</link>
+    	<link xlink:href="ca67819a-60b8-42f0-a512-ad0792d544f2">Getting started</link>
     </relatedTopics>
   </developerConceptualDocument>
 </topic>
