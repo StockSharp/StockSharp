@@ -4,7 +4,6 @@
     <introduction>
       <para>
       	<codeEntityReference>T:StockSharp.Xaml.MarketDepthControl</codeEntityReference> - графический компонент для отображения стакана.
-      	В основе данного компонента лежит <link xlink:href="88a40124-43a6-4be9-b04b-a245000fca70">универсальная таблица</link>.
       	Компонент позволяет отображать котировки и собственные заявки.
       </para>
       

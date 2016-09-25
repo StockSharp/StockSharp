@@ -7,10 +7,12 @@
     <Topic id="87d2cacd-5492-4bca-9140-7d7c3f5218d7" visible="True" title="Architecture" />
     <Topic id="b9f672db-e0c9-4208-9759-179e5de17fd8" visible="True" title="Installation instruction" />
     <Topic id="0f4f40ab-74a7-4a56-ab8b-6c07271e48e2" visible="True" title="Releases history" />
-    <Topic id="ad178c36-15c8-4314-bc5c-56220f41a67e" visible="True" title="Connectors">
+    <Topic id="ad178c36-15c8-4314-bc5c-56220f41a67e" visible="True" isExpanded="true" title="Connectors">
       <Topic id="f8cae46b-57e1-4954-a4cf-832854840981" visible="True" isExpanded="true" title="OpenECry">
         <Topic id="1dbc72c4-cc59-4094-824a-a2b77f9623d6" visible="True" title="Getting started" />
         <Topic id="6f3be323-80bb-4823-9d27-8060c238af32" visible="True" title="Stop orders" />
+        <Topic id="a1e2b191-995c-4b03-9858-8fe9d2ae1fa1" visible="True" title="Historical data" />
+        <Topic id="8e0967c3-d16f-427c-a9e1-5a94fa546e9b" visible="True" isSelected="true" title="News" />
         <Topic id="c56a139b-fb64-4f4f-992f-96a1480233cf" visible="True" title="Several algorithms connection" />
         <Topic id="49a7bfef-38e4-41e7-afe5-21bb8ac64258" visible="True" title="Simultaneous terminal and algorithm operation" />
       </Topic>
@@ -132,7 +134,7 @@
     <Topic id="2c3a0d3a-6e89-42a1-a158-9a258e0a62e1" visible="True" isExpanded="true" title="Strategies">
       <Topic id="8c0327db-494a-4fe0-aba8-0d4b93dea60e" visible="True" title="Creating strategies" />
       <Topic id="a8159c99-256b-46e4-80fe-7cf92944b4c9" visible="True" title="Iteration model" />
-      <Topic id="8ea639f6-ce74-4a00-9f13-db59c8c2396f" visible="True" isSelected="true" title="Child strategies" />
+      <Topic id="8ea639f6-ce74-4a00-9f13-db59c8c2396f" visible="True" title="Child strategies" />
       <Topic id="24250c24-029c-4dbc-bc8b-4afde645e483" visible="True" title="Quoting" />
       <Topic id="63952fce-6e43-4427-985a-1654e8d9cfc1" visible="True" title="Take-profit and stop-loss" />
       <Topic id="eeaa9b57-9108-4cbb-a9c1-e135eee35ae5" visible="True" title="Reports" />

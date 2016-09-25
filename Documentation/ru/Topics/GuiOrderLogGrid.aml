@@ -5,7 +5,6 @@
     <para>
       	<codeEntityReference>T:StockSharp.Xaml.OrderLogGrid</codeEntityReference> - графический компонент для отображения лога заявок (
       	<codeEntityReference>T:StockSharp.BusinessEntities.OrderLogItem</codeEntityReference>).
-      	В основе данного компонента лежит <link xlink:href="88a40124-43a6-4be9-b04b-a245000fca70">универсальная таблица</link>.
       </para>
       
             <para>

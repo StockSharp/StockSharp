@@ -92,7 +92,7 @@
 	</introduction>
 	
 	 <relatedTopics>
-     	<!--externalLink>
+     		<!--<externalLink>
 			<linkText>Новые подходы к лицензированию</linkText>
 			<linkAlternateText>Лицензирование</linkAlternateText>
 			<linkUri>http://stocksharp.ru/news/264/novye-podhody-k-litsenzirovaniyu/</linkUri>
@@ -103,8 +103,8 @@
 			<linkAlternateText>Стоимость лицензий</linkAlternateText>
 			<linkUri>http://stocksharp.ru/products/pricing/</linkUri>
 			<linkTarget>_blank</linkTarget>
-		</externalLink>
-     </relatedTopics-->
+		</externalLink>-->
+     	</relatedTopics>
 	</developerWalkthroughDocument>
 </topic>
 

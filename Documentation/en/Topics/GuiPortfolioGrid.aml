@@ -4,8 +4,6 @@
     <introduction>
       
       <para><codeEntityReference>T:StockSharp.Xaml.PortfolioGrid</codeEntityReference> - компонент, отображающий состояние портфелей и позиций.
-      Компонент создан на основе "<link xlink:href="88a40124-43a6-4be9-b04b-a245000fca70">универсальной таблицы</link>" 
-      и наследует ее функциональность.
       </para>
 
 	<para>

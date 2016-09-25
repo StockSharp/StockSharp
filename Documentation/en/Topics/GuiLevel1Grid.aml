@@ -5,8 +5,7 @@
        <introduction>
       <para>
       	<codeEntityReference>T:StockSharp.Xaml.Level1Grid</codeEntityReference> - таблица для отображения полей Level1. 
-      	В основе данного компонента лежит <link xlink:href="88a40124-43a6-4be9-b04b-a245000fca70">универсальная таблица</link>. Эта таблица
-      	использует данные в виде сообщений <codeEntityReference>T:StockSharp.Messages.Level1ChangeMessage</codeEntityReference>. 
+      	Эта таблица использует данные в виде сообщений <codeEntityReference>T:StockSharp.Messages.Level1ChangeMessage</codeEntityReference>. 
       </para>
       <para>
        <legacyBold>Основные свойства</legacyBold>

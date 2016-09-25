@@ -167,6 +167,8 @@
       <ImageId>candle_qpile</ImageId>
       <AlternateText>candle qpile</AlternateText>
     </None>
+    <None Include="Topics\OECNews.aml" />
+    <None Include="Topics\OECHistory.aml" />
     <None Include="Topics\BarChart.aml" />
     <None Include="Topics\MessageStorage.aml" />
     <None Include="Topics\Designer.aml" />

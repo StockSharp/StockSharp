@@ -5,7 +5,7 @@
 		<para><codeEntityReference>T:StockSharp.Blackwood.BlackwoodTrader</codeEntityReference> allows you to get news. News list is available through the
 		<codeEntityReference qualifyHint="false">P:StockSharp.BusinessEntities.IConnector.News</codeEntityReference>.</para>
 		
-		<para>In order to begin to receive the news, you must subscribe to the  <codeEntityReference qualifyHint="false">E:StockSharp.BusinessEntities.IConnector.NewNews</codeEntityReference>
+		<para>In order to begin to receive the news, you must subscribe to the <codeEntityReference qualifyHint="false">E:StockSharp.BusinessEntities.IConnector.NewNews</codeEntityReference>
 		and call the <codeEntityReference qualifyHint="false">M:StockSharp.BusinessEntities.IConnector.RegisterNews</codeEntityReference> method.</para>
 	</introduction>
   </developerConceptualDocument>
