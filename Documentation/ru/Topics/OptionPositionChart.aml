@@ -44,38 +44,16 @@
 			</step>
 			<step>
 				<content>
-					<para>В коде C# создаем подключение	<codeEntityReference>T:StockSharp.Quik.QuikTrader</codeEntityReference>,
-							если Quik используется в режиме DDE, то настраиваем дополнительные колонки опционов.</para>
+					<para>В коде C# создаем подключение	<codeEntityReference>T:StockSharp.Quik.QuikTrader</codeEntityReference>.</para>
             		<code title="C#" language="C#">
                   <![CDATA[
-var isDde = IsDde.IsChecked == true;
-
-if (isDde && Path.Text.IsEmpty())
-{
-	MessageBox.Show(this, LocalizedStrings.Str2969);
-	return;
-}
-
 if (Connector != null && !(Connector is FakeConnector))
 		return;
 
 // создаем подключение
-Connector = new QuikTrader(Path.Text)
+Connector = new QuikTrader
 {
-	IsDde = isDde
 };
-
-if (isDde)
-{
-	// изменяем метаданные так, чтобы начали обрабатывать дополнительные колонки опционов
-	var columns = ((QuikTrader)Connector).SecuritiesTable.Columns;
-	columns.Add(DdeSecurityColumns.Strike);
-	columns.Add(DdeSecurityColumns.ImpliedVolatility);
-	columns.Add(DdeSecurityColumns.UnderlyingSecurity);
-	columns.Add(DdeSecurityColumns.TheorPrice);
-	columns.Add(DdeSecurityColumns.OptionType);
-	columns.Add(DdeSecurityColumns.ExpiryDate);
-}
 
 ]]>
                   	</code>

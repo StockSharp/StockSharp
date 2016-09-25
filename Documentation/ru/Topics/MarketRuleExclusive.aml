@@ -15,7 +15,7 @@ var ruleReg = order.WhenRegistered();
 var ruleRegFailed = order.WhenRegisterFailed();
 
 ruleReg
-    .Do(() => this.AddInfoLog("Заявка успешно зарегестрирована"))
+    .Do(() => this.AddInfoLog("Заявка успешно зарегистрирована"))
     .Once()
     .Apply(this)
     .Exclusive(ruleRegFailed);
@@ -44,7 +44,7 @@ ruleReg.ExclusiveRules.Add(ruleRegFailed);
 ruleRegFailed.ExclusiveRules.Add(ruleReg);
 
 ruleReg
-    .Do(() => this.AddInfoLog("Заявка успешно зарегестрирована"))
+    .Do(() => this.AddInfoLog("Заявка успешно зарегистрирована"))
     .Once()
     .Apply(this);
 

@@ -77,8 +77,8 @@
   							<para><codeEntityReference>N:StockSharp.Algo.Strategies</codeEntityReference> - базовые классы для создания стратегии.</para>
   						</listItem>
   						<listItem>
-  							<para><codeEntityReference>N:StockSharp.Algo.Candles</codeEntityReference> - здесь собран весь необходимый функционал для работы со свечками и распознавания
-						графических паттернов (подробнее, <link xlink:href="cd52cfcf-938c-4fce-9a56-4e9a001f0792">Свечки</link>).</para>
+  							<para><codeEntityReference>N:StockSharp.Algo.Candles</codeEntityReference> - здесь собран весь необходимый функционал для работы со свечами и распознавания
+						графических паттернов (подробнее, <link xlink:href="cd52cfcf-938c-4fce-9a56-4e9a001f0792">Свечи</link>).</para>
   						</listItem>
   						<listItem>
   							<para><codeEntityReference>N:StockSharp.Algo.Indicators</codeEntityReference> - содержит базовые классы и интерфейсы для создания технических индикаторов,

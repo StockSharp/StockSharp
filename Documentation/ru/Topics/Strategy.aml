@@ -32,7 +32,7 @@
 				</listItem>
 				
 				<listItem>
-					Эмуляция рыночных заявок на бирже <token>rts</token> с помощью стратегии <link xlink:href="24250c24-029c-4dbc-bc8b-4afde645e483">Котирование</link>.
+					Эмуляция рыночных заявок на бирже (где они не поддерживаются) с помощью стратегии <link xlink:href="24250c24-029c-4dbc-bc8b-4afde645e483">Котирование</link>.
 				</listItem>
 				
 				<listItem>

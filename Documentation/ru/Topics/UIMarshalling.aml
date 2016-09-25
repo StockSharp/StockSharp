@@ -40,13 +40,7 @@ _trader.NewSecurities += securities => this.GuiSync(() => this.Security.ItemsSou
 <section address="optionalAddress">
   <title>Графические компоненты S#</title>
   <content>
-    <para>В состав <token>stocksharp</token> входит большое количество собственных графических компонент, а так же бесплатная библиотека для Wpf
-    <externalLink>
-	<linkText>Xceed.Wpf.Toolkit</linkText>
-<linkAlternateText>Optional alternate text</linkAlternateText>
-<linkUri>http://wpftoolkit.codeplex.com/</linkUri>
-<linkTarget>_blank</linkTarget>
-</externalLink>. Собственные графические компоненты размещены в пространствах имен 
+    <para>В состав <token>stocksharp</token> входит большое количество собственных графических компонент, которые размещены в пространствах имен 
 <codeEntityReference qualifyHint="true">N:StockSharp.Xaml</codeEntityReference>, <codeEntityReference qualifyHint="true">N:StockSharp.Xaml.Charting</codeEntityReference>
 и <codeEntityReference qualifyHint="true">N:StockSharp.Xaml.Diagram</codeEntityReference>. Некоторые специфические компоненты находятся в пространствах имен коннекторов,
  как например, комбинированный список <codeEntityReference qualifyHint="false">T:StockSharp.SmartCom.Xaml.SmartComAddressComboBox</codeEntityReference> для выбора адреса сервера

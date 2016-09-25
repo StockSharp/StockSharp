@@ -16,8 +16,8 @@
 		  </para>
 		  <list class="bullet">
 			  <listItem>
-				  Стратегия работает со свечками <codeEntityReference>T:StockSharp.Algo.Candles.TimeFrameCandle</codeEntityReference>, и ожидает при каждой
-				  итерации, что за запрашиваемое время всегда будет существовать свечка. Наступил период, когда не было ни одной сделки, и свечка не
+				  Стратегия работает со свечами <codeEntityReference>T:StockSharp.Algo.Candles.TimeFrameCandle</codeEntityReference>, и ожидает при каждой
+				  итерации, что за запрашиваемое время всегда будет существовать свеча. Наступил период, когда не было ни одной сделки, и свеча не
 				  сформировалась. В итоге, в случае отсутствия правильной обработки, будет выброшено исключение
 				  <codeEntityReference>T:System.NullReferenceException</codeEntityReference> и стратегия остановится.
 			  </listItem>

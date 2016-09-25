@@ -26,7 +26,7 @@ private ChartIndicatorElement _longMaElem;
 _area = new ChartArea();
 _chart.Areas.Add(_area);
 
-// Создание элемента графика представляющего свечки
+// Создание элемента графика представляющего свечи
 _candlesElem = new ChartCandleElement();
 _area.Elements.Add(_candlesElem);
 

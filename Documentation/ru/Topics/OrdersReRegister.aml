@@ -14,7 +14,7 @@
 			нереализованному балансу <codeEntityReference qualifyHint="true">P:StockSharp.BusinessEntities.Order.Balance</codeEntityReference> старой.-->
 		</para>
 	  <para>
-			 При замене стоп-заявок используется алгоритм с отменой заявки и выставлением новой. В итоге, всегда получается новый объект <codeEntityReference>T:StockSharp.BusinessEntities.Order</codeEntityReference>,
+			 В итоге при замене заявок всегда получается новый объект <codeEntityReference>T:StockSharp.BusinessEntities.Order</codeEntityReference>,
 		который содержит информацию старой заявки + измененная часть. В дальнейшем, если требуется работа с измененной заявкой (например, отменить ее или опять изменить),
 		то необходимо использовать именно этот новый объект <codeEntityReference>T:StockSharp.BusinessEntities.Order</codeEntityReference>.
 

@@ -4,7 +4,7 @@
 	<introduction>
 		<list class="bullet">
   			<listItem>
-  				<para><legacyBold>Создание правила на условие регистрации ордера:</legacyBold></para>
+  				<para><legacyBold>Создание правила на условие регистрации заявки:</legacyBold></para>
   				<code language="C#">
 				<![CDATA[
 private void btnBuy_Click(object sender, RoutedEventArgs e)
@@ -20,7 +20,7 @@ private void btnBuy_Click(object sender, RoutedEventArgs e)
     
 	order
 		.WhenRegistered()
-		.Do(() => trader.AddInfoLog("Заявка успешно зарегестрирована"))
+		.Do(() => trader.AddInfoLog("Заявка успешно зарегистрирована"))
 		.Once()
 		.Apply(this);
     
@@ -97,7 +97,7 @@ ruleCanceled
 
 order
 	.WhenRegistered()
-    .Do(() => this.AddInfoLog("Заявка успешно зарегестрирована"))
+    .Do(() => this.AddInfoLog("Заявка успешно зарегистрирована"))
     .Once()
     .Apply(this)
 
@@ -125,7 +125,7 @@ RegisterOrder(order);
   				/
   				<codeEntityReference qualifyHint="false" autoUpgrade="true">M:StockSharp.Algo.MarketRuleHelper.And(StockSharp.Algo.IMarketRule,StockSharp.Algo.IMarketRule[])</codeEntityReference>.</legacyBold></para>
 
-  				<para>Когда выйдет время <legacyBold>ИЛИ</legacyBold> закроется свечка:</para>
+  				<para>Когда выйдет время <legacyBold>ИЛИ</legacyBold> закроется свеча:</para>
   				
   				<code language="C#">
 				<![CDATA[
@@ -137,7 +137,7 @@ TimeSpan _holdTimeToOpen = TimeSpan.FromMilliseconds(5000);
 Trader
 	.WhenIntervalElapsed(_holdTimeToOpen)
 	.Or(_series.WhenCandlesStarted())
-	.Do(() => this.AddInfoLog("Свечка закрыта или вышло время"))
+	.Do(() => this.AddInfoLog("Свеча закрыта или вышло время"))
 	.Once()
 	.Apply(this);
 	  	  		]]>
@@ -149,7 +149,7 @@ Trader
 				<![CDATA[
 MarketRuleHelper
 	.Or(new IMarketRule[] {Trader.WhenIntervalElapsed(_holdTimeToOpen), _series.WhenCandlesStarted()})
-	.Do(() => this.AddInfoLog("Свечка закрыта или вышло время"))
+	.Do(() => this.AddInfoLog("Свеча закрыта или вышло время"))
 	.Once()
 	.Apply(this);
 	  	  		]]>

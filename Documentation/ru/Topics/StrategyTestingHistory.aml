@@ -18,7 +18,7 @@
 			<link xlink:href="e4a57b52-bd14-4640-a7c7-0979dba1ad0a">API</link>, или настроить и запустить специальную программу <token>hydra</token>.
 		</para>
 		<para>
-			В дистрибутиве <token>stocksharp</token> находится пример SampleHistoryTesting (а также архив HistoryData.zip, где лежат исторические данные по тикам, стаканам и свечкам, для
+			В дистрибутиве <token>stocksharp</token> находится пример SampleHistoryTesting (а также архив HistoryData.zip, где лежат исторические данные по тикам, стаканам и свечам, для
 			примера), который тестирует стратегию <token>ma</token> на истории. Для сравнение скорости и качества, тестирование идет с различным набором маркет-данных:
 		</para>
 		<mediaLink>
@@ -119,7 +119,7 @@ var storageRegistry = new StorageRegistry
 				  <content>
 					  <para>
 						  Далее в цикле создаются инструмент, портфель, стратегия, шлюз для тестирования и т.д. с соответсвущими настройками, в зависимости от значений флагов, 
-						  установленных в главном окне (Тики, Тики и стаканы, Свечки и пр.). Если значение флага False, то программа переходит к следующему набору настроек. 
+						  установленных в главном окне (Тики, Тики и стаканы, Свечи и пр.). Если значение флага False, то программа переходит к следующему набору настроек. 
 					  </para>
         <code language="C#">
         <![CDATA[
@@ -229,7 +229,7 @@ var connector = new HistoryEmulationConnector(new[] { security }, new[] { portfo
 				  <content>
 					  <para>
 						 В событии получения нового инструмента задаем начальные значения Level1, регистрируем стакан или создаем и настраиваем генератор стакана. Также в зависимости
-						 от настроек регистрируем получение ордерлога и сделок. Запускаем стратегию и генерацию свечек. А также запускаем сам эмулятор.
+						 от настроек регистрируем получение ордерлога и сделок. Запускаем стратегию и генерацию свечей. А также запускаем сам эмулятор.
 					  </para>
 					  <code language="C#"><![CDATA[
  connector.NewSecurities += securities =>
@@ -307,7 +307,7 @@ trader.Connect();
 			  <step>
 				  <content>
 					  <para>
-						  Создание менеджера свечек <codeEntityReference>T:StockSharp.Algo.Candles.CandleManager</codeEntityReference> (необходимо для
+						  Создание менеджера свечей <codeEntityReference>T:StockSharp.Algo.Candles.CandleManager</codeEntityReference> (необходимо для
 						  стратегии скользящих средних), в котором в качестве источника указан шлюз 
 						  <codeEntityReference>T:StockSharp.Algo.Testing.HistoryEmulationConnector</codeEntityReference>:
 					  </para>

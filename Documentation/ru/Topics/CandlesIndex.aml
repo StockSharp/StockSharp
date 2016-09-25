@@ -3,9 +3,9 @@
 	<developerWalkthroughDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
 
 	<introduction>
-		<para>Для создания свечек <codeEntityReference>T:StockSharp.Algo.ContinuousSecurity</codeEntityReference> и <codeEntityReference>T:StockSharp.Algo.WeightedIndexSecurity</codeEntityReference>
-		используется тот же механизм что и при создании свечек <codeEntityReference>T:StockSharp.BusinessEntities.Security</codeEntityReference>.</para>
-		<para>Например создадим 1мин. свечки для спреда GZM5 - LKM5:</para>
+		<para>Для создания свечей <codeEntityReference>T:StockSharp.Algo.ContinuousSecurity</codeEntityReference> и <codeEntityReference>T:StockSharp.Algo.WeightedIndexSecurity</codeEntityReference>
+		используется тот же механизм что и при создании свечей <codeEntityReference>T:StockSharp.BusinessEntities.Security</codeEntityReference>.</para>
+		<para>Например создадим 1мин. свечи для спреда GZM5 - LKM5:</para>
         <code language="C#">
         <![CDATA[
 private QuikTrader _trader;
@@ -51,7 +51,7 @@ _candleManager.Start(_indexSeries);
 		]]>
 		</code>
 		
-		<para>После этого, в обработчик события Processing - DrawCandles, будут поступать свечки, которые можно вывести на график:</para>
+		<para>После этого, в обработчик события Processing - DrawCandles, будут поступать свечи, которые можно вывести на график:</para>
 
         <code language="C#">
         <![CDATA[

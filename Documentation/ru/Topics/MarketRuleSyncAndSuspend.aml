@@ -35,7 +35,7 @@ private readonly object _syncToken = new object();
 
 order
 	.WhenRegistered()
-	.Do(() => this.AddInfoLog("Заявка успешно зарегестрирована"))
+	.Do(() => this.AddInfoLog("Заявка успешно зарегистрирована"))
 	.Once()
 	.Sync(_syncToken)
 	.Apply(this);
@@ -69,7 +69,7 @@ MarketRuleHelper.SuspendRules(() =>
 {
 	order
 		.WhenRegistered()
-		.Do(() => trader.AddInfoLog("Заявка успешно зарегестрирована"))
+		.Do(() => trader.AddInfoLog("Заявка успешно зарегистрирована"))
 		.Once()
 		.Apply(this);
 	

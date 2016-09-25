@@ -27,21 +27,12 @@
 			  <step>
 				  <content>
 					  <para>
-						  Создание подключения к <token>quik</token> и запуск экспорта:
+						  Создание подключения к <token>smartcom</token> и запуск экспорта:
 					  </para>
 					  <code language="C#">// создаем шлюз
-_trader = new QuikTrader(this.Path.Text);
+_trader = new SmartTrader(this.Path.Text);
 
 this.Portfolio.Trader = _trader;
-
-// изменяем метаданные так, чтобы начали обрабатывать дополнительные колонки опционов
-var columns = _trader.SecuritiesTable.Columns;
-columns.Add(DdeSecurityColumns.Strike);
-columns.Add(DdeSecurityColumns.Volatility);
-columns.Add(DdeSecurityColumns.UnderlyingSecurity);
-columns.Add(DdeSecurityColumns.TheorPrice);
-columns.Add(DdeSecurityColumns.OptionType);
-columns.Add(DdeSecurityColumns.ExpiryDate);
 
 // добавляем в выпадающий список только опционы
 _trader.NewSecurities += securities =>

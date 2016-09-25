@@ -5,18 +5,7 @@
     <introduction>
       <para>
       <codeEntityReference qualifyHint="false">T:StockSharp.Fix.FixServer</codeEntityReference> позволяет разрабатывать собственные фикс-сервера, 
-      использующие международные протоколы - <externalLink>
-		<linkText>FIX</linkText>
-		<linkAlternateText>Financial Information eXchange protocol</linkAlternateText>
-		<linkUri>https://ru.wikipedia.org/wiki/Financial_Information_eXchange</linkUri>
-		<linkTarget>_blank</linkTarget>
-		</externalLink>
-		/<externalLink>
-		<linkText>FAST</linkText>
-		<linkAlternateText>Fix Adapted for STreaming protocol</linkAlternateText>
-		<linkUri>https://en.wikipedia.org/wiki/FAST_protocol</linkUri>
-		<linkTarget>_blank</linkTarget>
-		</externalLink>.
+      использующие международные протоколы - <token>fix_external</token>/<token>fast_external</token>.
 		Для транзакций применяется FIX протокол 4.4, а для маркет-данных FAST протокол. Схема работы сервера показана на следующем рисунке.
       </para>
        <mediaLink><image placement="left" xlink:href="FixServer" /></mediaLink>

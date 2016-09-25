@@ -138,7 +138,7 @@
         <Topic id="7664591a-b5b5-4f96-90c3-c1b7f59d5601" visible="True" title="Пример работы с BitStampTrader" />
       </Topic>
     </Topic>
-    <Topic id="b0198d6a-0667-45d4-b172-698afd3ca310" visible="True" isExpanded="true" isSelected="true" title="Коннекторы FIX/FAST">
+    <Topic id="b0198d6a-0667-45d4-b172-698afd3ca310" visible="True" isExpanded="true" title="Коннекторы FIX/FAST">
       <Topic id="29dfad18-ac49-4cf4-993c-c32d62101fff" visible="True" isExpanded="true" title="FIX">
         <Topic id="4d00c89b-59d8-4e69-9ea2-db92f6d08a43" visible="True" title="Пример работы с FixTrader" />
         <Topic id="55f27fed-449d-486d-b662-8ddde39ae852" visible="True" title="Стоп-заявки" />
@@ -170,12 +170,12 @@
       <Topic id="e4a57b52-bd14-4640-a7c7-0979dba1ad0a" visible="True" title="API" />
       <Topic id="ac584200-f06a-49e6-b2fd-141b5fc898f9" visible="True" title="Хранилище сообщений" />
     </Topic>
-    <Topic id="cd52cfcf-938c-4fce-9a56-4e9a001f0792" visible="True" title="Свечки">
+    <Topic id="cd52cfcf-938c-4fce-9a56-4e9a001f0792" visible="True" title="Свечи">
       <Topic id="287125e1-7c7e-4be3-a8ce-5018538e613f" visible="True" title="График" />
       <Topic id="ccc96909-8623-4f56-b3ee-fdc5070b3fde" visible="True" title="Паттерны" />
-      <Topic id="99da6499-9ac1-4e7e-bcaf-a0c832dce4de" visible="True" title="Собственный тип свечек" />
-      <Topic id="f71010d3-135c-4fe9-a573-abf0245b3f5d" visible="True" title="Склеивание свечек, история + реал-тайм" />
-      <Topic id="b6f4b3fb-3a34-4ba8-bcea-258613f2b455" visible="True" title="Создание свечек по корзине инструментов" />
+      <Topic id="99da6499-9ac1-4e7e-bcaf-a0c832dce4de" visible="True" title="Собственный тип свечей" />
+      <Topic id="f71010d3-135c-4fe9-a573-abf0245b3f5d" visible="True" title="Склеивание свечей, история + реал-тайм" />
+      <Topic id="b6f4b3fb-3a34-4ba8-bcea-258613f2b455" visible="True" title="Создание свечей по корзине инструментов" />
     </Topic>
     <Topic id="8b9125ee-9d74-444f-82d6-5dea51266fd4" visible="True" title="Индикаторы">
       <Topic id="ec4c3abe-3779-4a5f-899c-697b049254d4" visible="True" title="Собственный индикатор" />
@@ -275,8 +275,7 @@
         <Topic id="0bcd3950-6fc9-463a-b473-6b0c6587f7f1" visible="True" title="Доска опционов" />
         <Topic id="5d9f8c0d-d05c-4a39-9fad-7148df4411ad" visible="True" title="График позиции" />
       </Topic>
-      <Topic id="c4aa5add-198d-432b-93fa-6ce60d0b7856" visible="True" title="PropertyGridEx" />
-      <Topic id="88a40124-43a6-4be9-b04b-a245000fca70" visible="True" title="UniversalGrid" />
+      <Topic id="c4aa5add-198d-432b-93fa-6ce60d0b7856" visible="True" isSelected="true" title="PropertyGridEx" />
     </Topic>
     <Topic id="5794f4b0-c536-4713-ad08-955a4a01b196" visible="True" title="Сообщения">
       <Topic id="fcd2df04-2463-4f85-aa0c-9b7a8f95a56a" visible="True" title="Описание" />

@@ -3,17 +3,17 @@
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     <introduction>
       <para>
-      	<token>IB</token> предоставляет исторические свечки, которые можно использовать как для тестирования, так и для инициализации <link xlink:href="8b9125ee-9d74-444f-82d6-5dea51266fd4">индикаторов</link>.
+      	<token>IB</token> предоставляет исторические свечи, которые можно использовать как для тестирования, так и для инициализации <link xlink:href="8b9125ee-9d74-444f-82d6-5dea51266fd4">индикаторов</link>.
 	  </para>
     </introduction>
     
     <procedure>
-      <title>Работа с историческими свечками</title>
+      <title>Работа с историческими свечами</title>
       <steps class="ordered">
         <step>
           <content>
             <para>
-            	Для того, чтобы получить исторические свечки, необходимо вызвать 
+            	Для того, чтобы получить исторические свечи, необходимо вызвать 
             	метод <codeEntityReference qualifyHint="true">M:StockSharp.InteractiveBrokers.InteractiveBrokersTrader.SubscribeCandles(StockSharp.Algo.Candles.CandleSeries,System.DateTimeOffset,System.DateTimeOffset)</codeEntityReference>:
        		</para>
             <code language="C#">
@@ -31,7 +31,7 @@ Trader.SubscribeCandles(series, DateTime.Today.Subtract(TimeSpan.FromDays(30)), 
         </step>
         <step>
         	<para>
-            	Исторические свечки передаются через событие 
+            	Исторические свечи передаются через событие 
             	<codeEntityReference qualifyHint="true">E:StockSharp.InteractiveBrokers.InteractiveBrokersTrader.NewCandles</codeEntityReference>:
        		</para>
           <code language="C#">
@@ -42,7 +42,7 @@ Trader.NewCandles += _securitiesWindow.AddHistoricalCandles;
         </step>
         <step>
           <content>
-            <para>Появившиеся свечки можно отрисовывать через <link xlink:href="287125e1-7c7e-4be3-a8ce-5018538e613f">графический контрол</link>:</para>
+            <para>Появившиеся свечи можно отрисовывать через <link xlink:href="287125e1-7c7e-4be3-a8ce-5018538e613f">графический контрол</link>:</para>
             <mediaLink><image placement="center" xlink:href="ib_history"/></mediaLink>
           </content>
         </step>
@@ -50,7 +50,7 @@ Trader.NewCandles += _securitiesWindow.AddHistoricalCandles;
     </procedure>
 
     <relatedTopics>
-      <link xlink:href="cd52cfcf-938c-4fce-9a56-4e9a001f0792">Свечки</link>
+      <link xlink:href="cd52cfcf-938c-4fce-9a56-4e9a001f0792">Свечи</link>
     </relatedTopics>
   </developerConceptualDocument>
 </topic>

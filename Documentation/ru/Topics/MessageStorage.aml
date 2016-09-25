@@ -4,7 +4,7 @@
    	<introduction>
 					<para>
 	    Наряду с использованием хранилищ торговых объектов, можно использовать хранилища сообщений. Работа с этими хранилищами также осуществляется
-	    через интерфейс <codeEntityReference>T:StockSharp.Algo.Storages.IMarketDataStorage`1</codeEntityReference>. Например, для работы со свечками
+	    через интерфейс <codeEntityReference>T:StockSharp.Algo.Storages.IMarketDataStorage`1</codeEntityReference>. Например, для работы со свечами
 	    можно использовать хранилище типа IMarketDataStorage&lt;CandleMessage&gt;.
 	    <codeEntityReference qualifyHint="false">T:StockSharp.Algo.Storages.IStorageRegistry</codeEntityReference> также содержит набор методов для получения
 	    нужных хранилищ сообщений. Так хранилище временных свечей можно получить, как показано в следующем фрагменте кода.

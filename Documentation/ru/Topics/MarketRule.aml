@@ -196,47 +196,47 @@
 		  <list class="bullet">
 			  <listItem>
 				  <codeEntityReference qualifyHint="true" autoUpgrade="true">M:StockSharp.Algo.MarketRuleHelper.WhenClosePriceMore(StockSharp.Algo.Candles.ICandleManager,StockSharp.Algo.Candles.Candle,StockSharp.Messages.Unit)</codeEntityReference>
-					- правило на событие повышения цены закрытия свечки выше определенного уровня.
+					- правило на событие повышения цены закрытия свечи выше определенного уровня.
 				</listItem>
 			  <listItem>
 				  <codeEntityReference qualifyHint="true" autoUpgrade="true">M:StockSharp.Algo.MarketRuleHelper.WhenClosePriceLess(StockSharp.Algo.Candles.ICandleManager,StockSharp.Algo.Candles.Candle,StockSharp.Messages.Unit)</codeEntityReference>
-					- правило на событие понижения цены закрытия свечки ниже определенного уровня.
+					- правило на событие понижения цены закрытия свечи ниже определенного уровня.
 				</listItem>
 				<listItem>
 					<codeEntityReference qualifyHint="true" autoUpgrade="true">M:StockSharp.Algo.MarketRuleHelper.WhenTotalVolumeMore(StockSharp.Algo.Candles.ICandleManager,StockSharp.Algo.Candles.Candle,StockSharp.Messages.Unit)</codeEntityReference>
-					- правило на событие превышения общего объема свечки выше определенного уровня.
+					- правило на событие превышения общего объема свечи выше определенного уровня.
 				</listItem>
 				<listItem>
 					<codeEntityReference qualifyHint="true" autoUpgrade="true">M:StockSharp.Algo.MarketRuleHelper.WhenCurrentCandleTotalVolumeMore(StockSharp.Algo.Candles.ICandleManager,StockSharp.Algo.Candles.CandleSeries,StockSharp.Messages.Unit)</codeEntityReference>
-					- правило на событие превышения общего объема текущей свечки выше определенного уровня.
+					- правило на событие превышения общего объема текущей свечи выше определенного уровня.
 				</listItem>
 			  <listItem>
 				  <codeEntityReference qualifyHint="true" autoUpgrade="true">M:StockSharp.Algo.MarketRuleHelper.WhenCandlesStarted(StockSharp.Algo.Candles.ICandleManager,StockSharp.Algo.Candles.CandleSeries)</codeEntityReference>
-				  - правило на событие появления новых свечек.
+				  - правило на событие появления новых свечей.
 			  </listItem>
 			  <listItem>
 				  <codeEntityReference qualifyHint="true" autoUpgrade="true">M:StockSharp.Algo.MarketRuleHelper.WhenCandlesChanged(StockSharp.Algo.Candles.ICandleManager,StockSharp.Algo.Candles.CandleSeries)</codeEntityReference>
-				  - правило на событие изменения свечек.
+				  - правило на событие изменения свечей.
 			  </listItem>
 			  <listItem>
 				  <codeEntityReference qualifyHint="true" autoUpgrade="true">M:StockSharp.Algo.MarketRuleHelper.WhenCandlesFinished(StockSharp.Algo.Candles.ICandleManager,StockSharp.Algo.Candles.CandleSeries)</codeEntityReference>
-				  - правило на событие окончания свечек.
+				  - правило на событие окончания свечей.
 			  </listItem>
 			  <listItem>
 				  <codeEntityReference qualifyHint="true" autoUpgrade="true">M:StockSharp.Algo.MarketRuleHelper.WhenChanged(StockSharp.Algo.Candles.ICandleManager,StockSharp.Algo.Candles.Candle)</codeEntityReference>
-				  - правило на событие изменения свечки.
+				  - правило на событие изменения свечи.
 			  </listItem>
 			  <listItem>
 				  <codeEntityReference qualifyHint="true" autoUpgrade="true">M:StockSharp.Algo.MarketRuleHelper.WhenFinished(StockSharp.Algo.Candles.ICandleManager,StockSharp.Algo.Candles.Candle)</codeEntityReference>
-				  - правило на событие окончания свечки.
+				  - правило на событие окончания свечи.
 			  </listItem>
 			  <listItem>
 				  <codeEntityReference qualifyHint="true" autoUpgrade="true">M:StockSharp.Algo.MarketRuleHelper.WhenPartiallyFinished(StockSharp.Algo.Candles.ICandleManager,StockSharp.Algo.Candles.Candle,StockSharp.BusinessEntities.IConnector,System.Decimal)</codeEntityReference>
-				  - правило на событие частичного окончания свечки.
+				  - правило на событие частичного окончания свечи.
 			  </listItem>
 			  <listItem>
 				  <codeEntityReference qualifyHint="true" autoUpgrade="true">M:StockSharp.Algo.MarketRuleHelper.WhenPartiallyFinishedCandles(StockSharp.Algo.Candles.ICandleManager,StockSharp.Algo.Candles.CandleSeries,StockSharp.BusinessEntities.IConnector,System.Decimal)</codeEntityReference>
-				  - правило на событие частичного окончания свечек.
+				  - правило на событие частичного окончания свечей.
 			  </listItem>
 		  </list>
 		  <para>
@@ -351,8 +351,9 @@ private sealed class PortfolioRule : MarketRule<Portfolio, Portfolio>
 {
 	private readonly Func<Portfolio, bool> _changed;
 	private readonly Portfolio _portfolio;
+	private readonly IConnector _connector;
 
-	public PortfolioRule(Portfolio portfolio, Func<Portfolio, bool> changed) : base(portfolio)
+	public PortfolioRule(Portfolio portfolio, IConnector connector, Func<Portfolio, bool> changed) : base(portfolio)
 	{
 		if (portfolio == null)
 			throw new ArgumentNullException("portfolio");
@@ -360,13 +361,11 @@ private sealed class PortfolioRule : MarketRule<Portfolio, Portfolio>
 		if (changed == null)
 			throw new ArgumentNullException("changed");
 
-		if (portfolio.Trader == null)
-			throw new ArgumentException("Портфель не имеет информацию о шлюзе.");
-
 		_changed = changed;
 
 		_portfolio = portfolio;
-		_portfolio.Trader.PortfoliosChanged += OnPortfoliosChanged;
+		_connector = connector;
+		_connector.PortfoliosChanged += OnPortfoliosChanged;
 	}
 
 	private void OnPortfoliosChanged(IEnumerable<Portfolio> portfolios)
@@ -377,7 +376,7 @@ private sealed class PortfolioRule : MarketRule<Portfolio, Portfolio>
 
 	protected override void DisposeManaged()
 	{
-		_portfolio.Trader.PortfoliosChanged -= OnPortfoliosChanged;
+		_connector.PortfoliosChanged -= OnPortfoliosChanged;
 		base.DisposeManaged();
 	}
 }
@@ -403,7 +402,7 @@ public static MarketRule<Portfolio, Portfolio> WhenMoneyMore(this Portfolio port
 			<codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.PortfoliosChanged</codeEntityReference>
 			и, как только оно вызывается, то проверяется условие на превышение текущего уровня денежных средств в портфеле выше определенного лимита.
 			Если условие возвращает <legacyBold>true</legacyBold>, то активируется правило через метод 
-			<codeEntityReference qualifyHint="true" autoUpgrade="true">M:StockSharp.Algo.MarketRule`2.Activate</codeEntityReference>
+			<codeEntityReference qualifyHint="true" autoUpgrade="true">M:StockSharp.Algo.MarketRule`2.Activate</codeEntityReference>.
 		</para>	
 
     </introduction>

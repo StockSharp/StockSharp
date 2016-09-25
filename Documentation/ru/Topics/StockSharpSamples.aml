@@ -63,7 +63,7 @@
 			  <row>
 			      <entry>Quik</entry>
 				  <entry>SampleCandles</entry>
-				  <entry>Построение свечек (временных, объемных, ценовых и тиковых).</entry>
+				  <entry>Построение свечей (временных, объемных, ценовых и тиковых).</entry>
 			  </row>
 			  <row>
 			      <entry>Quik</entry>
@@ -358,7 +358,7 @@
 			  </row>
 			  <row>
 				  <entry>SampleCandles</entry>
-				  <entry>Построение свечек (временных, объемных, ценовых и тиковых).</entry>
+				  <entry>Построение свечей (временных, объемных, ценовых и тиковых).</entry>
 			  </row>
 			  <row>
 				  <entry>SampleQuikStartStop</entry>

@@ -104,30 +104,28 @@ Trader.Connect();
 			<step>
 				<content>
 					<para>Поиск инструментов (<link xlink:href="39e0b7aa-0303-438c-b347-fea21540c9f3">подробнее</link>):</para>
-         			<!--><code language="C#">
-            				<![CDATA[
+         			<code language="C#">
+<![CDATA[
 private void Ok_Click(object sender, RoutedEventArgs e)
 {
     var criteria = new Security
     {
      Code = SecCode.Text,
      Type = SecType.SelectedType
-	};
+    };
 
     MainWindow.Instance.Trader.LookupSecurities(criteria);
-	DialogResult = true;
-}
-
-							]]>
-					</code>-->
+    DialogResult = true;
+}]]>
+					</code>
 				</content>
 			</step>
 			<step>
 				<content>
 					<para>Для получения сделок по выбранному инструменту необходимо вызвать метод
 					<codeEntityReference>M:StockSharp.BusinessEntities.IConnector.RegisterTrades(StockSharp.BusinessEntities.Security)</codeEntityReference>:</para>
-            		<!--<code language="C#">
-            				<![CDATA[
+            		<code language="C#">
+<![CDATA[
 private void TradesClick(object sender, RoutedEventArgs e)
 {
    TryInitialize();
@@ -148,9 +146,8 @@ private void TradesClick(object sender, RoutedEventArgs e)
        window.Hide();
    else
        window.Show();
-}
-							]]>
-					</code> -->
+}]]>
+					</code>
 					<para>Сделки будут приходить в событии <codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.NewTrades</codeEntityReference>.</para>
 				</content>
 			</step>
@@ -158,8 +155,8 @@ private void TradesClick(object sender, RoutedEventArgs e)
 				<content>
 					<para>Для запроса обновлений по стаканам необходимо воспользоваться методом 
 							<codeEntityReference>M:StockSharp.BusinessEntities.IConnector.RegisterMarketDepth(StockSharp.BusinessEntities.Security)</codeEntityReference>:</para>
-            		<!--<code language="C#">
-            				<![CDATA[
+            		<code language="C#">
+<![CDATA[
 private void DepthClick(object sender, RoutedEventArgs e)
 {
 	TryInitialize();
@@ -181,9 +178,8 @@ private void DepthClick(object sender, RoutedEventArgs e)
 		window.Hide();
 	else
 		window.Show();
-}
-							]]>
-					</code>-->
+}]]>
+					</code>
 					<para>Стаканы появляются в событии <codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.MarketDepthsChanged</codeEntityReference>.</para>
 				</content>
 			</step>

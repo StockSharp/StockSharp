@@ -117,14 +117,14 @@
 			return ProcessResults.Continue;
 		}
 
-		// получаем сформированную свечку
+		// получаем сформированную свечу
 		var candle = _candleManager.GetTimeFrameCandle(base.Security, base.TimeFrame, _nextTime - base.TimeFrame);
 		
-		// если свечки не существует (не было ни одной сделке в тайм-фрейме), то ждем окончания следующей свечки.
+		// если свечи не существует (не было ни одной сделке в тайм-фрейме), то ждем окончания следующей свечи.
 		if (candle == null)
 		{
-			// если прошло больше 10 секунд с момента окончания свечки, а она так и не появилась,
-			// значит сделок в прошедшей 5-минутке не было, и переходим на следующую свечку
+			// если прошло больше 10 секунд с момента окончания свечи, а она так и не появилась,
+			// значит сделок в прошедшей 5-минутке не было, и переходим на следующую свечу
 			if ((base.Trader.MarketTime - _nextTime) > TimeSpan.FromSeconds(10))
 				_nextTime = base.TimeFrame.GetCandleBounds(base.Trader.MarketTime).Max;
 
@@ -337,7 +337,7 @@ private void TryCreateStrategy()
 			<code language="C#"><![CDATA[// если скользящие не отрисованы за текущую сессию
 if (!_isTodaySmaDrawn)
 {
-	// вычисляем временные отрезки текущей свечки
+	// вычисляем временные отрезки текущей свечи
 	var bounds = _timeFrame.GetCandleBounds(_trader);
 
 	var candles = _candleManager.GetTimeFrameCandles(_strategy.Security, _timeFrame, new Range<DateTime>(_lastCandleTime + _timeFrame, bounds.Min));
@@ -378,7 +378,7 @@ else
 		<step>
 		  <content>
 			<para>
-			  Отрисовка на графике новых данных линий скользящий и свечек, показывающих тренд:
+			  Отрисовка на графике новых данных линий скользящий и свечей, показывающих тренд:
 			</para>
 			<code language="C#">
 			<![CDATA[_trader.CandlesStarted += (token, candles) =>
@@ -398,33 +398,33 @@ private void DrawCandles(IEnumerable<Candle> candles)
 
 private void DrawSma()
 {
-	// нас не интересует текущая свечка, так как она еще не сформировалась
+	// нас не интересует текущая свеча, так как она еще не сформировалась
 	// и из нее нельзя брать цену закрытия
 
-	// вычисляем временные отрезки текущей свечки
+	// вычисляем временные отрезки текущей свечи
 	var bounds = _timeFrame.GetCandleBounds(_trader);
 
-	// если появились новые полностью сформированные свечки
+	// если появились новые полностью сформированные свечи
 	if (_lastCandleTime < bounds.Min)
 	{
-		// отступ с конца интервала, чтобы не захватить текущую свечку.
+		// отступ с конца интервала, чтобы не захватить текущую свечу.
 		var endOffset = TimeSpan.FromSeconds(1);
 
 		bounds = new Range<DateTime>(_lastCandleTime + _timeFrame, bounds.Min - endOffset);
 
-		// получаем эти свечки
+		// получаем эти свечи
 		var candles = _trader.GetTimeFrameCandles(_strategy.Security, _timeFrame, bounds);
 
 		if (candles.Count() > 0)
 		{
 			foreach (var candle in candles)
 			{
-			  	// добавляем новую свечку
+			  	// добавляем новую свечу
 				 _strategy.LongSma.Process((DecimalIndicatorValue)candle.ClosePrice);
 				 _strategy.ShortSma.Process((DecimalIndicatorValue)candle.ClosePrice);
 			}
 		
-			// получаем время самой последней свечки и запоминаем его как новое начало
+			// получаем время самой последней свечи и запоминаем его как новое начало
 			_lastCandleTime = candles.Max(c => c.Time);
 
 			DrawSmaLines(bounds.Min);

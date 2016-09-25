@@ -21,10 +21,10 @@
 
   		<!--	<listItem>
 				<para><codeEntityReference qualifyHint="true">P:StockSharp.Algo.Testing.MarketEmulatorSettings.UseCandlesTimeFrame</codeEntityReference> -
-				Если таймфрейм указан, то будут загружаться свечки указанного таймфрейма (вместо трейдов). Далее по свечкам будут генерироваться набор из
-				5 тиковых сделок O, X, H, L, C (не обязательно в таком порядке), соответствующих точкам в свечке. Точка X выбирается рядом с точкой O,
+				Если таймфрейм указан, то будут загружаться свечи указанного таймфрейма (вместо трейдов). Далее по свечам будут генерироваться набор из
+				5 тиковых сделок O, X, H, L, C (не обязательно в таком порядке), соответствующих точкам в свече. Точка X выбирается рядом с точкой O,
 				чтобы изменение цены шло по цене X строго внутри диапазона L&lt;X&lt;H (нужно для того чтобы сделки были более реалистичными - по цене близкой к O, а не H или L). 
-				По-умолчанию свечки не используются.</para>
+				По-умолчанию свечи не используются.</para>
   			</listItem> -->
 
   			<listItem>
@@ -41,14 +41,14 @@
 
   		<!--	<listItem>
 				<para><codeEntityReference qualifyHint="true">P:StockSharp.Algo.Testing.HistoryEmulationConnector.UseExternalCandleSource</codeEntityReference> -
-				отправлять свечки c таймфреймом	<codeEntityReference qualifyHint="false">P:StockSharp.Algo.Testing.MarketEmulatorSettings.UseCandlesTimeFrame</codeEntityReference> в 
-				<codeEntityReference qualifyHint="false">T:StockSharp.Algo.Candles.ICandleManager</codeEntityReference> напрямую. Может ускорить построение свечек. По-умолчанию выключено.</para>
+				отправлять свечи c таймфреймом	<codeEntityReference qualifyHint="false">P:StockSharp.Algo.Testing.MarketEmulatorSettings.UseCandlesTimeFrame</codeEntityReference> в 
+				<codeEntityReference qualifyHint="false">T:StockSharp.Algo.Candles.ICandleManager</codeEntityReference> напрямую. Может ускорить построение свечей. По-умолчанию выключено.</para>
   			</listItem> --> 			
   			
   			<listItem>
 				<para><codeEntityReference qualifyHint="true">P:StockSharp.Algo.Testing.HistoryEmulationConnector.UseExternalCandleSource</codeEntityReference> -
-				отправлять свечки в	<codeEntityReference qualifyHint="false">T:StockSharp.Algo.Candles.ICandleManager</codeEntityReference> напрямую. 
-				Может ускорить построение свечек, но при этом будут отсутствовать промежуточные изменения свечи. По-умолчанию выключено.</para>
+				отправлять свечи в <codeEntityReference qualifyHint="false">T:StockSharp.Algo.Candles.ICandleManager</codeEntityReference> напрямую. 
+				Может ускорить построение свечей, но при этом будут отсутствовать промежуточные изменения свечи. По-умолчанию выключено.</para>
   			</listItem>  			
   			
   			
@@ -126,7 +126,7 @@ mdGenerator.MaxVolume = 1;
 				<para>Минимальный генерируемый спред равен <codeEntityReference qualifyHint="true">P:StockSharp.BusinessEntities.Security.PriceStep</codeEntityReference>.
 				Не следует генерировать спрэд между <codeEntityReference qualifyHint="true">P:StockSharp.BusinessEntities.MarketDepth.BestBid</codeEntityReference> и <codeEntityReference qualifyHint="true">P:StockSharp.BusinessEntities.MarketDepth.BestAsk</codeEntityReference>
 				больше чем 5 <codeEntityReference qualifyHint="true">P:StockSharp.BusinessEntities.Security.PriceStep</codeEntityReference>
-				(чтобы при генерации из свечек не получалось слишком широкого спреда):</para>
+				(чтобы при генерации из свечей не получалось слишком широкого спреда):</para>
 				<code language="C#">
 				<![CDATA[
 mdGenerator.MinSpreadStepCount = 1;

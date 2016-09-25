@@ -31,7 +31,7 @@
 		
 		<code language="C#"><![CDATA[var order = new Order
 {
-	Type = OrderTypes.Conditional, // условный ордер
+	Type = OrderTypes.Conditional, // условная заявка
 	Portfolio = _portfolio, // портфель
 	Security = _security, // инструмент
 	Price = Decimal.Parse(textBoxBuyStopPrice.Text), // стоп-цена
@@ -46,7 +46,7 @@
 
 try
 {
-	_trader.RegisterOrder(order); // Зарегистрировать ордер
+	_trader.RegisterOrder(order); // Зарегистрировать заявку
 }
 catch (Exception ex)
 {
