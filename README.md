@@ -42,7 +42,7 @@ Release notes - [RELEASE_NOTES.md](../master/_ReleaseNotes/CHANGE_LOG_API.md).
 StockSharp code is licensed under the [Apache License 2.0](../master/LICENSE).
 
   [1]: http://stocksharp.com
-  [2]: http://stocksharp.com/doc
+  [2]: http://doc.stocksharp.com
   [3]: https://github.com/StockSharp/StockSharp/releases
   [4]: http://edu.stocksharp.com
   [5]: http://stocksharp.com/forum
