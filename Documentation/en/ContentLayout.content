@@ -7,83 +7,83 @@
     <Topic id="87d2cacd-5492-4bca-9140-7d7c3f5218d7" visible="True" title="Architecture" />
     <Topic id="b9f672db-e0c9-4208-9759-179e5de17fd8" visible="True" title="Installation instruction" />
     <Topic id="0f4f40ab-74a7-4a56-ab8b-6c07271e48e2" visible="True" title="Releases history" />
-    <Topic id="ad178c36-15c8-4314-bc5c-56220f41a67e" visible="True" isExpanded="true" title="Connectors">
+    <Topic id="ad178c36-15c8-4314-bc5c-56220f41a67e" visible="True" title="Connectors">
       <Topic id="f8cae46b-57e1-4954-a4cf-832854840981" visible="True" isExpanded="true" title="OpenECry">
         <Topic id="1dbc72c4-cc59-4094-824a-a2b77f9623d6" visible="True" title="Getting started" />
         <Topic id="6f3be323-80bb-4823-9d27-8060c238af32" visible="True" title="Stop orders" />
         <Topic id="c56a139b-fb64-4f4f-992f-96a1480233cf" visible="True" title="Several algorithms connection" />
         <Topic id="49a7bfef-38e4-41e7-afe5-21bb8ac64258" visible="True" title="Simultaneous terminal and algorithm operation" />
       </Topic>
-      <Topic id="bae7b613-dcf6-4abb-b595-6c61fc4e5c46" visible="True" isExpanded="true" title="Interactive Brokers">
-        <Topic id="eab815a2-65f7-46e8-9989-4ae52d234703" visible="True" title="Настройка TWS" />
+      <Topic id="bae7b613-dcf6-4abb-b595-6c61fc4e5c46" visible="True" title="Interactive Brokers">
+        <Topic id="eab815a2-65f7-46e8-9989-4ae52d234703" visible="True" title="TWS configuration" />
         <Topic id="7c23b480-d472-43df-aabf-f743ad09fded" visible="True" title="Getting started" />
-        <Topic id="3e0f02b3-3e2f-405d-a8a2-6d44a50db166" visible="True" title="Алго-заявки" />
-        <Topic id="f7074321-9e5c-4bc0-a8a3-b2025c5b7268" visible="True" title="Исторические данные" />
-        <Topic id="9817c52a-fc3e-4fc8-a5f0-d7caf654b440" visible="True" title="Сканер" />
+        <Topic id="3e0f02b3-3e2f-405d-a8a2-6d44a50db166" visible="True" title="Algorithmic orders" />
+        <Topic id="f7074321-9e5c-4bc0-a8a3-b2025c5b7268" visible="True" title="Historical data" />
+        <Topic id="9817c52a-fc3e-4fc8-a5f0-d7caf654b440" visible="True" title="Scanner" />
       </Topic>
       <Topic id="89c3f13d-2602-446a-8c3d-5615b6f901b9" visible="True" isExpanded="true" title="Blackwood (Fusion)">
         <Topic id="95d01586-b798-4d38-82aa-38d8533586b5" visible="True" title="Getting started" />
-        <Topic id="b643d681-0558-43ed-87ce-53ee7d3f6538" visible="True" title="Стоп-заявки" />
-        <Topic id="3f9473b3-09f2-4a04-b09d-94c9b66fff2e" visible="True" title="Исторические данные" />
-        <Topic id="4ef0c89f-cf0d-40b3-8387-aab4057ee961" visible="True" title="Новости" />
-        <Topic id="c23146af-3f08-4928-a95a-dd1173b23133" visible="True" title="Сканер" />
+        <Topic id="b643d681-0558-43ed-87ce-53ee7d3f6538" visible="True" title="Stop orders" />
+        <Topic id="3f9473b3-09f2-4a04-b09d-94c9b66fff2e" visible="True" title="Historical data" />
+        <Topic id="4ef0c89f-cf0d-40b3-8387-aab4057ee961" visible="True" title="News" />
+        <Topic id="c23146af-3f08-4928-a95a-dd1173b23133" visible="True" title="Scanner" />
       </Topic>
       <Topic id="84d6a0fb-607f-4d87-be8a-e2b58006493e" visible="True" isExpanded="true" title="E*TRADE">
-        <Topic id="2b16e1d6-32bf-426d-8d20-08020f5f1f40" visible="True" isSelected="true" title="Getting started" />
-        <Topic id="df8227ff-5381-4912-b080-b58e6004480b" visible="True" title="Авторизация" />
-        <Topic id="028b3872-d610-4ca4-9127-5434764f05de" visible="True" title="Стоп-заявки" />
+        <Topic id="2b16e1d6-32bf-426d-8d20-08020f5f1f40" visible="True" title="Getting started" />
+        <Topic id="df8227ff-5381-4912-b080-b58e6004480b" visible="True" title="Autoriazation" />
+        <Topic id="028b3872-d610-4ca4-9127-5434764f05de" visible="True" title="Stop orders" />
       </Topic>
-      <Topic id="c7ff5937-e230-4db3-857f-4cd68583ebfc" visible="True" isExpanded="true" title="IQFeed">
-        <Topic id="21aa8b6b-137d-4c28-87d9-dfbc5e446d95" visible="True" title="Подключение" />
+      <Topic id="c7ff5937-e230-4db3-857f-4cd68583ebfc" visible="True" title="IQFeed">
+        <Topic id="21aa8b6b-137d-4c28-87d9-dfbc5e446d95" visible="True" title="Connection" />
         <Topic id="66003162-d1b0-4f5f-8126-508055d15470" visible="True" title="Getting started" />
-        <Topic id="443734c7-7c88-47e0-a96a-4eec6fdfcfc7" visible="True" title="Получение инструментов" />
-        <Topic id="310155fd-ef3a-40f4-9920-179dcaf2b6bf" visible="True" title="Исторические данные" />
-        <Topic id="d315bbb3-5d00-4685-8e75-9e8e3646320a" visible="True" title="Новости" />
+        <Topic id="443734c7-7c88-47e0-a96a-4eec6fdfcfc7" visible="True" title="Instruments getting" />
+        <Topic id="310155fd-ef3a-40f4-9920-179dcaf2b6bf" visible="True" title="Historical data" />
+        <Topic id="d315bbb3-5d00-4685-8e75-9e8e3646320a" visible="True" title="News" />
       </Topic>
-      <Topic id="8a531942-a16c-4348-a4d0-dd4ae999d8f9" visible="True" isExpanded="true" title="Sterling">
+      <Topic id="8a531942-a16c-4348-a4d0-dd4ae999d8f9" visible="True" title="Sterling">
         <Topic id="7e828fb2-0b95-41fd-8540-17f6bdc747cf" visible="True" title="Getting started" />
-        <Topic id="35cde593-3105-4903-974e-10d85482ec8f" visible="True" title="Стоп-заявки" />
-        <Topic id="6191a437-1a8c-451c-9a43-17daee119bb7" visible="True" title="Новости" />
+        <Topic id="35cde593-3105-4903-974e-10d85482ec8f" visible="True" title="Stop orders" />
+        <Topic id="6191a437-1a8c-451c-9a43-17daee119bb7" visible="True" title="News" />
       </Topic>
-      <Topic id="aac980b1-ac5b-415b-811c-a8d128942391" visible="True" isExpanded="true" title="CQG">
+      <Topic id="aac980b1-ac5b-415b-811c-a8d128942391" visible="True" title="CQG">
         <Topic id="436fc377-85ff-4d37-ad62-4846313a8563" visible="True" title="Getting started" />
-        <Topic id="355f6b70-c920-48b6-b2f1-31584ebb82f3" visible="True" title="Стоп-заявки" />
+        <Topic id="355f6b70-c920-48b6-b2f1-31584ebb82f3" visible="True" title="Stop orders" />
       </Topic>
-      <Topic id="777d9208-1146-4d54-b5ae-0315b4186522" visible="True" isExpanded="true" title="Rithmic">
+      <Topic id="777d9208-1146-4d54-b5ae-0315b4186522" visible="True" title="Rithmic">
         <Topic id="3e8732d0-71a5-44ab-be04-c482d5a41d71" visible="True" title="Getting started" />
-        <Topic id="36d037d2-fda8-4801-9294-0dcc9891a123" visible="True" title="Стоп-заявки" />
-        <Topic id="beafeb9f-608e-4986-99ae-1bcca1500c4b" visible="True" title="Исторические данные" />
+        <Topic id="36d037d2-fda8-4801-9294-0dcc9891a123" visible="True" title="Stop orders" />
+        <Topic id="beafeb9f-608e-4986-99ae-1bcca1500c4b" visible="True" title="Historical data" />
       </Topic>
-      <Topic id="62dc0f78-2b9a-4f88-b6bc-68361bd0d8fe" visible="True" isExpanded="true" title="ITCH">
+      <Topic id="62dc0f78-2b9a-4f88-b6bc-68361bd0d8fe" visible="True" title="ITCH">
         <Topic id="ca67819a-60b8-42f0-a512-ad0792d544f2" visible="True" title="Getting started" />
       </Topic>
       <Topic id="4448a233-b3d5-46e1-a0f2-549ec5fa681a" visible="True" />
     </Topic>
     <Topic id="b884020d-e4f0-4f7d-8de1-d75d052fe04b" visible="True" title="Forex connectors">
-      <Topic id="4f50724b-00de-4ed4-b043-7dacb6277c98" visible="True" isExpanded="true" title="LMAX">
-        <Topic id="9cd10cbc-8534-4d44-bf3b-60b0a3f03590" visible="True" title="Пример работы с LMaxTrader" />
-        <Topic id="c6236e85-fb9e-4c4d-9585-6b4b687e8b35" visible="True" title="Стоп-заявки" />
-        <Topic id="3220f956-8ab0-43bb-b063-c6861ccceaf1" visible="True" title="Исторические данные" />
+      <Topic id="4f50724b-00de-4ed4-b043-7dacb6277c98" visible="True" title="LMAX">
+        <Topic id="9cd10cbc-8534-4d44-bf3b-60b0a3f03590" visible="True" title="Getting started" />
+        <Topic id="c6236e85-fb9e-4c4d-9585-6b4b687e8b35" visible="True" title="Stop orders" />
+        <Topic id="3220f956-8ab0-43bb-b063-c6861ccceaf1" visible="True" title="Historical data" />
       </Topic>
       <Topic id="c2162c96-d12f-4107-ac96-0238b793f466" visible="True" isExpanded="true" title="Oanda">
-        <Topic id="bf4d89d7-32a7-4755-beab-3bfd0581db6c" visible="True" title="Пример работы с OandaTrader" />
-        <Topic id="5389994b-68d4-456d-8ea0-52d07dbc185d" visible="True" title="Стоп-заявки" />
-        <Topic id="ad7e6528-705a-4e3f-8df6-e9b129279c08" visible="True" title="Исторические данные" />
+        <Topic id="bf4d89d7-32a7-4755-beab-3bfd0581db6c" visible="True" title="Getting started" />
+        <Topic id="5389994b-68d4-456d-8ea0-52d07dbc185d" visible="True" title="Stop orders" />
+        <Topic id="ad7e6528-705a-4e3f-8df6-e9b129279c08" visible="True" title="Historical data" />
       </Topic>
     </Topic>
     <Topic id="4c2ed7ba-9cb8-45d4-90be-5dc79e7f13c9" visible="True" title="Bitcoins connectors">
       <Topic id="5d162089-902a-4a4e-885f-f38ff94fbe58" visible="True" isExpanded="true" title="BTC-E">
-        <Topic id="1f8dac56-b25a-4522-9965-4461a313f93b" visible="True" title="Пример работы с BtceTrader" />
+        <Topic id="1f8dac56-b25a-4522-9965-4461a313f93b" visible="True" title="Getting started" />
       </Topic>
       <Topic id="345fa341-661d-4992-a9a6-9c89af399feb" visible="True" isExpanded="true" title="BitStamp">
-        <Topic id="7664591a-b5b5-4f96-90c3-c1b7f59d5601" visible="True" title="Пример работы с BitStampTrader" />
+        <Topic id="7664591a-b5b5-4f96-90c3-c1b7f59d5601" visible="True" title="Getting started" />
       </Topic>
     </Topic>
     <Topic id="b0198d6a-0667-45d4-b172-698afd3ca310" visible="True" title="FIX/FAST connector">
-      <Topic id="29dfad18-ac49-4cf4-993c-c32d62101fff" visible="True" title="FIX">
-        <Topic id="4d00c89b-59d8-4e69-9ea2-db92f6d08a43" visible="True" title="Пример работы с FixTrader" />
-        <Topic id="55f27fed-449d-486d-b662-8ddde39ae852" visible="True" title="Стоп-заявки" />
-        <Topic id="9e6e40df-f41d-4429-bdc7-d5864dd2c1e3" visible="True" title="Новости" />
+      <Topic id="29dfad18-ac49-4cf4-993c-c32d62101fff" visible="True" isExpanded="true" title="FIX">
+        <Topic id="4d00c89b-59d8-4e69-9ea2-db92f6d08a43" visible="True" title="Getting started" />
+        <Topic id="55f27fed-449d-486d-b662-8ddde39ae852" visible="True" title="Stop orders" />
+        <Topic id="9e6e40df-f41d-4429-bdc7-d5864dd2c1e3" visible="True" title="News" />
       </Topic>
       <Topic id="c4dcbcb3-3b3f-4772-acd4-8068e8cadd93" visible="True" title="FIX Server" />
     </Topic>
@@ -92,143 +92,142 @@
       <Topic id="1cfb4f7c-b9fc-43da-a958-b0e0f881479d" visible="True" title="Множество подключений" />
       <Topic id="a188710e-7bb7-41b3-8119-6088f2bf1780" visible="True" title="Переподключение" />
     </Topic>
-    <Topic id="1c3c9835-b65b-48d5-8abf-70986c666ef4" visible="True" title="Управление заявками">
-      <Topic id="718fbbc7-efa5-45ed-80ef-e0a32fd4a8e2" visible="True" title="Получение информации по заявкам" />
-      <Topic id="41a3b3e7-a7cd-43ba-842f-13f6a7199d26" visible="True" title="Состояния заявок" />
-      <Topic id="6267fec7-64e5-4488-ba08-c72cf61fcc9e" visible="True" title="Снятие заявок" />
-      <Topic id="10c62aa1-5e15-4b3e-8b68-e55c2f055c32" visible="True" title="Снятие группы заявок" />
-      <Topic id="4b427409-9aa9-41d3-bb97-98745d1bba8e" visible="True" title="Замена заявок" />
-      <Topic id="cbce846a-dd31-4baa-ba77-2bac3eb38b2f" visible="True" title="Номер транзакции" />
+    <Topic id="1c3c9835-b65b-48d5-8abf-70986c666ef4" visible="True" title="Orders management">
+      <Topic id="718fbbc7-efa5-45ed-80ef-e0a32fd4a8e2" visible="True" title="Getting orders information" />
+      <Topic id="41a3b3e7-a7cd-43ba-842f-13f6a7199d26" visible="True" title="Orders states" />
+      <Topic id="6267fec7-64e5-4488-ba08-c72cf61fcc9e" visible="True" title="Order cancel" />
+      <Topic id="10c62aa1-5e15-4b3e-8b68-e55c2f055c32" visible="True" title="Orders mass cancel" />
+      <Topic id="4b427409-9aa9-41d3-bb97-98745d1bba8e" visible="True" title="Orders replacement" />
+      <Topic id="cbce846a-dd31-4baa-ba77-2bac3eb38b2f" visible="True" title="Transaction number" />
     </Topic>
-    <Topic id="37559237-e20a-477e-93bd-82bcad4c0243" visible="True" title="Инструменты">
-      <Topic id="34a9c518-60ca-45c0-a118-5e2e42165efa" visible="True" title="Идентификатор инструмента" />
-      <Topic id="e2f269f3-693c-4c02-a70f-351d93078e24" visible="True" title="Идентификатор *@ALL" />
-      <Topic id="0f7cceee-bb7c-4f24-a266-ed900cb8e557" visible="True" title="Непрерывный фьючерс" />
-      <Topic id="ee8f7be8-80ad-4ab9-a5aa-14754fe024f1" visible="True" title="Индекс" />
-      <Topic id="39e0b7aa-0303-438c-b347-fea21540c9f3" visible="True" title="Поиск инструмента" />
+    <Topic id="37559237-e20a-477e-93bd-82bcad4c0243" visible="True" title="Instruments">
+      <Topic id="34a9c518-60ca-45c0-a118-5e2e42165efa" visible="True" title="Instrument identifier" />
+      <Topic id="e2f269f3-693c-4c02-a70f-351d93078e24" visible="True" title="Identifier *@ALL" />
+      <Topic id="0f7cceee-bb7c-4f24-a266-ed900cb8e557" visible="True" title="Continuous futures" />
+      <Topic id="ee8f7be8-80ad-4ab9-a5aa-14754fe024f1" visible="True" title="Index" />
+      <Topic id="39e0b7aa-0303-438c-b347-fea21540c9f3" visible="True" title="Instrument search" />
     </Topic>
-    <Topic id="7a8a9518-6270-4cfe-a829-fa6c40e5fabd" visible="True" title="Хранение данных">
+    <Topic id="7a8a9518-6270-4cfe-a829-fa6c40e5fabd" visible="True" title="Market-data storage">
       <Topic id="e4a57b52-bd14-4640-a7c7-0979dba1ad0a" visible="True" title="API" />
-      <Topic id="ac584200-f06a-49e6-b2fd-141b5fc898f9" visible="True" title="Хранилище сообщений" />
+      <Topic id="ac584200-f06a-49e6-b2fd-141b5fc898f9" visible="True" title="Messages storage" />
     </Topic>
-    <Topic id="cd52cfcf-938c-4fce-9a56-4e9a001f0792" visible="True" title="Свечки">
-      <Topic id="287125e1-7c7e-4be3-a8ce-5018538e613f" visible="True" title="График" />
-      <Topic id="ccc96909-8623-4f56-b3ee-fdc5070b3fde" visible="True" title="Паттерны" />
-      <Topic id="99da6499-9ac1-4e7e-bcaf-a0c832dce4de" visible="True" title="Собственный тип свечек" />
-      <Topic id="f71010d3-135c-4fe9-a573-abf0245b3f5d" visible="True" title="Склеивание свечек, история + реал-тайм" />
-      <Topic id="b6f4b3fb-3a34-4ba8-bcea-258613f2b455" visible="True" title="Создание свечек по корзине инструментов" />
+    <Topic id="cd52cfcf-938c-4fce-9a56-4e9a001f0792" visible="True" title="Candles">
+      <Topic id="287125e1-7c7e-4be3-a8ce-5018538e613f" visible="True" title="Chart" />
+      <Topic id="ccc96909-8623-4f56-b3ee-fdc5070b3fde" visible="True" title="Patterns" />
+      <Topic id="99da6499-9ac1-4e7e-bcaf-a0c832dce4de" visible="True" title="Custom type of candle" />
+      <Topic id="f71010d3-135c-4fe9-a573-abf0245b3f5d" visible="True" title="The candles joining, history + real-time" />
+      <Topic id="b6f4b3fb-3a34-4ba8-bcea-258613f2b455" visible="True" title="Candles creating by instrument basket" />
     </Topic>
-    <Topic id="8b9125ee-9d74-444f-82d6-5dea51266fd4" visible="True" title="Индикаторы">
-      <Topic id="ec4c3abe-3779-4a5f-899c-697b049254d4" visible="True" title="Собственный индикатор" />
-      <Topic id="b8e71f65-00e3-41f7-af6e-69bf38a2c5bb" visible="True" title="Добавление индикатора на график" />
+    <Topic id="8b9125ee-9d74-444f-82d6-5dea51266fd4" visible="True" title="Indicators">
+      <Topic id="ec4c3abe-3779-4a5f-899c-697b049254d4" visible="True" title="Custom indicator" />
+      <Topic id="b8e71f65-00e3-41f7-af6e-69bf38a2c5bb" visible="True" title="Indicator adding to the chart" />
     </Topic>
-    <Topic id="82437493-cd53-41eb-b756-d913af0f4f8e" visible="True" title="Логирование">
-      <Topic id="eca7454c-0532-4aaf-92bf-7a3d0cba635b" visible="True" title="Логирование Strategy" />
-      <Topic id="9619f1db-064f-421f-967e-4c15a5b0aa71" visible="True" title="Логирование IConnector" />
-      <Topic id="f9e75266-8f0e-4983-8319-7a41d53e0f39" visible="True" title="Другие источники логов" />
-      <Topic id="1bed8343-9171-49ce-8259-f44007e01a78" visible="True" title="Визуальный мониторинг" />
-      <Topic id="a711d06d-9d1d-40b8-89bf-ee62d817a878" visible="True" title="Создание ILogListener" />
+    <Topic id="82437493-cd53-41eb-b756-d913af0f4f8e" visible="True" title="Logging">
+      <Topic id="eca7454c-0532-4aaf-92bf-7a3d0cba635b" visible="True" title="Strategy logging" />
+      <Topic id="9619f1db-064f-421f-967e-4c15a5b0aa71" visible="True" title="IConnector logging" />
+      <Topic id="f9e75266-8f0e-4983-8319-7a41d53e0f39" visible="True" title="Other logs sources" />
+      <Topic id="1bed8343-9171-49ce-8259-f44007e01a78" visible="True" title="Visual monitoring" />
+      <Topic id="a711d06d-9d1d-40b8-89bf-ee62d817a878" visible="True" title="Custom ILogListener" />
     </Topic>
-    <Topic id="2c3a0d3a-6e89-42a1-a158-9a258e0a62e1" visible="True" title="Cтратегии">
-      <Topic id="8c0327db-494a-4fe0-aba8-0d4b93dea60e" visible="True" title="Создание стратегии" />
-      <Topic id="a8159c99-256b-46e4-80fe-7cf92944b4c9" visible="True" title="Итерационная модель" />
-      <Topic id="8ea639f6-ce74-4a00-9f13-db59c8c2396f" visible="True" title="Дочерние стратегии" />
-      <Topic id="24250c24-029c-4dbc-bc8b-4afde645e483" visible="True" title="Котирование" />
-      <Topic id="63952fce-6e43-4427-985a-1654e8d9cfc1" visible="True" title="Тейк-профит и стоп-лосс" />
-      <Topic id="eeaa9b57-9108-4cbb-a9c1-e135eee35ae5" visible="True" title="Отчеты" />
-      <Topic id="6cdf7765-492b-46ac-b0c0-480adb56e059" visible="True" title="Сохранение и загрузка настроек" />
-      <Topic id="61ad1ece-8094-44a9-a558-ec664a1ab16a" visible="True" title="Загрузка заявок и сделок" />
+    <Topic id="2c3a0d3a-6e89-42a1-a158-9a258e0a62e1" visible="True" isExpanded="true" title="Strategies">
+      <Topic id="8c0327db-494a-4fe0-aba8-0d4b93dea60e" visible="True" title="Creating strategies" />
+      <Topic id="a8159c99-256b-46e4-80fe-7cf92944b4c9" visible="True" title="Iteration model" />
+      <Topic id="8ea639f6-ce74-4a00-9f13-db59c8c2396f" visible="True" isSelected="true" title="Child strategies" />
+      <Topic id="24250c24-029c-4dbc-bc8b-4afde645e483" visible="True" title="Quoting" />
+      <Topic id="63952fce-6e43-4427-985a-1654e8d9cfc1" visible="True" title="Take-profit and stop-loss" />
+      <Topic id="eeaa9b57-9108-4cbb-a9c1-e135eee35ae5" visible="True" title="Reports" />
+      <Topic id="6cdf7765-492b-46ac-b0c0-480adb56e059" visible="True" title="Settings saving and loading" />
+      <Topic id="61ad1ece-8094-44a9-a558-ec664a1ab16a" visible="True" title="Orders and trades loading" />
     </Topic>
-    <Topic id="97cf7a9c-8b3d-4791-9306-275d55d4cf36" visible="True" title="Событийная модель">
-      <Topic id="de6c121a-6a89-4c4b-80d1-804d7b98fda7" visible="True" title="Правило" />
-      <Topic id="12ef8365-1bd1-426d-afc5-5eee33d554a6" visible="True" title="Использование правил" />
-      <Topic id="41e6ea41-f8f8-4788-b5ea-c1c12e24007a" visible="True" title="Приостановка правил" />
-      <Topic id="db15f661-eb88-496f-a9f9-0ad4e0043ed3" visible="True" title="Взаимоисключающие правила" />
+    <Topic id="97cf7a9c-8b3d-4791-9306-275d55d4cf36" visible="True" isExpanded="true" title="Event model">
+      <Topic id="de6c121a-6a89-4c4b-80d1-804d7b98fda7" visible="True" title="Rule" />
+      <Topic id="12ef8365-1bd1-426d-afc5-5eee33d554a6" visible="True" title="Rules using" />
+      <Topic id="41e6ea41-f8f8-4788-b5ea-c1c12e24007a" visible="True" title="Rules suspension" />
+      <Topic id="db15f661-eb88-496f-a9f9-0ad4e0043ed3" visible="True" title="Mutually exclusive rules" />
     </Topic>
-    <Topic id="8ab11b62-a6d0-4507-a101-1bd63d9933c0" visible="True" title="Торговые алгоритмы">
-      <Topic id="db31c1e5-17a3-45d0-a3ad-34d4f2b1cd9f" visible="True" title="Проскальзывание" />
-      <Topic id="f59e2adf-df08-4c4f-b857-3fab819d1784" visible="True" title="Прибыль-убыток" />
-      <Topic id="662def8c-4f1e-4a92-b7db-f1735945b03b" visible="True" title="Позиция" />
-      <Topic id="e4b528cd-fed2-4866-8dbf-18c2e7402958" visible="True" title="Задержка" />
-      <Topic id="a2f51940-0932-432e-8255-433610cfd457" visible="True" title="Комиссия" />
-      <Topic id="e1d2c02b-ee6e-41ab-93c5-f2286f1fe897" visible="True" title="Основные алгоритмы" />
-      <Topic id="9feaabde-52ea-4562-a666-380ce49c6df6" visible="True" title="Стакан: алгоритмы" />
-      <Topic id="973860e9-8f2d-4035-98de-bb88b33b6751" visible="True" title="Кривая эквити" />
+    <Topic id="8ab11b62-a6d0-4507-a101-1bd63d9933c0" visible="True" isExpanded="true" title="Trading algorithms">
+      <Topic id="db31c1e5-17a3-45d0-a3ad-34d4f2b1cd9f" visible="True" title="Slippage" />
+      <Topic id="f59e2adf-df08-4c4f-b857-3fab819d1784" visible="True" title="Profit-loss" />
+      <Topic id="662def8c-4f1e-4a92-b7db-f1735945b03b" visible="True" title="Position" />
+      <Topic id="e4b528cd-fed2-4866-8dbf-18c2e7402958" visible="True" title="Latency" />
+      <Topic id="a2f51940-0932-432e-8255-433610cfd457" visible="True" title="Commission" />
+      <Topic id="e1d2c02b-ee6e-41ab-93c5-f2286f1fe897" visible="True" title="Base algorithms" />
+      <Topic id="9feaabde-52ea-4562-a666-380ce49c6df6" visible="True" title="Order book: algorithms" />
+      <Topic id="973860e9-8f2d-4035-98de-bb88b33b6751" visible="True" title="Equity curve" />
     </Topic>
-    <Topic id="b85270c7-ee7f-4dbc-a0a3-aac466b75f98" visible="True" title="Опционы">
-      <Topic id="063708c5-b6a8-45f6-9ff9-608f89796a88" visible="True" title="Греки" />
-      <Topic id="6fe5b321-a23d-415d-b3e3-af9de9212a20" visible="True" title="Котирование по волатильности" />
-      <Topic id="598efa7f-83fb-4dc8-8822-e6776362f652" visible="True" title="Дельта-хеджирование" />
-      <Topic id="efad2861-7392-4ed6-957d-f7fde651a48f" visible="True" title="Синтетика" />
-      <Topic id="667d9230-82d2-4052-9e23-6cdd983d3461" visible="True" title="Графические компоненты для опционов" />
+    <Topic id="b85270c7-ee7f-4dbc-a0a3-aac466b75f98" visible="True" isExpanded="true" title="Options">
+      <Topic id="063708c5-b6a8-45f6-9ff9-608f89796a88" visible="True" title="Greeks" />
+      <Topic id="6fe5b321-a23d-415d-b3e3-af9de9212a20" visible="True" title="Volatility trading" />
+      <Topic id="598efa7f-83fb-4dc8-8822-e6776362f652" visible="True" title="Delta hedging" />
+      <Topic id="efad2861-7392-4ed6-957d-f7fde651a48f" visible="True" title="Synthetics" />
+      <Topic id="667d9230-82d2-4052-9e23-6cdd983d3461" visible="True" title="Graphic components" />
     </Topic>
-    <Topic id="febbcf31-63d1-449d-847e-92fd8424f926" visible="True" title="Тестирование">
-      <Topic id="5b90a23e-24b9-474a-a699-da47b666194a" visible="True" isExpanded="true" title="На истории">
-        <Topic id="abfde7cc-fa0e-4705-b610-41b2ba1a2252" visible="True" title="На истории с Финам" />
+    <Topic id="febbcf31-63d1-449d-847e-92fd8424f926" visible="True" isExpanded="true" title="Backtesting/Emulation">
+      <Topic id="5b90a23e-24b9-474a-a699-da47b666194a" visible="True" isExpanded="true" title="Historical data">
+        <Topic id="abfde7cc-fa0e-4705-b610-41b2ba1a2252" visible="True" title="Google Finance" />
       </Topic>
-      <Topic id="24a5c734-199f-4090-943d-6324a04f335b" visible="True" title="На истории (оптимизация)" />
-      <Topic id="ab42038e-836b-4c00-9332-0b2db2cbd948" visible="True" title="На случайных данных" />
-      <Topic id="d27245ae-abfd-4d6b-b8c4-d1a24a45116f" visible="True" title="На рыночных данных" />
-      <Topic id="9e72851f-2a19-4680-b344-cdc39d1b85e1" visible="True" title="Настройки тестирования" />
+      <Topic id="24a5c734-199f-4090-943d-6324a04f335b" visible="True" title="Optimization" />
+      <Topic id="ab42038e-836b-4c00-9332-0b2db2cbd948" visible="True" title="Random data" />
+      <Topic id="d27245ae-abfd-4d6b-b8c4-d1a24a45116f" visible="True" title="Simulator" />
+      <Topic id="9e72851f-2a19-4680-b344-cdc39d1b85e1" visible="True" title="Extended settings" />
     </Topic>
-    <Topic id="a0a4c8df-2bba-4e1e-8ba9-e1fa98728f92" visible="True" title="Пользовательский интерфейс (GUI)">
-      <Topic id="956b3163-c537-4e1d-af29-cf80b633db3c" visible="True" title="Графики">
-        <Topic id="a76a0a9c-bb95-4596-9464-9903379b3096" visible="True" title="Свечной график" />
-        <Topic id="bb71ead8-62c4-47f8-a1aa-242d63d631fb" visible="True" title="График-панель" />
-        <Topic id="da275a7f-ff6f-4dc7-8451-bf4fc22624a6" visible="True" title="График эквити" />
-        <Topic id="78adcfb5-7c77-4f08-bed0-41c5eb2fd4ce" visible="True" title="Графики box chart" />
-        <Topic id="96f4c342-1d2f-4e0d-9352-5452643df5ab" visible="True" title="Кластеры" />
+    <Topic id="a0a4c8df-2bba-4e1e-8ba9-e1fa98728f92" visible="True" title="Graphical user interface">
+      <Topic id="956b3163-c537-4e1d-af29-cf80b633db3c" visible="True" isExpanded="true" title="Charts">
+        <Topic id="a76a0a9c-bb95-4596-9464-9903379b3096" visible="True" title="Candle chart" />
+        <Topic id="bb71ead8-62c4-47f8-a1aa-242d63d631fb" visible="True" title="Candle chart panel" />
+        <Topic id="da275a7f-ff6f-4dc7-8451-bf4fc22624a6" visible="True" title="Equity curve chart" />
+        <Topic id="78adcfb5-7c77-4f08-bed0-41c5eb2fd4ce" visible="True" title="Box chart" />
+        <Topic id="96f4c342-1d2f-4e0d-9352-5452643df5ab" visible="True" title="Cluster chart" />
       </Topic>
-      <Topic id="4cd2b7f9-fe8d-404a-bec6-227783410beb" visible="True" title="Логирование">
-        <Topic id="a206d470-20f1-42ed-b066-6e322d55d436" visible="True" title="Панель логов" />
-        <Topic id="dc573dca-b2ea-44c4-884d-b7d0ba8b212d" visible="True" title="Расширенная панель логов" />
+      <Topic id="4cd2b7f9-fe8d-404a-bec6-227783410beb" visible="True" isExpanded="true" title="Logging">
+        <Topic id="a206d470-20f1-42ed-b066-6e322d55d436" visible="True" title="Log panel" />
+        <Topic id="dc573dca-b2ea-44c4-884d-b7d0ba8b212d" visible="True" title="Extended log panel" />
       </Topic>
-      <Topic id="11b48b20-9502-4f7c-9d14-e9dd8b09d889" visible="True" title="Портфели">
-        <Topic id="bacfd0de-8a09-4ef8-a302-5dc010e36dc9" visible="True" title="Выпадающий список портфелей" />
-        <Topic id="528beb23-24fd-4d30-a9ff-4a3602b34fc2" visible="True" title="Выбор портфеля" />
-        <Topic id="059d6abd-2ef6-459f-bc1a-69c72213689b" visible="True" title="Окно выбора портфелей" />
-        <Topic id="275f3825-828e-4d3b-a032-7d4ff0f6717f" visible="True" title="Таблица портфелей" />
+      <Topic id="11b48b20-9502-4f7c-9d14-e9dd8b09d889" visible="True" isExpanded="true" title="Portfolios">
+        <Topic id="bacfd0de-8a09-4ef8-a302-5dc010e36dc9" visible="True" title="Drop down list" />
+        <Topic id="528beb23-24fd-4d30-a9ff-4a3602b34fc2" visible="True" title="Picker" />
+        <Topic id="059d6abd-2ef6-459f-bc1a-69c72213689b" visible="True" title="Window" />
+        <Topic id="275f3825-828e-4d3b-a032-7d4ff0f6717f" visible="True" title="Table" />
       </Topic>
-      <Topic id="c4bfe1be-0e21-4480-814b-abaa13536f1f" visible="True" title="Инструменты">
-        <Topic id="3d7de2e9-079d-40f5-9800-8cd81456f477" visible="True" title="Создание инструмента" />
-        <Topic id="de52af78-ec80-45b4-9820-0052f8add762" visible="True" title="Инструменты" />
-        <Topic id="f4e84944-41ad-42f2-9d2a-2854a8665152" visible="True" title="Выбор инструмента" />
-        <Topic id="43ce1f81-83aa-4e83-816f-7362de518f9e" visible="True" title="Непрерывный фьючерс" />
-        <Topic id="c3ee456c-31a9-4bc9-b296-c5f805bafb9e" visible="True" title="Индекс" />
+      <Topic id="c4bfe1be-0e21-4480-814b-abaa13536f1f" visible="True" isExpanded="true" title="Instruments">
+        <Topic id="3d7de2e9-079d-40f5-9800-8cd81456f477" visible="True" title="Window" />
+        <Topic id="de52af78-ec80-45b4-9820-0052f8add762" visible="True" title="Table" />
+        <Topic id="f4e84944-41ad-42f2-9d2a-2854a8665152" visible="True" title="Picker" />
+        <Topic id="43ce1f81-83aa-4e83-816f-7362de518f9e" visible="True" title="Continuous futures" />
+        <Topic id="c3ee456c-31a9-4bc9-b296-c5f805bafb9e" visible="True" title="Index" />
       </Topic>
-      <Topic id="af144c31-4138-4d15-8097-fd0137370830" visible="True" isExpanded="true" title="Рыночные данные">
-        <Topic id="8ec4f4b6-e7c8-4bf0-b05e-1d98960ca45f" visible="True" title="Тиковые сделки" />
+      <Topic id="af144c31-4138-4d15-8097-fd0137370830" visible="True" isExpanded="true" title="Market-data">
+        <Topic id="8ec4f4b6-e7c8-4bf0-b05e-1d98960ca45f" visible="True" title="Ticks" />
         <Topic id="cec80fb2-5072-4900-92d8-0e5c88becce3" visible="True" title="Level1" />
-        <Topic id="3a23bf32-fcbd-409b-99b3-2ff1b953c85a" visible="True" title="Стакан" />
-        <Topic id="583c9ad6-8798-4167-a6a1-667e9929fe2d" visible="True" title="Лог заявок" />
-        <Topic id="f9005237-fc93-4086-9300-6b081056a0fa" visible="True" title="Новости" />
+        <Topic id="3a23bf32-fcbd-409b-99b3-2ff1b953c85a" visible="True" title="Order book" />
+        <Topic id="583c9ad6-8798-4167-a6a1-667e9929fe2d" visible="True" title="Order log" />
+        <Topic id="f9005237-fc93-4086-9300-6b081056a0fa" visible="True" title="News" />
       </Topic>
-      <Topic id="20b858de-424e-43ee-89ab-00002d344f89" visible="True" title="Торговля">
-        <Topic id="5bb4f6f0-9057-4a88-b968-a5fd60641d4d" visible="True" title="Заявки" />
-        <Topic id="7ffeb2d8-55f3-447b-beb7-9b8017f5e7f4" visible="True" title="Собственные сделки" />
-        <Topic id="cfc729e7-65e7-4ec3-b215-57031be290c7" visible="True" title="Ввод новой заявки" />
-        <Topic id="94e71651-8964-41fc-866d-3ff65f513440" visible="True" title="Ввод стоп-заявки" />
+      <Topic id="20b858de-424e-43ee-89ab-00002d344f89" visible="True" isExpanded="true" title="Trading">
+        <Topic id="5bb4f6f0-9057-4a88-b968-a5fd60641d4d" visible="True" title="Orders" />
+        <Topic id="7ffeb2d8-55f3-447b-beb7-9b8017f5e7f4" visible="True" title="Own trades" />
+        <Topic id="cfc729e7-65e7-4ec3-b215-57031be290c7" visible="True" title="New order creation" />
+        <Topic id="94e71651-8964-41fc-866d-3ff65f513440" visible="True" title="New stop order creation" />
       </Topic>
-      <Topic id="36095948-4925-4809-b621-e3188d80b739" visible="True" title="Стратегии">
-        <Topic id="2a080612-818f-4757-affd-538af4e044ef" visible="True" title="Статистика" />
+      <Topic id="36095948-4925-4809-b621-e3188d80b739" visible="True" isExpanded="true" title="Strategies">
+        <Topic id="2a080612-818f-4757-affd-538af4e044ef" visible="True" title="Statistics" />
       </Topic>
-      <Topic id="b69ea6e5-d4e9-4889-b2aa-18c60a736805" visible="True" title="Опционы">
-        <Topic id="0bcd3950-6fc9-463a-b473-6b0c6587f7f1" visible="True" title="Доска опционов" />
-        <Topic id="5d9f8c0d-d05c-4a39-9fad-7148df4411ad" visible="True" title="График позиции" />
+      <Topic id="b69ea6e5-d4e9-4889-b2aa-18c60a736805" visible="True" isExpanded="true" title="Options">
+        <Topic id="0bcd3950-6fc9-463a-b473-6b0c6587f7f1" visible="True" title="Option desk" />
+        <Topic id="5d9f8c0d-d05c-4a39-9fad-7148df4411ad" visible="True" title="Position chart" />
       </Topic>
       <Topic id="c4aa5add-198d-432b-93fa-6ce60d0b7856" visible="True" title="PropertyGridEx" />
-      <Topic id="88a40124-43a6-4be9-b04b-a245000fca70" visible="True" title="UniversalGrid" />
     </Topic>
-    <Topic id="5794f4b0-c536-4713-ad08-955a4a01b196" visible="True" title="Сообщения">
-      <Topic id="fcd2df04-2463-4f85-aa0c-9b7a8f95a56a" visible="True" title="Описание" />
-      <Topic id="fb79e67d-945c-493d-bdac-85d0040af828" visible="True" title="Адаптеры" />
-      <Topic id="a26fc10a-4aa5-4a3e-9494-823c43eb9c84" visible="True" title="Хранилище сообщений" />
-      <Topic id="c883681e-f822-4f81-a7a3-542b81db8b3c" visible="True" title="Сетевое взаимодействие" />
+    <Topic id="5794f4b0-c536-4713-ad08-955a4a01b196" visible="True" isExpanded="true" title="Messages">
+      <Topic id="fcd2df04-2463-4f85-aa0c-9b7a8f95a56a" visible="True" title="Description" />
+      <Topic id="fb79e67d-945c-493d-bdac-85d0040af828" visible="True" title="Adapters" />
+      <Topic id="a26fc10a-4aa5-4a3e-9494-823c43eb9c84" visible="True" title="Storage" />
+      <Topic id="c883681e-f822-4f81-a7a3-542b81db8b3c" visible="True" title="Networking" />
     </Topic>
-    <Topic id="16070956-6e63-4cef-b6a8-6eb42372c424" visible="True" title="Биржевое время" />
-    <Topic id="a8486498-a2d8-4924-b009-8b93138b268a" visible="True" title="Арифметические операции" />
-    <Topic id="aca28ee6-5c0c-47ee-a7e6-fe295e001be7" visible="True" title="Конвертация валют" />
-    <Topic id="4efd0545-a100-44ed-bdf5-4588e5665199" visible="True" title="Примеры" />
+    <Topic id="16070956-6e63-4cef-b6a8-6eb42372c424" visible="True" title="Exchange time" />
+    <Topic id="a8486498-a2d8-4924-b009-8b93138b268a" visible="True" title="Arithmetic operations" />
+    <Topic id="aca28ee6-5c0c-47ee-a7e6-fe295e001be7" visible="True" title="Currency converter" />
+    <Topic id="4efd0545-a100-44ed-bdf5-4588e5665199" visible="True" title="Samples" />
   </Topic>
   <Topic id="a720a275-440a-44ce-86e2-bcec2e0bc55f" visible="True" isExpanded="true" title="S#.Data">
     <Topic id="755b1c72-57ee-4f26-8a92-5da9af7a7345" visible="True" title="Установка S#.Data" />

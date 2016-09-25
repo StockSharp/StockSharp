@@ -7,46 +7,44 @@
 
     <introduction>
 		<para>
-			Для построения синтетических позиций по опционам (или, наоборот, опционных позиций по базовому инструменту) можно воспользоваться специальным
-			классом <codeEntityReference>T:StockSharp.Algo.Derivatives.Synthetic</codeEntityReference>. Данный класс через методы
-			<codeEntityReference qualifyHint="true">M:StockSharp.Algo.Derivatives.Synthetic.Buy</codeEntityReference> и
-			<codeEntityReference qualifyHint="true">M:StockSharp.Algo.Derivatives.Synthetic.Sell</codeEntityReference> возвращает комбинацию из
-			синтетических инструментов для определения их возможной позиции.
+			To create the synthetic positions by options (or, vice versa, option positions by the base instrument) you can use the special
+			<codeEntityReference>T:StockSharp.Algo.Derivatives.Synthetic</codeEntityReference> class. This class through
+			<codeEntityReference qualifyHint="true">M:StockSharp.Algo.Derivatives.Synthetic.Buy</codeEntityReference> and
+			<codeEntityReference qualifyHint="true">M:StockSharp.Algo.Derivatives.Synthetic.Sell</codeEntityReference> methods returns a combination of synthetic
+			instruments to determine their possible position.
 		</para>
 		<para>
-			Синтетическую комбинацию можно использовать совместно с определением степени ликвидности по опциону (когда нет возможности реализовать необходимую
-			позицию). Для этого можно воспользоваться методами анализа ликвидности стакана
-			<codeEntityReference qualifyHint="true">Overload:StockSharp.Algo.TraderHelper.GetTheoreticalTrades</codeEntityReference>:
+			The synthetic combination can be used together with the degree of liquidity by the option determination (when it is impossible to get the required position).
+			To do this you can use the order book liquidity analysis methods <codeEntityReference qualifyHint="true">Overload:StockSharp.Algo.TraderHelper.GetTheoreticalTrades</codeEntityReference>:
 		</para>
-		<code language="C#"><![CDATA[// получить стакан опциона
+		<code language="C#"><![CDATA[// order book of the option
 var depth = trader.GetMarketDepth(option);
 
-// получить теоритические сделки на покупку 100 контрактов
+// calc theoretical price for 100 contracts
 var trades = depth.GetTheoreticalTrades(OrderDirections.Buy, 100);
 
-// расчитать реализованный объем
+// calc matched size
 var matchedVolume = trades.Sum(t => t.Trade.Volume);
 
-// регистрируем заявку по основному опциону
+// a new order for the option
 trader.RegisterOrder(new Order
 {
 	Security = option,
 	Volume = matchedVolume,
 	Direction = OrderDirections.Buy,
-	// максимальная цена, чтобы реализовать требуемый объем
+	// using max price
 	Price = trades.Max(t => t.Trade.Price),
 });
 
-// определяем оставшийся объем
+// calc elapsed size
 var elapsedVolume = 100 - matchedVolume;
 
-// если реализованный объем меньше планируемого
 if (elapsedVolume > 0)
 {
-	// получаем синтетические инструменты
+	// creating synthetic instruments
 	var syntheticBuy = new Synthetic(option).Buy();
 
-	// регистрируем оставшийся объем по синтетическим инструментам
+	// registering orders with elapsed volumes
 	foreach (var pair in syntheticBuy)
 	{
 		trader.RegisterOrder(new Order
@@ -59,9 +57,9 @@ if (elapsedVolume > 0)
 	}
 }]]></code>
 		<para>
-			Аналогично опционам также можно получить опционную позицию для базового инструмента через методы
-			<codeEntityReference qualifyHint="true">M:StockSharp.Algo.Derivatives.Synthetic.Buy(System.Decimal)</codeEntityReference> и
-			<codeEntityReference qualifyHint="true">M:StockSharp.Algo.Derivatives.Synthetic.Sell(System.Decimal)</codeEntityReference>.
+			Similarly to options, you can also get the option position for the base instrument through
+			<codeEntityReference qualifyHint="true">M:StockSharp.Algo.Derivatives.Synthetic.Buy(System.Decimal)</codeEntityReference> and
+			<codeEntityReference qualifyHint="true">M:StockSharp.Algo.Derivatives.Synthetic.Sell(System.Decimal)</codeEntityReference> methods.
 		</para>
     </introduction>
 

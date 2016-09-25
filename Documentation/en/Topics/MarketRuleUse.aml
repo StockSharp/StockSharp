@@ -4,7 +4,7 @@
 	<introduction>
 		<list class="bullet">
   			<listItem>
-  				<para><legacyBold>Создание правила на условие регистрации ордера:</legacyBold></para>
+  				<para><legacyBold>Creating a rule for the order registration condition:</legacyBold></para>
   				<code language="C#">
 				<![CDATA[
 private void btnBuy_Click(object sender, RoutedEventArgs e)
@@ -20,28 +20,28 @@ private void btnBuy_Click(object sender, RoutedEventArgs e)
     
 	order
 		.WhenRegistered()
-		.Do(() => trader.AddInfoLog("Заявка успешно зарегестрирована"))
+		.Do(() => trader.AddInfoLog("The order was successfully registered."))
 		.Once()
 		.Apply(this);
     
-	// регистрация заявки
+	// registering the order
 	trader.RegisterOrder(order);
 }
 	  	  		]]>
 				</code>
 				<para>
-					Теперь, когда сработает событие (заявка будет зарегистрирована на бирже), указанное через метод
+					Now, when the event is triggered (the order will be registered on exchange), the action specified through the
 					<codeEntityReference qualifyHint="true" autoUpgrade="true">M:StockSharp.Algo.IMarketRule.Do(System.Action)</codeEntityReference>
-					действие будет вызвано.
+					method will be called.
 				</para>
 				<para>
-					В конце формирования правила вызывается метод <codeEntityReference qualifyHint="true" autoUpgrade="true">M:StockSharp.Algo.MarketRuleHelper.Apply(StockSharp.Algo.IMarketRule)</codeEntityReference>.
-					До тех пор, пока метод не будет вызван для правила - оно неактивно (обработчик в <codeEntityReference qualifyHint="true" autoUpgrade="true">M:StockSharp.Algo.IMarketRule.Do(System.Action)</codeEntityReference> не будет вызываться).
+					At the end of the rule creating the <codeEntityReference qualifyHint="true" autoUpgrade="true">M:StockSharp.Algo.MarketRuleHelper.Apply(StockSharp.Algo.IMarketRule)</codeEntityReference>
+					method is called. As long as the method is not called for the rule - it is inactive (the handler in the <codeEntityReference qualifyHint="true" autoUpgrade="true">M:StockSharp.Algo.IMarketRule.Do(System.Action)</codeEntityReference> will not be called).
 				</para>
   			</listItem>
   			
   			<listItem>
-  				<para><legacyBold>Создание правил внутри стратегии:</legacyBold></para>
+  				<para><legacyBold>Rules creating within the strategy:</legacyBold></para>
   				<code language="C#">
 				<![CDATA[
 class FirstStrategy : Strategy
@@ -70,14 +70,14 @@ class FirstStrategy : Strategy
   			</listItem>
   			
   			<listItem>
-  				<para><legacyBold>Удаление ненужных правил.</legacyBold></para>
+  				<para><legacyBold>Unnecessary rules removing:</legacyBold></para>
   				
-				<para>У <codeEntityReference qualifyHint="false">T:StockSharp.Algo.IMarketRule</codeEntityReference> есть
-				<codeEntityReference qualifyHint="false">P:StockSharp.Algo.IMarketRule.Token</codeEntityReference> - токен правила, с которым он ассоциирован. Например, для правила 
+				<para>The <codeEntityReference qualifyHint="false">T:StockSharp.Algo.IMarketRule</codeEntityReference> has the
+				<codeEntityReference qualifyHint="false">P:StockSharp.Algo.IMarketRule.Token</codeEntityReference> - this token is associated with the rule. For example, for the
 				<codeEntityReference qualifyHint="false" autoUpgrade="true">M:StockSharp.Algo.MarketRuleHelper.WhenCanceled(StockSharp.BusinessEntities.Order,StockSharp.BusinessEntities.IConnector)</codeEntityReference>
-				токеном будет являться заявка.</para>  				
+				rule the token will be the order.</para>  				
   				
-  				<para>Когда сработало правило успешной отмены заявки, то лучше удалить все остальные правила, связанные с этой заявкой:</para>
+  				<para>When the rule of the successful order cancel has worked, then it is better to remove all of the other rules related to this order:</para>
   				<code language="C#">
 				<![CDATA[
 var order = this.CreateOrder(direction, (decimal) Security.GetCurrentPrice(direction), Volume);
@@ -87,9 +87,9 @@ var ruleCanceled = order.WhenCanceled();
 ruleCanceled
 	.Do(() => 
 			{
-				this.AddInfoLog("Заявка успешно отменена");
+				this.AddInfoLog("The order was successfully cancelled.");
 				
-				// удаление всех правил связанных с order
+				// removing all rules associated with the specified order
 				Rules.RemoveRulesByToken(ruleCanceled, ruleCanceled.Token);
 			})
 	.Once()
@@ -97,35 +97,35 @@ ruleCanceled
 
 order
 	.WhenRegistered()
-    .Do(() => this.AddInfoLog("Заявка успешно зарегестрирована"))
+    .Do(() => this.AddInfoLog("The order was successfully registered."))
     .Once()
     .Apply(this)
 
 order
 	.WhenRegisterFailed()
-    .Do(() => this.AddInfoLog("Заявка не принята биржей"))
+    .Do(() => this.AddInfoLog("The order was not accepted by broker."))
     .Once()
     .Apply(this)
 	
 order
 	.WhenMatched()
-	.Do(() => this.AddInfoLog("Заявка полностью исполнена"))
+	.Do(() => this.AddInfoLog("The order was fully matched."))
 	.Once()
 	.Apply(this);	
         
-// регистрирация заявки
+// registering the order
 RegisterOrder(order);
 	  	  		]]>
 				</code>	  				
   			</listItem>  
   			
   			<listItem>
-  				<para><legacyBold>Oбъединение правил по условию 
+  				<para><legacyBold>Rules combination by the condition
   				<codeEntityReference qualifyHint="false" autoUpgrade="true">M:StockSharp.Algo.MarketRuleHelper.Or(StockSharp.Algo.IMarketRule,StockSharp.Algo.IMarketRule[])</codeEntityReference>
   				/
   				<codeEntityReference qualifyHint="false" autoUpgrade="true">M:StockSharp.Algo.MarketRuleHelper.And(StockSharp.Algo.IMarketRule,StockSharp.Algo.IMarketRule[])</codeEntityReference>.</legacyBold></para>
 
-  				<para>Когда выйдет время <legacyBold>ИЛИ</legacyBold> закроется свечка:</para>
+  				<para>When time is over <legacyBold>OR</legacyBold> the candle is closed:</para>
   				
   				<code language="C#">
 				<![CDATA[
@@ -137,25 +137,25 @@ TimeSpan _holdTimeToOpen = TimeSpan.FromMilliseconds(5000);
 Trader
 	.WhenIntervalElapsed(_holdTimeToOpen)
 	.Or(_series.WhenCandlesStarted())
-	.Do(() => this.AddInfoLog("Свечка закрыта или вышло время"))
+	.Do(() => this.AddInfoLog("The candle is finished or time is over."))
 	.Once()
 	.Apply(this);
 	  	  		]]>
 				</code>	  	
 				
-  				<para>Или такой формат записи:</para>
+  				<para>Or such writing format:</para>
   				
   				<code language="C#">
 				<![CDATA[
 MarketRuleHelper
 	.Or(new IMarketRule[] {Trader.WhenIntervalElapsed(_holdTimeToOpen), _series.WhenCandlesStarted()})
-	.Do(() => this.AddInfoLog("Свечка закрыта или вышло время"))
+	.Do(() => this.AddInfoLog("The candle is finished or time is over."))
 	.Once()
 	.Apply(this);
 	  	  		]]>
 				</code>	  				
   				
-  				<para>Когда цена последней сделки будет выше 135000 <legacyBold>И</legacyBold> ниже 140000:</para>
+  				<para>When the last trade price will be higher than 135000 <legacyBold>AND</legacyBold> lower than 140000:</para>
   				<code language="C#">
 				<![CDATA[
 var priceMore = new Unit(135000m, UnitTypes.Limit);
@@ -163,16 +163,17 @@ var priceLess = new Unit(140000m, UnitTypes.Limit);
 				
 MarketRuleHelper
 	.And(new IMarketRule[] {Security.WhenLastTradePriceMore(priceMore), Security.WhenLastTradePriceLess(priceLess)})
-	.Do(() => this.AddInfoLog(string.Format("Цена последней сделки находится в диапазоне от {0} до {1}", priceMore, priceLess)))
+	.Do(() => /* some action */))
 	.Apply(this);
 	  	  		]]>
 				</code>
 
 				<alert class="note">
-					<para>Обработчик в 
+					<para>The handler in the 
 					<codeEntityReference qualifyHint="true" autoUpgrade="true">M:StockSharp.Algo.IMarketRule.Do(System.Action)</codeEntityReference>
-					вызовется после того, как сработает последнее правило добавленное через 
-					<codeEntityReference qualifyHint="false" autoUpgrade="true">M:StockSharp.Algo.MarketRuleHelper.And(StockSharp.Algo.IMarketRule,StockSharp.Algo.IMarketRule[])</codeEntityReference>.</para>
+					will be called after the last rule added through the 
+					<codeEntityReference qualifyHint="false" autoUpgrade="true">M:StockSharp.Algo.MarketRuleHelper.And(StockSharp.Algo.IMarketRule,StockSharp.Algo.IMarketRule[])</codeEntityReference>
+					has worked.</para>
 				</alert>
   			</listItem> 
   			

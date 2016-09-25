@@ -3,13 +3,13 @@
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     <introduction>
        <para>
-        Если инструмент торгуется на нескольких площадках, то в качестве кода площадки можно использовать "ALL". Например, инструмент с идентификатором AAPL@ALL означает, 
-        что в нем собраны данные со всех площадок для тикера AAPL (AAPL@BATS, AAPL@ICE и т.д.) и "стакан" у них также общий.
+        If  the instrument is traded on several boards, then as the board code you can use the "ALL". For example, the instrument with the AAPL@ALL identifier means
+        that it collects data from all boards for ticker AAPL (AAPL@BATS, AAPL@ICE, etc.) and these data also have a common order book.
         </para>
         <para>
-        Код площадки служит для выведения заявки в конкретную торговую систему, если указано "ALL", то маршрут заявки будет определять брокер или биржа.
-        В этом случае брокер или биржа самостоятельно решают на какой площадке лучше исполнить заявку. Напротив, если указана конкретная площадка, например BATS, 
-        то заявка попадет только на BATS.
+        The board code used to send the order in a specific trading system, if you specify "ALL", then the broker or the exchange will determine the order route. In this
+        case, the broker or the exchange independently decide on which board is better to match an order. On the contrary, if you specify a particular board, such as
+        BATS, then the order will be sent only to BATS.
       </para>
     </introduction>
   </developerConceptualDocument>

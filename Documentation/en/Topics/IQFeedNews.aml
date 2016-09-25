@@ -3,12 +3,12 @@
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     <introduction>
       	<para>
-      		<codeEntityReference>T:StockSharp.IQFeed.IQFeedTrader</codeEntityReference> позволяет получать новости.
-      		Список полученных новостей можно получить через <codeEntityReference>P:StockSharp.BusinessEntities.IConnector.News</codeEntityReference>.
+      		<codeEntityReference>T:StockSharp.IQFeed.IQFeedTrader</codeEntityReference> allows you to get news. News list is available through the
+      		<codeEntityReference>P:StockSharp.BusinessEntities.IConnector.News</codeEntityReference>.
       	</para>
 		<para>
-			Для того чтобы начать получить новости, необходимо подписаться на событие <codeEntityReference>E:StockSharp.BusinessEntities.IConnector.NewNews</codeEntityReference> и вызвать
-			метод <codeEntityReference>M:StockSharp.BusinessEntities.IConnector.RegisterNews</codeEntityReference>.
+			In order to begin to receive the news, you must subscribe to the <codeEntityReference>E:StockSharp.BusinessEntities.IConnector.NewNews</codeEntityReference>
+			event and call the <codeEntityReference>M:StockSharp.BusinessEntities.IConnector.RegisterNews</codeEntityReference> method.
 		</para>
 		<!-- <para>
 			По умолчанию для каждой новости приходит только ее заголовок, чтобы получить полный текст новости необходимо использовать метод <codeEntityReference qualifyHint="true">M:StockSharp.IQFeed.IQFeedTrader.GetNewsStory(System.Int64)</codeEntityReference>.

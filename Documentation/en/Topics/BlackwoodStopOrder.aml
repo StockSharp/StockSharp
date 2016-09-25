@@ -2,9 +2,9 @@
 <topic id="b643d681-0558-43ed-87ce-53ee7d3f6538" revisionNumber="1">
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     <introduction>
-		<para>Для регистрации стоп-заявок используется тот же метод <codeEntityReference qualifyHint="false" autoUpgrade="true">M:StockSharp.BusinessEntities.IConnector.RegisterOrder(StockSharp.BusinessEntities.Order)</codeEntityReference>, 
-		но с указанием стоп-условия <codeEntityReference qualifyHint="false">T:StockSharp.Blackwood.BlackwoodOrderCondition</codeEntityReference>
-		и типа заявки <codeEntityReference qualifyHint="false">F:StockSharp.Messages.OrderTypes.Conditional</codeEntityReference>:</para>   
+		<para>The same <codeEntityReference qualifyHint="false" autoUpgrade="true">M:StockSharp.BusinessEntities.IConnector.RegisterOrder(StockSharp.BusinessEntities.Order)</codeEntityReference>
+		method used to register stop orders, but with <codeEntityReference qualifyHint="false">T:StockSharp.Blackwood.BlackwoodOrderCondition</codeEntityReference>
+		and the <codeEntityReference qualifyHint="false">F:StockSharp.Messages.OrderTypes.Conditional</codeEntityReference> type of order indicating:</para>   
 		
         <code language="C#">
         <![CDATA[
@@ -14,7 +14,7 @@ private void SendClick(object sender, RoutedEventArgs e)
 
 	if (condType == null)
 	{
-		MessageBox.Show(this, "Необходимо выбрать условие.");
+		MessageBox.Show(this, "Conditional type must be selected.");
 		return;
 	}
 
@@ -40,9 +40,9 @@ private void SendClick(object sender, RoutedEventArgs e)
 		]]>
 		</code>
 		
-		<para>Для работы с условиями стоп-заявок коннектор <codeEntityReference qualifyHint="false">T:StockSharp.Blackwood.BlackwoodTrader</codeEntityReference>
-		предоставляет специальный класс <codeEntityReference qualifyHint="false">T:StockSharp.Blackwood.BlackwoodOrderCondition</codeEntityReference>.
-		Данным классом поддерживаются типы стоп-заявок, указанные в <codeEntityReference qualifyHint="false">T:StockSharp.Blackwood.BlackwoodOrderConditionTypes</codeEntityReference>.</para>
+		<para>The <codeEntityReference qualifyHint="false">T:StockSharp.Blackwood.BlackwoodTrader</codeEntityReference> connector provides the special
+		<codeEntityReference qualifyHint="false">T:StockSharp.Blackwood.BlackwoodOrderCondition</codeEntityReference> сlass to work with the stop orders conditions.
+		This class supports the types of stop orders indicated in the <codeEntityReference qualifyHint="false">T:StockSharp.Blackwood.BlackwoodOrderConditionTypes</codeEntityReference>.</para>
 	</introduction>
   </developerConceptualDocument>
 </topic>

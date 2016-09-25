@@ -3,8 +3,9 @@
 	<developerWalkthroughDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     <introduction>
     	<para>
-				Иногда требуется установить одновременно несколько правил, чтобы каждое из них было активно только тогда, когда завершено формирование всех этих правил.
-				Для этого используется метод <codeEntityReference qualifyHint="true">M:StockSharp.Algo.MarketRuleHelper.SuspendRules(System.Action)</codeEntityReference>.
+				Sometimes you want to set multiple rules in suspension mode (prevent to trigger any of them until code initialization will be finished).
+				To do this, the <codeEntityReference qualifyHint="true">M:StockSharp.Algo.MarketRuleHelper.SuspendRules(System.Action)</codeEntityReference>
+				method is used.
 		</para>
     
     </introduction>
@@ -55,13 +56,13 @@ order
 	
 
     <section address="Section2">
-		<title>Использование приостановки правил</title>
+		<title>Rules suspension using</title>
 		<content>
 			<procedure>
 				<steps class="bullet">
 				<step>
 						<content>
-							<para>Вне стратегии:</para>
+							<para>Out of the strategy:</para>
 			
 							<code language="C#">
 							<![CDATA[
@@ -69,13 +70,13 @@ MarketRuleHelper.SuspendRules(() =>
 {
 	order
 		.WhenRegistered()
-		.Do(() => trader.AddInfoLog("Заявка успешно зарегестрирована"))
+		.Do(() => trader.AddInfoLog("The order was successfully registered."))
 		.Once()
 		.Apply(this);
 	
 	order
 		.WhenCancelled()
-		.Do(() => trader.AddInfoLog("Заявка успешно отменена"))
+		.Do(() => trader.AddInfoLog("The order was successfully cancelled."))
 		.Once()
 		.Apply(this);
 });
@@ -89,7 +90,7 @@ trader.RegisterOrder(order);
 			
 					<step>
 						<content>
-							<para>Внутри стратегии:</para>
+							<para>Inside the strategy:</para>
 					
 							<code language="C#">
 							<![CDATA[

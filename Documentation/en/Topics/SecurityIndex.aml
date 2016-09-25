@@ -3,25 +3,26 @@
 	<developerWalkthroughDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
 
 	<introduction>
-		<para><codeEntityReference>T:StockSharp.Algo.IndexSecurity</codeEntityReference> - индекс, построенный из инструментов.</para>
-		<para>И его реализация <codeEntityReference>T:StockSharp.Algo.WeightedIndexSecurity</codeEntityReference> - индекс построенный из инструментов с применением весовых коэффициентов.</para>
-		<para>Например когда требуется построить спред между двумя инструментами GZM5 и LKM5.</para>
+		<para><codeEntityReference>T:StockSharp.Algo.IndexSecurity</codeEntityReference> - the index built from instruments.</para>
+		<para>And its implementation <codeEntityReference>T:StockSharp.Algo.WeightedIndexSecurity</codeEntityReference> - the index built from instruments with the use of weighting factors.</para>
+		<para>For example, when you want to build a spread between the two instruments ESM5 and APM5.</para>
 	</introduction>
 
 		<procedure>
-			<title>Создание WeightedIndexSecurity</title>
+			<title>WeightedIndexSecurity creating</title>
 				<steps class="ordered">
 					<step>
 						<content>
-							<para>Объявить составные инструменты, которые будут входить в <codeEntityReference>T:StockSharp.Algo.WeightedIndexSecurity</codeEntityReference> и сам <codeEntityReference>T:StockSharp.Algo.WeightedIndexSecurity</codeEntityReference>:</para>
+							<para>To declare the compound instruments that will be included in <codeEntityReference>T:StockSharp.Algo.WeightedIndexSecurity</codeEntityReference>
+							and in the <codeEntityReference>T:StockSharp.Algo.WeightedIndexSecurity</codeEntityReference> itself:</para>
             				<code language="C#">
             				<![CDATA[
 private Security _instr1;
 private Security _instr2;
 private WeightedIndexSecurity _indexInstr;
 
-private const string _secCode1 = "GZM5";
-private const string _secCode2 = "LKM5";
+private const string _secCode1 = "ESM5";
+private const string _secCode2 = "APM5";
 							]]>
 							</code>
 						</content>
@@ -29,10 +30,10 @@ private const string _secCode2 = "LKM5";
 
 					<step>
 						<content>
-							<para>Создать <codeEntityReference>T:StockSharp.Algo.WeightedIndexSecurity</codeEntityReference>:</para>
+							<para>To create the <codeEntityReference>T:StockSharp.Algo.WeightedIndexSecurity</codeEntityReference>:</para>
             				<code language="C#">
             				<![CDATA[
-_indexInstr = new WeightedIndexSecurity() { ExchangeBoard = ExchangeBoard.Forts, Id = "IndexInstr" };
+_indexInstr = new WeightedIndexSecurity() { ExchangeBoard = ExchangeBoard.Associated, Id = "IndexInstr" };
 							]]>
 							</code>						
 						</content>
@@ -40,7 +41,7 @@ _indexInstr = new WeightedIndexSecurity() { ExchangeBoard = ExchangeBoard.Forts,
 					
 					<step>
 						<content>
-							<para>Добавить в него составные инструменты:</para>
+							<para>To add the compound instruments in it:</para>
             				<code language="C#">
             				<![CDATA[
 _indexInstr.Weights.Add(_instr1, 1);

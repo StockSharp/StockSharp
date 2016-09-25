@@ -7,20 +7,18 @@
 
 	<introduction>
 		<para>
-			Замена заявок при написании торговых алгоритмов более продвинутый способ, чем <link xlink:href="6267fec7-64e5-4488-ba08-c72cf61fcc9e">Снятие заявок</link> и последующая регистрация.
-			Чтобы заменить заявку необходимо вызывать метод <codeEntityReference qualifyHint="true">M:StockSharp.BusinessEntities.IConnector.ReRegisterOrder(StockSharp.BusinessEntities.Order,System.Decimal,System.Decimal)</codeEntityReference>,
-		   или сразу передать объект новой заявки <codeEntityReference qualifyHint="true">M:StockSharp.BusinessEntities.IConnector.ReRegisterOrder(StockSharp.BusinessEntities.Order,StockSharp.BusinessEntities.Order)</codeEntityReference>.
-			<!--При этом, регистрируемый объем <codeEntityReference qualifyHint="true">P:StockSharp.BusinessEntities.Order.Volume</codeEntityReference> новой заявки будет равен
-			нереализованному балансу <codeEntityReference qualifyHint="true">P:StockSharp.BusinessEntities.Order.Balance</codeEntityReference> старой.-->
+			Orders replacement in the trading algorithms creating is more advanced way than the <link xlink:href="6267fec7-64e5-4488-ba08-c72cf61fcc9e">Orders cancel</link>
+			and the following registration. To replace the order you should call the <codeEntityReference qualifyHint="true">M:StockSharp.BusinessEntities.IConnector.ReRegisterOrder(StockSharp.BusinessEntities.Order,System.Decimal,System.Decimal)</codeEntityReference>
+			method or pass the new order object <codeEntityReference qualifyHint="true">M:StockSharp.BusinessEntities.IConnector.ReRegisterOrder(StockSharp.BusinessEntities.Order,StockSharp.BusinessEntities.Order)</codeEntityReference>
+			at once.
 		</para>
 	  <para>
-			 При замене стоп-заявок используется алгоритм с отменой заявки и выставлением новой. В итоге, всегда получается новый объект <codeEntityReference>T:StockSharp.BusinessEntities.Order</codeEntityReference>,
-		который содержит информацию старой заявки + измененная часть. В дальнейшем, если требуется работа с измененной заявкой (например, отменить ее или опять изменить),
-		то необходимо использовать именно этот новый объект <codeEntityReference>T:StockSharp.BusinessEntities.Order</codeEntityReference>.
-
+			As the result or orders replacement the new <codeEntityReference>T:StockSharp.BusinessEntities.Order</codeEntityReference>,
+			object created, which contains old order information plus the changed part. Subsequently, if you want to work with the changed order (for example, to cancel
+			or to change it again), you must use this new <codeEntityReference>T:StockSharp.BusinessEntities.Order</codeEntityReference> object.
 	  </para>
 
-		<para>В примере ниже показан способ "движения" заявки по лучшей цене:</para>
+		<para>The following example shows how "to move" the order at the best price:</para>
 	</introduction>
 
     <!-- Specify at least one procedure or section/procedure and codeExample -->
@@ -58,13 +56,13 @@
 
       <code language="C#"><![CDATA[if (registeredOrder.Security.BestBid != null && registeredOrder.Security.BestAsk != null)
 {
-	// registeredOrder - это ранее зарегистрированная заявка.
+	// registeredOrder - successfully registered order.
 	var newOrder = registeredOrder.Clone();
 
-	// изменяем цену на лучшую
+	// changing the price to be the best on order book
 	newOrder.Price = (registeredOrder.Direction == OrderDirections.Buy ? registeredOrder.Security.BestBid : registeredOrder.Security.BestAsk).Price;
 
-	// заменяем заявку на бирже
+	// sending request the replace our order with new price
 	trader.ReRegisterOrder(registeredOrder, newOrder);
 }]]></code>
 
@@ -116,7 +114,7 @@
         <link vref="id or URI"> Optional link text </link>
         
     -->
-		<link xlink:href="6267fec7-64e5-4488-ba08-c72cf61fcc9e">Снятие заявок</link>
+		<link xlink:href="6267fec7-64e5-4488-ba08-c72cf61fcc9e">Orders cancel</link>
 
       <!-- Example Usage 
 

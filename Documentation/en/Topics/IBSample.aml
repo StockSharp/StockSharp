@@ -2,8 +2,8 @@
 <topic id="7c23b480-d472-43df-aabf-f743ad09fded" revisionNumber="1">
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     <introduction>
-      <para>Пример работы с <codeEntityReference qualifyHint="false">T:StockSharp.InteractiveBrokers.InteractiveBrokersTrader</codeEntityReference> демонстрирует приложение SampleIB,
-        показанное на рисунке ниже. Исходные коды примера лежат в дистрибутиве в папке <legacyItalic>Samples/InteractiveBrokers</legacyItalic>.</para>
+      <para>The application SampleIB shows an example of working with <codeEntityReference qualifyHint="false">T:StockSharp.InteractiveBrokers.InteractiveBrokersTrader</codeEntityReference>,
+      as shown in the figure below. The example source code is in the <legacyItalic>Samples/InteractiveBrokers</legacyItalic> folder of the installation package.</para>
 		
 		<mediaLink><image placement="center" xlink:href="ib_main_window"/></mediaLink>
     </introduction>
@@ -11,7 +11,7 @@
 				<steps class="ordered">
 					<step>
 						<content>
-							<para>В самом начале необходимо создать экземпляр класса шлюза <codeEntityReference qualifyHint="false">T:StockSharp.InteractiveBrokers.InteractiveBrokersTrader</codeEntityReference>:</para>
+							<para>First, you need to create an instance of the <codeEntityReference qualifyHint="false">T:StockSharp.InteractiveBrokers.InteractiveBrokersTrader</codeEntityReference>:</para>
             				<code language="C#">
             				<![CDATA[
 Trader = new InteractiveBrokersTrader {
@@ -24,26 +24,26 @@ Trader = new InteractiveBrokersTrader {
 
 					<step>
 						<content>
-							<para>Далее следует установить требуемые обработчики событий <codeEntityReference qualifyHint="false">T:StockSharp.BusinessEntities.IConnector</codeEntityReference>:</para>
+							<para>Then you should to subscribe on required <codeEntityReference qualifyHint="false">T:StockSharp.BusinessEntities.IConnector</codeEntityReference> events:</para>
             				<code language="C#">
             				<![CDATA[
-// подписываемся на событие успешного соединения
+// subscribe on successfully connect event
 Trader.Connected += () =>
 {
 	this.GuiAsync(() => ChangeConnectStatus(true));
 };
 
-// подписываемся на событие разрыва соединения
+// subscribe on connection error event
 Trader.ConnectionError += error => this.GuiAsync(() =>
 {
 	ChangeConnectStatus(false);
 	MessageBox.Show(this, error.ToString(), "Ошибка соединения");
 });
 
-// подписываемся на событие успешного отключения
+// subscribe on successfully disconnect event
 Trader.Disconnected += () => this.GuiAsync(() => ChangeConnectStatus(false));
 
-Trader.Error += error => this.GuiAsync(() => MessageBox.Show(this, error.ToString(), "Ошибка обработки данных"));
+Trader.Error += error => this.GuiAsync(() => MessageBox.Show(this, error.ToString(), "Data processing error"));
 Trader.NewSecurities += securities => this.GuiAsync(() => _securitiesWindow.AddSecurities(securities));
 Trader.NewTrades += trades =>this.GuiAsync(() => _tradesWindow.Trades.AddRange(trades));
 Trader.NewOrders +=orders => this.GuiAsync(() => _ordersWindow.Orders.AddRange(orders));
@@ -61,10 +61,8 @@ Trader.NewPortfolios += portfolios =>
 };
 Trader.NewPositions += positions => this.GuiAsync(() => _positionsWindow.Positions.AddRange(positions));
 
-// подписываемся на событие о неудачной регистрации заявок
 Trader.OrdersRegisterFailed += OrdersFailed;
 
-// подписываемся на событие о неудачном снятии заявок
 Trader.OrdersCancelFailed += OrdersFailed;
 
 							]]>
@@ -74,7 +72,7 @@ Trader.OrdersCancelFailed += OrdersFailed;
 					
 					<step>
 						<content>
-							<para>Далее необходимо выполнить подключение к серверу <token>ib</token>:</para>
+							<para>Then you need to connect to <token>ib</token> server:</para>
             				<code language="C#">
             				<![CDATA[
 Trader.Connect();
@@ -85,23 +83,23 @@ Trader.Connect();
 					
 					<step>
 						<content>
-							<para>При успешном подключении можно ожидать срабатывания событий:</para>
+							<para>Once connected, you can expect to trigger events:</para>
 							<list class="bullet">
 								<listItem>
 									<para><codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.SecuritiesChanged</codeEntityReference> – 
-									изменение инструмента (последней цены, цены спроса/предложения и т.д.) запрошенного через <codeEntityReference>M:StockSharp.BusinessEntities.IConnector.RegisterSecurity(StockSharp.BusinessEntities.Security)</codeEntityReference>.</para>
+									instrument change (last price, best bid/ask price, etc.) requested through <codeEntityReference>M:StockSharp.BusinessEntities.IConnector.RegisterSecurity(StockSharp.BusinessEntities.Security)</codeEntityReference> method.</para>
 								</listItem>
 								<listItem>
 									<para><codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.MarketDepthsChanged</codeEntityReference> – 
-									изменение стакана, запрошенного с помощью <codeEntityReference>M:StockSharp.BusinessEntities.IConnector.RegisterMarketDepth(StockSharp.BusinessEntities.Security)</codeEntityReference>.</para>
+									order book change, requested through <codeEntityReference>M:StockSharp.BusinessEntities.IConnector.RegisterMarketDepth(StockSharp.BusinessEntities.Security)</codeEntityReference> method.</para>
 								</listItem>
 								<listItem>
 									<para><codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.NewTrades</codeEntityReference> – 
-									новые тики по подписанным с помощью <codeEntityReference>M:StockSharp.BusinessEntities.IConnector.RegisterTrades(StockSharp.BusinessEntities.Security)</codeEntityReference> инструментам.</para>
+									new ticks on instruments subscribed by using <codeEntityReference>M:StockSharp.BusinessEntities.IConnector.RegisterTrades(StockSharp.BusinessEntities.Security)</codeEntityReference> method.</para>
 								</listItem>
 								<listItem>
 									<para><codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.PortfoliosChanged</codeEntityReference> – 
-									изменение портфелей, запрошенное с помощью <codeEntityReference>M:StockSharp.BusinessEntities.IConnector.RegisterPortfolio(StockSharp.BusinessEntities.Portfolio)</codeEntityReference>.</para>
+									portfolios change requested through <codeEntityReference>M:StockSharp.BusinessEntities.IConnector.RegisterPortfolio(StockSharp.BusinessEntities.Portfolio)</codeEntityReference> method.</para>
 								</listItem>
 							</list>
 						</content>
@@ -109,7 +107,7 @@ Trader.Connect();
 
 					<step>
 						<content>
-							<para>Поиск инструментов (<link xlink:href="39e0b7aa-0303-438c-b347-fea21540c9f3">подробнее</link>):</para>
+							<para>Instruments search  (<link xlink:href="39e0b7aa-0303-438c-b347-fea21540c9f3">in more details</link>):</para>
 							
 							<mediaLink><image placement="center" xlink:href="ib_securities"/></mediaLink>
             				
@@ -142,15 +140,15 @@ MainWindow.Instance.Trader.LookupSecurities(criteria);
 							]]>
 							</code>
 							
-							<para>Если инструментов с заданными критериями не будет найдено, то вернется ошибка через событие <codeEntityReference>E:StockSharp.BusinessEntities.IConnector.Error</codeEntityReference>:</para>
+							<para>If instruments with specified criteria are not found, then the error returns through the <codeEntityReference>E:StockSharp.BusinessEntities.IConnector.Error</codeEntityReference> event:</para>
 							<mediaLink><image placement="center" xlink:href="ib_security_not_found"/></mediaLink>
 						</content>
 					</step>
 
 					<step>
 						<content>
-							<para>Для получения обновлений по выбранному инструменту необходимо вызвать метод
-							<codeEntityReference>M:StockSharp.BusinessEntities.IConnector.RegisterSecurity(StockSharp.BusinessEntities.Security)</codeEntityReference>:</para>
+							<para>For updates on the selected instrument you need to call
+							<codeEntityReference>M:StockSharp.BusinessEntities.IConnector.RegisterSecurity(StockSharp.BusinessEntities.Security)</codeEntityReference> method:</para>
             				<code language="C#">
             				<![CDATA[
 Trader.RegisterSecurity(SelectedSecurity);
@@ -161,19 +159,19 @@ Trader.RegisterSecurity(SelectedSecurity);
 
 					<step>
 						<content>
-							<para>Для запроса обновлений по стаканам необходимо воспользоваться методом 
-							<codeEntityReference>M:StockSharp.BusinessEntities.IConnector.RegisterMarketDepth(StockSharp.BusinessEntities.Security)</codeEntityReference>:</para>
+							<para>To request updates on the order books you need to use the 
+							<codeEntityReference>M:StockSharp.BusinessEntities.IConnector.RegisterMarketDepth(StockSharp.BusinessEntities.Security)</codeEntityReference> method:</para>
             				<code language="C#">
             				<![CDATA[
 private void QuotesClick(object sender, RoutedEventArgs e)
 {
 	if (Quotes.IsChecked == true)
 	{
-		// создаем окно со стаканом
-		var wnd = new QuotesWindow { Title = SelectedSecurity.Code + " котировки" };
+		// create order book window
+		var wnd = new QuotesWindow { Title = SelectedSecurity.Code + " quotes" };
 		_quotesWindows.Add(SelectedSecurity, wnd);
 
-		// начинаем получать котировки стакана
+		// subscribe on order book flow
 		Trader.RegisterMarketDepth(SelectedSecurity);
 
 		wnd.Show();
@@ -195,7 +193,8 @@ private void QuotesClick(object sender, RoutedEventArgs e)
 
 					<step>
 						<content>
-							<para>Для регистрации заявок предусмотрена кнопка «Новая заявка». Метод <codeEntityReference>M:StockSharp.BusinessEntities.IConnector.RegisterOrder(StockSharp.BusinessEntities.Order)</codeEntityReference> отправляет заявку на сервер:</para>
+							<para>For orders registration the <legacyItalic>New Order</legacyItalic> button used. The <codeEntityReference>M:StockSharp.BusinessEntities.IConnector.RegisterOrder(StockSharp.BusinessEntities.Order)</codeEntityReference>
+							method sends an order to the server:</para>
             				<code language="C#">
             				<![CDATA[
 private void Send_Click(object sender, RoutedEventArgs e)

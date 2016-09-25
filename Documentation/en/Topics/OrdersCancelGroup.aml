@@ -7,9 +7,8 @@
 
     <introduction>
       <para>
-		  Для снятия сразу нескольких заявок можно использовать метод
-		  <codeEntityReference qualifyHint="true">M:StockSharp.BusinessEntities.IConnector.CancelOrders(System.Nullable{System.Boolean},StockSharp.BusinessEntities.Portfolio,System.Nullable{StockSharp.Messages.Sides},StockSharp.BusinessEntities.ExchangeBoard,StockSharp.BusinessEntities.Security,System.Nullable{StockSharp.Messages.SecurityTypes})</codeEntityReference>,
-		  который по маске переданных параметров снимает активные заявки.
+		  To cancel several orders the <codeEntityReference qualifyHint="true">M:StockSharp.BusinessEntities.IConnector.CancelOrders(System.Nullable{System.Boolean},StockSharp.BusinessEntities.Portfolio,System.Nullable{StockSharp.Messages.Sides},StockSharp.BusinessEntities.ExchangeBoard,StockSharp.BusinessEntities.Security,System.Nullable{StockSharp.Messages.SecurityTypes})</codeEntityReference>
+		  method used, which cancel the active orders by the parameters mask passed.
 	  </para>
     </introduction>
     
@@ -22,19 +21,19 @@
     <!-- Any number of uiElementList and/or section elements -->
 
     <section>
-      <title>Примеры снятия группы заявок</title>
+      <title>Orders mass cancel examples</title>
 
       <content>
-        <para>Снять все обычные (<codeEntityReference qualifyHint="true">F:StockSharp.Messages.OrderTypes.Limit</codeEntityReference>) заявки для заданного портфеля и инструмента:</para>
+        <para>To cancel all ordinary orders (<codeEntityReference qualifyHint="true">F:StockSharp.Messages.OrderTypes.Limit</codeEntityReference>) for the specified portfolio and instrument:</para>
 		  <code language="C#">trader.CancelOrders(false, MainWindow.Instance.Portfolio, null, null, security);</code>
 
 		  <para>
-			  Снять все заявки для заданного инструмента:
+			  To cancel all orders for the specified instrument:
 		  </para>
 		  <code language="C#">trader.CancelOrders(null, null, null, null, security);</code>
 
 		  <para>
-			  Снять все стоп-заявки на покупку:
+			  To cancel all long stop orders:
 		  </para>
 		  <code language="C#">trader.CancelOrders(true, null, OrderDirections.Buy, null, null);</code>
       </content>

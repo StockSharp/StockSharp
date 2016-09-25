@@ -7,10 +7,10 @@
 
     <introduction>
       <para>
-      Для сохранения и загрузки настроек стратегии используются переопределения методов
-      <codeEntityReference qualifyHint="false" autoUpgrade="true">M:StockSharp.Algo.Strategies.Strategy.Save(Ecng.Serialization.SettingsStorage)</codeEntityReference> и 
+      To save and load strategy settings the overrides of
+      <codeEntityReference qualifyHint="false" autoUpgrade="true">M:StockSharp.Algo.Strategies.Strategy.Save(Ecng.Serialization.SettingsStorage)</codeEntityReference> and 
       <codeEntityReference qualifyHint="false" autoUpgrade="true">M:StockSharp.Algo.Strategies.Strategy.Load(Ecng.Serialization.SettingsStorage)</codeEntityReference>
-      соответственно.
+      methods  used respectively.
       </para>
 	  <code language="C#"><![CDATA[public override void Load(SettingsStorage settings)
 {
@@ -37,8 +37,7 @@ public override void Save(SettingsStorage settings)
 }]]></code>
 
       <para>
-      Для сохранения и загрузки настроек из внешнего файла можно воспользоваться соответственно сериализацией и десериализацией, 
-      реализованной в <token>stocksharp</token>.
+      To save and load settings from an external file, you can use serialization and deserialization, respectively, implemented in <token>stocksharp</token>.
       </para>
       
 	  <code language="C#"><![CDATA[var newStrategy = new MarketProfileStrategy();
@@ -50,9 +49,9 @@ if (File.Exists("marketProfile.xml"))
 }]]></code>
       
       <para>
-      Для сохранения настроек во внешний файл необходимо внести изменения в метод
+      To save the settings to an external file, you must change the
       <codeEntityReference qualifyHint="false" autoUpgrade="true">M:StockSharp.Algo.Strategies.Strategy.Save(Ecng.Serialization.SettingsStorage)</codeEntityReference>,
-      описанный ранее.
+      method, described earlier.
       </para>
       
 	  <code language="C#"><![CDATA[public override void Save(SettingsStorage settings)
@@ -71,7 +70,7 @@ if (File.Exists("marketProfile.xml"))
 
     <nextSteps>
       <content>
-        <para><link xlink:href="61ad1ece-8094-44a9-a558-ec664a1ab16a">Загрузка заявок и сделок</link></para>
+        <para><link xlink:href="61ad1ece-8094-44a9-a558-ec664a1ab16a">Orders and trades loading</link></para>
       </content>
     </nextSteps>
 

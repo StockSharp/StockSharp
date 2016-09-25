@@ -3,22 +3,22 @@
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
         <introduction>
       <para>
-      	Графический компонент <codeEntityReference>T:StockSharp.Xaml.OptionDesk</codeEntityReference> - таблица для отображения доски опционов. Показывает "греки", вмененную волатильность,
-                  	 теоретическую цену, лучший оффер и бид для Put и Call опционов.
+      	The <codeEntityReference>T:StockSharp.Xaml.OptionDesk</codeEntityReference> - graphic component is the table for option desk display. It shows “Greeks”, implied
+      	volatility, the theoretical price, the best offer and bid for Put and Call options.
       </para>
       <para>
-      	Ниже показан пример OptionCalculator, в котором используется этот компонент. Исходные коды примера можно найти в папке <legacyItalic>Samples/Options/OptionCalculator</legacyItalic>.
+      	Below is the OptionCalculator example, which uses this component. The source code of the example can be found in the <legacyItalic>Samples/Options/OptionCalculator</legacyItalic> folder.
       </para>
       <mediaLink><image placement="left" xlink:href="option_desk" /></mediaLink>
     </introduction>
     
    <procedure>
-   	<title>Пример OptionCalculator</title>
+   	<title>OptionCalculator example</title>
     	<steps class="ordered">
 			<step>
 				<content>
-					<para>В коде XAML добавляем элемент <codeEntityReference>T:StockSharp.Xaml.OptionDesk</codeEntityReference>
-							и присваиваем ему имя <legacyBold>Desk</legacyBold>.</para>
+					<para>The <codeEntityReference>T:StockSharp.Xaml.OptionDesk</codeEntityReference> element is added to the XAML code and the
+					<legacyBold>Desk</legacyBold> name is assigned to it.</para>
             		<code title="XAML" language="XAML">
 	  				<![CDATA[
 <Window x:Class="OptionCalculator.MainWindow"
@@ -42,59 +42,28 @@
 			</step>
 			<step>
 				<content>
-				<para>В коде C# создаем подключение. В зависимости от выбранного типа коннектора инициализируем экземпляр 
-					<codeEntityReference>T:StockSharp.Quik.QuikTrader</codeEntityReference> или <codeEntityReference>T:StockSharp.Plaza.PlazaTrader</codeEntityReference>.
-					Если Quik используется в режиме DDE, то настраиваем дополнительные колонки опционов.</para>
+				<para>The connection is created in the C# code. Depending on the type of connector an instance
+					<codeEntityReference>T:StockSharp.OpenECry.OpenECryTrader</codeEntityReference> or <codeEntityReference>T:StockSharp.Rithmic.RithmicTrader</codeEntityReference>
+					is initialized.</para>
             	<code title="C#" language="C#">
                   <![CDATA[
 if (_connector == null)
 {
-	if (IsQuik.IsChecked == true)
+	if (IsOpenECry.IsChecked == true)
 	{
-		var isDde = IsDde.IsChecked == true;
-
-		if (isDde && Path.Text.IsEmpty())
+		var trader = new OpenECryTrader
 		{
-			MessageBox.Show(this, LocalizedStrings.Str2969);
-			return;
-		}
-
-		// создаем подключение
-		var trader = new QuikTrader(Path.Text)
-		{
-			IsDde = isDde
+			// ... initialization
 		};
-
-		if (isDde)
-		{
-			// изменяем метаданные так, чтобы начали обрабатывать дополнительные колонки опционов
-			var columns = trader.SecuritiesTable.Columns;
-			columns.Add(DdeSecurityColumns.Strike);
-			columns.Add(DdeSecurityColumns.ImpliedVolatility);
-			columns.Add(DdeSecurityColumns.UnderlyingSecurity);
-			columns.Add(DdeSecurityColumns.TheorPrice);
-			columns.Add(DdeSecurityColumns.OptionType);
-			columns.Add(DdeSecurityColumns.ExpiryDate);
-			trader.DdeTables = new[] { trader.SecuritiesTable, trader.TradesTable };
-		}
 
 		_connector = trader;
 	}
 	else
 	{
-		var trader = new PlazaTrader
+		var trader = new RithmicTrader
 		{
-			Address = Address.Text.To<EndPoint>(),
-			IsCGate = IsCGate.IsChecked == true
+			// ... initialization
 		};
-
-		trader.Tables.Add(trader.TableRegistry.Volatility);
-			
-		if (IsAutorization.IsChecked == true)
-		{
-			trader.Login = Login.Text;
-			trader.Password = Password.Password;
-		}
 
 		_connector = trader;
 	}
@@ -105,7 +74,7 @@ if (_connector == null)
 				</step>
 				<step>
 					<content>
-					<para>Задаем провайдера сообщений для рыночных данных и инструментов.</para>
+					<para>The messages provider for market data and instruments is specified.</para>
             		<code title="C#" language="C#">
                   <![CDATA[
 Desk.MarketDataProvider = _connector;
@@ -117,21 +86,20 @@ Desk.CurrentTime = null;
 				</step>
 				<step>
 				<content>
-					<para>При получении инструментов:</para>
+					<para>Upon getting the instruments:</para>
 					<list class="ordered">
-  							<listItem>Заполняем коллекцию фьючерсов для выпадающего списка;</listItem>
-  							<listItem>Инициализируем выбранный инструмент первым элементом этой коллекции;</listItem>
-  							<listItem>Заполняем массив цепочкой опционов, где подлежащим активом выступает выбранный инструмент;</listItem>
-  							<listItem>Присваиваем свойству <codeEntityReference qualifyHint="true">P:StockSharp.Xaml.OptionDesk.Options</codeEntityReference> этот массив;</listItem>
-  							<listItem>Обновляем значения доски опционов при помощи метода 
-  							<codeEntityReference qualifyHint="true">M:StockSharp.Xaml.OptionDesk.RefreshOptions</codeEntityReference>.</listItem>
+  							<listItem>To fill the futures collection for the drop-down list;</listItem>
+  							<listItem>To initialize the selected instrument by the first element of this collection;</listItem>
+  							<listItem>To fill the array by the options chain, where selected instrument acts as underlying asset;</listItem>
+  							<listItem>To assign this array to the <codeEntityReference qualifyHint="true">P:StockSharp.Xaml.OptionDesk.Options</codeEntityReference> property;</listItem>
+  							<listItem>To update optiondesk values using the 
+  							<codeEntityReference qualifyHint="true">M:StockSharp.Xaml.OptionDesk.RefreshOptions</codeEntityReference> method.</listItem>
 					</list>
             		<code title="C#" language="C#">
                   <![CDATA[
 _connector.NewSecurities += securities =>
 	this.GuiAsync(() =>
 	{
-		// добавляем в выпадающий список (подлежащие инструменты) только фьючерсы
 		_assets.AddRange(securities.Where(s => s.Type == SecurityTypes.Future));
 
 		if (SelectedAsset == null && _assets.Count > 0)
@@ -157,14 +125,14 @@ _connector.NewSecurities += securities =>
 				</step>
 				<step>
 					<content>
-						<para>При изменении параметров опционов:</para>
+						<para>Upon options parameters change:</para>
 						<list class="ordered">
-  							<listItem>Заполняем массив опционами, которые не были добавлены ранее в коллекцию опционов контрола;</listItem>
-  							<listItem>Если добавлены новые опционы, то обновляем значение свойства 
-  							<codeEntityReference qualifyHint="true">P:StockSharp.Xaml.OptionDesk.Options</codeEntityReference>;</listItem>
+  							<listItem>To fill the array by options that have not been previously added to the control options collection;</listItem>
+  							<listItem>If new options added, to update the <codeEntityReference qualifyHint="true">P:StockSharp.Xaml.OptionDesk.Options</codeEntityReference> property value;</listItem>
   							<listItem>
-  									 Если были добавлены новые опционы или изменились параметры ранее добавленных опционов, то обновляем доску опционов 
-  									<codeEntityReference qualifyHint="true">M:StockSharp.Xaml.OptionDesk.RefreshOptions</codeEntityReference>.</listItem>
+  								If new options added or parameters of the previously added options changed, then to update option desk 
+  								<codeEntityReference qualifyHint="true">M:StockSharp.Xaml.OptionDesk.RefreshOptions</codeEntityReference>.
+  							</listItem>
 						</list>
             			<code title="C#" language="C#">
                   <![CDATA[
@@ -200,7 +168,7 @@ _connector.SecuritiesChanged += securities =>
  	</procedure>
 
     <relatedTopics>
-		<link xlink:href="063708c5-b6a8-45f6-9ff9-608f89796a88">Греки</link>
+		<link xlink:href="063708c5-b6a8-45f6-9ff9-608f89796a88">Greeks</link>
     </relatedTopics>
   </developerConceptualDocument>
 </topic>

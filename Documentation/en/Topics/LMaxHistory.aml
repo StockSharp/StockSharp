@@ -3,18 +3,19 @@
   <developerWalkthroughDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     <introduction>
       <para>
-      	<token>lmax</token> предоставляет исторические свечки, которые можно использовать как для тестирования, так и для инициализации <link xlink:href="8b9125ee-9d74-444f-82d6-5dea51266fd4">индикаторов</link>.
+      	<token>lmax</token> provides historical candles, which can be used for testing, and to initialize the <link xlink:href="8b9125ee-9d74-444f-82d6-5dea51266fd4">indicators</link>.
 	  </para>
     </introduction>
     
     <procedure>
-      <title>Работа с историческими свечками</title>
+      <title>Work with historical candles</title>
       <steps class="ordered">
         <step>
           <content>
             <para>
-            	Для того, чтобы получить исторические свечки, необходимо вызвать метод 
-            	<codeEntityReference qualifyHint="false" autoUpgrade="true">M:StockSharp.LMAX.LmaxTrader.SubscribeCandles(StockSharp.Algo.Candles.CandleSeries,System.DateTimeOffset,System.DateTimeOffset)</codeEntityReference>:
+            	In order to get historic candles, call 
+            	<codeEntityReference qualifyHint="false" autoUpgrade="true">M:StockSharp.LMAX.LmaxTrader.SubscribeCandles(StockSharp.Algo.Candles.CandleSeries,System.DateTimeOffset,System.DateTimeOffset)</codeEntityReference>
+            	method:
        		</para>
             <code language="C#">
             <![CDATA[
@@ -27,8 +28,8 @@ Trader.SubscribeCandles(SelectedSecurity, DateTime.Now.Subtract(TimeSpan.FromTic
         </step>
         <step>
         	<para>
-            	Исторически свечки передаются через событие 
-            	<codeEntityReference qualifyHint="false">E:StockSharp.LMAX.LmaxTrader.NewCandles</codeEntityReference>:
+            	Historical candles passed through the 
+            	<codeEntityReference qualifyHint="false">E:StockSharp.LMAX.LmaxTrader.NewCandles</codeEntityReference> event:
        		</para>
           <code language="C#">
             <![CDATA[
@@ -38,7 +39,7 @@ Trader.NewCandles += _securitiesWindow.AddHistoricalCandles;
         </step>
         <step>
           <content>
-            <para>Появившиеся свечки можно отрисовывать через <link xlink:href="287125e1-7c7e-4be3-a8ce-5018538e613f">графический контрол</link>:</para>
+            <para>Appeared candles can be drawn through the <link xlink:href="287125e1-7c7e-4be3-a8ce-5018538e613f">graphical control</link>:</para>
             <mediaLink><image placement="center" xlink:href="lmax_sample_history"/></mediaLink>
           </content>
         </step>
@@ -46,7 +47,7 @@ Trader.NewCandles += _securitiesWindow.AddHistoricalCandles;
     </procedure>
 
     <relatedTopics>
-      <link xlink:href="cd52cfcf-938c-4fce-9a56-4e9a001f0792">Свечки</link>
+      <link xlink:href="cd52cfcf-938c-4fce-9a56-4e9a001f0792">Candles</link>
     </relatedTopics>
   </developerWalkthroughDocument>
 </topic>

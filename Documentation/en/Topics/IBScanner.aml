@@ -3,13 +3,14 @@
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     <introduction>
       <para>
-      	Платформа <token>ib</token> предоставляет возможность создания специального сканера инструментов по заданным критериям. Сканер создается через метод
-      	<codeEntityReference qualifyHint="true">M:StockSharp.InteractiveBrokers.InteractiveBrokersTrader.SubscribeScanner(StockSharp.InteractiveBrokers.ScannerFilter,System.Boolean)</codeEntityReference> c аргументом <legacyItalic>isSubscribe = true</legacyItalic>.
-      	Инструменты, которые будут удовлетворять критериям выборки, будут приходить через событие <codeEntityReference qualifyHint="true">E:StockSharp.InteractiveBrokers.InteractiveBrokersTrader.NewScannerResults</codeEntityReference>.
+      	The <token>ib</token> platform provides the ability to create a special instruments scanner by specified criteria. The scanner is created through the
+      	<codeEntityReference qualifyHint="true">M:StockSharp.InteractiveBrokers.InteractiveBrokersTrader.SubscribeScanner(StockSharp.InteractiveBrokers.ScannerFilter,System.Boolean)</codeEntityReference>
+      	method with the <legacyItalic>isSubscribe = true</legacyItalic> argument. The instruments that will meet the selection criteria, will be coming through the
+      	<codeEntityReference qualifyHint="true">E:StockSharp.InteractiveBrokers.InteractiveBrokersTrader.NewScannerResults</codeEntityReference> event.
       </para>
       <para>
-      	Чтобы удалить сканер необходимо вызвать метод <codeEntityReference qualifyHint="true">M:StockSharp.InteractiveBrokers.InteractiveBrokersTrader.SubscribeScanner(StockSharp.InteractiveBrokers.ScannerFilter,System.Boolean)</codeEntityReference> c аргументом <legacyItalic>isSubscribe = false</legacyItalic>,
-      	куда нужно передать тот же объект настроек, что был ранее передан при создании сканера.
+      	To remove the scanner you should call the <codeEntityReference qualifyHint="true">M:StockSharp.InteractiveBrokers.InteractiveBrokersTrader.SubscribeScanner(StockSharp.InteractiveBrokers.ScannerFilter,System.Boolean)</codeEntityReference>
+      	method with the <legacyItalic>isSubscribe = false</legacyItalic> argument, where you need to pass the same settings object that was previously passed when the scanner created.
       </para>
     </introduction>
   </developerConceptualDocument>

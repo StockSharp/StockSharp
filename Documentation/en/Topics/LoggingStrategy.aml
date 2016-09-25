@@ -13,9 +13,9 @@
            zero (0) to limit it to top-level sections only.  -->
       <!-- <autoOutline /> -->
       <para>
-		Класс <codeEntityReference>T:StockSharp.Algo.Strategies.Strategy</codeEntityReference> реализует интерфейс <codeEntityReference>T:StockSharp.Logging.ILogSource</codeEntityReference>.
-		Поэтому стратегии можно передавать в <codeEntityReference qualifyHint="true">P:StockSharp.Logging.LogManager.Sources</codeEntityReference>,
-		и все ее сообщения будут автоматически попадать в <codeEntityReference qualifyHint="true">P:StockSharp.Logging.LogManager.Listeners</codeEntityReference>.
+		The <codeEntityReference>T:StockSharp.Algo.Strategies.Strategy</codeEntityReference> class implements the <codeEntityReference>T:StockSharp.Logging.ILogSource</codeEntityReference>
+		interface. Therefore, the strategies can be passed to the <codeEntityReference qualifyHint="true">P:StockSharp.Logging.LogManager.Sources</codeEntityReference>,
+		and all of its messages will automatically get to the <codeEntityReference qualifyHint="true">P:StockSharp.Logging.LogManager.Listeners</codeEntityReference>.
 		
 		
 		
@@ -38,20 +38,20 @@
     <prerequisites>
 		<content>
 			<para>
-				<link xlink:href="2c3a0d3a-6e89-42a1-a158-9a258e0a62e1">Торговые стратегии</link>
+				<link xlink:href="2c3a0d3a-6e89-42a1-a158-9a258e0a62e1">Trading strategies</link>
 			</para>
 		</content>
 	</prerequisites>
     <!-- <prerequisites><content>Optional prerequisites info</content></prerequisites> -->
     <!-- One or more procedure or section with procedure -->
     <procedure>
-			<title>Логирование в тестовый файл</title>
+			<title>Logging in to test file</title>
 
 			<steps class="ordered">
 				<step>
 					<content>
 						<para>
-							В самом начале необходимо создать менеджер логирования:
+							First, you need to create the special manager:
 						</para>
 						<code language="C#">var logManager = new LogManager();</code>
 					</content>
@@ -59,7 +59,7 @@
 				<step>
 					<content>
 						<para>
-							Затем необходимо создать файловый логгер, передав в него имя файла, и добавить его в <codeEntityReference qualifyHint="true">P:StockSharp.Logging.LogManager.Listeners</codeEntityReference>:
+							Then you need to create a file logger, passing to it the name of the file and to add it to the <codeEntityReference qualifyHint="true">P:StockSharp.Logging.LogManager.Listeners</codeEntityReference>:
 						</para>
 						<code language="C#">var fileListener = new FileLogListener("{0}_{1:00}_{2:00}.txt".Put(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day));
 logManager.Listeners.Add(fileListener);</code>
@@ -68,7 +68,7 @@ logManager.Listeners.Add(fileListener);</code>
 				<step>
 					<content>
 						<para>
-							Для логирования сообщений необходимо добавить стратегию в
+							For logging messages, you need to add a strategy to the
 							<codeEntityReference qualifyHint="true">P:StockSharp.Logging.LogManager.Sources</codeEntityReference>:
 						</para>
 						<code language="C#">logManager.Sources.Add(lkohSmaStrategy);</code>
@@ -77,7 +77,7 @@ logManager.Listeners.Add(fileListener);</code>
 				<step>
 					<content>
 						<para>
-							После добавления стратегии в менеджер логирования все ее сообщения будут записаться в файл.
+							After adding strategy to the logging manager all of its messages will be recorded to file.
 						</para>
 					</content>
 				</step>
@@ -85,13 +85,13 @@ logManager.Listeners.Add(fileListener);</code>
 		</procedure>
 
 		<procedure>
-			<title>Проигрывание звука</title>
+			<title>Sound playback</title>
 
 			<steps class="ordered">
 				<step>
 					<content>
 						<para>
-							Создание логгера и передача в него имени звукового файла:
+							Creating a logger and passing the name of the sound file in it:
 						</para>
 						<code language="C#">var soundListener = new SoundLogListener("error.mp3");
 						
@@ -102,7 +102,7 @@ logManager.Sources.Add(lkohSmaStrategy);</code>
 				<step>
 					<content>
 						<para>
-							Установка фильтра на проигрывание звука только при сообщениях типа
+							Setting the filter in the sound playback only when the type of messages is
 							<codeEntityReference qualifyHint="true">F:StockSharp.Logging.LogLevels.Error</codeEntityReference>:
 						</para>
 						<code language="C#">soundListener.Filters.Add(msg => msg.Level == LogLevels.Error);</code>
@@ -112,13 +112,13 @@ logManager.Sources.Add(lkohSmaStrategy);</code>
 		</procedure>
 
 		<procedure>
-			<title>Отсылка Email</title>
+			<title>Email sending</title>
 
 			<steps class="ordered">
 				<step>
 					<content>
 						<para>
-							Создание логгера и передача в него параметров отсылаемых писем:
+							The logger creating and passing to it sent letters parameters:
 						</para>
 						<code language="C#">var emailListener = new EmailLogListener("from@stocksharp.com", "to@stocksharp.com");
 
@@ -129,9 +129,9 @@ logManager.Sources.Add(lkohSmaStrategy);</code>
 				<step>
 					<content>
 						<para>
-							Установка фильтра на отсылку сообщений типов 
+							Setting the filter on the sending of messages of 
 							<codeEntityReference qualifyHint="true">F:StockSharp.Logging.LogLevels.Error</codeEntityReference>
-							и <codeEntityReference qualifyHint="true">F:StockSharp.Logging.LogLevels.Warning</codeEntityReference>:
+							and <codeEntityReference qualifyHint="true">F:StockSharp.Logging.LogLevels.Warning</codeEntityReference> types:
 						</para>
 						<code language="C#">emailListener.Filters.Add(msg => msg.Level == LogLevels.Error);
 emailListener.Filters.Add(msg => msg.Level == LogLevels.Warning);</code>
@@ -176,15 +176,15 @@ logManager.Sources.Add(lkohSmaStrategy);</code>
 		</procedure> -->
 
 		<procedure>
-			<title>Логирование в LogWindow</title>
+			<title>Logging in to the LogWindow</title>
 
 			<steps class="ordered">
 				<step>
 					<content>
 						<para>
-							Создание логгер <codeEntityReference>T:StockSharp.Xaml.GuiLogListener</codeEntityReference>:
+							The <codeEntityReference>T:StockSharp.Xaml.GuiLogListener</codeEntityReference> logger creating:
 						</para>
-						<code language="C#">// каждая стратегия будет иметь свое собственное окно
+						<code language="C#">// each strategy will have they own windows
 var guiListener = new GuiLogListener();
 
 logManager.Listeners.Add(guiListener);
@@ -194,7 +194,7 @@ logManager.Sources.Add(lkohSmaStrategy);</code>
 				<step>
 					<content>
 						<para>
-							Вот как выглядит окно логов при работе стратегии котирования заявок (<link xlink:href="24250c24-029c-4dbc-bc8b-4afde645e483"/>):
+							Here is the log window when orders quoting strategy working (<link xlink:href="24250c24-029c-4dbc-bc8b-4afde645e483"/>):
 						</para>
 						<mediaLink>
 							<image placement="center" xlink:href="strategylogging" />
@@ -205,7 +205,7 @@ logManager.Sources.Add(lkohSmaStrategy);</code>
 		</procedure>
     
      <relatedTopics>
-       <link xlink:href="4cd2b7f9-fe8d-404a-bec6-227783410beb">Визуальные компоненты логирования</link>
+       <link xlink:href="4cd2b7f9-fe8d-404a-bec6-227783410beb">Visual logging components</link>
     </relatedTopics>
     
    

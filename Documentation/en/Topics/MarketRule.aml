@@ -3,137 +3,136 @@
 	<developerWalkthroughDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     <introduction>
 		<para>
-		  В <token>stocksharp</token> для <codeEntityReference qualifyHint="false">T:StockSharp.Algo.IMarketRule</codeEntityReference> уже есть ряд предопределенных условий и действий для
-		  наиболее распространенных сценариев.
-		  Ниже представлены сгруппированные по торговым объектам списки условий класса <codeEntityReference qualifyHint="false">T:StockSharp.Algo.MarketRuleHelper</codeEntityReference>:
+		  For the <codeEntityReference qualifyHint="false">T:StockSharp.Algo.IMarketRule</codeEntityReference> the <token>stocksharp</token> already has a number
+		  of predefined conditions and actions for the most common scenarios. The <codeEntityReference qualifyHint="false">T:StockSharp.Algo.MarketRuleHelper</codeEntityReference>
+		  class conditions lists grouped by trading objects are listed below:
 		</para>
 		  <para>
-			  Для <codeEntityReference>T:StockSharp.BusinessEntities.Security</codeEntityReference>
+			  For the <codeEntityReference>T:StockSharp.BusinessEntities.Security</codeEntityReference>
 		  </para>
 		  <list class="bullet">
 		  	  <listItem>
 				  <codeEntityReference qualifyHint="true" autoUpgrade="true">M:StockSharp.Algo.MarketRuleHelper.WhenChanged(StockSharp.BusinessEntities.Security,StockSharp.BusinessEntities.IConnector)</codeEntityReference>
-				  - правило на событие изменения инструмента.
+				  - the instrument change event rule.
 			  </listItem>
 			  <listItem>
 				  <codeEntityReference qualifyHint="true" autoUpgrade="true">M:StockSharp.Algo.MarketRuleHelper.WhenNewTrades(StockSharp.BusinessEntities.Security,StockSharp.BusinessEntities.IConnector)</codeEntityReference>
-				  - правило на событие появления у инструмента новой сделки.
+				  - the rule when instrument has the new trade occurrence event.
 			  </listItem>
 			  <listItem>
 				  <codeEntityReference qualifyHint="true" autoUpgrade="true">M:StockSharp.Algo.MarketRuleHelper.WhenMarketDepthChanged(StockSharp.BusinessEntities.Security,StockSharp.BusinessEntities.IConnector)</codeEntityReference>
-				  - правило на событие изменения стакана по инструменту.
+				  - the rule when instrument has the order book change event.
 			  </listItem>
 			  <listItem>
 				  <codeEntityReference qualifyHint="true" autoUpgrade="true">M:StockSharp.Algo.MarketRuleHelper.WhenBestBidPriceMore(StockSharp.BusinessEntities.Security,StockSharp.BusinessEntities.IConnector,StockSharp.Messages.Unit)</codeEntityReference>
-				  - правило на событие повышения лучшего бида выше определенного уровня.
+				  - the rule for the event of the best bid increase above a specified level.
 				</listItem>
 			  <listItem>
 				  <codeEntityReference qualifyHint="true" autoUpgrade="true">M:StockSharp.Algo.MarketRuleHelper.WhenBestBidPriceLess(StockSharp.BusinessEntities.Security,StockSharp.BusinessEntities.IConnector,StockSharp.Messages.Unit)</codeEntityReference>
-					- правило на событие понижения лучшего бида ниже определенного уровня.
+					- the rule for the event of the best bid decrease below a specified level.
 				</listItem>
 			  <listItem>
 				  <codeEntityReference qualifyHint="true" autoUpgrade="true">M:StockSharp.Algo.MarketRuleHelper.WhenBestAskPriceMore(StockSharp.BusinessEntities.Security,StockSharp.BusinessEntities.IConnector,StockSharp.Messages.Unit)</codeEntityReference>
-					- правило на событие повышения лучшего оффера выше определенного уровня.
+					- the rule for the event of the best offer increase above a specified level.
 				</listItem>
 			  <listItem>
 				  <codeEntityReference qualifyHint="true" autoUpgrade="true">M:StockSharp.Algo.MarketRuleHelper.WhenBestAskPriceLess(StockSharp.BusinessEntities.Security,StockSharp.BusinessEntities.IConnector,StockSharp.Messages.Unit)</codeEntityReference>
-					- правило на событие понижения лучшего оффера ниже определенного уровня.
+					- the rule for the event of the best offer decrease below a specified level.
 				</listItem>
 			  <listItem>
 				  <codeEntityReference qualifyHint="true" autoUpgrade="true">M:StockSharp.Algo.MarketRuleHelper.WhenLastTradePriceMore(StockSharp.BusinessEntities.Security,StockSharp.BusinessEntities.IConnector,StockSharp.BusinessEntities.IMarketDataProvider,StockSharp.Messages.Unit)</codeEntityReference>
-					- правило на событие повышения цены последней сделки выше определенного уровня.
+					- the rule for the event of the last trade price increase above a specified level.
 				</listItem>
 			  <listItem>
 				  <codeEntityReference qualifyHint="true" autoUpgrade="true">M:StockSharp.Algo.MarketRuleHelper.WhenLastTradePriceLess(StockSharp.BusinessEntities.Security,StockSharp.BusinessEntities.IConnector,StockSharp.BusinessEntities.IMarketDataProvider,StockSharp.Messages.Unit)</codeEntityReference>
-					- правило на событие понижения цены последней сделки ниже определенного уровня.
+					- the rule for the event of the last trade price decrease below a specified level.
 				</listItem>
 		  </list>
 		  <para>
-			  Для <codeEntityReference>T:StockSharp.BusinessEntities.MarketDepth</codeEntityReference>
+			  For the <codeEntityReference>T:StockSharp.BusinessEntities.MarketDepth</codeEntityReference>
 		  </para>
 		  <list class="bullet">
 		  	  <listItem>
 				  <codeEntityReference qualifyHint="true" autoUpgrade="true">M:StockSharp.Algo.MarketRuleHelper.WhenChanged(StockSharp.BusinessEntities.MarketDepth)</codeEntityReference>
-				  - правило на событие изменения стакана.
+				  - the order book change event rule.
 			  </listItem>
 			  <listItem>
 				  <codeEntityReference qualifyHint="true" autoUpgrade="true">M:StockSharp.Algo.MarketRuleHelper.WhenSpreadMore(StockSharp.BusinessEntities.MarketDepth,StockSharp.Messages.Unit)</codeEntityReference>
-					- правило на событие повышения размера спреда стакана выше определенного уровня.
+					- the rule for the event of the book order spread size more then specified value.
 				</listItem>
 			  <listItem>
 				  <codeEntityReference qualifyHint="true" autoUpgrade="true">M:StockSharp.Algo.MarketRuleHelper.WhenSpreadLess(StockSharp.BusinessEntities.MarketDepth,StockSharp.Messages.Unit)</codeEntityReference>
-					- правило на событие понижения размера спреда стакана ниже определенного уровня.
+					- the rule for the event of the book order spread size less then specified value.
 				</listItem>
 			  <listItem>
 				  <codeEntityReference qualifyHint="true" autoUpgrade="true">M:StockSharp.Algo.MarketRuleHelper.WhenBestBidPriceMore(StockSharp.BusinessEntities.MarketDepth,StockSharp.Messages.Unit)</codeEntityReference>
-					- правило на событие повышения лучшего бида выше определенного уровня.
+					- the rule for the event of the best bid increase above a specified level.
 				</listItem>
 			  <listItem>
 				  <codeEntityReference qualifyHint="true" autoUpgrade="true">M:StockSharp.Algo.MarketRuleHelper.WhenBestBidPriceLess(StockSharp.BusinessEntities.MarketDepth,StockSharp.Messages.Unit)</codeEntityReference>
-					- правило на событие понижения лучшего бида ниже определенного уровня.
+					- the rule for the event of the best bid decrease below a specified level.
 				</listItem>
 			  <listItem>
 				  <codeEntityReference qualifyHint="true" autoUpgrade="true">M:StockSharp.Algo.MarketRuleHelper.WhenBestAskPriceMore(StockSharp.BusinessEntities.MarketDepth,StockSharp.Messages.Unit)</codeEntityReference>
-					- правило на событие повышения лучшего оффера выше определенного уровня.
+					- the rule for the event of the best offer increase above a specified level.
 				</listItem>
 			  <listItem>
 				  <codeEntityReference qualifyHint="true" autoUpgrade="true">M:StockSharp.Algo.MarketRuleHelper.WhenBestAskPriceLess(StockSharp.BusinessEntities.MarketDepth,StockSharp.Messages.Unit)</codeEntityReference>
-					- правило на событие понижения лучшего оффера ниже определенного уровня.
+					- the rule for the event of the best offer decrease below a specified level.
 				</listItem>
 		  </list>
 		  <para>
-			  Для <codeEntityReference>T:StockSharp.BusinessEntities.Order</codeEntityReference>
+			  For the <codeEntityReference>T:StockSharp.BusinessEntities.Order</codeEntityReference>
 		  </para>
 		  <list class="bullet">
 			  <listItem>
-			  
 				  <codeEntityReference qualifyHint="true" autoUpgrade="true">M:StockSharp.Algo.MarketRuleHelper.WhenRegistered(StockSharp.BusinessEntities.Order,StockSharp.BusinessEntities.IConnector)</codeEntityReference>
-				  - правило на событие успешной регистрации заявки на бирже.
+				  - the rule for the event of the successful order registration on exchange.
 			  </listItem>
 				<listItem>
 					<codeEntityReference qualifyHint="true" autoUpgrade="true">M:StockSharp.Algo.MarketRuleHelper.WhenActivated(StockSharp.BusinessEntities.Order,StockSharp.BusinessEntities.IConnector)</codeEntityReference>
-					- правило на событие активации стоп-заявки.
+					- the rule for the event of the stop order activation.
 				</listItem>
 			  <listItem>
 				  <codeEntityReference qualifyHint="true" autoUpgrade="true">M:StockSharp.Algo.MarketRuleHelper.WhenPartiallyMatched(StockSharp.BusinessEntities.Order,StockSharp.BusinessEntities.IConnector)</codeEntityReference>
-				  - правило на событие частичного исполнения заявки.
+				  - the rule for the event of the partially matched order.
 			  </listItem>
 			  <listItem>
 				  <codeEntityReference qualifyHint="true" autoUpgrade="true">M:StockSharp.Algo.MarketRuleHelper.WhenRegisterFailed(StockSharp.BusinessEntities.Order,StockSharp.BusinessEntities.IConnector)</codeEntityReference>
-				  - правило на событие неудачной регистрации заявки на бирже.
+				  - the rule for the event of the  failed order registration on exchange.
 			  </listItem>
 				<listItem>
 					<codeEntityReference qualifyHint="true" autoUpgrade="true">M:StockSharp.Algo.MarketRuleHelper.WhenCancelFailed(StockSharp.BusinessEntities.Order,StockSharp.BusinessEntities.IConnector)</codeEntityReference>
-					-  правило на событие неудачного снятия заявки на бирже.
+					-  the rule for the event of the failed order cancel on exchange.
 				</listItem>
 			  <listItem>
 				  <codeEntityReference qualifyHint="true" autoUpgrade="true">M:StockSharp.Algo.MarketRuleHelper.WhenCanceled(StockSharp.BusinessEntities.Order,StockSharp.BusinessEntities.IConnector)</codeEntityReference>
-				  - правило на событие отмены заявки.
+				  - the rule for the event of the order cancel on exchange.
 			  </listItem>
 			  <listItem>
 				  <codeEntityReference qualifyHint="true" autoUpgrade="true">M:StockSharp.Algo.MarketRuleHelper.WhenMatched(StockSharp.BusinessEntities.Order,StockSharp.BusinessEntities.IConnector)</codeEntityReference>
-				  - правило на событие полного исполнения заявки.
+				  - the rule for the event of the fully matched order on exchange.
 			  </listItem>
 			  <listItem>
 				  <codeEntityReference qualifyHint="true" autoUpgrade="true">M:StockSharp.Algo.MarketRuleHelper.WhenChanged(StockSharp.BusinessEntities.Order,StockSharp.BusinessEntities.IConnector)</codeEntityReference>
-				  - правило на событие изменения заявки.
+				  - the rule for the event of the order change.
 			  </listItem>
 			  <listItem>
 				  <codeEntityReference qualifyHint="true" autoUpgrade="true">M:StockSharp.Algo.MarketRuleHelper.WhenNewTrades(StockSharp.BusinessEntities.Order,StockSharp.BusinessEntities.IConnector)</codeEntityReference>
-				  - правило на событие появления сделок по заявке.
+				  - the rule for the event of the trades occurrence by the order.
 			  </listItem>
 		  </list>
 		  <para>
-			  Для <codeEntityReference>T:StockSharp.BusinessEntities.Portfolio</codeEntityReference>
+			  For the <codeEntityReference>T:StockSharp.BusinessEntities.Portfolio</codeEntityReference>
 		  </para>
 		  <list class="bullet">
 				<listItem>
 					<codeEntityReference qualifyHint="true" autoUpgrade="true">M:StockSharp.Algo.MarketRuleHelper.WhenMoneyLess(StockSharp.BusinessEntities.Portfolio,StockSharp.BusinessEntities.IConnector,StockSharp.Messages.Unit)</codeEntityReference>
-					- правило на событие уменьшения денег в портфеле ниже определенного уровня.
+					- the rule for the event of the money decrease in the portfolio below a specified level.
 				</listItem>
 				<listItem>
 					<codeEntityReference qualifyHint="true" autoUpgrade="true">M:StockSharp.Algo.MarketRuleHelper.WhenMoneyMore(StockSharp.BusinessEntities.Portfolio,StockSharp.BusinessEntities.IConnector,StockSharp.Messages.Unit)</codeEntityReference>
-					- правило на событие увеличения денег в портфеле выше определенного уровня.
+					- the rule for the event of the money increase in the portfolio above a specified level.
 				</listItem>
 		  </list>
 		  <para>
@@ -142,15 +141,15 @@
 		  <list class="bullet">
 				<listItem>
 					<codeEntityReference qualifyHint="true" autoUpgrade="true">M:StockSharp.Algo.MarketRuleHelper.WhenLess(StockSharp.BusinessEntities.Position,StockSharp.BusinessEntities.IConnector,StockSharp.Messages.Unit)</codeEntityReference>
-					- правило на событие уменьшения позиции ниже определенного уровня.
+					- the rule for the event of the position decrease below a specified level.
 				</listItem>
 				<listItem>
 					<codeEntityReference qualifyHint="true" autoUpgrade="true">M:StockSharp.Algo.MarketRuleHelper.WhenMore(StockSharp.BusinessEntities.Position,StockSharp.BusinessEntities.IConnector,StockSharp.Messages.Unit)</codeEntityReference>
-					- правило на событие увеличения позиции выше определенного уровня.
+					- the rule for the event of the position increase above a specified level.
 				</listItem>
 				<listItem>
 					<codeEntityReference qualifyHint="true" autoUpgrade="true">M:StockSharp.Algo.MarketRuleHelper.Changed(StockSharp.BusinessEntities.Position,StockSharp.BusinessEntities.IConnector)</codeEntityReference>
-					- правило на событие изменения позиции.
+					- the rule for the event of the position change.
 				</listItem>
 		  </list>
 <!--		  
@@ -173,144 +172,144 @@
 		  </list> -->		  
 
 		  <para>
-			  Для <codeEntityReference>T:StockSharp.Algo.PnL.IPnLManager</codeEntityReference>
+			  For the <codeEntityReference>T:StockSharp.Algo.PnL.IPnLManager</codeEntityReference>
 		  </para>
 		  <list class="bullet">
 				<listItem>
 					<codeEntityReference qualifyHint="true" autoUpgrade="true">M:StockSharp.Algo.Strategies.StrategyHelper.WhenPnLLess(StockSharp.Algo.Strategies.Strategy,StockSharp.Messages.Unit)</codeEntityReference>
-					- правило на событие уменьшения прибыли ниже определенного уровня.
+					- the rule for the event of the profit decrease below a specified level.
 				</listItem>
 				<listItem>
 					<codeEntityReference qualifyHint="true" autoUpgrade="true">M:StockSharp.Algo.Strategies.StrategyHelper.WhenPnLMore(StockSharp.Algo.Strategies.Strategy,StockSharp.Messages.Unit)</codeEntityReference>
-					- правило на событие увеличения прибыли выше определенного уровня.
+					- the rule for the event of the profit increase above a specified level.
 				</listItem>
 				<listItem>
 					<codeEntityReference qualifyHint="true" autoUpgrade="true">M:StockSharp.Algo.Strategies.StrategyHelper.WhenPositionChanged(StockSharp.Algo.Strategies.Strategy)</codeEntityReference>
-					- правило на событие изменения прибыли.
+					- the rule for the event of the profit change.
 				</listItem>
 		  </list> 
 		  
 		  <para>
-			  Для <codeEntityReference>T:StockSharp.Algo.Candles.Candle</codeEntityReference>
+			  For the <codeEntityReference>T:StockSharp.Algo.Candles.Candle</codeEntityReference>
 		  </para>
 		  <list class="bullet">
 			  <listItem>
 				  <codeEntityReference qualifyHint="true" autoUpgrade="true">M:StockSharp.Algo.MarketRuleHelper.WhenClosePriceMore(StockSharp.Algo.Candles.ICandleManager,StockSharp.Algo.Candles.Candle,StockSharp.Messages.Unit)</codeEntityReference>
-					- правило на событие повышения цены закрытия свечки выше определенного уровня.
+					- the rule for the event of the candle closing price increase above a specified level.
 				</listItem>
 			  <listItem>
 				  <codeEntityReference qualifyHint="true" autoUpgrade="true">M:StockSharp.Algo.MarketRuleHelper.WhenClosePriceLess(StockSharp.Algo.Candles.ICandleManager,StockSharp.Algo.Candles.Candle,StockSharp.Messages.Unit)</codeEntityReference>
-					- правило на событие понижения цены закрытия свечки ниже определенного уровня.
+					- the rule for the event of the candle closing price decrease below a specified level.
 				</listItem>
 				<listItem>
 					<codeEntityReference qualifyHint="true" autoUpgrade="true">M:StockSharp.Algo.MarketRuleHelper.WhenTotalVolumeMore(StockSharp.Algo.Candles.ICandleManager,StockSharp.Algo.Candles.Candle,StockSharp.Messages.Unit)</codeEntityReference>
-					- правило на событие превышения общего объема свечки выше определенного уровня.
+					- the rule for the event of the candle total volume increase above a specified level.
 				</listItem>
 				<listItem>
 					<codeEntityReference qualifyHint="true" autoUpgrade="true">M:StockSharp.Algo.MarketRuleHelper.WhenCurrentCandleTotalVolumeMore(StockSharp.Algo.Candles.ICandleManager,StockSharp.Algo.Candles.CandleSeries,StockSharp.Messages.Unit)</codeEntityReference>
-					- правило на событие превышения общего объема текущей свечки выше определенного уровня.
+					- the rule for the event of the current candle total volume increase above a specified level.
 				</listItem>
 			  <listItem>
 				  <codeEntityReference qualifyHint="true" autoUpgrade="true">M:StockSharp.Algo.MarketRuleHelper.WhenCandlesStarted(StockSharp.Algo.Candles.ICandleManager,StockSharp.Algo.Candles.CandleSeries)</codeEntityReference>
-				  - правило на событие появления новых свечек.
+				  - the rule for the event of the new candles occurrence.
 			  </listItem>
 			  <listItem>
 				  <codeEntityReference qualifyHint="true" autoUpgrade="true">M:StockSharp.Algo.MarketRuleHelper.WhenCandlesChanged(StockSharp.Algo.Candles.ICandleManager,StockSharp.Algo.Candles.CandleSeries)</codeEntityReference>
-				  - правило на событие изменения свечек.
+				  - the rule for the event of the candles change.
 			  </listItem>
 			  <listItem>
 				  <codeEntityReference qualifyHint="true" autoUpgrade="true">M:StockSharp.Algo.MarketRuleHelper.WhenCandlesFinished(StockSharp.Algo.Candles.ICandleManager,StockSharp.Algo.Candles.CandleSeries)</codeEntityReference>
-				  - правило на событие окончания свечек.
+				  - the rule for the event of the candles end.
 			  </listItem>
 			  <listItem>
 				  <codeEntityReference qualifyHint="true" autoUpgrade="true">M:StockSharp.Algo.MarketRuleHelper.WhenChanged(StockSharp.Algo.Candles.ICandleManager,StockSharp.Algo.Candles.Candle)</codeEntityReference>
-				  - правило на событие изменения свечки.
+				  - the rule for the event of the candle change.
 			  </listItem>
 			  <listItem>
 				  <codeEntityReference qualifyHint="true" autoUpgrade="true">M:StockSharp.Algo.MarketRuleHelper.WhenFinished(StockSharp.Algo.Candles.ICandleManager,StockSharp.Algo.Candles.Candle)</codeEntityReference>
-				  - правило на событие окончания свечки.
+				  - the rule for the event of the candle finish.
 			  </listItem>
 			  <listItem>
 				  <codeEntityReference qualifyHint="true" autoUpgrade="true">M:StockSharp.Algo.MarketRuleHelper.WhenPartiallyFinished(StockSharp.Algo.Candles.ICandleManager,StockSharp.Algo.Candles.Candle,StockSharp.BusinessEntities.IConnector,System.Decimal)</codeEntityReference>
-				  - правило на событие частичного окончания свечки.
+				  - the rule for the event of the candle partial finish.
 			  </listItem>
 			  <listItem>
 				  <codeEntityReference qualifyHint="true" autoUpgrade="true">M:StockSharp.Algo.MarketRuleHelper.WhenPartiallyFinishedCandles(StockSharp.Algo.Candles.ICandleManager,StockSharp.Algo.Candles.CandleSeries,StockSharp.BusinessEntities.IConnector,System.Decimal)</codeEntityReference>
-				  - правило на событие частичного окончания свечек.
+				  - the rule for the event of the candles partial finish.
 			  </listItem>
 		  </list>
 		  <para>
-			  Для <codeEntityReference>T:StockSharp.Algo.Strategies.Strategy</codeEntityReference>
+			  For the <codeEntityReference>T:StockSharp.Algo.Strategies.Strategy</codeEntityReference>
 		  </para>
 		  <list class="bullet">
 		  	  <listItem>
 				  <codeEntityReference qualifyHint="true" autoUpgrade="true">M:StockSharp.Algo.Strategies.StrategyHelper.WhenNewMyTrades(StockSharp.Algo.Strategies.Strategy)</codeEntityReference>
-				  - правило на событие появление новых сделок стратегии.
+				  - the rule for the event of the strategy new trades occurrence.
 			  </listItem>
 			  <listItem>
 				  <codeEntityReference qualifyHint="true" autoUpgrade="true">M:StockSharp.Algo.Strategies.StrategyHelper.WhenPositionChanged(StockSharp.Algo.Strategies.Strategy)</codeEntityReference>
-				  - правило на событие изменения позиции у стратегии.
+				  - the rule for the event of the strategy position change.
 			  </listItem>
 				<listItem>
 					<codeEntityReference qualifyHint="true" autoUpgrade="true">M:StockSharp.Algo.Strategies.StrategyHelper.WhenStarted(StockSharp.Algo.Strategies.Strategy)</codeEntityReference>
-					- правило на событие начала работы стратегии.
+					- the rule for the event of the strategy work start.
 				</listItem>
 			  <listItem>
 			  	  <codeEntityReference qualifyHint="true" autoUpgrade="true">M:StockSharp.Algo.Strategies.StrategyHelper.WhenStopping(StockSharp.Algo.Strategies.Strategy)</codeEntityReference>
-				  - правило на событие начала остановки работы стратегии.
+				  - the rule for the event of the strategy work stopping.
 			  </listItem>
 			  <listItem>
 				  <codeEntityReference qualifyHint="true" autoUpgrade="true">M:StockSharp.Algo.Strategies.StrategyHelper.WhenStopped(StockSharp.Algo.Strategies.Strategy)</codeEntityReference>
-				  - правило на событие полной остановки работы стратегии.
+				  - the rule for the event of the strategy work stopped.
 			  </listItem>
 			  <listItem>
 				  <codeEntityReference qualifyHint="true" autoUpgrade="true">M:StockSharp.Algo.Strategies.StrategyHelper.WhenError(StockSharp.Algo.Strategies.Strategy)</codeEntityReference>
-				  - правило на событие ошибки стратегии.
+				  - the rule for the event of the strategy error.
 			  </listItem>
 			  <listItem>
 				  <codeEntityReference qualifyHint="true" autoUpgrade="true">M:StockSharp.Algo.Strategies.StrategyHelper.WhenWarning(StockSharp.Algo.Strategies.Strategy)</codeEntityReference>
-				  - правило на событие предупреждения стратегии.
+				  - the rule for the event of the strategy warning.
 			  </listItem>
 		  </list>
 			<para>
-				Для <codeEntityReference>T:StockSharp.BusinessEntities.IConnector</codeEntityReference>
+				For the <codeEntityReference>T:StockSharp.BusinessEntities.IConnector</codeEntityReference>
 			</para>
 			<list class="bullet">
 				<listItem>
 					<codeEntityReference qualifyHint="true" autoUpgrade="true">M:StockSharp.Algo.MarketRuleHelper.WhenIntervalElapsed(StockSharp.BusinessEntities.IConnector,System.TimeSpan)</codeEntityReference>
-					- правило на событие изменения 
+					- the rule for the event of the 
 					<codeEntityReference qualifyHint="true" autoUpgrade="true">E:StockSharp.BusinessEntities.IConnector.MarketTimeChanged</codeEntityReference> 
-					на значение, большее или равно параметру.
+					change on value, which greater than or equal to the parameter.
 				</listItem>
 				<listItem>
 					<codeEntityReference qualifyHint="true" autoUpgrade="true">M:StockSharp.Algo.MarketRuleHelper.WhenTimeCome(StockSharp.BusinessEntities.IConnector,System.DateTimeOffset[])</codeEntityReference>
-					- правило, которое активизируется при наступлении точного времени.
+					- a rule that is activated upon the exact time occurrence.
 				</listItem>
 		  	    
 		  	    <listItem>
 			        <codeEntityReference qualifyHint="true" autoUpgrade="true">M:StockSharp.Algo.MarketRuleHelper.WhenNewMyTrades(StockSharp.BusinessEntities.IConnector)</codeEntityReference>
-			  	    - правило на событие появление новых сделок.
+			  	    - the rule for the event of the new trades occurrence.
 			    </listItem>
 		  	    <listItem>
 		  	  	    <codeEntityReference qualifyHint="true" autoUpgrade="true">M:StockSharp.Algo.MarketRuleHelper.WhenNewOrder(StockSharp.BusinessEntities.IConnector)</codeEntityReference>
-				    - правило на событие появление новой заявки.
+				    - the rule for the event of the new order occurrence.
 			    </listItem>
 			</list>
 			<para>
-			  Аналогично условиям есть и предопределенные действия:
+			  Similarly to the conditions there are predefined actions:
 		  </para>
 		  <list class="bullet">
 			  <listItem>
 				  <codeEntityReference qualifyHint="true" autoUpgrade="true">M:StockSharp.Algo.Strategies.StrategyHelper.Register(StockSharp.Algo.IMarketRule,StockSharp.BusinessEntities.Order)</codeEntityReference>
-				  - действие, регистрирующее заявку.
+				  - the action which registers the order.
 			  </listItem>
 			  <listItem>
 				  <codeEntityReference qualifyHint="true" autoUpgrade="true">M:StockSharp.Algo.Strategies.StrategyHelper.ReRegister(StockSharp.Algo.IMarketRule,StockSharp.BusinessEntities.Order,StockSharp.BusinessEntities.Order)</codeEntityReference>
-				  - действие, перерегистрирующее заявку.
+				  - the action which reregisters the order.
 			  </listItem>
 			  <listItem>
 				  <codeEntityReference qualifyHint="true" autoUpgrade="true">M:StockSharp.Algo.Strategies.StrategyHelper.Cancel(StockSharp.Algo.IMarketRule,StockSharp.BusinessEntities.Order)</codeEntityReference>
-				  - действие, отменяющее заявку.
+				  - the action which cancels the order.
 			  </listItem>
 <!--			  
 			  <listItem>
@@ -335,15 +334,15 @@
 				
 				<listItem>
 				 	<codeEntityReference qualifyHint="false" autoUpgrade="true">Overload:StockSharp.Algo.Strategies.Extensions.Protect</codeEntityReference>
-					- действие, защищающее сделки одновременно стратегиями <codeEntityReference>T:StockSharp.Algo.Strategies.Protective.TakeProfitStrategy</codeEntityReference>
-					и <codeEntityReference>T:StockSharp.Algo.Strategies.Protective.StopLossStrategy</codeEntityReference>.
+					- the action which protects trades simultaneously with <codeEntityReference>T:StockSharp.Algo.Strategies.Protective.TakeProfitStrategy</codeEntityReference>
+					and <codeEntityReference>T:StockSharp.Algo.Strategies.Protective.StopLossStrategy</codeEntityReference> strategies.
 				</listItem>
 		  </list>
 		  <para>
-		  	Если требуется создать свое уникальное правило (на какое-то событие, которое не предусмотрено стандартно), необходимо создать свой класс-наследник
-		  	<codeEntityReference qualifyHint="false">T:StockSharp.Algo.MarketRule`2</codeEntityReference>, который будет работать с необходимым условием. Ниже приведена
-		  	реализация метода 
-		  	<codeEntityReference qualifyHint="false" autoUpgrade="true">M:StockSharp.Algo.MarketRuleHelper.WhenMoneyMore(StockSharp.BusinessEntities.Portfolio,StockSharp.BusinessEntities.IConnector,StockSharp.Messages.Unit)</codeEntityReference>:
+		  	If you need to create your own unique rule (on any event, which is not provided as standard), you must create the derived
+		  	<codeEntityReference qualifyHint="false">T:StockSharp.Algo.MarketRule`2</codeEntityReference> class, which will work with a prerequisite. Below is the
+		  	<codeEntityReference qualifyHint="false" autoUpgrade="true">M:StockSharp.Algo.MarketRuleHelper.WhenMoneyMore(StockSharp.BusinessEntities.Portfolio,StockSharp.BusinessEntities.IConnector,StockSharp.Messages.Unit)</codeEntityReference>
+		  	method implementation:
 		  </para>
 		  <code language="C#">
 			<![CDATA[		
@@ -351,8 +350,9 @@ private sealed class PortfolioRule : MarketRule<Portfolio, Portfolio>
 {
 	private readonly Func<Portfolio, bool> _changed;
 	private readonly Portfolio _portfolio;
+	private readonly IConnector _connector;
 
-	public PortfolioRule(Portfolio portfolio, Func<Portfolio, bool> changed) : base(portfolio)
+	public PortfolioRule(Portfolio portfolio, IConnector connector, Func<Portfolio, bool> changed) : base(portfolio)
 	{
 		if (portfolio == null)
 			throw new ArgumentNullException("portfolio");
@@ -360,13 +360,11 @@ private sealed class PortfolioRule : MarketRule<Portfolio, Portfolio>
 		if (changed == null)
 			throw new ArgumentNullException("changed");
 
-		if (portfolio.Trader == null)
-			throw new ArgumentException("Портфель не имеет информацию о шлюзе.");
-
 		_changed = changed;
 
 		_portfolio = portfolio;
-		_portfolio.Trader.PortfoliosChanged += OnPortfoliosChanged;
+		_connector = connector;
+		_connector.PortfoliosChanged += OnPortfoliosChanged;
 	}
 
 	private void OnPortfoliosChanged(IEnumerable<Portfolio> portfolios)
@@ -377,7 +375,7 @@ private sealed class PortfolioRule : MarketRule<Portfolio, Portfolio>
 
 	protected override void DisposeManaged()
 	{
-		_portfolio.Trader.PortfoliosChanged -= OnPortfoliosChanged;
+		_connector.PortfoliosChanged -= OnPortfoliosChanged;
 		base.DisposeManaged();
 	}
 }
@@ -394,16 +392,16 @@ public static MarketRule<Portfolio, Portfolio> WhenMoneyMore(this Portfolio port
 
 	return new PortfolioRule(portfolio, pf => pf.CurrentValue > finishMoney)
 	{
-		Name = "Увеличение денег портфеля {0} выше {1}".Put(portfolio, finishMoney)
+		Name = "Portfolio {0} balance increased above {1}".Put(portfolio, finishMoney)
 	};
 }
 		]]></code>
 		<para>
-			Правило <legacyItalic>PortfolioRule</legacyItalic> подписывается на событие
+			The <legacyItalic>PortfolioRule</legacyItalic> rule subscribes to the
 			<codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.PortfoliosChanged</codeEntityReference>
-			и, как только оно вызывается, то проверяется условие на превышение текущего уровня денежных средств в портфеле выше определенного лимита.
-			Если условие возвращает <legacyBold>true</legacyBold>, то активируется правило через метод 
-			<codeEntityReference qualifyHint="true" autoUpgrade="true">M:StockSharp.Algo.MarketRule`2.Activate</codeEntityReference>
+			event, and as soon as it is called, then the condition is checked to exceed the current level of money in the portfolio above a specified limit.
+			If the condition returns <legacyBold>true</legacyBold>, then the rule is activated through the
+			<codeEntityReference qualifyHint="true" autoUpgrade="true">M:StockSharp.Algo.MarketRule`2.Activate</codeEntityReference> method.
 		</para>	
 
     </introduction>

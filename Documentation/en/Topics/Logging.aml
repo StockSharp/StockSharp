@@ -4,63 +4,61 @@
 
 		<introduction>
 			<para>
-				Для мониторинга работы торговых роботов, написанных на <token>stocksharp</token>, можно использовать специальный класс
-				<codeEntityReference>T:StockSharp.Logging.LogManager</codeEntityReference>. Данный класс принимает сообщения
-				<codeEntityReference>T:StockSharp.Logging.LogMessage</codeEntityReference> от источников
-				<codeEntityReference qualifyHint="true">P:StockSharp.Logging.LogManager.Sources</codeEntityReference> через событие 
-				<codeEntityReference qualifyHint="true">E:StockSharp.Logging.ILogSource.Log</codeEntityReference> и передает их в слушатели
-				<codeEntityReference qualifyHint="true">P:StockSharp.Logging.LogManager.Listeners</codeEntityReference>. Таким образом код робота
-				сможет передавать отладочную информацию (например, об ошибках, случившихся в процессе работы, или дополнительную информацию о математических расчетах),
-				а <codeEntityReference>T:StockSharp.Logging.LogManager</codeEntityReference> будет решать, как отобразить для оператора данную информацию.
+				For the monitoring of trading algorithms written in <token>stocksharp</token>, you can use the special
+				<codeEntityReference>T:StockSharp.Logging.LogManager</codeEntityReference> class. This class receives the
+				<codeEntityReference>T:StockSharp.Logging.LogMessage</codeEntityReference> messages from the
+				<codeEntityReference qualifyHint="true">P:StockSharp.Logging.LogManager.Sources</codeEntityReference> through the 
+				<codeEntityReference qualifyHint="true">E:StockSharp.Logging.ILogSource.Log</codeEntityReference> event and passes them to the
+				<codeEntityReference qualifyHint="true">P:StockSharp.Logging.LogManager.Listeners</codeEntityReference> listeners. Therefore, the algorithm
+				code will be able to pass debug information (for example, about errors occurred during the operation, or additional information about mathematical
+				calculations) and <codeEntityReference>T:StockSharp.Logging.LogManager</codeEntityReference> will decide how to display this information for the operator.
 			</para>
 			<para>
-				Стандартно в <token>stocksharp</token> входят следующие реализации <codeEntityReference>T:StockSharp.Logging.ILogListener</codeEntityReference>,
-				выбор которых влияет на то, куда будут переданы поступившие от стратегии сообщения:
+				Normally the <token>stocksharp</token> contains the following implementations of the <codeEntityReference>T:StockSharp.Logging.ILogListener</codeEntityReference>,
+				whose choice affects where messages received from strategies will be passed:
 			</para>
 			<list class="ordered">
 				<listItem>
-					<codeEntityReference>T:StockSharp.Logging.FileLogListener</codeEntityReference> - записывает сообщения в текстовый файл.
-					Рекомендуется использовать для уже сделаного робота, и использовать логи в форс-мажорных ситуациях.
+					<codeEntityReference>T:StockSharp.Logging.FileLogListener</codeEntityReference> - writes messages into a text file. It is recommended to use for
+					already created algorithm, and to use the logs in cases of force majeure.
 				</listItem>
 				<listItem>
-					<codeEntityReference>T:StockSharp.Logging.SoundLogListener</codeEntityReference> - проигрывает звуковое сообщение когда приходит
-					новое сообщение. Рекомендуется использовать, если за роботом нет постоянного внимания.
+					<codeEntityReference>T:StockSharp.Logging.SoundLogListener</codeEntityReference> - plays the audio message when a new message arrives. It is
+					recommended to use if the algorithm is not under continuous monitoring.
 				</listItem>
 				<listItem>
-					<codeEntityReference>T:StockSharp.Logging.ConsoleLogListener</codeEntityReference> - записывает сообщения в консольное окно (если
-					робот не имеет такое окно, то оно будет автоматически создано). Рекомендуется использовать для отладки и тестирования робота.
+					<codeEntityReference>T:StockSharp.Logging.ConsoleLogListener</codeEntityReference> - outputs messages to the console window (if the algorithm does
+					not have a window, it will be automatically created). It is recommended to use for debugging and testing the algorithm
 				</listItem>
 				<listItem>
-					<codeEntityReference>T:StockSharp.Logging.DebugLogListener</codeEntityReference> - записывает сообщения в отладочное окно. Такое
-					окно можно просматривать через специальные программы, такие как <token>dbgview</token>. Рекомендуется использовать для отладки и
-					тестирования робота.
+					<codeEntityReference>T:StockSharp.Logging.DebugLogListener</codeEntityReference> - outputs messages to the debug window. This window can be viewed
+					through special programs such as <token>dbgview</token>. It is recommended to use for debugging and testing the algorithm.
 				</listItem>
 				<listItem>
-					<codeEntityReference>T:StockSharp.Logging.EmailLogListener</codeEntityReference> - отсылает сообщения на указанный email адрес.
-					Рекомендуется использовать, если робот расположен на непостоянно контролируемом компьютере	(на сервере у хостера).
+					<codeEntityReference>T:StockSharp.Logging.EmailLogListener</codeEntityReference> - sends messages to the specified email address. It is recommended
+					to use if the algorithm is located at not controlled computer (at hoster’s server).
 				</listItem>
 				<!-- <listItem>
 					<codeEntityReference>T:StockSharp.Logging.SmsLogListener</codeEntityReference> - отсылает сообщения на телефон через Google
 					Calendar. Рекомендуется использовать, если робот расположен на непостоянно контролируемом компьютере (на сервере у провайдера).
 				</listItem> -->
 				<listItem>
-					<codeEntityReference>T:StockSharp.Xaml.GuiLogListener</codeEntityReference> - отображает сообщения через
-					специальное окно <codeEntityReference>T:StockSharp.Xaml.LogWindow</codeEntityReference>. Умеет работать в двух режимах: когда
-					все сообщения пишутся в одно окно, и когда для каждого <codeEntityReference>T:StockSharp.Logging.ILogSource</codeEntityReference> создается
-					отдельное окно. Рекомендуется использовать, если робот обладает графическим интерфейсом.
+					<codeEntityReference>T:StockSharp.Xaml.GuiLogListener</codeEntityReference> - displays messages through the special
+					<codeEntityReference>T:StockSharp.Xaml.LogWindow</codeEntityReference> window. Able to work in two modes: when all messages output in a single
+					window, and when a separate window is created for each <codeEntityReference>T:StockSharp.Logging.ILogSource</codeEntityReference>.
+					It is recommended to use if the algorithm has a graphical interface.
 				</listItem>
 				<listItem>
-					<codeEntityReference>T:StockSharp.Logging.Log4NetLogListener</codeEntityReference> - записывает сообщения через специальную
-					библиотеку <token>log4net</token>. Рекомендуется для тех, кто уже знаком с данной библиотекой.
+					<codeEntityReference>T:StockSharp.Logging.Log4NetLogListener</codeEntityReference> - records messages through the special <token>log4net</token> library.
+					It recommended for those who are already familiar with this library.
 				</listItem>
 			</list>
 			<para>
-				<codeEntityReference>T:StockSharp.Logging.LogListener</codeEntityReference> можно настроить на фильтрацию сообщений через
-				свойство <codeEntityReference>P:StockSharp.Logging.LogListener.Filters</codeEntityReference>. Например, через фильтры
-				можно задать, какой тип сообщений стоит обрабатывать. Это особенно полезно в случаях использования
-				<codeEntityReference>T:StockSharp.Logging.SoundLogListener</codeEntityReference> или
-				<codeEntityReference>T:StockSharp.Logging.EmailLogListener</codeEntityReference>, чтобы, к примеру, посылать e-mail только 
-				в критических ситуациях (ошибка алгоритма торговли), а не на каждое отладочное сообщение.
+				<codeEntityReference>T:StockSharp.Logging.LogListener</codeEntityReference> can be configured to filter messages through the
+				<codeEntityReference>P:StockSharp.Logging.LogListener.Filters</codeEntityReference> property. For example, through the filters you can specify what type
+				of messages should be processed. This is particularly useful when the <codeEntityReference>T:StockSharp.Logging.SoundLogListener</codeEntityReference>
+				or the <codeEntityReference>T:StockSharp.Logging.EmailLogListener</codeEntityReference> is used, in order that, for example, to send e-mail in emergency
+				situations only (trade algorithm error) rather than on each debug message.
 			</para>
 		</introduction>
 
@@ -78,11 +76,11 @@
 
     <nextSteps>
       <content>
-        <para><link xlink:href="eca7454c-0532-4aaf-92bf-7a3d0cba635b">Логирование Strategy</link></para>
-        <para><link xlink:href="9619f1db-064f-421f-967e-4c15a5b0aa71">Логирование IConnector</link></para>
-        <para><link xlink:href="f9e75266-8f0e-4983-8319-7a41d53e0f39">Другие источники логов</link></para>
-        <para><link xlink:href="1bed8343-9171-49ce-8259-f44007e01a78">Визуальный мониторинг</link></para>
-        <para><link xlink:href="a711d06d-9d1d-40b8-89bf-ee62d817a878">Создание ILogListener</link></para>
+        <para><link xlink:href="eca7454c-0532-4aaf-92bf-7a3d0cba635b">Strategy logging</link></para>
+        <para><link xlink:href="9619f1db-064f-421f-967e-4c15a5b0aa71">IConnector logging</link></para>
+        <para><link xlink:href="f9e75266-8f0e-4983-8319-7a41d53e0f39">Other logs sources</link></para>
+        <para><link xlink:href="1bed8343-9171-49ce-8259-f44007e01a78">Visual monitoring</link></para>
+        <para><link xlink:href="a711d06d-9d1d-40b8-89bf-ee62d817a878">ILogListener creating</link></para>
       </content>
     </nextSteps>
 

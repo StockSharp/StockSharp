@@ -2,10 +2,9 @@
 <topic id="028b3872-d610-4ca4-9127-5434764f05de" revisionNumber="1">
   <developerWalkthroughDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
 	<introduction>
-	<para>Для регистрации стоп-заявок используется тот же метод <codeEntityReference qualifyHint="false" autoUpgrade="true">M:StockSharp.BusinessEntities.IConnector.RegisterOrder(StockSharp.BusinessEntities.Order)</codeEntityReference>, 
-		но с указанием стоп-условия 
-		<codeEntityReference qualifyHint="false">T:StockSharp.ETrade.ETradeOrderCondition</codeEntityReference>
-		и типа заявки <codeEntityReference qualifyHint="false">F:StockSharp.Messages.OrderTypes.Conditional</codeEntityReference>:</para>   
+	<para>The same <codeEntityReference qualifyHint="false" autoUpgrade="true">M:StockSharp.BusinessEntities.IConnector.RegisterOrder(StockSharp.BusinessEntities.Order)</codeEntityReference> 
+		method used to register stop orders, but with <codeEntityReference qualifyHint="false">T:StockSharp.ETrade.ETradeOrderCondition</codeEntityReference>
+		and the <codeEntityReference qualifyHint="false">F:StockSharp.Messages.OrderTypes.Conditional</codeEntityReference> type of order indicating:</para>   
 		
         <code language="C#">
         <![CDATA[
@@ -33,15 +32,15 @@ private void SendClick(object sender, RoutedEventArgs e)
 		]]>
 		</code>
 		
-		<para>Для работы с условиями стоп-заявок предоставляется специальный класс <codeEntityReference qualifyHint="false">T:StockSharp.ETrade.ETradeOrderCondition</codeEntityReference>. 
-		Данным классом поддерживаются следующие типы стоп-заявок:</para>
+		<para>Для The special <codeEntityReference qualifyHint="false">T:StockSharp.ETrade.ETradeOrderCondition</codeEntityReference> сlass is given to work with the stop orders conditions.
+		This class supports the following types of stop orders:</para>
 
 		<list class="bullet">
 			<listItem>
-				<para><codeEntityReference qualifyHint="true">F:StockSharp.ETrade.ETradeStopTypes.StopMarket</codeEntityReference> – после достижения стоп-цены автоматически выставляется рыночная заявка.</para>
+				<para><codeEntityReference qualifyHint="true">F:StockSharp.ETrade.ETradeStopTypes.StopMarket</codeEntityReference> – if the stop price reached the market order is automatically registered.</para>
 			</listItem>
 			<listItem>
-				<para><codeEntityReference qualifyHint="true">F:StockSharp.ETrade.ETradeStopTypes.StopLimit</codeEntityReference> – после достижения стоп-цены автоматически выставляется лимитная заявка.</para>
+				<para><codeEntityReference qualifyHint="true">F:StockSharp.ETrade.ETradeStopTypes.StopLimit</codeEntityReference> – if the stop price reached the limit order is automatically registered.</para>
 			</listItem>
 		</list>		
 	</introduction>

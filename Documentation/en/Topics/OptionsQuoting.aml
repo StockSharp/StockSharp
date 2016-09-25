@@ -7,47 +7,38 @@
 
     <introduction>
 		<para>
-			Для котирования опционов реализована специальная стратегия <codeEntityReference>T:StockSharp.Algo.Strategies.Derivatives.VolatilityQuotingStrategy</codeEntityReference>,
-			которая предусматривает котирование объема по заданным границам волатильности.
+			For the option quoting the special <codeEntityReference>T:StockSharp.Algo.Strategies.Derivatives.VolatilityQuotingStrategy</codeEntityReference>
+			strategy is realized, which provides the volume quoting by the specified range of volatility.
 		</para>
     </introduction>
 
 	  <procedure>
-		  <title>Котирование по волатильности</title>
+		  <title>Quoting by volatility</title>
 
 		  <steps class="ordered">
 			  <step>
 				  <content>
 					  <para>
-						  В дистрибутиве <token>stocksharp</token> идет пример SampleOptionQuoting, который котирует выбранный страйк по заданной границе
-						  волатильности.
+						  The <token>stocksharp</token> installation package includes the example SampleOptionQuoting, which quotes selected strike by the specified
+						  range of volatility.
 					  </para>
 				  </content>
 			  </step>
 			  <step>
 				  <content>
 					  <para>
-						  Создание подключения к <token>quik</token> и запуск экспорта:
+						  Creating a connection to the <token>OpenECry</token> and export starting:
 					  </para>
-					  <code language="C#">// создаем шлюз
-_trader = new QuikTrader(this.Path.Text);
+					  <code language="C#">
+_trader = new OpenECryTrader(this.Path.Text);
 
 this.Portfolio.Trader = _trader;
 
-// изменяем метаданные так, чтобы начали обрабатывать дополнительные колонки опционов
-var columns = _trader.SecuritiesTable.Columns;
-columns.Add(DdeSecurityColumns.Strike);
-columns.Add(DdeSecurityColumns.Volatility);
-columns.Add(DdeSecurityColumns.UnderlyingSecurity);
-columns.Add(DdeSecurityColumns.TheorPrice);
-columns.Add(DdeSecurityColumns.OptionType);
-columns.Add(DdeSecurityColumns.ExpiryDate);
-
-// добавляем в выпадающий список только опционы
+// adding all options into drop down list
 _trader.NewSecurities += securities =>
 	this.GuiAsync(() => _options.AddRange(securities.Where(s => s.Type == SecurityTypes.Option)));
 
-// подписываемся на событие новых сделок чтобы обновить текущую цену фьючерса
+// tracking the last asset price
 _trader.NewTrades += trades => this.GuiAsync(() =>
 {
 	var option = this.SelectedOption;
@@ -67,15 +58,15 @@ _trader.Connect();</code>
 			  <step>
 				  <content>
 					  <para>
-						  Настройка стратегии <codeEntityReference>T:StockSharp.Algo.Strategies.Derivatives.VolatilityQuotingStrategy</codeEntityReference> (заполнение
-						  границ волатильности, а также создание заявки, через которую указываются требуемый объем и направление котирования):
+						  Set up the <codeEntityReference>T:StockSharp.Algo.Strategies.Derivatives.VolatilityQuotingStrategy</codeEntityReference> strategy
+						  (filling the range of volatility, as well as the creation of the order, wherethrough the required volume and quoting direction are specified):
 					  </para>
-					  <code><![CDATA[// создаем котирование на покупку 20-ти контрактов
+					  <code><![CDATA[// quoting 20 long option contacts
 var quoting = new VolatilityQuotingStrategy(
 		new Range<decimal>(this.VolatilityMin.Text.To<decimal>(), this.VolatilityMax.Text.To<decimal>()),
 		OrderDirections.Buy, 20)
 {
-	// указываем, что котирование работает с объемом в 1 контракт
+	// order size on order book will be always 1 contact (to hide a real size)
 	Volume = 1,
 	Security = option,
 	Portfolio = this.Portfolio.SelectedPortfolio,
@@ -86,7 +77,7 @@ var quoting = new VolatilityQuotingStrategy(
 			  <step>
 				  <content>
 					  <para>
-						  Запуск котирования:
+						  The quoting start:
 					  </para>
 					  <code language="C#">quoting.Start();</code>
 				  </content>
@@ -94,9 +85,9 @@ var quoting = new VolatilityQuotingStrategy(
 			  <step>
 				  <content>
 					  <para>
-						  Для визуального представления волатильности пример показывает, как можно перевести стандартный стакан с котировками в стакан волатильности
-						  за счет использования метода 
-						  <codeEntityReference qualifyHint="true">M:StockSharp.Algo.Derivatives.DerivativesHelper.ImpliedVolatility(StockSharp.BusinessEntities.MarketDepth,StockSharp.BusinessEntities.ISecurityProvider,StockSharp.BusinessEntities.IMarketDataProvider,System.DateTimeOffset,System.Decimal,System.Decimal)</codeEntityReference>:
+						  For a visual presentation of the volatility the example shows how you can convert the standard order book with quotations to the order book
+						  of volatility through the use of the <codeEntityReference qualifyHint="true">M:StockSharp.Algo.Derivatives.DerivativesHelper.ImpliedVolatility(StockSharp.BusinessEntities.MarketDepth,StockSharp.BusinessEntities.ISecurityProvider,StockSharp.BusinessEntities.IMarketDataProvider,System.DateTimeOffset,System.Decimal,System.Decimal)</codeEntityReference>
+						  method:
 					  </para>
 					  <code language="C#"><![CDATA[var ivDepth = _depth.ImpliedVolatility();
 
@@ -113,7 +104,7 @@ this.GuiAsync(() =>
 			  <step>
 				  <content>
 					  <para>
-						  Окончание котирования и остановка стратегии:
+						  The quoting ending and the strategy stop:
 					  </para>
 					  <code>quoting.Stop();</code>
 				  </content>

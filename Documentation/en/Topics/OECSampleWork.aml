@@ -4,8 +4,7 @@
 
 	<introduction>
 		<para>The SampleOEC application shows an example of working with the <codeEntityReference qualifyHint="false">T:StockSharp.OpenECry.OpenECryTrader</codeEntityReference>,
-		as shown in the figure below.
-		The example source code is in the <legacyItalic>Samples/OpenECry</legacyItalic> folder of the installation package.</para>
+		as shown in the figure below. The example source code is in the <legacyItalic>Samples/OpenECry</legacyItalic> folder of the installation package.</para>
 
 		<mediaLink><image placement="center" xlink:href="OECTraderMainWindow"/></mediaLink>
 	</introduction>
@@ -32,7 +31,7 @@ Trader = new OpenECryTrader {
 
 					<step>
 						<content>
-							<para>Next, you should subscribe to required <codeEntityReference qualifyHint="false">T:StockSharp.BusinessEntities.IConnector</codeEntityReference> events handlers:</para>
+							<para>Next, you should subscribe on required <codeEntityReference qualifyHint="false">T:StockSharp.BusinessEntities.IConnector</codeEntityReference> events:</para>
             				<code language="C#">
             				<![CDATA[
 // subscribe on successfully connect event
@@ -58,7 +57,7 @@ Trader.ConnectionError += error => this.GuiAsync(() =>
 Trader.Disconnected += () => this.GuiAsync(() => ChangeConnectStatus(false));
 
 // subscribe on error event
-Trader.Error += error => this.GuiAsync(() => MessageBox.Show(this, error.ToString(), "Ошибка обработки данных"));
+Trader.Error += error => this.GuiAsync(() => MessageBox.Show(this, error.ToString(), "Data processing error"));
 
 // new securities received
 Trader.NewSecurities += securities => this.GuiAsync(() => _securitiesWindow.AddSecurities(securities));
@@ -117,19 +116,19 @@ Trader.Connect();
 								<listItem>
 									<para><codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.SecuritiesChanged</codeEntityReference> – 
 									instrument change (last price, best bid/ask price, etc.) requested through
-									<codeEntityReference>M:StockSharp.BusinessEntities.IConnector.RegisterSecurity(StockSharp.BusinessEntities.Security)</codeEntityReference>.</para>
+									<codeEntityReference>M:StockSharp.BusinessEntities.IConnector.RegisterSecurity(StockSharp.BusinessEntities.Security)</codeEntityReference> method.</para>
 								</listItem>
 								<listItem>
 									<para><codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.MarketDepthsChanged</codeEntityReference> – 
-									order book change, requested through <codeEntityReference>M:StockSharp.BusinessEntities.IConnector.RegisterMarketDepth(StockSharp.BusinessEntities.Security)</codeEntityReference>.</para>
+									order book change, requested through <codeEntityReference>M:StockSharp.BusinessEntities.IConnector.RegisterMarketDepth(StockSharp.BusinessEntities.Security)</codeEntityReference> method.</para>
 								</listItem>
 								<listItem>
 									<para><codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.NewTrades</codeEntityReference> – 
-									new ticks on instruments subscribed by using <codeEntityReference>M:StockSharp.BusinessEntities.IConnector.RegisterTrades(StockSharp.BusinessEntities.Security)</codeEntityReference> инструментам.</para>
+									new ticks on instruments subscribed by using <codeEntityReference>M:StockSharp.BusinessEntities.IConnector.RegisterTrades(StockSharp.BusinessEntities.Security)</codeEntityReference> method.</para>
 								</listItem>
 								<listItem>
 									<para><codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.PortfoliosChanged</codeEntityReference> – 
-									portfolios change requested through <codeEntityReference>M:StockSharp.BusinessEntities.IConnector.RegisterPortfolio(StockSharp.BusinessEntities.Portfolio)</codeEntityReference>.</para>
+									portfolios change requested through <codeEntityReference>M:StockSharp.BusinessEntities.IConnector.RegisterPortfolio(StockSharp.BusinessEntities.Portfolio)</codeEntityReference> method.</para>
 								</listItem>
 							</list>
 						</content>
@@ -208,7 +207,7 @@ private void Quotes_Click(object sender, RoutedEventArgs e)
         MainWindow.Instance.Trader.RegisterMarketDepth(security);
 
         // create order book window
-        var wnd = new QuotesWindow { Title = security.Code + " котировки" };
+        var wnd = new QuotesWindow { Title = security.Code + " quotes" };
         wnd.MakeHideable();
         return wnd;
     });
@@ -242,7 +241,7 @@ Trader.NewPortfolios += portfolios =>
 
 					<step>
 						<content>
-							<para>For orders registration the «New Order» button used. 
+							<para>For orders registration the <legacyBold>New Order</legacyBold> button used. 
 							The <codeEntityReference>M:StockSharp.BusinessEntities.IConnector.RegisterOrder(StockSharp.BusinessEntities.Order)</codeEntityReference>
 							method sends an order to the server:</para>
             				<code language="C#">

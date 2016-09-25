@@ -12,31 +12,29 @@
            a specific number of sub-topics when creating the outline.  Specify
            zero (0) to limit it to top-level sections only.  -->
       <!-- <autoOutline /> -->
-      <para><token>stocksharp</token> предусмотрена возможность построения кривых доходности (эквити) с целью дальнейшего анализа работы торгового робота.
-      Данные для кривой получаются с помощью класса 
-      <codeEntityReference qualifyHint="false">T:StockSharp.Algo.PnL.PnLManager</codeEntityReference>. Данный класс
-      производит рассчет текущего значения, оповещая робота об изменениях через событие 
-      <codeEntityReference qualifyHint="true">E:StockSharp.Algo.Strategies.Strategy.PnLChanged</codeEntityReference>.
+      <para>The <token>stocksharp</token> provides the possibility to plot equity curves for further analysis of the trading algorithm work. The data for the curve
+      obtained using the <codeEntityReference qualifyHint="false">T:StockSharp.Algo.PnL.PnLManager</codeEntityReference> class. This class calculates the current value,
+      informing the algorithm about the changes through the <codeEntityReference qualifyHint="true">E:StockSharp.Algo.Strategies.Strategy.PnLChanged</codeEntityReference>
+      event.
       </para>
       
       <para>
-      	Для расчета параметров кривой (максимальная просадка, коэффициент Шарпа и т.д.) используется 
-      	<codeEntityReference qualifyHint="false">T:StockSharp.Algo.Statistics.StatisticManager</codeEntityReference>.
-      	Эти параметры хранятся в свойстве 
-      	<codeEntityReference qualifyHint="true">P:StockSharp.Algo.Statistics.StatisticManager.Parameters</codeEntityReference>.
-      	Каждый параметр реализует интерфейсы 
+      	To calculate the curve parameters (maximum drawdown, Sharpe ratio, etc.) <codeEntityReference qualifyHint="false">T:StockSharp.Algo.Statistics.StatisticManager</codeEntityReference> used.
+      	These parameters are stored in the <codeEntityReference qualifyHint="true">P:StockSharp.Algo.Statistics.StatisticManager.Parameters</codeEntityReference> property.
+      	
+      	Each parameter implements
       	<codeEntityReference qualifyHint="false">T:StockSharp.Algo.Statistics.IPnLStatisticParameter</codeEntityReference>, 
       	<codeEntityReference qualifyHint="false">T:StockSharp.Algo.Statistics.ITradeStatisticParameter</codeEntityReference>,      	
-      	<codeEntityReference qualifyHint="false">T:StockSharp.Algo.Statistics.IOrderStatisticParameter</codeEntityReference> или
-      	<codeEntityReference qualifyHint="false">T:StockSharp.Algo.Statistics.IPositionStatisticParameter</codeEntityReference>.
-      	Если требуется особый параметр расчета, то необходимо реализовать один из этих интерфейсов и добавить параметр в 
+      	<codeEntityReference qualifyHint="false">T:StockSharp.Algo.Statistics.IOrderStatisticParameter</codeEntityReference> or
+      	<codeEntityReference qualifyHint="false">T:StockSharp.Algo.Statistics.IPositionStatisticParameter</codeEntityReference> interfaces.
+      	
+      	If you want a particular calculation parameter, you must implement one of these interfaces and add the parameter to the 
       	<codeEntityReference qualifyHint="true">P:StockSharp.Algo.Statistics.StatisticManager.Parameters</codeEntityReference>.
       </para>
       
       <para>
-      	В разделе <link xlink:href="5b90a23e-24b9-474a-a699-da47b666194a">тестирования на истории</link> показано использование
-      	<codeEntityReference qualifyHint="true">E:StockSharp.Algo.Strategies.Strategy.PnLChanged</codeEntityReference>
-      	применительно к <link xlink:href="2c3a0d3a-6e89-42a1-a158-9a258e0a62e1">торговым стратегиям</link>:
+      	The use of the <codeEntityReference qualifyHint="true">E:StockSharp.Algo.Strategies.Strategy.PnLChanged</codeEntityReference> is shown in the
+      	<link xlink:href="5b90a23e-24b9-474a-a699-da47b666194a">backtesting</link> section in the context of <link xlink:href="2c3a0d3a-6e89-42a1-a158-9a258e0a62e1">trading strategies</link>:
       </para>
       <code language="C#">
 _strategy.PnLChanged += () =>
@@ -51,24 +49,23 @@ _strategy.PnLChanged += () =>
 };      
       </code>
       <para>
-      	Менеджер статистики получается через свойство 
-      	<codeEntityReference qualifyHint="true">P:StockSharp.Algo.Strategies.Strategy.StatisticManager</codeEntityReference>.
+      	The statistics manager is obtained through the 
+      	<codeEntityReference qualifyHint="true">P:StockSharp.Algo.Strategies.Strategy.StatisticManager</codeEntityReference> property.
       </para>
       <para>
-      	При появлении новых данных, кривая будет отрисовываться на специальном графике <codeEntityReference>T:StockSharp.Xaml.Charting.EquityCurveChart</codeEntityReference>.
-      	Чтобы начать рисовать кривую на данном графике, необходимо вызвать метод 
-      	<codeEntityReference qualifyHint="true">Overload:StockSharp.Xaml.Charting.EquityCurveChart.CreateCurve</codeEntityReference>.
-      	Полученная коллекция заполняется данными, которые передаются во время обработки события 
-      	<codeEntityReference qualifyHint="true">E:StockSharp.Algo.Strategies.Strategy.PnLChanged</codeEntityReference>.
+      	When the new data occur, the curve is drawn on the special <codeEntityReference>T:StockSharp.Xaml.Charting.EquityCurveChart</codeEntityReference> chart.
+      	To start drawing a curve on this chart, you must call the <codeEntityReference qualifyHint="true">Overload:StockSharp.Xaml.Charting.EquityCurveChart.CreateCurve</codeEntityReference> method.
+      	The resulting collection is filled with data that is passed during processing the
+      	<codeEntityReference qualifyHint="true">E:StockSharp.Algo.Strategies.Strategy.PnLChanged</codeEntityReference> event.
       </para>
       <para>
-      	График <codeEntityReference>T:StockSharp.Xaml.Charting.EquityCurveChart</codeEntityReference> позволяет рисовать одновременно несколько кривых, чтобы иметь
-      	возможность их сравнивать по доходности друг с другом. Пример такого подхода показан в разделе <link xlink:href="24a5c734-199f-4090-943d-6324a04f335b">тестирования на истории (оптимизация)</link>.
+      	The <codeEntityReference>T:StockSharp.Xaml.Charting.EquityCurveChart</codeEntityReference> chart allows to draw multiple curves to be able to compare their
+      	profitability with each other. An example of this approach is shown in the <link xlink:href="24a5c734-199f-4090-943d-6324a04f335b">optimization</link> section.
       </para>
       <para>
-      	В разделе <link xlink:href="5b90a23e-24b9-474a-a699-da47b666194a">тестирования на истории</link> показано использование визуальной панели
-      	<codeEntityReference qualifyHint="false">T:StockSharp.Xaml.StatisticParameterGrid</codeEntityReference>, которая позволяет отображать параметры 
-      	<codeEntityReference qualifyHint="true">P:StockSharp.Xaml.StatisticParameterGrid.Parameters</codeEntityReference>.
+      	The use of the <codeEntityReference qualifyHint="false">T:StockSharp.Xaml.StatisticParameterGrid</codeEntityReference> visual panel, which allows to display
+      	<codeEntityReference qualifyHint="true">P:StockSharp.Xaml.StatisticParameterGrid.Parameters</codeEntityReference> parameters, is shown in the
+      	<link xlink:href="5b90a23e-24b9-474a-a699-da47b666194a">backtesting</link> section.
       </para>
     </introduction>
    

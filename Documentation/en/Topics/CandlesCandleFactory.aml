@@ -3,170 +3,175 @@
 	<developerWalkthroughDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     
 	<introduction>
-		<para><token>stocksharp</token> позволяет расширить возможности <codeEntityReference>T:StockSharp.Algo.Candles.CandleManager</codeEntityReference>,
-		давая возможность работать с произвольными типами свечек. Это полезно в тех случаях, когда требуется работать со свечками, не поддерживаемые
-		в данный момент <token>stocksharp</token>. Ниже описан план действия по добавлению тиковых свечек (свечки, которые формируются по количеству сделок).</para>
+		<para>The <token>stocksharp</token> allows to extend the capabilities of the <codeEntityReference>T:StockSharp.Algo.Candles.CandleManager</codeEntityReference>,
+		giving the possibility to work with the custom types of candle. This is useful when you want to work with candles that are not supported at this time by
+		<token>stocksharp</token>. The following describes actions on tick candles adding (candles, which are created by the number of trades).</para>
     </introduction>
     
 	<procedure>
-		<title>Реализация тиковых свечек</title>
+		<title>The tick candles implementation</title>
 		<steps class="ordered">
 			<step>
 				<content>
-					<para>В начале необходимо создать свой тип свечки. Тип должен наследоваться от класса <codeEntityReference>T:StockSharp.Algo.Candles.Candle</codeEntityReference>:</para>
+					<para>First you need to create your own type of candle. The type must be inherited from the
+					<codeEntityReference>T:StockSharp.Algo.Candles.Candle</codeEntityReference> class:</para>
 					
-					<alert class="caution">Тиковые свечки поддерживаются <token>stocksharp</token> стандартно и данный шаг представлен лишь в качестве примера.</alert>
+					<alert class="caution">Tick candles are supported by the <token>stocksharp</token> as standard and this step is given as an example only.</alert>
 					
 					<code language="C#">
-					<![CDATA[
-/// <summary>
-/// Свечка, группируемая по количеству сделок.
+<![CDATA[/// <summary>
+/// Tick candle.
 /// </summary>
 public class TickCandle : Candle
 {
-    /// <summary>
-    /// Параметр свечки.
-    /// </summary>
-    public override object Arg
-    {
-        get
-        {
-            return this.TradeCount;
-        }
-        set
-        {
-            this.TradeCount = (int) value;
-        }
-    }
+	/// <summary>
+	/// Maximum tick count.
+	/// </summary>
+	public int MaxTradeCount { get; set; }
 
-    /// <summary>
-    /// Максимальное количество сделок, которое может содержать свечка.
-    /// </summary>
-    public int TradeCount { get; set; }
-}
-					]]>
+	/// <summary>
+	/// Current tick count.
+	/// </summary>
+	public int CurrentTradeCount { get; set; }
+
+	/// <summary>
+	/// Candle arg.
+	/// </summary>
+	public override object Arg
+	{
+		get { return MaxTradeCount; }
+		set { MaxTradeCount = (int)value; }
+	}
+
+	/// <summary>
+	/// Create a copy of <see cref="TickCandle"/>.
+	/// </summary>
+	/// <returns>Copy.</returns>
+	public override Candle Clone()
+	{
+		return CopyTo(new TickCandle());
+	}
+}]]>
 					</code>
 				</content>
 			</step>
      
 			<step>
 				<content>
-					<para>Далее требуется создать построителя свечек, для нового типа свечек. Для этого необходимо создать реализацию 
-					<codeEntityReference qualifyHint="false">T:StockSharp.Algo.Candles.Compression.CandleBuilder`1</codeEntityReference>.
-					В метод <codeEntityReference qualifyHint="false" autoUpgrade="true">M:StockSharp.Algo.Candles.Compression.CandleBuilder`1.ProcessValue(StockSharp.Algo.Candles.CandleSeries,`0,StockSharp.Algo.Candles.Compression.ICandleBuilderSourceValue)</codeEntityReference> 
-					будут поступать данные типа <codeEntityReference qualifyHint="false">T:StockSharp.Algo.Candles.Compression.ICandleBuilderSourceValue</codeEntityReference>.
-					В зависимости от источников <codeEntityReference qualifyHint="false">P:StockSharp.Algo.Candles.Compression.ICandleBuilder.Sources</codeEntityReference>,
-					<codeEntityReference qualifyHint="false">T:StockSharp.Algo.Candles.Compression.ICandleBuilderSourceValue</codeEntityReference> может содержать данные как о тиковой сделке
+					<para>Next, you must create the candles builder, for a new type of candles. To do this, create the 
+					<codeEntityReference qualifyHint="false">T:StockSharp.Algo.Candles.Compression.CandleBuilder`1</codeEntityReference> implementation.
+					Data of the <codeEntityReference qualifyHint="false">T:StockSharp.Algo.Candles.Compression.ICandleBuilderSourceValue</codeEntityReference> type will come to the
+					<codeEntityReference qualifyHint="false" autoUpgrade="true">M:StockSharp.Algo.Candles.Compression.CandleBuilder`1.ProcessValue(StockSharp.Algo.Candles.CandleSeries,`0,StockSharp.Algo.Candles.Compression.ICandleBuilderSourceValue)</codeEntityReference>
+					method. Depending on the <codeEntityReference qualifyHint="false">P:StockSharp.Algo.Candles.Compression.ICandleBuilder.Sources</codeEntityReference>,
+					<codeEntityReference qualifyHint="false">T:StockSharp.Algo.Candles.Compression.ICandleBuilderSourceValue</codeEntityReference> may contain data as about the
 					<codeEntityReference qualifyHint="false">T:StockSharp.BusinessEntities.Trade</codeEntityReference>,
-					так и о стакане <codeEntityReference qualifyHint="false">T:StockSharp.BusinessEntities.MarketDepth</codeEntityReference>.</para>
+					tick trade, and on the <codeEntityReference qualifyHint="false">T:StockSharp.BusinessEntities.MarketDepth</codeEntityReference> order book.</para>
 					
-					<para>Метод 
+					<para>The  
 					<codeEntityReference qualifyHint="false" autoUpgrade="true">M:StockSharp.Algo.Candles.Compression.CandleBuilder`1.ProcessValue(StockSharp.Algo.Candles.CandleSeries,`0,StockSharp.Algo.Candles.Compression.ICandleBuilderSourceValue)</codeEntityReference>
-					должен возвратить или новую свечку (если новые данные привели к формированию свечки), или обновить переданную(если данных пока недостаточно для создания новой свечки). Если метод
-					<codeEntityReference qualifyHint="false" autoUpgrade="true">M:StockSharp.Algo.Candles.Compression.CandleBuilder`1.ProcessValue(StockSharp.Algo.Candles.CandleSeries,`0,StockSharp.Algo.Candles.Compression.ICandleBuilderSourceValue)</codeEntityReference>
-					возвращает новую свечку, то <codeEntityReference qualifyHint="false">T:StockSharp.Algo.Candles.Compression.CandleBuilder`1</codeEntityReference> вызывает его еще раз, передав в метод
-					то же самое значение <codeEntityReference qualifyHint="false">T:StockSharp.Algo.Candles.Compression.ICandleBuilderSourceValue</codeEntityReference>. Метод будет вызываться до тех пор, пока
-					<codeEntityReference qualifyHint="false" autoUpgrade="true">M:StockSharp.Algo.Candles.Compression.CandleBuilder`1.ProcessValue(StockSharp.Algo.Candles.CandleSeries,`0,StockSharp.Algo.Candles.Compression.ICandleBuilderSourceValue)</codeEntityReference>
-					не вернет переданную свечку. Это сделано для тех случаев, когда по одному входящему значению <codeEntityReference qualifyHint="false">T:StockSharp.Algo.Candles.Compression.ICandleBuilderSourceValue</codeEntityReference>
-					может быть сформированно несколько свечек:
+					method should return or a new candle (if new data have led to the candle creation) or update the passed one (if the data is not enough to create a new candle).
+					If the <codeEntityReference qualifyHint="false" autoUpgrade="true">M:StockSharp.Algo.Candles.Compression.CandleBuilder`1.ProcessValue(StockSharp.Algo.Candles.CandleSeries,`0,StockSharp.Algo.Candles.Compression.ICandleBuilderSourceValue)</codeEntityReference>
+					method returns a new candle, then the <codeEntityReference qualifyHint="false">T:StockSharp.Algo.Candles.Compression.CandleBuilder`1</codeEntityReference>
+					calls it again, passing to the method the same value <codeEntityReference qualifyHint="false">T:StockSharp.Algo.Candles.Compression.ICandleBuilderSourceValue</codeEntityReference>.
+					The method will be called up until the <codeEntityReference qualifyHint="false" autoUpgrade="true">M:StockSharp.Algo.Candles.Compression.CandleBuilder`1.ProcessValue(StockSharp.Algo.Candles.CandleSeries,`0,StockSharp.Algo.Candles.Compression.ICandleBuilderSourceValue)</codeEntityReference>
+					returns the passsed candle. This is done for those cases when by one incoming value <codeEntityReference qualifyHint="false">T:StockSharp.Algo.Candles.Compression.ICandleBuilderSourceValue</codeEntityReference>
+					several candles can be created:
 					</para>
 					<code language="C#">
-					<![CDATA[
-
-/// <summary>
-/// Построитель свечек типа <see cref="T:StockSharp.Algo.Candles.TickCandle" />.
+<![CDATA[/// <summary>
+/// The builder of candles of <see cref="TickCandle"/> type.
 /// </summary>
 public class TickCandleBuilder : CandleBuilder<TickCandle>
 {
-    /// <summary>
-    /// Создать <see cref="T:StockSharp.Algo.Candles.Compression.TickCandleBuilder" />.
-    /// </summary>
-    public TickCandleBuilder()
-    {
-    }
+	/// <summary>
+	/// Initializes a new instance of the <see cref="TickCandleBuilder"/>.
+	/// </summary>
+	public TickCandleBuilder()
+	{
+	}
 
-    /// <summary>
-    /// Создать <see cref="T:StockSharp.Algo.Candles.Compression.TickCandleBuilder" />.
-    /// </summary>
-    /// <param name="container">Контейнер данных.</param>
-    public TickCandleBuilder(ICandleBuilderContainer container) : base(container)
-    {
-    }
+	/// <summary>
+	/// Initializes a new instance of the <see cref="TickCandleBuilder"/>.
+	/// </summary>
+	/// <param name="container">The data container.</param>
+	public TickCandleBuilder(ICandleBuilderContainer container)
+		: base(container)
+	{
+	}
 
-    /// <summary>
-    /// Создать новую свечку.
-    /// </summary>
-    /// <param name="series">Серия свечек.</param>
-    /// <param name="value">Данные, с помощью которых необходимо создать новую свечку.</param>
-    /// <returns>Созданная свечка.</returns>
-    protected override TickCandle CreateCandle(CandleSeries series, ICandleBuilderSourceValue value)
-    {
-        TickCandle candle = new TickCandle {
-            TradeCount = (int) series.Arg,
-            OpenTime = value.Time,
-            CloseTime = value.Time
-        };
-        return this.FirstInitCandle(series, candle, value);
-    }
+	/// <summary>
+	/// To get time ranges for which this source of passed candles series has data.
+	/// </summary>
+	/// <param name="series">Candles series.</param>
+	/// <returns>Time ranges.</returns>
+	public override IEnumerable<Range<DateTimeOffset>> GetSupportedRanges(CandleSeries series)
+	{
+		var ranges = base.GetSupportedRanges(series).ToArray();
 
-    /// <summary>
-    /// Получить временные диапазоны, для которых у данного источника для передаваемой серии свечек есть данные.
-    /// </summary>
-    /// <param name="series">Серия свечек.</param>
-    /// <returns>Временные диапазоны.</returns>
-    public override IEnumerable<Range<DateTime>> GetSupportedRanges(CandleSeries series)
-    {
-        IEnumerable<Range<DateTime>> supportedRanges = base.GetSupportedRanges(series);
-        if (!supportedRanges.IsEmpty<Range<DateTime>>())
-        {
-            if (!(series.Arg is int))
-            {
-                throw new ArgumentException();
-            }
-            if (((int) series.Arg) <= 0)
-            {
-                throw new ArgumentOutOfRangeException();
-            }
-        }
-        return supportedRanges;
-    }
+		if (!ranges.IsEmpty())
+		{
+			if (!(series.Arg is int))
+				throw new ArgumentException(LocalizedStrings.WrongCandleArg.Put(series.Arg), nameof(series));
 
-    /// <summary>
-    /// Сформирована ли свечка до добавления данных.
-    /// </summary>
-    /// <param name="series">Серия свечек.</param>
-    /// <param name="candle">Свечка.</param>
-    /// <param name="value">Данные, с помощью которых принимается решение о необходимости окончания формирования текущей свечки.</param>
-    /// <returns>True, если свечку необходимо закончить. Иначе, false.</returns>
-    protected override bool IsCandleFinishedBeforeChange(CandleSeries series, TickCandle candle, ICandleBuilderSourceValue value)
-    {
-        return (base.Container.GetValues(series, candle).Count<ICandleBuilderSourceValue>() >= candle.TradeCount);
-    }
+			if ((int)series.Arg <= 0)
+				throw new ArgumentOutOfRangeException(nameof(series), series.Arg, LocalizedStrings.TickCountMustBePositive);
+		}
 
-    /// <summary>
-    /// Обновить свечку данными.
-    /// </summary>
-    /// <param name="series">Серия свечек.</param>
-    /// <param name="candle">Свечка.</param>
-    /// <param name="value">Данные.</param>
-    protected override void UpdateCandle(CandleSeries series, TickCandle candle, ICandleBuilderSourceValue value)
-    {
-        base.UpdateCandle(series, candle, value);
-        candle.CloseTime = value.Time;
-    }
-}
-					]]>
+		return ranges;
+	}
+
+	/// <summary>
+	/// To create a new candle.
+	/// </summary>
+	/// <param name="series">Candles series.</param>
+	/// <param name="value">Data with which a new candle should be created.</param>
+	/// <returns>Created candle.</returns>
+	protected override TickCandle CreateCandle(CandleSeries series, ICandleBuilderSourceValue value)
+	{
+		return FirstInitCandle(series, new TickCandle
+		{
+			MaxTradeCount = (int)series.Arg,
+			OpenTime = value.Time,
+			CloseTime = value.Time,
+			HighTime = value.Time,
+			LowTime = value.Time,
+		}, value);
+	}
+
+	/// <summary>
+	/// Whether the candle is created before data adding.
+	/// </summary>
+	/// <param name="series">Candles series.</param>
+	/// <param name="candle">Candle.</param>
+	/// <param name="value">Data by which it is decided to end the current candle creation.</param>
+	/// <returns><see langword="true" /> if the candle should be finished. Otherwise, <see langword="false" />.</returns>
+	protected override bool IsCandleFinishedBeforeChange(CandleSeries series, TickCandle candle, ICandleBuilderSourceValue value)
+	{
+		return candle.CurrentTradeCount >= candle.MaxTradeCount;
+	}
+
+	/// <summary>
+	/// To update the candle data.
+	/// </summary>
+	/// <param name="series">Candles series.</param>
+	/// <param name="candle">Candle.</param>
+	/// <param name="value">Data.</param>
+	protected override void UpdateCandle(CandleSeries series, TickCandle candle, ICandleBuilderSourceValue value)
+	{
+		base.UpdateCandle(series, candle, value);
+		candle.CurrentTradeCount++;
+	}
+}]]>
 					</code>				
 				</content>
 			</step>
 				
 			<step>
 				<content>
-					<para>Затем, при создании <codeEntityReference>T:StockSharp.Algo.Candles.CandleManager</codeEntityReference>, нужно добавить 
-					<codeEntityReference qualifyHint="false">T:StockSharp.Algo.Candles.Compression.TickCandleBuilder</codeEntityReference> в источники. 
-					Этот построитель будет брать тики из <codeEntityReference qualifyHint="false">T:StockSharp.BusinessEntities.IConnector</codeEntityReference>:</para>
-					<alert class="caution"><codeEntityReference qualifyHint="false">T:StockSharp.Algo.Candles.Compression.TickCandleBuilder</codeEntityReference>, 
-					как источник свечек, стандартно присутствует в <codeEntityReference>T:StockSharp.Algo.Candles.CandleManager</codeEntityReference>. Данный шаг представлен лишь в качестве примера.</alert>
+					<para>Then, when you create the <codeEntityReference>T:StockSharp.Algo.Candles.CandleManager</codeEntityReference>, to add this candles builder
+					to the sources, which will take ticks from the <codeEntityReference qualifyHint="false">T:StockSharp.BusinessEntities.IConnector</codeEntityReference>:</para>
+					<alert class="caution">The <codeEntityReference qualifyHint="false">T:StockSharp.Algo.Candles.Compression.TickCandleBuilder</codeEntityReference>, 
+					as a source of candles, is in the <codeEntityReference>T:StockSharp.Algo.Candles.CandleManager</codeEntityReference> as standard. This step is given as an example only.</alert>
 					
 					<code language="C#">
 					<![CDATA[
@@ -185,10 +190,10 @@ _candleManager.Sources.Add(new TickCandleBuilder { Sources = { new TradeCandleBu
         
 			<step>
 				<content>
-				<para>Создать <codeEntityReference qualifyHint="false">T:StockSharp.Algo.Candles.CandleSeries</codeEntityReference> и запросить по ней данные:</para>
+				<para>To create the <codeEntityReference qualifyHint="false">T:StockSharp.Algo.Candles.CandleSeries</codeEntityReference> and to request the data on it:</para>
 					<code language="C#">
 					<![CDATA[
-private QuikTrader _trader;
+private RithmicTrader _trader;
 private Security _security;
 
 private CandleSeries _series;

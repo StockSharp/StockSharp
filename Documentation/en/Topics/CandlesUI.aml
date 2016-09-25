@@ -3,19 +3,20 @@
 	<developerWalkthroughDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     
 	<introduction>
-		<para>Для графического отображения свечек можно использовать специальный компонент <codeEntityReference>T:StockSharp.Xaml.Charting.Chart</codeEntityReference>
-		(см. <link xlink:href="956b3163-c537-4e1d-af29-cf80b633db3c">Компоненты для построения графиков</link>), который отрисовывает свечки следующим образом:</para>
+		<para>For a candles graphic display, you can use the special <codeEntityReference>T:StockSharp.Xaml.Charting.Chart</codeEntityReference> component, which draws candles as follows:
+		(see <link xlink:href="956b3163-c537-4e1d-af29-cf80b633db3c">Chart components</link>):</para>
       
 		<mediaLink><image placement="center" xlink:href="sample_candleschart" /></mediaLink>
 	  
-		<para>Для отображения, поступающие свечки от <codeEntityReference>T:StockSharp.Algo.Candles.CandleManager</codeEntityReference> передаются в метод
-		<codeEntityReference qualifyHint="true" autoUpgrade="true">M:StockSharp.Xaml.Charting.ChartHelper.Draw(StockSharp.Xaml.Charting.IChart,StockSharp.Xaml.Charting.ChartCandleElement,StockSharp.Algo.Candles.Candle)</codeEntityReference>.</para>
+		<para>The candles, coming from the <codeEntityReference>T:StockSharp.Algo.Candles.CandleManager</codeEntityReference>, then passed to the
+		<codeEntityReference qualifyHint="true" autoUpgrade="true">M:StockSharp.Xaml.Charting.ChartHelper.Draw(StockSharp.Xaml.Charting.IChart,StockSharp.Xaml.Charting.ChartCandleElement,StockSharp.Algo.Candles.Candle)</codeEntityReference>
+		method for displaying.</para>
 		
-		<para>При передаче свечки из события <codeEntityReference qualifyHint="false">E:StockSharp.Algo.Candles.CandleManager.Processing</codeEntityReference>
-		для отрисовки на графике, будут отбражаться изменения текущей свечки.</para>
+		<para>The current candle changes will be displayed when the candle is passed from the <codeEntityReference qualifyHint="false">E:StockSharp.Algo.Candles.CandleManager.Processing</codeEntityReference>
+		event to draw on the graph.</para>
 		
-		<para>Если же нужно отображать <legacyBold>только</legacyBold> "целые" свечки, то необходимо проверить свойство 
-		<codeEntityReference qualifyHint="false">P:StockSharp.Algo.Candles.Candle.State</codeEntityReference> пришедшей свечки:</para>
+		<para>If you want to display the finished candles, check the <codeEntityReference qualifyHint="false">P:StockSharp.Algo.Candles.Candle.State</codeEntityReference>
+		property of  candle that came:</para>
 		
 		<code language="C#">
 		<![CDATA[
@@ -23,11 +24,11 @@ private ChartArea _area;
 private ChartCandleElement _candlesElem;
 
 // _chart - StockSharp.Xaml.Chart
-// Создание области графика
+// a new chart area
 _area = new ChartArea();
 _chart.Areas.Add(_area);
 
-// Создание элемента графика представляющего свечки
+// chart candle element for draw candles
 _candlesElem = new ChartCandleElement();
 _area.Elements.Add(_candlesElem);
 
@@ -47,7 +48,7 @@ private void DrawCandle(CandleSeries series, Candle candle)
 	</introduction>
 	
 	<relatedTopics>
-		<link xlink:href="956b3163-c537-4e1d-af29-cf80b633db3c">Компоненты для построения графиков</link>
+		<link xlink:href="956b3163-c537-4e1d-af29-cf80b633db3c">Chart components</link>
     </relatedTopics>
 
 	</developerWalkthroughDocument>

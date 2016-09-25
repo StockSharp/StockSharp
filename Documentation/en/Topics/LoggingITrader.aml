@@ -4,30 +4,28 @@
 
     <introduction>
 		<para>
-			Объекты <codeEntityReference>T:StockSharp.BusinessEntities.IConnector</codeEntityReference>
-			аналогично <link xlink:href="eca7454c-0532-4aaf-92bf-7a3d0cba635b">стратегиям</link>, также реализуют интерфейс
-			<codeEntityReference>T:StockSharp.Logging.ILogSource</codeEntityReference>. Следовательно, от объекта <codeEntityReference>T:StockSharp.BusinessEntities.IConnector</codeEntityReference>
-			можно получать сообщения через <codeEntityReference>T:StockSharp.Logging.LogManager</codeEntityReference> всеми способами,
-			что доступны стратегиям.
+			The <codeEntityReference>T:StockSharp.BusinessEntities.IConnector</codeEntityReference> objects similar <link xlink:href="eca7454c-0532-4aaf-92bf-7a3d0cba635b">strategies</link>
+			also implement the <codeEntityReference>T:StockSharp.Logging.ILogSource</codeEntityReference> interface. Therefore, from the
+			<codeEntityReference>T:StockSharp.BusinessEntities.IConnector</codeEntityReference> object you can receive messages through the
+			<codeEntityReference>T:StockSharp.Logging.LogManager</codeEntityReference> by all means that are available for strategies.
 		</para>
     </introduction>
 
     <procedure>
-      <title>Пример логирования IConnector</title>
+      <title>IConnector logging example</title>
 
       <steps class="ordered">
           <step>
 			  <content>
 				  <para>
-				  	В качестве демонстрации выбраны примеры, демонстрирующие работу с <token>alfa</token>. Все примеры логируют информацию от шлюза в
-				  	текстовый файл.
+				  	As a demonstration selected examples showing work with the <token>rithmic</token>. All examples log information from the connector to a text file.
 				  </para>
 			  </content>
 		  </step>
           <step>
           	<content>
 			  	<para>
-					В самом начале необходимо создать менеджер логирования:
+					First, you need to create a log manager:
 			 	</para>
 				<code language="C#">private readonly LogManager _logManager = new LogManager();</code>
 			</content>
@@ -35,7 +33,7 @@
 		  <step>
 			<content>
 				<para>
-					Затем необходимо создать файловый логгер и добавить его в <codeEntityReference qualifyHint="true">P:StockSharp.Logging.LogManager.Listeners</codeEntityReference>:
+					Then you need to create a file logger, and to add it to the <codeEntityReference qualifyHint="true">P:StockSharp.Logging.LogManager.Listeners</codeEntityReference>:
 				</para>
 				<code language="C#">_logManager.Listeners.Add(new FileLogListener());</code>
 			</content>
@@ -44,7 +42,7 @@
 			  <content>
 				  <content>
 						<para>
-							Заключительным этапом является добавление <codeEntityReference>T:StockSharp.AlfaDirect.AlfaTrader</codeEntityReference>
+							The final step is to add the <codeEntityReference>T:StockSharp.Rithmic.RithmicTrader</codeEntityReference>
 							в <codeEntityReference qualifyHint="true">P:StockSharp.Logging.LogManager.Sources</codeEntityReference>:
 						</para>
 						<code language="C#">_logManager.Sources.Add(_trader);</code>
@@ -54,16 +52,15 @@
 		  <step>
 			  <content>
 				  <para>
-					  В итоге программа после запуска будет выводить сообщения, как показано ниже:
+					  As a result, the program will display messages as shown below after the start:
 				  </para>
-				  <code><![CDATA[18:43:15 | Info  | AlfaTrader      | AlfaDirect v.3.5.2.6
-18:43:15 | Debug | AlfaTrader      | StartExport()
-18:43:15 | Debug | AlfaWrapper     | ReadPortfolios()
-18:43:15 | Debug | AlfaTrader      | OnProcessPortfolios()
-18:43:15 | Debug | AlfaTrader      | 41469|15152,43|15530,8|
-18:43:15 | Debug | AlfaWrapper     | ReadSecurities()
-18:43:15 | Debug | AlfaTrader      | OnProcessSecurities
-18:43:15 | Debug | AlfaTrader      | 291|Лукойл а.о.|27.05.2011|4|LKOH|MICEX_SHR|RUR|0|0|MCX_SHR_LST|
+				  <code><![CDATA[18:43:15 | Info  | RithmicTrader
+18:43:15 | Debug | RithmicTrader     | ReadPortfolios()
+18:43:15 | Debug | RithmicTrader      | OnProcessPortfolios()
+18:43:15 | Debug | RithmicTrader      | 41469|15152,43|15530,8|
+18:43:15 | Debug | RithmicTrader     | ReadSecurities()
+18:43:15 | Debug | RithmicTrader      | OnProcessSecurities
+18:43:15 | Debug | RithmicTrader      | 291|ESU5|
 ]]></code>
 			  </content>
 		  </step>

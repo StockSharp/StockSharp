@@ -3,8 +3,8 @@
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     <introduction>
       <para>
-      	Пример работы с <codeEntityReference>T:StockSharp.ITCH.ItchTrader</codeEntityReference> демонстрирует приложение SampleITCH, показанное на рисунке ниже.
-      	Исходные коды примера лежат в дистрибутиве в папке <legacyItalic>Samples/ITCH</legacyItalic>.
+      	The application SampleITCH shows an example of working with <codeEntityReference>T:StockSharp.ITCH.ItchTrader</codeEntityReference>
+      	as shown in the figure below. The example source code is in the <legacyItalic>Samples/ITCH</legacyItalic> folder of the installation package.
       </para>
       <mediaLink><image placement="center" xlink:href="ITCHSettings"/></mediaLink>
     </introduction>
@@ -132,7 +132,7 @@ private void ConnectClick(object sender, RoutedEventArgs e)
 			<step>
 				<content>
 					<para>Для вывода сделок и логов заявок нужно открыть окна при помощи кнопок <legacyBold>Тики</legacyBold> и <legacyBold>Лог заявок</legacyBold> соответственно. Для получения стакана нужно открыть окно инструментов, выбрать нужный инструмент
-					и открыть стакан при помощи кнопки <legacyBold>Стакан..</legacyBold> .</para>
+					и открыть стакан при помощи кнопки <legacyBold>Стакан</legacyBold>.</para>
 				</content>
 			</step>
 		</steps>

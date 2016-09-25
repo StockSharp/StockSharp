@@ -13,35 +13,37 @@
            zero (0) to limit it to top-level sections only.  -->
       <!-- <autoOutline /> -->
       <para>
-      	В <token>stocksharp</token> инструменты из разных источников имеют унифицированные идентификаторы 
-      	<codeEntityReference qualifyHint="true">P:StockSharp.BusinessEntities.Security.Id</codeEntityReference>.
-      	Это сделано для того, чтобы код торгового робота не зависел от типа подключения (<token>plaza</token>, <token>quik</token>, <token>smartcom</token> и т.д.).
-      	Для идентификатора инструмента используется следующий синтаксис - <legacyBold>[код инструмента]@[код площадки]</legacyBold>.
-      	Например, для акций Лукойла идентификатором будет <legacyBold>LKOH@EQBR</legacyBold>. Для инструментов срочного рынка <token>moex</token> площадкой будет "FORTS".
-      	Так, например, для июньского фьючерса на индекс РТС идентификатором будет <legacyBold>RIM5@FORTS</legacyBold>.
+      	The instruments in the <token>stocksharp</token> from different sources have the 
+      	<codeEntityReference qualifyHint="true">P:StockSharp.BusinessEntities.Security.Id</codeEntityReference> uniform identifier.
+      	This is done in order to the code of trading algorithm does not depend on the type of connection (<token>OpenECry</token>, <token>rithmic</token>, <token>ib</token> etc.).
+      	For the instrument identifier the following syntax used - <legacyBold>[instrument code]@[board code]</legacyBold>.
+      	For example, for the Apple inc shares identifier will be <legacyBold>AAPL@NASDAQ</legacyBold>. For the derivatives market instruments board will be
+      	<legacyBold>NYSE</legacyBold> (or other board name where <legacyBold>AAPL</legacyBold> futures trades). For example, for the June futures on the ES index
+      	the identifier will be <legacyBold>ESM5@NYSE</legacyBold>.
       </para>
       
       <alert class="note">
-      	Программа <token>hydra</token> для скачивания маркет-данных нумерует папки с историей, основываясь на таком же механизме.
+      	The <token>hydra</token> application for market data download enumerates folders with a history based on the same mechanism.
       </alert>
     </introduction>
     <!-- <prerequisites><content>Optional prerequisites info</content></prerequisites> -->
     <!-- One or more procedure or section with procedure -->
     <procedure>
-      <title>Переопределение алгоритма генерации идентификаторов</title>
+      <title>Identifiers generation algorithm overriding</title>
       <steps class="ordered">
         <step>
           <content>
             <para>
-            	Для того, чтобы начать генерировать идентификаторы инструментов по своему алгоритму, необходимо создать наследника класса
-            	<codeEntityReference>T:StockSharp.Algo.SecurityIdGenerator</codeEntityReference>, и переопределить метод
-            	<codeEntityReference qualifyHint="true">M:StockSharp.Algo.SecurityIdGenerator.GenerateId(System.String,StockSharp.BusinessEntities.ExchangeBoard)</codeEntityReference>:
+            	To start the instrument identifiers generation on the own algorithm, you must create the descendant of the
+            	<codeEntityReference>T:StockSharp.Algo.SecurityIdGenerator</codeEntityReference> class, and override the
+            	<codeEntityReference qualifyHint="true">M:StockSharp.Algo.SecurityIdGenerator.GenerateId(System.String,StockSharp.BusinessEntities.ExchangeBoard)</codeEntityReference>
+            	method:
             </para>
             <code language="C#">class CustomSecurityIdGenerator : SecurityIdGenerator
 {
 	public override string GenerateId(string secCode, ExchangeBoard board)
 	{
-		// генерация идентификатора вида CODE--BOARD
+		// will be generate in CODE--BOARD form
 		return secCode + "--" + board.Code;
 	}
 }</code>
@@ -50,9 +52,9 @@
         <step>
           <content>
             <para>
-            	Далее, созданный генератор нужно передать в шлюз:
+            	Then, the created generator must be passed to the connector:
             </para>
-            <code language="C#">var trader = new PlazaTrader();
+            <code language="C#">var trader = new RithmicTrader();
 trader.SecurityIdGenerator = new CustomSecurityIdGenerator();
 </code>
           </content>
