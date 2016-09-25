@@ -29,7 +29,6 @@ namespace StockSharp.BusinessEntities
 		static ExchangeBoard()
 		{
 			// NOTE
-			// описание ММВБ площадок взято из документа http://fs.rts.micex.ru/files/707
 
 			Associated = new ExchangeBoard
 			{
