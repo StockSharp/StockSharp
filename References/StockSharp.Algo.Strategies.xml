@@ -699,7 +699,7 @@
         </member>
         <member name="T:StockSharp.Algo.Strategies.Derivatives.DeltaHedgeStrategy">
             <summary>
-            The options delta hedging strategy .
+            The options delta hedging strategy.
             </summary>
         </member>
         <member name="M:StockSharp.Algo.Strategies.Derivatives.DeltaHedgeStrategy.#ctor">

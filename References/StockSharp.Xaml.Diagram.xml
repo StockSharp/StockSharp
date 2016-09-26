@@ -323,6 +323,11 @@
         <see langword="true" />, if it is possible to go outside from the current diagram element. Otherwise, <see langword="false" />.
             </summary>
     </member>
+    <member name="P:StockSharp.Xaml.Diagram.DiagramDebugger.IsWaitingOnError">
+      <summary>
+        <see langword="true" />, if the debugger is stopped at the error. Otherwise, <see langword="false" />.
+            </summary>
+    </member>
     <member name="P:StockSharp.Xaml.Diagram.DiagramDebugger.IsEnabled">
       <summary>
         <see langword="true" />, if the debugger is used. Otherwise, <see langword="false" />.
@@ -416,25 +421,55 @@
             DiagramEditorControl
             </summary>
     </member>
-    <member name="F:StockSharp.Xaml.Diagram.DiagramEditorControl.OpenCommand">
+    <member name="F:StockSharp.Xaml.Diagram.DiagramEditorControl.RemoveCommandProperty">
       <summary>
-      </summary>
+        <see cref="T:System.Windows.DependencyProperty" /> for <see cref="P:StockSharp.Xaml.Diagram.DiagramEditorControl.RemoveCommand" />.
+            </summary>
     </member>
-    <member name="F:StockSharp.Xaml.Diagram.DiagramEditorControl.RemoveCommand">
+    <member name="P:StockSharp.Xaml.Diagram.DiagramEditorControl.RemoveCommand">
       <summary>
-      </summary>
+            Remove command.
+            </summary>
     </member>
-    <member name="F:StockSharp.Xaml.Diagram.DiagramEditorControl.PropertiesCommand">
+    <member name="F:StockSharp.Xaml.Diagram.DiagramEditorControl.OpenElementCommandProperty">
       <summary>
-      </summary>
+        <see cref="T:System.Windows.DependencyProperty" /> for <see cref="P:StockSharp.Xaml.Diagram.DiagramEditorControl.OpenElementCommand" />.
+            </summary>
     </member>
-    <member name="F:StockSharp.Xaml.Diagram.DiagramEditorControl.UndoCommand">
+    <member name="P:StockSharp.Xaml.Diagram.DiagramEditorControl.OpenElementCommand">
       <summary>
-      </summary>
+            Command for opening composition element.
+            </summary>
     </member>
-    <member name="F:StockSharp.Xaml.Diagram.DiagramEditorControl.RedoCommand">
+    <member name="F:StockSharp.Xaml.Diagram.DiagramEditorControl.OpenPropertiesCommandProperty">
       <summary>
-      </summary>
+        <see cref="T:System.Windows.DependencyProperty" /> for <see cref="P:StockSharp.Xaml.Diagram.DiagramEditorControl.OpenPropertiesCommand" />.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Diagram.DiagramEditorControl.OpenPropertiesCommand">
+      <summary>
+            Command for opening element properties.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Xaml.Diagram.DiagramEditorControl.UndoCommandProperty">
+      <summary>
+        <see cref="T:System.Windows.DependencyProperty" /> for <see cref="P:StockSharp.Xaml.Diagram.DiagramEditorControl.UndoCommand" />.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Diagram.DiagramEditorControl.UndoCommand">
+      <summary>
+            Undo command.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Xaml.Diagram.DiagramEditorControl.RedoCommandProperty">
+      <summary>
+        <see cref="T:System.Windows.DependencyProperty" /> for <see cref="P:StockSharp.Xaml.Diagram.DiagramEditorControl.RedoCommand" />.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Diagram.DiagramEditorControl.RedoCommand">
+      <summary>
+            Redo command.
+            </summary>
     </member>
     <member name="F:StockSharp.Xaml.Diagram.DiagramEditorControl.CompositionProperty">
       <summary>
@@ -466,6 +501,16 @@
             Scale.
             </summary>
     </member>
+    <member name="F:StockSharp.Xaml.Diagram.DiagramEditorControl.CanUndoRedoProperty">
+      <summary>
+        <see cref="T:System.Windows.DependencyProperty" /> for <see cref="P:StockSharp.Xaml.Diagram.DiagramEditorControl.CanUndoRedo" />.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Diagram.DiagramEditorControl.CanUndoRedo">
+      <summary>
+            Can undo/redo.
+            </summary>
+    </member>
     <member name="E:StockSharp.Xaml.Diagram.DiagramEditorControl.SelectionChanged">
       <summary>
             The event of the element selection on the diagram.
@@ -489,16 +534,6 @@
     <member name="P:StockSharp.Xaml.Diagram.DiagramEditorControl.IndicatorTypes">
       <summary>
             The list of available indicators types.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Xaml.Diagram.DiagramEditorControl.OpenElementCommand">
-      <summary>
-            Command for opening composition element.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Xaml.Diagram.DiagramEditorControl.OpenPropertiesCommand">
-      <summary>
-            Command for opening element properties.
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.DiagramEditorControl.#ctor">
@@ -690,7 +725,7 @@
             </summary>
       <param name="socket">Connection.</param>
     </member>
-    <member name="M:StockSharp.Xaml.Diagram.DiagramElement.RemoveSockets">
+    <member name="M:StockSharp.Xaml.Diagram.DiagramElement.RemoveSockets(System.Boolean)">
       <summary>
             To remove all incoming and outgoing connections.
             </summary>
@@ -819,6 +854,24 @@
             The method is called at re-initialisation of the diagram element state.
             </summary>
     </member>
+    <member name="E:StockSharp.Xaml.Diagram.DiagramElement.PropertyChanging">
+      <summary>
+            The diagram element properties value changing event.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.Diagram.DiagramElement.RaisePropertyChanging(System.String)">
+      <summary>
+            To call the <see cref="E:StockSharp.Xaml.Diagram.DiagramElement.PropertyChanging" /> event.
+            </summary>
+      <param name="propertyName">Property name.</param>
+    </member>
+    <member name="M:StockSharp.Xaml.Diagram.DiagramElement.RaisePropertyChanging(System.Object,System.ComponentModel.PropertyChangingEventArgs)">
+      <summary>
+            To call the <see cref="E:StockSharp.Xaml.Diagram.DiagramElement.PropertyChanging" /> event.
+            </summary>
+      <param name="sender">Sender.</param>
+      <param name="args">Arguments.</param>
+    </member>
     <member name="E:StockSharp.Xaml.Diagram.DiagramElement.PropertyChanged">
       <summary>
             The diagram element properties value change event.
@@ -826,13 +879,13 @@
     </member>
     <member name="M:StockSharp.Xaml.Diagram.DiagramElement.RaisePropertyChanged(System.String)">
       <summary>
-            To call the diagram element property value change event.
+            To call the <see cref="E:StockSharp.Xaml.Diagram.DiagramElement.PropertyChanged" /> event.
             </summary>
       <param name="propertyName">Property name.</param>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.DiagramElement.RaisePropertyChanged(System.Object,System.ComponentModel.PropertyChangedEventArgs)">
       <summary>
-            To call the diagram element property value change event.
+            To call the <see cref="E:StockSharp.Xaml.Diagram.DiagramElement.PropertyChanged" /> event.
             </summary>
       <param name="sender">Sender.</param>
       <param name="args">Arguments.</param>
@@ -844,7 +897,7 @@
     </member>
     <member name="M:StockSharp.Xaml.Diagram.DiagramElement.RaiseParameterValueChanged(System.String)">
       <summary>
-            To call the diagram element parameter value change event.
+            To call the <see cref="E:StockSharp.Xaml.Diagram.DiagramElement.ParameterValueChanged" /> event.
             </summary>
       <param name="parameterName">Parameter name.</param>
     </member>
@@ -874,7 +927,7 @@
     </member>
     <member name="M:StockSharp.Xaml.Diagram.DiagramElement.RaisePropertiesChanged">
       <summary>
-            To call the available properties change event.
+            To call the <see cref="E:StockSharp.Xaml.Diagram.DiagramElement.PropertiesChanged" /> event.
             </summary>
     </member>
     <member name="T:StockSharp.Xaml.Diagram.IDiagramElementParam">
@@ -1662,12 +1715,6 @@
             Initializes a new instance of the <see cref="T:StockSharp.Xaml.Diagram.Elements.ChartDiagramElement" />.
             </summary>
     </member>
-    <member name="M:StockSharp.Xaml.Diagram.Elements.ChartDiagramElement.RemoveAxis(StockSharp.Xaml.Charting.ChartAxis)">
-      <summary>
-            To remove the axis.
-            </summary>
-      <param name="axis">The axis.</param>
-    </member>
     <member name="M:StockSharp.Xaml.Diagram.Elements.ChartDiagramElement.Save(Ecng.Serialization.SettingsStorage)">
       <summary>
             Save settings.
@@ -1810,14 +1857,14 @@
             Icon resource name.
             </summary>
     </member>
-    <member name="M:StockSharp.Xaml.Diagram.Elements.IndicatorDiagramElement.OnInit">
-      <summary>
-            The method is called at initialization of the diagram element.
-            </summary>
-    </member>
     <member name="M:StockSharp.Xaml.Diagram.Elements.IndicatorDiagramElement.OnReseted">
       <summary>
             The method is called at re-initialisation of the diagram element state.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.Diagram.Elements.IndicatorDiagramElement.OnStart">
+      <summary>
+            The method is called at the start of the diagram element algorithm.
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.Elements.IndicatorDiagramElement.Load(Ecng.Serialization.SettingsStorage)">
@@ -1947,6 +1994,11 @@
             Initializes a new instance of the <see cref="T:StockSharp.Xaml.Diagram.Elements.OneParamFunctionDiagramElement" />.
             </summary>
     </member>
+    <member name="M:StockSharp.Xaml.Diagram.Elements.OneParamFunctionDiagramElement.OnStart">
+      <summary>
+            The method is called at the start of the diagram element algorithm.
+            </summary>
+    </member>
     <member name="T:StockSharp.Xaml.Diagram.Elements.TwoParamFunctionDiagramElement">
       <summary>
             Formula with two arguments element.
@@ -1997,6 +2049,12 @@
             The method is called at the stop of the diagram element algorithm.
             </summary>
     </member>
+    <member name="M:StockSharp.Xaml.Diagram.Elements.OpenPositionDiagramElement.Load(Ecng.Serialization.SettingsStorage)">
+      <summary>
+            Load settings.
+            </summary>
+      <param name="storage">Settings storage.</param>
+    </member>
     <member name="T:StockSharp.Xaml.Diagram.Elements.OrderTradesDiagramElement">
       <summary>
             Trades per order element.
@@ -2040,6 +2098,11 @@
     <member name="M:StockSharp.Xaml.Diagram.Elements.PartDiagramElement.TypeChanged">
       <summary>
             The method is called when the data type is changed.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.Diagram.Elements.PartDiagramElement.OnStart">
+      <summary>
+            The method is called at the start of the diagram element algorithm.
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.Elements.PartDiagramElement.OnProcess(StockSharp.Xaml.Diagram.DiagramSocketValue)">
@@ -2220,7 +2283,7 @@
             Data type.
             </summary>
     </member>
-    <member name="M:StockSharp.Xaml.Diagram.Elements.TypedDiagramElement`1.#ctor">
+    <member name="M:StockSharp.Xaml.Diagram.Elements.TypedDiagramElement`1.#ctor(System.String)">
       <summary>
             Initializes a new instance of the <see cref="T:StockSharp.Xaml.Diagram.Elements.TypedDiagramElement`1" />.
             </summary>
@@ -2241,6 +2304,11 @@
             The method is called at the processing of the new incoming value.
             </summary>
       <param name="value">The processed value.</param>
+    </member>
+    <member name="M:StockSharp.Xaml.Diagram.Elements.TypedDiagramElement`1.OnStart">
+      <summary>
+            The method is called at the start of the diagram element algorithm.
+            </summary>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.Elements.TypedDiagramElement`1.Load(Ecng.Serialization.SettingsStorage)">
       <summary>

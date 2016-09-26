@@ -678,6 +678,17 @@
             </summary>
       <param name="storage">Settings storage.</param>
     </member>
+    <member name="E:StockSharp.Xaml.Charting.ChartAxis.PropertyChanging">
+      <summary>
+            The chart element properties value changing event.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.Charting.ChartAxis.RaisePropertyChanging(System.String)">
+      <summary>
+            To call the <see cref="E:StockSharp.Xaml.Charting.ChartAxis.PropertyChanging" /> event.
+            </summary>
+      <param name="name">Property name.</param>
+    </member>
     <member name="E:StockSharp.Xaml.Charting.ChartAxis.PropertyChanged">
       <summary>
             The chart element properties value change event.
@@ -685,18 +696,18 @@
     </member>
     <member name="M:StockSharp.Xaml.Charting.ChartAxis.RaisePropertyChanged(System.String)">
       <summary>
-            To call the event <see cref="E:StockSharp.Xaml.Charting.ChartAxis.PropertyChanged" />.
+            To call the <see cref="E:StockSharp.Xaml.Charting.ChartAxis.PropertyChanged" /> event.
             </summary>
       <param name="name">Property name.</param>
     </member>
-    <member name="E:StockSharp.Xaml.Charting.ChartAxis.PropertyChanging">
+    <member name="E:StockSharp.Xaml.Charting.ChartAxis.PropertyValueChanging">
       <summary>
             The chart element properties value change start event.
             </summary>
     </member>
-    <member name="M:StockSharp.Xaml.Charting.ChartAxis.RaisePropertyChanging(System.String,System.Object)">
+    <member name="M:StockSharp.Xaml.Charting.ChartAxis.RaisePropertyValueChanging(System.String,System.Object)">
       <summary>
-            To call the event <see cref="E:StockSharp.Xaml.Charting.ChartAxis.PropertyChanging" />.
+            To call the <see cref="E:StockSharp.Xaml.Charting.ChartAxis.PropertyValueChanging" /> event.
             </summary>
       <param name="name">Property name.</param>
       <param name="value">New value of the property.</param>
@@ -1790,6 +1801,17 @@
       <param name="elem">Copy.</param>
       <returns>Copy.</returns>
     </member>
+    <member name="E:StockSharp.Xaml.Charting.ChartPart`1.PropertyChanging">
+      <summary>
+            The chart element properties value changing event.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.Charting.ChartPart`1.RaisePropertyChanging(System.String)">
+      <summary>
+            To call the event <see cref="E:StockSharp.Xaml.Charting.ChartPart`1.PropertyChanging" />.
+            </summary>
+      <param name="name">Property name.</param>
+    </member>
     <member name="E:StockSharp.Xaml.Charting.ChartPart`1.PropertyChanged">
       <summary>
             The chart element properties value change event.
@@ -1801,14 +1823,14 @@
             </summary>
       <param name="name">Property name.</param>
     </member>
-    <member name="E:StockSharp.Xaml.Charting.ChartPart`1.PropertyChanging">
+    <member name="E:StockSharp.Xaml.Charting.ChartPart`1.PropertyValueChanging">
       <summary>
             The chart element properties value change start event.
             </summary>
     </member>
-    <member name="M:StockSharp.Xaml.Charting.ChartPart`1.RaisePropertyChanging(System.String,System.Object)">
+    <member name="M:StockSharp.Xaml.Charting.ChartPart`1.RaisePropertyValueChanging(System.String,System.Object)">
       <summary>
-            To call the event <see cref="E:StockSharp.Xaml.Charting.ChartPart`1.PropertyChanging" />.
+            To call the event <see cref="E:StockSharp.Xaml.Charting.ChartPart`1.PropertyValueChanging" />.
             </summary>
       <param name="name">Property name.</param>
       <param name="value">New value of the property.</param>

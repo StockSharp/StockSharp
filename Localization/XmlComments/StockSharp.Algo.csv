@@ -3503,6 +3503,7 @@ P:StockSharp.Algo.Storages.Csv.CsvEntityRegistry.Orders/summary;DocStr1569
 P:StockSharp.Algo.Storages.Csv.CsvEntityRegistry.OrderFails/summary;DocStr1570
 P:StockSharp.Algo.Storages.Csv.CsvEntityRegistry.News/summary;DocStr1571
 M:StockSharp.Algo.Storages.Csv.CsvEntityRegistry.#ctor(System.String)/summary;DocStr1
+M:StockSharp.Algo.Storages.Csv.CsvEntityRegistry.Init/summary;DocStr9249
 T:StockSharp.Algo.Storages.Csv.CandleCsvSerializer`1/summary;DocStr8583
 M:StockSharp.Algo.Storages.Csv.CandleCsvSerializer`1.#ctor(StockSharp.Messages.SecurityId,System.Object,System.Text.Encoding)/summary;DocStr1
 M:StockSharp.Algo.Storages.Csv.CandleCsvSerializer`1.#ctor(StockSharp.Messages.SecurityId,System.Object,System.Text.Encoding)/param/securityId;SecurityId

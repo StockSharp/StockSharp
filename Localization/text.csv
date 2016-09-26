@@ -13399,6 +13399,15 @@ DocStr9242;The seconds value;Секунды
 DocStr9243;The minutes value;Минуты
 DocStr9244;The hours value;Часы
 DocStr9245;The days value;Дни
-DocStr9246;To create localized url;To create localized url
-DocStr9247;Help topic;Help topic
-DocStr9248;Localized url;Localized url
+DocStr9246;To create localized url;Создать локализованный адрес
+DocStr9247;Help topic;Помощь
+DocStr9248;Localized url;Локализованный адрес
+DocStr9249;Initialize the storage;Инициализировать хранилище
+DocStr9250;The chart element properties value changing event;Событие изменения свойств элемента графика
+DocStr9251;{0}, if the debugger is stopped at the error. Otherwise, {1};{0}, если отладчик остановился на ошибке. Иначе, {1}
+DocStr9252;Remove command;Команда удаления
+DocStr9253;Undo command;Команда отмены изменений
+DocStr9254;Redo command;Команда восстановления изменений
+DocStr9255;Can undo/redo;Можно ли отменять или восстанавливать изменения
+DocStr9256;The diagram element properties value changing event;Событие изменения свойств элемента схемы
+DocStr9257;To call the {0} event;Вызвать событие {0}
