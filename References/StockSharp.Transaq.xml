@@ -474,6 +474,11 @@
             Финам боевой сервер 2. IP адрес tr2.finam.ru, порт 3900.
             </summary>
     </member>
+    <member name="F:StockSharp.Transaq.TransaqAddresses.FinamHft">
+      <summary>
+            Финам HFT сервер. Адрес hft.finam.ru, порт 3900.
+            </summary>
+    </member>
     <member name="T:StockSharp.Transaq.TransaqTrader">
       <summary>
             Реализация интерфейса <see cref="T:StockSharp.BusinessEntities.IConnector" />, предоставляющая подключение к Transaq через TXmlConnector.
