@@ -1,6 +1,8 @@
 StockSharp API Change log
 ========================
 ###current:
+* (bug) Fix Oanda connector.
+* (feature) TransaqAddresses.FinamHft
 * (feature) Transaq. v2.20.13
 * (bug) CSV storage. TimeSpan serialization fix.
 * (bug) Fix http://stocksharp.ru/posts/m/36986/
