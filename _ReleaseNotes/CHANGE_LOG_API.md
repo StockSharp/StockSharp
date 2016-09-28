@@ -1,6 +1,7 @@
 StockSharp API Change log
 ========================
 ###current:
+* (feature) Position.ClientCode
 * (bug) Fix Oanda connector.
 * (feature) TransaqAddresses.FinamHft
 * (feature) Transaq. v2.20.13
