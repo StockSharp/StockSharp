@@ -904,6 +904,7 @@ F:StockSharp.Messages.PositionChangeTypes.State/summary;Str265
 T:StockSharp.Messages.PositionChangeMessage/summary;DocStr4439
 P:StockSharp.Messages.PositionChangeMessage.SecurityId/summary;SecurityId
 P:StockSharp.Messages.PositionChangeMessage.PortfolioName/summary;DocStr3127
+P:StockSharp.Messages.PositionChangeMessage.ClientCode/summary;ClientCodeDesc
 P:StockSharp.Messages.PositionChangeMessage.DepoName/summary;DocStr2933
 P:StockSharp.Messages.PositionChangeMessage.LimitType/summary;DocStr2934
 P:StockSharp.Messages.PositionChangeMessage.Description/summary;Str269
@@ -914,6 +915,7 @@ M:StockSharp.Messages.PositionChangeMessage.ToString/summary;DocStr49
 M:StockSharp.Messages.PositionChangeMessage.ToString/returns;DocStr50
 T:StockSharp.Messages.PositionMessage/summary;DocStr4440
 P:StockSharp.Messages.PositionMessage.PortfolioName/summary;Str270
+P:StockSharp.Messages.PositionMessage.ClientCode/summary;ClientCodeDesc
 P:StockSharp.Messages.PositionMessage.Description/summary;Str269
 P:StockSharp.Messages.PositionMessage.SecurityId/summary;Str271
 P:StockSharp.Messages.PositionMessage.DepoName/summary;DocStr2933
