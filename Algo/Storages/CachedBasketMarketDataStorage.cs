@@ -198,7 +198,7 @@ namespace StockSharp.Algo.Storages
 			Message message;
 
 			if (!_messageQueue.TryDequeue(out message))
-				return false;
+				return _isChanged;
 
 			var serverTime = message.GetServerTime();
 
