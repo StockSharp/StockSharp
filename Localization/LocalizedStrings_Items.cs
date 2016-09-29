@@ -42876,5 +42876,35 @@ namespace StockSharp.Localization
 		/// {0} not initialized.
 		/// </summary>
 		public static string NotInitializedParams => GetString(NotInitializedParamsKey);
+
+		/// <summary>
+		/// Order cancelling.
+		/// </summary>
+		public const string OrderCancellingKey = "OrderCancelling";
+
+		/// <summary>
+		/// Order cancelling.
+		/// </summary>
+		public static string OrderCancelling => GetString(OrderCancellingKey);
+
+		/// <summary>
+		/// Order moving.
+		/// </summary>
+		public const string OrderMovingKey = "OrderMoving";
+
+		/// <summary>
+		/// Order moving.
+		/// </summary>
+		public static string OrderMoving => GetString(OrderMovingKey);
+
+		/// <summary>
+		/// Not specified new value of price or volume.
+		/// </summary>
+		public const string NotSpecifiedPriceOrVolumeKey = "NotSpecifiedPriceOrVolume";
+
+		/// <summary>
+		/// Not specified new value of price or volume.
+		/// </summary>
+		public static string NotSpecifiedPriceOrVolume => GetString(NotSpecifiedPriceOrVolumeKey);
 	}
 }

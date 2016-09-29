@@ -4322,6 +4322,9 @@ HoursPart;Hours;Часы
 MinutesPart;Minutes;Минуты
 SecondsPart;Seconds;Секунды
 NotInitializedParams;{0} not initialized.;{0} не выбрано.
+OrderCancelling;Order cancelling;Отмена заявки
+OrderMoving;Order moving;Перемещение заявки
+NotSpecifiedPriceOrVolume;Not specified new value of price or volume.;Необходимо указать новое значение цены или объема.
 DocStr0;Button activation alert settings;Кнопка активации настроек сигнала
 DocStr1;Initializes a new instance of the {0};Создать {0}
 DocStr2;Load settings;Загрузить настройки
