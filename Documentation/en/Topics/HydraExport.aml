@@ -8,33 +8,33 @@
     -->
     <introduction>
       <para>
-		  Скачанные данные <token>hydra</token> позволяет просмотреть в специальных окнах. 
+		  The <token>hydra</token> allows you to view downloaded data in special windows. 
 	  </para>
 
       <para>
-		  Для этого в главном окне на панели инструметов необходимо нажать на одну из следующих кнопок -
+		  To do this, in the toolbox of the main window you should click on one of the following buttons -
 	  </para>
 	  
 	  	
       <list class="bullet">
         <listItem>
           <para>
-          	<link xlink:href="3a20fcda-25ba-4794-ac91-dfa227380530">Сделки</link> 
+          	<link xlink:href="3a20fcda-25ba-4794-ac91-dfa227380530">Ticks</link> 
           </para>
         </listItem>
         <listItem>
           <para>
-          	<link xlink:href="6126cb15-de8b-4bcc-8b81-7354e8894239">Стаканы</link>
+          	<link xlink:href="6126cb15-de8b-4bcc-8b81-7354e8894239">Order book</link>
           </para>
         </listItem>
         <listItem>
           <para>
-          	<link xlink:href="621927b7-839f-4492-8dbb-162e63d57769">Свечи</link> 
+          	<link xlink:href="621927b7-839f-4492-8dbb-162e63d57769">Candles</link> 
           </para>
         </listItem>
         <listItem>
           <para>
-          	 <link xlink:href="fe4f5992-a496-45bb-82e6-d353b42df894">Лог заявок</link> 
+          	 <link xlink:href="fe4f5992-a496-45bb-82e6-d353b42df894">Order log</link> 
           </para>
         </listItem>
         <listItem>
@@ -44,18 +44,18 @@
         </listItem>
         <listItem>
           <para>
-          	 <link xlink:href="243486c1-b9d4-47af-889e-61aaaa670644">Новости</link> 
+          	 <link xlink:href="243486c1-b9d4-47af-889e-61aaaa670644">News</link> 
           </para>
         </listItem>
         <listItem>
           <para>
-          	 <link xlink:href="8ba0e23b-1cf3-400e-96a0-5dfb11d3e677">Транзакции</link> 
+          	 <link xlink:href="8ba0e23b-1cf3-400e-96a0-5dfb11d3e677">Transactions</link> 
           </para>
         </listItem>
        
       </list> 
       
-      <para>Или выбрать соответствующий пункт меню в главном меню "Экспорт".</para>
+      <para>Or select the appropriate menu item in the main menu Export.</para>
 	  
 	  
 	  <mediaLink>
