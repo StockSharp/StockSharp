@@ -269,7 +269,7 @@
       <Topic id="01a85a46-7510-4385-b81c-348ffb3dfc46" visible="True" title="Connection properties" />
     </Topic>
     <Topic id="b5641d6c-cc5c-4692-a5c8-87742590a0a9" visible="True" title="Instruments list" />
-    <Topic id="fdba9886-25e8-4462-86e6-79ad5f40d9a9" visible="True" title="View and export">
+    <Topic id="fdba9886-25e8-4462-86e6-79ad5f40d9a9" visible="True" isExpanded="true" title="View and export">
       <Topic id="3a20fcda-25ba-4794-ac91-dfa227380530" visible="True" title="Ticks" />
       <Topic id="6126cb15-de8b-4bcc-8b81-7354e8894239" visible="True" title="Order books" />
       <Topic id="0adb23fa-a295-43e0-9e75-9060b1d03388" visible="True" title="Candles" />
@@ -279,28 +279,28 @@
       <Topic id="8ba0e23b-1cf3-400e-96a0-5dfb11d3e677" visible="True" title="Transactions" />
     </Topic>
     <Topic id="621927b7-839f-4492-8dbb-162e63d57769" visible="True" title="Candle generation" />
-    <Topic id="4edabdad-84d9-4dfa-9940-0559642b1ca2" visible="True" title="Importing">
-      <Topic id="2a830015-5cfb-4468-8538-4e94820b3659" visible="True" title="Инструменты" />
-      <Topic id="1e18851f-69f7-4fa0-a5ea-c059c7694990" visible="True" title="Сделки" />
-      <Topic id="6465c049-fca8-4bb4-b00a-d3495299267d" visible="True" title="Стаканы" />
-      <Topic id="9e13ea27-629d-4403-adfa-d76bc8648c7e" visible="True" title="Свечи" />
-      <Topic id="b0088f47-8c93-46ed-a53e-820b7c66e65b" visible="True" title="Лог заявок" />
+    <Topic id="4edabdad-84d9-4dfa-9940-0559642b1ca2" visible="True" isExpanded="true" title="Importing">
+      <Topic id="2a830015-5cfb-4468-8538-4e94820b3659" visible="True" title="Instruments" />
+      <Topic id="1e18851f-69f7-4fa0-a5ea-c059c7694990" visible="True" title="Ticks" />
+      <Topic id="6465c049-fca8-4bb4-b00a-d3495299267d" visible="True" title="Order books" />
+      <Topic id="9e13ea27-629d-4403-adfa-d76bc8648c7e" visible="True" title="Candles" />
+      <Topic id="b0088f47-8c93-46ed-a53e-820b7c66e65b" visible="True" title="Order log" />
       <Topic id="eac5ea13-e8a5-4133-82bd-4442a4df3aca" visible="True" title="Level 1" />
-      <Topic id="649dd276-171b-483a-9cf1-8f77e4e1b577" visible="True" title="Новости" />
-      <Topic id="cd5f6850-ae11-42c2-b5c8-e1b2af1c3380" visible="True" title="Транзакции" />
+      <Topic id="649dd276-171b-483a-9cf1-8f77e4e1b577" visible="True" title="News" />
+      <Topic id="cd5f6850-ae11-42c2-b5c8-e1b2af1c3380" visible="True" title="Transactions" />
     </Topic>
     <Topic id="d1058e35-8539-4297-9dbf-c0f4fec5d5eb" visible="True" title="Create new souce" />
     <Topic id="2a78aa1d-c8b6-4679-9d3e-4ab8e909df54" visible="True" title="Gluing data" />
-    <Topic id="c27c3ca2-7032-4b91-a9ce-a5ce7becae0c" visible="True" title="Tasks">
-      <Topic id="272eef99-c7e4-4245-ae83-7efa4d2345bc" visible="True" title="Конвертер" />
-      <Topic id="9e075b32-abb2-4fad-bfb2-b822dd7d9f30" visible="True" title="Экспорт (авто)" />
-      <Topic id="f2b919bd-cb33-4cf1-818f-315c8f79b5ce" visible="True" title="Бэкап данных" />
+    <Topic id="c27c3ca2-7032-4b91-a9ce-a5ce7becae0c" visible="True" isExpanded="true" title="Tasks">
+      <Topic id="272eef99-c7e4-4245-ae83-7efa4d2345bc" visible="True" title="Converter" />
+      <Topic id="9e075b32-abb2-4fad-bfb2-b822dd7d9f30" visible="True" title="Export (auto)" />
+      <Topic id="f2b919bd-cb33-4cf1-818f-315c8f79b5ce" visible="True" title="Backup" />
     </Topic>
-    <Topic id="7749ebdf-8bd5-4fae-a35c-d7e38f496c4a" visible="True" title="Analytics">
-      <Topic id="83e7f4bb-733d-4463-a2c9-923ccc486d36" visible="True" title="Работа со скриптами" />
-      <Topic id="46348bb0-292f-4c53-b075-793ecf8b3d08" visible="True" title="Отображение результатов анализа" />
+    <Topic id="7749ebdf-8bd5-4fae-a35c-d7e38f496c4a" visible="True" isExpanded="true" isSelected="true" title="Analytics">
+      <Topic id="83e7f4bb-733d-4463-a2c9-923ccc486d36" visible="True" title="Coding" />
+      <Topic id="46348bb0-292f-4c53-b075-793ecf8b3d08" visible="True" title="Execution" />
     </Topic>
-    <Topic id="8d9f131c-6327-4b88-a158-b1e52b821df3" visible="True" noFile="true" title="Misc">
+    <Topic id="8d9f131c-6327-4b88-a158-b1e52b821df3" visible="True" noFile="true" isExpanded="true" title="Misc">
       <Topic id="e088a37c-22aa-4a85-a20e-3b64c1b039d3" visible="True" title="Settings reset" />
       <Topic id="45cc9b3a-117c-4567-94af-fea13087ebe9" visible="True" title="Data removing" />
       <Topic id="715c9caa-2fc1-4b7d-bc01-05cdf5897794" visible="True" title="Synchronization" />
@@ -317,5 +317,5 @@
     </Topic>
   </Topic>
   <Topic id="76470d21-d624-46d1-a8c6-b52f7fabdeb4" visible="True" title="S#.Designer" />
-  <Topic id="e3f889a5-ddcd-4c77-a174-2f24385386a0" visible="True" isSelected="true" title="S#.MatLab" />
+  <Topic id="e3f889a5-ddcd-4c77-a174-2f24385386a0" visible="True" title="S#.MatLab" />
 </Topics>
