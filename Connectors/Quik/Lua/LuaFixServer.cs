@@ -106,7 +106,7 @@ namespace StockSharp.Quik.Lua
 		private readonly FixServerEx _fixServer;
 		private readonly SynchronizedDictionary<SecurityId, Level1ChangeMessage> _prevLevel1 = new CachedSynchronizedDictionary<SecurityId, Level1ChangeMessage>();
 		
-		private readonly Dictionary<string, string> _depoNames = new Dictionary<string, string>();
+		//private readonly Dictionary<string, string> _depoNames = new Dictionary<string, string>();
 		private readonly SynchronizedDictionary<long, Transaction> _transactions = new SynchronizedDictionary<long, Transaction>();
 
 		private readonly BlockingQueue<LuaRequest> _requests = new BlockingQueue<LuaRequest>();
@@ -254,7 +254,7 @@ namespace StockSharp.Quik.Lua
 			{
 				case MessageTypes.OrderRegister:
 					var regMsg = (OrderRegisterMessage)message;
-					RegisterTransaction(regMsg.CreateRegisterTransaction(_depoNames.TryGetValue(regMsg.PortfolioName), _securityClassInfo, SingleSlash), message.Type, regMsg.TransactionId, regMsg.OrderType);
+					RegisterTransaction(regMsg.CreateRegisterTransaction(_securityClassInfo, SingleSlash), message.Type, regMsg.TransactionId, regMsg.OrderType);
 					break;
 
 				case MessageTypes.OrderReplace:
@@ -591,9 +591,9 @@ namespace StockSharp.Quik.Lua
 
 					ReplaceBoardCode(pfMsg.BoardCode, board => pfMsg.BoardCode = board);
 
-					var depoName = (string)pfMsg.Changes.TryGetValue(PositionChangeTypes.DepoName);
-					if (!depoName.IsEmpty())
-						_depoNames[pfMsg.PortfolioName] = depoName;
+					//var depoName = (string)pfMsg.Changes.TryGetValue(PositionChangeTypes.DepoName);
+					//if (!depoName.IsEmpty())
+					//	_depoNames[pfMsg.PortfolioName] = depoName;
 
 					break;
 				}

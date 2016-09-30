@@ -250,7 +250,7 @@ namespace StockSharp.Quik
 
 				case MessageTypes.OrderRegister:
 					var regMsg = (OrderRegisterMessage)message;
-					RegisterTransaction(regMsg.CreateRegisterTransaction(regMsg.GetValue<string>(PositionChangeTypes.DepoName), SecurityClassInfo, SingleSlash));
+					RegisterTransaction(regMsg.CreateRegisterTransaction(SecurityClassInfo, SingleSlash));
 					break;
 
 				case MessageTypes.OrderReplace:

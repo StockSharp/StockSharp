@@ -7,45 +7,43 @@
     </summary>
     -->
     <introduction>
-    	<para>Свойства подключения, которые используются во многих источниках.</para>
+    	<para>Connection properties which are used in many sources.</para>
     	 <mediaLink>
         	<image placement="left" xlink:href="hydra_settings_connectionparams" />
       	</mediaLink>
-       <para><legacyBold>Подключение</legacyBold></para>
+       <para><legacyBold>Connection</legacyBold></para>
  		<list class="bullet">
 		<listItem>
-          <legacyBold>Время ожидания</legacyBold> - время ожидания успешного подключения/отключения.
+          <legacyBold>Timeout</legacyBold> - timeout of successful connection/disconnection.
 		</listItem>
 		<listItem>
-          <legacyBold>Интервал</legacyBold> - интервал, с которым будут происходить попытки подключения.
+          <legacyBold>Interval</legacyBold> - интервал, с которым будут происходить попытки подключения.
 		</listItem>
 		<listItem>
-          <legacyBold>Первоначально</legacyBold> - количество попыток установить первоначальное подключение.
+          <legacyBold>Initially</legacyBold> -  number of attempts to establish the initial connection.
 		</listItem>
 		<listItem>
-          <legacyBold>Переподключение</legacyBold> - количество попыток переподключения, если соединение было разорвано в процессе работы.
+          <legacyBold>Reconnecting</legacyBold> - the number of attempts to reconnect if the connection was broken in the course of the works.
 		</listItem>
       </list>
-       <para><legacyBold>Режим работы</legacyBold></para>
+       <para><legacyBold>Operation</legacyBold></para>
  		<list class="bullet">
 		<listItem>
-          <legacyBold>Выходные дни</legacyBold> - выходные дни, выпадающие на будни.
+          <legacyBold>Non-working days</legacyBold> - holidays falling on weekdays.
 		</listItem>
 		<listItem>
-          <legacyBold>Периоды</legacyBold> - периоды действия расписания.
+          <legacyBold>Periods</legacyBold> - periods of the schedule.
 		</listItem>
 		<listItem>
-          <legacyBold>Рабочие дни</legacyBold> - рабочие дни, выпадающие на субботу и воскресенье.
+          <legacyBold>Working days</legacyBold> - working days falling on Saturday and Sunday.
 		</listItem>
       </list>
       
-      <para>Вы можете настроить режимы работы, выбрав кнопку, расположенную справа от нужного режима. Ниже показана настройка <legacyItalic>периодов действия расписания</legacyItalic>.</para>
+      <para>You can set up the working pattern by selecting the button to the right of the required mode. Below is the setting up of <legacyItalic>schedule periods</legacyItalic>.</para>
       
        	<mediaLink>
         	<image placement="left" xlink:href="hydra_settings_connectionperiods" />
       	</mediaLink>
-
-      
       
     </introduction>
    

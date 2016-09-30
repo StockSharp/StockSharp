@@ -1143,7 +1143,7 @@ namespace StockSharp.Algo
 		{
 			var security = LookupSecurity(message.SecurityId);
 			var portfolio = GetPortfolio(message.PortfolioName);
-			var position = GetPosition(portfolio, security, message.DepoName, message.LimitType, message.Description);
+			var position = GetPosition(portfolio, security, message.ClientCode, message.DepoName, message.LimitType, message.Description);
 
 			message.CopyExtensionInfo(position);
 		}
@@ -1165,7 +1165,7 @@ namespace StockSharp.Algo
 				message.Changes.Remove(PositionChangeTypes.CurrentValueInLots);
 			}
 
-			var position = GetPosition(portfolio, security, message.DepoName, message.LimitType, message.Description);
+			var position = GetPosition(portfolio, security, message.ClientCode, message.DepoName, message.LimitType, message.Description);
 			position.ApplyChanges(message);
 
 			RaisePositionChanged(position);

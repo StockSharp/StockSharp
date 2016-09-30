@@ -277,7 +277,7 @@ namespace StockSharp.Algo
 			get { return _orderCancelFails.SyncGet(c => c.ToArray()); }
 		}
 
-		private readonly CachedSynchronizedDictionary<Tuple<Portfolio, Security, string, TPlusLimits?>, Position> _positions = new CachedSynchronizedDictionary<Tuple<Portfolio, Security, string, TPlusLimits?>, Position>();
+		private readonly CachedSynchronizedDictionary<Tuple<Portfolio, Security, string, string, TPlusLimits?>, Position> _positions = new CachedSynchronizedDictionary<Tuple<Portfolio, Security, string, string, TPlusLimits?>, Position>();
 
 		public IEnumerable<Position> Positions => _positions.CachedValues;
 
@@ -936,7 +936,7 @@ namespace StockSharp.Algo
 			_orderCancelFails.Add(fail);
 		}
 
-		public Position TryAddPosition(Portfolio portfolio, Security security, string depoName, TPlusLimits? limitType, string description, out bool isNew)
+		public Position TryAddPosition(Portfolio portfolio, Security security, string clientCode, string depoName, TPlusLimits? limitType, string description, out bool isNew)
 		{
 			isNew = false;
 			Position position;
@@ -946,7 +946,10 @@ namespace StockSharp.Algo
 				if (depoName == null)
 					depoName = string.Empty;
 
-				var key = Tuple.Create(portfolio, security, depoName, limitType);
+				if (clientCode == null)
+					clientCode = string.Empty;
+
+				var key = Tuple.Create(portfolio, security, clientCode, depoName, limitType);
 
 				if (!_positions.TryGetValue(key, out position))
 				{

@@ -13414,3 +13414,4 @@ DocStr9254;Redo command;Команда восстановления измене
 DocStr9255;Can undo/redo;Можно ли отменять или восстанавливать изменения
 DocStr9256;The diagram element properties value changing event;Событие изменения свойств элемента схемы
 DocStr9257;To call the {0} event;Вызвать событие {0}
+DocStr9258;The client code;Код клиента

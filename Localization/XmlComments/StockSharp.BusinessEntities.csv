@@ -373,11 +373,12 @@ M:StockSharp.BusinessEntities.IConnector.LookupSecurities(StockSharp.Messages.Se
 M:StockSharp.BusinessEntities.IConnector.LookupSecurities(StockSharp.Messages.SecurityLookupMessage)/param/criteria;DocStr809
 M:StockSharp.BusinessEntities.IConnector.LookupPortfolios(StockSharp.BusinessEntities.Portfolio)/summary;DocStr810
 M:StockSharp.BusinessEntities.IConnector.LookupPortfolios(StockSharp.BusinessEntities.Portfolio)/param/criteria;DocStr811
-M:StockSharp.BusinessEntities.IConnector.GetPosition(StockSharp.BusinessEntities.Portfolio,StockSharp.BusinessEntities.Security,System.String)/summary;DocStr812
-M:StockSharp.BusinessEntities.IConnector.GetPosition(StockSharp.BusinessEntities.Portfolio,StockSharp.BusinessEntities.Security,System.String)/param/portfolio;DocStr813
-M:StockSharp.BusinessEntities.IConnector.GetPosition(StockSharp.BusinessEntities.Portfolio,StockSharp.BusinessEntities.Security,System.String)/param/security;DocStr814
-M:StockSharp.BusinessEntities.IConnector.GetPosition(StockSharp.BusinessEntities.Portfolio,StockSharp.BusinessEntities.Security,System.String)/param/depoName;DocStr815
-M:StockSharp.BusinessEntities.IConnector.GetPosition(StockSharp.BusinessEntities.Portfolio,StockSharp.BusinessEntities.Security,System.String)/returns;Str862
+M:StockSharp.BusinessEntities.IConnector.GetPosition(StockSharp.BusinessEntities.Portfolio,StockSharp.BusinessEntities.Security,System.String,System.String)/summary;DocStr812
+M:StockSharp.BusinessEntities.IConnector.GetPosition(StockSharp.BusinessEntities.Portfolio,StockSharp.BusinessEntities.Security,System.String,System.String)/param/portfolio;DocStr813
+M:StockSharp.BusinessEntities.IConnector.GetPosition(StockSharp.BusinessEntities.Portfolio,StockSharp.BusinessEntities.Security,System.String,System.String)/param/security;DocStr814
+M:StockSharp.BusinessEntities.IConnector.GetPosition(StockSharp.BusinessEntities.Portfolio,StockSharp.BusinessEntities.Security,System.String,System.String)/param/clientCode;DocStr9258
+M:StockSharp.BusinessEntities.IConnector.GetPosition(StockSharp.BusinessEntities.Portfolio,StockSharp.BusinessEntities.Security,System.String,System.String)/param/depoName;DocStr815
+M:StockSharp.BusinessEntities.IConnector.GetPosition(StockSharp.BusinessEntities.Portfolio,StockSharp.BusinessEntities.Security,System.String,System.String)/returns;Str862
 M:StockSharp.BusinessEntities.IConnector.GetFilteredMarketDepth(StockSharp.BusinessEntities.Security)/summary;DocStr819
 M:StockSharp.BusinessEntities.IConnector.GetFilteredMarketDepth(StockSharp.BusinessEntities.Security)/param/security;DocStr817
 M:StockSharp.BusinessEntities.IConnector.GetFilteredMarketDepth(StockSharp.BusinessEntities.Security)/returns;DocStr820
@@ -687,6 +688,7 @@ M:StockSharp.BusinessEntities.Position.#ctor/summary;DocStr1
 P:StockSharp.BusinessEntities.Position.Portfolio/summary;Str270
 P:StockSharp.BusinessEntities.Position.Security/summary;Str271
 P:StockSharp.BusinessEntities.Position.DepoName/summary;DocStr2933
+P:StockSharp.BusinessEntities.Position.ClientCode/summary;ClientCodeDesc
 P:StockSharp.BusinessEntities.Position.LimitType/summary;DocStr2934
 M:StockSharp.BusinessEntities.Position.Clone/summary;DocStr643
 M:StockSharp.BusinessEntities.Position.Clone/returns;DocStr1116

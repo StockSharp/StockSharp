@@ -733,14 +733,15 @@ namespace StockSharp.Algo
 		/// </summary>
 		/// <param name="portfolio">The portfolio on which the position should be found.</param>
 		/// <param name="security">The instrument on which the position should be found.</param>
+		/// <param name="clientCode">The client code.</param>
 		/// <param name="depoName">The depository name where the stock is located physically. By default, an empty string is passed, which means the total position by all depositories.</param>
 		/// <returns>Position.</returns>
-		public Position GetPosition(Portfolio portfolio, Security security, string depoName = "")
+		public Position GetPosition(Portfolio portfolio, Security security, string clientCode = "", string depoName = "")
 		{
-			return GetPosition(portfolio, security, depoName, null, string.Empty);
+			return GetPosition(portfolio, security, clientCode, depoName, null, string.Empty);
 		}
 
-		private Position GetPosition(Portfolio portfolio, Security security, string depoName, TPlusLimits? limitType, string description)
+		private Position GetPosition(Portfolio portfolio, Security security, string clientCode, string depoName, TPlusLimits? limitType, string description)
 		{
 			if (portfolio == null)
 				throw new ArgumentNullException(nameof(portfolio));
@@ -749,7 +750,7 @@ namespace StockSharp.Algo
 				throw new ArgumentNullException(nameof(security));
 
 			bool isNew;
-			var position = _entityCache.TryAddPosition(portfolio, security, depoName, limitType, description, out isNew);
+			var position = _entityCache.TryAddPosition(portfolio, security, clientCode, depoName, limitType, description, out isNew);
 
 			if (isNew)
 				RaiseNewPosition(position);

@@ -2784,11 +2784,12 @@ M:StockSharp.Algo.Connector.LookupSecurities(StockSharp.Messages.SecurityLookupM
 M:StockSharp.Algo.Connector.LookupSecurities(StockSharp.Messages.SecurityLookupMessage)/param/criteria;DocStr809
 M:StockSharp.Algo.Connector.LookupPortfolios(StockSharp.BusinessEntities.Portfolio)/summary;DocStr810
 M:StockSharp.Algo.Connector.LookupPortfolios(StockSharp.BusinessEntities.Portfolio)/param/criteria;DocStr811
-M:StockSharp.Algo.Connector.GetPosition(StockSharp.BusinessEntities.Portfolio,StockSharp.BusinessEntities.Security,System.String)/summary;DocStr812
-M:StockSharp.Algo.Connector.GetPosition(StockSharp.BusinessEntities.Portfolio,StockSharp.BusinessEntities.Security,System.String)/param/portfolio;DocStr813
-M:StockSharp.Algo.Connector.GetPosition(StockSharp.BusinessEntities.Portfolio,StockSharp.BusinessEntities.Security,System.String)/param/security;DocStr814
-M:StockSharp.Algo.Connector.GetPosition(StockSharp.BusinessEntities.Portfolio,StockSharp.BusinessEntities.Security,System.String)/param/depoName;DocStr815
-M:StockSharp.Algo.Connector.GetPosition(StockSharp.BusinessEntities.Portfolio,StockSharp.BusinessEntities.Security,System.String)/returns;Str862
+M:StockSharp.Algo.Connector.GetPosition(StockSharp.BusinessEntities.Portfolio,StockSharp.BusinessEntities.Security,System.String,System.String)/summary;DocStr812
+M:StockSharp.Algo.Connector.GetPosition(StockSharp.BusinessEntities.Portfolio,StockSharp.BusinessEntities.Security,System.String,System.String)/param/portfolio;DocStr813
+M:StockSharp.Algo.Connector.GetPosition(StockSharp.BusinessEntities.Portfolio,StockSharp.BusinessEntities.Security,System.String,System.String)/param/security;DocStr814
+M:StockSharp.Algo.Connector.GetPosition(StockSharp.BusinessEntities.Portfolio,StockSharp.BusinessEntities.Security,System.String,System.String)/param/clientCode;DocStr9258
+M:StockSharp.Algo.Connector.GetPosition(StockSharp.BusinessEntities.Portfolio,StockSharp.BusinessEntities.Security,System.String,System.String)/param/depoName;DocStr815
+M:StockSharp.Algo.Connector.GetPosition(StockSharp.BusinessEntities.Portfolio,StockSharp.BusinessEntities.Security,System.String,System.String)/returns;Str862
 M:StockSharp.Algo.Connector.GetMarketDepth(StockSharp.BusinessEntities.Security)/summary;DocStr816
 M:StockSharp.Algo.Connector.GetMarketDepth(StockSharp.BusinessEntities.Security)/param/security;DocStr817
 M:StockSharp.Algo.Connector.GetMarketDepth(StockSharp.BusinessEntities.Security)/returns;DocStr2829

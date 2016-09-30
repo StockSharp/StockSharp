@@ -55,7 +55,7 @@ namespace StockSharp.Quik
 			return transaction;
 		}
 
-		public static Transaction CreateRegisterTransaction(this OrderRegisterMessage message, string orderAccount, IDictionary<string, RefPair<SecurityTypes, string>> securityClassInfo, bool singleSlash)
+		public static Transaction CreateRegisterTransaction(this OrderRegisterMessage message, /*string orderAccount,*/ IDictionary<string, RefPair<SecurityTypes, string>> securityClassInfo, bool singleSlash)
 		{
 			if (securityClassInfo == null)
 				throw new ArgumentNullException(nameof(securityClassInfo));
@@ -66,24 +66,24 @@ namespace StockSharp.Quik
 			var board = ExchangeBoard.GetOrCreateBoard(message.SecurityId.BoardCode);
 			var needDepoAccount = board.IsMicex || board.IsUxStock;
 
-			if (needDepoAccount)
-			{
-				if (orderAccount.IsEmpty())
-					throw new ArgumentException(LocalizedStrings.Str1848Params.Put(message.PortfolioName));
-			}
-			else
-				orderAccount = message.PortfolioName;
+			//if (needDepoAccount)
+			//{
+			//	if (orderAccount.IsEmpty())
+			//		throw new ArgumentException(LocalizedStrings.Str1848Params.Put(message.PortfolioName));
+			//}
+			//else
+			//	orderAccount = message.PortfolioName;
 
 			var transaction = new Transaction(TransactionTypes.Register, message);
 
 			transaction
-				.SetAccount(orderAccount)
+				.SetAccount(message.PortfolioName)
 				.SetSecurity(message, securityClassInfo)
 				.SetVolume((int)message.Volume);
 
 			//20-ти символьное составное поле, может содержать код клиента и текстовый комментарий с тем же разделителем, что и при вводе заявки вручную.
 			//для ртс код клиента не обязателен
-			var clientCode = needDepoAccount ? message.PortfolioName : string.Empty;
+			var clientCode = needDepoAccount ? message.ClientCode : string.Empty;
 			if (!message.Comment.IsEmpty())
 			{
 				// http://www.quik.ru/forum/import/24383

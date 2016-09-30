@@ -9,40 +9,40 @@
       <para><legacyBold>Google</legacyBold></para>
       <list class="bullet">
         <listItem>
-          <legacyBold>Начальная дата</legacyBold> - с какой даты начать загружать данные.
+          <legacyBold>Start date</legacyBold> - from which date to begin data downloading.
 		</listItem>
         <listItem>
-          <legacyBold>Временной отступ</legacyBold> - отступ в днях от текущей даты. Необходим для предотвращения загрузки неполных данных за текущую торговую сессию.
+          <legacyBold>Day offset</legacyBold> - time shift as the number of days from the current date. Required to prevent downloading of incomplete data in the current trading session.
 		</listItem>
 		<listItem>
-          <legacyBold>Выходные</legacyBold> - игнорировать выходные и праздничные дни (не загружать данные).
+          <legacyBold>Weekend</legacyBold> - to ignore weekends and holidays (do not download data).
 		</listItem>
 		 </list>
-		<para><legacyBold>Основные</legacyBold></para>
+		<para><legacyBold>Main</legacyBold></para>
 		<list class="bullet">
         <listItem>
-          <legacyBold>Работать с</legacyBold> - время начала работы источника.
+          <legacyBold>Work from</legacyBold> - source work start time.
 		</listItem>
         <listItem>
-          <legacyBold>Работать до</legacyBold> - время окончания работы источника.
+          <legacyBold>Work until</legacyBold> - source work stop time.
 		</listItem>
         <listItem>
-          <legacyBold>Интервал работы</legacyBold> - интервал работы источника.
+          <legacyBold>Work interval</legacyBold> - interval of source work.
 		</listItem>
         <listItem>
-          <legacyBold>Директория с данными</legacyBold> - директория с данными, куда будут сохраняться конечные файлы в формате <token>stocksharp</token>.
+          <legacyBold>Data directory</legacyBold> - data directory, where the resulting files will be saved in the <token>stocksharp</token> format.
 		</listItem>
 		<listItem>
-          <legacyBold>Формат</legacyBold> - формат данных: BIN/CSV.
+          <legacyBold>Format</legacyBold> - data format: BIN/CSV.
 		</listItem>
 		<listItem>
-          <legacyBold>Макс. ошибок</legacyBold> - максимальное количество ошибок по достижению которого задача будет остановлена. По умолчанию 0 - количество ошибок игнорируются.
+          <legacyBold>Max. errors</legacyBold> - the maximum number of errors to achieve that task will be stopped. By default 0 - number of errors is ignored.
 		</listItem>
 		<listItem>
-          <legacyBold>Зависимость</legacyBold> - задача, которая должна быть выполнена перед запуском текущей.
+          <legacyBold>Dependency</legacyBold> - task that must be executed before the start of current task.
 		</listItem>
 		<listItem>
-          <legacyBold>Уровень логирования</legacyBold> - уровень логирования.
+          <legacyBold>Logging level</legacyBold> - logging level.
 		</listItem>
       </list>
     </introduction>

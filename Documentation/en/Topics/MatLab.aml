@@ -13,21 +13,37 @@
            http://www.mathworks.com  -->
       <!-- <autoOutline /> -->
       <para>
-		  <token>matlab</token> предоставляет возможность использовать в своих скриптах <token>dotnet</token> классы, в том числе и <token>stocksharp</token>.
+		  The <token>matlab</token> is designed for traders who develop trading algorithms within the <externalLink>
+			<linkText>MatLab MathWorks</linkText>
+			<linkAlternateText>MathWorks</linkAlternateText>
+			<linkUri>http://www.mathworks.com</linkUri>
+			<linkTarget>_blank</linkTarget>
+		</externalLink> environment.
 	  </para>
 		<para>
-			Интеграция между <token>matlab</token> и <token>stocksharp</token> позволяет создавать торговых роботов (или аналитические
-			программы, оперирующие данными напрямую с торговых площадок) в единой среде языка M.
+			The integration connector <token>matlab</token> allows to connect to all brokers and exchanges that are supported by the <token>stocksharp</token>
+			(+30 connection types, all world markets). MatLab scripts will be able to get real-time data from the markets and to send trading orders in them.
+		</para>
+		<para>
+			Detailed settings, scripts, and documentation is available to customers who have purchased the <token>matlab</token>.
+		</para>
+		<para>
+			<externalLink>
+				<linkText>Buy S#.MatLab</linkText>
+				<linkAlternateText>Buy S#.MatLab</linkAlternateText>
+				<linkUri>http://stocksharp.com/products/pricing/#matlab</linkUri>
+				<linkTarget>_blank</linkTarget>
+			</externalLink>
 		</para>
     </introduction>
-     <prerequisites>
+     <!--<prerequisites>
 		 <content>
 			 <para>
 				 <link xlink:href="5c13da7b-b6e4-4fd4-958a-66c93c58b941">Настройка Quik</link>
 			 </para>
 		 </content>
 	 </prerequisites> 
-    <!-- One or more procedure or section with procedure -->
+
     <procedure>
       <title>Связь MatLab и Quik</title>
       <steps class="ordered">
@@ -183,7 +199,7 @@ RegisterOrder(trader.RealTrader, order);
 			<linkTarget>_blank</linkTarget>
 		</externalLink>
 
-    </relatedTopics>  
+    </relatedTopics>-->  
     
     
     
