@@ -42906,5 +42906,45 @@ namespace StockSharp.Localization
 		/// Not specified new value of price or volume.
 		/// </summary>
 		public static string NotSpecifiedPriceOrVolume => GetString(NotSpecifiedPriceOrVolumeKey);
+
+		/// <summary>
+		/// Duration
+		/// </summary>
+		public const string DurationKey = "Duration";
+
+		/// <summary>
+		/// Duration
+		/// </summary>
+		public static string Duration => GetString(DurationKey);
+
+		/// <summary>
+		/// Number of issued contracts
+		/// </summary>
+		public const string IssueSizeKey = "IssueSize";
+
+		/// <summary>
+		/// Number of issued contracts
+		/// </summary>
+		public static string IssueSize => GetString(IssueSizeKey);
+
+		/// <summary>
+		/// BuyBack date
+		/// </summary>
+		public const string BuyBackDateKey = "BuyBackDate";
+
+		/// <summary>
+		/// BuyBack date
+		/// </summary>
+		public static string BuyBackDate => GetString(BuyBackDateKey);
+
+		/// <summary>
+		/// BuyBack price
+		/// </summary>
+		public const string BuyBackPriceKey = "BuyBackPrice";
+
+		/// <summary>
+		/// BuyBack price
+		/// </summary>
+		public static string BuyBackPrice => GetString(BuyBackPriceKey);
 	}
 }
