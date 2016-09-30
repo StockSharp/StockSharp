@@ -1040,6 +1040,10 @@ F:StockSharp.Messages.Level1Fields.HistoricalVolatilityWeek/summary;DocStr4467
 F:StockSharp.Messages.Level1Fields.HistoricalVolatilityMonth/summary;DocStr4468
 F:StockSharp.Messages.Level1Fields.IsSystem/summary;DocStr4469
 F:StockSharp.Messages.Level1Fields.Decimals/summary;Str548
+F:StockSharp.Messages.Level1Fields.Duration/summary;Duration
+F:StockSharp.Messages.Level1Fields.IssueSize/summary;IssueSize
+F:StockSharp.Messages.Level1Fields.BuyBackDate/summary;BuyBackDate
+F:StockSharp.Messages.Level1Fields.BuyBackPrice/summary;BuyBackPrice
 T:StockSharp.Messages.Level1ChangeMessage/summary;DocStr4470
 P:StockSharp.Messages.Level1ChangeMessage.SecurityId/summary;SecurityId
 M:StockSharp.Messages.Level1ChangeMessage.#ctor/summary;DocStr1

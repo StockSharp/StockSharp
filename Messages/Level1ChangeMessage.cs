@@ -590,7 +590,35 @@ namespace StockSharp.Messages
 		/// </summary>
 		[EnumMember]
 		[EnumDisplayNameLoc(LocalizedStrings.DecimalsKey)]
-		Decimals
+		Decimals,
+
+		/// <summary>
+		/// Duration.
+		/// </summary>
+		[EnumMember]
+		[EnumDisplayNameLoc(LocalizedStrings.DurationKey)]
+		Duration,
+
+		/// <summary>
+		/// Number of issued contracts.
+		/// </summary>
+		[EnumMember]
+		[EnumDisplayNameLoc(LocalizedStrings.IssueSizeKey)]
+		IssueSize,
+
+		/// <summary>
+		/// BuyBack date.
+		/// </summary>
+		[EnumMember]
+		[EnumDisplayNameLoc(LocalizedStrings.BuyBackDateKey)]
+		BuyBackDate,
+
+		/// <summary>
+		/// BuyBack price.
+		/// </summary>
+		[EnumMember]
+		[EnumDisplayNameLoc(LocalizedStrings.BuyBackPriceKey)]
+		BuyBackPrice,
 	}
 
 	/// <summary>

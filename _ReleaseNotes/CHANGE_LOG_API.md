@@ -1,6 +1,7 @@
 StockSharp API Change log
 ========================
 ###current:
+* (feature) Quik lua. Duration, IssueSize, BuyBackDate, BuyBackPrice.
 * (bug) Quik lua. Fix ClientCode duplicate issue.
 * (feature) Position.ClientCode
 * (bug) Fix Oanda connector.
