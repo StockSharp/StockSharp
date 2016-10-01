@@ -4323,7 +4323,7 @@ MinutesPart;Minutes;Минуты
 SecondsPart;Seconds;Секунды
 NotInitializedParams;{0} not initialized.;{0} не выбрано.
 OrderCancelling;Order cancelling;Отмена заявки
-OrderMoving;Order moving;Перемещение заявки
+OrderReplacing;Order replacing;Перемещение заявки
 Duration;Duration;Дюрация
 IssueSize;Number of issued contracts;Объем выпуска
 BuyBackDate;BuyBack date;Дата выкупа
@@ -13419,3 +13419,5 @@ DocStr9255;Can undo/redo;Можно ли отменять или восстан�
 DocStr9256;The diagram element properties value changing event;Событие изменения свойств элемента схемы
 DocStr9257;To call the {0} event;Вызвать событие {0}
 DocStr9258;The client code;Код клиента
+DocStr9259;Order cancelling element;Элемент отмены заявки
+DocStr9260;Order replacing element;Элемент изменения заявки

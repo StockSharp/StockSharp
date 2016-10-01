@@ -42888,14 +42888,14 @@ namespace StockSharp.Localization
 		public static string OrderCancelling => GetString(OrderCancellingKey);
 
 		/// <summary>
-		/// Order moving
+		/// Order replacing
 		/// </summary>
-		public const string OrderMovingKey = "OrderMoving";
+		public const string OrderReplacingKey = "OrderReplacing";
 
 		/// <summary>
-		/// Order moving
+		/// Order replacing
 		/// </summary>
-		public static string OrderMoving => GetString(OrderMovingKey);
+		public static string OrderReplacing => GetString(OrderReplacingKey);
 
 		/// <summary>
 		/// Not specified new value of price or volume.
