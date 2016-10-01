@@ -42798,72 +42798,72 @@ namespace StockSharp.Localization
 		public static string ServiceNotRegistered => GetString(ServiceNotRegisteredKey);
 
 		/// <summary>
-		/// Clear items.
+		/// Clear items
 		/// </summary>
 		public const string ClearItemsKey = "ClearItems";
 
 		/// <summary>
-		/// Clear items.
+		/// Clear items
 		/// </summary>
 		public static string ClearItems => GetString(ClearItemsKey);
 
 		/// <summary>
-		/// View only.
+		/// View only
 		/// </summary>
 		public const string ViewOnlyKey = "ViewOnly";
 
 		/// <summary>
-		/// View only.
+		/// View only
 		/// </summary>
 		public static string ViewOnly => GetString(ViewOnlyKey);
 
 		/// <summary>
-		/// Is independent.
+		/// Is independent
 		/// </summary>
 		public const string IsIndependentKey = "IsIndependent";
 
 		/// <summary>
-		/// Is independent.
+		/// Is independent
 		/// </summary>
 		public static string IsIndependent => GetString(IsIndependentKey);
 
 		/// <summary>
-		/// Days.
+		/// Days
 		/// </summary>
 		public const string DaysPartKey = "DaysPart";
 
 		/// <summary>
-		/// Days.
+		/// Days
 		/// </summary>
 		public static string DaysPart => GetString(DaysPartKey);
 
 		/// <summary>
-		/// Hours.
+		/// Hours
 		/// </summary>
 		public const string HoursPartKey = "HoursPart";
 
 		/// <summary>
-		/// Hours.
+		/// Hours
 		/// </summary>
 		public static string HoursPart => GetString(HoursPartKey);
 
 		/// <summary>
-		/// Minutes.
+		/// Minutes
 		/// </summary>
 		public const string MinutesPartKey = "MinutesPart";
 
 		/// <summary>
-		/// Minutes.
+		/// Minutes
 		/// </summary>
 		public static string MinutesPart => GetString(MinutesPartKey);
 
 		/// <summary>
-		/// Seconds.
+		/// Seconds
 		/// </summary>
 		public const string SecondsPartKey = "SecondsPart";
 
 		/// <summary>
-		/// Seconds.
+		/// Seconds
 		/// </summary>
 		public static string SecondsPart => GetString(SecondsPartKey);
 
@@ -42878,22 +42878,22 @@ namespace StockSharp.Localization
 		public static string NotInitializedParams => GetString(NotInitializedParamsKey);
 
 		/// <summary>
-		/// Order cancelling.
+		/// Order cancelling
 		/// </summary>
 		public const string OrderCancellingKey = "OrderCancelling";
 
 		/// <summary>
-		/// Order cancelling.
+		/// Order cancelling
 		/// </summary>
 		public static string OrderCancelling => GetString(OrderCancellingKey);
 
 		/// <summary>
-		/// Order moving.
+		/// Order moving
 		/// </summary>
 		public const string OrderMovingKey = "OrderMoving";
 
 		/// <summary>
-		/// Order moving.
+		/// Order moving
 		/// </summary>
 		public static string OrderMoving => GetString(OrderMovingKey);
 
