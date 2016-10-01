@@ -50,7 +50,7 @@ namespace StockSharp.Algo.Testing
 			Name = LocalizedStrings.Str1176Key,
 			Description = LocalizedStrings.Str1177Key,
 			GroupName = LocalizedStrings.Str1175Key,
-			Order = 0)]
+			Order = 200)]
 		public bool MatchOnTouch
 		{
 			get { return _matchOnTouch; }
@@ -74,7 +74,7 @@ namespace StockSharp.Algo.Testing
 			Name = LocalizedStrings.Str1178Key,
 			Description = LocalizedStrings.Str1179Key,
 			GroupName = LocalizedStrings.Str1175Key,
-			Order = 1)]
+			Order = 201)]
 		public TimeSpan DepthExpirationTime
 		{
 			get { return _depthExpirationTime; }
@@ -98,7 +98,7 @@ namespace StockSharp.Algo.Testing
 			Name = LocalizedStrings.Str1180Key,
 			Description = LocalizedStrings.Str1181Key,
 			GroupName = LocalizedStrings.Str1175Key,
-			Order = 2)]
+			Order = 202)]
 		public double Failing
 		{
 			get { return _failing; }
@@ -125,7 +125,7 @@ namespace StockSharp.Algo.Testing
 			Name = LocalizedStrings.Str161Key,
 			Description = LocalizedStrings.Str1184Key,
 			GroupName = LocalizedStrings.Str1175Key,
-			Order = 3)]
+			Order = 203)]
 		public TimeSpan Latency
 		{
 			get { return _latency; }
@@ -149,7 +149,7 @@ namespace StockSharp.Algo.Testing
 			Name = LocalizedStrings.ReregisteringKey,
 			Description = LocalizedStrings.Str60Key,
 			GroupName = LocalizedStrings.Str1175Key,
-			Order = 4)]
+			Order = 204)]
 		public bool IsSupportAtomicReRegister
 		{
 			get { return _isSupportAtomicReRegister; }
@@ -170,7 +170,7 @@ namespace StockSharp.Algo.Testing
 			Name = LocalizedStrings.Str1186Key,
 			Description = LocalizedStrings.Str1187Key,
 			GroupName = LocalizedStrings.Str1175Key,
-			Order = 5)]
+			Order = 205)]
 		public TimeSpan BufferTime
 		{
 			get { return _bufferTime; }
@@ -218,7 +218,7 @@ namespace StockSharp.Algo.Testing
 			Name = LocalizedStrings.Str1190Key,
 			Description = LocalizedStrings.Str1191Key,
 			GroupName = LocalizedStrings.Str1175Key,
-			Order = 6)]
+			Order = 206)]
 		public long InitialOrderId
 		{
 			get { return _initialOrderId; }
@@ -239,7 +239,7 @@ namespace StockSharp.Algo.Testing
 			Name = LocalizedStrings.Str1192Key,
 			Description = LocalizedStrings.Str1193Key,
 			GroupName = LocalizedStrings.Str1175Key,
-			Order = 7)]
+			Order = 207)]
 		public long InitialTradeId
 		{
 			get { return _initialTradeId; }
@@ -260,7 +260,7 @@ namespace StockSharp.Algo.Testing
 			Name = LocalizedStrings.TransactionKey,
 			Description = LocalizedStrings.Str1194Key,
 			GroupName = LocalizedStrings.Str1175Key,
-			Order = 8)]
+			Order = 208)]
 		public long InitialTransactionId
 		{
 			get { return _initialTransactionId; }
@@ -281,7 +281,7 @@ namespace StockSharp.Algo.Testing
 			Name = LocalizedStrings.Str1195Key,
 			Description = LocalizedStrings.Str1196Key,
 			GroupName = LocalizedStrings.Str1175Key,
-			Order = 9)]
+			Order = 209)]
 		public int SpreadSize
 		{
 			get { return _spreadSize; }
@@ -305,7 +305,7 @@ namespace StockSharp.Algo.Testing
 			Name = LocalizedStrings.Str1197Key,
 			Description = LocalizedStrings.Str1198Key,
 			GroupName = LocalizedStrings.Str1175Key,
-			Order = 10)]
+			Order = 210)]
 		public int MaxDepth
 		{
 			get { return _maxDepth; }
@@ -329,7 +329,7 @@ namespace StockSharp.Algo.Testing
 			Name = LocalizedStrings.Str1199Key,
 			Description = LocalizedStrings.Str1200Key,
 			GroupName = LocalizedStrings.Str1175Key,
-			Order = 11)]
+			Order = 211)]
 		public int VolumeMultiplier
 		{
 			get { return _volumeMultiplier; }
@@ -353,7 +353,7 @@ namespace StockSharp.Algo.Testing
 			Name = LocalizedStrings.Str1201Key,
 			Description = LocalizedStrings.Str1202Key,
 			GroupName = LocalizedStrings.Str1175Key,
-			Order = 12)]
+			Order = 212)]
 		public TimeSpan PortfolioRecalcInterval
 		{
 			get { return _portfolioRecalcInterval; }
@@ -377,7 +377,7 @@ namespace StockSharp.Algo.Testing
 			Name = LocalizedStrings.Str1203Key,
 			Description = LocalizedStrings.Str1204Key,
 			GroupName = LocalizedStrings.Str1175Key,
-			Order = 13)]
+			Order = 213)]
 		public bool ConvertTime
 		{
 			get { return _convertTime; }
@@ -398,7 +398,7 @@ namespace StockSharp.Algo.Testing
 			Name = LocalizedStrings.TimeZoneKey,
 			Description = LocalizedStrings.Str68Key,
 			GroupName = LocalizedStrings.Str1175Key,
-			Order = 14)]
+			Order = 214)]
 		public TimeZoneInfo TimeZone
 		{
 			get { return _timeZone; }
@@ -419,7 +419,7 @@ namespace StockSharp.Algo.Testing
 			Name = LocalizedStrings.Str1205Key,
 			Description = LocalizedStrings.Str1206Key,
 			GroupName = LocalizedStrings.Str1175Key,
-			Order = 15)]
+			Order = 215)]
 		public Unit PriceLimitOffset
 		{
 			get { return _priceLimitOffset; }
@@ -442,7 +442,7 @@ namespace StockSharp.Algo.Testing
 			Name = LocalizedStrings.Str1207Key,
 			Description = LocalizedStrings.Str1208Key,
 			GroupName = LocalizedStrings.Str1175Key,
-			Order = 16)]
+			Order = 216)]
 		public bool IncreaseDepthVolume
 		{
 			get { return _increaseDepthVolume; }
