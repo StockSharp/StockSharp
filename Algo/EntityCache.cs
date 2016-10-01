@@ -425,33 +425,42 @@ namespace StockSharp.Algo
 				// проверяем не отмененная ли заявка пришла
 				if (cancelledInfo != null) // && (cancelledOrder.Id == orderId || (!cancelledOrder.StringId.IsEmpty() && cancelledOrder.StringId.CompareIgnoreCase(orderStringId))))
 				{
+					var cancellationOrder = cancelledInfo.Order;
+
 					if (registetedInfo == null)
 					{
 						var i = cancelledInfo.ApplyChanges(message, true);
-						UpdateOrderIds(cancelledInfo.Order, securityData);
+						UpdateOrderIds(cancellationOrder, securityData);
 						return new[] { i };
 					}
 
 					var retVal = new List<Tuple<Order, bool, bool>>();
+					var orderState = message.OrderState;
 
-					if (message.OrderState != null && cancelledInfo.Order.State != OrderStates.Done && message.OrderState != OrderStates.None && message.OrderState != OrderStates.Pending)
+					if (orderState != null && cancellationOrder.State != OrderStates.Done && orderState != OrderStates.None && orderState != OrderStates.Pending)
 					{
-						cancelledInfo.Order.State = cancelledInfo.Order.State.CheckModification(OrderStates.Done);
+						cancellationOrder.State = cancellationOrder.State.CheckModification(OrderStates.Done);
 						
 						if (message.Latency != null)
-							cancelledInfo.Order.LatencyCancellation = message.Latency.Value;
+							cancellationOrder.LatencyCancellation = message.Latency.Value;
 
-						retVal.Add(Tuple.Create(cancelledInfo.Order, false, true));
+						retVal.Add(Tuple.Create(cancellationOrder, false, true));
 					}
 
-					var replacedInfo = registetedInfo.ApplyChanges(message, false);
-					UpdateOrderIds(registetedInfo.Order, securityData);
-					retVal.Add(replacedInfo);
+					var regOrder = registetedInfo.Order;
+
+					if ((message.OrderId == null && message.OrderStringId == null && message.OrderBoardId == null)
+						|| message.OrderId == regOrder.Id
+						|| message.OrderStringId == regOrder.StringId
+						|| message.OrderBoardId == regOrder.BoardId)
+					{
+						var replacedInfo = registetedInfo.ApplyChanges(message, false);
+						UpdateOrderIds(regOrder, securityData);
+						retVal.Add(replacedInfo);
+					}
 
 					return retVal;
 				}
-
-				//var isNew = false;
 
 				if (registetedInfo == null)
 				{
