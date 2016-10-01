@@ -262,6 +262,7 @@ namespace StockSharp.Configuration
 						t != typeof(Xaml.Diagram.CompositionDiagramElement) &&
 						t != typeof(Xaml.Diagram.ExportDiagramElement))
 					.Concat(_customDiagramElements)
+					.OrderBy(t => t.Name)
 					.ToArray();
 			}
 
