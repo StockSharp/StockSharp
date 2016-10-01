@@ -36,12 +36,18 @@
 		<Grid Grid.Row="1" Grid.ColumnSpan="2" Grid.Column="0">
 			<Grid>
 				<Grid.ColumnDefinitions>
-					<ColumnDefinition Width="180"/>
+					<ColumnDefinition Width="250"/>
+					<ColumnDefinition Width="Auto"/>
 					<ColumnDefinition Width="*"/>
 				</Grid.ColumnDefinitions>
 
 				<sx:StatisticParameterGrid Grid.Column="0" x:Name="ParameterGrid" />
-				<charting:EquityCurveChart Grid.Column="1" x:Name="Curve" />
+				<GridSplitter Grid.Column="1"
+				  HorizontalAlignment="Center"
+				  VerticalAlignment="Stretch"
+				  ShowsPreview="True"
+				  Width="5"/>
+				<charting:EquityCurveChart Grid.Column="2" x:Name="Curve" />
 			</Grid>
 		</Grid>
 	</Grid>
