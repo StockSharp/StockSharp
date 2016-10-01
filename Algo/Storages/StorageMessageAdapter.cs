@@ -154,7 +154,7 @@ namespace StockSharp.Algo.Storages
 			var security = _entityRegistry.Securities.ReadBySecurityId(securityId) ?? TryCreateSecurity(securityId);
 
 			if (security == null)
-				throw new InvalidOperationException(Localization.LocalizedStrings.Str704Params.Put(securityId));
+				throw new InvalidOperationException(LocalizedStrings.Str704Params.Put(securityId));
 
 			return _storageRegistry.GetStorage(security, messageType, arg, Drive, Format);
 		}

@@ -684,7 +684,7 @@ namespace StockSharp.Algo.Storages.Csv
 			}
 		}
 
-		private const string _dateTimeFormat = "yyyMMddHHmmss";
+		private const string _dateTimeFormat = "yyyyMMddHHmmss";
 		private static readonly FastDateTimeParser _dateTimeParser = new FastDateTimeParser(_dateTimeFormat);
 
 		private static DateTimeOffset? ReadNullableDateTime(FastCsvReader reader)
@@ -694,7 +694,7 @@ namespace StockSharp.Algo.Storages.Csv
 			if (str == null)
 				return null;
 
-			return _dateTimeParser.Parse(reader.ReadString()).ChangeKind(DateTimeKind.Utc);
+			return _dateTimeParser.Parse(str).ChangeKind(DateTimeKind.Utc);
 		}
 
 		private readonly TimeSpan _flushInterval = TimeSpan.FromSeconds(1);
