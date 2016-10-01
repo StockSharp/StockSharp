@@ -1675,6 +1675,26 @@
             To call the available properties change event.
             </summary>
     </member>
+    <member name="T:StockSharp.Xaml.Diagram.Elements.OrderCancelElement">
+      <summary>
+            Order cancelling element.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Diagram.Elements.OrderCancelElement.TypeId">
+      <summary>
+            The unique identifier of the diagram element type.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Diagram.Elements.OrderCancelElement.IconName">
+      <summary>
+            Icon resource name.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.Diagram.Elements.OrderCancelElement.#ctor">
+      <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Xaml.Diagram.Elements.OrderCancelElement" />.
+            </summary>
+    </member>
     <member name="T:StockSharp.Xaml.Diagram.Elements.CandleSourceDiagramElement">
       <summary>
             Candles source element.
@@ -2024,32 +2044,57 @@
             The method is called at the start of the diagram element algorithm.
             </summary>
     </member>
-    <member name="T:StockSharp.Xaml.Diagram.Elements.OpenPositionDiagramElement">
+    <member name="T:StockSharp.Xaml.Diagram.Elements.OrderReplaceElement">
       <summary>
-            Position opening element.
+            Order replacing element.
             </summary>
     </member>
-    <member name="M:StockSharp.Xaml.Diagram.Elements.OpenPositionDiagramElement.#ctor">
-      <summary>
-            Initializes a new instance of the <see cref="T:StockSharp.Xaml.Diagram.Elements.OpenPositionDiagramElement" />.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Xaml.Diagram.Elements.OpenPositionDiagramElement.TypeId">
+    <member name="P:StockSharp.Xaml.Diagram.Elements.OrderReplaceElement.TypeId">
       <summary>
             The unique identifier of the diagram element type.
             </summary>
     </member>
-    <member name="P:StockSharp.Xaml.Diagram.Elements.OpenPositionDiagramElement.IconName">
+    <member name="P:StockSharp.Xaml.Diagram.Elements.OrderReplaceElement.IconName">
       <summary>
             Icon resource name.
             </summary>
     </member>
-    <member name="M:StockSharp.Xaml.Diagram.Elements.OpenPositionDiagramElement.OnStop">
+    <member name="M:StockSharp.Xaml.Diagram.Elements.OrderReplaceElement.#ctor">
+      <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Xaml.Diagram.Elements.OrderReplaceElement" />.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.Diagram.Elements.OrderReplaceElement.OnStop">
       <summary>
             The method is called at the stop of the diagram element algorithm.
             </summary>
     </member>
-    <member name="M:StockSharp.Xaml.Diagram.Elements.OpenPositionDiagramElement.Load(Ecng.Serialization.SettingsStorage)">
+    <member name="T:StockSharp.Xaml.Diagram.Elements.OrderRegisterDiagramElement">
+      <summary>
+            Position opening element.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.Diagram.Elements.OrderRegisterDiagramElement.#ctor">
+      <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Xaml.Diagram.Elements.OrderRegisterDiagramElement" />.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Diagram.Elements.OrderRegisterDiagramElement.TypeId">
+      <summary>
+            The unique identifier of the diagram element type.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Diagram.Elements.OrderRegisterDiagramElement.IconName">
+      <summary>
+            Icon resource name.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.Diagram.Elements.OrderRegisterDiagramElement.OnStop">
+      <summary>
+            The method is called at the stop of the diagram element algorithm.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.Diagram.Elements.OrderRegisterDiagramElement.Load(Ecng.Serialization.SettingsStorage)">
       <summary>
             Load settings.
             </summary>
