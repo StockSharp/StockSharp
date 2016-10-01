@@ -28,6 +28,7 @@ namespace SampleMultiConnection
 
 	using StockSharp.Algo;
 	using StockSharp.Algo.Storages;
+	using StockSharp.Algo.Storages.Csv;
 	using StockSharp.BusinessEntities;
 	using StockSharp.Logging;
 	using StockSharp.Configuration;
@@ -65,7 +66,13 @@ namespace SampleMultiConnection
 			var logManager = new LogManager();
 			logManager.Listeners.Add(new FileLogListener("sample.log"));
 
-			var entityRegistry = ConfigManager.GetService<IEntityRegistry>();
+			Directory.CreateDirectory("Data");
+			var entityRegistry = new CsvEntityRegistry("Data");
+
+			ConfigManager.RegisterService<IEntityRegistry>(entityRegistry);
+			// ecng.serialization invoke in several places IStorage obj
+			ConfigManager.RegisterService(entityRegistry.Storage);
+
 			var storageRegistry = ConfigManager.GetService<IStorageRegistry>();
 
 			SerializationContext.DelayAction = entityRegistry.DelayAction = new DelayAction(entityRegistry.Storage, ex => ex.LogError());
@@ -73,10 +80,10 @@ namespace SampleMultiConnection
 			Connector = new Connector(entityRegistry, storageRegistry);
 			logManager.Sources.Add(Connector);
 
-			InitConnector();
+			InitConnector(entityRegistry);
 		}
 
-		private void InitConnector()
+		private void InitConnector(CsvEntityRegistry entityRegistry)
 		{
 			// subscribe on connection successfully event
 			Connector.Connected += () =>
@@ -134,8 +141,9 @@ namespace SampleMultiConnection
 			if (Connector.StorageAdapter == null)
 				return;
 
-			if (!File.Exists("StockSharp.db"))
-				File.WriteAllBytes("StockSharp.db", Properties.Resources.StockSharp);
+			entityRegistry.Init();
+
+			ConfigManager.RegisterService<IExchangeInfoProvider>(new ExchangeInfoProvider(entityRegistry));
 
 			Connector.StorageAdapter.DaysLoad = TimeSpan.FromDays(3);
 			Connector.StorageAdapter.Load();
@@ -168,9 +176,8 @@ namespace SampleMultiConnection
 
 		private void SettingsClick(object sender, RoutedEventArgs e)
 		{
-			Connector.Configure(this);
-
-			new XmlSerializer<SettingsStorage>().Serialize(Connector.Save(), _settingsFile);
+			if (Connector.Configure(this))
+				new XmlSerializer<SettingsStorage>().Serialize(Connector.Save(), _settingsFile);
 		}
 
 		private void ConnectClick(object sender, RoutedEventArgs e)
