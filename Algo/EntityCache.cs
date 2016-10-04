@@ -447,12 +447,13 @@ namespace StockSharp.Algo
 						retVal.Add(Tuple.Create(cancellationOrder, false, true));
 					}
 
+					var isCancelOrder = (message.OrderId != null && message.OrderId == cancellationOrder.Id)
+						|| (message.OrderStringId != null && message.OrderStringId == cancellationOrder.StringId)
+						|| (message.OrderBoardId != null && message.OrderBoardId == cancellationOrder.BoardId);
+
 					var regOrder = registetedInfo.Order;
 
-					if ((message.OrderId == null && message.OrderStringId == null && message.OrderBoardId == null)
-						|| message.OrderId == regOrder.Id
-						|| message.OrderStringId == regOrder.StringId
-						|| message.OrderBoardId == regOrder.BoardId)
+					if (!isCancelOrder)
 					{
 						var replacedInfo = registetedInfo.ApplyChanges(message, false);
 						UpdateOrderIds(regOrder, securityData);
