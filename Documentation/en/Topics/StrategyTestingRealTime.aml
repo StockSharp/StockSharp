@@ -7,30 +7,30 @@
 
 	  <introduction>
 		  <para>
-			  Тестирование на рыночных данных представляет собой торговлю с реальным подключением к бирже ("живые" котировки), но без реального выставления
-			  заявок на биржу. Все регистрируемые заявки перехватываются, и их исполнение эмулируется на основе рыночных стаканов. Такое тестирование может
-			  быть полезно, например, если разрабатывается торговый тренажер. Или необходимо проверить торговый алгоритм на краткосрочном отрезке времени с
-			  реальными котировками.
+			  Testing on market data is trading with a real connection to the exchange ("live" quotes), but without actual orders registering on the exchange. All the
+			  registered orders are intercepted, and their execution is emulated based on market order books. Such testing can be useful, for example, if trading
+			  simulator is developed. Or it is necessary to check the trading algorithm at short period of time with the real quotes.
 		 </para>
 		 <para>
-			  Для эмуляции торговли на реальных данных необходимо использовать <codeEntityReference>T:StockSharp.Algo.Testing.RealTimeEmulationTrader`1</codeEntityReference>, 
-			  который выполняет роль "обертки" коннектора конкретной торговой системы (<token>quik</token>, <token>smartcom</token> и т.п.). Ниже приводится описание примера работы с эмулятором с использованием подключения
-			  к <token>smartcom</token>. Сам пример находится в папке <legacyItalic>Samples/Testing/SampleRealTimeEmulation</legacyItalic>.
+			  To emulate the trading on real data it is necessary to use <codeEntityReference>T:StockSharp.Algo.Testing.RealTimeEmulationTrader`1</codeEntityReference>, 
+			  which acts as a "wrapper" of the specific trading system connector (<token>openecry</token>, <token>rithmic</token> etc.). Below is a description of an
+			  example of working with the emulator using the connection to <token>openecry</token>. The example itself is in the
+			  <legacyItalic>Samples/Testing/SampleRealTimeEmulation</legacyItalic> folder.
 		  </para>
 	  </introduction>
 
 	  <procedure>
-		  <title>Работа с эмулятором торговли на реальных данных</title>
+		  <title>Work with the trading emulator on real data</title>
 		  <steps class="ordered">
 			  <step>
 				  <content>
 					  <para>
-						  Создаем шлюз <codeEntityReference>T:StockSharp.Algo.Testing.RealTimeEmulationTrader`1</codeEntityReference> и передаем в его конструктор
-						  адаптер сообщений <codeEntityReference>T:StockSharp.SmartCom.SmartComMessageAdapter</codeEntityReference>. Для создания идентификаторов "виртуальных" транзакций используем
-						  генератор идентификаторов <legacyBold>MillisecondIncrementalIdGenerator</legacyBold>.
+						  Creating the <codeEntityReference>T:StockSharp.Algo.Testing.RealTimeEmulationTrader`1</codeEntityReference> instance and passing to its
+						  constructor the <codeEntityReference>T:StockSharp.OpenECry.OpenECryMessageAdapter</codeEntityReference> adapter. To create identifiers of the
+						  "virtual" transactions using the <legacyBold>MillisecondIncrementalIdGenerator</legacyBold> identifier generator.
 					  </para>
 					  <code language="C#"><![CDATA[
-					_connector = new RealTimeEmulationTrader<SmartComMessageAdapter>(new SmartComMessageAdapter(new MillisecondIncrementalIdGenerator())
+					_connector = new RealTimeEmulationTrader<SmartComMessageAdapter>(new OpenECryMessageAdapter(new MillisecondIncrementalIdGenerator())
 					{
 						Login = Login.Text,
 						Password = Password.Password.To<SecureString>(),
@@ -42,9 +42,8 @@
 			  <step>
 				  <content>
 					  <para>
-						  Созданный шлюз используется как обычный коннектор. В нашем случае подписываемся на события, 
-						  создаем <codeEntityReference>T:StockSharp.Algo.Candles.CandleManager</codeEntityReference>, передаем информацию
-						  в графические компоненты и устанавливаем соединение.
+						  The created connector is used as a usual connector. In our case, subscribing to events, creating <codeEntityReference>T:StockSharp.Algo.Candles.CandleManager</codeEntityReference>,
+						  passing an information to the graphical components and establishing the connection.
 					  </para>
 					  <code language="C#"><![CDATA[
 SecurityEditor.SecurityProvider = new FilterableSecurityProvider(_connector);
@@ -60,10 +59,10 @@ _connector.Connected += () =>
 
 	// update gui labels
 	this.GuiAsync(() =>
-		{
-			ChangeConnectStatus(true);
-			ConnectBtn.IsEnabled = false;
-		});
+	{
+		ChangeConnectStatus(true);
+		ConnectBtn.IsEnabled = false;
+	});
 };
 
 // subscribe on connection error event
@@ -88,19 +87,18 @@ _connector.NewMyTrades += Trades.Trades.AddRange;
 _connector.OrdersRegisterFailed += OrdersFailed;
 
 _candleManager.Processing += (s, candle) =>
-	{
-		if (candle.State == CandleStates.Finished)
-			_buffer.Add(candle);
-	};
+{
+	if (candle.State == CandleStates.Finished)
+		_buffer.Add(candle);
+};
 
 // subscribe on error event
 _connector.Error += error =>
 	this.GuiAsync(() => MessageBox.Show(this, error.ToString(), LocalizedStrings.Str2955));
 
-	// subscribe on error of market data subscription event
-	_connector.MarketDataSubscriptionFailed += (security, type, error) =>
-		this.GuiAsync(() => MessageBox.Show(this, error.ToString(), LocalizedStrings.Str2956Params.Put(type, security)));
-			}
+// subscribe on error of market data subscription event
+_connector.MarketDataSubscriptionFailed += (security, type, error) =>
+	this.GuiAsync(() => MessageBox.Show(this, error.ToString(), LocalizedStrings.Str2956Params.Put(type, security)));
 
 _connector.Connect();
 					  ]]></code>
@@ -110,7 +108,7 @@ _connector.Connect();
 			  <step>
 				  <content>
 					  <para>
-						  На следующем рисунке показан результат работы примера.
+						  The following figure shows the result of the example work.
 					  </para>
 					  <mediaLink>
 						  <image placement="left" xlink:href="sample_realtaime_emulation" />
