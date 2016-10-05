@@ -19,7 +19,7 @@
 		</para>
 		<para>
 			В дистрибутиве <token>stocksharp</token> находится пример SampleHistoryTesting (а также архив HistoryData.zip, где лежат исторические данные по тикам, стаканам и свечам, для
-			примера), который тестирует стратегию <token>ma</token> на истории. Для сравнение скорости и качества, тестирование идет с различным набором маркет-данных:
+			примера), который тестирует стратегию <token>ma</token> на истории. Для сравнения скорости и качества, тестирование идет с различным набором маркет-данных:
 		</para>
 		<mediaLink>
 			<image placement="center" xlink:href="samplehistorytest" />
@@ -118,7 +118,7 @@ var storageRegistry = new StorageRegistry
 			  <step>
 				  <content>
 					  <para>
-						  Далее в цикле создаются инструмент, портфель, стратегия, шлюз для тестирования и т.д. с соответсвущими настройками, в зависимости от значений флагов, 
+						  Далее в цикле создаются инструмент, портфель, стратегия, шлюз для тестирования и т.д. с соответствующими настройками, в зависимости от значений флагов, 
 						  установленных в главном окне (Тики, Тики и стаканы, Свечи и пр.). Если значение флага False, то программа переходит к следующему набору настроек. 
 					  </para>
         <code language="C#">
@@ -298,7 +298,7 @@ trader.Connect();
 					</code>
 					  <para>
 						  Для переданных в конструктор <codeEntityReference>T:StockSharp.Algo.Testing.HistoryEmulationConnector</codeEntityReference> инструментов
-						  и портфелей вызывается <codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.NewSecurities</codeEntityReference>
+						  и портфелей вызываются <codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.NewSecurities</codeEntityReference>
 						  и <codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.NewPortfolios</codeEntityReference>.
 					  </para>
 				  </content>
@@ -348,7 +348,7 @@ var strategy = new SmaStrategy(_bufferedChart, _candlesElem, _tradesElem, _short
 					  <para>
 						  Подписка на событие  <codeEntityReference qualifyHint="false">E:StockSharp.Algo.Strategies.Strategy.PnLChanged</codeEntityReference>, для расчета кривой эквити
 						  (подробнее, в разделе <link xlink:href="973860e9-8f2d-4035-98de-bb88b33b6751"/>), а также визуальное наблюдение за прогрессом
-						  тестирования (в примере используется элементы в виде полос прогресса):
+						  тестирования (в примере используются элементы в виде полос прогресса):
 					  </para>
 						<code language="C#">
 						<![CDATA[

@@ -124,7 +124,7 @@ mdGenerator.MaxVolume = 1;
 
   			<listItem>
 				<para>Минимальный генерируемый спред равен <codeEntityReference qualifyHint="true">P:StockSharp.BusinessEntities.Security.PriceStep</codeEntityReference>.
-				Не следует генерировать спрэд между <codeEntityReference qualifyHint="true">P:StockSharp.BusinessEntities.MarketDepth.BestBid</codeEntityReference> и <codeEntityReference qualifyHint="true">P:StockSharp.BusinessEntities.MarketDepth.BestAsk</codeEntityReference>
+				Не следует генерировать спред между <codeEntityReference qualifyHint="true">P:StockSharp.BusinessEntities.MarketDepth.BestBid</codeEntityReference> и <codeEntityReference qualifyHint="true">P:StockSharp.BusinessEntities.MarketDepth.BestAsk</codeEntityReference>
 				больше чем 5 <codeEntityReference qualifyHint="true">P:StockSharp.BusinessEntities.Security.PriceStep</codeEntityReference>
 				(чтобы при генерации из свечей не получалось слишком широкого спреда):</para>
 				<code language="C#">
