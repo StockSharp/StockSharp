@@ -8287,15 +8287,15 @@ DocStr4022;The volume level;Уровень громкости
 DocStr4023;The logs source which receives information from {0};Источник логов, получающий информацию из {0}
 DocStr4024;The logs source sending information about unhandled errors {0} and {1};Источник логов, отсылающий информацию о необработанных ошибках {0} и {1}
 DocStr4025;Argument which contains an error information;Аргумент, передающий информацию об ошибке
-DocStr4026;Argument which contains instruments;Аргумент, передающий информацию об инструментах
-DocStr4027;Argument which contains orders;Аргумент, передающий информацию о заявках
-DocStr4028;Argument which contains order errors (registration or cancellation);Аргумент, передающий информацию об ошибках заявок (регистрации, снятия)
-DocStr4029;Argument which contains tick teades;Аргумент, передающий информацию о тиковых сделках
-DocStr4030;Argument which contains own trades;Аргумент, передающий информацию о собственных сделках
-DocStr4031;Argument which contains portfolios;Аргумент, передающий информацию о портфелях
-DocStr4032;Argument which contains positions;Аргумент, передающий информацию о позициях
-DocStr4033;Argument which contains order books;Аргумент, передающий информацию о стаканах
-DocStr4034;Argument which contains order logs;Аргумент, передающий информацию о строчках лога заявок
+DocStr4026;Argument which contains instrument;Аргумент, передающий информацию об инструменте
+DocStr4027;Argument which contains order;Аргумент, передающий информацию о заявке
+DocStr4028;Argument which contains order error (registration or cancellation);Аргумент, передающий информацию об ошибке заявок (регистрации, снятия)
+DocStr4029;Argument which contains tick trade;Аргумент, передающий информацию о тиковой сделке
+DocStr4030;Argument which contains own trade;Аргумент, передающий информацию о собственной сделке
+DocStr4031;Argument which contains portfolio;Аргумент, передающий информацию о портфеле
+DocStr4032;Argument which contains position;Аргумент, передающий информацию о позиции
+DocStr4033;Argument which contains order book;Аргумент, передающий информацию о стакане
+DocStr4034;Argument which contains order log;Аргумент, передающий информацию о строчку лога заявок
 DocStr4035;Order log;Строчки
 DocStr4036;The interface {0} implementation which provides ability to use from MatLab scripts;Подключение, предоставляющий возможность использовать из MatLab скриптов подключения {0}
 DocStr4037;The connection for market-data and transactions;Подключение, через которое будут отправляться заявки и получатся маркет-данные
@@ -13421,3 +13421,8 @@ DocStr9257;To call the {0} event;Вызвать событие {0}
 DocStr9258;The client code;Код клиента
 DocStr9259;Order cancelling element;Элемент отмены заявки
 DocStr9260;Order replacing element;Элемент изменения заявки
+DocStr9262;Stop-order received;Stop-order received
+DocStr9263;Stop order state change event;Stop order state change event
+DocStr9264;Stop-order registration error event;Stop-order registration error event
+DocStr9265;Stop-order cancellation error event;Stop-order cancellation error event
+DocStr9266;To find instruments that match the filter {0};To find instruments that match the filter {0}
