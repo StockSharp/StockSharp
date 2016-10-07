@@ -42946,5 +42946,35 @@ namespace StockSharp.Localization
 		/// BuyBack price
 		/// </summary>
 		public static string BuyBackPrice => GetString(BuyBackPriceKey);
+
+		/// <summary>
+		/// Start all
+		/// </summary>
+		public const string StartAllKey = "StartAll";
+
+		/// <summary>
+		/// Start all
+		/// </summary>
+		public static string StartAll => GetString(StartAllKey);
+
+		/// <summary>
+		/// Stop all
+		/// </summary>
+		public const string StopAllKey = "StopAll";
+
+		/// <summary>
+		/// Stop all
+		/// </summary>
+		public static string StopAll => GetString(StopAllKey);
+
+		/// <summary>
+		/// Composition {0} not found.
+		/// </summary>
+		public const string CompositionNotFoundParamsKey = "CompositionNotFoundParams";
+
+		/// <summary>
+		/// Composition {0} not found.
+		/// </summary>
+		public static string CompositionNotFoundParams => GetString(CompositionNotFoundParamsKey);
 	}
 }

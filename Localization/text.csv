@@ -4329,6 +4329,9 @@ IssueSize;Number of issued contracts;Объем выпуска
 BuyBackDate;BuyBack date;Дата выкупа
 BuyBackPrice;BuyBack price;Цена выкупа
 NotSpecifiedPriceOrVolume;Not specified new value of price or volume.;Необходимо указать новое значение цены или объема.
+StartAll;Start all;Запустить все
+StopAll;Stop all;Остановить все
+CompositionNotFoundParams;Composition {0} not found.;Схема {0} не найдена.
 DocStr0;Button activation alert settings;Кнопка активации настроек сигнала
 DocStr1;Initializes a new instance of the {0};Создать {0}
 DocStr2;Load settings;Загрузить настройки
