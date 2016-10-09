@@ -42976,5 +42976,15 @@ namespace StockSharp.Localization
 		/// Composition {0} not found.
 		/// </summary>
 		public static string CompositionNotFoundParams => GetString(CompositionNotFoundParamsKey);
+
+		/// <summary>
+		/// Composition {0} was changed. Update?
+		/// </summary>
+		public const string CompositionWasChangedParamsKey = "CompositionWasChangedParams";
+
+		/// <summary>
+		/// Composition {0} was changed. Update?
+		/// </summary>
+		public static string CompositionWasChangedParams => GetString(CompositionWasChangedParamsKey);
 	}
 }
