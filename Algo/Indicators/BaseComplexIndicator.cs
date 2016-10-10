@@ -118,6 +118,7 @@ namespace StockSharp.Algo.Indicators
 		/// </summary>
 		public override void Reset()
 		{
+            base.Reset();
 			InnerIndicators.ForEach(i => i.Reset());
 		}
 
