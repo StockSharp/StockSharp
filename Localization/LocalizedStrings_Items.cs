@@ -42986,5 +42986,35 @@ namespace StockSharp.Localization
 		/// Composition {0} was changed. Update?
 		/// </summary>
 		public static string CompositionWasChangedParams => GetString(CompositionWasChangedParamsKey);
+
+		/// <summary>
+		/// Sparsed market depth
+		/// </summary>
+		public const string SparsedMarketDepthKey = "SparsedMarketDepth";
+
+		/// <summary>
+		/// Sparsed market depth
+		/// </summary>
+		public static string SparsedMarketDepth => GetString(SparsedMarketDepthKey);
+
+		/// <summary>
+		/// Grouped market depth
+		/// </summary>
+		public const string GroupedMarketDepthKey = "GroupedMarketDepth";
+
+		/// <summary>
+		/// Grouped market depth
+		/// </summary>
+		public static string GroupedMarketDepth => GetString(GroupedMarketDepthKey);
+
+		/// <summary>
+		/// Price range
+		/// </summary>
+		public const string PriceRangeKey = "PriceRange";
+
+		/// <summary>
+		/// Price range
+		/// </summary>
+		public static string PriceRange => GetString(PriceRangeKey);
 	}
 }
