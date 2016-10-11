@@ -43016,5 +43016,15 @@ namespace StockSharp.Localization
 		/// Price range
 		/// </summary>
 		public static string PriceRange => GetString(PriceRangeKey);
+
+		/// <summary>
+		/// Need to add the option positions chart
+		/// </summary>
+		public const string NeedToAddOptionPositionChartKey = "NeedToAddOptionPositionChart";
+
+		/// <summary>
+		/// Need to add the option positions chart
+		/// </summary>
+		public static string NeedToAddOptionPositionChart => GetString(NeedToAddOptionPositionChartKey);
 	}
 }

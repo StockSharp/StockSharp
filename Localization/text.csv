@@ -4336,6 +4336,7 @@ CompositionWasChangedParams;Composition {0} was changed. Update?;Схема {0} 
 SparsedMarketDepth;Sparsed market depth;Разреженный стакан
 GroupedMarketDepth;Grouped market depth;Сгруппированный стакан
 PriceRange;Price range;Ценовой диапазон
+NeedToAddOptionPositionChart;Need to add the option positions chart;Необходимо добавить график позиций опционов
 DocStr0;Button activation alert settings;Кнопка активации настроек сигнала
 DocStr1;Initializes a new instance of the {0};Создать {0}
 DocStr2;Load settings;Загрузить настройки
