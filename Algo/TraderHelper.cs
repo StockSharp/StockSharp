@@ -1283,7 +1283,7 @@ namespace StockSharp.Algo
 					return 0;
 			}
 
-			return byOrder ? order.Balance : order.GetTrades(connector).Sum(o => o.Trade.Volume);
+			return byOrder ? order.Volume - order.Balance : order.GetTrades(connector).Sum(o => o.Trade.Volume);
 		}
 
 		/// <summary>
