@@ -853,8 +853,13 @@ namespace StockSharp.Algo
 					return value.To<MarketDepth>().ToMessage().To<TMessage>();
 				else if (value is Trade)
 					return value.To<Trade>().ToMessage().To<TMessage>();
+				else if (value is MyTrade)
+					return value.To<MyTrade>().ToMessage().To<TMessage>();
 				else if (value is Candle)
 					return value.To<Candle>().ToMessage().To<TMessage>();
+				else if (value is Order)
+					return value.To<Order>().ToMessage().To<TMessage>();
+
 				else
 					throw new InvalidOperationException();
 			}

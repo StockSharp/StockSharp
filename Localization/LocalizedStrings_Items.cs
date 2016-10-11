@@ -42946,5 +42946,85 @@ namespace StockSharp.Localization
 		/// BuyBack price
 		/// </summary>
 		public static string BuyBackPrice => GetString(BuyBackPriceKey);
+
+		/// <summary>
+		/// Start all
+		/// </summary>
+		public const string StartAllKey = "StartAll";
+
+		/// <summary>
+		/// Start all
+		/// </summary>
+		public static string StartAll => GetString(StartAllKey);
+
+		/// <summary>
+		/// Stop all
+		/// </summary>
+		public const string StopAllKey = "StopAll";
+
+		/// <summary>
+		/// Stop all
+		/// </summary>
+		public static string StopAll => GetString(StopAllKey);
+
+		/// <summary>
+		/// Composition {0} not found.
+		/// </summary>
+		public const string CompositionNotFoundParamsKey = "CompositionNotFoundParams";
+
+		/// <summary>
+		/// Composition {0} not found.
+		/// </summary>
+		public static string CompositionNotFoundParams => GetString(CompositionNotFoundParamsKey);
+
+		/// <summary>
+		/// Composition {0} was changed. Update?
+		/// </summary>
+		public const string CompositionWasChangedParamsKey = "CompositionWasChangedParams";
+
+		/// <summary>
+		/// Composition {0} was changed. Update?
+		/// </summary>
+		public static string CompositionWasChangedParams => GetString(CompositionWasChangedParamsKey);
+
+		/// <summary>
+		/// Sparsed market depth
+		/// </summary>
+		public const string SparsedMarketDepthKey = "SparsedMarketDepth";
+
+		/// <summary>
+		/// Sparsed market depth
+		/// </summary>
+		public static string SparsedMarketDepth => GetString(SparsedMarketDepthKey);
+
+		/// <summary>
+		/// Grouped market depth
+		/// </summary>
+		public const string GroupedMarketDepthKey = "GroupedMarketDepth";
+
+		/// <summary>
+		/// Grouped market depth
+		/// </summary>
+		public static string GroupedMarketDepth => GetString(GroupedMarketDepthKey);
+
+		/// <summary>
+		/// Price range
+		/// </summary>
+		public const string PriceRangeKey = "PriceRange";
+
+		/// <summary>
+		/// Price range
+		/// </summary>
+		public static string PriceRange => GetString(PriceRangeKey);
+
+		/// <summary>
+		/// Need to add the option positions chart
+		/// </summary>
+		public const string NeedToAddOptionPositionChartKey = "NeedToAddOptionPositionChart";
+
+		/// <summary>
+		/// Need to add the option positions chart
+		/// </summary>
+		public static string NeedToAddOptionPositionChart => GetString(NeedToAddOptionPositionChartKey);
 	}
 }
