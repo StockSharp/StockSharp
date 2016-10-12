@@ -43026,5 +43026,15 @@ namespace StockSharp.Localization
 		/// Need to add the option positions chart
 		/// </summary>
 		public static string NeedToAddOptionPositionChart => GetString(NeedToAddOptionPositionChartKey);
+
+		/// <summary>
+		/// Math
+		/// </summary>
+		public const string MathKey = "Math";
+
+		/// <summary>
+		/// Math
+		/// </summary>
+		public static string Math => GetString(MathKey);
 	}
 }

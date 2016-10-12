@@ -54,6 +54,11 @@
             The diagram element description.
             </summary>
     </member>
+    <member name="P:StockSharp.Xaml.Diagram.CompositionDiagramElement.Revision">
+      <summary>
+            The content revision.
+            </summary>
+    </member>
     <member name="P:StockSharp.Xaml.Diagram.CompositionDiagramElement.IsModifiable">
       <summary>
             Is it possible to edit a composite element diagram.
@@ -141,6 +146,30 @@
       <param name="socket">Socket.</param>
       <param name="value">Value.</param>
     </member>
+    <member name="M:StockSharp.Xaml.Diagram.CompositionDiagramElement.CanUndo">
+      <summary>
+            This predicate is true when one can call <see cref="M:StockSharp.Xaml.Diagram.CompositionDiagramElement.Undo" />.
+            </summary>
+      <returns>
+      </returns>
+    </member>
+    <member name="M:StockSharp.Xaml.Diagram.CompositionDiagramElement.Undo">
+      <summary>
+            Restore the state of some models to before the current state.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.Diagram.CompositionDiagramElement.CanRedo">
+      <summary>
+            This predicate is true when one can call <see cref="M:StockSharp.Xaml.Diagram.CompositionDiagramElement.Redo" />.
+            </summary>
+      <returns>
+      </returns>
+    </member>
+    <member name="M:StockSharp.Xaml.Diagram.CompositionDiagramElement.Redo">
+      <summary>
+            Restore the state of some models to after the current state.
+            </summary>
+    </member>
     <member name="M:StockSharp.Xaml.Diagram.CompositionDiagramElement.UpdateTypeId">
       <summary>
             Update <see cref="P:StockSharp.Xaml.Diagram.CompositionDiagramElement.TypeId" /> for composition elements.
@@ -161,6 +190,14 @@
       <param name="cloneSockets">To create copies of connections.</param>
       <returns>Copy.</returns>
     </member>
+    <member name="M:StockSharp.Xaml.Diagram.CompositionDiagramElement.Contains(StockSharp.Xaml.Diagram.DiagramElement)">
+      <summary>
+            Is composition contains element.
+            </summary>
+      <param name="element">Element.</param>
+      <returns>
+      </returns>
+    </member>
     <member name="T:StockSharp.Xaml.Diagram.CompositionRegistry">
       <summary>
             The storage of composite elements.
@@ -171,39 +208,10 @@
             List of elements.
             </summary>
     </member>
-    <member name="E:StockSharp.Xaml.Diagram.CompositionRegistry.SaveComposition">
-      <summary>
-            The diagram composite element saving event.
-            </summary>
-    </member>
-    <member name="E:StockSharp.Xaml.Diagram.CompositionRegistry.RemoveComposition">
-      <summary>
-            The diagram composite element removing event.
-            </summary>
-    </member>
     <member name="M:StockSharp.Xaml.Diagram.CompositionRegistry.#ctor">
       <summary>
             Initializes a new instance of the <see cref="T:StockSharp.Xaml.Diagram.CompositionRegistry" />.
             </summary>
-    </member>
-    <member name="M:StockSharp.Xaml.Diagram.CompositionRegistry.Save(StockSharp.Xaml.Diagram.CompositionDiagramElement)">
-      <summary>
-            Save settings.
-            </summary>
-      <param name="composition">Composite element.</param>
-    </member>
-    <member name="M:StockSharp.Xaml.Diagram.CompositionRegistry.TryRemove(StockSharp.Xaml.Diagram.CompositionDiagramElement)">
-      <summary>
-            To remove the composite element, if it is not used in other composite diagrams.
-            </summary>
-      <param name="element">Composite element.</param>
-    </member>
-    <member name="M:StockSharp.Xaml.Diagram.CompositionRegistry.Load(Ecng.Serialization.SettingsStorage,System.Boolean)">
-      <summary>
-            Load settings.
-            </summary>
-      <param name="data">The data string.</param>
-      <param name="readOnly">Is it possible to modify the element.</param>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.CompositionRegistry.Serialize(StockSharp.Xaml.Diagram.CompositionDiagramElement,System.Nullable{StockSharp.Xaml.Diagram.SchemeTypes})">
       <summary>
@@ -499,16 +507,6 @@
     <member name="P:StockSharp.Xaml.Diagram.DiagramEditorControl.Scale">
       <summary>
             Scale.
-            </summary>
-    </member>
-    <member name="F:StockSharp.Xaml.Diagram.DiagramEditorControl.CanUndoRedoProperty">
-      <summary>
-        <see cref="T:System.Windows.DependencyProperty" /> for <see cref="P:StockSharp.Xaml.Diagram.DiagramEditorControl.CanUndoRedo" />.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Xaml.Diagram.DiagramEditorControl.CanUndoRedo">
-      <summary>
-            Can undo/redo.
             </summary>
     </member>
     <member name="E:StockSharp.Xaml.Diagram.DiagramEditorControl.SelectionChanged">
@@ -1675,6 +1673,106 @@
             To call the available properties change event.
             </summary>
     </member>
+    <member name="T:StockSharp.Xaml.Diagram.Elements.BlackScholesGreeks">
+      <summary>
+            Black-Scholes "greeks".
+            </summary>
+    </member>
+    <member name="F:StockSharp.Xaml.Diagram.Elements.BlackScholesGreeks.Delta">
+      <summary>
+            Delta.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Xaml.Diagram.Elements.BlackScholesGreeks.Gamma">
+      <summary>
+            Gamma.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Xaml.Diagram.Elements.BlackScholesGreeks.Vega">
+      <summary>
+            Vega.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Xaml.Diagram.Elements.BlackScholesGreeks.Theta">
+      <summary>
+            Theta.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Xaml.Diagram.Elements.BlackScholesGreeks.Rho">
+      <summary>
+            Rho.
+            </summary>
+    </member>
+    <member name="T:StockSharp.Xaml.Diagram.Elements.BlackScholesDiagramElement">
+      <summary>
+            The Black-Scholes "Greeks" evaluation element.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Diagram.Elements.BlackScholesDiagramElement.TypeId">
+      <summary>
+            The unique identifier of the diagram element type.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Diagram.Elements.BlackScholesDiagramElement.IconName">
+      <summary>
+            Icon resource name.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.Diagram.Elements.BlackScholesDiagramElement.#ctor">
+      <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Xaml.Diagram.Elements.BlackScholesDiagramElement" />.
+            </summary>
+    </member>
+    <member name="T:StockSharp.Xaml.Diagram.Elements.MarketDepthGroupedDiagramElement">
+      <summary>
+            Grouped market depth element.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Diagram.Elements.MarketDepthGroupedDiagramElement.TypeId">
+      <summary>
+            The unique identifier of the diagram element type.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Diagram.Elements.MarketDepthGroupedDiagramElement.IconName">
+      <summary>
+            Icon resource name.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.Diagram.Elements.MarketDepthGroupedDiagramElement.#ctor">
+      <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Xaml.Diagram.Elements.MarketDepthGroupedDiagramElement" />.
+            </summary>
+    </member>
+    <member name="T:StockSharp.Xaml.Diagram.Elements.Level1DiagramElement">
+      <summary>
+            The Level1 element.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Diagram.Elements.Level1DiagramElement.TypeId">
+      <summary>
+            The unique identifier of the diagram element type.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Diagram.Elements.Level1DiagramElement.IconName">
+      <summary>
+            Icon resource name.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.Diagram.Elements.Level1DiagramElement.#ctor">
+      <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Xaml.Diagram.Elements.Level1DiagramElement" />.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.Diagram.Elements.Level1DiagramElement.OnStart">
+      <summary>
+            The method is called at the start of the diagram element algorithm.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.Diagram.Elements.Level1DiagramElement.OnStop">
+      <summary>
+            The method is called at the stop of the diagram element algorithm.
+            </summary>
+    </member>
     <member name="T:StockSharp.Xaml.Diagram.Elements.OrderCancelElement">
       <summary>
             Order cancelling element.
@@ -2290,6 +2388,56 @@
     <member name="M:StockSharp.Xaml.Diagram.Elements.SecurityDiagramElement.#ctor">
       <summary>
             Initializes a new instance of the <see cref="T:StockSharp.Xaml.Diagram.Elements.SecurityDiagramElement" />.
+            </summary>
+    </member>
+    <member name="T:StockSharp.Xaml.Diagram.Elements.MarketDepthSparsedDiagramElement">
+      <summary>
+            Sparsed market depth element.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Diagram.Elements.MarketDepthSparsedDiagramElement.TypeId">
+      <summary>
+            The unique identifier of the diagram element type.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Diagram.Elements.MarketDepthSparsedDiagramElement.IconName">
+      <summary>
+            Icon resource name.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.Diagram.Elements.MarketDepthSparsedDiagramElement.#ctor">
+      <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Xaml.Diagram.Elements.MarketDepthSparsedDiagramElement" />.
+            </summary>
+    </member>
+    <member name="T:StockSharp.Xaml.Diagram.Elements.StrategyDiagramElement">
+      <summary>
+            The element which is using compiled strategy, based on S#.API.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Diagram.Elements.StrategyDiagramElement.TypeId">
+      <summary>
+            The unique identifier of the diagram element type.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Diagram.Elements.StrategyDiagramElement.IconName">
+      <summary>
+            Icon resource name.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.Diagram.Elements.StrategyDiagramElement.#ctor">
+      <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Xaml.Diagram.Elements.StrategyDiagramElement" />.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.Diagram.Elements.StrategyDiagramElement.OnStart">
+      <summary>
+            The method is called at the start of the diagram element algorithm.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.Diagram.Elements.StrategyDiagramElement.OnStop">
+      <summary>
+            The method is called at the stop of the diagram element algorithm.
             </summary>
     </member>
     <member name="T:StockSharp.Xaml.Diagram.Elements.StrategyTradesDiagramElement">

@@ -4337,6 +4337,7 @@ SparsedMarketDepth;Sparsed market depth;Разреженный стакан
 GroupedMarketDepth;Grouped market depth;Сгруппированный стакан
 PriceRange;Price range;Ценовой диапазон
 NeedToAddOptionPositionChart;Need to add the option positions chart;Необходимо добавить график позиций опционов
+Math;Math;Математика
 DocStr0;Button activation alert settings;Кнопка активации настроек сигнала
 DocStr1;Initializes a new instance of the {0};Создать {0}
 DocStr2;Load settings;Загрузить настройки
@@ -13429,8 +13430,18 @@ DocStr9257;To call the {0} event;Вызвать событие {0}
 DocStr9258;The client code;Код клиента
 DocStr9259;Order cancelling element;Элемент отмены заявки
 DocStr9260;Order replacing element;Элемент изменения заявки
-DocStr9262;Stop-order received;Stop-order received
-DocStr9263;Stop order state change event;Stop order state change event
-DocStr9264;Stop-order registration error event;Stop-order registration error event
-DocStr9265;Stop-order cancellation error event;Stop-order cancellation error event
-DocStr9266;To find instruments that match the filter {0};To find instruments that match the filter {0}
+DocStr9262;Stop-order received;Событие получения стоп-заявки
+DocStr9263;Stop order state change event;Событие изменения стоп-заявки
+DocStr9264;Stop-order registration error event;Событие ошибки регистрации стоп-заявки
+DocStr9265;Stop-order cancellation error event;Событие ошибки отмены стоп-заявки
+DocStr9266;To find instruments that match the filter {0};Найти инструменты, соотвествующие фильтру {0}
+DocStr9267;This predicate is true when one can call {0};This predicate is true when one can call {0}
+DocStr9268;Restore the state of some models to before the current state;Restore the state of some models to before the current state
+DocStr9269;Restore the state of some models to after the current state;Restore the state of some models to after the current state
+DocStr9270;Is composition contains element;Пустой ли сложный элемент
+DocStr9271;Black-Scholes "greeks";"Греки" модели Black-Scholes
+DocStr9272;The Black-Scholes "Greeks" evaluation element;Элемент вычисления "греков" по формуле Black-Scholes
+DocStr9273;The Level1 element;Элемент Level1
+DocStr9274;Sparsed market depth element;Элемент, делающий стакан разреженным (пустые строчки цен)
+DocStr9275;Grouped market depth element;Элемент, группирующий стакан
+DocStr9276;The element which is using compiled strategy, based on S#.API;Элемент, использующий скомпилированную сборку со стратегией, написанной на S#.API
