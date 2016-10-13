@@ -4338,6 +4338,7 @@ GroupedMarketDepth;Grouped market depth;Сгруппированный стак�
 PriceRange;Price range;Ценовой диапазон
 NeedToAddOptionPositionChart;Need to add the option positions chart;Необходимо добавить график позиций опционов
 Math;Math;Математика
+Diagram;Diagram;Схема
 DocStr0;Button activation alert settings;Кнопка активации настроек сигнала
 DocStr1;Initializes a new instance of the {0};Создать {0}
 DocStr2;Load settings;Загрузить настройки

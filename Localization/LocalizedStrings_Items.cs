@@ -43036,5 +43036,15 @@ namespace StockSharp.Localization
 		/// Math
 		/// </summary>
 		public static string Math => GetString(MathKey);
+
+		/// <summary>
+		/// Diagram
+		/// </summary>
+		public const string DiagramKey = "Diagram";
+
+		/// <summary>
+		/// Diagram
+		/// </summary>
+		public static string Diagram => GetString(DiagramKey);
 	}
 }
