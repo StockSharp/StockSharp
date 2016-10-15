@@ -1350,6 +1350,9 @@ namespace StockSharp.Algo.Strategies
 					if (!WaitAllTrades)
 						return true;
 
+					if (order.IsCanceled())
+						return true;
+
 					//var leftVolume = order.Volume - order.GetMatchedVolume(Connector, true);
 
 					//if (leftVolume == 0)
@@ -2278,6 +2281,17 @@ namespace StockSharp.Algo.Strategies
 			foreach (var trade in filteredTrades)
 			{
 				ProcessRisk(trade.ToMessage());
+			}
+
+			if (ProcessState == ProcessStates.Stopping)
+			{
+				foreach (var rule in Rules.SyncGet(c => c.ToArray()))
+				{
+					if (this.TryRemoveWithExclusive(rule))
+						_childStrategies.TryRemoveStoppedRule(rule);
+				}
+
+				TryFinalStop();
 			}
 		}
 
