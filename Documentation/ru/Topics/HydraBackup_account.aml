@@ -28,7 +28,7 @@
 			
 			<step>
 				<content>
-					<para>На одном из этапов регистрации будет предложено ввести номер телефона и иницировать звонок
+					<para>На одном из этапов регистрации будет предложено ввести номер телефона и инициировать звонок
 					на Ваш телефон при помощи кнопки <legacyBold>Call Me Now</legacyBold>.</para>
 					<mediaLink>
         				<image placement="left" xlink:href="Aws3_CallMeNow" />
@@ -65,7 +65,7 @@
 			
 			<step>
 				<content>
-					<para>Далее необходимо задать ключи для програмного доступа к сервисам AWS. Для этого в консоли AWS нужно перейти по ссылке 
+					<para>Далее необходимо задать ключи для программного доступа к сервисам AWS. Для этого в консоли AWS нужно перейти по ссылке 
 					<legacyBold>Security Credentials</legacyBold>.</para>
 					<mediaLink>
         				<image placement="left" xlink:href="Aws3_SecurityCredentials"/>

@@ -13,17 +13,9 @@
 		  рыночных данных с других ресурсов, которые не входят стандартно. Ниже представлен процесс создания источника для <token>rts</token>, который входит
 		  стандартно.
 	  </para>
-		<alert class="note">
-			Все источники и сама программа <token>hydra</token> доступна в исходниках, и находится в репозитории <externalLink>
-			<linkText>StockSharp</linkText>
-				<linkAlternateText>Optional alternate text</linkAlternateText>
-					<linkUri>https://github.com/StockSharp/StockSharp/releases</linkUri>
-					<linkTarget>_blank</linkTarget>
-			</externalLink> на GitHub.
-		</alert>
     </introduction>
 	<procedure>
-		<title>Этапы создание источника</title>
+		<title>Этапы создания источника</title>
 		<steps class="ordered">
 			<step>
 				<content>
@@ -78,7 +70,7 @@
 		  		<content>
 			  		<para>
 				  		Свойство <codeEntityReference qualifyHint="true">P:StockSharp.Hydra.Core.IHydraTask.Settings</codeEntityReference> используется
-				  		для хранения настроек источника. Класс, возращаемый из данного свойства, должен быть наследником
+				  		для хранения настроек источника. Класс, возвращаемый из данного свойства, должен быть наследником
 				  		<codeEntityReference qualifyHint="false">T:StockSharp.Hydra.Core.HydraTaskSettings</codeEntityReference>:
 			  		</para>
 			  		<code language="C#">

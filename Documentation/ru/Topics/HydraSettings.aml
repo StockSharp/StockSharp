@@ -4,7 +4,7 @@
     <introduction>
     	<para>Пункт главного меню приложения <legacyBold>Дополнительно => Настройки...</legacyBold>.</para>
     	<para>
-    		Позволяет выполнить настройку <token>hydra</token> для работы в серверном режиме. Для того чтобы открыть окно с настройками <token>hydra</token> небходимо в главном меню нажать <legacyBold>Дополнительно</legacyBold> и в выпадающем меню выбрать <legacyBold>Настройки</legacyBold>.
+    		Позволяет выполнить настройку <token>hydra</token> для работы в серверном режиме. Для того чтобы открыть окно с настройками <token>hydra</token> необходимо в главном меню нажать <legacyBold>Дополнительно</legacyBold> и в выпадающем меню выбрать <legacyBold>Настройки</legacyBold>.
     	</para>
 		<mediaLink>
         	<image placement="center" xlink:href="hydra_settings" />
@@ -17,7 +17,7 @@
           <legacyBold>Серверный режим</legacyBold> - перевести <token>hydra</token> в серверный режим.
 		</listItem>
         <listItem>
-          <legacyBold>Авторизация</legacyBold> - метод авторизациии для получения доступа к <token>hydra</token>: Анонимно/Windows/Пользовательский/StockSharp.
+          <legacyBold>Авторизация</legacyBold> - метод авторизации для получения доступа к <token>hydra</token>: Анонимно/Windows/Пользовательский/StockSharp.
 		</listItem>  
 		<listItem>
           <legacyBold>Количество инструментов</legacyBold> - максимальное количество инструментов, которое можно запрашивать с сервера.

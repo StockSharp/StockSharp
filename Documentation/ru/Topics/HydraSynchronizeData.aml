@@ -6,7 +6,7 @@
   		<mediaLink>
         	<image placement="left" xlink:href="hydra_sync" />
 		</mediaLink>
-		<para>Позволяет восстановить инструменты по скаченным файлам. 
+		<para>Позволяет восстановить инструменты по скачанным файлам. 
 			См. <link xlink:href="a2130df7-ebc1-4bcd-8c8b-0e78524dfb20">Аварийное восстановление.</link> </para>
     </introduction>
   </developerConceptualDocument>

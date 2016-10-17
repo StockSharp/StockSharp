@@ -2035,7 +2035,7 @@ Str2134;Securities types, for which data must be received.;Типы инстру
 Str2135;Load securities;Загружать инструменты
 Str2136;Should the whole set of securities be loaded from IQFeed website archive.;Загружать ли инструменты из архива с сайта IQFeed.
 Str2137;File with securities;Файл с инструментами
-Str2138;Path to file with IQFeed list of securities, downloaded from the website. If path is specified, then secondary download from website does not occur, and only the local copy gets parsed.;Путь к файлу со списком инструментов IQFeed, скаченный с сайта. Если путь задан, то повторное скачивание с сайта не происходит, и парсится только локальная копия.
+Str2138;Path to file with IQFeed list of securities, downloaded from the website. If path is specified, then secondary download from website does not occur, and only the local copy gets parsed.;Путь к файлу со списком инструментов IQFeed, скачанный с сайта. Если путь задан, то повторное скачивание с сайта не происходит, и парсится только локальная копия.
 Str2139Params;IQFeed does not support interval {0}.;IQFeed не поддерживает интервал {0}.
 Str2140Params;Unknown type of security '{0}'.;Неизвестный тип инструмента '{0}'.
 Str2141Params;Error parsing string '{0}'.;Ошибка парсинга строки '{0}'.
@@ -4434,14 +4434,14 @@ DocStr94;To get the instrument code by its identifier;Получить код и
 DocStr95;To get the instrument board by its identifier;Получить площадку инструмента по его идентификатору
 DocStr96;Security board;Площадка инструмента
 DocStr97;Security id generator;Генератор идентификаторов инструментов
-DocStr98;The base source of market data, which saves the downloaded data to a temporary directory;Базовый источник маркет-данных, который сохраняет скаченные данные во временную директорию
+DocStr98;The base source of market data, which saves the downloaded data to a temporary directory;Базовый источник маркет-данных, который сохраняет скачанные данные во временную директорию
 DocStr99;Upload or download text file;Загрузить или скачать текстовый файл
 DocStr100;Loader;Загрузчик
 DocStr101;Text file;Текстовый файл
-DocStr102;Get the full path to the downloaded file;Получить полный путь к скаченному файлу
+DocStr102;Get the full path to the downloaded file;Получить полный путь к скачанному файлу
 DocStr103;Full path to the downloaded file;Полный путь к скаченному файлу
 DocStr104;Is it possible to save files;Можно ли сохранять файлы
-DocStr105;The path to the directory where the downloaded files will be saved;Путь к директории, куда будут сохранятся скаченные файлы
+DocStr105;The path to the directory where the downloaded files will be saved;Путь к директории, куда будут сохранятся скачанные файлы
 DocStr106;If the value is an empty string, the data will not stored locally;Если значение равно пустой строке, то данные не сохраняются локально
 DocStr107;The source for downloading historical data from FinViz;Источник исторических маркет-данных от FinViz
 DocStr108;The interface of the loader of information about instruments;Интерфейс загрузчика информации об инструментах
@@ -4758,7 +4758,7 @@ DocStr423;The stream of the open file that will be saved to the service;Пото
 DocStr424;Progress notification;Оповещение о прогрессе
 DocStr425;Cancellation token;Токен отмены
 DocStr426;Upload file;Загрузить файл
-DocStr427;The stream of the open file into which data from the service will be downloaded;Поток открытого файла, в который будет скачены данные из сервиса
+DocStr427;The stream of the open file into which data from the service will be downloaded;Поток открытого файла, в который будет скачаны данные из сервиса
 DocStr428;Region address;Адрес региона
 DocStr429;Storage name;Имя хранилища
 DocStr430;The data storage service based on Amazon S3 http://aws.amazon.com/s3/;Сервис хранения данных, основанный на Amazon S3 http://aws.amazon.com/s3/
@@ -8071,7 +8071,7 @@ DocStr3753;Found column. If the column does not exist then {0} is returned;На�
 DocStr3754;The interface {0} implementation for the interaction with DTN IQFeed for download of historical and real-time market data (level 1, level 2);Реализация интерфейса {0} для взаимодействия с DTN IQFeed для скачивания исторических и реал-тайм маркет-данных (level 1, level 2)
 DocStr3755;To query news for a specified date;Запросить новости для заданной даты
 DocStr3756;The instrument identifier for which you need to get all trades;Идентификатор инструмента, для которого необходимо получить все сделки
-DocStr3757;Instruments types that will be downloaded from the site when the option {0} enabled;Типы инструментов, которые будут скачены с сайта при включенной опции {0}
+DocStr3757;Instruments types that will be downloaded from the site when the option {0} enabled;Типы инструментов, которые будут скачаны с сайта при включенной опции {0}
 DocStr3758;The wrapper to work with the IQFeed using the TCP/IP protocol;Обертка для работы с IQFeed c помощью протокола TCP/IP
 DocStr3759;To connect to the server;Подключиться к серверу
 DocStr3760;To disconnect from the server;Отключиться от сервера
