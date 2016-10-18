@@ -7,68 +7,68 @@
     </summary>
     -->
     <introduction>
-      <para>Задача выполняет конвертацию биржевых данных. Например, из ОрдерЛог в тики или тиков в свечи и т.п.</para>
+      <para>The task performs conversion of the exchange data. For example, from Order Log into ticks or from ticks into candles, etc.</para>
       <mediaLink>
         <image placement="left" xlink:href="hydra_tasks_converter" />
       </mediaLink>
-      <para><legacyBold>Конвертер</legacyBold></para>
+      <para><legacyBold>Converter</legacyBold></para>
       <list class="bullet">
         <listItem>
-			<legacyBold>Конвертер</legacyBold> - конвертер.
+			<legacyBold>Converter</legacyBold> - converter.
 			</listItem>
 			<listItem>
- 		    <legacyBold>Начальная дата</legacyBold> - с какой даты начать конвертацию данных.
+ 		    <legacyBold>Start date</legacyBold> - the date from which to start data conversion.
 			</listItem>
 			<listItem>
- 		    <legacyBold>Формат</legacyBold> - формат данных.
+ 		    <legacyBold>Format</legacyBold> - the data format.
 			</listItem>
 			<listItem>
-			<legacyBold>Временной отступ</legacyBold> - временной отступ в днях от даты запуска задачи.
+			<legacyBold>Offset</legacyBold> - time offset in days from the task start date.
 			</listItem>
 			<listItem>
-          <legacyBold>Куда</legacyBold> - директория с данными, куда будут сохраняться сконвертированные данные.
+          <legacyBold>Destination</legacyBold> - a directory with data, where the converted data will be stored to.
 		</listItem>
 		 </list>
-		<para><legacyBold>Основные</legacyBold></para>
+		<para><legacyBold>Main</legacyBold></para>
 		<list class="bullet">
         <listItem>
-          <legacyBold>Работать с</legacyBold> - время начала работы.
+          <legacyBold>Work from</legacyBold> - the operating start time.
 		</listItem>
         <listItem>
-          <legacyBold>Работать до</legacyBold> - время окончания работы.
+          <legacyBold>Work till</legacyBold> - the operating stop time.
 		</listItem>
         <listItem>
-          <legacyBold>Интервал работы</legacyBold> - интервал работы.
+          <legacyBold>Interval</legacyBold> - the operating interval.
 		</listItem>
         <listItem>
-          <legacyBold>Директория с данными</legacyBold> - директория с данными, куда будут сохраняться конечные файлы в формате <token>stocksharp</token>.
+          <legacyBold>Data directory</legacyBold> - the data directory where the final files will be saved in the <token>stocksharp</token> format.
 		</listItem>
 		<listItem>
-          <legacyBold>Формат</legacyBold> - формат данных: BIN/CSV.
+          <legacyBold>Format</legacyBold> - the data format: BIN/CSV.
 		</listItem>
 		<listItem>
-          <legacyBold>Макс. ошибок</legacyBold> - максимальное количество ошибок по достижению которого задача будет остановлена. По умолчанию 0 - количество ошибок игнорируются.
+          <legacyBold>Max errors</legacyBold> - the maximum number of errors to achieve that the task will be stopped. By default is 0 – number of errors is ignored.
 		</listItem>
 		<listItem>
-          <legacyBold>Зависимость</legacyBold> - задача, которая должна быть выполнена перед запуском текущей.
+          <legacyBold>Dependency</legacyBold> - the task that must be executed before the current is started.
 		</listItem>
 		<listItem>
-          <legacyBold>Уровень логирования</legacyBold> - уровень логирования.
+          <legacyBold>Logging level</legacyBold> - the logging level.
 		</listItem>
       </list>
-     <para><legacyBold>Свечи</legacyBold></para>
+     <para><legacyBold>Candles</legacyBold></para>
       <list class="bullet">
         <listItem>
-			<legacyBold>Параметры</legacyBold> - параметры свечек.
+			<legacyBold>Parameters</legacyBold> - the candles parameters.
 		</listItem>
  	  </list>
-      <para><legacyBold>Стаканы</legacyBold></para>
+      <para><legacyBold>Order books</legacyBold></para>
       <list class="bullet">
         <listItem>
-			<legacyBold>Интервал</legacyBold> - интервал генерации стаканов.
+			<legacyBold>Interval</legacyBold> - the order books generating interval.
 		</listItem>
 		<listItem>
-			<legacyBold>Глубина</legacyBold> - максимальная глубина генерации стаканов.
+			<legacyBold>Depth</legacyBold> - the maximum depth of the order books generating.
 		</listItem>
  	  </list>
     

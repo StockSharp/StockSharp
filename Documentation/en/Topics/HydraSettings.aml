@@ -2,9 +2,10 @@
 <topic id="7d845e99-6bde-437e-b7f4-059be0438894" revisionNumber="1">
 	<developerWalkthroughDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     <introduction>
-    	<para>Пункт главного меню приложения <legacyBold>Дополнительно => Настройки...</legacyBold>.</para>
+    	<para>The application main menu item <legacyBold>Additional => Settings...</legacyBold>.</para>
     	<para>
-    		Позволяет выполнить настройку <token>hydra</token> для работы в серверном режиме. Для того чтобы открыть окно с настройками <token>hydra</token> небходимо в главном меню нажать <legacyBold>Дополнительно</legacyBold> и в выпадающем меню выбрать <legacyBold>Настройки</legacyBold>.
+    		It allows to setup <token>hydra</token> to work in server mode. To open the window with <token>hydra</token> settings it is necessary to click
+    		<legacyBold>Additional</legacyBold> in the main menu, and to select <legacyBold>Settings</legacyBold> in the drop-down menu.
     	</para>
 		<mediaLink>
         	<image placement="center" xlink:href="hydra_settings" />
@@ -14,36 +15,36 @@
       
       <list class="bullet">
         <listItem>
-          <legacyBold>Серверный режим</legacyBold> - перевести <token>hydra</token> в серверный режим.
+          <legacyBold>Server mode</legacyBold> - switch <token>hydra</token> to the server mode.
 		</listItem>
         <listItem>
-          <legacyBold>Авторизация</legacyBold> - метод авторизациии для получения доступа к <token>hydra</token>: Анонимно/Windows/Пользовательский/StockSharp.
+          <legacyBold>Authorization</legacyBold> - authorization method to access <token>hydra</token>: Anonymous/Windows/User/StockSharp.
 		</listItem>  
 		<listItem>
-          <legacyBold>Количество инструментов</legacyBold> - максимальное количество инструментов, которое можно запрашивать с сервера.
+          <legacyBold>Max securities</legacyBold> - the maximum number of the instruments that can be requested from the server.
 		</listItem>	
 
 	  </list>			
 		
-	<para> <legacyBold>Основные</legacyBold></para>
+	<para> <legacyBold>Main</legacyBold></para>
 	<list class="bullet">
 	    <listItem>
-          <legacyBold>Автостарт</legacyBold> - автостарт скачивания котировок при запуске.
+          <legacyBold>Auto-start</legacyBold> - the quotes auto downloading at start.
 		</listItem>
         <listItem>
-          <legacyBold>Трей</legacyBold> - сворачивать в трей.
+          <legacyBold>Tray icon</legacyBold> - to minimize to tray.
 		</listItem>
         <listItem>
-          <legacyBold>Авто-стоп</legacyBold> - остановка работы по времени.
+          <legacyBold>Auto-stop</legacyBold> - to stop the work at specified time.
 		</listItem>		
         <listItem>
-          <legacyBold>Время для Авто-стоп</legacyBold> - время для Авто-стоп.
+          <legacyBold>Auto-stop delay</legacyBold> - the time for the auto-stop option.
 		</listItem>	
         <listItem>
-          <legacyBold>Ошибки (кол-во)</legacyBold> - количество ошибок, после которого будет отправлено письмо на почту с сообщением об ошибке. Значение 0 означает выключенный режим.
+          <legacyBold>Errors (quantity)</legacyBold> - the number of errors after reaching that an email with an error message will be sent. A value of 0 means off mode.
 		</listItem>	
         <listItem>
-          <legacyBold>Ошибки (email)</legacyBold> - адрес почты, куда будет отправлено сообщение о превышении максимально допустимого количества ошибок.
+          <legacyBold>Errors (email)</legacyBold> - the e-mail address, to which a message about exceeding the maximum number of errors will be sent.
 		</listItem>	
       </list>		
 	</introduction>

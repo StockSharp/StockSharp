@@ -2,16 +2,17 @@
 <topic id="83e7f4bb-733d-4463-a2c9-923ccc486d36" revisionNumber="1">
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     <introduction>
-      <para>Вы можете загрузить готовый скрипт при помощи кнопки <mediaLinkInline>
-<image xlink:href="hydra_analitics_folder"/></mediaLinkInline> или создать его в редакторе <token>hydra</token>. Скрипт должен быть классом, унаследованным от класса <legacyItalic>BaseAnalyticsStrategy</legacyItalic>. Готовый скрипт необходимо откомпилировать при помощи кнопки <mediaLinkInline>
-<image xlink:href="hydra_analitics_compile"/></mediaLinkInline>. Результат компиляции отображается в окне <legacyBold>Список ошибок</legacyBold>. Для подключения нужных библиотек используется кнопка <mediaLinkInline>
-<image xlink:href="hydra_analitics_references"/></mediaLinkInline>.</para>
+      <para>You can download the ready script using the <mediaLinkInline><image xlink:href="hydra_analitics_folder"/></mediaLinkInline> button or create it in the
+      	<token>hydra</token> editor. The script must be a class inherited from the <legacyItalic>BaseAnalyticsStrategy</legacyItalic> class. The ready script must be
+      	compiled using the <mediaLinkInline><image xlink:href="hydra_analitics_compile"/></mediaLinkInline> button. The compilation result is displayed in the
+      	<legacyBold>Error list</legacyBold> window. To connect the necessary libraries using the <mediaLinkInline><image xlink:href="hydra_analitics_references"/></mediaLinkInline> button.</para>
       <mediaLink>
         <image placement="left" xlink:href="hydra_analitics_main" />
       </mediaLink>
       
      <alert class="note">
-  		<para>В стандартную поставку <token>hydra</token> входят два готовых скрипта: "анализ объема с разбивкой по часам" и "анализ объема с разбивкой по цене".</para>
+  		<para>The <token>hydra</token> standard installation kit includes two ready-made scripts: "the volume analysis broken down by the hours" and "volume analysis
+  		broken down by the price".</para>
 	 </alert>
 
       
