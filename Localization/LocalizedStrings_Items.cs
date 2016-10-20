@@ -43046,5 +43046,25 @@ namespace StockSharp.Localization
 		/// Diagram
 		/// </summary>
 		public static string Diagram => GetString(DiagramKey);
+
+		/// <summary>
+		/// Need to add the option desk panel
+		/// </summary>
+		public const string NeedToAddOptionDeskKey = "NeedToAddOptionDesk";
+
+		/// <summary>
+		/// Need to add the option desk panel
+		/// </summary>
+		public static string NeedToAddOptionDesk => GetString(NeedToAddOptionDeskKey);
+
+		/// <summary>
+		/// Implied volatility marketdepth
+		/// </summary>
+		public const string ImpliedVolatilityMarketDepthKey = "ImpliedVolatilityMarketDepth";
+
+		/// <summary>
+		/// Implied volatility marketdepth
+		/// </summary>
+		public static string ImpliedVolatilityMarketDepth => GetString(ImpliedVolatilityMarketDepthKey);
 	}
 }
