@@ -231,7 +231,7 @@ namespace StockSharp.Algo.Commissions
 		/// Order count.
 		/// </summary>
 		[DisplayNameLoc(LocalizedStrings.Str668Key)]
-		[DescriptionLoc(LocalizedStrings.Str669Key)]
+		[DescriptionLoc(LocalizedStrings.Str957Key)]
 		[CategoryLoc(LocalizedStrings.GeneralKey)]
 		public int Count
 		{

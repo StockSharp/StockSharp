@@ -459,9 +459,9 @@ namespace StockSharp.Algo.Strategies
 			public PnLManagerStrategyRule(Strategy strategy)
 				: this(strategy, v => true)
 			{
-				Name = LocalizedStrings.Str1249;
+				Name = LocalizedStrings.PnLChange;
 			}
-
+			
 			public PnLManagerStrategyRule(Strategy strategy, Func<decimal, bool> changed)
 				: base(strategy)
 			{

@@ -665,7 +665,7 @@ namespace StockSharp.Algo.Risk
 		/// Order count.
 		/// </summary>
 		[DisplayNameLoc(LocalizedStrings.Str878Key)]
-		[DescriptionLoc(LocalizedStrings.Str669Key)]
+		[DescriptionLoc(LocalizedStrings.Str957Key)]
 		[CategoryLoc(LocalizedStrings.GeneralKey)]
 		public int Count
 		{

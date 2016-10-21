@@ -3490,12 +3490,12 @@ namespace StockSharp.Localization
 		/// <summary>
 		/// Number of trades
 		/// </summary>
-		public const string Str323Key = "Str323";
+		public const string NumOfTradesKey = "NumOfTrades";
 
 		/// <summary>
 		/// Number of trades
 		/// </summary>
-		public static string Str323 => GetString(Str323Key);
+		public static string NumOfTrades => GetString(NumOfTradesKey);
 
 		/// <summary>
 		/// Last trade ID
@@ -6286,16 +6286,6 @@ namespace StockSharp.Localization
 		/// Orders
 		/// </summary>
 		public static string Str668 => GetString(Str668Key);
-
-		/// <summary>
-		/// Number of orders.
-		/// </summary>
-		public const string Str669Key = "Str669";
-
-		/// <summary>
-		/// Number of orders.
-		/// </summary>
-		public static string Str669 => GetString(Str669Key);
 
 		/// <summary>
 		/// Trade (quantity)
@@ -11920,12 +11910,12 @@ namespace StockSharp.Localization
 		/// <summary>
 		/// P&amp;L change
 		/// </summary>
-		public const string Str1249Key = "Str1249";
+		public const string PnLChangeKey = "PnLChange";
 
 		/// <summary>
 		/// P&amp;L change
 		/// </summary>
-		public static string Str1249 => GetString(Str1249Key);
+		public static string PnLChange => GetString(PnLChangeKey);
 
 		/// <summary>
 		/// Position change
@@ -36820,12 +36810,12 @@ namespace StockSharp.Localization
 		/// <summary>
 		/// Order count
 		/// </summary>
-		public const string XamlStr240Key = "XamlStr240";
+		public const string OrderCountKey = "OrderCount";
 
 		/// <summary>
 		/// Order count
 		/// </summary>
-		public static string XamlStr240 => GetString(XamlStr240Key);
+		public static string OrderCount => GetString(OrderCountKey);
 
 		/// <summary>
 		/// Order count per sec.
@@ -43066,35 +43056,5 @@ namespace StockSharp.Localization
 		/// Implied volatility marketdepth
 		/// </summary>
 		public static string ImpliedVolatilityMarketDepth => GetString(ImpliedVolatilityMarketDepthKey);
-
-		/// <summary>
-		/// Number of orders
-		/// </summary>
-		public const string OrdersCountKey = "OrdersCount";
-
-		/// <summary>
-		/// Number of orders
-		/// </summary>
-		public static string OrdersCount => GetString(OrdersCountKey);
-
-		/// <summary>
-		/// Number of trades
-		/// </summary>
-		public const string TradesCountKey = "TradesCount";
-
-		/// <summary>
-		/// Number of trades
-		/// </summary>
-		public static string TradesCount => GetString(TradesCountKey);
-
-		/// <summary>
-		/// P&L change
-		/// </summary>
-		public const string PnLChangeKey = "PnLChange";
-
-		/// <summary>
-		/// P&L change
-		/// </summary>
-		public static string PnLChange => GetString(PnLChangeKey);
 	}
 }

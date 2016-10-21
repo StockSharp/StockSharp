@@ -23,7 +23,7 @@
 		<Label><TextBlock Text="{x:Static loc:LocalizedStrings.XamlStr242}"/></Label>
 		<TextBlock x:Name="OperationCount" Grid.Column="1" Text="0" TextAlignment="Right" VerticalAlignment="Center" />
 
-		<Label Grid.Column="2"><TextBlock Text="{x:Static loc:LocalizedStrings.XamlStr240}"/></Label>
+		<Label Grid.Column="2"><TextBlock Text="{x:Static loc:LocalizedStrings.OrderCount}"/></Label>
 		<TextBlock x:Name="OrderCount" Grid.Column="3" Text="0" TextAlignment="Right" VerticalAlignment="Center" />
 
 		<Label Grid.Column="4"><TextBlock Text="{x:Static loc:LocalizedStrings.XamlStr245}"/></Label>

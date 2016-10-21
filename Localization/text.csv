@@ -345,7 +345,7 @@ Str319;Bid (max);Бид (макс)
 Str320;Ask (min);Оффер (мин)
 Str321;Yield;Доходность
 Str322;Time of last trade;Время последней сделки
-Str323;Number of trades;Количество сделок
+NumOfTrades;Number of trades;Количество сделок
 Str325;Last trade ID;Идентификатор последней сделки
 Str326;Best bid time;Время лучшего бида
 Str327;Best ask time;Время лучшего офера
@@ -630,7 +630,6 @@ Str665;Trade volume commission;Комиссия за объем в сделке
 Str666;Orders (quantity);Заявки (количество)
 Str667;Number of orders commission;Комиссия за количество заявок
 Str668;Orders;Заявок
-Str669;Number of orders.;Количество заявок.
 Str670;Trade (quantity);Сделка (количество)
 Str671;Number of trades commission;Комиссия за количество сделок
 Str672;Trade (price);Сделка (цена)
@@ -1192,7 +1191,7 @@ Str1245;Shift in position;Сдвиг в позиции
 Str1246;Shift in position for underlying asset, allowing not to hedge part of the options position.;Сдвиг в позиции по базовому активу, позволяющая не хеджировать часть опционной позиции.
 Str1247Params;Delta total {0}, Futures position {1}, Directional position {2}, Difference in position {3}.;Дельта суммарная {0}, Фьючерсная позиция {1}, Направленная позиция {2}, Разница в позиции {3}.
 Str1248;Information about both take-profit and stop-loss is missing.;Одновременно отсутствует информация о тейк-профит и стол-лоссе.
-Str1249;P&L change;Изменение П/У
+PnLChange;P&L change;Изменение П/У
 Str1250;Position change;Изменение позиции
 Str1251;New trades of a strategy;Новые сделки стратегии
 Str1252;New strategy order;Новая заявка стратегии
@@ -3688,7 +3687,7 @@ XamlStr233;Category;Категория
 XamlStr234;Key:;Ключ:
 XamlStr236;Code IB:;Код IB:
 XamlStr239;Bid count;Кол-во бидов
-XamlStr240;Order count;Кол-во заявок
+OrderCount;Order count;Кол-во заявок
 XamlStr241;Order count per sec.;Кол-во заявок в сек.
 XamlStr242;Log count;Кол-во операций
 XamlStr243;Log count per sec.;Кол-во операций в сек.
@@ -4341,9 +4340,6 @@ Math;Math;Математика
 Diagram;Diagram;Схема
 NeedToAddOptionDesk;Need to add the option desk panel;Необходимо добавить панель опицонный деск
 ImpliedVolatilityMarketDepth;Implied volatility marketdepth;Стакан подразумеваемой волатильности
-OrdersCount;Number of orders;Количество заявок
-TradesCount;Number of trades;Количество сделок
-PnLChange;P&L change;Изменение П/У
 DocStr0;Button activation alert settings;Кнопка активации настроек сигнала
 DocStr1;Initializes a new instance of the {0};Создать {0}
 DocStr2;Load settings;Загрузить настройки
