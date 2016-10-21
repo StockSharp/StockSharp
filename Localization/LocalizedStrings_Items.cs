@@ -43066,5 +43066,35 @@ namespace StockSharp.Localization
 		/// Implied volatility marketdepth
 		/// </summary>
 		public static string ImpliedVolatilityMarketDepth => GetString(ImpliedVolatilityMarketDepthKey);
+
+		/// <summary>
+		/// Number of orders
+		/// </summary>
+		public const string OrdersCountKey = "OrdersCount";
+
+		/// <summary>
+		/// Number of orders
+		/// </summary>
+		public static string OrdersCount => GetString(OrdersCountKey);
+
+		/// <summary>
+		/// Number of trades
+		/// </summary>
+		public const string TradesCountKey = "TradesCount";
+
+		/// <summary>
+		/// Number of trades
+		/// </summary>
+		public static string TradesCount => GetString(TradesCountKey);
+
+		/// <summary>
+		/// P&L change
+		/// </summary>
+		public const string PnLChangeKey = "PnLChange";
+
+		/// <summary>
+		/// P&L change
+		/// </summary>
+		public static string PnLChange => GetString(PnLChangeKey);
 	}
 }

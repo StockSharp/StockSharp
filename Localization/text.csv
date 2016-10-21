@@ -4341,6 +4341,9 @@ Math;Math;Математика
 Diagram;Diagram;Схема
 NeedToAddOptionDesk;Need to add the option desk panel;Необходимо добавить панель опицонный деск
 ImpliedVolatilityMarketDepth;Implied volatility marketdepth;Стакан подразумеваемой волатильности
+OrdersCount;Number of orders;Количество заявок
+TradesCount;Number of trades;Количество сделок
+PnLChange;P&L change;Изменение П/У
 DocStr0;Button activation alert settings;Кнопка активации настроек сигнала
 DocStr1;Initializes a new instance of the {0};Создать {0}
 DocStr2;Load settings;Загрузить настройки
