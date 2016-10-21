@@ -13439,8 +13439,8 @@ DocStr9264;Stop-order registration error event;Событие ошибки ре�
 DocStr9265;Stop-order cancellation error event;Событие ошибки отмены стоп-заявки
 DocStr9266;To find instruments that match the filter {0};Найти инструменты, соотвествующие фильтру {0}
 DocStr9267;This predicate is true when one can call {0};This predicate is true when one can call {0}
-DocStr9268;Restore the state of some models to before the current state;Restore the state of some models to before the current state
-DocStr9269;Restore the state of some models to after the current state;Restore the state of some models to after the current state
+DocStr9268;Restore the state of some models to before the current state;Восстановить состояние до текущего момента
+DocStr9269;Restore the state of some models to after the current state;Восстановить состояние после текущего момента
 DocStr9270;Is composition contains element;Пустой ли сложный элемент
 DocStr9271;Black-Scholes "greeks";"Греки" модели Black-Scholes
 DocStr9272;The Black-Scholes "Greeks" evaluation element;Элемент вычисления "греков" по формуле Black-Scholes
@@ -13448,3 +13448,9 @@ DocStr9273;The Level1 element;Элемент Level1
 DocStr9274;Sparsed market depth element;Элемент, делающий стакан разреженным (пустые строчки цен)
 DocStr9275;Grouped market depth element;Элемент, группирующий стакан
 DocStr9276;The element which is using compiled strategy, based on S#.API;Элемент, использующий скомпилированную сборку со стратегией, написанной на S#.API
+DocStr9277;The command for the applying changes;Команда для применения изменений
+DocStr9278;The command for the adding references;Команда для добавления ссылок
+DocStr9279;The command for the removing references;Команда для удаления ссылок
+DocStr9280;The diagram element socket;Сокет элемента диаграммы
+DocStr9281;The source diagram element socket;Сокет элемента исходной диаграммы
+DocStr9282;Implied volatility market depth element;Элемент корвертации стакана в IV
