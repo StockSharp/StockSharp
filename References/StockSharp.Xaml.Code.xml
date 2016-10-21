@@ -74,6 +74,21 @@
             CodeReferencesWindow
             </summary>
         </member>
+        <member name="F:StockSharp.Xaml.Code.CodeReferencesWindow.OkCommand">
+            <summary>
+            The command for the applying changes.
+            </summary>
+        </member>
+        <member name="F:StockSharp.Xaml.Code.CodeReferencesWindow.AddCommand">
+            <summary>
+            The command for the adding references.
+            </summary>
+        </member>
+        <member name="F:StockSharp.Xaml.Code.CodeReferencesWindow.RemoveCommand">
+            <summary>
+            The command for the removing references.
+            </summary>
+        </member>
         <member name="M:StockSharp.Xaml.Code.CodeReferencesWindow.#ctor">
             <summary>
             Initializes a new instance of the <see cref="T:StockSharp.Xaml.Code.CodeReferencesWindow"/>.
