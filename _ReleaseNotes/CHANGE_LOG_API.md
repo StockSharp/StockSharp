@@ -2,6 +2,7 @@ StockSharp API Change log
 ========================
 ###current:
 * (feature) Rithmic. v9.5.0.0
+* (bug) Transaq. UseCredit fixes.
 
 ###v4.3.17:
 * (feature) Quik lua. Duration, IssueSize, BuyBackDate, BuyBackPrice.
