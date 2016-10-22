@@ -12,7 +12,6 @@
 	using Ecng.Common;
 	using Ecng.Xaml;
 	using Ecng.Configuration;
-	using Ecng.ComponentModel;
 
 	using StockSharp.Algo.Candles;
 	using StockSharp.Algo.Storages;

@@ -56,7 +56,7 @@ namespace StockSharp.Algo.Indicators
 			set
 			{
 				_sqrtPeriod = value;
-				_wmaResult.Length = value == 0 ? (int)(Math.Sqrt(Length)) : value;
+				_wmaResult.Length = value == 0 ? (int)Math.Sqrt(Length) : value;
 			}
 		}
 
@@ -74,7 +74,7 @@ namespace StockSharp.Algo.Indicators
 
 			_wmaSlow.Length = Length;
 			_wmaFast.Length = Length / 2;
-			_wmaResult.Length = SqrtPeriod == 0 ? (int)(Math.Sqrt(Length)) : SqrtPeriod;
+			_wmaResult.Length = SqrtPeriod == 0 ? (int)Math.Sqrt(Length) : SqrtPeriod;
 		}
 
 		/// <summary>

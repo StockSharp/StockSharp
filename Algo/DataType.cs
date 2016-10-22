@@ -70,7 +70,7 @@ namespace StockSharp.Algo
 			var h1 = MessageType?.GetHashCode() ?? 0;
 			var h2 = Arg?.GetHashCode() ?? 0;
 
-			return (((h1 << 5) + h1) ^ h2);
+			return ((h1 << 5) + h1) ^ h2;
 		}
 
 		/// <summary>

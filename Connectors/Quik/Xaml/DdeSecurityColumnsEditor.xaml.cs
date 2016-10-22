@@ -17,7 +17,6 @@ namespace StockSharp.Quik.Xaml
 {
 	using System.Collections.Generic;
 	using System.Windows;
-	using System.Windows.Data;
 	
 	using Ecng.Common;
 	
