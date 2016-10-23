@@ -14560,12 +14560,12 @@ namespace StockSharp.Localization
 		/// <summary>
 		/// Options
 		/// </summary>
-		public const string Str1529Key = "Str1529";
+		public const string OptionsKey = "Options";
 
 		/// <summary>
 		/// Options
 		/// </summary>
-		public static string Str1529 => GetString(Str1529Key);
+		public static string Options => GetString(OptionsKey);
 
 		/// <summary>
 		/// AND Call and Put not found.
@@ -30388,24 +30388,24 @@ namespace StockSharp.Localization
 		public static string Str3264Params => GetString(Str3264ParamsKey);
 
 		/// <summary>
-		/// Options board
+		/// Option desk
 		/// </summary>
-		public const string Str3265Key = "Str3265";
+		public const string OptionDeskKey = "OptionDesk";
 
 		/// <summary>
-		/// Options board
+		/// Option desk
 		/// </summary>
-		public static string Str3265 => GetString(Str3265Key);
+		public static string OptionDesk => GetString(OptionDeskKey);
 
 		/// <summary>
-		/// Panel for viewing options board.
+		/// Panel for viewing option desk.
 		/// </summary>
-		public const string Str3266Key = "Str3266";
+		public const string OptionDeskPanelKey = "OptionDeskPanel";
 
 		/// <summary>
-		/// Panel for viewing options board.
+		/// Panel for viewing option desk.
 		/// </summary>
-		public static string Str3266 => GetString(Str3266Key);
+		public static string OptionDeskPanel => GetString(OptionDeskPanelKey);
 
 		/// <summary>
 		/// Panel for viewing and managing orders.
@@ -43048,13 +43048,43 @@ namespace StockSharp.Localization
 		public static string NeedToAddOptionDesk => GetString(NeedToAddOptionDeskKey);
 
 		/// <summary>
-		/// Implied volatility marketdepth
+		/// Implied volatility order book
 		/// </summary>
 		public const string ImpliedVolatilityMarketDepthKey = "ImpliedVolatilityMarketDepth";
 
 		/// <summary>
-		/// Implied volatility marketdepth
+		/// Implied volatility order book
 		/// </summary>
 		public static string ImpliedVolatilityMarketDepth => GetString(ImpliedVolatilityMarketDepthKey);
+
+		/// <summary>
+		/// Offet to the left (less) from central strike. If not set, all less then central strikes will be collected.
+		/// </summary>
+		public const string StrikeLeftOffsetKey = "StrikeLeftOffset";
+
+		/// <summary>
+		/// Offet to the left (less) from central strike. If not set, all less then central strikes will be collected.
+		/// </summary>
+		public static string StrikeLeftOffset => GetString(StrikeLeftOffsetKey);
+
+		/// <summary>
+		/// Offet to the right (more) from central strike. If not set, all more then central strikes will be collected.
+		/// </summary>
+		public const string StrikeRightOffsetKey = "StrikeRightOffset";
+
+		/// <summary>
+		/// Offet to the right (more) from central strike. If not set, all more then central strikes will be collected.
+		/// </summary>
+		public static string StrikeRightOffset => GetString(StrikeRightOffsetKey);
+
+		/// <summary>
+		/// Black-Scholes
+		/// </summary>
+		public const string BlackScholesKey = "BlackScholes";
+
+		/// <summary>
+		/// Black-Scholes
+		/// </summary>
+		public static string BlackScholes => GetString(BlackScholesKey);
 	}
 }

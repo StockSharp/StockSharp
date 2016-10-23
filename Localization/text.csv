@@ -1456,7 +1456,7 @@ Str1525;Pair options;Пара опционов
 Str1526;Information about the option.;Информация об опционе.
 Str1527;Profitability of an option contract;Прибыльность опциона
 Str1528;Profitability of an option contract.;Прибыльность опциона.
-Str1529;Options;Опционы
+Options;Options;Опционы
 Str1530;AND Call and Put not found.;И Call и Put не найдены.
 Str1531;Option volatility (implied).;Волатильность (подразумеваемая) опциона.
 Str1532;Option volatility (historic).;Волатильность (историческая) опциона.
@@ -3044,8 +3044,8 @@ PnLRealized;P&L (realized);П/У (реализ.)
 StorageSettings;Storage settings.;Настройки хранилища.
 Str3263;Selected directory does not exist. Continue?;Выбранная директория не существует. Продолжить?
 Str3264Params;{0} new securities added.;Добавлено {0} новых инструментов.
-Str3265;Options board;Доска опционов
-Str3266;Panel for viewing options board.;Панель для просмотра доски опционов.
+OptionDesk;Option desk;Доска опционов
+OptionDeskPanel;Panel for viewing option desk.;Панель для просмотра доски опционов.
 Str3268;Panel for viewing and managing orders.;Панель для просмотра и управления заявками.
 Str3269;Trading portfolios (checking account balance, open positions and etc.).;Торговых портфелей (просмотр остатков на счету, открытых позиций и т.д.).
 Str3270;Panel for viewing parameters (securities, portfolios, trades etc.).;Панель для просмотра параметров (инструментов, портфелей, сделок и т.д.).
@@ -4339,7 +4339,10 @@ NeedToAddOptionPositionChart;Need to add the option positions chart panel;Нео
 Math;Math;Математика
 Diagram;Diagram;Схема
 NeedToAddOptionDesk;Need to add the option desk panel;Необходимо добавить панель опицонный деск
-ImpliedVolatilityMarketDepth;Implied volatility marketdepth;Стакан подразумеваемой волатильности
+ImpliedVolatilityMarketDepth;Implied volatility order book;Стакан подразумеваемой волатильности
+StrikeLeftOffset;Offet to the left (less) from central strike. If not set, all less then central strikes will be collected.;Сдвид влево (меньше) от центрального страйка. Если не установлено, то все страйки с меньшим значением центрального будут использованы.
+StrikeRightOffset;Offet to the right (more) from central strike. If not set, all more then central strikes will be collected.;Сдвид вправо (больше) от центрального страйка. Если не установлено, то все страйки с большим значением центрального будут использованы.
+BlackScholes;Black-Scholes;Блэк-Шолз
 DocStr0;Button activation alert settings;Кнопка активации настроек сигнала
 DocStr1;Initializes a new instance of the {0};Создать {0}
 DocStr2;Load settings;Загрузить настройки
