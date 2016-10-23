@@ -64,7 +64,7 @@ namespace StockSharp.Algo.Derivatives
 		}
 
 		/// <summary>
-		/// The interface describing the internal models collection <see cref="BasketBlackScholes.InnerModels"/>.
+		/// The interface describing the internal models collection <see cref="InnerModels"/>.
 		/// </summary>
 		public interface IInnerModelList : ISynchronizedCollection<InnerModel>
 		{
@@ -184,7 +184,7 @@ namespace StockSharp.Algo.Derivatives
 
 		private decimal GetAssetPosition()
 		{
-			return (UnderlyingAssetPosition != null ? UnderlyingAssetPosition.Position : 0);
+			return UnderlyingAssetPosition?.Position ?? 0;
 		}
 
 		/// <summary>
