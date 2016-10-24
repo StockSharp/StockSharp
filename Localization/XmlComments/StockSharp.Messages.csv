@@ -1004,7 +1004,7 @@ F:StockSharp.Messages.Level1Fields.HighBidPrice/summary;Str594
 F:StockSharp.Messages.Level1Fields.LowAskPrice/summary;Str595
 F:StockSharp.Messages.Level1Fields.Yield/summary;Str321
 F:StockSharp.Messages.Level1Fields.LastTradeTime/summary;Str322
-F:StockSharp.Messages.Level1Fields.TradesCount/summary;Str323
+F:StockSharp.Messages.Level1Fields.TradesCount/summary;NumOfTrades
 F:StockSharp.Messages.Level1Fields.VWAP/summary;DocStr7578
 F:StockSharp.Messages.Level1Fields.LastTradeId/summary;Str325
 F:StockSharp.Messages.Level1Fields.BestBidTime/summary;Str326

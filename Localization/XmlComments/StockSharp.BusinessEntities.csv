@@ -765,7 +765,7 @@ P:StockSharp.BusinessEntities.Security.BidsVolume/summary;BidsVolume
 P:StockSharp.BusinessEntities.Security.BidsCount/summary;BidsCount
 P:StockSharp.BusinessEntities.Security.AsksVolume/summary;AsksVolume
 P:StockSharp.BusinessEntities.Security.AsksCount/summary;AsksCount
-P:StockSharp.BusinessEntities.Security.TradesCount/summary;Str323
+P:StockSharp.BusinessEntities.Security.TradesCount/summary;NumOfTrades
 P:StockSharp.BusinessEntities.Security.HighBidPrice/summary;Str594
 P:StockSharp.BusinessEntities.Security.LowAskPrice/summary;Str595
 P:StockSharp.BusinessEntities.Security.Yield/summary;Str321

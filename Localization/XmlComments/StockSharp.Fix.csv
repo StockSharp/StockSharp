@@ -1281,7 +1281,7 @@ P:StockSharp.Fix.Native.MDEntry.TickDirection/summary;DocStr3286
 P:StockSharp.Fix.Native.MDEntry.SecurityId/summary;SecurityId
 P:StockSharp.Fix.Native.MDEntry.OtherValue/summary;DocStr3287
 P:StockSharp.Fix.Native.MDEntry.Currency/summary;Currency
-P:StockSharp.Fix.Native.MDEntry.NumberOfOrders/summary;Str669
+P:StockSharp.Fix.Native.MDEntry.NumberOfOrders/summary;DocStr9283
 T:StockSharp.Fix.Native.TextFixReader/summary;DocStr3331
 M:StockSharp.Fix.Native.TextFixReader.#ctor(System.IO.Stream,System.Text.Encoding)/summary;DocStr1
 M:StockSharp.Fix.Native.TextFixReader.#ctor(System.IO.Stream,System.Text.Encoding)/param/stream;DocStr3198

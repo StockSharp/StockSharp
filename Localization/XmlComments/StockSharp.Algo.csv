@@ -70,7 +70,7 @@ M:StockSharp.Algo.Commissions.CommissionPerOrderCountRule.Save(Ecng.Serializatio
 M:StockSharp.Algo.Commissions.CommissionPerOrderCountRule.Load(Ecng.Serialization.SettingsStorage)/summary;DocStr2
 M:StockSharp.Algo.Commissions.CommissionPerOrderCountRule.Load(Ecng.Serialization.SettingsStorage)/param/storage;Str1405
 T:StockSharp.Algo.Commissions.CommissionPerTradeCountRule/summary;Str671
-P:StockSharp.Algo.Commissions.CommissionPerTradeCountRule.Count/summary;Str323
+P:StockSharp.Algo.Commissions.CommissionPerTradeCountRule.Count/summary;NumOfTrades
 M:StockSharp.Algo.Commissions.CommissionPerTradeCountRule.Reset/summary;DocStr748
 M:StockSharp.Algo.Commissions.CommissionPerTradeCountRule.OnProcessExecution(StockSharp.Messages.ExecutionMessage)/summary;DocStr749
 M:StockSharp.Algo.Commissions.CommissionPerTradeCountRule.OnProcessExecution(StockSharp.Messages.ExecutionMessage)/param/message;DocStr750
@@ -1587,7 +1587,7 @@ M:StockSharp.Algo.Risk.RiskTradeVolumeRule.Save(Ecng.Serialization.SettingsStora
 M:StockSharp.Algo.Risk.RiskTradeVolumeRule.Load(Ecng.Serialization.SettingsStorage)/summary;DocStr2
 M:StockSharp.Algo.Risk.RiskTradeVolumeRule.Load(Ecng.Serialization.SettingsStorage)/param/storage;Str1405
 T:StockSharp.Algo.Risk.RiskTradeFreqRule/summary;Str884
-P:StockSharp.Algo.Risk.RiskTradeFreqRule.Count/summary;Str323
+P:StockSharp.Algo.Risk.RiskTradeFreqRule.Count/summary;NumOfTrades
 P:StockSharp.Algo.Risk.RiskTradeFreqRule.Interval/summary;Str885
 M:StockSharp.Algo.Risk.RiskTradeFreqRule.Reset/summary;DocStr748
 M:StockSharp.Algo.Risk.RiskTradeFreqRule.ProcessMessage(StockSharp.Messages.Message)/summary;DocStr1252

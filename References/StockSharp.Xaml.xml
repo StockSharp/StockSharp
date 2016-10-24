@@ -1591,7 +1591,7 @@
     </member>
     <member name="T:StockSharp.Xaml.OptionDesk">
       <summary>
-            Options board.
+            Option desk.
             </summary>
       <summary>
             OptionDesk

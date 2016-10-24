@@ -13456,3 +13456,9 @@ DocStr9279;The command for the removing references;Команда для уда�
 DocStr9280;The diagram element socket;Сокет элемента диаграммы
 DocStr9281;The source diagram element socket;Сокет элемента исходной диаграммы
 DocStr9282;Implied volatility market depth element;Элемент корвертации стакана в IV
+DocStr9283;Number of orders;Количество заявок
+DocStr9284;Index in sockets list;Индекс в списке сокетов
+DocStr9285;Options hedging diagram element;Элемент диаграммы, хэджирующий опционы
+DocStr9286;Options quoting types;Типы котирования опционов
+DocStr9287;Options quoting diagram element;Элемент диаграммы, котирующий опционы
+DocStr9288;Filtering derivatives by underlying asset diagram element;Элемент диаграммы, фильтрующий опционы по базовому активу
