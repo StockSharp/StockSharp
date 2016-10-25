@@ -2,71 +2,69 @@
 <topic id="a0a4c8df-2bba-4e1e-8ba9-e1fa98728f92" revisionNumber="0">
   <developerWalkthroughDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     <summary>
-      <para>Данный топик предназначен для трейдеров, которые разрабатывают графические торговые программы с
-	  помощью <token>stocksharp</token>, но недостаточно знакомы с азами программирования графического интерфейса под <token>dotnet</token>.</para>
+      <para>This topic is designed for traders who develop graphical trading programs via <token>stocksharp</token>, but not enough familiar with the basics of GUI
+      programming in <token>dotnet</token>.</para>
     </summary>
 
     <introduction>
-      <para>В <token>dotnet</token> существует специальная технология для построения графического интерфейса – <token>wpf</token> (до этого была
-	  технология <token>winforms</token>, которая значительно уступает по графическим возможностям). В этой технологии для создания графических элементов 
-	  используется специальный декларативынй язык <externalLink>
+      <para>There is a special technology <token>wpf</token> for the GUI building in <token>dotnet</token> (before there was the <token>winforms</token> technology that
+      significantly was inferior by the graphics capabilities). To create graphical elements a special declarative language <externalLink>
 		<linkText>XAML</linkText>
 		<linkAlternateText>eXtensible Application Markup Language</linkAlternateText>
-		<linkUri>https://msdn.microsoft.com/ru-ru/library/hh700354.aspx</linkUri>
+		<linkUri>https://msdn.microsoft.com/library/hh700354.aspx</linkUri>
 		<linkTarget>_blank</linkTarget>
-		</externalLink>.</para>
-	  <para>Основное ограничение визуального API под Windows состоит в том, что нельзя обращаться из другого потока к элементам окна. Это связанно с ограничениями архитектуры Windows (подробнее описано здесь
-	  <token>messagepump</token>). Реализации шлюза <codeEntityReference>T:StockSharp.BusinessEntities.IConnector</codeEntityReference> в целях повышения
-	  производительности работают в многопоточном режиме. Поэтому, подписываясь на событие, например, 
+		</externalLink> is used in this technology.</para>
+	  <para>The main limitation of the Windows visual API is that it is impossible to access to the window elements from another thread. This is due to the Windows
+	  architectural limitations (described in more detail here <token>messagepump</token>). The <codeEntityReference>T:StockSharp.BusinessEntities.IConnector</codeEntityReference>
+	  interface implementations work in multithreaded mode to improve productivity. Therefore, by subscribing to an event, for example,
 	  <codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.NewSecurities</codeEntityReference>,
-	  нельзя напрямую выводить полученные данные в окно пользователя. Для этого нужно провести операцию синхронизации при помощи специального объекта
+	  it is impossible to directly display the data in a user window. To do this, in is necessary to perform the synchronizing operation via the special 
 	  <externalLink>
 		<linkText>Dispatcher</linkText>
 		<linkAlternateText>Dispatcher</linkAlternateText>
-		<linkUri>https://msdn.microsoft.com/ru-ru/library/system.windows.threading.dispatcher(v=vs.110).aspx</linkUri>
+		<linkUri>https://msdn.microsoft.com/library/system.windows.threading.dispatcher.aspx</linkUri>
 		<linkTarget>_blank</linkTarget>
-		</externalLink>, который управляет очередью рабочих элементов потока. </para>
-	  <para> Вот простой пример, как это делается:</para>
+		</externalLink> object, which controls the queue of the thread working elements.</para>
+	  <para>Here is a simple example of how this is done:</para>
 	  <code language="C#">
-// обязательно нужно вызвать метод BeginInvoke,
-// и уже в его обработчике можно обратиться к элементу окна 'Security' (это выпадающий список)
+// the BeginInvoke method must be invoked for access to any UI compenents in market-data handles
 _trader.NewSecurities += securities => this.Dispatcher.BeginInvoke((Action)(() => this.Security.ItemsSource = _trader.Securities));</code>
 	  <para>
-		<token>stocksharp</token> уже содержит специальные методы, которые скрывают использование Dispatcher и упрощают написание кода:
+		<token>stocksharp</token> already has special methods that hide the Dispatcher use and simplify coding:
 	  </para>
-	  <code language="C#">// обязательно нужно вызвать метод GuiSync, прежде чем обратиться к элементу окна 'Security' (это выпадающий список)
+	  <code language="C#">// the same as a prev example but uses short notation
 _trader.NewSecurities += securities => this.GuiSync(() => this.Security.ItemsSource = _trader.Securities);</code>
 
 <section address="optionalAddress">
-  <title>Графические компоненты S#</title>
+  <title>Graphical components of S#</title>
   <content>
-    <para>В состав <token>stocksharp</token> входит большое количество собственных графических компонент, а так же бесплатная библиотека для Wpf
+    <para><token>stocksharp</token> includes a large number of its own graphical components, as well as a free library for Wpf 
     <externalLink>
 	<linkText>Xceed.Wpf.Toolkit</linkText>
 <linkAlternateText>Optional alternate text</linkAlternateText>
 <linkUri>http://wpftoolkit.codeplex.com/</linkUri>
 <linkTarget>_blank</linkTarget>
-</externalLink>. Собственные графические компоненты размещены в пространствах имен 
+</externalLink>. Its own graphical components are placed in the 
 <codeEntityReference qualifyHint="true">N:StockSharp.Xaml</codeEntityReference>, <codeEntityReference qualifyHint="true">N:StockSharp.Xaml.Charting</codeEntityReference>
-и <codeEntityReference qualifyHint="true">N:StockSharp.Xaml.Diagram</codeEntityReference>. Некоторые специфические компоненты находятся в пространствах имен коннекторов,
- как например, комбинированный список <codeEntityReference qualifyHint="false">T:StockSharp.SmartCom.Xaml.SmartComAddressComboBox</codeEntityReference> для выбора адреса сервера
- <token>smartcom</token>.
+and <codeEntityReference qualifyHint="true">N:StockSharp.Xaml.Diagram</codeEntityReference> namespaces. Some specific components are in the connectors namespaces, for
+ example the combined list <codeEntityReference qualifyHint="false">T:StockSharp.OpenECry.Xaml.OpenECryAddressComboBox</codeEntityReference> for the <token>openecry</token>
+ server address selecting.
  </para>
 <para>
- <token>stocksharp</token> имеет различные контролы для:
+ <token>stocksharp</token> has a variety of controls for:
 </para>
 
 <list class="bullet">
-  <listItem><para>поиска и выбора данных (инструментов, портфелей, адресов); </para></listItem>
-  <listItem><para>создания заявок; </para></listItem>
-  <listItem><para>отображения биржевой и другой информации (сделки, заявки, транзакции, стаканы, логи и т.д.);</para></listItem>
-  <listItem><para>построения графиков.</para></listItem>
+  <listItem><para>search and select data (instruments, portfolios, addresses);</para></listItem>
+  <listItem><para>the orders creation;</para></listItem>
+  <listItem><para>display exchange and other information (trades, orders, transactions, order books, logs, etc.);</para></listItem>
+  <listItem><para>charts plotting.</para></listItem>
 </list>
 
 
 <para>
-	 Для доступа к графическим контролам <token>stocksharp</token> в коде XAML необходимо определить псевдонимы для соотвествующих пространств имен и использовать эти
-	 псевдонимы в коде XAML. Как это сделать показано в следующем примере:
+	 To access the <token>stocksharp</token> graphical controls in the XAML code it is necessary to define the aliases for the corresponding namespace and to use these
+	 aliases in the XAML code. How to do this is shown in the following example:
 </para>
 	  <code language="XAML">
 	  <![CDATA[

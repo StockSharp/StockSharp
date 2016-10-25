@@ -3,13 +3,13 @@
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     <introduction>
 		<para>
-           Сообщение несет информацию о рыночных данных, транзакциях или команде. Ниже приведен список основных сообщений, которые используются в <token>stocksharpapi</token>.
+           Message contains information on market data, transactions or command. Below is a list of key messages, used in the <token>stocksharpapi</token>.
 		</para>
 	<table>
   		<tableHeader>
     	<row>
-      		<entry><para>Сообщение</para></entry>
-      		<entry><para>Описание</para></entry>
+      		<entry><para>Message</para></entry>
+      		<entry><para>Description</para></entry>
     	</row>
   		</tableHeader>
   		<row>
@@ -17,8 +17,8 @@
     	<para><codeEntityReference>T:StockSharp.Messages.Message</codeEntityReference></para>
    		</entry>
     	<entry>
-    		<para>Абстрактный класс сообщения, от которого наследуют классы других сообщений. Содержит информацию о времени, типе 
-    		<codeEntityReference>T:StockSharp.Messages.MessageTypes</codeEntityReference> и адаптере, который создал сообщение.</para>
+    		<para>Abstract class of messages, from which other messages classes are inheriting. Contains information on time, type  
+    		<codeEntityReference>T:StockSharp.Messages.MessageTypes</codeEntityReference> and local time, when has created the message.</para>
     	</entry>
   		</row>
 		<row>
@@ -26,20 +26,20 @@
     		<para><codeEntityReference>T:StockSharp.Messages.BoardMessage</codeEntityReference></para>
    		</entry>
     	<entry>
-    		<para> Содержит информацию об электронной торговой площадке.</para>
+    		<para>Contains information on electronic trade board.</para>
     	</entry>
   		</row>
-  		  		<row>
+  		<row>
     	<entry>
     		<para><codeEntityReference>T:StockSharp.Messages.CandleMessage</codeEntityReference></para>
    		</entry>
     	<entry>
-    		<para>Абстрактный класс сообщения, который содержит общую информацию о свече. От этого класса наследуют классы сообщений для конкретных типов
-    		свечей: <codeEntityReference>T:StockSharp.Messages.TimeFrameCandleMessage</codeEntityReference>, 
+    		<para>Abstract class of message, containing general information on candle. Message classes for specific candle types are inheriting from this class:
+    		<codeEntityReference>T:StockSharp.Messages.TimeFrameCandleMessage</codeEntityReference>,
     		<codeEntityReference>T:StockSharp.Messages.TickCandleMessage</codeEntityReference>, 
     		<codeEntityReference>T:StockSharp.Messages.VolumeCandleMessage</codeEntityReference>, 
     		<codeEntityReference>T:StockSharp.Messages.RangeCandleMessage</codeEntityReference>, 
-    		<codeEntityReference>T:StockSharp.Messages.PnFCandleMessage</codeEntityReference> и 
+    		<codeEntityReference>T:StockSharp.Messages.PnFCandleMessage</codeEntityReference> and
     		<codeEntityReference>T:StockSharp.Messages.RenkoCandleMessage</codeEntityReference>.
     		</para>
     	</entry>
@@ -49,7 +49,7 @@
     		<para><codeEntityReference>T:StockSharp.Messages.ConnectMessage</codeEntityReference></para>
    		</entry>
     	<entry>
-    		<para>Используется в качестве команды установления соединения, а также для входящего сообщения об удачном соединении или ошибке соединения.</para>
+    		<para>Used as command for establishing connection, as well as for incoming message on successful connection or connection error.</para>
     	</entry>
   		</row>
   		<row>
@@ -57,7 +57,7 @@
     		<para><codeEntityReference>T:StockSharp.Messages.DisconnectMessage</codeEntityReference></para>
    		</entry>
     	<entry>
-    		<para>Используется в качестве команды разрыва соединения, а также для входящего сообщения о разрыве соединения.</para>
+    		<para>Used as command for disconnection, as well as for outgoing message on successful disconnection.</para>
     	</entry>
   		</row>
   		<row>
@@ -65,7 +65,7 @@
     		<para><codeEntityReference>T:StockSharp.Messages.ErrorMessage</codeEntityReference></para>
    		</entry>
     	<entry>
-    		<para>Сообщение об ошибке.</para>
+    		<para>Error message.</para>
     	</entry>
   		</row>
   		<row>
@@ -73,7 +73,7 @@
     		<para><codeEntityReference>T:StockSharp.Messages.ExecutionMessage</codeEntityReference></para>
    		</entry>
     	<entry>
-    		<para>Описание см. ниже.</para>
+    		<para>See description below.</para>
     	</entry>
   		</row>
   		<row>
@@ -81,7 +81,7 @@
     		<para><codeEntityReference>T:StockSharp.Messages.Level1ChangeMessage</codeEntityReference></para>
    		</entry>
     	<entry>
-    		<para>Сообщение содержит информацию о значении поля Level1 определенного типа. Доступные типы полей определены в перечислении <codeEntityReference>T:StockSharp.Messages.Level1Fields</codeEntityReference>.</para>
+    		<para>The message contains information on value of the level1 field of the certain type. Available field types are determined in the listing <codeEntityReference>T:StockSharp.Messages.Level1Fields</codeEntityReference>.</para>
     	</entry>
   		</row>
   		<row>
@@ -89,7 +89,7 @@
     		<para><codeEntityReference>T:StockSharp.Messages.NewsMessage</codeEntityReference></para>
    		</entry>
     	<entry>
-    		<para>Сообщение содержит информацию о новости.</para>
+    		<para>The message contains information on news.</para>
     	</entry>
   		</row>
   		
@@ -98,8 +98,8 @@
     		<para><codeEntityReference>T:StockSharp.Messages.OrderCancelMessage</codeEntityReference></para>
    		</entry>
     	<entry>
-    		<para>Сообщение содержит информацию для отмены заявки. Также существует сообщение 
-    		<codeEntityReference>T:StockSharp.Messages.OrderGroupCancelMessage</codeEntityReference>, которое содержит информацию для отмены группы заявок по фильтру.</para>
+    		<para>The message contains information for order cancelling. Also, there is the <codeEntityReference>T:StockSharp.Messages.OrderGroupCancelMessage</codeEntityReference>
+    		message, containing information for cancelling a group of orders by filter.</para>
     	</entry>
   		</row>
   		<row>
@@ -107,7 +107,7 @@
     		<para><codeEntityReference>T:StockSharp.Messages.OrderRegisterMessage</codeEntityReference></para>
    		</entry>
     	<entry>
-    		<para>Сообщение содержит информацию для регистрации заявки.</para>
+    		<para>The message contains information for orders registering.</para>
     	</entry>
   		</row>
   		<row>
@@ -115,7 +115,7 @@
     		<para><codeEntityReference>T:StockSharp.Messages.OrderStatusMessage</codeEntityReference></para>
    		</entry>
     	<entry>
-    		<para>Сообщение запрашивает информацию о текущих зарегистрированных заявках и сделках.</para>
+    		<para>The message contains information on current registered orders and trades.</para>
     	</entry>
   		</row>
   		
@@ -124,7 +124,7 @@
     		<para><codeEntityReference>T:StockSharp.Messages.OrderReplaceMessage</codeEntityReference></para>
    		</entry>
     	<entry>
-    		<para>Сообщение содержит информацию для замены заявки.</para>
+    		<para>The message contains information for order replacement.</para>
     	</entry>
   		</row>
   		
@@ -133,7 +133,8 @@
     		<para><codeEntityReference>T:StockSharp.Messages.PortfolioMessage</codeEntityReference></para>
    		</entry>
     	<entry>
-    		<para>Содержит информацию о портфеле. Также существует сообщение <codeEntityReference>T:StockSharp.Messages.PortfolioChangeMessage</codeEntityReference> - информация об изменениях портфеля.</para>
+    		<para>Contains portfolio information. Also, there is the <codeEntityReference>T:StockSharp.Messages.PortfolioChangeMessage</codeEntityReference>
+    		message - information on portfolio changes.</para>
     	</entry>
   		</row>
   		
@@ -142,7 +143,7 @@
     		<para><codeEntityReference>T:StockSharp.Messages.PortfolioLookupMessage</codeEntityReference></para>
    		</entry>
     	<entry>
-    		<para>Запращивает информацию о портфелях по заданному критерию. Результат запроса возвращается при помощи сообщения <codeEntityReference>T:StockSharp.Messages.PortfolioLookupResultMessage</codeEntityReference>.</para>
+    		<para>Requests portfolio information according to the given criteria. The request result returns by means of the <codeEntityReference>T:StockSharp.Messages.PortfolioLookupResultMessage</codeEntityReference> message.</para>
     	</entry>
   		</row>
   		
@@ -151,8 +152,8 @@
     		<para><codeEntityReference>T:StockSharp.Messages.PositionMessage</codeEntityReference></para>
    		</entry>
     	<entry>
-    		<para>Содержит информацию о позиции. Также существует сообщение <codeEntityReference>T:StockSharp.Messages.PositionChangeMessage</codeEntityReference>,
-    		которое содержит информацию об изменении определенного свойства позиции. Тип свойства определяется в перечислении <codeEntityReference>T:StockSharp.Messages.PositionChangeTypes</codeEntityReference>.</para>
+    		<para>Contains position information. Also, there is the <codeEntityReference>T:StockSharp.Messages.PositionChangeMessage</codeEntityReference>
+    		message, containing information on change of the position's certain feature. The feature type is determined in the listing <codeEntityReference>T:StockSharp.Messages.PositionChangeTypes</codeEntityReference>.</para>
     	</entry>
   		</row>
 
@@ -161,7 +162,7 @@
     		<para><codeEntityReference>T:StockSharp.Messages.QuoteChangeMessage</codeEntityReference></para>
    		</entry>
     	<entry>
-    		<para>Содержит информацию о котировках стакана.</para>
+    		<para>Contains information on the order book quotes.</para>
     	</entry>
   		</row>
 
@@ -170,7 +171,7 @@
     		<para><codeEntityReference>T:StockSharp.Messages.ResetMessage</codeEntityReference></para>
    		</entry>
     	<entry>
-    		<para>Сброс состояния.</para>
+    		<para>Status reset.</para>
     	</entry>
   		</row>
   		
@@ -179,7 +180,7 @@
     		<para><codeEntityReference>T:StockSharp.Messages.SecurityMessage</codeEntityReference></para>
    		</entry>
     	<entry>
-    		<para>Содержит информацию об инструменте.</para>
+    		<para>Contains instrument information.</para>
     	</entry>
   		</row>
   		
@@ -188,7 +189,7 @@
     		<para><codeEntityReference>T:StockSharp.Messages.SecurityLookupMessage</codeEntityReference></para>
    		</entry>
     	<entry>
-    		<para>Запращивает список инструментов по заданному критерию. Результат запроса будет возвращен при помощи сообщения
+    		<para>Requests list of instruments according to the given criteria. The request result returns by means of the
     		<codeEntityReference>T:StockSharp.Messages.SecurityLookupResultMessage</codeEntityReference>.</para>
     	</entry>
   		</row>
@@ -198,7 +199,7 @@
     		<para><codeEntityReference>T:StockSharp.Messages.SessionMessage</codeEntityReference></para>
    		</entry>
     	<entry>
-    		<para>Содержит информацию об изменении состояния торговой сессии. Доступные значения состояния сессии определены в перечислении
+    		<para>Contains information on trading session statute changes. Available values of the session statute are determined in the listing
     		<codeEntityReference>T:StockSharp.Messages.SessionStates</codeEntityReference>.</para>
     	</entry>
   		</row>
@@ -208,40 +209,38 @@
     		<para><codeEntityReference>T:StockSharp.Messages.TimeMessage</codeEntityReference></para>
    		</entry>
     	<entry>
-    		<para>Содержит информацию о текущем времени.</para>
+    		<para>Contains current time information.</para>
     	</entry>
   		</row>
 	</table>
 	
-	<para>Сообщение <codeEntityReference>T:StockSharp.Messages.ExecutionMessage</codeEntityReference> является универсальным сообщением, которое позволяет 
-	передавать различную биржевую информацию, связанную с заявками и сделками: тиковые сделки, ордерлоги, собственные заявки и сделки.</para>
+	<para>Message <codeEntityReference>T:StockSharp.Messages.ExecutionMessage</codeEntityReference> is a universal message, allowing transmission of various
+	information, related to orders, own trades, tick trades and order log.</para>
 	<para>
-		Тип информации в сообщении определяется значением свойства <codeEntityReference>P:StockSharp.Messages.ExecutionMessage.ExecutionType</codeEntityReference>:
+		Type of information in the message is determined by value of the property <codeEntityReference>P:StockSharp.Messages.ExecutionMessage.ExecutionType</codeEntityReference>:
 	</para>
 	
 	<list class="bullet">
   		<listItem>
-  			<para><codeEntityReference>F:StockSharp.Messages.ExecutionTypes.Tick</codeEntityReference> - тиковая сделка.</para>
+  			<para><codeEntityReference>F:StockSharp.Messages.ExecutionTypes.Tick</codeEntityReference> - tick trade.</para>
   		</listItem>
   		<listItem>
-  			<para><codeEntityReference>F:StockSharp.Messages.ExecutionTypes.Transaction</codeEntityReference> - транзакция (информация о собственной сделке или заявке).</para>
+  			<para><codeEntityReference>F:StockSharp.Messages.ExecutionTypes.Transaction</codeEntityReference> - transaction (information on own trade or order).</para>
   		</listItem>
   		<listItem>
-  			<para><codeEntityReference>F:StockSharp.Messages.ExecutionTypes.OrderLog</codeEntityReference> - лог заявок.</para>
+  			<para><codeEntityReference>F:StockSharp.Messages.ExecutionTypes.OrderLog</codeEntityReference> - order log.</para>
   		</listItem>
 	</list>
 	<para>
-		Если используется тип <codeEntityReference>F:StockSharp.Messages.ExecutionTypes.Transaction</codeEntityReference>, то речь идет о собственных заявках или сделках. 
-		При этом, если сообщение содержит информацию о заявке то, свойство <codeEntityReference>P:StockSharp.Messages.ExecutionMessage.HasOrderInfo</codeEntityReference> = true, 
-		если есть информация о сделке то, свойство <codeEntityReference>P:StockSharp.Messages.ExecutionMessage.HasTradeInfo</codeEntityReference> = true. Обратите внимание, что
-		<legacyItalic>собственная сделка</legacyItalic> содержит информацию как о самой сделке, так и о заявке, связанной с этой сделкой. Поэтому в этом случае вышеприведенные
-		свойства имеют значение true. Эти свойства позволяют дифференцировать сообщения с собственными сделками и заявками.
+		If the <codeEntityReference>F:StockSharp.Messages.ExecutionTypes.Transaction</codeEntityReference> type is used, it is about own orders or trades. At that, if
+		the message contains the order information, the feature <codeEntityReference>P:StockSharp.Messages.ExecutionMessage.HasOrderInfo</codeEntityReference> = true, 
+		if there is information on trade, the feature <codeEntityReference>P:StockSharp.Messages.ExecutionMessage.HasTradeInfo</codeEntityReference> = true.
+		Please note, that <legacyItalic>own trade</legacyItalic> contains information on the trade itself and on the order, related to this trade. Therefore, in this
+		case the abovementioned features have the true value. These features allow differentiating the messages with own trades and orders.
 	</para>
 	<para>
-	<token>stocksharp</token> содержит набор методов расширения для преобразования торговых объектов в сообщения и наоборот. Например, можно преобразовать заявку  
-	<codeEntityReference>T:StockSharp.BusinessEntities.Order</codeEntityReference> в сообщение 
-	<codeEntityReference>T:StockSharp.Messages.ExecutionMessage</codeEntityReference>,
-	а также выполнить обратную операцию, как это показано в следующем фрагменте кода.
+	<token>stocksharp</token> contains a set of extension methods to convert trade objects to messages and vice versa. For example, order <codeEntityReference>T:StockSharp.BusinessEntities.Order</codeEntityReference>
+	can be converted into message <codeEntityReference>T:StockSharp.Messages.ExecutionMessage</codeEntityReference>, and vice verse, as it is shown in the next code portion.
 	          <!--var tr = (IMarketDataStorage<Trade>)_storage.GetTickMessageStorage(sec);
             var ss = tr as IMarketDataStorage<Trade>;
             var aa = new Trade();
@@ -252,15 +251,15 @@
 						<code language="C#">
 <![CDATA[
 
-	var security = new Security() {Id = "RIM6#FORTS" };
+	var security = new Security() {Id = "ESM6@BATS" };
 	
-	// Для демонстрационных целей детали создания заявки опущены
+	// sample Order's instance
 	var order = new Order();
 	
-	// Конвертируем заявку в сообщение
+	// converting to message
 	var message = order.ToMessage();
 	
-	// Выполняем обратное преобразование
+	// and back to Order's instance
 	var order1 = message.ToOrder(security);
 
 ]]></code>

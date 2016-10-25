@@ -3,30 +3,33 @@
   <developerWalkthroughDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
 	<introduction>
 		<para>
-			 <token>stocksharp</token> имеет механизм для работы одновременно с несколькими соединениями (коннекторами). Например, робот может одновременно вести торговлю через
-			<token>quik</token> и <token>smartcom</token>, или работать с несколькими терминалами <token>quik</token>.
-			 Этот механизм реализован на уровне сообщений. (см. <link xlink:href="5794f4b0-c536-4713-ad08-955a4a01b196">Сообщения</link>). За кулисами механизма лежит использование класса
-			 <codeEntityReference>T:StockSharp.Algo.BasketMessageAdapter</codeEntityReference>, который позволяет последовательно оперировать несколькими адаптерами, связанными с различными
-			 торговыми системами. Класс <codeEntityReference>T:StockSharp.Algo.Connector</codeEntityReference> имеет свойство <codeEntityReference>P:StockSharp.Algo.Connector.Adapter</codeEntityReference> этого типа.
+			 <token>stocksharp</token> has a mechanism to work simultaneously with multiple connections (connectors). For example, the algorithm can simultaneously
+			 perform trade through <token>ib</token> and <token>openecry</token>, or work with multiple <token>ib</token> terminals.
+			 This mechanism is implemented at the message level (see <link xlink:href="5794f4b0-c536-4713-ad08-955a4a01b196">Messages</link>).
+			 Behind the scenes of this mechanism is the use of the <codeEntityReference>T:StockSharp.Algo.BasketMessageAdapter</codeEntityReference> class, which allows
+			 you to sequentially operate multiple adapters connected to various trading systems. The <codeEntityReference>T:StockSharp.Algo.Connector</codeEntityReference>
+			 class has the <codeEntityReference>P:StockSharp.Algo.Connector.Adapter</codeEntityReference> property of this type.
 		</para>
 		<para>
-			Организовать работу с несколькими коннекторами можно загрузив настойки из специального конфигурационного файла, в котором сохранены настройки коннектора, 
-			в том числе настройки адаптеров, или ли же можно воспользоваться компонентом <codeEntityReference>T:StockSharp.Xaml.ConnectorWindow</codeEntityReference>, который
-			является графическим сервисом для конфигурации коннектора.
+			It is possible to organize work with several connectors downloading the settings from the special configuration file, in which the connector settings are
+			saved, including adapters settings. Or it is possible to use the <codeEntityReference>T:StockSharp.Xaml.ConnectorWindow</codeEntityReference>
+			component, which is a graphical service for the connector configuration.
 		</para>
 		<para>
-			Ниже показан пример создания множественного подключения. Исходные коды примера находятся в проекте <legacyItalic>Samples/Common/SampleMultiConnection</legacyItalic>. 
+			The following is an example of creating multiple connection. Source codes of the example are in the <legacyItalic>Samples/Common/SampleMultiConnection</legacyItalic>
+			project.
 		</para>
 		<mediaLink><image placement="left" xlink:href="multiconnection_main" /></mediaLink>
 	</introduction>
 	
 	<procedure>
-      <title>Создание множественного подключения</title>
+      <title>Creating multiple connection</title>
      <steps class="ordered">
 		<step>
 			<content>
 				<para>
-					  В конструкторе главного окна вызываем метод InitConnector, в котором выполняется конфигурирование коннектора, а также подписка на необходимые события.
+					  In the main window constructor we call the InitConnector method in which the connector is configured, as well as subscription to the
+					  required events is performed.
 				</para>
 				<code language="C#">
 				<![CDATA[
@@ -53,8 +56,8 @@ public MainWindow()
 		<step>
 			<content>
 				<para>
-					   В методе InitConnector выполняется подписка на события коннектора, а также загрузка настроек коннектора из конфигурационного файла при помощи метода
-					   <codeEntityReference qualifyHint="true">M:StockSharp.Algo.Connector.Load(Ecng.Serialization.SettingsStorage)</codeEntityReference>.
+					   The subscription to the connector events is performed in the InitConnector method, as well as connector settings loading from the configuration file using the 
+					   <codeEntityReference qualifyHint="true">M:StockSharp.Algo.Connector.Load(Ecng.Serialization.SettingsStorage)</codeEntityReference> method.
 				</para>
 				<code language="C#">
 				<![CDATA[
@@ -110,9 +113,10 @@ private void InitConnector()
 		  <step>
 			<content>
 				<para>
-					 Ниже показан код обработчика события <legacyBold>Click</legacyBold> кнопки <legacyBold>Настройки</legacyBold>. В обработчике вызывается метод 
-					 <codeEntityReference>M:StockSharp.Configuration.Extensions.Configure(StockSharp.Algo.Connector,System.Windows.Window)</codeEntityReference>. Этот метод открывает окно Настройки подключений (см. ниже).
-					 Также в обработчике выполняется сохранение настроек коннектора в конфигурационный файл. Этот файл в последующем можно использовать для конфигурирования коннектора без вызова окна Настроек подключения.  
+					 The following is the code of the <legacyBold>Settings</legacyBold> button <legacyBold>Click</legacyBold> event handler. The 
+					 <codeEntityReference>M:StockSharp.Configuration.Extensions.Configure(StockSharp.Algo.Connector,System.Windows.Window)</codeEntityReference> method
+					 is called in the handler. This method opens the Connection Settings window (see below). Also in the handler the connector settings are saved to
+					 the configuration file. Further this file can be used to configure the connector without calling the Connection Settings window
 				</para>
 				<code language="C#">
 				<![CDATA[
@@ -128,19 +132,19 @@ private void SettingsClick(object sender, RoutedEventArgs e)
 		  <step>
 			<content>
 				<para>
-				 Здесь представлено окно настройки подключений. Из раскрывающегося списка (открывается кнопкой '+') необходимо выбрать нужные адаптеры и настроить их свойства
-				 в окне свойств, расположенном справа. Например, для <token>smartcom</token> нужно указать адрес сервера, логин и пароль. Для работы с несколькими <token>quik</token> будет нужно указать
-				 адреса серверов Lua.
+				 The connection settings window is shown here. It is necessary to select the required adapters from the drop-down list (it is opened by clicking '+')
+				 and to set their properties in the Properties window on the right. For example, for <token>openecry</token> it is required to specify the server address,
+				 login and password.
 				</para>
 				<mediaLink><image placement="left" xlink:href="multiconnection_settings" /></mediaLink>
 				
 				<alert class="note">
-  					<para>Корректность подключения можно проверить при помощи кнопки <legacyBold>Проверить</legacyBold>.</para>
+  					<para>The valid of the connection can be checked using the <legacyBold>Test</legacyBold> button.</para>
 				</alert>
 				
 				<para>
-				Результатом работы этого окна будет создание и добавление адаптеров в список <legacyItalic>внутренних</legacyItalic> адаптеров свойства 
-				<codeEntityReference qualifyHint="true" >P:StockSharp.Algo.Connector.Adapter</codeEntityReference>.
+				The result of this window will be creating and adding the adapters to the list of the <codeEntityReference qualifyHint="true" >P:StockSharp.Algo.Connector.Adapter</codeEntityReference>
+				property <legacyItalic>internal</legacyItalic> adapters.
 				</para>
 		 	</content>
 		</step>

@@ -3,41 +3,40 @@
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     <introduction>
        <para>
-       Механизм сообщений позволяет создавать собственные подключения к любой внешней торговой системе. Для этого необходимо 
-       создать собственный класс <legacyItalic>адаптера сообщений</legacyItalic>, 
-       унаследованный от абстрактного класса <codeEntityReference>T:StockSharp.Messages.MessageAdapter</codeEntityReference>.
+       The message mechanism allows creating own connections to any external trading system. To do that, it is necessary to create an own class of the
+       <legacyItalic>message adapter</legacyItalic>, inherited from the abstract class <codeEntityReference>T:StockSharp.Messages.MessageAdapter</codeEntityReference>.
        </para>
        <para>
-       	При разработке собственного адаптера сообщений необходимо решить следующие задачи:
+       	The following task shall be solved at development of own message adapter:
        </para>
        
 		<list class="ordered">
   			<listItem>
-  				<para>Написать код, преобразующий исходящие сообщения <token>stocksharp</token> в команды внешней системы.</para>
+  				<para>Write the code, converting outgoing messages <token>stocksharp</token> into external system commands.</para>
   			</listItem>
   			<listItem>
-  				<para>Написать код, преобразующий информацию, поступающую от внешней системы, во входящие сообщения.</para>
+  				<para>Write the code, converting information from the external system into incoming messages.</para>
   			</listItem>
   			<listItem>
-  				<para>Выполнить преобразование кодированной информации внешней системы (коды инструментов и площадок, перечисления и т.п.) в типы <token>stocksharp</token>.</para>
+  				<para>Perform conversion of encoded information from the external system (codes of instruments and boards, listings etc.) into types of <token>stocksharp</token>.</para>
   			</listItem>
   			<listItem>
-  				<para>Выполнить дополнительные настройки, связанные с особенностями внешней торговой системы.</para>
+  				<para>Perform additional adjustments, related with the external system features.</para>
   			</listItem>
 		</list>
 		
        <para>
-       	Прежде чем приступить к описанию разработки собственного адаптера, рассмотрим процесс создания и обработки входящих и исходящих сообщений в <token>stocksharp</token>
-		на примере сообщения	<codeEntityReference>T:StockSharp.Messages.ConnectMessage</codeEntityReference>. Предположим, что в программе был вызван метод
-						<codeEntityReference>M:StockSharp.Algo.Connector.Connect</codeEntityReference>, тогда в базовом классе  
-						<codeEntityReference>T:StockSharp.Algo.Connector</codeEntityReference> будет происходить следующее:
+       	Prior to starting description of the own adapter development, let's consider the process of creation and processing of incoming and outgoing messages in the
+       	<token>stocksharp</token> by the example of the message <codeEntityReference>T:StockSharp.Messages.ConnectMessage</codeEntityReference>.
+       	Supposing, that the program called the <codeEntityReference>M:StockSharp.Algo.Connector.Connect</codeEntityReference> method, then the following will happen
+       	in the base class <codeEntityReference>T:StockSharp.Algo.Connector</codeEntityReference>:
 		</para>
 		<list class="ordered">
   			<listItem>
-  				<para>Вызывается защищенный метод
+  				<para>The protected method 
   				<codeEntityReference qualifyHint="true">M:StockSharp.Algo.Connector.OnConnect</codeEntityReference>, 
-  				в котором создается сообщение и передается в метод
-  					<codeEntityReference qualifyHint="true">M:StockSharp.Algo.Connector.SendInMessage(StockSharp.Messages.Message)</codeEntityReference>.</para>
+  				is called, in which the message is created and transmitted to the method
+  				<codeEntityReference qualifyHint="true">M:StockSharp.Algo.Connector.SendInMessage(StockSharp.Messages.Message)</codeEntityReference>.</para>
   				<code language="C#">
 protected virtual void OnConnect()
 {
@@ -46,8 +45,8 @@ protected virtual void OnConnect()
   				</code>
   			</listItem>
   			<listItem>
-  			<para>В методе <codeEntityReference qualifyHint="true">M:StockSharp.Algo.Connector.SendInMessage(StockSharp.Messages.Message)</codeEntityReference>
-  			сообщение передается в одноименный метод адаптера.</para>
+  			<para>In the method <codeEntityReference qualifyHint="true">M:StockSharp.Algo.Connector.SendInMessage(StockSharp.Messages.Message)</codeEntityReference>
+  			the message is sent to the adapter method with the same name.</para>
   			<code language="C#">
 public void SendInMessage(Message message)
 {
@@ -56,41 +55,38 @@ public void SendInMessage(Message message)
   			</code>
   			</listItem>
   			<listItem>
-  				<para>В методе <codeEntityReference qualifyHint="true">M:StockSharp.Messages.MessageAdapter.SendInMessage(StockSharp.Messages.Message)</codeEntityReference> адаптера
-  					выполняются дополнительные проверки. Если все нормально, то сообщение передается в метод
-  					<codeEntityReference qualifyHint="true">M:StockSharp.Messages.MessageAdapter.OnSendInMessage(StockSharp.Messages.Message)</codeEntityReference> (см.ниже).
-  					Если сгенерирована ошибка, то создается создается
-  					новое входящее сообщение аналогичного типа, в свойство 
-  					<codeEntityReference>P:StockSharp.Messages.BaseConnectionMessage.Error</codeEntityReference>
-  					сообщения передается объект исключения. Это новое сообщение передается в метод 
-  					<codeEntityReference>M:StockSharp.Messages.MessageAdapter.SendOutMessage(StockSharp.Messages.Message)</codeEntityReference>,
-  					в котором будет сгенерировано событие появления нового входящего сообщения 
-  					<codeEntityReference>E:StockSharp.Messages.MessageAdapter.NewOutMessage</codeEntityReference>,
-  					сигнализирующего об ошибке.
+  				<para>In the adapter method <codeEntityReference qualifyHint="true">M:StockSharp.Messages.MessageAdapter.SendInMessage(StockSharp.Messages.Message)</codeEntityReference>
+  					additional checks are performed. If everything is OK, then the message is sent to the method 
+  					<codeEntityReference qualifyHint="true">M:StockSharp.Messages.MessageAdapter.OnSendInMessage(StockSharp.Messages.Message)</codeEntityReference>
+  					(see below). If error was generated, a new incoming message of the similar type is created, the exception object is transferred into the message's
+  					<codeEntityReference>P:StockSharp.Messages.BaseConnectionMessage.Error</codeEntityReference> feature. This new message is sent to the
+  					<codeEntityReference>M:StockSharp.Messages.MessageAdapter.SendOutMessage(StockSharp.Messages.Message)</codeEntityReference>
+  					method, in which event will be generated for occurrence of new incoming message <codeEntityReference>E:StockSharp.Messages.MessageAdapter.NewOutMessage</codeEntityReference>,
+  					signaling on error.
   				</para>
   			</listItem>
 		</list>
 		
 		<para>
-			Входящие сообщения создаются при помощи метода 
-			<codeEntityReference qualifyHint="true">M:StockSharp.Messages.MessageAdapter.SendOutMessage(StockSharp.Messages.Message)</codeEntityReference>,
-			в который передается объект сообщения. В этом методе генерируется событие нового входящего сообщения 
-			<codeEntityReference>E:StockSharp.Messages.MessageAdapter.NewOutMessage</codeEntityReference>.
-			Далее это событие обрабатывается в базовом классе коннектора в защищенном методе
-			<codeEntityReference qualifyHint="true">M:StockSharp.Algo.Connector.OnProcessMessage(StockSharp.Messages.Message)</codeEntityReference>, 
-			где в зависимости от ситуации сообщение преобразуется в соответствующий тип <token>stocksharp</token> и генерируется событие коннектора, 
-			а также могут создаваться дополнительное исходящие сообщения.
+			Incoming messages are created using the  
+			<codeEntityReference qualifyHint="true">M:StockSharp.Messages.MessageAdapter.SendOutMessage(StockSharp.Messages.Message)</codeEntityReference>
+			method, where the message object is sent to. In this method the event of new incoming message 
+			<codeEntityReference>E:StockSharp.Messages.MessageAdapter.NewOutMessage</codeEntityReference> is generated. Next, this
+			event is processed in the base class of the connecter on the protected method 
+			<codeEntityReference qualifyHint="true">M:StockSharp.Algo.Connector.OnProcessMessage(StockSharp.Messages.Message)</codeEntityReference>
+			where, depending on situation, the message is converted into the corresponding <token>stocksharp</token> type, and connector event is generated, also,
+			additional outgoing messages can be created.
 		</para>
 		
 		<para>
-		Ниже описан процесс создания собственного адаптера для <token>smartcom</token>.
+		Below see description of own adapter creation process for <token>btce</token>.
 		</para>
        
        
     </introduction>
     
     <procedure>
-			<title>Пример создания адаптера сообщений SmartCom</title>
+			<title>Example of BTCE message adapter creation</title>
 			<steps class="ordered">
 			   <step>
 					<content>
