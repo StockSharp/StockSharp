@@ -11,7 +11,7 @@
 			<linkUri>http://stocksharp.com/register/</linkUri>
 			<linkTarget>_blank</linkTarget>
 			</externalLink>
-			 Its include <token>designer</token>, <token>hydra</token>, <token>stocksharpapi</token> 
+			 It's include <token>designer</token>, <token>hydra</token>, <token>stocksharpapi</token> 
 			 (<token>openecry</token>, <token>IB</token>, <token>etrade</token>, <token>lmax</token>, <token>oanda</token>, 
 			 <token>blackwood</token>, <token>iqfeed</token>, <token>sterling</token>, <token>rithmic</token>, <token>cqg</token>, 
 			 <token>matlab</token>, <token>btce</token>, <token>bitstamp</token>, <token>barchart</token> и RSS).

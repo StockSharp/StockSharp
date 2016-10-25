@@ -325,7 +325,7 @@ M:StockSharp.Xaml.NewsPanel.#ctor/summary;DocStr1
 P:StockSharp.Xaml.NewsPanel.NewsProvider/summary;DocStr8921
 F:StockSharp.Xaml.NewsPanel.NewsGrid/summary;DocStr8149
 M:StockSharp.Xaml.NewsPanel.InitializeComponent/summary;DocStr8
-T:StockSharp.Xaml.OptionDesk/summary;Str3265
+T:StockSharp.Xaml.OptionDesk/summary;OptionDesk
 M:StockSharp.Xaml.OptionDesk.#ctor/summary;DocStr1
 P:StockSharp.Xaml.OptionDesk.SecurityProvider/summary;DocStr972
 P:StockSharp.Xaml.OptionDesk.MarketDataProvider/summary;DocStr973

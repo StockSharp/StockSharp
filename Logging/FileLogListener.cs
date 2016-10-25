@@ -190,16 +190,10 @@ namespace StockSharp.Logging
 			}
 		}
 
-		private bool _writeChildDataToRootFile = true;
-
 		/// <summary>
 		/// To record the subsidiary sources data to the parent file. The default mode is enabled.
 		/// </summary>
-		public bool WriteChildDataToRootFile
-		{
-			get { return _writeChildDataToRootFile; }
-			set { _writeChildDataToRootFile = value; }
-		}
+		public bool WriteChildDataToRootFile { get; set; } = true;
 
 		private string _extension = ".txt";
 

@@ -8,7 +8,7 @@
 		<steps class="ordered">
 			<step>
 				<content>
-					<para>Для создания задачи необходимо щелкнуть по кнопке <legacyBold>Добавить задачи...</legacyBold>, в окрывшемся окне
+					<para>Для создания задачи необходимо щелкнуть по кнопке <legacyBold>Добавить задачи...</legacyBold>, в открывшемся окне
 					отметить пункт <legacyBold>Резервный</legacyBold> и нажать кнопку <legacyBold>ОК</legacyBold>.</para>
 			<mediaLink>
         		<image placement="left" xlink:href="hydra_tasks_backup_add" />

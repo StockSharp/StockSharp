@@ -71,7 +71,7 @@ namespace StockSharp.Algo.Indicators
 			var znValue = _denominator.Process(input.SetValue(this, candle.TotalVolume)).GetValue<decimal>();
 
 			return znValue != 0 
-				? new DecimalIndicatorValue(this, (shValue / znValue)) 
+				? new DecimalIndicatorValue(this, shValue / znValue) 
 				: new DecimalIndicatorValue(this);
 		}
 	}

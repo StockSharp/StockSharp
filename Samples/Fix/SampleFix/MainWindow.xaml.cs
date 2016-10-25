@@ -26,8 +26,6 @@ namespace SampleFix
 	using Ecng.Serialization;
 	using Ecng.Xaml;
 
-	using MoreLinq;
-
 	using StockSharp.Messages;
 	using StockSharp.BusinessEntities;
 	using StockSharp.Fix;
@@ -38,7 +36,7 @@ namespace SampleFix
 	{
 		private bool _isInitialized;
 
-		public FixTrader Trader = new FixTrader();
+		public readonly FixTrader Trader = new FixTrader();
 
 		private readonly SecuritiesWindow _securitiesWindow = new SecuritiesWindow();
 		private readonly TradesWindow _tradesWindow = new TradesWindow();

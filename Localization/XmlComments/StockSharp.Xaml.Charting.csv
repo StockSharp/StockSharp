@@ -626,7 +626,6 @@ M:StockSharp.Xaml.Charting.IChartIndicatorPainter.ProcessValues(System.DateTimeO
 M:StockSharp.Xaml.Charting.IChartIndicatorPainter.ProcessValues(System.DateTimeOffset,StockSharp.Algo.Indicators.IIndicatorValue,StockSharp.Xaml.Charting.DrawHandler)/param/time;DocStr7780
 M:StockSharp.Xaml.Charting.IChartIndicatorPainter.ProcessValues(System.DateTimeOffset,StockSharp.Algo.Indicators.IIndicatorValue,StockSharp.Xaml.Charting.DrawHandler)/param/value;DocStr7842
 M:StockSharp.Xaml.Charting.IChartIndicatorPainter.ProcessValues(System.DateTimeOffset,StockSharp.Algo.Indicators.IIndicatorValue,StockSharp.Xaml.Charting.DrawHandler)/param/draw;DocStr7843
-M:StockSharp.Xaml.Charting.IChartIndicatorPainter.ProcessValues(System.DateTimeOffset,StockSharp.Algo.Indicators.IIndicatorValue,StockSharp.Xaml.Charting.DrawHandler)/returns;DocStr7844
 T:StockSharp.Xaml.Charting.IndicatorPainters.AlligatorPainter/summary;DocStr7845
 P:StockSharp.Xaml.Charting.IndicatorPainters.AlligatorPainter.LipsColor/summary;Str2018
 P:StockSharp.Xaml.Charting.IndicatorPainters.AlligatorPainter.TeethColor/summary;Str2020
@@ -637,7 +636,6 @@ M:StockSharp.Xaml.Charting.IndicatorPainters.AlligatorPainter.ProcessValues(Syst
 M:StockSharp.Xaml.Charting.IndicatorPainters.AlligatorPainter.ProcessValues(System.DateTimeOffset,StockSharp.Algo.Indicators.IIndicatorValue,StockSharp.Xaml.Charting.DrawHandler)/param/time;DocStr7780
 M:StockSharp.Xaml.Charting.IndicatorPainters.AlligatorPainter.ProcessValues(System.DateTimeOffset,StockSharp.Algo.Indicators.IIndicatorValue,StockSharp.Xaml.Charting.DrawHandler)/param/value;DocStr7842
 M:StockSharp.Xaml.Charting.IndicatorPainters.AlligatorPainter.ProcessValues(System.DateTimeOffset,StockSharp.Algo.Indicators.IIndicatorValue,StockSharp.Xaml.Charting.DrawHandler)/param/draw;DocStr7843
-M:StockSharp.Xaml.Charting.IndicatorPainters.AlligatorPainter.ProcessValues(System.DateTimeOffset,StockSharp.Algo.Indicators.IIndicatorValue,StockSharp.Xaml.Charting.DrawHandler)/returns;DocStr7844
 M:StockSharp.Xaml.Charting.IndicatorPainters.AlligatorPainter.Load(Ecng.Serialization.SettingsStorage)/summary;DocStr2
 M:StockSharp.Xaml.Charting.IndicatorPainters.AlligatorPainter.Load(Ecng.Serialization.SettingsStorage)/param/storage;DocStr3
 M:StockSharp.Xaml.Charting.IndicatorPainters.AlligatorPainter.Save(Ecng.Serialization.SettingsStorage)/summary;DocStr4
@@ -652,7 +650,6 @@ M:StockSharp.Xaml.Charting.IndicatorPainters.AverageDirectionalIndexPainter.Proc
 M:StockSharp.Xaml.Charting.IndicatorPainters.AverageDirectionalIndexPainter.ProcessValues(System.DateTimeOffset,StockSharp.Algo.Indicators.IIndicatorValue,StockSharp.Xaml.Charting.DrawHandler)/param/time;DocStr7780
 M:StockSharp.Xaml.Charting.IndicatorPainters.AverageDirectionalIndexPainter.ProcessValues(System.DateTimeOffset,StockSharp.Algo.Indicators.IIndicatorValue,StockSharp.Xaml.Charting.DrawHandler)/param/value;DocStr7842
 M:StockSharp.Xaml.Charting.IndicatorPainters.AverageDirectionalIndexPainter.ProcessValues(System.DateTimeOffset,StockSharp.Algo.Indicators.IIndicatorValue,StockSharp.Xaml.Charting.DrawHandler)/param/draw;DocStr7843
-M:StockSharp.Xaml.Charting.IndicatorPainters.AverageDirectionalIndexPainter.ProcessValues(System.DateTimeOffset,StockSharp.Algo.Indicators.IIndicatorValue,StockSharp.Xaml.Charting.DrawHandler)/returns;DocStr7844
 M:StockSharp.Xaml.Charting.IndicatorPainters.AverageDirectionalIndexPainter.Load(Ecng.Serialization.SettingsStorage)/summary;DocStr2
 M:StockSharp.Xaml.Charting.IndicatorPainters.AverageDirectionalIndexPainter.Load(Ecng.Serialization.SettingsStorage)/param/storage;DocStr3
 M:StockSharp.Xaml.Charting.IndicatorPainters.AverageDirectionalIndexPainter.Save(Ecng.Serialization.SettingsStorage)/summary;DocStr4
@@ -666,7 +663,6 @@ M:StockSharp.Xaml.Charting.IndicatorPainters.BaseChartIndicatorPainter.ProcessVa
 M:StockSharp.Xaml.Charting.IndicatorPainters.BaseChartIndicatorPainter.ProcessValues(System.DateTimeOffset,StockSharp.Algo.Indicators.IIndicatorValue,StockSharp.Xaml.Charting.DrawHandler)/param/time;DocStr7780
 M:StockSharp.Xaml.Charting.IndicatorPainters.BaseChartIndicatorPainter.ProcessValues(System.DateTimeOffset,StockSharp.Algo.Indicators.IIndicatorValue,StockSharp.Xaml.Charting.DrawHandler)/param/value;DocStr7842
 M:StockSharp.Xaml.Charting.IndicatorPainters.BaseChartIndicatorPainter.ProcessValues(System.DateTimeOffset,StockSharp.Algo.Indicators.IIndicatorValue,StockSharp.Xaml.Charting.DrawHandler)/param/draw;DocStr7843
-M:StockSharp.Xaml.Charting.IndicatorPainters.BaseChartIndicatorPainter.ProcessValues(System.DateTimeOffset,StockSharp.Algo.Indicators.IIndicatorValue,StockSharp.Xaml.Charting.DrawHandler)/returns;DocStr7844
 M:StockSharp.Xaml.Charting.IndicatorPainters.BaseChartIndicatorPainter.ToString/summary;DocStr49
 M:StockSharp.Xaml.Charting.IndicatorPainters.BaseChartIndicatorPainter.ToString/returns;DocStr50
 M:StockSharp.Xaml.Charting.IndicatorPainters.BaseChartIndicatorPainter.Load(Ecng.Serialization.SettingsStorage)/summary;DocStr2
@@ -683,7 +679,6 @@ M:StockSharp.Xaml.Charting.IndicatorPainters.BollingerBandsPainter.ProcessValues
 M:StockSharp.Xaml.Charting.IndicatorPainters.BollingerBandsPainter.ProcessValues(System.DateTimeOffset,StockSharp.Algo.Indicators.IIndicatorValue,StockSharp.Xaml.Charting.DrawHandler)/param/time;DocStr7780
 M:StockSharp.Xaml.Charting.IndicatorPainters.BollingerBandsPainter.ProcessValues(System.DateTimeOffset,StockSharp.Algo.Indicators.IIndicatorValue,StockSharp.Xaml.Charting.DrawHandler)/param/value;DocStr7842
 M:StockSharp.Xaml.Charting.IndicatorPainters.BollingerBandsPainter.ProcessValues(System.DateTimeOffset,StockSharp.Algo.Indicators.IIndicatorValue,StockSharp.Xaml.Charting.DrawHandler)/param/draw;DocStr7843
-M:StockSharp.Xaml.Charting.IndicatorPainters.BollingerBandsPainter.ProcessValues(System.DateTimeOffset,StockSharp.Algo.Indicators.IIndicatorValue,StockSharp.Xaml.Charting.DrawHandler)/returns;DocStr7844
 M:StockSharp.Xaml.Charting.IndicatorPainters.BollingerBandsPainter.Load(Ecng.Serialization.SettingsStorage)/summary;DocStr2
 M:StockSharp.Xaml.Charting.IndicatorPainters.BollingerBandsPainter.Load(Ecng.Serialization.SettingsStorage)/param/storage;DocStr3
 M:StockSharp.Xaml.Charting.IndicatorPainters.BollingerBandsPainter.Save(Ecng.Serialization.SettingsStorage)/summary;DocStr4
@@ -697,7 +692,6 @@ M:StockSharp.Xaml.Charting.IndicatorPainters.FractalsPainter.ProcessValues(Syste
 M:StockSharp.Xaml.Charting.IndicatorPainters.FractalsPainter.ProcessValues(System.DateTimeOffset,StockSharp.Algo.Indicators.IIndicatorValue,StockSharp.Xaml.Charting.DrawHandler)/param/time;DocStr7780
 M:StockSharp.Xaml.Charting.IndicatorPainters.FractalsPainter.ProcessValues(System.DateTimeOffset,StockSharp.Algo.Indicators.IIndicatorValue,StockSharp.Xaml.Charting.DrawHandler)/param/value;DocStr7842
 M:StockSharp.Xaml.Charting.IndicatorPainters.FractalsPainter.ProcessValues(System.DateTimeOffset,StockSharp.Algo.Indicators.IIndicatorValue,StockSharp.Xaml.Charting.DrawHandler)/param/draw;DocStr7843
-M:StockSharp.Xaml.Charting.IndicatorPainters.FractalsPainter.ProcessValues(System.DateTimeOffset,StockSharp.Algo.Indicators.IIndicatorValue,StockSharp.Xaml.Charting.DrawHandler)/returns;DocStr7844
 M:StockSharp.Xaml.Charting.IndicatorPainters.FractalsPainter.Load(Ecng.Serialization.SettingsStorage)/summary;DocStr2
 M:StockSharp.Xaml.Charting.IndicatorPainters.FractalsPainter.Load(Ecng.Serialization.SettingsStorage)/param/storage;DocStr3
 M:StockSharp.Xaml.Charting.IndicatorPainters.FractalsPainter.Save(Ecng.Serialization.SettingsStorage)/summary;DocStr4
@@ -714,7 +708,6 @@ M:StockSharp.Xaml.Charting.IndicatorPainters.IchimokuPainter.ProcessValues(Syste
 M:StockSharp.Xaml.Charting.IndicatorPainters.IchimokuPainter.ProcessValues(System.DateTimeOffset,StockSharp.Algo.Indicators.IIndicatorValue,StockSharp.Xaml.Charting.DrawHandler)/param/time;DocStr7780
 M:StockSharp.Xaml.Charting.IndicatorPainters.IchimokuPainter.ProcessValues(System.DateTimeOffset,StockSharp.Algo.Indicators.IIndicatorValue,StockSharp.Xaml.Charting.DrawHandler)/param/value;DocStr7842
 M:StockSharp.Xaml.Charting.IndicatorPainters.IchimokuPainter.ProcessValues(System.DateTimeOffset,StockSharp.Algo.Indicators.IIndicatorValue,StockSharp.Xaml.Charting.DrawHandler)/param/draw;DocStr7843
-M:StockSharp.Xaml.Charting.IndicatorPainters.IchimokuPainter.ProcessValues(System.DateTimeOffset,StockSharp.Algo.Indicators.IIndicatorValue,StockSharp.Xaml.Charting.DrawHandler)/returns;DocStr7844
 M:StockSharp.Xaml.Charting.IndicatorPainters.IchimokuPainter.Load(Ecng.Serialization.SettingsStorage)/summary;DocStr2
 M:StockSharp.Xaml.Charting.IndicatorPainters.IchimokuPainter.Load(Ecng.Serialization.SettingsStorage)/param/storage;DocStr3
 M:StockSharp.Xaml.Charting.IndicatorPainters.IchimokuPainter.Save(Ecng.Serialization.SettingsStorage)/summary;DocStr4
@@ -726,7 +719,6 @@ M:StockSharp.Xaml.Charting.IndicatorPainters.MovingAverageConvergenceDivergenceH
 M:StockSharp.Xaml.Charting.IndicatorPainters.MovingAverageConvergenceDivergenceHistogramPainter.ProcessValues(System.DateTimeOffset,StockSharp.Algo.Indicators.IIndicatorValue,StockSharp.Xaml.Charting.DrawHandler)/param/time;DocStr7780
 M:StockSharp.Xaml.Charting.IndicatorPainters.MovingAverageConvergenceDivergenceHistogramPainter.ProcessValues(System.DateTimeOffset,StockSharp.Algo.Indicators.IIndicatorValue,StockSharp.Xaml.Charting.DrawHandler)/param/value;DocStr7842
 M:StockSharp.Xaml.Charting.IndicatorPainters.MovingAverageConvergenceDivergenceHistogramPainter.ProcessValues(System.DateTimeOffset,StockSharp.Algo.Indicators.IIndicatorValue,StockSharp.Xaml.Charting.DrawHandler)/param/draw;DocStr7843
-M:StockSharp.Xaml.Charting.IndicatorPainters.MovingAverageConvergenceDivergenceHistogramPainter.ProcessValues(System.DateTimeOffset,StockSharp.Algo.Indicators.IIndicatorValue,StockSharp.Xaml.Charting.DrawHandler)/returns;DocStr7844
 T:StockSharp.Xaml.Charting.IndicatorPainters.MovingAverageConvergenceDivergenceSignalPainter/summary;DocStr7845
 M:StockSharp.Xaml.Charting.IndicatorPainters.MovingAverageConvergenceDivergenceSignalPainter.Init/summary;DocStr7839
 M:StockSharp.Xaml.Charting.IndicatorPainters.MovingAverageConvergenceDivergenceSignalPainter.Init/returns;DocStr7840
@@ -734,7 +726,6 @@ M:StockSharp.Xaml.Charting.IndicatorPainters.MovingAverageConvergenceDivergenceS
 M:StockSharp.Xaml.Charting.IndicatorPainters.MovingAverageConvergenceDivergenceSignalPainter.ProcessValues(System.DateTimeOffset,StockSharp.Algo.Indicators.IIndicatorValue,StockSharp.Xaml.Charting.DrawHandler)/param/time;DocStr7780
 M:StockSharp.Xaml.Charting.IndicatorPainters.MovingAverageConvergenceDivergenceSignalPainter.ProcessValues(System.DateTimeOffset,StockSharp.Algo.Indicators.IIndicatorValue,StockSharp.Xaml.Charting.DrawHandler)/param/value;DocStr7842
 M:StockSharp.Xaml.Charting.IndicatorPainters.MovingAverageConvergenceDivergenceSignalPainter.ProcessValues(System.DateTimeOffset,StockSharp.Algo.Indicators.IIndicatorValue,StockSharp.Xaml.Charting.DrawHandler)/param/draw;DocStr7843
-M:StockSharp.Xaml.Charting.IndicatorPainters.MovingAverageConvergenceDivergenceSignalPainter.ProcessValues(System.DateTimeOffset,StockSharp.Algo.Indicators.IIndicatorValue,StockSharp.Xaml.Charting.DrawHandler)/returns;DocStr7844
 T:StockSharp.Xaml.Charting.IndicatorPainters.ParabolicSarPainter/summary;DocStr7845
 M:StockSharp.Xaml.Charting.IndicatorPainters.ParabolicSarPainter.Init/summary;DocStr7839
 M:StockSharp.Xaml.Charting.IndicatorPainters.ParabolicSarPainter.Init/returns;DocStr7840
@@ -742,7 +733,6 @@ M:StockSharp.Xaml.Charting.IndicatorPainters.ParabolicSarPainter.ProcessValues(S
 M:StockSharp.Xaml.Charting.IndicatorPainters.ParabolicSarPainter.ProcessValues(System.DateTimeOffset,StockSharp.Algo.Indicators.IIndicatorValue,StockSharp.Xaml.Charting.DrawHandler)/param/time;DocStr7780
 M:StockSharp.Xaml.Charting.IndicatorPainters.ParabolicSarPainter.ProcessValues(System.DateTimeOffset,StockSharp.Algo.Indicators.IIndicatorValue,StockSharp.Xaml.Charting.DrawHandler)/param/value;DocStr7842
 M:StockSharp.Xaml.Charting.IndicatorPainters.ParabolicSarPainter.ProcessValues(System.DateTimeOffset,StockSharp.Algo.Indicators.IIndicatorValue,StockSharp.Xaml.Charting.DrawHandler)/param/draw;DocStr7843
-M:StockSharp.Xaml.Charting.IndicatorPainters.ParabolicSarPainter.ProcessValues(System.DateTimeOffset,StockSharp.Algo.Indicators.IIndicatorValue,StockSharp.Xaml.Charting.DrawHandler)/returns;DocStr7844
 T:StockSharp.Xaml.Charting.IndicatorPainters.PeakPainter/summary;DocStr7845
 M:StockSharp.Xaml.Charting.IndicatorPainters.PeakPainter.Init/summary;DocStr7839
 M:StockSharp.Xaml.Charting.IndicatorPainters.PeakPainter.Init/returns;DocStr7840
@@ -750,7 +740,6 @@ M:StockSharp.Xaml.Charting.IndicatorPainters.PeakPainter.ProcessValues(System.Da
 M:StockSharp.Xaml.Charting.IndicatorPainters.PeakPainter.ProcessValues(System.DateTimeOffset,StockSharp.Algo.Indicators.IIndicatorValue,StockSharp.Xaml.Charting.DrawHandler)/param/time;DocStr7780
 M:StockSharp.Xaml.Charting.IndicatorPainters.PeakPainter.ProcessValues(System.DateTimeOffset,StockSharp.Algo.Indicators.IIndicatorValue,StockSharp.Xaml.Charting.DrawHandler)/param/value;DocStr7842
 M:StockSharp.Xaml.Charting.IndicatorPainters.PeakPainter.ProcessValues(System.DateTimeOffset,StockSharp.Algo.Indicators.IIndicatorValue,StockSharp.Xaml.Charting.DrawHandler)/param/draw;DocStr7843
-M:StockSharp.Xaml.Charting.IndicatorPainters.PeakPainter.ProcessValues(System.DateTimeOffset,StockSharp.Algo.Indicators.IIndicatorValue,StockSharp.Xaml.Charting.DrawHandler)/returns;DocStr7844
 T:StockSharp.Xaml.Charting.IndicatorPainters.TroughPainter/summary;DocStr7845
 M:StockSharp.Xaml.Charting.IndicatorPainters.TroughPainter.Init/summary;DocStr7839
 M:StockSharp.Xaml.Charting.IndicatorPainters.TroughPainter.Init/returns;DocStr7840
@@ -758,7 +747,6 @@ M:StockSharp.Xaml.Charting.IndicatorPainters.TroughPainter.ProcessValues(System.
 M:StockSharp.Xaml.Charting.IndicatorPainters.TroughPainter.ProcessValues(System.DateTimeOffset,StockSharp.Algo.Indicators.IIndicatorValue,StockSharp.Xaml.Charting.DrawHandler)/param/time;DocStr7780
 M:StockSharp.Xaml.Charting.IndicatorPainters.TroughPainter.ProcessValues(System.DateTimeOffset,StockSharp.Algo.Indicators.IIndicatorValue,StockSharp.Xaml.Charting.DrawHandler)/param/value;DocStr7842
 M:StockSharp.Xaml.Charting.IndicatorPainters.TroughPainter.ProcessValues(System.DateTimeOffset,StockSharp.Algo.Indicators.IIndicatorValue,StockSharp.Xaml.Charting.DrawHandler)/param/draw;DocStr7843
-M:StockSharp.Xaml.Charting.IndicatorPainters.TroughPainter.ProcessValues(System.DateTimeOffset,StockSharp.Algo.Indicators.IIndicatorValue,StockSharp.Xaml.Charting.DrawHandler)/returns;DocStr7844
 T:StockSharp.Xaml.Charting.IndicatorPainters.VolumePainter/summary;DocStr7845
 P:StockSharp.Xaml.Charting.IndicatorPainters.VolumePainter.UpColor/summary;Str2036
 P:StockSharp.Xaml.Charting.IndicatorPainters.VolumePainter.DownColor/summary;Str2038
@@ -770,7 +758,6 @@ M:StockSharp.Xaml.Charting.IndicatorPainters.VolumePainter.ProcessValues(System.
 M:StockSharp.Xaml.Charting.IndicatorPainters.VolumePainter.ProcessValues(System.DateTimeOffset,StockSharp.Algo.Indicators.IIndicatorValue,StockSharp.Xaml.Charting.DrawHandler)/param/time;DocStr7780
 M:StockSharp.Xaml.Charting.IndicatorPainters.VolumePainter.ProcessValues(System.DateTimeOffset,StockSharp.Algo.Indicators.IIndicatorValue,StockSharp.Xaml.Charting.DrawHandler)/param/value;DocStr7842
 M:StockSharp.Xaml.Charting.IndicatorPainters.VolumePainter.ProcessValues(System.DateTimeOffset,StockSharp.Algo.Indicators.IIndicatorValue,StockSharp.Xaml.Charting.DrawHandler)/param/draw;DocStr7843
-M:StockSharp.Xaml.Charting.IndicatorPainters.VolumePainter.ProcessValues(System.DateTimeOffset,StockSharp.Algo.Indicators.IIndicatorValue,StockSharp.Xaml.Charting.DrawHandler)/returns;DocStr7844
 M:StockSharp.Xaml.Charting.IndicatorPainters.VolumePainter.Load(Ecng.Serialization.SettingsStorage)/summary;DocStr2
 M:StockSharp.Xaml.Charting.IndicatorPainters.VolumePainter.Load(Ecng.Serialization.SettingsStorage)/param/storage;DocStr3
 M:StockSharp.Xaml.Charting.IndicatorPainters.VolumePainter.Save(Ecng.Serialization.SettingsStorage)/summary;DocStr4
@@ -782,7 +769,6 @@ M:StockSharp.Xaml.Charting.IndicatorPainters.VolumeProfilePainter.ProcessValues(
 M:StockSharp.Xaml.Charting.IndicatorPainters.VolumeProfilePainter.ProcessValues(System.DateTimeOffset,StockSharp.Algo.Indicators.IIndicatorValue,StockSharp.Xaml.Charting.DrawHandler)/param/time;DocStr7780
 M:StockSharp.Xaml.Charting.IndicatorPainters.VolumeProfilePainter.ProcessValues(System.DateTimeOffset,StockSharp.Algo.Indicators.IIndicatorValue,StockSharp.Xaml.Charting.DrawHandler)/param/value;DocStr7842
 M:StockSharp.Xaml.Charting.IndicatorPainters.VolumeProfilePainter.ProcessValues(System.DateTimeOffset,StockSharp.Algo.Indicators.IIndicatorValue,StockSharp.Xaml.Charting.DrawHandler)/param/draw;DocStr7843
-M:StockSharp.Xaml.Charting.IndicatorPainters.VolumeProfilePainter.ProcessValues(System.DateTimeOffset,StockSharp.Algo.Indicators.IIndicatorValue,StockSharp.Xaml.Charting.DrawHandler)/returns;DocStr7844
 T:StockSharp.Xaml.Charting.IndicatorPainters.ZigZagEquisPainter/summary;DocStr7845
 M:StockSharp.Xaml.Charting.IndicatorPainters.ZigZagEquisPainter.Init/summary;DocStr7839
 M:StockSharp.Xaml.Charting.IndicatorPainters.ZigZagEquisPainter.Init/returns;DocStr7840
@@ -790,7 +776,6 @@ M:StockSharp.Xaml.Charting.IndicatorPainters.ZigZagEquisPainter.ProcessValues(Sy
 M:StockSharp.Xaml.Charting.IndicatorPainters.ZigZagEquisPainter.ProcessValues(System.DateTimeOffset,StockSharp.Algo.Indicators.IIndicatorValue,StockSharp.Xaml.Charting.DrawHandler)/param/time;DocStr7780
 M:StockSharp.Xaml.Charting.IndicatorPainters.ZigZagEquisPainter.ProcessValues(System.DateTimeOffset,StockSharp.Algo.Indicators.IIndicatorValue,StockSharp.Xaml.Charting.DrawHandler)/param/value;DocStr7842
 M:StockSharp.Xaml.Charting.IndicatorPainters.ZigZagEquisPainter.ProcessValues(System.DateTimeOffset,StockSharp.Algo.Indicators.IIndicatorValue,StockSharp.Xaml.Charting.DrawHandler)/param/draw;DocStr7843
-M:StockSharp.Xaml.Charting.IndicatorPainters.ZigZagEquisPainter.ProcessValues(System.DateTimeOffset,StockSharp.Algo.Indicators.IIndicatorValue,StockSharp.Xaml.Charting.DrawHandler)/returns;DocStr7844
 T:StockSharp.Xaml.Charting.IndicatorPainters.ZigZagPainter/summary;DocStr7845
 M:StockSharp.Xaml.Charting.IndicatorPainters.ZigZagPainter.Init/summary;DocStr7839
 M:StockSharp.Xaml.Charting.IndicatorPainters.ZigZagPainter.Init/returns;DocStr7840
@@ -798,7 +783,6 @@ M:StockSharp.Xaml.Charting.IndicatorPainters.ZigZagPainter.ProcessValues(System.
 M:StockSharp.Xaml.Charting.IndicatorPainters.ZigZagPainter.ProcessValues(System.DateTimeOffset,StockSharp.Algo.Indicators.IIndicatorValue,StockSharp.Xaml.Charting.DrawHandler)/param/time;DocStr7780
 M:StockSharp.Xaml.Charting.IndicatorPainters.ZigZagPainter.ProcessValues(System.DateTimeOffset,StockSharp.Algo.Indicators.IIndicatorValue,StockSharp.Xaml.Charting.DrawHandler)/param/value;DocStr7842
 M:StockSharp.Xaml.Charting.IndicatorPainters.ZigZagPainter.ProcessValues(System.DateTimeOffset,StockSharp.Algo.Indicators.IIndicatorValue,StockSharp.Xaml.Charting.DrawHandler)/param/draw;DocStr7843
-M:StockSharp.Xaml.Charting.IndicatorPainters.ZigZagPainter.ProcessValues(System.DateTimeOffset,StockSharp.Algo.Indicators.IIndicatorValue,StockSharp.Xaml.Charting.DrawHandler)/returns;DocStr7844
 T:StockSharp.Xaml.Charting.IndicatorType/summary;DocStr7850
 P:StockSharp.Xaml.Charting.IndicatorType.Name/summary;Str908
 P:StockSharp.Xaml.Charting.IndicatorType.Description/summary;DocStr7854

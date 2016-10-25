@@ -2211,7 +2211,6 @@
       <param name="time">The time stamp of the new data generation.</param>
       <param name="value">Indicator values.</param>
       <param name="draw">The method of value drawing on the chart.</param>
-      <returns>New values for display on the chart.</returns>
     </member>
     <member name="T:StockSharp.Xaml.Charting.IndicatorPainters.AlligatorPainter">
       <summary>
@@ -2246,7 +2245,6 @@
       <param name="time">The time stamp of the new data generation.</param>
       <param name="value">Indicator values.</param>
       <param name="draw">The method of value drawing on the chart.</param>
-      <returns>New values for display on the chart.</returns>
     </member>
     <member name="M:StockSharp.Xaml.Charting.IndicatorPainters.AlligatorPainter.Load(Ecng.Serialization.SettingsStorage)">
       <summary>
@@ -2293,7 +2291,6 @@
       <param name="time">The time stamp of the new data generation.</param>
       <param name="value">Indicator values.</param>
       <param name="draw">The method of value drawing on the chart.</param>
-      <returns>New values for display on the chart.</returns>
     </member>
     <member name="M:StockSharp.Xaml.Charting.IndicatorPainters.AverageDirectionalIndexPainter.Load(Ecng.Serialization.SettingsStorage)">
       <summary>
@@ -2335,7 +2332,6 @@
       <param name="time">The time stamp of the new data generation.</param>
       <param name="value">Indicator values.</param>
       <param name="draw">The method of value drawing on the chart.</param>
-      <returns>New values for display on the chart.</returns>
     </member>
     <member name="M:StockSharp.Xaml.Charting.IndicatorPainters.BaseChartIndicatorPainter.ToString">
       <summary>
@@ -2388,7 +2384,6 @@
       <param name="time">The time stamp of the new data generation.</param>
       <param name="value">Indicator values.</param>
       <param name="draw">The method of value drawing on the chart.</param>
-      <returns>New values for display on the chart.</returns>
     </member>
     <member name="M:StockSharp.Xaml.Charting.IndicatorPainters.BollingerBandsPainter.Load(Ecng.Serialization.SettingsStorage)">
       <summary>
@@ -2430,7 +2425,6 @@
       <param name="time">The time stamp of the new data generation.</param>
       <param name="value">Indicator values.</param>
       <param name="draw">The method of value drawing on the chart.</param>
-      <returns>New values for display on the chart.</returns>
     </member>
     <member name="M:StockSharp.Xaml.Charting.IndicatorPainters.FractalsPainter.Load(Ecng.Serialization.SettingsStorage)">
       <summary>
@@ -2487,7 +2481,6 @@
       <param name="time">The time stamp of the new data generation.</param>
       <param name="value">Indicator values.</param>
       <param name="draw">The method of value drawing on the chart.</param>
-      <returns>New values for display on the chart.</returns>
     </member>
     <member name="M:StockSharp.Xaml.Charting.IndicatorPainters.IchimokuPainter.Load(Ecng.Serialization.SettingsStorage)">
       <summary>
@@ -2519,7 +2512,6 @@
       <param name="time">The time stamp of the new data generation.</param>
       <param name="value">Indicator values.</param>
       <param name="draw">The method of value drawing on the chart.</param>
-      <returns>New values for display on the chart.</returns>
     </member>
     <member name="T:StockSharp.Xaml.Charting.IndicatorPainters.MovingAverageConvergenceDivergenceSignalPainter">
       <summary>
@@ -2539,7 +2531,6 @@
       <param name="time">The time stamp of the new data generation.</param>
       <param name="value">Indicator values.</param>
       <param name="draw">The method of value drawing on the chart.</param>
-      <returns>New values for display on the chart.</returns>
     </member>
     <member name="T:StockSharp.Xaml.Charting.IndicatorPainters.ParabolicSarPainter">
       <summary>
@@ -2559,7 +2550,6 @@
       <param name="time">The time stamp of the new data generation.</param>
       <param name="value">Indicator values.</param>
       <param name="draw">The method of value drawing on the chart.</param>
-      <returns>New values for display on the chart.</returns>
     </member>
     <member name="T:StockSharp.Xaml.Charting.IndicatorPainters.PeakPainter">
       <summary>
@@ -2579,7 +2569,6 @@
       <param name="time">The time stamp of the new data generation.</param>
       <param name="value">Indicator values.</param>
       <param name="draw">The method of value drawing on the chart.</param>
-      <returns>New values for display on the chart.</returns>
     </member>
     <member name="T:StockSharp.Xaml.Charting.IndicatorPainters.TroughPainter">
       <summary>
@@ -2599,7 +2588,6 @@
       <param name="time">The time stamp of the new data generation.</param>
       <param name="value">Indicator values.</param>
       <param name="draw">The method of value drawing on the chart.</param>
-      <returns>New values for display on the chart.</returns>
     </member>
     <member name="T:StockSharp.Xaml.Charting.IndicatorPainters.VolumePainter">
       <summary>
@@ -2639,7 +2627,6 @@
       <param name="time">The time stamp of the new data generation.</param>
       <param name="value">Indicator values.</param>
       <param name="draw">The method of value drawing on the chart.</param>
-      <returns>New values for display on the chart.</returns>
     </member>
     <member name="M:StockSharp.Xaml.Charting.IndicatorPainters.VolumePainter.Load(Ecng.Serialization.SettingsStorage)">
       <summary>
@@ -2671,7 +2658,6 @@
       <param name="time">The time stamp of the new data generation.</param>
       <param name="value">Indicator values.</param>
       <param name="draw">The method of value drawing on the chart.</param>
-      <returns>New values for display on the chart.</returns>
     </member>
     <member name="T:StockSharp.Xaml.Charting.IndicatorPainters.ZigZagEquisPainter">
       <summary>
@@ -2691,7 +2677,6 @@
       <param name="time">The time stamp of the new data generation.</param>
       <param name="value">Indicator values.</param>
       <param name="draw">The method of value drawing on the chart.</param>
-      <returns>New values for display on the chart.</returns>
     </member>
     <member name="T:StockSharp.Xaml.Charting.IndicatorPainters.ZigZagPainter">
       <summary>
@@ -2711,7 +2696,6 @@
       <param name="time">The time stamp of the new data generation.</param>
       <param name="value">Indicator values.</param>
       <param name="draw">The method of value drawing on the chart.</param>
-      <returns>New values for display on the chart.</returns>
     </member>
     <member name="T:StockSharp.Xaml.Charting.IndicatorType">
       <summary>

@@ -3,7 +3,7 @@
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     <introduction>
     	<para>Пункт главного меню приложения <legacyBold>Дополнительно => Сбросить настройки</legacyBold>.</para>
-    	<para>Сбрасывает настроки <token>hydra</token> в начальное состояние.</para>
+    	<para>Сбрасывает настройки <token>hydra</token> в начальное состояние.</para>
     </introduction>
   </developerConceptualDocument>
 </topic>

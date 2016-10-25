@@ -344,7 +344,7 @@ namespace StockSharp.Messages
 		/// Number of trades.
 		/// </summary>
 		[EnumMember]
-		[EnumDisplayNameLoc(LocalizedStrings.Str323Key)]
+		[EnumDisplayNameLoc(LocalizedStrings.NumOfTradesKey)]
 		TradesCount,
 
 		/// <summary>

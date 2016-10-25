@@ -66,14 +66,14 @@ namespace StockSharp.Algo.Indicators
 		{
 			var newValue = input.GetValue<decimal>();
 
-			// Вычисляем  СMO
+			// calc СMO
 			var cmoValue = _cmo.Process(input).GetValue<decimal>();
 
-			// Вычисляем Vidya
+			// calc Vidya
 			if (!IsFormed)
 			{
 				if (!input.IsFinal)
-					return new DecimalIndicatorValue(this, ((Buffer.Skip(1).Sum() + newValue) / Length));
+					return new DecimalIndicatorValue(this, (Buffer.Skip(1).Sum() + newValue) / Length);
 
 				Buffer.Add(newValue);
 

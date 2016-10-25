@@ -298,13 +298,13 @@
       <Topic id="9e075b32-abb2-4fad-bfb2-b822dd7d9f30" visible="True" title="Export (auto)" />
       <Topic id="f2b919bd-cb33-4cf1-818f-315c8f79b5ce" visible="True" title="Backup" />
     </Topic>
-    <Topic id="7749ebdf-8bd5-4fae-a35c-d7e38f496c4a" visible="True" isExpanded="true" isSelected="true" title="Analytics">
+    <Topic id="7749ebdf-8bd5-4fae-a35c-d7e38f496c4a" visible="True" isExpanded="true" title="Analytics">
       <Topic id="83e7f4bb-733d-4463-a2c9-923ccc486d36" visible="True" title="Coding" />
       <Topic id="46348bb0-292f-4c53-b075-793ecf8b3d08" visible="True" title="Execution" />
     </Topic>
     <Topic id="8d9f131c-6327-4b88-a158-b1e52b821df3" visible="True" noFile="true" isExpanded="true" title="Misc">
       <Topic id="e088a37c-22aa-4a85-a20e-3b64c1b039d3" visible="True" title="Settings reset" />
-      <Topic id="45cc9b3a-117c-4567-94af-fea13087ebe9" visible="True" title="Data removing" />
+      <Topic id="45cc9b3a-117c-4567-94af-fea13087ebe9" visible="True" isSelected="true" title="Data erasing" />
       <Topic id="715c9caa-2fc1-4b7d-bc01-05cdf5897794" visible="True" title="Synchronization" />
       <Topic id="938a2834-a3cc-4d92-8a41-e4c11cf84d78" visible="True" title="Network settings" />
       <Topic id="4caa035e-a420-4193-92a5-d667a4d65ee1" visible="True" title="Boards" />

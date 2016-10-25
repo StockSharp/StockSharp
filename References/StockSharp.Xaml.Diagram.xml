@@ -112,17 +112,19 @@
             The method is called at deinitialization of the diagram element.
             </summary>
     </member>
-    <member name="M:StockSharp.Xaml.Diagram.CompositionDiagramElement.OnBind(StockSharp.Xaml.Diagram.DiagramElement)">
+    <member name="M:StockSharp.Xaml.Diagram.CompositionDiagramElement.OnSocketConnected(StockSharp.Xaml.Diagram.DiagramSocket,StockSharp.Xaml.Diagram.DiagramSocket)">
       <summary>
             The method is called at subscription to the processing of diagram element output values.
             </summary>
-      <param name="element">The diagram element.</param>
+      <param name="socket">The diagram element socket.</param>
+      <param name="source">The source diagram element socket.</param>
     </member>
-    <member name="M:StockSharp.Xaml.Diagram.CompositionDiagramElement.OnUnBind(StockSharp.Xaml.Diagram.DiagramElement)">
+    <member name="M:StockSharp.Xaml.Diagram.CompositionDiagramElement.OnSocketDisconnected(StockSharp.Xaml.Diagram.DiagramSocket,StockSharp.Xaml.Diagram.DiagramSocket)">
       <summary>
             The method is called at unsubscription from the processing of diagram element output values.
             </summary>
-      <param name="element">The diagram element.</param>
+      <param name="socket">The diagram element socket.</param>
+      <param name="source">The source diagram element socket.</param>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.CompositionDiagramElement.OnStart">
       <summary>
@@ -694,7 +696,7 @@
             </summary>
       <param name="param">Parameter.</param>
     </member>
-    <member name="M:StockSharp.Xaml.Diagram.DiagramElement.AddInput(System.String,StockSharp.Xaml.Diagram.DiagramSocketType,System.Action{StockSharp.Xaml.Diagram.DiagramSocketValue},System.Int32)">
+    <member name="M:StockSharp.Xaml.Diagram.DiagramElement.AddInput(System.String,StockSharp.Xaml.Diagram.DiagramSocketType,System.Action{StockSharp.Xaml.Diagram.DiagramSocketValue},System.Int32,System.Int32)">
       <summary>
             To add an incoming connection.
             </summary>
@@ -702,20 +704,23 @@
       <param name="type">Connection type.</param>
       <param name="linkableMax">The maximum number of connections.</param>
       <param name="process">The action is called at the processing of the new incoming value for socket.</param>
+      <param name="index">Index in sockets list.</param>
     </member>
-    <member name="M:StockSharp.Xaml.Diagram.DiagramElement.AddOutput(System.String,StockSharp.Xaml.Diagram.DiagramSocketType,System.Int32)">
+    <member name="M:StockSharp.Xaml.Diagram.DiagramElement.AddOutput(System.String,StockSharp.Xaml.Diagram.DiagramSocketType,System.Int32,System.Int32)">
       <summary>
             To add an outgoing connection.
             </summary>
       <param name="name">The connection name.</param>
       <param name="type">Connection type.</param>
       <param name="linkableMax">The maximum number of connections.</param>
+      <param name="index">Index in sockets list.</param>
     </member>
-    <member name="M:StockSharp.Xaml.Diagram.DiagramElement.AddSocket(StockSharp.Xaml.Diagram.DiagramSocket)">
+    <member name="M:StockSharp.Xaml.Diagram.DiagramElement.AddSocket(StockSharp.Xaml.Diagram.DiagramSocket,System.Int32)">
       <summary>
             To add a connection.
             </summary>
       <param name="socket">Connection.</param>
+      <param name="index">Index in sockets list.</param>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.DiagramElement.RemoveSocket(StockSharp.Xaml.Diagram.DiagramSocket)">
       <summary>
@@ -741,6 +746,20 @@
             </summary>
       <param name="socket">Connection.</param>
       <returns>Sender elements.</returns>
+    </member>
+    <member name="M:StockSharp.Xaml.Diagram.DiagramElement.OnSocketConnected(StockSharp.Xaml.Diagram.DiagramSocket,StockSharp.Xaml.Diagram.DiagramSocket)">
+      <summary>
+            The method is called at subscription to the processing of diagram element output values.
+            </summary>
+      <param name="socket">The diagram element socket.</param>
+      <param name="source">The source diagram element socket.</param>
+    </member>
+    <member name="M:StockSharp.Xaml.Diagram.DiagramElement.OnSocketDisconnected(StockSharp.Xaml.Diagram.DiagramSocket,StockSharp.Xaml.Diagram.DiagramSocket)">
+      <summary>
+            The method is called at unsubscription from the processing of diagram element output values.
+            </summary>
+      <param name="socket">The diagram element socket.</param>
+      <param name="source">The source diagram element socket.</param>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.DiagramElement.RaiseProcessOutput(StockSharp.Xaml.Diagram.DiagramElement,System.DateTimeOffset,System.Object)">
       <summary>
@@ -796,31 +815,6 @@
       <summary>
             The method is called at deinitialization of the diagram element.
             </summary>
-    </member>
-    <member name="M:StockSharp.Xaml.Diagram.DiagramElement.Bind(StockSharp.Xaml.Diagram.DiagramElement,System.String)">
-      <summary>
-            To subscribe to the diagram element output values processing.
-            </summary>
-      <param name="source">The diagram element.</param>
-      <param name="destPortId">The port identifier to which the element is binded.</param>
-    </member>
-    <member name="M:StockSharp.Xaml.Diagram.DiagramElement.OnBind(StockSharp.Xaml.Diagram.DiagramElement)">
-      <summary>
-            The method is called at subscription to the processing of diagram element output values.
-            </summary>
-      <param name="element">The diagram element.</param>
-    </member>
-    <member name="M:StockSharp.Xaml.Diagram.DiagramElement.UnBind(StockSharp.Xaml.Diagram.DiagramElement)">
-      <summary>
-            To unsubscribe from the diagram element output values processing.
-            </summary>
-      <param name="source">The diagram element.</param>
-    </member>
-    <member name="M:StockSharp.Xaml.Diagram.DiagramElement.OnUnBind(StockSharp.Xaml.Diagram.DiagramElement)">
-      <summary>
-            The method is called at unsubscription from the processing of diagram element output values.
-            </summary>
-      <param name="element">The diagram element.</param>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.DiagramElement.Start">
       <summary>
@@ -1140,7 +1134,7 @@
       <param name="param">The diagram element parameter.</param>
       <param name="groupName">The category of the diagram element parameter.</param>
       <param name="displayName">The display name.</param>
-      <param name="desciption">The description of the diagram element parameter.</param>
+      <param name="description">The description of the diagram element parameter.</param>
       <param name="order">The property order.</param>
       <returns>The diagram element parameter.</returns>
     </member>
@@ -1220,7 +1214,6 @@
       <typeparam name="T">The diagram element parameter type.</typeparam>
       <typeparam name="TParam">The attribute type.</typeparam>
       <param name="param">The diagram element parameter.</param>
-      <returns>The diagram element parameter.</returns>
     </member>
     <member name="T:StockSharp.Xaml.Diagram.DiagramPaletteControl">
       <summary>
@@ -1551,6 +1544,11 @@
             Portfolio.
             </summary>
     </member>
+    <member name="F:StockSharp.Xaml.Diagram.DiagramSocketType.Options">
+      <summary>
+            Options.
+            </summary>
+    </member>
     <member name="T:StockSharp.Xaml.Diagram.DiagramSocketValue">
       <summary>
             The value for the connection.
@@ -1703,24 +1701,139 @@
             Rho.
             </summary>
     </member>
-    <member name="T:StockSharp.Xaml.Diagram.Elements.BlackScholesDiagramElement">
+    <member name="T:StockSharp.Xaml.Diagram.Elements.OptionsBlackScholesDiagramElement">
       <summary>
             The Black-Scholes "Greeks" evaluation element.
             </summary>
     </member>
-    <member name="P:StockSharp.Xaml.Diagram.Elements.BlackScholesDiagramElement.TypeId">
+    <member name="P:StockSharp.Xaml.Diagram.Elements.OptionsBlackScholesDiagramElement.TypeId">
       <summary>
             The unique identifier of the diagram element type.
             </summary>
     </member>
-    <member name="P:StockSharp.Xaml.Diagram.Elements.BlackScholesDiagramElement.IconName">
+    <member name="P:StockSharp.Xaml.Diagram.Elements.OptionsBlackScholesDiagramElement.IconName">
       <summary>
             Icon resource name.
             </summary>
     </member>
-    <member name="M:StockSharp.Xaml.Diagram.Elements.BlackScholesDiagramElement.#ctor">
+    <member name="M:StockSharp.Xaml.Diagram.Elements.OptionsBlackScholesDiagramElement.#ctor">
       <summary>
-            Initializes a new instance of the <see cref="T:StockSharp.Xaml.Diagram.Elements.BlackScholesDiagramElement" />.
+            Initializes a new instance of the <see cref="T:StockSharp.Xaml.Diagram.Elements.OptionsBlackScholesDiagramElement" />.
+            </summary>
+    </member>
+    <member name="T:StockSharp.Xaml.Diagram.Elements.OptionsHedgeDiagramElement">
+      <summary>
+            Options hedging diagram element.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Diagram.Elements.OptionsHedgeDiagramElement.TypeId">
+      <summary>
+            The unique identifier of the diagram element type.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Diagram.Elements.OptionsHedgeDiagramElement.IconName">
+      <summary>
+            Icon resource name.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.Diagram.Elements.OptionsHedgeDiagramElement.#ctor">
+      <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Xaml.Diagram.Elements.OptionsHedgeDiagramElement" />.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.Diagram.Elements.OptionsHedgeDiagramElement.OnStart">
+      <summary>
+            The method is called at the start of the diagram element algorithm.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.Diagram.Elements.OptionsHedgeDiagramElement.OnStop">
+      <summary>
+            The method is called at the stop of the diagram element algorithm.
+            </summary>
+    </member>
+    <member name="T:StockSharp.Xaml.Diagram.Elements.OptionsQuotingTypes">
+      <summary>
+            Options quoting types.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Xaml.Diagram.Elements.OptionsQuotingTypes.Volalitity">
+      <summary>
+            Option volatility quoting.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Xaml.Diagram.Elements.OptionsQuotingTypes.TheorPrice">
+      <summary>
+            Option theoretical price quoting.
+            </summary>
+    </member>
+    <member name="T:StockSharp.Xaml.Diagram.Elements.OptionsQuotingDiagramElement">
+      <summary>
+            Options quoting diagram element.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Diagram.Elements.OptionsQuotingDiagramElement.TypeId">
+      <summary>
+            The unique identifier of the diagram element type.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Diagram.Elements.OptionsQuotingDiagramElement.IconName">
+      <summary>
+            Icon resource name.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.Diagram.Elements.OptionsQuotingDiagramElement.#ctor">
+      <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Xaml.Diagram.Elements.OptionsQuotingDiagramElement" />.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.Diagram.Elements.OptionsQuotingDiagramElement.OnStart">
+      <summary>
+            The method is called at the start of the diagram element algorithm.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.Diagram.Elements.OptionsQuotingDiagramElement.OnStop">
+      <summary>
+            The method is called at the stop of the diagram element algorithm.
+            </summary>
+    </member>
+    <member name="T:StockSharp.Xaml.Diagram.Elements.OptionsStrikesDiagramElement">
+      <summary>
+            Filtering derivatives by underlying asset diagram element.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Diagram.Elements.OptionsStrikesDiagramElement.TypeId">
+      <summary>
+            The unique identifier of the diagram element type.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Diagram.Elements.OptionsStrikesDiagramElement.IconName">
+      <summary>
+            Icon resource name.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.Diagram.Elements.OptionsStrikesDiagramElement.#ctor">
+      <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Xaml.Diagram.Elements.OptionsStrikesDiagramElement" />.
+            </summary>
+    </member>
+    <member name="T:StockSharp.Xaml.Diagram.Elements.MarketDepthImpliedVolatilityDiagramElement">
+      <summary>
+            Implied volatility market depth element.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Diagram.Elements.MarketDepthImpliedVolatilityDiagramElement.TypeId">
+      <summary>
+            The unique identifier of the diagram element type.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Diagram.Elements.MarketDepthImpliedVolatilityDiagramElement.IconName">
+      <summary>
+            Icon resource name.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.Diagram.Elements.MarketDepthImpliedVolatilityDiagramElement.#ctor">
+      <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Xaml.Diagram.Elements.MarketDepthImpliedVolatilityDiagramElement" />.
             </summary>
     </member>
     <member name="T:StockSharp.Xaml.Diagram.Elements.MarketDepthGroupedDiagramElement">
@@ -2315,6 +2428,12 @@
             The method is called at the stop of the diagram element algorithm.
             </summary>
     </member>
+    <member name="M:StockSharp.Xaml.Diagram.Elements.PositionDiagramElement.Load(Ecng.Serialization.SettingsStorage)">
+      <summary>
+            Load settings.
+            </summary>
+      <param name="storage">Settings storage.</param>
+    </member>
     <member name="T:StockSharp.Xaml.Diagram.Elements.PreviousValueDiagramElement">
       <summary>
             Previous value receiving element.
@@ -2415,6 +2534,11 @@
             The element which is using compiled strategy, based on S#.API.
             </summary>
     </member>
+    <member name="P:StockSharp.Xaml.Diagram.Elements.StrategyDiagramElement.SelectedStrategy">
+      <summary>
+            The selected strategy.
+            </summary>
+    </member>
     <member name="P:StockSharp.Xaml.Diagram.Elements.StrategyDiagramElement.TypeId">
       <summary>
             The unique identifier of the diagram element type.
@@ -2426,6 +2550,11 @@
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.Elements.StrategyDiagramElement.#ctor">
+      <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Xaml.Diagram.Elements.StrategyDiagramElement" />.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.Diagram.Elements.StrategyDiagramElement.#ctor(System.Boolean)">
       <summary>
             Initializes a new instance of the <see cref="T:StockSharp.Xaml.Diagram.Elements.StrategyDiagramElement" />.
             </summary>

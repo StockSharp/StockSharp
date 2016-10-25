@@ -48,7 +48,7 @@
 			</mediaLink> 			
 
 			<list class="bullet">
-  				<listItem><para>Указать путь к каталогу с историческими данными, скаченными <token>hydra</token>.</para></listItem>
+  				<listItem><para>Указать путь к каталогу с историческими данными, скачанными <token>hydra</token>.</para></listItem>
   				<listItem><para>Выбрать терминал к которому будет производится подключение, в примере это <token>quik</token>.</para></listItem>
 			</list>
 

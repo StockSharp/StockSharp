@@ -21,6 +21,9 @@ M:StockSharp.Xaml.Code.CodeReference.#ctor/summary;DocStr1
 P:StockSharp.Xaml.Code.CodeReference.Name/summary;DocStr8112
 P:StockSharp.Xaml.Code.CodeReference.Location/summary;DocStr8108
 T:StockSharp.Xaml.Code.CodeReferencesWindow/summary;DocStr8109
+F:StockSharp.Xaml.Code.CodeReferencesWindow.OkCommand/summary;DocStr9277
+F:StockSharp.Xaml.Code.CodeReferencesWindow.AddCommand/summary;DocStr9278
+F:StockSharp.Xaml.Code.CodeReferencesWindow.RemoveCommand/summary;DocStr9279
 M:StockSharp.Xaml.Code.CodeReferencesWindow.#ctor/summary;DocStr1
 P:StockSharp.Xaml.Code.CodeReferencesWindow.References/summary;References
 M:StockSharp.Xaml.Code.CodeReferencesWindow.InitializeComponent/summary;DocStr8

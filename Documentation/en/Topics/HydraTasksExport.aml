@@ -2,7 +2,7 @@
 <topic id="9e075b32-abb2-4fad-bfb2-b822dd7d9f30" revisionNumber="1">
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     <introduction>
-      <para>Задача выполняет экспорт биржевых данных в различные форматы: Excel, xml, sql, bin или txt.</para>
+      <para>The task performs the export of the exchange data to different formats: Excel, xml, sql, bin or txt.</para>
 	<table>
 	  <row>
     	<entry>
@@ -19,98 +19,98 @@
 	</table>
 
 
-      <para><legacyBold>База данных</legacyBold></para>
+      <para><legacyBold>Database</legacyBold></para>
       <list class="bullet">
         <listItem>
-			<legacyBold>Подключение</legacyBold> - подключение в базе данных. Используется в случае экспорта через SQL.
+			<legacyBold>Connection</legacyBold> - the connect to the database. Used in the case of export via SQL.
 			</listItem>
 			<listItem>
- 		    <legacyBold>Пакет</legacyBold> - размер пакета передаваемых данных. По умолчанию равен 50 элементам. Используется в случае экспорта через SQL.
+ 		    <legacyBold>Batch</legacyBold> - the transmitted data batch size. By default is 50 items. Used in the case of export via SQL.
 			</listItem>
 			<listItem>
- 		    <legacyBold>Уникальность</legacyBold> - проверять уникальность данных в базе данных. Влияет на производительность. По умолчанию включено. Используется в случае экспорта через SQL. 
+ 		    <legacyBold>Uniqueness</legacyBold> - to check the data uniqueness in the database. It affects the performance. By default is enabled. Used in the case of export via SQL. 
 			</listItem>
 		 </list>
 		 
 		<alert class="note">
-  			<para>При использовании экспорта через SQL нужно установить параметры строки подключения</para>
+  			<para>When using the export via SQL it is required to set the connection string settings.</para>
 		</alert>
 		
-		<para><legacyBold>Новая строка подключения</legacyBold></para>
+		<para><legacyBold>New connection string</legacyBold></para>
        <list class="bullet">
         	<listItem>
-				<legacyBold>Провайдер</legacyBold> - настройки провайдера.
+				<legacyBold>Provider</legacyBold> - the ISP settings.
 			</listItem>
 			<listItem>
- 		    	<legacyBold>Сервер</legacyBold> - адрес сервера или путь к база данных.
+ 		    	<legacyBold>Server</legacyBold> - the server address or the path to the database.
 			</listItem>
 			<listItem>
- 		    	<legacyBold>База данных</legacyBold> - название базы данных. Не используется для SQLite. 
+ 		    	<legacyBold>Database</legacyBold> - the database name. Not used for SQLite. 
 			</listItem>
 			<listItem>
- 		    	<legacyBold>Логин</legacyBold> - логин для доступа к базе данных. Не используется при анонимном доступе.
+ 		    	<legacyBold>Login</legacyBold> - the login to access the database. Not used with anonymous access.
 			</listItem>
 			<listItem>
- 		    	<legacyBold>Пароль</legacyBold> - пароль для доступа к базе данных. Не используется при анонимном доступе.
+ 		    	<legacyBold>Password</legacyBold> - the password to access the database. Not used with anonymous access.
 			</listItem>
 			<listItem>
- 		    	<legacyBold>Windows</legacyBold> - использовать текущую учетную запись Windows для подключения к базе данных. 
+ 		    	<legacyBold>Windows</legacyBold> - to use the current Windows account to connect to the database. 
 			</listItem>
 			<listItem>
- 		    	<legacyBold>Подключение</legacyBold> - готовая строка подключения. 
+ 		    	<legacyBold>Connection</legacyBold> - the ready connection string. 
 			</listItem>
 		 </list>
 		 
 		 <alert class="note">
-  			<para>Проверить соединение с базой можно при помощи кнопки "Проверить".</para>
+  			<para>To check the connection to database is possible using the <legacyBold>Test</legacyBold> button.</para>
 		</alert>
 
-		<para><legacyBold>Основные</legacyBold></para>
+		<para><legacyBold>Main</legacyBold></para>
 		<list class="bullet">
         <listItem>
-          <legacyBold>Работать с</legacyBold> - время начала работы.
+          <legacyBold>Work from</legacyBold> - the operating start time.
 		</listItem>
         <listItem>
-          <legacyBold>Работать до</legacyBold> - время окончания работы.
+          <legacyBold>Work till</legacyBold> - the operating stop time.
 		</listItem>
         <listItem>
-          <legacyBold>Интервал работы</legacyBold> - интервал работы.
+          <legacyBold>Interval</legacyBold> - the operating interval.
 		</listItem>
         <listItem>
-          <legacyBold>Директория с данными</legacyBold> - директория с данными, куда будут сохраняться конечные файлы в формате <token>stocksharp</token>.
+          <legacyBold>Data directory</legacyBold> - the data directory where the final files will be saved in the <token>stocksharp</token> format.
 		</listItem>
 		<listItem>
-          <legacyBold>Формат</legacyBold> - формат данных: BIN/CSV.
+          <legacyBold>Format</legacyBold> - the data format: BIN/CSV.
 		</listItem>
 		<listItem>
-          <legacyBold>Макс. ошибок</legacyBold> - максимальное количество ошибок по достижению которого задача будет остановлена. По умолчанию 0 - количество ошибок игнорируются.
+          <legacyBold>Max errors</legacyBold> - the maximum number of errors to achieve that the task will be stopped. By default is 0 – number of errors is ignored.
 		</listItem>
 		<listItem>
-          <legacyBold>Зависимость</legacyBold> - задача, которая должна быть выполнена перед запуском текущей.
+          <legacyBold>Dependency</legacyBold> - the task that must be executed before the current is started.
 		</listItem>
 		<listItem>
-          <legacyBold>Уровень логирования</legacyBold> - уровень логирования.
+          <legacyBold>Logging level</legacyBold> - the logging level.
 		</listItem>
       </list>
-     <para><legacyBold>Свечи</legacyBold></para>
+     <para><legacyBold>Candles</legacyBold></para>
       <list class="bullet">
         <listItem>
-			<legacyBold>Параметры</legacyBold> - параметры свечек.
+			<legacyBold>Parameters</legacyBold> - the candles parameters.
 		</listItem>
  	  </list>
-      <para><legacyBold>Экспорт (авто)</legacyBold></para>
+      <para><legacyBold>Export (auto)</legacyBold></para>
       <list class="bullet">
         <listItem>
-			<legacyBold>Тип</legacyBold> - тип экспорта (формат).
+			<legacyBold>Type</legacyBold> - the type of export (format).
 		</listItem>
 		<listItem>
-		 	<legacyBold>Начальная дата</legacyBold> - с какой даты начать экспортировать данные.
+		 	<legacyBold>Start date</legacyBold> - from which date to start exporting data.
 		</listItem>
 		<listItem>
-			<legacyBold>Временной отступ</legacyBold> - временной отступ в днях.
+			<legacyBold>Offset</legacyBold> - the time offset in days.
 		</listItem>
 		<listItem>
-          <legacyBold>Директория экспорта</legacyBold> - директория, куда будут экспортироваться данные.
+          <legacyBold>Export directory</legacyBold> - the directory where data will be exported to.
 		</listItem>
  	  </list>
     </introduction>
