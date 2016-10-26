@@ -3,16 +3,16 @@
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
 
     <introduction>
- 		<para><codeEntityReference>T:StockSharp.Xaml.Monitor</codeEntityReference> - визуальный элемент, где 
-                	<link xlink:href="a206d470-20f1-42ed-b066-6e322d55d436">LogControl</link> используется вместе с иерархическим деревом <legacyBold>TreeView</legacyBold>, 
-                	в котором отображаются источники логов. Изначально компонент предназначался для мониторинга торговых стратегий. Поэтому по умолчанию
-                	в "дереве" присутствует узел <legacyBold>Стратегии</legacyBold>. В тоже время с этим компонетом могут использоваться и другие источники.
+ 		<para><codeEntityReference>T:StockSharp.Xaml.Monitor</codeEntityReference> - is the visual element where 
+                	<link xlink:href="a206d470-20f1-42ed-b066-6e322d55d436">LogControl</link> is used in conjunction with the <legacyBold>TreeView</legacyBold>
+                	hierarchical tree, in which logs sources are shown. Initially, the component was designed to monitor the trading strategies. Therefore, by default,
+                	the "tree" includes the <legacyBold>Strategy</legacyBold> node. At the same time other sources can be used with this component.
         </para>
     </introduction>
           <section address="SubSection1">
               <content>
               	<mediaLink><image placement="left" xlink:href="GUI_Monitor" /></mediaLink>
-                <para><legacyUnderline>Пример кода</legacyUnderline></para>
+                <para><legacyUnderline>Sample code</legacyUnderline></para>
                 <code title="XAML" language="XAML">
 				<![CDATA[
 <Window x:Class="LoggingControls.MainWindow"
@@ -27,15 +27,13 @@
 				]]>
                   </code>
                   <code title="C#" language="C#">
-// Создаем LogManager
-LogManager _logManager = new LogManager();
+// creating a new instance of LogManager
+_logManager = new LogManager();
 
-// Добавляем источник логов. Используем систему трассировки .NET.
-// При работе со стратегиями, добавьте аналогичным образом объект стратегии
+// adding .NET traing as a logs source.
 _logManager.Sources.Add(new StockSharp.Logging.TraceSource());
 
-// Добавляем "слушателя" логов - GuiLogListener, в конструктор которого передаем ссылку
-// на графический элемент.
+// adding Monitor as a logs listener.
 _logManager.Listeners.Add(new GuiLogListener(Monitor));
                   </code>
               </content>

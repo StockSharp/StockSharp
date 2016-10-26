@@ -29,15 +29,6 @@
 			<linkTarget>_blank</linkTarget>
 		</externalLink>.
       </para>
-     <para><token>stocksharp</token> development is carried out by
-      	<externalLink>
-			<linkText>StockSharp LLC</linkText>
-			<linkAlternateText>StockSharp LLC.</linkAlternateText>
-			<linkUri>http://stocksharp.com/</linkUri>
-			<linkTarget>_blank</linkTarget>
-		</externalLink>
- 	  as the Open-Source Software project (see <link xlink:href="536b1c81-5336-4dc0-ab29-8bef70a162ba">Source codes</link>). 
- 	  </para>
  	  <para> 	  
  	  Most <token>stocksharp</token> programs are <legacyBold>free of charge</legacyBold>, and some programs with advanced features are on a paying basis (see <link xlink:href="ba149b22-2024-4479-aaf3-8dd271a681f5">StockSharp Licensing</link>.).
  	  </para>

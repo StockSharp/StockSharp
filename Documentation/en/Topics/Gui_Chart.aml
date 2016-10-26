@@ -3,36 +3,36 @@
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     <introduction>
       <para>
-      <codeEntityReference>T:StockSharp.Xaml.Charting.Chart</codeEntityReference> - графический компонет, который позволяет строить 
-      биржевые графики: свечи, индикаторы, и отображать на графиках маркеры заявок и сделок.
+      <codeEntityReference>T:StockSharp.Xaml.Charting.Chart</codeEntityReference> - the graphical component that allows to plot the stock charts: candles, indicators,
+      and to display on the charts the markers of orders and trades.
       </para>
       <para>
-      	Ниже приведен пример построения графика при помощи компонета <codeEntityReference>T:StockSharp.Xaml.Charting.Chart</codeEntityReference>. За основу взят
-      	пример из Samples/Quik/SampleCandles, в который внесены некоторые изменения. 
+      	Below is an example of the chart plotting using the <codeEntityReference>T:StockSharp.Xaml.Charting.Chart</codeEntityReference>.
+      	The example from Samples/Chart/SampleChart is taken as a basis, in which some changes were made.
       </para>
     </introduction>
     
      <mediaLink><image placement="left" xlink:href="Gui_ChartSample" /></mediaLink>
     
       <procedure>
-      <title>Пример построения графика при помощи Chart</title>
+      <title>Example of chart plotting using Chart</title>
 
       <steps class="ordered">
 		  <step>
 			  <content>
 				  <para>
-					  В XAML создаем окно и добавляем в него графический компонент <codeEntityReference qualifyHint="true">T:StockSharp.Xaml.Charting.Chart</codeEntityReference>.
-					  Присваиваем компоненту имя <legacyBold>Chart</legacyBold>. Обратите внимание, что при создании окна нужно добавить пространство имен
-					  <legacyItalic>http://schemas.stocksharp.com/xaml</legacyItalic>.
+					  In XAML creating window and adding to it the graphical component <codeEntityReference qualifyHint="true">T:StockSharp.Xaml.Charting.Chart</codeEntityReference>.
+					  Assigning the <legacyBold>Chart</legacyBold> name to the component. Note that when the window is being created it is necessary to add the
+					  <legacyItalic>http://schemas.stocksharp.com/xaml</legacyItalic> namespace.
 				  </para>
 				   <code title="XAML" language="XAML">
 	  				<![CDATA[
-<Window x:Class="SampleCandles.ChartWindow"
+<Window x:Class="SampleChart.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:charting="http://schemas.stocksharp.com/xaml"
         Title="ChartWindow" Height="300" Width="300">
-   <charting:Chart x:Name="Chart" x:FieldModifier="public" />
+   <charting:Chart x:Name="Chart" />
 </Window>
 
 	  				]]>

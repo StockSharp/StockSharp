@@ -3,24 +3,24 @@
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
      <introduction>
       <para>
-      <codeEntityReference>T:StockSharp.Xaml.Charting.EquityCurveChart</codeEntityReference> - графический компонет для отбражения кривой доходности.
+      <codeEntityReference>T:StockSharp.Xaml.Charting.EquityCurveChart</codeEntityReference> - the graphical component for displaying the equity curve.
       </para>
       <para>
-      	Ниже приведен пример использования этого компонета. Полный код примера находится в Samples/Testing/SampleRandomEmulation. 
+      	Below is an example of using this component. The full example code is in the Samples/Testing/SampleRandomEmulation. 
       </para>
     </introduction>
     
     <mediaLink><image placement="left" xlink:href="Gui_EquityCurveChart"/></mediaLink>
     
       <procedure>
-      <title>Пример построения графика EquityCurveChart</title>
+      <title>Example of the EquityCurveChart plotting</title>
 
       <steps class="ordered">
 		  <step>
 			  <content>
 				  <para>
-					  В XAML добавляем графический компонент <codeEntityReference>T:StockSharp.Xaml.Charting.EquityCurveChart</codeEntityReference>.
-					  Присваиваем компоненту имя <legacyBold>Curve</legacyBold>.
+					  We add the <codeEntityReference>T:StockSharp.Xaml.Charting.EquityCurveChart</codeEntityReference> graphical component to XAML.
+					  Assigning the <legacyBold>Curve</legacyBold> name to the component.
 				  </para>
 				   <code title="XAML" language="XAML">
 	  				<![CDATA[
@@ -80,7 +80,8 @@
 		  <step>
 			  <content>
 				  <para>
-					  В коде главного окна создаем источник данных для отрисовки графика при помощи метода <codeEntityReference>Overload:StockSharp.Xaml.Charting.EquityCurveChart.CreateCurve</codeEntityReference>.
+					  In the main window code we create a data source to draw the chart using the <codeEntityReference>Overload:StockSharp.Xaml.Charting.EquityCurveChart.CreateCurve</codeEntityReference>
+					  method.
 				  </para>
 				   <code title="C#" language="C#">
               		<![CDATA[
@@ -104,21 +105,21 @@ public MainWindow()
 		  <step>
 			  <content>
 				  <para>
-					  При изменении значения PnL стратегии добавляем данные в источник данных. При этом используем специальный класс
-					  <codeEntityReference>T:StockSharp.Xaml.Charting.EquityData</codeEntityReference>.
+					  When the PnL value of the strategy is changed we add data to the data source. In this case we use the special 
+					  <codeEntityReference>T:StockSharp.Xaml.Charting.EquityData</codeEntityReference> class.
 				  </para>
 				   <code title="C#" language="C#">
               		<![CDATA[
 _strategy.PnLChanged += () =>
-		{
-			var data = new EquityData
-			{
-				Time = _strategy.CurrentTime,
-				Value = _strategy.PnL,
-			};
+{
+	var data = new EquityData
+	{
+		Time = _strategy.CurrentTime,
+		Value = _strategy.PnL,
+	};
 			
-			this.GuiAsync(() => _curveItems.Add(data));
-		};
+	this.GuiAsync(() => _curveItems.Add(data));
+};
 	  				]]>
 
 				   </code>
