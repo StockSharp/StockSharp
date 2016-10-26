@@ -967,14 +967,6 @@
             The default value is specified.
             </summary>
     </member>
-    <member name="P:StockSharp.Xaml.Diagram.IDiagramElementParam.IsSealed">
-      <summary>
-            The sealed parameter.
-            </summary>
-      <remarks>
-            The parameter will not be shown in the parent element.
-            </remarks>
-    </member>
     <member name="P:StockSharp.Xaml.Diagram.IDiagramElementParam.IsParam">
       <summary>
             The changeable parameter.
@@ -1040,14 +1032,6 @@
             The default value is specified.
             </summary>
     </member>
-    <member name="P:StockSharp.Xaml.Diagram.DiagramElementParam`1.IsSealed">
-      <summary>
-            The sealed parameter.
-            </summary>
-      <remarks>
-            The parameter will not be shown in the parent element.
-            </remarks>
-    </member>
     <member name="P:StockSharp.Xaml.Diagram.DiagramElementParam`1.IsParam">
       <summary>
             The changeable parameter.
@@ -1056,6 +1040,11 @@
     <member name="P:StockSharp.Xaml.Diagram.DiagramElementParam`1.IgnoreOnSave">
       <summary>
             To ignore when saving.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Diagram.DiagramElementParam`1.NotifyOnChanged">
+      <summary>
+            Raise changed event when property is changed.
             </summary>
     </member>
     <member name="P:StockSharp.Xaml.Diagram.DiagramElementParam`1.SaveHandler">
@@ -1191,14 +1180,6 @@
       <param name="param">The diagram element parameter.</param>
       <returns>The diagram element parameter.</returns>
     </member>
-    <member name="M:StockSharp.Xaml.Diagram.DiagramElementParamHelper.SetSealed``1(StockSharp.Xaml.Diagram.DiagramElementParam{``0})">
-      <summary>
-            To modify diagram element parameter to sealed.
-            </summary>
-      <typeparam name="T">The diagram element parameter type.</typeparam>
-      <param name="param">The diagram element parameter.</param>
-      <returns>The diagram element parameter.</returns>
-    </member>
     <member name="M:StockSharp.Xaml.Diagram.DiagramElementParamHelper.SetIsParam``1(StockSharp.Xaml.Diagram.DiagramElementParam{``0})">
       <summary>
             To modify diagram element parameter to changeable.
@@ -1214,6 +1195,15 @@
       <typeparam name="T">The diagram element parameter type.</typeparam>
       <typeparam name="TParam">The attribute type.</typeparam>
       <param name="param">The diagram element parameter.</param>
+    </member>
+    <member name="M:StockSharp.Xaml.Diagram.DiagramElementParamHelper.SetNotifyOnChange``1(StockSharp.Xaml.Diagram.DiagramElementParam{``0},System.Boolean)">
+      <summary>
+            Set the <see cref="P:StockSharp.Xaml.Diagram.DiagramElementParam`1.NotifyOnChanged" /> to <see langword="true" />.
+            </summary>
+      <typeparam name="T">The diagram element parameter type.</typeparam>
+      <param name="param">The diagram element parameter.</param>
+      <param name="value">Value.</param>
+      <returns>The diagram element parameter.</returns>
     </member>
     <member name="T:StockSharp.Xaml.Diagram.DiagramPaletteControl">
       <summary>
@@ -2529,14 +2519,34 @@
             Initializes a new instance of the <see cref="T:StockSharp.Xaml.Diagram.Elements.MarketDepthSparsedDiagramElement" />.
             </summary>
     </member>
+    <member name="T:StockSharp.Xaml.Diagram.Elements.BaseStrategyDiagramElement">
+      <summary>
+            The element which is using strategy, based on S#.API.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Diagram.Elements.BaseStrategyDiagramElement.SelectedStrategy">
+      <summary>
+            The selected strategy.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.Diagram.Elements.BaseStrategyDiagramElement.#ctor">
+      <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Xaml.Diagram.Elements.BaseStrategyDiagramElement" />.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.Diagram.Elements.BaseStrategyDiagramElement.OnStart">
+      <summary>
+            The method is called at the start of the diagram element algorithm.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.Diagram.Elements.BaseStrategyDiagramElement.OnStop">
+      <summary>
+            The method is called at the stop of the diagram element algorithm.
+            </summary>
+    </member>
     <member name="T:StockSharp.Xaml.Diagram.Elements.StrategyDiagramElement">
       <summary>
             The element which is using compiled strategy, based on S#.API.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Xaml.Diagram.Elements.StrategyDiagramElement.SelectedStrategy">
-      <summary>
-            The selected strategy.
             </summary>
     </member>
     <member name="P:StockSharp.Xaml.Diagram.Elements.StrategyDiagramElement.TypeId">
@@ -2550,11 +2560,6 @@
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.Elements.StrategyDiagramElement.#ctor">
-      <summary>
-            Initializes a new instance of the <see cref="T:StockSharp.Xaml.Diagram.Elements.StrategyDiagramElement" />.
-            </summary>
-    </member>
-    <member name="M:StockSharp.Xaml.Diagram.Elements.StrategyDiagramElement.#ctor(System.Boolean)">
       <summary>
             Initializes a new instance of the <see cref="T:StockSharp.Xaml.Diagram.Elements.StrategyDiagramElement" />.
             </summary>

@@ -13462,3 +13462,7 @@ DocStr9285;Options hedging diagram element;Элемент диаграммы, х
 DocStr9286;Options quoting types;Типы котирования опционов
 DocStr9287;Options quoting diagram element;Элемент диаграммы, котирующий опционы
 DocStr9288;Filtering derivatives by underlying asset diagram element;Элемент диаграммы, фильтрующий опционы по базовому активу
+DocStr9289;The volume of bids and asks;Объем бидов и оферов
+DocStr9290;Raise changed event when property is changed;Вызывать событие изменения при изменении свойства
+DocStr9293;The element which is using strategy, based on S#.API;Элемент, использующий стратегию, написанную на S#.API
+DocStr9294;Set the {0} to {1};Установить {0} в {1}

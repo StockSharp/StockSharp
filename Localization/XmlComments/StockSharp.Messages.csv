@@ -107,6 +107,7 @@ M:StockSharp.Messages.RenkoCandleMessage.Clone/returns;DocStr1116
 P:StockSharp.Messages.RenkoCandleMessage.Arg/summary;DocStr548
 T:StockSharp.Messages.CandlePriceLevel/summary;DocStr706
 P:StockSharp.Messages.CandlePriceLevel.Price/summary;Price
+P:StockSharp.Messages.CandlePriceLevel.TotalVolume/summary;DocStr9289
 P:StockSharp.Messages.CandlePriceLevel.BuyVolume/summary;DocStr710
 P:StockSharp.Messages.CandlePriceLevel.SellVolume/summary;DocStr711
 P:StockSharp.Messages.CandlePriceLevel.BuyCount/summary;DocStr712
