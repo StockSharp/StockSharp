@@ -93,8 +93,8 @@ namespace StockSharp.Algo.Candles.Compression
 		/// <param name="value">Value.</param>
 		public void Update(ICandleBuilderSourceValue value)
 		{
-			if (value.OrderDirection == null)
-				return;
+			//if (value.OrderDirection == null)
+			//	return;
 
 			UpdatePriceLevel(GetPriceLevel(value.Price), value);
 		}
@@ -111,6 +111,8 @@ namespace StockSharp.Algo.Candles.Compression
 			level.BuyCount += priceLevel.BuyCount;
 			level.SellVolume += priceLevel.SellVolume;
 			level.SellCount += priceLevel.SellCount;
+
+			level.TotalVolume += priceLevel.TotalVolume;
 
 			if (priceLevel.BuyVolumes != null)
 				((List<decimal>)level.BuyVolumes).AddRange(priceLevel.BuyVolumes);
@@ -141,19 +143,21 @@ namespace StockSharp.Algo.Candles.Compression
 			if (level == null)
 				throw new ArgumentNullException(nameof(level));
 
-			var side = value.OrderDirection;
+			//var side = value.OrderDirection;
 
-			if (side == null)
-				throw new ArgumentException(nameof(value));
+			//if (side == null)
+			//	throw new ArgumentException(nameof(value));
 
-			if (side == Sides.Buy)
+			level.TotalVolume += value.Volume;
+
+			if (value.OrderDirection == Sides.Buy)
 			{
 				level.BuyVolume += value.Volume;
 				level.BuyCount++;
 
 				((List<decimal>)level.BuyVolumes).Add(value.Volume);
 			}
-			else
+			else if (value.OrderDirection == Sides.Sell)
 			{
 				level.SellVolume += value.Volume;
 				level.SellCount++;
@@ -181,7 +185,7 @@ namespace StockSharp.Algo.Candles.Compression
 			// Если сумма сравниваемых объемов равна, х.з. какие брать.
 
 			var maxVolume = Math.Round(PriceLevels.Sum(p => p.BuyVolume + p.SellVolume) * VolumePercent / 100, 0);
-			var currVolume = PriceLevels.Select(p => (p.BuyVolume + p.SellVolume)).Max();
+			var currVolume = PriceLevels.Select(p => p.BuyVolume + p.SellVolume).Max();
 
 			PoC = PriceLevels.FirstOrDefault(p => p.BuyVolume + p.SellVolume == currVolume);
 

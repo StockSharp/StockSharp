@@ -65,6 +65,12 @@ namespace StockSharp.Messages
 		public decimal Price { get; set; }
 
 		/// <summary>
+		/// The volume of bids and asks.
+		/// </summary>
+		[DataMember]
+		public decimal TotalVolume { get; set; }
+
+		/// <summary>
 		/// The volume of bids.
 		/// </summary>
 		[DataMember]
@@ -113,6 +119,7 @@ namespace StockSharp.Messages
 				SellCount = SellCount,
 				SellVolume = SellVolume,
 				BuyVolume = BuyVolume,
+				TotalVolume = TotalVolume,
 				BuyVolumes = BuyVolumes?.ToArray(),
 				SellVolumes = SellVolumes?.ToArray(),
 			};
