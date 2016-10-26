@@ -182,16 +182,15 @@ namespace SampleChart
 				foreach (var tick in storage.GetTickMessageStorage(_security, new LocalMarketDataDrive(path)).Load())
 				{
 					AppendTick(_security, tick);
+
 					_lastTime = tick.ServerTime;
 
 					if (date != tick.ServerTime.Date)
 					{
 						date = tick.ServerTime.Date;
 
-						this.GuiAsync(() =>
-						{
-							BusyIndicator.BusyContent = date.ToString();
-						});
+						var str = date.To<string>();
+						this.GuiAsync(() => BusyIndicator.BusyContent = str);
 
 						maxDays--;
 
@@ -243,14 +242,17 @@ namespace SampleChart
 			var lastCandle = _allCandles.LastOrDefault();
 			_allCandles.AddRange(candlesToUpdate.Where(c => lastCandle == null || c.OpenTime != lastCandle.OpenTime));
 
+			var hasValue = false;
 			var chartData = new ChartDrawData();
 
 			foreach (var candle in candlesToUpdate)
 			{
 				chartData.Group(candle.OpenTime).Add(_candleElement1, candle);
+				hasValue = true;
 			}
 
-			Chart.Draw(chartData);
+			if (hasValue)
+				Chart.Draw(chartData);
 		}
 
 		private void AppendTick(Security security, ExecutionMessage tick)
@@ -263,14 +265,17 @@ namespace SampleChart
 				if (_candle != null)
 				{
 					_candle.State = CandleStates.Finished;
+
 					lock(_updatedCandles.SyncRoot)
 						_updatedCandles[_candle.OpenTime] = _candle;
+
 					_lastPrice = _candle.ClosePrice;
 				}
 
 				//var t = TimeframeSegmentDataSeries.GetTimeframePeriod(time.DateTime, _timeframe);
 				var tf = TimeSpan.FromMinutes(_timeframe);
 				var bounds = tf.GetCandleBounds(time, _security.Board);
+
 				_candle = new TimeFrameCandle
 				{
 					TimeFrame = tf,
@@ -278,6 +283,7 @@ namespace SampleChart
 					CloseTime = bounds.Max,
 					Security = security,
 				};
+
 				_volumeProfile = new VolumeProfile();
 				_candle.PriceLevels = _volumeProfile.PriceLevels;
 

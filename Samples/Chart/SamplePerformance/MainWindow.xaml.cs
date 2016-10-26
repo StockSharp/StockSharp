@@ -42,34 +42,34 @@ namespace SamplePerformance
 
 	public partial class MainWindow
 	{
-		static readonly string HistoryPath = @"..\..\..\..\Testing\HistoryData\".ToFullPath();
-		const string SecurityId = "RIZ2@FORTS";
-		const int Timeframe = 1; //minutes
-		const int PriceStep = 10;
-		const int CandlesPacketSize = 10; // количество свечей в одном вызове Draw()
-		const bool AddIndicator = true;
-		const int TradeEveryNCandles = 100;
+		private static readonly string _historyPath = @"..\..\..\..\Testing\HistoryData\".ToFullPath();
+		private const string _securityId = "RIZ2@FORTS";
+		private const int _timeframe = 1; //minutes
+		private const int _priceStep = 10;
+		private const int _candlesPacketSize = 10; // количество свечей в одном вызове Draw()
+		private const bool _addIndicator = true;
+		private const int _tradeEveryNCandles = 100;
 
 		private ChartArea _area;
 		private ChartCandleElement _candleElement;
 		private ChartIndicatorElement _indicatorElement;
-		readonly CachedSynchronizedList<LightCandle> _candles = new CachedSynchronizedList<LightCandle>();
-		readonly TimeSpan TFSpan = TimeSpan.FromTicks(Timeframe);
+		private readonly CachedSynchronizedList<LightCandle> _candles = new CachedSynchronizedList<LightCandle>();
+		private readonly TimeSpan _tfSpan = TimeSpan.FromTicks(_timeframe);
 		private readonly DispatcherTimer _chartUpdateTimer = new DispatcherTimer();
 		private decimal _lastPrice;
 		private DateTimeOffset _lastTime;
 		private bool _dataIsLoaded;
 		private TimeFrameCandle _lastCandle;
 
-		MyMovingAverage _indicator;
-		readonly MyMovingAverage _fpsAverage;
+		private MyMovingAverage _indicator;
+		private readonly MyMovingAverage _fpsAverage;
 
-		volatile int _curCandleNum;
+		private volatile int _curCandleNum;
 
 		private Security _security = new Security
 		{
-			Id = SecurityId,
-			PriceStep = PriceStep,
+			Id = _securityId,
+			PriceStep = _priceStep,
 			Board = ExchangeBoard.Forts
 		};
 
@@ -118,16 +118,23 @@ namespace SamplePerformance
 			var series = new CandleSeries(
 				typeof(TimeFrameCandle),
 				_security,
-				TimeSpan.FromMinutes(Timeframe));
+				TimeSpan.FromMinutes(_timeframe));
 
 			_indicatorElement = null;
 
-			_candleElement = new ChartCandleElement {FullTitle = "Candles", YAxisId = yAxis.Id};
+			_candleElement = new ChartCandleElement
+			{
+				FullTitle = "Candles",
+				YAxisId = yAxis.Id
+			};
 			Chart.AddElement(_area, _candleElement, series);
 
-			if (AddIndicator)
+			if (_addIndicator)
 			{
-				_indicator = new MyMovingAverage(200) {Name = "MyMA"};
+				_indicator = new MyMovingAverage(200)
+				{
+					Name = "MyMA"
+				};
 
 				_indicatorElement = new ChartIndicatorElement
 				{
@@ -147,12 +154,12 @@ namespace SamplePerformance
 			_lastPrice = 0m;
 
 			_candles.Clear();
-			var id = new SecurityIdGenerator().Split(SecurityId);
+			var id = new SecurityIdGenerator().Split(_securityId);
 
 			_security = new Security
 			{
-				Id = SecurityId,
-				PriceStep = PriceStep,
+				Id = _securityId,
+				PriceStep = _priceStep,
 				Board = ExchangeBoard.GetBoard(id.BoardCode)
 			};
 
@@ -164,7 +171,7 @@ namespace SamplePerformance
 
 			BusyIndicator.IsBusy = true;
 
-			var path = HistoryPath;
+			var path = _historyPath;
 
 			_curCandleNum = 0;
 
@@ -178,7 +185,8 @@ namespace SamplePerformance
 					{
 						date = tick.ServerTime.Date;
 
-						this.GuiAsync(() => BusyIndicator.BusyContent = $"Loading ticks for {date:dd MMM yyyy}...");
+						var str = $"Loading ticks for {date:dd MMM yyyy}...";
+						this.GuiAsync(() => BusyIndicator.BusyContent = str);
 
 						if (--maxDays == 0)
 							break;
@@ -187,15 +195,15 @@ namespace SamplePerformance
 					AppendTick(tick);
 				}
 			})
-			.ContinueWith(t => 
+			.ContinueWith(t =>
 			{
 				this.GuiAsync(() => BusyIndicator.IsBusy = false);
 
-				for (var i = 0; i < _candles.Count; i += CandlesPacketSize)
+				for (var i = 0; i < _candles.Count; i += _candlesPacketSize)
 				{
 					var data = new ChartDrawData();
 
-					var candles = _candles.GetRange(i, Math.Min(CandlesPacketSize, _candles.Count - i)).Select(c => c.ToCandle(TFSpan));
+					var candles = _candles.GetRange(i, Math.Min(_candlesPacketSize, _candles.Count - i)).Select(c => c.ToCandle(_tfSpan, _security));
 
 					foreach (var candle in candles)
 					{
@@ -233,7 +241,7 @@ namespace SamplePerformance
 
 		private void ChartUpdateTimerOnTick(object sender, EventArgs eventArgs)
 		{
-			if(!_dataIsLoaded || IsRealtime.IsChecked != true || _lastPrice == 0m)
+			if (!_dataIsLoaded || IsRealtime.IsChecked != true || _lastPrice == 0m)
 				return;
 
 			_lastTime += TimeSpan.FromSeconds(10);
@@ -242,7 +250,7 @@ namespace SamplePerformance
 			AppendTick(new ExecutionMessage
 			{
 				ServerTime = _lastTime,
-				TradePrice = Round(_lastPrice + (decimal)((RandomGen.GetDouble() - 0.5) * 5 * PriceStep), PriceStep),
+				TradePrice = Round(_lastPrice + (decimal)((RandomGen.GetDouble() - 0.5) * 5 * _priceStep), _priceStep),
 				TradeVolume = RandomGen.GetInt(50) + 1
 			});
 
@@ -257,7 +265,7 @@ namespace SamplePerformance
 
 			if (_candles.Count != numCandles || _lastCandle == null)
 			{
-				_lastCandle = candle = lastLightCandle.ToCandle(TFSpan);
+				_lastCandle = candle = lastLightCandle.ToCandle(_tfSpan, _security);
 			}
 			else
 			{
@@ -290,15 +298,15 @@ namespace SamplePerformance
 
 			if (candle == null || time >= candle.TimeTo)
 			{
-				var bounds = TFSpan.GetCandleBounds(time, _security.Board);
+				var bounds = _tfSpan.GetCandleBounds(time, _security.Board);
 				candle = new LightCandle
 				{
 					TimeFrom = bounds.Min,
 					TimeTo = bounds.Max,
-					Open = price + 2*PriceStep,
+					Open = price + 2 * _priceStep,
 					Close = price,
-					High = price + 4*PriceStep,
-					Low = price - 2*PriceStep,
+					High = price + 4 * _priceStep,
+					Low = price - 2 * _priceStep,
 				};
 
 				_candles.Add(candle);
@@ -338,18 +346,19 @@ namespace SamplePerformance
 
 	class LightCandle
 	{
-		public DateTimeOffset TimeFrom {get; set;}
-		public DateTimeOffset TimeTo {get; set;}
-		public int Open {get; set;}
-		public int High {get; set;}
-		public int Low {get; set;}
-		public int Close {get; set;}
-		public int Volume {get; set;}
+		public DateTimeOffset TimeFrom { get; set; }
+		public DateTimeOffset TimeTo { get; set; }
+		public int Open { get; set; }
+		public int High { get; set; }
+		public int Low { get; set; }
+		public int Close { get; set; }
+		public int Volume { get; set; }
 
-		public TimeFrameCandle ToCandle(TimeSpan ts)
+		public TimeFrameCandle ToCandle(TimeSpan ts, Security security)
 		{
 			return new TimeFrameCandle
 			{
+				Security = security,
 				TimeFrame = ts,
 				OpenTime = TimeFrom,
 				CloseTime = TimeTo,
@@ -373,9 +382,9 @@ namespace SamplePerformance
 
 	class MyMovingAverage : IIndicator
 	{
-		readonly int _period;
-		readonly Queue<double> _values = new Queue<double>();
-		double _sum;
+		private readonly int _period;
+		private readonly Queue<double> _values = new Queue<double>();
+		private double _sum;
 
 		public MyMovingAverage(int period)
 		{
@@ -386,7 +395,7 @@ namespace SamplePerformance
 
 		public DecimalIndicatorValue Process(double newValue)
 		{
-			while(_values.Count >= _period)
+			while (_values.Count >= _period)
 				_sum -= _values.Dequeue();
 
 			_values.Enqueue(newValue);
@@ -401,20 +410,41 @@ namespace SamplePerformance
 			};
 		}
 
-		public void Load(SettingsStorage storage) {}
-		public void Save(SettingsStorage storage) {}
-		public IIndicator Clone() =>  null;
+		void IPersistable.Load(SettingsStorage storage)
+		{
+		}
+
+		void IPersistable.Save(SettingsStorage storage)
+		{
+		}
+
+		public IIndicator Clone() => null;
 		object ICloneable.Clone() => Clone();
 
-		public IIndicatorValue Process(IIndicatorValue input) { throw new NotImplementedException(); }
+		IIndicatorValue IIndicator.Process(IIndicatorValue input)
+		{
+			throw new NotSupportedException();
+		}
 
-		public void Reset() {}
-		public Guid Id { get; }
+		void IIndicator.Reset()
+		{
+		}
+
+		Guid IIndicator.Id { get; } = default(Guid);
 		public string Name { get; set; }
-		public bool IsFormed => true;
-		public IIndicatorContainer Container { get; }
+		bool IIndicator.IsFormed => true;
+		IIndicatorContainer IIndicator.Container { get; } = null;
 
-		public event Action<IIndicatorValue, IIndicatorValue> Changed;
-		public event Action Reseted;
+		event Action<IIndicatorValue, IIndicatorValue> IIndicator.Changed
+		{
+			add { }
+			remove { }
+		}
+
+		event Action IIndicator.Reseted
+		{
+			add { }
+			remove { }
+		}
 	}
 }
