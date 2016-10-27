@@ -40865,7 +40865,7 @@ namespace StockSharp.Localization
 		/// <summary>
 		/// Temporary files
 		/// </summary>
-		public static string TemporaryFiles => GetString(MarketDataNotEnabledKey);
+		public static string TemporaryFiles => GetString(TemporaryFilesKey);
 
 		/// <summary>
 		/// Use
