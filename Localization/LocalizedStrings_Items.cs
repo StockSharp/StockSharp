@@ -43086,5 +43086,35 @@ namespace StockSharp.Localization
 		/// Black-Scholes
 		/// </summary>
 		public static string BlackScholes => GetString(BlackScholesKey);
+
+		/// <summary>
+		/// At least one connection must be connected.
+		/// </summary>
+		public const string NoActiveConnectionKey = "NoActiveConnection";
+
+		/// <summary>
+		/// At least one connection must be connected.
+		/// </summary>
+		public static string NoActiveConnection => GetString(NoActiveConnectionKey);
+
+		/// <summary>
+		/// Lookup securities is not supported. Need to manually create appropriate security.
+		/// </summary>
+		public const string LookupSecuritiesNotSupportedKey = "LookupSecuritiesNotSupported";
+
+		/// <summary>
+		/// Lookup securities is not supported. Need to manually create appropriate security.
+		/// </summary>
+		public static string LookupSecuritiesNotSupported => GetString(LookupSecuritiesNotSupportedKey);
+
+		/// <summary>
+		/// Historical market data
+		/// </summary>
+		public const string HistoricalMarketDataKey = "HistoricalMarketData";
+
+		/// <summary>
+		/// Historical market data
+		/// </summary>
+		public static string HistoricalMarketData => GetString(HistoricalMarketDataKey);
 	}
 }

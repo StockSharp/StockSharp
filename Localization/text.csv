@@ -4343,6 +4343,9 @@ ImpliedVolatilityMarketDepth;Implied volatility order book;Стакан подр
 StrikeLeftOffset;Offet to the left (less) from central strike. If not set, all less then central strikes will be collected.;Сдвид влево (меньше) от центрального страйка. Если не установлено, то все страйки с меньшим значением центрального будут использованы.
 StrikeRightOffset;Offet to the right (more) from central strike. If not set, all more then central strikes will be collected.;Сдвид вправо (больше) от центрального страйка. Если не установлено, то все страйки с большим значением центрального будут использованы.
 BlackScholes;Black-Scholes;Блэк-Шолз
+NoActiveConnection;At least one connection must be connected.;Необходимо выполнить хотя бы одно подключение.
+LookupSecuritiesNotSupported;Lookup securities is not supported. Need to manually create appropriate security.;Поиск инструментов не поддерживается. Необходимо создать инструмент вручную.
+HistoricalMarketData;Historical market data;Исторические маркет-данные
 DocStr0;Button activation alert settings;Кнопка активации настроек сигнала
 DocStr1;Initializes a new instance of the {0};Создать {0}
 DocStr2;Load settings;Загрузить настройки
