@@ -121,9 +121,9 @@ namespace StockSharp.Messages
 				if (value == null)
 					throw new ArgumentNullException(nameof(value));
 
-				var dulicate = value.GroupBy(m => m).FirstOrDefault(g => g.Count() > 1);
-				if (dulicate != null)
-					throw new ArgumentException(LocalizedStrings.Str415Params.Put(dulicate.Key), nameof(value));
+				var duplicate = value.GroupBy(m => m).FirstOrDefault(g => g.Count() > 1);
+				if (duplicate != null)
+					throw new ArgumentException(LocalizedStrings.Str415Params.Put(duplicate.Key), nameof(value));
 
 				_supportedMessages = value;
 			}
