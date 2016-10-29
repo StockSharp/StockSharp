@@ -43116,5 +43116,15 @@ namespace StockSharp.Localization
 		/// Historical market data
 		/// </summary>
 		public static string HistoricalMarketData => GetString(HistoricalMarketDataKey);
+
+		/// <summary>
+		/// Tools
+		/// </summary>
+		public const string ToolsKey = "Tools";
+
+		/// <summary>
+		/// Tools
+		/// </summary>
+		public static string Tools => GetString(ToolsKey);
 	}
 }
