@@ -24960,12 +24960,12 @@ namespace StockSharp.Localization
 		/// <summary>
 		/// Futures
 		/// </summary>
-		public const string Str2670Key = "Str2670";
+		public const string FuturesKey = "Futures";
 
 		/// <summary>
 		/// Futures
 		/// </summary>
-		public static string Str2670 => GetString(Str2670Key);
+		public static string Futures => GetString(FuturesKey);
 
 		/// <summary>
 		/// Futures: information about trading session
