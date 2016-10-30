@@ -34770,12 +34770,12 @@ namespace StockSharp.Localization
 		/// <summary>
 		/// Database
 		/// </summary>
-		public const string Str3755Key = "Str3755";
+		public const string DatabaseKey = "Database";
 
 		/// <summary>
 		/// Database
 		/// </summary>
-		public static string Str3755 => GetString(Str3755Key);
+		public static string Database => GetString(DatabaseKey);
 
 		/// <summary>
 		/// Export type (format).
@@ -43126,5 +43126,15 @@ namespace StockSharp.Localization
 		/// Tools
 		/// </summary>
 		public static string Tools => GetString(ToolsKey);
+
+		/// <summary>
+		/// The database Quandl identifier.
+		/// </summary>
+		public const string QuandlDatabaseKey = "QuandlDatabase";
+
+		/// <summary>
+		/// The database Quandl identifier.
+		/// </summary>
+		public static string QuandlDatabase => GetString(QuandlDatabaseKey);
 	}
 }
