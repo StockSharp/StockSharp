@@ -27,6 +27,8 @@ M:StockSharp.Algo.Expressions.ExpressionIndexSecurity.Calculate(System.Decimal[]
 M:StockSharp.Algo.Expressions.ExpressionIndexSecurity.Calculate(System.Decimal[])/returns;DocStr1115
 M:StockSharp.Algo.Expressions.ExpressionIndexSecurity.Clone/summary;DocStr643
 M:StockSharp.Algo.Expressions.ExpressionIndexSecurity.Clone/returns;DocStr1116
+M:StockSharp.Algo.Expressions.ExpressionIndexSecurity.ToString/summary;DocStr49
+M:StockSharp.Algo.Expressions.ExpressionIndexSecurity.ToString/returns;DocStr50
 T:StockSharp.Algo.Expressions.Xaml.IndexEditor/summary;DocStr8204
 M:StockSharp.Algo.Expressions.Xaml.IndexEditor.#ctor/summary;DocStr1
 P:StockSharp.Algo.Expressions.Xaml.IndexEditor.Securities/summary;DocStr2513

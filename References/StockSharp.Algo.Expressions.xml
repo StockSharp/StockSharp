@@ -97,6 +97,12 @@
             </summary>
       <returns>Copy.</returns>
     </member>
+    <member name="M:StockSharp.Algo.Expressions.ExpressionIndexSecurity.ToString">
+      <summary>
+            Returns a string that represents the current object.
+            </summary>
+      <returns>A string that represents the current object.</returns>
+    </member>
     <member name="T:StockSharp.Algo.Expressions.Xaml.IndexEditor">
       <summary>
             The graphic control for editing <see cref="T:StockSharp.Algo.Expressions.ExpressionIndexSecurity" />.

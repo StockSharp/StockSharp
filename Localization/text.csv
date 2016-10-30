@@ -13471,3 +13471,6 @@ DocStr9289;The volume of bids and asks;Объем бидов и оферов
 DocStr9290;Raise changed event when property is changed;Вызывать событие изменения при изменении свойства
 DocStr9293;The element which is using strategy, based on S#.API;Элемент, использующий стратегию, написанную на S#.API
 DocStr9294;Set the {0} to {1};Установить {0} в {1}
+DocStr9295;The market data source from Xignite;Источник данных Xignite
+DocStr9296;The diagram element connection changed event;Событие изменения соединения элемента
+DocStr9297;Security index based on {0} diagram element;Элемент, создающий индекс на основе {0}

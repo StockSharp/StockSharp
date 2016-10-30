@@ -670,6 +670,11 @@
             The diagram element connection removed event.
             </summary>
     </member>
+    <member name="E:StockSharp.Xaml.Diagram.DiagramElement.SocketChanged">
+      <summary>
+            The diagram element connection changed event.
+            </summary>
+    </member>
     <member name="M:StockSharp.Xaml.Diagram.DiagramElement.#ctor">
       <summary>
             Initializes a new instance of the <see cref="T:StockSharp.Xaml.Diagram.DiagramElement" />.
@@ -760,6 +765,12 @@
             </summary>
       <param name="socket">The diagram element socket.</param>
       <param name="source">The source diagram element socket.</param>
+    </member>
+    <member name="M:StockSharp.Xaml.Diagram.DiagramElement.RaiseSocketChanged(StockSharp.Xaml.Diagram.DiagramSocket)">
+      <summary>
+            To call the event <see cref="E:StockSharp.Xaml.Diagram.DiagramElement.SocketChanged" />.
+            </summary>
+      <param name="socket">Socket.</param>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.DiagramElement.RaiseProcessOutput(StockSharp.Xaml.Diagram.DiagramElement,System.DateTimeOffset,System.Object)">
       <summary>
@@ -2479,26 +2490,6 @@
             The method is called at the stop of the diagram element algorithm.
             </summary>
     </member>
-    <member name="T:StockSharp.Xaml.Diagram.Elements.SecurityDiagramElement">
-      <summary>
-            Security changes receiving element.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Xaml.Diagram.Elements.SecurityDiagramElement.TypeId">
-      <summary>
-            The unique identifier of the diagram element type.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Xaml.Diagram.Elements.SecurityDiagramElement.IconName">
-      <summary>
-            Icon resource name.
-            </summary>
-    </member>
-    <member name="M:StockSharp.Xaml.Diagram.Elements.SecurityDiagramElement.#ctor">
-      <summary>
-            Initializes a new instance of the <see cref="T:StockSharp.Xaml.Diagram.Elements.SecurityDiagramElement" />.
-            </summary>
-    </member>
     <member name="T:StockSharp.Xaml.Diagram.Elements.MarketDepthSparsedDiagramElement">
       <summary>
             Sparsed market depth element.
@@ -2517,6 +2508,31 @@
     <member name="M:StockSharp.Xaml.Diagram.Elements.MarketDepthSparsedDiagramElement.#ctor">
       <summary>
             Initializes a new instance of the <see cref="T:StockSharp.Xaml.Diagram.Elements.MarketDepthSparsedDiagramElement" />.
+            </summary>
+    </member>
+    <member name="T:StockSharp.Xaml.Diagram.Elements.SecurityIndexDiagramElement">
+      <summary>
+            Security index based on <see cref="T:StockSharp.Algo.Expressions.ExpressionIndexSecurity" /> diagram element.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Diagram.Elements.SecurityIndexDiagramElement.TypeId">
+      <summary>
+            The unique identifier of the diagram element type.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Diagram.Elements.SecurityIndexDiagramElement.IconName">
+      <summary>
+            Icon resource name.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.Diagram.Elements.SecurityIndexDiagramElement.#ctor">
+      <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Xaml.Diagram.Elements.SecurityIndexDiagramElement" />.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.Diagram.Elements.SecurityIndexDiagramElement.OnStart">
+      <summary>
+            The method is called at the start of the diagram element algorithm.
             </summary>
     </member>
     <member name="T:StockSharp.Xaml.Diagram.Elements.BaseStrategyDiagramElement">
@@ -2636,12 +2652,6 @@
       <summary>
             The method is called at the start of the diagram element algorithm.
             </summary>
-    </member>
-    <member name="M:StockSharp.Xaml.Diagram.Elements.TypedDiagramElement`1.Load(Ecng.Serialization.SettingsStorage)">
-      <summary>
-            Load settings.
-            </summary>
-      <param name="storage">Settings storage.</param>
     </member>
     <member name="T:StockSharp.Xaml.Diagram.Elements.VariableDiagramElement">
       <summary>

@@ -164,6 +164,7 @@ P:StockSharp.Xaml.Diagram.DiagramElement.DebuggerSyncObject/summary;DocStr7910
 E:StockSharp.Xaml.Diagram.DiagramElement.ProcessOutput/summary;DocStr3788
 E:StockSharp.Xaml.Diagram.DiagramElement.SocketAdded/summary;DocStr8896
 E:StockSharp.Xaml.Diagram.DiagramElement.SocketRemoved/summary;DocStr8897
+E:StockSharp.Xaml.Diagram.DiagramElement.SocketChanged/summary;DocStr9296
 M:StockSharp.Xaml.Diagram.DiagramElement.#ctor/summary;DocStr1
 M:StockSharp.Xaml.Diagram.DiagramElement.AddParam``1(System.String,``0)/summary;DocStr7868
 M:StockSharp.Xaml.Diagram.DiagramElement.AddParam``1(System.String,``0)/typeparam/T;ParameterType
@@ -203,6 +204,8 @@ M:StockSharp.Xaml.Diagram.DiagramElement.OnSocketConnected(StockSharp.Xaml.Diagr
 M:StockSharp.Xaml.Diagram.DiagramElement.OnSocketDisconnected(StockSharp.Xaml.Diagram.DiagramSocket,StockSharp.Xaml.Diagram.DiagramSocket)/summary;DocStr7890
 M:StockSharp.Xaml.Diagram.DiagramElement.OnSocketDisconnected(StockSharp.Xaml.Diagram.DiagramSocket,StockSharp.Xaml.Diagram.DiagramSocket)/param/socket;DocStr9280
 M:StockSharp.Xaml.Diagram.DiagramElement.OnSocketDisconnected(StockSharp.Xaml.Diagram.DiagramSocket,StockSharp.Xaml.Diagram.DiagramSocket)/param/source;DocStr9281
+M:StockSharp.Xaml.Diagram.DiagramElement.RaiseSocketChanged(StockSharp.Xaml.Diagram.DiagramSocket)/summary;DocStr466
+M:StockSharp.Xaml.Diagram.DiagramElement.RaiseSocketChanged(StockSharp.Xaml.Diagram.DiagramSocket)/param/socket;DocStr8883
 M:StockSharp.Xaml.Diagram.DiagramElement.RaiseProcessOutput(StockSharp.Xaml.Diagram.DiagramElement,System.DateTimeOffset,System.Object)/summary;DocStr466
 M:StockSharp.Xaml.Diagram.DiagramElement.RaiseProcessOutput(StockSharp.Xaml.Diagram.DiagramElement,System.DateTimeOffset,System.Object)/param/sender;Str329
 M:StockSharp.Xaml.Diagram.DiagramElement.RaiseProcessOutput(StockSharp.Xaml.Diagram.DiagramElement,System.DateTimeOffset,System.Object)/param/time;Time
@@ -636,14 +639,15 @@ P:StockSharp.Xaml.Diagram.Elements.ProtectPositionDiagramElement.TypeId/summary;
 P:StockSharp.Xaml.Diagram.Elements.ProtectPositionDiagramElement.IconName/summary;DocStr9214
 M:StockSharp.Xaml.Diagram.Elements.ProtectPositionDiagramElement.OnStart/summary;DocStr7892
 M:StockSharp.Xaml.Diagram.Elements.ProtectPositionDiagramElement.OnStop/summary;DocStr7894
-T:StockSharp.Xaml.Diagram.Elements.SecurityDiagramElement/summary;Str3153
-P:StockSharp.Xaml.Diagram.Elements.SecurityDiagramElement.TypeId/summary;DocStr7902
-P:StockSharp.Xaml.Diagram.Elements.SecurityDiagramElement.IconName/summary;DocStr9214
-M:StockSharp.Xaml.Diagram.Elements.SecurityDiagramElement.#ctor/summary;DocStr1
 T:StockSharp.Xaml.Diagram.Elements.MarketDepthSparsedDiagramElement/summary;DocStr9274
 P:StockSharp.Xaml.Diagram.Elements.MarketDepthSparsedDiagramElement.TypeId/summary;DocStr7902
 P:StockSharp.Xaml.Diagram.Elements.MarketDepthSparsedDiagramElement.IconName/summary;DocStr9214
 M:StockSharp.Xaml.Diagram.Elements.MarketDepthSparsedDiagramElement.#ctor/summary;DocStr1
+T:StockSharp.Xaml.Diagram.Elements.SecurityIndexDiagramElement/summary;DocStr9297
+P:StockSharp.Xaml.Diagram.Elements.SecurityIndexDiagramElement.TypeId/summary;DocStr7902
+P:StockSharp.Xaml.Diagram.Elements.SecurityIndexDiagramElement.IconName/summary;DocStr9214
+M:StockSharp.Xaml.Diagram.Elements.SecurityIndexDiagramElement.#ctor/summary;DocStr1
+M:StockSharp.Xaml.Diagram.Elements.SecurityIndexDiagramElement.OnStart/summary;DocStr7892
 T:StockSharp.Xaml.Diagram.Elements.BaseStrategyDiagramElement/summary;DocStr9293
 P:StockSharp.Xaml.Diagram.Elements.BaseStrategyDiagramElement.SelectedStrategy/summary;DocStr8421
 M:StockSharp.Xaml.Diagram.Elements.BaseStrategyDiagramElement.#ctor/summary;DocStr1
@@ -670,8 +674,6 @@ M:StockSharp.Xaml.Diagram.Elements.TypedDiagramElement`1.TypeChanged/summary;Doc
 M:StockSharp.Xaml.Diagram.Elements.TypedDiagramElement`1.OnProcess(StockSharp.Xaml.Diagram.DiagramSocketValue)/summary;DocStr7882
 M:StockSharp.Xaml.Diagram.Elements.TypedDiagramElement`1.OnProcess(StockSharp.Xaml.Diagram.DiagramSocketValue)/param/value;DocStr7883
 M:StockSharp.Xaml.Diagram.Elements.TypedDiagramElement`1.OnStart/summary;DocStr7892
-M:StockSharp.Xaml.Diagram.Elements.TypedDiagramElement`1.Load(Ecng.Serialization.SettingsStorage)/summary;DocStr2
-M:StockSharp.Xaml.Diagram.Elements.TypedDiagramElement`1.Load(Ecng.Serialization.SettingsStorage)/param/storage;DocStr3
 T:StockSharp.Xaml.Diagram.Elements.VariableDiagramElement/summary;Str3160
 P:StockSharp.Xaml.Diagram.Elements.VariableDiagramElement.TypeId/summary;DocStr7902
 P:StockSharp.Xaml.Diagram.Elements.VariableDiagramElement.IconName/summary;DocStr9214
