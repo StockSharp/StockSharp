@@ -6,6 +6,10 @@ StockSharp API Change log
 * (bug) Finam. New address.
 * (bug) Chart. Active orders fix.
 * (feature) CandlePriceLevel.TotalVolume
+* (feature) XigniteHistorySource added.
+* (feature) QuandlHistorySource. v3 API.
+* (bug) Samples. DevExp refs fixes.
+* (bug) Chart samples fixes.
 
 ###v4.3.17:
 * (feature) Quik lua. Duration, IssueSize, BuyBackDate, BuyBackPrice.

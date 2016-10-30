@@ -717,19 +717,14 @@
             Timeframes which can be passed to <see cref="M:StockSharp.Algo.History.QuandlHistorySource.GetCandles(StockSharp.BusinessEntities.Security,System.TimeSpan,System.DateTime,System.DateTime)" />.
             </summary>
     </member>
-    <member name="F:StockSharp.Algo.History.QuandlHistorySource.SourceCodeField">
-      <summary>
-            The key by which the source Quandl identifier will be present in <see cref="P:StockSharp.BusinessEntities.Security.ExtensionInfo" /> .
-            </summary>
-    </member>
-    <member name="F:StockSharp.Algo.History.QuandlHistorySource.SecurityCodeField">
-      <summary>
-            The key by which the instrument Quandl identifier will be present in <see cref="P:StockSharp.BusinessEntities.Security.ExtensionInfo" /> .
-            </summary>
-    </member>
     <member name="M:StockSharp.Algo.History.QuandlHistorySource.#ctor">
       <summary>
             Initializes a new instance of the <see cref="T:StockSharp.Algo.History.QuandlHistorySource" />.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Algo.History.QuandlHistorySource.DatabaseCode">
+      <summary>
+            The database Quandl identifier.
             </summary>
     </member>
     <member name="P:StockSharp.Algo.History.QuandlHistorySource.AuthToken">
@@ -1231,6 +1226,40 @@
       <param name="from">Begin period.</param>
       <param name="to">End period.</param>
       <returns>Downloaded candles.</returns>
+    </member>
+    <member name="T:StockSharp.Algo.History.XigniteHistorySource">
+      <summary>
+            The market data source from Xignite.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Algo.History.XigniteHistorySource.#ctor">
+      <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Algo.History.XigniteHistorySource" />.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Algo.History.XigniteHistorySource.AuthToken">
+      <summary>
+            The registered user identifier.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Algo.History.XigniteHistorySource.GetCandles(StockSharp.BusinessEntities.Security,System.TimeSpan,System.DateTime,System.DateTime)">
+      <summary>
+            Download candles from the site.
+            </summary>
+      <param name="security">Security.</param>
+      <param name="timeFrame">Time-frame.</param>
+      <param name="beginDate">Start date.</param>
+      <param name="endDate">End date.</param>
+      <returns>Candles.</returns>
+    </member>
+    <member name="M:StockSharp.Algo.History.XigniteHistorySource.Refresh(StockSharp.Algo.Storages.ISecurityStorage,StockSharp.BusinessEntities.Security,System.Action{StockSharp.BusinessEntities.Security},System.Func{System.Boolean})">
+      <summary>
+            Download new securities.
+            </summary>
+      <param name="storage">Securities meta info storage.</param>
+      <param name="criteria">The instrument whose fields will be used as a filter.</param>
+      <param name="newSecurity">The handler through which a new instrument will be passed.</param>
+      <param name="isCancelled">The handler which returns an attribute of search cancel.</param>
     </member>
     <member name="T:StockSharp.Algo.History.YahooHistorySource">
       <summary>
