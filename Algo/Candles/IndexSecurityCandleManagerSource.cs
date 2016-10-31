@@ -25,18 +25,20 @@ namespace StockSharp.Algo.Candles
 
 	using MoreLinq;
 
+	using StockSharp.Messages;
+
 	class IndexSecurityCandleManagerSource : Disposable, ICandleManagerSource
 	{
 		private sealed class IndexSeriesInfo : Disposable
 		{
 			private readonly ICandleManager _candleManager;
-			private readonly IEnumerable<CandleSeries> _innerSeries;
+			private readonly ISet<CandleSeries> _innerSeries;
 			private readonly DateTimeOffset _from;
 			private readonly DateTimeOffset _to;
-			//private readonly Action<Candle> _processing;
-			//private readonly Action _stopped;
+			private readonly Action<Candle> _processing;
+			private readonly Action _stopped;
 			//private int _startedSeriesCount;
-			//private readonly object _lock = new object();
+			private readonly object _lock = new object();
 			private readonly IndexCandleBuilder _builder;
 
 			public IndexSeriesInfo(ICandleManager candleManager, Type candleType, IEnumerable<CandleSeries> innerSeries, DateTimeOffset from, DateTimeOffset to, IndexSecurity security, Action<Candle> processing, Action stopped)
@@ -57,11 +59,14 @@ namespace StockSharp.Algo.Candles
 					throw new ArgumentNullException(nameof(stopped));
 
 				_candleManager = candleManager;
-				_innerSeries = innerSeries;
+				_innerSeries = innerSeries.ToHashSet();
 				_from = from;
 				_to = to;
-				//_processing = processing;
-				//_stopped = stopped;
+				_processing = processing;
+				_stopped = stopped;
+
+				candleManager.Processing += OnInnerSourceProcessCandle;
+				candleManager.Stopped += OnInnerSourceStopped;
 
 				_builder = new IndexCandleBuilder(security, candleType);
 
@@ -77,30 +82,44 @@ namespace StockSharp.Algo.Candles
 			public void Start()
 			{
 				_builder.Reset();
-				_innerSeries.ForEach(s => _candleManager.Start(s, _from, _to));
+
+				lock (_lock)
+					_innerSeries.ForEach(s => _candleManager.Start(s, _from, _to));
 			}
 
-			//private void OnInnerSourceProcessCandle(Candle candle)
-			//{
-			//	if (candle.State != CandleStates.Finished)
-			//		return;
+			private void OnInnerSourceProcessCandle(CandleSeries series, Candle candle)
+			{
+				if (candle.State != CandleStates.Finished)
+					return;
 
-			//	_builder.ProcessCandle(candle).ForEach(_processing);
-			//}
+				lock (_lock)
+				{
+					if (!_innerSeries.Contains(series))
+						return;
+				}
 
-			//private void OnInnerSourceStopped()
-			//{
-			//	lock (_lock)
-			//	{
-			//		if (--_startedSeriesCount > 0)
-			//			return;
-			//	}
+				_builder.ProcessCandle(candle).ForEach(_processing);
+			}
 
-			//	// отписываемся только после обработки остановки всех серий
-			//	_innerSeries.ForEach(s => s.Stopped -= OnInnerSourceStopped);
+			private void OnInnerSourceStopped(CandleSeries series)
+			{
+				lock (_lock)
+				{
+					if (!_innerSeries.Remove(series))
+						return;
 
-			//	_stopped();
-			//}
+					if (_innerSeries.Count > 0)
+						return;
+				}
+
+				_candleManager.Processing -= OnInnerSourceProcessCandle;
+				_candleManager.Stopped -= OnInnerSourceStopped;
+
+				//// отписываемся только после обработки остановки всех серий
+				//_innerSeries.ForEach(s => s.Stopped -= OnInnerSourceStopped);
+
+				_stopped();
+			}
 
 			//protected override void DisposeManaged()
 			//{
