@@ -1,6 +1,6 @@
 StockSharp API Change log
 ========================
-###current:
+###v4.3.18:
 * (feature) Rithmic. v9.5.0.0
 * (bug) Transaq. UseCredit fixes.
 * (bug) Finam. New address.
@@ -10,6 +10,7 @@ StockSharp API Change log
 * (feature) QuandlHistorySource. v3 API.
 * (bug) Samples. DevExp refs fixes.
 * (bug) Chart samples fixes.
+* (bug) Build index candles.
 
 ###v4.3.17:
 * (feature) Quik lua. Duration, IssueSize, BuyBackDate, BuyBackPrice.
