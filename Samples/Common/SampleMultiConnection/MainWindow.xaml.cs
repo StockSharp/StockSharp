@@ -66,7 +66,6 @@ namespace SampleMultiConnection
 			var logManager = new LogManager();
 			logManager.Listeners.Add(new FileLogListener("sample.log"));
 
-			Directory.CreateDirectory("Data");
 			var entityRegistry = new CsvEntityRegistry("Data");
 
 			ConfigManager.RegisterService<IEntityRegistry>(entityRegistry);
@@ -143,10 +142,10 @@ namespace SampleMultiConnection
 
 			entityRegistry.Init();
 
-			ConfigManager.RegisterService<IExchangeInfoProvider>(new ExchangeInfoProvider(entityRegistry));
-
 			Connector.StorageAdapter.DaysLoad = TimeSpan.FromDays(3);
 			Connector.StorageAdapter.Load();
+
+			ConfigManager.RegisterService<IExchangeInfoProvider>(new ExchangeInfoProvider(entityRegistry));
 		}
 
 		protected override void OnClosing(CancelEventArgs e)

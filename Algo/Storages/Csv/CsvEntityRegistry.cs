@@ -194,6 +194,9 @@ namespace StockSharp.Algo.Storages.Csv
 
 			public void ReadItems()
 			{
+				if (!File.Exists(_fileName))
+					return;
+
 				CultureInfo.InvariantCulture.DoInCulture(() =>
 				{
 					using (var stream = new FileStream(_fileName, FileMode.OpenOrCreate))
@@ -209,7 +212,6 @@ namespace StockSharp.Algo.Storages.Csv
 							Add(item);
 						}
 					}
-
 				});
 			}
 
@@ -816,6 +818,8 @@ namespace StockSharp.Algo.Storages.Csv
 		/// </summary>
 		public void Init()
 		{
+			Directory.CreateDirectory(Path);
+
 			var errors = new List<Exception>();
 
 			ReadItems(_exchanges, errors);
