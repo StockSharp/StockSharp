@@ -287,7 +287,7 @@ namespace StockSharp.Algo
 		{
 			if (message.IsBack)
 			{
-				message.IsBack = false;
+				//message.IsBack = false;
 				SendInMessage(message);
 			}
 			else

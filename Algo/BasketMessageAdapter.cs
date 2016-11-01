@@ -232,6 +232,17 @@ namespace StockSharp.Algo
 		/// <param name="message">Message.</param>
 		protected override void OnSendInMessage(Message message)
 		{
+			if (message.IsBack)
+			{
+				var adapter = message.Adapter;
+
+				if (adapter == null)
+					throw new InvalidOperationException();
+
+				adapter.SendInMessage(message);
+				return;
+			}
+
 			switch (message.Type)
 			{
 				case MessageTypes.Reset:
