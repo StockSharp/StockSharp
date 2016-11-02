@@ -25,7 +25,6 @@ P:StockSharp.LMAX.LmaxOrderCondition.StopLossOffset/summary;Str3383
 P:StockSharp.LMAX.LmaxOrderCondition.TakeProfitOffset/summary;Str3385
 T:StockSharp.LMAX.LmaxTrader/summary;DocStr3908
 M:StockSharp.LMAX.LmaxTrader.#ctor/summary;DocStr1
-P:StockSharp.LMAX.LmaxTrader.IsSupportAtomicReRegister/summary;DocStr87
 P:StockSharp.LMAX.LmaxTrader.Login/summary;Login
 P:StockSharp.LMAX.LmaxTrader.Password/summary;Password
 P:StockSharp.LMAX.LmaxTrader.IsDemo/summary;Str3388

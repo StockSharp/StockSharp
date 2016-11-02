@@ -754,8 +754,8 @@ namespace StockSharp.Algo
 				Code = board.Code,
 				ExchangeCode = board.Exchange.Name,
 				WorkingTime = board.WorkingTime.Clone(),
-				IsSupportMarketOrders = board.IsSupportMarketOrders,
-				IsSupportAtomicReRegister = board.IsSupportAtomicReRegister,
+				//IsSupportMarketOrders = board.IsSupportMarketOrders,
+				//IsSupportAtomicReRegister = board.IsSupportAtomicReRegister,
 				ExpiryTime = board.ExpiryTime,
 				TimeZone = board.TimeZone
 			};
@@ -813,8 +813,8 @@ namespace StockSharp.Algo
 				throw new ArgumentNullException(nameof(board));
 
 			board.WorkingTime = message.WorkingTime;
-			board.IsSupportAtomicReRegister = message.IsSupportAtomicReRegister;
-			board.IsSupportMarketOrders = message.IsSupportMarketOrders;
+			//board.IsSupportAtomicReRegister = message.IsSupportAtomicReRegister;
+			//board.IsSupportMarketOrders = message.IsSupportMarketOrders;
 			board.ExpiryTime = message.ExpiryTime;
 			board.TimeZone = message.TimeZone;
 

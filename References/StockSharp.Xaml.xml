@@ -933,6 +933,26 @@
             The <see cref="T:System.TimeSpan" /> value.
             </summary>
     </member>
+    <member name="F:StockSharp.Xaml.PropertyGrid.TimeSpanEditor.IsNullableProperty">
+      <summary>
+        <see cref="T:System.Windows.DependencyProperty" /> for <see cref="P:StockSharp.Xaml.PropertyGrid.TimeSpanEditor.HasValue" />.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.PropertyGrid.TimeSpanEditor.IsNullable">
+      <summary>
+            Is nullable.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Xaml.PropertyGrid.TimeSpanEditor.HasValueProperty">
+      <summary>
+        <see cref="T:System.Windows.DependencyProperty" /> for <see cref="P:StockSharp.Xaml.PropertyGrid.TimeSpanEditor.HasValue" />.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.PropertyGrid.TimeSpanEditor.HasValue">
+      <summary>
+            Has value.
+            </summary>
+    </member>
     <member name="F:StockSharp.Xaml.PropertyGrid.TimeSpanEditor.SecondsProperty">
       <summary>
         <see cref="T:System.Windows.DependencyProperty" /> for <see cref="P:StockSharp.Xaml.PropertyGrid.TimeSpanEditor.Seconds" />.
@@ -2966,11 +2986,6 @@
     <member name="P:StockSharp.Xaml.GuiConnector`1.ConnectionState">
       <summary>
             Connection state.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Xaml.GuiConnector`1.IsSupportAtomicReRegister">
-      <summary>
-            Gets a value indicating whether the re-registration orders via the method <see cref="M:StockSharp.BusinessEntities.IConnector.ReRegisterOrder(StockSharp.BusinessEntities.Order,StockSharp.BusinessEntities.Order)" /> as a single transaction.
             </summary>
     </member>
     <member name="P:StockSharp.Xaml.GuiConnector`1.RegisteredSecurities">

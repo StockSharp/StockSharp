@@ -239,43 +239,43 @@ namespace StockSharp.BusinessEntities
 		[MainCategory]
 		public Exchange Exchange { get; set; }
 
-		private bool _isSupportAtomicReRegister;
+		//private bool _isSupportAtomicReRegister;
 
-		/// <summary>
-		/// Gets a value indicating whether the re-registration orders via <see cref="OrderReplaceMessage"/> as a single transaction.
-		/// </summary>
-		[DataMember]
-		[DisplayNameLoc(LocalizedStrings.ReregisteringKey)]
-		[DescriptionLoc(LocalizedStrings.Str60Key)]
-		[MainCategory]
-		public bool IsSupportAtomicReRegister
-		{
-			get { return _isSupportAtomicReRegister; }
-			set
-			{
-				_isSupportAtomicReRegister = value;
-				Notify(nameof(IsSupportAtomicReRegister));
-			}
-		}
+		///// <summary>
+		///// Gets a value indicating whether the re-registration orders via <see cref="OrderReplaceMessage"/> as a single transaction.
+		///// </summary>
+		//[DataMember]
+		//[DisplayNameLoc(LocalizedStrings.ReregisteringKey)]
+		//[DescriptionLoc(LocalizedStrings.Str60Key)]
+		//[MainCategory]
+		//public bool IsSupportAtomicReRegister
+		//{
+		//	get { return _isSupportAtomicReRegister; }
+		//	set
+		//	{
+		//		_isSupportAtomicReRegister = value;
+		//		Notify(nameof(IsSupportAtomicReRegister));
+		//	}
+		//}
 
-		private bool _isSupportMarketOrders;
+		//private bool _isSupportMarketOrders;
 
-		/// <summary>
-		/// Are market type orders <see cref="OrderTypes.Market"/> supported.
-		/// </summary>
-		[DataMember]
-		[DisplayNameLoc(LocalizedStrings.MarketOrdersKey)]
-		[DescriptionLoc(LocalizedStrings.MarketOrdersSupportedKey)]
-		[MainCategory]
-		public bool IsSupportMarketOrders
-		{
-			get { return _isSupportMarketOrders; }
-			set
-			{
-				_isSupportMarketOrders = value;
-				Notify(nameof(IsSupportMarketOrders));
-			}
-		}
+		///// <summary>
+		///// Are market type orders <see cref="OrderTypes.Market"/> supported.
+		///// </summary>
+		//[DataMember]
+		//[DisplayNameLoc(LocalizedStrings.MarketOrdersKey)]
+		//[DescriptionLoc(LocalizedStrings.MarketOrdersSupportedKey)]
+		//[MainCategory]
+		//public bool IsSupportMarketOrders
+		//{
+		//	get { return _isSupportMarketOrders; }
+		//	set
+		//	{
+		//		_isSupportMarketOrders = value;
+		//		Notify(nameof(IsSupportMarketOrders));
+		//	}
+		//}
 
 		private WorkingTime _workingTime = new WorkingTime();
 
@@ -495,8 +495,8 @@ namespace StockSharp.BusinessEntities
 			{
 				Exchange = Exchange,
 				Code = Code,
-				IsSupportAtomicReRegister = IsSupportAtomicReRegister,
-				IsSupportMarketOrders = IsSupportMarketOrders,
+				//IsSupportAtomicReRegister = IsSupportAtomicReRegister,
+				//IsSupportMarketOrders = IsSupportMarketOrders,
 				ExpiryTime = ExpiryTime,
 				WorkingTime = WorkingTime.Clone(),
 				TimeZone = TimeZone,
@@ -521,8 +521,8 @@ namespace StockSharp.BusinessEntities
 		{
 			Exchange = storage.GetValue<SettingsStorage>(nameof(Exchange)).Load<Exchange>();
 			Code = storage.GetValue<string>(nameof(Code));
-			IsSupportMarketOrders = storage.GetValue<bool>(nameof(IsSupportMarketOrders));
-			IsSupportAtomicReRegister = storage.GetValue<bool>(nameof(IsSupportAtomicReRegister));
+			//IsSupportMarketOrders = storage.GetValue<bool>(nameof(IsSupportMarketOrders));
+			//IsSupportAtomicReRegister = storage.GetValue<bool>(nameof(IsSupportAtomicReRegister));
 			ExpiryTime = storage.GetValue<TimeSpan>(nameof(ExpiryTime));
 			WorkingTime = storage.GetValue<SettingsStorage>(nameof(WorkingTime)).Load<WorkingTime>();
 			TimeZone = storage.GetValue(nameof(TimeZone), TimeZone);
@@ -536,8 +536,8 @@ namespace StockSharp.BusinessEntities
 		{
 			storage.SetValue(nameof(Exchange), Exchange.Save());
 			storage.SetValue(nameof(Code), Code);
-			storage.SetValue(nameof(IsSupportMarketOrders), IsSupportMarketOrders);
-			storage.SetValue(nameof(IsSupportAtomicReRegister), IsSupportAtomicReRegister);
+			//storage.SetValue(nameof(IsSupportMarketOrders), IsSupportMarketOrders);
+			//storage.SetValue(nameof(IsSupportAtomicReRegister), IsSupportAtomicReRegister);
 			storage.SetValue(nameof(ExpiryTime), ExpiryTime);
 			storage.SetValue(nameof(WorkingTime), WorkingTime.Save());
 			storage.SetValue(nameof(TimeZone), TimeZone);

@@ -191,6 +191,10 @@ M:StockSharp.Xaml.PropertyGrid.SecurityEditor.InitializeComponent/summary;DocStr
 T:StockSharp.Xaml.PropertyGrid.TimeSpanEditor/summary;DocStr9240
 F:StockSharp.Xaml.PropertyGrid.TimeSpanEditor.ValueProperty/summary;DocStr29
 P:StockSharp.Xaml.PropertyGrid.TimeSpanEditor.Value/summary;DocStr9241
+F:StockSharp.Xaml.PropertyGrid.TimeSpanEditor.IsNullableProperty/summary;DocStr29
+P:StockSharp.Xaml.PropertyGrid.TimeSpanEditor.IsNullable/summary;DocStr9299
+F:StockSharp.Xaml.PropertyGrid.TimeSpanEditor.HasValueProperty/summary;DocStr29
+P:StockSharp.Xaml.PropertyGrid.TimeSpanEditor.HasValue/summary;DocStr9300
 F:StockSharp.Xaml.PropertyGrid.TimeSpanEditor.SecondsProperty/summary;DocStr29
 P:StockSharp.Xaml.PropertyGrid.TimeSpanEditor.Seconds/summary;DocStr9242
 F:StockSharp.Xaml.PropertyGrid.TimeSpanEditor.MinutesProperty/summary;DocStr29
@@ -610,7 +614,6 @@ P:StockSharp.Xaml.GuiConnector`1.Portfolios/summary;DocStr917
 P:StockSharp.Xaml.GuiConnector`1.Positions/summary;DocStr918
 P:StockSharp.Xaml.GuiConnector`1.News/summary;DocStr919
 P:StockSharp.Xaml.GuiConnector`1.ConnectionState/summary;DocStr922
-P:StockSharp.Xaml.GuiConnector`1.IsSupportAtomicReRegister/summary;DocStr2091
 P:StockSharp.Xaml.GuiConnector`1.RegisteredSecurities/summary;DocStr901
 P:StockSharp.Xaml.GuiConnector`1.RegisteredMarketDepths/summary;DocStr901
 P:StockSharp.Xaml.GuiConnector`1.RegisteredTrades/summary;DocStr901

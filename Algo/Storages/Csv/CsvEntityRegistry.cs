@@ -377,8 +377,8 @@ namespace StockSharp.Algo.Storages.Csv
 					Code = reader.ReadString(),
 					Exchange = Registry.Exchanges.ReadById(reader.ReadString()),
 					ExpiryTime = reader.ReadString().ToTime(),
-					IsSupportAtomicReRegister = reader.ReadBool(),
-					IsSupportMarketOrders = reader.ReadBool(),
+					//IsSupportAtomicReRegister = reader.ReadBool(),
+					//IsSupportMarketOrders = reader.ReadBool(),
 					TimeZone = TimeZoneInfo.FindSystemTimeZoneById(reader.ReadString()),
 					WorkingTime =
 					{
@@ -399,8 +399,8 @@ namespace StockSharp.Algo.Storages.Csv
 					data.Code,
 					data.Exchange.Name,
 					data.ExpiryTime.WriteTime(),
-					data.IsSupportAtomicReRegister.To<string>(),
-					data.IsSupportMarketOrders.To<string>(),
+					//data.IsSupportAtomicReRegister.To<string>(),
+					//data.IsSupportMarketOrders.To<string>(),
 					data.TimeZone.Id,
 					Serialize(data.WorkingTime.Periods),
 					Serialize(data.WorkingTime.SpecialWorkingDays),

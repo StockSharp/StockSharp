@@ -436,7 +436,7 @@ namespace StockSharp.Quik
 			//Quik не поддерживает Move с MODE=1 для Единой Денежной Позиции.
 			//http://quik.ru/forum/import/57855/57855/
 			//Поэтому делаем Cancel, потом Register
-			if (IsSupportAtomicReRegister && oldOrder.Security.Board.IsSupportAtomicReRegister && !IsCommonMonetaryPosition)
+			if (/*IsSupportAtomicReRegister && oldOrder.Security.Board.IsSupportAtomicReRegister &&*/ !IsCommonMonetaryPosition)
 				SendInMessage(oldOrder.CreateReplaceMessage(newOrder, GetSecurityId(newOrder.Security)));
 			else
 				base.OnReRegisterOrder(oldOrder, newOrder);

@@ -74,12 +74,6 @@
             Initializes a new instance of the <see cref="T:StockSharp.Btce.BtceTrader"/>.
             </summary>
         </member>
-        <member name="P:StockSharp.Btce.BtceTrader.IsSupportAtomicReRegister">
-            <summary>
-            Gets a value indicating whether the re-registration orders via the method <see cref="M:StockSharp.BusinessEntities.IConnector.ReRegisterOrder(StockSharp.BusinessEntities.Order,StockSharp.BusinessEntities.Order)"/>
-            as a single transaction. The default is enabled.
-            </summary>
-        </member>
         <member name="P:StockSharp.Btce.BtceTrader.Key">
             <summary>
             Key.

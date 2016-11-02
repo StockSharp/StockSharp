@@ -2455,10 +2455,21 @@
             Icon resource name.
             </summary>
     </member>
+    <member name="M:StockSharp.Xaml.Diagram.Elements.PreviousValueDiagramElement.TypeChanged">
+      <summary>
+            The method is called when the data type is changed.
+            </summary>
+    </member>
     <member name="M:StockSharp.Xaml.Diagram.Elements.PreviousValueDiagramElement.OnStart">
       <summary>
             The method is called at the start of the diagram element algorithm.
             </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.Diagram.Elements.PreviousValueDiagramElement.OnProcess(StockSharp.Xaml.Diagram.DiagramSocketValue)">
+      <summary>
+            The method is called at the processing of the new incoming value.
+            </summary>
+      <param name="value">The processed value.</param>
     </member>
     <member name="T:StockSharp.Xaml.Diagram.Elements.ProtectPositionDiagramElement">
       <summary>
@@ -2560,6 +2571,11 @@
             The method is called at the stop of the diagram element algorithm.
             </summary>
     </member>
+    <member name="M:StockSharp.Xaml.Diagram.Elements.BaseStrategyDiagramElement.OnReseted">
+      <summary>
+            The method is called at re-initialisation of the diagram element state.
+            </summary>
+    </member>
     <member name="T:StockSharp.Xaml.Diagram.Elements.StrategyDiagramElement">
       <summary>
             The element which is using compiled strategy, based on S#.API.
@@ -2648,10 +2664,21 @@
             </summary>
       <param name="value">The processed value.</param>
     </member>
+    <member name="M:StockSharp.Xaml.Diagram.Elements.TypedDiagramElement`1.UpdateOutputSocketType">
+      <summary>
+            To change the output socket type.
+            </summary>
+    </member>
     <member name="M:StockSharp.Xaml.Diagram.Elements.TypedDiagramElement`1.OnStart">
       <summary>
             The method is called at the start of the diagram element algorithm.
             </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.Diagram.Elements.TypedDiagramElement`1.Load(Ecng.Serialization.SettingsStorage)">
+      <summary>
+            Load settings.
+            </summary>
+      <param name="storage">Settings storage.</param>
     </member>
     <member name="T:StockSharp.Xaml.Diagram.Elements.VariableDiagramElement">
       <summary>

@@ -16,6 +16,5 @@ M:StockSharp.Btce.BtceMessageAdapter.ToString/summary;DocStr49
 M:StockSharp.Btce.BtceMessageAdapter.ToString/returns;DocStr50
 T:StockSharp.Btce.BtceTrader/summary;DocStr2582
 M:StockSharp.Btce.BtceTrader.#ctor/summary;DocStr1
-P:StockSharp.Btce.BtceTrader.IsSupportAtomicReRegister/summary;DocStr87
 P:StockSharp.Btce.BtceTrader.Key/summary;Str3304
 P:StockSharp.Btce.BtceTrader.Secret/summary;DocStr3146

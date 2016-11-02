@@ -483,10 +483,10 @@ namespace StockSharp.Algo
 		/// </summary>
 		public ConnectionStates ConnectionState { get; private set; }
 
-		/// <summary>
-		/// Gets a value indicating whether the re-registration orders via the method <see cref="ReRegisterOrder(StockSharp.BusinessEntities.Order,StockSharp.BusinessEntities.Order)"/> as a single transaction. The default is enabled.
-		/// </summary>
-		public virtual bool IsSupportAtomicReRegister { get; protected set; } = true;
+		///// <summary>
+		///// Gets a value indicating whether the re-registration orders via the method <see cref="ReRegisterOrder(StockSharp.BusinessEntities.Order,StockSharp.BusinessEntities.Order)"/> as a single transaction. The default is enabled.
+		///// </summary>
+		//public virtual bool IsSupportAtomicReRegister { get; protected set; } = true;
 
 		/// <summary>
 		/// Use orders log to create market depths. Disabled by default.
@@ -1143,16 +1143,16 @@ namespace StockSharp.Algo
 		/// <param name="newOrder">New order to register.</param>
 		protected virtual void OnReRegisterOrder(Order oldOrder, Order newOrder)
 		{
-			if (IsSupportAtomicReRegister && oldOrder.Security.Board.IsSupportAtomicReRegister)
-			{
-				var replaceMsg = oldOrder.CreateReplaceMessage(newOrder, GetSecurityId(newOrder.Security));
-				SendInMessage(replaceMsg);
-			}
-			else
-			{
-				CancelOrder(oldOrder);
-				RegisterOrder(newOrder, false);
-			}
+			//if (IsSupportAtomicReRegister && oldOrder.Security.Board.IsSupportAtomicReRegister)
+			//{
+			var replaceMsg = oldOrder.CreateReplaceMessage(newOrder, GetSecurityId(newOrder.Security));
+			SendInMessage(replaceMsg);
+			//}
+			//else
+			//{
+			//	CancelOrder(oldOrder);
+			//	RegisterOrder(newOrder, false);
+			//}
 		}
 
 		/// <summary>
@@ -1164,11 +1164,13 @@ namespace StockSharp.Algo
 		/// <param name="newOrder2">Second new order to register.</param>
 		protected virtual void OnReRegisterOrderPair(Order oldOrder1, Order newOrder1, Order oldOrder2, Order newOrder2)
 		{
-			CancelOrder(oldOrder1);
-			RegisterOrder(newOrder1, false);
+			SendInMessage(oldOrder1.CreateReplaceMessage(newOrder1, GetSecurityId(newOrder1.Security), oldOrder2, newOrder2, GetSecurityId(newOrder2.Security)));
 
-			CancelOrder(oldOrder2);
-			RegisterOrder(newOrder2, false);
+			//CancelOrder(oldOrder1);
+			//RegisterOrder(newOrder1, false);
+
+			//CancelOrder(oldOrder2);
+			//RegisterOrder(newOrder2, false);
 		}
 
 		/// <summary>

@@ -387,7 +387,7 @@ namespace StockSharp.BusinessEntities
 					SpecialHolidays = new List<DateTime>(russianSpecialHolidays),
 				},
 				ExpiryTime = new TimeSpan(18, 45, 00),
-				IsSupportAtomicReRegister = true,
+				//IsSupportAtomicReRegister = true,
 				Exchange = Exchange.Moex,
 				TimeZone = moscowTime,
 			};
@@ -413,8 +413,8 @@ namespace StockSharp.BusinessEntities
 			{
 				Code = "MICEX",
 				WorkingTime = micexWorkingTime.Clone(),
-				IsSupportMarketOrders = true,
-				IsSupportAtomicReRegister = true,
+				//IsSupportMarketOrders = true,
+				//IsSupportAtomicReRegister = true,
 				Exchange = Exchange.Moex,
 				TimeZone = moscowTime,
 			};
@@ -423,8 +423,8 @@ namespace StockSharp.BusinessEntities
 			{
 				Code = "AUCT",
 				WorkingTime = micexWorkingTime.Clone(),
-				IsSupportMarketOrders = true,
-				IsSupportAtomicReRegister = true,
+				//IsSupportMarketOrders = true,
+				//IsSupportAtomicReRegister = true,
 				Exchange = Exchange.Moex,
 				TimeZone = moscowTime,
 			};
@@ -433,8 +433,8 @@ namespace StockSharp.BusinessEntities
 			{
 				Code = "AUBB",
 				WorkingTime = micexWorkingTime.Clone(),
-				IsSupportMarketOrders = true,
-				IsSupportAtomicReRegister = true,
+				//IsSupportMarketOrders = true,
+				//IsSupportAtomicReRegister = true,
 				Exchange = Exchange.Moex,
 				TimeZone = moscowTime,
 			};
@@ -443,8 +443,8 @@ namespace StockSharp.BusinessEntities
 			{
 				Code = "CASF",
 				WorkingTime = micexWorkingTime.Clone(),
-				IsSupportMarketOrders = true,
-				IsSupportAtomicReRegister = true,
+				//IsSupportMarketOrders = true,
+				//IsSupportAtomicReRegister = true,
 				Exchange = Exchange.Moex,
 				TimeZone = moscowTime,
 			};
@@ -453,8 +453,8 @@ namespace StockSharp.BusinessEntities
 			{
 				Code = "EQBR",
 				WorkingTime = micexWorkingTime.Clone(),
-				IsSupportMarketOrders = true,
-				IsSupportAtomicReRegister = true,
+				//IsSupportMarketOrders = true,
+				//IsSupportAtomicReRegister = true,
 				Exchange = Exchange.Moex,
 				TimeZone = moscowTime,
 			};
@@ -463,8 +463,8 @@ namespace StockSharp.BusinessEntities
 			{
 				Code = "EQBS",
 				WorkingTime = micexWorkingTime.Clone(),
-				IsSupportMarketOrders = true,
-				IsSupportAtomicReRegister = true,
+				//IsSupportMarketOrders = true,
+				//IsSupportAtomicReRegister = true,
 				Exchange = Exchange.Moex,
 				TimeZone = moscowTime,
 			};
@@ -473,8 +473,8 @@ namespace StockSharp.BusinessEntities
 			{
 				Code = "EQDP",
 				WorkingTime = micexWorkingTime.Clone(),
-				IsSupportMarketOrders = true,
-				IsSupportAtomicReRegister = true,
+				//IsSupportMarketOrders = true,
+				//IsSupportAtomicReRegister = true,
 				Exchange = Exchange.Moex,
 				TimeZone = moscowTime,
 			};
@@ -483,8 +483,8 @@ namespace StockSharp.BusinessEntities
 			{
 				Code = "EQEU",
 				WorkingTime = micexWorkingTime.Clone(),
-				IsSupportMarketOrders = true,
-				IsSupportAtomicReRegister = true,
+				//IsSupportMarketOrders = true,
+				//IsSupportAtomicReRegister = true,
 				Exchange = Exchange.Moex,
 				TimeZone = moscowTime,
 			};
@@ -493,8 +493,8 @@ namespace StockSharp.BusinessEntities
 			{
 				Code = "EQUS",
 				WorkingTime = micexWorkingTime.Clone(),
-				IsSupportMarketOrders = true,
-				IsSupportAtomicReRegister = true,
+				//IsSupportMarketOrders = true,
+				//IsSupportAtomicReRegister = true,
 				Exchange = Exchange.Moex,
 				TimeZone = moscowTime,
 			};
@@ -503,8 +503,8 @@ namespace StockSharp.BusinessEntities
 			{
 				Code = "EQNB",
 				WorkingTime = micexWorkingTime.Clone(),
-				IsSupportMarketOrders = true,
-				IsSupportAtomicReRegister = true,
+				//IsSupportMarketOrders = true,
+				//IsSupportAtomicReRegister = true,
 				Exchange = Exchange.Moex,
 				TimeZone = moscowTime,
 			};
@@ -513,8 +513,8 @@ namespace StockSharp.BusinessEntities
 			{
 				Code = "EQNE",
 				WorkingTime = micexWorkingTime.Clone(),
-				IsSupportMarketOrders = true,
-				IsSupportAtomicReRegister = true,
+				//IsSupportMarketOrders = true,
+				//IsSupportAtomicReRegister = true,
 				Exchange = Exchange.Moex,
 				TimeZone = moscowTime,
 			};
@@ -523,8 +523,8 @@ namespace StockSharp.BusinessEntities
 			{
 				Code = "EQNL",
 				WorkingTime = micexWorkingTime.Clone(),
-				IsSupportMarketOrders = true,
-				IsSupportAtomicReRegister = true,
+				//IsSupportMarketOrders = true,
+				//IsSupportAtomicReRegister = true,
 				Exchange = Exchange.Moex,
 				TimeZone = moscowTime,
 			};
@@ -533,8 +533,8 @@ namespace StockSharp.BusinessEntities
 			{
 				Code = "EQNO",
 				WorkingTime = micexWorkingTime.Clone(),
-				IsSupportMarketOrders = true,
-				IsSupportAtomicReRegister = true,
+				//IsSupportMarketOrders = true,
+				//IsSupportAtomicReRegister = true,
 				Exchange = Exchange.Moex,
 				TimeZone = moscowTime,
 			};
@@ -543,8 +543,8 @@ namespace StockSharp.BusinessEntities
 			{
 				Code = "EQOB",
 				WorkingTime = micexWorkingTime.Clone(),
-				IsSupportMarketOrders = true,
-				IsSupportAtomicReRegister = true,
+				//IsSupportMarketOrders = true,
+				//IsSupportAtomicReRegister = true,
 				Exchange = Exchange.Moex,
 				TimeZone = moscowTime,
 			};
@@ -553,8 +553,8 @@ namespace StockSharp.BusinessEntities
 			{
 				Code = "EQOS",
 				WorkingTime = micexWorkingTime.Clone(),
-				IsSupportMarketOrders = true,
-				IsSupportAtomicReRegister = true,
+				//IsSupportMarketOrders = true,
+				//IsSupportAtomicReRegister = true,
 				Exchange = Exchange.Moex,
 				TimeZone = moscowTime,
 			};
@@ -563,8 +563,8 @@ namespace StockSharp.BusinessEntities
 			{
 				Code = "EQOV",
 				WorkingTime = micexWorkingTime.Clone(),
-				IsSupportMarketOrders = true,
-				IsSupportAtomicReRegister = true,
+				//IsSupportMarketOrders = true,
+				//IsSupportAtomicReRegister = true,
 				Exchange = Exchange.Moex,
 				TimeZone = moscowTime,
 			};
@@ -573,8 +573,8 @@ namespace StockSharp.BusinessEntities
 			{
 				Code = "EQLV",
 				WorkingTime = micexWorkingTime.Clone(),
-				IsSupportMarketOrders = true,
-				IsSupportAtomicReRegister = true,
+				//IsSupportMarketOrders = true,
+				//IsSupportAtomicReRegister = true,
 				Exchange = Exchange.Moex,
 				TimeZone = moscowTime,
 			};
@@ -583,8 +583,8 @@ namespace StockSharp.BusinessEntities
 			{
 				Code = "EQDB",
 				WorkingTime = micexWorkingTime.Clone(),
-				IsSupportMarketOrders = true,
-				IsSupportAtomicReRegister = true,
+				//IsSupportMarketOrders = true,
+				//IsSupportAtomicReRegister = true,
 				Exchange = Exchange.Moex,
 				TimeZone = moscowTime,
 			};
@@ -593,8 +593,8 @@ namespace StockSharp.BusinessEntities
 			{
 				Code = "EQDE",
 				WorkingTime = micexWorkingTime.Clone(),
-				IsSupportMarketOrders = true,
-				IsSupportAtomicReRegister = true,
+				//IsSupportMarketOrders = true,
+				//IsSupportAtomicReRegister = true,
 				Exchange = Exchange.Moex,
 				TimeZone = moscowTime,
 			};
@@ -603,8 +603,8 @@ namespace StockSharp.BusinessEntities
 			{
 				Code = "EQLI",
 				WorkingTime = micexWorkingTime.Clone(),
-				IsSupportMarketOrders = true,
-				IsSupportAtomicReRegister = true,
+				//IsSupportMarketOrders = true,
+				//IsSupportAtomicReRegister = true,
 				Exchange = Exchange.Moex,
 				TimeZone = moscowTime,
 			};
@@ -613,8 +613,8 @@ namespace StockSharp.BusinessEntities
 			{
 				Code = "EQQI",
 				WorkingTime = micexWorkingTime.Clone(),
-				IsSupportMarketOrders = true,
-				IsSupportAtomicReRegister = true,
+				//IsSupportMarketOrders = true,
+				//IsSupportAtomicReRegister = true,
 				Exchange = Exchange.Moex,
 				TimeZone = moscowTime,
 			};
@@ -623,8 +623,8 @@ namespace StockSharp.BusinessEntities
 			{
 				Code = "SMAL",
 				WorkingTime = micexWorkingTime.Clone(),
-				IsSupportMarketOrders = true,
-				IsSupportAtomicReRegister = true,
+				//IsSupportMarketOrders = true,
+				//IsSupportAtomicReRegister = true,
 				Exchange = Exchange.Moex,
 				TimeZone = moscowTime,
 			};
@@ -633,8 +633,8 @@ namespace StockSharp.BusinessEntities
 			{
 				Code = "SPOB",
 				WorkingTime = micexWorkingTime.Clone(),
-				IsSupportMarketOrders = true,
-				IsSupportAtomicReRegister = true,
+				//IsSupportMarketOrders = true,
+				//IsSupportAtomicReRegister = true,
 				Exchange = Exchange.Moex,
 				TimeZone = moscowTime,
 			};
@@ -643,8 +643,8 @@ namespace StockSharp.BusinessEntities
 			{
 				Code = "TQBR",
 				WorkingTime = micexWorkingTime.Clone(),
-				IsSupportMarketOrders = true,
-				IsSupportAtomicReRegister = true,
+				//IsSupportMarketOrders = true,
+				//IsSupportAtomicReRegister = true,
 				Exchange = Exchange.Moex,
 				TimeZone = moscowTime,
 			};
@@ -653,8 +653,8 @@ namespace StockSharp.BusinessEntities
 			{
 				Code = "TQDE",
 				WorkingTime = micexWorkingTime.Clone(),
-				IsSupportMarketOrders = true,
-				IsSupportAtomicReRegister = true,
+				//IsSupportMarketOrders = true,
+				//IsSupportAtomicReRegister = true,
 				Exchange = Exchange.Moex,
 				TimeZone = moscowTime,
 			};
@@ -663,8 +663,8 @@ namespace StockSharp.BusinessEntities
 			{
 				Code = "TQBS",
 				WorkingTime = micexWorkingTime.Clone(),
-				IsSupportMarketOrders = true,
-				IsSupportAtomicReRegister = true,
+				//IsSupportMarketOrders = true,
+				//IsSupportAtomicReRegister = true,
 				Exchange = Exchange.Moex,
 				TimeZone = moscowTime,
 			};
@@ -673,8 +673,8 @@ namespace StockSharp.BusinessEntities
 			{
 				Code = "TQEU",
 				WorkingTime = micexWorkingTime.Clone(),
-				IsSupportMarketOrders = true,
-				IsSupportAtomicReRegister = true,
+				//IsSupportMarketOrders = true,
+				//IsSupportAtomicReRegister = true,
 				Exchange = Exchange.Moex,
 				TimeZone = moscowTime,
 			};
@@ -683,8 +683,8 @@ namespace StockSharp.BusinessEntities
 			{
 				Code = "TQUS",
 				WorkingTime = micexWorkingTime.Clone(),
-				IsSupportMarketOrders = true,
-				IsSupportAtomicReRegister = true,
+				//IsSupportMarketOrders = true,
+				//IsSupportAtomicReRegister = true,
 				Exchange = Exchange.Moex,
 				TimeZone = moscowTime,
 			};
@@ -693,8 +693,8 @@ namespace StockSharp.BusinessEntities
 			{
 				Code = "TQNB",
 				WorkingTime = micexWorkingTime.Clone(),
-				IsSupportMarketOrders = true,
-				IsSupportAtomicReRegister = true,
+				//IsSupportMarketOrders = true,
+				//IsSupportAtomicReRegister = true,
 				Exchange = Exchange.Moex,
 				TimeZone = moscowTime,
 			};
@@ -703,8 +703,8 @@ namespace StockSharp.BusinessEntities
 			{
 				Code = "TQNE",
 				WorkingTime = micexWorkingTime.Clone(),
-				IsSupportMarketOrders = true,
-				IsSupportAtomicReRegister = true,
+				//IsSupportMarketOrders = true,
+				//IsSupportAtomicReRegister = true,
 				Exchange = Exchange.Moex,
 				TimeZone = moscowTime,
 			};
@@ -713,8 +713,8 @@ namespace StockSharp.BusinessEntities
 			{
 				Code = "TQNL",
 				WorkingTime = micexWorkingTime.Clone(),
-				IsSupportMarketOrders = true,
-				IsSupportAtomicReRegister = true,
+				//IsSupportMarketOrders = true,
+				//IsSupportAtomicReRegister = true,
 				Exchange = Exchange.Moex,
 				TimeZone = moscowTime,
 			};
@@ -723,8 +723,8 @@ namespace StockSharp.BusinessEntities
 			{
 				Code = "TQNO",
 				WorkingTime = micexWorkingTime.Clone(),
-				IsSupportMarketOrders = true,
-				IsSupportAtomicReRegister = true,
+				//IsSupportMarketOrders = true,
+				//IsSupportAtomicReRegister = true,
 				Exchange = Exchange.Moex,
 				TimeZone = moscowTime,
 			};
@@ -733,8 +733,8 @@ namespace StockSharp.BusinessEntities
 			{
 				Code = "TQOB",
 				WorkingTime = micexWorkingTime.Clone(),
-				IsSupportMarketOrders = true,
-				IsSupportAtomicReRegister = true,
+				//IsSupportMarketOrders = true,
+				//IsSupportAtomicReRegister = true,
 				Exchange = Exchange.Moex,
 				TimeZone = moscowTime,
 			};
@@ -743,8 +743,8 @@ namespace StockSharp.BusinessEntities
 			{
 				Code = "TQOS",
 				WorkingTime = micexWorkingTime.Clone(),
-				IsSupportMarketOrders = true,
-				IsSupportAtomicReRegister = true,
+				//IsSupportMarketOrders = true,
+				//IsSupportAtomicReRegister = true,
 				Exchange = Exchange.Moex,
 				TimeZone = moscowTime,
 			};
@@ -753,8 +753,8 @@ namespace StockSharp.BusinessEntities
 			{
 				Code = "TQOV",
 				WorkingTime = micexWorkingTime.Clone(),
-				IsSupportMarketOrders = true,
-				IsSupportAtomicReRegister = true,
+				//IsSupportMarketOrders = true,
+				//IsSupportAtomicReRegister = true,
 				Exchange = Exchange.Moex,
 				TimeZone = moscowTime,
 			};
@@ -763,8 +763,8 @@ namespace StockSharp.BusinessEntities
 			{
 				Code = "TQLV",
 				WorkingTime = micexWorkingTime.Clone(),
-				IsSupportMarketOrders = true,
-				IsSupportAtomicReRegister = true,
+				//IsSupportMarketOrders = true,
+				//IsSupportAtomicReRegister = true,
 				Exchange = Exchange.Moex,
 				TimeZone = moscowTime,
 			};
@@ -773,8 +773,8 @@ namespace StockSharp.BusinessEntities
 			{
 				Code = "TQLI",
 				WorkingTime = micexWorkingTime.Clone(),
-				IsSupportMarketOrders = true,
-				IsSupportAtomicReRegister = true,
+				//IsSupportMarketOrders = true,
+				//IsSupportAtomicReRegister = true,
 				Exchange = Exchange.Moex,
 				TimeZone = moscowTime,
 			};
@@ -783,8 +783,8 @@ namespace StockSharp.BusinessEntities
 			{
 				Code = "TQQI",
 				WorkingTime = micexWorkingTime.Clone(),
-				IsSupportMarketOrders = true,
-				IsSupportAtomicReRegister = true,
+				//IsSupportMarketOrders = true,
+				//IsSupportAtomicReRegister = true,
 				Exchange = Exchange.Moex,
 				TimeZone = moscowTime,
 			};
@@ -793,8 +793,8 @@ namespace StockSharp.BusinessEntities
 			{
 				Code = "EQRP",
 				WorkingTime = micexWorkingTime.Clone(),
-				IsSupportMarketOrders = true,
-				IsSupportAtomicReRegister = true,
+				//IsSupportMarketOrders = true,
+				//IsSupportAtomicReRegister = true,
 				Exchange = Exchange.Moex,
 				TimeZone = moscowTime,
 			};
@@ -803,8 +803,8 @@ namespace StockSharp.BusinessEntities
 			{
 				Code = "PSRP",
 				WorkingTime = micexWorkingTime.Clone(),
-				IsSupportMarketOrders = true,
-				IsSupportAtomicReRegister = true,
+				//IsSupportMarketOrders = true,
+				//IsSupportAtomicReRegister = true,
 				Exchange = Exchange.Moex,
 				TimeZone = moscowTime,
 			};
@@ -813,8 +813,8 @@ namespace StockSharp.BusinessEntities
 			{
 				Code = "RFND",
 				WorkingTime = micexWorkingTime.Clone(),
-				IsSupportMarketOrders = true,
-				IsSupportAtomicReRegister = true,
+				//IsSupportMarketOrders = true,
+				//IsSupportAtomicReRegister = true,
 				Exchange = Exchange.Moex,
 				TimeZone = moscowTime,
 			};
@@ -823,8 +823,8 @@ namespace StockSharp.BusinessEntities
 			{
 				Code = "TADM",
 				WorkingTime = micexWorkingTime.Clone(),
-				IsSupportMarketOrders = true,
-				IsSupportAtomicReRegister = true,
+				//IsSupportMarketOrders = true,
+				//IsSupportAtomicReRegister = true,
 				Exchange = Exchange.Moex,
 				TimeZone = moscowTime,
 			};
@@ -833,8 +833,8 @@ namespace StockSharp.BusinessEntities
 			{
 				Code = "NADM",
 				WorkingTime = micexWorkingTime.Clone(),
-				IsSupportMarketOrders = true,
-				IsSupportAtomicReRegister = true,
+				//IsSupportMarketOrders = true,
+				//IsSupportAtomicReRegister = true,
 				Exchange = Exchange.Moex,
 				TimeZone = moscowTime,
 			};
@@ -843,7 +843,7 @@ namespace StockSharp.BusinessEntities
 			//{
 			//	Code = "TRAN",
 			//	WorkingTime = micexWorkingTime.Clone(),
-			//	IsSupportMarketOrders = true,
+			//	//IsSupportMarketOrders = true,
 			//	Exchange = Exchange.Moex,
 			//	TimeZone = moscowTime,
 			//};
@@ -852,8 +852,8 @@ namespace StockSharp.BusinessEntities
 			{
 				Code = "PSAU",
 				WorkingTime = micexWorkingTime.Clone(),
-				IsSupportMarketOrders = true,
-				IsSupportAtomicReRegister = true,
+				//IsSupportMarketOrders = true,
+				//IsSupportAtomicReRegister = true,
 				Exchange = Exchange.Moex,
 				TimeZone = moscowTime,
 			};
@@ -862,8 +862,8 @@ namespace StockSharp.BusinessEntities
 			{
 				Code = "PAUS",
 				WorkingTime = micexWorkingTime.Clone(),
-				IsSupportMarketOrders = true,
-				IsSupportAtomicReRegister = true,
+				//IsSupportMarketOrders = true,
+				//IsSupportAtomicReRegister = true,
 				Exchange = Exchange.Moex,
 				TimeZone = moscowTime,
 			};
@@ -872,8 +872,8 @@ namespace StockSharp.BusinessEntities
 			{
 				Code = "PSBB",
 				WorkingTime = micexWorkingTime.Clone(),
-				IsSupportMarketOrders = true,
-				IsSupportAtomicReRegister = true,
+				//IsSupportMarketOrders = true,
+				//IsSupportAtomicReRegister = true,
 				Exchange = Exchange.Moex,
 				TimeZone = moscowTime,
 			};
@@ -882,8 +882,8 @@ namespace StockSharp.BusinessEntities
 			{
 				Code = "PSEQ",
 				WorkingTime = micexWorkingTime.Clone(),
-				IsSupportMarketOrders = true,
-				IsSupportAtomicReRegister = true,
+				//IsSupportMarketOrders = true,
+				//IsSupportAtomicReRegister = true,
 				Exchange = Exchange.Moex,
 				TimeZone = moscowTime,
 			};
@@ -892,8 +892,8 @@ namespace StockSharp.BusinessEntities
 			{
 				Code = "PSES",
 				WorkingTime = micexWorkingTime.Clone(),
-				IsSupportMarketOrders = true,
-				IsSupportAtomicReRegister = true,
+				//IsSupportMarketOrders = true,
+				//IsSupportAtomicReRegister = true,
 				Exchange = Exchange.Moex,
 				TimeZone = moscowTime,
 			};
@@ -902,8 +902,8 @@ namespace StockSharp.BusinessEntities
 			{
 				Code = "PSEU",
 				WorkingTime = micexWorkingTime.Clone(),
-				IsSupportMarketOrders = true,
-				IsSupportAtomicReRegister = true,
+				//IsSupportMarketOrders = true,
+				//IsSupportAtomicReRegister = true,
 				Exchange = Exchange.Moex,
 				TimeZone = moscowTime,
 			};
@@ -912,8 +912,8 @@ namespace StockSharp.BusinessEntities
 			{
 				Code = "PSDB",
 				WorkingTime = micexWorkingTime.Clone(),
-				IsSupportMarketOrders = true,
-				IsSupportAtomicReRegister = true,
+				//IsSupportMarketOrders = true,
+				//IsSupportAtomicReRegister = true,
 				Exchange = Exchange.Moex,
 				TimeZone = moscowTime,
 			};
@@ -922,8 +922,8 @@ namespace StockSharp.BusinessEntities
 			{
 				Code = "PSDE",
 				WorkingTime = micexWorkingTime.Clone(),
-				IsSupportMarketOrders = true,
-				IsSupportAtomicReRegister = true,
+				//IsSupportMarketOrders = true,
+				//IsSupportAtomicReRegister = true,
 				Exchange = Exchange.Moex,
 				TimeZone = moscowTime,
 			};
@@ -932,8 +932,8 @@ namespace StockSharp.BusinessEntities
 			{
 				Code = "PSUS",
 				WorkingTime = micexWorkingTime.Clone(),
-				IsSupportMarketOrders = true,
-				IsSupportAtomicReRegister = true,
+				//IsSupportMarketOrders = true,
+				//IsSupportAtomicReRegister = true,
 				Exchange = Exchange.Moex,
 				TimeZone = moscowTime,
 			};
@@ -942,8 +942,8 @@ namespace StockSharp.BusinessEntities
 			{
 				Code = "PSNB",
 				WorkingTime = micexWorkingTime.Clone(),
-				IsSupportMarketOrders = true,
-				IsSupportAtomicReRegister = true,
+				//IsSupportMarketOrders = true,
+				//IsSupportAtomicReRegister = true,
 				Exchange = Exchange.Moex,
 				TimeZone = moscowTime,
 			};
@@ -952,8 +952,8 @@ namespace StockSharp.BusinessEntities
 			{
 				Code = "PSNE",
 				WorkingTime = micexWorkingTime.Clone(),
-				IsSupportMarketOrders = true,
-				IsSupportAtomicReRegister = true,
+				//IsSupportMarketOrders = true,
+				//IsSupportAtomicReRegister = true,
 				Exchange = Exchange.Moex,
 				TimeZone = moscowTime,
 			};
@@ -962,8 +962,8 @@ namespace StockSharp.BusinessEntities
 			{
 				Code = "PSNL",
 				WorkingTime = micexWorkingTime.Clone(),
-				IsSupportMarketOrders = true,
-				IsSupportAtomicReRegister = true,
+				//IsSupportMarketOrders = true,
+				//IsSupportAtomicReRegister = true,
 				Exchange = Exchange.Moex,
 				TimeZone = moscowTime,
 			};
@@ -972,8 +972,8 @@ namespace StockSharp.BusinessEntities
 			{
 				Code = "PSNO",
 				WorkingTime = micexWorkingTime.Clone(),
-				IsSupportMarketOrders = true,
-				IsSupportAtomicReRegister = true,
+				//IsSupportMarketOrders = true,
+				//IsSupportAtomicReRegister = true,
 				Exchange = Exchange.Moex,
 				TimeZone = moscowTime,
 			};
@@ -982,8 +982,8 @@ namespace StockSharp.BusinessEntities
 			{
 				Code = "PSOB",
 				WorkingTime = micexWorkingTime.Clone(),
-				IsSupportMarketOrders = true,
-				IsSupportAtomicReRegister = true,
+				//IsSupportMarketOrders = true,
+				//IsSupportAtomicReRegister = true,
 				Exchange = Exchange.Moex,
 				TimeZone = moscowTime,
 			};
@@ -992,8 +992,8 @@ namespace StockSharp.BusinessEntities
 			{
 				Code = "PSOS",
 				WorkingTime = micexWorkingTime.Clone(),
-				IsSupportMarketOrders = true,
-				IsSupportAtomicReRegister = true,
+				//IsSupportMarketOrders = true,
+				//IsSupportAtomicReRegister = true,
 				Exchange = Exchange.Moex,
 				TimeZone = moscowTime,
 			};
@@ -1002,8 +1002,8 @@ namespace StockSharp.BusinessEntities
 			{
 				Code = "PSOV",
 				WorkingTime = micexWorkingTime.Clone(),
-				IsSupportMarketOrders = true,
-				IsSupportAtomicReRegister = true,
+				//IsSupportMarketOrders = true,
+				//IsSupportAtomicReRegister = true,
 				Exchange = Exchange.Moex,
 				TimeZone = moscowTime,
 			};
@@ -1012,8 +1012,8 @@ namespace StockSharp.BusinessEntities
 			{
 				Code = "PSLV",
 				WorkingTime = micexWorkingTime.Clone(),
-				IsSupportMarketOrders = true,
-				IsSupportAtomicReRegister = true,
+				//IsSupportMarketOrders = true,
+				//IsSupportAtomicReRegister = true,
 				Exchange = Exchange.Moex,
 				TimeZone = moscowTime,
 			};
@@ -1022,8 +1022,8 @@ namespace StockSharp.BusinessEntities
 			{
 				Code = "PSLI",
 				WorkingTime = micexWorkingTime.Clone(),
-				IsSupportMarketOrders = true,
-				IsSupportAtomicReRegister = true,
+				//IsSupportMarketOrders = true,
+				//IsSupportAtomicReRegister = true,
 				Exchange = Exchange.Moex,
 				TimeZone = moscowTime,
 			};
@@ -1032,8 +1032,8 @@ namespace StockSharp.BusinessEntities
 			{
 				Code = "PSQI",
 				WorkingTime = micexWorkingTime.Clone(),
-				IsSupportMarketOrders = true,
-				IsSupportAtomicReRegister = true,
+				//IsSupportMarketOrders = true,
+				//IsSupportAtomicReRegister = true,
 				Exchange = Exchange.Moex,
 				TimeZone = moscowTime,
 			};
@@ -1042,8 +1042,8 @@ namespace StockSharp.BusinessEntities
 			{
 				Code = "RPEU",
 				WorkingTime = micexWorkingTime.Clone(),
-				IsSupportMarketOrders = true,
-				IsSupportAtomicReRegister = true,
+				//IsSupportMarketOrders = true,
+				//IsSupportAtomicReRegister = true,
 				Exchange = Exchange.Moex,
 				TimeZone = moscowTime,
 			};
@@ -1052,8 +1052,8 @@ namespace StockSharp.BusinessEntities
 			{
 				Code = "RPMA",
 				WorkingTime = micexWorkingTime.Clone(),
-				IsSupportMarketOrders = true,
-				IsSupportAtomicReRegister = true,
+				//IsSupportMarketOrders = true,
+				//IsSupportAtomicReRegister = true,
 				Exchange = Exchange.Moex,
 				TimeZone = moscowTime,
 			};
@@ -1062,8 +1062,8 @@ namespace StockSharp.BusinessEntities
 			{
 				Code = "RPMO",
 				WorkingTime = micexWorkingTime.Clone(),
-				IsSupportMarketOrders = true,
-				IsSupportAtomicReRegister = true,
+				//IsSupportMarketOrders = true,
+				//IsSupportAtomicReRegister = true,
 				Exchange = Exchange.Moex,
 				TimeZone = moscowTime,
 			};
@@ -1072,8 +1072,8 @@ namespace StockSharp.BusinessEntities
 			{
 				Code = "RPUA",
 				WorkingTime = micexWorkingTime.Clone(),
-				IsSupportMarketOrders = true,
-				IsSupportAtomicReRegister = true,
+				//IsSupportMarketOrders = true,
+				//IsSupportAtomicReRegister = true,
 				Exchange = Exchange.Moex,
 				TimeZone = moscowTime,
 			};
@@ -1082,8 +1082,8 @@ namespace StockSharp.BusinessEntities
 			{
 				Code = "RPUO",
 				WorkingTime = micexWorkingTime.Clone(),
-				IsSupportMarketOrders = true,
-				IsSupportAtomicReRegister = true,
+				//IsSupportMarketOrders = true,
+				//IsSupportAtomicReRegister = true,
 				Exchange = Exchange.Moex,
 				TimeZone = moscowTime,
 			};
@@ -1092,8 +1092,8 @@ namespace StockSharp.BusinessEntities
 			{
 				Code = "RPUQ",
 				WorkingTime = micexWorkingTime.Clone(),
-				IsSupportMarketOrders = true,
-				IsSupportAtomicReRegister = true,
+				//IsSupportMarketOrders = true,
+				//IsSupportAtomicReRegister = true,
 				Exchange = Exchange.Moex,
 				TimeZone = moscowTime,
 			};
@@ -1102,8 +1102,8 @@ namespace StockSharp.BusinessEntities
 			{
 				Code = "FBCB",
 				WorkingTime = micexWorkingTime.Clone(),
-				IsSupportMarketOrders = true,
-				IsSupportAtomicReRegister = true,
+				//IsSupportMarketOrders = true,
+				//IsSupportAtomicReRegister = true,
 				Exchange = Exchange.Moex,
 				TimeZone = moscowTime,
 			};
@@ -1112,8 +1112,8 @@ namespace StockSharp.BusinessEntities
 			{
 				Code = "FBFX",
 				WorkingTime = micexWorkingTime.Clone(),
-				IsSupportMarketOrders = true,
-				IsSupportAtomicReRegister = true,
+				//IsSupportMarketOrders = true,
+				//IsSupportAtomicReRegister = true,
 				Exchange = Exchange.Moex,
 				TimeZone = moscowTime,
 			};
@@ -1122,8 +1122,8 @@ namespace StockSharp.BusinessEntities
 			{
 				Code = "IRK2",
 				WorkingTime = micexWorkingTime.Clone(),
-				IsSupportMarketOrders = true,
-				IsSupportAtomicReRegister = true,
+				//IsSupportMarketOrders = true,
+				//IsSupportAtomicReRegister = true,
 				Exchange = Exchange.Moex,
 				TimeZone = moscowTime,
 			};
@@ -1132,8 +1132,8 @@ namespace StockSharp.BusinessEntities
 			{
 				Code = "RPQI",
 				WorkingTime = micexWorkingTime.Clone(),
-				IsSupportMarketOrders = true,
-				IsSupportAtomicReRegister = true,
+				//IsSupportMarketOrders = true,
+				//IsSupportAtomicReRegister = true,
 				Exchange = Exchange.Moex,
 				TimeZone = moscowTime,
 			};
@@ -1142,8 +1142,8 @@ namespace StockSharp.BusinessEntities
 			{
 				Code = "PTEQ",
 				WorkingTime = micexWorkingTime.Clone(),
-				IsSupportMarketOrders = true,
-				IsSupportAtomicReRegister = true,
+				//IsSupportMarketOrders = true,
+				//IsSupportAtomicReRegister = true,
 				Exchange = Exchange.Moex,
 				TimeZone = moscowTime,
 			};
@@ -1152,8 +1152,8 @@ namespace StockSharp.BusinessEntities
 			{
 				Code = "PTES",
 				WorkingTime = micexWorkingTime.Clone(),
-				IsSupportMarketOrders = true,
-				IsSupportAtomicReRegister = true,
+				//IsSupportMarketOrders = true,
+				//IsSupportAtomicReRegister = true,
 				Exchange = Exchange.Moex,
 				TimeZone = moscowTime,
 			};
@@ -1162,8 +1162,8 @@ namespace StockSharp.BusinessEntities
 			{
 				Code = "PTEU",
 				WorkingTime = micexWorkingTime.Clone(),
-				IsSupportMarketOrders = true,
-				IsSupportAtomicReRegister = true,
+				//IsSupportMarketOrders = true,
+				//IsSupportAtomicReRegister = true,
 				Exchange = Exchange.Moex,
 				TimeZone = moscowTime,
 			};
@@ -1172,8 +1172,8 @@ namespace StockSharp.BusinessEntities
 			{
 				Code = "PTUS",
 				WorkingTime = micexWorkingTime.Clone(),
-				IsSupportMarketOrders = true,
-				IsSupportAtomicReRegister = true,
+				//IsSupportMarketOrders = true,
+				//IsSupportAtomicReRegister = true,
 				Exchange = Exchange.Moex,
 				TimeZone = moscowTime,
 			};
@@ -1182,8 +1182,8 @@ namespace StockSharp.BusinessEntities
 			{
 				Code = "PTNB",
 				WorkingTime = micexWorkingTime.Clone(),
-				IsSupportMarketOrders = true,
-				IsSupportAtomicReRegister = true,
+				//IsSupportMarketOrders = true,
+				//IsSupportAtomicReRegister = true,
 				Exchange = Exchange.Moex,
 				TimeZone = moscowTime,
 			};
@@ -1192,8 +1192,8 @@ namespace StockSharp.BusinessEntities
 			{
 				Code = "PTNE",
 				WorkingTime = micexWorkingTime.Clone(),
-				IsSupportMarketOrders = true,
-				IsSupportAtomicReRegister = true,
+				//IsSupportMarketOrders = true,
+				//IsSupportAtomicReRegister = true,
 				Exchange = Exchange.Moex,
 				TimeZone = moscowTime,
 			};
@@ -1202,8 +1202,8 @@ namespace StockSharp.BusinessEntities
 			{
 				Code = "PTNL",
 				WorkingTime = micexWorkingTime.Clone(),
-				IsSupportMarketOrders = true,
-				IsSupportAtomicReRegister = true,
+				//IsSupportMarketOrders = true,
+				//IsSupportAtomicReRegister = true,
 				Exchange = Exchange.Moex,
 				TimeZone = moscowTime,
 			};
@@ -1212,8 +1212,8 @@ namespace StockSharp.BusinessEntities
 			{
 				Code = "PTNO",
 				WorkingTime = micexWorkingTime.Clone(),
-				IsSupportMarketOrders = true,
-				IsSupportAtomicReRegister = true,
+				//IsSupportMarketOrders = true,
+				//IsSupportAtomicReRegister = true,
 				Exchange = Exchange.Moex,
 				TimeZone = moscowTime,
 			};
@@ -1222,8 +1222,8 @@ namespace StockSharp.BusinessEntities
 			{
 				Code = "PTOB",
 				WorkingTime = micexWorkingTime.Clone(),
-				IsSupportMarketOrders = true,
-				IsSupportAtomicReRegister = true,
+				//IsSupportMarketOrders = true,
+				//IsSupportAtomicReRegister = true,
 				Exchange = Exchange.Moex,
 				TimeZone = moscowTime,
 			};
@@ -1232,8 +1232,8 @@ namespace StockSharp.BusinessEntities
 			{
 				Code = "PTOS",
 				WorkingTime = micexWorkingTime.Clone(),
-				IsSupportMarketOrders = true,
-				IsSupportAtomicReRegister = true,
+				//IsSupportMarketOrders = true,
+				//IsSupportAtomicReRegister = true,
 				Exchange = Exchange.Moex,
 				TimeZone = moscowTime,
 			};
@@ -1242,8 +1242,8 @@ namespace StockSharp.BusinessEntities
 			{
 				Code = "PTOV",
 				WorkingTime = micexWorkingTime.Clone(),
-				IsSupportMarketOrders = true,
-				IsSupportAtomicReRegister = true,
+				//IsSupportMarketOrders = true,
+				//IsSupportAtomicReRegister = true,
 				Exchange = Exchange.Moex,
 				TimeZone = moscowTime,
 			};
@@ -1252,8 +1252,8 @@ namespace StockSharp.BusinessEntities
 			{
 				Code = "PTLV",
 				WorkingTime = micexWorkingTime.Clone(),
-				IsSupportMarketOrders = true,
-				IsSupportAtomicReRegister = true,
+				//IsSupportMarketOrders = true,
+				//IsSupportAtomicReRegister = true,
 				Exchange = Exchange.Moex,
 				TimeZone = moscowTime,
 			};
@@ -1262,8 +1262,8 @@ namespace StockSharp.BusinessEntities
 			{
 				Code = "PTLI",
 				WorkingTime = micexWorkingTime.Clone(),
-				IsSupportMarketOrders = true,
-				IsSupportAtomicReRegister = true,
+				//IsSupportMarketOrders = true,
+				//IsSupportAtomicReRegister = true,
 				Exchange = Exchange.Moex,
 				TimeZone = moscowTime,
 			};
@@ -1272,8 +1272,8 @@ namespace StockSharp.BusinessEntities
 			{
 				Code = "PTQI",
 				WorkingTime = micexWorkingTime.Clone(),
-				IsSupportMarketOrders = true,
-				IsSupportAtomicReRegister = true,
+				//IsSupportMarketOrders = true,
+				//IsSupportAtomicReRegister = true,
 				Exchange = Exchange.Moex,
 				TimeZone = moscowTime,
 			};
@@ -1282,8 +1282,8 @@ namespace StockSharp.BusinessEntities
 			{
 				Code = "SCVC",
 				WorkingTime = micexWorkingTime.Clone(),
-				IsSupportMarketOrders = true,
-				IsSupportAtomicReRegister = true,
+				//IsSupportMarketOrders = true,
+				//IsSupportAtomicReRegister = true,
 				Exchange = Exchange.Moex,
 				TimeZone = moscowTime,
 			};
@@ -1292,8 +1292,8 @@ namespace StockSharp.BusinessEntities
 			{
 				Code = "RPNG",
 				WorkingTime = micexWorkingTime.Clone(),
-				IsSupportMarketOrders = true,
-				IsSupportAtomicReRegister = true,
+				//IsSupportMarketOrders = true,
+				//IsSupportAtomicReRegister = true,
 				Exchange = Exchange.Moex,
 				TimeZone = moscowTime,
 			};
@@ -1302,8 +1302,8 @@ namespace StockSharp.BusinessEntities
 			{
 				Code = "RPFG",
 				WorkingTime = micexWorkingTime.Clone(),
-				IsSupportMarketOrders = true,
-				IsSupportAtomicReRegister = true,
+				//IsSupportMarketOrders = true,
+				//IsSupportAtomicReRegister = true,
 				Exchange = Exchange.Moex,
 				TimeZone = moscowTime,
 			};
@@ -1312,8 +1312,8 @@ namespace StockSharp.BusinessEntities
 			{
 				Code = "CBCR",
 				WorkingTime = micexWorkingTime.Clone(),
-				IsSupportMarketOrders = true,
-				IsSupportAtomicReRegister = true,
+				//IsSupportMarketOrders = true,
+				//IsSupportAtomicReRegister = true,
 				Exchange = Exchange.Moex,
 				TimeZone = moscowTime,
 			};
@@ -1322,8 +1322,8 @@ namespace StockSharp.BusinessEntities
 			{
 				Code = "CRED",
 				WorkingTime = micexWorkingTime.Clone(),
-				IsSupportMarketOrders = true,
-				IsSupportAtomicReRegister = true,
+				//IsSupportMarketOrders = true,
+				//IsSupportAtomicReRegister = true,
 				Exchange = Exchange.Moex,
 				TimeZone = moscowTime,
 			};
@@ -1332,8 +1332,8 @@ namespace StockSharp.BusinessEntities
 			{
 				Code = "DEPZ",
 				WorkingTime = micexWorkingTime.Clone(),
-				IsSupportMarketOrders = true,
-				IsSupportAtomicReRegister = true,
+				//IsSupportMarketOrders = true,
+				//IsSupportAtomicReRegister = true,
 				Exchange = Exchange.Moex,
 			};
 
@@ -1341,8 +1341,8 @@ namespace StockSharp.BusinessEntities
 			{
 				Code = "DPVB",
 				WorkingTime = micexWorkingTime.Clone(),
-				IsSupportMarketOrders = true,
-				IsSupportAtomicReRegister = true,
+				//IsSupportMarketOrders = true,
+				//IsSupportAtomicReRegister = true,
 				Exchange = Exchange.Moex,
 				TimeZone = moscowTime,
 			};
@@ -1351,8 +1351,8 @@ namespace StockSharp.BusinessEntities
 			{
 				Code = "DPFK",
 				WorkingTime = micexWorkingTime.Clone(),
-				IsSupportMarketOrders = true,
-				IsSupportAtomicReRegister = true,
+				//IsSupportMarketOrders = true,
+				//IsSupportAtomicReRegister = true,
 				Exchange = Exchange.Moex,
 				TimeZone = moscowTime,
 			};
@@ -1361,8 +1361,8 @@ namespace StockSharp.BusinessEntities
 			{
 				Code = "DPFO",
 				WorkingTime = micexWorkingTime.Clone(),
-				IsSupportMarketOrders = true,
-				IsSupportAtomicReRegister = true,
+				//IsSupportMarketOrders = true,
+				//IsSupportAtomicReRegister = true,
 				Exchange = Exchange.Moex,
 				TimeZone = moscowTime,
 			};
@@ -1371,8 +1371,8 @@ namespace StockSharp.BusinessEntities
 			{
 				Code = "DPPF",
 				WorkingTime = micexWorkingTime.Clone(),
-				IsSupportMarketOrders = true,
-				IsSupportAtomicReRegister = true,
+				//IsSupportMarketOrders = true,
+				//IsSupportAtomicReRegister = true,
 				Exchange = Exchange.Moex,
 				TimeZone = moscowTime,
 			};
@@ -1381,8 +1381,8 @@ namespace StockSharp.BusinessEntities
 			{
 				Code = "CETS",
 				WorkingTime = micexWorkingTime.Clone(),
-				IsSupportMarketOrders = true,
-				IsSupportAtomicReRegister = true,
+				//IsSupportMarketOrders = true,
+				//IsSupportAtomicReRegister = true,
 				Exchange = Exchange.Moex,
 				TimeZone = moscowTime,
 			};
@@ -1391,8 +1391,8 @@ namespace StockSharp.BusinessEntities
 			{
 				Code = "AETS",
 				WorkingTime = micexWorkingTime.Clone(),
-				IsSupportMarketOrders = true,
-				IsSupportAtomicReRegister = true,
+				//IsSupportMarketOrders = true,
+				//IsSupportAtomicReRegister = true,
 				Exchange = Exchange.Moex,
 				TimeZone = moscowTime,
 			};
@@ -1401,8 +1401,8 @@ namespace StockSharp.BusinessEntities
 			{
 				Code = "CNGD",
 				WorkingTime = micexWorkingTime.Clone(),
-				IsSupportMarketOrders = true,
-				IsSupportAtomicReRegister = true,
+				//IsSupportMarketOrders = true,
+				//IsSupportAtomicReRegister = true,
 				Exchange = Exchange.Moex,
 				TimeZone = moscowTime,
 			};
@@ -1411,8 +1411,8 @@ namespace StockSharp.BusinessEntities
 			{
 				Code = "TRAN",
 				WorkingTime = micexWorkingTime.Clone(),
-				IsSupportMarketOrders = true,
-				IsSupportAtomicReRegister = true,
+				//IsSupportMarketOrders = true,
+				//IsSupportAtomicReRegister = true,
 				Exchange = Exchange.Moex,
 				TimeZone = moscowTime,
 			};
@@ -1420,8 +1420,8 @@ namespace StockSharp.BusinessEntities
 			MicexJunior = new ExchangeBoard
 			{
 				Code = "QJSIM",
-				IsSupportMarketOrders = true,
-				IsSupportAtomicReRegister = true,
+				//IsSupportMarketOrders = true,
+				//IsSupportAtomicReRegister = true,
 				Exchange = Exchange.Moex,
 				TimeZone = moscowTime,
 			};
@@ -1429,8 +1429,8 @@ namespace StockSharp.BusinessEntities
 			Spb = new ExchangeBoard
 			{
 				Code = "SPB",
-				IsSupportMarketOrders = false,
-				IsSupportAtomicReRegister = false,
+				//IsSupportMarketOrders = false,
+				//IsSupportAtomicReRegister = false,
 				Exchange = Exchange.Spb,
 				TimeZone = moscowTime,
 			};
@@ -1454,7 +1454,7 @@ namespace StockSharp.BusinessEntities
 					},
 				},
 				ExpiryTime = new TimeSpan(18, 45, 00),
-				IsSupportAtomicReRegister = true,
+				//IsSupportAtomicReRegister = true,
 				Exchange = Exchange.Ux,
 				TimeZone = TimeZoneInfo.FindSystemTimeZoneById("FLE Standard Time"),
 			};
@@ -1500,7 +1500,7 @@ namespace StockSharp.BusinessEntities
 						}
 					},
 				},
-				IsSupportMarketOrders = true,
+				//IsSupportMarketOrders = true,
 				TimeZone = newYorkTime,
 				Exchange = Exchange.Amex
 			};
@@ -1543,7 +1543,7 @@ namespace StockSharp.BusinessEntities
 						}
 					},
 				},
-				IsSupportMarketOrders = true,
+				//IsSupportMarketOrders = true,
 				TimeZone = newYorkTime,
 				Exchange = Exchange.Nyse
 			};
@@ -1572,7 +1572,7 @@ namespace StockSharp.BusinessEntities
 						}
 					},
 				},
-				IsSupportMarketOrders = true,
+				//IsSupportMarketOrders = true,
 				Exchange = Exchange.Nasdaq,
 				TimeZone = newYorkTime,
 			};

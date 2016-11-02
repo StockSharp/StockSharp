@@ -107,8 +107,6 @@ M:StockSharp.BusinessEntities.ExchangeBoard.#ctor/summary;DocStr1
 P:StockSharp.BusinessEntities.ExchangeBoard.Code/summary;BoardCode
 P:StockSharp.BusinessEntities.ExchangeBoard.ExpiryTime/summary;Str64
 P:StockSharp.BusinessEntities.ExchangeBoard.Exchange/summary;Str479
-P:StockSharp.BusinessEntities.ExchangeBoard.IsSupportAtomicReRegister/summary;DocStr2812
-P:StockSharp.BusinessEntities.ExchangeBoard.IsSupportMarketOrders/summary;DocStr2813
 P:StockSharp.BusinessEntities.ExchangeBoard.WorkingTime/summary;WorkingHours
 P:StockSharp.BusinessEntities.ExchangeBoard.TimeZone/summary;Str68
 M:StockSharp.BusinessEntities.ExchangeBoard.GetBoard(System.String)/summary;DocStr2696
@@ -357,7 +355,6 @@ P:StockSharp.BusinessEntities.IConnector.MyTrades/summary;DocStr916
 P:StockSharp.BusinessEntities.IConnector.Positions/summary;DocStr918
 P:StockSharp.BusinessEntities.IConnector.News/summary;DocStr919
 P:StockSharp.BusinessEntities.IConnector.ConnectionState/summary;DocStr922
-P:StockSharp.BusinessEntities.IConnector.IsSupportAtomicReRegister/summary;DocStr2091
 P:StockSharp.BusinessEntities.IConnector.RegisteredSecurities/summary;DocStr901
 P:StockSharp.BusinessEntities.IConnector.RegisteredMarketDepths/summary;DocStr901
 P:StockSharp.BusinessEntities.IConnector.RegisteredTrades/summary;DocStr901

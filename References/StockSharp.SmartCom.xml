@@ -1688,12 +1688,6 @@
             </summary>
       <remarks>Необходим для того, чтобы сервер успел сформировать данные в своем хранилище свечек.</remarks>
     </member>
-    <member name="P:StockSharp.SmartCom.SmartTrader.IsSupportAtomicReRegister">
-      <summary>
-            Поддерживается ли перерегистрация заявок через метод <see cref="M:StockSharp.BusinessEntities.IConnector.ReRegisterOrder(StockSharp.BusinessEntities.Order,StockSharp.BusinessEntities.Order)" />
-            в виде одной транзакции. По-умолчанию включено.
-            </summary>
-    </member>
     <member name="P:StockSharp.SmartCom.SmartTrader.RestartService">
       <summary>
             Перезапускать службу SmartCOM при подключении.
@@ -1758,13 +1752,6 @@
       <summary>
             Отключиться от торговой системы.
             </summary>
-    </member>
-    <member name="M:StockSharp.SmartCom.SmartTrader.OnReRegisterOrder(StockSharp.BusinessEntities.Order,StockSharp.BusinessEntities.Order)">
-      <summary>
-            Перерегистрировать заявку на бирже.
-            </summary>
-      <param name="oldOrder">Старая заявка, которую нужно перерегистрировать.</param>
-      <param name="newOrder">Информация о новой заявке.</param>
     </member>
     <member name="M:StockSharp.SmartCom.SmartTrader.OnCancelOrders(System.Int64,System.Nullable{System.Boolean},StockSharp.BusinessEntities.Portfolio,System.Nullable{StockSharp.Messages.Sides},StockSharp.BusinessEntities.ExchangeBoard,StockSharp.BusinessEntities.Security,System.Nullable{StockSharp.Messages.SecurityTypes})">
       <summary>

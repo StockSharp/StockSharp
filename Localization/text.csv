@@ -2155,7 +2155,7 @@ Str2285;Time offset in days from current date, which is necessary to stop incomp
 Str2286;Weekend;Выходные
 Str2287;Ignore weekends and holidays (do not download data).;Игнорировать выходные и праздничные дни (не скачивать данные).
 Str2288Params;Source is designed to get history data from website {0}.;Источник предназначен для получения исторических данных с сайта {0}.
-Str2289;No securities selected. Downloading all that are available.;Нет выбранных инструментов. Закачиваем все доступные.
+Str2289;No securities selected. Downloading all available.;Нет выбранных инструментов. Закачиваем все доступные.
 Str2290;Synchronizing with {0}.;Производим синхронизацию с {0}.
 Str2291Params;Security {0} does not contain {1} identifier and it will be removed from the downloads list.;Инструмент {0} не содержит идентификатор {1} и он будет удален из списка скачиваемых.
 Str2292;No securities.;Нет инструментов.
@@ -13474,3 +13474,6 @@ DocStr9294;Set the {0} to {1};Установить {0} в {1}
 DocStr9295;The market data source from Xignite;Источник данных Xignite
 DocStr9296;The diagram element connection changed event;Событие изменения соединения элемента
 DocStr9297;Security index based on {0} diagram element;Элемент, создающий индекс на основе {0}
+DocStr9298;To change the output socket type;Изменить тип исходящего сокета
+DocStr9299;Is nullable;Может быть пустым
+DocStr9300;Has value;Имеет значение

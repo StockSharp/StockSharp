@@ -17,7 +17,6 @@ M:StockSharp.BitStamp.BitStampMessageAdapter.ToString/summary;DocStr49
 M:StockSharp.BitStamp.BitStampMessageAdapter.ToString/returns;DocStr50
 T:StockSharp.BitStamp.BitStampTrader/summary;DocStr2539
 M:StockSharp.BitStamp.BitStampTrader.#ctor/summary;DocStr1
-P:StockSharp.BitStamp.BitStampTrader.IsSupportAtomicReRegister/summary;DocStr87
 P:StockSharp.BitStamp.BitStampTrader.Key/summary;Str3304
 P:StockSharp.BitStamp.BitStampTrader.Secret/summary;DocStr3146
 P:StockSharp.BitStamp.BitStampTrader.ClientId/summary;Str3308

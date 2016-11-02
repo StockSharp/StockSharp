@@ -1813,7 +1813,8 @@ namespace StockSharp.Algo.Testing
 
 			if (board != null)
 			{
-				if (execMsg.OrderType == OrderTypes.Market && !board.IsSupportMarketOrders)
+				//if (execMsg.OrderType == OrderTypes.Market && !board.IsSupportMarketOrders)
+				if (!Settings.IsSupportAtomicReRegister)
 					return LocalizedStrings.Str1170Params.Put(board.Code);
 
 				if (!board.IsTradeTime(execMsg.ServerTime))

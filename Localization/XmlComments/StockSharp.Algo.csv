@@ -2764,7 +2764,6 @@ P:StockSharp.Algo.Connector.RiskManager/summary;DocStr8511
 P:StockSharp.Algo.Connector.CommissionManager/summary;DocStr745
 P:StockSharp.Algo.Connector.SlippageManager/summary;DocStr8536
 P:StockSharp.Algo.Connector.ConnectionState/summary;DocStr922
-P:StockSharp.Algo.Connector.IsSupportAtomicReRegister/summary;DocStr87
 P:StockSharp.Algo.Connector.CreateDepthFromOrdersLog/summary;Str2616
 P:StockSharp.Algo.Connector.CreateTradesFromOrdersLog/summary;Str2614
 P:StockSharp.Algo.Connector.UpdateSecurityLastQuotes/summary;DocStr923
@@ -5097,10 +5096,6 @@ M:StockSharp.Algo.Strategies.StrategyHelper.GetSecurityValue``1(StockSharp.Algo.
 M:StockSharp.Algo.Strategies.StrategyHelper.GetSecurityValue``1(StockSharp.Algo.Strategies.Strategy,StockSharp.Messages.Level1Fields)/param/strategy;Strategy
 M:StockSharp.Algo.Strategies.StrategyHelper.GetSecurityValue``1(StockSharp.Algo.Strategies.Strategy,StockSharp.Messages.Level1Fields)/param/field;DocStr854
 M:StockSharp.Algo.Strategies.StrategyHelper.GetSecurityValue``1(StockSharp.Algo.Strategies.Strategy,StockSharp.Messages.Level1Fields)/returns;DocStr855
-M:StockSharp.Algo.Strategies.StrategyHelper.GetMarketPrice(StockSharp.Algo.Strategies.Strategy,StockSharp.Messages.Sides)/summary;DocStr1787
-M:StockSharp.Algo.Strategies.StrategyHelper.GetMarketPrice(StockSharp.Algo.Strategies.Strategy,StockSharp.Messages.Sides)/param/strategy;Strategy
-M:StockSharp.Algo.Strategies.StrategyHelper.GetMarketPrice(StockSharp.Algo.Strategies.Strategy,StockSharp.Messages.Sides)/param/side;DocStr660
-M:StockSharp.Algo.Strategies.StrategyHelper.GetMarketPrice(StockSharp.Algo.Strategies.Strategy,StockSharp.Messages.Sides)/returns;DocStr1788
 M:StockSharp.Algo.Strategies.StrategyHelper.GetTraceId(StockSharp.BusinessEntities.Order)/summary;DocStr1789
 M:StockSharp.Algo.Strategies.StrategyHelper.GetTraceId(StockSharp.BusinessEntities.Order)/param/order;Str504
 M:StockSharp.Algo.Strategies.StrategyHelper.GetTraceId(StockSharp.BusinessEntities.Order)/returns;DocStr1790
@@ -5285,7 +5280,6 @@ P:StockSharp.Algo.Testing.HistorySourceMessage.GetMessages/summary;DocStr8630
 T:StockSharp.Algo.Testing.BaseEmulationConnector/summary;DocStr2081
 M:StockSharp.Algo.Testing.BaseEmulationConnector.#ctor/summary;DocStr93
 P:StockSharp.Algo.Testing.BaseEmulationConnector.EmulationAdapter/summary;DocStr2112
-P:StockSharp.Algo.Testing.BaseEmulationConnector.IsSupportAtomicReRegister/summary;DocStr2091
 M:StockSharp.Algo.Testing.BaseEmulationConnector.RegisterTrades(StockSharp.Algo.Testing.TradeGenerator)/summary;DocStr2082
 M:StockSharp.Algo.Testing.BaseEmulationConnector.RegisterTrades(StockSharp.Algo.Testing.TradeGenerator)/param/generator;DocStr2083
 M:StockSharp.Algo.Testing.BaseEmulationConnector.UnRegisterTrades(StockSharp.Algo.Testing.TradeGenerator)/summary;DocStr2084
@@ -6199,11 +6193,6 @@ M:StockSharp.Algo.TraderHelper.GetFilteredQuotes(System.Collections.Generic.IEnu
 M:StockSharp.Algo.TraderHelper.GetFilteredQuotes(System.Collections.Generic.IEnumerable{StockSharp.BusinessEntities.Quote},System.Collections.Generic.IEnumerable{StockSharp.BusinessEntities.Order},System.Collections.Generic.IEnumerable{StockSharp.BusinessEntities.Order})/param/ownOrders;DocStr2261
 M:StockSharp.Algo.TraderHelper.GetFilteredQuotes(System.Collections.Generic.IEnumerable{StockSharp.BusinessEntities.Quote},System.Collections.Generic.IEnumerable{StockSharp.BusinessEntities.Order},System.Collections.Generic.IEnumerable{StockSharp.BusinessEntities.Order})/param/orders;DocStr2262
 M:StockSharp.Algo.TraderHelper.GetFilteredQuotes(System.Collections.Generic.IEnumerable{StockSharp.BusinessEntities.Quote},System.Collections.Generic.IEnumerable{StockSharp.BusinessEntities.Order},System.Collections.Generic.IEnumerable{StockSharp.BusinessEntities.Order})/returns;DocStr319
-M:StockSharp.Algo.TraderHelper.GetMarketPrice(StockSharp.BusinessEntities.Security,StockSharp.BusinessEntities.IMarketDataProvider,StockSharp.Messages.Sides)/summary;DocStr1787
-M:StockSharp.Algo.TraderHelper.GetMarketPrice(StockSharp.BusinessEntities.Security,StockSharp.BusinessEntities.IMarketDataProvider,StockSharp.Messages.Sides)/param/security;DocStr2263
-M:StockSharp.Algo.TraderHelper.GetMarketPrice(StockSharp.BusinessEntities.Security,StockSharp.BusinessEntities.IMarketDataProvider,StockSharp.Messages.Sides)/param/provider;DocStr973
-M:StockSharp.Algo.TraderHelper.GetMarketPrice(StockSharp.BusinessEntities.Security,StockSharp.BusinessEntities.IMarketDataProvider,StockSharp.Messages.Sides)/param/side;DocStr660
-M:StockSharp.Algo.TraderHelper.GetMarketPrice(StockSharp.BusinessEntities.Security,StockSharp.BusinessEntities.IMarketDataProvider,StockSharp.Messages.Sides)/returns;DocStr1788
 M:StockSharp.Algo.TraderHelper.GetCurrentPrice(StockSharp.BusinessEntities.Security,StockSharp.BusinessEntities.IMarketDataProvider,System.Nullable{StockSharp.Messages.Sides},StockSharp.Algo.MarketPriceTypes,System.Collections.Generic.IEnumerable{StockSharp.BusinessEntities.Order})/summary;DocStr2264
 M:StockSharp.Algo.TraderHelper.GetCurrentPrice(StockSharp.BusinessEntities.Security,StockSharp.BusinessEntities.IMarketDataProvider,System.Nullable{StockSharp.Messages.Sides},StockSharp.Algo.MarketPriceTypes,System.Collections.Generic.IEnumerable{StockSharp.BusinessEntities.Order})/param/security;DocStr2265
 M:StockSharp.Algo.TraderHelper.GetCurrentPrice(StockSharp.BusinessEntities.Security,StockSharp.BusinessEntities.IMarketDataProvider,System.Nullable{StockSharp.Messages.Sides},StockSharp.Algo.MarketPriceTypes,System.Collections.Generic.IEnumerable{StockSharp.BusinessEntities.Order})/param/provider;DocStr973

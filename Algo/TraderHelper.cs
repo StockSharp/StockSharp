@@ -165,31 +165,31 @@ namespace StockSharp.Algo
 			return retVal;
 		}
 
-		/// <summary>
-		/// To get market price for the instrument by maximal and minimal possible prices.
-		/// </summary>
-		/// <param name="security">The instrument used for the market price calculation.</param>
-		/// <param name="provider">The market data provider.</param>
-		/// <param name="side">Order side.</param>
-		/// <returns>The market price. If there is no information on maximal and minimal possible prices, then <see langword="null" /> will be returned.</returns>
-		public static decimal? GetMarketPrice(this Security security, IMarketDataProvider provider, Sides side)
-		{
-			var board = security.CheckExchangeBoard();
+		///// <summary>
+		///// To get market price for the instrument by maximal and minimal possible prices.
+		///// </summary>
+		///// <param name="security">The instrument used for the market price calculation.</param>
+		///// <param name="provider">The market data provider.</param>
+		///// <param name="side">Order side.</param>
+		///// <returns>The market price. If there is no information on maximal and minimal possible prices, then <see langword="null" /> will be returned.</returns>
+		//public static decimal? GetMarketPrice(this Security security, IMarketDataProvider provider, Sides side)
+		//{
+		//	var board = security.CheckExchangeBoard();
 
-			if (board.IsSupportMarketOrders)
-				throw new ArgumentException(LocalizedStrings.Str1210Params.Put(board.Code), nameof(security));
+		//	if (board.IsSupportMarketOrders)
+		//		throw new ArgumentException(LocalizedStrings.Str1210Params.Put(board.Code), nameof(security));
 
-			var minPrice = (decimal?)provider.GetSecurityValue(security, Level1Fields.MinPrice);
-			var maxPrice = (decimal?)provider.GetSecurityValue(security, Level1Fields.MaxPrice);
+		//	var minPrice = (decimal?)provider.GetSecurityValue(security, Level1Fields.MinPrice);
+		//	var maxPrice = (decimal?)provider.GetSecurityValue(security, Level1Fields.MaxPrice);
 
-			if (side == Sides.Buy && maxPrice != null)
-				return maxPrice.Value;
-			else if (side == Sides.Sell && minPrice != null)
-				return minPrice.Value;
-			else
-				return null;
-				//throw new ArgumentException("У инструмента {0} отсутствует информация о планках.".Put(security), "security");
-		}
+		//	if (side == Sides.Buy && maxPrice != null)
+		//		return maxPrice.Value;
+		//	else if (side == Sides.Sell && minPrice != null)
+		//		return minPrice.Value;
+		//	else
+		//		return null;
+		//		//throw new ArgumentException("У инструмента {0} отсутствует информация о планках.".Put(security), "security");
+		//}
 
 		/// <summary>
 		/// To calculate the current price by the instrument depending on the order direction.

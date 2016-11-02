@@ -7,8 +7,6 @@ M:StockSharp.Messages.BaseConnectionMessage.ToString/returns;DocStr50
 T:StockSharp.Messages.BoardMessage/summary;DocStr4048
 P:StockSharp.Messages.BoardMessage.ExchangeCode/summary;DocStr4049
 P:StockSharp.Messages.BoardMessage.Code/summary;BoardCode
-P:StockSharp.Messages.BoardMessage.IsSupportAtomicReRegister/summary;DocStr2812
-P:StockSharp.Messages.BoardMessage.IsSupportMarketOrders/summary;DocStr2813
 P:StockSharp.Messages.BoardMessage.ExpiryTime/summary;Str64
 P:StockSharp.Messages.BoardMessage.WorkingTime/summary;WorkingHours
 P:StockSharp.Messages.BoardMessage.TimeZone/summary;Str68

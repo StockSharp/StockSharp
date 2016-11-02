@@ -6040,6 +6040,81 @@
             Таблица opt_vm - Вариационная маржа по опционам.
             </summary>
     </member>
+    <member name="T:StockSharp.Plaza.Native.CGate.ErrorCode">
+      <summary>
+            Коды ошибок Plaza CGate.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Plaza.Native.CGate.ErrorCode.AlreadyDestroyed">
+      <summary>
+            Объект уже уничтожен.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Plaza.Native.CGate.ErrorCode.BadCast">
+      <summary>
+            Неправильное приведение типа.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Plaza.Native.CGate.ErrorCode.BufferTooSmall">
+      <summary>
+            Недостаточный размер буфера.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Plaza.Native.CGate.ErrorCode.Duplicated">
+      <summary>
+            Повтор.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Plaza.Native.CGate.ErrorCode.IncorrectState">
+      <summary>
+            Неправильное состояние.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Plaza.Native.CGate.ErrorCode.Internal">
+      <summary>
+            Внутренняя ошибка
+            </summary>
+    </member>
+    <member name="F:StockSharp.Plaza.Native.CGate.ErrorCode.InvalidArgument">
+      <summary>
+            Неправильный аргумент
+            </summary>
+    </member>
+    <member name="F:StockSharp.Plaza.Native.CGate.ErrorCode.More">
+      <summary>
+            Требуется дополнительная информация.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Plaza.Native.CGate.ErrorCode.Ok">
+      <summary>
+            Успех.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Plaza.Native.CGate.ErrorCode.OverFlow">
+      <summary>
+            Перезаполнение буфера.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Plaza.Native.CGate.ErrorCode.TimeOut">
+      <summary>
+            Таймаут.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Plaza.Native.CGate.ErrorCode.UnderFlow">
+      <summary>
+            Недостаточное заполнение буфера.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Plaza.Native.CGate.ErrorCode.Unsupported">
+      <summary>
+            Операция не поддерживается.
+            </summary>
+    </member>
+    <member name="T:StockSharp.Plaza.Native.ClientGate.MessageDispatcher">
+      <summary>
+            Внутренний класс для обработки Plaza сообщений.
+            </summary>
+    </member>
     <member name="T:StockSharp.Plaza.PlazaBaseManager">
       <summary>
             Базовый менеджер.
@@ -7473,22 +7548,6 @@
       <param name="security">Инструмент. Если значение равно <see langword="null" />, то инструмент не попадает в фильтр снятия заявок.</param>
       <param name="securityType">Тип инструмента. Если значение равно <see langword="null" />, то тип не попадает в фильтр снятия заявок.</param>
     </member>
-    <member name="M:StockSharp.Plaza.PlazaTrader.OnReRegisterOrder(StockSharp.BusinessEntities.Order,StockSharp.BusinessEntities.Order)">
-      <summary>
-            Перерегистрировать заявку на бирже.
-            </summary>
-      <param name="oldOrder">Заявка, которую нужно снять.</param>
-      <param name="newOrder">Новая заявка, которую нужно зарегистрировать.</param>
-    </member>
-    <member name="M:StockSharp.Plaza.PlazaTrader.OnReRegisterOrderPair(StockSharp.BusinessEntities.Order,StockSharp.BusinessEntities.Order,StockSharp.BusinessEntities.Order,StockSharp.BusinessEntities.Order)">
-      <summary>
-            Перерегистрировать пару заявок на бирже.
-            </summary>
-      <param name="oldOrder1">Первая заявка, которую нужно снять.</param>
-      <param name="newOrder1">Первая новая заявка, которую нужно зарегистрировать.</param>
-      <param name="oldOrder2">Вторая заявка, которую нужно снять.</param>
-      <param name="newOrder2">Вторая новая заявка, которую нужно зарегистрировать.</param>
-    </member>
     <member name="T:StockSharp.Plaza.TransactionHelper">
       <summary>
             Вспомогательный класс для работы с <see cref="T:StockSharp.Plaza.Transaction" />.
@@ -7766,81 +7825,6 @@
             </summary>
       <param name="transactionId">Номер транзакции.</param>
       <returns>Транзакции (запрос и ответ).</returns>
-    </member>
-    <member name="T:StockSharp.Plaza.Native.CGate.ErrorCode">
-      <summary>
-            Коды ошибок Plaza CGate.
-            </summary>
-    </member>
-    <member name="F:StockSharp.Plaza.Native.CGate.ErrorCode.AlreadyDestroyed">
-      <summary>
-            Объект уже уничтожен.
-            </summary>
-    </member>
-    <member name="F:StockSharp.Plaza.Native.CGate.ErrorCode.BadCast">
-      <summary>
-            Неправильное приведение типа.
-            </summary>
-    </member>
-    <member name="F:StockSharp.Plaza.Native.CGate.ErrorCode.BufferTooSmall">
-      <summary>
-            Недостаточный размер буфера.
-            </summary>
-    </member>
-    <member name="F:StockSharp.Plaza.Native.CGate.ErrorCode.Duplicated">
-      <summary>
-            Повтор.
-            </summary>
-    </member>
-    <member name="F:StockSharp.Plaza.Native.CGate.ErrorCode.IncorrectState">
-      <summary>
-            Неправильное состояние.
-            </summary>
-    </member>
-    <member name="F:StockSharp.Plaza.Native.CGate.ErrorCode.Internal">
-      <summary>
-            Внутренняя ошибка
-            </summary>
-    </member>
-    <member name="F:StockSharp.Plaza.Native.CGate.ErrorCode.InvalidArgument">
-      <summary>
-            Неправильный аргумент
-            </summary>
-    </member>
-    <member name="F:StockSharp.Plaza.Native.CGate.ErrorCode.More">
-      <summary>
-            Требуется дополнительная информация.
-            </summary>
-    </member>
-    <member name="F:StockSharp.Plaza.Native.CGate.ErrorCode.Ok">
-      <summary>
-            Успех.
-            </summary>
-    </member>
-    <member name="F:StockSharp.Plaza.Native.CGate.ErrorCode.OverFlow">
-      <summary>
-            Перезаполнение буфера.
-            </summary>
-    </member>
-    <member name="F:StockSharp.Plaza.Native.CGate.ErrorCode.TimeOut">
-      <summary>
-            Таймаут.
-            </summary>
-    </member>
-    <member name="F:StockSharp.Plaza.Native.CGate.ErrorCode.UnderFlow">
-      <summary>
-            Недостаточное заполнение буфера.
-            </summary>
-    </member>
-    <member name="F:StockSharp.Plaza.Native.CGate.ErrorCode.Unsupported">
-      <summary>
-            Операция не поддерживается.
-            </summary>
-    </member>
-    <member name="T:StockSharp.Plaza.Native.ClientGate.MessageDispatcher">
-      <summary>
-            Внутренний класс для обработки Plaza сообщений.
-            </summary>
     </member>
     <member name="T:StockSharp.Plaza.IPlazaRecord">
       <summary>

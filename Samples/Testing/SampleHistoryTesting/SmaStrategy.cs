@@ -108,26 +108,10 @@ namespace SampleHistoryTesting
 				// calc size for open position or revert
 				var volume = Position == 0 ? Volume : Position.Abs().Min(Volume) * 2;
 
-				if (!SafeGetConnector().RegisteredMarketDepths.Contains(Security))
-				{
-					var price = Security.GetMarketPrice(Connector, direction);
+				// calc order price as a close price + offset
+				var price = candle.ClosePrice + ((direction == Sides.Buy ? Security.PriceStep : -Security.PriceStep) ?? 1);
 
-					// register "market" order (limit order with guaranteed execution price)
-					if (price != null)
-						RegisterOrder(this.CreateOrder(direction, price.Value, volume));
-				}
-				else
-				{
-					// register order (limit order)
-					RegisterOrder(this.CreateOrder(direction, (decimal)(Security.GetCurrentPrice(this, direction) ?? 0), volume));
-
-					// or revert position via market quoting
-					//var strategy = new MarketQuotingStrategy(direction, volume)
-					//{
-					//	WaitAllTrades = true,
-					//};
-					//ChildStrategies.Add(strategy);
-				}
+				RegisterOrder(this.CreateOrder(direction, price, volume));
 
 				// store current values for short and long
 				_isShortLessThenLong = isShortLessThenLong;

@@ -35,12 +35,9 @@ namespace StockSharp.Algo.Testing
 		/// </summary>
 		public MarketEmulatorSettings()
 		{
-			DepthExpirationTime = TimeSpan.FromDays(1);
-			MatchOnTouch = true;
-			IsSupportAtomicReRegister = true;
 		}
 
-		private bool _matchOnTouch;
+		private bool _matchOnTouch = true;
 
 		/// <summary>
 		/// At emulation of clearing by trades, to perform clearing of orders, when trade price touches the order price (is equal to order price), rather than only when the trade price is better than order price. Is On by default (optimistic scenario).
@@ -64,7 +61,7 @@ namespace StockSharp.Algo.Testing
 			}
 		}
 
-		private TimeSpan _depthExpirationTime;
+		private TimeSpan _depthExpirationTime = TimeSpan.FromDays(1);
 
 		/// <summary>
 		/// The maximal time, during which the order book is in the emulator, If no renewal during this time, the order book is deleted, This feature may be used to remove old order books if the are holes in data. By default is equal to 1 day.
@@ -139,7 +136,7 @@ namespace StockSharp.Algo.Testing
 			}
 		}
 
-		private bool _isSupportAtomicReRegister;
+		private bool _isSupportAtomicReRegister = true;
 
 		/// <summary>
 		/// Gets a value indicating whether the re-registration orders as a single transaction. By default is enabled.

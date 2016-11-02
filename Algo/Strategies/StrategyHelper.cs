@@ -129,10 +129,10 @@ namespace StockSharp.Algo.Strategies
 
 			if (price == null)
 			{
-				if (security.Board.IsSupportMarketOrders)
+				//if (security.Board.IsSupportMarketOrders)
 					order.Type = OrderTypes.Market;
-				else
-					order.Price = strategy.GetMarketPrice(direction) ?? 0;
+				//else
+				//	order.Price = strategy.GetMarketPrice(direction) ?? 0;
 			}
 			else
 				order.Price = price.Value;
@@ -314,19 +314,19 @@ namespace StockSharp.Algo.Strategies
 			return strategy.GetSecurityValue<T>(strategy.Security, field);
 		}
 
-		/// <summary>
-		/// To get market price for the instrument by maximal and minimal possible prices.
-		/// </summary>
-		/// <param name="strategy">Strategy.</param>
-		/// <param name="side">Order side.</param>
-		/// <returns>The market price. If there is no information on maximal and minimal possible prices, then <see langword="null" /> will be returned.</returns>
-		public static decimal? GetMarketPrice(this Strategy strategy, Sides side)
-		{
-			if (strategy == null)
-				throw new ArgumentNullException(nameof(strategy));
+		///// <summary>
+		///// To get market price for the instrument by maximal and minimal possible prices.
+		///// </summary>
+		///// <param name="strategy">Strategy.</param>
+		///// <param name="side">Order side.</param>
+		///// <returns>The market price. If there is no information on maximal and minimal possible prices, then <see langword="null" /> will be returned.</returns>
+		//public static decimal? GetMarketPrice(this Strategy strategy, Sides side)
+		//{
+		//	if (strategy == null)
+		//		throw new ArgumentNullException(nameof(strategy));
 
-			return strategy.Security.GetMarketPrice(strategy.SafeGetConnector(), side);
-		}
+		//	return strategy.Security.GetMarketPrice(strategy.SafeGetConnector(), side);
+		//}
 
 		/// <summary>
 		/// To get the tracing-based order identifier.

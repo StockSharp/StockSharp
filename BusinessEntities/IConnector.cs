@@ -345,10 +345,10 @@ namespace StockSharp.BusinessEntities
 		/// </summary>
 		ConnectionStates ConnectionState { get; }
 
-		/// <summary>
-		/// Gets a value indicating whether the re-registration orders via the method <see cref="ReRegisterOrder(StockSharp.BusinessEntities.Order,StockSharp.BusinessEntities.Order)"/> as a single transaction.
-		/// </summary>
-		bool IsSupportAtomicReRegister { get; }
+		///// <summary>
+		///// Gets a value indicating whether the re-registration orders via the method <see cref="ReRegisterOrder(StockSharp.BusinessEntities.Order,StockSharp.BusinessEntities.Order)"/> as a single transaction.
+		///// </summary>
+		//bool IsSupportAtomicReRegister { get; }
 
 		/// <summary>
 		/// List of all securities, subscribed via <see cref="RegisterSecurity"/>.
