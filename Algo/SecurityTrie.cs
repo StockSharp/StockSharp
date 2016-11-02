@@ -104,7 +104,7 @@ namespace StockSharp.Algo
 		public IEnumerable<Security> Retrieve(string filter)
 		{
 			lock (_sync)
-				return (filter.IsEmpty() ? _allSecurities : _trie.Retrieve(filter)).ToArray();
+				return (filter.IsEmpty() ? _allSecurities : _trie.Retrieve(filter.ToLowerInvariant())).ToArray();
 		}
 
 		/// <summary>

@@ -89,8 +89,8 @@ namespace StockSharp.Algo
 				throw new ArgumentNullException(nameof(criteria));
 
 			var filter = criteria.Id.IsEmpty()
-				? (criteria.IsLookupAll() ? string.Empty : criteria.Code.ToLowerInvariant())
-				: criteria.Id.ToLowerInvariant();
+				? (criteria.IsLookupAll() ? string.Empty : criteria.Code)
+				: criteria.Id;
 
 			var securities = _trie.Retrieve(filter);
 
