@@ -43136,5 +43136,15 @@ namespace StockSharp.Localization
 		/// The database Quandl identifier.
 		/// </summary>
 		public static string QuandlDatabase => GetString(QuandlDatabaseKey);
+
+		/// <summary>
+		/// Source code was changed. Compiling...
+		/// </summary>
+		public const string SourceCodeWasChangedCompilingKey = "SourceCodeWasChangedCompiling";
+
+		/// <summary>
+		/// Source code was changed. Compiling...
+		/// </summary>
+		public static string SourceCodeWasChangedCompiling => GetString(SourceCodeWasChangedCompilingKey);
 	}
 }

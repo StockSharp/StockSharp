@@ -4348,6 +4348,7 @@ LookupSecuritiesNotSupported;Lookup securities is not supported. Need to manuall
 HistoricalMarketData;Historical market data;Исторические маркет-данные
 Tools;Tools;Утилиты
 QuandlDatabase;The database Quandl identifier.;Идентификатор базы данных Quandl.
+SourceCodeWasChangedCompiling;Source code was changed. Compiling...;Исходный код был изменен. Выполняется компиляция...
 DocStr0;Button activation alert settings;Кнопка активации настроек сигнала
 DocStr1;Initializes a new instance of the {0};Создать {0}
 DocStr2;Load settings;Загрузить настройки
