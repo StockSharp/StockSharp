@@ -271,12 +271,12 @@ namespace StockSharp.BusinessEntities
 		/// <summary>
 		/// Successful subscription market-data.
 		/// </summary>
-		event Action<Security, MarketDataTypes> MarketDataSubscriptionSucceeded;
+		event Action<Security, MarketDataMessage> MarketDataSubscriptionSucceeded;
 
 		/// <summary>
 		/// Error subscription market-data.
 		/// </summary>
-		event Action<Security, MarketDataTypes, Exception> MarketDataSubscriptionFailed;
+		event Action<Security, MarketDataMessage> MarketDataSubscriptionFailed;
 
 		/// <summary>
 		/// Session changed.
@@ -473,15 +473,15 @@ namespace StockSharp.BusinessEntities
 		/// To sign up to get market data by the instrument.
 		/// </summary>
 		/// <param name="security">The instrument by which new information getting should be started.</param>
-		/// <param name="type">Market data type.</param>
-		void SubscribeMarketData(Security security, MarketDataTypes type);
+		/// <param name="message">The message that contain subscribe info.</param>
+		void SubscribeMarketData(Security security, MarketDataMessage message);
 
 		/// <summary>
 		/// To unsubscribe from getting market data by the instrument.
 		/// </summary>
 		/// <param name="security">The instrument by which new information getting should be started.</param>
-		/// <param name="type">Market data type.</param>
-		void UnSubscribeMarketData(Security security, MarketDataTypes type);
+		/// <param name="message">The message that contain unsubscribe info.</param>
+		void UnSubscribeMarketData(Security security, MarketDataMessage message);
 
 		/// <summary>
 		/// To start getting quotes (order book) by the instrument. Quotes values are available through the event <see cref="IConnector.MarketDepthsChanged"/>.

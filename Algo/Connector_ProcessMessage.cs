@@ -683,7 +683,7 @@ namespace StockSharp.Algo
 							if (mdMsg.Error == null)
 								RaiseMarketDataSubscriptionSucceeded(security, mdMsg);
 							else
-								RaiseMarketDataSubscriptionFailed(security, mdMsg.DataType, mdMsg.Error);
+								RaiseMarketDataSubscriptionFailed(security, mdMsg);
 						}
 						else
 						{

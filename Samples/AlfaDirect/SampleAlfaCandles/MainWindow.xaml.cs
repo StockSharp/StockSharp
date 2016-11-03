@@ -63,9 +63,9 @@ namespace SampleAlfaCandles
 				this.GuiAsync(() => MessageBox.Show(this, error.ToString(), LocalizedStrings.Str2955));
 
 			// подписываемся на ошибку подписки маркет-данных
-			_trader.MarketDataSubscriptionFailed += (security, type, error) =>
-				this.GuiAsync(() => MessageBox.Show(this, error.ToString(), LocalizedStrings.Str2956Params.Put(type, security)));
-			
+			_trader.MarketDataSubscriptionFailed += (security, msg) =>
+				this.GuiAsync(() => MessageBox.Show(this, msg.Error.ToString(), LocalizedStrings.Str2956Params.Put(msg.DataType, security)));
+
 			_trader.NewSecurities += securities =>
 			{
 				// начинаем получать текущие сделки (для построения свечек в реальном времени)

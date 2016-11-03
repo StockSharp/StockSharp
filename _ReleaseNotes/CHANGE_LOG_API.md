@@ -1,5 +1,17 @@
 StockSharp API Change log
 ========================
+###current:
+* (feature) IConnector. SubscribeMarketData and UnSubscribeMarketData. MarketDataTypes -> MarketDataMessage.
+* (feature) ExchangeBoard. Removed IsSupportAtomicReRegister, IsSupportMarketOrders
+* (feature) Plaza router. v5.1.3.754
+* (feature) Plaza. Flood control handling.
+* (bug) BarChart fix.
+* (bug) OpenECry fix.
+* (feature) OpenECryAddressComboBox. Prod address.
+* (bug) SecurityTrie fix.
+* (bug) Message.IsBack. Fix BasketMessageAdapter.
+* (bug) CsvEntityRegistry fixes.
+
 ###v4.3.18:
 * (feature) Rithmic. v9.5.0.0
 * (bug) Transaq. UseCredit fixes.

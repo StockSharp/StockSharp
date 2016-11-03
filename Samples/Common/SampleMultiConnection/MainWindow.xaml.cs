@@ -104,8 +104,8 @@ namespace SampleMultiConnection
 				this.GuiAsync(() => MessageBox.Show(this, error.ToString(), LocalizedStrings.Str2955));
 
 			// subscribe on error of market data subscription event
-			Connector.MarketDataSubscriptionFailed += (security, type, error) =>
-				this.GuiAsync(() => MessageBox.Show(this, error.ToString(), LocalizedStrings.Str2956Params.Put(type, security)));
+			Connector.MarketDataSubscriptionFailed += (security, msg) =>
+				this.GuiAsync(() => MessageBox.Show(this, msg.Error.ToString(), LocalizedStrings.Str2956Params.Put(msg.DataType, security)));
 
 			Connector.NewSecurities += securities => _securitiesWindow.SecurityPicker.Securities.AddRange(securities);
 			Connector.NewTrades += trades => _tradesWindow.TradeGrid.Trades.AddRange(trades);

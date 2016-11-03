@@ -275,12 +275,12 @@ namespace StockSharp.Algo
 		/// <summary>
 		/// Successful subscription market-data.
 		/// </summary>
-		public event Action<Security, MarketDataTypes> MarketDataSubscriptionSucceeded;
+		public event Action<Security, MarketDataMessage> MarketDataSubscriptionSucceeded;
 
 		/// <summary>
 		/// Error subscription market-data.
 		/// </summary>
-		public event Action<Security, MarketDataTypes, Exception> MarketDataSubscriptionFailed;
+		public event Action<Security, MarketDataMessage> MarketDataSubscriptionFailed;
 
 		/// <summary>
 		/// Session changed.
@@ -588,13 +588,13 @@ namespace StockSharp.Algo
 
 			this.AddInfoLog(msg + ".");
 
-			MarketDataSubscriptionSucceeded?.Invoke(security, message.DataType);
+			MarketDataSubscriptionSucceeded?.Invoke(security, message);
 		}
 
-		private void RaiseMarketDataSubscriptionFailed(Security security, MarketDataTypes dataType, Exception error)
+		private void RaiseMarketDataSubscriptionFailed(Security security, MarketDataMessage message)
 		{
-			this.AddErrorLog(LocalizedStrings.Str634Params, security.Id, dataType, error);
-			MarketDataSubscriptionFailed?.Invoke(security, dataType, error);
+			this.AddErrorLog(LocalizedStrings.Str634Params, security.Id, message.DataType, message.Error);
+			MarketDataSubscriptionFailed?.Invoke(security, message);
 		}
 
 		/// <summary>
