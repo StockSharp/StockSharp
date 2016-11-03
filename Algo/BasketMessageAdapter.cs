@@ -258,7 +258,7 @@ namespace StockSharp.Algo
 
 					_hearbeatAdapters.AddRange(GetSortedAdapters().ToDictionary(a => a, a =>
 					{
-						var hearbeatAdapter = (IMessageAdapter)new HeartbeatAdapter(a);
+						var hearbeatAdapter = (IMessageAdapter)new HeartbeatMessageAdapter(a);
 						hearbeatAdapter.Parent = this;
 						hearbeatAdapter.NewOutMessage += m => OnInnerAdapterNewOutMessage(a, m);
 						return hearbeatAdapter;

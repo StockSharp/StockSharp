@@ -29,7 +29,7 @@ namespace StockSharp.Algo
 	/// <summary>
 	/// The messages adapter controlling the connection.
 	/// </summary>
-	public class HeartbeatAdapter : MessageAdapterWrapper
+	public class HeartbeatMessageAdapter : MessageAdapterWrapper
 	{
 		private readonly SyncObject _timeSync = new SyncObject();
 
@@ -54,10 +54,10 @@ namespace StockSharp.Algo
 		private bool _isFirstTimeConnect = true;
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="HeartbeatAdapter"/>.
+		/// Initializes a new instance of the <see cref="HeartbeatMessageAdapter"/>.
 		/// </summary>
 		/// <param name="innerAdapter">Underlying adapter.</param>
-		public HeartbeatAdapter(IMessageAdapter innerAdapter)
+		public HeartbeatMessageAdapter(IMessageAdapter innerAdapter)
 			: base(innerAdapter)
 		{
 			_reConnectionSettings = InnerAdapter.ReConnectionSettings;
@@ -298,12 +298,12 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Create a copy of <see cref="HeartbeatAdapter"/>.
+		/// Create a copy of <see cref="HeartbeatMessageAdapter"/>.
 		/// </summary>
 		/// <returns>Copy.</returns>
 		public override IMessageChannel Clone()
 		{
-			return new HeartbeatAdapter((IMessageAdapter)InnerAdapter.Clone());
+			return new HeartbeatMessageAdapter((IMessageAdapter)InnerAdapter.Clone());
 		}
 	}
 }

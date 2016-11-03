@@ -371,7 +371,7 @@ namespace StockSharp.Algo
 		private IMessageAdapter _inAdapter;
 		private BasketMessageAdapter _adapter;
 		private TimeAdapter _timeAdapter;
-		private SecurityAdapter _securityAdapter;
+		private SecurityMessageAdapter _securityAdapter;
 
 		/// <summary>
 		/// Inner message adapter.
@@ -410,7 +410,7 @@ namespace StockSharp.Algo
 				while (adapter != null)
 				{
 					adapter.DoIf<IMessageAdapter, TimeAdapter>(a => _timeAdapter = a);
-					adapter.DoIf<IMessageAdapter, SecurityAdapter>(a => _securityAdapter = a);
+					adapter.DoIf<IMessageAdapter, SecurityMessageAdapter>(a => _securityAdapter = a);
 					adapter.DoIf<IMessageAdapter, StorageMessageAdapter>(a => StorageAdapter = a);
 
 					adapter.InnerAdapter.DoIf<IMessageAdapter, BasketMessageAdapter>(a => _adapter = a);
@@ -479,7 +479,7 @@ namespace StockSharp.Algo
 					if (TimeChange)
 						_inAdapter = _timeAdapter = new TimeAdapter(this, _inAdapter) { OwnInnerAdaper = true };
 
-					_inAdapter = _securityAdapter = new SecurityAdapter(_inAdapter) { OwnInnerAdaper = true };
+					_inAdapter = _securityAdapter = new SecurityMessageAdapter(_inAdapter) { OwnInnerAdaper = true };
 
 					if (LatencyManager != null)
 						_inAdapter = new LatencyMessageAdapter(_inAdapter) { LatencyManager = LatencyManager, OwnInnerAdaper = true };

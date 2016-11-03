@@ -13,7 +13,7 @@
 	/// <summary>
 	/// Security message adapter.
 	/// </summary>
-	public class SecurityAdapter : MessageAdapterWrapper
+	public class SecurityMessageAdapter : MessageAdapterWrapper
 	{
 		private readonly Dictionary<SecurityId, SecurityId> _securityIds = new Dictionary<SecurityId, SecurityId>();
 		private readonly PairSet<SecurityId, object> _nativeIds = new PairSet<SecurityId, object>();
@@ -21,10 +21,10 @@
 		private readonly SyncObject _syncRoot = new SyncObject();
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="SecurityAdapter"/>.
+		/// Initializes a new instance of the <see cref="SecurityMessageAdapter"/>.
 		/// </summary>
 		/// <param name="innerAdapter">The adapter, to which messages will be directed.</param>
-		public SecurityAdapter(IMessageAdapter innerAdapter)
+		public SecurityMessageAdapter(IMessageAdapter innerAdapter)
 			: base(innerAdapter)
 		{
 		}
@@ -172,12 +172,12 @@
 		}
 
 		/// <summary>
-		/// Create a copy of <see cref="SecurityAdapter"/>.
+		/// Create a copy of <see cref="SecurityMessageAdapter"/>.
 		/// </summary>
 		/// <returns>Copy.</returns>
 		public override IMessageChannel Clone()
 		{
-			return new SecurityAdapter(InnerAdapter);
+			return new SecurityMessageAdapter(InnerAdapter);
 		}
 
 		/// <summary>
