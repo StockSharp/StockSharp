@@ -32,6 +32,7 @@ namespace StockSharp.Algo.Export
 	/// </summary>
 	public class StockSharpExporter : BaseExporter
 	{
+		private readonly IStorageRegistry _storageRegistry;
 		private readonly IMarketDataDrive _drive;
 		private readonly StorageFormats _format;
 
@@ -41,14 +42,19 @@ namespace StockSharp.Algo.Export
 		/// <param name="security">Security.</param>
 		/// <param name="arg">The data parameter.</param>
 		/// <param name="isCancelled">The processor, returning export interruption sign.</param>
+		/// <param name="storageRegistry">The storage of market data.</param>
 		/// <param name="drive">Storage.</param>
 		/// <param name="format">Format type.</param>
-		public StockSharpExporter(Security security, object arg, Func<int, bool> isCancelled, IMarketDataDrive drive, StorageFormats format)
+		public StockSharpExporter(Security security, object arg, Func<int, bool> isCancelled, IStorageRegistry storageRegistry, IMarketDataDrive drive, StorageFormats format)
 			: base(security, arg, isCancelled, drive.Path)
 		{
+			if (storageRegistry == null)
+				throw new ArgumentNullException(nameof(storageRegistry));
+
 			if (drive == null)
 				throw new ArgumentNullException(nameof(drive));
 
+			_storageRegistry = storageRegistry;
 			_drive = drive;
 			_format = format;
 		}
@@ -78,11 +84,7 @@ namespace StockSharp.Algo.Export
 			foreach (var batch in messages.Batch(BatchSize).Select(b => b.ToArray()))
 			{
 				if (storage == null)
-				{
-					storage = (IMarketDataStorage<TMessage>)ConfigManager
-						.GetService<IStorageRegistry>()
-						.GetStorage(Security, typeof(TMessage), Arg, _drive);
-				}
+					storage = (IMarketDataStorage<TMessage>)_storageRegistry.GetStorage(Security, typeof(TMessage), Arg, _drive);
 
 				if (CanProcess(batch.Length))
 					storage.Save(batch);
