@@ -320,6 +320,8 @@ namespace StockSharp.Algo.Storages
 					candleStorage.Load(date).ToTrades(0.001m).ForEach(RaiseStorageMessage);
 				}
 			}
+
+			RaiseStorageMessage(new HistoryInitializedMessage());
 		}
 
 		/// <summary>
@@ -491,6 +493,25 @@ namespace StockSharp.Algo.Storages
 		public override IMessageChannel Clone()
 		{
 			return new StorageMessageAdapter(InnerAdapter, _entityRegistry, _storageRegistry);
+		}
+	}
+
+	/// <summary>
+	/// Indicate history initialized message.
+	/// </summary>
+	public class HistoryInitializedMessage : Message
+	{
+		/// <summary>
+		/// Message type.
+		/// </summary>
+		public static MessageTypes MessageType => ExtendedMessageTypes.HistoryInitialized;
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="HistoryInitializedMessage"/>.
+		/// </summary>
+		public HistoryInitializedMessage()
+			: base(MessageType)
+		{
 		}
 	}
 }
