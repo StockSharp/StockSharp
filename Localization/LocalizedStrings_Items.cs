@@ -43146,5 +43146,15 @@ namespace StockSharp.Localization
 		/// Source code was changed. Compiling...
 		/// </summary>
 		public static string SourceCodeWasChangedCompiling => GetString(SourceCodeWasChangedCompilingKey);
+
+		/// <summary>
+		/// Initialization
+		/// </summary>
+		public const string InitializationKey = "Initialization";
+
+		/// <summary>
+		/// Initialization
+		/// </summary>
+		public static string Initialization => GetString(InitializationKey);
 	}
 }
