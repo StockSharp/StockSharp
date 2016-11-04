@@ -226,6 +226,7 @@ namespace StockSharp.Configuration
 					.Where(t => t.Namespace == ns && !t.IsAbstract && typeof(IIndicator).IsAssignableFrom(t))
 					.Select(t => new IndicatorType(t, rendererTypes.TryGetValue(t.Name + "Painter")))
 					.Concat(_customIndicators)
+					.OrderBy(t => t.Name)
 					.ToArray();
 			}
 
