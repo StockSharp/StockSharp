@@ -23,6 +23,7 @@ namespace StockSharp.Algo.Storages
 
 	using MoreLinq;
 
+	using StockSharp.Algo.Candles;
 	using StockSharp.BusinessEntities;
 	using StockSharp.Localization;
 	using StockSharp.Logging;
@@ -143,6 +144,16 @@ namespace StockSharp.Algo.Storages
 			}
 		}
 
+		/// <summary>
+		/// Use timeframe candles instead of trades.
+		/// </summary>
+		public bool UseCandlesInsteadTrades { get; set; }
+
+		/// <summary>
+		/// Use candles with specified timeframe.
+		/// </summary>
+		public TimeSpan CandlesTimeFrame { get; set; }
+
 		private IMarketDataStorage<TMessage> GetStorage<TMessage>(SecurityId securityId, object arg)
 			where TMessage : Message
         {
@@ -244,7 +255,10 @@ namespace StockSharp.Algo.Storages
 
 				case MarketDataTypes.Trades:
 				case MarketDataTypes.OrderLog:
-					LoadMessages(GetStorage<ExecutionMessage>(msg.SecurityId, msg.Arg), from, to);
+					if (!UseCandlesInsteadTrades)
+						LoadMessages(GetStorage<ExecutionMessage>(msg.SecurityId, msg.Arg), from, to);
+					else
+						LoadMessages(msg.SecurityId, msg.Arg, from, to);
 					break;
 
 				case MarketDataTypes.News:
@@ -286,6 +300,28 @@ namespace StockSharp.Algo.Storages
 			storage
 				.Load(from, to)
 				.ForEach(RaiseStorageMessage);
+		}
+
+		private void LoadMessages(SecurityId securityId, object arg, DateTimeOffset from, DateTimeOffset to)
+		{
+			var tickStorage = GetStorage<ExecutionMessage>(securityId, arg);
+			var tickDates = tickStorage.GetDates(from.DateTime, to.DateTime).ToArray();
+
+			var candleStorage = GetStorage<TimeFrameCandleMessage>(securityId, CandlesTimeFrame);
+
+			for (var date = from.Date; date <= to.Date; date = date.AddDays(1))
+			{
+				if (tickDates.Contains(date))
+				{
+					tickStorage.Load(date).ForEach(RaiseStorageMessage);
+				}
+				else
+				{
+					candleStorage.Load(date).ToTrades(0.001m).ForEach(RaiseStorageMessage);
+				}
+			}
+
+			RaiseStorageMessage(new HistoryInitializedMessage());
 		}
 
 		/// <summary>
@@ -457,6 +493,25 @@ namespace StockSharp.Algo.Storages
 		public override IMessageChannel Clone()
 		{
 			return new StorageMessageAdapter(InnerAdapter, _entityRegistry, _storageRegistry);
+		}
+	}
+
+	/// <summary>
+	/// Indicate history initialized message.
+	/// </summary>
+	public class HistoryInitializedMessage : Message
+	{
+		/// <summary>
+		/// Message type.
+		/// </summary>
+		public static MessageTypes MessageType => ExtendedMessageTypes.HistoryInitialized;
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="HistoryInitializedMessage"/>.
+		/// </summary>
+		public HistoryInitializedMessage()
+			: base(MessageType)
+		{
 		}
 	}
 }
