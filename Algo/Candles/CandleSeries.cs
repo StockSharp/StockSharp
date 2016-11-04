@@ -23,6 +23,7 @@ namespace StockSharp.Algo.Candles
 	using Ecng.Serialization;
 
 	using StockSharp.BusinessEntities;
+	using StockSharp.Localization;
 	using StockSharp.Messages;
 
 	/// <summary>
@@ -49,7 +50,7 @@ namespace StockSharp.Algo.Candles
 				throw new ArgumentNullException(nameof(candleType));
 
 			if (!candleType.IsCandle())
-				throw new ArgumentOutOfRangeException(nameof(candleType), candleType, "Íåïðàâèëüíûé òèï ñâå÷êè.");
+				throw new ArgumentOutOfRangeException(nameof(candleType), candleType, LocalizedStrings.WrongCandleType);
 
 			if (security == null)
 				throw new ArgumentNullException(nameof(security));
