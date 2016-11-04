@@ -11,6 +11,7 @@ StockSharp API Change log
 * (bug) SecurityTrie fix.
 * (bug) Message.IsBack. Fix BasketMessageAdapter.
 * (bug) CsvEntityRegistry fixes.
+* (feature) OfflineMessageAdapter.
 
 ###v4.3.18:
 * (feature) Rithmic. v9.5.0.0

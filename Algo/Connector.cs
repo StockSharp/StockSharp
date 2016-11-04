@@ -204,6 +204,8 @@ namespace StockSharp.Algo
 
 		private bool _isDisposing;
 
+		private readonly bool _supportOffline;
+
 		/// <summary>
 		/// Initializes a new instance of the <see cref="Connector"/>.
 		/// </summary>
@@ -217,8 +219,10 @@ namespace StockSharp.Algo
 		/// </summary>
 		/// <param name="entityRegistry">The storage of trade objects.</param>
 		/// <param name="storageRegistry">The storage of market data.</param>
-		public Connector(IEntityRegistry entityRegistry, IStorageRegistry storageRegistry)
-			: this(false)
+		/// <param name="initManagers">Initialize managers.</param>
+		/// <param name="supportOffline">Use <see cref="OfflineMessageAdapter"/>.</param>
+		public Connector(IEntityRegistry entityRegistry, IStorageRegistry storageRegistry, bool initManagers = true, bool supportOffline = false)
+			: this(false, true, initManagers, supportOffline)
 		{
 			if (entityRegistry == null)
 				throw new ArgumentNullException(nameof(entityRegistry));
@@ -238,8 +242,10 @@ namespace StockSharp.Algo
 		/// <param name="initAdapter">Initialize basket adapter.</param>
 		/// <param name="initChannels">Initialize channels.</param>
 		/// <param name="initManagers">Initialize managers.</param>
-		protected Connector(bool initAdapter, bool initChannels = true, bool initManagers = true)
+		/// <param name="supportOffline">Use <see cref="OfflineMessageAdapter"/>.</param>
+		protected Connector(bool initAdapter, bool initChannels = true, bool initManagers = true, bool supportOffline = false)
 		{
+			_supportOffline = supportOffline;
 			ReConnectionSettings = new ReConnectionSettings();
 
 			_subscriptionManager = new SubscriptionManager(this);
