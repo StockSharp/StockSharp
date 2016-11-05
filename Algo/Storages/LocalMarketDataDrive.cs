@@ -356,6 +356,7 @@ namespace StockSharp.Algo.Storages
 					.EnumerateDirectories(Path)
 					.SelectMany(Directory.EnumerateDirectories)
 					.Select(System.IO.Path.GetFileName)
+					.Select(TraderHelper.FolderNameToSecurityId)
 					.Select(n => idGenerator.Split(n, true))
 					.Where(t => !t.IsDefault());
 			}

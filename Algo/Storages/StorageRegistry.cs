@@ -1006,7 +1006,12 @@ namespace StockSharp.Algo.Storages
 				dataType = dataType.ToMessageType(ref arg);
 
 			if (dataType == typeof(ExecutionMessage))
+			{
+				if (arg == null)
+					throw new ArgumentNullException(nameof(arg));
+
 				return GetExecutionMessageStorage(security, (ExecutionTypes)arg, drive, format);
+			}
 			else if (dataType == typeof(Level1ChangeMessage))
 				return GetLevel1MessageStorage(security, drive, format);
 			else if (dataType == typeof(QuoteChangeMessage))
