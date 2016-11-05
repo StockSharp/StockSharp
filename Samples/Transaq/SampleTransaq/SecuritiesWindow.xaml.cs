@@ -176,7 +176,7 @@ namespace SampleTransaq
 				var wnd = _quotesWindows.TryGetValue(depth.Security);
 
 				if (wnd != null)
-					wnd.DepthCtrl.UpdatingDepth = depth;
+					wnd.DepthCtrl.UpdateDepth(depth);
 			}
 		}
 

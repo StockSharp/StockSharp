@@ -651,14 +651,14 @@ namespace SampleHistoryTesting
 
 				if (ShowDepth.IsChecked == true)
 				{
-					MarketDepth.UpdatingFormat = security;
+					MarketDepth.UpdateFormat(security);
 
 					connector.NewMessage += message =>
 					{
 						var quoteMsg = message as QuoteChangeMessage;
 
 						if (quoteMsg != null)
-							MarketDepth.UpdatingQuotes = quoteMsg;
+							MarketDepth.UpdateDepth(quoteMsg);
 					};
 				}
 
