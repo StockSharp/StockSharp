@@ -28,6 +28,7 @@ M:StockSharp.Xaml.BaseApplication.OnStartup(System.Windows.StartupEventArgs)/sum
 M:StockSharp.Xaml.BaseApplication.OnStartup(System.Windows.StartupEventArgs)/param/e;Str347
 M:StockSharp.Xaml.BaseApplication.EditProxySettings(System.Windows.Window)/summary;DocStr8075
 M:StockSharp.Xaml.BaseApplication.EditProxySettings(System.Windows.Window)/param/owner;DocStr8907
+T:StockSharp.Xaml.Converters.SeriesToStringConverter/summary;DocStr9307
 T:StockSharp.Xaml.GridControl.BaseGridControl/summary;DocStr8990
 T:StockSharp.Xaml.GridControl.BaseGridControl.ColumnVisibilityHolder/summary;DocStr8991
 P:StockSharp.Xaml.GridControl.BaseGridControl.ColumnVisibilityHolder.Count/summary;DocStr8992
@@ -381,9 +382,6 @@ P:StockSharp.Xaml.MarketDepthControl.IsBidsOnTop/summary;DocStr8254
 P:StockSharp.Xaml.MarketDepthControl.SelectedQuote/summary;DocStr8255
 P:StockSharp.Xaml.MarketDepthControl.PriceTextFormat/summary;DocStr8256
 P:StockSharp.Xaml.MarketDepthControl.VolumeTextFormat/summary;DocStr8257
-P:StockSharp.Xaml.MarketDepthControl.UpdatingDepth/summary;DocStr8999
-P:StockSharp.Xaml.MarketDepthControl.UpdatingQuotes/summary;DocStr8999
-P:StockSharp.Xaml.MarketDepthControl.UpdatingFormat/summary;DocStr9000
 M:StockSharp.Xaml.MarketDepthControl.UpdateFormat(StockSharp.BusinessEntities.Security)/summary;DocStr8245
 M:StockSharp.Xaml.MarketDepthControl.UpdateFormat(StockSharp.BusinessEntities.Security)/param/security;DocStr2831
 M:StockSharp.Xaml.MarketDepthControl.ProcessNewOrder(StockSharp.BusinessEntities.Order)/summary;DocStr8246
@@ -641,12 +639,12 @@ M:StockSharp.Xaml.GuiConnector`1.GetMarketDepth(StockSharp.BusinessEntities.Secu
 M:StockSharp.Xaml.GuiConnector`1.GetFilteredMarketDepth(StockSharp.BusinessEntities.Security)/summary;DocStr819
 M:StockSharp.Xaml.GuiConnector`1.GetFilteredMarketDepth(StockSharp.BusinessEntities.Security)/param/security;DocStr817
 M:StockSharp.Xaml.GuiConnector`1.GetFilteredMarketDepth(StockSharp.BusinessEntities.Security)/returns;DocStr820
-M:StockSharp.Xaml.GuiConnector`1.SubscribeMarketData(StockSharp.BusinessEntities.Security,StockSharp.Messages.MarketDataTypes)/summary;DocStr772
-M:StockSharp.Xaml.GuiConnector`1.SubscribeMarketData(StockSharp.BusinessEntities.Security,StockSharp.Messages.MarketDataTypes)/param/security;DocStr773
-M:StockSharp.Xaml.GuiConnector`1.SubscribeMarketData(StockSharp.BusinessEntities.Security,StockSharp.Messages.MarketDataTypes)/param/type;DocStr774
-M:StockSharp.Xaml.GuiConnector`1.UnSubscribeMarketData(StockSharp.BusinessEntities.Security,StockSharp.Messages.MarketDataTypes)/summary;DocStr775
-M:StockSharp.Xaml.GuiConnector`1.UnSubscribeMarketData(StockSharp.BusinessEntities.Security,StockSharp.Messages.MarketDataTypes)/param/security;DocStr773
-M:StockSharp.Xaml.GuiConnector`1.UnSubscribeMarketData(StockSharp.BusinessEntities.Security,StockSharp.Messages.MarketDataTypes)/param/type;DocStr774
+M:StockSharp.Xaml.GuiConnector`1.SubscribeMarketData(StockSharp.BusinessEntities.Security,StockSharp.Messages.MarketDataMessage)/summary;DocStr772
+M:StockSharp.Xaml.GuiConnector`1.SubscribeMarketData(StockSharp.BusinessEntities.Security,StockSharp.Messages.MarketDataMessage)/param/security;DocStr773
+M:StockSharp.Xaml.GuiConnector`1.SubscribeMarketData(StockSharp.BusinessEntities.Security,StockSharp.Messages.MarketDataMessage)/param/message;DocStr9302
+M:StockSharp.Xaml.GuiConnector`1.UnSubscribeMarketData(StockSharp.BusinessEntities.Security,StockSharp.Messages.MarketDataMessage)/summary;DocStr775
+M:StockSharp.Xaml.GuiConnector`1.UnSubscribeMarketData(StockSharp.BusinessEntities.Security,StockSharp.Messages.MarketDataMessage)/param/security;DocStr773
+M:StockSharp.Xaml.GuiConnector`1.UnSubscribeMarketData(StockSharp.BusinessEntities.Security,StockSharp.Messages.MarketDataMessage)/param/message;DocStr9303
 M:StockSharp.Xaml.GuiConnector`1.RegisterMarketDepth(StockSharp.BusinessEntities.Security)/summary;DocStr779
 M:StockSharp.Xaml.GuiConnector`1.RegisterMarketDepth(StockSharp.BusinessEntities.Security)/param/security;DocStr780
 M:StockSharp.Xaml.GuiConnector`1.UnRegisterMarketDepth(StockSharp.BusinessEntities.Security)/summary;DocStr781

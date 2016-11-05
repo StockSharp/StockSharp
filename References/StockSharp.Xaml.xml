@@ -152,6 +152,11 @@
             </summary>
       <param name="owner">Parent window.</param>
     </member>
+    <member name="T:StockSharp.Xaml.Converters.SeriesToStringConverter">
+      <summary>
+        <see cref="T:System.TimeSpan" /> to <see cref="T:System.String" /> converter.
+            </summary>
+    </member>
     <member name="T:StockSharp.Xaml.GridControl.BaseGridControl">
       <summary>
             The grid control.
@@ -1855,21 +1860,6 @@
             The amount format. The default value is "0".
             </summary>
     </member>
-    <member name="P:StockSharp.Xaml.MarketDepthControl.UpdatingDepth">
-      <summary>
-            Update the order book.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Xaml.MarketDepthControl.UpdatingQuotes">
-      <summary>
-            Update the order book.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Xaml.MarketDepthControl.UpdatingFormat">
-      <summary>
-            Update <see cref="P:StockSharp.Xaml.MarketDepthControl.PriceTextFormat" /> and <see cref="P:StockSharp.Xaml.MarketDepthControl.VolumeTextFormat" />.
-            </summary>
-    </member>
     <member name="M:StockSharp.Xaml.MarketDepthControl.UpdateFormat(StockSharp.BusinessEntities.Security)">
       <summary>
             To update <see cref="P:StockSharp.Xaml.MarketDepthControl.PriceTextFormat" /> and <see cref="P:StockSharp.Xaml.MarketDepthControl.VolumeTextFormat" />.
@@ -3075,19 +3065,19 @@
       <param name="security">The instrument by which an order book should be got.</param>
       <returns>Filtered order book.</returns>
     </member>
-    <member name="M:StockSharp.Xaml.GuiConnector`1.SubscribeMarketData(StockSharp.BusinessEntities.Security,StockSharp.Messages.MarketDataTypes)">
+    <member name="M:StockSharp.Xaml.GuiConnector`1.SubscribeMarketData(StockSharp.BusinessEntities.Security,StockSharp.Messages.MarketDataMessage)">
       <summary>
             To sign up to get market data by the instrument.
             </summary>
       <param name="security">The instrument by which new information getting should be started.</param>
-      <param name="type">Market data type.</param>
+      <param name="message">The message that contain subscribe info.</param>
     </member>
-    <member name="M:StockSharp.Xaml.GuiConnector`1.UnSubscribeMarketData(StockSharp.BusinessEntities.Security,StockSharp.Messages.MarketDataTypes)">
+    <member name="M:StockSharp.Xaml.GuiConnector`1.UnSubscribeMarketData(StockSharp.BusinessEntities.Security,StockSharp.Messages.MarketDataMessage)">
       <summary>
             To unsubscribe from getting market data by the instrument.
             </summary>
       <param name="security">The instrument by which new information getting should be started.</param>
-      <param name="type">Market data type.</param>
+      <param name="message">The message that contain unsubscribe info.</param>
     </member>
     <member name="M:StockSharp.Xaml.GuiConnector`1.RegisterMarketDepth(StockSharp.BusinessEntities.Security)">
       <summary>

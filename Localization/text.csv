@@ -13482,3 +13482,10 @@ DocStr9297;Security index based on {0} diagram element;Элемент, созд�
 DocStr9298;To change the output socket type;Изменить тип исходящего сокета
 DocStr9299;Is nullable;Может быть пустым
 DocStr9300;Has value;Имеет значение
+DocStr9301;The messages adapter keeping message until connection will be done;Адаптер сообщений, хранящий входящие сообщения до тех пор, пока не будет установлено соединение
+DocStr9302;The message that contain subscribe info;Сообщение, содержащее информацию о подписке
+DocStr9303;The message that contain unsubscribe info;Сообщение, содержащее информацию об отписке
+DocStr9304;Use {0};Использовать {0}
+DocStr9305;Use timeframe candles instead of trades;Использовать свечи вместо тиков
+DocStr9306;Indicate history initialized message;Indicate history initialized message
+DocStr9307;{0} to {1} converter;Преобразование {0} в {1}
