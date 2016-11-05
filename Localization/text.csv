@@ -4350,6 +4350,9 @@ Tools;Tools;Утилиты
 QuandlDatabase;The database Quandl identifier.;Идентификатор базы данных Quandl.
 SourceCodeWasChangedCompiling;Source code was changed. Compiling...;Исходный код был изменен. Выполняется компиляция...
 Initialization;Initialization;Инициализация
+DirectoryNotExist;Directory '{0}' doesn't exist.;Директория '{0}' не существует.
+FileMask;File mask;Маска файла
+FileMaskDescription;File mask that uses for scanning in directory. For example, candles_*.csv.;Маска файла, которая используется при сканировании директории. Например, candles_*.csv.
 DocStr0;Button activation alert settings;Кнопка активации настроек сигнала
 DocStr1;Initializes a new instance of the {0};Создать {0}
 DocStr2;Load settings;Загрузить настройки

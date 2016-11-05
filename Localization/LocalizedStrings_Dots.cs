@@ -331,5 +331,15 @@ namespace StockSharp.Localization
 		/// 
 		/// </summary>
 		public static string Str2235Dot => AppendDot(Str2235);
+
+		/// <summary>
+		/// 
+		/// </summary>
+		public static string TimeZoneDot => AppendDot(TimeZone);
+
+		/// <summary>
+		/// 
+		/// </summary>
+		public static string Str2237Dot => AppendDot(Str2237);
 	}
 }

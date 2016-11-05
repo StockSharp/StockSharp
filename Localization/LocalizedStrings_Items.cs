@@ -43156,5 +43156,35 @@ namespace StockSharp.Localization
 		/// Initialization
 		/// </summary>
 		public static string Initialization => GetString(InitializationKey);
+
+		/// <summary>
+		/// Directory '{0}' doesn't exist.
+		/// </summary>
+		public const string DirectoryNotExistKey = "DirectoryNotExist";
+
+		/// <summary>
+		/// Directory '{0}' doesn't exist.
+		/// </summary>
+		public static string DirectoryNotExist => GetString(DirectoryNotExistKey);
+
+		/// <summary>
+		/// File mask
+		/// </summary>
+		public const string FileMaskKey = "FileMask";
+
+		/// <summary>
+		/// File mask
+		/// </summary>
+		public static string FileMask => GetString(FileMaskKey);
+
+		/// <summary>
+		/// File mask that uses for scanning in directory. For example, candles_*.csv.
+		/// </summary>
+		public const string FileMaskDescriptionKey = "FileMaskDescription";
+
+		/// <summary>
+		/// File mask that uses for scanning in directory. For example, candles_*.csv.
+		/// </summary>
+		public static string FileMaskDescription => GetString(FileMaskDescriptionKey);
 	}
 }
