@@ -88,6 +88,7 @@ namespace StockSharp.Algo.Storages.Csv
 				LowPrice = reader.ReadDecimal(),
 				ClosePrice = reader.ReadDecimal(),
 				TotalVolume = reader.ReadDecimal(),
+				State = CandleStates.Finished
 			};
 		}
 	}
