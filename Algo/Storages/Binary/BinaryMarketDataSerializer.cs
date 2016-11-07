@@ -53,6 +53,7 @@ namespace StockSharp.Algo.Storages.Binary
 		public static readonly Version Version56 = new Version(5, 6);
 		public static readonly Version Version57 = new Version(5, 7);
 		public static readonly Version Version58 = new Version(5, 8);
+		public static readonly Version Version59 = new Version(5, 9);
 	}
 
 	abstract class BinaryMetaInfo<TMetaInfo> : MetaInfo
@@ -89,6 +90,11 @@ namespace StockSharp.Algo.Storages.Binary
 
 		public TimeSpan FirstServerOffset { get; set; }
 		public TimeSpan LastServerOffset { get; set; }
+
+		public TimeSpan FirstItemLocalOffset { get; set; }
+		public TimeSpan LastItemLocalOffset { get; set; }
+		public DateTime FirstItemLocalTime { get; set; }
+		public DateTime LastItemLocalTime { get; set; }
 
 		public override object LastId
 		{
@@ -223,6 +229,42 @@ namespace StockSharp.Algo.Storages.Binary
 			LastServerOffset = stream.Read<TimeSpan>();
 		}
 
+		protected void WriteItemLocalOffset(Stream stream, Version minVersion)
+		{
+			if (Version < minVersion)
+				return;
+
+			stream.Write(FirstItemLocalOffset);
+			stream.Write(LastItemLocalOffset);
+		}
+
+		protected void ReadItemLocalOffset(Stream stream, Version minVersion)
+		{
+			if (Version < minVersion)
+				return;
+
+			FirstItemLocalOffset = stream.Read<TimeSpan>();
+			LastItemLocalOffset = stream.Read<TimeSpan>();
+		}
+
+		protected void WriteItemLocalTime(Stream stream, Version minVersion)
+		{
+			if (Version < minVersion)
+				return;
+
+			stream.Write(FirstItemLocalTime);
+			stream.Write(LastItemLocalTime);
+		}
+
+		protected void ReadItemLocalTime(Stream stream, Version minVersion)
+		{
+			if (Version < minVersion)
+				return;
+
+			FirstItemLocalTime = stream.Read<DateTime>();
+			LastItemLocalTime = stream.Read<DateTime>();
+		}
+
 		//public override TMetaInfo Clone()
 		//{
 		//	var copy = typeof(TMetaInfo).CreateInstance<TMetaInfo>(Date);
@@ -251,6 +293,10 @@ namespace StockSharp.Algo.Storages.Binary
 			LastLocalOffset = src.LastLocalOffset;
 			FirstServerOffset = src.FirstServerOffset;
 			LastServerOffset = src.LastServerOffset;
+			FirstItemLocalTime = src.FirstItemLocalTime;
+			LastItemLocalTime = src.LastItemLocalTime;
+			FirstItemLocalOffset = src.FirstItemLocalOffset;
+			LastItemLocalOffset = src.LastItemLocalOffset;
 		}
 	}
 
@@ -393,5 +439,22 @@ namespace StockSharp.Algo.Storages.Binary
 
 		protected abstract void OnSave(BitArrayWriter writer, IEnumerable<TData> data, TMetaInfo metaInfo);
 		public abstract TData MoveNext(MarketDataEnumerator enumerator);
+
+		protected void WriteItemLocalTime(BitArrayWriter writer, TMetaInfo metaInfo, Message message)
+		{
+			var lastLocalOffset = metaInfo.LastItemLocalOffset;
+			metaInfo.LastItemLocalTime = writer.WriteTime(message.LocalTime, metaInfo.LastItemLocalTime, "local time", true, true, metaInfo.LocalOffset, true, ref lastLocalOffset);
+			metaInfo.LastItemLocalOffset = lastLocalOffset;
+		}
+
+		protected DateTimeOffset ReadItemLocalTime(BitArrayReader reader, TMetaInfo metaInfo)
+		{
+			var prevTsTime = metaInfo.FirstItemLocalTime;
+			var lastOffset = metaInfo.FirstItemLocalOffset;
+			var retVal = reader.ReadTime(ref prevTsTime, true, true, lastOffset, true, ref lastOffset);
+			metaInfo.FirstItemLocalTime = prevTsTime;
+			metaInfo.FirstItemLocalOffset = lastOffset;
+			return retVal;
+		}
 	}
 }

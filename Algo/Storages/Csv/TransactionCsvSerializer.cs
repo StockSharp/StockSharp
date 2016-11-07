@@ -93,7 +93,9 @@ namespace StockSharp.Algo.Storages.Csv
 				data.Error?.Message,
 				data.ExpiryDate?.WriteDate(),
 				data.ExpiryDate?.WriteTimeMls(),
-				data.ExpiryDate?.ToString("zzz")
+				data.ExpiryDate?.ToString("zzz"),
+				data.LocalTime.WriteTimeMls(),
+				data.LocalTime.ToString("zzz"),
 			};
 			writer.WriteRow(row);
 
@@ -169,6 +171,8 @@ namespace StockSharp.Algo.Storages.Csv
 			}
 			else
 				reader.Skip(2);
+
+			msg.LocalTime = reader.ReadTime(date);
 
 			return msg;
 		}

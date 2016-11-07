@@ -125,6 +125,9 @@ namespace StockSharp.Algo.Storages.Binary
 			stream.Write(ServerOffset);
 
 			WriteOffsets(stream);
+
+			WriteItemLocalTime(stream, MarketDataVersions.Version59);
+			WriteItemLocalOffset(stream, MarketDataVersions.Version59);
 		}
 
 		private static void WriteList(Stream stream, IList<string> list)
@@ -183,6 +186,9 @@ namespace StockSharp.Algo.Storages.Binary
 			ServerOffset = stream.Read<TimeSpan>();
 
 			ReadOffsets(stream);
+
+			ReadItemLocalTime(stream, MarketDataVersions.Version59);
+			ReadItemLocalOffset(stream, MarketDataVersions.Version59);
 		}
 
 		public override void CopyFrom(TransactionSerializerMetaInfo src)
@@ -237,7 +243,7 @@ namespace StockSharp.Algo.Storages.Binary
 	class TransactionBinarySerializer : BinaryMarketDataSerializer<ExecutionMessage, TransactionSerializerMetaInfo>
 	{
 		public TransactionBinarySerializer(SecurityId securityId)
-			: base(securityId, 200, MarketDataVersions.Version58)
+			: base(securityId, 200, MarketDataVersions.Version59)
 		{
 		}
 
@@ -255,6 +261,8 @@ namespace StockSharp.Algo.Storages.Binary
 				metaInfo.FirstPnL = metaInfo.LastPnL = msg.PnL ?? 0;
 				metaInfo.FirstPosition = metaInfo.LastPosition = msg.Position ?? 0;
 				metaInfo.FirstSlippage = metaInfo.LastSlippage = msg.Slippage ?? 0;
+				metaInfo.FirstItemLocalTime = metaInfo.LastItemLocalTime = msg.LocalTime.UtcDateTime;
+				metaInfo.FirstItemLocalOffset = metaInfo.LastItemLocalOffset = msg.LocalTime.Offset;
 				metaInfo.ServerOffset = msg.ServerTime.Offset;
 			}
 
@@ -423,6 +431,11 @@ namespace StockSharp.Algo.Storages.Binary
 
 				if (msg.OriginSide != null)
 					writer.Write(msg.OriginSide.Value == Sides.Buy);
+
+				if (metaInfo.Version < MarketDataVersions.Version59)
+					continue;
+
+				WriteItemLocalTime(writer, metaInfo, msg);
 			}
 		}
 
@@ -572,6 +585,11 @@ namespace StockSharp.Algo.Storages.Binary
 
 			if (reader.Read())
 				msg.OriginSide = reader.Read() ? Sides.Buy : Sides.Sell;
+
+			if (metaInfo.Version >= MarketDataVersions.Version59)
+			{
+				msg.LocalTime = ReadItemLocalTime(reader, metaInfo);
+			}
 
 			return msg;
 		}
