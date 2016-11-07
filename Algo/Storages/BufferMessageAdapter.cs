@@ -36,6 +36,7 @@ namespace StockSharp.Algo.Storages
 		/// <typeparam name="TKey">The key type.</typeparam>
 		/// <typeparam name="TMarketData">Market data type.</typeparam>
 		class DataBuffer<TKey, TMarketData>
+			where TMarketData : Message
 		{
 			private readonly SynchronizedDictionary<TKey, List<TMarketData>> _data = new SynchronizedDictionary<TKey, List<TMarketData>>();
 
@@ -51,18 +52,19 @@ namespace StockSharp.Algo.Storages
 			/// <param name="data">New information.</param>
 			public void Add(TKey key, TMarketData data)
 			{
-				Add(key, new[] { data });
+				//Add(key, new[] { data });
+				_data.SyncDo(d => d.SafeAdd(key).Add(data));
 			}
 
-			/// <summary>
-			/// To add new information to the buffer.
-			/// </summary>
-			/// <param name="key">The key possessing new information.</param>
-			/// <param name="data">New information.</param>
-			public void Add(TKey key, IEnumerable<TMarketData> data)
-			{
-				_data.SyncDo(d => d.SafeAdd(key).AddRange(data));
-			}
+			///// <summary>
+			///// To add new information to the buffer.
+			///// </summary>
+			///// <param name="key">The key possessing new information.</param>
+			///// <param name="data">New information.</param>
+			//public void Add(TKey key, IEnumerable<TMarketData> data)
+			//{
+			//	_data.SyncDo(d => d.SafeAdd(key).AddRange(data));
+			//}
 
 			/// <summary>
 			/// To get accumulated data from the buffer and delete them.
@@ -182,6 +184,62 @@ namespace StockSharp.Algo.Storages
 		public IEnumerable<NewsMessage> GetNews()
 		{
 			return _newsBuffer.SyncGet(c => c.CopyAndClear());
+		}
+
+		/// <summary>
+		/// Send message.
+		/// </summary>
+		/// <param name="message">Message.</param>
+		public override void SendInMessage(Message message)
+		{
+			switch (message.Type)
+			{
+				case MessageTypes.OrderRegister:
+					var regMsg = (OrderRegisterMessage)message;
+
+					_transactionsBuffer.Add(regMsg.SecurityId, new ExecutionMessage
+					{
+						ServerTime = DateTimeOffset.Now,
+						ExecutionType = ExecutionTypes.Transaction,
+						SecurityId = regMsg.SecurityId,
+						HasOrderInfo = true,
+						OrderPrice = regMsg.Price,
+						OrderVolume = regMsg.Volume,
+						Currency = regMsg.Currency,
+						PortfolioName = regMsg.PortfolioName,
+						ClientCode = regMsg.ClientCode,
+						BrokerCode = regMsg.BrokerCode,
+						Comment = regMsg.Comment,
+						Side = regMsg.Side,
+						TimeInForce = regMsg.TimeInForce,
+						ExpiryDate = regMsg.TillDate,
+						VisibleVolume = regMsg.VisibleVolume,
+						LocalTime = regMsg.LocalTime,
+						TransactionId = regMsg.TransactionId,
+						//RepoInfo = regMsg.RepoInfo?.Clone(),
+						//RpsInfo = regMsg.RpsInfo?.Clone(),
+					});
+					break;
+				case MessageTypes.OrderCancel:
+					var cancelMsg = (OrderCancelMessage)message;
+
+					_transactionsBuffer.Add(cancelMsg.SecurityId, new ExecutionMessage
+					{
+						ServerTime = DateTimeOffset.Now,
+						ExecutionType = ExecutionTypes.Transaction,
+						SecurityId = cancelMsg.SecurityId,
+						HasOrderInfo = true,
+						IsCancelled = true,
+						OrderId = cancelMsg.OrderId,
+						OrderStringId = cancelMsg.OrderStringId,
+						OriginalTransactionId = cancelMsg.OrderTransactionId,
+						OrderVolume = cancelMsg.Volume,
+						//Side = cancelMsg.Side,
+					});
+					break;
+			}
+
+			base.SendInMessage(message);
 		}
 
 		/// <summary>
