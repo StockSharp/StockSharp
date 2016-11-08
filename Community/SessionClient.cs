@@ -83,7 +83,14 @@ namespace StockSharp.Community
 			lock (_pingSync)
 			{
 #if !DEBUG
-				Invoke(f => f.CloseSession(_sessionId));
+				try
+				{
+					Invoke(f => f.CloseSession(_sessionId));
+				}
+				catch (Exception ex)
+				{
+					ex.LogError();
+				}
 #endif
 				_sessionId = 0;
 			}
