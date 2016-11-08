@@ -132,6 +132,13 @@ namespace StockSharp.Algo.Storages.Csv
 							level1.Changes.Add(field, flag);
 
 						break;
+					case Level1Fields.State:
+						var state = reader.ReadNullableEnum<SecurityStates>();
+
+						if (state != null)
+							level1.Changes.Add(field, state);
+
+						break;
 					default:
 						var value = reader.ReadNullableDecimal();
 
