@@ -1,6 +1,8 @@
 StockSharp Data (Hydra) Change log
 ========================
-###current
+###current:
+* (feature) New design.
+* (bug) Finam, Quandl, Google fixes.
 * (feature) Hydra. ExportTypes. Bin -> StockSharpBin + StockSharpCsv.
 * (feature) Csv storage perf boost.
 * (feature) Data type refactoring.
@@ -11,7 +13,7 @@ StockSharp Data (Hydra) Change log
 * (bug) Hydra. Export task fix.
 * (feature) Hydra. Show news counter.
 
-###v4.3.13
+###v4.3.13:
 * (bug) DB export fix.
 * (bug) http://stocksharp.com/forum/yaf_postst5740_oshibka-pri-eksportie-dannykh-v-sqlite.aspx
 
@@ -105,7 +107,7 @@ StockSharp Data (Hydra) Change log
 * (bug) Fix http://stocksharp.com/forum/yaf_postst5556_S--Api.aspx
 * (bug) Fix Rts plugin
 
-###v4.2.70
+###v4.2.70:
 * (feature) Sterling plugin.
 * (feature) Quandl plugin.
 * (feature) Micex. OrderBookDepth and MicexLogLevel.
@@ -119,5 +121,5 @@ StockSharp Data (Hydra) Change log
 * (bug) Fix Quik, Micex, Plaza, Yahoo, Oanda, OpenECry, DukasCopy, GainCapital, MBTrading, TrueFX, RTS, UX plugins.
 * (bug) Fix http://stocksharp.com/forum/yaf_postsm34362_S--Data---biesplatnaia-proghramma-zaghruzki-i-khranieniie-rynochnykh-dannykh.aspx#post34362
 
-###v4.1.10-4.2.50
+###v4.1.10-4.2.50:
 Available on [forum](http://stocksharp.com/forum/yaf_postst2541_S--Data---biesplatnaia-proghramma-zaghruzki-i-khranieniie-rynochnykh-dannykh.aspx)

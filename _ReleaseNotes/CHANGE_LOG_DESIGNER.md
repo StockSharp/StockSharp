@@ -13,7 +13,7 @@ StockSharp Designer Change log
 * (feature) Open pos element. Price socket hide/show http://stocksharp.ru/posts/m/37025/
 * (feature) Show error element http://stocksharp.ru/posts/m/37044/
 
-###v4.3.16.1
+###v4.3.16.1:
 * (feature) Optimizator.
 * (feature) Strategy gallery.
 * (feature) Import/export with optional encryption.
@@ -23,13 +23,13 @@ StockSharp Designer Change log
 * (feature) Live trading.
 * (bug) Many minor fixes.
 
-###v4.3.16
+###v4.3.16:
 * (feature) See next release.
 
-###v4.3.14.2
+###v4.3.14.2:
 * (feature) New design.
 * (feature) Finam history downloading.
 * (feature) Chat embedded.
 
-###v4.3.14
-Available for download
+###v4.3.14:
+* (feature) Available for download
