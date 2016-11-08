@@ -274,6 +274,14 @@ namespace StockSharp.Algo.Storages
 							buffer = _ticksBuffer;
 							break;
 						case ExecutionTypes.Transaction:
+							
+							// some error responses do not contains sec id
+							if (execMsg.SecurityId.IsDefault())
+							{
+								base.OnInnerAdapterNewOutMessage(message);
+								return;
+							}
+
 							buffer = _transactionsBuffer;
 							break;
 						case ExecutionTypes.OrderLog:
