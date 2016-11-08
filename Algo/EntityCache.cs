@@ -63,7 +63,12 @@ namespace StockSharp.Algo
 					//throw new InvalidOperationException("Изменение заявки в состоянии Done невозможно.");
 				}
 				else if (order.State == OrderStates.Failed)
-					throw new InvalidOperationException();
+				{
+					// some adapters can resend order's info
+
+					//throw new InvalidOperationException();
+					return null;
+				}
 
 				var isPending = order.State == OrderStates.Pending;
 
@@ -500,8 +505,14 @@ namespace StockSharp.Algo
 				}
 
 				var orderInfo = registetedInfo.ApplyChanges(message, false);
-				UpdateOrderIds(registetedInfo.Order, securityData);
-				return new[] { orderInfo };
+
+				if (orderInfo != null)
+				{
+					UpdateOrderIds(registetedInfo.Order, securityData);
+					return new[] { orderInfo };
+				}
+				else
+					return Enumerable.Empty<Tuple<Order, bool, bool>>();
 			}
 		}
 
