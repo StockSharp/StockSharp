@@ -384,10 +384,8 @@ P:StockSharp.Xaml.MarketDepthControl.PriceTextFormat/summary;DocStr8256
 P:StockSharp.Xaml.MarketDepthControl.VolumeTextFormat/summary;DocStr8257
 M:StockSharp.Xaml.MarketDepthControl.UpdateFormat(StockSharp.BusinessEntities.Security)/summary;DocStr8245
 M:StockSharp.Xaml.MarketDepthControl.UpdateFormat(StockSharp.BusinessEntities.Security)/param/security;DocStr2831
-M:StockSharp.Xaml.MarketDepthControl.ProcessNewOrder(StockSharp.BusinessEntities.Order)/summary;DocStr8246
-M:StockSharp.Xaml.MarketDepthControl.ProcessNewOrder(StockSharp.BusinessEntities.Order)/param/order;Str504
-M:StockSharp.Xaml.MarketDepthControl.ProcessChangedOrder(StockSharp.BusinessEntities.Order)/summary;DocStr8247
-M:StockSharp.Xaml.MarketDepthControl.ProcessChangedOrder(StockSharp.BusinessEntities.Order)/param/order;Str504
+M:StockSharp.Xaml.MarketDepthControl.ProcessOrder(StockSharp.BusinessEntities.Order)/summary;DocStr9310
+M:StockSharp.Xaml.MarketDepthControl.ProcessOrder(StockSharp.BusinessEntities.Order)/param/order;Str504
 M:StockSharp.Xaml.MarketDepthControl.UpdateDepth(StockSharp.BusinessEntities.MarketDepth)/summary;DocStr8248
 M:StockSharp.Xaml.MarketDepthControl.UpdateDepth(StockSharp.BusinessEntities.MarketDepth)/param/depth;MarketDepth
 M:StockSharp.Xaml.MarketDepthControl.UpdateDepth(StockSharp.Messages.QuoteChangeMessage)/summary;DocStr8248

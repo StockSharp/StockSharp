@@ -757,6 +757,11 @@
             Cluster profile.
             </summary>
     </member>
+    <member name="F:StockSharp.Xaml.Charting.ChartCandleDrawStyles.Area">
+      <summary>
+            Area.
+            </summary>
+    </member>
     <member name="T:StockSharp.Xaml.Charting.ChartCandleElement">
       <summary>
             The chart element representing a candle.
@@ -2696,6 +2701,34 @@
       <param name="time">The time stamp of the new data generation.</param>
       <param name="value">Indicator values.</param>
       <param name="draw">The method of value drawing on the chart.</param>
+    </member>
+    <member name="T:StockSharp.Xaml.Charting.IndicatorPickerWindow">
+      <summary>
+            The indicator selection window.
+            </summary>
+      <summary>
+            IndicatorPickerWindow
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.Charting.IndicatorPickerWindow.#ctor">
+      <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Xaml.Charting.IndicatorPickerWindow" />.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Charting.IndicatorPickerWindow.SelectedIndicatorType">
+      <summary>
+            The selected indicator type.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.Charting.IndicatorPickerWindow.IndicatorTypes">
+      <summary>
+            The list of available indicators types.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.Charting.IndicatorPickerWindow.InitializeComponent">
+      <summary>
+            InitializeComponent
+            </summary>
     </member>
     <member name="T:StockSharp.Xaml.Charting.IndicatorType">
       <summary>

@@ -184,6 +184,7 @@ F:StockSharp.Xaml.Charting.ChartCandleDrawStyles.LineLow/summary;LineLow
 F:StockSharp.Xaml.Charting.ChartCandleDrawStyles.LineClose/summary;LineClose
 F:StockSharp.Xaml.Charting.ChartCandleDrawStyles.BoxVolume/summary;DocStr8857
 F:StockSharp.Xaml.Charting.ChartCandleDrawStyles.ClusterProfile/summary;ClusterProfile
+F:StockSharp.Xaml.Charting.ChartCandleDrawStyles.Area/summary;Str1900
 T:StockSharp.Xaml.Charting.ChartCandleElement/summary;DocStr7766
 M:StockSharp.Xaml.Charting.ChartCandleElement.#ctor/summary;DocStr1
 P:StockSharp.Xaml.Charting.ChartCandleElement.Title/summary;Str1945
@@ -783,6 +784,11 @@ M:StockSharp.Xaml.Charting.IndicatorPainters.ZigZagPainter.ProcessValues(System.
 M:StockSharp.Xaml.Charting.IndicatorPainters.ZigZagPainter.ProcessValues(System.DateTimeOffset,StockSharp.Algo.Indicators.IIndicatorValue,StockSharp.Xaml.Charting.DrawHandler)/param/time;DocStr7780
 M:StockSharp.Xaml.Charting.IndicatorPainters.ZigZagPainter.ProcessValues(System.DateTimeOffset,StockSharp.Algo.Indicators.IIndicatorValue,StockSharp.Xaml.Charting.DrawHandler)/param/value;DocStr7842
 M:StockSharp.Xaml.Charting.IndicatorPainters.ZigZagPainter.ProcessValues(System.DateTimeOffset,StockSharp.Algo.Indicators.IIndicatorValue,StockSharp.Xaml.Charting.DrawHandler)/param/draw;DocStr7843
+T:StockSharp.Xaml.Charting.IndicatorPickerWindow/summary;DocStr9308
+M:StockSharp.Xaml.Charting.IndicatorPickerWindow.#ctor/summary;DocStr1
+P:StockSharp.Xaml.Charting.IndicatorPickerWindow.SelectedIndicatorType/summary;DocStr9311
+P:StockSharp.Xaml.Charting.IndicatorPickerWindow.IndicatorTypes/summary;DocStr7740
+M:StockSharp.Xaml.Charting.IndicatorPickerWindow.InitializeComponent/summary;DocStr8
 T:StockSharp.Xaml.Charting.IndicatorType/summary;DocStr7850
 P:StockSharp.Xaml.Charting.IndicatorType.Name/summary;Str908
 P:StockSharp.Xaml.Charting.IndicatorType.Description/summary;DocStr7854

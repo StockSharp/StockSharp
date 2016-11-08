@@ -3948,7 +3948,6 @@ XamlStr631;Candles;Свечек
 XamlStr633;Candles (history);Свечи (история)
 XamlStr634;Candles (real-time);Свечи (реал-тайм)
 XamlStr635;Candles and depths;Свечи и стаканы
-XamlStr636;Candles...;Свечи...
 XamlStr639;Security parameters;Свойства инструмента
 XamlStr641;Trade on the market with specified price or higher.;Сделка на рынке по заданной цене или выше.
 XamlStr642;Trade on the market with specified price or lower.;Сделка на рынке по заданной цене или ниже.
@@ -4353,6 +4352,7 @@ Initialization;Initialization;Инициализация
 DirectoryNotExist;Directory '{0}' doesn't exist.;Директория '{0}' не существует.
 FileMask;File mask;Маска файла
 FileMaskDescription;File mask that uses for scanning in directory. For example, candles_*.csv.;Маска файла, которая используется при сканировании директории. Например, candles_*.csv.
+IndicatorSelection;Indicator selection;Выбор индикатора
 DocStr0;Button activation alert settings;Кнопка активации настроек сигнала
 DocStr1;Initializes a new instance of the {0};Создать {0}
 DocStr2;Load settings;Загрузить настройки
@@ -13489,3 +13489,6 @@ DocStr9304;Use {0};Использовать {0}
 DocStr9305;Use timeframe candles instead of trades;Использовать свечи вместо тиков
 DocStr9306;Indicate history initialized message;Indicate history initialized message
 DocStr9307;{0} to {1} converter;Преобразование {0} в {1}
+DocStr9308;The indicator selection window;Окно выбора типа индикатора
+DocStr9310;To handle an order;Обработать заявку
+DocStr9311;The selected indicator type;Выбранный тип индикатора

@@ -5,13 +5,17 @@ StockSharp API Change log
 * (feature) ExchangeBoard. Removed IsSupportAtomicReRegister, IsSupportMarketOrders
 * (feature) Plaza router. v5.1.3.754
 * (feature) Plaza. Flood control handling.
-* (bug) BarChart fix.
-* (bug) OpenECry fix.
+* (bug) BarChart fixes.
+* (bug) OpenECry fixes.
 * (feature) OpenECryAddressComboBox. Prod address.
 * (bug) SecurityTrie fix.
 * (bug) Message.IsBack. Fix BasketMessageAdapter.
 * (bug) CsvEntityRegistry fixes.
 * (feature) OfflineMessageAdapter.
+* (bug) MarketDepthControl. Own volume fix.
+* (bug) Level1 csv storage fix.
+* (feature) Transaction storage. LocalTime support.
+* (feature) Chart. Support area style.
 
 ###v4.3.18:
 * (feature) Rithmic. v9.5.0.0

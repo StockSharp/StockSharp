@@ -3446,9 +3446,6 @@ T:StockSharp.Algo.Storages.BufferMessageAdapter.DataBuffer`2/typeparam/TMarketDa
 M:StockSharp.Algo.Storages.BufferMessageAdapter.DataBuffer`2.Add(`0,`1)/summary;DocStr1591
 M:StockSharp.Algo.Storages.BufferMessageAdapter.DataBuffer`2.Add(`0,`1)/param/key;DocStr1592
 M:StockSharp.Algo.Storages.BufferMessageAdapter.DataBuffer`2.Add(`0,`1)/param/data;DocStr1593
-M:StockSharp.Algo.Storages.BufferMessageAdapter.DataBuffer`2.Add(`0,System.Collections.Generic.IEnumerable{`1})/summary;DocStr1591
-M:StockSharp.Algo.Storages.BufferMessageAdapter.DataBuffer`2.Add(`0,System.Collections.Generic.IEnumerable{`1})/param/key;DocStr1592
-M:StockSharp.Algo.Storages.BufferMessageAdapter.DataBuffer`2.Add(`0,System.Collections.Generic.IEnumerable{`1})/param/data;DocStr1593
 M:StockSharp.Algo.Storages.BufferMessageAdapter.DataBuffer`2.Get/summary;DocStr1594
 M:StockSharp.Algo.Storages.BufferMessageAdapter.DataBuffer`2.Get/returns;DocStr1595
 M:StockSharp.Algo.Storages.BufferMessageAdapter.#ctor(StockSharp.Messages.IMessageAdapter)/summary;DocStr1
@@ -3467,6 +3464,8 @@ M:StockSharp.Algo.Storages.BufferMessageAdapter.GetOrderBooks/summary;DocStr8572
 M:StockSharp.Algo.Storages.BufferMessageAdapter.GetOrderBooks/returns;DocStr8573
 M:StockSharp.Algo.Storages.BufferMessageAdapter.GetNews/summary;DocStr8574
 M:StockSharp.Algo.Storages.BufferMessageAdapter.GetNews/returns;News
+M:StockSharp.Algo.Storages.BufferMessageAdapter.SendInMessage(StockSharp.Messages.Message)/summary;DocStr46
+M:StockSharp.Algo.Storages.BufferMessageAdapter.SendInMessage(StockSharp.Messages.Message)/param/message;Str3166
 M:StockSharp.Algo.Storages.BufferMessageAdapter.OnInnerAdapterNewOutMessage(StockSharp.Messages.Message)/summary;DocStr8488
 M:StockSharp.Algo.Storages.BufferMessageAdapter.OnInnerAdapterNewOutMessage(StockSharp.Messages.Message)/param/message;DocStr8489
 M:StockSharp.Algo.Storages.BufferMessageAdapter.Clone/summary;DocStr643

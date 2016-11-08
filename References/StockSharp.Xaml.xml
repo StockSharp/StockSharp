@@ -1866,15 +1866,9 @@
             </summary>
       <param name="security">Security.</param>
     </member>
-    <member name="M:StockSharp.Xaml.MarketDepthControl.ProcessNewOrder(StockSharp.BusinessEntities.Order)">
+    <member name="M:StockSharp.Xaml.MarketDepthControl.ProcessOrder(StockSharp.BusinessEntities.Order)">
       <summary>
-            To handle a new order.
-            </summary>
-      <param name="order">Order.</param>
-    </member>
-    <member name="M:StockSharp.Xaml.MarketDepthControl.ProcessChangedOrder(StockSharp.BusinessEntities.Order)">
-      <summary>
-            To handle the changed order.
+            To handle an order.
             </summary>
       <param name="order">Order.</param>
     </member>

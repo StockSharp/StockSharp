@@ -39398,16 +39398,6 @@ namespace StockSharp.Localization
 		public static string XamlStr635 => GetString(XamlStr635Key);
 
 		/// <summary>
-		/// Candles...
-		/// </summary>
-		public const string XamlStr636Key = "XamlStr636";
-
-		/// <summary>
-		/// Candles...
-		/// </summary>
-		public static string XamlStr636 => GetString(XamlStr636Key);
-
-		/// <summary>
 		/// Security parameters
 		/// </summary>
 		public const string XamlStr639Key = "XamlStr639";
@@ -43186,5 +43176,15 @@ namespace StockSharp.Localization
 		/// File mask that uses for scanning in directory. For example, candles_*.csv.
 		/// </summary>
 		public static string FileMaskDescription => GetString(FileMaskDescriptionKey);
+
+		/// <summary>
+		/// Indicator selection
+		/// </summary>
+		public const string IndicatorSelectionKey = "IndicatorSelection";
+
+		/// <summary>
+		/// Indicator selection
+		/// </summary>
+		public static string IndicatorSelection => GetString(IndicatorSelectionKey);
 	}
 }
