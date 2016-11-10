@@ -263,14 +263,14 @@ namespace StockSharp.Algo
 		public event Action<Exception> Error;
 
 		/// <summary>
-		/// Lookup result <see cref="IConnector.LookupSecurities(StockSharp.BusinessEntities.Security)"/> received.
+		/// Lookup result <see cref="IConnector.LookupSecurities(Security)"/> received.
 		/// </summary>
-		public event Action<IEnumerable<Security>> LookupSecuritiesResult;
+		public event Action<Exception, IEnumerable<Security>> LookupSecuritiesResult;
 
 		/// <summary>
 		/// Lookup result <see cref="IConnector.LookupPortfolios"/> received.
 		/// </summary>
-		public event Action<IEnumerable<Portfolio>> LookupPortfoliosResult;
+		public event Action<Exception, IEnumerable<Portfolio>> LookupPortfoliosResult;
 
 		/// <summary>
 		/// Successful subscription market-data.
@@ -450,7 +450,7 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// To call the event <see cref="Connector.NewNews"/>.
+		/// To call the event <see cref="NewNews"/>.
 		/// </summary>
 		/// <param name="news">News.</param>
 		private void RaiseNewNews(News news)
@@ -459,7 +459,7 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// To call the event <see cref="Connector.NewsChanged"/>.
+		/// To call the event <see cref="NewsChanged"/>.
 		/// </summary>
 		/// <param name="news">News.</param>
 		private void RaiseNewsChanged(News news)
@@ -553,7 +553,7 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// To call the event <see cref="Connector.MarketTimeChanged"/>.
+		/// To call the event <see cref="MarketTimeChanged"/>.
 		/// </summary>
 		/// <param name="diff">The difference in the time since the last call of the event. The first time the event passes the <see cref="TimeSpan.Zero"/> value.</param>
 		private void RaiseMarketTimeChanged(TimeSpan diff)
@@ -562,21 +562,23 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// To call the event <see cref="Connector.LookupSecuritiesResult"/>.
+		/// To call the event <see cref="LookupSecuritiesResult"/>.
 		/// </summary>
+		/// <param name="error">An error of security lookup operation. The value will be <see langword="null"/> if operation complete successfully.</param>
 		/// <param name="securities">Found instruments.</param>
-		private void RaiseLookupSecuritiesResult(IEnumerable<Security> securities)
+		private void RaiseLookupSecuritiesResult(Exception error, IEnumerable<Security> securities)
 		{
-			LookupSecuritiesResult?.Invoke(securities);
+			LookupSecuritiesResult?.Invoke(error, securities);
 		}
 
 		/// <summary>
-		/// To call the event <see cref="Connector.LookupPortfoliosResult"/>.
+		/// To call the event <see cref="LookupPortfoliosResult"/>.
 		/// </summary>
+		/// <param name="error">An error of portfolio lookup operation. The value will be <see langword="null"/> if operation complete successfully.</param>
 		/// <param name="portfolios">Found portfolios.</param>
-		private void RaiseLookupPortfoliosResult(IEnumerable<Portfolio> portfolios)
+		private void RaiseLookupPortfoliosResult(Exception error, IEnumerable<Portfolio> portfolios)
 		{
-			LookupPortfoliosResult?.Invoke(portfolios);
+			LookupPortfoliosResult?.Invoke(error, portfolios);
 		}
 
 		private void RaiseMarketDataSubscriptionSucceeded(Security security, MarketDataMessage message)

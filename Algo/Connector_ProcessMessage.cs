@@ -1008,7 +1008,7 @@ namespace StockSharp.Algo
 				}
 			}
 
-			RaiseLookupSecuritiesResult(result);
+			RaiseLookupSecuritiesResult(message.Error, result);
 
 			lock (_lookupQueue.SyncRoot)
 			{
@@ -1044,7 +1044,7 @@ namespace StockSharp.Algo
 			if (criteria == null)
 				return;
 
-			RaiseLookupPortfoliosResult(Portfolios.Where(pf => pf.Name.CompareIgnoreCase(criteria.PortfolioName)));
+			RaiseLookupPortfoliosResult(message.Error, Portfolios.Where(pf => pf.Name.CompareIgnoreCase(criteria.PortfolioName)));
 		}
 
 		private void ProcessLevel1ChangeMessage(Level1ChangeMessage message)

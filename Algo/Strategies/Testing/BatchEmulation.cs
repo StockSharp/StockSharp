@@ -518,7 +518,7 @@ namespace StockSharp.Algo.Strategies.Testing
 			MemoryStatistics.Instance.LogLevel = EmulationSettings.LogLevel;
 		}
 
-		private void OnEmulationConnectorOnLookupSecuritiesResult(IEnumerable<Security> ss)
+		private void OnEmulationConnectorOnLookupSecuritiesResult(Exception exception, IEnumerable<Security> securities)
 		{
 			EmulationConnector.LookupSecuritiesResult -= OnEmulationConnectorOnLookupSecuritiesResult;
 

@@ -16,6 +16,7 @@ StockSharp API Change log
 * (bug) Level1 csv storage fix.
 * (feature) Transaction storage. LocalTime support.
 * (feature) Chart. Support area style.
+* (feature) IConnector. LookupSecuritiesResult, LookupPortfoliosResult - error argument added.
 
 ###v4.3.18:
 * (feature) Rithmic. v9.5.0.0

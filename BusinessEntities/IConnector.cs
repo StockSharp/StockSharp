@@ -259,14 +259,14 @@ namespace StockSharp.BusinessEntities
 		event Action<TimeSpan> MarketTimeChanged;
 
 		/// <summary>
-		/// Lookup result <see cref="LookupSecurities(StockSharp.BusinessEntities.Security)"/> received.
+		/// Lookup result <see cref="LookupSecurities(Security)"/> received.
 		/// </summary>
-		event Action<IEnumerable<Security>> LookupSecuritiesResult;
+		event Action<Exception, IEnumerable<Security>> LookupSecuritiesResult;
 
 		/// <summary>
 		/// Lookup result <see cref="LookupPortfolios"/> received.
 		/// </summary>
-		event Action<IEnumerable<Portfolio>> LookupPortfoliosResult;
+		event Action<Exception, IEnumerable<Portfolio>> LookupPortfoliosResult;
 
 		/// <summary>
 		/// Successful subscription market-data.

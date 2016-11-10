@@ -149,7 +149,7 @@ namespace SampleITCH
 					var subscribed = false;
 					//if (AllDepths.IsChecked == true)
 					{
-						Trader.LookupSecuritiesResult += securities =>
+						Trader.LookupSecuritiesResult += (error, securities) =>
 						{
 							if (subscribed)
 								return;
