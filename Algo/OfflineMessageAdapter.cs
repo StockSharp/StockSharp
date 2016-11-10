@@ -1,5 +1,7 @@
 ﻿namespace StockSharp.Algo
 {
+	using System;
+
 	using Ecng.Collections;
 
 	using StockSharp.Messages;
@@ -19,6 +21,26 @@
 		public OfflineMessageAdapter(IMessageAdapter innerAdapter)
 			: base(innerAdapter)
 		{
+		}
+
+		private int _maxMessageCount = 10000;
+
+		/// <summary>
+		/// Max message queue count. The default value is 10000.
+		/// </summary>
+		/// <remarks>
+		/// Value setted to -1 corresponds to the size without limitations.
+		/// </remarks>
+		public int MaxMessageCount
+		{
+			get { return _maxMessageCount; }
+			set
+			{
+				if (value < -1)
+					throw new ArgumentOutOfRangeException();
+
+				_maxMessageCount = value;
+			}
 		}
 
 		/// <summary>
@@ -62,6 +84,9 @@
 				{
 					if (!_connected)
 					{
+						if (_maxMessageCount > 0 && _pendingMessages.Count == _maxMessageCount)
+							throw new InvalidOperationException("Max message count exceed.");
+
 						_pendingMessages.Add(message.Clone());
 						return;
 					}
