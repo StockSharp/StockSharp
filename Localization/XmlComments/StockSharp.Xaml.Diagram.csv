@@ -427,7 +427,7 @@ F:StockSharp.Xaml.Diagram.DiagramSocketType.Any/summary;DocStr8032
 F:StockSharp.Xaml.Diagram.DiagramSocketType.Security/summary;DocStr2831
 F:StockSharp.Xaml.Diagram.DiagramSocketType.MarketDepth/summary;MarketDepth
 F:StockSharp.Xaml.Diagram.DiagramSocketType.Quote/summary;Str273
-F:StockSharp.Xaml.Diagram.DiagramSocketType.Candles/summary;XamlStr631
+F:StockSharp.Xaml.Diagram.DiagramSocketType.Candle/summary;DocStr491
 F:StockSharp.Xaml.Diagram.DiagramSocketType.IndicatorValue/summary;IndicatorValue
 F:StockSharp.Xaml.Diagram.DiagramSocketType.Order/summary;Str504
 F:StockSharp.Xaml.Diagram.DiagramSocketType.MyTrade/summary;OwnTrade
@@ -663,6 +663,7 @@ P:StockSharp.Xaml.Diagram.Elements.StrategyDiagramElement.IconName/summary;DocSt
 M:StockSharp.Xaml.Diagram.Elements.StrategyDiagramElement.#ctor/summary;DocStr1
 M:StockSharp.Xaml.Diagram.Elements.StrategyDiagramElement.OnStart/summary;DocStr7892
 M:StockSharp.Xaml.Diagram.Elements.StrategyDiagramElement.OnStop/summary;DocStr7894
+T:StockSharp.Xaml.Diagram.Elements.DiagramExternalSocketAttribute/summary;DocStr9316
 T:StockSharp.Xaml.Diagram.Elements.StrategyTradesDiagramElement/summary;Str3156
 M:StockSharp.Xaml.Diagram.Elements.StrategyTradesDiagramElement.#ctor/summary;DocStr1
 P:StockSharp.Xaml.Diagram.Elements.StrategyTradesDiagramElement.TypeId/summary;DocStr7902

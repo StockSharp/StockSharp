@@ -1269,6 +1269,33 @@
       <returns>
       </returns>
     </member>
+    <member name="T:StockSharp.Xaml.SecretWindow">
+      <summary>
+            The window for set the secret.
+            </summary>
+      <summary>
+            SecretWindow
+            </summary>
+    </member>
+    <member name="F:StockSharp.Xaml.SecretWindow.OkCommand">
+      <summary>
+      </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.SecretWindow.Secret">
+      <summary>
+            The secret.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.SecretWindow.#ctor">
+      <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Xaml.SecretWindow" />.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.SecretWindow.InitializeComponent">
+      <summary>
+            InitializeComponent
+            </summary>
+    </member>
     <member name="T:StockSharp.Xaml.SecurityJump">
       <summary>
             Rollover description for the instrument.

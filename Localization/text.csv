@@ -13492,3 +13492,10 @@ DocStr9307;{0} to {1} converter;Преобразование {0} в {1}
 DocStr9308;The indicator selection window;Окно выбора типа индикатора
 DocStr9310;To handle an order;Обработать заявку
 DocStr9311;The selected indicator type;Выбранный тип индикатора
+DocStr9312;Max message queue count. The default value is 10000;Максимальный размер очереди сообщений. Значение по умолчанию равно 10000
+DocStr9313;Value setted to -1 corresponds to the size without limitations;Значение -1 означает отсутствие ограничений
+DocStr9314;An error of security lookup operation. The value will be {0} if operation complete successfully;Ошибка поиска инструментов. Значение будет равно {0}, если операция выполнена успешно
+DocStr9315;An error of portfolio lookup operation. The value will be {0} if operation complete successfully;Ошибка поиска портфелей. Значение будет равно {0}, если операция выполнена успешно
+DocStr9316;Attribute, applied to methods or parameters, to create input socket;Атрибут, применяемый к методу или параметру, для создания входящего сокета.
+DocStr9317;The window for set the secret;Окно установки секрет
+DocStr9318;The secret;Секрет

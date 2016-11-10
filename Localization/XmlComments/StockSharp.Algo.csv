@@ -1346,6 +1346,8 @@ M:StockSharp.Algo.Indicators.ShiftedIndicatorValue.SetValue``1(StockSharp.Algo.I
 T:StockSharp.Algo.OfflineMessageAdapter/summary;DocStr9301
 M:StockSharp.Algo.OfflineMessageAdapter.#ctor(StockSharp.Messages.IMessageAdapter)/summary;DocStr1
 M:StockSharp.Algo.OfflineMessageAdapter.#ctor(StockSharp.Messages.IMessageAdapter)/param/innerAdapter;DocStr8563
+P:StockSharp.Algo.OfflineMessageAdapter.MaxMessageCount/summary;DocStr9312
+P:StockSharp.Algo.OfflineMessageAdapter.MaxMessageCount/remarks;DocStr9313
 M:StockSharp.Algo.OfflineMessageAdapter.SendInMessage(StockSharp.Messages.Message)/summary;DocStr46
 M:StockSharp.Algo.OfflineMessageAdapter.SendInMessage(StockSharp.Messages.Message)/param/message;Str3166
 M:StockSharp.Algo.OfflineMessageAdapter.OnInnerAdapterNewOutMessage(StockSharp.Messages.Message)/summary;DocStr8488
@@ -2585,6 +2587,7 @@ P:StockSharp.Algo.Connector.InMessageChannel/summary;DocStr8544
 P:StockSharp.Algo.Connector.OutMessageChannel/summary;DocStr863
 P:StockSharp.Algo.Connector.InnerAdapter/summary;DocStr9208
 P:StockSharp.Algo.Connector.Adapter/summary;DocStr864
+P:StockSharp.Algo.Connector.SupportOffline/summary;DocStr9304
 P:StockSharp.Algo.Connector.TransactionAdapter/summary;DocStr865
 P:StockSharp.Algo.Connector.MarketDataAdapter/summary;DocStr866
 P:StockSharp.Algo.Connector.StorageAdapter/summary;DocStr8545
@@ -2682,10 +2685,12 @@ M:StockSharp.Algo.Connector.RaiseError(System.Exception)/summary;DocStr466
 M:StockSharp.Algo.Connector.RaiseError(System.Exception)/param/exception;Str2955
 M:StockSharp.Algo.Connector.RaiseMarketTimeChanged(System.TimeSpan)/summary;DocStr466
 M:StockSharp.Algo.Connector.RaiseMarketTimeChanged(System.TimeSpan)/param/diff;DocStr768
-M:StockSharp.Algo.Connector.RaiseLookupSecuritiesResult(System.Collections.Generic.IEnumerable{StockSharp.BusinessEntities.Security})/summary;DocStr466
-M:StockSharp.Algo.Connector.RaiseLookupSecuritiesResult(System.Collections.Generic.IEnumerable{StockSharp.BusinessEntities.Security})/param/securities;DocStr3111
-M:StockSharp.Algo.Connector.RaiseLookupPortfoliosResult(System.Collections.Generic.IEnumerable{StockSharp.BusinessEntities.Portfolio})/summary;DocStr466
-M:StockSharp.Algo.Connector.RaiseLookupPortfoliosResult(System.Collections.Generic.IEnumerable{StockSharp.BusinessEntities.Portfolio})/param/portfolios;DocStr770
+M:StockSharp.Algo.Connector.RaiseLookupSecuritiesResult(System.Exception,System.Collections.Generic.IEnumerable{StockSharp.BusinessEntities.Security})/summary;DocStr466
+M:StockSharp.Algo.Connector.RaiseLookupSecuritiesResult(System.Exception,System.Collections.Generic.IEnumerable{StockSharp.BusinessEntities.Security})/param/error;DocStr9314
+M:StockSharp.Algo.Connector.RaiseLookupSecuritiesResult(System.Exception,System.Collections.Generic.IEnumerable{StockSharp.BusinessEntities.Security})/param/securities;DocStr3111
+M:StockSharp.Algo.Connector.RaiseLookupPortfoliosResult(System.Exception,System.Collections.Generic.IEnumerable{StockSharp.BusinessEntities.Portfolio})/summary;DocStr466
+M:StockSharp.Algo.Connector.RaiseLookupPortfoliosResult(System.Exception,System.Collections.Generic.IEnumerable{StockSharp.BusinessEntities.Portfolio})/param/error;DocStr9315
+M:StockSharp.Algo.Connector.RaiseLookupPortfoliosResult(System.Exception,System.Collections.Generic.IEnumerable{StockSharp.BusinessEntities.Portfolio})/param/portfolios;DocStr770
 M:StockSharp.Algo.Connector.RaiseNewMessage(StockSharp.Messages.Message)/summary;DocStr466
 M:StockSharp.Algo.Connector.RaiseNewMessage(StockSharp.Messages.Message)/param/message;DocStr771
 P:StockSharp.Algo.Connector.RegisteredSecurities/summary;DocStr901

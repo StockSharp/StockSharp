@@ -1505,9 +1505,9 @@
             Quote.
             </summary>
     </member>
-    <member name="F:StockSharp.Xaml.Diagram.DiagramSocketType.Candles">
+    <member name="F:StockSharp.Xaml.Diagram.DiagramSocketType.Candle">
       <summary>
-            Candles.
+            Candle.
             </summary>
     </member>
     <member name="F:StockSharp.Xaml.Diagram.DiagramSocketType.IndicatorValue">
@@ -2604,6 +2604,11 @@
     <member name="M:StockSharp.Xaml.Diagram.Elements.StrategyDiagramElement.OnStop">
       <summary>
             The method is called at the stop of the diagram element algorithm.
+            </summary>
+    </member>
+    <member name="T:StockSharp.Xaml.Diagram.Elements.DiagramExternalSocketAttribute">
+      <summary>
+            Attribute, applied to methods or parameters, to create input socket.
             </summary>
     </member>
     <member name="T:StockSharp.Xaml.Diagram.Elements.StrategyTradesDiagramElement">

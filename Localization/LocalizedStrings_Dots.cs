@@ -341,5 +341,10 @@ namespace StockSharp.Localization
 		/// 
 		/// </summary>
 		public static string Str2237Dot => AppendDot(Str2237);
+
+		/// <summary>
+		/// 
+		/// </summary>
+		public static string SecurityDot => AppendDot(Security);
 	}
 }

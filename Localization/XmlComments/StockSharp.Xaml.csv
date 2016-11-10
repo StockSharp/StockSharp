@@ -262,6 +262,11 @@ M:StockSharp.Xaml.IconsExtension.#ctor/summary;DocStr1
 M:StockSharp.Xaml.IconsExtension.GetImage(System.String)/summary;DocStr8459
 M:StockSharp.Xaml.IconsExtension.GetImage(System.String)/param/key;DocStr8459
 M:StockSharp.Xaml.IconsExtension.GetImage(System.String)/returns;DocStr8459
+T:StockSharp.Xaml.SecretWindow/summary;DocStr9317
+F:StockSharp.Xaml.SecretWindow.OkCommand/summary;DocStr8459
+P:StockSharp.Xaml.SecretWindow.Secret/summary;DocStr9318
+M:StockSharp.Xaml.SecretWindow.#ctor/summary;DocStr1
+M:StockSharp.Xaml.SecretWindow.InitializeComponent/summary;DocStr8
 T:StockSharp.Xaml.SecurityJump/summary;DocStr8171
 P:StockSharp.Xaml.SecurityJump.Security/summary;DocStr2831
 P:StockSharp.Xaml.SecurityJump.Date/summary;DocStr8172
