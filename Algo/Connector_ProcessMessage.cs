@@ -507,6 +507,69 @@ namespace StockSharp.Algo
 			}
 		}
 
+		private bool _supportOffline;
+
+		/// <summary>
+		/// Use <see cref="OfflineMessageAdapter"/>.
+		/// </summary>
+		public bool SupportOffline
+		{
+			get { return _supportOffline; }
+			set
+			{
+				if (_supportOffline == value)
+					return;
+
+				_inAdapter.NewOutMessage -= AdapterOnNewOutMessage;
+
+				if (value)
+				{
+					var storageAdapter = _inAdapter as StorageMessageAdapter;
+					if (storageAdapter != null)
+					{
+						storageAdapter.OwnInnerAdaper = false;
+						storageAdapter.Dispose();
+
+						var offlineAdapter = new OfflineMessageAdapter(storageAdapter.InnerAdapter) { OwnInnerAdaper = true };
+
+						_inAdapter = StorageAdapter = new StorageMessageAdapter(offlineAdapter, _entityRegistry, _storageRegistry) { OwnInnerAdaper = true };
+					}
+					else
+						_inAdapter = new OfflineMessageAdapter(_inAdapter) { OwnInnerAdaper = true };
+				}
+				else
+				{
+					var offlineAdapter = _inAdapter as OfflineMessageAdapter;
+
+					if (offlineAdapter != null)
+					{
+						_inAdapter = offlineAdapter.InnerAdapter;
+
+						offlineAdapter.OwnInnerAdaper = false;
+						offlineAdapter.Dispose();
+					}
+					else
+					{
+						var storageAdapter = (StorageMessageAdapter)_inAdapter;
+
+						offlineAdapter = (OfflineMessageAdapter)storageAdapter.InnerAdapter;
+
+						storageAdapter.OwnInnerAdaper = false;
+						storageAdapter.Dispose();
+
+						offlineAdapter.OwnInnerAdaper = false;
+						offlineAdapter.Dispose();
+
+						_inAdapter = StorageAdapter = new StorageMessageAdapter(offlineAdapter.InnerAdapter, _entityRegistry, _storageRegistry) { OwnInnerAdaper = true };
+					}
+				}
+
+				_inAdapter.NewOutMessage += AdapterOnNewOutMessage;
+
+				_supportOffline = value;
+			}
+		}
+
 		private void InnerAdaptersOnAdded(IMessageAdapter adapter)
 		{
 			if (adapter.IsMessageSupported(MessageTypes.OrderRegister))

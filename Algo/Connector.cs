@@ -204,8 +204,6 @@ namespace StockSharp.Algo
 
 		private bool _isDisposing;
 
-		private readonly bool _supportOffline;
-
 		/// <summary>
 		/// Initializes a new instance of the <see cref="Connector"/>.
 		/// </summary>
