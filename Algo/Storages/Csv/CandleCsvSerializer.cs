@@ -16,11 +16,129 @@ Copyright 2010 by StockSharp, LLC
 namespace StockSharp.Algo.Storages.Csv
 {
 	using System;
+	using System.Collections.Generic;
+	using System.Globalization;
+	using System.IO;
 	using System.Text;
 
 	using Ecng.Common;
 
 	using StockSharp.Messages;
+
+	class CandleCsvMetaInfo<TCandleMessage> : MetaInfo
+		where TCandleMessage : CandleMessage, new()
+	{
+		private readonly Dictionary<DateTimeOffset, TCandleMessage> _items = new Dictionary<DateTimeOffset, TCandleMessage>(); 
+
+		private readonly Encoding _encoding;
+		private readonly SecurityId _securityId;
+		private readonly object _arg;
+
+		private bool _isOverride;
+
+		public override bool IsOverride => _isOverride;
+
+		public CandleCsvMetaInfo(DateTime date, Encoding encoding, SecurityId securityId, object arg)
+			: base(date)
+		{
+			if (encoding == null)
+				throw new ArgumentNullException(nameof(encoding));
+
+			_encoding = encoding;
+			_securityId = securityId;
+			_arg = arg;
+		}
+
+		public override object LastId { get; set; }
+
+		public override void Write(Stream stream)
+		{
+		}
+
+		public override void Read(Stream stream)
+		{
+			CultureInfo.InvariantCulture.DoInCulture(() =>
+			{
+				var count = 0;
+				var firstTimeRead = false;
+
+				var reader = new FastCsvReader(stream, _encoding);
+
+				while (reader.NextLine())
+				{
+					var message = Read(reader);
+
+					_items.Add(message.OpenTime, message);
+
+					if (!firstTimeRead)
+					{
+						FirstTime = message.OpenTime.UtcDateTime;
+						firstTimeRead = true;
+					}
+
+					LastTime = message.OpenTime.UtcDateTime;
+
+					count++;
+				}
+
+				Count = count;
+
+				stream.Position = 0;
+			});
+		}
+
+		public TCandleMessage Read(FastCsvReader reader)
+		{
+			return new TCandleMessage
+			{
+				SecurityId = _securityId,
+				Arg = _arg,
+				OpenTime = reader.ReadTime(Date),
+				OpenPrice = reader.ReadDecimal(),
+				HighPrice = reader.ReadDecimal(),
+				LowPrice = reader.ReadDecimal(),
+				ClosePrice = reader.ReadDecimal(),
+				TotalVolume = reader.ReadDecimal(),
+				State = CandleStates.Finished
+			};
+		}
+
+		public void Write(CsvFileWriter writer, TCandleMessage message)
+		{
+			if (!_items.ContainsKey(message.OpenTime) && message.OpenTime.UtcDateTime > LastTime)
+			{
+				_isOverride = false;
+			}
+			else
+				_isOverride = true;
+
+			_items[message.OpenTime] = message;
+
+			if (_isOverride)
+			{
+				foreach (var data in _items.Values)
+					WriteData(writer, data);
+			}
+			else
+				WriteData(writer, message);
+		}
+
+		private void WriteData(CsvFileWriter writer, TCandleMessage data)
+		{
+			writer.WriteRow(new[]
+			{
+				data.OpenTime.WriteTimeMls(),
+				data.OpenTime.ToString("zzz"),
+				data.OpenPrice.ToString(),
+				data.HighPrice.ToString(),
+				data.LowPrice.ToString(),
+				data.ClosePrice.ToString(),
+				data.TotalVolume.ToString()
+			});
+
+			LastTime = data.OpenTime.UtcDateTime;
+		}
+	}
 
 	/// <summary>
 	/// The candle serializer in the CSV format.
@@ -49,6 +167,16 @@ namespace StockSharp.Algo.Storages.Csv
 		public object Arg { get; set; }
 
 		/// <summary>
+		/// To create empty meta-information.
+		/// </summary>
+		/// <param name="date">Date.</param>
+		/// <returns>Meta-information on data for one day.</returns>
+		public override IMarketDataMetaInfo CreateMetaInfo(DateTime date)
+		{
+			return new CandleCsvMetaInfo<TCandleMessage>(date, Encoding, SecurityId, Arg);
+		}
+
+		/// <summary>
 		/// Write data to the specified writer.
 		/// </summary>
 		/// <param name="writer">CSV writer.</param>
@@ -56,40 +184,18 @@ namespace StockSharp.Algo.Storages.Csv
 		/// <param name="metaInfo">Meta-information on data for one day.</param>
 		protected override void Write(CsvFileWriter writer, TCandleMessage data, IMarketDataMetaInfo metaInfo)
 		{
-			writer.WriteRow(new[]
-			{
-				data.OpenTime.WriteTimeMls(),
-				data.OpenTime.ToString("zzz"),
-				data.OpenPrice.ToString(),
-				data.HighPrice.ToString(),
-				data.LowPrice.ToString(),
-				data.ClosePrice.ToString(),
-				data.TotalVolume.ToString()
-			});
-
-			metaInfo.LastTime = data.OpenTime.UtcDateTime;
+			((CandleCsvMetaInfo<TCandleMessage>)metaInfo).Write(writer, data);
 		}
 
 		/// <summary>
 		/// Read data from the specified reader.
 		/// </summary>
 		/// <param name="reader">CSV reader.</param>
-		/// <param name="date">Date.</param>
+		/// <param name="metaInfo">Meta-information on data for one day.</param>
 		/// <returns>Data.</returns>
-		protected override TCandleMessage Read(FastCsvReader reader, DateTime date)
+		protected override TCandleMessage Read(FastCsvReader reader, IMarketDataMetaInfo metaInfo)
 		{
-			return new TCandleMessage
-			{
-				SecurityId = SecurityId,
-				Arg = Arg,
-				OpenTime = reader.ReadTime(date),
-				OpenPrice = reader.ReadDecimal(),
-				HighPrice = reader.ReadDecimal(),
-				LowPrice = reader.ReadDecimal(),
-				ClosePrice = reader.ReadDecimal(),
-				TotalVolume = reader.ReadDecimal(),
-				State = CandleStates.Finished
-			};
+			return ((CandleCsvMetaInfo<TCandleMessage>)metaInfo).Read(reader);
 		}
 	}
 }

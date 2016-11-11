@@ -71,6 +71,11 @@ namespace StockSharp.Algo.Storages
 		/// </summary>
 		/// <param name="stream">Data stream.</param>
 		void Read(Stream stream);
+
+		/// <summary>
+		/// Is override all data.
+		/// </summary>
+		bool IsOverride { get; }
 	}
 
 	abstract class MetaInfo : IMarketDataMetaInfo
@@ -102,6 +107,11 @@ namespace StockSharp.Algo.Storages
 		/// </summary>
 		/// <param name="stream">Data stream.</param>
 		public abstract void Read(Stream stream);
+
+		/// <summary>
+		/// Is override all data.
+		/// </summary>
+		public virtual bool IsOverride => false;
 
 		//public static TMetaInfo CreateMetaInfo(DateTime date)
 		//{

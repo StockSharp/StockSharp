@@ -235,7 +235,7 @@ namespace StockSharp.Algo.Storages.Csv
 				var retVal = _reader.NextLine();
 
 				if (retVal)
-					Current = _serializer.Read(_reader, _metaInfo.Date);
+					Current = _serializer.Read(_reader, _metaInfo);
 
 				return retVal;
 			}
@@ -267,8 +267,8 @@ namespace StockSharp.Algo.Storages.Csv
 		/// Read data from the specified reader.
 		/// </summary>
 		/// <param name="reader">CSV reader.</param>
-		/// <param name="date">Date.</param>
+		/// <param name="metaInfo">Meta-information on data for one day.</param>
 		/// <returns>Data.</returns>
-		protected abstract TData Read(FastCsvReader reader, DateTime date);
+		protected abstract TData Read(FastCsvReader reader, IMarketDataMetaInfo metaInfo);
 	}
 }

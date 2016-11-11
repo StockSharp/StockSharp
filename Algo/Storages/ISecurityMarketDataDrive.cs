@@ -252,7 +252,7 @@ namespace StockSharp.Algo.Storages
 				throw new NotSupportedException();
 			}
 
-			protected override QuoteChangeMessage Read(FastCsvReader reader, DateTime date)
+			protected override QuoteChangeMessage Read(FastCsvReader reader, IMarketDataMetaInfo metaInfo)
 			{
 				throw new NotSupportedException();
 			}

@@ -77,18 +77,18 @@ namespace StockSharp.Algo.Storages.Csv
 		}
 
 		/// <summary>
-		/// Load data from the specified reader.
+		/// Read data from the specified reader.
 		/// </summary>
 		/// <param name="reader">CSV reader.</param>
-		/// <param name="date">Date.</param>
+		/// <param name="metaInfo">Meta-information on data for one day.</param>
 		/// <returns>Data.</returns>
-		protected override ExecutionMessage Read(FastCsvReader reader, DateTime date)
+		protected override ExecutionMessage Read(FastCsvReader reader, IMarketDataMetaInfo metaInfo)
 		{
 			return new ExecutionMessage
 			{
 				SecurityId = SecurityId,
 				ExecutionType = ExecutionTypes.OrderLog,
-				ServerTime = reader.ReadTime(date),
+				ServerTime = reader.ReadTime(metaInfo.Date),
 				TransactionId = reader.ReadLong(),
 				OrderId = reader.ReadLong(),
 				OrderPrice = reader.ReadDecimal(),

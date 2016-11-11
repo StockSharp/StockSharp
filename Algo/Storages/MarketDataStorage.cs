@@ -47,7 +47,7 @@ namespace StockSharp.Algo.Storages
 		private readonly Func<TData, SecurityId> _getSecurityId;
 		private readonly Func<TData, TId> _getId;
 		private readonly SynchronizedDictionary<DateTime, SyncObject> _syncRoots = new SynchronizedDictionary<DateTime, SyncObject>();
-		private readonly SynchronizedDictionary<DateTime, IMarketDataMetaInfo> _dataMetaInfos = new SynchronizedDictionary<DateTime, IMarketDataMetaInfo>();
+		private readonly SynchronizedDictionary<DateTime, IMarketDataMetaInfo> _dateMetaInfos = new SynchronizedDictionary<DateTime, IMarketDataMetaInfo>();
 
 		protected MarketDataStorage(Security security, object arg, Func<TData, DateTimeOffset> getTime, Func<TData, SecurityId> getSecurity, Func<TData, TId> getId, IMarketDataSerializer<TData> serializer, IMarketDataStorageDrive drive)
 			: this(security.ToSecurityId(), arg, getTime, getSecurity, getId, serializer, drive)
@@ -230,7 +230,7 @@ namespace StockSharp.Algo.Storages
 			stream.Position = 0;
 			metaInfo.Write(stream);
 
-			if (isOverride)
+			if (isOverride || metaInfo.IsOverride)
 				stream.SetLength(stream.Position);
 			else
 				stream.Position = stream.Length;
@@ -379,7 +379,7 @@ namespace StockSharp.Algo.Storages
 
 			if (Serializer.Format == StorageFormats.Csv)
 			{
-				metaInfo = _dataMetaInfos.SafeAdd(date, d =>
+				metaInfo = _dateMetaInfos.SafeAdd(date, d =>
 				{
 					var info = Serializer.CreateMetaInfo(date);
 					info.Read(stream);
