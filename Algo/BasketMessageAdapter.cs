@@ -51,7 +51,7 @@ namespace StockSharp.Algo
 	/// <summary>
 	/// Adapter-aggregator that allows simultaneously to operate multiple adapters connected to different trading systems.
 	/// </summary>
-	public class BasketMessageAdapter : MessageAdapter
+	public class BasketMessageAdapter : MessageAdapter, IMessageAdapterProvider
 	{
 		private sealed class InnerAdapterList : CachedSynchronizedList<IMessageAdapter>, IInnerAdapterList
 		{
@@ -290,14 +290,14 @@ namespace StockSharp.Algo
 				case MessageTypes.OrderGroupCancel:
 				{
 					var ordMsg = (OrderMessage)message;
-					ProcessPortfolioMessage(ordMsg.PortfolioName, ordMsg);
+					ProcessAdapterMessage(ordMsg.PortfolioName, ordMsg);
 					break;
 				}
 
 				case MessageTypes.OrderPairReplace:
 				{
 					var ordMsg = (OrderPairReplaceMessage)message;
-					ProcessPortfolioMessage(ordMsg.Message1.PortfolioName, ordMsg);
+					ProcessAdapterMessage(ordMsg.Message1.PortfolioName, ordMsg);
 					break;
 				}
 
@@ -416,6 +416,16 @@ namespace StockSharp.Algo
 					break;
 				}
 			}
+		}
+
+		private void ProcessAdapterMessage(string portfolioName, Message message)
+		{
+			var adapter = message.Adapter;
+
+			if (adapter == null)
+				ProcessPortfolioMessage(portfolioName, message);
+			else
+				adapter.SendInMessage(message);
 		}
 
 		private void ProcessPortfolioMessage(string portfolioName, Message message)
@@ -659,6 +669,18 @@ namespace StockSharp.Algo
 			_hearbeatAdapters.Values.ForEach(a => a.Parent = null);
 
 			base.DisposeManaged();
+		}
+
+		IEnumerable<IMessageAdapter> IMessageAdapterProvider.Adapters => InnerAdapters;
+
+		IMessageAdapter IMessageAdapterProvider.GetAdapter(string portfolioName)
+		{
+			return Portfolios.TryGetValue(portfolioName);
+		}
+
+		void IMessageAdapterProvider.SetAdapter(string portfolioName, IMessageAdapter adapter)
+		{
+			Portfolios[portfolioName] = adapter;
 		}
 	}
 }

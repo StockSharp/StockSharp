@@ -90,6 +90,7 @@
     <Compile Include="Extensions.cs" />
     <Compile Include="IExtendableEntity.cs" />
     <Compile Include="IMessageAdapter.cs" />
+    <Compile Include="IMessageAdapterProvider.cs" />
     <Compile Include="IMessageAdapterWrapper.cs" />
     <Compile Include="InMemoryMessageChannel.cs" />
     <Compile Include="IOrderLogMarketDepthBuilder.cs" />
