@@ -61,13 +61,13 @@ namespace StockSharp.Algo.Storages.Csv
 		/// Read data from the specified reader.
 		/// </summary>
 		/// <param name="reader">CSV reader.</param>
-		/// <param name="date">Date.</param>
+		/// <param name="metaInfo">Meta-information on data for one day.</param>
 		/// <returns>Data.</returns>
-		protected override TimeQuoteChange Read(FastCsvReader reader, DateTime date)
+		protected override TimeQuoteChange Read(FastCsvReader reader, IMarketDataMetaInfo metaInfo)
 		{
 			return new TimeQuoteChange
 			{
-				ServerTime = reader.ReadTime(date),
+				ServerTime = reader.ReadTime(metaInfo.Date),
 				Price = reader.ReadDecimal(),
 				Volume = reader.ReadDecimal(),
 				Side = reader.ReadEnum<Sides>()

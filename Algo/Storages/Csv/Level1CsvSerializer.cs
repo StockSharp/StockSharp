@@ -79,14 +79,14 @@ namespace StockSharp.Algo.Storages.Csv
 		/// Read data from the specified reader.
 		/// </summary>
 		/// <param name="reader">CSV reader.</param>
-		/// <param name="date">Date.</param>
+		/// <param name="metaInfo">Meta-information on data for one day.</param>
 		/// <returns>Data.</returns>
-		protected override Level1ChangeMessage Read(FastCsvReader reader, DateTime date)
+		protected override Level1ChangeMessage Read(FastCsvReader reader, IMarketDataMetaInfo metaInfo)
 		{
 			var level1 = new Level1ChangeMessage
 			{
 				SecurityId = SecurityId,
-				ServerTime = reader.ReadTime(date),
+				ServerTime = reader.ReadTime(metaInfo.Date),
 			};
 
 			foreach (var field in _level1Fields)

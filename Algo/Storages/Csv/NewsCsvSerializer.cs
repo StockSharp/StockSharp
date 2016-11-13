@@ -53,13 +53,13 @@ namespace StockSharp.Algo.Storages.Csv
 		/// Read data from the specified reader.
 		/// </summary>
 		/// <param name="reader">CSV reader.</param>
-		/// <param name="date">Date.</param>
+		/// <param name="metaInfo">Meta-information on data for one day.</param>
 		/// <returns>Data.</returns>
-		protected override NewsMessage Read(FastCsvReader reader, DateTime date)
+		protected override NewsMessage Read(FastCsvReader reader, IMarketDataMetaInfo metaInfo)
 		{
 			var news = new NewsMessage
 			{
-				ServerTime = reader.ReadTime(date),
+				ServerTime = reader.ReadTime(metaInfo.Date),
 				Headline = reader.ReadString(),
 				Source = reader.ReadString(),
 				Url = reader.ReadString().To<Uri>(),
