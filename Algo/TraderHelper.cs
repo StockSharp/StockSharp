@@ -2889,11 +2889,17 @@ namespace StockSharp.Algo
 		/// </summary>
 		public const string SecurityColonSeparator = "##COLON##";
 
+		/// <summary>
+		/// The delimiter, replacing '|' in the path for instruments with id like AA-CA|SPB@SPBEX. Is equal to '##VBAR##'.
+		/// </summary>
+		public const string SecurityVerticalBarSeparator = "##VBAR##";
+
 		private static readonly CachedSynchronizedDictionary<string, string> _securitySeparators = new CachedSynchronizedDictionary<string, string>
 		{
 			{ "/", SecurityPairSeparator },
 			{ "*", SecurityStarSeparator },
-			{ ":", SecurityColonSeparator }
+			{ ":", SecurityColonSeparator },
+			{ "|", SecurityVerticalBarSeparator },
 		};
 
 		// http://stackoverflow.com/questions/62771/how-check-if-given-string-is-legal-allowed-file-name-under-windows
