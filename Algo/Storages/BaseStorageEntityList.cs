@@ -64,6 +64,8 @@ namespace StockSharp.Algo.Storages
 				throw new ArgumentNullException(nameof(entity));
 
 			base.Add(entity);
+
+			_addedRange?.Invoke(new[] { entity });
 		}
 
 		/// <summary>
@@ -76,7 +78,13 @@ namespace StockSharp.Algo.Storages
 			if (entity == null)
 				throw new ArgumentNullException(nameof(entity));
 
-			return base.Remove(entity);
+			if (base.Remove(entity))
+			{
+				_removedRange?.Invoke(new[] { entity });
+				return true;
+			}
+			else
+				return false;
 		}
 
 		/// <summary>
