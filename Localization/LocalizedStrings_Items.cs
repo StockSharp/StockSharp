@@ -27318,12 +27318,12 @@ namespace StockSharp.Localization
 		public static string Str2925 => GetString(Str2925Key);
 
 		/// <summary>
-		/// Board not selected.
+		/// Board is not specified.
 		/// </summary>
 		public const string Str2926Key = "Str2926";
 
 		/// <summary>
-		/// Board not selected.
+		/// Board is not specified.
 		/// </summary>
 		public static string Str2926 => GetString(Str2926Key);
 

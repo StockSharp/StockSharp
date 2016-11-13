@@ -2735,7 +2735,7 @@ Str2922;Change security;Изменить инструмент
 Str2923;Security code is not filled.;Не заполнен код инструмента.
 Str2924;Volume step is not filled.;Не заполнен шаг объема.
 Str2925;Price step is not filled.;Не заполнен шаг цены.
-Str2926;Board not selected.;Не выбрана площадка.
+Str2926;Board is not specified.;Не выбрана площадка.
 Str2927Params;Security {0} already exists in the database.;Инструмент {0} уже существует в базе данных.
 Str2928;Process must be stopped. Would you like to do it now?;Необходимо остановить операцию. Сделать это сейчас?
 Str2929Params;File {0} has wrong format.;Файл {0} имеет неправильный формат.
