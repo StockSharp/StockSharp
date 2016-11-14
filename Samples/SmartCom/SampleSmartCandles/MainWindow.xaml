@@ -3,10 +3,9 @@
 		xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
 		xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 		xmlns:loc="clr-namespace:StockSharp.Localization;assembly=StockSharp.Localization"
-		xmlns:sx="clr-namespace:StockSharp.Xaml;assembly=StockSharp.Xaml"
 		xmlns:smartCom="clr-namespace:StockSharp.SmartCom.Xaml;assembly=StockSharp.SmartCom"
         xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
-        xmlns:propertyGrid="http://schemas.stocksharp.com/xaml"
+        xmlns:sx="http://schemas.stocksharp.com/xaml"
         Title="{x:Static loc:LocalizedStrings.XamlStr568}" Height="160" Width="715">
     <Grid>
 		<Grid.ColumnDefinitions>
@@ -48,7 +47,7 @@
 		
 		<RadioButton x:Name="IsRealTime" IsChecked="True" Content="Real-Time" Grid.Column="0" Grid.Row="2" FlowDirection="RightToLeft" VerticalAlignment="Center" Click="OnChartTypeChanged" />
         <Grid x:Name="CandleSettingsEditorGrid" Grid.Column="1" Grid.Row="2" Grid.ColumnSpan="3">
-            <propertyGrid:CandleSettingsEditor x:Name="RealTimeSettings" />
+            <sx:CandleSettingsEditor x:Name="RealTimeSettings" />
         </Grid>
 		
 		<RadioButton x:Name="IsHistory" Content="{x:Static loc:LocalizedStrings.History}" Grid.Column="0" Grid.Row="3" FlowDirection="RightToLeft" VerticalAlignment="Center" Click="OnChartTypeChanged" />

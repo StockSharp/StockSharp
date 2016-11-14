@@ -3,7 +3,7 @@
 		xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 		xmlns:loc="clr-namespace:StockSharp.Localization;assembly=StockSharp.Localization"
 		Title="{x:Static loc:LocalizedStrings.XamlStr562}" Height="520" Width="834"
-		xmlns:sx="clr-namespace:StockSharp.Xaml;assembly=StockSharp.Xaml"
+		xmlns:sx="http://schemas.stocksharp.com/xaml"
 		xmlns:ex="clr-namespace:Ecng.Xaml.Converters;assembly=Ecng.Xaml"
         xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
         xmlns:charting="http://schemas.stocksharp.com/xaml"
