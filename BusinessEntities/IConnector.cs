@@ -119,6 +119,26 @@ namespace StockSharp.BusinessEntities
 		event Action<IEnumerable<Order>> StopOrdersChanged;
 
 		/// <summary>
+		/// Stop-order registration error event.
+		/// </summary>
+		event Action<OrderFail> StopOrderRegisterFailed;
+
+		/// <summary>
+		/// Stop-order cancellation error event.
+		/// </summary>
+		event Action<OrderFail> StopOrderCancelFailed;
+
+		/// <summary>
+		/// Stop-order received.
+		/// </summary>
+		event Action<Order> NewStopOrder;
+
+		/// <summary>
+		/// Stop order state change event.
+		/// </summary>
+		event Action<Order> StopOrderChanged;
+
+		/// <summary>
 		/// Security received.
 		/// </summary>
 		event Action<Security> NewSecurity;

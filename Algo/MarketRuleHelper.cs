@@ -195,7 +195,7 @@ namespace StockSharp.Algo
 			protected override void Subscribe()
 			{
 				if (Order.Type == OrderTypes.Conditional)
-					Connector.StopOrdersCancelFailed += OnOrdersCancelFailed;
+					Connector.StopOrderCancelFailed += OnOrderCancelFailed;
 				else
 					Connector.OrderCancelFailed += OnOrderCancelFailed;
 			}
@@ -203,14 +203,9 @@ namespace StockSharp.Algo
 			protected override void UnSubscribe()
 			{
 				if (Order.Type == OrderTypes.Conditional)
-					Connector.StopOrdersCancelFailed -= OnOrdersCancelFailed;
+					Connector.StopOrderCancelFailed -= OnOrderCancelFailed;
 				else
 					Connector.OrderCancelFailed -= OnOrderCancelFailed;
-			}
-
-			private void OnOrdersCancelFailed(IEnumerable<OrderFail> fails)
-			{
-				fails.ForEach(OnOrderCancelFailed);
 			}
 
 			private void OnOrderCancelFailed(OrderFail fail)
@@ -246,8 +241,8 @@ namespace StockSharp.Algo
 			{
 				if (Order.Type == OrderTypes.Conditional)
 				{
-					Connector.StopOrdersChanged += OnOrdersChanged;
-					Connector.NewStopOrders += OnOrdersChanged;
+					Connector.StopOrderChanged += OnOrderChanged;
+					Connector.NewStopOrder += OnOrderChanged;
 				}
 				else
 				{
@@ -260,19 +255,14 @@ namespace StockSharp.Algo
 			{
 				if (Order.Type == OrderTypes.Conditional)
 				{
-					Connector.StopOrdersChanged -= OnOrdersChanged;
-					Connector.NewStopOrders -= OnOrdersChanged;
+					Connector.StopOrderChanged -= OnOrderChanged;
+					Connector.NewStopOrder -= OnOrderChanged;
 				}
 				else
 				{
 					Connector.OrderChanged -= OnOrderChanged;
 					Connector.NewOrder -= OnOrderChanged;
 				}
-			}
-
-			private void OnOrdersChanged(IEnumerable<Order> orders)
-			{
-				orders.ForEach(OnOrderChanged);
 			}
 
 			private void OnOrderChanged(Order order)
@@ -335,8 +325,8 @@ namespace StockSharp.Algo
 			{
 				if (Order.Type == OrderTypes.Conditional)
 				{
-					Connector.StopOrdersChanged += OnOrdersChanged;
-					Connector.NewStopOrders += OnOrdersChanged;
+					Connector.StopOrderChanged += OnOrderChanged;
+					Connector.NewStopOrder += OnOrderChanged;
 				}
 				else
 				{
@@ -351,8 +341,8 @@ namespace StockSharp.Algo
 			{
 				if (Order.Type == OrderTypes.Conditional)
 				{
-					Connector.StopOrdersChanged -= OnOrdersChanged;
-					Connector.NewStopOrders -= OnOrdersChanged;
+					Connector.StopOrderChanged -= OnOrderChanged;
+					Connector.NewStopOrder -= OnOrderChanged;
 				}
 				else
 				{
@@ -361,11 +351,6 @@ namespace StockSharp.Algo
 				}
 
 				base.UnSubscribe();
-			}
-
-			private void OnOrdersChanged(IEnumerable<Order> orders)
-			{
-				orders.ForEach(OnOrderChanged);
 			}
 
 			private void OnOrderChanged(Order order)

@@ -88,6 +88,26 @@ namespace StockSharp.Algo
 		public event Action<IEnumerable<Order>> StopOrdersChanged;
 
 		/// <summary>
+		/// Stop-order registration error event.
+		/// </summary>
+		public event Action<OrderFail> StopOrderRegisterFailed;
+
+		/// <summary>
+		/// Stop-order cancellation error event.
+		/// </summary>
+		public event Action<OrderFail> StopOrderCancelFailed;
+
+		/// <summary>
+		/// Stop-order received.
+		/// </summary>
+		public event Action<Order> NewStopOrder;
+
+		/// <summary>
+		/// Stop order state change event.
+		/// </summary>
+		public event Action<Order> StopOrderChanged;
+
+		/// <summary>
 		/// Security received.
 		/// </summary>
 		public event Action<Security> NewSecurity;
@@ -329,18 +349,30 @@ namespace StockSharp.Algo
 		/// <summary>
 		/// To call the event <see cref="NewStopOrders"/>.
 		/// </summary>
-		/// <param name="stopOrders">Stop orders that should be passed to the event.</param>
-		private void RaiseNewStopOrders(IEnumerable<Order> stopOrders)
+		/// <param name="stopOrder">Stop order that should be passed to the event.</param>
+		private void RaiseNewStopOrder(Order stopOrder)
 		{
-			NewStopOrders?.Invoke(stopOrders);
+			NewStopOrder?.Invoke(stopOrder);
+			NewStopOrders?.Invoke(new[] { stopOrder });
 		}
 
 		/// <summary>
 		/// To call the event <see cref="StopOrdersChanged"/>.
 		/// </summary>
-		/// <param name="stopOrders">Stop orders that should be passed to the event.</param>
+		/// <param name="stopOrder">Stop orders that should be passed to the event.</param>
+		private void RaiseStopOrderChanged(Order stopOrder)
+		{
+			StopOrderChanged?.Invoke(stopOrder);
+			StopOrdersChanged?.Invoke(new[] { stopOrder });
+		}
+
 		private void RaiseStopOrdersChanged(IEnumerable<Order> stopOrders)
 		{
+			foreach (var stopOrder in stopOrders)
+			{
+				StopOrderChanged?.Invoke(stopOrder);
+			}
+
 			StopOrdersChanged?.Invoke(stopOrders);
 		}
 
@@ -359,19 +391,21 @@ namespace StockSharp.Algo
 		/// <summary>
 		/// To call the event <see cref="StopOrdersRegisterFailed"/>.
 		/// </summary>
-		/// <param name="fails">Error information that should be passed to the event.</param>
-		private void RaiseStopOrdersRegisterFailed(IEnumerable<OrderFail> fails)
+		/// <param name="fail">Error information that should be passed to the event.</param>
+		private void RaiseStopOrdersRegisterFailed(OrderFail fail)
 		{
-			StopOrdersRegisterFailed?.Invoke(fails);
+			StopOrderRegisterFailed?.Invoke(fail);
+			StopOrdersRegisterFailed?.Invoke(new[] { fail });
 		}
 
 		/// <summary>
 		/// To call the event <see cref="StopOrdersCancelFailed"/>.
 		/// </summary>
-		/// <param name="fails">Error information that should be passed to the event.</param>
-		private void RaiseStopOrdersCancelFailed(IEnumerable<OrderFail> fails)
+		/// <param name="fail">Error information that should be passed to the event.</param>
+		private void RaiseStopOrdersCancelFailed(OrderFail fail)
 		{
-			StopOrdersCancelFailed?.Invoke(fails);
+			StopOrderCancelFailed?.Invoke(fail);
+			StopOrdersCancelFailed?.Invoke(new[] { fail });
 		}
 
 		private void RaiseMassOrderCanceled(long transactionId)

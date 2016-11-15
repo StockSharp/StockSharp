@@ -1584,7 +1584,7 @@ namespace StockSharp.Algo
 						this.AddOrderInfoLog(order, "New order");
 
 						if (order.Type == OrderTypes.Conditional)
-							RaiseNewStopOrders(new[] { order });
+							RaiseNewStopOrder(order);
 						else
 							RaiseNewOrder(order);
 					}
@@ -1593,7 +1593,7 @@ namespace StockSharp.Algo
 						this.AddOrderInfoLog(order, "Order changed");
 
 						if (order.Type == OrderTypes.Conditional)
-							RaiseStopOrdersChanged(new[] { order });
+							RaiseStopOrderChanged(order);
 						else
 							RaiseOrderChanged(order);
 					}
@@ -1630,7 +1630,7 @@ namespace StockSharp.Algo
 						_entityCache.AddRegisterFail(fail);
 
 						if (isStop)
-							RaiseStopOrdersRegisterFailed(new[] { fail });
+							RaiseStopOrdersRegisterFailed(fail);
 						else
 							RaiseOrderRegisterFailed(fail);
 					}
@@ -1639,7 +1639,7 @@ namespace StockSharp.Algo
 						_entityCache.AddCancelFail(fail);
 
 						if (isStop)
-							RaiseStopOrdersCancelFailed(new[] { fail });
+							RaiseStopOrdersCancelFailed(fail);
 						else
 							RaiseOrderCancelFailed(fail);
 					}
