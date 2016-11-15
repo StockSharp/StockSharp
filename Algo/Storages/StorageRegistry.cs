@@ -1140,11 +1140,6 @@ namespace StockSharp.Algo.Storages
 				return _securities.Cache.Filter(criteria);
 			}
 
-			object ISecurityProvider.GetNativeId(Security security)
-			{
-				return null;
-			}
-
 			void ISecurityStorage.Save(Security security)
 			{
 				if (!_securities.TryAdd(security))

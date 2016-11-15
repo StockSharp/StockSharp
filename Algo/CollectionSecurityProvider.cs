@@ -67,10 +67,5 @@ namespace StockSharp.Algo
 			//return provider == null ? Securities.Filter(criteria) : provider.Lookup(criteria);
 			return this.Filter(criteria);
 		}
-
-		object ISecurityProvider.GetNativeId(Security security)
-		{
-			return null;
-		}
 	}
 }

@@ -100,11 +100,6 @@ namespace StockSharp.Algo
 			return securities;
 		}
 
-		object ISecurityProvider.GetNativeId(Security security)
-		{
-			return null;
-		}
-
 		private void AddSecurities(IEnumerable<Security> securities)
 		{
 			securities.ForEach(_trie.Add);

@@ -57,11 +57,6 @@ namespace StockSharp.Algo.Storages
 
 		int ISecurityProvider.Count => _cacheByNativeId.Count;
 
-		object ISecurityProvider.GetNativeId(Security security)
-		{
-			return _cacheByNativeId.SyncGet(d => d.FirstOrDefault(p => p.Value == security).Key);
-		}
-
 		/// <summary>
 		/// Get native id.
 		/// </summary>
