@@ -453,11 +453,6 @@ namespace StockSharp.Algo.Storages.Csv
 				return security == null ? Enumerable.Empty<Security>() : new[] { security };
 			}
 
-			public object GetNativeId(Security security)
-			{
-				return null;
-			}
-
 			public void Delete(Security security)
 			{
 				Remove(security);

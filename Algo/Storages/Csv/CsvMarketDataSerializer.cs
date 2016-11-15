@@ -175,7 +175,7 @@ namespace StockSharp.Algo.Storages.Csv
 		}
 
 		/// <summary>
-		/// Cast data into stream.
+		/// Save data into stream.
 		/// </summary>
 		/// <param name="stream">Data stream.</param>
 		/// <param name="data">Data.</param>

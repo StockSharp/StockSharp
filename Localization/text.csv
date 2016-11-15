@@ -5633,7 +5633,7 @@ DocStr1289;First record time;Время первой записи
 DocStr1290;Last record time;Время последней записи
 DocStr1291;Last record identifier;Идентификатор последней записи
 DocStr1292;To create empty meta-information;Создать пустую мета-информацию
-DocStr1293;Cast data into stream;Преобразовать данные в поток байтов
+DocStr1293;Save data into stream;Сохранить данные в поток байтов
 DocStr1294;To load data from the stream;Загрузить данные из потока
 DocStr1295;The stream;Поток
 DocStr1296;The market data storage, saving data in the cache-storage;Хранилище маркет-данных, сохраняющее данных в кэш-хранилище

@@ -28,7 +28,7 @@ namespace StockSharp.Algo.Storages.Csv
 	class CandleCsvMetaInfo<TCandleMessage> : MetaInfo
 		where TCandleMessage : CandleMessage, new()
 	{
-		private readonly Dictionary<DateTimeOffset, TCandleMessage> _items = new Dictionary<DateTimeOffset, TCandleMessage>(); 
+		private readonly Dictionary<DateTime, TCandleMessage> _items = new Dictionary<DateTime, TCandleMessage>(); 
 
 		private readonly Encoding _encoding;
 		private readonly SecurityId _securityId;
@@ -43,6 +43,9 @@ namespace StockSharp.Algo.Storages.Csv
 		{
 			if (encoding == null)
 				throw new ArgumentNullException(nameof(encoding));
+
+			if (arg == null)
+				throw new ArgumentNullException(nameof(arg));
 
 			_encoding = encoding;
 			_securityId = securityId;
@@ -68,15 +71,17 @@ namespace StockSharp.Algo.Storages.Csv
 				{
 					var message = Read(reader);
 
-					_items.Add(message.OpenTime, message);
+					var openTime = message.OpenTime.UtcDateTime;
+
+					_items.Add(openTime, message);
 
 					if (!firstTimeRead)
 					{
-						FirstTime = message.OpenTime.UtcDateTime;
+						FirstTime = openTime;
 						firstTimeRead = true;
 					}
 
-					LastTime = message.OpenTime.UtcDateTime;
+					LastTime = openTime;
 
 					count++;
 				}
@@ -105,14 +110,16 @@ namespace StockSharp.Algo.Storages.Csv
 
 		public void Write(CsvFileWriter writer, TCandleMessage message)
 		{
-			if (!_items.ContainsKey(message.OpenTime) && message.OpenTime.UtcDateTime > LastTime)
+			var openTime = message.OpenTime.UtcDateTime;
+
+			if (!_items.ContainsKey(openTime) && openTime > LastTime)
 			{
 				_isOverride = false;
 			}
 			else
 				_isOverride = true;
 
-			_items[message.OpenTime] = message;
+			_items[openTime] = message;
 
 			if (_isOverride)
 			{

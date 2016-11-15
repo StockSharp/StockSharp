@@ -38,7 +38,7 @@ namespace StockSharp.Algo.Storages
 		IMarketDataMetaInfo CreateMetaInfo(DateTime date);
 
 		/// <summary>
-		/// Cast data into stream.
+		/// Save data into stream.
 		/// </summary>
 		/// <param name="stream">Data stream.</param>
 		/// <param name="data">Data.</param>
@@ -61,7 +61,7 @@ namespace StockSharp.Algo.Storages
 	public interface IMarketDataSerializer<TData> : IMarketDataSerializer
 	{
 		/// <summary>
-		/// Cast data into stream.
+		/// Save data into stream.
 		/// </summary>
 		/// <param name="stream">Data stream.</param>
 		/// <param name="data">Data.</param>

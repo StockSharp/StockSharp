@@ -15,7 +15,6 @@ Copyright 2010 by StockSharp, LLC
 #endregion S# License
 namespace StockSharp.Algo.Storages.Csv
 {
-	using System;
 	using System.Text;
 
 	using Ecng.Common;
