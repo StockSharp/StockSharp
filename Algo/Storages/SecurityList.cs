@@ -210,11 +210,6 @@ namespace StockSharp.Algo.Storages
 			return this.Filter(criteria);
 		}
 
-		object ISecurityProvider.GetNativeId(Security security)
-		{
-			return null;
-		}
-
 		private IEnumerable<Security> ReadAllByCodeAndType(Security criteria)
 		{
 			var fields = new[]

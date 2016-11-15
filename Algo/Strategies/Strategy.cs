@@ -2644,11 +2644,6 @@ namespace StockSharp.Algo.Strategies
 			return SafeGetConnector().Lookup(criteria);
 		}
 
-		object ISecurityProvider.GetNativeId(Security security)
-		{
-			return SafeGetConnector().GetNativeId(security);
-		}
-
 		//private bool IsChildOrder(Order order)
 		//{
 		//	var info = _ordersInfo.TryGetValue(order);
