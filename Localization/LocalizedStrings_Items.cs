@@ -23668,16 +23668,6 @@ namespace StockSharp.Localization
 		public static string Str2529 => GetString(Str2529Key);
 
 		/// <summary>
-		/// In detail
-		/// </summary>
-		public const string Str2530Key = "Str2530";
-
-		/// <summary>
-		/// In detail
-		/// </summary>
-		public static string Str2530 => GetString(Str2530Key);
-
-		/// <summary>
 		/// Interactive Brokers does not support timeframe equal {0}.
 		/// </summary>
 		public const string Str2531ParamsKey = "Str2531Params";

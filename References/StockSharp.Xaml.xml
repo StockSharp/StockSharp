@@ -27,6 +27,11 @@
             Initializes a new instance of the <see cref="T:StockSharp.Xaml.AdvertisePanel" />.
             </summary>
     </member>
+    <member name="F:StockSharp.Xaml.AdvertisePanel.ClientProperty">
+      <summary>
+        <see cref="T:System.Windows.DependencyProperty" /> for <see cref="P:StockSharp.Xaml.AdvertisePanel.Client" />.
+            </summary>
+    </member>
     <member name="P:StockSharp.Xaml.AdvertisePanel.Client">
       <summary>
             The client for access to the StockSharp notification service.
@@ -882,6 +887,11 @@
             Available portfolios.
             </summary>
     </member>
+    <member name="P:StockSharp.Xaml.PropertyGrid.PortfolioEditor.SelectedPortfolio">
+      <summary>
+            The selected portfolio.
+            </summary>
+    </member>
     <member name="M:StockSharp.Xaml.PropertyGrid.PortfolioEditor.#ctor">
       <summary>
             Initializes a new instance of the <see cref="T:StockSharp.Xaml.PropertyGrid.PortfolioEditor" />.
@@ -908,6 +918,16 @@
     <member name="P:StockSharp.Xaml.PropertyGrid.SecurityEditor.SecurityProvider">
       <summary>
             The provider of information about instruments.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.PropertyGrid.SecurityEditor.SelectedSecurity">
+      <summary>
+            The selected instrument.
+            </summary>
+    </member>
+    <member name="E:StockSharp.Xaml.PropertyGrid.SecurityEditor.SecuritySelected">
+      <summary>
+            The selected instrument change event.
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.PropertyGrid.SecurityEditor.#ctor">
@@ -2021,6 +2041,16 @@
             The market data provider.
             </summary>
     </member>
+    <member name="P:StockSharp.Xaml.OrderConditionalWindow.MessageAdapterProvider">
+      <summary>
+            The message adapter's provider.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.OrderConditionalWindow.Adapters">
+      <summary>
+            All available adapters.
+            </summary>
+    </member>
     <member name="P:StockSharp.Xaml.OrderConditionalWindow.Adapter">
       <summary>
             The message adapter.
@@ -2108,54 +2138,6 @@
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.PortfolioMessageAdaptersWindow.InitializeComponent">
-      <summary>
-            InitializeComponent
-            </summary>
-    </member>
-    <member name="T:StockSharp.Xaml.PortfolioEditor">
-      <summary>
-            The control activating <see cref="T:StockSharp.Xaml.PortfolioPickerWindow" />.
-            </summary>
-      <summary>
-            PortfolioEditor
-            </summary>
-    </member>
-    <member name="F:StockSharp.Xaml.PortfolioEditor.ClearCommand">
-      <summary>
-            The command to delete the selected instrument.
-            </summary>
-    </member>
-    <member name="M:StockSharp.Xaml.PortfolioEditor.#ctor">
-      <summary>
-            Initializes a new instance of the <see cref="T:StockSharp.Xaml.PortfolioEditor" />.
-            </summary>
-    </member>
-    <member name="F:StockSharp.Xaml.PortfolioEditor.PortfoliosProperty">
-      <summary>
-        <see cref="T:System.Windows.DependencyProperty" /> for <see cref="P:StockSharp.Xaml.PortfolioEditor.Portfolios" />.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Xaml.PortfolioEditor.Portfolios">
-      <summary>
-            Available portfolios.
-            </summary>
-    </member>
-    <member name="F:StockSharp.Xaml.PortfolioEditor.SelectedPortfolioProperty">
-      <summary>
-        <see cref="T:System.Windows.DependencyProperty" /> for <see cref="P:StockSharp.Xaml.PortfolioEditor.SelectedPortfolio" />.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Xaml.PortfolioEditor.SelectedPortfolio">
-      <summary>
-            The selected portfolio.
-            </summary>
-    </member>
-    <member name="E:StockSharp.Xaml.PortfolioEditor.PortfolioSelected">
-      <summary>
-            The selected portfolio change event.
-            </summary>
-    </member>
-    <member name="M:StockSharp.Xaml.PortfolioEditor.InitializeComponent">
       <summary>
             InitializeComponent
             </summary>
@@ -2293,59 +2275,6 @@
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.SecurityCreateWindow.InitializeComponent">
-      <summary>
-            InitializeComponent
-            </summary>
-    </member>
-    <member name="T:StockSharp.Xaml.SecurityEditor">
-      <summary>
-            The control activating <see cref="T:StockSharp.Xaml.SecurityPickerWindow" />.
-            </summary>
-      <summary>
-            SecurityEditor
-            </summary>
-    </member>
-    <member name="F:StockSharp.Xaml.SecurityEditor.ClearCommand">
-      <summary>
-            The command to delete the selected instrument.
-            </summary>
-    </member>
-    <member name="M:StockSharp.Xaml.SecurityEditor.#ctor">
-      <summary>
-            Initializes a new instance of the <see cref="T:StockSharp.Xaml.SecurityEditor" />.
-            </summary>
-    </member>
-    <member name="F:StockSharp.Xaml.SecurityEditor.SecurityProviderProperty">
-      <summary>
-        <see cref="T:System.Windows.DependencyProperty" /> for <see cref="P:StockSharp.Xaml.SecurityEditor.SecurityProvider" />.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Xaml.SecurityEditor.SecurityProvider">
-      <summary>
-            The provider of information about instruments.
-            </summary>
-    </member>
-    <member name="F:StockSharp.Xaml.SecurityEditor.SelectedSecurityProperty">
-      <summary>
-        <see cref="T:System.Windows.DependencyProperty" /> for <see cref="P:StockSharp.Xaml.SecurityEditor.SelectedSecurity" />.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Xaml.SecurityEditor.SelectedSecurity">
-      <summary>
-            The selected instrument.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Xaml.SecurityEditor.Text">
-      <summary>
-            Gets or sets the text of the currently selected item.
-            </summary>
-    </member>
-    <member name="E:StockSharp.Xaml.SecurityEditor.SecuritySelected">
-      <summary>
-            The selected instrument change event.
-            </summary>
-    </member>
-    <member name="M:StockSharp.Xaml.SecurityEditor.InitializeComponent">
       <summary>
             InitializeComponent
             </summary>
@@ -2915,6 +2844,26 @@
     <member name="E:StockSharp.Xaml.GuiConnector`1.OrderCancelFailed">
       <summary>
             Order cancellation error event.
+            </summary>
+    </member>
+    <member name="E:StockSharp.Xaml.GuiConnector`1.StopOrderRegisterFailed">
+      <summary>
+            Stop-order registration error event.
+            </summary>
+    </member>
+    <member name="E:StockSharp.Xaml.GuiConnector`1.StopOrderCancelFailed">
+      <summary>
+            Stop-order cancellation error event.
+            </summary>
+    </member>
+    <member name="E:StockSharp.Xaml.GuiConnector`1.NewStopOrder">
+      <summary>
+            Stop-order received.
+            </summary>
+    </member>
+    <member name="E:StockSharp.Xaml.GuiConnector`1.StopOrderChanged">
+      <summary>
+            Stop order state change event.
             </summary>
     </member>
     <member name="E:StockSharp.Xaml.GuiConnector`1.NewMarketDepth">

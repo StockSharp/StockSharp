@@ -2368,7 +2368,6 @@ Str2526Params;Address = {0};Адрес = {0}
 Str2527Params;Unknown status {0}.;Неизвестный статус {0}.
 Str2528Params;Numeric value {0} is out of range.;Числовое значение {0} вне диапазона.
 Str2529;System;Системные
-Str2530;In detail;Детально
 Str2531Params;Interactive Brokers does not support timeframe equal {0}.;Interactive Brokers не поддерживает тайм-фрейм, равный {0}.
 Str2532;TWS address.;Адрес TWS.
 Str2535;Real-time data;Реалтайм данные
@@ -13499,3 +13498,13 @@ DocStr9315;An error of portfolio lookup operation. The value will be {0} if oper
 DocStr9316;Attribute, applied to methods or parameters, to create input socket;Атрибут, применяемый к методу или параметру, для создания входящего сокета.
 DocStr9317;The window for set the secret;Окно установки секрет
 DocStr9318;The secret;Секрет
+DocStr9319;Stop order that should be passed to the event;Стоп-заявка, которую необходимо передавать в событие
+DocStr9320;Is override all data;Перезаписать все данные
+DocStr9321;The delimiter, replacing '|' in the path for instruments with id like AA-CA|SPB@SPBEX. Is equal to '##VBAR##';Разделитель, заменяющий '|' в пути для инструментов вида AA-CA|SPB@SPBEX. Равно '##VBAR##'
+DocStr9322;The message adapter's provider interface;Интерфейс провайдера адаптеров сообщений
+DocStr9323;All available adapters;Все доступные адаптеры
+DocStr9324;Get adapter by portfolio name;Получить адаптер по имени портфеля
+DocStr9325;The found adapter;Найденный адаптер
+DocStr9326;Make association adapter and portfolio name;Ассоциировать адаптер и имя портфеля
+DocStr9327;The adapter;Адаптер
+DocStr9328;The message adapter's provider;Провайдер адаптеров сообщений

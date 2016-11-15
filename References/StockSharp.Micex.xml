@@ -12891,7 +12891,7 @@
     </member>
     <member name="M:StockSharp.Micex.Xaml.MicexInterfaceEditor.#ctor">
       <summary>
-            Initializes a new instance of the <see cref="T:StockSharp.Micex.Xaml.MicexInterfaceEditor" />.
+            Создать <see cref="T:StockSharp.Micex.Xaml.MicexInterfaceEditor" />.
             </summary>
     </member>
   </members>
