@@ -116,6 +116,7 @@
     <Compile Include="Indicators\Correlation.cs" />
     <Compile Include="Indicators\Covariance.cs" />
     <Compile Include="Indicators\MoneyFlowIndex.cs" />
+    <Compile Include="NativeIdStorageAdapter.cs" />
     <Compile Include="OfflineMessageAdapter.cs" />
     <Compile Include="PnL\PnLMessageAdapter.cs" />
     <Compile Include="Positions\PositionMessageAdapter.cs" />
