@@ -57,8 +57,19 @@ namespace StockSharp.Algo.Storages
 
 			Drive = _storageRegistry.DefaultDrive;
 
+			var isProcessing = false;
+			var sync = new SyncObject();
+
 			ThreadingHelper.Timer(() =>
 			{
+				lock (sync)
+				{
+					if (isProcessing)
+						return;
+
+					isProcessing = true;
+				}
+
 				try
 				{
 					foreach (var pair in GetTicks())
@@ -101,6 +112,11 @@ namespace StockSharp.Algo.Storages
 				catch (Exception excp)
 				{
 					excp.LogError();
+				}
+				finally
+				{
+					lock (sync)
+						isProcessing = false;
 				}
 			}).Interval(TimeSpan.FromSeconds(10));
 		}
