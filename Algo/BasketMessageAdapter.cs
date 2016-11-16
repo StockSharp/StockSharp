@@ -62,7 +62,7 @@ namespace StockSharp.Algo
 
 			public IEnumerable<IMessageAdapter> SortedAdapters
 			{
-				get { return Cache.Where(t => this[t] != -1).OrderBy(t => this[t]).Select(a => _adapterWrappers[a]); }
+				get { return Cache.Where(t => this[t] != -1).OrderBy(t => this[t]).Select(a => a.IsSupportNativeId ? _adapterWrappers[a] : a); }
 			}
 
 			public InnerAdapterList(BasketMessageAdapter basketMessageAdapter)
