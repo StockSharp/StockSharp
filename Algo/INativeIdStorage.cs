@@ -23,7 +23,7 @@ namespace StockSharp.Algo
 		/// </summary>
 		/// <param name="name">Storage name.</param>
 		/// <returns>Security identifiers.</returns>
-		IEnumerable<Tuple<SecurityId, object>> Get(string name);
+		Tuple<SecurityId, object>[] Get(string name);
 
 		/// <summary>
 		/// Try add native security identifier to storage.
@@ -82,7 +82,7 @@ namespace StockSharp.Algo
 		/// </summary>
 		/// <param name="name">Storage name.</param>
 		/// <returns>Security identifiers.</returns>
-		public IEnumerable<Tuple<SecurityId, object>> Get(string name)
+		public Tuple<SecurityId, object>[] Get(string name)
 		{
 			if (name == null)
 				throw new ArgumentNullException(nameof(name));
@@ -90,7 +90,7 @@ namespace StockSharp.Algo
 			var nativeIds = _nativeIds.TryGetValue(name);
 
 			if (nativeIds == null)
-				return Enumerable.Empty<Tuple<SecurityId, object>>();
+				return ArrayHelper.Empty<Tuple<SecurityId, object>>();
 
 			return nativeIds.Select(p => Tuple.Create(p.Key, p.Value)).ToArray();
 		}
