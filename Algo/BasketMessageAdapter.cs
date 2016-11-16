@@ -56,48 +56,33 @@ namespace StockSharp.Algo
 		private sealed class InnerAdapterList : CachedSynchronizedList<IMessageAdapter>, IInnerAdapterList
 		{
 			private readonly Dictionary<IMessageAdapter, int> _enables = new Dictionary<IMessageAdapter, int>();
-			private readonly Dictionary<IMessageAdapter, IMessageAdapter> _adapterWrappers = new Dictionary<IMessageAdapter, IMessageAdapter>();
-
-			private readonly BasketMessageAdapter _basketMessageAdapter;
 
 			public IEnumerable<IMessageAdapter> SortedAdapters
 			{
-				get { return Cache.Where(t => this[t] != -1).OrderBy(t => this[t]).Select(a => a.IsSupportNativeId ? _adapterWrappers[a] : a); }
-			}
-
-			public InnerAdapterList(BasketMessageAdapter basketMessageAdapter)
-			{
-				if (basketMessageAdapter == null)
-					throw new ArgumentNullException(nameof(basketMessageAdapter));
-
-				_basketMessageAdapter = basketMessageAdapter;
+				get { return Cache.Where(t => this[t] != -1).OrderBy(t => this[t]); }
 			}
 
 			protected override bool OnAdding(IMessageAdapter item)
 			{
 				_enables.Add(item, 0);
-				CreateAdapterWrapper(item);
 				return base.OnAdding(item);
 			}
 
 			protected override bool OnInserting(int index, IMessageAdapter item)
 			{
 				_enables.Add(item, 0);
-				CreateAdapterWrapper(item);
 				return base.OnInserting(index, item);
 			}
 
 			protected override bool OnRemoving(IMessageAdapter item)
 			{
 				_enables.Remove(item);
-				_adapterWrappers.Remove(item);
 				return base.OnRemoving(item);
 			}
 
 			protected override bool OnClearing()
 			{
 				_enables.Clear();
-				_adapterWrappers.Clear();
 				return base.OnClearing();
 			}
 
@@ -122,18 +107,6 @@ namespace StockSharp.Algo
 						//_portfolioTraders.Clear();
 					}
 				}
-			}
-
-			private void CreateAdapterWrapper(IMessageAdapter adapter)
-			{
-				if (!adapter.IsSupportNativeId)
-					return;
-
-				var securityAdapter = _basketMessageAdapter.NativeIdStorage != null
-					? new SecurityMessageAdapter(adapter, _basketMessageAdapter.NativeIdStorage)
-					: new SecurityMessageAdapter(adapter);
-
-				_adapterWrappers.Add(adapter, securityAdapter);
 			}
 		}
 
@@ -177,9 +150,7 @@ namespace StockSharp.Algo
 		public BasketMessageAdapter(IdGenerator transactionIdGenerator)
 			: base(transactionIdGenerator)
 		{
-			//NativeIdStorage = new CsvNativeIdStorage(@".\NativeId\");
-
-			_innerAdapters = new InnerAdapterList(this);
+			_innerAdapters = new InnerAdapterList();
 			Portfolios = new SynchronizedDictionary<string, IMessageAdapter>(StringComparer.InvariantCultureIgnoreCase);
 		}
 
@@ -260,6 +231,20 @@ namespace StockSharp.Algo
 			_subscriptionStates.Clear();
 		}
 
+		private IMessageAdapter TryCreateNativeIdAdapter(IMessageAdapter adapter)
+		{
+			var storageName = adapter.NativeIdStorageName;
+
+			if (storageName.IsEmpty())
+				return adapter;
+
+			var nativeIdAdapter = NativeIdStorage != null
+				? new NativeIdMessageAdapter(adapter, NativeIdStorage)
+				: new NativeIdMessageAdapter(adapter);
+
+			return nativeIdAdapter;
+		}
+
 		/// <summary>
 		/// Send message.
 		/// </summary>
@@ -292,7 +277,7 @@ namespace StockSharp.Algo
 
 					_hearbeatAdapters.AddRange(GetSortedAdapters().ToDictionary(a => a, a =>
 					{
-						var hearbeatAdapter = new HeartbeatMessageAdapter(a);
+						var hearbeatAdapter = new HeartbeatMessageAdapter(TryCreateNativeIdAdapter(a));
 						((IMessageAdapter)hearbeatAdapter).Parent = this;
 						hearbeatAdapter.NewOutMessage += m => OnInnerAdapterNewOutMessage(a, m);
 						return hearbeatAdapter;
@@ -490,7 +475,7 @@ namespace StockSharp.Algo
 		{
 			if (!message.IsBack)
 			{
-				var underlyingAdapter = (innerAdapter as SecurityMessageAdapter)?.InnerAdapter ?? innerAdapter;
+				var underlyingAdapter = (innerAdapter as NativeIdMessageAdapter)?.InnerAdapter ?? innerAdapter;
 
 				message.Adapter = underlyingAdapter;
 

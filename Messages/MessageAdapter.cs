@@ -180,9 +180,9 @@ namespace StockSharp.Messages
 		public virtual bool OrderStatusRequired => this.IsMessageSupported(MessageTypes.OrderStatus);
 
 		/// <summary>
-		/// Is native security identifiers supported by adapter.
+		/// Native security identifiers storage name.
 		/// </summary>
-		public virtual bool IsSupportNativeId => false;
+		public virtual string NativeIdStorageName => null;
 
 		/// <summary>
 		/// <see cref="OrderCancelMessage.Volume"/> required to cancel orders.

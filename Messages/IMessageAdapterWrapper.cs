@@ -173,7 +173,7 @@ namespace StockSharp.Messages
 
 		bool IMessageAdapter.OrderStatusRequired => InnerAdapter.OrderStatusRequired;
 
-		bool IMessageAdapter.IsSupportNativeId => InnerAdapter.IsSupportNativeId;
+		string IMessageAdapter.NativeIdStorageName => InnerAdapter.NativeIdStorageName;
 
 		OrderCancelVolumeRequireTypes? IMessageAdapter.OrderCancelVolumeRequired => InnerAdapter.OrderCancelVolumeRequired;
 

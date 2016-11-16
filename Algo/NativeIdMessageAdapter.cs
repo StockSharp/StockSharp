@@ -11,9 +11,9 @@
 	using StockSharp.Messages;
 
 	/// <summary>
-	/// Security message adapter.
+	/// Native id message adapter.
 	/// </summary>
-	public class SecurityMessageAdapter : MessageAdapterWrapper
+	public class NativeIdMessageAdapter : MessageAdapterWrapper
 	{
 		private sealed class InMemoryStorage : INativeIdStorage
 		{
@@ -73,25 +73,31 @@
 		public INativeIdStorage Storage { get; }
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="SecurityMessageAdapter"/>.
+		/// Initializes a new instance of the <see cref="NativeIdMessageAdapter"/>.
 		/// </summary>
 		/// <param name="innerAdapter">The adapter, to which messages will be directed.</param>
-		public SecurityMessageAdapter(IMessageAdapter innerAdapter)
+		public NativeIdMessageAdapter(IMessageAdapter innerAdapter)
 			: this(innerAdapter, new InMemoryStorage())
 		{
 		}
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="SecurityMessageAdapter"/>.
+		/// Initializes a new instance of the <see cref="NativeIdMessageAdapter"/>.
 		/// </summary>
 		/// <param name="innerAdapter">The adapter, to which messages will be directed.</param>
 		/// <param name="storage">Native ids storage.</param>
-		public SecurityMessageAdapter(IMessageAdapter innerAdapter, INativeIdStorage storage)
+		public NativeIdMessageAdapter(IMessageAdapter innerAdapter, INativeIdStorage storage)
 			: base(innerAdapter)
 		{
+			if (storage == null)
+				throw new ArgumentNullException(nameof(storage));
+
 			Storage = storage;
 
-			_storageName = GetStorageName(innerAdapter);
+			_storageName = innerAdapter.NativeIdStorageName;
+
+			if (_storageName.IsEmpty())
+				throw new ArgumentException(nameof(innerAdapter));
 		}
 
 		/// <summary>
@@ -317,12 +323,12 @@
 		}
 
 		/// <summary>
-		/// Create a copy of <see cref="SecurityMessageAdapter"/>.
+		/// Create a copy of <see cref="NativeIdMessageAdapter"/>.
 		/// </summary>
 		/// <returns>Copy.</returns>
 		public override IMessageChannel Clone()
 		{
-			return new SecurityMessageAdapter(InnerAdapter);
+			return new NativeIdMessageAdapter(InnerAdapter);
 		}
 
 		private void ProcessMessage<TMessage>(SecurityId securityId, TMessage message, Func<TMessage, TMessage, TMessage> processSuspend)
@@ -565,20 +571,6 @@
 				default:
 					throw new ArgumentOutOfRangeException(nameof(message), message.Type, LocalizedStrings.Str2770);
 			}
-		}
-
-		private string GetStorageName(IMessageAdapter innerAdapter)
-		{
-			var adapter = innerAdapter;
-			var wrapper = adapter as IMessageAdapterWrapper;
-
-			while (wrapper != null)
-			{
-				adapter = wrapper.InnerAdapter;
-				wrapper = adapter as IMessageAdapterWrapper;
-			}
-
-			return adapter.GetType().Name.Replace("MessageAdapter", string.Empty);
 		}
 	}
 }
