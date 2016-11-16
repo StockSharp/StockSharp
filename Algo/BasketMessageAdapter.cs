@@ -76,14 +76,14 @@ namespace StockSharp.Algo
 			protected override bool OnAdding(IMessageAdapter item)
 			{
 				_enables.Add(item, 0);
-				_adapterWrappers.Add(item, CreateAdapterWrapper(item));
+				CreateAdapterWrapper(item);
 				return base.OnAdding(item);
 			}
 
 			protected override bool OnInserting(int index, IMessageAdapter item)
 			{
 				_enables.Add(item, 0);
-				_adapterWrappers.Add(item, CreateAdapterWrapper(item));
+				CreateAdapterWrapper(item);
 				return base.OnInserting(index, item);
 			}
 
@@ -124,11 +124,16 @@ namespace StockSharp.Algo
 				}
 			}
 
-			private SecurityMessageAdapter CreateAdapterWrapper(IMessageAdapter adapter)
+			private void CreateAdapterWrapper(IMessageAdapter adapter)
 			{
-				return _basketMessageAdapter.NativeIdStorage != null
+				if (!adapter.IsSupportNativeId)
+					return;
+
+				var securityAdapter = _basketMessageAdapter.NativeIdStorage != null
 					? new SecurityMessageAdapter(adapter, _basketMessageAdapter.NativeIdStorage)
 					: new SecurityMessageAdapter(adapter);
+
+				_adapterWrappers.Add(adapter, securityAdapter);
 			}
 		}
 

@@ -90,6 +90,11 @@ namespace StockSharp.Messages
 		bool OrderStatusRequired { get; }
 
 		/// <summary>
+		/// Is native security identifiers supported by adapter.
+		/// </summary>
+		bool IsSupportNativeId { get; }
+
+		/// <summary>
 		/// <see cref="OrderCancelMessage.Volume"/> required to cancel orders.
 		/// </summary>
 		OrderCancelVolumeRequireTypes? OrderCancelVolumeRequired { get; }
