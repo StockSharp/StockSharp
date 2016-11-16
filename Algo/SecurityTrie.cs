@@ -100,7 +100,7 @@ namespace StockSharp.Algo
 		/// Find all instrument by filter.
 		/// </summary>
 		/// <param name="filter">Filter</param>
-		/// <returns>Founded instruments.</returns>
+		/// <returns>Found instruments.</returns>
 		public IEnumerable<Security> Retrieve(string filter)
 		{
 			lock (_sync)

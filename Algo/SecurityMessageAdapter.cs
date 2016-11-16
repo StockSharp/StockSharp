@@ -362,7 +362,7 @@
 
 				if (!isSecCodeEmpty && boardCode.IsEmpty())
 				{
-					SecurityId? foundedId = null;
+					SecurityId? foundId = null;
 
 					lock (_syncRoot)
 					{
@@ -374,10 +374,10 @@
 							if (securityId.SecurityType != null && securityId.SecurityType != id.SecurityType)
 								continue;
 
-							foundedId = id;
+							foundId = id;
 						}
 
-						if (foundedId == null)
+						if (foundId == null)
 						{
 							var tuple = _suspendedMessages.SafeAdd(securityId, key => RefTuple.Create(new List<Message>(), (Dictionary<MessageTypes, Message>)null));
 							tuple.First.Add(message.Clone());
@@ -385,7 +385,7 @@
 						}
 					}
 
-					ReplaceSecurityId(message, foundedId.Value);
+					ReplaceSecurityId(message, foundId.Value);
 
 					//// если указан код и тип инструмента, то пытаемся найти инструмент по ним
 					//if (securityId.SecurityType != null)

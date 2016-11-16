@@ -43176,5 +43176,15 @@ namespace StockSharp.Localization
 		/// Indicator selection
 		/// </summary>
 		public static string IndicatorSelection => GetString(IndicatorSelectionKey);
+
+		/// <summary>
+		/// Securities '{0}' not found.
+		/// </summary>
+		public const string SecuritiesNotFoundKey = "SecuritiesNotFound";
+
+		/// <summary>
+		/// Securities '{0}' not found.
+		/// </summary>
+		public static string SecuritiesNotFound => GetString(SecuritiesNotFoundKey);
 	}
 }

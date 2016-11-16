@@ -102,7 +102,7 @@ namespace StockSharp.Community
 		/// <param name="sessionId">Session ID.</param>
 		/// <param name="from">Minimum creation date.</param>
 		/// <param name="to">Maximum creation date.</param>
-		/// <returns>Founded sessions.</returns>
+		/// <returns>Found sessions.</returns>
 		[OperationContract]
 		StrategyBacktest[] GetBacktests(Guid sessionId, DateTime from, DateTime to);
 

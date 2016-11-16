@@ -4352,6 +4352,7 @@ DirectoryNotExist;Directory '{0}' doesn't exist.;Директория '{0}' не
 FileMask;File mask;Маска файла
 FileMaskDescription;File mask that uses for scanning in directory. For example, candles_*.csv.;Маска файла, которая используется при сканировании директории. Например, candles_*.csv.
 IndicatorSelection;Indicator selection;Выбор индикатора
+SecuritiesNotFound;Securities '{0}' not found.;Инструменты '{0}' не найдены.
 DocStr0;Button activation alert settings;Кнопка активации настроек сигнала
 DocStr1;Initializes a new instance of the {0};Создать {0}
 DocStr2;Load settings;Загрузить настройки
@@ -12754,7 +12755,7 @@ DocStr8514;"{0} if the {1} is read-only; otherwise, {2}";"{0} если знач�
 DocStr8515;Add new instrument;Новый инструмент была добавлен
 DocStr8516;New instrument;Новые инструмент
 DocStr8517;Find all instrument by filter;Найти все инструменты по фильтру
-DocStr8518;Founded instruments;Найденные инструменты
+DocStr8518;Found instruments;Найденные инструменты
 DocStr8519;Copies the elements of the {0} to an {1}, starting at a particular {2} index;Скопировать элементы {0} в {1}, начиная с индекса {2}
 DocStr8520;Destination array;Целевой массив
 DocStr8521;Start index;Начальный индекс
@@ -13277,7 +13278,7 @@ DocStr9082;Native (internal) trading system security id represented as integer;�
 DocStr9083;CFI code;CFI код
 DocStr9084;To get securities for the instrument code;Получить все инструменты для переданного кода
 DocStr9085;Instrument code;Код инструмента
-DocStr9086;Founded securities;Найденные инструменты
+DocStr9086;Found securities;Найденные инструменты
 DocStr9087;Security type. If the value is {0}, the type does not use;Тип инструмента. Если значение равно {0}, тип не используется
 DocStr9088;Download file;Скачать файл
 DocStr9089;To upload the existing file;Загрузить файл
@@ -13299,7 +13300,7 @@ DocStr9104;To delete the file;Удалить файл
 DocStr9105;To find backtesting session;Найти бэктест-сессию
 DocStr9106;Minimum creation date;Минимальная дата создания
 DocStr9107;Maximum creation date;Максимальная дата создания
-DocStr9108;Founded sessions;Найденные сессии
+DocStr9108;Found sessions;Найденные сессии
 DocStr9109;To get an approximate of money to spend for the specified backtesting configuration;Получить примерную стоимость для указанных настроек
 DocStr9110;Backtesting session;Бэктест сессия
 DocStr9111;An approximate of money;Примерная стоимость
@@ -13382,7 +13383,7 @@ DocStr9187;Defines an alert notification service;Интерфейс оповещ
 DocStr9188;Defines an alert processing service;Интерфейс обработки событий
 DocStr9189;Find schema by the specified identifier;Найти схему по заданному идентификатору
 DocStr9190;The identifier;Идентификатор
-DocStr9191;Founded schema. {0} if schema with the specified identifier doesn't exist;Найденная схема. {0} если схема не существует
+DocStr9191;Found schema. {0} if schema with the specified identifier doesn't exist;Найденная схема. {0} если схема не существует
 DocStr9192;The message, containing security id to remove;Сообщение об удалении инструмента
 DocStr9193;The CSV storage of trading objects;Реестр CSV объектов
 DocStr9194;The path to data directory;Путь к данным

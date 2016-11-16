@@ -1764,9 +1764,9 @@ namespace StockSharp.Quik
 
 				var itemsCount = securityTypesCtrl.Count;
 				var index = 0;
-				var founded = false;
+				var found = false;
 
-				while (index < itemsCount && !founded)
+				while (index < itemsCount && !found)
 				{
 					securityTypesCtrl.SelectMultiListBoxItem(index, true);
 					securityTypesWnd.PostMessage(WM.KEYDOWN, (int) VirtualKeys.Space, 1);
@@ -1781,12 +1781,12 @@ namespace StockSharp.Quik
 						{
 							securityTypesCtrl.SelectMultiListBoxItem(i, true);
 							editWindow.Command(addCtrl);
-							founded = true;
+							found = true;
 							break;
 						}
 					}
 
-					if (!founded)
+					if (!found)
 					{
 						securityTypesCtrl.SelectMultiListBoxItem(index, true);
 						securityTypesWnd.PostMessage(WM.KEYDOWN, (int)VirtualKeys.Space, 1);
@@ -1796,9 +1796,9 @@ namespace StockSharp.Quik
 					index++;
 				}
 
-				CloseEditWindow(editWindow, founded);
+				CloseEditWindow(editWindow, found);
 
-				if (founded && IsDdeStarted(Adapter.SecuritiesTable))
+				if (found && IsDdeStarted(Adapter.SecuritiesTable))
 				{
 					WaitAndCloseDdeWindow();
 				}
@@ -1845,16 +1845,16 @@ namespace StockSharp.Quik
 					}
 				}
 
-				var founded = index != -1;
-				if (founded)
+				var found = index != -1;
+				if (found)
 				{
 					selectedSecuritiesCtrl.SelectMultiListBoxItem(index, true);
 					editWindow.Command(removeCtrl);
 				}
 
-				CloseEditWindow(editWindow, founded);
+				CloseEditWindow(editWindow, found);
 
-				if (founded && IsDdeStarted(Adapter.SecuritiesTable))
+				if (found && IsDdeStarted(Adapter.SecuritiesTable))
 				{
 					WaitAndCloseDdeWindow();
 				}
@@ -1899,9 +1899,9 @@ namespace StockSharp.Quik
 				var securityTypesCtrl = editWindow.AllChildWindows.First(e => e.DialogID == 9000).ToListBox();
 			    var itemsCount = securityTypesCtrl.Count;
 			    var index = 0;
-			    var founded = false;
+			    var found = false;
 			    
-                while (index < itemsCount && !founded)
+                while (index < itemsCount && !found)
 			    {
                     securityTypesCtrl.SelectListBoxItem(index);
 
@@ -1926,9 +1926,9 @@ namespace StockSharp.Quik
                         }
                     }
 
-                    founded = itemIndex != -1;
+                    found = itemIndex != -1;
 
-                    if (founded)
+                    if (found)
                     {
                         securitiesList.SelectMultiListBoxItem(itemIndex, true);
                         moreWindow.Command(button);
@@ -1941,9 +1941,9 @@ namespace StockSharp.Quik
 			        index++;
 			    }
 
-				CloseEditWindow(editWindow, founded);
+				CloseEditWindow(editWindow, found);
 
-				if (founded && IsDdeStarted(Adapter.TradesTable))
+				if (found && IsDdeStarted(Adapter.TradesTable))
 				{
 					WaitAndCloseDdeWindow();
 				}
