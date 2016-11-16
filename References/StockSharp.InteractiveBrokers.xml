@@ -985,7 +985,7 @@
             Parent order ID.
             </summary>
     </member>
-    <member name="P:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.BlockOrder">
+    <member name="P:StockSharp.InteractiveBrokers.InteractiveBrokersOrderCondition.SplitVolume">
       <summary>
             Split order volume.
             </summary>
@@ -1237,6 +1237,11 @@
             Initializes a new instance of the <see cref="T:StockSharp.InteractiveBrokers.InteractiveBrokersMessageAdapter" />.
             </summary>
       <param name="transactionIdGenerator">Transaction id generator.</param>
+    </member>
+    <member name="P:StockSharp.InteractiveBrokers.InteractiveBrokersMessageAdapter.NativeIdStorageName">
+      <summary>
+            Native security identifiers storage name.
+            </summary>
     </member>
     <member name="M:StockSharp.InteractiveBrokers.InteractiveBrokersMessageAdapter.CreateOrderCondition">
       <summary>

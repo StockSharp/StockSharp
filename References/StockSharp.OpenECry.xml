@@ -169,24 +169,19 @@
             As <see cref="F:StockSharp.OpenECry.OpenECryStopType.TrailingStopMarket" />, but when it reaches the stop price the limit order is registered.
             </summary>
     </member>
-    <member name="T:StockSharp.OpenECry.OpenECryStopAssetTypes">
+    <member name="F:StockSharp.OpenECry.OpenECryStopType.MarketOnClose">
       <summary>
-            Asset types.
+            To match at the market price, if the closing price is higher than the expected price.
             </summary>
     </member>
-    <member name="F:StockSharp.OpenECry.OpenECryStopAssetTypes.All">
+    <member name="F:StockSharp.OpenECry.OpenECryStopType.MarketIfTouched">
       <summary>
-            All.
+            With the market price when the condition is fulfilled.
             </summary>
     </member>
-    <member name="F:StockSharp.OpenECry.OpenECryStopAssetTypes.Equity">
+    <member name="F:StockSharp.OpenECry.OpenECryStopType.MarketOnOpen">
       <summary>
-            Equity.
-            </summary>
-    </member>
-    <member name="F:StockSharp.OpenECry.OpenECryStopAssetTypes.Future">
-      <summary>
-            Future.
+            At trading opening.
             </summary>
     </member>
     <member name="T:StockSharp.OpenECry.OpenECryOrderCondition">
@@ -229,9 +224,9 @@
             Trailing stop begins tracking once the price reaches ReferencePrice.
             </summary>
     </member>
-    <member name="P:StockSharp.OpenECry.OpenECryOrderCondition.AssetType">
+    <member name="P:StockSharp.OpenECry.OpenECryOrderCondition.SplitVolume">
       <summary>
-            Asset type.
+            Split order volume.
             </summary>
     </member>
     <member name="T:StockSharp.OpenECry.OpenECryException">

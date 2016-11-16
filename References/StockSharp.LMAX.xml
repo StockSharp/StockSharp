@@ -85,6 +85,11 @@
             Gets a value indicating whether the connector supports security lookup.
             </summary>
     </member>
+    <member name="P:StockSharp.LMAX.LmaxMessageAdapter.NativeIdStorageName">
+      <summary>
+            Native security identifiers storage name.
+            </summary>
+    </member>
     <member name="T:StockSharp.LMAX.LmaxOrderCondition">
       <summary>
         <see cref="N:StockSharp.LMAX" /> order condition.

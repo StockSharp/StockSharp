@@ -326,7 +326,7 @@
             Find schema by the specified identifier.
             </summary>
       <param name="id">The identifier.</param>
-      <returns>Founded schema. <see langword="null" /> if schema with the specified identifier doesn't exist.</returns>
+      <returns>Found schema. <see langword="null" /> if schema with the specified identifier doesn't exist.</returns>
     </member>
   </members>
 </doc>

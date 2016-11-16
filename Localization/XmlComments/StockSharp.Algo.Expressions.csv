@@ -20,6 +20,7 @@ M:StockSharp.Algo.Expressions.ExpressionHelper.Decode(System.String)/param/expre
 M:StockSharp.Algo.Expressions.ExpressionHelper.Decode(System.String)/returns;DocStr8482
 T:StockSharp.Algo.Expressions.ExpressionIndexSecurity/summary;DocStr1111
 M:StockSharp.Algo.Expressions.ExpressionIndexSecurity.#ctor/summary;DocStr1
+P:StockSharp.Algo.Expressions.ExpressionIndexSecurity.Formula/summary;DocStr8476
 P:StockSharp.Algo.Expressions.ExpressionIndexSecurity.Expression/summary;DocStr1117
 P:StockSharp.Algo.Expressions.ExpressionIndexSecurity.InnerSecurities/summary;DocStr936
 M:StockSharp.Algo.Expressions.ExpressionIndexSecurity.Calculate(System.Decimal[])/summary;DocStr1113

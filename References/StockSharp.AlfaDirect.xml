@@ -31,6 +31,11 @@
             Поддерживается ли торговой системой поиск инструментов.
             </summary>
         </member>
+        <member name="P:StockSharp.AlfaDirect.AlfaDirectMessageAdapter.NativeIdStorageName">
+            <summary>
+            Native security identifiers storage name.
+            </summary>
+        </member>
         <member name="M:StockSharp.AlfaDirect.AlfaDirectMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)">
             <summary>
             Отправить сообщение.

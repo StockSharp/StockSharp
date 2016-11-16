@@ -11,7 +11,7 @@
 	using StockSharp.Messages;
 
 	/// <summary>
-	/// Native id message adapter.
+	/// Security native id message adapter.
 	/// </summary>
 	public class NativeIdMessageAdapter : MessageAdapterWrapper
 	{
@@ -68,7 +68,7 @@
 		private readonly string _storageName;
 
 		/// <summary>
-		/// Native ids storage.
+		/// Security native identifier storage.
 		/// </summary>
 		public INativeIdStorage Storage { get; }
 
@@ -85,7 +85,7 @@
 		/// Initializes a new instance of the <see cref="NativeIdMessageAdapter"/>.
 		/// </summary>
 		/// <param name="innerAdapter">The adapter, to which messages will be directed.</param>
-		/// <param name="storage">Native ids storage.</param>
+		/// <param name="storage">Security native identifier storage.</param>
 		public NativeIdMessageAdapter(IMessageAdapter innerAdapter, INativeIdStorage storage)
 			: base(innerAdapter)
 		{
@@ -158,26 +158,27 @@
 					// external code shouldn't receive native ids
 					securityId.Native = null;
 
-					var isNativeIdNull = nativeSecurityId == null;
-
 					if (!boardCode.IsEmpty())
 					{
-						lock (_syncRoot)
+						if (nativeSecurityId != null)
 						{
-							_securityIds[nativeSecurityId] = securityId;
-						}
-
-						if (!isNativeIdNull && !Storage.TryAdd(_storageName, securityId, nativeSecurityId))
-						{
-							var prevId = Storage.TryGetByNativeId(_storageName, nativeSecurityId);
-
-							if (prevId != null)
+							lock (_syncRoot)
 							{
-								if (securityId != prevId.Value)
-									throw new InvalidOperationException(LocalizedStrings.Str687Params.Put(securityId, prevId.Value, nativeSecurityId));
+								_securityIds[nativeSecurityId] = securityId;
 							}
-							else
-								throw new InvalidOperationException(LocalizedStrings.Str687Params.Put(Storage.TryGetBySecurityId(_storageName, securityId), nativeSecurityId, securityId));
+
+							if (!Storage.TryAdd(_storageName, securityId, nativeSecurityId))
+							{
+								var prevId = Storage.TryGetByNativeId(_storageName, nativeSecurityId);
+
+								if (prevId != null)
+								{
+									if (securityId != prevId.Value)
+										throw new InvalidOperationException(LocalizedStrings.Str687Params.Put(securityId, prevId.Value, nativeSecurityId));
+								}
+								else
+									throw new InvalidOperationException(LocalizedStrings.Str687Params.Put(Storage.TryGetBySecurityId(_storageName, securityId), nativeSecurityId, securityId));
+							}
 						}
 					}
 					else

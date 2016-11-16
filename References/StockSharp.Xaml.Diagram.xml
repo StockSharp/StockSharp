@@ -1550,6 +1550,13 @@
             Options.
             </summary>
     </member>
+    <member name="M:StockSharp.Xaml.Diagram.DiagramSocketType.GetSocketType(System.Type)">
+      <summary>
+            Get <see cref="T:StockSharp.Xaml.Diagram.DiagramSocketType" /> for <see cref="T:System.Type" />.
+            </summary>
+      <param name="parameterType">Type.</param>
+      <returns>Diagram socket type.</returns>
+    </member>
     <member name="T:StockSharp.Xaml.Diagram.DiagramSocketValue">
       <summary>
             The value for the connection.
@@ -2606,7 +2613,7 @@
             The method is called at the stop of the diagram element algorithm.
             </summary>
     </member>
-    <member name="T:StockSharp.Xaml.Diagram.Elements.DiagramExternalSocketAttribute">
+    <member name="T:StockSharp.Xaml.Diagram.Elements.DiagramExternalAttribute">
       <summary>
             Attribute, applied to methods or parameters, to create input socket.
             </summary>

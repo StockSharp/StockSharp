@@ -3204,13 +3204,6 @@
       <param name="criteria">The instrument whose fields will be used as a filter.</param>
       <returns>Found instruments.</returns>
     </member>
-    <member name="M:StockSharp.Xaml.GuiConnector`1.GetNativeId(StockSharp.BusinessEntities.Security)">
-      <summary>
-            Get native id.
-            </summary>
-      <param name="security">Security.</param>
-      <returns>Native (internal) trading system security id.</returns>
-    </member>
     <member name="M:StockSharp.Xaml.GuiConnector`1.DisposeManaged">
       <summary>
             Release resources.

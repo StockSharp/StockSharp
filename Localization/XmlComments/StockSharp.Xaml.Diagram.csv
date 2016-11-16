@@ -436,6 +436,9 @@ F:StockSharp.Xaml.Diagram.DiagramSocketType.Unit/summary;NumericValue
 F:StockSharp.Xaml.Diagram.DiagramSocketType.Comparable/summary;DocStr8033
 F:StockSharp.Xaml.Diagram.DiagramSocketType.Portfolio/summary;Portfolio
 F:StockSharp.Xaml.Diagram.DiagramSocketType.Options/summary;Options
+M:StockSharp.Xaml.Diagram.DiagramSocketType.GetSocketType(System.Type)/summary;DocStr9344
+M:StockSharp.Xaml.Diagram.DiagramSocketType.GetSocketType(System.Type)/param/parameterType;Str1963
+M:StockSharp.Xaml.Diagram.DiagramSocketType.GetSocketType(System.Type)/returns;DocStr9345
 T:StockSharp.Xaml.Diagram.DiagramSocketValue/summary;DocStr8035
 P:StockSharp.Xaml.Diagram.DiagramSocketValue.Sender/summary;DocStr8036
 P:StockSharp.Xaml.Diagram.DiagramSocketValue.Socket/summary;Str3143
@@ -663,7 +666,7 @@ P:StockSharp.Xaml.Diagram.Elements.StrategyDiagramElement.IconName/summary;DocSt
 M:StockSharp.Xaml.Diagram.Elements.StrategyDiagramElement.#ctor/summary;DocStr1
 M:StockSharp.Xaml.Diagram.Elements.StrategyDiagramElement.OnStart/summary;DocStr7892
 M:StockSharp.Xaml.Diagram.Elements.StrategyDiagramElement.OnStop/summary;DocStr7894
-T:StockSharp.Xaml.Diagram.Elements.DiagramExternalSocketAttribute/summary;DocStr9316
+T:StockSharp.Xaml.Diagram.Elements.DiagramExternalAttribute/summary;DocStr9316
 T:StockSharp.Xaml.Diagram.Elements.StrategyTradesDiagramElement/summary;Str3156
 M:StockSharp.Xaml.Diagram.Elements.StrategyTradesDiagramElement.#ctor/summary;DocStr1
 P:StockSharp.Xaml.Diagram.Elements.StrategyTradesDiagramElement.TypeId/summary;DocStr7902

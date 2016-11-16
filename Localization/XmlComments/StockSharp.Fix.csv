@@ -26,6 +26,7 @@ P:StockSharp.Fix.Dialects.BaseDialect.SecurityLookup/summary;DocStr8750
 P:StockSharp.Fix.Dialects.BaseDialect.PortfolioLookup/summary;DocStr8750
 P:StockSharp.Fix.Dialects.BaseDialect.OrderLookup/summary;DocStr8751
 P:StockSharp.Fix.Dialects.BaseDialect.OrderCancelVolumeRequired/summary;DocStr8752
+P:StockSharp.Fix.Dialects.BaseDialect.NativeIdStorageName/summary;DocStr9343
 M:StockSharp.Fix.Dialects.BaseDialect.OnRead(StockSharp.Fix.Native.IFixReader,System.String,Ecng.Common.AllocationArray{StockSharp.Messages.Message})/summary;DocStr8753
 M:StockSharp.Fix.Dialects.BaseDialect.OnRead(StockSharp.Fix.Native.IFixReader,System.String,Ecng.Common.AllocationArray{StockSharp.Messages.Message})/param/reader;DocStr3327
 M:StockSharp.Fix.Dialects.BaseDialect.OnRead(StockSharp.Fix.Native.IFixReader,System.String,Ecng.Common.AllocationArray{StockSharp.Messages.Message})/param/msgType;DocStr9
@@ -110,6 +111,7 @@ P:StockSharp.Fix.Dialects.IFixDialect.SecurityLookup/summary;DocStr8750
 P:StockSharp.Fix.Dialects.IFixDialect.PortfolioLookup/summary;DocStr8750
 P:StockSharp.Fix.Dialects.IFixDialect.OrderLookup/summary;DocStr8751
 P:StockSharp.Fix.Dialects.IFixDialect.OrderCancelVolumeRequired/summary;DocStr8752
+P:StockSharp.Fix.Dialects.IFixDialect.NativeIdStorageName/summary;DocStr9343
 M:StockSharp.Fix.Dialects.IFixDialect.Write(StockSharp.Messages.Message)/summary;DocStr8756
 M:StockSharp.Fix.Dialects.IFixDialect.Write(StockSharp.Messages.Message)/param/message;DocStr8489
 M:StockSharp.Fix.Dialects.IFixDialect.Write(StockSharp.Messages.Message)/returns;DocStr8774
@@ -1374,6 +1376,7 @@ P:StockSharp.Fix.FixMessageAdapter.OrderStatusRequired/summary;DocStr451
 P:StockSharp.Fix.FixMessageAdapter.SecurityLookupRequired/summary;DocStr452
 P:StockSharp.Fix.FixMessageAdapter.PortfolioLookupRequired/summary;DocStr450
 P:StockSharp.Fix.FixMessageAdapter.OrderCancelVolumeRequired/summary;DocStr8752
+P:StockSharp.Fix.FixMessageAdapter.NativeIdStorageName/summary;DocStr9343
 M:StockSharp.Fix.FixMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)/summary;DocStr46
 M:StockSharp.Fix.FixMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)/param/message;Str3166
 M:StockSharp.Fix.FixMessageAdapter.CreateDialect(System.IO.Stream,Ecng.Common.IncrementalIdGenerator)/summary;DocStr8804

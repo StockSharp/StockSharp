@@ -74,6 +74,11 @@
             Initializes a new instance of the <see cref="T:StockSharp.Algo.Expressions.ExpressionIndexSecurity" />.
             </summary>
     </member>
+    <member name="P:StockSharp.Algo.Expressions.ExpressionIndexSecurity.Formula">
+      <summary>
+            Compiled mathematical formula.
+            </summary>
+    </member>
     <member name="P:StockSharp.Algo.Expressions.ExpressionIndexSecurity.Expression">
       <summary>
             The mathematic formula of index.

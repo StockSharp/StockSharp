@@ -30,7 +30,7 @@ namespace StockSharp.Algo
 		/// </summary>
 		/// <param name="name">Storage name.</param>
 		/// <param name="securityId">Security identifier.</param>
-		/// <param name="nativeId">Native security identifier.</param>
+		/// <param name="nativeId">Native (internal) trading system security id.</param>
 		/// <returns><see langword="true"/> if native identifier was added. Otherwise, <see langword="false" />.</returns>
 		bool TryAdd(string name, SecurityId securityId, object nativeId);
 
@@ -38,7 +38,7 @@ namespace StockSharp.Algo
 		/// Try get security identifier by native identifier.
 		/// </summary>
 		/// <param name="name">Storage name.</param>
-		/// <param name="nativeId">Native security identifier.</param>
+		/// <param name="nativeId">Native (internal) trading system security id.</param>
 		/// <returns>Security identifier.</returns>
 		SecurityId? TryGetByNativeId(string name, object nativeId);
 
@@ -47,12 +47,12 @@ namespace StockSharp.Algo
 		/// </summary>
 		/// <param name="name">Storage name.</param>
 		/// <param name="securityId">Security identifier.</param>
-		/// <returns>Native security identifier.</returns>
+		/// <returns>Native (internal) trading system security id.</returns>
 		object TryGetBySecurityId(string name, SecurityId securityId);
 	}
 
 	/// <summary>
-	/// Csv security native identifier storage.
+	/// CSV security native identifier storage.
 	/// </summary>
 	public sealed class CsvNativeIdStorage : INativeIdStorage
 	{
@@ -61,7 +61,7 @@ namespace StockSharp.Algo
 		private readonly string _path;
 
 		/// <summary>
-		/// Create <see cref="CsvNativeIdStorage"/>.
+		/// Initializes a new instance of the <see cref="CsvNativeIdStorage"/>.
 		/// </summary>
 		/// <param name="path">Path to storage.</param>
 		public CsvNativeIdStorage(string path)
@@ -100,7 +100,7 @@ namespace StockSharp.Algo
 		/// </summary>
 		/// <param name="name">Storage name.</param>
 		/// <param name="securityId">Security identifier.</param>
-		/// <param name="nativeId">Native security identifier.</param>
+		/// <param name="nativeId">Native (internal) trading system security id.</param>
 		/// <returns><see langword="true"/> if native identifier was added. Otherwise, <see langword="false" />.</returns>
 		public bool TryAdd(string name, SecurityId securityId, object nativeId)
 		{
@@ -125,7 +125,7 @@ namespace StockSharp.Algo
 		/// Try get security identifier by native identifier.
 		/// </summary>
 		/// <param name="name">Storage name.</param>
-		/// <param name="nativeId">Native security identifier.</param>
+		/// <param name="nativeId">Native (internal) trading system security id.</param>
 		/// <returns>Security identifier.</returns>
 		public SecurityId? TryGetByNativeId(string name, object nativeId)
 		{
@@ -150,7 +150,7 @@ namespace StockSharp.Algo
 		/// </summary>
 		/// <param name="name">Storage name.</param>
 		/// <param name="securityId">Security identifier.</param>
-		/// <returns>Native security identifier.</returns>
+		/// <returns>Native (internal) trading system security id.</returns>
 		public object TryGetBySecurityId(string name, SecurityId securityId)
 		{
 			if (name == null)

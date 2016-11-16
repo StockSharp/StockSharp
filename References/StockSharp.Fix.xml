@@ -80,6 +80,11 @@
         <see cref="P:StockSharp.Messages.OrderCancelMessage.Volume" /> required to cancel orders.
             </summary>
     </member>
+    <member name="P:StockSharp.Fix.Dialects.BaseDialect.NativeIdStorageName">
+      <summary>
+            Native security identifiers storage name.
+            </summary>
+    </member>
     <member name="M:StockSharp.Fix.Dialects.BaseDialect.OnRead(StockSharp.Fix.Native.IFixReader,System.String,Ecng.Common.AllocationArray{StockSharp.Messages.Message})">
       <summary>
             Read next message from FIX protocol.
@@ -281,6 +286,11 @@
     <member name="P:StockSharp.Fix.Dialects.IFixDialect.OrderCancelVolumeRequired">
       <summary>
         <see cref="P:StockSharp.Messages.OrderCancelMessage.Volume" /> required to cancel orders.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.IFixDialect.NativeIdStorageName">
+      <summary>
+            Native security identifiers storage name.
             </summary>
     </member>
     <member name="M:StockSharp.Fix.Dialects.IFixDialect.Write(StockSharp.Messages.Message)">
@@ -5241,6 +5251,11 @@
     <member name="P:StockSharp.Fix.FixMessageAdapter.OrderCancelVolumeRequired">
       <summary>
         <see cref="P:StockSharp.Messages.OrderCancelMessage.Volume" /> required to cancel orders.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.FixMessageAdapter.NativeIdStorageName">
+      <summary>
+            Native security identifiers storage name.
             </summary>
     </member>
     <member name="M:StockSharp.Fix.FixMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)">

@@ -4194,6 +4194,7 @@ OnlyActiveSecurities;Only active instruments.;Только активные ин
 CandleTimeInterval;Interval (in days), for which the downloaded candles.;Интервал в днях, за который скачиваются свечи.
 StrategyNotSelected;Strategy is not selected;Стратегия не выбрана
 Palette;Palette;Палитра
+Refresh;Refresh;Обновить
 RefreshScheme;Refresh scheme;Обновить схему
 LabelsFormatIntraday;Labels format (intraday);Формат надписей (внутри дня)
 LabelsFormatIntradayDesc;The format of X-axis labels within the day;Формат надписей для оси X внутри дня
@@ -4275,6 +4276,7 @@ NotSubscribed;Strategy {0} has not subscribed.;На стратегию {0} не�
 CurrencyCannotChange;Currency cannot be changed.;Невозможно поменять валюту.
 NotCompleteRegistered;Registration was not completed.;Регистрация не была пройдена до конца.
 StrategiesGallery;Strategies gallery;Галерея стратегий
+Gallery;Gallery;Галерея
 StrategiesSubscriptions;Strategies subscriptions;Подписки на стратегии
 RefreshStrategies;Refresh strategies;Обновить список стратегий
 AllStrategies;All strategies;Все стратегии
@@ -13510,3 +13512,17 @@ DocStr9325;The found adapter;Найденный адаптер
 DocStr9326;Make association adapter and portfolio name;Ассоциировать адаптер и имя портфеля
 DocStr9327;The adapter;Адаптер
 DocStr9328;The message adapter's provider;Провайдер адаптеров сообщений
+DocStr9329;Security native identifier storage;Хранилище системных идентификатор инструментов
+DocStr9330;Get native security identifiers for storage;Получить все системные идентификаторы
+DocStr9331;Security identifiers;Идентификаторы инструментов
+DocStr9332;Try add native security identifier to storage;Добавить идентификатор в хранилище
+DocStr9333;Security identifier;Идентификатор инструмента
+DocStr9335;{0} if native identifier was added. Otherwise, {1};{0}, если был добавлен. Иначе, {1}
+DocStr9336;Try get security identifier by native identifier;Получить идентификатор инструмента
+DocStr9337;Try get native security identifier by identifier;Получить системных идентификатор
+DocStr9338;CSV security native identifier storage;Хранилище системных идентификатор инструментов в формате CSV
+DocStr9340;Path to storage;Путь к хранилищу
+DocStr9341;Security native id message adapter;Адаптер сообщений, использующих системных идентификатор инструментов
+DocStr9343;Native security identifiers storage name;Название хранилища системных идентификатор инструментов
+DocStr9344;Get {0} for {1};Получить {0} для {1}
+DocStr9345;Diagram socket type;Тип сокета диаграммы

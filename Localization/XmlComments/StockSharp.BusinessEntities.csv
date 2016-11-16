@@ -474,10 +474,7 @@ E:StockSharp.BusinessEntities.ISecurityProvider.Removed/summary;DocStr8501
 E:StockSharp.BusinessEntities.ISecurityProvider.Cleared/summary;DocStr8502
 M:StockSharp.BusinessEntities.ISecurityProvider.Lookup(StockSharp.BusinessEntities.Security)/summary;DocStr800
 M:StockSharp.BusinessEntities.ISecurityProvider.Lookup(StockSharp.BusinessEntities.Security)/param/criteria;DocStr111
-M:StockSharp.BusinessEntities.ISecurityProvider.Lookup(StockSharp.BusinessEntities.Security)/returns;DocStr3111
-M:StockSharp.BusinessEntities.ISecurityProvider.GetNativeId(StockSharp.BusinessEntities.Security)/summary;DocStr801
-M:StockSharp.BusinessEntities.ISecurityProvider.GetNativeId(StockSharp.BusinessEntities.Security)/param/security;DocStr2831
-M:StockSharp.BusinessEntities.ISecurityProvider.GetNativeId(StockSharp.BusinessEntities.Security)/returns;DocStr802
+M:StockSharp.BusinessEntities.ISecurityProvider.Lookup(StockSharp.BusinessEntities.Security)/returns;DocStr8518
 T:StockSharp.BusinessEntities.MarketDepth/summary;DocStr2829
 M:StockSharp.BusinessEntities.MarketDepth.#ctor(StockSharp.BusinessEntities.Security)/summary;DocStr2830
 M:StockSharp.BusinessEntities.MarketDepth.#ctor(StockSharp.BusinessEntities.Security)/param/security;DocStr2831

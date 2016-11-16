@@ -41658,6 +41658,16 @@ namespace StockSharp.Localization
 		public static string Palette => GetString(PaletteKey);
 
 		/// <summary>
+		/// Refresh
+		/// </summary>
+		public const string RefreshKey = "Refresh";
+
+		/// <summary>
+		/// Refresh
+		/// </summary>
+		public static string Refresh => GetString(RefreshKey);
+
+		/// <summary>
 		/// Refresh scheme
 		/// </summary>
 		public const string RefreshSchemeKey = "RefreshScheme";
@@ -42406,6 +42416,16 @@ namespace StockSharp.Localization
 		/// Strategies gallery
 		/// </summary>
 		public static string StrategiesGallery => GetString(StrategiesGalleryKey);
+
+		/// <summary>
+		/// Gallery
+		/// </summary>
+		public const string GalleryKey = "Gallery";
+
+		/// <summary>
+		/// Gallery
+		/// </summary>
+		public static string Gallery => GetString(GalleryKey);
 
 		/// <summary>
 		/// Strategies subscriptions

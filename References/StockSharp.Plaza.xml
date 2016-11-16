@@ -6224,6 +6224,11 @@
             </summary>
       <param name="transactionIdGenerator">Генератор идентификаторов транзакций.</param>
     </member>
+    <member name="P:StockSharp.Plaza.PlazaMessageAdapter.NativeIdStorageName">
+      <summary>
+            Имя хранилища системных идентификаторов инструментов.
+            </summary>
+    </member>
     <member name="M:StockSharp.Plaza.PlazaMessageAdapter.SendOutMessage(StockSharp.Messages.Message)">
       <summary>
             Добавить <see cref="T:StockSharp.Messages.Message" /> в выходную очередь <see cref="T:StockSharp.Messages.IMessageAdapter" />.

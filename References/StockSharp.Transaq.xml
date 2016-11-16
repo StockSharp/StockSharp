@@ -60,6 +60,11 @@
             Освободить занятые ресурсы.
             </summary>
     </member>
+    <member name="P:StockSharp.Transaq.TransaqMessageAdapter.NativeIdStorageName">
+      <summary>
+            Native security identifiers storage name.
+            </summary>
+    </member>
     <member name="M:StockSharp.Transaq.TransaqMessageAdapter.CreateOrderCondition">
       <summary>
             Создать для заявки типа <see cref="F:StockSharp.Messages.OrderTypes.Conditional" /> условие, которое поддерживается подключением.

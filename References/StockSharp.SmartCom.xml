@@ -47,6 +47,11 @@
             Поддерживается ли торговой системой поиск портфелей.
             </summary>
     </member>
+    <member name="P:StockSharp.SmartCom.SmartComMessageAdapter.NativeIdStorageName">
+      <summary>
+            Native security identifiers storage name.
+            </summary>
+    </member>
     <member name="M:StockSharp.SmartCom.SmartComMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)">
       <summary>
             Отправить сообщение.

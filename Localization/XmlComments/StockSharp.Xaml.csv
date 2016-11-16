@@ -696,10 +696,7 @@ M:StockSharp.Xaml.GuiConnector`1.GetLevel1Fields(StockSharp.BusinessEntities.Sec
 M:StockSharp.Xaml.GuiConnector`1.GetLevel1Fields(StockSharp.BusinessEntities.Security)/returns;DocStr857
 M:StockSharp.Xaml.GuiConnector`1.Lookup(StockSharp.BusinessEntities.Security)/summary;DocStr800
 M:StockSharp.Xaml.GuiConnector`1.Lookup(StockSharp.BusinessEntities.Security)/param/criteria;DocStr111
-M:StockSharp.Xaml.GuiConnector`1.Lookup(StockSharp.BusinessEntities.Security)/returns;DocStr3111
-M:StockSharp.Xaml.GuiConnector`1.GetNativeId(StockSharp.BusinessEntities.Security)/summary;DocStr801
-M:StockSharp.Xaml.GuiConnector`1.GetNativeId(StockSharp.BusinessEntities.Security)/param/security;DocStr2831
-M:StockSharp.Xaml.GuiConnector`1.GetNativeId(StockSharp.BusinessEntities.Security)/returns;DocStr802
+M:StockSharp.Xaml.GuiConnector`1.Lookup(StockSharp.BusinessEntities.Security)/returns;DocStr8518
 M:StockSharp.Xaml.GuiConnector`1.DisposeManaged/summary;DocStr7
 T:StockSharp.Xaml.LogControl/summary;DocStr8344
 M:StockSharp.Xaml.LogControl.#ctor/summary;DocStr1

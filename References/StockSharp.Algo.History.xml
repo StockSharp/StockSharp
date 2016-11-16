@@ -980,7 +980,7 @@
             </summary>
       <param name="code">Instrument code.</param>
       <param name="isDownload">Whether to download information from the site, if it is not found locally.</param>
-      <returns>Founded securities.</returns>
+      <returns>Found securities.</returns>
     </member>
     <member name="T:StockSharp.Algo.History.Russian.Rts.Competition">
       <summary>
