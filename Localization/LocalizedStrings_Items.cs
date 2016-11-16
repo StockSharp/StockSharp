@@ -43186,5 +43186,15 @@ namespace StockSharp.Localization
 		/// Securities '{0}' not found.
 		/// </summary>
 		public static string SecuritiesNotFound => GetString(SecuritiesNotFoundKey);
+
+		/// <summary>
+		/// Cyclic dependency of '{0}'.
+		/// </summary>
+		public const string CyclicDependencyKey = "CyclicDependency";
+
+		/// <summary>
+		/// Cyclic dependency of '{0}'.
+		/// </summary>
+		public static string CyclicDependency => GetString(CyclicDependencyKey);
 	}
 }

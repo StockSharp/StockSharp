@@ -122,6 +122,9 @@ namespace StockSharp.Logging
 				if (value != null && _parent != null)
 					throw new ArgumentException(LocalizedStrings.Str8Params.Put(this, _parent), nameof(value));
 
+				if (value == this)
+					throw new ArgumentException(LocalizedStrings.CyclicDependency.Put(this), nameof(value));
+
 				_parent = value;
 			}
 		}
