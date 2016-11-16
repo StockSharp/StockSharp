@@ -382,16 +382,6 @@ namespace StockSharp.Algo
 			return Securities.Filter(criteria);
 		}
 
-		/// <summary>
-		/// Get native id.
-		/// </summary>
-		/// <param name="security">Security.</param>
-		/// <returns>Native (internal) trading system security id.</returns>
-		public object GetNativeId(Security security)
-		{
-			return _securityAdapter?.GetNativeId(security.ToSecurityId());
-		}
-
 		private DateTimeOffset _currentTime;
 
 		/// <summary>
@@ -1366,9 +1356,7 @@ namespace StockSharp.Algo
 			if (security == null)
 				throw new ArgumentNullException(nameof(security));
 
-			var secId = security.ToSecurityId(SecurityIdGenerator);
-			secId.Native = GetNativeId(security);
-			return secId;
+			return security.ToSecurityId(SecurityIdGenerator);
 		}
 
 		private string GetBoardCode(string secClass)

@@ -15,18 +15,82 @@
 	/// </summary>
 	public class SecurityMessageAdapter : MessageAdapterWrapper
 	{
+		private sealed class InMemoryStorage : INativeIdStorage
+		{
+			private readonly PairSet<SecurityId, object> _nativeIds = new PairSet<SecurityId, object>();
+
+			public bool TryAdd(string name, SecurityId securityId, object nativeId)
+			{
+				if (name == null)
+					throw new ArgumentNullException(nameof(name));
+
+				if (nativeId == null)
+					throw new ArgumentNullException(nameof(nativeId));
+
+				return _nativeIds.TryAdd(securityId, nativeId);
+			}
+
+			public object TryGetBySecurityId(string name, SecurityId securityId)
+			{
+				if (name == null)
+					throw new ArgumentNullException(nameof(name));
+
+				return _nativeIds.TryGetValue(securityId);
+			}
+
+			public SecurityId? TryGetByNativeId(string name, object nativeId)
+			{
+				if (name == null)
+					throw new ArgumentNullException(nameof(name));
+
+				SecurityId securityId;
+
+				if (!_nativeIds.TryGetKey(nativeId, out securityId))
+					return null;
+
+				return securityId;
+			}
+
+			public IEnumerable<Tuple<SecurityId, object>> Get(string name)
+			{
+				if (name == null)
+					throw new ArgumentNullException(nameof(name));
+
+				return _nativeIds.Select(p => Tuple.Create(p.Key, p.Value)).ToArray();
+			}
+		}
+
 		private readonly Dictionary<SecurityId, SecurityId> _securityIds = new Dictionary<SecurityId, SecurityId>();
-		private readonly PairSet<SecurityId, object> _nativeIds = new PairSet<SecurityId, object>();
 		private readonly Dictionary<SecurityId, RefPair<List<Message>, Dictionary<MessageTypes, Message>>> _suspendedMessages = new Dictionary<SecurityId, RefPair<List<Message>, Dictionary<MessageTypes, Message>>>();
 		private readonly SyncObject _syncRoot = new SyncObject();
+
+		private readonly string _storageName;
+
+		/// <summary>
+		/// Native ids storage.
+		/// </summary>
+		public INativeIdStorage Storage { get; }
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="SecurityMessageAdapter"/>.
 		/// </summary>
 		/// <param name="innerAdapter">The adapter, to which messages will be directed.</param>
 		public SecurityMessageAdapter(IMessageAdapter innerAdapter)
+			: this(innerAdapter, new InMemoryStorage())
+		{
+		}
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="SecurityMessageAdapter"/>.
+		/// </summary>
+		/// <param name="innerAdapter">The adapter, to which messages will be directed.</param>
+		/// <param name="storage">Native ids storage.</param>
+		public SecurityMessageAdapter(IMessageAdapter innerAdapter, INativeIdStorage storage)
 			: base(innerAdapter)
 		{
+			Storage = storage;
+
+			_storageName = GetStorageName(innerAdapter);
 		}
 
 		/// <summary>
@@ -37,13 +101,35 @@
 		{
 			switch (message.Type)
 			{
+				case MessageTypes.Connect:
+				{
+					var nativeIds = Storage.Get(_storageName);
+
+					foreach (var tuple in nativeIds)
+					{
+						var securityId = tuple.Item1;
+						var nativeId = tuple.Item2;
+
+						var fullSecurityId = securityId;
+						fullSecurityId.Native = nativeId;
+
+						lock (_syncRoot)
+						{
+							_securityIds[fullSecurityId] = fullSecurityId;
+							_securityIds[securityId] = fullSecurityId;
+						}
+					}
+
+					base.OnInnerAdapterNewOutMessage(message);
+					break;
+				}
+
 				case MessageTypes.Reset:
 				{
 					lock (_syncRoot)
 					{
 						_securityIds.Clear();
 						_suspendedMessages.Clear();
-						_nativeIds.Clear();
 					}
 
 					break;
@@ -68,26 +154,27 @@
 
 					if (!boardCode.IsEmpty())
 					{
+						var temp = securityId;
+						// GetHashCode shouldn't calc based on native id
+						temp.Native = null;
+
 						lock (_syncRoot)
 						{
 							_securityIds[securityId] = securityId;
+							_securityIds[temp] = securityId;
+						}
 
-							var temp = securityId;
-							// GetHashCode shouldn't calc based on native id
-							temp.Native = null;
+						if (!isNativeIdNull && !Storage.TryAdd(_storageName, temp, nativeSecurityId))
+						{
+							var prevId = Storage.TryGetByNativeId(_storageName, nativeSecurityId);
 
-							if (!isNativeIdNull && !_nativeIds.TryAdd(temp, nativeSecurityId))
+							if (prevId != null)
 							{
-								SecurityId prevId;
-								
-								if (_nativeIds.TryGetKey(nativeSecurityId, out prevId))
-								{
-									if (temp != prevId)
-										throw new InvalidOperationException(LocalizedStrings.Str687Params.Put(temp, prevId, nativeSecurityId));
-								}
-								else
-									throw new InvalidOperationException(LocalizedStrings.Str687Params.Put(nativeSecurityId, _nativeIds[temp], temp));
+								if (temp != prevId.Value)
+									throw new InvalidOperationException(LocalizedStrings.Str687Params.Put(temp, prevId.Value, nativeSecurityId));
 							}
+							else
+								throw new InvalidOperationException(LocalizedStrings.Str687Params.Put(nativeSecurityId, Storage.TryGetBySecurityId(_storageName, temp), temp));
 						}
 					}
 					else
@@ -172,6 +259,36 @@
 		}
 
 		/// <summary>
+		/// Send message.
+		/// </summary>
+		/// <param name="message">Message.</param>
+		public override void SendInMessage(Message message)
+		{
+			switch (message.Type)
+			{
+				case MessageTypes.OrderRegister:
+				case MessageTypes.OrderReplace:
+				case MessageTypes.OrderCancel:
+				case MessageTypes.MarketData:
+				{
+					var secMsg = (SecurityMessage)message;
+
+					var securityId = secMsg.SecurityId;
+					securityId.Native = null;
+
+					var fullSecurityId = _securityIds.TryGetValue2(securityId);
+
+					if (fullSecurityId != null)
+						ReplaceSecurityId(message, fullSecurityId.Value);
+
+					break;
+				}
+			}
+
+			base.SendInMessage(message);
+		}
+
+		/// <summary>
 		/// Create a copy of <see cref="SecurityMessageAdapter"/>.
 		/// </summary>
 		/// <returns>Copy.</returns>
@@ -187,7 +304,7 @@
 		/// <returns>Native (internal) trading system security id.</returns>
 		public object GetNativeId(SecurityId securityId)
 		{
-			return _nativeIds.TryGetValue(securityId);
+			return Storage.TryGetBySecurityId(_storageName, securityId);
 		}
 
 		private void ProcessMessage<TMessage>(SecurityId securityId, TMessage message, Func<TMessage, TMessage, TMessage> processSuspend)
@@ -385,9 +502,51 @@
 					break;
 				}
 
+				case MessageTypes.OrderRegister:
+				{
+					var msg = (OrderRegisterMessage)message;
+					msg.SecurityId = securityId;
+					break;
+				}
+
+				case MessageTypes.OrderReplace:
+				{
+					var msg = (OrderReplaceMessage)message;
+					msg.SecurityId = securityId;
+					break;
+				}
+
+				case MessageTypes.OrderCancel:
+				{
+					var msg = (OrderCancelMessage)message;
+					msg.SecurityId = securityId;
+					break;
+				}
+
+				case MessageTypes.MarketData:
+				{
+					var msg = (MarketDataMessage)message;
+					msg.SecurityId = securityId;
+					break;
+				}
+
 				default:
 					throw new ArgumentOutOfRangeException(nameof(message), message.Type, LocalizedStrings.Str2770);
 			}
+		}
+
+		private string GetStorageName(IMessageAdapter innerAdapter)
+		{
+			var adapter = innerAdapter;
+			var wrapper = adapter as IMessageAdapterWrapper;
+
+			while (wrapper != null)
+			{
+				adapter = wrapper.InnerAdapter;
+				wrapper = adapter as IMessageAdapterWrapper;
+			}
+
+			return adapter.GetType().Name.Replace("MessageAdapter", string.Empty);
 		}
 	}
 }
