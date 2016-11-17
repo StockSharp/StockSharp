@@ -786,6 +786,10 @@ namespace StockSharp.Algo
 						ProcessSecurityRemoveMessage((SecurityRemoveMessage)message);
 						break;
 
+					case ExtendedMessageTypes.MarketDataCancelAll:
+						_subscriptionManager.ClearCache();
+						break;
+
 					// если адаптеры передают специфичные сообщения
 					//default:
 					//	throw new ArgumentOutOfRangeException("Тип сообщения {0} не поддерживается.".Put(message.Type));

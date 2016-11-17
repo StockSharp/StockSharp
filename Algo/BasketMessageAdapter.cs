@@ -277,9 +277,10 @@ namespace StockSharp.Algo
 
 					_hearbeatAdapters.AddRange(GetSortedAdapters().ToDictionary(a => a, a =>
 					{
-						var hearbeatAdapter = new HeartbeatMessageAdapter(TryCreateNativeIdAdapter(a));
+						var innerAdapter = TryCreateNativeIdAdapter(a);
+						var hearbeatAdapter = new HeartbeatMessageAdapter(innerAdapter);
 						((IMessageAdapter)hearbeatAdapter).Parent = this;
-						hearbeatAdapter.NewOutMessage += m => OnInnerAdapterNewOutMessage(a, m);
+						hearbeatAdapter.NewOutMessage += m => OnInnerAdapterNewOutMessage(innerAdapter, m);
 						return hearbeatAdapter;
 					}));
 					
@@ -482,7 +483,7 @@ namespace StockSharp.Algo
 				switch (message.Type)
 				{
 					case MessageTypes.Connect:
-						ProcessConnectMessage(_hearbeatAdapters[innerAdapter], underlyingAdapter, (ConnectMessage)message);
+						ProcessConnectMessage(_hearbeatAdapters[underlyingAdapter], underlyingAdapter, (ConnectMessage)message);
 						return;
 
 					case MessageTypes.Disconnect:

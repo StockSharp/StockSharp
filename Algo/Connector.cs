@@ -613,7 +613,7 @@ namespace StockSharp.Algo
 					_adapterStates[adapter] = ConnectionStates.Disconnecting;
 			}
 
-			_subscriptionManager.Stop();
+			SendInMessage(new MarketDataCancelAllMessage());
 
 			try
 			{

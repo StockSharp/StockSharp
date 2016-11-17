@@ -2,12 +2,32 @@ namespace StockSharp.Algo
 {
 	using System;
 	using System.Collections.Generic;
+	using System.Linq;
 
 	using Ecng.Collections;
 	using Ecng.Common;
 
 	using StockSharp.Localization;
 	using StockSharp.Messages;
+
+	/// <summary>
+	/// Cancel all market data subscriptions message.
+	/// </summary>
+	public class MarketDataCancelAllMessage : Message
+	{
+		/// <summary>
+		/// Message type.
+		/// </summary>
+		public static MessageTypes MessageType => ExtendedMessageTypes.MarketDataCancelAll;
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="MarketDataCancelAllMessage"/>.
+		/// </summary>
+		public MarketDataCancelAllMessage()
+			: base(MessageType)
+		{
+		}
+	}
 
 	/// <summary>
 	/// Subscription counter adapter.
@@ -51,6 +71,58 @@ namespace StockSharp.Algo
 					base.SendInMessage(message);
 					break;
 
+				case ExtendedMessageTypes.MarketDataCancelAll:
+					var mgMsgs = new List<Message>();
+
+					lock (_sync)
+					{
+						if (_newsSubscribers.Count > 0)
+						{
+							mgMsgs.Add(new MarketDataMessage
+							{
+								IsSubscribe = false,
+								DataType = MarketDataTypes.News,
+								TransactionId = InnerAdapter.TransactionIdGenerator.GetNextId(),
+							});
+
+							_newsSubscribers.Clear();
+						}
+
+						if (_subscribers.Count > 0)
+						{
+							foreach (var pair in _subscribers)
+							{
+								mgMsgs.AddRange(pair.Value.Select(subscriber => new MarketDataMessage
+								{
+									IsSubscribe = false,
+									DataType = pair.Key,
+									SecurityId = subscriber.Key,
+									TransactionId = InnerAdapter.TransactionIdGenerator.GetNextId(),
+								}));
+							}
+
+							_subscribers.Clear();
+						}
+
+						if (_pfSubscribers.Count > 0)
+						{
+							mgMsgs.AddRange(_pfSubscribers.Select(pair => new PortfolioMessage
+							{
+								IsSubscribe = false,
+								PortfolioName = pair.Key,
+								TransactionId = InnerAdapter.TransactionIdGenerator.GetNextId(),
+							}));
+
+							_pfSubscribers.Clear();
+						}
+					}
+
+					mgMsgs.ForEach(base.SendInMessage);
+
+					RaiseNewOutMessage(message);
+
+					break;
+
 				case MessageTypes.MarketData:
 					ProcessInMarketDataMessage((MarketDataMessage)message);
 					break;
@@ -58,17 +130,24 @@ namespace StockSharp.Algo
 				case MessageTypes.Portfolio:
 				{
 					var pfMsg = (PortfolioMessage)message;
+					var sendIn = false;
 
 					lock (_sync)
 					{
 						var subscribersCount = _pfSubscribers.TryGetValue2(pfMsg.PortfolioName) ?? 0;
 
 						if (pfMsg.IsSubscribe)
+						{
 							subscribersCount++;
+							sendIn = subscribersCount == 1;
+						}
 						else
 						{
 							if (subscribersCount > 0)
+							{
 								subscribersCount--;
+								sendIn = subscribersCount == 0;
+							}
 							//else
 							//	sendOutMsg = NonExist(message);
 						}
@@ -79,7 +158,9 @@ namespace StockSharp.Algo
 							_pfSubscribers.Remove(pfMsg.PortfolioName);
 					}
 					
-					base.SendInMessage(message);
+					if (sendIn)
+						base.SendInMessage(message);
+
 					break;
 				}
 
@@ -121,23 +202,24 @@ namespace StockSharp.Algo
 					var subscribersCount = _newsSubscribers.TryGetValue2(subscriber) ?? 0;
 
 					if (isSubscribe)
+					{
 						subscribersCount++;
+						sendIn = subscribersCount == 1;
+					}
 					else
 					{
 						if (subscribersCount > 0)
+						{
 							subscribersCount--;
+							sendIn = subscribersCount == 0;
+						}
 						else
 							sendOutMsg = NonExist(message);
 					}
 
 					if (sendOutMsg == null)
 					{
-						if (subscribersCount > 0)
-							_newsSubscribers[subscriber] = subscribersCount;
-						else
-							_newsSubscribers.Remove(subscriber);
-
-						if (subscribersCount > 1)
+						if (!sendIn)
 						{
 							sendOutMsg = new MarketDataMessage
 							{
@@ -146,8 +228,11 @@ namespace StockSharp.Algo
 								OriginalTransactionId = message.TransactionId,
 							};
 						}
+
+						if (subscribersCount > 0)
+							_newsSubscribers[subscriber] = subscribersCount;
 						else
-							sendIn = true;
+							_newsSubscribers.Remove(subscriber);
 					}
 				}
 				else
@@ -158,23 +243,24 @@ namespace StockSharp.Algo
 					var subscribersCount = subscribers.TryGetValue2(securityId) ?? 0;
 
 					if (isSubscribe)
+					{
 						subscribersCount++;
+						sendIn = subscribersCount == 1;
+					}
 					else
 					{
 						if (subscribersCount > 0)
+						{
 							subscribersCount--;
+							sendIn = subscribersCount == 0;
+						}
 						else
 							sendOutMsg = NonExist(message);
 					}
 
 					if (sendOutMsg == null)
 					{
-						if (subscribersCount > 0)
-							subscribers[securityId] = subscribersCount;
-						else
-							subscribers.Remove(securityId);
-
-						if (subscribersCount > 1)
+						if (!sendIn)
 						{
 							sendOutMsg = new MarketDataMessage
 							{
@@ -184,8 +270,11 @@ namespace StockSharp.Algo
 								OriginalTransactionId = message.TransactionId,
 							};
 						}
+
+						if (subscribersCount > 0)
+							subscribers[securityId] = subscribersCount;
 						else
-							sendIn = true;
+							subscribers.Remove(securityId);
 					}
 				}
 			}

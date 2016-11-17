@@ -32,8 +32,6 @@ namespace StockSharp.Algo
 
 		private sealed class SubscriptionManager
 		{
-			private readonly Connector _connector;
-
 			private sealed class ContinuousInfo : Tuple<ContinuousSecurity, MarketDataMessage>
 			{
 				public ContinuousInfo(ContinuousSecurity security, MarketDataMessage message)
@@ -44,17 +42,10 @@ namespace StockSharp.Algo
 				public TimeSpan Elapsed { get; set; }
 			}
 
-			public void ClearCache()
-			{
-				_subscribers.Clear();
-				_continuousSecurities.Clear();
-				_registeredFilteredMarketDepths.Clear();
-			}
-
 			private readonly SynchronizedDictionary<MarketDataTypes, CachedSynchronizedSet<Security>> _subscribers = new SynchronizedDictionary<MarketDataTypes, CachedSynchronizedSet<Security>>();
 			private readonly SynchronizedLinkedList<ContinuousInfo> _continuousSecurities = new SynchronizedLinkedList<ContinuousInfo>();
-
 			private readonly CachedSynchronizedDictionary<Security, int> _registeredFilteredMarketDepths = new CachedSynchronizedDictionary<Security, int>();
+			private readonly Connector _connector;
 
 			public SubscriptionManager(Connector connector)
 			{
@@ -62,6 +53,14 @@ namespace StockSharp.Algo
 					throw new ArgumentNullException(nameof(connector));
 
 				_connector = connector;
+			}
+
+			public void ClearCache()
+			{
+				_subscribers.Clear();
+				_continuousSecurities.Clear();
+				_registeredFilteredMarketDepths.Clear();
+				_registeredPortfolios.Clear();
 			}
 
 			private IEnumerable<Security> GetSubscribers(MarketDataTypes type)
@@ -320,17 +319,6 @@ namespace StockSharp.Algo
 				_subscribers.TryGetValue(message.DataType)?.Remove(subscriber);
 				_connector.SendInMessage(message);
 			}
-
-			public void Stop()
-			{
-				RegisteredSecurities.ForEach(_connector.UnRegisterSecurity);
-				RegisteredMarketDepths.ForEach(_connector.UnRegisterMarketDepth);
-				RegisteredOrderLogs.ForEach(_connector.UnRegisterOrderLog);
-				RegisteredTrades.ForEach(_connector.UnRegisterTrades);
-				RegisteredPortfolios.ForEach(_connector.UnRegisterPortfolio);
-
-				_connector.UnRegisterNews();
-			}
 		}
 
 		/// <summary>
@@ -411,7 +399,7 @@ namespace StockSharp.Algo
 
 		private void UnSubscribeMarketData(Security security, MarketDataTypes type)
 		{
-			SubscribeMarketData(security, new MarketDataMessage
+			UnSubscribeMarketData(security, new MarketDataMessage
 			{
 				DataType = type,
 				IsSubscribe = false,
