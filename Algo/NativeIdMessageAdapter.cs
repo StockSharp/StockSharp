@@ -571,6 +571,18 @@
 					break;
 				}
 
+				case MessageTypes.CandleTimeFrame:
+				case MessageTypes.CandleRange:
+				case MessageTypes.CandlePnF:
+				case MessageTypes.CandleRenko:
+				case MessageTypes.CandleTick:
+				case MessageTypes.CandleVolume:
+				{
+					var msg = (CandleMessage)message;
+					msg.SecurityId = securityId;
+					break;
+				}
+
 				default:
 					throw new ArgumentOutOfRangeException(nameof(message), message.Type, LocalizedStrings.Str2770);
 			}
