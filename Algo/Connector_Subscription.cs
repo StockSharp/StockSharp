@@ -64,9 +64,9 @@ namespace StockSharp.Algo
 				_connector = connector;
 			}
 
-			private Security[] GetSubscribers(MarketDataTypes type)
+			private IEnumerable<Security> GetSubscribers(MarketDataTypes type)
 			{
-				return _subscribers.TryGetValue(type)?.Cache;
+				return _subscribers.TryGetValue(type)?.Cache ?? ArrayHelper.Empty<Security>();
 			}
 
 			public IEnumerable<Security> RegisteredSecurities => GetSubscribers(MarketDataTypes.Level1);

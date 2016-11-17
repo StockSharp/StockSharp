@@ -4356,6 +4356,7 @@ FileMaskDescription;File mask that uses for scanning in directory. For example, 
 IndicatorSelection;Indicator selection;Выбор индикатора
 SecuritiesNotFound;Securities '{0}' not found.;Инструменты '{0}' не найдены.
 CyclicDependency;Cyclic dependency of '{0}'.;Циклическая зависимость '{0}'.
+SubscriptionNonExist;Subscription does not exist.;Подписка не существует.
 DocStr0;Button activation alert settings;Кнопка активации настроек сигнала
 DocStr1;Initializes a new instance of the {0};Создать {0}
 DocStr2;Load settings;Загрузить настройки

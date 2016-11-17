@@ -43216,5 +43216,15 @@ namespace StockSharp.Localization
 		/// Cyclic dependency of '{0}'.
 		/// </summary>
 		public static string CyclicDependency => GetString(CyclicDependencyKey);
+
+		/// <summary>
+		/// Subscription does not exist.
+		/// </summary>
+		public const string SubscriptionNonExistKey = "SubscriptionNonExist";
+
+		/// <summary>
+		/// Subscription does not exist.
+		/// </summary>
+		public static string SubscriptionNonExist => GetString(SubscriptionNonExistKey);
 	}
 }

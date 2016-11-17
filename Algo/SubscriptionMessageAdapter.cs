@@ -1,9 +1,12 @@
 namespace StockSharp.Algo
 {
 	using System;
+	using System.Collections.Generic;
 
 	using Ecng.Collections;
+	using Ecng.Common;
 
+	using StockSharp.Localization;
 	using StockSharp.Messages;
 
 	/// <summary>
@@ -11,8 +14,11 @@ namespace StockSharp.Algo
 	/// </summary>
 	public class SubscriptionMessageAdapter : MessageAdapterWrapper
 	{
-		private readonly SynchronizedDictionary<MarketDataTypes, CachedSynchronizedDictionary<SecurityId, int>> _subscribers = new SynchronizedDictionary<MarketDataTypes, CachedSynchronizedDictionary<SecurityId, int>>();
-		private readonly SynchronizedDictionary<string, int> _newsSubscribers = new SynchronizedDictionary<string, int>(StringComparer.InvariantCultureIgnoreCase);
+		private readonly SyncObject _sync = new SyncObject();
+
+		private readonly Dictionary<MarketDataTypes, Dictionary<SecurityId, int>> _subscribers = new Dictionary<MarketDataTypes, Dictionary<SecurityId, int>>();
+		private readonly Dictionary<string, int> _newsSubscribers = new Dictionary<string, int>(StringComparer.InvariantCultureIgnoreCase);
+		//private readonly Dictionary<Tuple<MarketDataTypes, SecurityId>, List<MarketDataMessage>> _pendingMessages = new Dictionary<Tuple<MarketDataTypes, SecurityId>, List<MarketDataMessage>>();
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="SubscriptionMessageAdapter"/>.
@@ -32,12 +38,18 @@ namespace StockSharp.Algo
 			switch (message.Type)
 			{
 				case MessageTypes.Reset:
-					_subscribers.Clear();
-					_newsSubscribers.Clear();
+
+					lock (_sync)
+					{
+						_subscribers.Clear();
+						_newsSubscribers.Clear();
+						//_pendingMessages.Clear();
+					}
+
 					break;
 
 				case MessageTypes.MarketData:
-					ProcessMarketDataMessage((MarketDataMessage)message);
+					ProcessInMarketDataMessage((MarketDataMessage)message);
 					break;
 
 				default:
@@ -46,64 +58,133 @@ namespace StockSharp.Algo
 			}
 		}
 
-		private void ProcessMarketDataMessage(MarketDataMessage message)
+		///// <summary>
+		///// Process <see cref="MessageAdapterWrapper.InnerAdapter"/> output message.
+		///// </summary>
+		///// <param name="message">The message.</param>
+		//protected override void OnInnerAdapterNewOutMessage(Message message)
+		//{
+		//	switch (message.Type)
+		//	{
+		//		case MessageTypes.MarketData:
+		//			ProcessOutMarketDataMessage((MarketDataMessage)message);
+		//			break;
+		//	}
+
+		//	base.OnInnerAdapterNewOutMessage(message);
+		//}
+
+		private void ProcessInMarketDataMessage(MarketDataMessage message)
 		{
-			var isSubscribe = message.IsSubscribe;
+			var sendIn = false;
+			MarketDataMessage sendOutMsg = null;
 
-			if (message.DataType == MarketDataTypes.News)
+			lock (_sync)
 			{
-				var subscriber = message.NewsId;
+				var isSubscribe = message.IsSubscribe;
 
-				var subscribersCount = _newsSubscribers.TryGetValue2(subscriber) ?? 0;
-
-				if (isSubscribe)
-					subscribersCount++;
-				else
+				if (message.DataType == MarketDataTypes.News)
 				{
-					if (subscribersCount > 0)
-						subscribersCount--;
-				}
+					var subscriber = message.NewsId ?? string.Empty;
 
-				if (subscribersCount > 0)
-					_newsSubscribers[subscriber] = subscribersCount;
-				else
-					_newsSubscribers.Remove(subscriber);
+					var subscribersCount = _newsSubscribers.TryGetValue2(subscriber) ?? 0;
 
-				if (subscribersCount > 1)
-				{
-					var msg = new MarketDataMessage
+					if (isSubscribe)
+						subscribersCount++;
+					else
 					{
-						DataType = message.DataType,
-						IsSubscribe = isSubscribe,
-						OriginalTransactionId = message.TransactionId,
-					};
+						if (subscribersCount > 0)
+							subscribersCount--;
+						else
+							sendOutMsg = NonExist(message);
+					}
 
-					RaiseNewOutMessage(msg);
+					if (sendOutMsg == null)
+					{
+						if (subscribersCount > 0)
+							_newsSubscribers[subscriber] = subscribersCount;
+						else
+							_newsSubscribers.Remove(subscriber);
+
+						if (subscribersCount > 1)
+						{
+							sendOutMsg = new MarketDataMessage
+							{
+								DataType = message.DataType,
+								IsSubscribe = isSubscribe,
+								OriginalTransactionId = message.TransactionId,
+							};
+						}
+						else
+							sendIn = true;
+					}
 				}
 				else
-					base.SendInMessage(message);
+				{
+					var subscribers = _subscribers.SafeAdd(message.DataType);
+					var securityId = message.SecurityId;
+
+					var subscribersCount = subscribers.TryGetValue2(securityId) ?? 0;
+
+					if (isSubscribe)
+						subscribersCount++;
+					else
+					{
+						if (subscribersCount > 0)
+							subscribersCount--;
+						else
+							sendOutMsg = NonExist(message);
+					}
+
+					if (sendOutMsg == null)
+					{
+						if (subscribersCount > 0)
+							subscribers[securityId] = subscribersCount;
+						else
+							subscribers.Remove(securityId);
+
+						if (subscribersCount > 1)
+						{
+							sendOutMsg = new MarketDataMessage
+							{
+								DataType = message.DataType,
+								IsSubscribe = isSubscribe,
+								SecurityId = securityId,
+								OriginalTransactionId = message.TransactionId,
+							};
+						}
+						else
+							sendIn = true;
+					}
+				}
 			}
-			else
+
+			if (sendIn)
+				base.SendInMessage(message);
+
+			if (sendOutMsg != null)
+				RaiseNewOutMessage(sendOutMsg);
+		}
+
+		//private void ProcessOutMarketDataMessage(MarketDataMessage message)
+		//{
+		// TODO
+		//	lock (_sync)
+		//	{
+		//		var pending = _pendingMessages.TryGetValue(Tuple.Create(message.DataType, message.SecurityId));
+		//	}
+		//}
+
+		private static MarketDataMessage NonExist(MarketDataMessage message)
+		{
+			return new MarketDataMessage
 			{
-				var subscribers = _subscribers.SafeAdd(message.DataType);
-				var securityId = message.SecurityId;
-				var subscribersCount = subscribers.ChangeSubscribers(securityId, isSubscribe);
-
-				if (subscribersCount > 1)
-				{
-					var msg = new MarketDataMessage
-					{
-						DataType = message.DataType,
-						IsSubscribe = isSubscribe,
-						SecurityId = securityId,
-						OriginalTransactionId = message.TransactionId,
-					};
-
-					RaiseNewOutMessage(msg);
-				}
-				else
-					base.SendInMessage(message);
-			}
+				DataType = message.DataType,
+				IsSubscribe = false,
+				SecurityId = message.SecurityId,
+				OriginalTransactionId = message.TransactionId,
+				Error = new InvalidOperationException(LocalizedStrings.SubscriptionNonExist),
+			};
 		}
 
 		/// <summary>

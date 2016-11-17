@@ -1344,6 +1344,7 @@ M:StockSharp.Algo.Indicators.ShiftedIndicatorValue.SetValue``1(StockSharp.Algo.I
 M:StockSharp.Algo.Indicators.ShiftedIndicatorValue.SetValue``1(StockSharp.Algo.Indicators.IIndicator,``0)/param/value;Str3099
 M:StockSharp.Algo.Indicators.ShiftedIndicatorValue.SetValue``1(StockSharp.Algo.Indicators.IIndicator,``0)/returns;DocStr1159
 T:StockSharp.Algo.INativeIdStorage/summary;DocStr9329
+M:StockSharp.Algo.INativeIdStorage.Init/summary;DocStr9249
 M:StockSharp.Algo.INativeIdStorage.Get(System.String)/summary;DocStr9330
 M:StockSharp.Algo.INativeIdStorage.Get(System.String)/param/name;DocStr429
 M:StockSharp.Algo.INativeIdStorage.Get(System.String)/returns;DocStr9331
@@ -1363,6 +1364,7 @@ M:StockSharp.Algo.INativeIdStorage.TryGetBySecurityId(System.String,StockSharp.M
 T:StockSharp.Algo.CsvNativeIdStorage/summary;DocStr9338
 M:StockSharp.Algo.CsvNativeIdStorage.#ctor(System.String)/summary;DocStr1
 M:StockSharp.Algo.CsvNativeIdStorage.#ctor(System.String)/param/path;DocStr9340
+M:StockSharp.Algo.CsvNativeIdStorage.Init/summary;DocStr9249
 M:StockSharp.Algo.CsvNativeIdStorage.Get(System.String)/summary;DocStr9330
 M:StockSharp.Algo.CsvNativeIdStorage.Get(System.String)/param/name;DocStr429
 M:StockSharp.Algo.CsvNativeIdStorage.Get(System.String)/returns;DocStr9331
