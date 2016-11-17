@@ -136,7 +136,11 @@ namespace SampleSmartCandles
 				var candlesElem = new ChartCandleElement();
 				area.Elements.Add(candlesElem);
 
-				_candleManager.Processing += (s, candle) => wnd.Chart.Draw(candlesElem, candle);
+				_candleManager.Processing += (s, candle) =>
+				{
+					if (s == series)
+						wnd.Chart.Draw(candlesElem, candle);
+				};
 
 				return wnd;
 			}).Show();

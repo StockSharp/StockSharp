@@ -36,7 +36,8 @@ namespace StockSharp.Algo
 	{
 		private readonly SyncObject _sync = new SyncObject();
 
-		private readonly Dictionary<MarketDataTypes, Dictionary<SecurityId, int>> _subscribers = new Dictionary<MarketDataTypes, Dictionary<SecurityId, int>>();
+		private readonly Dictionary<Tuple<MarketDataTypes, SecurityId>, int> _subscribers = new Dictionary<Tuple<MarketDataTypes, SecurityId>, int>();
+		private readonly Dictionary<Tuple<MarketDataTypes, SecurityId, object>, int> _candleSubscribers = new Dictionary<Tuple<MarketDataTypes, SecurityId, object>, int>();
 		private readonly Dictionary<string, int> _newsSubscribers = new Dictionary<string, int>(StringComparer.InvariantCultureIgnoreCase);
 		private readonly Dictionary<string, int> _pfSubscribers = new Dictionary<string, int>(StringComparer.InvariantCultureIgnoreCase);
 		//private readonly Dictionary<Tuple<MarketDataTypes, SecurityId>, List<MarketDataMessage>> _pendingMessages = new Dictionary<Tuple<MarketDataTypes, SecurityId>, List<MarketDataMessage>>();
@@ -65,6 +66,7 @@ namespace StockSharp.Algo
 						_subscribers.Clear();
 						_newsSubscribers.Clear();
 						_pfSubscribers.Clear();
+						_candleSubscribers.Clear();
 						//_pendingMessages.Clear();
 					}
 
@@ -90,18 +92,29 @@ namespace StockSharp.Algo
 
 						if (_subscribers.Count > 0)
 						{
-							foreach (var pair in _subscribers)
+							mgMsgs.AddRange(_subscribers.Select(subscriber => new MarketDataMessage
 							{
-								mgMsgs.AddRange(pair.Value.Select(subscriber => new MarketDataMessage
-								{
-									IsSubscribe = false,
-									DataType = pair.Key,
-									SecurityId = subscriber.Key,
-									TransactionId = InnerAdapter.TransactionIdGenerator.GetNextId(),
-								}));
-							}
+								IsSubscribe = false,
+								DataType = subscriber.Key.Item1,
+								SecurityId = subscriber.Key.Item2,
+								TransactionId = InnerAdapter.TransactionIdGenerator.GetNextId(),
+							}));
 
 							_subscribers.Clear();
+						}
+
+						if (_candleSubscribers.Count > 0)
+						{
+							mgMsgs.AddRange(_candleSubscribers.Select(subscriber => new MarketDataMessage
+							{
+								IsSubscribe = false,
+								DataType = subscriber.Key.Item1,
+								SecurityId = subscriber.Key.Item2,
+								Arg = subscriber.Key.Item3,
+								TransactionId = InnerAdapter.TransactionIdGenerator.GetNextId(),
+							}));
+
+							_candleSubscribers.Clear();
 						}
 
 						if (_pfSubscribers.Count > 0)
@@ -195,86 +208,141 @@ namespace StockSharp.Algo
 			{
 				var isSubscribe = message.IsSubscribe;
 
-				if (message.DataType == MarketDataTypes.News)
+				switch (message.DataType)
 				{
-					var subscriber = message.NewsId ?? string.Empty;
-
-					var subscribersCount = _newsSubscribers.TryGetValue2(subscriber) ?? 0;
-
-					if (isSubscribe)
+					case MarketDataTypes.News:
 					{
-						subscribersCount++;
-						sendIn = subscribersCount == 1;
-					}
-					else
-					{
-						if (subscribersCount > 0)
+						var subscriber = message.NewsId ?? string.Empty;
+
+						var subscribersCount = _newsSubscribers.TryGetValue2(subscriber) ?? 0;
+
+						if (isSubscribe)
 						{
-							subscribersCount--;
-							sendIn = subscribersCount == 0;
+							subscribersCount++;
+							sendIn = subscribersCount == 1;
 						}
 						else
-							sendOutMsg = NonExist(message);
-					}
-
-					if (sendOutMsg == null)
-					{
-						if (!sendIn)
 						{
-							sendOutMsg = new MarketDataMessage
+							if (subscribersCount > 0)
 							{
-								DataType = message.DataType,
-								IsSubscribe = isSubscribe,
-								OriginalTransactionId = message.TransactionId,
-							};
+								subscribersCount--;
+								sendIn = subscribersCount == 0;
+							}
+							else
+								sendOutMsg = NonExist(message);
 						}
 
-						if (subscribersCount > 0)
-							_newsSubscribers[subscriber] = subscribersCount;
-						else
-							_newsSubscribers.Remove(subscriber);
-					}
-				}
-				else
-				{
-					var subscribers = _subscribers.SafeAdd(message.DataType);
-					var securityId = message.SecurityId;
-
-					var subscribersCount = subscribers.TryGetValue2(securityId) ?? 0;
-
-					if (isSubscribe)
-					{
-						subscribersCount++;
-						sendIn = subscribersCount == 1;
-					}
-					else
-					{
-						if (subscribersCount > 0)
+						if (sendOutMsg == null)
 						{
-							subscribersCount--;
-							sendIn = subscribersCount == 0;
-						}
-						else
-							sendOutMsg = NonExist(message);
-					}
-
-					if (sendOutMsg == null)
-					{
-						if (!sendIn)
-						{
-							sendOutMsg = new MarketDataMessage
+							if (!sendIn)
 							{
-								DataType = message.DataType,
-								IsSubscribe = isSubscribe,
-								SecurityId = securityId,
-								OriginalTransactionId = message.TransactionId,
-							};
+								sendOutMsg = new MarketDataMessage
+								{
+									DataType = message.DataType,
+									IsSubscribe = isSubscribe,
+									OriginalTransactionId = message.TransactionId,
+								};
+							}
+
+							if (subscribersCount > 0)
+								_newsSubscribers[subscriber] = subscribersCount;
+							else
+								_newsSubscribers.Remove(subscriber);
 						}
 
-						if (subscribersCount > 0)
-							subscribers[securityId] = subscribersCount;
+						break;
+					}
+					case MarketDataTypes.CandleTimeFrame:
+					case MarketDataTypes.CandleRange:
+					case MarketDataTypes.CandlePnF:
+					case MarketDataTypes.CandleRenko:
+					case MarketDataTypes.CandleTick:
+					case MarketDataTypes.CandleVolume:
+					{
+						var key = Tuple.Create(message.DataType, message.SecurityId, message.Arg);
+
+						var subscribersCount = _candleSubscribers.TryGetValue2(key) ?? 0;
+
+						if (isSubscribe)
+						{
+							subscribersCount++;
+							sendIn = subscribersCount == 1;
+						}
 						else
-							subscribers.Remove(securityId);
+						{
+							if (subscribersCount > 0)
+							{
+								subscribersCount--;
+								sendIn = subscribersCount == 0;
+							}
+							else
+								sendOutMsg = NonExist(message);
+						}
+
+						if (sendOutMsg == null)
+						{
+							if (!sendIn)
+							{
+								sendOutMsg = new MarketDataMessage
+								{
+									DataType = message.DataType,
+									IsSubscribe = isSubscribe,
+									SecurityId = message.SecurityId,
+									Arg = message.Arg,
+									OriginalTransactionId = message.TransactionId,
+								};
+							}
+
+							if (subscribersCount > 0)
+								_candleSubscribers[key] = subscribersCount;
+							else
+								_candleSubscribers.Remove(key);
+						}
+
+						break;
+					}
+					default:
+					{
+						var key = Tuple.Create(message.DataType, message.SecurityId);
+
+						var subscribersCount = _subscribers.TryGetValue2(key) ?? 0;
+
+						if (isSubscribe)
+						{
+							subscribersCount++;
+							sendIn = subscribersCount == 1;
+						}
+						else
+						{
+							if (subscribersCount > 0)
+							{
+								subscribersCount--;
+								sendIn = subscribersCount == 0;
+							}
+							else
+								sendOutMsg = NonExist(message);
+						}
+
+						if (sendOutMsg == null)
+						{
+							if (!sendIn)
+							{
+								sendOutMsg = new MarketDataMessage
+								{
+									DataType = message.DataType,
+									IsSubscribe = isSubscribe,
+									SecurityId = message.SecurityId,
+									OriginalTransactionId = message.TransactionId,
+								};
+							}
+
+							if (subscribersCount > 0)
+								_subscribers[key] = subscribersCount;
+							else
+								_subscribers.Remove(key);
+						}
+
+						break;
 					}
 				}
 			}
