@@ -17,9 +17,13 @@
 	{
 		private sealed class InMemoryStorage : INativeIdStorage
 		{
-			private readonly PairSet<SecurityId, object> _nativeIds = new PairSet<SecurityId, object>();
+			private readonly SynchronizedPairSet<SecurityId, object> _nativeIds = new SynchronizedPairSet<SecurityId, object>();
 
-			public bool TryAdd(string name, SecurityId securityId, object nativeId)
+			void INativeIdStorage.Init()
+			{
+			}
+
+			bool INativeIdStorage.TryAdd(string name, SecurityId securityId, object nativeId)
 			{
 				if (name == null)
 					throw new ArgumentNullException(nameof(name));
@@ -30,7 +34,7 @@
 				return _nativeIds.TryAdd(securityId, nativeId);
 			}
 
-			public object TryGetBySecurityId(string name, SecurityId securityId)
+			object INativeIdStorage.TryGetBySecurityId(string name, SecurityId securityId)
 			{
 				if (name == null)
 					throw new ArgumentNullException(nameof(name));
@@ -38,7 +42,7 @@
 				return _nativeIds.TryGetValue(securityId);
 			}
 
-			public SecurityId? TryGetByNativeId(string name, object nativeId)
+			SecurityId? INativeIdStorage.TryGetByNativeId(string name, object nativeId)
 			{
 				if (name == null)
 					throw new ArgumentNullException(nameof(name));
@@ -51,12 +55,12 @@
 				return securityId;
 			}
 
-			public Tuple<SecurityId, object>[] Get(string name)
+			Tuple<SecurityId, object>[] INativeIdStorage.Get(string name)
 			{
 				if (name == null)
 					throw new ArgumentNullException(nameof(name));
 
-				return _nativeIds.Select(p => Tuple.Create(p.Key, p.Value)).ToArray();
+				return _nativeIds.SyncGet(c => c.Select(p => Tuple.Create(p.Key, p.Value)).ToArray());
 			}
 		}
 
@@ -157,16 +161,11 @@
 
 					// external code shouldn't receive native ids
 					securityId.Native = null;
-
+					
 					if (!boardCode.IsEmpty())
 					{
 						if (nativeSecurityId != null)
 						{
-							lock (_syncRoot)
-							{
-								_securityIds[nativeSecurityId] = securityId;
-							}
-
 							if (!Storage.TryAdd(_storageName, securityId, nativeSecurityId))
 							{
 								var prevId = Storage.TryGetByNativeId(_storageName, nativeSecurityId);
@@ -179,6 +178,9 @@
 								else
 									throw new InvalidOperationException(LocalizedStrings.Str687Params.Put(Storage.TryGetBySecurityId(_storageName, securityId), nativeSecurityId, securityId));
 							}
+
+							lock (_syncRoot)
+								_securityIds[nativeSecurityId] = securityId;
 						}
 					}
 					else

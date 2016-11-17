@@ -19,6 +19,11 @@ namespace StockSharp.Algo
 	public interface INativeIdStorage
 	{
 		/// <summary>
+		/// Initialize the storage.
+		/// </summary>
+		void Init();
+
+		/// <summary>
 		/// Get native security identifiers for storage. 
 		/// </summary>
 		/// <param name="name">Storage name.</param>
@@ -56,7 +61,8 @@ namespace StockSharp.Algo
 	/// </summary>
 	public sealed class CsvNativeIdStorage : INativeIdStorage
 	{
-		private readonly SynchronizedDictionary<string, PairSet<SecurityId, object>> _nativeIds = new SynchronizedDictionary<string, PairSet<SecurityId, object>>();
+		private readonly SyncObject _sync = new SyncObject();
+		private readonly Dictionary<string, PairSet<SecurityId, object>> _nativeIds = new Dictionary<string, PairSet<SecurityId, object>>();
 
 		private readonly string _path;
 
@@ -70,11 +76,34 @@ namespace StockSharp.Algo
 				throw new ArgumentNullException(nameof(path));
 
 			_path = path.ToFullPath();
+		}
 
+		/// <summary>
+		/// Initialize the storage.
+		/// </summary>
+		public void Init()
+		{
 			if (!Directory.Exists(_path))
 				Directory.CreateDirectory(_path);
 
-			Load();
+			var files = Directory.GetFiles(_path, "*.csv");
+
+			var errors = new List<Exception>();
+
+			foreach (var fileName in files)
+			{
+				try
+				{
+					LoadFile(fileName);
+				}
+				catch (Exception ex)
+				{
+					errors.Add(ex);
+				}
+			}
+
+			if (errors.Count > 0)
+				throw new AggregateException(errors);
 		}
 
 		/// <summary>
@@ -87,12 +116,15 @@ namespace StockSharp.Algo
 			if (name == null)
 				throw new ArgumentNullException(nameof(name));
 
-			var nativeIds = _nativeIds.TryGetValue(name);
+			lock (_sync)
+			{
+				var nativeIds = _nativeIds.TryGetValue(name);
 
-			if (nativeIds == null)
-				return ArrayHelper.Empty<Tuple<SecurityId, object>>();
+				if (nativeIds == null)
+					return ArrayHelper.Empty<Tuple<SecurityId, object>>();
 
-			return nativeIds.Select(p => Tuple.Create(p.Key, p.Value)).ToArray();
+				return nativeIds.Select(p => Tuple.Create(p.Key, p.Value)).ToArray();
+			}
 		}
 
 		/// <summary>
@@ -110,13 +142,16 @@ namespace StockSharp.Algo
 			if (nativeId == null)
 				throw new ArgumentNullException(nameof(nativeId));
 
-			var nativeIds = _nativeIds.SafeAdd(name);
-			var added = nativeIds.TryAdd(securityId, nativeId);
+			lock (_sync)
+			{
+				var nativeIds = _nativeIds.SafeAdd(name);
+				var added = nativeIds.TryAdd(securityId, nativeId);
 
-			if (!added)
-				return false;
+				if (!added)
+					return false;
+			}
 
-			Save(name, nativeIds);
+			Save(name, securityId, nativeId);
 
 			return true;
 		}
@@ -132,17 +167,20 @@ namespace StockSharp.Algo
 			if (name == null)
 				throw new ArgumentNullException(nameof(name));
 
-			var nativeIds = _nativeIds.TryGetValue(name);
+			lock (_sync)
+			{
+				var nativeIds = _nativeIds.TryGetValue(name);
 
-			if (nativeIds == null)
-				return null;
+				if (nativeIds == null)
+					return null;
 
-			SecurityId securityId;
+				SecurityId securityId;
 
-			if (!nativeIds.TryGetKey(nativeId, out securityId))
-				return null;
+				if (!nativeIds.TryGetKey(nativeId, out securityId))
+					return null;
 
-			return securityId;
+				return securityId;
+			}
 		}
 
 		/// <summary>
@@ -156,15 +194,11 @@ namespace StockSharp.Algo
 			if (name == null)
 				throw new ArgumentNullException(nameof(name));
 
-			var nativeIds = _nativeIds.TryGetValue(name);
-
-			if (nativeIds == null)
-				return null;
-
-			return nativeIds.TryGetValue(securityId);
+			lock (_sync)
+				return _nativeIds.TryGetValue(name)?.TryGetValue(securityId);
 		}
 
-		private void Save(string name, IEnumerable<KeyValuePair<SecurityId, object>> values)
+		private void Save(string name, SecurityId securityId, object nativeId)
 		{
 			CultureInfo.InvariantCulture.DoInCulture(() =>
 			{
@@ -172,22 +206,24 @@ namespace StockSharp.Algo
 
 				try
 				{
-					using (var stream = new FileStream(fileName, FileMode.OpenOrCreate))
+					using (var stream = new FileStream(fileName, FileMode.Append, FileAccess.Write))
 					using (var writer = new CsvFileWriter(stream))
 					{
-						foreach (var item in values)
-						{
-							var securityId = item.Key;
-							var nativeId = item.Value;
+						//foreach (var item in values)
+						//{
+							//var securityId = item.Key;
+							//var nativeId = item.Value;
 
-							writer.WriteRow(new[]
-							{
-								securityId.SecurityCode,
-								securityId.BoardCode,
-								nativeId.GetType().GetTypeName(false),
-								nativeId.ToString()
-							});
-						}
+						var nativeIdType = nativeId.GetType();
+
+						writer.WriteRow(new[]
+						{
+							securityId.SecurityCode,
+							securityId.BoardCode,
+							Converter.GetAlias(nativeIdType) ?? nativeIdType.GetTypeName(false),
+							nativeId.ToString()
+						});
+						//}
 					}
 				}
 				catch (Exception excp)
@@ -197,45 +233,44 @@ namespace StockSharp.Algo
 			});
 		}
 
-		private void Load()
-		{
-			var files = Directory.GetFiles(_path, "*.csv");
-
-			foreach (var fileName in files)
-				LoadFile(fileName);
-		}
-
 		private void LoadFile(string fileName)
 		{
 			CultureInfo.InvariantCulture.DoInCulture(() =>
 			{
-				try
+				if (!File.Exists(fileName))
+					return;
+
+				var name = Path.GetFileNameWithoutExtension(fileName);
+
+				var pairs = new List<Tuple<SecurityId, object>>();
+
+				using (var stream = new FileStream(fileName, FileMode.Open, FileAccess.Read))
 				{
-					var name = Path.GetFileNameWithoutExtension(fileName);
-					var nativeIds = _nativeIds.SafeAdd(name);
+					var reader = new FastCsvReader(stream, Encoding.UTF8);
 
-					using (var stream = new FileStream(fileName, FileMode.OpenOrCreate))
+					while (reader.NextLine())
 					{
-						var reader = new FastCsvReader(stream, Encoding.UTF8);
-
-						while (reader.NextLine())
+						var securityId = new SecurityId
 						{
-							var securityId = new SecurityId
-							{
-								SecurityCode = reader.ReadString(),
-								BoardCode = reader.ReadString()
-							};
+							SecurityCode = reader.ReadString(),
+							BoardCode = reader.ReadString()
+						};
 
-							var type = reader.ReadString().To<Type>();
-							var nativeId = reader.ReadString().To(type);
+						var type = reader.ReadString().To<Type>();
+						var nativeId = reader.ReadString().To(type);
 
-							nativeIds.Add(securityId, nativeId);
-						}
+						pairs.Add(Tuple.Create(securityId, nativeId));
 					}
 				}
-				catch (Exception excp)
+
+				lock (_sync)
 				{
-					excp.LogError("Load native storage from {0} error.".Put(fileName));
+					var nativeIds = _nativeIds.SafeAdd(name);
+
+					foreach (var tuple in pairs)
+					{
+						nativeIds.Add(tuple.Item1, tuple.Item2);
+					}
 				}
 			});
         }
