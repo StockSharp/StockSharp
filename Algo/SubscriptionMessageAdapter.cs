@@ -1,5 +1,7 @@
 namespace StockSharp.Algo
 {
+	using System;
+
 	using Ecng.Collections;
 
 	using StockSharp.Messages;
@@ -10,6 +12,7 @@ namespace StockSharp.Algo
 	public class SubscriptionMessageAdapter : MessageAdapterWrapper
 	{
 		private readonly SynchronizedDictionary<MarketDataTypes, CachedSynchronizedDictionary<SecurityId, int>> _subscribers = new SynchronizedDictionary<MarketDataTypes, CachedSynchronizedDictionary<SecurityId, int>>();
+		private readonly SynchronizedDictionary<string, int> _newsSubscribers = new SynchronizedDictionary<string, int>(StringComparer.InvariantCultureIgnoreCase);
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="SubscriptionMessageAdapter"/>.
@@ -30,6 +33,7 @@ namespace StockSharp.Algo
 			{
 				case MessageTypes.Reset:
 					_subscribers.Clear();
+					_newsSubscribers.Clear();
 					break;
 
 				case MessageTypes.MarketData:
@@ -44,27 +48,62 @@ namespace StockSharp.Algo
 
 		private void ProcessMarketDataMessage(MarketDataMessage message)
 		{
-			var securityId = message.SecurityId;
+			var isSubscribe = message.IsSubscribe;
 
-			var subscribersCount = _subscribers
-				.SafeAdd(message.DataType)
-				.ChangeSubscribers(securityId, message.IsSubscribe);
-
-			if (subscribersCount > 1)
+			if (message.DataType == MarketDataTypes.News)
 			{
-				var msg = new MarketDataMessage
-				{
-					DataType = message.DataType,
-					IsSubscribe = message.IsSubscribe,
-					SecurityId = securityId,
-					OriginalTransactionId = message.TransactionId,
-				};
+				var subscriber = message.NewsId;
 
-				//message.CopyTo(msg);
-				RaiseNewOutMessage(msg);
+				var subscribersCount = _newsSubscribers.TryGetValue2(subscriber) ?? 0;
+
+				if (isSubscribe)
+					subscribersCount++;
+				else
+				{
+					if (subscribersCount > 0)
+						subscribersCount--;
+				}
+
+				if (subscribersCount > 0)
+					_newsSubscribers[subscriber] = subscribersCount;
+				else
+					_newsSubscribers.Remove(subscriber);
+
+				if (subscribersCount > 1)
+				{
+					var msg = new MarketDataMessage
+					{
+						DataType = message.DataType,
+						IsSubscribe = isSubscribe,
+						OriginalTransactionId = message.TransactionId,
+					};
+
+					RaiseNewOutMessage(msg);
+				}
+				else
+					base.SendInMessage(message);
 			}
 			else
-				base.SendInMessage(message);
+			{
+				var subscribers = _subscribers.SafeAdd(message.DataType);
+				var securityId = message.SecurityId;
+				var subscribersCount = subscribers.ChangeSubscribers(securityId, isSubscribe);
+
+				if (subscribersCount > 1)
+				{
+					var msg = new MarketDataMessage
+					{
+						DataType = message.DataType,
+						IsSubscribe = isSubscribe,
+						SecurityId = securityId,
+						OriginalTransactionId = message.TransactionId,
+					};
+
+					RaiseNewOutMessage(msg);
+				}
+				else
+					base.SendInMessage(message);
+			}
 		}
 
 		/// <summary>

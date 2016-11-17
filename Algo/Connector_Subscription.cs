@@ -180,26 +180,6 @@ namespace StockSharp.Algo
 				return _registeredFilteredMarketDepths.ContainsKey(security);
 			}
 
-			private bool _isNewsSubscribed;
-
-			public void RegisterNews()
-			{
-				if (_isNewsSubscribed)
-					return;
-
-				_isNewsSubscribed = true;
-				_connector.OnRegisterNews();
-			}
-
-			public void UnRegisterNews()
-			{
-				if (!_isNewsSubscribed)
-					return;
-
-				_isNewsSubscribed = false;
-				_connector.OnUnRegisterNews();
-			}
-
 			private void SubscribeContinuous(ContinuousSecurity security, MarketDataMessage message)
 			{
 				lock (_continuousSecurities.SyncRoot)
@@ -349,7 +329,7 @@ namespace StockSharp.Algo
 				RegisteredTrades.ForEach(_connector.UnRegisterTrades);
 				RegisteredPortfolios.ForEach(_connector.UnRegisterPortfolio);
 
-				UnRegisterNews();
+				_connector.UnRegisterNews();
 			}
 		}
 
@@ -599,7 +579,7 @@ namespace StockSharp.Algo
 		/// </summary>
 		public void RegisterNews()
 		{
-			_subscriptionManager.RegisterNews();
+			OnRegisterNews();
 		}
 
 		/// <summary>
@@ -620,7 +600,7 @@ namespace StockSharp.Algo
 		/// </summary>
 		public void UnRegisterNews()
 		{
-			_subscriptionManager.UnRegisterNews();
+			OnUnRegisterNews();
 		}
 
 		/// <summary>
