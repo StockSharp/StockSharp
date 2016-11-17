@@ -48,6 +48,7 @@ namespace StockSharp.Algo
 						//_pendingMessages.Clear();
 					}
 
+					base.SendInMessage(message);
 					break;
 
 				case MessageTypes.MarketData:

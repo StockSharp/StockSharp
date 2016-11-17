@@ -68,6 +68,7 @@
 					_connected = false;
 					_pendingMessages.Clear();
 
+					base.SendInMessage(message);
 					break;
 				}
 				case MessageTypes.Connect:
