@@ -302,6 +302,10 @@ namespace StockSharp.Messages
 
 			switch (message.Type)
 			{
+				case MessageTypes.Reset:
+					_prevTime = default(DateTimeOffset);
+					break;
+
 				case MessageTypes.PortfolioLookup:
 				{
 					if (!IsSupportNativePortfolioLookup)

@@ -254,6 +254,8 @@ namespace StockSharp.Messages
 					return ((Level1ChangeMessage)message).ServerTime;
 				case MessageTypes.Time:
 					return ((TimeMessage)message).ServerTime;
+				case MessageTypes.Connect:
+					return ((ConnectMessage)message).LocalTime;
 				default:
 				{
 					var candleMsg = message as CandleMessage;
