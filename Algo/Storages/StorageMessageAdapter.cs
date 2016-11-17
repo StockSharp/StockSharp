@@ -270,11 +270,14 @@ namespace StockSharp.Algo.Storages
 					break;
 
 				case MarketDataTypes.Trades:
-				case MarketDataTypes.OrderLog:
 					if (!UseCandlesInsteadTrades)
-						LoadMessages(GetStorage<ExecutionMessage>(msg.SecurityId, msg.Arg), from, to);
+						LoadMessages(GetStorage<ExecutionMessage>(msg.SecurityId, ExecutionTypes.Tick), from, to);
 					else
-						LoadMessages(msg.SecurityId, msg.Arg, from, to);
+						LoadMessages(msg.SecurityId, ExecutionTypes.Tick, from, to);
+					break;
+
+				case MarketDataTypes.OrderLog:
+					LoadMessages(GetStorage<ExecutionMessage>(msg.SecurityId, ExecutionTypes.OrderLog), from, to);
 					break;
 
 				case MarketDataTypes.News:
