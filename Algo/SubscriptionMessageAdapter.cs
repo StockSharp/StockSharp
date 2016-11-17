@@ -28,6 +28,10 @@ namespace StockSharp.Algo
 		{
 			switch (message.Type)
 			{
+				case MessageTypes.Reset:
+					_subscribers.Clear();
+					break;
+
 				case MessageTypes.MarketData:
 					ProcessMarketDataMessage((MarketDataMessage)message);
 					break;
@@ -53,9 +57,10 @@ namespace StockSharp.Algo
 					DataType = message.DataType,
 					IsSubscribe = message.IsSubscribe,
 					SecurityId = securityId,
+					OriginalTransactionId = message.TransactionId,
 				};
 
-				message.CopyTo(msg);
+				//message.CopyTo(msg);
 				RaiseNewOutMessage(msg);
 			}
 			else
