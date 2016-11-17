@@ -299,7 +299,7 @@
 
 					lock (_syncRoot)
 					{
-						native = _securityIds.TryGetValue2(securityId);
+						native = _securityIds.TryGetKey(securityId);
 
 						if (native == null)
 						{
