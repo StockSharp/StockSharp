@@ -164,7 +164,12 @@ namespace SampleFix
 
 		private void FindClick(object sender, RoutedEventArgs e)
 		{
-			new FindSecurityWindow().ShowModal(this);
+			var wnd = new SecurityLookupWindow { Criteria = new Security { Code = "AAPL" } };
+
+			if (!wnd.ShowModal(this))
+				return;
+
+			MainWindow.Instance.Trader.LookupSecurities(wnd.Criteria);
 		}
 	}
 }

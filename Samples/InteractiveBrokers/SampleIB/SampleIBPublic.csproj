@@ -98,9 +98,6 @@
     <Compile Include="CandlesWindow.xaml.cs">
       <DependentUpon>CandlesWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="FindSecurityWindow.xaml.cs">
-      <DependentUpon>FindSecurityWindow.xaml</DependentUpon>
-    </Compile>
     <Compile Include="NewsWindow.xaml.cs">
       <DependentUpon>NewsWindow.xaml</DependentUpon>
     </Compile>
@@ -156,10 +153,6 @@
   </ItemGroup>
   <ItemGroup>
     <Page Include="CandlesWindow.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="FindSecurityWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

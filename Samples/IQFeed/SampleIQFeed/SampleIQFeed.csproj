@@ -133,9 +133,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="FindSecurityWindow.xaml.cs">
-      <DependentUpon>FindSecurityWindow.xaml</DependentUpon>
-    </Compile>
     <Compile Include="HistoryCandlesWindow.xaml.cs">
       <DependentUpon>HistoryCandlesWindow.xaml</DependentUpon>
     </Compile>
@@ -180,10 +177,6 @@
     <AppDesigner Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
-    <Page Include="FindSecurityWindow.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
     <Page Include="HistoryCandlesWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

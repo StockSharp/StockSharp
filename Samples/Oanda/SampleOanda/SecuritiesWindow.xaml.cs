@@ -108,7 +108,12 @@ namespace SampleOanda
 
 		private void FindClick(object sender, RoutedEventArgs e)
 		{
-			new FindSecurityWindow().ShowModal(this);
+			var wnd = new SecurityLookupWindow { Criteria = new Security { Code = "USD" } };
+
+			if (!wnd.ShowModal(this))
+				return;
+
+			MainWindow.Instance.Trader.LookupSecurities(wnd.Criteria);
 		}
 
 		private void CandlesClick(object sender, RoutedEventArgs e)

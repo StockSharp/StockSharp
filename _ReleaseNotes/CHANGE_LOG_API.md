@@ -17,6 +17,14 @@ StockSharp API Change log
 * (feature) Transaction storage. LocalTime support.
 * (feature) Chart. Support area style.
 * (feature) IConnector. LookupSecuritiesResult, LookupPortfoliosResult - error argument added.
+* (feature) SecurityLookupWindow
+* (feature) NativeIdMessageAdapter
+* (bug) SubscriptionMessageAdapter fix.
+* (bug) SmartCOM fixes.
+* (bug) LMAX fixes.
+* (feature) ISecurityProvider.GetNativeId removed.
+* (feature) OrderWindow, OrderConditionalWindow, SecurityJump - re-designed with DevExp.
+* (bug) CandleCsvSerializer fix.
 
 ###v4.3.18:
 * (feature) Rithmic. v9.5.0.0

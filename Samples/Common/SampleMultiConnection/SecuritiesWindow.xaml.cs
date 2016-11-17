@@ -41,25 +41,26 @@ namespace SampleMultiConnection
 
 		protected override void OnClosed(EventArgs e)
 		{
-			var trader = MainWindow.Instance.Connector;
-			if (trader != null)
+			var connector = MainWindow.Instance.Connector;
+
+			if (connector != null)
 			{
 				if (_initialized)
-					trader.MarketDepthsChanged -= TraderOnMarketDepthsChanged;
+					connector.MarketDepthsChanged -= TraderOnMarketDepthsChanged;
 
 				_quotesWindows.SyncDo(d =>
 				{
 					foreach (var pair in d)
 					{
-						trader.UnRegisterMarketDepth(pair.Key);
+						connector.UnRegisterMarketDepth(pair.Key);
 
 						pair.Value.DeleteHideable();
 						pair.Value.Close();
 					}
 				});
 
-				trader.RegisteredSecurities.ForEach(trader.UnRegisterSecurity);
-				trader.RegisteredTrades.ForEach(trader.UnRegisterTrades);
+				connector.RegisteredSecurities.ForEach(connector.UnRegisterSecurity);
+				connector.RegisteredTrades.ForEach(connector.UnRegisterTrades);
 			}
 
 			base.OnClosed(e);
@@ -67,16 +68,18 @@ namespace SampleMultiConnection
 
 		private void NewOrderClick(object sender, RoutedEventArgs e)
 		{
+			var connector = MainWindow.Instance.Connector;
+
 			var newOrder = new OrderWindow
 			{
 				Order = new Order { Security = SecurityPicker.SelectedSecurity },
-				SecurityProvider = MainWindow.Instance.Connector,
-				MarketDataProvider = MainWindow.Instance.Connector,
-				Portfolios = new PortfolioDataSource(MainWindow.Instance.Connector),
+				SecurityProvider = connector,
+				MarketDataProvider = connector,
+				Portfolios = new PortfolioDataSource(connector),
 			};
 
 			if (newOrder.ShowModal(this))
-				MainWindow.Instance.Connector.RegisterOrder(newOrder.Order);
+				connector.RegisterOrder(newOrder.Order);
 		}
 
 		private void SecurityPicker_OnSecuritySelected(Security security)
@@ -116,10 +119,12 @@ namespace SampleMultiConnection
 		{
 			var security = SecurityPicker.SelectedSecurity;
 
-			if (MainWindow.Instance.Connector.RegisteredSecurities.Contains(security))
-				MainWindow.Instance.Connector.UnRegisterSecurity(security);
+			var connector = MainWindow.Instance.Connector;
+
+			if (connector.RegisteredSecurities.Contains(security))
+				connector.UnRegisterSecurity(security);
 			else
-				MainWindow.Instance.Connector.RegisterSecurity(security);
+				connector.RegisterSecurity(security);
 		}
 
 		private void TraderOnMarketDepthsChanged(IEnumerable<MarketDepth> depths)
@@ -135,7 +140,12 @@ namespace SampleMultiConnection
 
 		private void FindClick(object sender, RoutedEventArgs e)
 		{
-			new FindSecurityWindow().ShowModal(this);
+			var wnd = new SecurityLookupWindow { Criteria = new Security { Code = "IS" } };
+
+			if (!wnd.ShowModal(this))
+				return;
+
+			MainWindow.Instance.Connector.LookupSecurities(wnd.Criteria);
 		}
 	}
 }

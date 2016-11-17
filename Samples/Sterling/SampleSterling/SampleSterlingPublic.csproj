@@ -98,9 +98,6 @@
     <Compile Include="..\..\..\StockSharpAssemblyInfo.cs">
       <Link>Properties\StockSharpAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="FindSecurityWindow.xaml.cs">
-      <DependentUpon>FindSecurityWindow.xaml</DependentUpon>
-    </Compile>
     <Compile Include="MyTradesWindow.xaml.cs">
       <DependentUpon>MyTradesWindow.xaml</DependentUpon>
     </Compile>
@@ -119,10 +116,6 @@
     <Compile Include="TradesWindow.xaml.cs">
       <DependentUpon>TradesWindow.xaml</DependentUpon>
     </Compile>
-    <Page Include="FindSecurityWindow.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

@@ -115,9 +115,6 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="FindSecurityWindow.xaml.cs">
-      <DependentUpon>FindSecurityWindow.xaml</DependentUpon>
-    </Compile>
     <Compile Include="PortfoliosWindow.xaml.cs">
       <DependentUpon>PortfoliosWindow.xaml</DependentUpon>
     </Compile>
@@ -127,10 +124,6 @@
     <Compile Include="TradesWindow.xaml.cs">
       <DependentUpon>TradesWindow.xaml</DependentUpon>
     </Compile>
-    <Page Include="FindSecurityWindow.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

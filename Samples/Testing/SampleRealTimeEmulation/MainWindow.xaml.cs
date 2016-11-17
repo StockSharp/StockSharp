@@ -299,7 +299,7 @@ namespace SampleRealTimeEmulation
 
 		private void FindClick(object sender, RoutedEventArgs e)
 		{
-			var wnd = new FindSecurityWindow();
+			var wnd = new SecurityLookupWindow { Criteria = new Security { Code = "AAPL" } };
 
 			if (!wnd.ShowModal(this))
 				return;
