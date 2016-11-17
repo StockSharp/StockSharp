@@ -491,6 +491,8 @@ namespace StockSharp.Algo
 					if (RiskManager != null)
 						_inAdapter = new RiskMessageAdapter(_inAdapter) { RiskManager = RiskManager, OwnInnerAdaper = true };
 
+					_inAdapter = new SubscriptionMessageAdapter(_inAdapter);
+
 					if (_supportOffline)
 						_inAdapter = new OfflineMessageAdapter(_inAdapter) { OwnInnerAdaper = true };
 
