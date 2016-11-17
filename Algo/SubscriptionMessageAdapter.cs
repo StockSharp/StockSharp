@@ -18,6 +18,7 @@ namespace StockSharp.Algo
 
 		private readonly Dictionary<MarketDataTypes, Dictionary<SecurityId, int>> _subscribers = new Dictionary<MarketDataTypes, Dictionary<SecurityId, int>>();
 		private readonly Dictionary<string, int> _newsSubscribers = new Dictionary<string, int>(StringComparer.InvariantCultureIgnoreCase);
+		private readonly Dictionary<string, int> _pfSubscribers = new Dictionary<string, int>(StringComparer.InvariantCultureIgnoreCase);
 		//private readonly Dictionary<Tuple<MarketDataTypes, SecurityId>, List<MarketDataMessage>> _pendingMessages = new Dictionary<Tuple<MarketDataTypes, SecurityId>, List<MarketDataMessage>>();
 
 		/// <summary>
@@ -43,6 +44,7 @@ namespace StockSharp.Algo
 					{
 						_subscribers.Clear();
 						_newsSubscribers.Clear();
+						_pfSubscribers.Clear();
 						//_pendingMessages.Clear();
 					}
 
@@ -51,6 +53,34 @@ namespace StockSharp.Algo
 				case MessageTypes.MarketData:
 					ProcessInMarketDataMessage((MarketDataMessage)message);
 					break;
+
+				case MessageTypes.Portfolio:
+				{
+					var pfMsg = (PortfolioMessage)message;
+
+					lock (_sync)
+					{
+						var subscribersCount = _pfSubscribers.TryGetValue2(pfMsg.PortfolioName) ?? 0;
+
+						if (pfMsg.IsSubscribe)
+							subscribersCount++;
+						else
+						{
+							if (subscribersCount > 0)
+								subscribersCount--;
+							//else
+							//	sendOutMsg = NonExist(message);
+						}
+
+						if (subscribersCount > 0)
+							_pfSubscribers[pfMsg.PortfolioName] = subscribersCount;
+						else
+							_pfSubscribers.Remove(pfMsg.PortfolioName);
+					}
+					
+					base.SendInMessage(message);
+					break;
+				}
 
 				default:
 					base.SendInMessage(message);
