@@ -259,7 +259,7 @@ namespace StockSharp.Algo.Testing
 						SendOutMessage(new LastMessage { LocalTime = StopDate });
 
 					SendOutMessage(new DisconnectMessage { LocalTime = StopDate });
-					SendOutMessage(new ResetMessage());
+					//SendOutMessage(new ResetMessage());
 
 					BasketStorage.Reset();
 					_isStarted = false;
