@@ -43246,5 +43246,15 @@ namespace StockSharp.Localization
 		/// Download securities
 		/// </summary>
 		public static string DownloadSecurities => GetString(DownloadSecuritiesKey);
+
+		/// <summary>
+		/// The source does not support automatical instruments downloading. Manually create an instrument?
+		/// </summary>
+		public const string NotSupportSecurityDownloadKey = "NotSupportSecurityDownload";
+
+		/// <summary>
+		/// The source does not support automatical instruments downloading. Manually create an instrument?
+		/// </summary>
+		public static string NotSupportSecurityDownload => GetString(NotSupportSecurityDownloadKey);
 	}
 }
