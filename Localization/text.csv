@@ -4358,6 +4358,7 @@ SecuritiesNotFound;Securities '{0}' not found.;Инструменты '{0}' не
 CyclicDependency;Cyclic dependency of '{0}'.;Циклическая зависимость '{0}'.
 SubscriptionNonExist;Subscription does not exist.;Подписка не существует.
 CandleDownloadInterval;Sleep interval while batch candles downloading.;Интервал скачивания данных.
+DownloadSecurities;Download securities;Скачать инструменты
 DocStr0;Button activation alert settings;Кнопка активации настроек сигнала
 DocStr1;Initializes a new instance of the {0};Создать {0}
 DocStr2;Load settings;Загрузить настройки
@@ -12857,7 +12858,7 @@ DocStr8612;Convert the date to directory name;Преобразовать дат�
 DocStr8613;Storage based message adapter;Адаптер сообщений, использующий хранилище
 DocStr8614;Total days to load stored data;Общее количество сохраненных дней
 DocStr8615;Load save data from storage;Загрузить сохраненные данные из хранилища
-DocStr8616;Read instrument by indentifier;Загрузить инструмен по идентификатору
+DocStr8616;Read instrument by indentifier;Загрузить инструмент по идентификатору
 DocStr8617;Instrument storage collection;Хранилище коллекции инструментов
 DocStr8619;To get the {0} storage the specified instrument;Получить хранилище {0} для переданного инструмента
 DocStr8620;The {0} storage;Хранилище {0}

@@ -43236,5 +43236,15 @@ namespace StockSharp.Localization
 		/// Sleep interval while batch candles downloading.
 		/// </summary>
 		public static string CandleDownloadInterval => GetString(CandleDownloadIntervalKey);
+
+		/// <summary>
+		/// Download securities
+		/// </summary>
+		public const string DownloadSecuritiesKey = "DownloadSecurities";
+
+		/// <summary>
+		/// Download securities
+		/// </summary>
+		public static string DownloadSecurities => GetString(DownloadSecuritiesKey);
 	}
 }
