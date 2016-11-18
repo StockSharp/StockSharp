@@ -62,7 +62,7 @@ namespace StockSharp.Algo.Candles
 			get { return _openTime; }
 			set
 			{
-				ThrowIfFinished();
+				//ThrowIfFinished();
 				_openTime = value;
 			}
 		}
@@ -80,7 +80,7 @@ namespace StockSharp.Algo.Candles
 			get { return _closeTime; }
 			set
 			{
-				ThrowIfFinished();
+				//ThrowIfFinished();
 				_closeTime = value;
 			}
 		}
@@ -98,7 +98,7 @@ namespace StockSharp.Algo.Candles
 			get { return _highTime; }
 			set
 			{
-				ThrowIfFinished();
+				//ThrowIfFinished();
 				_highTime = value;
 			}
 		}
@@ -116,7 +116,7 @@ namespace StockSharp.Algo.Candles
 			get { return _lowTime; }
 			set
 			{
-				ThrowIfFinished();
+				//ThrowIfFinished();
 				_lowTime = value;
 			}
 		}
@@ -134,7 +134,7 @@ namespace StockSharp.Algo.Candles
 			get { return _openPrice; }
 			set
 			{
-				ThrowIfFinished();
+				//ThrowIfFinished();
 				_openPrice = value;
 			}
 		}
@@ -152,7 +152,7 @@ namespace StockSharp.Algo.Candles
 			get { return _closePrice; }
 			set
 			{
-				ThrowIfFinished();
+				//ThrowIfFinished();
 				_closePrice = value;
 			}
 		}
@@ -170,7 +170,7 @@ namespace StockSharp.Algo.Candles
 			get { return _highPrice; }
 			set
 			{
-				ThrowIfFinished();
+				//ThrowIfFinished();
 				_highPrice = value;
 			}
 		}
@@ -188,7 +188,7 @@ namespace StockSharp.Algo.Candles
 			get { return _lowPrice; }
 			set
 			{
-				ThrowIfFinished();
+				//ThrowIfFinished();
 				_lowPrice = value;
 			}
 		}
@@ -204,7 +204,7 @@ namespace StockSharp.Algo.Candles
 			get { return _totalPrice; }
 			set
 			{
-				ThrowIfFinished();
+				//ThrowIfFinished();
 				_totalPrice = value;
 			}
 		}
@@ -220,7 +220,7 @@ namespace StockSharp.Algo.Candles
 			get { return _openVolume; }
 			set
 			{
-				ThrowIfFinished();
+				//ThrowIfFinished();
 				_openVolume = value;
 			}
 		}
@@ -236,7 +236,7 @@ namespace StockSharp.Algo.Candles
 			get { return _closeVolume; }
 			set
 			{
-				ThrowIfFinished();
+				//ThrowIfFinished();
 				_closeVolume = value;
 			}
 		}
@@ -252,7 +252,7 @@ namespace StockSharp.Algo.Candles
 			get { return _highVolume; }
 			set
 			{
-				ThrowIfFinished();
+				//ThrowIfFinished();
 				_highVolume = value;
 			}
 		}
@@ -268,7 +268,7 @@ namespace StockSharp.Algo.Candles
 			get { return _lowVolume; }
 			set
 			{
-				ThrowIfFinished();
+				//ThrowIfFinished();
 				_lowVolume = value;
 			}
 		}
@@ -286,7 +286,7 @@ namespace StockSharp.Algo.Candles
 			get { return _totalVolume; }
 			set
 			{
-				ThrowIfFinished();
+				//ThrowIfFinished();
 				_totalVolume = value;
 			}
 		}
@@ -302,7 +302,7 @@ namespace StockSharp.Algo.Candles
 			get { return _relativeVolume; }
 			set
 			{
-				ThrowIfFinished();
+				//ThrowIfFinished();
 				_relativeVolume = value;
 			}
 		}
@@ -349,7 +349,7 @@ namespace StockSharp.Algo.Candles
 			get { return _totalTicks; }
 			set
 			{
-				ThrowIfFinished();
+				//ThrowIfFinished();
 				_totalTicks = value;
 			}
 		}
@@ -367,7 +367,7 @@ namespace StockSharp.Algo.Candles
 			get { return _upTicks; }
 			set
 			{
-				ThrowIfFinished();
+				//ThrowIfFinished();
 				_upTicks = value;
 			}
 		}
@@ -385,7 +385,7 @@ namespace StockSharp.Algo.Candles
 			get { return _downTicks; }
 			set
 			{
-				ThrowIfFinished();
+				//ThrowIfFinished();
 				_downTicks = value;
 			}
 		}
