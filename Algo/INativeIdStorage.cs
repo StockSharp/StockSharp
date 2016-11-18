@@ -10,7 +10,6 @@ namespace StockSharp.Algo
 	using Ecng.Collections;
 	using Ecng.Common;
 
-	using StockSharp.Logging;
 	using StockSharp.Messages;
 
 	/// <summary>
@@ -204,8 +203,8 @@ namespace StockSharp.Algo
 			{
 				var fileName = Path.Combine(_path, name + ".csv");
 
-				try
-				{
+				//try
+				//{
 					using (var stream = new FileStream(fileName, FileMode.Append, FileAccess.Write))
 					using (var writer = new CsvFileWriter(stream))
 					{
@@ -225,11 +224,11 @@ namespace StockSharp.Algo
 						});
 						//}
 					}
-				}
-				catch (Exception excp)
-				{
-					excp.LogError("Save native storage to {0} error.".Put(fileName));
-				}
+				//}
+				//catch (Exception excp)
+				//{
+				//	excp.LogError("Save native storage to {0} error.".Put(fileName));
+				//}
 			});
 		}
 
