@@ -383,7 +383,15 @@ namespace StockSharp.Algo.Candles
 
 		private decimal Calculate(CandleBuffer buffer, Func<Candle, decimal> getPart)
 		{
-			return _security.Calculate(buffer.Candles.Select(getPart).ToArray());
+			try
+			{
+				return _security.Calculate(buffer.Candles.Select(getPart).ToArray());
+			}
+			catch (DivideByZeroException)
+			{
+				return default(decimal);
+			}
+			
 			//var calculate = TryCalculate(buffer, getPart);
 
 			//if (calculate == null)
