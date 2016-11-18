@@ -162,6 +162,29 @@
         <see cref="T:System.TimeSpan" /> to <see cref="T:System.String" /> converter.
             </summary>
     </member>
+    <member name="T:StockSharp.Xaml.SecurityLookupWindow">
+      <summary>
+            The instrument search window.
+            </summary>
+      <summary>
+            SecurityLookupWindow
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.SecurityLookupWindow.#ctor">
+      <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Xaml.SecurityLookupWindow" />.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.SecurityLookupWindow.Criteria">
+      <summary>
+            Search criteria.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.SecurityLookupWindow.InitializeComponent">
+      <summary>
+            InitializeComponent
+            </summary>
+    </member>
     <member name="T:StockSharp.Xaml.GridControl.BaseGridControl">
       <summary>
             The grid control.

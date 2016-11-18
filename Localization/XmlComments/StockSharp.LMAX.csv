@@ -10,6 +10,7 @@ P:StockSharp.LMAX.LmaxMessageAdapter.Login/summary;Login
 P:StockSharp.LMAX.LmaxMessageAdapter.Password/summary;Password
 P:StockSharp.LMAX.LmaxMessageAdapter.IsDemo/summary;Str3388
 P:StockSharp.LMAX.LmaxMessageAdapter.IsDownloadSecurityFromSite/summary;Str3389
+P:StockSharp.LMAX.LmaxMessageAdapter.CandleDownloadInterval/summary;DocStr9347
 P:StockSharp.LMAX.LmaxMessageAdapter.IsValid/summary;DocStr53
 P:StockSharp.LMAX.LmaxMessageAdapter.TimeFrames/summary;DocStr2531
 M:StockSharp.LMAX.LmaxMessageAdapter.Save(Ecng.Serialization.SettingsStorage)/summary;DocStr4

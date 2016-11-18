@@ -30,6 +30,10 @@ M:StockSharp.Xaml.BaseApplication.OnStartup(System.Windows.StartupEventArgs)/par
 M:StockSharp.Xaml.BaseApplication.EditProxySettings(System.Windows.Window)/summary;DocStr8075
 M:StockSharp.Xaml.BaseApplication.EditProxySettings(System.Windows.Window)/param/owner;DocStr8907
 T:StockSharp.Xaml.Converters.SeriesToStringConverter/summary;DocStr9307
+T:StockSharp.Xaml.SecurityLookupWindow/summary;DocStr9348
+M:StockSharp.Xaml.SecurityLookupWindow.#ctor/summary;DocStr1
+P:StockSharp.Xaml.SecurityLookupWindow.Criteria/summary;DocStr9349
+M:StockSharp.Xaml.SecurityLookupWindow.InitializeComponent/summary;DocStr8
 T:StockSharp.Xaml.GridControl.BaseGridControl/summary;DocStr8990
 T:StockSharp.Xaml.GridControl.BaseGridControl.ColumnVisibilityHolder/summary;DocStr8991
 P:StockSharp.Xaml.GridControl.BaseGridControl.ColumnVisibilityHolder.Count/summary;DocStr8992

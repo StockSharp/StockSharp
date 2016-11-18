@@ -5337,6 +5337,9 @@ P:StockSharp.Algo.Strategies.TimeFrameStrategy.Interval/summary;DocStr1911
 M:StockSharp.Algo.Strategies.TimeFrameStrategy.OnStarted/summary;DocStr282
 M:StockSharp.Algo.Strategies.TimeFrameStrategy.OnProcess/summary;DocStr1909
 M:StockSharp.Algo.Strategies.TimeFrameStrategy.OnProcess/returns;DocStr1910
+T:StockSharp.Algo.MarketDataCancelAllMessage/summary;DocStr9346
+P:StockSharp.Algo.MarketDataCancelAllMessage.MessageType/summary;DocStr9
+M:StockSharp.Algo.MarketDataCancelAllMessage.#ctor/summary;DocStr1
 T:StockSharp.Algo.SubscriptionMessageAdapter/summary;DocStr9212
 M:StockSharp.Algo.SubscriptionMessageAdapter.#ctor(StockSharp.Messages.IMessageAdapter)/summary;DocStr1
 M:StockSharp.Algo.SubscriptionMessageAdapter.#ctor(StockSharp.Messages.IMessageAdapter)/param/innerAdapter;DocStr9208

@@ -52,6 +52,11 @@
             Should the whole set of securities be loaded from LMAX website. Switched off by default.
             </summary>
     </member>
+    <member name="P:StockSharp.LMAX.LmaxMessageAdapter.CandleDownloadInterval">
+      <summary>
+            Candle downloading sleep interval.
+            </summary>
+    </member>
     <member name="P:StockSharp.LMAX.LmaxMessageAdapter.IsValid">
       <summary>
             The parameters validity check.

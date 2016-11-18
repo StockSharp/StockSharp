@@ -43226,5 +43226,15 @@ namespace StockSharp.Localization
 		/// Subscription does not exist.
 		/// </summary>
 		public static string SubscriptionNonExist => GetString(SubscriptionNonExistKey);
+
+		/// <summary>
+		/// Sleep interval while batch candles downloading.
+		/// </summary>
+		public const string CandleDownloadIntervalKey = "CandleDownloadInterval";
+
+		/// <summary>
+		/// Sleep interval while batch candles downloading.
+		/// </summary>
+		public static string CandleDownloadInterval => GetString(CandleDownloadIntervalKey);
 	}
 }

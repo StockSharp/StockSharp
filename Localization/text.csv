@@ -4357,6 +4357,7 @@ IndicatorSelection;Indicator selection;Выбор индикатора
 SecuritiesNotFound;Securities '{0}' not found.;Инструменты '{0}' не найдены.
 CyclicDependency;Cyclic dependency of '{0}'.;Циклическая зависимость '{0}'.
 SubscriptionNonExist;Subscription does not exist.;Подписка не существует.
+CandleDownloadInterval;Sleep interval while batch candles downloading.;Интервал скачивания данных.
 DocStr0;Button activation alert settings;Кнопка активации настроек сигнала
 DocStr1;Initializes a new instance of the {0};Создать {0}
 DocStr2;Load settings;Загрузить настройки
@@ -13527,3 +13528,6 @@ DocStr9341;Security native id message adapter;Адаптер сообщений,
 DocStr9343;Native security identifiers storage name;Название хранилища системных идентификатор инструментов
 DocStr9344;Get {0} for {1};Получить {0} для {1}
 DocStr9345;Diagram socket type;Тип сокета диаграммы
+DocStr9346;Cancel all market data subscriptions message;Сообщение отмены всех подписок
+DocStr9347;Candle downloading sleep interval;Интервал скачивания свечей
+DocStr9348;The instrument search window;Окно поиска инструментов
