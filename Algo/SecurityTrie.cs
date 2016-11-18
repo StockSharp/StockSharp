@@ -145,22 +145,29 @@ namespace StockSharp.Algo
 
             lock (_sync)
 			{
-				if (securities.Count() > 1000 || securities.Count() > _allSecurities.Count * 0.1)
+				if (securities.Count() > 1000 || (_allSecurities.Count > 1000 && securities.Count() > _allSecurities.Count * 0.1))
 				{
-					_trie.Clear();
-					securities.ForEach(Add);
-                }
-				else
-					_trie.RemoveRange(securities);
+					_allSecurities.RemoveRange(securities);
 
-				_allSecurities.RemoveRange(securities);
+					securities = _allSecurities.ToArray();
+
+					_allSecurities.Clear();
+					_trie.Clear();
+
+					securities.ForEach(Add);
+				}
+				else
+				{
+					_trie.RemoveRange(securities);
+					_allSecurities.RemoveRange(securities);
+				}
 			}
 		}
 
 		/// <summary>
 		/// Remove all instruments.
 		/// </summary>
-		public void Clear()
+		public virtual void Clear()
 		{
 			lock (_sync)
 			{
