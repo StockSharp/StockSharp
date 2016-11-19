@@ -300,7 +300,7 @@ namespace StockSharp.Algo
 		/// <summary>
 		/// Error subscription market-data.
 		/// </summary>
-		public event Action<Security, MarketDataMessage> MarketDataSubscriptionFailed;
+		public event Action<Security, MarketDataMessage, Exception> MarketDataSubscriptionFailed;
 
 		/// <summary>
 		/// Successful unsubscription market-data.
@@ -310,7 +310,7 @@ namespace StockSharp.Algo
 		/// <summary>
 		/// Error unsubscription market-data.
 		/// </summary>
-		public event Action<Security, MarketDataMessage> MarketDataUnSubscriptionFailed;
+		public event Action<Security, MarketDataMessage, Exception> MarketDataUnSubscriptionFailed;
 
 		/// <summary>
 		/// Session changed.
@@ -637,10 +637,10 @@ namespace StockSharp.Algo
 			MarketDataSubscriptionSucceeded?.Invoke(security, message);
 		}
 
-		private void RaiseMarketDataSubscriptionFailed(Security security, MarketDataMessage message)
+		private void RaiseMarketDataSubscriptionFailed(Security security, MarketDataMessage message, Exception error)
 		{
 			this.AddErrorLog(LocalizedStrings.Str634Params, security.Id, message.DataType, message.Error);
-			MarketDataSubscriptionFailed?.Invoke(security, message);
+			MarketDataSubscriptionFailed?.Invoke(security, message, error);
 		}
 
 		private void RaiseMarketDataUnSubscriptionSucceeded(Security security, MarketDataMessage message)
@@ -648,9 +648,9 @@ namespace StockSharp.Algo
 			MarketDataUnSubscriptionSucceeded?.Invoke(security, message);
 		}
 
-		private void RaiseMarketDataUnSubscriptionFailed(Security security, MarketDataMessage message)
+		private void RaiseMarketDataUnSubscriptionFailed(Security security, MarketDataMessage message, Exception error)
 		{
-			MarketDataUnSubscriptionFailed?.Invoke(security, message);
+			MarketDataUnSubscriptionFailed?.Invoke(security, message, error);
 		}
 
 		/// <summary>

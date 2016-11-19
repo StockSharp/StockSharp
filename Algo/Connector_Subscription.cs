@@ -42,7 +42,7 @@ namespace StockSharp.Algo
 			//	public TimeSpan Elapsed { get; set; }
 			//}
 
-			private readonly SynchronizedDictionary<long, Tuple<MarketDataTypes, Security>> _pendingSubscriptions = new SynchronizedDictionary<long, Tuple<MarketDataTypes, Security>>();
+			private readonly SynchronizedDictionary<long, Tuple<MarketDataMessage, Security>> _pendingSubscriptions = new SynchronizedDictionary<long, Tuple<MarketDataMessage, Security>>();
 			private readonly SynchronizedDictionary<MarketDataTypes, CachedSynchronizedSet<Security>> _subscribers = new SynchronizedDictionary<MarketDataTypes, CachedSynchronizedSet<Security>>();
 			//private readonly SynchronizedLinkedList<ContinuousInfo> _continuousSecurities = new SynchronizedLinkedList<ContinuousInfo>();
 			private readonly CachedSynchronizedDictionary<Security, int> _registeredFilteredMarketDepths = new CachedSynchronizedDictionary<Security, int>();
@@ -94,7 +94,11 @@ namespace StockSharp.Algo
 				//else if (security is ContinuousSecurity)
 				//	SubscribeContinuous((ContinuousSecurity)security, message);
 				else
-					TrySubscribe(security, message);
+				{
+					//TrySubscribe(security, message);
+					_pendingSubscriptions.Add(message.TransactionId, Tuple.Create((MarketDataMessage)message.Clone(), security));
+					_connector.SendInMessage(message);
+				}
 			}
 
 			public void UnSubscribe(Security security, MarketDataMessage message)
@@ -109,7 +113,10 @@ namespace StockSharp.Algo
 				//else if (security is ContinuousSecurity)
 				//	UnSubscribeContinuous((ContinuousSecurity)security, message);
 				else
-					TryUnSubscribe(security, message);
+				{
+					//TryUnSubscribe(security, message);
+					_connector.SendInMessage(message);
+				}
 			}
 
 			public void RegisterPortfolio(Portfolio portfolio)
@@ -181,154 +188,20 @@ namespace StockSharp.Algo
 				return _registeredFilteredMarketDepths.ContainsKey(security);
 			}
 
-			//private void SubscribeContinuous(ContinuousSecurity security, MarketDataMessage message)
-			//{
-			//	lock (_continuousSecurities.SyncRoot)
-			//	{
-			//		var info = new ContinuousInfo(security, message);
-
-			//		if (_continuousSecurities.Contains(info))
-			//			return;
-
-			//		_continuousSecurities.AddFirst(info);
-
-			//		if (_continuousSecurities.Count == 1)
-			//			_connector.MarketTimeChanged += ConnectorOnMarketTimeChanged;
-			//	}
-			//}
-
-			//private void UnSubscribeContinuous(ContinuousSecurity security, MarketDataMessage message)
-			//{
-			//	lock (_continuousSecurities.SyncRoot)
-			//	{
-			//		var node = _continuousSecurities.Find(new ContinuousInfo(security, message));
-
-			//		if (node == null)
-			//			return;
-
-			//		var diff = node.Value.Elapsed;
-			//		var curr = node;
-
-			//		while (curr != null)
-			//		{
-			//			curr.Value.Elapsed += diff;
-			//			curr = curr.Next;
-			//		}
-
-			//		_continuousSecurities.Remove(node);
-
-			//		if (_continuousSecurities.Count == 0)
-			//			_connector.MarketTimeChanged -= ConnectorOnMarketTimeChanged;
-			//	}
-			//}
-
-			//private DateTime NextExpInUtc(LinkedListNode<ContinuousInfo> node)
-			//{
-			//	if (node == null)
-			//		throw new ArgumentNullException(nameof(node));
-
-			//	var contSec = node.Value.Item1;
-			//	var currSec = contSec.GetSecurity(_connector.CurrentTime);
-			//	return contSec.ExpirationJumps[currSec].UtcDateTime;
-			//}
-
-			//private void ConnectorOnMarketTimeChanged(TimeSpan diff)
-			//{
-			//	var first = _continuousSecurities.First;
-
-			//	if (first == null)
-			//		return;
-
-			//	if (first.Value.Elapsed > diff)
-			//		first.Value.Elapsed -= diff;
-			//	else
-			//	{
-			//		var underlyingSecurities = new List<Tuple<ContinuousSecurity, MarketDataMessage, Security, Security>>();
-
-			//		lock (_continuousSecurities.SyncRoot)
-			//		{
-			//			var curr = first;
-
-			//			while (curr != null && curr.Value.Elapsed <= diff && diff > TimeSpan.Zero)
-			//			{
-			//				diff -= curr.Value.Elapsed;
-			//				_continuousSecurities.Remove(curr);
-
-			//				var currSec = curr.Value.Item1.GetSecurity(_connector.CurrentTime);
-
-			//				if (currSec != null)
-			//				{
-			//					var jumpInUtc = NextExpInUtc(curr);
-
-			//					var c = _continuousSecurities.First;
-
-			//					while (c != null)
-			//					{
-			//						if (jumpInUtc < NextExpInUtc(c))
-			//							break;
-
-			//						c = c.Next;
-			//					}
-
-			//					if (c == null)
-			//						_continuousSecurities.AddLast(curr);
-			//					else
-			//					{
-			//						c.Value.Elapsed = NextExpInUtc(c) - jumpInUtc;
-			//						_continuousSecurities.AddBefore(c, curr);
-			//					}
-
-			//					if (curr.Previous != null)
-			//					{
-			//						curr.Value.Elapsed = jumpInUtc - NextExpInUtc(curr.Previous);
-			//					}
-			//					else
-			//					{
-			//						curr.Value.Elapsed = jumpInUtc - _connector.CurrentTime.Convert(TimeZoneInfo.Utc);
-			//					}
-
-			//					underlyingSecurities.Add(Tuple.Create(curr.Value.Item1, curr.Value.Item2, curr.Value.Item1.ExpirationJumps.GetPrevSecurity(currSec), currSec));
-			//				}
-			//				else
-			//				{
-			//					underlyingSecurities.Add(Tuple.Create(curr.Value.Item1, curr.Value.Item2, curr.Value.Item1.ExpirationJumps.LastSecurity, (Security)null));
-			//					UnSubscribeContinuous(curr.Value.Item1, curr.Value.Item2);
-			//				}
-
-			//				curr = _continuousSecurities.First;
-			//			}
-			//		}
-
-			//		foreach (var tuple in underlyingSecurities)
-			//		{
-			//			if (tuple.Item3 != null)
-			//				UnSubscribe(tuple.Item3, tuple.Item2);
-
-			//			if (tuple.Item4 != null)
-			//				Subscribe(tuple.Item4, tuple.Item2);
-			//		}
-			//	}
-			//}
-
-			private void TrySubscribe(Security subscriber, MarketDataMessage message)
+			public Security ProcessResponse(long originalTransactionId, out MarketDataMessage message)
 			{
-				//_subscribers.SafeAdd(message.DataType).Add(subscriber);
-				_pendingSubscriptions.Add(message.TransactionId, Tuple.Create(message.DataType, subscriber));
-				_connector.SendInMessage(message);
-			}
+				var tuple = _pendingSubscriptions.TryGetValue(originalTransactionId);
 
-			private void TryUnSubscribe(Security subscriber, MarketDataMessage message)
-			{
-				//_subscribers.TryGetValue(message.DataType)?.Remove(subscriber);
-				_connector.SendInMessage(message);
-			}
+				if (tuple == null)
+				{
+					message = null;
+					return null;
+				}
 
-			public void ProcessResponse(Security subscriber, MarketDataMessage message)
-			{
-				var info = _pendingSubscriptions.TryGetValue(message.OriginalTransactionId);
+				_pendingSubscriptions.Remove(originalTransactionId);
 
-				if (info == null)
-					return;
+				var subscriber = tuple.Item2;
+				message = tuple.Item1;
 
 				lock (_subscribers.SyncRoot)
 				{
@@ -347,6 +220,8 @@ namespace StockSharp.Algo
 						}
 					}
 				}
+
+				return subscriber;
 			}
 		}
 

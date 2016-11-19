@@ -764,44 +764,54 @@ namespace StockSharp.Algo
 
 		private void ProcessMarketDataMessage(MarketDataMessage mdMsg)
 		{
-			//инструмент может быть не указан
-			//и нет необходимости вызывать события MarketDataSubscriptionSucceeded/Failed
-			if (mdMsg.SecurityId.IsDefault())
+			//_subscriptionManager.ProcessResponse(mdMsg);
+
+			////инструмент может быть не указан
+			////и нет необходимости вызывать события MarketDataSubscriptionSucceeded/Failed
+			//if (mdMsg.SecurityId.IsDefault())
+			//{
+			//	if (mdMsg.Error != null)
+			//		RaiseError(mdMsg.Error);
+
+			//	return;
+			//}
+
+			var error = mdMsg.Error;
+
+			MarketDataMessage originalMsg;
+
+			var security = _subscriptionManager.ProcessResponse(mdMsg.OriginalTransactionId, out originalMsg);
+
+			if (security == null)
 			{
-				if (mdMsg.Error != null)
-					RaiseError(mdMsg.Error);
+				if (error != null)
+					RaiseError(error);
 
 				return;
 			}
 
-			var security = LookupSecurity(mdMsg.SecurityId);
-
-			if (mdMsg.IsSubscribe)
+			if (originalMsg.IsSubscribe)
 			{
-				if (mdMsg.DataType == _filteredMarketDepth)
+				if (originalMsg.DataType == _filteredMarketDepth)
 					GetFilteredMarketDepthInfo(security).Init(GetMarketDepth(security), _entityCache.GetOrders(security, OrderStates.Active).Select(o => o.ToMessage()));
 				else
 				{
-					_subscriptionManager.ProcessResponse(security, mdMsg);
-
-					if (mdMsg.Error == null)
-						RaiseMarketDataSubscriptionSucceeded(security, mdMsg);
+					if (error == null)
+						RaiseMarketDataSubscriptionSucceeded(security, originalMsg);
 					else
-						RaiseMarketDataSubscriptionFailed(security, mdMsg);
+						RaiseMarketDataSubscriptionFailed(security, originalMsg, error);
 				}
 			}
 			else
 			{
-				if (mdMsg.DataType == _filteredMarketDepth)
+				if (originalMsg.DataType == _filteredMarketDepth)
 					_filteredMarketDepths.Remove(security);
 				else
 				{
-					_subscriptionManager.ProcessResponse(security, mdMsg);
-
-					if (mdMsg.Error == null)
-						RaiseMarketDataUnSubscriptionSucceeded(security, mdMsg);
+					if (error == null)
+						RaiseMarketDataUnSubscriptionSucceeded(security, originalMsg);
 					else
-						RaiseMarketDataUnSubscriptionFailed(security, mdMsg);
+						RaiseMarketDataUnSubscriptionFailed(security, originalMsg, error);
 				}
 			}
 		}
