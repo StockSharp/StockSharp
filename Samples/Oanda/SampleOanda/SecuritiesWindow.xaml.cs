@@ -22,8 +22,6 @@ namespace SampleOanda
 
 	using Ecng.Xaml;
 
-	using MoreLinq;
-
 	using StockSharp.Algo.Candles;
 	using StockSharp.BusinessEntities;
 	using StockSharp.Messages;
@@ -38,18 +36,6 @@ namespace SampleOanda
 
 			CandlesPeriods.ItemsSource = OandaMessageAdapter.TimeFrames;
 			CandlesPeriods.SelectedIndex = 0;
-		}
-
-		protected override void OnClosed(EventArgs e)
-		{
-			var trader = MainWindow.Instance.Trader;
-			if (trader != null)
-			{
-				trader.RegisteredSecurities.ForEach(trader.UnRegisterSecurity);
-				trader.RegisteredTrades.ForEach(trader.UnRegisterTrades);
-			}
-
-			base.OnClosed(e);
 		}
 
 		private void SecurityPicker_OnSecuritySelected(Security security)

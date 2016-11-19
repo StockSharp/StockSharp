@@ -24,8 +24,6 @@ namespace SampleTransaq
 	using Ecng.Collections;
 	using Ecng.Xaml;
 
-	using MoreLinq;
-
 	using StockSharp.Algo.Candles;
 	using StockSharp.BusinessEntities;
 	using StockSharp.Messages;
@@ -65,20 +63,6 @@ namespace SampleTransaq
 			{
 				if (_initialized)
 					trader.MarketDepthsChanged -= TraderOnMarketDepthsChanged;
-
-				_quotesWindows.SyncDo(d =>
-				{
-					foreach (var pair in d)
-					{
-						trader.UnRegisterMarketDepth(pair.Key);
-
-						pair.Value.DeleteHideable();
-						pair.Value.Close();
-					}
-				});
-
-				trader.RegisteredSecurities.ForEach(trader.UnRegisterSecurity);
-				trader.RegisteredTrades.ForEach(trader.UnRegisterTrades);
 			}
 
 			base.OnClosed(e);

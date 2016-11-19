@@ -24,8 +24,6 @@ namespace SampleLMAX
 	using Ecng.Collections;
 	using Ecng.Xaml;
 
-	using MoreLinq;
-
 	using StockSharp.Algo.Candles;
 	using StockSharp.BusinessEntities;
 	using StockSharp.LMAX;
@@ -53,19 +51,6 @@ namespace SampleLMAX
 			{
 				if (_initialized)
 					trader.MarketDepthsChanged -= TraderOnMarketDepthsChanged;
-
-				_quotesWindows.SyncDo(d =>
-				{
-					foreach (var pair in d)
-					{
-						trader.UnRegisterMarketDepth(pair.Key);
-
-						pair.Value.DeleteHideable();
-						pair.Value.Close();
-					}
-				});
-
-				trader.RegisteredSecurities.ForEach(trader.UnRegisterSecurity);
 			}
 
 			base.OnClosed(e);

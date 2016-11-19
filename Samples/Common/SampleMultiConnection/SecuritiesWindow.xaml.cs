@@ -23,8 +23,6 @@ namespace SampleMultiConnection
 	using Ecng.Collections;
 	using Ecng.Xaml;
 
-	using MoreLinq;
-
 	using StockSharp.BusinessEntities;
 	using StockSharp.Xaml;
 	using StockSharp.Localization;
@@ -47,20 +45,6 @@ namespace SampleMultiConnection
 			{
 				if (_initialized)
 					connector.MarketDepthsChanged -= TraderOnMarketDepthsChanged;
-
-				_quotesWindows.SyncDo(d =>
-				{
-					foreach (var pair in d)
-					{
-						connector.UnRegisterMarketDepth(pair.Key);
-
-						pair.Value.DeleteHideable();
-						pair.Value.Close();
-					}
-				});
-
-				connector.RegisteredSecurities.ForEach(connector.UnRegisterSecurity);
-				connector.RegisteredTrades.ForEach(connector.UnRegisterTrades);
 			}
 
 			base.OnClosed(e);
