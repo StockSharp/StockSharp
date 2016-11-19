@@ -56,7 +56,7 @@ namespace SampleTransaq
 			area.Elements.Add(_candleElem);
 
 			_trader.NewCandles += ProcessNewCandles;
-			_trader.SubscribeCandles(_candleSeries, DateTime.Today - TimeSpan.FromTicks(((TimeSpan)candleSeries.Arg).Ticks * 100), DateTimeOffset.MaxValue);
+			_trader.SubscribeCandles(_candleSeries, DateTime.Today - TimeSpan.FromTicks(((TimeSpan)candleSeries.Arg).Ticks * 10000), DateTimeOffset.MaxValue);
 		}
 
 		private void ProcessNewCandles(CandleSeries series, IEnumerable<Candle> candles)
