@@ -37,6 +37,14 @@ namespace StockSharp.Algo
 		/// </summary>
 		public bool IsRestoreOnReconnect { get; set; }
 
+		private void ClearSubscribers()
+		{
+			_subscribers.Clear();
+			_newsSubscribers.Clear();
+			_pfSubscribers.Clear();
+			_candleSubscribers.Clear();
+		}
+
 		/// <summary>
 		/// Send message.
 		/// </summary>
@@ -49,10 +57,7 @@ namespace StockSharp.Algo
 				{
 					lock (_sync)
 					{
-						_subscribers.Clear();
-						_newsSubscribers.Clear();
-						_pfSubscribers.Clear();
-						_candleSubscribers.Clear();
+						ClearSubscribers();
 						//_pendingMessages.Clear();
 					}
 
@@ -69,32 +74,23 @@ namespace StockSharp.Algo
 						lock (_sync)
 						{
 							if (_newsSubscribers.Count > 0)
-							{
-								messages.AddRange(_newsSubscribers.Values.Select(p => p.First.Clone()));
-								_newsSubscribers.Clear();
-							}
+								messages.AddRange(_newsSubscribers.Values.Select(p => p.First));
 
 							if (_subscribers.Count > 0)
-							{
-								messages.AddRange(_subscribers.Values.Select(p => p.First.Clone()));
-								_subscribers.Clear();
-							}
+								messages.AddRange(_subscribers.Values.Select(p => p.First));
 
 							if (_candleSubscribers.Count > 0)
-							{
-								messages.AddRange(_candleSubscribers.Values.Select(p => p.First.Clone()));
-								_candleSubscribers.Clear();
-							}
+								messages.AddRange(_candleSubscribers.Values.Select(p => p.First));
 
 							if (_pfSubscribers.Count > 0)
-							{
-								messages.AddRange(_pfSubscribers.Values.Select(p => p.First.Clone()));
-								_pfSubscribers.Clear();
-							}
+								messages.AddRange(_pfSubscribers.Values.Select(p => p.First));
+						
+							ClearSubscribers();
 						}
 
-						foreach (var msg in messages)
+						foreach (var m in messages)
 						{
+							var msg = m.Clone();
 							var mdMsg = msg as MarketDataMessage;
 
 							if (mdMsg != null)
@@ -195,10 +191,7 @@ namespace StockSharp.Algo
 							messages.AddRange(_candleSubscribers.Values.Select(p => p.First));
 							messages.AddRange(_pfSubscribers.Values.Select(p => p.First));
 
-							_subscribers.Clear();
-							_newsSubscribers.Clear();
-							_pfSubscribers.Clear();
-							_candleSubscribers.Clear();
+							ClearSubscribers();
 						}
 
 						if (messages.Count == 0)
@@ -219,8 +212,24 @@ namespace StockSharp.Algo
 			{
 				foreach (var m in messages)
 				{
-					m.IsBack = true;
-					base.OnInnerAdapterNewOutMessage(m);
+					var msg = m.Clone();
+
+					msg.IsBack = true;
+					msg.Adapter = this;
+
+					var mdMsg = msg as MarketDataMessage;
+
+					if (mdMsg != null)
+					{
+						mdMsg.TransactionId = InnerAdapter.TransactionIdGenerator.GetNextId();
+					}
+					else
+					{
+						var pfMsg = (PortfolioMessage)msg;
+						pfMsg.TransactionId = InnerAdapter.TransactionIdGenerator.GetNextId();
+					}
+
+					base.OnInnerAdapterNewOutMessage(msg);
 				}
 			}
 		}

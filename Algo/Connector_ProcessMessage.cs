@@ -369,9 +369,7 @@ namespace StockSharp.Algo
 		}
 
 		private IMessageAdapter _inAdapter;
-		private BasketMessageAdapter _adapter;
 		private TimeAdapter _timeAdapter;
-		private SubscriptionMessageAdapter _subscriptionAdapter;
 
 		/// <summary>
 		/// Inner message adapter.
@@ -427,6 +425,8 @@ namespace StockSharp.Algo
 			}
 		}
 
+		private BasketMessageAdapter _adapter;
+
 		/// <summary>
 		/// Message adapter.
 		/// </summary>
@@ -459,7 +459,6 @@ namespace StockSharp.Algo
 				_adapter = value;
 				_inAdapter = _adapter;
 				_timeAdapter = null;
-				_subscriptionAdapter = null;
 
 				if (_adapter != null)
 				{
@@ -492,8 +491,6 @@ namespace StockSharp.Algo
 
 					if (RiskManager != null)
 						_inAdapter = new RiskMessageAdapter(_inAdapter) { RiskManager = RiskManager, OwnInnerAdaper = true };
-
-					_inAdapter = _subscriptionAdapter = new SubscriptionMessageAdapter(_inAdapter) { IsRestoreOnReconnect = IsRestorSubscriptioneOnReconnect };
 
 					if (_supportOffline)
 						_inAdapter = new OfflineMessageAdapter(_inAdapter) { OwnInnerAdaper = true };

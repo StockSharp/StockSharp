@@ -197,6 +197,11 @@ namespace StockSharp.Algo
 		protected override bool IsSupportNativeSecurityLookup => true;
 
 		/// <summary>
+		/// Restore subscription on reconnect.
+		/// </summary>
+		public bool IsRestorSubscriptioneOnReconnect { get; set; }
+
+		/// <summary>
 		/// Create condition for order type <see cref="OrderTypes.Conditional"/>, that supports the adapter.
 		/// </summary>
 		/// <returns>Order condition. If the connection does not support the order type <see cref="OrderTypes.Conditional"/>, it will be returned <see langword="null" />.</returns>
@@ -231,18 +236,18 @@ namespace StockSharp.Algo
 			_subscriptionStates.Clear();
 		}
 
-		private IMessageAdapter TryCreateNativeIdAdapter(IMessageAdapter adapter)
+		private IMessageAdapter CreateSubscriptionAdapter(IMessageAdapter adapter)
 		{
 			var storageName = adapter.NativeIdStorageName;
 
-			if (storageName.IsEmpty())
-				return adapter;
+			if (!storageName.IsEmpty())
+			{
+				adapter = NativeIdStorage != null
+					? new SecurityNativeIdMessageAdapter(adapter, NativeIdStorage)
+					: new SecurityNativeIdMessageAdapter(adapter);
+			}
 
-			var nativeIdAdapter = NativeIdStorage != null
-				? new NativeIdMessageAdapter(adapter, NativeIdStorage)
-				: new NativeIdMessageAdapter(adapter);
-
-			return nativeIdAdapter;
+			return new SubscriptionMessageAdapter(adapter) { IsRestoreOnReconnect = IsRestorSubscriptioneOnReconnect };
 		}
 
 		/// <summary>
@@ -275,12 +280,11 @@ namespace StockSharp.Algo
 					else
 						ProcessReset(new ResetMessage());
 
-					_hearbeatAdapters.AddRange(GetSortedAdapters().ToDictionary(a => a, a =>
+					_hearbeatAdapters.AddRange(GetSortedAdapters().Select(CreateSubscriptionAdapter).ToDictionary(a => a, a =>
 					{
-						var innerAdapter = TryCreateNativeIdAdapter(a);
-						var hearbeatAdapter = new HeartbeatMessageAdapter(innerAdapter);
+						var hearbeatAdapter = new HeartbeatMessageAdapter(a);
 						((IMessageAdapter)hearbeatAdapter).Parent = this;
-						hearbeatAdapter.NewOutMessage += m => OnInnerAdapterNewOutMessage(innerAdapter, m);
+						hearbeatAdapter.NewOutMessage += m => OnInnerAdapterNewOutMessage(a, m);
 						return hearbeatAdapter;
 					}));
 					
@@ -476,22 +480,20 @@ namespace StockSharp.Algo
 		{
 			if (!message.IsBack)
 			{
-				var underlyingAdapter = (innerAdapter as NativeIdMessageAdapter)?.InnerAdapter ?? innerAdapter;
-
-				message.Adapter = underlyingAdapter;
+				message.Adapter = innerAdapter;
 
 				switch (message.Type)
 				{
 					case MessageTypes.Connect:
-						ProcessConnectMessage(_hearbeatAdapters[underlyingAdapter], underlyingAdapter, (ConnectMessage)message);
+						ProcessConnectMessage(innerAdapter, (ConnectMessage)message);
 						return;
 
 					case MessageTypes.Disconnect:
-						ProcessDisconnectMessage(underlyingAdapter, (DisconnectMessage)message);
+						ProcessDisconnectMessage(innerAdapter, (DisconnectMessage)message);
 						return;
 
 					case MessageTypes.MarketData:
-						ProcessMarketDataMessage(innerAdapter, underlyingAdapter, (MarketDataMessage)message);
+						ProcessMarketDataMessage(innerAdapter, (MarketDataMessage)message);
 						return;
 				}
 			}
@@ -499,13 +501,23 @@ namespace StockSharp.Algo
 			SendOutMessage(message);
 		}
 
-		private void ProcessConnectMessage(HeartbeatMessageAdapter heartbeatAdapter, IMessageAdapter underlyingAdapter, ConnectMessage message)
+		private static IMessageAdapter GetUnderlyingAdapter(IMessageAdapter adapter)
 		{
+			var wrapper = adapter as IMessageAdapterWrapper;
+			return wrapper != null ? GetUnderlyingAdapter(wrapper.InnerAdapter) : adapter;
+		}
+
+		private void ProcessConnectMessage(IMessageAdapter innerAdapter, ConnectMessage message)
+		{
+			var underlyingAdapter = GetUnderlyingAdapter(innerAdapter);
+
 			if (message.Error != null)
 				this.AddErrorLog(LocalizedStrings.Str625Params, underlyingAdapter.GetType().Name, message.Error);
 			else
 			{
-				foreach (var supportedMessage in underlyingAdapter.SupportedMessages)
+				var heartbeatAdapter = _hearbeatAdapters[innerAdapter];
+
+				foreach (var supportedMessage in innerAdapter.SupportedMessages)
 				{
 					_messageTypeAdapters.SafeAdd(supportedMessage).Add(heartbeatAdapter);
 				}
@@ -513,14 +525,18 @@ namespace StockSharp.Algo
 				_connectedAdapters.Add(heartbeatAdapter);
 			}
 
+			message.Adapter = underlyingAdapter;
 			SendOutMessage(message);
 		}
 
-		private void ProcessDisconnectMessage(IMessageAdapter underlyingAdapter, DisconnectMessage message)
+		private void ProcessDisconnectMessage(IMessageAdapter innerAdapter, DisconnectMessage message)
 		{
+			var underlyingAdapter = GetUnderlyingAdapter(innerAdapter);
+
 			if (message.Error != null)
 				this.AddErrorLog(LocalizedStrings.Str627Params, underlyingAdapter.GetType().Name, message.Error);
 
+			message.Adapter = underlyingAdapter;
 			SendOutMessage(message);
 		}
 
@@ -549,7 +565,7 @@ namespace StockSharp.Algo
 			return Tuple.Create(message.SecurityId, message.DataType, message.Arg, message.From, message.To, message.Count, message.MaxDepth);
 		}
 
-		private void ProcessMarketDataMessage(IMessageAdapter adapter, IMessageAdapter underlyingAdapter, MarketDataMessage message)
+		private void ProcessMarketDataMessage(IMessageAdapter adapter, MarketDataMessage message)
 		{
 			var key = _subscriptionKeys.TryGetValue(message.OriginalTransactionId) ?? CreateKey(message);
 			
@@ -614,7 +630,7 @@ namespace StockSharp.Algo
 			_subscriptionQueue.Remove(key);
 			_subscriptionKeys.Remove(message.OriginalTransactionId);
 
-			RaiseMarketDataMessage(underlyingAdapter, message.OriginalTransactionId, error, isSubscribe);
+			RaiseMarketDataMessage(adapter, message.OriginalTransactionId, error, isSubscribe);
 		}
 
 		private void RaiseMarketDataMessage(IMessageAdapter adapter, long originalTransactionId, Exception error, bool isSubscribe)

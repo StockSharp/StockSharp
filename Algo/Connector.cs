@@ -252,8 +252,6 @@ namespace StockSharp.Algo
 
 			CreateDepthFromLevel1 = true;
 
-			IsRestorSubscriptioneOnReconnect = true;
-
 			if (initManagers)
 			{
 				LatencyManager = new LatencyManager();
@@ -273,6 +271,8 @@ namespace StockSharp.Algo
 
 			if (initAdapter)
 				InitAdapter();
+
+			IsRestorSubscriptioneOnReconnect = true;
 		}
 
 		private void InitAdapter()
@@ -554,21 +554,13 @@ namespace StockSharp.Algo
 		/// </summary>
 		public bool TimeChange { get; set; } = true;
 
-		private bool _isRestorSubscriptioneOnReconnect;
-
 		/// <summary>
 		/// Restore subscription on reconnect.
 		/// </summary>
 		public bool IsRestorSubscriptioneOnReconnect
 		{
-			get { return _isRestorSubscriptioneOnReconnect; }
-			set
-			{
-				if (_subscriptionAdapter != null)
-					_subscriptionAdapter.IsRestoreOnReconnect = value;
-
-				_isRestorSubscriptioneOnReconnect = value;
-			}
+			get { return Adapter.IsRestorSubscriptioneOnReconnect; }
+			set { Adapter.IsRestorSubscriptioneOnReconnect = value; }
 		}
 
 		/// <summary>
@@ -1544,6 +1536,8 @@ namespace StockSharp.Algo
 			CreateTradesFromOrdersLog = storage.GetValue<bool>(nameof(CreateTradesFromOrdersLog));
 			CreateDepthFromLevel1 = storage.GetValue(nameof(CreateDepthFromLevel1), CreateDepthFromLevel1);
 
+			IsRestorSubscriptioneOnReconnect = storage.GetValue(nameof(IsRestorSubscriptioneOnReconnect), IsRestorSubscriptioneOnReconnect);
+
 			MarketTimeChangedInterval = storage.GetValue<TimeSpan>(nameof(MarketTimeChangedInterval));
 			CreateAssociatedSecurity = storage.GetValue(nameof(CreateAssociatedSecurity), CreateAssociatedSecurity);
 
@@ -1588,6 +1582,8 @@ namespace StockSharp.Algo
 
 			storage.SetValue(nameof(MarketTimeChangedInterval), MarketTimeChangedInterval);
 			storage.SetValue(nameof(CreateAssociatedSecurity), CreateAssociatedSecurity);
+
+			storage.SetValue(nameof(IsRestorSubscriptioneOnReconnect), IsRestorSubscriptioneOnReconnect);
 
 			base.Save(storage);
 		}
