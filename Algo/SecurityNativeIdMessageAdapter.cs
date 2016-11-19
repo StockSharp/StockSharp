@@ -13,7 +13,7 @@
 	/// <summary>
 	/// Security native id message adapter.
 	/// </summary>
-	public class NativeIdMessageAdapter : MessageAdapterWrapper
+	public class SecurityNativeIdMessageAdapter : MessageAdapterWrapper
 	{
 		private sealed class InMemoryStorage : INativeIdStorage
 		{
@@ -77,20 +77,20 @@
 		public INativeIdStorage Storage { get; }
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="NativeIdMessageAdapter"/>.
+		/// Initializes a new instance of the <see cref="SecurityNativeIdMessageAdapter"/>.
 		/// </summary>
 		/// <param name="innerAdapter">The adapter, to which messages will be directed.</param>
-		public NativeIdMessageAdapter(IMessageAdapter innerAdapter)
+		public SecurityNativeIdMessageAdapter(IMessageAdapter innerAdapter)
 			: this(innerAdapter, new InMemoryStorage())
 		{
 		}
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="NativeIdMessageAdapter"/>.
+		/// Initializes a new instance of the <see cref="SecurityNativeIdMessageAdapter"/>.
 		/// </summary>
 		/// <param name="innerAdapter">The adapter, to which messages will be directed.</param>
 		/// <param name="storage">Security native identifier storage.</param>
-		public NativeIdMessageAdapter(IMessageAdapter innerAdapter, INativeIdStorage storage)
+		public SecurityNativeIdMessageAdapter(IMessageAdapter innerAdapter, INativeIdStorage storage)
 			: base(innerAdapter)
 		{
 			if (storage == null)
@@ -328,12 +328,12 @@
 		}
 
 		/// <summary>
-		/// Create a copy of <see cref="NativeIdMessageAdapter"/>.
+		/// Create a copy of <see cref="SecurityNativeIdMessageAdapter"/>.
 		/// </summary>
 		/// <returns>Copy.</returns>
 		public override IMessageChannel Clone()
 		{
-			return new NativeIdMessageAdapter(InnerAdapter);
+			return new SecurityNativeIdMessageAdapter(InnerAdapter);
 		}
 
 		private void ProcessMessage<TMessage>(SecurityId securityId, TMessage message, Func<TMessage, TMessage, TMessage> processSuspend)

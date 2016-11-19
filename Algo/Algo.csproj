@@ -121,7 +121,7 @@
     <Compile Include="PnL\PnLMessageAdapter.cs" />
     <Compile Include="Positions\PositionMessageAdapter.cs" />
     <Compile Include="Risk\RiskMessageAdapter.cs" />
-    <Compile Include="NativeIdMessageAdapter.cs" />
+    <Compile Include="SecurityNativeIdMessageAdapter.cs" />
     <Compile Include="SecurityRemoveMessage.cs" />
     <Compile Include="SecurityTrie.cs" />
     <Compile Include="Slippage\SlippageMessageAdapter.cs" />
