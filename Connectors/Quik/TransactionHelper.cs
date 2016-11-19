@@ -63,7 +63,12 @@ namespace StockSharp.Quik
 			if (message == null)
 				throw new ArgumentNullException(nameof(message));
 
-			var board = ExchangeBoard.GetOrCreateBoard(message.SecurityId.BoardCode);
+			var boardCode = message.SecurityId.BoardCode;
+
+			if (boardCode?.EndsWith("emu", StringComparison.InvariantCultureIgnoreCase) == true)
+				boardCode = boardCode.Substring(0, boardCode.Length - 3);
+
+			var board = ExchangeBoard.GetOrCreateBoard(boardCode);
 			var needDepoAccount = board.IsMicex || board.IsUxStock;
 
 			//if (needDepoAccount)
