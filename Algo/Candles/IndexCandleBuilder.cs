@@ -26,6 +26,7 @@ namespace StockSharp.Algo.Candles
 	using StockSharp.BusinessEntities;
 	using StockSharp.Messages;
 	using StockSharp.Localization;
+	using StockSharp.Logging;
 
 	class IndexCandleBuilder
 	{
@@ -139,7 +140,6 @@ namespace StockSharp.Algo.Candles
 		private readonly CachedSynchronizedOrderedDictionary<DateTimeOffset, CandleBuffer> _buffers = new CachedSynchronizedOrderedDictionary<DateTimeOffset, CandleBuffer>();
 		private CandleBuffer _lastProcessBuffer;
 		private readonly SynchronizedDictionary<Security, int> _securityIndecies = new SynchronizedDictionary<Security, int>();
-		//private readonly SynchronizedDictionary<Security, Security> _securityToSecurity = new SynchronizedDictionary<Security, Security>();
 		private readonly int _bufferSize;
 		private CandleBuffer _sparseBuffer1;
 		private CandleBuffer _sparseBuffer2;
@@ -158,6 +158,8 @@ namespace StockSharp.Algo.Candles
 			_bufferSize = _securityIndecies.Values.Distinct().Count();
 		}
 
+		public bool CalculateExtended { get; set; }
+
 		private void FillSecurityIndecies(BasketSecurity basketSecurity)
 		{
 			var index = 0;
@@ -165,7 +167,6 @@ namespace StockSharp.Algo.Candles
 			foreach (var security in basketSecurity.InnerSecurities)
 			{
 				_securityIndecies[security] = index;
-				//_securityToSecurity[security] = security;
 
 				index++;
 			}
@@ -182,11 +183,6 @@ namespace StockSharp.Algo.Candles
 			return GetFormedBuffers(candle)
 				.Select(buffer =>
 				{
-					//var openPrice = Calculate(buffer, c => c.OpenPrice);
-
-					//if (openPrice == null)
-					//	return null;
-
 					var indexCandle = candle.GetType().CreateInstance<Candle>();
 
 					indexCandle.Security = _security;
@@ -194,16 +190,28 @@ namespace StockSharp.Algo.Candles
 					indexCandle.OpenTime = buffer.OpenTime;
 					indexCandle.CloseTime = buffer.CloseTime;
 
-					indexCandle.TotalVolume = Calculate(buffer, c => c.TotalVolume);
-					indexCandle.TotalPrice = Calculate(buffer, c => c.TotalPrice);
-					indexCandle.OpenPrice = Calculate(buffer, c => c.OpenPrice);
-					indexCandle.OpenVolume = Calculate(buffer, c => c.OpenVolume ?? 0);
-					indexCandle.ClosePrice = Calculate(buffer, c => c.ClosePrice);
-					indexCandle.CloseVolume = Calculate(buffer, c => c.CloseVolume ?? 0);
-					indexCandle.HighPrice = Calculate(buffer, c => c.HighPrice);
-					indexCandle.HighVolume = Calculate(buffer, c => c.HighVolume ?? 0);
-					indexCandle.LowPrice = Calculate(buffer, c => c.LowPrice);
-					indexCandle.LowVolume = Calculate(buffer, c => c.LowVolume ?? 0);
+					try
+					{
+						indexCandle.TotalVolume = Calculate(buffer, c => c.TotalVolume);
+						indexCandle.OpenPrice = Calculate(buffer, c => c.OpenPrice);
+						indexCandle.ClosePrice = Calculate(buffer, c => c.ClosePrice);
+						indexCandle.HighPrice = Calculate(buffer, c => c.HighPrice);
+						indexCandle.LowPrice = Calculate(buffer, c => c.LowPrice);
+
+						if (CalculateExtended)
+						{
+							indexCandle.TotalPrice = Calculate(buffer, c => c.TotalPrice);
+							indexCandle.OpenVolume = Calculate(buffer, c => c.OpenVolume ?? 0);
+							indexCandle.CloseVolume = Calculate(buffer, c => c.CloseVolume ?? 0);
+							indexCandle.HighVolume = Calculate(buffer, c => c.HighVolume ?? 0);
+							indexCandle.LowVolume = Calculate(buffer, c => c.LowVolume ?? 0);
+						}
+					}
+					catch (ArithmeticException ex)
+					{
+						ex.LogError();
+						return null;
+					}
 
 					// если некоторые свечи имеют неполные данные, то и индекс будет таким же неполным
 					if (indexCandle.OpenPrice == 0 || indexCandle.HighPrice == 0 || indexCandle.LowPrice == 0 || indexCandle.ClosePrice == 0)
@@ -376,28 +384,9 @@ namespace StockSharp.Algo.Candles
 			return buffers;
 		}
 
-		//private decimal? TryCalculate(CandleBuffer buffer, Func<Candle, decimal> getPart)
-		//{
-		//	return _security.Calculate(buffer.Candles.ToDictionary(c => _securityToSecurity[c.Security], getPart));
-		//}
-
 		private decimal Calculate(CandleBuffer buffer, Func<Candle, decimal> getPart)
 		{
-			try
-			{
-				return _security.Calculate(buffer.Candles.Select(getPart).ToArray());
-			}
-			catch (DivideByZeroException)
-			{
-				return default(decimal);
-			}
-			
-			//var calculate = TryCalculate(buffer, getPart);
-
-			//if (calculate == null)
-			//	throw new InvalidOperationException(LocalizedStrings.Str657);
-
-			//return (decimal)calculate;
+			return _security.Calculate(buffer.Candles.Select(getPart).ToArray());
 		}
 
 		internal static object CloneArg(object arg, Security security)
