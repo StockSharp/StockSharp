@@ -252,6 +252,8 @@ namespace StockSharp.Algo
 
 			CreateDepthFromLevel1 = true;
 
+			IsRestorSubscriptioneOnReconnect = true;
+
 			if (initManagers)
 			{
 				LatencyManager = new LatencyManager();
@@ -552,6 +554,23 @@ namespace StockSharp.Algo
 		/// </summary>
 		public bool TimeChange { get; set; } = true;
 
+		private bool _isRestorSubscriptioneOnReconnect;
+
+		/// <summary>
+		/// Restore subscription on reconnect.
+		/// </summary>
+		public bool IsRestorSubscriptioneOnReconnect
+		{
+			get { return _isRestorSubscriptioneOnReconnect; }
+			set
+			{
+				if (_subscriptionAdapter != null)
+					_subscriptionAdapter.IsRestoreOnReconnect = value;
+
+				_isRestorSubscriptioneOnReconnect = value;
+			}
+		}
+
 		/// <summary>
 		/// Connect to trading system.
 		/// </summary>
@@ -612,8 +631,6 @@ namespace StockSharp.Algo
 				if (prevState != ConnectionStates.Failed)
 					_adapterStates[adapter] = ConnectionStates.Disconnecting;
 			}
-
-			SendInMessage(new MarketDataCancelAllMessage());
 
 			try
 			{

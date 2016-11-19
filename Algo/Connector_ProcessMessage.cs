@@ -371,6 +371,7 @@ namespace StockSharp.Algo
 		private IMessageAdapter _inAdapter;
 		private BasketMessageAdapter _adapter;
 		private TimeAdapter _timeAdapter;
+		private SubscriptionMessageAdapter _subscriptionAdapter;
 
 		/// <summary>
 		/// Inner message adapter.
@@ -458,6 +459,7 @@ namespace StockSharp.Algo
 				_adapter = value;
 				_inAdapter = _adapter;
 				_timeAdapter = null;
+				_subscriptionAdapter = null;
 
 				if (_adapter != null)
 				{
@@ -491,7 +493,7 @@ namespace StockSharp.Algo
 					if (RiskManager != null)
 						_inAdapter = new RiskMessageAdapter(_inAdapter) { RiskManager = RiskManager, OwnInnerAdaper = true };
 
-					_inAdapter = new SubscriptionMessageAdapter(_inAdapter);
+					_inAdapter = _subscriptionAdapter = new SubscriptionMessageAdapter(_inAdapter) { IsRestoreOnReconnect = IsRestorSubscriptioneOnReconnect };
 
 					if (_supportOffline)
 						_inAdapter = new OfflineMessageAdapter(_inAdapter) { OwnInnerAdaper = true };
@@ -720,42 +722,8 @@ namespace StockSharp.Algo
 					//	break;
 
 					case MessageTypes.MarketData:
-					{
-						var mdMsg = (MarketDataMessage)message;
-
-						//инструмент может быть не указан
-						//и нет необходимости вызывать события MarketDataSubscriptionSucceeded/Failed
-						if (mdMsg.SecurityId.IsDefault())
-						{
-							if (mdMsg.Error != null)
-								RaiseError(mdMsg.Error);
-
-							break;
-						}
-
-						var security = LookupSecurity(mdMsg.SecurityId);
-
-						if (mdMsg.IsSubscribe)
-						{
-							if (mdMsg.DataType == _filteredMarketDepth)
-							{
-								GetFilteredMarketDepthInfo(security).Init(GetMarketDepth(security), _entityCache.GetOrders(security, OrderStates.Active).Select(o => o.ToMessage()));
-								return;
-							}
-
-							if (mdMsg.Error == null)
-								RaiseMarketDataSubscriptionSucceeded(security, mdMsg);
-							else
-								RaiseMarketDataSubscriptionFailed(security, mdMsg);
-						}
-						else
-						{
-							if (mdMsg.DataType == _filteredMarketDepth)
-								_filteredMarketDepths.Remove(security);
-						}
-
+						ProcessMarketDataMessage((MarketDataMessage)message);
 						break;
-					}
 
 					case MessageTypes.Error:
 						var mdErrorMsg = (ErrorMessage)message;
@@ -786,10 +754,6 @@ namespace StockSharp.Algo
 						ProcessSecurityRemoveMessage((SecurityRemoveMessage)message);
 						break;
 
-					case ExtendedMessageTypes.MarketDataCancelAll:
-						_subscriptionManager.ClearCache();
-						break;
-
 					// если адаптеры передают специфичные сообщения
 					//default:
 					//	throw new ArgumentOutOfRangeException("Тип сообщения {0} не поддерживается.".Put(message.Type));
@@ -798,6 +762,50 @@ namespace StockSharp.Algo
 			catch (Exception ex)
 			{
 				RaiseError(new InvalidOperationException(LocalizedStrings.Str681Params.Put(message), ex));
+			}
+		}
+
+		private void ProcessMarketDataMessage(MarketDataMessage mdMsg)
+		{
+			//инструмент может быть не указан
+			//и нет необходимости вызывать события MarketDataSubscriptionSucceeded/Failed
+			if (mdMsg.SecurityId.IsDefault())
+			{
+				if (mdMsg.Error != null)
+					RaiseError(mdMsg.Error);
+
+				return;
+			}
+
+			var security = LookupSecurity(mdMsg.SecurityId);
+
+			if (mdMsg.IsSubscribe)
+			{
+				if (mdMsg.DataType == _filteredMarketDepth)
+					GetFilteredMarketDepthInfo(security).Init(GetMarketDepth(security), _entityCache.GetOrders(security, OrderStates.Active).Select(o => o.ToMessage()));
+				else
+				{
+					_subscriptionManager.ProcessResponse(security, mdMsg);
+
+					if (mdMsg.Error == null)
+						RaiseMarketDataSubscriptionSucceeded(security, mdMsg);
+					else
+						RaiseMarketDataSubscriptionFailed(security, mdMsg);
+				}
+			}
+			else
+			{
+				if (mdMsg.DataType == _filteredMarketDepth)
+					_filteredMarketDepths.Remove(security);
+				else
+				{
+					_subscriptionManager.ProcessResponse(security, mdMsg);
+
+					if (mdMsg.Error == null)
+						RaiseMarketDataUnSubscriptionSucceeded(security, mdMsg);
+					else
+						RaiseMarketDataUnSubscriptionFailed(security, mdMsg);
+				}
 			}
 		}
 

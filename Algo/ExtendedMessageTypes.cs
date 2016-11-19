@@ -30,6 +30,5 @@ namespace StockSharp.Algo
 		public const MessageTypes HistorySource = (MessageTypes)(-8);
 		public const MessageTypes RemoveSecurity = (MessageTypes)(-9);
 		public const MessageTypes HistoryInitialized = (MessageTypes)(-10);
-		public const MessageTypes MarketDataCancelAll = (MessageTypes)(-11);
 	}
 }

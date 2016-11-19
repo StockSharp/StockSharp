@@ -299,6 +299,16 @@ namespace StockSharp.BusinessEntities
 		event Action<Security, MarketDataMessage> MarketDataSubscriptionFailed;
 
 		/// <summary>
+		/// Successful unsubscription market-data.
+		/// </summary>
+		event Action<Security, MarketDataMessage> MarketDataUnSubscriptionSucceeded;
+
+		/// <summary>
+		/// Error unsubscription market-data.
+		/// </summary>
+		event Action<Security, MarketDataMessage> MarketDataUnSubscriptionFailed;
+
+		/// <summary>
 		/// Session changed.
 		/// </summary>
 		event Action<ExchangeBoard, SessionStates> SessionStateChanged;

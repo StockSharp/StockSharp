@@ -303,6 +303,16 @@ namespace StockSharp.Algo
 		public event Action<Security, MarketDataMessage> MarketDataSubscriptionFailed;
 
 		/// <summary>
+		/// Successful unsubscription market-data.
+		/// </summary>
+		public event Action<Security, MarketDataMessage> MarketDataUnSubscriptionSucceeded;
+
+		/// <summary>
+		/// Error unsubscription market-data.
+		/// </summary>
+		public event Action<Security, MarketDataMessage> MarketDataUnSubscriptionFailed;
+
+		/// <summary>
 		/// Session changed.
 		/// </summary>
 		public event Action<ExchangeBoard, SessionStates> SessionStateChanged;
@@ -631,6 +641,16 @@ namespace StockSharp.Algo
 		{
 			this.AddErrorLog(LocalizedStrings.Str634Params, security.Id, message.DataType, message.Error);
 			MarketDataSubscriptionFailed?.Invoke(security, message);
+		}
+
+		private void RaiseMarketDataUnSubscriptionSucceeded(Security security, MarketDataMessage message)
+		{
+			MarketDataUnSubscriptionSucceeded?.Invoke(security, message);
+		}
+
+		private void RaiseMarketDataUnSubscriptionFailed(Security security, MarketDataMessage message)
+		{
+			MarketDataUnSubscriptionFailed?.Invoke(security, message);
 		}
 
 		/// <summary>

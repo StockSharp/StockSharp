@@ -11,35 +11,16 @@ namespace StockSharp.Algo
 	using StockSharp.Messages;
 
 	/// <summary>
-	/// Cancel all market data subscriptions message.
-	/// </summary>
-	public class MarketDataCancelAllMessage : Message
-	{
-		/// <summary>
-		/// Message type.
-		/// </summary>
-		public static MessageTypes MessageType => ExtendedMessageTypes.MarketDataCancelAll;
-
-		/// <summary>
-		/// Initializes a new instance of the <see cref="MarketDataCancelAllMessage"/>.
-		/// </summary>
-		public MarketDataCancelAllMessage()
-			: base(MessageType)
-		{
-		}
-	}
-
-	/// <summary>
 	/// Subscription counter adapter.
 	/// </summary>
 	public class SubscriptionMessageAdapter : MessageAdapterWrapper
 	{
 		private readonly SyncObject _sync = new SyncObject();
 
-		private readonly Dictionary<Tuple<MarketDataTypes, SecurityId>, int> _subscribers = new Dictionary<Tuple<MarketDataTypes, SecurityId>, int>();
-		private readonly Dictionary<Tuple<MarketDataTypes, SecurityId, object>, int> _candleSubscribers = new Dictionary<Tuple<MarketDataTypes, SecurityId, object>, int>();
-		private readonly Dictionary<string, int> _newsSubscribers = new Dictionary<string, int>(StringComparer.InvariantCultureIgnoreCase);
-		private readonly Dictionary<string, int> _pfSubscribers = new Dictionary<string, int>(StringComparer.InvariantCultureIgnoreCase);
+		private readonly Dictionary<Tuple<MarketDataTypes, SecurityId>, RefPair<MarketDataMessage, int>> _subscribers = new Dictionary<Tuple<MarketDataTypes, SecurityId>, RefPair<MarketDataMessage, int>>();
+		private readonly Dictionary<Tuple<MarketDataTypes, SecurityId, object>, RefPair<MarketDataMessage, int>> _candleSubscribers = new Dictionary<Tuple<MarketDataTypes, SecurityId, object>, RefPair<MarketDataMessage, int>>();
+		private readonly Dictionary<string, RefPair<MarketDataMessage, int>> _newsSubscribers = new Dictionary<string, RefPair<MarketDataMessage, int>>(StringComparer.InvariantCultureIgnoreCase);
+		private readonly Dictionary<string, RefPair<PortfolioMessage, int>> _pfSubscribers = new Dictionary<string, RefPair<PortfolioMessage, int>>(StringComparer.InvariantCultureIgnoreCase);
 		//private readonly Dictionary<Tuple<MarketDataTypes, SecurityId>, List<MarketDataMessage>> _pendingMessages = new Dictionary<Tuple<MarketDataTypes, SecurityId>, List<MarketDataMessage>>();
 
 		/// <summary>
@@ -52,6 +33,11 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
+		/// Restore subscription on reconnect.
+		/// </summary>
+		public bool IsRestoreOnReconnect { get; set; }
+
+		/// <summary>
 		/// Send message.
 		/// </summary>
 		/// <param name="message">Message.</param>
@@ -60,7 +46,7 @@ namespace StockSharp.Algo
 			switch (message.Type)
 			{
 				case MessageTypes.Reset:
-
+				{
 					lock (_sync)
 					{
 						_subscribers.Clear();
@@ -72,69 +58,74 @@ namespace StockSharp.Algo
 
 					base.SendInMessage(message);
 					break;
+				}
 
-				case ExtendedMessageTypes.MarketDataCancelAll:
-					var mgMsgs = new List<Message>();
-
-					lock (_sync)
+				case MessageTypes.Disconnect:
+				{
+					if (!IsRestoreOnReconnect)
 					{
-						if (_newsSubscribers.Count > 0)
-						{
-							mgMsgs.Add(new MarketDataMessage
-							{
-								IsSubscribe = false,
-								DataType = MarketDataTypes.News,
-								TransactionId = InnerAdapter.TransactionIdGenerator.GetNextId(),
-							});
+						var mgMsgs = new List<Message>();
 
-							_newsSubscribers.Clear();
+						lock (_sync)
+						{
+							if (_newsSubscribers.Count > 0)
+							{
+								mgMsgs.Add(new MarketDataMessage
+								{
+									IsSubscribe = false,
+									DataType = MarketDataTypes.News,
+									TransactionId = InnerAdapter.TransactionIdGenerator.GetNextId(),
+								});
+
+								_newsSubscribers.Clear();
+							}
+
+							if (_subscribers.Count > 0)
+							{
+								mgMsgs.AddRange(_subscribers.Select(subscriber => new MarketDataMessage
+								{
+									IsSubscribe = false,
+									DataType = subscriber.Key.Item1,
+									SecurityId = subscriber.Key.Item2,
+									TransactionId = InnerAdapter.TransactionIdGenerator.GetNextId(),
+								}));
+
+								_subscribers.Clear();
+							}
+
+							if (_candleSubscribers.Count > 0)
+							{
+								mgMsgs.AddRange(_candleSubscribers.Select(subscriber => new MarketDataMessage
+								{
+									IsSubscribe = false,
+									DataType = subscriber.Key.Item1,
+									SecurityId = subscriber.Key.Item2,
+									Arg = subscriber.Key.Item3,
+									TransactionId = InnerAdapter.TransactionIdGenerator.GetNextId(),
+								}));
+
+								_candleSubscribers.Clear();
+							}
+
+							if (_pfSubscribers.Count > 0)
+							{
+								mgMsgs.AddRange(_pfSubscribers.Select(pair => new PortfolioMessage
+								{
+									IsSubscribe = false,
+									PortfolioName = pair.Key,
+									TransactionId = InnerAdapter.TransactionIdGenerator.GetNextId(),
+								}));
+
+								_pfSubscribers.Clear();
+							}
 						}
 
-						if (_subscribers.Count > 0)
-						{
-							mgMsgs.AddRange(_subscribers.Select(subscriber => new MarketDataMessage
-							{
-								IsSubscribe = false,
-								DataType = subscriber.Key.Item1,
-								SecurityId = subscriber.Key.Item2,
-								TransactionId = InnerAdapter.TransactionIdGenerator.GetNextId(),
-							}));
-
-							_subscribers.Clear();
-						}
-
-						if (_candleSubscribers.Count > 0)
-						{
-							mgMsgs.AddRange(_candleSubscribers.Select(subscriber => new MarketDataMessage
-							{
-								IsSubscribe = false,
-								DataType = subscriber.Key.Item1,
-								SecurityId = subscriber.Key.Item2,
-								Arg = subscriber.Key.Item3,
-								TransactionId = InnerAdapter.TransactionIdGenerator.GetNextId(),
-							}));
-
-							_candleSubscribers.Clear();
-						}
-
-						if (_pfSubscribers.Count > 0)
-						{
-							mgMsgs.AddRange(_pfSubscribers.Select(pair => new PortfolioMessage
-							{
-								IsSubscribe = false,
-								PortfolioName = pair.Key,
-								TransactionId = InnerAdapter.TransactionIdGenerator.GetNextId(),
-							}));
-
-							_pfSubscribers.Clear();
-						}
+						mgMsgs.ForEach(base.SendInMessage);
 					}
 
-					mgMsgs.ForEach(base.SendInMessage);
-
-					RaiseNewOutMessage(message);
-
+					base.SendInMessage(message);
 					break;
+				}
 
 				case MessageTypes.MarketData:
 					ProcessInMarketDataMessage((MarketDataMessage)message);
@@ -147,7 +138,8 @@ namespace StockSharp.Algo
 
 					lock (_sync)
 					{
-						var subscribersCount = _pfSubscribers.TryGetValue2(pfMsg.PortfolioName) ?? 0;
+						var pair = _pfSubscribers.TryGetValue(pfMsg.PortfolioName) ?? RefTuple.Create((PortfolioMessage)pfMsg.Clone(), 0);
+						var subscribersCount = pair.Second;
 
 						if (pfMsg.IsSubscribe)
 						{
@@ -166,7 +158,10 @@ namespace StockSharp.Algo
 						}
 
 						if (subscribersCount > 0)
-							_pfSubscribers[pfMsg.PortfolioName] = subscribersCount;
+						{
+							pair.Second = subscribersCount;
+							_pfSubscribers[pfMsg.PortfolioName] = pair;
+						}
 						else
 							_pfSubscribers.Remove(pfMsg.PortfolioName);
 					}
@@ -183,21 +178,60 @@ namespace StockSharp.Algo
 			}
 		}
 
-		///// <summary>
-		///// Process <see cref="MessageAdapterWrapper.InnerAdapter"/> output message.
-		///// </summary>
-		///// <param name="message">The message.</param>
-		//protected override void OnInnerAdapterNewOutMessage(Message message)
-		//{
-		//	switch (message.Type)
-		//	{
-		//		case MessageTypes.MarketData:
-		//			ProcessOutMarketDataMessage((MarketDataMessage)message);
-		//			break;
-		//	}
+		/// <summary>
+		/// Process <see cref="MessageAdapterWrapper.InnerAdapter"/> output message.
+		/// </summary>
+		/// <param name="message">The message.</param>
+		protected override void OnInnerAdapterNewOutMessage(Message message)
+		{
+			List<Message> messages = null;
 
-		//	base.OnInnerAdapterNewOutMessage(message);
-		//}
+			switch (message.Type)
+			{
+				case MessageTypes.Connect:
+				{
+					var connectMsg = (ConnectMessage)message;
+
+					if (connectMsg.Error == null && IsRestoreOnReconnect)
+					{
+						messages = new List<Message>();
+
+						lock (_sync)
+						{
+							messages.AddRange(_subscribers.Values.Select(p => p.First));
+							messages.AddRange(_newsSubscribers.Values.Select(p => p.First));
+							messages.AddRange(_candleSubscribers.Values.Select(p => p.First));
+							messages.AddRange(_pfSubscribers.Values.Select(p => p.First));
+
+							_subscribers.Clear();
+							_newsSubscribers.Clear();
+							_pfSubscribers.Clear();
+							_candleSubscribers.Clear();
+						}
+
+						if (messages.Count == 0)
+							messages = null;
+					}
+
+					break;
+				}
+				// TODO
+				//case MessageTypes.MarketData:
+				//	ProcessOutMarketDataMessage((MarketDataMessage)message);
+				//	break;
+			}
+
+			base.OnInnerAdapterNewOutMessage(message);
+
+			if (messages != null)
+			{
+				foreach (var m in messages)
+				{
+					m.IsBack = true;
+					base.OnInnerAdapterNewOutMessage(m);
+				}
+			}
+		}
 
 		private void ProcessInMarketDataMessage(MarketDataMessage message)
 		{
@@ -214,7 +248,8 @@ namespace StockSharp.Algo
 					{
 						var subscriber = message.NewsId ?? string.Empty;
 
-						var subscribersCount = _newsSubscribers.TryGetValue2(subscriber) ?? 0;
+						var pair = _newsSubscribers.TryGetValue(subscriber) ?? RefTuple.Create((MarketDataMessage)message.Clone(), 0);
+						var subscribersCount = pair.Second;
 
 						if (isSubscribe)
 						{
@@ -245,7 +280,10 @@ namespace StockSharp.Algo
 							}
 
 							if (subscribersCount > 0)
-								_newsSubscribers[subscriber] = subscribersCount;
+							{
+								pair.Second = subscribersCount;
+								_newsSubscribers[subscriber] = pair;
+							}
 							else
 								_newsSubscribers.Remove(subscriber);
 						}
@@ -261,7 +299,8 @@ namespace StockSharp.Algo
 					{
 						var key = Tuple.Create(message.DataType, message.SecurityId, message.Arg);
 
-						var subscribersCount = _candleSubscribers.TryGetValue2(key) ?? 0;
+						var pair = _candleSubscribers.TryGetValue(key) ?? RefTuple.Create((MarketDataMessage)message.Clone(), 0);
+						var subscribersCount = pair.Second;
 
 						if (isSubscribe)
 						{
@@ -294,7 +333,10 @@ namespace StockSharp.Algo
 							}
 
 							if (subscribersCount > 0)
-								_candleSubscribers[key] = subscribersCount;
+							{
+								pair.Second = subscribersCount;
+								_candleSubscribers[key] = pair;
+							}
 							else
 								_candleSubscribers.Remove(key);
 						}
@@ -305,7 +347,8 @@ namespace StockSharp.Algo
 					{
 						var key = Tuple.Create(message.DataType, message.SecurityId);
 
-						var subscribersCount = _subscribers.TryGetValue2(key) ?? 0;
+						var pair = _subscribers.TryGetValue(key) ?? RefTuple.Create((MarketDataMessage)message.Clone(), 0);
+						var subscribersCount = pair.Second;
 
 						if (isSubscribe)
 						{
@@ -337,7 +380,10 @@ namespace StockSharp.Algo
 							}
 
 							if (subscribersCount > 0)
-								_subscribers[key] = subscribersCount;
+							{
+								pair.Second = subscribersCount;
+								_subscribers[key] = pair;
+							}
 							else
 								_subscribers.Remove(key);
 						}
@@ -353,15 +399,6 @@ namespace StockSharp.Algo
 			if (sendOutMsg != null)
 				RaiseNewOutMessage(sendOutMsg);
 		}
-
-		//private void ProcessOutMarketDataMessage(MarketDataMessage message)
-		//{
-		// TODO
-		//	lock (_sync)
-		//	{
-		//		var pending = _pendingMessages.TryGetValue(Tuple.Create(message.DataType, message.SecurityId));
-		//	}
-		//}
 
 		private static MarketDataMessage NonExist(MarketDataMessage message)
 		{

@@ -25,6 +25,8 @@ StockSharp API Change log
 * (feature) ISecurityProvider.GetNativeId removed.
 * (feature) OrderWindow, OrderConditionalWindow, SecurityJump - re-designed with DevExp.
 * (bug) CandleCsvSerializer fix.
+* (feature) IConnector. MarketDataUnSubscriptionSucceeded, MarketDataUnSubscriptionFailed
+* (feature) Connector. IsRestorSubscriptioneOnReconnect
 
 ###v4.3.18:
 * (feature) Rithmic. v9.5.0.0
