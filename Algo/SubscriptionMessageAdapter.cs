@@ -64,63 +64,55 @@ namespace StockSharp.Algo
 				{
 					if (!IsRestoreOnReconnect)
 					{
-						var mgMsgs = new List<Message>();
+						var messages = new List<Message>();
 
 						lock (_sync)
 						{
 							if (_newsSubscribers.Count > 0)
 							{
-								mgMsgs.Add(new MarketDataMessage
-								{
-									IsSubscribe = false,
-									DataType = MarketDataTypes.News,
-									TransactionId = InnerAdapter.TransactionIdGenerator.GetNextId(),
-								});
-
+								messages.AddRange(_newsSubscribers.Values.Select(p => p.First.Clone()));
 								_newsSubscribers.Clear();
 							}
 
 							if (_subscribers.Count > 0)
 							{
-								mgMsgs.AddRange(_subscribers.Select(subscriber => new MarketDataMessage
-								{
-									IsSubscribe = false,
-									DataType = subscriber.Key.Item1,
-									SecurityId = subscriber.Key.Item2,
-									TransactionId = InnerAdapter.TransactionIdGenerator.GetNextId(),
-								}));
-
+								messages.AddRange(_subscribers.Values.Select(p => p.First.Clone()));
 								_subscribers.Clear();
 							}
 
 							if (_candleSubscribers.Count > 0)
 							{
-								mgMsgs.AddRange(_candleSubscribers.Select(subscriber => new MarketDataMessage
-								{
-									IsSubscribe = false,
-									DataType = subscriber.Key.Item1,
-									SecurityId = subscriber.Key.Item2,
-									Arg = subscriber.Key.Item3,
-									TransactionId = InnerAdapter.TransactionIdGenerator.GetNextId(),
-								}));
-
+								messages.AddRange(_candleSubscribers.Values.Select(p => p.First.Clone()));
 								_candleSubscribers.Clear();
 							}
 
 							if (_pfSubscribers.Count > 0)
 							{
-								mgMsgs.AddRange(_pfSubscribers.Select(pair => new PortfolioMessage
-								{
-									IsSubscribe = false,
-									PortfolioName = pair.Key,
-									TransactionId = InnerAdapter.TransactionIdGenerator.GetNextId(),
-								}));
-
+								messages.AddRange(_pfSubscribers.Values.Select(p => p.First.Clone()));
 								_pfSubscribers.Clear();
 							}
 						}
 
-						mgMsgs.ForEach(base.SendInMessage);
+						foreach (var msg in messages)
+						{
+							var mdMsg = msg as MarketDataMessage;
+
+							if (mdMsg != null)
+							{
+								mdMsg.TransactionId = InnerAdapter.TransactionIdGenerator.GetNextId();
+								mdMsg.IsSubscribe = false;
+							}
+							else
+							{
+								var pfMsg = (PortfolioMessage)msg;
+
+								pfMsg.TransactionId = InnerAdapter.TransactionIdGenerator.GetNextId();
+								pfMsg.IsSubscribe = false;
+							}
+
+							base.SendInMessage(msg);
+
+						}
 					}
 
 					base.SendInMessage(message);
