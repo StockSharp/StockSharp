@@ -114,7 +114,7 @@ namespace StockSharp.Algo.Storages.Binary
 			{
 				var first = messages.First();
 
-				metaInfo.FirstId = metaInfo.PrevId = first.GetTradeId();
+				metaInfo.FirstId = metaInfo.PrevId = first.TradeId ?? 0;
 				metaInfo.ServerOffset = first.ServerTime.Offset;
 			}
 
@@ -129,7 +129,7 @@ namespace StockSharp.Algo.Storages.Binary
 				if (msg.ExecutionType != ExecutionTypes.Tick)
 					throw new ArgumentOutOfRangeException(nameof(messages), msg.ExecutionType, LocalizedStrings.Str1695Params.Put(msg.TradeId));
 
-				var tradeId = msg.GetTradeId();
+				var tradeId = msg.TradeId ?? 0;
 
 				// сделки для индексов имеют нулевой номер
 				if (tradeId < 0)

@@ -68,7 +68,7 @@ namespace StockSharp.Algo.Storages.Csv
 			});
 
 			metaInfo.LastTime = data.ServerTime.UtcDateTime;
-			metaInfo.LastId = data.GetTradeId();
+			metaInfo.LastId = data.TradeId;
 		}
 
 		/// <summary>
