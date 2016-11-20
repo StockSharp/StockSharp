@@ -76,8 +76,8 @@ namespace StockSharp.Algo
 			{
 				AddSuffix(security.Id, security);
 				AddSuffix(security.Code, security);
-				AddSuffix(security.Name, security);
-				AddSuffix(security.ShortName, security);
+				//AddSuffix(security.Name, security);
+				//AddSuffix(security.ShortName, security);
 				AddSuffix(security.ExternalId.Bloomberg, security);
 				AddSuffix(security.ExternalId.Cusip, security);
 				AddSuffix(security.ExternalId.Isin, security);

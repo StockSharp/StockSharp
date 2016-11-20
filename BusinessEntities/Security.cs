@@ -457,6 +457,7 @@ namespace StockSharp.BusinessEntities
 			Description = LocalizedStrings.Str427Key,
 			GroupName = LocalizedStrings.GeneralKey,
 			Order = 20)]
+		[Ignore]
 		public IDictionary<object, object> ExtensionInfo
 		{
 			get { return _extensionInfo; }
