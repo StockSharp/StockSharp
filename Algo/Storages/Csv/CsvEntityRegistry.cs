@@ -339,7 +339,7 @@ namespace StockSharp.Algo.Storages.Csv
 					CountryCode = reader.ReadNullableEnum<CountryCodes>(),
 					EngName = reader.ReadString(),
 					RusName = reader.ReadString(),
-					ExtensionInfo = Deserialize<Dictionary<object, object>>(reader.ReadString())
+					//ExtensionInfo = Deserialize<Dictionary<object, object>>(reader.ReadString())
 				};
 
 				return board;
@@ -353,7 +353,7 @@ namespace StockSharp.Algo.Storages.Csv
 					data.CountryCode.To<string>(),
 					data.EngName,
 					data.RusName,
-					Serialize(data.ExtensionInfo)
+					//Serialize(data.ExtensionInfo)
 				});
 			}
 		}
@@ -386,7 +386,7 @@ namespace StockSharp.Algo.Storages.Csv
 						SpecialWorkingDays = Deserialize<List<DateTime>>(reader.ReadString()),
 						SpecialHolidays = Deserialize<List<DateTime>>(reader.ReadString())
 					},
-					ExtensionInfo = Deserialize<Dictionary<object, object>>(reader.ReadString())
+					//ExtensionInfo = Deserialize<Dictionary<object, object>>(reader.ReadString())
 				};
 
 				return board;
@@ -405,7 +405,7 @@ namespace StockSharp.Algo.Storages.Csv
 					Serialize(data.WorkingTime.Periods),
 					Serialize(data.WorkingTime.SpecialWorkingDays),
 					Serialize(data.WorkingTime.SpecialHolidays),
-					Serialize(data.ExtensionInfo)
+					//Serialize(data.ExtensionInfo)
 				});
 			}
 		}
@@ -509,7 +509,7 @@ namespace StockSharp.Algo.Storages.Csv
 						InteractiveBrokers = reader.ReadNullableInt(),
 						Plaza = reader.ReadString()
 					},
-					ExtensionInfo = Deserialize<Dictionary<object, object>>(reader.ReadString())
+					//ExtensionInfo = Deserialize<Dictionary<object, object>>(reader.ReadString())
 				};
 
 				return security;
@@ -544,7 +544,7 @@ namespace StockSharp.Algo.Storages.Csv
 					data.ExternalId.IQFeed,
 					data.ExternalId.InteractiveBrokers.To<string>(),
 					data.ExternalId.Plaza,
-					Serialize(data.ExtensionInfo)
+					//Serialize(data.ExtensionInfo)
 				});
 			}
 
