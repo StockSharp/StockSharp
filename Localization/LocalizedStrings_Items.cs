@@ -20708,12 +20708,12 @@ namespace StockSharp.Localization
 		public static string Str2199 => GetString(Str2199Key);
 
 		/// <summary>
-		/// Trade price is not a multiple of security price step.
+		/// Trade price is not a multiple of security price step. Price step is '{0}', trade is '{1}'.
 		/// </summary>
 		public const string Str2200Key = "Str2200";
 
 		/// <summary>
-		/// Trade price is not a multiple of security price step.
+		/// Trade price is not a multiple of security price step. Price step is '{0}', trade is '{1}'.
 		/// </summary>
 		public static string Str2200 => GetString(Str2200Key);
 
@@ -20738,42 +20738,42 @@ namespace StockSharp.Localization
 		public static string Str2202 => GetString(Str2202Key);
 
 		/// <summary>
-		/// Opening price is not a multiple of security price step.
+		/// Open price is not a multiple of security price step. Price step is '{0}', O is '{1}'.
 		/// </summary>
 		public const string Str2203Key = "Str2203";
 
 		/// <summary>
-		/// Opening price is not a multiple of security price step.
+		/// Open price is not a multiple of security price step. Price step is '{0}', O is '{1}'.
 		/// </summary>
 		public static string Str2203 => GetString(Str2203Key);
 
 		/// <summary>
-		/// Maximum price is not a multiple of security price step.
+		/// High price is not a multiple of security price step. Price step is '{0}', H is '{1}'.
 		/// </summary>
 		public const string Str2204Key = "Str2204";
 
 		/// <summary>
-		/// Maximum price is not a multiple of security price step.
+		/// High price is not a multiple of security price step. Price step is '{0}', H is '{1}'.
 		/// </summary>
 		public static string Str2204 => GetString(Str2204Key);
 
 		/// <summary>
-		/// Minimum price is not a multiple of security price step.
+		/// Low price is not a multiple of security price step. Price step is '{0}', L is '{1}'.
 		/// </summary>
 		public const string Str2205Key = "Str2205";
 
 		/// <summary>
-		/// Minimum price is not a multiple of security price step.
+		/// Low price is not a multiple of security price step. Price step is '{0}', L is '{1}'.
 		/// </summary>
 		public static string Str2205 => GetString(Str2205Key);
 
 		/// <summary>
-		/// Closing price in not a multiple of security price step.
+		/// Close price is not a multiple of security price step. Price step is '{0}', H is '{1}'.
 		/// </summary>
 		public const string Str2206Key = "Str2206";
 
 		/// <summary>
-		/// Closing price in not a multiple of security price step.
+		/// Close price is not a multiple of security price step. Price step is '{0}', H is '{1}'.
 		/// </summary>
 		public static string Str2206 => GetString(Str2206Key);
 
