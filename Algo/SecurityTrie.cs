@@ -143,7 +143,7 @@ namespace StockSharp.Algo
 
 			securities = securities.ToArray();
 
-            lock (_sync)
+			lock (_sync)
 			{
 				if (securities.Count() > 1000 || (_allSecurities.Count > 1000 && securities.Count() > _allSecurities.Count * 0.1))
 				{

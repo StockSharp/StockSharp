@@ -32,7 +32,7 @@ M:StockSharp.Xaml.BaseApplication.EditProxySettings(System.Windows.Window)/param
 T:StockSharp.Xaml.Converters.SeriesToStringConverter/summary;DocStr9307
 T:StockSharp.Xaml.SecurityLookupWindow/summary;DocStr9348
 M:StockSharp.Xaml.SecurityLookupWindow.#ctor/summary;DocStr1
-P:StockSharp.Xaml.SecurityLookupWindow.Criteria/summary;DocStr9349
+P:StockSharp.Xaml.SecurityLookupWindow.Criteria/summary;DocStr8303
 M:StockSharp.Xaml.SecurityLookupWindow.InitializeComponent/summary;DocStr8
 T:StockSharp.Xaml.GridControl.BaseGridControl/summary;DocStr8990
 T:StockSharp.Xaml.GridControl.BaseGridControl.ColumnVisibilityHolder/summary;DocStr8991
@@ -575,6 +575,8 @@ E:StockSharp.Xaml.GuiConnector`1.LookupSecuritiesResult/summary;DocStr894
 E:StockSharp.Xaml.GuiConnector`1.LookupPortfoliosResult/summary;DocStr894
 E:StockSharp.Xaml.GuiConnector`1.MarketDataSubscriptionSucceeded/summary;DocStr895
 E:StockSharp.Xaml.GuiConnector`1.MarketDataSubscriptionFailed/summary;DocStr896
+E:StockSharp.Xaml.GuiConnector`1.MarketDataUnSubscriptionSucceeded/summary;DocStr9350
+E:StockSharp.Xaml.GuiConnector`1.MarketDataUnSubscriptionFailed/summary;DocStr9351
 E:StockSharp.Xaml.GuiConnector`1.SessionStateChanged/summary;DocStr897
 E:StockSharp.Xaml.GuiConnector`1.NewPortfolio/summary;DocStr8929
 E:StockSharp.Xaml.GuiConnector`1.PortfolioChanged/summary;DocStr8554

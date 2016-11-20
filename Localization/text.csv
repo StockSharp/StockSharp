@@ -13533,3 +13533,6 @@ DocStr9345;Diagram socket type;Тип сокета диаграммы
 DocStr9346;Cancel all market data subscriptions message;Сообщение отмены всех подписок
 DocStr9347;Candle downloading sleep interval;Интервал скачивания свечей
 DocStr9348;The instrument search window;Окно поиска инструментов
+DocStr9349;Restore subscription on reconnect;Восстановить подписку при переподключении
+DocStr9350;Successful unsubscription market-data;Успешная отписка на маркет-данные
+DocStr9351;Error unsubscription market-data;Ошибка отписки от маркет-данных

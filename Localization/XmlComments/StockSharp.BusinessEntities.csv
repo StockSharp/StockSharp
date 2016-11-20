@@ -344,6 +344,8 @@ E:StockSharp.BusinessEntities.IConnector.LookupSecuritiesResult/summary;DocStr89
 E:StockSharp.BusinessEntities.IConnector.LookupPortfoliosResult/summary;DocStr894
 E:StockSharp.BusinessEntities.IConnector.MarketDataSubscriptionSucceeded/summary;DocStr895
 E:StockSharp.BusinessEntities.IConnector.MarketDataSubscriptionFailed/summary;DocStr896
+E:StockSharp.BusinessEntities.IConnector.MarketDataUnSubscriptionSucceeded/summary;DocStr9350
+E:StockSharp.BusinessEntities.IConnector.MarketDataUnSubscriptionFailed/summary;DocStr9351
 E:StockSharp.BusinessEntities.IConnector.SessionStateChanged/summary;DocStr897
 M:StockSharp.BusinessEntities.IConnector.GetSessionState(StockSharp.BusinessEntities.ExchangeBoard)/summary;DocStr803
 M:StockSharp.BusinessEntities.IConnector.GetSessionState(StockSharp.BusinessEntities.ExchangeBoard)/param/board;DocStr804

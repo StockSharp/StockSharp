@@ -177,7 +177,7 @@
     </member>
     <member name="P:StockSharp.Xaml.SecurityLookupWindow.Criteria">
       <summary>
-            Search criteria.
+            The filter for instrument search.
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.SecurityLookupWindow.InitializeComponent">
@@ -2802,6 +2802,16 @@
     <member name="E:StockSharp.Xaml.GuiConnector`1.MarketDataSubscriptionFailed">
       <summary>
             Error subscription market-data.
+            </summary>
+    </member>
+    <member name="E:StockSharp.Xaml.GuiConnector`1.MarketDataUnSubscriptionSucceeded">
+      <summary>
+            Successful unsubscription market-data.
+            </summary>
+    </member>
+    <member name="E:StockSharp.Xaml.GuiConnector`1.MarketDataUnSubscriptionFailed">
+      <summary>
+            Error unsubscription market-data.
             </summary>
     </member>
     <member name="E:StockSharp.Xaml.GuiConnector`1.SessionStateChanged">
