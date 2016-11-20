@@ -214,9 +214,11 @@ namespace SampleHistoryTesting
 				Board = board,
 			};
 
+			var nativeIdStorage = new InMemoryNativeIdStorage();
+
 			if (FinamCandlesCheckBox.IsChecked == true)
 			{
-				_finamHistorySource.Refresh(new FinamSecurityStorage(security), security, s => {}, () => false);
+				_finamHistorySource.Refresh(new FinamSecurityStorage(security), nativeIdStorage, security, s => {}, () => false);
 			}
 
 			// create backtesting modes
@@ -297,7 +299,7 @@ namespace SampleHistoryTesting
 					FinamCandlesProgress,
 					FinamCandlesParameterGrid,
 					// candles
-					new EmulationInfo {UseCandleTimeFrame = timeFrame, HistorySource = d => _finamHistorySource.GetCandles(security, timeFrame, d.Date, d.Date), CurveColor = Colors.DarkBlue, StrategyName = LocalizedStrings.FinamCandles},
+					new EmulationInfo {UseCandleTimeFrame = timeFrame, HistorySource = d => _finamHistorySource.GetCandles(security, nativeIdStorage, timeFrame, d.Date, d.Date), CurveColor = Colors.DarkBlue, StrategyName = LocalizedStrings.FinamCandles},
 					FinamCandlesChart,
 					FinamCandlesEquity,
 					FinamCandlesPosition),

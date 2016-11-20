@@ -15,55 +15,6 @@
 	/// </summary>
 	public class SecurityNativeIdMessageAdapter : MessageAdapterWrapper
 	{
-		private sealed class InMemoryStorage : INativeIdStorage
-		{
-			private readonly SynchronizedPairSet<SecurityId, object> _nativeIds = new SynchronizedPairSet<SecurityId, object>();
-
-			void INativeIdStorage.Init()
-			{
-			}
-
-			bool INativeIdStorage.TryAdd(string name, SecurityId securityId, object nativeId)
-			{
-				if (name == null)
-					throw new ArgumentNullException(nameof(name));
-
-				if (nativeId == null)
-					throw new ArgumentNullException(nameof(nativeId));
-
-				return _nativeIds.TryAdd(securityId, nativeId);
-			}
-
-			object INativeIdStorage.TryGetBySecurityId(string name, SecurityId securityId)
-			{
-				if (name == null)
-					throw new ArgumentNullException(nameof(name));
-
-				return _nativeIds.TryGetValue(securityId);
-			}
-
-			SecurityId? INativeIdStorage.TryGetByNativeId(string name, object nativeId)
-			{
-				if (name == null)
-					throw new ArgumentNullException(nameof(name));
-
-				SecurityId securityId;
-
-				if (!_nativeIds.TryGetKey(nativeId, out securityId))
-					return null;
-
-				return securityId;
-			}
-
-			Tuple<SecurityId, object>[] INativeIdStorage.Get(string name)
-			{
-				if (name == null)
-					throw new ArgumentNullException(nameof(name));
-
-				return _nativeIds.SyncGet(c => c.Select(p => Tuple.Create(p.Key, p.Value)).ToArray());
-			}
-		}
-
 		private readonly PairSet<object, SecurityId> _securityIds = new PairSet<object, SecurityId>();
 		private readonly Dictionary<SecurityId, List<Message>> _suspendedInMessages = new Dictionary<SecurityId, List<Message>>();
 		private readonly Dictionary<SecurityId, RefPair<List<Message>, Dictionary<MessageTypes, Message>>> _suspendedOutMessages = new Dictionary<SecurityId, RefPair<List<Message>, Dictionary<MessageTypes, Message>>>();
@@ -81,7 +32,7 @@
 		/// </summary>
 		/// <param name="innerAdapter">The adapter, to which messages will be directed.</param>
 		public SecurityNativeIdMessageAdapter(IMessageAdapter innerAdapter)
-			: this(innerAdapter, new InMemoryStorage())
+			: this(innerAdapter, new InMemoryNativeIdStorage())
 		{
 		}
 

@@ -61,7 +61,7 @@ namespace StockSharp.Algo
 	public sealed class CsvNativeIdStorage : INativeIdStorage
 	{
 		private readonly SyncObject _sync = new SyncObject();
-		private readonly Dictionary<string, PairSet<SecurityId, object>> _nativeIds = new Dictionary<string, PairSet<SecurityId, object>>();
+		private readonly Dictionary<string, PairSet<SecurityId, object>> _nativeIds = new Dictionary<string, PairSet<SecurityId, object>>(StringComparer.InvariantCultureIgnoreCase);
 
 		private readonly string _path;
 
@@ -112,7 +112,7 @@ namespace StockSharp.Algo
 		/// <returns>Security identifiers.</returns>
 		public Tuple<SecurityId, object>[] Get(string name)
 		{
-			if (name == null)
+			if (name.IsEmpty())
 				throw new ArgumentNullException(nameof(name));
 
 			lock (_sync)
@@ -135,7 +135,7 @@ namespace StockSharp.Algo
 		/// <returns><see langword="true"/> if native identifier was added. Otherwise, <see langword="false" />.</returns>
 		public bool TryAdd(string name, SecurityId securityId, object nativeId)
 		{
-			if (name == null)
+			if (name.IsEmpty())
 				throw new ArgumentNullException(nameof(name));
 
 			if (nativeId == null)
@@ -163,7 +163,7 @@ namespace StockSharp.Algo
 		/// <returns>Security identifier.</returns>
 		public SecurityId? TryGetByNativeId(string name, object nativeId)
 		{
-			if (name == null)
+			if (name.IsEmpty())
 				throw new ArgumentNullException(nameof(name));
 
 			lock (_sync)
@@ -190,7 +190,7 @@ namespace StockSharp.Algo
 		/// <returns>Native (internal) trading system security id.</returns>
 		public object TryGetBySecurityId(string name, SecurityId securityId)
 		{
-			if (name == null)
+			if (name.IsEmpty())
 				throw new ArgumentNullException(nameof(name));
 
 			lock (_sync)
@@ -273,5 +273,63 @@ namespace StockSharp.Algo
 				}
 			});
         }
+	}
+
+	/// <summary>
+	/// In memory security native identifier storage.
+	/// </summary>
+	public class InMemoryNativeIdStorage : INativeIdStorage
+	{
+		private readonly SynchronizedDictionary<string, PairSet<SecurityId, object>> _nativeIds = new SynchronizedDictionary<string, PairSet<SecurityId, object>>(StringComparer.InvariantCultureIgnoreCase);
+
+		void INativeIdStorage.Init()
+		{
+		}
+
+		bool INativeIdStorage.TryAdd(string name, SecurityId securityId, object nativeId)
+		{
+			if (name.IsEmpty())
+				throw new ArgumentNullException(nameof(name));
+
+			if (nativeId == null)
+				throw new ArgumentNullException(nameof(nativeId));
+
+			lock (_nativeIds.SyncRoot)
+				return _nativeIds.SafeAdd(name).TryAdd(securityId, nativeId);
+		}
+
+		object INativeIdStorage.TryGetBySecurityId(string name, SecurityId securityId)
+		{
+			if (name.IsEmpty())
+				throw new ArgumentNullException(nameof(name));
+
+			lock (_nativeIds.SyncRoot)
+				return _nativeIds.TryGetValue(name)?.TryGetValue(securityId);
+		}
+
+		SecurityId? INativeIdStorage.TryGetByNativeId(string name, object nativeId)
+		{
+			if (name.IsEmpty())
+				throw new ArgumentNullException(nameof(name));
+
+			var securityId = default(SecurityId);
+
+			lock (_nativeIds.SyncRoot)
+			{
+				if (_nativeIds.TryGetValue(name)?.TryGetKey(nativeId, out securityId) != true)
+					return null;
+			}
+
+			return securityId;
+		}
+
+		Tuple<SecurityId, object>[] INativeIdStorage.Get(string name)
+		{
+			if (name.IsEmpty())
+				throw new ArgumentNullException(nameof(name));
+
+			lock (_nativeIds.SyncRoot)
+				return _nativeIds.TryGetValue(name)?.Select(p => Tuple.Create(p.Key, p.Value)).ToArray() ?? ArrayHelper.Empty<Tuple<SecurityId, object>>();
+		}
 	}
 }

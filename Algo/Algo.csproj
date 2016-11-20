@@ -325,7 +325,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Storages\Binary\Level1BinarySerializer.cs" />
-    <Compile Include="Storages\NativeIdSecurityStorage.cs" />
     <Compile Include="Storages\NewsList.cs" />
     <Compile Include="Storages\StorageEntityFactory.cs" />
     <Compile Include="Storages\Binary\TransactionBinarySerializer.cs" />

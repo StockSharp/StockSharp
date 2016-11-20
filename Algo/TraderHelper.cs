@@ -2978,6 +2978,30 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
+		/// To get the instrument by the system identifier.
+		/// </summary>
+		/// <param name="provider"></param>
+		/// <param name="nativeIdStorage">Security native identifier storage.</param>
+		/// <param name="storageName">Storage name.</param>
+		/// <param name="nativeId">Native (internal) trading system security id.</param>
+		/// <returns>The got instrument. If there is no instrument by given criteria, <see langword="null" /> is returned.</returns>
+		public static Security LookupByNativeId(this ISecurityProvider provider, INativeIdStorage nativeIdStorage, string storageName, object nativeId)
+		{
+			if (provider == null)
+				throw new ArgumentNullException(nameof(provider));
+
+			if (nativeIdStorage == null)
+				throw new ArgumentNullException(nameof(nativeIdStorage));
+
+			if (nativeId == null)
+				throw new ArgumentNullException(nameof(nativeId));
+
+			var secId = nativeIdStorage.TryGetByNativeId(storageName, nativeId);
+
+			return secId == null ? null : provider.LookupById(secId.Value.ToStringId());
+		}
+
+		/// <summary>
 		/// To get the instrument by the instrument code.
 		/// </summary>
 		/// <param name="provider">The provider of information about instruments.</param>
