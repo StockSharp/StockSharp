@@ -190,8 +190,8 @@ namespace SampleRealTimeEmulation
 						this.GuiAsync(() => MessageBox.Show(this, error.ToString(), LocalizedStrings.Str2955));
 
 					// subscribe on error of market data subscription event
-					_connector.MarketDataSubscriptionFailed += (security, msg) =>
-						this.GuiAsync(() => MessageBox.Show(this, msg.Error.ToString(), LocalizedStrings.Str2956Params.Put(msg.DataType, security)));
+					_connector.MarketDataSubscriptionFailed += (security, msg, error) =>
+						this.GuiAsync(() => MessageBox.Show(this, error.ToString(), LocalizedStrings.Str2956Params.Put(msg.DataType, security)));
 				}
 
 				ConnectBtn.IsEnabled = false;

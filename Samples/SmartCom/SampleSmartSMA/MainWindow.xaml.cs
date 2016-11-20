@@ -179,8 +179,8 @@ namespace SampleSmartSMA
 					//_trader.Error += error => this.GuiAsync(() => MessageBox.Show(this, error.ToString(), "Ошибка обработки данных"));
 
 					// подписываемся на ошибку подписки маркет-данных
-					_trader.MarketDataSubscriptionFailed += (security, msg) =>
-						this.GuiAsync(() => MessageBox.Show(this, msg.Error.ToString(), LocalizedStrings.Str2956Params.Put(msg.DataType, security)));
+					_trader.MarketDataSubscriptionFailed += (security, msg, error) =>
+						this.GuiAsync(() => MessageBox.Show(this, error.ToString(), LocalizedStrings.Str2956Params.Put(msg.DataType, security)));
 				}
 
 				_trader.Login = Login.Text;

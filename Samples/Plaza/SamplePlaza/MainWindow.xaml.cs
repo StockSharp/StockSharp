@@ -158,8 +158,8 @@ namespace SamplePlaza
 						//	this.GuiAsync(() => MessageBox.Show(this, error.ToString(), "Ошибка обработки данных"));
 
 						// подписываемся на ошибку подписки маркет-данных
-						Trader.MarketDataSubscriptionFailed += (security, msg) =>
-							this.GuiAsync(() => MessageBox.Show(this, msg.Error.ToString(), LocalizedStrings.Str2956Params.Put(msg.DataType, security)));
+						Trader.MarketDataSubscriptionFailed += (security, msg, error) =>
+							this.GuiAsync(() => MessageBox.Show(this, error.ToString(), LocalizedStrings.Str2956Params.Put(msg.DataType, security)));
 
 						Trader.NewSecurities += securities => _securitiesWindow.SecurityPicker.Securities.AddRange(securities);
 						Trader.NewTrades += trades => _tradesWindow.TradeGrid.Trades.AddRange(trades);

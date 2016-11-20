@@ -111,8 +111,8 @@ namespace SampleBarChart
 					this.GuiAsync(() => MessageBox.Show(this, error.ToString(), LocalizedStrings.Str2955));
 
 				// subscribe on error of market data subscription event
-				Trader.MarketDataSubscriptionFailed += (security, msg) =>
-					this.GuiAsync(() => MessageBox.Show(this, msg.Error.ToString(), LocalizedStrings.Str2956Params.Put(msg.DataType, security)));
+				Trader.MarketDataSubscriptionFailed += (security, msg, error) =>
+					this.GuiAsync(() => MessageBox.Show(this, error.ToString(), LocalizedStrings.Str2956Params.Put(msg.DataType, security)));
 
 				Trader.NewSecurities += securities => _securitiesWindow.SecurityPicker.Securities.AddRange(securities);
 
