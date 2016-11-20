@@ -3673,5 +3673,37 @@ namespace StockSharp.Algo
 		{
 			return !status.HasBits(0x04);
 		}
+
+		/// <summary>
+		/// Convert <see cref="DataType"/> to readable string.
+		/// </summary>
+		/// <param name="dt"><see cref="DataType"/> instance.</param>
+		/// <returns>Readable string.</returns>
+		public static string ToReadableString(this DataType dt)
+		{
+			if (dt == null)
+				throw new ArgumentNullException(nameof(dt));
+
+			var tf = (TimeSpan)dt.Arg;
+
+			var str = string.Empty;
+
+			if (tf.Days > 0)
+				str += LocalizedStrings.Str2918Params.Put(tf.Days);
+
+			if (tf.Hours > 0)
+				str = (str + " " + LocalizedStrings.Str2919Params.Put(tf.Hours)).Trim();
+
+			if (tf.Minutes > 0)
+				str = (str + " " + LocalizedStrings.Str2920Params.Put(tf.Minutes)).Trim();
+
+			if (tf.Seconds > 0)
+				str = (str + " " + LocalizedStrings.Seconds.Put(tf.Seconds)).Trim();
+
+			if (str.IsEmpty())
+				str = LocalizedStrings.Ticks;
+
+			return str;
+		}
 	}
 }
