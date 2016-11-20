@@ -2,7 +2,7 @@ StockSharp Data (Hydra) Change log
 ========================
 ###current:
 * (feature) New design.
-* (bug) Finam, Quandl, Google fixes.
+* (bug) Finam, Quandl, Google, QUIK, Transaq, OpenECry, Oanda fixes.
 * (feature) Hydra. ExportTypes. Bin -> StockSharpBin + StockSharpCsv.
 * (feature) Csv storage perf boost.
 * (feature) Data type refactoring.
@@ -12,6 +12,7 @@ StockSharp Data (Hydra) Change log
 * (bug) Advertise fix.
 * (bug) Hydra. Export task fix.
 * (feature) Hydra. Show news counter.
+* (feature) Xignite support.
 
 ###v4.3.13:
 * (bug) DB export fix.

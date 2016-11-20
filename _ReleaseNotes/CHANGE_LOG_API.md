@@ -27,6 +27,8 @@ StockSharp API Change log
 * (bug) CandleCsvSerializer fix.
 * (feature) IConnector. MarketDataUnSubscriptionSucceeded, MarketDataUnSubscriptionFailed
 * (feature) Connector. IsRestorSubscriptioneOnReconnect
+* (bug) Fix https://github.com/StockSharp/StockSharp/issues/47
+* (bug) QUIK. ALL subscription fix
 
 ###v4.3.18:
 * (feature) Rithmic. v9.5.0.0
