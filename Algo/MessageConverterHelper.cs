@@ -642,7 +642,6 @@ namespace StockSharp.Algo
 				Decimals = message.Decimals,
 				VolumeStep = message.VolumeStep,
 				Multiplier = message.Multiplier,
-				ExtensionInfo = new Dictionary<object, object>()
 			};
 		}
 

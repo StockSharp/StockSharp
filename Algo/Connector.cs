@@ -270,9 +270,10 @@ namespace StockSharp.Algo
 			}
 
 			if (initAdapter)
+			{
 				InitAdapter();
-
-			IsRestorSubscriptioneOnReconnect = true;
+				IsRestorSubscriptioneOnReconnect = true;
+			}
 		}
 
 		private void InitAdapter()

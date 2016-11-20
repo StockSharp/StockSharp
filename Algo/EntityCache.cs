@@ -911,9 +911,6 @@ namespace StockSharp.Algo
 				if (s == null)
 					throw new InvalidOperationException(LocalizedStrings.Str1102Params.Put(key));
 
-				if (s.ExtensionInfo == null)
-					s.ExtensionInfo = new Dictionary<object, object>();
-
 				var info = idConvert(key);
 
 				if (s.Board == null)

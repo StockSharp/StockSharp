@@ -489,7 +489,7 @@ namespace StockSharp.Algo.Storages
 				Id = securityId.ToStringId(),
 				Code = securityId.SecurityCode,
 				Board = ExchangeBoard.GetOrCreateBoard(securityId.BoardCode),
-				ExtensionInfo = new Dictionary<object, object>()
+				//ExtensionInfo = new Dictionary<object, object>()
 			};
 
 			_entityRegistry.Securities.Add(security);
