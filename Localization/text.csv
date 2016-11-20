@@ -13536,3 +13536,8 @@ DocStr9348;The instrument search window;Окно поиска инструмен
 DocStr9349;Restore subscription on reconnect;Восстановить подписку при переподключении
 DocStr9350;Successful unsubscription market-data;Успешная отписка на маркет-данные
 DocStr9351;Error unsubscription market-data;Ошибка отписки от маркет-данных
+DocStr9352;Native id storage name;Название хранилища системных идентификаторов
+DocStr9353;In memory security native identifier storage;Хранилища системных идентификаторов
+DocStr9354;To get the instrument by the system identifier;Получить инструмент по системному идентификатору
+DocStr9355;Convert {0} to readable string;Перевести {0} в читаемую строку
+DocStr9356;Readable string;Читаемая строка

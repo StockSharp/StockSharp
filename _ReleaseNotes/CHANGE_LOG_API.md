@@ -1,6 +1,6 @@
 StockSharp API Change log
 ========================
-###current:
+###v4.3.19:
 * (feature) IConnector. SubscribeMarketData and UnSubscribeMarketData. MarketDataTypes -> MarketDataMessage.
 * (feature) ExchangeBoard. Removed IsSupportAtomicReRegister, IsSupportMarketOrders
 * (feature) Plaza router. v5.1.3.754
