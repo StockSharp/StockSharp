@@ -9,6 +9,7 @@ namespace StockSharp.Algo
 
 	using Ecng.Collections;
 	using Ecng.Common;
+	using Ecng.Reflection;
 
 	using StockSharp.Messages;
 
@@ -203,33 +204,67 @@ namespace StockSharp.Algo
 			{
 				var fileName = Path.Combine(_path, name + ".csv");
 
-				//try
-				//{
-					using (var stream = new FileStream(fileName, FileMode.Append, FileAccess.Write))
-					using (var writer = new CsvFileWriter(stream))
-					{
-						//foreach (var item in values)
-						//{
-							//var securityId = item.Key;
-							//var nativeId = item.Value;
+				var appendHeader = !File.Exists(fileName);
 
-						var nativeIdType = nativeId.GetType();
+				using (var stream = new FileStream(fileName, FileMode.Append, FileAccess.Write))
+				using (var writer = new CsvFileWriter(stream))
+				{
+					var nativeIdType = nativeId.GetType();
+					var typleType = nativeIdType.GetGenericType(typeof(Tuple<,>));
+
+					if (appendHeader)
+					{
+						if (typleType == null)
+						{
+							writer.WriteRow(new[]
+							{
+								"Symbol",
+								"Board",
+								GetTypeName(nativeIdType),
+							});
+						}
+						else
+						{
+							dynamic tuple = nativeId;
+
+							writer.WriteRow(new[]
+							{
+								"Symbol",
+								"Board",
+								GetTypeName((Type)tuple.Item1.GetType()),
+								GetTypeName((Type)tuple.Item2.GetType()),
+							});
+						}
+					}
+
+					if (typleType == null)
+					{
+						writer.WriteRow(new[]
+						{
+							securityId.SecurityCode,
+							securityId.BoardCode,
+							nativeId.ToString()
+						});
+					}
+					else
+					{
+						dynamic tuple = nativeId;
 
 						writer.WriteRow(new[]
 						{
 							securityId.SecurityCode,
 							securityId.BoardCode,
-							Converter.GetAlias(nativeIdType) ?? nativeIdType.GetTypeName(false),
-							nativeId.ToString()
+							(string)tuple.Item1.ToString(),
+							(string)tuple.Item2.ToString()
 						});
-						//}
 					}
-				//}
-				//catch (Exception excp)
-				//{
-				//	excp.LogError("Save native storage to {0} error.".Put(fileName));
-				//}
+				}
 			});
+		}
+
+		private static string GetTypeName(Type nativeIdType)
+		{
+			return Converter.GetAlias(nativeIdType) ?? nativeIdType.GetTypeName(false);
 		}
 
 		private void LoadFile(string fileName)
@@ -247,6 +282,14 @@ namespace StockSharp.Algo
 				{
 					var reader = new FastCsvReader(stream, Encoding.UTF8);
 
+					reader.NextLine();
+					reader.Skip(2);
+
+					var type1 = reader.ReadString().To<Type>();
+					var type2 = reader.ReadString().To<Type>();
+
+					var isTuple = type2 != null;
+
 					while (reader.NextLine())
 					{
 						var securityId = new SecurityId
@@ -255,9 +298,14 @@ namespace StockSharp.Algo
 							BoardCode = reader.ReadString()
 						};
 
-						var type = reader.ReadString().To<Type>();
-						var nativeId = reader.ReadString().To(type);
+						var nativeId = reader.ReadString().To(type1);
 
+						if (isTuple)
+						{
+							var nativeId2 = reader.ReadString().To(type2);
+							nativeId = typeof(Tuple<,>).MakeGenericType(type1, type2).CreateInstance(new[] { nativeId, nativeId2 });
+						}
+						
 						pairs.Add(Tuple.Create(securityId, nativeId));
 					}
 				}

@@ -82,6 +82,7 @@
     <Reference Include="MathNet.Numerics">
       <HintPath>..\References\MathNet.Numerics.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.CSharp" />
     <Reference Include="MoreLinq">
       <HintPath>..\References\MoreLinq.dll</HintPath>
     </Reference>
