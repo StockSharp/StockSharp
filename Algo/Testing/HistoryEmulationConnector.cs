@@ -443,9 +443,9 @@ namespace StockSharp.Algo.Testing
 					case MessageTypes.CandleVolume:
 					case MessageTypes.Execution:
 					{
-						if (message.Adapter == MarketDataAdapter)
-							TransactionAdapter.SendInMessage(message);
-						else if (message.Adapter == TransactionAdapter)
+						var adapter = message.Adapter.GetInnerAdapter();
+
+						if (adapter == TransactionAdapter)
 						{
 							var candleMsg = message as CandleMessage;
 
@@ -461,7 +461,7 @@ namespace StockSharp.Algo.Testing
 
 								foreach (var series in seriesList.Cache)
 								{
-									_newCandles?.Invoke(series, new[] { candleMsg.ToCandle(series) });
+									_newCandles?.Invoke(series, new[] {candleMsg.ToCandle(series)});
 
 									if (candleMsg.IsFinished)
 										_stopped?.Invoke(series);
@@ -470,6 +470,8 @@ namespace StockSharp.Algo.Testing
 								break;
 							}
 						}
+						else if (adapter == MarketDataAdapter)
+								TransactionAdapter.SendInMessage(message);
 
 						base.OnProcessMessage(message);
 						break;

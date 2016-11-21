@@ -419,5 +419,23 @@ namespace StockSharp.Messages
 
 			return new ErrorMessage { Error = error };
 		}
+
+		/// <summary>
+		/// Get inner <see cref="IMessageAdapter"/>.
+		/// </summary>
+		/// <param name="adapter"><see cref="IMessageAdapter"/>.</param>
+		/// <returns>Inner <see cref="IMessageAdapter"/>.</returns>
+		public static IMessageAdapter GetInnerAdapter(this IMessageAdapter adapter)
+		{
+			if (adapter == null)
+				throw new ArgumentNullException(nameof(adapter));
+
+			IMessageAdapterWrapper wrapper;
+
+			while ((wrapper = adapter as IMessageAdapterWrapper) != null)
+				adapter = wrapper.InnerAdapter;
+
+			return adapter;
+		}
 	}
 }
