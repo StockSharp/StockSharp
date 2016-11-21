@@ -484,53 +484,53 @@
             InitializeComponent
             </summary>
     </member>
-    <member name="T:StockSharp.Xaml.ExchangeBoardEditor">
+    <member name="T:StockSharp.Xaml.ExchangeBoardsPanel">
       <summary>
             Editor of exchange boards.
             </summary>
       <summary>
-            ExchangeBoardEditor
+            ExchangeBoardsPanel
             </summary>
     </member>
-    <member name="F:StockSharp.Xaml.ExchangeBoardEditor.SaveErrorMessageProperty">
+    <member name="F:StockSharp.Xaml.ExchangeBoardsPanel.SaveErrorMessageProperty">
       <summary>
             The message about data saving error.
             </summary>
     </member>
-    <member name="P:StockSharp.Xaml.ExchangeBoardEditor.Boards">
+    <member name="P:StockSharp.Xaml.ExchangeBoardsPanel.Boards">
       <summary>
             List of boards.
             </summary>
     </member>
-    <member name="P:StockSharp.Xaml.ExchangeBoardEditor.SelectedBoardCode">
+    <member name="P:StockSharp.Xaml.ExchangeBoardsPanel.SelectedBoardCode">
       <summary>
             The code of board which is currently being edited.
             </summary>
     </member>
-    <member name="M:StockSharp.Xaml.ExchangeBoardEditor.#ctor">
+    <member name="M:StockSharp.Xaml.ExchangeBoardsPanel.#ctor">
       <summary>
-            Initializes a new instance of the <see cref="T:StockSharp.Xaml.ExchangeBoardEditor" />.
+            Initializes a new instance of the <see cref="T:StockSharp.Xaml.ExchangeBoardsPanel" />.
             </summary>
     </member>
-    <member name="M:StockSharp.Xaml.ExchangeBoardEditor.SetBoardCode(System.String)">
+    <member name="M:StockSharp.Xaml.ExchangeBoardsPanel.SetBoardCode(System.String)">
       <summary>
             To set the board for editing.
             </summary>
       <param name="boardCode">The editing board code. The board for editing is loaded by the code from EntityRegistry.</param>
     </member>
-    <member name="M:StockSharp.Xaml.ExchangeBoardEditor.Save(Ecng.Serialization.SettingsStorage)">
+    <member name="M:StockSharp.Xaml.ExchangeBoardsPanel.Save(Ecng.Serialization.SettingsStorage)">
       <summary>
             Save settings.
             </summary>
       <param name="storage">Settings storage.</param>
     </member>
-    <member name="M:StockSharp.Xaml.ExchangeBoardEditor.Load(Ecng.Serialization.SettingsStorage)">
+    <member name="M:StockSharp.Xaml.ExchangeBoardsPanel.Load(Ecng.Serialization.SettingsStorage)">
       <summary>
             Load settings.
             </summary>
       <param name="storage">Settings storage.</param>
     </member>
-    <member name="M:StockSharp.Xaml.ExchangeBoardEditor.InitializeComponent">
+    <member name="M:StockSharp.Xaml.ExchangeBoardsPanel.InitializeComponent">
       <summary>
             InitializeComponent
             </summary>
@@ -576,41 +576,41 @@
             </summary>
       <param name="e">The event parameter.</param>
     </member>
-    <member name="T:StockSharp.Xaml.ExchangeEditor">
+    <member name="T:StockSharp.Xaml.ExchangesPanel">
       <summary>
             Editor of exchange boards.
             </summary>
       <summary>
-            ExchangeEditor
+            ExchangesPanel
             </summary>
     </member>
-    <member name="P:StockSharp.Xaml.ExchangeEditor.Exchanges">
+    <member name="P:StockSharp.Xaml.ExchangesPanel.Exchanges">
       <summary>
             List of exchanges.
             </summary>
     </member>
-    <member name="P:StockSharp.Xaml.ExchangeEditor.SelectedExchangeName">
+    <member name="P:StockSharp.Xaml.ExchangesPanel.SelectedExchangeName">
       <summary>
             The name of the selected exchange.
             </summary>
     </member>
-    <member name="E:StockSharp.Xaml.ExchangeEditor.SelectedExchangeChanged">
+    <member name="E:StockSharp.Xaml.ExchangesPanel.SelectedExchangeChanged">
       <summary>
             The selected exchange change event.
             </summary>
     </member>
-    <member name="M:StockSharp.Xaml.ExchangeEditor.#ctor">
+    <member name="M:StockSharp.Xaml.ExchangesPanel.#ctor">
       <summary>
-            Initializes a new instance of the <see cref="T:StockSharp.Xaml.ExchangeEditor" />.
+            Initializes a new instance of the <see cref="T:StockSharp.Xaml.ExchangesPanel" />.
             </summary>
     </member>
-    <member name="M:StockSharp.Xaml.ExchangeEditor.SetExchange(System.String)">
+    <member name="M:StockSharp.Xaml.ExchangesPanel.SetExchange(System.String)">
       <summary>
             To set edited exchange.
             </summary>
       <param name="exchangeName">The code of edited exchange. The exchange for editing is loaded from <see cref="T:StockSharp.BusinessEntities.IExchangeInfoProvider" />.</param>
     </member>
-    <member name="M:StockSharp.Xaml.ExchangeEditor.InitializeComponent">
+    <member name="M:StockSharp.Xaml.ExchangesPanel.InitializeComponent">
       <summary>
             InitializeComponent
             </summary>
