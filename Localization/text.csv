@@ -4360,6 +4360,8 @@ SubscriptionNonExist;Subscription does not exist.;Подписка не суще
 CandleDownloadInterval;Sleep interval while batch candles downloading.;Интервал скачивания данных.
 DownloadSecurities;Download securities;Скачать инструменты
 NotSupportSecurityDownload;The source does not support automatical instruments downloading. Manually create an instrument?;Источник не предоставляет возможность автоматической загрузки инструментов. Создать инструмент напрямую?
+IgnoreErrors;Ignore errors;Игнорировать ошибки
+CalculateExtended;Calculate extended information;Вычислять расширенную информацию
 DocStr0;Button activation alert settings;Кнопка активации настроек сигнала
 DocStr1;Initializes a new instance of the {0};Создать {0}
 DocStr2;Load settings;Загрузить настройки

@@ -43256,5 +43256,25 @@ namespace StockSharp.Localization
 		/// The source does not support automatical instruments downloading. Manually create an instrument?
 		/// </summary>
 		public static string NotSupportSecurityDownload => GetString(NotSupportSecurityDownloadKey);
+
+		/// <summary>
+		/// Ignore errors
+		/// </summary>
+		public const string IgnoreErrorsKey = "IgnoreErrors";
+
+		/// <summary>
+		/// Ignore errors
+		/// </summary>
+		public static string IgnoreErrors => GetString(IgnoreErrorsKey);
+
+		/// <summary>
+		/// Calculate extended information
+		/// </summary>
+		public const string CalculateExtendedKey = "CalculateExtended";
+
+		/// <summary>
+		/// Calculate extended information
+		/// </summary>
+		public static string CalculateExtended => GetString(CalculateExtendedKey);
 	}
 }

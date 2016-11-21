@@ -31,6 +31,16 @@ namespace StockSharp.Algo
 	public abstract class IndexSecurity : BasketSecurity
 	{
 		/// <summary>
+		/// Ignore calculation errors.
+		/// </summary>
+		public bool IgnoreErrors { get; set; }
+
+		/// <summary>
+		/// Calculate extended information.
+		/// </summary>
+		public bool CalculateExtended { get; set; }
+
+		/// <summary>
 		/// Initialize <see cref="IndexSecurity"/>.
 		/// </summary>
 		protected IndexSecurity()

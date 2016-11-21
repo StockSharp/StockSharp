@@ -158,8 +158,6 @@ namespace StockSharp.Algo.Candles
 			_bufferSize = _securityIndecies.Values.Distinct().Count();
 		}
 
-		public bool CalculateExtended { get; set; }
-
 		private void FillSecurityIndecies(BasketSecurity basketSecurity)
 		{
 			var index = 0;
@@ -198,7 +196,7 @@ namespace StockSharp.Algo.Candles
 						indexCandle.HighPrice = Calculate(buffer, c => c.HighPrice);
 						indexCandle.LowPrice = Calculate(buffer, c => c.LowPrice);
 
-						if (CalculateExtended)
+						if (_security.CalculateExtended)
 						{
 							indexCandle.TotalPrice = Calculate(buffer, c => c.TotalPrice);
 							indexCandle.OpenVolume = Calculate(buffer, c => c.OpenVolume ?? 0);
@@ -209,6 +207,9 @@ namespace StockSharp.Algo.Candles
 					}
 					catch (ArithmeticException ex)
 					{
+						if (!_security.IgnoreErrors)
+							throw;
+
 						ex.LogError();
 						return null;
 					}
@@ -386,7 +387,16 @@ namespace StockSharp.Algo.Candles
 
 		private decimal Calculate(CandleBuffer buffer, Func<Candle, decimal> getPart)
 		{
-			return _security.Calculate(buffer.Candles.Select(getPart).ToArray());
+			var values = buffer.Candles.Select(getPart).ToArray();
+
+			try
+			{
+				return _security.Calculate(values);
+			}
+			catch (ArithmeticException excp)
+			{
+				throw new ArithmeticException("Build index candle {0} for {1} error.".Put(_security, _security.InnerSecurities.Zip(values, (s, v) => "{0}: {1}".Put(s, v)).Join(", ")), excp);
+			}
 		}
 
 		internal static object CloneArg(object arg, Security security)
