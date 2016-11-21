@@ -428,7 +428,7 @@ namespace StockSharp.Messages
 		public static IMessageAdapter GetInnerAdapter(this IMessageAdapter adapter)
 		{
 			if (adapter == null)
-				throw new ArgumentNullException(nameof(adapter));
+				return null;
 
 			IMessageAdapterWrapper wrapper;
 
