@@ -4214,7 +4214,7 @@ Any;Any;Любое
 LoadingVariableErrorParams;Loading variable parameter error: {0}.;Ошибка загрузки параметра переменной {0}.
 CancelOnDisconnect;Cancel On Disconnect;Cancel On Disconnect
 CancelOnDisconnectDesc;Heartbeat interval. Uses in Cancel On Disconnect mode.;Интервал оповещения сервера об активности. Используется в режиме Cancel On Disconnect.
-LoadHistoryDataQuestion;Open the window to get historical data from Finam website?;Открыть окно для скачивания исторических данных с сайта Finam-а?
+LoadHistoryDataQuestion;Open the window to download historical data?;Открыть окно для скачивания исторических данных?
 TimeFrameCandle;Timeframe candle;Таймфрейм свечи
 TickCandle;Tick candle;Тиковые свечи
 VolumeCandle;Volume candle;Объемные свечи
