@@ -425,7 +425,7 @@ namespace StockSharp.Messages
 		{
 			InitMessageLocalTime(message);
 
-			if (message.IsBack && message.Adapter == null)
+			if (/*message.IsBack && */message.Adapter == null)
 				message.Adapter = this;
 
 			if (_prevTime != DateTimeOffset.MinValue)

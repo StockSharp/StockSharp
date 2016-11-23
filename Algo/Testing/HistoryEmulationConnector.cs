@@ -443,7 +443,7 @@ namespace StockSharp.Algo.Testing
 					case MessageTypes.CandleVolume:
 					case MessageTypes.Execution:
 					{
-						var adapter = message.Adapter.GetInnerAdapter();
+						var adapter = message.Adapter;//.GetInnerAdapter();
 
 						if (adapter == TransactionAdapter)
 						{
@@ -471,7 +471,7 @@ namespace StockSharp.Algo.Testing
 							}
 						}
 						else if (adapter == MarketDataAdapter)
-								TransactionAdapter.SendInMessage(message);
+							TransactionAdapter.SendInMessage(message);
 
 						base.OnProcessMessage(message);
 						break;

@@ -156,7 +156,7 @@ namespace StockSharp.Algo.Testing
 								foreach (var m in _execLogConverter.ToExecutionLog(execMsg))
 									Process(m, result);
 
-								result.Add(execMsg);
+								//result.Add(execMsg);
 
 								result.Add(CreateQuoteMessage(
 									execMsg.SecurityId,
@@ -186,8 +186,8 @@ namespace StockSharp.Algo.Testing
 
 								// добавляем в результат ОЛ только из хранилища или из генератора
 								// (не из ExecutionLogConverter)
-								if (execMsg.TransactionId > 0)
-									result.Add(execMsg);
+								//if (execMsg.TransactionId > 0)
+								//	result.Add(execMsg);
 
 								break;
 							}
@@ -1539,7 +1539,7 @@ namespace StockSharp.Algo.Testing
 						retVal.AddRange(securityEmulator.Process(message));
 
 					// время у TimeMsg может быть больше времени сообщений из эмулятора
-					retVal.Add(message);
+					//retVal.Add(message);
 
 					break;
 				}
@@ -1685,7 +1685,7 @@ namespace StockSharp.Algo.Testing
 				case MessageTypes.Security:
 				{
 					var secMsg = (SecurityMessage)message;
-					retVal.Add(secMsg);
+					//retVal.Add(secMsg);
 					retVal.AddRange(GetEmulator(secMsg.SecurityId).Process(secMsg));
 					break;
 				}

@@ -480,7 +480,8 @@ namespace StockSharp.Algo
 		{
 			if (!message.IsBack)
 			{
-				message.Adapter = innerAdapter;
+				if (message.Adapter == null)
+					message.Adapter = innerAdapter;
 
 				switch (message.Type)
 				{
