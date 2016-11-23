@@ -1,5 +1,12 @@
 StockSharp API Change log
 ========================
+###v4.3.19.1:
+* (bug) SmartCOM candles fix.
+* (bug) OpenECry candles fix.
+* (bug) Backtesting fix.
+* (bug) SecurityNativeIdMessageAdapter. Clone fixes.
+* (feature) IndexSecurity. IgnoreErrors.
+
 ###v4.3.19:
 * (feature) IConnector. SubscribeMarketData and UnSubscribeMarketData. MarketDataTypes -> MarketDataMessage.
 * (feature) ExchangeBoard. Removed IsSupportAtomicReRegister, IsSupportMarketOrders

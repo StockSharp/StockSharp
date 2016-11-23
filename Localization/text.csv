@@ -13543,3 +13543,12 @@ DocStr9353;In memory security native identifier storage;Хранилища си�
 DocStr9354;To get the instrument by the system identifier;Получить инструмент по системному идентификатору
 DocStr9355;Convert {0} to readable string;Перевести {0} в читаемую строку
 DocStr9356;Readable string;Читаемая строка
+DocStr9357;Ignore calculation errors;Игнорировать ошибки расчета
+DocStr9358;Select datasource panel;Панель выбора источника
+DocStr9359;Selected item;Выбранный элемент
+DocStr9360;Configure action;Конфигурирование
+DocStr9362;Show 'ALL' option;Показать опцию 'ВСЕ'
+DocStr9363;Show data source panel;Показать панель источников
+DocStr9364;Data source items;Элементы
+DocStr9365;Selected data source item;Выбранный элемент
+DocStr9366;Configure data source items action;Кнофигурирование элементов

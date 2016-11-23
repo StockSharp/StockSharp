@@ -4465,6 +4465,8 @@ M:StockSharp.Algo.MarketRuleList.GetRulesByToken(System.Object)/summary;DocStr13
 M:StockSharp.Algo.MarketRuleList.GetRulesByToken(System.Object)/param/token;DocStr1373
 M:StockSharp.Algo.MarketRuleList.GetRulesByToken(System.Object)/returns;DocStr1374
 T:StockSharp.Algo.IndexSecurity/summary;DocStr1112
+P:StockSharp.Algo.IndexSecurity.IgnoreErrors/summary;DocStr9357
+P:StockSharp.Algo.IndexSecurity.CalculateExtended/summary;CalculateExtended
 M:StockSharp.Algo.IndexSecurity.#ctor/summary;DocStr93
 M:StockSharp.Algo.IndexSecurity.Calculate(System.Decimal[])/summary;DocStr1113
 M:StockSharp.Algo.IndexSecurity.Calculate(System.Decimal[])/param/prices;DocStr1114

@@ -1,5 +1,11 @@
 StockSharp Data (Hydra) Change log
 ========================
+###v4.3.19.1:
+* (bug) Backward settings compatibility fix.
+* (bug) Yahoo lookup fix.
+* (bug) Transaq, SmartCOM candles downloading fix.
+* (bug) TrueFX downloading fix.
+
 ###v4.3.19:
 * (feature) New design.
 * (bug) Finam, Quandl, Google, QUIK, Transaq, OpenECry, Oanda fixes.

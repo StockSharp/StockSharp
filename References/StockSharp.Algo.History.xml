@@ -299,6 +299,16 @@
             Initializes a new instance of the <see cref="T:StockSharp.Algo.History.Forex.TrueFXSource" />.
             </summary>
     </member>
+    <member name="P:StockSharp.Algo.History.Forex.TrueFXSource.Login">
+      <summary>
+            Login.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Algo.History.Forex.TrueFXSource.Password">
+      <summary>
+            Password.
+            </summary>
+    </member>
     <member name="M:StockSharp.Algo.History.Forex.TrueFXSource.Refresh(StockSharp.Algo.Storages.ISecurityStorage,StockSharp.Algo.INativeIdStorage,StockSharp.BusinessEntities.Security,System.Action{StockSharp.BusinessEntities.Security},System.Func{System.Boolean})">
       <summary>
             Download new securities.

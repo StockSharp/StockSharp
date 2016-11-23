@@ -162,6 +162,39 @@
         <see cref="T:System.TimeSpan" /> to <see cref="T:System.String" /> converter.
             </summary>
     </member>
+    <member name="T:StockSharp.Xaml.DataSourcePanel">
+      <summary>
+            Select datasource panel.
+            </summary>
+      <summary>
+            DataSourcePanel
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.DataSourcePanel.ItemsSource">
+      <summary>
+            Items source.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.DataSourcePanel.SelectedItem">
+      <summary>
+            Selected item.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.DataSourcePanel.Configure">
+      <summary>
+            Configure action.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.DataSourcePanel.#ctor">
+      <summary>
+            Initializes a new instance of the <see cref="T:StockSharp.Xaml.DataSourcePanel" />.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Xaml.DataSourcePanel.InitializeComponent">
+      <summary>
+            InitializeComponent
+            </summary>
+    </member>
     <member name="T:StockSharp.Xaml.SecurityLookupWindow">
       <summary>
             The instrument search window.
@@ -173,6 +206,31 @@
     <member name="M:StockSharp.Xaml.SecurityLookupWindow.#ctor">
       <summary>
             Initializes a new instance of the <see cref="T:StockSharp.Xaml.SecurityLookupWindow" />.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.SecurityLookupWindow.ShowAllOption">
+      <summary>
+            Show 'ALL' option.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.SecurityLookupWindow.ShowDataSourcePanel">
+      <summary>
+            Show data source panel.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.SecurityLookupWindow.DataSourceItemsSource">
+      <summary>
+            Data source items.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.SecurityLookupWindow.SelectedDataSource">
+      <summary>
+            Selected data source item.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.SecurityLookupWindow.Configure">
+      <summary>
+            Configure data source items action.
             </summary>
     </member>
     <member name="P:StockSharp.Xaml.SecurityLookupWindow.Criteria">

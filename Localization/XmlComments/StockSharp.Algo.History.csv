@@ -127,6 +127,8 @@ M:StockSharp.Algo.History.Forex.MBTradingSource.LoadTickMessages(StockSharp.Mess
 M:StockSharp.Algo.History.Forex.MBTradingSource.LoadTickMessages(StockSharp.Messages.SecurityId,System.DateTime,System.DateTime)/returns;DocStr119
 T:StockSharp.Algo.History.Forex.TrueFXSource/summary;DocStr132
 M:StockSharp.Algo.History.Forex.TrueFXSource.#ctor/summary;DocStr1
+P:StockSharp.Algo.History.Forex.TrueFXSource.Login/summary;Login
+P:StockSharp.Algo.History.Forex.TrueFXSource.Password/summary;Password
 M:StockSharp.Algo.History.Forex.TrueFXSource.Refresh(StockSharp.Algo.Storages.ISecurityStorage,StockSharp.Algo.INativeIdStorage,StockSharp.BusinessEntities.Security,System.Action{StockSharp.BusinessEntities.Security},System.Func{System.Boolean})/summary;DocStr109
 M:StockSharp.Algo.History.Forex.TrueFXSource.Refresh(StockSharp.Algo.Storages.ISecurityStorage,StockSharp.Algo.INativeIdStorage,StockSharp.BusinessEntities.Security,System.Action{StockSharp.BusinessEntities.Security},System.Func{System.Boolean})/param/securityStorage;DocStr110
 M:StockSharp.Algo.History.Forex.TrueFXSource.Refresh(StockSharp.Algo.Storages.ISecurityStorage,StockSharp.Algo.INativeIdStorage,StockSharp.BusinessEntities.Security,System.Action{StockSharp.BusinessEntities.Security},System.Func{System.Boolean})/param/nativeIdStorage;DocStr9329
