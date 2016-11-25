@@ -83,8 +83,12 @@ namespace StockSharp.Algo.Candles
 			{
 				_builder.Reset();
 
+				CandleSeries[] series;
+
 				lock (_lock)
-					_innerSeries.ForEach(s => _candleManager.Start(s, _from, _to));
+					series = _innerSeries.ToArray();
+
+				series.ForEach(s => _candleManager.Start(s, _from, _to));
 			}
 
 			private void OnInnerSourceProcessCandle(CandleSeries series, Candle candle)

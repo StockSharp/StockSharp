@@ -39,10 +39,10 @@ namespace StockSharp.Algo.Storages
 
 		private T _currentMessage;
 
-		/// <summary>
-		/// Embedded storages of market data.
-		/// </summary>
-		public IEnumerable<IMarketDataStorage> InnerStorages => _basketStorage.InnerStorages;
+		///// <summary>
+		///// Embedded storages of market data.
+		///// </summary>
+		//public IEnumerable<IMarketDataStorage> InnerStorages => _basketStorage.InnerStorages;
 
 		/// <summary>
 		/// List of all exchange boards, for which instruments are loaded.
@@ -143,7 +143,7 @@ namespace StockSharp.Algo.Storages
 		/// <summary>
 		/// Add inner market data storage.
 		/// </summary>
-		/// <param name="storage"></param>
+		/// <param name="storage">Market data storage.</param>
 		public void AddStorage(IMarketDataStorage storage)
 		{
 			if (storage == null)
@@ -159,17 +159,21 @@ namespace StockSharp.Algo.Storages
 		/// <summary>
 		/// Remove inner market data storage.
 		/// </summary>
-		/// <typeparam name="TStorage"></typeparam>
-		/// <param name="security"></param>
-		/// <param name="messageType"></param>
-		/// <param name="arg"></param>
+		/// <typeparam name="TStorage">Type of storage.</typeparam>
+		/// <param name="security">Security.</param>
+		/// <param name="messageType">Message type.</param>
+		/// <param name="arg">The parameter associated with the <paramref name="messageType" /> type. For example, <see cref="CandleMessage.Arg"/>.</param>
 		public void RemoveStorage<TStorage>(Security security, MessageTypes messageType, object arg)
 			where TStorage : class, IMarketDataStorage
 		{
+			if (security == null)
+				throw new ArgumentNullException(nameof(security));
+
 			var storage = _basketStorage
 				.InnerStorages
-				.OfType<TStorage>()
-				.FirstOrDefault(s => s.Security == security && s.Arg.Compare(arg) == 0);
+				.SyncGet(c => c
+					.OfType<TStorage>()
+					.FirstOrDefault(s => s.Security == security && ((arg == null && s.Arg == null) || (s.Arg.Compare(arg) == 0))));
 
 			if (storage == null)
 				return;
