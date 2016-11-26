@@ -21,6 +21,7 @@ namespace SampleOptionQuoting
 	using System.Linq;
 	using System.Windows;
 	using System.Windows.Controls;
+	using System.Windows.Media;
 	using System.Windows.Threading;
 
 	using Ecng.ComponentModel;
@@ -35,6 +36,7 @@ namespace SampleOptionQuoting
 	using StockSharp.Algo.Strategies.Derivatives;
 	using StockSharp.Messages;
 	using StockSharp.Xaml;
+	using StockSharp.Xaml.Charting;
 
 	public partial class MainWindow
 	{
@@ -53,11 +55,55 @@ namespace SampleOptionQuoting
 			{
 				switch (field)
 				{
+					case Level1Fields.OpenInterest:
+						return security.OpenInterest;
+
 					case Level1Fields.ImpliedVolatility:
 						return security.ImpliedVolatility;
+
+					case Level1Fields.HistoricalVolatility:
+						return security.HistoricalVolatility;
+
+					case Level1Fields.Volume:
+						return security.Volume;
+
+					case Level1Fields.LastTradePrice:
+						return security.LastTrade?.Price;
+
+					case Level1Fields.LastTradeVolume:
+						return security.LastTrade?.Volume;
+
+					case Level1Fields.BestBidPrice:
+						return security.BestBid?.Price;
+
+					case Level1Fields.BestBidVolume:
+						return security.BestBid?.Volume;
+
+					case Level1Fields.BestAskPrice:
+						return security.BestAsk?.Price;
+
+					case Level1Fields.BestAskVolume:
+						return security.BestAsk?.Volume;
 				}
 
 				return null;
+			}
+
+			IEnumerable<Level1Fields> IMarketDataProvider.GetLevel1Fields(Security security)
+			{
+				return new[]
+				{
+					Level1Fields.OpenInterest,
+					Level1Fields.ImpliedVolatility,
+					Level1Fields.HistoricalVolatility,
+					Level1Fields.Volume,
+					Level1Fields.LastTradePrice,
+					Level1Fields.LastTradeVolume,
+					Level1Fields.BestBidPrice,
+					Level1Fields.BestAskPrice,
+					Level1Fields.BestBidVolume,
+					Level1Fields.BestAskVolume
+				};
 			}
 		}
 
@@ -94,7 +140,7 @@ namespace SampleOptionQuoting
 			timer.Start();
 
 			//
-			// draw test data on the chart
+			// draw test data on the pos chart
 
 			var asset = new Security { Id = "RIM4@FORTS" };
 
@@ -124,7 +170,82 @@ namespace SampleOptionQuoting
 
 			PosChart.Refresh(100000, 10, new DateTime(2014, 5, 5), expDate);
 
+			//
+			// draw test data on the desk
+
+			var expiryDate = new DateTime(2014, 09, 15);
+
+			Desk.MarketDataProvider = Connector;
+			Desk.SecurityProvider = Connector;
+			Desk.CurrentTime = new DateTime(2014, 08, 15);
+
+			Desk.Options = new[]
+			{
+				CreateStrike(05000, 10, 60, OptionTypes.Call, expiryDate, asset, 100),
+				CreateStrike(10000, 10, 53, OptionTypes.Call, expiryDate, asset, 343),
+				CreateStrike(15000, 10, 47, OptionTypes.Call, expiryDate, asset, 3454),
+				CreateStrike(20000, 78, 42, OptionTypes.Call, expiryDate, asset, null),
+				CreateStrike(25000, 32, 35, OptionTypes.Call, expiryDate, asset, 100),
+				CreateStrike(30000, 3245, 32, OptionTypes.Call, expiryDate, asset, 55),
+				CreateStrike(35000, 3454, 37, OptionTypes.Call, expiryDate, asset, 456),
+				CreateStrike(40000, 34, 45, OptionTypes.Call, expiryDate, asset, 4),
+				CreateStrike(45000, 3566, 51, OptionTypes.Call, expiryDate, asset, 67),
+				CreateStrike(50000, 454, 57, OptionTypes.Call, expiryDate, asset, null),
+				CreateStrike(55000, 10, 59, OptionTypes.Call, expiryDate, asset, 334),
+
+				CreateStrike(05000, 10, 50, OptionTypes.Put, expiryDate, asset, 100),
+				CreateStrike(10000, 10, 47, OptionTypes.Put, expiryDate, asset, 343),
+				CreateStrike(15000, 6788, 42, OptionTypes.Put, expiryDate, asset, 3454),
+				CreateStrike(20000, 10, 37, OptionTypes.Put, expiryDate, asset, null),
+				CreateStrike(25000, 567, 32, OptionTypes.Put, expiryDate, asset, 100),
+				CreateStrike(30000, 4577, 30, OptionTypes.Put, expiryDate, asset, 55),
+				CreateStrike(35000, 67835, 32, OptionTypes.Put, expiryDate, asset, 456),
+				CreateStrike(40000, 13245, 35, OptionTypes.Put, expiryDate, asset, 4),
+				CreateStrike(45000, 10, 37, OptionTypes.Put, expiryDate, asset, 67),
+				CreateStrike(50000, 454, 39, OptionTypes.Put, expiryDate, asset, null),
+				CreateStrike(55000, 10, 41, OptionTypes.Put, expiryDate, asset, 334)
+			};
+
+			Desk.RefreshOptions();
+
+			//
+			// draw test data on the smile chart
+
+			var puts = SmileChart.CreateSmile("RIM4 (Put)", Colors.DarkRed);
+			var calls = SmileChart.CreateSmile("RIM4 (Call)", Colors.DarkGreen);
+
+			foreach (var option in Desk.Options)
+			{
+				if (option.Strike == null || option.ImpliedVolatility == null)
+					continue;
+
+				(option.OptionType == OptionTypes.Put ? puts : calls).Add(new LineData<double> { X = (double)option.Strike.Value, Y = option.ImpliedVolatility.Value });
+			}
+
 			Instance = this;
+		}
+
+		private static Security CreateStrike(decimal strike, decimal oi, decimal iv, OptionTypes type, DateTime expiryDate, Security asset, decimal? lastTrade)
+		{
+			var s = new Security
+			{
+				Code = "RI {0} {1}".Put(type == OptionTypes.Call ? 'C' : 'P', strike),
+				Strike = strike,
+				OpenInterest = oi,
+				ImpliedVolatility = iv,
+				HistoricalVolatility = iv,
+				OptionType = type,
+				ExpiryDate = expiryDate,
+				Board = ExchangeBoard.Forts,
+				UnderlyingSecurityId = asset.Id,
+				LastTrade = lastTrade == null ? null : new Trade { Price = lastTrade.Value },
+				Volume = RandomGen.GetInt(10000)
+			};
+
+			s.BestBid = new Quote(s, s.StepPrice ?? 1m * RandomGen.GetInt(100), s.VolumeStep ?? 1m * RandomGen.GetInt(100), Sides.Buy);
+			s.BestAsk = new Quote(s, s.BestBid.Price.Max(s.StepPrice ?? 1m * RandomGen.GetInt(100)), s.VolumeStep ?? 1m * RandomGen.GetInt(100), Sides.Sell);
+
+			return s;
 		}
 
 		public static MainWindow Instance { get; private set; }

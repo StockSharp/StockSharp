@@ -5,7 +5,7 @@
         xmlns:xaml="http://schemas.stocksharp.com/xaml"
         xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
         Title="{x:Static loc:LocalizedStrings.XamlStr539}" Height="430" Width="630">
-	<Grid Margin="5,5,5,5">
+	<Grid Margin="5">
 		<Grid.ColumnDefinitions>
 			<ColumnDefinition />
 			<ColumnDefinition />
@@ -46,7 +46,17 @@
 
 		<TextBlock Text="{x:Static loc:LocalizedStrings.XamlStr63}" Grid.Column="4" Grid.Row="5" HorizontalAlignment="Center" VerticalAlignment="Center" />
 		<xctk:DecimalUpDown x:Name="ImpliedVolatilityMax" Grid.Column="5" Grid.Row="5" IsReadOnly="True" />
-		
-		<xaml:OptionPositionChart x:Name="PosChart" Grid.Row="7" Grid.Column="0" Grid.ColumnSpan="6" />
+
+		<TabControl Grid.Row="7" Grid.Column="0" Grid.ColumnSpan="6">
+			<TabItem Header="Position">
+				<xaml:OptionPositionChart x:Name="PosChart" />
+			</TabItem>
+			<TabItem Header="Desk">
+				<xaml:OptionDesk x:Name="Desk" />
+			</TabItem>
+			<TabItem Header="Smile">
+				<xaml:OptionVolatilitySmileChart x:Name="SmileChart" />
+			</TabItem>
+		</TabControl>
 	</Grid>
 </Window>
