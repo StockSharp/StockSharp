@@ -1917,7 +1917,7 @@ Str2010;Sell color;Цвет продажи
 Str2011;Color of graphics element on chart, indicating sell.;Цвет графического элемента на графике, обозначающий продажу.
 Str2012;Sell border color;Цвет границы продажи
 Str2013;Border color of graphics element on chart, indicating sell.;Цвет границы графического элемента на графике, обозначающий продажу.
-Str2014Params;New date {0} is less than earlier added {1}.;Новое значение даты {0} меньше ранее добавленного {1}.
+Str2014Params;New X value {0} is less than earlier added {1}.;Новое X значение {0} меньше ранее добавленного {1}.
 Str2015;Data deletion is not supported.;Операция удаления данных не поддерживается.
 Str2016;Incorrect data collection type.;Неверный тип коллекции данных.
 Str2017;Lips color;Цвет Lips
@@ -2164,7 +2164,7 @@ Str2294Params;Start downloading trades for {0:d} date and {1} security.;Стар
 Str2295Params;Error loading trades for {0:d} date and {1} security.;Ошибка загрузки сделок за {0:d} для {1}.
 Str2296Params;Candles series {0} is not supported.;Серия свечек {0} не поддерживается.
 Str2297Params;No unsaved days to load {0} candles for {1}.;Нет несохраненных дней для загрузки {0} свечек для {1}.
-Str2298Params;Start downloading {0} candles for {1:d}-{2:d} date range and {2} security.;Старт загрузки {0} свечек за {1:d}-{2:d} диапазон для {2}.
+Str2298Params;Start downloading {0} candles for {1:d}-{2:d} date range and {3} security.;Старт загрузки {0} свечек за {1:d}-{2:d} диапазон для {3}.
 Str2299Params;Error loading {0} candles for {1:d} date and {2} security.;Ошибка загрузки {0} свечек за {1:d} для {2}.
 Str2300;End of iteration.;Окончание итерации.
 Str2302;Login. Required if server authorization is on.;Имя пользователя. Требуется при включенной авторизации на сервере.
@@ -4362,6 +4362,8 @@ DownloadSecurities;Download securities;Скачать инструменты
 NotSupportSecurityDownload;The source does not support automatical instruments downloading. Manually create an instrument?;Источник не предоставляет возможность автоматической загрузки инструментов. Создать инструмент напрямую?
 IgnoreErrors;Ignore errors;Игнорировать ошибки
 CalculateExtended;Calculate extended information;Вычислять расширенную информацию
+VolatilitySmile;Volatility smile;Улыбка волательности
+VolatilitySmileChart;Options volatility smile chart.;График улыбки волательности опционов
 DocStr0;Button activation alert settings;Кнопка активации настроек сигнала
 DocStr1;Initializes a new instance of the {0};Создать {0}
 DocStr2;Load settings;Загрузить настройки
@@ -12078,11 +12080,11 @@ DocStr7814;The event of the unsubscribe from getting data for the element;Соб
 DocStr7815;The chart element representing trades;Элемент графика, представляющий сделки
 DocStr7816;The graphical component to display the equity curve;Графический компонент отображения кривой эквити
 DocStr7817;To create new curve to draw the yield;Создать новую кривую для отрисовки доходности
-DocStr7818;The curve title;Заголовок кривой
-DocStr7819;The curve color;Цвет кривой
-DocStr7820;The equity curve drawing style. The default is {0};Стиль отрисовки кривой эквити. По-умолчанию установлен {0}
-DocStr7821;The collection of data that should be filled for the curve drawing;Коллекция с данными, которую необходимо заполнять для отрисовки кривой
-DocStr7822;The additional curve color. It is used to draw {0};Дополнительный цвет кривой. Используется для отрисовки {0}
+DocStr7818;The line title;Заголовок линии
+DocStr7819;The line color;Цвет линии
+DocStr7820;The line drawing style. The default is {0};Стиль отрисовки линии. По-умолчанию установлен {0}
+DocStr7821;The collection of data that should be filled for the line drawing;Коллекция с данными, которую необходимо заполнять для отрисовки линии
+DocStr7822;The additional line color. It is used to draw {0};Дополнительный цвет линии. Используется для отрисовки {0}
 DocStr7823;To remove the yield curve from the chart;Удалить кривую доходности с графика
 DocStr7824;The collection of data obtained from the method {0};Коллекция с данными, полученная из метода {0}
 DocStr7825;To remove yield curves from the chart;Удалить кривые доходности с графика
@@ -13552,3 +13554,8 @@ DocStr9363;Show data source panel;Показать панель источник
 DocStr9364;Data source items;Элементы
 DocStr9365;Selected data source item;Выбранный элемент
 DocStr9366;Configure data source items action;Кнофигурирование элементов
+DocStr9367;Type of storage;Тип хранилища
+DocStr9368;Line data;Данные линии
+DocStr9369;The X value;Значение X
+DocStr9370;The Y value;Значение Y
+DocStr9371;To create new smile;Создать новую улыбку

@@ -41,7 +41,7 @@ namespace SampleRandomEmulation
 	{
 		private SmaStrategy _strategy;
 
-		private readonly ICollection<EquityData> _curveItems;
+		private readonly ICollection<LineData<DateTime>> _curveItems;
 		private HistoryEmulationConnector _connector;
 
 		private readonly LogManager _logManager = new LogManager();

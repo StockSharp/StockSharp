@@ -3529,7 +3529,6 @@ M:StockSharp.Algo.Storages.CacheableMarketDataDrive.#ctor(StockSharp.Algo.Storag
 M:StockSharp.Algo.Storages.CacheableMarketDataDrive.#ctor(StockSharp.Algo.Storages.IMarketDataStorageDrive,StockSharp.Algo.Storages.IMarketDataStorageDrive)/param/cacheDrive;DocStr1305
 T:StockSharp.Algo.Storages.CachedBasketMarketDataStorage`1/summary;DocStr8575
 T:StockSharp.Algo.Storages.CachedBasketMarketDataStorage`1/typeparam/T;DocStr9
-P:StockSharp.Algo.Storages.CachedBasketMarketDataStorage`1.InnerStorages/summary;DocStr2096
 P:StockSharp.Algo.Storages.CachedBasketMarketDataStorage`1.Boards/summary;DocStr8576
 P:StockSharp.Algo.Storages.CachedBasketMarketDataStorage`1.MessageCount/summary;DocStr4313
 P:StockSharp.Algo.Storages.CachedBasketMarketDataStorage`1.MaxMessageCount/summary;DocStr4314
@@ -3542,12 +3541,12 @@ P:StockSharp.Algo.Storages.CachedBasketMarketDataStorage`1.MarketTimeChangedInte
 M:StockSharp.Algo.Storages.CachedBasketMarketDataStorage`1.#ctor/summary;DocStr1
 M:StockSharp.Algo.Storages.CachedBasketMarketDataStorage`1.#ctor(StockSharp.Algo.Storages.BasketMarketDataStorage{`0})/summary;DocStr1
 M:StockSharp.Algo.Storages.CachedBasketMarketDataStorage`1.AddStorage(StockSharp.Algo.Storages.IMarketDataStorage)/summary;DocStr8577
-M:StockSharp.Algo.Storages.CachedBasketMarketDataStorage`1.AddStorage(StockSharp.Algo.Storages.IMarketDataStorage)/param/storage;DocStr8459
+M:StockSharp.Algo.Storages.CachedBasketMarketDataStorage`1.AddStorage(StockSharp.Algo.Storages.IMarketDataStorage)/param/storage;MarketDataStorage
 M:StockSharp.Algo.Storages.CachedBasketMarketDataStorage`1.RemoveStorage``1(StockSharp.BusinessEntities.Security,StockSharp.Messages.MessageTypes,System.Object)/summary;DocStr8578
-M:StockSharp.Algo.Storages.CachedBasketMarketDataStorage`1.RemoveStorage``1(StockSharp.BusinessEntities.Security,StockSharp.Messages.MessageTypes,System.Object)/typeparam/TStorage;DocStr8459
-M:StockSharp.Algo.Storages.CachedBasketMarketDataStorage`1.RemoveStorage``1(StockSharp.BusinessEntities.Security,StockSharp.Messages.MessageTypes,System.Object)/param/security;DocStr8459
-M:StockSharp.Algo.Storages.CachedBasketMarketDataStorage`1.RemoveStorage``1(StockSharp.BusinessEntities.Security,StockSharp.Messages.MessageTypes,System.Object)/param/messageType;DocStr8459
-M:StockSharp.Algo.Storages.CachedBasketMarketDataStorage`1.RemoveStorage``1(StockSharp.BusinessEntities.Security,StockSharp.Messages.MessageTypes,System.Object)/param/arg;DocStr8459
+M:StockSharp.Algo.Storages.CachedBasketMarketDataStorage`1.RemoveStorage``1(StockSharp.BusinessEntities.Security,StockSharp.Messages.MessageTypes,System.Object)/typeparam/TStorage;DocStr9367
+M:StockSharp.Algo.Storages.CachedBasketMarketDataStorage`1.RemoveStorage``1(StockSharp.BusinessEntities.Security,StockSharp.Messages.MessageTypes,System.Object)/param/security;DocStr2831
+M:StockSharp.Algo.Storages.CachedBasketMarketDataStorage`1.RemoveStorage``1(StockSharp.BusinessEntities.Security,StockSharp.Messages.MessageTypes,System.Object)/param/messageType;DocStr9
+M:StockSharp.Algo.Storages.CachedBasketMarketDataStorage`1.RemoveStorage``1(StockSharp.BusinessEntities.Security,StockSharp.Messages.MessageTypes,System.Object)/param/arg;DocStr144
 M:StockSharp.Algo.Storages.CachedBasketMarketDataStorage`1.MoveNext/summary;DocStr8579
 M:StockSharp.Algo.Storages.CachedBasketMarketDataStorage`1.MoveNext/returns;DocStr8580
 M:StockSharp.Algo.Storages.CachedBasketMarketDataStorage`1.Reset/summary;DocStr8581

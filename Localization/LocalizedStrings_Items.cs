@@ -19168,12 +19168,12 @@ namespace StockSharp.Localization
 		public static string Str2013 => GetString(Str2013Key);
 
 		/// <summary>
-		/// New date {0} is less than earlier added {1}.
+		/// New X value {0} is less than earlier added {1}.
 		/// </summary>
 		public const string Str2014ParamsKey = "Str2014Params";
 
 		/// <summary>
-		/// New date {0} is less than earlier added {1}.
+		/// New X value {0} is less than earlier added {1}.
 		/// </summary>
 		public static string Str2014Params => GetString(Str2014ParamsKey);
 
@@ -21638,12 +21638,12 @@ namespace StockSharp.Localization
 		public static string Str2297Params => GetString(Str2297ParamsKey);
 
 		/// <summary>
-		/// Start downloading {0} candles for {1:d}-{2:d} date range and {2} security.
+		/// Start downloading {0} candles for {1:d}-{2:d} date range and {3} security.
 		/// </summary>
 		public const string Str2298ParamsKey = "Str2298Params";
 
 		/// <summary>
-		/// Start downloading {0} candles for {1:d}-{2:d} date range and {2} security.
+		/// Start downloading {0} candles for {1:d}-{2:d} date range and {3} security.
 		/// </summary>
 		public static string Str2298Params => GetString(Str2298ParamsKey);
 
@@ -43276,5 +43276,25 @@ namespace StockSharp.Localization
 		/// Calculate extended information
 		/// </summary>
 		public static string CalculateExtended => GetString(CalculateExtendedKey);
+
+		/// <summary>
+		/// Volatility smile
+		/// </summary>
+		public const string VolatilitySmileKey = "VolatilitySmile";
+
+		/// <summary>
+		/// Volatility smile
+		/// </summary>
+		public static string VolatilitySmile => GetString(VolatilitySmileKey);
+
+		/// <summary>
+		/// Options volatility smile chart.
+		/// </summary>
+		public const string VolatilitySmileChartKey = "VolatilitySmileChart";
+
+		/// <summary>
+		/// Options volatility smile chart.
+		/// </summary>
+		public static string VolatilitySmileChart => GetString(VolatilitySmileChartKey);
 	}
 }

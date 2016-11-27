@@ -1,5 +1,11 @@
 StockSharp API Change log
 ========================
+###current:
+* (feature) SecurityPicker performance improve.
+* (feature) OptionVolatilitySmileChart.
+* (bug) OptionDesk fix.
+* (bug) Candle storage fix.
+
 ###v4.3.19.1:
 * (bug) SmartCOM candles fix.
 * (bug) OpenECry candles fix.
