@@ -112,7 +112,7 @@ namespace StockSharp.Algo.Export
 
 		private void Do<TValue>(IEnumerable<TValue> values)
 		{
-			using (var writer = new StreamWriter(Path))
+			using (var writer = new StreamWriter(Path, true))
 			{
 				if (!_header.IsEmpty())
 					writer.WriteLine(_header);
@@ -128,7 +128,7 @@ namespace StockSharp.Algo.Export
 					writer.WriteLine(formater.FormatWithCache(ref templateCache, _template, value));
 				}
 
-				writer.Flush();
+				//writer.Flush();
 			}
 		}
 	}
