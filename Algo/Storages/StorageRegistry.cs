@@ -311,6 +311,12 @@ namespace StockSharp.Algo.Storages
 			{
 			}
 
+			protected override IEnumerable<TCandleMessage> FilterNewData(IEnumerable<TCandleMessage> data, IMarketDataMetaInfo metaInfo)
+			{
+				var lastTime = metaInfo.LastTime;
+				return data.Where(i => GetTruncatedTime(i) > lastTime);
+			}
+
 			IEnumerable<CandleMessage> IMarketDataStorage<CandleMessage>.Load(DateTime date)
 			{
 				return Load(date);

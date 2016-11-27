@@ -112,7 +112,7 @@ namespace StockSharp.Algo.Storages
 
 		public IMarketDataStorageDrive Drive { get; }
 
-		private DateTime GetTruncatedTime(TData data)
+		protected DateTime GetTruncatedTime(TData data)
 		{
 			return _getTime(data).Truncate().UtcDateTime;
 		}
