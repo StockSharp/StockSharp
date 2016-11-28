@@ -334,6 +334,11 @@ namespace StockSharp.Algo.Testing
 		public override void ClearCache()
 		{
 			base.ClearCache();
+
+			_series.Clear();
+			_historySourceSubscriptions.Clear();
+			_subscribedCandles.Clear();
+
 			IsFinished = false;
 		}
 
