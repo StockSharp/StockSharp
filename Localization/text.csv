@@ -4364,6 +4364,7 @@ IgnoreErrors;Ignore errors;Игнорировать ошибки
 CalculateExtended;Calculate extended information;Вычислять расширенную информацию
 VolatilitySmile;Volatility smile;Улыбка волательности
 VolatilitySmileChart;Options volatility smile chart.;График улыбки волательности опционов
+StrategyNotInitialized;Strategy not initialized.;Стратегия не инициализирована.
 DocStr0;Button activation alert settings;Кнопка активации настроек сигнала
 DocStr1;Initializes a new instance of the {0};Создать {0}
 DocStr2;Load settings;Загрузить настройки

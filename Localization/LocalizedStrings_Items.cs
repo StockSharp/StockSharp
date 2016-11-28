@@ -43296,5 +43296,15 @@ namespace StockSharp.Localization
 		/// Options volatility smile chart.
 		/// </summary>
 		public static string VolatilitySmileChart => GetString(VolatilitySmileChartKey);
+
+		/// <summary>
+		/// Strategy not initialized.
+		/// </summary>
+		public const string StrategyNotInitializedKey = "StrategyNotInitialized";
+
+		/// <summary>
+		/// Strategy not initialized.
+		/// </summary>
+		public static string StrategyNotInitialized => GetString(StrategyNotInitializedKey);
 	}
 }
