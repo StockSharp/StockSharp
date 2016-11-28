@@ -209,7 +209,7 @@ namespace StockSharp.Algo.Storages.Binary
 				// execution ticks (like option execution) may be a zero cost
 				// ticks for spreads may be a zero cost or less than zero
 				//if (item.Price < 0)
-				//	throw new ArgumentOutOfRangeException("items", item.Price, LocalizedStrings.Str926Params.Put(item.OrderId));
+				//	throw new ArgumentOutOfRangeException(nameof(messages), item.Price, LocalizedStrings.Str926Params.Put(item.OrderId));
 
 				var volume = message.SafeGetVolume();
 				if (volume <= 0)
@@ -227,7 +227,7 @@ namespace StockSharp.Algo.Storages.Binary
 					// execution ticks (like option execution) may be a zero cost
 					// ticks for spreads may be a zero cost or less than zero
 					//if (item.TradePrice <= 0)
-					//	throw new ArgumentOutOfRangeException("items", item.TradePrice, LocalizedStrings.Str929Params.Put(item.TradeId, item.OrderId));
+					//	throw new ArgumentOutOfRangeException(nameof(messages), item.TradePrice, LocalizedStrings.Str929Params.Put(item.TradeId, item.OrderId));
 				}
 
 				metaInfo.LastOrderId = writer.SerializeId(orderId, metaInfo.LastOrderId);

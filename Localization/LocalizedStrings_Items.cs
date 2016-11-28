@@ -43306,5 +43306,45 @@ namespace StockSharp.Localization
 		/// Strategy not initialized.
 		/// </summary>
 		public static string StrategyNotInitialized => GetString(StrategyNotInitializedKey);
+
+		/// <summary>
+		/// Type {0} must contain only one event with {1}.
+		/// </summary>
+		public const string ExternalSocketMoreEventsKey = "ExternalSocketMoreEvents";
+
+		/// <summary>
+		/// Type {0} must contain only one event with {1}.
+		/// </summary>
+		public static string ExternalSocketMoreEvents => GetString(ExternalSocketMoreEventsKey);
+
+		/// <summary>
+		/// Event {0} must contains only one parameter.
+		/// </summary>
+		public const string ExternalSocketOneParamKey = "ExternalSocketOneParam";
+
+		/// <summary>
+		/// Event {0} must contains only one parameter.
+		/// </summary>
+		public static string ExternalSocketOneParam => GetString(ExternalSocketOneParamKey);
+
+		/// <summary>
+		/// Max message count exceed.
+		/// </summary>
+		public const string MaxMessageCountExceedKey = "MaxMessageCountExceed";
+
+		/// <summary>
+		/// Max message count exceed.
+		/// </summary>
+		public static string MaxMessageCountExceed => GetString(MaxMessageCountExceedKey);
+
+		/// <summary>
+		/// Type {0} not implemented the {1} interface.
+		/// </summary>
+		public const string TypeNotImplementedKey = "TypeNotImplemented";
+
+		/// <summary>
+		/// Type {0} not implemented the {1} interface.
+		/// </summary>
+		public static string TypeNotImplemented => GetString(TypeNotImplementedKey);
 	}
 }

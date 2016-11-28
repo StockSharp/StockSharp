@@ -753,7 +753,7 @@ namespace StockSharp.Algo
 
 					// если адаптеры передают специфичные сообщения
 					//default:
-					//	throw new ArgumentOutOfRangeException("Тип сообщения {0} не поддерживается.".Put(message.Type));
+					//	throw new ArgumentOutOfRangeException(LocalizedStrings.Str2142Params.Put(message.Type));
 				}
 			}
 			catch (Exception ex)

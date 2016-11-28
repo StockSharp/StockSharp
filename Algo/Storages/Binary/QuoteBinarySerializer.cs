@@ -116,8 +116,8 @@ namespace StockSharp.Algo.Storages.Binary
 			{
 				var quoteMsg = m;
 
-				//if (depth.IsFullEmpty())
-				//	throw new ArgumentException("Переданный стакан является пустым.", "depths");
+				//if (m.IsFullEmpty())
+				//	throw new ArgumentException(LocalizedStrings.Str1309, nameof(messages));
 
 				if (!quoteMsg.IsSorted)
 				{

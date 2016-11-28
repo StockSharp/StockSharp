@@ -260,7 +260,7 @@ namespace StockSharp.Logging
 		//	set
 		//	{
 		//		if (value < -1) 
-		//			throw new ArgumentOutOfRangeException("value", value, "Количество не может быть отрицательным.");
+		//			throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.Str2796);
 
 		//		_maxMessageCount = value;
 		//	}
@@ -273,23 +273,14 @@ namespace StockSharp.Logging
 
 			_logMsgStat.Add(message);
 
-			//bool needFlush;
-
 			lock (_syncRoot)
 			{
 				_pendingMessages.Add(message);
-				//needFlush = MaxMessageCount > 0 && _pendingMessages.Count > MaxMessageCount || MaxMessageCount == -1;
-
-				// mika: если накопилось слишком много сообщений, то нужно принудительно вызвать таймер
+				
+				// mika: force flush in case too many messages
 				if (_pendingMessages.Count > 1000000)
 					ImmediateFlush();
 			}
-
-			// mika: сбрасывание логов необходимо делать только в одном потоке, чтобы избежать
-			// усложнения логики в Listener-ах
-
-			//if (needFlush)
-			//	Flush();
 		}
 
 		private void ImmediateFlush()
@@ -302,7 +293,6 @@ namespace StockSharp.Logging
 		/// </summary>
 		protected override void DisposeManaged()
 		{
-			// сначала удаляем поставщиков логов
 			Sources.Clear();
 
 			lock (_syncRoot)
@@ -311,7 +301,8 @@ namespace StockSharp.Logging
 				_pendingMessages.Add(_disposeMessage);
 			}
 
-			// сбрасываем в логи то, что еще не сбросилось и выключаем таймер
+			// flushing accumulated messages and closing the timer
+
 			ImmediateFlush();
 
 			_disposeMessage.Wait();

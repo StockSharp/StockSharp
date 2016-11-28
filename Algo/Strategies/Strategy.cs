@@ -1687,10 +1687,10 @@ namespace StockSharp.Algo.Strategies
 			//ThrowIfTraderNotRegistered();
 
 			//if (Security == null)
-			//	throw new InvalidOperationException("Инструмент не инициализирован.");
+			//	throw new InvalidOperationException(LocalizedStrings.Str1380);
 
 			//if (Portfolio == null)
-			//	throw new InvalidOperationException("Портфель не инициализирован.");
+			//	throw new InvalidOperationException(LocalizedStrings.Str1381);
 
 			ChildStrategies.SyncDo(c => c.ForEach(s => s.Reset()));
 

@@ -565,9 +565,6 @@ namespace StockSharp.Algo.Candles.Compression
 		//		if (series == null)
 		//			throw new ArgumentNullException(nameof(series));
 
-		//		if (series.Security.Connector == null)
-		//			throw new ArgumentException("Инструмент {0} не имеет информации о подключении.".Put(series.Security), "series");
-
 		//		if (builder == null)
 		//			throw new ArgumentNullException(nameof(builder));
 

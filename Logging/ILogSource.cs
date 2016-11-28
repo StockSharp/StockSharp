@@ -172,9 +172,6 @@ namespace StockSharp.Logging
 			if (message.Level < message.Source.LogLevel)
 				return;
 
-			//if (_log == null && Parent.IsNull())
-			//	throw new InvalidOperationException("Родитель не подписан на дочерний лог.");
-
 			_log?.Invoke(message);
 
 			var parent = Parent as ILogReceiver;

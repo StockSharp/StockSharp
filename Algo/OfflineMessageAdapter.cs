@@ -4,6 +4,7 @@
 
 	using Ecng.Collections;
 
+	using StockSharp.Localization;
 	using StockSharp.Messages;
 
 	/// <summary>
@@ -86,7 +87,7 @@
 					if (!_connected)
 					{
 						if (_maxMessageCount > 0 && _pendingMessages.Count == _maxMessageCount)
-							throw new InvalidOperationException("Max message count exceed.");
+							throw new InvalidOperationException(LocalizedStrings.MaxMessageCountExceed);
 
 						_pendingMessages.Add(message.Clone());
 						return;

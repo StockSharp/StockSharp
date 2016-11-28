@@ -293,8 +293,8 @@ namespace StockSharp.Algo.Testing
 				_volumeStepUpdated = true;
 			}
 
-			//if (message.DataType != ExecutionDataTypes.Trade)
-			//	throw new ArgumentOutOfRangeException("Тип данных не может быть {0}.".Put(message.DataType), "message");
+			//if (tick.ExecutionType != ExecutionTypes.Tick)
+			//	throw new ArgumentOutOfRangeException(nameof(tick), tick.ExecutionType, LocalizedStrings.Str1655);
 
 			//_lastTradeDate = message.LocalTime.Date;
 
@@ -562,7 +562,7 @@ namespace StockSharp.Algo.Testing
 				throw new ArgumentOutOfRangeException(nameof(price), price, LocalizedStrings.Str1144);
 
 			//if (volume <= 0)
-			//	throw new ArgumentOutOfRangeException("volume", volume, "Объем задан не верно.");
+			//	throw new ArgumentOutOfRangeException(nameof(volume), volume, LocalizedStrings.Str3344);
 
 			if (volume == 0)
 				volume = _volumeRandom.Next(10, 100);
