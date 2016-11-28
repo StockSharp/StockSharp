@@ -7,6 +7,7 @@
 	using Ecng.Collections;
 	using Ecng.Common;
 
+	using StockSharp.Algo.Storages;
 	using StockSharp.Localization;
 	using StockSharp.Messages;
 
