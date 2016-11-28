@@ -51,12 +51,6 @@ namespace StockSharp.Algo
 
 				Order = order;
 				Connector = connector;
-
-				//if (order.Connector == null)
-				//{
-				//	((INotifyPropertyChanged)order).PropertyChanged += OnOrderPropertyChanged;
-				//	//throw new ArgumentException("Заявка не имеет информации о подключении.");
-				//}
 			}
 
 			protected override bool CanFinish()
@@ -69,28 +63,14 @@ namespace StockSharp.Algo
 				return Order.State == OrderStates.Done || Order.State == OrderStates.Failed;
 			}
 
-			//private void OnOrderPropertyChanged(object sender, PropertyChangedEventArgs e)
-			//{
-			//	if (TrySubscribe())
-			//	{
-			//		((INotifyPropertyChanged)Order).PropertyChanged -= OnOrderPropertyChanged;
-			//	}
-			//}
-
 			protected Order Order { get; }
 
 			protected IConnector Connector { get; }
 
 			protected void TrySubscribe()
 			{
-				//if (Order.Connector != null)
-				{
-					Subscribe();
-					Container.AddRuleLog(LogLevels.Debug, this, LocalizedStrings.Str1028);
-					//return true;
-				}
-
-				//return false;
+				Subscribe();
+				Container.AddRuleLog(LogLevels.Debug, this, LocalizedStrings.Str1028);
 			}
 
 			protected abstract void Subscribe();
@@ -272,13 +252,13 @@ namespace StockSharp.Algo
 			}
 		}
 
-		private class NewTradesOrderRule : OrderRule<IEnumerable<MyTrade>>
+		private class NewTradeOrderRule : OrderRule<MyTrade>
 		{
 			private decimal _receivedVolume;
 
-			protected bool AllTradesReceived => Order.State == OrderStates.Done && (Order.Volume - Order.Balance == _receivedVolume);
+			private bool AllTradesReceived => Order.State == OrderStates.Done && (Order.Volume - Order.Balance == _receivedVolume);
 
-			public NewTradesOrderRule(Order order, IConnector connector)
+			public NewTradeOrderRule(Order order, IConnector connector)
 				: base(order, connector)
 			{
 				Name = LocalizedStrings.Str1032;
@@ -306,13 +286,15 @@ namespace StockSharp.Algo
 					return;
 
 				_receivedVolume += trade.Trade.Volume;
-				Activate(new[] { trade });
+				Activate(trade);
 			}
 		}
 
-		private sealed class AllTradesOrderRule : NewTradesOrderRule
+		private sealed class AllTradesOrderRule : OrderRule<IEnumerable<MyTrade>>
 		{
-			private readonly SynchronizedList<MyTrade> _trades = new SynchronizedList<MyTrade>();
+			private decimal _receivedVolume;
+
+			private readonly CachedSynchronizedList<MyTrade> _trades = new CachedSynchronizedList<MyTrade>();
 
 			public AllTradesOrderRule(Order order, IConnector connector)
 				: base(order, connector)
@@ -320,6 +302,8 @@ namespace StockSharp.Algo
 				Name = LocalizedStrings.Str1033;
 				TrySubscribe();
 			}
+
+			private bool AllTradesReceived => Order.State == OrderStates.Done && (Order.Volume - Order.Balance == _receivedVolume);
 
 			protected override void Subscribe()
 			{
@@ -334,7 +318,7 @@ namespace StockSharp.Algo
 					Connector.NewOrder += OnOrderChanged;
 				}
 
-				base.Subscribe();
+				Connector.NewMyTrade += OnNewMyTrade;
 			}
 
 			protected override void UnSubscribe()
@@ -350,7 +334,7 @@ namespace StockSharp.Algo
 					Connector.NewOrder -= OnOrderChanged;
 				}
 
-				base.UnSubscribe();
+				Connector.NewMyTrade -= OnNewMyTrade;
 			}
 
 			private void OnOrderChanged(Order order)
@@ -361,9 +345,14 @@ namespace StockSharp.Algo
 				}
 			}
 
-			protected override void Activate(IEnumerable<MyTrade> trades)
+			private void OnNewMyTrade(MyTrade trade)
 			{
-				_trades.AddRange(trades);
+				if (trade.Order != Order && (Order.Type != OrderTypes.Conditional || trade.Order != Order.DerivedOrder))
+					return;
+
+				_receivedVolume += trade.Trade.Volume;
+
+				_trades.Add(trade);
 				TryActivate();
 			}
 
@@ -371,7 +360,7 @@ namespace StockSharp.Algo
 			{
 				if (AllTradesReceived)
 				{
-					base.Activate(_trades.ToArray());
+					Activate(_trades.Cache);
 				}
 			}
 		}
@@ -497,9 +486,9 @@ namespace StockSharp.Algo
 		/// <param name="order">The order to be traced for trades occurrence events.</param>
 		/// <param name="connector">The connection of interaction with trade systems.</param>
 		/// <returns>Rule.</returns>
-		public static MarketRule<Order, IEnumerable<MyTrade>> WhenNewTrades(this Order order, IConnector connector)
+		public static MarketRule<Order, MyTrade> WhenNewTrade(this Order order, IConnector connector)
 		{
-			return new NewTradesOrderRule(order, connector);
+			return new NewTradeOrderRule(order, connector);
 		}
 
 		/// <summary>
@@ -2041,23 +2030,23 @@ namespace StockSharp.Algo
 			}
 		}
 
-		private sealed class NewMyTradesTraderRule : ConnectorRule<IEnumerable<MyTrade>>
+		private sealed class NewMyTradeTraderRule : ConnectorRule<MyTrade>
 		{
-			public NewMyTradesTraderRule(IConnector connector)
+			public NewMyTradeTraderRule(IConnector connector)
 				: base(connector)
 			{
 				Name = LocalizedStrings.Str1080;
-				Connector.NewMyTrades += OnNewMyTrades;
+				Connector.NewMyTrade += OnNewMyTrade;
 			}
 
-			private void OnNewMyTrades(IEnumerable<MyTrade> trades)
+			private void OnNewMyTrade(MyTrade trade)
 			{
-				Activate(trades);
+				Activate(trade);
 			}
 
 			protected override void DisposeManaged()
 			{
-				Connector.NewMyTrades -= OnNewMyTrades;
+				Connector.NewMyTrade -= OnNewMyTrade;
 				base.DisposeManaged();
 			}
 		}
@@ -2100,13 +2089,13 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// To create a rule for the event of new trades occurrences.
+		/// To create a rule for the event of new trade occurrences.
 		/// </summary>
 		/// <param name="connector">The connection to be traced for trades occurrences.</param>
 		/// <returns>Rule.</returns>
-		public static MarketRule<IConnector, IEnumerable<MyTrade>> WhenNewMyTrades(this IConnector connector)
+		public static MarketRule<IConnector, MyTrade> WhenNewMyTrade(this IConnector connector)
 		{
-			return new NewMyTradesTraderRule(connector);
+			return new NewMyTradeTraderRule(connector);
 		}
 
 		/// <summary>
