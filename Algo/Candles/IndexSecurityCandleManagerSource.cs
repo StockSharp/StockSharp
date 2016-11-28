@@ -125,16 +125,23 @@ namespace StockSharp.Algo.Candles
 				_stopped();
 			}
 
-			//protected override void DisposeManaged()
-			//{
-			//	base.DisposeManaged();
+			protected override void DisposeManaged()
+			{
+				base.DisposeManaged();
 
-			//	_innerSeries.ForEach(s =>
-			//	{
-			//		s.Dispose();
-			//		s.ProcessCandle -= OnInnerSourceProcessCandle;
-			//	});
-			//}
+				CandleSeries[] series;
+
+				lock (_lock)
+					series = _innerSeries.ToArray();
+
+				series.ForEach(_candleManager.Stop);
+
+				//_innerSeries.ForEach(s =>
+				//{
+				//	s.Dispose();
+				//	s.ProcessCandle -= OnInnerSourceProcessCandle;
+				//});
+			}
 		}
 
 		private readonly DateTimeOffset _from;
