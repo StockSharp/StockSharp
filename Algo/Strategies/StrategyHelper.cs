@@ -226,7 +226,14 @@ namespace StockSharp.Algo.Strategies
 		/// <returns>If initialization is performed - <see langword="true" />, otherwise - <see langword="false" />.</returns>
 		public static bool GetIsInitialization(this Strategy strategy)
 		{
-			return strategy.Environment.GetValue("IsInitializationMode", false);
+			var res = strategy.Environment.GetValue("IsInitializationMode", false);
+
+			if (!res)
+				return false;
+
+			var dic = strategy.Environment.GetValue("SecurityIdInitializationMode", new Dictionary<SecurityId, bool>());
+
+			return dic.Any(p => p.Value);
 		}
 
 		/// <summary>
@@ -237,6 +244,22 @@ namespace StockSharp.Algo.Strategies
 		public static void SetIsInitialization(this Strategy strategy, bool isInitialization)
 		{
 			strategy.Environment.SetValue("IsInitializationMode", isInitialization);
+		}
+
+		/// <summary>
+		/// To set the strategy operation mode (initialization or trade).
+		/// </summary>
+		/// <param name="strategy">Strategy.</param>
+		/// <param name="securityId">Security identifier.</param>
+		/// <param name="isInitialization">If initialization is performed - <see langword="true" />, otherwise - <see langword="false" />.</param>
+		public static void SetIsInitialization(this Strategy strategy, SecurityId securityId, bool isInitialization)
+		{
+			var dic = strategy.Environment.GetValue("SecurityIdInitializationMode", new Dictionary<SecurityId, bool>());
+
+			dic[securityId] = isInitialization;
+
+			if (dic.All(p => !p.Value))
+				strategy.SetIsInitialization(false);
 		}
 
 		/// <summary>
