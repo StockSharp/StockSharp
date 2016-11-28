@@ -19,6 +19,7 @@ namespace StockSharp.Algo.Storages
 	using System.Collections.Generic;
 	using System.Linq;
 
+	using Ecng.Collections;
 	using Ecng.Common;
 
 	using MoreLinq;
@@ -340,7 +341,7 @@ namespace StockSharp.Algo.Storages
 				}
 			}
 
-			RaiseStorageMessage(new HistoryInitializedMessage());
+			RaiseStorageMessage(new HistoryInitializedMessage(securityId));
 		}
 
 		/// <summary>
@@ -521,6 +522,11 @@ namespace StockSharp.Algo.Storages
 	public class HistoryInitializedMessage : Message
 	{
 		/// <summary>
+		/// Security identifier.
+		/// </summary>
+		public SecurityId SecurityId { get; }
+
+		/// <summary>
 		/// Message type.
 		/// </summary>
 		public static MessageTypes MessageType => ExtendedMessageTypes.HistoryInitialized;
@@ -528,9 +534,10 @@ namespace StockSharp.Algo.Storages
 		/// <summary>
 		/// Initializes a new instance of the <see cref="HistoryInitializedMessage"/>.
 		/// </summary>
-		public HistoryInitializedMessage()
+		public HistoryInitializedMessage(SecurityId securityId)
 			: base(MessageType)
 		{
+			SecurityId = securityId;
 		}
 	}
 }
