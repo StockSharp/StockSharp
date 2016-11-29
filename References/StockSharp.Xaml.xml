@@ -2388,6 +2388,11 @@
             Selected instruments.
             </summary>
     </member>
+    <member name="P:StockSharp.Xaml.SecurityGrid.ExtendedInfoStorage">
+      <summary>
+            Extended info <see cref="P:StockSharp.Messages.Message.ExtensionInfo" /> storage.
+            </summary>
+    </member>
     <member name="P:StockSharp.Xaml.SecurityGrid.MarketDataProvider">
       <summary>
             The market data provider.
@@ -3892,6 +3897,11 @@
     <member name="P:StockSharp.Xaml.SecurityPicker.MarketDataProvider">
       <summary>
             The market data provider.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Xaml.SecurityPicker.ExtendedInfoStorage">
+      <summary>
+            Extended info <see cref="P:StockSharp.Messages.Message.ExtensionInfo" /> storage.
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.SecurityPicker.SetColumnVisibility(System.String,System.Windows.Visibility)">

@@ -31,9 +31,9 @@
             Поддерживается ли торговой системой поиск инструментов.
             </summary>
         </member>
-        <member name="P:StockSharp.AlfaDirect.AlfaDirectMessageAdapter.NativeIdStorageName">
+        <member name="P:StockSharp.AlfaDirect.AlfaDirectMessageAdapter.IsNativeIdentifiers">
             <summary>
-            Native security identifiers storage name.
+            Идентифицировать инструменты в сообщениях по системному идентификатору <see cref="P:StockSharp.Messages.SecurityId.Native"/>.
             </summary>
         </member>
         <member name="M:StockSharp.AlfaDirect.AlfaDirectMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)">

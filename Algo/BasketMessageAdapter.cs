@@ -145,7 +145,7 @@ namespace StockSharp.Algo
 		public INativeIdStorage NativeIdStorage { get; set; }
 
 		/// <summary>
-		/// Extended info <see cref="Message.ExtensionInfo"/> identifier storage.
+		/// Extended info <see cref="Message.ExtensionInfo"/> storage.
 		/// </summary>
 		public IExtendedInfoStorage ExtendedInfoStorage { get; set; }
 

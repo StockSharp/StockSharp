@@ -90,9 +90,9 @@
             Gets a value indicating whether the connector supports security lookup.
             </summary>
     </member>
-    <member name="P:StockSharp.LMAX.LmaxMessageAdapter.NativeIdStorageName">
+    <member name="P:StockSharp.LMAX.LmaxMessageAdapter.IsNativeIdentifiers">
       <summary>
-            Native security identifiers storage name.
+            Identify security in messages by native identifier <see cref="P:StockSharp.Messages.SecurityId.Native" />.
             </summary>
     </member>
     <member name="T:StockSharp.LMAX.LmaxOrderCondition">

@@ -13564,3 +13564,14 @@ DocStr9368;Line data;Данные линии
 DocStr9369;The X value;Значение X
 DocStr9370;The Y value;Значение Y
 DocStr9371;To create new smile;Создать новую улыбку
+DocStr9372;The message adapter, that save {0} into {1};Адаптер сообщения, сохраняющий {0} в {1}
+DocStr9374;Extended info {0} storage;Хранилище расширенной информации {0}
+DocStr9375;Names of extended security fields;Название полей расширенной информации
+DocStr9376;Add extended info;Добавить расширенную информацию
+DocStr9377;Load extended info;Загрузить расширенную информацию
+DocStr9378;To get and initialize storage for the specified name;Получить и инициализировать хранилище по заданному имени
+DocStr9379;Extended info {0} storage, used csv files;Хранилище расширенной информации {0}, использующее CSV файлы
+DocStr9380;To create a rule for the event of new trade occurrences;Создать правило на событие появления новой сделки
+DocStr9381;Identify security in messages by native identifier {0};Идентифицировать инструменты в сообщениях по системному идентификатору {0}
+DocStr9382;The storage name, associated with the adapter;Название хранилища, ассоциированное с адаптером
+DocStr9383;Names of extended security fields in {0};Название полей расширенной информации в {0}

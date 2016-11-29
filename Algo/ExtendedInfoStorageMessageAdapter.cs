@@ -12,7 +12,7 @@ namespace StockSharp.Algo
 		/// Initializes a new instance of the <see cref="MessageAdapterWrapper"/>.
 		/// </summary>
 		/// <param name="innerAdapter">Underlying adapter.</param>
-		/// <param name="storage">Extended info <see cref="Message.ExtensionInfo"/> identifier storage.</param>
+		/// <param name="storage">Extended info <see cref="Message.ExtensionInfo"/> storage.</param>
 		public ExtendedInfoStorageMessageAdapter(IMessageAdapter innerAdapter, IExtendedInfoStorageItem storage)
 			: base(innerAdapter)
 		{

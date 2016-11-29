@@ -60,9 +60,9 @@
             Освободить занятые ресурсы.
             </summary>
     </member>
-    <member name="P:StockSharp.Transaq.TransaqMessageAdapter.NativeIdStorageName">
+    <member name="P:StockSharp.Transaq.TransaqMessageAdapter.IsNativeIdentifiers">
       <summary>
-            Native security identifiers storage name.
+            Идентифицировать инструменты в сообщениях по системному идентификатору <see cref="P:StockSharp.Messages.SecurityId.Native" />.
             </summary>
     </member>
     <member name="M:StockSharp.Transaq.TransaqMessageAdapter.CreateOrderCondition">

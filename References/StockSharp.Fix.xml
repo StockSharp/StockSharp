@@ -80,9 +80,19 @@
         <see cref="P:StockSharp.Messages.OrderCancelMessage.Volume" /> required to cancel orders.
             </summary>
     </member>
-    <member name="P:StockSharp.Fix.Dialects.BaseDialect.NativeIdStorageName">
+    <member name="P:StockSharp.Fix.Dialects.BaseDialect.StorageName">
       <summary>
-            Native security identifiers storage name.
+            The storage name, associated with the adapter.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.BaseDialect.IsNativeIdentifiers">
+      <summary>
+            Identify security in messages by native identifier <see cref="P:StockSharp.Messages.SecurityId.Native" />.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.BaseDialect.SecurityExtendedFields">
+      <summary>
+            Names of extended security fields in <see cref="T:StockSharp.Messages.SecurityMessage" />.
             </summary>
     </member>
     <member name="M:StockSharp.Fix.Dialects.BaseDialect.OnRead(StockSharp.Fix.Native.IFixReader,System.String,Ecng.Common.AllocationArray{StockSharp.Messages.Message})">
@@ -288,9 +298,19 @@
         <see cref="P:StockSharp.Messages.OrderCancelMessage.Volume" /> required to cancel orders.
             </summary>
     </member>
-    <member name="P:StockSharp.Fix.Dialects.IFixDialect.NativeIdStorageName">
+    <member name="P:StockSharp.Fix.Dialects.IFixDialect.StorageName">
       <summary>
-            Native security identifiers storage name.
+            The storage name, associated with the adapter.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.IFixDialect.IsNativeIdentifiers">
+      <summary>
+            Identify security in messages by native identifier <see cref="P:StockSharp.Messages.SecurityId.Native" />.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.IFixDialect.SecurityExtendedFields">
+      <summary>
+            Names of extended security fields in <see cref="T:StockSharp.Messages.SecurityMessage" />.
             </summary>
     </member>
     <member name="M:StockSharp.Fix.Dialects.IFixDialect.Write(StockSharp.Messages.Message)">
@@ -5253,9 +5273,19 @@
         <see cref="P:StockSharp.Messages.OrderCancelMessage.Volume" /> required to cancel orders.
             </summary>
     </member>
-    <member name="P:StockSharp.Fix.FixMessageAdapter.NativeIdStorageName">
+    <member name="P:StockSharp.Fix.FixMessageAdapter.IsNativeIdentifiers">
       <summary>
-            Native security identifiers storage name.
+            Identify security in messages by native identifier <see cref="P:StockSharp.Messages.SecurityId.Native" />.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.FixMessageAdapter.StorageName">
+      <summary>
+            The storage name, associated with the adapter.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.FixMessageAdapter.SecurityExtendedFields">
+      <summary>
+            Names of extended security fields in <see cref="T:StockSharp.Messages.SecurityMessage" />.
             </summary>
     </member>
     <member name="M:StockSharp.Fix.FixMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)">

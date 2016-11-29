@@ -48,7 +48,7 @@
             Is it possible to save files.
             </summary>
     </member>
-    <member name="M:StockSharp.Algo.History.BaseDumpableHistorySource.Process(StockSharp.BusinessEntities.Security,StockSharp.Algo.INativeIdStorage,System.DateTime,System.DateTime,System.Type,System.Object,System.Func{System.String})">
+    <member name="M:StockSharp.Algo.History.BaseDumpableHistorySource.Process(StockSharp.BusinessEntities.Security,StockSharp.Algo.Storages.INativeIdStorage,System.DateTime,System.DateTime,System.Type,System.Object,System.Func{System.String})">
       <summary>
             Upload or download text file.
             </summary>
@@ -69,7 +69,7 @@
             If the value is an empty string, the data will not stored locally.
             </remarks>
     </member>
-    <member name="M:StockSharp.Algo.History.BaseDumpableHistorySource.GetDumpFile(StockSharp.BusinessEntities.Security,StockSharp.Algo.INativeIdStorage,System.DateTime,System.DateTime,System.Type,System.Object)">
+    <member name="M:StockSharp.Algo.History.BaseDumpableHistorySource.GetDumpFile(StockSharp.BusinessEntities.Security,StockSharp.Algo.Storages.INativeIdStorage,System.DateTime,System.DateTime,System.Type,System.Object)">
       <summary>
             Get the full path to the downloaded file.
             </summary>
@@ -98,7 +98,7 @@
       <param name="securities">Securities.</param>
       <returns>Changes of market data.</returns>
     </member>
-    <member name="M:StockSharp.Algo.History.FinVizHistorySource.Refresh(StockSharp.Algo.Storages.ISecurityStorage,StockSharp.Algo.INativeIdStorage,StockSharp.BusinessEntities.Security,System.Action{StockSharp.BusinessEntities.Security},System.Func{System.Boolean})">
+    <member name="M:StockSharp.Algo.History.FinVizHistorySource.Refresh(StockSharp.Algo.Storages.ISecurityStorage,StockSharp.Algo.Storages.INativeIdStorage,StockSharp.BusinessEntities.Security,System.Action{StockSharp.BusinessEntities.Security},System.Func{System.Boolean})">
       <summary>
             Download new securities.
             </summary>
@@ -123,7 +123,7 @@
             Initializes a new instance of the <see cref="T:StockSharp.Algo.History.Forex.DukasCopySource" />.
             </summary>
     </member>
-    <member name="M:StockSharp.Algo.History.Forex.DukasCopySource.Refresh(StockSharp.Algo.Storages.ISecurityStorage,StockSharp.Algo.INativeIdStorage,StockSharp.BusinessEntities.Security,System.Action{StockSharp.BusinessEntities.Security},System.Func{System.Boolean})">
+    <member name="M:StockSharp.Algo.History.Forex.DukasCopySource.Refresh(StockSharp.Algo.Storages.ISecurityStorage,StockSharp.Algo.Storages.INativeIdStorage,StockSharp.BusinessEntities.Security,System.Action{StockSharp.BusinessEntities.Security},System.Func{System.Boolean})">
       <summary>
             Download new securities.
             </summary>
@@ -159,7 +159,7 @@
       <param name="side">Quote type (bid or ask).</param>
       <returns>Historical time-frames.</returns>
     </member>
-    <member name="M:StockSharp.Algo.History.Forex.DukasCopySource.GetDumpFile(StockSharp.BusinessEntities.Security,StockSharp.Algo.INativeIdStorage,System.DateTime,System.DateTime,System.Type,System.Object)">
+    <member name="M:StockSharp.Algo.History.Forex.DukasCopySource.GetDumpFile(StockSharp.BusinessEntities.Security,StockSharp.Algo.Storages.INativeIdStorage,System.DateTime,System.DateTime,System.Type,System.Object)">
       <summary>
             Get the full path to the downloaded file.
             </summary>
@@ -181,7 +181,7 @@
             Initializes a new instance of the <see cref="T:StockSharp.Algo.History.Forex.GainCapitalSource" />.
             </summary>
     </member>
-    <member name="M:StockSharp.Algo.History.Forex.GainCapitalSource.Refresh(StockSharp.Algo.Storages.ISecurityStorage,StockSharp.Algo.INativeIdStorage,StockSharp.BusinessEntities.Security,System.Action{StockSharp.BusinessEntities.Security},System.Func{System.Boolean})">
+    <member name="M:StockSharp.Algo.History.Forex.GainCapitalSource.Refresh(StockSharp.Algo.Storages.ISecurityStorage,StockSharp.Algo.Storages.INativeIdStorage,StockSharp.BusinessEntities.Security,System.Action{StockSharp.BusinessEntities.Security},System.Func{System.Boolean})">
       <summary>
             Download new securities.
             </summary>
@@ -191,7 +191,7 @@
       <param name="newSecurity">The handler through which a new instrument will be passed.</param>
       <param name="isCancelled">The handler which returns an attribute of search cancel.</param>
     </member>
-    <member name="M:StockSharp.Algo.History.Forex.GainCapitalSource.GetDumpFile(StockSharp.BusinessEntities.Security,StockSharp.Algo.INativeIdStorage,System.DateTime,System.DateTime,System.Type,System.Object)">
+    <member name="M:StockSharp.Algo.History.Forex.GainCapitalSource.GetDumpFile(StockSharp.BusinessEntities.Security,StockSharp.Algo.Storages.INativeIdStorage,System.DateTime,System.DateTime,System.Type,System.Object)">
       <summary>
             Get the full path to the downloaded file.
             </summary>
@@ -249,7 +249,7 @@
             The maximum number of attempts to login to the site. The default is 10.
             </summary>
     </member>
-    <member name="M:StockSharp.Algo.History.Forex.MBTradingSource.Refresh(StockSharp.Algo.Storages.ISecurityStorage,StockSharp.Algo.INativeIdStorage,StockSharp.BusinessEntities.Security,System.Action{StockSharp.BusinessEntities.Security},System.Func{System.Boolean})">
+    <member name="M:StockSharp.Algo.History.Forex.MBTradingSource.Refresh(StockSharp.Algo.Storages.ISecurityStorage,StockSharp.Algo.Storages.INativeIdStorage,StockSharp.BusinessEntities.Security,System.Action{StockSharp.BusinessEntities.Security},System.Func{System.Boolean})">
       <summary>
             Download new securities.
             </summary>
@@ -259,7 +259,7 @@
       <param name="newSecurity">The handler through which a new instrument will be passed.</param>
       <param name="isCancelled">The handler which returns an attribute of search cancel.</param>
     </member>
-    <member name="M:StockSharp.Algo.History.Forex.MBTradingSource.GetDumpFile(StockSharp.BusinessEntities.Security,StockSharp.Algo.INativeIdStorage,System.DateTime,System.DateTime,System.Type,System.Object)">
+    <member name="M:StockSharp.Algo.History.Forex.MBTradingSource.GetDumpFile(StockSharp.BusinessEntities.Security,StockSharp.Algo.Storages.INativeIdStorage,System.DateTime,System.DateTime,System.Type,System.Object)">
       <summary>
             Get the full path to the downloaded file.
             </summary>
@@ -309,7 +309,7 @@
             Password.
             </summary>
     </member>
-    <member name="M:StockSharp.Algo.History.Forex.TrueFXSource.Refresh(StockSharp.Algo.Storages.ISecurityStorage,StockSharp.Algo.INativeIdStorage,StockSharp.BusinessEntities.Security,System.Action{StockSharp.BusinessEntities.Security},System.Func{System.Boolean})">
+    <member name="M:StockSharp.Algo.History.Forex.TrueFXSource.Refresh(StockSharp.Algo.Storages.ISecurityStorage,StockSharp.Algo.Storages.INativeIdStorage,StockSharp.BusinessEntities.Security,System.Action{StockSharp.BusinessEntities.Security},System.Func{System.Boolean})">
       <summary>
             Download new securities.
             </summary>
@@ -319,7 +319,7 @@
       <param name="newSecurity">The handler through which a new instrument will be passed.</param>
       <param name="isCancelled">The handler which returns an attribute of search cancel.</param>
     </member>
-    <member name="M:StockSharp.Algo.History.Forex.TrueFXSource.GetDumpFile(StockSharp.BusinessEntities.Security,StockSharp.Algo.INativeIdStorage,System.DateTime,System.DateTime,System.Type,System.Object)">
+    <member name="M:StockSharp.Algo.History.Forex.TrueFXSource.GetDumpFile(StockSharp.BusinessEntities.Security,StockSharp.Algo.Storages.INativeIdStorage,System.DateTime,System.DateTime,System.Type,System.Object)">
       <summary>
             Get the full path to the downloaded file.
             </summary>
@@ -366,7 +366,7 @@
       <param name="to">End date.</param>
       <returns>Historical rate.</returns>
     </member>
-    <member name="M:StockSharp.Algo.History.Forex.OandaHistorySource.Refresh(StockSharp.Algo.Storages.ISecurityStorage,StockSharp.Algo.INativeIdStorage,StockSharp.BusinessEntities.Security,System.Action{StockSharp.BusinessEntities.Security},System.Func{System.Boolean})">
+    <member name="M:StockSharp.Algo.History.Forex.OandaHistorySource.Refresh(StockSharp.Algo.Storages.ISecurityStorage,StockSharp.Algo.Storages.INativeIdStorage,StockSharp.BusinessEntities.Security,System.Action{StockSharp.BusinessEntities.Security},System.Func{System.Boolean})">
       <summary>
             Download new securities.
             </summary>
@@ -675,7 +675,7 @@
             </summary>
       <returns>WCF channel.</returns>
     </member>
-    <member name="M:StockSharp.Algo.History.Hydra.RemoteStorageClient.Refresh(StockSharp.Algo.Storages.ISecurityStorage,StockSharp.Algo.INativeIdStorage,StockSharp.BusinessEntities.Security,System.Action{StockSharp.BusinessEntities.Security},System.Func{System.Boolean})">
+    <member name="M:StockSharp.Algo.History.Hydra.RemoteStorageClient.Refresh(StockSharp.Algo.Storages.ISecurityStorage,StockSharp.Algo.Storages.INativeIdStorage,StockSharp.BusinessEntities.Security,System.Action{StockSharp.BusinessEntities.Security},System.Func{System.Boolean})">
       <summary>
             Download new securities.
             </summary>
@@ -721,7 +721,7 @@
             The interface of the loader of information about instruments.
             </summary>
     </member>
-    <member name="M:StockSharp.Algo.History.ISecurityDownloader.Refresh(StockSharp.Algo.Storages.ISecurityStorage,StockSharp.Algo.INativeIdStorage,StockSharp.BusinessEntities.Security,System.Action{StockSharp.BusinessEntities.Security},System.Func{System.Boolean})">
+    <member name="M:StockSharp.Algo.History.ISecurityDownloader.Refresh(StockSharp.Algo.Storages.ISecurityStorage,StockSharp.Algo.Storages.INativeIdStorage,StockSharp.BusinessEntities.Security,System.Action{StockSharp.BusinessEntities.Security},System.Func{System.Boolean})">
       <summary>
             Download new securities.
             </summary>
@@ -756,7 +756,7 @@
             The registered user identifier.
             </summary>
     </member>
-    <member name="M:StockSharp.Algo.History.QuandlHistorySource.GetDumpFile(StockSharp.BusinessEntities.Security,StockSharp.Algo.INativeIdStorage,System.DateTime,System.DateTime,System.Type,System.Object)">
+    <member name="M:StockSharp.Algo.History.QuandlHistorySource.GetDumpFile(StockSharp.BusinessEntities.Security,StockSharp.Algo.Storages.INativeIdStorage,System.DateTime,System.DateTime,System.Type,System.Object)">
       <summary>
             Get the full path to the downloaded file.
             </summary>
@@ -778,7 +778,7 @@
       <param name="endDate">End date.</param>
       <returns>Candles.</returns>
     </member>
-    <member name="M:StockSharp.Algo.History.QuandlHistorySource.Refresh(StockSharp.Algo.Storages.ISecurityStorage,StockSharp.Algo.INativeIdStorage,StockSharp.BusinessEntities.Security,System.Action{StockSharp.BusinessEntities.Security},System.Func{System.Boolean})">
+    <member name="M:StockSharp.Algo.History.QuandlHistorySource.Refresh(StockSharp.Algo.Storages.ISecurityStorage,StockSharp.Algo.Storages.INativeIdStorage,StockSharp.BusinessEntities.Security,System.Action{StockSharp.BusinessEntities.Security},System.Func{System.Boolean})">
       <summary>
             Download new securities.
             </summary>
@@ -809,7 +809,7 @@
             Possible time-frames.
             </summary>
     </member>
-    <member name="M:StockSharp.Algo.History.Russian.AlorHistorySource.GetDumpFile(StockSharp.BusinessEntities.Security,StockSharp.Algo.INativeIdStorage,System.DateTime,System.DateTime,System.Type,System.Object)">
+    <member name="M:StockSharp.Algo.History.Russian.AlorHistorySource.GetDumpFile(StockSharp.BusinessEntities.Security,StockSharp.Algo.Storages.INativeIdStorage,System.DateTime,System.DateTime,System.Type,System.Object)">
       <summary>
             Get the full path to the downloaded file.
             </summary>
@@ -858,7 +858,7 @@
             </summary>
       <returns>Information about securities.</returns>
     </member>
-    <member name="M:StockSharp.Algo.History.Russian.Finam.FinamHistorySource.GetDumpFile(StockSharp.BusinessEntities.Security,StockSharp.Algo.INativeIdStorage,System.DateTime,System.DateTime,System.Type,System.Object)">
+    <member name="M:StockSharp.Algo.History.Russian.Finam.FinamHistorySource.GetDumpFile(StockSharp.BusinessEntities.Security,StockSharp.Algo.Storages.INativeIdStorage,System.DateTime,System.DateTime,System.Type,System.Object)">
       <summary>
             Get the full path to the downloaded file.
             </summary>
@@ -870,7 +870,7 @@
       <param name="arg">Argument.</param>
       <returns>Full path to the downloaded file.</returns>
     </member>
-    <member name="M:StockSharp.Algo.History.Russian.Finam.FinamHistorySource.GetTicks(StockSharp.BusinessEntities.Security,StockSharp.Algo.INativeIdStorage,System.DateTime,System.DateTime)">
+    <member name="M:StockSharp.Algo.History.Russian.Finam.FinamHistorySource.GetTicks(StockSharp.BusinessEntities.Security,StockSharp.Algo.Storages.INativeIdStorage,System.DateTime,System.DateTime)">
       <summary>
             Load historical ticks.
             </summary>
@@ -880,7 +880,7 @@
       <param name="to">End period.</param>
       <returns>Historical ticks.</returns>
     </member>
-    <member name="M:StockSharp.Algo.History.Russian.Finam.FinamHistorySource.GetCandles(StockSharp.BusinessEntities.Security,StockSharp.Algo.INativeIdStorage,System.TimeSpan,System.DateTime,System.DateTime)">
+    <member name="M:StockSharp.Algo.History.Russian.Finam.FinamHistorySource.GetCandles(StockSharp.BusinessEntities.Security,StockSharp.Algo.Storages.INativeIdStorage,System.TimeSpan,System.DateTime,System.DateTime)">
       <summary>
             To download candles.
             </summary>
@@ -891,7 +891,7 @@
       <param name="to">End period.</param>
       <returns>Downloaded candles.</returns>
     </member>
-    <member name="M:StockSharp.Algo.History.Russian.Finam.FinamHistorySource.Refresh(StockSharp.Algo.Storages.ISecurityStorage,StockSharp.Algo.INativeIdStorage,StockSharp.BusinessEntities.Security,System.Action{StockSharp.BusinessEntities.Security},System.Func{System.Boolean})">
+    <member name="M:StockSharp.Algo.History.Russian.Finam.FinamHistorySource.Refresh(StockSharp.Algo.Storages.ISecurityStorage,StockSharp.Algo.Storages.INativeIdStorage,StockSharp.BusinessEntities.Security,System.Action{StockSharp.BusinessEntities.Security},System.Func{System.Boolean})">
       <summary>
             Download new securities.
             </summary>
@@ -951,7 +951,7 @@
             Possible time-frames.
             </summary>
     </member>
-    <member name="M:StockSharp.Algo.History.Russian.MfdHistorySource.Refresh(StockSharp.Algo.Storages.ISecurityStorage,StockSharp.Algo.INativeIdStorage,StockSharp.BusinessEntities.Security,System.Action{StockSharp.BusinessEntities.Security},System.Func{System.Boolean})">
+    <member name="M:StockSharp.Algo.History.Russian.MfdHistorySource.Refresh(StockSharp.Algo.Storages.ISecurityStorage,StockSharp.Algo.Storages.INativeIdStorage,StockSharp.BusinessEntities.Security,System.Action{StockSharp.BusinessEntities.Security},System.Func{System.Boolean})">
       <summary>
             Download new securities.
             </summary>
@@ -961,7 +961,7 @@
       <param name="newSecurity">The handler through which a new instrument will be passed.</param>
       <param name="isCancelled">The handler which returns an attribute of search cancel.</param>
     </member>
-    <member name="M:StockSharp.Algo.History.Russian.MfdHistorySource.GetDumpFile(StockSharp.BusinessEntities.Security,StockSharp.Algo.INativeIdStorage,System.DateTime,System.DateTime,System.Type,System.Object)">
+    <member name="M:StockSharp.Algo.History.Russian.MfdHistorySource.GetDumpFile(StockSharp.BusinessEntities.Security,StockSharp.Algo.Storages.INativeIdStorage,System.DateTime,System.DateTime,System.Type,System.Object)">
       <summary>
             Get the full path to the downloaded file.
             </summary>
@@ -973,7 +973,7 @@
       <param name="arg">Argument.</param>
       <returns>Full path to the downloaded file.</returns>
     </member>
-    <member name="M:StockSharp.Algo.History.Russian.MfdHistorySource.GetTicks(StockSharp.BusinessEntities.Security,StockSharp.Algo.INativeIdStorage,System.DateTime,System.DateTime)">
+    <member name="M:StockSharp.Algo.History.Russian.MfdHistorySource.GetTicks(StockSharp.BusinessEntities.Security,StockSharp.Algo.Storages.INativeIdStorage,System.DateTime,System.DateTime)">
       <summary>
             To download tick trades.
             </summary>
@@ -983,7 +983,7 @@
       <param name="to">End period.</param>
       <returns>Loaded ticks.</returns>
     </member>
-    <member name="M:StockSharp.Algo.History.Russian.MfdHistorySource.GetCandles(StockSharp.BusinessEntities.Security,StockSharp.Algo.INativeIdStorage,System.TimeSpan,System.DateTime,System.DateTime)">
+    <member name="M:StockSharp.Algo.History.Russian.MfdHistorySource.GetCandles(StockSharp.BusinessEntities.Security,StockSharp.Algo.Storages.INativeIdStorage,System.TimeSpan,System.DateTime,System.DateTime)">
       <summary>
             To download candles.
             </summary>
@@ -1159,7 +1159,7 @@
             If the value is an empty string, the data in CSV and Excel formats are not processed.
             </remarks>
     </member>
-    <member name="M:StockSharp.Algo.History.Russian.Rts.RtsHistorySource.GetDumpFile(StockSharp.BusinessEntities.Security,StockSharp.Algo.INativeIdStorage,System.DateTime,System.DateTime,System.Type,System.Object)">
+    <member name="M:StockSharp.Algo.History.Russian.Rts.RtsHistorySource.GetDumpFile(StockSharp.BusinessEntities.Security,StockSharp.Algo.Storages.INativeIdStorage,System.DateTime,System.DateTime,System.Type,System.Object)">
       <summary>
             Get the full path to the downloaded file.
             </summary>
@@ -1214,7 +1214,7 @@
             Possible time-frames.
             </summary>
     </member>
-    <member name="M:StockSharp.Algo.History.Russian.UxHistorySource.GetDumpFile(StockSharp.BusinessEntities.Security,StockSharp.Algo.INativeIdStorage,System.DateTime,System.DateTime,System.Type,System.Object)">
+    <member name="M:StockSharp.Algo.History.Russian.UxHistorySource.GetDumpFile(StockSharp.BusinessEntities.Security,StockSharp.Algo.Storages.INativeIdStorage,System.DateTime,System.DateTime,System.Type,System.Object)">
       <summary>
             Get the full path to the downloaded file.
             </summary>
@@ -1226,7 +1226,7 @@
       <param name="arg">Argument.</param>
       <returns>Full path to the downloaded file.</returns>
     </member>
-    <member name="M:StockSharp.Algo.History.Russian.UxHistorySource.Refresh(StockSharp.Algo.Storages.ISecurityStorage,StockSharp.Algo.INativeIdStorage,StockSharp.BusinessEntities.Security,System.Action{StockSharp.BusinessEntities.Security},System.Func{System.Boolean})">
+    <member name="M:StockSharp.Algo.History.Russian.UxHistorySource.Refresh(StockSharp.Algo.Storages.ISecurityStorage,StockSharp.Algo.Storages.INativeIdStorage,StockSharp.BusinessEntities.Security,System.Action{StockSharp.BusinessEntities.Security},System.Func{System.Boolean})">
       <summary>
             Download new securities.
             </summary>
@@ -1280,7 +1280,7 @@
       <param name="endDate">End date.</param>
       <returns>Candles.</returns>
     </member>
-    <member name="M:StockSharp.Algo.History.XigniteHistorySource.Refresh(StockSharp.Algo.Storages.ISecurityStorage,StockSharp.Algo.INativeIdStorage,StockSharp.BusinessEntities.Security,System.Action{StockSharp.BusinessEntities.Security},System.Func{System.Boolean})">
+    <member name="M:StockSharp.Algo.History.XigniteHistorySource.Refresh(StockSharp.Algo.Storages.ISecurityStorage,StockSharp.Algo.Storages.INativeIdStorage,StockSharp.BusinessEntities.Security,System.Action{StockSharp.BusinessEntities.Security},System.Func{System.Boolean})">
       <summary>
             Download new securities.
             </summary>
@@ -1328,7 +1328,7 @@
       <param name="endDate">End date.</param>
       <returns>Candles.</returns>
     </member>
-    <member name="M:StockSharp.Algo.History.YahooHistorySource.Refresh(StockSharp.Algo.Storages.ISecurityStorage,StockSharp.Algo.INativeIdStorage,StockSharp.BusinessEntities.Security,System.Action{StockSharp.BusinessEntities.Security},System.Func{System.Boolean})">
+    <member name="M:StockSharp.Algo.History.YahooHistorySource.Refresh(StockSharp.Algo.Storages.ISecurityStorage,StockSharp.Algo.Storages.INativeIdStorage,StockSharp.BusinessEntities.Security,System.Action{StockSharp.BusinessEntities.Security},System.Func{System.Boolean})">
       <summary>
             Download new securities.
             </summary>

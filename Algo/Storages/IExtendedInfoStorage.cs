@@ -42,7 +42,7 @@ namespace StockSharp.Algo.Storages
 	public interface IExtendedInfoStorage
 	{
 		/// <summary>
-		/// To get and initialize the storage for the specified name.
+		/// To get and initialize storage for the specified name.
 		/// </summary>
 		/// <param name="storageName">Storage name.</param>
 		/// <param name="fields">Names of extended security fields.</param>
@@ -217,7 +217,7 @@ namespace StockSharp.Algo.Storages
 		}
 
 		/// <summary>
-		/// To get and initialize the storage for the specified name.
+		/// To get and initialize storage for the specified name.
 		/// </summary>
 		/// <param name="storageName">Storage name.</param>
 		/// <param name="fields">Names of extended security fields.</param>

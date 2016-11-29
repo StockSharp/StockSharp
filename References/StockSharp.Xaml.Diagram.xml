@@ -701,7 +701,7 @@
             </summary>
       <param name="param">Parameter.</param>
     </member>
-    <member name="M:StockSharp.Xaml.Diagram.DiagramElement.AddInput(System.String,StockSharp.Xaml.Diagram.DiagramSocketType,System.Action{StockSharp.Xaml.Diagram.DiagramSocketValue},System.Int32,System.Int32)">
+    <member name="M:StockSharp.Xaml.Diagram.DiagramElement.AddInput(System.String,StockSharp.Xaml.Diagram.DiagramSocketType,System.Action{StockSharp.Xaml.Diagram.DiagramSocketValue},System.Int32,System.Int32,System.String)">
       <summary>
             To add an incoming connection.
             </summary>
@@ -710,8 +710,9 @@
       <param name="linkableMax">The maximum number of connections.</param>
       <param name="process">The action is called at the processing of the new incoming value for socket.</param>
       <param name="index">Index in sockets list.</param>
+      <param name="socketId">The connection identifier.</param>
     </member>
-    <member name="M:StockSharp.Xaml.Diagram.DiagramElement.AddOutput(System.String,StockSharp.Xaml.Diagram.DiagramSocketType,System.Int32,System.Int32)">
+    <member name="M:StockSharp.Xaml.Diagram.DiagramElement.AddOutput(System.String,StockSharp.Xaml.Diagram.DiagramSocketType,System.Int32,System.Int32,System.String)">
       <summary>
             To add an outgoing connection.
             </summary>
@@ -719,6 +720,7 @@
       <param name="type">Connection type.</param>
       <param name="linkableMax">The maximum number of connections.</param>
       <param name="index">Index in sockets list.</param>
+      <param name="socketId">The connection identifier.</param>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.DiagramElement.AddSocket(StockSharp.Xaml.Diagram.DiagramSocket,System.Int32)">
       <summary>

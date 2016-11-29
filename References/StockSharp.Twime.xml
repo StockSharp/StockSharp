@@ -20,9 +20,14 @@
             Gets a value indicating whether the connector supports position lookup.
             </summary>
         </member>
-        <member name="P:StockSharp.Twime.TwimeMessageAdapter.NativeIdStorageName">
+        <member name="P:StockSharp.Twime.TwimeMessageAdapter.IsNativeIdentifiers">
             <summary>
-            Native security identifiers storage name.
+            Identify security in messages by native identifier <see cref="P:StockSharp.Messages.SecurityId.Native"/>.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Twime.TwimeMessageAdapter.StorageName">
+            <summary>
+            The storage name, associated with the adapter.
             </summary>
         </member>
         <member name="M:StockSharp.Twime.TwimeMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)">

@@ -15,9 +15,9 @@
             </summary>
             <param name="transactionIdGenerator">Transaction id generator.</param>
         </member>
-        <member name="P:StockSharp.CQG.CQGMessageAdapter.NativeIdStorageName">
+        <member name="P:StockSharp.CQG.CQGMessageAdapter.IsNativeIdentifiers">
             <summary>
-            Native security identifiers storage name.
+            Identify security in messages by native identifier <see cref="P:StockSharp.Messages.SecurityId.Native"/>.
             </summary>
         </member>
         <member name="M:StockSharp.CQG.CQGMessageAdapter.CreateOrderCondition">

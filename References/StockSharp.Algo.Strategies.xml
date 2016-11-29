@@ -870,7 +870,7 @@
             </summary>
             <param name="strategy">Strategy.</param>
         </member>
-        <member name="M:StockSharp.Algo.Strategies.Extensions.Protect(StockSharp.Algo.MarketRule{StockSharp.BusinessEntities.Order,System.Collections.Generic.IEnumerable{StockSharp.BusinessEntities.MyTrade}},StockSharp.Messages.Unit,StockSharp.Messages.Unit)">
+        <member name="M:StockSharp.Algo.Strategies.Extensions.Protect(StockSharp.Algo.MarketRule{StockSharp.BusinessEntities.Order,StockSharp.BusinessEntities.MyTrade},StockSharp.Messages.Unit,StockSharp.Messages.Unit)">
             <summary>
             To create the action protecting orders by strategies <see cref="T:StockSharp.Algo.Strategies.Protective.TakeProfitStrategy"/> and <see cref="T:StockSharp.Algo.Strategies.Protective.StopLossStrategy"/>.
             </summary>
@@ -879,7 +879,7 @@
             <param name="stopPriceDelta">The delta from the price of the protected order, by which the protective stop loss order is to be registered.</param>
             <returns>Rule.</returns>
         </member>
-        <member name="M:StockSharp.Algo.Strategies.Extensions.Protect(StockSharp.Algo.MarketRule{StockSharp.BusinessEntities.Order,System.Collections.Generic.IEnumerable{StockSharp.BusinessEntities.MyTrade}},System.Func{StockSharp.BusinessEntities.MyTrade,StockSharp.Algo.Strategies.Protective.TakeProfitStrategy},System.Func{StockSharp.BusinessEntities.MyTrade,StockSharp.Algo.Strategies.Protective.StopLossStrategy})">
+        <member name="M:StockSharp.Algo.Strategies.Extensions.Protect(StockSharp.Algo.MarketRule{StockSharp.BusinessEntities.Order,StockSharp.BusinessEntities.MyTrade},System.Func{StockSharp.BusinessEntities.MyTrade,StockSharp.Algo.Strategies.Protective.TakeProfitStrategy},System.Func{StockSharp.BusinessEntities.MyTrade,StockSharp.Algo.Strategies.Protective.StopLossStrategy})">
             <summary>
             To create the action protecting orders by strategies <see cref="T:StockSharp.Algo.Strategies.Protective.TakeProfitStrategy"/> and <see cref="T:StockSharp.Algo.Strategies.Protective.StopLossStrategy"/>.
             </summary>

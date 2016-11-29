@@ -6224,9 +6224,9 @@
             </summary>
       <param name="transactionIdGenerator">Генератор идентификаторов транзакций.</param>
     </member>
-    <member name="P:StockSharp.Plaza.PlazaMessageAdapter.NativeIdStorageName">
+    <member name="P:StockSharp.Plaza.PlazaMessageAdapter.IsNativeIdentifiers">
       <summary>
-            Имя хранилища системных идентификаторов инструментов.
+            Идентифицировать инструменты в сообщениях по системному идентификатору <see cref="P:StockSharp.Messages.SecurityId.Native" />.
             </summary>
     </member>
     <member name="M:StockSharp.Plaza.PlazaMessageAdapter.SendOutMessage(StockSharp.Messages.Message)">

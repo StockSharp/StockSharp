@@ -487,6 +487,7 @@ M:StockSharp.Xaml.SecurityGrid.#ctor/summary;DocStr1
 P:StockSharp.Xaml.SecurityGrid.SelectedSecurity/summary;DocStr8068
 P:StockSharp.Xaml.SecurityGrid.Securities/summary;DocStr2513
 P:StockSharp.Xaml.SecurityGrid.SelectedSecurities/summary;DocStr8294
+P:StockSharp.Xaml.SecurityGrid.ExtendedInfoStorage/summary;DocStr9374
 P:StockSharp.Xaml.SecurityGrid.MarketDataProvider/summary;DocStr973
 M:StockSharp.Xaml.SecurityGrid.InitializeComponent/summary;DocStr8
 T:StockSharp.Xaml.SecurityIdTextBox/summary;DocStr8295
@@ -850,6 +851,7 @@ P:StockSharp.Xaml.SecurityPicker.Securities/summary;DocStr2822
 P:StockSharp.Xaml.SecurityPicker.ExcludeSecurities/summary;DocStr8381
 P:StockSharp.Xaml.SecurityPicker.SecurityProvider/summary;DocStr972
 P:StockSharp.Xaml.SecurityPicker.MarketDataProvider/summary;DocStr973
+P:StockSharp.Xaml.SecurityPicker.ExtendedInfoStorage/summary;DocStr9374
 M:StockSharp.Xaml.SecurityPicker.SetColumnVisibility(System.String,System.Windows.Visibility)/summary;DocStr8369
 M:StockSharp.Xaml.SecurityPicker.SetColumnVisibility(System.String,System.Windows.Visibility)/param/name;DocStr8370
 M:StockSharp.Xaml.SecurityPicker.SetColumnVisibility(System.String,System.Windows.Visibility)/param/visibility;DocStr8371
