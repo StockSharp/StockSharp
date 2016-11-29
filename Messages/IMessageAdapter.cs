@@ -90,9 +90,14 @@ namespace StockSharp.Messages
 		bool OrderStatusRequired { get; }
 
 		/// <summary>
-		/// Native security identifiers storage name.
+		/// The storage name, associated with the adapter.
 		/// </summary>
-		string NativeIdStorageName { get; }
+		string StorageName { get; }
+
+		/// <summary>
+		/// Identify security in messages by native identifier <see cref="SecurityId.Native"/>.
+		/// </summary>
+		bool IsNativeIdentifiers { get; }
 
 		/// <summary>
 		/// <see cref="OrderCancelMessage.Volume"/> required to cancel orders.
@@ -103,6 +108,11 @@ namespace StockSharp.Messages
 		/// Board code for combined security.
 		/// </summary>
 		string AssociatedBoardCode { get; }
+
+		/// <summary>
+		/// Names of extended security fields in <see cref="SecurityMessage"/>.
+		/// </summary>
+		string[] SecurityExtendedFields { get; }
 
 		/// <summary>
 		/// Create condition for order type <see cref="OrderTypes.Conditional"/>, that supports the adapter.

@@ -105,6 +105,8 @@ namespace StockSharp.Messages
 
 			TransactionIdGenerator = transactionIdGenerator;
 			SecurityClassInfo = new Dictionary<string, RefPair<SecurityTypes, string>>();
+
+			StorageName = GetType().Namespace.Remove(nameof(StockSharp)).Remove(".");
 		}
 
 		private MessageTypes[] _supportedMessages = ArrayHelper.Empty<MessageTypes>();
@@ -180,9 +182,14 @@ namespace StockSharp.Messages
 		public virtual bool OrderStatusRequired => this.IsMessageSupported(MessageTypes.OrderStatus);
 
 		/// <summary>
-		/// Native security identifiers storage name.
+		/// Identify security in messages by native identifier <see cref="SecurityId.Native"/>.
 		/// </summary>
-		public virtual string NativeIdStorageName => null;
+		public virtual bool IsNativeIdentifiers => false;
+
+		/// <summary>
+		/// The storage name, associated with the adapter.
+		/// </summary>
+		public virtual string StorageName { get; }
 
 		/// <summary>
 		/// <see cref="OrderCancelMessage.Volume"/> required to cancel orders.
@@ -205,6 +212,11 @@ namespace StockSharp.Messages
 		/// </summary>
 		[Browsable(false)]
 		public Platforms Platform { get; protected set; }
+
+		/// <summary>
+		/// Names of extended security fields in <see cref="SecurityMessage"/>.
+		/// </summary>
+		public virtual string[] SecurityExtendedFields { get; } = ArrayHelper.Empty<string>();
 
 		/// <summary>
 		/// Create condition for order type <see cref="OrderTypes.Conditional"/>, that supports the adapter.

@@ -5,6 +5,8 @@ StockSharp API Change log
 * (feature) OptionVolatilitySmileChart.
 * (bug) OptionDesk fix.
 * (bug) Candle storage fix.
+* (bug) TextExporter fix.
+* (feature) IExtendedInfoStorage.
 
 ###v4.3.19.1:
 * (bug) SmartCOM candles fix.

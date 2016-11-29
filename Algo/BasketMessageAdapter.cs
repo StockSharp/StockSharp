@@ -145,6 +145,11 @@ namespace StockSharp.Algo
 		public INativeIdStorage NativeIdStorage { get; set; }
 
 		/// <summary>
+		/// Extended info <see cref="Message.ExtensionInfo"/> identifier storage.
+		/// </summary>
+		public IExtendedInfoStorage ExtendedInfoStorage { get; set; }
+
+		/// <summary>
 		/// Initializes a new instance of the <see cref="BasketMessageAdapter"/>.
 		/// </summary>
 		/// <param name="transactionIdGenerator">Transaction id generator.</param>
@@ -237,15 +242,18 @@ namespace StockSharp.Algo
 			_subscriptionStates.Clear();
 		}
 
-		private IMessageAdapter CreateSubscriptionAdapter(IMessageAdapter adapter)
+		private IMessageAdapter CreateWrappers(IMessageAdapter adapter)
 		{
-			var storageName = adapter.NativeIdStorageName;
-
-			if (!storageName.IsEmpty())
+			if (adapter.IsNativeIdentifiers)
 			{
 				adapter = NativeIdStorage != null
 					? new SecurityNativeIdMessageAdapter(adapter, NativeIdStorage)
 					: new SecurityNativeIdMessageAdapter(adapter);
+			}
+
+			if (ExtendedInfoStorage != null && !adapter.SecurityExtendedFields.IsEmpty())
+			{
+				adapter = new ExtendedInfoStorageMessageAdapter(adapter, ExtendedInfoStorage.Get(adapter.StorageName, adapter.SecurityExtendedFields));
 			}
 
 			return new SubscriptionMessageAdapter(adapter) { IsRestoreOnReconnect = IsRestorSubscriptioneOnReconnect };
@@ -281,7 +289,7 @@ namespace StockSharp.Algo
 					else
 						ProcessReset(new ResetMessage());
 
-					_hearbeatAdapters.AddRange(GetSortedAdapters().Select(CreateSubscriptionAdapter).ToDictionary(a => a, a =>
+					_hearbeatAdapters.AddRange(GetSortedAdapters().Select(CreateWrappers).ToDictionary(a => a, a =>
 					{
 						var hearbeatAdapter = new HeartbeatMessageAdapter(a);
 						((IMessageAdapter)hearbeatAdapter).Parent = this;

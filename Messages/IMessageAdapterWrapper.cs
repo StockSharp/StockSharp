@@ -173,11 +173,15 @@ namespace StockSharp.Messages
 
 		bool IMessageAdapter.OrderStatusRequired => InnerAdapter.OrderStatusRequired;
 
-		string IMessageAdapter.NativeIdStorageName => InnerAdapter.NativeIdStorageName;
+		string IMessageAdapter.StorageName => InnerAdapter.StorageName;
+
+		bool IMessageAdapter.IsNativeIdentifiers => InnerAdapter.IsNativeIdentifiers;
 
 		OrderCancelVolumeRequireTypes? IMessageAdapter.OrderCancelVolumeRequired => InnerAdapter.OrderCancelVolumeRequired;
 
 		string IMessageAdapter.AssociatedBoardCode => InnerAdapter.AssociatedBoardCode;
+
+		string[] IMessageAdapter.SecurityExtendedFields => InnerAdapter.SecurityExtendedFields;
 
 		OrderCondition IMessageAdapter.CreateOrderCondition()
 		{

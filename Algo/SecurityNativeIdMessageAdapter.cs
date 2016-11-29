@@ -50,10 +50,7 @@
 
 			Storage = storage;
 
-			_storageName = innerAdapter.NativeIdStorageName;
-
-			if (_storageName.IsEmpty())
-				throw new ArgumentException(nameof(innerAdapter));
+			_storageName = innerAdapter.StorageName;
 		}
 
 		/// <summary>
