@@ -4369,6 +4369,7 @@ ExternalSocketMoreEvents;Type {0} must contain only one event with {1}.;Тип {
 ExternalSocketOneParam;Event {0} must contains only one parameter.;Событие {0} должно содержать только 1 параметр.
 MaxMessageCountExceed;Max message count exceed.;Превышено максимальное количество сообщений.
 TypeNotImplemented;Type {0} not implemented the {1} interface.;Тип {0} не реализовывает интерфейс {1}.
+ExternalSocketReturnType;Event {0} should not return a value.;Событие {0} не должно возвращать значение.
 DocStr0;Button activation alert settings;Кнопка активации настроек сигнала
 DocStr1;Initializes a new instance of the {0};Создать {0}
 DocStr2;Load settings;Загрузить настройки

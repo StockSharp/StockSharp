@@ -43346,5 +43346,15 @@ namespace StockSharp.Localization
 		/// Type {0} not implemented the {1} interface.
 		/// </summary>
 		public static string TypeNotImplemented => GetString(TypeNotImplementedKey);
+
+		/// <summary>
+		/// Event {0} should not return a value.
+		/// </summary>
+		public const string ExternalSocketReturnTypeKey = "ExternalSocketReturnType";
+
+		/// <summary>
+		/// Event {0} should not return a value.
+		/// </summary>
+		public static string ExternalSocketReturnType => GetString(ExternalSocketReturnTypeKey);
 	}
 }
