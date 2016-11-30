@@ -336,7 +336,9 @@ namespace StockSharp.Algo
 
 				case MessageTypes.MarketData:
 				{
-					var adapters = _messageTypeAdapters.TryGetValue(message.Type)?.Cache;
+					var adapters = message.Adapter != null
+							? new[] { message.Adapter }
+							: _messageTypeAdapters.TryGetValue(message.Type)?.Cache;
 
 					if (adapters == null)
 						throw new InvalidOperationException(LocalizedStrings.Str629Params.Put(message.Type));
