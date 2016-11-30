@@ -60,6 +60,8 @@ namespace SampleIQFeed
 			LookupAddressCtrl.Text = Trader.LookupAddress.To<string>();
 			AdminAddressCtrl.Text = Trader.AdminAddress.To<string>();
 
+			Version.Text = Trader.Version.To<string>();
+
 			DownloadSecurityFromSiteCtrl.IsChecked = Trader.IsDownloadSecurityFromSite;
 
 			_securitiesWindow.MakeHideable();
@@ -139,6 +141,9 @@ namespace SampleIQFeed
 				Trader.LookupAddress = LookupAddressCtrl.Text.To<EndPoint>();
 				Trader.AdminAddress = AdminAddressCtrl.Text.To<EndPoint>();
 
+				Trader.Version = Version.Text.To<Version>();
+
+				Trader.SecuritiesFile = SecFilePath.File;
 				Trader.IsDownloadSecurityFromSite = DownloadSecurityFromSiteCtrl.IsChecked == true;
 
 				Trader.Connect();	
