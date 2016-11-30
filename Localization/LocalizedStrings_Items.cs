@@ -34928,12 +34928,12 @@ namespace StockSharp.Localization
 		public static string Str3771 => GetString(Str3771Key);
 
 		/// <summary>
-		/// {0}. Export {1} to {2}. Date {3}.
+		/// {0}. Export {1} to {2}. Dates {3}-{4}.
 		/// </summary>
 		public const string Str3772ParamsKey = "Str3772Params";
 
 		/// <summary>
-		/// {0}. Export {1} to {2}. Date {3}.
+		/// {0}. Export {1} to {2}. Dates {3}-{4}.
 		/// </summary>
 		public static string Str3772Params => GetString(Str3772ParamsKey);
 

@@ -3499,7 +3499,7 @@ Str3768;To export to a database, you must specify the connection string.;Для 
 Str3769Params;{0}. Export {1} to {2}.;{0}. Экспорт {1} в {2}.
 Str3770;No data to convert.;Нет данных для конвертации.
 Str3771;Too much data to export to Excel.;Слишком много данных для экспорта в Excel.
-Str3772Params;{0}. Export {1} to {2}. Date {3}.;{0}. Экспорт {1} в {2}. Дата {3}.
+Str3772Params;{0}. Export {1} to {2}. Dates {3}-{4}.;{0}. Экспорт {1} в {2}. Даты {3}-{4}.
 Str3773;OL to ticks;ОЛ в тики
 Str3774;OL to order books;ОЛ в стаканы
 Str3775;OL to candles;ОЛ в свечи
