@@ -346,5 +346,10 @@ namespace StockSharp.Localization
 		/// 
 		/// </summary>
 		public static string SecurityDot => AppendDot(Security);
+
+		/// <summary>
+		/// 
+		/// </summary>
+		public static string VersionDot => AppendDot(Version);
 	}
 }

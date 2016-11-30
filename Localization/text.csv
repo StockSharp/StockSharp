@@ -13576,3 +13576,6 @@ DocStr9380;To create a rule for the event of new trade occurrences;Создат�
 DocStr9381;Identify security in messages by native identifier {0};Идентифицировать инструменты в сообщениях по системному идентификатору {0}
 DocStr9382;The storage name, associated with the adapter;Название хранилища, ассоциированное с адаптером
 DocStr9383;Names of extended security fields in {0};Название полей расширенной информации в {0}
+DocStr9384;Protocol version;Версия протокола
+DocStr9385;Market data request finished message;Сообщение окончания запроса рыночных данных
+DocStr9386;Market data request finished;Окончание запроса рыночных данных

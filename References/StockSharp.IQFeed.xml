@@ -54,6 +54,11 @@
             Path to file with IQFeed list of securities, downloaded from the website. If path is specified, then secondary download from website does not occur, and only the local copy gets parsed.
             </summary>
     </member>
+    <member name="P:StockSharp.IQFeed.IQFeedMarketDataMessageAdapter.Version">
+      <summary>
+            Protocol version.
+            </summary>
+    </member>
     <member name="P:StockSharp.IQFeed.IQFeedMarketDataMessageAdapter.IsValid">
       <summary>
             The parameters validity check.
@@ -482,6 +487,11 @@
             Address for obtaining service data.
             </summary>
     </member>
+    <member name="P:StockSharp.IQFeed.IQFeedTrader.SecuritiesFile">
+      <summary>
+            Path to file with IQFeed list of securities, downloaded from the website. If path is specified, then secondary download from website does not occur, and only the local copy gets parsed.
+            </summary>
+    </member>
     <member name="P:StockSharp.IQFeed.IQFeedTrader.IsDownloadSecurityFromSite">
       <summary>
             Whether to load instruments from the archive of the IQFeed site. The default is off.
@@ -495,6 +505,11 @@
     <member name="P:StockSharp.IQFeed.IQFeedTrader.Level1Columns">
       <summary>
             All <see cref="T:StockSharp.IQFeed.IQFeedLevel1Column" /> to be transmit.
+            </summary>
+    </member>
+    <member name="P:StockSharp.IQFeed.IQFeedTrader.Version">
+      <summary>
+            Protocol version.
             </summary>
     </member>
     <member name="M:StockSharp.IQFeed.IQFeedTrader.RequestNews(System.DateTimeOffset)">

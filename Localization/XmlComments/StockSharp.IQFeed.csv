@@ -8,6 +8,7 @@ P:StockSharp.IQFeed.IQFeedMarketDataMessageAdapter.Level1Columns/summary;DocStr3
 P:StockSharp.IQFeed.IQFeedMarketDataMessageAdapter.SecurityTypesFilter/summary;Str2134
 P:StockSharp.IQFeed.IQFeedMarketDataMessageAdapter.IsDownloadSecurityFromSite/summary;DocStr3698
 P:StockSharp.IQFeed.IQFeedMarketDataMessageAdapter.SecuritiesFile/summary;Str2138
+P:StockSharp.IQFeed.IQFeedMarketDataMessageAdapter.Version/summary;DocStr9384
 P:StockSharp.IQFeed.IQFeedMarketDataMessageAdapter.IsValid/summary;DocStr53
 P:StockSharp.IQFeed.IQFeedMarketDataMessageAdapter.Level1ColumnRegistry/summary;DocStr3699
 P:StockSharp.IQFeed.IQFeedMarketDataMessageAdapter.TimeFrames/summary;DocStr2531
@@ -100,9 +101,11 @@ P:StockSharp.IQFeed.IQFeedTrader.Level1Address/summary;Str2123
 P:StockSharp.IQFeed.IQFeedTrader.Level2Address/summary;Str2125
 P:StockSharp.IQFeed.IQFeedTrader.LookupAddress/summary;Str2127
 P:StockSharp.IQFeed.IQFeedTrader.AdminAddress/summary;Str2129
+P:StockSharp.IQFeed.IQFeedTrader.SecuritiesFile/summary;Str2138
 P:StockSharp.IQFeed.IQFeedTrader.IsDownloadSecurityFromSite/summary;DocStr3698
 P:StockSharp.IQFeed.IQFeedTrader.SecurityTypesFilter/summary;DocStr3757
 P:StockSharp.IQFeed.IQFeedTrader.Level1Columns/summary;DocStr3697
+P:StockSharp.IQFeed.IQFeedTrader.Version/summary;DocStr9384
 M:StockSharp.IQFeed.IQFeedTrader.RequestNews(System.DateTimeOffset)/summary;DocStr3755
 M:StockSharp.IQFeed.IQFeedTrader.RequestNews(System.DateTimeOffset)/param/date;Date
 M:StockSharp.IQFeed.IQFeedTrader.GetTrades(StockSharp.BusinessEntities.Security,System.DateTimeOffset,System.DateTimeOffset,System.Boolean@)/summary;DocStr257

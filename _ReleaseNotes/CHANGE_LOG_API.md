@@ -7,6 +7,11 @@ StockSharp API Change log
 * (bug) Candle storage fix.
 * (bug) TextExporter fix.
 * (feature) IExtendedInfoStorage.
+* (feature) IQFeed. Protocol 5.2 support.
+* (bug) SubscriptionMessageAdapter fix.
+* (feature) MarketDataFinishedMessage.
+* (feature) WhenNewTrades -> WhenNewTrade
+* (feature) NativeIdStorage. Algo -> Algo.Storages
 
 ###v4.3.19.1:
 * (bug) SmartCOM candles fix.

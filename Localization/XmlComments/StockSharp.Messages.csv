@@ -478,6 +478,9 @@ M:StockSharp.Messages.Extensions.ToErrorMessage(System.String)/returns;DocStr876
 M:StockSharp.Messages.Extensions.ToErrorMessage(System.Exception)/summary;DocStr8844
 M:StockSharp.Messages.Extensions.ToErrorMessage(System.Exception)/param/error;DocStr4509
 M:StockSharp.Messages.Extensions.ToErrorMessage(System.Exception)/returns;DocStr4329
+T:StockSharp.Messages.MarketDataFinishedMessage/summary;DocStr9385
+P:StockSharp.Messages.MarketDataFinishedMessage.OriginalTransactionId/summary;DocStr4056
+M:StockSharp.Messages.MarketDataFinishedMessage.#ctor/summary;DocStr93
 T:StockSharp.Messages.IExtendableEntity/summary;DocStr4041
 P:StockSharp.Messages.IExtendableEntity.ExtensionInfo/summary;ExtendedInfo
 P:StockSharp.Messages.IExtendableEntity.ExtensionInfo/remarks;Str427
@@ -717,6 +720,7 @@ F:StockSharp.Messages.MessageTypes.CandleRange/summary;DocStr4371
 F:StockSharp.Messages.MessageTypes.CandlePnF/summary;DocStr4372
 F:StockSharp.Messages.MessageTypes.CandleRenko/summary;DocStr4373
 F:StockSharp.Messages.MessageTypes.Reset/summary;Str3282
+F:StockSharp.Messages.MessageTypes.MarketDataFinished/summary;DocStr9386
 T:StockSharp.Messages.Message/summary;DocStr4040
 P:StockSharp.Messages.Message.LocalTime/summary;Str204
 P:StockSharp.Messages.Message.Type/summary;DocStr9
