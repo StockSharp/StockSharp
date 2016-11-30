@@ -1,10 +1,5 @@
 StockSharp Designer Change log
 ========================
-###v4.3.19.1:
-* (feature) Connector tasks. Historical ticks refactoring.
-* (feature) Security extended info
-* (feature) IQFeed. Protocol 5.2 support.
-
 ###v4.3.17:
 * (feature) Selection lines on hover http://stocksharp.ru/posts/m/37025/
 * (bug) Fix candle settings editor http://stocksharp.ru/posts/m/36987/

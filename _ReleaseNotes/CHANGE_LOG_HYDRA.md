@@ -1,5 +1,11 @@
 StockSharp Data (Hydra) Change log
 ========================
+###v4.3.19.2:
+* (feature) Connector tasks. Historical ticks refactoring.
+* (feature) Security extended info
+* (feature) IQFeed. Protocol 5.2 support.
+* (bug) ExportTask. Candles fix.
+
 ###v4.3.19.1:
 * (bug) Backward settings compatibility fix.
 * (bug) Yahoo lookup fix.
