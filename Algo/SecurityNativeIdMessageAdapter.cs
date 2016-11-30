@@ -21,8 +21,6 @@
 		private readonly Dictionary<SecurityId, RefPair<List<Message>, Dictionary<MessageTypes, Message>>> _suspendedOutMessages = new Dictionary<SecurityId, RefPair<List<Message>, Dictionary<MessageTypes, Message>>>();
 		private readonly SyncObject _syncRoot = new SyncObject();
 
-		private readonly string _storageName;
-
 		/// <summary>
 		/// Security native identifier storage.
 		/// </summary>
@@ -49,8 +47,6 @@
 				throw new ArgumentNullException(nameof(storage));
 
 			Storage = storage;
-
-			_storageName = innerAdapter.StorageName;
 		}
 
 		/// <summary>
@@ -63,7 +59,7 @@
 			{
 				case MessageTypes.Connect:
 				{
-					var nativeIds = Storage.Get(_storageName);
+					var nativeIds = Storage.Get(InnerAdapter.StorageName);
 
 					lock (_syncRoot)
 					{
@@ -115,9 +111,11 @@
 					{
 						if (nativeSecurityId != null)
 						{
-							if (!Storage.TryAdd(_storageName, securityId, nativeSecurityId))
+							var storageName = InnerAdapter.StorageName;
+
+							if (!Storage.TryAdd(storageName, securityId, nativeSecurityId, InnerAdapter.IsNativeIdentifiersPersistable))
 							{
-								var prevId = Storage.TryGetByNativeId(_storageName, nativeSecurityId);
+								var prevId = Storage.TryGetByNativeId(storageName, nativeSecurityId);
 
 								if (prevId != null)
 								{
@@ -125,7 +123,7 @@
 										throw new InvalidOperationException(LocalizedStrings.Str687Params.Put(securityId, prevId.Value, nativeSecurityId));
 								}
 								else
-									throw new InvalidOperationException(LocalizedStrings.Str687Params.Put(Storage.TryGetBySecurityId(_storageName, securityId), nativeSecurityId, securityId));
+									throw new InvalidOperationException(LocalizedStrings.Str687Params.Put(Storage.TryGetBySecurityId(storageName, securityId), nativeSecurityId, securityId));
 							}
 
 							lock (_syncRoot)

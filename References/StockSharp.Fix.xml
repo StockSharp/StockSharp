@@ -95,6 +95,11 @@
             Names of extended security fields in <see cref="T:StockSharp.Messages.SecurityMessage" />.
             </summary>
     </member>
+    <member name="P:StockSharp.Fix.Dialects.BaseDialect.IsNativeIdentifiersPersistable">
+      <summary>
+            Native identifier can be stored.
+            </summary>
+    </member>
     <member name="M:StockSharp.Fix.Dialects.BaseDialect.OnRead(StockSharp.Fix.Native.IFixReader,System.String,Ecng.Common.AllocationArray{StockSharp.Messages.Message})">
       <summary>
             Read next message from FIX protocol.
@@ -311,6 +316,11 @@
     <member name="P:StockSharp.Fix.Dialects.IFixDialect.SecurityExtendedFields">
       <summary>
             Names of extended security fields in <see cref="T:StockSharp.Messages.SecurityMessage" />.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.Dialects.IFixDialect.IsNativeIdentifiersPersistable">
+      <summary>
+            Native identifier can be stored.
             </summary>
     </member>
     <member name="M:StockSharp.Fix.Dialects.IFixDialect.Write(StockSharp.Messages.Message)">
@@ -5276,6 +5286,11 @@
     <member name="P:StockSharp.Fix.FixMessageAdapter.IsNativeIdentifiers">
       <summary>
             Identify security in messages by native identifier <see cref="P:StockSharp.Messages.SecurityId.Native" />.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.FixMessageAdapter.IsNativeIdentifiersPersistable">
+      <summary>
+            Native identifier can be stored.
             </summary>
     </member>
     <member name="P:StockSharp.Fix.FixMessageAdapter.StorageName">

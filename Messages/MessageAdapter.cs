@@ -182,6 +182,11 @@ namespace StockSharp.Messages
 		public virtual bool OrderStatusRequired => this.IsMessageSupported(MessageTypes.OrderStatus);
 
 		/// <summary>
+		/// Native identifier can be stored.
+		/// </summary>
+		public virtual bool IsNativeIdentifiersPersistable => true;
+
+		/// <summary>
 		/// Identify security in messages by native identifier <see cref="SecurityId.Native"/>.
 		/// </summary>
 		public virtual bool IsNativeIdentifiers => false;

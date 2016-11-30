@@ -95,6 +95,11 @@ namespace StockSharp.Messages
 		string StorageName { get; }
 
 		/// <summary>
+		/// Native identifier can be stored.
+		/// </summary>
+		bool IsNativeIdentifiersPersistable { get; }
+
+		/// <summary>
 		/// Identify security in messages by native identifier <see cref="SecurityId.Native"/>.
 		/// </summary>
 		bool IsNativeIdentifiers { get; }

@@ -95,6 +95,11 @@
             Identify security in messages by native identifier <see cref="P:StockSharp.Messages.SecurityId.Native" />.
             </summary>
     </member>
+    <member name="P:StockSharp.LMAX.LmaxMessageAdapter.StorageName">
+      <summary>
+            The storage name, associated with the adapter.
+            </summary>
+    </member>
     <member name="T:StockSharp.LMAX.LmaxOrderCondition">
       <summary>
         <see cref="N:StockSharp.LMAX" /> order condition.

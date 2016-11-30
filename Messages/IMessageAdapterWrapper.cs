@@ -175,6 +175,8 @@ namespace StockSharp.Messages
 
 		string IMessageAdapter.StorageName => InnerAdapter.StorageName;
 
+		bool IMessageAdapter.IsNativeIdentifiersPersistable => InnerAdapter.IsNativeIdentifiersPersistable;
+
 		bool IMessageAdapter.IsNativeIdentifiers => InnerAdapter.IsNativeIdentifiers;
 
 		OrderCancelVolumeRequireTypes? IMessageAdapter.OrderCancelVolumeRequired => InnerAdapter.OrderCancelVolumeRequired;

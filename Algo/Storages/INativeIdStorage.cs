@@ -36,8 +36,9 @@ namespace StockSharp.Algo.Storages
 		/// <param name="name">Storage name.</param>
 		/// <param name="securityId">Security identifier.</param>
 		/// <param name="nativeId">Native (internal) trading system security id.</param>
+		/// <param name="isPersistable">Save the identifier as a permanent.</param>
 		/// <returns><see langword="true"/> if native identifier was added. Otherwise, <see langword="false" />.</returns>
-		bool TryAdd(string name, SecurityId securityId, object nativeId);
+		bool TryAdd(string name, SecurityId securityId, object nativeId, bool isPersistable = true);
 
 		/// <summary>
 		/// Try get security identifier by native identifier.
@@ -133,8 +134,9 @@ namespace StockSharp.Algo.Storages
 		/// <param name="name">Storage name.</param>
 		/// <param name="securityId">Security identifier.</param>
 		/// <param name="nativeId">Native (internal) trading system security id.</param>
+		/// <param name="isPersistable">Save the identifier as a permanent.</param>
 		/// <returns><see langword="true"/> if native identifier was added. Otherwise, <see langword="false" />.</returns>
-		public bool TryAdd(string name, SecurityId securityId, object nativeId)
+		public bool TryAdd(string name, SecurityId securityId, object nativeId, bool isPersistable)
 		{
 			if (name.IsEmpty())
 				throw new ArgumentNullException(nameof(name));
@@ -151,7 +153,8 @@ namespace StockSharp.Algo.Storages
 					return false;
 			}
 
-			Save(name, securityId, nativeId);
+			if (isPersistable)
+				Save(name, securityId, nativeId);
 
 			return true;
 		}
@@ -334,7 +337,7 @@ namespace StockSharp.Algo.Storages
 		{
 		}
 
-		bool INativeIdStorage.TryAdd(string name, SecurityId securityId, object nativeId)
+		bool INativeIdStorage.TryAdd(string name, SecurityId securityId, object nativeId, bool isPersistable)
 		{
 			if (name.IsEmpty())
 				throw new ArgumentNullException(nameof(name));

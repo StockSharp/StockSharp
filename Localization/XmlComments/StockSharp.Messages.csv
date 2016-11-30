@@ -508,6 +508,7 @@ P:StockSharp.Messages.IMessageAdapter.PortfolioLookupRequired/summary;DocStr450
 P:StockSharp.Messages.IMessageAdapter.SecurityLookupRequired/summary;DocStr452
 P:StockSharp.Messages.IMessageAdapter.OrderStatusRequired/summary;DocStr451
 P:StockSharp.Messages.IMessageAdapter.StorageName/summary;DocStr9382
+P:StockSharp.Messages.IMessageAdapter.IsNativeIdentifiersPersistable/summary;DocStr9388
 P:StockSharp.Messages.IMessageAdapter.IsNativeIdentifiers/summary;DocStr9381
 P:StockSharp.Messages.IMessageAdapter.OrderCancelVolumeRequired/summary;DocStr8752
 P:StockSharp.Messages.IMessageAdapter.AssociatedBoardCode/summary;Str199
@@ -635,6 +636,7 @@ P:StockSharp.Messages.MessageAdapter.HeartbeatInterval/summary;DocStr4334
 P:StockSharp.Messages.MessageAdapter.SecurityLookupRequired/summary;DocStr452
 P:StockSharp.Messages.MessageAdapter.PortfolioLookupRequired/summary;DocStr450
 P:StockSharp.Messages.MessageAdapter.OrderStatusRequired/summary;DocStr451
+P:StockSharp.Messages.MessageAdapter.IsNativeIdentifiersPersistable/summary;DocStr9388
 P:StockSharp.Messages.MessageAdapter.IsNativeIdentifiers/summary;DocStr9381
 P:StockSharp.Messages.MessageAdapter.StorageName/summary;DocStr9382
 P:StockSharp.Messages.MessageAdapter.OrderCancelVolumeRequired/summary;DocStr8752

@@ -13579,3 +13579,5 @@ DocStr9383;Names of extended security fields in {0};Название полей 
 DocStr9384;Protocol version;Версия протокола
 DocStr9385;Market data request finished message;Сообщение окончания запроса рыночных данных
 DocStr9386;Market data request finished;Окончание запроса рыночных данных
+DocStr9387;Save the identifier as a permanent;Сохранить идентификатор как постоянный
+DocStr9388;Native identifier can be stored;Системные идентификаторы могут быть сохранены
