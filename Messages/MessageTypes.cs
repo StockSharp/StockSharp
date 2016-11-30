@@ -206,6 +206,11 @@ namespace StockSharp.Messages
 		/// <summary>
 		/// Reset state.
 		/// </summary>
-		Reset
+		Reset,
+
+		/// <summary>
+		/// Market data request finished.
+		/// </summary>
+		MarketDataFinished,
 	}
 }
