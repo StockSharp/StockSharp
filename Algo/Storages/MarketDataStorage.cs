@@ -127,6 +127,11 @@ namespace StockSharp.Algo.Storages
 			return Drive.LoadStream(date);
 		}
 
+		private bool SecurityIdEqual(SecurityId securityId)
+		{
+			return securityId.SecurityCode.CompareIgnoreCase(SecurityId.SecurityCode) && securityId.BoardCode.CompareIgnoreCase(SecurityId.BoardCode);
+		}
+
 		public int Save(IEnumerable<TData> data)
 		{
 			if (data == null)
@@ -136,10 +141,10 @@ namespace StockSharp.Algo.Storages
 
 			foreach (var group in data.GroupBy(d =>
 			{
-				var security = _getSecurityId(d);
+				var securityId = _getSecurityId(d);
 
-				if (!security.IsDefault() && (security.SecurityCode != SecurityId.SecurityCode || security.BoardCode != SecurityId.BoardCode))
-					throw new ArgumentException(LocalizedStrings.Str1026Params.Put(typeof(TData).Name, security, SecurityId));
+				if (!securityId.IsDefault() && !SecurityIdEqual(securityId))
+					throw new ArgumentException(LocalizedStrings.Str1026Params.Put(typeof(TData).Name, securityId, SecurityId));
 
 				var time = _getTime(d);
 
