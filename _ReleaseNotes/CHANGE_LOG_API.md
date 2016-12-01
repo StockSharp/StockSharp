@@ -1,6 +1,6 @@
 StockSharp API Change log
 ========================
-###current:
+###v4.3.19.2:
 * (feature) SecurityPicker performance improve.
 * (feature) OptionVolatilitySmileChart.
 * (bug) OptionDesk fix.
@@ -12,6 +12,12 @@ StockSharp API Change log
 * (feature) MarketDataFinishedMessage.
 * (feature) WhenNewTrades -> WhenNewTrade
 * (feature) NativeIdStorage. Algo -> Algo.Storages
+* (bug) MarketDataStorage fix.
+* (bug) StorageMessageAdapter. Process MarketDataMessage fixes.
+* (feature) IMessageAdapter. IsNativeIdentifiersPersistable
+* (feature) BasketMessageAdapter. Send MarketData message to specified adapter.
+* (feature) SampleIQFeed. Refactoring.
+* (bug) https://github.com/StockSharp/StockSharp/issues/278 fix
 
 ###v4.3.19.1:
 * (bug) SmartCOM candles fix.
