@@ -96,6 +96,9 @@
     <Reference Include="DevExpress.Xpf.Grid.v15.2.Core">
       <HintPath>..\..\..\..\References\DevExpress.Xpf.Grid.v15.2.Core.dll</HintPath>
     </Reference>
+    <Reference Include="DevExpress.Xpf.LayoutControl.v15.2">
+      <HintPath>..\..\..\..\References\DevExpress.Xpf.LayoutControl.v15.2.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml">
