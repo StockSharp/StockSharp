@@ -19,7 +19,6 @@ namespace StockSharp.Algo.Storages
 	using System.Collections.Generic;
 	using System.Linq;
 
-	using Ecng.Collections;
 	using Ecng.Common;
 
 	using MoreLinq;
@@ -252,7 +251,7 @@ namespace StockSharp.Algo.Storages
 
 		private void ProcessMarketDataMessage(MarketDataMessage msg)
 		{
-			if (!msg.IsSubscribe || DaysLoad == TimeSpan.Zero)
+			if (msg.IsBack || !msg.IsSubscribe || DaysLoad == TimeSpan.Zero)
 				return;
 
 			var today = DateTime.UtcNow.Date;
