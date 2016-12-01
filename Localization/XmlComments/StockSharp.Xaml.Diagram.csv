@@ -662,6 +662,7 @@ M:StockSharp.Xaml.Diagram.Elements.BaseStrategyDiagramElement.#ctor/summary;DocS
 M:StockSharp.Xaml.Diagram.Elements.BaseStrategyDiagramElement.OnStart/summary;DocStr7892
 M:StockSharp.Xaml.Diagram.Elements.BaseStrategyDiagramElement.OnStop/summary;DocStr7894
 M:StockSharp.Xaml.Diagram.Elements.BaseStrategyDiagramElement.OnReseted/summary;DocStr7896
+M:StockSharp.Xaml.Diagram.Elements.BaseStrategyDiagramElement.RemoveExternalSockets/summary;DocStr9389
 T:StockSharp.Xaml.Diagram.Elements.StrategyDiagramElement/summary;DocStr9276
 P:StockSharp.Xaml.Diagram.Elements.StrategyDiagramElement.TypeId/summary;DocStr7902
 P:StockSharp.Xaml.Diagram.Elements.StrategyDiagramElement.IconName/summary;DocStr9214

@@ -13581,3 +13581,4 @@ DocStr9385;Market data request finished message;Сообщение оконча�
 DocStr9386;Market data request finished;Окончание запроса рыночных данных
 DocStr9387;Save the identifier as a permanent;Сохранить идентификатор как постоянный
 DocStr9388;Native identifier can be stored;Системные идентификаторы могут быть сохранены
+DocStr9389;Remove external sockets;Удалить внешние сокеты

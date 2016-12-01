@@ -2585,6 +2585,11 @@
             The method is called at re-initialisation of the diagram element state.
             </summary>
     </member>
+    <member name="M:StockSharp.Xaml.Diagram.Elements.BaseStrategyDiagramElement.RemoveExternalSockets">
+      <summary>
+            Remove external sockets.
+            </summary>
+    </member>
     <member name="T:StockSharp.Xaml.Diagram.Elements.StrategyDiagramElement">
       <summary>
             The element which is using compiled strategy, based on S#.API.
