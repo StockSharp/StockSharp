@@ -1,5 +1,17 @@
 StockSharp Designer Change log
 ========================
+###v4.3.19.2:
+* (feature) C# code editor. Design elements and strategies via C#. http://stocksharp.ru/posts/m/37286/
+* (feature) Embed into diagram ready to use dll strategies. http://stocksharp.ru/posts/m/37188/
+* (feature) Index element. http://stocksharp.ru/posts/m/37459/
+* (feature) Option "greeks", strikes filtering, delta-hedge elements. http://stocksharp.com/posts/m/37317/
+* (feature) Market data panel + securities panel + finam panel - joined into single panel.
+* (feature) Download securities + historical data via live connections.
+* (feature) Live dashboard panel.
+* (bug) Live connection fixes.
+* (bug) Converter element fixes http://stocksharp.ru/posts/m/37153/
+* (bug) Optimizer fixes.
+
 ###v4.3.17:
 * (feature) Selection lines on hover http://stocksharp.ru/posts/m/37025/
 * (bug) Fix candle settings editor http://stocksharp.ru/posts/m/36987/
