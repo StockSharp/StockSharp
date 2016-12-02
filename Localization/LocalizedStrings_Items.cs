@@ -43356,5 +43356,15 @@ namespace StockSharp.Localization
 		/// Event {0} should not return a value.
 		/// </summary>
 		public static string ExternalSocketReturnType => GetString(ExternalSocketReturnTypeKey);
+
+		/// <summary>
+		/// Session state request error.
+		/// </summary>
+		public const string SessionStateRequestErrorKey = "SessionStateRequestError";
+
+		/// <summary>
+		/// Session state request error.
+		/// </summary>
+		public static string SessionStateRequestError => GetString(SessionStateRequestErrorKey);
 	}
 }

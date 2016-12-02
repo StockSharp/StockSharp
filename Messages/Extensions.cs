@@ -404,7 +404,7 @@ namespace StockSharp.Messages
 		/// <returns><see cref="ErrorMessage"/> instance.</returns>
 		public static ErrorMessage ToErrorMessage(this string description)
 		{
-			return  new InvalidOperationException(description).ToErrorMessage();
+			return new InvalidOperationException(description).ToErrorMessage();
 		}
 
 		/// <summary>

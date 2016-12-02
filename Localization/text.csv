@@ -4370,6 +4370,7 @@ ExternalSocketOneParam;Event {0} must contains only one parameter.;Событи�
 MaxMessageCountExceed;Max message count exceed.;Превышено максимальное количество сообщений.
 TypeNotImplemented;Type {0} not implemented the {1} interface.;Тип {0} не реализовывает интерфейс {1}.
 ExternalSocketReturnType;Event {0} should not return a value.;Событие {0} не должно возвращать значение.
+SessionStateRequestError;Session state request error.;Ошибка запроса состояния сессии.
 DocStr0;Button activation alert settings;Кнопка активации настроек сигнала
 DocStr1;Initializes a new instance of the {0};Создать {0}
 DocStr2;Load settings;Загрузить настройки
@@ -7584,7 +7585,6 @@ DocStr3233;Opened;Открыта
 DocStr3234;Closed;Закрыта
 DocStr3235;Open pending;В процессе открытия
 DocStr3236;Close pending;В процессе закрытия
-DocStr3237;Session state request error;Ошибка запроса состояния сессии
 DocStr3238;Session state request error message;Причины ошибки получения состояния сессии
 DocStr3239;Unknown session;Неизвестная сессия
 DocStr3240;The user request states;Состояния запроса пользователя
