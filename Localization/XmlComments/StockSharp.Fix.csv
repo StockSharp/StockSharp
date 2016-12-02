@@ -325,7 +325,7 @@ F:StockSharp.Fix.Native.TradSesStatus.Open/summary;DocStr3233
 F:StockSharp.Fix.Native.TradSesStatus.Closed/summary;DocStr3234
 F:StockSharp.Fix.Native.TradSesStatus.PreOpen/summary;DocStr3235
 F:StockSharp.Fix.Native.TradSesStatus.PreClose/summary;DocStr3236
-F:StockSharp.Fix.Native.TradSesStatus.RequestRejected/summary;DocStr3237
+F:StockSharp.Fix.Native.TradSesStatus.RequestRejected/summary;SessionStateRequestError
 T:StockSharp.Fix.Native.TradSesStatusRejReason/summary;DocStr3238
 F:StockSharp.Fix.Native.TradSesStatusRejReason.InvalidSession/summary;DocStr3239
 F:StockSharp.Fix.Native.TradSesStatusRejReason.Other/summary;XamlStr157
