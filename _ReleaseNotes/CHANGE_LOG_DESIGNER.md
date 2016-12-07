@@ -1,5 +1,8 @@
 StockSharp Designer Change log
 ========================
+###v4.3.19.3:
+* (bug) refs update fix.
+
 ###v4.3.19.2:
 * (feature) C# code editor. Design elements and strategies via C#. http://stocksharp.ru/posts/m/37286/
 * (feature) Embed into diagram ready to use dll strategies. http://stocksharp.ru/posts/m/37188/

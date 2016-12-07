@@ -1,5 +1,8 @@
 StockSharp Data (Hydra) Change log
 ========================
+###v4.3.19.3:
+* (bug) refs update fix.
+
 ###v4.3.19.2:
 * (feature) Connector tasks. Historical ticks refactoring.
 * (feature) Security extended info
