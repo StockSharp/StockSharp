@@ -1,6 +1,6 @@
 # Development stage
 
-[S#.Studio](http://stocksharp.com/products/studio/) - beta.
+[S#.Designer](http://stocksharp.com/products/designer/) - stable.
 
 [S#.Data](http://stocksharp.com/products/hydra/) - stable.
 

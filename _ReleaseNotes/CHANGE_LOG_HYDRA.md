@@ -1,5 +1,9 @@
 StockSharp Data (Hydra) Change log
 ========================
+###v4.3.19.4:
+* (bug) FIX connection establish fix http://stocksharp.ru/posts/m/37571/
+* (bug) x86 launch fix http://stocksharp.ru/posts/m/37572/
+
 ###v4.3.19.3:
 * (bug) refs update fix.
 

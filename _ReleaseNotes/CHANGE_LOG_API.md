@@ -1,5 +1,8 @@
 StockSharp API Change log
 ========================
+###v4.3.19.4:
+* (bug) FIX connection establish fix http://stocksharp.ru/posts/m/37571/
+
 ###v4.3.19.2:
 * (feature) SecurityPicker performance improve.
 * (feature) OptionVolatilitySmileChart.
