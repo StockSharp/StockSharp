@@ -6,19 +6,28 @@
 
 ## Introduction ##
 
-StockSharp (shortly S#) – are free programs for trading at any markets of the world (American, European, Asian, Russian, stocks, futures, options, Bitcoins, forex, etc.). You will be able to trade manually or automated trading (algorithmic trading robots, conventional or HFT).
+StockSharp (shortly S#) – are free set of programs for trading at any markets of the world (American, European, Asian, Russian, stocks, futures, options, Bitcoins, forex, etc.). You will be able to trade manually or automated trading (algorithmic trading robots, conventional or HFT).
 
 **Available connections**: FIX/FAST, LMAX, Rithmic, Fusion/Blackwood, Interactive Brokers, OpenECry, Sterling, IQFeed, E*Trade, BTCE, BitStamp and many other. Any broker or [partner broker (benefits)][6].
 
-## S#.Studio
+## S#.Terminal
 
-S#.Studio is a free graphical environment for trading on any exchanges (american, europian and asian stock markets, forex, bitcoins and options). Support algorithmic strategies (C# or visual designer). [More info...](http://stocksharp.com/products/studio/)
+S#.Terminal is a free trading charting application (trading terminal). [More info...](http://stocksharp.com/products/terminal/)
 
 ### Screenshots
 
-![Terminal](http://stocksharp.com/file.ashx?t=forum&size=400x200&fid=2099)
-![Designer](http://stocksharp.com/file.ashx?t=forum&size=400x200&fid=2091)
-[more on official site...](http://stocksharp.com/products/studio/)
+![Terminal](http://stocksharp.com/file/103851?size=500x500)
+
+## S#.Designer
+
+S#.Designer is a free designer of trading strategies. The intuitive interface. Strategies "programming" by mouse or in C#. [More info...](http://stocksharp.com/products/designer/)
+
+### Screenshots
+
+![Designer1](http://stocksharp.com/file/103674?size=400x200)
+![Designer2](http://stocksharp.com/file/103666?size=400x200)
+![Designer3](http://stocksharp.com/file/103836?size=400x200)
+[more on official site...](http://stocksharp.com/products/)
 
 ## S#.Data
 
