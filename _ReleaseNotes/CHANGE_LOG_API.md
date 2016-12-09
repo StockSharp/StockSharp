@@ -1,5 +1,8 @@
 StockSharp API Change log
 ========================
+###v4.3.19.5:
+* (bug) Fix https://github.com/StockSharp/StockSharp/issues/279
+
 ###v4.3.19.4:
 * (bug) FIX connection establish fix http://stocksharp.ru/posts/m/37571/
 
