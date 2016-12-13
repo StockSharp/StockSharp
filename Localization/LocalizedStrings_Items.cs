@@ -43366,5 +43366,15 @@ namespace StockSharp.Localization
 		/// Session state request error.
 		/// </summary>
 		public static string SessionStateRequestError => GetString(SessionStateRequestErrorKey);
+
+		/// <summary>
+		/// All right reserved.
+		/// </summary>
+		public const string AllRightReservedKey = "AllRightReserved";
+
+		/// <summary>
+		/// All right reserved.
+		/// </summary>
+		public static string AllRightReserved => GetString(AllRightReservedKey);
 	}
 }
