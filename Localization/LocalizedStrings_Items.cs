@@ -43368,6 +43368,16 @@ namespace StockSharp.Localization
 		public static string SessionStateRequestError => GetString(SessionStateRequestErrorKey);
 
 		/// <summary>
+		/// All right reserved.
+		/// </summary>
+		public const string AllRightReservedKey = "AllRightReserved";
+
+		/// <summary>
+		/// All right reserved.
+		/// </summary>
+		public static string AllRightReserved => GetString(AllRightReservedKey);
+
+		/// <summary>
 		/// Model code
 		/// </summary>
 		public const string ModelCodeKey = "ModelCode";
