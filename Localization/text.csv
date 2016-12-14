@@ -4371,6 +4371,8 @@ MaxMessageCountExceed;Max message count exceed.;Превышено максим�
 TypeNotImplemented;Type {0} not implemented the {1} interface.;Тип {0} не реализовывает интерфейс {1}.
 ExternalSocketReturnType;Event {0} should not return a value.;Событие {0} не должно возвращать значение.
 SessionStateRequestError;Session state request error.;Ошибка запроса состояния сессии.
+ModelCode;Model code;Код модели
+NoSecIdsFound;Expression '{0}' do not contains any security identifiers. Format should be AAPL@NASDAQ.;Выражение '{0}' не содержит ни одного идентификатора инструмента. Формат должен быть SBER@TQBR.
 DocStr0;Button activation alert settings;Кнопка активации настроек сигнала
 DocStr1;Initializes a new instance of the {0};Создать {0}
 DocStr2;Load settings;Загрузить настройки

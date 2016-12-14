@@ -43366,5 +43366,25 @@ namespace StockSharp.Localization
 		/// Session state request error.
 		/// </summary>
 		public static string SessionStateRequestError => GetString(SessionStateRequestErrorKey);
+
+		/// <summary>
+		/// Model code
+		/// </summary>
+		public const string ModelCodeKey = "ModelCode";
+
+		/// <summary>
+		/// Model code
+		/// </summary>
+		public static string ModelCode => GetString(ModelCodeKey);
+
+		/// <summary>
+		/// Expression '{0}' do not contains any security identifiers. Format should be AAPL@NASDAQ.
+		/// </summary>
+		public const string NoSecIdsFoundKey = "NoSecIdsFound";
+
+		/// <summary>
+		/// Expression '{0}' do not contains any security identifiers. Format should be AAPL@NASDAQ.
+		/// </summary>
+		public static string NoSecIdsFound => GetString(NoSecIdsFoundKey);
 	}
 }
