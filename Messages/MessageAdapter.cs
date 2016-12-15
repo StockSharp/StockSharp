@@ -184,16 +184,19 @@ namespace StockSharp.Messages
 		/// <summary>
 		/// Native identifier can be stored.
 		/// </summary>
+		[Browsable(false)]
 		public virtual bool IsNativeIdentifiersPersistable => true;
 
 		/// <summary>
 		/// Identify security in messages by native identifier <see cref="SecurityId.Native"/>.
 		/// </summary>
+		[Browsable(false)]
 		public virtual bool IsNativeIdentifiers => false;
 
 		/// <summary>
 		/// The storage name, associated with the adapter.
 		/// </summary>
+		[Browsable(false)]
 		public virtual string StorageName { get; }
 
 		/// <summary>
@@ -221,6 +224,7 @@ namespace StockSharp.Messages
 		/// <summary>
 		/// Names of extended security fields in <see cref="SecurityMessage"/>.
 		/// </summary>
+		[Browsable(false)]
 		public virtual string[] SecurityExtendedFields { get; } = ArrayHelper.Empty<string>();
 
 		/// <summary>
@@ -435,7 +439,7 @@ namespace StockSharp.Messages
 		protected abstract void OnSendInMessage(Message message);
 
 		/// <summary>
-		/// Send outgoing message and raise <see cref="MessageAdapter.NewOutMessage"/> event.
+		/// Send outgoing message and raise <see cref="NewOutMessage"/> event.
 		/// </summary>
 		/// <param name="message">Message.</param>
 		public virtual void SendOutMessage(Message message)
