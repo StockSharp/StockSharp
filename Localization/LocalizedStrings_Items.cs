@@ -43396,5 +43396,25 @@ namespace StockSharp.Localization
 		/// Expression '{0}' do not contains any security identifiers. Format should be AAPL@NASDAQ.
 		/// </summary>
 		public static string NoSecIdsFound => GetString(NoSecIdsFoundKey);
+
+		/// <summary>
+		/// New version of the application available. Download updates?
+		/// </summary>
+		public const string DownloadUpdatesKey = "DownloadUpdates";
+
+		/// <summary>
+		/// New version of the application available. Download updates?
+		/// </summary>
+		public static string DownloadUpdates => GetString(DownloadUpdatesKey);
+
+		/// <summary>
+		/// Updates are downloaded. Install updates now?
+		/// </summary>
+		public const string InstallUpdatesKey = "InstallUpdates";
+
+		/// <summary>
+		/// Updates are downloaded. Install updates now?
+		/// </summary>
+		public static string InstallUpdates => GetString(InstallUpdatesKey);
 	}
 }

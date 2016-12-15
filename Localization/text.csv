@@ -4373,6 +4373,8 @@ ExternalSocketReturnType;Event {0} should not return a value.;Событие {0}
 SessionStateRequestError;Session state request error.;Ошибка запроса состояния сессии.
 ModelCode;Model code;Код модели
 NoSecIdsFound;Expression '{0}' do not contains any security identifiers. Format should be AAPL@NASDAQ.;Выражение '{0}' не содержит ни одного идентификатора инструмента. Формат должен быть SBER@TQBR.
+DownloadUpdates;New version of the application available. Download updates?;Доступна новая версия приложения. Загрузить обновления?
+InstallUpdates;Updates are downloaded. Install updates now?;Обновления загружены. Установить обновления сейчас?
 DocStr0;Button activation alert settings;Кнопка активации настроек сигнала
 DocStr1;Initializes a new instance of the {0};Создать {0}
 DocStr2;Load settings;Загрузить настройки
