@@ -4084,7 +4084,7 @@ DownloadingTrades;Downloading trades for {0:d}...;Скачивание сдел�
 InvalidFolderPath;Invalid folder path.;Неверно указан путь.
 InvalidFilePath;Invalid file path.;Неверно указан путь к файлу.
 About;About;О программе
-AllRightReserved;All right reserved.;Все права защищены.
+AllRightsReserved;All rights reserved.;Все права защищены.
 Grouping;Grouping;Группировка
 GroupingHeader;Show column header in grouping;Показывать имя столбца в заголовке группы
 ClipboardCsv;Clipboard (as csv);Буфер обмена (текст)
