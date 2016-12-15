@@ -24,6 +24,7 @@ namespace StockSharp.Algo.Commissions
 	using Ecng.ComponentModel;
 	using Ecng.Serialization;
 
+	using StockSharp.BusinessEntities;
 	using StockSharp.Messages;
 	using StockSharp.Localization;
 
@@ -395,7 +396,8 @@ namespace StockSharp.Algo.Commissions
 	[DescriptionLoc(LocalizedStrings.Str674Key)]
 	public class CommissionSecurityIdRule : CommissionRule
 	{
-		private SecurityId _securityId;
+		private SecurityId? _securityId;
+		private Security _security;
 
 		/// <summary>
 		/// Security ID.
@@ -403,13 +405,14 @@ namespace StockSharp.Algo.Commissions
 		[DisplayNameLoc(LocalizedStrings.SecurityIdKey)]
 		[DescriptionLoc(LocalizedStrings.SecurityIdKey, true)]
 		[CategoryLoc(LocalizedStrings.GeneralKey)]
-		public SecurityId SecurityId
+		public Security Security
 		{
-			get { return _securityId; }
+			get { return _security; }
 			set
 			{
-				_securityId = value;
-				Title = value.ToString();
+				_security = value;
+				_securityId = _security?.ToSecurityId();
+				Title = value?.ToString();
 			}
 		}
 
@@ -420,7 +423,7 @@ namespace StockSharp.Algo.Commissions
 		/// <returns>The commission. If the commission can not be calculated then <see langword="null" /> will be returned.</returns>
 		protected override decimal? OnProcessExecution(ExecutionMessage message)
 		{
-			if (message.HasTradeInfo() && message.SecurityId == SecurityId)
+			if (message.HasTradeInfo() && message.SecurityId == _securityId)
 				return (decimal)Value;
 			
 			return null;
@@ -434,7 +437,8 @@ namespace StockSharp.Algo.Commissions
 		{
 			base.Save(storage);
 
-			storage.SetValue(nameof(SecurityId), SecurityId);
+			if (Security != null)
+				storage.SetValue(nameof(Security), Security);
 		}
 
 		/// <summary>
@@ -445,7 +449,7 @@ namespace StockSharp.Algo.Commissions
 		{
 			base.Load(storage);
 
-			SecurityId = storage.GetValue<SecurityId>(nameof(SecurityId));
+			Security = storage.GetValue<Security>(nameof(Security));
 		}
 	}
 
@@ -525,7 +529,7 @@ namespace StockSharp.Algo.Commissions
 	[DescriptionLoc(LocalizedStrings.BoardCommissionKey)]
 	public class CommissionBoardCodeRule : CommissionRule
 	{
-		private string _boardCode;
+		private ExchangeBoard _board;
 
 		/// <summary>
 		/// Board code.
@@ -533,13 +537,13 @@ namespace StockSharp.Algo.Commissions
 		[DisplayNameLoc(LocalizedStrings.BoardKey)]
 		[DescriptionLoc(LocalizedStrings.BoardCodeKey)]
 		[CategoryLoc(LocalizedStrings.GeneralKey)]
-		public string BoardCode
+		public ExchangeBoard Board
 		{
-			get { return _boardCode; }
+			get { return _board; }
 			set
 			{
-				_boardCode = value;
-				Title = value;
+				_board = value;
+				Title = value?.Code;
 			}
 		}
 
@@ -550,7 +554,7 @@ namespace StockSharp.Algo.Commissions
 		/// <returns>The commission. If the commission can not be calculated then <see langword="null" /> will be returned.</returns>
 		protected override decimal? OnProcessExecution(ExecutionMessage message)
 		{
-			if (message.HasTradeInfo() && message.SecurityId.BoardCode.CompareIgnoreCase(BoardCode))
+			if (message.HasTradeInfo() && Board != null && message.SecurityId.BoardCode.CompareIgnoreCase(Board.Code))
 				return (decimal)Value;
 			
 			return null;
@@ -564,7 +568,8 @@ namespace StockSharp.Algo.Commissions
 		{
 			base.Save(storage);
 
-			storage.SetValue(nameof(BoardCode), BoardCode);
+			if (Board != null)
+				storage.SetValue(nameof(Board), Board.Code);
 		}
 
 		/// <summary>
@@ -575,7 +580,10 @@ namespace StockSharp.Algo.Commissions
 		{
 			base.Load(storage);
 
-			BoardCode = storage.GetValue<string>(nameof(BoardCode));
+			var boardCode = storage.GetValue<string>(nameof(Board));
+
+			if (!boardCode.IsEmpty())
+				Board = ExchangeBoard.GetBoard(boardCode);
 		}
 	}
 
