@@ -31,6 +31,7 @@ namespace SampleIB
 	using StockSharp.InteractiveBrokers;
 	using StockSharp.Xaml;
 	using StockSharp.Localization;
+	using StockSharp.Messages;
 
 	public partial class SecuritiesWindow
 	{
@@ -119,7 +120,7 @@ namespace SampleIB
 
 		private void FindClick(object sender, RoutedEventArgs e)
 		{
-			var wnd = new SecurityLookupWindow { Criteria = new Security { Code = "AAPL" } };
+			var wnd = new SecurityLookupWindow { Criteria = new Security { Code = "AAPL", Type = SecurityTypes.Stock } };
 
 			if (!wnd.ShowModal(this))
 				return;
