@@ -43416,5 +43416,15 @@ namespace StockSharp.Localization
 		/// Updates are downloaded. Install updates now?
 		/// </summary>
 		public static string InstallUpdates => GetString(InstallUpdatesKey);
+
+		/// <summary>
+		/// Show Board column
+		/// </summary>
+		public const string ShowBoardColumnKey = "ShowBoardColumn";
+
+		/// <summary>
+		/// Show Board column
+		/// </summary>
+		public static string ShowBoardColumn => GetString(ShowBoardColumnKey);
 	}
 }
