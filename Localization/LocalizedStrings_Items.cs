@@ -43426,5 +43426,15 @@ namespace StockSharp.Localization
 		/// Show Board column
 		/// </summary>
 		public static string ShowBoardColumn => GetString(ShowBoardColumnKey);
+
+		/// <summary>
+		/// Scanner
+		/// </summary>
+		public const string ScannerKey = "Scanner";
+
+		/// <summary>
+		/// Scanner
+		/// </summary>
+		public static string Scanner => GetString(ScannerKey);
 	}
 }
