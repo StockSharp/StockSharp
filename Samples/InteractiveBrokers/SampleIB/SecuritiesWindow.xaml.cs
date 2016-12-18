@@ -36,8 +36,12 @@ namespace SampleIB
 	public partial class SecuritiesWindow
 	{
 		private readonly SynchronizedDictionary<Security, QuotesWindow> _quotesWindows = new SynchronizedDictionary<Security, QuotesWindow>();
-		private readonly SynchronizedDictionary<CandleSeries, CandlesWindow> _сandles = new SynchronizedDictionary<CandleSeries, CandlesWindow>();
-		private readonly SynchronizedSet<Security> _reportSecurities = new SynchronizedSet<Security>();
+		private readonly SynchronizedDictionary<CandleSeries, CandlesWindow> _historyCandles = new SynchronizedDictionary<CandleSeries, CandlesWindow>();
+		private readonly SynchronizedDictionary<CandleSeries, CandlesWindow> _realTimeCandles = new SynchronizedDictionary<CandleSeries, CandlesWindow>();
+		private readonly Dictionary<Security, long[]> _reportSecurities = new Dictionary<Security, long[]>();
+		private readonly Dictionary<Security, long> _optionSecurities = new Dictionary<Security, long>();
+		private bool _initialized;
+		private long? _scannerId;
 
 		public SecuritiesWindow()
 		{
@@ -47,18 +51,41 @@ namespace SampleIB
 			CandlesPeriods.SelectedItem = InteractiveBrokersTimeFrames.Hour;
 		}
 
+		protected override void OnClosed(EventArgs e)
+		{
+			if (Trader != null)
+			{
+				if (_initialized)
+					Trader.MarketDepthsChanged -= TraderOnMarketDepthsChanged;
+
+				if (_scannerId != null)
+				{
+					Trader.UnSubscribeScanner(_scannerId.Value);
+					_scannerId = null;
+				}
+
+				_reportSecurities.SelectMany(p => p.Value).ForEach(Trader.UnSubscribeFundamentalReport);
+				_optionSecurities.ForEach(p => Trader.UnSubscribeOptionCalc(p.Value));
+
+				_reportSecurities.Clear();
+				_optionSecurities.Clear();
+			}
+
+			base.OnClosed(e);
+		}
+
 		private void NewOrderClick(object sender, RoutedEventArgs e)
 		{
 			var newOrder = new OrderWindow
 			{
 				Order = new Order { Security = SecurityPicker.SelectedSecurity },
-				SecurityProvider = MainWindow.Instance.Trader,
-				MarketDataProvider = MainWindow.Instance.Trader,
-				Portfolios = new PortfolioDataSource(MainWindow.Instance.Trader),
+				SecurityProvider = Trader,
+				MarketDataProvider = Trader,
+				Portfolios = new PortfolioDataSource(Trader),
 			};
 
 			if (newOrder.ShowModal(this))
-				MainWindow.Instance.Trader.RegisterOrder(newOrder.Order);
+				Trader.RegisterOrder(newOrder.Order);
 		}
 
 		private Security SelectedSecurity => SecurityPicker.SelectedSecurity;
@@ -73,8 +100,9 @@ namespace SampleIB
 				return;
 
 			Level1.IsChecked = Trader.RegisteredSecurities.Contains(SelectedSecurity);
-			Reports.IsChecked = _reportSecurities.Contains(SelectedSecurity);
-			RealTimeCandles.IsChecked = _сandles.Keys.Any(s => s.Security == SelectedSecurity);
+			Reports.IsChecked = _reportSecurities.ContainsKey(SelectedSecurity);
+			Options.IsChecked = _optionSecurities.ContainsKey(SelectedSecurity);
+			RealTimeCandles.IsChecked = _realTimeCandles.Keys.Any(s => s.Security == SelectedSecurity);
 			Depth.IsChecked = _quotesWindows.ContainsKey(SelectedSecurity);
 		}
 
@@ -86,18 +114,18 @@ namespace SampleIB
 			if (trader.RegisteredSecurities.Contains(security))
 			{
 				trader.UnRegisterSecurity(security);
-				trader.UnRegisterTrades(security);
+				//trader.UnRegisterTrades(security);
 			}
 			else
 			{
 				trader.RegisterSecurity(security);
-				trader.RegisterTrades(security);
+				//trader.RegisterTrades(security);
 			}
 		}
 
 		private void DepthClick(object sender, RoutedEventArgs e)
 		{
-			if (Depth.IsChecked == true)
+			if (Depth.IsChecked == false)
 			{
 				// create order book window
 				var wnd = new QuotesWindow { Title = SelectedSecurity.Id + " " + LocalizedStrings.MarketDepth };
@@ -114,7 +142,26 @@ namespace SampleIB
 
 				var wnd = _quotesWindows[SelectedSecurity];
 				_quotesWindows.Remove(SelectedSecurity);
+
 				wnd.Close();
+			}
+
+			if (!_initialized)
+			{
+				TraderOnMarketDepthsChanged(new[] { Trader.GetMarketDepth(SecurityPicker.SelectedSecurity) });
+				Trader.MarketDepthsChanged += TraderOnMarketDepthsChanged;
+				_initialized = true;
+			}
+		}
+
+		private void TraderOnMarketDepthsChanged(IEnumerable<MarketDepth> depths)
+		{
+			foreach (var depth in depths)
+			{
+				var wnd = _quotesWindows.TryGetValue(depth.Security);
+
+				if (wnd != null)
+					wnd.DepthCtrl.UpdateDepth(depth);
 			}
 		}
 
@@ -125,12 +172,13 @@ namespace SampleIB
 			if (!wnd.ShowModal(this))
 				return;
 
-			MainWindow.Instance.Trader.LookupSecurities(wnd.Criteria);
+			Trader.LookupSecurities(wnd.Criteria);
 		}
 
 		public void AddCandles(CandleSeries series, IEnumerable<Candle> candles)
 		{
-			var wnd = _сandles.TryGetValue(series);
+			var wnd = _realTimeCandles.TryGetValue(series) ?? _historyCandles.TryGetValue(series);
+
 			if (wnd != null)
 				candles.ForEach(wnd.ProcessCandles);
 		}
@@ -145,7 +193,7 @@ namespace SampleIB
 			};
 
 			var wnd = new CandlesWindow { Title = series.ToString() };
-			_сandles.Add(series, wnd);
+			_historyCandles.Add(series, wnd);
 			Trader.SubscribeCandles(series, DateTime.Today.Subtract(TimeSpan.FromTicks(((TimeSpan)series.Arg).Ticks * 30)), DateTime.Now);
 			wnd.Show();
 		}
@@ -156,15 +204,19 @@ namespace SampleIB
 
 			if (RealTimeCandles.IsChecked == true)
 			{
-				var wnd = new CandlesWindow { Title = SelectedSecurity.Id + LocalizedStrings.Str2973 };
-				_сandles.Add(series, wnd);
-				Trader.SubscribeCandles(series, DateTimeOffset.MinValue, DateTimeOffset.MaxValue);
-				wnd.Show();
+				Trader.UnSubscribeCandles(series);
+				_realTimeCandles.GetAndRemove(series).Close();
+
+				RealTimeCandles.IsChecked = false;
 			}
 			else
 			{
-				Trader.UnSubscribeCandles(series);
-				_сandles.GetAndRemove(series).Close();
+				var wnd = new CandlesWindow { Title = SelectedSecurity.Id + LocalizedStrings.Str2973 };
+				_realTimeCandles.Add(series, wnd);
+				Trader.SubscribeCandles(series, DateTimeOffset.MinValue, DateTimeOffset.MaxValue);
+				wnd.Show();
+
+				RealTimeCandles.IsChecked = true;
 			}
 		}
 
@@ -172,13 +224,79 @@ namespace SampleIB
 		{
 			var security = SelectedSecurity;
 
-			var isSubscribe = _reportSecurities.TryAdd(security);
+			var ids = _reportSecurities.TryGetValue(security);
 
-			if (!isSubscribe)
+			if (ids == null)
+			{
+				ids = Enumerator.GetValues<FundamentalReports>()
+					.Select(report => Trader.SubscribeFundamentalReport(security, report))
+					.ToArray();
+
+				_reportSecurities.Add(security, ids);
+				Reports.IsChecked = true;
+			}
+			else
+			{
 				_reportSecurities.Remove(security);
 
-			foreach (var report in Enumerator.GetValues<FundamentalReports>())
-				Trader.SubscribeFundamentalReport(security, report, isSubscribe);
+				ids.ForEach(Trader.UnSubscribeFundamentalReport);
+
+				Reports.IsChecked = false;
+			}
+		}
+
+		private void OptionsClick(object sender, RoutedEventArgs e)
+		{
+			var security = SelectedSecurity;
+
+			var id = _optionSecurities.TryGetValue2(security);
+
+			if (id == null)
+			{
+				var wnd = new OptionWindow();
+
+				if (!wnd.ShowModal(this))
+					return;
+
+				Trader.SubscribeOptionCalc(security, wnd.Volatility, wnd.OptionPrice, wnd.AssetPrice);
+				Options.IsChecked = true;
+			}
+			else
+			{
+				Trader.UnSubscribeOptionCalc(id.Value);
+				_optionSecurities.Remove(security);
+				Options.IsChecked = false;
+			}
+		}
+
+		private void ScannerClick(object sender, RoutedEventArgs e)
+		{
+			if (_scannerId == null)
+			{
+				Trader.NewScannerResults += TraderOnNewScannerResults;
+
+				_scannerId = Trader.SubscribeScanner(new ScannerFilter
+				{
+					ScanCode = "LOW_WS_13W_HL",
+					BoardCode = "STK.US",
+					SecurityType = "ALL",
+					RowCount = 15,
+				});
+				Scanner.IsChecked = true;
+			}
+			else
+			{
+				Trader.NewScannerResults -= TraderOnNewScannerResults;
+
+				Trader.UnSubscribeScanner(_scannerId.Value);
+				Scanner.IsChecked = false;
+				_scannerId = null;
+			}
+		}
+
+		private void TraderOnNewScannerResults(ScannerFilter filter, IEnumerable<ScannerResult> results)
+		{
+			
 		}
 	}
 }

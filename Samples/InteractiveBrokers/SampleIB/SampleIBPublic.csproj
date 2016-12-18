@@ -85,6 +85,9 @@
     <Reference Include="DevExpress.Xpf.LayoutControl.v15.2">
       <HintPath>..\..\..\References\DevExpress.Xpf.LayoutControl.v15.2.dll</HintPath>
     </Reference>
+    <Reference Include="DevExpress.Xpf.PropertyGrid.v15.2">
+      <HintPath>..\..\..\References\DevExpress.Xpf.PropertyGrid.v15.2.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml">
@@ -106,6 +109,9 @@
     </Compile>
     <Compile Include="QuotesWindow.xaml.cs">
       <DependentUpon>QuotesWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="OptionWindow.xaml.cs">
+      <DependentUpon>OptionWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="SecuritiesWindow.xaml.cs">
       <DependentUpon>SecuritiesWindow.xaml</DependentUpon>
@@ -170,6 +176,10 @@
     <Page Include="NewsWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="OptionWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="OrdersWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
